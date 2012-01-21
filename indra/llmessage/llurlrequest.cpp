@@ -84,8 +84,15 @@ LLURLRequestDetail::LLURLRequestDetail() :
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
 	mCurlRequest = new LLCurlEasyRequest();
 	
+	if(!mCurlRequest)
+	{
+		lldebugs << "failed to allocate new curl request." << llendl;
+		return;
+	}
+
 	if(!mCurlRequest->isValid()) //failed.
 	{
+		lldebugs << "new curl request is not valid." << llendl;
 		delete mCurlRequest ;
 		mCurlRequest = NULL ;
 	}
@@ -269,7 +276,7 @@ void LLURLRequest::setModifiedSince(const time_t &if_modified_since)
 //virtual 
 bool LLURLRequest::isValid() 
 {
-	return mDetail->mCurlRequest && mDetail->mCurlRequest->isValid(); 
+	return mDetail && mDetail->mCurlRequest && mDetail->mCurlRequest->isValid(); 
 }
 
 // virtual
@@ -469,6 +476,18 @@ void LLURLRequest::initialize()
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
 	mState = STATE_INITIALIZED;
 	mDetail = new LLURLRequestDetail;
+	if(!mDetail)
+	{
+		lldebugs << "LLURLRequestDetail() failed." << llendl;
+		return;
+	}
+
+	if(!mDetail->mCurlRequest)
+	{
+		lldebugs << "mCurlRequest==0!" << llendl;
+		return;
+	}
+
 	mDetail->mCurlRequest->setopt(CURLOPT_NOSIGNAL, 1);
 	mDetail->mCurlRequest->setWriteCallback(&downCallback, (void*)this);
 	mDetail->mCurlRequest->setReadCallback(&upCallback, (void*)this);
