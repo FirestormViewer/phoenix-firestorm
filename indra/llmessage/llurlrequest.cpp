@@ -476,6 +476,12 @@ void LLURLRequest::initialize()
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
 	mState = STATE_INITIALIZED;
 	mDetail = new LLURLRequestDetail;
+
+	if(!isValid())
+	{
+		return ;
+	}
+
 	if(!mDetail)
 	{
 		lldebugs << "LLURLRequestDetail() failed." << llendl;
