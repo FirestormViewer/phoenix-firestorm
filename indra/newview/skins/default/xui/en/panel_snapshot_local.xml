@@ -4,7 +4,7 @@
  layout="topleft"
  name="panel_snapshot_local"
  width="490">
-    <icon
+<!--    <icon
      follows="top|left"
      height="18"
      image_name="Snapshot_Download"
@@ -37,7 +37,7 @@
      name="hr"
      right="-10"
      top_pad="5"
-     />
+     />-->
     <combo_box
      follows="left|top|right"
      height="23"
@@ -46,7 +46,7 @@
      left_delta="0"
      name="local_size_combo"
      right="-10"
-     top_pad="10">
+     top="5">
         <combo_box.item
          label="Current Window"
          name="CurrentWindow"
@@ -202,7 +202,7 @@
             </text>
         </layout_panel>
     </layout_stack>
-    <button
+<!--    <button
      follows="right|bottom"
      height="23"
      label="Cancel"
@@ -213,16 +213,16 @@
      width="100">
       <button.commit_callback
        function="Local.Cancel" />
-    </button>
+   </button>-->
     <flyout_button
+     bottom="-1"
      follows="right|bottom"
      height="23"
      label="Save"
      layout="topleft"
-     left_delta="-106"
+     right="-1"
      name="save_btn"
      tool_tip="Save image to a file"
-     top_delta="0"
      width="100">
         <flyout_button.item
          label="Save"

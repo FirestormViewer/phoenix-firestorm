@@ -32,6 +32,8 @@
 
 #include "llfloatersnapshot.h" // FIXME: create a snapshot model
 
+// <FS:Zi> This file is not used in Firestorm
+
 /**
  * Provides several ways to save a snapshot.
  */
