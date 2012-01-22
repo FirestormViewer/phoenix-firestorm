@@ -1018,7 +1018,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			else
 				region = LLWorld::getInstance()->getRegion(mHost);
 
-			if (region && !LLAppViewer::getTextureFetch()->isHttpFailLimitReached())
+			if (region)
 			{
 				std::string http_url = region->getHttpUrl() ;
 				if (!http_url.empty())
@@ -1134,7 +1134,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 	
 	if (mState == SEND_HTTP_REQ)
 	{
-		if(mCanUseHTTP && !LLAppViewer::getTextureFetch()->isHttpFailLimitReached())
+		if(mCanUseHTTP)
 		{
 			//NOTE:
 			//control the number of the http requests issued for:
@@ -1260,7 +1260,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					//max_attempts = mHTTPFailCount+1; // Keep retrying
 					const S32 HTTP_MAX_RETRY_COUNT = 3;
 					max_attempts = HTTP_MAX_RETRY_COUNT + 1;
-					LLAppViewer::getTextureFetch()->addHttpFailCount();
 					LL_INFOS_ONCE("Texture") << "Texture server busy (503): " << mUrl << LL_ENDL;
 				}
 				else
@@ -1268,7 +1267,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					const S32 HTTP_MAX_RETRY_COUNT = 3;
 					max_attempts = HTTP_MAX_RETRY_COUNT + 1;
 					++mHTTPFailCount;
-					LLAppViewer::getTextureFetch()->addHttpFailCount();
 					llinfos << "HTTP GET failed for: " << mUrl
 							<< " Status: " << mGetStatus << " Reason: '" << mGetReason << "'"
 							<< " Attempt:" << mHTTPFailCount+1 << "/" << max_attempts << llendl;
@@ -1853,14 +1851,11 @@ LLTextureFetch::LLTextureFetch(LLTextureCache* cache, LLImageDecodeThread* image
 	  mHTTPTextureBits(0),
 	  mTotalHTTPRequests(0),
 	  mCurlGetRequest(NULL),
-	  mQAMode(qa_mode),
-	  mTotalHttpFailCount(0),
-	  mHttpFailMutex(NULL)
+	  mQAMode(qa_mode)
 {
 	mCurlPOSTRequestCount = 0;
 	mMaxBandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	mTextureInfo.setUpLogging(gSavedSettings.getBOOL("LogTextureDownloadsToViewerLog"), gSavedSettings.getBOOL("LogTextureDownloadsToSimulator"), gSavedSettings.getU32("TextureLoggingThreshold"));
-	mMaxHttpFailCountBeforeFallback = gSavedSettings.getU32("ImagePipelineHTTPMaxFailCountFallback");
 }
 
 LLTextureFetch::~LLTextureFetch()
@@ -2832,32 +2827,6 @@ void LLTextureFetch::cmdDoWork()
 		req->doWork(this);
 		delete req;
 	}
-}
-
-void LLTextureFetch::addHttpFailCount()
-{
-	LLMutexLock lock(&mHttpFailMutex);
-	++mTotalHttpFailCount;
-	llwarns << "Increasing HTTP GET fail count to: " << mTotalHttpFailCount << llendl;
-}
-
-void LLTextureFetch::processRegionChanged()
-{
-	llinfos << "Region changed. Resetting HTTP GET failure counter." << llendl;
-	LLMutexLock lock(&mHttpFailMutex);
-	mTotalHttpFailCount = 0;
-}
-
-void LLTextureFetch::setMaxHttpFailCountBeforeFallback(U32 maxFailCount)
-{
-	llinfos << "Setting max failure count before fallback for HTTP GET to " << maxFailCount << llendl;
-	mMaxHttpFailCountBeforeFallback = maxFailCount;
-}
-
-bool LLTextureFetch::isHttpFailLimitReached()
-{
-	return (mMaxHttpFailCountBeforeFallback > 0) &&
-		(mTotalHttpFailCount >= mMaxHttpFailCountBeforeFallback);
 }
 
 //////////////////////////////////////////////////////////////////////////////

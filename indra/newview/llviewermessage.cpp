@@ -4257,9 +4257,6 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	gMessageSystem->enableCircuit(sim_host, TRUE);
 	LLViewerRegion* regionp =  LLWorld::getInstance()->addRegion(region_handle, sim_host);
 	
-	// Ansariel: New region -> reset fail counter for texture fetcher
-	LLAppViewer::getTextureFetch()->processRegionChanged();
-
 	// Ansariel: Disable teleport beacon after teleport
 	if (gSavedSettings.getBOOL("FSDisableBeaconAfterTeleport"))
 	{
@@ -4561,9 +4558,6 @@ void process_crossed_region(LLMessageSystem* msg, void**)
 
 	LLViewerRegion* regionp = LLWorld::getInstance()->addRegion(region_handle, sim_host);
 	regionp->setSeedCapability(seedCap);
-	
-	// Ansariel: New region -> reset fail counter for texture fetcher
-	LLAppViewer::getTextureFetch()->processRegionChanged();
 }
 
 

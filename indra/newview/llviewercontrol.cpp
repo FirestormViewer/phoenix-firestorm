@@ -74,7 +74,6 @@
 #include "llcombobox.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
-#include "lltexturefetch.h"
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
 #include "llhunspell.h"
 // [/SL:KB]
@@ -629,12 +628,6 @@ void toggle_updater_service_active(const LLSD& new_value)
     }
 }
 
-static bool handleImagePipelineHTTPMaxFailCountFallback(const LLSD& newvalue)
-{
-	LLAppViewer::getTextureFetch()->setMaxHttpFailCountBeforeFallback(newvalue.asInteger());
-	return true;
-}
-
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -797,7 +790,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
 // [/SL:KB]
-	gSavedSettings.getControl("ImagePipelineHTTPMaxFailCountFallback")->getSignal()->connect(boost::bind(&handleImagePipelineHTTPMaxFailCountFallback, _2));
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
 	// NaCl - Antispam Registry

@@ -15937,17 +15937,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>8</integer>
   </map>
-  <key>ImagePipelineHTTPMaxFailCountFallback</key>
-    <map>
-      <key>Comment</key>
-      <string>Maximum failures during HTTP GET texture fetch per region before fallback to UDP fetch occurs. Set to 0 to disable automatic fallback.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>U32</string>
-      <key>Value</key>
-      <integer>25</integer>
-    </map>
   <key>WorldmapFilterDuplicateLandmarks</key>
   <map>
     <key>Comment</key>
