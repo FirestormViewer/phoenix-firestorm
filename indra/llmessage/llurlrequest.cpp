@@ -482,18 +482,6 @@ void LLURLRequest::initialize()
 		return ;
 	}
 
-	if(!mDetail)
-	{
-		lldebugs << "LLURLRequestDetail() failed." << llendl;
-		return;
-	}
-
-	if(!mDetail->mCurlRequest)
-	{
-		lldebugs << "mCurlRequest==0!" << llendl;
-		return;
-	}
-
 	mDetail->mCurlRequest->setopt(CURLOPT_NOSIGNAL, 1);
 	mDetail->mCurlRequest->setWriteCallback(&downCallback, (void*)this);
 	mDetail->mCurlRequest->setReadCallback(&upCallback, (void*)this);
