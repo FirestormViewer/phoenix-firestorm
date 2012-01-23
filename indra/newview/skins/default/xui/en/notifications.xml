@@ -5504,27 +5504,24 @@ Topic: [SUBJECT], Message: [MESSAGE]
    icon="notifytip.tga"
    name="FriendOnline"
    type="notifytip">
-[NAME] is online.
-    <tag>friendship</tag>
 &lt;nolink&gt;[NAME]&lt;/nolink&gt; is Online
+    <tag>friendship</tag>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="FriendOffline"
    type="notifytip">
-[NAME] is offline.
-    <tag>friendship</tag>
 &lt;nolink&gt;[NAME]&lt;/nolink&gt; is Offline
+    <tag>friendship</tag>
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="AddSelfFriend"
    type="notifytip">
-You cannot add yourself as a friend.
-    <tag>friendship</tag>
 Although you&apos;re very nice, you can&apos;t add yourself as a friend.
+    <tag>friendship</tag>
   </notification>
 
   <notification
