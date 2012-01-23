@@ -2,6 +2,7 @@
 <floater
  can_close="true"
  can_drag_on_left="false"
+ show_title="false"
  can_minimize="false"
  can_resize="true"
  can_tear_off="true"

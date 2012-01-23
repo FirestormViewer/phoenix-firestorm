@@ -4,14 +4,14 @@
  legacy_header_height="18"
  can_minimize="true"
  can_close="true"
- height="500"
+ height="560"
  layout="topleft"
  name="Snapshot"
  help_topic="snapshot"
  save_rect="true"
  save_visibility="false"
  title="SNAPSHOT PREVIEW"
- width="470">
+ width="270">
     <floater.string
      name="unknown">
         unknown
@@ -64,23 +64,13 @@
  	 name="local_failed_str">
  	    Failed to save to computer.
  	</string>
-    <button
-     follows="left|top"
-     height="23"
-     image_overlay="TabIcon_Close_Off"
-     layout="topleft"
-     left="236"
-     name="advanced_options_btn"
-     tool_tip="Advanced options"
-     top="25"
-     width="23" />
-  <ui_ctrl 
+  <ui_ctrl
+    follows="top|left|right"
     height="160"
     width="250"
     layout="topleft"
     name="thumbnail_placeholder"
-    top="50"
-    follows="left|top"
+    top="25"
     left="10">
       <panel
        background_visible="true"
@@ -208,7 +198,7 @@
    layout="topleft"
    name="img_info_border"
    top_pad="3"
-   follows="left|top"
+   follows="left|right|top"
    left_delta="0"
    />
    <text
@@ -226,11 +216,11 @@
        [WIDTH] x [HEIGHT] px
    </text>
    <text
-    follows="left|top"
+    follows="right|top"
     font="SansSerifSmall"
     height="14"
     layout="topleft"
-    left="200"
+    right="-14"
     length="1"
     halign="right"
     name="file_size_label"
@@ -239,7 +229,7 @@
     width="50">
        [SIZE] KB
    </text>
-    <panel_container
+<!--    <panel_container
      follows="left|top"
      height="260"
      layout="topleft"
@@ -247,48 +237,65 @@
      name="panel_container"
      default_panel_name="panel_snapshot_options"
      top_pad="10"
-     width="270">
-      <panel
+     width="270">-->
+    <tab_container
+     follows="top|left|right"
+     height="210"
+     layout="topleft"
+     left="5"
+     name="panel_tab_container"
+     right="-5"
+     tab_min_width="10"
+     top_pad="10">
+      <tab_container.commit_callback
+          function="Snapshot.SelectDestination" />
+<!--      <panel
        class="llpanelsnapshotoptions"
        filename="panel_snapshot_options.xml"
        follows="all"
        layout="topleft"
        left="0"
        name="panel_snapshot_options"
-       top="0" />
+       top="0" />-->
       <panel
        class="llpanelsnapshotprofile"
        follows="all"
+       label="Profile"
        layout="topleft"
        name="panel_snapshot_profile"
        filename="panel_snapshot_profile.xml" />
       <panel
        class="llpanelsnapshotpostcard"
        follows="all"
+       label="Email"
        layout="topleft"
        name="panel_snapshot_postcard"
        filename="panel_snapshot_postcard.xml" />
       <panel
        class="llpanelsnapshotinventory"
        follows="all"
+       label="Inventory"
        layout="topleft"
        name="panel_snapshot_inventory"
        filename="panel_snapshot_inventory.xml" />
       <panel
        class="llpanelsnapshotlocal"
        follows="all"
+       label="Disk"
        layout="topleft"
        name="panel_snapshot_local"
        filename="panel_snapshot_local.xml" />
-    </panel_container>
+    </tab_container>
+<!--     </panel_container> -->
     <panel
-     height="295"
+     follows="left|right|bottom"
+     height="120"
      layout="topleft"
-     left="270"
+     left="0"
      name="advanced_options_panel"
-     top="20"
-     width="200">
-        <text
+     right="-1"
+     top_pad="4">
+<!--        <text
          type="string"
          font="SansSerifSmall"
          length="1"
@@ -311,7 +318,7 @@
          name="advanced_options_hr"
          right="-10"
          top_pad="5"
-         />
+         /> -->
         <text
          type="string"
          length="1"
@@ -320,7 +327,7 @@
          layout="topleft"
          left="10"
          name="layer_type_label"
-         top_pad="10"
+         top_pad="0"
          width="50">
             Capture:
         </text>
@@ -370,4 +377,27 @@
          width="180"
          name="auto_snapshot_check" />
     </panel>
+    <button
+     bottom="-1"
+     follows="left|right|bottom"
+     height="12"
+     image_overlay="Arrow_Up"
+     layout="topleft"
+     left="1"
+     right="-1"
+     name="advanced_options_btn"
+     tool_tip="Advanced options" />
+    <!-- <FS:Zi> to make the code not crash -->
+    <panel_container
+     enabled="false"
+     follows="none"
+     height="0"
+     layout="topleft"
+     left="0"
+     name="panel_container"
+     top="0"
+     visible="false"
+     width="0">
+         <panel />
+     </panel_container>
 </floater>

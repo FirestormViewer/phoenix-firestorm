@@ -1144,12 +1144,16 @@ public:
 // static
 LLPanelSnapshot* LLFloaterSnapshot::Impl::getActivePanel(LLFloaterSnapshot* floater, bool ok_if_not_found)
 {
-	LLSideTrayPanelContainer* panel_container = floater->getChild<LLSideTrayPanelContainer>("panel_container");
-	LLPanelSnapshot* active_panel = dynamic_cast<LLPanelSnapshot*>(panel_container->getCurrentPanel());
-	if (!ok_if_not_found)
-	{
-		llassert_always(active_panel != NULL);
-	}
+	// <FS:Zi> We don't use the <panel_container> in the new version, since a tab widget makes a lot more sense
+//	LLSideTrayPanelContainer* panel_container = floater->getChild<LLSideTrayPanelContainer>("panel_container");
+//	LLPanelSnapshot* active_panel = dynamic_cast<LLPanelSnapshot*>(panel_container->getCurrentPanel());
+//	if (!ok_if_not_found)
+//	{
+//		llassert_always(active_panel != NULL);
+//	}
+	LLTabContainer* tab_container=floater->getChild<LLTabContainer>("panel_tab_container");
+	LLPanelSnapshot* active_panel=(LLPanelSnapshot*) tab_container->getCurrentPanel();
+	// </FS:Zi>
 	return active_panel;
 }
 
@@ -1267,11 +1271,18 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 	floaterp->getChild<LLButton>("advanced_options_btn")->setImageOverlay(advanced ? "TabIcon_Open_Off" : "TabIcon_Close_Off");
 	if (advanced != advanced_options_panel->getVisible())
 	{
-		S32 panel_width = advanced_options_panel->getRect().getWidth();
+		// <FS:Zi> New calculation method for advanced options at the bottom of the floater
+//		S32 panel_width = advanced_options_panel->getRect().getWidth();
 		floaterp->getChild<LLPanel>("advanced_options_panel")->setVisible(advanced);
-		S32 floater_width = floaterp->getRect().getWidth();
-		floater_width += (advanced ? panel_width : -panel_width);
-		floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+//		S32 floater_width = floaterp->getRect().getWidth();
+//		floater_width += (advanced ? panel_width : -panel_width);
+//		floaterp->reshape(floater_width, floaterp->getRect().getHeight());
+		S32 panel_height = advanced_options_panel->getRect().getHeight();
+		S32 floater_height = floaterp->getRect().getHeight();
+		floater_height+=(advanced) ? panel_height : -panel_height;
+		floaterp->reshape(floaterp->getRect().getWidth(),floater_height);
+		floaterp->translate(0,(advanced) ? -panel_height : panel_height);
+		// </FS:Zi>
 	}
 
 	if(!advanced) //set to original window resolution
@@ -2012,6 +2023,9 @@ LLFloaterSnapshot::LLFloaterSnapshot(const LLSD& key)
 	  mFailureLblPanel(NULL),
 	  impl (*(new Impl))
 {
+	// <FS:Zi> Add a commit handler to react on switching snapshot destination tab pages
+	mCommitCallbackRegistrar.add("Snapshot.SelectDestination",boost::bind(&LLFloaterSnapshot::onSelectDestination,this));
+	// </FS:Zi>
 }
 
 // Destroys the object
@@ -2446,11 +2460,37 @@ void LLFloaterSnapshot::setAgentEmail(const std::string& email)
 	LLFloaterSnapshot* instance = LLFloaterReg::findTypedInstance<LLFloaterSnapshot>("snapshot");
 	if (instance)
 	{
-		LLSideTrayPanelContainer* panel_container = instance->getChild<LLSideTrayPanelContainer>("panel_container");
-		LLPanel* postcard_panel = panel_container->getPanelByName("panel_snapshot_postcard");
+		// <FS:Zi> Adapt code to new tab widget
+// 		LLSideTrayPanelContainer* panel_container = instance->getChild<LLSideTrayPanelContainer>("panel_container");
+// 		LLPanel* postcard_panel = panel_container->getPanelByName("panel_snapshot_postcard");
+		LLPanel* postcard_panel=instance->getChild<LLPanel>("panel_snapshot_postcard");
 		postcard_panel->notify(LLSD().with("agent-email", email));
+		// </FS:Zi>
 	}
 }
+
+// <FS:Zi> Called whenever the snapshot destination is changed
+void LLFloaterSnapshot::onSelectDestination()
+{
+	static LLPanelSnapshot* previousPanel;
+
+	LLPanelSnapshot* panel=(LLPanelSnapshot*) getChild<LLTabContainer>("panel_tab_container")->getCurrentPanel();
+	if(!panel)
+	{
+		llwarns << "no active snapshot destination found" << llendl;
+		return;
+	}
+
+	// postPanelSwitch uses getInstance() on us, but we won't have retgistered in the singleton handler
+	// until then, so we'd run into a loop. Make sure we don't update on first run. <FS:Zi>
+	if(previousPanel!=0)
+	{
+		panel->onOpen(LLSD());
+		postPanelSwitch();
+	}
+	previousPanel=panel;
+}
+// </FS:Zi>
 
 ///----------------------------------------------------------------------------
 /// Class LLSnapshotFloaterView
