@@ -47,10 +47,12 @@ public:
 	/*virtual*/ void onOpen(const LLSD& key);
 	void onCloseFloater(LLUUID& id);
 	
-	/*virtual*/ void removeFloater(LLFloater* floaterp);
 	/*virtual*/ void addFloater(LLFloater* floaterp, 
 								BOOL select_added_floater, 
 								LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
+	/*virtual*/ void removeFloater(LLFloater* floaterp);
+// [/SL:KB]
 
 	static LLFloater* getCurrentVoiceFloater();
 

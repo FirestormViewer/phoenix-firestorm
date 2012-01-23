@@ -61,6 +61,18 @@ void LLFloaterReg::add(const std::string& name, const std::string& filename, con
 	sGroupMap[groupname] = groupname; // for referencing directly by group name
 }
 
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.4.0g
+//static
+void LLFloaterReg::addWithFileCallback(const std::string& name, const LLFloaterFileFunc& fileFunc, 
+									   const LLFloaterBuildFunc& func, const std::string& groupname)
+{
+	sBuildMap[name].mFunc = func;
+	sBuildMap[name].mFileFunc = fileFunc;
+	sGroupMap[name] = groupname.empty() ? name : groupname;
+	sGroupMap[groupname] = groupname; // for referencing directly by group name
+}
+// [/SL:KB]
+
 //static
 LLFloater* LLFloaterReg::getLastFloaterInGroup(const std::string& name)
 {
@@ -143,7 +155,10 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 	if (!res)
 	{
 		const LLFloaterBuildFunc& build_func = sBuildMap[name].mFunc;
-		const std::string& xui_file = sBuildMap[name].mFile;
+//		const std::string& xui_file = sBuildMap[name].mFile;
+// [SL:KB] - Patch: UI-Base | Checked: 2010-12-01 (Catznip-3.0.0a) | Added: Catznip-2.5.0a
+		const std::string& xui_file = (!sBuildMap[name].mFileFunc) ? sBuildMap[name].mFile : sBuildMap[name].mFileFunc();
+// [/SL:KB]
 		if (build_func)
 		{
 			const std::string& groupname = sGroupMap[name];
@@ -451,6 +466,23 @@ std::string LLFloaterReg::getDockStateControlName(const std::string& name)
 	return res;
 }
 
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+//static
+std::string LLFloaterReg::declareTearOffStateControl(const std::string& name)
+{
+	std::string controlname = getTearOffStateControlName(name);
+	LLFloater::getControlGroup()->declareBOOL(controlname, TRUE, llformat("Window Tear Off state for %s", name.c_str()), TRUE);
+	return controlname;
+}
+
+//static
+std::string LLFloaterReg::getTearOffStateControlName(const std::string& name)
+{
+	std::string res = std::string("floater_tearoff_") + name;
+	LLStringUtil::replaceChar(res, ' ', '_');
+	return res;
+}
+// [/SL:KB]
 
 //static
 void LLFloaterReg::registerControlVariables()
@@ -511,14 +543,25 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 		instance->openFloater(key);
 		instance->setVisibleAndFrontmost();
 	}
-	else if (!instance->isFrontmost())
-	{
-		instance->setVisibleAndFrontmost();
-	}
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-23 (Catznip-3.2.0b) | Modified: Catznip-3.2.0b
 	else
 	{
-		instance->closeFloater();
+		// Give focus to, or close, the host rather than the floater when hosted
+		LLFloater* floaterp = (!instance->getHost()) ? instance : instance->getHost();
+		if (!floaterp->isFrontmost())
+			floaterp->setVisibleAndFrontmost();
+		else
+			floaterp->closeFloater();
 	}
+// [/SL:KB]
+//	else if (!instance->isFrontmost())
+//	{
+//		instance->setVisibleAndFrontmost();
+//	}
+//	else
+//	{
+//		instance->closeFloater();
+//	}
 }
 
 // static

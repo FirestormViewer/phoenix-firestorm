@@ -570,7 +570,10 @@ void start_gesture( EKeystate s )
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
- 		if (LLNearbyChatBar::getInstance()->getCurrentChat().empty())
+// 		if (LLNearbyChatBar::getInstance()->getCurrentChat().empty())
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+ 		if (LLNearbyChatBar::getInstance()->getChatBarImpl()->getChatBoxText().empty())
+// [/SL:KB]
  		{
  			// No existing chat in chat editor, insert '/'
  			LLNearbyChatBar::startChat("/");

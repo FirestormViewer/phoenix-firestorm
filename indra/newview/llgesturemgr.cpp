@@ -51,7 +51,10 @@
 #include "llviewermessage.h"
 #include "llvoavatarself.h"
 #include "llviewerstats.h"
-#include "llnearbychatbar.h"
+//#include "llnearbychatbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a)
+#include "llnearbychatbarbase.h"
+// [/SL:KB]
 #include "llappearancemgr.h"
 #include "llgesturelistener.h"
 
@@ -1007,7 +1010,10 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 			
 			const BOOL animate = FALSE;
 
-			LLNearbyChatBar::getInstance()->sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+//			LLNearbyChatBar::getInstance()->sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+			LLNearbyChatBarBase::sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+// [/SL:KB]
 
 			gesture->mCurrentStep++;
 			break;

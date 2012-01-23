@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+    <panel width="380" 
+           height="31" 
+           left="0" 
+           name="bottom_panel"
+           bottom="-1" 
+           follows="left|right|bottom" 
+           tab_group="1">
+<layout_stack
+ animate="false"
+ follows="left|right"
+ height="23"
+ layout="topleft"
+ left="5"
+ name="nearby_chat_bar_panels"
+ orientation="horizontal"
+ top="2"
+ width="370"
+ >
+  <layout_panel
+   auto_resize="true"
+   follows="left|right"
+   height="23"
+   name="panel_nearby_chat_bar"
+   user_resize="false"
+   visible="true"
+   width="348"
+   >
+      <line_editor
+        border_style="line"
+        border_thickness="1"
+        follows="left|right"
+        height="23"
+        label="Click here to chat."
+        layout="topleft"
+        max_length_bytes="1023"
+        name="chat_box"
+        text_pad_left="5"
+        text_pad_right="25"
+        tool_tip="Press Enter to say, Ctrl+Enter to shout"
+        top="0"
+        width="348" />
+      <output_monitor
+        auto_update="true"
+        follows="right"
+        draw_border="false"
+        height="16"
+        layout="topleft"
+        left_pad="-24"
+        mouse_opaque="true"
+        name="chat_zone_indicator"
+        top="6"
+        visible="true"
+        width="20" />
+  </layout_panel>
+  <layout_panel
+   auto_resize="false"
+   follows="left|right"
+   height="23"
+   name="panel_nearby_chat_toggle"
+   user_resize="false"
+   visible="true"
+   width="22"
+   >
+      <button
+        follows="right"
+        is_toggle="true"
+        width="20"
+        top="0"
+        layout="topleft"
+        left="2"
+        image_disabled="ComboButton_UpOff"
+        image_unselected="ComboButton_UpOff"
+        image_selected="ComboButton_On"
+        image_pressed="ComboButton_UpSelected"
+        image_pressed_selected="ComboButton_Selected"
+        height="23"
+        chrome="true"
+        name="show_nearby_chat"
+        tool_tip="Shows/hides nearby chat log">
+      </button>
+  </layout_panel>
+  </layout_stack>
+    </panel>

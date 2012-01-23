@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ open_positioning="specified"
+ specified_left="320"
+ specified_bottom="10"
+ height="384"
+ layout="topleft"
+ legacy_header_height="25"
+ single_instance="true"
+ title="Nearby Chat"
+ save_rect="true"
+ save_tearoff_state="true"
+ can_close="true"
+ can_minimize="false"
+ help_topic="chat_bar"
+ min_height="84"
+ save_visibility="true"
+ min_width="150"
+ can_resize="true"
+ default_tab_group="1"
+ name="chat_bar"
+ width="380">
+
+<layout_stack
+ animate="false"
+ follows="all"
+ height="354"
+ layout="topleft"
+ left="0"
+ name="nearby_chat_panels"
+ orientation="vertical"
+ top="25"
+ width="380"
+ >
+  <layout_panel
+   auto_resize="true"
+   follows="all"
+   height="300"
+   name="panel_nearby_chat"
+   top="0"
+   visible="true"
+   width="380"
+   >
+    <panel
+        top="0"
+        class="panel_nearby_chat"
+        follows="all"
+        width="380"
+        filename="panel_nearby_chat.xml"
+        name="nearby_chat" />
+  </layout_panel>
+
+  <layout_panel
+   auto_resize="false"
+   bottom="-1"
+   height="54"
+   layout="topleft"
+   left="0"
+   min_dim="54"
+   mouse_opaque="false"
+   name="panel_nearby_chat_bar"
+   user_resize="true"
+   visible="true"
+   width="380"
+   >
+    <panel width="380" 
+           height="54" 
+           left="0" 
+           bottom="-1" 
+           filename="panel_nearby_chat_bar_multi.xml"
+           follows="left|right|bottom" 
+           name="panel_chat_bar_multi"
+           tab_group="1" />
+  </layout_panel>
+</layout_stack>
+
+</floater>

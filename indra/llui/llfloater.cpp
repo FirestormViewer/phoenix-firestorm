@@ -177,6 +177,9 @@ LLFloater::Params::Params()
 	save_dock_state("save_dock_state", false),
 	save_rect("save_rect", false),
 	save_visibility("save_visibility", false),
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	save_tearoff_state("save_tearoff_state", false),
+// [/SL:KB]
 	can_dock("can_dock", false),
 	show_title("show_title", true),
 	open_positioning("open_positioning", LLFloaterEnums::OPEN_POSITIONING_NONE),
@@ -270,9 +273,12 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
 	mHideOnMinimize(false),
+	mTearOffSignal(NULL),
+// [/SL:KB]
 	mMinimizeSignal(NULL)
 //	mNotificationContext(NULL)
 {
+//	mHandle.bind(this);
 //	mNotificationContext = new LLFloaterNotificationContext(getHandle());
 
 	// Clicks stop here.
@@ -548,6 +554,9 @@ LLFloater::~LLFloater()
 	storeDockStateControl();
 
 	delete mMinimizeSignal;
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	delete mTearOffSignal;
+// [/SL:KB]
 }
 
 void LLFloater::storeRectControl()
@@ -582,6 +591,16 @@ void LLFloater::storeMinimizeStateControl()
 		getControlGroup()->setBOOL( mMinimizeStateControl, mMinimized );
 	}	
 }
+
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+void LLFloater::storeTearOffStateControl()
+{
+	if ( (!sQuitting) && (mCanTearOff) && (mTearOffStateControl.size() > 1) )
+	{
+		getControlGroup()->setBOOL(mTearOffStateControl, isTornOff());
+	}
+}
+// [/SL:KB]
 
 LLRect LLFloater::getSavedRect() const
 {
@@ -886,16 +905,33 @@ LLMultiFloater* LLFloater::getHost()
 	return (LLMultiFloater*)mHostHandle.get(); 
 }
 
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-25 (Catznip-3.2.0b) | Added: Catznip-3.2.0b
+LLMultiFloater* LLFloater::getLastHost() const
+{
+	return (LLMultiFloater*)mLastHostHandle.get(); 
+}
+// [/SL:KB]
+
 void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
 	if (!applyDockState())
 	{
-		if (!applyRectControl())
+//		if (!applyRectControl())
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-27 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		if ( (!applyRectControl()) && ((!getHost()) || (mTornOff)) )
+// [/SL:KB]
 		{
 			applyPositioning(other);
 		}
 	}
 	applyMinimizedState();
+
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	if (getHost())
+	{
+		applyTearOffState();
+	}
+// [/SL:KB]
 }
 
 bool LLFloater::applyRectControl()
@@ -999,6 +1035,17 @@ void LLFloater::applyPositioning(LLFloater* other)
 		break;
 	}
 }
+
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+void LLFloater::applyTearOffState()
+{
+	if ( (mCanTearOff) && (mTearOffStateControl.size() > 1) )
+	{
+		bool tearoffState = getControlGroup()->getBOOL(mTearOffStateControl);
+		setTornOff(tearoffState);
+	}
+}
+// [/SL:KB]
 
 void LLFloater::applyTitle()
 {
@@ -1632,7 +1679,7 @@ void LLFloater::setFrontmost(BOOL take_focus)
 		// the appropriate panel
 		hostp->showFloater(this);
 	}
-	else
+	else if( getParent() )
 	{
 		// there are more than one floater view
 		// so we need to query our parent directly
@@ -1688,57 +1735,122 @@ void LLFloater::onClickMinimize(LLFloater* self)
 	self->setMinimized( !self->isMinimized() );
 }
 
-void LLFloater::onClickTearOff(LLFloater* self)
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+void LLFloater::setTornOff(bool torn_off)
 {
-	if (!self)
+	if ( (!mCanTearOff) || (mTornOff == torn_off) )
 		return;
-	S32 floater_header_size = self->mHeaderHeight;
-	LLMultiFloater* host_floater = self->getHost();
-	if (host_floater) //Tear off
-	{
-		LLRect new_rect;
-		host_floater->removeFloater(self);
-		// reparent to floater view
-		gFloaterView->addChild(self);
 
-		self->openFloater(self->getKey());
+	LLMultiFloater* host_floater = getHost();
+	if ( (torn_off) && (host_floater) )		// Tear off
+	{
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+		if (mTearOffSignal)
+			(*mTearOffSignal)(this, LLSD(true));
+// [/SL:KB]
+
+		LLRect new_rect;
+		host_floater->removeFloater(this);
+		// reparent to floater view
+		gFloaterView->addChild(this);
+
+		openFloater(getKey());
 		
 		// get floater rect size from either the rect control or the saved rect -Zi
-		if (self->mRectControl.size() <= 1)
+		if (mRectControl.size() <= 1)
 			// restore old size and position -Zi
-			new_rect=self->getExpandedRect();
+			new_rect= getExpandedRect();
 		else
-			new_rect=self->getSavedRect();
+			new_rect= getSavedRect();
 
 		// only force position for floaters that have an empty rect -Zi
 		if(new_rect.isEmpty())
 		{
 			llwarns << "no rect saved yet, so reshape the floater" << llendl;
-			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
+			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - mHeaderHeight - 5, getRect().getWidth(), getRect().getHeight());
+			setRect(new_rect);
 		}
-		self->setShape(new_rect);
-		self->storeRectControl();
+		setShape(new_rect);
+		storeRectControl();
 
-		gFloaterView->adjustToFitScreen(self, FALSE);
+		gFloaterView->adjustToFitScreen(this, FALSE);
 		// give focus to new window to keep continuity for the user
-		self->setFocus(TRUE);
+		setFocus(TRUE);
+		mTornOff = true;;
 	}
-	else  //Attach to parent.
+	else if (!torn_off)						// Attach to parent.
 	{
-		self->storeRectControl();
+		storeRectControl();
 		// save the current size and position -Zi
-		self->setExpandedRect(self->getRect());
-		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
+		setExpandedRect( getRect() );
+		LLMultiFloater* new_host = (LLMultiFloater*)mLastHostHandle.get();
 		if (new_host)
 		{
-			self->setMinimized(FALSE); // to reenable minimize button if it was minimized
-			new_host->showFloater(self);
+// [SL:KB] - Patch: UI-FloaterTearSignal | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+			if (mTearOffSignal)
+				(*mTearOffSignal)(this, LLSD(false));
+// [/SL:KB]
+
+			setMinimized(FALSE); // to reenable minimize button if it was minimized
+			new_host->showFloater(this);
 			// make sure host is visible
 			new_host->openFloater(new_host->getKey());
 		}
+		mTornOff = false;
 	}
-	self->updateTitleButtons();
+	updateTitleButtons();
+
+	storeTearOffStateControl();
 }
+
+void LLFloater::onClickTearOff(LLFloater* self)
+{
+	if ( (self) && (self->mCanTearOff) )
+	{
+		self->setTornOff(!self->mTornOff);
+	}
+}
+// [/SL:KB]
+//void LLFloater::onClickTearOff(LLFloater* self)
+//{
+//	if (!self)
+//		return;
+//	S32 floater_header_size = self->mHeaderHeight;
+//	LLMultiFloater* host_floater = self->getHost();
+//	if (host_floater) //Tear off
+//	{
+//		LLRect new_rect;
+//		host_floater->removeFloater(self);
+//		// reparent to floater view
+//		gFloaterView->addChild(self);
+//
+//		self->openFloater(self->getKey());
+//		
+//		// only force position for floaters that don't have that data saved
+//		if (self->mRectControl.size() <= 1)
+//		{
+//			new_rect.setLeftTopAndSize(host_floater->getRect().mLeft + 5, host_floater->getRect().mTop - floater_header_size - 5, self->getRect().getWidth(), self->getRect().getHeight());
+//			self->setRect(new_rect);
+//		}
+//		gFloaterView->adjustToFitScreen(self, FALSE);
+//		// give focus to new window to keep continuity for the user
+//		self->setFocus(TRUE);
+//		self->setTornOff(true);
+//	}
+//	else  //Attach to parent.
+//	{
+//		LLMultiFloater* new_host = (LLMultiFloater*)self->mLastHostHandle.get();
+//		if (new_host)
+//		{
+//			self->setMinimized(FALSE); // to reenable minimize button if it was minimized
+//			new_host->showFloater(self);
+//			// make sure host is visible
+//			new_host->openFloater(new_host->getKey());
+//		}
+//		self->setTornOff(false);
+//	}
+//	self->updateTitleButtons();
+//}
 
 // static
 void LLFloater::onClickDock(LLFloater* self)
@@ -3044,6 +3156,13 @@ void LLFloater::setInstanceName(const std::string& name)
 		{
 			mDocStateControl = LLFloaterReg::declareDockStateControl(ctrl_name);
 		}
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+		if(!mTearOffStateControl.empty())
+		{
+			mTearOffStateControl = LLFloaterReg::declareTearOffStateControl(ctrl_name);
+		}
+// [/SL:KB]
+
 		if(!mMinimizeStateControl.empty())
 		{
 			mMinimizeStateControl = LLFloaterReg::declareMinimizeStateControl(ctrl_name);
@@ -3135,9 +3254,16 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	{
 		mDocStateControl = "t"; // flag to build mDocStateControl name once mInstanceName is set
 	}
-	
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	if (p.save_tearoff_state)
+	{
+		mTearOffStateControl = "t"; // flag to build mTearOffStateControl name once mInstanceName is set
+	}
+// [/SL:KB]
+
 	mMinimizeStateControl = "t"; // AO: flag to save minimize state. TODO: make this param-optional.
 	
+
 	// open callback 
 	if (p.open_callback.isProvided())
 	{
@@ -3160,6 +3286,14 @@ boost::signals2::connection LLFloater::setMinimizeCallback( const commit_signal_
 	if (!mMinimizeSignal) mMinimizeSignal = new commit_signal_t();
 	return mMinimizeSignal->connect(cb); 
 }
+
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+boost::signals2::connection LLFloater::setTearOffCallback( const commit_signal_t::slot_type& cb ) 
+{ 
+	if (!mTearOffSignal) mTearOffSignal = new commit_signal_t();
+	return mTearOffSignal->connect(cb); 
+}
+// [/SL:KB]
 
 boost::signals2::connection LLFloater::setOpenCallback( const commit_signal_t::slot_type& cb )
 {

@@ -130,6 +130,9 @@ public:
 								save_rect,
 								save_visibility,
 								save_dock_state,
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+								save_tearoff_state,
+// [/SL:KB]
 								can_dock,
 								show_title;
 		
@@ -178,6 +181,9 @@ public:
 	bool buildFromFile(const std::string &filename, LLXMLNodePtr output_node = NULL);
 
 	boost::signals2::connection setMinimizeCallback( const commit_signal_t::slot_type& cb );
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	boost::signals2::connection setTearOffCallback( const commit_signal_t::slot_type& cb );
+// [/SL:KB]
 	boost::signals2::connection setOpenCallback( const commit_signal_t::slot_type& cb );
 	boost::signals2::connection setCloseCallback( const commit_signal_t::slot_type& cb );
 
@@ -207,6 +213,9 @@ public:
 	void			center();
 
 	LLMultiFloater* getHost();
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-25 (Catznip-3.2.0b) | Added: Catznip-3.2.0b
+	LLMultiFloater* getLastHost() const;
+// [/SL:KB]
 
 	void			applyTitle();
 	std::string		getCurrentTitle() const;
@@ -299,7 +308,10 @@ public:
 	bool            isDocked() const { return mDocked; }
 	virtual void    setDocked(bool docked, bool pop_on_undock = true);
 
-	virtual void    setTornOff(bool torn_off) { mTornOff = torn_off; }
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	bool            isTornOff() const { return mTornOff; }
+	virtual void    setTornOff(bool torn_off);
+// [/SL:KB]
 
 	// Return a closeable floater, if any, given the current focus.
 	static LLFloater* getClosableFloaterFromFocus(); 
@@ -335,9 +347,16 @@ protected:
 	virtual bool	applyRectControl();
 	bool			applyDockState();
 	void			applyPositioning(LLFloater* other);
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	void			applyTearOffState();
+// [/SL:KB]
 	void			storeRectControl();
 	void			storeVisibilityControl();
 	void			storeDockStateControl();
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	void			storeTearOffStateControl();
+// [/SL:KB]
+
 	void			storeMinimizeStateControl();
 	void			applyMinimizedState();
 
@@ -398,13 +417,20 @@ public:
 	commit_signal_t mCloseSignal;		
 
 	commit_signal_t* mMinimizeSignal;
+// [SL:KB] - Patch: UI-FloaterTearOffSignal | Checked: 2011-11-12 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
+	commit_signal_t* mTearOffSignal;
+// [/SL:KB]
 
 protected:
 	std::string		mRectControl;
 	std::string		mVisibilityControl;
 	std::string		mDocStateControl;
+// [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	std::string		mTearOffStateControl;
+// [/SL:KB]
+
 	std::string		mMinimizeStateControl;
-	
+
 	LLSD			mKey;				// Key used for retrieving instances; set (for now) by LLFLoaterReg
 
 	LLDragHandle*	mDragHandle;

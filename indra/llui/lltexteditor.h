@@ -64,6 +64,9 @@ public:
 								ignore_tab,
 								show_line_numbers,
 								commit_on_focus_lost,
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.2.0a) | Added: Catznip-2.8.0a
+								commit_on_return,
+// [/SL:KB]
 								show_context_menu;
 
 		//colors
@@ -338,6 +341,9 @@ private:
 
 	BOOL			mTabsToNextField;		// if true, tab moves focus to next field, else inserts spaces
 	BOOL			mCommitOnFocusLost;
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.2.0a) | Added: Catznip-2.8.0a
+	BOOL			mCommitOnReturn;
+// [/SL:KB]
 	BOOL			mTakesFocus;
 
 	BOOL			mAllowEmbeddedItems;

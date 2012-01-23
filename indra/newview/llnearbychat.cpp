@@ -492,11 +492,15 @@ bool isWordsName(const std::string& name)
 }
 void LLNearbyChat::onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata )
 {
-	LLNearbyChatBar::getInstance()->onChatBoxFocusReceived();
+	// <FS:ND> ND_MERGE code from FS commented out, causes endless recursion
+	//	LLNearbyChatBar::getInstance()->onChatBoxFocusReceived();
+	// </FS:ND>
 }
 void LLNearbyChat::onInputEditorFocusLost(LLFocusableElement* caller, void* userdata)
 {
-	LLNearbyChatBar::getInstance()->onChatBoxFocusLost(caller, userdata);
+	// <FS:ND> ND_MERGE code from FS commented out, causes endless recursion
+	//	LLNearbyChatBar::getInstance()->onChatBoxFocusLost();
+	// </FS:ND>
 }
 void LLNearbyChat::onInputEditorKeystroke(LLLineEditor* caller, void* userdata)
 {

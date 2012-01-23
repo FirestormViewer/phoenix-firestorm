@@ -67,6 +67,9 @@
 #include "llvowlsky.h"
 #include "llrender.h"
 #include "llnavigationbar.h"
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.2.0a)
+#include "llnearbychatbar.h"
+// [/SL:KB]
 #include "llfloatertools.h"
 #include "llpaneloutfitsinventory.h"
 #include "llpanellogin.h"
@@ -794,7 +797,6 @@ void settings_setup_listeners()
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
 // [/SL:KB]
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-07-02 (Catznip-2.8.0a) | Added: Catznip-2.7.0a
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
 // [/SL:KB]
@@ -806,6 +808,11 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));
 	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
 	// NaCl End
+
+// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-09-24 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
+	gSavedSettings.getControl("NearbyChatFloaterBarType")->getSignal()->connect(boost::bind(&LLNearbyChatBar::processFloaterTypeChanged));
+	gSavedSettings.getControl("NearbyChatFloaterWindow")->getSignal()->connect(boost::bind(&LLNearbyChatBar::processFloaterTypeChanged));
+// [/SL:KB]
 }
 
 #if TEST_CACHED_CONTROL

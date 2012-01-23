@@ -17,24 +17,43 @@
      layout="topleft"
      left_delta="3"
      left="0"
-	 max_length_bytes="1024"
+     max_length_bytes="1023"
      spellcheck="true"
      name="chat_box"
      text_pad_left="5"
      text_pad_right="25"
      tool_tip="Press Enter to say, Ctrl+Enter to shout"
      top="2"
-     width="303" />
+     width="283" />
     <output_monitor
      auto_update="true"
      follows="right"
      draw_border="false"
      height="16"
      layout="topleft"
-     left_pad="-30"
+     left_pad="-24"
      mouse_opaque="true"
      name="chat_zone_indicator"
      top="6"
      visible="true"
      width="20" />
+    <button
+     follows="right"
+     is_toggle="true"
+     width="20"
+     top="2"
+     layout="topleft"
+     left_pad="4"
+     image_disabled="ComboButton_UpOff"
+     image_unselected="ComboButton_UpOff"
+     image_selected="ComboButton_On"
+     image_pressed="ComboButton_UpSelected"
+     image_pressed_selected="ComboButton_Selected"
+     height="23"
+     name="show_nearby_chat"
+     tool_tip="Shows/hides nearby chat log">
+        <button.init_callback
+           function="Button.SetDockableFloaterToggle"
+           parameter="nearby_chat" />
+    </button>
 </panel>
