@@ -476,16 +476,10 @@ void LLURLRequest::initialize()
 	LLMemType m1(LLMemType::MTYPE_IO_URL_REQUEST);
 	mState = STATE_INITIALIZED;
 	mDetail = new LLURLRequestDetail;
-	if(!mDetail)
-	{
-		lldebugs << "LLURLRequestDetail() failed." << llendl;
-		return;
-	}
 
-	if(!mDetail->mCurlRequest)
+	if(!isValid())
 	{
-		lldebugs << "mCurlRequest==0!" << llendl;
-		return;
+		return ;
 	}
 
 	mDetail->mCurlRequest->setopt(CURLOPT_NOSIGNAL, 1);
