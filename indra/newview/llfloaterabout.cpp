@@ -43,6 +43,9 @@
 #include "llviewerregion.h"
 #include "llversioninfo.h"
 #include "llweb.h"
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.4.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden library includes
 #include "llaudioengine.h"

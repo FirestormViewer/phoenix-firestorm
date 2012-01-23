@@ -38,6 +38,10 @@
 #include "llviewermedia.h"
 #include "llviewermediafocus.h"
 #include "llviewerobjectlist.h"	// to select the requested object
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
+#include "rlvhandler.h"
+#include "lltoolpie.h"
+// [/RLVa:KB]
 
 // Linden libraries
 #include "llbutton.h"			// setLabel(), not virtual!

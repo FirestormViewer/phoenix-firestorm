@@ -111,7 +111,10 @@
 // [/RLVa:KB]
 #include "llcurl.h"
 #include "llnotifications.h"
-
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #ifdef _DEBUG
 // Debug indices is disabled for now for debug performance - djs 4/24/02

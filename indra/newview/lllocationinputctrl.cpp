@@ -1119,11 +1119,11 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
 			
 			if(!landmark)
 			{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
 			}
 			else
 			{
-			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
+				LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id",landmark->getUUID()));
 			}
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
 		}

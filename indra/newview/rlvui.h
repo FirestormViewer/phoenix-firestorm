@@ -46,7 +46,6 @@ protected:
 	void onRefreshHoverText();											// showloc, shownames, showhovertext(all|world|hud)
 	void onToggleEdit();												// edit
 	void onToggleMovement();											// fly, alwaysrun and temprun
-	void onToggleRez();													// rez
 	void onToggleSetDebug();											// setdebug
 	void onToggleSetEnv();												// setenv
 	void onToggleShowInv(bool fQuitting);								// showinv
@@ -72,9 +71,6 @@ protected:
 	boost::signals2::connection m_ConnFloaterShowLoc;					// showloc
 	bool filterFloaterViewXXX(const std::string&, const LLSD&);
 	boost::signals2::connection m_ConnFloaterViewXXX;					// viewnote, viewscript, viewtexture
-
-	bool canOpenSidebarTab(ERlvBehaviour, const std::string&, LLUICtrl*, const LLSD&);
-	boost::signals2::connection m_ConnSidePanelInventory;				// showinv
 
 	/*
 	 * Helper functions

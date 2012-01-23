@@ -16,25 +16,21 @@
 
 #include "llviewerprecompiledheaders.h"
 #include "llagent.h"
+#include "llavataractions.h"			// LLAvatarActions::profileVisible()
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
 #include "llavatarnamecache.h"
-#include "llbutton.h"
 #include "llcallfloater.h"
-#include "llenvmanager.h"				// LLEnvManagerNew
-#include "llhudtext.h"
-#include "llinventorypanel.h"
-#include "llimview.h"					// LLIMMgr
+#include "llenvmanager.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
+#include "llimview.h"					// LLIMMgr::computeSessionID()
 #include "llmoveview.h"					// Movement panel (contains "Stand" and "Stop Flying" buttons)
 #include "llnavigationbar.h"			// Navigation bar
-#include "llnotificationsutil.h"
 #include "lloutfitslist.h"				// "My Outfits" sidebar panel
 #include "llpaneloutfitsinventory.h"	// "My Appearance" sidebar panel
 #include "llpanelpeople.h"				// "People" sidebar panel
-#include "llpanelprofile.h"				// "Profile" sidebar panel
 #include "llpanelwearing.h"				// "Current Outfit" sidebar panel
 #include "llparcel.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llsidetraypanelcontainer.h"
 #include "llsidepanelappearance.h"
 #include "lltabcontainer.h"
 #include "llteleporthistory.h"
@@ -75,7 +71,6 @@ RlvUIEnabler::RlvUIEnabler()
 
 	// onToggleXXX
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_EDIT, boost::bind(&RlvUIEnabler::onToggleEdit, this)));
-	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_REZ, boost::bind(&RlvUIEnabler::onToggleRez, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETDEBUG, boost::bind(&RlvUIEnabler::onToggleSetDebug, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SETENV, boost::bind(&RlvUIEnabler::onToggleSetEnv, this)));
 	m_Handlers.insert(std::pair<ERlvBehaviour, behaviour_handler_t>(RLV_BHVR_SHOWINV, boost::bind(&RlvUIEnabler::onToggleShowInv, this, _1)));
@@ -135,9 +130,6 @@ void RlvUIEnabler::onToggleEdit()
 			LLToolMgr::instance().toggleBuildMode();
 	}
 
-	// Enable/disable the "Build" bottom tray button (but only if edit *and* rez restricted)
-	//	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled()); ND_MERGE
-
 	// Start or stop filtering opening the beacons floater
 	if (!fEnable)
 		addGenericFloaterFilter("beacons");
@@ -157,13 +149,6 @@ void RlvUIEnabler::onToggleMovement()
 
 	// Force an update since the status only updates when the current parcel changes [see LLFloaterMove::postBuild()]
 	LLFloaterMove::sUpdateMovementStatus();
-}
-
-// Checked: 2010-09-11 (RLVa-1.4.0a) | Added: RLVa-1.2.1d
-void RlvUIEnabler::onToggleRez()
-{
-	// Enable/disable the "Build" bottom tray button
-	//	LLBottomTray::getInstance()->getChild<LLButton>("build_btn")->setEnabled(isBuildEnabled()); ND_MERGE
 }
 
 // Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
@@ -210,7 +195,7 @@ void RlvUIEnabler::onToggleSetEnv()
 		LLEnvManagerNew::instance().usePrefs();
 }
 
-// Checked: 2010-09-07 (RLVa-1.4.0a) | Modified: RLVa-1.2.1a
+// Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a
 void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 {
 	if (fQuitting)
@@ -219,48 +204,14 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWINV);
 
 	//
-	// Enable/disable the "My Inventory" sidebar tab
+	// When disabling, close any inventory floaters that may be open
 	//
-
-	// ND_MERGE
-	// LLSideTray* pSideTray = (LLSideTray::instanceCreated()) ? LLSideTray::getInstance() : NULL;
-	// if (pSideTray)
-	// {
-	// 	// If the inventory sidebar tab is currently undocked we need to redock it first
-	// 	if ( (!fEnable) && (!pSideTray->isTabAttached("sidebar_inventory")) )
-	// 	{
-	// 		// NOTE: redocking will expand the sidebar and select the redocked tab so we need enough information to undo that again
-	// 		bool fCollapsed = pSideTray->getCollapsed();
-	// 		const LLPanel* pActiveTab = pSideTray->getActiveTab();
-
-	// 		pSideTray->setTabDocked("sidebar_inventory", true, true);
-
-	// 		if (pActiveTab)
-	// 			pSideTray->selectTabByName(pActiveTab->getName());
-	// 		if (fCollapsed)
-	// 			pSideTray->collapseSideBar();
-	// 	}
-
-	// 	LLButton* pInvBtn = pSideTray->getButtonFromName("sidebar_inventory");
-	// 	RLV_ASSERT(pInvBtn);
-	// 	if (pInvBtn) 
-	// 		pInvBtn->setEnabled(fEnable);
-
-	// 	// When disabling, switch to the first available sidebar tab if "My Inventory" is currently active
-	// 	// NOTE: when collapsed 'isPanelActive' will return FALSE even if the panel is currently active so we have to sidestep that
-	// 	const LLPanel* pActiveTab = pSideTray->getActiveTab();
-	// 	if ( (!fEnable) && (pActiveTab) && ("sidebar_inventory" == pActiveTab->getName()) )
-	// 	{
-	// 		if (!pSideTray->selectTabByIndex(1))		// Try to switch to the first available (docked) tab - open/close = index 0
-	// 			pSideTray->collapseSideBar();			// (or just collapse the sidebar if there's no tab we can switch to)
-	// 		if (pSideTray->getCollapsed())
-	// 			pSideTray->collapseSideBar();			// Fixes a button highlighting glitch when changing the active tab while collapsed
-	// 	}
-
-	// 	// Enable/disable the "Inventory" bottom tray button
-	// 	//		LLBottomTray::getInstance()->getChild<LLButton>("sidebar_inv_btn")->setEnabled(fEnable); ND_MERGE
-	// }
-	// /ND_MERGE
+	if (!fEnable)
+	{
+		LLFloaterReg::const_instance_list_t lFloaters = LLFloaterReg::getFloaterList("inventory");
+		for (LLFloaterReg::const_instance_list_t::const_iterator itFloater = lFloaters.begin(); itFloater != lFloaters.end(); ++itFloater)
+			(*itFloater)->closeFloater();
+	}
 
 	//
 	// Enable/disable the "My Outfits" panel on the "My Appearance" sidebar tab
@@ -292,29 +243,12 @@ void RlvUIEnabler::onToggleShowInv(bool fQuitting)
 	}
 
 	//
-	// When disabling, hide any old style inventory floaters that may be open
+	// Filter (or stop filtering) opening new inventory floaters
 	//
 	if (!fEnable)
-	{
-		LLFloaterReg::const_instance_list_t lFloaters = LLFloaterReg::getFloaterList("inventory");
-		for (LLFloaterReg::const_instance_list_t::const_iterator itFloater = lFloaters.begin(); itFloater != lFloaters.end(); ++itFloater)
-			(*itFloater)->closeFloater();
-	}
-
-	//
-	// Filter (or stop filtering) opening the inventory sidebar tab and spawning old style inventory floaters
-	//
-	RLV_ASSERT_DBG( (fEnable) || (!m_ConnSidePanelInventory.connected()) );
-	if (!fEnable)
-	{
-		//		m_ConnSidePanelInventory = pSideTray->setValidateCallback(boost::bind(&RlvUIEnabler::canOpenSidebarTab, this, RLV_BHVR_SHOWINV, "sidebar_inventory", _1, _2)); ND_MERGE
 		addGenericFloaterFilter("inventory");
-	}
 	else
-	{
-		m_ConnSidePanelInventory.disconnect();
 		removeGenericFloaterFilter("inventory");
-	}
 }
 
 // Checked: 2010-04-22 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -395,15 +329,6 @@ void RlvUIEnabler::onToggleShowMinimap()
 	else if ( (fEnable) && (fPrevVisibile) )
 		LLFloaterReg::showInstance("mini_map");
 
-	// Enable/disable the "Mini-Map" bottom tray button
-	// ND_MERGE
-	// const LLBottomTray* pTray = LLBottomTray::getInstance();
-	// LLView* pBtnView = (pTray) ? pTray->findChildView("mini_map_btn") : NULL;
-	// RLV_ASSERT(pBtnView);
-	// if (pBtnView)
-	// 	pBtnView->setEnabled(fEnable);
-	// ND_MERGE
-
 	// Break/reestablish the visibility connection for the nearby people panel embedded minimap instance
 	LLPanel* pPeoplePanel = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
 	LLPanel* pNetMapPanel = (pPeoplePanel) ? pPeoplePanel->getChild<LLPanel>("minimaplayout", TRUE) : NULL;  //AO: firestorm specific
@@ -426,7 +351,7 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 	bool fEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 
 	// Refresh the nearby people list
-	LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
+	LLPanelPeople* pPeoplePanel = LLFloaterSidePanelContainer::getPanel<LLPanelPeople>("people", "panel_people");
 	RLV_ASSERT( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) );
 	if ( (pPeoplePanel) && (pPeoplePanel->getNearbyList()) )
 		pPeoplePanel->getNearbyList()->updateAvatarNames();
@@ -457,16 +382,6 @@ void RlvUIEnabler::onToggleShowWorldMap()
 	// Hide the world map if it's currently visible
 	if ( (!fEnable) && (LLFloaterReg::instanceVisible("world_map")) )
 		LLFloaterReg::hideInstance("world_map");
-
-	// Enable/disable the "Map" bottom tray button
-
-	// ND_MERGE
-	// const LLBottomTray* pTray = LLBottomTray::getInstance();
-	// LLView* pBtnView = (pTray) ? pTray->findChildView("world_map_btn") : NULL;
-	// RLV_ASSERT(pBtnView);
-	// if (pBtnView)
-	// 	pBtnView->setEnabled(fEnable);
-	// /ND_MERGE
 
 	// Start or stop filtering opening the world map
 	if (!fEnable)
@@ -584,13 +499,6 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 	return true;
 }
 
-// Checked: 2010-03-01 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
-bool RlvUIEnabler::canOpenSidebarTab(ERlvBehaviour eBhvrFilter, const std::string& strNameFilter, LLUICtrl* pCtrl, const LLSD& sdParam)
-{
-	// NOTE: pCtrl->getName() is the name of the sidebar tab and sdParam is the name of the child panel being activated (can be omitted)
-	return (!gRlvHandler.hasBehaviour(eBhvrFilter)) || (strNameFilter != pCtrl->getName());
-}
-
 // ============================================================================
 
 // Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
@@ -652,43 +560,21 @@ bool RlvUIEnabler::hasOpenIM(const LLUUID& idAgent)
 	return (NULL != LLFloaterReg::findInstance("impanel", idSession));
 }
 
-// Checked: 2010-04-20 (RLVa-1.2.0h) | Added: RLVa-1.2.0f
+// Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a
 bool RlvUIEnabler::hasOpenProfile(const LLUUID& idAgent)
 {
-	// NOTE: despite its name this function is used to determine whether or not we'll obfuscate names for inventory drops on nearby agents
 	//   -> SL-2.1.0 added the ability to "share" inventory by dropping it on the avatar picker floater so we should check for that
 	//   -> we can drag/drop inventory onto calling cards but probably noone knows about it and it would be too involved to check for that
 	// TODO-RLVa: [RLVa-1.2.1] Check the avatar picker as well
 
 	// Check if the user has the specified agent's profile open
-
-	// ND_MERGE
-	// LLSideTray* pSideTray = LLSideTray::getInstance(); 
-	// RLV_ASSERT(pSideTray);
-	// if ( (pSideTray) && (!pSideTray->getCollapsed()) )
-	// {
-	// 	/*const*/ LLSideTrayPanelContainer* pPanelContainer = dynamic_cast</*const*/ LLSideTrayPanelContainer*>(pSideTray->getActivePanel());
-	// 	if (pPanelContainer)
-	// 	{
-	// 		const LLPanel* pActivePanel = pPanelContainer->getCurrentPanel();
-	// 		if ( (pActivePanel) && ("panel_profile_view" == pActivePanel->getName()) )
-	// 		{
-	// 			const LLPanelProfile* pProfilePanel = dynamic_cast<const LLPanelProfile*>(pActivePanel);
-	// 			RLV_ASSERT(pProfilePanel);
-	// 			if (pProfilePanel)
-	// 				return (idAgent == pProfilePanel->getAvatarId());
-	// 		}
-	// 	}
-	// }
-	// /ND_MERGE
-
-	return false;
+	return LLAvatarActions::profileVisible(idAgent);
 }
 
 // Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
 bool RlvUIEnabler::isBuildEnabled()
 {
-	return (!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT) || !gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && LLToolMgr::getInstance()->canEdit();
+	return (gAgent.canEditParcel()) && ((!gRlvHandler.hasBehaviour(RLV_BHVR_EDIT)) || (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)));
 }
 
 // ============================================================================

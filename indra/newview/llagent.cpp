@@ -91,18 +91,16 @@
 #include "llwindow.h"
 #include "llworld.h"
 #include "llworldmap.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
-#include "rlvhandler.h"
-#include "rlvhelper.h"
-// [/RLVa:KB]
+
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
 #include "kcwlinterface.h"
 #include "stringize.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+// [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
 #include "rlvhandler.h"
 #include "rlvhelper.h"
+#include "rlvui.h"
 // [/RLVa:KB]
 
 
@@ -194,7 +192,10 @@ bool LLAgent::isActionAllowed(const LLSD& sdname)
 
 	if (param == "build")
 	{
-		retval = gAgent.canEditParcel();
+//		retval = gAgent.canEditParcel();
+// [RLVa:KB] - Checked: 2011-11-05 (RLVa-1.4.4a) | Added: RLVa-1.4.4a
+		retval = RlvUIEnabler::isBuildEnabled();
+// [/RLVa:KB]
 	}
 	else if (param == "speak")
 	{

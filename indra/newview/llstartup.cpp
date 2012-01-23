@@ -187,6 +187,10 @@
 #include "llavatariconctrl.h"
 #include "llvoicechannel.h"
 
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
@@ -1988,6 +1992,14 @@ bool idle_startup()
 //		llinfos << "Creating Inventory Views" << llendl;
 //		LLFloaterReg::getInstance("inventory");
 //		display_startup();
+// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
+		if (rlv_handler_t::isEnabled())
+		{
+			// Regularly process a select subset of retained commands during logon
+			gIdleCallbacks.addFunction(RlvHandler::onIdleStartup, new LLTimer());
+		}
+// [/RLVa:KB]
+
 		LLStartUp::setStartupState( STATE_MISC );
 		display_startup();
 		return FALSE;
