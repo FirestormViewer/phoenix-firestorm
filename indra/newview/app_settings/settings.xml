@@ -2,7 +2,17 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
-
+  <key>FSLandmarkCreatedNotification</key>
+  <map>
+    <key>Comment</key>
+    <string>Display a notification if a landmark is added to your inventory.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
   <key>FSFolderViewItemHeight</key>
   <map>
     <key>Comment</key>
