@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <toolbars>
   <bottom_toolbar
-    button_display_mode="icons_with_text">
+    button_display_mode="icons_with_text"
+    button_layout_style="none">
     <command name="chat"/>
     <command name="speak"/>
     <command name="destinations"/>
@@ -12,7 +13,8 @@
     <command name="howto"/>
   </bottom_toolbar>
   <left_toolbar
-    button_display_mode="icons_only">
+    button_display_mode="icons_only"
+    button_layout_style="none">
     <command name="avatar"/>
     <command name="appearance"/>
     <command name="inventory"/>

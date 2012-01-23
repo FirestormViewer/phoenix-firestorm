@@ -65,6 +65,7 @@ public:
 	{
 		Mandatory<LLToolBarEnums::ButtonType>	button_display_mode;
 		Multiple<LLCommandId::Params>	commands;
+		Optional<LLToolBarEnums::LayoutStyle>	button_layout_style;	// <FS:Zi> Added layout style parameter
 
 		Toolbar();
 	};

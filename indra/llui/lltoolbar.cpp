@@ -64,6 +64,7 @@ namespace LLInitParam
 	{
 		declare("icons_with_text",	BTNTYPE_ICONS_WITH_TEXT);
 		declare("icons_only",		BTNTYPE_ICONS_ONLY);
+		declare("text_only",		BTNTYPE_TEXT_ONLY);		// <FS:Zi> Add text only button type
 	}
 
 	void TypeValues<SideType>::declareValues()
@@ -73,6 +74,15 @@ namespace LLInitParam
 		declare("right",	SIDE_RIGHT);
 		declare("top",		SIDE_TOP);
 	}
+
+	// <FS:Zi> Add our layout name to enum mappings for XUI load/save
+	void TypeValues<LayoutStyle>::declareValues()
+	{
+		declare("none",		LAYOUT_STYLE_NONE);
+		declare("equalize",	LAYOUT_STYLE_EQUALIZE);
+		declare("fill",		LAYOUT_STYLE_FILL);
+	}
+	// </FS:Zi>
 }
 
 LLToolBar::Params::Params()
@@ -89,7 +99,12 @@ LLToolBar::Params::Params()
 	pad_bottom("pad_bottom"),
 	pad_between("pad_between"),
 	min_girth("min_girth"),
-	button_panel("button_panel")
+	// <FS:Zi> Add our button (text-only) and layout style parameters
+	// button_panel("button_panel")
+	button_panel("button_panel"),
+	button("button"),
+	layout_style("layout_style",LLToolBarEnums::LAYOUT_STYLE_NONE)
+	// </FS:Zi>
 {}
 
 LLToolBar::LLToolBar(const LLToolBar::Params& p)
@@ -117,10 +132,15 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	mButtonEnterSignal(NULL),
 	mButtonLeaveSignal(NULL),
 	mButtonRemoveSignal(NULL),
-	mDragAndDropTarget(false)
+	// <FS:Zi> add layout style initialisation
+	// mDragAndDropTarget(false)
+	mDragAndDropTarget(false),
+	mLayoutStyle(p.layout_style)
+	// </FS:Zi>
 {
 	mButtonParams[LLToolBarEnums::BTNTYPE_ICONS_WITH_TEXT] = p.button_icon_and_text;
 	mButtonParams[LLToolBarEnums::BTNTYPE_ICONS_ONLY] = p.button_icon;
+	mButtonParams[LLToolBarEnums::BTNTYPE_TEXT_ONLY] = p.button;		// <FS:Zi> Add text only button
 }
 
 LLToolBar::~LLToolBar()
@@ -145,8 +165,26 @@ void LLToolBar::createContextMenu()
 		LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_reg;
 		enable_reg.add("Toolbars.CheckSetting", boost::bind(&LLToolBar::isSettingChecked, this, _2));
 
+		std::string menu_xml_name;		// <FS:Zi> Split menu XML files to have Horizontal and Vertical versions
+		// <FS:Zi> Add commit handlers for layout options in the context menu if this is a horizontal toolbar
+		LLLayoutStack::ELayoutOrientation orientation = getOrientation(mSideType);
+		if(orientation == LLLayoutStack::HORIZONTAL)
+		{
+			menu_xml_name="menu_toolbars_horizontal.xml";
+			commit_reg.add("Toolbars.SetLayoutStyle", boost::bind(&LLToolBar::onLayoutStyleChanged, this, _2));
+			enable_reg.add("Toolbars.CheckLayoutStyle", boost::bind(&LLToolBar::isLayoutStyle, this, _2));
+		}
+		else
+		{
+			menu_xml_name="menu_toolbars_vertical.xml";
+		}
+		// </FS:Zi>
+
 		// Create the context menu
-		LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_toolbars.xml", LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
+		// <FS:Zi> Load the context menu, using the previously defined XML file name
+		// LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>("menu_toolbars.xml", LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
+		LLContextMenu* menu = LLUICtrlFactory::instance().createFromFile<LLContextMenu>(menu_xml_name, LLMenuGL::sMenuContainer, LLMenuHolderGL::child_registry_t::instance());
+		// </FS:Zi>
 
 		if (menu)
 		{
@@ -449,6 +487,12 @@ BOOL LLToolBar::isSettingChecked(const LLSD& userdata)
 	{
 		retval = (mButtonType == BTNTYPE_ICONS_ONLY);
 	}
+	// <FS:Zi> Add text only buttons
+	else if (setting_name == "text_only")
+	{
+		retval = (mButtonType == BTNTYPE_TEXT_ONLY);
+	}
+	// </FS:Zi>
 
 	return retval;
 }
@@ -467,6 +511,12 @@ void LLToolBar::onSettingEnable(const LLSD& userdata)
 	{
 		setButtonType(BTNTYPE_ICONS_ONLY);
 	}
+	// <FS:Zi> Add text only buttons
+	else if (setting_name == "text_only")
+	{
+		setButtonType(BTNTYPE_TEXT_ONLY);
+	}
+	// </FS:Zi>
 }
 
 void LLToolBar::onRemoveSelectedCommand()
@@ -687,12 +737,59 @@ void LLToolBar::updateLayoutAsNeeded()
 
 	std::vector<LLToolBarButton*> buttons_in_row;
 
+	// <FS:Zi> Add equalized and fill layout options
+	S32 full_screen_width=max_length;
+	S32 equalized_width=0;
+
+	if(mLayoutStyle==LAYOUT_STYLE_FILL)
+	{
+		if(mButtons.size())
+		{
+			equalized_width=(full_screen_width-mPadBetween*(mButtons.size()+1))/mButtons.size();
+		}
+	}
+	else if(mLayoutStyle==LAYOUT_STYLE_EQUALIZE)
+	{
+		BOOST_FOREACH(LLToolBarButton* button, mButtons)
+		{
+			S32 width=button->getInitialWidth();
+			if(width>equalized_width)
+			{
+				equalized_width=width;
+			}
+		}
+	}
+	// </FS:Zi>
+
 	BOOST_FOREACH(LLToolBarButton* button, mButtons)
 	{
-		button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
+		// <FS:Zi> Add equalized and fill layout options
+		// button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
+		if(equalized_width)
+		{
+			button->mWidthRange.setRange(button->mWidthRange.getMin(),equalized_width);
+			button->reshape(equalized_width,button->mDesiredHeight);
+		}
+		else
+		{
+			button->reshape(button->mWidthRange.getMin(), button->mDesiredHeight);
+		}
+		// </FS:Zi>
 		button->autoResize();
 
-		S32 button_clamped_width = button->mWidthRange.clamp(button->getRect().getWidth());
+		// <FS:Zi> Add equalized and fill layout options
+		// button_clamped_width = button->mWidthRange.clamp(button->getRect().getWidth());
+		S32 button_clamped_width;
+		if(equalized_width)
+		{
+			button_clamped_width=equalized_width;
+		}
+		else
+		{
+			button_clamped_width = button->mWidthRange.clamp(button->getRect().getWidth());
+		}
+		// </FS:Zi>
+
 		S32 button_length = (orientation == LLLayoutStack::HORIZONTAL)
 							? button_clamped_width
 							: button->getRect().getHeight();
@@ -702,6 +799,7 @@ void LLToolBar::updateLayoutAsNeeded()
 		
 		// wrap if needed
 		if (mWrap
+			&& mLayoutStyle!=LAYOUT_STYLE_FILL		// <FS:Zi> Don't wrap in fill layout mode
 			&& row_running_length + button_length > max_length	// out of room...
 			&& cur_start != row_pad_start)						// ...and not first button in row
 		{
@@ -747,7 +845,13 @@ void LLToolBar::updateLayoutAsNeeded()
 	
 	max_row_length = llmax(max_row_length, row_running_length - mPadBetween + row_pad_end);
 
-	resizeButtonsInRow(buttons_in_row, max_row_girth);
+	// <FS:Zi> Add equalized and fill layout options
+	// resizeButtonsInRow(buttons_in_row, max_row_girth);
+	if(!equalized_width)
+	{
+		resizeButtonsInRow(buttons_in_row, max_row_girth);
+	}
+	// </FS:Zi>
 
 	// grow and optionally shift toolbar to accommodate buttons
 	if (orientation == LLLayoutStack::HORIZONTAL)
@@ -913,7 +1017,13 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	button_p.name = commandp->name();
 	button_p.label = LLTrans::getString(commandp->labelRef());
 	button_p.tool_tip = LLTrans::getString(commandp->tooltipRef());
-	button_p.image_overlay = LLUI::getUIImage(commandp->icon());
+	// <FS:Zi> Do not add an icon if we are using text only buttons
+	// button_p.image_overlay = LLUI::getUIImage(commandp->icon());
+	if(mButtonType!=BTNTYPE_TEXT_ONLY)
+	{
+		button_p.image_overlay = LLUI::getUIImage(commandp->icon());
+	}
+	// </FS:Zi>
 	button_p.overwriteFrom(mButtonParams[mButtonType]);
 	LLToolBarButton* button = LLUICtrlFactory::create<LLToolBarButton>(button_p);
 
@@ -1085,7 +1195,11 @@ LLToolBarButton::LLToolBarButton(const Params& p)
 	mOriginalLabelColor(p.label_color),
 	mOriginalLabelColorSelected(p.label_color_selected),
 	mOriginalImageOverlayColor(p.image_overlay_color),
-	mOriginalImageOverlaySelectedColor(p.image_overlay_selected_color)
+	// <FS:Zi> Added initial width initialisation
+	// mOriginalImageOverlaySelectedColor(p.image_overlay_selected_color)
+	mOriginalImageOverlaySelectedColor(p.image_overlay_selected_color),
+	mInitialWidth(0)
+	// </FS:Zi>
 {
 }
 
@@ -1178,6 +1292,12 @@ void LLToolBarButton::onCommit()
 void LLToolBarButton::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLButton::reshape(mWidthRange.clamp(width), height, called_from_parent);
+	// <FS:Zi> Remember first width this button was set to, so we can calculate the equalized layout
+	if(!mInitialWidth)
+	{
+		mInitialWidth=width;
+	}
+	// </FS:Zi>
 }
 
 void LLToolBarButton::setEnabled(BOOL enabled)
@@ -1228,3 +1348,65 @@ const std::string LLToolBarButton::getToolTip() const
 	return tooltip;
 }
 
+// <FS:Zi> Returns the current layout style for saving in XML settings
+LLToolBarEnums::LayoutStyle LLToolBar::getLayoutStyle() const
+{
+	llwarns << mLayoutStyle << llendl;
+	return mLayoutStyle;
+}
+
+// <FS:Zi> Sets the layout style for this panel when loading the XML settings
+void LLToolBar::setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style)
+{
+	mLayoutStyle=layout_style;
+	llwarns << mLayoutStyle << llendl;
+	mNeedsLayout=true;
+}
+
+// <FS:Zi> Context menu callback function to display checkmarks on layout style options
+BOOL LLToolBar::isLayoutStyle(const LLSD& userdata)
+{
+	BOOL retval=FALSE;
+
+	const std::string layout_style=userdata.asString();
+
+	if(layout_style=="none")
+	{
+		retval=(mLayoutStyle==LAYOUT_STYLE_NONE);
+	}
+	else if(layout_style=="equalize")
+	{
+		retval=(mLayoutStyle==LAYOUT_STYLE_EQUALIZE);
+	}
+	else if(layout_style=="fill")
+	{
+		retval=(mLayoutStyle==LAYOUT_STYLE_FILL);
+	}
+
+	return retval;
+}
+
+// <FS:Zi> Context menu callback function to set the layout style on click
+void LLToolBar::onLayoutStyleChanged(const LLSD& userdata)
+{
+	const std::string layout_style=userdata.asString();
+
+	if(layout_style=="none")
+	{
+		setLayoutStyle(LAYOUT_STYLE_NONE);
+	}
+	else if(layout_style=="equalize")
+	{
+		setLayoutStyle(LAYOUT_STYLE_EQUALIZE);
+	}
+	else if(layout_style=="fill")
+	{
+		setLayoutStyle(LAYOUT_STYLE_FILL);
+	}
+}
+
+// <FS:Zi> Returns the first width this button had, to make equalize layout work
+S32 LLToolBarButton::getInitialWidth() const
+{
+	return mInitialWidth;
+}

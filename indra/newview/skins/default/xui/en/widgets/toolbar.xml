@@ -54,4 +54,25 @@
                button_flash_count="99999"
                button_flash_rate="1.0"
                flash_color="EmphasisColor"/>
+  <!-- <FS:Zi> Added text only button -->
+  <button label_color_selected="White"
+          halign="center"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          image_disabled_selected="PushButton_Selected_Disabled"
+          image_disabled="PushButton_Disabled"
+          button_width.min="70"
+          button_width.max="140"
+          desired_height="24"
+          pad_left="10" 
+          pad_right="10"
+          follows="left|top"
+          chrome="true"
+          use_ellipses="true"
+          auto_resize="true"
+          button_flash_count="99999"
+          button_flash_rate="1.0"
+          flash_color="EmphasisColor"/>
+  <!-- </FS:Zi> -->
 </toolbar>

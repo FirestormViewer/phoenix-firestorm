@@ -103,6 +103,14 @@ private:
 							mOriginalLabelColorSelected,
 							mOriginalImageOverlayColor,
 							mOriginalImageOverlaySelectedColor;
+
+// <FS:Zi> Helper function and member variable to make equalize layout work
+public:
+	S32 getInitialWidth() const;
+
+private:
+	S32				mInitialWidth;
+// </FS:Zi>
 };
 
 
@@ -112,6 +120,7 @@ namespace LLToolBarEnums
 	{
 		BTNTYPE_ICONS_WITH_TEXT = 0,
 		BTNTYPE_ICONS_ONLY,
+		BTNTYPE_TEXT_ONLY,	// <FS:Zi> Add text only button
 
 		BTNTYPE_COUNT
 	};
@@ -125,6 +134,16 @@ namespace LLToolBarEnums
 	};
 
 	LLLayoutStack::ELayoutOrientation getOrientation(SideType sideType);
+
+	// <FS:Zi> Add equalize and fill layout styles
+		enum LayoutStyle
+	{
+		LAYOUT_STYLE_NONE,
+		LAYOUT_STYLE_EQUALIZE,
+		LAYOUT_STYLE_FILL
+	};
+	// </FS:Zi>
+
 }
 
 // NOTE: This needs to occur before Param block declaration for proper compilation.
@@ -141,6 +160,14 @@ namespace LLInitParam
 	{
 		static void declareValues();
 	};
+
+	// <FS:Zi> Template declaration to make mapping from layout enum to string work for load/save XML settings
+	template<>
+	struct TypeValues<LLToolBarEnums::LayoutStyle> : public TypeValuesHelper<LLToolBarEnums::LayoutStyle>
+	{
+		static void declareValues();
+	};
+	// </FS:Zi>
 }
 
 
@@ -155,7 +182,11 @@ public:
 		Mandatory<LLToolBarEnums::SideType>		side;
 
 		Optional<LLToolBarButton::Params>		button_icon,
-												button_icon_and_text;
+												// <FS:Zi> Add text only button
+												// button_icon_and_text,
+												button_icon_and_text,
+												button;
+												// </FS:Zi>
 
 		Optional<bool>							read_only,
 												wrap;
@@ -171,6 +202,8 @@ public:
 		Multiple<LLCommandId::Params>			commands;
 
 		Optional<LLPanel::Params>				button_panel;
+
+		Optional<LLToolBarEnums::LayoutStyle>	layout_style;	// <FS:Zi> Add layout style parameter to XUI
 
 		Params();
 	};
@@ -284,6 +317,19 @@ private:
 	button_signal_t*				mButtonRemoveSignal;
 
 	std::string						mButtonTooltipSuffix;
+
+// <FS:Zi> Layout context menu callbacks
+	BOOL							isLayoutStyle(const LLSD& userdata);
+	void							onLayoutStyleChanged(const LLSD& userdata);
+// </FS:Zi>
+
+// <FS:Zi> Layout accessor functions and member variable
+public:
+	void							setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style);
+	LLToolBarEnums::LayoutStyle		getLayoutStyle() const;
+
+	LLToolBarEnums::LayoutStyle		mLayoutStyle;
+// </FS:Zi>
 };
 
 
