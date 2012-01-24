@@ -46,6 +46,12 @@
 	<text name="file_size_label">
 		[SIZE] KB
 	</text>
+	<tab_container name="panel_tab_container">
+		<panel label="Profil" name="panel_snapshot_profile"/>
+		<panel label="E-Mail" name="panel_snapshot_postcard"/>
+		<panel label="Inventar" name="panel_snapshot_inventory"/>
+		<panel label="Festplatte" name="panel_snapshot_local"/>
+    </tab_container>
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">
 			ERWEITERTE OPTIONEN

@@ -328,7 +328,7 @@
          left="10"
          name="layer_type_label"
          top_pad="0"
-         width="50">
+         width="100">
             Capture:
         </text>
         <combo_box
