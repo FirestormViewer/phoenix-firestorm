@@ -373,7 +373,7 @@ void LLViewerFloaterReg::registerFloaters()
 //-TT
 
 //<FS:KC legacy profiles>
-    LLFloaterReg::add("floater_profile_view", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
+    LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
 //</FS:KC legacy profiles>
 
 	LLFloaterReg::add("flickr_auth", "floater_flickr_auth.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrAuth>);
