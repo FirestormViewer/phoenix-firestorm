@@ -1268,7 +1268,10 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 
 	// Show/hide advanced options.
 	LLPanel* advanced_options_panel = floaterp->getChild<LLPanel>("advanced_options_panel");
-	floaterp->getChild<LLButton>("advanced_options_btn")->setImageOverlay(advanced ? "TabIcon_Open_Off" : "TabIcon_Close_Off");
+
+	// <FS:Ansariel> Use Up/down chevrons
+	//floaterp->getChild<LLButton>("advanced_options_btn")->setImageOverlay(advanced ? "TabIcon_Open_Off" : "TabIcon_Close_Off");
+	floaterp->getChild<LLButton>("advanced_options_btn")->setImageOverlay(advanced ? "Arrow_Up" : "Arrow_Down");
 	if (advanced != advanced_options_panel->getVisible())
 	{
 		// <FS:Zi> New calculation method for advanced options at the bottom of the floater
