@@ -394,7 +394,19 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 {
 	if (id.notNull())
 	{
-		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
+//<FS:KC legacy profiles>
+//		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
+		if (gSavedSettings.getBOOL("FSUseWebProfiles"))
+		{
+			LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
+		}
+		else
+		{
+			LLSD params;
+			params["id"] = id;
+			LLFloaterReg::showInstance("floater_profile_view", LLSD().with("id", id));
+		}
+//</FS:KC legacy profiles>
 	}
 }
 
