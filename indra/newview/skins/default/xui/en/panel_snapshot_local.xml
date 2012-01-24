@@ -43,7 +43,7 @@
      height="23"
      label="Resolution"
      layout="topleft"
-     left_delta="0"
+     left="5"
      name="local_size_combo"
      right="-10"
      top="5">
