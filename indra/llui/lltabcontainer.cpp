@@ -1120,7 +1120,6 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 		p.pad_bottom( mLabelPadBottom );
 		p.scale_image(true);
 		p.tab_stop(false);
-		p.label_shadow(false);
 		p.follows.flags = FOLLOWS_LEFT;
 		
 		if (mIsVertical)
@@ -1137,7 +1136,6 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 			p.image_unselected(tab_img);
 			p.image_selected(tab_selected_img);
 			p.follows.flags = p.follows.flags() | (getTabPosition() == TOP ? FOLLOWS_TOP : FOLLOWS_BOTTOM);
-			p.label_shadow(false);
 			// Try to squeeze in a bit more text
 			p.pad_left( mLabelPadLeft );
 			p.pad_right(2);
