@@ -89,6 +89,7 @@ Error fetching server release notes URL.
       name="support_panel">
     <text
           follows="top|left|right"
+          font="SansSerif"
           height="40"
           layout="topleft"
           left="5"
@@ -96,9 +97,8 @@ Error fetching server release notes URL.
           top="20"
           width="435"
           wrap="true">
-    
-    For the latest information about Firestorm, visit 
-    http://www.phoenixviewer.com
+For the latest information about Firestorm, visit 
+http://www.phoenixviewer.com
     
     </text>
       <text_editor
@@ -107,7 +107,7 @@ Error fetching server release notes URL.
        font="SansSerif"
        height="443"
        bg_readonly_color="Transparent"
-       left="5"
+       left="0"
        max_length="65536"
        name="support_editor"
        top_pad="5"
@@ -324,7 +324,7 @@ Hitomi Tiponi, KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendal
       <text_editor
        enabled="false"
        follows="left|top"
-       height="475"
+       height="500"
        bg_readonly_color="Transparent"
        left="5"
        text_color="LtGray"
@@ -333,36 +333,36 @@ Hitomi Tiponi, KirstenLee Cinquetti, Alexandrea Fride, psi Merlin, Hugh Helendal
        top="5"
        width="435"
        word_wrap="true">
-        3Dconnexion SDK Copyright (C) 1992-2007 3Dconnexion
-        APR Copyright (C) 2000-2004 The Apache Software Foundation
-        Collada DOM Copyright 2005 Sony Computer Entertainment Inc.
-        cURL Copyright (C) 1996-2002, Daniel Stenberg, (daniel@haxx.se)
-        DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
-        expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
-        FreeType Copyright (C) 1996-2002, The FreeType Project (www.freetype.org).
-        GL Copyright (C) 1999-2004 Brian Paul.
-        GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
-        google-perftools Copyright (c) 2005, Google Inc.
-        Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
-        jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
-        jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
-        ogg/vorbis Copyright (C) 2001, Xiphophorus
-        OpenSSL Copyright (C) 1998-2002 The OpenSSL Project.
-        PCRE Copyright (c) 1997-2008 University of Cambridge
-        SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
-        SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
-        xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
-        zlib Copyright (C) 1995-2002 Jean-loup Gailly and Mark Adler.
-        google-perftools Copyright (c) 2005, Google Inc.
-	Some icons by Joseph Wain / glyphish.com
+3Dconnexion SDK Copyright (C) 1992-2007 3Dconnexion
+APR Copyright (C) 2000-2004 The Apache Software Foundation
+Collada DOM Copyright 2005 Sony Computer Entertainment Inc.
+cURL Copyright (C) 1996-2002, Daniel Stenberg, (daniel@haxx.se)
+DBus/dbus-glib Copyright (C) 2002, 2003  CodeFactory AB / Copyright (C) 2003, 2004 Red Hat, Inc.
+expat Copyright (C) 1998, 1999, 2000 Thai Open Source Software Center Ltd.
+FreeType Copyright (C) 1996-2002, The FreeType Project (www.freetype.org).
+GL Copyright (C) 1999-2004 Brian Paul.
+GLOD Copyright (C) 2003-04 Jonathan Cohen, Nat Duca, Chris Niski, Johns Hopkins University and David Luebke, Brenden Schubert, University of Virginia.
+google-perftools Copyright (c) 2005, Google Inc.
+Havok.com(TM) Copyright (C) 1999-2001, Telekinesys Research Limited.
+jpeg2000 Copyright (C) 2001, David Taubman, The University of New South Wales (UNSW)
+jpeglib Copyright (C) 1991-1998, Thomas G. Lane.
+ogg/vorbis Copyright (C) 2001, Xiphophorus
+OpenSSL Copyright (C) 1998-2002 The OpenSSL Project.
+PCRE Copyright (c) 1997-2008 University of Cambridge
+SDL Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002 Sam Lantinga
+SSLeay Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+xmlrpc-epi Copyright (C) 2000 Epinions, Inc.
+zlib Copyright (C) 1995-2002 Jean-loup Gailly and Mark Adler.
+google-perftools Copyright (c) 2005, Google Inc.
+Some icons by Joseph Wain / glyphish.com
 
-        Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. See www.havok.com for details.
+Second Life Viewer uses Havok (TM) Physics. (c)Copyright 1999-2010 Havok.com Inc. (and its Licensors). All Rights Reserved. See www.havok.com for details.
 
-        This software contains source code provided by NVIDIA Corporation.
+This software contains source code provided by NVIDIA Corporation.
 
-        All rights reserved.  See licenses.txt for details.
+All rights reserved.  See licenses.txt for details.
 
-        Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
+Voice chat Audio coding: Polycom(R) Siren14(TM) (ITU-T Rec. G.722.1 Annex C)
       </text_editor>
       </panel>
     </tab_container>
