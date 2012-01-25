@@ -27,18 +27,19 @@
 #ifndef LL_LLNEARBYCHAT_H_
 #define LL_LLNEARBYCHAT_H_
 
+#include "lldockablefloater.h"
 #include "llscrollbar.h"
 #include "llviewerchat.h"
-#include "llfloater.h"
 
 class LLResizeBar;
 class LLChatHistory;
 class LLLineEditor;
 
-class LLNearbyChat: public LLPanel
+class LLNearbyChat: public LLDockableFloater
 {
 public:
-	LLNearbyChat(const Params& p = LLPanel::getDefaultParams());
+	LLNearbyChat(const LLSD& key);
+	~LLNearbyChat();
 
 	BOOL	postBuild			();
 
@@ -62,9 +63,12 @@ public:
 #endif	
 	
 	/*virtual*/ void	onOpen	(const LLSD& key);
+
 	/*virtual*/ void	setVisible(BOOL visible);
-	//	void	openFloater(const LLSD& key); ND_MERGE
-	
+	void	openFloater(const LLSD& key);
+
+	virtual void setRect		(const LLRect &rect);
+
 	void clearChatHistory();
 	virtual void updateChatHistoryStyle();
 
@@ -75,11 +79,10 @@ public:
 	static LLNearbyChat* getInstance();
 	
 	void removeScreenChat();
-
 	
 	static bool isChatMultiTab();
 	
-	//	void setDocked(bool docked, bool pop_on_undock = true); ND_MERGE
+	void setDocked(bool docked, bool pop_on_undock = true);
 	
 	BOOL getVisible();
 	void doSendMsg( std::string msg, EChatType type);
@@ -118,5 +121,3 @@ private:
 };
 
 #endif
-
-

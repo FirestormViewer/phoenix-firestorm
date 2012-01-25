@@ -118,7 +118,7 @@ LLNearbyChatBar::LLNearbyChatBar(const LLSD& key)
 //	mChatBox(NULL)
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
 	mNearbyChatContainer(NULL),
-	mNearbyChat(NULL),
+// ## Zi: from old FS ## //	mNearbyChat(NULL),
 	mChatBarImpl(NULL)
 // [/SL:KB]
 {
@@ -177,7 +177,7 @@ BOOL LLNearbyChatBarSingle::postBuild()
 BOOL LLNearbyChatBar::postBuild()
 {
 	mNearbyChatContainer = findChild<LLPanel>("panel_nearby_chat");
-	mNearbyChat = findChild<LLNearbyChat>("nearby_chat");
+// ## Zi: from old FS ## //	mNearbyChat = findChild<LLNearbyChat>("nearby_chat");
 
 	mChatBarImpl = (hasChild("panel_chat_bar_multi", TRUE)) ? findChild<LLNearbyChatBarBase>("panel_chat_bar_multi", TRUE) : findChild<LLNearbyChatBarBase>("panel_chat_bar_single", TRUE);
 
@@ -216,8 +216,8 @@ BOOL LLNearbyChatBar::postBuild()
 	}
 // [/SL:KB]
 
-	gSavedSettings.declareBOOL("nearbychat_history_visibility", mNearbyChat->getVisible(), "Visibility state of nearby chat history", TRUE);
-	mNearbyChat->setVisible(gSavedSettings.getBOOL("nearbychat_history_visibility"));
+	gSavedSettings.declareBOOL("nearbychat_history_visibility", mNearbyChatContainer->getVisible(), "Visibility state of nearby chat history", TRUE);
+	mNearbyChatContainer->setVisible(gSavedSettings.getBOOL("nearbychat_history_visibility"));
 
 	return TRUE;
 }
@@ -767,7 +767,7 @@ void LLNearbyChatBar::onToggleNearbyChatPanel()
 		storeRectControl();
 	}
 
-	gSavedSettings.setBOOL("nearbychat_history_visibility", mNearbyChat->getVisible());
+	gSavedSettings.setBOOL("nearbychat_history_visibility", mNearbyChatContainer->getVisible());
 }
 
 //void LLNearbyChatBar::setMinimized(BOOL b)
@@ -793,7 +793,7 @@ void LLNearbyChatBar::onOpen(const LLSD& sdKey)
 	// When open the floater with nearby chat visible, go ahead and kill off screen chats
 	if (mNearbyChatContainer->getVisible())
 	{
-		mNearbyChat->removeScreenChat();
+// ## Zi: from old FS ## //		mNearbyChat->removeScreenChat();
 	}
 	enableTranslationCheckbox(LLTranslate::isTranslationConfigured()); // <FS:ND> Translation stuffs
 }

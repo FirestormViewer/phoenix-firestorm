@@ -553,8 +553,9 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	}
 // [/RLVa:KB]
 
-	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
-	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+// ## Zi - Post merge fixup ## //	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+// ## Zi - Post merge fixup ## //	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
 
 	// Build notification data 
 	LLSD notification;
@@ -713,7 +714,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	{
 		// Toasts mode...
 		
-		if( !chat_bar->isMinimized() && nearby_chat->getVisible()
+// ## Zi - Post merge fixup ## //	if( !chat_bar->isMinimized() && nearby_chat->getVisible()
+		if( nearby_chat->getVisible()	// ## Zi - Post merge fixup ##
 			|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
 				&& useChatBubbles )
 			|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
