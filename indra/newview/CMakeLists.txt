@@ -137,7 +137,6 @@ set(viewer_SOURCE_FILES
     llcapabilitylistener.cpp
     llcaphttpsender.cpp
     llchannelmanager.cpp
-    llchatbar.cpp
     llchathistory.cpp
     llchatitemscontainerctrl.cpp
     llchatmsgbox.cpp
@@ -737,7 +736,6 @@ set(viewer_HEADER_FILES
     llcapabilityprovider.h
     llcaphttpsender.h
     llchannelmanager.h
-    llchatbar.h
     llchathistory.h
     llchatitemscontainerctrl.h
     llchatmsgbox.h

@@ -35,7 +35,6 @@
 
 #include "llcalc.h"
 
-#include "llchatbar.h"
 #include "llagent.h"
 #include "stdtypes.h"
 #include "llviewerregion.h"

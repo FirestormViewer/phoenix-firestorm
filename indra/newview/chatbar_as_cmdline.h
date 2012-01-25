@@ -31,6 +31,6 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llchatbar.h"
+#include "llchat.h"
 
 bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture = false);
