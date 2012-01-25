@@ -1437,6 +1437,10 @@ if (WINDOWS)
         res/toolbuy.cur
         res/toolopen.cur
         res/toolsit.cur
+        res/toolbuy-legacy.cur
+        res/toolopen-legacy.cur
+        res/toolsit-legacy.cur
+        res/toolpay-legacy.cur
         )
 
     set_source_files_properties(${viewer_RESOURCE_FILES}

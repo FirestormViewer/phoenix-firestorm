@@ -123,6 +123,11 @@ TOOLBUY                 CURSOR                  "toolbuy.cur"
 TOOLOPEN                CURSOR                  "toolopen.cur"
 TOOLSIT                 CURSOR                  "toolsit.cur"
 
+TOOLBUY-LEGACY          CURSOR                  "toolbuy-legacy.cur"
+TOOLPAY-LEGACY          CURSOR                  "toolpay-legacy.cur"
+TOOLOPEN-LEGACY         CURSOR                  "toolopen-legacy.cur"
+TOOLSIT-LEGACY          CURSOR                  "toolsit-legacy.cur"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
