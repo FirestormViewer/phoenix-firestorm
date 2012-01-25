@@ -1452,7 +1452,9 @@ void doOnetimeEarlyHTTPRequests()
 //	if (!LLGridManager::getInstance()->isInProductionGrid())
 	if (LLGridManager::getInstance()->isInSLBeta())// <AW opensim>
 	{
-		std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
+		// <FS:Ansariel> Grid manager fix
+		//std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
+		std::string gridLabel = LLGridManager::getInstance()->getGridNick();
 		url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
 	}
 	
