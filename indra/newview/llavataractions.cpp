@@ -367,12 +367,6 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 
 static const char* get_profile_floater_name(const LLUUID& avatar_id)
 {
-//<FS:KC legacy profiles>
-    if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
-    {
-        return "floater_profile";
-    }
-//</FS:KC legacy profiles>
 	// Use different floater XML for our profile to be able to save its rect.
 	return avatar_id == gAgentID ? "my_profile" : "profile";
 }
