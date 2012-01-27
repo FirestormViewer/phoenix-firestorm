@@ -62,7 +62,10 @@
 #include "llavataractions.h"
 
 #include "lggcontactsets.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
 
@@ -830,7 +833,7 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 		if (history_only)
 		{
-			LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+			LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 			nearby_chat->addMessage(chat, true, LLSD());
 		}
 		else

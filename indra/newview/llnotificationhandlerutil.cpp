@@ -36,7 +36,10 @@
 #include "llagent.h"
 #include "llimfloater.h"
 #include "llimview.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 // [SL:KB] - Patch: Chat-Logs | Checked: 2010-11-18 (Catznip-2.4.0c) | Added: Catznip-2.4.0c
@@ -464,7 +467,7 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 // static
 void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChatSourceType type)
 {
-	LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
 	if(nearby_chat)
 	{
 		LLChat chat_msg(notification->getMessage());

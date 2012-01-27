@@ -1,53 +1,53 @@
-/**
- * @file   llnearbychatbarlistener.h
- * @author Dave Simmons
- * @date   2011-03-15
- * @brief  Class definition for LLNearbyChatBarListener.
+ /** 
+ * @file llnearbychatcontrol.h
+ * @brief Nearby chat input control implementation
  *
- * $LicenseInfo:firstyear=2011&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2004&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2011, Linden Research, Inc.
- *
+ * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2012, Zi Ree @ Second Life
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- *
+ * 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
 
+#ifndef LL_LLNEARBYCHATCONTROL_H
+#define LL_LLNEARBYCHATCONTROL_H
 
-#ifndef LL_LLNEARBYCHATBARLISTENER_H
-#define LL_LLNEARBYCHATBARLISTENER_H
+#include "lllineeditor.h"
 
-#include "lleventapi.h"
-
-class LLSD;
-// class LLNearbyChatBar;	// <FS:Zi> Remove floating chat bar
-
-class LLNearbyChatBarListener : public LLEventAPI
+class LLNearbyChatControl : public LLLineEditor
 {
 public:
-	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBarListener(LLNearbyChatBar & chatbar);
-	LLNearbyChatBarListener();
-	// </FS:Zi>
+	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params> {};
+
+	LLNearbyChatControl(const Params& p);
+	~LLNearbyChatControl();
+
+	virtual void setFocus(BOOL focus);
+
+	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 
 private:
-    void sendChat(LLSD const & chat_data) const;
+	// Typing in progress, expand gestures etc.
+	static void onKeystroke(LLLineEditor* caller,void* userdata);
 
-//	LLNearbyChatBar & mChatbar;
+	// Chat data entered to be sent to nearby chat
+	void onCommit();
 };
 
-#endif // LL_LLNEARBYCHATBARLISTENER_H
-
+#endif

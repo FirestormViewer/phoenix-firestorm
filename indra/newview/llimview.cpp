@@ -57,7 +57,10 @@
 #include "llviewerwindow.h"
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltextbox.h"
 #include "lltoolbarview.h"
@@ -852,7 +855,7 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		chat.mText = utf8_text;
 		chat.mTimeStr = timestr;
-		LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 		nearby_chat->addMessage(chat, true, LLSD());
 	}
 	// </Ansariel>
@@ -2603,8 +2606,11 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 		LLChat chat(message);
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		
-		LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
-		LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+		// <FS:Zi> Remove floating chat bar
+		// LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
+		// LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
+		LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+		// </FS:Zi>
 
 		if(nearby_chat)
 		{

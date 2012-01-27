@@ -119,7 +119,10 @@
 #include "llinspectremoteobject.h"
 #include "llinspecttoast.h"
 #include "llmoveview.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// <//FS:Zi>
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
 #include "llpreviewanim.h"
@@ -132,7 +135,7 @@
 #include "llscriptfloater.h"
 #include "llfloatermodelpreview.h"
 #include "llcommandhandler.h"
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
 // ND: And for FS please put yours after this line, for easier merges too
@@ -213,12 +216,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("bumps", "floater_bumps.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBump>);
 
 	LLFloaterReg::add("camera", "floater_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
-
-	LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChat>);
-//	LLFloaterReg::add("chat_bar", "floater_chat_bar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChatBar>);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-24 (Catznip-3.2.0a) | Added: Catznip-2.8.0a
-	LLFloaterReg::addWithFileCallback("chat_bar", &LLNearbyChatBar::getFloaterXMLFile, (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChatBar>);
-// [/SL:KB]
+	// <FS:Zi> Remove floating chat bar
+	// LLFloaterReg::add("chat_bar", "floater_chat_bar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChatBar>);
+	LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNearbyChat>);
+	// </FS:Zi>
 
 	LLFloaterReg::add("compile_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCompileQueue>);
 

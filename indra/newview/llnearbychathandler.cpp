@@ -34,14 +34,17 @@
 #include "llfirstuse.h"
 #include "llfloaterscriptdebug.h"
 #include "llhints.h"
-#include "llnearbychat.h"
+// #include "llnearbychat.h"	// <FS:Zi> Remove floating chat bar
 #include "llrecentpeople.h"
 
 #include "llviewercontrol.h"
 
 #include "llfloaterreg.h"//for LLFloaterReg::getTypedInstance
 #include "llviewerwindow.h"//for screen channel position
-#include "llnearbychatbar.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychatbar.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llrootview.h"
 #include "lllayoutstack.h"
 
@@ -555,7 +558,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 
 // ## Zi - Post merge fixup ## //	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
 // ## Zi - Post merge fixup ## //	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
-	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
 
 	// Build notification data 
 	LLSD notification;
@@ -823,7 +826,7 @@ void LLNearbyChatHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAva
 	LLColor4 chatcolor;
 	LLViewerChat::getChatColor(chat_msg, chatcolor);
 	gConsole->addConsoleLine(consoleChat, chatcolor);
-	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 	if( nearby_chat )
 		gConsole->setVisible(!nearby_chat->getVisible());
 }

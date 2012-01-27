@@ -2,7 +2,7 @@
 <toolbars>
   <bottom_toolbar
     button_display_mode="icons_with_text"
-    button_layout_style="none">
+    button_layout_style="fill">
     <command name="chat"/>
     <command name="speak"/>
     <command name="destinations"/>

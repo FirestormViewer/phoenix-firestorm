@@ -40,10 +40,10 @@
 #include "llviewermessage.h" // send_guid_sound_trigger
 #include "llviewernetwork.h"
 #include "llagent.h"
-//#include "llnearbychatbar.h"
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a)
-#include "llnearbychatbarbase.h"
-// [/SL:KB]
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychatbar.h"
+#include "llnearbychathub.h"
+// </FS:Zi>
 
 // Globals
 LLViewerGestureList gGestureList;
@@ -133,10 +133,9 @@ void LLViewerGesture::doTrigger( BOOL send_chat )
 	{
 		// Don't play nodding animation, since that might not blend
 		// with the gesture animation.
-//		LLNearbyChatBar::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-		LLNearbyChatBarBase::sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
-// [/SL:KB]
+		// <FS:Zi> Remove floating chat bar
+		// LLNearbyChatBar::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
+		LLNearbyChat::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
 	}
 }
 
