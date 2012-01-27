@@ -48,7 +48,8 @@ extern "C" {
 
 #include "llmediaimplgstreamer_syms.h"
 
-// <ND> extract stream metadata so we can report back into the client what's playing
+// <FS:ND> extract stream metadata so we can report back into the client what's playing
+#ifdef LL_STANDALONE
 struct ndStreamMetadata
 {
 	std::string mArtist;
@@ -82,7 +83,8 @@ static void extractMetadata (const GstTagList * list, const gchar * tag, gpointe
 			pStrOut->assign( g_value_get_string(val) );
   }
 }
-// </ND>
+#endif
+// </FS:ND>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -280,7 +282,8 @@ MediaPluginGStreamer010::processGSTEvents(GstBus     *bus,
 		}
 		break;
 	}
-	case GST_MESSAGE_TAG: // <ND> In case of metadata upate, extract it, then send it back to the client
+#ifdef LL_STANDALONE  // <FS:ND> In case of metadata upate, extract it, then send it back to the client
+	case GST_MESSAGE_TAG:
 	{
 		ndStreamMetadata oMData;
 		GstTagList *tags(0);
@@ -293,8 +296,8 @@ MediaPluginGStreamer010::processGSTEvents(GstBus     *bus,
 		message.setValue("title", oMData.mTitle );
 		message.setValue("artist", oMData.mArtist );
 		sendMessage(message);
-		
-	} // </ND>
+	}
+#endif  // </FS:ND>		
 	case GST_MESSAGE_ERROR: {
 		GError *err = NULL;
 		gchar *debug = NULL;
