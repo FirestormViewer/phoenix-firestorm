@@ -122,6 +122,8 @@ public:
 
 	// Mostly for debugging printout purposes.
 	const std::string& getSearchableLabel() { return mSearchableLabel; }
+	
+	BOOL isLoading() const { return mIsLoading; }
 
 private:
 	BOOL						mIsSelected;
@@ -177,9 +179,6 @@ protected:
 
 	// helper function to change the selection from the root.
 	void changeSelectionFromRoot(LLFolderViewItem* selection, BOOL selected);
-
-	// helper function to change the selection from the root.
-	void extendSelectionFromRoot(LLFolderViewItem* selection);
 
 	// this is an internal method used for adding items to folders. A
 	// no-op at this level, but reimplemented in derived classes.
@@ -237,9 +236,6 @@ public:
 	// If 'selection' is 'this' then note selection.
 	// Returns TRUE if the selection state of this item was changed.
 	virtual BOOL changeSelection(LLFolderViewItem* selection, BOOL selected);
-
-	// this method is used to group select items
-	virtual void extendSelection(LLFolderViewItem* selection, LLFolderViewItem* last_selected, LLDynamicArray<LLFolderViewItem*>& items) { }
 
 	// this method is used to deselect this element
 	void deselectItem();
@@ -409,12 +405,6 @@ public:
 	typedef std::list<LLFolderViewItem*> items_t;
 	typedef std::list<LLFolderViewFolder*> folders_t;
 
-private:
-	S32		mNumDescendantsSelected;
-
-public:		// Accessed needed by LLFolderViewItem
-	void recursiveIncrementNumDescendantsSelected(S32 increment);
-	S32 numSelected(void) const { return mNumDescendantsSelected + (isSelected() ? 1 : 0); }
 
 	// <ND> JIT Folders
 	void setPanel( LLInventoryPanel* aPanel )
@@ -426,7 +416,6 @@ public:		// Accessed needed by LLFolderViewItem
 	virtual bool isPreCreatedFolder()
 	{ return !mIsPopulated; }
 	// </ND>
-
 protected:
 	items_t mItems;
 	folders_t mFolders;
@@ -508,7 +497,7 @@ public:
 	virtual BOOL changeSelection(LLFolderViewItem* selection, BOOL selected);
 
 	// this method is used to group select items
-	virtual void extendSelection(LLFolderViewItem* selection, LLFolderViewItem* last_selected, LLDynamicArray<LLFolderViewItem*>& items);
+	void extendSelectionTo(LLFolderViewItem* selection);
 
 	// Returns true is this object and all of its children can be removed.
 	virtual BOOL isRemovable();
@@ -594,11 +583,15 @@ public:
 		void* cargo_data,
 		EAcceptance* accept,
 		std::string& tooltip_msg);
+	BOOL handleDragAndDropToThisFolder(MASK mask, BOOL drop,
+									   EDragAndDropType cargo_type,
+									   void* cargo_data,
+									   EAcceptance* accept,
+									   std::string& tooltip_msg);
 	virtual void draw();
 
 	time_t getCreationDate() const;
 	bool isTrash() const;
-	S32 getNumSelectedDescendants(void) const { return mNumDescendantsSelected; }
 
 	folders_t::const_iterator getFoldersBegin() const { return mFolders.begin(); }
 	folders_t::const_iterator getFoldersEnd() const { return mFolders.end(); }
@@ -607,6 +600,8 @@ public:
 	items_t::const_iterator getItemsBegin() const { return mItems.begin(); }
 	items_t::const_iterator getItemsEnd() const { return mItems.end(); }
 	items_t::size_type getItemsCount() const { return mItems.size(); }
+	LLFolderViewFolder* getCommonAncestor(LLFolderViewItem* item_a, LLFolderViewItem* item_b, bool& reverse);
+	void gatherChildRangeExclusive(LLFolderViewItem* start, LLFolderViewItem* end, bool reverse,  std::vector<LLFolderViewItem*>& items);
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

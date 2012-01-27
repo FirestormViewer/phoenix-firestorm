@@ -619,7 +619,6 @@ BOOL LLPanelPeople::postBuild()
 	// [/RLVa:KB]
 	
 	LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
-	minilayout->setMaxDim(140);
 	minilayout->setMinDim(140);
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
 	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
  default_tab_group="1"
  follows="all"
  height="423"
@@ -164,7 +163,6 @@
        left="0"
        layout="topleft"
        name="options_gear_btn_panel"
-       user_resize="false"
        width="32">
           <menu_button
            follows="top|left"

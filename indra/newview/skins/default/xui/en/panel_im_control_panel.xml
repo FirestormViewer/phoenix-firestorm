@@ -31,7 +31,6 @@
        layout="topleft"
        min_height="0"
        width="140"
-       name="spacer"
-       user_resize="false" />
+       name="spacer"/>
     </layout_stack>
 </panel>

@@ -817,7 +817,7 @@ void LLPanelMainInventory::onFocusReceived()
 		return;
 	}
 
-	sidepanel_inventory->clearSelections(false, true, true);
+	sidepanel_inventory->clearSelections(false, true);
 }
 
 void LLPanelMainInventory::setFilterTextFromFilter() 

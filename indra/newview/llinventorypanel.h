@@ -84,6 +84,7 @@ public:
 		Optional<Filter>					filter;
 		Optional<std::string>               start_folder;
 		Optional<bool>						use_label_suffix;
+		Optional<bool>						show_empty_message;
 		Optional<bool>						show_load_status;
 		Optional<LLScrollContainer::Params>	scroll;
 		Optional<bool>						accepts_drag_and_drop;
@@ -96,6 +97,7 @@ public:
 			filter("filter"),
 			start_folder("start_folder"),
 			use_label_suffix("use_label_suffix", true),
+			show_empty_message("show_empty_message", true),
 			show_load_status("show_load_status"),
 			scroll("scroll"),
 			accepts_drag_and_drop("accepts_drag_and_drop")
@@ -195,6 +197,7 @@ protected:
 	BOOL						mAcceptsDragAndDrop;
 	BOOL 						mAllowMultiSelect;
 	BOOL 						mShowItemLinkOverlays; // Shows link graphic over inventory item icons
+	BOOL						mShowEmptyMessage;
 	BOOL						mShowLoadStatus;
 
 // [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e

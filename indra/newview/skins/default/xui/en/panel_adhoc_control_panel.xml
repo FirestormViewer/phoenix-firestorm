@@ -27,8 +27,7 @@
          mouse_opaque="false"
          width="147"
          top="0"
-         name="speakers_list_panel"
-         user_resize="false">
+         name="speakers_list_panel">
             <avatar_list
              color="DkGray2"
              follows="all"

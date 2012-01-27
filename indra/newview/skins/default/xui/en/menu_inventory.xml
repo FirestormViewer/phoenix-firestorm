@@ -695,37 +695,26 @@
          function="Inventory.DoToSelected"
          parameter="detach" />
     </menu_item_call>
-	<!-- COMMENTED OUT for DEV-32347 -->
-	<!--
-    <menu_item_call
-     label="Restore to Last Position"
-     layout="topleft"
-     name="Restore to Last Position">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="restoreToWorld" />
-    </menu_item_call>
-	-->
-    <menu_item_separator
-     layout="topleft"
-     name="Marketplace Separator" />
-    <menu_item_call
-     label="Copy to Merchant Outbox"
-     layout="topleft"
-     name="Merchant Copy">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="copy_to_outbox" />
-    </menu_item_call>
-    <menu_item_call
-     label="Move to Merchant Outbox"
-     layout="topleft"
-     name="Merchant Move">
-        <menu_item_call.on_click
-         function="Inventory.DoToSelected"
-         parameter="move_to_outbox" />
-    </menu_item_call>
-    <menu_item_call
+	<menu_item_separator
+	 layout="topleft"
+	 name="Marketplace Separator" />
+	<menu_item_call
+	 label="Copy to Merchant Outbox"
+	 layout="topleft"
+	 name="Merchant Copy">
+		<menu_item_call.on_click
+		 function="Inventory.DoToSelected"
+		 parameter="copy_to_outbox" />
+	</menu_item_call>
+	<menu_item_call
+	 label="Send to Marketplace"
+	 layout="topleft"
+	 name="Marketplace Send">
+		<menu_item_call.on_click
+		 function="Inventory.DoToSelected"
+		 parameter="send_to_marketplace" />
+	</menu_item_call>
+	<menu_item_call
      label="--no options--"
      layout="topleft"
      name="--no options--" />

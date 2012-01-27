@@ -63,12 +63,10 @@ public:
 	
 private:
 	void update();
-	void onNameCache(const LLUUID& id, const std::string& name, bool is_group);
 	
 private:
 	LLUUID		 mObjectID;
 	LLUUID		 mOwnerID;
-	std::string  mOwnerLegacyName;
 	std::string  mSLurl;
 	std::string  mName;
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
@@ -81,7 +79,6 @@ LLInspectRemoteObject::LLInspectRemoteObject(const LLSD& sd) :
 	LLInspect(LLSD()),
 	mObjectID(NULL),
 	mOwnerID(NULL),
-	mOwnerLegacyName(),
 	mSLurl(""),
 	mName(""),
 // [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
@@ -124,14 +121,6 @@ void LLInspectRemoteObject::onOpen(const LLSD& data)
 		mRlvHideNames = data["rlv_shownames"].asBoolean();
 // [/RLVa:KB]
 
-	// work out the owner's name
-	mOwnerLegacyName = "";
-	if (gCacheName)
-	{
-		gCacheName->get(mOwnerID, mGroupOwned,  // muting
-			boost::bind(&LLInspectRemoteObject::onNameCache, this, _1, _2, _3));
-	}
-
 	// update the inspector with the current object state
 	update();
 
@@ -157,8 +146,7 @@ void LLInspectRemoteObject::onClickMap()
 
 void LLInspectRemoteObject::onClickBlock()
 {
-	LLMute::EType mute_type = mGroupOwned ? LLMute::GROUP : LLMute::AGENT;
-	LLMute mute(mOwnerID, mOwnerLegacyName, mute_type);
+	LLMute mute(mObjectID, mName, LLMute::OBJECT);
 	LLMuteList::getInstance()->add(mute);
 	LLPanelBlockedList::showPanelAndSelect(mute.mID);
 	closeFloater();
@@ -167,12 +155,6 @@ void LLInspectRemoteObject::onClickBlock()
 void LLInspectRemoteObject::onClickClose()
 {
 	closeFloater();
-}
-
-void LLInspectRemoteObject::onNameCache(const LLUUID& id, const std::string& name, bool is_group)
-{
-	mOwnerLegacyName = name;
-	update();
 }
 
 void LLInspectRemoteObject::update()
@@ -214,8 +196,8 @@ void LLInspectRemoteObject::update()
 	// disable the Map button if we don't have a SLurl
 	getChild<LLUICtrl>("map_btn")->setEnabled(! mSLurl.empty());
 
-	// disable the Block button if we don't have the owner ID
-	getChild<LLUICtrl>("block_btn")->setEnabled(! mOwnerID.isNull());
+	// disable the Block button if we don't have the object ID (will this ever happen?)
+	getChild<LLUICtrl>("block_btn")->setEnabled(! mObjectID.isNull());
 
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 	if ( (rlv_handler_t::isEnabled()) && (RlvStrings::getString(RLV_STRING_HIDDEN_REGION) == mSLurl) )
