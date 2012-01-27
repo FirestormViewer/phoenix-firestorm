@@ -312,11 +312,23 @@ LLMutex::LLMutex(apr_pool_t *poolp) :
 	//	mAPRPoolp = poolp;
 	//}
 	//else
-	{
-		mIsLocalPool = TRUE;
-		apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
-	}
-	apr_thread_mutex_create(&mAPRMutexp, APR_THREAD_MUTEX_UNNESTED, mAPRPoolp);
+	
+	// <FS:ND> Use a new allocator for each pool, that way we can be sure all memory gets released the way we want.
+
+	// {
+	// 	mIsLocalPool = TRUE;
+	// 	apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
+	// }
+	// apr_thread_mutex_create(&mAPRMutexp, APR_THREAD_MUTEX_UNNESTED, mAPRPoolp);
+
+	apr_allocator_t *pAlloc(0);
+
+	apr_allocator_create( &pAlloc );
+	apr_pool_create_ex( &mAPRPoolp, 0, 0, pAlloc );
+	apr_allocator_owner_set( pAlloc, mAPRPoolp );
+	apr_thread_mutex_create( &mAPRMutexp, APR_THREAD_MUTEX_UNNESTED, mAPRPoolp );
+ 	mIsLocalPool = TRUE;
+	// </FS:NS>	
 }
 
 
