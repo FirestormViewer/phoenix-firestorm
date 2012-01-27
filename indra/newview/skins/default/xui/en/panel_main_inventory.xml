@@ -224,7 +224,7 @@
            width="31">
            <button.init_callback
                  function="Button.SetDockableFloaterToggle"
-                 parameter="inventory" />
+                 parameter="secondary_inventory" />
            </button>
       </panel>
       <panel

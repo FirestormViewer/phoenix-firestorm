@@ -381,5 +381,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("flickr_auth", "floater_flickr_auth.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrAuth>);
 	LLFloaterReg::add("flickr_upload", "floater_flickr_upload.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrUpload>);
 	
+	// <FS:Ansariel> Secondary inventory for additional inventory button. Needs a different floater name
+	//               after the sidebar is gone or the floater toggle would toggle the main inventory window
+	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
+
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }
