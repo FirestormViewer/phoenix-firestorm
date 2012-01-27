@@ -205,6 +205,12 @@ public:
 	LLMeshHeaderResponder(const LLVolumeParams& mesh_params)
 		: mMeshParams(mesh_params)
 	{
+		LLMeshRepoThread::sActiveHeaderRequests++;
+	}
+
+	~LLMeshHeaderResponder()
+	{
+		LLMeshRepoThread::sActiveHeaderRequests--;
 	}
 
 	virtual void completedRaw(U32 status, const std::string& reason,
@@ -224,6 +230,12 @@ public:
 	LLMeshLODResponder(const LLVolumeParams& mesh_params, S32 lod, U32 offset, U32 requested_bytes)
 		: mMeshParams(mesh_params), mLOD(lod), mOffset(offset), mRequestedBytes(requested_bytes)
 	{
+		LLMeshRepoThread::sActiveLODRequests++;
+	}
+
+	~LLMeshLODResponder()
+	{
+		LLMeshRepoThread::sActiveLODRequests--;
 	}
 
 	virtual void completedRaw(U32 status, const std::string& reason,
@@ -714,7 +726,6 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id)
 										   new LLMeshSkinInfoResponder(mesh_id, offset, size));
 				if(ret)
 				{
-					++sActiveLODRequests;
 					LLMeshRepository::sHTTPRequestCount++;
 				}
 			}
@@ -792,7 +803,6 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 										   new LLMeshDecompositionResponder(mesh_id, offset, size));
 				if(ret)
 				{
-					++sActiveLODRequests;
 					LLMeshRepository::sHTTPRequestCount++;
 				}
 			}
@@ -870,7 +880,6 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 
 				if(ret)
 				{
-					++sActiveLODRequests;
 					LLMeshRepository::sHTTPRequestCount++;
 				}
 			}
@@ -995,7 +1004,6 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, 
 
 				if(retval)
 				{
-					++sActiveLODRequests;				
 					LLMeshRepository::sHTTPRequestCount++;
 				}
 				count++;
@@ -1753,7 +1761,6 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
 
-	LLMeshRepoThread::sActiveLODRequests--;
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1808,8 +1815,6 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	LLMeshRepoThread::sActiveLODRequests--; // <ND/> Mesh Queue stuck bugfix
-
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1864,8 +1869,6 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	LLMeshRepoThread::sActiveLODRequests--; // <ND/> Mesh Queue stuck bugfix
-
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1920,8 +1923,6 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	LLMeshRepoThread::sActiveLODRequests--; // <ND/> Mesh Queue stuck bugfix
-
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1976,7 +1977,6 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	LLMeshRepoThread::sActiveHeaderRequests--;
 	if (status < 200 || status > 400)
 	{
 		//llwarns
