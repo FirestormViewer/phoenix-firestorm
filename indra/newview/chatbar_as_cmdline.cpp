@@ -41,7 +41,10 @@
 #include "llworld.h"
 #include "lluuid.h"
 #include "llviewercontrol.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 
 #include "material_codes.h"
 #include "llvolume.h"
@@ -970,7 +973,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 
 			else if(command == std::string(sFSCmdLineClearChat))
 			{
-				LLNearbyChat* chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+				LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 				if(chat)
 				{
 					chat->clearChatHistory();

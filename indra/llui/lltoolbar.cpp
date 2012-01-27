@@ -1351,7 +1351,6 @@ const std::string LLToolBarButton::getToolTip() const
 // <FS:Zi> Returns the current layout style for saving in XML settings
 LLToolBarEnums::LayoutStyle LLToolBar::getLayoutStyle() const
 {
-	llwarns << mLayoutStyle << llendl;
 	return mLayoutStyle;
 }
 
@@ -1359,7 +1358,6 @@ LLToolBarEnums::LayoutStyle LLToolBar::getLayoutStyle() const
 void LLToolBar::setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style)
 {
 	mLayoutStyle=layout_style;
-	llwarns << mLayoutStyle << llendl;
 	mNeedsLayout=true;
 }
 

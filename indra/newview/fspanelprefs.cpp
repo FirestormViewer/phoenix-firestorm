@@ -11,7 +11,6 @@
 #include "lggbeamcolormapfloater.h"
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
-#include "llnearbychat.h"
 #include "llspinctrl.h"
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");

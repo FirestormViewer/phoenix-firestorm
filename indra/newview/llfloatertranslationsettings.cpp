@@ -29,7 +29,7 @@
 #include "llfloatertranslationsettings.h"
 
 // Viewer includes
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 #include "lltranslate.h"
 #include "llviewercontrol.h" // for gSavedSettings
 
@@ -293,6 +293,9 @@ void LLFloaterTranslationSettings::onBtnOK()
 	gSavedSettings.setString("TranslationService", getSelectedService());
 	gSavedSettings.setString("BingTranslateAPIKey", getEnteredBingKey());
 	gSavedSettings.setString("GoogleTranslateAPIKey", getEnteredGoogleKey());
-	LLNearbyChatBar::getInstance()->enableTranslationCheckbox(LLTranslate::isTranslationConfigured());
+	// <FS:Zi> Remove floating chat bar
+	// LLNearbyChatBar::getInstance()->enableTranslationCheckbox(LLTranslate::isTranslationConfigured());
+	// TODO: Add code to make this happen via control callback within LLNearbyChat
+	// </FS:Zi>
 	closeFloater(false);
 }

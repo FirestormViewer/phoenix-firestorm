@@ -28,8 +28,11 @@
 #include "llviewerprecompiledheaders.h" // must be first include
 
 #include "llfloaterreg.h"
-#include "llnearbychat.h"
-#include "llnearbychatbar.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+// #include "llnearbychatbar.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
 #include "lltoastnotifypanel.h"
@@ -94,9 +97,12 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 			LLHandlerUtil::logToNearbyChat(notification, CHAT_SOURCE_SYSTEM);
 
 			// don't show toast if Nearby Chat is opened
-			LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
-			LLNearbyChatBar* nearby_chat_bar = LLNearbyChatBar::getInstance();
-			if (!nearby_chat_bar->isMinimized() && nearby_chat_bar->getVisible() && nearby_chat->getVisible())
+			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Zi> Remove floating chat bar
+			// LLNearbyChatBar* nearby_chat_bar = LLNearbyChatBar::getInstance();
+			// if (!nearby_chat_bar->isMinimized() && nearby_chat_bar->getVisible() && nearby_chat->getVisible())
+			if (nearby_chat->getVisible())
+			// </FS:Zi>
 			{
 				return false;
 			}

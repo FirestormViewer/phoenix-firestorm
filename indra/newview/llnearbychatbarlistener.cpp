@@ -29,22 +29,24 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llnearbychatbarlistener.h"
-#include "llnearbychatbar.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychatbar.h"
+#include "llnearbychathub.h"
+// </FS:Zi>
 
 #include "llagent.h"
 #include "llchat.h"
 
 
-
-//LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
+// <FS:Zi> Remove floating chat bar
+// LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
 //  : LLEventAPI("LLChatBar",
 //               "LLChatBar listener to (e.g.) sendChat, etc."),
 //	mChatbar(chatbar)
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar& chatbar)
+LLNearbyChatBarListener::LLNearbyChatBarListener()
   : LLEventAPI("LLChatBar",
                "LLChatBar listener to (e.g.) sendChat, etc.")
-// [/SL:KB]
+// </FS:Zi>
 {
     add("sendChat",
         "Send chat to the simulator:\n"
@@ -100,9 +102,9 @@ void LLNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-//	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	LLNearbyChatBarBase::sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
-// [/SL:KB]
+	// <FS:Zi> Remove floating chat bar
+	// mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+	LLNearbyChat::getInstance()->sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+	// <FS:Zi>
 }
 

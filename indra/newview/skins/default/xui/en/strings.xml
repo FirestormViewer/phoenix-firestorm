@@ -3735,7 +3735,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Appearance_Label">Appearance</string>
   <string name="Command_Avatar_Label">Avatar</string>
   <string name="Command_Build_Label">Build</string>
-  <string name="Command_Chat_Label">Chat</string>
+  <string name="Command_Chat_Label">Conversations</string>
   <string name="Command_Compass_Label">Compass</string>
   <string name="Command_Destinations_Label">Destinations</string>
   <string name="Command_Gestures_Label">Gestures</string>

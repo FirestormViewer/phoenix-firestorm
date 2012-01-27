@@ -37,7 +37,10 @@
 #include "llavatarnamecache.h"
 #include "llconsole.h"
 #include "llfloaterreg.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "rlvhandler.h"
 #include "lggcontactsets.h"
 
@@ -203,6 +206,6 @@ void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName&
 	}
 	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
 
-	LLNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChat>("nearby_chat", LLSD());
+	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
 	gConsole->setVisible(!nearby_chat->getVisible());
 }

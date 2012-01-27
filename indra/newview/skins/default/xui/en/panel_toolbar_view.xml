@@ -126,17 +126,82 @@
       </layout_panel>
     </layout_stack>
   </layout_panel>
+
   <layout_panel name="bottom_toolbar_panel"
                 auto_resize="false"
                 height="30"
                 width="1024"
                 mouse_opaque="false">
+
+  <layout_stack name="chat_bar_stack"
+                orientation="horizontal"
+                left="0"
+                top="0"
+                width="1024"
+                height="30"
+                follows="all"
+                border_width="0"
+                mouse_opaque="false">
+
+  <layout_panel name="chat_bar_layout_panel"
+                auto_resize="true"
+                user_resize="true"
+                height="30"
+                width="280"
+                mouse_opaque="false">
+
+	<panel
+		name="chat_bar_layout_panel"
+		layout="topleft"
+		follows="all"
+		left="0"
+		top="2"
+		width="280"
+		height="29"
+		bg_opaque_image="Rounded_Rect"
+		background_visible="true"
+		bg_opaque_image_overlay="MouseGray"
+		background_opaque="true">
+
+	<button name="local_chat_button"
+        tool_tip="Shows/hides nearby chat window"
+		label="Local Chat"
+		follows="left|top"
+		layout="topleft"
+		height="24"
+		left="5"
+		top="3"
+		width="80">
+		<commit_callback
+			function="Floater.Toggle"
+			parameter="nearby_chat" />
+	</button>
+
+    <nearby_chat_control layout="topleft"
+             name="default_chat_bar"
+             height="22"
+             left_pad="4"
+             top="4"
+             width="184"
+             follows="left|right|bottom"
+             spellcheck="true"
+             visible="true" />
+	</panel>
+
+  </layout_panel>
+  <layout_panel name="toolbar_panel"
+                auto_resize="false"
+                user_resize="true"
+                height="30"
+                width="804"
+                mouse_opaque="false">
+
     <toolbar layout="topleft"
              button_panel.bg_opaque_image="Rounded_Rect_Top"
              name="toolbar_bottom"
              height="30"
-             left="40"
-             right="-40"
+             left="0"
+             right="-1"
              top="0"
              side="bottom"
              follows="left|right|bottom"
@@ -154,6 +219,11 @@
 	            image_name="Caret_Bottom_Icon"
 	            name="caret" />
     </toolbar>
+
+</layout_panel>
+</layout_stack>
+
+
   </layout_panel>
   </layout_stack>
 </toolbar_view>

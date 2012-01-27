@@ -31,7 +31,11 @@
 #include "llmath.h"
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llnearbychatbar.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychatbar.h"
+#include "llnearbychathub.h"
+#include "lllineeditor.h"
+// </FS:Zi>
 #include "llviewercontrol.h"
 #include "llfocusmgr.h"
 #include "llmorphview.h"
@@ -545,7 +549,10 @@ void stop_moving( EKeystate s )
 void start_chat( EKeystate s )
 {
 	// start chat
-	LLNearbyChatBar::startChat(NULL);
+	// <FS:Zi> Remove floating chat bar
+	// LLNearbyChatBar::startChat(NULL);
+	LLNearbyChat::getInstance()->showDefaultChatBar(TRUE);
+	// </FS:Zi>
 }
 
 void start_gesture( EKeystate s )
@@ -570,19 +577,19 @@ void start_gesture( EKeystate s )
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
-// 		if (LLNearbyChatBar::getInstance()->getCurrentChat().empty())
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
- 		if (LLNearbyChatBar::getInstance()->getChatBarImpl()->getChatBoxText().empty())
-// [/SL:KB]
+		// <FS:Zi> Remove floating chat bar
+ 		// TODO: This needs the new bottom chat bar to work at all
+/* 		if (LLNearbyChat::getInstance()->getCurrentChat().empty())
  		{
  			// No existing chat in chat editor, insert '/'
- 			LLNearbyChatBar::startChat("/");
+ 			LLNearbyChat::startChat("/");
  		}
  		else
  		{
  			// Don't overwrite existing text in chat editor
- 			LLNearbyChatBar::startChat(NULL);
- 		}
+ 			LLNearbyChat::startChat(NULL);
+ 		}*/
+ 		// </FS:Zi>
 	}
 }
 

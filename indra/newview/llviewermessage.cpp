@@ -67,7 +67,10 @@
 #include "llinventoryfunctions.h"
 #include "llinventoryobserver.h"
 #include "llinventorypanel.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llpanelgrouplandmoney.h"
@@ -2340,7 +2343,7 @@ void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::string m
 	// Treat like a system message and put in chat history.
 	chat.mText = av_name.getCompleteName() + ": " + message;
 
-	LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
 	if(nearby_chat)
 	{
 		nearby_chat->addMessage(chat);
@@ -3089,7 +3092,9 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
-			LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+			// <FS:Zi> Can anyone elaborate on this and add to the comment what this
+			//         code is supposed to do exactly?
+			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
 			if(SYSTEM_FROM != name && nearby_chat)
 			{
 				chat.mOwnerID = from_id;

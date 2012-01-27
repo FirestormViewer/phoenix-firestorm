@@ -63,7 +63,10 @@
 #include "llmemorystream.h"
 #include "llmessageconfig.h"
 #include "llmoveview.h"
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llfloaternearbychat.h"
+// </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llteleporthistory.h"
@@ -1567,7 +1570,7 @@ bool idle_startup()
 		//so I just moved nearby history loading a few states further
 		if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
 		{
-			LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
 			if (nearby_chat) nearby_chat->loadHistory();
 		}
 		display_startup();

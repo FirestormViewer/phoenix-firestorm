@@ -77,7 +77,7 @@
 #include <time.h>
 #include "llnotificationmanager.h"
 #include "lllayoutstack.h"
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include "llcontrol.h"

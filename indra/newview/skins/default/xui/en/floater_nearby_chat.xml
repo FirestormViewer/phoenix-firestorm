@@ -127,7 +127,7 @@
          user_resize="false"
          width="300">
 
-      <line_editor
+      <nearby_chat_control
          layout="topleft"
          top="0"
          left="0"
@@ -139,7 +139,7 @@
          label="To nearby chat"
          spellcheck="true"
          name="chat_box"
-         tab_group="3" />
+		 tab_group="3" />
       </layout_panel>
 
       <layout_panel

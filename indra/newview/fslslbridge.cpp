@@ -47,7 +47,7 @@
 #include "llfoldertype.h"
 #include "llhttpclient.h"
 #include "llassetuploadresponders.h"
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"		// <FS:Zi> Dead code
 #include "llnotificationmanager.h"
 #include "llviewerobject.h"
 

@@ -189,7 +189,7 @@
 #include "llviewerjoystick.h"
 #include "llviewernetwork.h"
 #include "llpostprocess.h"
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 #include "llagentui.h"
 #include "llwearablelist.h"
 
@@ -199,7 +199,10 @@
 
 #include "llfloaternotificationsconsole.h"
 
-#include "llnearbychat.h"
+// <FS:Zi> Remove floating chat bar
+// #include "llnearbychat.h"
+#include "llnearbychathub.h"
+// </FS:Zi>
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
 #include "llpaneltopinfobar.h"
@@ -2508,28 +2511,23 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// Traverses up the hierarchy
 	if( keyboard_focus )
 	{
-		LLNearbyChatBar* nearby_chat = LLFloaterReg::findTypedInstance<LLNearbyChatBar>("chat_bar");
+		// <FS:Zi> Remove floating chat bar
+		// LLNearbyChatBar* nearby_chat = LLFloaterReg::findTypedInstance<LLNearbyChatBar>("chat_bar");
 
-//		if (nearby_chat)
-//		{
-//			LLLineEditor* chat_editor = nearby_chat->getChatBox();
-//		
-//		// arrow keys move avatar while chatting hack
-//		if (chat_editor && chat_editor->hasFocus())
-//		{
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-		LLNearbyChatBarBase* pChatBarImpl = (nearby_chat) ? nearby_chat->getChatBarImpl() : NULL;
-		if ( (pChatBarImpl) && (pChatBarImpl->getChatBoxCtrl()) && (pChatBarImpl->getChatBoxCtrl()->hasFocus()) )
-		{
-// [/SL:KB]
-			// If text field is empty, there's no point in trying to move
-			// cursor with arrow keys, so allow movement
-//			if (chat_editor->getText().empty() 
-//				|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-			if (pChatBarImpl->getChatBoxText().empty() 
+		// if (nearby_chat)
+		// {
+		//	LLLineEditor* chat_editor = nearby_chat->getChatBox();
+
+
+		// arrow keys move avatar while chatting hack
+		// if (chat_editor && chat_editor->hasFocus())
+		// {
+		//	// If text field is empty, there's no point in trying to move
+		//	// cursor with arrow keys, so allow movement
+		//	if (chat_editor->getText().empty() 
+		if(LLNearbyChat::instance().chatIsEmpty()
+		// </FS:Zi>
 				|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
-// [/SL:KB]
 			{
 				// let Control-Up and Control-Down through for chat line history,
 				if (!(key == KEY_UP && mask == MASK_CONTROL)
@@ -2551,8 +2549,10 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 						break;
 					}
 				}
-			}
-//		}
+		// <FS:Zi> Remove floating chat bar
+		// 	}
+		// }
+		// </FS:Zi>
 		}
 		if (keyboard_focus->handleKey(key, mask, FALSE))
 		{
@@ -2581,23 +2581,22 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// If "Pressing letter keys starts local chat" option is selected, we are not in mouselook, 
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
+
 	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
-//		LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
-//		if (chat_editor)
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-		LLNearbyChatBar* nearby_chat = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar");
-		if (nearby_chat)
-// [/SL:KB]
-		{
-			// passing NULL here, character will be added later when it is handled by character handler.
-//			LLNearbyChatBar::getInstance()->startChat(NULL);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-			nearby_chat->startChat(NULL);
-// [/SL:KB]
-			return TRUE;
-		}
+		// <FS:Zi> Remove floating chat bar
+		// LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
+
+		// if (chat_editor)
+		// {
+		// 	// passing NULL here, character will be added later when it is handled by character handler.
+		// 	LLNearbyChatBar::getInstance()->startChat(NULL);
+		// 	return TRUE;
+		// }
+		LLNearbyChat::getInstance()->showDefaultChatBar(TRUE);
+		return TRUE;
+		// </FS:Zi>
 	}
 
 	// give menus a chance to handle unmodified accelerator keys

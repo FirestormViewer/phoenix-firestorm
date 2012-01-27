@@ -35,7 +35,7 @@
 #include "llfloaterreg.h"
 #include "lllocalcliprect.h"
 #include "lltrans.h"
-#include "llnearbychatbar.h"
+// #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 
 #include "llviewercontrol.h"
 #include "llagentdata.h"
@@ -45,6 +45,8 @@
 // [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+
+#include "llfloaternearbychat.h"	// <FS:Zi> Remove floating chat bar
 
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
@@ -326,12 +328,18 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 			return TRUE;
 		else
 		{
-			LLNearbyChatBar::getInstance()->showHistory();
+			// <FS:Zi> Remove floating chat bar
+			// LLNearbyChatBar::getInstance()->showHistory();
+			LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+			// </FS:Zi>
 			return FALSE;
 		}
 	}
 
-	LLNearbyChatBar::getInstance()->showHistory();
+	// <FS:Zi> Remove floating chat bar
+	// LLNearbyChatBar::getInstance()->showHistory();
+	LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+	// </FS:Zi>
 	return LLPanel::handleMouseUp(x,y,mask);
 }
 

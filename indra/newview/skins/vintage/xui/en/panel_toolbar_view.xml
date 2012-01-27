@@ -10,6 +10,7 @@
  mouse_opaque="false"
  tab_stop="false"
  visible="true">
+
   <layout_stack name="bottom_toolbar_stack"
                 orientation="vertical"
                 left="0"
@@ -17,6 +18,7 @@
                 width="1024"
                 height="500"
                 follows="all"
+                border_size="0"
                 mouse_opaque="false">
   <layout_panel name="vertical_toolbar_panel"
                 auto_resize="true"
@@ -130,6 +132,77 @@
       </layout_panel>
     </layout_stack>
   </layout_panel>
+
+  <!-- Nearby chat panel, resting on top of the bottom toolbar -->
+  <layout_panel name="bottom_chat_bar_panel"
+                auto_resize="false"
+                user_resize="false"
+                height="26"
+                width="1024"
+                mouse_opaque="false">
+
+  <!-- Layout stack to make showing and hiding easy -->
+  <layout_stack name="bottom_chat_stack"
+                orientation="vertical"
+                top="0"
+                left="0"
+                width="1024"
+                height="26"
+                follows="all"
+                border_size="0"
+                mouse_opaque="false">
+
+  <!-- Empty panel to take up the space when chat bar panel gets hidden -->
+  <layout_panel name="bottom_chat_bar_upper_padding_panel"
+                auto_resize="true"
+                user_resize="false"
+                width="1024"
+                height="26"
+                mouse_opaque="false" />
+
+  <!-- Panel to house the chat bar in, will be set visible/invisible in code
+       as parent of the chat control -->
+  <layout_panel name="bottom_chat_bar_panel"
+                auto_resize="false"
+                user_resize="false"
+                bg_visible="true"
+                bg_opaque_color="DkGray"
+                background_opaque="true"
+                height="26"
+                width="1024"
+                mouse_opaque="false">
+
+  <button name="local_chat_button"
+          tool_tip="Shows/hides nearby chat window"
+          control_name="floater_vis_nearby_chat"
+          label="Local Chat"
+          height="20"
+          left="5"
+          top="4"
+          width="80">
+  <commit_callback function="Floater.Toggle"
+                   parameter="nearby_chat" />
+  </button>
+
+  <nearby_chat_control layout="topleft"
+                       name="default_chat_bar"
+                       label="To nearby chat"
+                       max_length_bytes="1024"
+                       left_pad="8"
+                       height="20"
+                       right="-4"
+                       follows="all"
+                       spellcheck="true" />
+  </layout_panel>
+  <!-- Panel to house the chat bar in, will be set visible/invisible in code
+       as parent of the chat control -->
+
+  </layout_stack>
+  <!-- Layout stack to make showing and hiding easy -->
+
+  </layout_panel>
+  <!-- Nearby chat panel, resting on top of the bottom toolbar -->
+
   <layout_panel name="bottom_toolbar_panel"
                 auto_resize="false"
                 user_resize="false"
@@ -165,4 +238,5 @@
     </toolbar>
   </layout_panel>
   </layout_stack>
+
 </toolbar_view>

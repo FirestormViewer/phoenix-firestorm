@@ -238,6 +238,7 @@ set(viewer_SOURCE_FILES
     llfloatermodeluploadbase.cpp
     llfloatermodelwizard.cpp
     llfloaternamedesc.cpp
+    llfloaternearbychat.cpp
     llfloaternotificationsconsole.cpp
     llfloaterobjectweights.cpp
     llfloateropenobject.cpp
@@ -355,11 +356,10 @@ set(viewer_SOURCE_FILES
     llnameeditor.cpp
     llnamelistctrl.cpp
     llnavigationbar.cpp
-    llnearbychat.cpp
-    llnearbychatbar.cpp
+    llnearbychatcontrol.cpp
     llnearbychathandler.cpp
+    llnearbychathub.cpp
     llnearbychatbarlistener.cpp
-    llnearbychatbarmulti.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
     llnotificationgrouphandler.cpp
@@ -839,6 +839,7 @@ set(viewer_HEADER_FILES
     llfloatermodeluploadbase.h
     llfloatermodelwizard.h
     llfloaternamedesc.h
+    llfloaternearbychat.h
     llfloaternotificationsconsole.h
     llfloaterobjectweights.h
     llfloateropenobject.h
@@ -956,12 +957,10 @@ set(viewer_HEADER_FILES
     llnameeditor.h
     llnamelistctrl.h
     llnavigationbar.h
-    llnearbychat.h
-    llnearbychatbar.h
-    llnearbychatbarbase.h
+    llnearbychatcontrol.h
     llnearbychathandler.h
+    llnearbychathub.h
     llnearbychatbarlistener.h
-    llnearbychatbarmulti.h
     llnetmap.h
     llnotificationhandler.h
     llnotificationmanager.h

@@ -34,8 +34,7 @@
 #include "llgroupiconctrl.h"
 #include "llagent.h"
 #include "lltransientfloatermgr.h"
-
-#include "llnearbychat.h"
+#include "llfloaternearbychat.h"
 #include "fscontactsfloater.h"
 #include "llfloater.h"
 #include "llviewercontrol.h"
@@ -81,26 +80,23 @@ void LLIMFloaterContainer::onOpen(const LLSD& key)
 	// But only if it hasnt been already so we can reopen it to the same tab -KC
 	// Improved handling to leave most of the work to the LL tear-off code -Zi
 
-	// ND_MERGE
-	// LLPanel* floater = LLNearbyChat::getInstance();
-	// if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
-	// {
-	// 	if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-	// 	{
-	// 		// first set the tear-off host to this floater
-	// 		floater->setHost(this);
-	// 		// clear the tear-off host right after, the "last host used" will still stick
-	// 		floater->setHost(NULL);
-	// 		// reparent to floater view
-	// 		gFloaterView->addChild(floater);
-	// 	}
-	// 	else
-	// 	{
-	// 		LLMultiFloater::showFloater(floater);
-	// 	}
-	// }
-	// /ND_MERGE
-	
+	LLFloater* floater = LLFloaterNearbyChat::getInstance();
+	if (! LLFloater::isVisible(floater) && (floater->getHost() != this))
+	{
+		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+		{
+			// first set the tear-off host to this floater
+			floater->setHost(this);
+			// clear the tear-off host right after, the "last host used" will still stick
+			floater->setHost(NULL);
+			// reparent to floater view
+			gFloaterView->addChild(floater);
+		}
+		else
+		{
+			LLMultiFloater::showFloater(floater);
+		}
+	}
 	
 /*
 	if (key.isDefined())

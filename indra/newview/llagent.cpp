@@ -54,9 +54,10 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h" // to show/hide navigation bar when changing mouse look state
+// <FS:Zi> Remove floating chat bar
 //#include "llnearbychatbar.h"
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a)
-#include "llnearbychatbarbase.h"
+#include "llnearbychathub.h"
+// </FS:Zi>
 #include "llspeakers.h"
 // [/SL:KB]
 #include "llnotificationsutil.h"
@@ -1985,10 +1986,10 @@ void LLAgent::startTyping()
 	{
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_START);
 	}
-//	LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_START, FALSE);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-	LLNearbyChatBarBase::sendChatFromViewer("", CHAT_TYPE_START, FALSE);
-// [/SL:KB]
+	// <FS:Zi> Remove floating chat bar
+	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	LLNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	// </FS:Zi>
 }
 
 //-----------------------------------------------------------------------------
@@ -2000,10 +2001,10 @@ void LLAgent::stopTyping()
 	{
 		clearRenderState(AGENT_STATE_TYPING);
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_STOP);
-//		LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-26 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
-		LLNearbyChatBarBase::sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
-// [/SL:KB]
+	// <FS:Zi> Remove floating chat bar
+	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+	LLNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+	// </FS:Zi>
 	}
 }
 
