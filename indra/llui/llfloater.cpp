@@ -914,7 +914,7 @@ LLMultiFloater* LLFloater::getLastHost() const
 
 void LLFloater::applyControlsAndPosition(LLFloater* other)
 {
-	if (!applyDockState())
+//	if (!applyDockState()) // <FS:Zi> Don't apply dock state and forget about the undocked values
 	{
 //		if (!applyRectControl())
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-10-27 (Catznip-3.2.0a) | Added: Catznip-3.2.0a
@@ -931,6 +931,7 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 	{
 		applyTearOffState();
 	}
+	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 // [/SL:KB]
 }
 
