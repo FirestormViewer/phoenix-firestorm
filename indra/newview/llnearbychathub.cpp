@@ -475,5 +475,6 @@ BOOL LLNearbyChat::chatIsEmpty() const
 	if(mFocusedInputEditor)
 		return mFocusedInputEditor->getText().empty();
 
-	return TRUE;
+	// return FALSE for unfocused chat editor, so other UI elements can claim arrow keys
+	return FALSE;
 }

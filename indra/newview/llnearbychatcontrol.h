@@ -38,6 +38,8 @@ public:
 	LLNearbyChatControl(const Params& p);
 	~LLNearbyChatControl();
 
+	virtual void onFocusReceived();
+	virtual void onFocusLost();
 	virtual void setFocus(BOOL focus);
 
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);

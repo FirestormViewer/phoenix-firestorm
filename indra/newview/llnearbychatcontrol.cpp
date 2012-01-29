@@ -227,6 +227,18 @@ BOOL LLNearbyChatControl::matchChatTypeTrigger(const std::string& in_str, std::s
 }
 
 // send our focus status to the LLNearbyChat hub
+void LLNearbyChatControl::onFocusReceived()
+{
+	LLNearbyChat::instance().setFocusedInputEditor(this,TRUE);
+	LLLineEditor::onFocusReceived();
+}
+
+void LLNearbyChatControl::onFocusLost()
+{
+	LLNearbyChat::instance().setFocusedInputEditor(this,FALSE);
+	LLLineEditor::onFocusLost();
+}
+
 void LLNearbyChatControl::setFocus(BOOL focus)
 {
 	LLNearbyChat::instance().setFocusedInputEditor(this,focus);
