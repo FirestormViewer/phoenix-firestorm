@@ -28,8 +28,8 @@
 #ifndef FS_FSFLOATERPROFILE_H
 #define FS_FSFLOATERPROFILE_H
 
-#include "llviewerprecompiledheaders.h"
 #include "llfloater.h"
+#include "llavatarpropertiesprocessor.h"
 
 class LLAvatarName;
 class LLTextBox;
@@ -47,12 +47,33 @@ public:
 
 	/*virtual*/ BOOL postBuild();
 
+	/**
+	 * Returns avatar ID.
+	 */
     const LLUUID& getAvatarId() const { return mAvatarId; }
+    
+    /**
+	 * Sends update data request to server.
+	 */
+	void updateData();
 
 protected:
-    void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
+	/**
+	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
+	 */
+    void setAvatarId(const LLUUID& avatar_id);
 
-	bool isGrantedToSeeOnlineStatus();
+	/**
+	 * Process profile related data received from server.
+	 */
+	virtual void processProfileProperties(const LLAvatarData* avatar_data);
+
+	/**
+	 * Processes group related data received from server.
+	 */
+	virtual void processGroupProperties(const LLAvatarGroups* avatar_groups);
+
+	bool isGrantedToSeeOnlineStatus(bool online);
 
 	/**
 	 * Displays avatar's online status if possible.
@@ -72,9 +93,13 @@ protected:
 private:
     void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
+    typedef std::map<std::string,LLUUID>    group_map_t;
+    group_map_t             mGroups;
+    // void                    openGroupProfile();
 
-    LLUUID mAvatarId;
-	AvatarStatusObserver* mAvatarStatusObserver;
+    LLUUID                  mAvatarId;
+	AvatarStatusObserver*   mAvatarStatusObserver;
+    BOOL                    mIsFriend;
 
 
     LLTextBox* mStatusText;

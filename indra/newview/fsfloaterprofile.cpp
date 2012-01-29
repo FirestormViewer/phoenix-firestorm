@@ -26,66 +26,57 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-
 #include "fsfloaterprofile.h"
 
-#include "llavatarconstants.h"
+// LLCommon
+#include "llavatarconstants.h" //AVATAR_ONLINE
 #include "llavatarnamecache.h"
+
+// LLUI
+#include "lltextbox.h"
+#include "llgrouplist.h"
+
+// Newview
+#include "llagent.h" //gAgent
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
-#include "lltextbox.h"
-
 
 class AvatarStatusObserver : public LLAvatarPropertiesObserver
 {
 public:
-	AvatarStatusObserver(FSFloaterProfile* profile_view)
+	AvatarStatusObserver(FSFloaterProfile* profile_floater)
 	{
-		mProfileView = profile_view;
+		mProfileFloater = profile_floater;
+        LLAvatarPropertiesProcessor::instance().addObserver(mProfileFloater->getAvatarId(), this);
 	}
 
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
 	~AvatarStatusObserver()
 	{
-		if (mAvatarId.notNull())
-			LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
+		LLAvatarPropertiesProcessor::instance().removeObserver(mProfileFloater->getAvatarId(), this);
 	}
-// [/SL:KB]
 
 	void processProperties(void* data, EAvatarProcessorType type)
 	{
-		if(APT_PROPERTIES != type) return;
-		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
-		if(avatar_data && mProfileView->getAvatarId() == avatar_data->avatar_id)
-		{
-			llinfos << "processing online status in the AvatarStatusObserver, will remove it." << llendl;
-			mProfileView->processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
-//			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
-		}
-
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
-		// Profile view may have switched to a new avatar already so this needs to be outside the check above
-		LLAvatarPropertiesProcessor::instance().removeObserver(mAvatarId, this);
-		mAvatarId.setNull();
-// [/SL:KB]
-	}
-
-	void subscribe()
-	{
-//		LLAvatarPropertiesProcessor::instance().addObserver(mProfileView->getAvatarId(), this);
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
-		if (mAvatarId.notNull())
-			LLAvatarPropertiesProcessor::instance().removeObserver(mProfileView->getAvatarId(), this);
-		mAvatarId = mProfileView->getAvatarId();
-		LLAvatarPropertiesProcessor::instance().addObserver(mAvatarId, this);
-// [/SL:KB]
+        if(APT_PROPERTIES == type)
+        {
+            const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+            if(avatar_data && mProfileFloater->getAvatarId() == avatar_data->avatar_id)
+            {
+                mProfileFloater->processProfileProperties(avatar_data);
+            }
+        }
+        else if(APT_GROUPS == type)
+        {
+            LLAvatarGroups* avatar_groups = static_cast<LLAvatarGroups*>(data);
+            if(avatar_groups && mProfileFloater->getAvatarId() == avatar_groups->avatar_id)
+            {
+                mProfileFloater->processGroupProperties(avatar_groups);
+            }
+        }
 	}
 
 private:
-	FSFloaterProfile* mProfileView;
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-11-28 (Catznip-2.4.0g) | Added: Catznip-2.4.0g
-	LLUUID				mAvatarId;
-// [/SL:KB]
+	FSFloaterProfile* mProfileFloater;
 };
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
@@ -93,8 +84,8 @@ FSFloaterProfile::FSFloaterProfile(const LLSD& key)
  , mAvatarId(LLUUID::null)
  , mStatusText(NULL)
  , mAvatarStatusObserver(NULL)
+ , mIsFriend(FALSE)
 {
-    mAvatarStatusObserver = new AvatarStatusObserver(this);
 }
 
 FSFloaterProfile::~FSFloaterProfile()
@@ -111,26 +102,32 @@ void FSFloaterProfile::onOpen(const LLSD& key)
 		id = key["id"];
 	}
 
-	if(id.notNull() && getAvatarId() != id)
-	{
-		setAvatarId(id);
+	if(!id.notNull()) return;
 
-		// clear name fields, which might have old data
-		// getChild<LLUICtrl>("complete_name")->setValue( LLSD() );
-		// getChild<LLUICtrl>("display_name")->setValue( LLSD() );
-		// getChild<LLUICtrl>("user_name")->setValue( LLSD() );
-		// getChild<LLUICtrl>("user_key")->setValue( LLSD() );
-		//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
-		// getChild<LLUICtrl>("web_profile_text")->setValue( LLSD() );
-	}
+    setAvatarId(id);
+    
 
 	// Update the avatar name.
 	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
 
-	updateOnlineStatus();
-
 	// LLPanelProfile::onOpen(key);
     //process tab open cmd here
+    
+    updateData();
+}
+
+void FSFloaterProfile::setAvatarId(const LLUUID& avatar_id)
+{
+    mAvatarId = avatar_id;
+    
+    const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	if (NULL != relationship)
+    {
+        mIsFriend = TRUE;
+        updateOnlineStatus();
+    }
+
+    mAvatarStatusObserver = new AvatarStatusObserver(this);
 }
 
 BOOL FSFloaterProfile::postBuild()
@@ -152,28 +149,20 @@ BOOL FSFloaterProfile::postBuild()
 	return TRUE;
 }
 
-bool FSFloaterProfile::isGrantedToSeeOnlineStatus()
+void FSFloaterProfile::updateData()
 {
-	const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
-	if (NULL == relationship)
-		return false;
-
-	// *NOTE: GRANT_ONLINE_STATUS is always set to false while changing any other status.
-	// When avatar disallow me to see her online status processOfflineNotification Message is received by the viewer
-	// see comments for ChangeUserRights template message. EXT-453.
-	// If GRANT_ONLINE_STATUS flag is changed it will be applied when viewer restarts. EXT-3880
-	return relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
+	if (getAvatarId().notNull())
+	{
+		LLAvatarPropertiesProcessor::getInstance()->
+			sendAvatarPropertiesRequest(getAvatarId());
+		LLAvatarPropertiesProcessor::getInstance()->
+			sendAvatarGroupsRequest(getAvatarId());
+	}
 }
 
-// method was disabled according to EXT-2022. Re-enabled & improved according to EXT-3880
-void FSFloaterProfile::updateOnlineStatus()
+void FSFloaterProfile::processProfileProperties(const LLAvatarData* avatar_data)
 {
-	// set text box visible to show online status for non-friends who has not set in Preferences
-	// "Only Friends & Groups can see when I am online"
-	mStatusText->setVisible(TRUE);
-
-	const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
-	if (NULL == relationship)
+	if (!mIsFriend)
 	{
 		// this is non-friend avatar. Status will be updated from LLAvatarPropertiesProcessor.
 		// in FSFloaterProfile::processOnlineStatus()
@@ -181,21 +170,71 @@ void FSFloaterProfile::updateOnlineStatus()
 		// subscribe observer to get online status. Request will be sent by LLPanelAvatarProfile itself.
 		// do not subscribe for friend avatar because online status can be wrong overridden
 		// via LLAvatarData::flags if Preferences: "Only Friends & Groups can see when I am online" is set.
-		llinfos << "subscribing to AvatarStatusObserver for the profile" << llendl;
-		mAvatarStatusObserver->subscribe();
-		return;
+		processOnlineStatus(avatar_data->flags & AVATAR_ONLINE);
 	}
+
+	// fillCommonData(avatar_data);
+
+	// fillPartnerData(avatar_data);
+
+	// fillAccountStatus(avatar_data);
+}
+
+void FSFloaterProfile::processGroupProperties(const LLAvatarGroups* avatar_groups)
+{
+	//KC: the group_list ctrl can handle all this for us on our own profile
+	if (getAvatarId() == gAgent.getID())
+		return;
+
+	LLGroupList* group_list = getChild<LLGroupList>("group_list");
+
+	// *NOTE dzaporozhan
+	// Group properties may arrive in two callbacks, we need to save them across
+	// different calls. We can't do that in textbox as textbox may change the text.
+
+	LLAvatarGroups::group_list_t::const_iterator it = avatar_groups->group_list.begin();
+	const LLAvatarGroups::group_list_t::const_iterator it_end = avatar_groups->group_list.end();
+
+	for(; it_end != it; ++it)
+	{
+		LLAvatarGroups::LLGroupData group_data = *it;
+		mGroups[group_data.group_name] = group_data.group_id;
+	}
+
+	group_list->setGroups(mGroups);
+}
+
+bool FSFloaterProfile::isGrantedToSeeOnlineStatus(bool online)
+{
+    // set text box visible to show online status for non-friends who has not set in Preferences
+    // "Only Friends & Groups can see when I am online"
+	if (!mIsFriend)
+    {
+        return online;
+    }
+
+	// *NOTE: GRANT_ONLINE_STATUS is always set to false while changing any other status.
+	// When avatar disallow me to see her online status processOfflineNotification Message is received by the viewer
+	// see comments for ChangeUserRights template message. EXT-453.
+	// If GRANT_ONLINE_STATUS flag is changed it will be applied when viewer restarts. EXT-3880
+	const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	return relationship->isRightGrantedFrom(LLRelationship::GRANT_ONLINE_STATUS);
+}
+
+// method was disabled according to EXT-2022. Re-enabled & improved according to EXT-3880
+void FSFloaterProfile::updateOnlineStatus()
+{
+	if (!mIsFriend) return;
 	// For friend let check if he allowed me to see his status
-
-	// status should only show if viewer has permission to view online/offline. EXT-453, EXT-3880
-	mStatusText->setVisible(isGrantedToSeeOnlineStatus());
-
+	const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
 	bool online = relationship->isOnline();
 	processOnlineStatus(online);
 }
 
 void FSFloaterProfile::processOnlineStatus(bool online)
 {
+    mStatusText->setVisible(isGrantedToSeeOnlineStatus(online));
+
 	std::string status = getString(online ? "status_online" : "status_offline");
 
 	mStatusText->setValue(status);

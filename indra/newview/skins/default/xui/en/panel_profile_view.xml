@@ -10,14 +10,6 @@
  left="0"
  width="430"
  fit_panel="true">
-  <string
-   name="status_online">
-    Online
-  </string>
-  <string
-   name="status_offline">
-    Offline
-  </string>
   <tab_container
    follows="all"
    height="460"
@@ -29,7 +21,6 @@
    top_pad="5"
    width="420">
     <panel
-     class="panel_profile"
      filename="panel_profile_secondlife.xml"
      label="AVATAR"
      layout="topleft"
