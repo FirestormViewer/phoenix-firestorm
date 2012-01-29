@@ -7,13 +7,20 @@
  min_width="420"
  can_close="true"
  can_resize="true">
+  <string
+   name="status_online">
+    Online
+  </string>
+  <string
+   name="status_offline">
+    Offline
+  </string>
     <panel
      background_visible="false"
      top="5"
      height="460"
      left="5"
      width="420"
-     class="panel_profile_view"
      name="panel_profile_view"
      filename="panel_profile_view.xml"
     />
