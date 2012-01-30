@@ -102,9 +102,8 @@ struct WLFloatControl {
 	{
 	}
 
-	inline WLFloatControl & operator = (LLVector4 const & val) {
-		x = val.mV[0];
-
+	inline WLFloatControl & operator = (F32 val) {
+		x = val;
 		return *this;
 	}
 
@@ -347,10 +346,10 @@ public:
 	
 	/// Atmospherics
 	WLColorControl mBlueHorizon;
-	WLColorControl mHazeDensity;
+	WLFloatControl mHazeDensity;
 	WLColorControl mBlueDensity;
 	WLFloatControl mDensityMult;
-	WLColorControl mHazeHorizon;
+	WLFloatControl mHazeHorizon;
 	WLFloatControl mMaxAlt;
 
 	/// Lighting
