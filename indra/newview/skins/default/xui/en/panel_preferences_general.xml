@@ -323,7 +323,7 @@
     </check_box>
    <check_box
      control_name="FSNameTagShowLegacyUsernames"
-	 enabled_control="NameTagShowUserNames"
+     enabled_control="NameTagShowUserNames"
      height="16"
      label="Legacy names instead of usernames"
      layout="topleft"
@@ -339,9 +339,21 @@
      label="Highlight friends"
      layout="topleft"
      left="35"
+     width="100"
      top_pad="3"
      name="show_friends"
      tool_tip="Highlight the name tags of your friends."
+     top_delta="0" />
+
+  <check_box
+     control_name="FSPublishRadarTag"
+     enabled_control="UseLSLBridge"
+     height="16"
+     label="Publish and display Radar tags (work in progress)"
+     layout="topleft"
+     left_pad="50"
+     name="FSPublishRadarTag"
+     tool_tip="Enabling this checkbox will lets you see what radar tags are published by others. It will also publish one named 'Firestorm' for yourself. This feature uses the Firestorm LSL bridge and currently is only partially complete."
      top_delta="0" />
 	 
 	 <text
@@ -351,7 +363,7 @@
      height="13"
      layout="topleft"
      left="30"
-     top_pad="10"
+     top_pad="20"
      name="title_afk_text"
      width="150">
         Away timeout:
@@ -456,24 +468,10 @@
      left="30"
      mouse_opaque="false"
      name="text_box3"
-     top_pad="10"
-     width="400">
-       Automatic response (for busy online status):
+     top_pad="40"
+     width="500">
+       Busy and Autoresponse messages can be found under Privacy / Autoresponse
     </text>
-    <text_editor
-     control_name="BusyModeResponse"
-     use_ellipses="false"
-     commit_on_focus_lost = "true"
-     follows="left|top"
-     height="42"
-     layout="topleft"
-     left="50"
-     top_pad="10"
-     name="busy_response"
-     width="450"
-     word_wrap="true">
-       log_in_to_change
-    </text_editor>
 
     <panel
      border="true"

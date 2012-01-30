@@ -2,7 +2,18 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
-
+ 
+  <key>FSPublishRadarTag</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables the publishing of a 'Firestorm' radar tag, as well as the display of published radar tags of other avatars.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSFolderViewItemHeight</key>
   <map>
     <key>Comment</key>

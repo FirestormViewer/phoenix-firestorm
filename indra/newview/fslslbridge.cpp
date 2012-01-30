@@ -57,8 +57,8 @@
 #include <streambuf>
 
 
-//#define phoenix_bridge_name "#LSL<->Client Bridge v0.12"
-#define phoenix_folder_name "#Phoenix"
+//<FS_AO:Appears unused>
+//#define phoenix_folder_name "#Phoenix"
 
 #define LIB_ROCK_NAME "Rock - medium, round"
 
@@ -66,7 +66,7 @@
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 1
+#define FS_BRIDGE_MINOR_VERSION 2
 #define FS_MAX_MINOR_VERSION 99
 
 //current script version is 2.0
@@ -197,6 +197,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			//on first call from bridge, confirm that we are here
 			//then check options use
 			updateBoolSettingValue("UseLSLFlightAssist");
+			updateBoolSettingValue("FSPublishRadarTag");
 			mIsFirstCallDone = true;
 		}
 	}
