@@ -165,7 +165,8 @@ void LLKDUMessageWarning::put_text(const kdu_uint16 *s)
 
 void LLKDUMessageError::put_text(const char *s)
 {
-	llinfos << "KDU Error: " << s << llendl;
+	// <FS_AO: decrease performance-killing spam>
+	LL_INFOS_ONCE("LLImageJ2CKDU") << "KDU Error: " << s << llendl;
 }
 
 void LLKDUMessageError::put_text(const kdu_uint16 *s)
