@@ -62,6 +62,9 @@
 
 		<!--Autoresponse-->
 		<panel label="Automatische Antwort" name="tab-autoresponse">
+			<text name="text_box3">
+				Automatische Antwort wenn im "Beschäftigt"-Modus:
+			</text>
 			<text name="autorespond_response_label">
 				Automatische Antwort für Onlinestatus "Automatische Antwort":
 			</text>
