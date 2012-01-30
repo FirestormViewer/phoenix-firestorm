@@ -95,6 +95,7 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
     fsfloaterprofile.cpp
+    fspanelprofile.cpp
     fsradarlistctrl.cpp
     lggautocorrect.cpp
     lggautocorrectfloater.cpp
@@ -699,6 +700,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
     fsfloaterprofile.h
+    fspanelprofile.h
     fsradarlistctrl.h
     lggautocorrect.h
     lggautocorrectfloater.h

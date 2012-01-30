@@ -29,16 +29,10 @@
 #define FS_FSFLOATERPROFILE_H
 
 #include "llfloater.h"
-#include "llavatarpropertiesprocessor.h"
-
-class LLAvatarName;
-class LLTextBox;
-class AvatarStatusObserver;
 
 class FSFloaterProfile : public LLFloater
 {
 	LOG_CLASS(FSFloaterProfile);
-	friend class AvatarStatusObserver;
 public:
 	FSFloaterProfile(const LLSD& key);
 	virtual ~FSFloaterProfile();
@@ -51,59 +45,15 @@ public:
 	 * Returns avatar ID.
 	 */
     const LLUUID& getAvatarId() const { return mAvatarId; }
-    
-    /**
-	 * Sends update data request to server.
-	 */
-	void updateData();
 
 protected:
 	/**
 	 * Sets avatar ID, sets panel as observer of avatar related info replies from server.
 	 */
-    void setAvatarId(const LLUUID& avatar_id);
-
-	/**
-	 * Process profile related data received from server.
-	 */
-	virtual void processProfileProperties(const LLAvatarData* avatar_data);
-
-	/**
-	 * Processes group related data received from server.
-	 */
-	virtual void processGroupProperties(const LLAvatarGroups* avatar_groups);
-
-	bool isGrantedToSeeOnlineStatus(bool online);
-
-	/**
-	 * Displays avatar's online status if possible.
-	 *
-	 * Requirements from EXT-3880:
-	 * For friends:
-	 * - Online when online and privacy settings allow to show
-	 * - Offline when offline and privacy settings allow to show
-	 * - Else: nothing
-	 * For other avatars:
-	 *  - Online when online and was not set in Preferences/"Only Friends & Groups can see when I am online"
-	 *  - Else: Offline
-	 */
-	void updateOnlineStatus();
-	void processOnlineStatus(bool online);
+    void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
 
 private:
-    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-
-    typedef std::map<std::string,LLUUID>    group_map_t;
-    group_map_t             mGroups;
-    // void                    openGroupProfile();
-
-    LLUUID                  mAvatarId;
-	AvatarStatusObserver*   mAvatarStatusObserver;
-    BOOL                    mIsFriend;
-
-
-    LLTextBox* mStatusText;
-
+    LLUUID mAvatarId;
 };
 
 #endif // FS_FSFLOATERPROFILE_H

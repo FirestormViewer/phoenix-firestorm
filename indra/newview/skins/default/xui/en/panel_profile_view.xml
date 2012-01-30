@@ -21,6 +21,7 @@
    top_pad="5"
    width="420">
     <panel
+     class="panel_profile"
      filename="panel_profile_secondlife.xml"
      label="AVATAR"
      layout="topleft"
