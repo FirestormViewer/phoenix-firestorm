@@ -9,7 +9,7 @@
  left="0"
  min_height="350"
  name="people_panel"
- top="0">
+ top="0"
  width="333">
 	<string
 	  name="high_server_load"
