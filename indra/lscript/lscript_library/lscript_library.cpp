@@ -469,6 +469,47 @@ void LLScriptLibrary::init()
 	// IF YOU ADD NEW SCRIPT CALLS, YOU MUST PUT THEM AT THE END OF THIS LIST.
 	// Otherwise the bytecode numbers for each call will be wrong, and all
 	// existing scripts will crash.
+
+	// <FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
+	// Server v11.08.10.238207 new functions:
+	addFunction(10.f, 0.f, dummy_func, "llSetMemoryLimit", "i", "i");
+	addFunction(10.f, 0.f, dummy_func, "llGetMemoryLimit", "i", NULL);
+	addFunction(10.f, 0.f, dummy_func, "llSetLinkMedia", "i", "iil");
+	addFunction(10.f, 0.f, dummy_func, "llGetLinkMedia", "l", "iil");
+	addFunction(10.f, 0.f, dummy_func, "llClearLinkMedia", "i", "ii");
+	addFunction(10.f, 0.f, dummy_func, "llSetLinkCamera", NULL, "ivv");	
+	addFunction(10.f, 0.f, dummy_func, "llSetContentType", NULL, "ki");	
+	addFunction(10.f, 0.f, dummy_func, "llLinkSitTarget", NULL, "ivq");
+	addFunction(10.f, 0.f, dummy_func, "llAvatarOnLinkSitTarget", "k", "i");
+	addFunction(10.f, 0.f, dummy_func, "llSetVelocity", NULL, "vi");	
+
+	// Server v11.09.09.240509 new functions:
+	addFunction(10.f, 0.f, dummy_func, "llCastRay", "l", "vvl");
+	addFunction(10.f, 0.f, dummy_func, "llGetMassMKS", "f", NULL);
+	addFunction(10.f, 0.f, dummy_func, "llSetPhysicsMaterial", NULL, "iffff");
+	addFunction(10.f, 0.f, dummy_func, "llGetPhysicsMaterial", "l", NULL);
+
+	// Server v11.10.18.243270 new functions:
+	addFunction(10.f, 0.f, dummy_func, "llManageEstateAccess", "i", "ik");
+
+	// Server RC magnum v11.10.31.244254 new function:
+	addFunction(10.f, 0.f, dummy_func, "llSetKeyframedMotion", NULL, "ll");
+
+	// Server RC Le Tigre v11.10.30.245889 new function:
+	addFunction(10.f, 0.f, dummy_func, "llTransferLindenDollars", "k", "ki");
+
+	// Server new function 2011-12-13:
+	addFunction(10.f, 0.f, dummy_func, "llGetParcelMusicURL", "s", NULL);
+
+	// Missing script functions as of 2011-12-13
+	addFunction(10.f, 0.f, dummy_func, "llScriptProfiler", NULL, "i");
+	addFunction(10.f, 0.f, dummy_func, "llGetSPMaxMemory", "i", NULL);
+	addFunction(10.f, 0.f, dummy_func, "llGetUsedMemory", "i", NULL);
+	addFunction(10.f, 0.f, dummy_func, "llSetAngularVelocity", NULL, "vi");
+
+	// Server 12.01.24.248357 new functions
+	addFunction(0.f, 0.f, dummy_func, "llSetRegionPos", "i", "v");
+	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 }
 
 LLScriptLibraryFunction::LLScriptLibraryFunction(F32 eu, F32 st, void (*exec_func)(LLScriptLibData *, LLScriptLibData *, const LLUUID &), const char *name, const char *ret_type, const char *args, BOOL god_only)
