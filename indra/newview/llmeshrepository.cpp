@@ -934,7 +934,7 @@ bool LLMeshRepoThread::fetchMeshHeader(const LLVolumeParams& mesh_params, U32& c
 		retval = mCurlRequest->getByteRange(http_url, headers, 0, 4096, new LLMeshHeaderResponder(mesh_params));
 		if(retval)
 		{
-			++sActiveHeaderRequests;
+			//			++sActiveHeaderRequests; <FS:ND/> Don't increate here, LLMeshHeaderResponder() already did that.
 			LLMeshRepository::sHTTPRequestCount++;
 		}
 		count++;
