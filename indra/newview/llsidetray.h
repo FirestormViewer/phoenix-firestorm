@@ -130,7 +130,7 @@ public:
     std::string		getActivePanelName ();
     bool		isPanelActive	(const std::string& panel_name);
 
-	void		setTabDocked(const std::string& tab_name, bool dock, bool toggle_floater = true);
+	void		setTabDocked(const std::string& tab_name, bool dock, bool app_quitting, bool toggle_floater = true); // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 
 	/*
 	 * get the panel of given type T (don't show it or do anything else with it)

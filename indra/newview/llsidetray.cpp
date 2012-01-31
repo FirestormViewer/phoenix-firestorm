@@ -383,7 +383,7 @@ void LLSideTrayTab::minimizeTab()
 	////}
 }
 
-void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
+void LLSideTrayTab::toggleTabDocked(bool app_quitting /* = false */, bool toggle_floater /* = true */) // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 {
 	// *FIX: Calling this method twice per frame would crash the viewer.
 
@@ -418,7 +418,7 @@ void LLSideTrayTab::toggleTabDocked(bool toggle_floater /* = true */)
 
 	if (docking)
 	{
-		dock(floater_tab);
+		dock(app_quitting, floater_tab); // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 	}
 	else
 	{
@@ -481,7 +481,7 @@ BOOL LLSideTrayTab::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	return TRUE;
 }
 
-void LLSideTrayTab::dock(LLFloater* floater_tab)
+void LLSideTrayTab::dock(bool app_quitting, LLFloater* floater_tab) // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 {
 	LLSideTray* side_tray = getSideTray();
 	if (!side_tray) return;
@@ -503,7 +503,16 @@ void LLSideTrayTab::dock(LLFloater* floater_tab)
 
 	if (side_tray->getCollapsed())
 	{
-		side_tray->expandSideBar(false);
+		// LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
+		if(app_quitting)
+		{
+			side_tray->expandSideBar(false);
+		}
+		else
+		{
+			side_tray->collapseSideBar();
+		}
+		// ~LO
 	}
 }
 
@@ -1614,7 +1623,7 @@ bool		LLSideTray::isPanelActive(const std::string& panel_name)
 	return (panel->getName() == panel_name);
 }
 
-void LLSideTray::setTabDocked(const std::string& tab_name, bool dock, bool toggle_floater /* = true*/)
+void LLSideTray::setTabDocked(const std::string& tab_name, bool dock, bool app_quitting, bool toggle_floater /* = true*/) // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
 {
 	// Lookup tab by name.
 	LLSideTrayTab* tab = getTab(tab_name);
