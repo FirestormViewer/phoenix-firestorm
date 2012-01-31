@@ -186,18 +186,19 @@ LLFloater* LLFloaterReg::getInstance(const std::string& name, const LLSD& key)
 				}
 				res->setInstanceName(name);
 				
+// SIDEBAR_HACK
 				// AO: Mark certain floaters (sidebar tab floaters) as needing to be pseudo-hidden on minimization.
 				// At the moment we flag this pseudo hiding with the presence of a dummy control in floater_side_bar_tab.xml
 				// and the name of the floater window. This should be refactored into a floater attribute.
-				llinfos << "trying to restore variables for name: " << name << llendl;
-				std::string pat = "side_bar_tab";
-				size_t found = name.find(pat);
-				if (found!=std::string::npos)
-				{
-					if (!res->hasChild("showMinimized"))
-						res->setHideOnMinimize(true);
-				}
-				
+				//llinfos << "trying to restore variables for name: " << name << llendl;
+				//std::string pat = "side_bar_tab";
+				//size_t found = name.find(pat);
+				//if (found!=std::string::npos)
+				//{
+				//	if (!res->hasChild("showMinimized"))
+				//		res->setHideOnMinimize(true);
+				//}
+// SIDEBAR_HACK				
 
 				LLFloater *last_floater = (list.empty() ? NULL : list.back());
 
@@ -418,13 +419,15 @@ std::string LLFloaterReg::getVisibilityControlName(const std::string& name)
 	return res;
 }
 
+// SIDEBAR_HACK
 //static
-std::string LLFloaterReg::getMinimizedStateControlName(const std::string& name)
-{
-	std::string res = std::string("floater_minimized_") + name;
-	LLStringUtil::replaceChar( res, ' ', '_' );
-	return res;
-}
+//std::string LLFloaterReg::getMinimizedStateControlName(const std::string& name)
+//{
+//	std::string res = std::string("floater_minimized_") + name;
+//	LLStringUtil::replaceChar( res, ' ', '_' );
+//	return res;
+//}
+// /SIDEBAR_HACK
 
 //static
 std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
@@ -436,16 +439,18 @@ std::string LLFloaterReg::declareVisibilityControl(const std::string& name)
 	return controlname;
 }
 
+// SIDEBAR_HACK
 //static
-std::string LLFloaterReg::declareMinimizeStateControl(const std::string& name)
-{
-	std::string controlname = getMinimizedStateControlName(name);
-	LLFloater::getControlGroup()->declareBOOL(controlname, FALSE,
-												 llformat("Window Minimized state for %s", name.c_str()),
-												 TRUE);
-	return controlname;
-
-}
+//std::string LLFloaterReg::declareMinimizeStateControl(const std::string& name)
+//{
+//	std::string controlname = getMinimizedStateControlName(name);
+//	LLFloater::getControlGroup()->declareBOOL(controlname, FALSE,
+//												 llformat("Window Minimized state for %s", name.c_str()),
+//												 TRUE);
+//	return controlname;
+//
+//}
+// /SIDEBAR_HACK
 
 //static
 std::string LLFloaterReg::declareDockStateControl(const std::string& name)

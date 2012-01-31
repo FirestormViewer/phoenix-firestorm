@@ -272,7 +272,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
-	mHideOnMinimize(false),
+//	mHideOnMinimize(false), // SIDEBAR_HACK
 	mTearOffSignal(NULL),
 // [/SL:KB]
 	mMinimizeSignal(NULL)
@@ -538,8 +538,8 @@ LLFloater::~LLFloater()
 	// created with rect control rather than an LLRect) are restored in their
 	// correct, non-minimized positions.
 	
-	// AO - persist minimizing
-	storeMinimizeStateControl();
+	// AO - persist minimizing // SIDEBAR_HACK
+	//storeMinimizeStateControl(); // SIDEBAR_HACK
 	setMinimized( FALSE );
 
 	delete mDragHandle;
@@ -584,13 +584,15 @@ void LLFloater::storeDockStateControl()
 	}
 }
 
-void LLFloater::storeMinimizeStateControl()
-{
-	if( !sQuitting && mMinimizeStateControl.size() > 1 )
-	{
-		getControlGroup()->setBOOL( mMinimizeStateControl, mMinimized );
-	}	
-}
+// SIDEBAR_HACK
+//void LLFloater::storeMinimizeStateControl()
+//{
+//	if( !sQuitting && mMinimizeStateControl.size() > 1 )
+//	{
+//		getControlGroup()->setBOOL( mMinimizeStateControl, mMinimized );
+//	}	
+//}
+// /SIDEBAR_HACK
 
 // [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
 void LLFloater::storeTearOffStateControl()
@@ -924,7 +926,7 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 			applyPositioning(other);
 		}
 	}
-	applyMinimizedState();
+	//applyMinimizedState(); // SIDEBAR_HACK
 
 // [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
 	if (getHost())
@@ -978,14 +980,16 @@ bool LLFloater::applyDockState()
 	return docked;
 }
 
-void LLFloater::applyMinimizedState()
-{
-	if (mMinimizeStateControl.size() > 1)
-	{
-		bool minimized = getControlGroup()->getBOOL(mMinimizeStateControl);
-		setMinimized(minimized);
-	}
-}
+// SIDEBAR_HACK
+//void LLFloater::applyMinimizedState()
+//{
+//	if (mMinimizeStateControl.size() > 1)
+//	{
+//		bool minimized = getControlGroup()->getBOOL(mMinimizeStateControl);
+//		setMinimized(minimized);
+//	}
+//}
+// /SIDEBAR_HACK
 
 void LLFloater::applyPositioning(LLFloater* other)
 {
@@ -1081,11 +1085,12 @@ void LLFloater::setTitle( const std::string& title )
 	applyTitle();
 }
 
-void LLFloater::setHideOnMinimize(bool hide)
-{
-		mHideOnMinimize = hide;
-}
-
+// SIDEBAR_HACK
+//void LLFloater::setHideOnMinimize(bool hide)
+//{
+//		mHideOnMinimize = hide;
+//}
+// /SIDEBAR_HACK
 
 std::string LLFloater::getTitle() const
 {
@@ -1232,18 +1237,19 @@ void LLFloater::setMinimized(BOOL minimize)
 
 	if (minimize)
 	{
+// SIDEBAR_HACK
 		// AO: Pseudo-hide minimized sidebar floaters. We get into trouble if they are actually not visible,
 		// so fake invisibility with tiny sizign and out of the way location.
 		// At the moment we flag this pseudo hiding with the presence of a dummy control in floater_side_bar_tab.xml
 		// this should be refactored into a floater attribute.
-		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", getName());
-		llinfos << "Minimizing " << floater_tab << ". showMinimizedPanel= " << hasChild("showMinimized", false) << llendl;
-		if (LLFloater::isShown(floater_tab) && !hasChild("showMinimized", false))
-		{
-				mHideOnMinimize = true;
-				llinfos << "SideTray minimized floater " << getName() << " detected, hiding." << llendl;
-		}
-		
+		//LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab", getName());
+		//llinfos << "Minimizing " << floater_tab << ". showMinimizedPanel= " << hasChild("showMinimized", false) << llendl;
+		//if (LLFloater::isShown(floater_tab) && !hasChild("showMinimized", false))
+		//{
+		//		mHideOnMinimize = true;
+		//		llinfos << "SideTray minimized floater " << getName() << " detected, hiding." << llendl;
+		//}
+// /SIDEBAR_HACK		
 		
 		// minimized flag should be turned on before release focus
 		mMinimized = TRUE;
@@ -1261,16 +1267,18 @@ void LLFloater::setMinimized(BOOL minimize)
 		{
 			S32 left, bottom;
 			
-			if (mHideOnMinimize)
-			{
-				llinfos << "mHideOnMinize: setting origin off screen" << llendl;
-				setOrigin( -9999, -9999 );
-			}
-			else 
-			{
-				gFloaterView->getMinimizePosition(&left, &bottom);
-				setOrigin( left, bottom );
-			}
+// SIDEBAR_HACK
+			//if (mHideOnMinimize)
+			//{
+			//	llinfos << "mHideOnMinize: setting origin off screen" << llendl;
+			//	setOrigin( -9999, -9999 );
+			//}
+			//else 
+			//{
+// /SIDEBAR_HACK
+			gFloaterView->getMinimizePosition(&left, &bottom);
+			setOrigin( left, bottom );
+			//} // SIDEBAR_HACK
 		}
 
 		if (mButtonsEnabled[BUTTON_MINIMIZE])
@@ -1315,17 +1323,19 @@ void LLFloater::setMinimized(BOOL minimize)
 		}
 		
 		// Reshape *after* setting mMinimized
-		if (mHideOnMinimize)
-		{
-			llinfos << "mHideOnMinize - reshaping to be hidden" << llendl;
-			//LLPanel::reshape(width, height, called_from_parent);
-			reshape( 1, floater_header_size, TRUE);
-		}
-		else
-		{
-			llinfos << "AO: reshaping to minimized bar" << llendl;
-			reshape( minimized_width, floater_header_size, TRUE);
-		}
+// SIDEBAR_HACK
+		//if (mHideOnMinimize)
+		//{
+		//	llinfos << "mHideOnMinize - reshaping to be hidden" << llendl;
+		//	//LLPanel::reshape(width, height, called_from_parent);
+		//	reshape( 1, floater_header_size, TRUE);
+		//}
+		//else
+		//{
+		//	llinfos << "AO: reshaping to minimized bar" << llendl;
+// /SIDEBAR_HACK
+		reshape( minimized_width, floater_header_size, TRUE);
+		//} // SIDEBAR_HACK
 	}
 	else
 	{
@@ -1381,8 +1391,8 @@ void LLFloater::setMinimized(BOOL minimize)
 	updateTitleButtons();
 	applyTitle ();
 	
-	// AO - persist minimizing if true
-	storeMinimizeStateControl();
+	// AO - persist minimizing if true // SIDEBAR_HACK
+	//storeMinimizeStateControl(); // SIDEBAR_HACK
 }
 
 void LLFloater::setFocus( BOOL b )
@@ -2451,14 +2461,16 @@ void LLFloaterView::restoreAll()
 	{
 		LLFloater* floaterp = (LLFloater*)*child_it;
 
+// SIDEBAR_HACK
 		// Ansariel: Don't restore "closed" sidebar floaters that are hidden
 		//           minimized to emulate closed state!
-		std::string pat = "side_bar_tab";
-		size_t found = floaterp->getInstanceName().find(pat);
-		if (found == std::string::npos)
-		{
-			floaterp->setMinimized(FALSE);
-		}
+		//std::string pat = "side_bar_tab";
+		//size_t found = floaterp->getInstanceName().find(pat);
+		//if (found == std::string::npos)
+		//{
+// SIDEBAR_HACK
+		floaterp->setMinimized(FALSE);
+		//} // SIDEBAR_HACK
 	}
 
 	// *FIX: make sure dependents are restored
@@ -2582,7 +2594,8 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus)
 		// always unminimize dependee, but allow dependents to stay minimized
 		if (!floaterp->isDependent())
 		{
-			//floaterp->setMinimized(FALSE);
+			// SIDEBAR_HACK??? Was commented out
+			floaterp->setMinimized(FALSE);
 		}
 	}
 	floaters_to_move.clear();
@@ -2609,7 +2622,8 @@ void LLFloaterView::bringToFront(LLFloater* child, BOOL give_focus)
 		sendChildToFront(child);
 	}
 	
-	//child->setMinimized(FALSE);
+	// SIDEBAR_HACK??? Was commented out
+	child->setMinimized(FALSE);
 	if (give_focus && !gFocusMgr.childHasKeyboardFocus(child))
 	{
 		child->setFocus(TRUE);
@@ -2716,7 +2730,9 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 			{
 				// Examine minimized children.
 				LLFloater* floater = (LLFloater*)((LLView*)*child_it);
-				if(floater->isMinimized() && (LLFloaterReg::getInstance("side_bar_tab", floater->getName()) != floater)) 
+				// SIDEBAR_HACK
+				//if(floater->isMinimized() && (LLFloaterReg::getInstance("side_bar_tab", floater->getName()) != floater))
+				if(floater->isMinimized()) 
 				{
 					LLRect r = floater->getRect();
 					if((r.mBottom < (row + floater_header_size))
@@ -3164,10 +3180,12 @@ void LLFloater::setInstanceName(const std::string& name)
 		}
 // [/SL:KB]
 
-		if(!mMinimizeStateControl.empty())
-		{
-			mMinimizeStateControl = LLFloaterReg::declareMinimizeStateControl(ctrl_name);
-		}
+// SIDEBAR_HACK
+		//if(!mMinimizeStateControl.empty())
+		//{
+		//	mMinimizeStateControl = LLFloaterReg::declareMinimizeStateControl(ctrl_name);
+		//}
+// /SIDEBAR_HACK
 	}
 }
 
@@ -3262,7 +3280,8 @@ void LLFloater::initFromParams(const LLFloater::Params& p)
 	}
 // [/SL:KB]
 
-	mMinimizeStateControl = "t"; // AO: flag to save minimize state. TODO: make this param-optional.
+	// SIDEBAR_HACK
+	//mMinimizeStateControl = "t"; // AO: flag to save minimize state. TODO: make this param-optional.
 	
 
 	// open callback 
@@ -3431,7 +3450,7 @@ bool LLFloater::initFloaterXML(LLXMLNodePtr node, LLView *parent, const std::str
 	moveResizeHandlesToFront();
 
 	applyDockState();
-	applyMinimizedState();
+	//applyMinimizedState(); // SIDEBAR_HACK
 
 	return true; // *TODO: Error checking
 }

@@ -223,7 +223,7 @@ public:
 	std::string		getTitle() const;
 	void			setShortTitle( const std::string& short_title );
 	std::string		getShortTitle() const;
-	void			setHideOnMinimize(bool hide);
+	//void			setHideOnMinimize(bool hide); // SIDEBAR_HACK
 	virtual void	setMinimized(BOOL b);
 	void			moveResizeHandlesToFront();
 	void			addDependentFloater(LLFloater* dependent, BOOL reposition = TRUE);
@@ -357,8 +357,10 @@ protected:
 	void			storeTearOffStateControl();
 // [/SL:KB]
 
-	void			storeMinimizeStateControl();
-	void			applyMinimizedState();
+// SIDEBAR_HACK
+	//void			storeMinimizeStateControl();
+	//void			applyMinimizedState();
+// /SIDEBAR_HACK
 
 	void		 	setKey(const LLSD& key);
 	void		 	setInstanceName(const std::string& name);
@@ -429,7 +431,7 @@ protected:
 	std::string		mTearOffStateControl;
 // [/SL:KB]
 
-	std::string		mMinimizeStateControl;
+	//std::string		mMinimizeStateControl; // SIDEBAR_HACK
 
 	LLSD			mKey;				// Key used for retrieving instances; set (for now) by LLFLoaterReg
 
@@ -454,7 +456,7 @@ private:
 	BOOL			mCanClose;
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
-	bool			mHideOnMinimize;
+	//bool			mHideOnMinimize; // SIDEBAR_HACK
 
 	LLFloaterEnums::EOpenPositioning	mOpenPositioning;
 	S32									mSpecifiedLeft;

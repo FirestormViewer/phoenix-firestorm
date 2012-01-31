@@ -141,8 +141,8 @@ public:
 	static std::string declareRectControl(const std::string& name);
 	static std::string getVisibilityControlName(const std::string& name);
 	static std::string declareVisibilityControl(const std::string& name);
-	static std::string getMinimizedStateControlName(const std::string& name);
-	static std::string declareMinimizeStateControl(const std::string& name);
+	//static std::string getMinimizedStateControlName(const std::string& name); // SIDEBAR_HACK
+	//static std::string declareMinimizeStateControl(const std::string& name); // SIDEBAR_HACK
 
 	static std::string declareDockStateControl(const std::string& name);
 	static std::string getDockStateControlName(const std::string& name);
