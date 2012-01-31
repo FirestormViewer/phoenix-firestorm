@@ -503,16 +503,7 @@ void LLSideTrayTab::dock(bool app_quitting, LLFloater* floater_tab) // LO: Fix f
 
 	if (side_tray->getCollapsed())
 	{
-		// LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
-		if(app_quitting)
-		{
-			side_tray->expandSideBar(false);
-		}
-		else
-		{
-			side_tray->collapseSideBar();
-		}
-		// ~LO
+		side_tray->expandSideBar(false);
 	}
 }
 
@@ -1650,7 +1641,7 @@ void LLSideTray::setTabDocked(const std::string& tab_name, bool dock, bool app_q
 	// Toggle its dock state.
 	if (tab && tab->isDocked() != dock)
 	{
-		tab->toggleTabDocked(toggle_floater);
+		tab->toggleTabDocked(app_quitting, toggle_floater);
 	}
 }
 
