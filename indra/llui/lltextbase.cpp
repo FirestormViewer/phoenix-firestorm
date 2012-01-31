@@ -600,18 +600,18 @@ void LLTextBase::drawText()
 				while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
 					idxWordStart++;
 				// Iterate over all words in the text block and check them one by one
-				while (idxWordStart < idxSegmentEnd)
+				while (idxWordStart < idxSegmentEnd && idxWordStart < wstrText.length() )
 				{
 					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
 					idxWordEnd = idxWordStart + 1;
-					while ( (idxWordEnd < idxSegmentEnd) && 
+					while ( (idxWordEnd < idxSegmentEnd) && (idxWordEnd < wstrText.length()) &&
 							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
 								((L'\'' == wstrText[idxWordEnd]) && 
 								(LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
 					{
 						idxWordEnd++;
 					}
-					if (idxWordEnd > idxSegmentEnd)
+					if (idxWordEnd > idxSegmentEnd || idxWordEnd >= wstrText.length())
 						break;
 
 					// Don't process words shorter than 3 characters

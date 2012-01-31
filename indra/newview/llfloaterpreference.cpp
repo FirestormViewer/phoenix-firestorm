@@ -275,6 +275,13 @@ void handleFlightAssistOptionChanged(const LLSD& newvalue)
 }
 //-TT
 
+// <FS_AO: bridge-based radar tags>
+void handlePublishRadarTagOptionChanged(const LLSD& newvalue)
+{
+	FSLSLBridge::instance().updateBoolSettingValue("FSPublishRadarTag", newvalue.asBoolean());
+}
+// </FS_AO>
+
 
 /*bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater)
 {
@@ -398,6 +405,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
 	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged,  _2));
+	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 
 	//[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ] no longer exists!
 	//gSavedSettings.getControl("DoubleClickTeleport")->getCommitSignal()->connect(boost::bind(&LLFloaterPreference::onChangeDoubleClickSettings, this));

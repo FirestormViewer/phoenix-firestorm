@@ -2419,7 +2419,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="PanelContentsNewScript">New Script</string>
 
   <!-- panel preferences general -->
-  <string name="BusyModeResponseDefault">The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their IM panel for later viewing.</string>
+  <string name="BusyModeResponseDefault">The Resident you messaged is in &apos;unavailable mode&apos; which means they have requested not to be disturbed.  Your message will still be shown in their Firestorm Viewer&apos;s instant message panel for later viewing.</string>
 
 	<!-- Mute -->
 	<string name="MuteByName">(By name)</string>
