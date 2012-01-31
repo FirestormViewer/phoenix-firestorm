@@ -90,6 +90,8 @@ const F32 DOT_SCALE = 0.75f;
 const F32 MIN_PICK_SCALE = 2.f;
 const S32 MOUSE_DRAG_SLOP = 2;		// How far the mouse needs to move before we think it's a drag
 
+const F64 COARSEUPDATE_MAX_Z = 1020.0f;
+
 const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
@@ -342,7 +344,8 @@ void LLNetMap::draw()
 		}
 
 		LLVector3 map_center_agent = gAgent.getPosAgentFromGlobal(mObjectImageCenterGlobal);
-		map_center_agent -= gAgentCamera.getCameraPositionAgent();
+		LLVector3 camera_position = gAgentCamera.getCameraPositionAgent();
+		map_center_agent -= camera_position;
 		map_center_agent.mV[VX] *= mScale/region_width;
 		map_center_agent.mV[VY] *= mScale/region_width;
 
@@ -363,9 +366,6 @@ void LLNetMap::draw()
 
 		gGL.popMatrix();
 
-		LLVector3d pos_global;
-		LLVector3 pos_map;
-
 		// Mouse pointer in local coordinates
 		S32 local_mouse_x;
 		S32 local_mouse_y;
@@ -376,142 +376,108 @@ void LLNetMap::draw()
 		F32 closest_dist_squared = F32_MAX; // value will be overridden in the loop
 		F32 min_pick_dist_squared = (mDotRadius * MIN_PICK_SCALE) * (mDotRadius * MIN_PICK_SCALE);
 
+		LLVector3 pos_map;
+		uuid_vec_t avatar_ids;
+		std::vector<LLVector3d> positions;
+		bool unknown_relative_z;
+
+		LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgentCamera.getCameraPositionGlobal());
+
 		// Draw avatars
-		for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
-			 iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
+		for (U32 i = 0; i < avatar_ids.size(); i++)
 		{
-			LLViewerRegion* regionp = *iter;
-			const LLVector3d& origin_global = regionp->getOriginGlobal();
+			//pos_map = globalPosToView(positions[i]); // <FS:Ansariel> Do this later after advanced height check
+			LLUUID uuid = avatar_ids[i];
 
-			S32 count = regionp->mMapAvatars.count();
-			S32 i;
-			LLVector3 pos_local;
-			U32 compact_local;
-			U8 bits;
-			// TODO: it'd be very cool to draw these in sorted order from lowest Z to highest.
-			// just be careful to sort the avatar IDs along with the positions. -MG
-			for (i = 0; i < count; i++)
-			{
-				compact_local = regionp->mMapAvatars.get(i);
-
-				bits = compact_local & 0xFF;
-				pos_local.mV[VZ] = F32(bits) * 4.f;
-				compact_local >>= 8;
-
-				bits = compact_local & 0xFF;
-				pos_local.mV[VY] = (F32)bits;
-				compact_local >>= 8;
-
-				bits = compact_local & 0xFF;
-				pos_local.mV[VX] = (F32)bits;
-
-				// Ansariel: Moved further down
-				//pos_global.setVec( pos_local );
-				//pos_global += origin_global;
-
-				//pos_map = globalPosToView(pos_global);
-				// END Ansariel: Moved further down
-
-				LLUUID uuid(NULL);
-				BOOL show_as_friend = FALSE;
-				if( i < regionp->mMapAvatarIDs.count())
-				{
-					uuid = regionp->mMapAvatarIDs.get(i);
-//					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
+//			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-					show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL) &&
-						(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
+			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL) &&
+				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
 // [/RLVa:KB]
-				}
 
-				LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
+			LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
 
-				// Ansariel: Colorize and make use of avatar viewer objects
-				//           for improved height indication
-				bool isHeightUnknown = (pos_local.mV[VZ] == 0.f);
-				if (uuid.notNull())
+			// <FS:Ansariel> Also check for legacy unknown height reported as height = 0m
+			//unknown_relative_z = positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
+			//		camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z;
+			unknown_relative_z = (positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
+					camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z) || (positions[i].mdV[VZ] == 0.f);
+			// </FS:Ansariel>
+
+			// Colorize muted avatars and Lindens
+			std::string fullName;
+			LLMuteList* muteListInstance = LLMuteList::getInstance();
+
+			if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
+			else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
+
+			// Try to workaround 1020m bug by using
+			// the viewer object for the avatar.
+			if (unknown_relative_z)
+			{
+				LLViewerObject* viewerObject = gObjectList.findObject(uuid);
+				if (viewerObject)
 				{
-					// Colorize muted avatars and Lindens
-					std::string fullName;
-					LLMuteList* muteListInstance = LLMuteList::getInstance();
+					positions[i].mdV[VZ] = viewerObject->getPositionGlobal().mdV[VZ];
+					unknown_relative_z = false;
+				}
+			}
+			pos_map = globalPosToView(positions[i]);
 
-					if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
-					else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
-
-					// Try to workaround 1020m bug by using
-					// the viewer object for the avatar.
-					if (isHeightUnknown)
-					{
-						LLViewerObject* viewerObject = gObjectList.findObject(uuid);
-						if (viewerObject)
-						{
-							pos_local.mV[VZ] = viewerObject->getPositionGlobal().mdV[VZ];
-							isHeightUnknown = false;
-						}
-					}
-
-					// Mark Avatars with special colors - Ansariel
-					if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
-					{
-						color = LLNetMap::sAvatarMarksMap[uuid];
-					}
+			// Mark Avatars with special colors - Ansariel
+			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
+			{
+				color = LLNetMap::sAvatarMarksMap[uuid];
+			}
 					
-					//color based on contact sets prefs
-					if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid,FALSE,FALSE,FALSE,TRUE))
-					{
-						color = LGGContactSets::getInstance()->getFriendColor(uuid);
-					}
-				}
+			//color based on contact sets prefs
+			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid,FALSE,FALSE,FALSE,TRUE))
+			{
+				color = LGGContactSets::getInstance()->getFriendColor(uuid);
+			}
 
-				// Ansariel: Moved down here so we can take precise
-				//           height data into account
-				pos_global.setVec( pos_local );
-				pos_global += origin_global;
-				pos_map = globalPosToView(pos_global);
+			LLWorldMapView::drawAvatar(
+				pos_map.mV[VX], pos_map.mV[VY], 
+				color, 
+				pos_map.mV[VZ], mDotRadius,
+				unknown_relative_z);
 
-				LLWorldMapView::drawAvatar(
-					pos_map.mV[VX], pos_map.mV[VY], 
-					color, 
-					pos_map.mV[VZ], mDotRadius,
-					isHeightUnknown);
-
-				if(uuid.notNull())
+			if(uuid.notNull())
+			{
+				bool selected = false;
+				uuid_vec_t::iterator sel_iter = gmSelected.begin();
+				for (; sel_iter != gmSelected.end(); sel_iter++)
 				{
-					bool selected = false;
-					uuid_vec_t::iterator sel_iter = gmSelected.begin();
-					for (; sel_iter != gmSelected.end(); sel_iter++)
+					if(*sel_iter == uuid)
 					{
-						if(*sel_iter == uuid)
-						{
-							selected = true;
-							break;
-						}
-					}
-					if(selected)
-					{
-						if( (pos_map.mV[VX] < 0) ||
-							(pos_map.mV[VY] < 0) ||
-							(pos_map.mV[VX] >= getRect().getWidth()) ||
-							(pos_map.mV[VY] >= getRect().getHeight()) )
-						{
-							S32 x = llround( pos_map.mV[VX] );
-							S32 y = llround( pos_map.mV[VY] );
-							LLWorldMapView::drawTrackingCircle( getRect(), x, y, color, 1, 10);
-						} else
-						{
-							LLWorldMapView::drawTrackingDot(pos_map.mV[VX],pos_map.mV[VY],color,0.f);
-						}
+						selected = true;
+						break;
 					}
 				}
-
-				F32	dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
-											  LLVector2(local_mouse_x,local_mouse_y));
-				if(dist_to_cursor_squared < min_pick_dist_squared && dist_to_cursor_squared < closest_dist_squared)
+				if(selected)
 				{
-					closest_dist_squared = dist_to_cursor_squared;
-					mClosestAgentToCursor = regionp->mMapAvatarIDs.get(i);
-					mClosestAgentPosition = pos_global;
+					if( (pos_map.mV[VX] < 0) ||
+						(pos_map.mV[VY] < 0) ||
+						(pos_map.mV[VX] >= getRect().getWidth()) ||
+						(pos_map.mV[VY] >= getRect().getHeight()) )
+					{
+						S32 x = llround( pos_map.mV[VX] );
+						S32 y = llround( pos_map.mV[VY] );
+						LLWorldMapView::drawTrackingCircle( getRect(), x, y, color, 1, 10);
+					} else
+					{
+						LLWorldMapView::drawTrackingDot(pos_map.mV[VX],pos_map.mV[VY],color,0.f);
+					}
 				}
+			}
+
+			F32	dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
+											LLVector2(local_mouse_x,local_mouse_y));
+			if(dist_to_cursor_squared < min_pick_dist_squared && dist_to_cursor_squared < closest_dist_squared)
+			{
+				closest_dist_squared = dist_to_cursor_squared;
+				mClosestAgentToCursor = uuid;
+				mClosestAgentPosition = positions[i];
 			}
 		}
 
@@ -535,7 +501,7 @@ void LLNetMap::draw()
 		}
 
 		// Draw dot for self avatar position
-		pos_global = gAgent.getPositionGlobal();
+		LLVector3d pos_global = gAgent.getPositionGlobal();
 		pos_map = globalPosToView(pos_global);
 		S32 dot_width = llround(mDotRadius * 2.f);
 		LLUIImagePtr you = LLWorldMapView::sAvatarYouLargeImage;
@@ -617,9 +583,11 @@ void LLNetMap::reshape(S32 width, S32 height, BOOL called_from_parent)
 	createObjectImage();
 }
 
-LLVector3 LLNetMap::globalPosToView( const LLVector3d& global_pos )
+LLVector3 LLNetMap::globalPosToView(const LLVector3d& global_pos)
 {
-	LLVector3d relative_pos_global = global_pos - gAgentCamera.getCameraPositionGlobal();
+	LLVector3d camera_position = gAgentCamera.getCameraPositionGlobal();
+
+	LLVector3d relative_pos_global = global_pos - camera_position;
 	LLVector3 pos_local;
 	pos_local.setVec(relative_pos_global);  // convert to floats from doubles
 
@@ -657,7 +625,7 @@ void LLNetMap::drawRing(const F32 radius, const LLVector3 pos_map, const LLUICol
 void LLNetMap::drawTracking(const LLVector3d& pos_global, const LLColor4& color, 
 							BOOL draw_arrow )
 {
-	LLVector3 pos_local = globalPosToView( pos_global );
+	LLVector3 pos_local = globalPosToView(pos_global);
 	if( (pos_local.mV[VX] < 0) ||
 		(pos_local.mV[VY] < 0) ||
 		(pos_local.mV[VX] >= getRect().getWidth()) ||
@@ -815,8 +783,8 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			LLVector3d delta = otherPosition - myPosition;
 			F32 distance = (F32)delta.magVec();
 
-			// If avatar is >1020, the value for Z is returned as 0
-			bool isHigher1020mBug = (otherPosition[VZ] == 0.0);
+			// If avatar is >1020, the value for Z is returned as 0 (legacy) or 1020 (new)
+			bool isHigher1020mBug = (otherPosition[VZ] == COARSEUPDATE_MAX_Z || otherPosition[VZ] == 0.0);
 
 			// Ansariel: Try to get distance from the nearby people panel
 			//           aka radar. This usually contains better data,
