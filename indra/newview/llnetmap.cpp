@@ -795,11 +795,13 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 				LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
 				if (avatar_list_item != NULL)
 				{
-					distance = avatar_list_item->getRange();
+					F32 radar_distance = avatar_list_item->getRange();
 
-					// If avatar is >1020m and no viewer object exists,
-					// it is beyond far clip, so the distance value is wrong!
-					isHigher1020mBug = (isHigher1020mBug && gObjectList.findObject(avatar_id) == NULL);
+					if (isHigher1020mBug && radar_distance > -1.f)
+					{
+						distance = radar_distance;
+						isHigher1020mBug = false;
+					}
 				}
 			}
 
