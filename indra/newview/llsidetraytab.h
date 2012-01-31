@@ -66,7 +66,7 @@ public:
 protected:
 	LLSideTrayTab(const Params& params);
 	
-	void			dock(bool app_quitting, LLFloater* floater_tab); // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
+	void			dock(LLFloater* floater_tab);
 	void			undock(LLFloater* floater_tab);
 
 	LLSideTray*		getSideTray();
@@ -87,7 +87,7 @@ public:
 	const std::string& getTabTitle() const { return mTabTitle;}
 
 	void			onOpen		(const LLSD& key);
-	void			toggleTabDocked(bool app_quitting = false, bool toggle_floater = true); // LO: Fix for FIRE-2613: sidebar tabs and floaters not remembering being open/torn off
+	void			toggleTabDocked(bool toggle_floater = true);
     void			setDocked(bool dock);
     bool			isDocked() const;
 	void			minimizeTab();
