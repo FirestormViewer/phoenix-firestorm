@@ -385,5 +385,7 @@ void LLViewerFloaterReg::registerFloaters()
 	//               after the sidebar is gone or the floater toggle would toggle the main inventory window
 	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 
+	LLFloaterReg::add("volume_controls", "floater_volume_controls.xml", &LLFloaterReg::build<LLFloater>);
+
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

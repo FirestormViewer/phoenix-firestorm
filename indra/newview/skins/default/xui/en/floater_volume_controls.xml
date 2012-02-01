@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	legacy_header_height="18"
+	can_resize="false"
+	can_dock="false"
+	can_close="false"
+	can_minimize="false"
+	height="171"
+	layout="topleft"
+	name="volume_controls"
+	save_rect="true"
+	save_visibility="false"
+	single_instance="true"
+	save_dock_state="false"
+	title="Volume Controls"
+	width="210">
+
+	<panel
+		name="global_volume_controls_panel"
+		filename="panel_volume_pulldown.xml"
+		left="0"
+		top="16"
+		width="210"
+		height="155"
+		follows="all"
+		layout="topleft">
+	</panel>
+</floater>
