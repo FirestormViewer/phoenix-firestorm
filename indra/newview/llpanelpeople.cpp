@@ -984,7 +984,7 @@ void LLPanelPeople::updateNearbyList()
 		av->setAvatarName(avName); // maintain compatibility with underlying list, deprecated
 		U32 lastZOffsetTime  = av->getLastZOffsetTime();
 		F32 avZOffset        = av->getZOffset();
-		if (avPos[VZ] < 0.1 || avPos[VZ] > 1019.9) // if our official z position is 0.0 (legacy) or 1020 (new), we need a correction.
+		if (avPos[VZ] < 0.1 || avPos[VZ] == 1020.f) // if our official z position is 0.0 (legacy) or 1020 (new), we need a correction.
 		{
 			// set correction if we have it
 			if (avZOffset > 0.1) 
