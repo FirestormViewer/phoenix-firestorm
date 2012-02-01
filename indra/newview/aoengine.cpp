@@ -62,6 +62,7 @@ AOEngine::AOEngine() :
 	mLastMotion(ANIM_AGENT_STAND),
 	mLastOverriddenMotion(ANIM_AGENT_STAND)
 {
+	gSavedPerAccountSettings.getControl("UseAO")->getCommitSignal()->connect(boost::bind(&AOEngine::onToggleAOControl, this));
 }
 
 AOEngine::~AOEngine()
@@ -78,6 +79,11 @@ void AOEngine::init()
 void AOEngine::onLoginComplete()
 {
 	AOEngine::instance().init();
+}
+
+void AOEngine::onToggleAOControl()
+{
+	enable(gSavedPerAccountSettings.getBOOL("UseAO"));
 }
 
 void AOEngine::clear( bool aFromTimer )
