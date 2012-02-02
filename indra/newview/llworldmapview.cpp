@@ -80,7 +80,7 @@ LLUIImagePtr LLWorldMapView::sAvatarYouLargeImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarLevelImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarAboveImage = NULL;
 LLUIImagePtr LLWorldMapView::sAvatarBelowImage = NULL;
-LLUIImagePtr LLWorldMapView::sAvatarHeightUnknownImage = NULL;
+LLUIImagePtr LLWorldMapView::sAvatarUnknownImage = NULL;
 
 LLUIImagePtr LLWorldMapView::sTelehubImage = NULL;
 LLUIImagePtr LLWorldMapView::sInfohubImage = NULL;
@@ -125,7 +125,9 @@ void LLWorldMapView::initClass()
 	sAvatarLevelImage =		LLUI::getUIImage("map_avatar_32.tga");
 	sAvatarAboveImage =		LLUI::getUIImage("map_avatar_above_32.tga");
 	sAvatarBelowImage =		LLUI::getUIImage("map_avatar_below_32.tga");
-	sAvatarHeightUnknownImage = LLUI::getUIImage("map_avatar_unknown.tga");
+	// <FS:Ansariel> Use our own, established indicator
+	//sAvatarUnknownImage =	LLUI::getUIImage("map_avatar_unknown_32.tga");
+	sAvatarUnknownImage =	LLUI::getUIImage("map_avatar_unknown.tga");
 
 	sHomeImage =			LLUI::getUIImage("map_home.tga");
 	sTelehubImage = 		LLUI::getUIImage("map_telehub.tga");
@@ -158,7 +160,7 @@ void LLWorldMapView::cleanupClass()
 	sAvatarLevelImage = NULL;
 	sAvatarAboveImage = NULL;
 	sAvatarBelowImage = NULL;
-	sAvatarHeightUnknownImage = NULL;
+	sAvatarUnknownImage = NULL;
 
 	sTelehubImage = NULL;
 	sInfohubImage = NULL;
@@ -1215,23 +1217,26 @@ void LLWorldMapView::drawAvatar(F32 x_pixels,
 								const LLColor4& color,
 								F32 relative_z,
 								F32 dot_radius,
-								bool heightUnknown) // Ansariel: For drawing unknown height indicator
+								bool unknown_relative_z)
 {
 	const F32 HEIGHT_THRESHOLD = 7.f;
 	LLUIImagePtr dot_image = sAvatarLevelImage;
 
 	// Ansariel: If height is unknown, draw our special icon
-	if (heightUnknown)
+	if (unknown_relative_z)
 	{
-		dot_image = sAvatarHeightUnknownImage;
+		dot_image = sAvatarUnknownImage;
 	}
-	else if(relative_z < -HEIGHT_THRESHOLD) 
+	else
 	{
-		dot_image = sAvatarBelowImage; 
-	}
-	else if(relative_z > HEIGHT_THRESHOLD) 
-	{ 
-		dot_image = sAvatarAboveImage;
+		if(relative_z < -HEIGHT_THRESHOLD) 
+		{
+			dot_image = sAvatarBelowImage; 
+		}
+		else if(relative_z > HEIGHT_THRESHOLD) 
+		{ 
+			dot_image = sAvatarAboveImage;
+		}
 	}
 	S32 dot_width = llround(dot_radius * 2.f);
 	dot_image->draw(llround(x_pixels - dot_radius),
