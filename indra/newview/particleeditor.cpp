@@ -240,7 +240,8 @@ void ParticleEditor::onParameterChange()
 	if(mTexture->getID()==IMG_DEFAULT || mTexture->getID().isNull())
 		mTexture=mDefaultParticleTexture;
 
-	mParticles.mBurstRate=mBurstRateSpinner->getValueF32();
+	// limit burst rate to 0.01 to avoid internal freeze, script still gets the real value
+	mParticles.mBurstRate=llmax(0.01f,mBurstRateSpinner->getValueF32());
 	mParticles.mBurstPartCount=mBurstCountSpinner->getValue().asInteger();
 	mParticles.mBurstRadius=mBurstRadiusSpinner->getValueF32();
 	mParticles.mInnerAngle=mAngleBeginSpinner->getValueF32();
