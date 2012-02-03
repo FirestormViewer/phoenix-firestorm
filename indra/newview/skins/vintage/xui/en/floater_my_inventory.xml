@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater
+ open_positioning="cascading"
+ can_close="true"
+ can_resize="true"
+ height="550"
+ help_topic="sidebar_inventory"
+ min_height="230"
+ min_width="235"
+ name="floater_my_inventory"
+ save_rect="true"
+ save_visibility="true"
+ reuse_instance="true"
+ title="Inventory"
+ width="333" >
+   <panel
+    class="sidepanel_inventory"
+    name="main_panel"
+    filename="sidepanel_inventory.xml"
+    follows="all"
+    top="0"
+	left="0"/>
+</floater>

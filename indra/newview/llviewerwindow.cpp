@@ -215,6 +215,8 @@
 #include <tchar.h> // For Unicode conversion methods
 #endif
 
+#include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
+
 //
 // Globals
 //
@@ -1815,6 +1817,8 @@ void LLViewerWindow::initBase()
 	gToolBarView->setShape(panel_holder->getLocalRect());
 	// Hide the toolbars for the moment: we'll make them visible after logging in world (see LLViewerWindow::initWorldUI())
 	gToolBarView->setVisible(FALSE);
+
+	UtilityBar::instance().init();	// <FS:Zi> initialize the utility bar (classic V1 style buttons next to the chat bar)
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");

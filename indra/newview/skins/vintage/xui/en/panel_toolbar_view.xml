@@ -89,18 +89,8 @@
                name="chiclet_container"
                tab_stop="false"
                top="0"
-               bg_visible="false"
                width="20">
         </panel>          
-        <panel bottom="100"
-               follows="left|right|bottom"
-               height="25"
-               left="0"
-               mouse_opaque="false"
-               tab_stop="false"
-               name="stand_stop_flying_container"
-               visible="false"
-               width="200"/>
       </layout_panel>
       <layout_panel name="right_toolbar_panel"
                     auto_resize="false"
@@ -137,8 +127,27 @@
   <layout_panel name="bottom_chat_bar_panel"
                 auto_resize="false"
                 user_resize="false"
-                height="26"
+                height="46"
                 width="1024"
+                mouse_opaque="false">
+
+  <!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
+  <layout_stack name="chat_bar_utility_bar_stack"
+                orientation="horizontal"
+                top="0"
+                left="0"
+                width="1024"
+                height="46"
+                follows="all"
+                border_size="0"
+                mouse_opaque="false">
+
+  <!-- Chat panel -->
+  <layout_panel name="chat_panel"
+                auto_resize="true"
+                user_resize="false"
+                height="46"
+                width="844"
                 mouse_opaque="false">
 
   <!-- Layout stack to make showing and hiding easy -->
@@ -146,30 +155,45 @@
                 orientation="vertical"
                 top="0"
                 left="0"
-                width="1024"
-                height="26"
+                width="844"
+                height="46"
                 follows="all"
                 border_size="0"
                 mouse_opaque="false">
 
-  <!-- Empty panel to take up the space when chat bar panel gets hidden -->
-  <layout_panel name="bottom_chat_bar_upper_padding_panel"
+  <!-- Stand Up/Flycam panel, resting on top of the chat bar
+       Also takes up the space when chat bar panel gets hidden -->
+  <layout_panel name="stand_stop_flying_layout_panel"
                 auto_resize="true"
                 user_resize="false"
-                width="1024"
                 height="26"
-                mouse_opaque="false" />
+                width="844"
+                chrome="true"
+                mouse_opaque="false">
+        <panel top="4"
+               follows="bottom|left"
+               height="20"
+               left="350"
+               mouse_opaque="false"
+               tab_stop="false"
+               name="stand_stop_flying_container"
+               visible="true"
+               width="200"/>
+  </layout_panel>
+  <!-- Stand Up/Flycam panel, resting on top of the chat bar
+       Also takes up the space when chat bar panel gets hidden -->
 
   <!-- Panel to house the chat bar in, will be set visible/invisible in code
        as parent of the chat control -->
   <layout_panel name="bottom_chat_bar_panel"
                 auto_resize="false"
                 user_resize="false"
-                bg_visible="true"
-                bg_opaque_color="DkGray"
+                bg_opaque_image="Rounded_Rect_Top_2"
+                background_visible="true"
+                bg_opaque_image_overlay="DkGray"
                 background_opaque="true"
                 height="26"
-                width="1024"
+                width="844"
                 mouse_opaque="false">
 
   <button name="local_chat_button"
@@ -201,6 +225,325 @@
   <!-- Layout stack to make showing and hiding easy -->
 
   </layout_panel>
+  <!-- Chat panel -->
+
+  <!-- Utility Bar layout panel -->
+  <layout_panel name="utility_bar_layout_panel"
+                auto_resize="false"
+                user_resize="false"
+                height="46"
+                width="224"
+                layout="topleft"
+                chrome="true"
+                mouse_opaque="false">
+
+  <!-- Utility Bar panel -->
+  <panel name="utility_bar_panel"
+         top="20"
+         left="2"
+         width="220"
+         height="26"
+         bg_opaque_image="Rounded_Rect_Top_2"
+         background_visible="true"
+         bg_opaque_image_overlay="DkGray"
+         background_opaque="true"
+         layout="topleft"
+         follows="bottom|left">
+
+  <!-- Parcel Stream controls -->
+  <icon name="parcel_stream_icon"
+        image_name="icn_label_music.tga"
+        height="20"
+        left="3"
+        top="4"
+        layout="topleft"
+        follows="bottom|left"
+        width="16" />
+
+  <button name="utility_parcel_audio_stream_button"
+          tool_tip="Play/Pause parcel audio stream"
+          label=""
+          image_overlay="icn_play.tga"
+          is_toggle="true"
+          height="20"
+          left_pad="2"
+          layout="topleft"
+          follows="bottom|left"
+          width="40">
+<!-- Done in code for now -Zi
+          enabled_control="ToggleParcelStreamEnabled"
+          control_name="ParcelStreamRunning"
+  <button.commit_callback
+          function="Parcel.Streasm.Clicked"
+          parameter="play_pause" />
+-->
+  </button>
+  <!-- Parcel Stream controls -->
+
+  <!-- Parcel Media controls -->
+  <icon name="parcel_media_icon"
+        image_name="icn_label_media.tga"
+        height="20"
+        left_pad="5"
+        layout="topleft"
+        follows="bottom|left"
+        width="16" />
+
+  <button name="utility_parcel_media_button"
+          tool_tip="Play/Pause parcel media"
+          label=""
+          image_overlay="icn_play.tga"
+          is_toggle="true"
+          height="20"
+          left_pad="3"
+          top="4"
+          layout="topleft"
+          follows="bottom|left"
+          width="40">
+<!-- Done in code for now -Zi
+          enabled_control="ToggleParcelMediaEnabled"
+          control_name="ParcelMediaRunning"
+  <button.commit_callback
+          function="Parcel.Media.Clicked"
+          parameter="play_pause" />
+-->
+  </button>
+  <!-- Parcel Media controls -->
+
+  <!-- Volume controls -->
+  <slider name="System Volume"
+          tool_tip="Adjust system volume"
+          control_name="AudioLevelMaster"
+          height="20"
+          increment="0.025"
+          initial_value="0.5"
+          left_pad="3"
+          layout="topleft"
+          follows="bottom|left"
+          show_text="false"
+          width="43">
+  <!-- Copied from status bar, but doesn't seem to work:
+       "No callback found for: 'Pref.setControlFalse' in control: System Volume"
+  <slider.commit_callback
+          function="Pref.setControlFalse"
+          parameter="MuteAudio" /> -->
+  </slider>
+
+  <button name="mute_audio"
+          control_name="MuteAudio"
+          tool_tip="Mute system audio"
+          label=""
+          image_selected="AudioMute_Off"
+          image_unselected="Audio_Off"
+          is_toggle="true"
+          height="20"
+          left_pad="4"
+          top="4"
+          layout="topleft"
+          follows="bottom|left"
+          width="20">
+  </button>
+
+  <button name="show_volume_controls_button"
+          tool_tip="Show volume controls"
+          label=""
+          image_overlay="arrow_up.tga"
+          height="20"
+          left_pad="0"
+          layout="topleft"
+          follows="bottom|left"
+          width="22">
+  <button.commit_callback
+          function="Floater.ToggleOrBringToFront"
+          parameter="volume_controls" />
+  </button>
+  <!-- Volume controls -->
+
+  </panel>
+  <!-- Utility Bar panel -->
+
+  </layout_panel>
+  <!-- Utility Bar layout panel -->
+
+  <!-- Voice Chat layout panel -->
+  <layout_panel name="voice_chat_controls_layout_panel"
+                auto_resize="false"
+                user_resize="false"
+                height="46"
+                width="133"
+                visibility_control="EnableVoiceChat"
+                layout="topleft"
+                chrome="true"
+                mouse_opaque="false">
+
+  <!-- Voice Chat panel -->
+  <panel name="voice_chat_controls_panel"
+         top="20"
+         left="1"
+         width="130"
+         height="26"
+         bg_opaque_image="Rounded_Rect_Top_2"
+         background_visible="true"
+         bg_opaque_image_overlay="DkGray"
+         background_opaque="true"
+         layout="topleft"
+         follows="bottom|left">
+
+  <button name="show_voice_controls_button"
+          tool_tip="Shows the nearby voice speakers and controls"
+          label=""
+          image_overlay="active_speakers.tga"
+          height="20"
+          left="2"
+          layout="topleft"
+          follows="bottom|left"
+          width="38">
+  <button.commit_callback
+          function="Floater.ToggleOrBringToFront"
+          parameter="voice_controls" />
+  </button>
+
+  <button name="utility_talk_button"
+          tool_tip="Press this button to talk on voice. Click the lock to toggle Push-to-Talk mode on and off."
+          label="Talk"
+          height="20"
+          left_pad="2"
+          layout="topleft"
+          follows="bottom|left"
+          enabled_control="ParcelAllowsVoice"
+          width="64">
+<!-- Done in code for now -Zi
+  <mouse_down_callback
+           function="Agent.PressMicrophone"
+           parameter="speak" />
+  <mouse_up_callback
+           function="Agent.ReleaseMicrophone"
+           parameter="speak" />
+
+           is_running_function="Agent.IsMicrophoneOn"
+           is_running_parameters="speak"
+-->
+  </button>
+
+  <button name="utility_push_to_talk_lock_button"
+          tool_tip="Toggles push-to-talk function"
+          label=""
+          image_selected="ptt_lock_on.tga"
+          image_unselected="ptt_lock_off.tga"
+          control_name="PushToTalkToggle"
+          enabled_control="ParcelAllowsVoice"
+          is_toggle="true"
+          height="16"
+          left_delta="4"
+          top_delta="2"
+          layout="topleft"
+          follows="bottom|left"
+          width="16">
+  </button>
+
+   <!-- Do we need this button? -Zi -->
+  <button name="utility_show_voice_channel_button"
+          tool_tip="(TODO) Shows current voice channel"
+          label=""
+          image_overlay="arrow_up.tga"
+          height="20"
+          top="4"
+          left_pad="46"
+          layout="topleft"
+          follows="bottom|left"
+          enabled="false"
+          width="20">
+  </button>
+
+  </panel>
+  <!-- Voice Chat panel -->
+
+  </layout_panel>
+  <!-- Voice Chat layout panel -->
+
+  <!-- Quick Preferences Button layout panel -->
+  <layout_panel name="quick_preferences_button_layout_panel"
+                auto_resize="false"
+                user_resize="false"
+                height="46"
+                width="96"
+                layout="topleft"
+                chrome="true"
+                mouse_opaque="false">
+
+  <!-- Quick Preferences Button panel -->
+  <panel name="quick_preferences_button_panel"
+         top="20"
+         left="1"
+         width="93"
+         height="26"
+         bg_opaque_image="Rounded_Rect_Top_2"
+         background_visible="true"
+         bg_opaque_image_overlay="DkGray"
+         background_opaque="true"
+         layout="topleft"
+         follows="bottom|left">
+
+  <button name="enable_disable_ao_button"
+          control_name="UseAO"
+          tool_tip="Enable/Disable client animation overrider"
+          label=""
+          image_overlay="ao_toggle_18"
+          image_unselected="SplitButtonLeft_Off"
+          image_selected="SplitButtonLeft_Selected"
+          image_disabled="SplitButtonLeft_Disabled"
+          is_toggle="true"
+          height="20"
+          left="4"
+          top="4"
+          layout="topleft"
+          follows="bottom|left"
+          width="40">
+  </button>
+
+  <button name="show_ao_interface_button"
+          tool_tip="Show/Hide client animation overrider interface"
+          label=""
+          image_overlay="arrow_up.tga"
+          image_unselected="SplitButtonRight_Off"
+          image_selected="SplitButtonRight_Selected"
+          image_disabled="SplitButtonRight_Disabled"
+          height="20"
+          left_pad="0"
+          layout="topleft"
+          follows="bottom|left"
+          width="20">
+  <button.commit_callback
+          function="Floater.ToggleOrBringToFront"
+          parameter="animation_overrider" />
+  </button>
+
+  <!-- Tooltip text defined in commands.xml - buttons can't use tool_tip_ref yet -->
+  <button name="show_quick_prefs_button"
+          tool_tip="Quick preferences for changing often used settings"
+          label=""
+          image_overlay="phoenix_18"
+          top="4"
+          height="20"
+          left_pad="3"
+          layout="topleft"
+          follows="bottom|left"
+          width="22">
+  <button.commit_callback
+          function="Floater.ToggleOrBringToFront"
+          parameter="quickprefs" />
+  </button>
+
+  </panel>
+  <!-- Quick Preferences Button panel -->
+
+  </layout_panel>
+  <!-- Quick Preferences Button layout panel -->
+
+  </layout_stack>
+  <!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
+
+  </layout_panel>
   <!-- Nearby chat panel, resting on top of the bottom toolbar -->
 
   <layout_panel name="bottom_toolbar_panel"
@@ -213,7 +556,6 @@
                 width="1024"
                 mouse_opaque="false">
     <toolbar layout="topleft"
-             button_panel.bg_opaque_image="Rounded_Rect_Top"
              name="toolbar_bottom"
              height="28"
              left="0"

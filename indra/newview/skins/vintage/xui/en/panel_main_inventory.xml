@@ -3,13 +3,13 @@
 	background_visible="true"
 	default_tab_group="1"
 	follows="all"
-	height="423"
+	height="300"
 	label="Things"
 	layout="topleft"
-	min_height="300"
-	min_width="240"
+	min_height="100"
+	min_width="140"
 	name="main inventory panel"
-	width="330">
+	width="328">
 	<panel.string
 	name="Itemcount">
 	</panel.string>
@@ -401,10 +401,10 @@
 		height="18"
 		label="Filter Inventory"
 		layout="topleft"
-		left="10"
+		left="2"
 		max_length_chars="300"
 		name="inventory search editor"
-		right="-6"
+		right="-1"
 		tool_tip="Type in one or more words to search for, separated by '+' "
 		top_pad="4">
 		<filter_editor.clear_button
@@ -419,7 +419,7 @@
 		label="Collapse"
 		width="60"
 		height="16"
-		left="6"
+		left="2"
 		top_pad="4"
 		follows="top|left"
 		layout="topleft"/>
@@ -449,7 +449,7 @@
 		left_pad="4"
 		follows="top|left|right"
 		layout="topleft"
-		right="-6"
+		right="-1"
 		top_delta="-2">
 
 		<combo_box.item value="filter_type_all" label="All Types" />
@@ -478,54 +478,43 @@
 		background_opaque="true"
 		follows="all"
 		halign="center"
-		height="343"
+		height="212"
 		layout="topleft"
-		left="4"
+		left="0"
 		name="inventory filter tabs"
 		tab_drag_commit="true"
 		tab_group="1"
-		tab_padding="20"
 		tab_position="top"
 		top_pad="4"
-		width="322">
+		width="328">
 		<inventory_panel
-			border="false"
-			bevel_style="none"
+			border="true"
+			bevel_style="in"
 			follows="all"
-			height="341"
-			label="INVENTORY"
+			label="All Items"
 			help_topic="my_inventory_tab"
 			layout="topleft"
-			left="0"
 			name="All Items"
 			sort_order_setting="InventorySortOrder"
-			show_item_link_overlays="true"
-			top="16"
-			width="288" />
+			show_item_link_overlays="true" />
 		<recent_inventory_panel
-			border="false"
-			bevel_style="none"
+			border="true"
+			bevel_style="in"
 			follows="all"
-			height="341"
-			label="RECENT"
+			label="Recent Items"
 			help_topic="recent_inventory_tab"
 			layout="topleft"
-			left_delta="0"
 			name="Recent Items"
-			show_item_link_overlays="true"
-			width="290" />
+			show_item_link_overlays="true" />
 		<worn_inventory_panel
-			border="false"
-			bevel_style="none"
+			border="true"
+			bevel_style="in"
 			follows="all"
-			height="341"
-			label="WORN"
+			label="Worn Items"
 			help_topic="worn_inventory_tab"
 			layout="topleft"
-			left_delta="0"
 			name="Worn Items"
-			show_item_link_overlays="true"
-			width="290" />
+			show_item_link_overlays="true" />
 	</tab_container>
 
 	<text
@@ -541,5 +530,13 @@
 		follows="bottom|left">
 		Items
 	</text>
+
+	<!-- keep the buttons so the code doesn't complain about missing controls -Zi -->
+	<panel name="hide_buttons" enabled="false" visible="false" left="0" top="0">
+		<menu_button follows="top|left" height="0" layout="topleft" name="options_gear_btn"
+					left="0" top="0" width="0" />
+		<dnd_button follows="top|left" height="0" layout="topleft" name="trash_btn"
+					left="0" top="0" width="0" />
+	</panel>
 
 </panel>

@@ -130,6 +130,11 @@ public:
 	
 	void setBackgroundColor( const LLColor4& color );
 
+	// <FS:Zi> External toggles for media and streams
+	void toggleMedia(bool enable);
+	void toggleStream(bool enable);
+	// </FS:Zi>
+
 private:
 	
 	void onClickBuyCurrency();

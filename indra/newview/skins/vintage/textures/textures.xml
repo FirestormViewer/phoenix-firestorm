@@ -96,6 +96,66 @@
 		scale.right="18"
 		scale.bottom="13" />
 
+	<!-- Idle split button, left half -->
+	<texture
+		name="SplitButtonLeft_Off"
+		file_name="widgets/SplitButtonLeft_Off.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Idle split button, right half -->
+	<texture
+		name="SplitButtonRight_Off"
+		file_name="widgets/SplitButtonRight_Off.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled split button, left half -->
+	<texture
+		name="SplitButtonLeft_Selected"
+		file_name="widgets/SplitButtonLeft_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Pressed / Toggled split button, right half -->
+	<texture
+		name="SplitButtonRight_Selected"
+		file_name="widgets/SplitButtonRight_Selected.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Disabled split button, left half -->
+	<texture
+		name="SplitButtonLeft_Disabled"
+		file_name="widgets/SplitButtonLeft_Disabled.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
+	<!-- Disabled split button, right half -->
+	<texture
+		name="SplitButtonRight_Disabled"
+		file_name="widgets/SplitButtonRight_Disabled.png"
+		preload="true"
+		scale.left="12"
+		scale.top="12"
+		scale.right="18"
+		scale.bottom="13" />
+
 	<!-- Scrollbar Thumb to grab and scroll, horizontal version -->
 	<texture name="ScrollThumb_Horiz"
 		file_name="widgets/ScrollThumb_Horiz.png"
@@ -174,6 +234,16 @@
 		scale.top="18"
 		scale.right="248"
 		scale.bottom="4" />
+
+	<!-- Added our own texure, because for some reason the clipping refuses to work right
+	     and keeping the name makes things even worse -->
+	<texture name="Rounded_Rect_Top_2"
+		file_name="Rounded_Rect_Top.png"
+		preload="true"
+		scale.left="6"
+		scale.top="13"
+		scale.right="58"
+		scale.bottom="3" />
 
 	<!-- new-old icons :D -->
 	<texture name="Inv_Alpha"				file_name="legacy/inv_item_alpha.tga" />
@@ -283,5 +353,9 @@
 	<texture name="Permission_Visible_Map_Theirs_Button"	file_name="legacy/ff_visible_map_button_theirs.tga" />
 	<texture name="Permission_Edit_Objects_Mine_Button"		file_name="legacy/ff_edit_mine_button.tga" />
 	<texture name="Permission_Edit_Objects_Theirs_Button"	file_name="legacy/ff_edit_theirs_button.tga" />
+
+	<!-- Preload overrides -->
+	<texture name="Play_Off" file_name="icons/Play_Off.png" preload="true" />
+	<texture name="Stop_Off" file_name="icons/Stop_Off.png" preload="true" />
 
 </textures>
