@@ -324,24 +324,38 @@ void LLFolderViewItem::refresh()
 				std::string creator_name;
 				if(gCacheName->getFullName(item->getCreatorUUID(),creator_name))
 				{
-					mSearchableCreator=creator_name;
-					LLStringUtil::toUpper(mSearchableCreator);
-					change_all=TRUE;
+					LLStringUtil::toUpper( creator_name );
+
+					if( mSearchableCreator != creator_name )
+					{
+						mSearchableCreator=creator_name;
+						change_all=TRUE;
+					}
 				}
 		}
 
-		if(!item->getDescription().empty())
+		if(!item->getDescription().empty() )
 		{
-			mSearchableDescription=item->getDescription();
-			LLStringUtil::toUpper(mSearchableDescription);
-			change_all=TRUE;
+			std::string strDescr( item->getDescription() );
+			LLStringUtil::toUpper( strDescr );
+
+			if( strDescr != mSearchableDescription )
+			{
+				mSearchableDescription = strDescr;
+				change_all=TRUE;
+			}
 		}
 
 		if(!item->getAssetUUID().isNull())
 		{
-			mSearchableUUID=item->getAssetUUID().asString();
-			LLStringUtil::toUpper(mSearchableUUID);
-			change_all=TRUE;
+			std::string strUUID( mSearchableDescription );
+			LLStringUtil::toUpper( strUUID );
+
+			if( strUUID != mSearchableUUID )
+			{
+				mSearchableUUID = strUUID;
+				change_all=TRUE;
+			}
 		}
 
 		// if any of the above was changed, rebuild the mSearchableAll string

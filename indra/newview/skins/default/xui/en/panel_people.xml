@@ -163,14 +163,17 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		        <radar_list.columns
 		         label="NAME"
 		         name="name"
+				 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
 		         relative_width="0.44" />
 		        <radar_list.columns
 		         label=""
 		         name="in_region"
+				 tool_tip="Is in the same region"
 		         relative_width="0.03" />
 		        <radar_list.columns
 		         label=""
 		         name="flags"
+				 tool_tip="Has payment info on file"
 		         relative_width="0.03" />
 		        <radar_list.columns
 		         label="AGE"

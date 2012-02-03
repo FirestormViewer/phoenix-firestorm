@@ -983,7 +983,7 @@ void LLPanelPeople::updateNearbyList()
 		av->setAvatarName(avName); // maintain compatibility with underlying list, deprecated
 		U32 lastZOffsetTime  = av->getLastZOffsetTime();
 		F32 avZOffset        = av->getZOffset();
-		if (avPos[VZ] < 0.1 || avPos[VZ] == 1020.f) // if our official z position is 0.0 (legacy) or 1020 (new), we need a correction.
+		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
 		{
 			// set correction if we have it
 			if (avZOffset > 0.1) 
@@ -1432,7 +1432,9 @@ void LLPanelPeople::updateNearbyList()
 	name_count_args["[TOTAL]"] = llformat("%d", lastRadarSweep.size());
 	name_count_args["[IN_REGION]"] = llformat("%d", inSameRegion);
 	name_count_args["[IN_CHAT_RANGE]"] = llformat("%d", inChatRange);
-	mRadarList->setColumnLabel("name", getString("avatar_name_count", name_count_args));
+	LLScrollListColumn* column = mRadarList->getColumn("name");
+	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
+	column->mHeader->setToolTipArgs(name_count_args);
 	// update minimap with selected avatars
 	uuid_vec_t selected_uuids;
 	LLUUID sVal = mRadarList->getSelectedValue().asUUID();

@@ -1236,18 +1236,29 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
 		iter != LLCharacter::sInstances.end(); ++iter)
 	{
+		// <FS:Ansariel> Watch out for a potential merge of STORM-1793!
+		//               avatar_ids and positions MUST be checked
+		//               INDEPENDENTLY!!! Things rely on being able to
+		//               pass either one as NULL!!!
 		LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
-		LLVector3d pos_global = pVOAvatar->getPositionGlobal();
-		LLUUID uuid = pVOAvatar->getID();
-		if( !pVOAvatar->isDead() &&
-			!pVOAvatar->isSelf() &&
-			!uuid.isNull() &&
-			dist_vec_squared(pos_global, relative_to) <= radius_squared &&
-			positions != NULL &&
-			avatar_ids != NULL)
+		if(!pVOAvatar->isDead() && !pVOAvatar->isSelf())
 		{
-			positions->push_back(pos_global);
-			avatar_ids->push_back(uuid);
+			LLUUID uuid = pVOAvatar->getID();
+			if(!uuid.isNull())
+			{
+				LLVector3d pos_global = pVOAvatar->getPositionGlobal();
+				if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
+				{
+					if(positions != NULL)
+					{
+						positions->push_back(pos_global);
+					}
+					if(avatar_ids !=NULL)
+					{
+						avatar_ids->push_back(uuid);
+					}
+				}
+			}
 		}
 	}
 	// region avatars added for situations where radius is greater than RenderFarClip
@@ -1259,7 +1270,11 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 		S32 count = regionp->mMapAvatars.count();
 		for (S32 i = 0; i < count; i++)
 		{
-			LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.get(i), origin_global);
+			// <FS:Ansariel>
+			//LLVector3d pos_global = unpackLocalToGlobalPosition(regionp->mMapAvatars.get(i), origin_global);
+			U32 compact_local = regionp->mMapAvatars.get(i);
+			LLVector3d pos_global = unpackLocalToGlobalPosition(compact_local, origin_global);
+			// </FS:Ansariel>
 			if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
 			{
 				LLUUID uuid = regionp->mMapAvatarIDs.get(i);
@@ -1268,9 +1283,22 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 				{
 					if(positions != NULL)
 					{
+						// <FS:Ansariel> Explictly return AVATAR_UNKNOWN_Z_OFFSET
+						//               if height of avatar is unknown so we
+						//               can take measures. If we wouldn't do
+						//               this, we won't be able to distinguish
+						//               if height is unknown or not if 1020
+						//               is returned for Z-offset.
+						U32 coarse_location_z_offset = (compact_local & 0xFFU);
+						if (coarse_location_z_offset == 255 || coarse_location_z_offset == 0)
+						{
+							pos_global.mdV[VZ] = AVATAR_UNKNOWN_Z_OFFSET;
+						}
+						// </FS:Ansariel>
+
 						positions->push_back(pos_global);
-						avatar_ids->push_back(uuid);
 					}
+					avatar_ids->push_back(uuid);
 				}
 			}
 		}
