@@ -31,6 +31,10 @@
 	<color
 		name="UIControlBGSelected"
 		value="0.551 0.566 0.762 1.0" />
+	<!-- UI control highlight, always focused, compensates for in-code alpha -->
+	<color
+		name="UIControlBGSelectedCompensate"
+		value="0.45 0.46 0.745 1.0" />
 	<!-- Unfocused Text editors, scroll lists, notecards etc. -->
 	<color
 		name="UIControlBGLightUnfocused"
@@ -191,14 +195,14 @@
 	<color
 		name="TextBgFocusColor"
 		reference="UIControlBGLightFocused" />
-	<!-- New color - compensate for 0.7 alpha being applied in code :( Black is the best we can do here -->
+	<!-- Compensate for 0.7 alpha being applied in code :( -->
 	<color
 		name="TextBgSelectedColor"
-		reference="Black" />
-	<!-- New color - This is how TextBgFocusColor should be, too, if it wasn't for the alpha in code -->
+		reference="UIControlBGSelectedCompensate" />
+	<!-- New color - Selection color for line editors, read-only and editable -->
 	<color
 		name="LineEditorBgSelectedColor"
-		value="0.212 0.176 0.196 1.0" />
+		reference="UIControlBGSelected" />
 	<color
 		name="TextBgWriteableColor"
 		value="0.729 0.765 0.745 1.0" />
