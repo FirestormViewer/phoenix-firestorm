@@ -670,6 +670,7 @@ set(viewer_SOURCE_FILES
     rlvui.cpp
     sanitycheck.cpp
     streamtitledisplay.cpp
+    utilitybar.cpp
     NACLantispam.cpp
     )
 
@@ -1262,6 +1263,7 @@ set(viewer_HEADER_FILES
     rlvui.h
     sanitycheck.h
     streamtitledisplay.h
+    utilitybar.h
     VertexCache.h
     VorbisFramework.h
     kvflickr.h

@@ -666,6 +666,16 @@ void LLStatusBar::onClickMediaToggle(void* data)
 	LLStatusBar *status_bar = (LLStatusBar*)data;
 	// "Selected" means it was showing the "play" icon (so media was playing), and now it shows "pause", so turn off media
 	bool enable = ! status_bar->mMediaToggle->getValue();
+
+	// <FS:Zi> Split up handling here to allow external controls to switch media on/off
+// 	LLViewerMedia::setAllMediaEnabled(enable);
+// }
+	status_bar->toggleMedia(enable);
+}
+
+void LLStatusBar::toggleMedia(bool enable)
+{
+	// </FS:Zi>
 	LLViewerMedia::setAllMediaEnabled(enable);
 }
 
@@ -678,7 +688,13 @@ void LLStatusBar::onClickStreamToggle(void* data)
 
 	LLStatusBar *status_bar = (LLStatusBar*)data;
 	bool enable = ! status_bar->mStreamToggle->getValue();
+	// <FS:Zi> Split up handling here to allow external controls to switch media on/off
+	status_bar->toggleStream(enable);
+}
 
+void LLStatusBar::toggleStream(bool enable)
+{
+	// </FS:Zi>
 	if(enable)
 	{
 		if (LLAudioEngine::AUDIO_PAUSED == gAudiop->isInternetStreamPlaying())
@@ -704,7 +720,10 @@ void LLStatusBar::onClickStreamToggle(void* data)
 		gAudiop->stopInternetStream();
 	}
 
-	status_bar->mAudioStreamEnabled = enable;
+	// <FS:Zi> Split up handling cont.
+	// status_bar->mAudioStreamEnabled = enable;
+	mAudioStreamEnabled = enable;
+	// </FS:Zi>
 }
 
 BOOL LLStatusBar::getAudioStreamEnabled() const
@@ -886,6 +905,7 @@ void LLStatusBar::updateParcelIcons()
 	if (!agent_region || !agent_parcel)
 		return;
 
+	bool allow_voice=FALSE;		// <FS:Zi> Declare here to use it in both if() branches
 	if (mShowParcelIcons)
 	{
 		LLParcel* current_parcel;
@@ -907,7 +927,10 @@ void LLStatusBar::updateParcelIcons()
 			current_parcel = agent_parcel;
 		}
 
-		bool allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
+		// <FS:Zi> allow_voice is now declared outside the if() block
+		//	bool allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
+		allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
+		// </FS:Zi>
 		bool allow_fly		= vpm->allowAgentFly(agent_region, current_parcel);
 		bool allow_push		= vpm->allowAgentPush(agent_region, current_parcel);
 		bool allow_build	= vpm->allowAgentBuild(current_parcel); // true when anyone is allowed to build. See EXT-4610.
@@ -939,9 +962,11 @@ void LLStatusBar::updateParcelIcons()
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
 		mPWLBtn->setVisible(false);
+		allow_voice	= vpm->allowAgentVoice();	// <FS:Zi> update allow_voice even if icons are hidden
 	}
 
 	layoutParcelIcons();
+	gSavedSettings.setBOOL("ParcelAllowsVoice",allow_voice);	// <FS:Zi> set internal control for button state changing
 }
 
 void LLStatusBar::updateHealth()
