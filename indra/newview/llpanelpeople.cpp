@@ -1433,7 +1433,9 @@ void LLPanelPeople::updateNearbyList()
 	name_count_args["[TOTAL]"] = llformat("%d", lastRadarSweep.size());
 	name_count_args["[IN_REGION]"] = llformat("%d", inSameRegion);
 	name_count_args["[IN_CHAT_RANGE]"] = llformat("%d", inChatRange);
-	mRadarList->setColumnLabel("name", getString("avatar_name_count", name_count_args));
+	LLScrollListColumn* column = mRadarList->getColumn("name");
+	column->mHeader->setLabel(getString("avatar_name_count", name_count_args));
+	column->mHeader->setToolTipArgs(name_count_args);
 	// update minimap with selected avatars
 	uuid_vec_t selected_uuids;
 	LLUUID sVal = mRadarList->getSelectedValue().asUUID();
