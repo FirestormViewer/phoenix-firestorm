@@ -386,7 +386,7 @@ void LLNetMap::draw()
 		// Draw avatars
 		for (U32 i = 0; i < avatar_ids.size(); i++)
 		{
-			//pos_map = globalPosToView(positions[i]); // <FS:Ansariel> Do this later after advanced height check
+			pos_map = globalPosToView(positions[i]);
 			LLUUID uuid = avatar_ids[i];
 
 //			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
@@ -397,11 +397,26 @@ void LLNetMap::draw()
 
 			LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
 
-			// <FS:Ansariel> Also check for legacy unknown height reported as height = 0m
+			// <FS:Ansariel> Check for unknown Z-offset => AVATAR_UNKNOWN_Z_OFFSET
 			//unknown_relative_z = positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
 			//		camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z;
-			unknown_relative_z = (positions[i].mdV[VZ] == COARSEUPDATE_MAX_Z &&
-					camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z) || (positions[i].mdV[VZ] == 0.f);
+			unknown_relative_z = false;
+			if (positions[i].mdV[VZ] == AVATAR_UNKNOWN_Z_OFFSET)
+			{
+				if (camera_position.mV[VZ] >= COARSEUPDATE_MAX_Z)
+				{
+					// No exact data and cam >=1020 => we don't know if
+					// other avatar is above or below us => unknown
+					unknown_relative_z = true;
+				}
+				else
+				{
+					// No exact data but cam is below 1020 => other avatar
+					// is definitely above us => bump Z-offset to F32_MAX
+					// so we get the up chevron
+					pos_map.mV[VZ] = F32_MAX;
+				}
+			}
 			// </FS:Ansariel>
 
 			// Colorize muted avatars and Lindens
@@ -410,19 +425,6 @@ void LLNetMap::draw()
 
 			if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
 			else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
-
-			// Try to workaround 1020m bug by using
-			// the viewer object for the avatar.
-			if (unknown_relative_z)
-			{
-				LLViewerObject* viewerObject = gObjectList.findObject(uuid);
-				if (viewerObject)
-				{
-					positions[i].mdV[VZ] = viewerObject->getPositionGlobal().mdV[VZ];
-					unknown_relative_z = false;
-				}
-			}
-			pos_map = globalPosToView(positions[i]);
 
 			// Mark Avatars with special colors - Ansariel
 			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
@@ -783,24 +785,26 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			LLVector3d delta = otherPosition - myPosition;
 			F32 distance = (F32)delta.magVec();
 
-			// If avatar is >1020, the value for Z is returned as 0 (legacy) or 1020 (new)
-			bool isHigher1020mBug = (otherPosition[VZ] == COARSEUPDATE_MAX_Z || otherPosition[VZ] == 0.0);
+			// If avatar is >=1020, the value for Z might be returned as AVATAR_UNKNOWN_Z_OFFSET
+			bool isHigher1020mBug = (otherPosition[VZ] == AVATAR_UNKNOWN_Z_OFFSET);
 
 			// Ansariel: Try to get distance from the nearby people panel
-			//           aka radar. This usually contains better data,
-			//           especially when above 1020m.
-			LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
-			if (panel_people != NULL)
+			//           aka radar when above 1020m.
+			if (isHigher1020mBug)
 			{
-				LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
-				if (avatar_list_item != NULL)
+				LLPanel* panel_people = LLSideTray::getInstance()->getPanel("panel_people");
+				if (panel_people != NULL)
 				{
-					F32 radar_distance = avatar_list_item->getRange();
-
-					if (isHigher1020mBug && radar_distance > -1.f)
+					LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
+					if (avatar_list_item != NULL)
 					{
-						distance = radar_distance;
-						isHigher1020mBug = false;
+						F32 radar_distance = avatar_list_item->getRange();
+
+						if (radar_distance > -1.f)
+						{
+							distance = radar_distance;
+							isHigher1020mBug = false;
+						}
 					}
 				}
 			}
