@@ -168,6 +168,7 @@
                 user_resize="false"
                 height="26"
                 width="844"
+                chrome="true"
                 mouse_opaque="false">
         <panel top="4"
                follows="bottom|left"
@@ -233,6 +234,7 @@
                 height="46"
                 width="224"
                 layout="topleft"
+                chrome="true"
                 mouse_opaque="false">
 
   <!-- Utility Bar panel -->
@@ -371,6 +373,7 @@
                 width="133"
                 visibility_control="EnableVoiceChat"
                 layout="topleft"
+                chrome="true"
                 mouse_opaque="false">
 
   <!-- Voice Chat panel -->
@@ -465,6 +468,7 @@
                 height="46"
                 width="96"
                 layout="topleft"
+                chrome="true"
                 mouse_opaque="false">
 
   <!-- Quick Preferences Button panel -->
