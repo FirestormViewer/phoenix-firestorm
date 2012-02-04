@@ -704,13 +704,13 @@
      reference="Red" />
     <color
      name="PanelDefaultBackgroundColor"
-     reference="Transparent" />
+     reference="DkGray" />
     <color
      name="PanelDefaultHighlightLight"
      reference="White_50" />
     <color
      name="PanelFocusBackgroundColor"
-     reference="Transparent" />
+     reference="DkGray2" />
     <color
      name="ParcelHoverColor"
      reference="White" />
@@ -819,7 +819,7 @@
      reference="White_10" />
     <color
      name="ToolTipTextColor"
-     reference="SL-White" />
+     reference="Black" />
     <color
      name="InspectorTipTextColor"
      reference="LtGray" />

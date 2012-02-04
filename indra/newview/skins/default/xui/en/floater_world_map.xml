@@ -48,7 +48,7 @@
 	top="10"
     width="60"
 	layout="topleft"
-	background_visible="true"
+	background_visible="false"
     name="map_details_selection">
     <button
      follows="right|top"
@@ -72,7 +72,7 @@
     min_height="20"
     bottom="487"
     width="185"
-	background_visible="true"
+	background_visible="false"
     name="layout_panel_6">
     <icon
      follows="left|bottom"
