@@ -65,7 +65,7 @@ static F32 MIN_ACCELERATION_SQUARED = 0.0005f * 0.0005f;
 
 static F32 MAX_CONSTRAINTS = 10;
 
-static U32 const MAX_CACHE_TIME_IN_SECONDS = 45*60;
+static U32 const MAX_CACHE_TIME_IN_SECONDS = 5*60;
 static U32 const SCAN_CACHE_INTERVAL = 31;
 
 //-----------------------------------------------------------------------------
