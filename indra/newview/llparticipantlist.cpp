@@ -30,7 +30,9 @@
 #include "lltrans.h"
 #include "llavataractions.h"
 #include "llagent.h"
-
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1)
+#include "llgroupactions.h"
+// [/SL:KB]
 #include "llimview.h"
 #include "llnotificationsutil.h"
 #include "llparticipantlist.h"
@@ -678,6 +680,9 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 	registrar.add("ParticipantList.Sort", boost::bind(&LLParticipantList::LLParticipantListMenu::sortParticipantList, this, _2));
 	registrar.add("ParticipantList.ToggleAllowTextChat", boost::bind(&LLParticipantList::LLParticipantListMenu::toggleAllowTextChat, this, _2));
 	registrar.add("ParticipantList.ToggleMuteText", boost::bind(&LLParticipantList::LLParticipantListMenu::toggleMuteText, this, _2));
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	registrar.add("ParticipantList.Eject", boost::bind(&LLGroupActions::ejectFromGroup, mParent.mSpeakerMgr->getSessionID(), mUUIDs.front()));
+// [SL:KB]
 
 	registrar.add("Avatar.Profile",	boost::bind(&LLAvatarActions::showProfile, mUUIDs.front()));
 	registrar.add("Avatar.IM", boost::bind(&LLAvatarActions::startIM, mUUIDs.front()));
@@ -944,6 +949,12 @@ bool LLParticipantList::LLParticipantListMenu::enableContextMenuItem(const LLSD&
 		bool can_call = not_agent &&  LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 		return can_call;
 	}
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	else if (item == "can_eject")
+	{
+		return LLGroupActions::canEjectFromGroup(mParent.mSpeakerMgr->getSessionID(), mUUIDs.front());
+	}
+// [/SL:KB]
 
 	return true;
 }

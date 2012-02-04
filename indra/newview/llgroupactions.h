@@ -112,6 +112,11 @@ public:
 	 */
 	static bool isAvatarMemberOfGroup(const LLUUID& group_id, const LLUUID& avatar_id);
 	
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	static bool canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
+	static void ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent);
+// [/SL:KB]
+
 private:
 	static bool onJoinGroup(const LLSD& notification, const LLSD& response);
 	static bool onLeaveGroup(const LLSD& notification, const LLSD& response);

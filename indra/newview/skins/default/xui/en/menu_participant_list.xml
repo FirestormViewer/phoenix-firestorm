@@ -129,6 +129,18 @@
          function="ParticipantList.EnableItem"
          parameter="can_mute_text" />
     </menu_item_check>
+    <menu_item_call
+     label="Eject from Group"
+     layout="topleft"
+     name="EjectSelected">
+        <on_click
+         function="ParticipantList.Eject"
+        />
+        <on_enable
+         function="ParticipantList.EnableItem"
+         parameter="can_eject"
+        />
+    </menu_item_call>
     <menu_item_separator
      layout="topleft" 
      name="Moderator Options Separator"/>

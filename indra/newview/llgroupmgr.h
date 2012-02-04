@@ -83,6 +83,10 @@ public:
 	void clearRoles() { mRolesList.clear(); };
 	role_list_t::iterator roleBegin() { return mRolesList.begin(); }
 	role_list_t::iterator roleEnd() { return mRolesList.end(); }
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	role_list_t::const_iterator roleBegin() const { return mRolesList.begin(); }
+	role_list_t::const_iterator roleEnd() const { return mRolesList.end(); }
+// [/SL:KB]
 
 	BOOL isInRole(const LLUUID& role_id) { return (mRolesList.find(role_id) != mRolesList.end()); }
 
@@ -228,10 +232,16 @@ public:
 	void recalcAllAgentPowers();
 	void recalcAgentPowers(const LLUUID& agent_id);
 
-	BOOL isMemberDataComplete() { return mMemberDataComplete; }
-	BOOL isRoleDataComplete() { return mRoleDataComplete; }
-	BOOL isRoleMemberDataComplete() { return mRoleMemberDataComplete; }
-	BOOL isGroupPropertiesDataComplete() { return mGroupPropertiesDataComplete; }
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+	BOOL isMemberDataComplete() const { return mMemberDataComplete; }
+	BOOL isRoleDataComplete() const { return mRoleDataComplete; }
+	BOOL isRoleMemberDataComplete() const { return mRoleMemberDataComplete; }
+	BOOL isGroupPropertiesDataComplete() const { return mGroupPropertiesDataComplete; }
+// [/SL:KB]
+//	BOOL isMemberDataComplete() { return mMemberDataComplete; }
+//	BOOL isRoleDataComplete() { return mRoleDataComplete; }
+//	BOOL isRoleMemberDataComplete() { return mRoleMemberDataComplete; }
+//	BOOL isGroupPropertiesDataComplete() { return mGroupPropertiesDataComplete; }
 
 public:
 	typedef	std::map<LLUUID,LLGroupMemberData*> member_list_t;

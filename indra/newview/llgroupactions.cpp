@@ -485,6 +485,57 @@ bool LLGroupActions::isAvatarMemberOfGroup(const LLUUID& group_id, const LLUUID&
 	return true;
 }
 
+// [SL:KB] - Patch: Chat-GroupSessionEject | Checked: 2012-02-04 (Catznip-3.2.1) | Added: Catznip-3.2.1
+bool LLGroupActions::canEjectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent)
+{
+	if (gAgent.isGodlike())
+	{
+		return true;
+	}
+
+	if (gAgent.hasPowerInGroup(idGroup, GP_MEMBER_EJECT))
+	{
+		const LLGroupMgrGroupData* pGroupData = LLGroupMgr::getInstance()->getGroupData(idGroup);
+		if ( (!pGroupData) || (!pGroupData->isMemberDataComplete()) )
+		{
+			// There is no (or not enough) information on this group but the user does have the group eject power
+			return true;
+		}
+
+		LLGroupMgrGroupData::member_list_t::const_iterator itMember = pGroupData->mMembers.find(idAgent);
+		if (pGroupData->mMembers.end() != itMember)
+		{
+			const LLGroupMemberData* pMemberData = (*itMember).second;
+			if ( (pGroupData->isRoleDataComplete()) && (pGroupData->isRoleMemberDataComplete()) )
+			{
+				for (LLGroupMemberData::role_list_t::const_iterator itRole = pMemberData->roleBegin(); 
+						itRole != pMemberData->roleEnd(); ++itRole)
+				{
+					if ((*itRole).first.notNull())
+					{
+						// Someone who belongs to any roles other than "Everyone" can't be ejected
+						return false;
+					}
+				}
+			}
+			// Owners can never be ejected
+			return (itMember->second) && (!itMember->second->isOwner());
+		}
+	}
+	return false;
+}
+
+void LLGroupActions::ejectFromGroup(const LLUUID& idGroup, const LLUUID& idAgent)
+{
+	if (!canEjectFromGroup(idGroup, idAgent))
+		return;
+
+	uuid_vec_t idAgents;
+	idAgents.push_back(idAgent);
+	LLGroupMgr::instance().sendGroupMemberEjects(idGroup, idAgents);
+}
+// [/SL:KB]
+
 //-- Private methods ----------------------------------------------------------
 
 // static
