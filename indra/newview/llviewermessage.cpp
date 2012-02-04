@@ -4941,7 +4941,8 @@ void process_object_properties_family(LLMessageSystem *msg, void**user_data)
 	LLSelectMgr::processObjectPropertiesFamily(msg, user_data);
 	
 	FSAreaSearch* area_search_floater = dynamic_cast<FSAreaSearch*>(LLFloaterReg::getInstance("area_search"));
-	area_search_floater->processObjectPropertiesFamily(msg);
+	if( area_search_floater )
+		area_search_floater->processObjectPropertiesFamily(msg);
 }
 
 
