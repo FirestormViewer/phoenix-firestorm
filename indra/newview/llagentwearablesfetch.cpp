@@ -92,6 +92,10 @@ public:
 LLInitialWearablesFetch::LLInitialWearablesFetch(const LLUUID& cof_id) :
 	LLInventoryFetchDescendentsObserver(cof_id)
 {
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->outputRezTiming("Initial wearables fetch started");
+	}
 }
 
 LLInitialWearablesFetch::~LLInitialWearablesFetch()
@@ -113,6 +117,11 @@ void LLInitialWearablesFetch::done()
 	else
 		rlvCallbackTimerOnce(nDelay, boost::bind(&LLInitialWearablesFetch::processContents,this));
 // [/RLVa:KB]
+
+	if (isAgentAvatarValid())
+	{
+		gAgentAvatarp->outputRezTiming("Initial wearables fetch done");
+	}
 }
 
 void LLInitialWearablesFetch::add(InitialWearableData &data)
