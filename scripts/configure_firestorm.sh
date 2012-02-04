@@ -385,7 +385,7 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
 		fi
 	elif [ $PLATFORM == "linux32" ] ; then
 		JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
-		make -j $JOBS | tee -a $LOG
+		make -j 3 | tee -a $LOG
 	elif [ $PLATFORM == "win32" ] ; then
 		# note: this is not used to do needing to source vsversall.bat first. Autobuild calls this directly.
 		if [ ! -d logs ] ; then mkdir logs ; fi

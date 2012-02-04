@@ -120,15 +120,18 @@ void LLNearbyChatControl::onCommit()
 	LLNearbyChat::getInstance()->sendChat(getConvertedText(),CHAT_TYPE_NORMAL);
 	setText(LLStringExplicit(""));
 
-	if(gSavedSettings.getBOOL("CloseChatOnReturn"))
+	if(getName()=="default_chat_bar")
 	{
-		setFocus(FALSE);
-	}
+		if(gSavedSettings.getBOOL("CloseChatOnReturn"))
+		{
+			setFocus(FALSE);
+		}
 
-	if(gSavedSettings.getBOOL("AutohideChatBar") && getName()=="default_chat_bar")
-	{
-		setVisible(FALSE);
-		getParent()->setVisible(FALSE);
+		if(gSavedSettings.getBOOL("AutohideChatBar"))
+		{
+			setVisible(FALSE);
+			getParent()->setVisible(FALSE);
+		}
 	}
 
 	LLUICtrl::onCommit();
