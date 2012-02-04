@@ -1672,6 +1672,28 @@ bool LLAppViewer::cleanup()
 
 	llinfos << "Cleaning Up" << llendflush;
 
+	// FIRE-4871: Save per-account settings earlier -- TS
+	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
+	if (per_account_settings_file.empty())
+	{
+		llinfos << "Not saving per-account settings; don't know the account name yet." << llendl;
+	}
+	// Only save per account settings if the previous login succeeded, otherwise
+	// we might end up with a cleared out settings file in case a previous login
+	// failed after loading per account settings. -Zi
+	else if (!mSavePerAccountSettings)
+	{
+		llinfos << "Not saving per-account settings; last login was not successful." << llendl;
+	}
+	else
+	{
+		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
+		llinfos << "First time: Saved per-account settings to " <<
+		        per_account_settings_file << llendl;
+	}
+	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+	// /FIRE-4871
+
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
 
@@ -1881,7 +1903,8 @@ bool LLAppViewer::cleanup()
 	
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
-	if (gSavedSettings.getString("PerAccountSettingsFile").empty())
+	// FIRE-4871: use the same file we picked out earlier -- TS
+	if (per_account_settings_file.empty())
 	{
 		llinfos << "Not saving per-account settings; don't know the account name yet." << llendl;
 	}
@@ -1894,8 +1917,9 @@ bool LLAppViewer::cleanup()
 	}
 	else
 	{
-		gSavedPerAccountSettings.saveToFile(gSavedSettings.getString("PerAccountSettingsFile"), TRUE);
-		llinfos << "Saved settings" << llendflush;
+		gSavedPerAccountSettings.saveToFile(per_account_settings_file, TRUE);
+		llinfos << "Second time: Saved per-account settings to " <<
+		        per_account_settings_file << llendflush;
 	}
 
 	std::string crash_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);

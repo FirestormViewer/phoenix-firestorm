@@ -1572,6 +1572,13 @@ void LLTextEditor::pasteHelper(bool is_primary)
 		}
 	}
 
+	// <FS:ND> FIRE-4885; Truncate the text to mMaxTextByteLength.
+	// Can safely do this here, otherwise it would done in '::insert', which is bad for performance, as ::insert is called once per line.
+	// In theory text already in the editor should be taken into account too, but then text that would be overwriten would have to be considered aswell.
+	if ( wstring_utf8_length(clean_string) > mMaxTextByteLength )
+		clean_string = utf8str_to_wstring( utf8str_truncate( wstring_to_utf8str(clean_string), mMaxTextByteLength ) );
+	// </FS:ND>
+
 	// Insert the new text into the existing text.
 
 	//paste text with linebreaks.
