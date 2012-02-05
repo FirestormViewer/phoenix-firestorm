@@ -4,6 +4,8 @@
  background_visible="true"
  background_opaque="true"
  border_visible="false"
+ bg_opaque_image="none"
+ bg_alpha_image="none"
  bg_alpha_color="ScriptDialog"
  bg_opaque_color="ScriptDialog"
  height="250"
