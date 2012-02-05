@@ -98,6 +98,8 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 {
 	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
 		mToastAlignment = NA_TOP;
+	else
+		mToastAlignment = NA_BOTTOM;
 
 	mID = p.id;
 
