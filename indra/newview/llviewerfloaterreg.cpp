@@ -158,6 +158,7 @@
 #include "lggautocorrectfloater.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
+#include "fsgrouptitles.h"
 
 //-TT - Patch : ShowGroupFloaters
 #include "llpanelgroup.h"
@@ -386,6 +387,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 
 	LLFloaterReg::add("volume_controls", "floater_volume_controls.xml", &LLFloaterReg::build<LLFloater>);
+
+	// <FS:Ansariel> Group titles
+	LLFloaterReg::add("group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSGroupTitles>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ name="group_titles"
+ help_topic="fs_group_titles"
+ title="Group Titles"
+ width="250"
+ height="300"
+ min_width="250"
+ min_height="150"
+ save_rect="true"
+ can_resize="true"
+ can_minimize="true"
+ can_close="true"
+ can_drag_on_left="false">
+ 
+	<floater.string name="NoGroupTitle" value="&lt;No group title&gt;"/>
+
+	<scroll_list
+	 name="title_list"
+	 follows="all"
+	 draw_heading="true"
+	 can_resize="true"
+	 layout="topleft"
+	 width="240"
+	 left="5"
+	 height="265">
+		<column
+		 name="grouptitle"
+		 label="Title"/>
+		<column
+		 name="groupname"
+		 label="Group"/>
+		<column
+		 name="role_id"
+		 width="-1"/>
+		<column
+		 name="group_id"
+		 width="-1"/>
+	</scroll_list>
+	
+	<button
+		image_overlay="Refresh_Off"
+		tool_tip="Refresh list of available group titles"
+      	name="btnRefresh"
+      	font="SansSerif"
+      	mouse_opaque="true"
+      	height="22"
+      	width="25"
+      	left="5"
+      	follows="left|bottom"/>
+	
+	<button
+      	name="btnInfo"
+      	label="Info"
+		tool_tip="Show info about group of selected title"
+      	font="SansSerif"
+      	mouse_opaque="true"
+      	height="22"
+      	width="100"
+      	right="-110"
+		top_delta="0"
+      	follows="right|bottom"/>
+
+	<button
+      	name="btnActivate"
+      	label="Activate"
+		tool_tip="Activate selected group title"
+      	font="SansSerif"
+      	mouse_opaque="true"
+      	height="22"
+      	width="100"
+      	right="-4"
+		top_delta="0"
+      	follows="right|bottom"/>
+</floater>

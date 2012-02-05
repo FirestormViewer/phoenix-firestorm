@@ -35,6 +35,10 @@
 	 label="Suchen..."
 	 name="search_btn"
 	 width="85" />
+	<button
+	 label="Gruppentitel"
+	 name="titles_btn"
+	 width="85" />
 	<!--<button
 	 bottom_delta="-25"
 	 follows="top|right"

@@ -84,6 +84,13 @@ You belong to [COUNT] out of [MAX] groups.
 	 label="Search..."
 	 name="search_btn"
 	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
+	 label="Group Titles"
+	 name="titles_btn"
+	 width="80" />
 	<!--<button
 	 bottom_delta="-25"
 	 follows="top|right"

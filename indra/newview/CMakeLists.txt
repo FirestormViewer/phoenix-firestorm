@@ -90,6 +90,7 @@ set(viewer_SOURCE_FILES
     fsareasearch.cpp
     fsmoneytracker.cpp
     fsdata.cpp
+    fsgrouptitles.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
@@ -692,6 +693,7 @@ set(viewer_HEADER_FILES
     fsareasearch.h
     fsmoneytracker.h
     fsdata.h
+    fsgrouptitles.h
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h

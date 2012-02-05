@@ -3293,6 +3293,8 @@ void LLAgent::processAgentGroupDataUpdate(LLMessageSystem *msg, void **)
 		}
 	}
 
+	// <FS:Ansariel> Fire event for group title overview
+	gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 }
 
 class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
@@ -3353,6 +3355,9 @@ class LLAgentGroupDataUpdateViewerNode : public LLHTTPNode
 				update_group_floaters(group.mID);
 			}
 		}
+
+		// <FS:Ansariel> Fire event for group title overview
+		gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 	}
 };
 
@@ -3390,6 +3395,9 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupName.clear();
 	}		
 	update_group_floaters(active_id);
+
+	// <FS:Ansariel> Fire event for group title overview
+	gAgent.fireEvent(new LLOldEvents::LLEvent(&gAgent, "update grouptitle list"), "");
 }
 
 // static

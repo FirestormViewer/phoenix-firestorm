@@ -162,6 +162,7 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("leave_btn",	boost::bind(&FSFloaterContacts::onGroupLeaveButtonClicked,	this));
 	mGroupsTab->childSetAction("create_btn",	boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked,	this));
 	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,	this));
+	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,	this));
 	
 	return TRUE;
 }
@@ -369,6 +370,10 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 	LLGroupActions::search();
 }
 
+void FSFloaterContacts::onGroupTitlesButtonClicked()
+{
+	LLFloaterReg::showInstance("group_titles");
+}
 
 //
 // Tab and list functions
