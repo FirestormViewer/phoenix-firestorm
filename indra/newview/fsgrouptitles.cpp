@@ -125,6 +125,8 @@ void FSGroupTitles::changed(LLGroupChange gc)
 		case GC_TITLES:
 			refreshGroupTitles();
 			break;
+		default:
+			;
 	}
 }
 
@@ -189,11 +191,11 @@ void FSGroupTitles::processGroupTitleResults(const LLGroupData& group_data)
 	std::string group_name(group_data.mName);
 
 	LLGroupMgrGroupData* gmgr_data = LLGroupMgr::getInstance()->getGroupData(group_data.mID);
-	std::vector<LLGroupTitle> group_titles = gmgr_data->mTitles;
+	const std::vector<LLGroupTitle> group_titles = gmgr_data->mTitles;
 
 	// Add group titles
-	for (std::vector<LLGroupTitle>::const_iterator it = group_titles.cbegin();
-		it != group_titles.cend(); it++)
+	for (std::vector<LLGroupTitle>::const_iterator it = group_titles.begin();
+		it != group_titles.end(); it++)
 	{
 		bool is_active_title = ((*it).mSelected && group_data.mID == gAgent.getGroupID());
 		addListItem(group_data.mID, (*it).mRoleID, (*it).mTitle, group_name, is_active_title);
