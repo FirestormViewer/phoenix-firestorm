@@ -63,7 +63,7 @@ public:
 		FILTERTYPE_DATE = 0x1 << 3,		// search by date range
 		FILTERTYPE_WEARABLE = 0x1 << 4,	// search by wearable type
 		FILTERTYPE_EMPTYFOLDERS = 0x1 << 5,	// pass if folder is not a system folder to be hidden if empty
-//		FILTERTYPE_WORN = 0x1 << 6,	// search by wearable type ND_MERGE FILTERTYPE_WORN is no more?
+		FILTERTYPE_WORN = 0x1 << 6,	// search by wearable type
 	};
 
 	enum EFilterLink
@@ -134,9 +134,8 @@ public:
 	void 				setFilterLinks(U64 filter_link);
 	U64					getFilterLinks() const;
 
-	// ND_MERGE Worn is gone in FUI
-	/* void 				setFilterWorn(BOOL sl); */
-	/* BOOL 				getFilterWorn() { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; } */
+	void 				setFilterWorn(BOOL sl);
+	BOOL 				getFilterWorn() { return mFilterOps.mFilterTypes & FILTERTYPE_WORN; }
 
 	// +-------------------------------------------------------------------+
 	// + Execution And Results

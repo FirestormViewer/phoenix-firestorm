@@ -201,28 +201,28 @@ BOOL LLPanelMainInventory::postBuild()
 		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
 	}
 
-	// ND_MERGE Worn items it gone in FUI. I'm not sad about that...
-	// 	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
-	// if (worn_items_panel)
-	// {
-	// 	worn_items_panel->setWorn(TRUE);
-	// 	worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
-	// 	worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
-	// 	//worn_items_panel->getFilter()->markDefault();
-	// 	worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
+	// <FS:ND> Bring back worn items panel.
+	LLInventoryPanel* worn_items_panel = getChild<LLInventoryPanel>("Worn Items");
+	if (worn_items_panel)
+	{
+		worn_items_panel->setWorn(TRUE);
+		worn_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::DEFAULT_SORT_ORDER));
+		worn_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
+		//worn_items_panel->getFilter()->markDefault();
+		worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
 
-	// 	// <ND> Do not go all crazy and recurse through the whole inventory
-	// 	//		worn_items_panel->openAllFolders();
-	// 	if( worn_items_panel->getRootFolder() )
-	// 	{
-	// 		worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
-	// 		worn_items_panel->getRootFolder()->arrangeAll();
-	// 	}
-	// 	// </ND>
+		// <ND> Do not go all crazy and recurse through the whole inventory
+		//		worn_items_panel->openAllFolders();
+		if( worn_items_panel->getRootFolder() )
+		{
+			worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
+			worn_items_panel->getRootFolder()->arrangeAll();
+		}
+		// </ND>
 
-	// 	worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
-	// }
-	// /ND_MERGE
+		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
+	}
+	// </FS:ND>
 
 	// Now load the stored settings from disk, if available.
 	std::ostringstream filterSaveName;
@@ -247,17 +247,17 @@ BOOL LLPanelMainInventory::postBuild()
 			}
 		}
 
-		// ND_MERGE Worn items it gone in FUI. I'm not sad about that...
-	   // if(worn_items_panel)
-	   // {
-	   // 		   if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
-	   // 		   {
-	   // 				   LLSD worn_items = savedFilterState.get(
-	   // 						   worn_items_panel->getFilter()->getName());
-	   // 				   worn_items_panel->getFilter()->fromLLSD(worn_items);
-	   // 		   }
-	   // }
-		// /ND_MERGE
+		// <FS:ND> bring back worn items panel.
+		if(worn_items_panel)
+		{
+			if(savedFilterState.has(worn_items_panel->getFilter()->getName()))
+			{
+				LLSD worn_items = savedFilterState.get(
+													   worn_items_panel->getFilter()->getName());
+				worn_items_panel->getFilter()->fromLLSD(worn_items);
+			}
+		}
+		// </FS:ND>
 
 	}
 

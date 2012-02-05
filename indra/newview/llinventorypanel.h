@@ -158,7 +158,6 @@ public:
 	U64 getFilterLinks();		// ## Zi: Filter Links Menu
 
 	void setShowFolderState(LLInventoryFilter::EFolderShow show);
-	//	void setWorn(BOOL sl); ND_MERGE Worn is gone in FUI
 	LLInventoryFilter::EFolderShow getShowFolderState();
 	// This method is called when something has changed about the inventory.
 	void modelChanged(U32 mask);
@@ -263,6 +262,9 @@ private:
 	// UUID of category from which hierarchy should be built.  Set with the 
 	// "start_folder" xml property.  Default is LLUUID::null that means total Inventory hierarchy. 
 	LLUUID				mStartFolderID;
+
+public:
+	void setWorn(BOOL sl);
 };
 
 #endif // LL_LLINVENTORYPANEL_H

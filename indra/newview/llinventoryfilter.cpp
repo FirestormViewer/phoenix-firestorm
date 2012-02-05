@@ -292,15 +292,15 @@ BOOL LLInventoryFilter::checkAgainstFilterType(const LLFolderViewItem* item) con
 	////////////////////////////////////////////////////////////////////////////////
 	// FILTERTYPE_WORN
 	// Pass if this item is worn (hiding COF and Outfits folders)
-//	if (filterTypes & FILTERTYPE_WORN)
-//	{
-//		if (!object) return FALSE;
-//		LLUUID cat_id = object->getParentUUID();
-//		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
-//		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
-//			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
-//			&& get_is_item_worn(object_id);
-//	}
+	if (filterTypes & FILTERTYPE_WORN)
+	{
+		if (!object) return FALSE;
+		LLUUID cat_id = object->getParentUUID();
+		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_id);
+		return !LLAppearanceMgr::instance().getIsInCOF(object_id)
+			&& (!cat || cat->getPreferredType() != LLFolderType::FT_OUTFIT)
+			&& get_is_item_worn(object_id);
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	// FILTERTYPE_EMPTYFOLDERS
@@ -710,12 +710,11 @@ void LLInventoryFilter::setShowFolderState(EFolderShow state)
 	}
 }
 
-// ND_MERGE Worn is gone in FUI
-// void LLInventoryFilter::setFilterWorn(BOOL sl)
-// {
-// 	setModified();
-// 	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
-// }
+void LLInventoryFilter::setFilterWorn(BOOL sl)
+{
+	setModified();
+	mFilterOps.mFilterTypes |= FILTERTYPE_WORN;
+}
 
 void LLInventoryFilter::setSortOrder(U32 order)
 {
