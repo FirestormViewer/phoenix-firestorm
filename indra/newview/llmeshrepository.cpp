@@ -2825,10 +2825,17 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 	F32 dlow = llmin(radius/0.06f, max_distance);
 	F32 dmid = llmin(radius/0.24f, max_distance);
 	
-	F32 METADATA_DISCOUNT = (F32) gSavedSettings.getU32("MeshMetaDataDiscount");  //discount 128 bytes to cover the cost of LLSD tags and compression domain overhead
-	F32 MINIMUM_SIZE = (F32) gSavedSettings.getU32("MeshMinimumByteSize"); //make sure nothing is "free"
+	// <FS:ND> replace often called setting with LLCachedControl
+	// F32 METADATA_DISCOUNT = (F32) gSavedSettings.getU32("MeshMetaDataDiscount");  //discount 128 bytes to cover the cost of LLSD tags and compression domain overhead
+	// F32 MINIMUM_SIZE = (F32) gSavedSettings.getU32("MeshMinimumByteSize"); //make sure nothing is "free"
 
-	F32 bytes_per_triangle = (F32) gSavedSettings.getU32("MeshBytesPerTriangle");
+	// F32 bytes_per_triangle = (F32) gSavedSettings.getU32("MeshBytesPerTriangle");
+
+	static LLCachedControl< U32 > METADATA_DISCOUNT( gSavedSettings, "MeshMetaDataDiscount"); 
+	static LLCachedControl< U32 > MINIMUM_SIZE( gSavedSettings, "MeshMinimumByteSize");
+	static LLCachedControl< U32 > bytes_per_triangle( gSavedSettings ,"MeshBytesPerTriangle");
+
+	// </FS:ND>
 
 	S32 bytes_lowest = header["lowest_lod"]["size"].asInteger();
 	S32 bytes_low = header["low_lod"]["size"].asInteger();
@@ -2855,10 +2862,18 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 		bytes_lowest = bytes_low;
 	}
 
-	F32 triangles_lowest = llmax((F32) bytes_lowest-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_low = llmax((F32) bytes_low-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_mid = llmax((F32) bytes_mid-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
-	F32 triangles_high = llmax((F32) bytes_high-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// <FS:ND> replace often called setting with LLCachedControl
+	// F32 triangles_lowest = llmax((F32) bytes_lowest-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_low = llmax((F32) bytes_low-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_mid = llmax((F32) bytes_mid-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+	// F32 triangles_high = llmax((F32) bytes_high-METADATA_DISCOUNT, MINIMUM_SIZE)/bytes_per_triangle;
+
+	F32 triangles_lowest = llmax((F32) bytes_lowest-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_low = llmax((F32) bytes_low-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_mid = llmax((F32) bytes_mid-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+	F32 triangles_high = llmax((F32) bytes_high-(F32)METADATA_DISCOUNT, (F32)MINIMUM_SIZE)/(F32)bytes_per_triangle;
+
+	// </FS:ND>
 
 	if (bytes)
 	{
@@ -2911,7 +2926,12 @@ F32 LLMeshRepository::getStreamingCost(LLSD& header, F32 radius, S32* bytes, S32
 		*unscaled_value = weighted_avg;
 	}
 
-	return weighted_avg/gSavedSettings.getU32("MeshTriangleBudget")*15000.f;
+	// <FS:ND> replace often called setting with LLCachedControl
+	//	return weighted_avg/gSavedSettings.getU32("MeshTriangleBudget")*15000.f;
+
+	static LLCachedControl< U32 > MeshTriangleBudget( gSavedSettings, "MeshTriangleBudget");
+	return weighted_avg/MeshTriangleBudget*15000.f;
+	// </FS:ND>
 }
 
 

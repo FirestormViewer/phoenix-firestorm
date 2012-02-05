@@ -5228,7 +5228,11 @@ void LLAppViewer::resumeMainloopTimeout(const std::string& state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			// <FS:ND> Gets called often in display loop
+			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
+			secs = MainloopTimeoutDefault;
+			// </FS:ND>
 		}
 		
 		mMainloopTimeout->setTimeout(secs);
@@ -5255,7 +5259,11 @@ void LLAppViewer::pingMainloopTimeout(const std::string& state, F32 secs)
 	{
 		if(secs < 0.0f)
 		{
-			secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			// <FS:ND> Gets called often in display loop
+			// secs = gSavedSettings.getF32("MainloopTimeoutDefault");
+			static LLCachedControl< F32 > MainloopTimeoutDefault( gSavedSettings, "MainloopTimeoutDefault" );
+			secs = MainloopTimeoutDefault;
+			// </FS:ND>
 		}
 
 		mMainloopTimeout->setTimeout(secs);

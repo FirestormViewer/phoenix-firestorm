@@ -4167,8 +4167,18 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 	std::vector<LLFace*> alpha_faces;
 	U32 useage = group->mSpatialPartition->mBufferUsage;
 
-	U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
-	U32 max_total = (gSavedSettings.getS32("RenderMaxNodeSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	// U32 max_total = (gSavedSettings.getS32("RenderMaxNodeSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	static LLCachedControl< S32 > RenderMaxVBOSize( gSavedSettings, "RenderMaxVBOSize");
+	static LLCachedControl< S32 > RenderMaxNodeSize( gSavedSettings, "RenderMaxNodeSize");
+
+	U32 max_vertices = (RenderMaxVBOSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+	U32 max_total = (RenderMaxNodeSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// </FS:ND>
+
 	max_vertices = llmin(max_vertices, (U32) 65535);
 
 	U32 cur_total = 0;
@@ -4739,8 +4749,15 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, std::
 	}
 #endif
 	
-	//calculate maximum number of vertices to store in a single buffer
-	U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// U32 max_vertices = (gSavedSettings.getS32("RenderMaxVBOSize")*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	static LLCachedControl< S32 > RenderMaxVBOSize( gSavedSettings, "RenderMaxVBOSize");
+	U32 max_vertices = (RenderMaxVBOSize*1024)/LLVertexBuffer::calcVertexSize(group->mSpatialPartition->mVertexDataMask);
+
+	// </FS:ND>
+
 	max_vertices = llmin(max_vertices, (U32) 65535);
 
 	if (!distance_sort)
@@ -4779,7 +4796,13 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, std::
 		texture_index_channels = gDeferredAlphaProgram.mFeatures.mIndexedTextureChannels;
 	}
 
-	texture_index_channels = llmin(texture_index_channels, (S32) gSavedSettings.getU32("RenderMaxTextureIndex"));
+	// <FS:ND> replace frequent calls to saved settings with LLCachedControl
+	// texture_index_channels = llmin(texture_index_channels, (S32) gSavedSettings.getU32("RenderMaxTextureIndex"));
+
+	static LLCachedControl< U32 > RenderMaxTextureIndex( gSavedSettings, "RenderMaxTextureIndex");
+	texture_index_channels = llmin(texture_index_channels, (S32) RenderMaxTextureIndex);
+
+	// </FS:ND>
 	
 	//NEVER use more than 16 texture index channels (workaround for prevalent driver bug)
 	texture_index_channels = llmin(texture_index_channels, 16);
