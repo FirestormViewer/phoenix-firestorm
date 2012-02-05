@@ -136,6 +136,7 @@ LLGestureComboList::LLGestureComboList(const LLGestureComboList::Params& p)
 	params.commit_callback.function(boost::bind(&LLGestureComboList::onItemSelected, this, _2));
 	params.visible(false);
 	params.commit_on_keyboard_movement(false);
+	params.draw_stripes(false);
 
 	mList = LLUICtrlFactory::create<LLGestureScrollListCtrl>(params);
 	addChild(mList);
