@@ -167,6 +167,9 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 				if (get_is_item_worn(fsBridge->getUUID()))
 				{
 					LLVOAvatarSelf::detachAttachmentIntoInventory(fsBridge->getUUID());
+					//This may have been an unfinished bridge. If so - stop the process before recreating.
+					if (mBridgeCreating)
+						mBridgeCreating = false;
 					recreateBridge();
 					return true; 
 				}
@@ -373,6 +376,18 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 	}
 	if (mpBridge == NULL) //user is attaching an existing bridge?
 	{
+		//is it the right version?
+		if (fsObject->getName() != mCurrentFullName)
+		{
+			LLVOAvatarSelf::detachAttachmentIntoInventory(fsObject->getUUID());
+			llwarns << "Attempt to attach to bridge point an object other than current bridge" << llendl;
+			reportToNearbyChat("Bridge not attached. This is not the current bridge version. Please try recreating your bridge.");
+			if (mBridgeCreating)
+			{
+				mBridgeCreating = false; //in case we interrupted the creation
+			}
+			return;
+		}
 		//is it in the right place?
 		LLUUID catID = findFSCategory();
 		if (catID != fsObject->getParentUUID())
