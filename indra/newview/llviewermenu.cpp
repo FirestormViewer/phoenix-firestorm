@@ -6530,31 +6530,33 @@ class LLShowSidetrayPanel : public view_listener_t
 	{
 		std::string floater_name = userdata.asString();
 		std::string udock_name = userdata.asString();
-		if (floater_name == "sidepanel_inventory")
-			udock_name = "sidebar_inventory";
+// SIDEBAR_HACK
+		//if (floater_name == "sidepanel_inventory")
+		//	udock_name = "sidebar_inventory";
 
-		// AO: Proper behavior if tab is undocked
-		LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab",udock_name);
-		if (LLFloater::isShown(floater_tab) || LLFloater::isMinimized(floater_tab))
+		//// AO: Proper behavior if tab is undocked
+		//LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab",udock_name);
+		//if (LLFloater::isShown(floater_tab) || LLFloater::isMinimized(floater_tab))
+		//{
+		//	bool isMinimized = floater_tab->isMinimized();
+		//	floater_tab->setMinimized(!isMinimized);
+		//}
+		//else // Toggle docked sidetray
+		//{
+		LLPanel* panel = LLFloaterSidePanelContainer::getPanel(floater_name);
+		if (panel)
 		{
-			bool isMinimized = floater_tab->isMinimized();
-			floater_tab->setMinimized(!isMinimized);
-		}
-		else // Toggle docked sidetray
-		{
-			LLPanel* panel = LLFloaterSidePanelContainer::getPanel(floater_name);
-			if (panel)
+			if (panel->isInVisibleChain())
 			{
-				if (panel->isInVisibleChain())
-				{
-					LLFloaterReg::getInstance(floater_name)->closeFloater();
-				}
-				else
-				{
-					LLFloaterReg::getInstance(floater_name)->openFloater();
-				}
+				LLFloaterReg::getInstance(floater_name)->closeFloater();
+			}
+			else
+			{
+				LLFloaterReg::getInstance(floater_name)->openFloater();
 			}
 		}
+		//}
+// SIDEBAR_HACK
 		return true;
 	}
 };
