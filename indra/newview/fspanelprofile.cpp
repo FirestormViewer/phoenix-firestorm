@@ -32,10 +32,11 @@
 #include "llavatarconstants.h" //AVATAR_ONLINE
 #include "llavatarnamecache.h"
 #include "llslurl.h"
-#include "lldateutil.h"			// ageFromDate()
+#include "lldateutil.h" //ageFromDate
 
 // UI
 #include "llavatariconctrl.h"
+#include "llclipboard.h" //gClipboard
 #include "llmenubutton.h"
 #include "lltextbox.h"
 #include "lltexteditor.h"
@@ -58,7 +59,9 @@
 #include "llviewercontrol.h"
 #include "llviewernetwork.h" //LLGridManager
 
-static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile");
+static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile_secondlife");
+static LLRegisterPanelClassWrapper<FSPanelProfileWeb> t_panel_web("panel_profile_web");
+static LLRegisterPanelClassWrapper<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -72,10 +75,10 @@ FSPanelProfileTab::FSPanelProfileTab()
 
 FSPanelProfileTab::~FSPanelProfileTab()
 {
-	if(getAvatarId().notNull())
-	{
-		LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
-	}
+    if(getAvatarId().notNull())
+    {
+        LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
+    }
 }
 
 void FSPanelProfileTab::setAvatarId(const LLUUID& id)
@@ -95,8 +98,6 @@ void FSPanelProfileTab::onOpen(const LLSD& key)
 {
 	// Update data even if we are viewing same avatar profile as some data might been changed.
 	setAvatarId(key.asUUID());
-	updateData();
-	updateButtons();
 }
 
 void FSPanelProfileTab::onMapButtonClick()
@@ -104,34 +105,14 @@ void FSPanelProfileTab::onMapButtonClick()
 	LLAvatarActions::showOnMap(getAvatarId());
 }
 
-void FSPanelProfileTab::updateButtons()
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+bool enable_god()
 {
-	bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
-	
-	if(LLAvatarActions::isFriend(getAvatarId()))
-	{
-		getChildView("teleport")->setEnabled(is_buddy_online);
-	}
-	else
-	{
-		getChildView("teleport")->setEnabled(true);
-	}
-
-	bool enable_map_btn = (is_buddy_online &&
-			       is_agent_mappable(getAvatarId()))
-		|| gAgent.isGodlike();
-	getChildView("show_on_map_btn")->setEnabled(enable_map_btn);
-	
-	bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
-	getChildView("block")->setVisible(enable_block_btn);
-	
-	bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
-	getChildView("unblock")->setVisible(enable_unblock_btn);
+	return gAgent.isGodlike();
 }
-
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
 
 FSPanelProfile::FSPanelProfile()
  : FSPanelProfileTab()
@@ -160,31 +141,14 @@ FSPanelProfile::~FSPanelProfile()
 
 BOOL FSPanelProfile::postBuild()
 {
-
 	mStatusText = getChild<LLTextBox>("status");
 	mStatusText->setVisible(false);
 
-	// childSetCommitCallback("copy_to_clipboard",boost::bind(&FSPanelProfile::onCopyToClipboard,this),NULL);
-
-	// set up callback for copy URI button
-	// childSetCommitCallback("copy_uri",boost::bind(&FSPanelProfile::onCopyURI,this),NULL);
-
-	// set up callback for invite to group button
-	// childSetCommitCallback("group_invite",boost::bind(&FSPanelProfile::onGroupInvite,this),NULL);
-
-	childSetCommitCallback("see_profile_btn",(boost::bind(&FSPanelProfile::onSeeProfileBtnClick,this)),NULL);
-	childSetCommitCallback("add_friend",(boost::bind(&FSPanelProfile::onAddFriendButtonClick,this)),NULL);
-	childSetCommitCallback("im",(boost::bind(&FSPanelProfile::onIMButtonClick,this)),NULL);
-	childSetCommitCallback("call",(boost::bind(&FSPanelProfile::onCallButtonClick,this)),NULL);
-	childSetCommitCallback("teleport",(boost::bind(&FSPanelProfile::onTeleportButtonClick,this)),NULL);
-	childSetCommitCallback("share",(boost::bind(&FSPanelProfile::onShareButtonClick,this)),NULL);
-	childSetCommitCallback("show_on_map_btn", (boost::bind(
-			&FSPanelProfile::onMapButtonClick, this)), NULL);
-	childSetCommitCallback("pay",(boost::bind(&FSPanelProfile::pay,this)),NULL);
-	childSetCommitCallback("block",(boost::bind(&FSPanelProfile::toggleBlock,this)),NULL);
-	childSetCommitCallback("unblock",(boost::bind(&FSPanelProfile::toggleBlock,this)),NULL);
-
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+	registrar.add("Profile.AddFriend",  boost::bind(&FSPanelProfile::onAddFriendButtonClick, this));
+	registrar.add("Profile.IM",  boost::bind(&FSPanelProfile::onIMButtonClick, this));
+	registrar.add("Profile.Call",  boost::bind(&FSPanelProfile::onCallButtonClick, this));
+	registrar.add("Profile.Teleport",  boost::bind(&FSPanelProfile::onTeleportButtonClick, this));
 	registrar.add("Profile.ShowOnMap",  boost::bind(&FSPanelProfile::onMapButtonClick, this));
 	registrar.add("Profile.Pay",  boost::bind(&FSPanelProfile::pay, this));
 	registrar.add("Profile.Share", boost::bind(&FSPanelProfile::share, this));
@@ -192,9 +156,16 @@ BOOL FSPanelProfile::postBuild()
 	registrar.add("Profile.Kick", boost::bind(&FSPanelProfile::kick, this));
 	registrar.add("Profile.Freeze", boost::bind(&FSPanelProfile::freeze, this));
 	registrar.add("Profile.Unfreeze", boost::bind(&FSPanelProfile::unfreeze, this));
+	registrar.add("Profile.CSR", boost::bind(&FSPanelProfile::csr, this));
+	registrar.add("Profile.CopyNameToClipboard", boost::bind(&FSPanelProfile::onCopyToClipboard, this));
+	registrar.add("Profile.CopyURI", boost::bind(&FSPanelProfile::onCopyURI, this));
 
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable;
+	enable.add("Profile.EnableAddFriend", boost::bind(&FSPanelProfile::enableAddFriend, this));
+	enable.add("Profile.EnableCall", boost::bind(&FSPanelProfile::enableCall, this));
 	enable.add("Profile.EnableShowOnMap", boost::bind(&FSPanelProfile::enableShowOnMap, this));
+	enable.add("Profile.EnableTeleport", boost::bind(&FSPanelProfile::enableTeleport, this));
+	enable.add("Profile.EnableGod", boost::bind(&enable_god));
 	enable.add("Profile.EnableBlock", boost::bind(&FSPanelProfile::enableBlock, this));
 	enable.add("Profile.EnableUnblock", boost::bind(&FSPanelProfile::enableUnblock, this));
 
@@ -214,21 +185,20 @@ void FSPanelProfile::onOpen(const LLSD& key)
 {
 	FSPanelProfileTab::onOpen(key);
 
+	LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(),this);
+
 	//Disable "Add Friend" button for friends.
 	getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
     
-	// Update the avatar name.
-	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSPanelProfile::onAvatarNameCache, this, _1, _2));
+    updateData();
 }
 
 void FSPanelProfile::updateData()
 {
 	if (getAvatarId().notNull())
 	{
-		LLAvatarPropertiesProcessor::getInstance()->
-			sendAvatarPropertiesRequest(getAvatarId());
-		LLAvatarPropertiesProcessor::getInstance()->
-			sendAvatarGroupsRequest(getAvatarId());
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
+		LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(getAvatarId());
 	}
 }
 
@@ -303,14 +273,13 @@ void FSPanelProfile::openGroupProfile()
 	LLGroupActions::show(group_id);
 }
 
-void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id,
-										 const LLAvatarName& av_name)
+void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
 	getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
-	getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
-	getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
+	// getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
+	// getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
 	getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
-	getChild<LLUICtrl>("copy_uri")->setEnabled( true );
+	// getChild<LLUICtrl>("copy_uri")->setEnabled( true );
 
 	//[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
 	std::string username = av_name.mUsername;
@@ -360,12 +329,13 @@ void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id,
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( true );
 	}
-// [SL:KB] - Patch : UI-ProfileGroupFloater 
-	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
-	if (pParentView)
-		pParentView->setTitle(av_name.getCompleteName() + " - " + getLabel());
-// [/SL:KB]
+
+    //KC: This is very hacky, but getParent() would not work
+    // LLFloater* pParentView = LLFloaterReg::getInstance("floater_profile", LLSD().with("id", agent_id));
+	// if (pParentView)
+		// pParentView->setTitle(av_name.getCompleteName());
 }
+
 void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
 {
 	//remove avatar id from cache to get fresh info
@@ -382,10 +352,7 @@ void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
 	std::string register_date = getString("RegisterDateFormat", args);
 	getChild<LLUICtrl>("register_date")->setValue(register_date );
 	getChild<LLUICtrl>("sl_description_edit")->setValue(avatar_data->about_text);
-	getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
 	getChild<LLUICtrl>("2nd_life_pic")->setValue(avatar_data->image_id);
-	getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
-	getChild<LLUICtrl>("homepage_edit")->setValue(avatar_data->profile_url);
 
 	// Hide home page textbox if no page was set to fix "homepage URL appears clickable without URL - EXT-4734"
 	getChildView("homepage_edit")->setVisible( !avatar_data->profile_url.empty());
@@ -474,6 +441,16 @@ void FSPanelProfile::toggleBlock()
 	getChildView("unblock")->setVisible(enable_unblock_btn);
 }
 
+bool FSPanelProfile::enableAddFriend()
+{
+	return !LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
+}
+
+bool FSPanelProfile::enableCall()
+{
+	return mVoiceStatus == TRUE;
+}
+
 bool FSPanelProfile::enableShowOnMap()
 {
 	bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
@@ -481,6 +458,20 @@ bool FSPanelProfile::enableShowOnMap()
 	bool enable_map_btn = (is_buddy_online && is_agent_mappable(getAvatarId()))
 		|| gAgent.isGodlike();
 	return enable_map_btn;
+}
+
+bool FSPanelProfile::enableTeleport()
+{
+	bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
+	
+	if(LLAvatarActions::isFriend(getAvatarId()))
+	{
+		return is_buddy_online;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 bool FSPanelProfile::enableBlock()
@@ -508,14 +499,16 @@ void FSPanelProfile::unfreeze()
 	LLAvatarActions::unfreeze(getAvatarId());
 }
 
+void FSPanelProfile::csr()
+{
+	std::string name;
+	gCacheName->getFullName(getAvatarId(), name);
+	LLAvatarActions::csr(getAvatarId(), name);
+}
+
 void FSPanelProfile::onAddFriendButtonClick()
 {
 	LLAvatarActions::requestFriendshipDialog(getAvatarId());
-}
-
-void FSPanelProfile::onSeeProfileBtnClick()
-{
-	LLAvatarActions::showProfile(getAvatarId());
 }
 
 void FSPanelProfile::onIMButtonClick()
@@ -538,13 +531,31 @@ void FSPanelProfile::onShareButtonClick()
 	//*TODO not implemented
 }
 
+void FSPanelProfile::onCopyToClipboard()
+{
+	// std::string name = getChild<LLUICtrl>("display_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_name")->getValue().asString() + ")";
+	std::string name = getChild<LLUICtrl>("complete_name")->getValue().asString();
+	gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
+void FSPanelProfile::onCopyURI()
+{
+    std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
+    gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
+void FSPanelProfile::onGroupInvite()
+{
+    LLAvatarActions::inviteToGroup(getAvatarId());
+}
+
 // virtual, called by LLAvatarTracker
 void FSPanelProfile::changed(U32 mask)
 {
-	getChildView("teleport")->setEnabled(LLAvatarTracker::instance().isBuddyOnline(getAvatarId()));
+	updateOnlineStatus();
 }
 
-// virtual
+// virtual, called by LLVoiceClient
 void FSPanelProfile::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
 	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
@@ -552,7 +563,8 @@ void FSPanelProfile::onChange(EStatusType status, const std::string &channelURI,
 		return;
 	}
 
-	getChildView("call")->setEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
+	// getChildView("call")->setEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
+	mVoiceStatus == LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 }
 
 void FSPanelProfile::setAvatarId(const LLUUID& id)
@@ -603,6 +615,199 @@ void FSPanelProfile::processOnlineStatus(bool online)
 
 	mStatusText->setValue(status);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+FSPanelProfileWeb::FSPanelProfileWeb()
+ : FSPanelProfileTab()
+ , mWebBrowser(NULL)
+{
+}
+
+FSPanelProfileWeb::~FSPanelProfileWeb()
+{
+}
+
+BOOL FSPanelProfileWeb::postBuild()
+{
+    getChild<LLUICtrl>("load")->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitLoad, this, _1));
+    
+    getChild<LLUICtrl>("web_profile")->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitWebProfile, this, _1));
+	childSetVisible("web_profile", LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta());
+
+	mWebBrowser = getChild<LLMediaCtrl>("profile_html");
+	mWebBrowser->addObserver(this);
+
+    return TRUE;
+}
+
+void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
+{
+	if(APT_PROPERTIES == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+			mURLHome = avatar_data->profile_url;
+			getChild<LLUICtrl>("url_edit")->setValue(mURLHome);
+            childSetEnabled("load", mURLHome.length() > 0);
+		}
+	}
+}
+
+void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	//[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
+	std::string username = av_name.mUsername;
+	if (username.empty())
+	{
+		username = LLCacheName::buildUsername(av_name.mDisplayName);
+	}
+
+	//[ADD: FIRE-2266: SJ] Adding link to webprofiles on profile which opens Web Profiles in browser
+	std::string url;
+	if (LLGridManager::getInstance()->isInSLMain())
+	{
+		url = gSavedSettings.getString("WebProfileURL");
+	}
+	else if (LLGridManager::getInstance()->isInSLBeta())
+	{
+		url = gSavedSettings.getString("WebProfileNonProductionURL");
+	}
+	else
+	{
+		//OpenSimFIXME: get from grid - but how?
+		// possibilities: 	* grid_info  (profiles accessible outside the grid)
+		// 			* login message (profiles only within the grid)
+		//			* capability (better for decentaliced environment)
+        return;
+	}
+	LLSD subs;
+	subs["AGENT_NAME"] = username;
+	mURLWebProfile = LLWeb::expandURLSubstitutions(url,subs);
+	
+    childSetEnabled("web_profile", true);
+    childSetVisible("profile_html",true);
+    
+    mPerformanceTimer.start();
+    mWebBrowser->navigateTo( mURLWebProfile, "text/html" );
+}
+
+void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
+{
+	LLSD::String valstr = ctrl->getValue().asString();
+	if (valstr == "")
+	{
+		if (!mURLHome.empty())
+		{
+			childSetVisible("profile_html",true);
+            mPerformanceTimer.start();
+            mWebBrowser->navigateTo( mURLHome, "text/html" );
+		}
+	}
+	else if (valstr == "popout")
+	{
+		// open in viewer's browser, new window
+		LLWeb::loadURLInternal(mURLHome);
+	}
+	else if (valstr == "external")
+	{
+		// open in external browser
+		LLWeb::loadURLExternal(mURLHome);
+	}
+}
+
+void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
+{
+	LLSD::String valstr = ctrl->getValue().asString();
+	if (valstr == "")
+	{
+		if (!mURLHome.empty())
+		{
+			childSetVisible("profile_html",true);
+            mPerformanceTimer.start();
+            mWebBrowser->navigateTo( mURLHome, "text/html" );
+		}
+	}
+	else if (valstr == "popout")
+	{
+		// open in viewer's browser, new window
+		LLWeb::loadURLInternal(mURLHome);
+	}
+	else if (valstr == "external")
+	{
+		// open in external browser
+		LLWeb::loadURLExternal(mURLHome);
+	}
+}
+
+void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
+{
+	switch(event)
+	{
+		case MEDIA_EVENT_STATUS_TEXT_CHANGED:
+			childSetText("status_text", self->getStatusText() );
+		break;
+		
+		case MEDIA_EVENT_LOCATION_CHANGED:
+			// don't set this or user will set there url to profile url
+			// when clicking ok on there own profile.
+			// childSetText("url_edit", self->getLocation() );
+		break;
+		
+		case MEDIA_EVENT_NAVIGATE_BEGIN:
+		{
+			if (mFirstNavigate)
+			{
+				mFirstNavigate = false;
+			}
+			else
+			{
+				mPerformanceTimer.start();
+			}
+		}
+		break;
+		
+		case MEDIA_EVENT_NAVIGATE_COMPLETE:
+		{
+			childSetText("status_text", llformat("Load Time: %.2f seconds", mPerformanceTimer.getElapsedTimeF32()));
+		}
+		break;
+		
+		default:
+			// Having a default case makes the compiler happy.
+		break;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+FSPanelProfileFirstLife::FSPanelProfileFirstLife()
+ : FSPanelProfileTab()
+{
+}
+
+FSPanelProfileFirstLife::~FSPanelProfileFirstLife()
+{
+}
+
+void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType type)
+{
+	if(APT_PROPERTIES == type)
+	{
+		const LLAvatarData* avatar_data = static_cast<const LLAvatarData*>(data);
+		if(avatar_data && getAvatarId() == avatar_data->avatar_id)
+		{
+            getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
+            getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
+		}
+	}
+}
+
 
 
 // eof

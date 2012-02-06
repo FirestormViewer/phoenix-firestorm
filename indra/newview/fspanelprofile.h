@@ -32,9 +32,11 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
 #include "llvoiceclient.h"
+#include "llmediactrl.h"
 
 class LLAvatarName;
 class LLTextBox;
+class LLMediaCtrl;
 
 
 /**
@@ -52,14 +54,14 @@ public:
 	virtual void setAvatarId(const LLUUID& id);
 
 	/**
+	 * Processes data received from server.
+	 */
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type) = 0;
+
+	/**
 	 * Returns avatar ID.
 	 */
 	virtual const LLUUID& getAvatarId() { return mAvatarId; }
-
-	/**
-	 * Sends update data request to server.
-	 */
-	virtual void updateData() = 0;
 
 	/**
 	 * Clears panel data if viewing avatar info for first time and sends update data request.
@@ -73,8 +75,6 @@ protected:
 	FSPanelProfileTab();
 
 	virtual void onMapButtonClick();
-
-	virtual void updateButtons();
 
 private:
 
@@ -107,17 +107,18 @@ public:
 
 	/*virtual*/ void setAvatarId(const LLUUID& id);
 
-	/**
-	 * Processes data received from server.
-	 */
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
 	/*virtual*/ BOOL postBuild();
 
-	/*virtual*/ void updateData();
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+	/**
+	 * Sends update data request to server.
+	 */
+    void updateData();
+
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 
 protected:
-
 	/**
 	 * Process profile related data received from server.
 	 */
@@ -161,17 +162,24 @@ protected:
 	void kick();
 	void freeze();
 	void unfreeze();
+	void csr();
 	
+    bool enableAddFriend();
+    bool enableCall();
 	bool enableShowOnMap();
+	bool enableTeleport();
 	bool enableBlock();
 	bool enableUnblock();
 
-	void onSeeProfileBtnClick();
 	void onAddFriendButtonClick();
 	void onIMButtonClick();
 	void onCallButtonClick();
 	void onTeleportButtonClick();
 	void onShareButtonClick();
+
+	void onCopyToClipboard();
+	void onCopyURI();
+	void onGroupInvite();
 
 	bool isGrantedToSeeOnlineStatus(bool online);
 
@@ -191,13 +199,66 @@ protected:
 	void processOnlineStatus(bool online);
 
 private:
-    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-
     typedef std::map<std::string,LLUUID>    group_map_t;
     group_map_t             mGroups;
     void                    openGroupProfile();
 
-    LLTextBox* mStatusText;
+    LLTextBox*          mStatusText;
+    
+    bool                mVoiceStatus;
+};
+
+
+/**
+* Panel for displaying Avatar's first and second life related info.
+*/
+class FSPanelProfileWeb
+	: public FSPanelProfileTab
+	, public LLViewerMediaObserver
+{
+public:
+	FSPanelProfileWeb();
+	/*virtual*/ ~FSPanelProfileWeb();
+
+    /*virtual*/ BOOL postBuild();
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+    /*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
+
+    // void load(std::string url);
+    // static void onURLKeystroke(LLLineEditor* editor, void* data);
+    // static void onCommitLoad(LLUICtrl* ctrl, void* data);
+    // static void onCommitURL(LLUICtrl* ctrl, void* data);
+    // static void onClickWebProfileHelp(void *);
+
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+
+protected:
+	void onCommitLoad(LLUICtrl* ctrl);
+	void onCommitWebProfile(LLUICtrl* ctrl);
+    
+private:
+    std::string         mURLHome;
+    std::string         mURLWebProfile;
+    LLMediaCtrl*        mWebBrowser;
+    LLFrameTimer        mPerformanceTimer;
+    bool                mFirstNavigate;
+    bool                mCompleted;
+};
+
+
+/**
+* Panel for displaying Avatar's first and second life related info.
+*/
+class FSPanelProfileFirstLife
+	: public FSPanelProfileTab
+{
+public:
+	FSPanelProfileFirstLife();
+	/*virtual*/ ~FSPanelProfileFirstLife();;
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 };
 
 #endif // FS_FSPANELPROFILE_H

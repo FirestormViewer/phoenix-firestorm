@@ -30,6 +30,8 @@
 
 #include "llfloater.h"
 
+class LLAvatarName;
+
 class FSFloaterProfile : public LLFloater
 {
 	LOG_CLASS(FSFloaterProfile);
@@ -38,8 +40,6 @@ public:
 	virtual ~FSFloaterProfile();
 
 	/*virtual*/ void onOpen(const LLSD& key);
-
-	/*virtual*/ BOOL postBuild();
 
 	/**
 	 * Returns avatar ID.
@@ -53,6 +53,8 @@ protected:
     void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
 
 private:
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+
     LLUUID mAvatarId;
 };
 

@@ -30,8 +30,11 @@
 
 // Newview
 #include "fspanelprofile.h"
+#include "llavatarnamecache.h"
 
-static const std::string PANEL_PROFILE = "panel_profile";
+static const std::string PANEL_PROFILE = "panel_profile_secondlife";
+static const std::string PANEL_WEB = "panel_profile_web";
+static const std::string PANEL_FIRSTLIFE = "panel_profile_firstlife";
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
  : LLFloater(key)
@@ -50,21 +53,32 @@ void FSFloaterProfile::onOpen(const LLSD& key)
 	{
 		id = key["id"];
 	}
-
 	if(!id.notNull()) return;
 
     setAvatarId(id);
     
+    //HACK* fix this :(
     FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
     panel_profile->onOpen(getAvatarId());
+    FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
+    panel_web->onOpen(getAvatarId());
+    FSPanelProfileFirstLife* panel_firstlife = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
+    panel_firstlife->onOpen(getAvatarId());
+
+	// Update the avatar name.
+	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
 
     //process tab open cmd here
 }
 
-BOOL FSFloaterProfile::postBuild()
+void FSFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-
-	return TRUE;
+	setTitle(av_name.getCompleteName());
+    
+    FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
+    panel_profile->onAvatarNameCache(agent_id, av_name);
+    FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
+    panel_web->onAvatarNameCache(agent_id, av_name);;
 }
 
 // eof

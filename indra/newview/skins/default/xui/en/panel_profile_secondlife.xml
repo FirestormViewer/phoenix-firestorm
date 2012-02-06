@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- follows="all"
- height="450"
- label="Profile"
- layout="topleft"
- left="0"
- name="panel_profile"
  top="0"
- width="430">
-  <string
-   name="status_online">
-    Online
-  </string>
-  <string
-   name="status_offline">
-    Offline
-  </string>
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile"
+ label="Profile">
+    <string
+     name="status_online">
+Online
+    </string>
+    <string
+     name="status_offline">
+Offline
+    </string>
     <string
      name="CaptionTextAcctInfo">
 [ACCTTYPE]
 [PAYMENTINFO]
 [FIRESTORM][FSDEV][FSSUPP]
     </string>
-<!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
-	 LLPanelAvatarProfile::fillAccountStatus() ...TS -->
+    <!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
+    LLPanelAvatarProfile::fillAccountStatus() ...TS -->
     <string
      name="payment_update_link_url">
-        http://www.secondlife.com/account/billing.php?lang=en
+http://www.secondlife.com/account/billing.php?lang=en
     </string>
     <string
      name="partner_edit_link_url">
-        http://www.secondlife.com/account/partners.php?lang=en
+http://www.secondlife.com/account/partners.php?lang=en
     </string>
     <string
      name="my_account_link_url"
@@ -46,467 +46,477 @@
 [REG_DATE]
 ([AGE])
     </string>
-  <string
-  name="name_text_args">
-    [NAME]
-  </string>
-  <string
-    name="display_name_text_args">
-    [DISPLAY_NAME]
-  </string>
-  <string
-    name="FSDev"
-    value=" Developer" />
-  <string
-    name="FSSupp"
-    value=" Support" />
-
-          <panel
-           layout="topleft"
-           follows="left|top|right|bottom"
-           height="450"
-           name="second_life_panel"
-           top="0"
-           left="0"
-           width="430">
+    <string
+    name="name_text_args">
+[NAME]
+    </string>
+    <string
+     name="display_name_text_args">
+[DISPLAY_NAME]
+    </string>
+    <string
+     name="FSDev"
+     value=" Developer" />
+    <string
+     name="FSSupp"
+     value=" Support" />
 
 <!--
 
-KC: I used view_border's around text_editor's due to text render issues with border_visible
+KC: Use view_border's around text_editor's due to text render issues with border_visible
 
 -->
 
-            <text
-             top_pad="8"
-             follows="left|top"
-             halign="right"
-             height="16"
-             left="6"
-             name="Name:"
-             width="40"
-             value="Name:" />
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="Name:"
+         halign="right"
+         value="Name:" />
 
-            <view_border
-             left_pad="4"
-             height="16"
-             right="-86"
-             bevel_style="in"
-             follows="left|top|right"
-             name="info_border" />
-            <text_editor
-             left_delta="3"
-             bottom_delta="2"
-             height="16"
-             right="-86"
-             h_pad="0"
-             v_pad="0"
-             allow_scroll="false"
-             bg_visible="false"
-             enabled="false"
-             follows="left|top|right"
-             max_length="254"
-             name="complete_name"
-             value="(loading...)" />
+        <view_border
+         left_pad="4"
+         right="-86"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border"
+         bevel_style="in" />
+        <text_editor
+         bottom_delta="2"
+         left_delta="3"
+         right="-86"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="complete_name"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="0"
+         v_pad="0"
+         enabled="false"
+         max_length="254"
+         value="(loading...)" />
 
-            <button
-             name="copy_to_clipboard"
-             layout="topleft"
-             follows="top|right"
-             image_overlay="Copy"
-             top_delta="-5"
-             left_pad="4"
-             height="21"
-             width="21"
-             tab_stop="false"
-             tool_tip="Copy to Clipboard"/>
+        <text
+         top_pad="2"
+         left="6"
+         height="16"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="Key:"
+         halign="right"
+         value="Key:" />
 
-            <text
-             follows="top|right"
-             halign="center"
-             height="13"
-             top_pad="-15"
-             left_pad="2"
-             right="-6"
-             layout="topleft"
-             name="status"
-             text_color="LtGray_50"
-             value="" />
-            
-            <text
-             top_pad="2"
-             follows="left|top"
-             halign="right"
-             height="16"
-             left="6"
-             name="Key:"
-             width="40"
-             value="Key:" />
+        <view_border
+         left_pad="4"
+         right="-86"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border2"
+         bevel_style="in" />
+        <text_editor
+         bottom_delta="2"
+         left_delta="3"
+         right="-86"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="user_key"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="0"
+         v_pad="0"
+         enabled="false"
+         max_length="254"
+         value="(loading...)" />
 
-            <view_border
-             left_pad="4"
-             height="16"
-             right="-86"
-             bevel_style="in"
-             follows="left|top|right"
-             name="info_border2" />
-            <text_editor
-             left_delta="3"
-             bottom_delta="2"
-             height="16"
-             right="-86"
-             h_pad="0"
-             v_pad="0"
-             allow_scroll="false"
-             bg_visible="false"
-             enabled="false"
-             follows="left|top|right"
-             max_length="254"
-             name="user_key"
-             value="(loading...)" />
+        <text
+         top_pad="-15"
+         left_pad="2"
+         right="-6"
+         height="13"
+         layout="topleft"
+         follows="top|right"
+         name="status"
+         halign="center"
+         text_color="LtGray_50"
+         value="" />
 
-            <button
-             name="copy_uri"
-             left_pad="4"
-             right="-6"
-             bottom_delta="2"
-             height="20"
-             label="Copy URI"
-             enabled="false"
-             follows="top|right" />
-            
+        <texture_picker
+         top_pad="3"
+         left="6"
+         height="180"
+         width="220"
+         layout="topleft"
+         follows="top|left"
+         allow_no_texture="true"
+         name="2nd_life_pic"
+         default_image_name="None"
+         enabled="false"
+         fallback_image="Generic_Person_Large" />
+
+        <text
+         top_pad="-179"
+         left_pad="4"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="label"
+         value="Born:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="32"
+         name="info_border3"
+         layout="topleft"
+         follows="left|top|right"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="28"
+         layout="topleft"
+         follows="left|top|right"
+         name="register_date"
+         max_length="254" />
+
+        <text
+         top_pad="7"
+         left_delta="-2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="label2"
+         value="Account:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="48"
+         layout="topleft"
+         follows="left|top|right"
+         name="acct_border"
+         bevel_style="in" />
+        <text_editor
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="44"
+         layout="topleft"
+         follows="left|top|right"
+         name="acc_status_text"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="2"
+         v_pad="0"
+         read_only="true"
+         translate="false"
+         word_wrap="true"/>
+
+        <text
+         top_pad="7"
+         left_delta="-2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="partner_label"
+         value="Partner:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="18"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border4"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="partner_text"
+         max_length="254" />
 <!--
-FIRE-2266: SJ: Link to webprofiles on main panel
+        <button
+         top_pad="8"
+         left="6"
+         height="18"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="bigimg"
+         halign="center"
+         label="&lt; &lt;"
+         label_selected="&gt; &gt;"
+         tool_tip="Open Full Size." />
 -->
-            <text
-             top_pad="2"
-             follows="left|top"
-             halign="right"
-             height="16"
-             left="6"
-             name="Web:"
-             width="40"
-             value="Web:" />
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|top"
+         name="Groups:"
+         halign="right"
+         value="Groups:" />
 
+        <button
+         top_delta="20"
+         left="40"
+         height="20"
+         width="20"
+         layout="topleft"
+         follows="left|top"
+         name="group_invite"
+         label="+"
+         label_selected="+"
+         tool_tip="Invite to Group" />
 
-            <view_border
-             left_pad="4"
-             height="16"
-             right="-6"
-             bevel_style="in"
-             follows="left|top|right"
-             name="web_border" />
-            
-            <text
-             left_delta="3"
-             bottom_delta="2"
-             height="16"
-             right="-6"
-             h_pad="0"
-             v_pad="0"
-             allow_scroll="false"
-             bg_visible="false"
-             enabled="true"
-             follows="left|top|right"
-             name="web_profile_text"
-             value="" />
-<!--
-FIRE-2266: SJ: End change
--->            
-            <texture_picker
-             left="6"
-             top_pad="3"
-             height="180"
-             width="220"
-             allow_no_texture="true"
-             default_image_name="None"
-             enabled="false"
-             fallback_image="Generic_Person_Large"
-             follows="top|left"
-             name="2nd_life_pic" />
+        <group_list
+         top_delta="-20"
+         left="66"
+         right="-6"
+         height="80"
+         layout="topleft"
+         follows="left|top|right"
+         name="group_list"
+         border_visible="true"
+         for_agent="false" />
 
-            <text
-             top_pad="-179"
-             left_pad="4"
-             follows="left|top|right"
-             halign="left"
-             height="16"
-             name="label"
-             right="-6"
-             value="Born:" />
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|top"
+         name="About:"
+         halign="right"
+         value="About:" />
 
-            <view_border
-             top_pad="0"
-             left_delta="0"
-             height="32"
-             right="-6"
-             bevel_style="in"
-             follows="left|top|right"
-             name="info_border3" />
-            <text
-             top_delta="2"
-             left_delta="2"
-             height="28"
-             right="-6"
-             enabled="true"
-             follows="left|top|right"
-             max_length="254"
-             name="register_date" />
+        <view_border
+         top_delta="0"
+         left="66"
+         right="-6"
+         height="102"
+         layout="topleft"
+         follows="all"
+         name="info_border5"
+         bevel_style="in" />
+        <text_editor
+         top_delta="1"
+         left_delta="1"
+         right="-7"
+         height="100"
+         layout="topleft"
+         follows="all"
+         name="sl_description_edit"
+         bg_visible="false"
+         border_visible="false"
+         read_only="true"
+         enabled="false"
+         max_length="512"
+         h_pad="2"
+         word_wrap="true"
+         parse_urls="true" />
 
-            <text
-             top_pad="7"
-             follows="left|top|right"
-             halign="left"
-             height="16"
-             left_delta="-2"
-             name="label2"
-             right="-6"
-             value="Account:" />
+        <text
+         top_pad="10"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|bottom"
+         name="Give item:"
+         halign="right"
+         value="Give item:" />
+        <view_border
+         top_delta="0"
+         left="66"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|bottom|right"
+         name="drop_target_rect_vis"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="0"
+         height="16"
+         width="321"
+         layout="topleft"
+         follows="left|bottom"
+         name="Give inventory"
+         halign="center"
+         tool_tip="Drop inventory items here to give them to this person.">
+            Drop inventory item here.
+        </text>
 
-            <view_border
-             top_pad="0"
-             left_delta="0"
-             bevel_style="in"
-             follows="left|top|right"
-             height="48"
-             right="-6"
-             name="acct_border" />
-            <text_editor
-             top_delta="2"
-             left_delta="2"
-             height="44"
-             right="-6"
-             allow_scroll="false"
-             bg_visible="false"
-             follows="left|top|right"
-             h_pad="2"
-             v_pad="0"
-             layout="topleft"
-             name="acc_status_text"
-             read_only="true"
-             translate="false"
-             word_wrap="true"/>
-
-            <text
-             top_pad="7"
-             left_delta="-2"
-             height="16"
-             right="-6"
-             follows="left|top|right"
-             halign="left"
-             name="partner_label"
-             value="Partner:" />
-
-            <view_border
-             top_pad="0"
-             left_delta="0"
-             height="18"
-             right="-6"
-             bevel_style="in"
-             follows="left|top|right"
-             name="info_border4" />
-            <text
-             top_delta="2"
-             left_delta="2"
-             height="16"
-             right="-6"
-             border_visible="true"
-             enabled="true"
-             follows="left|top|right"
-             max_length="254"
-             name="partner_text" />
-
-            <!--<button follows="left|top" left="15"  top="75" height="20" halign="center"
-            label="&lt; &lt;" label_selected="&gt; &gt;" name="bigimg" tool_tip="Open Full Size." width="40" />-->
-
-            <text
-             left="6"
-             top_pad="8"
-             follows="left|top"
-             halign="right"
-             height="16"
-             name="Groups:"
-             width="45"
-             value="Groups:" />
-
-            <button
-             follows="left|top"
-             left="15"
-             top_pad="5"
-             height="20"
-             label="+"
-             label_selected="+"
-             name="group_invite"
-             tool_tip="Invite to Group"
-             width="20" />
-
-            <group_list
-            left_delta="42"
-            top_delta="-21"
-            height="80"
-            right="-6"
-            border_visible="true"
-            for_agent="false"
-            follows="left|top|right"
-            name="group_list" />
-
-            <text
-             left="6"
-             top_pad="8"
-             height="16"
-             width="45"
-             follows="left|top"
-             halign="right"
-             name="About:"
-             value="About:" />
-
-            <view_border
-             left_pad="6"
-             top_delta="0"
-             height="74"
-             right="-6"
-             bevel_style="in"
-             follows="all"
-             name="info_border5" />
-            <text_editor
-             left_delta="1"
-             top_delta="1"
-             height="72"
-             right="-7"
-             read_only="true"
-             enabled="false"
-             follows="all"
-             max_length="512"
-             name="sl_description_edit"
-             h_pad="2"
-             word_wrap="true"
-             parse_urls="true" />
-
-            <layout_stack
-             top_pad="8"
-             left="6"
-             right="-6"
-             orientation="horizontal"
-             follows="left|bottom|right"
-             height="44">
+        <layout_stack
+         bottom="-3"
+         left="6"
+         right="-6"
+         height="44"
+         layout="topleft"
+         follows="left|bottom|right"
+         name="buttonstack"
+         orientation="horizontal">
 
             <layout_panel
-			 name="left_buttonstack"
              left="2"
              right="-2"
              height="42"
-             user_resize="false"
              follows="all"
-             layout="topleft">
+             layout="topleft"
+			 name="left_buttonstack"
+             user_resize="false">
 
-            <button
-             top="2"
-             left="2"
-             height="20"
-             halign="center"
-             label="Find on Map"
-             label_selected="Find on Map"
-             name="show_on_map_btn"
-			 tool_tip="Locate the Resident on the map"
-             follows="left|top|right" />
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="show_on_map_btn"
+                 label="Find on Map"
+                 label_selected="Find on Map"
+                 tool_tip="Locate the Resident on the map"
+                 commit_callback.function="Profile.ShowOnMap"
+                 enabled_callback.function="Profile.EnableShowOnMap" />
 
-            <button
-             top_pad="2"
-             height="20"
-             halign="center"
-             label="Pay"
-             label_selected="Pay"
-             name="pay"
-             tool_tip="Pay money to or share inventory with the Resident"
-             follows="left|top|right" />
+                <button
+                 top_pad="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="pay"
+                 label="Pay"
+                 label_selected="Pay"
+                 tool_tip="Pay money to the Resident"
+                 commit_callback.function="Profile.Pay" />
 
             </layout_panel>
             <layout_panel
+             left="2"
+             right="-2"
+             follows="all"
+             layout="topleft"
 			 name="middle_buttonstack"
-             left="2"
-             right="-2"
-             user_resize="false"
-             follows="all"
-             layout="topleft">
+             user_resize="false">
 
-            <button
-             top="2"
-             left="2"
-             height="20"
-             halign="center"
-             label="Offer Teleport"
-             label_selected="Offer Teleport"
-             name="teleport"
-			 tool_tip="Offer a teleport to the Resident"
-             follows="left|top|right" />
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="teleport"
+                 label="Offer Teleport"
+                 label_selected="Offer Teleport"
+                 tool_tip="Offer a teleport to the Resident"
+                 commit_callback.function="Profile.Teleport"
+                 enabled_callback.function="Profile.EnableTeleport" />
 
-            <button
-             top_pad="2"
-             height="20"
-             halign="center"
-             label="Instant Message"
-             label_selected="Instant Message"
-             name="im"
-             tool_tip="Open instant message session"
-             follows="left|top|right" />
+                <button
+                 top_pad="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="im"
+                 label="Instant Message"
+                 label_selected="Instant Message"
+                 tool_tip="Open instant message session"
+                 commit_callback.function="Profile.IM" />
 
             </layout_panel>
             <layout_panel
-			 name="right_buttonstack"
              left="2"
              right="-2"
-             user_resize="false"
              follows="all"
-             layout="topleft">
-
-            <button
-             top="2"
-             left="2"
-             height="20"
-             halign="center"
-             label="Add Friend"
-             label_selected="Add Friend"
-             name="add_friend"
-             tool_tip="Offer friendship to the Resident"
-             follows="left|top|right" />
-
-            <button
-             top_pad="2"
-             height="20"
-             right="-40"
-             label="Block"
              layout="topleft"
-             name="block"
-             tool_tip="Block this Resident"
-             use_ellipses="true"
-             commit_callback.function="Profile.BlockUnblock"
-             enabled_callback.function="Profile.EnableBlock"
-             follows="left|top|right" />
+			 name="right_buttonstack"
+             user_resize="false">
 
-            <button
-             top_delta="0"
-             height="20"
-             right="-40"
-             label="Unblock"
-             layout="topleft"
-             name="unblock"
-             tool_tip="Unblock this Resident"
-             use_ellipses="true"
-             commit_callback.function="Profile.BlockUnblock"
-             enabled_callback.function="Profile.EnableUnblock"
-             follows="left|top|right" />
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="add_friend"
+                 label="Add Friend"
+                 label_selected="Add Friend"
+                 tool_tip="Offer friendship to the Resident"
+                 commit_callback.function="Profile.AddFriend"
+                 enabled_callback.function="Profile.EnableAddFriend" />
 
-            <menu_button
-             left_pad="4"
-             height="20"
-             image_overlay="OptionsMenu_Off"
-             layout="topleft"
-             name="overflow_btn"
-             width="36"
-             follows="top|right" />
+                <button
+                 top_pad="2"
+                 right="-40"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="block"
+                 label="Block"
+                 tool_tip="Block this Resident"
+                 commit_callback.function="Profile.BlockUnblock"
+                 enabled_callback.function="Profile.EnableBlock" />
+
+                <button
+                 top_delta="0"
+                 right="-40"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="unblock"
+                 label="Unblock"
+                 tool_tip="Unblock this Resident"
+                 commit_callback.function="Profile.BlockUnblock"
+                 enabled_callback.function="Profile.EnableUnblock" />
+
+                <menu_button
+                 left_pad="4"
+                 height="20"
+                 width="36"
+                 layout="topleft"
+                 follows="top|right"
+                 name="overflow_btn"
+                 image_overlay="OptionsMenu_Off" />
 
             </layout_panel>
-            </layout_stack>
+        </layout_stack>
 
-          </panel>
+        <view_border
+         top="0"
+         bottom="-1"
+         left="0"
+         right="-1"
+         layout="topleft"
+         follows="all"
+         name="drop_target_rect"
+         border_thickness="0"
+         mouse_opaque="false" />
 </panel>
 
