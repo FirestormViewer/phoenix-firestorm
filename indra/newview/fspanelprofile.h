@@ -83,7 +83,7 @@ private:
 
 
 /**
-* Panel for displaying Avatar's first and second life related info.
+* Panel for displaying Avatar's second life related info.
 */
 class FSPanelProfile
 	: public FSPanelProfileTab
@@ -210,7 +210,7 @@ private:
 
 
 /**
-* Panel for displaying Avatar's first and second life related info.
+* Panel for displaying Avatar's web profile and home page.
 */
 class FSPanelProfileWeb
 	: public FSPanelProfileTab
@@ -249,7 +249,7 @@ private:
 
 
 /**
-* Panel for displaying Avatar's first and second life related info.
+* Panel for displaying Avatar's first life related info.
 */
 class FSPanelProfileFirstLife
 	: public FSPanelProfileTab
@@ -259,6 +259,46 @@ public:
 	/*virtual*/ ~FSPanelProfileFirstLife();;
 
 	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+};
+
+/**
+ * Panel for displaying Avatar's notes and modifying friend's rights.
+ */
+class FSPanelAvatarNotes 
+	: public FSPanelProfileTab
+	, public LLFriendObserver
+{
+public:
+	FSPanelAvatarNotes();
+	/*virtual*/ ~FSPanelAvatarNotes();
+
+	virtual void setAvatarId(const LLUUID& id);
+
+	/** 
+	 * LLFriendObserver trigger
+	 */
+	virtual void changed(U32 mask);
+
+	/*virtual*/ void onOpen(const LLSD& key);
+
+	/*virtual*/ BOOL postBuild();
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+	/*virtual*/ void updateData();
+
+protected:
+	/**
+	 * Fills rights data for friends.
+	 */
+	void fillRightsData();
+
+	void rightsConfirmationCallback(const LLSD& notification,
+			const LLSD& response, S32 rights);
+	void confirmModifyRights(bool grant, S32 rights);
+	void onCommitRights();
+	void onCommitNotes();
+	void enableCheckboxes(bool enable);
 };
 
 #endif // FS_FSPANELPROFILE_H

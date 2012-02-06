@@ -62,6 +62,7 @@
 static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile_secondlife");
 static LLRegisterPanelClassWrapper<FSPanelProfileWeb> t_panel_web("panel_profile_web");
 static LLRegisterPanelClassWrapper<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
+static LLRegisterPanelClassWrapper<FSPanelAvatarNotes> t_panel_notes("panel_profile_notes");
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -697,50 +698,50 @@ void FSPanelProfileWeb::onAvatarNameCache(const LLUUID& agent_id, const LLAvatar
 
 void FSPanelProfileWeb::onCommitLoad(LLUICtrl* ctrl)
 {
-	LLSD::String valstr = ctrl->getValue().asString();
-	if (valstr == "")
-	{
-		if (!mURLHome.empty())
-		{
-			childSetVisible("profile_html",true);
+    if (!mURLHome.empty())
+    {
+        LLSD::String valstr = ctrl->getValue().asString();
+        if (valstr == "")
+        {
+            childSetVisible("profile_html",true);
             mPerformanceTimer.start();
             mWebBrowser->navigateTo( mURLHome, "text/html" );
-		}
-	}
-	else if (valstr == "popout")
-	{
-		// open in viewer's browser, new window
-		LLWeb::loadURLInternal(mURLHome);
-	}
-	else if (valstr == "external")
-	{
-		// open in external browser
-		LLWeb::loadURLExternal(mURLHome);
-	}
+        }
+        else if (valstr == "popout")
+        {
+            // open in viewer's browser, new window
+            LLWeb::loadURLInternal(mURLHome);
+        }
+        else if (valstr == "external")
+        {
+            // open in external browser
+            LLWeb::loadURLExternal(mURLHome);
+        }
+    }
 }
 
 void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
 {
-	LLSD::String valstr = ctrl->getValue().asString();
-	if (valstr == "")
-	{
-		if (!mURLHome.empty())
-		{
-			childSetVisible("profile_html",true);
+    if (!mURLWebProfile.empty())
+    {
+        LLSD::String valstr = ctrl->getValue().asString();
+        if (valstr == "")
+        {
+            childSetVisible("profile_html",true);
             mPerformanceTimer.start();
-            mWebBrowser->navigateTo( mURLHome, "text/html" );
-		}
-	}
-	else if (valstr == "popout")
-	{
-		// open in viewer's browser, new window
-		LLWeb::loadURLInternal(mURLHome);
-	}
-	else if (valstr == "external")
-	{
-		// open in external browser
-		LLWeb::loadURLExternal(mURLHome);
-	}
+            mWebBrowser->navigateTo( mURLWebProfile, "text/html" );
+        }
+        else if (valstr == "popout")
+        {
+            // open in viewer's browser, new window
+            LLWeb::loadURLInternal(mURLWebProfile);
+        }
+        else if (valstr == "external")
+        {
+            // open in external browser
+            LLWeb::loadURLExternal(mURLWebProfile);
+        }
+    }
 }
 
 void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event)
@@ -805,6 +806,195 @@ void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType
             getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
             getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
 		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+FSPanelAvatarNotes::FSPanelAvatarNotes()
+: FSPanelProfileTab()
+{
+
+}
+
+void FSPanelAvatarNotes::updateData()
+{
+	LLAvatarPropertiesProcessor::getInstance()->
+		sendAvatarNotesRequest(getAvatarId());
+}
+
+BOOL FSPanelAvatarNotes::postBuild()
+{
+	childSetCommitCallback("status_check", boost::bind(&FSPanelAvatarNotes::onCommitRights, this), NULL);
+	childSetCommitCallback("map_check", boost::bind(&FSPanelAvatarNotes::onCommitRights, this), NULL);
+	childSetCommitCallback("objects_check", boost::bind(&FSPanelAvatarNotes::onCommitRights, this), NULL);
+
+	LLTextEditor* te = getChild<LLTextEditor>("notes_edit");
+	te->setCommitCallback(boost::bind(&FSPanelAvatarNotes::onCommitNotes,this));
+	te->setCommitOnFocusLost(TRUE);
+
+	return TRUE;
+}
+
+void FSPanelAvatarNotes::onOpen(const LLSD& key)
+{
+	FSPanelProfileTab::onOpen(key);
+
+	fillRightsData();
+
+    updateData();
+}
+
+void FSPanelAvatarNotes::fillRightsData()
+{
+	getChild<LLUICtrl>("status_check")->setValue(FALSE);
+	getChild<LLUICtrl>("map_check")->setValue(FALSE);
+	getChild<LLUICtrl>("objects_check")->setValue(FALSE);
+
+	const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+	// If true - we are viewing friend's profile, enable check boxes and set values.
+	if(relation)
+	{
+		S32 rights = relation->getRightsGrantedTo();
+
+		getChild<LLUICtrl>("status_check")->setValue(LLRelationship::GRANT_ONLINE_STATUS & rights ? TRUE : FALSE);
+		getChild<LLUICtrl>("map_check")->setValue(LLRelationship::GRANT_MAP_LOCATION & rights ? TRUE : FALSE);
+		getChild<LLUICtrl>("objects_check")->setValue(LLRelationship::GRANT_MODIFY_OBJECTS & rights ? TRUE : FALSE);
+
+	}
+
+	enableCheckboxes(NULL != relation);
+}
+
+void FSPanelAvatarNotes::onCommitNotes()
+{
+	std::string notes = getChild<LLUICtrl>("notes_edit")->getValue().asString();
+	LLAvatarPropertiesProcessor::getInstance()-> sendNotes(getAvatarId(),notes);
+}
+
+void FSPanelAvatarNotes::rightsConfirmationCallback(const LLSD& notification,
+		const LLSD& response, S32 rights)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option == 0)
+	{
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(
+				getAvatarId(), rights);
+	}
+	else
+	{
+		getChild<LLUICtrl>("objects_check")->setValue(
+				getChild<LLUICtrl>("objects_check")->getValue().asBoolean() ? FALSE : TRUE);
+	}
+}
+
+void FSPanelAvatarNotes::confirmModifyRights(bool grant, S32 rights)
+// AO: If this is modified, also modify LLPanelAvatar::ConfirmModifyRights
+{
+	LLSD args;
+	args["NAME"] = LLSLURL("agent", getAvatarId(), "displayname").getSLURLString();
+
+	if (grant)
+	{
+		LLNotificationsUtil::add("GrantModifyRights", args, LLSD(),
+				boost::bind(&FSPanelAvatarNotes::rightsConfirmationCallback, this,
+						_1, _2, rights));
+	}
+	else
+	{
+		LLNotificationsUtil::add("RevokeModifyRights", args, LLSD(),
+				boost::bind(&FSPanelAvatarNotes::rightsConfirmationCallback, this,
+						_1, _2, rights));
+	}
+}
+
+void FSPanelAvatarNotes::onCommitRights()
+{
+	const LLRelationship* buddy_relationship =
+		LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
+
+	if (NULL == buddy_relationship)
+	{
+		// Lets have a warning log message instead of having a crash. EXT-4947.
+		llwarns << "Trying to modify rights for non-friend avatar. Skipped." << llendl;
+		return;
+	}
+
+
+	S32 rights = 0;
+
+	if(getChild<LLUICtrl>("status_check")->getValue().asBoolean())
+		rights |= LLRelationship::GRANT_ONLINE_STATUS;
+	if(getChild<LLUICtrl>("map_check")->getValue().asBoolean())
+		rights |= LLRelationship::GRANT_MAP_LOCATION;
+	if(getChild<LLUICtrl>("objects_check")->getValue().asBoolean())
+		rights |= LLRelationship::GRANT_MODIFY_OBJECTS;
+
+	bool allow_modify_objects = getChild<LLUICtrl>("objects_check")->getValue().asBoolean();
+
+	// if modify objects checkbox clicked
+	if (buddy_relationship->isRightGrantedTo(
+			LLRelationship::GRANT_MODIFY_OBJECTS) != allow_modify_objects)
+	{
+		confirmModifyRights(allow_modify_objects, rights);
+	}
+	// only one checkbox can trigger commit, so store the rest of rights
+	else
+	{
+		LLAvatarPropertiesProcessor::getInstance()->sendFriendRights(
+						getAvatarId(), rights);
+	}
+}
+
+void FSPanelAvatarNotes::processProperties(void* data, EAvatarProcessorType type)
+{
+	if(APT_NOTES == type)
+	{
+		LLAvatarNotes* avatar_notes = static_cast<LLAvatarNotes*>(data);
+		if(avatar_notes && getAvatarId() == avatar_notes->target_id)
+		{
+			getChild<LLUICtrl>("notes_edit")->setValue(avatar_notes->notes);
+			getChildView("notes edit")->setEnabled(true);
+
+			LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
+		}
+	}
+}
+
+void FSPanelAvatarNotes::enableCheckboxes(bool enable)
+{
+	getChildView("status_check")->setEnabled(enable);
+	getChildView("map_check")->setEnabled(enable);
+	getChildView("objects_check")->setEnabled(enable);
+}
+
+FSPanelAvatarNotes::~FSPanelAvatarNotes()
+{
+	if(getAvatarId().notNull())
+	{
+		LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+	}
+}
+
+// virtual, called by LLAvatarTracker
+void FSPanelAvatarNotes::changed(U32 mask)
+{
+	// update rights to avoid have checkboxes enabled when friendship is terminated. EXT-4947.
+	fillRightsData();
+}
+
+void FSPanelAvatarNotes::setAvatarId(const LLUUID& id)
+{
+	if(id.notNull())
+	{
+		if(getAvatarId().notNull())
+		{
+			LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
+		}
+		FSPanelProfileTab::setAvatarId(id);
+		LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
 	}
 }
 

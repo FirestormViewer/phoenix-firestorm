@@ -35,6 +35,7 @@
 static const std::string PANEL_PROFILE = "panel_profile_secondlife";
 static const std::string PANEL_WEB = "panel_profile_web";
 static const std::string PANEL_FIRSTLIFE = "panel_profile_firstlife";
+static const std::string PANEL_NOTES = "panel_profile_notes";
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
  : LLFloater(key)
@@ -64,6 +65,8 @@ void FSFloaterProfile::onOpen(const LLSD& key)
     panel_web->onOpen(getAvatarId());
     FSPanelProfileFirstLife* panel_firstlife = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
     panel_firstlife->onOpen(getAvatarId());
+    FSPanelAvatarNotes* panel_notes = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+    panel_notes->onOpen(getAvatarId());
 
 	// Update the avatar name.
 	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
@@ -78,7 +81,7 @@ void FSFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarN
     FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
     panel_profile->onAvatarNameCache(agent_id, av_name);
     FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
-    panel_web->onAvatarNameCache(agent_id, av_name);;
+    panel_web->onAvatarNameCache(agent_id, av_name);
 }
 
 // eof
