@@ -298,14 +298,14 @@ void LLGroupActions::show(const LLUUID& group_id)
 		params["group_id"] = group_id;
 		params["open_tab_name"] = "panel_group_info_sidetray";
 
-		LLFloaterSidePanelContainer::showPanel("panel_group_info_sidetray", params);
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 //-TT - Patch : ShowGroupFloaters
 	}
 	else
 	{
 		LLFloaterReg::showInstance("floater_group_view", LLSD().with("group_id", group_id));
 	}
-//-TT}
+//-TT
 }
 
 // static
