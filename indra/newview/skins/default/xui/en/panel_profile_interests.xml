@@ -29,7 +29,7 @@
          follows="left|top"
          name="chk0"
          label="Build"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -38,7 +38,7 @@
          follows="left|top"
          name="chk1"
          label="Explore"
-         enable="false" />
+         enabled="false" />
         <check_box
          top_pad="1"
          left="75"
@@ -48,7 +48,7 @@
          follows="left|top"
          name="chk2"
          label="Meet"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -57,7 +57,7 @@
          follows="left|top"
          name="chk6"
          label="Be Hired"
-         enable="false" />
+         enabled="false" />
         <check_box
          top_pad="1"
          left="75"
@@ -67,7 +67,7 @@
          follows="left|top"
          name="chk3"
          label="Group"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -76,7 +76,7 @@
          follows="left|top"
          name="chk4"
          label="Buy"
-         enable="false" />
+         enabled="false" />
         <check_box
          top_pad="1"
          left="75"
@@ -86,7 +86,7 @@
          follows="left|top"
          name="chk5"
          label="Sell"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -95,7 +95,7 @@
          follows="left|top"
          name="chk7"
          label="Hire"
-         enable="false" />
+         enabled="false" />
         <line_editor
          top_pad="1"
          left="76"
@@ -105,7 +105,7 @@
          follows="left|top"
          name="want_to_edit"
          is_unicode="false"
-         enable="false"
+         enabled="false"
          max_length="254" />
 
     <text
@@ -128,7 +128,7 @@
          follows="left|top"
          name="schk0"
          label="Textures"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -137,7 +137,7 @@
          follows="left|top"
          name="schk1"
          label="Architecture"
-         enable="false" />
+         enabled="false" />
         <check_box
          top_pad="1"
          left="75"
@@ -147,7 +147,7 @@
          follows="left|top"
          name="schk2"
          label="Event Planning"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -156,7 +156,7 @@
          follows="left|top"
          name="schk3"
          label="Modeling"
-         enable="false" />
+         enabled="false" />
         <check_box
          top_pad="1"
          left="75"
@@ -166,7 +166,7 @@
          follows="left|top"
          name="schk4"
          label="Scripting"
-         enable="false" />
+         enabled="false" />
         <check_box
          left_pad="80"
          height="16"
@@ -175,7 +175,7 @@
          follows="left|top"
          name="schk5"
          label="Custom Characters"
-         enable="false" />
+         enabled="false" />
         <line_editor
          top_pad="1"
          left="76"
@@ -185,7 +185,7 @@
          follows="left|top"
          name="skills_edit"
          is_unicode="false"
-         enable="false"
+         enabled="false"
          max_length="254" />
 
     <text
@@ -208,7 +208,7 @@
          follows="left|top"
          name="languages_edit"
          is_unicode="false"
-         enable="false"
+         enabled="false"
          max_length="254" />
 </panel>
 
