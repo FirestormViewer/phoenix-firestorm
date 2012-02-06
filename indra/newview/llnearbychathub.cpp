@@ -76,6 +76,8 @@ LLNearbyChat::LLNearbyChat() :
 	mDefaultChatBar(NULL),
 	mFocusedInputEditor(NULL)
 {
+	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&LLNearbyChat::showDefaultChatBar, this));
+
 }
 
 LLNearbyChat::~LLNearbyChat()
@@ -447,10 +449,12 @@ void LLNearbyChat::registerChatBar(LLNearbyChatControl* chatBar)
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void LLNearbyChat::showDefaultChatBar(BOOL visible) const
+void LLNearbyChat::showDefaultChatBar() const
 {
 	if(!mDefaultChatBar)
 		return;
+
+	BOOL visible=gSavedSettings.getBOOL("MainChatbarVisible");
 
 	mDefaultChatBar->getParent()->setVisible(visible);
 	mDefaultChatBar->setVisible(visible);

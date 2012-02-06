@@ -48,7 +48,7 @@ private:
 
 public:
 	void registerChatBar(LLNearbyChatControl* chatBar);
-	void showDefaultChatBar(BOOL visible) const;
+	void showDefaultChatBar() const;
 
 	void sendChat(LLWString text,EChatType type);
 	LLWString stripChannelNumber(const LLWString &mesg, S32* channel);

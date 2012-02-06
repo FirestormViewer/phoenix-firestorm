@@ -551,7 +551,7 @@ void start_chat( EKeystate s )
 	// start chat
 	// <FS:Zi> Remove floating chat bar
 	// LLNearbyChatBar::startChat(NULL);
-	LLNearbyChat::getInstance()->showDefaultChatBar(TRUE);
+	gSavedSettings.setBOOL("MainChatbarVisible",TRUE);
 	// </FS:Zi>
 }
 

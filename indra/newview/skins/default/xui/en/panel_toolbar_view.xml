@@ -138,10 +138,10 @@
 
   <!-- The chat bar / stand fly stack container -->
   <layout_panel name="chat_bar_stand_fly_container_panel"
-                auto_resize="true"
+                auto_resize="false"
                 user_resize="true"
                 height="60"
-                width="280"
+                width="300"
                 mouse_opaque="false">
 
   <!-- Vertical stack to house the stand fly buttons and the chat bar below -->
@@ -149,7 +149,7 @@
                 orientation="vertical"
                 left="0"
                 top="0"
-                width="280"
+                width="300"
                 height="60"
                 follows="all"
                 border_width="0"
@@ -160,7 +160,7 @@
                 auto_resize="true"
                 user_resize="false"
                 height="30"
-                width="280"
+                width="300"
                 mouse_opaque="false">
 
   <panel top="0"
@@ -182,7 +182,7 @@
                 auto_resize="false"
                 user_resize="false"
                 height="28"
-                width="280"
+                width="300"
                 mouse_opaque="false"
                 bg_opaque_image="Rounded_Rect"
                 background_visible="true"
@@ -191,7 +191,7 @@
 
   <button name="local_chat_button"
           tool_tip="Shows/hides nearby chat window"
-          label="Local Chat"
+          label="Nearby Chat"
           follows="left|top"
           layout="topleft"
           height="24"
@@ -208,7 +208,7 @@
                        height="22"
                        left_pad="4"
                        top="4"
-                       width="184"
+                       right="-4"
                        follows="left|right|bottom"
                        spellcheck="true"
                        visible="true" />
@@ -224,17 +224,47 @@
 
   <!-- The toolbar itself -->
   <layout_panel name="toolbar_panel"
-                auto_resize="false"
+                auto_resize="true"
                 user_resize="true"
                 height="30"
-                width="704"
+                width="724"
                 mouse_opaque="false">
+
+    <!-- Panel to house the show/hide chat bar button -->
+    <panel name="open_chat_bar_button_panel"
+           left="0"
+           top="2"
+           height="30"
+           width="44"
+           follows="left|bottom"
+           layout="topleft"
+           bg_opaque_image="Rounded_Rect"
+           background_visible="true"
+           bg_opaque_image_overlay="MouseGray"
+           background_opaque="true">
+
+    <button name="open_chat_bar_button"
+            tool_tip="Show chat bar (Enter)"
+            label=""
+            image_overlay="nearbychat_18"
+            control_name="MainChatbarVisible"
+            chrome="true"
+            is_toggle="true"
+            left="2"
+            top="3"
+            height="24"
+            width="40"
+            layout="topleft"
+            follows="all" />
+
+    </panel>
+    <!-- Panel to house the show/hide chat bar button -->
 
     <toolbar layout="topleft"
              button_panel.bg_opaque_image="Rounded_Rect_Top"
              name="toolbar_bottom"
              height="30"
-             left="0"
+             left_pad="0"
              right="-1"
              top="0"
              side="bottom"

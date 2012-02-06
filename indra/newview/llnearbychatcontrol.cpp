@@ -131,6 +131,7 @@ void LLNearbyChatControl::onCommit()
 		{
 			setVisible(FALSE);
 			getParent()->setVisible(FALSE);
+			gSavedSettings.setBOOL("MainChatbarVisible",FALSE);
 		}
 	}
 
