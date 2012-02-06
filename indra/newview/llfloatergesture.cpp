@@ -246,7 +246,7 @@ void LLFloaterGesture::buildGestureList()
 	uuid_vec_t selected_items;
 	getSelectedIds(selected_items);
 	LL_DEBUGS("Gesture")<< "Rebuilding gesture list "<< LL_ENDL;
-	mGestureList->deleteAllItems();
+//	mGestureList->deleteAllItems(); // <FS:ND/> Don't recreate the list over and over.
 
 	LLGestureMgr::item_map_t::const_iterator it;
 	const LLGestureMgr::item_map_t& active_gestures = LLGestureMgr::instance().getActiveGestures();
@@ -367,9 +367,14 @@ void LLFloaterGesture::addGesture(const LLUUID& item_id , LLMultiGesture* gestur
 
 	LL_DEBUGS("Gesture") << "Added gesture [" << item_name << "]" << LL_ENDL;
 
-	LLScrollListItem* sl_item = list->addElement(element, ADD_BOTTOM);
+	LLScrollListItem* sl_item(0);
+
+	if( !updateItem( item_id, element ) )
+		sl_item = list->addElement(element, ADD_BOTTOM);
+
 	if(sl_item)
 	{
+		mItems[ item_id ] = sl_item;
 		LLFontGL::StyleFlags style = LLGestureMgr::getInstance()->isGestureActive(item_id) ? LLFontGL::BOLD : LLFontGL::NORMAL;
 		// *TODO find out why ["font"]["style"] does not affect font style
 		((LLScrollListText*)sl_item->getColumn(0))->setFontStyle(style);
@@ -631,3 +636,25 @@ void LLFloaterGesture::playGesture(LLUUID item_id)
 		LLGestureMgr::instance().playGesture(item_id);
 	}
 }
+
+// <FS:ND> Try to update an item that already exists. Return true on success, false if such an item does not exist yet.
+bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
+{
+	std::map< LLUUID, LLScrollListItem * >::iterator itr = mItems.find( aItem );
+
+	if( mItems.end() == itr )
+		return false;
+
+	LLScrollListItem* pItem( itr->second );
+
+	if( !pItem )
+		return false;
+
+	pItem->getColumn(0)->setValue( aData[ "columns" ][ 0 ][ "value" ] );
+	pItem->getColumn(1)->setValue( aData[ "columns" ][ 1 ][ "value" ] );
+	pItem->getColumn(2)->setValue( aData[ "columns" ][ 2 ][ "value" ] );
+	pItem->getColumn(3)->setValue( aData[ "columns" ][ 3 ][ "value" ] );
+
+	return true;
+}
+// </FS:ND>

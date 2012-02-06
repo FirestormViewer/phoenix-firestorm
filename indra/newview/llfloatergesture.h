@@ -101,6 +101,11 @@ private:
 	LLScrollListCtrl* mGestureList;
 
 	LLFloaterGestureObserver* mObserver;
+
+	 // <FS:ND> Save items already created, then just change them if needed.
+	std::map< LLUUID, LLScrollListItem * > mItems;
+	bool updateItem( LLUUID const&, LLSD const& );
+	// </FS:ND>
 };
 
 
