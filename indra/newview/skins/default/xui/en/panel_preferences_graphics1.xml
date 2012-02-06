@@ -1512,6 +1512,23 @@
          tool_tip="Time taken to alter focus from one place to the next"
          top_pad="5"
          width="374"/>
+       <slider
+        control_name="CameraDoFResScale"
+        decimal_digits="2"
+        follows="left|top"
+        height="16"
+        increment="0.05"
+        initial_value="0.70"
+        label="DOF Rendering Quality"
+        label_width="160"
+        layout="topleft"
+        left="10"
+        max_val="1"
+        min_val="0.25"
+        name="CameraDoFResScale"
+        tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
+        top_pad="5"
+        width="374"/>
     </panel>
 </tab_container>
 </panel>
