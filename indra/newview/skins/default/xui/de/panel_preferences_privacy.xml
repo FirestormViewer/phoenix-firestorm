@@ -20,6 +20,7 @@
 			<check_box label="Automatisches Akzeptieren von Inventar-Angeboten" name="Auto_Accept_New_Inventory"/>
 			<check_box label="Automatisch empfangene Objekte im Inventar anzeigen" name="Show_In_Inventory"/>
 			<check_box label="Automatisch akzeptierte Notizkarten, Landmarken und Texturen anzeigen" name="Show_New_Inventory"/>
+			<check_box label="Partikeleffekte erzeugen, wenn Objekte an andere Avatare gegeben werden" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Meine Lieblingslandmarken bei Anmeldung anzeigen (im Dropdown-Menü &#10;„Hier anfangen“)" name="favorites_on_login_check" top_pad="15"/>
 			<text name="Logs:">
 				Chatprotokolle:

@@ -133,6 +133,16 @@
      name="Show_New_Inventory"
      top_pad="4"
      width="350" />
+	 
+	 <check_box
+     control_name="FSCreateGiveInventoryParticleEffect"
+     height="16"
+     label="Create particle effects upon giving inventory objects to other avatars"
+     layout="topleft"
+     left="30"
+     name="FSCreateGiveInventoryParticleEffect"
+     top_pad="4"
+     width="350" />
 
     <check_box
      control_name="ShowFavoritesOnLogin"
