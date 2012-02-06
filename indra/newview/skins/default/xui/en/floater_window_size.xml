@@ -29,10 +29,6 @@
      top_pad="5"
      width="179">
         <combo_box.item
-         label="800 x 600 (4:3 SVGA)"
-         name="item0"
-         value="800 x 600" />
-        <combo_box.item
          label="1000 x 700 (default)"
          name="item1"
          value="1000 x 700" />
@@ -51,10 +47,6 @@
         <combo_box.item
          label="1280 x 1024 (5:4 SXGA)"
          name="item5"
-         value="1280 x 1024" />
-        <combo_box.item
-         label="1280 x 1024 (5:4 SXGA)"
-         name="item6"
          value="1280 x 1024" />
         <combo_box.item
          label="1440 x 900 (8:5 WSXGA)"
