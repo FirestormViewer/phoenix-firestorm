@@ -28,6 +28,15 @@
         <menu_item_call.on_click
          function="Profile.Share" />
     </menu_item_call>
+    <menu_item_call
+     label="Call"
+     layout="topleft"
+     name="call">
+        <menu_item_call.on_click
+         function="Profile.Call" />
+    <menu_item_call.on_visible
+     function="Profile.EnableCall" />
+    </menu_item_call>
    <!--<menu_item_call
    label="Block"
    name="block">
@@ -44,6 +53,20 @@
     <menu_item_call.on_visible
      function="Profile.EnableUnblock" />
   </menu_item_call>-->
+  <menu_item_call
+   label="Copy Name"
+   layout="topleft"
+   name="copy_to_clipboard">
+    <menu_item_call.on_click
+     function="Profile.CopyNameToClipboard" />
+  </menu_item_call>
+  <menu_item_call
+   label="Copy URI"
+   layout="topleft"
+   name="copy_to_clipboard">
+    <menu_item_call.on_click
+     function="Profile.CopyURI" />
+  </menu_item_call>
   <menu_item_call
    label="Kick"
    layout="topleft"
@@ -80,4 +103,5 @@
     <menu_item_call.on_visible
      function="Profile.EnableGod" />
   </menu_item_call>
+-->
 </toggleable_menu>
