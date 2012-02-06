@@ -16864,6 +16864,8 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Internal, volatile control variable to enable/disable the talk button in the utility panel.</string>
     <key>Persist</key>
     <integer>0</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
@@ -16875,6 +16877,8 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Internal, volatile control variable to enable/disable the chat button in the toolbar.</string>
     <key>Persist</key>
     <integer>0</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
