@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<toolbar_view name="toolbar view">
+	<layout_stack name="bottom_toolbar_stack">
+		<!-- Panel to take up the chat bar / tool bar layout stack -->
+		<layout_panel name="bottom_toolbar_panel">
+			<!-- Horizontal panel to take up the chat bar and the tool bar -->
+			<layout_stack name="chat_bar_stack">
+				<!-- The chat bar / stand fly stack container -->
+				<layout_panel name="chat_bar_stand_fly_container_panel">
+					<!-- Vertical stack to house the stand fly buttons and the chat bar below -->
+					<layout_stack name="chat_bar_stand_fly_stack">
+						<!-- The chat bar itself -->
+						<layout_panel name="chat_bar_layout_panel">
+							<button name="local_chat_button" tool_tip="Zeigt/versteckt das Chat-in-der-Nähe-Fenster" label="Chat in der Nähe" width="100"/>
+						</layout_panel>
+						<!-- The chat bar itself -->
+					</layout_stack>
+					<!-- Vertical stack to house the stand fly buttons and the chat bar below -->
+				</layout_panel>
+				<!-- The chat bar / stand fly stack container -->
+				<!-- The toolbar itself -->
+				<layout_panel name="toolbar_panel">
+					<!-- Panel to house the show/hide chat bar button -->
+					<panel name="open_chat_bar_button_panel">
+						<button name="open_chat_bar_button" tool_tip="Chat-Eingabezeile öffnen (Enter)"/>
+					</panel>
+					<!-- Panel to house the show/hide chat bar button -->
+				</layout_panel>
+				<!-- The toolbar itself -->
+			</layout_stack>
+			<!-- Horizontal panel to take up the chat bar and the tool bar -->
+		</layout_panel>
+		<!-- Panel to take up the chat bar / tool bar layout stack -->
+	</layout_stack>
+</toolbar_view>
