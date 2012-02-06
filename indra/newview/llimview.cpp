@@ -965,7 +965,7 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
 
 	if (!session)
 	{
-		llwarns << "session " << session_id << "does not exist " << llendl;
+		llwarns << "session " << session_id << " does not exist " << llendl;
 		return NULL;
 	}
 
