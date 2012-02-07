@@ -42,7 +42,7 @@
     // The following vars could be defined for clarity, but are left out for mem savings.
     //integer MAX_STORE = 100; ;
     // Indexes may correspond to the following:  
-    //["", "Firestorm", "Kokua", "Dolphin2", "MiniRadar", "Catznip", "RLV", "Radegast", "TPV", "Phoenix", "Singularity"];
+    //["", "Firestorm", "Kokua", "Dolphin", "MiniRadar", "Catznip", "RLV", "Radegast", "TPV", "Phoenix", "Singularity", "Zen"];
     // If you add tags to the above list, also be sure to increment the range enforcement in the LISTEN section.
     // Note: the radar tag system is optional, opt-in, off by default. It can be enabled in viewer preferences.
 
@@ -774,7 +774,8 @@ default
             // Sanity: Insure the av is not ourselves (from other, radar tag handling attachments)
             if (llGetOwnerKey(senderID) == owner)
             {
-                llOwnerSay("Duplicate radar tag processing attachments detected ("+llKey2Name(senderID)+"). You may wish to wish to remove one of your attachments that processes radar tags.");
+		//disabled, pending a timer and flush mechanism to deal with typical "two bridge" scenarios during bridge creation.
+                //llOwnerSay("Duplicate radar tag processing attachments detected ("+llKey2Name(senderID)+"). You may wish to wish to remove one of your attachments that processes radar tags.");
             }
                                     
             //Message/Args are valid if we get here, return response

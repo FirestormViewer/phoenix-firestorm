@@ -354,11 +354,11 @@
      control_name="FSPublishRadarTag"
      enabled_control="UseLSLBridge"
      height="16"
-     label="Publish and display Radar tags (work in progress)"
+     label="Publish radar tags to LSL (work in progress)"
      layout="topleft"
      left_pad="50"
      name="FSPublishRadarTag"
-     tool_tip="Enabling this checkbox will lets you see what radar tags are published by others. It will also publish one named 'Firestorm' for yourself. This feature uses the Firestorm LSL bridge and currently is only partially complete."
+     tool_tip="Enabling this will allow scripted HUDs to receive a tag named 'Firestorm' when displaying information about your avatar. This functionality enhances the functionality of some scripted radar HUDs, and uses the Firestorm LSL bridge."
      top_delta="0" />
 	 
 	 <text
