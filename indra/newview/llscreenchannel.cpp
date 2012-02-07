@@ -98,9 +98,12 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 {
 	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
 		mToastAlignment = NA_TOP;
-	else
+	else if( NA_TOP == mToastAlignment )
+	{
+		// <FS:ND> in case it is TOP, move it down to bottom right to mimik the old behaviour.
+		// In fact we might just switch the prefs around, remove 'Show top right' and add 'Show top left', but wouldn't that cause even more confusion?
 		mToastAlignment = NA_BOTTOM;
-
+	}
 	mID = p.id;
 
 	setMouseOpaque( false );
