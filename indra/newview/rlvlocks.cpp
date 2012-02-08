@@ -51,6 +51,12 @@ void RlvAttachPtLookup::initLookupTable()
 					strAttachPtName = pAttachPt->getName();
 					LLStringUtil::toLower(strAttachPtName);
 					m_AttachPtLookupMap.insert(std::pair<std::string, S32>(strAttachPtName, itAttach->first));
+
+					// HACK: the RLV API randomly renames "Avatar Center" to "Root" so make sure we add it (but keep the official name)
+					if ("avatar center" == strAttachPtName)
+					{
+						m_AttachPtLookupMap.insert(std::pair<std::string, S32>("root", itAttach->first));
+					}
 				}
 			}
 			fInitialized = true;
