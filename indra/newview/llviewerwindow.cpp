@@ -1987,6 +1987,13 @@ void LLViewerWindow::initWorldUI()
 		url = LLWeb::expandURLSubstitutions(url, LLSD());
 		avatar_picker->navigateTo(url, "text/html");
 	}
+
+	// <FS:Zi> Autohide main chat bar if applicable
+	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
+
+	LLNearbyChat::instance().showDefaultChatBar(visible);
+	gSavedSettings.setBOOL("MainChatbarVisible",visible);
+	// </FS:Zi>
 }
 
 // Destroy the UI

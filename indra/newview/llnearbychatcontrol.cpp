@@ -129,8 +129,6 @@ void LLNearbyChatControl::onCommit()
 
 		if(gSavedSettings.getBOOL("AutohideChatBar"))
 		{
-			setVisible(FALSE);
-			getParent()->setVisible(FALSE);
 			LLNearbyChat::instance().showDefaultChatBar(FALSE);
 		}
 	}
