@@ -1333,6 +1333,27 @@
            parameter="RLVaShowAssertionFailures" />
       	</menu_item_check>
       	<menu_item_separator/>
+        <menu_item_check
+         label="Hide Locked Layers"
+         name="Hide Locked Layers">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaHideLockedLayers" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaHideLockedLayers" />
+        </menu_item_check>
+        <menu_item_check
+         label="Hide Locked Attachments"
+         name="Hide Locked Attachments">
+          <menu_item_check.on_check
+           function="CheckControl"
+           parameter="RLVaHideLockedAttachments" />
+          <menu_item_check.on_click
+           function="ToggleControl"
+           parameter="RLVaHideLockedAttachments" />
+        </menu_item_check>
+        <menu_item_separator/>
       	<menu_item_check
       	 label="Enable Legacy Naming"
       	 name="Enable Legacy Naming">
@@ -1375,27 +1396,6 @@
            parameter="rlv_locks" />
       	</menu_item_check>
       </menu>
-      <menu_item_separator/>
-      <menu_item_check
-       label="Hide Locked Layers"
-       name="Hide Locked Layers">
-      	<menu_item_check.on_check
-      	 function="CheckControl"
-      	 parameter="RLVaHideLockedLayers" />
-      	<menu_item_check.on_click
-      	 function="ToggleControl"
-      	 parameter="RLVaHideLockedLayers" />
-      </menu_item_check>
-      <menu_item_check
-       label="Hide Locked Attachments"
-       name="Hide Locked Attachments">
-      	<menu_item_check.on_check
-      	 function="CheckControl"
-      	 parameter="RLVaHideLockedAttachments" />
-      	<menu_item_check.on_click
-      	 function="ToggleControl"
-      	 parameter="RLVaHideLockedAttachments" />
-      </menu_item_check>
       <menu_item_separator/>
       <menu_item_check
        label="Allow OOC Chat"
