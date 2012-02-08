@@ -100,7 +100,7 @@ LLNearbyChatControl::LLNearbyChatControl(const LLNearbyChatControl::Params& p) :
 	LLLineEditor(p)
 {
 	setKeystrokeCallback(onKeystroke,this);
-	LLNearbyChat::getInstance()->registerChatBar(this);
+	LLNearbyChat::instance().registerChatBar(this);
 
 	setEnableLineHistory(TRUE);
 	setIgnoreArrowKeys( FALSE );

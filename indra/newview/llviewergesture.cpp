@@ -135,7 +135,7 @@ void LLViewerGesture::doTrigger( BOOL send_chat )
 		// with the gesture animation.
 		// <FS:Zi> Remove floating chat bar
 		// LLNearbyChatBar::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
-		LLNearbyChat::getInstance()->sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
+		LLNearbyChat::instance().sendChatFromViewer(mOutputString, CHAT_TYPE_NORMAL, FALSE);
 	}
 }
 

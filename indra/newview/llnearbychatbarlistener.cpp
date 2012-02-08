@@ -104,7 +104,7 @@ void LLNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 	// Send it as if it was typed in
 	// <FS:Zi> Remove floating chat bar
 	// mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
-	LLNearbyChat::getInstance()->sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
+	LLNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
 	// <FS:Zi>
 }
 

@@ -524,7 +524,7 @@ BOOL LLFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
 
 	if (handled == TRUE)
 	{
-		LLNearbyChat::getInstance()->sendChat(mInputEditor->getConvertedText(),type);
+		LLNearbyChat::instance().sendChat(mInputEditor->getConvertedText(),type);
 	}
 
 	return handled;	
