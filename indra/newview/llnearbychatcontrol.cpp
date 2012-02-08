@@ -120,18 +120,7 @@ void LLNearbyChatControl::onCommit()
 	LLNearbyChat::instance().sendChat(getConvertedText(),CHAT_TYPE_NORMAL);
 	setText(LLStringExplicit(""));
 
-	if(getName()=="default_chat_bar")
-	{
-		if(gSavedSettings.getBOOL("CloseChatOnReturn"))
-		{
-			setFocus(FALSE);
-		}
-
-		if(gSavedSettings.getBOOL("AutohideChatBar"))
-		{
-			LLNearbyChat::instance().showDefaultChatBar(FALSE);
-		}
-	}
+	autohide();
 
 	LLUICtrl::onCommit();
 }
@@ -245,4 +234,33 @@ void LLNearbyChatControl::setFocus(BOOL focus)
 {
 	LLNearbyChat::instance().setFocusedInputEditor(this,focus);
 	LLLineEditor::setFocus(focus);
+}
+
+void LLNearbyChatControl::autohide()
+{
+	if(getName()=="default_chat_bar")
+	{
+		if(gSavedSettings.getBOOL("CloseChatOnReturn"))
+		{
+			setFocus(FALSE);
+		}
+
+		if(gSavedSettings.getBOOL("AutohideChatBar"))
+		{
+			LLNearbyChat::instance().showDefaultChatBar(FALSE);
+		}
+	}
+}
+
+// handle ESC key here
+BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
+{
+	// autohide the chat bar if escape key was pressed and we're the default chat bar
+	if(key==KEY_ESCAPE && mask==MASK_NONE)
+	{
+		autohide();
+		gAgent.stopTyping();
+	}
+
+	return LLLineEditor::handleKeyHere(key,mask);
 }

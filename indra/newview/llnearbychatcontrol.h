@@ -42,6 +42,8 @@ public:
 	virtual void onFocusLost();
 	virtual void setFocus(BOOL focus);
 
+	virtual BOOL handleKeyHere(KEY key,MASK mask);
+
 	static BOOL matchChatTypeTrigger(const std::string& in_str, std::string* out_str);
 
 private:
@@ -50,6 +52,9 @@ private:
 
 	// Chat data entered to be sent to nearby chat
 	void onCommit();
+
+	// Unfocus and autohide chat bar accordingly if we are the default chat bar
+	void autohide();
 };
 
 #endif
