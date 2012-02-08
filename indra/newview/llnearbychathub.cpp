@@ -76,12 +76,16 @@ LLNearbyChat::LLNearbyChat() :
 	mDefaultChatBar(NULL),
 	mFocusedInputEditor(NULL)
 {
-	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&LLNearbyChat::showDefaultChatBar, this));
-
+	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&LLNearbyChat::onDefaultChatBarButtonClicked, this));
 }
 
 LLNearbyChat::~LLNearbyChat()
 {
+}
+
+void LLNearbyChat::onDefaultChatBarButtonClicked()
+{
+	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
 }
 
 //void send_chat_from_viewer(const std::string& utf8_out_text, EChatType type, S32 channel)
@@ -449,12 +453,13 @@ void LLNearbyChat::registerChatBar(LLNearbyChatControl* chatBar)
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void LLNearbyChat::showDefaultChatBar() const
+void LLNearbyChat::showDefaultChatBar(BOOL visible) const
 {
 	if(!mDefaultChatBar)
 		return;
 
-	BOOL visible=gSavedSettings.getBOOL("MainChatbarVisible");
+	// change settings control to signal button state
+	gSavedSettings.setBOOL("MainChatbarVisible",visible);
 
 	mDefaultChatBar->getParent()->setVisible(visible);
 	mDefaultChatBar->setVisible(visible);

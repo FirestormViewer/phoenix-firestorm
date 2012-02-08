@@ -2609,7 +2609,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		// 	LLNearbyChatBar::getInstance()->startChat(NULL);
 		// 	return TRUE;
 		// }
-		gSavedSettings.setBOOL("MainChatbarVisible",TRUE);
+		LLNearbyChat::instance().showDefaultChatBar(TRUE);
 		return TRUE;
 		// </FS:Zi>
 	}

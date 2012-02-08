@@ -117,7 +117,7 @@ LLNearbyChatControl::~LLNearbyChatControl()
 
 void LLNearbyChatControl::onCommit()
 {
-	LLNearbyChat::getInstance()->sendChat(getConvertedText(),CHAT_TYPE_NORMAL);
+	LLNearbyChat::instance().sendChat(getConvertedText(),CHAT_TYPE_NORMAL);
 	setText(LLStringExplicit(""));
 
 	if(getName()=="default_chat_bar")
@@ -131,7 +131,7 @@ void LLNearbyChatControl::onCommit()
 		{
 			setVisible(FALSE);
 			getParent()->setVisible(FALSE);
-			gSavedSettings.setBOOL("MainChatbarVisible",FALSE);
+			LLNearbyChat::instance().showDefaultChatBar(FALSE);
 		}
 	}
 
