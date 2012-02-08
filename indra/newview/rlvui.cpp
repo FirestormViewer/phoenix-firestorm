@@ -306,9 +306,15 @@ void RlvUIEnabler::onToggleShowLoc()
 
 	// Start or stop filtering the "About Land" and "Region / Estate" floaters
 	if ( (!fEnable) && (!m_ConnFloaterShowLoc.connected()) )
+	{
 		m_ConnFloaterShowLoc = LLFloaterReg::setValidateCallback(boost::bind(&RlvUIEnabler::filterFloaterShowLoc, this, _1, _2));
+		m_ConnPanelShowLoc = LLFloaterSidePanelContainer::setValidateCallback(boost::bind(&RlvUIEnabler::filterPanelShowLoc, this, _1, _2, _3));
+	}
 	else if ( (fEnable) && (m_ConnFloaterShowLoc.connected()) )
+	{
 		m_ConnFloaterShowLoc.disconnect();
+		m_ConnPanelShowLoc.disconnect();
+	}
 }
 
 // Checked: 2010-02-28 (RLVa-1.4.0a) | Added: RLVa-1.2.0a
@@ -466,7 +472,7 @@ bool RlvUIEnabler::filterFloaterGeneric(const std::string& strName, const LLSD&)
 	return m_FilteredFloaters.end() == m_FilteredFloaters.find(strName);
 }
 
-// Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+// Checked: 2010-04-22 (RLVa-1.4.5) | Added: RLVa-1.2.0
 bool RlvUIEnabler::filterFloaterShowLoc(const std::string& strName, const LLSD&)
 {
 	if ("about_land" == strName)
@@ -475,6 +481,20 @@ bool RlvUIEnabler::filterFloaterShowLoc(const std::string& strName, const LLSD&)
 		return canViewRegionProperties();
 	else if ("god_tools" == strName)
 		return false;
+	return true;
+}
+
+// Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+bool RlvUIEnabler::filterPanelShowLoc(const std::string& strFloater, const std::string&, const LLSD& sdKey)
+{
+	if ("places" == strFloater)
+	{
+		const std::string strType = sdKey["type"].asString();
+		if ("create_landmark" == strType)
+			return false;
+		else if ("agent" == strType)
+			return canViewParcelProperties();
+	}
 	return true;
 }
 

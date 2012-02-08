@@ -603,7 +603,7 @@ void LLLocationInputCtrl::reshape(S32 width, S32 height, BOOL called_from_parent
 
 void LLLocationInputCtrl::onInfoButtonClicked()
 {
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		return;
 // [/RLVa:KB]
@@ -613,7 +613,7 @@ void LLLocationInputCtrl::onInfoButtonClicked()
 
 void LLLocationInputCtrl::onForSaleButtonClicked()
 {
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		return;
 // [/RLVa:KB]
@@ -623,7 +623,7 @@ void LLLocationInputCtrl::onForSaleButtonClicked()
 
 void LLLocationInputCtrl::onAddLandmarkButtonClicked()
 {
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		return;
 // [/RLVa:KB]
@@ -744,7 +744,7 @@ void LLLocationInputCtrl::onTextEditorRightClicked(S32 x, S32 y, MASK mask)
 
 void LLLocationInputCtrl::refresh()
 {
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 	mInfoBtn->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 // [/RLVa:KB]
 
@@ -1021,7 +1021,7 @@ void LLLocationInputCtrl::enableAddLandmarkButton(bool val)
 // depending on whether current parcel has been landmarked.
 void LLLocationInputCtrl::updateAddLandmarkButton()
 {
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 	mAddLandmarkBtn->setVisible(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 // [/RLVa:KB]
 	enableAddLandmarkButton(LLLandmarkActions::hasParcelLandmark());
@@ -1053,7 +1053,7 @@ void LLLocationInputCtrl::updateContextMenu(){
 		{
 			landmarkItem->setLabel(LLTrans::getString("EditLandmarkNavBarMenu"));
 		}
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 		landmarkItem->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 // [/RLVa:KB]
 	}
@@ -1111,7 +1111,7 @@ void LLLocationInputCtrl::onLocationContextMenuItemClicked(const LLSD& userdata)
 	}
 	else if (item == "landmark")
 	{
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.4.5) | Added: RLVa-1.2.0
 		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 		{
 // [/RLVa:KB]

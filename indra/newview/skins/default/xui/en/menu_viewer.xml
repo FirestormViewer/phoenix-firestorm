@@ -390,6 +390,8 @@
          name="Place Profile">
             <menu_item_call.on_click
              function="World.PlaceProfile" />
+            <menu_item_call.on_enable
+             function="World.EnablePlaceProfile" />
         </menu_item_call>
         <menu_item_call
          label="About land"
@@ -397,12 +399,18 @@
             <menu_item_call.on_click
              function="Floater.Show"
              parameter="about_land" />
+            <menu_item_call.on_enable
+             function="Floater.CanShow"
+             parameter="about_land" />
         </menu_item_call>
         <menu_item_call
          label="Region / Estate"
          name="Region/Estate">
             <menu_item_call.on_click
              function="Floater.Show"
+             parameter="region_info" />
+            <menu_item_call.on_enable
+             function="Floater.CanShow"
              parameter="region_info" />
         </menu_item_call>
         <menu_item_call

@@ -7,8 +7,8 @@
            tooltip_ref="Command_AboutLand_Tooltip"
            execute_function="Floater.ToggleOrBringToFront"
            execute_parameters="about_land"
-           is_enabled_function="RLV.EnableIfNot"
-           is_enabled_parameters="showloc"
+           is_enabled_function="Floater.CanShow"
+           is_enabled_parameters="about_land"
            is_running_function="Floater.IsOpen"
            is_running_parameters="about_land"
            />

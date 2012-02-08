@@ -242,6 +242,14 @@ LLFloaterReg::const_instance_list_t& LLFloaterReg::getFloaterList(const std::str
 
 // Visibility Management
 
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+//static
+bool LLFloaterReg::canShowInstance(const std::string& name, const LLSD& key)
+{
+	return mValidateSignal(name, key);
+}
+// [/RLVa:KB]
+
 //static
 LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus) 
 {
