@@ -140,7 +140,6 @@ const static boost::regex NEWLINES("\\n{1}");
 
 #include "lltexturefetch.h"
 // [AO : Radar]
-#include "llsidetraytab.h"
 #include "llpanelpeople.h"
 // [/AO]
 
