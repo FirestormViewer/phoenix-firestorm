@@ -1946,37 +1946,33 @@ bool idle_startup()
 		LLLandmark::registerCallbacks(msg);
 		display_startup();
 
-		// Ansariel: Moved after inventory creation. Otherwise the responses
-		//           from the money balance request and mutelist request
-		//           seem to get lost under certain conditions
+		// <FS:Ansariel> Moved after inventory creation. Otherwise the responses
+		//               from the money balance request and mutelist request
+		//               seem to get lost under certain conditions
 		//// request mute list
 		//llinfos << "Requesting Mute List" << llendl;
 		//LLMuteList::getInstance()->requestFromServer(gAgent.getID());
-
+		//display_startup();
 		//// Get L$ and ownership credit information
 		//llinfos << "Requesting Money Balance" << llendl;
 		//LLStatusBar::sendMoneyBalanceRequest();
 
+		//display_startup();
+		// </FS:Ansariel>
 		// request all group information
 		llinfos << "Requesting Agent Data" << llendl;
 		gAgent.sendAgentDataUpdateRequest();
+		display_startup();
 
 		// Create the inventory views
 		// This is done in the sidepanel floaters already -Zi
 		// llinfos << "Creating Inventory Views" << llendl;
 		// LLFloaterReg::getInstance("inventory");
+		//display_startup();
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
-		if (rlv_handler_t::isEnabled())
-		{
-			// Regularly process a select subset of retained commands during logon
-			gIdleCallbacks.addFunction(RlvHandler::onIdleStartup, new LLTimer());
-		}
-// [/RLVa:KB]
-
-		// Ansariel: Moved after inventory creation. Otherwise the responses
-		//           from the money balance request and mutelist request
-		//           seem to get lost under certain conditions
+		// <FS:Ansariel> Moved after inventory creation. Otherwise the responses
+		//               from the money balance request and mutelist request
+		//               seem to get lost under certain conditions
 		// request mute list
 		llinfos << "Requesting Mute List" << llendl;
 		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
@@ -1984,16 +1980,10 @@ bool idle_startup()
 		// Get L$ and ownership credit information
 		llinfos << "Requesting Money Balance" << llendl;
 		LLStatusBar::sendMoneyBalanceRequest();
-// ND_MERGE Following lines (except display_startup, that's new Voodoo) had been deleted from FS. 
-//		display_startup();
-//		// request all group information
-//		llinfos << "Requesting Agent Data" << llendl;
-//		gAgent.sendAgentDataUpdateRequest();
-//		display_startup();
-//		// Create the inventory views
-//		llinfos << "Creating Inventory Views" << llendl;
-//		LLFloaterReg::getInstance("inventory");
-//		display_startup();
+
+		display_startup();
+		// </FS:Ansariel>
+
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
 		if (rlv_handler_t::isEnabled())
 		{
