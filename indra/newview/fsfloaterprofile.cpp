@@ -31,9 +31,11 @@
 // Newview
 #include "fspanelprofile.h"
 #include "llavatarnamecache.h"
+// #include "fspanelpicks.h"
 
 static const std::string PANEL_PROFILE = "panel_profile_secondlife";
 static const std::string PANEL_WEB = "panel_profile_web";
+static const std::string PANEL_PICKS = "panel_profile_picks";
 static const std::string PANEL_FIRSTLIFE = "panel_profile_firstlife";
 static const std::string PANEL_NOTES = "panel_profile_notes";
 
@@ -60,18 +62,26 @@ void FSFloaterProfile::onOpen(const LLSD& key)
     
     //HACK* fix this :(
     FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
-    panel_profile->onOpen(getAvatarId());
     FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
-    panel_web->onOpen(getAvatarId());
+    FSPanelProfilePicks* panel_picks = findChild<FSPanelProfilePicks>(PANEL_PICKS);
     FSPanelProfileFirstLife* panel_firstlife = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
-    panel_firstlife->onOpen(getAvatarId());
     FSPanelAvatarNotes* panel_notes = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+    
+    panel_profile->onOpen(getAvatarId());
+    panel_web->onOpen(getAvatarId());
+    panel_picks->onOpen(getAvatarId());
+    panel_firstlife->onOpen(getAvatarId());
     panel_notes->onOpen(getAvatarId());
 
 	// Update the avatar name.
 	LLAvatarNameCache::get(getAvatarId(), boost::bind(&FSFloaterProfile::onAvatarNameCache, this, _1, _2));
 
     //process tab open cmd here
+}
+
+BOOL FSFloaterProfile::postBuild()
+{
+	return TRUE;
 }
 
 void FSFloaterProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)

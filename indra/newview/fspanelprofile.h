@@ -33,11 +33,13 @@
 #include "llcallingcard.h"
 #include "llvoiceclient.h"
 #include "llmediactrl.h"
+#include "llremoteparcelrequest.h"
 
 class LLAvatarName;
 class LLTextBox;
 class LLMediaCtrl;
-
+class LLTabContainer;
+class LLTextureCtrl;
 
 /**
 * Base class for any Profile View or My Profile Panel.
@@ -206,6 +208,119 @@ private:
     LLTextBox*          mStatusText;
     
     bool                mVoiceStatus;
+};
+
+
+/**
+* Panel for displaying Avatar's picks.
+*/
+
+class FSPanelPick : public LLPanel, public LLAvatarPropertiesObserver, LLRemoteParcelInfoObserver
+{
+public:
+
+    // Creates new panel
+    static FSPanelPick* create();
+    
+    /*virtual*/ ~FSPanelPick();
+
+	/*virtual*/ BOOL postBuild();
+    
+	void setAvatarId(const LLUUID& avatar_id);
+
+	void setPickId(const LLUUID& id) { mPickId = id; }
+	
+	virtual void setPickName(const std::string& name);
+    
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+    
+    
+	//This stuff we got from LLRemoteParcelObserver, in the last one we intentionally do nothing
+	/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data);
+	/*virtual*/ void setParcelID(const LLUUID& parcel_id) { mParcelId = parcel_id; }
+	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason) {};
+
+protected:
+
+	FSPanelPick();
+    
+	/**
+	 * Sends remote parcel info request to resolve parcel name from its ID.
+	 */
+	void sendParcelInfoRequest();
+	
+	/** 
+	* "Location text" is actually the owner name, the original
+	* name that owner gave the parcel, and the location.
+	*/
+	static std::string createLocationText(
+		const std::string& owner_name, 
+		const std::string& original_name,
+		const std::string& sim_name, 
+		const LLVector3d& pos_global);
+
+	virtual LLUUID& getAvatarId() { return mAvatarId; }
+    const LLUUID& getPickId() { return mPickId; }
+
+	/**
+	 * Sets snapshot id.
+	 *
+	 * Will mark snapshot control as valid if id is not null.
+	 * Will mark snapshot control as invalid if id is null. If null id is a valid value,
+	 * you have to manually mark snapshot is valid.
+	 */
+	// virtual void setSnapshotId(const LLUUID& id);
+	
+	// virtual void setPickDesc(const std::string& desc);
+	
+	// virtual void setPickLocation(const std::string& location);
+	
+	virtual void setPosGlobal(const LLVector3d& pos) { mPosGlobal = pos; }
+	virtual LLVector3d& getPosGlobal() { return mPosGlobal; }
+
+	/**
+	 * Callback for "Map" button, opens Map
+	 */
+	// void onClickMap();
+
+	/**
+	 * Callback for "Teleport" button, teleports user to Pick location.
+	 */
+	// void onClickTeleport();
+
+protected:
+
+	LLTextureCtrl*			mSnapshotCtrl;
+
+	LLUUID mAvatarId;
+	LLVector3d mPosGlobal;
+	LLUUID mParcelId;
+	LLUUID mPickId;
+	LLUUID mRequestedId;
+};
+
+class FSPanelProfilePicks
+	: public FSPanelProfileTab
+{
+public:
+	FSPanelProfilePicks();
+	/*virtual*/ ~FSPanelProfilePicks();
+
+    /*virtual*/ BOOL postBuild();
+
+	/*virtual*/ void onOpen(const LLSD& key);
+
+	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+protected:
+	/**
+	 * Sends update data request to server.
+	 */
+    void updateData();
+    
+private:
+    LLTabContainer* mTabContainer;
+    LLUICtrl* mNoItemsLabel;
 };
 
 

@@ -38,6 +38,7 @@
 #include "llavatariconctrl.h"
 #include "llclipboard.h" //gClipboard
 #include "llmenubutton.h"
+#include "lltabcontainer.h"
 #include "lltextbox.h"
 #include "lltexteditor.h"
 #include "lltexturectrl.h"
@@ -61,6 +62,7 @@
 
 static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile_secondlife");
 static LLRegisterPanelClassWrapper<FSPanelProfileWeb> t_panel_web("panel_profile_web");
+static LLRegisterPanelClassWrapper<FSPanelProfilePicks> t_panel_picks("panel_profile_picks");
 static LLRegisterPanelClassWrapper<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
 static LLRegisterPanelClassWrapper<FSPanelAvatarNotes> t_panel_notes("panel_profile_notes");
 
@@ -330,11 +332,6 @@ void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarNam
 		getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );
 		getChild<LLUICtrl>("solo_username_label")->setVisible( true );
 	}
-
-    //KC: This is very hacky, but getParent() would not work
-    // LLFloater* pParentView = LLFloaterReg::getInstance("floater_profile", LLSD().with("id", agent_id));
-	// if (pParentView)
-		// pParentView->setTitle(av_name.getCompleteName());
 }
 
 void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
@@ -534,7 +531,6 @@ void FSPanelProfile::onShareButtonClick()
 
 void FSPanelProfile::onCopyToClipboard()
 {
-	// std::string name = getChild<LLUICtrl>("display_name")->getValue().asString() + " (" + getChild<LLUICtrl>("user_name")->getValue().asString() + ")";
 	std::string name = getChild<LLUICtrl>("complete_name")->getValue().asString();
 	gClipboard.copyFromString(utf8str_to_wstring(name));
 }
@@ -564,7 +560,6 @@ void FSPanelProfile::onChange(EStatusType status, const std::string &channelURI,
 		return;
 	}
 
-	// getChildView("call")->setEnabled(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking());
 	mVoiceStatus == LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
 }
 
@@ -781,6 +776,237 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 			// Having a default case makes the compiler happy.
 		break;
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+FSPanelPick::FSPanelPick()
+ : LLPanel()
+ , LLAvatarPropertiesObserver()
+ , LLRemoteParcelInfoObserver()
+ , mAvatarId(LLUUID::null)
+ , mSnapshotCtrl(NULL)
+ , mPickId(LLUUID::null)
+ , mParcelId(LLUUID::null)
+ , mRequestedId(LLUUID::null)
+{
+}
+
+//static
+FSPanelPick* FSPanelPick::create()
+{
+	FSPanelPick* panel = new FSPanelPick();
+	panel->buildFromFile("panel_profile_pick.xml");
+	return panel;
+}
+
+FSPanelPick::~FSPanelPick()
+{
+	LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(), this);
+
+	if (mParcelId.notNull())
+	{
+		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
+	}
+}
+
+void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
+{
+	if(avatar_id.isNull())
+	{
+		return;
+	}
+	mAvatarId = avatar_id;
+
+	LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
+	LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
+    
+    LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
+}
+
+BOOL FSPanelPick::postBuild()
+{
+	mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
+
+	// childSetAction("teleport_btn", boost::bind(&FSPanelPick::onClickTeleport, this));
+	// childSetAction("show_on_map_btn", boost::bind(&FSPanelPick::onClickMap, this));
+	// childSetAction("back_btn", boost::bind(&FSPanelPick::onClickBack, this));
+
+	return TRUE;
+}
+
+void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
+{
+	if(APT_PICK_INFO != type)
+	{
+		return;
+	}
+	LLPickData* pick_info = static_cast<LLPickData*>(data);
+	if(!pick_info 
+		|| pick_info->creator_id != getAvatarId() 
+		|| pick_info->pick_id != getPickId())
+	{
+		return;
+	}
+
+	mParcelId = pick_info->parcel_id;
+	// setSnapshotId(pick_info->snapshot_id);
+    mSnapshotCtrl->setImageAssetID(pick_info->snapshot_id);
+	mSnapshotCtrl->setValid(TRUE);
+	setPickName(pick_info->name);
+	// setPickDesc(pick_info->desc);
+    getChild<LLUICtrl>("pick_desc")->setValue(pick_info->desc);
+	setPosGlobal(pick_info->pos_global);
+
+	// Send remote parcel info request to get parcel name and sim (region) name.
+	sendParcelInfoRequest();
+
+	// *NOTE dzaporozhan
+	// We want to keep listening to APT_PICK_INFO because user may 
+	// edit the Pick and we have to update Pick info panel.
+	// revomeObserver is called from onClickBack
+}
+
+void FSPanelPick::setPickName(const std::string& name)
+{
+	getChild<LLUICtrl>("pick_name")->setValue(name);
+}
+
+void FSPanelPick::sendParcelInfoRequest()
+{
+	if (mParcelId != mRequestedId)
+	{
+		LLRemoteParcelInfoProcessor::getInstance()->addObserver(mParcelId, this);
+		LLRemoteParcelInfoProcessor::getInstance()->sendParcelInfoRequest(mParcelId);
+
+		mRequestedId = mParcelId;
+	}
+}
+
+void FSPanelPick::processParcelInfo(const LLParcelData& parcel_data)
+{
+    getChild<LLUICtrl>("pick_location")->setValue(createLocationText(LLStringUtil::null, parcel_data.name, parcel_data.sim_name, getPosGlobal()));
+
+	// We have received parcel info for the requested ID so clear it now.
+	mRequestedId.setNull();
+
+	if (mParcelId.notNull())
+	{
+		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
+	}
+}
+
+// static
+std::string FSPanelPick::createLocationText(const std::string& owner_name, const std::string& original_name, const std::string& sim_name, const LLVector3d& pos_global)
+{
+	std::string location_text;
+	location_text.append(owner_name);
+	if (!original_name.empty())
+	{
+		if (!location_text.empty()) location_text.append(", ");
+		location_text.append(original_name);
+
+	}
+	if (!sim_name.empty())
+	{
+		if (!location_text.empty()) location_text.append(", ");
+		location_text.append(sim_name);
+	}
+
+	if (!location_text.empty()) location_text.append(" ");
+
+	if (!pos_global.isNull())
+	{
+		S32 region_x = llround((F32)pos_global.mdV[VX]) % REGION_WIDTH_UNITS;
+		S32 region_y = llround((F32)pos_global.mdV[VY]) % REGION_WIDTH_UNITS;
+		S32 region_z = llround((F32)pos_global.mdV[VZ]);
+		location_text.append(llformat(" (%d, %d, %d)", region_x, region_y, region_z));
+	}
+	return location_text;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+FSPanelProfilePicks::FSPanelProfilePicks()
+ : FSPanelProfileTab()
+{
+}
+
+FSPanelProfilePicks::~FSPanelProfilePicks()
+{
+}
+
+void FSPanelProfilePicks::onOpen(const LLSD& key)
+{
+	FSPanelProfileTab::onOpen(key);
+
+    updateData();
+}
+
+BOOL FSPanelProfilePicks::postBuild()
+{
+    mTabContainer = getChild<LLTabContainer>("tab_picks");
+    mNoItemsLabel = getChild<LLUICtrl>("picks_panel_text");
+    
+    return TRUE;
+}
+
+void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType type)
+{
+    if(APT_PICKS == type)
+    {
+        LLAvatarPicks* avatar_picks = static_cast<LLAvatarPicks*>(data);
+        if(avatar_picks && getAvatarId() == avatar_picks->target_id)
+        {
+            // mTabContainer->deleteAllTabs();
+
+            LLAvatarPicks::picks_list_t::const_iterator it = avatar_picks->picks_list.begin();
+            for(; avatar_picks->picks_list.end() != it; ++it)
+            {
+                LLUUID pick_id = it->first;
+                std::string pick_name = it->second;
+
+                FSPanelPick* pick_panel = FSPanelPick::create();
+                
+                pick_panel->setPickId(pick_id);
+                pick_panel->setPickName(pick_name);
+                pick_panel->setAvatarId(getAvatarId());
+                
+                mTabContainer->addTabPanel(
+                    LLTabContainer::TabPanelParams().
+                    panel(pick_panel).
+                    label(pick_name));
+            }
+
+            bool no_data = !mTabContainer->getTabCount();
+            mNoItemsLabel->setVisible(no_data);
+            if (no_data)
+            {
+                // if(getAvatarId() == gAgentID)
+                // {
+                    // mNoItemsLabel->setValue(LLTrans::getString("NoPicksClassifiedsText"));
+                // }
+                // else
+                // {
+                    // mNoItemsLabel->setValue(LLTrans::getString("NoAvatarPicksClassifiedsText"));
+                // }
+            }
+        }
+    }
+}
+
+void FSPanelProfilePicks::updateData()
+{
+    if (getAvatarId().notNull())
+	{
+        // mNoItemsLabel->setValue(LLTrans::getString("PicksClassifiedsLoadingText"));
+        mNoItemsLabel->setVisible(TRUE);
+        
+        LLAvatarPropertiesProcessor::getInstance()->sendAvatarPicksRequest(getAvatarId());
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////

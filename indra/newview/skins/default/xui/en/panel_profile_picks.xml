@@ -33,7 +33,7 @@
      width="70"
      layout="topleft"
      follows="left|top"
-     name="New..."
+     name="new_btn"
      label="New..."
      label_selected="New..." />
     <button
@@ -42,9 +42,10 @@
      width="70"
      layout="topleft"
      follows="left|top"
-     name="Delete..."
+     name="trash_btn"
      label="Delete..."
      label_selected="Delete..." />
+<!--
     <button
      left_pad="5"
      height="20"
@@ -64,6 +65,7 @@
      label="Export..."
      label_selected="Export..."
      mouse_opaque="true" />
+-->
 
     <tab_container
      top="50"
@@ -72,7 +74,8 @@
      right="-4"
      layout="topleft"
      follows="all"
-     name="picks tab"
+     name="tab_picks"
+     border_visible="true"
      tab_position="left" />
 
     <text
