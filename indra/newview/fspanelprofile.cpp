@@ -37,6 +37,7 @@
 // UI
 #include "llavatariconctrl.h"
 #include "llclipboard.h" //gClipboard
+#include "llcheckboxctrl.h"
 #include "llmenubutton.h"
 #include "lltabcontainer.h"
 #include "lltextbox.h"
@@ -62,6 +63,7 @@
 
 static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile_secondlife");
 static LLRegisterPanelClassWrapper<FSPanelProfileWeb> t_panel_web("panel_profile_web");
+static LLRegisterPanelClassWrapper<FSPanelProfileInterests> t_panel_interests("panel_profile_interests");
 static LLRegisterPanelClassWrapper<FSPanelProfilePicks> t_panel_picks("panel_profile_picks");
 static LLRegisterPanelClassWrapper<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
 static LLRegisterPanelClassWrapper<FSPanelAvatarNotes> t_panel_notes("panel_profile_notes");
@@ -777,6 +779,79 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 		break;
 	}
 }
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+static const S32 WANT_CHECKS = 8;
+static const S32 SKILL_CHECKS = 6;
+
+FSPanelProfileInterests::FSPanelProfileInterests()
+ : FSPanelProfileTab()
+{
+}
+
+FSPanelProfileInterests::~FSPanelProfileInterests()
+{
+}
+
+BOOL FSPanelProfileInterests::postBuild()
+{
+    for (S32 i=0; i < WANT_CHECKS; ++i)
+    {
+        std::string check_name = llformat("chk%d", i);
+        mWantChecks[i] = getChild<LLCheckBoxCtrl>(check_name);
+    }
+
+    for (S32 i=0; i < SKILL_CHECKS; ++i)
+    {
+        std::string check_name = llformat("schk%d", i);
+        mSkillChecks[i] = getChild<LLCheckBoxCtrl>(check_name);
+    }
+    
+    return TRUE;
+}
+
+
+void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType type)
+{
+    if(APT_INTERESTS_INFO == type)
+    {
+        const FSInterestsData* interests_data = static_cast<const FSInterestsData*>(data);
+        if (interests_data && getAvatarId() == interests_data->avatar_id)
+        {
+            for (S32 i=0; i < WANT_CHECKS; ++i)
+            {
+                if (interests_data->want_to_mask & 1<<i)
+                {
+                    mWantChecks[i]->setValue(TRUE);
+                }
+                else
+                {
+                    mWantChecks[i]->setValue(FALSE);
+                }
+            }
+            
+            for (S32 i=0; i < SKILL_CHECKS; ++i)
+            {
+                if (interests_data->skills_mask & 1<<i)
+                {
+                    mSkillChecks[i]->setValue(TRUE);
+                }
+                else
+                {
+                    mSkillChecks[i]->setValue(FALSE);
+                }
+            }
+
+            childSetText("want_to_edit",    interests_data->want_to_text);
+            childSetText("skills_edit",     interests_data->skills_text);
+            childSetText("languages_edit",  interests_data->languages_text);
+        }
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////

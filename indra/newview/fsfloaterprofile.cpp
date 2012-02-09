@@ -33,11 +33,12 @@
 #include "llavatarnamecache.h"
 // #include "fspanelpicks.h"
 
-static const std::string PANEL_PROFILE = "panel_profile_secondlife";
-static const std::string PANEL_WEB = "panel_profile_web";
-static const std::string PANEL_PICKS = "panel_profile_picks";
-static const std::string PANEL_FIRSTLIFE = "panel_profile_firstlife";
-static const std::string PANEL_NOTES = "panel_profile_notes";
+static const std::string PANEL_PROFILE      = "panel_profile_secondlife";
+static const std::string PANEL_WEB          = "panel_profile_web";
+static const std::string PANEL_INTERESTS    = "panel_profile_interests";
+static const std::string PANEL_PICKS        = "panel_profile_picks";
+static const std::string PANEL_FIRSTLIFE    = "panel_profile_firstlife";
+static const std::string PANEL_NOTES        = "panel_profile_notes";
 
 FSFloaterProfile::FSFloaterProfile(const LLSD& key)
  : LLFloater(key)
@@ -61,14 +62,16 @@ void FSFloaterProfile::onOpen(const LLSD& key)
     setAvatarId(id);
     
     //HACK* fix this :(
-    FSPanelProfile* panel_profile = findChild<FSPanelProfile>(PANEL_PROFILE);
-    FSPanelProfileWeb* panel_web = findChild<FSPanelProfileWeb>(PANEL_WEB);
-    FSPanelProfilePicks* panel_picks = findChild<FSPanelProfilePicks>(PANEL_PICKS);
-    FSPanelProfileFirstLife* panel_firstlife = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
-    FSPanelAvatarNotes* panel_notes = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+    FSPanelProfile* panel_profile               = findChild<FSPanelProfile>(PANEL_PROFILE);
+    FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
+    FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
+    FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
+    FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
+    FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
     
     panel_profile->onOpen(getAvatarId());
     panel_web->onOpen(getAvatarId());
+    panel_interests->onOpen(getAvatarId());
     panel_picks->onOpen(getAvatarId());
     panel_firstlife->onOpen(getAvatarId());
     panel_notes->onOpen(getAvatarId());

@@ -36,10 +36,11 @@
 #include "llremoteparcelrequest.h"
 
 class LLAvatarName;
-class LLTextBox;
-class LLMediaCtrl;
+class LLCheckBoxCtrl;
 class LLTabContainer;
+class LLTextBox;
 class LLTextureCtrl;
+class LLMediaCtrl;
 
 /**
 * Base class for any Profile View or My Profile Panel.
@@ -212,6 +213,66 @@ private:
 
 
 /**
+* Panel for displaying Avatar's web profile and home page.
+*/
+class FSPanelProfileWeb
+    : public FSPanelProfileTab
+    , public LLViewerMediaObserver
+{
+public:
+    FSPanelProfileWeb();
+    /*virtual*/ ~FSPanelProfileWeb();
+
+    /*virtual*/ BOOL postBuild();
+
+    /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+    /*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
+
+    // void load(std::string url);
+    // static void onURLKeystroke(LLLineEditor* editor, void* data);
+    // static void onCommitLoad(LLUICtrl* ctrl, void* data);
+    // static void onCommitURL(LLUICtrl* ctrl, void* data);
+    // static void onClickWebProfileHelp(void *);
+
+    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+
+protected:
+    void onCommitLoad(LLUICtrl* ctrl);
+    void onCommitWebProfile(LLUICtrl* ctrl);
+
+private:
+    std::string         mURLHome;
+    std::string         mURLWebProfile;
+    LLMediaCtrl*        mWebBrowser;
+    LLFrameTimer        mPerformanceTimer;
+    bool                mFirstNavigate;
+    bool                mCompleted;
+};
+
+/**
+* Panel for displaying Avatar's interests.
+*/
+class FSPanelProfileInterests
+    : public FSPanelProfileTab
+{
+public:
+    FSPanelProfileInterests();
+    /*virtual*/ ~FSPanelProfileInterests();
+
+    /*virtual*/ BOOL postBuild();
+
+    /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+protected:
+
+private:
+    LLCheckBoxCtrl *mWantChecks[8];
+    LLCheckBoxCtrl *mSkillChecks[6];
+};
+
+
+/**
 * Panel for displaying Avatar's picks.
 */
 
@@ -323,44 +384,6 @@ private:
     LLUICtrl* mNoItemsLabel;
 };
 
-
-/**
-* Panel for displaying Avatar's web profile and home page.
-*/
-class FSPanelProfileWeb
-	: public FSPanelProfileTab
-	, public LLViewerMediaObserver
-{
-public:
-	FSPanelProfileWeb();
-	/*virtual*/ ~FSPanelProfileWeb();
-
-    /*virtual*/ BOOL postBuild();
-
-	/*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-
-    /*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
-
-    // void load(std::string url);
-    // static void onURLKeystroke(LLLineEditor* editor, void* data);
-    // static void onCommitLoad(LLUICtrl* ctrl, void* data);
-    // static void onCommitURL(LLUICtrl* ctrl, void* data);
-    // static void onClickWebProfileHelp(void *);
-
-    void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-
-protected:
-	void onCommitLoad(LLUICtrl* ctrl);
-	void onCommitWebProfile(LLUICtrl* ctrl);
-    
-private:
-    std::string         mURLHome;
-    std::string         mURLWebProfile;
-    LLMediaCtrl*        mWebBrowser;
-    LLFrameTimer        mPerformanceTimer;
-    bool                mFirstNavigate;
-    bool                mCompleted;
-};
 
 
 /**
