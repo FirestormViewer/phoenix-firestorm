@@ -1792,6 +1792,10 @@ void LLFloater::setTornOff(bool torn_off)
 	else if (!torn_off)						// Attach to parent.
 	{
 		storeRectControl();
+		// <FS:Zi> Mark floater as hosted here already, so any storeRectControl() call
+		//         will know NOT to save floater sizes.
+		mTornOff = false;	// <FS:Zi>
+
 		// save the current size and position -Zi
 		setExpandedRect( getRect() );
 		LLMultiFloater* new_host = (LLMultiFloater*)mLastHostHandle.get();
@@ -1807,7 +1811,7 @@ void LLFloater::setTornOff(bool torn_off)
 			// make sure host is visible
 			new_host->openFloater(new_host->getKey());
 		}
-		mTornOff = false;
+		// mTornOff = false;	// <FS:Zi> This would be too late, so we moved it up
 	}
 	updateTitleButtons();
 

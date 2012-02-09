@@ -339,6 +339,9 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	floaterp->setHost(NULL);
 	floaterp->applyRectControl();
 
+	// <FS:Zi> Make sure the floater doesn't resize with screen size changes
+	floaterp->setFollowsNone();		// <FS:Zi>
+
 	updateResizeLimits();
 
 	tabOpen((LLFloater*)mTabContainer->getCurrentPanel(), false);
