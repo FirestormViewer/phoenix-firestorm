@@ -1,269 +1,376 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!-- Side tray panel -->
 <panel
- default_tab_group="1"
- follows="all"
- height="449"
- label="People"
- layout="topleft"
- left="0"
- min_height="350"
- name="people_panel"
- top="0"
- width="333">
+	default_tab_group="1"
+	follows="all"
+	height="449"
+	label="People"
+	layout="topleft"
+	left="0"
+	min_height="350"
+	name="people_panel"
+	top="0"
+	width="333">
 	<string
-	  name="high_server_load"
-	  value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
+		name="high_server_load"
+		value="Due to server load, mass toggling visibility can take a while to become effective. Please be patient."/>
 	<string
-	  name="camera_no_focus"
-	  value="The camera cannot focus user [AVATARNAME] because they are outside your draw distance."/>
+		name="camera_no_focus"
+		value="The camera cannot focus user [AVATARNAME] because they are outside your draw distance."/>
 	<string
-	  name="entering_draw_distance"
-	  value="[AVATARNAME] entered draw distance ([DISTANCE] m)."/>
+		name="entering_draw_distance"
+		value="[AVATARNAME] entered draw distance ([DISTANCE] m)."/>
 	<string
-	  name="leaving_draw_distance"
-	  value="[AVATARNAME] left draw distance."/>
+		name="leaving_draw_distance"
+		value="[AVATARNAME] left draw distance."/>
 	<string
-	  name="entering_chat_range"
-	  value="[AVATARNAME] entered chat range ([DISTANCE] m)."/>
+		name="entering_chat_range"
+		value="[AVATARNAME] entered chat range ([DISTANCE] m)."/>
 	<string
-	  name="leaving_chat_range"
-	  value="[AVATARNAME] left chat range."/>
+		name="leaving_chat_range"
+		value="[AVATARNAME] left chat range."/>
 	<string
-	  name="entering_region"
-	  value="[AVATARNAME] entered the region."/>
+		name="entering_region"
+		value="[AVATARNAME] entered the region."/>
 	<string
-	  name="entering_region_distance"
-	  value="[AVATARNAME] entered the region ([DISTANCE] m)."/>
+		name="entering_region_distance"
+		value="[AVATARNAME] entered the region ([DISTANCE] m)."/>
 	<string
-	  name="leaving_region"
-	  value="[AVATARNAME] left the region."/>
+		name="leaving_region"
+		value="[AVATARNAME] left the region."/>
     <string
-     name="no_recent_people"
-     value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
+		name="no_recent_people"
+		value="No recent people. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
     <string
-     name="no_filtered_recent_people"
-     value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
+		name="no_filtered_recent_people"
+		value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
     <string
-     name="no_one_near"
-     value="No one nearby. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
+		name="no_one_near"
+		value="No one nearby. Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests." />
     <string
-     name="no_one_filtered_near"
-     value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
+		name="no_one_filtered_near"
+		value="Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search]." />
     <string
-     name="no_friends_online"
-     value="No friends online" />
+		name="no_friends_online"
+		value="No friends online" />
     <string
-     name="no_friends"
-     value="No friends" />
+		name="no_friends"
+		value="No friends" />
     <string
-     name="no_friends_msg">
-         Find friends using [secondlife:///app/search/people Search] or right-click on a Resident to add them as a friend.
+		name="no_friends_msg">
+		Find friends using [secondlife:///app/search/people Search] or right-click on a Resident to add them as a friend.
 Looking for people to hang out with? Use the search box to find topics or content you might be interested in, then visit those places to meet people with similar interests.
-    </string>
+	</string>
     <string
-     name="no_filtered_friends_msg">
-         Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search].
-    </string>
-    <string
-     name="people_filter_label"
-     value="Filter People" />
-    <string
-     name="groups_filter_label"
-     value="Filter Groups" />
-     <!--
-     *WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
-     They are not defined as translatable in VLT. See EXT-5931
-     -->
-    <string
-     name="no_filtered_groups_msg"
-     value="Didn't find what you're looking for? Try [secondlife:///app/search/groups/[SEARCH_TERM] Search]." />
-    <string
-     name="no_groups_msg"
-     value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
+		name="no_filtered_friends_msg">
+		Didn't find what you're looking for? Try [secondlife:///app/search/people/[SEARCH_TERM] Search].
+	</string>
 	<string
-	 name="MiniMapToolTipMsg"
-	 value="[REGION](Double-click to open Map, shift-drag to pan)"/>
+		name="people_filter_label"
+		value="Filter People" />
 	<string
-	 name="AltMiniMapToolTipMsg"
-	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+		name="groups_filter_label"
+		value="Filter Groups" />
+		<!--
+			*WORKAROUND: for group_list.no_items_msg & group_list.no_filtered_items_msg attributes.
+			They are not defined as translatable in VLT. See EXT-5931
+		-->
 	<string
-	 name="avatar_name_count"
-	 value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
+		name="no_filtered_groups_msg"
+		value="Didn't find what you're looking for? Try [secondlife:///app/search/groups/[SEARCH_TERM] Search]." />
+	<string
+		name="no_groups_msg"
+		value="Looking for Groups to join? Try [secondlife:///app/search/groups Search]." />
+	<string
+		name="MiniMapToolTipMsg"
+		value="[REGION](Double-click to open Map, shift-drag to pan)"/>
+	<string
+		name="AltMiniMapToolTipMsg"
+		value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
+	<string
+		name="avatar_name_count"
+		value="Name [[TOTAL] / [IN_REGION] / [IN_CHAT_RANGE]]" />
 	<filter_editor
-     follows="left|top|right"
-     height="23"
-     layout="topleft"
-     left="10"
-     label="Filter"
-     max_length_chars="300"
-     name="filter_input"
-     text_pad_left="10"
-     top="3"
-     width="303" />
-    <tab_container
-     follows="all"
-     height="383"
-     layout="topleft"
-     left="5"
-     name="tabs"
-     tab_drag_commit="true"
-     tab_group="1"
-     tab_min_width="70"
-     tab_height="20"
-     tab_position="top"
-     top_pad="10"
-     halign="center"
-     width="317">
-         <panel
-         background_opaque="false"
-         background_visible="true"
-         bg_alpha_color="SL-Background_50"
-         bg_opaque_color="SL-Background_50"
-         follows="all"
-         height="383"
-         label="NEARBY"
-         layout="topleft"
-         left="0"
-         help_topic="people_nearby_tab"
-         name="nearby_panel"
-         top="0"
-         width="313">
-			
-			
-			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" name="radar_ls" auto_resize="false">
-			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false">
-             <net_map
-             bg_color="NetMapBackgroundColor"
-             visibility_control="ShowRadarMinimap"
-             follows="all"
-             layout="topleft"
-             left="3"
-             mouse_opaque="false"
-             name="Net Map"
-             width="307"
-             height="140"
-             top="0"/>
-             </layout_panel>
+		follows="left|top|right"
+		height="23"
+		layout="topleft"
+		left="2"
+		label="Filter"
+		max_length_chars="300"
+		name="filter_input"
+		text_pad_left="10"
+		top="2"
+		right="-2" />
 
-            <layout_panel layout="topleft" top="0" left="0" height="215" width="313"  mouse_opaque="false" follows="all" name="radarlayout">
-            <radar_list
-		     draw_heading="true"
-		     follows="all"
-		     height="215"
-		     layout="topleft"
-		     left="0"
-		     top_pad="0"
-		     sort_column="0"
-		     sort_ascending="true"
-		     name="radar_list"
-		     draw_stripes="true"
-		     multi_select="true"
-		     width="311">
-		        <radar_list.columns
-		         label="Name"
-		         name="name"
-		         relative_width="0.44" />
-		        <radar_list.columns
-		         label="Distance"
-		         name="range"
-		         relative_width="0.15" />
-		        <radar_list.columns
-		         label="Time"
-		         name="seen"
-		         relative_width="0.15" />
-		        <radar_list.columns
-		         label="Age"
-		         name="age"
-		         relative_width="0.1" />
-		        <radar_list.columns
-		         label=""
-		         name="in_region"
-		         relative_width="0.03" />
-		        <radar_list.columns
-		         label=""
-		         name="flags"
-		         relative_width="0.03" />
-		        <radar_list.columns
-		         label="av_id"
-		         name="uuid"
-		         relative_width="0" />
-		    </radar_list>
-		    </layout_panel>
-		  </layout_stack>
-            
-            <avatar_list
-             allow_select="true"
-             follows="left"
-             height="1"
-             ignore_online_status="true"
-             layout="topleft"
-             left="3"
-             multi_select="true"
-             name="nearby_avatar_list"
-             visible="false"
-             top_pad="0"
-             width="307" />
+	<tab_container
+		follows="all"
+		height="413"
+		layout="topleft"
+		left="2"
+		name="tabs"
+		tab_drag_commit="true"
+		tab_group="1"
+		tab_position="top"
+		top_pad="4"
+		halign="center"
+		right="-2">
 
-<!--  Buttons -->
+		<panel
+			background_visible="false"
+			follows="all"
+			height="400"
+			label="Nearby"
+			layout="topleft"
+			left="0"
+			help_topic="people_nearby_tab"
+			name="nearby_panel"
+			top="0"
+			width="313">
 
-            <panel
-             background_visible="true"
-             follows="left|right|bottom"
-             height="27"
-             label="bottom_panel"
-             layout="topleft"
-             left="3"
-             name="bottom_panel_nearby"
-             top_pad="0"
-             width="313">
-	             <menu_button
-	             follows="bottom|left"
-	             height="25"
-	             image_hover_unselected="Toolbar_Left_Over"
-	             image_overlay="OptionsMenu_Off"
-	             image_selected="Toolbar_Left_Selected"
-	             image_unselected="Toolbar_Left_Off"
-	             layout="topleft"
-	             left="0"
-	             name="nearby_view_sort_btn"
-	             tool_tip="Options"
-	             top="1"
-	             width="31" />
-             	<button
-                 follows="bottom|left"
-                 height="25"
-                 image_hover_unselected="Toolbar_Middle_Over"
-                  image_overlay="AddItem_Off"
-                 image_selected="Toolbar_Middle_Selected"
-                  image_unselected="Toolbar_Middle_Off"
-                 layout="topleft"
-                 left_pad="1"
-                 name="add_friend_btn_nearby"
-                 tool_tip="Add selected Resident to your friends List"
-                 width="31">
-               	<commit_callback
-                  function="People.addFriend" />
-            	</button>
-	             <slider
-		          control_name="NearMeRange"
-		          decimal_digits="0"
-		          follows="bottom|left"
-		          height="16"
-		          increment="2"
-		          initial_value="96"
-		          label="Range(m):"
-		          label_width="70"
-		          layout="topleft"
-		          max_val="4096"
-		          min_val="20"
-		          name="NearMeRange"
-		          visible="True"
-		          left_pad="10"
-		          width="220" />
-            </panel>
-        </panel>
-        
+			<tab_container
+				layout="topleft"
+				follows="all"
+				tab_position="bottom"
+				height="400">
+
+				<panel
+					layout="topleft"
+					follows="all"
+					label="List"
+					height="400">
+
+					<layout_stack
+						orientation="vertical"
+						clip="true"
+						follows="all"
+						layout="topleft"
+						top="0"
+						left="0"
+						height="400"
+						width="313"
+						mouse_opaque="false"
+						name="radar_ls"
+						border_size="0"
+						auto_resize="false">
+
+						<layout_panel
+							layout="topleft"
+							top="0"
+							left="0"
+							height="140"
+							width="313"
+							follows="all"
+							mouse_opaque="false"
+							visibility_control="ShowRadarMinimap"
+							name="minimaplayout"
+							user_resize="true"
+							auto_resize="false">
+
+							<net_map
+								bg_color="NetMapBackgroundColor"
+								visibility_control="ShowRadarMinimap"
+								follows="all"
+								layout="topleft"
+								left="0"
+								mouse_opaque="false"
+								name="Net Map"
+								width="313"
+								height="140"
+								top="0"/>
+
+						</layout_panel>
+
+						<layout_panel
+							layout="topleft"
+							top="0"
+							left="0"
+							height="260"
+							width="313"
+							mouse_opaque="false"
+							follows="all"
+							name="radarlayout"
+							user_resize="true"
+							auto_resize="true">
+
+							<radar_list
+								draw_heading="true"
+								follows="all"
+								layout="topleft"
+								left="0"
+								top_pad="0"
+								height="255"
+								sort_column="0"
+								sort_ascending="true"
+								name="radar_list"
+								draw_stripes="true"
+								multi_select="true"
+								width="311">
+								<radar_list.columns
+									label="Name"
+									name="name"
+									relative_width="0.44" />
+								<radar_list.columns
+									label="Distance"
+									name="range"
+									relative_width="0.15" />
+								<radar_list.columns
+									label="Time"
+									name="seen"
+									relative_width="0.15" />
+								<radar_list.columns
+									label="Age"
+									name="age"
+									relative_width="0.1" />
+								<radar_list.columns
+									label=""
+									name="in_region"
+									relative_width="0.03" />
+								<radar_list.columns
+									label=""
+									name="flags"
+									relative_width="0.03" />
+								<radar_list.columns
+									label="av_id"
+									name="uuid"
+									relative_width="0" />
+							</radar_list>
+						</layout_panel>
+					</layout_stack>
+
+				</panel>
+
+				<panel
+					label="Options"
+					border_visible="true"
+					layout="topleft"
+					follows="all"
+					top="0"
+					height="383">
+
+				<check_box
+					label="Show Minimap above Radar"
+					left="0"
+					top="4"
+					control_name="ShowRadarMinimap"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Report Crossing Draw Range"
+					left="0"
+					top_pad="2"
+					control_name="RadarReportDrawRange"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Report Crossing Chat Range"
+					left="0"
+					top_pad="2"
+					control_name="RadarReportChatRange"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Report Crossing your Region"
+					left="0"
+					top_pad="2"
+					control_name="RadarReportSimRange"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Report Enter Alerts to Scripts"
+					left="0"
+					top_pad="2"
+					control_name="RadarEnterChannelAlert"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Report Exit Alerts to Scripts"
+					left="0"
+					top_pad="2"
+					control_name="RadarLeaveChannelAlert"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+				<check_box
+					label="Limit range to:"
+					tool_tip="Limit Results to specific Radius"
+					left="0"
+					top_pad="2"
+					control_name="LimitRadarByRange"
+					width="100"
+					height="16"
+					layout="topleft"
+					follows="left|top" />
+				<slider
+					enabled_control="LimitRadarByRange"
+					control_name="NearMeRange"
+					decimal_digits="0"
+					follows="top|left|right"
+					height="16"
+					increment="2"
+					initial_value="96"
+					layout="topleft"
+					max_val="4096"
+					min_val="20"
+					name="NearMeRangeVintage"
+					visible="true"
+					left_pad="4"
+					width="140" />
+				<text
+					value="m"
+					layout="topleft"
+					follows="top|left"
+					width="20"
+					left_pad="-6"
+					height="16"
+					wrap="false" />
+
+				<text
+					layout="topleft"
+					follows="left|top"
+					value="Radar Name Format:"
+					left="3"
+					top_pad="4"
+					height="16"
+					width="120"/>
+				<combo_box
+					layout="topleft"
+					follows="left|top|right"
+					left_pad="2"
+					top_delta="-2"
+					height="20"
+					right="-1"
+					control_name="RadarNameFormat"
+					enabled_control="UseDisplayNames">
+					<combo_box.item value="0" label="Username" />
+					<combo_box.item value="1" label="DisplayName (Username)" />
+					<combo_box.item value="2" label="Username (Displayname)" />
+				</combo_box>
+
+			</panel>
+			<panel
+				class="panel_block_list_sidetray"
+				name="panel_block_list_sidetray"
+				filename="panel_block_list_sidetray.xml"
+				label="Blocked" />
+
+		</tab_container>
+	</panel>
         
 <!-- END NEARBY TAB -->        
         
@@ -323,18 +430,6 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  follows="all"
                  title="Online">
 
-
-                        <avatar_list
-                         allow_select="true"
-                         follows="all"
-                         height="356"
-                         layout="topleft"
-                         left="0"
-                         multi_select="true"
-                         name="avatars_online"
-                         show_permissions_granted="true"
-                         top="0"
-                         width="307" />
 <!--
                 </accordion_tab>
                 <accordion_tab
@@ -669,6 +764,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
             </panel>
         </panel>
     </tab_container>
+
+    <!-- Vintage doesn't need the buttons at the bottom,
+	     since everything is available in the context menus -Zi -->
     <panel
      follows="bottom|left|right"
      height="23"
@@ -676,6 +774,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
      left="8"
      top_pad="4"
      name="button_bar"
+     visible="false"
      width="313">
 
 <!--********************************Profile; IM; Call, Share, Teleport********************************-->
@@ -876,4 +975,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
             </layout_panel>
         </layout_stack>
     </panel>
+
+	<!-- keep these controls so the code doesn't complain about missing controls -Zi -->
+	<panel name="hide_controls" enabled="false" visible="false" left="0" top="0">
+	<avatar_list	follows="top|left" height="0" layout="topleft" name="nearby_avatar_list"
+					left="0" top="0" width="0" />
+	</panel>
 </panel>
