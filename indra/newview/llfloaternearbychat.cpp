@@ -197,9 +197,6 @@ BOOL LLFloaterNearbyChat::postBuild()
 		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
 		
-		// <FS:Ansariel> Show window title according to docking state
-		mDragHandle->setTitleVisible(gSavedSettings.getBOOL("ChatHistoryTornOff"));
-
 		return LLDockableFloater::postBuild();
 	}
 	
@@ -605,23 +602,6 @@ bool LLFloaterNearbyChat::isChatMultiTab()
 	static bool is_single_window = gSavedSettings.getS32("ChatWindow") == 1;
 	return is_single_window;
 }
-
-void LLFloaterNearbyChat::setDocked(bool docked, bool pop_on_undock)
-{
-	if((!isChatMultiTab()) && gSavedSettings.getBOOL("ChatHistoryTornOff"))
-	{
-		mDragHandle->setTitleVisible(docked); // <FS:Ansariel> Show window title according to docking state
-		LLDockableFloater::setDocked(docked, pop_on_undock);
-	}
-}
-
-// <FS:Ansariel> Show window title according to docking state
-void LLFloaterNearbyChat::setTornOff(bool torn_off)
-{
-	mDragHandle->setTitleVisible(torn_off);
-	LLDockableFloater::setTornOff(torn_off);
-}
-// </FS:Ansariel> Show window title according to docking state
 
 BOOL LLFloaterNearbyChat::getVisible()
 {

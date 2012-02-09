@@ -719,9 +719,12 @@ void LLFloater::openFloater(const LLSD& key)
 		getHost()->setMinimized(FALSE);
 		getHost()->setVisibleAndFrontmost(mAutoFocus);
 		getHost()->showFloater(this);
+		mTornOff=FALSE;	// <FS:Zi> Make sure the floater knows it's not torn off
 	}
 	else
 	{
+		mTornOff=TRUE;	// <FS:Zi> Make sure the floater knows it's torn off
+
 		LLFloater* floater_to_stack = LLFloaterReg::getLastFloaterInGroup(mInstanceName);
 		if (!floater_to_stack)
 		{

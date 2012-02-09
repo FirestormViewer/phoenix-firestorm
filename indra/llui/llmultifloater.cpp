@@ -205,7 +205,7 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 
 	// update torn off status and remove title bar
 	//	floaterp->setTornOff(FALSE); <FS:ND> ND_MERGE setting torn off here will bring us right into an endless loop when using nearbychatbar from catznip.
-	//	floaterp->setTitleVisible(FALSE);
+	floaterp->getDragHandle()->setTitleVisible(FALSE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop -= floaterp->getHeaderHeight();
 	floaterp->setRect(rect);
@@ -315,7 +315,7 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 
 	// update torn off status and add title bar
 	//	floaterp->setTornOff(TRUE); <FS:ND> ND_MERGE setting torn off here will bring us right back into removeFloater when using nearbychat from catznip.
-	//	floaterp->setTitleVisible(TRUE);
+	floaterp->getDragHandle()->setTitleVisible(TRUE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop += floaterp->getHeaderHeight();
 	floaterp->setRect(rect);
