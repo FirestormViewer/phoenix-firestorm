@@ -521,47 +521,56 @@ bool RlvUIEnabler::filterFloaterViewXXX(const std::string& strName, const LLSD&)
 
 // ============================================================================
 
-// Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+// Checked: 2012-02-09 (RLVa-1.4.5) | Modified: RLVa-1.4.5
 bool RlvUIEnabler::canViewParcelProperties()
 {
 	// We'll allow "About Land" as long as the user has the ability to return prims (through ownership or through group powers)
 	bool fShow = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 	{
-		// RELEASE-RLVa: [SL-2.0.0] Check that ôpening the "About Land" floater still sets focus to the current parcel is none is selected
-		LLParcelSelection* pParcelSel = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
-		LLParcel* pParcel = (pParcelSel) ? pParcelSel->getParcel() : LLViewerParcelMgr::getInstance()->getAgentParcel();
-		if ( ((pParcelSel) && (pParcelSel->hasOthersSelected())) || (!pParcel) )
-			return false;
-
-		// Ideally we could just use LLViewerParcelMgr::isParcelOwnedByAgent(), but that has that sneaky exemption for "god-like"
-		// RELEASE-RLVa: [SL-2.0.0] Check that the "inlining" of "isParcelOwnedByAgent" and "LLAgent::hasPowerInGroup()" still matches
-		const LLUUID& idOwner = pParcel->getOwnerID();
-		if ( (idOwner != gAgent.getID()) )
+		// RELEASE-RLVa: [SL-3.2] Check that opening the "About Land" floater still sets focus to the current parcel is none is selected
+		const LLParcel* pParcel = NULL;
+		if (LLViewerParcelMgr::getInstance()->selectionEmpty())
 		{
-			// LLAgent::hasPowerInGroup() has it too so copy/paste from there
-			S32 count = gAgent.mGroups.count();
-			for (S32 i = 0; i < count; ++i)
-			{
-				if (gAgent.mGroups.get(i).mID == idOwner)
-				{
-					fShow |= ((gAgent.mGroups.get(i).mPowers & GP_LAND_RETURN) > 0);
-					break;
-				}
-			}
+			pParcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
 		}
 		else
 		{
-			fShow = true;
+			LLParcelSelection* pParcelSel = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
+			if (pParcelSel->hasOthersSelected())
+				return false;
+			pParcel = pParcelSel->getParcel();
+		}
+
+		// Ideally we could just use LLViewerParcelMgr::isParcelOwnedByAgent(), but that has that sneaky exemption for "god-like"
+		if (pParcel)
+		{
+			const LLUUID& idOwner = pParcel->getOwnerID();
+			if ( (idOwner != gAgent.getID()) )
+			{
+				S32 count = gAgent.mGroups.count();
+				for (S32 i = 0; i < count; ++i)
+				{
+					if (gAgent.mGroups.get(i).mID == idOwner)
+					{
+						fShow = ((gAgent.mGroups.get(i).mPowers & GP_LAND_RETURN) > 0);
+						break;
+					}
+				}
+			}
+			else
+			{
+				fShow = true;
+			}
 		}
 	}
 	return fShow;
 }
 
-// Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+// Checked: 2010-04-20 (RLVa-1.4.5) | Modified: RLVa-1.2.0
 bool RlvUIEnabler::canViewRegionProperties()
 {
-	// We'll allow "Region / Estate" if the user is either the sim owner or an estate manager
+	// We'll allow "Region / Estate" if the user is either the region owner or an estate manager
 	bool fShow = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC);
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 	{
