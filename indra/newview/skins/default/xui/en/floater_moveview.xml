@@ -4,9 +4,11 @@
  specified_left="320"
  specified_bottom="80"
  legacy_header_height="18"
+ bg_opaque_image="Window_NoTitle_Background"
+ bg_alpha_image="Window_NoTitle_Foreground"
  can_dock="false"
  can_minimize="false"
- can_close="true"
+ can_close="false"
  height="72"
  layout="topleft"
  name="move_floater"
@@ -15,7 +17,7 @@
  save_visibility="true"
  single_instance="true"
  chrome="true"
- title="WALK / RUN / FLY"
+ title=""
  width="83">
     <string
      name="walk_forward_tooltip">
