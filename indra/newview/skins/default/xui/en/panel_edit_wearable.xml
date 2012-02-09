@@ -4,7 +4,7 @@
  bevel_style="in"
  follows="all"
  height="570"
- help_topic="edit_wearable"
+ help_topic="fs_edit_body_part"
  label="Wearable"
  layout="topleft"
  left="0"

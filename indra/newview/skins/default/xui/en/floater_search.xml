@@ -8,7 +8,7 @@
   min_height="400"
   min_width="500"
   name="floater_search"
-  help_topic="floater_search"
+  help_topic="fs_search"
   save_rect="true"
   save_visibility="true"
   title=""
