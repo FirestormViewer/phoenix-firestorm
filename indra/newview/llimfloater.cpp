@@ -72,8 +72,6 @@
 #include "llversioninfo.h"
 #include "llcheckboxctrl.h"
 
-#include "lldraghandle.h"	// <FS:Ansariel> Show window title according to docking state
-
 LLIMFloater::LLIMFloater(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
 	mControlPanel(NULL),
