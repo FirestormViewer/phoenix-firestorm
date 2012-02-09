@@ -36,7 +36,8 @@
                     height="500"
                     width="30"
                     mouse_opaque="false">
-        <toolbar follows="left|top|bottom"
+        <!-- FS:Ansariel: Special vertical toolbar -->
+        <toolbar_vertical follows="left|top|bottom"
                  button_panel.bg_opaque_image="Rounded_Rect_Right"
                  name="toolbar_left"
                  width="30"
@@ -55,7 +56,7 @@
                        visible="false"
 	                   image_name="Caret_Left_Icon"
                        name="caret" />
-        </toolbar>
+        </toolbar_vertical> <!-- FS:Ansariel: Special vertical toolbar -->
       </layout_panel>
       <layout_panel name="non_toolbar_panel"
                     auto_resize="true"
@@ -93,7 +94,8 @@
                     height="500"
                     width="30"
                     mouse_opaque="false">
-        <toolbar
+        <!-- FS:Ansariel: Special vertical toolbar -->
+        <toolbar_vertical
           button_panel.bg_opaque_image="Rounded_Rect_Left"
           follows="right|top|bottom"
           name="toolbar_right"
@@ -113,7 +115,7 @@
                 visible="false"
 	            image_name="Caret_Right_Icon"
 	            name="caret" />
-        </toolbar>
+        </toolbar_vertical> <!-- FS:Ansariel: Special vertical toolbar -->
       </layout_panel>
     </layout_stack>
   </layout_panel>

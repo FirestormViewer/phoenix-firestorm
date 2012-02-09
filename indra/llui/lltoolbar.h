@@ -255,10 +255,19 @@ public:
 	command_id_list_t& getCommandsList() { return mButtonCommands; }
 	void clearCommandsList();
 
-private:
+// <FS:Ansariel> Changed for separate vertical toolbar
+//private:
+//	friend class LLUICtrlFactory;
+//	LLToolBar(const Params&);
+//	~LLToolBar();
+
+protected:
 	friend class LLUICtrlFactory;
 	LLToolBar(const Params&);
-	~LLToolBar();
+	virtual ~LLToolBar();
+
+private:
+// <FS:Ansariel> Changed for separate vertical toolbar
 
 	void initFromParams(const Params&);
 	void createContextMenu();
@@ -332,5 +341,24 @@ public:
 // </FS:Zi>
 };
 
+// <FS:Ansariel> Separate vertical toolbar; By sub-classing LLToolBar,
+//               we can add a different widget tag, thus allowing us
+//               to have a different widget XML definition with a
+//               different layout than LLToolBar.
+class LLToolBarVertical : public LLToolBar
+{
+public:
+	struct Params : LLToolBar::Params{};
+
+protected:
+	friend class LLUICtrlFactory;
+	LLToolBarVertical(const Params& p) : LLToolBar(p)
+	{
+	}
+	virtual ~LLToolBarVertical()
+	{
+	}
+};
+// </FS:Ansariel> Separate vertical toolbar
 
 #endif  // LL_LLTOOLBAR_H
