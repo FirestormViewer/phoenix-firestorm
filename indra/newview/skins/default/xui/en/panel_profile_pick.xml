@@ -5,9 +5,14 @@
  height="360"
  width="310"
  layout="topleft"
- follows="all"
+ follows="left|top"
  name="panel_pick_info"
  help_topic="profile_pick_info" >
+ 
+    <panel.string
+     name="location_notice">
+(will update after save)
+    </panel.string>
 
     <texture_picker
      top="10"
@@ -35,7 +40,7 @@
      height="100"
      width="290"
      layout="topleft"
-     follows="left|top|bottom"
+     follows="left|top"
      border_visible="true"
      v_pad="3"
      h_pad="4"
@@ -44,23 +49,39 @@
      name="pick_desc"
      word_wrap="true"
      allow_html="true" />
-
+<!--
     <line_editor
      top_pad="10"
      left="10"
      height="20"
      width="290"
-     enabled="false"
      layout="topleft"
      follows="left|bottom"
-     name="pick_location" />
+     name="pick_location"
+     enabled="false" />
+-->
+    <text
+     top_pad="10"
+     left="10"
+     height="20"
+     width="290"
+     layout="topleft"
+     follows="left|top"
+     name="pick_location"
+     border_visible="true"
+     enabled="false"
+     type="string"
+     length="1"
+     word_wrap="false" >
+        loading...
+    </text>
 
     <button
      left="10"
      height="20"
      width="80"
      layout="topleft"
-     follows="left|bottom"
+     follows="left|top"
      label="Teleport"
      name="teleport_btn" />
 
@@ -70,7 +91,7 @@
      width="100"
      bottom_delta="0"
      layout="topleft"
-     follows="left|bottom"
+     follows="left|top"
      label="Show on Map"
      name="show_on_map_btn" />
 
@@ -79,8 +100,18 @@
      height="20"
      width="100"
      layout="topleft"
-     follows="left|bottom"
+     follows="left|top"
      label="Set Location"
-     name="set_location_btn" />
+     tooltip="Set to Current Location"
+     name="set_to_curr_location_btn" />
+     
+    <button
+     left="10"
+     height="20"
+     width="100"
+     layout="topleft"
+     follows="left|top"
+     label="Save Pick"
+     name="save_changes_btn" />
 
 </panel>

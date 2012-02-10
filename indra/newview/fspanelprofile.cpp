@@ -49,6 +49,7 @@
 // Newview
 #include "fsdata.h"
 #include "llagent.h" //gAgent
+#include "llagentpicksinfo.h"
 #include "llavataractions.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
@@ -60,6 +61,11 @@
 #include "llgroupactions.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h" //LLGridManager
+#include "llfloaterworldmap.h"
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
+#include "llworldmap.h"
 
 static LLRegisterPanelClassWrapper<FSPanelProfile> t_panel_profile("panel_profile_secondlife");
 static LLRegisterPanelClassWrapper<FSPanelProfileWeb> t_panel_web("panel_profile_web");
@@ -866,6 +872,9 @@ FSPanelPick::FSPanelPick()
  , mPickId(LLUUID::null)
  , mParcelId(LLUUID::null)
  , mRequestedId(LLUUID::null)
+ , mLocationChanged(false)
+ , mNeedData(true)
+ , mNewPick(false)
 {
 }
 
@@ -895,19 +904,68 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
     }
     mAvatarId = avatar_id;
 
-    LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
-    LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
+    mNeedData = true;
 
-    LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
+    // creating new Pick
+    if(getPickId().isNull())
+    {
+        mNewPick = true;
+
+        setPosGlobal(gAgent.getPositionGlobal());
+
+        LLUUID parcel_id = LLUUID::null, snapshot_id = LLUUID::null;
+        std::string pick_name, pick_desc, region_name;
+
+        LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+        if(parcel)
+        {
+            parcel_id = parcel->getID();
+            pick_name = parcel->getName();
+            pick_desc = parcel->getDesc();
+            snapshot_id = parcel->getSnapshotID();
+        }
+
+        LLViewerRegion* region = gAgent.getRegion();
+        if(region)
+        {
+            region_name = region->getName();
+        }
+
+        setParcelID(parcel_id);
+        setPickName(pick_name.empty() ? region_name : pick_name);
+        setPickDesc(pick_desc);
+        setSnapshotId(snapshot_id);
+        setPickLocation(createLocationText(getLocationNotice(), pick_name, region_name, getPosGlobal()));
+
+        enableSaveButton(true);
+    }
+    else
+    {
+        LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
+        LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
+
+        LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
+    }
+
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLUICtrl>("pick_name")->setEnabled(true);
+        getChild<LLUICtrl>("pick_desc")->setEnabled(true);
+        getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( true );
+    }
 }
 
 BOOL FSPanelPick::postBuild()
 {
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
 
-    // childSetAction("teleport_btn", boost::bind(&FSPanelPick::onClickTeleport, this));
-    // childSetAction("show_on_map_btn", boost::bind(&FSPanelPick::onClickMap, this));
-    // childSetAction("back_btn", boost::bind(&FSPanelPick::onClickBack, this));
+    childSetAction("teleport_btn", boost::bind(&FSPanelPick::onClickTeleport, this));
+    childSetAction("show_on_map_btn", boost::bind(&FSPanelPick::onClickMap, this));
+
+    getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( false );
+
+    childSetAction("set_to_curr_location_btn", boost::bind(&FSPanelPick::onClickSetLocation, this));
+    childSetAction("save_changes_btn", boost::bind(&FSPanelPick::onClickSave, this));
 
     return TRUE;
 }
@@ -927,12 +985,9 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
     }
 
     mParcelId = pick_info->parcel_id;
-    // setSnapshotId(pick_info->snapshot_id);
-    mSnapshotCtrl->setImageAssetID(pick_info->snapshot_id);
-    mSnapshotCtrl->setValid(TRUE);
+    setSnapshotId(pick_info->snapshot_id);
     setPickName(pick_info->name);
-    // setPickDesc(pick_info->desc);
-    getChild<LLUICtrl>("pick_desc")->setValue(pick_info->desc);
+    setPickDesc(pick_info->desc);
     setPosGlobal(pick_info->pos_global);
 
     // Send remote parcel info request to get parcel name and sim (region) name.
@@ -944,9 +999,84 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
     // revomeObserver is called from onClickBack
 }
 
+void FSPanelPick::setSnapshotId(const LLUUID& id)
+{
+    mSnapshotCtrl->setImageAssetID(id);
+    mSnapshotCtrl->setValid(TRUE);
+}
+
 void FSPanelPick::setPickName(const std::string& name)
 {
     getChild<LLUICtrl>("pick_name")->setValue(name);
+}
+
+void FSPanelPick::setPickDesc(const std::string& desc)
+{
+    getChild<LLUICtrl>("pick_desc")->setValue(desc);
+}
+
+void FSPanelPick::setPickLocation(const std::string& location)
+{
+    getChild<LLUICtrl>("pick_location")->setValue(location);
+}
+
+void FSPanelPick::onClickMap()
+{
+    LLFloaterWorldMap::getInstance()->trackLocation(getPosGlobal());
+    LLFloaterReg::showInstance("world_map", "center");
+}
+
+void FSPanelPick::onClickTeleport()
+{
+    if (!getPosGlobal().isExactlyZero())
+    {
+        gAgent.teleportViaLocation(getPosGlobal());
+        LLFloaterWorldMap::getInstance()->trackLocation(getPosGlobal());
+    }
+}
+
+void FSPanelPick::enableSaveButton(bool enable)
+{
+    getChildView("save_changes_btn")->setEnabled(enable);
+}
+
+void FSPanelPick::onClickSetLocation()
+{
+    // Save location for later use.
+    setPosGlobal(gAgent.getPositionGlobal());
+
+    std::string parcel_name, region_name;
+
+    LLParcel* parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+    if (parcel)
+    {
+        mParcelId = parcel->getID();
+        parcel_name = parcel->getName();
+    }
+
+    LLViewerRegion* region = gAgent.getRegion();
+    if(region)
+    {
+        region_name = region->getName();
+    }
+
+    setPickLocation(createLocationText(getLocationNotice(), parcel_name, region_name, getPosGlobal()));
+
+    mLocationChanged = true;
+    enableSaveButton(TRUE);
+}
+
+void FSPanelPick::onClickSave()
+{
+    sendUpdate();
+
+    mLocationChanged = false;
+}
+
+std::string FSPanelPick::getLocationNotice()
+{
+    static std::string notice = getString("location_notice");
+    return notice;
 }
 
 void FSPanelPick::sendParcelInfoRequest()
@@ -962,7 +1092,7 @@ void FSPanelPick::sendParcelInfoRequest()
 
 void FSPanelPick::processParcelInfo(const LLParcelData& parcel_data)
 {
-    getChild<LLUICtrl>("pick_location")->setValue(createLocationText(LLStringUtil::null, parcel_data.name, parcel_data.sim_name, getPosGlobal()));
+    setPickLocation(createLocationText(LLStringUtil::null, parcel_data.name, parcel_data.sim_name, getPosGlobal()));
 
     // We have received parcel info for the requested ID so clear it now.
     mRequestedId.setNull();
@@ -970,6 +1100,43 @@ void FSPanelPick::processParcelInfo(const LLParcelData& parcel_data)
     if (mParcelId.notNull())
     {
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
+    }
+}
+
+void FSPanelPick::sendUpdate()
+{
+    LLPickData pick_data;
+
+    // If we don't have a pick id yet, we'll need to generate one,
+    // otherwise we'll keep overwriting pick_id 00000 in the database.
+    if (getPickId().isNull())
+    {
+        getPickId().generate();
+    }
+
+    pick_data.agent_id = gAgent.getID();
+    pick_data.session_id = gAgent.getSessionID();
+    pick_data.pick_id = getPickId();
+    pick_data.creator_id = gAgent.getID();;
+
+    //legacy var  need to be deleted
+    pick_data.top_pick = FALSE;
+    pick_data.parcel_id = mParcelId;
+    pick_data.name = getChild<LLUICtrl>("pick_name")->getValue().asString();
+    pick_data.desc = getChild<LLUICtrl>("pick_desc")->getValue().asString();
+    pick_data.snapshot_id = mSnapshotCtrl->getImageAssetID();
+    pick_data.pos_global = getPosGlobal();
+    pick_data.sort_order = 0;
+    pick_data.enabled = TRUE;
+
+    LLAvatarPropertiesProcessor::instance().sendPickInfoUpdate(&pick_data);
+
+    if(mNewPick)
+    {
+        // Assume a successful create pick operation, make new number of picks
+        // available immediately. Actual number of picks will be requested in
+        // LLAvatarPropertiesProcessor::sendPickInfoUpdate and updated upon server respond.
+        LLAgentPicksInfo::getInstance()->incrementNumberOfPicks();
     }
 }
 
@@ -1060,14 +1227,14 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
             mNoItemsLabel->setVisible(no_data);
             if (no_data)
             {
-                // if(getAvatarId() == gAgentID)
-                // {
-                    // mNoItemsLabel->setValue(LLTrans::getString("NoPicksClassifiedsText"));
-                // }
-                // else
-                // {
-                    // mNoItemsLabel->setValue(LLTrans::getString("NoAvatarPicksClassifiedsText"));
-                // }
+                if(getAvatarId() == gAgentID)
+                {
+                    mNoItemsLabel->setValue(LLTrans::getString("NoPicksText"));
+                }
+                else
+                {
+                    mNoItemsLabel->setValue(LLTrans::getString("NoAvatarPicksText"));
+                }
             }
         }
     }
@@ -1077,7 +1244,7 @@ void FSPanelProfilePicks::updateData()
 {
     if (getAvatarId().notNull())
     {
-        // mNoItemsLabel->setValue(LLTrans::getString("PicksClassifiedsLoadingText"));
+        mNoItemsLabel->setValue(LLTrans::getString("PicksClassifiedsLoadingText"));
         mNoItemsLabel->setVisible(TRUE);
 
         LLAvatarPropertiesProcessor::getInstance()->sendAvatarPicksRequest(getAvatarId());

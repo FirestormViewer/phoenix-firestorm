@@ -290,6 +290,7 @@ public:
     void setAvatarId(const LLUUID& avatar_id);
 
     void setPickId(const LLUUID& id) { mPickId = id; }
+    virtual LLUUID& getPickId() { return mPickId; }
 
     virtual void setPickName(const std::string& name);
 
@@ -321,7 +322,6 @@ protected:
         const LLVector3d& pos_global);
 
     virtual LLUUID& getAvatarId() { return mAvatarId; }
-    const LLUUID& getPickId() { return mPickId; }
 
     /**
      * Sets snapshot id.
@@ -330,11 +330,9 @@ protected:
      * Will mark snapshot control as invalid if id is null. If null id is a valid value,
      * you have to manually mark snapshot is valid.
      */
-    // virtual void setSnapshotId(const LLUUID& id);
-
-    // virtual void setPickDesc(const std::string& desc);
-
-    // virtual void setPickLocation(const std::string& location);
+    virtual void setSnapshotId(const LLUUID& id);
+    virtual void setPickDesc(const std::string& desc);
+    virtual void setPickLocation(const std::string& location);
 
     virtual void setPosGlobal(const LLVector3d& pos) { mPosGlobal = pos; }
     virtual LLVector3d& getPosGlobal() { return mPosGlobal; }
@@ -342,12 +340,34 @@ protected:
     /**
      * Callback for "Map" button, opens Map
      */
-    // void onClickMap();
+    void onClickMap();
 
     /**
      * Callback for "Teleport" button, teleports user to Pick location.
      */
-    // void onClickTeleport();
+    void onClickTeleport();
+
+    /**
+     * Enables/disables "Save" button
+     */
+    void enableSaveButton(bool enable);
+
+    /**
+     * Callback for "Set Location" button click
+     */
+    void onClickSetLocation();
+
+    /**
+     * Callback for "Save" button click
+     */
+    void onClickSave();
+
+    std::string getLocationNotice();
+
+    /**
+     * Sends Pick properties to server.
+     */
+    void sendUpdate();
 
 protected:
 
@@ -358,6 +378,10 @@ protected:
     LLUUID mParcelId;
     LLUUID mPickId;
     LLUUID mRequestedId;
+
+    bool mLocationChanged;
+    bool mNeedData;
+    bool mNewPick;
 };
 
 class FSPanelProfilePicks
