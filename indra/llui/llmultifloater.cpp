@@ -213,7 +213,6 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
 	floaterp->setCanDrag(FALSE);
-	floaterp->storeRectControl();
 	// avoid double rendering of floater background (makes it more opaque)
 	floaterp->setBackgroundVisible(FALSE);
 
