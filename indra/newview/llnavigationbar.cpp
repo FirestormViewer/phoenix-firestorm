@@ -321,9 +321,18 @@ BOOL LLNavigationBar::postBuild()
 	mDefaultFpRect = fp->getRect();
 	mDefaultNpRect = np->getRect();
 	mDefaultFrameRect = navFrame->getRect();
+
+	llinfos << "Navigation bar rectangles: Container = " << mDefaultNavContainerRect
+		<< ", favorites panel = " << mDefaultFpRect
+		<< ", navigation panel = " << mDefaultNpRect
+		<< ", frame = " << mDefaultFrameRect << llendl;
 	
 	mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
 	setRect(mDefaultNavContainerRect);
+	
+	llinfos << "Updated container = "
+		<< mDefaultNavContainerRect << llendl;
+	
 	navFrame->setRect(mDefaultFrameRect);
 	np->setRect(mDefaultNpRect);
 	fp->setRect(mDefaultFpRect);
