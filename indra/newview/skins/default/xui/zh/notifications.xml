@@ -2109,10 +2109,10 @@ Link to this from a web page to give others easy access to this location, or try
 		Topic: [SUBJECT], Message: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; 上線
+		[NAME] 上線
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; 離線
+		[NAME] 離線
 	</notification>
 	<notification name="AddSelfFriend">
 		Although you&apos;re very nice, you can&apos;t add yourself as a friend.

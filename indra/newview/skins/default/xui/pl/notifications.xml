@@ -2078,10 +2078,10 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		Temat: [SUBJECT], Treść: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; jest w Second Life
+		[NAME] jest w Second Life.
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; opuszcza Second Life
+		[NAME] opuszcza Second Life.
 	</notification>
 	<notification name="AddSelfFriend">
 		Nie możesz dodać siebie do listy znajomych.

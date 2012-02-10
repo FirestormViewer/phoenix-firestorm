@@ -2130,10 +2130,10 @@ Bu adımda web tarayıcınızın başlatılacağına dikkat edin.
 		Konu: [SUBJECT], İleti: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; çevrimiçi
+		[NAME] çevrimiçi
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; çevrimdışı
+		[NAME] çevrimdışı
 	</notification>
 	<notification name="AddSelfFriend">
 		Çok iyi biri olduğunuza eminiz fakat kendinizi arkadaş olarak ekleyemezsiniz.

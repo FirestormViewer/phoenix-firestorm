@@ -5550,7 +5550,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    icon="notifytip.tga"
    name="FriendOnline"
    type="notifytip">
-&lt;nolink&gt;[NAME]&lt;/nolink&gt; is Online
+[NAME] is Online.
     <tag>friendship</tag>
   </notification>
 
@@ -5558,7 +5558,7 @@ Topic: [SUBJECT], Message: [MESSAGE]
    icon="notifytip.tga"
    name="FriendOffline"
    type="notifytip">
-&lt;nolink&gt;[NAME]&lt;/nolink&gt; is Offline
+[NAME] is Offline.
     <tag>friendship</tag>
   </notification>
 

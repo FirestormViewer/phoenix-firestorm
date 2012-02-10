@@ -2120,10 +2120,10 @@ Isso abrirá o seu navegador.
 		Assunto: [SUBJECT], Mensagem: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está online
+		[NAME] está online.
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está offline
+		[NAME] está offline.
 	</notification>
 	<notification name="AddSelfFriend">
 		Você é o máximo! Mesmo assim, não dá para adicionar a si mesmo(a) como amigo(a).

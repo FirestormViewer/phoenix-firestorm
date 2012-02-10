@@ -2155,10 +2155,10 @@ Hierzu wird Ihr Webbrowser geöffnet.
 		Betreff: [SUBJECT], Nachricht: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; ist online
+		[NAME] ist online.
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; ist offline
+		[NAME] ist offline.
 	</notification>
 	<notification name="AddSelfFriend">
 		Obwohl Sie ein sehr netter Mensch sind, können Sie sich nicht selbst als Freund hinzufügen.

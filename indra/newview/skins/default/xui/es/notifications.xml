@@ -2150,10 +2150,10 @@ Al hacerlo se iniciará el navegador web.
 		Asunto: [SUBJECT], Mensaje: [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está conectado
+		[NAME] está conectado.
 	</notification>
 	<notification name="FriendOffline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; está desconectado
+		[NAME] está desconectado.
 	</notification>
 	<notification name="AddSelfFriend">
 		Aunque eres muy agradable, no puedes añadirte como amigo a ti mismo.
