@@ -170,29 +170,6 @@ BOOL LLFloaterNearbyChat::postBuild()
 		slide_left->setVisible(false);
 		LLButton* slide_right = getChild<LLButton>("slide_right_btn");
 		slide_right->setVisible(false);
-		
-		
-		if (getDockControl() == NULL)
-		{
-			LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
-			if (floater_container)
-			{
-				if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
-				{
-					// first set the tear-off host to this floater
-					setHost(floater_container);
-					// clear the tear-off host right after, the "last host used" will still stick
-					setHost(NULL);
-					// reparent the floater to the main view
-					gFloaterView->addChild(this);
-				}
-				else
-				{
-					floater_container->addFloater(this, FALSE);
-				}
-				floater_container->setVisible(FALSE);
-			}
-		}
 
 		FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 		gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::updateFSUseNearbyChatConsole, this, _2));
@@ -405,6 +382,24 @@ void	LLFloaterNearbyChat::setVisible(BOOL visible)
 
 void	LLFloaterNearbyChat::onOpen(const LLSD& key )
 {
+	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	if (floater_container)
+	{
+		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
+		{
+			// first set the tear-off host to this floater
+			setHost(floater_container);
+			// clear the tear-off host right after, the "last host used" will still stick
+			setHost(NULL);
+			// reparent the floater to the main view
+			gFloaterView->addChild(this);
+		}
+		else
+		{
+			floater_container->addFloater(this, FALSE);
+		}
+	}
+
 	// We override this to put nearbychat in the IM floater. -AO
 	if(isChatMultiTab() && ! isVisible(this))
 	{
