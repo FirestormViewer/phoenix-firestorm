@@ -1036,12 +1036,15 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 
 			// Build group prefix -Zi
 			std::string group_title;
-			LLNameValue* group=hover_object->getNVPair("Title");
-			if(group)
+			if (gSavedSettings.getBOOL("FSShowGroupTitleInTooltip"))
 			{
-				group_title=group->getString();
-				if(!group_title.empty())
-					group_title+=" ";
+				LLNameValue* group=hover_object->getNVPair("Title");
+				if(group)
+				{
+					group_title=group->getString();
+					if(!group_title.empty())
+						group_title+=" ";
+				}
 			}
 
 			if (!gCacheName->getFullName(hover_object->getID(), full_name))

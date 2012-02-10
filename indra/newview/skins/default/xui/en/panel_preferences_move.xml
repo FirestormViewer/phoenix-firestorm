@@ -507,6 +507,15 @@
          height="20"
          width="350" />
 
+        <check_box
+         control_name="FSShowGroupTitleInTooltip"
+         name="FSShowGroupTitleInTooltip"
+         label="Show avatar group titles in hovertips"
+         layout="topleft"
+         top_pad="0"
+         height="20"
+         width="350" />
+
         <check_box top_pad="5"
          follows="left|top"
          height="16"
