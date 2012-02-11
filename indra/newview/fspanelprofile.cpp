@@ -38,6 +38,7 @@
 #include "llavatariconctrl.h"
 #include "llclipboard.h" //gClipboard
 #include "llcheckboxctrl.h"
+#include "lllineeditor.h"
 #include "llmenubutton.h"
 #include "lltabcontainer.h"
 #include "lltextbox.h"
@@ -945,6 +946,8 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
         LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
 
         LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
+
+        enableSaveButton(false);
     }
 
     if (getAvatarId() == gAgent.getID())
@@ -953,19 +956,26 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
         getChild<LLUICtrl>("pick_desc")->setEnabled(true);
         getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( true );
     }
+
+    resetDirty();
 }
 
 BOOL FSPanelPick::postBuild()
 {
     mSnapshotCtrl = getChild<LLTextureCtrl>("pick_snapshot");
+    mSnapshotCtrl->setCommitCallback(boost::bind(&FSPanelPick::onSnapshotChanged, this));
 
     childSetAction("teleport_btn", boost::bind(&FSPanelPick::onClickTeleport, this));
     childSetAction("show_on_map_btn", boost::bind(&FSPanelPick::onClickMap, this));
 
-    getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( false );
-
     childSetAction("set_to_curr_location_btn", boost::bind(&FSPanelPick::onClickSetLocation, this));
     childSetAction("save_changes_btn", boost::bind(&FSPanelPick::onClickSave, this));
+    
+    LLLineEditor* line_edit = getChild<LLLineEditor>("pick_name");
+    line_edit->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1), NULL);
+
+    LLTextEditor* text_edit = getChild<LLTextEditor>("pick_desc");
+    text_edit->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
 
     return TRUE;
 }
@@ -1010,6 +1020,11 @@ void FSPanelPick::setPickName(const std::string& name)
     getChild<LLUICtrl>("pick_name")->setValue(name);
 }
 
+const std::string FSPanelPick::getPickName()
+{
+    return getChild<LLUICtrl>("pick_name")->getValue().asString();
+}
+
 void FSPanelPick::setPickDesc(const std::string& desc)
 {
     getChild<LLUICtrl>("pick_desc")->setValue(desc);
@@ -1037,7 +1052,42 @@ void FSPanelPick::onClickTeleport()
 
 void FSPanelPick::enableSaveButton(bool enable)
 {
-    getChildView("save_changes_btn")->setEnabled(enable);
+    // getChildView("save_changes_btn")->setEnabled(enable);
+    getChild<LLUICtrl>("save_changes_btn")->setVisible(enable);
+}
+
+void FSPanelPick::onSnapshotChanged()
+{
+	enableSaveButton(true);
+}
+
+void FSPanelPick::onPickChanged(LLUICtrl* ctrl)
+{
+	enableSaveButton(isDirty());
+}
+
+void FSPanelPick::resetDirty()
+{
+	LLPanel::resetDirty();
+
+	getChild<LLLineEditor>("pick_name")->resetDirty();
+	getChild<LLTextEditor>("pick_desc")->resetDirty();
+	mSnapshotCtrl->resetDirty();
+	mLocationChanged = false;
+}
+
+BOOL FSPanelPick::isDirty() const
+{
+	if( mNewPick
+		|| LLPanel::isDirty()
+		|| mLocationChanged
+		|| mSnapshotCtrl->isDirty()
+		|| getChild<LLLineEditor>("pick_name")->isDirty()
+		|| getChild<LLTextEditor>("pick_desc")->isDirty())
+	{
+		return TRUE;
+	}
+	return FALSE;
 }
 
 void FSPanelPick::onClickSetLocation()
@@ -1071,6 +1121,14 @@ void FSPanelPick::onClickSave()
     sendUpdate();
 
     mLocationChanged = false;
+}
+
+void FSPanelPick::apply()
+{
+    if (isDirty())
+    {
+        sendUpdate();
+    }
 }
 
 std::string FSPanelPick::getLocationNotice()
@@ -1122,7 +1180,7 @@ void FSPanelPick::sendUpdate()
     //legacy var  need to be deleted
     pick_data.top_pick = FALSE;
     pick_data.parcel_id = mParcelId;
-    pick_data.name = getChild<LLUICtrl>("pick_name")->getValue().asString();
+    pick_data.name = getPickName();
     pick_data.desc = getChild<LLUICtrl>("pick_desc")->getValue().asString();
     pick_data.snapshot_id = mSnapshotCtrl->getImageAssetID();
     pick_data.pos_global = getPosGlobal();
@@ -1192,8 +1250,65 @@ BOOL FSPanelProfilePicks::postBuild()
 {
     mTabContainer = getChild<LLTabContainer>("tab_picks");
     mNoItemsLabel = getChild<LLUICtrl>("picks_panel_text");
+    
+    childSetAction("new_btn", boost::bind(&FSPanelProfilePicks::onClickNewBtn, this));
+    childSetAction("delete_btn", boost::bind(&FSPanelProfilePicks::onClickDelete, this));
 
     return TRUE;
+}
+
+void FSPanelProfilePicks::onClickNewBtn()
+{
+	FSPanelPick* pick_panel = FSPanelPick::create();
+    pick_panel->setAvatarId(getAvatarId());
+    mTabContainer->addTabPanel(
+        LLTabContainer::TabPanelParams().
+        panel(pick_panel).
+        select_tab(true));
+}
+
+void FSPanelProfilePicks::onClickDelete()
+{
+    FSPanelPick* pick_panel = (FSPanelPick*) mTabContainer->getCurrentPanel();
+    if (pick_panel)
+    {
+        LLUUID pick_id = pick_panel->getPickId();
+        if (!pick_id.isNull())
+        {
+            LLSD args; 
+            args["PICK"] = pick_panel->getPickName();
+            LLSD payload;
+            payload["pick_id"] = pick_id;
+            LLNotificationsUtil::add("DeleteAvatarPick", args, payload, boost::bind(&FSPanelProfilePicks::callbackDeletePick, this, _1, _2)); 
+            return;
+        }
+    }
+}
+
+bool FSPanelProfilePicks::callbackDeletePick(const LLSD& notification, const LLSD& response) 
+{
+    S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+
+    if (0 == option)
+    {
+        LLUUID pick_id = notification["payload"]["pick_id"].asUUID();
+        LLAvatarPropertiesProcessor::instance().sendPickDelete(pick_id);
+        getChildView("new_btn")->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached());
+
+        for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+        {
+            FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+            if (pick_panel)
+            {
+                if (pick_id == pick_panel->getPickId())
+                {
+                    mTabContainer->removeTabPanel(pick_panel);
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType type)
@@ -1203,7 +1318,18 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
         LLAvatarPicks* avatar_picks = static_cast<LLAvatarPicks*>(data);
         if(avatar_picks && getAvatarId() == avatar_picks->target_id)
         {
-            // mTabContainer->deleteAllTabs();
+
+            LLUUID selected_id = LLUUID::null;
+            if (mTabContainer->getTabCount() > 0)
+            {
+                FSPanelPick* active_pick_panel = (FSPanelPick*) mTabContainer->getCurrentPanel();
+                if (active_pick_panel)
+                {
+                    selected_id = active_pick_panel->getPickId();
+                }
+            }
+            
+            mTabContainer->deleteAllTabs();
 
             LLAvatarPicks::picks_list_t::const_iterator it = avatar_picks->picks_list.begin();
             for(; avatar_picks->picks_list.end() != it; ++it)
@@ -1220,9 +1346,12 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
                 mTabContainer->addTabPanel(
                     LLTabContainer::TabPanelParams().
                     panel(pick_panel).
+                    select_tab(selected_id == pick_id).
                     label(pick_name));
             }
 
+            getChildView("new_btn")->setEnabled(!LLAgentPicksInfo::getInstance()->isPickLimitReached());
+            
             bool no_data = !mTabContainer->getTabCount();
             mNoItemsLabel->setVisible(no_data);
             if (no_data)
@@ -1236,6 +1365,22 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
                     mNoItemsLabel->setValue(LLTrans::getString("NoAvatarPicksText"));
                 }
             }
+            else if (selected_id.isNull())
+            {
+                mTabContainer->selectFirstTab();
+            }
+        }
+    }
+}
+
+void FSPanelProfilePicks::apply()
+{
+    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    {
+        FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+        if (pick_panel)
+        {
+            pick_panel->apply();
         }
     }
 }

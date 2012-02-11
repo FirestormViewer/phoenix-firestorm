@@ -293,9 +293,11 @@ public:
     virtual LLUUID& getPickId() { return mPickId; }
 
     virtual void setPickName(const std::string& name);
+    const std::string getPickName();
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
+    virtual void apply();
 
     //This stuff we got from LLRemoteParcelObserver, in the last one we intentionally do nothing
     /*virtual*/ void processParcelInfo(const LLParcelData& parcel_data);
@@ -353,6 +355,26 @@ protected:
     void enableSaveButton(bool enable);
 
     /**
+     * Called when snapshot image changes.
+     */
+    void onSnapshotChanged();
+
+    /**
+     * Callback for Pick snapshot, name and description changed event.
+     */
+    void onPickChanged(LLUICtrl* ctrl);
+
+    /**
+     * Resets panel and all cantrols to unedited state
+     */
+    /*virtual*/ void resetDirty();
+
+    /**
+     * Returns true if any of Pick properties was changed by user.
+     */
+    /*virtual*/ BOOL isDirty() const;
+
+    /**
      * Callback for "Set Location" button click
      */
     void onClickSetLocation();
@@ -396,6 +418,8 @@ public:
     /*virtual*/ void onOpen(const LLSD& key);
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+    
+    virtual void apply();
 
 protected:
     /**
@@ -404,6 +428,10 @@ protected:
     void updateData();
 
 private:
+	void onClickNewBtn();
+	void onClickDelete();
+    bool callbackDeletePick(const LLSD& notification, const LLSD& response);
+    
     LLTabContainer* mTabContainer;
     LLUICtrl* mNoItemsLabel;
 };
