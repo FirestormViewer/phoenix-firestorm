@@ -54,6 +54,9 @@ protected:
      */
     void setAvatarId(const LLUUID& avatar_id) { mAvatarId = avatar_id; }
 
+    void onOKBtn();
+    void onCancelBtn();
+
 private:
     void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
 

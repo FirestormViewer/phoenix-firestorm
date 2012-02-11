@@ -76,8 +76,8 @@
 
     <text
      bottom="-2"
-     left="140"
-     right="-70"
+     left="110"
+     right="-100"
      layout="topleft"
      follows="bottom|left|right"
      name="status_text" />

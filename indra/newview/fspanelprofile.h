@@ -100,6 +100,11 @@ public:
     /*virtual*/ void onOpen(const LLSD& key);
 
     /**
+     * Saves changes.
+     */
+    void apply(LLAvatarData* data);
+
+    /**
      * LLFriendObserver trigger
      */
     virtual void changed(U32 mask);
@@ -226,6 +231,11 @@ public:
     /*virtual*/ BOOL postBuild();
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+    /**
+     * Saves changes.
+     */
+    void apply(LLAvatarData* data);
 
     /*virtual*/ void handleMediaEvent(LLPluginClassMedia* self, EMediaEvent event);
 
@@ -418,7 +428,7 @@ public:
     /*virtual*/ void onOpen(const LLSD& key);
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
-    
+
     virtual void apply();
 
 protected:
@@ -428,10 +438,10 @@ protected:
     void updateData();
 
 private:
-	void onClickNewBtn();
-	void onClickDelete();
+    void onClickNewBtn();
+    void onClickDelete();
     bool callbackDeletePick(const LLSD& notification, const LLSD& response);
-    
+
     LLTabContainer* mTabContainer;
     LLUICtrl* mNoItemsLabel;
 };
@@ -449,6 +459,11 @@ public:
     /*virtual*/ ~FSPanelProfileFirstLife();;
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
+
+    /**
+     * Saves changes.
+     */
+    void apply(LLAvatarData* data);
 };
 
 /**

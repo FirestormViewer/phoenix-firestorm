@@ -333,9 +333,8 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="all"
          name="sl_description_edit"
-         bg_visible="false"
          border_visible="false"
-         read_only="true"
+         font="SansSerifSmall"
          enabled="false"
          max_length="512"
          h_pad="2"
@@ -507,6 +506,18 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
             </layout_panel>
         </layout_stack>
+        
+        <check_box
+         bottom="-30"
+         left="60"
+         height="16"
+         width="130"
+         layout="topleft"
+         follows="left|bottom"
+         name="show_in_search_checkbox"
+         label="Show in search"
+         visible="false"
+         enabled="false" />
 
         <view_border
          top="0"
