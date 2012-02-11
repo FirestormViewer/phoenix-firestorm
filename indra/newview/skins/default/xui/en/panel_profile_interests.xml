@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ top="0"
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile_interests"
+ label="Interests">
+
+    <text
+     top="10"
+     left="4"
+     height="16"
+     width="70"
+     layout="topleft"
+     follows="left|top"
+     name="I Want To:"
+     halign="right">
+        I Want To:
+    </text>
+        <check_box
+         top_delta="0"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk0"
+         label="Build"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk1"
+         label="Explore"
+         enabled="false" />
+        <check_box
+         top_pad="1"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk2"
+         label="Meet"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk6"
+         label="Be Hired"
+         enabled="false" />
+        <check_box
+         top_pad="1"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk3"
+         label="Group"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk4"
+         label="Buy"
+         enabled="false" />
+        <check_box
+         top_pad="1"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk5"
+         label="Sell"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="chk7"
+         label="Hire"
+         enabled="false" />
+        <line_editor
+         top_pad="1"
+         left="76"
+         height="16"
+         width="330"
+         layout="topleft"
+         follows="left|top"
+         name="want_to_edit"
+         is_unicode="false"
+         enabled="false"
+         max_length="254" />
+
+    <text
+     top_pad="15"
+     left="4"
+     height="16"
+     width="70"
+     layout="topleft"
+     follows="left|top"
+     name="Skills:"
+     halign="right">
+        Skills:
+    </text>
+        <check_box
+         top_delta="0"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk0"
+         label="Textures"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk1"
+         label="Architecture"
+         enabled="false" />
+        <check_box
+         top_pad="1"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk2"
+         label="Event Planning"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk3"
+         label="Modeling"
+         enabled="false" />
+        <check_box
+         top_pad="1"
+         left="75"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk4"
+         label="Scripting"
+         enabled="false" />
+        <check_box
+         left_pad="80"
+         height="16"
+         width="90"
+         layout="topleft"
+         follows="left|top"
+         name="schk5"
+         label="Custom Characters"
+         enabled="false" />
+        <line_editor
+         top_pad="1"
+         left="76"
+         height="16"
+         width="330"
+         layout="topleft"
+         follows="left|top"
+         name="skills_edit"
+         is_unicode="false"
+         enabled="false"
+         max_length="254" />
+
+    <text
+     top_pad="15"
+     left="4"
+     height="16"
+     width="70"
+     layout="topleft"
+     follows="left|top"
+     name="Languages:"
+     halign="right" >
+    Languages:
+    </text>
+        <line_editor
+         top_delta="-1"
+         left="76"
+         height="16"
+         width="330"
+         layout="topleft"
+         follows="left|top"
+         name="languages_edit"
+         is_unicode="false"
+         enabled="false"
+         max_length="254" />
+</panel>
+

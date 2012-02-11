@@ -1,80 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- follows="all"
- height="450"
- label="Profile"
- layout="topleft"
- left="0"
- name="panel_profile_firstlife"
  top="0"
- width="430">
-          <panel
-           layout="topleft"
-           follows="left|top|right|bottom"
-           height="450"
-           name="first_life_panel"
-           top="0"
-           left="0"
-           width="430">
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile_firstlife"
+ label="Profile">
+    <texture_picker
+     top="10"
+     left="6"
+     width="275"
+     height="225"
+     layout="topleft"
+     follows="top|left"
+     name="real_world_pic"
+     allow_no_texture="true"
+     default_image_name="None"
+     enabled="false"
+     fallback_image="Generic_Person_Large"
+     scale_image="false" />
 
-              <texture_picker
-               allow_no_texture="true"
-               default_image_name="None"
-               enabled="false"
-               fallback_image="Generic_Person_Large"
-               follows="top|left"
-               height="225"
-               layout="topleft"
-               left="6"
-	       scale_image="false"
-               name="real_world_pic"
-               top="10"
-               width="275" />
-       
-
-			<view_border
-			 left="6"
-			 top="225"
-			 bevel_style="in"
-			 follows="all"
-			 name="info_border"
-			 height="185"
-                         allow_resize="true"
-			 right="-6" />
-			<text_editor
-			 left_delta="1"
-			 top_delta="1"
-			 height="183"
-                         allow_resize="true"
-			 right="-7"
-			 enabled="false"
-			 follows="all"
-			 layout="topleft"
-			 max_length="512"
-			 name="fl_description_edit"
-			 word_wrap="true"
-			 parse_urls="true" />
-
-            <text
-             follows="left|bottom|right"
-             height="13"
-             layout="topleft"
-             right="-6"
-             top_pad="4"
-             name="homepage_text"
-	     font.style="BOLD"
-             value="Web page:" />
-            <text
-              follows="left|bottom|right"
-	      height="15"
-              layout="topleft"
-              top_pad="4"
-              name="homepage_edit"
-              translate="false"
-              value="blank"
-              right="-6"
-              word_wrap="false"
-              use_ellipses="true" />
-          </panel>
+    <view_border
+     top="225"
+     left="6"
+     height="185"
+     layout="topleft"
+     follows="all"
+     name="info_border"
+     bevel_style="in"
+     right="-6" />
+    <text_editor
+     top_delta="1"
+     left_delta="1"
+     right="-7"
+     height="183"
+     layout="topleft"
+     follows="all"
+     name="fl_description_edit"
+     enabled="false"
+     max_length="512"
+     word_wrap="true"
+     parse_urls="true" />
 </panel>
 

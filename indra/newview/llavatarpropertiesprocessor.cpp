@@ -291,6 +291,22 @@ void LLAvatarPropertiesProcessor::processAvatarInterestsReply(LLMessageSystem* m
 	That will suppress the warnings and be compatible with old server versions.
 	WARNING: LLTemplateMessageReader::decodeData: Message from 216.82.37.237:13000 with no handler function received: AvatarInterestsReply
 */
+//<FS:KC legacy profiles>
+    FSInterestsData interests_data;
+    
+    msg->getUUIDFast(   _PREHASH_AgentData,         _PREHASH_AgentID,       interests_data.agent_id );
+    msg->getUUIDFast(   _PREHASH_AgentData,         _PREHASH_AvatarID,      interests_data.avatar_id );
+    msg->getU32Fast(    _PREHASH_PropertiesData,	_PREHASH_WantToMask,    interests_data.want_to_mask );
+    msg->getStringFast( _PREHASH_PropertiesData,    _PREHASH_WantToText,    interests_data.want_to_text );
+    msg->getU32Fast(    _PREHASH_PropertiesData,	_PREHASH_SkillsMask,    interests_data.skills_mask );
+    msg->getStringFast( _PREHASH_PropertiesData,    _PREHASH_SkillsText,    interests_data.skills_text );
+    msg->getString(     _PREHASH_PropertiesData,    _PREHASH_LanguagesText, interests_data.languages_text );
+    
+    LLAvatarPropertiesProcessor* self = getInstance();
+    // Request processed, no longer pending
+    self->removePendingRequest(interests_data.avatar_id, APT_INTERESTS_INFO);
+    self->notifyObservers(interests_data.avatar_id, &interests_data, APT_INTERESTS_INFO);  
+//</FS:KC legacy profiles>
 }
 
 void LLAvatarPropertiesProcessor::processAvatarClassifiedsReply(LLMessageSystem* msg, void**)
