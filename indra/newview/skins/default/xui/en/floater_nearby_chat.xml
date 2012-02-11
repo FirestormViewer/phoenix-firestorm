@@ -136,7 +136,6 @@
          follows="all"
 	 font="SansSerifSmall"
          height="20"
-	 max_length_bytes="1024"
          label="To nearby chat"
          spellcheck="true"
          name="chat_box"
