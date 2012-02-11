@@ -80,7 +80,7 @@
      top="55"
      left="20"
      height="18"
-     width="100"
+     width="300"
      layout="topleft"
      follows="all"
      name="picks_panel_text"

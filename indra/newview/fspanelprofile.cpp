@@ -1259,6 +1259,7 @@ BOOL FSPanelProfilePicks::postBuild()
 
 void FSPanelProfilePicks::onClickNewBtn()
 {
+    mNoItemsLabel->setVisible(false);
 	FSPanelPick* pick_panel = FSPanelPick::create();
     pick_panel->setAvatarId(getAvatarId());
     mTabContainer->addTabPanel(
