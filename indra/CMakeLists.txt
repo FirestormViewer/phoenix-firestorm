@@ -69,8 +69,10 @@ if (VIEWER)
   add_subdirectory(${LIBS_OPEN_PREFIX}llxuixml)
   add_subdirectory(${LIBS_OPEN_PREFIX}viewer_components)
 
-  # Legacy C++ tests. Build always, run if LL_TESTS is true.
-  add_subdirectory(${VIEWER_PREFIX}test)
+  if (LL_TESTS OR NOT STANDALONE)
+    # Legacy C++ tests. Build always, run if LL_TESTS is true.
+    add_subdirectory(${VIEWER_PREFIX}test)
+  endif (LL_TESTS OR NOT STANDALONE)
 
   # viewer media plugins
   add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
