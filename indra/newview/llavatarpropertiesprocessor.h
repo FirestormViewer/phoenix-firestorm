@@ -232,6 +232,10 @@ public:
 
 	void sendClassifiedDelete(const LLUUID& classified_id);
 
+//<FS:KC legacy profiles>
+	void sendInterestsInfoUpdate(const FSInterestsData* interests_data);
+//</FS:KC legacy profiles>
+
 	// Returns translated, human readable string for account type, such
 	// as "Resident" or "Linden Employee".  Used for profiles, inspectors.
 	static std::string accountType(const LLAvatarData* avatar_data);

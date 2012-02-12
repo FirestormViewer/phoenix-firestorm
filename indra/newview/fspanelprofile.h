@@ -79,9 +79,14 @@ protected:
 
     virtual void onMapButtonClick();
 
+    virtual void enableControls() { mLoaded = TRUE; }
+
+    bool getIsLoaded() { return mLoaded; }
+
 private:
 
-    LLUUID mAvatarId;
+    LLUUID  mAvatarId;
+    BOOL    mLoaded;
 };
 
 
@@ -206,6 +211,8 @@ protected:
     void updateOnlineStatus();
     void processOnlineStatus(bool online);
 
+    virtual void enableControls();
+
 private:
     typedef std::map<std::string,LLUUID>    group_map_t;
     group_map_t             mGroups;
@@ -228,6 +235,8 @@ public:
     FSPanelProfileWeb();
     /*virtual*/ ~FSPanelProfileWeb();
 
+    /*virtual*/ void onOpen(const LLSD& key);
+
     /*virtual*/ BOOL postBuild();
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
@@ -246,6 +255,8 @@ public:
     // static void onClickWebProfileHelp(void *);
 
     void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
+
+    virtual void enableControls();
 
 protected:
     void onCommitLoad(LLUICtrl* ctrl);
@@ -270,11 +281,19 @@ public:
     FSPanelProfileInterests();
     /*virtual*/ ~FSPanelProfileInterests();
 
+    /*virtual*/ void onOpen(const LLSD& key);
+
     /*virtual*/ BOOL postBuild();
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
+    /**
+     * Saves changes.
+     */
+    virtual void apply();
+
 protected:
+    virtual void enableControls();
 
 private:
     LLCheckBoxCtrl *mWantChecks[8];
@@ -307,6 +326,9 @@ public:
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
+    /**
+     * Saves changes.
+     */
     virtual void apply();
 
     //This stuff we got from LLRemoteParcelObserver, in the last one we intentionally do nothing
@@ -429,6 +451,9 @@ public:
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
+    /**
+     * Saves changes.
+     */
     virtual void apply();
 
 protected:
@@ -456,7 +481,9 @@ class FSPanelProfileFirstLife
 {
 public:
     FSPanelProfileFirstLife();
-    /*virtual*/ ~FSPanelProfileFirstLife();;
+    /*virtual*/ ~FSPanelProfileFirstLife();
+
+    /*virtual*/ void onOpen(const LLSD& key);
 
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
@@ -464,6 +491,9 @@ public:
      * Saves changes.
      */
     void apply(LLAvatarData* data);
+
+protected:
+    virtual void enableControls();
 };
 
 /**
@@ -491,6 +521,11 @@ public:
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
     /*virtual*/ void updateData();
+
+    /**
+     * Saves changes.
+     */
+    virtual void apply();
 
 protected:
     /**

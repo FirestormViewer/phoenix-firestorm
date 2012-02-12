@@ -34,7 +34,9 @@
      layout="topleft"
      follows="left|top"
      name="new_btn"
-     label="New..." />
+     label="New..."
+     visible="false"
+     enabled="false" />
     <button
      left_pad="5"
      height="20"
@@ -42,7 +44,9 @@
      layout="topleft"
      follows="left|top"
      name="delete_btn"
-     label="Delete..." />
+     label="Delete..."
+     visible="false"
+     enabled="false" />
 <!--
     <button
      left_pad="5"

@@ -105,7 +105,6 @@
          follows="left|top"
          name="want_to_edit"
          is_unicode="false"
-         enabled="false"
          max_length="254" />
 
     <text
@@ -138,6 +137,7 @@
          name="schk1"
          label="Architecture"
          enabled="false" />
+<!-- The next two are out of order on purpose due to the odd layout used in v1.x -->
         <check_box
          top_pad="1"
          left="75"
@@ -145,8 +145,8 @@
          width="90"
          layout="topleft"
          follows="left|top"
-         name="schk2"
-         label="Event Planning"
+         name="schk3"
+         label="Modeling"
          enabled="false" />
         <check_box
          left_pad="80"
@@ -154,8 +154,8 @@
          width="90"
          layout="topleft"
          follows="left|top"
-         name="schk3"
-         label="Modeling"
+         name="schk2"
+         label="Event Planning"
          enabled="false" />
         <check_box
          top_pad="1"
@@ -185,7 +185,6 @@
          follows="left|top"
          name="skills_edit"
          is_unicode="false"
-         enabled="false"
          max_length="254" />
 
     <text
@@ -208,7 +207,6 @@
          follows="left|top"
          name="languages_edit"
          is_unicode="false"
-         enabled="false"
          max_length="254" />
 </panel>
 

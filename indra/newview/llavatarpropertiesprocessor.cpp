@@ -669,3 +669,28 @@ void LLAvatarPropertiesProcessor::removePendingRequest(const LLUUID& avatar_id, 
 	timestamp_map_t::key_type key = std::make_pair(avatar_id, type);
 	mRequestTimestamps.erase(key);
 }
+
+//<FS:KC legacy profiles>
+void LLAvatarPropertiesProcessor::sendInterestsInfoUpdate(const FSInterestsData* interests_data)
+{
+    if(!interests_data)
+    {
+        return;
+    }
+
+    LLMessageSystem* msg = gMessageSystem;
+
+    msg->newMessage(_PREHASH_AvatarInterestsUpdate);
+    msg->nextBlockFast( _PREHASH_AgentData);
+    msg->addUUIDFast(	_PREHASH_AgentID,       gAgent.getID() );
+    msg->addUUIDFast(   _PREHASH_SessionID,     gAgent.getSessionID() );
+    msg->nextBlockFast( _PREHASH_PropertiesData);
+    msg->addU32Fast(	_PREHASH_WantToMask,    interests_data->want_to_mask);
+    msg->addStringFast(	_PREHASH_WantToText,    interests_data->want_to_text);
+    msg->addU32Fast(	_PREHASH_SkillsMask,    interests_data->skills_mask);
+    msg->addStringFast(	_PREHASH_SkillsText,    interests_data->skills_text);
+    msg->addString(     _PREHASH_LanguagesText, interests_data->languages_text);
+    
+    gAgent.sendReliableMessage();
+}
+//</FS:KC legacy profiles>

@@ -182,6 +182,10 @@ BOOL FSPanelProfile::postBuild()
     enable.add("Profile.EnableUnblock", boost::bind(&FSPanelProfile::enableUnblock, this));
 
     LLGroupList* group_list = getChild<LLGroupList>("group_list");
+    if (getAvatarId() == gAgent.getID())
+    {
+        group_list->enableForAgent();
+    }
     group_list->setDoubleClickCallback(boost::bind(&FSPanelProfile::openGroupProfile, this));
     group_list->setReturnCallback(boost::bind(&FSPanelProfile::openGroupProfile, this));
 
@@ -209,11 +213,6 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChild<LLUICtrl>("block")->setVisible( false );
         getChild<LLUICtrl>("unblock")->setVisible( false );
         getChild<LLUICtrl>("overflow_btn")->setVisible( false );
-
-        getChild<LLUICtrl>("show_in_search_checkbox")->setVisible( true );
-        getChild<LLUICtrl>("show_in_search_checkbox")->setEnabled( true );
-        getChild<LLUICtrl>("sl_description_edit")->setEnabled( true );
-        getChild<LLUICtrl>("2nd_life_pic")->setEnabled( true );
     }
     else
     {
@@ -226,7 +225,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 
 void FSPanelProfile::apply(LLAvatarData* data)
 {
-    if (getAvatarId() == gAgent.getID())
+    if (getIsLoaded() && (getAvatarId() == gAgent.getID()))
     {
         data->image_id = getChild<LLTextureCtrl>("2nd_life_pic")->getImageAssetID();
         data->about_text = getChild<LLUICtrl>("sl_description_edit")->getValue().asString();
@@ -241,7 +240,10 @@ void FSPanelProfile::updateData()
     if (getAvatarId().notNull())
     {
         LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(getAvatarId());
-        LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(getAvatarId());
+        if (getAvatarId() != gAgent.getID())
+        {
+            LLAvatarPropertiesProcessor::getInstance()->sendAvatarGroupsRequest(getAvatarId());
+        }
     }
 }
 
@@ -253,6 +255,7 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
         if(avatar_data && getAvatarId() == avatar_data->avatar_id)
         {
             processProfileProperties(avatar_data);
+            enableControls();
         }
     }
     else if(APT_GROUPS == type)
@@ -657,6 +660,19 @@ void FSPanelProfile::processOnlineStatus(bool online)
     mStatusText->setValue(status);
 }
 
+void FSPanelProfile::enableControls()
+{
+    FSPanelProfileTab::enableControls();
+
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLUICtrl>("show_in_search_checkbox")->setVisible( true );
+        getChild<LLUICtrl>("show_in_search_checkbox")->setEnabled( true );
+        getChild<LLUICtrl>("sl_description_edit")->setEnabled( true );
+        getChild<LLUICtrl>("2nd_life_pic")->setEnabled( true );
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -671,6 +687,11 @@ FSPanelProfileWeb::~FSPanelProfileWeb()
 {
 }
 
+void FSPanelProfileWeb::onOpen(const LLSD& key)
+{
+    FSPanelProfileTab::onOpen(key);
+}
+
 BOOL FSPanelProfileWeb::postBuild()
 {
     getChild<LLUICtrl>("load")->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitLoad, this, _1));
@@ -680,6 +701,8 @@ BOOL FSPanelProfileWeb::postBuild()
 
     mWebBrowser = getChild<LLMediaCtrl>("profile_html");
     mWebBrowser->addObserver(this);
+
+    getChild<LLLineEditor>("url_edit")->setEnabled( FALSE );
 
     return TRUE;
 }
@@ -694,6 +717,7 @@ void FSPanelProfileWeb::processProperties(void* data, EAvatarProcessorType type)
             mURLHome = avatar_data->profile_url;
             getChild<LLUICtrl>("url_edit")->setValue(mURLHome);
             childSetEnabled("load", mURLHome.length() > 0);
+            enableControls();
         }
     }
 }
@@ -828,6 +852,16 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
     }
 }
 
+void FSPanelProfileWeb::enableControls()
+{
+    FSPanelProfileTab::enableControls();
+
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLLineEditor>("url_edit")->setEnabled( TRUE );
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -844,6 +878,11 @@ FSPanelProfileInterests::~FSPanelProfileInterests()
 {
 }
 
+void FSPanelProfileInterests::onOpen(const LLSD& key)
+{
+    FSPanelProfileTab::onOpen(key);
+}
+
 BOOL FSPanelProfileInterests::postBuild()
 {
     for (S32 i=0; i < WANT_CHECKS; ++i)
@@ -858,6 +897,12 @@ BOOL FSPanelProfileInterests::postBuild()
         mSkillChecks[i] = getChild<LLCheckBoxCtrl>(check_name);
     }
 
+    //FS:KC - Due to a bug with LLLineEditor, it cannot be disabled from XUI
+    // It won't properly enable from code if it is.
+    getChild<LLLineEditor>("want_to_edit")->setEnabled( FALSE );
+    getChild<LLLineEditor>("skills_edit")->setEnabled( FALSE );
+    getChild<LLLineEditor>("languages_edit")->setEnabled( FALSE );
+
     return TRUE;
 }
 
@@ -869,9 +914,9 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
         const FSInterestsData* interests_data = static_cast<const FSInterestsData*>(data);
         if (interests_data && getAvatarId() == interests_data->avatar_id)
         {
-            for (S32 i=0; i < WANT_CHECKS; ++i)
+            for (S32 i=0; i < WANT_CHECKS; i++)
             {
-                if (interests_data->want_to_mask & 1<<i)
+                if (interests_data->want_to_mask & (1<<i))
                 {
                     mWantChecks[i]->setValue(TRUE);
                 }
@@ -881,9 +926,9 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
                 }
             }
 
-            for (S32 i=0; i < SKILL_CHECKS; ++i)
+            for (S32 i=0; i < SKILL_CHECKS; i++)
             {
-                if (interests_data->skills_mask & 1<<i)
+                if (interests_data->skills_mask & (1<<i))
                 {
                     mSkillChecks[i]->setValue(TRUE);
                 }
@@ -896,10 +941,66 @@ void FSPanelProfileInterests::processProperties(void* data, EAvatarProcessorType
             childSetText("want_to_edit",    interests_data->want_to_text);
             childSetText("skills_edit",     interests_data->skills_text);
             childSetText("languages_edit",  interests_data->languages_text);
+
+            enableControls();
         }
     }
 }
 
+void FSPanelProfileInterests::apply()
+{
+    if (getIsLoaded() && (getAvatarId() == gAgent.getID()))
+    {
+        FSInterestsData interests_data = FSInterestsData();
+
+        interests_data.want_to_mask = 0;
+        for (S32 i=0; i < WANT_CHECKS; i++)
+        {
+            if (mWantChecks[i]->getValue().asBoolean())
+            {
+                interests_data.want_to_mask |= (1<<i);
+            }
+        }
+
+        interests_data.skills_mask = 0;
+        for (S32 i=0; i < SKILL_CHECKS; i++)
+        {
+            if (mSkillChecks[i]->getValue().asBoolean())
+            {
+                interests_data.skills_mask |= (1<<i);
+            }
+        }
+
+        interests_data.want_to_text = getChild<LLUICtrl>("want_to_edit")->getValue().asString();
+        interests_data.skills_text = getChild<LLUICtrl>("skills_edit")->getValue().asString();
+        interests_data.languages_text = getChild<LLUICtrl>("languages_edit")->getValue().asString();
+
+        LLAvatarPropertiesProcessor::getInstance()->sendInterestsInfoUpdate(&interests_data);
+    }
+
+}
+
+void FSPanelProfileInterests::enableControls()
+{
+    FSPanelProfileTab::enableControls();
+
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLLineEditor>("want_to_edit")->setEnabled( TRUE );
+        getChild<LLLineEditor>("skills_edit")->setEnabled( TRUE );
+        getChild<LLLineEditor>("languages_edit")->setEnabled( TRUE );
+
+        for (S32 i=0; i < WANT_CHECKS; ++i)
+        {
+            mWantChecks[i]->setEnabled( TRUE );
+        }
+
+        for (S32 i=0; i < SKILL_CHECKS; ++i)
+        {
+            mSkillChecks[i]->setEnabled( TRUE );
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -1093,7 +1194,7 @@ void FSPanelPick::onClickTeleport()
 
 void FSPanelPick::enableSaveButton(bool enable)
 {
-    // getChildView("save_changes_btn")->setEnabled(enable);
+    getChildView("save_changes_btn")->setEnabled(enable);
     getChild<LLUICtrl>("save_changes_btn")->setVisible(enable);
 }
 
@@ -1284,6 +1385,15 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
 {
     FSPanelProfileTab::onOpen(key);
 
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLUICtrl>("new_btn")->setVisible( true );
+        getChild<LLUICtrl>("new_btn")->setEnabled( true );
+        
+        getChild<LLUICtrl>("delete_btn")->setVisible( true );
+        getChild<LLUICtrl>("delete_btn")->setEnabled( true );
+    }
+
     updateData();
 }
 
@@ -1451,6 +1561,11 @@ FSPanelProfileFirstLife::~FSPanelProfileFirstLife()
 {
 }
 
+void FSPanelProfileFirstLife::onOpen(const LLSD& key)
+{
+    FSPanelProfileTab::onOpen(key);
+}
+
 void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType type)
 {
     if(APT_PROPERTIES == type)
@@ -1460,6 +1575,7 @@ void FSPanelProfileFirstLife::processProperties(void* data, EAvatarProcessorType
         {
             getChild<LLUICtrl>("fl_description_edit")->setValue(avatar_data->fl_about_text);
             getChild<LLUICtrl>("real_world_pic")->setValue(avatar_data->fl_image_id);
+            enableControls();
         }
     }
 }
@@ -1468,6 +1584,17 @@ void FSPanelProfileFirstLife::apply(LLAvatarData* data)
 {
     data->fl_image_id = getChild<LLTextureCtrl>("real_world_pic")->getImageAssetID();
     data->fl_about_text = getChild<LLUICtrl>("fl_description_edit")->getValue().asString();
+}
+
+void FSPanelProfileFirstLife::enableControls()
+{
+    FSPanelProfileTab::enableControls();
+
+    if (getAvatarId() == gAgent.getID())
+    {
+        getChild<LLUICtrl>("fl_description_edit")->setEnabled( true );
+        getChild<LLUICtrl>("real_world_pic")->setEnabled( true );
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1506,6 +1633,15 @@ void FSPanelAvatarNotes::onOpen(const LLSD& key)
     fillRightsData();
 
     updateData();
+}
+
+void FSPanelAvatarNotes::apply()
+{
+    if (getIsLoaded())
+    {
+        //likely overkill
+        onCommitNotes();
+    }
 }
 
 void FSPanelAvatarNotes::fillRightsData()
@@ -1618,6 +1754,7 @@ void FSPanelAvatarNotes::processProperties(void* data, EAvatarProcessorType type
         {
             getChild<LLUICtrl>("notes_edit")->setValue(avatar_notes->notes);
             getChildView("notes edit")->setEnabled(true);
+            enableControls();
 
             LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(),this);
         }
@@ -1658,7 +1795,5 @@ void FSPanelAvatarNotes::setAvatarId(const LLUUID& id)
         LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
     }
 }
-
-
 
 // eof

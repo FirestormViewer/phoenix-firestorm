@@ -100,10 +100,10 @@ void FSFloaterProfile::onOKBtn()
     {
         FSPanelProfile* panel_profile               = findChild<FSPanelProfile>(PANEL_PROFILE);
         FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
-        // FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
+        FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
         FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
         FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
-        // FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
+        FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
 
         //KC - Avatar data is spread over 3 different panels
         // collect data from the last 2 and give to the first to save
@@ -113,9 +113,9 @@ void FSFloaterProfile::onOKBtn()
         panel_web->apply(&data);
         panel_profile->apply(&data);
 
-        // panel_interests->apply();
+        panel_interests->apply();
         panel_picks->apply();
-        // panel_notes->apply();
+        panel_notes->apply();
     }
 
     closeFloater();

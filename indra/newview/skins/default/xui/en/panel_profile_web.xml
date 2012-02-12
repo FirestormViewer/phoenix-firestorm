@@ -16,7 +16,6 @@
      layout="topleft"
      follows="left|top"
      name="url_edit"
-     enabled="false"
      is_unicode="false"
      max_length="254" />
 
@@ -65,9 +64,9 @@
 
     <web_browser
      top="48"
-     bottom="-15"
+     bottom="-18"
      left="10"
-     right="-1"
+     right="-10"
      layout="topleft"
      follows="all"
      name="profile_html"
@@ -75,11 +74,12 @@
      start_url="" />
 
     <text
-     bottom="-2"
+     bottom="-4"
      left="110"
-     right="-100"
+     right="-110"
      layout="topleft"
      follows="bottom|left|right"
-     name="status_text" />
+     name="status_text"
+     halign="center" />
 </panel>
 
