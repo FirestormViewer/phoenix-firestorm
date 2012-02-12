@@ -27,6 +27,8 @@
 #include "llmath.h"
 #include "llquantize.h"
 
+#include <string.h> // <FS:ND> for mempcy
+
 extern const LLQuad F_ZERO_4A		= { 0, 0, 0, 0 };
 extern const LLQuad F_APPROXIMATELY_ZERO_4A = { 
 	F_APPROXIMATELY_ZERO,
@@ -80,12 +82,20 @@ extern const LLVector4a LL_V4A_EPSILON = reinterpret_cast<const LLVector4a&> ( F
 		}
 	}
 
-	while (dst < end)
-	{
-		copy4a(dst, src);
-		dst += 4;
-		src += 4;
-	}
+	// <FS:ND> There is no guarantee that the remaining about of bytes left is a number of 16. If that's not the case using copy4a will overwrite and trash memory behind the end of dst
+
+	// while (dst < end)
+	// {
+	// 	copy4a(dst, src);
+	// 	dst += 4;
+	// 	src += 4;
+	// }
+
+	bytes = (U8*)end-(U8*)dst;
+	if( bytes > 0 )
+		memcpy( dst, src, bytes );
+
+	// </FS:ND>
 }
 
 void LLVector4a::setRotated( const LLRotation& rot, const LLVector4a& vec )
