@@ -453,7 +453,7 @@ void LLNearbyChat::registerChatBar(LLNearbyChatControl* chatBar)
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void LLNearbyChat::showDefaultChatBar(BOOL visible) const
+void LLNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 {
 	if(!mDefaultChatBar)
 		return;
@@ -464,6 +464,15 @@ void LLNearbyChat::showDefaultChatBar(BOOL visible) const
 	mDefaultChatBar->getParent()->setVisible(visible);
 	mDefaultChatBar->setVisible(visible);
 	mDefaultChatBar->setFocus(visible);
+
+	if(!text)
+		return;
+
+	if(mDefaultChatBar->getText().empty())
+	{
+		mDefaultChatBar->setText(LLStringExplicit(text));
+		mDefaultChatBar->setCursorToEnd();
+	}
 }
 
 // We want to know which nearby chat editor (if any) currently has focus
@@ -486,23 +495,4 @@ BOOL LLNearbyChat::chatIsEmpty() const
 
 	// return FALSE for unfocused chat editor, so other UI elements can claim arrow keys
 	return FALSE;
-}
-
-void LLNearbyChat::startChatInDefaultChatBar(const char* line)
-{
-	showDefaultChatBar(TRUE);
-	setFocusedInputEditor(mDefaultChatBar, TRUE);
-	
-	if (line)
-	{
-		std::string line_string(line);
-		mFocusedInputEditor->setText(line_string);
-	}
-
-	mFocusedInputEditor->setCursorToEnd();
-}
-
-std::string LLNearbyChat::getCurrentChatInDefaultCharBar()
-{
-	return mDefaultChatBar ? mDefaultChatBar->getText() : LLStringUtil::null;
 }

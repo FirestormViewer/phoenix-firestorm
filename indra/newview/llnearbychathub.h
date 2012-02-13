@@ -50,7 +50,9 @@ private:
 
 public:
 	void registerChatBar(LLNearbyChatControl* chatBar);
-	void showDefaultChatBar(BOOL visible) const;
+
+	// set the contents of the chat bar to "text" if it was empty, otherwise just show it
+	void showDefaultChatBar(BOOL visible,const char* text=0) const;
 
 	void sendChat(LLWString text,EChatType type);
 	LLWString stripChannelNumber(const LLWString &mesg, S32* channel);
@@ -61,9 +63,6 @@ public:
 	void setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL focus);
 
 	BOOL chatIsEmpty() const;
-
-	void startChatInDefaultChatBar(const char* line);
-	std::string getCurrentChatInDefaultCharBar();
 
 	LLNearbyChatControl* mFocusedInputEditor;
 };

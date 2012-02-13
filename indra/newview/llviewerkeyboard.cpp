@@ -589,17 +589,8 @@ void start_gesture( EKeystate s )
  		//	LLNearbyChat::startChat(NULL);
  		//}
 
-		if (LLNearbyChat::instance().getCurrentChatInDefaultCharBar().empty())
- 		{
- 			// No existing chat in chat editor, insert '/'
- 			LLNearbyChat::instance().startChatInDefaultChatBar("/");
- 		}
- 		else
- 		{
- 			// Don't overwrite existing text in chat editor
- 			LLNearbyChat::instance().startChatInDefaultChatBar(NULL);
- 		}
- 		// </FS:Ansarieö>
+		LLNearbyChat::instance().showDefaultChatBar(TRUE,"/");
+ 		// </FS:Ansariel>
 	}
 }
 
