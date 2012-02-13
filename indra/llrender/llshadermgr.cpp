@@ -697,19 +697,34 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		}
 		else if (gGLManager.mGLVersion >= 3.f)
 		{ 
-			text[count++] = strdup("\tswitch (int(vary_texture_index+0.25))\n");
-			text[count++] = strdup("\t{\n");
+			// <FS:ND> some older drivers from ATI don't like that switch, which results in every texture being pink. Replace with if-statments
+
+			// text[count++] = strdup("\tswitch (int(vary_texture_index+0.25))\n");
+			// text[count++] = strdup("\t{\n");
 		
-			//switch body
+			// //switch body
+			// for (S32 i = 0; i < texture_index_channels; ++i)
+			// {
+			// 	std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
+			// 	text[count++] = strdup(case_str.c_str());
+			// }
+
+			// text[count++] = strdup("\t}\n");
+			// text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
+			// text[count++] = strdup("}\n");
+
+			text[count++] = strdup("if ( vary_texture_index < 0 ) { return vec4(0,1,1,1); }\n");
+
 			for (S32 i = 0; i < texture_index_channels; ++i)
 			{
-				std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
-				text[count++] = strdup(case_str.c_str());
+				std::stringstream str;
+				str << "if ( vary_texture_index <= " << i << ".25 ) { return texture2D(tex" << i << ", texcoord); }\n";
+				text[count++] = strdup(str.str().c_str());
 			}
-
-			text[count++] = strdup("\t}\n");
-			text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
+			text[count++] = strdup("return vec4(1,0,1,1);\n");
 			text[count++] = strdup("}\n");
+
+			// </FS:ND>
 		}
 		else
 		{
