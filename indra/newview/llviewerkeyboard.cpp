@@ -577,19 +577,29 @@ void start_gesture( EKeystate s )
 	if (KEYSTATE_UP == s &&
 		! (focus_ctrlp && focus_ctrlp->acceptsTextInput()))
 	{
-		// <FS:Zi> Remove floating chat bar
- 		// TODO: This needs the new bottom chat bar to work at all
-/* 		if (LLNearbyChat::getInstance()->getCurrentChat().empty())
+		// <FS:Ansariel> Changed for new chatbar
+ 		//if (LLNearbyChat::getInstance()->getCurrentChat().empty())
+ 		//{
+ 		//	// No existing chat in chat editor, insert '/'
+ 		//	LLNearbyChat::startChat("/");
+ 		//}
+ 		//else
+ 		//{
+ 		//	// Don't overwrite existing text in chat editor
+ 		//	LLNearbyChat::startChat(NULL);
+ 		//}
+
+		if (LLNearbyChat::instance().getCurrentChatInDefaultCharBar().empty())
  		{
  			// No existing chat in chat editor, insert '/'
- 			LLNearbyChat::startChat("/");
+ 			LLNearbyChat::instance().startChatInDefaultChatBar("/");
  		}
  		else
  		{
  			// Don't overwrite existing text in chat editor
- 			LLNearbyChat::startChat(NULL);
- 		}*/
- 		// </FS:Zi>
+ 			LLNearbyChat::instance().startChatInDefaultChatBar(NULL);
+ 		}
+ 		// </FS:Ansarieö>
 	}
 }
 

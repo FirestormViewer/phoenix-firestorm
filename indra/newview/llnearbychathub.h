@@ -62,6 +62,9 @@ public:
 
 	BOOL chatIsEmpty() const;
 
+	void startChatInDefaultChatBar(const char* line);
+	std::string getCurrentChatInDefaultCharBar();
+
 	LLNearbyChatControl* mFocusedInputEditor;
 };
 
