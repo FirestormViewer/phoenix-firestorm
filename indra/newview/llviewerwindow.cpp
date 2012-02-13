@@ -2603,9 +2603,9 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// If "Pressing letter keys starts local chat" option is selected, we are not in mouselook, 
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
-	// FIRE-5002: Accept the '/' key, as well, 0x98, to give focus to nearby chat. -- TS
+
 	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
-		!keyboard_focus && ((key < 0x80) || (key == 0x98)) && (mask == MASK_NONE || mask == MASK_SHIFT) )
+		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
 		// <FS:Zi> Remove floating chat bar
 		// LLLineEditor* chat_editor = LLFloaterReg::getTypedInstance<LLNearbyChatBar>("chat_bar")->getChatBox();
