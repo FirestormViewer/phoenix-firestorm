@@ -251,6 +251,7 @@ BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 	// autohide the chat bar if escape key was pressed and we're the default chat bar
 	if(key==KEY_ESCAPE && mask==MASK_NONE)
 	{
+		// we let ESC key go through to the rest of the UI code, so don't set handled=TRUE
 		autohide();
 		gAgent.stopTyping();
 	}
@@ -285,12 +286,17 @@ BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 
 	if (handled == TRUE)
 	{
+		// save current line in the history buffer
+		LLLineEditor::onCommit();
+
+		// send chat to nearby chat hub
 		LLNearbyChat::instance().sendChat(getConvertedText(),type);
+
 		setText(LLStringExplicit(""));
 		autohide();
 		return TRUE;
 	}
 
-	// let ESC key go through to the rest of the UI code
+	// let the line editor handle everything we don't handle
 	return LLLineEditor::handleKeyHere(key,mask);
 }
