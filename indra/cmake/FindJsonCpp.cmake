@@ -3,15 +3,14 @@
 # - Find JSONCpp
 # Find the JSONCpp includes and library
 # This module defines
-#  JSONCPP_INCLUDE_DIR, where to find json.h, etc.
+#  JSONCPP_INCLUDE_DIRS, where to find json.h, etc.
 #  JSONCPP_LIBRARIES, the libraries needed to use jsoncpp.
 #  JSONCPP_FOUND, If false, do not try to use jsoncpp.
 #  also defined, but not for general use are
 #  JSONCPP_LIBRARY, where to find the jsoncpp library.
 
-FIND_PATH(JSONCPP_INCLUDE_DIR jsoncpp/json.h
-/usr/local/include
-/usr/include
+FIND_PATH(JSONCPP_INCLUDE_DIRS json.h
+          PATH_SUFFIXES jsoncpp
 )
 
 # Get the GCC compiler version
@@ -23,21 +22,20 @@ EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
 
 # Try to find a library that was compiled with the same compiler version as we currently use.
 SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson_linux-gcc-${_gcc_COMPILER_VERSION}_libmt.so)
-IF (STANDALONE)
-    # On standalone, assume that the system installed library was compiled with the used compiler.
-    SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so)
-ENDIF (STANDALONE)
+
+# On standalone, assume that the system installed library was compiled with the used compiler.
+SET(JSONCPP_NAMES ${JSONCPP_NAMES} libjson.so)
+
 FIND_LIBRARY(JSONCPP_LIBRARY
   NAMES ${JSONCPP_NAMES}
-  PATHS /usr/lib /usr/local/lib
   )
 
-IF (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIR)
+IF (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIRS)
     SET(JSONCPP_LIBRARIES ${JSONCPP_LIBRARY})
     SET(JSONCPP_FOUND "YES")
-ELSE (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIR)
+ELSE (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIRS)
   SET(JSONCPP_FOUND "NO")
-ENDIF (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIR)
+ENDIF (JSONCPP_LIBRARY AND JSONCPP_INCLUDE_DIRS)
 
 
 IF (JSONCPP_FOUND)
@@ -51,10 +49,10 @@ ELSE (JSONCPP_FOUND)
 ENDIF (JSONCPP_FOUND)
 
 # Deprecated declarations.
-SET (NATIVE_JSONCPP_INCLUDE_PATH ${JSONCPP_INCLUDE_DIR} )
+SET (NATIVE_JSONCPP_INCLUDE_PATH ${JSONCPP_INCLUDE_DIRS} )
 GET_FILENAME_COMPONENT (NATIVE_JSONCPP_LIB_PATH ${JSONCPP_LIBRARY} PATH)
 
 MARK_AS_ADVANCED(
   JSONCPP_LIBRARY
-  JSONCPP_INCLUDE_DIR
+  JSONCPP_INCLUDE_DIRS
   )
