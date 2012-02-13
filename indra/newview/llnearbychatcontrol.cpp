@@ -115,16 +115,6 @@ LLNearbyChatControl::~LLNearbyChatControl()
 {
 }
 
-void LLNearbyChatControl::onCommit()
-{
-	LLNearbyChat::instance().sendChat(getConvertedText(),CHAT_TYPE_NORMAL);
-	setText(LLStringExplicit(""));
-
-	autohide();
-
-	LLUICtrl::onCommit();
-}
-
 void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 {
 	LLWString raw_text = caller->getWText();
@@ -255,12 +245,52 @@ void LLNearbyChatControl::autohide()
 // handle ESC key here
 BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 {
+	BOOL handled = FALSE;
+	EChatType type = CHAT_TYPE_NORMAL;
+
 	// autohide the chat bar if escape key was pressed and we're the default chat bar
 	if(key==KEY_ESCAPE && mask==MASK_NONE)
 	{
 		autohide();
 		gAgent.stopTyping();
 	}
+	else if( KEY_RETURN == key )
+	{
+		llinfos << "Handling return key, mask=" << mask << llendl;
+		if (mask == MASK_CONTROL)
+		{
+			// shout
+			type = CHAT_TYPE_SHOUT;
+			handled = TRUE;
+		}
+		else if (mask == MASK_SHIFT)
+		{
+			// whisper
+			type = CHAT_TYPE_WHISPER;
+			handled = TRUE;
+		}
+		else if (mask == MASK_ALT)
+		{
+			// OOC
+			type = CHAT_TYPE_OOC;
+			handled = TRUE;
+		}
+		else if (mask == MASK_NONE)
+		{
+			// say
+			type = CHAT_TYPE_NORMAL;
+			handled = TRUE;
+		}
+	}
 
+	if (handled == TRUE)
+	{
+		LLNearbyChat::instance().sendChat(getConvertedText(),type);
+		setText(LLStringExplicit(""));
+		autohide();
+		return TRUE;
+	}
+
+	// let ESC key go through to the rest of the UI code
 	return LLLineEditor::handleKeyHere(key,mask);
 }

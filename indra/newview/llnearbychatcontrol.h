@@ -28,6 +28,7 @@
 #ifndef LL_LLNEARBYCHATCONTROL_H
 #define LL_LLNEARBYCHATCONTROL_H
 
+#include "llchat.h"
 #include "lllineeditor.h"
 
 class LLNearbyChatControl : public LLLineEditor
@@ -49,9 +50,6 @@ public:
 private:
 	// Typing in progress, expand gestures etc.
 	static void onKeystroke(LLLineEditor* caller,void* userdata);
-
-	// Chat data entered to be sent to nearby chat
-	void onCommit();
 
 	// Unfocus and autohide chat bar accordingly if we are the default chat bar
 	void autohide();

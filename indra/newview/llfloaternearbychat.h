@@ -101,10 +101,6 @@ private:
 
 	void	onNearbySpeakers	();
 
-	void	setTyping(bool typing);
-
-	virtual BOOL handleKeyHere( KEY key, MASK mask );
-
 private:
 	LLHandle<LLView>	mPopupMenuHandle;
 	LLChatHistory*		mChatHistory;

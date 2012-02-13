@@ -471,57 +471,6 @@ bool isWordsName(const std::string& name)
 	}
 }
 
-
-
-
-
-// this probably belongs in LLNearbyChatControl
-// virtual
-BOOL LLFloaterNearbyChat::handleKeyHere( KEY key, MASK mask )
-{
-	BOOL handled = FALSE;
-	EChatType type = CHAT_TYPE_NORMAL; // won't get used as such
-
-	if( KEY_RETURN == key )
-	{
-		llinfos << "Handling return key, mask=" << mask << llendl;
-		if (mask == MASK_CONTROL)
-		{
-			// shout
-			type = CHAT_TYPE_SHOUT;
-			handled = TRUE;
-		}
-		else if (mask == MASK_SHIFT)
-		{
-			// whisper
-			type = CHAT_TYPE_WHISPER;
-			handled = TRUE;
-		}
-		else if (mask == MASK_ALT)
-		{
-			// OOC
-			type = CHAT_TYPE_OOC;
-			handled = TRUE;
-		}
-		// Ansariel: For some reason we don't get an unmasked return here.
-		//           So we use the child commit callback that invokes
-		//           LLNearbyChat::onSendMsg() to handle this case.
-		//else if (mask == MASK_NONE)
-		//{
-		//	// say
-		//	type = CHAT_TYPE_NORMAL;
-		//	handled = TRUE;
-		//}
-	}
-
-	if (handled == TRUE)
-	{
-		LLNearbyChat::instance().sendChat(mInputEditor->getConvertedText(),type);
-	}
-
-	return handled;	
-}
-
 void LLFloaterNearbyChat::loadHistory()
 {
 	LLSD do_not_log;
