@@ -15383,6 +15383,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 	      <string>nearby_chat</string>
 	      <string>im_container</string>
 		  <string>beacons</string>
+		  <string>avatar_picker</string>
         <string>stats</string>
       </array>
     </map>
