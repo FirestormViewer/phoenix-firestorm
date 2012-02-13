@@ -77,8 +77,6 @@ protected:
 
     FSPanelProfileTab();
 
-    virtual void onMapButtonClick();
-
     virtual void enableControls() { mLoaded = TRUE; }
 
     bool getIsLoaded() { return mLoaded; }
@@ -156,6 +154,8 @@ protected:
      * Fills account status.
      */
     virtual void fillAccountStatus(const LLAvatarData* avatar_data);
+
+    void onMapButtonClick();
 
     /**
      * Opens "Pay Resident" dialog.
@@ -305,7 +305,9 @@ private:
 * Panel for displaying Avatar's picks.
 */
 
-class FSPanelPick : public LLPanel, public LLAvatarPropertiesObserver, LLRemoteParcelInfoObserver
+class FSPanelPick
+    : public FSPanelProfileTab
+    , public LLRemoteParcelInfoObserver
 {
 public:
 
@@ -354,8 +356,6 @@ protected:
         const std::string& original_name,
         const std::string& sim_name,
         const LLVector3d& pos_global);
-
-    virtual LLUUID& getAvatarId() { return mAvatarId; }
 
     /**
      * Sets snapshot id.
@@ -427,14 +427,12 @@ protected:
 
     LLTextureCtrl*            mSnapshotCtrl;
 
-    LLUUID mAvatarId;
     LLVector3d mPosGlobal;
     LLUUID mParcelId;
     LLUUID mPickId;
     LLUUID mRequestedId;
 
     bool mLocationChanged;
-    bool mNeedData;
     bool mNewPick;
 };
 

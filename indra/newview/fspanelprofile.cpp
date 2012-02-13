@@ -112,11 +112,6 @@ void FSPanelProfileTab::onOpen(const LLSD& key)
     setAvatarId(key.asUUID());
 }
 
-void FSPanelProfileTab::onMapButtonClick()
-{
-    LLAvatarActions::showOnMap(getAvatarId());
-}
-
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -464,6 +459,11 @@ void FSPanelProfile::fillAccountStatus(const LLAvatarData* avatar_data)
 
     std::string caption_text = getString("CaptionTextAcctInfo", args);
     getChild<LLUICtrl>("acc_status_text")->setValue(caption_text);
+}
+
+void FSPanelProfile::onMapButtonClick()
+{
+    LLAvatarActions::showOnMap(getAvatarId());
 }
 
 void FSPanelProfile::pay()
@@ -1007,16 +1007,13 @@ void FSPanelProfileInterests::enableControls()
 //////////////////////////////////////////////////////////////////////////
 
 FSPanelPick::FSPanelPick()
- : LLPanel()
- , LLAvatarPropertiesObserver()
+ : FSPanelProfileTab()
  , LLRemoteParcelInfoObserver()
- , mAvatarId(LLUUID::null)
  , mSnapshotCtrl(NULL)
  , mPickId(LLUUID::null)
  , mParcelId(LLUUID::null)
  , mRequestedId(LLUUID::null)
  , mLocationChanged(false)
- , mNeedData(true)
  , mNewPick(false)
 {
 }
@@ -1031,8 +1028,6 @@ FSPanelPick* FSPanelPick::create()
 
 FSPanelPick::~FSPanelPick()
 {
-    LLAvatarPropertiesProcessor::getInstance()->removeObserver(getAvatarId(), this);
-
     if (mParcelId.notNull())
     {
         LLRemoteParcelInfoProcessor::getInstance()->removeObserver(mParcelId, this);
@@ -1045,9 +1040,7 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
     {
         return;
     }
-    mAvatarId = avatar_id;
-
-    mNeedData = true;
+    FSPanelProfileTab::setAvatarId(avatar_id);
 
     // creating new Pick
     if(getPickId().isNull())
@@ -1084,7 +1077,6 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
     }
     else
     {
-        LLAvatarPropertiesProcessor::getInstance()->addObserver(getAvatarId(), this);
         LLAvatarPropertiesProcessor::getInstance()->sendPickInfoRequest(getAvatarId(), getPickId());
 
         LLAvatarPropertiesProcessor::instance().sendPickInfoRequest(getAvatarId(), getPickId());
@@ -1149,6 +1141,8 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
     // We want to keep listening to APT_PICK_INFO because user may
     // edit the Pick and we have to update Pick info panel.
     // revomeObserver is called from onClickBack
+
+    enableControls();
 }
 
 void FSPanelPick::setSnapshotId(const LLUUID& id)
@@ -1267,7 +1261,7 @@ void FSPanelPick::onClickSave()
 
 void FSPanelPick::apply()
 {
-    if (isDirty())
+    if ((mNewPick || getIsLoaded()) && isDirty())
     {
         sendUpdate();
     }
@@ -1521,18 +1515,23 @@ void FSPanelProfilePicks::processProperties(void* data, EAvatarProcessorType typ
             {
                 mTabContainer->selectFirstTab();
             }
+
+            enableControls();
         }
     }
 }
 
 void FSPanelProfilePicks::apply()
 {
-    for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
+    if (getIsLoaded())
     {
-        FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
-        if (pick_panel)
+        for (S32 tab_idx = 0; tab_idx < mTabContainer->getTabCount(); ++tab_idx)
         {
-            pick_panel->apply();
+            FSPanelPick* pick_panel = (FSPanelPick*)mTabContainer->getPanelByIndex(tab_idx);
+            if (pick_panel)
+            {
+                pick_panel->apply();
+            }
         }
     }
 }
