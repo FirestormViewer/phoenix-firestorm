@@ -9079,6 +9079,8 @@ void show_topinfobar_context_menu(LLView* ctrl, S32 x, S32 y)
 	LLMenuGL::showPopup(ctrl, show_topbarinfo_context_menu, x, y);
 }
 
+// <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
+//         pick up the menu properly.
 void initialize_edit_menu()
 {
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a

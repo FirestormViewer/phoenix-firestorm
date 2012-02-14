@@ -868,8 +868,11 @@ bool idle_startup()
 		// this startup phase more than once.
 		if (gLoginMenuBarView == NULL)
 		{
-			display_startup();
-			initialize_edit_menu();
+			// <FS:Zi> Moved this to initBase() in llviewerwindow.cpp to get the edit menu set up
+			//         before any text widget uses it
+			// display_startup();
+			// initialize_edit_menu();
+			// </FS:Zi>
 			display_startup();
 			init_menus();
 			display_startup();
