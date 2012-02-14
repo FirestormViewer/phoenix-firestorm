@@ -48,9 +48,6 @@
 #include "llvoiceclient.h"
 #include "lltextbox.h"
 #include "lltrans.h"
-#include "llgroupactions.h"
-#include "llgrouplist.h"
-#include "fsdata.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLDropTarget

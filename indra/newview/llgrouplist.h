@@ -54,6 +54,8 @@ public:
 	LLGroupList(const Params& p);
 	virtual ~LLGroupList();
 
+    void enableForAgent();
+
 	virtual void draw(); // from LLView
 	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask); // from LLView
 

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ top="0"
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile_web"
+ label="Web">
+    <line_editor
+     top_pad="5"
+     left="10"
+     height="16"
+     width="400"
+     layout="topleft"
+     follows="left|top"
+     name="url_edit"
+     is_unicode="false"
+     max_length="254" />
+
+    <flyout_button
+     top_pad="5"
+     left="10"
+     height="18"
+     width="80"
+     layout="topleft"
+     follows="left|top"
+     name="load"
+     label="Load"
+     label_selected="Load"
+     enabled="false"
+     tool_tip="Load this profile page with embedded web browser." >
+        <flyout_button.item
+         label="In external browser"
+         value="popout"
+         name="open_item" />
+        <flyout_button.item
+         label="In external browser"
+         value="external"
+         name="home_item" />
+    </flyout_button>
+
+    <flyout_button
+     top_delta="0"
+     right="-10"
+     height="18"
+     width="80"
+     layout="topleft"
+     follows="right|top"
+     name="web_profile"
+     label="Profile"
+     label_selected="Profile"
+     enabled="false" >
+        <flyout_button.item
+         label="In built-in browser"
+         value="popout"
+         name="builtin_item" />
+        <flyout_button.item
+         label="In external browser"
+         value="external"
+         name="open_item" />
+    </flyout_button>
+
+    <web_browser
+     top="48"
+     bottom="-18"
+     left="10"
+     right="-10"
+     layout="topleft"
+     follows="all"
+     name="profile_html"
+     ignore_ui_scale="false"
+     start_url="" />
+
+    <text
+     bottom="-4"
+     left="110"
+     right="-110"
+     layout="topleft"
+     follows="bottom|left|right"
+     name="status_text"
+     halign="center" />
+</panel>
+

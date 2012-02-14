@@ -1,77 +1,95 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-bg_opaque_color="SL-Background_66"
-background_visible="true"
-background_opaque="false"
- follows="all"
- height="450"
- label="Picks"
+ top="0"
+ left="0"
+ width="420"
+ height="480"
  layout="topleft"
- left="8"
- name="panel_picks"
- top_pad="0"
- width="313">
- <string
-  name="no_picks"
-  value="No Picks" />
+ follows="all"
+ name="panel_profile_classified"
+ label="Classified">
+<!--
+    <text
+     top="5"
+     left="114"
+     height="16"
+     width="302"
+     layout="topleft"
+     follows="left|top"
+     name="Place an ad in Second Life&apos;s classified listings.">
+        Place an ad in Second Life&apos;s classified listings.
+    </text>
+
+    <button
+     top="24"
+     left="114"
+     height="20"
+     width="75"
+     layout="topleft"
+     follows="left|top"
+     name="New..."
+     label="New..."
+     label_selected="New..." />
+    <button
+     top="24"
+     left_delta="79"
+     height="20"
+     width="75"
+     layout="topleft"
+     follows="left|top"
+     name="Delete..."
+     label="Delete..."
+     label_selected="Delete..." />
+
+    <tab_container
+     top="50"
+     left="4"
+     height="395"
+     width="412"
+     layout="topleft"
+     follows="left|top"
+     name="classified tab"
+     tab_position="left" />
+
+    <text
+     top="55"
+     left="20"
+     height="18"
+     width="100"
+     layout="topleft"
+     follows="all"
+     name="classified_panel_text"
+     mouse_opaque="false">
+        Loading...
+    </text>
+-->
  <string
   name="no_classifieds"
   value="No Classifieds" />
 
-<tab_container
-  follows="all"
-  height="385"
-  layout="topleft"
-  left="0"
-  name="accordion"
-  top="4"
-  width="313">
-    <panel
-     layout="topleft"
-     name="tab_picks"
-     title="Picks"
+    <flat_list_view
+     top="4"
+     left="0"
+     height="385"
+     width="313"
      follows="all"
-     visible="true">
-        <flat_list_view
-         color="SL-Background_66"
-         follows="all"
-         layout="topleft"
-         left="0"
-         name="picks_list"
-         opaque="true"
-         top="0"
-         width="313" />
-    </panel>
-    <panel
      layout="topleft"
-     name="tab_classifieds"
-     title="Classifieds"
-     follows="all"
-     visible="true">
-            <flat_list_view
-             color="SL-Background_66"
-             follows="all"
-             layout="topleft"
-             left="0"
-             name="classifieds_list"
-             opaque="true"
-             top="0"
-             width="313" />
-    </panel>
- </tab_container>
+     name="classifieds_list"
+     color="SL-Background_66"
+     opaque="true" />
 
    <panel
-         bg_opaque_color="SL-Background_66"
-         bevel_style="none"
-         enabled="false"
-         follows="bottom|left|right"
-         left="6"
-         top_pad="2"
-         height="25"
-         label="bottom_panel"
-         layout="bottom"
-         name="edit_panel"
-         width="313">
+     bg_opaque_color="SL-Background_66"
+     bevel_style="none"
+     enabled="false"
+     follows="bottom|left|right"
+     left="6"
+     top_pad="2"
+     height="25"
+     label="bottom_panel"
+     layout="bottom"
+     name="edit_panel"
+     width="313">
 
   <!-- Replaces LLs button panel as they had not put buttons in -->
 
@@ -212,6 +230,7 @@ background_opaque="false"
      wrap="true"
      top="60"
      mouse_opaque="false"
-     right="-16"/>
-
+     right="-16"/> 
+    
 </panel>
+

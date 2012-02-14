@@ -5,7 +5,7 @@
  bg_opaque_color="DkGray2"
  bevel_style="in"
  follows="left|top|right|bottom"
- height="569"
+ height="595"
  label="Edit Classified"
  layout="topleft"
  left="0"
