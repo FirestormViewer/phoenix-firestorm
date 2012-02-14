@@ -32,11 +32,13 @@
 #include "fspanelprofile.h"
 #include "llagent.h" //gAgent
 #include "llavatarnamecache.h"
+#include "fspanelprofileclassifieds.h"
 
 static const std::string PANEL_PROFILE      = "panel_profile_secondlife";
 static const std::string PANEL_WEB          = "panel_profile_web";
 static const std::string PANEL_INTERESTS    = "panel_profile_interests";
 static const std::string PANEL_PICKS        = "panel_profile_picks";
+static const std::string PANEL_CLASSIFIEDS  = "panel_profile_classified";
 static const std::string PANEL_FIRSTLIFE    = "panel_profile_firstlife";
 static const std::string PANEL_NOTES        = "panel_profile_notes";
 
@@ -66,6 +68,7 @@ void FSFloaterProfile::onOpen(const LLSD& key)
     FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
     FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
     FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
+    FSPanelClassifieds* panel_classifieds       = findChild<FSPanelClassifieds>(PANEL_CLASSIFIEDS);
     FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
     FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
 
@@ -73,6 +76,7 @@ void FSFloaterProfile::onOpen(const LLSD& key)
     panel_web->onOpen(getAvatarId());
     panel_interests->onOpen(getAvatarId());
     panel_picks->onOpen(getAvatarId());
+    panel_classifieds->onOpen(getAvatarId());
     panel_firstlife->onOpen(getAvatarId());
     panel_notes->onOpen(getAvatarId());
 
@@ -102,6 +106,7 @@ void FSFloaterProfile::onOKBtn()
         FSPanelProfileWeb* panel_web                = findChild<FSPanelProfileWeb>(PANEL_WEB);
         FSPanelProfileInterests* panel_interests    = findChild<FSPanelProfileInterests>(PANEL_INTERESTS);
         FSPanelProfilePicks* panel_picks            = findChild<FSPanelProfilePicks>(PANEL_PICKS);
+        // FSPanelClassifieds* panel_classifieds            = findChild<FSPanelClassifieds>(PANEL_PICKS);
         FSPanelProfileFirstLife* panel_firstlife    = findChild<FSPanelProfileFirstLife>(PANEL_FIRSTLIFE);
         FSPanelAvatarNotes* panel_notes             = findChild<FSPanelAvatarNotes>(PANEL_NOTES);
 
@@ -112,6 +117,8 @@ void FSFloaterProfile::onOKBtn()
         panel_firstlife->apply(&data);
         panel_web->apply(&data);
         panel_profile->apply(&data);
+
+        // panel_classifieds->apply();
 
         panel_interests->apply();
         panel_picks->apply();

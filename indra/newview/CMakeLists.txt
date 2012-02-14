@@ -106,6 +106,8 @@ set(viewer_SOURCE_FILES
     lggbeamcolormapfloater.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
+    fspanelprofileclassifieds.cpp
+    fspanelclassified.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -713,6 +715,8 @@ set(viewer_HEADER_FILES
     lggbeamcolormapfloater.h
     lggcontactsets.h
     lggcontactsetsfloater.h
+    fspanelprofileclassifieds.h
+    fspanelclassified.h
 
     llaccountingcostmanager.h
     llagent.h
