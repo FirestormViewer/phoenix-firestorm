@@ -97,7 +97,8 @@
              function="Floater.Visible"
              parameter="moveview" />
             <menu_item_check.on_click
-             function="World.Toggle.MovementControls" />
+             function="Floater.Toggle"
+             parameter="moveview" />
         </menu_item_check>
    
 	<menu
@@ -174,7 +175,8 @@
              function="Floater.Visible"
              parameter="camera" />
             <menu_item_check.on_click
-             function="World.Toggle.CameraControls" />
+             function="Floater.Toggle"
+             parameter="camera" />
         </menu_item_check>
         
         <menu
