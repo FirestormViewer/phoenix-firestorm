@@ -62,7 +62,8 @@ public:
 
 	void setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL focus);
 
-	BOOL chatIsEmpty() const;
+	BOOL defaultChatBarIsIdle() const;
+	BOOL defaultChatBarHasFocus() const;
 
 	LLNearbyChatControl* mFocusedInputEditor;
 };

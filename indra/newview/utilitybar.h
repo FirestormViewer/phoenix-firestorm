@@ -43,6 +43,7 @@ class UtilityBar
 	public:
 		void init();
 		virtual BOOL tick();
+		void showUtilityBar(BOOL visible) const;
 
 	protected:
 		void onParcelStreamClicked();

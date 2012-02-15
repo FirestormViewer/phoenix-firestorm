@@ -49,6 +49,7 @@
 // #include "llchannelmanager.h"
 
 #include "llagent.h" 			// gAgent
+#include "llagentcamera.h"		// gAgentCamera
 // #include "llchathistory.h"
 // #include "llstylemap.h"
 
@@ -235,7 +236,7 @@ void LLNearbyChatControl::autohide()
 			setFocus(FALSE);
 		}
 
-		if(gSavedSettings.getBOOL("AutohideChatBar"))
+		if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
 		{
 			LLNearbyChat::instance().showDefaultChatBar(FALSE);
 		}

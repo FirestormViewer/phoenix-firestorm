@@ -122,3 +122,10 @@ BOOL UtilityBar::tick()
 
 	return FALSE;
 }
+
+void UtilityBar::showUtilityBar(BOOL visible) const
+{
+	LLUICtrl* utilityLayoutPanel=LLUI::getRootView()->findChild<LLUICtrl>("utility_bar_visibility_panel");
+	if(utilityLayoutPanel)
+		utilityLayoutPanel->setVisible(visible);
+}

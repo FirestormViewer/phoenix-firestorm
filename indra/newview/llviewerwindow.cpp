@@ -2558,9 +2558,11 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		//	// If text field is empty, there's no point in trying to move
 		//	// cursor with arrow keys, so allow movement
 		//	if (chat_editor->getText().empty() 
-		if(LLNearbyChat::instance().chatIsEmpty()
+		//		|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
+		if(LLNearbyChat::instance().defaultChatBarHasFocus() &&
+		   (LLNearbyChat::instance().defaultChatBarIsIdle() ||
+			gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
 		// </FS:Zi>
-				|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
 			{
 				// let Control-Up and Control-Down through for chat line history,
 				if (!(key == KEY_UP && mask == MASK_CONTROL)

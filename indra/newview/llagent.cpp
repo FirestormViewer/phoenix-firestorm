@@ -109,6 +109,8 @@
 #include "NACLantispam.h"
 // NaCl End
 
+#include "utilitybar.h"		// <FS:Zi> show/hide utility bar in mouselook
+
 using namespace LLVOAvatarDefines;
 
 extern LLMenuBarGL* gMenuBarView;
@@ -2067,6 +2069,14 @@ void LLAgent::endAnimationUpdateUI()
 	// clean up UI from mode we're leaving
 	if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK )
 	{
+		// <FS:Zi> Unhide chat bar, unless autohide is enabled
+		if(!gSavedSettings.getBOOL("AutohideChatBar"))
+			LLNearbyChat::instance().showDefaultChatBar(TRUE);
+
+		// Also, unhide utility bar if present in this skin
+		UtilityBar::instance().showUtilityBar(TRUE);
+		// </FS:Zi>
+
 		gToolBarView->setToolBarsVisible(true);
 		// show mouse cursor
 		gViewerWindow->showCursor();
@@ -2196,6 +2206,14 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(FALSE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
+
+		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
+		if(LLNearbyChat::instance().defaultChatBarIsIdle())
+			LLNearbyChat::instance().showDefaultChatBar(FALSE);
+
+		// Also, hide the utility bar, if present in this skin
+		UtilityBar::instance().showUtilityBar(FALSE);
+		// </FS:Zi>
 
 		// clear out camera lag effect
 		gAgentCamera.clearCameraLag();

@@ -488,11 +488,21 @@ void LLNearbyChat::setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL f
 }
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
-BOOL LLNearbyChat::chatIsEmpty() const
+// and the hide chat bar feature in mouselook in llagent.cpp
+BOOL LLNearbyChat::defaultChatBarIsIdle() const
 {
-	if(mFocusedInputEditor)
+	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
 		return mFocusedInputEditor->getText().empty();
 
-	// return FALSE for unfocused chat editor, so other UI elements can claim arrow keys
+	// if any other chat bar has focus, report "idle", because they're not the default
+	return TRUE;
+}
+
+// for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
+BOOL LLNearbyChat::defaultChatBarHasFocus() const
+{
+	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
+		return TRUE;
+
 	return FALSE;
 }
