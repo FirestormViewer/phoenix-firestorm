@@ -136,6 +136,7 @@
                 height="60"
                 follows="all"
                 border_width="0"
+                resize_bar_overlap="8"
                 mouse_opaque="false">
 
   <!-- The chat bar / stand fly stack container -->
@@ -210,10 +211,18 @@
                        height="22"
                        left_pad="4"
                        top="4"
-                       right="-4"
+                       right="-12"
                        follows="left|right|bottom"
                        spellcheck="true"
                        visible="true" />
+
+  <icon image_name="ChatBarHandle"
+         top="2"
+         width="5"
+         left_pad="2"
+         height="25"
+         follows="top|right"
+         layout="topleft" />
 
   </layout_panel>
   <!-- The chat bar itself -->
