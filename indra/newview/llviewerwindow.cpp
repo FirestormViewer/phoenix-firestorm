@@ -2209,7 +2209,11 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 		BOOL maximized = mWindow->getMaximized();
 		gSavedSettings.setBOOL("WindowMaximized", maximized);
 
-		if (!maximized)
+//FS:KC - fix for EXP-1777/EXP-1832
+        LLCoordScreen window_size;
+		if (!maximized
+			&& mWindow->getSize(&window_size))
+//		if (!maximized)
 		{
 			U32 min_window_width=gSavedSettings.getU32("MinWindowWidth");
 			U32 min_window_height=gSavedSettings.getU32("MinWindowHeight");
@@ -2217,8 +2221,11 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 			mWindow->setMinSize(min_window_width, min_window_height);
 
 			// Only save size if not maximized
-			gSavedSettings.setU32("WindowWidth", mWindowRectRaw.getWidth());
-			gSavedSettings.setU32("WindowHeight", mWindowRectRaw.getHeight());
+//FS:KC - fix for EXP-1777/EXP-1832
+//			gSavedSettings.setU32("WindowWidth", mWindowRectRaw.getWidth());
+//			gSavedSettings.setU32("WindowHeight", mWindowRectRaw.getHeight());
+			gSavedSettings.setS32("WindowWidth", window_size.mX);
+			gSavedSettings.setS32("WindowHeight", window_size.mY);
 		}
 
 		LLViewerStats::getInstance()->setStat(LLViewerStats::ST_WINDOW_WIDTH, (F64)width);

@@ -126,6 +126,7 @@
 // <//FS:Zi>
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
+#include "fspanelclassified.h"
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
 #include "llpreviewnotecard.h"
@@ -167,6 +168,10 @@
 #include "llfloatersearchreplace.h"
 // [/SL:KB]
 #include "llfloaterlocalbitmap.h"
+//<FS:KC legacy profiles>
+#include "fsfloaterprofile.h"
+//</FS:KC legacy profiles>
+
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -296,6 +301,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("preview_texture", "floater_preview_texture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewTexture>, "preview");
 	LLFloaterReg::add("properties", "floater_inventory_item_properties.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProperties>);
 	LLFloaterReg::add("publish_classified", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPublishClassifiedFloater>);
+	LLFloaterReg::add("publish_classified_fs", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSPublishClassifiedFloater>);
 
 	LLFloaterReg::add("telehubs", "floater_telehub.xml",&LLFloaterReg::build<LLFloaterTelehub>);
 	LLFloaterReg::add("test_inspectors", "floater_test_inspectors.xml", &LLFloaterReg::build<LLFloaterTestInspectors>);
@@ -374,10 +380,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("floater_group_view", "floater_group_view.xml",&LLFloaterReg::build<LLFloaterGroupView>);
 //-TT
 
-// ND_MERGE that floater is gone in FUI
-// [SL:KB] - Patch : UI-ProfileGroupFloater | Checked: 2010-09-08 (Catznip-2.1.2c) | Added: Catznip-2.1.2c
-//	LLFloaterReg::add("floater_profile_view", "floater_profile_view.xml",&LLFloaterReg::build<LLFloaterProfileView>);
-// [/SL:KB]
+//<FS:KC legacy profiles>
+    LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
+//</FS:KC legacy profiles>
 
 	LLFloaterReg::add("flickr_auth", "floater_flickr_auth.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrAuth>);
 	LLFloaterReg::add("flickr_upload", "floater_flickr_upload.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrUpload>);

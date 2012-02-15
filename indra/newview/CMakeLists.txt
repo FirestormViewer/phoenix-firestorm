@@ -79,6 +79,7 @@ include_directories(
     )
 
 set(viewer_SOURCE_FILES
+# <Add FS includes below this line>
     groupchatlistener.cpp
     ao.cpp
     aoengine.cpp
@@ -94,6 +95,8 @@ set(viewer_SOURCE_FILES
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
+    fsfloaterprofile.cpp
+    fspanelprofile.cpp
     fsradarlistctrl.cpp
     lggautocorrect.cpp
     lggautocorrectfloater.cpp
@@ -101,8 +104,11 @@ set(viewer_SOURCE_FILES
     lggbeammaps.cpp
     lggbeamscolors.cpp
     lggbeamcolormapfloater.cpp
-	lggcontactsets.cpp
-	lggcontactsetsfloater.cpp
+    lggcontactsets.cpp
+    lggcontactsetsfloater.cpp
+    fspanelprofileclassifieds.cpp
+    fspanelclassified.cpp
+
     llaccountingcostmanager.cpp
     llagent.cpp
     llagentaccess.cpp
@@ -681,6 +687,8 @@ set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
 set(viewer_HEADER_FILES
     CMakeLists.txt
     ViewerInstall.cmake
+
+# <Add FS includes below this line>
     groupchatlistener.h
     ao.h
     aoengine.h
@@ -689,7 +697,6 @@ set(viewer_HEADER_FILES
     kcwlinterface.h
     floatermedialists.h
     fscontactsfloater.h
-    fsradarlistctrl.h
     fsareasearch.h
     fsmoneytracker.h
     fsdata.h
@@ -697,6 +704,9 @@ set(viewer_HEADER_FILES
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
+    fsfloaterprofile.h
+    fspanelprofile.h
+    fsradarlistctrl.h
     lggautocorrect.h
     lggautocorrectfloater.h
     lggbeammapfloater.h
@@ -705,6 +715,9 @@ set(viewer_HEADER_FILES
     lggbeamcolormapfloater.h
     lggcontactsets.h
     lggcontactsetsfloater.h
+    fspanelprofileclassifieds.h
+    fspanelclassified.h
+
     llaccountingcostmanager.h
     llagent.h
     llagentaccess.h
