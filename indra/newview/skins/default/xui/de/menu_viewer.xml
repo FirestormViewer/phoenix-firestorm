@@ -90,8 +90,8 @@
 			<menu_item_call label="Mitternacht" name="Midnight"/>
             <menu_item_call label="Grundbesitzzeit" name="Revert to Region Default"/>
 		</menu>
-		<menu label="Umgebungs-Editor" name="Enviroment Editor">
-			<menu_item_call label="Umgebungseinstellungen..." name="Enviroment Settings"/>
+		<menu label="Umgebungs-Editor" name="Environment Editor">
+			<menu_item_call label="Umgebungseinstellungen..." name="Environment Settings"/>
 			<menu label="Wasser-Voreinstellungen" name="Water Presets">
 				<menu_item_call label="Neue Voreinstellung..." name="new_water_preset"/>
 				<menu_item_call label="Voreinstellung bearbeiten..." name="edit_water_preset"/>

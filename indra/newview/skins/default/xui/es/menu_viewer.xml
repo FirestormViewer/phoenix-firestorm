@@ -85,8 +85,8 @@
 			<menu_item_call label="Medianoche" name="Midnight"/>
 			<menu_item_call label="Hora de la región" name="Revert to Region Default"/>
 		</menu>
-		<menu label="Editor de entorno" name="Enviroment Editor">
-			<menu_item_call label="Configuración de entorno..." name="Enviroment Settings"/>
+		<menu label="Editor de entorno" name="Environment Editor">
+			<menu_item_call label="Configuración de entorno..." name="Environment Settings"/>
 			<menu label="Configuraciones de agua" name="Water Presets">
 				<menu_item_call label="Nueva configuración..." name="new_water_preset"/>
 				<menu_item_call label="Editar configuración..." name="edit_water_preset"/>
