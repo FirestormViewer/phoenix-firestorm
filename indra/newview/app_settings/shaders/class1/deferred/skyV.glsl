@@ -55,7 +55,7 @@ uniform vec4 glow;
 
 uniform vec4 cloud_color;
 
-uniform vec4 cloud_scale;
+uniform float cloud_scale;
 
 void main()
 {
