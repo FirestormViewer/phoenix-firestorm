@@ -406,7 +406,10 @@ private:
 
 void LLAvatarTexBar::draw()
 {	
-	if (!gSavedSettings.getBOOL("DebugAvatarRezTime")) return;
+	// <FS:Ansariel> Speed-up
+	//if (!gSavedSettings.getBOOL("DebugAvatarRezTime")) return;
+	static LLCachedControl<bool> debugAvatarRezTime(gSavedSettings, "DebugAvatarRezTime");
+	if (!debugAvatarRezTime) return;
 
 	LLVOAvatarSelf* avatarp = gAgentAvatarp;
 	if (!avatarp) return;
@@ -624,7 +627,11 @@ void LLGLTexMemBar::draw()
 
 	left = 500;
 	F32 bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
-	F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	// <FS:Ansariel> Speed-up
+	//F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	static LLCachedControl<F32> throttleBandwidthKBPS(gSavedSettings, "ThrottleBandwidthKBPS");
+	F32 max_bandwidth = F32(throttleBandwidthKBPS);
+	// </FS:Ansariel> Speed-up
 	color = bandwidth > max_bandwidth ? LLColor4::red : bandwidth > max_bandwidth*.75f ? LLColor4::yellow : text_color;
 	color[VALPHA] = text_color[VALPHA];
 	text = llformat("BW:%.0f/%.0f",bandwidth, max_bandwidth);
