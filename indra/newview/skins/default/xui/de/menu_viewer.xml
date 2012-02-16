@@ -83,6 +83,8 @@
 			<menu_item_check label="Parzelleneigenschaften" name="Parcel Properties"/>
 			<menu_item_check label="Menü „Erweitert“" name="Show Advanced Menu"/>
 		</menu>
+		<menu_item_call label="Nach Hause teleportieren" name="Teleport Home"/>
+		<menu_item_call label="Diesen Ort als Zuhause festlegen" name="Set Home to Here"/>
 		<menu label="Sonne" name="Environment Settings">
 			<menu_item_call label="Sonnenaufgang" name="Sunrise"/>
 			<menu_item_call label="Mittag" name="Noon"/>
@@ -220,10 +222,10 @@
 		<menu_item_check label="Kamerabeschränkungen deaktivieren" name="Disable Camera Distance"/>
 		<menu_item_check label="Foto (hohe Auflösung)" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos auf Festplatte leise speichern" name="QuietSnapshotsToDisk"/>
-		<menu label="Performance Tools" name="Performance Tools">
+		<menu label="Performance-Tools" name="Performance Tools">
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>
 			<menu_item_check label="Statistikleiste" name="Statistics Bar"/>
-			<menu_item_check label="Zuggewicht für Avatare anzeigen" name="Avatar Rendering Cost"/>
+			<menu_item_check label="Render-Weight für Avatare anzeigen (ARC-Ersatz)" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">
 			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>
@@ -234,19 +236,19 @@
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">
-			<menu_item_check label="Einfach" name="Simple"/>
-			<menu_item_check label="Alpha" name="Alpha"/>
-			<menu_item_check label="Baum" name="Tree"/>
-			<menu_item_check label="Avatare" name="Character"/>
-			<menu_item_check label="Flächenpatch" name="Surface Patch"/>
-			<menu_item_check label="Himmel" name="Sky"/>
-			<menu_item_check label="Wasser" name="Water"/>
-			<menu_item_check label="Boden" name="Ground"/>
-			<menu_item_check label="Volumen" name="Volume"/>
-			<menu_item_check label="Gras" name="Grass"/>
-			<menu_item_check label="Wolken" name="Clouds"/>
-			<menu_item_check label="Partikel" name="Particles"/>
-			<menu_item_check label="Unebenheiten" name="Bump"/>
+			<menu_item_check label="Einfach" name="Rendering Type Simple"/>
+			<menu_item_check label="Alpha" name="Rendering Type Alpha"/>
+			<menu_item_check label="Baum" name="Rendering Type Tree"/>
+			<menu_item_check label="Avatare" name="Rendering Type Character"/>
+			<menu_item_check label="Flächenpatch" name="Rendering Type Surface Patch"/>
+			<menu_item_check label="Himmel" name="Rendering Type Sky"/>
+			<menu_item_check label="Wasser" name="Rendering Type Water"/>
+			<menu_item_check label="Boden" name="Rendering Type Ground"/>
+			<menu_item_check label="Volumen" name="Rendering Type Volume"/>
+			<menu_item_check label="Gras" name="Rendering Type Grass"/>
+			<menu_item_check label="Wolken" name="Rendering Type Clouds"/>
+			<menu_item_check label="Partikel" name="Rendering Type Particles"/>
+			<menu_item_check label="Unebenheiten" name="Rendering Type Bump"/>
 		</menu>
 		<menu label="Rendering-Eigenschaften" name="Rendering Features">
 			<menu_item_check label="UI" name="UI"/>
@@ -281,12 +283,14 @@
 		<menu_item_check label="Plugin-Read-Thread verwenden" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Gruppen-Cache löschen" name="ClearGroupCache"/>
 		<menu_item_check label="Weiche Mausbewegung" name="Mouse Smoothing"/>
+		<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 		<menu label="Tastaturkürzel" name="Shortcuts">
 			<menu_item_call label="Bild hochladen ([COST] L$)..." name="Upload Image"/>
 			<menu_item_check label="Suchen" name="Search"/>
 			<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>
 			<menu_item_check label="Erweitert-Menü anzeigen - veraltetet" name="Show Advanced Menu - legacy shortcut"/>
+			<menu_item_check label="Doppelklick-Teleport" name="DoubleClick Teleport"/>
             <menu_item_check label="Immer rennen" name="Always Run"/>
             <menu_item_check label="Fliegen" name="Fly"/>
 			<menu_item_call label="Fenster schließen" name="Close Window"/>
@@ -428,9 +432,8 @@
 			<menu_item_call label="Aufnahme starten" name="Start Record"/>
 			<menu_item_call label="Aufnahme stoppen" name="Stop Record"/>
 		</menu>
-		<menu label="Welt" name="World">
+		<menu label="Welt" name="DevelopWorld">
 			<menu_item_check label="Sonnen-Override für Sim" name="Sim Sun Override"/>
-			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>
 			<menu_item_check label="Festgelegtes Wetter" name="Fixed Weather"/>
 			<menu_item_call label="Regionsobjekt-Cache ausgeben" name="Dump Region Object Cache"/>
 		</menu>
@@ -499,7 +502,7 @@
 		<menu_item_check label="HTTP-Inventar" name="HTTP Inventory"/>
 		<menu_item_call label="Bilder komprimieren" name="Compress Images"/>
 		<menu_item_check label="Ausgabe Fehlerbeseitigung ausgeben" name="Output Debug Minidump"/>
-		<menu_item_check label="Bei nächster Ausführung Fenster öffnen" name="Console Window"/>
+		<menu_item_check label="Bei nächster Ausführung Debugkonsole öffnen" name="Console Window"/>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
 		<menu_item_check label="Admin-Menü anzeigen" name="View Admin Options"/>
