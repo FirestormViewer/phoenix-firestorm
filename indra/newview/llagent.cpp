@@ -2073,9 +2073,6 @@ void LLAgent::endAnimationUpdateUI()
 		gSavedSettings.setBOOL("MouseLookEnabled",FALSE);
 		if(!gSavedSettings.getBOOL("AutohideChatBar"))
 			LLNearbyChat::instance().showDefaultChatBar(TRUE);
-
-		// Also, unhide utility bar if present in this skin
-		UtilityBar::instance().showUtilityBar(TRUE);
 		// </FS:Zi>
 
 		gToolBarView->setToolBarsVisible(true);
@@ -2212,9 +2209,6 @@ void LLAgent::endAnimationUpdateUI()
 		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
 		if(LLNearbyChat::instance().defaultChatBarIsIdle())
 			LLNearbyChat::instance().showDefaultChatBar(FALSE);
-
-		// Also, hide the utility bar, if present in this skin
-		UtilityBar::instance().showUtilityBar(FALSE);
 		// </FS:Zi>
 
 		// clear out camera lag effect
