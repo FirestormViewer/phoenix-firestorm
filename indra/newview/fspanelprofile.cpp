@@ -39,6 +39,7 @@
 #include "llclipboard.h" //gClipboard
 #include "llcheckboxctrl.h"
 #include "lllineeditor.h"
+#include "llloadingindicator.h"
 #include "llmenubutton.h"
 #include "lltabcontainer.h"
 #include "lltextbox.h"
@@ -214,6 +215,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
     }
 
+    setApplyProgress(true);
+
     updateData();
 }
 
@@ -250,6 +253,7 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
         {
             processProfileProperties(avatar_data);
             enableControls();
+            setApplyProgress(false);
         }
     }
     else if(APT_GROUPS == type)
@@ -647,6 +651,22 @@ void FSPanelProfile::enableControls()
         getChild<LLUICtrl>("show_in_search_checkbox")->setEnabled( true );
         getChild<LLUICtrl>("sl_description_edit")->setEnabled( true );
         getChild<LLUICtrl>("2nd_life_pic")->setEnabled( true );
+    }
+}
+
+void FSPanelProfile::setApplyProgress(bool started)
+{
+    LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("progress_indicator");
+
+    indicator->setVisible(started);
+
+    if (started)
+    {
+        indicator->start();
+    }
+    else
+    {
+        indicator->stop();
     }
 }
 

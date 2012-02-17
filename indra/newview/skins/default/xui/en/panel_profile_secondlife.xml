@@ -68,7 +68,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 -->
 
         <text
-         top_pad="8"
+         top="8"
          left="6"
          height="16"
          width="40"
@@ -140,16 +140,25 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="(loading...)" />
 
         <text
-         top_pad="-15"
-         left_pad="2"
+         top="8"
          right="-6"
          height="13"
+         width="70"
          layout="topleft"
          follows="top|right"
          name="status"
          halign="center"
          text_color="LtGray_50"
          value="" />
+
+        <loading_indicator
+         top_pad="3"
+         height="23"
+         width="23"
+         layout="topleft"
+         follows="top|right"
+         name="progress_indicator"
+         visible="false" />
 
         <texture_picker
          top_pad="3"

@@ -212,6 +212,8 @@ protected:
     void processOnlineStatus(bool online);
 
     virtual void enableControls();
+    
+    void setApplyProgress(bool started);
 
 private:
     typedef std::map<std::string,LLUUID>    group_map_t;
