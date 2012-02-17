@@ -29,8 +29,8 @@
     <pie_slice label="Skript-Info" name="ScriptInfo"/>
     <pie_slice label="Gesten..." name="Gestures"/>
 	<pie_menu label="Aussehen &gt;" name="Appearance &gt;">
-		<pie_slice label="Form bearbeiten" name="Edit My Shape"/>
-		<pie_slice label="Outfit bearbeiten" name="Edit My Outfit"/>
+		<pie_slice label="Form bearb." name="Edit My Shape"/>
+		<pie_slice label="Outfit bearb." name="Edit My Outfit"/>
 	</pie_menu>
     <pie_slice label="Debug Texturen" name="Debug..."/>
 </pie_menu>
