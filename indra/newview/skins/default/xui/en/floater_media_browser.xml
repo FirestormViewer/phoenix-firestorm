@@ -199,7 +199,8 @@
             top="60"
             right="-60"
             bottom="-60">
-We're sorry but the media browser plugin failed to open. Please visit
+The web browser plugin seems to be taking a while to open.
+If the plugin never loads, please visit:
 
 http://wiki.phoenixviewer.com/doku.php?id=fs_media
 
