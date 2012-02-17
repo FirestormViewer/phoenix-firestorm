@@ -289,6 +289,8 @@ with the same filename but different name
   <texture name="Inv_Undershirt" file_name="icons/Inv_Undershirt.png" preload="false" />
   <texture name="Inv_Link" file_name="icons/Inv_Link.png" preload="false" />
   <texture name="Inv_Invalid" file_name="icons/Inv_Invalid.png" preload="false" />
+  
+ <!-- Firstorm specific individual system folder icons -->
   <texture name="Inv_TexturesOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_TexturesClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_SoundOpen"			file_name="icons/Inv_SysOpen.png" />
@@ -301,6 +303,8 @@ with the same filename but different name
   <texture name="Inv_ClothingClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_ObjectsOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_ObjectsClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_MeshesOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_MeshesClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_NotecardsOpen"		file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_NotecardsClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_ScriptsOpen"		file_name="icons/Inv_SysOpen.png" />
@@ -317,6 +321,8 @@ with the same filename but different name
   <texture name="Inv_FavoritesClosed"	file_name="icons/Inv_SysClosed.png" />
   <texture name="Inv_InboxOpen"			file_name="icons/Inv_SysOpen.png" />
   <texture name="Inv_InboxClosed"		file_name="icons/Inv_SysClosed.png" />
+  <texture name="Inv_OutboxOpen"		file_name="icons/Inv_SysOpen.png" />
+  <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
   
  <!-- Firstorm virtual system folders -->
   <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
@@ -776,8 +782,10 @@ with the same filename but different name
   <texture name="icon_for_sale.tga" file_name="icons/Icon_For_Sale.png" />
   <texture name="icon_top_pick.tga" />
 
+ <!-- FS Ansariel: Icons don't exist and only spawn warn messages in log
   <texture name="inv_folder_mesh.tga"/>
   <texture name="inv_item_mesh.tga"/>
+  -->
 
   <texture name="lag_status_critical.tga" />
   <texture name="lag_status_good.tga" />

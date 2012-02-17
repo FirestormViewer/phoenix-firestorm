@@ -14,6 +14,7 @@
 	<texture name="Inv_Jacket"				file_name="legacy/inv_item_jacket.tga" />
 	<texture name="Inv_Landmark"			file_name="legacy/inv_item_landmark.tga" />
 	<texture name="Inv_LandmarkVisited"		file_name="legacy/inv_item_landmark_visited.tga" />
+	<texture name="Inv_Mesh"				file_name="legacy/inv_item_mesh.tga" />
 	<texture name="Inv_Notecard"			file_name="legacy/inv_item_notecard.tga" />
 	<texture name="Inv_Object"				file_name="legacy/inv_item_object.tga" />
 	<texture name="Inv_Object_Multi"		file_name="legacy/inv_item_object_multi.tga" />
@@ -43,6 +44,8 @@
 	<texture name="Inv_ClothingClosed"		file_name="legacy/inv_folder_clothing.tga" />
 	<texture name="Inv_ObjectsOpen"			file_name="legacy/inv_folder_object.tga" />
 	<texture name="Inv_ObjectsClosed"		file_name="legacy/inv_folder_object.tga" />
+	<texture name="Inv_MeshesOpen"			file_name="legacy/inv_folder_meshes.tga" />
+	<texture name="Inv_MeshesClosed"		file_name="legacy/inv_folder_meshes.tga" />
 	<texture name="Inv_NotecardsOpen"		file_name="legacy/inv_folder_notecard.tga" />
 	<texture name="Inv_NotecardsClosed"		file_name="legacy/inv_folder_notecard.tga" />
 	<texture name="Inv_SysClosed"			file_name="legacy/inv_folder_plain_closed.tga" />
@@ -65,8 +68,10 @@
 	<texture name="Inv_FavoritesClosed"		file_name="legacy/inv_folder_favorite.tga" />
 	<texture name="Inv_LookFolderOpen"		file_name="legacy/inv_folder_outfit.tga" />
 	<texture name="Inv_LookFolderClosed"	file_name="legacy/inv_folder_outfit.tga" />
-	<texture name="Inv_InboxOpen"			file_name="inv_folder_inbox.tga" />
-	<texture name="Inv_InboxClosed"			file_name="inv_folder_inbox.tga" />
+	<texture name="Inv_InboxOpen"			file_name="legacy/inv_folder_plain_open.tga" />
+	<texture name="Inv_InboxClosed"			file_name="legacy/inv_folder_plain_closed.tga" />
+	<texture name="Inv_OutboxOpen"			file_name="legacy/inv_folder_plain_open.tga" />
+	<texture name="Inv_OutboxClosed"		file_name="legacy/inv_folder_plain_closed.tga" />
 	<texture name="Inv_FolderClosed"		file_name="legacy/inv_folder_plain_closed.tga" />
 	<texture name="Inv_FolderOpen"			file_name="legacy/inv_folder_plain_open.tga" />
 
