@@ -2120,6 +2120,7 @@ void LLAgent::endAnimationUpdateUI()
 			gFloaterView->popVisibleAll(skip_list);
 #endif
 			mViewsPushed = FALSE;
+			gFocusMgr.setKeyboardFocus(NULL);	// <FS:Zi> make sure no floater has focus  after restoring them
 		}
 
 		
