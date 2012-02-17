@@ -36,8 +36,6 @@
 #include "llcriticaldamp.h"
 #include "boost/foreach.hpp"
 
-#include "../newview/llviewercontrol.h"		// <FS:Zi> to save size ... we should do this with a subclass
-
 static const F32 MIN_FRACTIONAL_SIZE = 0.0001f;
 static const F32 MAX_FRACTIONAL_SIZE = 1.f;
 
@@ -224,7 +222,7 @@ LLLayoutStack::LLLayoutStack(const LLLayoutStack::Params& p)
 		}
 		else
 		{
-			mSavedSizes=gSavedSettings.getLLSD(mSizeControlName);
+			mSavedSizes=LLControlGroup::getInstance("Global")->getLLSD(mSizeControlName);
 		}
 	}
 	// </FS:Zi>
@@ -481,7 +479,7 @@ void LLLayoutStack::updateLayout()
 	// <FS:Zi> Save new sizes for this layout stack's panels
 	if(mSaveSizes)
 	{
-		gSavedSettings.setLLSD(mSizeControlName,mSavedSizes);
+		LLControlGroup::getInstance("Global")->setLLSD(mSizeControlName,mSavedSizes);
 	}
 	// </FS:Zi>
 
