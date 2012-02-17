@@ -2070,6 +2070,7 @@ void LLAgent::endAnimationUpdateUI()
 	if (gAgentCamera.getLastCameraMode() == CAMERA_MODE_MOUSELOOK )
 	{
 		// <FS:Zi> Unhide chat bar, unless autohide is enabled
+		gSavedSettings.setBOOL("MouseLookEnabled",FALSE);
 		if(!gSavedSettings.getBOOL("AutohideChatBar"))
 			LLNearbyChat::instance().showDefaultChatBar(TRUE);
 
@@ -2208,6 +2209,7 @@ void LLAgent::endAnimationUpdateUI()
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
 
 		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
+		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
 		if(LLNearbyChat::instance().defaultChatBarIsIdle())
 			LLNearbyChat::instance().showDefaultChatBar(FALSE);
 

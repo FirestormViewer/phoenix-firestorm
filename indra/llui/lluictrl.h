@@ -83,10 +83,17 @@ public:
 		
 		EnableControls();
 	};	
-	struct ControlVisibility : public LLInitParam::ChoiceBlock<ControlVisibility>
+	// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
+	// struct ControlVisibility : public LLInitParam::ChoiceBlock<ControlVisibility>
+	// </FS:Zi>
+	struct ControlVisibility : public LLInitParam::Block<ControlVisibility>
 	{
-		Alternative<std::string> visible;
-		Alternative<std::string> invisible;
+		// <FS:Zi> Decide if a control should be visible, according to ControlVisibility
+		// Alternative<std::string> visible;
+		// Alternative<std::string> invisible;
+		Optional<std::string> visible;
+		Optional<std::string> invisible;
+		// </FS:Zi>
 
 		ControlVisibility();
 	};	
@@ -320,6 +327,9 @@ private:
 	ETypeTransparency mTransparencyType;
 
 	class DefaultTabGroupFirstSorter;
+
+	// <FS:Zi> Decides if this UI control should be visible according to ControlVisibility
+	void decideVisibility();
 };
 
 // Build time optimization, generate once in .cpp file

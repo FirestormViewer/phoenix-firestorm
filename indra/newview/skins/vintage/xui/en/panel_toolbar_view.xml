@@ -227,33 +227,13 @@
   </layout_panel>
   <!-- Chat panel -->
 
-  <!-- Utility Bar visibility panel, will be shown/hidden in code for mouselook -->
-  <layout_panel name="utility_bar_visibility_panel"
-                auto_resize="false"
-                user_resize="false"
-                height="46"
-                width="224"
-                layout="topleft"
-                chrome="true"
-                mouse_opaque="false">
-
-  <!-- Utility Bar visibility stack  -->
-  <layout_stack name="utility_bar_visibility_stack"
-                orientation="horizontal"
-                top="0"
-                left="0"
-                width="1024"
-                height="46"
-                follows="all"
-                border_size="0"
-                mouse_opaque="false">
-
   <!-- Utility Bar layout panel -->
   <layout_panel name="utility_bar_layout_panel"
                 auto_resize="false"
                 user_resize="false"
                 height="46"
                 width="224"
+				invisibility_control="MouseLookEnabled"
                 layout="topleft"
                 chrome="true"
                 mouse_opaque="false">
@@ -393,6 +373,7 @@
                 height="46"
                 width="133"
                 visibility_control="EnableVoiceChat"
+				invisibility_control="MouseLookEnabled"
                 layout="topleft"
                 chrome="true"
                 mouse_opaque="false">
@@ -488,6 +469,7 @@
                 user_resize="false"
                 height="46"
                 width="96"
+				invisibility_control="MouseLookEnabled"
                 layout="topleft"
                 chrome="true"
                 mouse_opaque="false">
@@ -560,12 +542,6 @@
 
   </layout_panel>
   <!-- Quick Preferences Button layout panel -->
-
-  </layout_stack>
-  <!-- Utility Bar visibility stack -->
-
-  </layout_panel>
-  <!-- Utility Bar visibility panel -->
 
   </layout_stack>
   <!-- Horizontal layout stack to divide chat bar and utility bar on the right -->
