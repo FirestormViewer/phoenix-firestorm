@@ -12,8 +12,8 @@
 		</layout_panel>
 		<layout_panel name="external_controls">
 			<text name="plugin_fail_text">
-Das Web-Browser-Plugin konnte nicht geöffnet werden.
-Informationen zur Problemlösung sind erhältlich unter
+Das Web-Browser-Plugin lädt gerade.
+Sollte das Plugin nicht laden, sind Informationen zur Problemlösung erhältlich unter
 
 http://wiki.phoenixviewer.com/doku.php?id=fs_search_issues
 
