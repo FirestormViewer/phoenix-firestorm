@@ -87,6 +87,9 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "fslslbridge.h"
+//<FS:KC legacy profiles>
+#include "fsfloaterprofile.h"
+
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -395,13 +398,16 @@ void LLAvatarActions::showProfile(const LLUUID& id)
 	if (id.notNull())
 	{
 //<FS:KC legacy profiles>
-        if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
+        if (gSavedSettings.getBOOL("FSUseWebProfiles"))
 		{
-			LLFloaterReg::showInstance("floater_profile", LLSD().with("id", id));
-            return;
+            showProfileWeb(id);
+        }
+        else
+        {
+			showProfileLegacy(id);
 		}
+//		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
 //</FS:KC legacy profiles>
-		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
 	}
 }
 
@@ -417,10 +423,38 @@ bool LLAvatarActions::profileVisible(const LLUUID& id)
 //static
 LLFloater* LLAvatarActions::getProfileFloater(const LLUUID& id)
 {
+//<FS:KC legacy profiles>
+    if (!gSavedSettings.getBOOL("FSUseWebProfiles"))
+    {
+        FSFloaterProfile *browser = dynamic_cast<FSFloaterProfile*>
+            (LLFloaterReg::findInstance("floater_profile", LLSD().with("id", id)));
+        return browser;
+    }
+//</FS:KC legacy profiles>
 	LLFloaterWebContent *browser = dynamic_cast<LLFloaterWebContent*>
 		(LLFloaterReg::findInstance(get_profile_floater_name(id), LLSD().with("id", id)));
 	return browser;
 }
+
+//<FS:KC legacy profiles>
+// static
+void LLAvatarActions::showProfileWeb(const LLUUID& id)
+{
+	if (id.notNull())
+	{
+		LLAvatarNameCache::get(id, boost::bind(&on_avatar_name_show_profile, _1, _2));
+	}
+}
+
+// static
+void LLAvatarActions::showProfileLegacy(const LLUUID& id)
+{
+	if (id.notNull())
+	{
+        LLFloaterReg::showInstance("floater_profile", LLSD().with("id", id));
+	}
+}
+//</FS:KC legacy profiles>
 
 //static 
 void LLAvatarActions::hideProfile(const LLUUID& id)
