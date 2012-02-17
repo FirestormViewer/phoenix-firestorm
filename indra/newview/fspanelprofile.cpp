@@ -779,8 +779,8 @@ void FSPanelProfileWeb::onCommitWebProfile(LLUICtrl* ctrl)
         }
         else if (valstr == "popout")
         {
-            // open in viewer's browser, new window
-            LLWeb::loadURLInternal(mURLWebProfile);
+            // open the web profile floater
+            LLAvatarActions::showProfileWeb(getAvatarId());
         }
         else if (valstr == "external")
         {

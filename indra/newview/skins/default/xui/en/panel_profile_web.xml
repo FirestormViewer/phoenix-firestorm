@@ -32,11 +32,11 @@
      enabled="false"
      tool_tip="Load this profile page with embedded web browser." >
         <flyout_button.item
-         label="In external browser"
+         label="Open in-viewer browser"
          value="popout"
          name="open_item" />
         <flyout_button.item
-         label="In external browser"
+         label="Open external browser"
          value="external"
          name="home_item" />
     </flyout_button>
@@ -53,11 +53,11 @@
      label_selected="Profile"
      enabled="false" >
         <flyout_button.item
-         label="In built-in browser"
+         label="Popout"
          value="popout"
          name="builtin_item" />
         <flyout_button.item
-         label="In external browser"
+         label="Open external browser"
          value="external"
          name="open_item" />
     </flyout_button>
