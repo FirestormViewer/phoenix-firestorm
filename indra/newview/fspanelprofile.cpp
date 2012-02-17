@@ -177,10 +177,6 @@ BOOL FSPanelProfile::postBuild()
     enable.add("Profile.EnableUnblock", boost::bind(&FSPanelProfile::enableUnblock, this));
 
     LLGroupList* group_list = getChild<LLGroupList>("group_list");
-    if (getAvatarId() == gAgent.getID())
-    {
-        group_list->enableForAgent();
-    }
     group_list->setDoubleClickCallback(boost::bind(&FSPanelProfile::openGroupProfile, this));
     group_list->setReturnCallback(boost::bind(&FSPanelProfile::openGroupProfile, this));
 
@@ -208,6 +204,9 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChild<LLUICtrl>("block")->setVisible( false );
         getChild<LLUICtrl>("unblock")->setVisible( false );
         getChild<LLUICtrl>("overflow_btn")->setVisible( false );
+        
+        LLGroupList* group_list = getChild<LLGroupList>("group_list");
+        group_list->enableForAgent();
     }
     else
     {
@@ -317,10 +316,7 @@ void FSPanelProfile::openGroupProfile()
 void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
-    // getChild<LLUICtrl>("display_name")->setValue( av_name.mDisplayName );
-    // getChild<LLUICtrl>("user_name")->setValue( av_name.mUsername );
     getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
-    // getChild<LLUICtrl>("copy_uri")->setEnabled( true );
 
     //[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
     std::string username = av_name.mUsername;
@@ -351,25 +347,6 @@ void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarNam
     url = LLWeb::expandURLSubstitutions(url,subs);
     LLStringUtil::toLower(url);
     getChild<LLUICtrl>("web_profile_text")->setValue( url );
-
-    if (LLAvatarNameCache::useDisplayNames())
-    {
-        getChild<LLUICtrl>("user_label")->setVisible( true );
-        getChild<LLUICtrl>("user_name")->setVisible( true );
-        getChild<LLUICtrl>("display_name_label")->setVisible( true );
-        getChild<LLUICtrl>("copy_to_clipboard")->setVisible( true );
-        getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( true );
-        getChild<LLUICtrl>("solo_username_label")->setVisible( false );
-    }
-    else
-    {
-        getChild<LLUICtrl>("user_label")->setVisible( false );
-        getChild<LLUICtrl>("user_name")->setVisible( false );
-        getChild<LLUICtrl>("display_name_label")->setVisible( false );
-        getChild<LLUICtrl>("copy_to_clipboard")->setVisible( false );
-        getChild<LLUICtrl>("copy_to_clipboard")->setEnabled( false );
-        getChild<LLUICtrl>("solo_username_label")->setVisible( true );
-    }
 }
 
 void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
