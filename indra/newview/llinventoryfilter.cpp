@@ -461,6 +461,13 @@ void LLInventoryFilter::setFilterEmptySystemFolders()
 	mFilterOps.mFilterTypes |= FILTERTYPE_EMPTYFOLDERS;
 }
 
+// <FS:Ansariel> Optional hiding of empty system folders
+void LLInventoryFilter::removeFilterEmptySystemFolders()
+{
+	mFilterOps.mFilterTypes &= FILTERTYPE_NO_EMPTYFOLDERS;
+}
+// </FS:Ansariel> Optional hiding of empty system folders
+
 void LLInventoryFilter::setFilterUUID(const LLUUID& object_id)
 {
 	if (mFilterOps.mFilterUUID == LLUUID::null)

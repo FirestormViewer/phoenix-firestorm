@@ -251,6 +251,9 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 		getFilter()->setFilterEmptySystemFolders();
 	}
 	
+	// <FS:Ansariel> Optional hiding of empty system folders
+	gSavedSettings.getControl("DebugHideEmptySystemFolders")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateHideEmptySystemFolders, this, _2));
+
 	// Initialize base class params.
 	LLPanel::initFromParams(params);
 }
@@ -1154,6 +1157,25 @@ BOOL LLInventoryPanel::getSinceLogoff()
 {
 	return getFilter()->isSinceLogoff();
 }
+
+// <FS:Ansariel> Optional hiding of empty system folders
+void LLInventoryPanel::updateHideEmptySystemFolders(const LLSD &data)
+{
+	LLInventoryFilter* filter = getFilter();
+	if (filter)
+	{
+		if (data.asBoolean())
+		{
+			filter->setFilterEmptySystemFolders();
+		}
+		else
+		{
+			filter->removeFilterEmptySystemFolders();
+		}
+		filter->setModified(LLInventoryFilter::FILTER_RESTART);
+	}
+}
+// </FS:Ansariel> Optional hiding of empty system folders
 
 // DEBUG ONLY
 // static 

@@ -132,8 +132,18 @@
          width="270"
          control_name="ShowMutedAvatarsAsCloud"
          tool_tip="Blocked avatars will be rendered as a particle cloud in special color.">
-            <check_box.commit_callback
-             function="FS.ToggleSortContacts" />
+        </check_box>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Hide empty system folders from inventory"
+         left="15"
+         name="DebugHideEmptySystemFolders"
+         width="270"
+         control_name="DebugHideEmptySystemFolders"
+         tool_tip="If enabled, the inventory windows will hide all empty system folders like Favorites, Landmarks etc.">
         </check_box>
 
         <check_box
