@@ -68,6 +68,13 @@
      function="Profile.CopyURI" />
   </menu_item_call>
   <menu_item_call
+   label="Copy UUID"
+   layout="topleft"
+   name="copy_to_key">
+    <menu_item_call.on_click
+     function="Profile.CopyKey" />
+  </menu_item_call>
+  <menu_item_call
    label="Kick"
    layout="topleft"
    name="kick">

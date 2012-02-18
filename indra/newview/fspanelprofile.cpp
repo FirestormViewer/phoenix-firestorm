@@ -192,6 +192,7 @@ BOOL FSPanelProfile::postBuild()
     registrar.add("Profile.CSR", boost::bind(&FSPanelProfile::csr, this));
     registrar.add("Profile.CopyNameToClipboard", boost::bind(&FSPanelProfile::onCopyToClipboard, this));
     registrar.add("Profile.CopyURI", boost::bind(&FSPanelProfile::onCopyURI, this));
+    registrar.add("Profile.CopyKey", boost::bind(&FSPanelProfile::onCopyKey, this));
 
     LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable;
     enable.add("Profile.EnableAddFriend", boost::bind(&FSPanelProfile::enableAddFriend, this));
@@ -239,6 +240,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
         //Disable "Add Friend" button for friends.
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
     }
+
+    getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
 
     updateData();
 }
@@ -342,7 +345,6 @@ void FSPanelProfile::openGroupProfile()
 void FSPanelProfile::onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
     getChild<LLUICtrl>("complete_name")->setValue( av_name.getCompleteName() );
-    getChild<LLUICtrl>("user_key")->setValue( agent_id.asString() );
 
     //[ADD: FIRE-2266: SJ] make sure username is always filled even when Displaynames are not enabled
     std::string username = av_name.mUsername;
@@ -590,6 +592,11 @@ void FSPanelProfile::onCopyURI()
 {
     std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
     gClipboard.copyFromString(utf8str_to_wstring(name));
+}
+
+void FSPanelProfile::onCopyKey()
+{
+    gClipboard.copyFromString(utf8str_to_wstring(getAvatarId().asString()));
 }
 
 void FSPanelProfile::onGroupInvite()

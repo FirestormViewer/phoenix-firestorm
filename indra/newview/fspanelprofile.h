@@ -194,6 +194,7 @@ protected:
 
     void onCopyToClipboard();
     void onCopyURI();
+    void onCopyKey();
     void onGroupInvite();
 
     bool isGrantedToSeeOnlineStatus(bool online);
