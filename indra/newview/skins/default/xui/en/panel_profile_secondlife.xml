@@ -528,14 +528,14 @@ KC: Use view_border's around text_editor's due to text render issues with border
          visible="false"
          enabled="false" />
 
-        <view_border
+        <profile_drop_target
          top="0"
          bottom="-1"
          left="0"
          right="-1"
          layout="topleft"
          follows="all"
-         name="drop_target_rect"
+         name="drop_target"
          border_thickness="0"
          mouse_opaque="false" />
 </panel>

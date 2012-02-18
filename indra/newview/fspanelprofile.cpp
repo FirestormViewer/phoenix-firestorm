@@ -61,6 +61,7 @@
 #include "lltrans.h"
 #include "llvoiceclient.h"
 #include "llgroupactions.h"
+#include "lltooldraganddrop.h"
 #include "llviewercontrol.h"
 #include "llviewernetwork.h" //LLGridManager
 #include "llfloaterworldmap.h"
@@ -75,6 +76,78 @@ static LLRegisterPanelClassWrapper<FSPanelProfileInterests> t_panel_interests("p
 static LLRegisterPanelClassWrapper<FSPanelProfilePicks> t_panel_picks("panel_profile_picks");
 static LLRegisterPanelClassWrapper<FSPanelProfileFirstLife> t_panel_firstlife("panel_profile_firstlife");
 static LLRegisterPanelClassWrapper<FSPanelAvatarNotes> t_panel_notes("panel_profile_notes");
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Class FSDropTarget
+//
+// This handy class is a simple way to drop something on another
+// view. It handles drop events, always setting itself to the size of
+// its parent.
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+class FSDropTarget : public LLView
+{
+public:
+    struct Params : public LLInitParam::Block<Params, LLView::Params>
+    {
+        Optional<LLUUID> agent_id;
+        Params()
+        :    agent_id("agent_id")
+        {
+            changeDefault(mouse_opaque, false);
+            changeDefault(follows.flags, FOLLOWS_ALL);
+        }
+    };
+
+    FSDropTarget(const Params&);
+    ~FSDropTarget();
+
+    void doDrop(EDragAndDropType cargo_type, void* cargo_data);
+
+    //
+    // LLView functionality
+    virtual BOOL handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+                                   EDragAndDropType cargo_type,
+                                   void* cargo_data,
+                                   EAcceptance* accept,
+                                   std::string& tooltip_msg);
+    void setAgentID(const LLUUID &agent_id)        { mAgentID = agent_id; }
+protected:
+    LLUUID mAgentID;
+};
+
+FSDropTarget::FSDropTarget(const FSDropTarget::Params& p)
+:    LLView(p),
+    mAgentID(p.agent_id)
+{}
+
+FSDropTarget::~FSDropTarget()
+{}
+
+void FSDropTarget::doDrop(EDragAndDropType cargo_type, void* cargo_data)
+{
+    llinfos << "FSDropTarget::doDrop()" << llendl;
+}
+
+BOOL FSDropTarget::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
+                                     EDragAndDropType cargo_type,
+                                     void* cargo_data,
+                                     EAcceptance* accept,
+                                     std::string& tooltip_msg)
+{
+    if(getParent())
+    {
+        LLToolDragAndDrop::handleGiveDragAndDrop(mAgentID, LLUUID::null, drop,
+                                                 cargo_type, cargo_data, accept);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static LLDefaultChildRegistry::Register<FSDropTarget> r("profile_drop_target");
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -231,7 +304,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChild<LLUICtrl>("block")->setVisible( false );
         getChild<LLUICtrl>("unblock")->setVisible( false );
         getChild<LLUICtrl>("overflow_btn")->setVisible( false );
-        
+
         LLGroupList* group_list = getChild<LLGroupList>("group_list");
         group_list->enableForAgent();
     }
@@ -240,6 +313,9 @@ void FSPanelProfile::onOpen(const LLSD& key)
         //Disable "Add Friend" button for friends.
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
     }
+
+    FSDropTarget* target = getChild<FSDropTarget> ("drop_target");
+    target->setAgentID( getAvatarId() );
 
     getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
 
@@ -1393,7 +1469,7 @@ void FSPanelProfilePicks::onOpen(const LLSD& key)
     {
         getChild<LLUICtrl>("new_btn")->setVisible( true );
         getChild<LLUICtrl>("new_btn")->setEnabled( true );
-        
+
         getChild<LLUICtrl>("delete_btn")->setVisible( true );
         getChild<LLUICtrl>("delete_btn")->setEnabled( true );
     }
