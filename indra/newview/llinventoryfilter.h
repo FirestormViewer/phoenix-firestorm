@@ -64,8 +64,6 @@ public:
 		FILTERTYPE_WEARABLE = 0x1 << 4,	// search by wearable type
 		FILTERTYPE_EMPTYFOLDERS = 0x1 << 5,	// pass if folder is not a system folder to be hidden if empty
 		FILTERTYPE_WORN = 0x1 << 6,	// search by wearable type
-
-		FILTERTYPE_NO_EMPTYFOLDERS = (~0x0) & (0 << 5), // <FS:Ansariel> Filter to disable hidden system folder filtering
 	};
 
 	enum EFilterLink
