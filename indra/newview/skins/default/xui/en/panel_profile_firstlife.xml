@@ -8,6 +8,17 @@
  follows="all"
  name="panel_profile_firstlife"
  label="Profile">
+
+    <loading_indicator
+     top="5"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
+
     <texture_picker
      top="10"
      left="6"

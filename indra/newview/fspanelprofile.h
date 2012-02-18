@@ -77,9 +77,11 @@ protected:
 
     FSPanelProfileTab();
 
-    virtual void enableControls() { mLoaded = TRUE; }
+    virtual void enableControls();
 
     bool getIsLoaded() { return mLoaded; }
+
+    void setApplyProgress(bool started);
 
 private:
 
@@ -212,8 +214,6 @@ protected:
     void processOnlineStatus(bool online);
 
     virtual void enableControls();
-    
-    void setApplyProgress(bool started);
 
 private:
     typedef std::map<std::string,LLUUID>    group_map_t;

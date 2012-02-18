@@ -15,6 +15,16 @@
   name="no_classifieds"
   value="No Classifieds" />
 
+    <loading_indicator
+     top="20"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
+
     <text
      top="5"
      left="114"

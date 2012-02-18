@@ -41,6 +41,15 @@
          name="home_item" />
     </flyout_button>
 
+    <loading_indicator
+     left_pad="100"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|left"
+     name="progress_indicator"
+     visible="false" />
+
     <flyout_button
      top_delta="0"
      right="-10"

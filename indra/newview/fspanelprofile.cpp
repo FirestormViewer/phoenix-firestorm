@@ -111,6 +111,31 @@ void FSPanelProfileTab::onOpen(const LLSD& key)
 {
     // Update data even if we are viewing same avatar profile as some data might been changed.
     setAvatarId(key.asUUID());
+
+    setApplyProgress(true);
+}
+
+void FSPanelProfileTab::enableControls()
+{
+    setApplyProgress(false);
+
+    mLoaded = TRUE;
+}
+
+void FSPanelProfileTab::setApplyProgress(bool started)
+{
+    LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("progress_indicator");
+
+    indicator->setVisible(started);
+
+    if (started)
+    {
+        indicator->start();
+    }
+    else
+    {
+        indicator->stop();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -215,8 +240,6 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
     }
 
-    setApplyProgress(true);
-
     updateData();
 }
 
@@ -253,7 +276,6 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
         {
             processProfileProperties(avatar_data);
             enableControls();
-            setApplyProgress(false);
         }
     }
     else if(APT_GROUPS == type)
@@ -651,22 +673,6 @@ void FSPanelProfile::enableControls()
         getChild<LLUICtrl>("show_in_search_checkbox")->setEnabled( true );
         getChild<LLUICtrl>("sl_description_edit")->setEnabled( true );
         getChild<LLUICtrl>("2nd_life_pic")->setEnabled( true );
-    }
-}
-
-void FSPanelProfile::setApplyProgress(bool started)
-{
-    LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("progress_indicator");
-
-    indicator->setVisible(started);
-
-    if (started)
-    {
-        indicator->start();
-    }
-    else
-    {
-        indicator->stop();
     }
 }
 

@@ -8,6 +8,17 @@
  follows="all"
  name="panel_notes"
  label="Notes &amp; Privacy">
+
+    <loading_indicator
+     top="3"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
+
     <text
      top="6"
      left="6"

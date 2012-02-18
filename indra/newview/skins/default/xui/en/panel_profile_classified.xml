@@ -8,6 +8,17 @@
  follows="all"
  name="panel_profile_classified"
  label="Classified">
+
+    <loading_indicator
+     top="5"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
+
 <!--
     <text
      top="5"
@@ -224,13 +235,13 @@
 	 type="string"
      follows="all"
      height="185"
+     width="300"
      layout="topleft"
      left="10"
      name="picks_panel_text"
      wrap="true"
      top="60"
-     mouse_opaque="false"
-     right="-16"/> 
+     mouse_opaque="false" /> 
     
 </panel>
 

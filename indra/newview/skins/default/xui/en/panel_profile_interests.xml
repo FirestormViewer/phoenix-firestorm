@@ -9,6 +9,15 @@
  name="panel_profile_interests"
  label="Interests">
 
+    <loading_indicator
+     top="5"
+     right="-10"
+     height="23"
+     width="23"
+     layout="topleft"
+     follows="top|right"
+     name="progress_indicator"
+     visible="false" />
     <text
      top="10"
      left="4"
