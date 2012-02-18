@@ -193,7 +193,7 @@ protected:
     void onCopyKey();
     void onGroupInvite();
 
-    bool isGrantedToSeeOnlineStatus(bool online);
+    bool isGrantedToSeeOnlineStatus();
 
     /**
      * Displays avatar's online status if possible.

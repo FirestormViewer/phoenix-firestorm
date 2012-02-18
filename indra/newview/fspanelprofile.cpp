@@ -295,6 +295,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 
     if (getAvatarId() == gAgent.getID())
     {
+        getChild<LLUICtrl>("group_invite")->setVisible( false );
         getChild<LLUICtrl>("show_on_map_btn")->setVisible( false );
         getChild<LLUICtrl>("pay")->setVisible( false );
         getChild<LLUICtrl>("teleport")->setVisible( false );
@@ -318,6 +319,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
 
     getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
 
+    updateOnlineStatus();
     updateButtons();
 
     updateData();
@@ -664,13 +666,13 @@ void FSPanelProfile::setAvatarId(const LLUUID& id)
     }
 }
 
-bool FSPanelProfile::isGrantedToSeeOnlineStatus(bool online)
+bool FSPanelProfile::isGrantedToSeeOnlineStatus()
 {
     // set text box visible to show online status for non-friends who has not set in Preferences
     // "Only Friends & Groups can see when I am online"
     if (!LLAvatarActions::isFriend(getAvatarId()))
     {
-        return online;
+        return true;
     }
 
     // *NOTE: GRANT_ONLINE_STATUS is always set to false while changing any other status.
@@ -684,17 +686,17 @@ bool FSPanelProfile::isGrantedToSeeOnlineStatus(bool online)
 // method was disabled according to EXT-2022. Re-enabled & improved according to EXT-3880
 void FSPanelProfile::updateOnlineStatus()
 {
-    updateButtons();
     if (!LLAvatarActions::isFriend(getAvatarId())) return;
     // For friend let check if he allowed me to see his status
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     bool online = relationship->isOnline();
     processOnlineStatus(online);
+    updateButtons();
 }
 
 void FSPanelProfile::processOnlineStatus(bool online)
 {
-    mStatusText->setVisible(isGrantedToSeeOnlineStatus(online));
+    mStatusText->setVisible(isGrantedToSeeOnlineStatus());
 
     std::string status = getString(online ? "status_online" : "status_offline");
 
