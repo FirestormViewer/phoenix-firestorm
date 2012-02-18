@@ -56,21 +56,21 @@
   <menu_item_call
    label="Copy Name"
    layout="topleft"
-   name="copy_to_clipboard">
+   name="copy_name_to_clipboard">
     <menu_item_call.on_click
      function="Profile.CopyNameToClipboard" />
   </menu_item_call>
   <menu_item_call
    label="Copy URI"
    layout="topleft"
-   name="copy_to_clipboard">
+   name="copy_uri_to_clipboard">
     <menu_item_call.on_click
      function="Profile.CopyURI" />
   </menu_item_call>
   <menu_item_call
    label="Copy UUID"
    layout="topleft"
-   name="copy_to_key">
+   name="copy_key_to_clipboard">
     <menu_item_call.on_click
      function="Profile.CopyKey" />
   </menu_item_call>

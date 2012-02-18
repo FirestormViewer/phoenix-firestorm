@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_profile">
+<panel name="panel_profile" label="Profil">
 	<string name="payment_update_link_url">
 		http://www.secondlife.com/account/billing.php?lang=de
 	</string>
@@ -11,40 +11,39 @@
 	<string name="FSDev" value="-Entwickler"/>
 	<string name="FSSupp" value="-Support"/>
 
-	<panel name="second_life_panel">
-		<text name="Key:" value="UUID:"/>
-		<text_editor name="user_key" value="(laden)"/>
-		<button name="copy_uri" label="URI kopieren"/>
-		<text name="Name:" value="Name:"/>
-		<text_editor name="complete_name" value="(laden)"/>
-		<button name="copy_to_clipboard" tool_tip="In Zwischenablage kopieren"/>
-		<text name="status" value="Online"/>
-		<text name="label" value="Geboren am:"/>
-		<text name="label2" value="Konto:"/>
-		<text name="partner_label" value="Partner:"/>
-		<text left="9" name="Groups:" value="Gruppen:"/>
-		<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
-		<group_list left_pad="3" name="group_list"/>
-		<text left="9" name="About:" value="Info:"/>
-		<view_border left_pad="3" name="info_border5"/>
+	<text name="Name:" value="Name:"/>
+	<text_editor name="complete_name" value="(laden)"/>
+	<text name="Key:" value="UUID:"/>
+	<text_editor name="user_key" value="(laden)"/>
+	<text name="status" value="Online"/>
+	<text name="label" value="Geboren am:"/>
+	<text name="label2" value="Konto:"/>
+	<text name="partner_label" value="Partner:"/>
+	<text name="Groups:" value="Gruppen:"/>
+	<button label="+" label_selected="+" name="group_invite" tool_tip="In Gruppe einladen"/>
+	<text name="About:" value="Info:"/>
+	<text name="Give item:" value="Teilen:"/>
+	<text name="Give inventory" tool_tip="Hier Inventarobjekte ablegen, um sie dieser Person zu geben.">
+		Inventarobjekt hier ablegen.
+	</text>
 
-		<layout_stack>
-			<layout_panel name="left_buttonstack">
-				<button label="Zeige auf Karte" label_selected="Zeige auf Karte" name="show_on_map_btn" tool_tip="Zeige Position des Einwohners auf der Karte."/>
-				<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Zahle Geld an diesen Einwohner."/>
-			</layout_panel>
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
+			<button label="Zeige auf Karte" label_selected="Zeige auf Karte" name="show_on_map_btn" tool_tip="Zeige Position des Einwohners auf der Karte."/>
+			<button label="Zahlen" label_selected="Zahlen" name="pay" tool_tip="Zahle Geld an diesen Einwohner."/>
+		</layout_panel>
 
-			<layout_panel name="middle_buttonstack">
-				<button label="Teleport anbieten" label_selected="Teleport anbieten" name="teleport" tool_tip="Diesem Einwohner einen Teleport anbieten."/>
-				<button label="Instant Message" label_selected="Instant Message" name="im" tool_tip="Instant-Message-Session mit diesem Einwohner beginnen."/>
-			</layout_panel>
-			
-			<layout_panel name="right_buttonstack">
-				<button label="Freund hinzufügen" label_selected="Freund hinzufügen" name="add_friend" tool_tip="Diesem Einwohner deine Freundschaft anbieten."/>
-				<button label="Blockieren" name="block" tool_tip="Diesen Einwohner blockieren."/>
-				<button label="Freigeben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren."/>
-			</layout_panel>
-		</layout_stack>
-	</panel>
+		<layout_panel name="middle_buttonstack">
+			<button label="Teleport anbieten" label_selected="Teleport anbieten" name="teleport" tool_tip="Diesem Einwohner einen Teleport anbieten."/>
+			<button label="Instant Message" label_selected="Instant Message" name="im" tool_tip="Instant-Message-Session mit diesem Einwohner beginnen."/>
+		</layout_panel>
+		
+		<layout_panel name="right_buttonstack">
+			<button label="Freund hinzufügen" label_selected="Freund hinzufügen" name="add_friend" tool_tip="Diesem Einwohner deine Freundschaft anbieten."/>
+			<button label="Blockieren" name="block" tool_tip="Diesen Einwohner blockieren."/>
+			<button label="Freigeben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren."/>
+		</layout_panel>
+	</layout_stack>
+	<check_box name="show_in_search_checkbox" label="Show in search"/>
 </panel>
 

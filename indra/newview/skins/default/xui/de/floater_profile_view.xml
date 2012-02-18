@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="avatarinfo" title="PROFIL">
+	<panel name="panel_profile_view">
+		<tab_container name="tabs">
+			<panel label="2. Leben" name="panel_profile_secondlife"/>
+			<panel label="Web" name="panel_profile_web"/>
+			<panel label="Interes." name="panel_profile_interests"/>
+			<panel label="Auswahl" name="panel_profile_picks"/>
+			<panel label="Anzeige" name="panel_profile_classified"/>
+			<panel label="1. Leben" name="panel_profile_firstlife"/>
+			<panel label="Notizen" name="panel_profile_notes"/>
+		</tab_container>
+		<button name="ok_btn" label="OK" tool_tip="Änderungen speichern und schließen"/>
+		<button name="cancel_btn" label="Abbrechen" label_selected="Abbrechen"/>
+	</panel>
+</floater>

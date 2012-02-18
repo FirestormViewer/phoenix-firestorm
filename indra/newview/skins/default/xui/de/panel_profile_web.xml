@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_web" label="Web">
+	<flyout_button name="load" label="Laden" label_selected="Laden" tool_tip="Dieses Profil im integrierten Webbrowser laden."/>
+	<flyout_button name="web_profile" label="Profil" label_selected="Profil"/>
+</panel>
+

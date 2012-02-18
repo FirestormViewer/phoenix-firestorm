@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_profile_firstlife">
-          <panel name="first_life_panel">
-            <text name="homepage_text" value="Webseite:" />
-            <text name="homepage_edit" value="keine"/>
-          </panel>
+<panel name="panel_profile_firstlife" label="Profil">
 </panel>
 
