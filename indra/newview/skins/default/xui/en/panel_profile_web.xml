@@ -17,7 +17,7 @@
      follows="left|top"
      name="url_edit"
      is_unicode="false"
-     max_length="254" />
+     max_length_bytes="254" />
 
     <flyout_button
      top_pad="5"

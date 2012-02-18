@@ -114,7 +114,7 @@
          follows="left|top"
          name="want_to_edit"
          is_unicode="false"
-         max_length="254" />
+         max_length_bytes="254" />
 
     <text
      top_pad="15"
@@ -194,7 +194,7 @@
          follows="left|top"
          name="skills_edit"
          is_unicode="false"
-         max_length="254" />
+         max_length_bytes="254" />
 
     <text
      top_pad="15"
