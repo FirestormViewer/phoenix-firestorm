@@ -79,36 +79,42 @@ LLGroupList::LLGroupList(const Params& p)
 	mForAgent(p.for_agent)
 	, mDirty(true) // to force initial update
 {
-	// Listen for agent group changes.
-	if (mForAgent) gAgent.addListener(this, "new group");
-
 	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons");
 	setCommitOnSelectionChange(true);
 
 	// Set default sort order.
 	setComparator(&GROUP_COMPARATOR);
-
-
-	if (mForAgent)
+    
+    if (mForAgent)
 	{
-	// Set up context menu.
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
-
-	registrar.add("People.Groups.Action",			boost::bind(&LLGroupList::onContextMenuItemClick,	this, _2));
-	enable_registrar.add("People.Groups.Enable",	boost::bind(&LLGroupList::onContextMenuItemEnable,	this, _2));
-
-	LLMenuGL* context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_groups.xml",
-			gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if(context_menu)
-		mContextMenuHandle = context_menu->getHandle();
-	}
+        enableForAgent();
+    }
 }
 
 LLGroupList::~LLGroupList()
 {
 	if (mForAgent) gAgent.removeListener(this);
 	if (mContextMenuHandle.get()) mContextMenuHandle.get()->die();
+}
+
+void LLGroupList::enableForAgent()
+{
+    mForAgent = true;
+
+	// Listen for agent group changes.
+	gAgent.addListener(this, "new group");
+
+    // Set up context menu.
+    LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
+    LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+
+    registrar.add("People.Groups.Action",			boost::bind(&LLGroupList::onContextMenuItemClick,	this, _2));
+    enable_registrar.add("People.Groups.Enable",	boost::bind(&LLGroupList::onContextMenuItemEnable,	this, _2));
+
+    LLMenuGL* context_menu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_people_groups.xml",
+            gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    if(context_menu)
+        mContextMenuHandle = context_menu->getHandle();
 }
 
 // virtual

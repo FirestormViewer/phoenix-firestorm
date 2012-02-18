@@ -97,6 +97,10 @@ public:
 	static void hideProfile(const LLUUID& id);
 	static bool profileVisible(const LLUUID& id);
 	static LLFloater* getProfileFloater(const LLUUID& id);
+//<FS:KC legacy profiles>
+    static void showProfileWeb(const LLUUID& id);
+    static void showProfileLegacy(const LLUUID& id);
+//</FS:KC legacy profiles>
 
 	/**
 	 * Show avatar on world map.
