@@ -2068,6 +2068,18 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="PicksClassifiedsLoadingText">
 		Wird geladen...
 	</string>
+	<string name="NoPicksText">
+		Du hast noch keine Auswahl erstellt.
+	</string>
+	<string name="NoAvatarPicksText">
+		Der Einwohner hat keine Auswahl.
+	</string>
+	<string name="NoClassifiedsText">
+		Du hast noch keine Anzeige erstellt.
+	</string>
+	<string name="NoAvatarClassifiedsText">
+		Der Einwohner hat keine Anzeigen.
+	</string>
 	<string name="MultiPreviewTitle">
 		Vorschau
 	</string>
