@@ -80,7 +80,6 @@ FSPanelClassifieds::FSPanelClassifieds()
 	// mProfilePanel(NULL),
 	mClassifiedsList(NULL),
 	mPlusMenu(NULL),
-	mClassifiedsAccTab(NULL),
 	mPanelClassifiedInfo(NULL),
 	mNoClassifieds(false)
 {
@@ -147,8 +146,6 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
 				c_item->setMouseUpCallback(boost::bind(&FSPanelClassifieds::updateButtons, this));
 			}
 
-			showAccordion("tab_classifieds", mClassifiedsList->size());
-
 			resetDirty();
 			updateButtons();
 		}
@@ -197,10 +194,6 @@ BOOL FSPanelClassifieds::postBuild()
 	childSetAction(XML_BTN_TELEPORT, boost::bind(&FSPanelClassifieds::onClickTeleport, this));
 	childSetAction(XML_BTN_SHOW_ON_MAP, boost::bind(&FSPanelClassifieds::onClickMap, this));
 	childSetAction(XML_BTN_INFO, boost::bind(&FSPanelClassifieds::onClickInfo, this));
-
-	mClassifiedsAccTab = getChild<LLAccordionCtrlTab>("tab_classifieds");
-	mClassifiedsAccTab->setDropDownStateChangedCallback(boost::bind(&FSPanelClassifieds::onAccordionStateChanged, this, mClassifiedsAccTab));
-	mClassifiedsAccTab->setDisplayChildren(false);
 	
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registar;
 	registar.add("Pick.Info", boost::bind(&FSPanelClassifieds::onClickInfo, this));
@@ -259,16 +252,6 @@ bool FSPanelClassifieds::isClassifiedPublished(FSClassifiedItem* c_item)
 	return false;
 }
 
-void FSPanelClassifieds::onAccordionStateChanged(const LLAccordionCtrlTab* acc_tab)
-{
-	if(!mClassifiedsAccTab->getDisplayChildren())
-	{
-		mClassifiedsList->resetSelection(true);
-	}
-
-	updateButtons();
-}
-
 void FSPanelClassifieds::onOpen(const LLSD& key)
 {
 	const LLUUID id(key.asUUID());
@@ -299,9 +282,6 @@ void FSPanelClassifieds::onOpen(const LLSD& key)
 
 	if(getAvatarId() != id)
 	{
-		showAccordion("tab_picks", false);
-		showAccordion("tab_classifieds", false);
-
 		mClassifiedsList->goToTop();
 		// Set dummy value to make panel dirty and make it reload picks
 		setValue(LLSD());
@@ -459,11 +439,6 @@ void FSPanelClassifieds::updateButtons()
 	}
 }
 
-// void FSPanelClassifieds::setProfilePanel(FSPanelClassifieds* profile_panel)
-// {
-	// mProfilePanel = profile_panel;
-// }
-
 void FSPanelClassifieds::onClickPlusBtn()
 {
 	LLRect rect(getChildView(XML_BTN_NEW)->getRect());
@@ -521,14 +496,6 @@ void FSPanelClassifieds::openClassifiedEdit(const LLSD& params)
 	editClassified(classified_id);
 }
 
-void FSPanelClassifieds::showAccordion(const std::string& name, bool show)
-{
-	LLAccordionCtrlTab* tab = getChild<LLAccordionCtrlTab>(name);
-	tab->setVisible(show);
-	LLAccordionCtrl* acc = getChild<LLAccordionCtrl>("accordion");
-	acc->arrange();
-}
-
 void FSPanelClassifieds::onPanelPickClose(LLPanel* panel)
 {
 	// getProfilePanel()->closePanel(panel);
@@ -558,10 +525,6 @@ void FSPanelClassifieds::onPanelClassifiedSave(FSPanelClassifiedEdit* panel)
 		c_item->setRightMouseUpCallback(boost::bind(&FSPanelClassifieds::onRightMouseUpItem, this, _1, _2, _3, _4));
 		c_item->setMouseUpCallback(boost::bind(&FSPanelClassifieds::updateButtons, this));
 		c_item->childSetAction("info_chevron", boost::bind(&FSPanelClassifieds::onClickInfo, this));
-
-		// order does matter, showAccordion will invoke arrange for accordions.
-		mClassifiedsAccTab->changeOpenClose(false);
-		showAccordion("tab_classifieds", true);
 	}
 	else if(panel->isNewWithErrors())
 	{

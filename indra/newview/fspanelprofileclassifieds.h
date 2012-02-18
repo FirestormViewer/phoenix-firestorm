@@ -73,10 +73,6 @@ public:
 	FSClassifiedItem* getSelectedClassifiedItem();
 	FSClassifiedItem* findClassifiedById(const LLUUID& classified_id);
 
-	//*NOTE top down approch when panel toggling is done only by 
-	// parent panels failed to work (picks related code was in my profile panel)
-	// void setProfilePanel(FSPanelClassifieds* profile_panel);
-
 	void createNewClassified();
 
 protected:
@@ -93,7 +89,6 @@ private:
 	bool isClassifiedPublished(FSClassifiedItem* c_item);
 
 	void onListCommit(const LLFlatListView* f_list);
-	void onAccordionStateChanged(const LLAccordionCtrlTab* acc_tab);
 
 	//------------------------------------------------
 	// Callbacks which require panel toggling
@@ -112,9 +107,6 @@ private:
 	void openClassifiedInfo();
 	void openClassifiedInfo(const LLSD& params);
 	void openClassifiedEdit(const LLSD& params);
-
-	void showAccordion(const std::string& name, bool show);
-
 
 	bool callbackDeleteClassified(const LLSD& notification, const LLSD& response);
 	bool callbackTeleport(const LLSD& notification, const LLSD& response);
@@ -144,8 +136,6 @@ private:
 	// This map is needed for newly created classifieds. The purpose of panel is to
 	// sit in this map and listen to FSPanelClassifiedEdit::processProperties callback.
 	panel_classified_edit_map_t mEditClassifiedPanels;
-
-	LLAccordionCtrlTab* mClassifiedsAccTab;
 
 	//true if classifieds list is empty after processing classifieds
 	bool mNoClassifieds;
