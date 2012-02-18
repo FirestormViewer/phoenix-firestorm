@@ -1789,6 +1789,20 @@ bool idle_startup()
 	//---------------------------------------------------------------------
 	if (STATE_INVENTORY_SEND == LLStartUp::getStartupState())
 	{
+		// <FS:Ansariel> Moved before inventory creation. Otherwise the responses
+		//               from the money balance request and mutelist request
+		//               seem to get lost under certain conditions
+		// request mute list
+		llinfos << "Requesting Mute List" << llendl;
+		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
+		display_startup();
+		// Get L$ and ownership credit information
+		llinfos << "Requesting Money Balance" << llendl;
+		LLStatusBar::sendMoneyBalanceRequest();
+
+		display_startup();
+		// </FS:Ansariel>
+
 		display_startup();
 		// Inform simulator of our language preference
 		LLAgentLanguage::update();
@@ -1949,7 +1963,7 @@ bool idle_startup()
 		LLLandmark::registerCallbacks(msg);
 		display_startup();
 
-		// <FS:Ansariel> Moved after inventory creation. Otherwise the responses
+		// <FS:Ansariel> Moved before inventory creation. Otherwise the responses
 		//               from the money balance request and mutelist request
 		//               seem to get lost under certain conditions
 		//// request mute list
@@ -1972,20 +1986,6 @@ bool idle_startup()
 		// llinfos << "Creating Inventory Views" << llendl;
 		// LLFloaterReg::getInstance("inventory");
 		//display_startup();
-
-		// <FS:Ansariel> Moved after inventory creation. Otherwise the responses
-		//               from the money balance request and mutelist request
-		//               seem to get lost under certain conditions
-		// request mute list
-		llinfos << "Requesting Mute List" << llendl;
-		LLMuteList::getInstance()->requestFromServer(gAgent.getID());
-		display_startup();
-		// Get L$ and ownership credit information
-		llinfos << "Requesting Money Balance" << llendl;
-		LLStatusBar::sendMoneyBalanceRequest();
-
-		display_startup();
-		// </FS:Ansariel>
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f
 		if (rlv_handler_t::isEnabled())
