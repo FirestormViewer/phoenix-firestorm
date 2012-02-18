@@ -251,30 +251,29 @@ BOOL FSPanelProfile::postBuild()
     mStatusText->setVisible(false);
 
     LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-    registrar.add("Profile.AddFriend",  boost::bind(&FSPanelProfile::onAddFriendButtonClick, this));
-    registrar.add("Profile.IM",  boost::bind(&FSPanelProfile::onIMButtonClick, this));
     registrar.add("Profile.Call",  boost::bind(&FSPanelProfile::onCallButtonClick, this));
-    registrar.add("Profile.Teleport",  boost::bind(&FSPanelProfile::onTeleportButtonClick, this));
-    registrar.add("Profile.ShowOnMap",  boost::bind(&FSPanelProfile::onMapButtonClick, this));
-    registrar.add("Profile.Pay",  boost::bind(&FSPanelProfile::pay, this));
-    registrar.add("Profile.Share", boost::bind(&FSPanelProfile::share, this));
-    registrar.add("Profile.BlockUnblock", boost::bind(&FSPanelProfile::toggleBlock, this));
-    registrar.add("Profile.Kick", boost::bind(&FSPanelProfile::kick, this));
-    registrar.add("Profile.Freeze", boost::bind(&FSPanelProfile::freeze, this));
-    registrar.add("Profile.Unfreeze", boost::bind(&FSPanelProfile::unfreeze, this));
-    registrar.add("Profile.CSR", boost::bind(&FSPanelProfile::csr, this));
-    registrar.add("Profile.CopyNameToClipboard", boost::bind(&FSPanelProfile::onCopyToClipboard, this));
-    registrar.add("Profile.CopyURI", boost::bind(&FSPanelProfile::onCopyURI, this));
-    registrar.add("Profile.CopyKey", boost::bind(&FSPanelProfile::onCopyKey, this));
+    registrar.add("Profile.Share",                  boost::bind(&FSPanelProfile::share, this));
+    registrar.add("Profile.Kick",                   boost::bind(&FSPanelProfile::kick, this));
+    registrar.add("Profile.Freeze",                 boost::bind(&FSPanelProfile::freeze, this));
+    registrar.add("Profile.Unfreeze",               boost::bind(&FSPanelProfile::unfreeze, this));
+    registrar.add("Profile.CSR",                    boost::bind(&FSPanelProfile::csr, this));
+    registrar.add("Profile.CopyNameToClipboard",    boost::bind(&FSPanelProfile::onCopyToClipboard, this));
+    registrar.add("Profile.CopyURI",                boost::bind(&FSPanelProfile::onCopyURI, this));
+    registrar.add("Profile.CopyKey",                boost::bind(&FSPanelProfile::onCopyKey, this));
+
+    childSetCommitCallback("add_friend",            boost::bind(&FSPanelProfile::onAddFriendButtonClick, this),NULL);
+    childSetCommitCallback("im",                    boost::bind(&FSPanelProfile::onIMButtonClick, this), NULL);
+    childSetCommitCallback("call",                  boost::bind(&FSPanelProfile::onCallButtonClick, this), NULL);
+    childSetCommitCallback("teleport",              boost::bind(&FSPanelProfile::onTeleportButtonClick, this), NULL);
+    childSetCommitCallback("show_on_map_btn",       boost::bind(&FSPanelProfile::onMapButtonClick, this), NULL);
+    childSetCommitCallback("pay",                   boost::bind(&FSPanelProfile::pay, this), NULL);
+    childSetCommitCallback("block",                 boost::bind(&FSPanelProfile::toggleBlock,this),NULL);
+    childSetCommitCallback("unblock",               boost::bind(&FSPanelProfile::toggleBlock,this),NULL);
+    childSetCommitCallback("group_invite",          boost::bind(&FSPanelProfile::onGroupInvite,this),NULL);
 
     LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable;
-    enable.add("Profile.EnableAddFriend", boost::bind(&FSPanelProfile::enableAddFriend, this));
-    enable.add("Profile.EnableCall", boost::bind(&FSPanelProfile::enableCall, this));
-    enable.add("Profile.EnableShowOnMap", boost::bind(&FSPanelProfile::enableShowOnMap, this));
-    enable.add("Profile.EnableTeleport", boost::bind(&FSPanelProfile::enableTeleport, this));
-    enable.add("Profile.EnableGod", boost::bind(&enable_god));
-    enable.add("Profile.EnableBlock", boost::bind(&FSPanelProfile::enableBlock, this));
-    enable.add("Profile.EnableUnblock", boost::bind(&FSPanelProfile::enableUnblock, this));
+    enable.add("Profile.EnableCall",                boost::bind(&FSPanelProfile::enableCall, this));
+    enable.add("Profile.EnableGod",                 boost::bind(&enable_god));
 
     LLGroupList* group_list = getChild<LLGroupList>("group_list");
     group_list->setDoubleClickCallback(boost::bind(&FSPanelProfile::openGroupProfile, this));
@@ -318,6 +317,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
     target->setAgentID( getAvatarId() );
 
     getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
+
+    updateButtons();
 
     updateData();
 }
@@ -561,54 +562,12 @@ void FSPanelProfile::toggleBlock()
 {
     LLAvatarActions::toggleBlock(getAvatarId());
 
-    bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
-    getChildView("block")->setVisible(enable_block_btn);
-
-    bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
-    getChildView("unblock")->setVisible(enable_unblock_btn);
-}
-
-bool FSPanelProfile::enableAddFriend()
-{
-    return !LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
+    updateButtons();
 }
 
 bool FSPanelProfile::enableCall()
 {
     return mVoiceStatus == TRUE;
-}
-
-bool FSPanelProfile::enableShowOnMap()
-{
-    bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
-
-    bool enable_map_btn = (is_buddy_online && is_agent_mappable(getAvatarId()))
-        || gAgent.isGodlike();
-    return enable_map_btn;
-}
-
-bool FSPanelProfile::enableTeleport()
-{
-    bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
-
-    if(LLAvatarActions::isFriend(getAvatarId()))
-    {
-        return is_buddy_online;
-    }
-    else
-    {
-        return true;
-    }
-}
-
-bool FSPanelProfile::enableBlock()
-{
-    return LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
-}
-
-bool FSPanelProfile::enableUnblock()
-{
-    return LLAvatarActions::isBlocked(getAvatarId());
 }
 
 void FSPanelProfile::kick()
@@ -651,11 +610,6 @@ void FSPanelProfile::onTeleportButtonClick()
 void FSPanelProfile::onCallButtonClick()
 {
     LLAvatarActions::startCall(getAvatarId());
-}
-
-void FSPanelProfile::onShareButtonClick()
-{
-    //*TODO not implemented
 }
 
 void FSPanelProfile::onCopyToClipboard()
@@ -730,6 +684,7 @@ bool FSPanelProfile::isGrantedToSeeOnlineStatus(bool online)
 // method was disabled according to EXT-2022. Re-enabled & improved according to EXT-3880
 void FSPanelProfile::updateOnlineStatus()
 {
+    updateButtons();
     if (!LLAvatarActions::isFriend(getAvatarId())) return;
     // For friend let check if he allowed me to see his status
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
@@ -757,6 +712,29 @@ void FSPanelProfile::enableControls()
         getChild<LLUICtrl>("sl_description_edit")->setEnabled( true );
         getChild<LLUICtrl>("2nd_life_pic")->setEnabled( true );
     }
+}
+
+void FSPanelProfile::updateButtons()
+{
+    bool is_buddy_online = LLAvatarTracker::instance().isBuddyOnline(getAvatarId());
+
+    if(LLAvatarActions::isFriend(getAvatarId()))
+    {
+        getChildView("teleport")->setEnabled(is_buddy_online);
+    }
+    else
+    {
+        getChildView("teleport")->setEnabled(true);
+    }
+
+    bool enable_map_btn = (is_buddy_online && is_agent_mappable(getAvatarId())) || gAgent.isGodlike();
+    getChildView("show_on_map_btn")->setEnabled(enable_map_btn);
+
+    bool enable_block_btn = LLAvatarActions::canBlock(getAvatarId()) && !LLAvatarActions::isBlocked(getAvatarId());
+    getChildView("block")->setVisible(enable_block_btn);
+
+    bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
+    getChildView("unblock")->setVisible(enable_unblock_btn);
 }
 
 //////////////////////////////////////////////////////////////////////////

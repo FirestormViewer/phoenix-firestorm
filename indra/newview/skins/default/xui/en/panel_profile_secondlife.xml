@@ -301,7 +301,8 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="group_invite"
          label="+"
          label_selected="+"
-         tool_tip="Invite to Group" />
+         tool_tip="Invite to Group"
+         commit_callback.function="Profile.GroupInvite" />
 
         <group_list
          top_delta="-20"
@@ -410,9 +411,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="show_on_map_btn"
                  label="Find on Map"
                  label_selected="Find on Map"
-                 tool_tip="Locate the Resident on the map"
-                 commit_callback.function="Profile.ShowOnMap"
-                 enabled_callback.function="Profile.EnableShowOnMap" />
+                 tool_tip="Locate the Resident on the map" />
 
                 <button
                  top_pad="2"
@@ -422,8 +421,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="pay"
                  label="Pay"
                  label_selected="Pay"
-                 tool_tip="Pay money to the Resident"
-                 commit_callback.function="Profile.Pay" />
+                 tool_tip="Pay money to the Resident" />
 
             </layout_panel>
             <layout_panel
@@ -443,9 +441,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="teleport"
                  label="Offer Teleport"
                  label_selected="Offer Teleport"
-                 tool_tip="Offer a teleport to the Resident"
-                 commit_callback.function="Profile.Teleport"
-                 enabled_callback.function="Profile.EnableTeleport" />
+                 tool_tip="Offer a teleport to the Resident" />
 
                 <button
                  top_pad="2"
@@ -455,8 +451,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="im"
                  label="Instant Message"
                  label_selected="Instant Message"
-                 tool_tip="Open instant message session"
-                 commit_callback.function="Profile.IM" />
+                 tool_tip="Open instant message session" />
 
             </layout_panel>
             <layout_panel
@@ -476,9 +471,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  name="add_friend"
                  label="Add Friend"
                  label_selected="Add Friend"
-                 tool_tip="Offer friendship to the Resident"
-                 commit_callback.function="Profile.AddFriend"
-                 enabled_callback.function="Profile.EnableAddFriend" />
+                 tool_tip="Offer friendship to the Resident" />
 
                 <button
                  top_pad="2"
@@ -488,9 +481,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  follows="left|top|right"
                  name="block"
                  label="Block"
-                 tool_tip="Block this Resident"
-                 commit_callback.function="Profile.BlockUnblock"
-                 enabled_callback.function="Profile.EnableBlock" />
+                 tool_tip="Block this Resident" />
 
                 <button
                  top_delta="0"
@@ -500,9 +491,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  follows="left|top|right"
                  name="unblock"
                  label="Unblock"
-                 tool_tip="Unblock this Resident"
-                 commit_callback.function="Profile.BlockUnblock"
-                 enabled_callback.function="Profile.EnableUnblock" />
+                 tool_tip="Unblock this Resident" />
 
                 <menu_button
                  left_pad="4"

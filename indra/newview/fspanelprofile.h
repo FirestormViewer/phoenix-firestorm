@@ -174,23 +174,19 @@ protected:
      */
     void toggleBlock();
 
+    void updateButtons();
+
     void kick();
     void freeze();
     void unfreeze();
     void csr();
 
-    bool enableAddFriend();
     bool enableCall();
-    bool enableShowOnMap();
-    bool enableTeleport();
-    bool enableBlock();
-    bool enableUnblock();
 
     void onAddFriendButtonClick();
     void onIMButtonClick();
     void onCallButtonClick();
     void onTeleportButtonClick();
-    void onShareButtonClick();
 
     void onCopyToClipboard();
     void onCopyURI();
