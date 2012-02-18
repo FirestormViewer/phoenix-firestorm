@@ -10,6 +10,7 @@
  help_topic="snapshot"
  save_rect="true"
  save_visibility="false"
+ single_instance="true"
  title="SNAPSHOT PREVIEW"
  width="270">
     <floater.string
