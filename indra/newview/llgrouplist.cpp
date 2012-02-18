@@ -79,7 +79,6 @@ LLGroupList::LLGroupList(const Params& p)
 	mForAgent(p.for_agent)
 	, mDirty(true) // to force initial update
 {
-	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons");
 	setCommitOnSelectionChange(true);
 
 	// Set default sort order.
@@ -100,6 +99,8 @@ LLGroupList::~LLGroupList()
 void LLGroupList::enableForAgent()
 {
     mForAgent = true;
+
+	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons");
 
 	// Listen for agent group changes.
 	gAgent.addListener(this, "new group");
