@@ -44,6 +44,6 @@
 			<button label="Freigeben" name="unblock" tool_tip="Diesen Einwohner nicht mehr blockieren."/>
 		</layout_panel>
 	</layout_stack>
-	<check_box name="show_in_search_checkbox" label="Show in search"/>
+	<check_box name="show_in_search_checkbox" label="In Suche anzeigen"/>
 </panel>
 
