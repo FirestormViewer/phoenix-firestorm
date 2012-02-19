@@ -263,7 +263,6 @@ BOOL FSPanelProfile::postBuild()
 
     childSetCommitCallback("add_friend",            boost::bind(&FSPanelProfile::onAddFriendButtonClick, this),NULL);
     childSetCommitCallback("im",                    boost::bind(&FSPanelProfile::onIMButtonClick, this), NULL);
-    childSetCommitCallback("call",                  boost::bind(&FSPanelProfile::onCallButtonClick, this), NULL);
     childSetCommitCallback("teleport",              boost::bind(&FSPanelProfile::onTeleportButtonClick, this), NULL);
     childSetCommitCallback("show_on_map_btn",       boost::bind(&FSPanelProfile::onMapButtonClick, this), NULL);
     childSetCommitCallback("pay",                   boost::bind(&FSPanelProfile::pay, this), NULL);
@@ -307,11 +306,15 @@ void FSPanelProfile::onOpen(const LLSD& key)
 
         LLGroupList* group_list = getChild<LLGroupList>("group_list");
         group_list->enableForAgent();
+
+        getChild<LLTextBase>("sl_description_edit")->setParseHTML(false);
     }
     else
     {
         //Disable "Add Friend" button for friends.
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
+
+        mVoiceStatus == LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
     }
 
     FSDropTarget* target = getChild<FSDropTarget> ("drop_target");
