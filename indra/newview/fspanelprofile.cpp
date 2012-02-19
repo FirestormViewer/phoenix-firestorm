@@ -305,7 +305,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChild<LLUICtrl>("overflow_btn")->setVisible( false );
 
         LLGroupList* group_list = getChild<LLGroupList>("group_list");
-        group_list->enableForAgent();
+        group_list->setShowNone(false);
+        group_list->enableForAgent(false);
 
         getChild<LLTextBase>("sl_description_edit")->setParseHTML(false);
     }
@@ -408,7 +409,6 @@ void FSPanelProfile::processGroupProperties(const LLAvatarGroups* avatar_groups)
     LLAvatarGroups::group_list_t::const_iterator it = avatar_groups->group_list.begin();
     const LLAvatarGroups::group_list_t::const_iterator it_end = avatar_groups->group_list.end();
 
-    mGroups.clear();
     for(; it_end != it; ++it)
     {
         LLAvatarGroups::LLGroupData group_data = *it;

@@ -78,6 +78,8 @@ LLGroupList::LLGroupList(const Params& p)
 :	LLFlatListViewEx(p),
 	mForAgent(p.for_agent)
 	, mDirty(true) // to force initial update
+    , mShowIcons(false)
+    , mShowNone(true)
 {
 	setCommitOnSelectionChange(true);
 
@@ -86,7 +88,7 @@ LLGroupList::LLGroupList(const Params& p)
     
     if (mForAgent)
 	{
-        enableForAgent();
+        enableForAgent(true);
     }
 }
 
@@ -96,11 +98,11 @@ LLGroupList::~LLGroupList()
 	if (mContextMenuHandle.get()) mContextMenuHandle.get()->die();
 }
 
-void LLGroupList::enableForAgent()
+void LLGroupList::enableForAgent(bool show_icons)
 {
     mForAgent = true;
 
-	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons");
+	mShowIcons = mForAgent && gSavedSettings.getBOOL("GroupListShowIcons") && show_icons;
 
 	// Listen for agent group changes.
 	gAgent.addListener(this, "new group");
@@ -192,7 +194,7 @@ void LLGroupList::refresh()
 
 	// Add "none" to list at top if filter not set (what's the point of filtering "none"?).
 	// but only if some real groups exists. EXT-4838
-	if (!have_filter && count > 0)
+	if (!have_filter && count > 0 && mShowNone)
 	{
 		std::string loc_none = LLTrans::getString("GroupsNone");
 		addNewItem(LLUUID::null, loc_none, LLUUID::null, ADD_TOP);
@@ -244,7 +246,7 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
 
 void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos)
 {
-	LLGroupListItem* item = new LLGroupListItem(mForAgent);
+	LLGroupListItem* item = new LLGroupListItem(mForAgent && mShowIcons);
 
 	item->setGroupID(id);
 	item->setName(name, mNameFilter);

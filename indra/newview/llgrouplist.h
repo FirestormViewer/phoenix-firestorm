@@ -54,7 +54,7 @@ public:
 	LLGroupList(const Params& p);
 	virtual ~LLGroupList();
 
-    void enableForAgent();
+    void enableForAgent(bool show_icons);
 
 	virtual void draw(); // from LLView
 	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask); // from LLView
@@ -62,6 +62,8 @@ public:
 	void setNameFilter(const std::string& filter);
 	void toggleIcons();
 	bool getIconsVisible() const { return mShowIcons; }
+	void setIconsVisible(bool show_icons) { mShowIcons = show_icons; }
+	void setShowNone(bool show_none) { mShowNone = show_none; }
 	void setGroups(const std::map< std::string,LLUUID> group_list);
 
 private:
@@ -80,6 +82,7 @@ private:
 	std::string mNameFilter;
 
 	bool mForAgent;
+    bool mShowNone;
 	typedef std::map< std::string,LLUUID>	group_map_t;
 	group_map_t 			mGroups;
 };
