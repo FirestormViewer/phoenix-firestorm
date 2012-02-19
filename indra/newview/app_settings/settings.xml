@@ -16457,7 +16457,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <array>
         <integer>0</integer>
         <integer>680</integer>
-        <integer>485</integer>
+        <integer>500</integer>
         <integer>0</integer>
         </array>
     </map>
