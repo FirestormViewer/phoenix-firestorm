@@ -4,7 +4,7 @@
 		Pause
 	</string>
 	<string name="run">
-		Rennen
+		Start
 	</string>
 	<button label="Pause" name="pause_btn"/>
 </floater>

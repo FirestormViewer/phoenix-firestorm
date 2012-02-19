@@ -12,7 +12,7 @@
 -->
 	<string name="no_classifieds" value="Keine Anzeigen"/>
 	<panel name="edit_panel">
-		<button name="new_btn" tool_tip="Neue Auswahl oder Anzeige am aktuellen Standort erstellen"/>
+		<button name="new_btn" tool_tip="Neue Anzeige am aktuellen Standort erstellen"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">
