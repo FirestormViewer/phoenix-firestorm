@@ -315,7 +315,7 @@ void FSPanelProfile::onOpen(const LLSD& key)
         //Disable "Add Friend" button for friends.
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
 
-        mVoiceStatus == LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+        mVoiceStatus = LLAvatarActions::canCall();
     }
 
     FSDropTarget* target = getChild<FSDropTarget> ("drop_target");
@@ -572,7 +572,7 @@ void FSPanelProfile::toggleBlock()
 
 bool FSPanelProfile::enableCall()
 {
-    return mVoiceStatus == TRUE;
+    return mVoiceStatus;
 }
 
 void FSPanelProfile::kick()
@@ -653,7 +653,7 @@ void FSPanelProfile::onChange(EStatusType status, const std::string &channelURI,
         return;
     }
 
-    mVoiceStatus == LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
+    mVoiceStatus = LLAvatarActions::canCall();
 }
 
 void FSPanelProfile::setAvatarId(const LLUUID& id)
