@@ -1478,7 +1478,13 @@ void LLSpatialBridge::cleanupReferences()
 			}
 		}
 
-		LLDrawable* drawablep = mDrawable;
+		// <FS:ND> setting the pointer to 0 can delete the drawable, referencing it with setSpatialBridge after that is illegal.
+
+		// LLDrawable* drawablep = mDrawable;
+		LLPointer< LLDrawable > drawablep = mDrawable;
+
+		// </FS:ND>
+
 		mDrawable = NULL;
 		drawablep->setSpatialBridge(NULL);
 	}

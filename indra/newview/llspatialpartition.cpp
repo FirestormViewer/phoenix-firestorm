@@ -69,6 +69,11 @@ const F32 SG_OCCLUSION_FUDGE = 0.25f;
 #endif
 
 
+// <FS:ND> helper to extract the tree data before iterating over it
+bool extractDrawables( const LLSpatialGroup::OctreeNode* branch, std::vector< LLPointer< LLDrawable > >& );
+bool extractChildNodes( const LLSpatialGroup::OctreeNode* node, std::vector< const LLSpatialGroup::OctreeNode* >& );
+// </FS:ND>
+
 static U32 sZombieGroups = 0;
 U32 LLSpatialGroup::sNodeCount = 0;
 
@@ -4390,19 +4395,48 @@ public:
 	
 	virtual void visit(const LLSpatialGroup::OctreeNode* branch) 
 	{	
-		for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getData().begin(); i != branch->getData().end(); ++i)
+		// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+
+		// for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getData().begin(); i != branch->getData().end(); ++i)
+		// {
+		// 	check(*i);
+		// }
+
+		std::vector< LLPointer< LLDrawable > > vTree;
+		extractDrawables( branch, vTree );
+
+		for( std::vector< LLPointer< LLDrawable > >::iterator itr = vTree.begin(); vTree.end() != itr; )
 		{
-			check(*i);
+			check( *itr );
+
+			if( !extractDrawables( branch, vTree ) )
+				++itr;
+			else
+				itr = vTree.begin();
 		}
+
+		// </FS:ND>
 	}
 
 	virtual LLDrawable* check(const LLSpatialGroup::OctreeNode* node)
 	{
 		node->accept(this);
 	
-		for (U32 i = 0; i < node->getChildCount(); i++)
+		// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+		std::vector< const LLSpatialGroup::OctreeNode* > vTree;
+		extractChildNodes( node, vTree );
+
+		// for (U32 i = 0; i < node->getChildCount(); i++)
+		for (U32 i = 0; i < vTree.size(); )
+		 // </FS:ND>
 		{
-			const LLSpatialGroup::OctreeNode* child = node->getChild(i);
+			// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+
+			// const LLSpatialGroup::OctreeNode* child = node->getChild(i);
+			const LLSpatialGroup::OctreeNode* child = vTree[i];
+			
+			// </FS:ND>
+
 			LLVector3 res;
 
 			LLSpatialGroup* group = (LLSpatialGroup*) child->getListener(0);
@@ -4433,6 +4467,15 @@ public:
 			{
 				check(child);
 			}
+
+			// <FS:ND> Tree can change while we are visiting, make sure to restart iteration if the tree changes
+
+			if( !extractChildNodes( node, vTree ) )
+				++i;
+			else
+				i = 0;
+
+			// </FS:ND>
 		}	
 
 		return mHit;
@@ -4791,5 +4834,45 @@ void LLCullResult::assertDrawMapsEmpty()
 	}
 }
 
+// <FS:ND> helper to extract the tree data before iterating over it.
+// Returns false if sequence is equal to old one and old was not empty.
 
+bool extractDrawables( const LLSpatialGroup::OctreeNode* branch, std::vector< LLPointer< LLDrawable > > &aTree )
+{
+	std::vector< LLPointer< LLDrawable > > vTree;
+	for (LLSpatialGroup::OctreeNode::const_element_iter i = branch->getData().begin(); i != branch->getData().end(); ++i)
+		vTree.push_back( *i );
 
+	if( aTree.empty() )
+	{
+		aTree = vTree;
+		return true;
+	}
+	else if( aTree == vTree )
+		return false;
+
+	LL_DEBUGS("Octree") << "Tree did change while traversing it, restarting traversal." << LL_ENDL;
+	aTree = vTree;
+	return true;
+}
+
+bool extractChildNodes( const LLSpatialGroup::OctreeNode* node, std::vector< const LLSpatialGroup::OctreeNode* > &aTree )
+{
+	std::vector< const LLSpatialGroup::OctreeNode* > vTree;
+	for (U32 i = 0; i < node->getChildCount(); i++)
+		vTree.push_back( node->getChild(i) );
+
+	if( aTree.empty() )
+	{
+		aTree = vTree;
+		return true;
+	}
+	else if( aTree == vTree )
+		return false;
+
+	LL_DEBUGS("Octree") << "Tree did change while traversing it, restarting traversal." << LL_ENDL;
+	aTree = vTree;
+	return true;
+}
+
+// </FS:ND>
