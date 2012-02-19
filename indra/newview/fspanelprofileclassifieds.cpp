@@ -31,15 +31,11 @@
 #include "llagent.h"
 #include "llagentpicksinfo.h"
 #include "llavatarconstants.h"
-// #include "llcommandhandler.h"
-// #include "lldispatcher.h"
 #include "llflatlistview.h"
 #include "llfloaterreg.h"
-// #include "llfloatersidepanelcontainer.h"
 #include "llfloaterworldmap.h"
 #include "llnotificationsutil.h"
 #include "lltexturectrl.h"
-#include "lltoggleablemenu.h"
 #include "lltrans.h"
 #include "llviewergenericmessage.h"	// send_generic_message
 #include "llmenugl.h"
@@ -49,7 +45,6 @@
 #include "llaccordionctrl.h"
 #include "llaccordionctrltab.h"
 #include "llavatarpropertiesprocessor.h"
-// #include "llfloatersidepanelcontainer.h"
 #include "fspanelprofile.h"
 #include "fspanelclassified.h"
 
@@ -77,9 +72,7 @@ static LLRegisterPanelClassWrapper<FSPanelClassifieds> t_panel_classifieds("pane
 FSPanelClassifieds::FSPanelClassifieds()
 :	FSPanelProfileTab(),
 	mPopupMenu(NULL),
-	// mProfilePanel(NULL),
 	mClassifiedsList(NULL),
-	mPlusMenu(NULL),
 	mPanelClassifiedInfo(NULL),
 	mNoClassifieds(false)
 {
@@ -189,51 +182,25 @@ BOOL FSPanelClassifieds::postBuild()
 
 	mNoItemsLabel = getChild<LLUICtrl>("picks_panel_text");
 
-	childSetAction(XML_BTN_NEW, boost::bind(&FSPanelClassifieds::onClickPlusBtn, this));
 	childSetAction(XML_BTN_DELETE, boost::bind(&FSPanelClassifieds::onClickDelete, this));
 	childSetAction(XML_BTN_TELEPORT, boost::bind(&FSPanelClassifieds::onClickTeleport, this));
 	childSetAction(XML_BTN_SHOW_ON_MAP, boost::bind(&FSPanelClassifieds::onClickMap, this));
 	childSetAction(XML_BTN_INFO, boost::bind(&FSPanelClassifieds::onClickInfo, this));
 	
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registar;
-	registar.add("Pick.Info", boost::bind(&FSPanelClassifieds::onClickInfo, this));
-	registar.add("Pick.Edit", boost::bind(&FSPanelClassifieds::onClickMenuEdit, this)); 
-	registar.add("Pick.Teleport", boost::bind(&FSPanelClassifieds::onClickTeleport, this));
-	registar.add("Pick.Map", boost::bind(&FSPanelClassifieds::onClickMap, this));
-	registar.add("Pick.Delete", boost::bind(&FSPanelClassifieds::onClickDelete, this));
+	registar.add("Classified.Info", boost::bind(&FSPanelClassifieds::onClickInfo, this));
+	registar.add("Classified.Edit", boost::bind(&FSPanelClassifieds::onClickMenuEdit, this)); 
+	registar.add("Classified.Teleport", boost::bind(&FSPanelClassifieds::onClickTeleport, this));
+	registar.add("Classified.Map", boost::bind(&FSPanelClassifieds::onClickMap, this));
+	registar.add("Classified.Delete", boost::bind(&FSPanelClassifieds::onClickDelete, this));
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registar;
-	enable_registar.add("Pick.Enable", boost::bind(&FSPanelClassifieds::onEnableMenuItem, this, _2));
+	enable_registar.add("Classified.Enable", boost::bind(&FSPanelClassifieds::onEnableMenuItem, this, _2));
 
-	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>("menu_picks.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar plus_registar;
-	plus_registar.add("Picks.Plus.Action", boost::bind(&FSPanelClassifieds::onPlusMenuItemClicked, this, _2));
-	mEnableCallbackRegistrar.add("Picks.Plus.Enable", boost::bind(&FSPanelClassifieds::isActionEnabled, this, _2));
-	mPlusMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_picks_plus.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>("menu_classifieds.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+    
+	childSetAction(XML_BTN_NEW, boost::bind(&FSPanelClassifieds::createNewClassified, this));
 	
 	return TRUE;
-}
-
-void FSPanelClassifieds::onPlusMenuItemClicked(const LLSD& param)
-{
-	std::string value = param.asString();
-
-	if("new_classified" == value)
-	{
-		createNewClassified();
-	}
-}
-
-bool FSPanelClassifieds::isActionEnabled(const LLSD& userdata) const
-{
-	std::string command_name = userdata.asString();
-
-	if (command_name == "new_pick" && LLAgentPicksInfo::getInstance()->isPickLimitReached())
-	{
-		return false;
-	}
-
-	return true;
 }
 
 bool FSPanelClassifieds::isClassifiedPublished(FSClassifiedItem* c_item)
@@ -303,19 +270,6 @@ void FSPanelClassifieds::onClosePanel()
 
 void FSPanelClassifieds::onListCommit(const LLFlatListView* f_list)
 {
-	// Make sure only one of the lists has selection.
-	// if(f_list == mPicksList)
-	// {
-		// mClassifiedsList->resetSelection(true);
-	// }
-	// else if(f_list == mClassifiedsList)
-	// {
-		// mPicksList->resetSelection(true);
-	// }
-	// else
-	// {
-		// llwarns << "Unknown list" << llendl;
-	// }
 
 	updateButtons();
 }
@@ -439,15 +393,6 @@ void FSPanelClassifieds::updateButtons()
 	}
 }
 
-void FSPanelClassifieds::onClickPlusBtn()
-{
-	LLRect rect(getChildView(XML_BTN_NEW)->getRect());
-
-	mPlusMenu->updateParent(LLMenuGL::sMenuContainer);
-	mPlusMenu->setButtonRect(rect, this);
-	LLMenuGL::showPopup(this, mPlusMenu, rect.mLeft, rect.mTop);
-}
-
 void FSPanelClassifieds::createNewClassified()
 {
 	FSPanelClassifiedEdit* panel = NULL;
@@ -485,7 +430,6 @@ void FSPanelClassifieds::openClassifiedInfo()
 void FSPanelClassifieds::openClassifiedInfo(const LLSD &params)
 {
 	createClassifiedInfoPanel();
-	// getProfilePanel()->openPanel(mPanelClassifiedInfo, params);
 	openPanel(mPanelClassifiedInfo, params);
 }
 
@@ -498,7 +442,6 @@ void FSPanelClassifieds::openClassifiedEdit(const LLSD& params)
 
 void FSPanelClassifieds::onPanelPickClose(LLPanel* panel)
 {
-	// getProfilePanel()->closePanel(panel);
 	closePanel(panel);
 }
 
@@ -656,7 +599,6 @@ void FSPanelClassifieds::editClassified(const LLUUID&  classified_id)
 		createClassifiedEditPanel(&panel);
 		mEditClassifiedPanels[c_item->getClassifiedId()] = panel;
 	}
-	// getProfilePanel()->openPanel(panel, params);
 	openPanel(panel, params);
 	panel->setPosGlobal(c_item->getPosGlobal());
 }
@@ -683,19 +625,9 @@ bool FSPanelClassifieds::onEnableMenuItem(const LLSD& user_data)
 	return true;
 }
 
-// inline FSPanelClassifieds* FSPanelClassifieds::getProfilePanel()
-// {
-	// llassert_always(NULL != mProfilePanel);
-	// return mProfilePanel;
-	// return this;
-// }
-
 //hack
 void FSPanelClassifieds::openPanel(LLPanel* panel, const LLSD& params)
 {
-	// Hide currently visible panel (STORM-690).
-	// mChildStack.push();
-
 	// Add the panel or bring it to front.
 	if (panel->getParent() != this)
 	{
@@ -724,9 +656,6 @@ void FSPanelClassifieds::closePanel(LLPanel* panel)
 	if (panel->getParent() == this) 
 	{
 		removeChild(panel);
-
-		// Make the underlying panel visible.
-		// mChildStack.pop();
 
 		// Prevent losing focus by the floater
 		const child_list_t* child_list = getChildList();

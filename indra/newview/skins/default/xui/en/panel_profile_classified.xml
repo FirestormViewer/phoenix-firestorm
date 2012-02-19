@@ -79,10 +79,10 @@
   value="No Classifieds" />
 
     <flat_list_view
-     top="4"
+     top="6"
      left="0"
      height="385"
-     width="313"
+     width="412"
      follows="all"
      layout="topleft"
      name="classifieds_list"
@@ -100,7 +100,7 @@
      label="bottom_panel"
      layout="bottom"
      name="edit_panel"
-     width="313">
+     width="412">
 
   <!-- Replaces LLs button panel as they had not put buttons in -->
 
@@ -114,7 +114,7 @@
                    layout="topleft"
                    left="0"
                    name="new_btn"
-                   tool_tip="Create a new pick or classified at the current location"
+                   tool_tip="Create a classified at the current location"
                    top="0"
                    width="31" />
 
@@ -127,7 +127,7 @@
                    left_pad="2"
                    top="0"
                    name="dummy_icon"
-                   width="237" />
+                   width="336" />
 
                   <dnd_button
                    follows="bottom|right"
@@ -153,7 +153,7 @@
          height="30"
          top_pad="2"
          name="buttons_cucks"
-         width="313">
+         width="412">
 
       <layout_stack
           follows="bottom|left|right"
@@ -163,7 +163,7 @@
           name="buttons_cucks_ls"
           orientation="horizontal"
           top="0"
-          width="309">
+          width="408">
 
           <layout_panel
               follows="bottom|left|right"
@@ -174,7 +174,7 @@
               user_resize="false"
               auto_resize="true"
               top="0"
-              width="95">
+              width="130">
                <button
                  enabled="false"
                  follows="top|left|right"
@@ -184,7 +184,7 @@
                  name="info_btn"
                  tab_stop="false"
                  tool_tip="Show pick information"
-                 width="95" />
+                 width="130" />
           </layout_panel>
 
           <layout_panel
@@ -195,7 +195,7 @@
               name="teleport_btn_lp"
               user_resize="false"
               auto_resize="true"
-              width="117">
+              width="150">
                 <button
                  enabled="false"
                  follows="top|left|right"
@@ -205,7 +205,7 @@
                  name="teleport_btn"
                  tab_stop="false"
                  tool_tip="Teleport to the corresponding area"
-                 width="117" />
+                 width="150" />
           </layout_panel>
 
           <layout_panel
@@ -216,7 +216,7 @@
               user_resize="false"
               auto_resize="true"
               left_pad="2"
-              width="90">
+              width="122">
                 <button
                  enabled="false"
                  follows="top|left|right"
@@ -226,7 +226,7 @@
                  name="show_on_map_btn"
                  tab_stop="false"
                  tool_tip="Show the corresponding area on the World Map"
-                 width="90" />
+                 width="122" />
           </layout_panel>
     </layout_stack>
     </panel>
@@ -234,10 +234,10 @@
     <text
 	 type="string"
      follows="all"
-     height="185"
+     height="200"
      width="300"
      layout="topleft"
-     left="10"
+     left="20"
      name="picks_panel_text"
      wrap="true"
      top="60"

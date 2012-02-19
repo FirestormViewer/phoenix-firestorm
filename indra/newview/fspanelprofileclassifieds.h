@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLPANELPICKS_H
-#define LL_LLPANELPICKS_H
+#ifndef FS_FSPANELCLASSIFIEDS_H
+#define FS_FSPANELCLASSIFIEDS_H
 
 #include "llpanel.h"
 #include "v3dmath.h"
@@ -34,7 +34,6 @@
 #include "fspanelprofile.h"
 #include "llregistry.h"
 
-class LLAccordionCtrlTab;
 class LLMessageSystem;
 class LLVector3d;
 class FSPanelProfileTab;
@@ -42,7 +41,6 @@ class LLAgent;
 class LLMenuGL;
 class FSClassifiedItem;
 class LLFlatListView;
-class LLToggleableMenu;
 class FSPanelClassifiedInfo;
 class FSPanelClassifiedEdit;
 
@@ -83,9 +81,6 @@ private:
 	void onClickTeleport();
 	void onClickMap();
 
-	void onPlusMenuItemClicked(const LLSD& param);
-	bool isActionEnabled(const LLSD& userdata) const;
-
 	bool isClassifiedPublished(FSClassifiedItem* c_item);
 
 	void onListCommit(const LLFlatListView* f_list);
@@ -93,7 +88,6 @@ private:
 	//------------------------------------------------
 	// Callbacks which require panel toggling
 	//------------------------------------------------
-	void onClickPlusBtn();
 	void onClickInfo();
 	void onPanelPickClose(LLPanel* panel);
 	void onPanelClassifiedSave(FSPanelClassifiedEdit* panel);
@@ -115,8 +109,6 @@ private:
 	virtual void onDoubleClickClassifiedItem(LLUICtrl* item);
 	virtual void onRightMouseUpItem(LLUICtrl* item, S32 x, S32 y, MASK mask);
 
-	// FSPanelClassifieds* getProfilePanel();
-
 	void createClassifiedInfoPanel();
 	void createClassifiedEditPanel(FSPanelClassifiedEdit** panel);
     
@@ -124,10 +116,8 @@ private:
     void closePanel(LLPanel* panel);
 
 	LLMenuGL* mPopupMenu;
-	// FSPanelClassifieds* mProfilePanel;
 	LLFlatListView* mClassifiedsList;
 	FSPanelClassifiedInfo* mPanelClassifiedInfo;
-	LLToggleableMenu* mPlusMenu;
 	LLUICtrl* mNoItemsLabel;
 
 	// <classified_id, edit_panel>
@@ -212,4 +202,4 @@ private:
 	S32 mPriceForListing;
 };
 
-#endif // LL_LLPANELPICKS_H
+#endif // FS_FSPANELCLASSIFIEDS_H
