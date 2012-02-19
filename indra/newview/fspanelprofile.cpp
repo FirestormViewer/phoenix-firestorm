@@ -281,6 +281,17 @@ BOOL FSPanelProfile::postBuild()
     LLToggleableMenu* profile_menu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>("menu_profile_overflow.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
         getChild<LLMenuButton>("overflow_btn")->setMenu(profile_menu, LLMenuButton::MP_TOP_RIGHT);
 
+    // allow skins to have copy buttons for name and avatar URI -Zi
+    LLButton* copy_uri_button=findChild<LLButton>("copy_uri_button");
+    LLButton* copy_name_button=findChild<LLButton>("copy_name_button");
+
+    if(copy_uri_button)
+        copy_uri_button->setCommitCallback(boost::bind(&FSPanelProfile::onCopyURI, this));
+
+    if(copy_name_button)
+        copy_name_button->setCommitCallback(boost::bind(&FSPanelProfile::onCopyToClipboard, this));
+    // allow skins to have copy buttons for name and avatar URI -Zi
+
     LLVoiceClient::getInstance()->addObserver((LLVoiceClientStatusObserver*)this);
 
     return TRUE;
@@ -472,6 +483,7 @@ void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
     }
 
     args["[AGE]"] = LLDateUtil::ageFromDate( avatar_data->born_on, LLDate::now());
+    args["[AGEDAYS]"] = LLSD((S32) (LLDate::now().secondsSinceEpoch()-avatar_data->born_on.secondsSinceEpoch())/86400).asString();
     std::string register_date = getString("RegisterDateFormat", args);
     getChild<LLUICtrl>("register_date")->setValue(register_date );
     getChild<LLUICtrl>("sl_description_edit")->setValue(avatar_data->about_text);
