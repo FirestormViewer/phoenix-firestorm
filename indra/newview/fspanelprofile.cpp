@@ -704,6 +704,7 @@ void FSPanelProfile::processOnlineStatus(bool online)
     std::string status = getString(online ? "status_online" : "status_offline");
 
     mStatusText->setValue(status);
+    mStatusText->setColor(online ? LLColor4::green : LLColor4::red);
 }
 
 void FSPanelProfile::enableControls()
