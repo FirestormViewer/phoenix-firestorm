@@ -11,7 +11,7 @@
 <panel
  top="0"
  left="0"
- fallows="all"
+ follows="all"
  width="420"
  height="500"
  name="panel_profile_view">
