@@ -51,6 +51,7 @@
      use_ellipses="true"
      value="Unknown"
      right="-2" />
+
 <!--
     We don't want the "hover buttons" to appear, since they only waste space
     and their function is redundant
@@ -67,10 +68,10 @@
      top_delta="-2"
      width="16" />
 
-     <button
+    <button
      follows="right"
      height="20"
-     image_overlay="Web_Profile_Off"
+     image_overlay="ForwardArrow_Off"
      layout="topleft"
      left_pad="5"
      right="-3"
