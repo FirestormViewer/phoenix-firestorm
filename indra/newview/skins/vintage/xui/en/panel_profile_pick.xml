@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border_visible="true"
+ top="0"
+ left="0"
+ height="360"
+ width="310"
+ layout="topleft"
+ follows="all"
+ name="panel_pick_info"
+ help_topic="profile_pick_info" >
+ 
+    <panel.string
+     name="location_notice">
+(will update after save)
+    </panel.string>
+
+    <layout_stack
+     orientation="horizontal"
+     top="10"
+     left="6"
+     right="-6"
+     height="180"
+     follows="left|top|right"
+     layout="topleft">
+
+    <layout_panel
+     width="4" />
+
+    <layout_panel
+     auto_resize="false"
+     width="290">
+
+    <texture_picker
+     top="0"
+     left="0"
+     height="180"
+     width="290"
+     layout="topleft"
+     follows="left|top"
+     name="pick_snapshot"
+     fallback_image="default_land_picture.j2c" />
+
+    </layout_panel>
+
+    <layout_panel
+     width="4" />
+
+    </layout_stack>
+
+    <line_editor
+     top_pad="-15"
+     left="6"
+     height="20"
+     right="-6"
+     layout="topleft"
+     follows="left|right|top"
+     enabled="false"
+     name="pick_name" />
+
+    <text_editor
+     top_pad="8"
+     height="75"
+     right="-6"
+     layout="topleft"
+     follows="all"
+     border_visible="true"
+     v_pad="3"
+     h_pad="4"
+     enabled="false"
+     max_length="1023"
+     name="pick_desc"
+     word_wrap="true"
+     allow_html="true" />
+<!--
+    <line_editor
+     top_pad="10"
+     left="10"
+     height="20"
+     width="290"
+     layout="topleft"
+     follows="left|bottom"
+     name="pick_location"
+     enabled="false" />
+-->
+    <text
+     left="6"
+     height="20"
+     right="-6"
+     layout="topleft"
+     follows="left|bottom"
+     name="pick_location"
+     border_visible="true"
+     enabled="false"
+     type="string"
+     length="1"
+     word_wrap="false" >
+        loading...
+    </text>
+
+    <button
+     left="6"
+     height="20"
+     width="80"
+     layout="topleft"
+     follows="left|bottom"
+     label="Teleport"
+     name="teleport_btn" />
+
+    <button
+     left_pad="5"
+     height="20"
+     width="100"
+     bottom_delta="0"
+     layout="topleft"
+     follows="left|bottom"
+     label="Show on Map"
+     name="show_on_map_btn" />
+
+    <button
+     left_pad="5"
+     height="20"
+     width="100"
+     layout="topleft"
+     follows="left|bottom"
+     label="Set Location"
+     tooltip="Set to Current Location"
+     name="set_to_curr_location_btn"
+     visible="false" />
+     
+    <button
+     left="6"
+     height="20"
+     width="80"
+     layout="topleft"
+     follows="left|bottom"
+     label="Save Pick"
+     name="save_changes_btn"
+     visible="true" />
+
+</panel>
