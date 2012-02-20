@@ -96,11 +96,7 @@ public:
 		Mandatory<std::string>	name;
 		Mandatory<std::string>	tooltip_ref;
 
-		// <FS:Zi> Add control_name to toolbar buttons
-		//         so we can have control_name instead of aall these functions.
-		// Mandatory<std::string>	execute_function;
-		Optional<std::string>	execute_function;
-		// </FS:Zi>
+		Mandatory<std::string>	execute_function;
 		Optional<LLSD>			execute_parameters;
 
 		Optional<std::string>	execute_stop_function;
@@ -114,8 +110,6 @@ public:
 
 		Optional<std::string>	is_starting_function;
 		Optional<LLSD>			is_starting_parameters;
-
-		Optional<std::string>	control_name;	// <FS:Zi> Add control_name to toolbar buttons
 
 		Params();
 	};
@@ -167,13 +161,6 @@ private:
 
 	std::string mIsStartingFunction;
 	LLSD        mIsStartingParameters;
-
-// <FS;Zi> Add control_variable to commands in toolbar
-	std::string mControlVariable;
-
-public:
-	const std::string& controlVariableName() const { return mControlVariable; }
-// </FS:Zi>
 };
 
 
