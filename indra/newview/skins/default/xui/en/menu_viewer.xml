@@ -762,7 +762,7 @@
             <menu_item_call
              label="Midnight"
              name="Midnight"
-			 shortcut="control|shift|Z">
+			 shortcut="control|shift|D">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="midnight" />
