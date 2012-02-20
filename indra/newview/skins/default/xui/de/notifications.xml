@@ -404,6 +404,9 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 	</notification>
 	<notification name="ChangeSkin">
 		Die neue Benutzeroberfläche wird nach einem Neustart von [APP_NAME] angezeigt.
+		<form name="form">
+			<ignore name="ignore" text="Eine andere Skin wurde ausgewählt."/>
+		</form>
 	</notification>
 	<notification name="ChangeLanguage">
 		Die Sprachänderung tritt nach Neustart von [APP_NAME] in Kraft.
@@ -1581,8 +1584,17 @@ Versuchen Sie es später erneut.
 		Ihr Anzeigenamen muss Buchstaben enthalten und kann nicht ausschließlich aus Satzzeichen bestehen.
 	</notification>
 	<notification name="DisplayNameUpdate">
-		[OLD_NAME] ([OLD_NAME] ([SLID]) hat einen neuen Namen: [NEW_NAME].
+		[OLD_NAME] ([SLID]) hat einen neuen Namen: [NEW_NAME].
 	</notification>
+	<notification name="DisplayNameUpdateRemoveAlias">
+		[OLD_NAME] ([SLID]) hat einen neuen Namen: [NEW_NAME].
+Dieser Avatar hat ein Alias gesetzt, das [NEW_NAME] ersetzen wird.
+Soll dieses entfernt werden?
+		<form name="form">
+			<button name="Yes" text="Ja"/>
+			<button name="No" text="Nein"/>
+		</form>
+	</notification> 
 	<notification name="OfferTeleport">
 		Teleport an Ihre Position mit der folgenden Meldung anbieten?
 		<form name="form">
