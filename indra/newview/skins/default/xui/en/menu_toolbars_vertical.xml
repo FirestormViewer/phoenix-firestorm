@@ -16,6 +16,31 @@
                              parameter="toybox" />
   </menu_item_call>
   <menu_item_separator layout="topleft" />
+  <menu_item_check label="Top Aligned"
+                   layout="topleft"
+                   name="top_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="top" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="top" />
+  </menu_item_check>
+  <menu_item_check label="Center Aligned"
+                   layout="topleft"
+                   name="center_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="center" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="center" />
+  </menu_item_check>
+  <menu_item_check label="Bottom Aligned"
+                   layout="topleft"
+                   name="bottom_aligned">
+    <on_click function="Toolbars.SetAlignment"
+              parameter="bottom" />
+    <on_check function="Toolbars.CheckAlignment"
+              parameter="bottom" />
+  </menu_item_check>
+  <menu_item_separator layout="topleft" />
   <menu_item_check label="Icons and labels"
                    layout="topleft"
                    name="icons_with_text">

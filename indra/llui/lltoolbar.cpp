@@ -75,6 +75,17 @@ namespace LLInitParam
 		declare("top",		SIDE_TOP);
 	}
 
+	// <FS:Zi> Add our alignment name to enum mappings for XUI load/save
+	void TypeValues<Alignment>::declareValues()
+	{
+		declare("left",		ALIGN_START);
+		declare("top",		ALIGN_START);
+		declare("center",	ALIGN_CENTER);
+		declare("right",	ALIGN_END);
+		declare("bottom",	ALIGN_END);
+	}
+	// </FS:Zi>
+
 	// <FS:Zi> Add our layout name to enum mappings for XUI load/save
 	void TypeValues<LayoutStyle>::declareValues()
 	{
@@ -99,11 +110,12 @@ LLToolBar::Params::Params()
 	pad_bottom("pad_bottom"),
 	pad_between("pad_between"),
 	min_girth("min_girth"),
-	// <FS:Zi> Add our button (text-only) and layout style parameters
+	// <FS:Zi> Add our button (text-only) and layout style parameters, as well as alignment settings
 	// button_panel("button_panel")
 	button_panel("button_panel"),
 	button("button"),
-	layout_style("layout_style",LLToolBarEnums::LAYOUT_STYLE_NONE)
+	layout_style("layout_style",LLToolBarEnums::LAYOUT_STYLE_NONE),
+	alignment("alignment",LLToolBarEnums::ALIGN_CENTER)
 	// </FS:Zi>
 {}
 
@@ -132,10 +144,11 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	mButtonEnterSignal(NULL),
 	mButtonLeaveSignal(NULL),
 	mButtonRemoveSignal(NULL),
-	// <FS:Zi> add layout style initialisation
+	// <FS:Zi> add layout style and alignment initialisation
 	// mDragAndDropTarget(false)
 	mDragAndDropTarget(false),
-	mLayoutStyle(p.layout_style)
+	mLayoutStyle(p.layout_style),
+	mAlignment(p.alignment)
 	// </FS:Zi>
 {
 	mButtonParams[LLToolBarEnums::BTNTYPE_ICONS_WITH_TEXT] = p.button_icon_and_text;
@@ -166,7 +179,7 @@ void LLToolBar::createContextMenu()
 		enable_reg.add("Toolbars.CheckSetting", boost::bind(&LLToolBar::isSettingChecked, this, _2));
 
 		std::string menu_xml_name;		// <FS:Zi> Split menu XML files to have Horizontal and Vertical versions
-		// <FS:Zi> Add commit handlers for layout options in the context menu if this is a horizontal toolbar
+		// <FS:Zi> Add commit handlers for layout and alignment options in the context menu if this is a horizontal toolbar
 		LLLayoutStack::ELayoutOrientation orientation = getOrientation(mSideType);
 		if(orientation == LLLayoutStack::HORIZONTAL)
 		{
@@ -178,6 +191,8 @@ void LLToolBar::createContextMenu()
 		{
 			menu_xml_name="menu_toolbars_vertical.xml";
 		}
+		commit_reg.add("Toolbars.SetAlignment", boost::bind(&LLToolBar::onAlignmentChanged, this, _2));
+		enable_reg.add("Toolbars.CheckAlignment", boost::bind(&LLToolBar::isAlignment, this, _2));
 		// </FS:Zi>
 
 		// Create the context menu
@@ -229,7 +244,11 @@ void LLToolBar::initFromParams(const LLToolBar::Params& p)
 	border_panel_p.user_resize = false;
 	border_panel_p.mouse_opaque = false;
 	
-	mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
+	// <FS:Zi> Add alignment options to toolbars
+	// mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
+	mStartCenteringPanel=LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
+	mCenteringStack->addChild(mStartCenteringPanel);
+	// </FS:Zi>
 
 	LLLayoutPanel::Params center_panel_p;
 	center_panel_p.name = "center_panel";
@@ -246,7 +265,11 @@ void LLToolBar::initFromParams(const LLToolBar::Params& p)
 	mButtonPanel = LLUICtrlFactory::create<LLPanel>(button_panel_p);
 	center_panel->addChild(mButtonPanel);
 	
-	mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
+	// <FS:Zi> Add alignment options to toolbars
+	// mCenteringStack->addChild(LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p));
+	mEndCenteringPanel=LLUICtrlFactory::create<LLLayoutPanel>(border_panel_p);
+	mCenteringStack->addChild(mEndCenteringPanel);
+	// </FS:Zi>
 
 	BOOST_FOREACH(LLCommandId id, p.commands)
 	{
@@ -881,6 +904,24 @@ void LLToolBar::updateLayoutAsNeeded()
 	// re-center toolbar buttons
 	mCenteringStack->updateLayout();
 
+	// <FS:Zi> Apply alignment settings
+	if(mAlignment==ALIGN_CENTER)
+	{
+		mStartCenteringPanel->setVisible(TRUE);
+		mEndCenteringPanel->setVisible(TRUE);
+	}
+	else if(mAlignment==ALIGN_START)
+	{
+		mStartCenteringPanel->setVisible(FALSE);
+		mEndCenteringPanel->setVisible(TRUE);
+	}
+	else if(mAlignment==ALIGN_END)
+	{
+		mStartCenteringPanel->setVisible(TRUE);
+		mEndCenteringPanel->setVisible(FALSE);
+	}
+	// <FS:Zi>
+
 	if (!mButtons.empty())
 	{
 		mButtonPanel->setVisible(TRUE);
@@ -1356,6 +1397,61 @@ const std::string LLToolBarButton::getToolTip() const
 	}
 
 	return tooltip;
+}
+
+// <FS:Zi> Returns the current alignment for saving in XML settings
+LLToolBarEnums::Alignment LLToolBar::getAlignment() const
+{
+	return mAlignment;
+}
+
+// <FS:Zi> Sets the alignment for this panel when loading the XML settings
+void LLToolBar::setAlignment(LLToolBarEnums::Alignment alignment)
+{
+	mAlignment=alignment;
+	mNeedsLayout=true;
+}
+
+// <FS:Zi> Context menu callback function to display checkmarks on alignment options
+BOOL LLToolBar::isAlignment(const LLSD& userdata)
+{
+	BOOL retval=FALSE;
+
+	const std::string alignment=userdata.asString();
+
+	if(alignment=="center")
+	{
+		retval=(mAlignment==ALIGN_CENTER);
+	}
+	else if(alignment=="left" || alignment=="top")
+	{
+		retval=(mAlignment==ALIGN_START);
+	}
+	else if(alignment=="right" || alignment=="bottom")
+	{
+		retval=(mAlignment==ALIGN_END);
+	}
+
+	return retval;
+}
+
+// <FS:Zi> Context menu callback function to set the alignment on click
+void LLToolBar::onAlignmentChanged(const LLSD& userdata)
+{
+	const std::string alignment=userdata.asString();
+
+	if(alignment=="center")
+	{
+		setAlignment(ALIGN_CENTER);
+	}
+	else if(alignment=="left" || alignment=="top")
+	{
+		setAlignment(ALIGN_START);
+	}
+	else if(alignment=="right" || alignment=="bottom")
+	{
+		setAlignment(ALIGN_END);
+	}
 }
 
 // <FS:Zi> Returns the current layout style for saving in XML settings

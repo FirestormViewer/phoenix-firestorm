@@ -135,8 +135,17 @@ namespace LLToolBarEnums
 
 	LLLayoutStack::ELayoutOrientation getOrientation(SideType sideType);
 
+	// <FS:Zi> Add alignment settings
+	enum Alignment
+	{
+		ALIGN_START,	// left (horizontal), top (vertical)
+		ALIGN_END,		// right (horizontal), bottom (vertical)
+		ALIGN_CENTER
+	};
+	// </FS:Zi>
+
 	// <FS:Zi> Add equalize and fill layout styles
-		enum LayoutStyle
+	enum LayoutStyle
 	{
 		LAYOUT_STYLE_NONE,
 		LAYOUT_STYLE_EQUALIZE,
@@ -160,6 +169,14 @@ namespace LLInitParam
 	{
 		static void declareValues();
 	};
+
+	// <FS:Zi> Template declaration to make mapping from alignment enum to string work for load/save XML settings
+	template<>
+	struct TypeValues<LLToolBarEnums::Alignment> : public TypeValuesHelper<LLToolBarEnums::Alignment>
+	{
+		static void declareValues();
+	};
+	// </FS:Zi>
 
 	// <FS:Zi> Template declaration to make mapping from layout enum to string work for load/save XML settings
 	template<>
@@ -204,6 +221,7 @@ public:
 		Optional<LLPanel::Params>				button_panel;
 
 		Optional<LLToolBarEnums::LayoutStyle>	layout_style;	// <FS:Zi> Add layout style parameter to XUI
+		Optional<LLToolBarEnums::Alignment>		alignment;		// <FS:Zi> Add alignment parameter to XUI
 
 		Params();
 	};
@@ -327,17 +345,30 @@ private:
 
 	std::string						mButtonTooltipSuffix;
 
-// <FS:Zi> Layout context menu callbacks
+// <FS:Zi> Layout and alignment helper functions and member variables
+
+	// context menu callbacks
+	BOOL							isAlignment(const LLSD& userdata);
+	void							onAlignmentChanged(const LLSD& userdata);
+
+	// context menu callbacks
 	BOOL							isLayoutStyle(const LLSD& userdata);
 	void							onLayoutStyleChanged(const LLSD& userdata);
-// </FS:Zi>
 
-// <FS:Zi> Layout accessor functions and member variable
 public:
+	// accessors
 	void							setLayoutStyle(LLToolBarEnums::LayoutStyle layout_style);
 	LLToolBarEnums::LayoutStyle		getLayoutStyle() const;
 
+	void							setAlignment(LLToolBarEnums::Alignment alignment);
+	LLToolBarEnums::Alignment		getAlignment() const;
+
 	LLToolBarEnums::LayoutStyle		mLayoutStyle;
+	LLToolBarEnums::Alignment		mAlignment;
+
+	// layout panel pointers to control alignment
+	LLPanel*						mStartCenteringPanel;
+	LLPanel*						mEndCenteringPanel;
 // </FS:Zi>
 };
 

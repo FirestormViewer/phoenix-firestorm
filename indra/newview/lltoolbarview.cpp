@@ -60,9 +60,10 @@ bool isToolDragged()
 
 LLToolBarView::Toolbar::Toolbar()
 :	button_display_mode("button_display_mode"),
-	// <FS:Zi> Added layout style parameter
+	// <FS:Zi> Added layout style and alignment parameters
 	// commands("command")
 	commands("command"),
+	button_alignment("button_alignment"),
 	button_layout_style("button_layout_style")
 	// </FS:Zi>
 {}
@@ -278,7 +279,13 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.left_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_LEFT]->setButtonType(button_type);
 		}
-		// <FS:Zi> Load left toolbar layout from XML
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.left_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.left_toolbar.button_alignment;
+			mToolbars[TOOLBAR_LEFT]->setAlignment(alignment);
+		}
+
 		if (toolbar_set.left_toolbar.button_layout_style.isProvided())
 		{
 			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.left_toolbar.button_layout_style;
@@ -300,7 +307,13 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.right_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_RIGHT]->setButtonType(button_type);
 		}
-		// <FS:Zi> Load right toolbar layout from XML
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.right_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.right_toolbar.button_alignment;
+			mToolbars[TOOLBAR_RIGHT]->setAlignment(alignment);
+		}
+
 		if (toolbar_set.right_toolbar.button_layout_style.isProvided())
 		{
 			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.right_toolbar.button_layout_style;
@@ -322,7 +335,13 @@ bool LLToolBarView::loadToolbars(bool force_default)
 			LLToolBarEnums::ButtonType button_type = toolbar_set.bottom_toolbar.button_display_mode;
 			mToolbars[TOOLBAR_BOTTOM]->setButtonType(button_type);
 		}
-		// <FS:Zi> Load bottom toolbar layout from XML
+		// <FS:Zi> Load left toolbar layout and alignment from XML
+		if (toolbar_set.bottom_toolbar.button_alignment.isProvided())
+		{
+			LLToolBarEnums::Alignment alignment = toolbar_set.bottom_toolbar.button_alignment;
+			mToolbars[TOOLBAR_BOTTOM]->setAlignment(alignment);
+		}
+
 		if (toolbar_set.bottom_toolbar.button_layout_style.isProvided())
 		{
 			LLToolBarEnums::LayoutStyle layout_style = toolbar_set.bottom_toolbar.button_layout_style;
@@ -398,18 +417,21 @@ void LLToolBarView::saveToolbars() const
 	if (mToolbars[TOOLBAR_LEFT])
 	{
 		toolbar_set.left_toolbar.button_display_mode = mToolbars[TOOLBAR_LEFT]->getButtonType();
+		toolbar_set.left_toolbar.button_alignment = mToolbars[TOOLBAR_LEFT]->getAlignment();	// <FS_Zi>
 		toolbar_set.left_toolbar.button_layout_style = mToolbars[TOOLBAR_LEFT]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_LEFT]->getCommandsList(), toolbar_set.left_toolbar);
 	}
 	if (mToolbars[TOOLBAR_RIGHT])
 	{
 		toolbar_set.right_toolbar.button_display_mode = mToolbars[TOOLBAR_RIGHT]->getButtonType();
+		toolbar_set.right_toolbar.button_alignment = mToolbars[TOOLBAR_RIGHT]->getAlignment();	// <FS_Zi>
 		toolbar_set.right_toolbar.button_layout_style = mToolbars[TOOLBAR_RIGHT]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_RIGHT]->getCommandsList(), toolbar_set.right_toolbar);
 	}
 	if (mToolbars[TOOLBAR_BOTTOM])
 	{
 		toolbar_set.bottom_toolbar.button_display_mode = mToolbars[TOOLBAR_BOTTOM]->getButtonType();
+		toolbar_set.bottom_toolbar.button_alignment = mToolbars[TOOLBAR_BOTTOM]->getAlignment();	// <FS_Zi>
 		toolbar_set.bottom_toolbar.button_layout_style = mToolbars[TOOLBAR_BOTTOM]->getLayoutStyle();	// <FS_Zi>
 		addToToolset(mToolbars[TOOLBAR_BOTTOM]->getCommandsList(), toolbar_set.bottom_toolbar);
 	}
