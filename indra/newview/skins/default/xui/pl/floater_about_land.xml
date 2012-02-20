@@ -437,16 +437,10 @@ Mediów:
 			<panel.string name="access_estate_defined">
 				(Zdefiniowane przez Majątek)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Udostępniaj publicznie ([MATURITY]) (Pamiętaj: w przypadku braku zaznaczenia tej opcji widoczne będą linie bana.)
-			</panel.string>
 			<panel.string name="estate_override">
 				Jedna lub więcej z tych opcji ustawiona jest z poziomu Posiadłości
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Dostęp do tej Posiadłości:
-			</text>
-			<check_box label="Publiczny [MATURITY]" name="public_access"/>
+			<check_box label="Publiczny (Pamiętaj: w przypadku braku zaznaczenia tej opcji widoczne będą linie bana.)" name="public_access"/>
 			<text name="Only Allow">
 				Zablokuj dostęp dla:
 			</text>

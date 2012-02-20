@@ -446,15 +446,9 @@ Sadece büyük parseller aramada görünür.
 			<panel.string name="access_estate_defined">
 				(Gayrimenkul tarafından tanımlanır)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Kamusal Erişime İzin Ver ([MATURITY]) (Not: İşaret kaldırılırsa yasaklama çizgileri oluşur)
-			</panel.string>
 			<panel.string name="estate_override">
 				Bu seçeneklerden biri veya daha fazlası gayrimenkul düzeyinde ayarlanır
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Bu Parsele Erişim
-			</text>
 			<text name="Only Allow">
 				Erişimi şununla doğrulanan Sakinlerle Sınırla:
 			</text>

@@ -457,16 +457,10 @@ los medios:
 			<panel.string name="access_estate_defined">
 				(Definido por el Estado)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Permitir el acceso público ([MATURITY]) (Nota: Si no seleccionas esta opción, se crearán líneas de prohibición)
-			</panel.string>
 			<panel.string name="estate_override">
 				Una o más de esta opciones está configurada a nivel del estado
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Acceso a esta parcela
-			</text>
-			<check_box label="Permitir el acceso público [MATURITY]" name="public_access"/>
+			<check_box label="Permitir el acceso público (Nota: Si no seleccionas esta opción, se crearán líneas de prohibición)" name="public_access"/>
 			<text name="Only Allow">
 				Restringir el acceso a residentes verificados con:
 			</text>

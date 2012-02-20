@@ -435,15 +435,9 @@ Only large parcels can be listed in search.
 			<panel.string name="access_estate_defined">
 				(Defined by the Estate)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Allow Public Access ([MATURITY]) (Note: Unchecking this will create ban lines)
-			</panel.string>
 			<panel.string name="estate_override">
 				One or more of these options is set at the estate level
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				出入此地段
-			</text>
 			<text name="Only Allow">
 				Restrict Access to Residents verified by:
 			</text>

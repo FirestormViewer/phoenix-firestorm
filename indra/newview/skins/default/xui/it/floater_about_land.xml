@@ -460,16 +460,10 @@ Media:
 			<panel.string name="access_estate_defined">
 				(Definito dalla proprietà)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Consenti accesso pubblico ([MATURITY]) (Nota: se si rimuove la selezione vengono create linee di espulsione)
-			</panel.string>
 			<panel.string name="estate_override">
 				Una o più di queste impostazioni sono già impostate a livello regionale
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Accesso a questo terreno
-			</text>
-			<check_box label="Consenti l&apos;accesso pubblico [MATURITY]" name="public_access"/>
+			<check_box label="Consenti l&apos;accesso pubblico (Nota: se si rimuove la selezione vengono create linee di espulsione)" name="public_access"/>
 			<text name="Only Allow">
 				Consenti l&apos;accesso soltanto ai residenti verificati tramite:
 			</text>

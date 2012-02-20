@@ -457,16 +457,10 @@ Mídia:
 			<panel.string name="access_estate_defined">
 				(Definições do terreno)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Acesso para público: [MATURITY]) (Desmarcar esse item cria limites)
-			</panel.string>
 			<panel.string name="estate_override">
 				Uma ou mais destas opções está definida no nível de propriedade.
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Acesso a este lote
-			</text>
-			<check_box label="Acesso para público categoria [MATURITY]" name="public_access"/>
+			<check_box label="Acesso para público categoria (Desmarcar esse item cria limites)" name="public_access"/>
 			<text name="Only Allow">
 				Restringir acesso a contas confirmardas por:
 			</text>

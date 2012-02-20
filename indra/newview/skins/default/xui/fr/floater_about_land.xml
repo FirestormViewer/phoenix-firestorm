@@ -462,16 +462,10 @@ musique :
 			<panel.string name="access_estate_defined">
 				(défini par le domaine
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Autoriser l&apos;accès public ([MATURITY]) (Remarque : des lignes d&apos;interdiction seront créées si cette case n&apos;est pas cochée)
-			</panel.string>
 			<panel.string name="estate_override">
 				Au moins une de ces options est définie au niveau du domaine.
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Accès à cette parcelle
-			</text>
-			<check_box label="Autoriser l&apos;accès public [MATURITY]" name="public_access"/>
+			<check_box label="Autoriser l&apos;accès public (Remarque : des lignes d&apos;interdiction seront créées si cette case n&apos;est pas cochée)" name="public_access"/>
 			<text name="Only Allow">
 				Limiter l&apos;accès aux résidents vérifiés par :
 			</text>

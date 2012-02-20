@@ -446,15 +446,9 @@
 			<panel.string name="access_estate_defined">
 				(Определено на землевладении)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Разрешить общий доступ ([MATURITY]) (Снятие приведет к созданию линий запрета)
-			</panel.string>
 			<panel.string name="estate_override">
 				Часть этих параметров установлена на уровне землевладения
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Доступ на этот участок
-			</text>
 			<text name="Only Allow">
 				Разрешить доступ только жителям, у которых:
 			</text>

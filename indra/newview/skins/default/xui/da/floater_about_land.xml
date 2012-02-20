@@ -455,16 +455,10 @@ Kun større parceller kan vises i søgning.
 			<panel.string name="access_estate_defined">
 				(Defineret via estate)
 			</panel.string>
-			<panel.string name="allow_public_access">
-				Tillad offentlig adgang ([MATURITY]) (Bemærk: Ellers oprettes blokeringslinier)
-			</panel.string>
 			<panel.string name="estate_override">
 				En eller flere af disse valg er indstillet på estate niveau
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Adgang til denne parcel
-			</text>
-			<check_box label="Tillad offentlig adgang [MATURITY]" name="public_access"/>
+			<check_box label="Tillad offentlig adgang (Bemærk: Ellers oprettes blokeringslinier)" name="public_access"/>
 			<text name="Only Allow">
 				Blokér adgang for::
 			</text>
