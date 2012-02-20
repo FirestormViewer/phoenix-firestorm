@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="quickprefs" title="Schnelleinstellungen" width="280">
-<panel name="quickprefs" width="280">
-        <text name="Draw Distance" width="105" tool_tip="Legt die Entfernung fest, bis zu der Objekte dargestellt werden.">
-            Draw Distance:
-        </text>
-        <slider left_delta="101" name="DrawDistance"/>		
-        <text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
-            Max. Bandbreite:
-        </text>
-        <slider left_delta="108" name="max_bandwidth"/>		
-        <text name="Particles" width="105" tool_tip="Die maximale Anzahl an Partikel, die dargestellt werden sollen.">
-            Max. Partikel:
-        </text>
-        <slider left_delta="101" name="RenderMaxPartCount"/>
+	<panel name="quickprefs" width="280">
+		<text name="Draw Distance" width="105" tool_tip="Legt die Entfernung fest, bis zu der Objekte dargestellt werden.">
+			Draw Distance:
+		</text>
+		<slider left_delta="101" name="DrawDistance"/>		
+		<text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
+			Max. Bandbreite:
+		</text>
+		<slider left_delta="108" name="max_bandwidth"/>		
+		<text name="Particles" width="105" tool_tip="Die maximale Anzahl an Partikel, die dargestellt werden sollen.">
+			Max. Partikel:
+		</text>
+		<slider left_delta="101" name="RenderMaxPartCount"/>
 		<text name="Avatar Physics LOD" width="105" tool_tip="Legt das Detaillevel der Avatar-Physik fest.">
-            Av-Physik LOD:
-        </text>
-        <slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
-        <text name="LOD Factor" width="105"  tool_tip="Legt das Detaillevel von Primitiven fest (Multiplikator für den aktuellen Bildschirmbereich, für den das Detaillevel berechnet wird) [Standardwert variiert abhängig vom System]">
-            LOD-Faktor:
-        </text>
-        <slider left_delta="90" name="RenderVolumeLODFactor"/>		
-        <text name="Max Avatars" width="105" tool_tip="Legt fest wie viele Avatar gleichzeitig dargestellt werden sollen. Ein kleinerer Wert verbessert die Geschwindigkeit an belebten Orten deutlich. Avatar Impostors muss hierfür eingeschaltet sein. [Standardwert 12]">
-            Max. Avatare:
-        </text>
-        <slider left_delta="87" name="RenderAvatarMaxVisible"/>		
-        <text name="Height Offset" width="105" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
-            Höhenabstand:
-        </text>
-        <slider left_delta="87" name="AvatarZOffset"/>		
+			Av-Physik LOD:
+		</text>
+		<slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
+		<text name="LOD Factor" width="105"  tool_tip="Legt das Detaillevel von Primitiven fest (Multiplikator für den aktuellen Bildschirmbereich, für den das Detaillevel berechnet wird) [Standardwert variiert abhängig vom System]">
+			LOD-Faktor:
+		</text>
+		<slider left_delta="90" name="RenderVolumeLODFactor"/>		
+		<text name="Max Avatars" width="105" tool_tip="Legt fest wie viele Avatar gleichzeitig dargestellt werden sollen. Ein kleinerer Wert verbessert die Geschwindigkeit an belebten Orten deutlich. Avatar Impostors muss hierfür eingeschaltet sein. [Standardwert 12]">
+			Max. Avatare:
+		</text>
+		<slider left_delta="87" name="RenderAvatarMaxVisible"/>		
+		<text name="Height Offset" width="105" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
+			Höhenabstand:
+		</text>
+		<slider left_delta="87" name="AvatarZOffset"/>		
 		<text name="name_tags_textbox">
-            Avatarnamen:
-        </text>
+			Avatarnamen:
+		</text>
 		<radio_group left="45" name="Name_Tag_Preference">
 			<radio_item label="An" name="radio"/>
 			<radio_item label="Aus" name="radio2"/>
-        </radio_group>
-        <text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
-            WL-Himmel:
-        </text>
-        <combo_box left_delta="77" name="WLPresetsCombo"/>
-        <text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
-            WL-Wasser:
-        </text>
-        <combo_box left_delta="77" name="WaterPresetsCombo"/>
-</panel>
+		</radio_group>
+		<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
+			WL-Himmel:
+		</text>
+		<combo_box left_delta="77" name="WLPresetsCombo"/>
+		<text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
+			WL-Wasser:
+		</text>
+		<combo_box left_delta="77" name="WaterPresetsCombo"/>
+		<icon name="SkyDayCycle" tool_tip="Tageszeit ändern"/>
+		<button name="UseRegionWL" tool_tip="Windlight-Voreinstelleungen auf Regionsstandard zurücksetzen"/>
+	</panel>
 </floater>
