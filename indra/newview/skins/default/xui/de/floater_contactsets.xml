@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater" title="Kontakt-Sets">
+	<text name="lgg_fg_text1">
+		Set:
+	</text>
+	<text name="lgg_fg_text2a" width="110">
+		Zeige Nachrichten</text>
+	<text name="lgg_fg_text2b" width="110">
+		für dieses Set
+	</text>
+	<button label="Einstellungen" name="lgg_fg_openSettings" left_delta="108"/>
+	<button label="Set löschen" name="lgg_fg_groupDelete" left_delta="85"/>
+	<color_swatch label="Farbe" name="colorswatch" tool_tip="Klicken, um die Farbauswahl zu öffnen"/>
+	<text name="lgg_fg_text3">
+		Zeige:
+	</text>
+	<check_box label="Online" name="lgg_fg_showOnline"/>
+	<text name="lgg_fg_text4a" width="110">
+		Andere
+	</text>
+	<text name="lgg_fg_text4b" width="110">
+		Sets
+	</text>
+	<check_box label="Offline" name="lgg_fg_showOffline"/>
+	<check_box label="Alle Freunde" name="lgg_fg_showAllFriends" width="270"/>
+	<line_editor left_delta="90" name="lgg_fg_groupNewName" width="122" label="Name neues Set"/>
+	<button label="Set erstellen" name="lgg_fg_groupCreate" left_delta="123"/>
+</floater>

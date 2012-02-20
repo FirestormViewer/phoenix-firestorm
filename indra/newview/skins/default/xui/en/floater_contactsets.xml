@@ -17,7 +17,7 @@
     <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text4b" width="110">Sets</text>
     <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Offline" left_delta="40" mouse_opaque="true" name="lgg_fg_showOffline" radio_style="false" width="270" control_name="FSContactSetsShowOffline"/>
     <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="All Friends" left_delta="60" mouse_opaque="true" name="lgg_fg_showAllFriends" radio_style="false" width="270" control_name="FSContactSetsShowAllFriends"/>
-    <line_editor bevel_style="in" border_style="line" border_thickness="1" bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20" left_delta="82" max_length="256" mouse_opaque="true" tool_tip="" name="lgg_fg_groupNewName" width="130" label="New Set Name"/>
+    <line_editor bevel_style="in" border_style="line" border_thickness="1" bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20" left_delta="82" max_length_bytes="256" mouse_opaque="true" tool_tip="" name="lgg_fg_groupNewName" width="130" label="New Set Name"/>
    <button bottom_delta="0" follows="top|left" font="SansSerifSmall" height="20" label="Create Set" name="lgg_fg_groupCreate" left_delta="131" width="85"/>
  <panel name="draw_region" left="5" width="590" height="750" bottom="830" border="true" mouse_opaque="true" bevel_style="in" background_visible="false" background_opaque="true" follows="bottom|left|top|right" bg_opaque_color="1,1,1,0" bg_alpha_color="white" can_resize="false">
   </panel>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater_settings" title="Kontakt-Sets-Einstellungen">
+	<color_swatch name="colordefault" tool_tip="Standardfarbe für Freunde, die nicht in einer Gruppe sind. Hat nur Auswirkungen auf die Anzeige der Liste der Freundegruppen."/>
+	<text name="lgg_fg_text2a">
+		Standardfarbe für
+	</text>
+	<text name="lgg_fg_text2b" width="125">
+		Freunde in keinem Set
+	</text>
+	<slider name="FSContactSetsScrollSpeed" label="Scrollgeschwindigkeit" width="300" label_width="130" tool_tip="Geschwindigkeit, mit der durch die Liste gescrollt werden soll."/>
+	<check_box label="Online-Meldungen für ALLE Freunde als Toasts anzeigen (Deaktivieren für einzelne Sets)" name="ChatOnlineNotification"/>
+	<check_box label="Online-Meldungen für ALLE Freunde im Chat in der Nähe anzeigen (Deakt. für einzelne Sets)" name="OnlineOfflinetoNearbyChat"/>
+	<check_box label="Online-Meldungen für bestimmte Sets als Toasts anzeigen" name="FSContactSetsNotificationToast"/>
+	<check_box label="Online-Meldungen für bestimmte Sets im Chat in der Nähe anzeigen" name="FSContactSetsNotificationNearbyChat"/>
+	<check_box label="Farbe des Minimap-Icon eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeMiniMap"/>
+	<check_box label="Farbe des Namens-Tags eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeNameTag"/>
+	<check_box label="Farbe des Radarlisten-Eintrags eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeRadar"/>
+	<check_box label="Chatfarbe eines Freundes basiert auf dem Kontakt-Set" name="FSContactSetsColorizeChat"/>
+
+	<check_box label="Nur kleinen Bereich des Kontakt-Set-Fensters colorieren" name="FSContactSetsColorizeBar"/>
+	<check_box label="Text anstelle des Hintergrunds im Kontakt-Set-Fenster colorieren" name="FSContactSetsColorizeText"/>
+	<check_box label="STRG-Taste für Mehrfachauswahl notwendig" name="FSContactSetsRequireCTRL"/>
+	<check_box label="Zoom-Effekt verwenden" name="FSContactSetsDoZoom"/>
+	<check_box label="Farbliche Hervorhebung verwenden" name="FSContactSetsUseColorHighlight"/>
+	<slider left="250" name="FSContactSetsMaxColorStrength" width="210" label="Hintergrundstärke" label_width="100" tool_tip="Legt die Stärke der Hintergrundfarbe fest."/>
+
+	<check_box label="Zeige Ordner oberhalb der Kontakte (Dropdown-Menü verwenden, falls deaktiviert)" name="FSContactSetsShowFolders"/>
+	<check_box label="Zeige Profilbilder zusätzlich zu den Namen" name="FSContactSetsDrawProfileIcon"/>
+	<text name="lgg_fg_text3" width="100">
+		Namensformat:
+	</text>
+	<combo_box left_delta="90" name="lgg_fg_dispName">
+		<combo_item name="Legacy Names">
+			Altes Namensformat
+		</combo_item>
+		<combo_item name="Display Names (with Username)">
+			Anzeigename (Benutzername)
+		</combo_item>
+		<combo_item name="Display Names only">
+			Anzeigename
+		</combo_item>
+	</combo_box>
+	<text name="lgg_fg_text4" width="110">
+		Sortieren nach:
+	</text>
+	<combo_box left_delta="90" name="lgg_fg_sortName">
+		<combo_item name="Legacy Names">
+			Altes Namensformat
+		</combo_item>
+		<combo_item name="Display Names (with Username)">
+			Anzeigename (Benutzername)
+		</combo_item>
+		<combo_item name="Display Names only">
+			Anzeigename
+		</combo_item>
+	</combo_box>
+	<button label="OK" name="lgg_fg_okButton"/>
+</floater>
