@@ -2,6 +2,9 @@
 <context_menu name="Toolbars Popup">
 	<menu_item_call label="Diese Schaltfläche entfernen" name="Remove button"/>
 	<menu_item_call label="Symbolleistenschaltflächen..." name="Choose Buttons"/>
+	<menu_item_check label="Linksbündig ausrichten" name="left_aligned"/>
+	<menu_item_check label="Mittig ausrichten" name="center_aligned"/>
+	<menu_item_check label="Rechtsbündig ausrichten" name="right_aligned"/>
 	<menu_item_check label="Symbole und Beschriftungen" name="icons_with_text"/>
 	<menu_item_check label="Nur Symbole" name="icons_only"/>
 	<menu_item_check label="Nur Beschriftungen" name="text_only"/>
