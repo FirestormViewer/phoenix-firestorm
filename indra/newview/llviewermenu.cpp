@@ -7523,38 +7523,6 @@ class LLToolsSelectedScriptAction : public view_listener_t
 	}
 };
 
-class SetLogLevel : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		std::string newLevel=userdata.asString();
-
-		LLError::ELevel level=LLError::LEVEL_INFO;
-		if(newLevel=="all")
-			level=LLError::LEVEL_ALL;
-		else if(newLevel=="debug")
-			level=LLError::LEVEL_DEBUG;
-		else if(newLevel=="error")
-			level=LLError::LEVEL_ERROR;
-		else if(newLevel=="info")
-			level=LLError::LEVEL_INFO;
-		else if(newLevel=="warn")
-			level=LLError::LEVEL_WARN;
-		else if(newLevel=="none")
-			level=LLError::LEVEL_NONE;
-
-		LLError::setDefaultLevel(level);
-
-		std::string msg="New debug level: "+newLevel;
-
-		LLSD args;
-		args["MESSAGE"]=msg;
-		LLNotificationsUtil::add("SystemMessageTip",args);
-
-		return true;
-	}
-};
-
 void handle_selected_texture_info(void*)
 {
 	for (LLObjectSelection::valid_iterator iter = LLSelectMgr::getInstance()->getSelection()->valid_begin();
@@ -9282,9 +9250,6 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedToggleConsole(), "Advanced.ToggleConsole");
 	view_listener_t::addMenu(new LLAdvancedCheckConsole(), "Advanced.CheckConsole");
 	view_listener_t::addMenu(new LLAdvancedDumpInfoToConsole(), "Advanced.DumpInfoToConsole");
-
-	// Advanced > Debug Level
-	view_listener_t::addMenu(new SetLogLevel(), "Advanced.SetLogLevel");
 
 	// Advanced > HUD Info
 	view_listener_t::addMenu(new LLAdvancedToggleHUDInfo(), "Advanced.ToggleHUDInfo");

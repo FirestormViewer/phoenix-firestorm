@@ -265,54 +265,5 @@
          function="Floater.Toggle"
          parameter="notifications_console" />
       </menu_item_call>
-      <menu_item_separator />
-      <menu
-       create_jump_keys="true"
-       label="Set Loglevel"
-       name="Set Loglevel"
-       tear_off="true">
-        <menu_item_call
-          label="All"
-          name="Debug Level All">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="all" />
-        </menu_item_call>
-        <menu_item_call
-          label="Debug"
-          name="Debug Level Debug">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="debug" />
-        </menu_item_call>
-        <menu_item_call
-          label="Error"
-          name="Debug Level Error">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="error" />
-        </menu_item_call>
-        <menu_item_call
-          label="Info (Default)"
-          name="Debug Level Info">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="info" />
-        </menu_item_call>
-        <menu_item_call
-          label="Warn"
-          name="Debug Level Warn">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="warn" />
-        </menu_item_call>
-        <menu_item_call
-          label="None"
-          name="Debug Level None">
-          <on_click
-           function="Advanced.SetLogLevel"
-           parameter="none" />
-        </menu_item_call>
-      </menu>
     </menu>
 </menu_bar>
