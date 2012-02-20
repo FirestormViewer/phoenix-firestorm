@@ -1059,12 +1059,20 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	button_p.label = LLTrans::getString(commandp->labelRef());
 	button_p.tool_tip = LLTrans::getString(commandp->tooltipRef());
 
-	// <FS;Zi> Add control_variable to commands in toolbar if it's not read-only
-	if(!mReadOnly && !commandp->controlVariableName().empty())
+	// <FS;Zi> Add control_variable and checkbox_control to commands in toolbar if it's not read-only
+	if(!mReadOnly)
 	{
-		// set up button's control name and make it a toggle, so it works properly
-		button_p.control_name = commandp->controlVariableName();
-		button_p.is_toggle = TRUE;
+		if(!commandp->controlVariableName().empty())
+		{
+			// set up button's control name and make it a toggle, so it works properly
+			button_p.control_name = commandp->controlVariableName();
+			button_p.is_toggle = TRUE;
+		}
+
+		if(!commandp->checkboxControlVariableName().empty())
+		{
+			button_p.checkbox_control = commandp->checkboxControlVariableName();
+		}
 	}
 	// </FS:Zi>
 

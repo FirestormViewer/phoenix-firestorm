@@ -64,6 +64,7 @@ LLCommand::Params::Params()
 	, is_starting_function("is_starting_function")
 	, is_starting_parameters("is_starting_parameters")
 	, control_name("control_name")		// <FS:Zi> Add control_name to toolbar buttons
+	, checkbox_control("checkbox_control")		// <FS:Zi> Add checkbox control toggle
 {
 }
 
@@ -85,6 +86,7 @@ LLCommand::LLCommand(const LLCommand::Params& p)
 	, mIsStartingFunction(p.is_starting_function)
 	, mIsStartingParameters(p.is_starting_parameters)
 	, mControlVariable(p.control_name)		// <FS:Zi> Add control_name to toolbar buttons
+	, mCheckboxControlVariable(p.checkbox_control)	// <FS:Zi> Add checkbox control toggle
 {
 }
 

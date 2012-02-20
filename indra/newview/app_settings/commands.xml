@@ -279,6 +279,7 @@
            execute_parameters="animation_overrider"
            is_running_function="Floater.IsOpen"
            is_running_parameters="animation_overrider"
+           checkbox_control="UseAO"
            />
 
   <command name="webbrowser"
