@@ -80,9 +80,18 @@
      left="10"
      name="landmark_created_checkbox"
      top_pad="2"
-     width="190" />
+     width="210" />
 
     <check_box
+     control_name="FSShowDisplayNameUpdateNotification"
+     height="16"
+     label="When somebody changes their display name"
+     layout="topleft"
+     left_pad="10"
+     name="FSShowDisplayNameUpdateNotification"
+     width="180" />
+
+	<check_box
      control_name="ShowScriptErrors"
      follows="left|top"
      height="16"
