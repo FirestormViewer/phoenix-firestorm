@@ -239,38 +239,8 @@
                 auto_resize="true"
                 user_resize="true"
                 height="30"
-                width="724"
+                width="768"
                 mouse_opaque="false">
-
-    <!-- Panel to house the show/hide chat bar button -->
-    <panel name="open_chat_bar_button_panel"
-           left="0"
-           top="2"
-           height="30"
-           width="44"
-           follows="left|bottom"
-           layout="topleft"
-           bg_opaque_image="Rounded_Rect"
-           background_visible="true"
-           bg_opaque_image_overlay="MouseGray"
-           background_opaque="true">
-
-    <button name="open_chat_bar_button"
-            tool_tip="Show chat bar (Enter)"
-            label=""
-            image_overlay="nearbychat_18"
-            control_name="MainChatbarVisible"
-            chrome="true"
-            is_toggle="true"
-            left="2"
-            top="3"
-            height="24"
-            width="40"
-            layout="topleft"
-            follows="all" />
-
-    </panel>
-    <!-- Panel to house the show/hide chat bar button -->
 
     <toolbar layout="topleft"
              button_panel.bg_opaque_image="Rounded_Rect_Top"
