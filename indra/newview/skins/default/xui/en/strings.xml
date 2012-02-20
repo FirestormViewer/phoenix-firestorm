@@ -3893,7 +3893,7 @@ Try enclosing path to the editor with double quotes.
 <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Label">Quick prefs</string>
   <string name="Command_AO_Label">Animation Overrider</string>
-  <string name="Command_Webbrowser_Label">Web Browser</string>
+  <string name="Default_Chat_Bar_Label">Chat</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -3923,7 +3923,7 @@ Try enclosing path to the editor with double quotes.
 <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Tooltip">Quick preferences for changing often used settings</string>
   <string name="Command_AO_Tooltip">Animation Overrider</string>
-  <string name="Command_Webbrowser_Tooltip">Opens the internal web browser</string>
+  <string name="Default_Chat_Bar_Tooltip">Shows or hides the default chat bar</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>

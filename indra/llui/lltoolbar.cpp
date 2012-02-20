@@ -1017,6 +1017,16 @@ LLToolBarButton* LLToolBar::createButton(const LLCommandId& id)
 	button_p.name = commandp->name();
 	button_p.label = LLTrans::getString(commandp->labelRef());
 	button_p.tool_tip = LLTrans::getString(commandp->tooltipRef());
+
+	// <FS;Zi> Add control_variable to commands in toolbar if it's not read-only
+	if(!mReadOnly && !commandp->controlVariableName().empty())
+	{
+		// set up button's control name and make it a toggle, so it works properly
+		button_p.control_name = commandp->controlVariableName();
+		button_p.is_toggle = TRUE;
+	}
+	// </FS:Zi>
+
 	// <FS:Zi> Do not add an icon if we are using text only buttons
 	// button_p.image_overlay = LLUI::getUIImage(commandp->icon());
 	if(mButtonType!=BTNTYPE_TEXT_ONLY)

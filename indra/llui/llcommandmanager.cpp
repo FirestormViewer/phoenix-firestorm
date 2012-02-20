@@ -63,6 +63,7 @@ LLCommand::Params::Params()
 	, is_running_parameters("is_running_parameters")
 	, is_starting_function("is_starting_function")
 	, is_starting_parameters("is_starting_parameters")
+	, control_name("control_name")		// <FS:Zi> Add control_name to toolbar buttons
 {
 }
 
@@ -83,6 +84,7 @@ LLCommand::LLCommand(const LLCommand::Params& p)
 	, mIsRunningParameters(p.is_running_parameters)
 	, mIsStartingFunction(p.is_starting_function)
 	, mIsStartingParameters(p.is_starting_parameters)
+	, mControlVariable(p.control_name)		// <FS:Zi> Add control_name to toolbar buttons
 {
 }
 
