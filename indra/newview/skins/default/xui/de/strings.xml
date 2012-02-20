@@ -4956,6 +4956,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_AO_Label">
 		Animation Overrider
 	</string>
+	<string name="Command_Webbrowser_Label">
+		Webbrowser
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5033,6 +5036,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_AO_Tooltip">
 		Animation Overrider
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Öffnet den internen Webbrowser
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

@@ -9079,6 +9079,20 @@ void show_topinfobar_context_menu(LLView* ctrl, S32 x, S32 y)
 	LLMenuGL::showPopup(ctrl, show_topbarinfo_context_menu, x, y);
 }
 
+// <FS:Ansariel> For web browser toolbar button
+void toggleWebBrowser(const LLSD& sdParam)
+{
+	if (LLFloaterReg::instanceVisible("web_content"))
+	{
+		LLFloaterReg::hideInstance("web_content");
+	}
+	else
+	{
+		LLWeb::loadURLInternal(sdParam.asString());
+	}
+}
+// </FS:Ansariel> For web browser toolbar button
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -9587,4 +9601,7 @@ void initialize_menus()
 		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
 	}
 // [/RLVa:KB]
+
+	// <FS:Ansariel> Toggle internal web browser
+	commit.add("ToggleWebBrowser", boost::bind(&toggleWebBrowser, _2));
 }

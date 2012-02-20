@@ -281,4 +281,15 @@
            is_running_parameters="animation_overrider"
            />
 
+  <command name="webbrowser"
+           available_in_toybox="true"
+           icon="www_18"
+           label_ref="Command_Webbrowser_Label"
+           tooltip_ref="Command_Webbrowser_Tooltip"
+           execute_function="ToggleWebBrowser"
+           execute_parameters="http://www.google.com"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="web_content"
+           />
+
 </commands>
