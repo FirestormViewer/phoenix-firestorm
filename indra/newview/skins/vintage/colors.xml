@@ -227,4 +227,12 @@
 	<color
 		name="DefaultShadowLight"
 		reference="Black" />
+	<!-- for legacy profiles -->
+	<color
+		name="StatusUserOnline"
+		reference="LabelTextColor" />
+	<!-- for legacy profiles -->
+	<color
+		name="StatusUserOffline"
+		reference="LabelDisabledColor" />
 </colors>
