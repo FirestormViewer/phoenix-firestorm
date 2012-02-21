@@ -213,6 +213,10 @@ protected:
     virtual void enableControls();
 
 private:
+    void onClickSetName();
+    void onAvatarNameCacheSetName(const LLUUID& id, const LLAvatarName& av_name);
+
+private:
     typedef std::map<std::string,LLUUID>    group_map_t;
     group_map_t             mGroups;
     void                    openGroupProfile();

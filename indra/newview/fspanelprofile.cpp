@@ -56,6 +56,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llcallingcard.h"
 #include "llfloaterreg.h"
+#include "llfirstuse.h"
 #include "llnotificationsutil.h"
 #include "llnotificationsutil.h"
 #include "lltrans.h"
@@ -245,7 +246,7 @@ BOOL FSPanelProfile::postBuild()
     mStatusText->setVisible(false);
 
     LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-    registrar.add("Profile.Call",  boost::bind(&FSPanelProfile::onCallButtonClick, this));
+    registrar.add("Profile.Call",                   boost::bind(&FSPanelProfile::onCallButtonClick, this));
     registrar.add("Profile.Share",                  boost::bind(&FSPanelProfile::share, this));
     registrar.add("Profile.Kick",                   boost::bind(&FSPanelProfile::kick, this));
     registrar.add("Profile.Freeze",                 boost::bind(&FSPanelProfile::freeze, this));
@@ -263,6 +264,7 @@ BOOL FSPanelProfile::postBuild()
     childSetCommitCallback("block",                 boost::bind(&FSPanelProfile::toggleBlock,this),NULL);
     childSetCommitCallback("unblock",               boost::bind(&FSPanelProfile::toggleBlock,this),NULL);
     childSetCommitCallback("group_invite",          boost::bind(&FSPanelProfile::onGroupInvite,this),NULL);
+    childSetCommitCallback("set_name",              boost::bind(&FSPanelProfile::onClickSetName, this), NULL);
 
     LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable;
     enable.add("Profile.EnableCall",                boost::bind(&FSPanelProfile::enableCall, this));
@@ -312,6 +314,12 @@ void FSPanelProfile::onOpen(const LLSD& key)
         LLGroupList* group_list = getChild<LLGroupList>("group_list");
         group_list->setShowNone(false);
         group_list->enableForAgent(false);
+
+        if (LLAvatarNameCache::useDisplayNames())
+        {
+            getChild<LLUICtrl>("set_name")->setVisible( true );
+            getChild<LLUICtrl>("set_name")->setEnabled( true );
+        }
 
         getChild<LLTextBase>("sl_description_edit")->setParseHTML(false);
     }
@@ -747,6 +755,43 @@ void FSPanelProfile::updateButtons()
 
     bool enable_unblock_btn = LLAvatarActions::isBlocked(getAvatarId());
     getChildView("unblock")->setVisible(enable_unblock_btn);
+}
+
+void FSPanelProfile::onClickSetName()
+{	
+	LLAvatarNameCache::get(getAvatarId(), 
+			boost::bind(&FSPanelProfile::onAvatarNameCacheSetName,
+				this, _1, _2));	
+
+	LLFirstUse::setDisplayName(false);
+}
+
+void FSPanelProfile::onAvatarNameCacheSetName(const LLUUID& agent_id, const LLAvatarName& av_name)
+{
+	if (av_name.mDisplayName.empty())
+	{
+		// something is wrong, tell user to try again later
+		LLNotificationsUtil::add("SetDisplayNameFailedGeneric");
+		return;		
+	}
+
+	llinfos << "name-change now " << LLDate::now() << " next_update "
+		<< LLDate(av_name.mNextUpdate) << llendl;
+	F64 now_secs = LLDate::now().secondsSinceEpoch();
+
+	if (now_secs < av_name.mNextUpdate)
+	{
+		// if the update time is more than a year in the future, it means updates have been blocked
+		// show a more general message
+        const int YEAR = 60*60*24*365; 
+		if (now_secs + YEAR < av_name.mNextUpdate)
+		{
+			LLNotificationsUtil::add("SetDisplayNameBlocked");
+			return;
+		}
+	}
+	
+	LLFloaterReg::showInstance("display_name");
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -67,6 +67,16 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
 -->
 
+        <loading_indicator
+         top="4"
+         right="-10"
+         height="23"
+         width="23"
+         layout="topleft"
+         follows="top|right"
+         name="progress_indicator"
+         visible="false" />
+
         <text
          top="8"
          left="6"
@@ -102,6 +112,18 @@ KC: Use view_border's around text_editor's due to text render issues with border
          enabled="false"
          max_length="254"
          value="(loading...)" />
+
+        <button
+         left_pad="2"
+         height="20"
+         width="20"
+         layout="topleft"
+         follows="top|left"
+         name="set_name"
+         image_overlay="Edit_Wrench"
+         tool_tip="Set Display Name"
+         visible="false"
+         enabled="false" />
 
         <text
          top_pad="2"
@@ -140,25 +162,14 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="(loading...)" />
 
         <text
-         top="8"
+         left_pad="2"
          right="-6"
-         height="13"
-         width="70"
+         height="16"
          layout="topleft"
-         follows="top|right"
+         follows="left|top|right"
          name="status"
          halign="center"
-         text_color="LtGray_50"
          value="" />
-
-        <loading_indicator
-         top_pad="3"
-         height="23"
-         width="23"
-         layout="topleft"
-         follows="top|right"
-         name="progress_indicator"
-         visible="false" />
 
         <texture_picker
          top_pad="3"
