@@ -236,6 +236,7 @@
            is_enabled_parameters="speak"
            is_running_function="Agent.IsMicrophoneOn"
            is_running_parameters="speak"
+           checkbox_control="PushToTalkToggle"
            />
   <command name="view"
            available_in_toybox="true"
