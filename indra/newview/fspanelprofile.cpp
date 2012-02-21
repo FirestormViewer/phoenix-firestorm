@@ -1205,14 +1205,14 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
         enableSaveButton(false);
     }
 
+    resetDirty();
+
     if (getAvatarId() == gAgent.getID())
     {
-        getChild<LLUICtrl>("pick_name")->setEnabled(true);
-        getChild<LLUICtrl>("pick_desc")->setEnabled(true);
-        getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( true );
+        getChild<LLLineEditor>("pick_name")->setEnabled( TRUE );
+        getChild<LLUICtrl>("pick_desc")->setEnabled( TRUE );
+        getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( TRUE );
     }
-
-    resetDirty();
 }
 
 BOOL FSPanelPick::postBuild()
@@ -1228,6 +1228,7 @@ BOOL FSPanelPick::postBuild()
 
     LLLineEditor* line_edit = getChild<LLLineEditor>("pick_name");
     line_edit->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1), NULL);
+    line_edit->setEnabled( FALSE );
 
     LLTextEditor* text_edit = getChild<LLTextEditor>("pick_desc");
     text_edit->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
