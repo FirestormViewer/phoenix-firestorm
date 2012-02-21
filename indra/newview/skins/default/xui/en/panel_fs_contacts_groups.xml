@@ -20,6 +20,7 @@
 	 follows="left|top|right|bottom"
 	 left="7"
 	 name="group_list"
+	 color="ScrollBgWriteableColor"
 	 top="-10"
 	 width="243" />
     <text
