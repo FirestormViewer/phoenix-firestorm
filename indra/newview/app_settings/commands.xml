@@ -302,4 +302,15 @@
            tooltip_ref="Default_Chat_Bar_Tooltip"
            control_name="MainChatbarVisible"
            />
+
+  <command name="areasearch"
+           available_in_toybox="true"
+           icon="areasearch"
+           label_ref="Command_Areasearch_Label"
+           tooltip_ref="Command_Areasearch_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="area_search"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="area_search"
+           />
 </commands>

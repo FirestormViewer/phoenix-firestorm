@@ -694,6 +694,7 @@ with the same filename but different name
   <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" />
   <texture name="phoenix_18" file_name="bottomtray/phoenix_18.png" preload="false" />
   <texture name="www_18" file_name="bottomtray/www_18.png" preload="false" />
+  <texture name="areasearch" file_name="toolbar_icons/areasearch.png" preload="false" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />

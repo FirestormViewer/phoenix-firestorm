@@ -4962,6 +4962,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Default_Chat_Bar_Label">
 		Chat
 	</string>
+	<string name="Command_Areasearch_Label">
+		Umgebungssuche
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5045,6 +5048,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Default_Chat_Bar_Tooltip">
 		Zeigt oder versteckt die Standard-Chatleiste
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Umgebungssuche nach Objekten
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
