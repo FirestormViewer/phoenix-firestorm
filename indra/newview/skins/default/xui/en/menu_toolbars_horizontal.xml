@@ -66,7 +66,7 @@
               parameter="text_only" />
   </menu_item_check>
   <menu_item_separator layout="topleft" />
-  <menu_item_check label="No Layout"
+  <menu_item_check label="Autosize Buttons"
                    layout="topleft"
                    name="layout_style_none">
     <on_click function="Toolbars.SetLayoutStyle"
@@ -74,7 +74,7 @@
     <on_check function="Toolbars.CheckLayoutStyle"
               parameter="none" />
   </menu_item_check>
-  <menu_item_check label="Even Width Layout"
+  <menu_item_check label="Fixed Size Buttons"
                    layout="topleft"
                    name="layout_style_equalize">
     <on_click function="Toolbars.SetLayoutStyle"
@@ -82,7 +82,7 @@
     <on_check function="Toolbars.CheckLayoutStyle"
               parameter="equalize" />
   </menu_item_check>
-  <menu_item_check label="Auto Fill Layout"
+  <menu_item_check label="Buttons Fill Bar"
                    layout="topleft"
                    name="layout_style_fill">
     <on_click function="Toolbars.SetLayoutStyle"
