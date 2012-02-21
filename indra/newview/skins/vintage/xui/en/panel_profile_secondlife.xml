@@ -121,6 +121,18 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="Name:"
          halign="right"
          value="Name:" />
+        <button
+         label="Name:"
+         top_delta="0"
+         left_delta="0"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="top|left"
+         name="set_name"
+         tool_tip="Set Display Name"
+         visible="false"
+         enabled="false" />
 
         <view_border
          left_pad="4"

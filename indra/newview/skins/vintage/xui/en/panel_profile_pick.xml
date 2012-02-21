@@ -55,7 +55,6 @@
      right="-6"
      layout="topleft"
      follows="left|right|top"
-     enabled="false"
      name="pick_name" />
 
     <text_editor
@@ -72,18 +71,8 @@
      name="pick_desc"
      word_wrap="true"
      allow_html="true" />
-<!--
-    <line_editor
-     top_pad="10"
-     left="10"
-     height="20"
-     width="290"
-     layout="topleft"
-     follows="left|bottom"
-     name="pick_location"
-     enabled="false" />
--->
-    <text
+
+     <text
      left="6"
      height="20"
      right="-6"
@@ -124,7 +113,7 @@
      layout="topleft"
      follows="left|bottom"
      label="Set Location"
-     tooltip="Set to Current Location"
+     tool_tip="Set to Current Location"
      name="set_to_curr_location_btn"
      visible="false" />
      
