@@ -1000,6 +1000,15 @@
       name="ToolbarDropZoneColor"
       value=".48 .69 1 .5" />
   
+    <!-- for legacy profiles -->
+    <color
+     name="StatusUserOnline"
+     reference="Green" />
+    <!-- for legacy profiles -->
+    <color
+     name="StatusUserOffline"
+     reference="BrightRed" />
+
     <!-- Generic color names (legacy) -->
   <color
     name="white"
