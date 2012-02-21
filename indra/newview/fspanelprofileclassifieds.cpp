@@ -236,17 +236,6 @@ void FSPanelClassifieds::onOpen(const LLSD& key)
 		getChildView(XML_BTN_SHOW_ON_MAP)->setEnabled(FALSE);
 	}
 
-	// and see a special title - set as invisible by default in xml file
-	if (self)
-	{
-		getChildView("pick_title")->setVisible( !self);
-		getChildView("pick_title_agent")->setVisible( self);
-
-		mPopupMenu->setItemVisible("pick_delete", TRUE);
-		mPopupMenu->setItemVisible("pick_edit", TRUE);
-		mPopupMenu->setItemVisible("pick_separator", TRUE);
-	}
-
 	if(getAvatarId() != id)
 	{
 		mClassifiedsList->goToTop();
