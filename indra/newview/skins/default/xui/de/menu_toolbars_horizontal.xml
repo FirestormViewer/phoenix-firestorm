@@ -8,7 +8,7 @@
 	<menu_item_check label="Symbole und Beschriftungen" name="icons_with_text"/>
 	<menu_item_check label="Nur Symbole" name="icons_only"/>
 	<menu_item_check label="Nur Beschriftungen" name="text_only"/>
-	<menu_item_check label="Kein Layout" name="layout_style_none"/>
-	<menu_item_check label="Layout mit identischer Breite" name="layout_style_equalize"/>
-	<menu_item_check label="Layout mit automatischer Breite" name="layout_style_fill"/>
+	<menu_item_check label="Buttons mit automatische Breite" name="layout_style_none"/>
+	<menu_item_check label="Buttons mit fester Breite" name="layout_style_equalize"/>
+	<menu_item_check label="Buttons füllen Buttonleiste" name="layout_style_fill"/>
 </context_menu>

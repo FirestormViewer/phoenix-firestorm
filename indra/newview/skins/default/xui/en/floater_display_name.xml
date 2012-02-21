@@ -3,7 +3,7 @@
  legacy_header_height="18"
  can_minimize="false"
  can_close="false" 
- height="300"
+ height="200"
  layout="topleft"
  name="Display Name"
  help_topic="display_name"
@@ -19,7 +19,7 @@
      layout="topleft"
      left="25"
      name="info_text"
-     top="40"
+     top="25"
      use_ellipses="true"
      width="380"
      wrap="true">
@@ -35,7 +35,7 @@
      left="25"
 	 text_color="EmphasisColor" 
      name="lockout_text"
-     top="80"
+     top="25"
      use_ellipses="true"
 	 visible="false" 
      width="410"
@@ -58,12 +58,12 @@
       top_pad="5"
       left="50" />
 	<text
-       top_pad="15"
+       top_pad="10"
        left="25"
-       width="300"
+       width="380"
        height="20"
-      font="SansSerif"
-    name="set_name_label">
+       font="SansSerif"
+       name="name_confirm_label">
       Type your new name again to confirm:
     </text>
     <line_editor
@@ -81,7 +81,7 @@
      left="35"
      name="save_btn"
      tool_tip="Save your new Display Name" 
-     top_pad="40"
+     top_pad="10"
      width="120" />
     <button
      height="23"

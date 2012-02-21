@@ -8,6 +8,6 @@
     </text>
 	<button label="Teleportieren" name="teleport_btn"/>
     <button label="Auf Karte zeigen" name="show_on_map_btn"/>
-	<button label="Standort festl." tooltip="Set to Current Location" name="set_to_curr_location_btn"/>
+	<button label="Standort festl." tool_tip="Auf aktuellen Standort festlegen" name="set_to_curr_location_btn"/>
 	<button label="Auswahl speichern" name="save_changes_btn" width="110"/>
 </panel>
