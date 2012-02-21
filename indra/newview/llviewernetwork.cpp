@@ -211,7 +211,7 @@ void LLGridManager::initGrids()
 void LLGridManager::initSystemGrids()
 {
 
-	addSystemGrid(LLTrans::getString("loading..."), "", "", "", "", DEFAULT_LOGIN_PAGE);
+	addSystemGrid(LLTrans::getString("LoadingData"), "", "", "", "", DEFAULT_LOGIN_PAGE);
 // 	addSystemGrid("None", "", "", "", DEFAULT_LOGIN_PAGE);
 //we get this now from the grid list
 /*
