@@ -2377,9 +2377,6 @@ bool LLAppViewer::initConfiguration()
 	LLTransUtil::parseStrings("strings.xml", default_trans_args);
 	LLTransUtil::parseLanguageStrings("language_settings.xml");
 	// - set procedural settings
-
-	gSavedSettings.setString("VersionChannelName", LLVersionInfo::getChannel());
-
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
         //gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
         gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
