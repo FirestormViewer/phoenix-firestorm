@@ -4306,6 +4306,18 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	// Don't send camera updates to the new region until we're
 	// actually there...
 
+	// <FS:Ansariel> Copied from process_teleport_local: Keep us flying if we
+	//               were flying before the teleport or we always want to fly
+	//               after a TP.
+	if (teleport_flags & TELEPORT_FLAGS_IS_FLYING || gSavedSettings.getBOOL("FSFlyAfterTeleport"))
+	{
+		gAgent.setFlying(TRUE);
+	}
+	else
+	{
+		gAgent.setFlying(FALSE);
+	}
+	// </FS:Ansariel>
 
 	// Now do teleport effect for where you're going.
 	// VEFFECT: TeleportEnd
@@ -7072,7 +7084,10 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 	}
 
 	// Sim tells us whether the new position is off the ground
-	if (teleport_flags & TELEPORT_FLAGS_IS_FLYING)
+	// <FS:Ansariel> Always fly after TP option
+	//if (teleport_flags & TELEPORT_FLAGS_IS_FLYING)
+	if (teleport_flags & TELEPORT_FLAGS_IS_FLYING || gSavedSettings.getBOOL("FSFlyAfterTeleport"))
+	// </FS:Ansariel> Always fly after TP option
 	{
 		gAgent.setFlying(TRUE);
 	}
