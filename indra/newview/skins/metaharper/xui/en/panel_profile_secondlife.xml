@@ -9,6 +9,14 @@
  top="0"
  width="430">
     <string
+     name="status_online">
+Online
+    </string>
+    <string
+     name="status_offline">
+Offline
+    </string>
+    <string
      name="CaptionTextAcctInfo">
 [ACCTTYPE]
 [PAYMENTINFO]
