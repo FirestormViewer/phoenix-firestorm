@@ -104,6 +104,7 @@
      left="4"
      name="inventory filter tabs"
      tab_drag_commit="true"
+     open_tabs_on_drag_and_drop="true"
      tab_group="1"
      tab_position="top"
      top_pad="4"
