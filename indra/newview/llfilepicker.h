@@ -85,6 +85,9 @@ public:
 		FFLOAD_MODEL = 9,
 		FFLOAD_COLLADA = 10,
 		FFLOAD_SCRIPT = 11,
+		// NaCl - Asset blacklister
+		FFLOAD_BLACKLIST = 12,
+		// NaCl End
 	};
 
 	enum ESaveFilter
@@ -105,7 +108,10 @@ public:
 		FFSAVE_PNG = 13,
 		FFSAVE_JPEG = 14,
 		FFSAVE_SCRIPT = 15,
-		FFSAVE_BEAM = 16,
+		// NaCl - Asset blacklister
+		FFSAVE_BLACKLIST = 16,
+		// NaCl End
+		FFSAVE_BEAM = 17,
 	};
 
 	// open the dialog. This is a modal operation

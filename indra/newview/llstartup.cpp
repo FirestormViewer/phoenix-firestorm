@@ -208,6 +208,9 @@
 #include "streamtitledisplay.h"
 #include "fsdata.h"
 
+// NaCl - Asset blacklister
+#include "NACLfloaterblacklist.h"
+// NaCl End
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
@@ -1076,6 +1079,9 @@ bool idle_startup()
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
 
+		// NaCl - Asset blacklister
+		NACLFloaterBlacklist::loadFromSave();
+		// NaCl End
 		// NaCl - Antispam
 		U32 antispam_time = gSavedSettings.getU32("_NACL_AntiSpamTime");
 		U32 antispam_amount = gSavedSettings.getU32("_NACL_AntiSpamAmount");

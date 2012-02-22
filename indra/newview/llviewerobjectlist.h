@@ -183,6 +183,10 @@ public:
 	// Used ONLY by the orphaned object code.
 	static U64 getIndex(const U32 local_id, const U32 ip, const U32 port);
 
+	// NaCl - Autoblacklisting of video crashers / Asset blacklister
+	std::vector<LLUUID> autoKill_list;
+	// NaCl End
+
 	S32 mNumUnknownUpdates;
 	S32 mNumDeadObjectUpdates;
 	S32 mNumUnknownKills;

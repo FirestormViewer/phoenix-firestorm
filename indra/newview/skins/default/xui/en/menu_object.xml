@@ -213,6 +213,27 @@
       function="Object.Derender" />
    </menu_item_call>
    <!-- /Derender -->
+   <menu_item_call
+     enabled="true"
+     label="Blacklist Object"
+     name="BlacklistObject">
+     <menu_item_call.on_click
+      function="NaCl.BlacklistObject" />
+  </menu_item_call>
+   <menu_item_call
+     enabled="true"
+     label="Blacklist Textures"
+     name="BlacklistTextures">
+     <menu_item_call.on_click
+      function="NaCl.BlacklistTextures" />
+  </menu_item_call>
+   <menu_item_call
+     enabled="true"
+     label="Blacklist Sculpt"
+     name="BlacklistSculpt">
+     <menu_item_call.on_click
+      function="NaCl.BlacklistSculpt" />
+  </menu_item_call>
    
    <menu_item_call
       enabled="false"

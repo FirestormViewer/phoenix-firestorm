@@ -49,6 +49,9 @@ LLFilePicker LLFilePicker::sInstance;
 #if LL_WINDOWS
 #define SOUND_FILTER L"Sounds (*.wav)\0*.wav\0"
 #define IMAGE_FILTER L"Images (*.tga; *.bmp; *.jpg; *.jpeg; *.png)\0*.tga;*.bmp;*.jpg;*.jpeg;*.png\0"
+// NaCl - Asset blacklister
+#define BLACKLIST_FILTER L"Asset Blacklist (*.blacklist)\0*.blacklist;\0"
+// NaCl End
 #define ANIM_FILTER L"Animations (*.bvh)\0*.bvh\0"
 #define COLLADA_FILTER L"Scene (*.dae)\0*.dae\0"
 #ifdef _CORY_TESTING
@@ -210,6 +213,12 @@ BOOL LLFilePicker::setupFilter(ELoadFilter filter)
 		mOFN.lpstrFilter = RAW_FILTER \
 			L"\0";
 		break;
+	// NaCl - Asset blacklister
+	case FFLOAD_BLACKLIST:
+		mOFN.lpstrFilter = BLACKLIST_FILTER \
+			L"\0";
+		break;
+	// NaCl End
 	case FFLOAD_MODEL:
 		mOFN.lpstrFilter = MODEL_FILTER \
 			L"\0";
@@ -510,6 +519,18 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename)
 		mOFN.lpstrDefExt = L"txt";
 		mOFN.lpstrFilter = L"LSL Files (*.lsl)\0*.lsl\0" L"\0";
 		break;
+	// NaCl - Asset blacklister
+	case FFSAVE_BLACKLIST:
+		if(filename.empty())
+		{
+			wcsncpy( mFilesW,L"untitled.blacklist", FILENAME_BUFFER_SIZE);
+		}
+		mOFN.lpstrDefExt = L".blacklist";
+		mOFN.lpstrFilter =
+			L"Asset Blacklists (*.blacklist)\0*.blacklist\0" \
+			L"\0";
+		break;
+	// NaCl End
 	case FFSAVE_BEAM:
 		if (filename.empty())
 		{

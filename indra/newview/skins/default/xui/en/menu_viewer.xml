@@ -922,6 +922,13 @@
           function="Floater.Toggle"
           parameter="area_search" />
       </menu_item_call>
+    <menu_item_call
+      label="Asset Blacklist"
+      name="Asset Blacklist">
+      <menu_item_call.on_click
+        function="Floater.Toggle"
+        parameter="blacklist" />
+	</menu_item_call>
     
     </menu>
     <menu
