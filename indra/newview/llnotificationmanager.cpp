@@ -103,7 +103,9 @@ bool LLNotificationManager::onNotification(const LLSD& notify)
 	if(!handle)
 		return false;
 	
-	return handle->processNotification(notify);
+	// If we don't return false, everything that follows breaks.
+	handle->processNotification(notify);
+	return false;
 }
 
 //--------------------------------------------------------------------------

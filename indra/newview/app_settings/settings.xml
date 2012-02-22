@@ -16943,6 +16943,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>600</integer>
     </array>
   </map>
+  <key>FSEnableGrowl</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables Growl notifications</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+  <key>FSGrowlWhenActive</key>
+  <map>
+    <key>Comment</key>
+    <string>If Growl notifications are active, show them even when the window is active.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 
 </map>
 </llsd>

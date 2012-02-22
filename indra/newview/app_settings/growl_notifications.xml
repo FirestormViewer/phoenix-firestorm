@@ -1,0 +1,186 @@
+<!-- 
+  Not all possible growl notifications are defined here; Firestorm Keyword Alerts and incoming IMs are hardcoded.
+  
+  The following options are available:
+  GrowlName (string): The name used by Growl for this notification. Should be human-readable. REQUIRED.
+  GrowlTitle (string): The title text for the notification. Default ""
+  GrowlBody (string): The body for the notification. Default ""
+  UseDefaultTextForTitle (boolean): Display the default notification text in the title. Overrides GrowlTitle. Default false.
+  UseDefaultTextForBody (boolean): Display the default notification text in the body. Overrides GrowlBody. Default false.
+  
+  If you specify nothing at all, UseDefaultTextForBody will be taken as true.
+  GrowlTitle and GrowlBody will both accept the substitutions available in LL's standard notification.
+  
+  This file uses two-space tabs. Be consistent, please.
+-->
+<llsd>
+  <map>
+    <key>FriendOnline</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friend logged on</string>
+      <key>GrowlTitle</key>
+      <string>[NAME]</string>
+      <key>GrowlBody</key>
+      <string>came online</string>
+    </map>
+    <key>FriendOffline</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friend logged off</string>
+      <key>GrowlTitle</key>
+      <string>[NAME]</string>
+      <key>GrowlBody</key>
+      <string>went offline</string>
+    </map>
+    <key>SystemMessageTip</key>
+    <map>
+      <key>GrowlName</key>
+      <string>System Message</string>
+      <key>GrowlTitle</key>
+      <string>System Message</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
+    <key>SystemMessage</key>
+    <map>
+      <key>GrowlName</key>
+      <string>System Message</string>
+      <key>GrowlTitle</key>
+      <string>System Message</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
+    <key>GroupNotice</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Group Notice</string>
+      <key>GrowlTitle</key>
+      <string>Group Notice</string>
+      <key>GrowlBody</key>
+      <string>[SUBJECT]</string>
+    </map>
+    <key>InventoryAccepted</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory accepted</string>
+    </map>
+    <key>InventoryDeclined</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory declined</string>
+    </map>
+    <key>CallingCardAccepted</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Calling card accepted</string>
+    </map>
+    <key>CallingCardDeclined</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Calling card declined</string>
+    </map>
+    <key>EventNotification</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Event notification</string>
+      <key>GrowlTitle</key>
+      <string>Event starting soon</string>
+      <key>GrowlBody</key>
+      <string>[NAME]</string>
+    </map>
+    <key>ObjectGiveItem</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory received from object</string>
+      <key>GrowlTitle</key>
+      <string>Inventory received</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
+    <key>ObjectGiveItemUnknownUser</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory received from object</string>
+      <key>GrowlTitle</key>
+      <string>Inventory received</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
+    <key>UserGiveItem</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Inventory received from a person</string>
+      <key>GrowlTitle</key>
+      <string>Inventory received</string>
+      <key>UseDefaultTextForBody</key>
+      <boolean>true</boolean>
+    </map>
+    <key>OfferFriendship</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friendship offer received</string>
+      <key>GrowlTitle</key>
+      <string>[NAME] is offering friendship</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
+    <key>OfferFriendshipNoMessage</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friendship offer received</string>
+      <key>GrowlBody</key>
+      <string>[NAME] is offering friendship</string>
+    </map>
+    <key>FriendshipAccepted</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friendship offer accepted</string>
+    </map>
+    <key>FriendshipDeclined</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Friendship offer declined</string>
+    </map>
+    <key>GodMessage</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Global message</string>
+      <key>GrowlTitle</key>
+      <string>Global message</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
+    <key>RegionRestartMinute</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Region restart warning</string>
+      <key>GrowlTitle</key>
+      <string>Region restart in [MINUTES] minutes</string>
+      <key>GrowlBody</key>
+      <string>If you remain in this region, you will be logged out.</string>
+      <key>Urgent</key>
+      <boolean>true</boolean>
+    </map>
+    <key>RegionRestartSecond</key>
+    <map>
+      <key>GrowlName</key>
+      <string>Region restart warning</string>
+      <key>GrowlTitle</key>
+      <string>Region restart in [SECONDS] seconds</string>
+      <key>GrowlBody</key>
+      <string>If you remain in this region, you will be logged out.</string>
+      <key>Urgent</key>
+      <boolean>true</boolean>
+    </map>
+    <key>YouHaveBeenLoggedOut</key>
+    <map>
+      <key>GrowlName</key>
+      <string>You have been logged out</string>
+      <key>GrowlTitle</key>
+      <string>You have been logged out</string>
+      <key>GrowlBody</key>
+      <string>[MESSAGE]</string>
+    </map>
+  </map>
+</llsd>

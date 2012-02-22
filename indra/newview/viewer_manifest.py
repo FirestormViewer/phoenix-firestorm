@@ -431,6 +431,10 @@ class WindowsManifest(ViewerManifest):
             # Hunspell
             self.path("libhunspell.dll")
 
+            # Growl
+            self.path("lgggrowl.dll")
+            self.path("lgggrowl++.dll")
+
             # For google-perftools tcmalloc allocator.
             try:
                 if self.args['configuration'].lower() == 'debug':
@@ -725,6 +729,9 @@ class DarwinManifest(ViewerManifest):
             self.path("../packages/lib/release/libndofdev.dylib", dst="Resources/libndofdev.dylib")
             self.path("../packages/lib/release/libhunspell-1.3.0.dylib", dst="Resources/libhunspell-1.3.0.dylib")
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
+
+            # Growl library
+            #self.path("../../libraries/universal-darwin/lib_release/libgrowl.dylib", "Frameworks/Growl.framework/Versions/A/Growl"); # LO - uncomment for work on growl on mac
 
             # most everything goes in the Resources directory
             if self.prefix(src="", dst="Resources"):
@@ -1135,6 +1142,7 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libalut.so")
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
+            #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
             self.path("libfontconfig.so.1.4.4")
             self.path("libtcmalloc.so", "libtcmalloc.so") #formerly called google perf tools
             self.path("libtcmalloc.so.0", "libtcmalloc.so.0") #formerly called google perf tools

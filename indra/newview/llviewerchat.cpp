@@ -39,6 +39,7 @@
 #include "fskeywords.h"
 #include "lggcontactsets.h"
 #include "rlvhandler.h"
+#include "growlmanager.h"
 
 // LLViewerChat
 LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
@@ -106,8 +107,9 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		}
 		
 		//Keyword alerts -KC
-		if ((gAgentID != chat.mFromID) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
+		if ((gAgentID != chat.mFromID || chat.mFromName == SYSTEM_FROM) && FSKeywords::getInstance()->chatContainsKeyword(chat, is_local))
 		{
+			gGrowlManager->notify("Keyword Alert", chat.mText, "Keyword Alert");
 			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
 			if (sFSKeywordChangeColor)
 			{

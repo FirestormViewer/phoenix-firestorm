@@ -205,6 +205,10 @@
 
 #include "llnotificationmanager.h"
 
+#if LL_WINDOWS
+#include "growlmanager.h"
+#endif
+
 #include "streamtitledisplay.h"
 #include "fsdata.h"
 
@@ -437,6 +441,10 @@ bool idle_startup()
 		std::string lastGPU = gSavedSettings.getString("LastGPUString");
 		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
 		
+#if LL_WINDOWS
+		GrowlManager::InitiateManager();
+#endif
+
 		// fsdata: load dynamic xml data
 		FSData::getInstance()->startDownload();
 		

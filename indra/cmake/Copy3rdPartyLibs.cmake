@@ -39,6 +39,8 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
+        lgggrowl++.dll
+        lgggrowl.dll
         ssleay32.dll
         libeay32.dll
         libcollada14dom22-d.dll
@@ -52,6 +54,8 @@ if(WINDOWS)
         libapr-1.dll
         libaprutil-1.dll
         libapriconv-1.dll
+        lgggrowl++.dll
+        lgggrowl.dll
         ssleay32.dll
         libeay32.dll
         libcollada14dom22.dll
@@ -219,6 +223,7 @@ elseif(DARWIN)
         libhunspell-1.3.dylib
         libexception_handler.dylib
     libcollada14dom.dylib
+		#libgrowl.dylib # *TODO - test/fix/get mac growl working
        )
 
     # fmod is statically linked on darwin
@@ -275,6 +280,7 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libssl.so.1.0.0
         libfontconfig.so.1.4.4
+        #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
 
     if (FMOD)
