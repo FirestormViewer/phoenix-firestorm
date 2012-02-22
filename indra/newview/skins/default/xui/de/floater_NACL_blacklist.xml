@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="blacklist" title="Asset-Blacklist">
+	<floater.string name="Texture" value="Textur"/>
+	<floater.string name="Sound" value="Sound"/>
+	<floater.string name="Animation" value="Animation"/>
+	<floater.string name="Object" value="Objekt"/>
+	<button name="add_btn" label="Hinzufügen..."/>
+	<button name="remove_btn" label="Entfernen"/>
+	<combo_box name="asset_combo" label="Asset-Typ"/>
+	<line_editor name="id_edit" label="Asset-UUID hier eingeben."/>
+	<line_editor name="name_edit" label="Name des Eintrags hier eingeben."/>
+	<scroll_list name="file_list">
+		<column name="entry_name" label="Name"/>
+		<column name="entry_type" label="Typ"/>
+		<column name="entry_agent" label="Geblacklistet von"/>
+		<column name="entry_date" label="Datum"/>
+		<column name="asset_id" label="Asset-ID"/>
+	</scroll_list>
+	<button name="save_btn" label="XML speichern"/>
+	<button name="load_btn" label="XML laden"/>
+	<button name="clear_btn" label="Löschen"/>
+	<button name="rerender_btn" label="Alle Objekte wieder darstellen"/>
+</floater>
