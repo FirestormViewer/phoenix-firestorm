@@ -4959,7 +4959,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Webbrowser_Label">
 		Webbrowser
 	</string>
-	<string name="Default_Chat_Bar_Label">
+	<string name="Command_Default_Chat_Bar_Label">
 		Chat
 	</string>
 	<string name="Command_Areasearch_Label">
@@ -5046,7 +5046,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Webbrowser_Tooltip">
 		Öffnet den internen Webbrowser
 	</string>
-	<string name="Default_Chat_Bar_Tooltip">
+	<string name="Command_Default_Chat_Bar_Tooltip">
 		Zeigt oder versteckt die Standard-Chatleiste
 	</string>
 	<string name="Command_Areasearch_Tooltip">

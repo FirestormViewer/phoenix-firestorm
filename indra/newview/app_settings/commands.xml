@@ -298,8 +298,8 @@
   <command name="defaultchatbar"
            available_in_toybox="true"
            icon="nearbychat_18"
-           label_ref="Default_Chat_Bar_Label"
-           tooltip_ref="Default_Chat_Bar_Tooltip"
+           label_ref="Command_Default_Chat_Bar_Label"
+           tooltip_ref="Command_Default_Chat_Bar_Tooltip"
            control_name="MainChatbarVisible"
            />
 
