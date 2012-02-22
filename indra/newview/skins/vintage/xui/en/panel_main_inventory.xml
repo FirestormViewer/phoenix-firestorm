@@ -481,6 +481,7 @@
 		layout="topleft"
 		left="0"
 		name="inventory filter tabs"
+		open_tabs_on_drag_and_drop="true"
 		tab_drag_commit="true"
 		tab_group="1"
 		tab_position="top"
