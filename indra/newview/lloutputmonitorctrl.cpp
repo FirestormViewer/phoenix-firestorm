@@ -35,6 +35,8 @@
 #include "llmutelist.h"
 #include "llagent.h"
 
+#include "llspeakers.h"		// <FS:Zi> Add new control to have a nearby voice output monitor
+
 // default options set in output_monitor.xml
 static LLDefaultChildRegistry::Register<LLOutputMonitorCtrl> r("output_monitor");
 
@@ -317,5 +319,55 @@ void LLOutputMonitorCtrl::notifyParentVisibilityChanged()
 
 	notifyParent(params);
 }
+
+//////////////////////////////////////////////////////////////////////////
+// <FS:Zi> Add new control to have a nearby voice output monitor
+
+// default options set in output_monitor.xml
+static LLDefaultChildRegistry::Register<NearbyVoiceMonitor> r2("nearby_voice_monitor");
+
+NearbyVoiceMonitor::Params::Params()
+:	auto_hide("auto_hide",false)
+{
+}
+
+NearbyVoiceMonitor::NearbyVoiceMonitor(const NearbyVoiceMonitor::Params& p)
+:	LLOutputMonitorCtrl(p),
+	mAutoHide(p.auto_hide)
+{
+	 mSpeakerMgr=LLLocalSpeakerMgr::getInstance();
+}
+
+void NearbyVoiceMonitor::draw()
+{
+	LLSpeakerMgr::speaker_list_t speaker_list;
+	LLUUID id;
+	BOOL draw=FALSE;
+
+	id.setNull();
+	mSpeakerMgr->update(TRUE);
+	mSpeakerMgr->getSpeakerList(&speaker_list, FALSE);
+
+	for (LLSpeakerMgr::speaker_list_t::iterator i = speaker_list.begin(); i != speaker_list.end(); ++i)
+	{
+		LLPointer<LLSpeaker> s = *i;
+		if (s->mSpeechVolume > 0 || s->mStatus == LLSpeaker::STATUS_SPEAKING)
+		{
+			draw=TRUE;
+			id = s->mID;
+			break;
+		}
+	}
+
+	setSpeakerId(id);
+
+	if(!mAutoHide || draw)
+	{
+		LLOutputMonitorCtrl::draw();
+	}
+}
+
+// </FS:Zi> Add new control to have a nearby voice output monitor
+//////////////////////////////////////////////////////////////////////////
 
 // EOF

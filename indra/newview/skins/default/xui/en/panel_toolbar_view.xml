@@ -225,6 +225,19 @@
          follows="top|right"
          layout="topleft" />
 
+  <nearby_voice_monitor name="nearby_voice_output_monitor"
+          draw_border="false"
+          tool_tip="Current voice channel activity"
+          label=""
+          height="20"
+          top="4"
+          right="-10"
+          layout="topleft"
+          follows="top|right"
+          auto_update="true"
+          auto_hide="true"
+          width="40" />
+
   </layout_panel>
   <!-- The chat bar itself -->
 

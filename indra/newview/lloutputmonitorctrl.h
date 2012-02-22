@@ -149,4 +149,31 @@ private:
 	bool			mShouldSwitchOn;
 };
 
+//////////////////////////////////////////////////////////////////////////
+// <FS:Zi> Add new control to have a nearby voice output monitor
+
+class LLLocalSpeakerMgr;
+
+class NearbyVoiceMonitor : public LLOutputMonitorCtrl
+{
+public:
+	struct Params : public LLInitParam::Block<Params, LLOutputMonitorCtrl::Params>
+	{
+		Optional<bool>	auto_hide;		// hide this control when nobody is speaking
+
+		Params();
+	};
+
+    NearbyVoiceMonitor(const Params& p);
+
+	void draw();
+
+protected:
+	BOOL mAutoHide;
+	LLLocalSpeakerMgr* mSpeakerMgr;
+};
+
+// </FS:Zi> Add new control to have a nearby voice output monitor
+//////////////////////////////////////////////////////////////////////////
+
 #endif

@@ -409,11 +409,12 @@
           tool_tip="Press this button to talk on voice. Click the lock to toggle Push-to-Talk mode on and off."
           label="Talk"
           height="20"
+          pad_left="10"
           left_pad="2"
           layout="topleft"
           follows="bottom|left"
           enabled_control="ParcelAllowsVoice"
-          width="64">
+          width="56">
 <!-- Done in code for now -Zi
   <mouse_down_callback
            function="Agent.PressMicrophone"
@@ -443,7 +444,20 @@
           width="16">
   </button>
 
-   <!-- Do we need this button? -Zi -->
+  <nearby_voice_monitor name="nearby_voice_output_monitor"
+          draw_border="false"
+          tool_tip="Current voice channel activity"
+          label=""
+          height="20"
+          top="2"
+          left_pad="38"
+          layout="topleft"
+          follows="bottom|left"
+          auto_update="true"
+          width="40" />
+
+<!-- Do we need this button? -Zi -->
+<!--
   <button name="utility_show_voice_channel_button"
           tool_tip="(TODO) Shows current voice channel"
           label=""
@@ -455,7 +469,7 @@
           follows="bottom|left"
           enabled="false"
           width="20">
-  </button>
+  </button> -->
 
   </panel>
   <!-- Voice Chat panel -->
