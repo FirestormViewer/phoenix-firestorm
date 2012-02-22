@@ -322,6 +322,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
         }
 
         getChild<LLTextBase>("sl_description_edit")->setParseHTML(false);
+
+        updateButtons();
     }
     else
     {
@@ -329,15 +331,14 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChildView("add_friend")->setEnabled(!LLAvatarActions::isFriend(getAvatarId()));
 
         mVoiceStatus = LLAvatarActions::canCall();
+
+        updateOnlineStatus(); //will also call updateButtons()
     }
 
     FSDropTarget* target = getChild<FSDropTarget> ("drop_target");
     target->setAgentID( getAvatarId() );
 
     getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
-
-    updateOnlineStatus();
-    updateButtons();
 
     updateData();
 }
@@ -389,7 +390,7 @@ void FSPanelProfile::processProperties(void* data, EAvatarProcessorType type)
 
 void FSPanelProfile::processProfileProperties(const LLAvatarData* avatar_data)
 {
-    if (!LLAvatarActions::isFriend(getAvatarId()))
+    if (!LLAvatarActions::isFriend(getAvatarId()) && (getAvatarId() != gAgent.getID()))
     {
         // this is non-friend avatar. Status will be updated from LLAvatarPropertiesProcessor.
         // in FSPanelProfile::processOnlineStatus()
@@ -678,8 +679,13 @@ void FSPanelProfile::setAvatarId(const LLUUID& id)
         {
             LLAvatarTracker::instance().removeParticularFriendObserver(getAvatarId(), this);
         }
+
         FSPanelProfileTab::setAvatarId(id);
-        LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
+
+        if (LLAvatarActions::isFriend(getAvatarId()))
+        {
+            LLAvatarTracker::instance().addParticularFriendObserver(getAvatarId(), this);
+        }
     }
 }
 
