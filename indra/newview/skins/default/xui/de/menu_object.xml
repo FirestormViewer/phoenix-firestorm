@@ -29,6 +29,11 @@
 		<menu_item_call label="Missbrauch melden" name="Report Abuse..."/>
 		<menu_item_call label="Ignorieren" name="Object Mute"/>
 	</context_menu>
+	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
+	<menu_item_call label="Nicht anzeigen" name="Derender"/>
+	<menu_item_call label="Objekt blacklisten" name="BlacklistObject"/>
+	<menu_item_call label="Texturen blacklisten" name="BlacklistTextures"/>
+	<menu_item_call label="Sculpt blacklisten" name="BlacklistSculpt"/>
 	<menu_item_call label="Zurückgeben" name="Return..."/>
 	<menu_item_call label="Nehmen" name="Pie Object Take"/>
 	<menu_item_call label="Kopie nehmen" name="Take Copy"/>
