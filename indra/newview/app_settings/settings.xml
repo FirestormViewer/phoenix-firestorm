@@ -16931,5 +16931,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
- </map>
+  <key>layout_size_chat_bar_stack</key>
+  <map>
+    <key>Comment</key>
+    <string>Fractional size for layout panel chat_bar_stack</string>
+    <key>Type</key>
+    <string>LLSD</string>
+    <key>Value</key>
+    <array>
+      <integer>400</integer>
+      <integer>600</integer>
+    </array>
+  </map>
+
+</map>
 </llsd>
