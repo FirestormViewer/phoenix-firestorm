@@ -45,6 +45,7 @@
 
 #include "growlmanager.h"
 #include "growlnotifier.h"
+#include "llurlregistry.h" // for SLURL parsing
 
 // Platform-specific includes
 #ifdef LL_DARWIN
@@ -181,19 +182,9 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 {
 	if(notice["sigtype"].asString() != "add")
 		return false;
-	static LLCachedControl<bool> enabled(gSavedSettings, "FSEnableGrowl");
-	if(!enabled)
-		return false;
-	if(!shouldNotify())
-		return false;
 	LLNotificationPtr notification = LLNotifications::instance().find(notice["id"].asUUID());
 	std::string name = notification->getName();
 	LLSD substitutions = notification->getSubstitutions();
-	if(LLStartUp::getStartupState() < STATE_STARTED)
-	{
-		LL_WARNS("GrowlLLNotification") << "GrowlManager discarded a notification (" << name << ") - too early." << LL_ENDL;
-		return false;
-	}
 	if(gGrowlManager->mNotifications.find(name) != gGrowlManager->mNotifications.end())
 	{
 		GrowlNotification* growl_notification = &gGrowlManager->mNotifications[name];
@@ -214,6 +205,21 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			LLStringUtil::format(body, substitutions);
 		}
 		LL_INFOS("GrowlLLNotification") << "Notice: " << title << ": " << body << LL_ENDL;
+		if(name == "ObjectGiveItem" || name == "ObjectGiveItemUnknownUser" || name == "UserGiveItem")
+		{
+			LLUrlMatch urlMatch;
+			LLWString newLine = utf8str_to_wstring(body);
+			LLWString workLine = utf8str_to_wstring(body);
+			while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+			{
+				LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
+
+				// Remove the URL from the work line so we don't end in a loop in case of regular URLs!
+				// findUrl will always return the very first URL in a string
+				workLine = workLine.erase(0, urlMatch.getEnd() + 1);
+			}
+			body = wstring_to_utf8str(newLine);
+		}
 		gGrowlManager->notify(title, body, growl_notification->growlName);
 	}
 	return false;
@@ -249,6 +255,10 @@ bool GrowlManager::shouldNotify()
 {
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
 	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
+	if(LLStartUp::getStartupState() < STATE_STARTED)
+	{
+		return false;
+	}
 	return (activated || (!gViewerWindow->getWindow()->getVisible()  || !gFocusMgr.getAppHasFocus()));
 }
 
