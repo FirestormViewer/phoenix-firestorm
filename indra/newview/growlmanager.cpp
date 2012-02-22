@@ -249,7 +249,7 @@ bool GrowlManager::shouldNotify()
 {
 	// This magic stolen from llappviewer.cpp. LLViewerWindow::getActive lies.
 	static LLCachedControl<bool> activated(gSavedSettings, "FSGrowlWhenActive");
-	return (activated || (!gViewerWindow->mWindow->getVisible()  || !gFocusMgr.getAppHasFocus()));
+	return (activated || (!gViewerWindow->getWindow()->getVisible()  || !gFocusMgr.getAppHasFocus()));
 }
 
 void GrowlManager::InitiateManager()

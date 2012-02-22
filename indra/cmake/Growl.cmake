@@ -18,7 +18,7 @@ else (STANDALONE)
 	include(Prebuilt)
     use_prebuilt_binary(Growl)
 	set(GROWL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/Growl)
-	set(GROWL_LIBRARY lgggrowl++)
+	set(GROWL_LIBRARY growl++)
     elseif (LINUX)
 	# Everything glib-2.0 and GTK-specific is pulled in by UI.cmake.. Ugh.
 	#set(GROWL_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/libnotify)

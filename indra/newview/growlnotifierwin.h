@@ -33,7 +33,7 @@
 #define GROWLNOTIFIERWIN_H
 
 #include "growlnotifier.h"
-#include <lgggrowl++.hpp>
+#include <growl++.hpp>
 
 class GrowlNotifierWin : public GrowlNotifier
 {

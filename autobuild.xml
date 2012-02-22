@@ -30,9 +30,9 @@
             <key>archive</key>
             <map>
                 <key>hash</key>
-                <string>0617f44de455a57e319f667d95ae02dc</string>
+                <string>694d33eeb7361ccb5709ba66f72591c9</string>
                 <key>url</key>
-                <uri>http://downloads.phoenixviewer.com/lggemwingrowllibrariesfs.tar.bz2</uri>
+                <uri>http://downloads.phoenixviewer.com/gntp-growlFS-win-20111207.tar.bz2</uri>
             </map>
           </map>
           <key>linux</key>

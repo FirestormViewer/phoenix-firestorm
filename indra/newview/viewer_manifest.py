@@ -432,8 +432,8 @@ class WindowsManifest(ViewerManifest):
             self.path("libhunspell.dll")
 
             # Growl
-            self.path("lgggrowl.dll")
-            self.path("lgggrowl++.dll")
+            self.path("growl.dll")
+            self.path("growl++.dll")
 
             # For google-perftools tcmalloc allocator.
             try:

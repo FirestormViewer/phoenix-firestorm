@@ -1777,7 +1777,7 @@ if (WINDOWS)
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qjpcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qkrcodecsd4.dll
       ${ARCH_PREBUILT_DIRS_RELEASE}/codecs/qtwcodecsd4.dll
-	  ${ARCH_PREBUILT_DIRS_RELEASE}/lgggrowl.dll
+	  ${ARCH_PREBUILT_DIRS_RELEASE}/growl.dll
       SLPlugin
       media_plugin_quicktime
       media_plugin_webkit
