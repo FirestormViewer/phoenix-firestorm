@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_notes" label="Notizen &amp; Privatsphäre">
-	<text name="status_message" value="Private Notizen über dise Person:" />
+	<text name="status_message" value="Private Notizen über diese Person:"/>
 	<text name="status_message2" value="Dieser Person erlauben:"/>
 	<check_box name="status_check" label="Sehen, wenn ich online bin"/>
 	<check_box name="map_check" label="Mich auf der Karte finden"/>
