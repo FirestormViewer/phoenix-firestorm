@@ -9,7 +9,7 @@
 	<string name="get_voice_effects">
 		Uzyskaj Voice Morphing ▶
 	</string>
-	<combo_box name="voice_effect" tool_tip="Wybierz Voice Morph aby zmienić Twój głos">
+	<combo_box name="voice_effect" tool_tip="Wybierz Voice Morph, aby zmienić Twój głos">
 		<combo_box.item label="Wyłącz Voice Morph" name="no_voice_effect"/>
 	</combo_box>
 </panel>

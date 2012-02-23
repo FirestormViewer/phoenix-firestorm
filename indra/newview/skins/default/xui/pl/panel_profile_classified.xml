@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_classified" label="Reklama">
+<!--
+    <text name="Place an ad in Second Life&apos;s classified listings.">
+        Umieść reklamę na liście Second Life.
+    </text>
+    <button name="New..." label="Nowa..." label_selected="Nowa..." />
+    <button name="Delete..." label="Usuń..." label_selected="Usuń..." />
+    <text name="classified_panel_text">
+        Ładowanie...
+    </text>
+-->
+ <string name="no_classifieds" value="Brak reklam" />
+   <panel name="edit_panel">
+                  <button name="new_btn" tool_tip="Utwórz nową reklamę w obecnej lokalizacji" />
+      </panel>
+      <panel name="buttons_cucks">
+      <layout_stack name="buttons_cucks_ls">
+          <layout_panel name="info_btn_lp">
+               <button name="info_btn" tool_tip="Pokaż informacje o miejscu" />
+          </layout_panel>
+          <layout_panel name="teleport_btn_lp">
+                <button label="Teleportuj" name="teleport_btn" tool_tip="Przenieś do obszaru właściwego" />
+          </layout_panel>
+          <layout_panel name="show_on_map_btn_lp">
+                <button label="Mapa" name="show_on_map_btn" tool_tip="Pokaż obszar na mapie świata" />
+          </layout_panel>
+    </layout_stack>
+    </panel>
+</panel>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="url_entry" title="">
+<floater name="url_entry">
 	<text name="media_label">
 		URL Mediów:
 	</text>

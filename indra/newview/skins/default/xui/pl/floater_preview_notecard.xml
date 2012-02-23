@@ -4,7 +4,7 @@
 		Nie można znaleźć obiektu zawierającego tą notkę.
 	</floater.string>
 	<floater.string name="not_allowed">
-		Nie masz pozwolenia na zobaczenie tej notki.
+		Nie masz uprawnień aby zobaczyć tą notkę.
 	</floater.string>
 	<floater.string name="Title">
 		Notka: [NAME]

@@ -2,13 +2,27 @@
 <floater name="floater_web_content" title="">
 	<layout_stack name="stack1">
 		<layout_panel name="nav_controls">
-			<button name="back" tool_tip="Do tyłu"/>
+			<button name="back" tool_tip="Wstecz"/>
 			<button name="forward" tool_tip="Do przodu"/>
 			<button name="stop" tool_tip="Zatrzymaj"/>
 			<button name="reload" tool_tip="Odśwież stronę"/>
-			<combo_box name="address" tool_tip="Wprowadź URL tutaj"/>
-			<icon name="media_secure_lock_flag" tool_tip="Funkcja bezpiecznego przeglądania (Secured Browsing)"/>
-			<button name="popexternal" tool_tip="Otwórz bieżący URL w zewnętrznej przeglądarce"/>
+			<combo_box name="address" tool_tip="Tutaj wpisz URL"/>
+			<icon name="media_secure_lock_flag" tool_tip="Bezpieczne przeglądanie (Secured Browsing)"/>
+			<button name="popexternal" tool_tip="Otwórz obecny URL w Twojej zewnętrznej przeglądarce internetowej"/>
+		</layout_panel>
+		<layout_panel name="external_controls">
+			<text name="plugin_fail_text">
+Wygląda na to, że wtyczka przeglądarki długo się otwiera.
+Jeśli plugin się wcale nie załaduje, to odwiedź:
+
+http://wiki.phoenixviewer.com/doku.php?id=fs_search_issues
+
+oraz
+
+http://wiki.phoenixviewer.com/doku.php?id=fs_media
+
+aby poznać możliwe kroki naprawy błędu.
+			</text>
 		</layout_panel>
 	</layout_stack>
 </floater>

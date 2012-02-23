@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_web" label="Sieć">
+    <flyout_button name="load" label="Wczytaj" label_selected="Wczytaj" tool_tip="Wczytaj stronę tego profilu w przeglądarce internetowej.">
+        <flyout_button.item label="Otwórz we wbudowanej" name="open_item" />
+        <flyout_button.item label="Otwórz w zewnętrznej" name="home_item" />
+    </flyout_button>
+        <flyout_button name="web_profile" label="Profil" label_selected="Profil">
+        <flyout_button.item label="Okienko" name="builtin_item" />
+        <flyout_button.item label="Otwórz zewn. przeglądarkę" name="open_item" />
+    </flyout_button>
+</panel>

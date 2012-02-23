@@ -3,10 +3,10 @@
 	<layout_stack name="resizing_stack">
 		<layout_panel name="map_panel">
 			<panel name="map_details_selection">
-				<button name="Show Map details" tool_tip="Show or hide details next to the World Map"/>
+				<button name="Show Map details" tool_tip="Pokaż lub ukryj informacje obok mapy świata"/>
 			</panel>
 			<panel name="layout_panel_6">
-				<slider label="Zoom" name="zoom slider"/>
+				<slider label="Powiększ" name="zoom slider"/>
 			</panel>
 		</layout_panel>
 		<layout_panel name="map_details_panel">
@@ -21,23 +21,23 @@
 					Ja
 				</text>
 				<text name="person_label">
-					Osoba
+					Rezydent
 				</text>
 				<text name="infohub_label">
 					Infohub
 				</text>
 				<text name="land_sale_label">
-					Sprzedaż posiadłości
+					Sprzedaż ziemi
 				</text>
 				<text name="auction_label">
-					Aukcja posiadłości
+					Aukcja ziemi
 				</text>
 				<text name="by_owner_label">
 					przez właściciela
 				</text>
 				<button name="Go Home" tool_tip="Teleportuj do mojego Miejsca Startowego"/>
 				<text name="Home_label">
-					Miejsce Startu
+					Mój Start
 				</text>
 				<text name="events_label">
 					Wydarzenia:
@@ -45,7 +45,6 @@
 				<text name="pg_label">
 					General
 				</text>
-				<check_box initial_value="true" name="events_mature_chk"/>
 				<text name="events_mature_label">
 					Moderate
 				</text>
@@ -73,10 +72,10 @@
 				<layout_stack name="layoutstack_bottom_buttons">
 					<layout_panel name="layoutstackpanel_left">
 						<button label="Teleportuj" name="Teleport" tool_tip="Teleportuj do wybranego miejsca"/>
-						<button label="Wyczyść" name="Clear" tool_tip="Wyczyść zapamiętane linie oraz zresetuj mapę"/>
+						<button label="Wyczyść" name="Clear" tool_tip="Wyczyść zapamiętane linie i zresetuj mapę"/>
 					</layout_panel>
 					<layout_panel name="layoutstackpanel_right">
-						<button label="Kopiuj SLurl" name="copy_slurl" tool_tip="Kopie obecnego miejsca jako SLurl mogą zostać użyte na stronie internetowej."/>
+						<button label="Kopiuj SLurl" name="copy_slurl" tool_tip="Kopiuje obecną lokalizację jako SLurl, aby można było ją użyć na stronie internetowej."/>
 						<button label="Pokaż wybrane" name="Show Destination" tool_tip="Wyśrodkuj mapę w wybranym miejscu"/>
 					</layout_panel>
 				</layout_stack>

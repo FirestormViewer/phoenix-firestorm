@@ -1,32 +1,70 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ruch" name="move_panel">
-	<tab_container name="tabs">
-		<!--View-->
-		<panel name="tab-view">
-			<slider label="Kąt widoku kamery" name="camera_fov"/>
-			<slider label="Dystans kamery" name="camera_offset_scale"/>
+	<tab_container label="Ruch i widok" name="tabs">
+		<panel label="Widok" name="tab-view">
+			<slider label="Kąt widzenia" name="camera_fov"/>
+			<slider label="Dystans" name="camera_offset_scale"/>
+			<slider label="Czas przejścia" name="camera_transition_time"/>
+			<slider label="Wygładzanie" name="camera_position_smoothing"/>
+			<check_box label="Pozwól na większą swobodę kamery" name="DisableCameraConstraints" tool_tip="Zaznacz, aby móc ustawiać punkt widzenia kamery daleko poza jego normalne granice lub poniżej poziomu terenu. Jeśli nie jesteś dobry/a w operowaniu kamerą, to możesz mieć większe problemy z dobraniem odpowiedniego kątu patrzenia."/>
 			<text name="heading2">
 				Automatyczna pozycja dla:
 			</text>
 			<check_box label="Budowanie/Edycja" name="edit_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas włączania i wyłączania trybu edycji."/>
-			<check_box label="Wygląd" name="appearance_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas trybu edycji"/>
-			<check_box initial_value="prawda" label="Schowek" name="appearance_sidebar_positioning" tool_tip="Używaj automatycznego pozycjonowania kamery dla panelu bocznego"/>
-			<check_box label="Awatar widoczny w trybie panoramicznym" name="first_person_avatar_visible"/>
+			<check_box label="Wygląd" name="appearance_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas trybu edycji wyglądu."/>
+			<check_box label="Dodawaj dodatkowe oświetlenie" name="EditAppearanceLighting" tool_tip="Włącz lub wyłącz dodatkowe oświetlenie, gdy edytujesz wygląd."/>
+			<check_box label="Awatar widoczny w trybie pierwszoosobowym" name="first_person_avatar_visible"/>
+			<check_box label="Pokazuj instrukcje trybu pierwszoosobowego" name="mouselook_instructions_visible" tool_tip="Pokazuj instrukcje w trybie pierwszoosobowym"/>
 			<text name="Mouse Sensitivity">
-				Czułość myszki w widoku panoramicznym:
+				Czułość myszki w tym widoku:
 			</text>
-			<check_box label="Zmień klawisze myszki" name="invert_mouse"/>
+			<check_box label="Zmień klaw. myszki" name="invert_mouse"/>
 		</panel>
-		<!--Movement-->
-		<panel name="tab-movement">
+		<panel label="Ruch" name="tab-movement">
 			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem" name="arrow_keys_move_avatar_check"/>
-			<check_box label="Wciśnij-wciśnij-przytrzymaj aby biec" name="tap_tap_hold_to_run"/>
-			<check_box label="Podwójnie kliknij aby:" name="double_click_chkbox"/>
-			<radio_group name="double_click_action">
-				<radio_item label="teleportować się" name="radio_teleport"/>
-				<radio_item label="włączyć auto-pilota" name="radio_autopilot"/>
-			</radio_group>
-			<button label="Inne urządzenia" name="joystick_setup_button"/>
+			<check_box label="Użyj układu klawiatury AZERTY" name="FSUseAzertyKeyboardLayout"/>
+			<text name="FSUseAzertyKeyboardLayout_requires_restart">
+				(wymaga restartu)
+			</text>
+			<check_box label="Puk-puk-trzymaj, aby biec" name="tap_tap_hold_to_run"/>
+			<check_box label="Lataj/ląduj poprzez naciśnięcie góra/dół" name="automatic_fly"/>
+			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
+			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
+			<text name="single_click_action_lbl">
+				Pojedynczy klik na ziemi:
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="Nie rób nic" name="0"/>
+				<combo_box.item label="Podejdź do klikniętego punktu" name="1"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				Podwójny klik na ziemi:
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="Nie rób nic" name="0"/>
+				<combo_box.item label="Podejdź do klikniętego punktu" name="1"/>
+				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
+			</combo_box>
+			<button label="Konfiguruj joystick" name="joystick_setup_button"/>
+		</panel>
+		<panel name="tab-firestorm">
+			<text name="camera_options_label">
+				Opcje kamery:
+			</text>
+			<check_box label="Nie resetuj kamery, gdy kliknę na swojego awatara" name="clickonavatarkeepscamera" tool_tip="Normalnie gdy klikniesz na swojego awatara pozycja kamery ulega zresetowaniu. Ta opcja usuwa to zachowanie."/>
+			<check_box label="Resetowanie pozycji kamery po teleportacji (wewnątrz regionu)" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
+			<check_box label="Wyłącz minimalną odległość przybliżenia kamery" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
+			<check_box label="Przenikanie kamery przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów."/>
+			<text name="ignorecameraconstraints_requires_restart">
+				(wymaga restartu)
+			</text>
+			<check_box label="Włącz rotację minimapy" name="minimaprotate" tool_tip="Obraca miniaturką mapy świata w zależności od tego, w którą stronę zwrócony jest awatar."/>
+			<check_box name="MiniMapChatRing" label="Pierścień na minimapie symbolizujący zasięg czatu lokalnego"/>
+			<check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)"/>
+			<check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach"/>
+			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
+			<check_box label="Filtruj powtarzające się landmarki na mapie świata" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtruj zduplikowane landmarki w liście landmarków na mapie świata."/>
+			<check_box label="Pokazuj dodatkowe informacje o regionie na mapie świata" name="FSAdvancedWorldmapRegionInfo" tool_tip="Pokazuj dodatkowe informacje o regionie na mapie świata (liczbę awatarów i poziom dojrzałości)."/>
 		</panel>
 	</tab_container>
 </panel>

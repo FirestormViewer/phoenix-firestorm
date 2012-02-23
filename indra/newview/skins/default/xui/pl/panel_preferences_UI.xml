@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Ustawienia interfejsu" name="Display panel">
+<tab_container label="Ust. Firestorma" name="tabs">
+    <panel label="Ogólne" name="UI Prefs Panel">
+        <text name="UI Size:">
+            Skalowanie interfejsu (ostrożnie):
+        </text>
+        <text name="HoverTipText">
+            Chmurki pomocy:
+        </text>
+        <check_box label="Włącz (zaznacz najpierw to)" name="ShowHoverTips" tool_tip="Zaznacz, aby pokazywać podstawowe chmurki informacyjne nad awatarami i kilkoma innymi rzeczami - zaznacz najpierw to" />
+        <check_box label="na wszystkich obiektach" tool_tip="Zaznacz, aby włączyć chmurki na obiektach w świecie" name="ShowAllHoverTips" />
+        <check_box label="na terenie" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
+        <text name="tooltip_textbox">
+           Chmurka pojawi się po:
+        </text>
+        <combo_box name="Tooltipdelay">
+            <combo_box.item label="0.7 sekundy" name="tt_item1" />
+            <combo_box.item label="1.5 sekundy" name="tt_item2" />
+            <combo_box.item label="3 sekundach" name="tt_item3" />
+            <combo_box.item label="6 sekundach" name="tt_item4" />
+        </combo_box>
+        <text name="ScriptDialogPlacementText">
+            Komunikaty skryptów:
+        </text>
+        <check_box label="W prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
+        <check_box label="Ogł. grup w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
+        <text name="GroupTopRightRequiresRestart">
+            (wymaga restartu)
+        </text>
+        <text name="ScriptDialogsPerObjectLabel">
+            Komunikatów skr. na obiekt:
+        </text>
+        <combo_box name="ScriptDialogPerObjectDropdown">
+            <combo_box.item label="Jeden na obiekt" name="ScriptDialogOption_0" />
+            <combo_box.item label="Jeden na obiekt i kanał" name="ScriptDialogOption_1" />
+            <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
+        </combo_box>
+        <check_box label="Używaj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
+        <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
+        <text name="ButtonFlashing">
+            Mruganie przycisków:
+        </text>
+        <slider label="Ile razy mrugają przyciski IM:" tool_tip="Ile razy mrugają przyciski IM (używane przy powiadomieniach)" name="ButtonsFlashCount" />
+        <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
+        <text name="ToastSettings">
+            Ustawienia powiadomień (popupy, konsola, tosty):
+        </text>
+        <text name="ToastSpaceTextLabel">
+            Odstęp między najniższym
+        </text>
+        <slider label="tostem i spodem interfejsu:" tool_tip="Odstęp w pikselach pomiędzy spodem interfejsu użytkownika, a dolnym tostem (miejsce na tosty)" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            pikseli
+        </text>
+        <slider label="Ukryj tost po:" tool_tip="Liczba sekund, po jakich tost jest usuwany z ekranu" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            sekund
+        </text>
+        <slider label="Ukryj tost napiwków po:" tool_tip="Liczba sekund, po jakich tost napiwków jest usuwany z ekranu" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            sekund
+        </text>
+        <slider label="Ukryj tost czatu po:" tool_tip="Liczba sekund, po jakich tost czatu lokalnego jest usuwany z ekranu" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            sekund
+        </text>
+        <slider label="Ukryj tost na starcie po:" tool_tip="Liczba sekund, po jakich tost pojawiający się po starcie jest usuwany z ekranu" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            sekund
+        </text>
+        <slider label="Czas ukrywania tosta czatu:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie tosta czatu lokalnego" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            sekund
+        </text>
+        <slider label="Czas dla zwykłego tosta:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie zwykłego tosta" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            sekund
+        </text>
+        <slider label="Odstęp między tostami:" tool_tip="Odstęp pomiędzy sąsiadującymi tostami w pikselach" name="ToastGap" />
+        <text name="ToastGapText">
+            pikseli
+        </text>
+        <slider label="Wysokość dodatk. tosta:" tool_tip="Wysokość nadmiarowego tosta w pikselach" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            pikseli
+        </text>
+        <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu lokalnego ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
+    </panel>
+    <panel label="Czcionka" name="UI-font-tab">
+        <text name="tooltip_textbox1">
+           Krój czcionki:
+        </text>
+        <text name="tooltip_textbox2">
+           (wymaga restartu)
+        </text>
+        <text name="tooltip_textbox5">
+           Dostrojenie rozmiaru:
+        </text>
+        <text name="tooltip_textbox6" >
+           pt (wymaga restartu)
+Domyślnie 0. Większa wartość może sprawiać kłopoty.
+        </text>
+        <text name="tooltip_textbox3">
+           Odstępy w czatach:
+        </text>
+        <text name="tooltip_textbox4">
+          pikseli (wymaga restartu)
+V2/3 domyślnie 0. V1 domyślnie 2.
+        </text>
+        <text name="Label_FolderItemViewHeight">
+           Wysokość w folderach:
+        </text>
+        <text name="Label_FolderItemViewHeight_Scale">
+          pikseli (wymaga restartu)
+V2/3 domyślnie 20. V1 domyślnie 18.
+        </text>
+    </panel>
+</tab_container>
+</panel>

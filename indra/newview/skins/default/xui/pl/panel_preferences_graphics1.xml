@@ -1,103 +1,156 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Grafika" name="Display panel">
-	<text name="QualitySpeed">
-		Jakość i prędkość:
-	</text>
-	<text name="FasterText">
-		Prędkość
-	</text>
-	<text name="BetterText">
-		Lepiej
-	</text>
-	<slider label="" name="QualityPerformanceSelection"/>
-	<text name="ShadersPrefText">
-		Niska
-	</text>
-	<text name="ShadersPrefText2">
-		Średnia
-	</text>
-	<text name="ShadersPrefText3">
-		Wysoka
-	</text>
-	<text name="ShadersPrefText4">
-		Super
-	</text>
-	<panel label="CustomGraphics" name="CustomGraphics Panel">
-		<text name="ShadersText">
-			Cieniowanie pixeli (shadery):
-		</text>
-		<check_box initial_value="prawda" label="Przeźroczystość wody" name="TransparentWater"/>
-		<check_box initial_value="true" label="Mapowanie wypukłości i połysk" name="BumpShiny"/>
-		<check_box initial_value="true" label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych."/>
-		<check_box initial_value="true" label="Shadery atmosfery" name="WindLightUseAtmosShaders"/>
-		<text name="reflection_label">
-			Refleksy w wodzie:
-		</text>
-		<combo_box initial_value="true" label="Refleksy w wodzie" name="Reflections">
-			<combo_box.item label="Mało" name="0"/>
-			<combo_box.item label="Teren i drzewa" name="1"/>
-			<combo_box.item label="Obiekty statyczne" name="2"/>
-			<combo_box.item label="Awatary i obiekty" name="3"/>
-			<combo_box.item label="Wszystko" name="4"/>
-		</combo_box>
-		<slider label="Fizyka awatara:" name="AvatarPhysicsDetail"/>
-		<text name="AvatarPhysicsDetailText">
-			Niska
-		</text>
-		<slider label="Pole widzenia:" name="DrawDistance"/>
-		<text name="DrawDistanceMeterText2">
-			m
-		</text>
-		<slider label="Liczba cząsteczek:" name="MaxParticleCount"/>
-		<slider label="Max. # awatarów bez impostoryzacji:" name="MaxNumberAvatarDrawn"/>
-		<slider label="Jakość post-procesu:" name="RenderPostProcess"/>
-		<text name="MeshDetailText">
-			Szczególy obiektów:
-		</text>
-		<slider label="  Przedmioty:" name="ObjectMeshDetail"/>
-		<slider label="  Obiekty elastyczne:" name="FlexibleMeshDetail"/>
-		<slider label="  Drzewa:" name="TreeMeshDetail"/>
-		<slider label="  Awatary:" name="AvatarMeshDetail"/>
-		<slider label="  Teren:" name="TerrainMeshDetail"/>
-		<slider label="  Niebo:" name="SkyMeshDetail"/>
-		<text name="PostProcessText">
-			Mało
-		</text>
-		<text name="ObjectMeshDetailText">
-			Mało
-		</text>
-		<text name="FlexibleMeshDetailText">
-			Mało
-		</text>
-		<text name="TreeMeshDetailText">
-			Mało
-		</text>
-		<text name="AvatarMeshDetailText">
-			Mało
-		</text>
-		<text name="TerrainMeshDetailText">
-			Mało
-		</text>
-		<text name="SkyMeshDetailText">
-			Mało
-		</text>
-		<text name="AvatarRenderingText">
-			Rendering awatara:
-		</text>
-		<check_box initial_value="true" label="Impostoryzacja awatarowa" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
-		<text name="TerrainDetailText">
-			Szczegóły terenu:
-		</text>
-		<radio_group name="TerrainDetailRadio">
-			<radio_item label="Niska" name="0"/>
-			<radio_item label="Wysoka" name="2"/>
-		</radio_group>
-		--&gt;
-	</panel>
-	<button label="Zastosuj" label_selected="Zastosuj" name="Apply"/>
-	<button label="Zresetuj" name="Defaults"/>
-	<button label="Zaawansowane" name="Advanced"/>
-	<button label="Sprzęt" label_selected="Sprzęt" name="GraphicsHardwareButton"/>
+	<tab_container label="Ustawienia graficzne" name="tabs">
+		<panel label="Ogólne" name="General">
+			<check_box label="Pełny ekran (wymaga restartu)" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie."/>
+			<text name="QualitySpeed">
+				Jakość wyświetlania (niższa jest zwykle szybsza):
+			</text>
+			<text name="ShadersPrefText">
+				Niska
+			</text>
+			<text name="ShadersPrefText2">
+				Średnia
+			</text>
+			<text name="ShadersPrefText3">
+				Wysoka
+			</text>
+			<text name="ShadersPrefText4">
+				Ultra
+			</text>
+			<panel name="CustomGraphics Panel">
+				<text name="ShadersText">
+					Cieniowanie pikseli:
+				</text>
+				<check_box label="Przezroczysta woda" name="TransparentWater"/>
+				<check_box label="Mapowanie wypukłości i połysk" name="BumpShiny"/>
+				<check_box label="Lokalne światła" name="LocalLights"/>
+				<check_box label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych."/>
+				<check_box label="Shadery atmosfery" name="WindLightUseAtmosShaders"/>
+				<check_box label="Światła i cienie" name="UseLightShaders"/>
+				<check_box label="Okluzja otoczenia" name="UseSSAO"/>
+				<check_box label="Głębia ostrości" name="UseDoF"/>
+				<text name="shadows_label">
+					Cienie:
+				</text>
+				<combo_box name="ShadowDetail">
+					<combo_box.item label="Brak" name="0"/>
+					<combo_box.item label="Słońce/Księżyc" name="1"/>
+					<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
+				</combo_box>
+				<text name="reflection_label">
+					Odbicia w wodzie:
+				</text>
+				<combo_box name="Reflections">
+					<combo_box.item label="Minimalne" name="0"/>
+					<combo_box.item label="Teren i drzewa" name="1"/>
+					<combo_box.item label="Wszystkie obiekty statyczne" name="2"/>
+					<combo_box.item label="Wszystkie awatary i obiekty" name="3"/>
+					<combo_box.item label="Wszystko" name="4"/>
+				</combo_box>
+				<text name="local lights_label">
+					Oświetlenie punktowe:
+				</text>
+				<combo_box name="LocalLightsDetail">
+					<combo_box.item label="Pełne (domyślne)" name="3"/>
+					<combo_box.item label="Częściowe" name="2"/>
+					<combo_box.item label="Tylko Słońce/Księżyc" name="1"/>
+				</combo_box>
+				<slider label="Pole widzenia" name="DrawDistance"/>
+				<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
+				<slider label="Maks. il. wyświetlanych awatarów" name="MaxNumberAvatarDrawn"/>
+				<slider label="Jakość post-procesu" name="RenderPostProcess"/>
+				<text name="PostProcessText">
+					Niska
+				</text>
+				<slider label="Szczegółowość nieba:" name="SkyMeshDetail"/>
+				<text name="MeshDetailText">
+					Szczegółowość obiektów (LOD):
+				</text>
+				<slider label="  Obiekty i skulpty" name="ObjectMeshDetail"/>
+				<slider label="  Obiekty elastyczne" name="FlexibleMeshDetail"/>
+				<slider label="  Drzewa" name="TreeMeshDetail"/>
+				<slider label="  Awatary" name="AvatarMeshDetail"/>
+				<slider label="  Teren" name="TerrainMeshDetail"/>
+				<slider label="  Fizyka awatarów" name="AvatarPhysicsDetail"/>
+				<text name="AvatarRenderingText">
+					Rendering awatarów:
+				</text>
+				<check_box label="Upraszczaj oddalone awatary" name="AvatarImpostors"/>
+				<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
+				<check_box initial_value="true" label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
+				<text name="TerrainDetailText">
+					Szczegóły terenu:
+				</text>
+				<radio_group name="TerrainDetailRadio">
+					<radio_item label="Mało" name="0"/>
+					<radio_item label="Dużo" name="2"/>
+				</radio_group>
+			</panel>
+			<button label="Zastosuj" label_selected="Zastosuj" name="Apply"/>
+			<button label="Resetuj" name="Defaults"/>
+			<button label="Zaawansowane" name="Advanced"/>
+		</panel>
+		<panel label="Ustawienia sprzętowe" name="Hardware Settings">
+			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani"/>
+			<check_box label="Włącz OpenGL Vertex Buffer Object (opis geometrii obiektów)" name="vbo" tool_tip="Włączenie tej opcji na nowoczesnym sprzęcie spowoduje wzrost wydajności. Starszy sprzęt jednak ma często słabe wsparcie dla VBO i mogą wystąpić na nim awarie."/>
+			<check_box label="Włącz strumieniowe VBO" name="vbo_stream" tool_tip="Wyłączenie tej opcji może zwiększyć wydajność, gdy VBO jest włączone. Odnotowano zauważalny wzrost wydajności na różnych GPU ze stajni AMD przy wyłączonej tej pozycji."/>
+			<text name="Antialiasing:">
+				Antyaliasing:
+			</text>
+			<combo_box label="Antyaliasing" name="fsaa">
+				<combo_box.item label="Wyłączony" name="FSAADisabled"/>
+			</combo_box>
+			<text name="brightness text">
+				(0 = domyślna jasność, niżej = jaśniej)
+			</text>
+			<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane. Zwiększanie tej wartości ponad 512 MB nie jest wskazane nawet, jeśli Twoja karta to obsługuje - ogólna wydajność Przeglądarki związana z pamięcią operacyjną widocznie spadnie."/>
+			<spinner label="Stosunek odległości dla mgły:" name="fog"/>
+		</panel>
+		<panel name="Rendering">
+			<text name="World Updating">
+				Odświeżanie świata:
+			</text>
+			<check_box label="Wstrzymaj odświeżanie świata (pauzuj wszystko)" tool_tip="Wstrzymaj odświeżanie świata z serwera - zatrzymaj wszystkie akcje w świecie Second Life, ale bez wpływu na czat, IM czy rozmowy głosowe" name="WorldPause"/>
+			<text name="Texture Rendering">
+				Rendering tekstur:
+			</text>
+			<check_box label="Minimalne ładowanie tekstur" tool_tip="Ta opcja jest skrótem dla parametru 'TextureDisable' - tekstury są jednak ciągle wczytywane, ale bardzo powoli. Może to być użyteczne dla komputerów ze słabą kartą graficzną albo wyjątkowo kiepskim połączeniem internetowym. Podczas normalnego użytkowania Second Life nie zaleca się zaznaczania tej opcji." name="TexturesLoaded"/>
+			<check_box label="Ładuj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
+			<slider label="Maks. ilość jednoczesnych wywołań HTTP GET" name="HTTPFetchMaxRequests"/>
+			<text name="TextureDetailLabel">
+				Detale tekstur:
+			</text>
+			<combo_box name="TextureDetail">
+				<combo_box.item label="Normalne" name="0"/>
+				<combo_box.item label="Minimalne" name="3"/>
+				<combo_box.item label="Żadne" name="5"/>
+			</combo_box>
+			<text name="Alpha Mask Rendering">
+				Maski przezroczystości (alpha):
+			</text>
+			<check_box label="Renderuj gdy 'Światła i cienie' są WYŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie nie są zaznaczone" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="Renderuj gdy 'Światła i cienie' są WŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie SĄ zaznaczone" name="RenderAutoMaskAlphaDeferred"/>
+			<text name="Miscellaneous Rendering">
+				Inne opcje wyświetlania:
+			</text>
+			<check_box label="Renderuj blask" tool_tip="Renderuj blask. Siła musi być ustawiona na 0, aby wyłączyć blask gdy cienie są włączone." name="RenderGlow"/>
+			<slider label="Siła:" tool_tip="Siła blasku. Więcej = szerszy i gładszy (domyślnie 2) " name="glow_strength"/>
+			<check_box label="Pokazuj awatary, które nie skończyły się ładować" name="RenderUnloadedAvatars"/>
+			<slider label="Opóźnienie wczytywania świata po logowaniu" tool_tip="Jak długo czekać na rozpoczęcie odświeżenia świata dla Ciebie po tym, gdy pokażesz się dostępny/a dla Twoich znajomych (domyślnie 6 sekund)" name="PrecachingDelay"/>
+			<text name="PrecachingDelayText">
+				sekund
+			</text>
+			<slider label="Jakość cieni" tool_tip="Określa jakość cieni (domyślnie 1)" name="ShadowResolution"/>
+			<slider label="Wielkość tekstur terenu (wymaga restartu)" name="RenderTerrainScale" tool_tip="Określa wielkość tekstur terenu - mniej oznacza: bardziej skompresowane (wymaga restartu)."/>
+		</panel>
+		<panel label="Głębia ostrości" name="DOF panel">
+			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
+			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
+			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>
+			<slider label="Proporcje:" name="CameraAspectRatio" tool_tip="Proporcje dla głębi ostrości"/>
+			<slider label="Czas przejścia:" name="CameraFocusTrans" tool_tip="Czas potrzebny na dostosowanie skupienia kamery podczas zmiany z jednego punktu widzenia na drugi"/>
+			<slider label="Jakość renderowania:" name="CameraDoFResScale" tool_tip="Wpływa na jakość rozmywania oraz wydajność renderowania (więcej = lepsza jakość, mniej = lepsza wydajność)"/>
+		</panel>
+	</tab_container>
 </panel>

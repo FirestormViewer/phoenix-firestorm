@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Raportowanie błędów" name="crash_reports">
+    <check_box label="Wysyłaj raporty o błędach na phoenixviewer.com" name="checkSendCrashReports" />
+    <text label="Logi:" name="textSaveMiniDumpType">
+        Typ zrzutu:
+    </text>
+    <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
+    <check_box label="Dołącz settings.xml" name="checkSendSettings" />
+    <text name="textSendSettings">
+        (zawiera nazwę konta Second Life)
+    </text>
+    <check_box label="Dołącz nazwę konta Second Life" name="checkSendName" />
+    <text name="textSendName">
+        (używane, aby zapytać o dodatkowe informacje w razie potrzeby)
+    </text>
+    <text name="textInformation1">
+        Dopóki nie określono inaczej, to raport o błędach zawiera tylko informacje związane z awarią.
+    </text>
+    <text name="textInformation2">
+        Logi Second Life nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
+    </text>
+    <text name="textInformation3">
+        jeśli uważasz, że mogą zawierać istotne informacje.
+    </text>
+    <text name="textInformation4">
+        Polityka prywatności: http://privacy-placeholder
+    </text>
+</panel>

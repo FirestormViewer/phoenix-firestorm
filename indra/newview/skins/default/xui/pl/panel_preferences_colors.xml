@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Kolory" name="colors_panel">
 	<text name="effects_color_textbox">
-		Moje efekty (opcje wyboru):
+		Efekty wyboru (wiązka cząsteczek):
 	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Kliknij aby wybrać kolor"/>
+	<text name="netmap_color_textbox">
+		Minimapa:
+	</text>
+	<text name="netmap_chatring_color_label">
+		Zasięg czatu
+	</text>
+	<color_swatch name="netmap_shoutring_color_swatch" tool_tip="Kliknij aby wybrać kolor"/>
+	<text name="netmap_shoutring_color_label">
+		Zasięg krzyku
+	</text>
 	<text name="font_colors">
-		Kolory czcionki czatu:
+		Kolory czcionki interfejsu:
 	</text>
 	<text name="text_box1">
 		Ja
@@ -22,20 +31,42 @@
 	<text name="text_box5">
 		Błędy
 	</text>
+	<text name="text_box6">
+		IM obiektów
+	</text>
 	<text name="text_box7">
 		Właściciel
 	</text>
+	<text name="text_box8">
+		Nagłówki czatu
+	</text>
 	<text name="text_box9">
-		URL
+		URLe
+	</text>
+	<text name="text_box10">
+		Bezpośrednie
+	</text>
+	<text name="ScriptDialogBgLabel">
+		Tło skryptów
+	</text>
+	<text name="ScriptDialogFgLabel">
+		Kolor skryptów
 	</text>
 	<text name="bubble_chat">
-		Kolor tła taga (dotyczy również czatu chmurkowego):
+		Tło imienia, czatu chmurkowego, konsoli:
 	</text>
-	<color_swatch name="background" tool_tip="Wybierz kolor taga"/>
-	<slider label="Przeźroczystość:" name="bubble_chat_opacity" tool_tip="Wybierz przeźroczystość taga"/>
+	<color_swatch name="background" tool_tip="Wybierz kolor tła imienia (taga)"/>
+	<slider label="Przezrocz.:" name="bubble_chat_opacity" tool_tip="Wybierz przezroczystość taga"/>
 	<text name="floater_opacity">
-		Floater Opacity:
+		Przezroczystość pływającego okna:
 	</text>
 	<slider label="Aktywne:" name="active"/>
 	<slider label="Nieaktywne:" name="inactive"/>
+	<check_box name="FSScriptDialogNoTransparency" label="Okna dialogowe skryptów zawsze na nieprzejrzystym tle"/>
+	<check_box name="FSGroupNotifyNoTransparency" label="Ogłoszenia grupowe zawsze na nieprzejrzystym tle"/>
+	<check_box name="override_pie_color_checkbox" label="Nadpisz przezroczystość i kolor tła menu kołowego:"/>
+	<color_swatch name="pie_bg_color_override" tool_tip="Wybierz kolor tła menu kołowego"/>
+	<color_swatch name="pie_selected_color_override" tool_tip="Wybierz kolor selekcji menu kołowego"/>
+	<slider label="Przezrocz.:" name="pie_menu_opacity" tool_tip="Wybierz przezroczystość menu kołowego"/>
+	<slider label="Brzegi:" name="pie_menu_fade_out" tool_tip="Wybierz stopień wyciemnienia brzegów menu kołowego"/>
 </panel>

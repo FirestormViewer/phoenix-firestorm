@@ -1,30 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Komunikacja" name="im">
-	<panel.string name="log_in_to_change">
-		Zaloguj się ponownie, aby zmienić
-	</panel.string>
-	<button label="Wyczyść Historię" name="clear_cache" tool_tip="Wyczyść obraz zapisu, ostatniej lokalizacji, historii teleportów, stron i bufor danych tekstur"/>
-	<text name="cache_size_label_l">
-		(Miejsca, obrazy, przeglądarka internetowa, wyszukiwarka historii)
-	</text>
-	<check_box label="Pokaż mój profil w wynikach wyszukiwarki" name="online_searchresults"/>
-	<check_box label="Mój status online jest dostępny tylko dla znajomych i grup do których należę" name="online_visibility"/>
-	<check_box label="Możliwość wysyłania wiadomości prywatnej (IM) oraz rozmowy głosowej tylko dla &#10;znajomych i grup do których należę" name="voice_call_friends_only_check" top_pad="15"/>
-	<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
-	<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		Logi rozmów:
-	</text>
-	<check_box label="Zapisz logi rozmów ogólnych na moim komputerze" name="log_nearby_chat"/>
-	<check_box label="Zapisuj logi wiadomości prywatnych (IM) na moim komputerze" name="log_instant_messages"/>
-	<check_box label="Dodaj znacznik czasu do każdej linii w logu rozmów." name="show_timestamps_check_im"/>
-	<check_box label="Dodaj znacznik czasu do nazwy pliku z zapisem rozmów." name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		Lokalizacja zapisu:
-	</text>
-	<button label="Przeglądaj" label_selected="Przeglądaj" name="log_path_button"/>
-	<button label="Lista zablokowanych" name="block_list"/>
-	<text name="block_list_label">
-		(Ludzie i/lub obiekty zablokowane)
-	</text>
+	<tab_container label="Prywatność" name="tabs">
+		<panel label="Ogólne" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Zaloguj się, by zmienić
+			</panel.string>
+			<button label="Wyczyść historię" tool_tip="Wyczyść zapisane obrazy, ostatnią lokalizację, historię teleportów, bufor stron internetowych i cache tekstur" name="clear_cache"/>
+			<text name="cache_size_label">
+				(miejsca, obrazy, strony web, historia wyszukiwarki)
+			</text>
+			<check_box label="Pokaż mój profil w wynikach wyszukiwarki" name="online_searchresults"/>
+			<check_box label="Mój status online dostępny tylko dla znajomych i grup" name="online_visibility"/>
+			<check_box label="Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe" name="voice_call_friends_only_check"/>
+			<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
+			<check_box label="Automatycznie akceptuj nowe przedmioty" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Automatycznie pokazuj akceptowane przedmioty" name="Show_In_Inventory"/>
+			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
+			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Pokaż moje ulubione landmarki przy logowaniu (w rozwijanym menu &apos;Rozpocznij w&apos;)" name="favorites_on_login_check"/>
+			<text name="Logs:">
+				Logi czatów:
+			</text>
+			<check_box label="Zapisz logi rozmów lokalnych na moim komputerze (może lagować)" name="log_nearby_chat"/>
+			<check_box label="Zapisz logi wiadomości prywatnych (IM) na moim komputerze" name="log_instant_messages"/>
+			<check_box label="Dodaj znacznik czasu do każdej linii w logu rozmów." name="show_timestamps_check_im"/>
+			<check_box label="Pokazuj sekundy w logach" name="seconds_in_timestamps"/>
+			<check_box label="Dodaj znacznik czasu do nazwy pliku z zapisem rozmów." name="logfile_name_datestamp"/>
+			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
+		</panel>
+		<panel label="Śledzenie spojrzeń" name="tab-lookat">
+			<check_box label="Pokazuj na co patrzą inni" name="showlookat" tool_tip="Włącz celowniczki pokazujące, gdzie inni ludzie mają skierowany swój wzrok."/>
+			<text name="lookatshownames" tool_tip="Wybierz, czy przy celowniczkach mają być pokazywane imiona awatarów">
+				Pokazuj imiona przy celach spojrzeń:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Nie pokazuj" name="None"/>
+				<combo_box.item label="Pełne imię" name="Complete_Name"/>
+				<combo_box.item label="Wyświetlane imię" name="Display_Name"/>
+				<combo_box.item label="Stare imię" name="Legacy_Name"/>
+				<combo_box.item label="Nazwa konta" name="User_Name"/>
+			</combo_box>
+			<text name="mylookat">
+				Moje spojrzenie:
+			</text>
+			<check_box label="Nie pokazuj celu mojego spojrzenia" name="LookAtHideOwn" tool_tip="Nie pokazuj mi mojego własnego celowniczka"/>
+			<check_box label="Nie pokazuj innym, gdzie patrzę" name="privatelookat" tool_tip="Zapobiega wysyłaniu na serwer informacji o własnym celu spojrzenia"/>
+			<check_box label="Nie zmieniaj celu mojego spojrzenia nawet na moim własnym ekranie" name="privateLocalLookat" tool_tip="Zapobiega poruszaniu głową i skupianiu wzroku Twojego awatara na Twoim własnym ekranie. Ten ruch nie musi być widoczny dla innych nawet gdy ta opcja jest wyłączona."/>
+			<check_box label="Nie pokazuj innym celów moich wskazań" name="privatepointat" tool_tip="Zapobiega wysyłaniu innym celów wskazanych myszką"/>
+		</panel>
+		<panel label="Autoodpowiedzi" name="tab-autoresponse">
+			<text name="text_box3">
+				Gdy jestem zajęty/a:
+			</text>
+			<text name="autorespond_response_label">
+				Gdy włączony jest tryb autoodpowiedzi do wszystkich awatarów:
+			</text>
+			<text name="autorespond_nf_response_label">
+				Dla nieznajomych, gdy włączony jest tryb autoodpowiedzi do nieznajomych:
+			</text>
+			<check_box label="Wysyłaj autoodpowiedzi do WYCISZONYCH awatarów" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+			<text name="muted_avatar_response_label">
+				Automatyczna odpowiedź wysyłana wyciszonym awatarom:
+			</text>
+		</panel>
+	</tab_container>
 </panel>

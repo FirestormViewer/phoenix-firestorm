@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="ZRESETUJ PRACĘ W TOKU">
+<floater name="queue" title="POSTĘP RESETOWANIA">
 	<floater.string name="Starting">
-		Rozpoczęcie [START] [COUNT] elementów.
+		Rozpoczęcie [START] z [COUNT] elementów.
 	</floater.string>
 	<floater.string name="Done">
-		Wykonane.
+		Gotowe.
 	</floater.string>
 	<floater.string name="Resetting">
 		Trwa resetowanie

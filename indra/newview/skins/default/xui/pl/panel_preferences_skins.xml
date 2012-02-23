@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Skórki" name="skin_panel">
+    <text name="skin_textbox">
+        Skórka:
+    </text>
+    <text name="skin_textbox1">
+        (wymaga restartu)
+    </text>
+    <text name="theme_textbox">
+        Schemat kolorów:
+    </text>
+    <text name="theme_textbox2">
+        (wymaga restartu)
+    </text>
+    <check_box label="Używaj stylu kursorów z Viewer 1.x" name="use _legacy_cursors" />
+    <text name="theme_textbox3">
+        (wymaga restartu)
+    </text>
+</panel>

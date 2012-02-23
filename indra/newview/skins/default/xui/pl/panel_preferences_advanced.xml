@@ -3,16 +3,12 @@
 	<panel.string name="aspect_ratio_text">
 		[NUM]:[DEN]
 	</panel.string>
-	<text name="UI Size:">
-		rozmiar UI:
-	</text>
-	<check_box label="Pokaż błędy skryptu w:" name="show_script_errors"/>
-	<radio_group name="show_location">
-		<radio_item label="Czat Lokalny" name="0"/>
-		<radio_item label="Osobne okno:" name="1"/>
-	</radio_group>
-	<check_box label="Pozwól na wiele przeglądarek" name="allow_multiple_viewer_check"/>
-	<check_box label="Pokaż selekcję siatki przy logowaniu" name="show_grid_selection_check"/>
-	<check_box label="Pokaz menu Zaawansowane" name="show_advanced_menu_check"/>
-	<check_box label="Pokaz menu Rozwinięcie" name="show_develop_menu_check"/>
+	<panel.string name="middle_mouse">
+		Środkowy przycisk myszki
+	</panel.string>
+	<check_box label="Zezwól na wiele Przeglądarek (może obniżyć stabilność i wydajność)" name="allow_multiple_viewer_check"/>
+	<check_box label="Zezwól na logowanie do innych siatek (nie wszystkie będą obsługiwać Firestorma)" name="show_grid_selection_check"/>
+	<check_box label="Pokaż menu Zaawansowane (na własną odpowiedzialność!)" name="show_advanced_menu_check"/>
+	<check_box label="Pokaż menu Programista" name="show_develop_menu_check"/>
+	<button label="Resetuj wszystkie ustawienia" label_selected="Resetuj wszystkie ustawienia..." name="clear_settings"/>
 </panel>

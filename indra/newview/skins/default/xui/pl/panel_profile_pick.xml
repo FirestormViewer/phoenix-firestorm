@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_pick_info">
+    <panel.string name="location_notice">
+(zostanie zaktualizowane po zapisaniu)
+    </panel.string>
+    <text name="pick_location">
+        ładowanie...
+    </text>
+    <button label="Teleportuj" name="teleport_btn" />
+    <button label="Pokaż na mapie" name="show_on_map_btn" />
+    <button label="Ustaw lokalizację" tool_tip="Ustaw na bieżącą lokalizację" name="set_to_curr_location_btn" />
+    <button label="Zapisz Miejsce" name="save_changes_btn" />
+</panel>
