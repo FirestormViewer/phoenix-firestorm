@@ -45,7 +45,7 @@ Voice-Serverversion: [VOICE_VERSION]
 	<tab_container name="about_tab">
 		<panel label="Info" name="support_panel">
     <text name="support_intro">    
-For the latest information about Firestorm, visit    
+Aktuelle Informationen über Firestorm finden Sie unter
     http://www.phoenixviewer.com
     </text>
 			<button label="In Zwischenablage kopieren" name="copy_btn"/>
@@ -72,7 +72,7 @@ Second Life wird präsentiert von den Lindens:
 <!-- Firestorm Credits -->
       <panel label="Firestorm" name="fs_credits_panel">      
 <text name="firestorm_intro" height="100" >
-Firestorm ist ein Community-Entwicklungsprojekt, um das SecondLife(tm) Viewer Erlebnis zu verbessern. Wir verbinden Beiträge von verschie denen Community-Entwicklern mit Code von Linden Lab sowie unseren eigenen Erweiterungen, um Ihnen ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
+Firestorm ist ein Community-Entwicklungsprojekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von verschiedenen Community-Entwicklern mit Code von Linden Lab sowie unseren eigenen Erweiterungen, um Ihnen ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:
       </text>
@@ -80,12 +80,12 @@ Das Firestorm Entwickler-Team:
 Zusätzlicher Programmcode von:
       </text>
       <text name="fs_support_intro" >
-Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
+Besonderer Dank gilt unserem Firestorm-Support-Team sowie den Wiki-Autoren, Schulungsleitern und Übersetzern:
       </text>
       <text name="fs_art_intro" >
-Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of provi ding an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.sec ondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+Firestorm enthält Starlight, modifiziert für Firestorm. Es ist von Einwohnern für Einwohner und hat das Ziel, eine alternative, freundlichere und hoffentlich einfacher zu bedienende Oberfläche bereitzustellen. Für weitere Details, siehe &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
-UI Artists and Designers:
+UI-Künstler und Designer:
       </text>
 
         </panel>
