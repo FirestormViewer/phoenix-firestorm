@@ -1221,6 +1221,10 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
         getChild<LLUICtrl>("pick_desc")->setEnabled( TRUE );
         getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( TRUE );
     }
+	else
+	{
+		mSnapshotCtrl->setEnabled(FALSE);
+	}
 }
 
 BOOL FSPanelPick::postBuild()
