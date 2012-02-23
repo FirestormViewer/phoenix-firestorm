@@ -270,6 +270,7 @@ LLNavigationBar::LLNavigationBar()
 	mBtnForward(NULL),
 	mBtnHome(NULL),
 	mCmbLocation(NULL),
+	mSearchComboBox(NULL),
 	mPurgeTPHistoryItems(false),
 	mSaveToLocationHistory(false)
 {
@@ -291,7 +292,10 @@ BOOL LLNavigationBar::postBuild()
 	mBtnForward	= getChild<LLPullButton>("forward_btn");
 	mBtnHome	= getChild<LLButton>("home_btn");
 	
-	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo");
+	mCmbLocation= getChild<LLLocationInputCtrl>("location_combo"); 
+	mSearchComboBox	= getChild<LLSearchComboBox>("search_combo_box");
+
+	fillSearchComboBox();
 
 	mBtnBack->setEnabled(FALSE);
 	mBtnBack->setClickedCallback(boost::bind(&LLNavigationBar::onBackButtonClicked, this));
@@ -306,6 +310,8 @@ BOOL LLNavigationBar::postBuild()
 	mBtnHome->setClickedCallback(boost::bind(&LLNavigationBar::onHomeButtonClicked, this));
 
 	mCmbLocation->setCommitCallback(boost::bind(&LLNavigationBar::onLocationSelection, this));
+	
+	mSearchComboBox->setCommitCallback(boost::bind(&LLNavigationBar::onSearchCommit, this));
 
 	mTeleportFinishConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFinishedCallback(boost::bind(&LLNavigationBar::onTeleportFinished, this, _1));
@@ -348,6 +354,26 @@ void LLNavigationBar::setVisible(BOOL visible)
 			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
 		}
 		getParent()->setVisible(visible);	
+	}
+}
+
+
+void LLNavigationBar::fillSearchComboBox()
+{
+	if(!mSearchComboBox)
+	{
+		return;
+	}
+
+	LLSearchHistory::getInstance()->load();
+
+	LLSearchHistory::search_history_list_t search_list = 
+		LLSearchHistory::getInstance()->getSearchHistoryList();
+	LLSearchHistory::search_history_list_t::const_iterator it = search_list.begin();
+	for( ; search_list.end() != it; ++it)
+	{
+		LLSearchHistory::LLSearchHistoryItem item = *it;
+		mSearchComboBox->add(item.search_query);
 	}
 }
 
@@ -401,6 +427,16 @@ void LLNavigationBar::onForwardButtonClicked()
 void LLNavigationBar::onHomeButtonClicked()
 {
 	gAgent.teleportHome();
+}
+
+void LLNavigationBar::onSearchCommit()
+{
+	std::string search_query = mSearchComboBox->getSimple();
+	if(!search_query.empty())
+	{
+		LLSearchHistory::getInstance()->addEntry(search_query);
+	}
+	invokeSearch(search_query);	
 }
 
 void LLNavigationBar::onTeleportHistoryMenuItemClicked(const LLSD& userdata)

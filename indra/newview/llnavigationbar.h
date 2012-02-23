@@ -118,6 +118,7 @@ private:
 	void onHomeButtonClicked();
 	void onLocationSelection();
 	void onLocationPrearrange(const LLSD& data);
+	void onSearchCommit();
 	void onTeleportFinished(const LLVector3d& global_agent_pos);
 	void onTeleportFailed();
 	void onRegionNameResponse(
@@ -126,6 +127,8 @@ private:
 			LLVector3 local_coords,
 			U64 region_handle, const std::string& url,
 			const LLUUID& snapshot_id, bool teleport);
+
+	void fillSearchComboBox();
 
 	static void destroyClass()
 	{
@@ -139,6 +142,7 @@ private:
 	LLPullButton*				mBtnBack;
 	LLPullButton*				mBtnForward;
 	LLButton*					mBtnHome;
+	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
 	LLRect						mDefaultNpRect;
 	LLRect						mDefaultNavContainerRect;
