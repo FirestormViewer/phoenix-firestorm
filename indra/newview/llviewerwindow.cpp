@@ -1932,6 +1932,13 @@ void LLViewerWindow::initWorldUI()
 		navbar->setVisible(FALSE);
 	}
 
+	// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
+	if (!gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+	{
+		navbar->showFavoritesPanel(FALSE);
+	}
+	// </FS:Ansariel>
+
 	if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
 	{
 		navbar->childSetVisible("search_combo_box",FALSE);
