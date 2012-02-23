@@ -1221,10 +1221,10 @@ void FSPanelPick::setAvatarId(const LLUUID& avatar_id)
         getChild<LLUICtrl>("pick_desc")->setEnabled( TRUE );
         getChild<LLUICtrl>("set_to_curr_location_btn")->setVisible( TRUE );
     }
-	else
+	/*else
 	{
 		mSnapshotCtrl->setEnabled(FALSE);
-	}
+	}*/
 }
 
 BOOL FSPanelPick::postBuild()
@@ -1264,6 +1264,10 @@ void FSPanelPick::processProperties(void* data, EAvatarProcessorType type)
 
     mParcelId = pick_info->parcel_id;
     setSnapshotId(pick_info->snapshot_id);
+	if (getAvatarId() != gAgent.getID())
+	{
+		mSnapshotCtrl->setEnabled(FALSE);
+	}
     setPickName(pick_info->name);
     setPickDesc(pick_info->desc);
     setPosGlobal(pick_info->pos_global);
