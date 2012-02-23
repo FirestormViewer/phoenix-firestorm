@@ -317,14 +317,6 @@
         <menu_item_check label="RestrainedLove API" name="RLV API"/>
 		<menu_item_call label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
 		<menu_item_check label="Menü „Entwickler“ anzeigen" name="Debug Mode"/>
-		<menu label="Loglevel" name="Set Loglevel">
-			<menu_item_call label="Alles" name="Debug Level All"/>
-			<menu_item_call label="Debug" name="Debug Level Debug"/>
-			<menu_item_call label="Fehler" name="Debug Level Error"/>
-			<menu_item_call label="Info (Standard)" name="Debug Level Info"/>
-			<menu_item_call label="Warnung" name="Debug Level Warn"/>
-			<menu_item_call label="Nichts" name="Debug Level None"/>
-		</menu>
 	</menu>
 	<menu label="Entwickler" name="Develop">
 		<menu label="Konsolen" name="Consoles">
@@ -505,6 +497,13 @@
 		<menu_item_call label="Bilder komprimieren" name="Compress Images"/>
 		<menu_item_check label="Ausgabe Fehlerbeseitigung ausgeben" name="Output Debug Minidump"/>
 		<menu_item_check label="Bei nächster Ausführung Debugkonsole öffnen" name="Console Window"/>
+		<menu label="Loglevel" name="Set Logging Level">
+			<menu_item_call label="Debug" name="Debug Level Debug"/>
+			<menu_item_call label="Info (Standard)" name="Debug Level Info"/>
+			<menu_item_call label="Warnung" name="Debug Level Warn"/>
+			<menu_item_call label="Fehler" name="Debug Level Error"/>
+			<menu_item_call label="Nichts" name="Debug Level None"/>
+		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
 		<menu_item_check label="Admin-Menü anzeigen" name="View Admin Options"/>
