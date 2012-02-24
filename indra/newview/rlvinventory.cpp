@@ -404,7 +404,8 @@ void RlvRenameOnWearObserver::doneIdle()
 	}
 
 	const LLViewerJointAttachment* pAttachPt = NULL; S32 idxAttachPt = 0;
-	RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
+	// Kitty says this check really doesn't do much of anything. -- TS
+	// RLV_ASSERT(mComplete.size() > 0);	// Catch instances where we forgot to call startFetch()
 	for (uuid_vec_t::const_iterator itItem = mComplete.begin(); itItem != mComplete.end(); ++itItem)
 	{
 		const LLUUID& idAttachItem = *itItem;
