@@ -64,6 +64,18 @@ LLRect LLScreenChannelBase::getChannelRect()
 	if (mChicletRegion == NULL)
 	{
 		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		// <FS:Ansariel> Group notices, IMs and chiclets position:
+		//               Move the chiclet container to the bottom of its parent
+		//               and follow bottom instead of top
+		if (!gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+		{
+			LLRect parent_rect = mChicletRegion->getParent()->getRect();
+			LLRect chiclet_rect = mChicletRegion->getRect();
+			chiclet_rect = chiclet_rect.set(chiclet_rect.mLeft, parent_rect.mBottom - chiclet_rect.getHeight() - 1, chiclet_rect.mRight, parent_rect.mBottom - 1);
+			mChicletRegion->setRect(chiclet_rect);
+			mChicletRegion->setFollows((mChicletRegion->getFollows() & ~FOLLOWS_TOP) | FOLLOWS_BOTTOM);
+		}
+		// </FS:Ansariel> Group notices, IMs and chiclets position
 	}
 	
 	LLRect channel_rect;
@@ -72,7 +84,18 @@ LLRect LLScreenChannelBase::getChannelRect()
 	mFloaterSnapRegion->localRectToScreen(mFloaterSnapRegion->getLocalRect(), &channel_rect);
 	mChicletRegion->localRectToScreen(mChicletRegion->getLocalRect(), &chiclet_rect);
 
-	channel_rect.mTop = chiclet_rect.mBottom;
+	// <FS:Ansariel> Group notices, IMs and chiclets position
+	//channel_rect.mTop = chiclet_rect.mBottom;
+	if (gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+	{
+		channel_rect.mTop = chiclet_rect.mBottom;
+	}
+	else
+	{
+		// Apparently not needed at the moment - pushes the toasts up too high
+		//channel_rect.mBottom = chiclet_rect.mTop;
+	}
+	// </FS:Ansariel> Group notices, IMs and chiclets position
 	return channel_rect;
 }
 
@@ -96,9 +119,6 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 	mFloaterSnapRegion(NULL),
 	mChicletRegion(NULL)
 {
-	if(gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
-		mToastAlignment = NA_TOP;
-
 	mID = p.id;
 
 	setMouseOpaque( false );

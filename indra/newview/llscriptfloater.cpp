@@ -350,9 +350,20 @@ void LLScriptFloater::dockToChiclet(bool dock)
 		bool save = getSavePosition();
 		setSavePosition(false);
 
-		setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
-			LLDockControl::BOTTOM));
-
+		// <FS:Ansariel> Group notices, IMs and chiclets position
+		//setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
+		//	LLDockControl::BOTTOM));
+		if (gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+		{
+			setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
+				LLDockControl::BOTTOM));
+		}
+		else
+		{
+			setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
+				LLDockControl::TOP));
+		}
+		// </FS:Ansariel> Group notices, IMs and chiclets position
 		setDocked(dock);
 
 		// Restore saving
