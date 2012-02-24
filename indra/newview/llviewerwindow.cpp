@@ -1929,7 +1929,9 @@ void LLViewerWindow::initWorldUI()
 	
 	if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
 	{
-		navbar->setVisible(FALSE);
+		// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
+		//navbar->setVisible(FALSE);
+		navbar->showNavigationPanel(FALSE);
 	}
 
 	// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
