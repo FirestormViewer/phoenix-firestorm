@@ -99,6 +99,7 @@
 		<text name="NearbyToastWidthText">
 			%
 		</text>
+		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 	</panel>
 
 	<!--Font-->

@@ -577,6 +577,9 @@ void LLScreenChannel::showToastsBottom()
 
 	LLDockableFloater* floater = dynamic_cast<LLDockableFloater*>(LLDockableFloater::getInstanceHandle().get());
 
+	// <FS:Ansariel> Show toasts in front of other floaters
+	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
+
 	for(it = mToastList.rbegin(); it != mToastList.rend(); ++it)
 	{
 		if(it != mToastList.rbegin())
@@ -639,7 +642,10 @@ void LLScreenChannel::showToastsBottom()
 			// EXT-2653: it is necessary to prevent overlapping for secondary showed toasts
 			(*it).toast->setVisible(TRUE);
 		}		
-		if(!(*it).toast->hasFocus())
+		// <FS:Ansariel> Show toasts in front of other floaters
+		//if(!(*it).toast->hasFocus())
+		if(!(*it).toast->hasFocus() && !toasts_in_front)
+		// </FS:Ansariel> Show toasts in front of other floaters
 		{
 			// Fixing Z-order of toasts (EXT-4862)
 			// Next toast will be positioned under this one.
@@ -688,6 +694,9 @@ void LLScreenChannel::showToastsTop()
 	updateRect();
 
 	LLDockableFloater* floater = dynamic_cast<LLDockableFloater*>(LLDockableFloater::getInstanceHandle().get());
+
+	// <FS:Ansariel> Show toasts in front of other floaters
+	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
 
 	for(it = mToastList.rbegin(); it != mToastList.rend(); ++it)
 	{
@@ -751,7 +760,10 @@ void LLScreenChannel::showToastsTop()
 			// EXT-2653: it is necessary to prevent overlapping for secondary showed toasts
 			(*it).toast->setVisible(TRUE);
 		}		
-		if(!(*it).toast->hasFocus())
+		// <FS:Ansariel> Show toasts in front of other floaters
+		//if(!(*it).toast->hasFocus())
+		if(!(*it).toast->hasFocus() && !toasts_in_front)
+		// </FS:Ansariel> Show toasts in front of other floaters
 		{
 			// Fixing Z-order of toasts (EXT-4862)
 			// Next toast will be positioned under this one.
