@@ -165,13 +165,6 @@ protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
 
-//	<Ansariel>: removed local DN processing in favor of onAvatarNameLookup
-//	void lookupDisplayNames(const LLUUID& agent_id);
-//	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name);
-//	bool checkDisplayName();
-//	LLAvatarName mAvatarName;
-//	</Ansariel>
-
 	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
 
 	BOOL FSLogImToChatConsole;
