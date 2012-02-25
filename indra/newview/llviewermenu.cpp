@@ -9694,7 +9694,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLGoToObject(), "GoToObject");
 	commit.add("PayObject", boost::bind(&handle_give_money_dialog));
 
-	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
+	// <FS:Ansariel> Commented out - already definied earlier in this method
+	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 
 	enable.add("EnablePayObject", boost::bind(&enable_pay_object));
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
