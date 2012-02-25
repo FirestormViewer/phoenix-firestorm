@@ -2288,7 +2288,11 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 	{
 		// when it's time to show navigation bar we need to ensure that the user wants to see it
 		// i.e. ShowNavbarNavigationPanel option is true
-		navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
+		// <FS:Ansariel> Separate navigation and favorites panel
+		//navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
+		navbarp->showNavigationPanel(visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		navbarp->showFavoritesPanel(visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+		// </FS:Ansariel> Separate navigation and favorites panel
 	}
 }
 
@@ -5213,7 +5217,11 @@ void LLViewerWindow::setUIVisibility(bool visible)
 		gToolBarView->setToolBarsVisible(visible);
 	}
 
-	LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	// <FS:Ansariel> Separate navigation and favorites panel
+	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	LLNavigationBar::getInstance()->showNavigationPanel(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	LLNavigationBar::getInstance()->showFavoritesPanel(visible ? gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"): FALSE);
+	// </FS:Ansariel> Separate navigation and favorites panel
 	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
 }
