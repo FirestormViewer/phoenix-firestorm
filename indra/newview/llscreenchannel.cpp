@@ -63,17 +63,19 @@ LLRect LLScreenChannelBase::getChannelRect()
 	
 	if (mChicletRegion == NULL)
 	{
-		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
 		// <FS:Ansariel> Group notices, IMs and chiclets position:
 		//               Move the chiclet container to the bottom of its parent
 		//               and follow bottom instead of top
-		if (!gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+		//mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
 		{
-			LLRect parent_rect = mChicletRegion->getParent()->getRect();
-			LLRect chiclet_rect = mChicletRegion->getRect();
-			chiclet_rect = chiclet_rect.set(chiclet_rect.mLeft, parent_rect.mBottom - chiclet_rect.getHeight() - 1, chiclet_rect.mRight, parent_rect.mBottom - 1);
-			mChicletRegion->setRect(chiclet_rect);
-			mChicletRegion->setFollows((mChicletRegion->getFollows() & ~FOLLOWS_TOP) | FOLLOWS_BOTTOM);
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+			gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
 		}
 		// </FS:Ansariel> Group notices, IMs and chiclets position
 	}
@@ -86,7 +88,7 @@ LLRect LLScreenChannelBase::getChannelRect()
 
 	// <FS:Ansariel> Group notices, IMs and chiclets position
 	//channel_rect.mTop = chiclet_rect.mBottom;
-	if (gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
 	{
 		channel_rect.mTop = chiclet_rect.mBottom;
 	}
@@ -134,7 +136,21 @@ BOOL LLScreenChannelBase::postBuild()
 	
 	if (mChicletRegion == NULL)
 	{
-		mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		// <FS:Ansariel> Group notices, IMs and chiclets position - Apparently
+		//               this never gets called, instead see
+		//               LLScreenChannelBase::getChannelRect()
+		//mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+		{
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container");
+			gViewerWindow->getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+		}
+		else
+		{
+			mChicletRegion = gViewerWindow->getRootView()->getChildView("chiclet_container_bottom");
+			gViewerWindow->getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+		}
+		// </FS:Ansariel>
 	}
 	
 	return TRUE;

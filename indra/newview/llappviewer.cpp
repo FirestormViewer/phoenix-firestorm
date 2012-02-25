@@ -3140,6 +3140,10 @@ bool LLAppViewer::initWindow()
 	}
 	LL_INFOS("AppInit") << "watchdog setting is done." << LL_ENDL;
 
+	// <FS:Ansariel> Init group notices, IMs and chiclets position before the
+	//               screenchannel gets created
+	gSavedSettings.setBOOL("InternalShowGroupNoticesTopRight", gSavedSettings.getBOOL("ShowGroupNoticesTopRight"));
+
 	LLNotificationsUI::LLNotificationManager::getInstance();
 		
 	if (gSavedSettings.getBOOL("WindowMaximized"))

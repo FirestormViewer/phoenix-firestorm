@@ -1882,7 +1882,20 @@ void LLViewerWindow::initWorldUI()
 	//getRootView()->sendChildToFront(gFloaterView);
 	//getRootView()->sendChildToFront(gSnapshotFloaterView);
 
-	LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+	// <FS:Ansariel> Group notices, IMs and chiclets position
+	//LLPanel* chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+	LLPanel* chiclet_container;
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+	{
+		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container");
+		getRootView()->getChildView("chiclet_container_bottom")->setVisible(FALSE);
+	}
+	else
+	{
+		getRootView()->getChildView("chiclet_container")->setVisible(FALSE);
+		chiclet_container = getRootView()->getChild<LLPanel>("chiclet_container_bottom");
+	}
+	// </FS:Ansariel> Group notices, IMs and chiclets position
 	LLChicletBar* chiclet_bar = LLChicletBar::getInstance();
 	chiclet_bar->setShape(chiclet_container->getLocalRect());
 	chiclet_bar->setFollowsAll();

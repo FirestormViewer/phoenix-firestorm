@@ -353,7 +353,7 @@ void LLScriptFloater::dockToChiclet(bool dock)
 		// <FS:Ansariel> Group notices, IMs and chiclets position
 		//setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
 		//	LLDockControl::BOTTOM));
-		if (gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+		if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
 		{
 			setDockControl(new LLDockControl(chiclet, this, getDockTongue(),
 				LLDockControl::BOTTOM));

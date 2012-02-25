@@ -76,7 +76,7 @@ LLScreenChannel* LLChannelManager::createNotificationChannel()
 	p.channel_align = CA_RIGHT;
 	// <FS:Ansariel> Group notices, IMs and chiclets position
 	//p.toast_align = NA_TOP;
-	if (gSavedSettings.getBOOL("ShowGroupNoticesTopRight"))
+	if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
 	{
 		p.toast_align = NA_TOP;
 	}

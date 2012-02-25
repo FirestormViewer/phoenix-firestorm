@@ -88,6 +88,19 @@
                bg_visible="false"
                width="20">
         </panel>          
+		<!-- FS:Ansariel: For chiclets and notices at bottom -->
+        <panel follows="left|bottom|right"
+               layout="topleft"
+               height="30"
+               left_pad="-20"
+               mouse_opaque="false"
+               name="chiclet_container_bottom"
+               tab_stop="false"
+               bottom="-1"
+               bg_visible="false"
+               width="20">
+        </panel>
+		<!-- END FS:Ansariel: For chiclets and notices at bottom -->
       </layout_panel>
       <layout_panel name="right_toolbar_panel"
                     auto_resize="false"

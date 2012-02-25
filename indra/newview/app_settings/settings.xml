@@ -868,7 +868,21 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>InternalShowGroupNoticesTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Holds the information if group notifications should be shown in top right corner of the screen throughou the session.</string>
+    <key>Persist</key>
     <integer>0</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
   </map>
 
   <key>FirstUseFlyOverride</key>
