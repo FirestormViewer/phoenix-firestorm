@@ -251,18 +251,9 @@ void FSGroupTitles::refreshGroupTitles()
 	for (S32 i = 0; i < gAgent.mGroups.count(); i++)
 	{
 		LLGroupData group_data = gAgent.mGroups.get(i);
-		LLGroupMgrGroupData* gmgr_data = LLGroupMgr::getInstance()->getGroupData(group_data.mID);
-	
-		if (gmgr_data)
-		{
-			processGroupTitleResults(group_data);
-		}
-		else
-		{
-			FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, this);
-			mGroupTitleObserverMap[group_data.mID] = roleObserver;
-			LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
-		}
+		FSGroupTitlesObserver* roleObserver = new FSGroupTitlesObserver(group_data, this);
+		mGroupTitleObserverMap[group_data.mID] = roleObserver;
+		LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_data.mID);
 	}
 	mIsUpdated = true;
 }
