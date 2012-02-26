@@ -369,30 +369,39 @@
          label="Online Status"
          name="Status"
          tear_off="true">
-            <menu_item_call
-             label="Away"
+          <menu_item_check
+           label="Away"
              name="Set Away">
-                <menu_item_call.on_click
+                <menu_item_check.on_check
+                 function="World.GetAway" />
+                <menu_item_check.on_click
                  function="World.SetAway" />
-            </menu_item_call>
-			<menu_item_call
+            </menu_item_check>
+			    <menu_item_check
              label="Autorespond"
              name="Set Autorespond">
-                <menu_item_call.on_click
+                <menu_item_check.on_check
+                 function="World.GetAutorespond"/>
+                <menu_item_check.on_click
                  function="World.SetAutorespond"/>
-            </menu_item_call>
-			<menu_item_call
+            </menu_item_check>
+			    <menu_item_check
              label="Autorespond to non-friends"
              name="Set Autorespond to non-friends">
-                <menu_item_call.on_click
+                <menu_item_check.on_check
+                 function="World.GetAutorespondNonFriends"/>
+                <menu_item_check.on_click
                  function="World.SetAutorespondNonFriends"/>
-            </menu_item_call>
-            <menu_item_call
-             label="Unavailable"
-             name="Set Busy">
-                <menu_item_call.on_click
-                 function="World.SetBusy"/>
-            </menu_item_call>
+            </menu_item_check>
+          <menu_item_check
+              label="Unavailable"
+              name="Set Busy">
+                <menu_item_check.on_check
+                  function="World.GetBusy"/>
+                <menu_item_check.on_click
+                  function="World.SetBusy"/>
+            </menu_item_check>
+        
         </menu>
         
         <menu_item_separator/>

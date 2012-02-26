@@ -6168,6 +6168,15 @@ class LLWorldSetAway : public view_listener_t
 		return true;
 	}
 };
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetAway : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getAFK();
+		return new_value;
+	}
+};
 
 class LLWorldSetBusy : public view_listener_t
 {
@@ -6183,6 +6192,16 @@ class LLWorldSetBusy : public view_listener_t
 			LLNotificationsUtil::add("BusyModeSet");
 		}
 		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetBusy : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getBusy();
+		return new_value;
 	}
 };
 
@@ -6204,6 +6223,17 @@ class LLWorldSetAutorespond : public view_listener_t
 	}
 };
 
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetAutorespond : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getAutorespond();
+		return new_value;
+	}
+};
+
+
 class LLWorldSetAutorespondNonFriends : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -6218,6 +6248,16 @@ class LLWorldSetAutorespondNonFriends : public view_listener_t
 			LLNotificationsUtil::add("AutorespondNonFriendsModeSet");
 		}
 		return true;
+	}
+};
+
+// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+class LLWorldGetAutorespondNonFriends : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool new_value = gAgent.getAutorespondNonFriends();
+		return new_value;
 	}
 };
 
@@ -9342,9 +9382,13 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldSetHomeLocation(), "World.SetHomeLocation");
 	view_listener_t::addMenu(new LLWorldTeleportHome(), "World.TeleportHome");
 	view_listener_t::addMenu(new LLWorldSetAway(), "World.SetAway");
+	view_listener_t::addMenu(new LLWorldGetAway(), "World.GetAway"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetBusy(), "World.SetBusy");
+	view_listener_t::addMenu(new LLWorldGetBusy(), "World.GetBusy"); //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespond(), "World.SetAutorespond");
+	view_listener_t::addMenu(new LLWorldGetAutorespond(), "World.GetAutorespond");  //[SJ FIRE-2177]
 	view_listener_t::addMenu(new LLWorldSetAutorespondNonFriends(), "World.SetAutorespondNonFriends");
+	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
 
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
 	view_listener_t::addMenu(new LLWorldEnableSetHomeLocation(), "World.EnableSetHomeLocation");

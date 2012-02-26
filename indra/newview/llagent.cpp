@@ -1328,10 +1328,11 @@ void LLAgent::setAFK()
 		setControlFlags(AGENT_CONTROL_AWAY | AGENT_CONTROL_STOP);
 		LL_INFOS("AFK") << "Setting Away" << LL_ENDL;
 		gAwayTimer.start();
-		if (gAFKMenu)
-		{
-			gAFKMenu->setLabel(LLTrans::getString("AvatarSetNotAway"));
-		}
+		// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+		//if (gAFKMenu)
+		//{
+		//	gAFKMenu->setLabel(LLTrans::getString("AvatarSetNotAway"));
+		//}
 
 		// <AO> Gsit on away, antigrief protection
 		if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
@@ -1359,10 +1360,11 @@ void LLAgent::clearAFK()
 		sendAnimationRequest(ANIM_AGENT_AWAY, ANIM_REQUEST_STOP);
 		clearControlFlags(AGENT_CONTROL_AWAY);
 		LL_INFOS("AFK") << "Clearing Away" << LL_ENDL;
-		if (gAFKMenu)
-		{
-			gAFKMenu->setLabel(LLTrans::getString("AvatarSetAway"));
-		}
+		// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+		//if (gAFKMenu)
+		//{
+		//	gAFKMenu->setLabel(LLTrans::getString("AvatarSetAway"));
+		//}
 
                 // <AO> if we sat while away, stand back up on clear
                 if (gSavedSettings.getBOOL("AvatarSitOnAway") == TRUE)
@@ -1390,10 +1392,11 @@ void LLAgent::setBusy()
 {
 	sendAnimationRequest(ANIM_AGENT_BUSY, ANIM_REQUEST_START);
 	mIsBusy = TRUE;
-	if (gBusyMenu)
-	{
-		gBusyMenu->setLabel(LLTrans::getString("AvatarSetNotBusy"));
-	}
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gBusyMenu)
+	//{
+	//	gBusyMenu->setLabel(LLTrans::getString("AvatarSetNotBusy"));
+	//}
 	LLNotificationsUI::LLChannelManager::getInstance()->muteAllChannels(true);
 }
 
@@ -1404,10 +1407,11 @@ void LLAgent::clearBusy()
 {
 	mIsBusy = FALSE;
 	sendAnimationRequest(ANIM_AGENT_BUSY, ANIM_REQUEST_STOP);
-	if (gBusyMenu)
-	{
-		gBusyMenu->setLabel(LLTrans::getString("AvatarSetBusy"));
-	}
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gBusyMenu)
+	//{
+	//	gBusyMenu->setLabel(LLTrans::getString("AvatarSetBusy"));
+	//}
 	LLNotificationsUI::LLChannelManager::getInstance()->muteAllChannels(false);
 }
 
@@ -1443,17 +1447,18 @@ void LLAgent::selectAutorespond(BOOL selected)
 	llinfos << "Setting autorespond mode to " << selected << llendl;
 	mIsAutorespond = selected;
 	gSavedPerAccountSettings.setBOOL("FSAutorespondMode",selected);
-	if (gAutorespondMenu)
-	{
-		if (selected)
-		{
-			gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespond"));
-		}
-		else
-		{
-			gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetAutorespond"));
-		}
-	}
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gAutorespondMenu)
+	//{
+	//	if (selected)
+	//	{
+	//		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespond"));
+	//	}
+	//	else
+	//	{
+	//		gAutorespondMenu->setLabel(LLTrans::getString("AvatarSetAutorespond"));
+	//	}
+	//}
 }
 
 //-----------------------------------------------------------------------------
@@ -1488,17 +1493,18 @@ void LLAgent::selectAutorespondNonFriends(BOOL selected)
 	llinfos << "Setting autorespond non-friends mode to " << selected << llendl;
 	mIsAutorespondNonFriends = selected;
 	gSavedPerAccountSettings.setBOOL("FSAutorespondNonFriendsMode",selected);
-	if (gAutorespondNonFriendsMenu)
-	{
-		if (selected)
-		{
-			gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
-		}
-		else
-		{
-			gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
-		}
-	}
+	// [SJ - FIRE-2177 - Making Autorespons a simple Check in the menu again for clarity]
+	//if (gAutorespondNonFriendsMenu)
+	//{
+	//	if (selected)
+	//	{
+	//		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetNotAutorespondNonFriends"));
+	//	}
+	//	else
+	//	{
+	//		gAutorespondNonFriendsMenu->setLabel(LLTrans::getString("AvatarSetAutorespondNonFriends"));
+	//	}
+	//}
 }
 
 //-----------------------------------------------------------------------------
