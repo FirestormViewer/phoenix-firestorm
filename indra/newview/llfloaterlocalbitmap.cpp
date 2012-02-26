@@ -107,9 +107,18 @@ LLLocalBitmap::LLLocalBitmap(std::string fullpath)
 		else { return; } // no valid extension.
 		
 		/* getting file's last modified */
-		const std::time_t time = boost::filesystem::last_write_time( boost::filesystem::path( this->mFilename ) );
-		this->mLastModified = asctime( localtime(&time) );
-		
+
+		// <FS:ND> Using boost breaks on windows if mFilename is a UTF-8 filename, use either wpath (not included in the prebuilt boost libs) or LLFile
+
+		// const std::time_t time = boost::filesystem::last_write_time( boost::filesystem::path( this->mFilename ) );
+		// this->mLastModified = asctime( localtime(&time) );
+	
+		llstat oStatus;
+		LLFile::stat( mFilename, &oStatus );
+		this->mLastModified = asctime( localtime(&oStatus.st_mtime) );
+
+		// </FS:ND>
+
 		/* checking if the bitmap is valid && decoding if it is */
 		LLImageRaw* raw_image = new LLImageRaw();
 		if ( this->decodeSelf(raw_image) )

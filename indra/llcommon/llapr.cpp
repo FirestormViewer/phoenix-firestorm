@@ -37,6 +37,8 @@ apr_thread_mutex_t *gCallStacksLogMutexp = NULL;
 
 const S32 FULL_VOLATILE_APR_POOL = 1024 ; //number of references to LLVolatileAPRPool
 
+std::string ndConvertFilename( std::string const &aFilename ); // <FS:ND/> Porper UTF-8 filename handling under windows.
+
 void ll_init_apr()
 {
 	if (!gAPRPoolp)
@@ -356,7 +358,13 @@ apr_status_t LLAPRFile::open(const std::string& filename, apr_int32_t flags, LLV
 	llassert_always(!mCurrentFilePoolp) ;
 	
 	apr_pool_t* apr_pool = pool ? pool->getVolatileAPRPool() : NULL ;
-	s = apr_file_open(&mFile, filename.c_str(), flags, APR_OS_DEFAULT, getAPRFilePool(apr_pool));
+
+	// <FS:ND> Convert filenames with UTF-8 charaters into a shortfilename (8.3) if running under windows
+
+	// s = apr_file_open(&mFile, filename.c_str(), flags, APR_OS_DEFAULT, getAPRFilePool(apr_pool));
+	s = apr_file_open(&mFile, ndConvertFilename(filename).c_str(), flags, APR_OS_DEFAULT, getAPRFilePool(apr_pool));
+
+	// </FS:ND>
 
 	if (s != APR_SUCCESS || !mFile)
 	{
@@ -404,7 +412,7 @@ apr_status_t LLAPRFile::open(const std::string& filename, apr_int32_t flags, BOO
 	llassert_always(!mCurrentFilePoolp) ;
 	llassert_always(use_global_pool) ; //be aware of using gAPRPoolp.
 	
-	s = apr_file_open(&mFile, filename.c_str(), flags, APR_OS_DEFAULT, gAPRPoolp);
+	s = apr_file_open(&mFile, ndConvertFilename(filename).c_str(), flags, APR_OS_DEFAULT, gAPRPoolp);
 	if (s != APR_SUCCESS || !mFile)
 	{
 		mFile = NULL ;
@@ -507,7 +515,7 @@ apr_file_t* LLAPRFile::open(const std::string& filename, LLVolatileAPRPool* pool
 
 	pool = pool ? pool : LLAPRFile::sAPRFilePoolp ;
 
-	s = apr_file_open(&file_handle, filename.c_str(), flags, APR_OS_DEFAULT, pool->getVolatileAPRPool());
+	s = apr_file_open(&file_handle, ndConvertFilename(filename).c_str(), flags, APR_OS_DEFAULT, pool->getVolatileAPRPool());
 	if (s != APR_SUCCESS || !file_handle)
 	{
 		ll_apr_warn_status(s);
@@ -694,7 +702,7 @@ bool LLAPRFile::isExist(const std::string& filename, LLVolatileAPRPool* pool, ap
 	apr_status_t s;
 
 	pool = pool ? pool : LLAPRFile::sAPRFilePoolp ;
-	s = apr_file_open(&apr_file, filename.c_str(), flags, APR_OS_DEFAULT, pool->getVolatileAPRPool());	
+	s = apr_file_open(&apr_file, ndConvertFilename(filename).c_str(), flags, APR_OS_DEFAULT, pool->getVolatileAPRPool());	
 
 	if (s != APR_SUCCESS || !apr_file)
 	{
@@ -717,7 +725,7 @@ S32 LLAPRFile::size(const std::string& filename, LLVolatileAPRPool* pool)
 	apr_status_t s;
 	
 	pool = pool ? pool : LLAPRFile::sAPRFilePoolp ;
-	s = apr_file_open(&apr_file, filename.c_str(), APR_READ, APR_OS_DEFAULT, pool->getVolatileAPRPool());
+	s = apr_file_open(&apr_file, ndConvertFilename(filename).c_str(), APR_READ, APR_OS_DEFAULT, pool->getVolatileAPRPool());
 	
 	if (s != APR_SUCCESS || !apr_file)
 	{		
@@ -782,3 +790,24 @@ bool LLAPRFile::removeDir(const std::string& dirname, LLVolatileAPRPool* pool)
 //end of static components of LLAPRFile
 //*******************************************************************************************************************************
 //
+
+// <FS:ND> Special case for UTF-8 filenames under windows. As we cannot pass UTF-16 filenames into apr use a shortfilename, those are always ASCII
+std::string ndConvertFilename( std::string const &aFilename )
+{
+#ifdef LL_WINDOWS
+	// For safety reason (don't change any behaviour) do nothing different if filename is already ASCII
+	std::string::const_iterator itr = std::find_if( aFilename.begin(), aFilename.end(), [&]( char const & aVal ){ return aVal < 0; } ); 
+	if( aFilename.end() == itr )
+		return aFilename;
+
+	wchar_t aShort[ MAX_PATH ] = {0};
+	DWORD nRes = ::GetShortPathNameW( utf8str_to_utf16str( aFilename ).c_str(), aShort, _countof( aShort ) );
+	if( nRes == 0 || nRes >= _countof( aShort ) )
+		return aFilename;
+
+	return utf16str_to_utf8str( aShort );
+#else
+	return aFilename;
+#endif
+}
+// </FS:ND>
