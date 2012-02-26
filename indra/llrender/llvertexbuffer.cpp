@@ -1132,8 +1132,13 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (nverts >= 65535)
 	{
-		llwarns << "Vertex buffer overflow!" << llendl;
-		nverts = 65535;
+		// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
+
+		// llwarns << "Vertex buffer overflow!" << llendl;
+		// nverts = 65535;
+		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
+
+		// </FS:ND>
 	}
 
 	U32 needed_size = calcOffsets(mTypeMask, mOffsets, nverts);
@@ -1168,11 +1173,21 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 	
 	stop_glerror();
 
-	if (nverts < 0 || nindices < 0 ||
-		nverts > 65536)
-	{
+	// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
+
+	// if (nverts < 0 || nindices < 0 ||
+	// 	nverts > 65536)
+	// {
+	// 	llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
+	// }
+
+	if( nverts < 0 || nindices < 0 )
 		llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
-	}
+
+	if( nverts > 0xFFFF )
+		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
+	
+	// </FS:ND>
 
 	updateNumVerts(nverts);
 	updateNumIndices(nindices);
