@@ -53,11 +53,11 @@
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Gespräche" name="Conversations"/>
         <menu label="Online-Status" name="Status">
-            <menu_item_call label="Abwesend" name="Set Away"/>
-			<menu_item_call label="Automatische Antwort" name="Set Autorespond"/>
-			<menu_item_call label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
-            <menu_item_call label="Beschäftigt" name="Set Busy"/>		
-		</menu>
+            <menu_item_check label="Abwesend" name="Set Away"/>
+            <menu_item_check label="Automatische Antwort" name="Set Autorespond"/>
+            <menu_item_check label="Automatische Antwort an Nicht-Freunde" name="Set Autorespond to non-friends"/>
+            <menu_item_check label="Beschäftigt" name="Set Busy"/>		
+        </menu>
         <menu_item_check label="Gesten" name="Gestures"/>
         <menu_item_check label="Sprachfilter" name="ShowVoice"/>
 		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
