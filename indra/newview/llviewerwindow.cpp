@@ -5136,8 +5136,19 @@ S32 LLViewerWindow::getChatConsoleBottomPad()
 {
 	S32 offset = 0;
 
+	// <FS:Ansariel> Fixed chat console offset for Vintage skin (FIRE-5266)
+	//if(gToolBarView)
+		//offset += gToolBarView->getChild<LLView>("bottom_toolbar_panel")->getRect().getHeight();
 	if(gToolBarView)
+	{
 		offset += gToolBarView->getChild<LLView>("bottom_toolbar_panel")->getRect().getHeight();
+		LLView* chat_stack = gToolBarView->getChild<LLView>("bottom_chat_stack");
+		if (chat_stack)
+		{
+			offset = chat_stack->getRect().getHeight();
+		}
+	}
+	// </FS:Ansariel>
 
 	return offset;
 }
