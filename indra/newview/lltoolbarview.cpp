@@ -737,11 +737,13 @@ bool LLToolBarView::isModified() const
 void handleLoginToolbarSetup()
 {
 	// Open the destinations guide by default on first login, per Rhett
-	if (gSavedPerAccountSettings.getBOOL("DisplayDestinationsOnInitialRun") || gAgent.isFirstLogin())
-	{
-		LLFloaterReg::showInstance("destinations");
+	// <FS:Ansariel> Don't show destinations on first login (FIRE-5255)
+	//if (gSavedPerAccountSettings.getBOOL("DisplayDestinationsOnInitialRun") || gAgent.isFirstLogin())
+	//{
+	//	LLFloaterReg::showInstance("destinations");
 
-		gSavedPerAccountSettings.setBOOL("DisplayDestinationsOnInitialRun", FALSE);
-	}
+	//	gSavedPerAccountSettings.setBOOL("DisplayDestinationsOnInitialRun", FALSE);
+	//}
+	// </FS:Ansariel>
 }
 
