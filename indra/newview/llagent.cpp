@@ -2207,7 +2207,11 @@ void LLAgent::endAnimationUpdateUI()
 		// then hide stuff we want hidden for mouselook 
 		gToolBarView->setToolBarsVisible(false);
 		gMenuBarView->setVisible(FALSE);
-		LLNavigationBar::getInstance()->setVisible(FALSE);
+		// <FS:Ansariel> Separate navigation and favorites panel
+		//LLNavigationBar::getInstance()->setVisible(FALSE);
+		LLNavigationBar::getInstance()->showNavigationPanel(FALSE);
+		LLNavigationBar::getInstance()->showFavoritesPanel(FALSE);
+		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(false);
 
 		LLPanelTopInfoBar::getInstance()->setVisible(FALSE);
