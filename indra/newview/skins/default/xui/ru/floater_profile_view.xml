@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater name="avatarinfo" title="Профиль">
+	<panel name="panel_profile_view">
+		<tab_container name="tabs">
+			<panel label="2. Жизнь" name="panel_profile_secondlife"/>
+			<panel label="Веб" name="panel_profile_web"/>
+			<panel label="Интерес." name="panel_profile_interests"/>
+			<panel label="Выборы" name="panel_profile_picks"/>
+			<panel label="Реклама" name="panel_profile_classified"/>
+			<panel label="1. Жизнь" name="panel_profile_firstlife"/>
+			<panel label="Заметки" name="panel_profile_notes"/>
+		</tab_container>
+		<button name="ok_btn" label="OK" tool_tip="Ок"/>
+		<button name="cancel_btn" label="Отмена" label_selected="Отмена"/>
+	</panel>
+</floater>

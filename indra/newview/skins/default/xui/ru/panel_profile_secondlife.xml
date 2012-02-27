@@ -1,45 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_profile">
-    <string
-     name="payment_update_link_url">
-        http://www.secondlife.com/account/billing.php?lang=en
-    </string>
-    <string
-     name="partner_edit_link_url">
-        http://www.secondlife.com/account/partners.php?lang=en
-    </string>
-    <string
-     name="no_partner_text"
-     value="Нет" />
-    <string
-     name="no_group_text"
-     value="Нет" />
-    <string
-     name="FSDev"
-     value="-Dev" />
-	<string
-     name="FSSupp"
-     value="-Support" />
+<panel name="panel_profile" label="Profil">
+	<string name="payment_update_link_url">
+		http://www.secondlife.com/account/billing.php?lang=de
+	</string>
+	<string name="partner_edit_link_url">
+		http://www.secondlife.com/account/partners.php?lang=de
+	</string>
+	<string name="no_partner_text" value="Нет"/>
+	<string name="no_group_text" value="Нет"/>
+	<string name="FSDev" value="-Dev"/>
+	<string name="FSSupp" value="-Team"/>
 
-          <panel name="second_life_panel">
+	<text name="Name:" value="Имя:"/>
+	<text_editor name="complete_name" value="(загрузка)"/>
+	<button name="set_name" tool_tip="Изменить имя"/>
+	<text name="Key:" value="UUID:"/>
+	<text_editor name="user_key" value="(загрузка)"/>
+	<text name="status" value="Онлайн"/>
+	<text name="label" value="Рожден:"/>
+	<text name="label2" value="Аккаунт:"/>
+	<text name="partner_label" value="Партнер:"/>
+	<text name="Groups:" value="Группы:"/>
+	<button label="+" label_selected="+" name="group_invite" tool_tip="В группу"/>
+	<text name="About:" value="Про:"/>
+	<text name="Give item:" value="Дать:"/>
+	<text name="Give inventory" tool_tip="Дать резиденту вещь.">
+		Положите предмет сюда..
+	</text>
 
-            <text name="Key:" value="UUID:"/>
-            <text_editor name="user_key" value="(загрузка)"/>
-            <button name="copy_uri" label="Копировать URI"/>
-            <text name="Name:" value="Имя:"/>
-            <text_editor name="complete_name" value="(загрузка)"/>
-            <button name="copy_to_clipboard" tool_tip="Копировать в буфер обмена"/>
-            <text name="status" value="Онлайн"/>
-            <text name="label" value="Рожден:"/>
-            <text name="label2" value="Аккаунт:"/>
-            <text name="partner_label" value="Партнер:"/>
-            <text left="9" name="Groups:" value="Группы:"/>
-            <group_list left_pad="3" name="group_list"/>
-            <text left="9" name="About:" value="Про:"/>
-            <view_border left_pad="3" name="info_border"/>
-
-            <layout_stack>
-				<layout_panel name="left_buttonstack">
+	<layout_stack name="buttonstack">
+		<layout_panel name="left_buttonstack">
 					<button label="Найти на карте" label_selected="Найти на карте" name="show_on_map_btn" tool_tip="Найдите пользователя на карте."/>
 					<button label="Платить" label_selected="Платить" name="pay" tool_tip="Заплатить денег или заплатить бабки  пользователю."/>
 				</layout_panel>
@@ -54,8 +44,7 @@
 					<button label="Блокировать" name="block" tool_tip="Заблокировать пользователя."/>
 					<button label="Разблокировать" name="unblock" tool_tip="Разблокировать пользователя."/>
 				</layout_panel>
-            </layout_stack>
-
-          </panel>
+	</layout_stack>
+	<check_box name="show_in_search_checkbox" label="Показать в поиске"/>
 </panel>
 

@@ -2,11 +2,18 @@
 <panel label="Редактирование профиля" name="edit_profile_panel">
 	<string name="CaptionTextAcctInfo">
 		[ACCTTYPE]
-[PAYMENTINFO] [AGEVERIFICATION]
-	</string>
+[PAYMENTINFO] [FIRESTORM][FSDEV][FSSUPP]
+    </string>
+<!-- The previous line was [PAYMENTINFO] [AGEVERIFICATION], but they're not
+    sending the latter any more. ...TS -->
+    <string
+      name="FSDev"
+      value="-Dev" />
+    <string
+      name="FSSupp"
+      value="-Team" />
 	<string name="RegisterDateFormat">
 		[REG_DATE] ([AGE])
-	</string>
 	<string name="AcctTypeResident" value="Житель"/>
 	<string name="AcctTypeTrial" value="Гость"/>
 	<string name="AcctTypeCharterMember" value="Учредитель"/>
@@ -20,7 +27,7 @@
 		http://www.secondlife.com/account/partners.php?lang=en
 	</string>
 	<string name="my_account_link_url">
-		http://secondlife.com/my
+		http://de.secondlife.com/my
 	</string>
 	<string name="no_partner_text" value="Нет"/>
 	<scroll_container name="profile_scroll">
@@ -32,7 +39,7 @@
 				<text name="user_label" value="Имя пользователя:"/>
 				<panel name="lifes_images_panel">
 					<panel name="second_life_image_panel">
-						<text name="second_life_photo_title_text" value="[SECOND_LIFE]:"/>
+						<text name="second_life_photo_title_text" value="[CURRENT_GRID]:"/>
 					</panel>
 					<icon label="" name="2nd_life_edit_icon" tool_tip="Щелкните для выбора изображения"/>
 				</panel>

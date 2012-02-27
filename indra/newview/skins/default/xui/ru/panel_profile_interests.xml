@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_interests" label="Интересы">
+	<text name="I Want To:">
+		Я хочу:
+	</text>
+	<check_box name="chk0" label="Строить"/>
+	<check_box name="chk1" label="Исследовать"/>
+	<check_box name="chk2" label="Встреча"/>
+	<check_box name="chk6" label="Работу"/>
+	<check_box name="chk3" label="Группы"/>
+	<check_box name="chk4" label="Покупать"/>
+	<check_box name="chk5" label="Продавать"/>
+	<check_box name="chk7" label="Давать работу"/>
+	<text name="Skills:">
+		Навыки:
+	</text>
+	<check_box name="schk0" label="Текстуры"/>
+	<check_box name="schk1" label="Архитектура"/>
+<!-- The next two are out of order on purpose due to the odd layout used in v1.x -->
+	<check_box name="schk3" label="Моделирование"/>
+	<check_box name="schk2" label="Евенты"/>
+	<check_box name="schk4" label="Скриптинг"/>
+	<check_box name="schk5" label="Персонажи на заказ"/>
+	<text name="Languages:">
+		Языки:
+	</text>
+</panel>
+

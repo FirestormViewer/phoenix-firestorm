@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Kommunikation" name="im">
+<panel label="Приватность" name="im">
 	<tab_container label="Privacy" name="tabs">
 		<!--General-->
-		<panel label="Allgemein" name="tab-general">
+		<panel label="Основное" name="tab-general">
 			<panel.string name="log_in_to_change">
 				Войдите, чтобы измененить
 			</panel.string>
@@ -38,7 +38,7 @@
 		<!--LookAt-->
 		<panel label="Фокус камеры (Крестики)" name="tab-lookat">
 			<check_box label="Показать фокус камеры" name="showlookat" tool_tip=""/>
-			<text name="lookatshownames" tool_tip="Auswählen, ob Avatarnamen zusätzlich zum Fadenkreuz angezeigt werden soll.">
+			<text name="lookatshownames" tool_tip=".">
 				Имена у фокусировки камеры:
 			</text>
 			<combo_box name="lookatshownames_combobox">

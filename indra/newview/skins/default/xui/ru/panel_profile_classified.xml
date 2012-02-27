@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_classified" label="Реклама">
+<!--
+	<text name="Place an ad in Second Life&apos;s classified listings.">
+        Anzeige in Second Life aufgeben.
+    </text>
+	<button name="New..." label="Neu..." label_selected="Neu..."/>
+	<button name="Delete..." label="Löschen..." label_selected="Löschen..."/>
+	<text name="classified_panel_text">
+		Wird geladen...
+	</text>
+-->
+	<string name="no_classifieds" value="нет рекламы"/>
+	<panel name="edit_panel">
+		<button name="new_btn" tool_tip="Создать новую рекламу"/>
+	</panel>
+	<panel name="buttons_cucks">
+		<layout_stack name="buttons_cucks_ls">
+			<layout_panel name="info_btn_lp">
+				<button label="Инфоe="info_btn" tool_tip="инфо"/>
+			</layout_panel>
+			<layout_panel name="teleport_btn_lp">
+				<button label="Телепорт" name="teleport_btn" tool_tip="Телепорт по рекламе"/>
+			</layout_panel>
+			<layout_panel name="show_on_map_btn_lp">
+				<button label="Карта" name="show_on_map_btn" tool_tip="показать на карте"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>
+
