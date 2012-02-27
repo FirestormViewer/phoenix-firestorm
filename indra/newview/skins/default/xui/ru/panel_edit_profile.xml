@@ -24,10 +24,10 @@
 	<string name="AgeVerified" value="Возраст проверен"/>
 	<string name="NotAgeVerified" value="Возраст не проверен"/>
 	<string name="partner_edit_link_url">
-		http://www.secondlife.com/account/partners.php?lang=en
+		http://www.secondlife.com/account/partners.php?lang=ru
 	</string>
 	<string name="my_account_link_url">
-		http://de.secondlife.com/my
+		http://www.secondlife.com/my
 	</string>
 	<string name="no_partner_text" value="Нет"/>
 	<scroll_container name="profile_scroll">
