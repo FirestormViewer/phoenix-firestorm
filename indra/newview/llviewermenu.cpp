@@ -133,6 +133,7 @@
 // ## Zi: Texture Refresh
 
 #include "particleeditor.h"
+#include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
 
 using namespace LLVOAvatarDefines;
 
@@ -4027,12 +4028,28 @@ class LLTogglePanelPeopleTab : public view_listener_t
 		LLSD param;
 		param["people_panel_tab_name"] = panel_name;
 
-		if (   panel_name == "friends_panel"
-			|| panel_name == "groups_panel"
-			|| panel_name == "nearby_panel")
+		// <FS:Zi> Open groups and friends lists in communicate floater
+		// if (   panel_name == "friends_panel"
+		// 	|| panel_name == "groups_panel"
+		// 	|| panel_name == "nearby_panel")
+		// {
+		// 	return togglePeoplePanel(panel_name, param);
+		// }
+		if(panel_name=="nearby_panel")
 		{
-			return togglePeoplePanel(panel_name, param);
+			return togglePeoplePanel(panel_name,param);
 		}
+		else if(panel_name=="groups_panel")
+		{
+			FSFloaterContacts::getInstance()->openTab("groups");
+			return true;
+		}
+		else if(panel_name=="friends_panel")
+		{
+			FSFloaterContacts::getInstance()->openTab("friends");
+			return true;
+		}
+		// </FS:Zi>
 		else
 		{
 			return false;

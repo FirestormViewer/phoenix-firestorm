@@ -193,15 +193,32 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 		floater_container->addFloater(this, TRUE);
 	}
 
-	if (key.asString() == "friends")
+	openTab(key.asString());
+}
+
+void FSFloaterContacts::openTab(const std::string& name)
+{
+	BOOL visible=FALSE;
+
+	if(name=="friends")
 	{
+		visible=TRUE;
 		childShowTab("friends_and_groups", "friends_panel");
 	}
-	else if (key.asString() == "groups")
+	else if(name=="groups")
 	{
+		visible=TRUE;
 		childShowTab("friends_and_groups", "groups_panel");
 		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
 		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+	}
+
+	if(visible)
+	{
+		if(getHost())
+			getHost()->setVisible(TRUE);
+
+		setVisible(TRUE);
 	}
 }
 
