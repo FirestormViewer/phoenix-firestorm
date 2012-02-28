@@ -132,7 +132,15 @@
 			height="98"
 			multi_select="true"
 			follows="all"
-			layout="topleft" />
+			layout="topleft">
+			<scroll_list.columns
+				name="icon"
+				dynamic_width="false"
+				width="20" />
+			<scroll_list.columns
+				name="animation_name"
+				dynamic_width="true" />
+		</scroll_list>
 
 		<panel
 			name="ao_animation_move_trash_panel"
@@ -362,6 +370,7 @@
 				name="ao_reload_indicator_left_layout_panel"
 				width="160"
 				height="32"
+				auto_resize="true"
 				user_resize="false">
 			</layout_panel>
 			<layout_panel
@@ -382,6 +391,7 @@
 				name="ao_reload_indicator_right_layout_panel"
 				width="160"
 				height="32"
+				auto_resize="true"
 				user_resize="false">
 			</layout_panel>
 			</layout_stack>

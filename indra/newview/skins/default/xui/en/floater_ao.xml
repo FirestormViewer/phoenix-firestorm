@@ -20,12 +20,12 @@
 
 	<floater.string
 		name="ao_no_sets_loaded">
-		No Sets Loaded
+No Sets Loaded
 	</floater.string>
 
 	<floater.string
 		name="ao_no_animations_loaded">
-		No Animations Loaded
+No Animations Loaded
 	</floater.string>
 
 	<panel
