@@ -3350,4 +3350,84 @@ Teleportieren zum Avatar nicht möglich, da die exakte Position unbekannt ist.
 Der Viewercache ist momentan leer. Während des Downloads von neuen Inhalten kann es daher zu niedrigeren Frameraten und langsamerem Laden des Inventars kommen.
   </notification>
 
+	<notification name="EnableMediaFilter"> 
+Das Abspielen von Medien oder Musik kann deine Identität an Webseiten außerhalb von Second Life verraten. Durch das Einschalten des Filters kann ausgewählt werden, welche Webseiten Medien abspielen dürfen, wodurch eine bessere Kontrolle über die Privatspähre ermöglicht wird.
+
+Medienfilter aktivieren?
+(Diese Einstellung kann später unter Einstellungen &gt; Sound &amp; Medien geändert werden.)
+		<form name="form">
+			<button name="Enable" text="Aktivieren"/>
+			<button name="Disable" text="Deaktivieren"/>
+		</form>
+	</notification>
+
+	<notification name="MediaAlert"> 
+Diese Parzelle enthält Medien von :
+
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+		</form>
+	</notification>
+
+	<notification name="MediaAlert2"> 
+Auswahl merken und [LCONDITION] Medien von dieser Quelle erlauben?
+
+Domain: [MEDIADOMAIN]
+URL: [MEDIAURL]
+		<form name="form">
+			<button name="Do Now" text="Jetzt [ACTION]"/>
+			<button name="RememberDomain" text="[CONDITION] diese Domain erlauben"/>
+			<button name="RememberURL" text="[CONDITION] diese URL erlauben"/>
+		</form>
+	</notification>
+
+	<notification name="AudioAlert">
+Diese Parzelle enthält Musik von:
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+		</form>
+	</notification>
+
+	<notification name="AudioAlert2"> 
+Auswahl merken und [LCONDITION] Musik von dieser Quelle erlauben?
+
+Domain: [AUDIODOMAIN]
+URL: [AUDIOURL]
+		<form name="form">
+			<button name="Do Now" text="Jetzt [ACTION]"/>
+			<button name="RememberDomain" text="[CONDITION] diese Domain erlauben"/>
+			<button name="RememberURL" text="[CONDITION] diese URL erlauben"/>
+		</form>
+	</notification>
+
+	<notification name="MOAPAlert">
+Ein Objekt enthält Geteilte Medien von:
+
+Domain: [MOAPDOMAIN]
+URL: [MOAPURL]
+		<form name="form">
+			<button name="Allow" text="Erlauben"/>
+			<button name="Deny" text="Verbieten"/>
+		</form>
+	</notification>
+
+	<notification name="MOAPAlert2">
+Auswahl merken und [LCONDITION] Geteilte Medien von dieser Quelle erlauben?
+
+Domain: [MOAPDOMAIN]
+URL: [MOAPURL]
+		<form name="form">
+			<button name="Do Now" text="Jetzt [ACTION]"/>
+			<button name="RememberDomain" text="[CONDITION] diese Domain erlauben"/>
+			<button name="RememberURL" text="[CONDITION] diese URL erlauben"/>
+		</form>
+	</notification>
+
 </notifications>

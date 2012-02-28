@@ -3962,4 +3962,29 @@ Try enclosing path to the editor with double quotes.
   <string name="RlvEnabled">RestrainedLove Support will be enabled after you restart.</string>
   <string name="RlvDisabled">RestrainedLove Support will be disabled after you restart.</string>
 
-  </strings>
+  <!-- Media filter options -->
+  <string name="MediaFilterActionAllow">Allow</string>
+  <string name="MediaFilterActionDeny">Deny</string>
+  <string name="MediaFilterConditionAlways">Always</string>
+  <string name="MediaFilterConditionAlwaysLower">always</string>
+  <string name="MediaFilterConditionNever">Never</string>
+  <string name="MediaFilterConditionNeverLower">never</string>
+  <string name="MediaFilterMediaContentBlocked">Media from the domain [DOMAIN] has been blocked.</string>
+  <string name="MediaFilterMediaContentDomainAlwaysAllowed">Media from the domain [DOMAIN] will always be played.</string>
+  <string name="MediaFilterMediaContentDomainAlwaysBlocked">Media from the domain [DOMAIN] will never be played.</string>
+  <string name="MediaFilterMediaContentUrlAlwaysAllowed">Media from the URL [MEDIAURL] will always be played.</string>
+  <string name="MediaFilterMediaContentUrlAlwaysBlocked">Media from the URL [MEDIAURL] will never be played.</string>
+  
+  <string name="MediaFilterAudioContentBlocked">Audio from the domain [DOMAIN] has been blocked.</string>
+  <string name="MediaFilterAudioContentDomainAlwaysAllowed">Audio from the domain [DOMAIN] will always be played.</string>
+  <string name="MediaFilterAudioContentDomainAlwaysBlocked">Audio from the domain [DOMAIN] will never be played.</string>
+  <string name="MediaFilterAudioContentUrlAlwaysAllowed">Audio from the URL [MEDIAURL] will always be played.</string>
+  <string name="MediaFilterAudioContentUrlAlwaysBlocked">Audio from the URL [MEDIAURL] will never be played.</string>
+
+  <string name="MediaFilterSharedMediaContentBlocked">Shared Media from the domain [DOMAIN] has been blocked.</string>
+  <string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">Shared Media from the domain [DOMAIN] will always be played.</string>
+  <string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">Shared Media from the domain [DOMAIN] will never be played.</string>
+  <string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">Shared Media from the URL [MEDIAURL] will always be played.</string>
+  <string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">Shared Media from the URL [MEDIAURL] will never be played.</string>
+ 
+</strings>

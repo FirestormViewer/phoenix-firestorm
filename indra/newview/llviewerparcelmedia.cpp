@@ -48,6 +48,8 @@
 #include "llviewertexture.h"
 #include "llsdserialize.h"
 
+#include "lltrans.h"
+
 // Static Variables
 
 S32 LLViewerParcelMedia::sMediaParcelLocalID = 0;
@@ -921,8 +923,10 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 	}
 	else if (media_action=="deny")
 	{
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
 		LLChat chat;
-		chat.mText = "Media from the domain "+domain+" has been blocked.";
+		chat.mText = LLTrans::getString("MediaFilterContentBlocked", format_args);;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
@@ -956,16 +960,16 @@ void callback_media_alert(const LLSD &notification, const LLSD &response, LLParc
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 	if (option == 0) // allow
 	{
-		args["ACTION"] = "Allow";
-		args["CONDITION"] = "Always";
-		args["LCONDITION"] = "always";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionAllow");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionAlways");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionAlwaysLower");
 		allow = true;
 	}
 	else
 	{
-		args["ACTION"] = "Deny";
-		args["CONDITION"] = "Never";
-		args["LCONDITION"] = "never";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionDeny");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionNever");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionNeverLower");
 		allow = false;
 	}
 	args["MEDIAURL"] = media_url;
@@ -1004,7 +1008,9 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Media from domain "+domain+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterMediaContentDomainAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		LLViewerParcelMedia::sCurrentMedia = *parcel;
 		if (parcel->getName() == currentparcel->getName())
@@ -1020,7 +1026,9 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Media from domain "+domain+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterMediaContentDomainAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 	}
 	else if ((option == 2) && allow) // Whitelist URL
@@ -1030,7 +1038,9 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Media from location "+media_url+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterMediaContentUrlAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		LLViewerParcelMedia::sCurrentMedia = *parcel;
 		if (parcel->getName() == currentparcel->getName())
@@ -1046,7 +1056,9 @@ void callback_media_alert2(const LLSD &notification, const LLSD &response, LLPar
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Media from location "+media_url+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterMediaContentUrlAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 	}
 
@@ -1248,8 +1260,10 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 	}
 	else if (media_action=="deny")
 	{
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
 		LLChat chat;
-		chat.mText = "Audio from the domain "+domain+" has been blocked.";
+		chat.mText = LLTrans::getString("MediaFilterAudioContentBlocked", format_args);
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
@@ -1279,16 +1293,16 @@ void callback_audio_alert(const LLSD &notification, const LLSD &response, std::s
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 	if (option == 0) // allow
 	{
-		args["ACTION"] = "Allow";
-		args["CONDITION"] = "Always";
-		args["LCONDITION"] = "always";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionAllow");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionAlways");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionAlwaysLower");
 		allow = true;
 	}
 	else
 	{
-		args["ACTION"] = "Deny";
-		args["CONDITION"] = "Never";
-		args["LCONDITION"] = "never";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionDeny");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionNever");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionNeverLower");
 		allow = false;
 	}
 	args["AUDIOURL"] = media_url;
@@ -1334,7 +1348,9 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Music from domain "+domain+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterAudioContentDomainAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		if (gAudiop != NULL)
 		{
@@ -1351,7 +1367,9 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Music from domain "+domain+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterAudioContentDomainAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		if (gAudiop != NULL)
 		{
@@ -1368,7 +1386,9 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Music from location "+media_url+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterAudioContentUrlAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		if (gAudiop != NULL)
 		{
@@ -1385,7 +1405,9 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Music from location "+media_url+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterAudioContentUrlAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		if (gAudiop != NULL)
 		{
@@ -1576,8 +1598,10 @@ void LLViewerParcelMedia::filterMOAPUrl(LLMediaDataClientObject *object, LLObjec
 	}
 	else if (media_action=="deny")
 	{
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
 		LLChat chat;
-		chat.mText = "Shared media from the domain "+domain+" has been blocked.";
+		chat.mText = LLTrans::getString("MediaFilterSharedMediaContentBlocked", domain);
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
@@ -1613,16 +1637,16 @@ void callback_MOAP_alert(const LLSD &notification, const LLSD &response, LLMedia
 	std::string domain = LLViewerParcelMedia::extractDomain(media_url);
 	if (option == 0) // allow
 	{
-		args["ACTION"] = "Allow";
-		args["CONDITION"] = "Always";
-		args["LCONDITION"] = "always";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionAllow");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionAlways");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionAlwaysLower");
 		allow = true;
 	}
 	else
 	{
-		args["ACTION"] = "Deny";
-		args["CONDITION"] = "Never";
-		args["LCONDITION"] = "never";
+		args["ACTION"] = LLTrans::getString("MediaFilterActionDeny");
+		args["CONDITION"] = LLTrans::getString("MediaFilterConditionNever");
+		args["LCONDITION"] = LLTrans::getString("MediaFilterConditionNeverLower");
 		allow = false;
 	}
 	args["MOAPURL"] = media_url;
@@ -1659,7 +1683,9 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Shared media from domain "+domain+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterSharedMediaContentDomainAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		nav_object->doNavigate(object, texture_index, media_url);
 		LLViewerParcelMedia::sCurrentMOAP = media_url;
@@ -1672,7 +1698,9 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Shared media from domain "+domain+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[DOMAIN]"] = domain;
+		chat.mText = LLTrans::getString("MediaFilterSharedMediaContentDomainAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		LLViewerParcelMedia::sCurrentMOAP = "";
 		LLViewerParcelMedia::sMOAPLastActionPlay = false;
@@ -1684,7 +1712,9 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		newmedia["action"] = "allow";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Shared media from location "+media_url+" will always be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterSharedMediaContentUrlAlwaysAllowed", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		nav_object->doNavigate(object, texture_index, media_url);
 		LLViewerParcelMedia::sCurrentMOAP = media_url;
@@ -1697,7 +1727,9 @@ void callback_MOAP_alert2(const LLSD &notification, const LLSD &response, LLMedi
 		newmedia["action"] = "deny";
 		LLViewerParcelMedia::sMediaFilterList.append(newmedia);
 		LLViewerParcelMedia::saveDomainFilterList();
-		chat.mText = "Shared media from location "+media_url+" will never be played.";
+		LLStringUtil::format_map_t format_args;
+		format_args["[MEDIAURL]"] = media_url;
+		chat.mText = LLTrans::getString("MediaFilterSharedMediaContentUrlAlwaysBlocked", format_args);
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 		LLViewerParcelMedia::sCurrentMOAP = "";
 		LLViewerParcelMedia::sMOAPLastActionPlay = false;

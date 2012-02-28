@@ -5106,4 +5106,67 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="RlvDisabled">
 		RestrainedLove-Unterstützung ist beim nächsten Start ausgeschaltet.
 	</string>
+	<string name="MediaFilterActionAllow">
+		erlauben
+	</string>
+	<string name="MediaFilterActionDeny">
+		verbieten
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Immer
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		immer
+	</string>
+	<string name="MediaFilterConditionNever">
+		Niemals
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		niemals
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		Medien von der Domain [DOMAIN] wurden geblockt.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		Medien von der Domain [DOMAIN] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		Medien von der Domain [DOMAIN] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		Medien von der URL [MEDIAURL] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		Medien von der URL [MEDIAURL] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentBlocked">
+		Musik von der Domain [DOMAIN] wurde geblockt.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		Musik von der Domain [DOMAIN] wird immer abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		Musik von der Domain [DOMAIN] wird niemals abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		Musik von der URL [MEDIAURL] wird immer abgespielt.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		Musik von der URL [MEDIAURL] wird niemals abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentBlocked">
+		Geteilte Medien von der Domain [DOMAIN] wurden geblockt.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">
+		Geteilte Medien von der Domain [DOMAIN] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">
+		Geteilte Medien von der Domain [DOMAIN] werden niemals abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">
+		Geteilte Medien von der URL [MEDIAURL] werden immer abgespielt.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
+		Geteilte Medien von der URL [MEDIAURL] werden niemals abgespielt.
+	</string>
 </strings>
