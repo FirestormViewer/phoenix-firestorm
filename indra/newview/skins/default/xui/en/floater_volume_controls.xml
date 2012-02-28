@@ -3,9 +3,9 @@
 	legacy_header_height="18"
 	can_resize="false"
 	can_dock="false"
-	can_close="false"
+	can_close="true"
 	can_minimize="false"
-	height="171"
+	height="170"
 	layout="topleft"
 	name="volume_controls"
 	save_rect="true"
@@ -13,13 +13,14 @@
 	single_instance="true"
 	save_dock_state="false"
 	title="Volume Controls"
+	background_opaque="false"
 	width="210">
 
 	<panel
 		name="global_volume_controls_panel"
 		filename="panel_volume_pulldown.xml"
 		left="0"
-		top="16"
+		top="20"
 		width="210"
 		height="155"
 		follows="all"
