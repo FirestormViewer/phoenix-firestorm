@@ -215,10 +215,14 @@ void FSFloaterContacts::openTab(const std::string& name)
 
 	if(visible)
 	{
-		if(getHost())
-			getHost()->setVisible(TRUE);
-
-		setVisible(TRUE);
+		LLIMFloaterContainer* floater_container = (LLIMFloaterContainer *) getHost();
+		if(floater_container)
+		{
+			floater_container->setVisible(TRUE);
+			floater_container->showFloater(this);
+		}
+		else
+			setVisible(TRUE);
 	}
 }
 
