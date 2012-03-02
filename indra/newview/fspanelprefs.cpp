@@ -246,7 +246,7 @@ void PanelPreferenceFirestorm::applyTagCombos()
 
 	if(tag_color!=gSavedPerAccountSettings.getColor4("FirestormTagColor")){
 		gSavedPerAccountSettings.setColor4("FirestormTagColor",tag_color);
-		if(gAgentAvatarp!=NULL)	gAgentAvatarp->forceBakeAllTextures(true);
+		if(gAgentAvatarp.notNull())	gAgentAvatarp->forceBakeAllTextures(true);
 		if(gSavedSettings.getBOOL("FSShowOwnTagColor")) change=true;
 	}
 
