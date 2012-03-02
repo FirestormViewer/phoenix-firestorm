@@ -2433,7 +2433,7 @@ Friends can give permissions to track each other on the map and receive online s
 Offer friendship to [NAME]?
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 Would you be my friend?
       </input>
       <button
@@ -2457,7 +2457,7 @@ Would you be my friend?
     Save what I'm wearing as a new Outfit:
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
         [DESC] (new)
       </input>
       <button
@@ -2480,7 +2480,7 @@ Would you be my friend?
     Save item to my inventory as:
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
         [DESC] (new)
       </input>
       <button
@@ -2504,7 +2504,7 @@ Would you be my friend?
     New outfit name:
     <tag>confirm</tag>
     <form name="form">
-      <input name="new_name" type="text" width="300">
+      <input name="new_name" type="text" width="300" default="true">
         [NAME]
       </input>
       <button
@@ -3724,7 +3724,7 @@ You have reached your maximum number of groups. Please leave some group before j
 Kick this Resident with what message?
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 An administrator has logged you off.
       </input>
       <button
@@ -3747,7 +3747,7 @@ An administrator has logged you off.
 Kick everyone currently on the grid with what message?
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 An administrator has logged you off.
       </input>
       <button
@@ -3770,7 +3770,7 @@ An administrator has logged you off.
     <tag>confirm</tag>
 Freeze this Resident with what message?
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 You have been frozen. You cannot move or chat. An administrator will contact you via instant message (IM).
       </input>
       <button
@@ -3793,7 +3793,7 @@ You have been frozen. You cannot move or chat. An administrator will contact you
     <tag>confirm</tag>
 Unfreeze this Resident with what message?
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 You are no longer frozen.
       </input>
       <button
@@ -3924,10 +3924,10 @@ type="notify">
 Offer a teleport to your location with the following message?
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 Join me in [REGION]
       </input>
-      <button
+			<button
        default="true"
        index="0"
        name="OK"
@@ -3959,7 +3959,7 @@ which exceeds the limit of [LIMIT].
 God summon this resident to your location?
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 Join me in [REGION]
       </input>
       <button
@@ -4034,7 +4034,7 @@ Teleport to [HISTORY_ENTRY]?
 Type a short announcement which will be sent to everyone currently in your estate.
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text"/>
+      <input name="message" type="text" default="true"/>
       <button
        default="true"
        index="0"
@@ -4577,7 +4577,7 @@ Do you really want to schedule this region to restart?
 Type a short announcement which will be sent to everyone in this region.
     <tag>confirm</tag>
     <form name="form">
-      <input name="message" type="text"/>
+      <input name="message" type="text" default="true"/>
       <button
        default="true"
        index="0"
@@ -4772,7 +4772,8 @@ Please re-enter your password and click OK.
     <form name="form">
       <input
        name="message"
-       type="password"/>
+       type="password"
+       default="true"/>
       <button
        default="true"
        index="0"
@@ -7939,7 +7940,7 @@ Click and drag anywhere on the world to rotate your view
 The site at &apos;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&apos; in realm &apos;[REALM]&apos; requires a user name and password.
     <tag>confirm</tag>
     <form name="form">
-      <input name="username" type="text" text="User Name"/>
+      <input name="username" type="text" text="User Name" default="true"/>
       <input name="password" type="password" text="Password    "/>
       <button default="true"
               index="0"
@@ -8259,7 +8260,7 @@ Reset WL settings for &apos;[PARCEL_NAME]&apos; to region default?
 Specify a name for the new AO set:
 (The name may not contain a ":" or "|" character)
     <form name="form">
-      <input name="message" type="text">
+      <input name="message" type="text" default="true">
 New AO Set
       </input>
       <button

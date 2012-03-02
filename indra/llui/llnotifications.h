@@ -196,6 +196,7 @@ public:
 		Optional<S32>			width;
 		Optional<S32>			max_length_chars;
 		Optional<std::string>	text;
+		Optional<bool>			is_default;
 
 		Optional<std::string>	value;
 		FormInput();
