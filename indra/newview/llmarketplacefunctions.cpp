@@ -30,6 +30,7 @@
 
 #include "llagent.h"
 #include "llhttpclient.h"
+#include "lltimer.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -116,6 +117,9 @@ namespace LLMarketplaceImport
 	static U32 sImportResultStatus = 0;
 	static LLSD sImportResults = LLSD::emptyMap();
 
+	static LLTimer slmGetTimer;
+	static LLTimer slmPostTimer;
+
 	// Responders
 	
 	class LLImportPostResponder : public LLHTTPClient::Responder
@@ -125,11 +129,15 @@ namespace LLMarketplaceImport
 		
 		void completed(U32 status, const std::string& reason, const LLSD& content)
 		{
+			slmPostTimer.stop();
+
 			if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 			{
 				llinfos << " SLM POST status: " << status << llendl;
 				llinfos << " SLM POST reason: " << reason << llendl;
 				llinfos << " SLM POST content: " << content.asString() << llendl;
+
+				llinfos << " SLM POST timer: " << slmPostTimer.getElapsedTimeF32() << llendl;
 			}
 
 			if ((status == MarketplaceErrorCodes::IMPORT_REDIRECT) ||
@@ -168,11 +176,15 @@ namespace LLMarketplaceImport
 		
 		void completed(U32 status, const std::string& reason, const LLSD& content)
 		{
+			slmGetTimer.stop();
+
 			if (gSavedSettings.getBOOL("InventoryOutboxLogging"))
 			{
 				llinfos << " SLM GET status: " << status << llendl;
 				llinfos << " SLM GET reason: " << reason << llendl;
 				llinfos << " SLM GET content: " << content.asString() << llendl;
+
+				llinfos << " SLM GET timer: " << slmGetTimer.getElapsedTimeF32() << llendl;
 			}
 			
 			if ((status == MarketplaceErrorCodes::IMPORT_AUTHENTICATION_ERROR) ||
@@ -248,6 +260,7 @@ namespace LLMarketplaceImport
 			llinfos << " SLM GET: " << url << llendl;
 		}
 
+		slmGetTimer.start();
 		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders());
 		
 		return true;
@@ -278,6 +291,7 @@ namespace LLMarketplaceImport
 			llinfos << " SLM GET: " << url << llendl;
 		}
 
+		slmGetTimer.start();
 		LLHTTPClient::get(url, new LLImportGetResponder(), headers);
 		
 		return true;
@@ -311,6 +325,7 @@ namespace LLMarketplaceImport
 			llinfos << " SLM POST: " << url << llendl;
 		}
 
+		slmPostTimer.start();
 		LLHTTPClient::post(url, LLSD(), new LLImportPostResponder(), headers);
 		
 		return true;
