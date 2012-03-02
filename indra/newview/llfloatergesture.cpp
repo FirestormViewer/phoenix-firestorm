@@ -650,10 +650,26 @@ bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
 	if( !pItem )
 		return false;
 
-	pItem->getColumn(0)->setValue( aData[ "columns" ][ 0 ][ "value" ] );
-	pItem->getColumn(1)->setValue( aData[ "columns" ][ 1 ][ "value" ] );
-	pItem->getColumn(2)->setValue( aData[ "columns" ][ 2 ][ "value" ] );
+	std::string	sDummyShortcut = "---";
+	std::string	sDummyKey = "~~~";
+
+	if( aData[ "columns" ][ 0 ][ "value" ] != "" )
+		pItem->getColumn(0)->setValue( aData[ "columns" ][ 0 ][ "value" ] );
+	
+	if( aData[ "columns" ][ 1 ][ "value" ] != sDummyShortcut )
+		pItem->getColumn(1)->setValue( aData[ "columns" ][ 1 ][ "value" ] );
+
+	if( aData[ "columns" ][ 2 ][ "value" ] != sDummyKey )
+		pItem->getColumn(2)->setValue( aData[ "columns" ][ 2 ][ "value" ] );
+	
 	pItem->getColumn(3)->setValue( aData[ "columns" ][ 3 ][ "value" ] );
+
+	LLFontGL::StyleFlags oStyle = LLGestureMgr::getInstance()->isGestureActive(aItem) ? LLFontGL::BOLD : LLFontGL::NORMAL;
+
+	LLScrollListText *pTextItem = dynamic_cast< LLScrollListText* >( pItem->getColumn(0) );
+
+	if( pTextItem )
+		pTextItem->setFontStyle( oStyle );
 
 	return true;
 }
