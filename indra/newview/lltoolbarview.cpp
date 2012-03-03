@@ -80,7 +80,12 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
 	mDragStarted(false),
 	mShowToolbars(true),
 	mDragToolbarButton(NULL),
-	mToolbarsLoaded(false)
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	//mToolbarsLoaded(false)
+	mToolbarsLoaded(false),
+	mBottomChatStack(NULL),
+	mBottomToolbarPanel(NULL)
+	// </FS:Ansariel> Member variables needed for console chat bottom offset
 {
 	for (S32 i = 0; i < TOOLBAR_COUNT; i++)
 	{
@@ -116,6 +121,11 @@ BOOL LLToolBarView::postBuild()
 
 	LLAppViewer::instance()->setOnLoginCompletedCallback(boost::bind(&handleLoginToolbarSetup));
 	
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	mBottomChatStack = findChild<LLView>("bottom_chat_stack");
+	mBottomToolbarPanel = findChild<LLView>("bottom_toolbar_panel");
+	// </FS:Ansariel> Member variables needed for console chat bottom offset
+
 	return TRUE;
 }
 

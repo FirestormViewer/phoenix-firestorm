@@ -5169,8 +5169,9 @@ S32 LLViewerWindow::getChatConsoleBottomPad()
 		//offset += gToolBarView->getChild<LLView>("bottom_toolbar_panel")->getRect().getHeight();
 	if(gToolBarView)
 	{
-		offset += gToolBarView->getChild<LLView>("bottom_toolbar_panel")->getRect().getHeight();
-		LLView* chat_stack = gToolBarView->findChild<LLView>("bottom_chat_stack");
+		// This gets called every frame, so don't call getChild/findChild every time!
+		offset += gToolBarView->getBottomToolbarPanel()->getRect().getHeight();
+		LLView* chat_stack = gToolBarView->getBottomChatStack();
 		if (chat_stack)
 		{
 			offset = chat_stack->getRect().getHeight();

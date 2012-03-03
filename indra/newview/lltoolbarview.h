@@ -114,6 +114,11 @@ public:
 	// <FS:Ansariel> Allow accessing the toolbars itself
 	LLToolBar* getToolBar(EToolBarLocation location) const { return mToolbars[location]; };
 
+	// <FS:Ansariel> Getters for member variables needed for console chat bottom offset
+	LLView* getBottomToolbarPanel() const { return mBottomToolbarPanel; };
+	LLView* getBottomChatStack() const { return mBottomChatStack; };
+	// </FS:Ansariel>
+
 protected:
 	friend class LLUICtrlFactory;
 	LLToolBarView(const Params&);
@@ -135,6 +140,11 @@ private:
 	bool				mDragStarted;
 	LLToolBarButton*	mDragToolbarButton;
 	bool				mShowToolbars;
+
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	LLView*				mBottomToolbarPanel;
+	LLView*				mBottomChatStack;
+	// </FS:Ansariel>
 };
 
 extern LLToolBarView* gToolBarView;
