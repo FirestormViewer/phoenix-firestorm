@@ -343,7 +343,9 @@ public:
 
 		clearText();
 		
-		if (gSavedSettings.getBOOL("DebugShowTime"))
+		//if (gSavedSettings.getBOOL("DebugShowTime"))
+		static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
+		if (debugShowTime)
 		{
 			const U32 y_inc2 = 15;
 			for (std::map<S32,LLFrameTimer>::reverse_iterator iter = gDebugTimers.rbegin();
@@ -368,7 +370,9 @@ public:
 		}
 		
 #if LL_WINDOWS
-		if (gSavedSettings.getBOOL("DebugShowMemory"))
+		//if (gSavedSettings.getBOOL("DebugShowMemory"))
+		static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
+		if (debugShowMemory)
 		{
 			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
 			ypos += y_inc;
@@ -459,7 +463,9 @@ public:
 			ypos += y_inc;
 		}*/
 		
-		if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+		static LLCachedControl<bool> debugShowRenderInfo(gSavedSettings, "DebugShowRenderInfo");
+		if (debugShowRenderInfo)
 		{
 			if (gPipeline.getUseVertexShaders() == 0)
 			{
@@ -631,7 +637,9 @@ public:
 				LLVertexBuffer::sSetCount = LLImageGL::sUniqueCount = 
 				gPipeline.mNumVisibleNodes = LLPipeline::sVisibleLightCount = 0;
 		}
-		if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+		static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
+		if (debugShowRenderMatrices)
 		{
 			addText(xpos, ypos, llformat("%.4f    .%4f    %.4f    %.4f", gGLProjection[12], gGLProjection[13], gGLProjection[14], gGLProjection[15]));
 			ypos += y_inc;
@@ -664,7 +672,9 @@ public:
 			addText(xpos, ypos, "View Matrix");
 			ypos += y_inc;
 		}
-		if (gSavedSettings.getBOOL("DebugShowColor"))
+		//if (gSavedSettings.getBOOL("DebugShowColor"))
+		static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+		if (debugShowColor)
 		{
 			U8 color[4];
 			LLCoordGL coord = gViewerWindow->getCurrentMouse();
@@ -673,7 +683,9 @@ public:
 			ypos += y_inc;
 		}
 
-		if (gSavedSettings.getBOOL("DebugShowPrivateMem"))
+		//if (gSavedSettings.getBOOL("DebugShowPrivateMem"))
+		static LLCachedControl<bool> debugShowPrivateMem(gSavedSettings, "DebugShowPrivateMem");
+		if (debugShowPrivateMem)
 		{
 			LLPrivateMemoryPoolManager::getInstance()->updateStatistics() ;
 			addText(xpos, ypos, llformat("Total Reserved(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalReservedSize / 1024));
@@ -745,7 +757,9 @@ public:
 			}
 		}				
 
-		if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
+		//if (gSavedSettings.getBOOL("DebugShowTextureInfo"))
+		static LLCachedControl<bool> debugShowTextureInfo(gSavedSettings, "DebugShowTextureInfo");
+		if (debugShowTextureInfo)
 		{
 			LLViewerObject* objectp = NULL ;
 			//objectp = = gAgentCamera.getFocusObject();
@@ -2382,13 +2396,17 @@ void LLViewerWindow::draw()
 
 	//S32 screen_x, screen_y;
 
-	if (!gSavedSettings.getBOOL("RenderUIBuffer"))
+	//if (!gSavedSettings.getBOOL("RenderUIBuffer"))
+	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
+	if (!renderUIBuffer)
 	{
 		LLUI::sDirtyRect = getWindowRectScaled();
 	}
 
 	// HACK for timecode debugging
-	if (gSavedSettings.getBOOL("DisplayTimecode"))
+	//if (gSavedSettings.getBOOL("DisplayTimecode"))
+	static LLCachedControl<bool> displayTimecode(gSavedSettings, "DisplayTimecode");
+	if (displayTimecode)
 	{
 		// draw timecode block
 		std::string text;
@@ -2439,7 +2457,8 @@ void LLViewerWindow::draw()
 		// Draw tool specific overlay on world
 		LLToolMgr::getInstance()->getCurrentTool()->draw();
         // Only show Mouselookinstructions if FSShowMouselookInstruction is TRUE
-		if( gSavedSettings.getBOOL("FSShowMouselookInstructions") && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )
+		static LLCachedControl<bool> fsShowMouselookInstructions(gSavedSettings, "FSShowMouselookInstructions");
+		if( fsShowMouselookInstructions && (gAgentCamera.cameraMouselook() || LLFloaterCamera::inFreeCameraMode()) )
 		{
 			drawMouselookInstructions();
 			stop_glerror();
@@ -3140,7 +3159,9 @@ void LLViewerWindow::updateUI()
 			LLRect screen_sticky_rect = mRootView->getLocalRect();
 			S32 local_x, local_y;
 
-			if (gSavedSettings.getBOOL("DebugShowXUINames"))
+			//if (gSavedSettings.getBOOL("DebugShowXUINames"))
+			static LLCachedControl<bool> debugShowXUINames(gSavedSettings, "DebugShowXUINames");
+			if (debugShowXUINames)
 			{
 				LLToolTip::Params params;
 
@@ -3330,7 +3351,9 @@ void LLViewerWindow::updateMouseDelta()
 
 	LLVector2 mouse_vel; 
 
-	if (gSavedSettings.getBOOL("MouseSmooth"))
+	//if (gSavedSettings.getBOOL("MouseSmooth"))
+	static LLCachedControl<bool> mouseSmooth(gSavedSettings, "MouseSmooth");
+	if (mouseSmooth)
 	{
 		static F32 fdx = 0.f;
 		static F32 fdy = 0.f;
