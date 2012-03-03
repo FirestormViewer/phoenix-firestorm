@@ -546,7 +546,7 @@
 			<menu_item_call label="Physik" name="Physics"/>
 			<menu_item_call label="Alle Kleider" name="All Clothes"/>
 		</menu>
-		<menu label="Hilfe" name="Help">
+		<menu label="Hilfe" name="DeprecatedHelp">
 			<menu_item_call label="Offizielles Linden-Blog" name="Official Linden Blog"/>
 			<menu_item_call label="Scripting-Portal" name="Scripting Portal"/>
 			<menu label="Fehlermeldungen" name="Bug Reporting">
