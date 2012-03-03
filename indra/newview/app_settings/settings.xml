@@ -1118,7 +1118,7 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>FSSupportGroupChatPrefix</key>
+  <key>FSSupportGroupChatPrefix2</key>
     <map>
       <key>Comment</key>
       <string>Adds (FS 1.2.3) to support group chat</string>
@@ -1127,7 +1127,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
   <key>AutoCloseOOC</key>
     <map>

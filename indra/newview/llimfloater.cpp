@@ -298,7 +298,7 @@ void LLIMFloater::sendMsg()
 //-TT /Patch MU_OOC from Satomi Ahn
 
 			// TL: Support group chat prefix
-			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix");
+			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
 			if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 			{
 				if (utf8_text.find("/me ") == 0)

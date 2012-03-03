@@ -309,7 +309,7 @@
     <!-- Checkbox for FS prefix on support groups -->
     <check_box
      visible="true"
-     control_name="FSSupportGroupChatPrefix"
+     control_name="FSSupportGroupChatPrefix2"
      follows="left|top"
      height="18"
      label="Specify viewer type"
