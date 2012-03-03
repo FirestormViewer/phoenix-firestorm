@@ -21,6 +21,14 @@
         </menu_item_call>
         
         <menu_item_call
+         label="Merchant Outbox..."
+         name="MerchantOutbox">
+            <menu_item_call.on_click
+             function="Floater.ToggleOrBringToFront"
+             parameter="outbox" />
+        </menu_item_call>
+
+        <menu_item_call
          label="Buy L$"
          name="Buy and Sell L$">
             <menu_item_call.on_click
