@@ -195,6 +195,9 @@
 			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		</panel>
 		<panel label="Etiquetas" name="TagTab">
+			<text name="SL-Tags-Notice">
+				Nota: Debido a los cambios realizados por Linden Lab, las etiquetas de visor no funcionarán en Second Life.
+			</text>
 			<text name="whattagstoshow" width="285">
 				¿Qué etiquetas quieres ver?
 			</text>

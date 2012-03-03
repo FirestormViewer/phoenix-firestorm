@@ -262,9 +262,7 @@
 		<menu label="Atajos de teclado" name="Shortcuts">
 			<menu_item_call label="Subir imagen ([COST] L$)..." name="Upload Image"/>
 			<menu_item_check label="Buscar" name="Search"/>
-			<menu_item_call label="Recuperar las teclas" name="Release Keys"/>
-			<menu_item_call label="Interfaz en el tamaño predeterminado" name="Set UI Size to Default"/>
-			<menu_item_check label="Mostrar el menú Avanzado - acceso directo clásico" name="Show Advanced Menu - legacy shortcut"/>
+			<menu_item_check label="Mostrar el menú Avanzado - atajo clásico" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
 			<menu_item_check label="Correr siempre" name="Always Run"/>
             		<menu_item_check label="Iniciar el vuelo" name="Fly"/>
@@ -274,18 +272,12 @@
 			<menu_item_check label="Flycam del joystick" name="Joystick Flycam"/>
 			<menu_item_call label="Volver a la vista por defecto" name="Reset View"/>
 			<menu_item_call label="Mirar al último que habló" name="Look at Last Chatter"/>
-			<menu label="Herramientas de construcción" name="Select Tool">
-				<menu_item_call label="Visión" name="Focus"/>
-				<menu_item_call label="Mover" name="Move"/>
-				<menu_item_call label="Editar" name="Edit"/>
-				<menu_item_call label="Crear" name="Create"/>
-				<menu_item_call label="Terreno" name="Land"/>
-			</menu>
 			<menu_item_call label="Acercar el zoom" name="Zoom In"/>
 			<menu_item_call label="Zoom por defecto" name="Zoom Default"/>
 			<menu_item_call label="Alejar el zoom" name="Zoom Out"/>
 		</menu>
 		<menu_item_check label="Ignorar prohibición de volar" name="Fly Override"/>
+		<menu_item_check label="RestrainedLove API (RLVa)" name="RLV API"/>
 		<menu_item_call label="Mostrar configuraciones del depurador" name="Debug Settings"/>
 		<menu_item_check label="Mostrar el menú Desarrollo" name="Debug Mode"/>
 	</menu>
@@ -396,7 +388,6 @@
 		</menu>
 		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Ignorar sol de la región" name="Sim Sun Override"/>
-			<menu_item_check label="Baliza con destellos" name="Cheesy Beacon"/>
 			<menu_item_check label="Clima fijo" name="Fixed Weather"/>
 			<menu_item_call label="Volcar caché de objetos de la región" name="Dump Region Object Cache"/>
 		</menu>
@@ -426,7 +417,7 @@
 			<menu_item_call label="Cargar desde XML" name="Load from XML"/>
 			<menu_item_call label="Salvar a XML" name="Save to XML"/>
 			<menu_item_check label="Mostrar nombres de XUI" name="Show XUI Names"/>
-			<menu_item_call label="Enviar MI de prueba" name="Send Test IMs"/>
+			<menu_item_call label="Enviar MIs de prueba" name="Send Test IMs"/>
 			<menu_item_call label="Eliminar cachés de nombres" name="Flush Names Caches"/>
 		</menu>
 		<menu label="Avatar" name="Character">
@@ -448,8 +439,8 @@
 			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
 			<menu_item_check label="Información de animación" name="Animation Info"/>
 			<menu_item_check label="Animaciones en cámara lenta" name="Slow Motion Animations"/>
-			<menu_item_check label="Mostrar Look At" name="Show Look At"/>
-			<menu_item_check label="Mostrar Point At" name="Show Point At"/>
+			<menu_item_check label="Mostrar puntos de mira de foco" name="Show Look At"/>
+			<menu_item_check label="Mostrar puntos de mira de ratón" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>
 			<menu_item_check label="Desactivar nivel de detalle (LOD)" name="Disable LOD"/>
 			<menu_item_check label="Depurar visibilidad del personaje" name="Debug Character Vis"/>
@@ -514,7 +505,7 @@
 			<menu_item_call label="Física" name="Physics"/>
 			<menu_item_call label="Todas las prendas" name="All Clothes"/>
 		</menu>
-		<menu label="Help" name="Help">
+		<menu label="Help" name="DeprecatedHelp">
 			<menu_item_call label="Official Linden Blog" name="Official Linden Blog"/>
 			<menu_item_call label="Scripting Portal" name="Scripting Portal"/>
 			<menu label="Informe de fallos" name="Bug Reporting">
@@ -525,5 +516,15 @@
 				<menu_item_call label="QA Wiki" name="QA Wiki"/>
 			</menu>
 		</menu>
-	</menu>		
+	</menu>
+	<menu label="Archivo" name="V1-File"/>
+	<menu label="Editar" name="V1-Edit"/>
+	<menu label="Ver" name="V1-View"/>
+	<menu label="Mundo" name="V1-World"/>
+	<menu label="Herramientas" name="V1-Tools"/>
+	<menu label="Ayuda" name="V1-Help"/>
+	<menu label="Firestorm" name="V1-Firestorm"/>
+	<menu label="Avanzado" name="V1-Advanced">
+		<menu_item_check label="Usar menús V1" name="V1 Menus"/>
+	</menu>
 </menu_bar>

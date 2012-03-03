@@ -636,10 +636,6 @@ Se admiten [VALIDS]
 		No se encontró el fragmento &apos;data&apos; en la cabecera del WAV:
 [FILE]
 	</notification>
-	<notification name="SoundFileInvalidChunkSize">
-		Tamaño de lote erróneo en el archivo WAV:
-[FILE]
-	</notification>
 	<notification name="SoundFileInvalidTooLong">
 		El archivo de audio es demasiado largo (debe ser como máximo de10 segundos):
 [FILE]
@@ -1844,9 +1840,6 @@ Puede que lleve algún tiempo hasta que el cambio se vea reflejado en el mapa.
 
 Para entrar a regiones Adultas, los Residentes deben haber verificado su cuenta, bien verificando la edad o bien aportando información de una forma de pago.
 	</notification>
-	<notification label="Desajuste en la versión de voz" name="VoiceVersionMismatch">
-		Esta versión de [APP_NAME] no es compatible con la prestación de voz de esta región. Para que el chat de voz funcione correctamente debes actualizar [APP_NAME].
-	</notification>
 	<notification label="No se pudo comprar los objetos" name="BuyObjectOneOwner">
 		No se pueden comprar a la vez objetos de propietarios diferentes.
 Por favor, selecciona sólo un objeto y vuelve a intentarlo.
@@ -2946,19 +2939,6 @@ Con los siguientes residentes:
 	</notification>
 	<notification name="DeedToGroupFail">
 		Error de transferencia a grupo.
-	</notification>
-	<notification name="ReleaseLandThrottled">
-		La parcela [PARCEL_NAME] no se puede abandonar en este momento.
-	</notification>
-	<notification name="ReleasedLandWithReclaim">
-		Ya está disponible la parcela [PARCEL_NAME] de [ÁREA] m².
-
-Dispondrás de [RECLAIM_PERIOD] horas para reclamarla por de 0 L$ antes de que se ponga en venta.
-	</notification>
-	<notification name="ReleasedLandNoReclaim">
-		Ya está disponible la parcela [PARCEL_NAME] de [ÁREA] m².
-
-Ya está en venta.
 	</notification>
 	<notification name="AvatarRezNotification">
 		( [EXISTENCE] segundos vivo )
