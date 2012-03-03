@@ -66,8 +66,14 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<panel.string name="time_stamp_template">
 				[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 			</panel.string>
+			<panel.string name="error_resolving_uuid">
+				No se ha podido resolver la id. de la parcela.
+			</panel.string>
 			<text name="Name:">
 				Nombre:
+			</text>
+			<text name="UUID:">
+				ID de Parcela:
 			</text>
 			<text name="Description:">
 				Descripción:

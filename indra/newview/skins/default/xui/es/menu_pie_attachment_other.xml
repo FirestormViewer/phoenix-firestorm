@@ -10,6 +10,7 @@
 		<pie_slice label="Congelar" name="Freeze..."/>
 		<pie_slice label="Ofrecer tarjeta" name="Add Calling Card"/>
 		<pie_slice label="Invitar a grupo" name="Group Invite..."/>
+		<pie_slice label="Expulsar..." name="Eject..."/>
 		<pie_menu name="Avatar Pie More 2" label="Más >">
 			<pie_slice label="Depurar texturas" name="Debug..."/>
 			<pie_slice label="Info scripts" name="ScriptInfo"/>

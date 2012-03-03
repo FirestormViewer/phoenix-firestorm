@@ -11,7 +11,8 @@
 				Posicionar automáticamente la cámara al:
 			</text>
 			<check_box label="Construir/Editar" name="edit_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de objetos"/>
-			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario"/>
+			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario" width="115"/>
+			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
 			<text name="Mouse Sensitivity" width="220">
@@ -28,6 +29,7 @@
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Volar/aterrizar al mantener Re Pág/Av Pág" name="automatic_fly"/>
 			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
+			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
 			<text name="single_click_action_lbl">
 				Un solo clic en el terreno:
 			</text>
@@ -50,6 +52,7 @@
 				Opciones de cámara:
 			</text>
 			<check_box label="Hacer clic en mi avatar mantiene la posición de la cámara" name="clickonavatarkeepscamera" tool_tip="Normalmente, hacer clic en tu avatar restablece la posición de la cámara. Esta configuración evita ese comportamiento."/>
+			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
 			<check_box label="Desactivar la distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva el límite de cercanía de la cámara a un objeto o avatar."/>
 			<check_box label="Permitir a la cámara moverse a través de objetos" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos." width="285"/>
 			<text name="ignorecameraconstraints_requires_restart" top_pad="-2" top_delta="-1">
@@ -58,8 +61,10 @@
 			<check_box label="Activar rotación del minimapa" name="minimaprotate" tool_tip="Rota la miniatura del mapa hacia la dirección del avatar."/>
 			<check_box name="MiniMapChatRing" label="Muestra un círculo en el minimapa indicando el alcance del chat local"/>
 			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
+			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>
 			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box top_pad="5" label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
+			<check_box label="Mostrar informacion adicional de la región en el Mapa Mundial" name="FSAdvancedWorldmapRegionInfo" tool_tip="Muestra informaciones adicionales en el mapa del mundo (número de avatares y calificación de contenidos)."/>
 		</panel>
 	</tab_container>
 </panel>

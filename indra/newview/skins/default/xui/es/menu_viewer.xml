@@ -4,6 +4,7 @@
 		<menu_item_call label="Mi panel de control" name="Manage Account"/>
 		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Preferencias" name="Preferences"/>
+		<menu_item_call label="Botones de la barra de herramientas" name="Toolbar Buttons"/>
 		<menu_item_call label="Mi perfil" name="Profile"/>
 		<menu_item_call label="Mi apariencia" name="ChangeOutfit"/>
 		<menu_item_call label="Tomar fotografía" name="Take Snapshot"/>
@@ -28,6 +29,7 @@
 			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
 			<menu_item_call label="Recrear el LSL Bridge" name="Recreate LSL Bridge"/>			
 		</menu>
+		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
 		<menu label="Subir" name="Upload">
 			<menu_item_call label="Imagen ([COST] L$)..." name="Upload Image"/>
 			<menu_item_call label="Sonido ([COST] L$)..." name="Upload Sound"/>
@@ -42,10 +44,10 @@
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
 		<menu label="Estado" name="Status">
-			<menu_item_call label="Ausente" name="Set Away"/>
-			<menu_item_call label="Autorresponder" name="Set Autorespond"/>
-			<menu_item_call label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
-			<menu_item_call label="Ocupado" name="Set Busy"/>
+			<menu_item_check label="Ausente" name="Set Away"/>
+			<menu_item_check label="Autorresponder" name="Set Autorespond"/>
+			<menu_item_check label="Autorresponder a no-amigos" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Ocupado" name="Set Busy"/>
 		</menu>
 		<menu_item_call label="Amigos" name="My Friends"/>
 		<menu_item_check label="Contactos" name="Contacts"/>
@@ -104,6 +106,7 @@
 			</menu>
 		</menu>
 		<menu_item_call label="Búsqueda de área" name="area_search"/>
+		<menu_item_call label="Lista negra" name="Asset Blacklist"/>
 	</menu>
 	<menu label="Construir" name="BuildTools">
 		<menu_item_check label="Construir" name="Show Build Tools"/>
@@ -128,7 +131,9 @@
 		<menu label="Objeto" name="Object">
 			<menu_item_call label="Comprar" name="Menu Object Buy"/>
 			<menu_item_call label="Tomar" name="Menu Object Take"/>
-			<menu_item_call label="Coger una copia" name="Take Copy"/>
+			<menu_item_call label="Tomar una copia" name="Take Copy"/>
+			<menu_item_call label="Duplicar" name="Duplicate"/>
+			<menu_item_call label="Editar partículas" name="Menu Object Edit Particles"/>
 			<menu_item_call label="Guardar una copia en mi inventario" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Guardar una copia en los contenidos del objeto del que salió" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
@@ -226,22 +231,22 @@
 			<menu_item_check label="Mostrar punto de mira en vista subjetiva" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="Objetos representados" name="Rendering Types">
-			<menu_item_check label="Simple" name="Simple"/>
-			<menu_item_check label="Alfa" name="Alpha"/>
-			<menu_item_check label="Árboles" name="Tree"/>
-			<menu_item_check label="Avatares" name="Character"/>
-			<menu_item_check label="Parche de superficie" name="Surface Patch"/>
-			<menu_item_check label="Cielo" name="Sky"/>
-			<menu_item_check label="Agua" name="Water"/>
-			<menu_item_check label="Terreno" name="Ground"/>
-			<menu_item_check label="Volumen" name="Volume"/>
-			<menu_item_check label="Hierba" name="Grass"/>
-			<menu_item_check label="Nubes" name="Clouds"/>
-			<menu_item_check label="Partículas" name="Particles"/>
-			<menu_item_check label="Relieve" name="Bump"/>
+			<menu_item_check label="Simple" name="Rendering Type Simple"/>
+			<menu_item_check label="Alfa" name="Rendering Type Alpha"/>
+			<menu_item_check label="Árboles" name="Rendering Type Tree"/>
+			<menu_item_check label="Avatares" name="Rendering Type Character"/>
+			<menu_item_check label="Parche de superficie" name="Rendering Type Surface Patch"/>
+			<menu_item_check label="Cielo" name="Rendering Type Sky"/>
+			<menu_item_check label="Agua" name="Rendering Type Water"/>
+			<menu_item_check label="Terreno" name="Rendering Type Ground"/>
+			<menu_item_check label="Volumen" name="Rendering Type Volume"/>
+			<menu_item_check label="Hierba" name="Rendering Type Grass"/>
+			<menu_item_check label="Nubes" name="Rendering Type Clouds"/>
+			<menu_item_check label="Partículas" name="Rendering Type Particles"/>
+			<menu_item_check label="Relieve" name="Rendering Type Bump"/>
 		</menu>
 		<menu label="Rasgos renderizados" name="Rendering Features">
-			<menu_item_check label="UI" name="UI"/>
+			<menu_item_check label="Interfaz de usuario" name="UI"/>
 			<menu_item_check label="Seleccionado" name="Selected"/>
 			<menu_item_check label="Realzados" name="Highlighted"/>
 			<menu_item_check label="Texturas dinámicas" name="Dynamic Textures"/>
@@ -253,6 +258,7 @@
 		<menu_item_check label="Usar Plugin Read Thread" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Vaciar caché de grupo" name="ClearGroupCache"/>
 		<menu_item_check label="Vista subjetiva suavizada" name="Mouse Smoothing"/>
+		<menu_item_call label="Liberar teclas" name="Release Keys"/>
 		<menu label="Atajos de teclado" name="Shortcuts">
 			<menu_item_call label="Subir imagen ([COST] L$)..." name="Upload Image"/>
 			<menu_item_check label="Buscar" name="Search"/>
@@ -293,6 +299,7 @@
 			<menu_item_check label="Fast Timers" name="Fast Timers"/>
 			<menu_item_check label="Memoria" name="Memory"/>
 			<menu_item_check label="Estadísticas de escena" name="Scene Statistics"/>
+			<menu_item_check label="Consola de depuración de región" name="Region Debug Console"/>
 			<menu_item_call label="Enviar información de región a consola de depuración" name="Region Info to Debug Console"/>
 			<menu_item_call label="Enviar información de grupo a consola de depuración" name="Group Info to Debug Console"/>
 			<menu_item_call label="Enviar prestaciones a consola de depuración" name="Capabilities Info to Debug Console"/>
@@ -306,6 +313,7 @@
 			<menu_item_check label="Coste de subida" name="Show Upload Cost"/>
 			<menu_item_check label="Información de textura" name="Show Texture Info"/>
 			<menu_item_check label="Información de dibujo" name="Show Render Info"/>
+			<menu_item_check label="Mostrar matrices" name="Show Matrices"/>
 			<menu_item_check label="Color bajo el cursor" name="Show Color Under Cursor"/>
 			<menu_item_check label="Memoria" name="Show Memory"/>
 			<menu_item_check label="Mostrar información de memoria privada" name="Show Private Mem Info"/>
@@ -343,6 +351,9 @@
 			<menu_item_check label="Luces" name="Lights"/>
 			<menu_item_check label="Armazón de colisión" name="Collision Skeleton"/>
 			<menu_item_check label="Emisión de rayos" name="Raycast"/>
+			<menu_item_check label="Vectores del viento" name="Wind Vectors"/>
+			<menu_item_check label="Complejidad del dibujo" name="rendercomplexity"/>
+			<menu_item_check label="Bytes de objetos anexados" name="attachment bytes"/>
 			<menu_item_check label="Esculpidos" name="Sculpt"/>
 		</menu>
 		<menu label="Dibujo" name="Rendering">
@@ -374,7 +385,7 @@
 			<menu_item_call label="Desactivar registro de mensajes" name="Disable Message Log"/>
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Descartar cámara guionizada" name="Dump Scripted Camera"/>
+		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
 		<menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Grabadora" name="Recorder">
 			<menu_item_call label="Iniciar reproducción" name="Start Playback"/>
@@ -383,19 +394,21 @@
 			<menu_item_call label="Iniciar grabación" name="Start Record"/>
 			<menu_item_call label="Detener grabación"  name="Stop Record"/>
 		</menu>
-		<menu label="Mundo" name="World">
+		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Ignorar sol de la región" name="Sim Sun Override"/>
 			<menu_item_check label="Baliza con destellos" name="Cheesy Beacon"/>
 			<menu_item_check label="Clima fijo" name="Fixed Weather"/>
-			<menu_item_call label="Descartar caché de objetos de la región" name="Dump Region Object Cache"/>
+			<menu_item_call label="Volcar caché de objetos de la región" name="Dump Region Object Cache"/>
 		</menu>
 		<menu label="Interfaz de Usuario" name="UI">
 			<menu_item_call label="Prueba de navegador de medios" name="Web Browser Test"/>
 			<menu_item_call label="Navegador de contenido web" name="Web Content Browser"/>
-			<menu_item_call label="Descartar inventario" name="Dump Inventory"/>
-			<menu_item_call label="Descartar temporizadores" name="Dump Timers"/>
+			<menu_item_call label="Volcar SelectMgr" name="Dump SelectMgr"/>
+			<menu_item_call label="Volcar inventario" name="Dump Inventory"/>
+			<menu_item_call label="Volcar temporizadores" name="Dump Timers"/>
+			<menu_item_call label="Volcar objeto del foco" name="Dump Focus Holder"/>
 			<menu_item_call label="Imprimir información del objeto seleccionado" name="Print Selected Object Info"/>
-			<menu_item_call label="Imprimir inforamción del avatar" name="Print Agent Info"/>
+			<menu_item_call label="Imprimir información del avatar" name="Print Agent Info"/>
 			<menu_item_call label="Estadísticas de memoria" name="Memory Stats"/>
 			<menu_item_check label="Piloto automático con doble clic" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
@@ -418,11 +431,11 @@
 		</menu>
 		<menu label="Avatar" name="Character">
 			<menu label="Tomar textura" name="Grab Baked Texture">
-				<menu_item_call label="Iris" name="Iris"/>
-				<menu_item_call label="Cabeza" name="Head"/>
-				<menu_item_call label="Parte superior del cuerpo" name="Upper Body"/>
-				<menu_item_call label="Parte inferior del cuerpo" name="Lower Body"/>
-				<menu_item_call label="Falda" name="Skirt"/>
+				<menu_item_call label="Iris" name="Grab Iris"/>
+				<menu_item_call label="Cabeza" name="Grab Head"/>
+				<menu_item_call label="Parte superior del cuerpo" name="Grab Upper Body"/>
+				<menu_item_call label="Parte inferior del cuerpo" name="Grab Lower Body"/>
+				<menu_item_call label="Falda" name="Grab Skirt"/>
 			</menu>
 			<menu label="Pruebas de personaje" name="Character Tests">
 				<menu_item_call label="Apariencia a XML" name="Appearance To XML"/>
@@ -439,12 +452,12 @@
 			<menu_item_check label="Mostrar Point At" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>
 			<menu_item_check label="Desactivar nivel de detalle (LOD)" name="Disable LOD"/>
-			<menu_item_check label="Debug Character Vis" name="Debug Character Vis"/>
+			<menu_item_check label="Depurar visibilidad del personaje" name="Debug Character Vis"/>
 			<menu_item_check label="Mostrar armazón de colisión" name="Show Collision Skeleton"/>
 			<menu_item_check label="Mostrar objetivo del avatar" name="Display Agent Target"/>
-			<menu_item_call label="Descartar objetos anexados" name="Dump Attachments"/>
+			<menu_item_call label="Volcar objetos anexados" name="Dump Attachments"/>
 			<menu_item_call label="Depurar texturas del avatar" name="Debug Avatar Textures"/>
-			<menu_item_call label="Descartar texturas locales" name="Dump Local Textures"/>
+			<menu_item_call label="Volcar texturas locales" name="Dump Local Textures"/>
 			<menu_item_call label="Recargar partícula de nube del avatar" name="Reload Avatar Cloud Particle"/>
 		</menu>
 		<menu_item_check label="Texturas HTTP" name="HTTP Textures"/>
@@ -452,6 +465,13 @@
 		<menu_item_call label="Comprimir imágenes" name="Compress Images"/>
 		<menu_item_check label="Minivolcado de la salida del depurador" name="Output Debug Minidump"/>
 		<menu_item_check label="Ventana de consola en la próxima ejecución" name="Console Window"/>
+		<menu label="Nivel de registro" name="Set Logging Level">
+			<menu_item_check label="Depuración" name="Debug Level Debug"/>
+			<menu_item_check label="Información" name="Debug Level Info"/>
+			<menu_item_check label="Advertencias" name="Debug Level Warn"/>
+			<menu_item_check label="Errores" name="Debug Level Error"/>
+			<menu_item_check label="Ninguno" name="Debug Level None"/>
+		</menu>
 		<menu_item_call label="Solicitar estatus de Administrador" name="Request Admin Options"/>
 		<menu_item_call label="Abandonar estatus de Administrador" name="Leave Admin Options"/>
 		<menu_item_check label="Mostrar menú Admin" name="View Admin Options"/>
@@ -471,7 +491,7 @@
 			<menu_item_call label="Reclamar terreno público" name="Claim Public Land"/>
 		</menu>
 		<menu label="Región" name="Region">
-			<menu_item_call label="Descartar datos temporales de activo" name="Dump Temp Asset Data"/>
+			<menu_item_call label="Volcar datos temporales de activo" name="Dump Temp Asset Data"/>
 			<menu_item_call label="Salvar estado de la región" name="Save Region State"/>
 		</menu>
 		<menu_item_call label="Herramientas de dios" name="God Tools"/>

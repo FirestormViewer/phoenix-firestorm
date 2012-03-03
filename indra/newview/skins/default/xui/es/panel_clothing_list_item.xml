@@ -3,6 +3,6 @@
 	<button name="btn_delete" tool_tip="Quitar del vestuario"/>
 	<panel name="btn_lock" tool_tip="No tienes permiso para editar"/>
 	<panel name="btn_edit_panel">
-		<button name="btn_edit" tool_tip="Editar este artículo"/>
+		<button name="btn_edit" tool_tip="Editar este ítem"/>
 	</panel>
 </panel>

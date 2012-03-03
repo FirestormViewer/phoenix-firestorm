@@ -4,8 +4,8 @@
 		Puedes agregar o quitar botones arrastrándolos a las barras de herramientas o desde ellas.
 	</text>
 	<text name="toybox label 2">
-		Los botones aparecerán como se muestra o solo como iconos, según la configuración de cada barra de herramientas.
+		Los botones aparecerán como se muestra o solo como iconos, según la configuración de cada barra.
 	</text>
-	<button label="Quitar todas las barras de herramientas" label_selected="Quitar todas las barras de herramientas" name="btn_clear_all"/>
-	<button label="Restaurar valores predeterminados" label_selected="Restaurar valores predeterminados" name="btn_restore_defaults"/>
+	<button label="Quitar todas las barras" label_selected="Quitar todas las barras" name="btn_clear_all" width="170"/>
+	<button label="Restaurar predeterminados" label_selected="Restaurar predeterminados" name="btn_restore_defaults" width="170"/>
 </floater>

@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="Yo" name="File">
+	<menu label="Visor" name="File">
 		<menu_item_call label="Preferencias..." name="Preferences..."/>
 		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Ayuda" name="Help">
-		<menu_item_call label="Ayuda de [APP_NAME]" name="Second Life Help"/>
+		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
+		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help_login"/>
+		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about_login"/>
 	</menu>
-	<menu_item_check label="Mostrar el menú &apos;Debug&apos;" name="Show Debug Menu"/>
-	<menu label="Depurar" name="Debug">
+	<menu_item_check label="Mostrar el menú &apos;Depuración&apos;" name="Show Debug Menu"/>
+	<menu label="Depuración" name="Debug">
 		<menu_item_call label="Mostrar las configuraciones del depurador" name="Debug Settings"/>
 		<menu_item_call label="Configuraciones del Visor/Color" name="UI/Color Settings"/>
-		<menu label="Pruebas de la interfaz" name="UI Tests"/>
+		<menu_item_call label="Herramienta de previsualización de XUI" name="UI Preview Tool"/>
+		<menu label="Pruebas de la interfaz" name="UI Tests">
+			<menu_item_call label="Caja de texto" name="Textbox"/>
+			<menu_item_call label="Editor de texto" name="Text Editor"/>
+			<menu_item_call label="Widgets" name="Widgets"/>
+			<menu_item_call label="Inspectores" name="Inspectors"/>
+		</menu>
 		<menu_item_call label="Definir el tamaño de la ventana..." name="Set Window Size..."/>
-		<menu_item_call label="Mostrar los &apos;TOS&apos;" name="TOS"/>
+		<menu_item_call label="Mostrar las Condiciones del Servicio (&apos;TOS&apos;)" name="TOS"/>
 		<menu_item_call label="Mostrar mensaje crítico" name="Critical"/>
-		<menu_item_call label="Prueba de navegadores de medios" name="Web Browser Test"/>
 		<menu_item_call label="Prueba de depuración de ventanas de contenido web" name="Web Content Floater Debug Test"/>
-		<menu_item_check label="Mostrar el selector de Grid" name="Show Grid Picker"/>
+		<menu label="Nivel de registro" name="Set Logging Level">
+			<menu_item_check name="Debug Level Debug" label="Depuración"/>
+			<menu_item_check name="Debug Level Info" label="Información"/>
+			<menu_item_check name="Debug Level Warn" label="Advertencias"/>
+			<menu_item_check name="Debug Level Error" label="Errores"/>
+			<menu_item_check name="Debug Level None" label="Ninguno"/>
+		</menu>
+		<menu_item_check label="Mostrar selector de red" name="Show Grid Picker"/>
 		<menu_item_call label="Mostrar la consola de notificaciones" name="Show Notifications Console"/>
 	</menu>
 </menu_bar>

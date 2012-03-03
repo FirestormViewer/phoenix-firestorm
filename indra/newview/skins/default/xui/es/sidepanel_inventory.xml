@@ -16,9 +16,9 @@
 							<text name="inbox_fresh_new_count">
 								[NUM] nuevos
 							</text>
-							<panel tool_tip="Drag and drop items to your inventory to manage and use them">
+							<panel tool_tip="Arrastra items a tu inventario para usarlos">
 								<text name="inbox_inventory_placeholder">
-									Aquí se entregarán las compras realizadas en el mercado.
+									Aquí se entregarán las compras realizadas en Marketplace.
 								</text>
 							</panel>
 						</panel>
@@ -32,7 +32,7 @@
 								Buzón de salida de comerciante
 							</string>
 							<button label="Buzón de salida de comerciante" name="outbox_btn"/>
-							<button label="" name="outbox_sync_btn" tool_tip="Poner en el escaparate de Mi Mercado"/>
+							<button label="" name="outbox_sync_btn" tool_tip="Poner en mi Escaparate de Marketplace"/>
 							<panel>
 								<panel name="outbox_inventory_placeholder_panel">
 									<text name="outbox_inventory_placeholder_title">
@@ -54,7 +54,7 @@
 					<button label="Compartir" name="share_btn" tool_tip="Compartir un objeto del inventario"/>
 				</layout_panel>
 				<layout_panel name="shop_btn_lp">
-					<button label="Comprar" name="shop_btn" tool_tip="Abrir la página web del mercado"/>
+					<button label="Comprar" name="shop_btn" tool_tip="Abrir la página web de Marketplace"/>
 					<button label="Ponerme" name="wear_btn" tool_tip="Ponerme el vestuario seleccionado"/>
 					<button label="Play" name="play_btn"/>
 					<button label="Teleporte" name="teleport_btn" tool_tip="Teleportar a la zona elegida"/>

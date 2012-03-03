@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs" title="Preferencias Rápidas" width="265">
+	<panel name="quickprefs" width="265">
+		<text name="Draw Distance" tool_tip="Cambia tu distancia de dibujo" width="120">
+			Distancia de dibujo:
+		</text>
+		<slider name="DrawDistance" left_delta="100"/>
+		<text name="Maximum bandwidth" tool_tip="Configura el ancho de banda de red máximo que puede consumir Firestorm Viewer (en kilobits por segundo)" width="120">
+			Ancho de banda:
+		</text>
+		<slider name="max_bandwidth" left_delta="107"/>
+		<text name="Particles" tool_tip="Cantidad de partículas a dibujar" width="120">
+			Max. partículas:
+		</text>
+		<slider name="RenderMaxPartCount" left_delta="100"/>
+		<text name="Avatar Physics LOD" tool_tip="Controla el nivel de detalle de la física del avatar" width="120">
+			LOD física avatar:
+		</text>
+		<slider name="RenderAvatarPhysicsLOD" left_delta="100"/>
+		<text name="LOD Factor" tool_tip="Controla el nivel de detalle de las primitivas (multiplicador del área actual de pantalla cuando se calcula el nivel de detalle) [Por defecto: variable]" width="120">
+			Factor LOD:
+		</text>
+		<slider name="RenderVolumeLODFactor" left_delta="89"/>
+		<text name="Max Avatars" tool_tip="Cuántos avatares se deben dibujar completamente en pantalla. Reducir el número mejora en gran medida los FPS en situaciones de aglomeración. Requiere activar la opción de Avatares Impostores. [Por defecto: 12]" width="120">
+			Máx. avatares:
+		</text>
+		<slider name="RenderAvatarMaxVisible" left_delta="86"/>
+		<text name="Height Offset" tool_tip="Utiliza este valor para manipular, hasta cierto punto, los límites de tu avatar. Puede usarse para distorsionar los orbitadores, o para modificar tu altura sin alterar tu forma." width="120">
+			Despl. vertical:
+		</text>
+		<slider name="AvatarZOffset" left_delta="86"/>
+		<text name="name_tags_textbox" width="120">
+			Etiquetas:
+		</text>
+		<radio_group name="Name_Tag_Preference">
+			<radio_item label="Sí" name="radio"/>
+			<radio_item label="No" name="radio2"/>
+		</radio_group>
+		<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
+			Cielo WL:
+		</text>
+		<text name="WL Water" tool_tip="Preselecciones Windlight para el agua" width="120">
+			Agua WL:
+		</text>
+		<icon name="SkyDayCycle" tool_tip="Cambia la hora del día"/>
+		<button name="UseRegionWL" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
+	</panel>
+</floater>

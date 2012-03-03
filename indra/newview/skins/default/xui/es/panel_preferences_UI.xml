@@ -10,8 +10,8 @@
 				Descripciones emergentes:
 			</text>
 			<check_box label="Básicas" name="ShowHoverTips" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre avatares o algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
-			<check_box label="en todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
-			<check_box label="en el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
+			<check_box label="En todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
+			<check_box label="En el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
 			<text name="tooltip_textbox">
 				Demora en mostrarlas:
 			</text>
@@ -21,19 +21,27 @@
 				<combo_box.item label="3 segundos" name="tt_item3"/>
 				<combo_box.item label="6 segundos" name="tt_item4"/>
 			</combo_box>
-			<text name="ScriptDialogPlacementText" height="22" width="160">
-				Mostrar en esquina
-superior derecha:
+			<text name="ScriptDialogPlacementText" width="180">
+				Mostrar en esquina sup. derecha:
 			</text>
 			<check_box label="Diálogos de scripts" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
 			<check_box label="Avisos de grupo" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
 			<text name="GroupTopRightRequiresRestart">
 				(requiere reiniciar)
 			</text>
+			<text name="ScriptDialogsPerObjectLabel">
+				Diálogos de script por objeto:
+			</text>
+			<combo_box name="ScriptDialogPerObjectDropdown">
+				<combo_box.item name="ScriptDialogOption_0" label="Uno por objeto"/>
+				<combo_box.item name="ScriptDialogOption_1" label="Uno por objeto y canal"/>
+				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
+			</combo_box>
 			<text name="UsePieMenuLabel">
 				Menús circulares:
 			</text>
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5" top_pad="4"/>
 			<text name="ButtonFlashing" width="150">
 				Parpadeo de los botones:
 			</text>
@@ -42,7 +50,6 @@ superior derecha:
 			<text name="ButtonFlashRateText" left="383">
 				Hz
 			</text>
-			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5" top_pad="4"/>
 			<text name="ToastSettings" height="22">
 				Configuración de notificaciones
 (emergentes, en consola, 'tostadas'):
@@ -84,7 +91,7 @@ superior derecha:
 			<text name="ToastGapText" left_delta="301">
 				px
 			</text>
-			<slider label="Altura de tostadas de desbordamiento:" tool_tip="Altura en pixels de una tostada de desbord." name="OverflowToastHeight" label_width="185" width="307"/>
+			<slider label="Altura de tostadas de desbord.:" tool_tip="Altura en pixels de una tostada de desbordamiento" name="OverflowToastHeight" label_width="185" width="307"/>
 			<text name="OverflowToastHeightText" left_delta="301">
 				px
 			</text>
@@ -92,6 +99,7 @@ superior derecha:
 			<text name="NearbyToastWidthText" left_delta="301">
 				%
 			</text>
+			<check_box label="Mostrar tostadas sobre las otras ventanas" name="FSShowToastsInFront"/>
 		</panel>
 		<panel label="Fuente" name="UI-font-tab">
 			<text name="tooltip_textbox1" width="165">

@@ -19,6 +19,11 @@
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 			<pie_slice label="Desdibujar" name="Derender"/>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
+			<pie_menu label="Lista negra" name="Blacklist">
+				<pie_slice name="Blacklist Object" label="Objeto"/>
+				<pie_slice name="Blacklist Textures" label="Texturas"/>
+				<pie_slice name="Blacklist Sculpt" name="Esculpido"/>
+			</pie_menu>
 			<pie_slice label="Bloquear" name="Object Mute"/>
 			<pie_slice label="Info scripts" name="ScriptInfo"/>
 			<pie_slice label="Inspeccionar" name="Object Inspect"/>

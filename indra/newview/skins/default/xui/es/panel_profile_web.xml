@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_web" label="Web">
+	<flyout_button name="load" label="Cargar" label_selected="Cargar" tool_tip="Carga esta página del perfil con un navegador incrustado">
+		<flyout_button.item label="Abrir en navegador interno" name="open_item"/>
+		<flyout_button.item label="Abrir en navegador externo" name="home_item"/>
+	</flyout_button>
+	<flyout_button name="web_profile" label="Perfil" label_selected="Perfil">
+		<flyout_button.item label="Abrir" name="builtin_item"/>
+		<flyout_button.item label="Abrir en navegador externo" name="open_item"/>
+	</flyout_button>
+</panel>
+

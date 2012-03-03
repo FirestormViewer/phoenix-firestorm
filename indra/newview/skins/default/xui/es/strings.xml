@@ -613,7 +613,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		el modelo mesh
 	</string>
 	<string name="AvatarEditingAppearance">
-		(Edición de Apariencia)
+		(Editando Apariencia)
 	</string>
 	<string name="AvatarAway">
 		Ausente
@@ -1257,7 +1257,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		No tienes en tu inventario una copia de esta textura.
 	</string>
 	<string name="InventoryInboxNoItems">
-		Cuando compres un objeto o lo recibas por otra vía, aparecerá aquí, para que puedas arrastrarlo a una carpeta de tu inventario o eliminarlo si no deseas conservarlo.
+		Tus compras en Marketplace aparecerán aquí. Podrás arrastrarlas a tu inventario para usarlas..
 	</string>
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
@@ -2037,7 +2037,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Script nuevo
 	</string>
 	<string name="BusyModeResponseDefault">
-		El Residente al que has enviado un mensaje ha solicitado que no se le moleste porque está en modo ocupado. Podrá ver tu mensaje más adelante, ya que éste aparecerá en su panel de MI.
+		El Residente al que has enviado un mensaje no desea ser molestado. Aún así, tu mensaje le será mostrado en el panel de mensajes de su Firestorm Viewer para ser revisado más tarde.
 	</string>
 	<string name="MuteByName">
 		(Por el nombre)
@@ -2093,6 +2093,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="PicksClassifiedsLoadingText">
 		Cargando...
 	</string>
+	<string name="NoPicksText">No has creado ningún destacado.</string>
+	<string name="NoAvatarPicksText">El usuario no tiene destacados</string>
+	<string name="NoClassifiedsText">No has creado ningún clasificado.</string>
+	<string name="NoAvatarClassifiedsText">El usuario no tiene clasificados</string>
 	<string name="MultiPreviewTitle">
 		Vista previa
 	</string>
@@ -2366,6 +2370,14 @@ Si aun así sigue apareciendo el mensaje, debes desinstalar completamente [APP_N
 	</string>
 	<string name="MBFatalError">
 		Error fatal
+	</string>
+	<string name="MBApplicationError">
+		Error de la aplicación - No te asustes
+	</string>
+	<string name="MBApplicationErrorDetails">
+		Lo sentimos, pero [APP_NAME] ha fallado y tiene que cerrarse. Si el problema se produce repetidamente, por favor contacta con nuestro equipo de soporte y hazle llegar el siguiente mensaje:
+
+[ERROR_DETAILS]
 	</string>
 	<string name="MBRequiresAltiVec">
 		[APP_NAME] requiere un procesador con AltiVec (G4 o posterior).
@@ -4011,7 +4023,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Ofrecido ítem de inventario a [NAME]
 	</string>
 	<string name="share_alert">
-		Arrastra los ítems desde el invenbtario hasta aquí
+		Arrastra aquí items del inventario
 	</string>
 	<string name="no_session_message">
 		(La sesión de MI no existe)
@@ -4952,6 +4964,11 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Voice_Label">
 		Configuración de voz
 	</string>
+	<string name="Command_Quickprefs_Label">Preferencias rápidas</string>
+	<string name="Command_AO_Label">Animation Overrider</string>
+	<string name="Command_Webbrowser_Label">Navegador web</string>
+	<string name="Command_Default_Chat_Bar_Label">Chat</string>
+	<string name="Command_Areasearch_Label">Buscar en el área</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -4992,7 +5009,10 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Mostrar la gente que está cerca
 	</string>
 	<string name="Command_Move_Tooltip">
-		Desplazando el avatar
+		Desplazar el avatar
+	</string>
+	<string name="Command_Outbox_Tooltip">
+		Transferir items a tu marketplace para vender
 	</string>
 	<string name="Command_People_Tooltip">
 		Amigos, grupos y personas próximas
@@ -5019,11 +5039,16 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Utiliza el micrófono para hablar con las personas próximas
 	</string>
 	<string name="Command_View_Tooltip">
-		Cambiando el ángulo de la cámara
+		Cambiar el ángulo de la cámara
 	</string>
 	<string name="Command_Voice_Tooltip">
 		Controles de volumen para las llamadas y la gente que se encuentre cerca de ti en el mundo virtual
 	</string>
+	<string name="Command_Quickprefs_Tooltip">Preferencias rápidas para cambiar configuraciones de uso frecuente</string>
+	<string name="Command_AO_Tooltip">Animation Overrider</string>
+	<string name="Command_Webbrowser_Tooltip">Abre el navegador web interno</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">Muestra u oculta la barra de chat</string>
+	<string name="Command_Areasearch_Tooltip">Buscar objetos a tu alrededor</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
@@ -5040,7 +5065,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Detalle
 	</string>
 	<string name="Better Detail">
-		Mejor detalle
+		Más detallado
 	</string>
 	<string name="Surface">
 		Superficie
@@ -5099,4 +5124,25 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="RlvDisabled">
 		Se desactivará el soporte para RestrainedLove después de reiniciar.
 	</string>
+	<string name="MediaFilterActionAllow">Permitir</string>
+	<string name="MediaFilterActionDeny">Denegar</string>
+	<string name="MediaFilterConditionAlways">Siempre</string>
+	<string name="MediaFilterConditionAlwaysLower">siempre</string>
+	<string name="MediaFilterConditionNever">Nunca</string>
+	<string name="MediaFilterConditionNeverLower">nunca</string>
+	<string name="MediaFilterMediaContentBlocked">Los medios del dominio [DOMAIN] han sido bloqueados.</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">Los medios del dominio [DOMAIN] podrán ser siempre reproducidos.</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">Los medios del dominio [DOMAIN] nunca serán reproducidos.</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">Los medios de la URL [MEDIAURL] podrán ser siempre reproducidos.</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">Los medios de la URL [MEDIAURL] nunca serán reproducidos.</string>
+	<string name="MediaFilterAudioContentBlocked">El audio del dominio [DOMAIN] ha sido bloqueado.</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">El audio del dominio [DOMAIN] podrá ser siempre reproducido.</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">El audio del dominio [DOMAIN] nunca será reproducido.</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">El audio de la URL [MEDIAURL] podrá ser siempre reproducido.</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">El audio de la URL [MEDIAURL] nunca será reproducido.</string>
+	<string name="MediaFilterSharedMediaContentBlocked">Los medios compartidos del dominio [DOMAIN] han sido bloqueados.</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">Los medios compartidos del dominio [DOMAIN] podrán ser siempre reproducidos.</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">Los medios compartidos del dominio [DOMAIN] nunca serán reproducidos.</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">Los medios compartidos de la URL [MEDIAURL] podrán ser siempre reproducidos.</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">Los medios compartidos de la URL [MEDIAURL] nunca serán reproducidos.</string>
 </strings>

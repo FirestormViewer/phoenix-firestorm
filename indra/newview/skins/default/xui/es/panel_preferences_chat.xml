@@ -100,6 +100,7 @@
 			<text name="console_enhancements">
 				Consola:
 			</text>
+			<check_box name="FSConsoleClassicDrawMode" label="Dibujar consola al modo clásico" tool_tip="El modo clásico dibuja el fondo de la consola como un único bloque para todas las líneas, con la anchura de la línea más larga."/>
 			<check_box name="ChatFullWidth" label="Usar todo el ancho de la pantalla como consola" width="290"/>
 			<text name="requires_restart_label2" top_delta="1">
 				(requiere reiniciar)

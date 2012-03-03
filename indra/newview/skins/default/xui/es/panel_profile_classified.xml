@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_classified" label="Clasificado">
+	<string name="no_classifieds" value="No hay clasificados"/>
+	<panel name="edit_panel">
+		<button name="new_btn"
+                   tool_tip="Crear un clasificado en la posición actual"/>
+	</panel>
+	<panel name="buttons_cucks">
+		<layout_stack name="buttons_cucks_ls">
+			<layout_panel name="info_btn_lp">
+				<button label="Información" name="info_btn" tool_tip="Mostrar información del clasificado"/>
+			</layout_panel>
+			<layout_panel name="teleport_btn_lp">
+				<button label="Teleporte" name="teleport_btn" tool_tip="Teleportarse al lugar correspondiente"/>
+			</layout_panel>
+			<layout_panel name="show_on_map_btn_lp">
+				<button label="Mapa" name="show_on_map_btn" tool_tip="Mostrar la posición en el mapa del mundo"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>
+

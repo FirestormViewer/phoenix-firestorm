@@ -148,6 +148,8 @@
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>
+			<check_box label="Dibujar brillo" tool_tip="Dibujar brillo. Ten en cuenta que la intensidad debe configurarse a cero para desactivar el brillo cuando las sombras están activadas." name="RenderGlow"/>
+			<slider label="Intensidad:" tool_tip="Intensidad del brillo. Más alto = más amplio y suave (2 por defecto)." label_width="60" name="glow_strength" width="140"/>
 			<check_box label="Mostrar avatares que aún no se han terminado de cargar" name="RenderUnloadedAvatars"/>
 			<slider label="Retardo de pre-cacheado antes de mostrar el mundo" tool_tip="Configura cuánto tiempo se debe esperar antes de mostrarte el mundo después de mostrarte a los demás como conectado (por defecto, 6 segundos)" name="PrecachingDelay" label_width="330" width="440"/>
 			<text name="PrecachingDelayText" width="55" left_delta="441">
@@ -178,6 +180,7 @@
 			<slider label="Campo de visión (º):" name="Camera FOV" tool_tip="Campo de visión vertical para el efecto PDC (en grados)" width="395" label_width="171"/>
 			<slider label="Relación de aspecto:" name="CameraAspectRatio" tool_tip="Relación de aspecto de la cámara para el efecto PDC" width="386" label_width="171"/>
 			<slider label="Tiempo de transición del foco:" name="CameraFocusTrans" tool_tip="Tiempo que lleva ajustar el foco entre un punto y el siguiente" width="392" label_width="171"/>
+			<slider label="Calidad de dibujo de la PDC:" name="CameraDoFResScale" tool_tip="Afecta a la calidad del difuminado y al rendimiento del dibujo (más alto = mayor calidad, más bajo = mayor rendimiento)" width="388" label_width="171"/>
 		</panel>
 	</tab_container>
 </panel>

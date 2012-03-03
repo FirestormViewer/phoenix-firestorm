@@ -27,7 +27,11 @@
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse..."/>
 		<menu_item_call label="Bloquear" name="Object Mute"/>
 	</context_menu>
+	<menu_item_call label="Retexturizar" name="Texture Refresh"/>
 	<menu_item_call label="Desdibujar" name="Derender"/>
+	<menu_item_call label="Añadir objeto a Lista Negra" name="BlacklistObject"/>
+	<menu_item_call label="Añadir texturas  a Lista Negra" name="BlacklistTextures"/>
+	<menu_item_call label="Añadir esculpido a Lista Negra" name="BlacklistSculpt"/>
 	<menu_item_call label="Devolver" name="Return..."/>
 	<menu_item_call label="Tomar" name="Pie Object Take"/>
 	<menu_item_call label="Tomar una copia" name="Take Copy"/>

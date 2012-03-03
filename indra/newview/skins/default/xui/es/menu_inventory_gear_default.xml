@@ -5,6 +5,14 @@
 	<menu_item_check label="Ordenar por los más recientes" name="sort_by_recent"/>
 	<menu_item_check label="Ordenar las carpetas siempre alfabéticamente" name="sort_folders_by_name"/>
 	<menu_item_check label="Las carpetas del sistema, arriba" name="sort_system_folders_to_top"/>
+	<menu label="Buscar por..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="Nombre"/>
+		<menu_item_check name="inventory_search_by_creator" label="Creador"/>
+		<menu_item_check name="inventory_search_by_description" label="Descripción"/>
+		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
+		<menu_item_check name="inventory_search_by_all" label="Todo"/>
+		<menu_item_check name="inventory_show_partial_results" label="Mostrar resultados parciales de búsqueda"/>
+	</menu>
 	<menu_item_call label="Añadir objetos con doble clic" name="add_inv_toggle"/>
 	<menu_item_call label="Ver los filtros" name="show_filters"/>
 	<menu_item_call label="Restablecer los filtros" name="reset_filters"/>
@@ -14,5 +22,8 @@
 	<menu_item_call label="Compartir" name="Share"/>
 	<menu_item_call label="Encontrar el original" name="Find Original"/>
 	<menu_item_call label="Encontrar todos los enlazados" name="Find All Links"/>
+	<menu_item_check name="inventory_filter_show_links" label="Mostrar enlaces"/>
+	<menu_item_check name="inventory_filter_only_links" label="Mostrar sólo enlaces"/>
+	<menu_item_check name="inventory_filter_hide_links" label="Ocultar enlaces"/>
 	<menu_item_call label="Vaciar la Papelera" name="empty_trash"/>
 </toggleable_menu>

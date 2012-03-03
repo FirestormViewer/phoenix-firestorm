@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Colores" name="colors_panel">
 	<text name="effects_color_textbox">
-		Mis efectos (rayo de partículas):
+		Rayo de partículas de selección:
+	</text>
+	<text name="netmap_color_textbox">
+		Minimapa:
 	</text>
 	<color_swatch name="effect_color_swatch" tool_tip="Pulsa para abrir el selector de color"/>
+	<text name="netmap_chatring_color_label">
+		Alcance de chat
+	</text>
+	<color_swatch name="netmap_shoutring_color_swatch" tool_tip="Pulsa para abrir el selector de color"/>
+	<text name="netmap_shoutring_color_label">
+		Alcance de grito
+	</text>
 	<text name="font_colors" width="200">
 		Colores de fuente de la interfaz:
 	</text>
@@ -54,6 +64,7 @@
 	<slider label="Activa:" name="active"/>
 	<slider label="Inactiva:" name="inactive"/>
 	<check_box name="FSScriptDialogNoTransparency" label="Mostrar diálogos de script siempre con fondo opaco"/>
+	<check_box name="FSGroupNotifyNoTransparency" label="Mostrar avisos de grupo siempre con fondo opaco"/>
 	<check_box name="override_pie_color_checkbox" label="Configurar manualmente opacidad y color de fondo del menú circular:"/>
 	<color_swatch name="pie_bg_color_override" tool_tip="Pulsa para escoger el color de fondo"/>
 	<color_swatch name="pie_selected_color_override" tool_tip="Pulsa para escoger el color de selección"/>

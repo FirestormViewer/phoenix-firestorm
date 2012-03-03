@@ -8,6 +8,8 @@
 	<check_box name="friends_online_notify_checkbox" label="Cuando mis amigos se conecten o desconecten"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="Mostrar en el chat local y en la consola" top_pad="4" left_pad="" left="30" width="190"/>
 	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
+	<check_box label="Cuando se cree un hito" name="landmark_created_checkbox"/>
+	<check_box label="Cuando alguien cambie su displayname" name="FSShowDisplayNameUpdateNotification"/>
 	<check_box label="Cuando se produzcan errores de script:" name="show_script_errors"/>
 	<radio_group name="show_script_errors_location" left_pad="" top_pad="4" width="400">
 		<radio_item label="En el chat local" name="script_0" left_pad="10" width="200"/>
@@ -16,9 +18,9 @@
 	<text name="show_label">
 		Mostrar siempre:
 	</text>
-	<scroll_list height="110" name="enabled_popups"/>
+	<scroll_list height="105" name="enabled_popups"/>
 	<text name="dont_show_label">
 		No mostrar nunca:
 	</text>
-	<scroll_list height="110" name="disabled_popups"/>
+	<scroll_list height="105" name="disabled_popups"/>
 </panel>

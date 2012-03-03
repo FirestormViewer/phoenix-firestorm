@@ -9,9 +9,8 @@
 	<string name="upload_message">
 		Enviando...
 	</string>
-	<text name="title">
-		Correo-e
-	</text>
-	<button label="Mensaje" name="message_btn"/>
-	<button label="Ajustes" name="settings_btn"/>
+	<tab_container name="postcard_panel_container">
+		<panel label="Mensaje" name="panel_postcard_message"/>
+		<panel label="Ajustes" name="panel_postcard_settings"/>
+	</tab_container>
 </panel>

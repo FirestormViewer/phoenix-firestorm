@@ -6,10 +6,7 @@
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] ítems [FILTER]
 	</panel.string>
-	<text name="ItemcountUnknown">
-
-	</text>
-	<filter_editor label="Filtrar" name="inventory search editor"/>
+	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe uno o más términos a buscar, separados por '+' "/>
 	<button name="collapse_btn" label="Contraer"/>
 	<button name="expand_btn" label="Expandir"/>
 	<text name="filter_label" value="Filtrar:"/>

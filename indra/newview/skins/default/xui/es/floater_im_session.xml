@@ -35,7 +35,8 @@
 			<button tool_tip="Abre el historial de chat con este residente o grupo" name="im_history_btn"/>
 		</layout_panel>
 	</layout_stack>
-	<button tool_tip="Enviar información del sistema" name="send_sysinfo_btn"/>	
+	<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" tool_tip="Añade (FS) al principio de tus mensajes para ayudar al equipo de soporte a determinar si tu pregunta se refiere a Phoenix o a Firestorm. ¡Se agradece tu ayuda para evitar confusiones!"/>
+	<button tool_tip="Enviar información de tu sistema" name="send_sysinfo_btn"/>	
 	<layout_stack name="im_panels">
 		<layout_panel>
 			<line_editor label="A" name="chat_editor"/>
