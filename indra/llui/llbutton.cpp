@@ -636,10 +636,28 @@ void LLButton::draw()
 	{
 		if ( sEnableButtonFlashing)
 		{
+			// <FS:Ansariel> Global flash rate override
+			//F32 elapsed = mFlashingTimer.getElapsedTimeF32();
+			//S32 flash_count = S32(elapsed * mButtonFlashRate * 2.f);
+			//// flash on or off?
+			//flash = (flash_count % 2 == 0) || flash_count > S32((F32)mButtonFlashCount * 2.f);
+
+			S32 buttonFlashCount = mButtonFlashCount;
+			F32 buttonFlashRate = mButtonFlashRate;
+			static LLCachedControl<bool> fsGlobalButtonFlashOverride(*LLUI::sSettingGroups["config"], "FSGlobalButtonFlashOverride", true);
+			static LLCachedControl<S32> fsButtonFlashCount(*LLUI::sSettingGroups["config"], "FSButtonFlashCount", true);
+			static LLCachedControl<F32> fsButtonFlashRate(*LLUI::sSettingGroups["config"], "FSButtonFlashRate", true);
+			if (fsGlobalButtonFlashOverride)
+			{
+				buttonFlashCount = (S32)fsButtonFlashCount;
+				buttonFlashRate = (F32)fsButtonFlashRate;
+			}
+
 			F32 elapsed = mFlashingTimer.getElapsedTimeF32();
-			S32 flash_count = S32(elapsed * mButtonFlashRate * 2.f);
+			S32 flash_count = S32(elapsed * buttonFlashRate * 2.f);
 			// flash on or off?
-			flash = (flash_count % 2 == 0) || flash_count > S32((F32)mButtonFlashCount * 2.f);
+			flash = (flash_count % 2 == 0) || flash_count > S32((F32)buttonFlashCount * 2.f);
+			// </FS:Ansariel> Global flash rate override
 		}
 		else
 		{ // otherwise just highlight button in flash color

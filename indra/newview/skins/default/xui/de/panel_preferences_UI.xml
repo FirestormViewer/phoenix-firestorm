@@ -45,10 +45,8 @@
 		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1.x-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
 
-		<text name="ButtonFlashing">
-			Blinkende Buttons:
-		</text>
-		<slider label="Wiederholungen blinkende IM-Button:" tool_tip="Anzahl wie oft ein Button für IM-Benachrichtungen blinkt" name="ButtonsFlashCount"/>
+		<checkbox name="ButtonFlashing" label="Blinkrate für Buttons global übersteuern:"/>
+		<slider label="Wiederholungen blinkende Button:" tool_tip="Anzahl wie oft ein Button für Benachrichtungen blinkt" name="ButtonsFlashCount"/>
 		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Buttons blinken" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Hz

@@ -249,7 +249,8 @@
          width="270"
          tool_tip="Show lag meter in the Status Overlay"/>
 
-        <text
+        <check_box
+         control_name="FSGlobalButtonFlashOverride"
          type="string"
          left="5"
          top_pad="10"
@@ -258,17 +259,16 @@
          height="12"
          layout="topleft"
          name="ButtonFlashing"
-         width="128">
-            Flashing Buttons:
-        </text>
+         width="128"
+         label="Global Flashing Buttons Override:"/>
         <slider
-         control_name="ButtonFlashCount"
+         control_name="FSButtonFlashCount"
          decimal_digits="0"
          follows="left|top"
          height="16"
          increment="1"
-         label="Number of times IM buttons flash:"
-         tool_tip="Number of times buttons flash (used for IM notifications)"
+         label="Number of times buttons flash:"
+         tool_tip="Number of times buttons flash"
          label_width="300"
          layout="topleft"
          left="15"
@@ -278,7 +278,7 @@
          top_pad="5"
          width="471" />
         <slider
-         control_name="ButtonFlashRate"
+         control_name="FSButtonFlashRate"
          decimal_digits="0"
          follows="left|top"
          height="16"
