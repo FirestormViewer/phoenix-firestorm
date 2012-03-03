@@ -687,17 +687,6 @@
              name="ChatFullWidth"
              control_name="ChatFullWidth"
              label="Use full screen width for console"/>
-            <text
-             top_delta="2"
-             name="requires_restart_label2"
-             follows="left|top"
-             layout="topleft"
-             left_pad="0"
-             height="20"
-             width="130"
-             text_color="White_25">
-              (requires restart)
-            </text>
             <spinner
              top_pad="0"
              control_name="NearbyToastLifeTime"

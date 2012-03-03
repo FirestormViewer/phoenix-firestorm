@@ -1789,8 +1789,8 @@ void LLViewerWindow::initBase()
 
 	// Create global views
 
-	// Ansariel: Move console further down in the view hierarchy to not float
-	//           in front of floaters!
+	// <FS:Ansariel> Move console further down in the view hierarchy to not float
+	//               in front of floaters!
 	// Console
 	llassert( !gConsole );
 	LLConsole::Params cp;
@@ -1808,6 +1808,7 @@ void LLViewerWindow::initBase()
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
 	getRootView()->addChild(gConsole);
+	// </FS:Ansariel>
 
 	// Create the floater view at the start so that other views can add children to it. 
 	// (But wait to add it as a child of the root view so that it will be in front of the 
@@ -5194,9 +5195,13 @@ LLRect LLViewerWindow::getChatConsoleRect()
 
 	console_rect.mLeft   += CONSOLE_PADDING_LEFT; 
 
-	static const BOOL CHAT_FULL_WIDTH = gSavedSettings.getBOOL("ChatFullWidth");
+	// <FS:Ansariel> This also works without relog!
+	//static const BOOL CHAT_FULL_WIDTH = gSavedSettings.getBOOL("ChatFullWidth");
 
-	if (CHAT_FULL_WIDTH)
+	//if (CHAT_FULL_WIDTH)
+	static LLCachedControl<bool> chatFullWidth(gSavedSettings, "ChatFullWidth");
+	if (chatFullWidth)
+	// </FS:Ansariel>
 	{
 		console_rect.mRight -= CONSOLE_PADDING_RIGHT;
 	}
@@ -5207,10 +5212,28 @@ LLRect LLViewerWindow::getChatConsoleRect()
 
 		//AO, Have console reuse/respect the desired nearby popup width set in NearbyToastWidth
 		//console_rect.mRight  = console_rect.mLeft + 2 * getWindowWidthScaled() / 3;
-		F32 percentage=gSavedSettings.getS32("NearbyToastWidth") / 100.0;
+		static LLCachedControl<S32> nearbyToastWidth(gSavedSettings, "NearbyToastWidth");
+		F32 percentage = nearbyToastWidth / 100.0;
 		console_rect.mRight = S32((console_rect.mRight - CONSOLE_PADDING_RIGHT ) * percentage);
 		//</AO>
 	}
+
+	// <FS:Ansariel> Push the chat console out of the way of the vertical toolbars
+	if (gToolBarView)
+	{
+		LLToolBar* toolbar_left = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_LEFT);
+		if (toolbar_left && toolbar_left->hasButtons())
+		{
+			console_rect.mLeft += toolbar_left->getRect().getWidth();
+		}
+
+		LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
+		if (toolbar_right && toolbar_right->hasButtons())
+		{
+			console_rect.mRight -= toolbar_right->getRect().getWidth();
+		}
+	}
+	// </FS:Ansariel>
 
 	return console_rect;
 }

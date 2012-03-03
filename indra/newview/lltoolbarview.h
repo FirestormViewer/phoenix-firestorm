@@ -111,6 +111,9 @@ public:
 
 	bool isModified() const;
 	
+	// <FS:Ansariel> Allow accessing the toolbars itself
+	LLToolBar* getToolBar(EToolBarLocation location) const { return mToolbars[location]; };
+
 protected:
 	friend class LLUICtrlFactory;
 	LLToolBarView(const Params&);
