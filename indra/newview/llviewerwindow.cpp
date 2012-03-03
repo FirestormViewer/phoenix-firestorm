@@ -2883,17 +2883,19 @@ void LLViewerWindow::updateUI()
 
 	static std::string last_handle_msg;
 
-	if (gLoggedInTime.getStarted())
-	{
-		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("DestinationGuideHintTimeout"))
-		{
-			LLFirstUse::notUsingDestinationGuide();
-		}
-		if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
-		{
-			LLFirstUse::notUsingSidePanel();
-		}
-	}
+	// <FS:Ansariel> We don't show the hints anyway, so needless to check here
+	//if (gLoggedInTime.getStarted())
+	//{
+	//	if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("DestinationGuideHintTimeout"))
+	//	{
+	//		LLFirstUse::notUsingDestinationGuide();
+	//	}
+	//	if (gLoggedInTime.getElapsedTimeF32() > gSavedSettings.getF32("SidePanelHintTimeout"))
+	//	{
+	//		LLFirstUse::notUsingSidePanel();
+	//	}
+	//}
+	// </FS:Ansariel>
 
 	LLConsole::updateClass();
 
