@@ -218,6 +218,9 @@
 
 	<!--Tags-->
 	<panel label="Tags" name="TagTab">
+		<text name="SL-Tags-Notice">
+			Aufgrund von Änderungen durch Linden Lab funktionieren Viewertags in Second Life nicht.
+		</text>
 		<text name="whattagstoshow">
 			Tag-Anzeige:
 		</text>
