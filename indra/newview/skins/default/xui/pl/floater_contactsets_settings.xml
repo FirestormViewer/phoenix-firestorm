@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater_settings" title="Ustawienia zestawów kontaktów">
+  <color_swatch name="colordefault" tool_tip="Domyślny kolor dla znajomych poza zestawem. Odnosi się tylko do listy w trybie wyświetlania przyjaciół i grup."/>
+  <text name="lgg_fg_text2a">Domyślny kolor dla</text>
+  <text name="lgg_fg_text2b">znajomych poza zest.</text>
+  <slider name="FSContactSetsScrollSpeed" label="Przewijanie" tool_tip="Określa jak szybko lista ma się przewijać."/>
+  <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych jako tosty (odznacz, aby pokazywać tylko dla danych zestawów)" name="ChatOnlineNotification"/>
+  <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie lokalnym (odznacz, aby pokazywać tylko dla danych zestawów)" name="OnlineOfflinetoNearbyChat"/>
+  <check_box label="Powiadamiaj online dla danych zestawów jako tosty" name="FSContactSetsNotificationToast"/>
+  <check_box label="Powiadamiaj online dla danych zestawów w czacie lokalnym" name="FSContactSetsNotificationNearbyChat"/>
+  <check_box label="Koloruj ikonę znajomego na minimapie bazując na zestawie kontaktów" name="FSContactSetsColorizeMiniMap"/>
+  <check_box label="Koloruj tag imienia znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeNameTag"/>
+  <check_box label="Koloruj wpis znajomego w radarze bazując na zestawie kontaktów" name="FSContactSetsColorizeRadar"/>
+  <check_box label="Koloruj czat znajomego bazując na zestawie kontaktów" name="FSContactSetsColorizeChat"/>
+  <check_box label="Koloruj tylko małą przestrzeń tła w zestawach kontaktów" name="FSContactSetsColorizeBar"/>
+  <check_box label="Koloruj tekst zamiast tła w zestawach kontaktów" name="FSContactSetsColorizeText"/>
+  <check_box label="Wymagaj klawisza CTRL przy zaznaczaniu wielu pozycji" name="FSContactSetsRequireCTRL"/>
+  <check_box label="Użyj efektu przybliżenia" name="FSContactSetsDoZoom"/>
+  <check_box label="Użyj podświetlania koloru" name="FSContactSetsUseColorHighlight"/>
+  <slider name="FSContactSetsMaxColorStrength" label="Siła tła" tool_tip="Jak bardzo wyrazisty ma być kolor tła."/>
+  <check_box label="Foldery nad kontaktami (jeśli ta opcja jest wyłączona możesz używać listy rozwijanej)" name="FSContactSetsShowFolders"/>
+  <check_box label="Ikony profili obok imion" name="FSContactSetsDrawProfileIcon"/>
+  <text name="lgg_fg_text3">Format imion:</text>
+  <combo_box name="lgg_fg_dispName">
+  <combo_item name="Legacy Names">
+    Starego typu
+  </combo_item>
+  <combo_item name="Display Names (with Username)">
+    Imiona wyświetlane (z nazwą konta)
+  </combo_item>
+  <combo_item name="Display Names only">
+    Tylko imiona wyświetlane
+  </combo_item>
+  </combo_box>
+  <text name="lgg_fg_text4">Sortuj po:</text>
+  <combo_box name="lgg_fg_sortName">
+  <combo_item name="Legacy Names">
+    Starym typie
+  </combo_item>
+  <combo_item name="Display Names (with Username)">
+    Imionach wyświetlanych (z nazwą konta)
+  </combo_item>
+  <combo_item name="Display Names only">
+    Tylko imionach wyświetlanych
+  </combo_item>
+  </combo_box>
+  <button label="Ok" name="lgg_fg_okButton"/>
+</floater>

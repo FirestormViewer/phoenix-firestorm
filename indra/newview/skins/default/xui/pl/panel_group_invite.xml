@@ -12,13 +12,13 @@
 	<text name="help_text">
 		Możesz zaprosić kilku Rezydentów do swojej grupy. Wybierz &apos;Otwórz Katalog Osobisty&apos; aby rozpocząć.
 	</text>
-	<button label="Otwórz Katalog Osobisty" name="add_button" tool_tip=""/>
+	<button label="Otwórz Katalog Osobisty" name="add_button"/>
 	<name_list name="invitee_list" tool_tip="Przytrzymaj klawisz Ctrl i kliknij imię Rezydenta aby wybrać kilka osób."/>
 	<button label="Usuń z Listy" name="remove_button" tool_tip="Usuwa wybranych powyżej Rezydentów z listy zaproszeń."/>
 	<text name="role_text">
-		Wybierz rolę dla nowego członka:
+		Wybierz funkcję dla nowego członka:
 	</text>
-	<combo_box name="role_name" tool_tip="Wybierz z listy Role, które możesz przypisać członkom"/>
+	<combo_box name="role_name" tool_tip="Wybierz z listy funkcje, które możesz przypisać członkom"/>
 	<button label="Wyślij Zaproszenia" name="ok_button"/>
 	<button label="Anuluj" name="cancel_button"/>
 	<string name="GroupInvitation">

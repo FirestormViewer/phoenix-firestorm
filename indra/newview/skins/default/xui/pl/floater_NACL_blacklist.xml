@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="blacklist" title="Czarna lista zasobów danych (assetów)">
+	<floater.string name="Texture" value="Tekstura"/>
+	<floater.string name="Sound" value="Dźwięk"/>
+	<floater.string name="Animation" value="Animacja"/>
+	<floater.string name="Object" value="Obiekt"/>
+	<button name="add_btn" label="Dodaj..."/>
+	<button name="remove_btn" label="Usuń"/>
+	<combo_box name="asset_combo" label="Typ zasobu"/>
+	<line_editor name="id_edit" label="Miejsce na UUID zasobu."/>
+	<line_editor name="name_edit" label="Miejsce na nazwę."/>
+	<scroll_list name="file_list">
+		<column name="entry_name" label="Nazwa"/>
+		<column name="entry_type" label="Typ"/>
+		<column name="entry_agent" label="Zablokowany przez"/>
+		<column name="entry_date" label="Data"/>
+		<column name="asset_id" label="Identyfikator"/>
+	</scroll_list>
+	<button name="save_btn" label="Zapisz XML"/>
+	<button name="load_btn" label="Wczytaj XML"/>
+	<button name="clear_btn" label="Czyść"/>
+	<button name="rerender_btn" label="Renderuj wszystko"/>
+</floater>

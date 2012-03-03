@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater" title="Zestawy kontaktów">
+    <text name="lgg_fg_text1">Zestaw:</text>
+    <text name="lgg_fg_text2a">Powiadomienia</text>
+    <text name="lgg_fg_text2b">dla tego Zestawu</text>
+    <button label="Ustawienia" name="lgg_fg_openSettings"/>
+    <button label="Usuń Zestaw" name="lgg_fg_groupDelete"/>
+    <color_swatch label="Ustaw kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+    <text name="lgg_fg_text3">Pokaż:</text>
+    <text name="lgg_fg_text4a">Inne</text>
+    <text name="lgg_fg_text4b">Zestawy</text>
+    <check_box label="Wszyscy" name="lgg_fg_showAllFriends"/>
+    <line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zestawu"/>
+   <button label="Nowy Zestaw" name="lgg_fg_groupCreate"/>
+</floater>

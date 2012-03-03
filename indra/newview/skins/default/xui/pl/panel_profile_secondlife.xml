@@ -13,8 +13,8 @@
         <text name="label2" value="Konto:" />
         <text name="Groups:" value="Grupy:" />
         <button name="group_invite" tool_tip="Zaproś do grupy" />
-        <text name="About:" value="Informacje:" />
-        <text name="Give item:" value="Daj przedmiot:" />
+        <text name="About:" value="Info:" />
+        <text name="Give item:" value="Podaruj:" />
         <text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu, aby dać go tej osobie.">
             Upuść przedmiot w tym miejscu.
         </text>

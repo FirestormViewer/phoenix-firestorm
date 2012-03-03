@@ -490,7 +490,7 @@
 			<spinner label="Poziome (U)" name="TexOffsetU"/>
 			<button label="Kopiuj" name="copytextures" tool_tip="Kopiuj parametry do schowka"/>
 			<spinner label="Pionowe (V)" name="TexOffsetV"/>
-			<button label="Wklej" name="pastetextures" tool_tip="Wklej parametry ze schowka">
+			<button label="Wklej" name="pastetextures" tool_tip="Wklej parametry ze schowka"/>
 			<panel name="Add_Media">
 				<text name="media_tex">
 					Media

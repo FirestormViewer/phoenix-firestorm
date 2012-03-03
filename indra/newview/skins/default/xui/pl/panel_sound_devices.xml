@@ -1,0 +1,27 @@
+<panel label="Ustawienia urz¹dzenia" name="device_settings_panel">
+    <panel.string name="default_text">
+        Domyœlne
+    </panel.string>
+    <string name="name_no_device">
+        Brak
+    </string>
+    <string name="name_no_device">
+        Brak
+    </string>
+    <string name="name_default_system_device">
+        Domyœlne systemowe
+    </string>
+    <text name="Input">
+        Wejœcie
+    </text>
+    <text name="Output">
+        Wyjœcie
+    </text>
+    <text name="My volume label">
+        Moja g³oœnoœæ:
+    </text>
+    <slider_bar name="mic_volume_slider" tool_tip="Zmieñ g³oœnoœæ u¿ywaj¹c tego suwaka"/>
+    <text name="wait_text">
+        Proszê czekaæ
+    </text>
+</panel>

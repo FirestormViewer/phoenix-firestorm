@@ -4456,7 +4456,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		CapsLock
 	</string>
 	<string name="Home">
-		Miejsce Startu
+		Home
 	</string>
 	<string name="End">
 		End
@@ -5006,5 +5006,68 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="RlvDisabled">
 		Wsparcie dla RestrainedLove zostanie wyłączone po restarcie
+	</string>
+	<string name="MediaFilterActionAllow">
+		Zezwól
+	</string>
+	<string name="MediaFilterActionDeny">
+		Odmów
+	</string>
+	<string name="MediaFilterConditionAlways">
+		Zawsze
+	</string>
+	<string name="MediaFilterConditionAlwaysLower">
+		zawsze
+	</string>
+	<string name="MediaFilterConditionNever">
+		Nigdy
+	</string>
+	<string name="MediaFilterConditionNeverLower">
+		nigdy
+	</string>
+	<string name="MediaFilterMediaContentBlocked">
+		Media z domeny [DOMAIN] zostały zablokowane.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysAllowed">
+		Media z domeny [DOMAIN] zawsze będą odtwarzane.
+	</string>
+	<string name="MediaFilterMediaContentDomainAlwaysBlocked">
+		Media z domeny [DOMAIN] zawsze będą blokowane.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysAllowed">
+		Media z URL [MEDIAURL] zawsze będą odtwarzane.
+	</string>
+	<string name="MediaFilterMediaContentUrlAlwaysBlocked">
+		Media z URL [MEDIAURL] zawsze będą blokowane.
+	</string>
+	<string name="MediaFilterAudioContentBlocked">
+		Audio z domeny [DOMAIN] zostało zablokowane.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysAllowed">
+		Audio z domeny [DOMAIN] zawsze będzie odtwarzane.
+	</string>
+	<string name="MediaFilterAudioContentDomainAlwaysBlocked">
+		Audio z domeny [DOMAIN] zawsze będzie blokowane.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysAllowed">
+		Audio z URL [MEDIAURL] zawsze będzie odtwarzane.
+	</string>
+	<string name="MediaFilterAudioContentUrlAlwaysBlocked">
+		Audio z URL [MEDIAURL] zawsze będzie blokowane.
+	</string>
+	<string name="MediaFilterSharedMediaContentBlocked">
+		Współdzielone Media z domeny [DOMAIN] zostały zablokowane.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysAllowed">
+		Współdzielone Media z domeny [DOMAIN] zawsze będą odtwarzane.
+	</string>
+	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">
+		Współdzielone Media z domeny [DOMAIN] zawsze będą blokowane.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">
+		Współdzielone Media z URL [MEDIAURL] zawsze będą odtwarzane.
+	</string>
+	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
+		Współdzielone Media z URL [MEDIAURL] zawsze będą blokowane.
 	</string>
 </strings>

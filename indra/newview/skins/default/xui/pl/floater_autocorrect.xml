@@ -37,7 +37,7 @@ Upuść tutaj Notę, aby z niej załadować.
             </text>
         </panel>
         <panel name="priority_stack">
-            <check_box label="Włączona, priorytet:" name="lgg_ac_list_enabled" tool_tip="Zaznacz lub odznacz, aby używać tej listy bądź nie." />
+            <check_box label="Włącz, priorytet:" name="lgg_ac_list_enabled" tool_tip="Zaznacz lub odznacz, aby używać tej listy bądź nie." />
             <spinner name="lgg_ac_priority" tool_tip="Ta cyfra wskazuje, która w kolejności będzie ta lista brana pod uwagę podczas sprawdzania słów. Wyższy priorytet oznacza, że lista będzie używana przed innymi o mniejszym pierwszeństwie." />
         </panel>
         <check_box label="Pokazuj powiadomienia" name="lgg_ac_list_show" tool_tip="Jeśli ta opcja będzie włączona, to za każdym razem gdy słowo zostanie zamienione wyświetli się odpowiedni komunikat." />

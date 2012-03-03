@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Object Pie">
+	<pie_slice label="Otwórz" name="Open"/>
+	<pie_slice label="Stwórz" name="Build"/>
+	<pie_slice label="Dotknij" name="Pie Object Touch"/>
+	<pie_slice label="Usiądź tutaj" name="Pie Object Sit"/>
+	<pie_slice label="Wstań" name="Object Stand Up"/>
+	<pie_slice label="Kup" name="Buy..."/>
+	<pie_slice label="Weź" name="Pie Object Take"/>
+	<pie_slice label="Zapłać" name="Pay..."/>
+	<pie_menu label="Więcej >" name="Object Pie More 1">
+		<pie_slice label="Usuń" name="Delete"/>
+		<pie_slice label="Załóż" name="Wear"/>
+		<pie_slice label="Weź kopię" name="Take Copy"/>
+		<pie_menu label="Dołącz HUD >" name="Pie Object Attach HUD"/>
+		<pie_menu label="Dołącz >" name="Pie Object Attach"/>
+		<pie_slice label="Zwróć" name="Return..."/>
+		<pie_menu label="Więcej >" name="Object Pie More 2">
+			<pie_slice label="Odśwież tekstury" name="Texture Refresh"/>
+			<pie_slice label="Derenderuj" name="Derender"/>
+			<pie_slice label="Zgłoś..." name="Report Abuse..."/>
+			<pie_menu label="Czarna lista >" name="Blacklist">
+				<pie_slice label="Obiekt" name="Blacklist Object"/>
+				<pie_slice label="Tekstury" name="Blacklist Textures"/>
+				<pie_slice label="Skulpt" name="Blacklist Sculpt"/>
+			</pie_menu>
+			<pie_slice label="Wycisz" name="Object Mute"/>
+			<pie_slice label="Info o skryptach" name="ScriptInfo"/>
+			<pie_slice label="Inspekcja" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="Kup" name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="Edytuj" name="Edit..."/>
+</pie_menu>

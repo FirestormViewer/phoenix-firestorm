@@ -14,5 +14,5 @@
 	</text>
 	<button label="Zapisz" name="save_btn" tool_tip="Zapisz swoją nową wyświetlaną nazwę"/>
 	<button label="Resetuj" name="reset_btn" tool_tip="Uczyń wyświetlaną nazwę taką samą jak nazwa konta użytkownika"/>
-	<button label="Cofnij" name="cancel_btn"/>
+	<button label="Anuluj" name="cancel_btn"/>
 </floater>

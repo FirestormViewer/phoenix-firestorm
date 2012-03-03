@@ -6,6 +6,6 @@
   <text name="toybox label 2">
       Przyciski będą wyglądać jak te poniżej lub jak ikonki, zależnie od ustawienia paska.
   </text>
-  <button label="Wyczyść wszystkie paski" label_selected="Wyczyść wszystkie paski" name="btn_clear_all" />
+  <button label="Wyczyść paski" label_selected="Wyczyść paski" name="btn_clear_all" />
   <button label="Przywróć domyślne" label_selected="Przywróć domyślne" name="btn_restore_defaults" />
 </floater>

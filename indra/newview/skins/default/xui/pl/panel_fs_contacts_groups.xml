@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="groups">
+	<group_list name="group_list"/>
+    <text name="groupcount">
+Należysz do [COUNT] z [MAX] grup.
+    </text>
+	<button label="IM/Dzwoń" name="chat_btn" tool_tip="Otwórz sesję IM"/>
+	<button label="Informacje" name="info_btn"/>
+	<button label="Aktywuj" name="activate_btn"/>
+	<button label="Opuść" name="leave_btn"/>
+	<button label="Utwórz..." name="create_btn"/>
+	<button label="Szukaj..." name="search_btn"/>
+	<button label="Tytuły grup" name="titles_btn"/>
+</panel>

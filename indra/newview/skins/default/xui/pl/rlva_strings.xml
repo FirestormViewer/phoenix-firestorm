@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rlva_strings>
+  <strings>
+    <string name="hidden_generic">(Ukryte)</string>
+    <string name="hidden_parcel">(Ukryta parcela)</string>
+    <string name="hidden_region">(Ukryty region)</string>
+    <string name="blocked_recvim">*** IM zablokowana przez Twoją Przeglądarkę</string>
+    <string name="blocked_sendim">*** IM zablokowana przez Przeglądarkę nadawcy</string>
+    <string name="blocked_generic">Nie można tego zrobić ze względu na ograniczenia RLV</string>
+    <string name="blocked_permattach">Założenie '[OBJECT]' zostało anulowane ze względu na ograniczenia RLV</string>
+    <string name="blocked_startim">Nie można rozpocząć sesji IM z [RECIPIENT] ze względu na ograniczenia RLV</string>
+    <string name="blocked_startconf">Nie można rozpocząć konferencji z [RECIPIENT] ze względu na ograniczenia RLV</string>
+    <string name="blocked_teleport">Nie można teleportować ze względu na ograniczenia RLV</string>
+    <string name="blocked_viewxxx">Nie można otworzyć [TYPE] ze względu na ograniczenia RLV</string>
+    <string name="blocked_recvim_remote">
+      Rezydent, do którego napisałeś/aś ma uniemożliwione czytanie wiadomości na tą chwilę, spróbuj później.
+    </string>
+    <string name="blocked_tplure_remote">
+      Rezydent, któremu zaproponowałeś/aś teleport ma uniemożliwione odbieranie ich na tą chwilę, spróbuj później.
+    </string>
+  </strings>
+  <anonyms>
+    <anonym>Rezydent</anonym>
+    <anonym>Osoba</anonym>
+    <anonym>Nieznajomy</anonym>
+    <anonym>Ktoś</anonym>
+    <anonym>Tajemniczy ktoś</anonym>
+    <anonym>Ktoś niezidentyfikowany</anonym>
+    <anonym>Nieznana osoba</anonym>
+  </anonyms>
+</rlva_strings>

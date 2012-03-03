@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Self Pie">
+    <pie_slice label="Profil" name="Profile..."/>
+    <pie_slice label="Grupy" name="Groups..."/>
+    <pie_menu label="Zdejmij >" name="Take Off &gt;">
+        <pie_menu label="Ubrania >" name="Clothes &gt;">
+            <pie_slice label="Koszulę" name="Shirt"/>
+            <pie_slice label="Spodnie" name="Pants"/>
+            <pie_slice label="Buty" name="Shoes"/>
+            <pie_slice label="Skarpetki" name="Socks"/>
+            <pie_slice label="Kurtka" name="Jacket"/>
+            <pie_slice label="Rękawiczki" name="Gloves"/>
+            <pie_menu label="Więcej >" name="Clothes More">
+                <pie_slice label="Podkoszulek" name="Self Undershirt"/>
+                <pie_slice label="Wszystkie ubrania" name="All Clothes"/>
+                <pie_slice label="Bielizna" name="Self Underpants"/>
+                <pie_slice label="Tatuaż" name="Self Tattoo"/>
+                <pie_slice label="Fizyka" name="Self Physics"/>
+                <pie_slice label="Alpha (przezr.)" name="Self Alpha"/>
+            </pie_menu>
+            <pie_slice label="Spódnica" name="Skirt"/>
+        </pie_menu>
+        <pie_menu name="Pie Object Detach HUD"/>
+        <pie_menu label="Odłącz >" name="Pie Object Detach"/>
+        <pie_slice label="Odłącz wszystko" name="Detach All"/>
+    </pie_menu>
+    <pie_slice label="Usiądź" name="Sit Down Here"/>
+    <pie_slice label="Wstań" name="Stand Up"/>
+    <pie_slice label="O skryptach" name="ScriptInfo"/>
+    <pie_slice label="Gesty..."  name="Gestures"/>
+    <pie_menu label="Wygląd &gt;" name="Appearance &gt;">
+        <pie_slice label="Edytuj kształt" name="Edit My Shape"/>
+        <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
+        <pie_slice label="Edytuj strój" name="Edit My Outfit"/>
+    </pie_menu>
+    <pie_slice label="Debuguj tekstury" name="Debug..."/>
+</pie_menu>

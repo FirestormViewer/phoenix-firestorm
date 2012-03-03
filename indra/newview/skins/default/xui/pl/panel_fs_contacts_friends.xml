@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="friends">
+	<panel.string name="FriendCount" value="Znajomych: [COUNT]"/>
+	<scroll_list name="friend_list" tool_tip="Wybierz pozycję z tej listy, aby podświetlić ją w świecie">
+		<scroll_list.column name="icon_online_status" tool_tip="Status online"/>
+		<scroll_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
+		<scroll_list.column label="Imię" name="full_name" tool_tip="Wybrane imię tego kontaktu."/>
+		<scroll_list.column name="icon_visible_online" tool_tip="Znajomy może widzieć, że jesteś dostępny/a online w świecie"/>
+		<scroll_list.column name="icon_visible_map" tool_tip="Znajomy może znaleźć Cię na mapie"/>
+		<scroll_list.column name="icon_edit_mine" tool_tip="Znajomy może edytować, usuwać lub zabierać Twoje obiekty"/>
+		<scroll_list.column name="icon_visible_map_theirs" tool_tip="Możesz znajdować na mapie"/>
+		<scroll_list.column name="icon_edit_theirs" tool_tip="Możesz edytować obiekty tego znajomego"/>
+	</scroll_list>
+	<button label="IM/Dzwoń" name="im_btn" tool_tip="Rozpocznij sesję IM (prywatnej wiadomości)"/>
+	<button label="Profil" name="profile_btn" tool_tip="Pokaż obrazek, grupy i inne informacje"/>
+	<button label="Teleportuj..." name="offer_teleport_btn"tool_tip="Zaoferuj teleport do Twojej obecnej lokalizacji temu znajomemu"/>
+	<button label="Zapłać..." name="pay_btn" tool_tip="Daj Lindeny (L$) temu znajomemu"/>
+	<button label="Usuń..." name="remove_btn" tool_tip="Usuń tą osobę z listy Twoich znajomych"/>
+	<button label="Dodaj..." name="add_btn" tool_tip="Zapytaj tego Rezydenta, czy nie chce zostać Twoim znajomym"/>
+	<button label="Zestawy kontaktów" name="lgg_fg_openFG" tool_tip="Pokaż Twoich znajomych podzielonych na grupy"/>
+	<text name="friend_count">
+	 Znajomych: ...
+	</text>
+</panel>
