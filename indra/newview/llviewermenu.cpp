@@ -4029,31 +4029,44 @@ class LLTogglePanelPeopleTab : public view_listener_t
 		param["people_panel_tab_name"] = panel_name;
 
 		// <FS:Zi> Open groups and friends lists in communicate floater
-		// if (   panel_name == "friends_panel"
-		// 	|| panel_name == "groups_panel"
-		// 	|| panel_name == "nearby_panel")
-		// {
-		// 	return togglePeoplePanel(panel_name, param);
-		// }
-		if(panel_name=="nearby_panel")
+		// <FS:Lo> Adding an option to still use v2 windows
+		if(gSavedSettings.getBOOL("FSUseV2Friends"))
 		{
-			return togglePeoplePanel(panel_name,param);
+			if (   panel_name == "friends_panel"
+				|| panel_name == "groups_panel"
+				|| panel_name == "nearby_panel")
+			{
+				return togglePeoplePanel(panel_name, param);
+			}
+			else
+			{
+				return false;
+			}
 		}
-		else if(panel_name=="groups_panel")
-		{
-			FSFloaterContacts::getInstance()->openTab("groups");
-			return true;
-		}
-		else if(panel_name=="friends_panel")
-		{
-			FSFloaterContacts::getInstance()->openTab("friends");
-			return true;
-		}
-		// </FS:Zi>
 		else
 		{
-			return false;
+			if(panel_name=="nearby_panel")
+			{
+				return togglePeoplePanel(panel_name,param);
+			}
+			else if(panel_name=="groups_panel")
+			{
+				FSFloaterContacts::getInstance()->openTab("groups");
+				return true;
+			}
+			else if(panel_name=="friends_panel")
+			{
+				FSFloaterContacts::getInstance()->openTab("friends");
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
+		// </FS:Lo>
+		// </FS:Zi>
+		return false;
 	}
 
 	static bool togglePeoplePanel(const std::string& panel_name, const LLSD& param)
