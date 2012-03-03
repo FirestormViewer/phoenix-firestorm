@@ -177,7 +177,7 @@
     <key>Value</key>
     <integer>2</integer>
   </map>
-  <key>FSClientTagsVisibility</key>
+  <key>FSClientTagsVisibility2</key>
   <map>
     <key>Comment</key>
     <string>Show clienttags: 0=Clienttags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
@@ -186,7 +186,7 @@
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
   <key>FSUseV1TagColor</key>
   <map>

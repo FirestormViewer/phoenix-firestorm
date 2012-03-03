@@ -332,7 +332,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 	curtag["id_based"]=new_system;	
 	curtag["tex_color"]=color.getValue();	
 	// If we don't want to display anything...return
-	if(gSavedSettings.getU32("FSClientTagsVisibility") == 0)
+	if(gSavedSettings.getU32("FSClientTagsVisibility2") == 0)
 	{
 		return curtag;
 	}
@@ -434,7 +434,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 	//WS: If we have a tag using the new system, check if we want to display it's name and/or color
 	if(new_system)
 	{
-		if(gSavedSettings.getU32("FSClientTagsVisibility") >= 3)
+		if(gSavedSettings.getU32("FSClientTagsVisibility2") >= 3)
 		{
 			// strnlen() doesn't exist on OS X before 10.7. -- TS
 			char tag_temp[UUID_BYTES+1];
@@ -466,7 +466,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 
 	//If we only want to display tpvd viewer. And "tpvd" is not available or false, then
 	// clear the data, but keep the basedata (like uuid, id_based and tex_color) for (maybe) later displaying.
-	if(gSavedSettings.getU32("FSClientTagsVisibility") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
+	if(gSavedSettings.getU32("FSClientTagsVisibility2") <= 1 && (!curtag.has("tpvd") || !curtag["tpvd"].asBoolean()))
 	{
 		curtag.clear();
 	}

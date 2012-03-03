@@ -171,7 +171,7 @@ void PanelPreferenceFirestorm::refreshTagCombos()
 
 	//WS: Set the combo_boxes to the right value
 	U32 usel_u = gSavedSettings.getU32("FSUseLegacyClienttags");
-	U32 tagv_u = gSavedSettings.getU32("FSClientTagsVisibility");
+	U32 tagv_u = gSavedSettings.getU32("FSClientTagsVisibility2");
 	U32 tagc_u = gSavedSettings.getU32("FSColorClienttags");
 
 
@@ -208,11 +208,11 @@ void PanelPreferenceFirestorm::applyTagCombos()
 	bool change=false;
 	if(gSavedSettings.getU32("FSUseLegacyClienttags")!=m_UseLegacyClienttags->getCurrentIndex()
 		|| gSavedSettings.getU32("FSColorClienttags")!=m_ColorClienttags->getCurrentIndex()
-		|| gSavedSettings.getU32("FSClientTagsVisibility")!=m_ClientTagsVisibility->getCurrentIndex()){
+		|| gSavedSettings.getU32("FSClientTagsVisibility2")!=m_ClientTagsVisibility->getCurrentIndex()){
 
 		gSavedSettings.setU32("FSUseLegacyClienttags",m_UseLegacyClienttags->getCurrentIndex());
 		gSavedSettings.setU32("FSColorClienttags",m_ColorClienttags->getCurrentIndex());
-		gSavedSettings.setU32("FSClientTagsVisibility",m_ClientTagsVisibility->getCurrentIndex());
+		gSavedSettings.setU32("FSClientTagsVisibility2",m_ClientTagsVisibility->getCurrentIndex());
 		
 		//WS: Clear all nametags to make everything display properly!
 		change=true;

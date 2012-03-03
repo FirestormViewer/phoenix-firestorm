@@ -1427,6 +1427,18 @@
      label="Tags"
      name="TagTab">
 
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="15"
+       layout="topleft"
+       left="5"
+       name="whattagstoshow"
+       top_pad="10"
+       width="512">
+        Note: Do to changes Linden Lab has made, viewer tags will not work in Second Life.
+      </text>
         <text
          type="string"
          length="1"
