@@ -24,7 +24,7 @@
          label="Merchant Outbox..."
          name="MerchantOutbox">
             <menu_item_call.on_click
-             function="Floater.ToggleOrBringToFront"
+             function="Floater.Show"
              parameter="outbox" />
         </menu_item_call>
 
@@ -60,6 +60,14 @@
             <menu_item_call.on_click
              function="ShowAgentProfile"
              parameter="agent" />
+        </menu_item_call>
+        
+      <menu_item_call
+       label="Picks..."
+       name="Picks">
+        <menu_item_call.on_click
+         function="Floater.Show"
+         parameter="picks" />
         </menu_item_call>
         
         <menu_item_call
