@@ -3161,12 +3161,15 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 	if (show_distance_color_tag && !isSelf() && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))))
 	{
-		F64 distance = dist_vec(getPositionGlobal(), gAgent.getPositionGlobal());
-		if (distance <= 20.f)
+		static const F64 CHAT_RANGE_SQUARED = 400.f;
+		static const F64 SHOUT_RANGE_SQUARED = 10000.f;
+
+		F64 distance_squared = dist_vec_squared(getPositionGlobal(), gAgent.getPositionGlobal());
+		if (distance_squared <= CHAT_RANGE_SQUARED)
 		{
 			name_tag_color = tag_chat_color;
 		}
-		else if (distance <= 100.f)
+		else if (distance_squared <= SHOUT_RANGE_SQUARED)
 		{
 			name_tag_color = tag_shout_color;
 		}
