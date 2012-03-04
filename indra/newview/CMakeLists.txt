@@ -97,6 +97,7 @@ set(viewer_SOURCE_FILES
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
+	fslslpreproc.cpp
     fsfloaterprofile.cpp
     fspanelprofile.cpp
     fsradarlistctrl.cpp
@@ -707,6 +708,7 @@ set(viewer_HEADER_FILES
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
+	fslslpreproc.h
     fsfloaterprofile.h
     fspanelprofile.h
     fsradarlistctrl.h
