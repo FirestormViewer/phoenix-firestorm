@@ -7,7 +7,9 @@
  can_close="true"
  can_resize="false"
  name="avatarinfo"
+ help_topic="panel_my_profile_tab"
  title="PROFILE" >
+ <!-- Ansariel: Help topic set above is a dummy only - real topics are set for the panels down below! -->
 <panel
  top="0"
  left="0"
