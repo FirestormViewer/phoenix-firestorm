@@ -3153,6 +3153,30 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		name_tag_color = mClientTagData["color"]; 
 	}
 
+	// <FS:Ansariel> Color name tags based on distance
+	static LLCachedControl<bool> show_distance_color_tag(gSavedSettings, "FSTagShowDistanceColors");
+	static LLUIColor tag_chat_color = LLUIColorTable::instance().getColor("NameTagChatDistanceColor", LLColor4::green);
+	static LLUIColor tag_shout_color = LLUIColorTable::instance().getColor("NameTagShoutDistanceColor", LLColor4::yellow);
+	static LLUIColor tag_beyond_shout_color = LLUIColorTable::instance().getColor("NameTagBeyondShoutDistanceColor", LLColor4::red);
+
+	if (show_distance_color_tag && !isSelf() && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))))
+	{
+		F64 distance = dist_vec(getPositionGlobal(), gAgent.getPositionGlobal());
+		if (distance < 20.f)
+		{
+			name_tag_color = tag_chat_color;
+		}
+		else if (distance < 100.f)
+		{
+			name_tag_color = tag_shout_color;
+		}
+		else
+		{
+			name_tag_color = tag_beyond_shout_color;
+		}
+	}
+	// </FS:Ansariel>
+
 	// Rebuild name tag if state change detected
 	if (mNameString.empty()
 		|| new_name
