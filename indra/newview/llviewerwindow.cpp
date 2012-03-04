@@ -5229,7 +5229,9 @@ LLRect LLViewerWindow::getChatConsoleRect()
 		}
 
 		LLToolBar* toolbar_right = gToolBarView->getToolBar(LLToolBarView::TOOLBAR_RIGHT);
-		if (toolbar_right && toolbar_right->hasButtons())
+		LLRect toolbar_right_screen_rect;
+		toolbar_right->localRectToScreen(toolbar_right->getRect(), &toolbar_right_screen_rect);
+		if (toolbar_right && toolbar_right->hasButtons() && console_rect.mRight >= toolbar_right_screen_rect.mLeft)
 		{
 			console_rect.mRight -= toolbar_right->getRect().getWidth();
 		}
