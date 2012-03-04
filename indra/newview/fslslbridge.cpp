@@ -490,7 +490,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 {
 	llinfos << "Entering processDetach" << llendl;
 
-	if ((!gAgentAvatarp->isSelf()) || (attachment->getName() != "Bridge"))
+	if (gAgentAvatarp.isNull() || (!gAgentAvatarp->isSelf()) || (attachment == NULL) || (attachment->getName() != "Bridge"))
 	{
 		llwarns << "Couldn't detach bridge, object has wrong name or avatar wasn't self." << llendl;
 		return;
@@ -522,6 +522,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 		}
 	}
 
+	llinfos << "processDetach Finished" << llendl;
 }
 
 void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
@@ -852,7 +853,15 @@ void FSLSLBridge :: reportToNearbyChat(std::string message)
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	LLNotificationsUI::LLNotificationManager* notification_manager = LLNotificationsUI::LLNotificationManager::getInstance();
+	if (notification_manager)
+	{
+		notification_manager->onChat(chat, args);
+	}
+	else
+	{
+		llwarns << "Tried to write notification to chat, but LLNotificationManager was NULL!" << llendl;
+	}
 }
 
 void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
