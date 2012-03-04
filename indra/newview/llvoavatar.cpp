@@ -3162,11 +3162,11 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	if (show_distance_color_tag && !isSelf() && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))))
 	{
 		F64 distance = dist_vec(getPositionGlobal(), gAgent.getPositionGlobal());
-		if (distance < 20.f)
+		if (distance <= 20.f)
 		{
 			name_tag_color = tag_chat_color;
 		}
-		else if (distance < 100.f)
+		else if (distance <= 100.f)
 		{
 			name_tag_color = tag_shout_color;
 		}
