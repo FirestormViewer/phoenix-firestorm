@@ -338,7 +338,7 @@
   <layout_stack
    animate="false" 
   follows="all"
-  height="300"
+  height="308"
   width="394"
   layout="topleft"
   orientation="horizontal"
