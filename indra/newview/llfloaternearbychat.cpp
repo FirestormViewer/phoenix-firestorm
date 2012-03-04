@@ -380,6 +380,12 @@ void	LLFloaterNearbyChat::setVisible(BOOL visible)
 	// </Ansariel> Support for chat console
 }
 
+void LLFloaterNearbyChat::onFocusReceived()
+{
+	// <FS:Ansariel> Give focus to input textbox
+	mInputEditor->setFocus(TRUE);
+}
+
 void	LLFloaterNearbyChat::onOpen(const LLSD& key )
 {
 	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
