@@ -805,7 +805,7 @@
      reference="Yellow" />
     <color
      name="NameTagBeyondShoutDistanceColor"
-     reference="Red" />
+     value="1 0 0 1.0" />
     <color
      name="NameTagFriend"
      value="0.75 0.92 0.49 1.0" />
