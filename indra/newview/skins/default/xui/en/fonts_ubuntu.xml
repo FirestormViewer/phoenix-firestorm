@@ -62,6 +62,11 @@
     <file>DejaVuSansMono.ttf</file>
   </font>
 
+  <font name="Script"
+	comment="Name of an optional font used for the script editor">
+    <file>DejaVuSansMono.ttf</file>
+  </font>
+
   <font name="DejaVu"
 	comment="Name of DejaVu font">
     <file>DejaVuSans.ttf</file>
@@ -132,6 +137,10 @@
       </os>
   </font>
 
+  <font_size name="Script"
+	     comment="Size of script editor font (points, or 1/72 of an inch)"
+	     size="9.6"
+	     />
   <font name="OverrideTest"
 	comment="Name of font to test overriding">
     <file>times.ttf</file>
