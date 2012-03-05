@@ -55,10 +55,6 @@ const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
 //static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
 static LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
-// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-bool LLInventoryPanel::s_fActiveSidebar = false;
-// [/SL:KB]
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInventoryPanelObserver
 //
@@ -930,12 +926,6 @@ void LLInventoryPanel::onFocusReceived()
 {
 	// inventory now handles cut/copy/paste/delete
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot;
-
-// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-//	s_fActiveSidebar = (LLSideTray::instanceCreated()) && (hasAncestor(LLFloaterSidePanelContainer::getPanel("sidepanel_inventory"))); ND_MERGE
-// [/SL:KB]
-
-	s_fActiveSidebar = false;
 
 	LLPanel::onFocusReceived();
 }
