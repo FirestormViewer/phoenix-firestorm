@@ -1590,12 +1590,23 @@
          top_pad="10"
          follows="left|top"
          height="16"
-         width="220"
+         width="250"
          label="Color nametags based on distance"
          name="FSTagShowDistanceColors"
 		 control_name="FSTagShowDistanceColors"
          tool_tip="When checked, the tag color of other avatars show if they are in chat range, shout range or beyond shout range. This overrides viewer tag colors, but not friend or contact set colors." />
 		 
+        <check_box
+         left="260"
+         top_delta="0"
+         follows="left|top"
+         height="16"
+         width="200"
+         label="Show distance in tag"
+         name="FSTagShowDistance"
+		 control_name="FSTagShowDistance"
+         tool_tip="When checked, the tag of other avatars shows their distance, using the colors set below." />
+
         <color_swatch
          can_apply_immediately="true"
          follows="left|top"

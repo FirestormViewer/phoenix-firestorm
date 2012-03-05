@@ -268,6 +268,7 @@
 		<check_box label="Andere Farbe für Benutzernamen verwenden" name="FSColorUsername_toggle" tool_tip="Zeigt den Benutzernamen in einer anderen Farbe (übersteuert die Tag-Farbe für Benutzernamen)" width="270"/>
 		<color_swatch name="usernamecolorswatch" tool_tip="Anklicken um die Farbauswahl zu öffnen"/>
 		<check_box label="Tag-Farbe basierend auf Entfernung" name="FSTagShowDistanceColors" tool_tip="Aktivieren, um die Tag-Farbe eines Avatars abhändig von der Entfernung (Chat-Reichweite, Ruf-Reichweite, außerhalb Ruf-Reichweite) zu setzen. Übersteuert Viewertag-Farben außer Hervorhebung von Freunden und Kontakt-Set-Farben."/>
+		<check_box label="Entfernung im Tag anzeigen" name="FSTagShowDistance" tool_tip="Aktivieren, um die Entfernung eines Avatars in den nachfolgenden Farben im Tag anzuzeigen."/>
 		<text name="NameTagChatDistanceColor_Label">
 			Chat-Reichweite
 		</text>
