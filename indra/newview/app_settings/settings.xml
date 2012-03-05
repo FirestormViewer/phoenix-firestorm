@@ -13131,7 +13131,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>4</real>
+      <real>7</real>
     </map>
     <key>UIImgDefaultEyesUUID</key>
     <map>
