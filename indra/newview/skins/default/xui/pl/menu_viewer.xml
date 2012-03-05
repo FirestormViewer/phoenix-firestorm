@@ -2,10 +2,12 @@
 <menu_bar name="Main Menu">
 	<menu label="Awatar" name="Me">
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
+		<menu_item_call label="Skrzynka nadawcza kupca..." name="MerchantOutbox"/>
 		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Ustawienia" name="Preferences"/>
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
+		<menu_item_call label="Miejsca..." name="Picks"/>
 		<menu_item_call label="Mój wygląd" name="ChangeOutfit"/>
 		<menu_item_call label="Zrób zdjęcie" name="Take Snapshot"/>
 		<menu_item_check label="Moja Szafa" name="Inventory"/>
@@ -34,7 +36,7 @@
 			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
-			<menu_item_call label="Model meszowy ([COST]L$)..." name="Upload Model"/>
+			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
 		</menu>
@@ -163,7 +165,7 @@
 			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
 			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
-			<menu_item_call label="Model meszowy ([COST]L$)..." name="Upload Model"/>
+			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików ([COST]L$ za plik)..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
 		</menu>

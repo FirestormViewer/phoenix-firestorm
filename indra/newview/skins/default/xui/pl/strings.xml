@@ -1284,7 +1284,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Nie posiadasz kopii tej tekstury w swojej Szafie.
 	</string>
 	<string name="InventoryInboxNoItems">
-		Niektóre z otrzymanych przedmiotów, takie jak prezenty, pojawią się tutaj.  Możesz następnie przeciągnąć je do głównej części Szafy.
+		Przedmioty zakupione na Marketplace pojawią się tutaj. Możesz następnie przeciągnąć je do głównej części Szafy.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
 		Każdy może sprzedawać przedmioty na Marketplace.

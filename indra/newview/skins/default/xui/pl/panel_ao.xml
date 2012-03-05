@@ -6,7 +6,7 @@
 		<check_box name="ao_default" label="Domyślny" tool_tip="Ustaw ten zestaw animacji jako domyślny." />
 		<button name="ao_add" tool_tip="Utwórz nowy zestaw animacji." />
 		<button name="ao_remove" tool_tip="Usuń ten zestaw animacji." />
-		<check_box name="ao_sit_override" label="Podmień siadanie" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
+		<check_box name="ao_sit_override" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
 		<check_box name="ao_smart" label="Sprytnie" tool_tip="Ten tryb próbuje zapobiegać sytuacjom, w których Zastępowanie koliduje z wewnętrznymi animacjami obiektu - i wyłącza tymczasowo podmienianie." />
 		<check_box name="ao_disable_stands_in_mouselook" label="Wyłącz w trybie 1 osoby" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
 		<combo_box name="ao_state_selection_combo" tool_tip="Wybierz stan animacji do edycji." />
@@ -43,7 +43,7 @@
 	<panel name="animation_overrider_panel_small">
 	<combo_box name="ao_set_selection_combo_small" tool_tip="Wybierz zestaw animacji do edycji." />
 	<button name="ao_more" tool_tip="Pokaż pełny interfejs." />
-	<button name="ao_previous_small"tool_tip="Poprzednia animacja obecnego stanu." />
+	<button name="ao_previous_small" tool_tip="Poprzednia animacja obecnego stanu." />
 	<button name="ao_next_small" tool_tip="Następna animacja obecnego stanu." />
 	<check_box name="ao_sit_override_small" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
 	</panel>

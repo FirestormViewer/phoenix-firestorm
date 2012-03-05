@@ -38,10 +38,8 @@
         </combo_box>
         <check_box label="Używaj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
-        <text name="ButtonFlashing">
-            Mruganie przycisków:
-        </text>
-        <slider label="Ile razy mrugają przyciski IM:" tool_tip="Ile razy mrugają przyciski IM (używane przy powiadomieniach)" name="ButtonsFlashCount" />
+        <checkbox name="ButtonFlashing" label="Globalne mruganie przycisków:" />
+        <slider label="Ile razy mrugają przyciski:" tool_tip="Ile razy mrugają przyciski" name="ButtonsFlashCount" />
         <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
         <text name="ToastSettings">
             Ustawienia powiadomień (popupy, konsola, tosty):
