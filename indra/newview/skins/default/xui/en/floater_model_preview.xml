@@ -175,9 +175,13 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_high_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_high_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
             </combo_box>
@@ -210,9 +214,13 @@
              visible="false"
              width="135">
                 <item
+                 name="lod_mode_high_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_high_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -300,12 +308,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_medium_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_medium_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_medium_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -339,9 +353,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_medium_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_medium_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -428,12 +446,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_low_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_low_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_low_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -467,9 +491,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_low_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_low_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -556,12 +584,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_lowest_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_lowest_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_lowest_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -595,9 +629,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_lowest_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_lowest_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -1170,7 +1208,7 @@
              name="pelvis_offset_label"
              text_color="White"
              top="134"
-             width="200">
+             width="250">
              Z offset (raise or lower avatar):
            </text>
            <spinner
