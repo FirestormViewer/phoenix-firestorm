@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_voice_controls" title="SPRACHSTEUERUNGEN">
 	<string name="title_nearby">
-		VOICE-EINSTELLUNGEN
+		STIMMEN IN DER NÄHE
 	</string>
 	<string name="title_group">
 		GRUPPENGESPRÄCH MIT [GROUP]

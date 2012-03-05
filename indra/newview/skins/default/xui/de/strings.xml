@@ -4947,8 +4947,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_View_Label">
 		Kamerasteuerungen
 	</string>
+<!-- Ansariel: Renamed for FS (FIRE-5019)
 	<string name="Command_Voice_Label">
 		Voice-Einstellungen
+	</string> -->
+	<string name="Command_Voice_Label">
+		Stimmen in der Nähe
 	</string>
 	<string name="Command_Quickprefs_Label">
 		Schnelleinstellungen

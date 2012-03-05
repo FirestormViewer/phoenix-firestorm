@@ -62,7 +62,7 @@
         <menu_item_check label="Gesten" name="Gestures"/>
         <menu_item_check label="Sprachfilter" name="ShowVoice"/>
 		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
-		<menu_item_check label="Stimme in der Nähe" name="Nearby Voice"/>
+		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
 	</menu>
 	<menu label="Welt" name="World">
         <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>

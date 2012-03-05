@@ -3889,7 +3889,9 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Snapshot_Label">Snapshot</string>
   <string name="Command_Speak_Label">Speak</string>
   <string name="Command_View_Label">Camera controls</string>
-  <string name="Command_Voice_Label">Voice settings</string>
+<!-- Ansariel: Renamed for FS (FIRE-5019)
+  <string name="Command_Voice_Label">Voice settings</string>-->
+  <string name="Command_Voice_Label">Nearby voice</string>
 <!-- Firestorm commands -->
   <string name="Command_Quickprefs_Label">Quick prefs</string>
   <string name="Command_AO_Label">Animation Overrider</string>
