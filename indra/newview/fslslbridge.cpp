@@ -346,6 +346,10 @@ void FSLSLBridge :: createNewBridge()
 		llinfos << "Cloning a new Bridge container from the Library..." << llendl;
 		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),catID,mCurrentFullName,cb);
 	}
+	else
+	{
+		llwarns << "Bridge container not found in the Library!" << llendl;
+	}
 }
 
 void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
