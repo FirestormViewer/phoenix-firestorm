@@ -1560,6 +1560,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/mid_graphics.xml
     app_settings/grids.fallback.xml
     app_settings/account_settings_phoenix.xml
+    app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml

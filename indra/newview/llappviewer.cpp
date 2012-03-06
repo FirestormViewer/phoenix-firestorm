@@ -780,6 +780,7 @@ bool LLAppViewer::init()
 
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "releases.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "client_list_v2.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_firestorm.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_hybrid.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v3.xml"));
@@ -2482,7 +2483,7 @@ bool LLAppViewer::initConfiguration()
 	//Wolfspirit: Temporary fix for NOT loading settings_minimal.xml
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
-		gSavedSettings.setString("SessionSettingsFile", "settings_phoenix.xml");
+		gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
 
 		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);

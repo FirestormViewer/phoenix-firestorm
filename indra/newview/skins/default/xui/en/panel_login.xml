@@ -131,6 +131,41 @@ label="Remember password"
   top="35"
   width="90" />
   <text
+   follows="left|bottom"
+   font="SansSerifSmall"
+   height="15"
+   left_pad="10"
+   name="mode_selection_text"
+   top="20"
+   width="110">
+    Default Settings:
+  </text>
+  <combo_box
+    follows="left|bottom"
+    height="23"
+    max_chars="128"
+    tool_tip="Select which style of viewer you are most familiar with to set your defaults to appropriately."
+    top_pad="0"
+    name="mode_combo"
+    width="110">
+    <combo_box.item
+      label="Firestorm"
+      name="Firestorm"
+      value="settings_firestorm.xml" />
+    <combo_box.item
+      label="Phoenix"
+      name="Phoenix"
+      value="settings_phoenix.xml" />
+    <combo_box.item
+      label="V3"
+      name="V3"
+      value="settings_v3.xml" />
+    <combo_box.item
+      label="Hybrid"
+      name="Hybrid"
+      value="settings_hybrid.xml" />
+  </combo_box>
+  <text
   follows="left|bottom"
   font="SansSerifSmall"
   height="15"
