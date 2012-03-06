@@ -110,7 +110,7 @@
   <key>FSColorClienttags</key>
   <map>
     <key>Comment</key>
-    <string>Color Clienttags by: 0=Off, 1=Single color per Viewer, 2=Userdefinied color (one color per UUID), 3=New Tagsystem Color </string>
+    <string>Color Client tags by: 0=Off, 1=Single color per Viewer, 2=User defined color (one color per UUID), 3=New Tagsystem Color </string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -188,7 +188,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>PlainTextChatHistory</key>

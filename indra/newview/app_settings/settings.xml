@@ -158,7 +158,7 @@
   <key>FSUseLegacyClienttags</key>
   <map>
     <key>Comment</key>
-    <string>0=Off, 1=Local Clienttags, 2=Download Clienttags (needs relog)</string>
+    <string>0=Off, 1=Local Client tags, 2=Download Client tags (needs relog)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -169,7 +169,7 @@
   <key>FSColorClienttags</key>
   <map>
     <key>Comment</key>
-    <string>Color Clienttags by: 0=Off, 1=Single color per Viewer, 2=Userdefinied color (one color per UUID), 3=New Tagsystem Color</string>
+    <string>Color Client tags by: 0=Off, 1=Single color per Viewer, 2=User defined color (one color per UUID), 3=New Tagsystem Color</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -180,7 +180,7 @@
   <key>FSClientTagsVisibility2</key>
   <map>
     <key>Comment</key>
-    <string>Show clienttags: 0=Clienttags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
+    <string>Show client tags: 0=Client tags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -191,7 +191,7 @@
   <key>FSUseV1TagColor</key>
   <map>
     <key>Comment</key>
-    <string>If Clienttags should be colored</string>
+    <string>If Client tags should be colored</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
