@@ -483,6 +483,16 @@
              parameter="people" />
             </menu_item_check>
         <menu_item_check
+         label="Places"
+         name="Places">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="places" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="places" />
+            </menu_item_check>
+        <menu_item_check
          label="Conversations"
          name="Conversations"
          shortcut="control|T"
