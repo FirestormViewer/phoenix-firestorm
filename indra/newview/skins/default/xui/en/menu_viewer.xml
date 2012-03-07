@@ -473,6 +473,16 @@
              parameter="nearby_chat" />
         </menu_item_check>
         <menu_item_check
+         label="People"
+         name="People">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="people" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="people" />
+            </menu_item_check>
+        <menu_item_check
          label="Conversations"
          name="Conversations"
          shortcut="control|T"
