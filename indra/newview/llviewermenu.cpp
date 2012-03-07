@@ -4066,7 +4066,6 @@ class LLTogglePanelPeopleTab : public view_listener_t
 		}
 		// </FS:Lo>
 		// </FS:Zi>
-		return false;
 	}
 
 	static bool togglePeoplePanel(const std::string& panel_name, const LLSD& param)
