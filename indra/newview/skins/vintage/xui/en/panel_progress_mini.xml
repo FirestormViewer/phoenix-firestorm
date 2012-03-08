@@ -1,0 +1,42 @@
+<panel
+ background_visible="false"
+ follows="all"
+ height="20"
+ layout="topleft"
+ left="0"
+ name="mini_progress_panel"
+ top="0"
+ mouse_opaque="true"
+ width="200">
+
+<progress_bar
+ color_bar="1 1 1 0.96"
+ follows="left|right|top"
+ height="20"
+ layout="topleft"
+ left="0"
+ name="progress_bar_mini"
+ right="-64"
+ top="0" />
+
+<button
+ follows="right|top"
+ height="20"
+ label="Cancel"
+ layout="topleft"
+ left_pad="4"
+ name="cancel_btn"
+ width="60" />
+
+<text
+ text_color="LoginProgressBoxTextColor"
+ follows="left|right|top"
+ height="16"
+ layout="topleft"
+ left="10"
+ name="progress_text"
+ right="-64"
+ top="4"
+ value="Progress..." />
+
+</panel>
