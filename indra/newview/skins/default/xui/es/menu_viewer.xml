@@ -2,10 +2,12 @@
 <menu_bar name="Main Menu">
 	<menu label="Avatar" name="Me">
 		<menu_item_call label="Mi panel de control" name="Manage Account"/>
+		<menu_item_call label="Merchant Outbox" name="MerchantOutbox"/>
 		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Preferencias" name="Preferences"/>
 		<menu_item_call label="Botones de la barra de herramientas" name="Toolbar Buttons"/>
 		<menu_item_call label="Mi perfil" name="Profile"/>
+		<menu_item_call label="Destacados..." name="Picks"/>
 		<menu_item_call label="Mi apariencia" name="ChangeOutfit"/>
 		<menu_item_call label="Tomar fotografía" name="Take Snapshot"/>
 		<menu_item_check label="Mi inventario" name="Inventory"/>

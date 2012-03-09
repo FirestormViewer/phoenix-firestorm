@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="texture picker" title="DESTACADO: TEXTURA">
-	<string name="choose_picture">
-		Pulse para elegir una imagen
-	</string>
+	<floater.string name="choose_picture">
+		Pulsa para elegir una imagen
+	</floater.string>
+	<floater.string name="pick title">
+		Destacado:
+	</floater.string>
 	<text name="Multiple">
 		Texturas múltiples
 	</text>
@@ -12,13 +15,22 @@
 	<button label="Por defecto" label_selected="Por defecto" name="Default" width="84"/>
 	<button label="Ninguna" label_selected="Ninguna" left="90" name="None"/>
 	<button label="Blanca" label_selected="Blanca" name="Blank"/>
-	<check_box label="Ver carpetas" name="show_folders_check"/>
-	<search_editor label="Filtrar" name="inventory search editor"/>
 	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
-	<button label="" label_selected="" name="Pipette"/>
+	<tab_container name="servloc_tabcont">
+		<panel label="Servidor" name="server_tab">
+			<filter_editor label="Filtrar" name="inventory search editor"/>
+			<check_box label="Mostrar carpetas" name="show_folders_check"/>
+		</panel>
+		<panel label="Local" name="local_tab">
+			<button label="Añadir" name="l_add_btn"/>
+			<button label="Eliminar" name="l_del_btn"/>
+			<button label="Subir" name="l_upl_btn"/>
+			<scroll_list name="local_name_list">
+				<column name="unit_name" label="Nombre"/>
+				<column name="unit_id_HIDDEN" label="ID"/>
+			</scroll_list> 
+		</panel>
+	</tab_container>
+	<button label="Aceptar" label_selected="Aceptar" name="Select"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
-	<button label="OK" label_selected="OK" name="Select"/>
-	<string name="pick title">
-		Elegir:
-	</string>
 </floater>

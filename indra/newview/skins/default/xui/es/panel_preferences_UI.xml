@@ -42,10 +42,8 @@
 			</text>
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5" top_pad="4"/>
-			<text name="ButtonFlashing" width="150">
-				Parpadeo de los botones:
-			</text>
-			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean (para las notificar MIs)" name="ButtonsFlashCount" label_width="207" width="378"/>
+			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:"/>
+			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount" label_width="207" width="378"/>
 			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate" label_width="207" width="375"/>
 			<text name="ButtonFlashRateText" left="383">
 				Hz
