@@ -98,7 +98,7 @@
              layout="topleft"
              left_delta="0"
              name="check fixed sun"
-             tool_tip="Fix the sun position (like in Region/Estate &gt; Terrain"
+             tool_tip="Fix the sun position (like in Region/Estate &gt; Terrain)"
              top_pad="4"
              width="180">
 			       <check_box.commit_callback

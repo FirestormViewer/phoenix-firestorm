@@ -45,6 +45,6 @@
 	<button name="ao_more" tool_tip="Pokaż pełny interfejs." />
 	<button name="ao_previous_small" tool_tip="Poprzednia animacja obecnego stanu." />
 	<button name="ao_next_small" tool_tip="Następna animacja obecnego stanu." />
-	<check_box name="ao_sit_override_small" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
+	<check_box name="ao_sit_override_small" label="Siady" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
 	</panel>
 </panel>

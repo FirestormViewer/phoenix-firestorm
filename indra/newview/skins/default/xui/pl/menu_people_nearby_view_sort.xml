@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_group_plus">
-	<menu_item_check label="Sortuj według ostatnich rozmówców" name="sort_by_recent_speakers"/>
-	<menu_item_check label="Sortuj według nazwy" name="sort_name"/>
-	<menu_item_check label="Sortuj według odległości" name="sort_distance"/>
-	<menu_item_check label="Wyświetlaj ikonki" name="view_icons"/>
-	<menu_item_call label="Pokaż zablokowanych Rezydentów &amp; obiekty" name="show_blocked_list"/>
+	<menu_item_check label="Pokaż minimapę ponad radarem" name="ShowRadarMinimap"/>
+	<menu_item_check label="Ogranicz wyniki do określonej odległości" name="LimitRadarByRange"/>
+	<menu label="Format imion radaru" name="radarNameFormat">
+		<menu_item_call label="Wyświetlane" name="radarFmtDN"/>
+		<menu_item_call label="NazwaKonta" name="radarFmtUN"/>
+		<menu_item_call label="Wyświetlane (NazwaKonta)" name="radarFmtDNUN"/>
+		<menu_item_call label="NazwaKonta (Wyświetlane)" name="radarFmtUNDN"/>
+	</menu>
+	<menu_item_check label="Pierścień czatu lokalnego na minimapie" name="MiniMapChatRing"/>
+	<menu_item_check label="Powiadom o osobie w polu widzenia" name="RadarReportDrawRange"/>
+	<menu_item_check label="Powiadom o osobie w zasięgu czatu" name="RadarReportChatRange"/>
+	<menu_item_check label="Powiadom o osobie w zasięgu regionu" name="RadarReportSimRange"/>
+	<menu_item_check label="Wysyłaj alerty wejść do skryptów" name="RadarEnterChannelAlert"/>
+	<menu_item_check label="Wysyłaj alerty wyjść do skryptów" name="RadarLeaveChannelAlert"/>
+	<menu_item_call label="Pokaż zablokowanych Rezydentów i obiekty" name="show_blocked_list"/>
 </menu>

@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Animation Preview" title="">
+<floater name="Animation Preview">
 	<floater.string name="failed_to_initialize">
 		Inicjalizacja ruchu nie powiodła się.
 	</floater.string>
 	<floater.string name="anim_too_long">
 		Długość pliku animacji wynosi [LENGTH] sekund.
-
 Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	</floater.string>
 	<floater.string name="failed_file_read">
-		Brak możliwości odczytania plików animacji do wyświetlenia.
-
+		Nie można odczytać pliku animacji.
 [STATUS]
 	</floater.string>
-	<floater.string name="E_ST_OK">
-		Ok
-	</floater.string>
 	<floater.string name="E_ST_EOF">
-		Niewłaściwe zakończenie nazwy pliku.
+		Przedwczesny koniec pliku.
 	</floater.string>
 	<floater.string name="E_ST_NO_CONSTRAINT">
-		Brak możliwości wyświetlenia definicji ograniczenia.
+		Nie można odczytać definicji więzów.
 	</floater.string>
 	<floater.string name="E_ST_NO_FILE">
 		Plik BVH nie może zostać otworzony.
@@ -41,7 +36,7 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		CHANNELS nieodnalezione.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROTATION">
-		Brak otrzymania kolejności obrotu.
+		Nie można uzyskać kolejności obrotu.
 	</floater.string>
 	<floater.string name="E_ST_NO_AXIS">
 		Brak osi obrotu.
@@ -50,13 +45,13 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		MOTION nieodnalezione.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAMES">
-		Brak otrzymania liczby klatek obrazu.
+		Nie można uzyskać liczby klatek obrazu.
 	</floater.string>
 	<floater.string name="E_ST_NO_FRAME_TIME">
-		Brak otrzymania czasu dla ilości klatek obrazu.
+		Nie można uzyskać czasu klatki obrazu.
 	</floater.string>
 	<floater.string name="E_ST_NO_POS">
-		Brak otrzymania wartości pozycji.
+		Nie można uzyskać wartości pozycji.
 	</floater.string>
 	<floater.string name="E_ST_NO_ROT">
 		Nie można odczytać wartości obrotu.
@@ -71,43 +66,43 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		Nie można przetłumaczyć nazw.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_IGNORE">
-		Nie można przeczytać tłumaczenia dla wartości ignorowania.
+		Nie można przeczytać wartości ignorowania dla tłumaczenia.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_RELATIVE">
-		Nie można przeczytać tłumaczenia wartości relatywnej.
+		Nie można przeczytać wartości relatywnej dla tłumaczenia.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_OUTNAME">
-		Nie można przeczytać nazw wartości tłumaczenia.
+		Nie można przeczytać wartości rozszerzenia nazw dla tłumaczenia.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MATRIX">
-		Nie można przeczytać tłumaczenia pola.
+		Nie można odczytać macierzy translacji.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGECHILD">
-		Brak otrzymania nazwy dla mergechild.
+		Nie można uzyskać nazwy dla mergechild.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_MERGEPARENT">
-		Brak otrzymania nazwy dla mergeparent.
+		Nie można uzyskać nazwy dla mergeparent.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_PRIORITY">
-		Brak wartości prerogatywy.
+		Nie można uzyskać wartości priorytetu.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_LOOP">
-		Brak otrzymania wartości powtórzeń.
+		Nie można uzyskać wartości powtórzeń.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEIN">
-		Brak otrzymawnia wartości easeIn.
+		Nie można uzyskać wartości easeIn.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EASEOUT">
-		Brak otrzymania wartości dla easeOut.
+		Nie można uzyskać wartości dla easeOut.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_HAND">
-		Brak otrzymania wartości morfizacji.
+		Nie można uzyskać wartości morfizacji dla ręki.
 	</floater.string>
 	<floater.string name="E_ST_NO_XLT_EMOTE">
 		Nie można odczytać nazwy emocji.
 	</floater.string>
 	<floater.string name="E_ST_BAD_ROOT">
-		Nieprawidłowa nazwa, użyj &quot;hip&quot;.
+		Nieprawidłowa nazwa dla roota, użyj "hip".
 	</floater.string>
 	<text name="name_label">
 		Nazwa:
@@ -115,14 +110,14 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	<text name="description_label">
 		Opis:
 	</text>
-	<spinner label="Pierwszeństwo" name="priority" tool_tip="Kontroluj animacje,które mogą zostać zdominowane przez tą animację"/>
-	<check_box label="Powtarzaj" name="loop_check" tool_tip="Powtarzaj tą animację"/>
+	<spinner label="Pierwszeństwo" name="priority" tool_tip="Kontroluj animacje, które mogą zostać zdominowane przez tą animację"/>
+	<check_box label="Powtarzaj" name="loop_check" tool_tip="Powtarzaj tą animację w pętli"/>
 	<spinner label="Od(%)" name="loop_in_point" tool_tip="Wybierz punkt, od którego chcesz zacząć powtarzać animację"/>
 	<spinner label="Do(%)" name="loop_out_point" tool_tip="Wybierz punkt, od którego chcesz zakończyć powtarzanie animacji"/>
 	<text name="hand_label">
-		Pozycja ręki
+		Poz. ręki
 	</text>
-	<combo_box label="" name="hand_pose_combo" tool_tip="Kontroluje co robi ręka podczas animacji">
+	<combo_box name="hand_pose_combo" tool_tip="Kontroluje co robi ręka podczas animacji">
 		<combo_box.item label="Rozciągaj" name="Spread"/>
 		<combo_box.item label="Odpocznij" name="Relaxed"/>
 		<combo_box.item label="Wskazuj" name="PointBoth"/>
@@ -140,8 +135,8 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 	<text name="emote_label">
 		Ekspresja
 	</text>
-	<combo_box label="" name="emote_combo" tool_tip="Kontroluj mimikę twarzy w czasie animacji">
-		<item label="(Żadne)" name="[None]" value=""/>
+	<combo_box name="emote_combo" tool_tip="Kontroluj mimikę twarzy w czasie animacji">
+		<item label="(Brak)" name="[None]"/>
 		<item label="Aaaaah" name="Aaaaah" value="Aaaaah"/>
 		<item label="Obawa" name="Afraid" value="Obawa"/>
 		<item label="Złość" name="Angry" value="Złość"/>
@@ -153,7 +148,6 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		<item label="Marszczenie brwi" name="Frown" value="Marszczenie brwi"/>
 		<item label="Pocałunek" name="Kiss" value="Pocałunek"/>
 		<item label="Śmiech" name="Laugh" value="Śmiech"/>
-		<item label="Plllppt" name="Plllppt" value="Plllppt"/>
 		<item label="Odrzucenie" name="Repulsed" value="Odrzucenie"/>
 		<item label="Smutek" name="Sad" value="Smutek"/>
 		<item label="Wzruszenie ramionami" name="Shrug" value="Wzruszenie ramionami"/>
@@ -163,25 +157,24 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		<item label="Zmartwienie" name="Worry" value="Zmartwienie"/>
 	</combo_box>
 	<text name="preview_label">
-		Przeglądaj kiedy:
+		Podgląd gdy:
 	</text>
-	<combo_box label="" name="preview_base_anim" tool_tip="Przetestuj zachowanie animacji kiedy awatar wykonuje normalne czynności">
+	<combo_box name="preview_base_anim" tool_tip="Przetestuj zachowanie animacji kiedy awatar wykonuje normalne czynności">
 		<item label="Stoisz" name="Standing" value="Stoisz"/>
 		<item label="Chodzisz" name="Walking" value="Chodzisz"/>
 		<item label="Siedzisz" name="Sitting" value="Siedzisz"/>
 		<item label="Latasz" name="Flying" value="Latasz"/>
 	</combo_box>
-	<spinner label="Złagodzić w (sekund)" name="ease_in_time" tool_tip="Ilość Czasu (w sekundach), w których animacje mieszają się"/>
-	<spinner label="Złagodzić na zewnątrz (sekund)" name="ease_out_time" tool_tip="Ilość Czasu (w sekundach), w których animacje oddzielają się"/>
-	<button label="" name="play_btn" tool_tip="Odtwarzaj animację"/>
-	<button name="pause_btn" tool_tip="Zatrzymaj animację"/>
-	<button label="" name="stop_btn" tool_tip="Zakończ odtwarzanie animacji"/>
-	<slider label="" name="playback_slider"/>
+	<spinner label="Łagodź wej. (sek)" name="ease_in_time" tool_tip="Ilość czasu (w sekundach), po których animacje mieszają się"/>
+	<spinner label="Łagodź wyj. (sek)" name="ease_out_time" tool_tip="Ilość czasu (w sekundach), po których animacje oddzielają się"/>
+	<button name="play_btn" tool_tip="Odtwarzaj animację"/>
+	<button name="pause_btn" tool_tip="Pauzuj animację"/>
+	<button name="stop_btn" tool_tip="Zakończ odtwarzanie"/>
 	<text name="bad_animation_text">
-		Brak możliwości wczytania pliku animacji.
-
+		Nie można wczytać pliku animacji.
 Doradzamy eksport plików BVH z Poser 4.
 	</text>
+	<button label="Przeładuj plik" name="reload_btn" />
 	<button label="Załaduj ([AMOUNT]L$)" name="ok_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>

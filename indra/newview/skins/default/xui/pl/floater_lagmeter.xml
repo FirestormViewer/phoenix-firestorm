@@ -3,23 +3,8 @@
 	<floater.string name="max_title_msg">
 		Pomiar lagów
 	</floater.string>
-	<floater.string name="max_width_px">
-		360
-	</floater.string>
-	<floater.string name="min_title_msg">
-		Lag
-	</floater.string>
-	<floater.string name="min_width_px">
-		90
-	</floater.string>
 	<floater.string name="client_text_msg">
 		Klient
-	</floater.string>
-	<floater.string name="client_frame_rate_critical_fps">
-		10
-	</floater.string>
-	<floater.string name="client_frame_rate_warning_fps">
-		15
 	</floater.string>
 	<floater.string name="client_frame_time_window_bg_msg">
 		W normie, okno w tle
@@ -34,10 +19,10 @@
 		W normie
 	</floater.string>
 	<floater.string name="client_draw_distance_cause_msg">
-		Przyczyna: dystans rysowania jest za wysoki
+		Przyczyna: pole widzenia jest zbyt duże
 	</floater.string>
 	<floater.string name="client_texture_loading_cause_msg">
-		Przyczyna: ładowanie obrazu
+		Przyczyna: ładowanie obrazów
 	</floater.string>
 	<floater.string name="client_texture_memory_cause_msg">
 		Przyczyna: za dużo obrazów w pamięci
@@ -48,12 +33,6 @@
 	<floater.string name="network_text_msg">
 		Sieć
 	</floater.string>
-	<floater.string name="network_packet_loss_critical_pct">
-		10
-	</floater.string>
-	<floater.string name="network_packet_loss_warning_pct">
-		5
-	</floater.string>
 	<floater.string name="network_packet_loss_critical_msg">
 		Utrata pakietów przekracza [NETWORK_PACKET_LOSS_CRITICAL]%
 	</floater.string>
@@ -62,12 +41,6 @@
 	</floater.string>
 	<floater.string name="network_performance_normal_msg">
 		W normie
-	</floater.string>
-	<floater.string name="network_ping_critical_ms">
-		600
-	</floater.string>
-	<floater.string name="network_ping_warning_ms">
-		300
 	</floater.string>
 	<floater.string name="network_ping_critical_msg">
 		Fatalny ping - [NETWORK_PING_CRITICAL] ms
@@ -83,15 +56,6 @@
 	</floater.string>
 	<floater.string name="server_text_msg">
 		Serwer
-	</floater.string>
-	<floater.string name="server_frame_rate_critical_fps">
-		20
-	</floater.string>
-	<floater.string name="server_frame_rate_warning_fps">
-		30
-	</floater.string>
-	<floater.string name="server_single_process_max_time_ms">
-		20
 	</floater.string>
 	<floater.string name="server_frame_time_critical_msg">
 		Ilość klatek na sekundę poniżej [SERVER_FRAME_RATE_CRITICAL]
@@ -109,7 +73,7 @@
 		Przyczyna: za dużo obieków skryptowanych
 	</floater.string>
 	<floater.string name="server_net_cause_msg">
-		Przyczyna: za duży ruch w sieci
+		Przyczyna: za duży ruch sieciowy
 	</floater.string>
 	<floater.string name="server_agent_cause_msg">
 		Przyczyna: za dużo poruszających się awatarów w regionie
@@ -118,34 +82,28 @@
 		Przyczyna: za dużo kalkulacji obrazu
 	</floater.string>
 	<floater.string name="server_generic_cause_msg">
-		Przyczyna: symulator ładuje się zbyt powoli
+		Przyczyna: obciążenie symulatora zbyt wysokie
 	</floater.string>
-	<floater.string name="smaller_label">
-		&gt;&gt;
-	</floater.string>
-	<floater.string name="bigger_label">
-		&lt;&lt;
-	</floater.string>
-	<button label="" label_selected="" name="client_lagmeter" tool_tip="Status lagów klienta"/>
+	<button name="client_lagmeter" tool_tip="Status lagów klienta"/>
 	<text name="client">
 		Klient
 	</text>
 	<text name="client_text">
 		W normie
 	</text>
-	<button label="" label_selected="" name="network_lagmeter" tool_tip="Network lag status"/>
+	<button name="network_lagmeter" tool_tip="Status lagów sieci"/>
 	<text name="network">
 		Sieć
 	</text>
 	<text name="network_text">
 		W normie
 	</text>
-	<button label="" label_selected="" name="server_lagmeter" tool_tip="Server lag status"/>
+	<button name="server_lagmeter" tool_tip="Status lagów serwera"/>
 	<text name="server">
 		Serwer
 	</text>
 	<text name="server_text">
 		W normie
 	</text>
-	<button label="&gt;&gt;" name="minimize" tool_tip="Złącz rozmiar pliku xml"/>
+	<button name="minimize" tool_tip="Zmień rozmiar miernika lagów"/>
 </floater>

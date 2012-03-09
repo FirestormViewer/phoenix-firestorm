@@ -56,6 +56,8 @@
 		<menu_item_check label="Zestawy kontaktów" name="Contact Sets"/>
 		<menu_item_call label="Grupy" name="My Groups"/>
 		<menu_item_check label="Czat lokalny..." name="Nearby Chat"/>
+		<menu_item_check label="Ludzie" name="People"/>
+		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
 		<menu_item_check label="Filtry głosowe" name="ShowVoice"/>
@@ -108,6 +110,7 @@
 				</menu>
 		</menu>
 		<menu_item_call label="Przeszukiwanie obszaru" name="area_search"/>
+		<menu_item_check label="Eksplorator dźwięków" name="Sound Explorer"/>
 		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="Asset Blacklist"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">

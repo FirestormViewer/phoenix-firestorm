@@ -101,14 +101,8 @@ wspiera [AMOUNT2] obiektów
 	<floater.string name="sold_without_objects">
 		obiekty nie są zawarte w sprzedaży
 	</floater.string>
-	<floater.string name="info_price_string">
-		L$ [PRICE]
-(L$ [PRICE_PER_SQM]/m²)
-[SOLD_WITH_OBJECTS]
-	</floater.string>
 	<floater.string name="insufficient_land_credits">
-		Grupa [GROUP] musi mieć wystarczający kredyt na
-używanie Posiadłości żeby sfinalizować ten zakup.
+		Grupa [GROUP] musi mieć wystarczający kredyt na używanie Posiadłości żeby sfinalizować ten zakup.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
 		Masz [AMOUNT]L$ co wystarcza na zakup tej Posiadłości.
@@ -123,11 +117,8 @@ używanie Posiadłości żeby sfinalizować ten zakup.
 		Musisz dokupić [AMOUNT]L$ żeby kupić tą Posiadłość.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
-		(Posiadłość nie została wybrana)
+		(niczego nie wybrano)
 	</floater.string>
-	<text name="region_name_label">
-		Region:
-	</text>
 	<text name="region_name_text">
 		(brak danych)
 	</text>
@@ -144,7 +135,7 @@ używanie Posiadłości żeby sfinalizować ten zakup.
 		(brak danych)
 	</text>
 	<text name="estate_owner_label">
-		Właściciel Majątku:
+		Właśc. Majątku:
 	</text>
 	<text name="estate_owner_text">
 		(brak danych)
@@ -165,22 +156,16 @@ używanie Posiadłości żeby sfinalizować ten zakup.
 		Ładowanie...
 	</text_editor>
 	<check_box label="Zgadzam się na Powyższą Umowę." name="agree_covenant"/>
-	<text name="info_parcel_label" width="60">
+	<text name="info_parcel_label">
 		Posiadłość:
-	</text>
-	<text left_delta="62" name="info_parcel">
-		Scotopteryx 138,204
 	</text>
 	<text name="info_size_label">
 		Obszar:
 	</text>
-	<text left_delta="62" name="info_size">
-		1024 m²
-	</text>
 	<text name="info_price_label">
 		Cena:
 	</text>
-	<text left_delta="62" name="info_price">
+	<text name="info_price">
 		L$ 1500
 (L$ 1.1/m²)
 sprzedaż z obiektami
@@ -204,29 +189,26 @@ sprzedaż z obiektami
 		<combo_box.item label="US$6.00/miesięcznie, naliczane rocznie" name="US$6.00/month,billedannually"/>
 	</combo_box>
 	<text name="land_use_action">
-		Zwiększ opłatę za używanie Posiadłości do 40US$/miesiąc.
+		Zwiększ opłatę za używanie Posiadłości do 40 US$/miesiąc.
 	</text>
 	<text name="land_use_reason">
-		Jesteś właścicielem  1309 m² ziemi. 
+		Jesteś właścicielem 1309 m² ziemi. 
 Posiadłość ta zawiera 512 m² ziemi.
 	</text>
 	<text name="purchase_action">
-		Pay Joe Resident L$ 4000 for the land
+		Zapłać Joe Resident 4000 L$ za posiadłość
 	</text>
 	<text name="currency_reason">
-		You have L$ 2,100.
+		Masz 2,100 L$.
 	</text>
 	<text name="currency_action">
 		Kup więcej L$
 	</text>
-	<line_editor name="currency_amt">
-		1000
-	</line_editor>
 	<text name="currency_est">
 		za [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Masz 2,100L$.
+		Masz 2,100 L$.
 	</text>
 	<check_box label="Usuń [AMOUNT] m² z kontrybucji w grupie." name="remove_contribution"/>
 	<button label="Zakup" name="buy_btn"/>

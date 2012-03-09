@@ -389,7 +389,7 @@
 			<spinner label="Siła Y" name="FlexForceY"/>
 			<spinner label="Siła Z" name="FlexForceZ"/>
 			<check_box label="Światło" name="Light Checkbox Ctrl" tool_tip="Sprawia, że obiekt emituje światło"/>
-			<color_swatch label="" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+			<color_swatch name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
 			<texture_picker name="light texture control" tool_tip="Kliknij, aby wybrać obraz (efekt występuje tylko z aktywowanym opóźnionym renderowaniem)"/>
 			<spinner label="Natężenie" name="Light Intensity"/>
 			<spinner label="Pole widzenia" name="Light FOV"/>
@@ -424,7 +424,7 @@
 			</panel.string>
 			<texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz"/>
 			<color_swatch label="Kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
-			<text left="170" name="color trans">
+			<text name="color trans">
 				Przezroczystość %
 			</text>
 			<text name="glow label">

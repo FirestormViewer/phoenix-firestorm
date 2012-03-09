@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="Główne Obiekty">
+<floater name="top_objects" title="Szczytowe Obiekty">
 	<floater.string name="top_scripts_title">
 		Główne skrypty
 	</floater.string>
 	<floater.string name="top_scripts_text">
-		[COUNT] skryptów działa w czasie [TIME] ms
+		[COUNT] skryptów zabiera w sumie [TIME] ms
 	</floater.string>
 	<floater.string name="scripts_score_label">
 		Czas
@@ -34,7 +34,7 @@
 		<scroll_list.columns label="Miejsce" name="location"/>
 		<scroll_list.columns label="Czas" name="time"/>
 		<scroll_list.columns label="Czas Mono" name="mono_time"/>
-		<scroll_list.columns label="URL" name="URLs"/>
+		<scroll_list.columns label="URLe" name="URLs"/>
 	</scroll_list>
 	<text name="id_text">
 		ID obiektu:
@@ -47,10 +47,11 @@
 	<text name="owner_name_text">
 		Właściciel:
 	</text>
-	<button label="Filter" name="filter_owner_btn"/>
+	<button label="Filtruj" name="filter_owner_btn"/>
 	<button label="Odśwież" name="refresh_btn"/>
 	<button label="Zwróć wybrane" name="return_selected_btn"/>
 	<button label="Zwróć wszystko" name="return_all_btn"/>
+	<button label="Teleportuj do" name="teleport_to_btn"/>
 	<button label="Dezaktywuj wybrane" name="disable_selected_btn"/>
 	<button label="Dezaktywuj wszystko" name="disable_all_btn"/>
 </floater>

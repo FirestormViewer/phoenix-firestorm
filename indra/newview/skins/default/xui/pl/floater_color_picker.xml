@@ -19,7 +19,6 @@
 		Luminacja:
 	</text>
 	<check_box label="Zastosuj teraz" name="apply_immediate"/>
-	<button label="" label_selected="" name="color_pipette"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
 	<text name="Current color:">

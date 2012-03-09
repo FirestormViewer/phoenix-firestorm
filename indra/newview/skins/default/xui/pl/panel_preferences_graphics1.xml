@@ -78,7 +78,7 @@
 				</text>
 				<check_box label="Upraszczaj oddalone awatary" name="AvatarImpostors"/>
 				<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
-				<check_box initial_value="true" label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
+				<check_box label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
 				<text name="TerrainDetailText">
 					Szczegóły terenu:
 				</text>

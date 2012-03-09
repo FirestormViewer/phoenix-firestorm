@@ -36,7 +36,7 @@
 		<combo_box.item label="Ostatnie miejsce" name="MyLastLocation" tool_tip="Domyślnie loguj mnie w ostatnio odwiedzonym miejscu."/>
 		<combo_box.item label="Mój Start" name="MyHome" tool_tip="Domyślnie loguj mnie w moim Miejscu Startu."/>
 	</combo_box>
-	<check_box initial_value="true" label="Pokaż na ekranie logowania" name="show_location_checkbox"/>
+	<check_box label="Pokaż na ekranie logowania" name="show_location_checkbox"/>
 	<text name="name_tags_textbox">
 		Imiona:
 	</text>

@@ -11,9 +11,6 @@
 			<text name="info_size_label">
 				Rozmiar:
 			</text>
-			<text name="info_size">
-				[AREA] m²
-			</text>
 			<text name="info_action">
 				Aby sprzedać tą posiadłość:
 			</text>
@@ -23,14 +20,8 @@
 			<text name="price_text">
 				Wybierz właściwą cenę za tą posiadłość.
 			</text>
-			<text name="price_ld">
-				L$
-			</text>
-			<line_editor name="price">
-				0
-			</line_editor>
 			<text name="price_per_m">
-				(L$[PER_METER] za m²)
+				([PER_METER]L$ za m²)
 			</text>
 			<text name="sell_to_label">
 				2. Sprzedaj posiadłość:
@@ -45,7 +36,7 @@
 			</combo_box>
 			<button label="Wybierz" name="sell_to_select_agent"/>
 			<text name="sell_objects_label" font="SansSerifSmall">
-				3. Obiekty sprzedawane razem z posiadłością?
+				3. Sprzedać obiekty razem z posiadłością?
 			</text>
 			<text name="sell_objects_text">
 				Przekazywalne obiekty właściciela posiadłości zmienią właściciela.
@@ -54,7 +45,7 @@
 				<radio_item label="Nie, zatrzymaj obiekty" name="no"/>
 				<radio_item label="Tak, sprzedaj obiekty razem z posiadłością" name="yes"/>
 			</radio_group>
-			<button label="Pokaż Obiekty" name="show_objects"/>
+			<button label="Pokaż obiekty" name="show_objects"/>
 			<text name="nag_message_label">
 				PAMIĘTAJ: Sprzedaż jest nieodwracalna.
 			</text>
