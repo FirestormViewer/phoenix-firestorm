@@ -558,7 +558,7 @@ bool LLGLManager::initGL()
 
 	mGLVersion = mDriverVersionMajor + mDriverVersionMinor * .1f;
 
-	if (mGLVersion >= 3.f && LLImageGL::sCompressTextures)
+	if (mGLVersion >= 2.1f && LLImageGL::sCompressTextures)
 	{ //use texture compression
 		glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
 	}
