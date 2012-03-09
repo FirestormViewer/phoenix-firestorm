@@ -9331,6 +9331,13 @@ void toggleWebBrowser(const LLSD& sdParam)
 }
 // </FS:Ansariel> For web browser toolbar button
 
+// <FS:Ansariel> Toggle debug settings floater
+void toggleSettingsDebug()
+{
+	LLFloaterReg::toggleInstance("settings_debug", "all");
+}
+// </FS:Ansariel> Toggle debug settings floater
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -9850,4 +9857,6 @@ void initialize_menus()
 
 	// <FS:Ansariel> Toggle internal web browser
 	commit.add("ToggleWebBrowser", boost::bind(&toggleWebBrowser, _2));
+	// <FS:Ansariel> Toggle debug settings floater
+	commit.add("ToggleSettingsDebug", boost::bind(&toggleSettingsDebug));
 }

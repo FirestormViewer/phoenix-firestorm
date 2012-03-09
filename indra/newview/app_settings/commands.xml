@@ -313,4 +313,14 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="area_search"
            />
+
+  <command name="settings_debug"
+           available_in_toybox="true"
+           icon="settings_debug"
+           label_ref="Command_Settings_Debug_Label"
+           tooltip_ref="Command_Settings_Debug_Tooltip"
+           execute_function="ToggleSettingsDebug"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="settings_debug"
+           />
 </commands>
