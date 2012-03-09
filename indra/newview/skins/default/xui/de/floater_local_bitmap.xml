@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="local_bitmap_browser_floater" title="LOKALER BITMAP-BROWSER">
+	<scroll_list name="bitmap_list">
+		<column name="bitmap_name" label="Name"/>
+	</scroll_list>
+	<button name="add_btn" label="Hinzufügen"/>
+	<button name="del_btn" label="Entfernen"/>
+	<button name="upload_btn" label="Hochladen"/>
+	<texture_picker label="Vorschau" name="texture_view"/>
+	<check_box label="Auto-Update als:" name="keep_updating_checkbox" tool_tip="Periodisch prüfen, ob sich das Bitmap auf der lokalen Festplatte geändert hat."/>
+	<combo_box name="type_combobox" left_delta="115" width="95">
+		<combo_item name="type_texture">Textur</combo_item>
+		<combo_item name="type_sculptie">Gestaltetes Prim (Sculptie)</combo_item>
+		<combo_item name="type_layer">Avatar-Layer</combo_item>
+	</combo_box>
+	<text name="time_caption_text" width="90" left_delta="-113">
+		Letzt. Update:
+	</text>
+	<text name="time_text" left_delta="80">
+		(Datum)
+	</text>
+	<text name="link_text" left_delta="35">
+		(Status)
+	</text>
+	<text name="link_caption_text" width="110">
+		Status Verknüpfung:
+	</text>
+	<text name="uuid_caption_text">
+		Lokale UUID:
+	</text>
+	<text name="path_caption_text">
+		Lokaler Pfad:
+	</text>
+</floater>

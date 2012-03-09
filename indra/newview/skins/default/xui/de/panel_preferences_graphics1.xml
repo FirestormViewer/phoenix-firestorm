@@ -104,7 +104,11 @@
 	<panel label="Hardware" name="Hardware Settings">
 		<check_box label="Anisotropische Filterung (langsamer, wenn aktiviert)" name="ani"/>
 		<check_box label="OpenGL Vertex-Buffer-Objekte aktivieren" name="vbo" tool_tip="Wenn Sie über moderne Grafikhardware verfügen, können Sie durch Aktivieren dieser Option die Geschwindigkeit verbessern.  Bei alter Hardware sind die VBO oft schlecht implementiert, was zu Abstürzen führen kann, wenn diese Option aktiviert ist."/>
-        <check_box label="Gestreamte VBOs aktivieren" name="vbo_stream" tool_tip="Deaktivieren kann die Performanz verbessern, wenn VBOs aktiviert sind, insbesondere auf diversen AMD-GPUs."/>
+		<check_box label="Gestreamte VBOs aktivieren" name="vbo_stream" tool_tip="Deaktivieren kann die Performanz verbessern, wenn VBOs aktiviert sind, insbesondere auf diversen AMD-GPUs."/>
+		<text name="tc label">
+			S3TC Aktivieren:
+		</text>
+		<check_box label="Textur-Komprimierung aktivieren (Erfordert Neustart)" name="texture compression" tool_tip="Komprimiert Texturen im Videospeicher und erlaubt dadurch eine höhrere Auflösung und/oder Laden von mehr Texturen auf Kosten der Textqualität."/>
 		<text name="Antialiasing:">
 			Antialiasing:
 		</text>
