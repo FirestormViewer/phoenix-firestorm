@@ -142,6 +142,7 @@ public:
 
 		
 		Optional<S32>			header_height,
+								label_v_padding,	// <FS:Zi> Make vertical label padding a per-skin option
 								legacy_header_height; // HACK see initFromXML()
 
 		// Images for top-right controls
@@ -451,6 +452,7 @@ private:
 	std::string		mInstanceName;		// Store the instance name so we can remove ourselves from the list
 	
 	BOOL			mDropShadow;		// ## Zi: Optional Drop Shadows
+	S32				mLabelVPadding;	// <FS:Zi> Make vertical label padding a per-skin option
 	BOOL			mCanTearOff;
 	BOOL			mCanMinimize;
 	BOOL			mCanClose;

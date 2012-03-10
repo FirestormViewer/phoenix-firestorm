@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="nearby_media">
 	<string name="media_item_count_format">
-		(%ld media items)
+		(%ld pozycji mediów)
 	</string>
 	<string name="empty_item_text">
-		&lt;empty&gt;
+		&lt;pusto&gt;
 	</string>
 	<string name="parcel_media_name">
 		Strumień mediów posiadłości
@@ -18,9 +18,8 @@
 	<panel name="minimized_controls">
 		<button label="Zatrzymaj" name="all_nearby_media_disable_btn" tool_tip="Wyłącz wszystkie media w pobliżu"/>
 		<button label="Włącz" name="all_nearby_media_enable_btn" tool_tip="Włącz wszystkie media w pobliżu"/>
-		<button name="open_prefs_btn" tool_tip="Uruchom preferencje medialne"/>
+		<button name="open_prefs_btn" tool_tip="Uruchom preferencje mediów"/>
 		<button label="Więcej &gt;&gt;" label_selected="&lt;&lt; Mniej" name="more_btn" tool_tip="Zaawansowane"/>
-		<button label="Więcej &gt;&gt;" label_selected="Mniej &lt;&lt;" name="less_btn" tool_tip="Zaawansowane"/>
 	</panel>
 	<panel name="nearby_media_panel">
 		<text name="nearby_media_title">
@@ -36,7 +35,7 @@
 			<combo_box.item label="Na innych awatarach" name="OnOthers"/>
 		</combo_box>
 		<scroll_list name="media_list">
-			<scroll_list.columns label="Dokładność" name="media_proximity"/>
+			<scroll_list.columns label="Bliskość" name="media_proximity"/>
 			<scroll_list.columns label="Widoczność" name="media_visibility"/>
 			<scroll_list.columns label="Klasa" name="media_class"/>
 			<scroll_list.columns label="Nazwa" name="media_name"/>
@@ -51,10 +50,10 @@
 					<button name="play_btn" tool_tip="Włącz wybrane media"/>
 				</layout_panel>
 				<layout_panel name="pause">
-					<button name="pause_btn" tool_tip="Zatrzymaj wybrane media"/>
+					<button name="pause_btn" tool_tip="Pauzuj wybrane media"/>
 				</layout_panel>
 				<layout_panel name="volume_slider_ctrl">
-					<slider_bar initial_value="0.5" name="volume_slider" tool_tip="Głośność audio dla wybranych mediów"/>
+					<slider_bar name="volume_slider" tool_tip="Głośność audio dla wybranych mediów"/>
 				</layout_panel>
 				<layout_panel name="mute">
 					<button name="mute_btn" tool_tip="Wycisz audio wybranych mediów"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Rzeczy" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Dostarczanie [ITEM_COUNT] obiektów... [FILTER]
+		Pobieranie [ITEM_COUNT] obiektów... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
 		[ITEM_COUNT] obiekty [FILTER]
@@ -9,20 +9,48 @@
 	<text name="ItemcountText">
 		Obiekty:
 	</text>
-	<filter_editor label="Filtr" name="inventory search editor"/>
+	<filter_editor label="Filtr" name="inventory search editor" tool_tip="Wpisz jedno lub więcej słów które chcesz wyszukać, oddzielonych za pomocą '+' "/>
+	<button name="collapse_btn" label="Zwiń"/>
+	<button name="expand_btn" label="Rozwiń" />
+	<text name="filter_label" value="Filtruj:"/>
+	<combo_box name="filter_combo_box">
+		<combo_box.item value="filter_type_all" label="Wszystkie typy" />
+		<combo_box.item value="filter_type_animations" label="Animacje" />
+		<combo_box.item value="filter_type_calling_cards" label="Wizytówki" />
+		<combo_box.item value="filter_type_clothing" label="Ubrania / części ciała" />
+		<combo_box.item value="filter_type_gestures" label="Gesty" />
+		<combo_box.item value="filter_type_landmarks" label="Landmarki" />
+		<combo_box.item value="filter_type_notecards" label="Noty" />
+		<combo_box.item value="filter_type_objects" label="Obiekty" />
+		<combo_box.item value="filter_type_scripts" label="Skrypty" />
+		<combo_box.item value="filter_type_sounds" label="Dźwięki" />
+		<combo_box.item value="filter_type_textures" label="Tekstury" />
+		<combo_box.item value="filter_type_snapshots" label="Zdjęcia" />
+		<combo_box.item value="filter_type_meshes" label="Mesze" />
+		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
+	</combo_box>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="Wszystkie obiekty" name="All Items"/>
-		<recent_inventory_panel label="Ostatnio dodane obiekty" name="Recent Items"/>
+		<inventory_panel label="WSZYSTKIE" name="All Items"/>
+		<recent_inventory_panel label="OSTATNIE" name="Recent Items"/>
+		<worn_inventory_panel label="ZAŁOŻONE" name="Worn Items"/>
 	</tab_container>
-	<layout_stack name="bottom_panel">
-		<layout_panel name="options_gear_btn_panel">
-			<button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
-		</layout_panel>
-		<layout_panel name="add_btn_panel">
+	<panel name="bottom_panel">
+		<panel name="options_gear_btn_panel">
+			<menu_button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
+		</panel>
+		<panel name="add_btn_panel">
 			<button name="add_btn" tool_tip="Dodaj nowy obiekt"/>
-		</layout_panel>
-		<layout_panel name="trash_btn_panel">
+		</panel>
+		<panel name="new_inventory_panel">
+			<button name="new_inv_btn" tool_tip="Otwórz dodatkowe okno Szafy"/>
+		</panel>
+		<panel name="dummy_panel">
+			<text name="ItemcountText">
+				Obiekty
+			</text>
+		</panel>
+		<panel name="trash_btn_panel">
 			<dnd_button name="trash_btn" tool_tip="Usuń zaznaczony obiekt"/>
-		</layout_panel>
-	</layout_stack>
+		</panel>
+	</panel>
 </panel>

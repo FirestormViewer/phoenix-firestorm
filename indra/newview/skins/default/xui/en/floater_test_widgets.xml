@@ -188,6 +188,7 @@
    left_delta="0"
    name="test_progress_bar"
    top_pad="30"
+   control_name="NearbyToastWidth"
    tool_tip="progress bar"
    width="200" />
   <!-- "stat_view" is a container for statistics graphs.  It is only used

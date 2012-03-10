@@ -7925,6 +7925,19 @@ You must authenticate [APP_NAME] before you can upload images to Flickr. Please 
    <tag>confirm</tag>
 </notification>
 
+   <notification
+	name="ModeChange"
+	label=""
+	type="alertmodal">
+    <unique/>
+Changing modes requires you to quit and restart.
+    <tag>confirm</tag>
+    <usetemplate
+   name="okcancelbuttons"
+   yestext="Quit"
+   notext="Don't Quit"/>
+    </notification>
+
   <notification
 
  name="NoClassifieds"

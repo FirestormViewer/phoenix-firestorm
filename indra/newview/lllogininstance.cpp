@@ -561,7 +561,15 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 
 	//send this info to login.cgi for stats gathering 
 	//since viewerstats isn't reliable enough
-	requested_options.append("advanced-mode");
+	if (gSavedSettings.getString("SessionSettingsFile").empty())
+	{
+		requested_options.append("advanced-mode");
+	}
+	else
+	{
+		requested_options.append("basic-mode");
+		//requested_options.append("inventory-basic");
+	}
 
 #endif
 	requested_options.append("max-agent-groups");	

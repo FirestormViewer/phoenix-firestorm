@@ -68,7 +68,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>firestorm</string>
+    <string>vintage</string>
   </map>
 
   <key>SkinCurrentTheme</key>
@@ -80,7 +80,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>grey</string>
+    <string>classic</string>
   </map>
 
   <key>LetterKeysFocusChatBar</key>
@@ -98,7 +98,7 @@
   <key>FSColorClienttags</key>
   <map>
     <key>Comment</key>
-    <string>Color Clienttags by: 0=Off, 1=Single color per Viewer, 2=Userdefinied color (one color per UUID), 3=New Tagsystem Color </string>
+    <string>Color Client tags by: 0=Off, 1=Single color per Viewer, 2=User defined color (one color per UUID), 3=New Tagsystem Color </string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

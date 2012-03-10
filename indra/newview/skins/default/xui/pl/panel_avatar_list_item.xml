@@ -7,7 +7,7 @@
 		[COUNT]m
 	</string>
 	<string name="FormatHours">
-		[COUNT]h
+		[COUNT]g
 	</string>
 	<string name="FormatDays">
 		[COUNT]d
@@ -22,9 +22,11 @@
 		[COUNT]lat
 	</string>
 	<text name="avatar_name" value="(ładowanie)"/>
+	<icon name="payment_info" tool_tip="Dane płatnicze na koncie"/> 
 	<icon name="permission_edit_theirs_icon" tool_tip="Możesz edytować obiekty tego Znajomego"/>
-	<icon name="permission_edit_mine_icon" tool_tip="Ten Znajomy może edytować, kasować lub wziąć Twoje obiekty"/>
-	<icon name="permission_map_icon" tool_tip="Ten Znajomy może zlokalizować Ciebie na mapie"/>
-	<icon name="permission_online_icon" tool_tip="Ten Znajomy widzi Ciebie kiedy jesteś obecny/obecna w SL"/>
+	<button name="permission_edit_mine_btn" tool_tip="Ten Znajomy może edytować, kasować lub wziąć Twoje obiekty"/>
+	<button name="permission_map_btn" tool_tip="Ten Znajomy może zlokalizować Cię na mapie"/>
+	<button name="permission_online_btn" tool_tip="Ten Znajomy widzi Ciebie kiedy jesteś obecny/a w SL"/>
+	<slider name="volume_slider" tool_tip="Siła głosu"/>
 	<button name="profile_btn" tool_tip="Zobacz profil"/>
 </panel>

@@ -4,7 +4,7 @@
 		&apos;[TEXT]&apos; nie zostało odnalezione
 	</floater.string>
 	<floater.string name="no_one_near">
-		Nie ma nikogo w pobliżu
+		Nikogo w pobliżu
 	</floater.string>
 	<floater.string name="no_results">
 		Brak wyników
@@ -12,7 +12,7 @@
 	<floater.string name="searching">
 		Wyszukiwanie...
 	</floater.string>
-	<string label="Wybierz" label_selected="Wybierz" name="Select">
+	<string name="Select">
 		Wybierz
 	</string>
 	<string name="Close">
@@ -42,7 +42,6 @@
 			<text name="meters">
 				Metry
 			</text>
-			<button label="Odśwież" label_selected="Odśwież" name="Refresh"/>
 			<scroll_list name="NearMe">
 				<columns label="Imię" name="name"/>
 				<columns label="Nazwa użytkownika" name="username"/>
@@ -50,5 +49,5 @@
 		</panel>
 	</tab_container>
 	<button label="OK" label_selected="OK" name="ok_btn"/>
-	<button label="Cofnij" label_selected="Cofnij" name="cancel_btn"/>
+	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 </floater>

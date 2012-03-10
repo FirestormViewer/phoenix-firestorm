@@ -825,6 +825,28 @@
          type="string"
          length="1"
          follows="left|top"
+         height="16"
+         layout="topleft"
+         left="10"
+         name="tc label"
+         top_pad="10"
+         width="188">
+         Enable S3TC:
+        </text>
+        <check_box
+         control_name="RenderCompressTextures"
+         height="16"
+         initial_value="true"
+         label="Enable Texture Compression (requires restart)"
+         layout="topleft"
+         left_pad="10"
+         name="texture compression"
+         tool_tip="Compresses textures in video memory, allowing for higher resolution textures and/or more textures to be loaded at the cost of some color quality."
+         width="315" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
          height="12"
          layout="topleft"
          left="10"

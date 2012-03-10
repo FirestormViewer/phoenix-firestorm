@@ -10,6 +10,6 @@
 	<menu_item_call label="Kopiuj URI" name="copy_uri_to_clipboard"/>
 	<menu_item_call label="Kopiuj UUID" name="copy_key_to_clipboard"/>
 	<menu_item_call label="Wyrzuć" name="kick"/>
-	<menu_item_call label="Zamroź" name="freeze"/>
-	<menu_item_call label="Odmroź" name="unfreeze"/>
+	<menu_item_call label="Unieruchom" name="freeze"/>
+	<menu_item_call label="Zezwól na ruch" name="unfreeze"/>
 </toggleable_menu>

@@ -191,11 +191,12 @@
              length="1"
              height="14"
              layout="topleft"
-             left_pad="-5"
+			 left="95"
+			 top="50"
              halign="left"
              name="image_quality_level"
              top_delta="0"
-             width="60">
+             width="115">
                ([QLVL])
             </text>
         </layout_panel>

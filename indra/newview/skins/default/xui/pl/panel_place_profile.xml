@@ -7,14 +7,12 @@
 	<string name="allocated" value="przydzielony"/>
 	<string name="title_place" value="Profil Miejsca"/>
 	<string name="title_teleport_history" value="Historia teleportacji"/>
-	<string name="not_available" value="(brak)"/>
+	<string name="not_available" value="(niedostępny)"/>
 	<string name="unknown" value="(nieznany)"/>
 	<string name="public" value="(publiczny)"/>
-	<string name="none_text" value="(żaden)"/>
-	<string name="sale_pending_text" value="(Sprzedaż w toku realizacji)"/>
+	<string name="none_text" value="(brak)"/>
+	<string name="sale_pending_text" value="(Sprzedaż w toku)"/>
 	<string name="group_owned_text" value="(Własność grupy)"/>
-	<string name="price_text" value="L$"/>
-	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="Każdemu"/>
 	<string name="group_text" value="Grupie"/>
 	<string name="can_resell">
@@ -38,9 +36,6 @@
 	<string name="server_forbidden_text">
 		Dostęp do informacji o tym miejscu jest ograniczony. Zweryfikuj swoje przywileje z właścicielem posiadłości.
 	</string>
-	<string name="acquired_date">
-		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
-	</string>
 	<button name="back_btn" tool_tip="Cofnij"/>
 	<text name="title" value="Profil Miejsca"/>
 	<scroll_container name="place_scroll">
@@ -51,10 +46,10 @@
 				<accordion_tab name="parcel_characteristics_tab" title="Posiadłość">
 					<panel name="parcel_characteristics_panel">
 						<text name="rating_label" value="Rodzaj:"/>
-						<text name="rating_value" value="nieznane"/>
-						<text name="voice_label" value="Komunikacja głosowa:"/>
-						<text name="voice_value" value="Włączone"/>
-						<text name="fly_label" value="Lataj:"/>
+						<text name="rating_value" value="nieznany"/>
+						<text name="voice_label" value="Kom. głosowa:"/>
+						<text name="voice_value" value="Włączona"/>
+						<text name="fly_label" value="Latanie:"/>
 						<text name="fly_value" value="Włączone"/>
 						<text name="push_label" value="Popchnięcia:"/>
 						<text name="push_value" value="Wyłączone"/>
@@ -62,25 +57,20 @@
 						<text name="build_value" value="Włączone"/>
 						<text name="scripts_label" value="Skrypty:"/>
 						<text name="scripts_value" value="Włączone"/>
-						<text name="damage_label" value="Zniszczenia:"/>
+						<text name="damage_label" value="Uszkodzenia:"/>
 						<text name="damage_value" value="Wyłączone"/>
+						<text name="see_avatars_label" value="Inne awatary:"/>
+						<text name="see_avatars_value" value="Wyłączone"/>
 						<button label="O Posiadłości" name="about_land_btn"/>
 					</panel>
 				</accordion_tab>
-				<accordion_tab name="region_information_tab" title="Region">
+				<accordion_tab name="region_information_tab">
 					<panel name="region_information_panel">
-						<text name="region_name_label" value="Region:"/>
-						<text name="region_name" value="Mooseland"/>
 						<text name="region_type_label" value="Typ:"/>
-						<text name="region_type" value="Moose"/>
 						<text name="region_rating_label" value="Rodzaj:"/>
 						<text name="region_rating" value="Adult"/>
 						<text name="region_owner_label" value="Właściciel:"/>
-						<text name="region_owner" value="moose Van Moose extra long name moose"/>
 						<text name="region_group_label" value="Grupa:"/>
-						<text name="region_group">
-							The Mighty Moose of mooseville soundvillemoose
-						</text>
 						<button label="Region/Majątek" name="region_info_btn"/>
 					</panel>
 				</accordion_tab>
@@ -89,19 +79,18 @@
 						<text name="estate_name_label" value="Majątek:"/>
 						<text name="estate_rating_label" value="Rodzaj:"/>
 						<text name="estate_owner_label" value="Właściciel:"/>
-						<text name="estate_owner" value="Testing owner name length with long name"/>
 						<text name="covenant_label" value="Umowa:"/>
 					</panel>
 				</accordion_tab>
 				<accordion_tab name="sales_tab" title="Na sprzedaż">
 					<panel name="sales_panel">
 						<text name="sales_price_label" value="Cena:"/>
-						<text name="area_label" value="Powierzchnia:"/>
+						<text name="area_label" value="Obszar:"/>
 						<text name="traffic_label" value="Ruch:"/>
 						<text name="primitives_label" value="Primy:"/>
 						<text name="parcel_scripts_label" value="Skrypty:"/>
-						<text name="terraform_limits_label" value="Ograniczenia terraformingu:"/>
-						<text name="subdivide_label" value="Podziel/Złącz:"/>
+						<text name="terraform_limits_label" value="Limity terraformingu:"/>
+						<text name="subdivide_label" value="Dzielenie/łączenie:"/>
 						<text name="resale_label" value="Możliwość sprzedaży:"/>
 						<text name="sale_to_label" value="Na sprzedaż:"/>
 					</panel>

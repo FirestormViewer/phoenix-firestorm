@@ -2,16 +2,16 @@
 <toggleable_menu name="Gear Menu">
 	<menu_item_call label="Zobacz profil" name="view_profile"/>
 	<menu_item_call label="Nowy znajomy" name="add_friend"/>
-	<menu_item_call label="IM" name="im"/>
+	<menu_item_call label="Wiadomość IM" name="im"/>
 	<menu_item_call label="Zadzwoń" name="call"/>
 	<menu_item_call label="Teleportuj" name="teleport"/>
 	<menu_item_call label="Zaproś do grupy" name="invite_to_group"/>
 	<menu_item_call label="Zablokuj" name="block"/>
 	<menu_item_call label="Odblokuj" name="unblock"/>
-	<menu_item_call label="Raport" name="report"/>
+	<menu_item_call label="Zgłoś" name="report"/>
 	<menu_item_call label="Unieruchom" name="freeze"/>
-	<menu_item_call label="Wyrzuć" name="eject"/>
-	<menu_item_call label="Kopnij" name="kick"/>
+	<menu_item_call label="Wyrzuć (parcela)" name="eject"/>
+	<menu_item_call label="Wyrzuć (majątek)" name="kick"/>
 	<menu_item_call label="CSR" name="csr"/>
 	<menu_item_call label="Debugowanie tekstur" name="debug"/>
 	<menu_item_call label="Znajdź na mapie" name="find_on_map"/>

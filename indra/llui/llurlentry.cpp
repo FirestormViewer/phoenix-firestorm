@@ -1223,7 +1223,7 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 //
 LLUrlEntryJira::LLUrlEntryJira()
 {
-	mPattern = boost::regex("((?:ECC|SH|SOCIAL|LEAP|DN|MISC|SNOW|LLSD|CTS|PYO|STORM|PLAT|ER|VWR|SVC|WEB|SEC|ARVD|OPEN|SCR|PHOE|FIRE|SPOT)-\\d+)",
+	mPattern = boost::regex("((?:ARVD|CHOP|CTS|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MAINT|MISC|OPEN|PATHBUG|PHOE|PLAT|PYO|SCR|SEC|SH|SINV|SNOW|SOCIAL|STORM|SVC|SPOT|VWR|WEB)-\\d+)",
 				boost::regex::perl|boost::regex::icase);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");

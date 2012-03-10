@@ -4947,8 +4947,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_View_Label">
 		Kamerasteuerungen
 	</string>
+<!-- Ansariel: Renamed for FS (FIRE-5019)
 	<string name="Command_Voice_Label">
 		Voice-Einstellungen
+	</string> -->
+	<string name="Command_Voice_Label">
+		Stimmen in der Nähe
 	</string>
 	<string name="Command_Quickprefs_Label">
 		Schnelleinstellungen
@@ -4964,6 +4968,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Areasearch_Label">
 		Umgebungssuche
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Debug-Einstellungen
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
@@ -5051,6 +5058,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Areasearch_Tooltip">
 		Umgebungssuche nach Objekten
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Konfigurationseinstellungen des Viewers ändern
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

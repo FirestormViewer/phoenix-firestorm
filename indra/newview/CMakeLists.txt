@@ -685,6 +685,7 @@ set(viewer_SOURCE_FILES
     utilitybar.cpp
     NACLantispam.cpp
 	NACLfloaterblacklist.cpp
+	NACLfloaterexploresounds.cpp
     )
 
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
@@ -1294,6 +1295,7 @@ set(viewer_HEADER_FILES
     kvfloaterflickrupload.h
     NACLantispam.h
 	NACLfloaterblacklist.h
+	NACLfloaterexploresounds.h
     )
 
 # AO Get our viewer version & channel at this point
@@ -1560,6 +1562,7 @@ set(viewer_APPSETTINGS_FILES
     app_settings/mid_graphics.xml
     app_settings/grids.fallback.xml
     app_settings/account_settings_phoenix.xml
+    app_settings/settings_firestorm.xml
     app_settings/settings_hybrid.xml
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml

@@ -99,9 +99,6 @@
 			</text>
 			<check_box name="FSConsoleClassicDrawMode" label="Używaj klasycznej konsoli" tool_tip="Ta opcja renderuje tło konsoli jako jeden duży blok pod wszystkimi liniami tekstu, o szerokości takiej jak najdłuższa z nich."/>
 			<check_box name="ChatFullWidth" label="Używaj pełnej szerokości ekranu"/>
-			<text name="requires_restart_label2">
-				(wymaga restartu)
-			</text>
 			<spinner label="Zanikanie po" name="fade_chat_time"/>
 			<text name="text_box4">
 				(sekundy)

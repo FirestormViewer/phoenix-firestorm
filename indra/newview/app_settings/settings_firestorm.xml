@@ -1,0 +1,278 @@
+<llsd>
+<map>
+
+    <key>ShowNetStats</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the Status Indicators for the Viewer and Network Usage in the Status Overlay.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+  <key>ShowNavbarNavigationPanel</key>
+  <map>
+    <key>Comment</key>
+    <string>Show/Hide Navigation Bar Navigation Panel</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>OnlineOfflinetoNearbyChat</key>
+    <map>
+      <key>Comment</key>
+      <string>Send online/offline notifications to Nearby Chat panel (v1-style behavior)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+    <key>ChatOnlineNotification</key>
+    <map>
+      <key>Comment</key>
+      <string>Provide notifications for when friend log on and off of SL</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+
+  <key>OpenSidePanelsInFloaters</key>
+  <map>
+    <key>Comment</key>
+    <string>Open Panels in Floaters</string>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <boolean>1</boolean>
+  </map>
+
+  <key>FSShowMouselookInstructions</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, instructions about leaving Mouseview are displayed.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>SkinCurrent</key>
+  <map>
+    <key>Comment</key>
+    <string>The currently selected skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>firestorm</string>
+  </map>
+
+  <key>SkinCurrentTheme</key>
+  <map>
+    <key>Comment</key>
+    <string>The selected theme for the current skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>grey</string>
+  </map>
+
+  <key>LetterKeysFocusChatBar</key>
+  <map>
+    <key>Comment</key>
+    <string>When printable characters keys (possibly with Shift held) are pressed, the chat bar takes focus</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSColorClienttags</key>
+  <map>
+    <key>Comment</key>
+    <string>Color Client tags by: 0=Off, 1=Single color per Viewer, 2=User defined color (one color per UUID), 3=New Tagsystem Color </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
+
+  <key>FSScriptDialogNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowRadarMinimap</key>
+  <map>
+    <key>Comment</key>
+    <string>Toggle visibility of the embedded minimap in the radar panel</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSUseNearbyChatConsole</key>
+  <map>
+    <key>Comment</key>
+    <string>Display popup chat embedded into the read-only world console (v1-style) instead of overlayed floaters (v2-style)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowScriptDialogsTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Show script llDialog floaters always in the top right corner of the screen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>EnableGroupChatPopups</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable Incoming Group Chat Popups</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>EnableIMChatPopups</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable Incoming IM Chat Popups</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>PlainTextChatHistory</key>
+  <map>
+    <key>Comment</key>
+    <string>Enable/Disable plain text chat history style</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowChatMiniIcons</key>
+  <map>
+    <key>Comment</key>
+    <string>Toggles the display of mini icons in chat history</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>ChatWindow</key>
+  <map>
+    <key>Comment</key>
+    <string>Show chat in multiple windows(by default) or in one multi-tabbed window(requires restart)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseWebProfiles</key>
+  <map>
+    <key>Comment</key>
+    <string>Shows web profiles instead of the v1-style profile floater</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSFolderViewItemHeight</key>
+  <map>
+    <key>Comment</key>
+    <string>Controls the height of folder items, for instance in inventory</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>18</integer>
+  </map>
+
+  <key>ShowGroupNoticesTopRight</key>
+  <map>
+    <key>Comment</key>
+    <string>Show group notifications to the top right corner of the screen.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSConsoleClassicDrawMode</key>
+  <map>
+    <key>Comment</key>
+    <string>Enables classic console draw mode (single background block over all lines with width of the longest line)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map> 
+</map>
+</llsd>

@@ -2,16 +2,12 @@
 <panel label="Auswahl" name="panel_picks">
 	<string name="no_picks" value="Keine Auswahl"/>
 	<string name="no_classifieds" value="Keine Anzeigen"/>
-	<accordion name="accordion">
-		<accordion_tab name="tab_picks" title="Auswahl"/>
-		<accordion_tab name="tab_classifieds" title="Anzeigen"/>
-	</accordion>
+	<tab_container name="accordion">
+		<panel name="tab_picks" title="Auswahl"/>
+		<panel name="tab_classifieds" title="Anzeigen"/>
+	</tab_container>
 	<panel label="bottom_panel" name="edit_panel">
-		<layout_stack name="edit_panel_ls">
-			<layout_panel name="gear_menu_btn">
-				<button name="new_btn" tool_tip="An aktuellem Standort neue Auswahl oder Anzeige erstellen"/>
-			</layout_panel>
-		</layout_stack>
+		<button name="new_btn" tool_tip="An aktuellem Standort neue Auswahl oder Anzeige erstellen"/>
 	</panel>
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">

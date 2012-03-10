@@ -7,7 +7,7 @@
     <pie_slice label="Nowa znajomość..." name="Add Friend"/>
     <pie_slice label="Zapłać..." name="Pay..."/>
     <pie_menu name="Avatar Pie More 1" label="Więcej >">
-        <pie_slice label="Zamroź" name="Freeze..."/>
+        <pie_slice label="Unieruchom" name="Freeze..."/>
         <pie_slice label="Daj wizytówkę" name="Add Calling Card"/>
         <pie_slice label="Zaproś do grupy" name="Group Invite..."/>
         <pie_slice label="Wyrzuć..." name="Eject..."/>

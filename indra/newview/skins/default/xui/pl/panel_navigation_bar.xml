@@ -4,15 +4,17 @@
 		<pull_button name="back_btn" tool_tip="Wróć do poprzedniej lokalizacji"/>
 		<pull_button name="forward_btn" tool_tip="Idź do następnej lokalizacji"/>
 		<button name="home_btn" tool_tip="Teleportuj do miejsca startu"/>
+		<button name="About_Land" label="Ziemia" tool_tip="Pokazuje okno informacyjne o Posiadłości"/>
+		<button name="Sky" label="Niebo" tool_tip="Pokazuje okno edytora nieba"/>
 		<location_input label="Lokalizacja" name="location_combo"/>
 		<search_combo_box label="Szukaj" name="search_combo_box" tool_tip="Szukaj">
-			<combo_editor label="Szukaj [CURRENT_GRID]" name="search_combo_editor"/>
+			<combo_editor label="Szukaj (MetaVerse)" name="search_combo_editor"/>
 		</search_combo_box>
 	</panel>
 	<favorites_bar name="favorite" tool_tip="Przeciągnij swoje landmarki tutaj by szybko dostać się do swoich ulubionych miejsc w Second Life!">
 		<label name="favorites_bar_label" tool_tip="Przeciągnij swoje landmarki tutaj by szybko dostać się do swoich ulubionych miejsc w Second Life!">
 			Pasek Ulubionych
 		</label>
-		<chevron_button name="&gt;&gt;" tool_tip="Pokaż więcej Moich Ulubionych"/>
+		<chevron_button name=">>" tool_tip="Pokaż więcej Moich Ulubionych"/>
 	</favorites_bar>
 </panel>

@@ -264,7 +264,8 @@ LLSD LLFloaterAbout::getInfo()
 
 
 	//[FIRE 3113 : SJ] Added Settingsfile to info
-	if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+	if (gSavedSettings.getString("SessionSettingsFile") == "settings_firestorm.xml") info["MODE"] = "Firestorm";
+	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
 	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_v3.xml") info["MODE"] = "V3";
 	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_hybrid.xml") info["MODE"] = "Hybrid";
 

@@ -6,7 +6,6 @@
 Pamiętaj, że opłaty za reklamy nie podlegają prawu zwrotu.
 	</text>
 	<spinner label="Cena: L$" name="price_for_listing" tool_tip="Cena za umieszczenie reklamy w wyszukiwarce."/>
-	<text name="l$_text" value="L$"/>
 	<button label="Publikuj" name="publish_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>

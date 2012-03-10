@@ -3119,6 +3119,10 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 			<button name="cancel" text="Cancelar"/>
 		</form>
 	</notification>
+	<notification name="ModeChange">
+		Cambiar entre los diferentes modos requiere que cierres y reinicies Firestorm.
+		<usetemplate name="okcancelbuttons" yestext="Cerrar" notext="No cerrar"/>
+	</notification>
 	<notification label="" name="NoClassifieds">
 		La creación y edición de clasificados sólo está disponible en el modo Avanzado. ¿Quieres salir y cambiar de modo? El selector de modo se encuentra en la pantalla de inicio de sesión.
 		<usetemplate name="okcancelbuttons" notext="No salir" yestext="Salir"/>

@@ -24,7 +24,6 @@ Placa gráfica: [GRAPHICS_CARD]
 	<floater.string name="AboutLibs">
 		Versão OpenGL: [OPENGL_VERSION]
 
-Viewer Skin: [SKIN] ([THEME])
 RestrainedLove API: [RLV_VERSION]
 Versão libcurl: [LIBCURL_VERSION]
 Versão J2C Decoder: [J2C_VERSION]

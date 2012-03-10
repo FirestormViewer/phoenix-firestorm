@@ -1585,9 +1585,128 @@
          name="usernamecolorswatch"
          tool_tip="Click to open color picker"/>
 
-        <slider
+        <check_box
          left="20"
          top_pad="10"
+         follows="left|top"
+         height="16"
+         width="250"
+         label="Color nametags based on distance"
+         name="FSTagShowDistanceColors"
+		 control_name="FSTagShowDistanceColors"
+         tool_tip="When checked, the tag color of other avatars show if they are in chat range, shout range or beyond shout range. This overrides viewer tag colors, but not friend or contact set colors." />
+		 
+        <check_box
+         left="260"
+         top_delta="0"
+         follows="left|top"
+         height="16"
+         width="200"
+         label="Show distance in tag"
+         name="FSTagShowDistance"
+		 control_name="FSTagShowDistance"
+         tool_tip="When checked, the tag of other avatars shows their distance, using the colors set below." />
+
+        <color_swatch
+         can_apply_immediately="true"
+         follows="left|top"
+         height="15"
+         label_height="0"
+         layout="topleft"
+         top_pad="5"
+         left="40"
+         name="NameTagChatDistanceColor_Color_Swatch"
+         width="15">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="NameTagChatDistanceColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="NameTagChatDistanceColor" />
+            <color_swatch.caption_text
+             height="0" />
+        </color_swatch>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_pad="5"
+         mouse_opaque="false"
+         name="NameTagChatDistanceColor_Label"
+         top_delta="3"
+         width="95">
+            Chat range
+        </text>
+        <color_swatch
+         can_apply_immediately="true"
+         follows="left|top"
+         height="15"
+         label_height="0"
+         layout="topleft"
+         left="175"
+         name="NameTagShoutDistanceColor_Color_Swatch"
+         width="15"
+		 top_delta="-3">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="NameTagShoutDistanceColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="NameTagShoutDistanceColor" />
+            <color_swatch.caption_text
+             height="0" />
+        </color_swatch>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_pad="5"
+         mouse_opaque="false"
+         name="NameTagShoutDistanceColor_Label"
+         top_delta="3"
+         width="95">
+            Shout range
+        </text>
+        <color_swatch
+         can_apply_immediately="true"
+         follows="left|top"
+         height="15"
+         label_height="0"
+         layout="topleft"
+         left="310"
+         name="NameTagBeyondShoutDistanceColor_Color_Swatch"
+         width="15"
+		 top_delta="-3">
+            <color_swatch.init_callback
+             function="Pref.getUIColor"
+             parameter="NameTagBeyondShoutDistanceColor" />
+            <color_swatch.commit_callback
+             function="Pref.applyUIColor"
+             parameter="NameTagBeyondShoutDistanceColor" />
+            <color_swatch.caption_text
+             height="0" />
+        </color_swatch>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_pad="5"
+         mouse_opaque="false"
+         name="NameTagBeyondShoutDistanceColor_Label"
+         top_delta="3"
+         width="150">
+            Beyond Shout range
+        </text>
+		 
+        <slider
+         left="20"
+         top_pad="15"
          name="FSNameTagZOffsetCorrection"
          control_name="FSNameTagZOffsetCorrection"
          decimal_digits="0"

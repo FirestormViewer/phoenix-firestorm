@@ -32,7 +32,7 @@
          filename="panel_profile_secondlife.xml"
          label="2nd Life"
          layout="topleft"
-         help_topic="profile_profile_tab"
+         help_topic="profile_secondlife_tab"
          name="panel_profile_secondlife" />
         <panel
          class="panel_profile_web"
@@ -67,7 +67,7 @@
          filename="panel_profile_firstlife.xml"
          label="1st Life"
          layout="topleft"
-         help_topic="profile_profile_tab"
+         help_topic="profile_firstlife_tab"
          name="panel_profile_firstlife" />
         <panel
          class="panel_profile_notes"

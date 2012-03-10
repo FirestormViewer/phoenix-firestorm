@@ -907,6 +907,7 @@ private:
 	F32				mNameAlpha;
 	LLColor4		mNameColor;
 	BOOL      		mRenderGroupTitles;
+	std::string		mDistanceString;
 
 	//--------------------------------------------------------------------
 	// Display the name (then optionally fade it out)

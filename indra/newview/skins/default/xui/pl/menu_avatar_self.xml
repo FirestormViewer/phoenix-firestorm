@@ -14,19 +14,20 @@
 			<menu_item_call label="Podkoszulek" name="Self Undershirt"/>
 			<menu_item_call label="Bieliznę" name="Self Underpants"/>
 			<menu_item_call label="Tatuaż" name="Self Tattoo"/>
-			<menu_item_call label="Fizyka" name="Self Physics"/>
+			<menu_item_call label="Fizykę" name="Self Physics"/>
 			<menu_item_call label="Ubranie alpha" name="Self Alpha"/>
 			<menu_item_call label="Wszystko" name="All Clothes"/>
 		</context_menu>
-		<context_menu label="HUD" name="Object Detach HUD"/>
 		<context_menu label="Odłącz" name="Object Detach"/>
 		<menu_item_call label="Odłącz wszystko" name="Detach All"/>
 	</context_menu>
-	<menu_item_call label="Mój wygląd" name="Chenge Outfit"/>
-	<menu_item_call label="Edytuj mój strój" name="Edit Outfit"/>
-	<menu_item_call label="Edytuj mój kształt" name="Edit My Shape"/>
-	<menu_item_call label="Moi znajomi" name="Friends..."/>
-	<menu_item_call label="Moje grupy" name="Groups..."/>
-	<menu_item_call label="Mój profil" name="Profile..."/>
+	<menu_item_call label="Zmień strój" name="Chenge Outfit"/>
+	<menu_item_call label="Edytuj strój" name="Edit Outfit"/>
+	<menu_item_call label="Edytuj kształt" name="Edit My Shape"/>
+	<menu_item_call label="Znajomi" name="Friends..."/>
+	<menu_item_call label="Grupy" name="Groups..."/>
+	<menu_item_call label="Profil" name="Profile..."/>
 	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
+	<menu_item_call label="Info o skryptach" name="ScriptInfo"/>
+	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 </context_menu>

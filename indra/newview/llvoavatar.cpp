@@ -3137,6 +3137,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		}
 	}
 	LLColor4 name_tag_color = getNameTagColor(is_friend);
+	LLColor4 distance_color = name_tag_color;
+	std::string distance_string;
 
 	static LLCachedControl<bool> fsShowOwnTagColor(gSavedSettings, "FSShowOwnTagColor");
 	if (isSelf() && fsShowOwnTagColor)
@@ -3153,6 +3155,46 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		name_tag_color = mClientTagData["color"]; 
 	}
 
+	// <FS:Ansariel> Color name tags based on distance
+	static LLCachedControl<bool> show_distance_color_tag(gSavedSettings, "FSTagShowDistanceColors");
+	static LLCachedControl<bool> show_distance_in_tag(gSavedSettings, "FSTagShowDistance");
+	static LLUIColor tag_chat_color = LLUIColorTable::instance().getColor("NameTagChatDistanceColor", LLColor4::green);
+	static LLUIColor tag_shout_color = LLUIColorTable::instance().getColor("NameTagShoutDistanceColor", LLColor4::yellow);
+	static LLUIColor tag_beyond_shout_color = LLUIColorTable::instance().getColor("NameTagBeyondShoutDistanceColor", LLColor4::red);
+
+	if (!isSelf() && (show_distance_color_tag || show_distance_in_tag))
+	{
+		static const F64 CHAT_RANGE_SQUARED = 400.f;
+		static const F64 SHOUT_RANGE_SQUARED = 10000.f;
+
+		F64 distance_squared = dist_vec_squared(getPositionGlobal(), gAgent.getPositionGlobal());
+		if (distance_squared <= CHAT_RANGE_SQUARED)
+		{
+			distance_color = tag_chat_color;
+		}
+		else if (distance_squared <= SHOUT_RANGE_SQUARED)
+		{
+			distance_color = tag_shout_color;
+		}
+		else
+		{
+			distance_color = tag_beyond_shout_color;
+		}
+
+		if (show_distance_in_tag)
+		{
+			distance_string = llformat("%.02f m", sqrt(distance_squared));
+		}
+
+		// Override nametag color only if friend color is disabled
+		// or avatar is not a friend nor has a contact set color
+		if (show_distance_color_tag && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(),FALSE,TRUE))))
+		{
+			name_tag_color = distance_color;
+		}
+	}
+	// </FS:Ansariel>
+
 	// Rebuild name tag if state change detected
 	if (mNameString.empty()
 		|| new_name
@@ -3164,7 +3206,8 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		|| is_appearance != mNameAppearance 
 		|| is_friend != mNameFriend
 		|| is_cloud != mNameCloud
-		|| name_tag_color != mNameColor)
+		|| name_tag_color != mNameColor
+		|| distance_string != mDistanceString)
 	{
 
 		//WS: If we got a uuid and if we know if it's id_based or not, ask FSDATA for the other tagdata, before we display it.
@@ -3314,6 +3357,13 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			}
 		}
 
+		// <FS:Ansariel> Show distance in tag
+		if (show_distance_in_tag)
+		{
+			addNameTagLine(distance_string, distance_color, LLFontGL::NORMAL, LLFontGL::getFontSansSerifSmall());
+		}
+		// <FS:Ansariel> Show distance in tag
+
 		mNameAway = is_away;
 		mNameBusy = is_busy;
 		mNameMute = is_muted;
@@ -3321,6 +3371,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		mNameFriend = is_friend;
 		mNameCloud = is_cloud;
 		mNameColor=name_tag_color;
+		mDistanceString = distance_string;
 		mTitle = title ? title->getString() : "";
 		LLStringFn::replace_ascii_controlchars(mTitle,LL_UNKNOWN_CHAR);
 		new_name = TRUE;

@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel name="MediaControlsPanel">
-	<string name="min_width">
-		300
-	</string>
-	<string name="min_height">
-		75
-	</string>
-	<string name="zoom_medium_padding">
-		1.1
-	</string>
-	<string name="top_world_view_avoid_zone">
-		50
-	</string>
+<panel name="MediaControls">
 	<layout_stack name="progress_indicator_area">
 		<layout_panel name="media_progress_indicator">
 			<progress_bar name="media_progress_bar" tool_tip="Wczytywanie mediów"/>
@@ -54,7 +42,7 @@
 			</layout_stack>
 		</layout_panel>
 		<layout_panel name="media_play_position">
-			<slider_bar initial_value="0.5" name="media_play_slider" tool_tip="Postęp odtwarzania filmu"/>
+			<slider_bar name="media_play_slider" tool_tip="Postęp odtwarzania filmu"/>
 		</layout_panel>
 		<layout_panel name="skip_back">
 			<button name="skip_back_btn" tool_tip="Przewiń do tyłu"/>

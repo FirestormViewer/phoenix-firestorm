@@ -64,9 +64,8 @@ public:
 
 	// focus overrides
 	/*virtual*/ void	onFocusLost();
-	/*virtual*/ void	onFocusReceived();
 #endif	
-	
+	/*virtual*/ void	onFocusReceived();
 	/*virtual*/ void	onOpen	(const LLSD& key);
 
 	/*virtual*/ void	setVisible(BOOL visible);

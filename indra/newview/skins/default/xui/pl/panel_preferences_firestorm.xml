@@ -191,6 +191,9 @@
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
     </panel>
     <panel label="Tagi" name="TagTab">
+        <text name="SL-Tags-Notice">
+          Uwaga: ze względu na zmiany wprowadzone przez Linden Lab tagi nie działają już w SL.
+        </text>
         <text name="whattagstoshow">
           Które tagi chcesz widzieć?
         </text>
@@ -233,6 +236,17 @@
         <check_box label="Pokazuj swój kolor" name="FSShowOwnTagColor_toggle" tool_tip="Gdy zaznaczysz tą opcję, to Twój tag będzie pokazywany w wybranym przez Ciebie kolorze." />
         <check_box label="Koloruj nazwy kont odmiennie" name="FSColorUsername_toggle" tool_tip="Koloruje nazwy kont odmiennie (zastępuje kolory tagów dla nazw kont)" />
         <color_swatch name="usernamecolorswatch" tool_tip="Kliknij, aby otworzyć paletę kolorów" />
+		<check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
+		<check_box label="Pokazuj odległość w tagach" name="FSTagShowDistance" tool_tip="W tagach awatarów będzie widoczny dystans po zaznaczeniu tej opcji, zgodnie z kolorami ustawionymi poniżej."/>
+		<text name="NameTagChatDistanceColor_Label">
+			Zasięg czatu
+		</text>
+		<text name="NameTagShoutDistanceColor_Label">
+			Zasięg krzyku
+		</text>
+		<text name="NameTagBeyondShoutDistanceColor_Label">
+			Poza zasięgiem krzyku
+		</text>
         <slider name="FSNameTagZOffsetCorrection" label="Przesuń w pionie:" tool_tip="Zmienia przesunięcie w pionie dla tagów imion. Domyślnie 0" />
     </panel>
 </tab_container>

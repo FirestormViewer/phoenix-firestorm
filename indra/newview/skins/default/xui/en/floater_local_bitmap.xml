@@ -13,7 +13,8 @@
 	height="205"
 	min_width="575"
 	min_height="230"
-    rect_control="FloaterLocalbitmapbrowserRect"
+  rect_control="FloaterLocalbitmapbrowserRect"
+  help_topic="fs_bitmap_browser"
 	>
 
   <!-- floater definition end, left side begin -->

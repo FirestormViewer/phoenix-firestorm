@@ -202,10 +202,6 @@ protected:
 	BOOL						mShowEmptyMessage;
 	BOOL						mShowLoadStatus;
 
-// [SL:KB] - Patch: Inventory-ActivePanel | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
-	static bool					s_fActiveSidebar;		// True if the last focused inventory panel was the sidebar
-// [/SL:KB]
-
 	LLFolderView*				mFolderRoot;
 	LLScrollContainer*			mScroller;
 

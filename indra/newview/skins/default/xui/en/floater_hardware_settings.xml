@@ -11,7 +11,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="16"
+     height="12"
      layout="topleft"
      left="10"
      name="Filtering:"
@@ -32,7 +32,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="22"
+     height="12"
      layout="topleft"
      left="10"
      name="antialiasing label"
@@ -48,7 +48,7 @@
      layout="topleft"
      left_pad="10"
      name="fsaa"
-     top_delta="-4"
+     top_delta="0"
      width="130">
         <combo_box.item
          label="Disabled"
@@ -73,18 +73,17 @@
     </combo_box>
    <text
      type="string"
-     top_delta="0"
      length="1"
      follows="left|top"
-     height="16"
+     height="12"
      layout="topleft"
      left_pad="10"
      name="antialiasing restart"
-     width="188">
+     top_delta="0"
+     width="230">
       (requires viewer restart)
     </text>
     <spinner
-     top_delta="0"
      control_name="RenderGamma"
      decimal_digits="2"
      follows="left|top"
@@ -97,13 +96,13 @@
      left="10"
      max_val="2"
      name="gamma"
-     top_pad="10"
+     top_pad="11"
      width="262" />
     <text
      type="string"
      length="1"
      follows="left|top"
-     height="16"
+     height="12"
      layout="topleft"
      left_pad="10"
      name="(brightness, lower is brighter)"
@@ -133,30 +132,28 @@
      name="vbo"
      tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
      width="315" />
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
+  <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="16"
+    layout="topleft"
+    left="10"
+    name="tc label"
+    top_pad="10"
+    width="188">
+    Enable S3TC:
+  </text>
+    <check_box
+     control_name="RenderCompressTextures"
      height="16"
+     initial_value="true"
+     label="Enable Texture Compression (requires restart)"
      layout="topleft"
-     left="10"
-     name="Enable VBO Stream:"
-     top_pad="10"
-     width="188">
-        Enable VBO Stream:
-    </text>
-
-     <check_box  
-      control_name="RenderUseStreamVBO"
-      height="16" 
-      initial_value="false"
-      label="Enable Streamed VBOs"
-      left_pad="10"
-      name="vbo_stream"
-      tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
+     left_pad="10"
+     name="texture compression"
+     tool_tip="Compresses textures in video memory, allowing for higher resolution textures to be loaded at the cost of some color quality."
      width="315" />
-
-
     <slider
      control_name="TextureMemory"
      decimal_digits="0"
@@ -168,7 +165,7 @@
      label_width="195"
      layout="topleft"
      left="10"
-     max_val="1024"
+     max_val="4096"
      name="GraphicsCardTextureMemory"
      tool_tip="Amount of memory to allocate for textures. Defaults to video card memory. Reducing this may improve performance but may also make textures blurry."
      top_pad="10"

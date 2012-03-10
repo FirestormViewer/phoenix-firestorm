@@ -569,7 +569,7 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	{
 		// Give focus to, or close, the host rather than the floater when hosted
 		LLFloater* floaterp = (!instance->getHost()) ? instance : instance->getHost();
-		if (!floaterp->isFrontmost())
+		if (!floaterp->isFrontmost() || !floaterp->hasFocus())
 			floaterp->setVisibleAndFrontmost();
 		else
 			floaterp->closeFloater();

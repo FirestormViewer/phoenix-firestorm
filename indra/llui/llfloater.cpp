@@ -173,6 +173,7 @@ LLFloater::Params::Params()
 	can_close("can_close", true),
 	can_drag_on_left("can_drag_on_left", false),
 	drop_shadow("drop_shadow",true),		// ## Zi: Optional Drop Shadows
+	label_v_padding("label_v_padding", -1),	// <FS:Zi> Make vertical label padding a per-skin option
 	can_tear_off("can_tear_off", true),
 	save_dock_state("save_dock_state", false),
 	save_rect("save_rect", false),
@@ -244,6 +245,7 @@ static LLWidgetNameRegistry::StaticRegistrar sRegisterFloaterParams(&typeid(LLFl
 LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 :	LLPanel(),	// intentionally do not pass params here, see initFromParams
  	mDragHandle(NULL),
+	mLabelVPadding(p.label_v_padding),	// <FS:Zi> Make vertical label padding a per-skin optional
 	mTitle(p.title),
 	mShortTitle(p.short_title),
 	mSingleInstance(p.single_instance),
@@ -293,7 +295,15 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	
 	memset(mButtonsEnabled, 0, BUTTON_COUNT * sizeof(bool));
 	memset(mButtons, 0, BUTTON_COUNT * sizeof(LLButton*));
-	
+
+	// <FS:Zi> Make vertical label padding a per-skin option
+	// if no padding is set, use default from settings.xml
+	if(mLabelVPadding==-1)
+	{
+		mLabelVPadding=gSavedSettings.getS32("UIFloaterTitleVPad");
+	}
+	// </FS:Zi>
+
 	addDragHandle();
 	addResizeCtrls();
 	
@@ -357,6 +367,7 @@ void LLFloater::addDragHandle()
 			p.name("Drag Handle");
 			p.follows.flags(FOLLOWS_ALL);
 			p.label(mTitle);
+			p.label_v_padding = mLabelVPadding;		// <FS:Zi> Make vertical label padding a per-skin option
 			mDragHandle = LLUICtrlFactory::create<LLDragHandleTop>(p);
 		}
 		addChild(mDragHandle);

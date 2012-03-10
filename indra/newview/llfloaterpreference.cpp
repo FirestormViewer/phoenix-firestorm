@@ -1209,6 +1209,12 @@ void LLFloaterPreference::refreshEnabledState()
 		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
 #endif
 
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
+		!gGLManager.mHasVertexBufferObject)
+	{
+		getChildView("texture compression")->setEnabled(FALSE);
+	}
+
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	getChildView("gamma")->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());

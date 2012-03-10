@@ -14,7 +14,7 @@
 		<combo_item name="type_layer">Jako warstwę awatara</combo_item>
 	</combo_box>
 	<text  name="time_caption_text">
-		Ostatnia akt.:
+		Ostat. akt.:
 	</text>  
 	<text name="link_caption_text">
 		Status linka:

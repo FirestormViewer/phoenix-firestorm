@@ -206,6 +206,14 @@
 	<color
 		name="TextBgWriteableColor"
 		value="0.729 0.765 0.745 1.0" />
+	<!-- Username matches the computed display name -->
+	<color
+		name="NameTagMatch"
+		reference="NameTagV1" />
+	<!-- Username does not match a computed display name (uses custom display name) -->
+	<color
+		name="NameTagMismatch"
+		reference="NameTagV1" />
 	<!-- Default Opaque Floater Background Color -->
 	<color
 		name="DkGray"

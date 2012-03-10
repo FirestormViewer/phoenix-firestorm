@@ -393,7 +393,7 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 
 void FSFloaterContacts::onGroupTitlesButtonClicked()
 {
-	LLFloaterReg::showInstance("group_titles");
+	LLFloaterReg::toggleInstance("group_titles");
 }
 
 //

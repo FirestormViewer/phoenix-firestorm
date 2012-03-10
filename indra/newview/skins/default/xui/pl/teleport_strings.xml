@@ -17,7 +17,8 @@ Jeśli nadal nie możesz się teleportować wyloguj się i ponownie zaloguj.
 			Przepraszamy, ale nie możemy znaleźć miejsca docelowego.
 		</message>
 		<message name="timeout_tport">
-			Przepraszamy, ale nie udało się przeprowadzić teleportacji. Spróbuj jeszcze raz.
+			Przepraszamy, ale nie udało się przeprowadzić teleportacji.
+Spróbuj jeszcze raz.
 		</message>
 		<message name="NoHelpIslandTP">
 		Brak możliwości ponownej teleportacji do Welcome Island.
@@ -30,7 +31,7 @@ Odwiedź &apos;Welcome Island Public&apos; by powtórzyć szkolenie.
 			Czekamy na Twoje akcesoria. Możesz poczekać kilka minut lub zrobić relog przed następną próbą teleportacji.
 		</message>
 		<message name="too_many_uploads_tport">
-			Obecnie ten region ma problemy z ładowaniem obiektów, w związku z czym teleportacja bardzo sie opóźnia.
+			Obecnie ten region ma problemy z ładowaniem obiektów, w związku z czym teleportacja bardzo się opóźnia.
 Spróbuj jeszcze raz za kilka minut albo teleportuj się do mniej zatłoczonego miejsca.
 		</message>
 		<message name="expired_tport">

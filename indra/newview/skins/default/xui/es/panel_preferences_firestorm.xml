@@ -196,7 +196,8 @@
 		</panel>
 		<panel label="Etiquetas" name="TagTab">
 			<text name="SL-Tags-Notice">
-				Nota: Debido a los cambios realizados por Linden Lab, las etiquetas de visor no funcionarán en Second Life.
+				Nota: Debido a los cambios realizados por Linden Lab, las etiquetas de visor
+no funcionarán en Second Life.
 			</text>
 			<text name="whattagstoshow" width="285">
 				¿Qué etiquetas quieres ver?
@@ -240,6 +241,17 @@
 			<check_box label="Mostrar mi propio color" name="FSShowOwnTagColor_toggle" tool_tip="Cuando lo activas, tu etiqueta se mostrará en el color seleccionado."/>
 			<check_box label="Colorear de forma diferente los nombres de usuario" name="FSColorUsername_toggle" tool_tip="Muestra los nombres de usuario en un color diferente (ignora el color de la etiqueta para los nombres de usuario)" width="310"/>
 			<color_swatch name="usernamecolorswatch" tool_tip="Clic para abrir el selector de color"/>
+			<check_box label="Etiquetas de nombre basadas en la distancia" name="FSTagShowDistanceColors" tool_tip="Si lo activas, el color de la etiqueta de los demás avatares mostrarán si están dentro del alcance del chat, de los gritos, o más allá del alcance de los gritos. Esto anula los colores de etiqueta según visor, pero los colores definidos para los amigos o los de los Grupos de Contactos."/>
+			<check_box label="Mostrar distancia en la etiqueta" name="FSTagShowDistance" tool_tip="Si lo activas, las etiquetas de los demás avatares mostrarán la distancia que te serpara de ellos, usando los colores seleccionados abajo." left="300"/>
+			<text name="NameTagChatDistanceColor_Label">
+				Alcance de chat
+			</text>
+			<text name="NameTagShoutDistanceColor_Label">
+				Alcance de grito
+			</text>
+			<text name="NameTagBeyondShoutDistanceColor_Label">
+				Más allá del grito
+			</text>
 			<slider name="FSNameTagZOffsetCorrection" label="Corrección de altura:" label_width="125" width="265" tool_tip="Modifica la altura de las etiquetas de nombre de avatar. Por defecto, 0"/>
 		</panel>
 	</tab_container>

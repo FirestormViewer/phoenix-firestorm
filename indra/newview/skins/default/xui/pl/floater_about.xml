@@ -2,10 +2,10 @@
 <floater name="floater_about" title="O [CAPITALIZED_APP_NAME]">
 	<floater.string name="AboutHeader">
 		[APP_NAME] [VIEWER_VERSION_0].[VIEWER_VERSION_1].[VIEWER_VERSION_2] ([VIEWER_VERSION_3]) [BUILD_DATE] [BUILD_TIME] ([CHANNEL])
-[[VIEWER_RELEASE_NOTES_URL] [ReleaseNotes]]
+[[VIEWER_RELEASE_NOTES_URL] Informacje o wydaniu]
 	</floater.string>
 	<floater.string name="AboutCompiler">
-		Buduj z [COMPILER] wersją [COMPILER_VERSION]
+		Zbudowane z [COMPILER] w wersji [COMPILER_VERSION]
 	</floater.string>
 	<floater.string name="AboutPosition">
 		Położenie [POSITION_0,number,1], [POSITION_1,number,1], [POSITION_2,number,1] w [REGION] zlokalizowanym w &lt;nolink&gt;[HOSTNAME]&lt;/nolink&gt; ([HOSTIP])
@@ -13,62 +13,82 @@
 [SERVER_RELEASE_NOTES_URL]
 	</floater.string>
 	<floater.string name="AboutSystem">
-		Procesor: [CPU]
-Pamięć: [MEMORY_MB] MB
-Wersja OS: [OS_VERSION]
-Sprzedawca karty graficznej: [GRAPHICS_CARD_VENDOR]
-Karta graficzna: [GRAPHICS_CARD]
+		Procesor (CPU): [CPU]
+Pamięć (Memory): [MEMORY_MB] MB
+Wersja OS (OS Version): [OS_VERSION]
+Sprzedawca karty graficznej (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
+Karta graficzna (Graphics Card): [GRAPHICS_CARD]
 	</floater.string>
 	<floater.string name="AboutDriver">
-		Windows Sterownik karty graficznej: [GRAPHICS_DRIVER_VERSION]
+		Sterownik karty graficznej Windows (Driver Version): [GRAPHICS_DRIVER_VERSION]
 	</floater.string>
 	<floater.string name="AboutLibs">
 		Wersja OpenGL: [OPENGL_VERSION]
-		
-Viewer Skin: [SKIN] ([THEME])
+
 RestrainedLove API: [RLV_VERSION]
 Wersja libcurl: [LIBCURL_VERSION]
 Wersja dekodera J2C: [J2C_VERSION]
-Wersja Audio Driver: [AUDIO_DRIVER_VERSION]
+Wersja sterownika dźwięku (Audio Driver): [AUDIO_DRIVER_VERSION]
 Wersja Qt Webkit: [QT_WEBKIT_VERSION]
-Wersja serwera głosu: [VOICE_VERSION]
+Wersja serwera głosu (Voice Server): [VOICE_VERSION]
+	</floater.string>
+	<floater.string
+     name="AboutSettings">
+		Tryb ustawień (Settings Mode): [MODE]
+Skórka i schemat (Skin): [SKIN] ([THEME])
+Czcionka (Font): [FONT] ([FONT_SCREEN_DPI])
+Pole widzenia (Draw Distance): [DRAW_DISTANCE]
+Przepustowość (Bandwidth): [BANDWIDTH]
+Mnożnik poziomu detali (LOD Factor): [LOD]
 	</floater.string>
 	<floater.string name="none">
-		(żadne)
+		(brak)
 	</floater.string>
 	<floater.string name="AboutTraffic">
-		Stracone pakiety: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
+		Pakiety utracone: [PACKETS_LOST,number,0]/[PACKETS_IN,number,0] ([PACKETS_PCT,number,1]%)
+	</floater.string>
+	<floater.string name="ErrorFetchingServerReleaseNotesURL">
+		Błąd podczas pobierania informacji o wydaniu.
 	</floater.string>
 	<tab_container name="about_tab">
-		<panel label="Info" name="support_panel">
+		<panel label="Informacje" name="support_panel">
 			<text name="support_intro">    
-For the latest information about Firestorm, visit    
-    http://www.phoenixviewer.com
+				Najnowsze informacje o Firestorm są dostępne pod adresem 
+http://www.phoenixviewer.com
     		</text>
 			<button label="Kopiuj do schowka" name="copy_btn"/>
 		</panel>
 		<panel label="Podziękowania" name="credits_panel">
-		</panel>
-<!-- Firestorm Credits -->
-      <panel label="Firestorm" name="fs_credits_panel">      
-			<text name="firestorm_intro" height="100" >
-Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
-          
-The Firestorm Development Team:
-     		 </text>
-      		<text name="fs_contrib_intro" >
-Additional code generously contributed to Firestorm by:
-      		</text>
-      		<text name="fs_support_intro" >
-Special thanks to our Firestorm Support Team, wiki editors, educators, and translators:
-      		</text>
-      		<text name="fs_art_intro" >
-Firestorm includes Starlight, modified for Firestorm.  It is provided by residents for residents, with the intention of provi ding an alternative, brighter, and hopefully easier to use interface.  For further details see &lt;nolink&gt;https://wiki.sec ondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+			<text name="linden_intro">
+				Stworzenie Firestorma nie byłoby możliwe bez decyzji Linden Lab o upublicznieniu kodu oryginalnego klienta Second Life.
 
-UI Artists and Designers:
-      		</text>
-        </panel>
-		<panel label="Licencje" name="licenses_panel">
+Lindeni to:
+			</text>
+			<text name="contrib_intro">
+				z wkładem open source od:
+			</text>
+			<text name="trans_intro">
+				i tłumaczeniami od:
+			</text>
 		</panel>
+		<panel label="Firestorm" name="fs_credits_panel">      
+			<text name="firestorm_intro">
+				Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Viewer Project, Inc., organizacji non-profit.          
+          
+Zespół programistów Firestorma:
+     		 </text>
+      		<text name="fs_contrib_intro">
+				Dodatkowy wkład w rozwój kodu Firestorma:
+      		</text>
+      		<text name="fs_support_intro">
+				Specjalne podziękowania dla naszego zespołu wsparcia, edytorów wiki, nauczycieli i tłumaczy:
+      		</text>
+      		<text name="fs_art_intro">
+				Firestorm zawiera Starlight, zmodyfikowany dla Firestorma. Jest on tworzony przez rezydentów dla rezydentów, z intencją dostarczenia alternatywnego, jaśniejszego i w założeniach łatwiejszego w użytkowaniu interfejsu. Więcej szczegółów pod &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
+
+Artyści i projektanci interfejsu:
+      		</text>
+		</panel>
+		<panel label="Licencje" name="licenses_panel" />
 	</tab_container>
 </floater>

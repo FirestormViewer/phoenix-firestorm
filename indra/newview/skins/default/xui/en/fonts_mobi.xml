@@ -62,6 +62,11 @@
     <file>MobiSansMono.ttf</file>
   </font>
 
+  <font name="Script"
+	comment="Name of an optional font used for the script editor">
+    <file>DejaVuSansMono.ttf</file>
+  </font>
+
   <font name="DejaVu"
 	comment="Name of DejaVu font">
     <file>MobiSans.ttf</file>
@@ -138,6 +143,10 @@
     <file>MobiSans.ttf</file>
   </font>
 
+  <font_size name="Script"
+	     comment="Size of script editor font (points, or 1/72 of an inch)"
+	     size="9.6"
+	     />
   <font_size name="Monospace"
 	     comment="Size for monospaced font (points, or 1/72 of an inch)"
 	     size="8.0"

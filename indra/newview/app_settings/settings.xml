@@ -158,7 +158,7 @@
   <key>FSUseLegacyClienttags</key>
   <map>
     <key>Comment</key>
-    <string>0=Off, 1=Local Clienttags, 2=Download Clienttags (needs relog)</string>
+    <string>0=Off, 1=Local Client tags, 2=Download Client tags (needs relog)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -169,7 +169,7 @@
   <key>FSColorClienttags</key>
   <map>
     <key>Comment</key>
-    <string>Color Clienttags by: 0=Off, 1=Single color per Viewer, 2=Userdefinied color (one color per UUID), 3=New Tagsystem Color</string>
+    <string>Color Client tags by: 0=Off, 1=Single color per Viewer, 2=User defined color (one color per UUID), 3=New Tagsystem Color</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -180,7 +180,7 @@
   <key>FSClientTagsVisibility2</key>
   <map>
     <key>Comment</key>
-    <string>Show clienttags: 0=Clienttags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
+    <string>Show client tags: 0=Client tags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -191,7 +191,7 @@
   <key>FSUseV1TagColor</key>
   <map>
     <key>Comment</key>
-    <string>If Clienttags should be colored</string>
+    <string>If Client tags should be colored</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -5650,7 +5650,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://wiki.phoenixviewer.com/doku.php?id=[TOPIC]</string>
+      <string>http://wiki.phoenixviewer.com/[TOPIC]</string>
     </map>
     <key>HowToHelpURL</key>
     <map>
@@ -13131,7 +13131,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <real>4</real>
+      <real>7</real>
     </map>
     <key>UIImgDefaultEyesUUID</key>
     <map>
@@ -16199,7 +16199,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>Settings that are a applied per session (not saved).</string>
       <key>Persist</key>
-      <integer>0</integer>
+      <integer>1</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
@@ -16210,7 +16210,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Comment</key>
       <string>User settings that are a applied per session (not saved).</string>
       <key>Persist</key>
-      <integer>0</integer>
+      <integer>1</integer>
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
@@ -17038,6 +17038,28 @@ Change of this parameter will affect the layout of buttons in notification toast
   <map>
     <key>Comment</key>
     <string>If enabled, button flash rate and count will be overridden globally.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSTagShowDistanceColors</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, color other avatars' nametags based on their distance</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSTagShowDistance</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, show distance to other avatars in their nametag.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

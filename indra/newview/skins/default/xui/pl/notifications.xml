@@ -1537,7 +1537,7 @@ Wiadomości przychodzące od osób spoza listy znajomych będą teraz otrzymywa�
 		</form>
 	</notification>
 	<notification name="UnFreezeUser">
-		Cofnij unieruchomienie tego Rezydenta, wysyłając następujący komunikat.
+		Cofnij unieruchomienie (zamrożenie) tego Rezydenta, wysyłając następujący komunikat.
 		<form name="form">
 			<input name="message">
 				Odblokowano Cię.
@@ -1646,9 +1646,9 @@ co przekracza limit [LIMIT].
 		</form>
 	</notification>
 	<notification label="Zmiana Majątku Lindenów" name="ChangeLindenEstate">
-		Zamierzasz zmienić ustawienia majątku Lindenów (mainland, teen grid, orientacja, itp).
+		Zamierzasz zmienić ustawienia majątku Lindenów (region główny, teen grid, orientacja, itp).
 
-Jest to wyjątkowo niebezpieczna decyzja, odczuwalna przez wszystkich Rezydentów. Dla mainland, spowoduje to zmianę tysięcy regionów oraz ich przestrzeń serwerową, spowoduje lagi.
+Jest to wyjątkowo niebezpieczna decyzja, odczuwalna przez wszystkich Rezydentów. Dla regionu głównego, spowoduje to zmianę tysięcy regionów oraz ich przestrzeń serwerową, spowoduje lagi.
 
 Kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
@@ -3141,6 +3141,10 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 		Musisz autoryzować [APP_NAME] zanim będzie można ładować obrazki na Flickr. Zaloguj się i autoryzuj [APP_NAME], a następnie wybierz "Załaduj na Flickr" ponownie.
 
 (Jeśli [APP_NAME] został już autoryzowany i ciągle jesteś zalogowany/a, to ten proces może być automatyczny)
+	</notification>
+	<notification name="ModeChange">
+		Zmiana trybu wymaga zamknięcia i ponownego uruchomienia aplikacji.
+		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
 	</notification>
 	<notification name="NoClassifieds">
 		Tworzenie i edycja reklam jest możliwa tylko w trybie zaawansowanym. Czy chcesz wylogować się i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.

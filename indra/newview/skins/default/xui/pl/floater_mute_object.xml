@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="mute by name" title="ZABLOKUJ OBIEKT WEDŁUG NAZWY">
+<floater name="block by name" title="ZABLOKUJ OBIEKT WEDŁUG NAZWY">
 	<text name="message">
 		Zablokuj obiekt:
 	</text>
-	<line_editor bottom_delta="-60" name="object_name">
+	<line_editor name="object_name">
 		Nazwa obiektu
 	</line_editor>
 	<text name="note">
