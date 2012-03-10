@@ -6295,7 +6295,7 @@ class LLWorldCreateLandmark : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.0.0a
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.4.5) | Added: RLVa-1.0.0
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 			return true;
 // [/RLVa:KB]
@@ -6310,11 +6310,23 @@ class LLWorldPlaceProfile : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+			return true;
+// [/RLVa:KB]
+
 		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
 
 		return true;
 	}
 };
+
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+bool enable_place_profile()
+{
+	return LLFloaterSidePanelContainer::canShowPanel("places", LLSD().with("type", "agent"));
+}
+// [/RLVa:KB]
 
 void handle_script_info()
 {
@@ -8214,7 +8226,7 @@ class LLWorldEnableCreateLandmark : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 //		return !LLLandmarkActions::landmarkAlreadyExists();
-// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.4.5) | Added: RLVa-1.2.1
 		return (!LLLandmarkActions::landmarkAlreadyExists()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 // [/RLVa:KB]
 	}
@@ -9258,6 +9270,9 @@ void show_topinfobar_context_menu(LLView* ctrl, S32 x, S32 y)
 	{
 		landmark_item->setLabel(LLTrans::getString("EditLandmarkNavBarMenu"));
 	}
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	landmark_item->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+// [/RLVa:KB]
 
 	if(gMenuHolder->hasVisibleMenu())
 	{
@@ -9421,6 +9436,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLWorldGetAutorespondNonFriends(), "World.GetAutorespondNonFriends");  //[SJ FIRE-2177]
 
 	view_listener_t::addMenu(new LLWorldEnableCreateLandmark(), "World.EnableCreateLandmark");
+// [RLVa:KB]
+	enable.add("World.EnablePlaceProfile", boost::bind(&enable_place_profile));
+// [/RLVa:KB]
 	view_listener_t::addMenu(new LLWorldEnableSetHomeLocation(), "World.EnableSetHomeLocation");
 	view_listener_t::addMenu(new LLWorldEnableTeleportHome(), "World.EnableTeleportHome");
 	view_listener_t::addMenu(new LLWorldEnableBuyLand(), "World.EnableBuyLand");

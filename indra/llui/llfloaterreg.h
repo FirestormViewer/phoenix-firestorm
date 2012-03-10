@@ -123,6 +123,10 @@ public:
 	static const_instance_list_t& getFloaterList(const std::string& name);
 
 	// Visibility Management
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	// return false if floater can not be shown (=doesn't pass the validation filter)
+	static bool canShowInstance(const std::string& name, const LLSD& key = LLSD());
+// [/RLVa:KB]
 	// return NULL if instance not found or can't create instance (no builder)
 	static LLFloater* showInstance(const std::string& name, const LLSD& key = LLSD(), BOOL focus = FALSE);
 	// Close a floater (may destroy or set invisible)

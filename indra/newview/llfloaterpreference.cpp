@@ -1275,7 +1275,7 @@ void LLFloaterPreference::refreshEnabledState()
 	ctrl_shader_enable->setEnabled(
 		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
 // [/RLVa:KB]
-	
+
 	BOOL shaders = ctrl_shader_enable->get();
 	if (shaders)
 	{

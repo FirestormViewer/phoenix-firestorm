@@ -86,14 +86,14 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mProfileBtn(NULL),
 	mOnlineStatus(E_UNKNOWN),
 	mShowInfoBtn(true),
-	mShowVoiceVolume(false),
 	mShowProfileBtn(true),
-	mNearbyRange(false),
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mRlvCheckShowNames(false),
 // [/RLVa:KB]
 	mShowPermissions(false),
 	mHovered(false),
+	mShowVoiceVolume(false),
+	mNearbyRange(false),
 	mShowDisplayName(true),
 	mShowUsername(true),
 	mFirstSeen(time(NULL)),

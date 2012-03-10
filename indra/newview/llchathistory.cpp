@@ -56,7 +56,6 @@
 #include "llworld.h"
 #include "lluiconstants.h"
 #include "llstring.h"
-
 #include "llviewercontrol.h"
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
 #include "rlvcommon.h"

@@ -272,6 +272,14 @@ LLFloaterReg::const_instance_list_t& LLFloaterReg::getFloaterList(const std::str
 
 // Visibility Management
 
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+//static
+bool LLFloaterReg::canShowInstance(const std::string& name, const LLSD& key)
+{
+	return mValidateSignal(name, key);
+}
+// [/RLVa:KB]
+
 //static
 LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus) 
 {
@@ -545,8 +553,16 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	}
 	else if (!instance->isShown())
 	{
-		instance->openFloater(key);
-		instance->setVisibleAndFrontmost();
+// [RLVa:KB] - Checked: 2011-12-17 (RLVa-1.4.5a) | Added: RLVa-1.4.5a
+		// [See LLFloaterReg::showInstance()]
+		if ( ((!sBlockShowFloaters) || (sAlwaysShowableList.find(name) != sAlwaysShowableList.end())) && (mValidateSignal(name, key)) )
+		{
+			instance->openFloater(key);
+			instance->setVisibleAndFrontmost();
+		}
+// [/RLVa:KB]
+//		instance->openFloater(key);
+//		instance->setVisibleAndFrontmost();
 	}
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-11-23 (Catznip-3.2.0b) | Modified: Catznip-3.2.0b
 	else

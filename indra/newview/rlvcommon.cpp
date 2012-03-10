@@ -252,13 +252,12 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 	return NULL;
 }
 
-// Checked: 2010-03-27 (RLVa-1.4.0a) | Modified: RLVa-1.2.0b
+// Checked: 2012-02-25 (RLVa-1.4.5) | Modified: RLVa-1.4.5
 std::string RlvStrings::getVersion(bool fLegacy)
 {
-	return llformat("%s viewer v%d.%d.%d (%s %d.%d.%d.%d - RLVa %d.%d.%d)",
+	return llformat("%s viewer v%d.%d.%d (RLVa %d.%d.%d)",
 		( (!fLegacy) ? "RestrainedLove" : "RestrainedLife" ),
 		RLV_VERSION_MAJOR, RLV_VERSION_MINOR, RLV_VERSION_PATCH,
-		LLAppViewer::instance()->getSecondLifeTitle().c_str(), LL_VERSION_MAJOR, LL_VERSION_MINOR, LL_VERSION_PATCH, LL_VERSION_BUILD,
 		RLVa_VERSION_MAJOR, RLVa_VERSION_MINOR, RLVa_VERSION_PATCH);
 }
 
@@ -430,7 +429,7 @@ bool RlvUtil::sendChatReply(S32 nChannel, const std::string& strUTF8Text)
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 	gMessageSystem->nextBlockFast(_PREHASH_ChatData);
-	gMessageSystem->addStringFast(_PREHASH_Message, strUTF8Text);
+	gMessageSystem->addStringFast(_PREHASH_Message, utf8str_truncate(strUTF8Text, MAX_MSG_STR_LEN));
 	gMessageSystem->addU8Fast(_PREHASH_Type, CHAT_TYPE_SHOUT);
 	gMessageSystem->addS32("Channel", nChannel);
 	gAgent.sendReliableMessage();

@@ -429,7 +429,6 @@ private:
 	 */
 	static bool canEmbedNotificationInIM(const LLNotificationPtr& notification);
 // [/SL:KB]
-
 };
 
 }

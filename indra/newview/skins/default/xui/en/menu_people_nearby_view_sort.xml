@@ -124,6 +124,9 @@
      <menu_item_check.on_click
         function="ToggleControl"
         parameter="RadarLeaveChannelAlert" />
+    <menu_item_check.on_enable
+      function="RLV.EnableIfNot"
+      parameter="showminimap" />
   </menu_item_check>
      
   <menu_item_separator layout="topleft" />
