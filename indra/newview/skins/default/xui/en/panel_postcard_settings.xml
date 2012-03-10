@@ -123,11 +123,12 @@
              length="1"
              height="14"
              layout="topleft"
-             left_pad="-5"
+			 left="85"
+			 top="30"
              halign="left"
              name="image_quality_level"
              top_delta="0"
-             width="60">
+             width="105">
                ([QLVL])
             </text>
         </layout_panel>
