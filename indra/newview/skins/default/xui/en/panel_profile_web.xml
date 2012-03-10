@@ -8,6 +8,7 @@
  follows="all"
  name="panel_profile_web"
  label="Web">
+    <panel.string name="LoadTime" value="Load Time: [TIME] seconds"/>
     <line_editor
      top_pad="5"
      left="10"

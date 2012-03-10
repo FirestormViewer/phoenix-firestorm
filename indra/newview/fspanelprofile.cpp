@@ -971,7 +971,9 @@ void FSPanelProfileWeb::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent e
 
         case MEDIA_EVENT_NAVIGATE_COMPLETE:
         {
-            childSetText("status_text", llformat("Load Time: %.2f seconds", mPerformanceTimer.getElapsedTimeF32()));
+			LLStringUtil::format_map_t args;
+			args["[TIME]"] = llformat("%.2f", mPerformanceTimer.getElapsedTimeF32());
+            childSetText("status_text", getString("LoadTime", args));
         }
         break;
 
