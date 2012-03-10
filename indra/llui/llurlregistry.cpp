@@ -163,29 +163,34 @@ static bool stringHasUrl(const std::string &text)
 static bool stringHasJira(const std::string &text)
 {
 	// same as above, but for jiras
-	return (boost::ifind_first(text, "ECC") ||
-			boost::ifind_first(text, "SH") ||
-			boost::ifind_first(text, "SOCIAL") ||
-			boost::ifind_first(text, "LEAP") ||
-			boost::ifind_first(text, "DN") ||
-			boost::ifind_first(text, "MISC") ||
-			boost::ifind_first(text, "SNOW") ||
-			boost::ifind_first(text, "LLSD") ||
+	return (boost::ifind_first(text, "ARVD") ||
+			boost::ifind_first(text, "CHOP") ||
 			boost::ifind_first(text, "CTS") ||
-			boost::ifind_first(text, "PYO") ||
-			boost::ifind_first(text, "STORM") ||
-			boost::ifind_first(text, "PLAT") ||
-			boost::ifind_first(text, "ER") ||
-			boost::ifind_first(text, "VWR") ||
-			boost::ifind_first(text, "SVC") ||
-			boost::ifind_first(text, "WEB") ||
-			boost::ifind_first(text, "SEC") ||
-			boost::ifind_first(text, "ARVD") ||
-			boost::ifind_first(text, "OPEN") ||
-			boost::ifind_first(text, "SCR") ||
-			boost::ifind_first(text, "PHOE") ||
+			boost::ifind_first(text, "DOC") ||
+			boost::ifind_first(text, "DN") ||
+			boost::ifind_first(text, "ECC") ||
+			boost::ifind_first(text, "EXP") ||
 			boost::ifind_first(text, "FIRE") ||
-			boost::ifind_first(text, "SPOT"));
+			boost::ifind_first(text, "LEAP") ||
+			boost::ifind_first(text, "LLSD") ||
+			boost::ifind_first(text, "MAINT") ||
+			boost::ifind_first(text, "MISC") ||
+			boost::ifind_first(text, "OPEN") ||
+			boost::ifind_first(text, "PATHBUG") ||
+			boost::ifind_first(text, "PHOE") ||
+			boost::ifind_first(text, "PLAT") ||
+			boost::ifind_first(text, "PYO") ||
+			boost::ifind_first(text, "SCR") ||
+			boost::ifind_first(text, "SEC") ||
+			boost::ifind_first(text, "SH") ||
+			boost::ifind_first(text, "SINV") ||
+			boost::ifind_first(text, "SNOW") ||
+			boost::ifind_first(text, "SOCIAL") ||
+			boost::ifind_first(text, "SPOT")) ||
+			boost::ifind_first(text, "STORM") ||
+			boost::ifind_first(text, "SVC") ||
+			boost::ifind_first(text, "VWR") ||
+			boost::ifind_first(text, "WEB");
 }
 
 bool LLUrlRegistry::findUrl(const std::string &text, LLUrlMatch &match, const LLUrlLabelCallback &cb)
