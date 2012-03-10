@@ -1454,6 +1454,14 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 				RlvAttachmentLockWatchdog::instance().onDetach(viewer_object, pAttachPt);
 				gRlvHandler.onDetach(viewer_object, pAttachPt);
 			}
+
+//-TT Client LSL Bridge
+			if (pAttachPt->getName() == "Bridge" && gSavedSettings.getBOOL("UseLSLBridge"))
+			{
+				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
+			}
+//-TT
+			break;
 		}
 	}
 // [/RLVa:KB]
@@ -1496,13 +1504,6 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 		if ( (rlv_handler_t::isEnabled()) && (viewer_object->isHUDAttachment()) && (gRlvAttachmentLocks.hasLockedHUD()) )
 			gRlvAttachmentLocks.updateLockedHUD();
 // [/RLVa:KB]
-//-TT Client LSL Bridge
-		if (gSavedSettings.getBOOL("UseLSLBridge"))
-		{
-			if ((pAttachPt != NULL) && (pAttachPt->getName() == "Bridge"))
-				FSLSLBridge::instance().processDetach(viewer_object, pAttachPt);
-		}
-//-TT
 
 		return TRUE;
 	}
