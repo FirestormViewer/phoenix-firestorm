@@ -638,6 +638,17 @@ void LLFloaterGesture::playGesture(LLUUID item_id)
 }
 
 // <FS:ND> Try to update an item that already exists. Return true on success, false if such an item does not exist yet.
+
+#define COL_TRIGGER 0
+#define COL_SHORTCUT 1
+#define COL_KEY 2
+#define COL_NAME 3
+
+#define UI_COL_NAME 0
+#define UI_COL_TRIGGER 1
+#define UI_COL_KEY 2
+#define UI_COL_SHORTCUT 3
+
 bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
 {
 	std::map< LLUUID, LLScrollListItem * >::iterator itr = mItems.find( aItem );
@@ -653,20 +664,20 @@ bool LLFloaterGesture::updateItem( LLUUID const &aItem, LLSD const &aData )
 	std::string	sDummyShortcut = "---";
 	std::string	sDummyKey = "~~~";
 
-	if( aData[ "columns" ][ 0 ][ "value" ] != "" )
-		pItem->getColumn(0)->setValue( aData[ "columns" ][ 0 ][ "value" ] );
+	if( aData[ "columns" ][ COL_NAME ][ "value" ] != "" )
+		pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
 	
-	if( aData[ "columns" ][ 1 ][ "value" ] != sDummyShortcut )
-		pItem->getColumn(1)->setValue( aData[ "columns" ][ 1 ][ "value" ] );
+	if( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] != sDummyShortcut )
+		pItem->getColumn( UI_COL_SHORTCUT )->setValue( aData[ "columns" ][ COL_SHORTCUT ][ "value" ] );
 
-	if( aData[ "columns" ][ 2 ][ "value" ] != sDummyKey )
-		pItem->getColumn(2)->setValue( aData[ "columns" ][ 2 ][ "value" ] );
+	if( aData[ "columns" ][ COL_KEY ][ "value" ] != sDummyKey )
+		pItem->getColumn( UI_COL_KEY )->setValue( aData[ "columns" ][ COL_KEY ][ "value" ] );
 	
-	pItem->getColumn(3)->setValue( aData[ "columns" ][ 3 ][ "value" ] );
+	pItem->getColumn( UI_COL_NAME )->setValue( aData[ "columns" ][ COL_NAME ][ "value" ] );
 
 	LLFontGL::StyleFlags oStyle = LLGestureMgr::getInstance()->isGestureActive(aItem) ? LLFontGL::BOLD : LLFontGL::NORMAL;
 
-	LLScrollListText *pTextItem = dynamic_cast< LLScrollListText* >( pItem->getColumn(0) );
+	LLScrollListText *pTextItem = dynamic_cast< LLScrollListText* >( pItem->getColumn( UI_COL_NAME ) );
 
 	if( pTextItem )
 		pTextItem->setFontStyle( oStyle );
