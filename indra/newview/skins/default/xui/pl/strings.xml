@@ -4538,6 +4538,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Areasearch_Label">
 		Przeszukiwanie obszaru
 	</string>
+	<string name="Command_Settings_Debug_Label">
+		Ustawienia debugowania
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4627,6 +4630,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Areasearch_Tooltip">
 		Poszukaj obiektów na obszarze
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Zmień ustawienia konfiguracji przeglądarki
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

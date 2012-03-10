@@ -20,10 +20,10 @@
 		Włącz VBO:
 	</text>
 	<check_box label="Włącz OpenGL VBO" name="vbo" tool_tip="OpenGL Vertex Buffer Object (opis geometrii obiektów). Włączenie tej opcji na nowoczesnym sprzęcie spowoduje wzrost wydajności. Starszy sprzęt jednak ma często słabe wsparcie dla VBO i mogą wystąpić na nim awarie."/>
-	<text name="Enable VBO Stream:">
-        Włącz strumieniowe VBO:
+	<text name="tc label">
+        Włącz S3TC:
 	</text>
-	<check_box label="Włącz strumieniowe VBO" name="vbo_stream" tool_tip="Wyłączenie tej opcji może zwiększyć wydajność, gdy VBO jest włączone. Odnotowano zauważalny wzrost wydajności na różnych GPU ze stajni AMD przy wyłączonej tej pozycji."/>
+	<check_box label="Włącz kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu."/>
 	<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane. Zwiększanie tej wartości ponad 512 MB nie jest wskazane nawet, jeśli Twoja karta to obsługuje - ogólna wydajność Przeglądarki związana z pamięcią operacyjną widocznie spadnie."/>
 	<spinner label="Stosunek odległości dla mgły:" name="fog"/>
 	<button label="OK" label_selected="OK" name="OK"/>

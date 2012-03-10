@@ -59,7 +59,7 @@
 						<text name="scripts_value" value="Włączone"/>
 						<text name="damage_label" value="Uszkodzenia:"/>
 						<text name="damage_value" value="Wyłączone"/>
-						<text name="see_avatars_label" value="Widzenie awatarów:"/>
+						<text name="see_avatars_label" value="Inne awatary:"/>
 						<text name="see_avatars_value" value="Wyłączone"/>
 						<button label="O Posiadłości" name="about_land_btn"/>
 					</panel>
