@@ -101,7 +101,7 @@ private:
 //
 // Bridge functionality
 //
-FSLSLBridge :: FSLSLBridge(): LLEventTimer(1.0f),
+FSLSLBridge :: FSLSLBridge(): LLEventTimer(2.0f),
 					mBridgeCreating(false),
 					mpBridge(NULL),
 					mIsFirstCallDone(false),
