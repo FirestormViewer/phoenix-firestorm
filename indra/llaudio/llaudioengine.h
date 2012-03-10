@@ -479,7 +479,7 @@ protected:
 extern LLAudioEngine* gAudiop;
 
 // NaCl - Sound explorer
-typedef struct
+struct LLSoundHistoryItem
 {
   LLUUID mID;
   LLVector3d mPosition;
@@ -495,7 +495,20 @@ typedef struct
   bool mReviewed;
   bool mReviewedCollision;
   LLAudioSource* mAudioSource;
-} LLSoundHistoryItem;
+
+	LLSoundHistoryItem()
+	  : mType(0)
+	  , mPlaying(0)
+	  , mIsTrigger(0)
+	  , mIsLooped(0)
+	  , mTimeStarted(0.f)
+	  , mTimeStopped(0.f)
+	  , mReviewed(false)
+	  , mReviewedCollision(false)
+	  , mAudioSource(0)
+	{
+	}
+};
 extern std::map<LLUUID, LLSoundHistoryItem> gSoundHistory;
 // NaCl End
 
