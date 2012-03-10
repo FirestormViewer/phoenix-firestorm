@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_profile_web" label="Sieć">
+	<panel.string name="LoadTime" value="Załadowano w: [TIME] sekund"/>
     <flyout_button name="load" label="Wczytaj" label_selected="Wczytaj" tool_tip="Wczytaj stronę tego profilu w przeglądarce internetowej.">
         <flyout_button.item label="Otwórz we wbudowanej" name="open_item" />
         <flyout_button.item label="Otwórz w zewnętrznej" name="home_item" />
