@@ -65,6 +65,7 @@
 //#define ROOT_FIRESTORM_FOLDER "#Firestorm"	//moved to llinventoryfunctions to synch with the AO object
 #define FS_BRIDGE_FOLDER "#LSL Bridge"
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
+#define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
 #define FS_BRIDGE_MAJOR_VERSION 2
 #define FS_BRIDGE_MINOR_VERSION 2
 #define FS_MAX_MINOR_VERSION 99
@@ -100,10 +101,12 @@ private:
 //
 // Bridge functionality
 //
-FSLSLBridge :: FSLSLBridge():
+FSLSLBridge :: FSLSLBridge(): LLEventTimer(1.0f),
 					mBridgeCreating(false),
 					mpBridge(NULL),
-					mIsFirstCallDone(false)
+					mIsFirstCallDone(false),
+					mHasInitStarted(false),
+					mHasInventoryLoaded(false)
 {
 	llinfos << "Initializing FSLSLBridge" << llendl;
 	std::stringstream sstr;
@@ -160,8 +163,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			
 			
 			// If something that looks like our current bridge is attached but failed auth, detach and recreate.
-			LLUUID catID = findFSCategory();
-			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, mBridgeFolderID, LLAssetType::AT_OBJECT);
 			if (fsBridge != NULL)
 			{
 				if (get_is_item_worn(fsBridge->getUUID()))
@@ -186,8 +188,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		
 		if (mpBridge == NULL)
 		{
-			LLUUID catID = findFSCategory();
-			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, mBridgeFolderID, LLAssetType::AT_OBJECT);
 
 			if (fsBridge != NULL)
 				mpBridge = fsBridge;
@@ -247,6 +248,13 @@ void FSLSLBridge :: recreateBridge()
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return;
 
+	if (!mHasInventoryLoaded)
+	{
+		llwarns << "Inventory is still loading, aborting new attempt." << llendl;
+		reportToNearbyChat("Can't start bridge creation process because inventory is still loading. Please wait a few minutes.");
+		return;
+	}
+
 	if (mBridgeCreating)
 	{
 		llwarns << "Bridge creation already in progress, aborting new attempt." << llendl;
@@ -254,9 +262,7 @@ void FSLSLBridge :: recreateBridge()
 		return;
 	}
 
-	LLUUID catID = findFSCategory();
-
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, mBridgeFolderID, LLAssetType::AT_OBJECT);
 	if (fsBridge != NULL)
 	{
 		if (get_is_item_worn(fsBridge->getUUID()))
@@ -276,21 +282,63 @@ void FSLSLBridge :: initBridge()
 	if (!gSavedSettings.getBOOL("UseLSLBridge"))
 		return;
 
-	LLUUID catID = findFSCategory();
-
-	//check for inventory load
-	FSLSLBridgeInventoryObserver *bridgeInventoryObserver = new FSLSLBridgeInventoryObserver(catID);
-	gInventory.addObserver(bridgeInventoryObserver);
+	mEventTimer.start();
 }
 
+BOOL FSLSLBridge::tick()
+{
+	// Start with init process not before inventory is usable
+	if (gInventory.isInventoryUsable())
+	{
+		if (!mHasInitStarted)
+		{
+			mHasInitStarted = true;
+
+			// Inventory is usable, so let's find our needed categories
+			// (FS bridge folder and the landscaping folder in the library)
+			// Only do this once instead of in all kind of different places!
+			mBridgeFolderID = findFSCategory();
+			mBridgeContainerFolderID = findFSBridgeContainerCategory();
+
+			if (mBridgeFolderID.notNull() && mBridgeContainerFolderID.notNull())
+			{
+				// Explicitly bump fetching of our important folders
+				gInventory.fetchDescendentsOf(mBridgeFolderID);
+				gInventory.fetchDescendentsOf(mBridgeContainerFolderID);
+			}
+			else
+			{
+				mEventTimer.stop();
+				if (mBridgeFolderID.isNull())
+				{
+					llwarns << "Bridge folder not found in inventory. Cannot initialize bridge." << llendl;
+					reportToNearbyChat("Firestorm bridge folder could not be found in inventory. Cannot proceed with bridge initialization.");
+				}
+				if (mBridgeContainerFolderID.isNull())
+				{
+					llwarns << "Bridge container folder not found in library. Cannot initialize bridge." << llendl;
+					reportToNearbyChat("Firestorm bridge container folder could not be found in the library. Cannot proceed with bridge initialization.");
+				}
+			}
+		}
+
+		// Wait and periodically check if our important folders have been
+		// fetched in the meantime
+		if (gInventory.isCategoryComplete(mBridgeFolderID) && gInventory.isCategoryComplete(mBridgeContainerFolderID))
+		{
+			// Now that inventory is usable, start bridge creation process
+			mEventTimer.stop();
+			mHasInventoryLoaded = true;
+			startCreation();
+		}
+	}
+	return FALSE;
+}
 
 // Gets called by the Init, when inventory loaded.
 void FSLSLBridge :: startCreation()
 {
-	//if bridge object doesn't exist - create and attach it, update script.
-	LLUUID catID = findFSCategory();
-
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, mBridgeFolderID, LLAssetType::AT_OBJECT);
 
 	//detach everything else
 	detachOtherBridges();
@@ -323,32 +371,33 @@ void FSLSLBridge :: initCreationStep()
 	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
-		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
+		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog.");
 		mBridgeCreating = false;
 		return;
 	}
+
 	createNewBridge();
 }
 
 void FSLSLBridge :: createNewBridge() 
 {
-	//check if user has a bridge
-	LLUUID catID = findFSCategory();
+	findFSCategory(); // Make sure bridge folder still exists
 
 	//attach the Linden rock from the library (will resize as soon as attached)
-	LLUUID libID = gInventory.getLibraryRootFolderID();
-	LLViewerInventoryItem* libRock = findInvObject(LIB_ROCK_NAME, libID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* libRock = findInvObject(LIB_ROCK_NAME, mBridgeContainerFolderID, LLAssetType::AT_OBJECT);
 	//shouldn't happen but just in case
 	if (libRock != NULL)
 	{
 		//copy the library item to inventory and put it on 
 		LLPointer<LLInventoryCallback> cb = new FSLSLBridgeRezCallback();
 		llinfos << "Cloning a new Bridge container from the Library..." << llendl;
-		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),catID,mCurrentFullName,cb);
+		copy_inventory_item(gAgent.getID(),libRock->getPermissions().getOwner(),libRock->getUUID(),mBridgeFolderID,mCurrentFullName,cb);
 	}
 	else
 	{
 		llwarns << "Bridge container not found in the Library!" << llendl;
+		reportToNearbyChat("Firestorm could not create an LSL bridge. Bridge container object could not be found in the Library!");
+		mBridgeCreating = false;
 	}
 }
 
@@ -393,8 +442,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 			return;
 		}
 		//is it in the right place?
-		LLUUID catID = findFSCategory();
-		if (catID != fsObject->getParentUUID())
+		if (mBridgeFolderID != fsObject->getParentUUID())
 		{
 			//the object is not where we think it is. Kick it off.
 			LLVOAvatarSelf::detachAttachmentIntoInventory(fsObject->getUUID());
@@ -428,52 +476,88 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 
 	if (!mBridgeCreating) //just an attach. See what it is
 	{
-		//are we attaching the right thing? Check size and script
-		LLInventoryObject::object_list_t inventory_objects;
-		object->getInventoryContents(inventory_objects);
-
-		if (object->flagInventoryEmpty())
-		{
-			llinfos << "Empty bridge detected- re-enter creation process" << llendl;
-			mBridgeCreating = true;
-		}
-		else if (inventory_objects.size() > 0)
-		{
-			LLInventoryObject::object_list_t::iterator it = inventory_objects.begin();
-			LLInventoryObject::object_list_t::iterator end = inventory_objects.end();
-			bool isOurScript = false;
-			for ( ; it != end; ++it)
-			{
-				LLInventoryItem* item = ((LLInventoryItem*)((LLInventoryObject*)(*it)));
-				if (item->getType() == LLAssetType::AT_LSL_TEXT)
-				{
-					if (item->getCreatorUUID() == gAgent.getID()) 
-						isOurScript = true;
-					else //problem, not our script
-						llwarns << "The bridge inventory contains a script not created by user." << llendl;
-				}
-			}
-			if ((inventory_objects.size() == 1) && isOurScript) //We attached a valid bridge. Run along.
-				return;
-			else 
-			{
-				reportToNearbyChat("The bridge inventory contains unexpected items.");
-				llwarns << "The bridge inventory contains items other than bridge script." << llendl;
-				if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
-					mBridgeCreating = true;
-				else //Let the script disable competitors 
-				{
-					return;
-				}
-			}
-		}
-		else
-			llwarns << "Bridge not empty, but we're unable to retrieve contents." << llendl;
+		// Request object's inventory
+		object->registerInventoryListener(this, NULL);
+		object->requestInventory();
 	}
-
-	//modify the rock size and texture
-	if ((object != NULL) && (mBridgeCreating))
+	else
 	{
+		configureBridgePrim(object);
+	}
+}
+
+
+void FSLSLBridge::inventoryChanged(LLViewerObject* object,
+								LLInventoryObject::object_list_t* inventory,
+								S32 serial_num,
+								void* user_data)
+{
+	object->removeInventoryListener(this);
+
+	llinfos << "Received object inventory for existing bridge prim. Checking contents..." << llendl;
+
+	//are we attaching the right thing? Check size and script
+	LLInventoryObject::object_list_t inventory_objects;
+	object->getInventoryContents(inventory_objects);
+
+	if (object->flagInventoryEmpty())
+	{
+		llinfos << "Empty bridge detected- re-enter creation process" << llendl;
+		mBridgeCreating = true;
+	}
+	else if (inventory_objects.size() > 0)
+	{
+		S32 count(0);
+
+		LLInventoryObject::object_list_t::iterator it = inventory_objects.begin();
+		LLInventoryObject::object_list_t::iterator end = inventory_objects.end();
+		bool isOurScript = false;
+		for ( ; it != end; ++it)
+		{
+			LLInventoryItem* item = ((LLInventoryItem*)((LLInventoryObject*)(*it)));
+
+			// Somehow always contains a wonky object item with creator
+			// UUID = NULL UUID and asset type AT_NONE - don't count it
+			if (item->getType() != LLAssetType::AT_NONE)
+			{
+				count++;
+			}
+
+			if (item->getType() == LLAssetType::AT_LSL_TEXT)
+			{
+				if (item->getCreatorUUID() == gAgent.getID()) 
+					isOurScript = true;
+				else //problem, not our script
+					llwarns << "The bridge inventory contains a script not created by user." << llendl;
+			}
+		}
+		if (count == 1 && isOurScript) //We attached a valid bridge. Run along.
+			return;
+		else 
+		{
+			reportToNearbyChat("The bridge inventory contains unexpected items.");
+			llwarns << "The bridge inventory contains items other than bridge script." << llendl;
+			if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
+				mBridgeCreating = true;
+			else //Let the script disable competitors 
+			{
+				return;
+			}
+		}
+	}
+	else
+		llwarns << "Bridge not empty, but we're unable to retrieve contents." << llendl;
+
+		//modify the rock size and texture
+	if (mBridgeCreating)
+	{
+		configureBridgePrim(object);
+	}
+}
+
+void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
+{
+		//modify the rock size and texture
 		llinfos << "Bridge container found after second attachment, resizing..." << llendl;
 		setupBridgePrim(object);
 
@@ -487,7 +571,6 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		//add bridge script to object
 		llinfos << "Creating bridge script..." << llendl;
 		create_script_inner(object);
-	}
 }
 
 void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
@@ -507,8 +590,7 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 		return;
 	}
 	//is it in the right place?
-	LLUUID catID = findFSCategory();
-	if (catID != fsObject->getParentUUID())
+	if (mBridgeFolderID != fsObject->getParentUUID())
 	{
 		//that was in the wrong place. It's not ours.
 		llwarns << "Bridge seems to be the wrong inventory category. Aborting detachment." << llendl;
@@ -565,12 +647,12 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 
 void FSLSLBridge :: create_script_inner(LLViewerObject* object)
 {
-	LLUUID catID = findFSCategory();
+	findFSCategory(); // Make sure bridge folder still exists
 
 	LLPointer<LLInventoryCallback> cb = new FSLSLBridgeScriptCallback();
 	create_inventory_item(gAgent.getID(), 
 							gAgent.getSessionID(),
-							catID,	//LLUUID::null, 
+							mBridgeFolderID,	//LLUUID::null, 
 							LLTransactionID::tnull, 
 							mCurrentFullName, 
 							mCurrentFullName, 
@@ -579,7 +661,6 @@ void FSLSLBridge :: create_script_inner(LLViewerObject* object)
 							NOT_WEARABLE, 
 							mpBridge->getPermissions().getMaskNextOwner(), 
 							cb);
-
 }
 
 //
@@ -820,6 +901,59 @@ LLUUID FSLSLBridge :: findFSCategory()
 
 	return mBridgeFolderID;
 }
+
+LLUUID FSLSLBridge::findFSBridgeContainerCategory()
+{
+	llinfos << "Retrieving FSBridge container category (" << FS_BRIDGE_CONTAINER_FOLDER << ")" << llendl;
+	if (mBridgeContainerFolderID.notNull())
+	{
+		llinfos << "Returning FSBridge container category UUID from instance: " << mBridgeContainerFolderID << llendl;
+		return mBridgeContainerFolderID;
+	}
+
+	LLUUID LibRootID = gInventory.getLibraryRootFolderID();
+	if (LibRootID.notNull())
+	{
+		LLInventoryModel::item_array_t* items;
+		LLInventoryModel::cat_array_t* cats;
+		gInventory.getDirectDescendentsOf(LibRootID, cats, items);
+		if (cats)
+		{
+			S32 count = cats->count();
+			for(S32 i = 0; i < count; ++i)
+			{
+				if (cats->get(i)->getName() == "Objects")
+				{
+					LLUUID LibObjectsCatID = cats->get(i)->getUUID();
+					if (LibObjectsCatID.notNull())
+					{
+						LLInventoryModel::item_array_t* objects_items;
+						LLInventoryModel::cat_array_t* objects_cats;
+						gInventory.getDirectDescendentsOf(LibObjectsCatID, objects_cats, objects_items);
+						if (objects_cats)
+						{
+							S32 objects_count = objects_cats->count();
+							for (S32 j = 0; j < objects_count; ++j)
+							{
+								if (objects_cats->get(j)->getName() == FS_BRIDGE_CONTAINER_FOLDER)
+								{
+									mBridgeContainerFolderID = objects_cats->get(j)->getUUID();
+									llinfos << "FSBridge container category found in library. UUID: " << mBridgeContainerFolderID << llendl;
+									gInventory.fetchDescendentsOf(mBridgeContainerFolderID);
+									return mBridgeContainerFolderID;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	llwarns << "FSBridge container category not found in library!" << llendl;
+	return LLUUID();
+}
+
 LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type)
 {
 	LLViewerInventoryCategory::cat_array_t cats;
@@ -872,14 +1006,13 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 {
 	llinfos << "Cleaning leftover scripts and bridges for folder " << nameToCleanUp << llendl;
 	
-	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
 	//find all bridge and script duplicates and delete them
 	//NameCollectFunctor namefunctor(mCurrentFullName);
 	NameCollectFunctor namefunctor(nameToCleanUp);
-	gInventory.collectDescendentsIf(catID,cats,items,FALSE,namefunctor);
+	gInventory.collectDescendentsIf(mBridgeFolderID,cats,items,FALSE,namefunctor);
 
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
@@ -952,14 +1085,13 @@ bool FSLSLBridge :: isOldBridgeVersion(LLInventoryItem *item)
 
 void FSLSLBridge :: detachOtherBridges()
 {
-	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
 
-	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
+	LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, mBridgeFolderID, LLAssetType::AT_OBJECT);
 
 	//detach everything except current valid bridge - if any
-	gInventory.collectDescendents(catID,cats,items,FALSE);
+	gInventory.collectDescendents(mBridgeFolderID,cats,items,FALSE);
 
 	for (S32 iIndex = 0; iIndex < items.count(); iIndex++)
 	{
