@@ -324,11 +324,11 @@ BOOL FSLSLBridge::tick()
 
 		// Wait and periodically check if our important folders have been
 		// fetched in the meantime
-		if (gInventory.isCategoryComplete(mBridgeFolderID) && gInventory.isCategoryComplete(mBridgeContainerFolderID))
+		if (gInventory.isCategoryComplete(mBridgeFolderID) && gInventory.isCategoryComplete(mBridgeContainerFolderID) && !mHasInventoryLoaded)
 		{
 			// Now that inventory is usable, start bridge creation process
-			mEventTimer.stop();
 			mHasInventoryLoaded = true;
+			mEventTimer.stop();
 			startCreation();
 		}
 	}
