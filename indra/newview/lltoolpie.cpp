@@ -1043,7 +1043,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				{
 					group_title=group->getString();
 					if(!group_title.empty())
-						group_title+=" ";
+						group_title+="\n";
 				}
 			}
 

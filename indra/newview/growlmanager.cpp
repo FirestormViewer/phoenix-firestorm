@@ -210,7 +210,7 @@ bool GrowlManager::onLLNotification(const LLSD& notice)
 			LLUrlMatch urlMatch;
 			LLWString newLine = utf8str_to_wstring(body);
 			LLWString workLine = utf8str_to_wstring(body);
-			while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+			while (LLUrlRegistry::instance().findUrl(workLine, urlMatch) && !urlMatch.getUrl().empty())
 			{
 				LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
 
