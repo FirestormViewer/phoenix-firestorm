@@ -225,7 +225,10 @@ void viewerappapi_init(ViewerAppAPI *server)
 	}
 }
 
-gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **success_rtn, GError **error)
+// <FS:ND> FIRE-5417; The xml manifest for dbus claims success_rtn is a boolean, not a boolean array
+//gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **success_rtn, GError **error)
+gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean *success_rtn, GError **error)
+// </FS:ND>
 {
 	bool success = false;
 
@@ -242,8 +245,14 @@ gboolean viewer_app_api_GoSLURL(ViewerAppAPI *obj, gchar *slurl, gboolean **succ
 		success = true;
 	}		
 
-	*success_rtn = g_new (gboolean, 1);
-	(*success_rtn)[0] = (gboolean)success;
+	// <FS:ND> FIRE-5417; The xml manifest for dbus claims success_rtn is a boolean, not a boolean array
+
+	// *success_rtn = g_new (gboolean, 1);
+	// (*success_rtn)[0] = (gboolean)success;
+
+	*success_rtn = (gboolean)success;
+
+	// </FS:ND>
 
 	return TRUE; // the invokation succeeded, even if the actual dispatch didn't.
 }
