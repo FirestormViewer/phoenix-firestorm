@@ -342,7 +342,7 @@ void LLConsole::addConsoleLine(const LLWString& wline, const LLColor4 &color, LL
 	{
 		LLUrlMatch urlMatch;
 		LLWString workLine = wline;
-		while (LLUrlRegistry::instance().findUrl(workLine, urlMatch))
+		while (LLUrlRegistry::instance().findUrl(workLine, urlMatch) && !urlMatch.getUrl().empty())
 		{
 			LLWStringUtil::replaceString(newLine, utf8str_to_wstring(urlMatch.getUrl()), utf8str_to_wstring(urlMatch.getLabel()));
 
