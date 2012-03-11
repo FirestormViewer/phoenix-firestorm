@@ -11,6 +11,7 @@
 	<menu_item_check label="Pokazuj ikonki" name="View Icons"/>
 	<menu_item_check label="Zablokuj głos" name="Block/Unblock"/>
 	<menu_item_check label="Zablokuj tekst" name="MuteText"/>
+	<menu_item_call label="Wyrzuć z grupy" name="EjectSelected"/>
 	<context_menu label="Opcje Moderatora" name="Moderator Options">
 		<menu_item_check label="Czat tekstowy dozwolony" name="AllowTextChat"/>
 		<menu_item_call label="Wycisz tego uczestnika" name="ModerateVoiceMuteSelected"/>
