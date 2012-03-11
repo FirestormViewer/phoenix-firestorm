@@ -106,12 +106,12 @@
          name="ShowSidetrayInventory"
          shortcut="control|I"
 		 visible="true">
-            <menu_item_check.on_check
-             function="SidetrayPanelVisible"
-             parameter="inventory" />
-            <menu_item_check.on_click
-             function="ShowSidetrayPanel"
-             parameter="inventory" />
+          <menu_item_check.on_check
+           function="Floater.Visible"
+           parameter="inventory" />
+          <menu_item_check.on_click
+           function="Floater.Toggle"
+           parameter="inventory" />
         </menu_item_check>
         
         <menu_item_check

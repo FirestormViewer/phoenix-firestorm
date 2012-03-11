@@ -6748,61 +6748,6 @@ class LLToggleSpeak : public view_listener_t
 		return true;
 	}
 };
-class LLShowSidetrayPanel : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		std::string floater_name = userdata.asString();
-		std::string udock_name = userdata.asString();
-// SIDEBAR_HACK
-		//if (floater_name == "sidepanel_inventory")
-		//	udock_name = "sidebar_inventory";
-
-		//// AO: Proper behavior if tab is undocked
-		//LLFloater* floater_tab = LLFloaterReg::getInstance("side_bar_tab",udock_name);
-		//if (LLFloater::isShown(floater_tab) || LLFloater::isMinimized(floater_tab))
-		//{
-		//	bool isMinimized = floater_tab->isMinimized();
-		//	floater_tab->setMinimized(!isMinimized);
-		//}
-		//else // Toggle docked sidetray
-		//{
-		LLPanel* panel = LLFloaterSidePanelContainer::getPanel(floater_name);
-		if (panel)
-		{
-			if (panel->isInVisibleChain())
-			{
-				LLFloaterReg::getInstance(floater_name)->closeFloater();
-			}
-			else
-			{
-				LLFloaterReg::getInstance(floater_name)->openFloater();
-			}
-		}
-		//}
-// SIDEBAR_HACK
-		return true;
-	}
-};
-
-class LLSidetrayPanelVisible : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		std::string floater_name = userdata.asString();
-		// Toggle the panel
-		if (LLFloaterReg::getInstance(floater_name)->isInVisibleChain())
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-		
-	}
-};
-
 
 bool callback_show_url(const LLSD& notification, const LLSD& response)
 {
@@ -9841,8 +9786,6 @@ void initialize_menus()
 	enable.add("VisibleBuild", boost::bind(&enable_object_build));
 
 	view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");
-	view_listener_t::addMenu(new LLShowSidetrayPanel(), "ShowSidetrayPanel");
-	view_listener_t::addMenu(new LLSidetrayPanelVisible(), "SidetrayPanelVisible");
 	view_listener_t::addMenu(new LLSomethingSelected(), "SomethingSelected");
 	view_listener_t::addMenu(new LLSomethingSelectedNoHUD(), "SomethingSelectedNoHUD");
 	view_listener_t::addMenu(new LLEditableSelected(), "EditableSelected");
