@@ -324,6 +324,10 @@ void FSPanelProfile::onOpen(const LLSD& key)
         getChild<LLTextBase>("sl_description_edit")->setParseHTML(false);
 
         updateButtons();
+
+        FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
+        drop_target->setVisible( false );
+        drop_target->setEnabled( false );
     }
     else
     {
@@ -333,10 +337,10 @@ void FSPanelProfile::onOpen(const LLSD& key)
         mVoiceStatus = LLAvatarActions::canCall();
 
         updateOnlineStatus(); //will also call updateButtons()
-    }
 
-    FSDropTarget* target = getChild<FSDropTarget> ("drop_target");
-    target->setAgentID( getAvatarId() );
+        FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
+        drop_target->setAgentID( getAvatarId() );
+    }
 
     getChild<LLUICtrl>("user_key")->setValue( getAvatarId().asString() );
 
