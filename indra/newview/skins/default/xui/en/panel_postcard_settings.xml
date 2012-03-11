@@ -115,7 +115,7 @@
              max_val="100"
              name="image_quality_slider"
              top_pad="7"
-             width="190" />
+             width="200" />
             <text
              type="string"
              follows="left|top"

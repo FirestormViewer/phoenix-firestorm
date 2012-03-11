@@ -1996,9 +1996,8 @@ bool idle_startup()
 		display_startup();
 
 		// Create the inventory views
-		// This is done in the sidepanel floaters already -Zi
-		// llinfos << "Creating Inventory Views" << llendl;
-		// LLFloaterReg::getInstance("inventory");
+		llinfos << "Creating Inventory Views" << llendl;
+		LLFloaterReg::getInstance("inventory");
 		//display_startup();
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Added: RLVa-1.1.0f

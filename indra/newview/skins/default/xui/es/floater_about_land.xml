@@ -90,16 +90,16 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="ContentRatingText">
 				Adulto
 			</text>
-			<text name="Owner:">
+			<text name="Owner:" top_pad="2">
 				Propietario:
 			</text>
-			<text name="OwnerText">
+			<text name="OwnerText" left_pad="0">
 				Cargando...
 			</text>
-			<text name="Group:">
+			<text name="Group:" top_pad="2">
 				Grupo:
 			</text>
-			<text name="GroupText">
+			<text name="GroupText" left_pad="0">
 				Cargando...
 			</text>
 			<button label="Configurar" name="Set..."/>
@@ -119,14 +119,14 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="For sale to">
 				En venta a: [BUYER]
 			</text>
-			<text name="Sell with landowners objects in parcel.">
+			<text name="Sell with landowners objects in parcel." top_pad="-1">
 				Objetos incluídos en la venta
 			</text>
 			<text name="Selling with no objects in parcel.">
 				Los objetos no se incluyen en la venta.
 			</text>
 			<button label="Cancelar la venta del terreno" label_selected="Cancelar la venta del terreno" name="Cancel Land Sale"/>
-			<text name="Claimed:">
+			<text name="Claimed:" top="272">
 				Reclamada:
 			</text>
 			<text name="DateClaimText">
@@ -231,13 +231,13 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				[COUNT] de un máx. de [MAX] ([AVAILABLE] disponibles)
 			</text>
 			<text name="Primitives parcel supports:">
-				Capacidad del terreno de la parcela:
+				Capacidad de la parcela:
 			</text>
 			<text name="object_contrib_text">
 				[COUNT]
 			</text>
 			<text name="Primitives on parcel:">
-				Impacto en el terreno de la parcela:
+				Impacto en la parcela:
 			</text>
 			<text name="total_objects_text">
 				[COUNT]
@@ -273,10 +273,10 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				[COUNT]
 			</text>
 			<text name="Autoreturn">
-				Devolución automát. de objetos de otros (en min., 0 la desactiva):
+				Devolución automática de objetos de otros (en min., 0 la desactiva):
 			</text>
 			<line_editor name="clean other time"/>
-			<text name="Object Owners:">
+			<text name="Object Owners:" width="200">
 				Propietarios de los objetos:
 			</text>
 			<button label="Actualizar la lista" label_selected="Actualizar la lista" name="Refresh List" tool_tip="Refrescar la lista de objetos"/>
@@ -346,8 +346,8 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<check_box label="Cualquiera" name="check other scripts"/>
 			<check_box label="El grupo" name="check group scripts"/>
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
-			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos."/>
-			<check_box label="Mostrar parcela en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
+			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos." left_pad="42"/>
+			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
@@ -384,10 +384,10 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				Foto:
 			</text>
 			<texture_picker label="" name="snapshot_ctrl" tool_tip="Pulse para elegir una imagen"/>
-			<text name="allow_label5">
-				a los avatares de esta parcela y chatear con ellos
+			<text name="allow_label5" left="281">
+				Los  avatares de otras parcelas pueden ver y chatear con los avatares de ésta
 			</text>
-			<check_box label="Ver los avatares" name="SeeAvatarsCheck" tool_tip="Permite que los avatares de otras parcelas vean a los avatares de ésta y chateen con ellos, y también que tú puedas verles y chatear con ellos."/>
+			<check_box name="SeeAvatarsCheck" tool_tip="Permite que los avatares de otras parcelas vean a los avatares de ésta y chateen con ellos, y también que tú puedas verles y chatear con ellos." left="260"/>
 			<text name="landing_point">
 				Punto de llegada: [LANDING]
 			</text>
@@ -443,21 +443,21 @@ los medios:
 			<text name="MusicURL:">
 				URL de música:
 			</text>
-			<text name="Sound:">
+			<text name="Sound:" width="110">
 				Sonido:
 			</text>
 			<check_box label="Restringir sonidos de objetos y gestos a esta parcela" name="check sound local"/>
-			<text name="Avatar Sounds:">
+			<text name="Avatar Sounds:" width="110">
 				Sonidos de avatar:
 			</text>
 			<check_box label="Todos" name="all av sound check"/>
 			<check_box label="Grupo" name="group av sound check"/>
-			<text name="Voice settings:">
+			<text name="Voice settings:" width="110">
 				Voz:
 			</text>
 			<check_box label="Activar la voz" name="parcel_enable_voice_channel"/>
-			<check_box label="Autorizar la voz (establecido por el Estado)" name="parcel_enable_voice_channel_is_estate_disabled"/>
-			<check_box label="Limitar la voz a esta parcela" name="parcel_enable_voice_channel_local"/>
+			<check_box label="Activar la voz (establecido por el Estado)" name="parcel_enable_voice_channel_is_estate_disabled" left="120"/>
+			<check_box label="Limitar la voz a esta parcela" name="parcel_enable_voice_channel_local" left="120"/>
 		</panel>
 		<panel label="ACCESO" name="land_access_panel">
 			<panel.string name="access_estate_defined">
@@ -466,7 +466,7 @@ los medios:
 			<panel.string name="estate_override">
 				Una o más de esta opciones está configurada a nivel del estado
 			</panel.string>
-			<check_box label="Permitir el acceso público (Nota: Si no seleccionas esta opción, se crearán líneas de prohibición)" name="public_access"/>
+			<check_box label="Permitir el acceso público (Nota: Si no lo activas, se crearán líneas de prohibición)" name="public_access"/>
 			<text name="Only Allow">
 				Restringir el acceso a residentes verificados con:
 			</text>

@@ -1,3 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="block by name" title="BLOQUEAR OBJETO POR NOMBRE">
+	<text name="message">
+		Bloquear un objeto:
+	</text>
+	<line_editor name="object_name">
+		Nombre del objeto
+	</line_editor>
+	<text name="note">
+		* Sólo bloquea el texto del objeto, no sus sonidos
+	</text>
+	<button label="Aceptar" name="OK"/>
+	<button label="Cancelar" name="Cancel"/>
+</floater>
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="mute by name" title="IGNORAR OBJETOS SEGÚN SU NOMBRE">
 	<text bottom_delta="-40" name="message">

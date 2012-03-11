@@ -198,13 +198,13 @@
 			<menu_item_check label="Pokazuj komunikaty debugera" name="Show Debug Messages"/>
 			<menu_item_check label="Ukrywaj nieustawione lub zduplikowane wiadomości" name="Hide Unset or Duplicate Messages"/>
 			<menu_item_check label="Pokazuj błędy założeń logicznych" name="Show Assertion Failures"/>
+			<menu_item_check label="Ukryj zablokowane warstwy" name="Hide Locked Layers"/>
+			<menu_item_check label="Ukryj zablokowane dodatki" name="Hide Locked Attachments"/>
 			<menu_item_check label="Włącz stary tryb nazewnictwa (Legacy Naming)" name="Enable Legacy Naming"/>
 			<menu_item_check label="Włącz dzielenie się ubraniami (Shared Wear)" name="Enable Shared Wear"/>
 			<menu_item_check label="Zmieniaj nazwy przedmiotów współdzielonych po założeniu" name="Rename Shared Items on Wear"/>
 			<menu_item_check label="Blokady..." name="Locks"/>
 		</menu>
-		<menu_item_check label="Ukryj zablokowane warstwy" name="Hide Locked Layers"/>
-		<menu_item_check label="Ukryj zablokowane dodatki" name="Hide Locked Attachments"/>
 		<menu_item_check label="Zezwól na czat OOC (Out Of Character)" name="Allow OOC Chat"/>
 		<menu_item_check label="Odmów innym osobom/obiektom dodawania rzeczy do mojego #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Pokaż filtrowany czat" name="Show Filtered Chat"/>

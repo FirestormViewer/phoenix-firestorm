@@ -42,37 +42,6 @@
      label="Show L$ transactions in nearby chat instead of toasts"/>
 
     <check_box
-     control_name="ChatOnlineNotification"
-     height="16"
-     label="When my friends log in or out"
-     layout="topleft"
-     left="10"
-     name="friends_online_notify_checkbox"
-     top_pad="2"
-     width="190" />
-    <check_box
-     control_name="OnlineOfflinetoNearbyChat"
-     name="OnlineOfflinetoNearbyChat"
-     label="Log to nearby chat and console"
-     layout="topleft"
-     left_pad="0"
-     height="18"
-     width="150">
-     <check_box.commit_callback
-    function="Pref.Online_Notices" />
-    </check_box>
-    <check_box
-     enabled="false"
-     control_name="OnlineOfflinetoNearbyChatHistory"
-     follows="left|top"
-     height="18"
-     label="Only in nearby chat"
-     layout="topleft"
-     left_pad="50"
-     name="OnlineOfflinetoNearbyChatHistory"
-     width="150" />
-
-    <check_box
      control_name="FSLandmarkCreatedNotification"
      height="16"
      label="When a landmark has been created"
@@ -129,6 +98,49 @@
          width="100" />
     </radio_group>
 
+	 <text
+     type="string"
+     length="1"
+     follows="top|left"
+     height="15"
+     layout="topleft"
+     left="10"
+     name="friends_logon_label"
+     width="400">
+        Show when my friends log in or out:
+    </text>
+	 
+    <check_box
+     control_name="ChatOnlineNotification"
+     height="16"
+     label="As toasts"
+     layout="topleft"
+     left="10"
+     name="friends_online_notify_checkbox"
+     top_pad="2"
+     width="100" />
+    <check_box
+     control_name="OnlineOfflinetoNearbyChat"
+     name="OnlineOfflinetoNearbyChat"
+     label="In nearby chat and console"
+     layout="topleft"
+     left_pad="0"
+     height="18"
+     width="190">
+     <check_box.commit_callback
+    function="Pref.Online_Notices" />
+    </check_box>
+    <check_box
+     enabled="false"
+     control_name="OnlineOfflinetoNearbyChatHistory"
+     follows="left|top"
+     height="18"
+     label="In nearby chat only"
+     layout="topleft"
+     left_pad="0"
+     name="OnlineOfflinetoNearbyChatHistory"
+     width="180" />
+	
     <text
      type="string"
      length="1"
@@ -143,7 +155,7 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="140"
+     height="130"
      layout="topleft"
      left="10"
      multi_select="true"
@@ -193,7 +205,7 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="140"
+     height="130"
      layout="topleft"
      left="10"
      sort_column="0"

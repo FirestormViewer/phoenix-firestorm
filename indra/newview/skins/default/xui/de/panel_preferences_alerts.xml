@@ -5,9 +5,6 @@
 	</text>
 	<check_box label="Wenn ich L$ ausgebe oder erhalte" name="notify_money_change_checkbox" width="225"/>
 	<check_box left_pad="5" name="FSPaymentInfoInChat" label="L$-Transaktionen im lokalen Chat anzeigen"/>
-	<check_box label="Wenn Freunde sich an- oder abmelden" name="friends_online_notify_checkbox" width="230"/>
-	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
-	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Console" width="160"/>
 	<check_box label="Wenn eine Landmarke erstellt wurde" name="landmark_created_checkbox" width="230"/>
 	<check_box label="Wenn jemand seinen Displaynamen ändert" name="FSShowDisplayNameUpdateNotification" left_pad="0"/>
 	<check_box label="Skriptfehler anzeigen in:" name="show_script_errors"/>
@@ -15,6 +12,12 @@
 		<radio_item label="Lokaler Chat" name="script_0"/>
 		<radio_item label="Separates Fenster" name="script_1"/>
 	</radio_group>
+	<text name="friends_logon_label">
+		Anzeigen wenn meine Freunden sich an- oder abmelden:
+	</text>
+	<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
+	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory"/>
 	<text name="show_label">
 		Immer anzeigen:
 	</text>

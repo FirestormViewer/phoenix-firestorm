@@ -1117,7 +1117,7 @@ public:
 	static LLSnapshotLivePreview* getPreviewView(LLFloaterSnapshot *floater);
 	static void setResolution(LLFloaterSnapshot* floater, const std::string& comboname);
 	static void updateControls(LLFloaterSnapshot* floater);
-	static void updateLayout(LLFloaterSnapshot* floater);
+	static void updateLayout(LLFloaterSnapshot* floater,BOOL closingFloater=FALSE);
 	static void setStatus(EStatus status, bool ok = true, const std::string& msg = LLStringUtil::null);
 	EStatus getStatus() const { return mStatus; }
 	static void setNeedRefresh(LLFloaterSnapshot* floater, bool need);
@@ -1260,7 +1260,7 @@ void LLFloaterSnapshot::Impl::setResolution(LLFloaterSnapshot* floater, const st
 }
 
 //static 
-void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
+void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp,BOOL closingFloater)
 {
 	LLSnapshotLivePreview* previewp = getPreviewView(floaterp);
 
@@ -1303,7 +1303,10 @@ void LLFloaterSnapshot::Impl::updateLayout(LLFloaterSnapshot* floaterp)
 
 	bool use_freeze_frame = floaterp->getChild<LLUICtrl>("freeze_frame_check")->getValue().asBoolean();
 
-	if (use_freeze_frame)
+	// <FS:Zi> Fix snapshot freeze frame getting stuck
+	// if (use_freeze_frame)
+	if (use_freeze_frame && !closingFloater)
+	// </FS:Zi>
 	{
 		// stop all mouse events at fullscreen preview layer
 		floaterp->getParent()->setMouseOpaque(TRUE);
@@ -2218,6 +2221,7 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 void LLFloaterSnapshot::onClose(bool app_quitting)
 {
 	getParent()->setMouseOpaque(FALSE);
+	LLFloaterSnapshot::Impl::updateLayout(this,TRUE);	// <FS:Zi> Fix snapshot freeze frame getting stuck
 }
 
 // virtual

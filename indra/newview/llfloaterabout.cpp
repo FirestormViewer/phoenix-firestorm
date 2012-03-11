@@ -243,8 +243,8 @@ LLSD LLFloaterAbout::getInfo()
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
-	info["SKIN"] = gSavedSettings.getString("SkinCurrent");
-	info["THEME"] = gSavedSettings.getString("SkinCurrentTheme");
+	info["SKIN"] = gSavedSettings.getString("SkinCurrent2");
+	info["THEME"] = gSavedSettings.getString("SkinCurrentTheme2");
 
 	//[FIRE 3113 : SJ] Added Font and fontsize to info
 	info["FONT"] = "Unknown Font";

@@ -22,7 +22,7 @@
 				<combo_box.item label="JPEG" name="JPEG"/>
 				<combo_box.item label="BMP (sin pérdida)" name="BMP"/>
 			</combo_box>
-			<slider label="Calidad imagen" name="image_quality_slider"/>
+			<slider label="Calidad imagen" name="image_quality_slider" label_width="90"/>
 		</layout_panel>
 	</layout_stack>
 	<flyout_button label="Guardar" name="save_btn" tool_tip="Guardar la imagen en un archivo">

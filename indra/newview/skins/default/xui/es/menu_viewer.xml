@@ -29,7 +29,7 @@
 			<menu_item_call label="Volver al avatar femenino por defecto (Character Test)" name="ResetDefaultAvF"/>
 	        	<menu_item_check label="Mostrar coste de dibujo del avatar (ARC)" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
-			<menu_item_call label="Recrear el LSL Bridge" name="Recreate LSL Bridge"/>			
+			<menu_item_call label="Regenerar el LSL Bridge" name="Recreate LSL Bridge"/>			
 		</menu>
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
 		<menu label="Subir" name="Upload">
@@ -57,6 +57,7 @@
 		<menu_item_call label="Grupos" name="My Groups"/>
 		<menu_item_check label="Chat" name="Nearby Chat"/>
 		<menu_item_check label="Conversaciones" name="Conversations"/>
+		<menu_item_check label="Gente" name="People"/>
 		<menu_item_check label="Gestos" name="Gestures"/>
 		<menu_item_check label="Filtros de voz" name="ShowVoice"/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
@@ -108,6 +109,7 @@
 			</menu>
 		</menu>
 		<menu_item_call label="Búsqueda de área" name="area_search"/>
+		<menu_item_check label="Explorador de sonidos" name="Sound Explorer"/>
 		<menu_item_call label="Lista negra" name="Asset Blacklist"/>
 	</menu>
 	<menu label="Construir" name="BuildTools">
@@ -196,13 +198,13 @@
 			<menu_item_check label="Mostrar mensajes de depuración" name="Show Debug Messages"/>
 			<menu_item_check label="Ocultar mensajes de No configurado o Duplicado" name="Hide Unset or Duplicate Messages"/>
 			<menu_item_check label="Mostrar fallos de aserción" name="Show Assertion Failures"/>
+			<menu_item_check label="Ocultar capas bloqueadas" name="Hide Locked Layers"/>
+			<menu_item_check label="Ocultar accesorios bloqueados" name="Hide Locked Attachments"/>
 			<menu_item_check label="Activar nomenclatura clásica" name="Enable Legacy Naming"/>
 			<menu_item_check label="Activar ropa compartida" name="Enable Shared Wear"/>
 			<menu_item_check label="Renombrar elementos compartidos al vestirlos" name="Rename Shared Items on Wear"/>
 			<menu_item_check label="Bloqueos..." name="Locks"/>
 		</menu>
-		<menu_item_check label="Ocultar capas bloqueadas" name="Hide Locked Layers"/>
-		<menu_item_check label="Ocultar accesorios bloqueados" name="Hide Locked Attachments"/>
 		<menu_item_check label="Permitir chat OOC" name="Allow OOC Chat"/>
 		<menu_item_check label="Prohibir Give to #RLV" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Mostrar chat filtrado" name="Show Filtered Chat"/>

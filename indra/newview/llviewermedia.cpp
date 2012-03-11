@@ -542,7 +542,7 @@ std::string LLViewerMedia::getCurrentUserAgent()
 {
 	// Don't use user-visible string to avoid 
 	// punctuation and strange characters.
-	std::string skin_name = gSavedSettings.getString("SkinCurrent");
+	std::string skin_name = gSavedSettings.getString("SkinCurrent2");
 
 	// Just in case we need to check browser differences in A/B test
 	// builds.

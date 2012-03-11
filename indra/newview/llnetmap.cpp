@@ -435,8 +435,8 @@ void LLNetMap::draw()
 
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f | FS-Specific
 			LLWorldMapView::drawAvatar(
-				pos_map.mV[VX], pos_map.mV[VY], 
-				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? color : map_avatar_color, 
+				pos_map.mV[VX], pos_map.mV[VY],
+				((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? color : map_avatar_color.get()),
 				pos_map.mV[VZ], mDotRadius,
 				unknown_relative_z);
 // [/RLVa:KB]

@@ -14,7 +14,7 @@
 			<check_box label="Mantener las proporciones" name="postcard_keep_aspect_check"/>
 		</layout_panel>
 		<layout_panel name="postcard_image_format_quality_lp">
-			<slider label="Calidad imagen" name="image_quality_slider" label_width="90" width="200"/>
+			<slider label="Calidad imagen" name="image_quality_slider" label_width="90"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

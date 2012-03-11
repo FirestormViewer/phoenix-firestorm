@@ -3,24 +3,27 @@
 	<text name="tell_me_label">
 		Avisarme:
 	</text>
-	<check_box name="notify_money_change_checkbox" label="Cuando gaste o consiga L$"/>
-	<check_box name="FSPaymentInfoInChat" label="Mostrar transacciones de L$ en el chat local en vez de en 'tostadas'" left_pad="" left="10"/>
-	<check_box name="friends_online_notify_checkbox" label="Cuando mis amigos se conecten o desconecten"/>
-	<check_box name="OnlineOfflinetoNearbyChat" label="Mostrar en el chat local y en la consola" top_pad="4" left_pad="" left="30" width="190"/>
-	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
-	<check_box label="Cuando se cree un hito" name="landmark_created_checkbox"/>
-	<check_box label="Cuando alguien cambie su displayname" name="FSShowDisplayNameUpdateNotification"/>
-	<check_box label="Cuando se produzcan errores de script:" name="show_script_errors"/>
-	<radio_group name="show_script_errors_location" left_pad="" top_pad="4" width="400">
-		<radio_item label="En el chat local" name="script_0" left_pad="10" width="200"/>
-		<radio_item label="En una ventana independiente" name="script_1" width="200"/>
+	<check_box name="notify_money_change_checkbox" label="Cuando gaste o reciba L$" width="145"/>
+	<check_box name="FSPaymentInfoInChat" label="Transacciones de L$ en el chat local en vez de en tostadas"/>
+	<check_box label="Cuando se cree un hito" name="landmark_created_checkbox" width="145"/>
+	<check_box label="Cuando alguien cambie su displayname" name="FSShowDisplayNameUpdateNotification" left_pad="30"/>
+	<check_box label="Cuando haya errores de script:" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location">
+		<radio_item label="En el chat local" name="script_0"/>
+		<radio_item label="En una ventana independiente" name="script_1" left_delta="110"/>
 	</radio_group>
+	<text name="friends_logon_label" width="310">
+		Mostrar cuando mis amigos se conecten/desconecten:
+	</text>
+	<check_box name="friends_online_notify_checkbox" label="En tostadas" width="95"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="En el chat local y en la consola" width="195"/>
+	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
 	<text name="show_label">
 		Mostrar siempre:
 	</text>
-	<scroll_list height="105" name="enabled_popups"/>
+	<scroll_list name="enabled_popups"/>
 	<text name="dont_show_label">
 		No mostrar nunca:
 	</text>
-	<scroll_list height="105" name="disabled_popups"/>
+	<scroll_list name="disabled_popups"/>
 </panel>

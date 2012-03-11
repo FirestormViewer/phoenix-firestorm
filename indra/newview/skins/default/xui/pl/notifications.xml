@@ -2578,7 +2578,7 @@ Spróbuj ponownie za kilka minut.
 			<button name="Discard" text="Odrzuć"/>
 		</form>
 	</notification>
-	<notification name="UserGiveItem">
+	<notification name="UserGiveItem" label="Propozycja przedmiotu od [NAME_LABEL]">
 		[NAME_SLURL] dał Ci [OBJECTTYPE]:
 [ITEM_SLURL]
 Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już otrzymywać żadnych ofert lub wiadomości od [NAME_SLURL].
@@ -2616,7 +2616,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 			<button name="GoNow..." text="Teraz..."/>
 		</form>
 	</notification>
-	<notification name="OfferFriendship">
+	<notification name="OfferFriendship" label="Propozycja znajomości od [NAME_LABEL]">
 		[NAME_SLURL] proponuje znajomość.
 
 [MESSAGE]
@@ -2630,7 +2630,7 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 	<notification name="FriendshipOffered">
 		Zaoferowałeś/aś znajomość dla [TO_NAME]
 	</notification>
-	<notification name="OfferFriendshipNoMessage">
+	<notification name="OfferFriendshipNoMessage" label="Propozycja znajomości od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci znajomość.
 
 (Będziecie mogli widzieć swój status online)
