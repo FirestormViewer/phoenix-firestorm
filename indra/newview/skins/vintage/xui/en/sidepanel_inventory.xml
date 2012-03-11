@@ -21,6 +21,7 @@
 			layout="topleft"
 			left="0"
 			top="0"
+			open_tabs_on_drag_and_drop="true"
 			tab_drag_commit="true"
 			tab_position="bottom"
 			name="inventory_tab_container"
