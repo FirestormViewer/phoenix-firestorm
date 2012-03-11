@@ -50,6 +50,7 @@
 // #include "llnearbychatbar.h"		// <FS:Zi> Dead code
 #include "llnotificationmanager.h"
 #include "llviewerobject.h"
+#include "llappearancemgr.h"
 
 #include <boost/regex.hpp>
 #include <string>
@@ -352,9 +353,9 @@ void FSLSLBridge :: startCreation()
 	{
 		//TODO need versioning - see isOldBridgeVersion()
 		mpBridge = fsBridge;
-		if (!isItemAttached(mpBridge->getUUID()))
+		if (!isItemAttached(mpBridge->getUUID()) && !LLAppearanceMgr::instance().getIsInCOF(mpBridge->getUUID()))
 		{
-			//Is this a valid bridge - wear it. 
+			//Is this a valid bridge - wear it.
 			LLAttachmentsMgr::instance().addAttachment(mpBridge->getUUID(), BRIDGE_POINT, FALSE, TRUE);	
 			llinfos << "Bridge found in inventory, reattaching..." << llendl;
 			//from here, the attach shoould report to ProcessAttach and make sure bridge is valid.
