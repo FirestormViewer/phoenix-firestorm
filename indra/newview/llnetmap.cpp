@@ -388,11 +388,7 @@ void LLNetMap::draw()
 			pos_map = globalPosToView(positions[i]);
 			LLUUID uuid = avatar_ids[i];
 
-//			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
-// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL) &&
-				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-// [/RLVa:KB]
+			bool show_as_friend = (LLAvatarTracker::instance().getBuddyInfo(uuid) != NULL);
 
 			LLColor4 color = show_as_friend ? map_avatar_friend_color : map_avatar_color;
 
@@ -437,11 +433,18 @@ void LLNetMap::draw()
 				color = LGGContactSets::getInstance()->getFriendColor(uuid);
 			}
 
+// [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f | FS-Specific
 			LLWorldMapView::drawAvatar(
 				pos_map.mV[VX], pos_map.mV[VY], 
-				color, 
+				(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? color : map_avatar_color, 
 				pos_map.mV[VZ], mDotRadius,
 				unknown_relative_z);
+// [/RLVa:KB]
+//			LLWorldMapView::drawAvatar(
+//				pos_map.mV[VX], pos_map.mV[VY], 
+//				color, 
+//				pos_map.mV[VZ], mDotRadius,
+//				unknown_relative_z);
 
 			if(uuid.notNull())
 			{
