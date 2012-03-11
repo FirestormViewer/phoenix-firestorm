@@ -69,7 +69,20 @@ BOOL LLPanelBlockedList::postBuild()
 	mBlockedList = getChild<LLScrollListCtrl>("blocked");
 	mBlockedList->setCommitOnSelectionChange(TRUE);
 
-	childSetCommitCallback("back", boost::bind(&LLPanelBlockedList::onBackBtnClick, this), NULL);
+	// <FS:Zi> Make sure user can go back blocked user list if it's in a skin without
+	//         sidebar <Back button
+	// childSetCommitCallback("back", boost::bind(&LLPanelBlockedList::onBackBtnClick, this), NULL);
+	LLSideTrayPanelContainer* parent = dynamic_cast<LLSideTrayPanelContainer*>(getParent());
+	if(parent)
+	{
+		childSetCommitCallback("back", boost::bind(&LLPanelBlockedList::onBackBtnClick, this), NULL);
+		getChild<LLUICtrl>("back_button_container")->setVisible(TRUE);
+	}
+	else
+	{
+		getChild<LLUICtrl>("back_button_container")->setVisible(FALSE);
+	}
+	// </FS:Zi>
 
 	LLMuteList::getInstance()->addObserver(this);
 	
