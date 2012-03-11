@@ -128,7 +128,7 @@
 						user_resize="false"
 						follows="all"
 						name="outbox_layout_panel"
-						visible="true">
+						visible="false">
 						<panel
 							follows="all"
 							layout="topleft"
