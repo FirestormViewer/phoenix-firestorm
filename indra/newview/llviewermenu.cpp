@@ -2552,31 +2552,22 @@ void cleanup_menus()
 // Object pie menu
 //-----------------------------------------------------------------------------
 
-// Andromeda Rage:  Derender functionality, inspired by Phoenix.  TODO: RLVa stuff
 class LLObjectDerender : public view_listener_t
 {
     bool handleEvent(const LLSD& userdata)
     {
-        LLViewerObject* slct = LLSelectMgr::getInstance()->getSelection()->getFirstObject();
-        if(!slct)return true;
-        LLUUID id = slct->getID();
-        LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
-        LLUUID root_key;
-        LLSelectNode* node = selection->getFirstRootNode();
-        if(node)root_key = node->getObject()->getID();
-        if(root_key.notNull())
-        {
-            id = root_key;
-        }
-        LLSelectMgr::getInstance()->removeObjectFromSelections(id);
+		LLSelectNode* nodep = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
+		LLViewerObject* objp = (nodep) ? nodep->getObject() : NULL;
 
-        if (!(id == gAgentID))
-        {
-            LLViewerObject *objectp = gObjectList.findObject(id);
-            {
-                gObjectList.killObject(objectp);
-            }
-        }
+//		if ( (objp) && (gAgentID != objp->getID()) )
+// [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
+		// Don't allow derendering of own attachments when RLVa is enabled
+		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
+// [/RLVa:KB]
+		{
+	        LLSelectMgr::getInstance()->removeObjectFromSelections(objp->getID());
+			gObjectList.killObject(objp);
+		}
         return true;
     }
 };
