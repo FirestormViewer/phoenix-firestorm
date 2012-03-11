@@ -6,6 +6,6 @@
 	<tab_container name="friends_and_groups">
 		<panel label="Amigos" name="friends_panel"/>
 		<panel label="Grupos" name="groups_panel"/>
-		<panel label="Amigos y contactos" name="contacts_lists_panel" />
+<!-- 		<panel label="Amigos y contactos" name="contacts_lists_panel" /> -->
 	</tab_container>
 </floater>

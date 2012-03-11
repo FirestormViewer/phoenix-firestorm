@@ -4969,6 +4969,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Webbrowser_Label">Navegador web</string>
 	<string name="Command_Default_Chat_Bar_Label">Chat</string>
 	<string name="Command_Areasearch_Label">Buscar en el área</string>
+	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5049,6 +5050,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Webbrowser_Tooltip">Abre el navegador web interno</string>
 	<string name="Command_Default_Chat_Bar_Tooltip">Muestra u oculta la barra de chat</string>
 	<string name="Command_Areasearch_Tooltip">Buscar objetos a tu alrededor</string>
+	<string name="Command_Settings_Debug_Tooltip">Cambia valores de configuración del visor</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
@@ -5086,16 +5088,16 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Muy bajo
 	</string>
 	<string name="snapshot_quality_low">
-		Bajo
+		Baja
 	</string>
 	<string name="snapshot_quality_medium">
-		Medio
+		Media
 	</string>
 	<string name="snapshot_quality_high">
-		Alto
+		Alta
 	</string>
 	<string name="snapshot_quality_very_high">
-		Muy alto
+		Muy alta
 	</string>
 	<string name="IMPrefix">
 		MI:

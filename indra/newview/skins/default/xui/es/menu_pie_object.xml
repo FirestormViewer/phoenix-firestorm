@@ -22,7 +22,7 @@
 			<pie_menu label="Lista negra" name="Blacklist">
 				<pie_slice name="Blacklist Object" label="Objeto"/>
 				<pie_slice name="Blacklist Textures" label="Texturas"/>
-				<pie_slice name="Blacklist Sculpt" name="Esculpido"/>
+				<pie_slice name="Blacklist Sculpt" label="Esculpido"/>
 			</pie_menu>
 			<pie_slice label="Bloquear" name="Object Mute"/>
 			<pie_slice label="Info scripts" name="ScriptInfo"/>

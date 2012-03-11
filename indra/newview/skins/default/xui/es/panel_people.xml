@@ -29,6 +29,7 @@
 	<string name="no_groups_msg" value="¿Buscas grupos en que participar? Prueba la [secondlife:///app/search/groups Búsqueda]."/>
 	<string name="MiniMapToolTipMsg" value="[REGION](Haz doble clic para abrir el mapa, pulsa mayúsculas y arrastra para obtener una panorámica)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION](Haz doble clic para teleportarte, pulsa mayúsculas y arrastra para obtener una panorámica)"/>
+	<string name="avatar_name_count" value="NOMBRE [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<filter_editor label="Filtrar" name="filter_input"/>
 	<tab_container name="tabs">
 		<panel label="CERCANA" name="nearby_panel">

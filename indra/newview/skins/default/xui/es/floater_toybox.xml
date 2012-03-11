@@ -6,6 +6,6 @@
 	<text name="toybox label 2">
 		Los botones aparecerán como se muestra o solo como iconos, según la configuración de cada barra.
 	</text>
-	<button label="Quitar todas las barras" label_selected="Quitar todas las barras" name="btn_clear_all" width="170"/>
-	<button label="Restaurar predeterminados" label_selected="Restaurar predeterminados" name="btn_restore_defaults" width="170"/>
+	<button label="Quitar todas las barras" label_selected="Quitar todas las barras" name="btn_clear_all" width="170" left="105"/>
+	<button label="Restaurar predeterminados" label_selected="Restaurar predeterminados" name="btn_restore_defaults" width="170" left="375"/>
 </floater>

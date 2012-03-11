@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="Sonidos" width="597">
+	<check_box name="avatars_chk" label="Avatares" width="75"/>
+	<check_box name="objects_chk" label="Objetos" width="69" left_delta="75"/>
+	<check_box name="collision_chk" label="Sonidos de colisión por defecto" width="194" left_delta="69"/>
+	<check_box name="repeated_asset_chk" label="Activos repetidos" width="120" left_delta="194"/>
+	<check_box name="pause_chk" label="Registro de Pausas" left_delta="120"/>
+	<scroll_list name="sound_list">
+		<columns label="Sonando" name="playing"/>
+		<columns label="Tipo" name="type"/>
+		<columns label="Propietario" name="owner"/>
+		<columns label="Sonido" name="sound"/>
+	</scroll_list>
+	<button label="Reproducir localmente" name="play_locally_btn" width="140"/>
+	<button label="Reproducir en el mundo" name="play_ambient_btn" left_delta="145" width="140"/>
+	<button label="Mirarlo" name="look_at_btn" left_delta="145"/>
+	<button label="Detener" name="stop_btn" width="75"/>
+	<button label="Bloquear" name="bl_btn" width="75" right="-90"/>
+</floater>

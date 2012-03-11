@@ -9,4 +9,5 @@ Perteneces a [COUNT] grupos de un máximo de [MAX].
 	<button label="Abandonar" name="leave_btn"/>
 	<button label="Crear..." name="create_btn"/>
 	<button label="Buscar..." name="search_btn"/>
+	<button label="Títulos" name="titles_btn"/>
 </panel>
