@@ -1388,17 +1388,6 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 		// Clear any pending requests once the attachment arrives.
 		removeAttachmentRequest(attachment_id);
 
-// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
-		// NOTE: RLVa event handlers should be invoked *after* LLVOAvatar::attachObject() calls LLViewerJointAttachment::addObject()
-		if (rlv_handler_t::isEnabled())
-		{
-			RlvAttachmentLockWatchdog::instance().onAttach(viewer_object, attachment);
-			gRlvHandler.onAttach(viewer_object, attachment);
-
-			if ( (attachment->getIsHUDAttachment()) && (!gRlvAttachmentLocks.hasLockedHUD()) )
-				gRlvAttachmentLocks.updateLockedHUD();
-		}
-// [/RLVa:KB]
 //-TT Patch: ReplaceWornItemsOnly
 		gInventory.wearAttachmentsOnAvatarCheckRemove(viewer_object, attachment);
 //-TT
