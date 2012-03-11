@@ -17,7 +17,7 @@
 Speicher: [MEMORY_MB] MB
 Betriebssystem, Version: [OS_VERSION]
 Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
-Grafikkarten: [GRAPHICS_CARD]
+Grafikkarte: [GRAPHICS_CARD]
 	</floater.string>
 	<floater.string name="AboutDriver">
 		Windows Grafiktreiber-Version: [GRAPHICS_DRIVER_VERSION]
