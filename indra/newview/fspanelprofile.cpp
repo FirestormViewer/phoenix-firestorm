@@ -336,7 +336,8 @@ void FSPanelProfile::onOpen(const LLSD& key)
 
         mVoiceStatus = LLAvatarActions::canCall();
 
-        updateOnlineStatus(); //will also call updateButtons()
+        updateOnlineStatus();
+        updateButtons();
 
         FSDropTarget* drop_target = getChild<FSDropTarget> ("drop_target");
         drop_target->setAgentID( getAvatarId() );
@@ -662,6 +663,7 @@ void FSPanelProfile::onGroupInvite()
 void FSPanelProfile::changed(U32 mask)
 {
     updateOnlineStatus();
+    updateButtons();
 }
 
 // virtual, called by LLVoiceClient
@@ -718,7 +720,6 @@ void FSPanelProfile::updateOnlineStatus()
     const LLRelationship* relationship = LLAvatarTracker::instance().getBuddyInfo(getAvatarId());
     bool online = relationship->isOnline();
     processOnlineStatus(online);
-    updateButtons();
 }
 
 void FSPanelProfile::processOnlineStatus(bool online)
