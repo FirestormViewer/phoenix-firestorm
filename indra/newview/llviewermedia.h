@@ -299,7 +299,7 @@ public:
 	// switch skins without restarting the app.
 	static void updateBrowserUserAgent();
 
-	// Callback for when the SkinCurrent control is changed to
+	// Callback for when the SkinCurrent2 control is changed to
 	// switch the user agent string to indicate the new skin.
 	static bool handleSkinCurrentChanged(const LLSD& newvalue);
 

@@ -73,7 +73,7 @@
                 </map>
             </array>
         </map>
-
+<!--removed do to skin not working
         <map>
         <key>name</key>
             <string>StarLight</string>
@@ -93,7 +93,7 @@
                 <key>folder</key>
                     <string>original_teal</string>
                 </map>
-		<map>
+		            <map>
                 <key>name</key>
                     <string>Mono Teal</string>
                 <key>folder</key>
@@ -119,7 +119,7 @@
                 </map>
 
             </array>
-        </map>
+        </map> -->
     </array>
 </llsd>
 

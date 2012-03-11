@@ -71,7 +71,7 @@
     <integer>1</integer>
   </map>
 
-  <key>SkinCurrent</key>
+  <key>SkinCurrent2</key>
   <map>
     <key>Comment</key>
     <string>The currently selected skin.</string>
@@ -80,10 +80,10 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>starlight</string>
+    <string>metaharper</string>
   </map>
 
-  <key>SkinCurrentTheme</key>
+  <key>SkinCurrentTheme2</key>
   <map>
     <key>Comment</key>
     <string>The selected theme for the current skin.</string>
@@ -92,7 +92,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-    <string>original_orange</string>
+    <string>modern</string>
   </map>
 
   <key>LetterKeysFocusChatBar</key>
