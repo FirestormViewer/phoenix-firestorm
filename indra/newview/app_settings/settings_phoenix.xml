@@ -59,7 +59,7 @@
     <integer>0</integer>
   </map>
 
-  <key>SkinCurrent2</key>
+  <key>SkinCurrent</key>
   <map>
     <key>Comment</key>
     <string>The currently selected skin.</string>
@@ -71,7 +71,7 @@
     <string>vintage</string>
   </map>
 
-  <key>SkinCurrentTheme2</key>
+  <key>SkinCurrentTheme</key>
   <map>
     <key>Comment</key>
     <string>The selected theme for the current skin.</string>

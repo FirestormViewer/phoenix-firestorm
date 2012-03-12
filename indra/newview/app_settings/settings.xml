@@ -995,7 +995,7 @@
       <integer>1</integer>   
     </map>
 
-  <key>SkinCurrentTheme2</key>
+  <key>SkinCurrentTheme</key>
     <map>
       <key>Comment</key>
       <string>The selected theme for the current skin.</string>
@@ -12332,7 +12332,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>SkinCurrent2</key>
+    <key>SkinCurrent</key>
     <map>
       <key>Comment</key>
       <string>The currently selected skin.</string>
