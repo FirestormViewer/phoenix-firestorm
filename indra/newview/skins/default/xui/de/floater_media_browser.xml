@@ -26,7 +26,7 @@
 Das Medien-Browser-Plugin lädt gerade.
 Sollte das Plugin nicht laden, sind Informationen zur Problemlösung erhältlich unter
 
-http://wiki.phoenixviewer.com/doku.php?id=fs_media
+http://wiki.phoenixviewer.com/fs_media
 			</text>
 			<button label="In meinem Browser öffnen" name="open_browser"/>
 			<check_box label="Immer in meinem Browser öffnen" name="open_always"/>
