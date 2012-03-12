@@ -34,18 +34,18 @@
 #include "llviewerinventory.h"
 #include "llinventoryobserver.h"
 #include "lleventtimer.h"
-#include "llvoinventorylistener.h"
 
 //
 //-TT Client LSL Bridge File
 //
 
-class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLEventTimer, public LLVOInventoryListener //, public LLVOInventoryListener
+class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder //, public LLVOInventoryListener
 {
 	static const U8 BRIDGE_POINT = 127;
 
 	friend class FSLSLBridgeScriptCallback;
 	friend class FSLSLBridgeRezCallback;
+	friend class FSLSLBridgeInventoryObserver;
 	friend class FSLSLBridgeCleanupTimer;
 
 public:
@@ -74,15 +74,6 @@ public:
 
 	LLUUID getBridgeFolder() { return mBridgeFolderID; }
 
-	// from LLEventTimer
-	BOOL tick();
-
-	// from LLVOInventoryListener
-	virtual void inventoryChanged(LLViewerObject* object,
-								LLInventoryObject::object_list_t* inventory,
-								S32 serial_num,
-								void* user_data);
-
 private:
 	std::string				mCurrentURL;
 	bool					mBridgeCreating;
@@ -91,17 +82,12 @@ private:
 	std::string				mCurrentFullName;
 	LLUUID					mScriptItemID;	//internal script ID
 	LLUUID					mBridgeFolderID;
-	LLUUID					mBridgeContainerFolderID;
 
 	bool					mIsFirstCallDone; //initialization conversation
-
-	bool					mHasInitStarted;
-	bool					mHasInventoryLoaded;
 
 protected:
 	LLViewerInventoryItem* findInvObject(std::string obj_name, LLUUID catID, LLAssetType::EType type);
 	LLUUID findFSCategory();
-	LLUUID findFSBridgeContainerCategory();
 
 	bool isItemAttached(LLUUID iID);
 	void createNewBridge();
@@ -117,7 +103,11 @@ protected:
 	void finishBridge();
 	void cleanUpOldVersions();
 	void detachOtherBridges();
-	void configureBridgePrim(LLViewerObject* object);
+
+	/*virtual*/ void inventoryChanged(LLViewerObject* obj,
+									 LLInventoryObject::object_list_t* inv,
+									 S32 serial_num,
+									 void* queue);
 };
 
 
@@ -140,6 +130,17 @@ public:
 
 protected:
 	~FSLSLBridgeScriptCallback();
+};
+
+class FSLSLBridgeInventoryObserver : public LLInventoryFetchDescendentsObserver
+{
+public:
+	FSLSLBridgeInventoryObserver(const LLUUID& cat_id = LLUUID::null):LLInventoryFetchDescendentsObserver(cat_id) {}
+	/*virtual*/ void done() { gInventory.removeObserver(this); FSLSLBridge::instance().startCreation(); }
+
+protected:
+	~FSLSLBridgeInventoryObserver() {}
+
 };
 
 class FSLSLBridgeCleanupTimer : public LLEventTimer
