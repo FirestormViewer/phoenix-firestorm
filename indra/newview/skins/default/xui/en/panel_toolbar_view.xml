@@ -189,7 +189,7 @@
          tab_stop="false"
          name="stand_stop_flying_container"
          visible="false"
-         width="200" />
+         width="220" />
 
   </layout_panel>
   <!-- Panel to house the stand fly buttons, will expand down if chatbar is hidden -->
