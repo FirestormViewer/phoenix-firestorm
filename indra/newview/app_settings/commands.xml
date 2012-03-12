@@ -323,4 +323,15 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="settings_debug"
            />
+
+  <command name="statistics"
+           available_in_toybox="true"
+           icon="statistics"
+           label_ref="Command_Statistics_Label"
+           tooltip_ref="Command_Statistics_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="stats"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="settings_debug"
+           />
 </commands>

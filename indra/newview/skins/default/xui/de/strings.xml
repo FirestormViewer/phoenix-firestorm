@@ -4972,6 +4972,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Settings_Debug_Label">
 		Debug-Einstellungen
 	</string>
+	<string name="Command_Statistics_Label">
+		Statistiken
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5061,6 +5064,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Settings_Debug_Tooltip">
 		Konfigurationseinstellungen des Viewers ändern
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Viewer-Statistiken anzeigen
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste

@@ -3899,6 +3899,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Default_Chat_Bar_Label">Chat</string>
   <string name="Command_Areasearch_Label">Area Search</string>
   <string name="Command_Settings_Debug_Label">Debug Settings</string>
+  <string name="Command_Statistics_Label">Statistics</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -3932,6 +3933,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Default_Chat_Bar_Tooltip">Shows or hides the default chat bar</string>
   <string name="Command_Areasearch_Tooltip">Search the area for objects</string>
   <string name="Command_Settings_Debug_Tooltip">Change configuration settings of the viewer</string>
+  <string name="Command_Statistics_Tooltip">Shows the viewer statistics</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
