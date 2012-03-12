@@ -120,6 +120,29 @@
 
             </array>
         </map>
+
+        <map>
+        <key>name</key>
+            <string>StarLight CUI</string>
+        <key>folder</key>
+            <string>starlightcui</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Custom Dark</string>
+                <key>folder</key>
+                    <string>custom_dark</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Custom Light</string>
+                <key>folder</key>
+                    <string>custom_Light</string>
+                </map>
+            </array>
+        </map>
+
     </array>
 </llsd>
 
