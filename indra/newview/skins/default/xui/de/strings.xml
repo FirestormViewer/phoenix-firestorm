@@ -38,7 +38,7 @@
 		Fullbright (Legacy)
 	</string>
 	<string name="LoginInProgress">
-		Anmeldevorgang gestartet. [APP_NAME] reagiert möglicherweise nicht.  Bitte warten.
+		Anmeldevorgang gestartet. [APP_NAME] reagiert möglicherweise nicht. Bitte warten.
 	</string>
 	<string name="LoginInProgressNoFrozen">
 		Anmeldung erfolgt...
@@ -5184,5 +5184,25 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
 		Geteilte Medien von der URL [MEDIAURL] werden niemals abgespielt.
+	</string>
+
+	<!-- Settings sanity checks -->
+	<string name="SanityCheckEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte den Wert [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckNotEquals">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte nicht den Wert [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckLowerThan">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert kleiner als [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckGreaterThan">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert größer als [VALUE_1] haben.
+	</string>
+	<string name="SanityCheckBetween">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte einen Wert zwischen [VALUE_1] und [VALUE_2] haben.
+	</string>
+	<string name="SanityCheckNotBetween">
+		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert zwischen [VALUE_1] und [VALUE_2] haben.
 	</string>
 </strings>
