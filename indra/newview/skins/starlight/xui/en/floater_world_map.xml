@@ -2,7 +2,7 @@
 <floater
  legacy_header_height="18"
  can_resize="true"
- open_centered="true"
+ open_positioning="centered"
  height="530"
  layout="topleft"
  min_height="386"
@@ -48,7 +48,7 @@
 	top="10"
     width="60"
 	layout="topleft"
-	background_visible="true"
+	background_visible="false"
     name="map_details_selection">
     <button
      follows="right|top"
@@ -72,7 +72,7 @@
     min_height="20"
     bottom="487"
     width="185"
-	background_visible="true"
+	background_visible="false"
     name="layout_panel_6">
     <icon
      follows="left|bottom"
@@ -669,7 +669,7 @@
       </spinner>
 
     <layout_stack
-	 name="layoutstack_bottom_buttons"
+     name="layoutstack_bottom_buttons"
      left="0"
      top_pad="7"
      right="-7"

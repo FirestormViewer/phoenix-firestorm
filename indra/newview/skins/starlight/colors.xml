@@ -749,9 +749,6 @@
      name="ObjectChatColor"
      reference="EmphasisColor" />
     <color
-     name="ObjectIMColor"
-     reference="EmphasisColor" />
-    <color
      name="OverdrivenColor"
      reference="Red" />
     <color
@@ -963,6 +960,18 @@
 	<color
      name="ChatToastAgentNameColor"
      reference="EmphasisColor" />
+    <color
+     name="ObjectIMColor"
+     reference="EmphasisColor" />
+	 
+    <!-- for FS legacy profiles -->
+    <color
+     name="StatusUserOnline"
+     reference="Green" />
+    <!-- for FS legacy profiles -->
+    <color
+     name="StatusUserOffline"
+     reference="BrightRed" />
 	 
     <!-- Colours for Kirstens Viewer - all themes -->	
      <color

@@ -922,7 +922,7 @@
    <!-- Colours for Firestorm - change for each theme as necessary -->	
 	<color
      name="ScriptDialog"
-     value="Black" />
+     reference="Black" />
     <color
      name="ScriptDialogFg"
      reference="White" />
@@ -961,7 +961,28 @@
 	<color
      name="ChatToastAgentNameColor"
      reference="EmphasisColor" />
+    <color
+     name="ObjectIMColor"
+     reference="EmphasisColor" />
+    <color
+     name="NameTagChatDistanceColor"
+     reference="Green" />
+    <color
+     name="NameTagShoutDistanceColor"
+     reference="Yellow" />
+    <color
+     name="NameTagBeyondShoutDistanceColor"
+     reference="BrightRed" />
 	
+    <!-- for FS legacy profiles -->
+    <color
+     name="StatusUserOnline"
+     reference="Green" />
+    <!-- for FS legacy profiles -->
+    <color
+     name="StatusUserOffline"
+     reference="BrightRed" />
+	 
 	    <!-- Colours for Kirstens Viewer - all themes -->	
      <color
      name="MapChatRingColor"

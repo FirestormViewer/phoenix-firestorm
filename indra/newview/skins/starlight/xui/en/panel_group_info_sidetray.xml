@@ -97,6 +97,7 @@ background_visible="true"
        follows="all"
        layout="topleft"
        auto_resize="true"
+       user_resize="true"
        height="513"
        width="313">
    <accordion
@@ -226,7 +227,6 @@ background_visible="true"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_chat_lp"
-			    user_resize="false" 
 			    auto_resize="true"
 				width="83">
 					<button
@@ -245,7 +245,6 @@ background_visible="true"
 				layout="bottomleft"
 				left_pad="3"
 				name="call_btn_lp"
-			    user_resize="false" 
 			    auto_resize="true"
 				width="113">
 					<button
@@ -266,7 +265,6 @@ background_visible="true"
 				layout="bottomleft"
 				left_pad="3"
 				name="btn_apply_lp"
-			    user_resize="false" 
 			    auto_resize="true"
 				width="83">
 					<button
@@ -285,8 +283,7 @@ background_visible="true"
 				height="23"
 				layout="bottomleft"
 				left_pad="3"
-				name="btn_create_lp"
-			    user_resize="false" 
+				name="btn_create_lp" 
 			    auto_resize="true"
 				width="125">
 					<button

@@ -141,7 +141,6 @@
 			  layout="bottomleft"
 			  left="0"
 			  name="layout_panel1"
-		      user_resize="false" 
 		      auto_resize="true"
 			  width="95">
 			  <button
@@ -161,7 +160,6 @@
 			  layout="bottomleft"
 			  left_pad="0"
 			  name="show_on_map_btn_lp"
-		      user_resize="false" 
 		      auto_resize="true"
 			  width="95">
 			  <button
@@ -181,7 +179,6 @@
 			  layout="bottomleft"
 			  left_pad="0"
 			  name="edit_btn_lp"
-		      user_resize="false" 
 		      auto_resize="true"
 			  width="95">
 			  <button

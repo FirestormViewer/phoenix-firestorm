@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
  default_tab_group="1"
  follows="all"
  height="423"
@@ -90,6 +89,7 @@
      left="7"
      name="inventory filter tabs"
      tab_drag_commit="true"
+     open_tabs_on_drag_and_drop="true"
      tab_height="23"
      tab_group="1"
      tab_position="top"
@@ -151,7 +151,6 @@
        height="25"
        layout="topleft"
        name="options_gear_btn_panel"
-       user_resize="false"
        width="32">
           <menu_button
            follows="bottom|left"
@@ -213,7 +212,7 @@
            width="31">
            <button.init_callback
                  function="Button.SetDockableFloaterToggle"
-                 parameter="inventory" />
+                 parameter="secondary_inventory" />
            </button>
       </panel>
       <panel

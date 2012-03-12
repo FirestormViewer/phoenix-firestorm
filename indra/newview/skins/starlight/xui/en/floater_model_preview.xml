@@ -6,6 +6,7 @@
 
   <string name="status_idle"></string>
   <string name="status_parse_error">Error: Dae parsing issue - see log for details.</string>
+  <string name="status_material_mismatch">Error: Material of model is not a subset of reference model.</string>
   <string name="status_reading_file">Loading...</string>
   <string name="status_generating_meshes">Generating Meshes...</string>
   <string name="status_vertex_number_overflow">Error: Vertex number is more than 65534, aborted!</string>
@@ -174,9 +175,13 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_high_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_high_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
             </combo_box>
@@ -209,9 +214,13 @@
              visible="false"
              width="135">
                 <item
+                 name="lod_mode_high_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_high_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -299,12 +308,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_medium_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_medium_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_medium_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -338,9 +353,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_medium_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_medium_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -427,12 +446,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_low_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_low_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_low_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -466,9 +491,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_low_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_low_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -555,12 +584,18 @@
              top_delta="-3"
              width="135">
                 <item
+                 name="lod_source_lowest_load_from_file"
+                 label="Load from file"
                  id="Load from file"
                  value="Load from file" />
                 <item
+                 name="lod_source_lowest_generate"
+                 label="Generate"
                  id="Generate"
                  value="Generate" />
                 <item
+                 name="lod_source_lowest_use_lod_above"
+                 label="Use LoD above"
                  id="Use LoD above"
                  value="Use LoD above" />
             </combo_box>
@@ -594,9 +629,13 @@
              top_delta="0"
              width="135">
                 <item
+                 name="lod_mode_lowest_triangle_limit"
+                 label="Triangle Limit"
                  id="Triangle Limit"
                  value="Triangle Limit" />
                 <item
+                 name="lod_mode_lowest_error_threshold"
+                 label="Error Threshold"
                  id="Error Threshold"
                  value="Error Threshold" />
             </combo_box>
@@ -818,7 +857,7 @@
                       name="method_label"
                       text_color="White"
                       top_pad="0">
-                      Step 2: Analyse
+                      Step 2: Analyze
                     </text>
                     <text
                       follows="top|left"
@@ -1169,7 +1208,7 @@
              name="pelvis_offset_label"
              text_color="White"
              top="134"
-             width="200">
+             width="250">
              Z offset (raise or lower avatar):
            </text>
            <spinner

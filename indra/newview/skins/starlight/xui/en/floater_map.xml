@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ open_positioning="none"
  bg_alpha_image_overlay="DkGray_66"
  bg_alpha_color="SL-Background_86"
  legacy_header_height="0"
  can_minimize="true" 
  can_resize="true"
  follows="top|right"
- height="174"
+ height="200"
  layout="topleft"
- min_height="128"
- min_width="128"
+ min_height="64"
+ min_width="64"
  name="Map"
  title=""
  help_topic="map"
@@ -22,11 +23,11 @@
     <!-- RLVa shows the anonymized name on the regular tooltip when @shownames=n restricted (rather than show the avatar inspector) --> 
     <floater.string
      name="ToolTipMsg">
-        [AGENT][REGION](Double-click to open Map, shift-drag to pan)
+        [AGENT][REGION] (Double-click to open Map, shift-drag to pan)
     </floater.string>
 	<floater.string
      name="AltToolTipMsg">
-		[REGION](Double-click to teleport, shift-drag to pan)
+		[REGION] (Double-click to teleport, shift-drag to pan)
 	</floater.string>
     <floater.string name="mini_map_caption">
 	MINIMAP
