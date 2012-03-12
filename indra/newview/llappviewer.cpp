@@ -1894,8 +1894,8 @@ bool LLAppViewer::cleanup()
 	LLUIColorTable::instance().saveUserSettings();
 
 //<Firestorm Skin Cleanup>
-	std::string skinSaved = gSavedSettings.getString("SkinCurrent2");
-	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme2");
+	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
+	std::string themeSaved = gSavedSettings.getString("SkinCurrentTheme");
 	if ((skinSaved != mCurrentSkin) || (themeSaved != mCurrentSkinTheme))
 	{
 		llinfos << "Clearing skin colors." << llendflush;
@@ -2726,10 +2726,10 @@ bool LLAppViewer::initConfiguration()
 	}
 
 //-TT Hacking to save the skin and theme for future use.
-	mCurrentSkin = gSavedSettings.getString("SkinCurrent2");
-	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme2");
+	mCurrentSkin = gSavedSettings.getString("SkinCurrent");
+	mCurrentSkinTheme = gSavedSettings.getString("SkinCurrentTheme");
 //-TT
-    const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent2");
+    const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
     if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
     {   
 		// hack to force the skin to default.
@@ -2738,7 +2738,7 @@ bool LLAppViewer::initConfiguration()
 		// KB: catznip viewer-skins
 		//gDirUtilp->setSkinFolder("default");
 		gDirUtilp->setSkinFolder(skinfolder->getValue().asString());
-		const LLControlVariable* themefolder = gSavedSettings.getControl("SkinCurrentTheme2");
+		const LLControlVariable* themefolder = gSavedSettings.getControl("SkinCurrentTheme");
 		if ( (themefolder) && (LLStringUtil::null != skinfolder->getValue().asString()) )
 			gDirUtilp->setSkinThemeFolder(themefolder->getValue().asString());
     }

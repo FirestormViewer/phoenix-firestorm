@@ -397,7 +397,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
 	
-	sSkin = gSavedSettings.getString("SkinCurrent2");
+	sSkin = gSavedSettings.getString("SkinCurrent");
 
 	mCommitCallbackRegistrar.add("Pref.ClickActionChange",				boost::bind(&LLFloaterPreference::onClickActionChange, this));
 
@@ -610,7 +610,7 @@ void LLFloaterPreference::apply()
 	
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
 /*
- if (sSkin != gSavedSettings.getString("SkinCurrent2"))
+ if (sSkin != gSavedSettings.getString("SkinCurrent"))
 	{
 		LLNotificationsUtil::add("ChangeSkin");
 		refreshSkin(this);
@@ -716,7 +716,7 @@ void LLFloaterPreference::cancel()
 	}
 	
 	// reverts any changes to current skin
-	//gSavedSettings.setString("SkinCurrent2", sSkin);
+	//gSavedSettings.setString("SkinCurrent", sSkin);
 
 	if (mClickActionDirty)
 	{
@@ -1106,20 +1106,20 @@ void LLFloaterPreference::onClickJavascript()
 /*
 void LLFloaterPreference::onClickSkin(LLUICtrl* ctrl, const LLSD& userdata)
 {
-	gSavedSettings.setString("SkinCurrent2", userdata.asString());
+	gSavedSettings.setString("SkinCurrent", userdata.asString());
 	ctrl->setValue(userdata.asString());
 }
 
 void LLFloaterPreference::onSelectSkin()
 {
 	std::string skin_selection = getChild<LLRadioGroup>("skin_selection")->getValue().asString();
-	gSavedSettings.setString("SkinCurrent2", skin_selection);
+	gSavedSettings.setString("SkinCurrent", skin_selection);
 }
 
 void LLFloaterPreference::refreshSkin(void* data)
 {
 	LLPanel*self = (LLPanel*)data;
-	sSkin = gSavedSettings.getString("SkinCurrent2");
+	sSkin = gSavedSettings.getString("SkinCurrent");
 	self->getChild<LLRadioGroup>("skin_selection", true)->setValue(sSkin);
 }
 */
@@ -1919,7 +1919,7 @@ BOOL LLPanelPreference::postBuild()
 		// if skin is set to a skin that no longer exists (silver) set back to default
 		if (getChild<LLRadioGroup>("skin_selection")->getSelectedIndex() < 0)
 		{
-			gSavedSettings.setString("SkinCurrent2", "default");
+			gSavedSettings.setString("SkinCurrent", "default");
 			LLFloaterPreference::refreshSkin(this);
 		}
 
@@ -2471,8 +2471,8 @@ static LLRegisterPanelClassWrapper<LLPanelPreferenceSkins> t_pref_skins("panel_p
 
 LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinCombo(NULL), m_pSkinThemeCombo(NULL)
 {
-	m_Skin = gSavedSettings.getString("SkinCurrent2");
-	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme2");
+	m_Skin = gSavedSettings.getString("SkinCurrent");
+	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
 	llifstream fileSkins(strSkinsPath, std::ios::binary);
 	if (fileSkins.is_open())
@@ -2500,10 +2500,10 @@ BOOL LLPanelPreferenceSkins::postBuild()
 
 void LLPanelPreferenceSkins::apply()
 {
-	if ( (m_Skin != gSavedSettings.getString("SkinCurrent2")) || (m_SkinTheme != gSavedSettings.getString("SkinCurrentTheme2")) )
+	if ( (m_Skin != gSavedSettings.getString("SkinCurrent")) || (m_SkinTheme != gSavedSettings.getString("SkinCurrentTheme")) )
 	{
-		gSavedSettings.setString("SkinCurrent2", m_Skin);
-		gSavedSettings.setString("SkinCurrentTheme2", m_SkinTheme);
+		gSavedSettings.setString("SkinCurrent", m_Skin);
+		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
 
 		LLNotificationsUtil::add("ChangeSkin");	
 
@@ -2513,8 +2513,8 @@ void LLPanelPreferenceSkins::apply()
 
 void LLPanelPreferenceSkins::cancel()
 {
-	m_Skin = gSavedSettings.getString("SkinCurrent2");
-	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme2");
+	m_Skin = gSavedSettings.getString("SkinCurrent");
+	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
 	refreshSkinList();	
 }
 
@@ -2526,16 +2526,16 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
 	
 	//AO: Some crude hardcoded preferences per skin. We will remove these and replace them with "basic mode"-style behaviors in the 2.6 mergeup
-	//if  (m_Skin.compare("starlight") == 0)
-	//{
-	//	gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
-	//	gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
-	//}
-	//else 
-	//{
-	//	gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
-	//	gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
-	//}
+	if  (m_Skin.compare("starlight") == 0)
+	{
+		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+	}
+	else 
+	{
+		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+	}
 
 }
 
