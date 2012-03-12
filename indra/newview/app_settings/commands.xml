@@ -332,6 +332,6 @@
            execute_function="Floater.Toggle"
            execute_parameters="stats"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="settings_debug"
+           is_running_parameters="stats"
            />
 </commands>
