@@ -199,7 +199,7 @@
        length="1"
       follows="left|top"
       layout="topleft"
-       height="28"
+       height="15"
      left="10"
       name="GroupLabel"
       width="92"
@@ -218,7 +218,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="28"
+     height="15"
      layout="topleft"
      name="AnyoneLabel"
      left="104"
@@ -239,7 +239,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="28"
+     height="15"
      layout="topleft"
      name="NextOwnerLabel"
      top="110"
@@ -285,7 +285,7 @@
      layout="topleft"
      left="10"
      name="queue output"
-     top="175"
+     top_pad="5"
      width="250" />
     <button
      follows="left|top"
@@ -294,7 +294,7 @@
      layout="topleft"
      left="95"
      name="apply"
-     top_pad="10"
+     top_pad="5"
      width="90">
       <button.commit_callback
        function="BulkPermission.Apply"/>
