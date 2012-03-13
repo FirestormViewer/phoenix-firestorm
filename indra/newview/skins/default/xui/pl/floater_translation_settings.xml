@@ -33,7 +33,7 @@
  <line_editor default_text="Wpisz Bing AppID i kliknij na &quot;Weryfikuj&quot;" name="bing_api_key" />
  <button label="Weryfikuj" name="verify_bing_api_key_btn" />	
  <text name="google_api_key_label">
-  Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth klucz API]:
+  Google [http://code.google.com/apis/language/translate/v2/getting_started.html#auth API key]:
  </text>
  <line_editor default_text="Wpisz klucz Google API i kliknij na &quot;Weryfikuj&quot;" name="google_api_key" />
  <button label="Weryfikuj" name="verify_google_api_key_btn" />	

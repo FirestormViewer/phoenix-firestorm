@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Alerty" name="popups">
+	<text name="tell_me_label">
+		Powiadom mnie:
+	</text>
 	<check_box label="Kiedy wydaję lub otrzymuję L$" name="notify_money_change_checkbox"/>
 	<check_box name="FSPaymentInfoInChat" label="Pokazuj transakcje L$ w Czacie Lokalnym - nie w Tostach"/>
 	<check_box label="Kiedy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
@@ -9,8 +12,8 @@
 		<radio_item label="Czacie" name="script_0"/>
 		<radio_item label="Osobnym oknie" name="script_1"/>
 	</radio_group>
-	<text name="tell_me_label">
-		Powiadom mnie gdy znajomi się logują lub wylogowywują:
+	<text name="friends_logon_label">
+		Powiadom gdy znajomi się logują/wylogowywują:
 	</text>
 	<check_box label="W tostach" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>

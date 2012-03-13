@@ -11,6 +11,6 @@
 		</radio_group>
 		<color_swatch label="Kolor" name="val_color_swatch"/>
 		<button label="Kopiuj" name="copy_btn" tool_tip="Skopiuj nazwę ustawienia do schowka."/>
-		<button label="Ustawienia domyślne" name="default_btn" tool_tip="Resetuj to ustawienie do wartości domyślnej."/>
+		<button label="Domyślnie" name="default_btn" tool_tip="Resetuj to ustawienie do wartości domyślnej."/>
 	</panel>
 </floater>
