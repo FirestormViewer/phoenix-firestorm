@@ -1969,10 +1969,12 @@ void LLViewerWindow::initWorldUI()
 	}
 	// </FS:Ansariel>
 
-	if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
-	{
-		navbar->childSetVisible("search_combo_box",FALSE);
-	}
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
+	// {
+	// 	navbar->childSetVisible("search_combo_box",FALSE);
+	// }
+	// </FS:Zi>
 
 	if (!gSavedSettings.getBOOL("ShowMenuBarLocation"))
 	{
