@@ -23,13 +23,13 @@
 	animate="false" 
 	follows="top|left"
 	clip="false"
-	height="20"
+	height="27"
 	width="200"
 	left_pad="0"
 	layout="topleft"
 	orientation="horizontal"
 	name="ls_control_panel"
-	top="20"
+	top="13"
 	left="3">
        <layout_panel
           auto_resize="false"
@@ -37,8 +37,8 @@
           name="slide_panel"
           top="0"
           layout="topleft"
-          height="20"
-          width="30"
+          height="24"
+          width="40"
           follows="left|top">
        	<button
           height="20"
@@ -47,7 +47,7 @@
           left="5"
           image_overlay="TabIcon_Open_Off"
           layout="topleft"
-          width="25"
+          width="24"
           name="slide_left_btn" />
        	<button
           height="20"
@@ -55,7 +55,7 @@
           top="0"
           left="5"
           image_overlay="TabIcon_Close_Off"
-          width="25"
+          width="24"
           name="slide_right_btn" />
        </layout_panel>
        
@@ -65,20 +65,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">
        	<button
-       		 name="group_info_btn"
-             follows="left|top"
-             top="0"
-             height="20"
-             width="20"
-             image_overlay="profile_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Show this group's profile"/>
+          name="group_info_btn"
+          follows="left|top"
+          top="0"
+          height="20"
+          width="24"
+          left_delta="5"
+          image_overlay="profile_icon_24x24"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Show this group's profile"/>
        </layout_panel>
        
        <layout_panel
@@ -87,13 +88,16 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">	  
        		<button
              name="view_profile_btn"
              follows="left|top"
              top="0"
+             height="20"
+             width="24"
+             left_delta="5"
              image_overlay="profile_icon_24x24"
              image_pressed="PushButton_Press"
              image_pressed_selected="PushButton_Selected_Press"
@@ -115,8 +119,8 @@
         	<button
 	          follows="left|top"
 	          top="0"
-	          width="20"
-	          height="20"
+	          width="24"
+	          height="24"
 	          image_overlay="TabIcon_Translate_Off"
 	          control_name="TranslateChat"
 	          is_toggle="true"
@@ -134,20 +138,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">
         	<button
-             follows="left|top"
-             height="20"
-             top="0"
-             image_overlay="friends_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Add this resident as a friend"
-             name="add_friend_btn"
-             width="20" />
+            follows="left|top"
+            height="20"
+            top="0"
+            left_delta="5"
+            image_overlay="friends_icon_24x24"
+            image_pressed="PushButton_Press"
+            image_pressed_selected="PushButton_Selected_Press"
+            image_selected="PushButton_Selected_Press"
+            tool_tip="Add this resident as a friend"
+            name="add_friend_btn"
+            width="24" />
        </layout_panel>
        
        <layout_panel
@@ -156,20 +161,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">
         <button
-             follows="left|top"
-             top="0"
-             height="20"
-	         image_overlay="teleport_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Summon / Teleport this resident"
-             name="teleport_btn"
-             width="20" />
+          follows="left|top"
+          top="0"
+          height="20"
+          left_delta="5"
+          image_overlay="teleport_icon_24x24"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Summon / Teleport this resident"
+          name="teleport_btn"
+          width="24" />
        </layout_panel>
        
        <layout_panel
@@ -178,20 +184,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">
         <button
-             follows="left|top"
-             top="0"
-             height="20"
-	         image_overlay="gift_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Send an item to this resident"
-             name="share_btn"
-             width="20" />
+          follows="left|top"
+          top="0"
+          height="20"
+          left_delta="5"
+          image_overlay="gift_icon_24x24"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Send an item to this resident"
+          name="share_btn"
+          width="24" />
        </layout_panel>
        
        <layout_panel
@@ -200,20 +207,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">
         	<button
-             follows="left|top"
-             top="0"
-             height="20"
-	         image_overlay="sale_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Send money to this resident"
-             name="pay_btn"
-             width="20" />
+            follows="left|top"
+            top="0"
+            height="20"
+            left_delta="5"
+            image_overlay="sale_icon_24x24"
+            image_pressed="PushButton_Press"
+            image_pressed_selected="PushButton_Selected_Press"
+            image_selected="PushButton_Selected_Press"
+            tool_tip="Send money to this resident"
+            name="pay_btn"
+            width="24" />
        </layout_panel>
 
        <layout_panel
@@ -222,20 +230,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">              
          	<button
-             follows="left|top"
-             height="20"
-	         image_overlay="call_icon_24x24"
-	         image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Add a voice to this chat"
-             name="call_btn"
-             top="0"
-             width="20" />
+            follows="left|top"
+            height="20"
+            left_delta="5"
+            image_overlay="call_icon_24x24"
+            image_pressed="PushButton_Press"
+            image_pressed_selected="PushButton_Selected_Press"
+            image_selected="PushButton_Selected_Press"
+            tool_tip="Add a voice to this chat"
+            name="call_btn"
+            top="0"
+            width="24" />
        </layout_panel> 
        
        <layout_panel
@@ -244,20 +253,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">       
          	<button
-             follows="left|top"
-             height="20"
-             image_overlay="call_end_icon_24x24"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="End Voice Call"
-             name="end_call_btn"
-             top="0"
-             width="20" />
+            follows="left|top"
+            height="20"
+            left_delta="5"
+            image_overlay="call_end_icon_24x24"
+            image_pressed="PushButton_Press"
+            image_pressed_selected="PushButton_Selected_Press"
+            image_selected="PushButton_Selected_Press"
+            tool_tip="End Voice Call"
+            name="end_call_btn"
+            top="0"
+            width="24" />
        </layout_panel>
        
        <layout_panel
@@ -266,20 +276,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">             
          <button
-             follows="left|top"
-             height="20"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Voice Properties"
-             image_overlay="VoicePTT_Off"
-             name="voice_ctrls_btn"
-             top="0"
-             width="20" />
+          follows="left|top"
+          height="20"
+          left_delta="10"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Voice Properties"
+          image_overlay="VoicePTT_Off"
+          name="voice_ctrls_btn"
+          top="0"
+          width="24" />
         </layout_panel>
       
        <layout_panel
@@ -288,20 +299,21 @@
           user_resize="false"
           top="0"
           layout="topleft"
-          height="20"
-          width="20"
+          height="24"
+          width="27"
           follows="left|top">             
          <button
-             follows="left|top"
-             height="20"
-             image_pressed="PushButton_Press"
-	         image_pressed_selected="PushButton_Selected_Press"
-	         image_selected="PushButton_Selected_Press"
-	         tool_tip="Open this Instant Message's past history."
-             image_overlay="List_View_On"
-             name="im_history_btn"
-             top="0"
-             width="20" />
+          follows="left|top"
+          height="20"
+          left_delta="5"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Open this Instant Message's past history."
+          image_overlay="List_View_On"
+          name="im_history_btn"
+          top="0"
+          width="25" />
         </layout_panel>
       
 </layout_stack>
@@ -320,7 +332,7 @@
      tool_tip="Add (FS) in front of your messages to help support staff understand whether your question pertains to Phoenix or Firestorm. Your help avoiding confusion is greatly appreciated!"
      width="150" />
     <!-- END: FS Prefix -->
-
+  <!--button for sending sys info-->
 <button
 	follows="right|top"
 	height="20"
@@ -333,8 +345,8 @@
 	left_delta="0"
 	right="-35"
 	tab_group="5"
-	width="20" />
-
+	width="24" />
+<!--End sys info button-->
   <layout_stack
    animate="false" 
   follows="all"
