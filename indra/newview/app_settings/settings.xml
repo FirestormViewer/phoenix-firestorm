@@ -11,6 +11,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
+    <string />
   </map>
   <key>FSPublishRadarTag</key>
   <map>
@@ -14474,6 +14475,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>LLSD</string>
       <key>Value</key>
+      <string />
     </map>
     <key>UseLSLBridge</key>
     <map>
