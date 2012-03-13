@@ -138,7 +138,7 @@
 	 auto_resize="false"
 	 user_resize="false">
         <search_combo_box
-	     follows="allt"
+	     follows="all"
 	     left="8"
 	     halign="right"
 	     height="23"
