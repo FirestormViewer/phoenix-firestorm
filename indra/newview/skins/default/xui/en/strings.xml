@@ -2288,7 +2288,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="InvFolder Uncompressed Sounds">Uncompressed Sounds</string>
 	<string name="InvFolder Animations">Animations</string>
 	<string name="InvFolder Gestures">Gestures</string>
-	<string name="InvFolder Favorite">Favorites</string>
+	<string name="InvFolder Favorites">Favorites</string>
   <!-- historically default name of the Favorites folder can start from either "f" or "F" letter.
   We should localize both of them with the same value -->
 	<string name="InvFolder favorite">Favorites</string>
