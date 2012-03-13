@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
 <panel
+ follows="right|top"
  height="21"
- layout="topleft"
+ layout="topright"
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="220">
+ width="77">
     <button
      follows="left|bottom"
      height="19"
      label="Stand"
      layout="topleft"
-     left="125"
+     left="1"
      name="stand_btn"
      tool_tip="Click here to stand up."
      top="2"
@@ -23,7 +24,7 @@
      height="19"
      label="Stop Flying"
      layout="topleft"
-     left="125"
+     left="1"
      name="stop_fly_btn"
      tool_tip="Stop flying"
      top="2"
