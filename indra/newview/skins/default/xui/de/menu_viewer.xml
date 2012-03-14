@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="Avatar" name="Me">
-		<menu_item_call label="Einstellungen" name="Preferences"/>
-		<menu_item_call label="Toolbar-Buttons" name="Toolbar Buttons"/>
-		<menu_item_call label="Meine Startseite" name="Manage My Account">
+		<menu_item_call label="Konto" name="Manage Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=de"/>
 		</menu_item_call>
+		<menu_item_call label="Händler-Outbox..." name="MerchantOutbox"/>
 		<menu_item_call label="L$ kaufen" name="Buy and Sell L$"/>
-		<menu_item_call label="Mein Profil" name="Profile"/>
-		<menu_item_call label="Meine Auswahlen" name="Picks"/>
+		<menu_item_call label="Einstellungen" name="Preferences"/>
+		<menu_item_call label="Toolbar-Buttons" name="Toolbar Buttons"/>
+		<menu_item_call label="Profil" name="Profile"/>
+		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Outfit ändern" name="ChangeOutfit"/>
         <menu_item_call label="Schnappschuss" name="Take Snapshot"/>
-		<menu_item_check label="Mein Inventar" name="Inventory"/>
-        <menu_item_check label="Steuerung" name="Movement Controls"/>
-		<menu_item_check label="Mein Inventar" name="ShowSidetrayInventory"/>
-		<menu_item_check label="Meine Gesten" name="Gestures"/>
-		<menu_item_check label="Meine Stimme" name="ShowVoice"/>
+		<menu_item_check label="Inventar" name="Inventory"/>
+		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Steuerung" name="Movement Controls"/>
 		<menu label="Bewegung" name="Movement">
 			<menu_item_call label="Hinsetzen" name="Sit Down Here"/>
 			<menu_item_check label="Fliegen" name="Fly"/>
@@ -47,10 +46,10 @@
 		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Unterhalten" name="Communicate">
-		<menu_item_call label="Meine Freunde" name="My Friends"/>
+		<menu_item_call label="Freunde" name="My Friends"/>
 		<menu_item_check label="Kontakte" name="Contacts"/>
 		<menu_item_check label="Kontakt-Sets" name="Contact Sets"/>
-		<menu_item_call label="Meine Gruppen" name="My Groups"/>
+		<menu_item_call label="Gruppen" name="My Groups"/>
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Leute" name="People"/>
         <menu_item_check label="Orte" name="Places"/>
