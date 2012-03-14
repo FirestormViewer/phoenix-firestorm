@@ -306,7 +306,7 @@ void LLIMFloater::sendMsg()
 			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
 			if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 			{
-				if (utf8_text.find("/me ") == 0)
+				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
 					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + ") "));
 				}
