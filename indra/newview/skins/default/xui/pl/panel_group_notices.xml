@@ -17,7 +17,7 @@ Limit dzienny ogłoszeń dla grupy wynosi 200.
 		<scroll_list.columns label="Autor" name="from"/>
 		<scroll_list.columns label="Data" name="date"/>
 	</scroll_list>
-	<button label="Nowe Ogłoszenie" name="create_new_notice" tool_tip="Stwórz nowe ogłoszenie"/>
+	<button label="Nowe" name="create_new_notice" tool_tip="Stwórz nowe ogłoszenie"/>
 	<button name="refresh_notices" tool_tip="Odśwież listę Ogłoszeń."/>
 	<text name="notice_list_none_found">
 		Nie znaleziono
