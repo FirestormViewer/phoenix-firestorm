@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater border="true" can_close="true" can_minimize="true" bottom="400" left="300" can_resize="false" height="370" width="550" name="lgg_fg_floater_settings" title="Contact Sets Settings" help_topic="fs_contact_sets">
+<floater border="true" can_close="true" can_minimize="true" bottom="400" left="300" can_resize="false" height="370" width="550" name="lgg_fg_floater_settings" title="CONTACT SET SETTINGS" help_topic="fs_contact_sets">
   <color_swatch bottom_delta="50" can_apply_immediately="true" color="1, 1, 1, 1" follows="left|top" height="40" label="" left_delta="5" mouse_opaque="true" name="colordefault" tool_tip="Default color for friends not in a group. Affects only the FriendGroups list display." width="65" control_name="lgg_fg_groupColor"/>
   <text bottom_delta="-30" follows="left|top" font="SansSerifSmall" height="10" left_delta="70" name="lgg_fg_text2a" width="110">Default color for</text>
   <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text2b" width="120">friends not in a Set</text>

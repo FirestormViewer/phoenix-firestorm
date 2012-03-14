@@ -2,7 +2,7 @@
 <floater
  name="area_search"
  help_topic="fs_area_search"
- title="Area Search for objects"
+ title="AREA SEARCH FOR OBJECTS"
  min_width="425"
  min_height="250"
  width="600"
