@@ -783,10 +783,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//dont enable texture compression by default -FS:TM
+	//dont enable texture compression by default on anything -FS:TM
 	//if (gGLManager.mVRAM > 512)
 	//{
-	//	maskFeatures("VRAMGT512");
+		maskFeatures("VRAMGT512");
 	//}
 
 	// now mask by gpu string

@@ -840,7 +840,7 @@
          visible="false" 
          control_name="RenderCompressTextures"
          height="16"
-         initial_value="true"
+         initial_value="false"
          label="Enable Texture Compression (requires restart)"
          layout="topleft"
          left_pad="10"
