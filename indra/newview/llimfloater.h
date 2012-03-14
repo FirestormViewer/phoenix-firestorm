@@ -138,6 +138,8 @@ protected:
 	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);
 	LLButton* mSysinfoButton;
 	// support sysinfo button -Zi
+
+	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
 private:
 	// process focus events to set a currently active session
 	/* virtual */ void onFocusLost();

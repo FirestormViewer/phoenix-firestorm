@@ -72,6 +72,8 @@
 #include "llversioninfo.h"
 #include "llcheckboxctrl.h"
 
+#include "llnotificationtemplate.h"		// <FS:Zi> Viewer version popup
+
 LLIMFloater::LLIMFloater(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
 	mControlPanel(NULL),
@@ -795,7 +797,23 @@ BOOL LLIMFloater::postBuild()
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 
 	LLCheckBoxCtrl* FSPrefixBox = getChild<LLCheckBoxCtrl>("FSSupportGroupChatPrefix_toggle");
-	FSPrefixBox->setVisible(FSData::getInstance()->isSupportGroup(mSessionID));
+
+	BOOL isFSSupportGroup=FSData::getInstance()->isSupportGroup(mSessionID);
+	FSPrefixBox->setVisible(isFSSupportGroup);
+
+	// <FS:Zi> Viewer version popup
+	if(isFSSupportGroup)
+	{
+		// check if the dialog was set to ignore
+		LLNotificationTemplatePtr templatep=LLNotifications::instance().getTemplate("FirstJoinSupportGroup");
+		if(!templatep.get()->mForm->getIgnored())
+		{
+			// if not, give the user a choice, whether to enable the version prefix or not
+			LLSD args;
+			LLNotificationsUtil::add("FirstJoinSupportGroup",args,LLSD(),boost::bind(&LLIMFloater::enableViewerVersionCallback,this,_1,_2));
+		}
+	}
+	// </FS:Zi> Viewer version popup
 
 	setDocked(true);
 
@@ -1742,3 +1760,19 @@ void	LLIMFloater::onClickCloseBtn()
 
 	LLFloater::onClickCloseBtn();
 }
+
+// <FS:Zi> Viewer version popup
+BOOL LLIMFloater::enableViewerVersionCallback(const LLSD& notification,const LLSD& response)
+{
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	BOOL result=FALSE;
+	if(option==0)		// "yes"
+	{
+		result=TRUE;
+	}
+
+	gSavedSettings.setBOOL("FSSupportGroupChatPrefix2",result);
+	return result;
+}
+// </FS:Zi>
