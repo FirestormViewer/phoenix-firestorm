@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!--Size in this section needs to say for How To floater to work correctly-->
 <floater
   legacy_header_height="18"
   can_resize="true"
@@ -12,6 +13,7 @@
   title=""
   initial_mime_type="text/html"
   width="780">
+  <!--Size in this section needs to say for How To floater to work correctly-->
   <layout_stack
     bottom="775"
     follows="left|right|top|bottom"
