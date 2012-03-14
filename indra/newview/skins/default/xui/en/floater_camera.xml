@@ -4,7 +4,7 @@
  legacy_header_height="0"
  header_height="0"
  bg_alpha_image_overlay="LtGray_50"
- can_dock="true"
+ can_dock="false"
  can_minimize="false"
  can_resize="true"
  can_close="false"
@@ -16,7 +16,7 @@
  help_topic="camera_floater"
  save_rect="true"
  save_visibility="true"
- save_dock_state="true"
+ save_dock_state="false"
  single_instance="true"
  width="155"
  min_width="155">
