@@ -3434,4 +3434,14 @@ URL: [MOAPURL]
 		</form>
 	</notification>
 
+	<notification name="FirstJoinSupportGroup">
+Willkommen in der Phoenix/Firestorm Viewer Support-Gruppe!
+
+Um den Support zu vereinfachen wird empfohlen, die aktuelle Version deines Viewers der Gruppe mitzuteilen. Du kannst daher entscheiden, ob du die Version deines Viewers jeder Nachrichtig in diesem Gruppenchat voranstellen möchtest. Unser Support-Team kann dir eine sinnvollere Hilfestellung geben, wenn es direkt weiß, welche Viewer-Version du benutzt.
+
+Diese Funktion kann jederzeit über die Checkbox innerhalb des Gruppenchat-Fensters aktiviert bzw. deaktiviert werden.
+
+Soll die automatische Anzeige der Viewer-Version aktiviert werden?
+		<usetemplate ignoretext="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird." name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
 </notifications>
