@@ -350,6 +350,7 @@
      tool_tip="Highlight the name tags of your friends."
      top_delta="0" />
 
+  <!--    FIRE-5505 Commented out "Publish radar tags to LSL" for now
   <check_box
      control_name="FSPublishRadarTag"
      enabled_control="UseLSLBridge"
@@ -360,6 +361,7 @@
      name="FSPublishRadarTag"
      tool_tip="Enabling this will allow scripted HUDs to receive a tag named 'Firestorm' when displaying information about your avatar. This functionality enhances the functionality of some scripted radar HUDs, and uses the Firestorm LSL bridge."
      top_delta="0" />
+     -->
 	 
 	 <text
      type="string"
