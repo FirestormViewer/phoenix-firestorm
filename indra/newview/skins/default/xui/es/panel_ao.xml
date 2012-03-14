@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel" width="285">
+	<panel name="animation_overrider_panel" width="265">
+		<combo_box name="ao_set_selection_combo" tool_tip="Selecciona un conjunto de animaciones para editar."/>
+		<button name="ao_activate" tool_tip="Activar este conjunto de animaciones ahora."/>
+		<check_box name="ao_default" label="Por defecto" tool_tip="Configurar este conjunto de animaciones como conjunto por defecto."/>
+		<button name="ao_add" tool_tip="Crear un nuevo conjunto de animaciones."/>
+		<button name="ao_remove" tool_tip="Eliminar este conjunto de animaciones."/>
+		<check_box name="ao_sit_override" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse por la configuradas en este conjunto de animaciones."/>
+		<check_box name="ao_smart" label="Inteligente" tool_tip="El modo inteligente trata de determinar si la animación de sentarse va a interferir con la animación propia del objeto en el que te sientas, y la desactiva temporalmente"/>
+		<check_box name="ao_disable_stands_in_mouselook" label="Desactivar postura 'de pie' en vista subjetiva" tool_tip="Si quieres preservar tu animación personalizada para estar de pie en vista subjetiva, activa esta casilla."/>
+		<combo_box name="ao_state_selection_combo" tool_tip="Selecciona el estado de animación a editar."/>
+		<panel name="ao_animation_move_trash_panel">
+			<button name="ao_move_up" tool_tip="Mover la animación seleccionada una posición arriba en la lista."/>
+			<button name="ao_move_down" tool_tip="Mover la animación seleccionada una posición abajo en la lista."/>
+			<button name="ao_trash" tool_tip="Elimina de la lista la animación seleccionada."/>
+		</panel>
+		<check_box name="ao_cycle" label="Ciclo" tool_tip="Reproducir una animación de la lista diferente cada vez que se llama al estado de animación."/>
+		<check_box name="ao_randomize" label="Orden aleatorio" tool_tip="En el modo de ciclo, establecer al azar el orden de las animaciones."/>
+		<text name="ao_cycle_time_seconds_label" value="Tiempo de ciclo (s.):"/>
+		<spinner name="ao_cycle_time" tool_tip="Tiempo que ha de transcurrir para que cambie a la siguiente animación de la lista. Establecer a 0 para desactivar el ciclo automático de animaciones."/>
+		<button name="ao_reload" label="Recargar" tool_tip="Vuelve a cargar la configuración del AO."/>
+		<layout_stack name="next_previous_buttons_stack">
+			<layout_panel name="next_previous_buttons_stack_left">
+				<button name="ao_previous" tool_tip="Cambiar a la anterior animación del estado actual."/>
+			</layout_panel>
+			<layout_panel name="next_previous_buttons_stack_right">
+				<button name="ao_next" tool_tip="Cambiar a la siguiente animación del estado actual."/>
+			</layout_panel>
+		</layout_stack>
+		<button name="ao_less" tool_tip="Muestra la interfaz pequeña del Animation Overrider."/>
+	</panel>
+	<panel name="ao_reload_cover" width="285">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label">
+				Recargando configuración
+			</text>
+			<text name="wait_label">
+				Espera, por favor
+			</text>
+			<layout_stack name="ao_reload_indicator_layout_stack">
+				<layout_panel name="ao_reload_indicator_left_layout_panel">
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</panel>
+	<panel name="animation_overrider_panel_small" width="265">
+		<combo_box name="ao_set_selection_combo_small" tool_tip="Selecciona el conjunto de animaciones a editar."/>
+		<button name="ao_more" tool_tip="Mostrar la interfaz completa para configurar el AO."/>
+		<button name="ao_previous_small" tool_tip="Cambiar a la anterior animación del estado actual."/>
+		<button name="ao_next_small" tool_tip="Cambiar a la siguiente animación del estado actual."/>
+		<check_box name="ao_sit_override_small" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse por la configuradas en este conjunto de animaciones."/>
+	</panel>
+</panel>

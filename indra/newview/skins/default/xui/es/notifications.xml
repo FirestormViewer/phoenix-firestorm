@@ -3405,4 +3405,13 @@ Configuración actual: [CURRENT_VALUE]
 	<notification name="CacheEmpty">
 		La cache del visor está vacía. Por favor, ten en cuenta que puedes sufrir de lentitud de movimiento y de inventario mientras se carga el nuevo contenido.
 	</notification>
+	<notification name="FirstJoinSupportGroup">
+		¡Bienvenido al Grupo de Soporte de Phoenix/Firestorm Viewer!
+Para facilitar el soporte, se recomienda que publiques la versión de tu visor en el grupo. Puedes mostrar la versión de tu visor delante de cada mensaje que envías al grupo. Nuestros miembros de soporte pueden darte respuestas más adecuadas si saben qué visor estás usando.
+
+Puedes activar y desactivar esta función en cualquier momento usando la casilla existente en la ventana del chat del grupo.
+
+¿Quieres activar la identificación automática de la versión de tu visor?
+		<usetemplate ignoretext="Te has unido al Grupo de Soporte de Phoenix/Firestorm" name="okcancelignore" notext="No" yestext="Sí"/>
+	</notification>
 </notifications>

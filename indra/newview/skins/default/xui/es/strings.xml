@@ -1457,10 +1457,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Gestos
 	</string>
 	<string name="InvFolder Favorites">
-		Mis Favoritos
+		Favoritos
 	</string>
 	<string name="InvFolder favorite">
-		Mis Favoritos
+		Favoritos
 	</string>
 	<string name="InvFolder Current Outfit">
 		Vestuario actual
@@ -1469,7 +1469,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Vestuarios iniciales
 	</string>
 	<string name="InvFolder My Outfits">
-		Mis vestuarios
+		Vestuarios
 	</string>
 	<string name="InvFolder Accessories">
 		Accesorios
@@ -4970,6 +4970,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Default_Chat_Bar_Label">Chat</string>
 	<string name="Command_Areasearch_Label">Buscar en el área</string>
 	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
+	<string name="Command_Statistics_Label">Estadísticas</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5051,6 +5052,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Default_Chat_Bar_Tooltip">Muestra u oculta la barra de chat</string>
 	<string name="Command_Areasearch_Tooltip">Buscar objetos a tu alrededor</string>
 	<string name="Command_Settings_Debug_Tooltip">Cambia valores de configuración del visor</string>
+	<string name="Command_Statistics_Tooltip">Muestra las estadísticas del visor</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>

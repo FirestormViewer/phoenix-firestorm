@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider" title="Animation Overrider" width="285" min_width="285">
+	<floater.string name="ao_no_sets_loaded">
+		Ningún conjunto cargado
+	</floater.string>
+	<floater.string name="ao_no_animations_loaded">
+		Ninguna animación cargada
+	</floater.string>
+	<panel name="animation_overrider_outer_panel" width="285"/>
+</floater>
