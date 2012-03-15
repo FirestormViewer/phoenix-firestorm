@@ -258,10 +258,10 @@
 	<texture name="ProgressTrack"
 		file_name="widgets/ProgressTrack.png"
 		preload="true"
-		scale.left="4"
-		scale.top="13"
-		scale.right="148"
-		scale.bottom="2" />
+		scale.left="8"
+		scale.top="12"
+		scale.right="144"
+		scale.bottom="3" />
 
 	<!-- Direct delivery icon for Received Items folder -->
 	<texture name="Inv_InboxOpen"   file_name="legacy/inv_folder_plain_open.tga" />
