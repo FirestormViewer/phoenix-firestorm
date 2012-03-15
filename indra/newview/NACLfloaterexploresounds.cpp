@@ -325,24 +325,14 @@ void NACLFloaterExploreSounds::handle_stop(void* user_data)
 		if(item.mID.isNull()) continue;
 		if(item.mPlaying)
 		{
-			// Make sure the audio source in question is still in the system to prevent
-			// crashes by using a stale pointer. This can happen when the same UUID is
-			// played twice without stopping it first. -Zi
-			if(!gAudiop->findAudioSource(item.mSourceID))
-			{
-				llwarns << "audio source " << item.mAudioSource << " already gone but still marked as playing. Fixing ..." << llendl;
-				gSoundHistory[item.mID].mPlaying=false;
-				gSoundHistory[item.mID].mAudioSource = NULL;
-				gSoundHistory[item.mID].mTimeStopped = LLTimer::getElapsedSeconds();
-				continue;
-			}
-
 			if(item.mAudioSource)
 			{
 				S32 type = item.mType;
 				item.mAudioSource->setType(LLAudioEngine::AUDIO_TYPE_UI);
-				item.mAudioSource->play(LLUUID::null);
-				item.mAudioSource->setType(type);
+				if(item.mAudioSource)
+					item.mAudioSource->play(LLUUID::null);
+				if(item.mAudioSource)
+					item.mAudioSource->setType(type);
 			}
 		}
 	}
