@@ -3443,4 +3443,14 @@ Obecne ustawienie: [CURRENT_VALUE]
 	<notification name="CacheEmpty">
 		Pamięć podręczna Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
 	</notification>
+	<notification name="FirstJoinSupportGroup">
+		Witaj w grupie wsparcia Phoenix/Firestorm!
+
+Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie prezentowała swoją wersję - będzie ona wyświetlana przed każdą Twoją wypowiedzią na tym czacie grupowym. Nasi członkowie będą mogli dać Ci bardziej sensowne porady, jeśli będą znać wersję Twojej Przeglądarki od razu.
+
+Możesz włączyć lub wyłączyć tą funkcję w każdej chwili w górnej części okna czatu.
+
+Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
+		<usetemplate ignoretext="Dołączenie do grupy wsparcia Phoenix/Firestorm" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
 </notifications>

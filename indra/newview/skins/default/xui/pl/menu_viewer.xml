@@ -110,8 +110,6 @@
 				</menu>
 		</menu>
 		<menu_item_call label="Przeszukiwanie obszaru" name="area_search"/>
-		<menu_item_check label="Eksplorator dźwięków" name="Sound Explorer"/>
-		<menu_item_call label="Czarna lista zasobów danych (assetów)" name="Asset Blacklist"/>
 	</menu>
 	<menu label="Buduj" name="BuildTools">
 		<menu_item_check label="Pokaż narzędzia budowania" name="Show Build Tools"/>

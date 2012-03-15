@@ -19,11 +19,6 @@
 			<pie_slice label="Odśwież tekstury" name="Texture Refresh"/>
 			<pie_slice label="Derenderuj" name="Derender"/>
 			<pie_slice label="Zgłoś..." name="Report Abuse..."/>
-			<pie_menu label="Czarna lista >" name="Blacklist">
-				<pie_slice label="Obiekt" name="Blacklist Object"/>
-				<pie_slice label="Tekstury" name="Blacklist Textures"/>
-				<pie_slice label="Skulpt" name="Blacklist Sculpt"/>
-			</pie_menu>
 			<pie_slice label="Wycisz" name="Object Mute"/>
 			<pie_slice label="Info o skryptach" name="ScriptInfo"/>
 			<pie_slice label="Inspekcja" name="Object Inspect"/>

@@ -30,9 +30,6 @@
 	</context_menu>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Derenderuj" name="Derender"/>
-	<menu_item_call label="Obiekt na Czarną Listę" name="BlacklistObject"/>
-	<menu_item_call label="Tekstury na Czarną Listę" name="BlacklistTextures"/>
-	<menu_item_call label="Skulpt na Czarną Listę" name="BlacklistSculpt"/>
 	<menu_item_call label="Zwróć" name="Return..."/>
 	<menu_item_call label="Weź" name="Pie Object Take"/>
 	<menu_item_call label="Weź kopię" name="Take Copy"/>
