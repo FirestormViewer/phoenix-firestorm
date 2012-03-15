@@ -1,134 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater
- can_close="true"
- open_centered="true"
- can_minimize="true"
- can_resize="true"
- width="750"
- min_width="650"
- height="300"
- min_height="320"
- name="blacklist"
- title="Asset Blacklist"
- help_topic="blacklist"
- save_rect="true"
+<floater can_close="true"  open_centered="true" can_minimize="true"
+     can_resize="true" width="750" min_width="650" height="320" min_height="320"
+     name="blacklist" title="Asset Blacklist"  save_rect="true"
  save_visibility="true"
  single_instance="true">
-	<floater.string name="Texture" value="Texture"/>
-	<floater.string name="Sound" value="Sound"/>
-	<floater.string name="Animation" value="Animation"/>
-	<floater.string name="Object" value="Object"/>
-	<button
-	 name="add_btn"
-	 follows="left|top"
-	 width="100"
-	 bottom_delta="80"
-	 left="10"
-	 height="20"
-	 label="Add..."/>
-	<button
-	 name="remove_btn"
-	 follows="left|top"
-	 width="100"
-	 left_delta="110"
-	 bottom_delta="0"
-	 height="20"
-	 label="Remove"/>
-	<combo_box
-	 name="asset_combo"
-	 follows="left|top"
-	 width="100"
-	 left_delta="110"
-	 bottom_delta="0"
-	 height="20"
-	 label="Asset Type"/>
-	<line_editor
-	 name="id_edit"
-	 label="Asset UUID goes here."
-	 enable="true"
-	 follows="left|top|right"
-	 bottom_delta="-30"
-	 left="10"
-	 right="-10"
-	 width="300"
-	 height="20"/>
-	<line_editor
-	 name="name_edit"
-	 label="Entry name goes here."
-	 enable="true"
-	 follows="left|top|right"
-	 bottom_delta="-23"
-	 left="10"
-	 right="-10"
-	 width="300"
-	 height="20"/>
-	<scroll_list
-	 top="100"
-	 bottom="-30"
-	 can_resize="true"
-	 column_padding="0"
-	 draw_heading="true"
-	 follows="all"
-	 left="10"
-	 multi_select="true"
-	 name="file_list"
-	 right="-10"
-	 search_column="0">
-		<column
-		 dynamicwidth="true"
-		 name="entry_name"
-		 label="Name" />
-		<column
-		 dynamicwidth="false"
-		 name="entry_type"
-		 label="Type"
-		 width="110" />
-		<column
-		 dynamicwidth="false"
-		 name="entry_agent"
-		 label="Blacklisted by"
-		 width="170" />
-		<column
-		 dynamicwidth="false"
-		 name="entry_date"
-		 label="Date"
-		 width="130"/>
-		<column
-		 dynamicwidth="false"
-		 name="asset_id"
-		 label="Asset-ID"
-		 width="130"/>
+	<button name="add_btn" follows="left|top" width="100" bottom_delta="80" left="10" height="20" label="Add..."/>
+	<button name="remove_btn" follows="left|top" width="100" left_delta="110" bottom_delta="0" height="20" label="Remove"/>
+  <combo_box name="asset_combo" follows="left|top" width="100" left_delta="110" bottom_delta="0" height="20" label="Asset Type"/>
+	<line_editor name="id_edit" label="Asset UUID goes here." enable="true" follows="left|top|right" bottom_delta="-30" left="10" right="-10" width="300" height="20"/>
+  <line_editor name="name_edit" label="Entry name goes here." enable="true" follows="left|top|right" bottom_delta="-23" left="10" right="-10" width="300" height="20"/>
+	<scroll_list top="100" bottom="-70" can_resize="true" column_padding="0" draw_heading="true"
+	     follows="all" left="10" multi_select="true" name="file_list" right="-10" search_column="0">
+	  <column dynamicwidth="true" name="entry_name" label="Name" />
+    <column dynamicwidth="false" name="entry_type" label="Type" width="110" />
+    <column dynamicwidth="false" name="entry_agent" label="Blacklisted by" width="170" />
+    <column dynamicwidth="false" name="entry_date" label="Date" width="130"/>
+    <column dynamicwidth="false" name="asset_id" label="Asset-ID" width="130"/>
 	</scroll_list>
-	<button
-	 name="save_btn"
-	 follows="left|bottom"
-	 width="100"
-	 bottom_delta="23"
-	 left="10"
-	 height="20"
-	 label="Save XML"/>
-	<button
-	 name="load_btn"
-	 follows="left|bottom"
-	 width="100"
-	 bottom_delta="0"
-	 left_delta="110"
-	 height="20"
-	 label="Load XML"/>
-	<button
-	 name="clear_btn"
-	 follows="left|bottom"
-	 width="100"
-	 bottom_delta="0"
-	 left_delta="110"
-	 height="20"
-	 label="Clear"/>
-	<button
-	 name="rerender_btn"
-	 follows="right|bottom"
-	 width="175"
-	 bottom_delta="0"
-	 left_delta="335"
-	 height="20"
-	 label="Rerender all Objects"/>
+	<button name="save_btn" follows="left|bottom" width="75" bottom_delta="23" left="10" height="20" label="Save XML"/>
+	<button name="load_btn" follows="left|bottom" width="75" bottom_delta="0" left_delta="75" height="20" label="Load XML"/>
+  <button name="clear_btn" follows="left|bottom" width="75" bottom_delta="0" left_delta="75" height="20" label="Clear"/>
+  <button name="rerender_btn" follows="right|bottom" width="150" bottom_delta="0" left_delta="400" height="20" label="Rerender all Objects"/>
 </floater>

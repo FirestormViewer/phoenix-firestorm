@@ -42,10 +42,10 @@ BOOL NACLFloaterBlacklist::postBuild()
 	childSetAction("load_btn", onClickLoad, this);
 	childSetAction("rerender_btn", onClickRerender, this);
 	LLComboBox* box = getChild<LLComboBox>("asset_combo");
-	box->add(getString("Texture"), LLSD(0));
-	box->add(getString("Sound"), LLSD(1));
-	box->add(getString("Animation"), LLSD(20));
-	box->add(getString("Object"), LLSD(6));
+	box->add("Texture",LLSD(0));
+	box->add("Sound",LLSD(1));
+	box->add("Animation",LLSD(20));
+	box->add("Object",LLSD(6));
 	refresh();
 	return TRUE;
 }
