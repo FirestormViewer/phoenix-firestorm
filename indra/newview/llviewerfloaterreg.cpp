@@ -174,9 +174,6 @@
 // NaCl - Asset blacklister
 #include "NACLfloaterblacklist.h"
 // NaCl End
-// NaCl - Sound explorer
-#include "NACLfloaterexploresounds.h"
-// NaCl End
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -371,9 +368,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);	// ## Zi: Animation Overrider
 	// NaCl - Asset blacklister
 	LLFloaterReg::add("blacklist", "floater_NACL_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterBlacklist>);
-	// NaCl End
-	// NaC - Sound explorer
-	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
 	// NaCl End
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);

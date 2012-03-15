@@ -5058,10 +5058,8 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
 		(owner_id != gAgent.getID()) &&
 		(owner_id == object_id)) return;
-
-  // NaCl - Sound Explorer
-	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global, object_id);
-  // NaCl End
+	
+	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global);
 }
 
 void process_preload_sound(LLMessageSystem *msg, void **user_data)
