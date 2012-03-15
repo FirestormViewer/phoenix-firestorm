@@ -53,10 +53,6 @@
 #include "llviewerassetstats.h"
 #include "llworld.h"
 
-// NaCl - Asset blacklister
-#include "NACLfloaterblacklist.h"
-// NaCl End
-
 //////////////////////////////////////////////////////////////////////////////
 class LLTextureFetchWorker : public LLWorkerClass
 {
@@ -890,17 +886,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 	if (mState == INIT)
 	{		
-		// NaCl - Asset blacklister
-		LLUUID tmp;
-		tmp = LLUUID::generateNewID(mID.asString()+"hash");
-		if(std::find(NACLFloaterBlacklist::blacklist_textures.begin(),
-		  NACLFloaterBlacklist::blacklist_textures.end(),tmp) != NACLFloaterBlacklist::blacklist_textures.end())
-		{
-		  llinfos << "Blacklisted texture asset (hashed) " << tmp.asString() << " blocked." << llendl;
-		  mState = DONE;
-		  return true;
-		}
-		// NaCl End
 		mRawImage = NULL ;
 		mRequestedDiscard = -1;
 		mLoadedDiscard = -1;

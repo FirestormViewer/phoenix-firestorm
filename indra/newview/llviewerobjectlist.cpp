@@ -74,9 +74,6 @@
 #include "object_flags.h"
 
 #include "llappviewer.h"
-// NaCl - Asset blacklister
-#include "NACLfloaterblacklist.h"
-// NaCl End
 
 extern F32 gMinObjectDistance;
 extern BOOL gAnimateTextures;
@@ -534,17 +531,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 #endif
 
-			// NaCl - Asset blacklister
-			LLUUID tmp;
-			tmp = LLUUID::generateNewID(fullid.asString()+"hash");
-			if (std::find(NACLFloaterBlacklist::blacklist_objects.begin(),
-				NACLFloaterBlacklist::blacklist_objects.end(),tmp) != NACLFloaterBlacklist::blacklist_objects.end())
-			{
-				llinfos << "Blacklisted object asset (hashed) " << tmp.asString() << " blocked." << llendl;
-				continue;
-			}
-			// NaCl End
-
 			objectp = createObject(pcode, regionp, fullid, local_id, gMessageSystem->getSender());
 			if (!objectp)
 			{
@@ -948,20 +934,6 @@ void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 	// Make a copy of the list in case something in idleUpdate() messes with it
 	std::vector<LLViewerObject*> idle_list;
 	
-	// NaCl - Autoblacklisting of video crashers / Asset blacklister
-	if(autoKill_list.size())
-	{
-		for(std::vector<LLUUID>::iterator it = autoKill_list.begin(); it != autoKill_list.end(); ++it)
-		{
-			LLUUID& object_id = *it;
-			LLViewerObject* object = findObject(object_id);
-			if(object)
-				killObject(object);
-		}
-		autoKill_list.clear();
-	}
-	// NaCl End
-
 	static LLFastTimer::DeclareTimer idle_copy("Idle Copy");
 
 	{

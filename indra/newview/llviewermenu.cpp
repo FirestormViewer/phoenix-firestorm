@@ -123,10 +123,6 @@
 #include "fslslbridge.h"
 //-TT
 
-// NaCl - Asset blacklister
-#include "NACLfloaterblacklist.h"
-// NaCl End
-
 // ## Zi: Texture Refresh
 #include "llavatarpropertiesprocessor.h"
 #include "lltexturecache.h"
@@ -2613,154 +2609,6 @@ void destroy_texture(LLUUID id)		// will be used by the texture refresh function
 	tx->destroyTexture();
 	LLAppViewer::getTextureCache()->removeFromCache(id);
 }
-
-// NaCl - Asset Blacklister
-class NACLBlacklistObject : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
-		for (LLObjectSelection::root_object_iterator iter = selection->root_object_begin(); iter != selection->root_object_end(); iter++)
-		{
-			LLSelectNode* obj = *iter;
-			if(obj)
-			{
-				LLViewerObject* object = obj->getObject();
-				if(object)
-				{
-					LLUUID tmp;
-					tmp = LLUUID::generateNewID(object->getID().asString()+"hash");
-					if(std::find(NACLFloaterBlacklist::blacklist_objects.begin(), NACLFloaterBlacklist::blacklist_objects.end(),tmp) == NACLFloaterBlacklist::blacklist_objects.end())
-					{
-						LLSD data;
-						data["entry_name"] = llformat("Derendered object.");
-						data["entry_type"] = LLAssetType::AT_OBJECT;
-						data["entry_agent"] = gAgent.getID();
-						NACLFloaterBlacklist::addEntry(tmp,data);
-						gObjectList.autoKill_list.push_back(object->getID());
-					}
-				}
-			}
-		}
-		LLSelectMgr::getInstance()->deselectAll();
-		return true;
-	}
-};
-
-class NACLBlacklistTextures : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
-		for (LLObjectSelection::valid_iterator iter = selection->valid_begin(); iter != selection->valid_end(); iter++)
-		{
-			LLSelectNode* obj = *iter;
-			if(obj)
-			{
-				LLViewerObject* object = obj->getObject();
-				if(object)
-				{
-					S32 faces = object->getNumFaces();
-					for(S32 face = 0; face < faces; face++)
-					{
-
-						LLUUID tmp;
-						LLUUID orig;
-						LLTextureEntry* TE=object->getTE(face);
-						if(TE)
-						{
-							orig=TE->getID();
-							tmp = LLUUID::generateNewID(object->getTE(face)->getID().asString() +"hash");
-							if(std::find(NACLFloaterBlacklist::blacklist_textures.begin(), NACLFloaterBlacklist::blacklist_textures.end(),tmp) == NACLFloaterBlacklist::blacklist_textures.end())
-							{
-								LLSD data;
-								data["entry_name"] = llformat("Blacklisted texture.");
-								data["entry_type"] = LLAssetType::AT_TEXTURE;
-								data["entry_agent"] = gAgent.getID();
-								NACLFloaterBlacklist::addEntry(tmp,data);
-							}
-							// NaCl - Instantly delete blacklisted texture - based on Zi's texture refresh
-							destroy_texture(orig);
-							// NaCl End
-						}
-					}
-					LLViewerObject::const_child_list_t& child_list = object->getChildren();
-					for (LLViewerObject::child_list_t::const_iterator iter2 = child_list.begin();
-						 iter2 != child_list.end(); ++iter2)
-					{
-						LLViewerObject* child_objectp = *iter2;
-						if(child_objectp)
-						{
-							S32 faces = child_objectp->getNumFaces();
-							for(S32 face = 0; face < faces; face++)
-							{
-								LLUUID tmp;
-								LLUUID orig;
-								LLTextureEntry* TE=object->getTE(face);
-								if(TE)
-								{
-									orig=TE->getID();
-									tmp = LLUUID::generateNewID(object->getTE(face)->getID().asString() +"hash");
-									if(std::find(NACLFloaterBlacklist::blacklist_textures.begin(), NACLFloaterBlacklist::blacklist_textures.end(),tmp) == NACLFloaterBlacklist::blacklist_textures.end())
-									{
-										LLSD data;
-										data["entry_name"] = llformat("Blacklisted texture.");
-										data["entry_type"] = LLAssetType::AT_TEXTURE;
-										data["entry_agent"] = gAgent.getID();
-										NACLFloaterBlacklist::addEntry(tmp,data);
-									}
-									// NaCl - Instantly delete blacklisted texture - based on Zi's texture refresh
-									destroy_texture(orig);
-									// NaCl End
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-};
-
-class NACLBlacklistSculpt : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		LLObjectSelectionHandle selection = LLSelectMgr::getInstance()->getSelection();
-		for (LLObjectSelection::valid_iterator iter = selection->valid_begin(); iter != selection->valid_end(); iter++)
-		{
-			LLSelectNode* obj = *iter;
-			if(obj)
-			{
-				LLViewerObject* object = obj->getObject();
-				if(object)
-				{
-					if(object->isSculpted())
-					{
-						LLSculptParams *sculpt_params = (LLSculptParams *)object->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
-						if(sculpt_params)
-						{
-							LLUUID sculpt_id = sculpt_params->getSculptTexture();
-							LLUUID tmp;
-							tmp = LLUUID::generateNewID(sculpt_id.asString()+"hash");
-							if(std::find(NACLFloaterBlacklist::blacklist_textures.begin(), NACLFloaterBlacklist::blacklist_textures.end(),tmp) == NACLFloaterBlacklist::blacklist_textures.end())
-							{
-								LLSD data;
-								data["entry_name"] = llformat("Blacklisted sculpt.");
-								data["entry_type"] = LLAssetType::AT_TEXTURE;
-								data["entry_agent"] = gAgent.getID();
-								NACLFloaterBlacklist::addEntry(tmp,data);
-							}
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-};
-// NaCl End
 
 class LLObjectTexRefresh : public view_listener_t
 {
@@ -9800,12 +9648,6 @@ void initialize_menus()
 		enable.add("RLV.EnableIfNot", boost::bind(&rlvMenuEnableIfNot, _2));
 	}
 // [/RLVa:KB]
-
-	// NaCl - Asset Blacklister
-	view_listener_t::addMenu(new NACLBlacklistObject(), "NaCl.BlacklistObject");
-	view_listener_t::addMenu(new NACLBlacklistTextures(), "NaCl.BlacklistTextures");
-	view_listener_t::addMenu(new NACLBlacklistSculpt(), "NaCl.BlacklistSculpt");
-	// NaCl End
 
 	// <FS:Ansariel> Toggle internal web browser
 	commit.add("ToggleWebBrowser", boost::bind(&toggleWebBrowser, _2));

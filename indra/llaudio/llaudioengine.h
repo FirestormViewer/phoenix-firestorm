@@ -150,9 +150,6 @@ public:
 
 	LLAudioSource *findAudioSource(const LLUUID &source_id);
 	LLAudioData *getAudioData(const LLUUID &audio_uuid);
-	// NaCl - Asset blacklister
-	void removeAudioData(LLUUID &audio_uuid);
-	// NaCl End
 
 	// Internet stream implementation manipulation
 	LLStreamingAudioInterface *getStreamingAudioImpl();

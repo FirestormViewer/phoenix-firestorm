@@ -966,60 +966,6 @@ LLAudioData * LLAudioEngine::getAudioData(const LLUUID &audio_uuid)
 	}
 }
 
-
-// NaCl - Asset blacklister
-void LLAudioEngine::removeAudioData(LLUUID &audio_uuid)
-{
-	data_map::iterator iter;
-	iter = mAllData.find(audio_uuid);
-	if(iter != mAllData.end())
-	{
-		source_map::iterator iter2;
-		for (iter2 = mAllSources.begin(); iter2 != mAllSources.end();)
-		{
-			LLAudioSource *sourcep = iter2->second;
-			if(sourcep)
-			{
-				if(sourcep->getCurrentData())
-				{
-					if(sourcep->getCurrentData()->getID().asString() == audio_uuid.asString())
-					{
-						LLAudioChannel* chan=sourcep->getChannel();
-						delete sourcep;
-						mAllSources.erase(iter2++);
-						if(chan)
-							chan->cleanup();
-					}
-					else
-						iter2++;
-				}
-				else
-					iter2++;
-			}
-			else
-				iter2++;
-		}	
-		LLAudioData* aData=(LLAudioData*)iter->second;
-		if(aData)
-		{
-			LLAudioBuffer* buf=aData->getBuffer();
-			if(buf)
-			{
-				S32 i;
-				for (i = 0; i < MAX_BUFFERS; i++)
-				{
-					if(mBuffers[i] == buf)
-						mBuffers[i] = NULL;
-				}
-				delete buf;
-			}
-		}
-		delete iter->second;
-		mAllData[audio_uuid] = NULL;
-	}
-}
-// NaCl End
-
 void LLAudioEngine::addAudioSource(LLAudioSource *asp)
 {
 	mAllSources[asp->getID()] = asp;

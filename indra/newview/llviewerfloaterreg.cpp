@@ -171,9 +171,6 @@
 //<FS:KC legacy profiles>
 #include "fsfloaterprofile.h"
 //</FS:KC legacy profiles>
-// NaCl - Asset blacklister
-#include "NACLfloaterblacklist.h"
-// NaCl End
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -366,9 +363,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);  // Quick Preferences panel -WoLf
 
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);	// ## Zi: Animation Overrider
-	// NaCl - Asset blacklister
-	LLFloaterReg::add("blacklist", "floater_NACL_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterBlacklist>);
-	// NaCl End
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);
 	LLFloaterReg::add("contactsetsettings", "floater_contactsets_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloaterSettings>);
