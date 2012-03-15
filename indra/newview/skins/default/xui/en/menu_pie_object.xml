@@ -154,34 +154,7 @@
                 function="Object.EnableReportAbuse" />
         </pie_slice>
         <pie_separator name="export_placeholder" />
-		<pie_menu
-			label="Blacklist >"
-			name="Blacklist">
-			<pie_separator name="blacklist_placeholder_1" />
-			<pie_separator name="blacklist_placeholder_2" />
-			<pie_separator name="blacklist_placeholder_3" />
-			<pie_slice
-				enabled="true"
-				label="Object"
-				name="Blacklist Object">
-				<pie_slice.on_click
-				function="NaCl.BlacklistObject" />
-			</pie_slice>
-			<pie_slice
-				enabled="true"
-				label="Textures"
-				name="Blacklist Textures">
-				<pie_slice.on_click
-				function="NaCl.BlacklistTextures" />
-			</pie_slice>
-			<pie_slice
-				enabled="true"
-				label="Sculpt"
-				name="Blacklist Sculpt">
-				<pie_slice.on_click
-				function="NaCl.BlacklistSculpt" />
-			</pie_slice>
-		</pie_menu>
+        <pie_separator name="disable_placeholder" />
         <pie_slice
             enabled="false"
             label="Mute"
