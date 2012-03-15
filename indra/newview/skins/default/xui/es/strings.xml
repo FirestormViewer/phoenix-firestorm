@@ -1245,10 +1245,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Pulsa ESC para salir de la vista subjetiva
 	</string>
 	<string name="InventoryNoMatchingItems">
-		¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/all/[SEARCH_TERM] la Búsqueda].
+		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/all/[SEARCH_TERM] Búsqueda].
 	</string>
 	<string name="PlacesNoMatchingItems">
-		¿No encuentras lo que buscas? Prueba con [secondlife:///app/search/places/[SEARCH_TERM] la Búsqueda].
+		¿No encuentras lo que buscas? Prueba con la [secondlife:///app/search/places/[SEARCH_TERM] Búsqueda].
 	</string>
 	<string name="FavoritesNoMatchingItems">
 		Arrastra aquí un hito para añadirlo a tus favoritos.
@@ -1257,16 +1257,19 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		No tienes en tu inventario una copia de esta textura.
 	</string>
 	<string name="InventoryInboxNoItems">
-		Tus compras en Marketplace aparecerán aquí. Podrás arrastrarlas a tu inventario para usarlas..
+		Tus compras en Marketplace aparecerán aquí. Podrás arrastrarlas a tu inventario para usarlas.
 	</string>
 	<string name="MarketplaceURL">
-		http://marketplace.[DOMAIN_NAME]
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://marketplace.[DOMAIN_NAME]/create_store
+		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.4
+	</string>
+	<string name="MarketplaceURL_Imports">
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/imports
 	</string>
 	<string name="MarketplaceURL_LearnMore">
-		http://marketplace.[DOMAIN_NAME]/learn_more
+		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
 	<string name="InventoryOutboxCreationErrorTitle">
 		Tu Buzón de salida de comerciante no está configurado correctamente
@@ -1278,22 +1281,18 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Ponte en contacto con el servicio de atención al cliente para resolver el problema.
 	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
-		Cualquiera puede vender objetos en el mercado
+		Todos pueden vender objetos en Marketplace
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip">
-		¡Hazte comerciante!
-	</string>
+	<string name="InventoryOutboxNotMerchantTooltip"></string>
 	<string name="InventoryOutboxNotMerchant">
-		[[MARKETPLACE_URL] Second Life Marketplace] pone en venta más de un millón de productos virtuales, todos ellos creados por residentes. Tú también puedes vender los objetos que crees, así como algunos de los objetos que hayas comprado. Es fácil y es gratuito. [[LEARN_MORE_URL] Más información] o [[CREATE_STORE_URL] crea una tienda] en el mercado para empezar.
+		Si quieres convertirte en comerciante, tienes que [[MARKETPLACE_CREATE_STORE_URL] crear una tienda en Marketplace].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
-		Una nueva forma para enviar objetos al mercado
+		Tu bandeja de salida está vacía.
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip">
-		Arrastra y coloca aquí los objetos que desees preparar para venderlos en el mercado
-	</string>
+	<string name="InventoryOutboxNoItemsTooltip"></string>
 	<string name="InventoryOutboxNoItems">
-		Arrastra a esta zona los objetos o carpetas que desees vender. Aparecerá una copia del objeto, sin quitarlo de tu inventario, salvo que el objeto arrastrado sea &quot;no copiable&quot;. Cuando estés listo para enviar los objetos al mercado, pulsa en el botón Subir. Cuando se hayan trasladado los objetos a tu inventario al mercado, desaparecerán de esta carpeta.
+		Arrastra carpetas a este área y pulsa "Enviar a Marketplace" para listarlos para su venta en [[MARKETPLACE_DASHBOARD_URL] Marketplace].
 	</string>
 	<string name="Marketplace Error None">
 		Sin errores
@@ -1305,7 +1304,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Error: Esta carpeta está vacía.
 	</string>
 	<string name="Marketplace Error Unassociated Products">
-		Error: Este objeto no se pudo subir porque tu cuenta de comerciante tiene demasiados objetos que no están asociados a productos. Para corregirlo, inicia sesión en la página web del mercado y asocia más objetos.
+		Error: Este objeto no se pudo subir porque tu cuenta de comerciante tiene demasiados objetos que no están asociados a productos. Para corregirlo, inicia sesión en la página web Marketplace y reduce el número de objetos no asociados.
 	</string>
 	<string name="Marketplace Error Object Limit">
 		Error: Este elemento contiene demasiados objetos. Para corregir el error, guarda objetos en cajas de forma que el total de objetos sea menor que 200.
@@ -1317,7 +1316,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Error: Este objeto no se puede vender en el mercado.
 	</string>
 	<string name="Marketplace Error Internal Import">
-		Error: Este objeto tiene un problema. Vuelve a intentarlo más tarde.
+		Error: Se ha producido un problema con este objeto. Vuelve a intentarlo más tarde.
 	</string>
 	<string name="Open landmarks">
 		Abrir hitos
