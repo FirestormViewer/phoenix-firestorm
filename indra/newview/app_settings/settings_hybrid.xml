@@ -263,5 +263,214 @@
     <integer>0</integer>
   </map>
 
+<!-- Below here, new for 4.0. Focus on power users, content creators, opensim -->
+
+
+  <key>FSNameTagShowLegacyUsernames</key>
+  <map>
+    <key>Comment</key>
+    <string>Show legacy name (Firstname Lastname) in user tags instead of username</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
   </map>
+
+  <key>UseTypingBubbles</key>
+  <map>
+    <key>Comment</key>
+    <string>Show typing indicator in avatar nametags</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSAnnounceIncomingIM</key>
+  <map>
+    <key>Comment</key>
+    <string>Opens the IM floater and announces an incoming IM as soon as somebody is starting to write an IM to you.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>EmotesUseItalic</key>
+  <map>
+    <key>Comment</key>
+    <string>Chat emotes are emphasized by using italic font style.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSScriptDialogNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, script dialogs will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSGroupNotifyNoTransparency</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, group notices will be shown opaque and ignore the floater opacity settings.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>OverridePieColors</key>
+  <map>
+    <key>Comment</key>
+    <string>Override the pie menu color defined by the currently selected skin</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>ShowAdvancedGraphicsSettings</key>
+  <map>
+    <key>Comment</key>
+    <string>Show advanced graphics settings</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>DisableCameraConstraints</key>
+    <map>
+      <key>Comment</key>
+      <string>Disable the normal bounds put on the camera by avatar position</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+
+  <key>FSDisableMinZoomDist</key>
+  <map>
+    <key>Comment</key>
+    <string>Disable the constraint on the closest distance the camera is allowed to get to an object.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSIgnoreSimulatorCameraConstraints</key>
+  <map>
+    <key>Comment</key>
+    <string>Ignores the 'push' the simulator applies to your camera to keep it out of objects.(Requires restart to work correctly)</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+
+  <key>TurnAroundWhenWalkingBackwards</key>
+  <map>
+     <key>Comment</key>
+     <string>Turns your avatar around to face the camera when you are walking backwards.</string>
+     <key>Persist</key>
+     <integer>1</integer>
+     <key>Type</key>
+     <string>Boolean</string>
+     <key>Value</key>
+     <integer>0</integer>
+  </map>
+
+  <key>ForceShowGrid</key>
+  <map>
+    <key>Comment</key>
+    <string>Always show grid dropdown on login screen</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>FSDisableTeleportScreens</key>
+  <map>
+    <key>Comment</key>
+    <string>Disable teleport screens</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSClientTagsVisibility2</key>
+  <map>
+    <key>Comment</key>
+    <string>Show client tags: 0=Client tags Off, 1=That are on the TPVD (needs FSUseLegacyClienttags), 2=That are on the client_tag.xml (needs FSUseLegacyClienttags), 3=That using the new system</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>AdvanceSnapshot</key>
+  <map>
+    <key>Comment</key>
+    <string>Display advanced parameter settings in snapshot interface</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>QuietSnapshotsToDisk</key>
+  <map>
+    <key>Comment</key>
+    <string>Take snapshots to disk without playing animation or sound</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+
+</map>
 </llsd>
