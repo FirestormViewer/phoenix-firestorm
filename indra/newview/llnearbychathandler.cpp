@@ -630,8 +630,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
  		LLFirstUse::otherAvatarChatFirst();
 
  		// Add sender to the recent people list.
- 		LLRecentPeople::instance().add(chat_msg.mFromID);
-
+// [RLVa:KB] - Checked: 2012-03-15 (RLVa-1.4.6) | Added: RLVa-1.4.6
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	 		LLRecentPeople::instance().add(chat_msg.mFromID);
+// [/RLVa:KB]
+// 		LLRecentPeople::instance().add(chat_msg.mFromID);
 	}
 
 	// Send event on to LLEventStream
