@@ -144,26 +144,70 @@
              value="6.0" />
         </combo_box>
 
+      <check_box
+       control_name="UsePieMenu"
+       height="16"
+       initial_value="true"
+       label="Use Pie Menu"
+       layout="topleft"
+       left="5"
+       name="UsePieMenu"
+       tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
+       top_pad="12"
+       width="256" />
 
-        <text
-         type="string"
-         left="5"
-         top_pad="10"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         name="ScriptDialogPlacementText"
-         width="140">
-            Script Dialog Placement:
-        </text>
+      <check_box
+       top_pad="2"
+       control_name="ShowNetStats"
+       follows="left|top"
+       height="16"
+       initial_value="false"
+       name="ShowNetStats"
+       label="Show lag meter"
+       left="5"
+       width="270"
+       tool_tip="Show lag meter in the Status Overlay"/>
+
+      <text
+       type="string"
+       left="5"
+       top_pad="20"
+       width="170"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ScriptDialogsPerObjectLabel">
+        Script Dialogs per Object:
+      </text>
+      <combo_box
+       control_name="ScriptDialogPerObject"
+       height="23"
+       layout="topleft"
+       left="17"
+       top_pad ="5"
+       name="ScriptDialogPerObjectDropdown"
+       width="180">
+        <combo_box.item
+         label="One per Object"
+         name="ScriptDialogOption_0"
+         value="0"/>
+        <combo_box.item
+         label="One per Object &amp; Channel"
+         name="ScriptDialogOption_1"
+         value="1"/>
+        <combo_box.item
+         label="Unconstrained"
+         name="ScriptDialogOption_2"
+         value="2"/>
+      </combo_box>
+      
         <check_box
          control_name="ShowScriptDialogsTopRight"
          height="16"
          initial_value="true"
          label="Script Dialogs in Top Right"
          layout="topleft"
-         left_delta="10"
+         left_delta="-10"
          name="ShowScriptDialogsTopRight"
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="12"
@@ -172,17 +216,17 @@
          control_name="ShowGroupNoticesTopRight"
          height="16"
          initial_value="true"
-         label="GN and chicklets in Top Right"
+         label="Group Notices and chiclets in Top Right"
          layout="topleft"
          left_delta="0"
          name="ShowGroupNoticesTopRight"
-         tool_tip="Set this to move group notifications and chicklet icons to the top right corner of the screen (Classic V1.x behavior)."
+         tool_tip="Set this to move group notifications and chiclet icons to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="2"
          width="256" />
         <text
          type="string"
-         left_delta="20"
-         top_pad="-3"
+         left_delta="240"
+         top_pad="-15"
          width="128"
          follows="left|top"
          height="12"
@@ -192,75 +236,29 @@
             (requires restart)
         </text>
 
-        <text
-         type="string"
-         left="5"
-         top_pad="10"
-         width="170"
-         follows="left|top"
-         height="16"
-         layout="topleft"
-         name="ScriptDialogsPerObjectLabel">
-            Script Dialogs per Object:
-        </text>
-        <combo_box
-         control_name="ScriptDialogPerObject"
-         height="23"
-         layout="topleft"
-         left="17"
-         top_pad ="5"
-         name="ScriptDialogPerObjectDropdown"
-         width="180">
-            <combo_box.item
-             label="One per Object"
-             name="ScriptDialogOption_0"
-             value="0"/>
-            <combo_box.item
-             label="One per Object &amp; Channel"
-             name="ScriptDialogOption_1"
-             value="1"/>
-            <combo_box.item
-             label="Unconstrained"
-             name="ScriptDialogOption_2"
-             value="2"/>
-        </combo_box>
-
-        <check_box
-         control_name="UsePieMenu"
-         height="16"
-         initial_value="true"
-         label="Use Pie Menu"
-         layout="topleft"
-         left="5"
-         name="UsePieMenu"
-         tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-         top_pad="12"
-         width="256" />
-
-        <check_box
-         top_pad="2"
-         control_name="ShowNetStats"
-         follows="left|top"
-         height="16"
-         initial_value="false"
-         name="ShowNetStats"
-         label="Show lag meter"
-         left="5"
-         width="270"
-         tool_tip="Show lag meter in the Status Overlay"/>
+      <check_box
+       control_name="FSShowToastsInFront"
+       height="16"
+       initial_value="true"
+       label="Show toasts in front of other windows"
+       layout="topleft"
+       left_delta="-240"
+       name="FSShowToastsInFront"
+       top_delta="15"
+       width="256" />
 
         <check_box
          control_name="FSGlobalButtonFlashOverride"
          type="string"
-         left="5"
-         top_pad="10"
+         left_pad="-255"
+         top_pad="15"
          length="1"
          follows="left|top"
          height="12"
          layout="topleft"
          name="ButtonFlashing"
          width="128"
-         label="Global Flashing Buttons Override:"/>
+         label="Global Flashing Buttons Override"/>
         <slider
          control_name="FSButtonFlashCount"
          decimal_digits="0"
@@ -271,7 +269,7 @@
          tool_tip="Number of times buttons flash"
          label_width="300"
          layout="topleft"
-         left="15"
+         left="30"
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
@@ -287,7 +285,7 @@
          tool_tip="Rate buttons flash at (in Hz) - used for IM notifications"
          label_width="300"
          layout="topleft"
-         left="15"
+         left="30"
          min_val="0"
          max_val="4"
          name="ButtonFlashRate"
@@ -299,7 +297,7 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left="475"
+         left="490"
          name="ButtonFlashRateText"
          top_delta="0"
          width="50">
@@ -594,7 +592,7 @@
          max_val="90"
          name="NearbyToastWidth"
          top_pad="7"
-         width="272" />
+         width="266" />
         <text
          type="string"
          length="1"
@@ -607,16 +605,6 @@
          width="50">
             %
         </text>
-        <check_box
-         control_name="FSShowToastsInFront"
-         height="16"
-         initial_value="true"
-         label="Show toasts in front of other windows"
-         layout="topleft"
-         left="210"
-         name="FSShowToastsInFront"
-         top_delta="25"
-         width="256" />
     </panel>
 
     <!--Font-->
