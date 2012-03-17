@@ -886,7 +886,7 @@
   <key>InternalShowGroupNoticesTopRight</key>
   <map>
     <key>Comment</key>
-    <string>Holds the information if group notifications should be shown in top right corner of the screen throughou the session.</string>
+    <string>Holds the information if group notifications should be shown in top right corner of the screen throughout the session.</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>HideFromEditor</key>

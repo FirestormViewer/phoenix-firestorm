@@ -172,11 +172,11 @@
          control_name="ShowGroupNoticesTopRight"
          height="16"
          initial_value="true"
-         label="Group Notices in Top Right"
+         label="GN and chicklets in Top Right"
          layout="topleft"
          left_delta="0"
          name="ShowGroupNoticesTopRight"
-         tool_tip="Set this to move group notifications to the top right corner of the screen (Classic V1.x behavior)."
+         tool_tip="Set this to move group notifications and chicklet icons to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="2"
          width="256" />
         <text
