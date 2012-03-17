@@ -108,6 +108,9 @@ BOOL LLFloaterSearch::postBuild()
 	LLFloaterWebContent::postBuild();
 	mWebBrowser->addObserver(this);
 
+	// <FS:Ansariel> Seperate help topic aside from other web content
+	setHelpTopic("floater_search");
+
 	return TRUE;
 }
 

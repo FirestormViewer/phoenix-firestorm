@@ -8,7 +8,7 @@
   min_height="400"
   min_width="500"
   name="floater_web_content"
-  help_topic="floater_web_content"
+  help_topic="floater_web_browser"
   save_rect="true"
   title=""
   initial_mime_type="text/html"
