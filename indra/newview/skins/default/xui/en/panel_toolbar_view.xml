@@ -84,7 +84,7 @@
                mouse_opaque="false"
                name="chiclet_container"
                tab_stop="false"
-               top="0"
+               top="40"
                bg_visible="false"
                width="20">
         </panel>          
