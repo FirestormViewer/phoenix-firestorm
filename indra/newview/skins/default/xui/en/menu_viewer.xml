@@ -2437,7 +2437,7 @@
                 <menu_item_call.on_enable
                  function="File.EnableCloseWindow" />
             </menu_item_call>
-            <!--<menu_item_call
+            <menu_item_call
              label="Close All Windows"
              name="Close All Windows"
              shortcut="control|shift|W">
@@ -2445,7 +2445,7 @@
                  function="File.CloseAllWindows" />
                 <menu_item_call.on_enable
                  function="File.EnableCloseAllWindows" />
-            </menu_item_call> -->
+            </menu_item_call>
 
             <menu_item_separator/>
 
