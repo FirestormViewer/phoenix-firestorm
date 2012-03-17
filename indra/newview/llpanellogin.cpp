@@ -1337,6 +1337,10 @@ void LLPanelLogin::updateLoginPanelLinks()
  
 void LLPanelLogin::onModeChange(const LLSD& original_value, const LLSD& new_value)
 {
+	// <FS:AO> make sure toolbar settings are reset on mode change
+	llinfos << "Clearing toolbar settings." << llendl;
+        gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
+
 	if (original_value.asString() != new_value.asString())
 	{
 		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&LLPanelLogin::onModeChangeConfirm, this, original_value, new_value, _1, _2));
