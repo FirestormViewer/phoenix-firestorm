@@ -27,7 +27,7 @@
         label="Head Tattoos"
         layout="topleft"
         left="5"
-        name="Head Tattoos"
+        name="Head"
         tool_tip="Click to choose a picture"
         top="5"
         width="64" >
@@ -43,7 +43,7 @@
         label="Upper Tattoos"
         layout="topleft"
         left_pad="10"
-        name="Upper Tattoos"
+        name="Upper Body"
         tool_tip="Click to choose a picture"
         top_delta="0"
         width="64" >
@@ -59,7 +59,7 @@
         label="Lower Tattoos"
         layout="topleft"
         left_pad="10"
-        name="Lower Tattoos"
+        name="Lower Body"
         tool_tip="Click to choose a picture"
         top_delta="0"
         width="64" >
