@@ -2524,6 +2524,26 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_SkinTheme = "default";
 	refreshSkinThemeList();
 	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
+
+        // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
+        // current skin would be carried over, leading to confusion and a first experience with
+        // the skin that the designer didn't intend.
+
+        if  (m_Skin.compare("starlight") == 0)
+        {
+                gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+        }
+        else
+        {
+                gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
+                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+        }
+
+        llinfos << "Clearing toolbar settings." << llendl;
+        gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
+
+        //</FS:AO>
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()

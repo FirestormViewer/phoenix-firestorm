@@ -2017,7 +2017,15 @@ void LLViewerWindow::initWorldUI()
 	// Note: we need to load the toolbars only *after* the user is logged in and IW
 	if (gToolBarView)
 	{
-		gToolBarView->loadToolbars();
+		if (gSavedSettings.getBOOL("ResetToolbarSettings"))
+		{
+			gToolBarView->loadDefaultToolbars();
+			gSavedSettings.setBOOL("ResetToolbarSettings",FALSE);
+		}
+		else
+		{
+			gToolBarView->loadToolbars();
+		}
 		gToolBarView->setVisible(TRUE);
 	}
 

@@ -228,12 +228,17 @@ bool LLToolBarView::loadToolbars(bool force_default)
 	std::string toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "toolbars.xml");
 	if (force_default)
 	{
-		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "toolbars.xml");
+		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_TOP_SKIN, "toolbars.xml"); // FS:AO - Look in skin directory, not settings
 	}
 	else if (!gDirUtilp->fileExists(toolbar_file)) 
 	{
-		llwarns << "User toolbars def not found -> use default" << llendl;
-		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "toolbars.xml");
+		llwarns << "User toolbars def not found -> use selected skin" << llendl;
+		toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_TOP_SKIN, "toolbars.xml"); // FS:AO - Look in skin directory, not settings
+	}
+	if (!gDirUtilp->fileExists(toolbar_file)) // FS:AO - Look in skin default dir as fallback
+	{
+		llwarns << "Skin toolbars def not found -> use default skin" << llendl;
+                toolbar_file = gDirUtilp->getExpandedFilename(LL_PATH_DEFAULT_SKIN, "toolbars.xml");
 	}
 	
 	LLXMLNodePtr root;
