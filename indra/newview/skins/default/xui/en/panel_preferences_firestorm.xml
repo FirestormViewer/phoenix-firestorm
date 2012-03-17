@@ -61,6 +61,16 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Enable double click teleports on the world map"
+         left="15"
+         name="FSWorldMapDoubleclickTeleport"
+         width="270"
+         control_name="FSWorldMapDoubleclickTeleport"
+         tool_tip="Enables teleporting via double click to a destination on the world map."/>
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Disable Teleport Screens"
          left="15"
          name="tp_screen_toggle"

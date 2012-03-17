@@ -9,6 +9,7 @@
 		<text name="textMiscRLVaRestart">
 			(Erfordert Neustart)
 		</text>
+		<check_box label="Aktiviere Teleport via Doppelklick auf der Weltkarte" name="FSWorldMapDoubleclickTeleport" tool_tip="Aktiviert das Teleportieren zu einem Ziel auf der Weltkarte mittels Doppelklick."/>
 		<check_box label="Deaktiviere Teleport-Anzeige" name="tp_screen_toggle" tool_tip="Deaktiviert den schwarzen Teleport-Bildschirm während eines Teleports."/>
 		<check_box label="Deaktiviere Teleport-Leitstrahl" name="tp_beam_toggle" tool_tip="Deaktiviert den Leitstrahl zum Teleportziel nach Teleports."/>
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logins" name="login_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logins."/>

@@ -1851,7 +1851,9 @@ BOOL LLWorldMapView::handleDoubleClick( S32 x, S32 y, MASK mask )
 					// Teleport if we got a valid location
 					LLVector3d pos_global = viewPosToGlobal(x,y);
 					LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos_global);
-					if (sim_info && !sim_info->isDown())
+					// <FS:Ansariel> Doubleclick teleport option for worldmap
+					//if (sim_info && !sim_info->isDown())
+					if (sim_info && !sim_info->isDown() && gSavedSettings.getBOOL("FSWorldMapDoubleclickTeleport"))
 					{
 						gAgent.teleportViaLocation( pos_global );
 					}
