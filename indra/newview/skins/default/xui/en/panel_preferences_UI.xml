@@ -244,7 +244,7 @@
        layout="topleft"
        left_delta="-240"
        name="FSShowToastsInFront"
-       top_delta="15"
+       top_delta="17"
        width="256" />
 
         <check_box

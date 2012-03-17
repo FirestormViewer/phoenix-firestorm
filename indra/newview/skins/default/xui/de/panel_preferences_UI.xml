@@ -23,14 +23,6 @@
 			<combo_box.item label="6 Sekunden" name="tt_item4"/>
 		</combo_box>
 
-		<text name="ScriptDialogPlacementText">
-			Platzierung Skript-Dialoge:
-		</text>
-		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
-		<check_box label="Gruppenmitteil. oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
-		<text name="GroupTopRightRequiresRestart">
-			(Erfordert Neustart)
-		</text>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>
@@ -39,6 +31,12 @@
 			<combo_box.item label="Einer pro Objekt &amp; Kanal" name="ScriptDialogOption_1"/>
 			<combo_box.item label="Unbeschränkt" name="ScriptDialogOption_2"/>
         </combo_box>
+		<check_box label="Skript-Dialoge oben rechts" name="ShowScriptDialogsTopRight" tool_tip="Aktivieren, um Skript-Dialoge in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<check_box label="Gruppenmitteilungen und Chiclets oben rechts" name="ShowGroupNoticesTopRight" tool_tip="Aktivieren, um Gruppenmitteilungen in der oberen rechten Ecke des Bildschirms anzuzeigen (Klassisches V1.x-Verhalten)."/>
+		<text name="GroupTopRightRequiresRestart" left_delta="280">
+			(Erfordert Neustart)
+		</text>
+		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront" left_delta="-280"/>
 		<text name="UsePieMenuLabel">
 			Pie-Menü:
 		</text>
@@ -97,7 +95,6 @@
 		<text name="NearbyToastWidthText">
 			%
 		</text>
-		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 	</panel>
 
 	<!--Font-->
