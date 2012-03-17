@@ -24,10 +24,10 @@
         default_image_name="Default"
         follows="left|top"
         height="80"
-        label="Head"
+        label="Head Tattoos"
         layout="topleft"
         left="5"
-        name="Head Tattoos"
+        name="Head"
         tool_tip="Click to choose a picture"
         top="5"
         width="64" >
