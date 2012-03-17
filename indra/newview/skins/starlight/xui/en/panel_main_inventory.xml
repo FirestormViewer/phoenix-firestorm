@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ default_tab_group="1"
+ follows="all"
+ height="423"
+ label="Things"
+ layout="topleft"
+ min_height="300"
+ min_width="240"
+ name="main inventory panel"
+ width="330">
+  <panel.string
+   name="Itemcount">
+  </panel.string>
+  <panel.string
+   name="ItemcountFetching">
+    Fetching [ITEM_COUNT] Items... [FILTER]
+  </panel.string>
+  <panel.string
+   name="ItemcountCompleted">
+    [ITEM_COUNT] Items [FILTER]
+  </panel.string>
+  <panel.string
+   name="ItemcountUnknown">
+
+  </panel.string>
+  <text
+		     type="string"
+		     length="1"
+		     follows="left|top"
+		     height="13"
+		     layout="topleft"
+    		 left="12"
+		     name="ItemcountText"
+		     font="SansSerifMedium"
+		     text_color="EmphasisColor"
+		     top_pad="0"
+		     width="300">
+    Items:
+  </text>
+  <filter_editor
+   text_pad_left="10"
+   follows="left|top|right"
+   height="23"
+   label="Filter Inventory"
+   layout="topleft"
+   left="10"
+   max_length_chars="300"
+   name="inventory search editor"
+   tool_tip="Type in one or more words to search for, separated by '+' "
+   top="18"
+   width="219" />
+  <combo_box
+   name="filter_combo_box"
+   width="80"
+   height="21"
+   top="19"
+   left_pad="4"
+   follows="top|right"
+   layout="topleft">
+
+  <combo_box.item value="filter_type_all" label="All Types" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_animations" label="Animations" />
+  <combo_box.item value="filter_type_calling_cards" label="Calling Cards" />
+  <combo_box.item value="filter_type_clothing" label="Clothing / Body Parts" />
+  <combo_box.item value="filter_type_gestures" label="Gestures" />
+  <combo_box.item value="filter_type_landmarks" label="Landmarks" />
+  <combo_box.item value="filter_type_notecards" label="Notecards" />
+  <combo_box.item value="filter_type_objects" label="Objects" />
+  <combo_box.item value="filter_type_scripts" label="Scripts" />
+  <combo_box.item value="filter_type_sounds" label="Sounds" />
+  <combo_box.item value="filter_type_textures" label="Textures" />
+  <combo_box.item value="filter_type_snapshots" label="Snapshots" />
+  <combo_box.item value="filter_type_meshes" label="Meshes" />
+  <combo_box.item value="filter_separator" label="------------" enabled="false" />
+  <combo_box.item value="filter_type_custom" label="Custom..." />
+
+  </combo_box>
+  <tab_container
+     bg_alpha_color="Transparent"
+     bg_opaque_color="Transparent"
+     background_visible="true"
+     background_opaque="false"
+     follows="all"
+     halign="center"
+     height="339"
+     layout="topleft"
+     left="7"
+     name="inventory filter tabs"
+     tab_drag_commit="true"
+     open_tabs_on_drag_and_drop="true"
+     tab_height="23"
+     tab_group="1"
+     tab_position="top"
+     tab_min_width="100"
+     top_pad="10"
+     width="312">
+    <inventory_panel
+     bevel_style="none"
+     follows="all"
+     height="338"
+     label="INVENTORY"
+     help_topic="my_inventory_tab"
+     layout="topleft"
+     left="0"
+     name="All Items"
+     sort_order_setting="InventorySortOrder"
+	 show_item_link_overlays="true"
+     top="16"
+     width="288" />
+    <recent_inventory_panel
+     bevel_style="none"
+     follows="all"
+     height="338"
+     label="RECENT"
+     help_topic="recent_inventory_tab"
+     layout="topleft"
+     left_delta="0"
+     name="Recent Items"
+	 show_item_link_overlays="true"
+     width="290" />
+	<worn_inventory_panel
+     bevel_style="none"
+     follows="all"
+     height="338"
+     label="WORN"
+     help_topic="worn_inventory_tab"
+     layout="topleft"
+     left_delta="0"
+     name="Worn Items"
+	 show_item_link_overlays="true"
+     width="290" />
+  </tab_container>
+  <panel
+   animate="false"
+   border_size="0"
+   follows="left|right|bottom"
+   height="25"
+   layout="topleft"
+   orientation="horizontal"
+   auto_resize="true"
+   top_pad="0"
+   left="10"
+   name="bottom_panel"
+   width="307">
+      <panel
+       auto_resize="false"
+	   follows="top|left"
+       left="0"
+       height="25"
+       layout="topleft"
+       name="options_gear_btn_panel"
+       width="32">
+          <menu_button
+           follows="bottom|left"
+           tool_tip="Show additional options"
+           height="25"
+           image_hover_unselected="Toolbar_Left_Over"
+           image_overlay="OptionsMenu_Off"
+           image_selected="Toolbar_Left_Selected"
+           image_unselected="Toolbar_Left_Off"
+           layout="topleft"
+           left="0"
+           name="options_gear_btn"
+           top="0"
+           width="31" />
+      </panel>
+      <panel
+       auto_resize="false"
+	   follows="top|left"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="add_btn_panel"
+       user_resize="false"
+       width="32">
+          <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="AddItem_Off"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="add_btn"
+           tool_tip="Add new item"
+           top="0"
+           width="31" />
+      </panel>
+	  <panel
+   	  auto_resize="true"
+	  follows="top|left"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="new_inventory_panel"
+       width="32">
+          <button
+           follows="bottom|left"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+           image_overlay="inventory_18"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="new_inv_btn"
+           tool_tip="Additional Inventory Window"
+           top="0"
+           width="31">
+           <button.init_callback
+                 function="Button.SetDockableFloaterToggle"
+                 parameter="secondary_inventory" />
+           </button>
+      </panel>
+      <panel
+	   auto_resize="true"
+	   follows="top|left"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+	   user_resize="false"
+       name="collapse_panel"
+       width="90">
+	      <button
+		   auto_resize="true"
+           follows="bottom|left|right"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Collapse All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="collapse_btn"
+           tool_tip="Collapse Folders"
+           top="0"
+           width="89" />
+	  </panel>	   
+      <panel
+	   auto_resize="false"
+	   follows="top|left|right"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="expand_panel"
+       user_resize="false"
+       width="90">
+		  <button
+		   auto_resize="true"
+           follows="bottom|left|right"
+           height="25"
+           image_hover_unselected="Toolbar_Middle_Over"
+		   label="Expand All"
+           image_selected="Toolbar_Middle_Selected"
+           image_unselected="Toolbar_Middle_Off"
+           layout="topleft"
+           left="0"
+           name="expand_btn"
+           tool_tip="Expand Folders"
+           top="0"
+           width="89" />
+          <!-- icon
+           follows="bottom|left|right"
+           height="25"
+           image_name="Toolbar_Middle_Off"
+           layout="topleft"
+           left_pad="1"
+           top="0"
+           name="dummy_icon"
+           width="59" / -->
+      </panel>
+      <panel
+       auto_resize="false"
+	   follows="top|right"
+       left_pad="0"
+       height="25"
+       layout="topleft"
+       name="trash_btn_panel"
+       user_resize="false"
+       width="31">
+          <dnd_button
+           follows="top|right"
+           height="25"
+           image_hover_unselected="Toolbar_Right_Over"
+           image_overlay="TrashItem_Off"
+           image_selected="Toolbar_Right_Selected"
+           image_unselected="Toolbar_Right_Off"
+           left="0"
+           layout="topleft"
+           name="trash_btn"
+           tool_tip="Remove selected item"
+           top="0"
+           width="31"/>
+      </panel>
+  </panel>
+</panel>

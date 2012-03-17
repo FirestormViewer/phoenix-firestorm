@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="440"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Custom Colors"
+ name="custom_colors_panel">
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="custom_colors_text"
+   top_pad="12"
+   width="170"
+   >
+    Custom UI colors:
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="custommain"
+   top_pad="8"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-CustomMain" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-CustomMain" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxc1"
+   top_delta="5"
+   width="175">
+    Buttons, Scroll Bars etc.
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="270"
+   name="textEmphasis"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-EmphasisColor" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-EmphasisColor" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxc3"
+   top_delta="5"
+   width="175">
+    Emphasis Text
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="buttonnormal"
+   top_pad="18"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-ButtonNormal" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-ButtonNormal" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxc4"
+   top_delta="5"
+   width="175">
+    Button Label - normal
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="270"
+   name="buttonselect"
+   top_pad="-15"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-ButtonSelect" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-ButtonSelect" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxc6"
+   top_delta="5"
+   width="175">
+    Button Label - selected
+  </text>
+    <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="40"
+   name="backgroundnormal"
+   top_pad="18"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-CustomBackground" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-CustomBackground" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxbn"
+   top_delta="5"
+   width="175">
+    Panel Background - normal
+  </text>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left="89"
+   mouse_opaque="false"
+   name="text_boxbn_restart"
+   top_delta="12"
+   width="175">
+    (requires restart)
+  </text>
+  <color_swatch
+   can_apply_immediately="true"
+   follows="left|top"
+   height="24"
+   label_height="0"
+   layout="topleft"
+   left="270"
+   name="backgroundlight"
+   top_pad="-27"
+   width="44" >
+    <color_swatch.init_callback
+		 function="Pref.getUIColor"
+		 parameter="SL-CustomBackground_Light" />
+    <color_swatch.commit_callback
+		 function="Pref.applyUIColor"
+		 parameter="SL-CustomBackground_Light" />
+  </color_swatch>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left_pad="5"
+   mouse_opaque="false"
+   name="text_boxbl"
+   top_delta="5"
+   width="175">
+    Panel Background - lighter
+  </text>
+  <text
+   type="string"
+   length="1"
+   follows="left|top"
+   height="10"
+   layout="topleft"
+   left="319"
+   mouse_opaque="false"
+   name="text_boxb1_restart"
+   top_delta="12"
+   width="175">
+    (requires restart)
+  </text>
+  <text
+   follows="left|top"
+   layout="topleft"
+   left="30"
+   height="12"
+   name="general_colors_text"
+   top_pad="25"
+   width="370"
+   >
+    General UI colors (also set in 'Colors' Preferences):
+  </text>
+    <color_swatch
+     can_apply_immediately="true"
+     color="DialogColorBg"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="40"
+     name="CustomDialogColorBg"
+     top_pad="12"
+     width="44" >
+        <color_swatch.init_callback
+         function="Pref.getUIColor"
+         parameter="ScriptDialog" />
+        <color_swatch.commit_callback
+         function="Pref.applyUIColor"
+         parameter="ScriptDialog" />
+    </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="CustomScriptDialogBgLabel"
+     top_delta="5"
+     width="175">
+        Script Dialog Background
+    </text>
+    <color_swatch
+     can_apply_immediately="true"
+     color="DialogColorFg"
+     follows="left|top"
+     height="24"
+     label_height="0"
+     layout="topleft"
+     left="270"
+     name="CustomScriptDialogFb"
+     top_pad="-15"
+     width="44" >
+        <color_swatch.init_callback
+         function="Pref.getUIColor"
+         parameter="ScriptDialogFg" />
+        <color_swatch.commit_callback
+         function="Pref.applyUIColor"
+         parameter="ScriptDialogFg" />
+    </color_swatch>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="5"
+     mouse_opaque="false"
+     name="CustomScriptDialogFgLabel"
+     top_delta="5"
+     width="175">
+        Script Dialog Foreground
+    </text>
+
+</panel>
