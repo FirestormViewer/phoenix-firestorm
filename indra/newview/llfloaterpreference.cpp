@@ -2540,8 +2540,11 @@ void LLPanelPreferenceSkins::onSkinChanged()
                 gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
         }
 
-        llinfos << "Clearing toolbar settings." << llendl;
-        gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
+	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
+	{
+        	llinfos << "Clearing toolbar settings." << llendl;
+        	gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
+	}
 
         //</FS:AO>
 }

@@ -79,6 +79,21 @@
     </text>
 
     <check_box
+     control_name="FSSkinClobbersToolbarPrefs"
+     enabled="true"
+     follows="left|top"
+     height="16"
+     initial_value="true"
+     label="Reset toolbars to the skin's preferred layout when changing skins. (recommended)"
+	 tool_tip="When enabled, this option preserves the skin's designed toolbar button layout and will override your chosen button customisations when you change skins or change login mode."
+     layout="topleft"
+     left="30"
+     top_pad="20"
+     name="reset_toolbar_settings"
+     width="200" />
+
+
+    <check_box
      control_name="UseLegacyCursors"
      enabled="false"
      follows="left|top"
@@ -103,4 +118,9 @@
      width="200">
         (Requires restart)
     </text>
+
+
+
+
+
 </panel>
