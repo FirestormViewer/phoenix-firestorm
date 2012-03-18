@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Eigene Farben" name="custom_colors_panel">
+<panel label="Spezialfarben" name="custom_colors_panel">
 	<text name="custom_colors_text">
-		Eigene Benutzerinterface-Farben:
+		Spezielle Benutzerinterface-Farben:
 	</text>
 	<text name="text_boxc1">
 		Buttons, Scrollleisten usw.
