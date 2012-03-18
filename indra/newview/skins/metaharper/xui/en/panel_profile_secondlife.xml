@@ -81,7 +81,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          top="8"
          left="6"
          height="16"
-         width="40"
+         width="55"
          layout="topleft"
          follows="left|top"
          name="Name:"
@@ -89,6 +89,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="Name:" />
 
         <view_border
+	 visible="false"
          left_pad="4"
          right="-28"
          height="16"
@@ -122,14 +123,14 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="set_name"
          image_overlay="Edit_Wrench"
          tool_tip="Set Display Name"
-         visible="true"
+         visible="false"
          enabled="false" />
 
         <text
          top_pad="2"
          left="6"
          height="16"
-         width="40"
+         width="55"
          layout="topleft"
          follows="left|top"
          name="Key:"
@@ -137,20 +138,21 @@ KC: Use view_border's around text_editor's due to text render issues with border
          value="Key:" />
 
         <view_border
+	 visible="false"
          left_pad="4"
          right="-6"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|right"
          name="info_border2"
          bevel_style="in" />
         <text_editor
          bottom_delta="2"
          left_delta="3"
-         right="-6"
          height="16"
+	 width="250"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|left|right"
          name="user_key"
          bg_visible="false"
          border_visible="false"
@@ -163,10 +165,10 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <text
          left_pad="2"
-         right="-6"
+         right="-1"
          height="16"
          layout="topleft"
-         follows="left|top|right"
+         follows="top|right"
          name="status"
          halign="center"
          value="" />
@@ -186,7 +188,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
 
         <text
          top_pad="-179"
-         left_pad="4"
+         left_pad="10"
          right="-6"
          height="16"
          layout="topleft"
