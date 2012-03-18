@@ -1,5 +1,69 @@
 <llsd>
-    <map>
+  <map>
+    <key>login.avination.net/</key>
+        <map>
+        <key>LastModified</key>
+            <date>2011-08-28T12:00:00.00Z</date>
+        <key>about</key>
+            <string>https://login.avination.net/</string>
+        <key>grid_login_id</key>
+            <string>login.avination.net/</string>
+        <key>gridname</key>
+            <string>Avination</string>
+        <key>gridnick</key>
+            <string>craft</string>
+        <key>helperuri</key>
+            <string>https://secure.3dhosting.de/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>https://www.avination.com/welcome.php</string>
+        <key>loginuri</key>
+            <array>
+                <string>login.avination.net/</string>
+            </array>
+        <key>name</key>
+            <string>login.avination.net/</string>
+        <key>register</key>
+            <string>https://www.avination.com/account.php</string>
+        <key>slurl_base</key>
+            <string>https://login.avination.net/</string>
+	</map>
+	    <key>grid.avatarconnection.com:8002/</key>
+        <map>
+        <key>LastModified</key>
+            <date>2011-08-28T12:00:00.00Z</date>
+        <key>about</key>
+            <string>http://grid.avatarconnection.com:8002/</string>
+        <key>grid_login_id</key>
+            <string>grid.avatarconnection.com:8002/</string>
+        <key>gridname</key>
+            <string>Avatar Connection</string>
+        <key>gridnick</key>
+            <string>craft</string>
+        <key>helperuri</key>
+            <string>http://grid.avatarconnection.com:9000/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://avatarconnection.com/grid/index.php</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://grid.avatarconnection.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>grid.avatarconnection.com:8002/</string>
+        <key>register</key>
+            <string></string>
+        <key>slurl_base</key>
+            <string>http://grid.avatarconnection.com:8002/</string>
+	</map>
     <key>craft-world.org:8002</key>
         <map>
         <key>LastModified</key>
@@ -234,7 +298,7 @@
         </map>
     <key>login.osgrid.org</key>
         <map>
-        <key>LastModified</key>
+		 <key>LastModified</key>
             <date>2011-08-28T12:00:00.00Z</date>
         <key>about</key>
             <string>http://www.osgrid.org/</string>
