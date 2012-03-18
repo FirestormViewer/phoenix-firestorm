@@ -267,6 +267,7 @@
 			<menu_item_check label="Zawsze biegaj" name="Always Run"/>
 			<menu_item_check label="Lataj" name="Fly"/>
 			<menu_item_call label="Zamknij okno" name="Close Window"/>
+			<menu_item_call label="Zamknij wszystkie okna" name="Close All Windows"/>
 			<menu_item_call label="Zapisz zdjęcie na dysk twardy" name="Snapshot to Disk"/>
 			<menu_item_call label="Widok pierwszoosobowy" name="Mouselook"/>
 			<menu_item_call label="Wolna kamera" name="Joystick Flycam"/>

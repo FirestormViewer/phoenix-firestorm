@@ -20,14 +20,6 @@
             <combo_box.item label="3 sekundach" name="tt_item3" />
             <combo_box.item label="6 sekundach" name="tt_item4" />
         </combo_box>
-        <text name="ScriptDialogPlacementText">
-            Komunikaty skryptów:
-        </text>
-        <check_box label="W prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
-        <check_box label="Ogł. grup w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
-        <text name="GroupTopRightRequiresRestart">
-            (wymaga restartu)
-        </text>
         <text name="ScriptDialogsPerObjectLabel">
             Komunikatów skr. na obiekt:
         </text>
@@ -36,6 +28,12 @@
             <combo_box.item label="Jeden na obiekt i kanał" name="ScriptDialogOption_1" />
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
         </combo_box>
+        <check_box label="W prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
+        <check_box label="Ikonki w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
+        <text name="GroupTopRightRequiresRestart">
+            (wymaga restartu)
+        </text>
+        <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
         <check_box label="Używaj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <checkbox name="ButtonFlashing" label="Globalne mruganie przycisków:" />
@@ -84,7 +82,6 @@
             pikseli
         </text>
         <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu lokalnego ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
-        <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
     </panel>
     <panel label="Czcionka" name="UI-font-tab">
         <text name="tooltip_textbox1">

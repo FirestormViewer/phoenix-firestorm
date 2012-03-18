@@ -6,6 +6,7 @@
         <text name="textMiscRLVaRestart">
             (wymaga restartu)
         </text>
+        <check_box label="Włącz teleport przez dwuklik na mapie świata" name="FSWorldMapDoubleclickTeleport" tool_tip="Włącza teleportację do punktu docelowego przez podwójne kliknięcie klawiszem myszki na mapie świata."/>
         <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
         <check_box label="Wyłącz znaki świetlne teleportów" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
