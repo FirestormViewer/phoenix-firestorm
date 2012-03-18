@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<floater
+ open_positioning="centered"
+ height="510"
+ width="420"
+ layout="topleft"
+ can_close="true"
+ can_resize="true"
+ name="avatarinfo"
+ help_topic="panel_my_profile_tab"
+ title="PROFILE" >
+ <!-- Ansariel: Help topic set above is a dummy only - real topics are set for the panels down below! -->
+<panel
+ top="0"
+ left="0"
+ follows="all"
+ width="420"
+ height="500"
+ name="panel_profile_view">
+
+    <tab_container
+     follows="all"
+     top_pad="5"
+     left="0"
+     width="420"
+     height="500"
+     halign="center"
+     layout="topleft"
+     name="tabs"
+     tab_position="top"
+     tab_min_width="50">
+        <panel
+         class="panel_profile_secondlife"
+         filename="panel_profile_secondlife.xml"
+         label="Avatar"
+         layout="topleft"
+         help_topic="profile_secondlife_tab"
+         name="panel_profile_secondlife" />
+        <panel
+         class="panel_profile_web"
+         filename="panel_profile_web.xml"
+         label="Web"
+         layout="topleft"
+         help_topic="profile_web_tab"
+         name="panel_profile_web" />
+        <panel
+         class="panel_profile_interests"
+         filename="panel_profile_interests.xml"
+         label="Interests"
+         layout="topleft"
+         help_topic="profile_interests_tab"
+         name="panel_profile_interests" />
+        <panel
+         class="panel_profile_picks"
+         filename="panel_profile_picks.xml"
+         label="Picks"
+         layout="topleft"
+         help_topic="profile_picks_tab"
+         name="panel_profile_picks" />
+        <panel
+         class="panel_profile_classified"
+         filename="panel_profile_classified.xml"
+         label="Classified"
+         layout="topleft"
+         help_topic="profile_classified_tab"
+         name="panel_profile_classified" />
+        <panel
+         class="panel_profile_firstlife"
+         filename="panel_profile_firstlife.xml"
+         label="More Info"
+         layout="topleft"
+         help_topic="profile_firstlife_tab"
+         name="panel_profile_firstlife" />
+        <panel
+         class="panel_profile_notes"
+         filename="panel_profile_notes.xml"
+         label="Notes"
+         layout="topleft"
+         help_topic="profile_notes_tab"
+         name="panel_profile_notes" />
+    </tab_container>
+
+    <button
+     bottom_delta="0"
+     left="10"
+     height="20"
+     width="90"
+     layout="topleft"
+     follows="left|bottom"
+     name="ok_btn"
+     label="OK"
+     tool_tip="Save changes to profile and close"
+     visible="false" />
+
+    <button
+     bottom_delta="0"
+     right="-10"
+     height="20"
+     width="90"
+     layout="topleft"
+     follows="right|bottom"
+     name="cancel_btn"
+     label="Cancel"
+     label_selected="Cancel"
+     visible="false" />
+
+</panel>
+</floater>
