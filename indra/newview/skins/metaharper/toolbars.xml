@@ -7,7 +7,7 @@
     <bottom_toolbar
      button_alignment="left"
      button_display_mode="icons_only"
-     button_layout_style="equalize">
+     button_layout_style="fill">
         <command
          name="chat" />
         <command

@@ -59,18 +59,19 @@
             <string>metaharper</string>
         <key>themes</key>
             <array>
+		<map>
+                <key>name</key>
+                    <string>CoolOcean</string>
+                <key>folder</key>
+                    <string>cool_ocean</string>
+                </map>
+
                 <map>
                 <key>name</key>
                     <string>AppalachianSky</string>
                 <key>folder</key>
                     <string>appalachian_sky</string>
 		</map>
-                <map>
-                <key>name</key>
-                    <string>Thea Blue</string>
-                <key>folder</key>
-                    <string>Blue</string>
-                </map>
             </array>
         </map>
 

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ background_visible="false"
+ bg_alpha_color="Transparent"
+ color="Transparent"
+ follows="left|top|right"
+ focus_root="true"
+ height="37"
+ layout="topleft"
+ name="navigation_bar"
+ chrome="true"
+ width="1024">
+
+	<panel
+	 background_visible="false"
+	 follows="left|top|right"
+	 height="22"
+	 layout="topleft"
+	 top_pad="0"
+	 name="navigation_panel"
+	 width="1024">
+
+	<!-- Layout stack for buttons, location input and search field -->
+	<layout_stack
+	 follows="left|top|right"
+	 layout="topleft"
+	 orientation="horizontal"
+	 name="location_search_layout"
+	 width="1024"
+	 height="22"
+	 left="0"
+	 top="0">
+
+	<!-- Contains the navigation buttons -->
+	<layout_panel
+	 name="navigation_buttons_visibility_panel"
+	 layout="topleft"
+	 top_pad="0"
+	 right="193"
+	 height="22"
+	 border_size="0"
+	 auto_resize="false">
+
+	     <pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Left_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left="5"
+	     name="back_btn"
+	     tool_tip="Go back to previous location"
+	     top="0"
+	     width="31" />
+	    <pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Right_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left_pad="0"
+	     name="forward_btn"
+	     tool_tip="Go forward one location"
+	     top_delta="0"
+	     width="31" />
+	    <button
+	     follows="left|top"
+	     height="23"
+	     image_bottom_pad="1"
+	     image_overlay="Home_Off"
+	     layout="topleft"
+	     left_pad="7"
+	     name="home_btn"
+	     tool_tip="Teleport to home location"
+	     top_delta="0"
+	     width="32" />
+          <!-- About Land Button here -->         
+	    <button
+	     follows="left|top"
+	     height="23"
+           use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="About_Land"
+	     label="Land" 
+	     tool_tip="Pops up Land Information window"
+	     top_delta="0"
+	     width="43">
+		 <button.init_callback
+               function="Button.SetFloaterToggle"
+               parameter="about_land" />
+		 </button>
+          <!-- end of About Land Button -->
+
+          <!-- Windlight Button here -->  
+	    <button
+	     follows="left|top"
+	     height="23"
+           use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="Sky"
+	     label="Sky" 
+	     tool_tip="Pops up Sky Editor window"
+	     top_delta="0"
+	     width="30">
+		 <button.commit_callback
+               function="World.EnvPreset"
+               parameter="edit_sky" />
+		 </button>
+          <!-- end of Windlight Button -->
+
+	</layout_panel>
+	<!-- Contains the navigation buttons -->
+
+	<!-- Contains the location bar -->
+	<layout_panel
+	 name="location_bar_visibility_panel"
+	 layout="topleft"
+	 width="587"
+	 height="22"
+	 border_size="0"
+	 auto_resize="true">
+
+	    <location_input
+	     follows="all"
+	     halign="right"
+	     height="23"
+	     label="Location"
+	     layout="topleft"
+	     left="7"
+	     max_chars="254"
+	     mouse_opaque="false"
+	     name="location_combo"
+	     top="0"
+	     width="587">
+
+	    </location_input>
+         <combo_list
+         mouse_wheel_opaque="true"/>
+
+	</layout_panel>
+	<!-- Contains the location bar -->
+
+	<!-- Contains the search bar, can be hidden by code -->
+	<layout_panel
+	 name="search_bar_visibility_panel"
+	 layout="topleft"
+	 width="244"
+	 height="22"
+	 visibility_control="ShowSearchTopBar"
+	 auto_resize="false">
+
+        <search_combo_box
+	     follows="all"
+	     left="10"
+	     halign="right"
+	     height="23"
+	     label="Search"
+	     layout="topleft"
+	     mouse_opaque="false"
+	     name="search_combo_box"
+	     tool_tip="Search"
+	     top="0"
+	     width="234">
+         <combo_editor
+          label="Search MetaVerse"
+          name="search_combo_editor"/>
+         <combo_list
+          draw_border="true"
+          border.highlight_light_color="FocusColor"
+          border.highlight_dark_color="FocusColor"
+          border.shadow_light_color="FocusColor"
+          border.shadow_dark_color="FocusColor"
+          mouse_wheel_opaque="true" />
+        </search_combo_box>
+
+	</layout_panel>
+	<!-- Contains the search bar, can be hidden by code -->
+
+	</layout_stack>
+	<!-- Layout stack for buttons, location input and search field -->
+
+	</panel>
+  <favorites_bar
+ 	 background_visible="false"
+ 	 bg_alpha_color="Transparent"
+ 	 color="Transparent"
+     follows="left|bottom|right"
+     top_pad="0"
+     font="SansSerifSmall"
+     height="16"
+     layout="topleft"
+     left="0"
+     name="favorite"
+     image_drag_indication="Accordion_ArrowOpened_Off"
+     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     width="1024">
+        <label
+         follows="left|bottom"
+         height="15"
+         layout="topleft"
+         top_pad="2"
+         left="10"
+         name="favorites_bar_label"
+         text_color="LtGray"
+         tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+         width="102">
+          Favorites Bar
+        </label>
+        <chevron_button name=">>"
+             image_unselected="TabIcon_Close_Off"
+             image_selected="TabIcon_Close_Off"
+             tab_stop="false"
+             follows="left|bottom"
+             tool_tip="Show more of My Favorites"
+             width="15"
+             height="15"/>
+  </favorites_bar>
+</panel>

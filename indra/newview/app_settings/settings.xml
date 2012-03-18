@@ -12701,9 +12701,9 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>TextureLoadFullRes</key>
     <map>
       <key>Comment</key>
-      <string>If TRUE, always load textures at full resolution (discard = 0)</string>
+      <string>If TRUE, always load textures at full resolution (discard = 0). Not persistent. Will cause excessive memory pressure.</string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
