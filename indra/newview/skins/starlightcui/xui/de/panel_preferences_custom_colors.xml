@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Eigene Farben" name="custom_colors_panel">
+	<text name="custom_colors_text">
+		Eigene Benutzerinterface-Farben:
+	</text>
+	<text name="text_boxc1">
+		Buttons, Scrollleisten usw.
+	</text>
+	<text name="text_boxc3">
+		Hervorhebungen
+	</text>
+	<text name="text_boxc4">
+		Buttontext - normal
+	</text>
+	<text name="text_boxc6">
+		Buttontext - ausgewählt
+	</text>
+	<text name="text_boxbn">
+		Fensterhintergrund - normal
+	</text>
+	<text name="text_boxbn_restart">
+		(Erfordert Neustart)
+	</text>
+	<text name="text_boxbl">
+		Fensterhintergrund - heller
+	</text>
+	<text name="text_boxb1_restart">
+		(Erfordert Neustart)
+	</text>
+	<text name="general_colors_text">
+		Allgemeine Benutzerinterface-Farben (auch im "Farben"-Reiter):
+	</text>
+	<text name="CustomScriptDialogBgLabel">
+		Hintergrund Skript-Dialoge
+	</text>
+	<text name="CustomScriptDialogFgLabel">
+		Vordergrund Skript-Dialoge
+	</text>
+</panel>

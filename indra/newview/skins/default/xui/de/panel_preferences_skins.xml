@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel label="Skins" name="skin_panel">
+<panel label="Oberflächendesign" name="skin_panel">
 	<text name="skin_textbox">
-        Skin:
+        Oberflächendesign:
     </text>
     <text name="skin_textbox1">
         (Erfordert Neustart)
