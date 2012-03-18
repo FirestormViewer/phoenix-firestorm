@@ -3042,7 +3042,7 @@ even though the user gets a free copy.
              label_width="115"
              layout="topleft"
              left="20"
-             max_val="1000"
+             max_val="10000"
              name="TexScaleU"
              top_pad="5"
              width="185" />
@@ -3062,7 +3062,7 @@ even though the user gets a free copy.
              label_width="115"
              layout="topleft"
              left="20"
-             max_val="1000"
+             max_val="10000"
              name="TexScaleV"
              width="185" />
             <check_box
