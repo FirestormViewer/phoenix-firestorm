@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ top="0"
+ left="0"
+ width="420"
+ height="480"
+ layout="topleft"
+ follows="all"
+ name="panel_profile"
+ label="Profile">
+    <string
+     name="status_online">
+Online
+    </string>
+    <string
+     name="status_offline">
+Offline
+    </string>
+    <string
+     name="CaptionTextAcctInfo">
+[ACCTTYPE]
+[PAYMENTINFO]
+[FIRESTORM][FSDEV][FSSUPP]
+    </string>
+    <!-- [AGEVERIFICATION] moved out of the above, since it's not set anyway. See
+    LLPanelAvatarProfile::fillAccountStatus() ...TS -->
+    <string
+     name="payment_update_link_url">
+http://www.secondlife.com/account/billing.php?lang=en
+    </string>
+    <string
+     name="partner_edit_link_url">
+http://www.secondlife.com/account/partners.php?lang=en
+    </string>
+    <string
+     name="my_account_link_url"
+     value="http://secondlife.com/account" />
+    <string
+     name="no_partner_text"
+     value="None" />
+    <string
+     name="no_group_text"
+     value="None" />
+    <string
+     name="RegisterDateFormat">
+[REG_DATE]
+([AGE])
+    </string>
+    <string
+    name="name_text_args">
+[NAME]
+    </string>
+    <string
+     name="display_name_text_args">
+[DISPLAY_NAME]
+    </string>
+    <string
+     name="FSDev"
+     value=" Developer" />
+    <string
+     name="FSSupp"
+     value=" Support" />
+
+<!--
+
+KC: Use view_border's around text_editor's due to text render issues with border_visible
+
+-->
+
+        <loading_indicator
+         top="4"
+         right="-10"
+         height="23"
+         width="23"
+         layout="topleft"
+         follows="top|right"
+         name="progress_indicator"
+         visible="false" />
+
+        <text
+         top="8"
+         left="6"
+         height="16"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="Name:"
+         halign="right"
+         value="Name:" />
+
+        <view_border
+         left_pad="4"
+         right="-28"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border"
+         bevel_style="in" />
+        <text_editor
+         bottom_delta="2"
+         left_delta="3"
+         right="-28"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="complete_name"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="0"
+         v_pad="0"
+         enabled="false"
+         max_length="254"
+         value="(loading...)" />
+
+        <button
+         left_pad="2"
+         height="20"
+         width="20"
+         layout="topleft"
+         follows="top|right"
+         name="set_name"
+         image_overlay="Edit_Wrench"
+         tool_tip="Set Display Name"
+         visible="true"
+         enabled="false" />
+
+        <text
+         top_pad="2"
+         left="6"
+         height="16"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="Key:"
+         halign="right"
+         value="Key:" />
+
+        <view_border
+         left_pad="4"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border2"
+         bevel_style="in" />
+        <text_editor
+         bottom_delta="2"
+         left_delta="3"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="user_key"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="0"
+         v_pad="0"
+         enabled="false"
+         max_length="254"
+         value="(loading...)" />
+
+        <text
+         left_pad="2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="status"
+         halign="center"
+         value="" />
+
+        <texture_picker
+         top_pad="3"
+         left="6"
+         height="180"
+         width="220"
+         layout="topleft"
+         follows="top|left"
+         allow_no_texture="true"
+         name="2nd_life_pic"
+         default_image_name="None"
+         enabled="false"
+         fallback_image="Generic_Person_Large" />
+
+        <text
+         top_pad="-179"
+         left_pad="4"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="label"
+         value="Born:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="32"
+         name="info_border3"
+         layout="topleft"
+         follows="left|top|right"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="28"
+         layout="topleft"
+         follows="left|top|right"
+         name="register_date"
+         max_length="254" />
+
+        <text
+         top_pad="7"
+         left_delta="-2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="label2"
+         value="Account:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="48"
+         layout="topleft"
+         follows="left|top|right"
+         name="acct_border"
+         bevel_style="in" />
+        <text_editor
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="44"
+         layout="topleft"
+         follows="left|top|right"
+         name="acc_status_text"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="2"
+         v_pad="0"
+         read_only="true"
+         translate="false"
+         word_wrap="true"/>
+
+        <text
+         top_pad="7"
+         left_delta="-2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="partner_label"
+         value="Partner:" />
+
+        <view_border
+         top_pad="0"
+         left_delta="0"
+         right="-6"
+         height="18"
+         layout="topleft"
+         follows="left|top|right"
+         name="info_border4"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="2"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|top|right"
+         name="partner_text"
+         max_length="254" />
+<!--
+        <button
+         top_pad="8"
+         left="6"
+         height="18"
+         width="40"
+         layout="topleft"
+         follows="left|top"
+         name="bigimg"
+         halign="center"
+         label="&lt; &lt;"
+         label_selected="&gt; &gt;"
+         tool_tip="Open Full Size." />
+-->
+
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|top"
+         name="About:"
+         halign="right"
+         value="About:" />
+
+        <view_border
+         top_delta="0"
+         left="66"
+         right="-6"
+         height="102"
+         layout="topleft"
+         follows="all"
+         name="info_border5"
+         bevel_style="in" />
+
+        <text_editor
+         top_delta="1"
+         left_delta="1"
+         right="-7"
+         height="100"
+         layout="topleft"
+         follows="all"
+         name="sl_description_edit"
+         border_visible="false"
+         font="SansSerifSmall"
+         enabled="false"
+         max_length="512"
+         h_pad="2"
+         word_wrap="true"
+         parse_urls="true" />
+
+        <text
+         top_pad="8"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|bottom"
+         name="Groups:"
+         halign="right"
+         value="Groups:" />
+
+        <button
+         top_delta="20"
+         left="40"
+         height="20"
+         width="20"
+         layout="topleft"
+         follows="left|bottom"
+         name="group_invite"
+         label="+"
+         label_selected="+"
+         tool_tip="Invite to Group"
+         commit_callback.function="Profile.GroupInvite" />
+
+        <group_list
+         top_delta="-20"
+         left="66"
+         right="-6"
+         height="80"
+         layout="topleft"
+         follows="left|bottom|right"
+         name="group_list"
+         border_visible="true"
+         for_agent="false" />
+
+
+        <text
+         top_pad="10"
+         left="6"
+         height="16"
+         width="55"
+         layout="topleft"
+         follows="left|bottom"
+         name="Give item:"
+         halign="right"
+         value="Give item:" />
+        <view_border
+         top_delta="0"
+         left="66"
+         right="-6"
+         height="16"
+         layout="topleft"
+         follows="left|bottom|right"
+         name="drop_target_rect_vis"
+         bevel_style="in" />
+        <text
+         top_delta="2"
+         left_delta="0"
+         height="16"
+         width="321"
+         layout="topleft"
+         follows="left|bottom"
+         name="Give inventory"
+         halign="center"
+         tool_tip="Drop inventory items here to give them to this person.">
+            Drop inventory item here.
+        </text>
+
+        <layout_stack
+         bottom="-3"
+         left="6"
+         right="-6"
+         height="44"
+         layout="topleft"
+         follows="left|bottom|right"
+         name="buttonstack"
+         orientation="horizontal">
+
+            <layout_panel
+             left="2"
+             right="-2"
+             height="42"
+             follows="all"
+             layout="topleft"
+			 name="left_buttonstack"
+             user_resize="false">
+
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="show_on_map_btn"
+                 label="Find on Map"
+                 label_selected="Find on Map"
+		 image_overlay="Permission_Visible_Map"
+                 image_overlay_alignment="left"
+                 tool_tip="Locate the Resident on the map" />
+
+                <button
+                 top_pad="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="pay"
+                 label="Pay"
+                 label_selected="Pay"
+		 image_overlay="sale_icon_24x24"
+                 image_overlay_alignment="left"
+                 tool_tip="Pay money to the Resident" />
+
+            </layout_panel>
+            <layout_panel
+             left="2"
+             right="-2"
+             follows="all"
+             layout="topleft"
+			 name="middle_buttonstack"
+             user_resize="false">
+
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="teleport"
+                 label="Summon to You"
+                 label_selected="Summon Resident"
+		 image_overlay="teleport_icon_24x24"
+                 image_overlay_alignment="left"
+                 tool_tip="Offer to teleport this Resident to your location" />
+
+                <button
+                 top_pad="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="im"
+                 label="Chat"
+                 label_selected="Chat"
+		 image_overlay="toolbar_icons/chat.png"
+                 image_overlay_alignment="left"
+                 tool_tip="Open instant message session" />
+
+            </layout_panel>
+            <layout_panel
+             left="2"
+             right="-2"
+             follows="all"
+             layout="topleft"
+			 name="right_buttonstack"
+             user_resize="false">
+
+                <button
+                 top="2"
+                 left="2"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="add_friend"
+                 label="Add Friend"
+                 label_selected="Add Friend"
+                 image_overlay="friends_icon_24x24"
+                 image_overlay_alignment="left"
+                 tool_tip="Offer friendship to the Resident" />
+
+                <button
+                 top_pad="2"
+                 right="-40"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="block"
+                 label="Mute"
+                 tool_tip="Mute this Resident" />
+
+                <button
+                 top_delta="0"
+                 right="-40"
+                 height="20"
+                 layout="topleft"
+                 follows="left|top|right"
+                 name="unblock"
+                 label="Unmute"
+                 tool_tip="Unmute this Resident" />
+
+                <menu_button
+                 left_pad="4"
+                 height="20"
+                 width="36"
+                 layout="topleft"
+                 follows="top|right"
+                 name="overflow_btn"
+                 image_overlay="OptionsMenu_Off" />
+
+            </layout_panel>
+        </layout_stack>
+        
+        <check_box
+         bottom="-30"
+         left="60"
+         height="16"
+         width="130"
+         layout="topleft"
+         follows="left|bottom"
+         name="show_in_search_checkbox"
+         label="Show in search"
+         visible="false"
+         enabled="false" />
+
+        <profile_drop_target
+         top="0"
+         bottom="-1"
+         left="0"
+         right="-1"
+         layout="topleft"
+         follows="all"
+         name="drop_target"
+         border_thickness="0"
+         mouse_opaque="false" />
+</panel>
+

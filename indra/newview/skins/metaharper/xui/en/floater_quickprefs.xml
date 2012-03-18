@@ -181,7 +181,7 @@
         layout="topleft"
         left="5"
         name="Height Offset"
-        tool_tip="Use this to manipulate, to a degree, your avatar bounding box. This can be used to distort orbiters, or to raise you up or down without altering your shape."
+        tool_tip="Use this to manipulate, to a degree, your avatar bounding box. This can be used to raise you up or down without altering your shape, typically for adjusting your position when seated to more naturally line up with the sitting surface."
         mouse_opaque="false"
         top_delta="20"
         width="90">
