@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Preferences" title="USTAWIENIA">
+	<button label="Zastosuj" label_selected="Zastosuj" name="Apply"/>
+	<button label="OK" label_selected="OK" name="OK"/>
+	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
+	<tab_container name="pref core">
+		<panel label="Ogólne" name="general"/>
+		<panel label="Czat" name="chat"/>
+		<panel label="Kolory" name="colors"/>
+		<panel label="Własne kolory" name="custom_colors"/>
+		<panel label="Grafika" name="display"/>
+		<panel label="Dźwięk i media" name="audio"/>
+		<panel label="Sieć i cache" name="input"/>
+		<panel label="Ruch i widok" name="move"/>
+		<panel label="Powiadomienia" name="msgs"/>
+		<panel label="Prywatność" name="im"/>
+		<panel label="Zaawansowane" name="advanced1"/>
+		<panel label="Interfejs" name="starlightUI1"/>
+		<panel label="Skórki" name="skins"/>
+		<panel label="Błędy" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+	</tab_container>
+</floater>
