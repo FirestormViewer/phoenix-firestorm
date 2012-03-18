@@ -6,8 +6,8 @@
 				Escalado de la IU (puede tener efectos inesperados):
 			</text>
 			<slider name="ui_scale_slider" width="230"/>
-			<text name="HoverTipText" width="150">
-				Descripciones emergentes:
+			<text name="HoverTipText">
+				Bulas:
 			</text>
 			<check_box label="Básicas" name="ShowHoverTips" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre avatares o algunas otras cosas (es necesario activarlas para que funcionen las otras)"/>
 			<check_box label="En todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
@@ -21,14 +21,8 @@
 				<combo_box.item label="3 segundos" name="tt_item3"/>
 				<combo_box.item label="6 segundos" name="tt_item4"/>
 			</combo_box>
-			<text name="ScriptDialogPlacementText" width="180">
-				Mostrar en esquina sup. derecha:
-			</text>
-			<check_box label="Diálogos de scripts" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
-			<check_box label="Avisos de grupo" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
-			<text name="GroupTopRightRequiresRestart">
-				(requiere reiniciar)
-			</text>
+			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
+			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
 			<text name="ScriptDialogsPerObjectLabel">
 				Diálogos de script por objeto:
 			</text>
@@ -37,23 +31,23 @@
 				<combo_box.item name="ScriptDialogOption_1" label="Uno por objeto y canal"/>
 				<combo_box.item name="ScriptDialogOption_2" label="Sin restricciones"/>
 			</combo_box>
-			<text name="UsePieMenuLabel">
-				Menús circulares:
+			<check_box label="Diálogos de scripts en esquina superior derecha" name="ShowScriptDialogsTopRight" tool_tip="Activa para mover las notificaciones a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)"/>
+			<check_box label="Avisos de grupo en esquina superior derecha" name="ShowGroupNoticesTopRight" tool_tip="Activa para mover los avisos de grupo a la esquina superior derecha de la pantalla (comportamiento clásico V1.x)" width="256"/>
+			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
+				(requiere reiniciar)
 			</text>
-			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
-			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5" top_pad="4"/>
-			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:"/>
+			<check_box label="Mostrar tostadas sobre las otras ventanas" name="FSShowToastsInFront" left_delta="-267" top_delta="19"/>
+			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:" top_pad="13"/>
 			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount" label_width="207" width="378"/>
 			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate" label_width="207" width="375"/>
 			<text name="ButtonFlashRateText" left="383">
 				Hz
 			</text>
-			<text name="ToastSettings" height="22">
-				Configuración de notificaciones
-(emergentes, en consola, 'tostadas'):
+			<text name="ToastSettings">
+				Notificaciones (emergentes, en consola, tostadas):
 			</text>
 			<text name="ToastSpaceTextLabel">
-				Espaciado entre tostada
+				Espaciado entre tostadas
 			</text>
 			<slider label="más baja y el borde inferior:" tool_tip="Espacio en pixels entre el borde inferior de la interfaz de usuario y la tostada inferior" name="ToastSpace" label_width="185" width="307"/>
 			<text name="ToastSpaceText" left_delta="301">
@@ -97,7 +91,7 @@
 			<text name="NearbyToastWidthText" left_delta="301">
 				%
 			</text>
-			<check_box label="Mostrar tostadas sobre las otras ventanas" name="FSShowToastsInFront"/>
+			
 		</panel>
 		<panel label="Fuente" name="UI-font-tab">
 			<text name="tooltip_textbox1" width="165">

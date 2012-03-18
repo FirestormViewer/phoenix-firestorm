@@ -6,6 +6,7 @@
 			<text name="textMiscRLVaRestart">
 				(requiere reiniciar)
 			</text>
+			<check_box label="Activar teleportes con doble clic en el mapa del mundo" name="FSWorldMapDoubleclickTeleport" tool_tip="Permite teleportarse mediante doble clic a una destinación en el mapa del mundo."/>
 			<check_box label="Desactivar pantalla de teleporte" name="tp_screen_toggle" tool_tip="Desactiva la pantalla negra durante todos los teleportes."/>
 			<check_box label="Desactivar las balizas de teleporte" name="tp_beam_toggle" tool_tip="Desactiva las balizas de destino de teleporte que se muestran tras teleportarse"/>
 			<check_box label="Desactivar la pantalla de progreso del inicio de sesión" name="login_screen_toggle" tool_tip="Desactiva la pantalla negra que muestra el progreso del inicio de la sesión"/>
