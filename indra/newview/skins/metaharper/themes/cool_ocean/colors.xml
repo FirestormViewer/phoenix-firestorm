@@ -348,6 +348,15 @@
      name="AvatarListItemIconOfflineColor"
      reference="SL-MidDkGray_50" />
     <color
+     name="AvatarListItemChatRange"
+     reference="BrightSlate" />
+    <color
+     name="AvatarListItemShoutRange"
+     reference="White" />
+    <color
+     name="AvatarListItemBeyondShoutRange"
+     reference="SL-Silver" />
+    <color
      name="AvatarListItemIconVoiceInvitedColor"
      reference="AvatarListItemIconOfflineColor" />
     <color

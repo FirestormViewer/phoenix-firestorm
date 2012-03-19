@@ -241,10 +241,10 @@ class ViewerManifest(LLManifest):
         setting_flags = ''
         if not self.default_channel() or not self.default_grid():
             if self.default_grid():
-                setting_flags = '--settings settings_%s.xml'\
+                setting_flags = '--settings settings_%s_v4.xml'\
                                 % self.channel_lowerword()
             else:
-                setting_flags = '--settings settings_%s_%s.xml'\
+                setting_flags = '--settings settings_%s_%s_v4.xml'\
                                 % (self.grid(), self.channel_lowerword())
                                                 
         return " ".join((channel_flags, grid_flags, setting_flags)).strip()
