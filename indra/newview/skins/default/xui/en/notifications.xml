@@ -8661,12 +8661,22 @@ To make support easier, it is recommended to announce your viewer's version to t
 You can enable and disable this function at any time using the checkbox in the group chat floater.
 
 Do you want to enable the automatic viewer version display?
-    <usetemplate
-     save_option="true"
-     ignoretext="The Phoenix/Firestorm Support Group was joined"
-     name="okcancelignore"
-     notext="No"
-     yestext="Yes"/>
+
+    <form>
+      <button
+       index="0"
+       name="OK_okcancelignore"
+       text="Yes"/>
+      <button
+       default="true"
+       index="1"
+       name="Cancel_okcancelignore"
+       text="No"/>
+      <ignore
+       text="The Phoenix/Firestorm Support Group was joined"
+       save_option="true" />
+    </form>
+
   </notification>
   <!-- <FS:Zi> Viewer version popup -->
 
