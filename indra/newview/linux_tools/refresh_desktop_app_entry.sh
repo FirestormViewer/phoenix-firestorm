@@ -14,7 +14,7 @@ function install_desktop_entry()
 [Desktop Entry]\n\
 Name=Firestorm Viewer\n\
 Comment=Client for the MetaVerse\n\
-Exec=${installation_prefix}/firestorm\n\
+Exec=${installation_prefix}/firestorm -settings settings_firestorm_v4.xml\n\
 Icon=${installation_prefix}/firestorm_icon.png\n\
 Terminal=false\n\
 Type=Application\n\
