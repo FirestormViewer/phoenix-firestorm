@@ -459,7 +459,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
                  layout="topleft"
                  follows="left|top|right"
                  name="teleport"
-                 label="Summon to You"
+                 label="Summon"
                  label_selected="Summon Resident"
 		 image_overlay="teleport_icon_24x24"
                  image_overlay_alignment="left"
