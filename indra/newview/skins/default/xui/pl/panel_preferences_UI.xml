@@ -28,13 +28,13 @@
             <combo_box.item label="Jeden na obiekt i kanał" name="ScriptDialogOption_1" />
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
         </combo_box>
-        <check_box label="W prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
-        <check_box label="Ikonki w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
+        <check_box label="Skrypty w prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
+        <check_box label="Ikonki i ogł. grup w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
         </text>
         <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
-        <check_box label="Używaj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
+        <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <checkbox name="ButtonFlashing" label="Globalne mruganie przycisków:" />
         <slider label="Ile razy mrugają przyciski:" tool_tip="Ile razy mrugają przyciski" name="ButtonsFlashCount" />

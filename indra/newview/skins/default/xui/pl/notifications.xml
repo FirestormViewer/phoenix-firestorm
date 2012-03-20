@@ -3451,6 +3451,10 @@ Abyśmy mogli pomóc Ci lepiej zalecamy, aby Twoja Przeglądarka automatycznie p
 Możesz włączyć lub wyłączyć tą funkcję w każdej chwili w górnej części okna czatu.
 
 Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
-		<usetemplate ignoretext="Dołączenie do grupy wsparcia Phoenix/Firestorm" name="okcancelignore" notext="Nie" yestext="Tak"/>
+		<form name="form">
+			<button name="OK_okcancelignore" text="Tak" />
+			<button name="Cancel_okcancelignore" text="Nie" />
+			<ignore name="ignore" text="Dołączenie do grupy wsparcia Phoenix/Firestorm" />
+		</form>
 	</notification>
 </notifications>
