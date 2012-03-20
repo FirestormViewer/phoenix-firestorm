@@ -95,10 +95,11 @@ void NACLAntiSpamQueue::purgeEntries()
 void NACLAntiSpamQueue::blockEntry(LLUUID& source)
 {
 	it=entries.find(source.asString());
-	if(it != entries.end())
+	if(it == entries.end())
 	{
 		entries[source.asString()]=new NACLAntiSpamQueueEntry();
 	}
+
 	entries[source.asString()]->setBlocked();
 }
 int NACLAntiSpamQueue::checkEntry(LLUUID& name, U32 multiplier)
@@ -256,6 +257,9 @@ void NACLAntiSpamRegistry::purgeRegisteredQueue(U32 name)
 }
 void NACLAntiSpamRegistry::blockOnQueue(U32 name, LLUUID& source)
 {
+	if (!gSavedSettings.getBOOL("UseAntiSpam"))
+		return;
+
 	if(bGlobalQueue)
 	{
 		NACLAntiSpamRegistry::blockGlobalEntry(source);
@@ -273,7 +277,7 @@ void NACLAntiSpamRegistry::blockOnQueue(U32 name, LLUUID& source)
 void NACLAntiSpamRegistry::blockGlobalEntry(LLUUID& source)
 {
 	it2=globalEntries.find(source.asString());
-	if(it2 != globalEntries.end())
+	if(it2 == globalEntries.end())
 	{
 		globalEntries[source.asString()]=new NACLAntiSpamQueueEntry();
 	}
