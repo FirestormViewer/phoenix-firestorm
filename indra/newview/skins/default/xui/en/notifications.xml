@@ -8662,7 +8662,7 @@ You can enable and disable this function at any time using the checkbox in the g
 
 Do you want to enable the automatic viewer version display?
 
-    <form>
+    <form name="form">
       <button
        index="0"
        name="OK_okcancelignore"
@@ -8673,6 +8673,7 @@ Do you want to enable the automatic viewer version display?
        name="Cancel_okcancelignore"
        text="No"/>
       <ignore
+	   name="ignore"
        text="The Phoenix/Firestorm Support Group was joined"
        save_option="true" />
     </form>

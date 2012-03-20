@@ -3442,6 +3442,10 @@ Um den Support zu vereinfachen wird empfohlen, die aktuelle Version deines Viewe
 Diese Funktion kann jederzeit über die Checkbox innerhalb des Gruppenchat-Fensters aktiviert bzw. deaktiviert werden.
 
 Soll die automatische Anzeige der Viewer-Version aktiviert werden?
-		<usetemplate ignoretext="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird." name="okcancelignore" notext="Nein" yestext="Ja"/>
+		<form name="form">
+			<button name="OK_okcancelignore" text="Ja"/>
+			<button name="Cancel_okcancelignore" text="Nein"/>
+			<ignore name="ignore" text="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird."/>
+		</form>
 	</notification>
 </notifications>
