@@ -995,8 +995,20 @@ LLIMFloater* LLIMFloater::show(const LLUUID& session_id)
 				LLChicletBar::getInstance()->getChicletPanel()->scrollToChiclet(chiclet);
 			}
 
-			floater->setDockControl(new LLDockControl(chiclet, floater, floater->getDockTongue(),
-					LLDockControl::BOTTOM));
+			// <FS:Ansariel> Group notices, IMs and chiclets position
+			//floater->setDockControl(new LLDockControl(chiclet, floater, floater->getDockTongue(),
+			//		LLDockControl::BOTTOM));
+			if (gSavedSettings.getBOOL("InternalShowGroupNoticesTopRight"))
+			{
+				floater->setDockControl(new LLDockControl(chiclet, floater, floater->getDockTongue(),
+						LLDockControl::BOTTOM));
+			}
+			else
+			{
+				floater->setDockControl(new LLDockControl(chiclet, floater, floater->getDockTongue(),
+						LLDockControl::TOP));
+			}
+			// </FS:Ansariel> Group notices, IMs and chiclets position
 		}
 
 		// window is positioned, now we can show it.
