@@ -820,7 +820,17 @@ void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 		}
 		else if( items )
 		{
-			llwarns << "No parent folder for items" << llendl;
+			llwarns << "No parent folder for items; items:" << llendl;
+			for (LLViewerInventoryItem::item_array_t::const_iterator item_iter = items->begin();
+				 item_iter != items->end();
+				 ++item_iter)
+			{
+				const LLViewerInventoryItem* item = (*item_iter);
+				if( item )
+					llwarns << "    name: " << item->getName() << llendl;
+			}
+			llwarns << "end of item enumeratin" << llendl;
+
 		}
 		mInventory->unlockDirectDescendentArrays(id);
 	}
