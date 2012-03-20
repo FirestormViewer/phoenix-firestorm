@@ -83,6 +83,14 @@ LLDrawPoolWater::LLDrawPoolWater() :
 	mWaterNormp = LLViewerTextureManager::getFetchedTexture(DEFAULT_WATER_NORMAL);
 	mWaterNormp->setNoDelete();
 
+	// <FS:Zi> Render speedup for water parameters
+	gSavedSettings.getControl("RenderTransparentWater")->getCommitSignal()->connect(boost::bind(&LLDrawPoolWater::onRenderTransparentWaterChanged, this));
+	onRenderTransparentWaterChanged();
+
+	gSavedSettings.getControl("RenderWaterMipNormal")->getCommitSignal()->connect(boost::bind(&LLDrawPoolWater::onRenderWaterMipNormalChanged, this));
+	onRenderWaterMipNormalChanged();
+	// </FS:Zi>
+
 	restoreGL();
 }
 
@@ -169,7 +177,10 @@ void LLDrawPoolWater::render(S32 pass)
 	std::sort(mDrawFace.begin(), mDrawFace.end(), LLFace::CompareDistanceGreater());
 
 	// See if we are rendering water as opaque or not
-	if (!gSavedSettings.getBOOL("RenderTransparentWater"))
+	// <FS:Zi> Render speedup for water parameters
+	// if (!gSavedSettings.getBOOL("RenderTransparentWater"))
+	if (!mRenderTransparentWater)
+	// </FS:Zi>
 	{
 		// render water for low end hardware
 		renderOpaqueLegacyWater();
@@ -568,7 +579,10 @@ void LLDrawPoolWater::shade()
 
 	mWaterNormp->addTextureStats(1024.f*1024.f);
 	gGL.getTexUnit(bumpTex)->bind(mWaterNormp) ;
-	if (gSavedSettings.getBOOL("RenderWaterMipNormal"))
+	// <FS:Zi> Render speedup for water parameters
+	// if (gSavedSettings.getBOOL("RenderWaterMipNormal"))
+	if (mRenderWaterMipNormal)
+	// <FS:Zi>
 	{
 		mWaterNormp->setFilteringOption(LLTexUnit::TFO_ANISOTROPIC);
 	}
@@ -723,3 +737,15 @@ LLColor3 LLDrawPoolWater::getDebugColor() const
 {
 	return LLColor3(0.f, 1.f, 1.f);
 }
+
+// <FS:Zi> Render speedup for water parameters
+void LLDrawPoolWater::onRenderTransparentWaterChanged()
+{
+	mRenderTransparentWater=gSavedSettings.getBOOL("RenderTransparentWater");
+}
+
+void LLDrawPoolWater::onRenderWaterMipNormalChanged()
+{
+	mRenderWaterMipNormal=gSavedSettings.getBOOL("RenderWaterMipNormal");
+}
+// </FS:Zi>
