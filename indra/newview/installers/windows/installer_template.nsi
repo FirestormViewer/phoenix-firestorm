@@ -897,21 +897,21 @@ lbl_configure_default_lang:
 
 ; <FS:Ansariel> Commented out; Warning in build log about not being used
 ;lbl_build_menu:
-;	Push ""
-;    # Use separate file so labels can be UTF-16 but we can still merge changes
-;    # into this ASCII file. JC
-;    !include "%%SOURCE%%\installers\windows\language_menu.nsi"
-;    
-;	Push A ; A means auto count languages for the auto count to work the first empty push (Push "") must remain
-;	LangDLL::LangDialog $(InstallerLanguageTitle) $(SelectInstallerLanguage)
-;	Pop $0
-;	StrCmp $0 "cancel" 0 +2
-;		Abort
-;    StrCpy $LANGUAGE $0
-;
-;	; save language in registry		
-;	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTNAME}" "InstallerLanguage" $LANGUAGE
 ; </FS:Ansariel> Commented out; Warning in build log about not being used
+	Push ""
+    # Use separate file so labels can be UTF-16 but we can still merge changes
+    # into this ASCII file. JC
+    !include "%%SOURCE%%\installers\windows\language_menu.nsi"
+    
+	Push A ; A means auto count languages for the auto count to work the first empty push (Push "") must remain
+	LangDLL::LangDialog $(InstallerLanguageTitle) $(SelectInstallerLanguage)
+	Pop $0
+	StrCmp $0 "cancel" 0 +2
+		Abort
+    StrCpy $LANGUAGE $0
+
+	; save language in registry		
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTNAME}" "InstallerLanguage" $LANGUAGE
 lbl_return:
     Pop $0
     Return
