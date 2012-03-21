@@ -35,14 +35,22 @@
 
 class DesktopNotifierLinux : public GrowlNotifier
 {
-	LOG_CLASS(DesktopNotifierLinux);
-public:	
-	DesktopNotifierLinux();
-	~DesktopNotifierLinux(){}
+	LOG_CLASS( DesktopNotifierLinux );
 
-	void showNotification(const std::string& notification_title, const std::string& notification_message, const std::string& notificationTypes);
+	struct NDLibnotifyWrapper *m_pLibNotify;
+	struct NotifyNotification *m_pNotification;
+	std::string m_strIcon;
+
+	DesktopNotifierLinux( DesktopNotifierLinux const & );
+	DesktopNotifierLinux& operator=(DesktopNotifierLinux const& );
+
+public:
+	DesktopNotifierLinux();
+	~DesktopNotifierLinux();
+
+	void showNotification( const std::string& notification_title, const std::string& notification_message, const std::string& notificationTypes );
 	bool isUsable();
-	//void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes);
+	void registerApplication(const std::string& application, const std::set<std::string>& notificationTypes);
 	bool needsThrottle();
 };
 

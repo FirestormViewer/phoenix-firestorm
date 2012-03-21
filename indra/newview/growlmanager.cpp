@@ -53,7 +53,7 @@
 #elif LL_WINDOWS
 #include "growlnotifierwin.h"
 #elif LL_LINUX
-//#include "desktopnotifierlinux.h"
+#include "desktopnotifierlinux.h"
 #endif
 
 
@@ -69,15 +69,15 @@ GrowlManager::GrowlManager() : LLEventTimer(GROWL_THROTTLE_CLEANUP_PERIOD)
 	this->mNotifier = new GrowlNotifierWin();
 	LL_INFOS("GrowlManagerInit") << "Created GrowlNotifierWin." << LL_ENDL;
 #elif LL_LINUX
-	//this->mNotifier = new DesktopNotifierLinux();
-	//LL_INFOS("GrowlManagerInit") << "Created DesktopNotifierLinux." << LL_ENDL;
+	this->mNotifier = new DesktopNotifierLinux();
+	LL_INFOS("GrowlManagerInit") << "Created DesktopNotifierLinux." << LL_ENDL;
 #else
 	this->mNotifier = new GrowlNotifier();
 	LL_INFOS("GrowlManagerInit") << "Created generic GrowlNotifier." << LL_ENDL;
 #endif
 	
 	// Don't do anything more if Growl isn't usable.
-	if(!mNotifier->isUsable())
+	if( !mNotifier || !mNotifier->isUsable())
 	{
 		LL_WARNS("GrowlManagerInit") << "Growl is unusable; bailing out." << LL_ENDL;
 		return;

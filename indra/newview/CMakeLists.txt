@@ -44,9 +44,7 @@ include(ViewerMiscLibs)
 include(LLLogin)
 include(GLOD)
 include(CMakeCopyIfDifferent)
-if (WINDOWS)
 include(Growl)
-endif (WINDOWS)
 
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
@@ -1355,8 +1353,9 @@ endif (DARWIN)
 if (LINUX)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux.cpp)
     LIST(APPEND viewer_SOURCE_FILES llappviewerlinux_api_dbus.cpp)
-    #LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h)
-    #LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp)
+	LIST(APPEND viewer_HEADER_FILES desktopnotifierlinux.h growlmanager.h)
+    LIST(APPEND viewer_SOURCE_FILES desktopnotifierlinux.cpp growlmanager.cpp)
+
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--as-needed")
 
     set(viewer_LIBRARIES

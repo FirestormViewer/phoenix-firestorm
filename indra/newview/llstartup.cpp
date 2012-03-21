@@ -205,7 +205,7 @@
 
 #include "llnotificationmanager.h"
 
-#if LL_WINDOWS
+#if HAS_GROWL
 #include "growlmanager.h"
 #endif
 
@@ -438,7 +438,7 @@ bool idle_startup()
 		std::string lastGPU = gSavedSettings.getString("LastGPUString");
 		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
 		
-#if LL_WINDOWS
+#if HAS_GROWL
 		GrowlManager::InitiateManager();
 #endif
 
