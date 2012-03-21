@@ -157,6 +157,18 @@
         </check_box>
 
         <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Show the Received Items folder in normal inventory"
+         left="15"
+         name="FSShowInboxFolder"
+         width="270"
+         control_name="FSShowInboxFolder"
+         tool_tip="If enabled, the inventory windows will also show the Received Items folder">
+        </check_box>
+
+        <check_box
          top_pad="15"
          control_name="UseLSLBridge"
          follows="left|top"

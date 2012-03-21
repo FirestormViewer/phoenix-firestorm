@@ -18,6 +18,7 @@
 		<check_box label="Kontaktliste immer nach Benutzername sortieren" name="sortcontactsbyun" tool_tip="Sortiert Kontaktlisten immer anhand des Benutzernamens, auch wenn Anzeigenamen aktiviert sind."/>
 		<check_box label="Blockierte Avatar als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
+		<check_box label="Ordner &quot;Received Items&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert wird der Ordner &quot;Received Items&quot; als normaler Ordner im Inventar angezeigt."/>
 		<check_box name="UseLSLBridge" label="LSL-Client-Brücke aktivieren" tool_tip="Erlaub dem Viewer die Nutzung eines geskripteten Objektes (Brücke), um weitergehende Funktionen anzubieten."/>
 		<check_box name="UseLSLFlightAssist" label="Flug-Assistent der Brücke aktivieren" tool_tip="Aktiviert ein Skript, dass Fliegen und Schweben in größeren Höhen ermöglicht."/>
 	</panel>
