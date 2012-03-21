@@ -401,7 +401,7 @@ LLSD FSData::resolveClientTag(LLUUID id, bool new_system, LLColor4 color){
 			}	
 			else if(id == LLUUID("c228d1cf-4b5d-4ba8-84f4-899a0796aa97"))//viewer 2.0
 			{
-				curtag["name"] = "Linden Lab";
+				curtag["name"] = "LL Viewer";
 			}
 			else if(id == LLUUID("cc7a030f-282f-c165-44d2-b5ee572e72bf"))
 			{
