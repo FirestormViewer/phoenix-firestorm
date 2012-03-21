@@ -1463,6 +1463,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="InvFolder Meshes">
 		Netze
 	</string>
+	<string name="InvFolder Received Items">
+		Empfangene Objekte
+	</string>
+	<string name="InvFolder Merchant Outbox">
+		Händler-Outbox
+	</string>
 	<string name="InvFolder Friends">
 		Freunde
 	</string>
