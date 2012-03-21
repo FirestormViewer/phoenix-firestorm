@@ -435,7 +435,9 @@ void LLNearbyChatScreenChannel::arrangeToasts()
 
 	S32 channel_bottom = channel_rect.mBottom;
 
-	S32		bottom = channel_bottom + 80;
+	// <FS:Ansariel> Configurable nearby chat toasts offset
+	//S32		bottom = channel_bottom + 80;
+	S32		bottom = channel_bottom + gSavedSettings.getS32("FSNearbyChatToastsOffset");
 	S32		margin = gSavedSettings.getS32("ToastGap");
 
 	//sort active toasts

@@ -17115,6 +17115,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
+    <key>FSNearbyChatToastsOffset</key>
+    <map>
+      <key>Comment</key>
+      <string>Vertical offset of the nearby chat toasts</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <real>20</real>
+    </map>
 
 </map>
 </llsd>
