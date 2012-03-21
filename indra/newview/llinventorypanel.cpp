@@ -244,7 +244,7 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 	{
 		getFilter()->setFilterCategoryTypes(getFilter()->getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_INBOX));
 	}
-	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateHideInboxFolder, this, _2));
+	gSavedSettings.getControl("FSShowInboxFolder")->getSignal()->connect(boost::bind(&LLInventoryPanel::updateShowInboxFolder, this, _2));
 	// </FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	getFilter()->setFilterCategoryTypes(getFilter()->getFilterCategoryTypes() & ~(1ULL << LLFolderType::FT_OUTBOX));
 
@@ -1185,7 +1185,7 @@ void LLInventoryPanel::updateHideEmptySystemFolders(const LLSD &data)
 // </FS:Ansariel> Optional hiding of empty system folders
 
 // <FS:Ansariel> Optional hiding of Inbox folder
-void LLInventoryPanel::updateHideInboxFolder(const LLSD &data)
+void LLInventoryPanel::updateShowInboxFolder(const LLSD &data)
 {
 	LLInventoryFilter* filter = getFilter();
 	if (filter)
