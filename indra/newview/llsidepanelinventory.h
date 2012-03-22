@@ -75,6 +75,9 @@ public:
 	void onToggleInboxBtn();
 
 	void enableInbox(bool enabled);
+
+	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
+	void refreshInboxVisibility();
 	
 	void openInbox();
 	
