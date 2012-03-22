@@ -68,8 +68,8 @@
 	<texture name="Inv_FavoritesClosed"		file_name="legacy/inv_folder_favorite.tga" />
 	<texture name="Inv_LookFolderOpen"		file_name="legacy/inv_folder_outfit.tga" />
 	<texture name="Inv_LookFolderClosed"	file_name="legacy/inv_folder_outfit.tga" />
-	<texture name="Inv_InboxOpen"			file_name="legacy/inv_folder_plain_open.tga" />
-	<texture name="Inv_InboxClosed"			file_name="legacy/inv_folder_plain_closed.tga" />
+	<texture name="Inv_InboxOpen"			file_name="legacy/inv_folder_inbox.tga" />
+	<texture name="Inv_InboxClosed"			file_name="legacy/inv_folder_inbox.tga" />
 	<texture name="Inv_OutboxOpen"			file_name="legacy/inv_folder_plain_open.tga" />
 	<texture name="Inv_OutboxClosed"		file_name="legacy/inv_folder_plain_closed.tga" />
 	<texture name="Inv_FolderClosed"		file_name="legacy/inv_folder_plain_closed.tga" />

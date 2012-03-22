@@ -334,10 +334,8 @@
 	<texture name="Inv_FavoritesClosed"		file_name="legacy/inv_folder_favorite.tga" />
 	<texture name="Inv_LookFolderOpen"		file_name="legacy/inv_folder_outfit.tga" />
 	<texture name="Inv_LookFolderClosed"	file_name="legacy/inv_folder_outfit.tga" />
-<!-- We don't have special icons for the inbox yet
-	<texture name="Inv_InboxOpen"			file_name="inv_folder_inbox.tga" />
-	<texture name="Inv_InboxClosed"			file_name="inv_folder_inbox.tga" />
--->
+	<texture name="Inv_InboxOpen"			file_name="legacy/inv_folder_inbox.tga" />
+	<texture name="Inv_InboxClosed"			file_name="legacy/inv_folder_inbox.tga" />
 	<texture name="Inv_FolderClosed"		file_name="legacy/inv_folder_plain_closed.tga" />
 	<texture name="Inv_FolderOpen"			file_name="legacy/inv_folder_plain_open.tga" />
 
