@@ -853,6 +853,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="anim_yes_head">
 		Tak
 	</string>
+	<string name="multiple_textures">
+		Wiele
+	</string>
 	<string name="texture_loading">
 		Ładowanie...
 	</string>
@@ -1442,6 +1445,12 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="InvFolder Meshes">
 		Mesze
+	</string>
+	<string name="InvFolder Received Items">
+		Odebrane przedmioty
+	</string>
+	<string name="InvFolder Merchant Outbox">
+		Skrzynka nadawcza kupca
 	</string>
 	<string name="InvFolder Friends">
 		Znajomi
