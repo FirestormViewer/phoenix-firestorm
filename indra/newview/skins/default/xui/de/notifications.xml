@@ -3366,7 +3366,7 @@ Medienfilter aktivieren?
 	</notification>
 
 	<notification name="MediaAlert"> 
-Diese Parzelle enthält Medien von :
+Diese Parzelle enthält Medien von:
 
 Domain: [MEDIADOMAIN]
 URL: [MEDIAURL]
