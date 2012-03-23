@@ -831,6 +831,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="anim_yes_head">
 		Sí
 	</string>
+	<string name="multiple_textures">
+		Múltiple
+	</string>
 	<string name="texture_loading">
 		Cargando...
 	</string>
@@ -1475,6 +1478,12 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="InvFolder Meshes">
 		Modelos mesh
+	</string>
+	<string name="InvFolder Received Items">
+		Items recibidos
+	</string>
+	<string name="InvFolder Merchant Outbox">
+		Merchant Outbox
 	</string>
 	<string name="InvFolder Friends">
 		Amigos

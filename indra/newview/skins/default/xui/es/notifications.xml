@@ -298,7 +298,7 @@ Para que funcionen las armas los scripts deben estar activados.
 		Están seleccionadas varias caras.
 Si sigues con esta acción, en las diferentes caras del objeto aparecerán distintas instancias de los medios.
 Para colocar los medios en una sola cara, marca la opción &apos;Elegir la cara&apos; y pulsa en la cara adecuada del objeto, y luego pulsa &apos;+&apos;.
-		<usetemplate ignoretext="Los media se configurarán en todas las caras seleccionadas" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Los medios se configurarán en todas las caras seleccionadas" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="MustBeInParcel">
 		Para configurar el Punto de llegada de la parcela,
@@ -2413,7 +2413,7 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 	</notification>
 	<notification name="NoQuickTime">
 		No parece que tu sistema tenga instalado el software QuickTime de Apple.
-Si quieres ver media en streaming en las parcelas que los tienen, deberías ir al [http://www.apple.com/quicktime sitio de QuickTime] e intalar el QuickTime Player.
+Si quieres ver medios en streaming en las parcelas que los tienen, deberías ir al [http://www.apple.com/quicktime sitio de QuickTime] e instalar el QuickTime Player.
 	</notification>
 	<notification name="NoPlugin">
 		No se ha encontrado el &apos;Media Plugin&apos; para manejar el &apos;mime type&apos; &quot;[MIME_TYPE]&quot;. Los medios de este tipo no estarán disponibles.
@@ -3412,6 +3412,10 @@ Para facilitar el soporte, se recomienda que publiques la versión de tu visor e
 Puedes activar y desactivar esta función en cualquier momento usando la casilla existente en la ventana del chat del grupo.
 
 ¿Quieres activar la identificación automática de la versión de tu visor?
-		<usetemplate ignoretext="Te has unido al Grupo de Soporte de Phoenix/Firestorm" name="okcancelignore" notext="No" yestext="Sí"/>
+		<form name="form">
+			<button name="OK_okcancelignore" text="Sí"/>
+			<button name="Cancel_okcancelignore" text="No"/>
+			<ignore name="ignore" text="Te has unido al Grupo de Soporte de Phoenix/Firestorm"/>
+		</form>
 	</notification>
 </notifications>
