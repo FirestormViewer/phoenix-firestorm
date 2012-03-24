@@ -5,6 +5,7 @@
  can_minimize="false"
  can_resize="true"
  can_close="false"
+ chrome="true"
  follows="bottom"
  min_width="188"
  min_height="100"
