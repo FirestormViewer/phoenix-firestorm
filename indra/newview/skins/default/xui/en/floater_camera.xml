@@ -8,6 +8,7 @@
  can_minimize="false"
  can_resize="true"
  can_close="false"
+ chrome="true"
  follows="bottom"
  height="72"
  min_height="20"

@@ -117,11 +117,6 @@ LLPanelCameraItem::LLPanelCameraItem(const LLPanelCameraItem::Params& p)
 	mText = LLUICtrlFactory::create<LLTextBox>(text_params);
 	addChild(mText);
 
-// <AW: Flat cam floater>
-	//used to be registered in llbottomtray.cpp
-  	LLUICtrl::CommitCallbackRegistry::defaultRegistrar().add("CameraPresets.ChangeView", boost::bind(&LLFloaterCamera::onClickCameraItem, _2));
-// </AW: Flat cam floater>
-
 	if (p.mousedown_callback.isProvided())
 	{
 		setCommitCallback(initCommitCallback(p.mousedown_callback));
