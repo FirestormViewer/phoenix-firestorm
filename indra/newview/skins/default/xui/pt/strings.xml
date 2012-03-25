@@ -1967,7 +1967,7 @@ Titulares de contas gratuitas não poderão acessar o Second Life para acomodar 
 		deu a você
 	</string>
 	<string name="InvOfferDecline">
-		Você recusou um(a) [DESC] de &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Você recusou um(a) [DESC] de [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total

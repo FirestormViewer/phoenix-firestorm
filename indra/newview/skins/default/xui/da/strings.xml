@@ -1890,7 +1890,7 @@ Prøv venligst om lidt igen.
 		gav dig
 	</string>
 	<string name="InvOfferDecline">
-		Du afslår [DESC] fra &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Du afslår [DESC] fra [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total

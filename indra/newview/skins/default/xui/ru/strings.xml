@@ -2027,7 +2027,7 @@ support@secondlife.com.
 		дал(а) вам
 	</string>
 	<string name="InvOfferDecline">
-		Вы не приняли [DESC] от жителя &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Вы не приняли [DESC] от жителя [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Итого

@@ -2006,7 +2006,7 @@ Prova ad accedere nuovamente tra un minuto.
 		Ti ha offerto
 	</string>
 	<string name="InvOfferDecline">
-		Non hai accettato [DESC] da &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Non hai accettato [DESC] da [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Totale

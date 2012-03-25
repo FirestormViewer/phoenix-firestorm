@@ -1780,7 +1780,7 @@
 		gave you
 	</string>
 	<string name="InvOfferDecline">
-		You decline [DESC] from &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		You decline [DESC] from [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total

@@ -2027,7 +2027,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		size verdi:
 	</string>
 	<string name="InvOfferDecline">
-		&lt;nolink&gt;[NAME]&lt;/nolink&gt; tarafından gönderilen [DESC]&apos;i reddettiniz.
+		[NAME] tarafından gönderilen [DESC]&apos;i reddettiniz.
 	</string>
 	<string name="GroupMoneyTotal">
 		Toplam

@@ -2079,7 +2079,7 @@ Spróbuj zalogować się ponownie za minutę.
 		oddany Tobie
 	</string>
 	<string name="InvOfferDecline">
-		Odrzucono [DESC] od &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Odrzucono [DESC] od [NAME].
 	</string>
 	<string name="InvOfferFrom">
 		od

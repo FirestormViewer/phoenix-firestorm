@@ -2130,7 +2130,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		te ha dado
 	</string>
 	<string name="InvOfferDecline">
-		Has rechazado [DESC] de &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Has rechazado [DESC] de [NAME].
 	</string>
 	<string name="InvOfferFrom">
 		de

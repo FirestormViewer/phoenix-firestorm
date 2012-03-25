@@ -2603,7 +2603,8 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="InvOfferOwnedByUnknownUser">owned by an unknown user</string>
 	<string name="InvOfferGaveYou">gave you</string>
 	<string name="InvOfferYouDecline">You decline</string>
-	<string name="InvOfferDecline">You decline [DESC] from &lt;nolink&gt;[NAME]&lt;/nolink&gt;.</string>
+	<!-- FS:Ansariel: Removed nolink-tags for console -->
+	<string name="InvOfferDecline">You decline [DESC] from [NAME].</string>
 	<string name="InvOfferFrom">from</string>
 
 	<!-- group money -->

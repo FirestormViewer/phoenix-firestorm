@@ -2027,7 +2027,7 @@ Veuillez réessayer de vous connecter dans une minute.
 		vous a donné
 	</string>
 	<string name="InvOfferDecline">
-		Vous refusez l&apos;offre [DESC] de &lt;nolink&gt;[NAME]&lt;/nolink&gt;.
+		Vous refusez l&apos;offre [DESC] de [NAME].
 	</string>
 	<string name="GroupMoneyTotal">
 		Total
