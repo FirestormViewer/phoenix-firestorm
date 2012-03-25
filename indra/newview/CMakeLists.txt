@@ -1941,6 +1941,10 @@ if (WINDOWS)
     )
 endif (WINDOWS)
 
+if (LINUX)
+    target_link_libraries(${VIEWER_BINARY_NAME} "dl" )
+endif (LINUX)
+
 if (USE_KDU)
     target_link_libraries(${VIEWER_BINARY_NAME}
         ${LLKDU_LIBRARIES}
