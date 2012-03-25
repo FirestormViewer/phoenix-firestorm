@@ -10,19 +10,24 @@
 		<text name="HoverTipText">
 			Schwebetips:
 		</text>
-		<check_box label="Einfache Schwebetipps (zuerst)" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
+		<check_box label="Einfache Schwebetipps (zuerst aktivieren)" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
 		<check_box label="für alle Objekte" tool_tip="Aktivieren, um Schwebetipps für Inworld-Objekte anzuzeigen." name="ShowAllHoverTips"/>
 		<check_box label="für Land" tool_tip="Aktivieren, um Schwebetipps für Land anzuzeigen." name="ShowLandHoverTips"/>
 		<text name="tooltip_textbox">
-			Schwebetipps-Verzögerung:
+			Verzögerungen für Schwebetips:
 		</text>
-		<combo_box name="Tooltipdelay">
-			<combo_box.item label="0,7 Sekunden" name="tt_item1"/>
-			<combo_box.item label="1,5 Sekunden" name="tt_item2"/>
-			<combo_box.item label="3 Sekunden" name="tt_item3"/>
-			<combo_box.item label="6 Sekunden" name="tt_item4"/>
-		</combo_box>
-
+		<slider label="Tooltips:" name="ToolTipDelay_slider" tool_tip="Verzögerung, nach der Tooltips für Bedienelemente der Benutzeroberfläche angezeigt werden. (Standardwert: 0.7)"/>
+		<text name="ToolTipDelay_text">
+			Sekunden
+		</text>
+		<slider label="Avatare:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Verzögerung, nach der Schwebetips für Avatare angezeigt werden. (Standardwert: 0.35)"/>
+		<text name="AvatarInspectorTooltipDelay_text">
+			Sekunden
+		</text>
+		<slider label="Objekte:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Verzögerung, nach der Schwebetips für Objekte angezeigt werden. (Standardwert: 0.35)"/>
+		<text name="ObjectInspectorTooltipDelay_text">
+			Sekunden
+		</text>
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>

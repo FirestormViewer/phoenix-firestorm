@@ -111,38 +111,102 @@
          follows="left|top"
          height="16"
          layout="topleft"
-         left="300"
+         left="275"
          name="tooltip_textbox"
-         top_pad="-52"
-         width="400">
-           Hovertip Trigger Delay:
+         top_pad="-76"
+         width="200">
+           Hovertip Trigger Delays:
         </text>
-        <combo_box
-         height="23"
-         layout="topleft"
-         follows="left|top"
+		
+        <slider
          control_name="ToolTipDelay"
-         left="300"
-         top_pad="5"
-         name="Tooltipdelay"
-         width="160">
-            <combo_box.item
-             label="0.7 seconds"
-             name="tt_item1"
-             value="0.7" />
-            <combo_box.item
-             label="1.5 seconds"
-             name="tt_item2"
-             value="1.5" />
-            <combo_box.item
-             label="3 seconds"
-             name="tt_item3"
-             value="3.0" />
-            <combo_box.item
-             label="6 seconds"
-             name="tt_item4"
-             value="6.0" />
-        </combo_box>
+         decimal_digits="3"
+         follows="left|top"
+         height="16"
+         increment="0.025"
+         initial_value="0.7"
+         label="Tooltips:"
+         label_width="50"
+         layout="topleft"
+         left_pad="-200"
+         max_val="6.0"
+         min_val="0"
+         name="ToolTipDelay_slider"
+         tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"
+         top_pad="8"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="200"
+         name="ToolTipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+		
+        <slider
+         control_name="AvatarInspectorTooltipDelay"
+         decimal_digits="3"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="0.35"
+         label="Avatars:"
+         label_width="50"
+         layout="topleft"
+         left_pad="-280"
+         max_val="6.0"
+         min_val="0"
+         name="AvatarInspectorTooltipDelay_slider"
+         tool_tip="Delay after that hovertips for avatars are shown. (Default: 0.35)"
+         top_pad="2"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="200"
+         name="AvatarInspectorTooltipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
+		
+        <slider
+         control_name="ObjectInspectorTooltipDelay"
+         decimal_digits="3"
+         follows="left|top"
+         height="17"
+         increment="0.025"
+         initial_value="0.35"
+         label="Objects:"
+         label_width="50"
+         layout="topleft"
+         left_pad="-280"
+         max_val="6.0"
+         min_val="0"
+         name="ObjectInspectorTooltipDelay_slider"
+         tool_tip="Delay after that hovertips for objects are shown. (Default: 0.35)"
+         top_pad="2"
+         width="200" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="16"
+         layout="topleft"
+         left_delta="200"
+         name="ObjectInspectorTooltipDelay_text"
+         top_delta="0"
+         width="80">
+            seconds
+        </text>
 
       <check_box
        control_name="UsePieMenu"
@@ -153,7 +217,7 @@
        left="5"
        name="UsePieMenu"
        tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top_pad="20"
+       top_pad="10"
        width="256" />
 
       <check_box
