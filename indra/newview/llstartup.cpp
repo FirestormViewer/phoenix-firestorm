@@ -2264,8 +2264,14 @@ bool idle_startup()
 			// initial outfit, but if the load hasn't started
 			// already then something is wrong so fall back
 			// to generic outfits. JC
-			LLNotificationsUtil::add("WelcomeChooseSex", LLSD(), LLSD(),
+			// <FS:Ansariel> Set CURRENT_GRID parameter
+			//LLNotificationsUtil::add("WelcomeChooseSex", LLSD(), LLSD(),
+			//	callback_choose_gender);
+			LLSD args;
+			args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
+			LLNotificationsUtil::add("WelcomeChooseSex", args, LLSD(),
 				callback_choose_gender);
+			// </FS:Ansariel> Set CURRENT_GRID parameter
 			LLStartUp::setStartupState( STATE_CLEANUP );
 			return TRUE;
 		}
