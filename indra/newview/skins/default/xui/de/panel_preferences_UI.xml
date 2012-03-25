@@ -36,52 +36,55 @@
 		<text name="GroupTopRightRequiresRestart" left_delta="280">
 			(Erfordert Neustart)
 		</text>
-		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront" left_delta="-280"/>
 		<text name="UsePieMenuLabel">
 			Pie-Menü:
 		</text>
 		<check_box label="Pie-Menü aktivieren" name="UsePieMenu" tool_tip="Aktiviert das klassische V1.x-Kontextmenü in Kuchenform anstelle des standardmäßigen Kontextmenüs."/>
 		<check_box name="ShowNetStats" label="Laganzeige aktivieren" tool_tip="Aktiviert die Laganzeige in der Statuszeile"/>
-
 		<checkbox name="ButtonFlashing" label="Blinkrate für Buttons global übersteuern:"/>
 		<slider label="Wiederholungen blinkende Button:" tool_tip="Anzahl wie oft ein Button für Benachrichtungen blinkt" name="ButtonsFlashCount"/>
 		<slider label="Blinkrate:" tool_tip="Blinkrate in Hz, mit der Buttons blinken" name="ButtonFlashRate"/>
 		<text name="ButtonFlashRateText">
 			Hz
 		</text>
+	</panel>
+	
+	<!--Toasts-->
+	<panel label="Toasts" name="UI-toasts-tab">
 		<text name="ToastSettings">
 			Benachrichtigungseinstellungen (Popups, Konsole, Toasts):
 		</text>
-		<text name="ToastSpaceTextLabel">
-			Abstand zwischen
-		</text>
-		<slider label="Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace"/>
+		<slider label="Abstand zwischen Toast und unterer UI:" tool_tip="Abstand in Pixeln zwischen dem unteren Teil der UI und dem untersten Toast" name="ToastSpace"/>
 		<text name="ToastSpaceText">
 			Pixel
 		</text>
-		<slider label="Anzeige Toast-Benachricht.:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime"/>
+		<slider label="Anzeige Toast-Benachrichtigung:" tool_tip="Anzahl an Sekunden, die ein Benachrichtigungstoast angezeigt wird, bevor es ausgeblendet wird." name="ToastLifetime"/>
 		<text name="ToastLifetimeText">
-			Sek.
+			Sekunden
 		</text>
 		<slider label="Anzeige Tipp-Toast:" tool_tip="Anzahl an Sekunden, die ein Tipp-Toast angezeigt wird, bevor es ausgeblendet wird." name="TipToastLifetime"/>
 		<text name="TipToastLifetimeText">
-			Sek.
+			Sekunden
 		</text>
-		<slider label="Anzeige Chat-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime"/>
+		<slider label="Anzeigedauer für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe angezeigt wird, bevor es ausgeblendet wird." name="NearbyToastLifetime"/>
 		<text name="NearbyToastLifetimeText">
-			Sek.
+			Sekunden
+		</text>
+		<slider label="Höhenabstand für Toasts für Chat in der Nähe:" tool_tip="Höhenabstand von Toasts für Chat in der Nähe." name="FSNearbyChatToastsOffset"/>
+		<text name="FSNearbyChatToastsOffsetText">
+			Pixel
+		</text>
+		<slider label="Ausblendzeit für Toasts für Chat in der Nähe:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime"/>
+		<text name="NearbyToastFadingTimeText">
+			Sekunden
 		</text>
 		<slider label="Anzeige Startup-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast beim Starten angezeigt wird, bevor es ausgeblendet wird." name="StartupToastLifetime"/>
 		<text name="StartupToastLifetimeText">
-			Sek.
+			Sekunden
 		</text>
-		<slider label="Ausblendzeit Chat-Toast:" tool_tip="Anzahl an Sekunden, die ein Toast für den Chat in der Nähe benötigt, um vollständig ausgeblendet zu werden." name="NearbyToastFadingTime"/>
-		<text name="NearbyToastFadingTimeText">
-			Sek.
-		</text>
-		<slider label="Ausblendzeit normal. Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime"/>
+		<slider label="Ausblendzeit normales Toast:" tool_tip="Anzahl an Sekunden, die ein normales Toast benötigt, um vollständig ausgeblendet zu werden." name="ToastFadingTime"/>
 		<text name="ToastFadingTimeText">
-			Sek.
+			Sekunden
 		</text>
 		<slider label="Abstand zwischen Toasts:" tool_tip="Abstand zwischen zwei Toasts in Pixeln." name="ToastGap"/>
 		<text name="ToastGapText">
@@ -95,8 +98,8 @@
 		<text name="NearbyToastWidthText">
 			%
 		</text>
+		<check_box label="Zeige Toasts im Vordergrund" name="FSShowToastsInFront"/>
 	</panel>
-
 	<!--Font-->
 	<panel label="Schrift" name="UI-font-tab">
 		<text name="tooltip_textbox1">
