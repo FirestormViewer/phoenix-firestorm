@@ -49,7 +49,7 @@ extern "C" {
 #include "llmediaimplgstreamer_syms.h"
 
 // <FS:ND> extract stream metadata so we can report back into the client what's playing
-#ifdef LL_STANDALONE
+// <ML> Fix this to use llgst symbols so it will work in standard builds
 struct ndStreamMetadata
 {
 	std::string mArtist;
@@ -74,16 +74,15 @@ static void extractMetadata (const GstTagList * list, const gchar * tag, gpointe
 	if( !pStrOut )
 		return;
 
-	num = gst_tag_list_get_tag_size (list, tag);
+	num = llgst_tag_list_get_tag_size (list, tag);
 	for (i = 0; i < num; ++i)
 	{
-		const GValue *val( gst_tag_list_get_value_index (list, tag, i) );
+		const GValue *val( llgst_tag_list_get_value_index (list, tag, i) );
 
 		if (G_VALUE_HOLDS_STRING (val))
 			pStrOut->assign( g_value_get_string(val) );
   }
 }
-#endif
 // </FS:ND>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -282,22 +281,22 @@ MediaPluginGStreamer010::processGSTEvents(GstBus     *bus,
 		}
 		break;
 	}
-#ifdef LL_STANDALONE  // <FS:ND> In case of metadata upate, extract it, then send it back to the client
+// <FS:ND> In case of metadata upate, extract it, then send it back to the client
 	case GST_MESSAGE_TAG:
 	{
 		ndStreamMetadata oMData;
 		GstTagList *tags(0);
 
-		gst_message_parse_tag (message, &tags);
-		gst_tag_list_foreach (tags, extractMetadata, &oMData );
-		gst_tag_list_free (tags);
+		llgst_message_parse_tag (message, &tags);
+		llgst_tag_list_foreach (tags, extractMetadata, &oMData );
+		llgst_tag_list_free (tags);
 		
 		LLPluginMessage message(LLPLUGIN_MESSAGE_CLASS_MEDIA, "ndMediadata_change");
 		message.setValue("title", oMData.mTitle );
 		message.setValue("artist", oMData.mArtist );
 		sendMessage(message);
 	}
-#endif  // </FS:ND>		
+// </FS:ND>
 	case GST_MESSAGE_ERROR: {
 		GError *err = NULL;
 		gchar *debug = NULL;
