@@ -887,7 +887,7 @@ void LLMotionController::updateMotions(bool force_update)
 void LLMotionController::updateMotionsMinimal()
 {
 	// Always update mPrevTimerElapsed
-	mPrevTimerElapsed = mTimer.getElapsedTimeF32();
+	mAnimTime = mPrevTimerElapsed = mTimer.getElapsedTimeF32();
 
 	purgeExcessMotions();
 	updateLoadingMotions();
