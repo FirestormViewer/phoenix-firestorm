@@ -156,6 +156,11 @@ public:
 	virtual LLTool*		getOverrideTool(MASK mask);
 	
 	static void pickCallback(const LLPickInfo& pick_info);
+
+	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+	virtual BOOL		handleMiddleMouseDown(S32 x, S32 y, MASK mask);
+	virtual BOOL		handleMiddleMouseUp(S32 x, S32 y, MASK mask);
+	// </FS:Zi>
 };
 
 

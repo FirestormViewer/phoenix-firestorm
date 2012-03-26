@@ -435,6 +435,20 @@ void LLToolCompScale::render()
 	}
 }
 
+// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+BOOL LLToolCompScale::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+{
+	LLToolCompScale::getInstance()->mManip->handleMiddleMouseDown(x,y,mask);
+	return handleMouseDown(x,y,mask);
+}
+
+BOOL LLToolCompScale::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
+{
+	LLToolCompScale::getInstance()->mManip->handleMiddleMouseUp(x,y,mask);
+	return handleMouseUp(x,y,mask);
+}
+// </FS:Zi>
+
 //-----------------------------------------------------------------------
 // LLToolCompCreate
 

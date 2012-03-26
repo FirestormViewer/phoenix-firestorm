@@ -69,6 +69,8 @@ const F32 SELECTED_MANIPULATOR_SCALE = 1.2f;
 const F32 MANIPULATOR_SCALE_HALF_LIFE = 0.07f;
 const S32 NUM_MANIPULATORS = 14;
 
+BOOL LLManipScale::mInvertUniform=FALSE;	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+
 const LLManip::EManipPart MANIPULATOR_IDS[NUM_MANIPULATORS] = 
 {
 	LLManip::LL_CORNER_NNN,
@@ -130,7 +132,10 @@ void LLManipScale::setStretchTextures(BOOL b)
 // static
 BOOL LLManipScale::getUniform()
 {
-	return gSavedSettings.getBOOL("ScaleUniform");
+	// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+	// return gSavedSettings.getBOOL("ScaleUniform");
+	return (gSavedSettings.getBOOL("ScaleUniform") ^ mInvertUniform);
+	// </FS:Zi>
 }
 
 // static
@@ -2082,3 +2087,17 @@ BOOL LLManipScale::canAffectSelection()
 	}
 	return can_scale;
 }
+
+// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+BOOL LLManipScale::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+{
+	LLManipScale::mInvertUniform=TRUE;
+	return handleMouseDown(x,y,mask);
+}
+
+BOOL LLManipScale::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
+{
+	LLManipScale::mInvertUniform=FALSE;
+    return handleMouseUp(x, y, mask);
+}
+// </FS:Zi>

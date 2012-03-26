@@ -163,6 +163,15 @@ private:
 	F32				mScaleSnapValue;
 	BOOL			mInSnapRegime;
 	F32*			mManipulatorScales;
+
+// <FS:Zi> Add middle mouse control for switching uniform scaling on the fly
+public:
+	virtual BOOL	handleMiddleMouseDown( S32 x, S32 y, MASK mask );
+	virtual BOOL	handleMiddleMouseUp( S32 x, S32 y, MASK mask );
+
+private:
+	static BOOL mInvertUniform;
+// </FS:Zi>
 };
 
 #endif  // LL_MANIPSCALE_H
