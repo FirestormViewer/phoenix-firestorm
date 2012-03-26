@@ -2130,7 +2130,7 @@ Cette opération lancera votre navigateur Web.
 		Sujet : [SUBJECT], Message : [MESSAGE]
 	</notification>
 	<notification name="FriendOnline">
-		[NAME]; est en ligne.
+		[NAME] est en ligne.
 	</notification>
 	<notification name="FriendOffline">
 		[NAME] est hors ligne.
