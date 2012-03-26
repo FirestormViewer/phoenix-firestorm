@@ -413,7 +413,16 @@ bool LLScriptEdCore::loadScriptText(const std::string& filename)
 	buffer[nread] = '\0';
 	fclose(file);
 
-	mEditor->setText(LLStringExplicit(buffer));
+	// <FS:Zi> Optionally convert tabs to spaces
+	// mEditor->setText(LLStringExplicit(buffer));
+	std::string scriptText=LLStringExplicit(buffer);
+	if(gSavedSettings.getBOOL("ExternalEditorConvertTabsToSpaces"))
+	{
+		LLStringUtil::replaceTabsWithSpaces(scriptText,mEditor->spacesPerTab());
+	}
+	// </FS:Zi>
+	mEditor->setText(scriptText);
+
 	delete[] buffer;
 
 	return true;
