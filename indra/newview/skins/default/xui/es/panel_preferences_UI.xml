@@ -13,14 +13,20 @@
 			<check_box label="En todos los objetos" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre cualquier objeto del mundo" name="ShowAllHoverTips"/>
 			<check_box label="En el terreno" tool_tip="Activa para mostrar descripciones emergentes al situar el cursor sobre el terreno" name="ShowLandHoverTips"/>
 			<text name="tooltip_textbox">
-				Demora en mostrarlas:
+				Demora en mostrar bulas:
 			</text>
-			<combo_box name="Tooltipdelay">
-				<combo_box.item label="0,7 segundos" name="tt_item1"/>
-				<combo_box.item label="1,5 segundos" name="tt_item2"/>
-				<combo_box.item label="3 segundos" name="tt_item3"/>
-				<combo_box.item label="6 segundos" name="tt_item4"/>
-			</combo_box>
+			<slider label="De ayuda:" name="ToolTipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los elementos de la interfaz, como los botones. (Por defecto: 0.7)" label_width="54"/>
+			<text name="ToolTipDelay_text">
+				segundos
+			</text>
+			<slider label="Avatares:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los avatares. (Por defecto: 0.35)" label_width="54"/>
+			<text name="AvatarInspectorTooltipDelay_text">
+				segundos
+			</text>
+			<slider label="Objetos:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Demora antes de mostrar las bulas de los objetos. (Por defecto: 0.35)" label_width="54"/>
+			<text name="ObjectInspectorTooltipDelay_text">
+				segundos
+			</text>
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
 			<text name="ScriptDialogsPerObjectLabel">
@@ -36,62 +42,64 @@
 			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
 				(requiere reiniciar)
 			</text>
-			<check_box label="Mostrar tostadas sobre las otras ventanas" name="FSShowToastsInFront" left_delta="-267" top_delta="19"/>
 			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:" top_pad="13"/>
-			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount" label_width="207" width="378"/>
-			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate" label_width="207" width="375"/>
-			<text name="ButtonFlashRateText" left="383">
+			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount"/>
+			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate"/>
+			<text name="ButtonFlashRateText">
 				Hz
 			</text>
+		</panel>
+		<panel label="Tostadas" name="UI-toasts-tab">		
 			<text name="ToastSettings">
 				Notificaciones (emergentes, en consola, tostadas):
 			</text>
-			<text name="ToastSpaceTextLabel">
-				Espaciado entre tostadas
+			<slider label="Espaciado entre tostada más baja y el borde inferior:" tool_tip="Espacio en pixels entre el borde inferior de la interfaz de usuario y la tostada inferior" name="ToastSpace" label_width="290" width="440"/>
+			<text name="ToastSpaceText" left_delta="440">
+				pixels
 			</text>
-			<slider label="más baja y el borde inferior:" tool_tip="Espacio en pixels entre el borde inferior de la interfaz de usuario y la tostada inferior" name="ToastSpace" label_width="185" width="307"/>
-			<text name="ToastSpaceText" left_delta="301">
-				px
+			<slider label="Vida de las tostadas:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada" name="ToastLifetime" label_width="290" width="440"/>
+			<text name="ToastLifetimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Vida de tostadas:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada" name="ToastLifetime" label_width="185" width="307"/>
-			<text name="ToastLifetimeText" left_delta="301">
-				s
+			<slider label="Vida de las tostadas de aviso:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de aviso" name="TipToastLifetime" label_width="290" width="440"/>
+			<text name="TipToastLifetimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Vida de tostadas de aviso:" tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de aviso" name="TipToastLifetime" label_width="185" width="307"/>
-			<text name="TipToastLifetimeText" left_delta="301">
-				s
+			<slider label="Vida de las tostadas de chat:"
+         tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de chat local" name="NearbyToastLifetime" label_width="290" width="440"/>
+			<text name="NearbyToastLifetimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Vida de tostadas de chat:"
-         tool_tip="Tiempo en segundos que tarda en desvanecerse una tostada de chat local" name="NearbyToastLifetime" label_width="185" width="307"/>
-			<text name="NearbyToastLifetimeText" left_delta="301">
-				s
+			<slider label="Desplazamiento vertical de las tostadas:" tool_tip="Desplazamiento vertical de las tostadas de chat local" name="FSNearbyChatToastsOffset" label_width="290" width="440"/>
+			<text name="FSNearbyChatToastsOffsetText" left_delta="440">
+				pixels
 			</text>
-			<slider label="Vida de tostadas de inicio:"
-         tool_tip="Tiempo en segundos que tardan en desvanecerse las tostadas que se muestran al iniciar sesión" name="StartupToastLifetime" label_width="185" width="307"/>
-			<text name="StartupToastLifetimeText" left_delta="301">
-				s
+			<slider label="Apagado de las tostadas de chat:" tool_tip="Tiempo en segundos que tarda en desvanecerse por completo una tostada de chat local" name="NearbyToastFadingTime" label_width="290" width="440"/>
+			<text name="NearbyToastFadingTimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Apagado de tostadas de chat:" tool_tip="Tiempo en segundos que tarda en desvanecerse por completo una tostada de chat local" name="NearbyToastFadingTime" label_width="185" width="307"/>
-			<text name="NearbyToastFadingTimeText" left_delta="301">
-				s
+			<slider label="Vida de las tostadas de inicio:"
+         tool_tip="Tiempo en segundos que tardan en desvanecerse las tostadas que se muestran al iniciar sesión" name="StartupToastLifetime" label_width="290" width="440"/>
+			<text name="StartupToastLifetimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Apagado de tostadas normales:" tool_tip="Timepo en segundos que se muestra una tostada antes de desvanecerse" name="ToastFadingTime" label_width="185" width="307"/>
-			<text name="ToastFadingTimeText" left_delta="301">
-				s
+			<slider label="Apagado de las tostadas normales:" tool_tip="Timepo en segundos que se muestra una tostada antes de desvanecerse" name="ToastFadingTime" label_width="290" width="440"/>
+			<text name="ToastFadingTimeText" left_delta="440">
+				segundos
 			</text>
-			<slider label="Espacio entre tostadas:" tool_tip="Espacio en pixels entre tostadas adyacentes" name="ToastGap" label_width="185" width="307"/>
-			<text name="ToastGapText" left_delta="301">
-				px
+			<slider label="Espacio entre tostadas:" tool_tip="Espacio en pixels entre tostadas adyacentes" name="ToastGap" label_width="290" width="440"/>
+			<text name="ToastGapText" left_delta="440">
+				pixels
 			</text>
-			<slider label="Altura de tostadas de desbord.:" tool_tip="Altura en pixels de una tostada de desbordamiento" name="OverflowToastHeight" label_width="185" width="307"/>
-			<text name="OverflowToastHeightText" left_delta="301">
-				px
+			<slider label="Altura de una tostada de desbordamiento:" tool_tip="Altura en pixels de una tostada de desbordamiento" name="OverflowToastHeight" label_width="290" width="440"/>
+			<text name="OverflowToastHeightText" left_delta="440">
+				pixels
 			</text>
-			<slider label="Anchura de tostadas de chat:" tool_tip="Anchura de las tostadas de chat en porcentaje sobre el ancho de pantalla" name="NearbyToastWidth" label_width="185" width="307"/>
-			<text name="NearbyToastWidthText" left_delta="301">
+			<slider label="Anchura de las tostadas de chat:" tool_tip="Anchura de las tostadas de chat en porcentaje sobre el ancho de pantalla" name="NearbyToastWidth" label_width="290" width="440"/>
+			<text name="NearbyToastWidthText" left_delta="440">
 				%
 			</text>
-			
+			<check_box label="Mostrar tostadas sobre las demás ventanas" name="FSShowToastsInFront"/>
 		</panel>
 		<panel label="Fuente" name="UI-font-tab">
 			<text name="tooltip_textbox1" width="165">
