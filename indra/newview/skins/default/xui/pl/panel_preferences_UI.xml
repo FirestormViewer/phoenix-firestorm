@@ -12,14 +12,22 @@
         <check_box label="na wszystkich obiektach" tool_tip="Zaznacz, aby włączyć chmurki na obiektach w świecie" name="ShowAllHoverTips" />
         <check_box label="na terenie" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
         <text name="tooltip_textbox">
-           Chmurka pojawi się po:
+           Pojawianie się chmurek po:
         </text>
-        <combo_box name="Tooltipdelay">
-            <combo_box.item label="0.7 sekundy" name="tt_item1" />
-            <combo_box.item label="1.5 sekundy" name="tt_item2" />
-            <combo_box.item label="3 sekundach" name="tt_item3" />
-            <combo_box.item label="6 sekundach" name="tt_item4" />
-        </combo_box>
+        <slider label="Podpowiedzi:" name="ToolTipDelay_slider" tool_tip="Opóźnienie dla chmurek pojawiających się po wskazaniu elementów interfejsu takich, jak przyciski (domyślnie: 0.7)." />
+        <text name="ToolTipDelay_text">
+            sek.
+        </text>
+        <slider label="Awatary:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Opóźnienie dla chmurek pojawiających się po wskazaniu awatarów (domyślnie: 0.35)." />
+        <text name="AvatarInspectorTooltipDelay_text">
+            sek.
+        </text>
+        <slider label="Obiekty:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Opóźnienie dla chmurek pojawiających się po wskazaniu obiektów (domyślnie: 0.35)." />
+        <text name="ObjectInspectorTooltipDelay_text">
+            sek.
+        </text>
+        <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
+        <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <text name="ScriptDialogsPerObjectLabel">
             Komunikatów skr. na obiekt:
         </text>
@@ -33,19 +41,15 @@
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
         </text>
-        <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
-        <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
-        <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <checkbox name="ButtonFlashing" label="Globalne mruganie przycisków:" />
         <slider label="Ile razy mrugają przyciski:" tool_tip="Ile razy mrugają przyciski" name="ButtonsFlashCount" />
         <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />
+    </panel>
+    <panel label="Tosty" name="UI-toasts-tab">
         <text name="ToastSettings">
             Ustawienia powiadomień (popupy, konsola, tosty):
         </text>
-        <text name="ToastSpaceTextLabel">
-            Odstęp między najniższym
-        </text>
-        <slider label="tostem i spodem interfejsu:" tool_tip="Odstęp w pikselach pomiędzy spodem interfejsu użytkownika, a dolnym tostem (miejsce na tosty)" name="ToastSpace" />
+        <slider label="Odstęp między najniższym tostem i spodem UI:" tool_tip="Odstęp w pikselach pomiędzy spodem interfejsu użytkownika, a dolnym tostem (miejsce na tosty)" name="ToastSpace" />
         <text name="ToastSpaceText">
             pikseli
         </text>
@@ -61,12 +65,16 @@
         <text name="NearbyToastLifetimeText">
             sekund
         </text>
-        <slider label="Ukryj tost na starcie po:" tool_tip="Liczba sekund, po jakich tost pojawiający się po starcie jest usuwany z ekranu" name="StartupToastLifetime" />
-        <text name="StartupToastLifetimeText">
-            sekund
+        <slider label="Przesunięcie Z dla tostów czatu:" tool_tip="Kontroluje przesunięcie w osi Z dla tostów czatu lokalnego." name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            pikseli
         </text>
         <slider label="Czas ukrywania tosta czatu:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie tosta czatu lokalnego" name="NearbyToastFadingTime" />
         <text name="NearbyToastFadingTimeText">
+            sekund
+        </text>
+        <slider label="Ukryj tost na starcie po:" tool_tip="Liczba sekund, po jakich tost pojawiający się po starcie jest usuwany z ekranu" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
             sekund
         </text>
         <slider label="Czas dla zwykłego tosta:" tool_tip="Liczba sekund potrzebna na całkowite wygaszenie zwykłego tosta" name="ToastFadingTime" />
@@ -82,6 +90,7 @@
             pikseli
         </text>
         <slider label="Szerokość tosta czatu:" tool_tip="Szerokość tosta czatu lokalnego ustalana procentowo do szerokości ekranu" name="NearbyToastWidth" />
+        <check_box label="Pokazuj tosty ponad innymi oknami" name="FSShowToastsInFront" />
     </panel>
     <panel label="Czcionka" name="UI-font-tab">
         <text name="tooltip_textbox1">
