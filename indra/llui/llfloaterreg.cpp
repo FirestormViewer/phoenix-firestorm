@@ -467,11 +467,17 @@ void LLFloaterReg::registerControlVariables()
 	for (build_map_t::iterator iter = sBuildMap.begin(); iter != sBuildMap.end(); ++iter)
 	{
 		const std::string& name = iter->first;
-		if (LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
+		// <FS:Zi> Save rects even when the floater wasn't opened this session
+		// if (LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
+		// </FS:Zi>
+		if (!LLFloater::getControlGroup()->controlExists(getRectControlName(name)))
 		{
 			declareRectControl(name);
 		}
-		if (LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
+		// <FS:Zi> Save rects even when the floater wasn't opened this session
+		// if (LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
+		// </FS:Zi>
+		if (!LLFloater::getControlGroup()->controlExists(getVisibilityControlName(name)))
 		{
 			declareVisibilityControl(name);
 		}
