@@ -144,22 +144,7 @@ currentRightClickText(""),mouseInWindow(FALSE)
 		center();
 	}
 }
-lggContactSetsFloater* lggContactSetsFloater::showFloater()
-{
-	lggContactSetsFloater *floater = dynamic_cast<lggContactSetsFloater*>(LLFloaterReg::getInstance("contactsets"));
-	if(floater)
-	{
-		floater->setVisible(true);
-		floater->setFrontmost(true);
-		floater->center();
-		return floater;
-	}
-	else
-	{
-		LL_WARNS("LGGContactSets") << "Can't find floater!" << LL_ENDL;
-		return NULL;
-	}
-}
+
 //virtual
 void lggContactSetsFloater::processProperties(void* data, EAvatarProcessorType type)
 {

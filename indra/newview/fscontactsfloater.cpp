@@ -350,7 +350,7 @@ void FSFloaterContacts::onAddFriendWizButtonClicked()
 
 void FSFloaterContacts::onContactSetsButtonClicked()
 {
-	lggContactSetsFloater::showFloater();
+	LLFloaterReg::toggleInstance("contactsets");
 }
 
 //

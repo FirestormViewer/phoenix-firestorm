@@ -32,7 +32,6 @@ class lggContactSetsFloater : public LLFloater,  public LLFriendObserver
 	, public LLAvatarPropertiesObserver
 {
 public:
-	static lggContactSetsFloater* showFloater();
 	lggContactSetsFloater(const LLSD& seed);
 	virtual ~lggContactSetsFloater();
 	// LLAvatarPropertiesProcessor observer trigger

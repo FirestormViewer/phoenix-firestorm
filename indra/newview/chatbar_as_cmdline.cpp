@@ -919,7 +919,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 			}
 			else if(revised_text == "/cs")
 			{
-				lggContactSetsFloater::showFloater();
+				LLFloaterReg::showInstance("contactsets");
 				cmdline_printchat("Displaying Contact Sets Floater.");
 				return false;
 			}
