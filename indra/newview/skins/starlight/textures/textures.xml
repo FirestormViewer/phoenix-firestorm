@@ -786,7 +786,7 @@ with the same filename but different name
   <texture name="Build_btn" file_name="bottomtray/starlight_build.png" preload="false" />
   <texture name="Windlight_btn" file_name="icons/Inv_WindLight.png" preload="false" />
   <texture name="Prefs_btn" file_name="icons/Edit_Wrench.png" preload="false" />
-  <texture name="XMPP_Icon" file_name="icons/xmpp_default_icon.jpg" preload="true" />
+<!--  <texture name="XMPP_Icon" file_name="icons/xmpp_default_icon.jpg" preload="true" /> -->
     
   <!-- Firestorm viewer Art --> 
   <texture name="Inv_CallingCardOffline" file_name="icons/Inv_CallingCard.png" preload="false" />
@@ -825,7 +825,7 @@ with the same filename but different name
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
   <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
-  <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" />
+<!--  <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" /> -->
   <texture name="profile_icon_24x24" file_name="icons/profile_icon_24x24.png" preload="false" />
   <texture name="sale_icon_24x24" file_name="icons/sale_icon_24x24.png" preload="false" />
   <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />

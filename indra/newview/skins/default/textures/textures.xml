@@ -682,23 +682,14 @@ with the same filename but different name
   <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="false" />
   <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="false" />
 
-  
-  <texture name="hammer_18" file_name="bottomtray/hammer_18.png" preload="false" />
-  <texture name="search_18" file_name="bottomtray/search_18.png" preload="false" />
-  <texture name="view_18" file_name="bottomtray/view_18.png" preload="false" />
-  <texture name="move_18" file_name="bottomtray/move_18.png" preload="false" />
-  <texture name="conversations_18" file_name="bottomtray/conversations_18.png" preload="false" />
-  <texture name="nearbychat_18" file_name="bottomtray/nearbychat_18.png" preload="false" />
-  <texture name="gesture_18" file_name="bottomtray/gesture_18.png" preload="false" />
-  <texture name="map_18" file_name="bottomtray/map_18.png" preload="false" />
-  <texture name="minimap_18" file_name="bottomtray/minimap_18.png" preload="false" />
-  <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="false" />
-  <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" />
-  <texture name="phoenix_18" file_name="bottomtray/phoenix_18.png" preload="false" />
-  <texture name="www_18" file_name="bottomtray/www_18.png" preload="false" />
-  <texture name="areasearch" file_name="toolbar_icons/areasearch.png" preload="false" />
-  <texture name="settings_debug" file_name="toolbar_icons/settings_debug.png" preload="false" />
-  <texture name="statistics" file_name="toolbar_icons/statistics.png" preload="false" />
+  <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="true" />
+  <texture name="nearbychat_18" file_name="toolbar_icons/nearbychat.png" preload="true" />
+  <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="true" />
+  <texture name="phoenix_18" file_name="toolbar_icons/phoenix.png" preload="true" />
+  <texture name="www_18" file_name="toolbar_icons/www.png" preload="true" />
+  <texture name="areasearch" file_name="toolbar_icons/areasearch.png" preload="true" />
+  <texture name="settings_debug" file_name="toolbar_icons/settings_debug.png" preload="true" />
+  <texture name="statistics" file_name="toolbar_icons/statistics.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
