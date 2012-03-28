@@ -581,8 +581,7 @@ void cache_script(std::string name, std::string content)
 	content += "\n";/*hack!*/
 	//cmdline_printchat("writing "+name+" to cache");
 	std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"lslpreproc",name);
-	LLAPRFile infile;
-	infile.open(path.c_str(), LL_APR_WB);
+	LLAPRFile infile(path.c_str(), LL_APR_WB);
 	apr_file_t *fp = infile.getFileHandle();
 	if(fp)infile.write(content.c_str(), content.length());
 	infile.close();
