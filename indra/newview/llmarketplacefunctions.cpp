@@ -261,7 +261,11 @@ namespace LLMarketplaceImport
 		}
 
 		slmGetTimer.start();
-		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders());
+
+		// <FS:ND> Bump timeout to 2 minutes. Marketplace can be really slow ...
+		//		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders());
+		LLHTTPClient::get(url, new LLImportGetResponder(), LLViewerMedia::getHeaders(), 2*60);
+		// </FS:ND>
 		
 		return true;
 	}
