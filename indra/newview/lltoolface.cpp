@@ -207,10 +207,10 @@ void LLToolFace::render()
 	// move the mouse back to the grabbing point
 	gViewerWindow->getWindow()->setCursorPosition(LLCoordWindow(mGrabX,gViewerWindow->getWindowHeightRaw()-mGrabY-1));
 
-	F32 scaleU;
-	F32 scaleV;
 	F32 u;
 	F32 v;
+	F32 scaleU;
+	F32 scaleV;
 
 	// get texture coordinates and scale from the currently edited face
 	mTextureObject->getTE(mFaceGrabbed)->getOffset(&u,&v);
@@ -219,26 +219,51 @@ void LLToolFace::render()
 	// get the status of modifier keys
 	MASK mask=gKeyboard->currentMask(FALSE);
 
-	// set the value scaling based on SHIFT and CTRL keys being used
-	F32 scale=100.0f;
-	if(mask & MASK_CONTROL)
-		scale=1000.0f;
-	else if(mask & MASK_SHIFT)
-		scale=10000.0;
+	// scale mode
+//	if(mask & MASK_ALT)
+	if(gKeyboard->getKeyDown(KEY_CAPSLOCK))
+	{
+		// set the value scaling based on SHIFT and CTRL keys being used
+		F32 scale=10.0f;
+		if(mask & MASK_CONTROL)
+			scale=100.0f;
+		else if(mask & MASK_SHIFT)
+			scale=1000.0f;
 
-	// recalculate texture position
-	u-=(F32) dx/scale*scaleU;
-	v+=(F32) dy/scale*scaleV;
+		// recalculate texture scale
+		scaleU-=(F32) dx/scale;
+		scaleV+=(F32) dy/scale;
 
-	// Bounds check and roll over
-	if     (u> 1.0f)  u-=1.0f;
-	else if(u<-1.0f)  u+=1.0f;
-	if     (v> 1.0f)  v-=1.0f;
-	else if(v<-1.0f)  v+=1.0f;
+		// Bounds check 
+		if(scaleU<0.0f)  scaleU=0.0f;
+		if(scaleV<0.0f)  scaleV=0.0f;
 
-	// apply new texture position
-	mTextureObject->setTEOffsetS(mFaceGrabbed,u);
-	mTextureObject->setTEOffsetT(mFaceGrabbed,v);
+		// apply new texture scale
+		mTextureObject->setTEScale(mFaceGrabbed,scaleU,scaleV);
+	}
+	// drag mode
+	else
+	{
+		// set the value scaling based on SHIFT and CTRL keys being used
+		F32 scale=100.0f;
+		if(mask & MASK_CONTROL)
+			scale=1000.0f;
+		else if(mask & MASK_SHIFT)
+			scale=10000.0f;
+
+		// recalculate texture position
+		u-=(F32) dx/scale*scaleU;
+		v+=(F32) dy/scale*scaleV;
+
+		// Bounds check and roll over
+		if     (u> 1.0f)  u-=1.0f;
+		else if(u<-1.0f)  u+=1.0f;
+		if     (v> 1.0f)  v-=1.0f;
+		else if(v<-1.0f)  v+=1.0f;
+
+		// apply new texture position
+		mTextureObject->setTEOffset(mFaceGrabbed,u,v);
+	}
 
 	// update the build floater to reflect the new values
 	LLFloaterTools* toolsFloater=(LLFloaterTools*) LLFloaterReg::findInstance("build");
