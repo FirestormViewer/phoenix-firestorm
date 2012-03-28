@@ -43,7 +43,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-// <FS:Zi> Add Middle Mouse control to drag texture faces around
+// <FS:Zi> Add control to drag texture faces around
 #include "llpanelface.h"
 #include "llspinctrl.h"
 #include "llkeyboard.h"
@@ -52,6 +52,8 @@
 BOOL LLToolFace::mTextureGrabbed=FALSE;
 LLViewerObject* LLToolFace::mTextureObject=NULL;
 S32 LLToolFace::mFaceGrabbed=0;
+
+#undef TEXTURE_GRAB_UPDATE_REGULARLY	// continuous update of texture grabbing, might cause twitching
 // </FS:Zi>
 
 //
@@ -87,6 +89,9 @@ BOOL LLToolFace::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 BOOL LLToolFace::handleMouseDown(S32 x, S32 y, MASK mask)
 {
+	mGrabX=x;
+	mGrabY=y;
+
 	gViewerWindow->pickAsync(x, y, mask, pickCallback);
 	return TRUE;
 }
@@ -94,16 +99,6 @@ BOOL LLToolFace::handleMouseDown(S32 x, S32 y, MASK mask)
 void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 {
 	LLViewerObject* hit_obj	= pick_info.getObject();
-
-	// <FS:Zi> Add Middle Mouse control to drag texture faces around
-	if(LLToolFace::mTextureGrabbed)
-	{
-		// remember the object being selected when this pick came from a middle mouse click
-		LLToolFace::mTextureObject=hit_obj;
-		// also remember the selected object face
-		LLToolFace::mFaceGrabbed=pick_info.mObjectFace;
-	}
-	// </FS:Zi>
 
 	if (hit_obj)
 	{
@@ -154,6 +149,25 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 			LLSelectMgr::getInstance()->deselectAll();
 			LLSelectMgr::getInstance()->selectObjectOnly(hit_obj, hit_face);
 		}
+
+		// <FS:Zi> Add control to drag texture faces around
+		// if the same object and face was clicked as before, assume the user wants to grab it
+		if(LLToolFace::mTextureObject==hit_obj && LLToolFace::mFaceGrabbed==pick_info.mObjectFace)
+		{
+			LLToolFace::mTextureGrabbed=TRUE;
+			gViewerWindow->hideCursor();
+		}
+		else
+		{
+			LLToolFace::mTextureGrabbed=FALSE;
+			gViewerWindow->showCursor();
+		}
+
+		// remember the object being selected so we can check for grabbing later
+		LLToolFace::mTextureObject=hit_obj;
+		// also remember the selected object face
+		LLToolFace::mFaceGrabbed=pick_info.mObjectFace;
+		// </FS:Zi>
 	}
 	else
 	{
@@ -176,16 +190,23 @@ void LLToolFace::handleDeselect()
 {
 	// Stop drawing faces
 	LLSelectMgr::getInstance()->setTEMode(FALSE);
+
+	stopGrabbing();	// <FS:Zi> Add control to drag texture faces around
 }
 
 
 void LLToolFace::render()
 {
-	// <FS:Zi> Add Middle Mouse control to drag texture faces around
+	// <FS:Zi> Add control to drag texture faces around
 	// // for now, do nothing
 
-	// do nothing if no texture was grabbed or no associated object was found
-	if(!LLToolFace::mTextureGrabbed || !LLToolFace::mTextureObject)
+#ifdef TEXTURE_GRAB_UPDATE_REGULARLY
+	static S32 updateCounter=0;
+	static BOOL teDirty=FALSE;
+#endif
+
+	// do nothing if no texture was grabbed or no associated object was found, or the object is no modify
+	if(!LLToolFace::mTextureGrabbed || !LLToolFace::mTextureObject || !mTextureObject->permModify())
 	{
 		return;
 	}
@@ -276,6 +297,17 @@ void LLToolFace::render()
 		}
 	}
 
+#ifdef TEXTURE_GRAB_UPDATE_REGULARLY
+	teDirty=TRUE;
+
+	updateCounter++;
+	if(updateCounter==10)
+	{
+		mTextureObject->sendTEUpdate();
+		updateCounter=0;
+		teDirty=FALSE;
+	}
+#endif
 	// this is one way I would rather do it than tracking mouse deltas, because it
 	// would take rotations into account. However, mSTCoords seems too coarse to be useful
 /*
@@ -323,22 +355,27 @@ void LLToolFace::render()
 */
 }
 
-
-BOOL LLToolFace::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+void LLToolFace::stopGrabbing()
 {
-	gViewerWindow->hideCursor();
-	mGrabX=x;
-	mGrabY=y;
-	LLToolFace::mTextureGrabbed=TRUE;
-	return handleMouseDown(x,y,mask);
-}
-
-BOOL LLToolFace::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
-{
+	if(mTextureObject)
+	{
+		mTextureObject->sendTEUpdate();
+	}
 	gViewerWindow->showCursor();
+
 	LLToolFace::mTextureGrabbed=FALSE;
 	LLToolFace::mTextureObject=NULL;
 	LLToolFace::mFaceGrabbed=0;
+}
+
+BOOL LLToolFace::handleMouseUp(S32 x, S32 y, MASK mask)
+{
+	if(mTextureObject)
+	{
+		mTextureObject->sendTEUpdate();
+	}
+	gViewerWindow->showCursor();
+	LLToolFace::mTextureGrabbed=FALSE;
 
 	return TRUE;
 }

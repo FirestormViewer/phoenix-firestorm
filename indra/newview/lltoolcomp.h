@@ -97,11 +97,6 @@ protected:
 
 public:
 	static const std::string sNameComp;
-
-	// <FS:Zi> Add middle mouse control for tools overall
-	virtual BOOL			handleMiddleMouseDown(S32 x, S32 y, MASK mask);
-	virtual BOOL			handleMiddleMouseUp(S32 x, S32 y, MASK mask);
-	// </FS:Zi>
 };
 
 
