@@ -385,6 +385,15 @@ protected:
 	bool mHasLocalData;
 	bool mHasDecodedData;
 	bool mHasValidData;
+
+	// <FS:ND> Mark data as still waiting for being decoded.
+public:
+	void setHasDecodeRequestPending( bool aRequestPending ) { mHasDecodeRequest = aRequestPending; }
+	bool hasDecodeRequestPending() const { return mHasDecodeRequest; }
+
+private:
+	bool mHasDecodeRequest;
+	// </FS:ND>
 };
 
 
