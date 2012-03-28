@@ -130,6 +130,18 @@ void LLToolComposite::handleSelect()
 	mSelected = TRUE; 
 }
 
+// <FS:Zi> Add middle mouse control for tools overall
+BOOL LLToolComposite::handleMiddleMouseDown(S32 x, S32 y, MASK mask)
+{
+	return FALSE;
+}
+
+BOOL LLToolComposite::handleMiddleMouseUp(S32 x, S32 y, MASK mask)
+{
+	return FALSE;
+}
+// </FS:Zi>
+
 //----------------------------------------------------------------------------
 // LLToolCompInspect
 //----------------------------------------------------------------------------

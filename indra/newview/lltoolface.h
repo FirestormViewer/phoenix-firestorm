@@ -46,6 +46,18 @@ public:
 	virtual void	render();			// draw face highlights
 
 	static void pickCallback(const LLPickInfo& pick_info);
+
+	// <FS:Zi> Add Middle Mouse control to drag texture faces around
+	virtual BOOL	handleMiddleMouseDown(S32 x, S32 y, MASK mask);
+	virtual BOOL	handleMiddleMouseUp(S32 x, S32 y, MASK mask);
+
+	static BOOL mTextureGrabbed;
+	static LLViewerObject* mTextureObject;
+	static S32 mFaceGrabbed;
+
+	S32 mGrabX;
+	S32 mGrabY;
+	// </FS:Zi>
 };
 
 #endif
