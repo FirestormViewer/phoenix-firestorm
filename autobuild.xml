@@ -242,9 +242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a34e7fffdb94a6a4d8a2966b1f216da3</string>
+              <string>c81e5f3d43b05dabafa1f34342c4425e</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/boost-1.45.0-linux-20110310.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.45.0-linux-20120326.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
