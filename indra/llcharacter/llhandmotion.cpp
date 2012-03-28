@@ -138,12 +138,18 @@ BOOL LLHandMotion::onUpdate(F32 time, U8* joint_mask)
 	}
 	else
 	{
+		// <FS:ND> Sometimes we seem to get garbage here, with poses that are out of bounds.
+
 		// this is a new morph we didn't know about before
-		if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
+		//		if ( *requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
+		if (*requestedHandPose >= 0 && *requestedHandPose < NUM_HAND_POSES && *requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
 		{
 			mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
 		}
-		mNewPose = *requestedHandPose;
+		//		mNewPose = *requestedHandPose;
+		mNewPose = static_cast<eHandPose> ( llclamp( static_cast<int>(*requestedHandPose), 0, NUM_HAND_POSES-1 ) );
+
+		// </FS:ND>
 	}
 
 	mCharacter->removeAnimationData("Hand Pose");
