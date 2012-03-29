@@ -716,12 +716,70 @@ BOOL AOEngine::addAnimation(const AOSet* set,AOSet::AOState* state,const LLInven
 	return TRUE;
 }
 
+BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
+{
+	BOOL moved=FALSE;
+
+	LLInventoryModel::item_array_t* items;
+	LLInventoryModel::cat_array_t* cats;
+
+	gInventory.getDirectDescendentsOf(uuid,cats,items);
+	for(S32 index=0;index<cats->count();index++)
+	{
+		// recurse into subfolders
+		if(findForeignItems(cats->get(index)->getUUID()))
+		{
+			moved=TRUE;
+		}
+	}
+
+	// count backwards in case we have to remove items
+	for(S32 index=items->count()-1;index>=0;index--)
+	{
+		BOOL move=FALSE;
+
+		LLPointer<LLViewerInventoryItem> item=items->get(index);
+		if(item->getIsLinkType())
+		{
+			if(item->getInventoryType()!=LLInventoryType::IT_ANIMATION)
+			{
+				lldebugs << item->getName() << " is a link but does not point to an animation." << llendl;
+				move=TRUE;
+			}
+			else
+			{
+				lldebugs << item->getName() << " is an animation link." << llendl;
+			}
+		}
+		else
+		{
+			lldebugs << item->getName() << " is not a link!" << llendl;
+			move=TRUE;
+		}
+
+		if(move)
+		{
+			moved=TRUE;
+			change_item_parent(&gInventory,item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
+			lldebugs << item->getName() << " moved to lost and found!" << llendl;
+		}
+	}
+
+	return moved;
+}
+
 // needs a three-step process, since purge of categories only seems to work from trash
 void AOEngine::purgeFolder(const LLUUID& uuid) const
 {
 	// unprotect it
 	BOOL wasProtected=gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
 	gSavedPerAccountSettings.setBOOL("ProtectAOFolders",FALSE);
+
+	// move everything that's not an animation link to "lost and found"
+	if(findForeignItems(uuid))
+	{
+		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
+	}
 
 	// trash it
 	remove_category(&gInventory,uuid);
@@ -752,6 +810,29 @@ BOOL AOEngine::removeAnimation(const AOSet* set,AOSet::AOState* state,S32 index)
 	if(numOfAnimations==0)
 		return FALSE;
 
+	LLViewerInventoryItem* item=gInventory.getItem(state->mAnimations[index].mInventoryUUID);
+
+	// check if this item is actually an animation link
+	BOOL move=TRUE;
+	if(item->getIsLinkType())
+	{
+		if(item->getInventoryType()==LLInventoryType::IT_ANIMATION)
+		{
+			// it is an animation link, so mark it to be purged
+			move=FALSE;
+		}
+	}
+
+	// this item was not an animation link, move it to lost and found
+	if(move)
+	{
+		change_item_parent(&gInventory,item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
+		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
+		update();
+		return FALSE;
+	}
+
+	// purge the item from inventory
 	lldebugs << __LINE__ << " purging: " << state->mAnimations[index].mInventoryUUID << llendl;
 	gInventory.purgeObject(state->mAnimations[index].mInventoryUUID); // item->getUUID());
 	gInventory.notifyObservers();
@@ -884,6 +965,12 @@ void AOEngine::update()
 {
 	if(mAOFolder.isNull())
 		return;
+
+	// move everything that's not an animation link to "lost and found"
+	if(findForeignItems(mAOFolder))
+	{
+		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
+	}
 
 	LLInventoryModel::cat_array_t* categories;
 	LLInventoryModel::item_array_t* items;

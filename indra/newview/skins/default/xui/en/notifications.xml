@@ -8286,6 +8286,13 @@ Remove AO set "[AO_SET_NAME]" from the list?
 
   <notification
    icon="notifytip.tga"
+   name="AOForeignItemsFound"
+   type="alertmodal">
+The animation overrider found at least one item that did not belong in the configuration. Please check your &quot;Lost and Found&quot; folder for items that were moved out of the animation overrider configuration.
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
    name="AOImportSetAlreadyExists"
    type="notifytip">
 An animation set with this name already exists.
