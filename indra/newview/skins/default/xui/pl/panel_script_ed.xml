@@ -46,4 +46,5 @@
 	<combo_box label="Wstaw..." name="Insert..."/>
 	<button label="Zapisz" label_selected="Zapisz" name="Save_btn"/>
 	<button label="Edytuj..." name="Edit_btn"/>
+	<check_box label="Tabulatory na spacje" tool_tip="Włącza automatyczną zamianę tabulatorów na spacje (po 4 dla każdego), gdy skrypt jest wysyłany z edytora zewnętrznego do Przeglądarki." name="ExternalEditorConvertTabsToSpaces"/>
 </panel>
