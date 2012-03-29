@@ -1176,7 +1176,7 @@ void FSLSLPreprocessor::display_error(std::string err)
 }
 
 
-bool FSLSLPreprocessor::mono_directive(std::string& text, bool agent_inv)
+bool FSLSLPreprocessor::mono_directive(std::string const& text, bool agent_inv)
 {
 	bool domono = agent_inv;
 	

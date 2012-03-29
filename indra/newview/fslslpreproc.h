@@ -43,7 +43,7 @@ public:
 		: mCore(corep), waving(FALSE), mClose(FALSE)
 	{}
 
-	static bool mono_directive(std::string& text, bool agent_inv = true);
+	static bool mono_directive(std::string const& text, bool agent_inv = true);
 	std::string encode(std::string script);
 	std::string decode(std::string script);
 
