@@ -76,7 +76,6 @@
 #include "llmultigesture.h"
 
 #include "llconsole.h"
-#include "fscontactsfloater.h"
 
 // <FS:Zi> Moved nearby chat functionality here for now
 #include "chatbar_as_cmdline.h"
@@ -153,16 +152,6 @@ BOOL LLFloaterNearbyChat::postBuild()
 
 	mChatHistory = getChild<LLChatHistory>("chat_history");
 	
-	// Nicky D.; FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
-	// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
-	LLFloater *pContacts(FSFloaterContacts::getInstance());
-	
-	// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
-	if( pContacts )
-		llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
-
-	// Nicky D.; End FIRE-3066
-
 	// <vertical tab docking> -AO
 	if(isChatMultiTab())
 	{

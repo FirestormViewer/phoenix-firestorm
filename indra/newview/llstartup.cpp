@@ -222,6 +222,8 @@
 #include "fslslbridge.h"
 //-TT
 
+#include "fscontactsfloater.h"		// <FS:ND> Fix for FIRE-3066
+
 //
 // exported globals
 //
@@ -1576,6 +1578,16 @@ bool idle_startup()
 		// so that we can construct voice UI that relies on the name cache
 		LLVoiceClient::getInstance()->updateSettings();
 		display_startup();
+
+		// <FS:ND> FIRE-3066: Force creation or FSFLoaterContacts here, this way it will register with LLAvatarTracker early enough.
+		// Otherwise it is only create if isChatMultriTab() == true and LLIMFloaterContainer::getInstance is called
+		// Moved here from llfloaternearbyvchat.cpp by Zi, to make this work even if LogShowHistory is FALSE
+		LLFloater *pContacts(FSFloaterContacts::getInstance());
+		
+		// Do something with pContacts so no overzealous optimizer optimzes our neat little call to FSFloaterContacts::getInstance() away.
+		if( pContacts )
+			llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
+		// </FS:ND>
 
 		//gCacheName is required for nearby chat history loading
 		//so I just moved nearby history loading a few states further
