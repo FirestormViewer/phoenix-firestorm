@@ -211,7 +211,7 @@ BOOL LLVorbisDecodeState::initDecode()
 	int r = ov_open_callbacks(mInFilep, &mVF, NULL, 0, vfs_callbacks);
 	if(r < 0) 
 	{
-		llwarns << r << " Input to vorbis decode does not appear to be an Ogg bitstream: " << mUUID << llendl;
+		LL_WARNS_ONCE(NULL) << r << " Input to vorbis decode does not appear to be an Ogg bitstream: " << mUUID << llendl;
 		return(FALSE);
 	}
 	
@@ -242,23 +242,23 @@ BOOL LLVorbisDecodeState::initDecode()
 	    (size_t)sample_count <= 0)
 	{
 		abort_decode = true;
-		llwarns << "Illegal sample count: " << sample_count << llendl;
+		LL_WARNS_ONCE(NULL) << "Illegal sample count: " << sample_count << llendl;
 	}
 	
 	if( size_guess > LLVORBIS_CLIP_REJECT_SIZE ||
 	    size_guess < 0)
 	{
 		abort_decode = true;
-		llwarns << "Illegal sample size: " << size_guess << llendl;
+		LL_WARNS_ONCE(NULL) << "Illegal sample size: " << size_guess << llendl;
 	}
 	
 	if( abort_decode )
 	{
-		llwarns << "Canceling initDecode. Bad asset: " << mUUID << llendl;
+		LL_WARNS_ONCE(NULL) << "Canceling initDecode. Bad asset: " << mUUID << llendl;
 		vorbis_comment* comment = ov_comment(&mVF,-1);
 		if (comment && comment->vendor)
 		{
-			llwarns << "Bad asset encoded by: " << comment->vendor << llendl;
+			LL_WARNS_ONCE(NULL) << "Bad asset encoded by: " << comment->vendor << llendl;
 		}
 		delete mInFilep;
 		mInFilep = NULL;
