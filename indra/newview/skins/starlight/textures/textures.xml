@@ -122,7 +122,9 @@ with the same filename but different name
   <texture name="Checkbox_On_Press" file_name="widgets/Checkbox_On_Press.png" preload="true" />
   <texture name="Checkbox_Press" file_name="widgets/Checkbox_Press.png" preload="true" />
   <texture name="Check_Mark" file_name="icons/check_mark.png" preload="true" />
-  
+
+  <texture name="Checker" file_name="checker.png" preload="false" />
+    
   <texture name="Command_AboutLand_Icon"    file_name="toolbar_icons/land.png"         preload="true" />
   <texture name="Command_Appearance_Icon"   file_name="toolbar_icons/appearance.png"   preload="true" />
   <texture name="Command_Avatar_Icon"       file_name="toolbar_icons/avatars.png"      preload="true" />
@@ -142,7 +144,12 @@ with the same filename but different name
   <texture name="Command_MiniMap_Icon"      file_name="toolbar_icons/mini_map.png"     preload="true" />
   <texture name="Command_Move_Icon"         file_name="toolbar_icons/move.png"         preload="true" />
   <texture name="Command_Outbox_Icon"       file_name="toolbar_icons/outbox.png"       preload="true" />
+  <texture name="Command_Pathfinding_Icon"  file_name="toolbar_icons/land.png"         preload="true" />
   <texture name="Command_People_Icon"       file_name="toolbar_icons/people.png"       preload="true" />
+  <texture name="Command_PF_Basic_Icon"     file_name="toolbar_icons/land.png"         preload="true" />
+  <texture name="Command_PF_Characters_Icon" file_name="toolbar_icons/land.png"        preload="true" />
+  <texture name="Command_PF_Linksets_Icon"  file_name="toolbar_icons/land.png"         preload="true" />
+  <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
   <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
   <texture name="Command_Places_Icon"       file_name="toolbar_icons/places.png"       preload="true" />
   <texture name="Command_Preferences_Icon"  file_name="toolbar_icons/preferences.png"  preload="true" />
@@ -786,7 +793,6 @@ with the same filename but different name
   <texture name="Build_btn" file_name="bottomtray/starlight_build.png" preload="false" />
   <texture name="Windlight_btn" file_name="icons/Inv_WindLight.png" preload="false" />
   <texture name="Prefs_btn" file_name="icons/Edit_Wrench.png" preload="false" />
-<!--  <texture name="XMPP_Icon" file_name="icons/xmpp_default_icon.jpg" preload="true" /> -->
     
   <!-- Firestorm viewer Art --> 
   <texture name="Inv_CallingCardOffline" file_name="icons/Inv_CallingCard.png" preload="false" />
@@ -825,7 +831,7 @@ with the same filename but different name
   <texture name="Inv_OutboxClosed"		file_name="icons/Inv_SysClosed.png" />
   <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
   <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
-<!--  <texture name="ao_toggle_18" file_name="bottomtray/ao_toggle_18.png" preload="false" /> -->
+  <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="false" />
   <texture name="profile_icon_24x24" file_name="icons/profile_icon_24x24.png" preload="false" />
   <texture name="sale_icon_24x24" file_name="icons/sale_icon_24x24.png" preload="false" />
   <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />
@@ -837,11 +843,10 @@ with the same filename but different name
   <texture name="Music_Off" file_name="icons/Music_Off.png" preload="true" />
   <texture name="Music_Over" file_name="icons/Music_Over.png" preload="true" />
   <texture name="Music_Press" file_name="icons/Music_Press.png" preload="true" />
-  <texture name="phoenix_18" file_name="bottomtray/phoenix_18.png" preload="false" />
+  <texture name="phoenix_18" file_name="toolbar_icons/phoenix.png" preload="false" />
   <texture name="www_18" file_name="toolbar_icons/google.png" preload="true" />
   <texture name="areasearch" file_name="toolbar_icons/areasearch.png" preload="false" />
-  <texture name="conversations_18" file_name="bottomtray/conversations_18.png" preload="false" />
-  <texture name="nearbychat_18" file_name="bottomtray/nearbychat_18.png" preload="false" />
+  <texture name="nearbychat_18" file_name="toolbar_icons/nearbychat.png" preload="false" />
   
   <texture name="Permission_Visible_Online_h" file_name="icons/see_me_online_h.png" preload="false" />
   <texture name="Permission_Visible_Map_h" file_name="icons/see_on_map_h.png" preload="false" />
