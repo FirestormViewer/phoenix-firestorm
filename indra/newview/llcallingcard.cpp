@@ -346,7 +346,7 @@ void LLAvatarTracker::setBuddyOnline(const LLUUID& id, bool is_online)
 	}
 	else
 	{
-		llwarns << "!! No buddy info found for " << id 
+		lldebugs << "!! No buddy info found for " << id 
 				<< ", setting to " << (is_online ? "Online" : "Offline") << llendl;
 	}
 }
