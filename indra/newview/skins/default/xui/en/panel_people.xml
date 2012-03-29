@@ -131,8 +131,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
          width="313">
 			
 			
-			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" name="radar_ls" auto_resize="false">
-			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false">
+			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" name="radar_ls" auto_resize="false" user_resize="true">
+			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false" user_resize="true">
              <net_map
              bg_color="NetMapBackgroundColor"
              visibility_control="ShowRadarMinimap"
