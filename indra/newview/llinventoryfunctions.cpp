@@ -994,6 +994,11 @@ bool LLFindWearablesEx::operator()(LLInventoryCategory* cat, LLInventoryItem* it
 	if (!vitem) return false;
 
 	// Skip non-wearables.
+	//<FS:LO> FIRE-1256 fix
+	/*if (!vitem->isWearableType() && vitem->getType() != LLAssetType::AT_OBJECT)
+	{
+		return false;
+	}*/
 	if (!vitem->isWearableType())
 	{
 		if((vitem->getType() != LLAssetType::AT_OBJECT) && (vitem->getType() != LLAssetType::AT_GESTURE))
@@ -1001,6 +1006,7 @@ bool LLFindWearablesEx::operator()(LLInventoryCategory* cat, LLInventoryItem* it
 			return false;
 		}
 	}
+	//</FS:LO>
 
 	// Skip body parts if requested.
 	if (!mIncludeBodyParts && vitem->getType() == LLAssetType::AT_BODYPART)
