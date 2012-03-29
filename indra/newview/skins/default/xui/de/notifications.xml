@@ -3183,6 +3183,10 @@ Animationsset "[AO_SET_NAME]" aus Liste löschen?
      yestext="Löschen"/>
   </notification>
 
+  <notification name="AOForeignItemsFound">
+Es wurden Objekte im Animation Overrider gefunden, die nicht zur Konfiguration gehören. Bitte prüfe den &quot;Fundbüro&quot;-Ordner nach Objekten, die aus der Konfiguration des Animation Overrider entfernt wurden.
+  </notification>
+
   <notification name="AOImportSetAlreadyExists">
 Ein Animationsset mit diesem Namen existiert bereits.
   </notification>
