@@ -3530,9 +3530,11 @@ protected:
 	{
 		llwarns << "Translation failed for mesg " << m_origMesg << " toLang " << mToLang << " fromLang " << mFromLang << llendl;
 
+		//<FS:LO> Removing (useless?) annoying translation failed messages from local chat
 		//std::string msg = LLTrans::getString("TranslationFailed", LLSD().with("[REASON]", err_msg));
 		//LLStringUtil::replaceString(msg, "\n", " "); // we want one-line error messages
 		//m_chat.mText += " (" + msg + ")";
+		//</FS:LO>
 
 		LLNotificationsUI::LLNotificationManager::instance().onChat(m_chat, m_toastArgs);
 	}
