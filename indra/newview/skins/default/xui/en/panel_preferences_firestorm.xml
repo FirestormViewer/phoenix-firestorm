@@ -1437,25 +1437,23 @@
          control_name="FSSaveInventoryScriptsAsMono"/>
 
 	<check_box
-         follows="left|top"
+   follows="left|top"
 	 height="16"
 	 label="Enable LSL preprocessor"
 	 tool_tip="When checked, the LSL preprocessor is enabled."
 	 name="preproc_checkbox"
-	 control_name="_NACL_LSLPreprocessor"
-	 initial_value="true" />
+	 control_name="_NACL_LSLPreprocessor" />
 	<check_box
-         follows="left|top"
+   follows="left|top"
 	 height="16"
 	 left="20"
 	 enabled_control="_NACL_LSLPreprocessor"
 	 label="Script optimizer"
 	 tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
 	 name="preprocoptimizer_checkbox"
-	 control_name="_NACL_PreProcLSLOptimizer"
-	 initial_value="true" />
+	 control_name="_NACL_PreProcLSLOptimizer" />
 	<check_box
-         follows="left|top"
+   follows="left|top"
 	 height="16"
 	 top_delta="0"
 	 left_delta="120"
@@ -1463,10 +1461,9 @@
 	 label="switch() statement"
 	 tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
 	 name="preprocswitch_checkbox"
-	 control_name="_NACL_PreProcLSLSwitch"
-	 initial_value="true" />
+	 control_name="_NACL_PreProcLSLSwitch" />
 	<check_box
-         follows="left|top"
+   follows="left|top"
 	 height="16"
 	 top_delta="0"
 	 left_delta="130"
@@ -1474,10 +1471,9 @@
 	 label="Lazy lists"
 	 tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
 	 name="preproclazy_checkbox"
-	 control_name="_NACL_PreProcLSLLazyLists"
-	 initial_value="true" />
+	 control_name="_NACL_PreProcLSLLazyLists" />
 	<check_box
-         follows="left|top"
+   follows="left|top"
 	 top_delta="0"
 	 left_delta="80"
 	 height="16"
@@ -1485,10 +1481,9 @@
 	 label="#includes from local disk"
 	 tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
 	 name="preprocinclude_checkbox"
-	 control_name="_NACL_PreProcEnableHDDInclude"
-	 initial_value="true" />
+	 control_name="_NACL_PreProcEnableHDDInclude" />
 	<text
-         follows="left|top"
+   follows="left|top"
 	 height="16"
 	 type="string"
 	 length="1"
@@ -1497,8 +1492,8 @@
 	 name="lslpreprocinclude_textbox"
 	 left="10"
 	 width="256">
-          Preprocessor include path:
-        </text>
+    Preprocessor include path:
+  </text>
 	<line_editor
 	 control_name="_NACL_PreProcHDDIncludeLocation"
 	 border_style="line"
@@ -1523,7 +1518,7 @@
 	 <button.commit_callback
 	  function="NACL.SetPreprocInclude" />
 	 </button>
-    </panel>
+  </panel>
 
 
     <!--Tags-->
