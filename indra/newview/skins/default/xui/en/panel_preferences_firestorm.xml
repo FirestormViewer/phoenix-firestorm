@@ -1452,7 +1452,7 @@
 	 label="Script optimizer"
 	 tool_tip="When checked, the LSL preprocessor will optimize space used by scripts at the cost of readability."
 	 name="preprocoptimizer_checkbox"
-	 control_name="_NACL_LSLPreProcLSLOptimizer"
+	 control_name="_NACL_PreProcLSLOptimizer"
 	 initial_value="true" />
 	<check_box
          follows="left|top"
@@ -1463,7 +1463,7 @@
 	 label="switch() statement"
 	 tool_tip="When checked, the LSL preprocessor will allow the use of the switch() statement for script flow control."
 	 name="preprocswitch_checkbox"
-	 control_name="_NACL_LSLPreProcLSLSwitch"
+	 control_name="_NACL_PreProcLSLSwitch"
 	 initial_value="true" />
 	<check_box
          follows="left|top"
@@ -1474,7 +1474,7 @@
 	 label="Lazy lists"
 	 tool_tip="When checked, the LSL preprocessor will allow the use of syntax extensions for list handling."
 	 name="preproclazy_checkbox"
-	 control_name="_NACL_LSLPreProcLSLLazyLists"
+	 control_name="_NACL_PreProcLSLLazyLists"
 	 initial_value="true" />
 	<check_box
          follows="left|top"
@@ -1485,7 +1485,7 @@
 	 label="#includes from local disk"
 	 tool_tip="When checked, the LSL preprocessor will allow #include statements to reference files on your local disk."
 	 name="preprocinclude_checkbox"
-	 control_name="_NACL_LSLPreProcEnableHDDInclude"
+	 control_name="_NACL_PreProcEnableHDDInclude"
 	 initial_value="true" />
 	<text
          follows="left|top"
@@ -1493,7 +1493,7 @@
 	 type="string"
 	 length="1"
 	 layout="topleft"
-	 enabled_control="_NACL_LSLPreProcEnableHDDInclude"
+	 enabled_control="_NACL_PreProcEnableHDDInclude"
 	 name="lslpreprocinclude_textbox"
 	 left="10"
 	 width="256">
@@ -1506,14 +1506,14 @@
 	 follows="left|top"
 	 font="SansSerif"
 	 height="23"
-	 enabled_control="_NACL_LSLPreProcEnableHDDInclude"
+	 enabled_control="_NACL_PreProcEnableHDDInclude"
 	 max_length="4096"
 	 name="preprocinclude_location"
 	 width="310" />
 	<button
 	 follows="left|top"
 	 height="23"
-	 enabled_control="_NACL_LSLPreProcEnableHDDInclude"
+	 enabled_control="_NACL_PreProcEnableHDDInclude"
 	 label="Browse"
 	 label_selected="Browse"
 	 left_pad="5"
