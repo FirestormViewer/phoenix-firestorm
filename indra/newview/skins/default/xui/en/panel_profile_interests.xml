@@ -216,6 +216,6 @@
          follows="left|top"
          name="languages_edit"
          is_unicode="false"
-         max_length="254" />
+         max_length_bytes="254" />
 </panel>
 
