@@ -295,6 +295,7 @@ MediaPluginGStreamer010::processGSTEvents(GstBus     *bus,
 		message.setValue("title", oMData.mTitle );
 		message.setValue("artist", oMData.mArtist );
 		sendMessage(message);
+		break;
 	}
 // </FS:ND>
 	case GST_MESSAGE_ERROR: {
