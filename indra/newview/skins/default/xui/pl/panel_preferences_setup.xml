@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sieć/cache" name="Input panel">
 	<text name="Maximum bandwidth">
-		Maksymalna przepustowość
+		Maks. przepustowość
 	</text>
 	<check_box label="Własny port" name="connection_port_enabled"/>
 	<spinner label="Numer portu:" name="connection_port"/>

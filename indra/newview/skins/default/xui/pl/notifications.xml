@@ -3280,6 +3280,9 @@ Nazwa nie może zawierać ":" lub "|".
 	<notification name="AOImportSetAlreadyExists">
 		Zestaw animacji o tej nazwie już istnieje.
 	</notification>
+	<notification name="AOForeignItemsFound">
+		Zastępowanie Animacji znalazło przynajmniej jedną pozycję, jaka nie powinna znaleźć się w konfiguracji. Sprawdź folder &quot;Zagubione i odnalezione&quot; aby przejrzeć pozycje, które zostały usunięte z konfiguracji Zastępowania Animacji.
+	</notification>
 	<notification name="AOImportPermissionDenied">
 		Niewystarczające uprawnienia do odczytu notki.
 	</notification>
