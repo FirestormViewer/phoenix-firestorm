@@ -10,15 +10,17 @@
 			<text name="cache_size_label" height="19">
 				(Localizaciones, imágenes, web, historial de búsqueda)
 			</text>
-			<check_box label="Publicar mi avatar en los resultados de búsqueda" name="online_searchresults"/>
+			<check_box label="Publicar mi avatar en los resultados de búsqueda" name="online_searchresults" top_pad="10"/>
 			<check_box label="Sólo mis amigos y grupos pueden ver si estoy conectado" name="online_visibility"/>
 			<check_box label="Sólo mis amigos y grupos pueden llamarme o enviarme MI" name="voice_call_friends_only_check"/>
 			<check_box label="Apagar micrófono cuando terminan las llamadas" name="auto_disengage_mic_check"/>
 			<check_box label="Aceptar automáticamente nuevos items de inventario" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Utilizar mensajes clásicos de aceptación/rechazo de ofertas de inventario" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Si lo activas, el visor sólo enviará mensajes de aceptación o rechazo tras pulsar el botón correspondiente. Si lo desactivas, la respuesta de aceptación se enviará tan pronto como la oferta haya sido recibida. Esta opción no tiene ningún efecto si las ofertas de inventario se aceptan de forma automática."/>
 			<check_box label="Mostrar automáticamente en el inventario los items recién aceptados" name="Show_In_Inventory"/>
 			<check_box label="Mostrar automáticamente las notas, texturas e hitos al aceptarlos" name="Show_New_Inventory"/>
+			<check_box label="Crear efecto de partículas al entregar items del inventario a otros avatares" name="FSCreateGiveInventoryParticleEffect"/>
 			<check_box label="Mostrar mis hitos favoritos en el desplegable &apos;Iniciar en&apos; de la pantalla de conexión" name="favorites_on_login_check"/>
-			<text name="Logs:">
+			<text name="Logs:" top_pad="10">
 				Registros de chat:
 			</text>
 			<check_box label="Guardar un registro del chat local en mi equipo (puede causar lag)" name="log_nearby_chat"/>
