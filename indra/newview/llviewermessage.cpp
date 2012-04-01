@@ -1949,10 +1949,13 @@ void inventory_offer_handler(LLOfferInfo* info)
 
 	bool bAutoAccept(false);
 	// Avoid the Accept/Discard dialog if the user so desires. JC
-	if (gSavedSettings.getBOOL("AutoAcceptNewInventory")
-		&& (info->mType == LLAssetType::AT_NOTECARD
-			|| info->mType == LLAssetType::AT_LANDMARK
-			|| info->mType == LLAssetType::AT_TEXTURE))
+	// <FS:Ansariel> Auto-accept any kind of inventory (FIRE-4128)
+	//if (gSavedSettings.getBOOL("AutoAcceptNewInventory")
+	//	&& (info->mType == LLAssetType::AT_NOTECARD
+	//		|| info->mType == LLAssetType::AT_LANDMARK
+	//		|| info->mType == LLAssetType::AT_TEXTURE))
+	if (gSavedSettings.getBOOL("AutoAcceptNewInventory"))
+	// </FS:Ansariel> Auto-accept any kind of inventory (FIRE-4128)
 	{
 		// For certain types, just accept the items into the inventory,
 		// and possibly open them on receipt depending upon "ShowNewInventory".
