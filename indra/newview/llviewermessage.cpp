@@ -2097,6 +2097,30 @@ void inventory_offer_handler(LLOfferInfo* info)
 		    p.payload = payload;
 		    LLPostponedNotification::add<LLPostponedOfferNotification>(p, info->mFromID, false);
 		}
+
+		// <FS:Ansariel> Show offered inventory also if auto-accept is enabled (FIRE-5101)
+		if (bAutoAccept && gSavedSettings.getBOOL("ShowOfferedInventory"))
+		{
+			LLViewerInventoryCategory* catp = NULL;
+			catp = (LLViewerInventoryCategory*)gInventory.getCategory(info->mObjectID);
+			LLViewerInventoryItem* itemp = NULL;
+			if(!catp)
+			{
+				itemp = (LLViewerInventoryItem*)gInventory.getItem(info->mObjectID);
+			}
+
+			LLOpenAgentOffer* open_agent_offer = new LLOpenAgentOffer(info->mObjectID, info->mFromName);
+			open_agent_offer->startFetch();
+			if(catp || (itemp && itemp->isFinished()))
+			{
+				open_agent_offer->done();
+			}
+			else
+			{
+				gInventory.addObserver(open_agent_offer);
+			}
+		}
+		// </FS:Ansariel> Show offered inventory also if auto-accept is enabled (FIRE-5101)
 	}
 
 	LLFirstUse::newInventory();
