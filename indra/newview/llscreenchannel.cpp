@@ -125,6 +125,16 @@ LLScreenChannelBase::LLScreenChannelBase(const Params& p)
 
 	setMouseOpaque( false );
 	setVisible(FALSE);
+
+	mObserver = 0; // </FS:ND> Observerable
+}
+
+LLScreenChannelBase::~LLScreenChannelBase()
+{
+	// <FS:ND> Notofiy our observer that we're going down
+	if( mObserver )
+		mObserver->observeDestruction( this );
+	// </FS:ND>
 }
 
 BOOL LLScreenChannelBase::postBuild()
@@ -233,7 +243,6 @@ void LLScreenChannel::init(S32 channel_left, S32 channel_right)
 //--------------------------------------------------------------------------
 LLScreenChannel::~LLScreenChannel() 
 {
-	
 }
 
 std::list<LLToast*> LLScreenChannel::findToasts(const Matcher& matcher)

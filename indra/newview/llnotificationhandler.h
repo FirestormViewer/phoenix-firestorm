@@ -81,6 +81,7 @@ typedef enum e_notification_type
 //			- signal, that emits ID of the notification that is being processed
 //
 class LLEventHandler
+	: public LLScreenChannelBase::LLScreenChannelObserver // </FS:ND> derive from observer, so we get notified when the Channel we hold dies.
 {
 public:
 	virtual ~LLEventHandler() {};
@@ -110,6 +111,10 @@ protected:
 	LLScreenChannelBase*	mChannel;
 	e_notification_type		mType;
 
+	// <FS:ND> Channel is dead, remove it. Yay for mChannel being protected so every derived class just mucks with the pointer as it wishes. Otherwise we could register an observer as soon as mChannel is set.
+	virtual void observeDestruction( LLScreenChannelBase *)
+	{ mChannel = 0;	}
+	// </FS:ND>
 };
 
 // LLSysHandler and LLChatHandler are more specific base classes
@@ -256,6 +261,7 @@ protected:
  * Handler for offers notices.
  * It manages life time of offer notices.
  */
+
 class LLOfferHandler : public LLSysHandler
 {
 public:
@@ -264,6 +270,7 @@ public:
 
 	// base interface functions
 	virtual bool processNotification(const LLSD& notify);
+
 
 protected:
 	virtual void onDeleteToast(LLToast* toast);

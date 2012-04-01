@@ -51,11 +51,20 @@ LLOfferHandler::LLOfferHandler(e_notification_type type, const LLSD& id)
 	LLScreenChannel* channel = dynamic_cast<LLScreenChannel*>(mChannel);
 	if(channel)
 		channel->setOnRejectToastCallback(boost::bind(&LLOfferHandler::onRejectToast, this, _1));
+
+	// <FS:ND> Register with observer so we notice when mChannel diees
+	if( mChannel )
+		mChannel->setObserver( this );
+	// </FS:ND>
 }
 
 //--------------------------------------------------------------------------
 LLOfferHandler::~LLOfferHandler()
 {
+	// <FS:ND> Where are dead. In case we still hold a channel unregister
+	if( mChannel )
+		mChannel->setObserver( 0 );
+	// </FS:ND>
 }
 
 //--------------------------------------------------------------------------
