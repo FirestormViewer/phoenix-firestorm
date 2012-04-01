@@ -34,7 +34,7 @@
             height="19"/>
     </layout_panel>
     <layout_panel auto_resize="false"
-                  height="34"
+                  height="40"
                   mouse_opaque="false"
                   name="nav_bar_container"
                   tab_stop="false"
@@ -56,7 +56,7 @@
             name="world_view_rect"
             width="1024"/>
       <panel follows="left|top|right"
-             height="30"
+             height="42"
              left="0"
              mouse_opaque="false"
              name="topinfo_bar_container"

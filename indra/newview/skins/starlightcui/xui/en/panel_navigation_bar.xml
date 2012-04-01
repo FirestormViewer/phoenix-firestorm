@@ -3,52 +3,51 @@
  background_opaque="false"
  background_visible="true"
  follows="left|bottom|right"
- focus_root="true" 
- height="34"
+ focus_root="true"
+ height="40"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
- width="800">
+ width="1024">
 
-<panel
- background_visible="false"
- follows="left|top|right"
- height="25"
- layout="topleft"
- top="9"
- left="0"
- name="navigation_panel"
- width="800">
+	<panel
+	 background_visible="false"
+	 follows="left|top|right"
+	 height="24"
+	 layout="topleft"
+	 top_delta="0"
+	 top_pad="0"
+	 name="navigation_panel"
+	 width="1024">
 
- <!-- Layout stack for buttons, location input and search field -->
- <layout_stack
-   follows="all"
-   height="23"
-   layout="topleft"
-   border_size="0"
-   resize_bar_overlap="5"
-   left="0"
-   top="0"
-   mouse_opaque="false"
-   name="nvp_stack"
-   orientation="horizontal"
-   width="800">
-	 <!-- Contains the navigation buttons -->
-	 <layout_panel
-	   follows="top|left"
-	   layout="topleft"
-       background_visible="true"
-	   name="navigation_buttons_layout_panel"
-	   auto_resize="false"
-	   width="110">
-	   <pull_button
+	<!-- Layout stack for buttons, location input and search field -->
+	<layout_stack
+	 follows="left|top|right"
+	 layout="topleft"
+	 orientation="horizontal"
+	 name="location_search_layout"
+	 width="1024"
+	 height="24"
+	 left="0"
+	 top="0">
+
+	<!-- Contains the navigation buttons -->
+	<layout_panel
+	 name="navigation_buttons_visibility_panel"
+	 layout="topleft"
+	 right="193"
+	 height="24"
+	 border_size="0"
+	 auto_resize="false">
+
+	     <pull_button
 	     follows="left|top"
 	     direction="down"
 	     height="23"
 	     image_overlay="Arrow_Left_Off"
 	     image_bottom_pad="1"
 	     layout="topleft"
-	     left="8"
+	     left="5"
 	     name="back_btn"
 	     tool_tip="Go back to previous location"
 	     top="0"
@@ -71,60 +70,77 @@
 	     image_bottom_pad="1"
 	     image_overlay="Home_Off"
 	     layout="topleft"
-	     left_pad="8"
+	     left_pad="7"
 	     name="home_btn"
-	     tool_tip="Teleport to my home location"
+	     tool_tip="Teleport to home location"
 	     top_delta="0"
 	     width="32" />
-	 </layout_panel>
-	 <!-- Contains the navigation buttons -->
-
-	<!-- Layout panel for location input and search field stack -->
-	<layout_panel
-	 follows="left|top|right"
-     background_visible="true"
-	 layout="topleft"
-	 name="location_search_layout_panel"
-	 min_width="375"
-	 width="375"
-	 auto_resize="true"
-	 user_resize="true"
-	 height="22">
-
-	<!-- Layout stack for location input and search field -->
-	<layout_stack
-	 follows="left|top|right"
-	 layout="topleft"
-	 orientation="horizontal"
-	 name="location_search_layout_stack"
-	 width="375"
-	 height="22"
-	 left="0"
-	 top="0">
-
-	 <!-- Contains the location bar -->
-	 <layout_panel
-	   follows="top|left"
-	   layout="topleft"
-	   auto_resize="true"
-	   name="location_bar_layout_panel"
-	   min_width="200"
-	   width="223">
-	    <location_input
-         follows="top|left|right"
-	     halign="right"
+          <!-- About Land Button here -->         
+	    <button
+	     follows="left|top"
 	     height="23"
+           use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="About_Land"
+	     label="Land" 
+	     tool_tip="Pops up Land Information window"
+	     top_delta="0"
+	     width="43">
+		 <button.init_callback
+               function="Button.SetFloaterToggle"
+               parameter="about_land" />
+		 </button>
+          <!-- end of About Land Button -->
+
+          <!-- Windlight Button here -->  
+	    <button
+	     follows="left|top"
+	     height="23"
+           use_ellipses="true"
+	     layout="topleft"
+	     left_pad="7"
+	     name="Sky"
+	     label="Sky" 
+	     tool_tip="Pops up Sky Editor window"
+	     top_delta="0"
+	     width="30">
+		 <button.commit_callback
+               function="World.EnvPreset"
+               parameter="edit_sky" />
+		 </button>
+          <!-- end of Windlight Button -->
+
+	</layout_panel>
+	<!-- Contains the navigation buttons -->
+
+	<!-- Contains the location bar -->
+	<layout_panel
+	 name="location_bar_visibility_panel"
+	 layout="topleft"
+	 width="587"
+	 height="22"
+	 border_size="0"
+	 auto_resize="true">
+
+	    <location_input
+	     follows="all"
+	     halign="right"
+	     height="22"
 	     label="Location"
 	     layout="topleft"
-	     left="8"
+	     left="7"
 	     max_chars="254"
 	     mouse_opaque="false"
 	     name="location_combo"
 	     top="0"
-         width="215">
-         <combo_list
-          mouse_wheel_opaque="true"/>
+	     width="587">
+
 	    </location_input>
+         <combo_list
+		 height="24"
+         mouse_wheel_opaque="true"/>
+
 	</layout_panel>
 	<!-- Contains the location bar -->
 
@@ -132,24 +148,23 @@
 	<layout_panel
 	 name="search_bar_visibility_panel"
 	 layout="topleft"
-	 min_width="152"
-	 width="152"
+	 width="244"
 	 height="22"
 	 visibility_control="ShowSearchTopBar"
-	 auto_resize="false"
-	 user_resize="false">
+	 auto_resize="false">
+
         <search_combo_box
 	     follows="all"
-	     left="6"
+	     left="10"
 	     halign="right"
-	     height="23"
+	     height="22"
 	     label="Search"
 	     layout="topleft"
 	     mouse_opaque="false"
 	     name="search_combo_box"
 	     tool_tip="Search"
 	     top="0"
-	     width="140" >
+	     width="234">
          <combo_editor
           label="Search MetaVerse"
           name="search_combo_editor"/>
@@ -161,43 +176,28 @@
           border.shadow_dark_color="FocusColor"
           mouse_wheel_opaque="true" />
         </search_combo_box>
+
 	</layout_panel>
 	<!-- Contains the search bar, can be hidden by code -->
 
 	</layout_stack>
-	<!-- Layout stack for location input and search field -->
+	<!-- Layout stack for buttons, location input and search field -->
 
-	</layout_panel>
-	<!-- Layout panel for location input and search field stack -->
-
-	 <layout_panel
-	   follows="top|left"
-	   layout="topleft"
-	   auto_resize="false"
-	   user_resize="true"
-	   min_width="0"
-	   name="favorites_layout_panel"
-	   width="311">
-        <icon
-		 follows="top|left"
-		 height="21"
-		 image_name="ChatBarHandle"
-		 layout="topleft"
-		 left="0"
-		 name="resize_handle"
-		 top="2"
-		 width="5" />
-           <favorites_bar
-             follows="left|right|top"
-             font="SansSerifSmall"
-             height="20"
-             layout="topleft"
-             left_pad="3"
-             top="0"
-             name="favorite"
-             image_drag_indication="Accordion_ArrowOpened_Off"
-             tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
-             width="300">
+	</panel>
+  <favorites_bar
+ 	 background_visible="false"
+ 	 bg_alpha_color="Transparent"
+ 	 color="Transparent"
+     follows="left|top|right"
+     top_pad="2"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left="0"
+     name="favorite"
+     image_drag_indication="Accordion_ArrowOpened_Off"
+     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     width="1024">
               <!-- More button actually is a text box. -->
               <more_button
                 follows="left|bottom"
@@ -210,10 +210,5 @@
                 valign="bottom">
                 More &#9660;
                 </more_button>
-         </favorites_bar>
-         </layout_panel>
-     
-     </layout_stack>
-     <!-- Layout stack for buttons, location input and search field -->
-</panel>
+  </favorites_bar>
 </panel>
