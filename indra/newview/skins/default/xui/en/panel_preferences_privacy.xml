@@ -71,7 +71,7 @@
      layout="topleft"
      left="30"
      name="online_searchresults"
-     top_pad="20"
+     top_pad="10"
      width="350" />
     <check_box
      height="16"
@@ -175,7 +175,7 @@
      left="30"
      mouse_opaque="false"
      name="Logs:"
-     top_pad="20"
+     top_pad="10"
      width="350">
         Chat Logs:
     </text>
