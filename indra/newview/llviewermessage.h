@@ -235,6 +235,8 @@ public:
 	/*virtual*/ void handleRespond(const LLSD& notification, const LLSD& response);
 
 	void send_auto_receive_response(void);
+	// <FS:Ansariel> Optional V1-like inventory accept messages
+	void send_decline_response(void);
 
 	// TODO - replace all references with handleRespond()
 	bool inventory_offer_callback(const LLSD& notification, const LLSD& response);

@@ -1484,6 +1484,33 @@ void LLOfferInfo::send_auto_receive_response(void)
 	}
 }
 
+// <FS:Ansariel> Optional V1-like inventory accept messages
+void LLOfferInfo::send_decline_response(void)
+{	
+	LLMessageSystem* msg = gMessageSystem;
+	msg->newMessageFast(_PREHASH_ImprovedInstantMessage);
+	msg->nextBlockFast(_PREHASH_AgentData);
+	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	msg->nextBlockFast(_PREHASH_MessageBlock);
+	msg->addBOOLFast(_PREHASH_FromGroup, FALSE);
+	msg->addUUIDFast(_PREHASH_ToAgentID, mFromID);
+	msg->addU8Fast(_PREHASH_Offline, IM_ONLINE);
+	msg->addUUIDFast(_PREHASH_ID, mTransactionID);
+	msg->addU32Fast(_PREHASH_Timestamp, NO_TIMESTAMP); // no timestamp necessary
+	std::string name;
+	LLAgentUI::buildFullname(name);
+	msg->addStringFast(_PREHASH_FromAgentName, name);
+	msg->addStringFast(_PREHASH_Message, ""); 
+	msg->addU32Fast(_PREHASH_ParentEstateID, 0);
+	msg->addUUIDFast(_PREHASH_RegionID, LLUUID::null);
+	msg->addVector3Fast(_PREHASH_Position, gAgent.getPositionAgent());
+	msg->addU8Fast(_PREHASH_Dialog, (U8)(mIM + 2));
+	msg->addBinaryDataFast(_PREHASH_BinaryBucket, EMPTY_BINARY_BUCKET, EMPTY_BINARY_BUCKET_SIZE);
+	msg->sendReliable(mHost);
+}
+// </FS:Ansariel> Optional V1-like inventory accept messages
+
 void LLOfferInfo::handleRespond(const LLSD& notification, const LLSD& response)
 {
 	initRespondFunctionMap();
@@ -1577,6 +1604,13 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 						opener = open_agent_offer;
 					}
 				}
+
+				// <FS:Ansariel> Optional V1-like inventory accept messages
+				if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages"))
+				{
+					send_auto_receive_response();
+				}
+				// </FS:Ansariel> Optional V1-like inventory accept messages
 			}
 			break;
 		case IM_GROUP_NOTICE:
@@ -1639,6 +1673,12 @@ bool LLOfferInfo::inventory_offer_callback(const LLSD& notification, const LLSD&
 				opener = discard_agent_offer;
 			}
 			
+			// <FS:Ansariel> Optional V1-like inventory accept messages
+			if (gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages"))
+			{
+				send_decline_response();
+			}
+			// </FS:Ansariel> Optional V1-like inventory accept messages
 			
 			if (busy &&	(!mFromGroup && !mFromObject))
 			{
@@ -2088,7 +2128,14 @@ void inventory_offer_handler(LLOfferInfo* info)
 		}
 		
 		// In viewer 2 we're now auto receiving inventory offers and messaging as such (not sending reject messages).
-		info->send_auto_receive_response();
+		// <FS:Ansariel> Optional V1-like inventory accept messages
+		//info->send_auto_receive_response();
+		// Also needs to be send on auto-accept so the item gets into the inventory!
+		if (bAutoAccept || !gSavedSettings.getBOOL("FSUseLegacyInventoryAcceptMessages"))
+		{
+			info->send_auto_receive_response();
+		}
+		// </FS:Ansariel> Optional V1-like inventory accept messages
 
 		if( !bAutoAccept ) // Nicky D. if we auto accept, do not pester the user with stuff in the chicklet.
 		// Inform user that there is a script floater via toast system

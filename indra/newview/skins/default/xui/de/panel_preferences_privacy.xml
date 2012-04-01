@@ -18,6 +18,7 @@
 			<check_box label="Kamerafokus auch lokal nicht anzeigen" name="privateLocalLookat"/>
 			<check_box label="Auswahl Ziel nicht anzeigen" name="privatepointat"/>
 			<check_box label="Automatisches Akzeptieren von Inventar-Angeboten" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Klassische Annahme/Ablehnungs-Nachrichten für Inventar-Angebote verwenden" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Falls aktiviert, werden Annahme- bzw. Ablehnungs-Nachrichten erst verschickt, wenn der entsprechende Button angeklickt wurde. Falls deaktiviert, wird automatisch eine Annahme-Nachricht verschickt, sobald das angebotene Objekt im Inventar eingetroffen ist. Diese Option hat keinen Effekt, wenn Inventar-Angebote automatisch akzeptiert werden."/>
 			<check_box label="Automatisch empfangene Objekte im Inventar anzeigen" name="Show_In_Inventory"/>
 			<check_box label="Automatisch akzeptierte Notizkarten, Landmarken und Texturen anzeigen" name="Show_New_Inventory"/>
 			<check_box label="Partikeleffekte erzeugen, wenn Objekte an andere Avatare gegeben werden" name="FSCreateGiveInventoryParticleEffect"/>
