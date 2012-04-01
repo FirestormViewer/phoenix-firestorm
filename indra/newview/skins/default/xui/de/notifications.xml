@@ -2500,7 +2500,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		Ein Objekt namens &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; hat Ihnen folgende/n/s [OBJECTTYPE] übergeben:
 &lt;nolink&gt;[ITEM_SLURL]&lt;/nolink&gt;
 		<form name="form">
-			<button name="Keep" text="Beibehalten"/>
+			<button name="Keep" text="Behalten"/>
 			<button name="Discard" text="Verwerfen"/>
 		</form>
 	</notification>
@@ -2508,7 +2508,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		[NAME_SLURL] hat Ihnen folgendes [OBJECTTYPE] übergeben:
 [ITEM_SLURL]
 		<form name="form">
-			<button name="Show" text="Anzeigen"/>
+			<button name="Show" text="Annehmen"/>
 			<button name="Discard" text="Verwerfen"/>
 			<button name="Mute" text="Blockieren"/>
 		</form>
