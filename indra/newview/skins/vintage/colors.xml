@@ -15,6 +15,10 @@
 	<color
 		name="OldGray_63"
 		value="0.243 0.243 0.243 0.63" />
+	<!-- Default Opaque Floater Background Color -->
+	<color
+		name="DkGray"
+		value="0.242 0.242 0.242 1" />
 	<!-- Focused Text editors, scroll lists, notecards etc. -->
 	<color
 		name="UIControlBGLightFocused"
@@ -206,6 +210,9 @@
 	<color
 		name="TextBgWriteableColor"
 		value="0.729 0.765 0.745 1.0" />
+	<color
+		name="TextBgReadOnlyColor"
+		reference="DkGray" />
 	<!-- Username matches the computed display name -->
 	<color
 		name="NameTagMatch"
@@ -214,10 +221,6 @@
 	<color
 		name="NameTagMismatch"
 		reference="NameTagV1" />
-	<!-- Default Opaque Floater Background Color -->
-	<color
-		name="DkGray"
-		value="0.242 0.242 0.242 1" />
 	<!-- Floater title bar color, mostly used for sidebar related floaters -->
 	<color
 		name="TitleBarFocusColor"
@@ -243,4 +246,7 @@
 	<color
 		name="StatusUserOffline"
 		reference="LabelDisabledColor" />
+	<color
+		name="ChatTimestampColor"
+		value="0.5 0.5 0.5 1.0" />
 </colors>
