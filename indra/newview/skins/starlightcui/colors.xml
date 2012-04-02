@@ -599,6 +599,15 @@
      name="InventoryFocusOutlineColor"
      reference="White_25" />
     <color
+     name="InventoryItemEnabledColor"
+     reference="LtGray" />
+    <color
+     name="InventoryItemHighlightBgColor"
+     reference="EmphasisColor_35" />
+    <color
+     name="InventoryItemHighlightFgColor"
+     reference="White" />
+    <color
      name="InventoryItemSuffixColor"
      reference="White_25" />
     <color

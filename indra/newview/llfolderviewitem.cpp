@@ -948,9 +948,14 @@ BOOL LLFolderViewItem::handleDragAndDrop(S32 x, S32 y, MASK mask, BOOL drop,
 
 void LLFolderViewItem::draw()
 {
-	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
-	static LLUIColor sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
-	static LLUIColor sHighlightFgColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+	// <FS:Ansariel> Make inventory selection color independent from menu color
+	//static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", DEFAULT_WHITE);
+	//static LLUIColor sHighlightBgColor = LLUIColorTable::instance().getColor("MenuItemHighlightBgColor", DEFAULT_WHITE);
+	//static LLUIColor sHighlightFgColor = LLUIColorTable::instance().getColor("MenuItemHighlightFgColor", DEFAULT_WHITE);
+	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("InventoryItemEnabledColor", DEFAULT_WHITE);
+	static LLUIColor sHighlightBgColor = LLUIColorTable::instance().getColor("InventoryItemHighlightBgColor", DEFAULT_WHITE);
+	static LLUIColor sHighlightFgColor = LLUIColorTable::instance().getColor("InventoryItemHighlightFgColor", DEFAULT_WHITE);
+	// <FS:Ansariel> Make inventory selection color independent from menu color
 	static LLUIColor sFocusOutlineColor = LLUIColorTable::instance().getColor("InventoryFocusOutlineColor", DEFAULT_WHITE);
 	static LLUIColor sFilterBGColor = LLUIColorTable::instance().getColor("FilterBackgroundColor", DEFAULT_WHITE);
 	static LLUIColor sFilterTextColor = LLUIColorTable::instance().getColor("FilterTextColor", DEFAULT_WHITE);
