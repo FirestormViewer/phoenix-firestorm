@@ -694,9 +694,6 @@ class WindowsManifest(ViewerManifest):
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
 
         #AO: Try to package up symbols
-        symbolArchiveFilename="Phoenix_Firestorm_%(version_dashes)s_WinSymbols.zip"
-
-        print "Working directory: %s" % os.getcwd()
         symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
         symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
         symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
