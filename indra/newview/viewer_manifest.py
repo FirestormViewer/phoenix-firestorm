@@ -36,6 +36,7 @@ import random
 import os
 import shlex
 import subprocess
+import zipfile
 #/AO
 
 viewer_dir = os.path.dirname(__file__)
@@ -691,6 +692,18 @@ class WindowsManifest(ViewerManifest):
         except Exception, e:
             print "Working directory: %s" % os.getcwd()
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
+
+        #AO: Try to package up symbols
+        symbolArchiveFilename="Phoenix_Firestorm_%(version_dashes)s_WinSymbols.zip"
+
+        print "Working directory: %s" % os.getcwd()
+        symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
+        symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
+        symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
+        symbolZip.write("../sharedlibs/%s/llcommon.dll" % self.args['configuration'].lower(),"llcommon.dll")
+        symbolZip.write("../sharedlibs/%s/llcommon.pdb" % self.args['configuration'].lower(),"llcommon.pdb")
+        symbolZip.close()
+
 
 
 # If we're on a build machine, sign the code using our Authenticode certificate. JC
