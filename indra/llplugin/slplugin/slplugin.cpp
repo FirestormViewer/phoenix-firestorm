@@ -99,30 +99,37 @@ BOOL PreventSetUnhandledExceptionFilter()
 // WARNING: This won't work on 64-bit Windows systems so we turn it off it.
 //          It should work for any flavor of 32-bit Windows we care about.
 //          If it's off, sometimes you will see an OS message when a plugin crashes
-#ifndef _WIN64
-	HMODULE hKernel32 = LoadLibraryA( "kernel32.dll" );
-	if ( NULL == hKernel32 )
-		return FALSE;
 
-	void *pOrgEntry = GetProcAddress( hKernel32, "SetUnhandledExceptionFilter" );
-	if( NULL == pOrgEntry )
-		return FALSE;
+// <FS:ND> Just say no to screwing around with WriteProcessMemory. It is likely one of the top reasons why antivirus software dislikes SLPlugin so much
 
-	unsigned char newJump[ 100 ];
-	DWORD dwOrgEntryAddr = (DWORD)pOrgEntry;
-	dwOrgEntryAddr += 5; // add 5 for 5 op-codes for jmp far
-	void *pNewFunc = &MyDummySetUnhandledExceptionFilter;
-	DWORD dwNewEntryAddr = (DWORD) pNewFunc;
-	DWORD dwRelativeAddr = dwNewEntryAddr - dwOrgEntryAddr;
+// #ifndef _WIN64
+// 	HMODULE hKernel32 = LoadLibraryA( "kernel32.dll" );
+// 	if ( NULL == hKernel32 )
+// 		return FALSE;
+//
+// 	void *pOrgEntry = GetProcAddress( hKernel32, "SetUnhandledExceptionFilter" );
+// 	if( NULL == pOrgEntry )
+// 		return FALSE;
+//
+// 	unsigned char newJump[ 100 ];
+// 	DWORD dwOrgEntryAddr = (DWORD)pOrgEntry;
+// 	dwOrgEntryAddr += 5; // add 5 for 5 op-codes for jmp far
+// 	void *pNewFunc = &MyDummySetUnhandledExceptionFilter;
+// 	DWORD dwNewEntryAddr = (DWORD) pNewFunc;
+// 	DWORD dwRelativeAddr = dwNewEntryAddr - dwOrgEntryAddr;
+//
+// 	newJump[ 0 ] = 0xE9;  // JMP absolute
+// 	memcpy( &newJump[ 1 ], &dwRelativeAddr, sizeof( pNewFunc ) );
+// 	SIZE_T bytesWritten;
+// 	BOOL bRet = WriteProcessMemory( GetCurrentProcess(), pOrgEntry, newJump, sizeof( pNewFunc ) + 1, &bytesWritten );
+// 	return bRet;
+// #else
+// 	return FALSE;
+// #endif
+	
+	return TRUE;
 
-	newJump[ 0 ] = 0xE9;  // JMP absolute
-	memcpy( &newJump[ 1 ], &dwRelativeAddr, sizeof( pNewFunc ) );
-	SIZE_T bytesWritten;
-	BOOL bRet = WriteProcessMemory( GetCurrentProcess(), pOrgEntry, newJump, sizeof( pNewFunc ) + 1, &bytesWritten );
-	return bRet;
-#else
-	return FALSE;
-#endif
+// </FS:ND>
 }
 
 ////////////////////////////////////////////////////////////////////////////////
