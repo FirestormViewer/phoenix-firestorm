@@ -614,13 +614,13 @@
      reference="BrickBrown" />
     <color
      name="MenuBarBgColor"
-     reference="DkGray" />
+     reference="DkGray_86" />
     <color
      name="MenuBarGodBgColor"
      reference="FrogGreen" />
     <color
      name="MenuDefaultBgColor"
-     reference="DkGray2" />
+     reference="DkGray_86" />
     <color
      name="MenuItemDisabledColor"
 	 reference="LtGray_50" />
@@ -683,7 +683,7 @@
 <!-- Changed Color -->
     <color
      name="NetMapBackgroundColor"
-     reference="Black_25" />
+     reference="Black_10" />
     <color
      name="NotifyBoxColor"
      reference="LtGray" />
