@@ -65,7 +65,7 @@
 	<check_box label="Zeige Skript-Dialoge auf undurchsichtigem Hintergrund" name="FSScriptDialogNoTransparency"/>
 	<check_box name="FSGroupNotifyNoTransparency" label="Zeige Gruppenmitteilungen auf undurchsichtigem Hintergrund"/>
 	<check_box label="Hintergrundfarbe und Deckkraft des Pie-Menüs übersteuern" name="override_pie_color_checkbox"/>
-	<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü -intergrundfarbe"/>
+	<color_swatch name="pie_bg_color_override" tool_tip="Wähle die Pie-Menü-Hintergrundfarbe"/>
 	<color_swatch name="pie_selected_color_override" tool_tip="Wähle die Pie-Menü-Farbe"/>
 	<slider label="Deckkraft:" name="pie_menu_opacity" tool_tip="Wähle die Deckkraft des Pie-Menüs"/>
 	<slider label="Ausblenden:" name="pie_menu_fade_out" tool_tip="Wähle die Höhe der Durchsichtigkeit des Pie-Menüs"/>
