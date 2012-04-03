@@ -14,6 +14,7 @@
 			<check_box label="Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe" name="voice_call_friends_only_check"/>
 			<check_box label="Wyłącz mikrofon po zakończeniu rozmowy głosowej" name="auto_disengage_mic_check"/>
 			<check_box label="Automatycznie akceptuj nowe przedmioty" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Klasyczne powiadomienia akceptacji/odrzucenia przedmiotu" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Gdy włączysz tą opcję, to Przeglądarka będzie wysyłać powiadomienia o akceptacji/odrzuceniu przedmiotu tylko po naciśnięciu odpowiedniego przycisku. Gdy wyłączysz tą opcję, to powiadomienie będzie wysłane automatycznie zaraz po tym, gdy przedmiot zostanie zaakceptowany. Ta opcja nie ma żadnej mocy, gdy przedmioty są akceptowane automatycznie."/>
 			<check_box label="Automatycznie pokazuj akceptowane przedmioty" name="Show_In_Inventory"/>
 			<check_box label="Automatycznie pokazuj noty, tekstury i landmarki po zaakceptowaniu" name="Show_New_Inventory"/>
 			<check_box label="Twórz efekty cząsteczkowe, gdy dam jakiś przedmiot innej osobie" name="FSCreateGiveInventoryParticleEffect"/>
