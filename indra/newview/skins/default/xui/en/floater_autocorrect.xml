@@ -8,6 +8,7 @@
  height="390"
  width="540"
  name="autocorrect"
+ help_topic="fs_auto_correct"
  title="Autocorrect Settings">
  
 <panel
