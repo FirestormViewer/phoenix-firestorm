@@ -119,10 +119,7 @@ class LLChatHistory : public LLUICtrl
 		 */
 		void appendMessage(const LLChat& chat, const LLSD &args = LLSD(), const LLStyle::Params& input_append_params = LLStyle::Params());
 		/*virtual*/ void clear();
-//-TT Display names timing in chat
-		void lookupDisplayNames(const LLChat& chat);
-		bool checkDisplayName();
-//-TT
+
 	private:
 		std::string mLastFromName;
 		LLUUID mLastFromID;
