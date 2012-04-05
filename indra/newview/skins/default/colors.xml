@@ -1027,6 +1027,11 @@
      name="StatusUserOffline"
      reference="BrightRed" />
 
+	<!-- Groups visible in profiles -->
+	<color
+	 name="ProfileGroupVisible"
+	 reference="EmphasisColor" />
+	 
     <!-- Generic color names (legacy) -->
   <color
     name="white"

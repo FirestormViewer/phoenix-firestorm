@@ -186,7 +186,9 @@ void LLGroupList::refresh()
 		const LLGroupData& group_data = gAgent.mGroups.get(i);
 		if (have_filter && !findInsensitive(group_data.mName, mNameFilter))
 			continue;
-		addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM);
+		// <FS:Ansariel> Mark groups shown in profile
+		//addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM);
+		addNewItem(id, group_data.mName, group_data.mInsigniaID, ADD_BOTTOM, group_data.mListInProfile);
 	}
 
 	// Sort the list.
@@ -244,7 +246,9 @@ void LLGroupList::setGroups(const std::map< std::string,LLUUID> group_list)
 // PRIVATE Section
 //////////////////////////////////////////////////////////////////////////
 
-void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos)
+// <FS:Ansariel> Mark groups shown in profile
+//void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos)
+void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos, bool markProfileVisible)
 {
 	LLGroupListItem* item = new LLGroupListItem(mForAgent && mShowIcons);
 
@@ -255,6 +259,13 @@ void LLGroupList::addNewItem(const LLUUID& id, const std::string& name, const LL
 	item->getChildView("info_btn")->setVisible( false);
 	item->getChildView("profile_btn")->setVisible( false);
 	item->setGroupIconVisible(mShowIcons);
+
+	// <FS:Ansariel> Mark groups shown in profile
+	if (markProfileVisible)
+	{
+		item->markProfileVisible();
+	}
+	// </FS:Ansariel> Mark groups shown in profile
 
 	addItem(item, id, pos);
 
@@ -436,6 +447,13 @@ void LLGroupListItem::setGroupIconVisible(bool visible)
 	name_rect.mLeft += visible ? sIconWidth : -sIconWidth;
 	mGroupNameBox->setRect(name_rect);
 }
+
+// <FS:Ansariel> Mark groups shown in profile
+void LLGroupListItem::markProfileVisible()
+{
+	mGroupNameBox->setColor(LLUIColorTable::instance().getColor("ProfileGroupVisible", LLColor4::white).get());
+}
+// </FS:Ansariel> Mark groups shown in profile
 
 //////////////////////////////////////////////////////////////////////////
 // Private Section
