@@ -781,9 +781,12 @@ void LLChatHistory::lookupDisplayNames(const LLChat& chat)
 	// resolve display names if necessary		
 	if (gSavedSettings.getBOOL("UseDisplayNames"))
 	{
-		mDisplayName=chat.mFromName;
-		mDisplayName_Username=chat.mFromName;
-		LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
+		if (chat.mSourceType == CHAT_SOURCE_AGENT)
+		{
+			mDisplayName=chat.mFromName;
+			mDisplayName_Username=chat.mFromName;
+			LLAvatarNameCache::get(chat.mFromID,boost::bind(&LLChatHistory::onAvatarNameCache, this, _1, _2));
+		}
 	}
 }
 //-TT
