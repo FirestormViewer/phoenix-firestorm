@@ -28,6 +28,7 @@
 #define LL_LLFLOATERTOPOBJECTS_H
 
 #include "llfloater.h"
+#include "llavatarname.h"
 
 class LLUICtrl;
 
@@ -68,7 +69,15 @@ private:
 	void onDisableAll();
 	void onDisableSelected();
 
+	// <FS:Ansariel> TP to object
 	void onTeleportToObject();
+	// <FS:Ansariel> Estate kick avatar
+	void onKick();
+	// <FS:Ansariel> Show profile
+	void onProfile();
+
+	// <FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar
+	void onAvatarCheck(const LLUUID& avatar_id, const LLAvatarName av_name);
 
 	static bool callbackReturnAll(const LLSD& notification, const LLSD& response);
 	static bool callbackDisableAll(const LLSD& notification, const LLSD& response);

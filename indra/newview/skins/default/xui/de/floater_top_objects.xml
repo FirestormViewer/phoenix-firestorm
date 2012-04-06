@@ -55,6 +55,8 @@
 	<button label="Auswahl zurückgeben" name="return_selected_btn" width="134"/>
 	<button label="Alle zurückgeben" left="150" name="return_all_btn" width="134"/>
 	<button label="Teleportieren zu" left="150" name="teleport_to_btn" width="134"/>
+	<button label="Profil" left="150" name="profile_btn" width="134"/>
 	<button label="Auswahl deaktivieren" name="disable_selected_btn" width="134"/>
 	<button label="Alle deaktivieren" left="150" name="disable_all_btn" width="134"/>
+	<button label="Estate: Hinauswerfen" left="150" name="estate_kick_btn" width="134"/>
 </floater>

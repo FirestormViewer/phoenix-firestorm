@@ -51,6 +51,8 @@
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 
+#include "llavataractions.h"
+
 //LLFloaterTopObjects* LLFloaterTopObjects::sInstance = NULL;
 
 // Globals
@@ -83,7 +85,13 @@ LLFloaterTopObjects::LLFloaterTopObjects(const LLSD& key)
 	mCommitCallbackRegistrar.add("TopObjects.GetByObjectName",	boost::bind(&LLFloaterTopObjects::onGetByObjectName, this));
 	mCommitCallbackRegistrar.add("TopObjects.GetByOwnerName",	boost::bind(&LLFloaterTopObjects::onGetByOwnerName, this));
 	mCommitCallbackRegistrar.add("TopObjects.CommitObjectsList",boost::bind(&LLFloaterTopObjects::onCommitObjectsList, this));
+
+	// <FS:Ansariel> TP to object
 	mCommitCallbackRegistrar.add("TopObjects.TeleportToObject",	boost::bind(&LLFloaterTopObjects::onTeleportToObject, this));
+	// <FS:Ansariel> Estate kick avatar
+	mCommitCallbackRegistrar.add("TopObjects.Kick",				boost::bind(&LLFloaterTopObjects::onKick, this));
+	// <FS:Ansariel> Show profile
+	mCommitCallbackRegistrar.add("TopObjects.Profile",			boost::bind(&LLFloaterTopObjects::onProfile, this));
 }
 
 LLFloaterTopObjects::~LLFloaterTopObjects()
@@ -292,6 +300,24 @@ void LLFloaterTopObjects::updateSelectionInfo()
 
 	LLUUID object_id = list->getCurrentID();
 	if (object_id.isNull()) return;
+
+	// <FS:Ansariel> Use the avatar name cache to determine if selected object
+	//     is an avatar or object and enable avatar-specific buttons
+	//     accordingly.
+	LLAvatarName av_name;
+	if (LLAvatarNameCache::get(object_id, &av_name))
+	{
+		bool isAvatar = !av_name.mIsTemporaryName;
+		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
+		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
+	}
+	else
+	{
+		getChild<LLButton>("profile_btn")->setEnabled(FALSE);
+		getChild<LLButton>("estate_kick_btn")->setEnabled(FALSE);
+		LLAvatarNameCache::get(object_id, boost::bind(&LLFloaterTopObjects::onAvatarCheck, this, _1, _2));
+	}
+	// </FS:Ansariel>
 
 	std::string object_id_string = object_id.asString();
 
@@ -502,6 +528,7 @@ void LLFloaterTopObjects::showBeacon()
 	LLTracker::trackLocation(pos_global, name, tooltip, LLTracker::LOCATION_ITEM);
 }
 
+// </FS:Ansariel> TP to object
 void LLFloaterTopObjects::onTeleportToObject()
 {
 	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("objects_list");
@@ -521,3 +548,50 @@ void LLFloaterTopObjects::onTeleportToObject()
 
 	gAgent.teleportViaLocation(pos_global);
 }
+// </FS:Ansariel> TP to object
+
+// <FS:Ansariel> Estate kick avatar
+void LLFloaterTopObjects::onKick()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("objects_list");
+	if (!list) return;
+
+	LLScrollListItem* first_selected = list->getFirstSelected();
+	if (!first_selected) return;
+
+	const LLUUID& objectId = first_selected->getUUID();
+	LLAvatarActions::estateKick(objectId);
+}
+// </FS:Ansariel> Estate kick avatar
+
+// <FS:Ansariel> Show profile
+void LLFloaterTopObjects::onProfile()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("objects_list");
+	if (!list) return;
+
+	LLScrollListItem* first_selected = list->getFirstSelected();
+	if (!first_selected) return;
+
+	const LLUUID& objectId = first_selected->getUUID();
+	LLAvatarActions::showProfile(objectId);
+}
+// </FS:Ansariel> Show profile
+
+// <FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar
+void LLFloaterTopObjects::onAvatarCheck(const LLUUID& avatar_id, LLAvatarName av_name)
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("objects_list");
+	if (!list) return;
+
+	LLScrollListItem* first_selected = list->getFirstSelected();
+	if (!first_selected) return;
+
+	if (first_selected->getUUID() == avatar_id)
+	{
+		bool isAvatar = !av_name.mIsTemporaryName;
+		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
+		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
+	}
+}
+// </FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar

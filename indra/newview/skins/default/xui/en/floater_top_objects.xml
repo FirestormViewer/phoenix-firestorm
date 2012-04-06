@@ -242,6 +242,19 @@
           function="TopObjects.TeleportToObject" />
     </button>
     <button
+     enabled="false"
+     follows="bottom|left"
+     height="23"
+     label="Profile"
+     layout="topleft"
+     left_pad="10"
+     name="profile_btn"
+     top_delta="0"
+     width="130">
+      <button.commit_callback
+          function="TopObjects.Profile" />
+    </button>
+    <button
      follows="bottom|left"
      height="23"
      label="Disable Selected"
@@ -264,5 +277,18 @@
      width="130">
       <button.commit_callback
           function="TopObjects.DisableAll" />
+    </button>
+    <button
+     enabled="false"
+     follows="bottom|left"
+     height="23"
+     label="Estate Kick"
+     layout="topleft"
+     left_pad="10"
+     name="estate_kick_btn"
+     top_delta="0"
+     width="130">
+      <button.commit_callback
+          function="TopObjects.Kick" />
     </button>
 </floater>
