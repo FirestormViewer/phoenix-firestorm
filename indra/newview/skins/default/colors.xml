@@ -1029,7 +1029,7 @@
 
 	<!-- Groups visible in profiles -->
 	<color
-	 name="ProfileGroupVisible"
+	 name="GroupHiddenInProfile"
 	 reference="EmphasisColor" />
 	 
     <!-- Generic color names (legacy) -->

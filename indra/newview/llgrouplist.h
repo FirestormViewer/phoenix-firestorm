@@ -69,9 +69,9 @@ public:
 private:
 	void setDirty(bool val = true)		{ mDirty = val; }
 	void refresh();
-	// <FS:Ansariel> Mark groups shown in profile
+	// <FS:Ansariel> Mark groups hidden in profile
 	//void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM);
-	void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool markProfileVisible = false);
+	void addNewItem(const LLUUID& id, const std::string& name, const LLUUID& icon_id, EAddPosition pos = ADD_BOTTOM, bool hiddenInProfile = false);
 	bool handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& userdata); // called on agent group list changes
 
 	bool onContextMenuItemClick(const LLSD& userdata);
@@ -114,8 +114,8 @@ public:
 
 	virtual void changed(LLGroupChange gc);
 
-	// <FS:Ansariel> Mark groups shown in profile
-	void markProfileVisible();
+	// <FS:Ansariel> Mark groups hidden in profile
+	void markHiddenInProfile();
 private:
 	void setActive(bool active);
 	void onInfoBtnClick();
