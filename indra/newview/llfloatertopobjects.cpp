@@ -52,6 +52,7 @@
 #include "llviewerwindow.h"
 
 #include "llavataractions.h"
+#include "llviewercontrol.h"
 
 //LLFloaterTopObjects* LLFloaterTopObjects::sInstance = NULL;
 
@@ -92,6 +93,8 @@ LLFloaterTopObjects::LLFloaterTopObjects(const LLSD& key)
 	mCommitCallbackRegistrar.add("TopObjects.Kick",				boost::bind(&LLFloaterTopObjects::onKick, this));
 	// <FS:Ansariel> Show profile
 	mCommitCallbackRegistrar.add("TopObjects.Profile",			boost::bind(&LLFloaterTopObjects::onProfile, this));
+	// <FS:Ansariel> Script info
+	mCommitCallbackRegistrar.add("TopObjects.ScriptInfo",		boost::bind(&LLFloaterTopObjects::onScriptInfo, this));
 }
 
 LLFloaterTopObjects::~LLFloaterTopObjects()
@@ -595,3 +598,17 @@ void LLFloaterTopObjects::onAvatarCheck(const LLUUID& avatar_id, LLAvatarName av
 	}
 }
 // </FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar
+
+// <FS:Ansariel> Script info
+void LLFloaterTopObjects::onScriptInfo()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("objects_list");
+	if (!list) return;
+
+	LLScrollListItem* first_selected = list->getFirstSelected();
+	if (!first_selected) return;
+
+	const LLUUID& objectId = first_selected->getUUID();
+	LLAvatarActions::getScriptInfo(objectId);
+}
+// </FS:Ansariel> Script info

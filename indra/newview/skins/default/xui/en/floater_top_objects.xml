@@ -8,11 +8,11 @@
  min_width="450"
  name="top_objects"
  help_topic="top_objects"
- title="Top Objects"
+ title="TOP OBJECTS"
  width="800">
     <floater.string
      name="top_scripts_title">
-        Top Scripts
+        TOP SCRIPTS
     </floater.string>
     <floater.string
      name="top_scripts_text">
@@ -28,7 +28,7 @@
     </floater.string>
     <floater.string
      name="top_colliders_title">
-        Top Colliders
+        TOP COLLIDERS
     </floater.string>
     <floater.string
      name="top_colliders_text">
@@ -277,6 +277,19 @@
      width="130">
       <button.commit_callback
           function="TopObjects.DisableAll" />
+    </button>
+    <button
+     enabled_control="UseLSLBridge"
+     follows="bottom|left"
+     height="23"
+     label="Script Info"
+     layout="topleft"
+     left_pad="10"
+     name="script_info_btn"
+     top_delta="0"
+     width="130">
+      <button.commit_callback
+          function="TopObjects.ScriptInfo" />
     </button>
     <button
      enabled="false"

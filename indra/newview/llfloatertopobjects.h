@@ -75,6 +75,8 @@ private:
 	void onKick();
 	// <FS:Ansariel> Show profile
 	void onProfile();
+	// <FS:Ansariel> Script info
+	void onScriptInfo();
 
 	// <FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar
 	void onAvatarCheck(const LLUUID& avatar_id, const LLAvatarName av_name);

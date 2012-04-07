@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="Top-Objekte">
+<floater name="top_objects" title="TOP-OBJEKTE">
 	<floater.string name="top_scripts_title">
-		Top-Skripts
+		TOP-SKRIPTE
 	</floater.string>
 	<floater.string name="top_scripts_text">
 		[COUNT] Skripts benötigen insgesamt [TIME] ms
@@ -13,7 +13,7 @@
 		Mono-Uhrzeit:
 	</floater.string>
 	<floater.string name="top_colliders_title">
-		Top-Kollisionsobjekte
+		TOP-KOLLISIONSOBJEKTE
 	</floater.string>
 	<floater.string name="top_colliders_text">
 		Top [COUNT] Objekte mit vielen potenziellen Kollisionen
@@ -58,5 +58,6 @@
 	<button label="Profil" left="150" name="profile_btn" width="134"/>
 	<button label="Auswahl deaktivieren" name="disable_selected_btn" width="134"/>
 	<button label="Alle deaktivieren" left="150" name="disable_all_btn" width="134"/>
+	<button label="Skript-Info" left="150" name="script_info_btn" width="134"/>
 	<button label="Estate: Hinauswerfen" left="150" name="estate_kick_btn" width="134"/>
 </floater>
