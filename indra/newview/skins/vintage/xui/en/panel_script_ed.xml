@@ -158,6 +158,7 @@
      max_length="65536"
      name="Script Editor"
      text_readonly_color="DkGray"
+     bg_readonly_color="TextBgWriteableColor"
      show_line_numbers="true" 
      width="487"
      word_wrap="true">
