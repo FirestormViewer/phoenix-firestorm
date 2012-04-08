@@ -66,7 +66,7 @@
 			Vista Normal
 		</text>
 	</panel>
-	<check_box label="Convertir este valor predefinido en mi nueva configuración de agua" name="make_default_cb"/>
+	<check_box label="Convertir en mi nueva configuración de agua" name="make_default_cb" left="190"/>
 	<button label="Guardar" name="save"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>

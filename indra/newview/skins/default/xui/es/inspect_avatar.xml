@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!--
-  Not can_close / no title to avoid window chrome
-  Single instance - only have one at a time, recycle it each spawn
--->
 <floater name="inspect_avatar">
 	<string name="Subtitle">
 		[AGE]
@@ -13,8 +9,8 @@
 	<text name="user_details">
 		Ésta es mi descripción de Second Life que, por cierto, me encanta. Pero, por lo que sea, me he enrollado más de la cuenta y la descripción es larguísima.
 	</text>
-	<slider name="volume_slider" tool_tip="Volumen de la voz" value="0.5"/>
-	<button label="Añadir como amigo" name="add_friend_btn"/>
+	<slider name="volume_slider" tool_tip="Volumen de la voz"/>
+	<button label="Ofrecer amistad" name="add_friend_btn"/>
 	<button label="MI" name="im_btn"/>
 	<button label="Perfil" name="view_profile_btn"/>
 	<panel name="moderator_panel">

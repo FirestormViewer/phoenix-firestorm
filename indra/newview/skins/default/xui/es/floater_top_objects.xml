@@ -4,7 +4,7 @@
 		Scripts según su uso
 	</floater.string>
 	<floater.string name="top_scripts_text">
-		[COUNT] scripts con un total de [TIME] ms
+		[COUNT] scripts usando un total de [TIME] ms
 	</floater.string>
 	<floater.string name="scripts_score_label">
 		Tiempo
@@ -39,7 +39,7 @@
 	<text name="id_text">
 		ID del objeto:
 	</text>
-	<button label="Mostrar la baliza" name="show_beacon_btn"/>
+	<button label="Mostrar baliza" name="show_beacon_btn"/>
 	<text name="obj_name_text">
 		Nombre del objeto:
 	</text>
@@ -50,7 +50,11 @@
 	<button label="Filtro" name="filter_owner_btn"/>
 	<button label="Actualizar" name="refresh_btn"/>
 	<button label="Devolver lo seleccionado" name="return_selected_btn" width="170"/>
-	<button label="Devolver todo" left="190" name="return_all_btn"/>
+	<button label="Devolver todo" left="190" width="110" name="return_all_btn"/>
+	<button label="Teleportarse" name="teleport_to_btn" width="110" />
+	<button label="Perfil" name="profile_btn"/>
 	<button label="Desactivar lo seleccionado" name="disable_selected_btn" width="170"/>
-	<button label="Desactivar todo" left="190" name="disable_all_btn"/>
+	<button label="Desactivar todo" left="190" width="110" name="disable_all_btn"/>
+	<button label="Info scripts" name="script_info_btn" width="110"/>
+	<button label="Expulsar del Estado" name="estate_kick_btn"/>
 </floater>

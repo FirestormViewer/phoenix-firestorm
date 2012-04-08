@@ -130,14 +130,14 @@
 			<text name="WLCloudScrollXText">
 				Velocidad de las nubes: X
 			</text>
-			<check_box label="Lock" name="WLCloudLockX"/>
+			<check_box label="Bloquear" name="WLCloudLockX"/>
 			<text name="WLCloudScrollYText">
 				Velocidad de las nubes: Y
 			</text>
-			<check_box label="Lock" name="WLCloudLockY"/>
+			<check_box label="Bloquear" name="WLCloudLockY"/>
 		</panel>
 	</tab_container>
-	<check_box label="Convertir este valor predefinido en mi nueva configuración de cielo" name="make_default_cb"/>
+	<check_box label="Convertir en mi nueva configuración de cielo" name="make_default_cb"/>
 	<button label="Guardar" name="save"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>

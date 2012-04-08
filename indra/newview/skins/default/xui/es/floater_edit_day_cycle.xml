@@ -10,24 +10,24 @@
 		Asigna un nombre al ciclo de día, ajusta los controles para crearlo y selecciona &quot;Guardar&quot;.
 	</string>
 	<string name="hint_edit">
-		Para editar el ciclo de día, ajusta los controles siguientes y selecciona &quot;Guardar&quot;.
+		Para editar el ciclo de día, ajusta los controles siguientes y selecciona "Guardar".
 	</string>
 	<string name="combo_label">
 		-Selecciona un valor predefinido-
 	</string>
-	<text name="label">
+	<text name="label" width="122">
 		Nombre predefinido:
 	</text>
 	<text name="note">
 		Nota: Si cambias el nombre del valor predefinido, crearás un predefinido nuevo y el actual no se modificará.
 	</text>
-	<text name="hint_item1">
+	<text name="hint_item1" width="500">
 		- Pulsa en una pestaña para editar la configuración y el tiempo de un cielo determinado.
 	</text>
-	<text name="hint_item2">
+	<text name="hint_item2" width="500">
 		- Pulsa y arrastra las pestañas para ajustar los tiempos de transición.
 	</text>
-	<text name="hint_item3">
+	<text name="hint_item3" width="500">
 		- Usa el depurador para obtener una vista previa del ciclo de día.
 	</text>
 	<panel name="day_cycle_slider_panel">
@@ -90,8 +90,8 @@
 			|
 		</text>
 	</panel>
-	<text name="WLCurKeyPresetText">
-		Configuración del cielo:
+	<text name="WLCurKeyPresetText" left_delta="134" width="134">
+		Configuración de cielo:
 	</text>
 	<combo_box label="Predefinido" name="WLSkyPresets"/>
 	<text name="WLCurKeyTimeText">
