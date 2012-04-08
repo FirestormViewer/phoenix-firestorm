@@ -210,6 +210,7 @@ private:
 	LLUUID mNotificationId;
 	LLUUID mObjectId;
 	bool mSaveFloaterPosition;
+	bool mNoTransparency;
 };
 
 #endif //LL_SCRIPTFLOATER_H

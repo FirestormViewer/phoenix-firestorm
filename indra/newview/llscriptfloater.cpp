@@ -69,6 +69,7 @@ LLScriptFloater::LLScriptFloater(const LLSD& key)
 	setMouseDownCallback(boost::bind(&LLScriptFloater::onMouseDown, this));
 	setOverlapsScreenChannel(true);
 	mIsDockedStateForcedCallback = boost::bind(&LLAgentCamera::cameraMouselook, &gAgentCamera);
+	mNoTransparency = gSavedSettings.getBOOL("FSScriptDialogNoTransparency");
 }
 
 bool LLScriptFloater::toggle(const LLUUID& notification_id)
@@ -304,7 +305,7 @@ void LLScriptFloater::restorePosition()
 // always on opaque background.
 F32 LLScriptFloater::getCurrentTransparency()
 {
-	if (gSavedSettings.getBOOL("FSScriptDialogNoTransparency"))
+	if (mNoTransparency)
 	{
 		return 1.0;
 	}
