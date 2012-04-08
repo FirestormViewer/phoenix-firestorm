@@ -14,7 +14,7 @@
         <text name="tooltip_textbox">
            Pojawianie się chmurek po:
         </text>
-        <slider label="Podpowiedzi:" name="ToolTipDelay_slider" tool_tip="Opóźnienie dla chmurek pojawiających się po wskazaniu elementów interfejsu takich, jak przyciski (domyślnie: 0.7)." />
+        <slider label="Podpow.:" name="ToolTipDelay_slider" tool_tip="Opóźnienie dla chmurek podpowiedzi pojawiających się po wskazaniu elementów interfejsu takich, jak przyciski (domyślnie: 0.7)." />
         <text name="ToolTipDelay_text">
             sek.
         </text>
@@ -37,7 +37,7 @@
             <combo_box.item label="Nieograniczone" name="ScriptDialogOption_2" />
         </combo_box>
         <check_box label="Skrypty w prawym górnym rogu" name="ShowScriptDialogsTopRight" tool_tip="Zaznacz, aby przenieść komunikaty skryptów w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)." />
-        <check_box label="Ikonki i ogł. grup w pr. górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
+        <check_box label="Ikony i ogł. grup w prawym górnym rogu" name="ShowGroupNoticesTopRight" tool_tip="Zaznacz, aby przenieść ogłoszenia grup oraz inne ikonki w prawy górny narożnik ekranu (klasyczne zachowanie 1.x)" />
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
         </text>
@@ -49,7 +49,7 @@
         <text name="ToastSettings">
             Ustawienia powiadomień (popupy, konsola, tosty):
         </text>
-        <slider label="Odstęp między najniższym tostem i spodem UI:" tool_tip="Odstęp w pikselach pomiędzy spodem interfejsu użytkownika, a dolnym tostem (miejsce na tosty)" name="ToastSpace" />
+        <slider label="Między najniższym tostem i spodem UI:" tool_tip="Odstęp w pikselach pomiędzy spodem interfejsu użytkownika, a dolnym tostem (miejsce na tosty)" name="ToastSpace" />
         <text name="ToastSpaceText">
             pikseli
         </text>

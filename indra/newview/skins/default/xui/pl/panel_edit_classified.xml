@@ -34,7 +34,7 @@
 			<text name="content_type_label" value="Typ zawartości:"/>
 			<icons_combo_box label="Treść General" name="content_type">
 				<icons_combo_box.item label="Treść Moderate" name="mature_ci"/>
-				<icons_combo_box.item label="Treść General" name="pg_ci" >
+				<icons_combo_box.item label="Treść General" name="pg_ci"/>
 			</icons_combo_box>
 			<check_box label="Ponawiaj automatycznie co tydzień" name="auto_renew"/>
 			<text name="price_for_listing_label" value="Cena za wyświetlenie:"/>

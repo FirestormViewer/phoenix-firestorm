@@ -2034,7 +2034,7 @@ Spróbuj zalogować się ponownie za minutę.
 		(zostanie zaktualizowane po publikacji)
 	</string>
 	<string name="NoPicksClassifiedsText">
-		Nie dodałeś nic do Ulubionych i Reklam. Kliknij na poniższy przycisk Plus, aby dodać miejsce do Ulubionych lub Reklam.
+		Nie dodałeś/aś nic do Ulubionych i Reklam. Kliknij na przycisk + poniżej, aby dodać miejsce do Ulubionych lub Reklam.
 	</string>
 	<string name="NoAvatarPicksClassifiedsText">
 		Brak ulubionych miejsc/reklam
@@ -4497,7 +4497,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Minimapa
 	</string>
 	<string name="Command_Move_Label">
-		Ruch / bieg / lot
+		Ruch
 	</string>
 	<string name="Command_Outbox_Label">
 		Skrzynka nadawcza kupca
@@ -4506,10 +4506,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Ludzie
 	</string>
 	<string name="Command_Picks_Label">
-		Ulubione miejsca
+		Miejsca
 	</string>
 	<string name="Command_Places_Label">
-		Miejsca
+		Landmarki
 	</string>
 	<string name="Command_Preferences_Label">
 		Preferencje
@@ -4527,7 +4527,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Głos
 	</string>
 	<string name="Command_View_Label">
-		Sterowanie kamerą
+		Kamera
 	</string>
 	<string name="Command_Voice_Label">
 		Głos w pobliżu
@@ -4605,7 +4605,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Miejsca, które są pokazywane jako ulubione w Twoim profilu
 	</string>
 	<string name="Command_Places_Tooltip">
-		Miejsca zapisane przez Ciebie
+		Miejsca (landmarki) zapisane przez Ciebie
 	</string>
 	<string name="Command_Preferences_Tooltip">
 		Ustawienia
