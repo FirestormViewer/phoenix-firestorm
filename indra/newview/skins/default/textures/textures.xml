@@ -690,6 +690,7 @@ with the same filename but different name
   <texture name="areasearch" file_name="toolbar_icons/areasearch.png" preload="true" />
   <texture name="settings_debug" file_name="toolbar_icons/settings_debug.png" preload="true" />
   <texture name="statistics" file_name="toolbar_icons/statistics.png" preload="true" />
+  <texture name="regioninfo" file_name="toolbar_icons/region.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />

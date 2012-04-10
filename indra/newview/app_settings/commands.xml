@@ -334,4 +334,15 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="stats"
            />
+
+  <command name="regioninfo"
+           available_in_toybox="true"
+           icon="regioninfo"
+           label_ref="Command_Region_Label"
+           tooltip_ref="Command_Region_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="region_info"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="region_info"
+           />
 </commands>
