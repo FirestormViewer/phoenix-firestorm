@@ -3122,7 +3122,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			chat.mSourceType = CHAT_SOURCE_OBJECT;
 			chat.mChatType = CHAT_TYPE_IM;
 
-			if(SYSTEM_FROM == name)
+			// <FS:Zi> Make this check a bit more elaborate, since objects that call themselves
+			//         SYSTEM_FROM ("Second Life") can spoof system messages this way. We check
+			//         for additional parameters that can't be faked by inworld objects.
+			// if(SYSTEM_FROM == name)
+			if(SYSTEM_FROM == name && region_id.isNull() && position.isNull())
+			// </FS:Zi>
 			{
 				// System's UUID is NULL (fixes EXT-4766)
 				chat.mFromID = LLUUID::null;
@@ -3171,7 +3176,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			// <FS:Zi> Can anyone elaborate on this and add to the comment what this
 			//         code is supposed to do exactly?
 			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
-			if(SYSTEM_FROM != name && nearby_chat)
+			// <FS:Zi> Check for chat source type, not name, to prevent objects from spoofing
+			// if(SYSTEM_FROM != name && nearby_chat)
+			if(chat.mSourceType != CHAT_SOURCE_SYSTEM && nearby_chat)
+			// </FS:Zi>
 			{
 				chat.mOwnerID = from_id;
 				LLSD args;
@@ -3190,7 +3198,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 
 			//Object IMs send with from name: 'Second Life' need to be displayed also in notification toasts (EXT-1590)
-			if (SYSTEM_FROM != name) break;
+			// <FS:Zi> Check for chat source type, not name, to prevent objects from spoofing
+			// if (SYSTEM_FROM != name) break;
+			if (chat.mSourceType != CHAT_SOURCE_SYSTEM) break;
+			// </FS:Zi>
 			
 			LLSD substitutions;
 			substitutions["NAME"] = name;
