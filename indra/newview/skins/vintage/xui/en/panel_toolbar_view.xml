@@ -191,7 +191,7 @@
                tab_stop="false"
                name="stand_stop_flying_container"
                visible="true"
-               width="77"/>
+               width="158"/>
   </layout_panel>
   <!-- Stand Up/Flycam panel, resting on top of the chat bar
        Also takes up the space when chat bar panel gets hidden -->

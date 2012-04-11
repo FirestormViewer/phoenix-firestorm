@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
 <panel
- follows="right|top"
+ follows="all"
  height="21"
  layout="topright"
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="77">
+ width="158">
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="19"
      label="Stand"
      layout="topleft"
@@ -20,26 +20,26 @@
      visible="false"
      width="77" />
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="19"
      label="Stop Flying"
      layout="topleft"
-     left="1"
+     left_delta="0"
      name="stop_fly_btn"
      tool_tip="Stop flying"
      top="2"
      visible="false"
      width="77" />
     <button
-     follows="left|bottom"
+     follows="left|top"
      height="19"
      label="Flycam"
      layout="topleft"
-     left="80"
+     left_pad="3"
      name="flycam_btn"
      tool_tip="Stop Flycam Mode"
      top="2"
-     visible="true"
+     visible="false"
      width="77">
         <commit_callback
          function="View.JoystickFlycam" />
