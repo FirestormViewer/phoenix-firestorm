@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="BOTONES DE LA BARRA DE HERRAMIENTAS" width="660">
+<floater name="Toybox" title="BOTONES DE LA BARRA DE HERRAMIENTAS" width="680">
 	<text name="toybox label 1">
 		Puedes agregar o quitar botones arrastrándolos a las barras de herramientas o desde ellas.
 	</text>
@@ -7,5 +7,5 @@
 		Los botones aparecerán como se muestra o solo como iconos, según la configuración de cada barra.
 	</text>
 	<button label="Quitar todas las barras" label_selected="Quitar todas las barras" name="btn_clear_all" width="170" left="105"/>
-	<button label="Restaurar predeterminados" label_selected="Restaurar predeterminados" name="btn_restore_defaults" width="170" left="385"/>
+	<button label="Restaurar predeterminados" label_selected="Restaurar predeterminados" name="btn_restore_defaults" width="170" left="405"/>
 </floater>

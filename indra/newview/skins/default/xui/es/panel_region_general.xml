@@ -9,7 +9,7 @@
 	<text name="version_channel_text_lbl">
 		Versión:
 	</text>
-	<text name="version_channel_text">
+	<text name="version_channel_text" width="360">
 		desconocida
 	</text>
 	<text name="region_type_lbl">
@@ -22,12 +22,12 @@
 	<check_box label="Prohibir volar" name="block_fly_check"/>
 	<check_box label="Permitir el daño" name="allow_damage_check"/>
 	<check_box label="Impedir los &apos;empujones&apos;" name="restrict_pushobject"/>
-	<check_box label="Permitir la reventa del terreno" name="allow_land_resell_check"/>
+	<check_box label="Permitir la reventa de terreno" name="allow_land_resell_check"/>
 	<check_box label="Permitir unir/dividir el terreno" name="allow_parcel_changes_check"/>
 	<check_box label="Bloquear el mostrar el terreno en la búsqueda" name="block_parcel_search_check" tool_tip="Permitir que la gente vea esta región y sus parcelas en los resultados de la búsqueda."/>
 	<check_box label="Permitir objetos de red" name="mesh_rez_enabled_check" tool_tip="Permitir que los usuarios creen objetos de red en esta región"/>
-	<spinner label="Nº máximo de avatares" label_width="120" name="agent_limit_spin" width="180"/>
-	<spinner label="Plus de objetos" label_width="120" name="object_bonus_spin" width="180"/>
+	<spinner label="Nº máximo de avatares" label_width="140" name="agent_limit_spin" width="180"/>
+	<spinner label="Plus de objetos" label_width="140" name="object_bonus_spin" width="180"/>
 	<text label="Calificación" name="access_text">
 		Calificación:
 	</text>
@@ -37,8 +37,8 @@
 		<icons_combo_box.item label="General" name="PG" value="13"/>
 	</icons_combo_box>
 	<button label="Aplicar" name="apply_btn"/>
-	<button label="Teleportar a su Base a un Residente..." name="kick_btn"/>
-	<button label="Teleportar a sus Bases a todos los Residentes..." name="kick_all_btn"/>
-	<button label="Enviar un mensaje a toda la región..." name="im_btn" width="250"/>
+	<button label="Teleportar a su Base a un Residente..." name="kick_btn" width="270"/>
+	<button label="Teleportar a sus Bases a todos los Residentes..." name="kick_all_btn" width="270"/>
+	<button label="Enviar un mensaje a toda la región..." name="im_btn" width="270"/>
 	<button label="Administrar el Punto de Teleporte..." name="manage_telehub_btn" width="210"/>
 </panel>

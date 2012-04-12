@@ -1865,10 +1865,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		todos los estados que administras para [OWNER]
 	</string>
 	<string name="RegionInfoAllowedResidents">
-		Residentes autorizados: ([ALLOWEDAGENTS], de un máx. de [MAXACCESS])
+		Residentes autorizados: ([ALLOWEDAGENTS], máx. [MAXACCESS])
 	</string>
 	<string name="RegionInfoAllowedGroups">
-		Grupos autorizados: ([ALLOWEDGROUPS], de un máx. de [MAXACCESS])
+		Grupos autorizados: ([ALLOWEDGROUPS], máx. [MAXACCESS])
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Memoria de scripts de la parcela
@@ -4979,6 +4979,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Areasearch_Label">Buscar en el área</string>
 	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
 	<string name="Command_Statistics_Label">Estadísticas</string>
+	<string name="Command_Region_Label">Región/Estado</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5061,6 +5062,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Areasearch_Tooltip">Buscar objetos a tu alrededor</string>
 	<string name="Command_Settings_Debug_Tooltip">Cambia valores de configuración del visor</string>
 	<string name="Command_Statistics_Tooltip">Muestra las estadísticas del visor</string>
+	<string name="Command_Region_Tooltip">Abre las herramientas de región/estado</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>

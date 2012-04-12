@@ -6,12 +6,12 @@
 	<text name="region_text">
 		desconocida
 	</text>
-	<spinner label="Nivel del agua" name="water_height_spin"/>
+	<spinner label="Nivel del agua" name="water_height_spin" label_width="80" width="140"/>
 	<spinner label="Límite de elevación 
-del terreno" name="terrain_raise_spin"/>
+del terreno" name="terrain_raise_spin" left="180" label_width="180" width="250"/>
 	<spinner bottom_delta="-34" label="Límite de bajada del 
-terreno" name="terrain_lower_spin"/>
-	<text name="detail_texture_text">
+terreno" name="terrain_lower_spin" left="180" label_width="180" width="250"/>
+	<text name="detail_texture_text" width="350">
 		Texturas del terreno (requiere archivos .tga de 512x512, 24 bits)
 	</text>
 	<text name="height_text_lbl">
@@ -55,8 +55,8 @@ terreno" name="terrain_lower_spin"/>
 	<spinner label="Bajo" name="height_start_spin_2"/>
 	<spinner label="Alto" name="height_range_spin_0"/>
 	<spinner label="Alto" name="height_range_spin_2"/>
-	<button label="Descargar el RAW del terreno..." name="download_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="230"/>
-	<button label="Subir un RAW para el terreno..." name="upload_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="230"/>
-	<button label="Predeterminar este terreno" name="bake_terrain_btn" tool_tip="Definir el terreno actual como punto medio para los límites de elevación/bajada" width="230"/>
+	<button label="Descargar el RAW del terreno..." name="download_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190"/>
+	<button label="Subir un RAW para el terreno..." name="upload_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190"/>
+	<button label="Predeterminar" name="bake_terrain_btn" tool_tip="Definir el terreno actual como punto medio para los límites de elevación/bajada"/>
 	<button label="Aplicar" name="apply_btn"/>
 </panel>

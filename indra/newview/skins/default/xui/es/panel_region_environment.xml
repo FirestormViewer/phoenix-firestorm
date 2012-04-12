@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Entorno" name="panel_env_info">
 	<text name="water_settings_title">
-		Selecciona la configuración de agua y cielo/ciclo del día que deseas que vean todos los visitantes de tu región. Más información
+		Selecciona la configuración de agua y cielo/ciclo de día que deseas que vean todos los visitantes de tu región. Más información
 	</text>
 	<radio_group name="region_settings_radio_group">
 		<radio_item label="Usar los valores predeterminados de Second Life" name="use_sl_default_settings"/>
@@ -15,11 +15,11 @@
 			<combo_box.item label="-Selecciona un valor predefinido-" name="item0"/>
 		</combo_box>
 		<text name="sky_dayc_settings_title">
-			Cielo/Ciclo del día
+			Cielo/Ciclo de día
 		</text>
 		<radio_group name="sky_dayc_settings_radio_group">
-			<radio_item label="Cielo invariable" name="my_sky_settings"/>
-			<radio_item label="Ciclo del día" name="my_dayc_settings"/>
+			<radio_item label="Cielo fijo" name="my_sky_settings"/>
+			<radio_item label="Ciclo de día" name="my_dayc_settings"/>
 		</radio_group>
 		<combo_box name="sky_settings_preset_combo">
 			<combo_box.item label="-Selecciona un valor predefinido-" name="item0"/>

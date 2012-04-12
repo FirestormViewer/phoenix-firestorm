@@ -86,7 +86,8 @@
      layout="topleft"
      left="10"
      top_pad="5"
-     width="470" />
+     width="470"
+     name="wb1"/>
 
     <check_box
      height="20"
@@ -191,7 +192,8 @@
      layout="topleft"
      left="10"
      top_pad="-5"
-     width="200" />
+     width="200"
+     name="wb2"/>
     <name_list
      follows="left|top"
      height="71"
@@ -210,7 +212,8 @@
      layout="topleft"
      left="280"
      top_delta="0"
-     width="200" />
+     width="200"
+     name="wb3"/>
     <name_list
      follows="left|top"
      height="71"
@@ -293,7 +296,8 @@
      layout="topleft"
      left="10"
      top_pad="-5"
-     width="200" />
+     width="200"
+     name="wb4"/>
     <name_list
      follows="left|top"
      height="71"
@@ -312,7 +316,8 @@
      layout="topleft"
      left="280"
      top_delta="0"
-     width="200" />
+     width="200"
+     name="wb5"/>
     <name_list
      follows="left|top"
      height="71"
