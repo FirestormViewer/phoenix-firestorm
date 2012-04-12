@@ -393,6 +393,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
+	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
 	//[ADD - Clear Settings : SJ]
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
@@ -1089,6 +1090,26 @@ void LLFloaterPreference::onClickChatOnlineNotices()
 void LLFloaterPreference::onClickClearSpamList()
 {
 	NACLAntiSpamRegistry::purgeAllQueues(); 
+}
+
+void LLFloaterPreference::setPreprocInclude()
+{
+	std::string cur_name(gSavedSettings.getString("_NACL_PreProcHDDIncludeLocation"));
+
+	std::string proposed_name(cur_name);
+
+	LLDirPicker& picker = LLDirPicker::instance();
+	if (! picker.getDir(&proposed_name ) )
+	{
+		return; //Canceled!
+	}
+
+	std::string dir_name = picker.getDirName();
+	if (!dir_name.empty() && dir_name != cur_name)
+	{
+		std::string new_top_folder(gDirUtilp->getBaseFileName(dir_name));	
+		gSavedSettings.setString("_NACL_PreProcHDDIncludeLocation", dir_name);
+	}
 }
 
 //[FIX JIRA-1971 : SJ] Show an notify when Cookies setting change

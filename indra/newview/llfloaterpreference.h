@@ -148,6 +148,7 @@ public:
 	void setKey(KEY key);
 	void onClickSetMiddleMouse();
 	void onClickSetSounds();
+	void setPreprocInclude();
 //	void onClickSkipDialogs();
 //	void onClickResetDialogs();
 	void onClickEnablePopup();
