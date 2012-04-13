@@ -88,9 +88,11 @@
 			<text name="FSShowGroupNameLength_label" width="365">
 				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
 			</text>
+			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
 			<text name="FSIMChatHistoryFade_label" width="310">
 				IM-Text vor dem Hintergrund der Chathistorie ausblenden
 			</text>
+			<spinner tool_tip="0.0-1.0, 0 für kein Ausblenden, 1 für unsichtbar" name="FSIMChatHistoryFade"/>
             <check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
         </panel>
 		
