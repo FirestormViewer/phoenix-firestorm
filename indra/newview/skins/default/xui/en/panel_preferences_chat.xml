@@ -441,7 +441,7 @@
              follows="left|top"
              height="15"
              left="50"
-             name="text_box4"
+             name="FSShowGroupNameLength_label"
              width="275">
                 Length of group name to be printed in chat history
             </text>
@@ -463,7 +463,7 @@
              follows="left|top"
              height="15"
              left="50"
-             name="text_box4"
+             name="FSIMChatHistoryFade_label"
              width="280">
                 Fade IM text into the background of the chat history window
             </text>

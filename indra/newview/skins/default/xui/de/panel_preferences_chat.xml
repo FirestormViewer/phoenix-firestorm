@@ -85,6 +85,12 @@
             <check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
             <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups verwenden (Viewer 1.x-Stil)"/>
             <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppenchats in Chat-Konsole anzeigen"/>
+			<text name="FSShowGroupNameLength_label" width="365">
+				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
+			</text>
+			<text name="FSIMChatHistoryFade_label" width="310">
+				IM-Text vor dem Hintergrund der Chathistorie ausblenden
+			</text>
             <check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
         </panel>
 		
