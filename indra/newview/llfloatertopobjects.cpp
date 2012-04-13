@@ -52,7 +52,6 @@
 #include "llviewerwindow.h"
 
 #include "llavataractions.h"
-#include "llviewercontrol.h"
 
 //LLFloaterTopObjects* LLFloaterTopObjects::sInstance = NULL;
 
