@@ -46,6 +46,25 @@
     <key>Value</key>
     <integer>20</integer>
   </map>
+	<key>FSIMChatHistoryFade</key>
+	<map>
+		<key>Comment</key>
+		<string>Ammount to fade IM text into the background of the chat history floater (0.25-1.0, 0.25 for really light, 1 for fully visible).</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>F32</string>
+		<key>Value</key>
+		<real>0.5</real>
+		<key>SanityCheckType</key>
+		<string>GreaterThan</string>
+		<key>SanityValue</key>
+		<array>
+			<real>0.24</real>
+		</array>
+		<key>SanityComment</key>
+		<string>If you make this too small you might not be able to read IMs that are shown in chat history.</string>
+	</map>
   <key>UsePieMenu</key>
   <map>
     <key>Comment</key>

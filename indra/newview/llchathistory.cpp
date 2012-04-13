@@ -852,6 +852,16 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 	std::string prefix = chat.mText.substr(0, 4);
 
+	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+	F32 FSIMChatHistoryFade = gSavedSettings.getF32("FSIMChatHistoryFade");
+
+	if(FSIMChatHistoryFade > 1.0f)
+	{
+		FSIMChatHistoryFade = 1.0f;
+		gSavedSettings.setF32("FSIMChatHistoryFade",FSIMChatHistoryFade);
+	}
+	// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+
 	//IRC styled /me messages.
 	bool irc_me = prefix == "/me " || prefix == "/me'";
 
@@ -968,8 +978,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.color(header_name_color);
 				link_params.readonly_color(header_name_color);
 
-				if (chat.mChatType == CHAT_TYPE_IM)
+				// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+				if(chat.mChatType == CHAT_TYPE_IM)
 				{
+					link_params.color.alpha = FSIMChatHistoryFade;
+					link_params.readonly_color.alpha = FSIMChatHistoryFade;
+					// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 					mEditor->appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);
 				}
 
@@ -1137,7 +1151,15 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		{
 			message = chat.mFromName + message;
 		}
-		
+
+		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+		if(chat.mChatType == CHAT_TYPE_IM)
+		{
+			style_params.color.alpha = FSIMChatHistoryFade;
+			style_params.readonly_color.alpha = FSIMChatHistoryFade;
+			style_params.selected_color.alpha = FSIMChatHistoryFade;
+		}
+		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 		mEditor->appendText(message, FALSE, style_params);
 	}
 

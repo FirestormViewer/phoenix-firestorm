@@ -437,10 +437,33 @@
              control_name="FSLogImToChatConsole"
              label="Show IMs and group chat in chat console"/>
 
+            <text
+             top_pad="10"
+             follows="left|top"
+             height="15"
+             left="50"
+             name="text_box4"
+             width="280">
+                Fade IM text into the background of the chat history window
+            </text>
+            <spinner
+             decimal_digits="2"
+             control_name="FSIMChatHistoryFade"
+             follows="left|top"
+             height="20"
+             increment="0.01"
+             initial_val="0.5"
+             tool_tip="0.0-1.0, 0 for no fade, 1 for invisible"
+             left_pad="3"
+             max_val="1.0"
+             min_val="0.25"
+             name="FSIMChatHistoryFade"
+             width="45" />
+
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="0"
+             top_pad="5"
              left="30"
              width="400"
              height="18"
