@@ -170,7 +170,8 @@ protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
 
-	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
+	//void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str);
+	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 
 	BOOL FSLogImToChatConsole;
 };

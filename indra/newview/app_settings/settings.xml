@@ -46,6 +46,17 @@
     <key>Value</key>
     <integer>20</integer>
   </map>
+	<key>FSShowGroupNameLength</key>
+	<map>
+		<key>Comment</key>
+		<string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>S32</string>
+		<key>Value</key>
+		<integer>0</integer>
+	</map>
 	<key>FSIMChatHistoryFade</key>
 	<map>
 		<key>Comment</key>

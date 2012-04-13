@@ -857,9 +857,25 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 	{
 		LLChat chat;
 		chat.mChatStyle = CHAT_STYLE_NORMAL;
+ 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		chat.mChatType = CHAT_TYPE_IM;
 		chat.mFromID = from_id;
-		chat.mFromName = from;
+		//chat.mFromName = from;
+		S32 groupNameLength = gSavedSettings.getS32("FSShowGroupNameLength");
+		if(groupNameLength != 0 && session->isGroupSessionType())
+		{
+			chat.mChatType = CHAT_TYPE_IM_GROUP;
+			chat.mFromNameGroup = "[";
+			chat.mFromNameGroup += session->mName.substr(0,groupNameLength);
+			chat.mFromNameGroup += "] ";
+			chat.mFromName=from;
+		}
+		else
+		{
+			chat.mChatType = CHAT_TYPE_IM;
+			chat.mFromName = from;
+		}
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		chat.mText = utf8_text;
 		chat.mTimeStr = timestr;

@@ -254,11 +254,22 @@ void	LLFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			}
 
 			// Ansariel: Handle IMs in nearby chat
-			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
+			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+			//if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && chat.mChatType == CHAT_TYPE_IM)
+			if (gSavedSettings.getBOOL("FSShowIMInChatHistory") && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP))
 			{
 				if (gSavedSettings.getBOOL("FSLogIMInChatHistory"))
 				{
-					from_name = "IM: " + from_name;
+					//from_name = "IM: " + from_name;
+					if(chat.mChatType == CHAT_TYPE_IM_GROUP && chat.mFromNameGroup != "")
+					{
+						from_name = "IM: " + chat.mFromNameGroup + from_name;
+					}
+					else
+					{
+						from_name = "IM: " + from_name;
+					}
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
 				else return;
 			}
@@ -475,12 +486,21 @@ void LLFloaterNearbyChat::loadHistory()
 	LLLogChat::loadAllHistory("chat", history);
 
 	std::list<LLSD>::const_iterator it = history.begin();
+	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	typedef enum e_im_type
+	{
+		IM_TYPE_NONE = 0,
+		IM_TYPE_NORMAL,
+		IM_TYPE_GROUP
+	} EIMType;
+	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 	while (it != history.end())
 	{
-		bool im_type = false;
+		EIMType im_type = IM_TYPE_NONE; // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		const LLSD& msg = *it;
 
 		std::string from = msg[IM_FROM];
+		std::string fromGroup = ""; // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		LLUUID from_id;
 		if (msg[IM_FROM_ID].isDefined())
 		{
@@ -496,7 +516,21 @@ void LLFloaterNearbyChat::loadHistory()
 			if (im_prefix_found != std::string::npos)
 			{
 				from = from.substr(im_prefix.length());
-				im_type = true;
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//im_type = true;
+				size_t group_im_prefix_start = from.find("[");
+				size_t group_im_prefix_end = from.find("] ");
+				if((group_im_prefix_start != std::string::npos) && (group_im_prefix_end != std::string::npos))
+				{
+					fromGroup = from.substr(group_im_prefix_start,group_im_prefix_end+2);
+					from = from.substr(fromGroup.length());
+					im_type = IM_TYPE_GROUP;
+				}
+				else
+				{
+					im_type = IM_TYPE_NORMAL;
+				}
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 			}
 
 			std::string legacy_name = gCacheName->buildLegacyName(from);
@@ -510,7 +544,18 @@ void LLFloaterNearbyChat::loadHistory()
 		chat.mTimeStr = msg[IM_TIME].asString();
 		chat.mChatStyle = CHAT_STYLE_HISTORY;
 
-		if (im_type) chat.mChatType = CHAT_TYPE_IM;
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		//if (im_type) chat.mChatType = CHAT_TYPE_IM;
+		if (im_type == IM_TYPE_NORMAL)
+		{
+			chat.mChatType = CHAT_TYPE_IM;
+		}
+		else if(im_type == IM_TYPE_GROUP)
+		{
+			chat.mChatType = CHAT_TYPE_IM_GROUP;
+			chat.mFromNameGroup = fromGroup;
+		}
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		if (from_id.isNull() && SYSTEM_FROM == from)

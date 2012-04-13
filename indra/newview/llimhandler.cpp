@@ -44,6 +44,8 @@
 #include "rlvhandler.h"
 #include "lggcontactsets.h"
 
+#include "llimview.h" // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+
 using namespace LLNotificationsUI;
 
 //--------------------------------------------------------------------------
@@ -97,11 +99,25 @@ bool LLIMHandler::processNotification(const LLSD& notify)
 		{
 			LLSD substitutions = notification->getSubstitutions();
 
+			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+			std::string group;
+			LLIMModel::LLIMSession* session = LLIMModel::getInstance()->findIMSession(substitutions["SESSION_ID"]);
+			if(session)
+			{
+				S32 groupNameLength = gSavedSettings.getS32("FSShowGroupNameLength");
+				if(groupNameLength != 0 && session->isGroupSessionType())
+				{
+					group = session->mName.substr(0,groupNameLength);
+				}
+			}
+			// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+
 			// Filter notifications with empty ID and empty message
 			if (substitutions["FROM_ID"].asString() == "" && substitutions["MESSAGE"].asString() == "") return false;
 
 			// Ansarial, replace long lock of local DN handling with the following call
-			LLAvatarNameCache::get(LLUUID(substitutions["FROM_ID"].asString()), boost::bind(&LLIMHandler::onAvatarNameLookup, this, _1, _2, substitutions["MESSAGE"].asString()));
+			//LLAvatarNameCache::get(LLUUID(substitutions["FROM_ID"].asString()), boost::bind(&LLIMHandler::onAvatarNameLookup, this, _1, _2, substitutions["MESSAGE"].asString()));
+			LLAvatarNameCache::get(LLUUID(substitutions["FROM_ID"].asString()), boost::bind(&LLIMHandler::onAvatarNameLookup, this, _1, _2, substitutions["MESSAGE"].asString(),group)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		}
 	}
 	else
@@ -164,7 +180,9 @@ void LLIMHandler::onDeleteToast(LLToast* toast)
 //--------------------------------------------------------------------------
 
 // Ansariel: Name lookup callback for chat console output
-void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str)
+// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+//void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str)
+void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group)
 {
 	std::string senderName;
 	std::string message(message_str);
@@ -198,6 +216,14 @@ void LLIMHandler::onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName&
 	{
 		senderName = RlvStrings::getAnonym(senderName);
 	}
+
+	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	if(group != "")
+	{
+		senderName = "[" + group + "] " + senderName;
+	}
+	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+
 	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
 	//color based on contact sets prefs
 	if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id,TRUE))

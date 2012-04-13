@@ -309,13 +309,24 @@ public:
 			{
 				user_name->setValue( LLSD() );
 				LLAvatarNameCache::get(mAvatarID,
-					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					//boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				}
+				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
+				}
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -351,13 +362,24 @@ public:
 					user_name->appendText("  - " + username, FALSE, style_params_name);
 				}
 				*/
-				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
+				//LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
+				LLAvatarNameCache::get(mAvatarID, boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
-				if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				}
+				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
+				}
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
@@ -478,10 +500,24 @@ public:
 		}
 	}
 
-	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type)
+// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	//void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type)
+	void onAvatarNameCache(const LLUUID& agent_id, const LLAvatarName& av_name, EChatType chat_type, std::string& group)
 	{
-		mFrom = av_name.mDisplayName;
-		if (chat_type == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+		//mFrom = av_name.mDisplayName;
+		//mFrom = av_name.mDisplayName;
+		//if (chat_type == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+		mFrom = "";
+		if (chat_type == CHAT_TYPE_IM || chat_type == CHAT_TYPE_IM_GROUP)
+		{
+			mFrom = LLTrans::getString("IMPrefix") + " ";
+			if(group != "")
+			{
+				mFrom += group;
+			}
+		}
+		mFrom += av_name.mDisplayName;
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 
 		LLTextBox* user_name = getChild<LLTextBox>("user_name");
 		user_name->setValue( LLSD(mFrom) );
@@ -979,7 +1015,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.readonly_color(header_name_color);
 
 				// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-				if(chat.mChatType == CHAT_TYPE_IM)
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//if(chat.mChatType == CHAT_TYPE_IM)
+				if(chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
 				{
 					link_params.color.alpha = FSIMChatHistoryFade;
 					link_params.readonly_color.alpha = FSIMChatHistoryFade;
@@ -989,11 +1027,31 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 
 				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
 				{
-					mEditor->appendText(mDisplayName_Username, false, link_params);
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					//mEditor->appendText(mDisplayName_Username, false, link_params);
+					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+					{
+						mEditor->appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);
+					}
+					else
+					{
+						mEditor->appendText(mDisplayName_Username, false, link_params);
+					}
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
 				else if (gSavedSettings.getBOOL("UseDisplayNames"))
 				{
-					mEditor->appendText(mDisplayName, false, link_params);
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					//mEditor->appendText(mDisplayName, false, link_params);
+					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+					{
+						mEditor->appendText(chat.mFromNameGroup + mDisplayName, false, link_params);
+					}
+					else
+					{
+						mEditor->appendText(mDisplayName, false, link_params);
+					}
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
 				else
 				{
@@ -1006,7 +1064,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			}
 			else
 			{
-				if (chat.mChatType == CHAT_TYPE_IM)
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//if (chat.mChatType == CHAT_TYPE_IM)
+				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
 				{
 					mEditor->appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);
 				}
@@ -1028,7 +1088,17 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		LLDate new_message_time = LLDate::now();
 
 		std::string tmp_from_name(chat.mFromName);
-		if (chat.mChatType == CHAT_TYPE_IM) tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		//if (chat.mChatType == CHAT_TYPE_IM) tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
+		if (chat.mChatType == CHAT_TYPE_IM)
+		{
+			tmp_from_name = LLTrans::getString("IMPrefix") + " " + tmp_from_name;
+		}
+		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+		{
+			tmp_from_name = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + tmp_from_name;
+		}
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 
 		if (mLastFromName == tmp_from_name 
 			&& mLastFromID == chat.mFromID
@@ -1073,7 +1143,17 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		mEditor->appendWidget(p, widget_associated_text, false);
 
 		mLastFromName = chat.mFromName;
-		if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		//if (chat.mChatType == CHAT_TYPE_IM) mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
+		if (chat.mChatType == CHAT_TYPE_IM)
+		{
+			mLastFromName = LLTrans::getString("IMPrefix") + " " + mLastFromName;
+		}
+		else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+		{
+			mLastFromName = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mLastFromName;
+		}
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		mLastFromID = chat.mFromID;
 		mLastMessageTime = new_message_time;
 		mIsLastMessageFromLog = message_from_log;
@@ -1153,7 +1233,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-		if(chat.mChatType == CHAT_TYPE_IM)
+		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+		//if(chat.mChatType == CHAT_TYPE_IM)
+		if(chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
 		{
 			style_params.color.alpha = FSIMChatHistoryFade;
 			style_params.readonly_color.alpha = FSIMChatHistoryFade;
