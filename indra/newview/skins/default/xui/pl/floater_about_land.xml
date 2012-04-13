@@ -358,7 +358,7 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Kliknij by wybrać zdjęcie"/>
 			<text name="allow_label5">
-				Pozwól Rezydentom na innych Posiadłościach:
+				Awatary na innych parcelach mogą rozmawiać/widzieć awatary na tej parceli
 			</text>
 			<check_box label="Widzieć awatary" name="SeeAvatarsCheck" tool_tip="Pozwala Rezydentom z innych posiadłości widzieć i rozmawiać z Rezydentami na tej Posiadłości - oraz Tobie, widzieć ich i rozmawiać z nimi."/>
 			<text name="landing_point">
@@ -417,7 +417,7 @@ Teksturę:
 			<text name="Sound:">
 				Dźwięk:
 			</text>
-			<check_box label="Ogranicz dźwięki gestów i obiektów do tej posiadłości" name="check sound local"/>
+			<check_box label="Ogranicz dźwięki gestów i obiektów do tej Posiadłości" name="check sound local"/>
 			<text name="Avatar Sounds:">
 				Dźwięki awatarów:
 			</text>
@@ -428,7 +428,7 @@ Teksturę:
 			</text>
 			<check_box label="Rozmowy włączone" name="parcel_enable_voice_channel"/>
 			<check_box label="Rozmowy włączone (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
-			<check_box label="Ogranicz komunikację głosową w tej Posiadłości." name="parcel_enable_voice_channel_local"/>
+			<check_box label="Ogranicz komunikację głosową do tej Posiadłości." name="parcel_enable_voice_channel_local"/>
 		</panel>
 		<panel label="DOSTĘP" name="land_access_panel">
 			<panel.string name="access_estate_defined">

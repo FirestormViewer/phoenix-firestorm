@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Dopasuj" name="Media settings for controls">
 	<text name="controls_label">
-		Ustawienia:
+		Kontrolki:
 	</text>
 	<combo_box name="controls">
 		<combo_item name="Standard">

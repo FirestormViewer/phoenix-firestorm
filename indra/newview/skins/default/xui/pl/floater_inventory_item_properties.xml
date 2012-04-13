@@ -50,7 +50,7 @@
 	<check_box label="Kopiowanie" name="CheckNextOwnerCopy"/>
 	<check_box label="Transferowanie" name="CheckNextOwnerTransfer"/>
 	<check_box label="Sprzedaż" name="CheckPurchase"/>
-	<combo_box name="combobox sale copy">
+	<combo_box name="ComboSaleType">
 		<combo_box.item label="Oryginał" name="Original"/>
 		<combo_box.item label="Kopia" name="Copy"/>
 		<combo_box.item label="Zawartość" name="Contents"/>
