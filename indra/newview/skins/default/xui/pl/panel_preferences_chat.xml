@@ -64,6 +64,14 @@
 			<check_box label="Czaty IM" name="EnableIMChatPopups" tool_tip="Zaznacz opcję, aby widzieć wyskakujące okienko, kiedy pojawia się nowa wiadomość prywatna IM (Instant Message)"/>
 			<check_box name="FSUseNearbyChatConsole" label="Używaj konsoli dla wyskakujących okienek zamiast Tostów (styl Viewera 1.x)"/>
 			<check_box name="FSLogImToChatConsole" label="Pokazuj IM i czaty grupowe w konsoli Czatu"/>
+			<text name="FSShowGroupNameLength_label">
+				Długość nazwy grupy wyświetlanej w historii czatu
+			</text>
+			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
+			<text name="FSIMChatHistoryFade_label">
+				Wygaszaj tekst IM w tło okna historii czatu
+			</text>
+			<spinner tool_tip="0.0-1.0, 0 dla braku wygaszania, 1 dla niewidzialności" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 		</panel>
 		<panel name="ChatFirestorm">
