@@ -569,7 +569,7 @@ protected:
 		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		{
 			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-			if(mType = CHAT_TYPE_RADAR)
+			if(mType == CHAT_TYPE_RADAR)
 			{
 				showAvatarContextMenu(x,y);
 			}
