@@ -1084,7 +1084,17 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				}
 				else
 				{
-					mEditor->appendText(chat.mFromName, false, link_params);
+					//mEditor->appendText(chat.mFromName, false, link_params);
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+					{
+						mEditor->appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);
+					}
+					else
+					{
+						mEditor->appendText(chat.mFromName, false, link_params);
+					}
+					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
 				link_params.color(txt_color);
 				link_params.readonly_color(txt_color);
