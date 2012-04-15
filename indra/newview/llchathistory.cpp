@@ -120,6 +120,7 @@ public:
 		mPopupMenuHandleObject(),
 		mAvatarID(),
 		mSourceType(CHAT_SOURCE_UNKNOWN),
+		mType(CHAT_TYPE_NORMAL), // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		mFrom(),
 		mSessionID(),
 		mMinUserNameWidth(0),
@@ -244,7 +245,8 @@ public:
 		{
 			LLFloaterReg::showInstance("inspect_remote_object", mObjectData);
 		}
-		else if (mSourceType == CHAT_SOURCE_AGENT)
+		//else if (mSourceType == CHAT_SOURCE_AGENT)
+		else if (mSourceType == CHAT_SOURCE_AGENT || (mSourceType == CHAT_SOURCE_SYSTEM && mType == CHAT_TYPE_RADAR)) // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		{
 			LLFloaterReg::showInstance("inspect_avatar", LLSD().with("avatar_id", mAvatarID));
 		}
@@ -269,6 +271,7 @@ public:
 		mAvatarID = chat.mFromID;
 		mSessionID = chat.mSessionID;
 		mSourceType = chat.mSourceType;
+		mType = chat.mChatType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 
 		//*TODO overly defensive thing, source type should be maintained out there
 		if((chat.mFromID.isNull() && chat.mFromName.empty()) || (chat.mFromName == SYSTEM_FROM && chat.mFromID.isNull()))
@@ -282,7 +285,9 @@ public:
 		user_name->setColor(style_params.color());
 
 		if (chat.mFromName.empty()
-			|| mSourceType == CHAT_SOURCE_SYSTEM
+			//|| mSourceType == CHAT_SOURCE_SYSTEM
+			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+			|| (mSourceType == CHAT_SOURCE_SYSTEM && mType != CHAT_TYPE_RADAR)
 			|| mAvatarID.isNull())
 		{
 			//mFrom = LLTrans::getString("SECOND_LIFE");
@@ -429,7 +434,17 @@ public:
 				icon->setValue(LLSD("OBJECT_Icon"));
 				break;
 			case CHAT_SOURCE_SYSTEM:
-				icon->setValue(LLSD("SL_Logo"));
+				//icon->setValue(LLSD("SL_Logo"));
+				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+				if(chat.mChatType == CHAT_TYPE_RADAR)
+				{
+					icon->setValue(chat.mFromID);
+				}
+				else
+				{
+					icon->setValue(LLSD("SL_Logo"));
+				}
+				// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 				break;
 			case CHAT_SOURCE_UNKNOWN: 
 				icon->setValue(LLSD("Unknown_Icon"));
@@ -550,7 +565,20 @@ protected:
 			return;
 // [/RLVa:KB]
 		if(mSourceType == CHAT_SOURCE_SYSTEM)
-			showSystemContextMenu(x,y);
+			//showSystemContextMenu(x,y);
+		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+		{
+			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+			if(mType = CHAT_TYPE_RADAR)
+			{
+				showAvatarContextMenu(x,y);
+			}
+			else
+			{
+				showSystemContextMenu(x,y);
+			}
+		}
+		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
 			showAvatarContextMenu(x,y);
 		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_OBJECT && SYSTEM_FROM != mFrom)
@@ -670,6 +698,7 @@ protected:
 	LLUUID			    mAvatarID;
 	LLSD				mObjectData;
 	EChatSourceType		mSourceType;
+	EChatType			mType; // FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 	std::string			mFrom;
 	LLUUID				mSessionID;
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f

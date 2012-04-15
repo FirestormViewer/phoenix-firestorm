@@ -775,14 +775,19 @@ void LLPanelPeople::onChange(EStatusType status, const std::string &channelURI, 
 
 
 void LLPanelPeople::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av_name,std::string postMsg)
-{	
-	LLStringUtil::format_map_t formatargs;
-	formatargs["AVATARNAME"] = getRadarName(av_name);
-	LLStringUtil::format(postMsg, formatargs);
+{
+	// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+	//LLStringUtil::format_map_t formatargs;
+	//formatargs["AVATARNAME"] = getRadarName(av_name);
+	//LLStringUtil::format(postMsg, formatargs);
 
 	LLChat chat;
 	chat.mText = postMsg;
 	chat.mSourceType = CHAT_SOURCE_SYSTEM;
+	chat.mFromName = getRadarName(av_name);
+	chat.mFromID = agent_id;
+	chat.mChatType = CHAT_TYPE_RADAR;
+	// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);

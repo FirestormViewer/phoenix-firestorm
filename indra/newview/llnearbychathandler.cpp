@@ -707,10 +707,17 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 			{
 				consoleChat = args["console_message"].asString();
 			}
-			else
+			//consoleChat = chat_msg.mText;
+			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+			else if(chat_msg.mFromName.empty())
 			{
 				consoleChat = chat_msg.mText;
 			}
+			else
+			{
+				consoleChat = chat_msg.mFromName + " " + chat_msg.mText;
+			}
+			// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 
 			LLColor4 chatcolor;
 			LLViewerChat::getChatColor(chat_msg, chatcolor);

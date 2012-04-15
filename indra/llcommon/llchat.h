@@ -53,7 +53,8 @@ typedef enum e_chat_type
 	CHAT_TYPE_OWNER = 8,
 	CHAT_TYPE_DIRECT = 9,		// From llRegionSayTo()
 	CHAT_TYPE_IM = 10,			// Ansariel: Special type for IMs in nearby chat
-	CHAT_TYPE_IM_GROUP = 11		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	CHAT_TYPE_IM_GROUP = 11,	// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+	CHAT_TYPE_RADAR = 12		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
 } EChatType;
 
 typedef enum e_chat_audible_level
