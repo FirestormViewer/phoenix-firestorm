@@ -383,7 +383,7 @@
          layout="topleft"
          left_pad="0"
          name="external"
-         value="1"
+         value="true"
          top_delta="0"
          tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
          width="200" />
