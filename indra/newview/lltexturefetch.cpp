@@ -1205,7 +1205,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				LLViewerAssetStatsFF::record_enqueue_thread1(LLViewerAssetType::AT_TEXTURE,
 															 true,
 															 LLImageBase::TYPE_AVATAR_BAKE == mType);
-
+				if(cur_size > 0) offset--;
 				// Will call callbackHttpGet when curl request completes
 				std::vector<std::string> headers;
 				headers.push_back("Accept: image/x-j2c");
@@ -1354,8 +1354,11 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			if (cur_size > 0)
 			{
 				memcpy(buffer, mFormattedImage->getData(), cur_size);
+				mBufferSize--;
+				if(mRequestedSize == 1) mRequestedDiscard = 0;
+				else memcpy(buffer + cur_size, mBuffer+1, mRequestedSize-1); // append
 			}
-			memcpy(buffer + cur_size, mBuffer, mRequestedSize); // append
+			else memcpy(buffer + cur_size, mBuffer, mRequestedSize); // append
 			// NOTE: setData releases current data and owns new data (buffer)
 			mFormattedImage->setData(buffer, mBufferSize);
 			// delete temp data
@@ -1760,7 +1763,11 @@ S32 LLTextureFetchWorker::callbackHttpGet(const LLChannelDescriptors& channels,
 			mBuffer = (U8*)ALLOCATE_MEM(LLImageBase::getPrivatePool(), data_size);
 			buffer->readAfter(channels.in(), NULL, mBuffer, data_size);
 			mBufferSize += data_size;
-			if (data_size < mRequestedSize && mRequestedDiscard == 0)
+			if(mFormattedImage.notNull() && mFormattedImage->getDataSize() > 0 && data_size == 1)
+			{
+				mHaveAllData = TRUE;
+			}
+			else if (data_size < mRequestedSize && mRequestedDiscard == 0)
 			{
 				mHaveAllData = TRUE;
 			}
