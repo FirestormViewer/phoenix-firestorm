@@ -936,6 +936,9 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 	std::string whisper = LLTrans::getString("whisper");
 	if (chat.mChatType == CHAT_TYPE_SHOUT || 
 		chat.mChatType == CHAT_TYPE_WHISPER ||
+		// FS:TS FIRE-6049: No : in radar chat header
+		chat.mChatType == CHAT_TYPE_RADAR ||
+		// FS:TS FIRE-6049: No : in radar chat header
 		chat.mText.compare(0, shout.length(), shout) == 0 ||
 		chat.mText.compare(0, whisper.length(), whisper) == 0)
 	{
