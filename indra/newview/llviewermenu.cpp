@@ -9137,6 +9137,20 @@ void toggleSettingsDebug()
 }
 // </FS:Ansariel> Toggle debug settings floater
 
+// <FS:Ansariel> Toggle teleport history panel directly
+void toggleTeleportHistory()
+{
+	if (LLFloaterReg::instanceVisible("places"))
+	{
+		LLFloaterReg::hideInstance("places");
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_teleport_history_tab"));
+	}
+}
+// </FS:Ansariel> Toggle teleport history panel directly
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -9653,4 +9667,6 @@ void initialize_menus()
 	commit.add("ToggleWebBrowser", boost::bind(&toggleWebBrowser, _2));
 	// <FS:Ansariel> Toggle debug settings floater
 	commit.add("ToggleSettingsDebug", boost::bind(&toggleSettingsDebug));
+	// <FS:Ansariel> Toggle teleport history panel directly
+	commit.add("ToggleTeleportHistory", boost::bind(&toggleTeleportHistory));
 }

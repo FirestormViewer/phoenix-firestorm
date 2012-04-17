@@ -482,6 +482,14 @@
              function="Floater.Toggle"
              parameter="people" />
             </menu_item_check>
+        <menu_item_call
+         label="Teleport History"
+         name="Teleport History"
+         visible="false"
+         shortcut="alt|H">
+            <menu_item_call.on_click
+             function="ToggleTeleportHistory"/>
+            </menu_item_call>
         <menu_item_check
          label="Places"
          name="Places">

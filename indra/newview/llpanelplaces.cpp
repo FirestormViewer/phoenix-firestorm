@@ -83,6 +83,8 @@ static const std::string LANDMARK_INFO_TYPE			= "landmark";
 static const std::string REMOTE_PLACE_INFO_TYPE		= "remote_place";
 static const std::string TELEPORT_HISTORY_INFO_TYPE	= "teleport_history";
 static const std::string LANDMARK_TAB_INFO_TYPE     = "open_landmark_tab";
+// <FS:Ansariel> Toggle teleport history panel directly
+static const std::string TELEPORT_HISTORY_TAB_INFO_TYPE = "open_teleport_history_tab";
 
 // Support for secondlife:///app/parcel/{UUID}/about SLapps
 class LLParcelHandler : public LLCommandHandler
@@ -384,6 +386,29 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 			// Update the buttons at the bottom of the panel
 			updateVerbs();
 		}
+		// <FS:Ansariel> Toggle teleport history panel directly
+		else if (key_type == TELEPORT_HISTORY_TAB_INFO_TYPE)
+		{
+			togglePlaceInfoPanel(FALSE);
+			// This has been set intentially to not mess up other functions!
+			mPlaceInfoType = LANDMARK_TAB_INFO_TYPE;
+
+			// This has been basically borrowed from togglePlaceInfoPanel()
+			// further down.
+			mLandmarkInfo->setVisible(FALSE);
+			LLTeleportHistoryPanel* teleport_history_panel =
+					dynamic_cast<LLTeleportHistoryPanel*>(mTabContainer->getPanelByName("Teleport History"));
+			if (teleport_history_panel)
+			{
+				mTabContainer->selectTabPanel(teleport_history_panel);
+			}
+
+			// Update the active tab
+			onTabSelected();
+			// Update the buttons at the bottom of the panel
+			updateVerbs();
+		}
+		// </FS:Ansariel> Toggle teleport history panel directly
 		else
 		{
 			mFilterEditor->clear();
