@@ -724,7 +724,7 @@ std::set<LLUUID> LLAvatarActions::getInventorySelectedUUIDs()
 		LLSidepanelInventory *sidepanel_inventory = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 		if (sidepanel_inventory)
 		{
-			inventory_selected_uuids = sidepanel_inventory->getInboxOrOutboxSelectionList();
+			inventory_selected_uuids = sidepanel_inventory->getInboxSelectionList();
 		}
 	}
 
@@ -738,6 +738,11 @@ void LLAvatarActions::shareWithAvatars()
 
 	LLFloaterAvatarPicker* picker =
 		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE);
+	if (!picker)
+	{
+		return;
+	}
+
 	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable));
 	picker->openFriendsTab();
 	LLNotificationsUtil::add("ShareNotification");

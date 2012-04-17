@@ -33,9 +33,11 @@
 class LLShaderFeatures
 {
 public:
+	bool atmosphericHelpers;
 	bool calculatesLighting;
 	bool calculatesAtmospherics;
 	bool hasLighting; // implies no transport (it's possible to have neither though)
+	bool isAlphaLighting; // indicates lighting shaders need not be linked in (lighting performed directly in alpha shader to match deferred lighting functions)
 	bool isShiny;
 	bool isFullbright; // implies no lighting
 	bool isSpecular;

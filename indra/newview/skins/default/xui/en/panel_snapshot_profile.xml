@@ -84,7 +84,6 @@
          layout="topleft"
          left="0"
          name="profile_image_size_lp"
-         user_resize="false" 
          auto_resize="false"
          top="0"
          right="-1"
@@ -120,6 +119,7 @@
              top_delta="0"
              width="95" />
             <check_box
+              height="10"
              bottom_delta="20"
              label="Constrain proportions"
              layout="topleft"
@@ -132,7 +132,6 @@
          layout="topleft"
          left="0"
          name="profile_image_metadata_lp"
-         user_resize="false" 
          auto_resize="true"
          top="0"
          right="-1"

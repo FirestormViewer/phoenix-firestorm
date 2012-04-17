@@ -35,7 +35,6 @@
 #include "llcallfloater.h"
 #include "llfasttimerview.h"
 #include "llfloaterabout.h"
-#include "llfloateranimpreview.h"
 #include "llfloaterauction.h"
 #include "llfloateravatar.h"
 #include "llfloateravatarpicker.h"
@@ -49,6 +48,7 @@
 #include "llfloaterbuyland.h"
 #include "llfloaterbulkpermission.h"
 #include "llfloaterbump.h"
+#include "llfloaterbvhpreview.h"
 #include "llfloatercamera.h"
 #include "llfloaterdeleteenvpreset.h"
 #include "llfloaterdisplayname.h"
@@ -83,6 +83,7 @@
 #include "llfloaternotificationsconsole.h"
 #include "llfloaterobjectweights.h"
 #include "llfloateropenobject.h"
+#include "llfloateroutbox.h"
 #include "llfloaterpay.h"
 #include "llfloaterperms.h"
 #include "llfloaterpostprocess.h"
@@ -238,6 +239,7 @@ void LLViewerFloaterReg::registerFloaters()
 
 	LLFloaterReg::add("object_weights", "floater_object_weights.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterObjectWeights>);
 	LLFloaterReg::add("openobject", "floater_openobject.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterOpenObject>);
+	LLFloaterReg::add("outbox", "floater_merchant_outbox.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterOutbox>);
 	LLFloaterReg::add("outgoing_call", "floater_outgoing_call.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLOutgoingCallDialog>);
 	LLFloaterPayUtil::registerFloater();
 
@@ -292,7 +294,8 @@ void LLViewerFloaterReg::registerFloaters()
 
 	
 	LLFloaterUIPreviewUtil::registerFloater();
-	LLFloaterReg::add("upload_anim", "floater_animation_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAnimPreview>, "upload");
+	LLFloaterReg::add("upload_anim_bvh", "floater_animation_bvh_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterBvhPreview>, "upload");
+	LLFloaterReg::add("upload_anim_anim", "floater_animation_anim_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterAnimPreview>, "upload");
 	LLFloaterReg::add("upload_image", "floater_image_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterImagePreview>, "upload");
 	LLFloaterReg::add("upload_model", "floater_model_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterModelPreview>, "upload");
 	LLFloaterReg::add("upload_model_wizard", "floater_model_wizard.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterModelWizard>);

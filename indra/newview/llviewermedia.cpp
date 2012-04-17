@@ -26,46 +26,48 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "llviewermedia.h"
+
 #include "llagent.h"
 #include "llagentcamera.h"
-#include "llviewermedia.h"
-#include "llviewermediafocus.h"
-#include "llmimetypes.h"
-#include "llmediaentry.h"
-#include "llversioninfo.h"
-#include "llviewercontrol.h"
-#include "llviewertexture.h"
-#include "llviewerparcelmedia.h"
-#include "llviewerparcelmgr.h"
-#include "llviewertexturelist.h"
-#include "llvovolume.h"
-#include "llpluginclassmedia.h"
-#include "llplugincookiestore.h"
-#include "llviewerwindow.h"
-#include "llfocusmgr.h"
-#include "llcallbacklist.h"
-#include "llparcel.h"
+#include "llappviewer.h"
 #include "llaudioengine.h"  // for gAudiop
-#include "llurldispatcher.h"
-#include "llvoavatar.h"
-#include "llvoavatarself.h"
-#include "llviewerregion.h"
-#include "llwebprofile.h"
-#include "llwebsharing.h"	// For LLWebSharing::setOpenIDCookie(), *TODO: find a better way to do this!
-#include "llfilepicker.h"
-#include "llnotifications.h"
+#include "llcallbacklist.h"
 #include "lldir.h"
 #include "lldiriterator.h"
 #include "llevent.h"		// LLSimpleListener
-#include "llnotificationsutil.h"
-#include "lluuid.h"
+#include "llfilepicker.h"
+#include "llfloaterwebcontent.h"	// for handling window close requests and geometry change requests in media browser windows.
+#include "llfocusmgr.h"
 #include "llkeyboard.h"
+#include "lllogininstance.h"
+#include "llmarketplacefunctions.h"
+#include "llmediaentry.h"
+#include "llmimetypes.h"
 #include "llmutelist.h"
+#include "llnotifications.h"
+#include "llnotificationsutil.h"
 #include "llpanelprofile.h"
-#include "llappviewer.h"
-#include "lllogininstance.h" 
-//#include "llfirstuse.h"
+#include "llparcel.h"
+#include "llpluginclassmedia.h"
+#include "llplugincookiestore.h"
+#include "llurldispatcher.h"
+#include "lluuid.h"
+#include "llversioninfo.h"
+#include "llviewermediafocus.h"
+#include "llviewercontrol.h"
 #include "llviewernetwork.h"
+#include "llviewerparcelmedia.h"
+#include "llviewerparcelmgr.h"
+#include "llviewerregion.h"
+#include "llviewertexture.h"
+#include "llviewertexturelist.h"
+#include "llviewerwindow.h"
+#include "llvoavatar.h"
+#include "llvoavatarself.h"
+#include "llvovolume.h"
+#include "llwebprofile.h"
+#include "llwebsharing.h"	// For LLWebSharing::setOpenIDCookie(), *TODO: find a better way to do this!
 #include "llwindow.h"
 #include "llvieweraudio.h"
 
@@ -385,7 +387,6 @@ class LLViewerMediaMuteListObserver : public LLMuteListObserver
 
 static LLViewerMediaMuteListObserver sViewerMediaMuteListObserver;
 static bool sViewerMediaMuteListObserverInitialized = false;
-static bool sInWorldMediaDisabled = false;
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -648,20 +649,6 @@ void LLViewerMedia::muteListChanged()
 		LLViewerMediaImpl* pimpl = *iter;
 		pimpl->mNeedsMuteCheck = true;
 	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// static
-void LLViewerMedia::setInWorldMediaDisabled(bool disabled)
-{
-	sInWorldMediaDisabled = disabled;
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// static
-bool LLViewerMedia::getInWorldMediaDisabled()
-{
-	return sInWorldMediaDisabled;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1398,75 +1385,11 @@ void LLViewerMedia::removeCookie(const std::string &name, const std::string &dom
 }
 
 
-// This is defined in two files but I don't want to create a dependence between this and llsidepanelinventory
-// just to be able to temporarily disable the outbox.
-#define ENABLE_INVENTORY_DISPLAY_OUTBOX		0	// keep in sync with ENABLE_MERCHANT_OUTBOX_PANEL, ENABLE_MERCHANT_OUTBOX_CONTEXT_MENU
-
-class LLInventoryUserStatusResponder : public LLHTTPClient::Responder
-{
-public:
-	LLInventoryUserStatusResponder()
-		: LLCurl::Responder()
-	{
-	}
-
-	void completed(U32 status, const std::string& reason, const LLSD& content)
-	{
-		if (isGoodStatus(status))
-		{
-			std::string merchantStatus = content[gAgent.getID().getString()].asString();
-			llinfos << "Marketplace merchant status: " << merchantStatus << llendl;
-
-			// Save the merchant status before turning on the display
-			gSavedSettings.setString("InventoryMarketplaceUserStatus", merchantStatus);
-
-			// Complete success
-			gSavedSettings.setBOOL("InventoryDisplayInbox", true);
-
-#if ENABLE_INVENTORY_DISPLAY_OUTBOX
-			gSavedSettings.setBOOL("InventoryDisplayOutbox", true);
-#endif
-		}
-		else if (status == 401)
-		{
-			// API is available for use but OpenID authorization failed
-			gSavedSettings.setBOOL("InventoryDisplayInbox", true);
-		}
-		else
-		{
-			// API in unavailable
-			llinfos << "Marketplace API is unavailable -- Inbox may be disabled, status = " << status << ", reason = " << reason << llendl;
-		}
-	}
-};
-
-
-void doOnetimeEarlyHTTPRequests()
-{
-	std::string url = "https://marketplace.secondlife.com/";
-
-	if (!LLGridManager::getInstance()->isInProductionGrid())
-	{
-		std::string gridLabel = LLGridManager::getInstance()->getGridLabel();
-		url = llformat("https://marketplace.%s.lindenlab.com/", utf8str_tolower(gridLabel).c_str());
-
-		// TEMP for Jim's pdp
-		//url = "http://pdp24.lindenlab.com:3000/";
-	}
-	
-	url += "api/1/users/";
-	url += gAgent.getID().getString();
-	url += "/user_status";
-
-	llinfos << "http get: " << url << llendl;
-	LLHTTPClient::get(url, new LLInventoryUserStatusResponder(), LLViewerMedia::getHeaders());
-}
-
-
 LLSD LLViewerMedia::getHeaders()
 {
 	LLSD headers = LLSD::emptyMap();
 	headers["Accept"] = "*/*";
+	headers["Content-Type"] = "application/xml";
 	headers["Cookie"] = sOpenIDCookie;
 	headers["User-Agent"] = getCurrentUserAgent();
 
@@ -1521,9 +1444,6 @@ void LLViewerMedia::setOpenIDCookie()
 		LLHTTPClient::get(profile_url,  
 			new LLViewerMediaWebProfileResponder(raw_profile_url.getAuthority()),
 			headers);
-
-		// FUI: No longer perform the user_status query
-		//doOnetimeEarlyHTTPRequests();
 	}
 }
 
@@ -1633,7 +1553,6 @@ LLPluginClassMedia* LLViewerMedia::getSpareBrowserMediaSource()
 
 bool LLViewerMedia::hasInWorldMedia()
 {
-	if (sInWorldMediaDisabled) return false;
 	impl_list::iterator iter = sViewerMediaImplList.begin();
 	impl_list::iterator end = sViewerMediaImplList.end();
 	// This should be quick, because there should be very few non-in-world-media impls
@@ -1966,7 +1885,7 @@ LLPluginClassMedia* LLViewerMediaImpl::newSourceFromMediaType(std::string media_
 		}
 	}
 	
-	LL_WARNS_ONCE("Plugin") << "plugin intialization failed for mime type: " << media_type << LL_ENDL;
+	LL_WARNS_ONCE("Plugin") << "plugin initialization failed for mime type: " << media_type << LL_ENDL;
 	LLSD args;
 	args["MIME_TYPE"] = media_type;
 	LLNotificationsUtil::add("NoPlugin", args);
@@ -3172,15 +3091,6 @@ bool LLViewerMediaImpl::isForcedUnloaded() const
 		return true;
 	}
 	
-	if(sInWorldMediaDisabled)
-	{
-		// When inworld media is disabled, all instances that aren't marked as "used in UI" will not be loaded.
-		if(!mUsedInUI)
-		{
-			return true;
-		}
-	}
-	
 	// If this media's class is not supposed to be shown, unload
 	if (!shouldShowBasedOnClass())
 	{
@@ -3848,12 +3758,22 @@ bool LLViewerMediaImpl::shouldShowBasedOnClass() const
 	
 	// If it is attached to an avatar and the pref is off, we shouldn't show it
 	if (attached_to_another_avatar)
-		return gSavedSettings.getBOOL(LLViewerMedia::SHOW_MEDIA_ON_OTHERS_SETTING);
-	
+	{
+		static LLCachedControl<bool> show_media_on_others(gSavedSettings, LLViewerMedia::SHOW_MEDIA_ON_OTHERS_SETTING);
+		return show_media_on_others;
+	}
 	if (inside_parcel)
-		return gSavedSettings.getBOOL(LLViewerMedia::SHOW_MEDIA_WITHIN_PARCEL_SETTING);
+	{
+		static LLCachedControl<bool> show_media_within_parcel(gSavedSettings, LLViewerMedia::SHOW_MEDIA_WITHIN_PARCEL_SETTING);
+
+		return show_media_within_parcel;
+	}
 	else 
-		return gSavedSettings.getBOOL(LLViewerMedia::SHOW_MEDIA_OUTSIDE_PARCEL_SETTING);
+	{
+		static LLCachedControl<bool> show_media_outside_parcel(gSavedSettings, LLViewerMedia::SHOW_MEDIA_OUTSIDE_PARCEL_SETTING);
+
+		return show_media_outside_parcel;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -33,6 +33,7 @@
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llavataractions.h"
+#include "llclipboard.h"
 #include "llfloaterinventory.h"
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
@@ -132,6 +133,7 @@ LLInventoryPanel::LLInventoryPanel(const LLInventoryPanel::Params& p) :
 	mAcceptsDragAndDrop(p.accepts_drag_and_drop),
 	mAllowMultiSelect(p.allow_multi_select),
 	mShowItemLinkOverlays(p.show_item_link_overlays),
+	mShowEmptyMessage(p.show_empty_message),
 	mShowLoadStatus(p.show_load_status),
 	mViewsInitialized(false),
 	mInvFVBridgeBuilder(NULL)
@@ -205,10 +207,11 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 		scroller_view_rect.translate(-scroller_view_rect.mLeft, -scroller_view_rect.mBottom);
 		LLScrollContainer::Params scroller_params(params.scroll());
 		scroller_params.rect(scroller_view_rect);
-		mScroller = LLUICtrlFactory::create<LLScrollContainer>(scroller_params);
+		mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroller_params);
 		addChild(mScroller);
 		mScroller->addChild(mFolderRoot);
 		mFolderRoot->setScrollContainer(mScroller);
+		mFolderRoot->setFollowsAll();
 		mFolderRoot->addChild(mFolderRoot->mStatusTextBox);
 	}
 
@@ -246,6 +249,9 @@ void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
 		getFilter()->setFilterEmptySystemFolders();
 	}
 	
+	// keep track of the clipboard state so that we avoid filtering too much
+	mClipboardState = LLClipboard::instance().getGeneration();
+	
 	// Initialize base class params.
 	LLPanel::initFromParams(params);
 }
@@ -276,6 +282,14 @@ void LLInventoryPanel::draw()
 {
 	// Select the desired item (in case it wasn't loaded when the selection was requested)
 	mFolderRoot->updateSelection();
+	
+	// Nudge the filter if the clipboard state changed
+	if (mClipboardState != LLClipboard::instance().getGeneration())
+	{
+		mClipboardState = LLClipboard::instance().getGeneration();
+		getFilter()->setModified(LLClipboard::instance().isCutMode() ? LLInventoryFilter::FILTER_MORE_RESTRICTIVE : LLInventoryFilter::FILTER_LESS_RESTRICTIVE);
+	}
+	
 	LLPanel::draw();
 }
 
@@ -617,6 +631,7 @@ LLFolderView * LLInventoryPanel::createFolderView(LLInvFVBridge * bridge, bool u
 	p.listener =  bridge;
 	p.use_label_suffix = useLabelSuffix;
 	p.allow_multiselect = mAllowMultiSelect;
+	p.show_empty_message = mShowEmptyMessage;
 	p.show_load_status = mShowLoadStatus;
 
 	return LLUICtrlFactory::create<LLFolderView>(p);
@@ -815,7 +830,7 @@ BOOL LLInventoryPanel::handleHover(S32 x, S32 y, MASK mask)
 	if(handled)
 	{
 		ECursorType cursor = getWindow()->getCursor();
-		if (LLInventoryModelBackgroundFetch::instance().backgroundFetchActive() && cursor == UI_CURSOR_ARROW)
+		if (LLInventoryModelBackgroundFetch::instance().folderFetchActive() && cursor == UI_CURSOR_ARROW)
 		{
 			// replace arrow cursor with arrow and hourglass cursor
 			getWindow()->setCursor(UI_CURSOR_WORKING);
@@ -1157,7 +1172,6 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		LLViewerInventoryCategory * cat = gInventory.getCategory(obj_id);
 		
 		bool in_inbox = false;
-		bool in_outbox = false;
 		
 		LLViewerInventoryCategory * parent_cat = NULL;
 		
@@ -1173,10 +1187,9 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 		if (parent_cat)
 		{
 			in_inbox = (LLFolderType::FT_INBOX == parent_cat->getPreferredType());
-			in_outbox = (LLFolderType::FT_OUTBOX == parent_cat->getPreferredType());
 		}
 		
-		if (in_inbox || in_outbox)
+		if (in_inbox)
 		{
 			LLSidepanelInventory * sidepanel_inventory =	LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 			LLInventoryPanel * inventory_panel = NULL;
@@ -1185,11 +1198,6 @@ void LLInventoryPanel::openInventoryPanelAndSetSelection(BOOL auto_open, const L
 			{
 				sidepanel_inventory->openInbox();
 				inventory_panel = sidepanel_inventory->getInboxPanel();
-			}
-			else
-			{
-				sidepanel_inventory->openOutbox();
-				inventory_panel = sidepanel_inventory->getOutboxPanel();
 			}
 
 			if (inventory_panel)
