@@ -89,6 +89,11 @@
 				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
 			</text>
 			<spinner tool_tip="-1 für kompletten Gruppennamen, 0 für deaktiviert" name="FSShowGroupNameLength"/>
+			<check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
+			<check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
+			<text name="requires_save_chat_logs" width="280">
+				(Erfordert Speichern von lokalem Chatprotokoll)
+			</text>
 			<text name="FSIMChatHistoryFade_label" width="310">
 				IM-Text vor dem Hintergrund der Chathistorie ausblenden
 			</text>
@@ -122,15 +127,10 @@
 
             <!-- Logging -->
             <text name="logging_enhancements">
-              Chatprotokoll-Extras:
+              Zeitstempel:
             </text>
             <check_box label="Zeitstempel im lokalem Chat nicht anzeigen" name="hide_timestamps_nearby_chat"/>
-            <check_box label="Zeitstempen in Instant Messages nicht anzeigen" name="hide_timestamps_im"/>
-            <check_box name="FSShowIMInChatHistory" label="Instant Messages im lokalem Chat anzeigen"/>
-            <check_box name="FSLogIMInChatHistory" label="IMs im lokalem Chat speichern" width="190"/>
-            <text name="requires_save_chat_logs" width="280">
-              (Erfordert Speichern von lokalem Chatprotokoll)
-            </text>
+            <check_box label="Zeitstempel in Instant Messages nicht anzeigen" name="hide_timestamps_im"/>
 
             <!-- Console -->
             <text name="console_enhancements">
