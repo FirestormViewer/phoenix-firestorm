@@ -505,7 +505,7 @@
              height="20"
              increment="0.01"
              initial_val="0.5"
-             tool_tip="0.0-1.0, 0 for no fade, 1 for invisible"
+             tool_tip="0.25-1.0, 0.25 for a lot of fade, 1 for no fade"
              left_pad="3"
              max_val="1.0"
              min_val="0.25"
