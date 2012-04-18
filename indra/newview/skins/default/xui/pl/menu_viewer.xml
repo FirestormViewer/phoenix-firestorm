@@ -57,6 +57,7 @@
 		<menu_item_call label="Grupy" name="My Groups"/>
 		<menu_item_check label="Czat lokalny..." name="Nearby Chat"/>
 		<menu_item_check label="Ludzie" name="People"/>
+		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
 		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>

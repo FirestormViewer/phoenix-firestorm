@@ -68,10 +68,15 @@
 				Długość nazwy grupy wyświetlanej w historii czatu
 			</text>
 			<spinner tool_tip="-1 dla pełnej nazwy grupy, 0 aby wyłączyć" name="FSShowGroupNameLength"/>
+			<check_box name="FSShowIMInChatHistory" label="Pokazuj IM w oknie czatu lokalnego"/>
+			<check_box name="FSLogIMInChatHistory" label="Zapisuj IM w oknie czatu"/>
+			<text name="requires_save_chat_logs">
+				(wymaga zapisywania logów czatu)
+			</text>
 			<text name="FSIMChatHistoryFade_label">
 				Wygaszaj tekst IM w tło okna historii czatu
 			</text>
-			<spinner tool_tip="0.0-1.0, 0 dla braku wygaszania, 1 dla niewidzialności" name="FSIMChatHistoryFade"/>
+			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 		</panel>
 		<panel name="ChatFirestorm">
@@ -93,15 +98,10 @@
 			<check_box name="FSMuteAllGroups" label="Wyłącz WSZYSTKIE czaty grupowe"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
 			<text name="logging_enhancements">
-				Dodatki logowania czatu:
+				Znaczniki czasu:
 			</text>
 			<check_box label="Wyłącz znaczniki czasu w Czacie Lokalnym" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Wyłącz znaczniki czasu w IM" name="hide_timestamps_im"/>
-			<check_box name="FSShowIMInChatHistory" label="Pokazuj IM w oknie czatu lokalnego"/>
-			<check_box name="FSLogIMInChatHistory" label="Zapisuj IM w oknie czatu"/>
-			<text name="requires_save_chat_logs">
-				(wymaga zapisywania logów czatu)
-			</text>
 			<text name="console_enhancements">
 				Konsola:
 			</text>
