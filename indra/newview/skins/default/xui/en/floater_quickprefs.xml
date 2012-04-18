@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="258"
+    height="275"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -231,6 +231,36 @@
             name="AvatarZOffset"
             top_delta="-2"
             width="165"
+            label_width="17"/>
+		<text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Tag Offset"
+            tool_tip="Changes the Z-offset for avatar name tags. Default 0"
+            mouse_opaque="false"
+            top_delta="20"
+            width="90">
+            Tags Offset:
+        </text>
+		<slider
+            can_edit_text="true"
+            control_name="FSNameTagZOffsetCorrection"
+            decimal_digits="2"
+            follows="left|top"
+            height="15"
+            increment="1"
+            initial_value="0"
+            layout="topleft"
+            left_delta="79"
+            max_val="5"
+            min_val="-5"
+            name="FSNameTagZOffsetCorrection"
+            top_delta="-2"
+            width="162"
             label_width="17"/>
 		<text
             type="string"
