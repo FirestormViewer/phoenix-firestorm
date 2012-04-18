@@ -14,7 +14,7 @@
 		</text>
 		<slider left_delta="101" name="RenderMaxPartCount"/>
 		<text name="Avatar Physics LOD" width="105" tool_tip="Legt das Detaillevel der Avatar-Physik fest.">
-			Av-Physik LOD:
+			Avatar-Physik LOD:
 		</text>
 		<slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
 		<text name="LOD Factor" width="105"  tool_tip="Legt das Detaillevel von Primitiven fest (Multiplikator für den aktuellen Bildschirmbereich, für den das Detaillevel berechnet wird) [Standardwert variiert abhängig vom System]">
@@ -28,10 +28,18 @@
 		<text name="Height Offset" width="105" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
 			Höhenabstand:
 		</text>
+		<text name="Tag Offset" tool_tip="Ändert den Höhenabstand der Avatar-Namenstags. Standardwert: 0" width="105">
+			Tag-Höhenabstand:
+		</text>
+		<slider left_delta="87" name="FSNameTagZOffsetCorrection"/>
 		<slider left_delta="87" name="AvatarZOffset"/>		
 		<text name="name_tags_textbox">
 			Avatarnamen:
 		</text>
+		<text name="LookAt_Preferences_Label" width="105">
+			Kamerafokus:
+		</text>
+		<check_box name="showlookat" label="Anzeigen" width="70" left="117" tool_tip="Aktiviert Fadenkreuze, die die Kamerapositionen anderer Avatare markieren."/>
 		<radio_group left="45" name="Name_Tag_Preference">
 			<radio_item label="An" name="radio"/>
 			<radio_item label="Aus" name="radio2"/>
