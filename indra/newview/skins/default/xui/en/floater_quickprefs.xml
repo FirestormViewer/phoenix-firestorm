@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="275"
+    height="285"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -272,7 +272,7 @@
             name="name_tags_textbox"
 			top_pad="8"
             width="400">
-            Name tags:
+            Name Tags:
         </text>
 		<radio_group
             control_name="AvatarNameTagMode"
@@ -300,6 +300,28 @@
             value="0"
             width="75" />
         </radio_group>
+		<text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="0"
+            layout="topleft"
+            left="5"
+            name="LookAt_Preferences_Label"
+			top_pad="0"
+            width="90">
+            LookAt Target:
+        </text>
+        <check_box
+         top_delta="0"
+         follows="left|top"
+         height="16"
+         left="107"
+         name="showlookat"
+         label="Enabled"
+         width="70"
+         control_name="DebugLookAt"
+         tool_tip="Enable crosshairs marking where people are looking."/>
         <text
             type="string"
             length="1"
@@ -310,7 +332,7 @@
             name="WL Sky"
             tool_tip="Windlight presets for your sky"
             mouse_opaque="false"
-            top_delta="27"
+            top_delta="22"
             width="90">
             WL Sky:
         </text>
