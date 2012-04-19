@@ -29,6 +29,10 @@
 			Despl. vertical:
 		</text>
 		<slider name="AvatarZOffset" left_delta="86"/>
+		<text name="Tag Offset" tool_tip="Modifica la separación vertical entre los avatar y sus etiqueta de nombre. 0 por defecto" width="120">
+			Altura etiquetas:
+		</text>
+		<slider name="FSNameTagZOffsetCorrection" left_delta="86"/>
 		<text name="name_tags_textbox" width="120">
 			Etiquetas:
 		</text>
@@ -36,6 +40,10 @@
 			<radio_item label="Sí" name="radio"/>
 			<radio_item label="No" name="radio2"/>
 		</radio_group>
+		<text name="LookAt_Preferences_Label" width="120">
+			Puntos de mira:
+		</text>
+		<check_box name="showlookat" label="Activados" tool_tip="Muestra los puntos a los que otros están mirando"/>
 		<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 			Cielo WL:
 		</text>
