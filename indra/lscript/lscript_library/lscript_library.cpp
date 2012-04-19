@@ -509,6 +509,9 @@ void LLScriptLibrary::init()
 
 	// Server 12.01.24.248357 new functions
 	addFunction(0.f, 0.f, dummy_func, "llSetRegionPos", "i", "v");
+
+	// Server 12.04.13.253827 new function
+	addFunction(0.f, 0.f, dummy_func, "llGetAgentList", "l", "il");
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 }
 

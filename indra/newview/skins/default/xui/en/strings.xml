@@ -2086,6 +2086,10 @@ Applies rotational velocity to object.
 integer llSetRegionPos(vector position)
 Tries to moves the entire object so that the root prim is within 0.1m of position.
 </string>
+<string name="LSLTipText_llGetAgentList" translate="false">
+list llGetAgentList(integer scope, list options)
+Requests a list of agents currently in the region, limited by the scope parameter.
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 
   <!-- Avatar busy/away mode -->
