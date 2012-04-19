@@ -85,7 +85,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 				<button label="IM" name="im_btn" tool_tip="Otwórz sesję wiadomości IM"/>
 			</layout_panel>
 			<layout_panel name="call_btn_lp">
-				<button label="Dzwoń" name="call_btn" tool_tip="Zadzwoń do tego Rezydenta"/>
+				<button label="Dzw." name="call_btn" tool_tip="Zadzwoń do tego Rezydenta"/>
 			</layout_panel>
 			<layout_panel name="share_btn_lp">
 				<button label="Daj" name="share_btn" tool_tip="Udostępnij obiekt z Szafy"/>
@@ -102,7 +102,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 				<button label="Czat grupy" name="chat_btn" tool_tip="Otwórz sesję czatu"/>
 			</layout_panel>
 			<layout_panel name="group_call_btn_lp">
-				<button label="Grupowa rozmowa głosowa" name="group_call_btn" tool_tip="Rozmowa głosowa w tej grupie"/>
+				<button label="Rozm. głos." name="group_call_btn" tool_tip="Rozmowa głosowa w tej grupie"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>

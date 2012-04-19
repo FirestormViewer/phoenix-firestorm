@@ -10,7 +10,7 @@
         <text name="Particles" tool_tip="Ilość cząsteczek do renderowania">
             Maks. cząstek:
         </text>
-		<text name="Avatar Physics LOD" tool_tip="Kontroluj poziom detali (LOD) dla fizyki awatarów (np. fizykę piersi)">
+        <text name="Avatar Physics LOD" tool_tip="Kontroluj poziom detali (LOD) dla fizyki awatarów (np. fizykę piersi)">
             LOD fiz. awat.:
         </text>
         <text name="LOD Factor" tool_tip="Kontroluj poziom detali (LOD) dla obiektów i prim (mnożnik dla bieżącego obszaru ekranu, gdy obliczony jest poziom szczegółowości) [wartość domyślna - zależy]">
@@ -22,10 +22,17 @@
         <text name="Height Offset" tool_tip="Użyj tego suwaka, aby do pewnego stopnia manipulować bryłami brzegowymi (bounding boxes) Twojego awatara. Przydatne, aby zmylić tzw. orbitery lub podnieść Cię w górę lub w dół bez zmiany kształtu.">
             Dostrój wys.:
         </text>
-		<text name="name_tags_textbox">
+        <text name="Tag Offset" tool_tip="Zmienia przesunięcie tagów (imion) awatarów w osi Z (w górę lub w dół). Domyślnie 0">
+            Poz. tagów:
+        </text>
+        <text name="name_tags_textbox">
             Tagi imion:
         </text>
-		<radio_group name="Name_Tag_Preference">
+        <text name="LookAt_Preferences_Label">
+            Cele spojrzeń:
+        </text>
+        <check_box name="showlookat" label="Włącz" tool_tip="Włącz celowniczki pokazujące gdzie patrzą inne osoby."/>
+        <radio_group name="Name_Tag_Preference">
          <radio_item label="Włącz" name="radio"/>
          <radio_item label="Wyłącz" name="radio2"/>
         </radio_group>
