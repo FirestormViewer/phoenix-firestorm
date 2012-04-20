@@ -15,6 +15,31 @@
  title="CONTACT SETS"
  width="600"
  help_topic="fs_contact_sets">
+	<floater.string name="AddToGroup" value="Add to: [GROUPNAME]"/>
+	<floater.string name="RemoveFromGroup" value="Remove from: [GROUPNAME]"/>
+	<floater.string name="RemoveDisplayName" value="Remove display name"/>
+	<floater.string name="ResetNameModification" value="Reset name modification"/>
+	<floater.string name="RemoveFromList" value="Remove from list"/>
+	<floater.string name="ShowProfile" value="Show profile"/>
+	<floater.string name="ShowOnMap" value="Show on map"/>
+	<floater.string name="SendIM" value="Send instant message"/>
+	<floater.string name="OfferTP" value="Offer teleport"/>
+	<floater.string name="AllSelected" value="All [COUNT] selected"/>
+	<floater.string name="StartConferenceCall" value="Start conference call ([COUNT])"/>
+	<floater.string name="SendMassTP" value="Send mass TP ([COUNT])"/>
+	<floater.string name="DeselectAll" value="Deselect all ([COUNT])"/>
+	<floater.string name="SelectAll" value="Select all ([COUNT])"/>
+	<floater.string name="AddNewAvatar" value="Add new avatar"/>
+	<floater.string name="FilterLabel" value="Currently using filter:"/>
+	<floater.string name="TooltipFriendUnselected" value="Friend is unselected"/>
+	<floater.string name="TooltipFriendSelected" value="Friend is selected"/>
+	<floater.string name="TooltipFriendOnline" value="Friend is online"/>
+	<floater.string name="TooltipFriendOffline" value="Friend is offline"/>
+	<floater.string name="TooltipNotOnFriendlist" value="Not on your friends list"/>
+	<floater.string name="TooltipIM" value="Instant message"/>
+	<floater.string name="TooltipProfile" value="Show profile"/>
+	<floater.string name="TooltipNameChanged" value="Name has been changed"/>
+
 	<check_box
 	 bottom_delta="-5000"
 	 left_delta="0"

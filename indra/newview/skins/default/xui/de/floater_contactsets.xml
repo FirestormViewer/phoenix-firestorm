@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="lgg_fg_floater" title="KONTAKT-SETS">
+	<floater.string name="AddToGroup" value="Hinzufügen zu: [GROUPNAME]"/>
+	<floater.string name="RemoveFromGroup" value="Entfernen von: [GROUPNAME]"/>
+	<floater.string name="RemoveDisplayName" value="Anzeigename entfernen"/>
+	<floater.string name="ResetNameModification" value="Namensänderung zurücksetzen"/>
+	<floater.string name="RemoveFromList" value="Von Liste entfernen"/>
+	<floater.string name="ShowProfile" value="Profil anzeigen"/>
+	<floater.string name="ShowOnMap" value="Auf Karte zeigen"/>
+	<floater.string name="SendIM" value="Instant Message senden"/>
+	<floater.string name="OfferTP" value="Teleport anbieten"/>
+	<floater.string name="AllSelected" value="Alle [COUNT] ausgewählt"/>
+	<floater.string name="StartConferenceCall" value="Gruppenanruf starten ([COUNT])"/>
+	<floater.string name="SendMassTP" value="Massen-TP senden ([COUNT])"/>
+	<floater.string name="DeselectAll" value="Alle abwählen ([COUNT])"/>
+	<floater.string name="SelectAll" value="Alle auswählen ([COUNT])"/>
+	<floater.string name="AddNewAvatar" value="Neuen Avatar hinzufügen"/>
+	<floater.string name="FilterLabel" value="Aktueller Filter:"/>
+	<floater.string name="TooltipFriendUnselected" value="Freund ist nicht ausgewählt"/>
+	<floater.string name="TooltipFriendSelected" value="Freund ist ausgewählt"/>
+	<floater.string name="TooltipFriendOnline" value="Freund ist online"/>
+	<floater.string name="TooltipFriendOffline" value="Freund ist offline"/>
+	<floater.string name="TooltipNotOnFriendlist" value="Nicht auf der Freundesliste"/>
+	<floater.string name="TooltipIM" value="Instant Message"/>
+	<floater.string name="TooltipProfile" value="Profile anzeigen"/>
+	<floater.string name="TooltipNameChanged" value="Name wurde geändert"/>
+
 	<text name="lgg_fg_text1">
 		Set:
 	</text>
 	<text name="lgg_fg_text2a" width="110">
-		Zeige Nachrichten</text>
+		Zeige Nachrichten
+	</text>
 	<text name="lgg_fg_text2b" width="110">
 		für dieses Set
 	</text>
 	<button label="Einstellungen" name="lgg_fg_openSettings" left_delta="108"/>
 	<button label="Set löschen" name="lgg_fg_groupDelete" left_delta="85"/>
 	<color_swatch label="Farbe" name="colorswatch" tool_tip="Klicken, um die Farbauswahl zu öffnen"/>
+	<view_border name="lgg_fg_border1" width="310"/>
 	<text name="lgg_fg_text3">
 		Zeige:
 	</text>
