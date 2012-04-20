@@ -22,7 +22,7 @@
 	<floater.string name="TooltipFriendOffline" value="Freund ist offline"/>
 	<floater.string name="TooltipNotOnFriendlist" value="Nicht auf der Freundesliste"/>
 	<floater.string name="TooltipIM" value="Instant Message"/>
-	<floater.string name="TooltipProfile" value="Profile anzeigen"/>
+	<floater.string name="TooltipProfile" value="Profil anzeigen"/>
 	<floater.string name="TooltipNameChanged" value="Name wurde geändert"/>
 
 	<text name="lgg_fg_text1">
