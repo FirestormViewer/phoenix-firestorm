@@ -17,6 +17,7 @@
 
 #ifndef LGG_FRIENDS_GROUPS_FLOATER_H
 #define LGG_FRIENDS_GROUPS_FLOATER_H
+
 #include "llview.h"
 #include "llviewerinventory.h"
 #include "llfloater.h"
@@ -28,8 +29,7 @@
 #include "llavatarpropertiesprocessor.h"
 
 
-class lggContactSetsFloater : public LLFloater,  public LLFriendObserver
-	, public LLAvatarPropertiesObserver
+class lggContactSetsFloater : public LLFloater, public LLFriendObserver, public LLAvatarPropertiesObserver
 {
 public:
 	lggContactSetsFloater(const LLSD& seed);
@@ -40,10 +40,10 @@ public:
 	virtual void changed(U32 mask);
 	void onClose(bool app_quitting);
 	BOOL postBuild(void);
-	BOOL handleMouseDown(S32 x,S32 y,MASK mask);
+	BOOL handleMouseDown(S32 x, S32 y, MASK mask);
 	void update();
-	BOOL handleRightMouseDown(S32 x,S32 y,MASK mask);
-	BOOL handleKeyHere( KEY key, MASK mask );
+	BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
+	BOOL handleKeyHere(KEY key, MASK mask);
 	BOOL handleDoubleClick(S32 x, S32 y, MASK mask);
 	BOOL handleHover(S32 x, S32 y, MASK mask);
 	BOOL handleUnicodeCharHere(llwchar uni_char);
@@ -82,8 +82,8 @@ public:
 	LLRect contextRect;
 
 	static lggContactSetsFloater* sInstance;
-private:
 
+private:
 	S32 mouse_x;
 	S32 mouse_y;
 	F32 hovered;
