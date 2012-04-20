@@ -1,50 +1,296 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater border="true" can_close="true" can_minimize="true" bottom="400" left="300" can_resize="false" height="370" width="550" name="lgg_fg_floater_settings" title="CONTACT SET SETTINGS" help_topic="fs_contact_sets">
-  <color_swatch bottom_delta="50" can_apply_immediately="true" color="1, 1, 1, 1" follows="left|top" height="40" label="" left_delta="5" mouse_opaque="true" name="colordefault" tool_tip="Default color for friends not in a group. Affects only the FriendGroups list display." width="65" control_name="lgg_fg_groupColor"/>
-  <text bottom_delta="-30" follows="left|top" font="SansSerifSmall" height="10" left_delta="70" name="lgg_fg_text2a" width="110">Default color for</text>
-  <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text2b" width="120">friends not in a Set</text>
-  <slider can_edit_text="false" control_name="FSContactSetsScrollSpeed" decimal_digits="0" follows="left|top" height="15" increment="1" initial_value="100" layout="topleft" left_delta="150" max_val="100" min_val="1" name="FSContactSetsScrollSpeed" bottom_delta="0" width="250" label="Scroll speed" label_width="80" tool_tip="How fast to scroll through the list."/>
-  <check_box bottom_delta="30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Show Online Notices for ALL friends as toasts (set to false to only show for certain Sets)" left="5" mouse_opaque="true" name="ChatOnlineNotification" visible="true" radio_style="false" width="270" control_name="ChatOnlineNotification"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Show Online Notices for ALL friends in nearby chat (set to false to only show for certain Sets)" left="5" mouse_opaque="true" name="OnlineOfflinetoNearbyChat" visible="true" radio_style="false" width="270" control_name="OnlineOfflinetoNearbyChat"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Show Online Notices for certain Sets as toast" left="5" mouse_opaque="true" name="FSContactSetsNotificationToast" visible="true" radio_style="false" width="270" control_name="FSContactSetsNotificationToast"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Show Online Notices for certain Sets in nearby chat" left="5" mouse_opaque="true" name="FSContactSetsNotificationNearbyChat" visible="true" radio_style="false" width="270" control_name="FSContactSetsNotificationNearbyChat"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Color a friend's mini map icon based on their Contact Set" left="5" mouse_opaque="true" name="FSContactSetsColorizeMiniMap" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeMiniMap"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Color a friend's name tag based on their Contact Set" left="5" mouse_opaque="true" name="FSContactSetsColorizeNameTag" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeNameTag"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Color a friend's radar list entry based on their Contact Set" left="5" mouse_opaque="true" name="FSContactSetsColorizeRadar" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeRadar"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Color a friend's chat based on their Contact Set" left="5" mouse_opaque="true" name="FSContactSetsColorizeChat" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeChat"/>
+<floater
+ border="true"
+ can_close="true"
+ can_minimize="true"
+ bottom="400"
+ left="300"
+ can_resize="false"
+ height="370"
+ width="550"
+ name="lgg_fg_floater_settings"
+ title="CONTACT SET SETTINGS"
+ help_topic="fs_contact_sets">
+	<color_swatch
+	 bottom_delta="50"
+	 can_apply_immediately="true"
+	 color="1, 1, 1, 1"
+	 follows="left|top"
+	 height="40"
+	 label=""
+	 left_delta="5"
+	 name="colordefault"
+	 tool_tip="Default color for friends not in a group. Affects only the FriendGroups list display."
+	 width="65"
+	 control_name="lgg_fg_groupColor"/>
+	<text
+	 bottom_delta="-30"
+	 follows="left|top"
+	 height="10"
+	 left_delta="70"
+	 name="lgg_fg_text2a"
+	 width="110">
+		Default color for
+	</text>
+	<text
+	 bottom_delta="11"
+	 follows="left|top"
+	 height="10"
+	 left_delta="0"
+	 name="lgg_fg_text2b"
+	 width="120">
+		friends not in a Set
+	</text>
+	<slider
+	 can_edit_text="false"
+	 control_name="FSContactSetsScrollSpeed"
+	 decimal_digits="0"
+	 follows="left|top"
+	 height="15"
+	 increment="1"
+	 initial_value="100"
+	 layout="topleft"
+	 left_delta="150"
+	 max_val="100"
+	 min_val="1"
+	 name="FSContactSetsScrollSpeed"
+	 bottom_delta="0"
+	 width="250"
+	 label="Scroll speed"
+	 label_width="80"
+	 tool_tip="How fast to scroll through the list."/>
+	<check_box
+	 bottom_delta="30"
+	 follows="left|top"
+	 height="16"
+	 label="Show Online Notices for ALL friends as toasts (set to false to only show for certain Sets)"
+	 left="5"
+	 name="ChatOnlineNotification"
+	 width="270"
+	 control_name="ChatOnlineNotification"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Show Online Notices for ALL friends in nearby chat (set to false to only show for certain Sets)"
+	 left="5"
+	 name="OnlineOfflinetoNearbyChat"
+	 width="270"
+	 control_name="OnlineOfflinetoNearbyChat"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Show Online Notices for certain Sets as toast"
+	 left="5"
+	 name="FSContactSetsNotificationToast"
+	 width="270"
+	 control_name="FSContactSetsNotificationToast"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Show Online Notices for certain Sets in nearby chat"
+	 left="5"
+	 name="FSContactSetsNotificationNearbyChat"
+	 width="270"
+	 control_name="FSContactSetsNotificationNearbyChat"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Color a friend's mini map icon based on their Contact Set"
+	 left="5"
+	 name="FSContactSetsColorizeMiniMap"
+	 width="270"
+	 control_name="FSContactSetsColorizeMiniMap"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Color a friend's name tag based on their Contact Set"
+	 left="5"
+	 name="FSContactSetsColorizeNameTag"
+	 width="270"
+	 control_name="FSContactSetsColorizeNameTag"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Color a friend's radar list entry based on their Contact Set"
+	 left="5"
+	 name="FSContactSetsColorizeRadar"
+	 width="270"
+	 control_name="FSContactSetsColorizeRadar"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 initial_value="false"
+	 label="Color a friend's chat based on their Contact Set"
+	 left="5"
+	 name="FSContactSetsColorizeChat"
+	 width="270"
+	 control_name="FSContactSetsColorizeChat"/>
 
-  <check_box bottom_delta="30" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Color only a small area of the background of the Contact Sets floater" left="5" mouse_opaque="true" name="FSContactSetsColorizeBar" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeBar"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Colorise text instead of backgrounds in the Contact Sets floater" left="25" mouse_opaque="true" name="FSContactSetsColorizeText" visible="true" radio_style="false" width="270" control_name="FSContactSetsColorizeText"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Require CTRL key to be pressed to be able to multiselect" left="5" mouse_opaque="true" name="FSContactSetsRequireCTRL" visible="true" radio_style="false" width="270" control_name="FSContactSetsRequireCTRL"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Use the Zoom Effect in the floater" left="5" mouse_opaque="true" name="FSContactSetsDoZoom" visible="true" radio_style="false" width="270" control_name="FSContactSetsDoZoom"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Use the color highlight effect in the floater" left="5" mouse_opaque="true" name="FSContactSetsUseColorHighlight" visible="true" radio_style="false" width="270" control_name="FSContactSetsUseColorHighlight"/>
-  <slider can_edit_text="false" control_name="FSContactSetsMaxColorStrength" decimal_digits="0" follows="left|top" height="15" increment="1" initial_value="100" layout="topleft" left="280" max_val="100" min_val="1" name="FSContactSetsMaxColorStrength" bottom_delta="0" width="180" label="BG Strength" label_width="70" tool_tip="How strong do you want the color of the background to be."/>
+	<check_box
+	 bottom_delta="30"
+	 follows="left|top"
+	 height="16"
+	 label="Color only a small area of the background of the Contact Sets floater"
+	 left="5"
+	 name="FSContactSetsColorizeBar"
+	 width="270"
+	 control_name="FSContactSetsColorizeBar"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Colorise text instead of backgrounds in the Contact Sets floater"
+	 left="25"
+	 name="FSContactSetsColorizeText"
+	 width="270"
+	 control_name="FSContactSetsColorizeText"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Require CTRL key to be pressed to be able to multiselect"
+	 left="5"
+	 name="FSContactSetsRequireCTRL"
+	 width="270"
+	 control_name="FSContactSetsRequireCTRL"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Use the Zoom Effect in the floater"
+	 left="5"
+	 name="FSContactSetsDoZoom"
+	 width="270"
+	 control_name="FSContactSetsDoZoom"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Use the color highlight effect in the floater"
+	 left="5"
+	 name="FSContactSetsUseColorHighlight"
+	 width="270"
+	 control_name="FSContactSetsUseColorHighlight"/>
+	<slider
+	 can_edit_text="false"
+	 control_name="FSContactSetsMaxColorStrength"
+	 decimal_digits="0"
+	 follows="left|top"
+	 height="15"
+	 increment="1"
+	 initial_value="100"
+	 layout="topleft"
+	 left="280"
+	 max_val="100"
+	 min_val="1"
+	 name="FSContactSetsMaxColorStrength"
+	 bottom_delta="0"
+	 width="180"
+	 label="BG Strength"
+	 label_width="70"
+	 tool_tip="How strong do you want the color of the background to be."/>
 
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Show Folders above contacts (you can use the drop down instead if this is off)" left="5" mouse_opaque="true" name="FSContactSetsShowFolders" visible="true" radio_style="false" width="270" control_name="FSContactSetsShowFolders"/>
-  <check_box bottom_delta="15" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Draw Profile Icons Next To Names" left="5" mouse_opaque="true" name="FSContactSetsDrawProfileIcon" visible="true" radio_style="false" width="270" control_name="FSContactSetsDrawProfileIcon"/>
-  <text type="string" length="1" follows="left|top" height="10" layout="topleft" left="5" name="lgg_fg_text3" mouse_opaque="false" top_delta="27" width="90">Name Format:</text>
-  <combo_box height="20" layout="topleft" left_delta="80" name="lgg_fg_dispName" control_name="FSContactSetsNameFormat" top_delta="-4" width="150">
-  <combo_item name="Legacy Names" value="0">
-    Legacy Names
-  </combo_item>
-  <combo_item name="Display Names (with Username)" value="1">
-    Display Names (with Username)
-  </combo_item>
-  <combo_item name="Display Names only" value="2">
-    Display Names only
-  </combo_item>
-  </combo_box>
-  <text type="string" length="1" follows="left|top" height="10" layout="topleft" left_delta="170" name="lgg_fg_text4" mouse_opaque="false" top_delta="4" width="90">Sort by:</text>
-  <combo_box height="20" layout="topleft" left_delta="45" name="lgg_fg_sortName" control_name="FSContactSetSortNameFormat" top_delta="-4" width="150" >
-  <combo_item name="Legacy Names" value="Old Names">
-    Legacy Names
-  </combo_item>
-  <combo_item name="Display Names (with Username)" value="Display Names (with Username)">
-    Display Names (with Username)
-  </combo_item>
-  <combo_item name="Display Names only" value="Display Names only">
-    Display Names only
-  </combo_item>
-  </combo_box>
-  <button bottom_delta="40" follows="top|left" font="SansSerifSmall" height="20" label="Ok" name="lgg_fg_okButton" left="195" width="40"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Show Folders above contacts (you can use the drop down instead if this is off)"
+	 left="5"
+	 name="FSContactSetsShowFolders"
+	 width="270"
+	 control_name="FSContactSetsShowFolders"/>
+	<check_box
+	 bottom_delta="15"
+	 follows="left|top"
+	 height="16"
+	 label="Draw Profile Icons Next To Names"
+	 left="5"
+	 name="FSContactSetsDrawProfileIcon"
+	 width="270"
+	 control_name="FSContactSetsDrawProfileIcon"/>
+	<text
+	 type="string"
+	 follows="left|top"
+	 height="10"
+	 layout="topleft"
+	 left="5"
+	 name="lgg_fg_text3"
+	 top_delta="27"
+	 width="90">
+		Name Format:
+	</text>
+	<combo_box
+	 height="20"
+	 layout="topleft"
+	 left_delta="80"
+	 name="lgg_fg_dispName"
+	 control_name="FSContactSetsNameFormat"
+	 top_delta="-4"
+	 width="150">
+		<combo_item
+		 name="Legacy Names"
+		 value="0">
+			Legacy Names
+		</combo_item>
+		<combo_item
+		 name="Display Names (with Username)"
+		 value="1">
+			Display Names (with Username)
+		</combo_item>
+		<combo_item
+		 name="Display Names only"
+		 value="2">
+			Display Names only
+		</combo_item>
+	</combo_box>
+	<text
+	 type="string"
+	 follows="left|top"
+	 height="10"
+	 layout="topleft"
+	 left_delta="170"
+	 name="lgg_fg_text4"
+	 mouse_opaque="false"
+	 top_delta="4"
+	 width="90">
+		Sort by:
+	</text>
+	<combo_box
+	 height="20"
+	 layout="topleft"
+	 left_delta="45"
+	 name="lgg_fg_sortName"
+	 control_name="FSContactSetSortNameFormat"
+	 top_delta="-4"
+	 width="150">
+		<combo_item
+		 name="Legacy Names"
+		 value="Old Names">
+			Legacy Names
+		</combo_item>
+		<combo_item
+		 name="Display Names (with Username)"
+		 value="Display Names (with Username)">
+			Display Names (with Username)
+		</combo_item>
+		<combo_item
+		 name="Display Names only"
+		 value="Display Names only">
+			Display Names only
+		</combo_item>
+	</combo_box>
+	<button
+	 bottom_delta="40"
+	 follows="top|left"
+	 height="20"
+	 label="OK"
+	 name="lgg_fg_okButton"
+	 left="195"
+	 width="40"/>
 </floater>

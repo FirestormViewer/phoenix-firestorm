@@ -1,28 +1,238 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater can_close="true" can_drag_on_left="false" can_minimize="true" can_resize="true" height="863" layout="topleft" min_height="300" min_width="600" name="lgg_fg_floater" save_rect="true" save_visibility="true" single_instance="true" title="CONTACT SETS" width="600" help_topic="fs_contact_sets">
-    <check_box bottom_delta="-5000" left_delta="0" enabled="true" follows="left|top" height="6" initial_value="false" label="0.0"  mouse_opaque="true" name="haxCheckbox" radio_style="false"  />
-	<text bottom_delta="5017" follows="left|top" font="SansSerifSmall" height="10" left_delta="5" name="lgg_fg_text1" width="100">Set:</text>
-    <combo_box allow_text_entry="false" bottom_delta="5" left_delta="45" follows="left|top" height="18" left="10" max_chars="20" mouse_opaque="true" name="lgg_fg_groupCombo" width="170"/>
-    <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="" left_delta="177" mouse_opaque="true" name="lgg_fg_showNotices" radio_style="false" width="270" control_name="lgg_fg_showNotices"/>
-    <text bottom_delta="-11" follows="left|top" font="SansSerifSmall" height="10" left_delta="20" name="lgg_fg_text2a" width="110">Show notices</text>
-    <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text2b" width="110">for this Set</text>
-    <button bottom_delta="2" follows="top|left" font="SansSerifSmall" height="20" label="Settings" name="lgg_fg_openSettings" left_delta="93" width="80"/>
-    <button bottom_delta="0" follows="top|left" font="SansSerifSmall" height="20" label="Delete Set" name="lgg_fg_groupDelete" left_delta="100" width="85"/>
-        <color_swatch bottom_delta="35" can_apply_immediately="true" follows="left|top" height="55" label="Set Color" left_delta="90" mouse_opaque="true" name="colorswatch" tool_tip="Click to open Color Picker" width="65" control_name="lgg_fg_groupColor"/>
-        <view_border blevel_style="in" bottom_delta="-8" follows="left|top" height="26" left="5" mouse_opaque="false" name="lgg_fg_border1" width="300"/>
-    <text bottom_delta="-8" follows="left|top" font="SansSerifSmall" height="10" left="7" name="lgg_fg_text3" width="100">Show:</text>
-    <check_box bottom_delta="5" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Online" left_delta="40" mouse_opaque="true" name="lgg_fg_showOnline" radio_style="false" width="270" control_name="FSContactSetsShowOnline"/>
-    <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="" left_delta="60" mouse_opaque="true" name="lgg_fg_showOtherGroups" radio_style="false" width="270" control_name="FSContactSetsShowOtherGroups"/>
-    <text bottom_delta="-11" follows="left|top" font="SansSerifSmall" height="10" left_delta="20" name="lgg_fg_text4a" width="110">Other</text>
-    <text bottom_delta="11" follows="left|top" font="SansSerifSmall" height="10" left_delta="0" name="lgg_fg_text4b" width="110">Sets</text>
-    <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="Offline" left_delta="40" mouse_opaque="true" name="lgg_fg_showOffline" radio_style="false" width="270" control_name="FSContactSetsShowOffline"/>
-    <check_box bottom_delta="0" enabled="true" follows="left|top" font="SansSerifSmall" height="16" initial_value="false" label="All Friends" left_delta="60" mouse_opaque="true" name="lgg_fg_showAllFriends" radio_style="false" width="270" control_name="FSContactSetsShowAllFriends"/>
-    <line_editor bevel_style="in" border_style="line" border_thickness="1" bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20" left_delta="82" max_length_bytes="256" mouse_opaque="true" tool_tip="" name="lgg_fg_groupNewName" width="130" label="New Set Name"/>
-   <button bottom_delta="0" follows="top|left" font="SansSerifSmall" height="20" label="Create Set" name="lgg_fg_groupCreate" left_delta="131" width="85"/>
- <panel name="draw_region" left="5" width="590" height="750" bottom="830" border="true" mouse_opaque="true" bevel_style="in" background_visible="false" background_opaque="true" follows="bottom|left|top|right" bg_opaque_color="1,1,1,0" bg_alpha_color="white" can_resize="false">
-  </panel>
-  <panel name="bottom_region" left_delta="0" width="590" height="20" top_delta="755" border="true" mouse_opaque="true" bevel_style="in" background_visible="false" background_opaque="true" follows="bottom|left|right" bg_opaque_color="1,1,1,0" bg_alpha_color="white" can_resize="false">
-  </panel>
-   <panel name="top_region" left_delta="0" width="590" height="20" bottom_delta="-780" border="true" mouse_opaque="true" bevel_style="in" background_visible="false" background_opaque="true" follows="top|left|right" bg_opaque_color="1,1,1,0" bg_alpha_color="white" can_resize="false">
-  </panel>
+<floater
+ can_close="true"
+ can_drag_on_left="false"
+ can_minimize="true"
+ can_resize="true"
+ height="863"
+ layout="topleft"
+ min_height="300"
+ min_width="600"
+ name="lgg_fg_floater"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ title="CONTACT SETS"
+ width="600"
+ help_topic="fs_contact_sets">
+	<check_box
+	 bottom_delta="-5000"
+	 left_delta="0"
+	 enabled="true"
+	 follows="left|top"
+	 height="6"
+	 initial_value="false"
+	 label="0.0"
+	 name="haxCheckbox"
+	 radio_style="false" />
+	<text
+	 bottom_delta="5017"
+	 follows="left|top"
+	 height="10"
+	 left_delta="5"
+	 name="lgg_fg_text1"
+	 width="100">
+		Set:
+	</text>
+	<combo_box
+	 allow_text_entry="false"
+	 bottom_delta="5"
+	 left_delta="45"
+	 follows="left|top"
+	 height="18"
+	 left="10"
+	 max_chars="20"
+	 name="lgg_fg_groupCombo"
+	 width="170"/>
+	<check_box
+	 bottom_delta="0"
+	 follows="left|top"
+	 height="16"
+	 label=""
+	 left_delta="177"
+	 name="lgg_fg_showNotices"
+	 width="270"
+	 control_name="lgg_fg_showNotices"/>
+	<text
+	 bottom_delta="-11"
+	 follows="left|top"
+	 height="10"
+	 left_delta="20"
+	 name="lgg_fg_text2a"
+	 width="110">
+		Show notices
+	</text>
+	<text
+	 bottom_delta="11"
+	 follows="left|top"
+	 height="10"
+	 left_delta="0"
+	 name="lgg_fg_text2b"
+	 width="110">
+		for this Set
+	</text>
+	<button
+	 bottom_delta="2"
+	 follows="top|left"
+	 height="20"
+	 label="Settings"
+	 name="lgg_fg_openSettings"
+	 left_delta="93"
+	 width="80"/>
+	<button
+	 bottom_delta="0"
+	 follows="top|left"
+	 height="20"
+	 label="Delete Set"
+	 name="lgg_fg_groupDelete"
+	 left_delta="100"
+	 width="85"/>
+	<color_swatch
+	 bottom_delta="35"
+	 can_apply_immediately="true"
+	 follows="left|top"
+	 height="55"
+	 label="Set Color"
+	 left_delta="90"
+	 name="colorswatch"
+	 tool_tip="Click to open Color Picker"
+	 width="65"
+	 control_name="lgg_fg_groupColor"/>
+	<view_border
+	 bevel_style="in"
+	 bottom_delta="-8"
+	 follows="left|top"
+	 height="26"
+	 left="5"
+	 mouse_opaque="false"
+	 name="lgg_fg_border1"
+	 width="300"/>
+	<text
+	 bottom_delta="-8"
+	 follows="left|top"
+	 height="10"
+	 left="7"
+	 name="lgg_fg_text3"
+	 width="100">
+		Show:
+	</text>
+	<check_box
+	 bottom_delta="5"
+	 follows="left|top"
+	 height="16"
+	 label="Online"
+	 left_delta="40"
+	 name="lgg_fg_showOnline"
+	 width="270"
+	 control_name="FSContactSetsShowOnline"/>
+	<check_box
+	 bottom_delta="0"
+	 follows="left|top"
+	 height="16"
+	 label=""
+	 left_delta="60"
+	 name="lgg_fg_showOtherGroups"
+	 width="270"
+	 control_name="FSContactSetsShowOtherGroups"/>
+	<text
+	 bottom_delta="-11"
+	 follows="left|top"
+	 height="10"
+	 left_delta="20"
+	 name="lgg_fg_text4a"
+	 width="110">
+		Other
+	</text>
+	<text
+	 bottom_delta="11"
+	 follows="left|top"
+	 height="10"
+	 left_delta="0"
+	 name="lgg_fg_text4b"
+	 width="110">
+		Sets
+	</text>
+	<check_box
+	 bottom_delta="0"
+	 follows="left|top"
+	 height="16"
+	 label="Offline"
+	 left_delta="40"
+	 name="lgg_fg_showOffline"
+	 width="270"
+	 control_name="FSContactSetsShowOffline"/>
+	<check_box
+	 bottom_delta="0"
+	 follows="left|top"
+	 height="16"
+	 label="All Friends"
+	 left_delta="60"
+	 name="lgg_fg_showAllFriends"
+	 width="270"
+	 control_name="FSContactSetsShowAllFriends"/>
+	<line_editor
+	 bevel_style="in"
+	 border_style="line"
+	 border_thickness="1"
+	 bottom_delta="0"
+	 follows="left|top"
+	 height="20"
+	 left_delta="82"
+	 max_length_bytes="256"
+	 name="lgg_fg_groupNewName"
+	 width="130"
+	 label="New Set Name"/>
+	<button
+	 bottom_delta="0"
+	 follows="top|left"
+	 height="20"
+	 label="Create Set"
+	 name="lgg_fg_groupCreate"
+	 left_delta="131"
+	 width="85"/>
+	<panel
+	 name="draw_region"
+	 left="5"
+	 width="590"
+	 height="750"
+	 bottom="830"
+	 border="true"
+	 bevel_style="in"
+	 background_visible="false"
+	 background_opaque="true"
+	 follows="bottom|left|top|right"
+	 bg_opaque_color="1,1,1,0"
+	 bg_alpha_color="white"
+	 can_resize="false">
+	</panel>
+	<panel
+	 name="bottom_region"
+	 left_delta="0"
+	 width="590"
+	 height="20"
+	 top_delta="755"
+	 border="true"
+	 bevel_style="in"
+	 background_visible="false"
+	 background_opaque="true"
+	 follows="bottom|left|right"
+	 bg_opaque_color="1,1,1,0"
+	 bg_alpha_color="white"
+	 can_resize="false">
+	</panel>
+	<panel
+	 name="top_region"
+	 left_delta="0"
+	 width="590"
+	 height="20"
+	 bottom_delta="-780"
+	 border="true"
+	 bevel_style="in"
+	 background_visible="false"
+	 background_opaque="true"
+	 follows="top|left|right"
+	 bg_opaque_color="1,1,1,0"
+	 bg_alpha_color="white"
+	 can_resize="false">
+	</panel>
 </floater>
