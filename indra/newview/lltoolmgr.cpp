@@ -55,7 +55,10 @@
 #include "llviewerjoystick.h"
 #include "llviewermenu.h"
 #include "llviewerparcelmgr.h"
-
+// [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 // Used when app not active to avoid processing hover.
 LLTool*			gToolNull	= NULL;
@@ -80,7 +83,10 @@ LLToolMgr::LLToolMgr()
 {
 	// Not a panel, register these callbacks globally.
 	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Active", boost::bind(&LLToolMgr::inEdit, this));
-	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&LLToolMgr::canEdit, this));
+//	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&LLToolMgr::canEdit, this));
+// [RLVa:KB] - Checked: 2010-09-11 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+	LLUICtrl::EnableCallbackRegistry::currentRegistrar().add("Build.Enabled", boost::bind(&RlvUIEnabler::isBuildEnabled));
+// [/RLVa:KB]
 	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Build.Toggle", boost::bind(&LLToolMgr::toggleBuildMode, this, _2));
 	
 	gToolNull = new LLTool(LLStringUtil::null);  // Does nothing

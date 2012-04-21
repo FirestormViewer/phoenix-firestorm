@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rlva_strings>
+
+  <strings>
+    <!-- Primarily used when @showloc restricted -->
+    <string name="hidden_generic">(Hidden)</string>
+    <string name="hidden_parcel">(Hidden parcel)</string>
+    <string name="hidden_region">(Hidden region)</string>
+
+    <!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+    <string name="blocked_recvim">*** IM blocked by your viewer</string>
+    <string name="blocked_sendim">*** IM blocked by sender's viewer</string>
+
+    <!-- Shown as notifications -->
+    <string name="blocked_generic">Unable to perform action due to RLV restrictions</string>
+    <string name="blocked_permattach">Attempt to attach '[OBJECT]' was denied due to RLV restrictions</string>
+    <string name="blocked_startim">Unable to start IM session with [RECIPIENT] due to RLV restrictions</string>
+    <string name="blocked_startconf">Unable to start conference with [RECIPIENT] due to RLV restrictions</string>
+    <string name="blocked_teleport">Unable to initiate teleport due to RLV restrictions</string>
+    <string name="blocked_viewxxx">Unable to open [TYPE] due to RLV restrictions</string>
+
+    <!-- Sent as "Busy" messages to the remote party -->
+    <string name="blocked_recvim_remote">
+      The Resident you messaged is prevented from reading your instant messages at the moment, please try again later.
+    </string>
+    <string name="blocked_tplure_remote">
+      The Resident you invited is prevented from accepting teleport offers. Please try again later.
+    </string>
+
+    <!-- Shown in local chat when dropping inventory onto a nearby agent (moved to strings.xml since it needs to be accesible by LLTrans) -->
+    <!--
+    <string name="inventory_item_offered_rlv">
+      Inventory item offered to [NAME]
+    </string>
+    -->
+  </strings>
+
+  <!-- Generic names used to replace resident names when @shownames restricted -->
+  <anonyms>
+    <anonym>A resident</anonym>
+    <anonym>This resident</anonym>
+    <anonym>That resident</anonym>
+    <anonym>An individual</anonym>
+    <anonym>This individual</anonym>
+    <anonym>That individual</anonym>
+    <anonym>A person</anonym>
+    <anonym>This person</anonym>
+    <anonym>That person</anonym>
+    <anonym>A stranger</anonym>
+    <anonym>This stranger</anonym>
+    <anonym>That stranger</anonym>
+    <anonym>A being</anonym>
+    <anonym>This being</anonym>
+    <anonym>That being</anonym>
+    <anonym>An agent</anonym>
+    <anonym>This agent</anonym>
+    <anonym>That agent</anonym>
+    <anonym>A soul</anonym>
+    <anonym>This soul</anonym>
+    <anonym>That soul</anonym>
+    <anonym>Somebody</anonym>
+    <anonym>Some people</anonym>
+    <anonym>Someone</anonym>
+    <anonym>Mysterious one</anonym>
+    <anonym>An unknown being</anonym>
+    <anonym>Unidentified one</anonym>
+    <anonym>An unknown person</anonym>
+  </anonyms>
+
+  <behaviour-notifications>
+    <!-- 
+    <notification behaviour="defaultwear" type="add">Text goes here</notification>
+    <notification behaviour="defaultwear" type="rem">Text goes here</notification>
+    -->
+  </behaviour-notifications>
+
+</rlva_strings>
