@@ -15454,6 +15454,7 @@ Change of this parameter will affect the layout of buttons in notification toast
 		  <string>beacons</string>
 		  <string>avatar_picker</string>
         <string>stats</string>
+         <string>script_floater</string>
       </array>
     </map>
     <key>LandmarksSortedByDate</key>
