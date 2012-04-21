@@ -926,7 +926,7 @@ void LLViewerParcelMedia::filterMediaUrl(LLParcel* parcel)
 		LLStringUtil::format_map_t format_args;
 		format_args["[DOMAIN]"] = domain;
 		LLChat chat;
-		chat.mText = LLTrans::getString("MediaFilterContentBlocked", format_args);;
+		chat.mText = LLTrans::getString("MediaFilterMediaContentBlocked", format_args);;
 		chat.mSourceType = CHAT_SOURCE_SYSTEM;
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
