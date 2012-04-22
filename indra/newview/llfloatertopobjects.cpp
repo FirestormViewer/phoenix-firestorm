@@ -53,6 +53,9 @@
 
 #include "llavataractions.h"
 
+// <FS:Ansariel> Name returned if object is not an avatar (with and without display names)
+const std::string OBJECT_NOT_AVATAR_NAME = "(???) (???)";
+
 //LLFloaterTopObjects* LLFloaterTopObjects::sInstance = NULL;
 
 // Globals
@@ -309,7 +312,7 @@ void LLFloaterTopObjects::updateSelectionInfo()
 	LLAvatarName av_name;
 	if (LLAvatarNameCache::get(object_id, &av_name))
 	{
-		bool isAvatar = !av_name.mIsTemporaryName;
+		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
 		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
 	}
@@ -591,7 +594,7 @@ void LLFloaterTopObjects::onAvatarCheck(const LLUUID& avatar_id, LLAvatarName av
 
 	if (first_selected->getUUID() == avatar_id)
 	{
-		bool isAvatar = !av_name.mIsTemporaryName;
+		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
 		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
 	}
