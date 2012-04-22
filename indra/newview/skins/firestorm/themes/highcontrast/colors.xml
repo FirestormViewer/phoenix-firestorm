@@ -638,7 +638,7 @@
      reference="Black" />
     <color
      name="MenuPopupBgColor"
-	  reference="DkGray2" />
+	  reference="DkGray_86" />
     <color
      name="MultiSliderDisabledThumbColor"
      reference="Unused?" />
