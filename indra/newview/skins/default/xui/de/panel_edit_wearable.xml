@@ -113,7 +113,7 @@
 				<button label="Speichern unter" name="save_as_button"/>
 			</layout_panel>
 			<layout_panel name="revert_btn_lp">
-				<button label="Änderungen rückgängig machen" name="revert_button"/>
+				<button label="Änderungen zurücksetzen" name="revert_button"/>
 			</layout_panel>
 		</layout_stack>
 	</panel>
