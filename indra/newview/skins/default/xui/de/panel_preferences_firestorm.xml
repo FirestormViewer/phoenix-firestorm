@@ -215,6 +215,15 @@
 		<check_box label="Hervorhebung ausgewählte Primitive aktivieren" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="EmBuildPrefsRenderHighlight_toggle"/>
 		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; aktivieren" tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
+		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz auf Kosten der Lesbarkeit." name="preprocoptimizer_checkbox"/>
+		<check_box label="switch()-Befehl" tool_tip="Stellt den switch()-Befehl zur Ablaufsteuerung bereit." name="preprocswitch_checkbox"/>
+		<check_box label="Lazy Lists" tool_tip="Aktiviert eine erweiterte Syntax für Listen-Operationen." name="preproclazy_checkbox"/>
+		<check_box label="#includes von der Festplatte" tool_tip="Aktiviert #include-Befehle zum Einbinden von Dateien auf der lokalen Festplatte." name="preprocinclude_checkbox"/>
+		<text name="lslpreprocinclude_textbox">
+			Include-Verzeichnis für Präprozessor:
+		</text>
+		<button label="Durchsuchen" label_selected="Durchsuchen" name="SetPreprocInclude"/>
 	</panel>
 
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="script panel">
+	<panel.string name="loading">
+		Wird geladen...
+	</panel.string>
+	<panel.string name="can_not_view">
+		Dieses Skript kann nicht angezeigt oder bearbeitet werden, da als Berechtigung „kein kopieren&quot; festgelegt wurde. Um ein Skript innerhalb eines Objektes anzuzeigen oder zu bearbeiten, benötigen Sie die vollständige Berechtigung.
+	</panel.string>
+	<panel.string name="public_objects_can_not_run">
+		Öffentliche Objekte können keine Skripts ausführen
+	</panel.string>
+	<panel.string name="script_running">
+		Läuft
+	</panel.string>
+	<panel.string name="Title">
+		Skript: [NAME]
+	</panel.string>
+	<panel.string name="external_editor_not_set">
+		Wählen Sie über die Umgebungsvariable „LL_SCRIPT_EDITOR“ oder die Einstellung „ExternalEditor“ einen Editor aus.
+	</panel.string>
+	<menu_bar name="script_menu">
+		<menu label="Datei" name="File">
+			<menu_item_call label="Speichern" name="Save"/>
+			<menu_item_call label="Alle Änderungen zurücksetzen" name="Revert All Changes"/>
+			<menu_item_call label="Aus Datei laden..." name="LoadFromFile"/>
+			<menu_item_call label="In Datei speichern..." name="SaveToFile"/>
+		</menu>
+		<menu label="Bearbeiten" name="Edit">
+			<menu_item_call label="Rückgängig" name="Undo"/>
+			<menu_item_call label="Wiederherstellen" name="Redo"/>
+			<menu_item_call label="Ausschneiden" name="Cut"/>
+			<menu_item_call label="Kopieren" name="Copy"/>
+			<menu_item_call label="Einfügen" name="Paste"/>
+			<menu_item_call label="Alle auswählen" name="Select All"/>
+			<menu_item_call label="Auswahl aufheben" name="Deselect"/>
+			<menu_item_call label="Suchen / Ersetzen..." name="Search / Replace..."/>
+		</menu>
+		<menu label="Hilfe" name="Help">
+			<menu_item_call label="Hilfe..." name="Help..."/>
+			<menu_item_call label="Schlüsselwort-Hilfe" name="Keyword Help..."/>
+		</menu>
+	</menu_bar>
+    <tab_container name="Tabset">
+		<panel name="Script" label="Skript">
+			<text_editor name="Script Editor">
+				Wird geladen...
+			</text_editor>
+		</panel>
+		<panel name="Preprocessed" label="Präprozessiert">
+			<text_editor name="Post Editor">
+				Wird geladen...
+			</text_editor>
+		</panel>
+	</tab_container>
+	<combo_box label="Einfügen..." name="Insert..."/>
+	<button label="Speichern" label_selected="Speichern" name="Save_btn"/>
+	<button label="Bearbeiten..." name="Edit_btn"/>
+</panel>

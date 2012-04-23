@@ -1512,7 +1512,7 @@
 	 label="Browse"
 	 label_selected="Browse"
 	 left_pad="5"
-	 name="set_cache"
+	 name="SetPreprocInclude"
 	 top_delta="0"
 	 width="100">
 	 <button.commit_callback
