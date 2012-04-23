@@ -11,7 +11,7 @@
 	<check_box label="Когда я создаю закладку" name="landmark_created_checkbox"/>
 	<check_box label="Ошибки скриптов в:" name="show_script_errors"/>
 	<radio_group name="show_script_errors_location">
-		<radio_item label="Локоаль. чате"  name="script_0"/>
+		<radio_item label="Локоал. чате"  name="script_0"/>
 		<radio_item label="В отдельном окне" name="script_1"/>
 	</radio_group>
 	<text name="show_label">

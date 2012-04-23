@@ -16,7 +16,7 @@
 				Размер шрифта чата:
 			</text>
 			<radio_group name="chat_font_size">
-				<radio_item label="Мален" name="radio" value="0"/>
+				<radio_item label="Мал." name="radio" value="0"/>
 				<radio_item label="Средний" name="radio2" value="1"/>
 				<radio_item label="Большой" name="radio3" value="2"/>
 			</radio_group>
@@ -38,7 +38,7 @@
 			<check_box label="Штамп времени в локальном чате" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Штамп времени в ЛС" name="hide_timestamps_im"/>
 			<check_box label="Чат в пузырьках" name="bubble_text_chat"/>
-			<check_box label="Показать индекатор ввода над аватаром в пузыре" name="bubble_text_typing"/>
+			<check_box label="Показать индикатор ввода над аватаром в пузыре" name="bubble_text_typing"/>
 			<text name="inworld_typing_rg_label" width="115">
 			   При нажатии букв:
 			</text>
@@ -97,14 +97,14 @@
 		
         <!-- Chat: Notifications -->
         <!-- This tab is only for notifications related directly to chat and not for notification options that simply use nearby chat -->
-        <panel label="Нотификации" name="ChatNotifications">
+        <panel label="Уведомления" name="ChatNotifications">
             <text name="disable_toast_label">
                  Всплывающие окна для входящего чата:
             </text>
             <check_box name="EnableGroupChatPopups" label="Групповые" tool_tip=""/>
             <check_box name="EnableIMChatPopups" label="ЛС" tool_tip=""/>
             <check_box name="FSUseNearbyChatConsole" label="Чат консоли вместо тост нотификацый (Viewer 1.x стиль)"/>
-            <check_box name="FSLogImToChatConsole" label="Показать ЛС и Групповые чаты в консолье"/>
+            <check_box name="FSLogImToChatConsole" label="Показать ЛС и Групповые чаты в консоли"/>
         </panel>
 		
         <!-- Chat: Firestorm -->
@@ -129,15 +129,15 @@
             </text>
             <check_box name="FSBoldGroupMods" label="Выделить модераторов"/>
             <check_box name="FSMuteAllGroups" label="выкл. все групповые чаты"/>
-            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Если опция 'получить нотификации' выкл. также выкл. групповой чат."/>
+            <check_box name="FSMuteGroupWhenNoticesDisabled" label="Если опция 'получить уведомления' выкл. также выкл. групповой чат."/>
 
             <!-- Logging -->
             <text name="logging_enhancements">
               История чата:
             </text>
             <check_box label="Показать штамп времени в локальном чате" name="hide_timestamps_nearby_chat"/>
-            <check_box label="Не воказать штамп времени в ЛС" name="hide_timestamps_im"/>
-            <check_box name="FSShowIMInChatHistory" label="Показать Лс в локальном чате"/>
+            <check_box label="Не показать штамп времени в ЛС" name="hide_timestamps_im"/>
+            <check_box name="FSShowIMInChatHistory" label="Показать ЛС в локальном чате"/>
             <check_box name="FSLogIMInChatHistory" label="сохранить ЛС в локальном чате" width="190"/>
             <text name="requires_save_chat_logs" width="280">
               (Требует сохронение истории чата)
@@ -175,7 +175,7 @@
         <panel label="Ключевые слова" name="ChatKeywordAlerts">
             <check_box name="FSKeywordOn" label="Вкл. Ключевые слова"/>
             <check_box name="FSKeywordInChat" label="Проверять локальный чат на Ключевые слова"/>
-            <check_box name="FSKeywordInIM" label="проверять Лс на Ключевые слова"/>
+            <check_box name="FSKeywordInIM" label="Проверять ЛС на Ключевые слова"/>
             <text name="textFSKeywords">
 				Ключевые слова (через запятую):
             </text>

@@ -13,7 +13,7 @@
 		<slider label="Звуковые эффекты" name="SFX Volume"/>
 		<check_box label="Звуки жестов" name="gesture_audio_play_btn" tool_tip="" value="true"/>
 		<slider label="Потоковая музыка" name="Music Volume"/>
-		<check_box label="Aktiviert" name="enable_music"/>
+		<check_box label="Вкл." name="enable_music"/>
 		<slider label="Медия" name="Media Volume"/>
 		<check_box label="Вкл." name="enable_media"/>
 		<slider label="Голосовой чат" name="Voice Volume"/>
@@ -49,7 +49,7 @@
 			<radio_item label="Положения аватара" name="1"/>
 		</radio_group>
 		<check_box label="Губы аватара двигаются при разговоре" name="enable_lip_sync"/>
-		<check_box label="показать индекатор голосового чата в групповом чате." name="Show_Voice_Visualizers_In_Calls" tool_tip=""/>
+		<check_box label="Показать индикатор голосового чата в групповом чате." name="Show_Voice_Visualizers_In_Calls" tool_tip=""/>
 		<check_box label="Включить / Выключить микрофон, при нажатии:" name="push_to_talk_toggle_check" tool_tip="В режиме переключения однократное нажатие и отпускание данной клавиши включает/выключает микрофон. Если режим переключения отключен, то микрофон передает голос только когда клавиша нажата."/>
 		<line_editor label="Релиз речи:" name="modifier_combo"/>
 		<button label="Уст. кнопку" name="set_voice_hotkey_button"/>
