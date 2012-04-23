@@ -60,6 +60,16 @@
              label="Revert All Changes"
              layout="topleft"
              name="Revert All Changes" />
+          <menu_item_separator
+           layout="topleft" />
+          <menu_item_call
+           label="Load from file..."
+           layout="topleft"
+           name="LoadFromFile" />
+          <menu_item_call
+           label="Save to file..."
+           layout="topleft"
+           name="SaveToFile" />
         </menu>
         <menu
          top="0"
@@ -245,4 +255,14 @@
      right="400"
      name="Edit_btn"
      width="81" />
+    <check_box
+     top_pad="4"
+     follows="right|bottom"
+     layout="topleft"
+     height="16"
+     width="100"
+     label="Convert Tabs to Spaces"
+     tool_tip="If enabled, the script sent to the viewer from an external editor will automatically have all tabs being replaced by the default number of spaces (usually 4)."
+     name="ExternalEditorConvertTabsToSpaces"
+     control_name="ExternalEditorConvertTabsToSpaces" />
 </panel>
