@@ -97,6 +97,7 @@ set(viewer_SOURCE_FILES
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
+	fslslpreproc.cpp
     fsfloaterprofile.cpp
     fspanelprofile.cpp
     fsradarlistctrl.cpp
@@ -707,6 +708,7 @@ set(viewer_HEADER_FILES
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
+	fslslpreproc.h
     fsfloaterprofile.h
     fspanelprofile.h
     fsradarlistctrl.h
@@ -1913,6 +1915,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${viewer_LIBRARIES}
     ${BOOST_PROGRAM_OPTIONS_LIBRARY}
     ${BOOST_REGEX_LIBRARY}
+    ${BOOST_WAVE_LIBRARY}
+    ${BOOST_THREAD_LIBRARY}
     ${DBUSGLIB_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${FMODWRAPPER_LIBRARY} # must come after LLAudio

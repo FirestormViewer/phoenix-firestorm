@@ -92,6 +92,10 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
+// NaCl - LSL Preprocessor
+#include "fslslpreproc.h"
+// NaCl End
+
 const std::string HELLO_LSL =
 	"default\n"
 	"{\n"
@@ -207,7 +211,17 @@ LLScriptEdCore::LLScriptEdCore(
 	setFollowsAll();
 	setBorderVisible(FALSE);
 
-	setXMLFilename("panel_script_ed.xml");
+	// NaCl - Script Preprocessor
+	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
+	BOOL preproc = _NACL_LSLPreprocessor;
+	if(preproc)
+	{
+		setXMLFilename("panel_script_ed_preproc.xml");
+		mLSLProc = new FSLSLPreprocessor(this);
+	}
+	else
+		setXMLFilename("panel_script_ed.xml");
+	// NaCl End
 	llassert_always(mContainer != NULL);
 }
 
@@ -226,6 +240,7 @@ LLScriptEdCore::~LLScriptEdCore()
 	delete mLiveFile;
 }
 
+
 BOOL LLScriptEdCore::postBuild()
 {
 	mLineCol=getChild<LLTextBox>("line_col");
@@ -239,10 +254,24 @@ BOOL LLScriptEdCore::postBuild()
 
 	mEditor = getChild<LLViewerTextEditor>("Script Editor");
 
+	// NaCl - LSL Preprocessor
+	static LLCachedControl<bool> _NACL_LSLPreprocessor(gSavedSettings,"_NACL_LSLPreprocessor", 0);
+	BOOL preproc = _NACL_LSLPreprocessor;
+	if(preproc)
+	{
+		mPostEditor = getChild<LLViewerTextEditor>("Post Editor");
+		if(mPostEditor)
+		{
+			mPostEditor->setFollowsAll();
+			mPostEditor->setEnabled(TRUE);
+		}
+	}
+	// NaCl End
+
 	childSetCommitCallback("lsl errors", &LLScriptEdCore::onErrorList, this);
 	childSetAction("Save_btn", boost::bind(&LLScriptEdCore::doSave,this,FALSE));
 	childSetAction("Edit_btn", boost::bind(&LLScriptEdCore::openInExternalEditor, this));
-
+	
 	initMenu();
 
 
@@ -298,6 +327,66 @@ BOOL LLScriptEdCore::postBuild()
 			secondary_keywords.push_back( wstring_to_utf8str(token->getToken()) );
 		}
 	}
+
+	// NaCl - LSL Preprocessor
+	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	if(mPostEditor)
+	{
+		mPostEditor->loadKeywords(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,"keywords.ini"), funcs, tooltips, color);
+		mEditor->addToken(LLKeywordToken::WORD,"#assert",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#define",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#elif",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#else",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#endif",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#error",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#ident",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#sccs",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#if",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#ifdef",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#ifndef",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#import",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#include",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#include_next",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#line",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#pragma",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#unassert",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#undef",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#warning",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+		mEditor->addToken(LLKeywordToken::WORD,"#",LLColor3(0.0f,0.0f,0.8f),
+			std::string("Preprocessor command. See Advanced menu of the script editor."));
+
+		if(gSavedSettings.getBOOL("_NACL_PreProcLSLSwitch"))
+		{
+			mEditor->addToken(LLKeywordToken::WORD,"switch",LLColor3(0.0f,0.0f,0.8f),
+				std::string("Switch statement. See Advanced menu of the script editor."));
+			mEditor->addToken(LLKeywordToken::WORD,"case",LLColor3(0.0f,0.0f,0.8f),
+				std::string("Switch case. See Advanced menu of the script editor."));
+			mEditor->addToken(LLKeywordToken::WORD,"break",LLColor3(0.0f,0.0f,0.8f),
+				std::string("Switch break. See Advanced menu of the script editor."));
+		}
+
+		//couldn'tr define in file because # represented a comment
+	}
+	// NaCl End
 
 	// Case-insensitive dictionary sort for primary keywords. We don't sort the secondary
 	// keywords. They're intelligently grouped in keywords.ini.
@@ -376,14 +465,49 @@ void LLScriptEdCore::initMenu()
 	menuItem->setEnableCallback(boost::bind(&LLScriptEdCore::enableSaveToFileMenu, this));
 }
 
+// NaCl - LSL Preprocessor
+void LLScriptEdCore::onToggleProc(void* userdata)
+{
+	LLScriptEdCore* corep = (LLScriptEdCore*)userdata;
+	corep->mErrorList->setCommentText(std::string("Toggling the preprocessor will not take full effect unless you close and reopen this editor."));
+	corep->mErrorList->selectFirstItem();
+	gSavedSettings.setBOOL("_NACL_LSLPreprocessor",!gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
+}
+// NaCl End
+
 void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
 {
 	if (mEditor)
 	{
-		mEditor->setText(text);
+		// NaCl - LSL Preprocessor
+		std::string ntext = text;
+		if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+		{
+			if(mPostEditor)mPostEditor->setText(ntext);
+			ntext = mLSLProc->decode(ntext);
+		}
+		LLStringUtil::replaceTabsWithSpaces(ntext, 4);
+		// NaCl End
+		mEditor->setText(ntext);
 		mHasScriptData = is_valid;
 	}
 }
+
+// NaCl - LSL Preprocessor
+std::string LLScriptEdCore::getScriptText()
+{
+	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && mPostEditor)
+	{
+		//return mPostEditor->getText();
+		return mPostScript;
+	}
+	else if (mEditor)
+	{
+		return mEditor->getText();
+	}
+	return std::string();
+}
+// NaCl End
 
 bool LLScriptEdCore::loadScriptText(const std::string& filename)
 {
@@ -442,7 +566,9 @@ bool LLScriptEdCore::writeToFile(const std::string& filename)
 		return false;
 	}
 
-	std::string utf8text = mEditor->getText();
+	// NaCl - LSL Preprocessor
+	std::string utf8text = this->getScriptText();
+	// NaCl End
 
 	// Special case for a completely empty script - stuff in one space so it can store properly.  See SL-46889
 	if (utf8text.size() == 0)
@@ -813,13 +939,35 @@ void LLScriptEdCore::onBtnInsertFunction(LLUICtrl *ui, void* userdata)
 
 void LLScriptEdCore::doSave( BOOL close_after_save )
 {
+	// NaCl - LSL Preprocessor
+	if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor"))
+	{
+		llinfos << "passing to preproc" << llendl;
+		this->mLSLProc->preprocess_script(close_after_save);
+	}
+	else
+	{
+		if( mSaveCallback )
+		{
+			mSaveCallback( mUserdata, close_after_save );
+		}
+	}
+	// NaCl End
+}
+
+// NaCl - LSL Preprocessor
+void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
+{
 	LLViewerStats::getInstance()->incStat( LLViewerStats::ST_LSL_SAVE_COUNT );
+
+	//LLScriptEdCore* self = (LLScriptEdCore*) userdata;
 
 	if( mSaveCallback )
 	{
 		mSaveCallback( mUserdata, close_after_save );
 	}
 }
+// NaCl End
 
 void LLScriptEdCore::openInExternalEditor()
 {
@@ -890,8 +1038,22 @@ void LLScriptEdCore::onErrorList(LLUICtrl*, void* user_data)
 		sscanf(line.c_str(), "%d %d", &row, &column);
 		//llinfos << "LLScriptEdCore::onErrorList() - " << row << ", "
 		//<< column << llendl;
-		self->mEditor->setCursor(row, column);
-		self->mEditor->setFocus(TRUE);
+		// NaCl - LSL Preprocessor
+		if(gSavedSettings.getBOOL("_NACL_LSLPreprocessor") && self->mPostEditor)
+		{
+			LLPanel* tab = self->getChild<LLPanel>("Preprocessed");
+			LLTabContainer* tabset = self->getChild<LLTabContainer>("Tabset");
+			if(tabset)tabset->selectTabByName("Preprocessed");
+			if(tab)tab->setFocus(TRUE);
+			self->mPostEditor->setFocus(TRUE);
+			self->mPostEditor->setCursor(row, column);
+		}
+		else
+		{
+		  self->mEditor->setCursor(row, column);
+		  self->mEditor->setFocus(TRUE);
+		}
+		// NaCl End
 	}
 }
 
@@ -957,7 +1119,16 @@ BOOL LLScriptEdCore::handleKeyHere(KEY key, MASK mask)
 		if(mSaveCallback)
 		{
 			// don't close after saving
-			mSaveCallback(mUserdata, FALSE);
+			// NaCl - LSL Preprocessor
+			if (!hasChanged())
+			{
+				llinfos << "Save Not Needed" << llendl;
+				return TRUE;
+			}
+			doSave(FALSE);
+			// NaCl End
+				
+			//mSaveCallback(mUserdata, FALSE);
 		}
 
 		return TRUE;
@@ -1305,7 +1476,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	std::string filename = filepath + ".lsl";
 
 	mScriptEd->writeToFile(filename);
-
+	
 	if (sync)
 	{
 		mScriptEd->sync();
@@ -1314,13 +1485,30 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	const LLInventoryItem *inv_item = getItem();
 	// save it out to asset server
 	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+
+	// NaCL - LSL Preprocessor
+	BOOL domono = FSLSLPreprocessor::mono_directive(mScriptEd->getScriptText());
+	if(domono == FALSE)
+	{
+		LLSD row;
+		if(gSavedSettings.getBOOL("_NACL_SaveInventoryScriptsAsMono"))
+		{
+			row["columns"][0]["value"] = "Detected compile-as-LSL2 directive, but debug setting SaveInventoryScriptsAsMono overrided it.";
+			domono = TRUE;
+		}else row["columns"][0]["value"] = "Detected compile-as-LSL2 directive";
+		//domono = FALSE;
+		row["columns"][0]["font"] = "SANSSERIF_SMALL";
+		mScriptEd->mErrorList->addElement(row);
+	}
+	// NaCl End
 	if(inv_item)
 	{
 		getWindow()->incBusyCount();
 		mPendingUploads++;
 		if (!url.empty())
 		{
-			uploadAssetViaCaps(url, filename, mItemUUID);
+			// NaCL - LSL Preprocessor
+			uploadAssetViaCaps(url, filename, mItemUUID, domono);
 		}
 		else if (gAssetStorage)
 		{
@@ -1331,7 +1519,8 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 
 void LLPreviewLSL::uploadAssetViaCaps(const std::string& url,
 									  const std::string& filename,
-									  const LLUUID& item_id)
+									  const LLUUID& item_id,
+									  bool mono)
 {
 	llinfos << "Update Agent Inventory via capability" << llendl;
 	LLSD body;
@@ -1433,8 +1622,11 @@ void LLPreviewLSL::uploadAssetLegacy(const std::string& filename,
 
 
 // static
-void LLPreviewLSL::onSaveComplete(const LLUUID& asset_uuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)
+void LLPreviewLSL::onSaveComplete(const LLUUID& iuuid, void* user_data, S32 status, LLExtStat ext_status) // StoreAssetData callback (fixed)
 {
+	// NaCl - LSL Preprocessor
+	LLUUID asset_uuid = iuuid;
+	// NaCl End
 	LLScriptSaveInfo* info = reinterpret_cast<LLScriptSaveInfo*>(user_data);
 	if(0 == status)
 	{
@@ -1445,6 +1637,10 @@ void LLPreviewLSL::onSaveComplete(const LLUUID& asset_uuid, void* user_data, S32
 			if(item)
 			{
 				LLPointer<LLViewerInventoryItem> new_item = new LLViewerInventoryItem(item);
+				// NaCl - LSL Preprocessor
+				if(asset_uuid.isNull())
+					asset_uuid.generate();
+				// NaCl End
 				new_item->setAssetUUID(asset_uuid);
 				new_item->setTransactionID(info->mTransactionID);
 				new_item->updateServer(FALSE);

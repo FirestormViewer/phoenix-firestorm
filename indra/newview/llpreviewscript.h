@@ -49,6 +49,9 @@ class LLKeywordToken;
 class LLVFS;
 class LLViewerInventoryItem;
 class LLScriptEdContainer;
+// NaCl - LSL Preprocessor
+class FSLSLPreprocessor;
+// NaCl End
 
 // Inner, implementation class.  LLPreviewScript and LLLiveLSLEditor each own one of these.
 class LLScriptEdCore : public LLPanel
@@ -58,6 +61,9 @@ class LLScriptEdCore : public LLPanel
 	friend class LLLiveLSLEditor;
 //	friend class LLFloaterScriptSearch;
 	friend class LLScriptEdContainer;
+	// NaCl - LSL Preprocessor
+	friend class FSLSLPreprocessor;
+	// NaCl End
 
 protected:
 	// Supposed to be invoked only by the container.
@@ -82,6 +88,10 @@ public:
 	bool			canLoadOrSaveToFile( void* userdata );
 
 	void            setScriptText(const std::string& text, BOOL is_valid);
+	// NaCL - LSL Preprocessor
+	std::string		getScriptText();
+	void			doSaveComplete(void* userdata, BOOL close_after_save );
+	// NaCl End
 	bool			loadScriptText(const std::string& filename);
 	bool			writeToFile(const std::string& filename);
 	void			sync();
@@ -108,6 +118,9 @@ public:
 	virtual bool	hasAccelerators() const { return true; }
 
 private:
+	// NaCl - LSL Preprocessor
+	static void		onToggleProc(void* userdata);
+	// NaCl End
 	void		onBtnHelp();
 	void		onBtnDynamicHelp();
 	void		onBtnUndoChanges();
@@ -148,6 +161,11 @@ private:
 	LLLiveLSLFile*	mLiveFile;
 	LLTextBox*		mLineCol;
 	LLView*			mSaveBtn;
+	// NaCl - LSL Preprocessor
+	FSLSLPreprocessor* mLSLProc;
+	LLTextEditor*	mPostEditor;
+	std::string		mPostScript;
+	// NaCl End
 
 	LLScriptEdContainer* mContainer; // parent view
 };
@@ -187,9 +205,12 @@ protected:
 
 	virtual void loadAsset();
 	/*virtual*/ void saveIfNeeded(bool sync = true);
+	// NaCl - LSL Preprocessor
 	void uploadAssetViaCaps(const std::string& url,
 							const std::string& filename, 
-							const LLUUID& item_id);
+							const LLUUID& item_id,
+							bool mono);
+	// NaCl End
 	void uploadAssetLegacy(const std::string& filename,
 							const LLUUID& item_id,
 							const LLTransactionID& tid);

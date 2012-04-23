@@ -230,9 +230,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>d98078791ce345bf6168ce9ba53ca2d7</string>
+              <string>86cbc23962babb418992e26f0301e674</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-boost/rev/222752/arch/Darwin/installer/boost-1.45.0-darwin-20110304.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/boost-1.45.0-darwin-20120325.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -242,9 +242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>a34e7fffdb94a6a4d8a2966b1f216da3</string>
+              <string>c81e5f3d43b05dabafa1f34342c4425e</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/boost-1.45.0-linux-20110310.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.45.0-linux-20120326.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -254,9 +254,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>98be22c8833aa2bca184b9fa09fbb82b</string>
+              <string>b32acce28e8f5dc404ff6d36c140ea65</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/boost-1.45.0-windows-20110124.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/boost-1.45.0-windows-20120303.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
