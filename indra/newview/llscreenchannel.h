@@ -52,7 +52,6 @@ typedef enum e_channel_alignment
 class LLScreenChannelBase : public LLUICtrl
 {
 	friend class LLChannelManager;
-
 public:
 	struct Params : public LLInitParam::Block<Params, LLUICtrl::Params>
 	{
@@ -70,7 +69,6 @@ public:
 	};
 
 	LLScreenChannelBase(const Params&);
-	virtual ~LLScreenChannelBase();
 	
 	BOOL postBuild();
 
@@ -144,22 +142,6 @@ protected:
 	
 	LLView*	mFloaterSnapRegion;
 	LLView* mChicletRegion;
-
-	// <FS:ND> Oberserver for ScreenChannelBase destruction
-public:
-	class LLScreenChannelObserver
-	{
-	public:
-		virtual ~LLScreenChannelObserver() {}
-		virtual void observeDestruction( LLScreenChannelBase *) = 0;
-	};
-
-	void setObserver( LLScreenChannelObserver *aObserver )
-	{ mObserver = aObserver; }
-
-private:
-	LLScreenChannelObserver *mObserver;
-	// </FS:ND>
 };
 
 
@@ -169,7 +151,6 @@ private:
 class LLScreenChannel : public LLScreenChannelBase
 {
 	friend class LLChannelManager;
-
 public:
 	LLScreenChannel(const Params&);
 	virtual ~LLScreenChannel();
