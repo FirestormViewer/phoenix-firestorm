@@ -133,41 +133,36 @@ public:
 
 };
 
-// <FS:ND> Don't artifically increase buffer sizes
 
 //which power of 2 is i?
 //assumes i is a power of 2 > 0
-// U32 wpo2(U32 i)
-// {
-// 	llassert(i > 0);
-// 	llassert(nhpo2(i) == i);
+U32 wpo2(U32 i)
+{
+	llassert(i > 0);
+	llassert(nhpo2(i) == i);
 
-// 	U32 r = 0;
+	U32 r = 0;
 
-// 	while (i >>= 1) ++r;
+	while (i >>= 1) ++r;
 
-// 	return r;
-// }
-
-// </FS:ND>
+	return r;
+}
 
 volatile U8* LLVBOPool::allocate(U32& name, U32 size)
 {
-	// <FS:ND> don't use any pooling that never shrinks in size
+	llassert(nhpo2(size) == size);
 
-	// llassert(nhpo2(size) == size);
+	U32 i = wpo2(size);
 
-	// U32 i = wpo2(size);
-
-	// if (mFreeList.size() <= i)
-	// {
-	// 	mFreeList.resize(i+1);
-	// }
+	if (mFreeList.size() <= i)
+	{
+		mFreeList.resize(i+1);
+	}
 
 	volatile U8* ret = NULL;
 
-	// if (mFreeList[i].empty())
-	// {
+	if (mFreeList[i].empty())
+	{
 		//make a new buffer
 		glGenBuffersARB(1, &name);
 		glBindBufferARB(mType, name);
@@ -184,86 +179,71 @@ volatile U8* LLVBOPool::allocate(U32& name, U32 size)
 		}
 
 		glBindBufferARB(mType, 0);
-	// }
-	// else
-	// {
-	// 	name = mFreeList[i].front().mGLName;
-	// 	ret = mFreeList[i].front().mClientData;
+	}
+	else
+	{
+		name = mFreeList[i].front().mGLName;
+		ret = mFreeList[i].front().mClientData;
 
-	// 	sBytesPooled -= size;
+		sBytesPooled -= size;
 
-	// 	mFreeList[i].pop_front();
-	// }
-
-	// </FS:ND>
+		mFreeList[i].pop_front();
+	}
 
 	return ret;
 }
 
 void LLVBOPool::release(U32 name, volatile U8* buffer, U32 size)
 {
-	// <FS:ND> don't use any pooling that never shrinks in size
+	llassert(nhpo2(size) == size);
 
-	// llassert(nhpo2(size) == size);
+	U32 i = wpo2(size);
 
-	// U32 i = wpo2(size);
+	llassert(mFreeList.size() > i);
 
-	// llassert(mFreeList.size() > i);
+	Record rec;
+	rec.mGLName = name;
+	rec.mClientData = buffer;
 
-	// Record rec;
-	// rec.mGLName = name;
-	// rec.mClientData = buffer;
-
-	// sBytesPooled += size;
+	sBytesPooled += size;
 	
-	// if (!LLVertexBuffer::sDisableVBOMapping && mUsage == GL_DYNAMIC_DRAW_ARB)
-	// {
-	// 	glDeleteBuffersARB(1, &rec.mGLName);
-	// }
-	// else
-	// {
-	// 	mFreeList[i].push_back(rec);
-	// }
-
-	glDeleteBuffersARB(1, &name );
-
-	if( buffer )
-		ll_aligned_free_16( (void*) buffer );
-
-	// </FS:ND>
+	if (!LLVertexBuffer::sDisableVBOMapping && mUsage == GL_DYNAMIC_DRAW_ARB)
+	{
+		glDeleteBuffersARB(1, &rec.mGLName);
+	}
+	else
+	{
+		mFreeList[i].push_back(rec);
+	}
 }
 
 void LLVBOPool::cleanup()
 {
-	// <FS:ND> don't use any pooling that never shrinks in size
+	U32 size = 1;
 
-	// U32 size = 1;
+	for (U32 i = 0; i < mFreeList.size(); ++i)
+	{
+		record_list_t& l = mFreeList[i];
 
-	// for (U32 i = 0; i < mFreeList.size(); ++i)
-	// {
-	// 	record_list_t& l = mFreeList[i];
+		while (!l.empty())
+		{
+			Record& r = l.front();
 
-	// 	while (!l.empty())
-	// 	{
-	// 		Record& r = l.front();
+			glDeleteBuffersARB(1, &r.mGLName);
 
-	// 		glDeleteBuffersARB(1, &r.mGLName);
+			if (r.mClientData)
+			{
+				ll_aligned_free_16(r.mClientData);
+			}
 
-	// 		if (r.mClientData)
-	// 		{
-	// 			ll_aligned_free_16((void*) r.mClientData);
-	// 		}
+			l.pop_front();
 
-	// 		l.pop_front();
+			LLVertexBuffer::sAllocatedBytes -= size;
+			sBytesPooled -= size;
+		}
 
-	// 		LLVertexBuffer::sAllocatedBytes -= size;
-	// 		sBytesPooled -= size;
-	// 	}
-
-	// 	size *= 2;
-	// }
-
-	// </FS:ND>
+		size *= 2;
+	}
 }
 
 
@@ -953,8 +933,7 @@ void LLVertexBuffer::waitFence() const
 
 void LLVertexBuffer::genBuffer(U32 size)
 {
-	// mSize = nhpo2(size);
-	mSize = size; // <FS:ND> Without the leaky pooling we do not need to blow up buffer sizes to powers of two
+	mSize = nhpo2(size);
 
 	if (mUsage == GL_STREAM_DRAW_ARB)
 	{
@@ -970,8 +949,7 @@ void LLVertexBuffer::genBuffer(U32 size)
 
 void LLVertexBuffer::genIndices(U32 size)
 {
-	//	mIndicesSize = nhpo2(size);
-	mIndicesSize = size; // <FS:ND> Without the leaky pooling we do not need to blow up buffer sizes to powers of two
+	mIndicesSize = nhpo2(size);
 
 	if (mUsage == GL_STREAM_DRAW_ARB)
 	{

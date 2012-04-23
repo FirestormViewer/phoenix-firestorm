@@ -76,7 +76,7 @@ public:
 	};
 
 	typedef std::list<Record> record_list_t;
-	//	std::vector<record_list_t> mFreeList; 	// <FS:ND> don't use any pooling that never shrinks in size
+	std::vector<record_list_t> mFreeList;
 };
 
 class LLGLFence
