@@ -55,4 +55,5 @@
 	<combo_box label="Einfügen..." name="Insert..."/>
 	<button label="Speichern" label_selected="Speichern" name="Save_btn"/>
 	<button label="Bearbeiten..." name="Edit_btn"/>
+	<check_box name="ExternalEditorConvertTabsToSpaces" label="Tabs in Leerzeichen konvert." tool_tip="Falls aktiviert werden Tabs in Leerzeichen (üblicherweise 4) konvertiert, wenn ein Skript aus einem externen Editor eingefügt wird."/>
 </panel>
