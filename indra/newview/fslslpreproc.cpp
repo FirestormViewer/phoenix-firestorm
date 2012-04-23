@@ -976,8 +976,7 @@ void FSLSLPreprocessor::start_process()
 		ctx.add_macro_definition(def,false);
 		def = llformat("__AGENTIDRAW__=%s",gAgent.getID().asString().c_str());
 		ctx.add_macro_definition(def,false);
-		std::string aname;
-		gAgentAvatarp->getFullname();
+		std::string aname = gAgentAvatarp->getFullname();
 		def = llformat("__AGENTNAME__=\"%s\"",aname.c_str());
 		ctx.add_macro_definition(def,false);
 		def = llformat("__ASSETID__=%s",LLUUID::null.asString().c_str());
