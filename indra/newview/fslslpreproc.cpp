@@ -110,7 +110,7 @@ std::map<std::string,LLUUID> FSLSLPreprocessor::cached_assetids;
 #ifdef LL_WINDOWS
 #pragma warning (disable : 4702) // warning C4702: unreachable code
 #endif
-#define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+//#define BOOST_SPIRIT_THREADSAFE
 
 #include <boost/assert.hpp>
 #include <boost/wave.hpp>
