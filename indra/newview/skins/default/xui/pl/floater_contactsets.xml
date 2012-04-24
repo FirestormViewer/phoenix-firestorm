@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="lgg_fg_floater" title="Zestawy kontaktów">
-    <text name="lgg_fg_text1">Zestaw:</text>
-    <text name="lgg_fg_text2a">Powiadomienia</text>
-    <text name="lgg_fg_text2b">dla tego Zestawu</text>
+<floater name="lgg_fg_floater" title="ZESTAWY KONTAKTÓW">
+	<floater.string name="AddToGroup" value="Dodaj do: [GROUPNAME]"/>
+	<floater.string name="RemoveFromGroup" value="Usuń z: [GROUPNAME]"/>
+	<floater.string name="RemoveDisplayName" value="Usuń wyświetlane imię"/>
+	<floater.string name="ResetNameModification" value="Resetuj modyfikację imienia"/>
+	<floater.string name="RemoveFromList" value="Usuń z listy"/>
+	<floater.string name="ShowProfile" value="Pokaż profil"/>
+	<floater.string name="ShowOnMap" value="Pokaż na mapie"/>
+	<floater.string name="SendIM" value="Wyślij wiadomość IM"/>
+	<floater.string name="OfferTP" value="Proponuj teleport"/>
+	<floater.string name="AllSelected" value="Wszystkie [COUNT] zaznaczone"/>
+	<floater.string name="StartConferenceCall" value="Zacznij konferencję ([COUNT])"/>
+	<floater.string name="SendMassTP" value="Wyślij masowy TP ([COUNT])"/>
+	<floater.string name="DeselectAll" value="Odznacz wszystko ([COUNT])"/>
+	<floater.string name="SelectAll" value="Zaznacz wszystko ([COUNT])"/>
+	<floater.string name="AddNewAvatar" value="Dodaj awatara"/>
+	<floater.string name="FilterLabel" value="Obecny filtr:"/>
+	<floater.string name="TooltipFriendUnselected" value="Znajomy jest odznaczony"/>
+	<floater.string name="TooltipFriendSelected" value="Znajomy jest zaznaczony"/>
+	<floater.string name="TooltipFriendOnline" value="Znajomy jest online"/>
+	<floater.string name="TooltipFriendOffline" value="Znajomy jest offline"/>
+	<floater.string name="TooltipNotOnFriendlist" value="Nie na liście znajomych"/>
+	<floater.string name="TooltipIM" value="Wiadomość IM"/>
+	<floater.string name="TooltipProfile" value="Pokaż profil"/>
+	<floater.string name="TooltipNameChanged" value="Imię zostało zmienione"/>
+    <text name="lgg_fg_text1">
+        Zestaw:</text>
+    <text name="lgg_fg_text2a">
+        Powiadamiaj
+    </text>
+    <text name="lgg_fg_text2b">
+        dla tego Zest.
+    </text>
     <button label="Ustawienia" name="lgg_fg_openSettings"/>
     <button label="Usuń Zestaw" name="lgg_fg_groupDelete"/>
     <color_swatch label="Ustaw kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
-    <text name="lgg_fg_text3">Pokaż:</text>
-    <text name="lgg_fg_text4a">Inne</text>
-    <text name="lgg_fg_text4b">Zestawy</text>
+    <text name="lgg_fg_text3">
+        Pokaż:
+    </text>
+    <text name="lgg_fg_text4a">
+        Inne
+    </text>
+    <text name="lgg_fg_text4b">
+        Zestawy
+    </text>
     <check_box label="Wszyscy" name="lgg_fg_showAllFriends"/>
-    <line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zestawu"/>
-   <button label="Nowy Zestaw" name="lgg_fg_groupCreate"/>
+    <line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zest."/>
+    <button label="Nowy Zestaw" name="lgg_fg_groupCreate"/>
 </floater>

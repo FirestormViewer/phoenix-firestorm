@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="lgg_fg_floater_settings" title="Ustawienia zestawów kontaktów">
+<floater name="lgg_fg_floater_settings" title="USTAWIENIA ZESTAWÓW KONTAKTÓW">
   <color_swatch name="colordefault" tool_tip="Domyślny kolor dla znajomych poza zestawem. Odnosi się tylko do listy w trybie wyświetlania przyjaciół i grup."/>
-  <text name="lgg_fg_text2a">Domyślny kolor dla</text>
-  <text name="lgg_fg_text2b">znajomych poza zest.</text>
+  <text name="lgg_fg_text2a">
+    Domyślny kolor dla
+  </text>
+  <text name="lgg_fg_text2b">
+    znajomych poza zest.
+  </text>
   <slider name="FSContactSetsScrollSpeed" label="Przewijanie" tool_tip="Określa jak szybko lista ma się przewijać."/>
   <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w tostach" name="ChatOnlineNotification"/>
   <check_box label="Powiadamiaj online dla WSZYSTKICH znajomych w czacie lokalnym" name="OnlineOfflinetoNearbyChat"/>
@@ -20,29 +24,32 @@
   <slider name="FSContactSetsMaxColorStrength" label="Siła tła" tool_tip="Jak bardzo wyrazisty ma być kolor tła."/>
   <check_box label="Foldery nad kontaktami (jeśli ta opcja jest wyłączona możesz używać listy rozwijanej)" name="FSContactSetsShowFolders"/>
   <check_box label="Ikony profili obok imion" name="FSContactSetsDrawProfileIcon"/>
-  <text name="lgg_fg_text3">Format imion:</text>
+  <text name="lgg_fg_text3">
+    Format imion:
+  </text>
   <combo_box name="lgg_fg_dispName">
-  <combo_item name="Legacy Names">
-    Starego typu
-  </combo_item>
-  <combo_item name="Display Names (with Username)">
-    Imiona wyświetlane (z nazwą konta)
-  </combo_item>
-  <combo_item name="Display Names only">
-    Tylko imiona wyświetlane
-  </combo_item>
+    <combo_item name="Legacy Names">
+      Starego typu
+    </combo_item>
+    <combo_item name="Display Names (with Username)">
+      Imiona wyświetlane (z nazwą konta)
+    </combo_item>
+    <combo_item name="Display Names only">
+      Tylko imiona wyświetlane
+    </combo_item>
   </combo_box>
-  <text name="lgg_fg_text4">Sortuj:</text>
+  <text name="lgg_fg_text4">
+    Sortuj:
+  </text>
   <combo_box name="lgg_fg_sortName">
-  <combo_item name="Legacy Names">
-    Po starym typie
-  </combo_item>
-  <combo_item name="Display Names (with Username)">
-    Po imionach wyświetlanych (z nazwą konta)
-  </combo_item>
-  <combo_item name="Display Names only">
-    Tylko po imionach wyświetlanych
-  </combo_item>
+    <combo_item name="Legacy Names">
+      Po starym typie
+    </combo_item>
+    <combo_item name="Display Names (with Username)">
+      Po imionach wyświetlanych (z nazwą konta)
+    </combo_item>
+    <combo_item name="Display Names only">
+      Tylko po imionach wyświetlanych
+    </combo_item>
   </combo_box>
-  <button label="Ok" name="lgg_fg_okButton"/>
 </floater>

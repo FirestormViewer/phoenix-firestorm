@@ -19,7 +19,7 @@
 		</panel>
 		<panel name="shape_head_tab_holder" title="Kopf">
 			<accordion name="shape_head_accordion">
-				<accordion_tab name="shape_head_tab" title="Body"/>
+				<accordion_tab name="shape_head_tab" title="Kopf"/>
 			</accordion>
 		</panel>
 		<panel name="shape_eyes_tab_holder" title="Augen">
