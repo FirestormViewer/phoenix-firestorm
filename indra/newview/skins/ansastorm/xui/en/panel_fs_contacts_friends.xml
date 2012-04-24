@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ height="300"
+ layout="topleft"
+ mouse_opaque="true"
+ name="friends"
+ width="350">
+	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
+<!--
+	<view_border
+	 top="-9"
+	 bottom="9"
+	 left="9"
+	 right="-91"
+	 follows="left|top|right|bottom"
+	 bevel_style="in"
+	 name="info_border" />
+	<avatar_list
+	 allow_select="true"
+	 bottom="10"
+	 follows="left|top|right|bottom"
+	 left="10"
+	 multi_select="true"
+	 name="avatars_all"
+	 show_permissions_granted="true"
+	 top="-10"
+	 width="240" />
+-->
+	<scroll_list
+     left="4"
+     right="-100"
+     top="10"
+     bottom="-10"
+	 follows="all"
+	 layout="topleft"
+     column_padding="0"
+     draw_heading="true"
+	 heading_height="20"
+	 multi_select="true"
+     name="friend_list"
+     tool_tip="Select an object from this list to highlight it in-world" >
+		<scroll_list.column
+		 image="legacy/ff_online_status_button.tga"
+		 name="icon_online_status"
+		 tool_tip="Online status"
+		 width="20" />
+		<scroll_list.column
+		 label="Username"
+		 name="user_name"
+		 tool_tip="This contact's username."
+		 width="-1" />
+		<scroll_list.column
+		 dynamicwidth="true"
+		 label="Name"
+		 name="full_name"
+		 tool_tip="This contact's chosen name." />
+		<scroll_list.column
+		 image="legacy/ff_visible_online_button.tga"
+		 name="icon_visible_online"
+		 tool_tip="Friend can see when you&apos;re online"
+		 width="20" />
+		<scroll_list.column
+		 image="legacy/ff_visible_map_button.tga"
+		 name="icon_visible_map"
+		 tool_tip="Friend can locate you on the map"
+		 width="20" />
+		<scroll_list.column
+		 image="legacy/ff_edit_mine_button.tga"
+		 name="icon_edit_mine"
+		 tool_tip="Friend can edit, delete or take objects"
+		 width="20" />
+		<scroll_list.column
+		 image="legacy/ff_visible_map_button_theirs.tga"
+		 name="icon_visible_map_theirs"
+		 tool_tip="You can locate them on the map"
+		 width="20" />
+		<scroll_list.column
+		 image="legacy/ff_edit_theirs_button.tga"
+		 name="icon_edit_theirs"
+		 tool_tip="You can edit this friend&apos;s objects"
+		 width="20" />
+		<scroll_list.column
+		 name="friend_last_update_generation"
+		 width="-1" />
+	</scroll_list>
+	<button
+	 top="10"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="IM/Call"
+	 right="-10"
+	 name="im_btn"
+	 tool_tip="Open Instant Message session"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Profile"
+	 name="profile_btn"
+	 tool_tip="Show picture, groups, and other information"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Teleport..."
+	 name="offer_teleport_btn"
+	 tool_tip="Offer this friend a teleport to your current location"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Pay..."
+	 name="pay_btn"
+	 tool_tip="Give Linden dollars (L$) to this friend"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Remove..."
+	 name="remove_btn"
+	 tool_tip="Remove this person from your friends list"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Add..."
+	 name="add_btn"
+	 tool_tip="Offer friendship to a resident"
+	 width="80" />
+	<button
+	 top_pad="3"
+	 follows="top|right"
+	 layout="topleft"
+	 height="22"
+	 label="Contact Sets"
+	 name="lgg_fg_openFG"
+	 tool_tip="List your friends divided in groups"
+	 width="80" />
+	<text
+	 top_pad="10"
+	 left_delta="2"
+	 follows="top|right"
+	 layout="topleft"
+	 height="20"
+	 name="friend_count"
+	 width="80">
+	 Friends: ...
+	</text>
+</panel>

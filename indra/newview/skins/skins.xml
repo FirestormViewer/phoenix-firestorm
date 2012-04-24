@@ -144,6 +144,27 @@
             </array>
         </map>
 
+        <map>
+        <key>name</key>
+            <string>AnsaStorm</string>
+        <key>folder</key>
+            <string>ansastorm</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Bright Blue</string>
+                <key>folder</key>
+                    <string>bright_blue</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Classic Brown</string>
+                <key>folder</key>
+                    <string>classic_brown</string>
+                </map>
+            </array>
+        </map>
     </array>
 </llsd>
 
