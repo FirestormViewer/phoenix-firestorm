@@ -231,8 +231,9 @@ void	LLFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	if(isChatMultiTab())
 	{
 		LLMultiFloater* hostp = getHost();
-		if( !isInVisibleChain()
-		   && hostp)
+        // KC: Don't flash tab on system messages
+		if (!isInVisibleChain() && hostp
+        && (chat.mSourceType == CHAT_SOURCE_AGENT || chat.mSourceType == CHAT_SOURCE_OBJECT))
 		{
 			hostp->setFloaterFlashing(this, TRUE);
 		}
