@@ -619,7 +619,7 @@
            font="SansSerifMedium"
            top_pad="6"
            follows="bottom|left|right"
-           width="170">
+           width="240">
           Items
           </text>
           <icon
