@@ -60,6 +60,17 @@
 				function="Inventory.NewWindow" />
 		</menu_item_call>
 		<menu_item_separator />
+		<menu_item_check
+			label="Add objects on double click"
+			name="add_inv_toggle">
+			<menu_item_check.on_check
+				function="CheckControl"
+				parameter="FSDoubleClickAddInventoryObjects" />
+			<menu_item_check.on_click
+				function="ToggleControl"
+				parameter="FSDoubleClickAddInventoryObjects" />
+		</menu_item_check>
+		<menu_item_separator />
 		<menu_item_call
 			name="inventory_show_filters"
 			label="Show Filters">
