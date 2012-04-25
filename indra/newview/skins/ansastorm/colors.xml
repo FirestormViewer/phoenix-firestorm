@@ -208,7 +208,7 @@
 <!-- Colors below transparent in panel_notification.xml -->
 	<color
 	 name="Cerise_0"
-	 reference="Black" />
+	 value="1 0.3 0.3 0" />
 	<color
 	 name="Titanium_0"
 	 value="0.3 0.3 0.3 0" />
