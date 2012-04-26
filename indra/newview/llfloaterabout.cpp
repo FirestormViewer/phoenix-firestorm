@@ -253,6 +253,7 @@ LLSD LLFloaterAbout::getInfo()
 	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_liberation.xml") info["FONT"] = "Liberation";
 	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_droid.xml") info["FONT"] = "Droid Sans";
 	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
+	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_roboto.xml") info["FONT"] = "Roboto";
 	
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
