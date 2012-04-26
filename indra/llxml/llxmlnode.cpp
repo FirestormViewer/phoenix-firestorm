@@ -595,26 +595,7 @@ void XMLCALL XMLData(void *userData,
 	current_node->setValue(value);
 }
 
-typedef std::map< std::string, LLXMLNodePtr > tNodeMap;
-typedef std::map< std::string, LLXMLNodePtr >::iterator tNodeMapItr;
-typedef std::vector< tNodeMap > tNodeMapVector;
 
-void preHashChildnodes( LLXMLNodePtr &aNode, tNodeMapVector &aNodes )
-{
-	aNodes.erase( aNodes.begin(), aNodes.end() );
-	aNodes.resize( 2 );
-
-	for ( LLXMLNodePtr child = aNode->getFirstChild(); child.notNull(); child = child->getNextSibling())
-	{
-		std::string nodeName;
-		child->getAttributeString("name", nodeName);
-
-		aNodes[0][ nodeName ] = child;
-		
-		child->getAttributeString("value", nodeName);
-		aNodes[1][ nodeName ] = child;
-	}
-}
 
 // static 
 bool LLXMLNode::updateNode(
@@ -653,33 +634,31 @@ bool LLXMLNode::updateNode(
 	LLXMLNodePtr child;
 	LLXMLNodePtr updateChild;
 	
-
-	// NickyD: This was a n*m search, where m was n most of the time, making this O(n^2). Walk the childnodes of node and update_node
-	// only once by saving them in a map and than using that to lookup childnodes from node to update. Thus making this O(n)
-	// This is in seconds: >60 (old) to ~2.
-	tNodeMapVector vNodes;
-	preHashChildnodes( node, vNodes );
-
 	for (updateChild = update_node->getFirstChild(); updateChild.notNull(); 
 		 updateChild = updateChild->getNextSibling())
 	{
-		std::string updateName;
-
-		updateChild->getAttributeString("name", updateName);
-
-		int nMapIndex = 0;
-
-		//if it's a combobox there's no name, but there is a value
-		if (updateName.empty())
+		for (child = node->getFirstChild(); child.notNull(); child = child->getNextSibling())
 		{
-			updateChild->getAttributeString("value", updateName);
-			nMapIndex = 1;
+			std::string nodeName;
+			std::string updateName;
+
+			updateChild->getAttributeString("name", updateName);
+			child->getAttributeString("name", nodeName);		
+
+
+			//if it's a combobox there's no name, but there is a value
+			if (updateName.empty())
+			{
+				updateChild->getAttributeString("value", updateName);
+				child->getAttributeString("value", nodeName);
+			}
+
+			if ((nodeName != "") && (updateName == nodeName))
+			{
+				updateNode(child, updateChild);
+				break;
+			}
 		}
-
-		tNodeMapItr itr = vNodes[ nMapIndex ].find( updateName );
-
-		if( vNodes[ nMapIndex ].end() != itr )
-			updateNode( itr->second, updateChild );
 	}
 
 	return TRUE;
