@@ -1213,10 +1213,10 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="InventoryInboxNoItems">
 		Lorsque vous achetez ou recevez un article, il s&apos;affiche ici. Vous pouvez alors le faire glisser vers un dossier de votre inventaire ou le supprimer si vous ne souhaitez pas le conserver.
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
 	</string>
-<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL_CreateStore">
 		http://marketplace.[DOMAIN_NAME]/create_store
 	</string>
