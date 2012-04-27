@@ -12,6 +12,26 @@
  save_visibility="true"
  sound_flags="0"
  width="295">
+  <floater.string
+    name="grid_screen_text">
+    Screen
+  </floater.string>
+  <floater.string
+   name="grid_local_text">
+    Local
+  </floater.string>
+  <floater.string
+   name="grid_world_text">
+    World
+  </floater.string>
+  <floater.string
+   name="grid_reference_text">
+    Reference
+  </floater.string>
+  <floater.string
+   name="grid_attachment_text">
+    Attachment
+  </floater.string>
     <floater.string
      name="status_rotate">
         Drag colored bands to rotate object
