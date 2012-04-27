@@ -1236,10 +1236,6 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
 		iter != LLCharacter::sInstances.end(); ++iter)
 	{
-		// <FS:Ansariel> Watch out for a potential merge of STORM-1793!
-		//               avatar_ids and positions MUST be checked
-		//               INDEPENDENTLY!!! Things rely on being able to
-		//               pass either one as NULL!!!
 		LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
 		LLVector3d pos_global = pVOAvatar->getPositionGlobal();
 		LLUUID uuid = pVOAvatar->getID();
