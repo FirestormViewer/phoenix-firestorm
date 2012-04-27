@@ -134,7 +134,7 @@
       <nearby_chat_control
          layout="topleft"
          top="0"
-         left="0"
+         left="3"
          right="-1"
          follows="all"
 	 font="SansSerifSmall"
