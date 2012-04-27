@@ -166,6 +166,8 @@ public:
 	
 	void onSelectionChange(const std::deque<LLFolderViewItem*> &items, BOOL user_action);
 	
+	LLHandle<LLInventoryPanel> getInventoryPanelHandle() const { return getDerivedHandle<LLInventoryPanel>(); }
+
 	// Callbacks
 	void doToSelected(const LLSD& userdata);
 	void doCreate(const LLSD& userdata);

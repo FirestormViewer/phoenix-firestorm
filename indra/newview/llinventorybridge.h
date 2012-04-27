@@ -35,6 +35,7 @@
 #include "llviewercontrol.h"
 #include "llwearable.h"
 
+class LLInventoryFilter;
 class LLInventoryPanel;
 class LLInventoryModel;
 class LLMenuGL;
@@ -168,7 +169,7 @@ protected:
 									 BOOL restamp);
 	void removeBatchNoCheck(LLDynamicArray<LLFolderViewEventListener*>& batch);
 protected:
-	LLHandle<LLPanel> mInventoryPanel;
+	LLHandle<LLInventoryPanel> mInventoryPanel;
 	LLFolderView* mRoot;
 	const LLUUID mUUID;	// item id
 	LLInventoryType::EType mInvType;
@@ -691,7 +692,8 @@ BOOL move_inv_category_world_to_agent(const LLUUID& object_id,
 									  const LLUUID& category_id,
 									  BOOL drop,
 									  void (*callback)(S32, void*) = NULL,
-									  void* user_data = NULL);
+									  void* user_data = NULL,
+									  LLInventoryFilter* filter = NULL);
 
 // Utility function to hide all entries except those in the list
 // Can be called multiple times on the same menu (e.g. if multiple items

@@ -507,8 +507,10 @@ LLNearbyChatHandler::LLNearbyChatHandler(e_notification_type type, const LLSD& i
 
 	channel->setCreatePanelCallback(callback);
 
-	mChannel = LLChannelManager::getInstance()->addChannel(channel);
+	LLChannelManager::getInstance()->addChannel(channel);
 
+	mChannel = channel->getHandle();
+	
 	FSUseNearbyChatConsole = gSavedSettings.getBOOL("FSUseNearbyChatConsole");
 	gSavedSettings.getControl("FSUseNearbyChatConsole")->getSignal()->connect(boost::bind(&LLNearbyChatHandler::updateFSUseNearbyChatConsole, this, _2));
 }
@@ -647,7 +649,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	if( ( nearby_chat->getVisible() && !FSUseNearbyChatConsole) // Ansariel: If nearby chat not visible but we use the console, proceed!
 		|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
 			&& useChatBubbles )
-		|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
+		|| mChannel.isDead()
+		|| !mChannel.get()->getShowToasts() ) // to prevent toasts in Busy mode
 		return;//no need in toast if chat is visible or if bubble chat is enabled
 
 	// Ansariel: Use either old style chat output to console or toasts
@@ -733,11 +736,12 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 		if( nearby_chat->getVisible()	// ## Zi - Post merge fixup ##
 			|| ( chat_msg.mSourceType == CHAT_SOURCE_AGENT
 				&& useChatBubbles )
-			|| !mChannel->getShowToasts() ) // to prevent toasts in Busy mode
+			|| mChannel.isDead()
+			|| !mChannel.get()->getShowToasts() ) // to prevent toasts in Busy mode
 			return;//no need in toast if chat is visible or if bubble chat is enabled
 
 		// arrange a channel on a screen
-		if(!mChannel->getVisible())
+		if(!mChannel.get()->getVisible())
 		{
 			initChannel();
 		}
@@ -757,7 +761,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 		LLUUID id;
 		id.generate();
 
-		LLNearbyChatScreenChannel* channel = dynamic_cast<LLNearbyChatScreenChannel*>(mChannel);
+		LLNearbyChatScreenChannel* channel = dynamic_cast<LLNearbyChatScreenChannel*>(mChannel.get());
 		
 		if(channel)
 		{

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="155"
+ height="170"
  layout="topleft"
  name="build options floater"
  help_topic="build_options_floater"
  save_rect="true"
  title="GRID OPTIONS"
- width="230">
- 	<spinner
+ width="264">
+    <spinner
      control_name="GridResolution"
      follows="left|top"
      height="23"
@@ -20,7 +20,7 @@
      max_val="5"
      min_val="0.01"
      name="GridResolution"
-     top_pad="24"
+     top_pad="30"
      width="200" />
     <spinner
      control_name="GridDrawSize"
@@ -36,7 +36,7 @@
      max_val="50"
      min_val="1"
      name="GridDrawSize"
-     top_pad="3"
+     top_pad="0"
      width="200" />
     <check_box
      control_name="GridSubUnit"

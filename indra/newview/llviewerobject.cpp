@@ -147,7 +147,10 @@ LLViewerObject *LLViewerObject::createObject(const LLUUID &id, const LLPCode pco
 			}
 			else 
 			{
-				gAgentAvatarp->updateRegion(regionp);
+				if (isAgentAvatarValid())
+				{
+					gAgentAvatarp->updateRegion(regionp);
+				}
 			}
 			res = gAgentAvatarp;
 		}

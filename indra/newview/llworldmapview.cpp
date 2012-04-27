@@ -566,7 +566,7 @@ void LLWorldMapView::draw()
 					 TRUE,
 					 sStringsMap["agent_position"].c_str(),
 					 "",
-					 llround(LLFontGL::getFontSansSerifSmall()->getLineHeight())); // offset vertically by one line, to avoid overlap with target tracking
+					 LLFontGL::getFontSansSerifSmall()->getLineHeight()); // offset vertically by one line, to avoid overlap with target tracking
 	}
 
 	// Draw the current agent viewing angle
@@ -1053,7 +1053,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 	const S32 TEXT_PADDING = DEFAULT_TRACKING_ARROW_SIZE + 2;
 	S32 half_text_width = llfloor(font->getWidthF32(label) * 0.5f);
 	text_x = llclamp(text_x, half_text_width + TEXT_PADDING, getRect().getWidth() - half_text_width - TEXT_PADDING);
-	text_y = llclamp(text_y + vert_offset, TEXT_PADDING + vert_offset, getRect().getHeight() - llround(font->getLineHeight()) - TEXT_PADDING - vert_offset);
+	text_y = llclamp(text_y + vert_offset, TEXT_PADDING + vert_offset, getRect().getHeight() - font->getLineHeight() - TEXT_PADDING - vert_offset);
 
 //	if (label != "")
 // [RLVa:KB] - Checked: 2009-07-04 (RLVa-1.4.5) | Added: RLVa-1.0.0
@@ -1069,7 +1069,7 @@ void LLWorldMapView::drawTracking(const LLVector3d& pos_global, const LLColor4& 
 
 		if (tooltip != "")
 		{
-			text_y -= (S32)font->getLineHeight();
+			text_y -= font->getLineHeight();
 
 			font->renderUTF8(
 				tooltip, 0,
@@ -1221,15 +1221,13 @@ void LLWorldMapView::drawAvatar(F32 x_pixels,
 {
 	const F32 HEIGHT_THRESHOLD = 7.f;
 	LLUIImagePtr dot_image = sAvatarLevelImage;
-
-	// Ansariel: If height is unknown, draw our special icon
 	if (unknown_relative_z)
 	{
 		dot_image = sAvatarUnknownImage;
 	}
 	else
 	{
-		if(relative_z < -HEIGHT_THRESHOLD) 
+		if(relative_z < -HEIGHT_THRESHOLD)
 		{
 			dot_image = sAvatarBelowImage; 
 		}
@@ -1282,7 +1280,7 @@ void LLWorldMapView::drawIconName(F32 x_pixels,
 		LLFontGL::NORMAL, 
 		LLFontGL::DROP_SHADOW);
 
-	text_y -= llround(LLFontGL::getFontSansSerif()->getLineHeight());
+	text_y -= LLFontGL::getFontSansSerif()->getLineHeight();
 
 	// render text
 	LLFontGL::getFontSansSerif()->renderUTF8(second_line, 0,

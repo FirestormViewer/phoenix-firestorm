@@ -104,6 +104,8 @@ typedef enum e_sanity_type
 
 class LLControlVariable : public LLRefCount
 {
+	LOG_CLASS(LLControlVariable);
+
 	friend class LLControlGroup;
 	
 public:
@@ -206,6 +208,8 @@ T convert_from_llsd(const LLSD& sd, eControlType type, const std::string& contro
 //const U32 STRING_CACHE_SIZE = 10000;
 class LLControlGroup : public LLInstanceTracker<LLControlGroup, std::string>
 {
+	LOG_CLASS(LLControlGroup);
+
 protected:
 	typedef std::map<std::string, LLControlVariablePtr > ctrl_name_table_t;
 	ctrl_name_table_t mNameTable;

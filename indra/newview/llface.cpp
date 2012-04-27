@@ -1840,10 +1840,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 		}
 	}
 
-	// <FS:ND> FS-5132 Only use color strider if face has colors.
-	// if (rebuild_color)
 	if (rebuild_color && mVertexBuffer->hasDataType(LLVertexBuffer::TYPE_COLOR) )
-	// </FS:ND>
 	{
 		LLFastTimer t(FTM_FACE_GEOM_COLOR);
 		mVertexBuffer->getColorStrider(colors, mGeomIndex, mGeomCount, map_range);

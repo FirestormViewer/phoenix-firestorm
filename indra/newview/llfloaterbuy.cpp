@@ -239,10 +239,10 @@ void LLFloaterBuy::inventoryChanged(LLViewerObject* obj,
 
 		// Compute icon for this item
 		BOOL item_is_multi = FALSE;
-		if(obj->getType()==LLAssetType::AT_OBJECT && (inv_item->getFlags() & LLInventoryItemFlags::II_FLAGS_OBJECT_HAS_MULTIPLE_ITEMS))
+		if (( inv_item->getFlags() & LLInventoryItemFlags::II_FLAGS_LANDMARK_VISITED
+			|| inv_item->getFlags() & LLInventoryItemFlags::II_FLAGS_OBJECT_HAS_MULTIPLE_ITEMS)
+			&& !(inv_item->getFlags() & LLInventoryItemFlags::II_FLAGS_WEARABLES_MASK))
 		{
-			// multiple flag is only interesting for object types
-			// landmark visited status is in inv_item->getFlags() -Zi
 			item_is_multi = TRUE;
 		}
 

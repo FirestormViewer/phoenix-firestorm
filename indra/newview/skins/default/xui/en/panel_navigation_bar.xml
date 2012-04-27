@@ -207,6 +207,7 @@
          name="favorites_bar_label"
          text_color="LtGray"
          tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+	     valign="bottom"
          width="102">
           Favorites Bar
         </label>

@@ -728,7 +728,7 @@ bool LLMeshRepoThread::fetchMeshSkinInfo(const LLUUID& mesh_id)
 			if (!http_url.empty())
 			{				
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-										   new LLMeshSkinInfoResponder(mesh_id, offset, size));
+												 new LLMeshSkinInfoResponder(mesh_id, offset, size));
 				if(ret)
 				{
 					LLMeshRepository::sHTTPRequestCount++;
@@ -805,7 +805,7 @@ bool LLMeshRepoThread::fetchMeshDecomposition(const LLUUID& mesh_id)
 			if (!http_url.empty())
 			{				
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-										   new LLMeshDecompositionResponder(mesh_id, offset, size));
+												 new LLMeshDecompositionResponder(mesh_id, offset, size));
 				if(ret)
 				{
 					LLMeshRepository::sHTTPRequestCount++;
@@ -881,7 +881,7 @@ bool LLMeshRepoThread::fetchMeshPhysicsShape(const LLUUID& mesh_id)
 			if (!http_url.empty())
 			{				
 				ret = mCurlRequest->getByteRange(http_url, headers, offset, size,
-										   new LLMeshPhysicsShapeResponder(mesh_id, offset, size));
+												 new LLMeshPhysicsShapeResponder(mesh_id, offset, size));
 
 				if(ret)
 				{

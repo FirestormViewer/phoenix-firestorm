@@ -294,7 +294,7 @@ void LLFloaterTranslationSettings::onBtnOK()
 	gSavedSettings.setString("BingTranslateAPIKey", getEnteredBingKey());
 	gSavedSettings.setString("GoogleTranslateAPIKey", getEnteredGoogleKey());
 	// <FS:Zi> Remove floating chat bar
-	// LLNearbyChatBar::getInstance()->enableTranslationCheckbox(LLTranslate::isTranslationConfigured());
+	// LLNearbyChatBar::getInstance()->showTranslationCheckbox(LLTranslate::isTranslationConfigured());
 	// TODO: Add code to make this happen via control callback within LLNearbyChat
 	// </FS:Zi>
 	closeFloater(false);

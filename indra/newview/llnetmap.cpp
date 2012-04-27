@@ -476,7 +476,7 @@ void LLNetMap::draw()
 			}
 
 			F32	dist_to_cursor_squared = dist_vec_squared(LLVector2(pos_map.mV[VX], pos_map.mV[VY]),
-											LLVector2(local_mouse_x,local_mouse_y));
+										  LLVector2(local_mouse_x,local_mouse_y));
 			if(dist_to_cursor_squared < min_pick_dist_squared && dist_to_cursor_squared < closest_dist_squared)
 			{
 				closest_dist_squared = dist_to_cursor_squared;

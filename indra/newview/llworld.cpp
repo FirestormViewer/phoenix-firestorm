@@ -1241,23 +1241,20 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 		//               INDEPENDENTLY!!! Things rely on being able to
 		//               pass either one as NULL!!!
 		LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
-		if(!pVOAvatar->isDead() && !pVOAvatar->isSelf())
+		LLVector3d pos_global = pVOAvatar->getPositionGlobal();
+		LLUUID uuid = pVOAvatar->getID();
+		if( !pVOAvatar->isDead()
+			&& !pVOAvatar->isSelf()
+			&& !uuid.isNull() &&
+			dist_vec_squared(pos_global, relative_to) <= radius_squared)
 		{
-			LLUUID uuid = pVOAvatar->getID();
-			if(!uuid.isNull())
+			if(positions != NULL)
 			{
-				LLVector3d pos_global = pVOAvatar->getPositionGlobal();
-				if(dist_vec_squared(pos_global, relative_to) <= radius_squared)
-				{
-					if(positions != NULL)
-					{
-						positions->push_back(pos_global);
-					}
-					if(avatar_ids !=NULL)
-					{
-						avatar_ids->push_back(uuid);
-					}
-				}
+				positions->push_back(pos_global);
+			}
+			if(avatar_ids !=NULL)
+			{
+				avatar_ids->push_back(uuid);
 			}
 		}
 	}
@@ -1281,7 +1278,7 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 				// if this avatar doesn't already exist in the list, add it
 				if(uuid.notNull() && avatar_ids != NULL && std::find(avatar_ids->begin(), avatar_ids->end(), uuid) == avatar_ids->end())
 				{
-					if(positions != NULL)
+					if (positions != NULL)
 					{
 						// <FS:Ansariel> Explictly return AVATAR_UNKNOWN_Z_OFFSET
 						//               if height of avatar is unknown so we

@@ -238,7 +238,7 @@ void LLPanelLogin::addUsersWithFavoritesToUsername()
 
 void LLPanelLogin::addFavoritesToStartLocation()
 {
-
+	// Clear the combo.
 	LLComboBox* combo = getChild<LLComboBox>("start_location_combo");
 	if (!combo) return;
 	int num_items = combo->getItemCount();
@@ -246,6 +246,10 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	{
 		combo->remove(i);
 	}
+
+	// Load favorites into the combo.
+	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
+	std::string canonical_user_name = canonicalize_username(user_defined_name);
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
@@ -255,19 +259,18 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
 		iter != fav_llsd.endMap(); ++iter)
 	{
-		std::string user_defined_name = getChild<LLComboBox>("username_combo")->getValue();
-		U32 arobase = user_defined_name.find("@");
-		if (arobase != -1 && arobase +1 < user_defined_name.length())
-			user_defined_name = user_defined_name.substr(0,arobase);
-
 		// The account name in stored_favorites.xml has Resident last name even if user has
 		// a single word account name, so it can be compared case-insensitive with the
 		// user defined "firstname lastname".
-		
-		S32 res = LLStringUtil::compareInsensitive(canonicalize_username(user_defined_name), iter->first);
-		if (res != 0) continue;
+		S32 res = LLStringUtil::compareInsensitive(canonical_user_name, iter->first);
+		if (res != 0)
+		{
+			lldebugs << "Skipping favorites for " << iter->first << llendl;
+			continue;
+		}
 
 		combo->addSeparator();
+		lldebugs << "Loading favorites for " << iter->first << llendl;
 		LLSD user_llsd = iter->second;
 		for (LLSD::array_const_iterator iter1 = user_llsd.beginArray();
 			iter1 != user_llsd.endArray(); ++iter1)

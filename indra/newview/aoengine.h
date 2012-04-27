@@ -33,6 +33,10 @@
 #include "llsingleton.h"
 #include "lluuid.h"
 
+// NaCl - feex
+#include "llextendedstatus.h"
+// NaCl End
+
 class AOTimerCollection
 :	public LLEventTimer
 {

@@ -744,12 +744,15 @@ LLPanelGroupMembersSubTab::LLPanelGroupMembersSubTab()
 	mHasMatch(FALSE),
 	mNumOwnerAdditions(0)
 {
-//	mUdpateSessionID = LLUUID::null;
+	mUdpateSessionID = LLUUID::null;
 }
 
 LLPanelGroupMembersSubTab::~LLPanelGroupMembersSubTab()
 {
-//	gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
+	if (mMembersList)
+	{
+		gSavedSettings.setString("GroupMembersSortOrder", mMembersList->getSortColumnName());
+	}
 }
 
 BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
@@ -777,16 +780,16 @@ BOOL LLPanelGroupMembersSubTab::postBuildSubTab(LLView* root)
 	mMembersList->setDoubleClickCallback(onMemberDoubleClick, this);
 	mMembersList->setContextMenu(LLScrollListCtrl::MENU_AVATAR);
 	
-//	LLSD row;
-//	row["columns"][0]["column"] = "name";
-//	row["columns"][1]["column"] = "donated";
-//	row["columns"][2]["column"] = "online";
-//	mMembersList->addElement(row);
-//	std::string order_by = gSavedSettings.getString("GroupMembersSortOrder");
-//	if(!order_by.empty())
-//	{
-//		mMembersList->sortByColumn(order_by, TRUE);
-//	}	
+	LLSD row;
+	row["columns"][0]["column"] = "name";
+	row["columns"][1]["column"] = "donated";
+	row["columns"][2]["column"] = "online";
+	mMembersList->addElement(row);
+	std::string order_by = gSavedSettings.getString("GroupMembersSortOrder");
+	if(!order_by.empty())
+	{
+		mMembersList->sortByColumn(order_by, TRUE);
+	}	
 
 	LLButton* button = parent->getChild<LLButton>("member_invite", recurse);
 	if ( button )
@@ -1544,10 +1547,10 @@ void LLPanelGroupMembersSubTab::update(LLGroupChange gc)
 		mMemberProgress = gdatap->mMembers.begin();
 		mPendingMemberUpdate = TRUE;
 		mHasMatch = FALSE;
-//		// Generate unique ID for current updateMembers()- see onNameCache for details.
-//		// Using unique UUID is perhaps an overkill but this way we are perfectly safe
-//		// from coincidences.
-//		mUdpateSessionID.generate();
+		// Generate unique ID for current updateMembers()- see onNameCache for details.
+		// Using unique UUID is perhaps an overkill but this way we are perfectly safe
+		// from coincidences.
+		mUdpateSessionID.generate();
 	}
 	else
 	{
@@ -1573,6 +1576,63 @@ void LLPanelGroupMembersSubTab::update(LLGroupChange gc)
 		mMembersList->setEnabled(FALSE);
 		mMembersList->setCommentText(retrieved.str());
 	}
+}
+
+void LLPanelGroupMembersSubTab::addMemberToList(LLUUID id, LLGroupMemberData* data)
+{
+	if (!data) return;
+	LLUIString donated = getString("donation_area");
+	donated.setArg("[AREA]", llformat("%d", data->getContribution()));
+
+	LLSD row;
+	row["id"] = id;
+
+	row["columns"][0]["column"] = "name";
+	// value is filled in by name list control
+
+	row["columns"][1]["column"] = "donated";
+	row["columns"][1]["value"] = donated.getString();
+
+	row["columns"][2]["column"] = "online";
+	row["columns"][2]["value"] = data->getOnlineStatus();
+	row["columns"][2]["font"] = "SANSSERIF_SMALL";
+
+	mMembersList->addElement(row);
+
+	mHasMatch = TRUE;
+}
+
+void LLPanelGroupMembersSubTab::onNameCache(const LLUUID& update_id, const LLUUID& id)
+{
+	// Update ID is used to determine whether member whose id is passed
+	// into onNameCache() was passed after current or previous user-initiated update.
+	// This is needed to avoid probable duplication of members in list after changing filter
+	// or adding of members of another group if gets for their names were called on
+	// previous update. If this id is from get() called from older update,
+	// we do nothing.
+	if (mUdpateSessionID != update_id) return;
+	
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
+		if (!gdatap) 
+	{
+		llwarns << "LLPanelGroupMembersSubTab::updateMembers() -- No group data!" << llendl;
+		return;
+	}
+	
+	std::string fullname;
+	gCacheName->getFullName(id, fullname);
+
+	LLGroupMemberData* data;
+	// trying to avoid unnecessary hash lookups
+	if (matchesSearchFilter(fullname) && ((data = gdatap->mMembers[id]) != NULL))
+	{
+		addMemberToList(id, data);
+		if(!mMembersList->getEnabled())
+		{
+			mMembersList->setEnabled(TRUE);
+		}
+	}
+	
 }
 
 void LLPanelGroupMembersSubTab::updateMembers()
@@ -1605,8 +1665,7 @@ void LLPanelGroupMembersSubTab::updateMembers()
 
 
 	LLGroupMgrGroupData::member_list_t::iterator end = gdatap->mMembers.end();
-	LLUIString donated = getString("donation_area");
-
+	
 	S32 i = 0;
 	for( ; mMemberProgress != end && i<UPDATE_MEMBERS_PER_FRAME; 
 			++mMemberProgress, ++i)
@@ -1614,38 +1673,19 @@ void LLPanelGroupMembersSubTab::updateMembers()
 		if (!mMemberProgress->second)
 			continue;
 		// Do filtering on name if it is already in the cache.
-		bool add_member = true;
-
 		std::string fullname;
 		if (gCacheName->getFullName(mMemberProgress->first, fullname))
 		{
-			if ( !matchesSearchFilter(fullname) )
+			if (matchesSearchFilter(fullname))
 			{
-				add_member = false;
+				addMemberToList(mMemberProgress->first, mMemberProgress->second);
 			}
 		}
-
-		if (add_member)
+		else
 		{
-			donated.setArg("[AREA]", llformat("%d", mMemberProgress->second->getContribution()));
-
-			LLSD row;
-			row["id"] = (*mMemberProgress).first;
-
-			row["columns"][0]["column"] = "name";
-			// value is filled in by name list control
-
-			row["columns"][1]["column"] = "donated";
-			row["columns"][1]["value"] = donated.getString();
-
-			row["columns"][2]["column"] = "online";
-			row["columns"][2]["value"] = mMemberProgress->second->getOnlineStatus();
-			row["columns"][2]["font"] = "SANSSERIF_SMALL";
-
-			LLScrollListItem* member = mMembersList->addElement(row);
-
-			LLUUID id = member->getUUID();
-			mHasMatch = TRUE;
+			// If name is not cached, onNameCache() should be called when it is cached and add this member to list.
+			gCacheName->get(mMemberProgress->first, FALSE, boost::bind(&LLPanelGroupMembersSubTab::onNameCache,
+																	   this, mUdpateSessionID, _1));
 		}
 	}
 

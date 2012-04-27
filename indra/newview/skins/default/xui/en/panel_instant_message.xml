@@ -15,7 +15,7 @@
     <panel
      background_visible="true"
      bevel_style="in"
-     bg_alpha_color="black"
+     bg_alpha_color="Black"
      follows="top"
      height="24"
      label="im_header"

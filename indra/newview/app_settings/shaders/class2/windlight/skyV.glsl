@@ -53,8 +53,6 @@ uniform vec4 glow;
 
 uniform vec4 cloud_color;
 
-uniform float cloud_scale;
-
 void main()
 {
 
@@ -86,7 +84,6 @@ void main()
 	vec4 haze_weight;
 	vec4 sunlight = sunlight_color;
 	vec4 light_atten;
-
 
 	// Sunlight attenuation effect (hue and brightness) due to atmosphere
 	// this is used later for sunlight modulation at various altitudes
