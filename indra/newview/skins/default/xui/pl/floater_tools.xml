@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="toolbox floater" short_title="NARZĘDZIA BUDOWANIA">
+	<floater.string name="grid_screen_text">
+		Ekran
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Lokalnie
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Świat
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Odniesienie
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Dodatek
+	</floater.string>
 	<floater.string name="status_rotate">
 		Przeciągaj barwne pierścienie, by obracać obiekt
 	</floater.string>

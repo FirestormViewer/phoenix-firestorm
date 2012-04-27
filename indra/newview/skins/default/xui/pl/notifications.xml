@@ -656,7 +656,7 @@ To może się zdarzyć, kiedy zmieniasz ustawienia sieci. Zrestartowanie Przegl�
 		Nie można utworzyć pliku wyjściowego: [FILE]
 	</notification>
 	<notification name="DoNotSupportBulkAnimationUpload">
-		[APP_NAME] obecnie nie wspomaga ładowania grupowego plików animacji.
+		[APP_NAME] obecnie nie wspomaga ładowania grupowego plików animacji w formacie BVH.
 	</notification>
 	<notification name="CannotUploadReason">
 		Ładowanie pliku [FILE] nie powiodło się z powodu: [REASON]
@@ -2715,16 +2715,16 @@ Czy się zgadzasz?
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; - [NAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Blokuj"/>
-			<button name="___ignore_button___" text="Zignoruj"/>
+			<button name="Client_Side_Mute" text="Blokuj"/>
+			<button name="Client_Side_Ignore" text="Zignoruj"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; - [GROUPNAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Blokuj"/>
-			<button name="___ignore_button___" text="Zignoruj"/>
+			<button name="Client_Side_Mute" text="Blokuj"/>
+			<button name="Client_Side_Ignore" text="Zignoruj"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">
@@ -3281,7 +3281,7 @@ Nazwa nie może zawierać ":" lub "|".
 		Zestaw animacji o tej nazwie już istnieje.
 	</notification>
 	<notification name="AOForeignItemsFound">
-		Zastępowanie Animacji znalazło przynajmniej jedną pozycję, jaka nie powinna znaleźć się w konfiguracji. Sprawdź folder &quot;Zagubione i odnalezione&quot; aby przejrzeć pozycje, które zostały usunięte z konfiguracji Zastępowania Animacji.
+		Animator znalazł przynajmniej jedną pozycję, jaka nie powinna znaleźć się w konfiguracji. Sprawdź folder &quot;Zagubione i odnalezione&quot; aby przejrzeć pozycje, które zostały usunięte z konfiguracji Animatora.
 	</notification>
 	<notification name="AOImportPermissionDenied">
 		Niewystarczające uprawnienia do odczytu notki.

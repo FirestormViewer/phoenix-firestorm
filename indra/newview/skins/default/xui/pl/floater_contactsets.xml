@@ -42,7 +42,7 @@
         Inne
     </text>
     <text name="lgg_fg_text4b">
-        Zestawy
+        Zest.
     </text>
     <check_box label="Wszyscy" name="lgg_fg_showAllFriends"/>
     <line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zest."/>

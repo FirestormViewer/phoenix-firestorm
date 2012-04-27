@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="animation_overrider" title="Zastępowanie Animacji (AO)">
+<floater name="animation_overrider" title="Animator (AO)">
 	<floater.string name="ao_no_sets_loaded">Brak załadowanych zestawów</floater.string>
 	<floater.string name="ao_no_animations_loaded">Brak załadowanych animacji</floater.string>
 </floater>

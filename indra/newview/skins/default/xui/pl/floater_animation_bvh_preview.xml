@@ -24,7 +24,7 @@ Maksymalna długość pliku animacji wynosi [MAX_LENGTH] sekund.
 		Niewłaściwy nagłówek HIERARCHII.
 	</floater.string>
 	<floater.string name="E_ST_NO_JOINT">
-		ROOT oraz JOINT nieodnalezione.
+		ROOT lub JOINT nieodnalezione.
 	</floater.string>
 	<floater.string name="E_ST_NO_NAME">
 		Brak nazwy JOINT.

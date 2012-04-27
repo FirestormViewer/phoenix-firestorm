@@ -6,8 +6,8 @@
 		<check_box name="ao_default" label="Domyślny" tool_tip="Ustaw ten zestaw animacji jako domyślny." />
 		<button name="ao_add" tool_tip="Utwórz nowy zestaw animacji." />
 		<button name="ao_remove" tool_tip="Usuń ten zestaw animacji." />
-		<check_box name="ao_sit_override" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
-		<check_box name="ao_smart" label="Sprytnie" tool_tip="Ten tryb próbuje zapobiegać sytuacjom, w których Zastępowanie koliduje z wewnętrznymi animacjami obiektu - i wyłącza tymczasowo podmienianie." />
+		<check_box name="ao_sit_override" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Animator ma też podmieniać animacje siedzenia." />
+		<check_box name="ao_smart" label="Sprytnie" tool_tip="Ten tryb próbuje zapobiegać sytuacjom, w których Animator koliduje z wewnętrznymi animacjami obiektu - i wyłącza tymczasowo podmienianie." />
 		<check_box name="ao_disable_stands_in_mouselook" label="Wyłącz w trybie 1 osoby" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
 		<combo_box name="ao_state_selection_combo" tool_tip="Wybierz stan animacji do edycji." />
 		<panel name="ao_animation_move_trash_panel">
@@ -19,7 +19,7 @@
 		<check_box name="ao_randomize" label="Losowy porządek" tool_tip="Losuj porządek odtwarzania animacji w cyklu." />
 		<text name="ao_cycle_time_seconds_label" value="Czas cyklu (sekundy):" />
 		<spinner name="ao_cycle_time" tool_tip="Czas, po jakim animacja zmienia się na następną z listy. Ustaw na 0, aby wyłączyć automatyczny cykl animacji." />
-		<button name="ao_reload" label="Przeładuj" tool_tip="Przeładuj konfigurację Zastępowania Animacji." />
+		<button name="ao_reload" label="Przeładuj" tool_tip="Przeładuj konfigurację Animatora." />
 		<layout_stack name="next_previous_buttons_stack">
 		<layout_panel name="next_previous_buttons_stack_left">
 		<button name="ao_previous" tool_tip="Poprzednia animacja obecnego stanu." />
@@ -28,7 +28,7 @@
 		<button name="ao_next" tool_tip="Następna animacja obecnego stanu." />
 		</layout_panel>
 		</layout_stack>
-		<button name="ao_less" tool_tip="Pokazuj mniejszy interfejs Zastępowania Animacji." />
+		<button name="ao_less" tool_tip="Pokazuj mniejszy interfejs Animatora." />
 	</panel>
 	<panel name="ao_reload_cover">
 		<panel name="ao_reload_text_panel">
@@ -45,6 +45,6 @@
 	<button name="ao_more" tool_tip="Pokaż pełny interfejs." />
 	<button name="ao_previous_small" tool_tip="Poprzednia animacja obecnego stanu." />
 	<button name="ao_next_small" tool_tip="Następna animacja obecnego stanu." />
-	<check_box name="ao_sit_override_small" label="Siady" tool_tip="Zaznacz tą opcję, jeśli Zastępowanie Animacji ma też podmieniać animacje siedzenia." />
+	<check_box name="ao_sit_override_small" label="Siady" tool_tip="Zaznacz tą opcję, jeśli Animator ma też podmieniać animacje siedzenia." />
 	</panel>
 </panel>

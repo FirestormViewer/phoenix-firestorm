@@ -1288,14 +1288,18 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InventoryOutboxNotMerchantTitle">
 		Każdy może sprzedawać przedmioty na Marketplace.
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip"></string>
+	<string name="InventoryOutboxNotMerchantTooltip">
+		Zostań sprzedawcą!
+	</string>
 	<string name="InventoryOutboxNotMerchant">
 		Jeśli chcesz zostać kupcem i sprzedawać przedmioty, to musisz najpierw [[MARKETPLACE_CREATE_STORE_URL] założyć sklep na Marketplace].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Twoja skrzynka nadawcza kupca jest pusta.
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip"></string>
+	<string name="InventoryOutboxNoItemsTooltip">
+		Umieść tutaj przedmioty, aby przygotować je do wysyłki na Marketplace.
+	</string>
 	<string name="InventoryOutboxNoItems">
 		Przeciągnij foldery do tego obszaru i kliknij "Wyślij na Marketplace", aby dodać je na listę sprzedaży w [[MARKETPLACE_DASHBOARD_URL] Marketplace].
 	</string>
@@ -3940,6 +3944,9 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="Saved_message">
 		(Zapisano [LONG_TIMESTAMP])
 	</string>
+	<string name="IM_unblock_only_groups_friends">
+		Aby zobaczyć tą wiadomość musisz odznaczyć &apos;Tylko znajomi i grupy mogą wysyłać mi wiad. prywatne (IM) oraz rozmowy głosowe&apos; w Ustawieniach/Prywatności.
+	</string>
 	<string name="IM_announce_incoming">
 		Nadchodzi wiadomość od [NAME]
 	</string>
@@ -4467,7 +4474,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Awatar
 	</string>
 	<string name="Command_Build_Label">
-		Budowanie
+		Buduj
 	</string>
 	<string name="Command_Chat_Label">
 		Rozmowy
@@ -4485,7 +4492,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Samouczek
 	</string>
 	<string name="Command_Inventory_Label">
-		Moja szafa
+		Szafa
 	</string>
 	<string name="Command_Map_Label">
 		Mapa
@@ -4530,25 +4537,25 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Kamera
 	</string>
 	<string name="Command_Voice_Label">
-		Głos w pobliżu
+		Pobliski głos
 	</string>
 	<string name="Command_Quickprefs_Label">
-		Podręczne ustawienia
+		Szybkie strojenie
 	</string>
 	<string name="Command_AO_Label">
-		Zastępowanie animacji
+		Animator
 	</string>
 	<string name="Command_Webbrowser_Label">
-		Przeglądarka internetowa
+		Przeglądaj sieć
 	</string>
 	<string name="Command_Default_Chat_Bar_Label">
 		Czat
 	</string>
 	<string name="Command_Areasearch_Label">
-		Przeszukiwanie obszaru
+		Przeszukaj obszar
 	</string>
 	<string name="Command_Settings_Debug_Label">
-		Ustawienia debugowania
+		Debuguj
 	</string>
 	<string name="Command_Statistics_Label">
 		Statystyki
