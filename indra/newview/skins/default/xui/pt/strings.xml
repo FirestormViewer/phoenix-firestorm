@@ -1165,6 +1165,7 @@ Titulares de contas gratuitas não poderão acessar o Second Life para acomodar 
 	<string name="InventoryInboxNoItems">
 		Quando você comprar ou receber um item, ele aparecerá aqui para que você possa arrastá-lo para uma pasta em seu inventário ou excluí-lo caso não queira mantê-lo.
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
 	</string>
@@ -1174,6 +1175,7 @@ Titulares de contas gratuitas não poderão acessar o Second Life para acomodar 
 	<string name="MarketplaceURL_LearnMore">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
+-->
 	<string name="InventoryOutboxCreationErrorTitle">
 		Sua Caixa de saída do lojista não está configurada corretamente
 	</string>

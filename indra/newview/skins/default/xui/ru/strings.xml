@@ -1213,6 +1213,7 @@ support@secondlife.com.
 	<string name="InventoryInboxNoItems">
 		Если вы купите или как-то иначе получите предмет, он появится здесь. Его можно будет перетащить в папку вашего инвентаря или удалить, если он больше не нужен.
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
 	</string>
@@ -1222,6 +1223,7 @@ support@secondlife.com.
 	<string name="MarketplaceURL_LearnMore">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
+-->
 	<string name="InventoryOutboxCreationErrorTitle">
 		Папка «Торговые исходящие» настроена неправильно
 	</string>

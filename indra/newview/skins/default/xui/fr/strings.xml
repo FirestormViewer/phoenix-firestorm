@@ -1216,12 +1216,14 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL_CreateStore">
 		http://marketplace.[DOMAIN_NAME]/create_store
 	</string>
 	<string name="MarketplaceURL_LearnMore">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
+-->
 	<string name="InventoryOutboxCreationErrorTitle">
 		Configuration incorrecte de votre boîte d&apos;envoi vendeur
 	</string>

@@ -1213,6 +1213,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="InventoryInboxNoItems">
 		Bir öğeyi satın aldığınızda veya başka bir şekilde edindiğinizde burada görünür; bunu envanterinizdeki bir klasöre sürükleyebilir veya tutmak istemiyorsanız silebilirsiniz.
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]
 	</string>
@@ -1222,6 +1223,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="MarketplaceURL_LearnMore">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
+-->
 	<string name="InventoryOutboxCreationErrorTitle">
 		Satıcı Giden Kutunuz düzgün yapılandırılmamıştır
 	</string>

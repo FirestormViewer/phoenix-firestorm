@@ -1204,6 +1204,7 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="InventoryInboxNoItems">
 		Quando acquisti o ricevi un oggetto, verrà visualizzato qui per permetterti di trascinarlo in una cartella dell&apos;inventario o di cancellarlo se non desideri mantenerlo.
 	</string>
+<!-- FS:Ansariel: Commented out because they are apparently wrong
 	<string name="MarketplaceURL">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
@@ -1213,6 +1214,7 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="MarketplaceURL_LearnMore">
 		http://marketplace.[DOMAIN_NAME]/learn_more
 	</string>
+-->
 	<string name="InventoryOutboxCreationErrorTitle">
 		La casella in uscita del rivenditore non è configurata correttamente
 	</string>
