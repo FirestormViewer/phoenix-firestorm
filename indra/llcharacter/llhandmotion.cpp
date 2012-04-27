@@ -132,7 +132,23 @@ BOOL LLHandMotion::onUpdate(F32 time, U8* joint_mask)
 	{
 		if (mNewPose != HAND_POSE_RELAXED && mNewPose != mCurrentPose)
 		{
-			mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			// <FS:Ansariel>
+			// mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			if (mNewPose != HAND_POSE_SPREAD)
+			{
+				mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			}
+
+			if (mCurrentPose != HAND_POSE_SPREAD)
+			{
+				mCharacter->setVisualParamWeight(gHandPoseNames[mCurrentPose], 1.f);
+			}
+
+			if (mCurrentPose == HAND_POSE_RELAXED)
+			{
+				mCharacter->updateVisualParams();
+			}
+			// </FS:Ansariel>
 		}
 		mNewPose = HAND_POSE_RELAXED;
 	}
@@ -149,10 +165,29 @@ BOOL LLHandMotion::onUpdate(F32 time, U8* joint_mask)
 		// </FS:ND>
 
 		// this is a new morph we didn't know about before
-		if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
+		// <FS:Ansariel>
+		//if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
+		//{
+		//	mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+		//}
+		if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose)
 		{
-			mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			if (mNewPose != HAND_POSE_SPREAD)
+			{
+				mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			}
+
+			if (mCurrentPose != HAND_POSE_SPREAD)
+			{
+				mCharacter->setVisualParamWeight(gHandPoseNames[mCurrentPose], 1.f);
+			}
+
+			if (mCurrentPose == *requestedHandPose)
+			{
+				mCharacter->updateVisualParams();
+			}
 		}
+		// </FS:Ansariel>
 		mNewPose = *requestedHandPose;
 	}
 
