@@ -223,7 +223,6 @@
      label_shadow="true"
      name="buyL"
      pad_right="2"
-     pad_bottom="3"
      tool_tip="Click to buy more L$"
      top="2"
      width="40" />
