@@ -3998,6 +3998,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="Saved_message">
 		(Gespeichert am [LONG_TIMESTAMP])
 	</string>
+	<string name="IM_unblock_only_groups_friends">
+		Um diese Message sehen zu können, muss &apos;Nur Freunde und Gruppen können mich anrufen oder mir eine IM schicken&apos; in Einstellungen/Privatspäre deaktiviert sein.
+	</string>
 	<string name="IM_announce_incoming">
 		Ankommende Instant Message von [NAME]
 	</string>
