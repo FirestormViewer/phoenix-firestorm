@@ -201,6 +201,7 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam);
 //
 
 bool rlvCanDeleteOrReturn();
+bool rlvCanDeleteOrReturn(const LLViewerObject* pObj);
 
 struct RlvSelectHasLockedAttach : public LLSelectedNodeFunctor
 {
