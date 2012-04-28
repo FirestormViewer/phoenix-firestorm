@@ -181,9 +181,8 @@ RlvWindLight::RlvWindLight()
 	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("distancemultiplier", RlvWindLightControl(&pWLParamMgr->mDistanceMult)));
 	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("maxaltitude",	RlvWindLightControl(&pWLParamMgr->mMaxAlt)));
 	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("scenegamma",		RlvWindLightControl(&pWLParamMgr->mWLGamma)));
-	// TYPE_COLOR_R
-	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("hazedensity",	RlvWindLightControl(&pWLParamMgr->mHazeDensity, true)));
-	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("hazehorizon",	RlvWindLightControl(&pWLParamMgr->mHazeHorizon, true)));
+	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("hazedensity",	RlvWindLightControl(&pWLParamMgr->mHazeDensity)));
+	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("hazehorizon",	RlvWindLightControl(&pWLParamMgr->mHazeHorizon)));
 	// TYPE_COLOR
 	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("ambient",		RlvWindLightControl(&pWLParamMgr->mAmbient, false)));
 	m_ControlLookupMap.insert(std::pair<std::string, RlvWindLightControl>("bluedensity",	RlvWindLightControl(&pWLParamMgr->mBlueDensity, false)));

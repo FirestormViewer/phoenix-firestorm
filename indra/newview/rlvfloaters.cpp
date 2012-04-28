@@ -130,7 +130,8 @@ void RlvFloaterBehaviours::onBtnCopyToClipboard()
 		}
 	}
 
-	gClipboard.copyFromString(utf8str_to_wstring(strRestrictions.str()));
+	LLWString wstrRestrictions = utf8str_to_wstring(strRestrictions.str());
+	LLClipboard::instance().copyToClipboard(wstrRestrictions, 0, wstrRestrictions.length());
 }
 
 // Checked: 2011-05-23 (RLVa-1.3.1c) | Modified: RLVa-1.3.1c
