@@ -320,13 +320,13 @@ public:
 		std::string rwind_vector_text;
 		std::string audio_text;
 
-                static const std::string beacon_particle = LLTrans::getString("BeaconParticle");
-                static const std::string beacon_physical = LLTrans::getString("BeaconPhysical");
-                static const std::string beacon_scripted = LLTrans::getString("BeaconScripted");
-                static const std::string beacon_scripted_touch = LLTrans::getString("BeaconScriptedTouch");
-                static const std::string beacon_sound = LLTrans::getString("BeaconSound");
-                static const std::string beacon_media = LLTrans::getString("BeaconMedia");
-                static const std::string particle_hiding = LLTrans::getString("ParticleHiding");
+		static const std::string beacon_particle = LLTrans::getString("BeaconParticle");
+		static const std::string beacon_physical = LLTrans::getString("BeaconPhysical");
+		static const std::string beacon_scripted = LLTrans::getString("BeaconScripted");
+		static const std::string beacon_scripted_touch = LLTrans::getString("BeaconScriptedTouch");
+		static const std::string beacon_sound = LLTrans::getString("BeaconSound");
+		static const std::string beacon_media = LLTrans::getString("BeaconMedia");
+		static const std::string particle_hiding = LLTrans::getString("ParticleHiding");
 
 		// Draw the statistics in a light gray
 		// and in a thin font
@@ -694,29 +694,30 @@ public:
 		// only display these messages if we are actually rendering beacons at this moment
 		if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
 		{
-                        if (LLPipeline::getRenderMOAPBeacons(NULL))
-                        {
-                                addText(xpos, ypos, "Viewing media beacons (white)");
-                                ypos += y_inc;
-                        }
- 
-                        if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
-                        {
-                                addText(xpos, ypos, particle_hiding);
-                                ypos += y_inc;
-                        }
- 
+			if (LLPipeline::getRenderMOAPBeacons(NULL))
+			{
+				addText(xpos, ypos, "Viewing media beacons (white)");
+				ypos += y_inc;
+			}
+
+			if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+			{
+				addText(xpos, ypos, particle_hiding);
+				ypos += y_inc;
+			}
 
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
 				addText(xpos, ypos, "Viewing particle beacons (blue)");
 				ypos += y_inc;
 			}
+
 			if (LLPipeline::getRenderSoundBeacons(NULL))
 			{
 				addText(xpos, ypos, "Viewing sound beacons (yellow)");
 				ypos += y_inc;
 			}
+
 			if (LLPipeline::getRenderScriptedBeacons(NULL))
 			{
 				addText(xpos, ypos, beacon_scripted);
@@ -728,6 +729,7 @@ public:
 					addText(xpos, ypos, beacon_scripted_touch);
 					ypos += y_inc;
 				}
+
 			if (LLPipeline::getRenderPhysicalBeacons(NULL))
 			{
 				addText(xpos, ypos, "Viewing physical object beacons (green)");
@@ -1674,12 +1676,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 		LLFeatureManager::getInstance()->applyRecommendedSettings();
 		gSavedSettings.setBOOL("ProbeHardwareOnStartup", FALSE);
 	}
-	
+
 	if (!gGLManager.mHasDepthClamp)
 	{
- 		LL_INFOS("RenderInit") << "Missing feature GL_ARB_depth_clamp. Void water might disappear in rare cases." << LL_ENDL;
+		LL_INFOS("RenderInit") << "Missing feature GL_ARB_depth_clamp. Void water might disappear in rare cases." << LL_ENDL;
 	}
-
+	
 	// If we crashed while initializng GL stuff last time, disable certain features
 	if (gSavedSettings.getBOOL("RenderInitError"))
 	{
@@ -2142,8 +2144,8 @@ void LLViewerWindow::shutdownGL()
 	LLSelectMgr::getInstance()->cleanup();	
 
 	llinfos << "Stopping GL during shutdown" << llendl;
-        stopGL(FALSE);
-        stop_glerror();
+	stopGL(FALSE);
+	stop_glerror();
 
 	gGL.shutdown();
 
@@ -2679,7 +2681,6 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// If "Pressing letter keys starts local chat" option is selected, we are not in mouselook, 
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
-
 	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
@@ -2917,7 +2918,8 @@ void LLViewerWindow::updateUI()
 
 	S32 x = mCurrentMousePoint.mX;
 	S32 y = mCurrentMousePoint.mY;
-	MASK    mask = gKeyboard->currentMask(TRUE);
+
+	MASK	mask = gKeyboard->currentMask(TRUE);
 
 	if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_RAYCAST))
 	{
@@ -3312,8 +3314,8 @@ void LLViewerWindow::updateLayout()
 			}
 			// Update the location of the blue box tool popup
 			LLCoordGL select_center_screen;
-                        MASK    mask = gKeyboard->currentMask(TRUE);
-                        gFloaterTools->updatePopup( select_center_screen, mask );
+			MASK	mask = gKeyboard->currentMask(TRUE);
+			gFloaterTools->updatePopup( select_center_screen, mask );
 		}
 		else
 		{
@@ -3441,8 +3443,8 @@ void LLViewerWindow::updateKeyboardFocus()
 		// sync all floaters with their focus state
 		gFloaterView->highlightFocusedFloater();
 		gSnapshotFloaterView->highlightFocusedFloater();
-                MASK    mask = gKeyboard->currentMask(TRUE);
-                if ((mask & MASK_CONTROL) == 0)
+		MASK	mask = gKeyboard->currentMask(TRUE);
+		if ((mask & MASK_CONTROL) == 0)
 		{
 			// control key no longer held down, finish cycle mode
 			gFloaterView->setCycleMode(FALSE);
@@ -3830,8 +3832,8 @@ LLPickInfo LLViewerWindow::pickImmediate(S32 x, S32 y_from_bot,  BOOL pick_trans
 	}
 
 	// shortcut queueing in mPicks and just update mLastPick in place
-        MASK    key_mask = gKeyboard->currentMask(TRUE);
-        mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, TRUE, NULL);
+	MASK	key_mask = gKeyboard->currentMask(TRUE);
+	mLastPick = LLPickInfo(LLCoordGL(x, y_from_bot), key_mask, pick_transparent, TRUE, NULL);
 	mLastPick.fetchResults();
 
 	return mLastPick;
@@ -3953,12 +3955,12 @@ LLViewerObject* LLViewerWindow::cursorIntersect(S32 mouse_x, S32 mouse_y, F32 de
 // [/RLVa:KB]
 		if (!found) // if not found in HUD, look in world:
 		{
-                     found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
-								face_hit, intersection, uv, normal, binormal);
-                       if (found && !pick_transparent)
-                      {
-                             gDebugRaycastIntersection = *intersection;
-                      }
+			found = gPipeline.lineSegmentIntersectInWorld(mouse_world_start, mouse_world_end, pick_transparent,
+														  face_hit, intersection, uv, normal, binormal);
+			if (found && !pick_transparent)
+			{
+				gDebugRaycastIntersection = *intersection;
+			}
 		}
 
 // [RLVa:KB] - Checked: 2010-01-02 (RLVa-1.1.0l) | Added: RLVa-1.1.0l
@@ -4331,7 +4333,6 @@ BOOL LLViewerWindow::thumbnailSnapshot(LLImageRaw *raw, S32 preview_width, S32 p
 // Saves the image from the screen to a raw image
 // Since the required size might be bigger than the available screen, this method rerenders the scene in parts (called subimages) and copy
 // the results over to the final raw image.
-
 BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_height, 
 								 BOOL keep_window_aspect, BOOL is_texture, BOOL show_ui, BOOL do_rebuild, ESnapshotType type, S32 max_size)
 {
@@ -4381,10 +4382,10 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	// from window
 	LLRect window_rect = show_ui ? getWindowRectRaw() : getWorldViewRectRaw(); 
 
-	S32 snapshot_width = window_rect.getWidth();
+	S32 snapshot_width  = window_rect.getWidth();
 	S32 snapshot_height = window_rect.getHeight();
 	// SNAPSHOT
-	S32 window_width = snapshot_width;
+	S32 window_width  = snapshot_width;
 	S32 window_height = snapshot_height;
 	
 	// Note: Scaling of the UI is currently *not* supported so we limit the output size if UI is requested
@@ -4397,10 +4398,10 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 
 	F32 scale_factor = 1.0f ;
 	if (!keep_window_aspect || (image_width > window_width) || (image_height > window_height))
-	{		
+	{	
 		// if image cropping or need to enlarge the scene, compute a scale_factor
 		F32 ratio = llmin( (F32)window_width / image_width , (F32)window_height / image_height) ;
-		snapshot_width = (S32)(ratio * image_width) ;
+		snapshot_width  = (S32)(ratio * image_width) ;
 		snapshot_height = (S32)(ratio * image_height) ;
 		scale_factor = llmax(1.0f, 1.0f / ratio) ;
 	}
@@ -4411,16 +4412,16 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		llwarns << "over scaling UI not supported." << llendl;
 	}
 
-	S32 buffer_x_offset = llfloor(((window_width - snapshot_width) * scale_factor) / 2.f);
+	S32 buffer_x_offset = llfloor(((window_width  - snapshot_width)  * scale_factor) / 2.f);
 	S32 buffer_y_offset = llfloor(((window_height - snapshot_height) * scale_factor) / 2.f);
 
-        S32 image_buffer_x = llfloor(snapshot_width  * scale_factor) ;
-        S32 image_buffer_y = llfloor(snapshot_height * scale_factor) ;
- 
-        if ((image_buffer_x > max_size) || (image_buffer_y > max_size)) // boundary check to avoid memory overflow
+	S32 image_buffer_x = llfloor(snapshot_width  * scale_factor) ;
+	S32 image_buffer_y = llfloor(snapshot_height * scale_factor) ;
+
+	if ((image_buffer_x > max_size) || (image_buffer_y > max_size)) // boundary check to avoid memory overflow
 	{
 		scale_factor *= llmin((F32)max_size / image_buffer_x, (F32)max_size / image_buffer_y) ;
-		image_buffer_x = llfloor(snapshot_width * scale_factor) ;
+		image_buffer_x = llfloor(snapshot_width  * scale_factor) ;
 		image_buffer_y = llfloor(snapshot_height * scale_factor) ;
 	}
 	if ((image_buffer_x > 0) && (image_buffer_y > 0))
@@ -4473,7 +4474,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 			// handle fractional rows
 			U32 read_width = llmax(0, (window_width - subimage_x_offset) -
 									llmax(0, (window_width * (subimage_x + 1)) - (buffer_x_offset + raw->getWidth())));
-
+			
 			// Skip rendering and sampling altogether if either width or height is degenerated to 0 (common in cropping cases)
 			if (read_width && read_height)
 			{
@@ -4482,56 +4483,57 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 				
 				if (!LLPipeline::sRenderDeferred)
 				{
-                                        // Required for showing the GUI in snapshots and performing bloom composite overlay
-                                        // Call even if show_ui is FALSE
-                                        render_ui(scale_factor, subfield);
+					// Required for showing the GUI in snapshots and performing bloom composite overlay
+					// Call even if show_ui is FALSE
+					render_ui(scale_factor, subfield);
 				}
 				
 				for (U32 out_y = 0; out_y < read_height ; out_y++)
 				{
-                                        S32 output_buffer_offset = (
-                                                                                                (out_y * (raw->getWidth())) // ...plus iterated y...
-                                                                                                + (window_width * subimage_x) // ...plus subimage start in x...
-                                                                                                + (raw->getWidth() * window_height * subimage_y) // ...plus subimage start in y...
-                                                                                                - output_buffer_offset_x // ...minus buffer padding x...
-                                                                                                - (output_buffer_offset_y * (raw->getWidth()))  // ...minus buffer padding y...
-                                                                                                ) * raw->getComponents();
- 
-                                        // Ping the watchdog thread every 100 lines to keep us alive (arbitrary number, feel free to change)
-                                        if (out_y % 100 == 0)
+					S32 output_buffer_offset = ( 
+												(out_y * (raw->getWidth())) // ...plus iterated y...
+												+ (window_width * subimage_x) // ...plus subimage start in x...
+												+ (raw->getWidth() * window_height * subimage_y) // ...plus subimage start in y...
+												- output_buffer_offset_x // ...minus buffer padding x...
+												- (output_buffer_offset_y * (raw->getWidth()))  // ...minus buffer padding y...
+												) * raw->getComponents();
+				
+					// Ping the watchdog thread every 100 lines to keep us alive (arbitrary number, feel free to change)
+					if (out_y % 100 == 0)
 					{
-                                                LLAppViewer::instance()->pingMainloopTimeout("LLViewerWindow::rawSnapshot");
-                                        }
- 
-                                        if (type == SNAPSHOT_TYPE_COLOR)
-                                        {
-                                                glReadPixels(
-                                                                         subimage_x_offset, out_y + subimage_y_offset,
-                                                                         read_width, 1,
-                                                                         GL_RGB, GL_UNSIGNED_BYTE,
-                                                                         raw->getData() + output_buffer_offset
-                                                                         );
-                                        }
-                                        else // SNAPSHOT_TYPE_DEPTH
-                                        {
-                                                LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GL_FLOAT)); // need to store floating point values
-                                                glReadPixels(
-                                                                         subimage_x_offset, out_y + subimage_y_offset,
-                                                                         read_width, 1,
-                                                                         GL_DEPTH_COMPONENT, GL_FLOAT,
-                                                                         depth_line_buffer->getData()// current output pixel is beginning of buffer...
-                                                                         );
- 
-                                                for (S32 i = 0; i < (S32)read_width; i++)
-                                                {
-                                                        F32 depth_float = *(F32*)(depth_line_buffer->getData() + (i * sizeof(F32)));
-                                                        F32 linear_depth_float = 1.f / (depth_conversion_factor_1 - (depth_float * depth_conversion_factor_2));
-                                                        U8 depth_byte = F32_to_U8(linear_depth_float, LLViewerCamera::getInstance()->getNear(), LLViewerCamera::getInstance()->getFar());
-                                                        // write converted scanline out to result image
-                                                        for (S32 j = 0; j < raw->getComponents(); j++)
-                                                        {
-                                                                *(raw->getData() + output_buffer_offset + (i * raw->getComponents()) + j) = depth_byte;
-                                                        }
+						LLAppViewer::instance()->pingMainloopTimeout("LLViewerWindow::rawSnapshot");
+					}
+				
+					if (type == SNAPSHOT_TYPE_COLOR)
+					{
+						glReadPixels(
+									 subimage_x_offset, out_y + subimage_y_offset,
+									 read_width, 1,
+									 GL_RGB, GL_UNSIGNED_BYTE,
+									 raw->getData() + output_buffer_offset
+									 );
+					}
+					else // SNAPSHOT_TYPE_DEPTH
+					{
+						LLPointer<LLImageRaw> depth_line_buffer = new LLImageRaw(read_width, 1, sizeof(GL_FLOAT)); // need to store floating point values
+						glReadPixels(
+									 subimage_x_offset, out_y + subimage_y_offset,
+									 read_width, 1,
+									 GL_DEPTH_COMPONENT, GL_FLOAT,
+									 depth_line_buffer->getData()// current output pixel is beginning of buffer...
+									 );
+
+						for (S32 i = 0; i < (S32)read_width; i++)
+						{
+							F32 depth_float = *(F32*)(depth_line_buffer->getData() + (i * sizeof(F32)));
+					
+							F32 linear_depth_float = 1.f / (depth_conversion_factor_1 - (depth_float * depth_conversion_factor_2));
+							U8 depth_byte = F32_to_U8(linear_depth_float, LLViewerCamera::getInstance()->getNear(), LLViewerCamera::getInstance()->getFar());
+							// write converted scanline out to result image
+							for (S32 j = 0; j < raw->getComponents(); j++)
+							{
+								*(raw->getData() + output_buffer_offset + (i * raw->getComponents()) + j) = depth_byte;
+							}
 						}
 					}
 				}
