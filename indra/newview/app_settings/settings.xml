@@ -16564,6 +16564,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>GroupMembersSortOrder</key>
+    <map>
+      <key>Comment</key>
+      <string>The order by which group members will be sorted (name|donated|online)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>name</string>
+    </map>
 
     <key>FSFontSettingsFile</key>
     <map>
