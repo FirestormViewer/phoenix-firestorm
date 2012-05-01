@@ -1071,6 +1071,10 @@ U32 info_display_from_string(std::string info_display)
 	{
 		return LLPipeline::RENDER_DEBUG_WIND_VECTORS;
 	}
+	else if ("texture size" == info_display)
+	{
+		return LLPipeline::RENDER_DEBUG_TEXTURE_SIZE;
+	}
 	else
 	{
 		return 0;
