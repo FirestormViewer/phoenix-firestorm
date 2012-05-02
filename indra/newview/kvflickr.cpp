@@ -25,7 +25,13 @@
 #include "llmd5.h"
 #include "llhttpclient.h"
 #include "llxmltree.h"
+
+#if LL_STANDALONE
+#include "jsoncpp/json.h"
+#else
 #include "json.h"
+#endif
+
 
 #include "kvflickr.h"
 

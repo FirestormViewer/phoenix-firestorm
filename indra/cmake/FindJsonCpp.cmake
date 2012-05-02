@@ -9,9 +9,7 @@
 #  also defined, but not for general use are
 #  JSONCPP_LIBRARY, where to find the jsoncpp library.
 
-FIND_PATH(JSONCPP_INCLUDE_DIRS json.h
-          PATH_SUFFIXES jsoncpp
-)
+FIND_PATH(JSONCPP_INCLUDE_DIRS jsoncpp/json.h )
 
 # Get the GCC compiler version
 EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
