@@ -52,6 +52,11 @@
 #include "llvoavatarself.h"
 // NaCl End
 
+#ifdef __GNUC__
+// There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
+#pragma GCC diagnostic ignored "-Wformat"
+#endif
+
 class ScriptMatches : public LLInventoryCollectFunctor
 {
 public:
@@ -445,7 +450,11 @@ struct ProcCacheInfo
 
 inline std::string shortfile(std::string in)
 {
+#if BOOST_FILESYSTEM_VERSION == 3
+	return boost::filesystem::path(std::string(in)).filename().string();
+#else
 	return boost::filesystem::path(std::string(in)).filename();
+#endif
 }
 
 
