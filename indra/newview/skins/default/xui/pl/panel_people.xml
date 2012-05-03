@@ -46,7 +46,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 			</layout_stack>
 			<panel name="bottom_panel_nearby">
 				<menu_button name="nearby_view_sort_btn" tool_tip="Opcje"/>
-				<button name="add_friend_btn" tool_tip="Dodaj wybranego Rezydenta do znajomych"/>
+				<button name="add_friend_btn_nearby" tool_tip="Dodaj wybranego Rezydenta do znajomych"/>
 				<slider label="Zasięg(m):" name="NearMeRange" />
 			</panel>
 		</panel>
@@ -90,8 +90,8 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 			<layout_panel name="share_btn_lp">
 				<button label="Daj" name="share_btn" tool_tip="Udostępnij obiekt z Szafy"/>
 			</layout_panel>
-			<layout_panel name="teleport_btn_lp">
-				<button label="Teleportuj" name="teleport_btn" tool_tip="Zaproponuj teleport"/>
+			<layout_panel name="tp_btn_lp">
+				<button label="Teleport" name="teleport_btn" tool_tip="Zaproponuj teleport"/>
 			</layout_panel>
 		</layout_stack>
 		<layout_stack name="bottom_bar_ls1">
