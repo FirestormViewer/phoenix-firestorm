@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="edit_underpants_panel">
+	<panel name="avatar_underpants_color_panel">
+             layout="topleft"
+		<texture_picker label="Fabric" name="Tejido" tool_tip="Pulsa para seleccionar una imagen"/>
+		<color_swatch label="Color/Tinte" name="Color/Tint" tool_tip="Pulsa para abrir el selector de color"/>
+	</panel>
+	<panel name="underpants_main_tab_holder" title="Ropa interior">
+		<accordion name="underpants_main_accordion">
+			<accordion_tab name="underpants_main_tab" title="Ropa interior"/>
+		</accordion>
+	</panel>
+</panel>

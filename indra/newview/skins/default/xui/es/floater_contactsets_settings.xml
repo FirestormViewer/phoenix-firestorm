@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater_settings" title="CONFIGURACIÓN DE GRUPOS DE CONTACTOS">
+	<color_swatch name="colordefault" tool_tip="Color por defecto para los amigos que no están en ningún grupo. Afecta sólo a la visualización de la lista Grupos de Amigos."/>
+	<text name="lgg_fg_text2a" width="125">
+		Color por defecto para
+	</text>
+	<text name="lgg_fg_text2b">
+		amigos sin grupo
+	</text>
+	<slider name="FSContactSetsScrollSpeed" label="Velocidad de desplazamiento" tool_tip="Configura la velocidad a la que te desplazas por la lista" width="320" label_width="165"/>
+	<check_box label="Mostrar notificaciones de conexión/desconexión para TODOS los amigos en tostadas" name="ChatOnlineNotification"/>
+	<check_box label="Mostrar notificaciones de conexión/desconexión para TODOS los amigos en el chat general" name="OnlineOfflinetoNearbyChat"/>
+	<check_box label="Mostrar notificaciones de conexión/desconexión para ciertos grupos en tostadas" name="FSContactSetsNotificationToast"/>
+	<check_box label="Mostrar notificaciones de conexión/desconexión para ciertos grupos en el chat general" name="FSContactSetsNotificationNearbyChat"/>
+	<check_box label="Colorear a los amigos en el minimapa basándose en los grupos de contactos" name="FSContactSetsColorizeMiniMap"/>
+	<check_box label="Colorear el tag de los amigos basándose en los grupos de contactos" name="FSContactSetsColorizeNameTag"/>
+	<check_box label="Colorear a los amigos en la lista del radar basándose en los grupos de contactos" name="FSContactSetsColorizeRadar"/>
+	<check_box label="Colorear a los amigos en el chat basándose en los grupos de contactos" name="FSContactSetsColorizeChat"/>
+	<check_box label="Colorear sólo un pequeño área del fondo de la ventana de grupos de contactos" name="FSContactSetsColorizeBar"/>
+	<check_box label="Colorear el texto en lugar de los fondos en la ventana de grupos de contactos" name="FSContactSetsColorizeText"/>
+	<check_box label="Requerir el uso de CTRL para realizar selecciones múltiples" name="FSContactSetsRequireCTRL"/>
+	<check_box label="Usar el efecto de Zoom en la ventana" name="FSContactSetsDoZoom"/>
+	<check_box label="Usar el efecto de realzado de color en la ventana" name="FSContactSetsUseColorHighlight"/>
+	<slider name="FSContactSetsMaxColorStrength" label="Intensidad del fondo" tool_tip="Intensidad del color de fondo." left="310" label_width="115" width="230" bottom_delta="-3"/>
+	<check_box label="Mostrar carpetas sobre los contactos (sino, puedes usar el desplegable)" name="FSContactSetsShowFolders"/>
+	<check_box label="Mostrar iconos de perfil junto a los nombres" name="FSContactSetsDrawProfileIcon"/>
+	<text name="lgg_fg_text3" width="130">
+		Formato de nombre:
+	</text>
+	<combo_box name="lgg_fg_dispName" left_delta="120" top_delta="-3">
+		<combo_item name="Legacy Names">
+			Nombres clásicos
+		</combo_item>
+		<combo_item name="Display Names (with Username)">
+			Displaynames (con nombre de usuario)
+		</combo_item>
+		<combo_item name="Display Names only">
+			Sólo displaynames
+		</combo_item>
+	</combo_box>
+	<text name="lgg_fg_text4" width="120" top_delta="3">
+		Ordenar por:
+	</text>
+	<combo_box name="lgg_fg_sortName" left_delta="75" top_delta="-3">
+		<combo_item name="Legacy Names">
+			Nombre clásico
+		</combo_item>
+		<combo_item name="Display Names (with Username)">
+			Displayname + nombre de usuario
+		</combo_item>
+		<combo_item name="Display Names only">
+			Displayname
+		</combo_item>
+	</combo_box>
+	<button label="Aceptar" name="lgg_fg_okButton" width="70"/>
+</floater>

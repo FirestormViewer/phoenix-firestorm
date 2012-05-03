@@ -6,7 +6,7 @@
 		<check_box name="ao_default" label="Por defecto" tool_tip="Configurar este conjunto de animaciones como conjunto por defecto."/>
 		<button name="ao_add" tool_tip="Crear un nuevo conjunto de animaciones."/>
 		<button name="ao_remove" tool_tip="Eliminar este conjunto de animaciones."/>
-		<check_box name="ao_sit_override" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse por la configuradas en este conjunto de animaciones."/>
+		<check_box name="ao_sit_override" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse."/>
 		<check_box name="ao_smart" label="Inteligente" tool_tip="El modo inteligente trata de determinar si la animación de sentarse va a interferir con la animación propia del objeto en el que te sientas, y la desactiva temporalmente"/>
 		<check_box name="ao_disable_stands_in_mouselook" label="Desactivar postura 'de pie' en vista subjetiva" tool_tip="Si quieres preservar tu animación personalizada para estar de pie en vista subjetiva, activa esta casilla."/>
 		<combo_box name="ao_state_selection_combo" tool_tip="Selecciona el estado de animación a editar."/>
@@ -49,6 +49,6 @@
 		<button name="ao_more" tool_tip="Mostrar la interfaz completa para configurar el AO."/>
 		<button name="ao_previous_small" tool_tip="Cambiar a la anterior animación del estado actual."/>
 		<button name="ao_next_small" tool_tip="Cambiar a la siguiente animación del estado actual."/>
-		<check_box name="ao_sit_override_small" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse por la configuradas en este conjunto de animaciones."/>
+		<check_box name="ao_sit_override_small" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse."/>
 	</panel>
 </panel>

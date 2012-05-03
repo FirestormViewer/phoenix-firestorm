@@ -110,7 +110,7 @@
 				<menu_item_call label="Eliminar configuración..." name="delete_day_preset"/>
 			</menu>
 		</menu>
-		<menu_item_call label="Búsqueda de área" name="area_search"/>
+		<menu_item_call label="Buscar en el área" name="area_search"/>
 		<menu_item_check label="Explorador de sonidos" name="Sound Explorer"/>
 		<menu_item_call label="Lista negra" name="Asset Blacklist"/>
 	</menu>
@@ -273,6 +273,7 @@
 			<menu_item_check label="Correr siempre" name="Always Run"/>
             		<menu_item_check label="Iniciar el vuelo" name="Fly"/>
 			<menu_item_call label="Cerrar la ventana" name="Close Window"/>
+			<menu_item_call label="Cerrar todas las ventanas" name="Close All Windows"/>
 			<menu_item_call label="Guardar una foto" name="Snapshot to Disk"/>
 			<menu_item_call label="Vista subjetiva" name="Mouselook"/>
 			<menu_item_check label="Flycam del joystick" name="Joystick Flycam"/>
@@ -474,7 +475,7 @@
 		<menu_item_check label="Mostrar menú Admin" name="View Admin Options"/>
 	</menu>
 	<menu label="Admin" name="Admin">
-		<menu label="Objeto">
+		<menu label="Objeto" name="AdminObject">
 			<menu_item_call label="Tomar una copia" name="Take Copy"/>
 			<menu_item_call label="Tomar posesión" name="Force Owner To Me"/>
 			<menu_item_call label="Tomar posesión con todos los permisos" name="Force Owner Permissive"/>

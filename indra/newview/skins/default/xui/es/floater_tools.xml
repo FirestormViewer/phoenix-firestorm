@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="toolbox floater" short_title="HERRAMIENTAS DE CONSTRUCCIÓN">
+	<floater.string name="grid_screen_text">
+		Pantalla
+	</floater.string>
+	<floater.string name="grid_local_text">
+		Local
+	</floater.string>
+	<floater.string name="grid_world_text">
+		Mundo
+	</floater.string>
+	<floater.string name="grid_reference_text">
+		Referencia
+	</floater.string>
+	<floater.string name="grid_attachment_text">
+		Accesorio
+	</floater.string>
 	<floater.string name="status_rotate">
 		Arrastra las bandas de color para girar el objeto.
 	</floater.string>
@@ -35,21 +50,6 @@
 	</floater.string>
 	<floater.string name="selected_faces">
 		Caras:
-	</floater.string>
- 	<floater.string name="grid_screen_text">
-		Pantalla
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Local
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Mundo
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referencia
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Accesorio
 	</floater.string>
 	<button name="button focus" tool_tip="Visión"/>
 	<button name="button move" tool_tip="Mover"/>

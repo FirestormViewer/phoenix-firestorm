@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rlva_strings>
+	<strings>
+		<string name="hidden_generic">(Oculto)</string>
+		<string name="hidden_parcel">(Parcela oculta)</string>
+		<string name="hidden_region">(Región oculta)</string>
+		<string name="blocked_recvim">*** MI bloqueado por tu visor</string>
+		<string name="blocked_sendim">*** MI bloqueado por el visor del remitente</string>
+		<string name="blocked_generic">No es posible realizar la acción debido a restricciones RLV</string>
+		<string name="blocked_permattach">El intento de anexar '[OBJECT]' fue denegado debido a restricciones RLV</string>
+		<string name="blocked_startim">No es posible iniciar una sesión de MI con [RECIPIENT] debido a restricciones RLV</string>
+		<string name="blocked_startconf">No es posible iniciar una conferencia with [RECIPIENT] debido a restricciones RLV</string>
+		<string name="blocked_teleport">No es posible iniciar un teleporte debido a restricciones RLV</string>
+		<string name="blocked_viewxxx">No es posible abrir [TYPE] debido a restricciones RLV</string>
+		<string name="blocked_recvim_remote">
+			El residente al que has enviado el mensaje no tiene permitido leer tus mensajes en este momento. Por favor, vuélvelo a intentar más tarde.
+		</string>
+		<string name="blocked_tplure_remote">
+			El residente al que has invitado no tiene permitido aceptar peticiones de teleporte. Por favor, vuélvelo a intentar más tarde.
+		</string>
+	</strings>
+	<anonyms>
+		<anonym>Un residente</anonym>
+		<anonym>Este residente</anonym>
+		<anonym>Ese residente</anonym>
+		<anonym>Un individuo</anonym>
+		<anonym>Este individuo</anonym>
+		<anonym>Ese individuo</anonym>
+		<anonym>Una persona</anonym>
+		<anonym>Esta persona</anonym>
+		<anonym>That person</anonym>
+		<anonym>Un extraño</anonym>
+		<anonym>Este extraño</anonym>
+		<anonym>Ese extraño</anonym>
+		<anonym>Un ser</anonym>
+		<anonym>Este ser</anonym>
+		<anonym>Ese ser</anonym>
+		<anonym>Un agente</anonym>
+		<anonym>Este agente</anonym>
+		<anonym>Ese agente</anonym>
+		<anonym>Un alma</anonym>
+		<anonym>Este alma</anonym>
+		<anonym>Ese alma</anonym>
+		<anonym>Alguien</anonym>
+		<anonym>Algunos</anonym>
+		<anonym>Alguien</anonym>
+		<anonym>El misterioso</anonym>
+		<anonym>Un ser desconocidoAn </anonym>
+		<anonym>El no identificado</anonym>
+		<anonym>Una persona desconocida</anonym>
+	</anonyms>
+	<behaviour-notifications>
+	</behaviour-notifications>
+</rlva_strings>

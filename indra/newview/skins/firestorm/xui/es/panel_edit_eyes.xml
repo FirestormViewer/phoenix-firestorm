@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel name="edit_eyes_panel">
+	<panel name="avatar_eye_color_panel">
+		<texture_picker label="Iris" name="Iris" tool_tip="Pulsa para seleccionar una imagen"/>
+	</panel>
+	<panel name="eyes_main_tab_holder" title="Ojos">
+		<accordion name="eyes_main_accordion">
+			<accordion_tab name="eyes_main_tab" title="Ojos">
+				<scrolling_panel_list name="eyes_main_param_list"/>
+			</accordion_tab>
+		</accordion>
+	</panel>
+</panel>

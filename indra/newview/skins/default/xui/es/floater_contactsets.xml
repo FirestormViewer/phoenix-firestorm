@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater" title="GRUPOS DE CONTACTOS" width="670">
+	<floater.string name="AddToGroup" value="Añadir a: [GROUPNAME]"/>
+	<floater.string name="RemoveFromGroup" value="Eliminar de: [GROUPNAME]"/>
+	<floater.string name="RemoveDisplayName" value="Eliminar displayname"/>
+	<floater.string name="ResetNameModification" value="Restablecer modificación de nombre"/>
+	<floater.string name="RemoveFromList" value="Eliminar de la lista"/>
+	<floater.string name="ShowProfile" value="Mostrar perfil"/>
+	<floater.string name="ShowOnMap" value="Mostrar en el mapa"/>
+	<floater.string name="SendIM" value="Enviar mensaje instantáneo"/>
+	<floater.string name="OfferTP" value="Ofrecer teleporte"/>
+	<floater.string name="AllSelected" value="Los [COUNT] seleccionados"/>
+	<floater.string name="StartConferenceCall" value="Iniciar conferencia ([COUNT])"/>
+	<floater.string name="SendMassTP" value="Enviar TP masivo ([COUNT])"/>
+	<floater.string name="DeselectAll" value="Deseleccionar todos ([COUNT])"/>
+	<floater.string name="SelectAll" value="Seleccionar todos ([COUNT])"/>
+	<floater.string name="AddNewAvatar" value="Añadir nuevo avatar"/>
+	<floater.string name="FilterLabel" value="Usando el filtro:"/>
+	<floater.string name="TooltipFriendUnselected" value="El contacto no está seleccionado"/>
+	<floater.string name="TooltipFriendSelected" value="El contacto está seleccionado"/>
+	<floater.string name="TooltipFriendOnline" value="El contacto está conectado"/>
+	<floater.string name="TooltipFriendOffline" value="El contacto está desconectado"/>
+	<floater.string name="TooltipNotOnFriendlist" value="No está en tu lista de amigos"/>
+	<floater.string name="TooltipIM" value="Mensaje instantáneo"/>
+	<floater.string name="TooltipProfile" value="Mostrar perfil"/>
+	<floater.string name="TooltipNameChanged" value="El nombre ha cambiado"/>
+	<text name="lgg_fg_text1" bottom_delta="5021">
+		Grupo:
+	</text>
+	<text name="lgg_fg_text2a">
+		Mostrar avisos
+	</text>
+	<text name="lgg_fg_text2b">
+		para este grupo
+	</text>
+	<button label="Configuración" name="lgg_fg_openSettings" width="90"/>
+	<button label="Eliminar grupo" name="lgg_fg_groupDelete" width="90"/>
+	<color_swatch label="Asignar color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color" height="35" width="80" left_delta="142" bottom_delta="11"/>
+	<view_border name="lgg_fg_border1" width="423" bottom_delta="24"/>
+	<text name="lgg_fg_text3" bottom_delta="-8">
+		Mostrar:
+	</text>
+	<check_box label="Conectados" name="lgg_fg_showOnline" left_delta="45"/>
+	<check_box left_delta="90" name="lgg_fg_showOtherGroups"/>
+	<text name="lgg_fg_text4a">
+		Otros
+	</text>
+	<text name="lgg_fg_text4b">
+		Grupos
+	</text>
+	<check_box label="Desconectados" name="lgg_fg_showOffline" left_delta="43"/>
+	<check_box label="Todos los amigos" name="lgg_fg_showAllFriends" left_delta="107"/>
+	<line_editor name="lgg_fg_groupNewName" label="Nombre del nuevo grupo" left_delta="122" width="140"/>
+	<button label="Crear grupo" name="lgg_fg_groupCreate" left_delta="145"/>
+	<panel name="draw_region" width="660" height="737"/>
+	<panel name="bottom_region" width="660" top_delta="742"/>
+	<panel name="top_region" width="660" bottom_delta="-767"/>
+</floater>

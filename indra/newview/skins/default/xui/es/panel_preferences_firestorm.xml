@@ -113,6 +113,7 @@
 			<text name="FSCmdLineMapTo_txt">
 				Telep. al sim X (uso: cmd nombredelsim)
 			</text>
+			<check_box label="Usar misma posición entre sims" name="toggle"/>
 			<text name="FSCmdLineCalc_txt">
 				Calc. expresiones (uso: cmd SIN(2+2))
 			</text>
@@ -195,6 +196,15 @@
 			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="EmBuildPrefsRenderHighlight_toggle"/>
 			<check_box label="Usar comportamiento antiguo de &quot;Poner objeto en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
 			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
+			<check_box label="Activar el preprocesador LSL" tool_tip="Marcar para activar el preprocesador LSL." name="preproc_checkbox"/>
+			<check_box label="Optimizar scripts" tool_tip="Marcar para que el preprocesador LSL optimice el espacio utilizado por los scripts, a costa de su legibilidad." name="preprocoptimizer_checkbox"/>
+			<check_box label="Instrucción switch()" tool_tip="Marcar para que el preprocesador LSL permita el uso de la instrucción switch() para controlar el flujo de los scripts." name="preprocswitch_checkbox"/>
+			<check_box label="Lazy lists" tool_tip="Marcar para que el preprocesador LSL permita el uso de extensiones de sintaxis para el manejo de listas." name="preproclazy_checkbox"/>
+			<check_box label="#includes desde el disco local" tool_tip="Marcar para que el preprocesador LSL permita instrucciones #include para referenciar ficheros en tu sistema local." name="preprocinclude_checkbox"/>
+			<text name="lslpreprocinclude_textbox">
+				Ruta include del preprocesador:
+			</text>
+			<button label="Examinar" label_selected="Examinar" name="SetPreprocInclude"/>
 		</panel>
 		<panel label="Etiquetas" name="TagTab">
 			<text name="SL-Tags-Notice">
