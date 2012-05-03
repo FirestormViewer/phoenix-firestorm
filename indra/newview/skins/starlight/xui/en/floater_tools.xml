@@ -80,26 +80,6 @@
 	  name="selected_faces">
 		Faces:
 	</floater.string>
-    	<floater.string
-     name="grid_screen_text">
-        Screen
-    </floater.string>
-    <floater.string
-     name="grid_local_text">
-        Local
-    </floater.string>
-    <floater.string
-     name="grid_world_text">
-        World
-    </floater.string>
-    <floater.string
-     name="grid_reference_text">
-        Reference
-    </floater.string>
-    <floater.string
-     name="grid_attachment_text">
-        Attachment
-    </floater.string>
     <button
      follows="left|top"
      height="25"
