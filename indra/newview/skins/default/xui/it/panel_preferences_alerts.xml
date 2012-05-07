@@ -4,7 +4,20 @@
 		Avvisami:
 	</text>
 	<check_box label="Quando spendo o ottengo L$" name="notify_money_change_checkbox"/>
-	<check_box label="Quando i miei amici entrano o escono da Second Life" name="friends_online_notify_checkbox"/>
+	<check_box name="FSPaymentInfoInChat" label="Mostra nella chat locale le transizioni di L$"/>
+	<check_box label="Quando viene creato un Landmark" name="landmark_created_checkbox"/>
+	<check_box label="Quando qualcuno cambia il suo Display name" name="FSShowDisplayNameUpdateNotification"/>
+	<check_box label="Quando ho un errore di script:" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location">
+		<radio_item label="Chat locale" name="script_0"/>
+		<radio_item label="Finestra separata" name="script_1"/>
+	</radio_group>
+	<text name="friends_logon_label">
+		Notifica quando i miei amici entrano o escono:
+	</text>
+	<check_box label="Come Popups" name="friends_online_notify_checkbox"/>
+	<check_box name="OnlineOfflinetoNearbyChat" label="Nella chat locale e nella console"/>
+	<check_box label="Solo nella chat locale" left_pad="10" name="OnlineOfflinetoNearbyChatHistory"/>
 	<text name="show_label">
 		Mostra sempre:
 	</text>

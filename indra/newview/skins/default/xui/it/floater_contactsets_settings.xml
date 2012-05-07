@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="lgg_fg_floater_settings" title="Impostazioni Contact Set">
+  <color_swatch name="colordefault" tool_tip="Il colore di default per i miei amici al di fuori dei set. Questo vale solo per l'elenco amici in modalità di visualizzazione gruppi/amici."/>
+  <text name="lgg_fg_text2a" width="180">Colore di Default per gli</text>
+  <text name="lgg_fg_text2b" width="200">amici che non sono nei set.</text>
+  <slider name="FSContactSetsScrollSpeed" label="Velocità scorrimento:" label_width="115" width="285" tool_tip="Imposta la velocità di scorrimento" left_delta="180"/>
+  <check_box label="Mostra notifiche online per TUTTI gli amici come toast" name="ChatOnlineNotification"/>
+  <check_box label="Mostra notifiche online per TUTTI gli amici in local chat" name="OnlineOfflinetoNearbyChat"/>
+  <check_box label="Mostra notifiche online per alcuni Set come toast" name="FSContactSetsNotificationToast"/>
+  <check_box label="Mostra notifiche online per alcuni Set in local chat" name="FSContactSetsNotificationNearbyChat"/>
+  <check_box label="Il colore degli amici sulla mini mappa è basato sul colore del Contact Set" name="FSContactSetsColorizeMiniMap"/>
+  <check_box label="Il colore del tag degli amici è basato sul colore del Contact Set" name="FSContactSetsColorizeNameTag"/>
+  <check_box label="Il colore degli amici nel radar è basato sul colore del Contact Set" name="FSContactSetsColorizeRadar"/>
+  <check_box label="Il colore della chat degli amici è basato sul colore del Contact Set" name="FSContactSetsColorizeChat"/>
+  <check_box label="Colora solo una piccola area di sfondo dell'amico selezionato nel Contact Set" name="FSContactSetsColorizeBar"/>
+  <check_box label="Colora il nome dell'amico nel Contact Set in base al suo Set" name="FSContactSetsColorizeText"/>
+  <check_box label="Tenere premuto CTRL per selezionare più amici" name="FSContactSetsRequireCTRL"/>
+  <check_box label="Usare effetto Zoom al passaggio del mouse" name="FSContactSetsDoZoom"/>
+  <check_box label="Evidenzia colore al passaggio del mouse" name="FSContactSetsUseColorHighlight"/>
+  <slider name="FSContactSetsMaxColorStrength" label="Intensità BG" tool_tip="Che intensità deve avere il colore di sfondo"/>
+  <check_box label="Mostra cartella vicino il contatto (Puoi usare il menu a tendina se questo è disattivato)" name="FSContactSetsShowFolders"/>
+  <check_box label="Mostra icona Profilo vicino ai nomi" name="FSContactSetsDrawProfileIcon"/>
+  <text name="lgg_fg_text3">Formato nome:</text>
+  <combo_box name="lgg_fg_dispName" left_delta="90"/>
+  <text name="lgg_fg_text4">Ordina per:</text>
+  <combo_box name="lgg_fg_sortName" left_delta="67"/>
+</floater>

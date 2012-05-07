@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_pick_info">
+    <panel.string name="location_notice">
+(sarà aggiornato dopo il salvataggio)
+    </panel.string>
+    <text name="pick_location">
+        Caricamento...
+    </text>
+    <button label="Mostra sulla mappa" width="115" name="show_on_map_btn" />
+    <button label="Imposta Qui" width="80" tool_tip="Imposta la posizione corrente per il picks" name="set_to_curr_location_btn" />
+    <button label="Salva posizione" name="save_changes_btn" />
+</panel>

@@ -6,31 +6,51 @@
 	<text name="Maximum bandwidth">
 		Capacità massima di banda
 	</text>
+	<text name="cache_size_label_l">
+		Grandezza Cache
+	</text>
 	<text name="text_box2">
 		kbps
 	</text>
 	<check_box label="Porta personalizzata" name="connection_port_enabled"/>
 	<spinner label="Numero porta:" name="connection_port"/>
+	<text name="Cache location">
+		Posizione cache:
+	</text>
+	<button label="Apri" label_selected="Apri" name="open_cache"/>
+	<button label="Set" label_selected="Set" name="set_cache"/>
+	<button label="Resetta" label_selected="Resetta" name="reset_cache"/>
+	<button label="Pulisci" label_selected="Pulisci" name="clear_cache"/>
+	<text name="log_path_desc">
+		Posizione Log cache:
+	</text>
+	<button label="Apri" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
+	<button label="Set" label_selected="Ustaw" name="log_path_button-panelsetup"/>
+	<button label="Resetta" label_selected="Resetuj" name="reset_logpath"/>
+	<button label="Apri cartella Crash Log" label_selected="Apri Crash Log" name="browse_crashlogs" width="150"/>
+	<button label="Apri cartella impostazioni" label_selected="Apri cartella impostazioni" name="browse_settingsdir" width="150"/>
 	<text name="Web:">
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Usa il mio browser (IE, Firefox, Safari)" name="external" tool_tip="Utilizza il browser Web predefinito di sistema per l&apos;aiuto, per i link Web e così via. Sconsigliato durante l&apos;esecuzione a tutto schermo." value="true"/>
+		<radio_item label="Usa il mio browser (IE, Firefox, Safari)" name="external" tool_tip="Utilizza il browser Web predefinito di sistema per l&apos;aiuto, per i link Web e così via. Sconsigliato durante l&apos;esecuzione a tutto schermo." value="true" left_pad="50"/>
 		<radio_item label="Utilizza il browser Web integrato" name="internal" tool_tip="Utilizza il browser Web integrato per l&apos;aiuto, per i link Web e così via. Questo browser si apre in una nuova finestra in [APP_NAME]." value=""/>
 	</radio_group>
+	<text name="numberwebfloaters_label">
+		Numero massimo di finestre nel browser Web integrato:
+	</text>
+	<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
+		<combo_box.item label="Illimitate" name="web_unlimited"/>
+		<combo_box.item label="Una Finestra" name="web_1"/>
+		<combo_box.item label="Cinque Finestre" name="web_5"/>
+		<combo_box.item label="Dieci Finestre" name="web_10"/>
+	</combo_box>
 	<check_box initial_value="true" label="Abilita plugin" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Accetta cookie" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Abilita Javascript" name="browser_javascript_enabled"/>
 	<check_box initial_value="falso" label="Consenti pop-up nel browser media" name="media_popup_enabled"/>
-	<text name="Software updates:">
-		Aggiornamenti software:
-	</text>
-	<combo_box name="updater_service_combobox">
-		<combo_box.item label="Installa automaticamente" name="Install_automatically"/>
-		<combo_box.item label="Scarica e installa manualmente gli aggiornamenti" name="Install_manual"/>
-	</combo_box>
 	<text name="Proxy Settings:">
 		Impostazioni proxy:
 	</text>
-	<button label="Regola impostazioni proxy" label_selected="Sfoglia" name="set_proxy"/>
+	<button label="Regola impostazioni proxy" label_selected="Sfoglia" name="set_proxy" width="150"/>
 </panel>

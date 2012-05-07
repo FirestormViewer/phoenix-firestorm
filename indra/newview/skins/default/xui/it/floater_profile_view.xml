@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<floater name="avatarinfo" title="PROFIL">
+<panel name="panel_profile_view">
+    <tab_container name="tabs">
+        <panel label="Interessi" name="panel_profile_interests" />
+        <panel label="Inserzioni" name="panel_profile_classified" />
+        <panel label="Note" name="panel_profile_notes" />
+    </tab_container>
+    <button name="ok_btn" tool_tip="Salva modifiche profilo e chiudi" />
+    <button name="cancel_btn" label="Cancella" label_selected="Cancella" />
+</panel>
+</floater>

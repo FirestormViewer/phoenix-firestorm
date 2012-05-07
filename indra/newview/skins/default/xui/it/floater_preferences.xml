@@ -2,6 +2,7 @@
 <floater name="Preferences" title="PREFERENZE">
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
+	<button label="Applica" name="Apply"/>
 	<tab_container name="pref core" tab_width="100">
 		<panel label="Generale" name="general"/>
 		<panel label="Grafica" name="display"/>

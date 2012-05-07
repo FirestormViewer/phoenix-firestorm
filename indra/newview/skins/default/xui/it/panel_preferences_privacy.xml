@@ -1,31 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Comunicazione" name="im">
-	<panel.string name="log_in_to_change">
-		accedi per cambiare
-	</panel.string>
-	<button label="Pulisci la cronologia" name="clear_cache" tool_tip="Elimina immagine login, ultimo luogo, cronologia teleport, web e texture cache"/>
-	<text name="cache_size_label_l">
-		(Luoghi, immagini, web, cronologia ricerche)
-	</text>
-	<check_box label="Mostrami nei risultati della ricerca" name="online_searchresults"/>
-	<check_box label="Solo amici e gruppi mi vedono online" name="online_visibility"/>
-	<check_box label="Solo amici e gruppi possono chiamarmi o mandarmi IM" name="voice_call_friends_only_check"/>
-	<check_box label="Spegnere il microfono alla chiusura delle chiamate" name="auto_disengage_mic_check"/>
-	<check_box label="Mostra i miei punti di riferimento preferiti all&apos;accesso (nel menu a discesa &apos;Inizia da&apos;)" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		Registri chat:
-	</text>
-	<check_box label="Salva i registri delle conversazioni sul mio computer" name="log_nearby_chat"/>
-	<check_box label="Salva i registri degli IM nel mio computer" name="log_instant_messages"/>
-	<check_box label="Aggiungi l&apos;orario a ogni riga nel registro chat" name="show_timestamps_check_im"/>
-	<check_box label="Aggiungi la data al nome del file del registro." name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		Ubicazione dei registri
-	</text>
-	<line_editor left="288" name="log_path_string" right="-20"/>
-	<button label="Sfoglia" label_selected="Sfoglia" name="log_path_button" width="130"/>
-	<button label="Lista dei bloccati" name="block_list"/>
-	<text name="block_list_label">
-		(Persone e/o Oggetti bloccati)
-	</text>
+	<tab_container label="Riservatezza" name="tabs">
+		<panel label="Generale" name="tab-general">
+			<panel.string name="log_in_to_change">
+				Accedi per modificare
+			</panel.string>
+			<button label="Cancella Cronologia" tool_tip="Cancella immagine LogIn, ultimo luogo visitato, cronologia web di Firestorm, cronologia teleport, e la Texture cache." name="clear_cache"/>
+			<text name="cache_size_label">
+				(Luoghi, Immagini, Web, Cronologia Ricerca)
+			</text>
+			<check_box label="Mostrami nella lista della ricerca" name="online_searchresults"/>
+			<check_box label="Solo gli amici e i gruppi possono veremi on-line" name="online_visibility"/>
+			<check_box label="Solo gli amici e i gruppi possono chiamarmi o inviarmi IMs" name="voice_call_friends_only_check"/>
+			<check_box label="Chiudi il microfono automaticamente quando finisco le chiamate" name="auto_disengage_mic_check"/>
+			<check_box label="Accetta automaticamente oggetti nell'inventario" name="Auto_Accept_New_Inventory"/>
+			<check_box label="Utilizza Inventario Legacy per i messaggi Accettare/Declinare" name="FSUseLegacyInventoryAcceptMessages" tool_tip="Se abilitato, il viewer invierà solo i messaggi accetta e declina dopo aver premuto il pulsante corrispondente. Se disattivato, la risposta 'Accettato' verrà inviata automaticamente non appena l'offerta d'inventario è stata ricevuta. Questa opzione non ha effetto se le offerte d'inventario sono accettate automaticamente."/>
+			<check_box label="Mostra automaticamente l'oggetto ricevuto dopo averlo accettato" name="Show_In_Inventory"/>
+			<check_box label="Mostra automaticamente notecard, textures e landmarks dopo averli accettati" name="Show_New_Inventory"/>
+			<check_box label="Crea l'effetto particle quando dai un'oggetto dall'inventario ad un'altro residente" name="FSCreateGiveInventoryParticleEffect"/>
+			<check_box label="Mostra i miei Landmarks preferiti al Login" name="favorites_on_login_check"/>
+			<text name="Logs:">
+				Cronologia Chat (Log Chat):
+			</text>
+			<check_box label="Salva Log della chat locale sul mio Computer (Può causare Lag)" name="log_nearby_chat"/>
+			<check_box label="Salva Log degli IMs sul mio Computer" name="log_instant_messages"/>
+			<check_box label="Aggiungi l'orario nei Log delle Chat" name="show_timestamps_check_im"/>
+			<check_box label="Mostra anche i secondi con l'orario nei log delle Chat" name="seconds_in_timestamps"/>
+			<check_box label="Aggiungi la data nei Log delle Chat" name="logfile_name_datestamp"/>
+			<button label="Organizza lista Mute/Bloccati" name="block_list"/>
+		</panel>
+		<panel name="tab-lookat">
+			<check_box label="Mostra LookAt" name="showlookat" tool_tip="Abilita la croce che indica dove l'avatar sta guardando."/>
+			<text name="lookatshownames" tool_tip="Selezionare quale nome mostrare sul LookAt">
+				Quale nome mostrare per il LookAt:
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="Nessuno" name="None"/>
+				<combo_box.item label="Nome Completo" name="Complete_Name"/>
+			</combo_box>
+			<text name="mylookat">
+				Mio LookAt:
+			</text>
+			<check_box label="Non mostrare a me il mio LookAt" name="LookAtHideOwn" tool_tip="Non mostra il mio LookAt sul mio schermo"/>
+			<check_box label="Non mostrare, a nessuno il mio LookAt" name="privatelookat" tool_tip="Fa in modo che gli altri non vedano cosa stai guardando"/>
+			<check_box label="Blocca la rotazione della testa dell'avatar" name="privateLocalLookat" tool_tip="Questa opzione blocca la testa dell'avatar in modo tale da non mostrare dove si sta guardando"/>
+			<check_box label="Non mostrare cosa sto Editando" name="privatepointat" tool_tip="Questa opzione fa in modo che nessuno veda cosa stai editando con il mio Raggio Indicatore"/>
+		</panel>
+		<panel label="Autorisposte" name="tab-autoresponse">
+			<text name="text_box3">
+				Risposta automatica quando sono su Occupato:
+			</text>
+			<text name="autorespond_response_label">
+				Risposta automatica per tutti i residenti quando l'Autorisposta è impostata su tutti:
+			</text>
+			<text name="autorespond_nf_response_label">
+				Risposta automatica per tutti i residenti che non sono tuoi amici:
+			</text>
+			<check_box label="Abilita risposta automatica agli avatar MUTATI" name="send_muted_av_response" tool_tip="Wysyła poniższy tekst do osoby, która wysyła Ci IM, a jest przez Ciebie wyciszona."/>
+			<text name="muted_avatar_response_label">
+				Risposta automatica per gli avatar Mutati:
+			</text>
+		</panel>
+	</tab_container>
 </panel>

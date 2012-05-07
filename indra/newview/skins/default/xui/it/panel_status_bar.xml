@@ -17,7 +17,7 @@
 	</panel.string>
 	<panel name="balance_bg">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ???"/>
-		<button label="ACQUISTA L$" name="buyL" tool_tip="Clicca per acquistare più L$"/>
+		<button label="Compra L$" left_pad="-5" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>
 	<combo_box name="mode_combo" tool_tip="Seleziona la modalità. Seleziona Di base per esplorare facilmente e rapidamente e per la chat. Seleziona Avanzata per accedere ad altre funzionalità.">
 		<combo_box.item label="Modalità di base" name="Basic"/>

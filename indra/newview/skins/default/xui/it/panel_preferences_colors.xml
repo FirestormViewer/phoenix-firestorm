@@ -3,7 +3,17 @@
 	<text name="effects_color_textbox">
 		I miei effetti (raggio indicatore):
 	</text>
-	<color_swatch name="effect_color_swatch" tool_tip="Clicca per aprire il selettore dei colori"/>
+	<text name="netmap_color_textbox">
+		Minimappa:
+	</text>
+	<color_swatch name="netmap_chatring_color_swatch" left_delta="190"/>
+	<text name="netmap_chatring_color_label" width="100">
+		Raggio Chat (20m)
+	</text>
+	<color_swatch name="netmap_shoutring_color_swatch" left_delta="110" tool_tip="Clicca per aprire il color picker e selezionare il tuo colore"/>
+	<text name="netmap_shoutring_color_label" width="110">
+		Raggio Urlo (100m)
+	</text>
 	<text name="font_colors">
 		Colori font della chat:
 	</text>
@@ -22,14 +32,26 @@
 	<text name="text_box5">
 		Errori
 	</text>
-	<text name="text_box10">
-		Diretto
+	<text name="text_box6">
+		IM da oggetti
 	</text>
 	<text name="text_box7">
 		Proprietario
 	</text>
+	<text name="text_box8">
+		Nomi in evidenza
+	</text>
 	<text name="text_box9">
 		URL
+	</text>
+	<text name="text_box10">
+		Diretto
+	</text>
+	<text name="ScriptDialogBgLabel">
+		Script Dialog Bg
+	</text>
+	<text name="ScriptDialogFgLabel">
+		Script Dialog Fg 
 	</text>
 	<text name="bubble_chat">
 		Colore sfondo etichetta nome (influenza anche Chat a vignetta):
@@ -41,4 +63,11 @@
 	</text>
 	<slider label="Attiva:" name="active"/>
 	<slider label="Disattivata:" name="inactive"/>
+	<check_box name="FSScriptDialogNoTransparency" label="Mostra lo Script Dialogs sempre con lo sfondo opaco"/>
+	<check_box name="FSGroupNotifyNoTransparency" label="Mostra le notice sempre con lo sfondo opaco"/>
+	<check_box name="override_pie_color_checkbox" label="Seleziona colore di sfondo e l'opacità del menu a torta:"/>
+	<color_swatch name="pie_bg_color_override" tool_tip="Seleziona il colore di sfondo del menu a torta (Menu del tasto destro)"/>
+	<color_swatch name="pie_selected_color_override" tool_tip="Seleziona il colore di selezione del menu a torta (Menu del tasto destro)"/>
+	<slider label="Opacità:" name="pie_menu_opacity" tool_tip="Imposta l'opacità del menu a torta"/>
+	<slider label="Sfumatura:" name="pie_menu_fade_out" tool_tip="Imposta la sfumatura del colore di selezione"/>
 </panel>

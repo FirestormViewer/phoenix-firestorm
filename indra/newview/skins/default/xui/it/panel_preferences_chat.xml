@@ -1,33 +1,149 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Text Chat" name="chat">
-	<text name="font_size">
-		Dimensioni caratteri:
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="Piccola" name="radio" value="0"/>
-		<radio_item label="Media" name="radio2" value="1"/>
-		<radio_item label="Grande" name="radio3" value="2"/>
-	</radio_group>
-	<check_box initial_value="true" label="Simula la battitura tasti quando scrivi" name="play_typing_animation"/>
-	<check_box label="Quando sono OFF-LINE, spediscimi gli IM in una e-mail" name="send_im_to_email"/>
-	<check_box label="Attiva IM in testo semplice e cronologia chat" name="plain_text_chat_history"/>
-	<check_box label="Chat a vignetta" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
-		Mostra gli IM in:
-	</text>
-	<text name="requires_restart_label">
-		(richiede il riavvio)
-	</text>
-	<radio_group name="chat_window" tool_tip="Mostra i tuoi messaggi istantanei in diverse finestre, o in una finestra con più schede (richiede il riavvio)">
-		<radio_item label="Finestre separate" name="radio" value="0"/>
-		<radio_item label="Schede" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label">
-		Attiva popup per chat in arrivo:
-	</text>
-	<check_box label="Chat di gruppo" name="EnableGroupChatPopups" tool_tip="Seleziona per vedere una finestra popup quando arriva una chat di gruppo"/>
-	<check_box label="Chat IM" name="EnableIMChatPopups" tool_tip="Seleziona per vedere una finestra popup quando arriva un messaggio IM"/>
-	<spinner label="Durata chat vicine:" name="nearby_toasts_lifetime"/>
-	<spinner label="Durata dissolvenza chat vicine:" name="nearby_toasts_fadingtime"/>
-	<button label="Impostazioni traduzione chat" name="ok_btn"/>
+<panel label="Chat" name="chat">
+	<tab_container label="Impostazioni di Firestorm" name="tabs">
+		<panel label="Generale" name="ChatGeneral">
+			<text name="font_size" width="160">
+				Dimensione caratteri chat:
+			</text>
+			<radio_group name="chat_font_size">
+				<radio_item label="Piccola" name="radio"/>
+				<radio_item label="Media" name="radio2"/>
+				<radio_item label="Grande" name="radio3"/>
+			</radio_group>
+			<text name="console_font_size" width="180">
+				Dimensione caratteri console:
+			</text>
+			<radio_group name="chat_console_font_size">
+				<radio_item label="Piccola" name="consradio"/>
+				<radio_item label="Media" name="consradio2"/>
+				<radio_item label="Grande" name="consradio3"/>
+			</radio_group>
+			<check_box label="Simula la battitura tasti quando scrivi" name="play_typing_animation"/>
+			<check_box label="Simula animazione avatar (Quando gridi)" name="play_avatar_animations"/>
+			<check_box label="Riproduci suono scrittura quando gli altri scrivono in local chat" name="play_typing_sound"/>
+			<check_box label="Invia notifica di scrittura agli altri quando scrivi in IM" name="FSSendTypingState"/>
+			<check_box label="Quando sono Offline invia gli IM in e-mail" name="send_im_to_email"/>
+			<check_box label="Rimuovi nome in evidenza in chat (Viewer 1 Style)" name="plain_text_chat_history"/>
+			<check_box label="Quando usi i nomi in evidenzia, mostra le mini icone" name="ShowChatMiniIcons"/>
+			<check_box label="Visualizza chat in vignetta sopra l'avatar" name="bubble_text_chat"/>
+			<check_box label="Visualizza nella vignetta chi sta scrivendo sopra l'avatar" name="bubble_text_typing"/>	 
+			<text name="inworld_typing_rg_label">
+				Premendo i tasti delle lettere:
+			</text>
+			<radio_group name="inworld_typing_preference">
+				<radio_item label="Avvia chat locale" name="radio_start_chat"/>
+				<radio_item label="Permette movimento(es. WASD)" name="radio_move"/>
+			</radio_group>
+			<text name="show_ims_in_label">
+				Visualizza IMs in:
+			</text>
+			<radio_group name="chat_window" tool_tip="Visualizza i tuoi Instant Messages in una finestra separata, o in un'unica finestra con più schede (Richiesto riavvio)">
+				<radio_item label="Finestra separata" name="radio"/>
+				<radio_item label="Più schede" name="radio2"/>
+			</radio_group>
+			<text name="req_restart_ims" left_pad="20">
+				(Richiesto riavvio)
+			</text>
+			<text name="tab_direction_label">
+				Orientamento schede Chat:
+			</text>	
+			<radio_group name="chat_tab_direction" tool_tip="Cambia la posizione delle schede degli IMs in verticale/orizontale quando la modalità chede è attiva (Richiesto riavvio)">
+				<radio_item label="Orizzontale" name="radio_horizontal"/>
+				<radio_item label="Verticale" name="radio_vertical"/>
+			</radio_group>
+			<text name="req_restart_chattabs" left_pad="20">
+				(Richiesto riavvio)
+			</text>
+			<button label="Opzioni di traduzione Chat" name="translation_settings_btn"/>
+		</panel>
+		<!-- NOTIFICHE -->
+		<panel label="Notifiche" name="ChatNotifications">
+			<text name="disable_toast_label">
+				Attiva popups inizio chat:
+			</text>
+			<check_box label="Chat di gruppo" name="EnableGroupChatPopups" tool_tip="Spunta per visualizare un popups quando qualcuno sta scrivendo in un gruppo"/>
+			<check_box label="IM Chat" name="EnableIMChatPopups" tool_tip="Spunta per visualizare un popups quando qualcuno sta scrivendo in IMs"/>
+			<check_box label="Usa la Chat Console per i popups invece dei 'Floating toasts' (Viewer 1.x style)" name="FSUseNearbyChatConsole" />
+			<check_box label="Visualizza IMs nella Chat Console" name="FSLogImToChatConsole"/>
+			<text name="FSShowGroupNameLength_label">
+				Lunghezza nome del gruppo da visualizzare nella chat locale
+			</text>
+			<spinner name="FSShowGroupNameLength" tool_tip="-1 per il nome completo del gruppo, 0 per disabilitare il nome del gruppo"/>
+			<check_box name="FSShowIMInChatHistory" label="Mostra IMs nella chat locale"/>
+			<check_box name="FSLogIMInChatHistory" label="Salva IMs nella Chat Locale"/>
+			<text name="requires_save_chat_logs" left_pad="20" width="250">
+				(Richiesto salvataggio della chat locale)
+			</text>
+			<text name="FSIMChatHistoryFade_label">
+                Opacità colore IM nella finestra della chat locale
+            </text>
+			<spinner tool_tip="Va da 0.25 a 1.0, 0.25 opacità minima, 1 per opacità massima" name="FSIMChatHistoryFade"/>
+			<check_box label="Annuncia chi sta iniziando a scriverti un IMs" name="FSAnnounceIncomingIM"/>
+		</panel>
+		<!-- FIRESTORM -->
+		<panel name="ChatFirestorm">
+			<text name="chat_and_im_enhancements">
+				Miglioramenti Chat e IMs:
+			</text>
+			<check_box label="&quot;:&quot; sinonimo di &quot;/me&quot;" name="AllowMUpose"/>
+			<check_box label="Per le azioni usa il corsivo" name="EmotesUseItalic"/>
+			<check_box name="AutoCloseOOC" label="Chiudi automaticamente parentesi ((OOC))" />
+			<check_box name="FSNearbyChatbar" label="Aggiungi la chatbar nella finestra 'Chat nei Dintorni'" />
+			<check_box name="FSShowChatChannel" label="Mostra selezione canale nella chat bar" />
+			<check_box label="Nascondi automaticamente la Chat bar principale" name="AutohideChatBar" tool_tip="Nascondi automaticamente la Chat bar principale dopo aver inviato il messaggio e ricomparirà quando inizierete a scrivere" />
+			<check_box label="Deseleziona la Chat Bar dopo aver inviato il messaggio" name="CloseChatOnReturn"/>
+			<check_box name="FSMarkObjects" label="Rinomina ogetto che parla con (no name) per evitare scambi di nomi"/>
+			<text name="group_enhancements">
+				Chat di Gruppo:
+			</text>
+			<check_box name="FSBoldGroupMods" label="Mostra i moderatori della chat in grassetto"/>
+			<check_box name="FSMuteAllGroups" label="Disabilita tutte la chat di gruppo"/>
+			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Quando 'Ricevi notice dal gruppo' è disabilitato, disabilita la Chat del gruppo"/>
+			<text name="logging_enhancements">
+				Data e ora Log:
+			</text>
+			<check_box label="Nascondi date e ora Chat locale" name="hide_timestamps_nearby_chat"/>
+			<check_box label="Nascondi Data e Ora in IMs" name="hide_timestamps_im"/>
+			<text name="console_enhancements">
+				Console:
+			</text>
+			<check_box name="FSConsoleClassicDrawMode" label="Usa un popups unico per la chat" tool_tip="Se spuntato quando verrà scritto in local chat vedrete un unico riquadro con tutti i messagi, altrimenti per ogni messaggio verrà fatto un popups diverso"/>
+			<check_box name="ChatFullWidth" label="Utilizzare tutto lo schermo per la chat console"/>
+			<spinner label="Dissolvi chat dopo:" name="fade_chat_time"/>
+			<text name="text_box4">
+				(secondi)
+			</text>
+			<text name="text_box5">
+				(#linee)
+			</text>
+		</panel>
+		<!-- RADAR -->
+		<panel name="ChatRadar">
+			<check_box name="reportChatRange" label="Il radar segnala quando qualcuno entra/esce dal raggio della chat"/>
+			<check_box name="reportDrawRange" label="Il radar segnala quando qualcuno entra/esce dalla draw distance"/>
+			<check_box name="RadarReportSimRange" label="Il radar segnala quando qualcuno entra/esce dalla regione"/>
+		</panel>
+		<panel label="Parole in Allerta" name="ChatKeywordAlerts">
+			<check_box name="FSKeywordOn" label="Abilita allerta parole"/>
+			<check_box name="FSKeywordInChat" label="Cerca allerta parole in Local Chat"/>
+			<check_box name="FSKeywordInIM" label="Cerca allerta parole In IMs and Group Chat"/>
+			<text name="textFSKeywords" width="280">
+				Parole da segnalare (Separatele con una virgola):
+			</text>
+			<check_box name="FSKeywordChangeColor" label="Abilita colore di allerta"/>
+			<color_swatch name="colorswatch" left="180" tool_tip="Click per aprire il color picker"/>
+			<check_box name="FSKeywordPlaySound" label="Riproduci suono di allerta"/>
+			<text name="textFSKeywordSound">
+				UUID Suono di allerta:
+			</text>
+		</panel>
+		<panel label="Dizionari" name="ChatTextInput">
+			<check_box label="Abilita controllo parole" name="checkSpellCheck"/>
+			<text name="textDictionaryMain">
+				Dizionari:
+			</text>
+			<check_box label="Abilita autocorrezione" name="lgg_ac_enable" tool_tip="Spuntando questa casella abiliterete l'autocorrezione, in automatico cercherà le parole corrette e le sostituirà  alla parole digitate male, le parole verranno prese dal dizionario selezionato nel menu a tendina."/>
+			<button name="lgg_ac_showgui" label="Impostazioni Autocorrezione" width="180" />
+		</panel>
+	</tab_container>
 </panel>

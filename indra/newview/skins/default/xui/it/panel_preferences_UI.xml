@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Interfaccia Utente" name="Display panel">
+<tab_container label="Interfaccia" name="tabs">
+    <panel label="Generale" name="UI Prefs Panel">
+        <text name="UI Size:">
+            Grandezza UI (può avere effetti collaterali):
+        </text>
+        <text name="HoverTipText" width="300">
+            Suggerimenti al passaggio del mouse (Hovertip):
+        </text>
+        <check_box label="Hover Tips di base (Setta prima questa)" name="ShowHoverTips" tool_tip="Impostando questa spunta, passando col mouse su un'avatar o altre cose, compariranno dei suggerimenti. (Impostare questa per prima)" />
+        <check_box label="Su tutti gli oggetti" tool_tip="Zaznacz, aby włączyć chmurki na obiektach w świecie" name="ShowAllHoverTips" />
+        <check_box label="Sul terreno" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
+        <text name="tooltip_textbox" left="300">
+           Tempo comparsa degli Hovertip:
+        </text>
+        <slider label="Interfaccia:" name="ToolTipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sull'interfaccia. es. Quando posizionate il mouse su un pulsante della tool bar (Default: 0.7)." />
+        <text name="ToolTipDelay_text">
+            Secondi
+        </text>
+        <slider label="Avatar:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Default: 0.35)." />
+        <text name="AvatarInspectorTooltipDelay_text">
+            Secondi
+        </text>
+        <slider label="Oggetti:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Defaut: 0.35)." />
+        <text name="ObjectInspectorTooltipDelay_text">
+            Secondi
+        </text>
+        <check_box label="Usa Menu a torta (pie menu)" name="UsePieMenu" tool_tip="Utilizza il menu circolare (a torta) come quello del Viewer 1.x invece dei menu contestuali rettangolari del Viewer 2/3" />
+        <check_box name="ShowNetStats" label="Mostra l'indicatore lag" tool_tip="Mostra l'indicatore della lagg nella barra di stato (Vicino l'orario di SL)" />
+        <text name="ScriptDialogsPerObjectLabel" width="200">
+            Quanti menu Script per oggetto:
+        </text>
+        <combo_box name="ScriptDialogPerObjectDropdown">
+            <combo_box.item label="Uno per oggetto" name="ScriptDialogOption_0" />
+            <combo_box.item label="Uno per oggetto e canale" name="ScriptDialogOption_1" />
+            <combo_box.item label="Nessun limite" name="ScriptDialogOption_2" />
+        </combo_box>
+        <check_box label="Menu script in alto a destra" name="ShowScriptDialogsTopRight" tool_tip="Selezionare per spostare i menu degli script in alto a destra dello schermo (Stile Viewer 1.x)." />
+        <check_box label="Notice dei gruppi e notifiche in alto a destra" name="ShowGroupNoticesTopRight" tool_tip="Selezionare per impostare tutte le notifiche in alto a destra (Stile Viewer 1.x)." />
+        <text name="GroupTopRightRequiresRestart" left_delta="280">
+            (Richiesto Riavvio)
+        </text>
+        <checkbox name="ButtonFlashing" label="Flash dei pulsanti" />
+        <slider label="Numero delle volte che lampeggiano:" tool_tip="Quante volte deve lampeggiare un pulsante" name="ButtonsFlashCount" />
+        <slider label="Intensità:" tool_tip="Con che velocità devono lampeggiare. Viene usata per le notifiche delle IM" name="ButtonFlashRate" />
+    </panel>
+    <panel label="Notifiche Toasts" name="UI-toasts-tab">
+        <text name="ToastSettings" width="360">
+            Impostazioni notifiche sullo schermo (popups, toasts, console):
+        </text>
+        <slider label="Distanza Toasts e UI in basso:" tool_tip="Lo spazio in pixel tra il fondo dell'interfaccia utente e il toast in basso" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            Pixel
+        </text>
+        <slider label="Durata Notifica Toast" tool_tip="Numero in secondi che la notifica Toast ci impiega prima di dissolversi" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            Secondi
+        </text>
+        <slider label="Durata dei suggerimenti Toast:" tool_tip="Numero in secondi che un suggerimento Toast ci impiega prima di dissolversi" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            Secondi
+        </text>
+        <slider label="Durata Toast Chat locale" tool_tip="Numero di secondi che un popup della Chat locale viene visualizzato prima di svanire" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            Secondi
+        </text>
+        <slider label="Altezza Toast Chat locale" tool_tip="Controlla l'asse Z dei tosat per regolarne l'altezza" name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            Pixel
+        </text>
+        <slider label="Durata sfumatura Toast Chat Locale:" tool_tip="Durata della sfumatura prima che il Toast scompare del tutto" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            Secondi
+        </text>
+        <slider label="Durata Toast all'avvio:" tool_tip="Numero di secondi che un toast viene mostrato all'avvio, prima di svanire" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            Secondi
+        </text>
+        <slider label="Tempo di dissolvenza Toast normale:" tool_tip="Numero di secondi necessari per completare la dissolvenza dei toast" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            Secondi
+        </text>
+        <slider label="Distanza tra i Toast:" tool_tip="Distanza tra i Toast misurata in pixel" name="ToastGap" />
+        <text name="ToastGapText">
+            Pixel
+        </text>
+        <slider label="Altezza massima del Toast:" tool_tip="È l'altezza massima che può avere un toast con un messaggio troppo lungo" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            Pixel
+        </text>
+        <slider label="Larghezza Toast Chat Locale:" tool_tip="Larghezza massima delle popup della chat locale in percentuale della larghezza dello schermo" name="NearbyToastWidth" />
+        <check_box label="Visualizza i Toast sopra le altre finestre" name="FSShowToastsInFront" />
+    </panel>
+    <panel label="Caratteri" name="UI-font-tab">
+        <text name="tooltip_textbox1">
+           Tipo carattere:
+        </text>
+        <text name="tooltip_textbox2">
+           (Richiesto riavvio)
+        </text>
+        <text name="tooltip_textbox5">
+           Grandezza carattere:
+        </text>
+        <text name="tooltip_textbox6" >
+           pt (Richiesto riavvio)
+Default 0. Valori più grandi non funzionano bene
+        </text>
+        <text name="tooltip_textbox3">
+           Distanza massima
+linee della chat:
+        </text>
+        <text name="tooltip_textbox4">
+          Pixel (Richiesto riavvio)
+V2/3 Default 0. V1 Default 2.
+        </text>
+        <text name="Label_FolderItemViewHeight">
+           Distanza massima 
+cartelle inventario:
+        </text>
+        <text name="Label_FolderItemViewHeight_Scale">
+          Pixel (Richiesto riavvio)
+V2/3 Default 20. V1 Default 18.
+        </text>
+    </panel>
+</tab_container>
+</panel>

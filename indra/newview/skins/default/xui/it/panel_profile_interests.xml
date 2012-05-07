@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_profile_interests" label="Interessi">
+    <text name="I Want To:">
+        Voglio:
+    </text>
+        <check_box name="chk0" label="Costruire" />
+        <check_box name="chk1" label="Esplorare" />
+        <check_box name="chk2" label="Conoscersi" />
+        <check_box name="chk6" label="Lavorare" />
+        <check_box name="chk3" label="Gruppi" />
+        <check_box name="chk4" label="Comprare" />
+        <check_box name="chk5" label="Vendere" />
+        <check_box name="chk7" label="Assumere" />
+    <text name="Skills:">
+        Capacità:
+    </text>
+        <check_box name="schk0" label="Texture" />
+        <check_box name="schk1" label="Architettura" />
+        <check_box name="schk3" label="Modellare" />
+        <check_box name="schk2" label="Organizzare eventi" />
+        <check_box name="schk4" label="Script" />
+        <check_box name="schk5" label="Costruire avatar" />
+    <text name="Languages:">
+    Lingue:
+    </text>
+</panel>

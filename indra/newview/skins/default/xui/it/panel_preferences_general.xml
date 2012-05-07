@@ -48,27 +48,48 @@
 	</radio_group>
 	<check_box label="Il mio nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nomi utente" name="show_slids" tool_tip="Mostra il nome utente, come bobsmith123"/>
-	<check_box label="TItoli gruppo" name="show_all_title_checkbox1" tool_tip="Mostra titoli di gruppo, come Funzionario o Membro"/>
+	<check_box label="Titoli gruppo" name="show_all_title_checkbox1" tool_tip="Mostra titoli di gruppo, come Funzionario o Membro"/>
 	<check_box label="Evidenzia amici" name="show_friends" tool_tip="Evidenzia le etichette dei nomi dei tuoi amici"/>
 	<check_box label="Mostra nomi visualizzati" name="display_names_check" tool_tip="Seleziona per visualizzare i nomi in chat, IM, etichette, ecc."/>
+	<check_box label="Nascondi il mio titolo del gruppo" name="RenderHideGroupTitle" tool_tip="Nasconde/Mostra il proprio titolo del gruppo attivo, nel tag, a tutti e a te stesso." />
+	<check_box label="I Legacy names sostituiscono gli usernames" name="FSshow_legacyun" tool_tip="Mostra i Legacy Name (Nome Cognome) invece degli username (nome.cognome)"/>
+	<panel name="general_extras">
+		<text name="text_box3">
+			Extra:
+		</text>
+		<check_box name="FSUseWebProfiles" label="Usa i profili web" tool_tip="Se NON spuntata verranno visualizzati i profili come quelli del viewer 1.x"/>
 	<text name="inworld_typing_rg_label">
 		Premere i tasti lettera:
 	</text>
 	<radio_group name="inworld_typing_preference">
 		<radio_item label="Avvia chat locale" name="radio_start_chat" value="1"/>
-		<radio_item label="Influenza il movimento (per es. WASD)" name="radio_move" value="0"/>
+		<radio_item label="Permette movimento(es.WASD)" name="radio_move" value="0"/>
 	</radio_group>
+	</panel>
 	<text name="title_afk_text">
 		Pausa assenza:
+	</text>
+	<text name="title_afk_quit_text">
+		Logout da away dopo:
 	</text>
 	<combo_box label="Pausa assenza:" name="afk">
 		<combo_box.item label="2 minuti" name="item0"/>
 		<combo_box.item label="5 minuti" name="item1"/>
 		<combo_box.item label="10 minuti" name="item2"/>
 		<combo_box.item label="30 minuti" name="item3"/>
-		<combo_box.item label="mai" name="item4"/>
+		<combo_box.item label="60 minuti" name="item4"/>
+		<combo_box.item label="Mai" name="item5"/>
 	</combo_box>
+	<combo_box label="Logout da away dopo:" name="quitafk">
+		<combo_box.item label="2 minuti" name="item0"/>
+		<combo_box.item label="5 minuti" name="item1"/>
+		<combo_box.item label="10 minuti" name="item2"/>
+		<combo_box.item label="30 minuti" name="item3"/>
+		<combo_box.item label="Mai" name="item4"/>
+	</combo_box>
+	<check_box name="AvatarSitOnAway" label="Siedimi quando sono assente"/>
 	<text name="text_box3">
-		Risposta in modalità occupato:
+		Le risposte automatiche di busy e privacy si trovano in Riservatezza/Autorisposte
 	</text>
+
 </panel>

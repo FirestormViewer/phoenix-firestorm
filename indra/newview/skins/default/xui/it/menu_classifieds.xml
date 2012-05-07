@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<context_menu name="Classifieds">
+    <menu_item_call label="Info" name="classified_info" />
+    <menu_item_call label="Modifica" name="classified_edit" />
+    <menu_item_call label="Teleport" name="classified_teleport" />
+    <menu_item_call label="Mappa" name="classified_map" />
+    <menu_item_call label="Cancellare" name="classified_delete" />
+</context_menu>

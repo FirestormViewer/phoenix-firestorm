@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="firestorm">
+<tab_container label="Ust. Firestorma" name="tabs">
+    <panel label="Generale" name="tab-general">
+        <check_box name="checkMiscRLVa" label="Abilita Remote Scripted Viewer Controls  (RLVa)" />
+        <text name="textMiscRLVaRestart">
+            (Richiesto riavvio)
+        </text>
+        <check_box label="Abilita doppio click teleport sulla Mappa del mondo" name="FSWorldMapDoubleclickTeleport" tool_tip="Abilita il doppio click per teleportarsi a destinazione sulla Mappa del mondo"/>
+        <check_box label="Disabilita schermata Teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
+        <check_box label="Disable Teleport Beacons" name="tp_beam_toggle" tool_tip="Disables the teleport destination beacons after teleports." />
+        <check_box label="Disabilita schermata di Accesso" name="login_screen_toggle" tool_tip="Disabilita la schermata nera durante l'Accesso."/>
+        <check_box label="Disabilita schermata di Uscita" name="logout_screen_toggle" tool_tip="Disabilita la schermata nera durante la Disconnessione" />
+        <check_box label="Rezza sempre con il gruppo della land se è possibile" name="grouplandrez" tool_tip="Il viewer cercherà automaticamente di rezzare con il gruppo della land se ne fate parte." />
+        <check_box label="Riordina la contact lists per username quando i Display Name sono attivi" name="sortcontactsbyun" tool_tip="Se questa opzione è spuntata, tutte liste dei contatti saranno sempre riordinate per username (Nome Originale es: Philipe Linden)" />
+        <check_box label="Gli avatar bloccati saranno visualizati come nuvole" name="ShowMutedAvatarsAsCloud" tool_tip="Gli avatar Bloccati saranno visualizati come nuvole di un colore speciale." />
+        <check_box label="Nascondi le cartelle di sistema vuote dall'inventario" name="DebugHideEmptySystemFolders" tool_tip="Se attiva nasconderà le cartelle vuote di sistema come Landmarks, Preferiti, Notecard ecc..."/>
+		<check_box label="Mostra la cartella Recived Items nell'inventario normalmente" name="FSShowInboxFolder" tool_tip="Se attiva, la finestra dell'inventario non presenterà la cartella Recived Items sotto l'inventario ma verrà visualizzata come una normale cartella di sistema"/>
+        <check_box label="Abilita LSL-Client Bridge" name="UseLSLBridge" tool_tip="Permette al Viewer di utilizare lo script del Bridge per consentire caratteristiche avanzate" />
+        <check_box label="Volare oltre il Limite" name="UseLSLFlightAssist" tool_tip="Consente di volare oltre il limite tramite il Flight Assist (Piuma o altri HUD non più necessari)" />
+    </panel>
+    <panel label="Protezione" name="ProtectionTab">
+        <check_box label="Blocca seduta tramite tasto sinistro del mouse" name="FSBlockClickSit" />
+        <check_box label="Consente agli script di aprire la mappa (llMapDestination)" name="ScriptsCanShowUI" />
+        <text name="revokepermissions_txt">
+         Rimuovi autorizzazioni:
+         </text>
+        <radio_group name="FSRevokePerms">
+            <radio_item label="Mai (Impostazioni originali)" name="never_radio" />
+            <radio_item label="Rimuovi sulla SEDUTA" name="sit_radio" />
+            <radio_item label="Rimuovi sugli STAND" name="stand_radio" />
+            <radio_item label="Rimuovi sulla SEDUTA e STAND" name="sitnstand_radio" />
+        </radio_group>
+        <text name="SurfaceAreaThreshholdLabel">
+         Protezione da Lag Texture(Può visualizare male alcuni oggetti):
+         </text>
+         <check_box label="Nasconde oggetti con una Texture grande la cui area supera: " name="RenderVolumeSAProtection" tool_tip="Questo vi protegge da oggetti con texture di grandi dimensioni su superfici molto grandi, spesso progettati per mandare in crash il Viewer. Di base è impostato a 5000 metri quadrati, nel caso vi siano problemi di crash dovuti a oggetti troppo grandi consigliamo di aumentare questo valore." />
+         <check_box label="Attiva protezione Spam" name="UseAntiSpam" />
+        <text name="AntiSpamText1" width="250">
+           Massimo di linee in un singolo messaggio:
+        </text>
+        <spinner name="_NACL_AntiSpamNewlines" tool_tip="Numero massimo di linee per un singolo messaggio [Default: 70]" />
+        <text name="AntiSpamText2" width="250">
+           Massimo di messaggi da una stessa Fonte:
+        </text>
+        <spinner name="_NACL_AntiSpamAmount" tool_tip="Numero massimo di messaggi simili ricevuti in 2 secondi dalla stessa fonte [Default: 10]" />
+        <text name="AntiSpamText3" width="250">
+           Spam Suoni:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Quando arrivano molti suoni in riproduzione contemporaneamente[Default: 10]" />
+        <text name="AntiSpamText4" width="250">
+           Precaricamento Suoni:
+        </text>
+        <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="[Quando arrivano molte richieste di precaricamento dei suoni contemporaneamente[Default: 4]" />
+        <button name="AntiSpamUnblock" label="Sblocca tutte le fonti di Spam" />
+        <check_box label="Notifica quando gli oggetti arrivano troppo velocemente" name="FSNotifyIncomingObjectSpam" />
+        <check_box label="Notifica quando un'altro residente ti invia oggetti troppo velocemente" name="FSNotifyIncomingObjectSpamFrom" />
+        <slider name="FSOfferThrottleMaxCount" label="Limita soglia degli oggetti che arrivano:" tool_tip="Soglia massima di oggetti che devono arrivare in 10 secondi[Default 5]" />
+	</panel>
+	<panel label="Avatar" name="firestorm_avatar">
+        <text name="HeadMovement">
+            Gradi di rotazione della testa quando segue il mouse(Impostare a '0' per non muoverla):
+        </text>
+        <slider label="Raggio di rotazione verticale della testa:" tool_tip="Rotazione Verticale della testa quando si muove il mouse, misurato in gradi" name="PitchFromMousePositionSlider" />
+        <text name="PitchFromMousePositionText">
+            Gradi
+        </text>
+        <slider label="Raggio di rotazione orizontale della testa:" tool_tip="Rotazione Orizontale della testa quando si muove il mouse, misurato in gradi" name="YawFromMousePositionSlider" />
+        <text name="YawFromMousePositionText">
+            Gradi
+        </text>
+        <text name="note_lookat">
+             (Le impostazioni del "Look at" si trovano in riservatezza)
+        </text>
+        <check_box label="Non mandare la fisicità dell'avatar al server (Compatibile con il viewer 1)" name="dontsendavphysics" tool_tip="Disabilita l'invio delle informazioni sulla fisicità del proprio avatar al server, per essere visualizati al meglio con il viewer 1" />
+        <text name="BeamPrefs">
+            Personalizza particle Raggio Indicatore (RI)
+        </text>
+        <button name="BeamColor_delete" label="Elimina" tool_tip="Rimuove il tema selezionato" />
+        <combo_box name="BeamColor_combo" tool_tip="Seleziona un colore per l'indicatore di selezione" />
+        <button name="BeamColor_new" label="Crea Nuovo" tool_tip="Crea un nuovo set di colori" />
+        <button name="BeamColor_refresh" label="Aggiorna lista" tool_tip="Aggiorna la lista dei colori salvati" />
+        <slider name="FSMaxBeamsPerSecond" label="Particle RI/sec:" tool_tip="Quante volte il raggio viene aggiornato in un secondo. [Default 40]" />
+        <check_box label="Abilita Raggio Indicatore" name="SLPartBeam" />
+        <check_box label="SL Particle Chat" name="FSParticleChat" />
+        <combo_box name="FSBeamShape_combo" tool_tip="Seleziona la forma e il colore dell'Indicatore di selezione." />
+        <button name="delete_beam" label="Elimina" tool_tip="Elimina questa forma di RI" />
+        <button name="custom_beam_btn" label="Crea Nuovo" tool_tip="Crea una nuova Forma per il Raggio Indicatore" />
+        <button name="refresh_beams" label="Aggiorna lista" tool_tip="Aggiorna la lista delle forme salvati" />
+        <slider name="FSBeamShapeScale" label="Scala:" tool_tip="Cambia la grandezza dell'indicatore a forma della Fenice di Firestorm" />
+    </panel>
+    <panel label="CmdLine" name="tab1-3">
+        <check_box label="Abilita comandi dalla Chat" name="chat_cmd_toggle" />
+        <text name="FSCmdLinePos_txt">
+         Teleport nella Sim (usa: cmd x y z)
+        </text>
+        <text name="FSCmdLineGround_txt">
+         Teleport al suolo (usa: cmd)
+        </text>
+        <text name="FSCmdLineHeight_txt">
+         Teleport ad altezza (usa: cmd z)
+        </text>
+        <text name="FSCmdLineTeleportHome_txt">
+         Teleport a casa (usa: cmd)
+         </text>
+        <text name="FSCmdLineRezPlatform_txt">
+         Rezza una piattaforma (usa: cmd n)
+        </text>
+        <slider name="FSCmdLinePlatformSize" label="Grandezza" tool_tip="Quanto vuoi che sia grande la piattaforma che apparirà?" />
+        <text name="FSCmdLineMapTo_txt">
+           Teleport alla sim X (usa: cmd NomeSim)
+        </text>
+        <check_box label="Usa la posizione attuale" name="toggle" />
+        <text name="FSCmdLineCalc_txt">
+           Calcolatrice (usa: cmd calcolo)
+        </text>
+        <text name="FSCmdLineAutocorrect_txt">
+           Aggiungi a dizionario (cmd list|bad|good)
+        </text>
+        <text name="FSCmdLineDrawDistance_txt">
+          Cambia Draw Distance (usa: cmd metri)
+        </text>
+        <text name="FSCmdTeleportToCam_txt">
+          Teleport alla posizione della Cam (usa: cmd)
+        </text>
+        <text name="FSCmdLineKeyToName_txt">
+          Trova il nome tramite Key(usa: cmd key)
+        </text>
+        <text name="FSCmdLineOfferTp_txt">
+          Offri Teleport ad Avatar (usa: cmd key)
+        </text>
+        <text name="FSCmdLineTP2_txt">
+          Teleport ad avatar (usa: cmd nome)
+        </text>
+        <line_editor tool_tip="Potrete effettuare un Teleport per raggiungere un'altro avatar anche scrivendo parzialmente il nome della persona a cui arrivare. Funziona meglio se si ha il radar aperto." name="FSCmdLineTP2" />
+        <text name="FSCmdLineAO_txt">
+          AO on/off (usa: cmd on/off)
+        </text>
+        <text name="FSCmdLineClearChat_txt">
+          Cancellare la cronologia della chat (usa: cmd)
+        </text>
+        <line_editor tool_tip="Pulisce la chat per prevenire la lag dovuta allo spam." name="FSCmdLineClearChat" />
+        <text name="FSCmdLineMedia_txt">
+          Setta URL Video(usa: cmd url)
+        </text>
+        <line_editor tool_tip="Setta i Video della parcella e lì fa partire tramite l'url indicato" name="FSCmdLineMedia" />
+        <text name="FSCmdLineMusic_txt">
+          Setta URL Musica(usa: cmd url)
+        </text>
+      <line_editor tool_tip="Setta nella parcella e riproduce lo streaming audio da URL" name="FSCmdLineMusic" />
+    </panel>
+    <panel label="Windlight" name="WindlightTab">
+        <check_box label="Cambia automaticamente le impostazioni ambiente della Sim/Parcella" name="UseEnvironmentFromRegionAlways" />
+        <check_box label="Cambiare gradualmente le impostazioni del cielo" name="FSInterpolateSky" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
+        <check_box label="Cambiare gradualmente le impostazioni dell'acuqa" name="FSInterpolateWater" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
+        <text name="FSWLshare_txt">
+          Condivisione Phoenix WL (Sperimentale)
+        </text>
+        <check_box label="Usa Phoenix Parcel Windlight (Sperimentale)" name="FSWLParcelEnabled" />
+        <check_box label="Applica automaticamente le impostazioni WL nelle sim di amici" name="FSWLWhitelistFriends" />
+        <check_box label="Applica automaticamente le impostazioni WL nelle land dei miei Gruppi" name="FSWLWhitelistGroups" />
+        <check_box label="Applica automaticamente le impostazioni WL ovunque" name="FSWLWhitelistAll" />
+        <check_box label="Cambiare gradualmente le impostazioni al cambio sim del WL" name="FSInterpolateParcelWL" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
+    </panel>
+    <panel label="Costruzione" name="BuildTab">
+        <text name="text_box_objprams">
+         Parametri di base alla creazione dell'oggetto
+         </text>
+        <spinner label="Asse X" name="X size" />
+        <spinner label="Asse Y" name="Y size" />
+        <spinner label="Asse Z" name="Z size" />
+        <text name="text_box_objmaterial">
+         Materiale:
+         </text>
+        <combo_box name="material">
+             <combo_item name="Stone">Pietra</combo_item>
+			 <combo_item name="Metal">Metallo</combo_item>
+             <combo_item name="Glass">Vestro</combo_item>
+             <combo_item name="Wood">Lego</combo_item>
+             <combo_item name="Flesh">Carne</combo_item>
+             <combo_item name="Plastic">Plastica</combo_item>
+             <combo_item name="Rubber">Gomma</combo_item>
+        </combo_box>
+        <text name="text_box_pivotpoint">
+          Fulcro oggetto
+        </text>
+        <check_box label="Mostra assi in riferimento al prim root" tool_tip="Di Default è impostato il centro non sul prim principale ma sul centro dell'intero oggetto, spuntando questa casella il centro verrà settato sul Prim Root." name="EmBuildPrefsActualRoot_toggle" />
+        <spinner label="Poz. X" name="X pos" />
+        <spinner label="Poz. Y" name="Y pos" />
+        <spinner label="Poz. Z" name="Z pos" />
+        <check_box label="Valori in percentuale" tool_tip="Di Default è impostato a 50%" name="EmPivotPercToggle" />
+        <check_box label="Evidenzia i prims selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="EmBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Usa il vecchio metodo &quot;Metti oggetto in vendita&quot;" tool_tip="Quando selezionato, l'oggetto in vendita viene salvato senza chiedere conferma" name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Salva gli Script in inventario come Mono" tool_tip="Quando selezionato, salverà gli script editati nell'invetario con il formato mono." name="FSSaveInventoryScriptsAsMono_toggle" />
+    </panel>
+    <panel label="Tag" name="TagTab">
+        <text name="SL-Tags-Notice">
+          Nota: A causa di cambiamenti del TOS LindenLab, i settaggi del tag non funzionano in SL
+        </text>
+        <text name="whattagstoshow">
+          Quale Tag vuoi visualizare?
+        </text>
+        <combo_box name="ClientTagsVisibility">
+          <combo_item name="No Viewertags">Nessun Viewertags</combo_item>
+          <combo_item name="TPVD Viewer">PVD Viewers (usa lista)</combo_item>
+          <combo_item name="All known Viewers">Tutti i Viewers conosciuti (usa lista)</combo_item>
+          <combo_item name="All Viewers">Tutti i Viewers</combo_item>
+        </combo_box>
+        <text name="colorbasedonviewer">
+          Colore del Tag basato sui Viewer?
+        </text>
+        <combo_box name="ColorClienttags">
+          <combo_item name="Color not based on Viewer">Colore non basato sul Viewer</combo_item>
+          <combo_item name="Single color per Viewer">Singolo colore per Viewer</combo_item>
+          <combo_item name="Multiple colors per Viewer">Più colori per Viewer</combo_item>
+          <combo_item name="Userdefined color">Definito dall'utente</combo_item>
+        </combo_box>
+        <text name="listtodisplayviewertags_txt">
+          Usare una lista per Viewertags?
+        </text>
+        <combo_box name="UseLegacyClienttags">
+          <combo_item name="Don't use a list">Non usare una lista</combo_item>
+          <combo_item name="Local Clienttags">Usare lista locale</combo_item>
+          <combo_item name="Download Clienttags">Scarica la lista dei viewer</combo_item>
+        </combo_box>
+        <text name="chooseyourcolor_txt">
+          Scegli il tuo colore:
+        </text>
+        <combo_box name="ClientTagColor">
+          <combo_item name="red" label="Rosso" />
+          <combo_item name="blue" label="Blu" />
+          <combo_item name="yellow" label="Giallo" />
+          <combo_item name="purple" label="Viola" />
+          <combo_item name="pink" label="Rosa" />
+          <combo_item name="white" label="Bianco" />
+          <combo_item name="orange" label="Arancione" />
+          <combo_item name="green" label="Verde" />
+        </combo_box>
+        <check_box label="Mostra il Mio colore del Tag" name="FSShowOwnTagColor_toggle" tool_tip="Quando selezionata vedrete il vostro colore da voi settato nella propria Tag" />
+        <check_box label="Colore personalizato Username" name="FSColorUsername_toggle" tool_tip="Visualizza l'Username in un colore diverso (Lo vedrete solo voi)" />
+        <color_swatch name="usernamecolorswatch" tool_tip="Clicca per aprire il 'color picker'" />
+		<check_box label="Il colore del nome basato sulla distanza" name="FSTagShowDistanceColors" tool_tip="Se spuntata, il Tag risulterà del colore della distanza in chat (Chat range), della distanza del grido (Shout range) o oltre la distanza del grido (Oltre Shout range)" />
+		<check_box label="Mostra la distanza nel Tag" name="FSTagShowDistance" tool_tip="Quando spuntata, sotto il tag degli altri avatar verrà visualizzata la loro distanza da te usando i colori riportati qui di seguito."/>
+		<text name="NameTagChatDistanceColor_Label">
+			Chat Range
+		</text>
+		<text name="NameTagShoutDistanceColor_Label">
+			Shout Range
+		</text>
+		<text name="NameTagBeyondShoutDistanceColor_Label">
+			Oltre Shout Range
+		</text>
+        <slider name="FSNameTagZOffsetCorrection" label="Altezza Tags:" tool_tip="Imposta a che altezza si deve trovare il Tag name al di sopra dell'avatar [Default 0]" />
+    </panel>
+</tab_container>
+</panel>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Skórki" name="skin_panel">
+    <text name="skin_textbox">
+        Skin:
+    </text>
+    <text name="skin_textbox1">
+        (Richiesto riavvio)
+    </text>
+    <text name="theme_textbox">
+        Schema colore:
+    </text>
+    <text name="theme_textbox2">
+        (Richiesto riavvio)
+    </text>
+    <check_box label="Ripristina le Toolbar di default della skin quando viene cambiata. (Consigliato)" tool_tip="Quando quest'opzione è attiva le toolbar verranno ripristinate come di default e tutti i cambiamenti effettuati dall'utente sull'interfaccia delle toolbar verranno ignorate e ripristinate." name="reset_toolbar_settings"/>
+    <check_box label="Utilizza i cursori del Viewer 1.x" name="use _legacy_cursors" />
+    <text name="theme_textbox3">
+        (Richiesto riavvio)
+    </text>
+</panel>

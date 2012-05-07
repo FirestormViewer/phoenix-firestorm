@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu name="Object Pie">
+	<pie_slice label="Apri" name="Open"/>
+	<pie_slice label="Costruisci" name="Build"/>
+	<pie_slice label="Tocca" name="Pie Object Touch"/>
+	<pie_slice label="Siedi qui" name="Pie Object Sit"/>
+	<pie_slice label="Alzati" name="Object Stand Up"/>
+	<pie_slice label="Compra" name="Buy..."/>
+	<pie_slice label="Prendi" name="Pie Object Take"/>
+	<pie_slice label="Paga" name="Pay..."/>
+	<pie_menu label="Avanti >" name="Object Pie More 1">
+		<pie_slice label="Elimina" name="Delete"/>
+		<pie_slice label="Indossa" name="Wear"/>
+		<pie_slice label="Prendi copia" name="Take Copy"/>
+		<pie_menu label="HUD Indossati>" name="Pie Object Attach HUD"/>
+		<pie_menu label="Indossato >" name="Pie Object Attach"/>
+		<pie_menu label="Avanti >" name="Object Pie More 2">
+			<pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
+			<pie_slice label="Muta" name="Object Mute"/>
+			<pie_slice label="N. Script" name="ScriptInfo"/>
+		</pie_menu>
+		<pie_slice label="Compra" name="Buy..."/>
+	</pie_menu>
+	<pie_slice label="Modifica" name="Edit..."/>
+</pie_menu>
