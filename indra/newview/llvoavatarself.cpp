@@ -503,9 +503,9 @@ BOOL LLVOAvatarSelf::buildMenus()
 
 					// ## Zi: Pie menu
 					slice_params.name =(slice_params.label );
-					slice_params.on_click.function_name = "Attachment.Detach";
+					slice_params.on_click.function_name = "Attachment.DetachFromPoint";
 					slice_params.on_click.parameter = iter->first;
-					slice_params.on_enable.function_name = "Attachment.EnableDetach";
+					slice_params.on_enable.function_name = "Attachment.PointFilled";
 					slice_params.on_enable.parameter = iter->first;
 					PieSlice* slice = LLUICtrlFactory::create<PieSlice>(slice_params);
 
