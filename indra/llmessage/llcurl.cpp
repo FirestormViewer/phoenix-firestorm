@@ -1526,7 +1526,16 @@ void LLCurl::cleanupClass()
 	delete sHandleMutexp ;
 	sHandleMutexp = NULL ;
 
-	llassert(Easy::sActiveHandles.empty());
+	// <FS:Ansariel> Replaced assert with a log warning. Crashing here is
+	//               pretty much pointless as the user won't notice
+	//               anyway during shutdown and we will only boost the
+	//               crash rate.
+	//llassert(Easy::sActiveHandles.empty());
+	if (!Easy::sActiveHandles.empty())
+	{
+		llwarns << "List of active CURL handles not empty: " << Easy::sActiveHandles.size() << " handles still active" << llendl;
+	}
+	// </FS:Ansariel>
 }
 
 //static 
