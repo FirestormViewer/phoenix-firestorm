@@ -2612,16 +2612,16 @@ Concedi questa richiesta?
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; di [NAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Blocca"/>
-			<button name="___ignore_button___" text="Ignora"/>
+			<button name="Client_Side_Mute" text="Blocca"/>
+			<button name="Client_Side_Ignore" text="Ignora"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; di [GROUPNAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Blocca"/>
-			<button name="___ignore_button___" text="Ignora"/>
+			<button name="Client_Side_Mute" text="Blocca"/>
+			<button name="Client_Side_Ignore" text="Ignora"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">

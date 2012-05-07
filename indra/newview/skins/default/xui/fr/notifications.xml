@@ -2609,16 +2609,16 @@ Accepter cette requête ?
 		&lt;nolink&gt;[TITLE]&lt;/nolink&gt; de [NAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Ignorer"/>
-			<button name="___ignore_button___" text="Ignorer"/>
+			<button name="Client_Side_Mute" text="Ignorer"/>
+			<button name="Client_Side_Ignore" text="Ignorer"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&lt;nolink&gt;[TITLE]&lt;/nolink&gt; de [GROUPNAME]
 [MESSAGE]
 		<form name="form">
-			<button name="___mute_button___" text="Ignorer"/>
-			<button name="___ignore_button___" text="Ignorer"/>
+			<button name="Client_Side_Mute" text="Ignorer"/>
+			<button name="Client_Side_Ignore" text="Ignorer"/>
 		</form>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">
