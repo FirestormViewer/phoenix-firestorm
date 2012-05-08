@@ -232,7 +232,7 @@ bool LLTexUnit::bind(LLTexture* texture, bool for_rendering, bool forceBind)
 	LLImageGL* gl_tex = NULL ;
 	if (texture == NULL || !(gl_tex = texture->getGLTexture()))
 	{
-		llwarns << "NULL LLTexUnit::bind texture" << llendl;
+		//llwarns << "NULL LLTexUnit::bind texture" << llendl; //FS:LO Removing possable spammy debug line.
 		return false;
 	}
 
