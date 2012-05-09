@@ -135,14 +135,7 @@
 
         </pie_menu>
 
-        <pie_slice
-            label="Inspect"
-            name="Avatar Inspect">
-            <pie_slice.on_click
-                function="Object.Inspect" />
-            <pie_slice.on_enable
-                function="Avatar.EnableCall" />
-        </pie_slice>
+        <pie_separator />
         <pie_slice
             enabled="true"
             label="Derender"
