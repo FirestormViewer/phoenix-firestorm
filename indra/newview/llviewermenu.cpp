@@ -2577,6 +2577,9 @@ class LLEnableEditParticleSource : public view_listener_t
 			LLObjectSelection::valid_iterator iter=LLSelectMgr::instance().getSelection()->valid_begin();
 			LLSelectNode* node=*iter;
 
+			if(!node || !node->mPermissions)
+				return false;
+
 			if(node->mPermissions->getOwner()==gAgent.getID())
 				return true;
 		}
