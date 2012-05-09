@@ -397,7 +397,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				// If someone knows how to call "View.ZoomDefault" by hand, we should do that instead of
 				// replicating the behavior here. -Zi
 				LLViewerCamera::getInstance()->setDefaultFOV(DEFAULT_FIELD_OF_VIEW);
-				//gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
+				if(gSavedSettings.getBOOL("FSResetCameraOnTP"))
+				{
+					gSavedSettings.setF32("CameraAngle", LLViewerCamera::getInstance()->getView()); // FS:LO Dont reset rightclick zoom when we teleport however. Fixes FIRE-6246.
+				}
 				// also, reset the marker for "currently zooming" in the mouselook zoom settings. -Zi
 				LLVector3 vTemp=gSavedSettings.getVector3("_NACL_MLFovValues");
 				vTemp.mV[2]=0.0f;
