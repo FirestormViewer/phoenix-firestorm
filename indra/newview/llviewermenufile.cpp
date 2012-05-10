@@ -1091,6 +1091,16 @@ void temp_upload_done_callback(const LLUUID& uuid, void* user_data, S32 result, 
 		gInventory.updateItem(item);
 		gInventory.notifyObservers();
 		LLFloaterReg::showInstance("preview_texture", LLSD(item_id), TRUE);
+
+		//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+		// Let the Snapshot floater know we have finished uploading a snapshot to inventory.
+		LLFloater* floater_snapshot = LLFloaterReg::findInstance("snapshot");
+		if (data->mAssetInfo.mType == LLAssetType::AT_TEXTURE && floater_snapshot)
+		{
+			floater_snapshot->notify(LLSD().with("set-finished", LLSD().with("ok", true).with("msg", "inventory")));
+		}
+		//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+
 //		open_texture(item_id, std::string("Texture: ") + item->getName(), TRUE, LLUUID::null, FALSE);
 	}
 	else

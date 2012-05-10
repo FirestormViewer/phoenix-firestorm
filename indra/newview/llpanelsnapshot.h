@@ -45,6 +45,7 @@ public:
 	virtual std::string getAspectRatioCBName() const = 0;
 	virtual std::string getImageSizeComboName() const = 0;
 	virtual std::string getImageSizePanelName() const = 0;
+	virtual std::string getTempUploadCBName() const = 0; //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 
 	virtual S32 getTypedPreviewWidth() const;
 	virtual S32 getTypedPreviewHeight() const;
@@ -66,6 +67,7 @@ protected:
 	void onCustomResolutionCommit();
 	void onResolutionComboCommit(LLUICtrl* ctrl);
 	void onKeepAspectRatioCommit(LLUICtrl* ctrl);
+	void onTempUploadCommit(LLUICtrl* ctrl); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 };
 
 #endif // LL_LLPANELSNAPSHOT_H

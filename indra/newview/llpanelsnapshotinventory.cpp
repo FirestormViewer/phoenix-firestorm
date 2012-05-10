@@ -53,6 +53,7 @@ private:
 	/*virtual*/ std::string getWidthSpinnerName() const		{ return "inventory_snapshot_width"; }
 	/*virtual*/ std::string getHeightSpinnerName() const	{ return "inventory_snapshot_height"; }
 	/*virtual*/ std::string getAspectRatioCBName() const	{ return "inventory_keep_aspect_check"; }
+	/*virtual*/ std::string getTempUploadCBName() const		{ return "inventory_temp_upload"; } //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	/*virtual*/ std::string getImageSizeComboName() const	{ return "texture_size_combo"; }
 	/*virtual*/ std::string getImageSizePanelName() const	{ return LLStringUtil::null; }
 	/*virtual*/ void updateControls(const LLSD& info);

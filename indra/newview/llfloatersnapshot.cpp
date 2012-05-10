@@ -1094,6 +1094,7 @@ public:
 	static void onClickUICheck(LLUICtrl *ctrl, void* data);
 	static void onClickHUDCheck(LLUICtrl *ctrl, void* data);
 	static void applyKeepAspectCheck(LLFloaterSnapshot* view, BOOL checked);
+	static void applyTempUploadCheck(LLFloaterSnapshot* view, BOOL checked); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	static void updateResolution(LLUICtrl* ctrl, void* data, BOOL do_update = TRUE);
 	static void onCommitFreezeFrame(LLUICtrl* ctrl, void* data);
 	static void onCommitLayerTypes(LLUICtrl* ctrl, void*data);
@@ -1113,6 +1114,7 @@ public:
 	static LLSpinCtrl* getHeightSpinner(LLFloaterSnapshot* floater);
 	static void enableAspectRatioCheckbox(LLFloaterSnapshot* floater, BOOL enable);
 	static void setAspectRatioCheckboxValue(LLFloaterSnapshot* floater, BOOL checked);
+	static void setTempUploadCheckboxValue(LLFloaterSnapshot* floater, BOOL checked); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 
 	static LLSnapshotLivePreview* getPreviewView(LLFloaterSnapshot *floater);
 	static void setResolution(LLFloaterSnapshot* floater, const std::string& comboname);
@@ -1228,6 +1230,17 @@ void LLFloaterSnapshot::Impl::setAspectRatioCheckboxValue(LLFloaterSnapshot* flo
 	if (active_panel)
 	{
 		active_panel->getChild<LLUICtrl>(active_panel->getAspectRatioCBName())->setValue(checked);
+	}
+}
+
+//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+// static
+void LLFloaterSnapshot::Impl::setTempUploadCheckboxValue(LLFloaterSnapshot* floater, BOOL checked)
+{
+	LLPanelSnapshot* active_panel = getActivePanel(floater);
+	if (active_panel)
+	{
+		active_panel->getChild<LLUICtrl>(active_panel->getTempUploadCBName())->setValue(checked);
 	}
 }
 
@@ -1385,6 +1398,7 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	floater->getChild<LLComboBox>("local_format_combo")->selectNthItem(gSavedSettings.getS32("SnapshotFormat"));
 	enableAspectRatioCheckbox(floater, !floater->impl.mAspectRatioCheckOff);
 	setAspectRatioCheckboxValue(floater, gSavedSettings.getBOOL("KeepAspectForSnapshot"));
+	setTempUploadCheckboxValue(floater, gSavedSettings.getBOOL("TemporaryUpload")); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	floater->getChildView("layer_types")->setEnabled(shot_type == LLSnapshotLivePreview::SNAPSHOT_LOCAL);
 
 	LLPanelSnapshot* active_panel = getActivePanel(floater);
@@ -1645,6 +1659,13 @@ void LLFloaterSnapshot::Impl::applyKeepAspectCheck(LLFloaterSnapshot* view, BOOL
 			checkAutoSnapshot(previewp, TRUE);
 		}
 	}
+}
+
+//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+// static
+void LLFloaterSnapshot::Impl::applyTempUploadCheck(LLFloaterSnapshot* view, BOOL checked)
+{
+	gSavedSettings.setBOOL("TemporaryUpload", checked);
 }
 
 // static
@@ -2102,7 +2123,7 @@ BOOL LLFloaterSnapshot::postBuild()
 	parent_view->addChild(previewp);
 	parent_view->addChild(gSnapshotFloaterView);
 	
-	gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+	gSavedSettings.setBOOL("TemporaryUpload", FALSE); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	
 	//move snapshot floater to special purpose snapshotfloaterview
 	gFloaterView->removeChild(this);
@@ -2276,6 +2297,13 @@ S32 LLFloaterSnapshot::notify(const LLSD& info)
 	{
 		LLSD data = info["set-finished"];
 		impl.setStatus(Impl::STATUS_FINISHED, data["ok"].asBoolean(), data["msg"].asString());
+		return 1;
+	}
+
+	//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+	if (info.has("temp-upload-change"))
+	{
+		impl.applyTempUploadCheck(this, info["temp-upload-change"].asBoolean());
 		return 1;
 	}
 	return 0;

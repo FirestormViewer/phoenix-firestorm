@@ -58,6 +58,7 @@ private:
 	/*virtual*/ std::string getAspectRatioCBName() const	{ return "profile_keep_aspect_check"; }
 	/*virtual*/ std::string getImageSizeComboName() const	{ return "profile_size_combo"; }
 	/*virtual*/ std::string getImageSizePanelName() const	{ return "profile_image_size_lp"; }
+	/*virtual*/ std::string getTempUploadCBName() const		{ return LLStringUtil::null; } //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	/*virtual*/ LLFloaterSnapshot::ESnapshotFormat getImageFormat() const { return LLFloaterSnapshot::SNAPSHOT_FORMAT_PNG; }
 	/*virtual*/ void updateControls(const LLSD& info);
 

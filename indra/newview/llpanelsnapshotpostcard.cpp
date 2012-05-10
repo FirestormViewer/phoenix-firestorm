@@ -63,6 +63,7 @@ private:
 	/*virtual*/ std::string getAspectRatioCBName() const	{ return "postcard_keep_aspect_check"; }
 	/*virtual*/ std::string getImageSizeComboName() const	{ return "postcard_size_combo"; }
 	/*virtual*/ std::string getImageSizePanelName() const	{ return "postcard_image_size_lp"; }
+	/*virtual*/ std::string getTempUploadCBName() const		{ return LLStringUtil::null; } //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	/*virtual*/ LLFloaterSnapshot::ESnapshotFormat getImageFormat() const { return LLFloaterSnapshot::SNAPSHOT_FORMAT_JPEG; }
 	/*virtual*/ void updateControls(const LLSD& info);
 

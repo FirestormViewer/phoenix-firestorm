@@ -44,6 +44,7 @@ BOOL LLPanelSnapshot::postBuild()
 	getChild<LLUICtrl>(getWidthSpinnerName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onCustomResolutionCommit, this));
 	getChild<LLUICtrl>(getHeightSpinnerName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onCustomResolutionCommit, this));
 	getChild<LLUICtrl>(getAspectRatioCBName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onKeepAspectRatioCommit, this, _1));
+	getChild<LLUICtrl>(getTempUploadCBName())->setCommitCallback(boost::bind(&LLPanelSnapshot::onTempUploadCommit, this, _1)); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 
 	updateControls(LLSD());
 	return TRUE;
@@ -198,4 +199,10 @@ void LLPanelSnapshot::onResolutionComboCommit(LLUICtrl* ctrl)
 void LLPanelSnapshot::onKeepAspectRatioCommit(LLUICtrl* ctrl)
 {
 	LLFloaterSnapshot::getInstance()->notify(LLSD().with("keep-aspect-change", ctrl->getValue().asBoolean()));
+}
+
+//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
+void LLPanelSnapshot::onTempUploadCommit(LLUICtrl* ctrl)
+{
+	LLFloaterSnapshot::getInstance()->notify(LLSD().with("temp-upload-change", ctrl->getValue().asBoolean()));
 }
