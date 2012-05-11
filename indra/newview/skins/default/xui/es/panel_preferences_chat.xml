@@ -81,6 +81,7 @@
 			</text>
 			<spinner tool_tip="0.0-1.0, 0 para fundido máximo, 1 para no fundir" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Anunciar MI entrante tan pronto como el remitente empiece a escribir"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Hacer parpadear las pestañas de MI cuando tus contactos conecten o desconecten"/>
 		</panel>
 		<panel label="Firestorm" name="ChatFirestorm">
 			<text name="chat_and_im_enhancements">
