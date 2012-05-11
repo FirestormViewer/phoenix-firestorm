@@ -248,7 +248,9 @@ void LLIMFloaterContainer::onNewMessageReceived(const LLSD& data)
 	LLFloater* floaterp = get_ptr_in_map(mSessions, session_id);
 	LLFloater* current_floater = LLMultiFloater::getActiveFloater();
 
-	if(floaterp && current_floater && floaterp != current_floater)
+    // KC: Don't flash tab on friend status changes per setting
+    if (floaterp && current_floater && floaterp != current_floater
+     && (gSavedSettings.getBOOL("FSIMChatFlashOnFriendStatusChange") || data["from_id"].asUUID() !=  LLUUID::null))
 	{
 		if(LLMultiFloater::isFloaterFlashing(floaterp))
 			LLMultiFloater::setFloaterFlashing(floaterp, FALSE);

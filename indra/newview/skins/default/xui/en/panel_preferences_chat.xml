@@ -523,6 +523,17 @@
              control_name="FSAnnounceIncomingIM"
              label="Announces incoming IMs as soon as the sender starts typing"/>
 
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="6"
+             left="30"
+             width="400"
+             height="18"
+             name="FSIMChatFlashOnFriendStatusChange"
+             control_name="FSIMChatFlashOnFriendStatusChange"
+             label="Flash IM tabs when friends come online or go offline"/>
+
         </panel>
 
         <!-- Chat: Firestorm -->
