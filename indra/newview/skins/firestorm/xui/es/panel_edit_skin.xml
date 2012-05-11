@@ -28,3 +28,33 @@
 		</panel>
 	</tab_container>
 </panel>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="edit_skin_panel">
+	<panel name="avatar_skin_color_panel">
+		<texture_picker label="Tatuajes de cabeza" name="Head" tool_tip="Pulsa para seleccionar una imagen"/>
+		<texture_picker label="Tatuajes superiores" name="Upper Body" tool_tip="Pulsa para seleccionar una imagen"/>
+		<texture_picker label="Tatuajes inferiores" name="Lower Body" tool_tip="Pulsa para seleccionar una imagen"/>
+	</panel>
+	<tab_container name="wearable_accordion">
+		<panel name="skin_color_tab_holder" title="Color de la piel">
+			<accordion name="skin_color_accordion">
+				<accordion_tab name="skin_color_tab" title="Color de la piel"/>
+			</accordion>
+		</panel>
+		<panel name="skin_face_tab_holder" title="Detalle de la cara">
+			<accordion name="skin_face_accordion">
+				<accordion_tab name="skin_face_tab" title="Detalle de la cara"/>
+			</accordion>
+		</panel>
+		<panel name="skin_makeup_holder" title="Maquillaje">
+			<accordion name="skin_makeup_accordion">
+				<accordion_tab name="skin_makeup_tab" title="Maquillaje"/>
+			</accordion>
+		</panel>
+		<panel name="skin_body_holder" title="Detalle del cuerpo">
+			<accordion name="skin_body_accordion">
+				<accordion_tab title="Detalle del cuerpo"/>
+			</accordion>
+		</panel>
+	</tab_container>
+</panel>
