@@ -1326,13 +1326,13 @@
          follows="left|top"
          name="material"
          control_name="FSBuildPrefs_Material">
-             <combo_item name="Stone" value="Stone">Stone</combo_item>
-             <combo_item name="Metal" value="Metal">Metal</combo_item>
-             <combo_item name="Glass" value="Glass">Glass</combo_item>
-             <combo_item name="Wood" value="Wood">Wood</combo_item>
-             <combo_item name="Flesh" value="Flesh">Flesh</combo_item>
-             <combo_item name="Plastic" value="Plastic">Plastic</combo_item>
-             <combo_item name="Rubber" value="Rubber">Rubber</combo_item>
+             <combo_item name="Stone" value="Stone" label="Stone"/>
+             <combo_item name="Metal" value="Metal" label="Metal"/>
+             <combo_item name="Glass" value="Glass" label="Glass"/>
+             <combo_item name="Wood" value="Wood" label="Wood"/>
+             <combo_item name="Flesh" value="Flesh" label="Flesh"/>
+             <combo_item name="Plastic" value="Plastic" label="Plastic"/>
+             <combo_item name="Rubber" value="Rubber" label="Rubber"/>
         </combo_box>
 
         <text

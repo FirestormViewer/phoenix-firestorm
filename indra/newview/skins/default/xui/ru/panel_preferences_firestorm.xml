@@ -186,13 +186,13 @@
 			Материал:
 		</text>
 		<combo_box name="material">
-			<combo_item name="Stone">Камень</combo_item>
-			<combo_item name="Metal">Метал</combo_item>
-			<combo_item name="Glass">Стекло</combo_item>
-			<combo_item name="Wood">Дерево</combo_item>
-			<combo_item name="Flesh">Мясо</combo_item>
-			<combo_item name="Plastic">Пластик</combo_item>
-			<combo_item name="Rubber">Резина</combo_item>
+			<combo_item name="Stone" label="Камень"/>
+			<combo_item name="Metal" label="Метал"/>
+			<combo_item name="Glass" label="Стекло"/>
+			<combo_item name="Wood" label="Дерево"/>
+			<combo_item name="Flesh" label="Мясо"/>
+			<combo_item name="Plastic" label="Пластик"/>
+			<combo_item name="Rubber" label="Резина"/>
 		</combo_box>
 
 		<text name="text_box_pivotpoint">

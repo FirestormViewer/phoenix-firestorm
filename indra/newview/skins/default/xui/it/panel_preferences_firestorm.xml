@@ -173,13 +173,13 @@
          Materiale:
          </text>
         <combo_box name="material">
-             <combo_item name="Stone">Pietra</combo_item>
-			 <combo_item name="Metal">Metallo</combo_item>
-             <combo_item name="Glass">Vestro</combo_item>
-             <combo_item name="Wood">Lego</combo_item>
-             <combo_item name="Flesh">Carne</combo_item>
-             <combo_item name="Plastic">Plastica</combo_item>
-             <combo_item name="Rubber">Gomma</combo_item>
+             <combo_item name="Stone" label="Pietra"/>
+             <combo_item name="Metal" label="Metallo"/>
+             <combo_item name="Glass" label="Vestro"/>
+             <combo_item name="Wood" label="Lego"/>
+             <combo_item name="Flesh" label="Carne"/>
+             <combo_item name="Plastic" label="Plastica"/>
+             <combo_item name="Rubber" label="Gomma"/>
         </combo_box>
         <text name="text_box_pivotpoint">
           Fulcro oggetto

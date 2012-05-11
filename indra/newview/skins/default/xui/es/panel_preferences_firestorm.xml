@@ -176,13 +176,13 @@
 				Material:
 			</text>
 			<combo_box name="material">
-				<combo_item name="Stone">Piedra</combo_item>
-				<combo_item name="Metal" value="Metal">Metal</combo_item>
-				<combo_item name="Glass" value="Glass">Cristal</combo_item>
-				<combo_item name="Wood" value="Wood">Madera</combo_item>
-				<combo_item name="Flesh" value="Flesh">Carne</combo_item>
-				<combo_item name="Plastic" value="Plastic">Plástico</combo_item>
-				<combo_item name="Rubber" value="Rubber">Goma</combo_item>
+				<combo_item name="Stone" label="Piedra"/>
+				<combo_item name="Metal" label="Metal"/>
+				<combo_item name="Glass" label="Cristal"/>
+				<combo_item name="Wood" label="Madera"/>
+				<combo_item name="Flesh" label="Carne"/>
+				<combo_item name="Plastic" label="Plástico"/>
+				<combo_item name="Rubber" label="Goma"/>
 			</combo_box>
 			<text name="text_box_pivotpoint">
 				Punto de pivotaje

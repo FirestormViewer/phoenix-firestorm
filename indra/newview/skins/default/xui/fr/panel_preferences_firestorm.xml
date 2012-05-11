@@ -445,15 +445,14 @@
 		<text name="text_box_objmaterial">
 			Matière
 		</text>
-		<combo_box name="material"
-			control_name="PhoenixBuildPrefs_Material">
-			<combo_item name="Stone" value="Stone">Pierre</combo_item>
-			<combo_item name="Metal" value="Metal">Métal</combo_item>
-			<combo_item name="Glass" value="Glass">Verre</combo_item>
-			<combo_item name="Wood" value="Wood">Bois</combo_item>
-			<combo_item name="Flesh" value="Flesh">Chair</combo_item>
-			<combo_item name="Plastic" value="Plastic">Plastique</combo_item>
-			<combo_item name="Rubber" value="Rubber">Caoutchouc</combo_item>
+		<combo_box name="material">
+			<combo_item name="Stone" label="Pierre"/>
+			<combo_item name="Metal" label="Métal"/>
+			<combo_item name="Glass" label="Verre"/>
+			<combo_item name="Wood" label="Bois"/>
+			<combo_item name="Flesh" label="Chair"/>
+			<combo_item name="Plastic" label="Plastique"/>
+			<combo_item name="Rubber" label="Caoutchouc"/>
 		</combo_box>
 		<text name="text_box_pivotpoint">
 			Point de pivot

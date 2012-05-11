@@ -194,13 +194,13 @@
 			Material:
 		</text>
 		<combo_box name="material">
-			<combo_item name="Stone">Stein</combo_item>
-			<combo_item name="Metal">Metall</combo_item>
-			<combo_item name="Glass">Glas</combo_item>
-			<combo_item name="Wood">Holz</combo_item>
-			<combo_item name="Flesh">Fleisch</combo_item>
-			<combo_item name="Plastic">Plastik</combo_item>
-			<combo_item name="Rubber">Gummi</combo_item>
+			<combo_item name="Stone" label="Stein"/>
+			<combo_item name="Metal" label="Metall"/>
+			<combo_item name="Glass" label="Glas"/>
+			<combo_item name="Wood" label="Holz"/>
+			<combo_item name="Flesh" label="Fleisch"/>
+			<combo_item name="Plastic" label="Plastik"/>
+			<combo_item name="Rubber" label="Gummi"/>
 		</combo_box>
 
 		<text name="text_box_pivotpoint">

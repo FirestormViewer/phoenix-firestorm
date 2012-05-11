@@ -173,12 +173,12 @@
          Materiał:
          </text>
         <combo_box name="material">
-             <combo_item name="Stone">Kamień</combo_item>
-             <combo_item name="Glass">Szkło</combo_item>
-             <combo_item name="Wood">Drewno</combo_item>
-             <combo_item name="Flesh">Ciało</combo_item>
-             <combo_item name="Plastic">Plastik</combo_item>
-             <combo_item name="Rubber">Guma</combo_item>
+             <combo_item name="Stone" label="Kamień"/>
+             <combo_item name="Glass" label="Szkło"/>
+             <combo_item name="Wood" label="Drewno"/>
+             <combo_item name="Flesh" label="Ciało"/>
+             <combo_item name="Plastic" label="Plastik"/>
+             <combo_item name="Rubber" label="Guma"/>
         </combo_box>
         <text name="text_box_pivotpoint">
           Punkt obracania osi
