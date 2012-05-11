@@ -192,9 +192,9 @@
         <check_box label="Użyj starego zachowania &quot;Ustaw obiekt na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapsisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
-        <check_box label="Optymalizator skryptów" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
+        <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
-        <check_box label="Powolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
+        <check_box label="Wolne listy" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z rozszerzeń składni do obsługi list." name="preproclazy_checkbox" />
         <check_box label="#includes z twardego dysku" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli odnosić się instrukcjom #include (dołączania) do plików na Twoim dysku twardym." name="preprocinclude_checkbox" />
         <text name="lslpreprocinclude_textbox">
           Ścieżka dołączania preprocesora:

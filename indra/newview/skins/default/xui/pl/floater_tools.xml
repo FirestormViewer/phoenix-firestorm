@@ -132,6 +132,9 @@
 	<text name="selection_empty">
 		Zaznacz coś!
 	</text>
+	<text name="remaining_capacity">
+		[CAPACITY_STRING] [secondlife:///app/openfloater/object_weights Więcej]
+	</text>
 	<tab_container name="Object Info Tabs">
 		<panel label="Ogólne" name="General">
 			<panel.string name="text deed continued">

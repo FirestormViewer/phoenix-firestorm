@@ -18,7 +18,6 @@
             <pie_slice label="Przybliż" name="Zoom In"/>
             <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
         </pie_menu>
-        <pie_slice label="Inspekcja" name="Avatar Inspect"/>
         <pie_slice label="Derenderuj" name="Derender"/>
     </pie_menu>
     <pie_slice label="Wiadomość IM" name="Send IM..."/>
