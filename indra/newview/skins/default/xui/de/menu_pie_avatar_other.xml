@@ -19,7 +19,6 @@
             <pie_slice label="Anrufen" name="Call"/>
             <pie_slice label="Hineinzoomen" name="Zoom In"/>
         </pie_menu>
-        <pie_slice label="Untersuchen" name="Avatar Inspect"/>
         <pie_slice label="Nicht anzeigen" name="Derender"/>
     </pie_menu>
     <pie_slice label="IM" name="Send IM..."/>
