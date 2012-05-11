@@ -4007,16 +4007,18 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 
 		// Check whether the item being dragged from active inventory panel
 		// passes the filter of the destination panel.
-		if (accept && active_panel)
-		{
-			LLFolderView* active_folder_view = active_panel->getRootFolder();
-			if (!active_folder_view) return false;
+		// <FS:Ansariel> Allow drag and drop in inventory regardless of filter (e.g. Recent)
+		//if (accept && active_panel)
+		//{
+		//	LLFolderView* active_folder_view = active_panel->getRootFolder();
+		//	if (!active_folder_view) return false;
 
-			LLFolderViewItem* fv_item = active_folder_view->getItemByID(inv_item->getUUID());
-			if (!fv_item) return false;
+		//	LLFolderViewItem* fv_item = active_folder_view->getItemByID(inv_item->getUUID());
+		//	if (!fv_item) return false;
 
-			accept = filter->check(fv_item);
-		}
+		//	accept = filter->check(fv_item);
+		//}
+		// </FS:Ansariel>
 
 		if (accept && drop)
 		{
@@ -4146,10 +4148,12 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		
 		// Check whether the item being dragged from in world
 		// passes the filter of the destination panel.
-		if (accept)
-		{
-			accept = filter->check(inv_item);
-		}
+		// <FS:Ansariel> Allow dropping from inworld objects regardless of filter
+		//if (accept)
+		//{
+		//	accept = filter->check(inv_item);
+		//}
+		// </FS:Ansariel>
 
 		if (accept && drop)
 		{
@@ -4190,10 +4194,12 @@ BOOL LLFolderBridge::dragItemIntoFolder(LLInventoryItem* inv_item,
 		
 		// Check whether the item being dragged from notecard
 		// passes the filter of the destination panel.
-		if (accept)
-		{
-			accept = filter->check(inv_item);
-		}
+		// <FS:Ansariel> Allow dropping from notecards regardless of filter
+		//if (accept)
+		//{
+		//	accept = filter->check(inv_item);
+		//}
+		// </FS:Ansariel>
 
 		if (accept && drop)
 		{
