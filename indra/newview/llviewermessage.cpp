@@ -2582,7 +2582,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
 		//AO Autorespond
 		//TS Autorespond to non-friends
-		else if ( (offline == IM_ONLINE && !is_linden &&
+		else if ( (offline == IM_ONLINE && !is_linden && !is_muted &&
 			(is_busy || is_autorespond || (is_autorespond_nonfriends && !is_friend)) && name != SYSTEM_FROM) &&
 			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
