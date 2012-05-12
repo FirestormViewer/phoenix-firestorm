@@ -159,10 +159,10 @@
         <slider
             can_edit_text="true"
             control_name="RenderVolumeLODFactor"
-            decimal_digits="2"
+            decimal_digits="3"
             follows="left|top"
             height="15"
-            increment="0.1"
+            increment="0.125"
             initial_value="2"
             layout="topleft"
             left_delta="82"
@@ -170,7 +170,7 @@
             min_val="0"
             name="RenderVolumeLODFactor"
             top_delta="-2"
-            width="158"
+            width="164"
             label_width="14"/>
         <text
             type="string"
