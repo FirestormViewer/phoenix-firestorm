@@ -332,6 +332,14 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 			// LLNearbyChatBar::getInstance()->showHistory();
 			LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
 			// </FS:Zi>
+
+			// <FS:Ansariel> If nearby chat history is docked, we also need
+			//               to open the container floater (FIRE-6265)
+			if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+			{
+				LLFloaterReg::showInstance("im_container");
+			}
+			// </FS:Ansariel>
 			return FALSE;
 		}
 	}
@@ -340,6 +348,14 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 	// LLNearbyChatBar::getInstance()->showHistory();
 	LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
 	// </FS:Zi>
+
+	// <FS:Ansariel> If nearby chat history is docked, we also need
+	//               to open the container floater (FIRE-6265)
+	if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
+	{
+		LLFloaterReg::showInstance("im_container");
+	}
+	// </FS:Ansariel>
 	return LLPanel::handleMouseUp(x,y,mask);
 }
 
