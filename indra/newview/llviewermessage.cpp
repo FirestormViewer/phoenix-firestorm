@@ -2524,6 +2524,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	BOOL is_busy = gAgent.getBusy();
 	BOOL is_autorespond = gAgent.getAutorespond();
 	BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+	BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
 	BOOL is_muted = LLMuteList::getInstance()->isMuted(from_id, name, LLMute::flagTextChat)
 		// object IMs contain sender object id in session_id (STORM-1209)
 		|| dialog == IM_FROM_TASK && LLMuteList::getInstance()->isMuted(session_id);
@@ -2582,12 +2583,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
 		//AO Autorespond
 		//TS Autorespond to non-friends
-		// <FS:Ansariel> Don't send auto-responses for everyone/non-friends
-		//               if sender is muted, but do send the busy message
-		//               or it would be possible for the sender to find out
-		//               if he is muted!
+		// <FS:Ansariel> Only send the busy reponse if either the sender is not
+		//               muted OR the sender is muted and we explicitely want
+		//               to inform him about that fact.
 		else if ( (offline == IM_ONLINE && !is_linden &&
-			(is_busy || (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
+			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
 			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
