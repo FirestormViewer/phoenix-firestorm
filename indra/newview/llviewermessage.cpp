@@ -6710,8 +6710,12 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 //		if (!foundpos)
 		{
 			// unable to determine location of the object
-			notice.setArg("[REGIONNAME]", "(unknown region)");
-			notice.setArg("[REGIONPOS]", "(unknown position)");
+			// <FS:Ansariel> Made hardcoded strings localizable
+			//notice.setArg("[REGIONNAME]", "(unknown region)");
+			//notice.setArg("[REGIONPOS]", "(unknown position)");
+			notice.setArg("[REGIONNAME]", LLTrans::getString("UnknownRegion"));
+			notice.setArg("[REGIONPOS]", LLTrans::getString("UnknownPosition"));
+			// </FS:Ansariel>
 		}
 
 		// check each permission that was requested, and list each 

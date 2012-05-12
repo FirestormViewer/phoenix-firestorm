@@ -4006,4 +4006,8 @@ Try enclosing path to the editor with double quotes.
   <string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">Shared Media from the URL [MEDIAURL] will always be played.</string>
   <string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">Shared Media from the URL [MEDIAURL] will never be played.</string>
  
+  <!-- Replacement for hardcoded UI strings -->
+  <string name="UnknownRegion">(unknown region)</string>
+  <string name="UnknownPosition">(unknown position)</string>
+
 </strings>

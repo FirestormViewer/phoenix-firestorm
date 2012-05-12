@@ -366,7 +366,9 @@ bool LLWorldMap::simNameFromPosGlobal(const LLVector3d& pos_global, std::string 
 	}
 	else
 	{
-		outSimName = "(unknown region)";
+		// <FS:Ansariel> Made hardcoded string localizable
+		//outSimName = "(unknown region)";
+		outSimName = LLTrans::getString("UnknownRegion");
 	}
 
 	return (sim_info != NULL);

@@ -5226,4 +5226,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="SanityCheckNotBetween">
 		Die Einstellung &quot;[CONTROL_NAME]&quot; sollte keinen Wert zwischen [VALUE_1] und [VALUE_2] haben.
 	</string>
+
+	<!-- Replacement for hardcoded UI strings -->
+	<string name="UnknownRegion">
+		(unbekannte Region)
+	</string>
+	<string name="UnknownPosition">
+		(unbekannte Position)
+	</string>
 </strings>
