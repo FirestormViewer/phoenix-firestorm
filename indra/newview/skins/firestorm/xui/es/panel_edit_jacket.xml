@@ -11,16 +11,3 @@
 		</accordion>
 	</panel>
 </panel>
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
- <panel name="edit_jacket_panel">
-	<panel name="avatar_jacket_color_panel">
-		<texture_picker label="Tejido superior" name="Upper Fabric" tool_tip="Pulsa para seleccionar una imagen"/>
-		<texture_picker label="Tejido inferior" name="Lower Fabric" tool_tip="Pulsa para seleccionar una imagen"/>
-		<color_swatch label="Color/Tinte" name="Color/Tint" tool_tip="Pulsa para abrir el selector de color"/>
-	</panel>
-	<panel name="jacket_main_tab_holder" title="Chaqueta">
-		<accordion name="jacket_main_accordion">
-			<accordion_tab name="jacket_main_tab" title="Chaqueta"/>
-		</accordion>
-	</panel>
-</panel>

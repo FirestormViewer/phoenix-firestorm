@@ -10,15 +10,3 @@
 		</accordion>
 	</panel>
 </panel>
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="edit_shoes_panel">
-	<panel name="avatar_shoes_color_panel">
-		<texture_picker label="Tejido" name="Fabric" tool_tip="Pulsa para seleccionar una imagen"/>
-		<color_swatch label="Color/Tinte" name="Color/Tint" tool_tip="Pulsa para abrir el selector de color"/>
-	</panel>
-	<panel name="shoes_main_tab_holder" title="Zapatos">
-		<accordion name="shoes_main_accordion">
-			<accordion_tab name="shoes_main_tab" title="Zapatos"/>
-		</accordion>
-	</panel>
-</panel>
