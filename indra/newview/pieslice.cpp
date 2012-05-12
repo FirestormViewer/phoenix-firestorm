@@ -34,10 +34,12 @@ PieSlice::PieSlice(const PieSlice::Params& p) :
 	LLUICtrl(p),
 	mLabel(p.label),
 	mStartAutohide(p.start_autohide),
-	mAutohide(p.autohide)	
+	mAutohide(p.autohide),
+	mCheckEnableOnce(p.check_enable_once),
+	mDoUpdateEnabled(TRUE)
 {
 
-	lldebugs << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << llendl;
+	lldebugs << "PieSlice::PieSlice(): " << mLabel << " " << mAutohide << " " << mCheckEnableOnce << llendl;
 }
 
 // pick up parameters from the XUI definition
@@ -46,7 +48,8 @@ PieSlice::Params::Params() :
 	on_visible("on_visible"),
 	on_enable("on_enable"),
 	start_autohide("start_autohide",FALSE),
-	autohide("autohide",FALSE)
+	autohide("autohide",FALSE),
+	check_enable_once("check_enable_once",FALSE)
 {
 }
 
@@ -84,7 +87,7 @@ void PieSlice::initFromParams(const Params& p)
 // call this to make the menu update its "enabled" status
 void PieSlice::updateEnabled()
 {
-	if(mEnableSignal.num_slots()>0)
+	if(mDoUpdateEnabled && mEnableSignal.num_slots()>0)
 	{
 		bool enabled=mEnableSignal(this,LLSD());
 		if(mEnabledControlVariable)
@@ -99,6 +102,8 @@ void PieSlice::updateEnabled()
 		{
 			setEnabled(enabled);
 		}
+
+		mDoUpdateEnabled = !mCheckEnableOnce;
 	}
 }
 
@@ -146,4 +151,9 @@ BOOL PieSlice::getStartAutohide()
 BOOL PieSlice::getAutohide()
 {
 	return mStartAutohide | mAutohide;
+}
+
+void PieSlice::resetUpdateEnabledCheck()
+{
+	mDoUpdateEnabled = TRUE;
 }

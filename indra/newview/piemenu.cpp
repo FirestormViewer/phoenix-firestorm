@@ -158,6 +158,16 @@ void PieMenu::show(S32 x,S32 y)
 	// set up the slices pointer to the menu's own slices
 	mSlices=&mMySlices;
 
+	// reset enable update checks for slices
+	for (slice_list_t::iterator it = mSlices->begin(); it != mSlices->end(); it++)
+	{
+		PieSlice* resetSlice = dynamic_cast<PieSlice*>(*it);
+		if (resetSlice)
+		{
+			resetSlice->resetUpdateEnabledCheck();
+		}
+	}
+
 	// cleanup
 	mSlice=0;
 	mOldSlice=0;
@@ -494,6 +504,15 @@ BOOL PieMenu::handleMouseButtonUp(S32 x,S32 y,MASK mask)
 				mFirstClick=FALSE;
 				// swap out the list of items for the ones in the submenu
 				mSlices=&currentSubmenu->mMySlices;
+				// reset enable update checks for slices
+				for (slice_list_t::iterator it = mSlices->begin(); it != mSlices->end(); it++)
+				{
+					PieSlice* resetSlice = dynamic_cast<PieSlice*>(*it);
+					if (resetSlice)
+					{
+						resetSlice->resetUpdateEnabledCheck();
+					}
+				}
 				// the menu stays visible
 				visible=TRUE;
 #if PIE_POPUP_EFFECT

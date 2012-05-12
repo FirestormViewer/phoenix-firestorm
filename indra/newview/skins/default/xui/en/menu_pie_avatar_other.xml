@@ -59,7 +59,8 @@
 
         <pie_slice
             label="Freeze"
-            name="Freeze...">
+            name="Freeze..."
+            check_enable_once="true">
             <pie_slice.on_click
                 function="Avatar.Freeze" />
             <pie_slice.on_enable
@@ -83,7 +84,8 @@
         <pie_separator />
         <pie_slice
             label="Eject..."
-            name="Eject...">
+            name="Eject..."
+            check_enable_once="true">
             <pie_slice.on_click
                 function="Avatar.Eject" />
             <pie_slice.on_enable

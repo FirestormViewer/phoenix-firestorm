@@ -52,6 +52,8 @@ class PieSlice : public LLUICtrl
 			Optional<bool> start_autohide;
 			// next item in an autohide chain
 			Optional<bool> autohide;
+			// only do the enable check once
+			Optional<bool> check_enable_once;
 			// parameter "constructor" function to pick up the parameters from the XUI system
 			Params();
 		};
@@ -87,11 +89,15 @@ class PieSlice : public LLUICtrl
 			return mEnableSignal.connect(cb);
 		}
 
+		void resetUpdateEnabledCheck();
+
 	protected:
 		// accessor store
 		std::string mLabel;
 		BOOL mStartAutohide;
 		BOOL mAutohide;
+		BOOL mCheckEnableOnce;
+		BOOL mDoUpdateEnabled;
 
 	private:
 		enable_signal_t mEnableSignal;
