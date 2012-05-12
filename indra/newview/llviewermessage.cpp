@@ -2582,8 +2582,12 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 		//else if ( (offline == IM_ONLINE && !is_linden && is_busy && name != SYSTEM_FROM) && (gRlvHandler.canReceiveIM(from_id)) )
 		//AO Autorespond
 		//TS Autorespond to non-friends
-		else if ( (offline == IM_ONLINE && !is_linden && !is_muted &&
-			(is_busy || is_autorespond || (is_autorespond_nonfriends && !is_friend)) && name != SYSTEM_FROM) &&
+		// <FS:Ansariel> Don't send auto-responses for everyone/non-friends
+		//               if sender is muted, but do send the busy message
+		//               or it would be possible for the sender to find out
+		//               if he is muted!
+		else if ( (offline == IM_ONLINE && !is_linden &&
+			(is_busy || (is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) && name != SYSTEM_FROM) &&
 			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
