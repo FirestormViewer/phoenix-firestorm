@@ -3259,6 +3259,51 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 			false, // <-- Wow! This parameter is never handled!!!
 			TRUE
 			);
+
+		// Send busy and auto-response messages now or they won't be send
+		// later because a session has already been created by showing the
+		// incoming IM announcement.
+		// The logic is copied from process_improved_im() in llviewermessage.cpp
+		BOOL is_busy = gAgent.getBusy();
+		BOOL is_autorespond = gAgent.getAutorespond();
+		BOOL is_autorespond_nonfriends = gAgent.getAutorespondNonFriends();
+		BOOL is_autorespond_muted = gSavedPerAccountSettings.getBOOL("FSSendMutedAvatarResponse");
+		BOOL is_muted = LLMuteList::getInstance()->isMuted(im_info->mFromID, im_info->mName, LLMute::flagTextChat);
+		BOOL is_linden = LLMuteList::getInstance()->isLinden(im_info->mName);
+		BOOL is_friend = (LLAvatarTracker::instance().getBuddyInfo(im_info->mFromID) == NULL) ? false : true;
+
+		if (gRlvHandler.canReceiveIM(im_info->mFromID) && !is_linden &&
+			((is_busy && (!is_muted || (is_muted && !is_autorespond_muted))) ||
+			(is_autorespond && !is_muted) || (is_autorespond_nonfriends && !is_friend && !is_muted)) )
+		{
+			std::string my_name;
+			std::string response;
+			LLAgentUI::buildFullname(my_name);
+			if (is_busy)
+			{
+				response = gSavedPerAccountSettings.getString("BusyModeResponse");
+			}
+			else if (is_autorespond_nonfriends && !is_friend)
+			{
+				response = gSavedPerAccountSettings.getString("FSAutorespondNonFriendsResponse");
+			}
+			else if (is_autorespond)
+			{
+				response = gSavedPerAccountSettings.getString("FSAutorespondModeResponse");
+			}
+			pack_instant_message(
+				gMessageSystem,
+				gAgent.getID(),
+				FALSE,
+				gAgent.getSessionID(),
+				im_info->mFromID,
+				my_name,
+				response,
+				IM_ONLINE,
+				IM_BUSY_AUTO_RESPONSE,
+				session_id);
+			gAgent.sendReliableMessage();
+		}
 	}
 	// </Ansariel>
 
