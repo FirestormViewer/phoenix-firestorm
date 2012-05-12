@@ -170,6 +170,9 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(onSelectServer, NULL);
 	LLComboBox* saved_login_choice_combo = sInstance->getChild<LLComboBox>("username_combo");
+	// <FS:Ansariel> Clear password field while typing (FIRE-6266)
+	saved_login_choice_combo->setFocusLostCallback(boost::bind(&usernameLostFocus, _1, this));
+	// </FS:Ansariel> Clear password field while typing (FIRE-6266)
 	saved_login_choice_combo->setCommitCallback(onSelectSavedLogin, NULL);
 	updateServerCombo();
 
@@ -238,6 +241,10 @@ void LLPanelLogin::addUsersWithFavoritesToUsername()
 
 void LLPanelLogin::addFavoritesToStartLocation()
 {
+	// <FS:Ansariel> Clear password field while typing (FIRE-6266)
+	getChild<LLLineEditor>("password_edit")->clear();
+	// </FS:Ansariel> Clear password field while typing (FIRE-6266)
+
 	// Clear the combo.
 	LLComboBox* combo = getChild<LLComboBox>("start_location_combo");
 	if (!combo) return;
