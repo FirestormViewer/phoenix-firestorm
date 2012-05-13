@@ -81,6 +81,7 @@
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
+#include "llnearbychathub.h"
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -639,6 +640,22 @@ void toggle_updater_service_active(const LLSD& new_value)
     }
 }
 
+// <FS:Ansariel> Change visibility of main chatbar if autohide setting is changed
+static void handleAutohideChatbarChanged(const LLSD& new_value)
+{
+	// Flip MainChatbarVisible when chatbar autohide setting changes. This
+	// will trigger LLNearbyChat::showDefaultChatBar() being called. Since we
+	// don't want to loose focus of the preferences floater when changing the
+	// autohide setting, we have to use the workaround via gFloaterView.
+	LLFloater* focus = gFloaterView->getFocusedFloater();
+	gSavedSettings.setBOOL("MainChatbarVisible", !new_value.asBoolean());
+	if (focus)
+	{
+		focus->setFocus(TRUE);
+	}
+}
+// </FS:Ansariel>
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -811,6 +828,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));
 	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
 	// NaCl End
+	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&handleAutohideChatbarChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
