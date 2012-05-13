@@ -5163,4 +5163,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="MediaFilterSharedMediaContentDomainAlwaysBlocked">Los medios compartidos del dominio [DOMAIN] nunca serán reproducidos.</string>
 	<string name="MediaFilterSharedMediaContentUrlAlwaysAllowed">Los medios compartidos de la URL [MEDIAURL] podrán ser siempre reproducidos.</string>
 	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">Los medios compartidos de la URL [MEDIAURL] nunca serán reproducidos.</string>
+	<string name="UnknownRegion">(región desconocida)</string>
+	<string name="UnknownPosition">(posición desconocida)</string>
 </strings>

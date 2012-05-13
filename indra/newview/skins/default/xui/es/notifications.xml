@@ -1268,13 +1268,13 @@ Por favor, selecciona sólo uno y vuelve a intentarlo.
 		No se han podido configurar las texturas de la región:
 La textura del terreno [TEXTURE_NUM] tiene una profundidad de bits inválida: [TEXTURE_BIT_DEPTH].
 
-Cambia la textura [TEXTURE_NUM] por una imagen de 24-bit y 1024x1024 o menor, y pulsa de nuevo &apos;Aplicar&apos; .
+Cambia la textura [TEXTURE_NUM] por una imagen de 24 bits y 1024x1024 o menor, y pulsa de nuevo &apos;Aplicar&apos; .
 	</notification>
 	<notification name="InvalidTerrainSize">
 		No se han podido configurar las texturas de la región:
 La textura del terreno [TEXTURE_NUM] es demasiado grande: [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Cambia la textura [TEXTURE_NUM] por una imagen de 24-bit y 1024x1024 o menor, y pulsa de nuevo &apos;Aplicar&apos; .
+Cambia la textura [TEXTURE_NUM] por una imagen de 24 bits y 1024x1024 o menor, y pulsa de nuevo &apos;Aplicar&apos; .
 	</notification>
 	<notification name="RawUploadStarted">
 		Ha empezado la subida. Dependiendo de la velocidad de tu conexión, llevará hasta dos minutos.
