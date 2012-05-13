@@ -2545,7 +2545,7 @@ Se permanecer aqui, você será desconectado.
 Se permanecer aqui, você será desconectado.
 	</notification>
 	<notification name="LoadWebPage">
-		Carregar a página [URL]?
+		Carregar a página [URL] ?
 
 [MESSAGE]
 

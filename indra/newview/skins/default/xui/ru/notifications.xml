@@ -2562,7 +2562,7 @@ http://secondlife.com/download.
 Если вы останетесь в этом регионе, вы выйдете из программы.
 	</notification>
 	<notification name="LoadWebPage">
-		Загрузить веб-страницу [URL]?
+		Загрузить веб-страницу [URL] ?
 
 [MESSAGE]
 

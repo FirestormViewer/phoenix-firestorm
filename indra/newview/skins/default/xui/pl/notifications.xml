@@ -2668,7 +2668,7 @@ Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 Nastąpi wylogowanie jeżeli zostaniesz w tym regionie.
 	</notification>
 	<notification name="LoadWebPage">
-		Załadować stronę [URL]?
+		Załadować stronę [URL] ?
 
 [MESSAGE]
 

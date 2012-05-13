@@ -1432,7 +1432,7 @@ Hvis du ikke forlader regionen, vil du blive logget af.
 Hvis du ikke forlader regionen, vil du blive logget af.
 	</notification>
 	<notification name="LoadWebPage">
-		Indlæas websiden [URL]?
+		Indlæas websiden [URL] ?
 
 [MESSAGE]
 

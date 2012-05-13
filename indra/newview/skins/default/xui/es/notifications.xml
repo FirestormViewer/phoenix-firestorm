@@ -2671,7 +2671,7 @@ Si permaneces en esta región serás desconectado.
 Si permaneces en esta región serás desconectado.
 	</notification>
 	<notification name="LoadWebPage">
-		¿Cargar página web [URL]?
+		¿Cargar página web [URL] ?
 
 [MESSAGE]
 

@@ -2519,7 +2519,7 @@ If you stay in this region you will be logged out.
 If you stay in this region you will be logged out.
 	</notification>
 	<notification name="LoadWebPage">
-		載入網頁 [URL]?
+		載入網頁 [URL] ?
 
 [MESSAGE]
 
