@@ -1237,13 +1237,13 @@ Veuillez ne sélectionner qu&apos;un seul objet.
 		Impossible de definir les textures de la région :
 La texture du terrain [TEXTURE_NUM] a une profondeur invalide ([TEXTURE_BIT_DEPTH]).
 
-Remplacer la texture [TEXTURE_NUM] avec une image de 24 bits, 512 X 512, ou plus petite, puis cliquez à nouveau sur Appliquer.
+Remplacer la texture [TEXTURE_NUM] avec une image de 24 bits, 1024 X 1024, ou plus petite, puis cliquez à nouveau sur Appliquer.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Impossible de definir les textures de la région :
 La texture du terrain [TEXTURE_NUM] est trop volumineuse ([TEXTURE_SIZE_X] X [TEXTURE_SIZE_Y]).
 
-Remplacer la texture [TEXTURE_NUM] avec une image de 24 bits, 512 X 512, ou plus petite, puis cliquez à nouveau sur Appliquer.
+Remplacer la texture [TEXTURE_NUM] avec une image de 24 bits, 1024 X 1024, ou plus petite, puis cliquez à nouveau sur Appliquer.
 	</notification>
 	<notification name="RawUploadStarted">
 		Le chargement a commencé. Cela va prendre une à deux minutes,

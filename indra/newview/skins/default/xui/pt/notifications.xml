@@ -1229,13 +1229,13 @@ Isso é realmente útil apenas para depuração.
 		Não foi possível definir texturas da região:
 Textura do Terreno [TEXTURE_NUM] tem uma profundidade de bits inválidos [TEXTURE_BIT_DEPTH].
 
-Substitua textura [TEXTURE_NUM], com uma imagem de 24-bit 512x512 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
+Substitua textura [TEXTURE_NUM], com uma imagem de 24-bit 1024x1024 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Não foi possível definir texturas da região:
 Textura do Terreno [TEXTURE_NUM] é muito grande em [TEXTURE_SIZE_X] x [TEXTURE_SIZE_Y].
 
-Substituir textura [TEXTURE_NUM], com uma imagem de 24-bit 512x512 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
+Substituir textura [TEXTURE_NUM], com uma imagem de 24-bit 1024x1024 ou menor e em seguida, clique em &apos;Aplicar&apos; novamente.
 	</notification>
 	<notification name="RawUploadStarted">
 		Upload iniciado. Pode levar uns 2 minutos, dependendo da sua velocidade de conexão.

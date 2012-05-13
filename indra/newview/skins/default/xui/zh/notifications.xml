@@ -1223,13 +1223,13 @@ Please select only one object and try again.
 		Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] has an invalid bit depth of [TEXTURE_BIT_DEPTH].
 
-Replace texture [TEXTURE_NUM] with a 24-bit 512x512 or smaller image then click &quot;Apply&quot; again.
+Replace texture [TEXTURE_NUM] with a 24-bit 1024x1024 or smaller image then click &quot;Apply&quot; again.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Couldn&apos;t set region textures:
 Terrain texture [TEXTURE_NUM] is too large at [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y].
 
-Replace texture [TEXTURE_NUM] with a 24-bit 512x512 or smaller image then click &quot;Apply&quot; again.
+Replace texture [TEXTURE_NUM] with a 24-bit 1024x1024 or smaller image then click &quot;Apply&quot; again.
 	</notification>
 	<notification name="RawUploadStarted">
 		上傳開始。將會花費約兩分鐘，這取決於你的連線速度。

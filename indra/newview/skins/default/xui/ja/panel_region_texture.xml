@@ -7,7 +7,7 @@
 		未知
 	</text>
 	<text name="detail_texture_text">
-		地形のテクスチャ （512x512、24ビット .tgaファイルが必要です）
+		地形のテクスチャ （1024x1024、24ビット .tgaファイルが必要です）
 	</text>
 	<text name="height_text_lbl">
 		1（低）

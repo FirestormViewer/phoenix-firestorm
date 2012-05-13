@@ -1277,13 +1277,13 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 		地域テクスチャを設定できませんでした：
 地形テクスチャ[TEXTURE_NUM]は、無効のビット深度[TEXTURE_BIT_DEPTH]です。
 
-テクスチャ[TEXTURE_NUM]を24ビット512x512かそれ以下のイメージと交換し、「適用」を再度クリックしてください。
+テクスチャ[TEXTURE_NUM]を24ビット1024x1024かそれ以下のイメージと交換し、「適用」を再度クリックしてください。
 	</notification>
 	<notification name="InvalidTerrainSize">
 		地域テクスチャを設定できませんでした：
 地形テクスチャ「 [TEXTURE_NUM] 」は、[TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y] では大きすぎます。
 
-「 [TEXTURE_NUM] 」を 24 ビット 512x512 かそれ以下のイメージと交換し、「適用」を再度クリックしてください。
+「 [TEXTURE_NUM] 」を 24 ビット 1024x1024 かそれ以下のイメージと交換し、「適用」を再度クリックしてください。
 	</notification>
 	<notification name="RawUploadStarted">
 		アップロードを開始しました。 接続速度によっては、最大 2 分間かかります。

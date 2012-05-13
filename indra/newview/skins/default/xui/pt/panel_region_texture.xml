@@ -7,7 +7,7 @@
 		desconhecido
 	</text>
 	<text name="detail_texture_text" width="380">
-		Texturas de Terreno (requer 512x512, arquivos 24 bit .tga )
+		Texturas de Terreno (requer 1024x1024, arquivos 24 bit .tga )
 	</text>
 	<text name="height_text_lbl">
 		1 (baixo)

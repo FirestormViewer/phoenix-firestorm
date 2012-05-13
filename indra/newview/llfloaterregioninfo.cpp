@@ -1086,7 +1086,10 @@ BOOL LLPanelRegionTerrainInfo::validateTextureSizes()
 			return FALSE;
 		}
 
-		if (width > 512 || height > 512)
+		// <FS:Ansariel> Allow terrain textures up to 1024x1024 pixels
+		//               as in Phoenix (FIRE-2319)
+		//if (width > 512 || height > 512)
+		if (width > 1024 || height > 1024)
 		{
 
 			LLSD args;

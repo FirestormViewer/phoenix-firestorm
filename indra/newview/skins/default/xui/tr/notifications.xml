@@ -1241,13 +1241,13 @@ Lütfen sadece bir nesne seçin ve tekrar deneyin.
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu geçersiz bir bit derinliğine ([TEXTURE_BIT_DEPTH]) sahip.
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 512x512 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Bölge dokuları ayarlanamadı:
 [TEXTURE_NUM] numaralı yüzey dokusu çok büyük ([TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y]).
 
-[TEXTURE_NUM] numaralı dokuyu 24 bit 512x512 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
+[TEXTURE_NUM] numaralı dokuyu 24 bit 1024x1024 veya daha küçük bir resimle değiştirin ve &quot;Uygula&quot; seçeneğini yeniden tıklatın.
 	</notification>
 	<notification name="RawUploadStarted">
 		Karşıya yükleme başlatıldı. Bağlantı hızına bağlı olarak iki dakika kadar sürebilir.

@@ -1259,13 +1259,13 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		Die Regionstexturen konnten nicht festgelegt werden:
 Die Terraintextur [TEXTURE_NUM] hat eine ungültige Bit-Tiefe [TEXTURE_BIT_DEPTH].
 
-Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 512x512 und 24 Bit und klicken Sie dann erneut auf „Übernehmen“.
+Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 und 24 Bit und klicken Sie dann erneut auf „Übernehmen“.
 	</notification>
 	<notification name="InvalidTerrainSize">
 		Die Regionstexturen konnten nicht festgelegt werden:
 Die Terraintextur [TEXTURE_NUM] ist mit [TEXTURE_SIZE_X]x[TEXTURE_SIZE_Y] zu groß.
 
-Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 512x512 und 24 Bit und klicken Sie dann erneut auf „Übernehmen“.
+Ersetzen Sie die Textur [TEXTURE_NUM] mit einer Bilddatei von maximal 1024x1024 und 24 Bit und klicken Sie dann erneut auf „Übernehmen“.
 	</notification>
 	<notification name="RawUploadStarted">
 		Hochladen gestartet. Je nach Verbindungsgeschwindigkeit kann der Vorgang bis zu 2 Minuten dauern.

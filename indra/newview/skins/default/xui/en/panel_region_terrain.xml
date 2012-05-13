@@ -85,7 +85,7 @@
      left="10"
      name="detail_texture_text"
      top="110"
-     width="300">
+     width="450">
         Terrain Textures (requires 512x512, 24 bit .tga files)
     </text>
     <texture_picker

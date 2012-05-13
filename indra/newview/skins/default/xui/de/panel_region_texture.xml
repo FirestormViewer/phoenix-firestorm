@@ -7,7 +7,7 @@
 		unbekannt
 	</text>
 	<text name="detail_texture_text">
-		Terraintexturen (erfordert 512x512, 24-Bit-.tga-Dateien)
+		Terraintexturen (erfordert 1024x1024, 24-Bit-.tga-Dateien)
 	</text>
 	<text name="height_text_lbl">
 		1 (niedrig)
