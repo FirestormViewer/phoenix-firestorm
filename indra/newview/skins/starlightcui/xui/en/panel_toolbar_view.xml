@@ -155,6 +155,7 @@
 
   <!-- The chat bar / stand fly stack container -->
   <layout_panel name="chat_bar_stand_fly_container_panel"
+                min_dim="200"
                 auto_resize="false"
                 user_resize="true"
                 height="60"
