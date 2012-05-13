@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Umowa" name="Covenant">
 	<string name="can_resell">
-		Posiadłości kupione w tym Regionie mogą być odsprzedane.
+		Posiadłości kupione w Regionie mogą być odsprzedane.
 	</string>
 	<string name="can_not_resell">
-		Posiadłości kupione w tym Regionie nie mogą być odsprzedane.
+		Posiadłości kupione w Regionie nie mogą być odsprzedane.
 	</string>
 	<string name="can_change">
-		Posiadłości kupione w tym Regionie mogą być łączone i dzielone.
+		Posiadłości kupione w Regionie mogą być łączone
+i dzielone.
 	</string>
 	<string name="can_not_change">
-		Posiadłości kupione w tym Regionie nie mogą być łączone i
-dzielone.
+		Posiadłości kupione w Regionie nie mogą być łączone
+i dzielone.
 	</string>
 	<text name="estate_section_lbl">
 		Majątek
@@ -64,7 +65,7 @@ wszystkich posiadłościach majątku.
 		Posiadłość kupiona w tym Regionie nie może być odsprzedana.
 	</text>
 	<text name="changeable_lbl">
-		Podziel:
+		Dzielenie:
 	</text>
 	<text name="changeable_clause">
 		Posiadłość kupiona w tym Regionie nie może być

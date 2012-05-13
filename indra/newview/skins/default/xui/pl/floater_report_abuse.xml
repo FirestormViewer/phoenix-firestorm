@@ -18,7 +18,7 @@
 	</text>
 	<button name="pick_btn" tool_tip="Wybór obiektu - wybierz obiekt, którego dotyczy raport"/>
 	<text name="object_name_label">
-		Nazwa obiektu:
+		Obiekt:
 	</text>
 	<text name="owner_name_label">
 		Właściciel:
@@ -75,7 +75,7 @@
 		Podsumowanie:
 	</text>
 	<text name="dscr_title">
-		Szczegóły:
+		Detale:
 	</text>
 	<text name="bug_aviso">
 		Bądź tak dokładny/a jak to tylko możliwe

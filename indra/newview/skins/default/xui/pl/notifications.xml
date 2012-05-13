@@ -2820,19 +2820,19 @@ Wybierz Zaakceptuj żeby zacząć czat albo Odmów żeby nie przyjąć zaproszen
 		Tworzymy kanał głosu dla Ciebie. To może potrwać minutę.
 	</notification>
 	<notification name="VoiceEffectsExpired">
-		Subskrypcja jednego lub więcej Voice Morphów wygasła.
+		Subskrypcja jednego lub więcej Przekształceń Głosu wygasła.
 [[URL] Kliknij tutaj] oby odnowić subskrypcję.
 	</notification>
 	<notification name="VoiceEffectsExpiredInUse">
-		Czas aktywności Voice Morph wygasł, normalne ustawienia Twojego głosu zostały zastosowane.
+		Czas aktywności Przekształcenia Głosu wygasł, normalne ustawienia Twojego głosu zostały zastosowane.
 [[URL] Kliknij tutaj] aby odnowić subskrypcję.
 	</notification>
 	<notification name="VoiceEffectsWillExpire">
-		Jedno lub więcej z Twoich Voice Morph wygaśnie za mniej niż [INTERVAL] dni.
+		Jedno lub więcej z Twoich Przekształceń Głosu wygaśnie za mniej niż [INTERVAL] dni.
 [[URL] Klinij tutaj] aby odnowić subskrypcję.
 	</notification>
 	<notification name="VoiceEffectsNew">
-		Nowe Voice Morph są dostępne!
+		Nowe Przekształcenia Głosu są dostępne!
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
 		Nie masz dostępu do posiadłości, nie należysz do właściwej grupy.

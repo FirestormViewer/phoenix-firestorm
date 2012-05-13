@@ -61,7 +61,7 @@
 		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
-		<menu_item_check label="Filtry głosowe" name="ShowVoice"/>
+		<menu_item_check label="Przekształcanie głosu" name="ShowVoice"/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
 	</menu>
 	<menu label="Świat" name="World">

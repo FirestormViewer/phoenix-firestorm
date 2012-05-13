@@ -78,6 +78,7 @@
 			</text>
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
 		</panel>
 		<panel name="ChatFirestorm">
 			<text name="chat_and_im_enhancements">

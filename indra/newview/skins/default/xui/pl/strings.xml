@@ -4581,7 +4581,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Compass_Tooltip">
 		Kompas
 	</string>
-	<string name="Destinations of interest">
+	<string name="Command_Destinations_Tooltip">
 		Punkty, jakie mogą być interesujące
 	</string>
 	<string name="Command_Gestures_Tooltip">
@@ -4799,5 +4799,11 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="MediaFilterSharedMediaContentUrlAlwaysBlocked">
 		Współdzielone Media z URL [MEDIAURL] zawsze będą blokowane.
+	</string>
+	<string name="UnknownRegion">
+		(nieznany region)
+	</string>
+	<string name="UnknownPosition">
+		(nieznana pozycja)
 	</string>
 </strings>

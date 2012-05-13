@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Miejsca" name="voice_effects" title="VOICE MORPHING">
+<floater label="Miejsca" name="voice_effects" title="PRZEKSZTAŁCANIE GŁOSU">
 	<string name="no_voice_effect">
-		(Bez Voice Morpha)
+		(Bez Przekształcania)
 	</string>
 	<string name="active_voice_effect">
 		(Aktywny)
@@ -44,6 +44,6 @@
 	</text>
 	<scroll_list name="voice_effect_list" tool_tip="Nagraj próbkę swojego głosu, a następnie kliknij na efekt aby odsłuchać podgląd.">
 		<scroll_list.columns label="Nazwa głosu" name="name"/>
-		<scroll_list.columns label="Subskrypcja wygasa" name="expires"/>
+		<scroll_list.columns label="Wygasa" name="expires"/>
 	</scroll_list>
 </floater>
