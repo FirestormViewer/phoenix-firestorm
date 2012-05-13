@@ -534,7 +534,8 @@ LLPanelPeople::LLPanelPeople()
  		mGroupsGearButton(NULL),
 		mRecentGearButton(NULL),
 		mMiniMap(NULL),
-		mRadarList(NULL)
+		mRadarList(NULL),
+		mRadarLastRequestTime(0.f)
 {
 	mFriendListUpdater = new LLFriendListUpdater(boost::bind(&LLPanelPeople::updateFriendList,	this));
 	mNearbyListUpdater = new LLNearbyListUpdater(boost::bind(&LLPanelPeople::updateNearbyList,	this));
