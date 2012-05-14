@@ -31,6 +31,7 @@
        height="384"
        width="263">
       <text name="physics_breast_updown_not_available"
+       visibility_control="AvatarSex"
        follows="top|left"
        layout="topleft"
        top="0"
@@ -78,6 +79,7 @@ for female avatars.
        height="384"
        width="263">
       <text name="physics_breast_inout_not_available"
+       visibility_control="AvatarSex"
        follows="top|left"
        layout="topleft"
        top="0"
@@ -126,6 +128,7 @@ for female avatars.
        height="384"
        width="263">
       <text name="physics_breast_leftright_not_available"
+       visibility_control="AvatarSex"
        follows="top|left"
        layout="topleft"
        top="0"
