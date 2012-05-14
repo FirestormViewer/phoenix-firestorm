@@ -81,7 +81,6 @@
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
-#include "llnearbychathub.h"
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
