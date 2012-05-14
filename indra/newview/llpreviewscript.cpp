@@ -552,7 +552,7 @@ bool LLScriptEdCore::loadScriptText(const std::string& filename)
 	return true;
 }
 
-bool LLScriptEdCore::writeToFile(const std::string& filename)
+bool LLScriptEdCore::writeToFile(const std::string& filename, bool unprocessed)
 {
 	LLFILE* fp = LLFile::fopen(filename, "wb");
 	if (!fp)
@@ -567,7 +567,11 @@ bool LLScriptEdCore::writeToFile(const std::string& filename)
 	}
 
 	// NaCl - LSL Preprocessor
-	std::string utf8text = this->getScriptText();
+	std::string utf8text;
+	if(!unprocessed)
+		utf8text = this->getScriptText();
+	else
+		utf8text = mEditor->getText();
 	// NaCl End
 
 	// Special case for a completely empty script - stuff in one space so it can store properly.  See SL-46889
@@ -589,7 +593,7 @@ void LLScriptEdCore::sync()
 	if (LLFile::stat(tmp_file, &s) == 0) // file exists
 	{
 		if (mLiveFile) mLiveFile->ignoreNextUpdate();
-		writeToFile(tmp_file);
+		writeToFile(tmp_file,gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
 	}
 }
 
@@ -971,16 +975,6 @@ void LLScriptEdCore::doSaveComplete( void* userdata, BOOL close_after_save )
 
 void LLScriptEdCore::openInExternalEditor()
 {
-	delete mLiveFile; // deletes file
-
-	// Save the script to a temporary file.
-	std::string filename = mContainer->getTmpFileName();
-	writeToFile(filename);
-
-	// Start watching file changes.
-	mLiveFile = new LLLiveLSLFile(filename, boost::bind(&LLScriptEdContainer::onExternalChange, mContainer, _1));
-	mLiveFile->addToEventTimer();
-
 	// Open it in external editor.
 	{
 		LLExternalEditor ed;
@@ -1002,6 +996,20 @@ void LLScriptEdCore::openInExternalEditor()
 			LLNotificationsUtil::add("GenericAlert", LLSD().with("MESSAGE", msg));
 			return;
 		}
+
+		// FS:TS FIRE-6122: Script contents clobbered when Edit button
+		//  clicked with preprocessor active. Fix from NaCl (code moved
+		//  from above).
+		delete mLiveFile; // deletes file
+
+		// Save the script to a temporary file.
+		std::string filename = mContainer->getTmpFileName();
+		writeToFile(filename,gSavedSettings.getBOOL("_NACL_LSLPreprocessor"));
+
+		// Start watching file changes.
+		mLiveFile = new LLLiveLSLFile(filename, boost::bind(&LLScriptEdContainer::onExternalChange, mContainer, _1));
+		mLiveFile->addToEventTimer();
+		// FS:TS FIRE-6122 end
 
 		status = ed.run(filename);
 		if (status != LLExternalEditor::EC_SUCCESS)
@@ -1262,6 +1270,7 @@ bool LLScriptEdContainer::onExternalChange(const std::string& filename)
 	}
 
 	// Disable sync to avoid recursive load->save->load calls.
+	mScriptEd->doSave(FALSE);
 	saveIfNeeded(false);
 	return true;
 }
@@ -1475,7 +1484,7 @@ void LLPreviewLSL::saveIfNeeded(bool sync /*= true*/)
 	std::string filepath = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,asset_id.asString());
 	std::string filename = filepath + ".lsl";
 
-	mScriptEd->writeToFile(filename);
+	mScriptEd->writeToFile(filename,false);
 	
 	if (sync)
 	{
@@ -2237,7 +2246,7 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 	mItem->setAssetUUID(asset_id);
 	mItem->setTransactionID(tid);
 
-	mScriptEd->writeToFile(filename);
+	mScriptEd->writeToFile(filename,false);
 
 	if (sync)
 	{
