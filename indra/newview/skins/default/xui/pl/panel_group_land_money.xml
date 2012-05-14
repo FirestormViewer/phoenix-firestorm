@@ -27,10 +27,10 @@
 	</scroll_list>
 	<button label="Mapa" label_selected="Mapa" name="map_button"/>
 	<text name="total_land_in_use_label">
-		Używane posiadłości:
+		Używane posiadł.:
 	</text>
 	<text name="land_available_label">
-		Dostępne posiadłości:
+		Dostępne posiadł.:
 	</text>
 	<text name="total_contributed_land_label">
 		Kontrybucje:

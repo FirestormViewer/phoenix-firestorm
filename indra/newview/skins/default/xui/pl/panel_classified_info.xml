@@ -23,7 +23,7 @@
 			<text name="category_label" value="Kategoria:"/>
 			<text name="creation_date_label" value="Data stworzenia:"/>
 			<text_editor name="creation_date" tool_tip="Data stworzenia"/>
-			<text name="price_for_listing_label" value="Cena za wyświetlenie:"/>
+			<text name="price_for_listing_label" value="Cena wyświetlenia:"/>
 			<text_editor name="price_for_listing" tool_tip="Cena za umieszczenie reklamy."/>
 			<layout_stack name="descr_stack">
 				<layout_panel name="clickthrough_layout_panel">

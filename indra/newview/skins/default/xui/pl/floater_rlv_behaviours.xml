@@ -3,15 +3,15 @@
   <tab_container name="behaviour_tab">
     <panel label="Ograniczenia" name="behaviour_panel">
       <scroll_list name="behaviour_list">
-        <scroll_list.columns label="Ograniczenie" name="behaviour" />
-        <scroll_list.columns label="Nazwa obiektu" name="issuer" />
+        <scroll_list.columns label="Restrykcja" name="behaviour" />
+        <scroll_list.columns label="Obiekt" name="issuer" />
       </scroll_list>
     </panel>
     <panel label="Wyjątki" name="exception_panel">
       <scroll_list name="exception_list">
-        <scroll_list.columns label="Ograniczenie" name="behaviour" />
+        <scroll_list.columns label="Restrykcja" name="behaviour" />
         <scroll_list.columns label="Opcja" name="option" />
-        <scroll_list.columns label="Nazwa obiektu" name="issuer" />
+        <scroll_list.columns label="Obiekt" name="issuer" />
       </scroll_list>
     </panel>
   </tab_container>

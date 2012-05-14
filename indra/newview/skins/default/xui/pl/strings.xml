@@ -2712,7 +2712,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Rozszczepienie
 	</string>
 	<string name="Close Set Eyes">
-		Oczy blisko ustawione
+		Wąski
 	</string>
 	<string name="Closed">
 		Zamknięte
@@ -2724,10 +2724,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Zamknięte z przodu
 	</string>
 	<string name="Closed Left">
-		Lewe oko zamknięte
+		Zamknięte z lewej
 	</string>
 	<string name="Closed Right">
-		Prawe oko zamknięte
+		Zamknięte z prawej
 	</string>
 	<string name="Coin Purse">
 		Portmonetka
@@ -2745,7 +2745,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Kącik w górę
 	</string>
 	<string name="Creased">
-		Pognieciony
+		Z fałdami
 	</string>
 	<string name="Crooked Nose">
 		Skrzywienie nosa
@@ -2850,7 +2850,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Detale twarzy
 	</string>
 	<string name="Far Set Eyes">
-		Oczy szeroko rozstawione
+		Szeroki
 	</string>
 	<string name="Fat Lips">
 		Grube usta
@@ -2868,7 +2868,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Rozszerzane rękawy
 	</string>
 	<string name="Flat">
-		Płaskość
+		Płaskie
 	</string>
 	<string name="Flat Butt">
 		Płaskie pośladki
@@ -2979,7 +2979,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Wysokość
 	</string>
 	<string name="High">
-		Wysoka
+		Wysoko
 	</string>
 	<string name="High Heels">
 		Wysokie obcasy
@@ -3141,7 +3141,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Kolor szminki
 	</string>
 	<string name="Long">
-		Długość
+		Długie
 	</string>
 	<string name="Long Head">
 		Długa głowa
@@ -3492,13 +3492,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Szeroka spódnica
 	</string>
 	<string name="Pop Left Eye">
-		Wybałuszone lewe oko
+		Wybałuszone lewe
 	</string>
 	<string name="Pop Right Eye">
-		Wybałuszone prawe oko
+		Wybałuszone prawe
 	</string>
 	<string name="Puffy">
-		Opuchnięty
+		Opuchnięte
 	</string>
 	<string name="Puffy Eyelids">
 		Spuchnięte powieki
@@ -3552,10 +3552,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Przednie usunięcie włosów
 	</string>
 	<string name="Shear Left Up">
-		Usunięcie od lewej strony do góry
+		Usunięcie od lewej
 	</string>
 	<string name="Shear Right Up">
-		Usunięcie od prawej strony do góry
+		Usunięcie od prawej
 	</string>
 	<string name="Sheared Back">
 		Tylne usunięcie włosów
@@ -3753,7 +3753,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Obcisłe spodnie
 	</string>
 	<string name="Tight Shirt">
-		Obcisły podkoszulek
+		Obcisła koszulka
 	</string>
 	<string name="Tight Skirt">
 		Wąska spódnica
@@ -3780,7 +3780,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Nieprzyłączone
 	</string>
 	<string name="Uncreased">
-		Niepogniecione
+		Bez fałd
 	</string>
 	<string name="Underbite">
 		Przodozgryz

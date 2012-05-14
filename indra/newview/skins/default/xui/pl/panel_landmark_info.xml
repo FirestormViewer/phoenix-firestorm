@@ -23,11 +23,11 @@
 	<panel name="landmark_info_panel">
 		<text name="owner_label" value="Właściciel:"/>
 		<text name="creator_label" value="Twórca:"/>
-		<text name="created_label" value="Stworzone:"/>
+		<text name="created_label" value="Data:"/>
 	</panel>
 	<panel name="landmark_edit_panel">
 		<text name="title_label" value="Tytuł:"/>
 		<text name="notes_label" value="Moje notatki:"/>
-		<text name="folder_label" value="Lokalizacja landmarka:"/>
+		<text name="folder_label" value="Lokalizacja:"/>
 	</panel>
 </panel>

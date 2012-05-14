@@ -11,7 +11,7 @@
     </text>
     <check_box label="Dołącz nazwę konta Second Life" name="checkSendName" />
     <text name="textSendName">
-        (używane, aby zapytać o dodatkowe informacje w razie potrzeby)
+        (aby zapytać o dodatkowe info w razie potrzeby)
     </text>
     <text name="textInformation1">
         Dopóki nie określono inaczej, to raport o błędach zawiera tylko informacje związane z awarią.

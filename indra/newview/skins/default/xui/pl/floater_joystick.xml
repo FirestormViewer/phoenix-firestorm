@@ -18,7 +18,7 @@
 		Kontroluj:
 	</text>
 	<check_box label="Awatara" name="JoystickAvatarEnabled"/>
-	<check_box label="Budowanie" name="JoystickBuildEnabled"/>
+	<check_box label="Budow." name="JoystickBuildEnabled"/>
 	<check_box label="Kamerę latając" name="JoystickFlycamEnabled"/>
 	<stat_view label="Monitor Joysticka" name="axis_view">
 		<stat_bar label="Oś 0" name="axis0"/>

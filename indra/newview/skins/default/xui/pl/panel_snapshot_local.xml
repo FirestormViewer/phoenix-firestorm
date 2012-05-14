@@ -6,8 +6,8 @@
     </combo_box>
     <layout_stack name="local_image_params_ls">
         <layout_panel name="local_image_size_lp">
-            <spinner label="Szerokość" name="local_snapshot_width"/>
-            <spinner label="Wysokość" name="local_snapshot_height"/>
+            <spinner label="Szer." name="local_snapshot_width"/>
+            <spinner label="Wys." name="local_snapshot_height"/>
             <check_box label="Zachowaj proporcje" name="local_keep_aspect_check"/>
         </layout_panel>
         <layout_panel name="local_image_format_quality_lp">

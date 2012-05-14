@@ -41,13 +41,13 @@
 				<text name="perm_modify">
 					Możesz:
 				</text>
-				<check_box label="Modyfikować" name="CheckOwnerModify"/>
-				<check_box label="Kopiować" name="CheckOwnerCopy"/>
-				<check_box label="Transferować" name="CheckOwnerTransfer"/>
+				<check_box label="Modyfikacja" name="CheckOwnerModify"/>
+				<check_box label="Kopiowanie" name="CheckOwnerCopy"/>
+				<check_box label="Transferowanie" name="CheckOwnerTransfer"/>
 				<text name="AnyoneLabel">
 					Każdy:
 				</text>
-				<check_box label="Kopiować" name="CheckEveryoneCopy"/>
+				<check_box label="Kopiowanie" name="CheckEveryoneCopy"/>
 				<text name="GroupLabel">
 					Grupa:
 				</text>
@@ -55,9 +55,9 @@
 				<text name="NextOwnerLabel">
 					Nast. właściciel:
 				</text>
-				<check_box label="Modyfikować" name="CheckNextOwnerModify"/>
-				<check_box label="Kopiować" name="CheckNextOwnerCopy"/>
-				<check_box label="Transferować" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddawać lub sprzedawać ten obiekt"/>
+				<check_box label="Modyfikacja" name="CheckNextOwnerModify"/>
+				<check_box label="Kopiowanie" name="CheckNextOwnerCopy"/>
+				<check_box label="Transferowanie" name="CheckNextOwnerTransfer" tool_tip="Następny właściciel może oddawać lub sprzedawać ten obiekt"/>
 			</panel>
 			<check_box label="Na sprzedaż" name="CheckPurchase"/>
 			<combo_box name="combobox sale copy">

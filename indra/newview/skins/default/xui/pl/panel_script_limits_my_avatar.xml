@@ -7,7 +7,7 @@
 		Ładowanie...
 	</text>
 	<scroll_list name="scripts_list">
-		<scroll_list.columns label="Rozmiar (kb)" name="size"/>
+		<scroll_list.columns label="Rozm. (kb)" name="size"/>
 		<scroll_list.columns label="URLe" name="urls"/>
 		<scroll_list.columns label="Nazwa obiektu" name="name"/>
 		<scroll_list.columns label="Lokalizacja" name="location"/>

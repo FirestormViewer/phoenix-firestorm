@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="whitelist_entry" title="BIAŁA LISTA">
 	<text name="media_label">
-		Wprowadź URL lub wzorzec URL dla dodania do listy dozwolonych domen
+		Wprowadź URL / wzorzec dla dodania do listy dozwolonych domen
 	</text>
 	<line_editor name="whitelist_entry" tool_tip="Wprowadź URL lub wzorzec URL do Białej Listy"/>
 	<button label="OK" name="ok_btn"/>

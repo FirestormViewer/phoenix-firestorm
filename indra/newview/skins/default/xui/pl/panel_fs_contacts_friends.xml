@@ -19,6 +19,6 @@
 	<button label="Dodaj..." name="add_btn" tool_tip="Zapytaj tego Rezydenta, czy nie chce zostać Twoim znajomym"/>
 	<button label="Zest. Kont." name="lgg_fg_openFG" tool_tip="Pokaż Twoich znajomych podzielonych na grupy"/>
 	<text name="friend_count">
-	 Znajomych: ...
+	 Znajomi: ...
 	</text>
 </panel>

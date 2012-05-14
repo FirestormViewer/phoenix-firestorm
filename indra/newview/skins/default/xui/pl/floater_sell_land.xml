@@ -18,7 +18,7 @@
 				1. Ustal cenę:
 			</text>
 			<text name="price_text">
-				Wybierz właściwą cenę za tą posiadłość.
+				Wybierz cenę za posiadłość.
 			</text>
 			<text name="price_per_m">
 				([PER_METER]L$ za m²)
@@ -43,11 +43,11 @@
 			</text>
 			<radio_group name="sell_objects">
 				<radio_item label="Nie, zatrzymaj obiekty" name="no"/>
-				<radio_item label="Tak, sprzedaj obiekty razem z posiadłością" name="yes"/>
+				<radio_item label="Tak, sprzedaj razem z posiadłością" name="yes"/>
 			</radio_group>
 			<button label="Pokaż obiekty" name="show_objects"/>
 			<text name="nag_message_label">
-				PAMIĘTAJ: Sprzedaż jest nieodwracalna.
+				UWAGA: Sprzedaży nie można cofnąć.
 			</text>
 			<button label="Wystaw ziemię na sprzedaż" name="sell_btn"/>
 			<button label="Anuluj" name="cancel_btn"/>

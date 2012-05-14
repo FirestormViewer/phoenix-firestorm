@@ -8,7 +8,7 @@ Pozycja Twojej reklamy na liście zależy od tego, jak dużo za nią zapłacisz.
 Lepiej opłacone reklamy pojawiają się na szczycie listy i wyżej w wynikach wyszukiwania.
     </text>
     <text name="price_text">
-        Cena za reklamę:
+        Ustal cenę:
     </text>
     <button label="Anuluj" name="cancel_btn" />
 </floater>

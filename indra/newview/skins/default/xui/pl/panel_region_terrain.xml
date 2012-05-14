@@ -25,25 +25,25 @@
 		Mierzone w metrach, wartość Nisko jest maksymalną wys. tekstury #1, a wartość Wysoko jest minimalną wys. tekstury #4.
 	</text>
 	<text name="height_text_lbl6">
-		Północny zachód
+		Północny zach.
 	</text>
 	<text name="height_text_lbl7">
-		Północny wschód
+		Północny wsch.
 	</text>
 	<spinner label="Nisko" name="height_start_spin_1" />
 	<spinner label="Nisko" name="height_start_spin_3" />
-	<spinner label="Wysoko" name="height_range_spin_1" />
-	<spinner label="Wysoko" name="height_range_spin_3" />
+	<spinner label="Wys." name="height_range_spin_1" />
+	<spinner label="Wys." name="height_range_spin_3" />
 	<text name="height_text_lbl8">
-		Południowy zachód
+		Południowy zach.
 	</text>
 	<text name="height_text_lbl9">
-		Południowy wschód
+		Południowy wsch.
 	</text>
 	<spinner label="Nisko" name="height_start_spin_0" />
 	<spinner label="Nisko" name="height_start_spin_2" />
-	<spinner label="Wysoko" name="height_range_spin_0" />
-	<spinner label="Wysoko" name="height_range_spin_2" />
+	<spinner label="Wys." name="height_range_spin_0" />
+	<spinner label="Wys." name="height_range_spin_2" />
 	<button label="Zapisz surowy teren..." name="download_raw_btn" tool_tip="Dostępne tylko dla właścicieli Majątku, nie dla zarządców" />
 	<button label="Załaduj surowy teren..." name="upload_raw_btn" tool_tip="Dostępne tylko dla właścicieli Majątku, nie dla zarządców" />
 	<button label="Ustal teren" name="bake_terrain_btn" tool_tip="(Bake Terrain) Zapamiętaj obecny teren jako punkt odniesienia dla limitów podnoszenia i opuszczania" />
