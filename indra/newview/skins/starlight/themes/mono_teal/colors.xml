@@ -391,13 +391,13 @@
      reference="White_50" />
     <color
      name="ColorPaletteEntry01"
-     reference="Black" />
+     value="0 0 0 1" />
     <color
      name="ColorPaletteEntry02"
      reference="Gray" />
     <color
      name="ColorPaletteEntry03"
-     value="0.3344 0.5456 0.5159 1" />
+     value="0.5 0 0 1" />
     <color
      name="ColorPaletteEntry04"
      value="0.5 0.5 0 1" />
@@ -433,34 +433,34 @@
      value="0.5 0.25 0 1" />
     <color
      name="ColorPaletteEntry15"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry16"
-     reference="LtYellow" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry17"
-     reference="LtGreen" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry18"
-     reference="LtGray" />
+     value="0.75 0.75 0.75 1" />
     <color
      name="ColorPaletteEntry19"
-     reference="Red" />
+     value="1 0 0 1" />
     <color
      name="ColorPaletteEntry20"
      reference="Yellow" />
     <color
      name="ColorPaletteEntry21"
-     reference="Green" />
+     value="0 1 0 1" />
     <color
      name="ColorPaletteEntry22"
      value="0 1 1 1" />
     <color
      name="ColorPaletteEntry23"
-     reference="Blue" />
+     value="0 0 1 1" />
     <color
      name="ColorPaletteEntry24"
-     reference="Purple" />
+     value="1 0 1 1" />
     <color
      name="ColorPaletteEntry25"
      value="1 1 0.5 1" />
@@ -481,10 +481,10 @@
      value="1 0.5 0 1" />
     <color
      name="ColorPaletteEntry31"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ColorPaletteEntry32"
-     reference="White" />
+     value="1 1 1 1" />
     <color
      name="ComboListBgColor"
      reference="DkGray" />
@@ -599,15 +599,6 @@
     <color
      name="InventoryFocusOutlineColor"
      reference="White_25" />
-    <color
-     name="InventoryItemEnabledColor"
-     reference="LtGray" />
-    <color
-     name="InventoryItemHighlightBgColor"
-     reference="EmphasisColor_35" />
-    <color
-     name="InventoryItemHighlightFgColor"
-     reference="White" />
     <color
      name="InventoryItemSuffixColor"
      reference="White_25" />
@@ -771,6 +762,9 @@
      name="PanelFocusBackgroundColor"
      reference="Transparent" />
     <color
+     name="PanelNotificationBackground"
+     value="1 0.3 0.3 0" />
+    <color
      name="ParcelHoverColor"
      reference="White" />
     <color
@@ -870,6 +864,9 @@
      name="TitleBarFocusColor"
      reference="White_10" />
     <color
+     name="ToastBackground"
+     value="0.3 0.3 0.3 0" />
+    <color
      name="ToolTipTextColor"
      reference="SL-White" />
     <color
@@ -946,6 +943,15 @@
 	 reference="Red" />
 	 
     <!-- Colours for Firestorm - same for all themes -->
+    <color
+     name="InventoryItemEnabledColor"
+     reference="LtGray" />
+    <color
+     name="InventoryItemHighlightBgColor"
+     reference="EmphasisColor_35" />
+    <color
+     name="InventoryItemHighlightFgColor"
+     reference="White" />
     <color
      name="SchemeLightest"
      reference="EmphasisColor" />	
