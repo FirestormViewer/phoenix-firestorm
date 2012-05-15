@@ -4277,13 +4277,22 @@ void LLViewerWindow::resetSnapshotLoc()
 // static
 void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 {
-	LLCoordWindow size;
-	LLCoordWindow new_size(new_width, new_height);
-	gViewerWindow->getWindow()->getSize(&size);
-	if ( size != new_size )
-	{
-		gViewerWindow->getWindow()->setSize(new_size.convert());
-	}
+	// FS:TS FIRE-6182: Set Window Size sets random size each time
+	// Don't use LLCoordWindow, since the chosen resolution winds up
+	// with position dependent numbers added each time. Instead, we use
+	// LLCoordScreen, which avoids this. Fix from Niran's Viewer.
+	// LLCoordWindow size;
+	// LLCoordWindow new_size(new_width, new_height);
+	// gViewerWindow->getWindow()->getSize(&size);
+	// if ( size != new_size )
+	// {
+	//	gViewerWindow->getWindow()->setSize(new_size.convert());
+	// }
+	LLCoordScreen new_size;
+	new_size.mX = new_width;
+	new_size.mY = new_height;
+	gViewerWindow->getWindow()->setSize(new_size);
+	// FS:TS FIRE-6182 end
 }
 
 BOOL LLViewerWindow::saveSnapshot( const std::string& filepath, S32 image_width, S32 image_height, BOOL show_ui, BOOL do_rebuild, ESnapshotType type)
