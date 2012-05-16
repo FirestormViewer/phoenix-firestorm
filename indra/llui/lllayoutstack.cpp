@@ -828,10 +828,22 @@ void LLLayoutStack::updatePanelRect( LLLayoutPanel* resized_panel, const LLRect&
 				}
 				else
 				{
-					F32 new_fractional_size = llclamp(total_visible_fraction * (F32)(panelp->mTargetDim - panelp->getRelevantMinDim() + delta_auto_resize_headroom) 
+					// <FS:Ansariel> Don't divide by zero! updated_auto_resize_headroom
+					//               will be zero if the next panel after the resized
+					//               panel reaches it minimum size. Set the new
+					//               fractional size to MAX_FRACTIONAL_SIZE because
+					//               it seems to be always MAX_FRACTIONAL_SIZE during
+					//               resizing.
+					//F32 new_fractional_size = llclamp(total_visible_fraction * (F32)(panelp->mTargetDim - panelp->getRelevantMinDim() + delta_auto_resize_headroom) 
+					//									/ updated_auto_resize_headroom,
+					//								MIN_FRACTIONAL_SIZE,
+					//								MAX_FRACTIONAL_SIZE);
+					F32 new_fractional_size = (updated_auto_resize_headroom == 0.f) ? MAX_FRACTIONAL_SIZE
+						: 	llclamp(total_visible_fraction * (F32)(panelp->mTargetDim - panelp->getRelevantMinDim() + delta_auto_resize_headroom) 
 														/ updated_auto_resize_headroom,
 													MIN_FRACTIONAL_SIZE,
 													MAX_FRACTIONAL_SIZE);
+					// </FS:Ansariel>
 					fraction_given_up -= new_fractional_size - panelp->mFractionalSize;
 					panelp->mFractionalSize = new_fractional_size;
 				}
