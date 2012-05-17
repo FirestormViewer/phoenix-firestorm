@@ -54,7 +54,10 @@ public:
 
 	bool			inEdit();
 	bool			canEdit();
-	void			toggleBuildMode(const LLSD& sdname);
+// [RLVa:KB] - Checked: 2012-04-26 (RLVa-1.4.6) | Added: RLVa-1.4.6
+	void			toggleBuildMode();
+// [/RLVa:KB]
+//	void			toggleBuildMode(const LLSD& sdname);
 	
 	/* Determines if we are in Build mode or not. */
 	bool			inBuildMode();

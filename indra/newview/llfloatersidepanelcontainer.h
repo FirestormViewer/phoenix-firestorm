@@ -53,6 +53,11 @@ public:
 
 	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
 
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	static bool canShowPanel(const std::string& floater_name, const LLSD& key);
+	static bool canShowPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
+// [/RLVa:KB]
+	
 	static void showPanel(const std::string& floater_name, const LLSD& key);
 
 	static void showPanel(const std::string& floater_name, const std::string& panel_name, const LLSD& key);
@@ -76,6 +81,15 @@ public:
 		}
 		return panel;
 	}
+	
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	// Used to determine whether a sidepanel can be shown
+public:
+	typedef boost::signals2::signal<bool(const std::string&, const std::string&, const LLSD&), boost_boolean_combiner> validate_signal_t;
+	static boost::signals2::connection setValidateCallback(const validate_signal_t::slot_type& cb) { return mValidateSignal.connect(cb); }
+private:
+	static validate_signal_t mValidateSignal;
+// [/RLVa:KB]
 };
 
 #endif // LL_LLFLOATERSIDEPANELCONTAINER_H

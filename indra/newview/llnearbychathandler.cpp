@@ -44,6 +44,10 @@
 #include "llrootview.h"
 #include "lllayoutstack.h"
 
+// [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 //add LLNearbyChatHandler to LLNotificationsUI namespace
 using namespace LLNotificationsUI;
 
@@ -485,10 +489,27 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages
 
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
+	if (rlv_handler_t::isEnabled())
+	{
+		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
+		LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterLocation(tmp_chat.mText);
+			tmp_chat.mRlvLocFiltered = TRUE;
+		}
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!tmp_chat.mRlvNamesFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
+		{
+			RlvUtil::filterNames(tmp_chat.mText);
+			tmp_chat.mRlvNamesFiltered = TRUE;
+		}
+	}
+// [/RLVa:KB]
+
 	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
 
 	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
-
 	// Build notification data 
 	LLSD notification;
 	notification["message"] = chat_msg.mText;
@@ -499,7 +520,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	notification["chat_type"] = (S32)chat_msg.mChatType;
 	notification["chat_style"] = (S32)chat_msg.mChatStyle;
 	// Pass sender info so that it can be rendered properly (STORM-1021).
-	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+//	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+	if ((CHAT_SOURCE_AGENT != chat_msg.mSourceType) || (!chat_msg.mRlvNamesFiltered))
+		notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [/RLVa:KB]
 
 	if (chat_msg.mChatType == CHAT_TYPE_DIRECT &&
 		chat_msg.mText.length() > 0 &&
@@ -548,8 +573,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
  		LLFirstUse::otherAvatarChatFirst();
 
  		// Add sender to the recent people list.
- 		LLRecentPeople::instance().add(chat_msg.mFromID);
-
+// [RLVa:KB] - Checked: 2012-03-15 (RLVa-1.4.6) | Added: RLVa-1.4.6
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	 		LLRecentPeople::instance().add(chat_msg.mFromID);
+// [/RLVa:KB]
+// 		LLRecentPeople::instance().add(chat_msg.mFromID);
 	}
 
 	// Send event on to LLEventStream
@@ -605,6 +633,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 		LLUUID id;
 		id.generate();
 		notification["id"] = id;
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+		if (rlv_handler_t::isEnabled())
+			notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+// [/RLVa:KB]
 		std::string r_color_name = "White";
 		F32 r_color_alpha = 1.0f; 
 		LLViewerChat::getChatColor( chat_msg, r_color_name, r_color_alpha);
