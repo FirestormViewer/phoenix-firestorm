@@ -35,6 +35,7 @@
 #include "llfloater.h"
 #include "llfloaterreg.h"
 #include "lluictrl.h"
+#include "llviewercontrol.h"
 
 // System libraries
 #include <boost/regex.hpp>
