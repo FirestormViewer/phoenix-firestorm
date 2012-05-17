@@ -278,6 +278,15 @@ void LLAvatarNameCache::handleAgentError(const LLUUID& agent_id)
 	std::map<LLUUID,LLAvatarName>::iterator existing = sCache.find(agent_id);
 	if (existing == sCache.end())
     {
+		// <FS:Ansariel> Don't re-request names for agents with null uuid.
+		if (agent_id.isNull())
+		{
+			LL_WARNS("AvNameCache") << "LLAvatarNameCache handling error for agent with null uuid" << LL_ENDL;
+			sPendingQueue.erase(agent_id);
+			return;
+		}
+		// </FS:Ansariel>
+
         // there is no existing cache entry, so make a temporary name from legacy
         LL_WARNS("AvNameCache") << "LLAvatarNameCache get legacy for agent "
                                 << agent_id << LL_ENDL;
