@@ -196,11 +196,7 @@ public:
 	/*virtual*/ void result(const LLSD& content)
 	{
 		// Pull expiration out of headers if available
-		
-		// AO: SL's expiration is 120 seconds, too short
-		//F64 expires = LLAvatarNameCache::nameExpirationFromHeaders(mHeaders);
-		F64 expires = 60 * 60;
-		
+		F64 expires = LLAvatarNameCache::nameExpirationFromHeaders(mHeaders);
 		F64 now = LLFrameTimer::getTotalSeconds();
 
 		LLSD agents = content["agents"];
@@ -214,7 +210,7 @@ public:
 			av_name.fromLLSD(row);
 
 			// Use expiration time from header
-			av_name.mExpires = expires + now;
+			av_name.mExpires = expires;
 
 			// Some avatars don't have explicit display names set
 			if (av_name.mDisplayName.empty())
@@ -225,7 +221,7 @@ public:
 			LL_DEBUGS("AvNameCache") << "LLAvatarNameResponder::result for " << agent_id << " "
 									 << "user '" << av_name.mUsername << "' "
 									 << "display '" << av_name.mDisplayName << "' "
-									 << "expires in " << av_name.mExpires - now << " seconds"
+									 << "expires in " << expires - now << " seconds"
 									 << LL_ENDL;
 			
 			// cache it and fire signals
