@@ -115,6 +115,13 @@ void LLFloaterWindowSize::onClickSet()
 	std::string resolution = ctrl_window_size->getValue().asString();
 	if (extractWindowSizeFromString(resolution, &width, &height))
 	{
+		// FS:TS FIRE-6182, from Niran's Viewer
+		//additionally set WindowHeight and WindowWidth to the set values to prevent
+		//the window size to go back to the set default after restart
+		gSavedSettings.setS32("WindowWidth",width);
+		gSavedSettings.setS32("WindowHeight",height);
+		// FS:TS FIRE-6182 end
+
 		LLViewerWindow::movieSize(width, height);
 	}
 	closeFloater();
