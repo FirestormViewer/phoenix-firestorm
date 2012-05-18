@@ -5,7 +5,7 @@
 		<no_visible_tabs_text name="no_outfits_msg" value="Todavía no tienes vestuarios. Inténtalo con la [secondlife:///app/search/all/ Búsqueda]"/>
 	</accordion>
 	<panel name="bottom_panel">
-		<button name="options_gear_btn" tool_tip="Ver más opciones"/>
+		<menu_button name="options_gear_btn" tool_tip="Ver más opciones"/>
 		<button name="trash_btn" tool_tip="Eliminar el vestuario seleccionado"/>
 	</panel>
 </panel>

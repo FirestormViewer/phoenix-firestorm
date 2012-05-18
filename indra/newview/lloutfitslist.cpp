@@ -115,7 +115,7 @@ public:
 		registrar.add("Gear.Wear", boost::bind(&LLOutfitListGearMenu::onWear, this));
 		registrar.add("Gear.TakeOff", boost::bind(&LLOutfitListGearMenu::onTakeOff, this));
 		registrar.add("Gear.Rename", boost::bind(&LLOutfitListGearMenu::onRename, this));
-		registrar.add("Gear.Delete", boost::bind(&LLOutfitListGearMenu::onDelete, this));
+		registrar.add("Gear.Delete", boost::bind(&LLOutfitsList::removeSelected, mOutfitList));
 		registrar.add("Gear.Create", boost::bind(&LLOutfitListGearMenu::onCreate, this, _2));
 
 		registrar.add("Gear.WearAdd", boost::bind(&LLOutfitListGearMenu::onAdd, this));
@@ -125,24 +125,9 @@ public:
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLOutfitListGearMenu::onEnable, this, _2));
 		enable_registrar.add("Gear.OnVisible", boost::bind(&LLOutfitListGearMenu::onVisible, this, _2));
 
-//		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
-//			"menu_outfit_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-
-		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
+		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
 			"menu_outfit_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 		llassert(mMenu);
-	}
-
-	void show(LLView* spawning_view)
-	{
-		if (!mMenu) return;
-
-		updateItemsVisibility();
-		mMenu->buildDrawLabels();
-		mMenu->updateParent(LLMenuGL::sMenuContainer);
-		S32 menu_x = 0;
-		S32 menu_y = spawning_view->getRect().getHeight() + mMenu->getRect().getHeight();
-		LLMenuGL::showPopup(spawning_view, mMenu, menu_x, menu_y);
 	}
 
 	void updateItemsVisibility()
@@ -155,7 +140,7 @@ public:
 		mMenu->arrangeAndClear(); // update menu height
 	}
 
-//	LLToggleableMenu* getMenu() { return mMenu; }
+	LLToggleableMenu* getMenu() { return mMenu; }
 
 private:
 	const LLUUID& getSelectedOutfitID()
@@ -225,15 +210,6 @@ private:
 		}
 	}
 
-	void onDelete()
-	{
-		const LLUUID& selected_outfit_id = getSelectedOutfitID();
-		if (selected_outfit_id.notNull())
-		{
-			remove_category(&gInventory, selected_outfit_id);
-		}
-	}
-
 	void onCreate(const LLSD& data)
 	{
 		LLWearableType::EType type = LLWearableType::typeNameToType(data.asString());
@@ -281,14 +257,19 @@ private:
 	}
 
 	LLOutfitsList*			mOutfitList;
-//	LLToggleableMenu*		mMenu;
-	LLMenuGL*		mMenu;
+	LLToggleableMenu*		mMenu;
 };
 
 //////////////////////////////////////////////////////////////////////////
 
 class LLOutfitContextMenu : public LLListContextMenu
 {
+public:
+
+	LLOutfitContextMenu(LLOutfitsList* outfit_list)
+	:		LLListContextMenu(),
+	 		mOutfitList(outfit_list)
+	{}
 protected:
 	/* virtual */ LLContextMenu* createMenu()
 	{
@@ -308,7 +289,7 @@ protected:
 				boost::bind(&LLAppearanceMgr::takeOffOutfit, &LLAppearanceMgr::instance(), selected_id));
 		registrar.add("Outfit.Edit", boost::bind(editOutfit));
 		registrar.add("Outfit.Rename", boost::bind(renameOutfit, selected_id));
-		registrar.add("Outfit.Delete", boost::bind(deleteOutfit, selected_id));
+		registrar.add("Outfit.Delete", boost::bind(&LLOutfitsList::removeSelected, mOutfitList));
 
 		enable_registrar.add("Outfit.OnEnable", boost::bind(&LLOutfitContextMenu::onEnable, this, _2));
 		enable_registrar.add("Outfit.OnVisible", boost::bind(&LLOutfitContextMenu::onVisible, this, _2));
@@ -371,10 +352,8 @@ protected:
 		LLAppearanceMgr::instance().renameOutfit(outfit_cat_id);
 	}
 
-	static void deleteOutfit(const LLUUID& outfit_cat_id)
-	{
-		remove_category(&gInventory, outfit_cat_id);
-	}
+private:
+	LLOutfitsList*	mOutfitList;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -391,7 +370,7 @@ LLOutfitsList::LLOutfitsList()
 	mCategoriesObserver = new LLInventoryCategoriesObserver();
 
 	mGearMenu = new LLOutfitListGearMenu(this);
-	mOutfitMenu = new LLOutfitContextMenu();
+	mOutfitMenu = new LLOutfitContextMenu(this);
 }
 
 LLOutfitsList::~LLOutfitsList()
@@ -411,11 +390,10 @@ BOOL LLOutfitsList::postBuild()
 	mAccordion = getChild<LLAccordionCtrl>("outfits_accordion");
 	mAccordion->setComparator(&OUTFIT_TAB_NAME_COMPARATOR);
 
-// ND_MERGE did not exit in FS
-//	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
-//
-//	menu_gear_btn->setMouseDownCallback(boost::bind(&LLOutfitListGearMenu::updateItemsVisibility, mGearMenu));
-//	menu_gear_btn->setMenu(mGearMenu->getMenu());
+	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
+
+	menu_gear_btn->setMouseDownCallback(boost::bind(&LLOutfitListGearMenu::updateItemsVisibility, mGearMenu));
+	menu_gear_btn->setMenu(mGearMenu->getMenu());
 
 	return TRUE;
 }
@@ -674,6 +652,14 @@ void LLOutfitsList::performAction(std::string action)
 
 void LLOutfitsList::removeSelected()
 {
+	LLNotificationsUtil::add("DeleteOutfits", LLSD(), LLSD(), boost::bind(&LLOutfitsList::onOutfitsRemovalConfirmation, this, _1, _2));
+}
+
+void LLOutfitsList::onOutfitsRemovalConfirmation(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option != 0) return; // canceled
+
 	if (mSelectedOutfitUUID.notNull())
 	{
 		remove_category(&gInventory, mSelectedOutfitUUID);
@@ -761,13 +747,6 @@ bool LLOutfitsList::isActionEnabled(const LLSD& userdata)
 	}
 
 	return false;
-}
-
-// virtual
-void LLOutfitsList::showGearMenu(LLView* spawning_view)
-{
-	if (!mGearMenu) return;
-	mGearMenu->show(spawning_view);
 }
 
 void LLOutfitsList::getSelectedItemsUUIDs(uuid_vec_t& selected_uuids) const

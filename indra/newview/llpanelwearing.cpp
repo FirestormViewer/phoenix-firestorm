@@ -86,25 +86,12 @@ public:
 
 		enable_registrar.add("Gear.OnEnable", boost::bind(&LLPanelWearing::isActionEnabled, mPanelWearing, _2));
 
-//		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
-		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>(
+		mMenu = LLUICtrlFactory::getInstance()->createFromFile<LLToggleableMenu>(
 			"menu_wearing_gear.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 		llassert(mMenu);
 	}
 
-//	LLToggleableMenu* getMenu() { return mMenu; }
-
-
-	void show(LLView* spawning_view)
-	{
-		if (!mMenu) return;
-
-		mMenu->buildDrawLabels();
-		mMenu->updateParent(LLMenuGL::sMenuContainer);
-		S32 menu_x = 0;
-		S32 menu_y = spawning_view->getRect().getHeight() + mMenu->getRect().getHeight();
-		LLMenuGL::showPopup(spawning_view, mMenu, menu_x, menu_y);
-	}
+	LLToggleableMenu* getMenu() { return mMenu; }
 
 private:
 
@@ -119,9 +106,8 @@ private:
 		}
 	}
 
-//	LLToggleableMenu*		mMenu;
-	LLMenuGL*		mMenu;
-	LLPanelWearing* mPanelWearing;
+	LLToggleableMenu*		mMenu;
+	LLPanelWearing* 		mPanelWearing;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -236,9 +222,9 @@ BOOL LLPanelWearing::postBuild()
 	mCOFItemsList = getChild<LLWearableItemsList>("cof_items_list");
 	mCOFItemsList->setRightMouseDownCallback(boost::bind(&LLPanelWearing::onWearableItemsListRightClick, this, _1, _2, _3));
 
-//	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
+	LLMenuButton* menu_gear_btn = getChild<LLMenuButton>("options_gear_btn");
 
-//	menu_gear_btn->setMenu(mGearMenu->getMenu());
+	menu_gear_btn->setMenu(mGearMenu->getMenu());
 
 	return TRUE;
 }
@@ -302,13 +288,6 @@ bool LLPanelWearing::isActionEnabled(const LLSD& userdata)
 	}
 
 	return false;
-}
-
-// virtual
-void LLPanelWearing::showGearMenu(LLView* spawning_view)
-{
-	if (!mGearMenu) return;
-	mGearMenu->show(spawning_view);
 }
 
 boost::signals2::connection LLPanelWearing::setSelectionChangeCallback(commit_callback_t cb)
