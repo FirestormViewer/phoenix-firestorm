@@ -140,14 +140,9 @@ LLScriptFloater* LLScriptFloater::show(const LLUUID& notification_id)
 			S32 width=pos.getWidth();
 			S32 height=pos.getHeight();
 
-			// ND_MERGE LLBottomTray is gone
-			//			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
-			//					 LLBottomTray::instance().getRect().getHeight(),
-			//					 width,height);
 			pos.setOriginAndSize(gViewerWindow->getWorldViewWidthScaled()-width,
 								 gViewerWindow->getWorldViewHeightScaled()-height,
 								 width,height);
-			// /ND_MERGE
 
 			floater->setRect(pos);
 			floater->savePosition();
