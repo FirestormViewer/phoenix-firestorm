@@ -77,7 +77,7 @@
             initial_value="500"
             layout="topleft"
             left_delta="100"
-            max_val="10000"
+            max_val="1500"
             min_val="100"
             name="max_bandwidth"
             top_delta="-2"
