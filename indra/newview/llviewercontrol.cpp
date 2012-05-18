@@ -298,7 +298,8 @@ static bool handleChatPersistTimeChanged(const LLSD& newvalue)
 {
 	if(gConsole)
 	{
-//		gConsole->setLinePersistTime((F32) newvalue.asReal()); ND_MERGE V/dev uses asReal here, FS asInterger. Intentional?
+		// <FS> Changed for FIRE-805
+		//gConsole->setLinePersistTime((F32) newvalue.asReal());
 		gConsole->setLinePersistTime((F32) newvalue.asInteger());
 	}
 	return true;
