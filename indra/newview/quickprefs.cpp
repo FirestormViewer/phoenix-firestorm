@@ -48,10 +48,6 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
-	// ND_MERGE
-	// LLButton* anchor_panel=LLBottomTray::instance().getChild<LLButton>("quickprefs_toggle");
-	// if(anchor_panel)
-	// 	setDockControl(new LLDockControl(anchor_panel,this,getDockTongue(),LLDockControl::TOP));
 }
 
 
