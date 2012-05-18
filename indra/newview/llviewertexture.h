@@ -38,7 +38,7 @@
 #include <map>
 #include <list>
 
-#define MIN_VIDEO_RAM_IN_MEGA_BYTES    64  // ND_MERGE V/Dev is 32, is this intentional we use 64?
+#define MIN_VIDEO_RAM_IN_MEGA_BYTES    32
 #define MAX_VIDEO_RAM_IN_MEGA_BYTES    512 // 512MB max for performance reasons.
 
 class LLFace;
