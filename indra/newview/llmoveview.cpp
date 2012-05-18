@@ -93,7 +93,7 @@ LLFloaterMove::~LLFloaterMove()
 // virtual
 BOOL LLFloaterMove::postBuild()
 {
-//	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730) ND_MERGE line was deleted in FS
+	updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
 	
 	// Code that implements floater buttons toggling when user moves via keyboard is located in LLAgent::propagate()
 
