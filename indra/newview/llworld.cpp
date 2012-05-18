@@ -817,20 +817,19 @@ void LLWorld::setLandFarClip(const F32 far_clip)
 	}
 }
 
-// ND_MERGE; was missing in FS
 // Some region that we're connected to, but not the one we're in, gave us
 // a (possibly) new water height. Update it in our local copy.
-//void LLWorld::waterHeightRegionInfo(std::string const& sim_name, F32 water_height)
-//{
-//	for (region_list_t::iterator iter = mRegionList.begin(); iter != mRegionList.end(); ++iter)
-//	{
-//		if ((*iter)->getName() == sim_name)
-//		{
-//			(*iter)->setWaterHeight(water_height);
-//			break;
-//		}
-//	}
-//}
+void LLWorld::waterHeightRegionInfo(std::string const& sim_name, F32 water_height)
+{
+	for (region_list_t::iterator iter = mRegionList.begin(); iter != mRegionList.end(); ++iter)
+	{
+		if ((*iter)->getName() == sim_name)
+		{
+			(*iter)->setWaterHeight(water_height);
+			break;
+		}
+	}
+}
 
 void LLWorld::updateWaterObjects()
 {
