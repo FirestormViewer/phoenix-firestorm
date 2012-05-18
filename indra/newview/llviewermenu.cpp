@@ -415,8 +415,6 @@ void set_underclothes_menu_options()
 
 void init_menus()
 {
-	//	S32 top = gViewerWindow->getRootView()->getRect().getHeight(); ND_MERGE
-
 	// Initialize actions
 	initialize_menus();
 
@@ -508,27 +506,34 @@ void init_menus()
 	gPopupMenuView->setBackgroundColor( color );
 	*/
 
-	gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	//	gMenuBarView->setRect(LLRect(0, top, 0, top - MENU_BAR_HEIGHT)); ND_MERGE results in a tiny menu, top likely 0
-
+	// <FS> Changed for grid manager
 	// If we are not in production, use a different color to make it apparent.
+	//if (LLGridManager::getInstance()->isInProductionGrid())
+	//{
+	//	color = LLUIColorTable::instance().getColor( "MenuBarBgColor" );
+	//}
+	//else
+	//{
+	//	color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
+	//}
+
+	//LLView* menu_bar_holder = gViewerWindow->getRootView()->getChildView("menu_bar_holder");
+
+	//gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+	//gMenuBarView->setRect(LLRect(0, menu_bar_holder->getRect().mTop, 0, menu_bar_holder->getRect().mTop - MENU_BAR_HEIGHT));
+	//gMenuBarView->setBackgroundColor( color );
+
+	gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	// ONLY change the color IF we are in beta. Otherwise leave it alone so it can use the skinned color. -Zi
 	if(LLGridManager::getInstance()->isInSLBeta())
-/*	{
-		color = LLUIColorTable::instance().getColor( "MenuBarBgColor" );
-	}
-	else */
 	{
 		color = LLUIColorTable::instance().getColor( "MenuNonProductionBgColor" );
 		gMenuBarView->setBackgroundColor( color );
 	}
 
 	LLView* menu_bar_holder = gViewerWindow->getRootView()->getChildView("menu_bar_holder");
-
-// ND_MERGE had been deleted in FS
-//	gMenuBarView = LLUICtrlFactory::getInstance()->createFromFile<LLMenuBarGL>("menu_viewer.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	gMenuBarView->setRect(LLRect(0, menu_bar_holder->getRect().mTop, 0, menu_bar_holder->getRect().mTop - MENU_BAR_HEIGHT)); // ND_MERGE
-//	gMenuBarView->setBackgroundColor( color );
+	// </FS> Changed for grid manager
 
 	menu_bar_holder->addChild(gMenuBarView);
   
