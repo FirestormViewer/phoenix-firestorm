@@ -326,9 +326,6 @@ void LLGroupActions::refresh_notices()
 	if(!isGroupUIVisible())
 		return;
 
-	//	if(!isGroupVisible(LLUUID::null)) ND_MERGE
-	//	return;
-
 	LLSD params;
 	params["group_id"] = LLUUID::null;
 	params["open_tab_name"] = "panel_group_info_sidetray";
@@ -355,9 +352,6 @@ void LLGroupActions::refresh(const LLUUID& group_id)
 	if(!isGroupUIVisible())
 		return;
 
-	//if(!isGroupVisible(group_id)) ND_MERGE
-	//		return;
-
 	LLSD params;
 	params["group_id"] = group_id;
 	params["open_tab_name"] = "panel_group_info_sidetray";
@@ -382,9 +376,6 @@ void LLGroupActions::closeGroup(const LLUUID& group_id)
 {
 	if(!isGroupUIVisible())
 		return;
-
-	//	if(!isGroupVisible(group_id)) ND_MERGE
-	//	return;
 
 	LLSD params;
 	params["group_id"] = group_id;
