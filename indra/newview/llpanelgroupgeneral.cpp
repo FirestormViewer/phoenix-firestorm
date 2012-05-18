@@ -702,8 +702,8 @@ void LLPanelGroupGeneral::updateMembers()
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mGroupID);
 
 	if (!mListVisibleMembers || !gdatap 
-		|| !gdatap->isMemberDataComplete())
-//		|| gdatap->mMembers.empty()) ND_MERGE, line was missing in FS, intentional?
+		|| !gdatap->isMemberDataComplete()
+		|| gdatap->mMembers.empty())
 	{
 		return;
 	}
