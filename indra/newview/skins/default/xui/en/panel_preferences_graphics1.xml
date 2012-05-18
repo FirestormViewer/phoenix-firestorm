@@ -998,19 +998,8 @@
          width="308">
             Texture Rendering:
         </text>
-<!-- texture disabler -->
-        <check_box
-         control_name="TextureDisable"
-         height="16"
-         initial_value="false"
-         label="Minimal texture loading"
-         tool_tip="This sets the 'TextureDisable' parameter - but still seems to load some textures, but slowly - may be useful for computers with a poor GPU"
-         layout="topleft"
-         left_delta="10"
-         name="TexturesLoaded"
-         top_pad="12"
-         width="256"/>
-<!-- HTTP textures -->
+
+      <!-- HTTP textures -->
         <check_box
          control_name="ImagePipelineUseHTTP"
          height="16"
@@ -1019,7 +1008,7 @@
          layout="topleft"
          left_delta="0"
          name="TexturesHTTP"
-         top_pad="3"
+         top_pad="5"
          width="256"/>
 
 <!-- Max Concurrent HTTP GET requests-->
@@ -1064,15 +1053,15 @@
          name="TextureDetail"
          width="150">
             <combo_box.item
-             label="Normal"
+             label="Normal quality"
              name="0"
              value="0"/>
             <combo_box.item
-             label="Minimal"
+             label="Low quality"
              name="3"
              value="3"/>
             <combo_box.item
-             label="None"
+             label="No textures"
              name="5"
              value="5"/>
         </combo_box>
