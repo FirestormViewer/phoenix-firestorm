@@ -1277,7 +1277,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		//if(chat.mChatType == CHAT_TYPE_IM)
-		if(chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
+		if(chat.mSourceType != CHAT_SOURCE_OBJECT && (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)) // FS::LO Fix for FIRE-6334; Fade IM Text into background of chat history default setting should not be 0.5; made object IM text not fade into the background as per phoenix behavior.
 		{
 			style_params.color.alpha = FSIMChatHistoryFade;
 			style_params.readonly_color.alpha = FSIMChatHistoryFade;
