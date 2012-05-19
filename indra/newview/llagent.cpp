@@ -196,7 +196,10 @@ bool LLAgent::isActionAllowed(const LLSD& sdname)
 	if (param == "speak")
 	{
 		if ( gAgent.isVoiceConnected() && 
-			LLViewerParcelMgr::getInstance()->allowAgentVoice() &&
+			// FS::LO FIRE-5564: Speak button disabled in private call when entering no-voice parcel
+			// LLViewerParcelMgr::getInstance()->allowAgentVoice() &&
+			 ( LLViewerParcelMgr::getInstance()->allowAgentVoice() ||
+			   LLVoiceChannel::getCurrentVoiceChannel()->isActive() ) &&
 				! LLVoiceClient::getInstance()->inTuningMode() )
 		{
 			retval = true;
