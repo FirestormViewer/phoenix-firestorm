@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="godtools floater" title="HERRAMIENTAS DE DIOS">
-	<tab_container name="GodTools Tabs">
-		<panel label="Red" name="grid">
+<floater name="godtools floater" title="HERRAMIENTAS DE DIOS" width="500">
+	<tab_container name="GodTools Tabs" width="500">
+		<panel label="Red" name="grid" width="498">
 			<button label="Vaciar los caches de visibilidad del mapa de la región" label_selected="Vaciar los caches de visibilidad del mapa de la región" name="Flush This Region&apos;s Map Visibility Caches"/>
 		</panel>
-		<panel label="Región" name="region">
-			<text name="Region Name:">
+		<panel label="Región" name="region" width="498">
+			<text name="Region Name:" width="120">
 				Nombre de la región:
 			</text>
 			<check_box label="Preludio" name="check prelude" tool_tip="Defina esté para hacer un preludio de la región."/>
@@ -19,42 +19,41 @@
 			<button label="Formar terreno" label_selected="Formar terreno" name="Bake Terrain" tool_tip="Guardar el terreno actual como plantilla."/>
 			<button label="Revertir terreno" label_selected="Revertir terreno" name="Revert Terrain" tool_tip="Sustituir el terreno actual por la plantilla."/>
 			<button label="Cambiar terreno" label_selected="Cambiar terreno" name="Swap Terrain" tool_tip="Cambiar terreno actual por la plantilla."/>
-			<text name="estate id">
+			<text name="estate id" left="240">
 				ID de la propiedad:
 			</text>
-			<text name="parent id">
+			<line_editor name="estate" left_delta="125"/>
+			<text name="parent id" left="240">
 				ID del padre:
 			</text>
-			<line_editor name="parentestate" tool_tip="Ésta es una propiedad padre para esta región"/>
-			<text name="Grid Pos: ">
+			<line_editor name="parentestate" tool_tip="Ésta es una propiedad padre para esta región" left_delta="125"/>
+			<text name="Grid Pos: " left="240">
 				Posición en la Red:
 			</text>
-			<line_editor name="gridposx" tool_tip="Ésta es la posición x en la red para esta región"/>
-			<line_editor name="gridposy" tool_tip="Ésta es la posición y ein la red para esta región"/>
-			<text name="Redirect to Grid: ">
+			<line_editor name="gridposx" tool_tip="Ésta es la posición x en la red para esta región" left_delta="125"/>
+			<line_editor name="gridposy" tool_tip="Ésta es la posición y en la red para esta región" width="50"/>
+			<text name="Redirect to Grid: " left="240" width="125">
 				Redireccionar a la red:
 			</text>
-			<text name="billable factor text">
+			<line_editor name="redirecty" width="50"/>
+			<text name="billable factor text" left="240" width="125">
 				Factor cobrable:
 			</text>
-			<text name="land cost text">
+			<text name="land cost text" left="240" width="125">
 				L$ por m²:
 			</text>
 			<button label="Actualizar" label_selected="Actualizar" name="Refresh" tool_tip="Haga clic aquí para actualizar la información."/>
 			<button label="Aplicar" label_selected="Aplicar" name="Apply" tool_tip="Haga clic aquí para aplicar los cambios."/>
-			<button label="Seleccionar región" label_selected="Seleccionar región" name="Select Region" tool_tip="Seleccione toda la región con esta herramienta de terreno."/>
-			<button label="Guardado automático ahora" label_selected="Guardado automático ahora" name="Autosave now" tool_tip="Guardar estado con gzip en el directorio de guardado automático."/>
+			<button label="Seleccionar región" label_selected="Seleccionar región" name="Select Region" tool_tip="Seleccione toda la región con esta herramienta de terreno." width="180"/>
+			<button label="Guardado automático ahora" label_selected="Guardado automático ahora" name="Autosave now" tool_tip="Guardar estado con gzip en el directorio de guardado automático." width="180"/>
 		</panel>
-		<panel label="Objetos" name="objects">
-			<text name="Region Name:">
+		<panel label="Objetos" name="objects" width="498">
+			<text name="Region Name:" width="115">
 				Nombre de la región:
 			</text>
-			<text name="region name">
-				Galés
-			</text>
-			<check_box label="Desactivar scripts" name="disable scripts" tool_tip="Marque para desactivar todos los scripts en esta región"/>
-			<check_box label="Desactivar colisiones" name="disable collisions" tool_tip="Marque para desactivar las colisiones entre no agentes en esta región"/>
-			<check_box label="Desactivar física" name="disable physics" tool_tip="Marque para desactivar toda la física en esta región"/>
+			<check_box label="Desactivar scripts" name="disable scripts" tool_tip="Marque para desactivar todos los scripts en esta región" width="120"/>
+			<check_box label="Desactivar colisiones" name="disable collisions" tool_tip="Marque para desactivar las colisiones entre no agentes en esta región" width="135"/>
+			<check_box label="Desactivar física" name="disable physics" tool_tip="Marque para desactivar toda la física en esta región" left_delta="145"/>
 			<button label="Aplicar" label_selected="Aplicar" name="Apply" tool_tip="Haga clic aquí para aplicar los cambios."/>
 			<button label="Definir objetivo" label_selected="Definir objetivo" name="Set Target" tool_tip="Seleccionar el avatar para el borrado de objeto"/>
 			<text name="target_avatar_name">
@@ -63,11 +62,11 @@
 			<button label="Borrar objetos con scripts del objetivo en otros terrenos" label_selected="Borrar objetos con scripts del objetivo en otros terrenos" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Borrar todos los objetos con scripts pertenecientes al objetivo en terrenos que no le pertenecen. Los objetos no copiables le serán devueltos."/>
 			<button label="Borrar objetos con scripts del objetivo en *TODOS* los terrenos" label_selected="Borrar objetos con scripts del objetivo en *TODOS* los terrenos" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Borrar todos los objetos con scripts pertenecientes al objetivo en esta región. Los objetos no copiables le serán devueltos."/>
 			<button label="Borrar *TODOS* los objetos del objetivo" label_selected="Borrar *TODOS* los objetos del objetivo" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Borrar todos los objetos pertenecientes al objetivo en esta región. Los objetos no copiables le serán devueltos."/>
-			<button label="Obtener top de colisionadores" label_selected="Obtener top de colisionadores" name="Get Top Colliders" tool_tip="Obtener lista de objetos que están recibiendo narrowphase callbacks."/>
-			<button label="Obtener top de scripts" label_selected="Obtener top de scripts" name="Get Top Scripts" tool_tip="Obtener lista de objetos que están consumiendo más tiempo de ejecución de scripts."/>
-			<button label="Compilador de scripts" label_selected="Compilador de scripts" name="Scripts digest" tool_tip="Obtener una lista de todos los scripts y sus respectivos números de instancia."/>
+			<button label="Obtener top de colisionadores" label_selected="Obtener top de colisionadores" name="Get Top Colliders" tool_tip="Obtener lista de objetos que están recibiendo narrowphase callbacks." width="175"/>
+			<button label="Obtener top de scripts" label_selected="Obtener top de scripts" name="Get Top Scripts" tool_tip="Obtener lista de objetos que están consumiendo más tiempo de ejecución de scripts." width="175"/>
+			<button label="Compilador de scripts" label_selected="Compilador de scripts" name="Scripts digest" tool_tip="Obtener una lista de todos los scripts y sus respectivos números de instancia." width="175"/>
 		</panel>
-		<panel label="Requerir" name="request">
+		<panel label="Requerir" name="request" width="498">
 			<text name="Destination:">
 				Destino:
 			</text>

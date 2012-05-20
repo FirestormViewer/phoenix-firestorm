@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="instant_message" name="panel_group_notify">
-	<panel label="cabecera" name="header">
-		<text name="title" value="Nombre del emisor / Nombre del grupo"/>
-	</panel>
+	<text name="group_notice" value="Aviso de grupo"/>
+	<text name="title" value="Enviado por Nombre del emisor / Nombre del grupo"/>
 	<text_editor name="message" value="mensaje"/>
 	<text name="attachment" value="Adjunción"/>
 	<button label="Aceptar" name="btn_ok"/>
+	<button label="Avisos del grupo" name="btn_notices"/>
 </panel>

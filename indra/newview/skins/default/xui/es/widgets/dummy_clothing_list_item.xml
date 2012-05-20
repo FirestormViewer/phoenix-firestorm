@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <dummy_clothing_list_item name="dummy_clothing_item">
+	<add_btn name="btn_add" tool_tip="Añadir más elementos de este tipo"/>
+</dummy_clothing_list_item>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<dummy_clothing_list_item name="dummy_clothing_item">
 	<add_btn name="btn_add" tool_tip="Añadir más items de este tipo"/>
 </dummy_clothing_list_item>

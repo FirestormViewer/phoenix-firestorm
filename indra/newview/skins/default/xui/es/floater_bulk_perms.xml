@@ -14,7 +14,7 @@
 	</floater.string>
 	<check_box label="Animación" name="check_animation"/>
 	<icon name="icon_animation" tool_tip="Animaciones"/>
-	<check_box label="Partes del cuerpo" name="check_bodypart"/>
+	<check_box label="Partes del cuerpo" name="check_bodypart" top_pad="5"/>
 	<icon name="icon_bodypart" tool_tip="Partes del cuerpo"/>
 	<check_box label="Ropa" name="check_clothing"/>
 	<icon name="icon_clothing" tool_tip="Ropa"/>
@@ -35,20 +35,21 @@
 	<text name="newperms">
 		Permisos nuevos del contenido
 	</text>
-	<text name="GroupLabel">
+	<text name="GroupLabel" height="34">
 		Grupo:
 	</text>
 	<check_box label="Compartir" name="share_with_group"/>
-	<text name="AnyoneLabel">
+	<text name="AnyoneLabel" height="34">
 		Cualquiera:
 	</text>
 	<check_box label="Copiarlo" name="everyone_copy"/>
-	<text name="NextOwnerLabel">
+	<text name="NextOwnerLabel" height="34">
 		Próximo propietario:
 	</text>
 	<check_box label="Modificarlo" name="next_owner_modify"/>
 	<check_box label="Copiarlo" name="next_owner_copy"/>
 	<check_box initial_value="true" label="Transferirlo" name="next_owner_transfer" tool_tip="El próximo propietario puede dar o revender este objeto"/>
+	<scroll_list height="76" name="queue output"/>
 	<button label="OK" name="apply"/>
 	<button label="Cancelar" name="close"/>
 </floater>

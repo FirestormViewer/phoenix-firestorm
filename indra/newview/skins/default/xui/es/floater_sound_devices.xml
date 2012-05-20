@@ -3,5 +3,5 @@
 	<text name="voice_label">
 		Chat de voz
 	</text>
-	<check_box label="Activados" name="enable_voice"/>
+	<check_box label="Activado" name="enable_voice"/>
 </floater>

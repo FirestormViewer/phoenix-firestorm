@@ -92,19 +92,54 @@
 				<text initial_value="Triángulos" name="triangles" value="Triángulos"/>
 				<text initial_value="Vértices" name="vertices" value="Vértices"/>
 				<text initial_value="Alto" name="high_label" value="Alto"/>
+				<combo_box name="lod_source_high">
+					<item name="lod_source_high_load_from_file" label="Cargar de archivo"/>
+					<item name="lod_source_high_generate" label="Generar"/>
+				</combo_box>
 				<button label="Buscar..." name="lod_browse_high"/>
+				<combo_box name="lod_mode_high">
+					<item name="lod_mode_high_triangle_limit" label="Límite de triángulo"/>
+					<item name="lod_mode_high_error_threshold" label="Umbral de error"/>
+				</combo_box>
 				<text initial_value="0" name="high_triangles" value="0"/>
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Medio" name="medium_label" value="Medio"/>
+				<combo_box name="lod_source_medium">
+					<item name="lod_source_medium_load_from_file" label="Cargar de archivo"/>
+					<item name="lod_source_medium_generate" label="Generar"/>
+					<item name="lod_source_medium_use_lod_above" label="Usar LoD de arriba"/>
+				</combo_box>
 				<button label="Buscar..." name="lod_browse_medium"/>
+				<combo_box name="lod_mode_medium">
+					<item name="lod_mode_medium_triangle_limit" label="Límite de triángulo"/>
+					<item name="lod_mode_medium_error_threshold" label="Umbral de error"/>
+				</combo_box>
 				<text initial_value="0" name="medium_triangles" value="0"/>
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Bajo" name="low_label" value="Bajo"/>
+				<combo_box name="lod_source_low">
+					<item name="lod_source_low_load_from_file" label="Cargar de archivo"/>
+					<item name="lod_source_low_generate" label="Generar"/>
+					<item name="lod_source_low_use_lod_above" label="Usar LoD de arriba"/>
+				</combo_box>
 				<button label="Buscar..." name="lod_browse_low"/>
+				<combo_box name="lod_mode_low">
+					<item name="lod_mode_low_triangle_limit" label="Límite de triángulo"/>
+					<item name="lod_mode_low_error_threshold" label="Umbral de error"/>
+				</combo_box>
 				<text initial_value="0" name="low_triangles" value="0"/>
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Mínimo" name="lowest_label" value="Mínimo"/>
+				<combo_box name="lod_source_lowest">
+					<item name="lod_source_lowest_load_from_file" label="Cargar de archivo"/>
+					<item name="lod_source_lowest_generate" label="Generar"/>
+					<item name="lod_source_lowest_use_lod_above" label="Usar LoD de arriba"/>
+				</combo_box>
 				<button label="Buscar..." name="lod_browse_lowest"/>
+				<combo_box name="lod_mode_lowest">
+					<item name="lod_mode_lowest_triangle_limit" label="Límite de triángulo"/>
+					<item name="lod_mode_lowest_error_threshold" label="Umbral de error"/>
+				</combo_box>
 				<text initial_value="0" name="lowest_triangles" value="0"/>
 				<text initial_value="0" name="lowest_vertices" value="0"/>
 				<check_box label="Generar normales" name="gen_normals"/>
@@ -149,7 +184,7 @@
 						Calidad:
 					</text>
 					<text name="smooth_method_label">
-						Leve:
+						Suavizado:
 					</text>
 					<check_box label="Cerrar agujeros" name="Close Holes (Slow)"/>
 					<button label="Analizar" name="Decompose"/>
@@ -165,21 +200,21 @@
 					<text name="pass_method_header">
 						Pases:
 					</text>
-					<text name="Detail Scale label">
+					<text name="Detail Scale label" width="95">
 						Escala de detalle:
 					</text>
 					<text name="Retain%_label">
 						Retención:
 					</text>
 					<combo_box name="Combine Quality" value="1"/>
-					<button label="Simplificar" name="Simplify"/>
+					<button label="Simplificar" name="Simplify" left_pad="65"/>
 					<button label="Cancelar" name="simplify_cancel"/>
 				</panel>
 				<panel name="physics info">
-					<text name="results_text">
+					<text name="results_text" width="65">
 						Resultados:
 					</text>
-					<text name="physics_triangles">
+					<text name="physics_triangles" width="100">
 						Triángulos: [TRIANGLES],
 					</text>
 					<text name="physics_points">
@@ -191,7 +226,7 @@
 				</panel>
 			</panel>
 			<panel label="Opciones de subida" name="modifiers_panel">
-				<text name="scale_label">
+				<text name="scale_label" width="170">
 					Escala (1=sin ajuste de escala):
 				</text>
 				<spinner name="import_scale" value="1.0"/>
@@ -207,7 +242,7 @@
 				</text>
 				<check_box label="Incluir el peso de la piel" name="upload_skin"/>
 				<check_box label="Incluir posturas de las articulaciones" name="upload_joints"/>
-				<text name="pelvis_offset_label">
+				<text name="pelvis_offset_label" left="270">
 					Desplazamiento Z (subir o bajar el avatar):
 				</text>
 				<spinner name="pelvis_offset" value="0.0"/>
@@ -217,7 +252,7 @@
 			<button label="Calcular pesos y precio" name="calculate_btn" tool_tip="Calcular pesos y precio"/>
 			<button label="Cancelar" name="cancel_btn"/>
 			<button label="subir" name="ok_btn" tool_tip="Subir al simulador"/>
-			<button label="Limpiar la configuración y reiniciar el formulario" name="reset_btn"/>
+			<button label="Limpiar configuración y reiniciar formulario" name="reset_btn" width="260"/>
 			<text name="upload_fee">
 				Precio de subida: L$ [FEE]
 			</text>

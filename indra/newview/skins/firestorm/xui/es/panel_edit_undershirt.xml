@@ -2,7 +2,7 @@
 <panel name="edit_undershirt_panel">
 	<panel name="avatar_undershirt_color_panel">
 		<texture_picker label="Textura" name="Fabric" tool_tip="Pulsa para escoger una imagen"/>
-		<color_swatch label="Color/Tinte" name="Color/Tinte" tool_tip="Pulsa para abrir el selector de color"/>
+		<color_swatch label="Color/Tinte" name="Color/Tint" tool_tip="Pulsa para abrir el selector de color"/>
 	</panel>
 	<panel name="undershirt_main_tab_holder" title="Camiseta interior">
 		<accordion name="undershirt_main_accordion">

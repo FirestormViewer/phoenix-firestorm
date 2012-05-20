@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="edit_skin_panel">
 	<panel name="avatar_skin_color_panel">
-		<texture_picker label="Tatuajes de cabeza" name="Head" tool_tip="Pulsa para seleccionar una imagen"/>
-		<texture_picker label="Tatuajes superiores" name="Upper Body" tool_tip="Pulsa para seleccionar una imagen"/>
-		<texture_picker label="Tatuajes inferiores" name="Lower Body" tool_tip="Pulsa para seleccionar una imagen"/>
+		<texture_picker label="Cabeza" name="Head" tool_tip="Pulsa para seleccionar una imagen"/>
+		<texture_picker label="Superior" name="Upper Body" tool_tip="Pulsa para seleccionar una imagen"/>
+		<texture_picker label="Inferior" name="Lower Body" tool_tip="Pulsa para seleccionar una imagen"/>
 	</panel>
 	<tab_container name="wearable_accordion">
 		<panel name="skin_color_tab_holder" title="Color de la piel">

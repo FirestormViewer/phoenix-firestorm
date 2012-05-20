@@ -56,8 +56,10 @@
 	<text name="group_money_heading">
 		L$ del grupo
 	</text>
-	<text name="group_over_limit_text">
-		Se necesitan más créditos de terreno para mantener el terreno en uso
+	<icon name="group_over_limit_icon" left="225"/>
+	<text name="group_over_limit_text" left_pad="2" width="210">
+		Se necesitan más créditos de terreno
+para mantener el terreno en uso
 	</text>
 	<tab_container name="group_money_tab_container">
 		<panel label="RESUMEN" name="group_money_planning_tab">

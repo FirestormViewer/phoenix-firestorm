@@ -55,8 +55,8 @@ terreno" name="terrain_lower_spin" left="180" label_width="180" width="250"/>
 	<spinner label="Bajo" name="height_start_spin_2"/>
 	<spinner label="Alto" name="height_range_spin_0"/>
 	<spinner label="Alto" name="height_range_spin_2"/>
-	<button label="Descargar el RAW del terreno..." name="download_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190"/>
-	<button label="Subir un RAW para el terreno..." name="upload_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190"/>
-	<button label="Predeterminar" name="bake_terrain_btn" tool_tip="Definir el terreno actual como punto medio para los límites de elevación/bajada"/>
+	<button label="Descargar el RAW del terreno..." name="download_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190" left="8"/>
+	<button label="Subir un RAW para el terreno..." name="upload_raw_btn" tool_tip="Disponible sólo para los propietarios del estado, no para los administradores" width="190" left_pad="6"/>
+	<button label="Predeterminar" name="bake_terrain_btn" tool_tip="Definir el terreno actual como punto medio para los límites de elevación/bajada" left_pad="6"/>
 	<button label="Aplicar" name="apply_btn"/>
 </panel>
