@@ -143,9 +143,9 @@
 			Details für geladene Texturen:
 		</text>
 		<combo_box name="TextureDetail">
-			<combo_box.item label="Normal" name="0"/>
-			<combo_box.item label="Minimal" name="3"/>
-			<combo_box.item label="Keine" name="5"/>
+			<combo_box.item label="Normale Qualität" name="0"/>
+			<combo_box.item label="Geringe Qualität" name="3"/>
+			<combo_box.item label="Keine Texturen" name="5"/>
 		</combo_box>
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
