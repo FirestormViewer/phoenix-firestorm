@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <pie_menu name="Object Pie">
 	<pie_slice label="Apri" name="Open"/>
-	<pie_slice label="Costruisci" name="Build"/>
+	<pie_slice label="Crea" name="Build"/>
 	<pie_slice label="Tocca" name="Pie Object Touch"/>
 	<pie_slice label="Siedi qui" name="Pie Object Sit"/>
 	<pie_slice label="Alzati" name="Object Stand Up"/>

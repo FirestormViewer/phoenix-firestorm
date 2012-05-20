@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_picks" label="Preferiti">
  <string name="no_picks" value="Nessun Preferito" />
- <string name="no_classifieds" value="Nessun annuncio" />
     <text name="Tell everyone about your favorite places in Second Life.">
         Di a tutti i tuoi loghi preferiti di Second Life!
     </text>

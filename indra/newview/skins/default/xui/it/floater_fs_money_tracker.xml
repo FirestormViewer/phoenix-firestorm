@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="money_tracker">
+    <button name="Clear" label="Pulisci"/>
+</floater>

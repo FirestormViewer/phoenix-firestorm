@@ -1980,6 +1980,9 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="NoAvatarPicksClassifiedsText">
 		L&apos;utente non ha luoghi preferiti né inserzioni
 	</string>
+	<string name="NoAvatarPicksText">
+		L'utente non ha picks.
+	</string>
 	<string name="PicksClassifiedsLoadingText">
 		Caricamento in corso...
 	</string>
@@ -2099,10 +2102,10 @@ Tipi conosciuti .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 		In ricezione
 	</string>
 	<string name="AM">
-		antemeridiane
+		AM
 	</string>
 	<string name="PM">
-		pomeridiane
+		PM
 	</string>
 	<string name="PST">
 		Ora Pacifico
@@ -4300,10 +4303,10 @@ Segnala abuso
 		[MDAY]
 	</string>
 	<string name="dateTimeAM">
-		antemeridiane
+		AM
 	</string>
 	<string name="dateTimePM">
-		pomeridiane
+		PM
 	</string>
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
@@ -4707,7 +4710,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Particelle nascoste
 	</string>
 	<string name="Command_AboutLand_Label">
-		Informazioni sul terreno
+		Info Terreno
 	</string>
 	<string name="Command_Appearance_Label">
 		Aspetto fisico
@@ -4746,7 +4749,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Mini mappa
 	</string>
 	<string name="Command_Move_Label">
-		Cammina / corri / vola
+		Movimento
 	</string>
 	<string name="Command_People_Label">
 		Persone
@@ -4777,6 +4780,21 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Voice_Label">
 		Impostazioni voce
+	</string>
+	<string name="Command_Webbrowser_Label">
+		Web
+	</string>
+	<string name="Command_Default_Chat_Bar_Label">
+		Barra chat
+	</string>
+	<string name="Command_Settings_Debug_Label">
+		Menu Debug
+	</string>
+	<string name="Command_Statistics_Label">
+		Statistiche
+	</string>
+	<string name="Command_Region_Label">
+		Regione/Estate
 	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informazioni sul terreno che visiti
@@ -4849,6 +4867,30 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Voice_Tooltip">
 		I controlli per il volume per le chiamate e per le persone nelle vicinanze nel mondo virtuale
+	</string>
+	<string name="Command_Quickprefs_Tooltip">
+		Quick Preference -- Alcune impostazioni da settare rapidamente 
+	</string>
+	<string name="Command_AO_Tooltip">
+		AO come in Phoenix
+	</string>
+	<string name="Command_Webbrowser_Tooltip">
+		Apre il Web Browser interno al viewer
+	</string>
+	<string name="Command_Default_Chat_Bar_Tooltip">
+		Chat bar -- Mostra o nasconde la barra della chat come in Phoenix
+	</string>
+	<string name="Command_Areasearch_Tooltip">
+		Cerca oggetti nell'area
+	</string>
+	<string name="Command_Settings_Debug_Tooltip">
+		Apre il Menu di Debug per cambiare le impostazioni del viewer
+	</string>
+	<string name="Command_Statistics_Tooltip">
+		Mostra le statistiche del viewer (FPS, Banda, Ping ecc..)
+	</string>
+	<string name="Command_Region_Tooltip">
+		Apre il pannello di modifica Regione/Estate
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		attualmente nella barra degli strumenti in basso

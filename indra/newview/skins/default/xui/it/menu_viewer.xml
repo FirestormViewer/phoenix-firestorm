@@ -5,24 +5,42 @@
 		<menu_item_call label="Il mio Dashboard" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
 		</menu_item_call>
+		<!--<menu_item_call label="??" name="MerchantOutbox"/>-->
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Il mio profilo" name="Profile"/>
 		<menu_item_call label="Il mio aspetto" name="ChangeOutfit"/>
+		<menu_item_call label="Foto istantanea" name="Take Snapshot"/>
 		<menu_item_check label="Il mio inventario" name="Inventory"/>
 		<menu_item_check label="Il mio inventario" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Le mie gesture" name="Gestures"/>
 		<menu_item_check label="La mia voce" name="ShowVoice"/>
+		<menu_item_check label="Contolli Movimento" name="Movement Controls"/>
 		<menu label="Spostamento" name="Movement">
 			<menu_item_call label="Siedi" name="Sit Down Here"/>
 			<menu_item_check label="Vola" name="Fly"/>
 			<menu_item_check label="Corri sempre" name="Always Run"/>
 			<menu_item_call label="Ferma animazione" name="Stop Animating My Avatar"/>
+			<menu_item_check label="Siedi a terra" name="Force Toggle Sitting"/>
+			<menu_item_check label="Salto rapido" name="Avatar Ignore Prejump"/>
 		</menu>
-		<menu label="Stato" name="Status">
-			<menu_item_call label="Assente" name="Set Away"/>
-			<menu_item_call label="Non disponibile" name="Set Busy"/>
+		<menu_item_check label="Contolli Camera" name="Camera Controls"/>
+		<menu label="Ripara Avatar" name="avhealth">
+			<menu_item_call label="Ferma tutte le animazioni" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Forza caricamento apparence (rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Ripristina avatar ad avatar maschio (Character Test)" name="ResetDefaultAvM"/>
+			<menu_item_call label="Ripristina avatar ad avatar femmina (Character Test)" name="ResetDefaultAvF"/>
+			<menu_item_check label="Mostra peso dell'avatar (Avatar Rendering Cost)" name="Avatar Rendering Cost"/>
+			<menu_item_call label="Ricrea LSL Bridge" name="Recreate LSL Bridge"/>
 		</menu>
-		<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
+		<menu label="Carica sul server" name="Upload">
+			<menu_item_call label="Immagine ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Suono ([COST]L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animazione ([COST]L$)..." name="Upload Animation"/>
+			<menu_item_call label="Modello..." name="Upload Model"/>
+			<menu_item_call label="Caricamento multiplo..." name="Bulk Upload"/>
+			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
+		</menu>
+		<!--<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
 		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
 		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Dashboard dell&apos;account..." name="Manage My Account">
@@ -30,10 +48,20 @@
 		</menu_item_call>
 		<menu_item_call label="Preferenze..." name="Preferences"/>
 		<menu_item_call label="Pulsanti barra strumenti..." name="Toolbars"/>
-		<menu_item_call label="Nascondi tutti i controlli" name="Hide UI"/>
+		<menu_item_call label="Nascondi tutti i controlli" name="Hide UI"/>-->
 		<menu_item_call label="Esci da [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Comunica" name="Communicate">
+		<menu label="Stato online" name="Status">
+			<menu_item_check label="Autorisposta" name="Set Autorespond"/>
+			<menu_item_check label="Autorisposta ai non amici" name="Set Autorespond to non-friends"/>
+			<menu_item_check label="Occupato (Busy)" name="Set Busy"/>
+		</menu>
+		<menu_item_check label="Contatti" name="Contacts"/>
+		<menu_item_check label="Persone" name="People"/>
+		<menu_item_call label="Cronologia teleport" name="Teleport History"/>
+		<menu_item_check label="Luoghi" name="Places"/>
+		<menu_item_check label="Conversazioni" name="Conversations"/>
 		<menu_item_check label="Chat..." name="Nearby Chat"/>
 		<menu_item_check label="Parla" name="Speak"/>
 		<menu_item_check label="Impostazioni voce..." name="Nearby Voice"/>
@@ -72,6 +100,7 @@
 			<menu_item_call label="Tramonto" name="Sunset"/>
 			<menu_item_call label="Mezzanotte" name="Midnight"/>
 			<menu_item_call label="Usa impostazioni regione" name="Use Region Settings"/>
+			<menu_item_call label="Imposta come da Default" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Editor ambiente" name="Environment Editor">
 			<menu_item_call label="Impostazioni ambiente..." name="Environment Settings"/>
@@ -149,14 +178,21 @@
 			<menu_item_call label="In blocco ([COST] L$ per file)..." name="Bulk Upload"/>
 			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
 		</menu>
+		<menu_item_call label="Texture caricate localmente" name="Local Bitmap Browser"/>
 		<menu_item_call label="Annulla" name="Undo"/>
 		<menu_item_call label="Ripeti" name="Redo"/>
+	</menu>
+	<menu label="Contenuto" name="Content">
+		<menu_item_check label="Cerca" name="Search"/>
+		<menu_item_call label="Bibleoteca Script" name="Script Library"/>
 	</menu>
 	<menu label="Aiuto" name="Help">
 		<menu_item_call label="Aiuto di [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_check label="Attiva suggerimenti" name="Enable Hints"/>
+		<menu_item_call label="Controlla stato Grid [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Segnala abuso" name="Report Abuse"/>
 		<menu_item_call label="Segnala bug" name="Report Bug"/>
+		<menu_item_check label="Abilita tasto informazioni di sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informazioni su [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avanzate" name="Advanced">
@@ -230,6 +266,7 @@
 			<menu_item_call label="Zoom predefinito" name="Zoom Default"/>
 			<menu_item_call label="Zoom indietro" name="Zoom Out"/>
 		</menu>
+		<menu_item_check label="Vola ovunque" name="Fly Override"/>
 		<menu_item_call label="Mostra impostazioni di debug" name="Debug Settings"/>
 		<menu_item_check label="Mostra menu sviluppo" name="Debug Mode"/>
 	</menu>

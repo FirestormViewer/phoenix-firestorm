@@ -50,7 +50,7 @@
 	<check_box label="Nomi utente" name="show_slids" tool_tip="Mostra il nome utente, come bobsmith123"/>
 	<check_box label="Titoli gruppo" name="show_all_title_checkbox1" tool_tip="Mostra titoli di gruppo, come Funzionario o Membro"/>
 	<check_box label="Evidenzia amici" name="show_friends" tool_tip="Evidenzia le etichette dei nomi dei tuoi amici"/>
-	<check_box label="Mostra nomi visualizzati" name="display_names_check" tool_tip="Seleziona per visualizzare i nomi in chat, IM, etichette, ecc."/>
+	<check_box label="Mostra Display Name" name="display_names_check" tool_tip="Seleziona per visualizzare i nomi in chat, IM, etichette, ecc."/>
 	<check_box label="Nascondi il mio titolo del gruppo" name="RenderHideGroupTitle" tool_tip="Nasconde/Mostra il proprio titolo del gruppo attivo, nel tag, a tutti e a te stesso." />
 	<check_box label="I Legacy names sostituiscono gli usernames" name="FSshow_legacyun" tool_tip="Mostra i Legacy Name (Nome Cognome) invece degli username (nome.cognome)"/>
 	<panel name="general_extras">

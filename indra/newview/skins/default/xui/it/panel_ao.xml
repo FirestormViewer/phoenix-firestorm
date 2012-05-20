@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel name="animation_overrider_outer_panel">
+	<panel name="animation_overrider_panel">
+		<combo_box name="ao_set_selection_combo" tool_tip="Seleziona un set di animazioni da modificare." />
+		<button name="ao_activate" tool_tip="Attiva questo set di animazioni ora." />
+		<check_box name="ao_default" tool_tip="Utilizza questo set di animazione di default." />
+		<button name="ao_add" tool_tip="Crea nuovo set di animazioni." />
+		<button name="ao_remove" tool_tip="Rimuovi questo set di animazioni." />
+		<check_box name="ao_sit_override" label="Forza Seduta" tool_tip="Se spuntata, questa opzione permetterà di sovrascrivere le sedute degli oggetti." />
+		<check_box name="ao_smart" label="Sprytnie" tool_tip="Modalità Smart cerca di determinare se la sovrascrittura della seduta fosse in contrasto con l'animazione stessa dell'oggetto, in questo caso disabilita temporaneamente la Super Seduta." />
+		<check_box name="ao_disable_stands_in_mouselook" label="Disabilita Stands in Mouselook" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
+		<combo_box name="ao_state_selection_combo" tool_tip="Seleziona quale tipo di animazione si vuole modificare." />
+		<panel name="ao_animation_move_trash_panel">
+			<button name="ao_move_up" tool_tip="Spostare l'animazione selezionata verso l'alto nell'elenco." />
+			<button name="ao_move_down" tool_tip="Spostare l'animazione selezionato verso il basso nell'elenco." />
+			<button name="ao_trash" tool_tip="Rimuovere l'animazione selezionato dalla lista." />
+		</panel>
+		<check_box name="ao_cycle" label="Cicliche" tool_tip="Riproduce le animazioni in modo cliclico a seconda di quale funzione è richiamata." />
+		<check_box left_pad="15" name="ao_randomize" label="Ordine casuale" tool_tip="Riproduce le animazioni in modo casuale." />
+		<text name="ao_cycle_time_seconds_label" value="Tempo ciclo(secondi):" />
+		<spinner name="ao_cycle_time" tool_tip="Quanto tempo deve passare prima di passare all'animazione successiva. Impostare a 0 per disattivare l'animazione ciclica in automatico." />
+		<button name="ao_reload" label="Ricarica" tool_tip="Ricarica questo Set di animazioni." />
+		<layout_stack name="next_previous_buttons_stack">
+		<layout_panel name="next_previous_buttons_stack_left">
+		<button name="ao_previous" tool_tip="Animazione precedente." />
+		</layout_panel>
+		<layout_panel name="next_previous_buttons_stack_right">
+		<button name="ao_next" tool_tip="Animazione successiva." />
+		</layout_panel>
+		</layout_stack>
+		<button name="ao_less" tool_tip="Mostra interfaccia piccola dell'AO." />
+	</panel>
+	<panel name="ao_reload_cover">
+		<panel name="ao_reload_text_panel">
+			<text name="reload_label">
+				Caricamento config
+			</text>
+			<text name="wait_label">
+				Attendere...
+			</text>
+		</panel>
+	</panel>
+	<panel name="animation_overrider_panel_small">
+	<combo_box name="ao_set_selection_combo_small" tool_tip="Scegli una serie di animazione da modificare." />
+	<button name="ao_more" tool_tip="Mostra interfaccia completa." />
+	<button name="ao_previous_small" tool_tip="Animazione precedente." />
+	<button name="ao_next_small" tool_tip="Animazione successiva." />
+	<check_box name="ao_sit_override_small" label="Seduta" tool_tip="Spunta questa se vuoi sovrascrivere l'animazione degli oggetti." />
+	</panel>
+</panel>

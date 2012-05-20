@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="animation_overrider" >
+	<floater.string name="ao_no_sets_loaded">Nessun AO Caricato</floater.string>
+	<floater.string name="ao_no_animations_loaded">Nessuna animazione caricata</floater.string>
+</floater>

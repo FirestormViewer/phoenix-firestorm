@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="firestorm">
 <tab_container label="Ust. Firestorma" name="tabs">
+<!-- Gnerale -->
     <panel label="Generale" name="tab-general">
         <check_box name="checkMiscRLVa" label="Abilita Remote Scripted Viewer Controls  (RLVa)" />
         <text name="textMiscRLVaRestart">
@@ -19,6 +20,7 @@
         <check_box label="Abilita LSL-Client Bridge" name="UseLSLBridge" tool_tip="Permette al Viewer di utilizare lo script del Bridge per consentire caratteristiche avanzate" />
         <check_box label="Volare oltre il Limite" name="UseLSLFlightAssist" tool_tip="Consente di volare oltre il limite tramite il Flight Assist (Piuma o altri HUD non più necessari)" />
     </panel>
+	<!--Protezione-->
     <panel label="Protezione" name="ProtectionTab">
         <check_box label="Blocca seduta tramite tasto sinistro del mouse" name="FSBlockClickSit" />
         <check_box label="Consente agli script di aprire la mappa (llMapDestination)" name="ScriptsCanShowUI" />
@@ -57,6 +59,7 @@
         <check_box label="Notifica quando un'altro residente ti invia oggetti troppo velocemente" name="FSNotifyIncomingObjectSpamFrom" />
         <slider name="FSOfferThrottleMaxCount" label="Limita soglia degli oggetti che arrivano:" tool_tip="Soglia massima di oggetti che devono arrivare in 10 secondi[Default 5]" />
 	</panel>
+	<!--Avatar-->
 	<panel label="Avatar" name="firestorm_avatar">
         <text name="HeadMovement">
             Gradi di rotazione della testa quando segue il mouse(Impostare a '0' per non muoverla):
@@ -89,6 +92,7 @@
         <button name="refresh_beams" label="Aggiorna lista" tool_tip="Aggiorna la lista delle forme salvati" />
         <slider name="FSBeamShapeScale" label="Scala:" tool_tip="Cambia la grandezza dell'indicatore a forma della Fenice di Firestorm" />
     </panel>
+	<!--Comandi brevi-->
     <panel label="CmdLine" name="tab1-3">
         <check_box label="Abilita comandi dalla Chat" name="chat_cmd_toggle" />
         <text name="FSCmdLinePos_txt">
@@ -149,6 +153,7 @@
         </text>
       <line_editor tool_tip="Setta nella parcella e riproduce lo streaming audio da URL" name="FSCmdLineMusic" />
     </panel>
+	<!-- Cielo e mare-->
     <panel label="Windlight" name="WindlightTab">
         <check_box label="Cambia automaticamente le impostazioni ambiente della Sim/Parcella" name="UseEnvironmentFromRegionAlways" />
         <check_box label="Cambiare gradualmente le impostazioni del cielo" name="FSInterpolateSky" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
@@ -162,14 +167,15 @@
         <check_box label="Applica automaticamente le impostazioni WL ovunque" name="FSWLWhitelistAll" />
         <check_box label="Cambiare gradualmente le impostazioni al cambio sim del WL" name="FSInterpolateParcelWL" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
     </panel>
+	<!--Costruzione-->
     <panel label="Costruzione" name="BuildTab">
-        <text name="text_box_objprams">
+        <text name="text_box_objprams" width="250">
          Parametri di base alla creazione dell'oggetto
          </text>
         <spinner label="Asse X" name="X size" />
         <spinner label="Asse Y" name="Y size" />
         <spinner label="Asse Z" name="Z size" />
-        <text name="text_box_objmaterial">
+        <text name="text_box_objmaterial" width="60">
          Materiale:
          </text>
         <combo_box name="material">
@@ -192,7 +198,17 @@
         <check_box label="Evidenzia i prims selezionati" tool_tip="Quando non è spuntata questa casella, i prim editati non verranno messi in evidenza con i contorni gialli/blu. Questa casella non spuntata aumenta le prestazioni del viewer evitando crash quando si selezionano molti oggetti." name="EmBuildPrefsRenderHighlight_toggle" />
         <check_box label="Usa il vecchio metodo &quot;Metti oggetto in vendita&quot;" tool_tip="Quando selezionato, l'oggetto in vendita viene salvato senza chiedere conferma" name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Salva gli Script in inventario come Mono" tool_tip="Quando selezionato, salverà gli script editati nell'invetario con il formato mono." name="FSSaveInventoryScriptsAsMono_toggle" />
+	<check_box label="Abilita LSL preprocessor" tool_tip="Quando spuntata, LSL preprocessor è attivo." name="preproc_checkbox" />
+	<check_box label="Ottimizza Script" tool_tip="Quando spuntato, LSL preprocessor ottimizzerà lo spazio usato usato dallo script e migliora la leggibilità." name="preprocoptimizer_checkbox"/>
+	<check_box tool_tip="Quando spuntato, LSL preprocessor sarà autorizzato a fare lo switch() statement per controllare il flusso dello script." name="preprocswitch_checkbox"/>
+	<check_box label="Lazy lists" tool_tip="Quando spuntato, LSL preprocessor sarà autorizzato a fare la sintassi delle estenzioni per gestire l'elenco" name="preproclazy_checkbox"/>
+	<check_box label="#Includi dal disco locale" tool_tip="Quando spuntato, LSL preprocessor sarà autorizzato a #includere informazioni da un file nel tuo HDD." name="preprocinclude_checkbox"/>
+	<text name="lslpreprocinclude_textbox">
+    Percorso file da includere nel Preprocessor:
+	</text>
+	<button label="Sfoglia" label_selected="Sfoglia" name="SetPreprocInclude"/>
     </panel>
+	<!--Tag-->
     <panel label="Tag" name="TagTab">
         <text name="SL-Tags-Notice">
           Nota: A causa di cambiamenti del TOS LindenLab, i settaggi del tag non funzionano in SL

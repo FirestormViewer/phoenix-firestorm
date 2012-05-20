@@ -23,4 +23,7 @@
 	<line_editor name="amount" />
 	<button label="Paga" label_selected="Paga" name="pay btn"/>
 	<button label="Annulla" label_selected="Annulla" name="cancel btn"/>
+	<text name="payment_message_label" left="20" width="210">
+		Messaggio di pagamento (opzionale):
+	</text>
 </floater>

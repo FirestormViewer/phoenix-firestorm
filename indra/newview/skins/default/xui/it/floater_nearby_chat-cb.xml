@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="CZAT LOKALNY">
+  <layout_stack name="im_panels">
+    <layout_panel>
+          <button tool_tip="Usa servizio di traduzione selezionato" name="translate_btn"/>
+          <button tool_tip="Apri cronologia della Chat locale (Se attiva)" name="chat_history_btn"/>
+    </layout_panel>
+  </layout_stack>
+</floater>
