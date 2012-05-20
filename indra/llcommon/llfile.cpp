@@ -291,7 +291,8 @@ llifstream::~llifstream()
 llifstream::llifstream(const std::string& _Filename,
 	ios_base::openmode _Mode,
 	int _Prot)
-	: std::basic_istream< char , std::char_traits< char > >(NULL,true),_Filebuffer(NULL),_ShouldClose(false)
+//	: std::basic_istream< char , std::char_traits< char > >(NULL,true),_Filebuffer(NULL),_ShouldClose(false)
+	: std::basic_istream< char , std::char_traits< char > >(std::_Noinit),_Filebuffer(NULL),_ShouldClose(false)
 
 {	// construct with named file and specified mode
 	open(_Filename, _Mode | ios_base::in, _Prot);	/* Flawfinder: ignore */
@@ -341,7 +342,8 @@ void llofstream::close()
 llofstream::llofstream(const std::string& _Filename,
 	std::ios_base::openmode _Mode,
 	int _Prot) 
-		: std::basic_ostream<char,std::char_traits < char > >(NULL,true),_Filebuffer(NULL),_ShouldClose(false)
+//		: std::basic_ostream<char,std::char_traits < char > >(NULL,true),_Filebuffer(NULL),_ShouldClose(false)
+		: std::basic_ostream<char,std::char_traits < char > >(std::_Noinit,true),_Filebuffer(NULL),_ShouldClose(false)
 {	// construct with named file and specified mode
 	open(_Filename, _Mode , _Prot);	/* Flawfinder: ignore */
 }
