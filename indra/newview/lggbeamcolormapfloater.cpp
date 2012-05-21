@@ -363,7 +363,7 @@ void lggBeamColorMapFloater::onClickSave()
 	LLSD main = getMyDataSerialized();
   
 	llofstream export_file;
-	export_file.open(filename.c_str());
+	export_file.open(filename);
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
 

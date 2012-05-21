@@ -499,7 +499,7 @@ void FSData::saveLLSD(const LLSD& data, const std::string& filename)
 {
 	LL_INFOS("Data") << "Saving " << filename << LL_ENDL;
 	llofstream file;
-	file.open(filename.c_str());
+	file.open(filename);
 	if(!file.is_open())
 	{
 		LL_WARNS("Data") << "Unable to open " << filename << LL_ENDL;
