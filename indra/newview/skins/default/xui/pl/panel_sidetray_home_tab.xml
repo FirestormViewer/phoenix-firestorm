@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!-- the web-based Home panel of the side tray -->
 <panel name="home_tab">
   <layout_stack name="stack">
     <layout_panel name="browser_layout">

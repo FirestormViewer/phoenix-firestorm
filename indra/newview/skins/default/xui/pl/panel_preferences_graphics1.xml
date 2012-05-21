@@ -119,16 +119,15 @@
 			<text name="Texture Rendering">
 				Rendering tekstur:
 			</text>
-			<check_box label="Minimalne ładowanie tekstur" tool_tip="Ta opcja jest skrótem dla parametru 'TextureDisable' - tekstury są jednak ciągle wczytywane, ale bardzo powoli. Może to być użyteczne dla komputerów ze słabą kartą graficzną albo wyjątkowo kiepskim połączeniem internetowym. Podczas normalnego użytkowania Second Life nie zaleca się zaznaczania tej opcji." name="TexturesLoaded"/>
 			<check_box label="Ładuj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
 			<slider label="Maks. ilość jednoczesnych wywołań HTTP GET" name="HTTPFetchMaxRequests"/>
 			<text name="TextureDetailLabel">
 				Detale tekstur:
 			</text>
 			<combo_box name="TextureDetail">
-				<combo_box.item label="Normalne" name="0"/>
-				<combo_box.item label="Minimalne" name="3"/>
-				<combo_box.item label="Żadne" name="5"/>
+				<combo_box.item label="Normalna jakość" name="0"/>
+				<combo_box.item label="Niska jakość" name="3"/>
+				<combo_box.item label="Bez tekstur" name="5"/>
 			</combo_box>
 			<text name="Alpha Mask Rendering">
 				Maski przezroczystości (alpha):
