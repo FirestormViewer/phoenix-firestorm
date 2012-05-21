@@ -673,6 +673,7 @@ void LLPanelGroupGeneral::update(LLGroupChange gc)
 		{
 			mMemberProgress = gdatap->mMembers.begin();
 			mPendingMemberUpdate = TRUE;
+			mIteratorGroup = mGroupID; // <FS:ND/> FIRE-6074
 
 			sSDTime = 0.0f;
 			sElementTime = 0.0f;
@@ -707,6 +708,14 @@ void LLPanelGroupGeneral::updateMembers()
 	{
 		return;
 	}
+
+	// <FS:ND> FIRE-6074; If the group changes, mMemberPRogresss is invalid, as it belongs to a different LLGroupMgrGroupData. Reset it, start over.
+	if( mIteratorGroup != mGroupID )
+	{
+		mMemberProgress == gdatap->mMembers.begin();
+		mIteratorGroup = mGroupID;
+	}
+	// </FS:ND> FIRE-6074
 
 	static LLTimer all_timer;
 	static LLTimer sd_timer;
