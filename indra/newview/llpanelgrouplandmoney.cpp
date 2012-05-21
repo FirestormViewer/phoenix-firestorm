@@ -665,9 +665,7 @@ BOOL LLPanelGroupLandMoney::postBuild()
 	*/
 	
 	bool can_view = gAgent.isInGroup(mGroupID);
-
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	this->setLabelArg("[CUR]", type_currency);
+	
 	mImplementationp->mGroupOverLimitIconp = 
 		getChild<LLIconCtrl>("group_over_limit_icon");
 	mImplementationp->mGroupOverLimitTextp = 
@@ -806,6 +804,7 @@ BOOL LLPanelGroupLandMoney::postBuild()
 												 loading_text);
 	}
 
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	getChild<LLUICtrl>("group_money_heading")->setTextArg("[CUR]", type_currency);
 	return LLPanelGroupTab::postBuild();
 }

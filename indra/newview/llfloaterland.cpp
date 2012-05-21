@@ -1944,6 +1944,9 @@ BOOL LLPanelLandOptions::postBuild()
 	mCheckShowDirectory = getChild<LLCheckBoxCtrl>( "ShowDirectoryCheck");
 	childSetCommitCallback("ShowDirectoryCheck", onCommitAny, this);
 
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	mCheckShowDirectory->setLabelArg(std::string("[CUR]"), type_currency);
+
 	
 	if (gAgent.getAgentAccess().isInTransition())
 	{
@@ -2441,7 +2444,7 @@ BOOL LLPanelLandAccess::postBuild()
 	}
 
 	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLUICtrl>("PriceSpin")->setLabelArg(std::string("[CUR]"), type_currency);
+	getChild<LLSpinCtrl>("PriceSpin")->setLabelArg(std::string("[CUR]"), type_currency);
 	return TRUE;
 }
 
