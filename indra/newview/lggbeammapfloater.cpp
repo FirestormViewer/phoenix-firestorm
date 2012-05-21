@@ -241,7 +241,7 @@ void lggBeamMapFloater::onClickSave()
 	main["data"] = getMyDataSerialized();
   
 	llofstream export_file;
-	export_file.open(filename);
+	export_file.open(filename.c_str());
 	LLSDSerialize::toPrettyXML(main, export_file);
 	export_file.close();
 	gSavedSettings.setString("FSBeamShape",gDirUtilp->getBaseFileName(filename,true));

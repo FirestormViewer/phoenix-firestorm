@@ -229,7 +229,7 @@ void LLPanelLogin::addUsersWithFavoritesToUsername()
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
-	file.open(filename);
+	file.open(filename.c_str());
 	if (!file.is_open()) return;
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
@@ -260,7 +260,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
-	file.open(filename);
+	file.open(filename.c_str());
 	if (!file.is_open()) return;
 	LLSDSerialize::fromXML(fav_llsd, file);
 	for (LLSD::map_const_iterator iter = fav_llsd.beginMap();
