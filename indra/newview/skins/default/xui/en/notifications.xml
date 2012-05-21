@@ -8187,6 +8187,30 @@ Otherwise, you can look at the Map and find places marked &quot;Infohub&quot;.
   <global name="You died and have been teleported to your home location">
 You died and have been teleported to your home location.
   </global>
+<!-- <FS:AW>  opensim search support-->
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmClearDebugSearchURL"
+   type="alertmodal">
+Are you sure you want to clear the debug search url?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmPickDebugSearchURL"
+   type="alertmodal">
+Are you sure you want to pick the current search url as debug search url?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+<!-- </FS:AW>  opensim search support-->
 
   <notification
      icon="notifytip.tga"

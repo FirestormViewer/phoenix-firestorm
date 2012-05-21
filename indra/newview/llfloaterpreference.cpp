@@ -128,6 +128,8 @@
 #include "llhunspell.h"
 // [/SL:KB]
 
+#include "llviewernetwork.h" // <FS:AW  opensim search support>
+
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
@@ -210,6 +212,10 @@ void handleFlightAssistOptionChanged(const LLSD& newvalue);
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_cache(const LLSD& notification, const LLSD& response);
 bool callback_clear_settings(const LLSD& notification, const LLSD& response);
+// <FS:AW  opensim search support>
+bool callback_clear_debug_search(const LLSD& notification, const LLSD& response);
+bool callback_pick_debug_search(const LLSD& notification, const LLSD& response);
+// </FS:AW  opensim search support>
 
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
@@ -257,6 +263,46 @@ bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response
 	
 	return false;
 }
+
+// <FS:AW  opensim search support>
+bool callback_clear_debug_search(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+	        gSavedSettings.setString("SearchURLDebug","");
+	}
+
+	return false;
+}
+
+bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 0 ) // YES
+	{
+		std::string url;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+		if(LLGridManager::getInstance()->isInOpenSim())
+		{
+			url = LLLoginInstance::getInstance()->hasResponse("search")
+				? LLLoginInstance::getInstance()->getResponse("search").asString()
+				: gSavedSettings.getString("SearchURLOpenSim");
+		}
+		else // we are in SL or SL beta
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+		{
+			//not in OpenSim means we are in SL or SL beta
+			url = gSavedSettings.getString("SearchURL");
+		}
+
+	        gSavedSettings.setString("SearchURLDebug", url);
+
+	}
+
+	return false;
+}
+// </FS:AW  opensim search support>
 
 void handleNameTagOptionChanged(const LLSD& newvalue)
 {
@@ -392,6 +438,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("Pref.Proxy",					boost::bind(&LLFloaterPreference::onClickProxySettings, this));
 	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
+// <FS:AW  opensim search support>
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL",				boost::bind(&LLFloaterPreference::onClickClearDebugSearchURL, this));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL",				boost::bind(&LLFloaterPreference::onClickPickDebugSearchURL, this));
+// </FS:AW  opensim search support>
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
@@ -1017,6 +1067,20 @@ void LLFloaterPreference::onClickSetCache()
 		gSavedSettings.setString("CacheLocationTopFolder", top_folder);
 	}
 }
+
+// <FS:AW  opensim search support>
+void LLFloaterPreference::onClickClearDebugSearchURL()
+{
+	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);
+}
+
+void LLFloaterPreference::onClickPickDebugSearchURL()
+{
+
+	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
+}
+// </FS:AW  opensim search support>
+
 void LLFloaterPreference::onClickBrowseCache()
 {
 	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""));
@@ -1359,8 +1423,21 @@ void LLFloaterPreference::refreshEnabledState()
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
+// <FS:AW  opensim search support>
+// getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
+	bool logged_in = LLLoginInstance::getInstance()->authSuccess();
+	getChildView("block_list")->setEnabled(logged_in);
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	getChildView("pick_current_search_url")->setEnabled(logged_in);
+	getChildView("DebugSearch")->setEnabled(logged_in);
+	getChildView("debug_search_panel")->setEnabled(logged_in);
+// <FS:AW optional opensim support>
+#else // HAS_OPENSIM_SUPPORT 
+	getChildView("debug_search_panel")->setVisible(false);
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:AW optional opensim support>
 
-	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
+// </FS:AW  opensim search support>
 }
 
 void LLFloaterPreference::disableUnavailableSettings()

@@ -93,6 +93,11 @@ protected:
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
+// <FS:AW  opensim search support>
+	void onClickClearDebugSearchURL();
+	void onClickPickDebugSearchURL();
+// </FS:AW  opensim search support>
+
 	// ## Zi: Pie menu
 	// make sure controls get greyed out or enabled when pie color override is toggled
 	void onPieColorsOverrideChanged();
