@@ -5,7 +5,7 @@
 		<menu_item_call label="マイアカウント" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=ja"/>
 		</menu_item_call>
-		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
+		<menu_item_call label="[CUR] の購入" name="Buy and Sell L$"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
 		<menu_item_call label="容姿" name="ChangeOutfit"/>
 		<menu_item_check label="持ち物" name="Inventory"/>
@@ -24,7 +24,7 @@
 		</menu>
 		<menu_item_call label="管理者権限のリクエスト" name="Request Admin Options"/>
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
-		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
+		<menu_item_call label="[CUR] の購入" name="Buy and Sell L$"/>
 		<menu_item_call label="マイアカウント..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=ja"/>
 		</menu_item_call>
@@ -142,11 +142,11 @@
 			<menu_item_call label="グリッドオプション" name="Grid Options"/>
 		</menu>
 		<menu label="アップロード" name="Upload">
-			<menu_item_call label="画像（L$[COST]）..." name="Upload Image"/>
-			<menu_item_call label="サウンド（L$[COST]）..." name="Upload Sound"/>
-			<menu_item_call label="アニメーション（L$[COST]）..." name="Upload Animation"/>
+			<menu_item_call label="画像（[CUR][COST]）..." name="Upload Image"/>
+			<menu_item_call label="サウンド（[CUR][COST]）..." name="Upload Sound"/>
+			<menu_item_call label="アニメーション（[CUR][COST]）..." name="Upload Animation"/>
 			<menu_item_call label="モデル" name="Upload Model"/>
-			<menu_item_call label="一括 （ファイルにつきL$[COST]）..." name="Bulk Upload"/>
+			<menu_item_call label="一括 （ファイルにつき[CUR][COST]）..." name="Bulk Upload"/>
 			<menu_item_call label="デフォルトのアップロード権限を設定" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="元に戻す" name="Undo"/>
@@ -210,7 +210,7 @@
 		<menu_item_check label="マウスの平滑化" name="Mouse Smoothing"/>
 		<menu_item_call label="リリースキー" name="Release Keys"/>
 		<menu label="ショートカット" name="Shortcuts">
-			<menu_item_call label="画像 （L$ [COST] ）..." name="Upload Image"/>
+			<menu_item_call label="画像 （[CUR] [COST] ）..." name="Upload Image"/>
 			<menu_item_check label="検索" name="Search"/>
 			<menu_item_check label="アドバンスメニューを表示 - レガシーのショートカット" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_call label="ウィンドウを閉じる" name="Close Window"/>

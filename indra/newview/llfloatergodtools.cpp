@@ -69,6 +69,7 @@
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
 #include "lltrans.h"
+#include "llviewernetwork.h"
 
 #include "lltransfertargetfile.h"
 #include "lltransfersourcefile.h"
@@ -480,6 +481,8 @@ void LLPanelRegionTools::clearAllWidgets()
 	getChild<LLUICtrl>("billable factor")->setValue(BILLABLE_FACTOR_DEFAULT);
 	getChildView("billable factor")->setEnabled(FALSE);
 
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	getChild<LLUICtrl>("land cost text")->setTextArg("[CUR]", type_currency);
 	getChild<LLUICtrl>("land cost")->setValue(PRICE_PER_METER_DEFAULT);
 	getChildView("land cost")->setEnabled(FALSE);
 

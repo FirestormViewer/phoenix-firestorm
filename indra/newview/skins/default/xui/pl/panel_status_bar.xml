@@ -12,11 +12,11 @@
 		Przepustowość
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] L$
+		[AMT] [CUR]
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo L$"/>
-		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
+		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo [CUR]"/>
+		<button label="KUP [CUR]" name="buyL" tool_tip="Kliknij aby kupić więcej [CUR]"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>

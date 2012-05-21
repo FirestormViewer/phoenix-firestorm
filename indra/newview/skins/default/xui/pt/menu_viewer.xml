@@ -5,7 +5,7 @@
 		<menu_item_call label="Meu painel" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=pt"/>
 		</menu_item_call>
-		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Comprar [CUR]" name="Buy and Sell L$"/>
 		<menu_item_call label="Meu perfil" name="Profile"/>
 		<menu_item_call label="Minha aparência" name="ChangeOutfit"/>
 		<menu_item_check label="Meu inventário" name="Inventory"/>
@@ -24,7 +24,7 @@
 		</menu>
 		<menu_item_call label="Request Admin Status" name="Request Admin Options"/>
 		<menu_item_call label="Sair do modo admin" name="Leave Admin Options"/>
-		<menu_item_call label="Comprar L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Comprar [CUR]" name="Buy and Sell L$"/>
 		<menu_item_call label="Painel da conta..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=pt"/>
 		</menu_item_call>
@@ -142,11 +142,11 @@
 			<menu_item_call label="Opções de grade" name="Grid Options"/>
 		</menu>
 		<menu label="Upload" name="Upload">
-			<menu_item_call label="Imagem (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Som (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animação (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagem ([CUR][COST])..." name="Upload Image"/>
+			<menu_item_call label="Som ([CUR][COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animação ([CUR][COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelar..." name="Upload Model"/>
-			<menu_item_call label="Volume (L$[COST] por arquivo)..." name="Bulk Upload"/>
+			<menu_item_call label="Volume ([CUR][COST] por arquivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Autorizações de upload padrão" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Desfazer" name="Undo"/>
@@ -209,7 +209,7 @@
 		<menu_item_check label="Smoothing de mouse" name="Mouse Smoothing"/>
 		<menu_item_call label="Liberar teclas" name="Release Keys"/>
 		<menu label="Atalhos" name="Shortcuts">
-			<menu_item_call label="Imagem (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Imagem ([CUR][COST])..." name="Upload Image"/>
 			<menu_item_check label="Busca" name="Search"/>
 			<menu_item_check label="Mostrar menu avançado - atalho antigo" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_call label="Fechar janela" name="Close Window"/>

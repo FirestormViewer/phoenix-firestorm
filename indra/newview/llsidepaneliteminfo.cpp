@@ -43,6 +43,8 @@
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
 #include "llviewerobjectlist.h"
+#include "llspinctrl.h"
+#include "llviewernetwork.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -177,6 +179,8 @@ BOOL LLSidepanelItemInfo::postBuild()
 	getChild<LLUICtrl>("CheckPurchase")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this));
 	// "Price" label for edit
 	getChild<LLUICtrl>("Edit Cost")->setCommitCallback(boost::bind(&LLSidepanelItemInfo::onCommitSaleInfo, this));
+	std::string type_currency = "Price: " + LLGridManager::getInstance()->getCurrency();
+	getChild<LLSpinCtrl>("Edit Cost")->setLabel(type_currency);
 	refresh();
 	return TRUE;
 }

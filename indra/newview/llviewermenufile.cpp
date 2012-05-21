@@ -61,6 +61,7 @@
 #include "lluploaddialog.h"
 #include "lltrans.h"
 #include "llfloaterbuycurrency.h"
+#include "llviewernetwork.h"
 
 // linden libraries
 #include "llassetuploadresponders.h"
@@ -967,9 +968,11 @@ void upload_done_callback(
 				
 				if(!(can_afford_transaction(expected_upload_cost)))
 				{
+					std::string type_currency = LLGridManager::getInstance()->getCurrency();
 					LLStringUtil::format_map_t args;
 					args["NAME"] = data->mAssetInfo.getName();
 					args["AMOUNT"] = llformat("%d", expected_upload_cost);
+					args["CUR"] = type_currency;
 					LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("UploadingCosts", args), expected_upload_cost );
 					is_balance_sufficient = FALSE;
 				}
@@ -1286,10 +1289,12 @@ void upload_new_resource(
 			S32 balance = gStatusBar->getBalance();
 			if (balance < expected_upload_cost)
 			{
+				std::string type_currency = LLGridManager::getInstance()->getCurrency();
 				// insufficient funds, bail on this upload
 				LLStringUtil::format_map_t args;
 				args["NAME"] = name;
 				args["AMOUNT"] = llformat("%d", expected_upload_cost);
+				args["CUR"] = type_currency;
 				LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("UploadingCosts", args), expected_upload_cost );
 				return;
 			}

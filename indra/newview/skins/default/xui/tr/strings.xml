@@ -309,7 +309,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		(Grup)
 	</string>
 	<string name="TooltipForSaleL$">
-		Satılık: L$[AMOUNT]
+		Satılık: [CUR][AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Grup İnşası
@@ -338,7 +338,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="TooltipMustSingleDrop">
 		Buraya sadece bir öğe sürüklenebilir.
 	</string>
-	<string name="TooltipPrice" value="L$[AMOUNT]:"/>
+	<string name="TooltipPrice" value="[CUR][AMOUNT]:"/>
 	<string name="TooltipOutboxNoTransfer">
 		Bu nesnelerden bir veya daha fazlası başka bir kullanıcıya satılamaz veya aktarılamaz.
 	</string>
@@ -821,7 +821,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		Çevrimdışı
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] m² L$[PRICE]
+		[AREA] m² [CUR][PRICE]
 	</string>
 	<string name="worldmap_results_none_found">
 		Hiçbiri bulunamadı.
@@ -863,7 +863,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		&apos;[OWNERNAME]&apos; adlı kişiye ait, [REGIONPOS] üzerinde [REGIONNAME] içerisinde bulunan &apos;[OBJECTNAME]&apos; nesnesine şunu yapma izni verilmedi: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Sizden Linden dolar (L$) almak
+		Sizden Linden dolar ([CUR]) almak
 	</string>
 	<string name="ActOnControlInputs">
 		Denetim girişlerinizle ilgili eylem gerçekleştirmek
@@ -1418,7 +1418,7 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		Satın Al
 	</string>
 	<string name="BuyforL$">
-		L$&apos;a Satın Al
+		[CUR]&apos;a Satın Al
 	</string>
 	<string name="Stone">
 		Taş
@@ -2074,10 +2074,10 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 		İptal
 	</string>
 	<string name="UploadingCosts">
-		[NAME] için karşıya yükleme maliyeti: L$ [AMOUNT]
+		[NAME] için karşıya yükleme maliyeti: [CUR] [AMOUNT]
 	</string>
 	<string name="BuyingCosts">
-		Bunu satın almanın maliyeti: L$ [AMOUNT]
+		Bunu satın almanın maliyeti: [CUR] [AMOUNT]
 	</string>
 	<string name="UnknownFileExtension">
 		Bilinmeyen dosya uzantısı .%s
@@ -4021,34 +4021,34 @@ Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] size [REASON] L$[AMOUNT] ödedi.
+		[NAME] size [REASON] [CUR][AMOUNT] ödedi.
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] size L$[AMOUNT] ödedi.
+		[NAME] size [CUR][AMOUNT] ödedi.
 	</string>
 	<string name="you_paid_ldollars">
-		[NAME]&apos;e [REASON] L$[AMOUNT]  ödediniz.
+		[NAME]&apos;e [REASON] [CUR][AMOUNT]  ödediniz.
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		L$[AMOUNT] ödediniz.
+		[CUR][AMOUNT] ödediniz.
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		[NAME]&apos;e L$[AMOUNT] ödediniz.
+		[NAME]&apos;e [CUR][AMOUNT] ödediniz.
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		[REASON] L$[AMOUNT] ödediniz.
+		[REASON] [CUR][AMOUNT] ödediniz.
 	</string>
 	<string name="you_paid_failure_ldollars">
-		[REASON] [NAME]&apos;e L$[AMOUNT] ödeyemediniz.
+		[REASON] [NAME]&apos;e [CUR][AMOUNT] ödeyemediniz.
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		L$[AMOUNT] ödeyemediniz.
+		[CUR][AMOUNT] ödeyemediniz.
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		[NAME]&apos;e L$[AMOUNT] ödeyemediniz.
+		[NAME]&apos;e [CUR][AMOUNT] ödeyemediniz.
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		[REASON] L$[AMOUNT] ödeyemediniz.
+		[REASON] [CUR][AMOUNT] ödeyemediniz.
 	</string>
 	<string name="for item">
 		[ITEM] için.
@@ -4075,19 +4075,19 @@ Bu iletiyi almaya devam ederseniz, lütfen [SUPPORT_SITE] bölümüne başvurun.
 		bir ilan yayınlamak için
 	</string>
 	<string name="giving">
-		L$ [AMOUNT] veriliyor
+		[CUR] [AMOUNT] veriliyor
 	</string>
 	<string name="uploading_costs">
-		Karşıya yüklemenin maliyeti: L$ [AMOUNT]
+		Karşıya yüklemenin maliyeti: [CUR] [AMOUNT]
 	</string>
 	<string name="this_costs">
-		Bunun maliyeti: L$ [AMOUNT]
+		Bunun maliyeti: [CUR] [AMOUNT]
 	</string>
 	<string name="buying_selected_land">
-		L$ [AMOUNT] karşılığında seçilen arazi satın alınıyor
+		[CUR] [AMOUNT] karşılığında seçilen arazi satın alınıyor
 	</string>
 	<string name="this_object_costs">
-		Bu nesnenin maliyeti: L$ [AMOUNT]
+		Bu nesnenin maliyeti: [CUR] [AMOUNT]
 	</string>
 	<string name="group_role_everyone">
 		Herkes

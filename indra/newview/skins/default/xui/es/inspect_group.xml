@@ -11,7 +11,7 @@
 		Inscripción gratuita
 	</string>
 	<string name="CostToJoin">
-		Inscribirse cuesta [AMOUNT] L$
+		Inscribirse cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="YouAreMember">
 		Eres miembro

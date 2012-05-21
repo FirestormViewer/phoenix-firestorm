@@ -38,6 +38,7 @@
 #include "llui.h"
 #include "llappviewer.h"
 #include "lltracker.h"
+#include "llviewernetwork.h"
 
 
 // static
@@ -163,7 +164,10 @@ void LLFirstUse::setDisplayName(bool enable)
 // static
 void LLFirstUse::receiveLindens(bool enable)
 {
-	firstUseNotification("FirstReceiveLindens", enable, "HintLindenDollar", LLSD(), LLSD().with("target", "linden_balance").with("direction", "bottom"));
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	LLSD args;
+	args["CUR"] = type_currency;
+	firstUseNotification("FirstReceiveLindens", enable, "HintLindenDollar", args, LLSD().with("target", "linden_balance").with("direction", "bottom"));
 }
 
 

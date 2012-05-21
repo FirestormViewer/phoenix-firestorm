@@ -50,6 +50,7 @@
 #include "lltexturectrl.h"
 #include "lltrans.h"
 #include "llviewerwindow.h"
+#include "llviewernetwork.h"
 
 // for copy URI button
 #include "llclipboard.h"
@@ -144,7 +145,9 @@ BOOL LLPanelGroupGeneral::postBuild()
 		mCtrlEnrollmentFee->setCommitCallback(onCommitEnrollment, this);
 	}
 
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	mSpinEnrollmentFee = getChild<LLSpinCtrl>("spin_enrollment_fee", recurse);
+	mSpinEnrollmentFee->setLabel(type_currency);
 	if (mSpinEnrollmentFee)
 	{
 		mSpinEnrollmentFee->setCommitCallback(onCommitAny, this);
@@ -379,7 +382,10 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 				return false;
 			}
 
-			LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+			LLSD args;
+			std::string type_currency = LLGridManager::getInstance()->getCurrency();
+			args["CUR"] = type_currency;
+			LLNotificationsUtil::add("CreateGroupCost",  args, LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
 
 			return false;
 		}

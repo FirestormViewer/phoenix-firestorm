@@ -56,6 +56,7 @@
 #include "llsdutil.h"
 #include "llsdutil_math.h"
 #include "lltrans.h"
+#include "llviewernetwork.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -448,10 +449,12 @@ void LLFloaterAuction::onClickSellToAnyone(void* data)
 		S32 sale_price = parcelp->getArea();	// Selling for L$1 per meter
 		S32 area = parcelp->getArea();
 
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		LLSD args;
 		args["LAND_SIZE"] = llformat("%d", area);
 		args["SALE_PRICE"] = llformat("%d", sale_price);
 		args["NAME"] = LLTrans::getString("Anyone");
+		args["CUR"] = type_currency;
 
 		LLNotification::Params params("ConfirmLandSaleChange");	// Re-use existing dialog
 		params.substitutions(args)

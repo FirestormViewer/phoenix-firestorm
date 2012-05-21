@@ -291,7 +291,7 @@ Spróbuj zalogować się ponownie za minutę.
 		(Grupa)
 	</string>
 	<string name="TooltipForSaleL$">
-		Na sprzedaż: [AMOUNT]L$
+		Na sprzedaż: [AMOUNT][CUR]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Budowanie grupowe
@@ -320,7 +320,7 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="TooltipMustSingleDrop">
 		Tylko pojedynczy obiekt może być tutaj przeciągnięty
 	</string>
-	<string name="TooltipPrice" value="[AMOUNT]L$:"/>
+	<string name="TooltipPrice" value="[AMOUNT][CUR]:"/>
 	<string name="TooltipFlagScript">
 		Skrypt
 	</string>
@@ -863,7 +863,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Mapa Świata jest niedostępna
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] m² [PRICE]L$
+		[AREA] m² [PRICE][CUR]
 	</string>
 	<string name="worldmap_results_none_found">
 		Miejsce nie zostało odnalezione.
@@ -914,7 +914,7 @@ Spróbuj zalogować się ponownie za minutę.
 		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], nie pozwala Ci na: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Zabiera Lindeny (L$) od Ciebie
+		Zabiera Lindeny ([CUR]) od Ciebie
 	</string>
 	<string name="ActOnControlInputs">
 		Użyj klawiszy sterowania
@@ -1472,7 +1472,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Kup
 	</string>
 	<string name="BuyforL$">
-		Kup za L$
+		Kup za [CUR]
 	</string>
 	<string name="Stone">
 		Kamień
@@ -2128,10 +2128,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Anuluj
 	</string>
 	<string name="UploadingCosts">
-		Załadowanie [NAME] kosztuje [AMOUNT]L$
+		Załadowanie [NAME] kosztuje [AMOUNT][CUR]
 	</string>
 	<string name="BuyingCosts">
-		Cena zakupu tego wynosi [AMOUNT]L$
+		Cena zakupu tego wynosi [AMOUNT][CUR]
 	</string>
 	<string name="UnknownFileExtension">
 		Nieznane rozszerzenie pliku [.%s]
@@ -4067,34 +4067,34 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Ustawiono miejsce startu.
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] zapłacił/a Tobie [AMOUNT]L$ [REASON].
+		[NAME] zapłacił/a Tobie [AMOUNT][CUR] [REASON].
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] zapłacił/a Tobie [AMOUNT]L$.
+		[NAME] zapłacił/a Tobie [AMOUNT][CUR].
 	</string>
 	<string name="you_paid_ldollars">
-		Zapłacono [NAME] [AMOUNT]L$ [REASON].
+		Zapłacono [NAME] [AMOUNT][CUR] [REASON].
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		Zapłacono [AMOUNT]L$.
+		Zapłacono [AMOUNT][CUR].
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Zapłacono [NAME] [AMOUNT]L$.
+		Zapłacono [NAME] [AMOUNT][CUR].
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		Zapłacono [AMOUNT]L$ [REASON].
+		Zapłacono [AMOUNT][CUR] [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars">
-		Nie udało się zapłacić [NAME] [AMOUNT]L$ [REASON].
+		Nie udało się zapłacić [NAME] [AMOUNT][CUR] [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		Nie udało się zapłacić [AMOUNT]L$.
+		Nie udało się zapłacić [AMOUNT][CUR].
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		Nie udało się zapłacić [NAME] [AMOUNT]L$.
+		Nie udało się zapłacić [NAME] [AMOUNT][CUR].
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		Nie udało się zapłacić [AMOUNT]L$ [REASON].
+		Nie udało się zapłacić [AMOUNT][CUR] [REASON].
 	</string>
 	<string name="for item">
 		dla [ITEM]
@@ -4121,19 +4121,19 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		publikacja reklamy
 	</string>
 	<string name="giving">
-		Dajesz [AMOUNT]L$
+		Dajesz [AMOUNT][CUR]
 	</string>
 	<string name="uploading_costs">
-		Ładowanie kosztuje [AMOUNT]L$
+		Ładowanie kosztuje [AMOUNT][CUR]
 	</string>
 	<string name="this_costs">
-		To kosztuje [AMOUNT]L$
+		To kosztuje [AMOUNT][CUR]
 	</string>
 	<string name="buying_selected_land">
-		Kupno wybranej Posiadłości za [AMOUNT]L$
+		Kupno wybranej Posiadłości za [AMOUNT][CUR]
 	</string>
 	<string name="this_object_costs">
-		Ten obiekt kosztuje [AMOUNT]L$
+		Ten obiekt kosztuje [AMOUNT][CUR]
 	</string>
 	<string name="group_role_everyone">
 		Każdy

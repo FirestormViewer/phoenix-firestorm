@@ -29,6 +29,7 @@
 #include "lleconomy.h"
 #include "llpanel.h"
 #include "llsidetraypanelcontainer.h"
+#include "llviewernetwork.h"
 
 #include "llfloatersnapshot.h" // FIXME: create a snapshot model
 
@@ -83,8 +84,10 @@ void LLPanelSnapshotOptions::onOpen(const LLSD& key)
 
 void LLPanelSnapshotOptions::updateUploadCost()
 {
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	getChild<LLUICtrl>("save_to_inventory_btn")->setLabelArg("[AMOUNT]", llformat("%d", upload_cost));
+	getChild<LLUICtrl>("save_to_inventory_btn")->setLabelArg("[CUR]", type_currency);
 }
 
 void LLPanelSnapshotOptions::openPanel(const std::string& panel_name)

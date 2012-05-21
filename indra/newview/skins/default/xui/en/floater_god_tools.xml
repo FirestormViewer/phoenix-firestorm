@@ -385,7 +385,7 @@
              name="land cost text"
              top_pad="10"
              width="110">
-                L$ per m²:
+                [CUR] per m²:
             </text>
             <spinner
              follows="top|right"

@@ -111,6 +111,7 @@
 #include "llagentui.h"
 #include "llpanelblockedlist.h"
 #include "llpanelplaceprofile.h"
+#include "llviewernetwork.h"
 // [RLVa:KB] - Checked: 2010-03-09 (RLVa-1.2.0a)
 #include "rlvhandler.h"
 #include "rlvinventory.h"
@@ -311,8 +312,10 @@ void give_money(const LLUUID& uuid, LLViewerRegion* region, S32 amount, BOOL is_
 	}
 	else
 	{
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		LLStringUtil::format_map_t args;
 		args["AMOUNT"] = llformat("%d", amount);
+		args["CUR"] = type_currency;
 		LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("giving", args), amount );
 	}
 }
@@ -699,7 +702,9 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 		{
 			delete_context_data = FALSE;
 			LLSD args;
+			std::string type_currency = LLGridManager::getInstance()->getCurrency();
 			args["COST"] = llformat("%d", fee);
+			args["CUR"] = type_currency;
 			// Set the fee for next time to 0, so that we don't keep
 			// asking about a fee.
 			LLSD next_payload = notification["payload"];
@@ -6134,9 +6139,11 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 	std::string reason =
 		reason_from_transaction_type(transaction_type, item_description);
 	
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	LLStringUtil::format_map_t args;
 	args["REASON"] = reason; // could be empty
 	args["AMOUNT"] = llformat("%d", amount);
+	args["CUR"] = type_currency;
 	
 	// Need to delay until name looked up, so need to know whether or not
 	// is group
@@ -6659,6 +6666,12 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
 	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));
 	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", llformat("%d", upload_cost));
+
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[CUR]", type_currency);
+	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[CUR]", type_currency);
+	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[CUR]", type_currency);
+	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[CUR]", type_currency);
 }
 
 void notify_cautioned_script_question(const LLSD& notification, const LLSD& response, S32 orig_questions, BOOL granted)
@@ -6728,6 +6741,7 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 		BOOL caution = FALSE;
 		S32 count = 0;
 		std::string perms;
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		for (S32 i = 0; i < SCRIPT_PERMISSION_EOF; i++)
 		{
 			if ((orig_questions & LSCRIPTRunTimePermissionBits[i]) && SCRIPT_QUESTION_IS_CAUTION[i])
@@ -6742,7 +6756,9 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 					perms.append(", ");
 				}
 
-				perms.append(LLTrans::getString(SCRIPT_QUESTIONS[i]));
+				LLSD args;
+				args["CUR"] = type_currency;
+				perms.append(LLTrans::getString(SCRIPT_QUESTIONS[i],args));
 			}
 		}
 
@@ -6771,7 +6787,12 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 		LLNotificationsUtil::add(notification["name"], notification["substitutions"], notification["payload"]);
 
 		// ...with description on top
-		LLNotificationsUtil::add("DebitPermissionDetails");
+		// LLNotificationsUtil::add("DebitPermissionDetails"); - FS:TM grid pannel support
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
+		LLSD args;
+		args["CUR"] = type_currency;
+		LLNotificationsUtil::add("DebitPermissionDetails", args);
+		//FS:TM grid pannel support
 		return false;
 	}
 

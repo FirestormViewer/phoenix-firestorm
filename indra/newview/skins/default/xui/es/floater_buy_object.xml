@@ -19,7 +19,7 @@
 		Contenidos:
 	</text>
 	<text name="buy_text">
-		¿Comprar por [AMOUNT] L$ a:
+		¿Comprar por [AMOUNT] [CUR] a:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?

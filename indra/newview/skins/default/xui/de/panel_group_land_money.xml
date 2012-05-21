@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Land und L$" name="land_money_tab">
+<panel label="Land und [CUR]" name="land_money_tab">
 	<panel.string name="help_text">
 		Ein Warnhinweis wird angezeigt, solange der Wert für das insgesamt verwendete Land gleich oder weniger ist als der Gesamtbeitrag.
 	</panel.string>
@@ -54,7 +54,7 @@
 		([AMOUNT] max.)
 	</text>
 	<text name="group_money_heading" width="120">
-		Gruppen-L$
+		Gruppen-[CUR]
 	</text>
 	<icon image_name="Parcel_Exp_Color" left="100" name="group_over_limit_icon"/>
 	<text name="group_over_limit_text">

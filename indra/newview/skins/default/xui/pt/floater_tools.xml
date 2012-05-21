@@ -135,13 +135,13 @@
 				Selecione o objeto inteiro para configurar as autorizações
 			</panel.string>
 			<panel.string name="Cost Default">
-				Preço: L$
+				Preço: [CUR]
 			</panel.string>
 			<panel.string name="Cost Total">
-				Total: L$
+				Total: [CUR]
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Preço unitário: L$
+				Preço unitário: [CUR]
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Preço misto
@@ -185,7 +185,7 @@
 				<combo_box.item label="Conteúdo" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Preço: L$" name="Edit Cost"/>
+			<spinner label="Preço: [CUR]" name="Edit Cost"/>
 			<check_box label="Mostrar na busca" name="search_check" tool_tip="Permitir que as pessoas vejam este objeto nos resultados de busca"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -471,7 +471,7 @@
 			Informações do lote
 		</text>
 		<text name="label_area_price">
-			Preço: L$[PRICE] por [AREA] m²
+			Preço: [CUR][PRICE] por [AREA] m²
 		</text>
 		<text name="label_area">
 			Área: [AREA] m²

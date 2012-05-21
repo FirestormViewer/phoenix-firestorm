@@ -21,7 +21,7 @@
 		</menu>
 		<menu_item_call label="Yönetici Durumu Talep Et" name="Request Admin Options"/>
 		<menu_item_call label="Yönetici Durumundan Ayrıl" name="Leave Admin Options"/>
-		<menu_item_call label="L$ Satın Al" name="Buy and Sell L$"/>
+		<menu_item_call label="[CUR] Satın Al" name="Buy and Sell L$"/>
 		<menu_item_call label="Hesap kontrol paneli..." name="Manage My Account"/>
 		<menu_item_call label="Tercihler..." name="Preferences"/>
 		<menu_item_call label="Araç çubuğu düğmeleri..." name="Toolbars"/>
@@ -137,11 +137,11 @@
 			<menu_item_call label="Ağ Seçenekleri" name="Grid Options"/>
 		</menu>
 		<menu label="Karşıya Yükle" name="Upload">
-			<menu_item_call label="Görüntü (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Ses (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animasyon (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Görüntü ([CUR][COST])..." name="Upload Image"/>
+			<menu_item_call label="Ses ([CUR][COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animasyon ([CUR][COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model..." name="Upload Model"/>
-			<menu_item_call label="Toplu (dosya başına L$[COST])..." name="Bulk Upload"/>
+			<menu_item_call label="Toplu (dosya başına [CUR][COST])..." name="Bulk Upload"/>
 			<menu_item_call label="Varsayılan Karşıya Yükleme İzinlerini Ayarla" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Geri Al" name="Undo"/>
@@ -205,7 +205,7 @@
 		<menu_item_check label="Fare Düzleştirme" name="Mouse Smoothing"/>
 		<menu_item_call label="Bırakma Anahtarları" name="Release Keys"/>
 		<menu label="Kısa Yollar" name="Shortcuts">
-			<menu_item_call label="Görüntü (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Görüntü ([CUR][COST])..." name="Upload Image"/>
 			<menu_item_check label="Ara" name="Search"/>
 			<menu_item_check label="Gelişmiş Menüyü Göster - eski kısayol" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_call label="Pencereyi Kapat" name="Close Window"/>

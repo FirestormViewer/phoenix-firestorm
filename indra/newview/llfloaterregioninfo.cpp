@@ -91,6 +91,7 @@
 #include "lltrans.h"
 #include "llagentui.h"
 #include "llmeshrepository.h"
+#include "llviewernetwork.h"
 
 const S32 TERRAIN_TEXTURE_COUNT = 4;
 const S32 CORNER_COUNT = 4;
@@ -1390,6 +1391,10 @@ void LLPanelEstateInfo::onClickAddAllowedGroup()
 	}
 
 	LLNotification::Params params("ChangeLindenAccess");
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	LLSD args;
+	args["CUR"] = type_currency;
+	params.substitutions(args);
 	params.functor.function(boost::bind(&LLPanelEstateInfo::addAllowedGroup, this, _1, _2));
 	if (isLindenEstate())
 	{
@@ -1627,6 +1632,10 @@ void LLPanelEstateInfo::accessAddCore(U32 operation_flag, const std::string& dia
 	// agent id filled in after avatar picker
 
 	LLNotification::Params params("ChangeLindenAccess");
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	LLSD args;
+	args["CUR"] = type_currency;
+	params.substitutions(args);
 	params.payload(payload)
 		.functor.function(accessAddCore2);
 
@@ -1755,6 +1764,10 @@ void LLPanelEstateInfo::accessRemoveCore(U32 operation_flag, const std::string& 
 	}
 	
 	LLNotification::Params params("ChangeLindenAccess");
+	std::string type_currency = LLGridManager::getInstance()->getCurrency();
+	LLSD args;
+	args["CUR"] = type_currency;
+	params.substitutions(args);
 	params.payload(payload)
 		.functor.function(accessRemoveCore2);
 
@@ -3414,6 +3427,7 @@ void LLPanelEnvironmentInfo::onBtnApply()
 
 	// Start spinning the progress indicator.
 	setApplyProgress(true);
+	refresh();
 }
 
 void LLPanelEnvironmentInfo::onBtnCancel()

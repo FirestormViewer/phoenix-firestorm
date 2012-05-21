@@ -52,6 +52,7 @@
 
 #include "llaccordionctrltab.h"
 #include "llaccordionctrl.h"
+#include "llviewernetwork.h"
 
 #include "lltrans.h"
 //-TT - Patch : ShowGroupFloaters
@@ -215,7 +216,9 @@ BOOL LLPanelGroup::postBuild()
 		mButtonJoin = button;
 		mButtonJoin->setCommitCallback(boost::bind(&LLPanelGroup::onBtnJoin,this));
 
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		mJoinText = panel_general->getChild<LLUICtrl>("join_cost_text");
+		mJoinText->setTextArg("[CUR]", type_currency);
 	}
 
 	LLVoiceClient::getInstance()->addObserver(this);
@@ -368,7 +371,9 @@ void LLPanelGroup::update(LLGroupChange gc)
 			std::string fee_buff;
 			if(gdatap->mMembershipFee)
 			{
+				std::string type_currency = LLGridManager::getInstance()->getCurrency();
 				string_args["[AMOUNT]"] = llformat("%d", gdatap->mMembershipFee);
+				string_args["[CUR]"] = type_currency;
 				fee_buff = getString("group_join_btn", string_args);
 				
 			}

@@ -136,13 +136,13 @@
 				Devi selezionare tutto l&apos;oggetto per impostare i permessi
 			</panel.string>
 			<panel.string name="Cost Default">
-				Prezzo: L$
+				Prezzo: [CUR]
 			</panel.string>
 			<panel.string name="Cost Total">
-				Prezzo totale: L$
+				Prezzo totale: [CUR]
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Prezzo per: L$
+				Prezzo per: [CUR]
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Prezzo misto
@@ -192,7 +192,7 @@
 				<combo_box.item label="Contenuto" name="Contents"/>
 				<combo_box.item label="Originale" name="Original"/>
 			</combo_box>
-			<spinner label="Prezzo: L$" name="Edit Cost"/>
+			<spinner label="Prezzo: [CUR]" name="Edit Cost"/>
 			<check_box label="Mostra nella ricerca" name="search_check" tool_tip="Permetti che l&apos;oggetto sia visibile nella ricerca"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -478,7 +478,7 @@
 			Informazioni sul terreno
 		</text>
 		<text name="label_area_price">
-			Prezzo: L$ [PRICE] per [AREA] m²
+			Prezzo: [CUR] [PRICE] per [AREA] m²
 		</text>
 		<text name="label_area">
 			Zona: [AREA] m²

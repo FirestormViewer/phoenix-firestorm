@@ -134,13 +134,13 @@
 				Чтобы задать права доступа, нужно выделить объект целиком
 			</panel.string>
 			<panel.string name="Cost Default">
-				Цена: L$
+				Цена: [CUR]
 			</panel.string>
 			<panel.string name="Cost Total">
-				Всего: L$
+				Всего: [CUR]
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Цена за: L$
+				Цена за: [CUR]
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Смешанная цена
@@ -184,7 +184,7 @@
 				<combo_box.item label="Контент" name="Contents"/>
 				<combo_box.item label="Оригинал" name="Original"/>
 			</combo_box>
-			<spinner label="Цена: L$" name="Edit Cost"/>
+			<spinner label="Цена: [CUR]" name="Edit Cost"/>
 			<check_box label="Показать в поиске" name="search_check" tool_tip="Показывать объект в результатах поиска"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -470,7 +470,7 @@
 			Даные об участке
 		</text>
 		<text name="label_area_price">
-			Цена: L$[PRICE] за [AREA] м²
+			Цена: [CUR][PRICE] за [AREA] м²
 		</text>
 		<text name="label_area">
 			Площадь: [AREA] м²

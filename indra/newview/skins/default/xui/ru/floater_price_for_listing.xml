@@ -11,7 +11,7 @@
 		Цена за объявление:
 	</text>
 	<text name="price_symbol">
-		L$
+		[CUR]
 	</text>
 	<button label="ОК" name="set_price_btn"/>
 	<button label="Отмена" name="cancel_btn"/>

@@ -6,7 +6,7 @@
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
 		</menu_item_call>
 		<!--<menu_item_call label="??" name="MerchantOutbox"/>-->
-		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Compra [CUR]" name="Buy and Sell L$"/>
 		<menu_item_call label="Il mio profilo" name="Profile"/>
 		<menu_item_call label="Il mio aspetto" name="ChangeOutfit"/>
 		<menu_item_call label="Foto istantanea" name="Take Snapshot"/>
@@ -42,7 +42,7 @@
 		</menu>
 		<!--<menu_item_call label="Richiedi diritti Admin" name="Request Admin Options"/>
 		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
-		<menu_item_call label="Compra L$" name="Buy and Sell L$"/>
+		<menu_item_call label="Compra [CUR]" name="Buy and Sell L$"/>
 		<menu_item_call label="Dashboard dell&apos;account..." name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=it"/>
 		</menu_item_call>
@@ -171,11 +171,11 @@
 			<menu_item_call label="Opzioni della griglia" name="Grid Options"/>
 		</menu>
 		<menu label="Carica sul server" name="Upload">
-			<menu_item_call label="Immagine ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Suono ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animazione ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Immagine ([COST] [CUR])..." name="Upload Image"/>
+			<menu_item_call label="Suono ([COST] [CUR])..." name="Upload Sound"/>
+			<menu_item_call label="Animazione ([COST] [CUR])..." name="Upload Animation"/>
 			<menu_item_call label="Modella..." name="Upload Model"/>
-			<menu_item_call label="In blocco ([COST] L$ per file)..." name="Bulk Upload"/>
+			<menu_item_call label="In blocco ([COST] [CUR] per file)..." name="Bulk Upload"/>
 			<menu_item_call label="Definisci diritti di caricamento predefiniti" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Texture caricate localmente" name="Local Bitmap Browser"/>
@@ -245,7 +245,7 @@
 		<menu_item_check label="Fluidità mouse" name="Mouse Smoothing"/>
 		<menu_item_call label="Rilascia tasti" name="Release Keys"/>
 		<menu label="Scorciatoie" name="Shortcuts">
-			<menu_item_call label="Immagine ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Immagine ([COST][CUR])..." name="Upload Image"/>
 			<menu_item_check label="Cerca" name="Search"/>
 			<menu_item_check label="Mostra menu Avanzato - tasti di scelta rapida esistenti" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_call label="Chiudi finestra" name="Close Window"/>

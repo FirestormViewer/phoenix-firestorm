@@ -29,10 +29,13 @@
         </menu_item_call>
 
         <menu_item_call
-         label="Buy L$"
+         label="Buy [CUR]"
          name="Buy and Sell L$">
             <menu_item_call.on_click
              function="BuyCurrency" />
+            <menu_item_call.on_visible
+                 function="Currency.TypeCheck"
+                 parameter="Buy and Sell L$" />
         </menu_item_call>
 
         <menu_item_separator/>
@@ -273,7 +276,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([CUR][COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -287,7 +290,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([CUR][COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -300,7 +303,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([CUR][COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -325,12 +328,17 @@
             function="File.VisibleUploadModel"/>
             </menu_item_call>
             <menu_item_call
-             label="Bulk (Multi-file) upload..."
+             label="Bulk ([CUR][COST] per file) upload..."
              layout="topleft"
              name="Bulk Upload">
                 <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
+				<menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -1412,7 +1420,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([CUR][COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -1426,7 +1434,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([CUR][COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -1439,7 +1447,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([CUR][COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -1464,12 +1472,17 @@
             function="File.VisibleUploadModel"/>
             </menu_item_call>
 	   <menu_item_call
-             label="Bulk (L$[COST] per file)..."
+             label="Bulk ([CUR][COST] per file)..."
              layout="topleft"
              name="Bulk Upload">
                 <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
+				<menu_item_call.on_enable
+                 function="File.EnableUpload" />
+                <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -1552,12 +1565,15 @@
              parameter="WebLaunchExternalTarget,https://marketplace.secondlife.com/" />
        </menu_item_call>
        <menu_item_call
-             label="L$ Market Data"
+             label="[CUR] Market Data"
              name="LindenXchange">
              <menu_item_call.on_click
              function="PromptShowURL"
              name="lindenxchange_url"
              parameter="WebLaunchExternalTarget,https://secure-web30.secondlife.com/my/lindex/market.php" />
+         <menu_item_call.on_visible
+                 function="Currency.TypeCheck"
+                 parameter="LindenXchange" />
        </menu_item_call>  
     	<menu_item_call
              label="Script Library"
@@ -2364,7 +2380,7 @@
          tear_off="true"
          visible="false">
           <menu_item_call
-             label="Upload Image (L$[COST])..."
+             label="Upload Image ([CUR][COST])..."
              name="Upload Image"
              shortcut="control|U">
             <menu_item_call.on_click

@@ -2,7 +2,7 @@
 <panel
  border="false"
  height="500"
- label="Land &amp; L$"
+ label="Land &amp; [CUR]"
  layout="topleft"
  left="0"
  name="land_money_tab"
@@ -242,7 +242,7 @@
      text_color="EmphasisColor"
      top_pad="-15"
      width="100">
-        Group L$
+        Group [CUR]
     </text>
     </panel>
     <tab_container

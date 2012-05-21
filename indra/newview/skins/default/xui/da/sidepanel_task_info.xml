@@ -22,13 +22,13 @@
 		Dette objekt har linkede dele
 	</panel.string>
 	<panel.string name="Cost Default">
-		Pris: L$
+		Pris: [CUR]
 	</panel.string>
 	<panel.string name="Cost Total">
-		Total pris: L$
+		Total pris: [CUR]
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Pris pr.: L$
+		Pris pr.: [CUR]
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Blandet pris
@@ -93,7 +93,7 @@
 			<combo_box.item label="Indhold" name="Contents"/>
 			<combo_box.item label="Original" name="Original"/>
 		</combo_box>
-		<spinner label="Pris: L$" name="Edit Cost"/>
+		<spinner label="Pris: [CUR]" name="Edit Cost"/>
 		<check_box label="Vis i søgning" name="search_check" tool_tip="Lad personer se dette objekt i søgeresultater"/>
 		<text name="B:">
 			S:

@@ -50,7 +50,7 @@
      value="(Group Owned)" />
     <string
      name="price_text"
-     value="L$" />
+     value="[CUR]" />
     <string
      name="area_text"
      value="m²" />

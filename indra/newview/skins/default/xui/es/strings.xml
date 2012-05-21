@@ -305,7 +305,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		(Grupo)
 	</string>
 	<string name="TooltipForSaleL$">
-		En venta: [AMOUNT] L$
+		En venta: [AMOUNT] [CUR]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Construir el grupo
@@ -335,11 +335,11 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Aquí se puede arrastrar sólo un ítem
 	</string>
 	<string name="TooltipPrice"
-		 value="[AMOUNT] L$:" />
+		 value="[AMOUNT] [CUR]:" />
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Física</string>
 	<string name="TooltipFlagTouch">Tocar</string>
-	<string name="TooltipFlagL$">L$</string>
+	<string name="TooltipFlagL$">[CUR]</string>
 	<string name="TooltipFlagDropInventory">Soltar inventario</string>
 	<string name="TooltipFlagPhantom">Fantasma</string>
 	<string name="TooltipFlagTemporary">Temporal</string>
@@ -841,7 +841,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Sin conexión
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[PRICE] L$ por [AREA] m²
+		[PRICE] [CUR] por [AREA] m²
 	</string>
 	<string name="worldmap_results_none_found">
 		No se ha encontrado.
@@ -895,7 +895,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		A '[OBJECTNAME]', un objeto propiedad de '[OWNERNAME]', localizado en [REGIONNAME] con la posición [REGIONPOS], se le ha denegado el permiso para: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Obtener de usted dólares Linden (L$)
+		Obtener de usted dólares Linden ([CUR])
 	</string>
 	<string name="ActOnControlInputs">
 		Actuar en sus controles de entrada
@@ -1503,7 +1503,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Comprar
 	</string>
 	<string name="BuyforL$">
-		Comprar por L$
+		Comprar por [CUR]
 	</string>
 	<string name="Stone">
 		Piedra
@@ -2180,10 +2180,10 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Cancelar
 	</string>
 	<string name="UploadingCosts">
-		Subir [NAME] cuesta [AMOUNT] L$
+		Subir [NAME] cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="BuyingCosts">
-		Comprar esto cuesta [AMOUNT] L$
+		Comprar esto cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="UnknownFileExtension">
 		Extensión de archivo desconocida [.%s]
@@ -4116,34 +4116,34 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		http://secondlife.com/landing/voicemorphing?lang=es-ES
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] te ha pagado [AMOUNT] L$ [REASON].
+		[NAME] te ha pagado [AMOUNT] [CUR] [REASON].
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] te ha pagado [AMOUNT] L$.
+		[NAME] te ha pagado [AMOUNT] [CUR].
 	</string>
 	<string name="you_paid_ldollars">
-		Has pagado [AMOUNT] L$ a [NAME] por [REASON].
+		Has pagado [AMOUNT] [CUR] a [NAME] por [REASON].
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		Has pagado[AMOUNT] L$
+		Has pagado[AMOUNT] [CUR]
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Has pagado [AMOUNT] L$ a [NAME].
+		Has pagado [AMOUNT] [CUR] a [NAME].
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		Has pagado [AMOUNT] L$ por [REASON].
+		Has pagado [AMOUNT] [CUR] por [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars">
-		No has pagado a [NAME] [AMOUNT] L$ [REASON].
+		No has pagado a [NAME] [AMOUNT] [CUR] [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		No has pagado [AMOUNT] L$.
+		No has pagado [AMOUNT] [CUR].
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		No has pagado a [NAME] [AMOUNT] L$.
+		No has pagado a [NAME] [AMOUNT] [CUR].
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		No has pagado [AMOUNT] L$ [REASON].
+		No has pagado [AMOUNT] [CUR] [REASON].
 	</string>
 	<string name="for item">
 		por [ITEM]
@@ -4170,19 +4170,19 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		para publicar un anuncio clasificado
 	</string>
 	<string name="giving">
-		Dando [AMOUNT] L$
+		Dando [AMOUNT] [CUR]
 	</string>
 	<string name="uploading_costs">
-		Subir esto cuesta [AMOUNT] L$
+		Subir esto cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="this_costs">
-		Esto cuesta [AMOUNT] L$
+		Esto cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="buying_selected_land">
-		Compra del terreno seleccionado por [AMOUNT] L$
+		Compra del terreno seleccionado por [AMOUNT] [CUR]
 	</string>
 	<string name="this_object_costs">
-		Este objeto cuesta [AMOUNT] L$
+		Este objeto cuesta [AMOUNT] [CUR]
 	</string>
 	<string name="group_role_everyone">
 		Todos

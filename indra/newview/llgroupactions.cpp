@@ -40,6 +40,7 @@
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
+#include "llviewernetwork.h"
 //-TT  ShowGroupFloaters
 #include "llpanelgroup.h"
 //-TT
@@ -183,8 +184,10 @@ void LLGroupActions::join(const LLUUID& group_id)
 	{
 		S32 cost = gdatap->mMembershipFee;
 		LLSD args;
+		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		args["COST"] = llformat("%d", cost);
 		args["NAME"] = gdatap->mName;
+		args["CUR"] = type_currency;
 		LLSD payload;
 		payload["group_id"] = group_id;
 
