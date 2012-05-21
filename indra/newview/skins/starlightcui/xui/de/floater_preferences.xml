@@ -18,5 +18,12 @@
 		<panel label="Benutzerinterface" name="starlightUI1"/>
 		<panel label="Oberflächendesign" name="skins"/>
 		<panel label="Firestorm" name="firestorm"/>
+    <panel
+      class="panel_preference_grids"
+      filename="panel_preferences_grids.xml"
+      label="Grids"
+      layout="topleft"
+      help_topic="preferences_grids_tab"
+      name="grids" />
 	</tab_container>
 </floater>
