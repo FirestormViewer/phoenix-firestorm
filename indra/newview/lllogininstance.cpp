@@ -486,6 +486,7 @@ LLLoginInstance::LLLoginInstance() :
 	mDispatcher.add("connect",    "", boost::bind(&LLLoginInstance::handleLoginSuccess, this, _1));
 	mDispatcher.add("disconnect", "", boost::bind(&LLLoginInstance::handleDisconnect, this, _1));
 	mDispatcher.add("indeterminate", "", boost::bind(&LLLoginInstance::handleIndeterminate, this, _1));
+
 }
 
 LLLoginInstance::~LLLoginInstance()
@@ -592,9 +593,10 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 		requested_options.append("currency");// <FS:AW opensim currency support>
 		requested_options.append("max_groups");// <FS:AW  opensim max groups support>
 		requested_options.append("search"); // <FS:AW  opensim search support>
+		requested_options.append("destination_guide_url");// <FS:AW  opensim destinations and avatar picker>
+		requested_options.append("avatar_picker_url");// <FS:AW  opensim destinations and avatar picker>
 		//not in this patch
 		//requested_options.append("profile-server-url");
-		//requested_options.append("web-profile-url");
 	}
 #endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // </FS:AW various patches>

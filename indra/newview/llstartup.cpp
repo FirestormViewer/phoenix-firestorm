@@ -3790,9 +3790,29 @@ bool process_login_success_response()
 		currency = "OS$";
 		LL_DEBUGS("OS_SETTINGS") << "no currency in login response" << llendl;
 	}
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	Tea::setCurrency(currency);
 // </FS:AW opensim currency support>
+
+// <FS:AW  opensim destinations and avatar picker>
+	if(response.has("avatar_picker_url"))
+	{
+		LL_DEBUGS("OS_SETTINGS") << "avatar_picker_url " << response["avatar_picker_url"] << llendl;
+	}
+	else if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LL_DEBUGS("OS_SETTINGS") << "no avatar_picker_url in login response" << llendl;
+	}
+
+	if(response.has("destination_guide_url"))
+	{
+		LL_DEBUGS("OS_SETTINGS") << "destination_guide_url " << response["destination_guide_url"] << llendl;
+	}
+	else if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << llendl;
+	}
+// </FS:AW  opensim destinations and avatar picker>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system

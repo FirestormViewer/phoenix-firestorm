@@ -38,6 +38,7 @@
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llfloaterreg.h"
+#include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llmeshrepository.h"
 #include "llpanellogin.h"
 #include "llviewerkeyboard.h"
@@ -121,6 +122,7 @@
 #include "llimageworker.h"
 #include "llkeyboard.h"
 #include "lllineeditor.h"
+#include "lllogininstance.h"
 #include "llmenugl.h"
 #include "llmodaldialog.h"
 #include "llmorphview.h"
@@ -2038,23 +2040,77 @@ void LLViewerWindow::initWorldUI()
 		}
 		gToolBarView->setVisible(TRUE);
 	}
+// <FS:AW  opensim destinations and avatar picker>
+// 	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+// 	if (destinations)
+// 	{
+// 		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+// 		std::string url = gSavedSettings.getString("DestinationGuideURL");
+// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
+// 		destinations->navigateTo(url, "text/html");
+// 	}
+// 	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+// 	if (avatar_picker)
+// 	{
+// 		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+// 		std::string url = gSavedSettings.getString("AvatarPickerURL");
+// 		url = LLWeb::expandURLSubstitutions(url, LLSD());
+// 		avatar_picker->navigateTo(url, "text/html");
+// 	}
+	std::string destination_guide_url;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
+		{
+			destination_guide_url = LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString();
+		}
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT  // <FS:AW optional opensim support>
+	{
+		destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
+	}
 
-	LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
-	if (destinations)
-	{
-		destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-		std::string url = gSavedSettings.getString("DestinationGuideURL");
-		url = LLWeb::expandURLSubstitutions(url, LLSD());
-		destinations->navigateTo(url, "text/html");
+	if(!destination_guide_url.empty())
+	{	
+		LLMediaCtrl* destinations = LLFloaterReg::getInstance("destinations")->getChild<LLMediaCtrl>("destination_guide_contents");
+		if (destinations)
+		{
+			destinations->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+			destination_guide_url = LLWeb::expandURLSubstitutions(destination_guide_url, LLSD());
+			LL_DEBUGS("WebApi") << "3 DestinationGuideURL \"" << destination_guide_url << "\"" << LL_ENDL;
+			destinations->navigateTo(destination_guide_url, "text/html");
+		}
 	}
-	LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
-	if (avatar_picker)
+
+	std::string avatar_picker_url;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	if (LLGridManager::getInstance()->isInOpenSim())
 	{
-		avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
-		std::string url = gSavedSettings.getString("AvatarPickerURL");
-		url = LLWeb::expandURLSubstitutions(url, LLSD());
-		avatar_picker->navigateTo(url, "text/html");
+		if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
+		{
+			avatar_picker_url = LLLoginInstance::getInstance()->getResponse("avatar_picker_url").asString();
+		}
 	}
+	else
+#endif // HAS_OPENSIM_SUPPORT  // <FS:AW optional opensim support>
+	{
+		avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
+	}
+
+	if(!avatar_picker_url.empty())
+	{	
+		LLMediaCtrl* avatar_picker = LLFloaterReg::getInstance("avatar")->findChild<LLMediaCtrl>("avatar_picker_contents");
+		if (avatar_picker)
+		{
+			avatar_picker->setErrorPageURL(gSavedSettings.getString("GenericErrorPageURL"));
+			avatar_picker_url = LLWeb::expandURLSubstitutions(avatar_picker_url, LLSD());
+			LL_DEBUGS("WebApi") << "AvatarPickerURL \"" << avatar_picker_url << "\"" << LL_ENDL;
+			avatar_picker->navigateTo(avatar_picker_url, "text/html");
+		}
+ 	}
+// </FS:AW  opensim destinations and avatar picker>
 
 	// <FS:Zi> Autohide main chat bar if applicable
 	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
