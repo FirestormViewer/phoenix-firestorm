@@ -17,7 +17,8 @@
 		<panel label="Ortografía" name="spell_check"/>
 		<panel label="Interfaz" name="starlightUI1"/>
 		<panel label="Skins" name="skins"/>
-		<panel label="Reporte de fallos" name="crashreports" />
-		<panel label="Firestorm" name="firestorm" />
+		<panel label="Reporte de fallos" name="crashreports"/>
+		<panel label="Firestorm" name="firestorm"/>
+		<panel label="Redes" name="grids"/>
 	</tab_container>
 </floater>
