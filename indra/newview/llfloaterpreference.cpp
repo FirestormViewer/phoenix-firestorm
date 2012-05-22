@@ -2676,7 +2676,10 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 // </KB>
 static LLRegisterPanelClassWrapper<LLPanelPreferenceGrids> t_pref_grids("panel_preference_grids");
 
-LLPanelPreferenceGrids::LLPanelPreferenceGrids() : LLPanelPreference(), m_GridCombo(NULL), mState(NORMAL)
+LLPanelPreferenceGrids::LLPanelPreferenceGrids()
+	: LLPanelPreference(),
+	m_GridCombo(NULL),
+	mState(NORMAL)
 {
 }
 
@@ -2684,7 +2687,9 @@ BOOL LLPanelPreferenceGrids::postBuild()
 {
 	m_GridCombo = getChild<LLComboBox>("grid_selector");
 	if (m_GridCombo)
+	{
 		m_GridCombo->setCommitCallback(boost::bind(&LLPanelPreferenceGrids::onSelectGrid, this));
+	}
 
 	getChild<LLUICtrl>("btn_delete")->setCommitCallback(boost::bind(&LLPanelPreferenceGrids::onClickDelete, this));
 	getChild<LLUICtrl>("btn_new")->setCommitCallback(boost::bind(&LLPanelPreferenceGrids::onClickNew, this));
@@ -2700,7 +2705,8 @@ BOOL LLPanelPreferenceGrids::postBuild()
 
 void LLPanelPreferenceGrids::apply()
 {
-	if (saveCurGrid()) {
+	if (saveCurGrid())
+	{
 		// adding new grid did not fail
 		LLGridManager::getInstance()->setGridChoice(mCurGrid);
 	}
@@ -2708,7 +2714,8 @@ void LLPanelPreferenceGrids::apply()
 	LLGridManager::getInstance()->saveGridList();
 	refresh();
 	// update render compatibility
-	//if (mCurGrid == LLGridManager::getInstance()->getGrid()) {
+	//if (mCurGrid == LLGridManager::getInstance()->getGrid())
+	//{
 		//gHippoLimits->setLimits();
 	//}
 }
@@ -2721,7 +2728,9 @@ void LLPanelPreferenceGrids::cancel()
 void LLPanelPreferenceGrids::onClickDelete()
 {
 	if (mState == NORMAL)
+	{
 		LLGridManager::getInstance()->deleteGrid(mCurGrid);
+	}
 	reset();
 }
 
@@ -2733,7 +2742,8 @@ void LLPanelPreferenceGrids::onClickNew()
 
 void LLPanelPreferenceGrids::onClickCopy()
 {
-	if (mState == NORMAL) {
+	if (mState == NORMAL)
+	{
 		mState = ADD_COPY;
 		loadCurGrid();
 	}
@@ -2741,7 +2751,8 @@ void LLPanelPreferenceGrids::onClickCopy()
 
 void LLPanelPreferenceGrids::onClickDefault()
 {
-	if (mState == NORMAL) {
+	if (mState == NORMAL)
+	{
 		saveCurGrid();
 		LLGridManager::getInstance()->setGridChoice(mCurGrid);
 		refresh();
@@ -2751,8 +2762,9 @@ void LLPanelPreferenceGrids::onClickDefault()
 void LLPanelPreferenceGrids::onAddDoneCallback(std::string gridlabel)
 {
 	loadCurGrid();
-	if(!gridlabel.empty()) {
-		m_GridCombo->setSelectedByValue(gridlabel,TRUE);
+	if (!gridlabel.empty())
+	{
+		m_GridCombo->setSelectedByValue(gridlabel, TRUE);
 		onSelectGrid();
 	}
 }
@@ -2764,7 +2776,9 @@ void LLPanelPreferenceGrids::onClickAdd()
 	mState = NORMAL;
 	getChild<LLButton>("btn_add", true)->setVisible(false);
 
-	if(loginuri != "<required>") {
+	// This is ugly...
+	if (loginuri != getString("Required"))
+	{
 		GridEntry* grid_entry = new GridEntry;
 		grid_entry->grid = LLSD::emptyMap();
 		grid_entry->grid[GRID_VALUE] = loginuri;
@@ -2772,7 +2786,8 @@ void LLPanelPreferenceGrids::onClickAdd()
 		grid_entry->mOnDoneCallback = boost::bind(&LLPanelPreferenceGrids::onAddDoneCallback, this, _1);
 		LLGridManager::getInstance()->addGrid(grid_entry, LLGridManager::FETCH);
 	}
-	else {
+	else
+	{
 		loadCurGrid();
 	}
 }
@@ -2784,7 +2799,7 @@ void LLPanelPreferenceGrids::onClickHelpRenderCompat()
 
 void LLPanelPreferenceGrids::onClickAdvanced()
 {
-	if(getChildView("loginpage_label")->getVisible())
+	if (getChildView("loginpage_label")->getVisible())
 	{
 		getChildView("loginpage_label")->setVisible(false);
 		getChildView("loginpage")->setVisible(false);
@@ -2828,14 +2843,19 @@ void LLPanelPreferenceGrids::onSelectGrid()
 {
 	std::string newGrid = m_GridCombo->getSelectedItemLabel();
 
-	if (!saveCurGrid()) {
+	if (!saveCurGrid())
+	{
 		m_GridCombo->setCurrentByIndex(m_GridCombo->getItemCount() - 1);
 		return;
 	}
 
 	mCurGrid = LLGridManager::getInstance()->getGridByLabel(newGrid);
 
-	if(mState != NORMAL) mState = NORMAL;
+	if (mState != NORMAL)
+	{
+		mState = NORMAL;
+	}
+
 	loadCurGrid();
 }
 
@@ -2844,8 +2864,8 @@ void LLPanelPreferenceGrids::loadCurGrid()
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(mCurGrid, grid_info);
 	
-	if (mState != ADD_NEW) {
-		
+	if (mState != ADD_NEW)
+	{	
 		getChild<LLLineEditor>("gridname", true)->setText(grid_info[GRID_LABEL_VALUE].asString());
 		getChild<LLLineEditor>("loginuri",true)->setText(grid_info[GRID_LOGIN_URI_VALUE][0].asString());
 		getChild<LLLineEditor>("loginpage",true)->setText(grid_info[GRID_LOGIN_PAGE_VALUE].asString());
@@ -2858,7 +2878,9 @@ void LLPanelPreferenceGrids::loadCurGrid()
 	    getChild<LLTextEditor>("gridmessage",true)->setText(grid_info["message"].asString());
 		getChild<LLButton>("btn_add", true)->setVisible(false);
 		//getChild<LLCheckBoxCtrl>("render_compat",true)->set(gridInfo->isRenderCompat());
-	} else {
+	}
+	else
+	{
 		std::string empty = "";
 		getChild<LLLineEditor>("gridname",true)->setText(empty);
 		getChild<LLLineEditor>("loginuri",true)->setText(empty);
@@ -2874,13 +2896,17 @@ void LLPanelPreferenceGrids::loadCurGrid()
 		//getChild<LLCheckBoxCtrl>("render_compat",true)->set(true);
 	}
 
-	if (mState == ADD_NEW) {
-		std::string required = "<required>";
+	if (mState == ADD_NEW)
+	{
 		getChild<LLButton>("btn_add", true)->setVisible(true);
-		getChild<LLLineEditor>("loginuri",true)->setText(required);
-	} else if (mState == ADD_COPY) {
-		getChild<LLLineEditor>("gridname",true)->setText(std::string("<required>"));
-	} else if (mState != NORMAL) {
+		getChild<LLLineEditor>("loginuri",true)->setText(getString("Required"));
+	}
+	else if (mState == ADD_COPY)
+	{
+		getChild<LLLineEditor>("gridname",true)->setText(getString("Required"));
+	}
+	else if (mState != NORMAL)
+	{
 		llwarns << "Illegal state " << mState << '.' << llendl;
 	}
 	
@@ -2900,7 +2926,8 @@ void LLPanelPreferenceGrids::refresh()
 
 	S32 selectIndex = -1, i = 0;
 	m_GridCombo->removeall();
-	if (defaultGrid != "") {
+	if (defaultGrid != "")
+	{
 		m_GridCombo->add(defaultGrid);
 		selectIndex = i++;
 	}
@@ -2919,17 +2946,21 @@ void LLPanelPreferenceGrids::refresh()
 		}
 	}
 
-	if ((mState == ADD_NEW) || (mState == ADD_COPY)) {
-		m_GridCombo->add("<new>");
+	if ((mState == ADD_NEW) || (mState == ADD_COPY))
+	{
+		m_GridCombo->add(getString("New"));
 		selectIndex = i++;
 	}
-	if (selectIndex >= 0) {
+	if (selectIndex >= 0)
+	{
 		m_GridCombo->setCurrentByIndex(selectIndex);
-	} else {
+	}
+	else
+	{
 		m_GridCombo->setLabel(LLStringExplicit(""));  // LLComboBox::removeall() does not clear the label
 	}
 
-	getChild<LLTextBase>("default_grid", true)->setTextArg("[DEFAULT]", (defaultGrid != "")? defaultGrid: " ");
+	getChild<LLTextBase>("default_grid", true)->setTextArg("[DEFAULT]", (defaultGrid != "") ? defaultGrid: " ");
 
 	getChild<LLButton>("btn_delete", true)->setEnabled((selectIndex >= 0));
 	//getChild<LLButton>("btn_copy", true)->setEnabled((mState == NORMAL) && (selectIndex >= 0));

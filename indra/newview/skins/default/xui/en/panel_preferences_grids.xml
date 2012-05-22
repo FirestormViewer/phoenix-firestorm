@@ -9,6 +9,12 @@
  width="540"
  label="Grids"
  name="grids_panel">
+	<panel.string name="Required">
+		&lt;required&gt;
+	</panel.string>
+	<panel.string name="New">
+		&lt;new&gt;
+	</panel.string>
 	<panel
 	 name="layoutfix"
 	 layout="topleft"
