@@ -27,12 +27,12 @@
 			</text>
 			<line_editor name="parentestate" tool_tip="To jest Majątek-Rodzic dla tego regionu"/>
 			<text name="Grid Pos: ">
-				Poz. Gridu:
+				Poz. Siatki:
 			</text>
-			<line_editor name="gridposx" tool_tip="Pozycja x gridu dla regionu"/>
-			<line_editor name="gridposy" tool_tip="Pozycja y gridu dla regionu"/>
+			<line_editor name="gridposx" tool_tip="Pozycja x siatki dla regionu"/>
+			<line_editor name="gridposy" tool_tip="Pozycja y siatki dla regionu"/>
 			<text name="Redirect to Grid: ">
-				Kieruj na grid:
+				Kier. na siatkę:
 			</text>
 			<text name="billable factor text">
 				Czynnik płatności:

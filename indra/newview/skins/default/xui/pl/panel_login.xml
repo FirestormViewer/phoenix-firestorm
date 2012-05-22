@@ -27,8 +27,9 @@
 				<combo_box.item label="&lt;Wpisz Region&gt;" name="Typeregionname"/>
 			</combo_box>
 			<text name="grid_selection_text">
-				Loguj na Grid:
+				Loguj na siatkę:
 			</text>
+			<button label="Menedżer siatek" name="grids_btn"/>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

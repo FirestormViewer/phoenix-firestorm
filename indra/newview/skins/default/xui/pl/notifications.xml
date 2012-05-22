@@ -1187,7 +1187,7 @@ Wybierz awatara właściwej płci. Ten wybór będzie można później zmienić.
 		<usetemplate name="okcancelbuttons" notext="Kobieta" yestext="Mężczyzna"/>
 	</notification>
 	<notification name="CantTeleportToGrid">
-		Nie można teleportować do [SLURL], ponieważ jest na innym gridzie ([GRID]) niż obecny grid ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
+		Nie można teleportować do [SLURL], ponieważ jest na innej siatce ([GRID]) niż obecna siatka ([CURRENT_GRID]). Proszę zamknąć przeglądarkę i spróbować ponownie.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="GeneralCertificateError">
@@ -1455,7 +1455,7 @@ Chcesz opuścić grupę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmKick">
-		Na pewno chcesz wyrzucić wszystkich Rezydentów z gridu?
+		Na pewno chcesz wyrzucić wszystkich Rezydentów z siatki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć Rezydentów"/>
 	</notification>
 	<notification name="MuteLinden">
@@ -3329,7 +3329,7 @@ Nazwa nie może zawierać ":" lub "|".
 		<usetemplate name="okcancelbuttons" yestext="Wyślij" notext="Anuluj" />
 	</notification>
 	<notification name="InvalidGrid">
-		'[GRID]' nie jest prawidłową nazwą lub adresem grida.
+		'[GRID]' nie jest prawidłową nazwą lub adresem siatki.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="FireStormReqInfo">
@@ -3358,7 +3358,7 @@ Na pewno chcesz zresetować wszystkie ustawienia?
 		Ustawienia zostaną zresetowane po zrestartowaniu [APP_NAME].
 	</notification>
 	<notification name="CantAddGrid">
-		Nie można dodać [GRID] do listy gridów.
+		Nie można dodać [GRID] do listy siatek.
 [REASON] skontaktuj się ze wsparciem [GRID].
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>

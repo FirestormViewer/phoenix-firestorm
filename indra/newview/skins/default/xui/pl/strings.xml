@@ -94,22 +94,22 @@
 		Pobieranie ubrania...
 	</string>
 	<string name="InvalidCertificate">
-		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem Grida.
+		Serwer zwrócił nieważny lub zniekształcony certyfikat. Proszę skontaktuj się z administratorem siatki.
 	</string>
 	<string name="CertInvalidHostname">
-		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta Grida.
+		Nazwa hosta jest nieważna, proszę sprawdź SLURL lub nazwę hosta siatki.
 	</string>
 	<string name="CertExpired">
-		Termin ważności certyfikatu zwróconego przez Grid minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem Grida.
+		Termin ważności certyfikatu zwróconego przez siatkę minął. Proszę sprawdzić swój zegar systemowy lub skontaktować się z administratorem siatki.
 	</string>
 	<string name="CertKeyUsage">
-		Certyfikat zwrócony przez serwer nie może być użyty dla SSL.  Proszę skontaktuj się z administratorem Grida.
+		Certyfikat zwrócony przez serwer nie może być użyty dla SSL.  Proszę skontaktuj się z administratorem siatki.
 	</string>
 	<string name="CertBasicConstraints">
-		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem Grida.
+		Zbyt wiele certyfikatów w łańcuchu certyfikatów serwera. Proszę skontaktować się z administratorem siatki.
 	</string>
 	<string name="CertInvalidSignature">
-		Podpis certyfikatu zwrócony przez Grid nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem Grida.
+		Podpis certyfikatu zwrócony przez siatkę nie mógł zostać zweryfikowany. Proszę skontaktować się z administratorem siatki.
 	</string>
 	<string name="LoginFailedNoNetwork">
 		Błąd sieci: Brak połączenia z siecią, sprawdź status swojego połączenia internetowego.
