@@ -410,10 +410,11 @@ void	LLFloaterNearbyChat::onOpen(const LLSD& key )
 	// We override this to put nearbychat in the IM floater. -AO
 	if(isChatMultiTab() && ! isVisible(this))
 	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
 		// only show the floater container if we are actually attached -Zi
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
+			// make sure to show our parent floater, too
+			floater_container->setVisible(TRUE);
 			floater_container->showFloater(this, LLTabContainer::START);
 		}
 		setVisible(TRUE);
