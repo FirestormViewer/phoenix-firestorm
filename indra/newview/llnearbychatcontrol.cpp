@@ -159,7 +159,11 @@ void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	// Ignore "special" keys, like backspace, arrows, etc.
 	if (length > 1 
 		&& raw_text[0] == '/'
-		&& key < KEY_SPECIAL)
+		// <FS:Ansariel / Holy Gavenkrantz> Optional gesture autocomplete
+		//&& key < KEY_SPECIAL)
+		&& key < KEY_SPECIAL
+		&& gSavedSettings.getBOOL("FSChatbarGestureAutoCompleteEnable"))
+		// </FS:Ansariel / Holy Gavenkrantz> Optional gesture autocomplete
 	{
 		// we're starting a gesture, attempt to autocomplete
 		

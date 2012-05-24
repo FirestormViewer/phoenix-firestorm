@@ -150,7 +150,7 @@
              control_name="FSPlayTypingSound"
              follows="left|top"
              height="16"
-             label="Hear typing sound when people type in local chat"
+             label="Hear typing sound when people type in nearby chat"
              layout="topleft"
              left_delta="0"
              top_pad="5"
@@ -165,6 +165,15 @@
              left_delta="0"
              top_pad="5"
              name="FSSendTypingState"
+             width="400" />
+            <check_box
+             control_name="FSChatbarGestureAutoCompleteEnable"
+             name="FSChatbarGestureAutoCompleteEnable"
+             label="Enable auto-completion of gestures in nearby chat bar"
+             layout="topleft"
+             left_delta="0"
+             top_pad="5"
+             height="16"
              width="400" />
             <check_box
              enabled="false"
