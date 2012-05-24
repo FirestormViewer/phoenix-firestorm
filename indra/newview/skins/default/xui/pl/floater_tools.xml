@@ -377,7 +377,7 @@
 			<panel.string name="Prim">Prima</panel.string>
 			<panel.string name="Convex Hull">Powłoka wypukła</panel.string>
 			<text name="select_single">
-				Wybierz tylko jeden element, aby edytować jego cechę.
+				Wybierz pojedynczy obiekt, aby edytować cechy.
 			</text>
 			<text name="edit_object">
 				Edytuj cechy obiektu:

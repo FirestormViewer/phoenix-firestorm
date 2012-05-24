@@ -3,7 +3,7 @@
  <string name="no_picks" value="Brak Miejsc" />
  <string name="no_classifieds" value="Brak reklam" />
     <text name="Tell everyone about your favorite places in Second Life.">
-        Pokaż wszystkim swoje ulubione miejsca w Second Life.
+        Pokaż innym swoje ulubione miejsca w Second Life.
     </text>
     <button name="new_btn" label="Nowe..." />
     <button name="delete_btn" label="Usuń..." />

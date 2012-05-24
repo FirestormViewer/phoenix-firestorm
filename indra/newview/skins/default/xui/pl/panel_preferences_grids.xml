@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Siatki" name="grids_panel">
+	<panel.string name="Required">
+		&lt;wymagane&gt;
+	</panel.string>
+	<panel.string name="New">
+		&lt;nowe&gt;
+	</panel.string>
 	<panel name="layoutfix">
 	  <text name="grid_selector_label">
 		Wybierz siatkę:
