@@ -11,7 +11,7 @@
         <command
          name="chat" />
         <command
-         name="move" />
+         name="fly" />
         <command
          name="people" />
         <command
