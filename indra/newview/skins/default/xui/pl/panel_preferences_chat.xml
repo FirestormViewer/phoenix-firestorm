@@ -22,6 +22,7 @@
 			<check_box label="Odtwarzaj animacje awatara (np. krzyczenie)" name="play_avatar_animations"/>
 			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
 			<check_box label="Powiadomienia o pisaniu do innych awatarów podczas sesji IM" name="FSSendTypingState"/>
+			<check_box label="Włącz autouzupełnianie gestów w pasku czatu lokalnego" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Wysyłaj wiadomości prywatne (IM) na mojego e-maila, gdy jestem wylogowany/a" name="send_im_to_email"/>
 			<check_box label="Usuń nagłówki czatów (powrót do stylu V1)" name="plain_text_chat_history"/>
 			<check_box label="Podczas używania nagłówków czatów pokazuj małe ikony" name="ShowChatMiniIcons"/>
