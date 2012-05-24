@@ -3912,6 +3912,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Settings_Debug_Label">Debug settings</string>
   <string name="Command_Statistics_Label">Statistics</string>
   <string name="Command_Region_Label">Region/Estate</string>
+  <string name="Command_Fly_Label">Fly</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -3951,6 +3952,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
   <string name="Toolbar_Right_Tooltip" >currently in your right toolbar</string>
+
+  <string name="Command_Fly_Tooltip">Toggle flying mode on/off</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>

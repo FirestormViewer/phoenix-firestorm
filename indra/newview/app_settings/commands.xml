@@ -345,4 +345,14 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="region_info"
            />
+
+  <command name="fly"
+           available_in_toybox="true"
+           icon="Move_Fly_Off"
+           label_ref="Command_Fly_Label"
+           tooltip_ref="Command_Fly_Tooltip"
+           execute_function="Agent.toggleFlying"
+           is_running_function="Agent.getFlying"
+           />
+
 </commands>
