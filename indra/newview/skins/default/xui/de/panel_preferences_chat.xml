@@ -31,8 +31,9 @@
 			<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
 			<check_box initial_value="true" label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
 			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
-			<check_box label="Tipp-Sound abspielen wenn Personen im lokalen Chat tippen" name="play_typing_sound"/> 
+			<check_box label="Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
+			<check_box label="Auto-Vervollständigen für Gesten im Chat in der Nähe aktivieren" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="IMs per Email zuschicken, wenn ich offline bin" name="send_im_to_email"/>
 			<check_box label="Kompakten IM- und Text-Chatverlauf aktivieren" name="plain_text_chat_history"/>
 			<check_box label="Miniaturicons anzeigen, falls Chat-Überschriften verwendet werden" name="ShowChatMiniIcons"/>	
