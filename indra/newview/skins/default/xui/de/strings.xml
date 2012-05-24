@@ -4993,6 +4993,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Region_Label">
 		Region/Grundbesitz
 	</string>
+	<string name="Command_Fly_Label">
+		Fliegen
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5088,6 +5091,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Region_Tooltip">
 		Öffnet die Regions- und Grundbesitzverwaltung
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Flugmodus ein-/ausschalten
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
