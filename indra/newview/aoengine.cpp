@@ -734,6 +734,8 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 	}
 
 	// count backwards in case we have to remove items
+	BOOL wasProtected=gSavedPerAccountSettings.getBOOL("ProtectAOFolders");
+	gSavedPerAccountSettings.setBOOL("ProtectAOFolders",FALSE);
 	for(S32 index=items->count()-1;index>=0;index--)
 	{
 		BOOL move=FALSE;
@@ -764,6 +766,7 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 			lldebugs << item->getName() << " moved to lost and found!" << llendl;
 		}
 	}
+	gSavedPerAccountSettings.setBOOL("ProtectAOFolders",wasProtected);
 
 	return moved;
 }
