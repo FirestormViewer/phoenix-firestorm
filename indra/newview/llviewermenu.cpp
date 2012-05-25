@@ -7580,6 +7580,13 @@ class LLToolsSelectedScriptAction : public view_listener_t
 			name = "stop_queue";
 			msg = "SetRunningNot";
 		}
+		// <FS> Delete scripts
+		else if (action == "delete")
+		{
+			name = "delete_queue";
+			msg = "delete";
+		}
+		// </FS> Delete scripts
 		LLUUID id; id.generate();
 		
 		LLFloaterScriptQueue* queue =LLFloaterReg::getTypedInstance<LLFloaterScriptQueue>(name, LLSD(id));

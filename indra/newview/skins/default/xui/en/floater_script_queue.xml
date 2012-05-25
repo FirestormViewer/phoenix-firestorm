@@ -29,6 +29,10 @@
      name="NotRunning">
         Not running
     </floater.string>
+    <floater.string
+        name="Deleting">
+      Deleting
+    </floater.string>
     <button
      follows="right|bottom"
      height="24"

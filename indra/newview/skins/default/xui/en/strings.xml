@@ -2440,6 +2440,8 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="RunQueueStart">set running</string>
 	<string name="NotRunQueueTitle">Set Not Running Progress</string>
 	<string name="NotRunQueueStart">set not running</string>
+	<string name="DeleteQueueTitle">Delete Progress</string>
+	<string name="DeleteQueueStart">Deleting</string>
 
 	<!-- compile comment text-->
 	<string name="CompileSuccessful">Compile successful!</string>

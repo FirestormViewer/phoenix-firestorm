@@ -785,6 +785,60 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 	nextObject();	
 }
 
+// <FS> Delete scripts
+///----------------------------------------------------------------------------
+/// Class LLFloaterDeleteQueue 
+///----------------------------------------------------------------------------
+
+LLFloaterDeleteQueue::LLFloaterDeleteQueue(const LLSD& key)
+  : LLFloaterScriptQueue(key)
+{
+	setTitle(LLTrans::getString("DeleteQueueTitle"));
+	setStartString(LLTrans::getString("DeleteQueueStart"));
+}
+
+LLFloaterDeleteQueue::~LLFloaterDeleteQueue()
+{ 
+}
+
+void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
+										  LLInventoryObject::object_list_t* inv)
+{
+	// find all of the lsl, leaving off duplicates. We'll remove
+	// all matching asset uuids on compilation success.
+	LLDynamicArray<const char*> names;
+	
+	LLInventoryObject::object_list_t::const_iterator it = inv->begin();
+	LLInventoryObject::object_list_t::const_iterator end = inv->end();
+	for ( ; it != end; ++it)
+	{
+		if((*it)->getType() == LLAssetType::AT_LSL_TEXT)
+		{
+			LLViewerObject* object = gObjectList.findObject(viewer_obj->getID());
+
+			if (object)
+			{				
+				LLInventoryItem* item = (LLInventoryItem*)((LLInventoryObject*)(*it));
+				std::string buffer;
+				buffer = getString("Deleting") + (": ") + item->getName();
+				getChild<LLScrollListCtrl>("queue output")->addCommentText(buffer);
+				LLMessageSystem* msg = gMessageSystem;
+				msg->newMessageFast(_PREHASH_RemoveTaskInventory);
+				msg->nextBlockFast(_PREHASH_AgentData);
+				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+				msg->nextBlockFast(_PREHASH_InventoryData);
+				msg->addU32Fast(_PREHASH_LocalID, viewer_obj->getLocalID());
+				msg->addUUIDFast(_PREHASH_ItemID, (*it)->getUUID());
+				msg->sendReliable(object->getRegion()->getHost());
+			}
+		}
+	}
+
+	nextObject();	
+}
+// </FS> Delete scripts
+
 ///----------------------------------------------------------------------------
 /// Local function definitions
 ///----------------------------------------------------------------------------

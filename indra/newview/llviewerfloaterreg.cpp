@@ -400,5 +400,7 @@ void LLViewerFloaterReg::registerFloaters()
 	// <FS:Ansariel> Group titles
 	LLFloaterReg::add("group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSGroupTitles>);
 
+	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
+
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }
