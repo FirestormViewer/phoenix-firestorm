@@ -212,7 +212,7 @@ Dummy Name replaced at run time
       name="fs_credits_panel">
       <text
           follows="top|left|right"
-          height="90"
+          height="100"
           layout="topleft"
           left="5"
           name="firestorm_intro"
@@ -220,7 +220,7 @@ Dummy Name replaced at run time
           width="435"
           wrap="true">
 Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
-          
+
 The Firestorm Development Team:
       </text>
       <text_editor

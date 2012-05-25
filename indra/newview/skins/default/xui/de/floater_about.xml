@@ -70,8 +70,8 @@ Second Life wird präsentiert von den Lindens:
 		</panel>
 <!-- Firestorm Credits -->
       <panel label="Firestorm" name="fs_credits_panel">      
-<text name="firestorm_intro" height="100" >
-Firestorm ist ein Community-Entwicklungsprojekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von verschiedenen Community-Entwicklern mit Code von Linden Lab sowie unseren eigenen Erweiterungen, um Ihnen ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
+<text name="firestorm_intro" height="100">
+Firestorm ist ein Community-Projekt, um das SecondLife(tm)-Viewer-Erlebnis zu verbessern. Wir verbinden Beiträge von Community-Entwicklern mit Code von Linden Lab sowie eigenen Erweiterungen, um ein qualitativ hochwertiges und funktionsreiches Viewer-Erlebnis zu bieten. Wir werden durch ein großes, freiwilliges Support-Team unterstützt. Firestorm wird Ihnen präsentiert von The Phoenix Viewer Project, Inc., einer gemeinnützigen Organisation.
 
 Das Firestorm Entwickler-Team:
       </text>
