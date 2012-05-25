@@ -9,7 +9,7 @@
  visible="false"
  width="128">
     <menu_item_check
-         label="Show Navigation Bar"
+         label="Show Navigation and Search Bar"
          layout="topleft"
          name="ShowNavbarNavigationPanel">
            <on_click
