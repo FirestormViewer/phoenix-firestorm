@@ -2084,8 +2084,10 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(TRUE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		LLNavigationBar::getInstance()->showNavigationPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		LLNavigationBar::getInstance()->showFavoritesPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+		// <FS:Zi> Is done inside XUI now, using visibility_control
+		// LLNavigationBar::getInstance()->showNavigationPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+		// LLNavigationBar::getInstance()->showFavoritesPanel(TRUE && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+		// </FS:Zi>
 		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(true);
 
@@ -2205,8 +2207,10 @@ void LLAgent::endAnimationUpdateUI()
 		gMenuBarView->setVisible(FALSE);
 		// <FS:Ansariel> Separate navigation and favorites panel
 		//LLNavigationBar::getInstance()->setVisible(FALSE);
-		LLNavigationBar::getInstance()->showNavigationPanel(FALSE);
-		LLNavigationBar::getInstance()->showFavoritesPanel(FALSE);
+		// <FS:Zi> Is done inside XUI now, using visibility_control
+		// LLNavigationBar::getInstance()->showNavigationPanel(FALSE);
+		// LLNavigationBar::getInstance()->showFavoritesPanel(FALSE);
+		// </FS:Zi>
 		// </FS:Ansariel> Separate navigation and favorites panel
 		gStatusBar->setVisibleForMouselook(false);
 

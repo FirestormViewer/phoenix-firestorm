@@ -33,13 +33,6 @@
             width="1024"
             height="19"/>
     </layout_panel>
-    <layout_panel auto_resize="false"
-                  height="34"
-                  mouse_opaque="false"
-                  name="nav_bar_container"
-                  tab_stop="false"
-                  width="1024"
-                  visible="false"/>
     <layout_panel auto_resize="true"  
                   follows="all"
                   height="500"
@@ -56,6 +49,17 @@
             name="world_view_rect"
             width="1024"/>
       <panel follows="left|top|right"
+             top="0"
+             left="0"
+             height="39"
+             mouse_opaque="false"
+             name="nav_bar_container"
+             tab_stop="false"
+             width="1024"
+             invisibility_control="MouseLookEnabled"
+             visible="false"/>
+      <!-- <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
+      <panel follows="left|top|right"
              height="37"
              left="0"
              mouse_opaque="false"
@@ -64,6 +68,7 @@
 	     top_delta="0"
              visible="false"
              width="1024"/>
+      -->
       <panel top="0"
              left="0"
              follows="all"

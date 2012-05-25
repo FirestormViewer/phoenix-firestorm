@@ -319,20 +319,22 @@ BOOL LLNavigationBar::postBuild()
 	mTeleportFailedConnection = LLViewerParcelMgr::getInstance()->
 		setTeleportFailedCallback(boost::bind(&LLNavigationBar::onTeleportFailed, this));
 	
-	LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
-	LLPanel* np = getChild<LLPanel>("navigation_panel");
-	LLPanel* navFrame = getChild<LLPanel>("navigation_bar");
+	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+	// LLFavoritesBarCtrl* fp = getChild<LLFavoritesBarCtrl>("favorite");
+	// LLPanel* np = getChild<LLPanel>("navigation_panel");
+	// LLPanel* navFrame = getChild<LLPanel>("navigation_bar");
 	
-	mDefaultNavContainerRect = getRect();
-	mDefaultFpRect = fp->getRect();
-	mDefaultNpRect = np->getRect();
-	mDefaultFrameRect = navFrame->getRect();
+	// mDefaultNavContainerRect = getRect();
+	// mDefaultFpRect = fp->getRect();
+	// mDefaultNpRect = np->getRect();
+	// mDefaultFrameRect = navFrame->getRect();
 	
-	mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
-	setRect(mDefaultNavContainerRect);
-	navFrame->setRect(mDefaultFrameRect);
-	np->setRect(mDefaultNpRect);
-	fp->setRect(mDefaultFpRect);
+	// mDefaultNavContainerRect.set(mDefaultNavContainerRect.mLeft, mDefaultNpRect.mTop,mDefaultNavContainerRect.mRight, mDefaultFpRect.mBottom);
+	// setRect(mDefaultNavContainerRect);
+	// navFrame->setRect(mDefaultFrameRect);
+	// np->setRect(mDefaultNpRect);
+	// fp->setRect(mDefaultFpRect);
+	// </FS:Zi>
 
 	// we'll be notified on teleport history changes
 	LLTeleportHistory::getInstance()->setHistoryChangedCallback(
@@ -343,19 +345,21 @@ BOOL LLNavigationBar::postBuild()
 	return TRUE;
 }
 
-void LLNavigationBar::setVisible(BOOL visible)
-{
-	// change visibility of grandparent layout_panel to animate in and out
-	if (getParent()) 
-	{
-		//to avoid some mysterious bugs like EXT-3352, at least try to log an incorrect parent to ping  about a problem. 
-		if(getParent()->getName() != "nav_bar_container")
-		{
-			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
-		}
-		getParent()->setVisible(visible);	
-	}
-}
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// void LLNavigationBar::setVisible(BOOL visible)
+// {
+// 	// change visibility of grandparent layout_panel to animate in and out
+// 	if (getParent()) 
+// 	{
+// 		//to avoid some mysterious bugs like EXT-3352, at least try to log an incorrect parent to ping  about a problem. 
+// 		if(getParent()->getName() != "nav_bar_container")
+// 		{
+// 			LL_WARNS("LLNavigationBar")<<"NavigationBar has an unknown name of the parent: "<<getParent()->getName()<< LL_ENDL;
+// 		}
+// 		getParent()->setVisible(visible);	
+// 	}
+// }
+// </FS:Zi>
 
 
 void LLNavigationBar::fillSearchComboBox()
@@ -742,100 +746,102 @@ void LLNavigationBar::clearHistoryCache()
 	mPurgeTPHistoryItems= true;
 }
 
-int LLNavigationBar::getDefNavBarHeight()
-{
-	return mDefaultNpRect.getHeight();
-}
-int LLNavigationBar::getDefFavBarHeight()
-{
-	return mDefaultFpRect.getHeight();
-}
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// int LLNavigationBar::getDefNavBarHeight()
+// {
+// 	return mDefaultNpRect.getHeight();
+// }
+// int LLNavigationBar::getDefFavBarHeight()
+// {
+// 	return mDefaultFpRect.getHeight();
+// }
 
-void LLNavigationBar::showNavigationPanel(BOOL npVisible)
-// AO: Rewrite for transparency
-// AH: Calculations changed for FUI - This really needs to be reworked!
-{
-	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
-	LLPanel* np = getChild<LLPanel>("navigation_panel");
-	llinfos << "showing navpanel :" << npVisible << llendl;
-	llinfos << "DEBUG: mDefaultNpRect = mLeft,mTop,mRight,mBottom = " << mDefaultNpRect.mLeft << "," << mDefaultNpRect.mTop << "," << mDefaultNpRect.mRight << "," << mDefaultNpRect.mBottom << llendl;
-	LLRect r;
-	LLRect curRect = getRect();
-	
-	if (npVisible)
-	{
-		if (fpVisible) // Show both panels
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
-		}
-		else // NavPanel only 
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
-			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight(),curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight()));
-		}
-	}
-	else 
-	{
-		if (fpVisible) // Show favorite bar only
-		{
-			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()));
-		}
-		else // show nothing
-		{
-			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mTop));
-		}
-	}
-	
-	np->setVisible(npVisible);			
-	return;
-}
+// void LLNavigationBar::showNavigationPanel(BOOL npVisible)
+// // AO: Rewrite for transparency
+// // AH: Calculations changed for FUI - This really needs to be reworked!
+// {
+// 	bool fpVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
+// 	LLPanel* np = getChild<LLPanel>("navigation_panel");
+// 	llinfos << "showing navpanel :" << npVisible << llendl;
+// 	llinfos << "DEBUG: mDefaultNpRect = mLeft,mTop,mRight,mBottom = " << mDefaultNpRect.mLeft << "," << mDefaultNpRect.mTop << "," << mDefaultNpRect.mRight << "," << mDefaultNpRect.mBottom << llendl;
+// 	LLRect r;
+// 	LLRect curRect = getRect();
+// 	
+// 	if (npVisible)
+// 	{
+// 		if (fpVisible) // Show both panels
+// 		{
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
+// 		}
+// 		else // NavPanel only 
+// 		{
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
+// 			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
+// 			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight(),curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight()));
+// 		}
+// 	}
+// 	else 
+// 	{
+// 		if (fpVisible) // Show favorite bar only
+// 		{
+// 			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()));
+// 		}
+// 		else // show nothing
+// 		{
+// 			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mTop));
+// 		}
+// 	}
+// 	
+// 	np->setVisible(npVisible);			
+// 	return;
+// }
 
-void LLNavigationBar::showFavoritesPanel(BOOL visible)
-// AO: Rewrite for transparency
-// AH: Calculations changed for FUI - This really needs to be reworked!
-{
-	
-	bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
-
-	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-	LLPanel* np = getChild<LLPanel>("navigation_panel");
-	LLRect curRect = getRect();
-	LLRect r = getRect();
-	
-	fb->setVisible(visible);
-	
-	if (visible)
-	{
-		if (npVisible) // NavBar + FavBar
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
-			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop + 5,curRect.mRight, mDefaultNpRect.mBottom + 5));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,curRect.mRight, mDefaultNpRect.mBottom));
-		}
-		else 
-		{
-			// Show FavBar Only
-			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()));
-		}
-	}
-	else 
-	{
-		if (npVisible) // NavBar
-		{
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
-			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
-			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight(),curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight()));
-	
-		}
-		else 
-		{
-			// show nothing
-			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
-			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop));
-		}
-	}
-}
+// void LLNavigationBar::showFavoritesPanel(BOOL visible)
+// // AO: Rewrite for transparency
+// // AH: Calculations changed for FUI - This really needs to be reworked!
+// {
+// 	
+// 	bool npVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
+// 
+// 	LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
+// 	LLPanel* np = getChild<LLPanel>("navigation_panel");
+// 	LLRect curRect = getRect();
+// 	LLRect r = getRect();
+// 	
+// 	fb->setVisible(visible);
+// 	
+// 	if (visible)
+// 	{
+// 		if (npVisible) // NavBar + FavBar
+// 		{
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom));
+// 			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop + 5,curRect.mRight, mDefaultNpRect.mBottom + 5));
+// 			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop,curRect.mRight, mDefaultNpRect.mBottom));
+// 		}
+// 		else 
+// 		{
+// 			// Show FavBar Only
+// 			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()+4));
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom+mDefaultNpRect.getHeight()));
+// 		}
+// 	}
+// 	else 
+// 	{
+// 		if (npVisible) // NavBar
+// 		{
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop,curRect.mRight, mDefaultNavContainerRect.mBottom + mDefaultFpRect.getHeight()));
+// 			//np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight() + 5,curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight() + 5));
+// 			np->setRect(r.set(mDefaultNpRect.mLeft, mDefaultNpRect.mTop - mDefaultFpRect.getHeight(),curRect.mRight, mDefaultNpRect.mBottom - mDefaultFpRect.getHeight()));
+// 	
+// 		}
+// 		else 
+// 		{
+// 			// show nothing
+// 			//setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop+5));
+// 			setRect(r.set(mDefaultNavContainerRect.mLeft, curRect.mTop+5,curRect.mRight, mDefaultNavContainerRect.mTop));
+// 		}
+// 	}
+// }
+// </FS:Zi>

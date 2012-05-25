@@ -93,20 +93,22 @@ public:
 	/*virtual*/ void	draw();
 	/*virtual*/ BOOL handleRightMouseDown(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL	postBuild();
-	/*virtual*/ void	setVisible(BOOL visible);
+//	/*virtual*/ void	setVisible(BOOL visible); // <FS:Zi> Is done inside XUI now, using visibility_control
 
 	void handleLoginComplete();
 	void clearHistoryCache();
 
-	void showNavigationPanel(BOOL visible);
-	void showFavoritesPanel(BOOL visible);
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// 	void showNavigationPanel(BOOL visible);
+// 	void showFavoritesPanel(BOOL visible);
 
-	int getDefNavBarHeight();
-	int getDefFavBarHeight();
+// 	int getDefNavBarHeight();
+// 	int getDefFavBarHeight();
+// </FS:Zi>
 	
 private:
 	// the distance between navigation panel and favorites panel in pixels
-	const static S32 FAVBAR_TOP_PADDING = 10;
+	// const static S32 FAVBAR_TOP_PADDING = 10;	// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
 
 	void rebuildTeleportHistoryMenu();
 	void showTeleportHistoryMenu(LLUICtrl* btn_ctrl);
@@ -147,10 +149,12 @@ private:
 	LLButton*					mBtnHome;
 	LLSearchComboBox*			mSearchComboBox;
 	LLLocationInputCtrl*		mCmbLocation;
-	LLRect						mDefaultNpRect;
-	LLRect						mDefaultNavContainerRect;
-	LLRect						mDefaultFpRect;
-	LLRect						mDefaultFrameRect;
+// <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
+// 	LLRect						mDefaultNpRect;
+// 	LLRect						mDefaultNavContainerRect;
+// 	LLRect						mDefaultFpRect;
+// 	LLRect						mDefaultFrameRect;
+// </FS:Zi>
 	boost::signals2::connection	mTeleportFailedConnection;
 	boost::signals2::connection	mTeleportFinishConnection;
 	boost::signals2::connection	mHistoryMenuConnection;

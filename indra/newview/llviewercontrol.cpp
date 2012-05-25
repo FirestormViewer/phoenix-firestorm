@@ -572,34 +572,38 @@ bool toggle_agent_pause(const LLSD& newvalue)
 	return true;
 }
 
-bool toggle_show_navigation_panel(const LLSD& newvalue)
-{
-	bool value = newvalue.asBoolean();
+// <FS:Zi> Is done inside XUI now, using visibility_control
+// bool toggle_show_navigation_panel(const LLSD& newvalue)
+// {
+// 	bool value = newvalue.asBoolean();
 
-	//LLNavigationBar::getInstance()->setVisible(value);
-	LLNavigationBar::getInstance()->showNavigationPanel(value); // <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-//	gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
+// 	//LLNavigationBar::getInstance()->setVisible(value);
+// 	LLNavigationBar::getInstance()->showNavigationPanel(value); // <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
+// //	gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
 
-	return true;
-}
+// 	return true;
+// }
 
 // <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-bool toggle_show_favorites_panel(const LLSD& newvalue)
-{
-	LLNavigationBar::getInstance()->showFavoritesPanel(newvalue.asBoolean());
-	return true;
-}
+// bool toggle_show_favorites_panel(const LLSD& newvalue)
+// {
+// 	LLNavigationBar::getInstance()->showFavoritesPanel(newvalue.asBoolean());
+// 	return true;
+// }
 // </FS:Ansariel>
+// </FS:Zi>
 
-bool toggle_show_mini_location_panel(const LLSD& newvalue)
-{
-	bool value = newvalue.asBoolean();
-
-	LLPanelTopInfoBar::getInstance()->setVisible(value);
-	gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
-
-	return true;
-}
+// <FS:Zi> We don't have the mini location bar
+// bool toggle_show_mini_location_panel(const LLSD& newvalue)
+// {
+// 	bool value = newvalue.asBoolean();
+// 
+// 	LLPanelTopInfoBar::getInstance()->setVisible(value);
+// 	gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
+// 
+// 	return true;
+// }
+// </FS:Zi>
 
 // <FS:Zi> Is done inside XUI now, using visibility_control
 // bool toggle_show_search_topbar(const LLSD& newvalue)
@@ -804,8 +808,12 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("QAMode")->getSignal()->connect(boost::bind(&show_debug_menus));
 	gSavedSettings.getControl("UseDebugMenus")->getSignal()->connect(boost::bind(&show_debug_menus));
 	gSavedSettings.getControl("AgentPause")->getSignal()->connect(boost::bind(&toggle_agent_pause, _2));
-	gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&toggle_show_navigation_panel, _2));
-	gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// gSavedSettings.getControl("ShowNavbarNavigationPanel")->getSignal()->connect(boost::bind(&toggle_show_navigation_panel, _2));
+	// </FS:Zi>
+	// <FS:Zi> We don't have the mini location bar
+	// gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
+	// </FS: Zi>
 	// <FS:Zi> Is done inside XUI now, using visibility_control
 	// gSavedSettings.getControl("ShowSearchTopBar")->getSignal()->connect(boost::bind(&toggle_show_search_topbar, _2));
 	// </FS:Zi>
@@ -822,7 +830,9 @@ void settings_setup_listeners()
 // [/SL:KB]
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
-	gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// gSavedSettings.getControl("ShowNavbarFavoritesPanel")->getSignal()->connect(boost::bind(&toggle_show_favorites_panel, _2));
+	// </FS:Zi>
 	// NaCl - Antispam Registry
 	gSavedSettings.getControl("_NACL_AntiSpamGlobalQueue")->getSignal()->connect(boost::bind(&handleNaclAntiSpamGlobalQueueChanged, _2));
 	gSavedSettings.getControl("_NACL_AntiSpamTime")->getSignal()->connect(boost::bind(&handleNaclAntiSpamTimeChanged, _2));

@@ -5,20 +5,31 @@
  color="Transparent"
  follows="left|top|right"
  focus_root="true"
- height="37"
+ height="39"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
  width="1024">
 
-	<panel
-	 background_visible="false"
-	 follows="left|top|right"
-	 height="22"
-	 layout="topleft"
-	 top_pad="0"
-	 name="navigation_panel"
-	 width="1024">
+<!-- Navigation and Favorites Bar visibility stack -->
+<layout_stack
+ top="0"
+ left="0"
+ follows="left|top|right"
+ height="39"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_stack"
+ orientation="vertical"
+ width="1024">
+
+<!-- Navigation Bar visibility panel -->
+<layout_panel
+ height="22"
+ layout="topleft"
+ name="navigation_bar_visibility_panel"
+ visibility_control="ShowNavbarNavigationPanel"
+ width="1024">
 
 	<!-- Layout stack for buttons, location input and search field -->
 	<layout_stack
@@ -183,15 +194,25 @@
 	</layout_stack>
 	<!-- Layout stack for buttons, location input and search field -->
 
-	</panel>
+</layout_panel>
+<!-- Navigation Bar visibility panel -->
+
+<!-- Favorites Bar visibility panel -->
+<layout_panel
+ height="15"
+ layout="topleft"
+ name="favorites_bar_visibility_panel"
+ visibility_control="ShowNavbarFavoritesPanel"
+ auto_resize="true">
+
   <favorites_bar
  	 background_visible="false"
  	 bg_alpha_color="Transparent"
  	 color="Transparent"
-     follows="left|bottom|right"
+     follows="left|top|right"
      top_pad="0"
      font="SansSerifSmall"
-     height="16"
+     height="15"
      layout="topleft"
      left="0"
      name="favorite"
@@ -219,4 +240,11 @@
              width="15"
              height="15"/>
   </favorites_bar>
+
+</layout_panel>
+<!-- Favorites Bar visibility panel -->
+
+</layout_stack>
+<!-- Navigation and Favorites Bar visibility stack -->
+
 </panel>

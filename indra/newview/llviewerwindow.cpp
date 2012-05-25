@@ -1948,29 +1948,33 @@ void LLViewerWindow::initWorldUI()
 	status_bar_container->setVisible(TRUE);
 
 	// Navigation bar
-	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
+	// <FS:Zi> Use nav_bar_container here, not topinfo_bar_container
+	// LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
+	LLPanel* nav_bar_container = getRootView()->getChild<LLPanel>("nav_bar_container");
+	// </FS_Zi>
 
 	LLNavigationBar* navbar = LLNavigationBar::getInstance();
-	navbar->setShape(nav_bar_container->getLocalRect());
+	// navbar->setShape(nav_bar_container->getLocalRect());	// <FS:Zi> Moved lower so reshape works properly
 	navbar->setBackgroundColor(gMenuBarView->getBackgroundColor().get());
 	nav_bar_container->addChild(navbar);
 	nav_bar_container->setVisible(TRUE);
+	navbar->setShape(nav_bar_container->getLocalRect());	// <FS:Zi> Moved here so reshape works properly
 	
-	if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
-	{
-		// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-		//navbar->setVisible(FALSE);
-		navbar->showNavigationPanel(FALSE);
-	}
-
-	// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-	if (!gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
-	{
-		navbar->showFavoritesPanel(FALSE);
-	}
-	// </FS:Ansariel>
-
 	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// if (!gSavedSettings.getBOOL("ShowNavbarNavigationPanel"))
+	// {
+	// 	// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
+	// 	//navbar->setVisible(FALSE);
+	// 	navbar->showNavigationPanel(FALSE);
+	// 	}
+
+	// 	// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
+	// 	if (!gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"))
+	// 	{
+	// 		navbar->showFavoritesPanel(FALSE);
+	// 	}
+	// 	// </FS:Ansariel>
+
 	// if (!gSavedSettings.getBOOL("ShowSearchTopBar"))
 	// {
 	// 	navbar->childSetVisible("search_combo_box",FALSE);
@@ -1983,19 +1987,21 @@ void LLViewerWindow::initWorldUI()
 	}
 	
 
-	// Top Info bar
-	LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
-	LLPanelTopInfoBar* topinfo_bar = LLPanelTopInfoBar::getInstance();
+	// <FS:Zi> We don't have the mini location bar, so no topinfo_bar required
+	// // Top Info bar
+	// LLPanel* topinfo_bar_container = getRootView()->getChild<LLPanel>("topinfo_bar_container");
+	// LLPanelTopInfoBar* topinfo_bar = LLPanelTopInfoBar::getInstance();
 
-	topinfo_bar->setShape(topinfo_bar_container->getLocalRect());
+	// topinfo_bar->setShape(topinfo_bar_container->getLocalRect());
 
-	topinfo_bar_container->addChild(topinfo_bar);
-	topinfo_bar_container->setVisible(TRUE);
+	// topinfo_bar_container->addChild(topinfo_bar);
+	// topinfo_bar_container->setVisible(TRUE);
 
-	if (!gSavedSettings.getBOOL("ShowMiniLocationPanel"))
-	{
-		topinfo_bar->setVisible(FALSE);
-	}
+	// if (!gSavedSettings.getBOOL("ShowMiniLocationPanel"))
+	// {
+	// 	topinfo_bar->setVisible(FALSE);
+	// }
+	// </FS:Zi>
 
 	if ( gHUDView == NULL )
 	{
@@ -2311,17 +2317,19 @@ void LLViewerWindow::setNormalControlsVisible( BOOL visible )
 		gStatusBar->setEnabled( visible );	
 	}
 	
-	LLNavigationBar* navbarp = LLUI::getRootView()->findChild<LLNavigationBar>("navigation_bar");
-	if (navbarp)
-	{
-		// when it's time to show navigation bar we need to ensure that the user wants to see it
-		// i.e. ShowNavbarNavigationPanel option is true
-		// <FS:Ansariel> Separate navigation and favorites panel
-		//navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
-		navbarp->showNavigationPanel(visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
-		navbarp->showFavoritesPanel(visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
-		// </FS:Ansariel> Separate navigation and favorites panel
-	}
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// LLNavigationBar* navbarp = LLUI::getRootView()->findChild<LLNavigationBar>("navigation_bar");
+	// if (navbarp)
+	// {
+	// 	// when it's time to show navigation bar we need to ensure that the user wants to see it
+	// 	// i.e. ShowNavbarNavigationPanel option is true
+	// 	// <FS:Ansariel> Separate navigation and favorites panel
+	// 	//navbarp->setVisible( visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel") );
+	// 	navbarp->showNavigationPanel(visible && gSavedSettings.getBOOL("ShowNavbarNavigationPanel"));
+	// 	navbarp->showFavoritesPanel(visible && gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"));
+	// 	// </FS:Ansariel> Separate navigation and favorites panel
+	// }
+	// </FS_Zi>
 }
 
 void LLViewerWindow::setMenuBackgroundColor(bool god_mode, bool dev_grid)
@@ -5278,11 +5286,14 @@ void LLViewerWindow::setUIVisibility(bool visible)
 		gToolBarView->setToolBarsVisible(visible);
 	}
 
-	// <FS:Ansariel> Separate navigation and favorites panel
-	//LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
-	LLNavigationBar::getInstance()->showNavigationPanel(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
-	LLNavigationBar::getInstance()->showFavoritesPanel(visible ? gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"): FALSE);
-	// </FS:Ansariel> Separate navigation and favorites panel
+	// <FS:Zi> Is done inside XUI now, using visibility_control
+	// // <FS:Ansariel> Separate navigation and favorites panel
+	// //LLNavigationBar::getInstance()->setVisible(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	// LLNavigationBar::getInstance()->showNavigationPanel(visible ? gSavedSettings.getBOOL("ShowNavbarNavigationPanel") : FALSE);
+	// LLNavigationBar::getInstance()->showFavoritesPanel(visible ? gSavedSettings.getBOOL("ShowNavbarFavoritesPanel"): FALSE);
+	// // </FS:Ansariel> Separate navigation and favorites panel
+	// </FS:Zi>
+
 	LLPanelTopInfoBar::getInstance()->setVisible(visible? gSavedSettings.getBOOL("ShowMiniLocationPanel") : FALSE);
 	mRootView->getChildView("status_bar_container")->setVisible(visible);
 }

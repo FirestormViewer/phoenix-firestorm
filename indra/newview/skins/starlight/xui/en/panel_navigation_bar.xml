@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- height intentionally 1px too high to make room for filler panel at the bottom -->
 <panel
- background_opaque="true"
- background_visible="true"
- bg_opaque_color="MouseGray"
+ top="0"
+ left="0"
+ background_visible="false"
  follows="left|bottom|right"
  focus_root="true"
- height="40"
+ height="41"
  layout="topleft"
  name="navigation_bar"
  chrome="true"
  width="1024">
 
-	<panel
-	 background_opaque="true"
-	 background_visible="true"
-	 bg_opaque_color="MouseGray"
-	 follows="left|top|right"
-	 height="24"
-	 layout="topleft"
-	 top_delta="0"
-	 top_pad="0"
-	 name="navigation_panel"
-	 width="1024">
+<!-- Navigation and Favorites Bar visibility stack -->
+<layout_stack
+ top="0"
+ left="0"
+ follows="left|top|right"
+ height="40"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_stack"
+ orientation="vertical"
+ width="1024">
+
+<!-- Navigation Bar visibility panel -->
+<layout_panel
+ background_opaque="true"
+ background_visible="true"
+ height="24"
+ layout="topleft"
+ border_size="0"
+ name="navigation_bar_visibility_panel"
+ visibility_control="ShowNavbarNavigationPanel"
+ width="1024"
+ auto_resize="false">
 
 	<!-- Layout stack for buttons, location input and search field -->
 	<layout_stack
@@ -186,11 +200,21 @@
 	</layout_stack>
 	<!-- Layout stack for buttons, location input and search field -->
 
-	</panel>
+</layout_panel>
+<!-- Navigation Bar visibility panel -->
+
+<!-- Favorites Bar visibility panel -->
+<layout_panel
+ background_opaque="true"
+ background_visible="true"
+ height="15"
+ layout="topleft"
+ border_size="0"
+ name="favorites_bar_visibility_panel"
+ visibility_control="ShowNavbarFavoritesPanel"
+ auto_resize="false">
+
   <favorites_bar
- 	 background_visible="false"
- 	 bg_alpha_color="Transparent"
- 	 color="Transparent"
      follows="left|top|right"
      top_pad="2"
      font="SansSerifSmall"
@@ -214,4 +238,22 @@
                 More &#9660;
                 </more_button>
   </favorites_bar>
+
+</layout_panel>
+<!-- Favorites Bar visibility panel -->
+
+<!-- Filler panel at the bottom to push the opaque background away -->
+<layout_panel
+ background_opaque="false"
+ background_visible="false"
+ height="1"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_padding_panel"
+ width="1024"
+ auto_resize="true" />
+
+</layout_stack>
+<!-- Navigation and Favorites Bar visibility stack -->
+
 </panel>
