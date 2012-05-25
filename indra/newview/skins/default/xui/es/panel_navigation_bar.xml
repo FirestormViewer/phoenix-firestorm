@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="navigation_bar">
-	<panel name="navigation_panel">
-		<layout_stack name="location_search_layout">
-			<layout_panel name="navigation_buttons_visibility_panel" right="222">
-				<pull_button name="back_btn" tool_tip="Volver a la localización anterior"/>
-				<pull_button name="forward_btn" tool_tip="Ir una localización adelante"/>
-				<button name="home_btn" tool_tip="Teleportar a mi Base"/>
-				<button name="About_Land" label="Terreno" tool_tip="Muestra la ventana de información de la parcela" width="60"/>
-				<button name="Sky" label="Cielo" tool_tip="Muestra la ventana del Editor de Cielo" width="44"/>
-			</layout_panel>
-			<layout_panel name="location_bar_visibility_panel">
-				<location_input label="Localización" name="location_combo"/>
-			</layout_panel>
-			<layout_panel name="search_bar_visibility_panel">
-				<search_combo_box label="Buscar" name="search_combo_box" tool_tip="Buscar">
-					<combo_editor label="Buscar en el Metaverso" name="search_combo_editor"/>
-				</search_combo_box>
-			</layout_panel>
-		</layout_stack>
-	</panel>
-	<favorites_bar name="favorite" tool_tip="¡Arrastra hitos aquí para acceder más velozmente a tus lugares favoritos de Second Life!">
-		<label name="favorites_bar_label" tool_tip="¡Arrastra hitos aquí para acceder más velozmente a tus lugares favoritos de Second Life!">
-			Barra de Favoritos
-		</label>
-		<chevron_button name="&gt;&gt;" tool_tip="Mostrar más de Mis favoritos"/>
-	</favorites_bar>
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel" right="222">
+					<pull_button name="back_btn" tool_tip="Volver a la localización anterior"/>
+					<pull_button name="forward_btn" tool_tip="Ir una localización adelante"/>
+					<button name="home_btn" tool_tip="Teleportar a mi Base"/>
+					<button name="About_Land" label="Terreno" tool_tip="Muestra la ventana de información de la parcela" width="60"/>
+					<button name="Sky" label="Cielo" tool_tip="Muestra la ventana del Editor de Cielo" width="44"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Localización" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Buscar" name="search_combo_box" tool_tip="Buscar">
+						<combo_editor label="Buscar en el Metaverso" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="¡Arrastra hitos aquí para acceder más velozmente a tus lugares favoritos de Second Life!">
+				<label name="favorites_bar_label" tool_tip="¡Arrastra hitos aquí para acceder más velozmente a tus lugares favoritos de Second Life!">
+					Barra de Favoritos
+				</label>
+				<chevron_button name="&gt;&gt;" tool_tip="Mostrar más de Mis favoritos"/>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
 </panel>

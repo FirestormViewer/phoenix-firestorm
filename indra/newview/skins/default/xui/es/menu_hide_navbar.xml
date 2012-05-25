@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="hide_navbar_menu">
+	<menu_item_check label="Mostrar la barra de navegación y búsqueda" name="ShowNavbarNavigationPanel"/>
+	<menu_item_check label="Mostrar la barra de favoritos" name="ShowNavbarFavoritesPanel"/>
+	<menu_item_check label="Mostrar la barra de búsqueda" name="ShowSearchTopBar"/>
+<!-- 	<menu_item_check label="Mostrar mini-barra de ubicación" name="ShowMiniLocationPanel"/> -->
+	<menu_item_check label="Mostrar localización en la barra de menú" name="ShowMenuBarLocation"/>
+</menu>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<menu name="hide_navbar_menu">
 	<menu_item_check label="Mostrar la barra de navegación" name="ShowNavbarNavigationPanel"/>
 	<menu_item_check label="Mostrar la barra de favoritos" name="ShowNavbarFavoritesPanel"/>
 	<menu_item_check label="Mostrar la barra de búsqueda" name="ShowSearchTopBar"/>

@@ -4984,6 +4984,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Settings_Debug_Label">Configuraciones del depurador</string>
 	<string name="Command_Statistics_Label">Estadísticas</string>
 	<string name="Command_Region_Label">Región/Estado</string>
+	<string name="Command_Fly_Label">Volar</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5076,6 +5077,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Toolbar_Right_Tooltip">
 		actualmente en tu barra de herramientas derecha
 	</string>
+	<string name="Command_Fly_Tooltip">Activar/desactivar el modo de vuelo</string>
 	<string name="Retain%">
 		% retención
 	</string>
