@@ -1781,6 +1781,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="NotRunQueueStart">
 		Skript anhalten
 	</string>
+	<string name="DeleteQueueTitle">
+		Löschen
+	</string>
+	<string name="DeleteQueueStart">
+		Löschung
+	</string>
 	<string name="CompileSuccessful">
 		Kompilieren erfolgreich abgeschlossen!
 	</string>

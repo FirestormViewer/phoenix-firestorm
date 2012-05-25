@@ -15,5 +15,8 @@
 	<floater.string name="NotRunning">
 		Läuft nicht
 	</floater.string>
+	<floater.string name="Deleting">
+		Wird gelöscht
+	</floater.string>
 	<button label="Schließen" label_selected="Schließen" left="215" name="close" width="72"/>
 </floater>
