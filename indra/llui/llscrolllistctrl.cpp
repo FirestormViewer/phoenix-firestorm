@@ -1116,6 +1116,13 @@ void LLScrollListCtrl::setCommentText(const std::string& comment_text)
 	getChild<LLTextBox>("comment_text")->setValue(comment_text);
 }
 
+// <FS:Ansariel> Allow appending of comment text
+void LLScrollListCtrl::addCommentText(const std::string& comment_text)
+{
+	getChild<LLTextBox>("comment_text")->appendText(comment_text, true);
+}
+// </FS:Ansariel> Allow appending of comment text
+
 LLScrollListItem* LLScrollListCtrl::addSeparator(EAddPosition pos)
 {
 	LLScrollListItem::Params separator_params;
