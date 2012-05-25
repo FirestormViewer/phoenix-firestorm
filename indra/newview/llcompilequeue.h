@@ -102,6 +102,8 @@ protected:
 
 	std::string mStartString;
 	bool mMono;
+	// <FS:Ansariel> Floater title
+	std::string mFloaterTitle;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
