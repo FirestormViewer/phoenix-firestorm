@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="navigation_bar">
-	<panel name="navigation_panel">
-		<layout_stack name="location_search_layout">
-			<layout_panel name="navigation_buttons_visibility_panel" right="223">
-				<pull_button name="back_btn" tool_tip="Zum vorherigen Standort zurückgehen"/>
-				<pull_button name="forward_btn" tool_tip="Einen Standort weiter gehen"/>
-				<button name="home_btn" tool_tip="Zu meinem Zuhause teleportieren"/>
-				<button name="About_Land" label="Land" tool_tip="Landinformationen anzeigen"/>
-				<button name="Sky" label="Himmel" tool_tip="Öffnet das Fenster mit den Himmel-Voreinstellungen" width="60"/>
-			</layout_panel>
-			<layout_panel name="location_bar_visibility_panel">
-				<location_input label="Standort" name="location_combo"/>
-			</layout_panel>
-			<layout_panel name="search_bar_visibility_panel">
-				<search_combo_box label="Suchen" name="search_combo_box" tool_tip="Suchen">
-					<combo_editor label="MetaVerse durchsuchen" name="search_combo_editor"/>
-				</search_combo_box>
-			</layout_panel>
-		</layout_stack>
-	</panel>
-	<favorites_bar name="favorite" tool_tip="Landmarken hierher ziehen für schnellen Zugriff auf Lieblingsorte in Second Life.">
-		<label name="favorites_bar_label" tool_tip="Landmarken hierher ziehen für schnellen Zugriff auf Lieblingsorte in Second Life.">
-			Favoritenleiste
-		</label>
-		<chevron_button name=">>" tool_tip="Mehr meiner Favoriten anzeigen"/>
-	</favorites_bar>
+	<layout_stack name="navigation_favorites_bar_visibility_stack">
+		<layout_panel name="navigation_bar_visibility_panel">
+			<layout_stack name="location_search_layout">
+				<layout_panel name="navigation_buttons_visibility_panel" right="223">
+					<pull_button name="back_btn" tool_tip="Zum vorherigen Standort zurückgehen"/>
+					<pull_button name="forward_btn" tool_tip="Einen Standort weiter gehen"/>
+					<button name="home_btn" tool_tip="Zu meinem Zuhause teleportieren"/>
+					<button name="About_Land" label="Land" tool_tip="Landinformationen anzeigen"/>
+					<button name="Sky" label="Himmel" tool_tip="Öffnet das Fenster mit den Himmel-Voreinstellungen" width="60"/>
+				</layout_panel>
+				<layout_panel name="location_bar_visibility_panel">
+					<location_input label="Standort" name="location_combo"/>
+				</layout_panel>
+				<layout_panel name="search_bar_visibility_panel">
+					<search_combo_box label="Suchen" name="search_combo_box" tool_tip="Suchen">
+						<combo_editor label="MetaVerse durchsuchen" name="search_combo_editor"/>
+					</search_combo_box>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+		<layout_panel name="favorites_bar_visibility_panel">
+			<favorites_bar name="favorite" tool_tip="Landmarken hierher ziehen für schnellen Zugriff auf Lieblingsorte.">
+				<label name="favorites_bar_label" tool_tip="Landmarken hierher ziehen für schnellen Zugriff auf Lieblingsorte.">
+					Favoritenleiste
+				</label>
+				<chevron_button name=">>" tool_tip="Mehr meiner Favoriten anzeigen"/>
+			</favorites_bar>
+		</layout_panel>
+	</layout_stack>
 </panel>
