@@ -1386,7 +1386,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Sounds" value=" Sounds,"/>
 	<string name="Textures" value=" Texturen,"/>
 	<string name="Snapshots" value=" Fotos,"/>
-	<string name="No Filters" value="Nein "/>
+	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
 	<string name="InvFolder My Inventory">
 		Mein Inventar
