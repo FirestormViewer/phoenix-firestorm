@@ -148,6 +148,8 @@
 			<menu_item_call label="Reset skryptów" name="Reset Scripts"/>
 			<menu_item_call label="Przestaw skrypty na stan Włączony" name="Set Scripts to Running"/>
 			<menu_item_call label="Przestaw skrypty na stan Wyłączony" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
+			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
 		</menu>
 		<menu label="Opcje" name="Options">
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>

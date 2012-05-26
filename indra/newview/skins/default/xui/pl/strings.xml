@@ -1730,28 +1730,37 @@ Spróbuj zalogować się ponownie za minutę.
 		Nieznany błąd podczas pobierania
 	</string>
 	<string name="CompileQueueTitle">
-		Postęp rekompilacji
+		POSTĘP REKOMPILACJI
 	</string>
 	<string name="CompileQueueStart">
 		rekompiluj
 	</string>
 	<string name="ResetQueueTitle">
-		Zresetuj
+		POSTĘP RESETOWANIA
 	</string>
 	<string name="ResetQueueStart">
 		zresetuj
 	</string>
 	<string name="RunQueueTitle">
-		Ustaw Włączone
+		POSTĘP WŁĄCZANIA
 	</string>
 	<string name="RunQueueStart">
-		ustaw włączone
+		włącz
 	</string>
 	<string name="NotRunQueueTitle">
-		Ustaw Wyłączone
+		POSTĘP WYŁĄCZANIA
 	</string>
 	<string name="NotRunQueueStart">
-		ustaw wyłączone
+		wyłącz
+	</string>
+	<string name="DeleteQueueTitle">
+		POSTĘP USUWANIA
+	</string>
+	<string name="DeleteQueueStart">
+		Usuwanie
+	</string>
+	<string name="Compiling">
+		Kompilowanie [NAME]
 	</string>
 	<string name="CompileSuccessful">
 		Kompilacja zakończona pomyślnie!

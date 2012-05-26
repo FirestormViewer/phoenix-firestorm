@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="queue" title="POSTĘP RESETOWANIA">
 	<floater.string name="Starting">
-		Rozpoczęcie [START] z [COUNT] elementów.
+		[START] z [COUNT] obiektów.
 	</floater.string>
 	<floater.string name="Done">
 		Gotowe.
@@ -14,6 +14,9 @@
 	</floater.string>
 	<floater.string name="NotRunning">
 		Skrypt nie działa
+	</floater.string>
+	<floater.string name="Deleting">
+		Usuwanie
 	</floater.string>
 	<button label="Zamknij" label_selected="Zamknij" name="close"/>
 </floater>
