@@ -1292,6 +1292,14 @@
             <menu_item_call.on_enable
                function="EditableSelected" />
           </menu_item_call>
+          <menu_item_call
+             label="Script Info (Counter)"
+             name="Script Info">
+            <menu_item_call.on_click
+               function="Tools.ScriptInfo" />
+            <menu_item_call.on_enable
+               function="EditableSelected" />
+          </menu_item_call>
         </menu>
 
         <menu_item_separator/>
