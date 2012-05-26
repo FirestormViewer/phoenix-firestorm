@@ -20,9 +20,9 @@
             <key>archive</key>
             <map>
                 <key>hash</key>
-                <string>f075e96d8e1bfdd1f518829f0d7b74af</string>
+                <string>4ece2c0c7376aa004e2d54b1b28cc22a</string>
                 <key>url</key>
-                <uri>http://downloads.phoenixviewer.com/growl-1.2.1-darwin.tar.gz</uri>
+                <uri>http://phoenixviewer.com/app/packages/growl-1.3-darwin-20120525.tar.bz2</uri>
             </map>
           </map>
           <key>windows</key>

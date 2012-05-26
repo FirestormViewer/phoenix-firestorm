@@ -1308,11 +1308,18 @@ list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h)
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
-  LIST(APPEND viewer_SOURCE_FILES llappviewermacosx.cpp)
-  #LIST(APPEND viewer_HEADER_FILES growlnotifiermacosx-objc.h)
-  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx-objc.mm)
-  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.h)
-  #LIST(APPEND viewer_SOURCE_FILES growlnotifiermacosx.cpp)
+  LIST(APPEND viewer_SOURCE_FILES
+        llappviewermacosx.cpp
+        growlmanager.cpp
+        growlnotifiermacosx.cpp
+        growlnotifiermacosx-objc.mm
+        )
+
+  LIST(APPEND viewer_HEADER_FILES
+         growlmanager.h
+         growlnotifiermacosx.h
+         growlnotifiermacosx-objc.h
+         )
 
 
   find_library(AGL_LIBRARY AGL)

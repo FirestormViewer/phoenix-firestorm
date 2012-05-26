@@ -740,8 +740,8 @@ class DarwinManifest(ViewerManifest):
             self.path("../packages/lib/release/libhunspell-1.3.0.dylib", dst="Resources/libhunspell-1.3.0.dylib")
             self.path("../viewer_components/updater/scripts/darwin/update_install", "MacOS/update_install")
 
-            # Growl library
-            #self.path("../../libraries/universal-darwin/lib_release/libgrowl.dylib", "Frameworks/Growl.framework/Versions/A/Growl"); # LO - uncomment for work on growl on mac
+            # Growl Frameworks
+            self.path("../packages/Frameworks/Growl", dst="Frameworks/Growl")
 
             # most everything goes in the Resources directory
             if self.prefix(src="", dst="Resources"):

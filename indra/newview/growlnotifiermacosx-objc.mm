@@ -31,49 +31,85 @@
 #import <Cocoa/Cocoa.h>
 #import "Growl/Growl.h"
 
-// Make a happy delegate (that does nothing)
+// Make a happy delegate (that does nothing other than the required response to a registration dictionary)
 @interface FirestormBridge : NSObject <GrowlApplicationBridgeDelegate>
 @end
 
 @implementation FirestormBridge
+
+- (NSDictionary *) registrationDictionaryForGrowl {
+	
+	NSDictionary *regDict = [NSDictionary dictionaryWithObjectsAndKeys:
+							 @"Firestorm Viewer", GROWL_APP_NAME,
+							 nil];
+		
+	return regDict;
+}
+
 @end
+
+bool isInstalled = false;
 
 void growlApplicationBridgeNotify(const std::string& withTitle, const std::string& description, const std::string& notificationName, 
                                 void *iconData, unsigned int iconDataSize, int priority, bool isSticky) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [GrowlApplicationBridge notifyWithTitle:[NSString stringWithCString:withTitle.c_str() encoding:NSUTF8StringEncoding]
+    Class GAB = NSClassFromString(@"GrowlApplicationBridge");
+	if([GAB respondsToSelector:@selector(notifyWithTitle:description:notificationName:iconData:priority:isSticky:clickContext:identifier:)]) {
+        [GAB notifyWithTitle:[NSString stringWithCString:withTitle.c_str() encoding:NSUTF8StringEncoding]
                                 description:[NSString stringWithCString:description.c_str() encoding:NSUTF8StringEncoding]
                            notificationName:[NSString stringWithCString:notificationName.c_str() encoding:NSUTF8StringEncoding]
                                    iconData:(iconData == NULL ? nil : [NSData dataWithBytes:iconData length:iconDataSize])
                                    priority:priority
                                    isSticky:isSticky
-                               clickContext:nil
-     ];
+                               clickContext:nil];
+        //NSLog(@"Growl msg: %@:%@", [NSString stringWithCString:withTitle.c_str() encoding:NSUTF8StringEncoding],              [NSString stringWithCString:description.c_str() encoding:NSUTF8StringEncoding]);
+    }
     [pool release];
 }
 
 void growlApplicationBridgeInit() {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    FirestormBridge *delegate = [[[FirestormBridge alloc] init] autorelease];
-    [GrowlApplicationBridge setGrowlDelegate:delegate];
+    NSBundle *mainBundle = [NSBundle mainBundle];
+	NSString *path = [[mainBundle privateFrameworksPath] stringByAppendingPathComponent:@"Growl"];
+	if(NSAppKitVersionNumber >= 1038)
+		path = [path stringByAppendingPathComponent:@"1.3"];
+	else
+		path = [path stringByAppendingPathComponent:@"1.2.3"];
+	
+	path = [path stringByAppendingPathComponent:@"Growl.framework"];
+	//NSLog(@"path: %@", path);
+	NSBundle *growlFramework = [NSBundle bundleWithPath:path];
+	if([growlFramework load])
+	{
+		NSDictionary *infoDictionary = [growlFramework infoDictionary];
+		NSLog(@"Using Growl.framework %@ (%@)",
+              [infoDictionary objectForKey:@"CFBundleShortVersionString"],
+			  [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey]);
+        
+        FirestormBridge *delegate = [[[FirestormBridge alloc] init] autorelease];
+
+        Class GAB = NSClassFromString(@"GrowlApplicationBridge");
+		if([GAB respondsToSelector:@selector(setGrowlDelegate:)])
+			[GAB performSelector:@selector(setGrowlDelegate:) withObject:delegate];
+        isInstalled = true;
+    }
+    
     [pool release];
 }
 
 bool growlApplicationBridgeIsGrowlInstalled() {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    bool installed = [GrowlApplicationBridge isGrowlInstalled];
-    [pool release];
-    return installed;
+    return isInstalled;
 }
 
 void growlApplicationBridgeRegister(const std::string& appname, const std::set<std::string>& notifications)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    Class GAB = NSClassFromString(@"GrowlApplicationBridge");
     NSMutableArray *notificationArray = [[[NSMutableArray alloc] init] autorelease];
     for(std::set<std::string>::iterator itr = notifications.begin(); itr != notifications.end(); ++itr) {
         [notificationArray addObject:[NSString stringWithCString:itr->c_str() encoding:NSUTF8StringEncoding]];
     }
-    [GrowlApplicationBridge registerWithDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
+    [GAB registerWithDictionary:[NSDictionary dictionaryWithObjectsAndKeys:
                                                     [NSString stringWithCString:appname.c_str() encoding:NSUTF8StringEncoding], GROWL_APP_NAME,
                                                     notificationArray, GROWL_NOTIFICATIONS_ALL,
                                                     notificationArray, GROWL_NOTIFICATIONS_DEFAULT,

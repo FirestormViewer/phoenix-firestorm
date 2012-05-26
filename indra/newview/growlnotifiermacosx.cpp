@@ -33,7 +33,6 @@
 
 GrowlNotifierMacOSX::GrowlNotifierMacOSX()
 {
-	// Work around a Growl 1.1 bug whereby the app bridge *requires* a delegate.
 	growlApplicationBridgeInit();
 	LL_INFOS("GrowlNotifierOSX") << "OS X growl notifications initialised." << LL_ENDL;
 }
