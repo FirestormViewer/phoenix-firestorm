@@ -45,6 +45,7 @@
      width="64" />
     <scroll_list
      follows="left|top|right|bottom"
+     draw_stripes="false"
      height="344"
      layout="topleft"
      left="4"

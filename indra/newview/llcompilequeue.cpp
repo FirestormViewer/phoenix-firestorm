@@ -182,7 +182,10 @@ BOOL LLFloaterScriptQueue::start()
 	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
 	buffer = getString ("Starting", args);
 	
-	getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
+	// <FS:Ansariel> Add text to scroll list
+	//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
+	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
+	// </FS:Ansariel> Add text to scroll list
 
 	return nextObject();
 }
@@ -217,7 +220,7 @@ BOOL LLFloaterScriptQueue::nextObject()
 		mDone = true;
 		// <FS:Ansariel> Append text
 		//getChild<LLScrollListCtrl>("queue output")->setCommentText(getString("Done"));
-		getChild<LLScrollListCtrl>("queue output")->addCommentText(getString("Done"));
+		getChild<LLScrollListCtrl>("queue output")->addSimpleElement(getString("Done"));
 		// </FS:Ansariel> Append text
 		getChildView("close")->setEnabled(TRUE);
 	}
@@ -286,7 +289,7 @@ public:
 
 		// <FS:Ansariel> Append text
 		//queue->getChild<LLScrollListCtrl>("queue output")->setCommentText(message);
-		queue->getChild<LLScrollListCtrl>("queue output")->addCommentText(message);
+		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message);
 		// </FS:Ansariel> Append text
 	}
 		
@@ -479,7 +482,7 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 	{
 		// <FS:Ansariel> Append text
 		//queue->getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
-		queue->getChild<LLScrollListCtrl>("queue output")->addCommentText(buffer);
+		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
 		// </FS:Ansariel> Append text
 	}
 	delete data;
@@ -658,7 +661,7 @@ void LLFloaterResetQueue::handleInventory(LLViewerObject* viewer_obj,
 				buffer = getString("Resetting") + (": ") + item->getName();
 				// <FS:Ansariel> Append text
 				//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
-				getChild<LLScrollListCtrl>("queue output")->addCommentText(buffer);
+				getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
 				// </FS:Ansariel> Append text
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_ScriptReset);
@@ -717,7 +720,7 @@ void LLFloaterRunQueue::handleInventory(LLViewerObject* viewer_obj,
 				buffer = getString("Running") + (": ") + item->getName();
 				// <FS:Ansariel> Append text
 				//list->setCommentText(buffer);
-				list->addCommentText(buffer);
+				list->addSimpleElement(buffer);
 				// </FS:Ansariel> Append text
 
 				LLMessageSystem* msg = gMessageSystem;
@@ -778,7 +781,7 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 				buffer = getString("NotRunning") + (": ") +item->getName();
 				// <FS:Ansariel> Append text
 				//list->setCommentText(buffer);
-				list->addCommentText(buffer);
+				list->addSimpleElement(buffer);
 				// </FS:Ansariel> Append text
 	
 				LLMessageSystem* msg = gMessageSystem;
@@ -837,7 +840,7 @@ void LLFloaterDeleteQueue::handleInventory(LLViewerObject* viewer_obj,
 				LLInventoryItem* item = (LLInventoryItem*)((LLInventoryObject*)(*it));
 				std::string buffer;
 				buffer = getString("Deleting") + (": ") + item->getName();
-				getChild<LLScrollListCtrl>("queue output")->addCommentText(buffer);
+				getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_RemoveTaskInventory);
 				msg->nextBlockFast(_PREHASH_AgentData);
