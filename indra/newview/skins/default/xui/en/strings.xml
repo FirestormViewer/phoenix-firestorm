@@ -2432,18 +2432,19 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="CompileQueueInsufficientPermDownload">Insufficient permissions to download a script.</string>
 	<string name="CompileQueueInsufficientPermFor">Insufficient permissions for</string>
 	<string name="CompileQueueUnknownFailure">Unknown failure to download</string>
-	<string name="CompileQueueTitle">Recompilation Progress</string>
+	<string name="CompileQueueTitle">RECOMPILATION PROGRESS</string>
 	<string name="CompileQueueStart">recompile</string>
-	<string name="ResetQueueTitle">Reset Progress</string>
+	<string name="ResetQueueTitle">RESET PROGRES</string>
 	<string name="ResetQueueStart">reset</string>
-	<string name="RunQueueTitle">Set Running Progress</string>
+	<string name="RunQueueTitle">SET RUNNING PROGRESS</string>
 	<string name="RunQueueStart">set running</string>
-	<string name="NotRunQueueTitle">Set Not Running Progress</string>
+	<string name="NotRunQueueTitle">SET NOT RUNNING PROGRESS</string>
 	<string name="NotRunQueueStart">set not running</string>
-	<string name="DeleteQueueTitle">Delete Progress</string>
+	<string name="DeleteQueueTitle">DELETE PROGRESS</string>
 	<string name="DeleteQueueStart">Deleting</string>
 
 	<!-- compile comment text-->
+	<string name="Compiling">Compiling [NAME]</string>
 	<string name="CompileSuccessful">Compile successful!</string>
 	<string name="CompileSuccessfulSaving">Compile successful, saving...</string>
 	<string name="SaveComplete">Save complete.</string>

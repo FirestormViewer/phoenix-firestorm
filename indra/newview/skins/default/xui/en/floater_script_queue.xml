@@ -5,7 +5,7 @@
  height="400"
  layout="topleft"
  name="queue"
- help_topic="queue"
+ help_topic="script_queue"
  save_rect="true"
  title="RESET PROGRESS"
  width="300">

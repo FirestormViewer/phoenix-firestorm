@@ -34,6 +34,8 @@
 #include "llsd.h"
 #include <iostream>
 
+#include "lltrans.h" // <FS:Ansariel> For localized log message
+
 class LLAssetUploadChainResponder : public LLUpdateTaskInventoryResponder
 {
 public:
@@ -100,7 +102,12 @@ public:
 	{
 		std::string uploader = content["uploader"];
 
-		mSupplier->log(std::string("Compiling " + mScriptName).c_str());
+		// <FS:Ansariel> Localized log messages
+		//mSupplier->log(std::string("Compiling " + mScriptName).c_str());
+		LLStringUtil::format_map_t args;
+		args["[NAME]"] = mScriptName;
+		mSupplier->log(LLTrans::getString("Compiling", args).c_str());
+		// </FS:Ansariel> Localized log messages
 		llinfos << "Compiling " << llendl;
 
 		// postRaw takes ownership of mData and will delete it.
@@ -114,7 +121,10 @@ public:
 		// Bytecode save completed
 		if (content["compiled"])
 		{
-			mSupplier->log("Compilation succeeded");
+			// <FS:Ansariel> Localized log messages
+			//mSupplier->log("Compilation succeeded");
+			mSupplier->log(LLTrans::getString("CompileSuccessful").c_str());
+			// </FS:Ansariel> Localized log messages
 			llinfos << "Compiled!" << llendl;
 		}
 		else

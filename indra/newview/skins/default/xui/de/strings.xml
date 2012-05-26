@@ -1758,34 +1758,37 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Unbekannter Fehler beim Herunterladen
 	</string>
 	<string name="CompileQueueTitle">
-		Rekompilierung
+		SKRIPTE REKOMPILIEREN
 	</string>
 	<string name="CompileQueueStart">
-		rekompilieren
+		Rekompilieren
 	</string>
 	<string name="ResetQueueTitle">
-		Zurücksetzen
+		SKRIPTE ZURÜCKSETZEN
 	</string>
 	<string name="ResetQueueStart">
 		Zurücksetzen
 	</string>
 	<string name="RunQueueTitle">
-		Skript ausführen
+		SKRIPTE AUSFÜHREN
 	</string>
 	<string name="RunQueueStart">
 		Skript ausführen
 	</string>
 	<string name="NotRunQueueTitle">
-		Skript anhalten
+		SKRIPTE ANHALTEN
 	</string>
 	<string name="NotRunQueueStart">
 		Skript anhalten
 	</string>
 	<string name="DeleteQueueTitle">
-		Löschen
+		SKRIPTE LÖSCHEN
 	</string>
 	<string name="DeleteQueueStart">
-		Löschung
+		Löschen
+	</string>
+	<string name="Compiling">
+		Kompiliere [NAME]
 	</string>
 	<string name="CompileSuccessful">
 		Kompilieren erfolgreich abgeschlossen!

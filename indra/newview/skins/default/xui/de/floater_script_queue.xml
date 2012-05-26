@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="queue" title="ZURÜCKSETZEN">
 	<floater.string name="Starting">
-		[START] von [COUNT] Artikeln.
+		[START] von [COUNT] Objekt(en).
 	</floater.string>
 	<floater.string name="Done">
 		Fertig.
