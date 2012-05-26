@@ -1777,7 +1777,11 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 
 	if (data_size < mRequestedBytes)
 	{
-		if (status == 499 || status == 503)
+		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
+		//               not produce a request within the time that the server
+		//               was prepared to wait.)
+		//if (status == 499 || status == 503)
+		if (status == 408 || status == 499 || status == 503)
 		{ //timeout or service unavailable, try again
 			LLMeshRepository::sHTTPRetryCount++;
 			gMeshRepo.mThread->loadMeshLOD(mMeshParams, mLOD);
@@ -1831,7 +1835,11 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 
 	if (data_size < mRequestedBytes)
 	{
-		if (status == 499 || status == 503)
+		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
+		//               not produce a request within the time that the server
+		//               was prepared to wait.)
+		//if (status == 499 || status == 503)
+		if (status == 408 || status == 499 || status == 503)
 		{ //timeout or service unavailable, try again
 			LLMeshRepository::sHTTPRetryCount++;
 			gMeshRepo.mThread->loadMeshSkinInfo(mMeshID);
@@ -1885,7 +1893,11 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 
 	if (data_size < mRequestedBytes)
 	{
-		if (status == 499 || status == 503)
+		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
+		//               not produce a request within the time that the server
+		//               was prepared to wait.)
+		//if (status == 499 || status == 503)
+		if (status == 408 || status == 499 || status == 503)
 		{ //timeout or service unavailable, try again
 			LLMeshRepository::sHTTPRetryCount++;
 			gMeshRepo.mThread->loadMeshDecomposition(mMeshID);
@@ -1939,7 +1951,11 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 
 	if (data_size < mRequestedBytes)
 	{
-		if (status == 499 || status == 503)
+		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
+		//               not produce a request within the time that the server
+		//               was prepared to wait.)
+		//if (status == 499 || status == 503)
+		if (status == 408 || status == 499 || status == 503)
 		{ //timeout or service unavailable, try again
 			LLMeshRepository::sHTTPRetryCount++;
 			gMeshRepo.mThread->loadMeshPhysicsShape(mMeshID);
@@ -1996,7 +2012,11 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 		// TODO*: Add maximum retry logic, exponential backoff
 		// and (somewhat more optional than the others) retries
 		// again after some set period of time
-		if (status == 503 || status == 499)
+		// <FS:Ansariel> Also retry on 408: Request timeout (The client did
+		//               not produce a request within the time that the server
+		//               was prepared to wait.)
+		//if (status == 499 || status == 503)
+		if (status == 408 || status == 499 || status == 503)
 		{ //retry
 			LLMeshRepository::sHTTPRetryCount++;
 			LLMeshRepoThread::HeaderRequest req(mMeshParams);
