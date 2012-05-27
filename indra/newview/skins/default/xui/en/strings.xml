@@ -2434,7 +2434,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<string name="CompileQueueUnknownFailure">Unknown failure to download</string>
 	<string name="CompileQueueTitle">RECOMPILATION PROGRESS</string>
 	<string name="CompileQueueStart">recompile</string>
-	<string name="ResetQueueTitle">RESET PROGRES</string>
+	<string name="ResetQueueTitle">RESET PROGRESS</string>
 	<string name="ResetQueueStart">reset</string>
 	<string name="RunQueueTitle">SET RUNNING PROGRESS</string>
 	<string name="RunQueueStart">set running</string>
