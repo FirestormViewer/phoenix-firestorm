@@ -20,7 +20,7 @@
 
   <font name="SansSerifBold"
 	comment="Name of bold sans-serif font">
-    <file>Ubuntu-B.ttf</file>
+    <file>Ubuntu-M.ttf</file>
     <os name="Windows">
       <file>arialbd.ttf</file>
       </os>
@@ -42,7 +42,7 @@
   <font name="SansSerif"
 	comment="Name of bold sans-serif font"
 	font_style="BOLD">
-    <file>Ubuntu-B.ttf</file>
+    <file>Ubuntu-M.ttf</file>
   </font>
 
   <font name="SansSerif"
@@ -54,17 +54,17 @@
   <font name="SansSerif"
 	comment="Name of bold italic sans-serif font"
 	font_style="BOLD|ITALIC">
-    <file>Ubuntu-BI.ttf</file>
+    <file>Ubuntu-MI.ttf</file>
   </font>
 
   <font name="Monospace"
 	comment="Name of monospace font">
-    <file>DejaVuSansMono.ttf</file>
+    <file>UbuntuMono-R.ttf</file>
   </font>
 
   <font name="Script"
 	comment="Name of an optional font used for the script editor">
-    <file>DejaVuSansMono.ttf</file>
+    <file>UbuntuMono-R.ttf</file>
   </font>
 
   <font name="DejaVu"
