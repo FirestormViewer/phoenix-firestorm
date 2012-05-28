@@ -191,9 +191,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		{
 			LLUUID catID = findFSCategory();
 			LLViewerInventoryItem* fsBridge = findInvObject(mCurrentFullName, catID, LLAssetType::AT_OBJECT);
-
-			if (fsBridge != NULL)
-				mpBridge = fsBridge;
+			mpBridge = fsBridge;
 		}
 
 		status = viewerToLSL("URL Confirmed", new FSLSLBridgeRequestResponder());
@@ -276,8 +274,7 @@ void FSLSLBridge :: recreateBridge()
 		}
 	}
 	// clear the stored bridge ID - we are starting over.
-	if (mpBridge != NULL)
-		mpBridge = NULL; //the object itself will get cleaned up when new one is created.
+	mpBridge = 0; //the object itself will get cleaned up when new one is created.
 
 	initCreationStep();
 }
@@ -547,20 +544,21 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 {
-		//modify the rock size and texture
-		llinfos << "Bridge container found after second attachment, resizing..." << llendl;
-		setupBridgePrim(object);
+	llassert_always( isBridgeValid() );
+	//modify the rock size and texture
+	llinfos << "Bridge container found after second attachment, resizing..." << llendl;
+	setupBridgePrim(object);
 
-		mpBridge->setDescription(mCurrentFullName);
-		mpBridge->setComplete(TRUE);
-		mpBridge->updateServer(FALSE);
+	mpBridge->setDescription(mCurrentFullName);
+	mpBridge->setComplete(TRUE);
+	mpBridge->updateServer(FALSE);
 
-		gInventory.updateItem(mpBridge);
-		gInventory.notifyObservers();
+	gInventory.updateItem(mpBridge);
+	gInventory.notifyObservers();
 
-		//add bridge script to object
-		llinfos << "Creating bridge script..." << llendl;
-		create_script_inner(object);
+	//add bridge script to object
+	llinfos << "Creating bridge script..." << llendl;
+	create_script_inner(object);
 }
 
 void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAttachment *attachment)
@@ -638,6 +636,8 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 
 void FSLSLBridge :: create_script_inner(LLViewerObject* object)
 {
+	llassert_always( isBridgeValid() );
+
 	LLUUID catID = findFSCategory();
 
 	LLPointer<LLInventoryCallback> cb = new FSLSLBridgeScriptCallback();
@@ -725,10 +725,19 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	gInventory.updateItem(item);
 	gInventory.notifyObservers();
 
-	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(FSLSLBridge::instance().getBridge()->getUUID());
+	LLViewerObject* obj( 0 );
+
+	if( FSLSLBridge::instance().isBridgeValid() )
+		obj = gAgentAvatarp->getWornAttachment(FSLSLBridge::instance().getBridge()->getUUID());
+	else
+		llwarns << "Bridge non valid" << llendl;
 
 	//caps import 
-	std::string url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+	std::string url;
+	
+	if( gAgent.getRegion() )
+		url = gAgent.getRegion()->getCapability("UpdateScriptAgent");
+
 	std::string isMono = "mono";  //could also be "lsl2"
 	if (!url.empty() && obj != NULL)  
 	{
@@ -742,7 +751,9 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 	{
 		//can't complete bridge creation - detach and remove object, remove script
 		//try to clean up and go away. Fail.
-		LLVOAvatarSelf::detachAttachmentIntoInventory(FSLSLBridge::instance().getBridge()->getUUID());
+		if( FSLSLBridge::instance().isBridgeValid() )
+			LLVOAvatarSelf::detachAttachmentIntoInventory(FSLSLBridge::instance().getBridge()->getUUID());
+	
 		FSLSLBridge::instance().cleanUpBridge();
 		//also clean up script remains
 		gInventory.purgeObject(item->getUUID());
@@ -793,6 +804,13 @@ void FSLSLBridge :: checkBridgeScriptName(std::string fileName)
 		return;
 	}
 
+	if( !isBridgeValid() )
+	{
+		llwarns << "Bridge not valid (anymore)" << llendl;
+		cleanUpBridge();
+		return;
+	}
+
 	//need to parse out the last length of a GUID and compare to saved possible names.
 	std::string fileOnly = fileName.substr(fileName.length()-UPLOAD_SCRIPT_CURRENT.length(), UPLOAD_SCRIPT_CURRENT.length());
 
@@ -827,7 +845,10 @@ void FSLSLBridge :: cleanUpBridge()
 	//something unexpected went wrong. Try to clean up and not crash.
 	llwarns << "Bridge object not found. Can't proceed with creation, exiting." << llendl;
 	reportToNearbyChat("Bridge object not found. Can't proceed with creation, exiting.");
-	gInventory.purgeObject(mpBridge->getUUID());
+
+	if( isBridgeValid() )
+		gInventory.purgeObject(mpBridge->getUUID());
+
 	gInventory.notifyObservers();
 	mpBridge = NULL;
 	mBridgeCreating = false;
@@ -998,6 +1019,12 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 {
 	llinfos << "Cleaning leftover scripts and bridges for folder " << nameToCleanUp << llendl;
 	
+	if( !isBridgeValid() )
+	{
+		llwarns << "Bridge no valid" << llendl;
+		return;
+	}
+
 	LLUUID catID = findFSCategory();
 	LLViewerInventoryCategory::cat_array_t cats;
 	LLViewerInventoryItem::item_array_t items;
@@ -1021,7 +1048,6 @@ void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
 void FSLSLBridge :: cleanUpBridgeFolder()
 {
 	cleanUpBridgeFolder(mCurrentFullName);
-
 }
 
 void FSLSLBridge :: cleanUpOldVersions()
