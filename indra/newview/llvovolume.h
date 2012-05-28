@@ -218,7 +218,6 @@ public:
 				void	preRebuild();
 	virtual		void	updateSpatialExtents(LLVector4a& min, LLVector4a& max);
 	virtual		F32		getBinRadius();
-				void    setSculptChanged(BOOL has_changed) { mSculptChanged = has_changed; mFaceMappingChanged = has_changed; mVolumeChanged = has_changed; }
 	
 	virtual U32 getPartitionType() const;
 

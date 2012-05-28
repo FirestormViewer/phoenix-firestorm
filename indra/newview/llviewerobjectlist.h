@@ -223,7 +223,6 @@ protected:
 	std::set<LLViewerObject *> mSelectPickList;
 
 	friend class LLViewerObject;
-	friend class LLLocalBitmap;
 };
 
 

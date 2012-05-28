@@ -241,7 +241,6 @@ set(viewer_SOURCE_FILES
     llfloaterlagmeter.cpp
     llfloaterland.cpp
     llfloaterlandholdings.cpp
-	llfloaterlocalbitmap.cpp
     llfloatermap.cpp
     llfloatermediasettings.cpp
     llfloatermemleak.cpp
@@ -854,7 +853,6 @@ set(viewer_HEADER_FILES
     llfloaterlagmeter.h
     llfloaterland.h
     llfloaterlandholdings.h
-	llfloaterlocalbitmap.h
     llfloatermap.h
     llfloatermediasettings.h
     llfloatermemleak.h

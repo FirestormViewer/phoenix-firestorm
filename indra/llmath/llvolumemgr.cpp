@@ -327,15 +327,6 @@ BOOL LLVolumeLODGroup::derefLOD(LLVolume *volumep)
 	return FALSE;
 }
 
-LLVolume* LLVolumeLODGroup::getVolByLOD(S32 lod) const
-{
-	if ( lod >= NUM_LODS ) { return NULL; }
-	if ( mVolumeLODs[lod].isNull() ) { return NULL; }
-
-	LLVolume* vol = mVolumeLODs[lod];
-	return vol;
-}
-
 S32 LLVolumeLODGroup::getDetailFromTan(const F32 tan_angle)
 {
 	S32 i = 0;
