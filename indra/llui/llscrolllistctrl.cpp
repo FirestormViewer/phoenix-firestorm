@@ -2517,7 +2517,7 @@ void	LLScrollListCtrl::copy()
 	{
 		buffer += (*itor)->getContentsCSV() + "\n";
 	}
-	gClipboard.copyFromSubstring(utf8str_to_wstring(buffer), 0, buffer.length());
+	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(buffer), 0, buffer.length());
 }
 
 // virtual

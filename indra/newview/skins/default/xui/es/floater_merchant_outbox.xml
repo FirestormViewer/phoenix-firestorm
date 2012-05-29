@@ -1,25 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<floater name="floater_merchant_outbox" title="MERCHANT OUTBOX">
-	<string name="OutboxFolderCount0"></string>
-	<string name="OutboxFolderCount1">1 carpeta</string>
-	<string name="OutboxFolderCountN">[NUM] carpetas</string>
-	<string name="OutboxImporting">Enviando carpetas...</string>
-	<string name="OutboxInitializing">Inicializando...</string>
-	<panel name="panel_1">
-		<panel name="panel_2">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_merchant_outbox" title="BUZÓN DE SALIDA DE COMERCIANTE">
+	<string name="OutboxFolderCount1">
+		1 carpeta
+	</string>
+	<string name="OutboxFolderCountN">
+		[NUM] carpetas
+	</string>
+	<string name="OutboxImporting">
+		Enviando carpetas...
+	</string>
+	<string name="OutboxInitializing">
+		Inicializando...
+	</string>
+	<panel label="">
+		<panel>
 			<panel name="outbox_inventory_placeholder_panel">
 				<text name="outbox_inventory_placeholder_title">
 					Cargando...
 				</text>
 			</panel>
 		</panel>
-		<panel name="panel_3">
-			<panel name="outbox_generic_drag_target">
-				<text name="text_1">
-					Arrastra items aquí para crear carpetas
-				</text>
-			</panel>
-			<button label="Enviar a Marketplace" tool_tip="Pulsa para enviar a tu Escaparate de Marketplace" name="outbox_import_btn"/>
+		<panel>
+			<button label="Enviar al Mercado" name="outbox_import_btn" tool_tip="Poner en el escaparate de Mi Mercado"/>
 		</panel>
 	</panel>
 </floater>

@@ -15,7 +15,7 @@
 	<panel.string name="buycurrencylabel">
 		[CUR] [AMT]
 	</panel.string>
-	<panel name="balance_bg">
+	<panel left="-410" name="balance_bg" width="200">
 		<text name="balance" tool_tip="Atualizar saldo de [CUR]" value="[CUR]???"/>
 		<button label="Comprar [CUR]" name="buyL" tool_tip="Comprar mais [CUR]"/>
 		<button label="Comprar" name="goShop" tool_tip="Abrir Mercado do Second Life" width="80"/>

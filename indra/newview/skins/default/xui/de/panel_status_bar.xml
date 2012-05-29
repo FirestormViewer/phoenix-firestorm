@@ -15,12 +15,12 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] [CUR]
 	</panel.string>
+	<panel left="-415" name="balance_bg" width="205">
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Diese Parzelle steht zum Verkauf."/>
 		<button name="status_wl_btn" tool_tip="Windlight-Einstellungen der Parzelle"/>
 		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
 	</panel>
-	<panel name="balance_bg">
 		<text name="balance" tool_tip="Klicken, um [CUR]-Guthaben zu aktualisieren" value="??? [CUR]"/>
 		<button label="[CUR]-Kauf" name="buyL" tool_tip="Hier klicken, um mehr [CUR] zu kaufen"/>
 	</panel>

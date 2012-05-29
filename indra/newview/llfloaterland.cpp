@@ -2824,7 +2824,12 @@ void LLPanelLandAccess::onCommitAny(LLUICtrl *ctrl, void *userdata)
 
 void LLPanelLandAccess::onClickAddAccess()
 {
-	gFloaterView->getParentFloater(this)->addDependentFloater(LLFloaterAvatarPicker::show(boost::bind(&LLPanelLandAccess::callbackAvatarCBAccess, this, _1)) );
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(
+		boost::bind(&LLPanelLandAccess::callbackAvatarCBAccess, this, _1));
+	if (picker)
+	{
+		gFloaterView->getParentFloater(this)->addDependentFloater(picker);
+	}
 }
 
 void LLPanelLandAccess::callbackAvatarCBAccess(const uuid_vec_t& ids)
@@ -2868,7 +2873,12 @@ void LLPanelLandAccess::onClickRemoveAccess(void* data)
 // static
 void LLPanelLandAccess::onClickAddBanned()
 {
-	gFloaterView->getParentFloater(this)->addDependentFloater(LLFloaterAvatarPicker::show(boost::bind(&LLPanelLandAccess::callbackAvatarCBBanned, this, _1)));
+	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(
+		boost::bind(&LLPanelLandAccess::callbackAvatarCBBanned, this, _1));
+	if (picker)
+	{
+		gFloaterView->getParentFloater(this)->addDependentFloater(picker);
+	}
 }
 
 // static

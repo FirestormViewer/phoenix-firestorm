@@ -61,8 +61,8 @@
 	<menu_item_call label="Umbenennen" name="Rename"/>
 	<menu_item_call label="Asset-UUID kopieren" name="Copy Asset UUID"/>
     <menu_item_call label="Wiederherstellen an letzter Position" name="Restore to Last Position"/>
-	<menu_item_call label="Kopieren" name="Copy"/>
 	<menu_item_call label="Ausschneiden" name="Cut"/>
+	<menu_item_call label="Kopieren" name="Copy"/>
 	<menu_item_call label="Einfügen" name="Paste"/>
 	<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
 	<menu_item_call label="Löschen" name="Remove Link"/>
@@ -87,6 +87,6 @@
 	<menu_item_call label="Hinzufügen" name="Wearable Add"/>
 	<menu_item_call label="Ausziehen" name="Take Off"/>
 	<menu_item_call label="In Händler-Outbox kopieren" name="Merchant Copy"/>
-	<menu_item_call label="In Händler-Outbox verschieben" name="Merchant Move"/>
+	<menu_item_call label="In Marktplatz übertragen" name="Marketplace Send"/>
 	<menu_item_call label="--keine Optionen--" name="--no options--"/>
 </menu>

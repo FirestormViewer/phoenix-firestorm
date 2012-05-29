@@ -66,6 +66,8 @@ void change_item_parent(LLInventoryModel* model,
 									 const LLUUID& new_parent_id,
 									 BOOL restamp);
 
+void remove_item(LLInventoryModel* model, const LLUUID& id);
+
 void change_category_parent(LLInventoryModel* model,
 	LLViewerInventoryCategory* cat,
 	const LLUUID& new_parent_id,
@@ -74,6 +76,8 @@ void change_category_parent(LLInventoryModel* model,
 void remove_category(LLInventoryModel* model, const LLUUID& cat_id);
 
 void rename_category(LLInventoryModel* model, const LLUUID& cat_id, const std::string& new_name);
+
+void copy_inventory_category(LLInventoryModel* model, LLViewerInventoryCategory* cat, const LLUUID& parent_id, const LLUUID& root_copy_id = LLUUID::null);
 
 // Generates a string containing the path to the item specified by item_id.
 void append_path(const LLUUID& id, std::string& path);

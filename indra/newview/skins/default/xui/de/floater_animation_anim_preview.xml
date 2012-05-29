@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Anim Preview">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="Anim Preview" title="ANIMATION.ANIM">
 	<text name="name_label">
 		Name:
 	</text>
 	<text name="description_label">
 		Beschreibung:
 	</text>
-	<button label="Hochladen ([AMOUNT][CUR])" name="ok_btn" />
-	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn" />
+	<button label="Hochladen ([AMOUNT][CUR])" name="ok_btn"/>
+	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
 </floater>

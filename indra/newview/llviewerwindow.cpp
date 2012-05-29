@@ -623,7 +623,7 @@ public:
 				addText(xpos, ypos, llformat("%d/%d Mesh HTTP Requests/Retries", LLMeshRepository::sHTTPRequestCount,
 					LLMeshRepository::sHTTPRetryCount));
 				ypos += y_inc;
-				
+
 				addText(xpos, ypos, llformat("%d/%d Mesh LOD Pending/Processing", LLMeshRepository::sLODPending, LLMeshRepository::sLODProcessing));
 				ypos += y_inc;
 
@@ -2080,12 +2080,12 @@ void LLViewerWindow::shutdownViews()
 		gMorphView->setVisible(FALSE);
 	}
 	llinfos << "Global views cleaned." << llendl ;
-
+	
 	// DEV-40930: Clear sModalStack. Otherwise, any LLModalDialog left open
 	// will crump with LL_ERRS.
 	LLModalDialog::shutdownModals();
 	llinfos << "LLModalDialog shut down." << llendl; 
-	
+
 	// destroy the nav bar, not currently part of gViewerWindow
 	// *TODO: Make LLNavigationBar part of gViewerWindow
 	if (LLNavigationBar::instanceExists())
@@ -2093,17 +2093,17 @@ void LLViewerWindow::shutdownViews()
 		delete LLNavigationBar::getInstance();
 	}
 	llinfos << "LLNavigationBar destroyed." << llendl ;
-
+	
 	// destroy menus after instantiating navbar above, as it needs
 	// access to gMenuHolder
 	cleanup_menus();
 	llinfos << "menus destroyed." << llendl ;
-
+	
 	// Delete all child views.
 	delete mRootView;
 	mRootView = NULL;
 	llinfos << "RootView deleted." << llendl ;
-
+	
 	// Automatically deleted as children of mRootView.  Fix the globals.
 	gStatusBar = NULL;
 	gIMMgr = NULL;
@@ -2277,17 +2277,19 @@ void LLViewerWindow::reshape(S32 width, S32 height)
 			// tell the OS specific window code about min window size
 			mWindow->setMinSize(min_window_width, min_window_height);
 
+			LLCoordScreen window_rect;
+			if (mWindow->getSize(&window_rect))
+			{
 			// Only save size if not maximized
-//<FS:KC - fix for EXP-1777/EXP-1832>
-//			gSavedSettings.setU32("WindowWidth", mWindowRectRaw.getWidth());
-//			gSavedSettings.setU32("WindowHeight", mWindowRectRaw.getHeight());
-			gSavedSettings.setU32("WindowWidth", window_size.mX);
-			gSavedSettings.setU32("WindowHeight", window_size.mY);
-//</FS:KC - fix for EXP-1777/EXP-1832>
+				gSavedSettings.setU32("WindowWidth", window_rect.mX);
+				gSavedSettings.setU32("WindowHeight", window_rect.mY);
+			}
 		}
 
 		LLViewerStats::getInstance()->setStat(LLViewerStats::ST_WINDOW_WIDTH, (F64)width);
 		LLViewerStats::getInstance()->setStat(LLViewerStats::ST_WINDOW_HEIGHT, (F64)height);
+
+		LLLayoutStack::updateClass();
 	}
 }
 
@@ -4288,28 +4290,13 @@ void LLViewerWindow::resetSnapshotLoc()
 // static
 void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 {
-	// FS:TS FIRE-6182: Set Window Size sets random size each time
-	// Don't use LLCoordWindow, since the chosen resolution winds up
-	// with position dependent numbers added each time. Instead, we use
-	// LLCoordScreen, which avoids this. Fix from Niran's Viewer.
-	// LLCoordWindow size;
-	// LLCoordWindow new_size(new_width, new_height);
-	// gViewerWindow->getWindow()->getSize(&size);
-	// if ( size != new_size )
-	// {
-	//	gViewerWindow->getWindow()->setSize(new_size.convert());
-	// }
-#ifdef LL_WINDOWS
-	// The Windows functions get the size wrong. The OS X and Linux
-	// versions don't.
-	new_width += 16;
-	new_height += 38;
-#endif // LL_WINDOWS
-	LLCoordScreen new_size;
-	new_size.mX = new_width;
-	new_size.mY = new_height;
-	gViewerWindow->getWindow()->setSize(new_size);
-	// FS:TS FIRE-6182 end
+	LLCoordWindow size;
+	LLCoordWindow new_size(new_width, new_height);
+	gViewerWindow->getWindow()->getSize(&size);
+	if ( size != new_size )
+	{
+		gViewerWindow->getWindow()->setSize(new_size);
+	}
 }
 
 BOOL LLViewerWindow::saveSnapshot( const std::string& filepath, S32 image_width, S32 image_height, BOOL show_ui, BOOL do_rebuild, ESnapshotType type)

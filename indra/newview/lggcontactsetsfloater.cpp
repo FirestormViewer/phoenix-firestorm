@@ -2026,7 +2026,9 @@ BOOL lggContactSetsFloater::handleUnicodeCharHere(llwchar uni_char)
 	{
 		if (gKeyboard->getKeyDown(KEY_CONTROL) && 22 == (U32)uni_char)
 		{
-			std::string toPaste = wstring_to_utf8str(gClipboard.getPasteWString());
+			LLWString strW;
+			LLClipboard::instance().pasteFromClipboard( strW );
+			std::string toPaste = wstring_to_utf8str( strW );
 			if (sInstance->showRightClick)
 			{
 				sInstance->currentRightClickText += toPaste;

@@ -80,6 +80,7 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
 	mDragStarted(false),
 	mShowToolbars(true),
 	mDragToolbarButton(NULL),
+	mDragItem(NULL),
 	// <FS:Ansariel> Member variables needed for console chat bottom offset
 	//mToolbarsLoaded(false)
 	mToolbarsLoaded(false),
@@ -644,7 +645,6 @@ BOOL LLToolBarView::handleDragTool( S32 x, S32 y, const LLUUID& uuid, LLAssetTyp
 			uuid_vec_t cargo_ids;
 			types.push_back(DAD_WIDGET);
 			cargo_ids.push_back(uuid);
-			gClipboard.setSourceObject(uuid,LLAssetType::AT_WIDGET);
 			LLToolDragAndDrop::ESource src = LLToolDragAndDrop::SOURCE_VIEWER;
 			LLUUID srcID;
 			LLToolDragAndDrop::getInstance()->beginMultiDrag(types, cargo_ids, src, srcID);
@@ -725,6 +725,18 @@ void LLToolBarView::resetDragTool(LLToolBarButton* toolbarButton)
 	// Clear the saved command, toolbar and rank
 	gToolBarView->mDragStarted = false;
 	gToolBarView->mDragToolbarButton = toolbarButton;
+}
+
+// Provide a handle on a free standing inventory item containing references to the tool.
+// This might be used by Drag and Drop to move around references to tool items.
+LLInventoryObject* LLToolBarView::getDragItem()
+{
+	if (mDragToolbarButton)
+	{
+		LLUUID item_uuid = mDragToolbarButton->getCommandId().uuid();
+		mDragItem = new LLInventoryObject (item_uuid, LLUUID::null, LLAssetType::AT_WIDGET, "");
+	}
+	return mDragItem;
 }
 
 void LLToolBarView::setToolBarsVisible(bool visible)

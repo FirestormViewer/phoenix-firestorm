@@ -662,7 +662,7 @@ void LLOutfitsList::onOutfitsRemovalConfirmation(const LLSD& notification, const
 
 	if (mSelectedOutfitUUID.notNull())
 	{
-		remove_category(&gInventory, mSelectedOutfitUUID);
+		gInventory.removeCategory(mSelectedOutfitUUID);
 	}
 }
 

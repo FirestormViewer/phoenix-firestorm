@@ -39,10 +39,13 @@
 #include "llviewerfoldertype.h"
 
 // linden library includes
+#include "llclipboard.h"
 #include "lltrans.h"
 
 #include "llinventoryfunctions.h" // needed to query worn status
 #include "llappearancemgr.h" // needed to query whether we are in COF
+LLFastTimer::DeclareTimer FT_FILTER_CLIPBOARD("Filter Clipboard");
+
 
 
 LLInventoryFilter::FilterOps::FilterOps() :
@@ -140,11 +143,15 @@ const std::string& LLInventoryFilter::getSearchableTarget(const LLFolderViewItem
 
 BOOL LLInventoryFilter::check(const LLFolderViewItem* item) 
 {
-	// If it's a folder and we're showing all folders, return TRUE automatically.
+	// Clipboard cut items are *always* filtered so we need this value upfront
+	const LLFolderViewEventListener* listener = item->getListener();
+	const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
+
+	// If it's a folder and we're showing all folders, return automatically.
 	const BOOL is_folder = (dynamic_cast<const LLFolderViewFolder*>(item) != NULL);
 	if (is_folder && (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS))
 	{
-		return TRUE;
+		return passed_clipboard;
 	}
 	
 	//	Begin Multi-substring inventory search
@@ -185,6 +192,7 @@ BOOL LLInventoryFilter::check(const LLFolderViewItem* item)
 	const BOOL passed = (passed_filtertype &&
 						 passed_permissions &&
 						 passed_filterlink &&
+						 passed_clipboard &&
 						 (mFilterSubString.size() == 0 || mSubStringMatchOffset != std::string::npos));
 
 	return passed;
@@ -196,8 +204,10 @@ bool LLInventoryFilter::check(const LLInventoryItem* item)
 
 	const bool passed_filtertype = checkAgainstFilterType(item);
 	const bool passed_permissions = checkAgainstPermissions(item);
+	const BOOL passed_clipboard = checkAgainstClipboard(item->getUUID());
 	const bool passed = (passed_filtertype &&
 						 passed_permissions &&
+						 passed_clipboard &&
 						 (mFilterSubString.size() == 0 || mSubStringMatchOffset != std::string::npos));
 
 	return passed;
@@ -227,12 +237,15 @@ bool LLInventoryFilter::checkFolder(const LLFolderViewFolder* folder) const
 
 bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 {
+	// Always check against the clipboard
+	const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
+	
 	// we're showing all folders, overriding filter
 	if (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS)
 	{
-		return true;
+		return passed_clipboard;
 	}
-	
+
 	if (mFilterOps.mFilterTypes & FILTERTYPE_CATEGORY)
 	{
 		// Can only filter categories for items in your inventory
@@ -245,7 +258,7 @@ bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 			return false;
 	}
 
-	return true;
+	return passed_clipboard;
 }
 
 BOOL LLInventoryFilter::checkAgainstFilterType(const LLFolderViewItem* item) const
@@ -404,6 +417,31 @@ bool LLInventoryFilter::checkAgainstFilterType(const LLInventoryItem* item) cons
 	return true;
 }
 
+// Items and folders that are on the clipboard or, recursively, in a folder which  
+// is on the clipboard must be filtered out if the clipboard is in the "cut" mode.
+bool LLInventoryFilter::checkAgainstClipboard(const LLUUID& object_id) const
+{
+	if (LLClipboard::instance().isCutMode())
+	{
+		LLFastTimer ft(FT_FILTER_CLIPBOARD);
+		LLUUID current_id = object_id;
+		LLInventoryObject *current_object = gInventory.getObject(object_id);
+		while (current_id.notNull() && current_object)
+		{
+			if (LLClipboard::instance().isOnClipboard(current_id))
+			{
+				return false;
+			}
+			current_id = current_object->getParentUUID();
+			if (current_id.notNull())
+			{
+				current_object = gInventory.getObject(current_id);
+			}
+		}
+	}
+	return true;
+}
+
 BOOL LLInventoryFilter::checkAgainstPermissions(const LLFolderViewItem* item) const
 {
 	const LLFolderViewEventListener* listener = item->getListener();
@@ -459,6 +497,11 @@ std::string::size_type LLInventoryFilter::getStringMatchOffset() const
 	return mSubStringMatchOffset;
 }
 
+BOOL LLInventoryFilter::isDefault() const
+{
+	return !isNotDefault();
+}
+
 // has user modified default filter params?
 BOOL LLInventoryFilter::isNotDefault() const
 {
@@ -474,7 +517,7 @@ BOOL LLInventoryFilter::isNotDefault() const
 	not_default |= (mFilterOps.mMinDate != mDefaultFilterOps.mMinDate);
 	not_default |= (mFilterOps.mMaxDate != mDefaultFilterOps.mMaxDate);
 	not_default |= (mFilterOps.mHoursAgo != mDefaultFilterOps.mHoursAgo);
-
+	
 	return not_default;
 }
 
@@ -690,8 +733,14 @@ void LLInventoryFilter::setDateRange(time_t min_date, time_t max_date)
 		setModified();
 	}
 
-	areDateLimitsSet() ? mFilterOps.mFilterTypes |= FILTERTYPE_DATE
-			: mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	if (areDateLimitsSet())
+	{
+		mFilterOps.mFilterTypes |= FILTERTYPE_DATE;
+	}
+	else
+	{
+		mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	}
 }
 
 void LLInventoryFilter::setDateRangeLastLogoff(BOOL sl)
@@ -707,8 +756,14 @@ void LLInventoryFilter::setDateRangeLastLogoff(BOOL sl)
 		setModified();
 	}
 
-	areDateLimitsSet() ? mFilterOps.mFilterTypes |= FILTERTYPE_DATE
-			: mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	if (areDateLimitsSet())
+	{
+		mFilterOps.mFilterTypes |= FILTERTYPE_DATE;
+	}
+	else
+	{
+		mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	}
 }
 
 BOOL LLInventoryFilter::isSinceLogoff() const
@@ -754,8 +809,14 @@ void LLInventoryFilter::setHoursAgo(U32 hours)
 		}
 	}
 
-	areDateLimitsSet() ? mFilterOps.mFilterTypes |= FILTERTYPE_DATE
-			: mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	if (areDateLimitsSet())
+	{
+		mFilterOps.mFilterTypes |= FILTERTYPE_DATE;
+	}
+	else
+	{
+		mFilterOps.mFilterTypes &= ~FILTERTYPE_DATE;
+	}
 }
 
 // ## Zi: Filter Links Menu
@@ -1108,7 +1169,7 @@ void LLInventoryFilter::fromLLSD(LLSD& data)
 {
 	if(data.has("filter_types"))
 	{
-		setFilterObjectTypes((U32)data["filter_types"].asInteger());
+		setFilterObjectTypes((U64)data["filter_types"].asInteger());
 	}
 
 	if(data.has("min_date") && data.has("max_date"))

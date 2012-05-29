@@ -31,6 +31,7 @@
 #include "lluictrl.h"
 #include "lltoolbar.h"
 #include "llcommandmanager.h"
+#include "llinventory.h"
 
 class LLUICtrlFactory;
 
@@ -108,6 +109,7 @@ public:
 	static BOOL handleDragTool(S32 x, S32 y, const LLUUID& uuid, LLAssetType::EType type);
 	static BOOL handleDropTool(void* cargo_data, S32 x, S32 y, LLToolBar* toolbar);
 	static void resetDragTool(LLToolBarButton* toolbarButton);
+	LLInventoryObject* getDragItem();
 
 	bool isModified() const;
 	
@@ -139,6 +141,7 @@ private:
 	
 	bool				mDragStarted;
 	LLToolBarButton*	mDragToolbarButton;
+	LLInventoryObject*	mDragItem;
 	bool				mShowToolbars;
 
 	// <FS:Ansariel> Member variables needed for console chat bottom offset

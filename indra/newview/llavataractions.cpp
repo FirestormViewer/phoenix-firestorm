@@ -892,6 +892,11 @@ void LLAvatarActions::shareWithAvatars()
 
 //	LLFloaterAvatarPicker* picker =
 //		LLFloaterAvatarPicker::show(boost::bind(give_inventory, _1, _2), TRUE, FALSE);
+//	if (!picker)
+//	{
+//		return;
+//	}
+//
 //	picker->setOkBtnEnableCb(boost::bind(is_give_inventory_acceptable));
 // [SL:KB] - Patch: Inventory-ShareSelection | Checked: 2011-06-29 (Catznip-2.6.0e) | Added: Catznip-2.6.0e
 	const uuid_set_t idItems = get_inventory_selection();

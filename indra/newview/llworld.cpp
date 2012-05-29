@@ -1236,20 +1236,14 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 		iter != LLCharacter::sInstances.end(); ++iter)
 	{
 		LLVOAvatar* pVOAvatar = (LLVOAvatar*) *iter;
-		// <FS:Ansariel> FIRE-6249: Check if avatar is valid first before
-		//               doing anything: Fixes crash during disconnect
+
 		if (!pVOAvatar->isDead() && !pVOAvatar->isSelf())
 		{
-		// </FS:Ansariel> FIRE-6249
 			LLVector3d pos_global = pVOAvatar->getPositionGlobal();
 			LLUUID uuid = pVOAvatar->getID();
-			// <FS:Ansariel> FIRE-6249
-			//if( !pVOAvatar->isDead()
-			//	&& !pVOAvatar->isSelf()
-			//	&& !uuid.isNull() &&
-			if (!uuid.isNull() &&
-			// </FS:Ansariel> FIRE-6249
-				dist_vec_squared(pos_global, relative_to) <= radius_squared)
+
+			if (!uuid.isNull()
+				&& dist_vec_squared(pos_global, relative_to) <= radius_squared)
 			{
 				if(positions != NULL)
 				{
@@ -1260,9 +1254,7 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 					avatar_ids->push_back(uuid);
 				}
 			}
-		// <FS:Ansariel> FIRE-6249
 		}
-		// </FS:Ansariel> FIRE-6249
 	}
 	// region avatars added for situations where radius is greater than RenderFarClip
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
@@ -1308,6 +1300,11 @@ void LLWorld::getAvatars(uuid_vec_t* avatar_ids, std::vector<LLVector3d>* positi
 	}
 }
 
+bool LLWorld::isRegionListed(const LLViewerRegion* region) const
+{
+	region_list_t::const_iterator it = find(mRegionList.begin(), mRegionList.end(), region);
+	return it != mRegionList.end();
+}
 
 LLHTTPRegistration<LLEstablishAgentCommunication>
 	gHTTPRegistrationEstablishAgentCommunication(
