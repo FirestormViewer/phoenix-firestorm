@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Configuration" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Réseau :
 	</text>
@@ -9,6 +12,10 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Port de connexion" name="connection_port_enabled"/>
 	<spinner label="Numéro :" name="connection_port"/>
 	<text name="Web:">
@@ -33,4 +40,7 @@
 		Paramètres de proxy :
 	</text>
 	<button label="Définir" label_selected="Parcourir" name="set_proxy"/>
+
+		</layout_panel>
+	<layout_stack>
 </panel>

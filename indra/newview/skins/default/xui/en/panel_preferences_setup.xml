@@ -20,6 +20,7 @@
      orientation="vertical"
      layout="topleft">
     <layout_panel
+     name="bandwidth_panel"
      width="539"
      height="24"
      auto_resize="false">
@@ -91,11 +92,12 @@
      left_pad="10"
      top_delta="1"
      name="bandwidth_warning_message"
-     width="400">
+     width="540">
     We strongly advise not to set the Bandwidth over 1500 kbps.
     </text>
     </layout_panel>
     <layout_panel
+     name="other_settings_panel"
      width="539"
      height="415"
      auto_resize="true">

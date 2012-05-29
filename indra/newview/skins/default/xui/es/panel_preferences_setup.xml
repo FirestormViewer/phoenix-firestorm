@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Configuración" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Red:
 	</text>
@@ -9,6 +12,10 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Personalizar el puerto" name="connection_port_enabled"/>
 	<spinner label="Nº del puerto:" name="connection_port"/>
 	<text name="cache_size_label_l">
@@ -58,4 +65,7 @@
 		Configuración de proxy:
 	</text>
 	<button label="Ajustar la configuración de proxy" label_selected="Elegir" name="set_proxy"/>
+
+		</layout_panel>
+	<layout_stack>
 </panel>

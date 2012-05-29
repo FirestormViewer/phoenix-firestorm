@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sieć/cache" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Maximum bandwidth">
 		Maks. przepustowość
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Własny port" name="connection_port_enabled"/>
 	<spinner label="Numer portu:" name="connection_port"/>
 	<text name="cache_size_label_l">
@@ -47,4 +54,7 @@
 		Ustawienia proxy:
 	</text>
 	<button label="Dostosuj ustawienia" label_selected="Przeglądaj" name="set_proxy"/>
+
+		</layout_panel>
+	<layout_stack>
 </panel>
