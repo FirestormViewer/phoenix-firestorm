@@ -51,7 +51,6 @@
 			<line_editor label="Przełącznik naciśnij-by-mówić" name="modifier_combo"/>
 			<button label="Ustaw klawisz" name="set_voice_hotkey_button"/>
 			<button name="set_voice_middlemouse_button" tool_tip="Zresetuj do środkowego przycisku myszy"/>
-			<button label="Wejściowe/Wyjściowe urządzenia" name="device_settings_btn"/>
 			<button label="Ustawienia sprzętowe audio" name="device_settings_btn"/>
 			<panel label="Ustawienia sprzętowe" name="device_settings_panel">
 				<panel.string name="default_text">
