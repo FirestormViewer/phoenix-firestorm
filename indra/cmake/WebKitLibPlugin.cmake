@@ -58,6 +58,11 @@ elseif (DARWIN)
         )
 elseif (LINUX)
     set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
+
+    if( STANDALONE )
+     link_directories (${QT_PLUGINS_DIR}/imageformats)
+    endif( STANDALONE )
+  
     set(WEBKIT_PLUGIN_LIBRARIES
         llqtwebkit
 #        qico
