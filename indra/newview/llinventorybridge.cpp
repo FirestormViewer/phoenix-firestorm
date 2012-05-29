@@ -2892,7 +2892,8 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		if ( (!pModel) || (&gInventory != pModel) || (!pCat) )
 			return;
 
-		change_category_parent(pModel, pCat, gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND), TRUE);
+		LLInventoryModel* model = &gInventory;
+		model->changeCategoryParent(pCat,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
 
 		gInventory.addChangedMask(LLInventoryObserver::REBUILD, mUUID);
 		gInventory.notifyObservers();
