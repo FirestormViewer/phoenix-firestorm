@@ -519,6 +519,10 @@ void LLPanelMainInventory::onClearSearch()
 		// ## Zi: Filter Links Menu
 		// We don't do this anymore, we have a menu option for it now. -Zi
 //		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+		// <FS:Zi> make sure the dropdown shows "All Types" once again
+		LLInventoryFilter* filter=mActivePanel->getFilter();
+		updateFilterDropdown(filter);
+		// </FS:Zi>
 	}
 
 	if (finder)
