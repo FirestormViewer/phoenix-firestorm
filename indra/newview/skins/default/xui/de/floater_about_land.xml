@@ -465,7 +465,6 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				Eine oder mehrere dieser Optionen gelten auf Grundbesitzebene
 			</panel.string>
 			<check_box label="Öffentlichen Zugang erlauben (Hinweis: Deakt. erzeugt Bannlinien)" name="public_access"/>
-			<check_box label="Öffentlichen Zugang gestatten (bei Deaktivierung dieser Option werden Bannlinien generiert)" name="public_access"/>
 			<text name="Only Allow" width="400">
 				Zugang nur Einwohnern gestatten, die:
 			</text>

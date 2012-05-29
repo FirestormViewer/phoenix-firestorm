@@ -55,21 +55,6 @@
 	  name="selected_faces">
 		Fläche:
 	</floater.string>
-	<floater.string name="grid_screen_text">
-		Bildschirm
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Lokal
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Welt
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referenz
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Anhang
-	</floater.string>
 	<text name="grid_mode_label" tool_tip="Rasteropazität">
 		Modus
 	</text>
@@ -112,12 +97,6 @@
 	<check_box initial_value="true" label="An Raster ausrichten" name="checkbox snap to grid"/>
     <check_box initial_value="false" label="Achse an Wurzel edit." name="checkbox actual root"/>
 	<check_box initial_value="true" label="Aktiviere Hervorhebung" name="checkbox show highlight"/>
-	<combo_box name="combobox grid mode" tool_tip="Wählen Sie ein Rasterlineal zum Positionieren des Objekts aus." width="115">
-		<combo_box.item label="Globales Raster" name="World"/>
-		<combo_box.item label="Lokales Raster" name="Local"/>
-		<combo_box.item label="Referenzraster" name="Reference"/>
-	</combo_box>
-	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen" top="63"/>
 	<check_box initial_value="true" label="Texturen dehnen" name="checkbox stretch textures" top_pad="-5"/>
 	<check_box initial_value="true" label="Einrasten" name="checkbox snap to grid" top_pad="15"/>
 	<combo_box name="combobox grid mode" tool_tip="Wählen Sie das gewünschte Rasterlineal zum Positionieren des Objekts aus.">
@@ -125,7 +104,7 @@
 		<combo_box.item label="Lokal" name="Local"/>
 		<combo_box.item label="Referenz" name="Reference"/>
 	</combo_box>
-	<button label="" label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen"/>
+	<button label="Optionen..." label_selected="Optionen..." name="Options..." tool_tip="Mehr Raster-Optionen anzeigen" top="63"/>
 	<button label="" label_selected="" name="ToolCube" tool_tip="Würfel"/>
 	<button label="" label_selected="" name="ToolPrism" tool_tip="Prisma"/>
 	<button label="" label_selected="" name="ToolPyramid" tool_tip="Pyramide"/>
