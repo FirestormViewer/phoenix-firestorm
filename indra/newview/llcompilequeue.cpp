@@ -159,10 +159,6 @@ void LLFloaterScriptQueue::addObject(const LLUUID& id)
 
 BOOL LLFloaterScriptQueue::start()
 {
-	// <FS:Ansariel> Show script compile floater
-	setTitle(mFloaterTitle);
-	setVisible(TRUE);
-
 	std::string buffer;
 
 	LLSelectMgr *mgr = LLSelectMgr::getInstance();
@@ -291,10 +287,7 @@ private:
 LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("CompileQueueTitle"));
-	mFloaterTitle = LLTrans::getString("CompileQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("CompileQueueTitle"));
 	setStartString(LLTrans::getString("CompileQueueStart"));
 														 															 
 	mUploadQueue = new LLAssetUploadQueue(new LLCompileFloaterUploadQueueSupplier(key.asUUID()));
@@ -616,10 +609,7 @@ void LLFloaterCompileQueue::saveItemByItemID(const LLUUID& asset_id)
 LLFloaterResetQueue::LLFloaterResetQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("ResetQueueTitle"));
-	mFloaterTitle = LLTrans::getString("ResetQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("ResetQueueTitle"));
 	setStartString(LLTrans::getString("ResetQueueStart"));
 }
 
@@ -671,10 +661,7 @@ void LLFloaterResetQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterRunQueue::LLFloaterRunQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("RunQueueTitle"));
-	mFloaterTitle = LLTrans::getString("RunQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("RunQueueTitle"));
 	setStartString(LLTrans::getString("RunQueueStart"));
 }
 
@@ -729,10 +716,7 @@ void LLFloaterRunQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterNotRunQueue::LLFloaterNotRunQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("NotRunQueueTitle"));
-	mFloaterTitle = LLTrans::getString("NotRunQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("NotRunQueueTitle"));
 	setStartString(LLTrans::getString("NotRunQueueStart"));
 }
 
@@ -788,10 +772,7 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterDeleteQueue::LLFloaterDeleteQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("DeleteQueueTitle"));
-	mFloaterTitle = LLTrans::getString("DeleteQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("DeleteQueueTitle"));
 	setStartString(LLTrans::getString("DeleteQueueStart"));
 }
 
