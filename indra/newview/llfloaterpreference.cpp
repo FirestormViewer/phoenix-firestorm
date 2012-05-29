@@ -1869,9 +1869,18 @@ void LLFloaterPreference::setCacheLocation(const LLStringExplicit& location)
 
 //------------------------------Updater---------------------------------------
 
+// <FS:Zi> Add warning on high bandwidth setting
+static void updateBandwidthWarning()
+{
+	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);
+}
+// </FS:Zi>
+
 static bool handleBandwidthChanged(const LLSD& newvalue)
 {
 	gViewerThrottle.setMaxBandwidth((F32) newvalue.asReal());
+	updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
 	return true;
 }
 
@@ -1998,10 +2007,15 @@ BOOL LLPanelPreference::postBuild()
 	// [/WoLf]
 
 	//////////////////////PanelSetup ///////////////////
-	if (hasChild("max_bandwidth"))
+	// <FS:Zi> Add warning on high bandwidth settings
+	// if (hasChild("max_bandwidth"))
+	// Look for the layout widget on top level of this panel
+	if (hasChild("max_bandwidth_layout"))
+	// </FS:Zi>
 	{
 		mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 		gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
+		updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
 	}
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
