@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ <panel name="edit_jacket_panel">
+	<panel name="avatar_jacket_color_panel">
+		<texture_picker label="Tessuto sup" name="Upper Fabric" tool_tip="Clicca per selezionare un'immagine"/>
+		<texture_picker label="Tessuto inf" name="Lower Fabric" tool_tip="Clicca per selezionare un'immagine"/>
+		<color_swatch label="Colore/Tinta" name="Color/Tint" tool_tip="Clicca per selezionare il colore" width="70"/>
+	</panel>
+	<panel name="jacket_main_tab_holder" title="Giacca">
+		<accordion name="jacket_main_accordion">
+			<accordion_tab name="jacket_main_tab" title="Giacca"/>
+		</accordion>
+	</panel>
+</panel>

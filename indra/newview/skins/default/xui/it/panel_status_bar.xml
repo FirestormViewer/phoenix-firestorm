@@ -6,13 +6,18 @@
 	<panel.string name="bandwidth_tooltip">
 		Larghezza di banda
 	</panel.string>
-
+	<panel.string name="time">
+		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
+	</panel.string>
+	<panel.string name="timeTooltip">
+		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
+	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in [CUR]" value="[CUR] ???"/>
-		<button label="Compra [CUR]" left_pad="-5" name="buyL" tool_tip="Clicca per acquistare più [CUR]"/>
+		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ???"/>
+		<button label="Compra L$" left_pad="-5" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>
 	<text name="TimeText" tool_tip="Orario attuale (Pacifico)">
 		24:00, ora del Pacifico
