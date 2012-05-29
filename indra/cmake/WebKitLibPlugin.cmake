@@ -57,30 +57,33 @@ elseif (DARWIN)
         debug ${ARCH_PREBUILT_DIRS_RELEASE}/libllqtwebkit.dylib
         )
 elseif (LINUX)
-    set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
-    set(WEBKIT_PLUGIN_LIBRARIES
-        llqtwebkit
-#        qico
-#        qpng
-#        qtiff
-#        qsvg
-#        QtSvg
-        QtWebKit
-        QtOpenGL
-        QtNetwork
-        QtGui
-        QtCore
-        jscore
-#        qgif
-#        qjpeg
-#        jpeg
-        fontconfig
-        X11
-        Xrender
-        GL
+    # FIRE-6108, add missing if clause for standalone builds - TL
+    if (STANDALONE)
+      set(WEBKIT_PLUGIN_LIBRARIES ${LLQTWEBKIT_LIBRARY} ${QT_LIBRARIES} ${QT_PLUGIN_LIBRARIES})
+    else (STANDALONE)
+      set(WEBKIT_PLUGIN_LIBRARIES
+          llqtwebkit
+#          qico
+#          qpng
+#          qtiff
+#          qsvg
+#          QtSvg
+          QtWebKit
+          QtOpenGL
+          QtNetwork
+          QtGui
+          QtCore
+          qgif
+          qjpeg
+          jpeg
+          fontconfig
+          X11
+          Xrender
+          GL
 
-#        sqlite3
-#        Xi
-#        SM
-        )
+#          sqlite3
+#          Xi
+#          SM
+          )
+    endif (STANDALONE)
 endif (WINDOWS)

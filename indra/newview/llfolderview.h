@@ -364,6 +364,22 @@ public:
 	static F32 sAutoOpenTime;
 	LLTextBox*						mStatusTextBox;
 
+
+	// <FS:ND> FIRE-4702; When displaying a confirmation dialog to delete items, don't pass
+	// this, but instead a new proxy objects. this can be destroyed if there is a
+	// race condition between displaying the confirmation dialog and this folderview
+	// being populated at the same time.
+private:
+	struct FolderviewProxy
+	{
+		void onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response);
+		LLFolderView *mFolderview;
+	};
+
+	friend struct FolderviewProxy;
+
+	FolderviewProxy *mFolderviewProxy;
+	// </FS:ND>
 };
 
 bool sort_item_name(LLFolderViewItem* a, LLFolderViewItem* b);

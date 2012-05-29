@@ -368,11 +368,32 @@ public:
 			// greater priority is "less"
 			const F32 lpriority = lhsp->getDecodePriority();
 			const F32 rpriority = rhsp->getDecodePriority();
-			if (lpriority > rpriority) // higher priority
+
+			// <FS:ND> FIRE-4482
+			// It is hard to say why FIRE-4482 is really happenening. There are a few things that could cause it
+			//
+			// 1) Image not in texturelist: Then !image->isInImageList() would have caused to error out a few lines before. isInImageList should always be properly set IMO.
+			// 2) The set is bad, due to multithreading and race conditions: The set is only every access from one thread.
+			// 3) The ordering operator does not adhere to the requirement of strict weak ordering: This can be possible, due to float rounding and precision.
+			//
+			// 1&2 seem to be ruled out (can one ever be sure :)?), so it is viable to test 3 by rewriting this operator.
+			
+			// if (lpriority > rpriority) // higher priority
+			// 	return true;
+			// if (lpriority < rpriority)
+			// 	return false;
+			// return lhsp < rhsp;
+
+			F32 fDiff = lpriority-rpriority;
+
+			if( llabs( fDiff ) < 0.001 ) // Very small difference, don't take the risk and just compare the pointers.
+				return lhsp < rhsp;
+			else if( fDiff > 0 ) // lhs is bigger, so by the priority queue it is 'less'
 				return true;
-			if (lpriority < rpriority)
+			else
 				return false;
-			return lhsp < rhsp;
+
+			// </FS:ND>
 		}
 	};
 

@@ -309,11 +309,18 @@ LLFolderView::LLFolderView(const Params& p)
 	mPopupMenuHandle = menu->getHandle();
 
 	mListener->openItem();
+
+	mFolderviewProxy = 0; // <FS:ND> FIRE-4702;
 }
 
 // Destroys the object
 LLFolderView::~LLFolderView( void )
 {
+	// <FS:ND> FIRE-4702;
+	if( mFolderviewProxy )
+		mFolderviewProxy->mFolderview = 0;
+	// </FS:ND>
+
 	closeRenamer();
 
 	// The release focus call can potentially call the
@@ -1026,7 +1033,15 @@ void LLFolderView::removeSelectedItems( void )
 	if (mSelectedItems.empty()) return;
 	LLSD args;
 	args["QUESTION"] = LLTrans::getString(mSelectedItems.size() > 1 ? "DeleteItems" :  "DeleteItem");
-	LLNotificationsUtil::add("DeleteItems", args, LLSD(), boost::bind(&LLFolderView::onItemsRemovalConfirmation, this, _1, _2));
+
+	// <FS:ND> FIRE-4702;
+
+	//	LLNotificationsUtil::add("DeleteItems", args, LLSD(), boost::bind(&LLFolderView::onItemsRemovalConfirmation, this, _1, _2));
+
+	mFolderviewProxy = new FolderviewProxy();
+	mFolderviewProxy->mFolderview = this;
+	LLNotificationsUtil::add("DeleteItems", args, LLSD(), boost::bind(&FolderviewProxy::onItemsRemovalConfirmation, mFolderviewProxy, _1, _2));
+	// </FS:ND>
 }
 
 bool isDescendantOfASelectedItem(LLFolderViewItem* item, const std::vector<LLFolderViewItem*>& selectedItems)
@@ -2697,3 +2712,16 @@ void properties_selected_items(void* user_data)
 		fv->propertiesSelectedItems();
 	}
 }
+
+// <FS:ND> FIRE-4702;
+void LLFolderView::FolderviewProxy::onItemsRemovalConfirmation(const LLSD& notification, const LLSD& response)
+{
+	if( mFolderview )
+	{
+		mFolderview->mFolderviewProxy = 0;
+		mFolderview->onItemsRemovalConfirmation( notification, response);
+	}
+	delete this;
+}
+// </FS:ND>
+

@@ -69,6 +69,7 @@ public:
 
 	void setBridge(LLViewerInventoryItem* item) { mpBridge = item; };
 	LLViewerInventoryItem* getBridge() { return mpBridge; };
+	bool isBridgeValid() const { return 0 != mpBridge; }
 
 	void checkBridgeScriptName(std::string fileName);
 	std::string currentFullName() { return mCurrentFullName; }

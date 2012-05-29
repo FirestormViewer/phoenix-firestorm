@@ -1420,12 +1420,33 @@ void LLRender::multMatrix(const GLfloat* m)
 
 void LLRender::matrixMode(U32 mode)
 {
+	U32 origMode = mode; // <FS:ND> FIRE-5577 for trace.
 	if (mode == MM_TEXTURE)
 	{
 		mode = MM_TEXTURE0 + gGL.getCurrentTexUnitIndex();
 	}
 
+	// <FS:ND> FIRE-5577
+	// If mode is greater or equal to NUM_MATRIX_MODES we're really in trouble here. This can happen if getTexUnit( 0 )->unbind() is called with the wrong argument,
+	// eg Texture but it was bound to something else. Then unbind will not unbind and getCurrentTexUnitIndex is not 0, but something betweeen [0, max texture unit].
+	//
+	// There are a few possible solutions to deal with this here, as the error actually happened maybe long before this call:
+	// 1) Crash and burn. the assert will do that in non release mode.
+	// 2) Do nothing, than loadIdentity will crash later. This was the default before.
+	// 3) Try to recover and unbind unit 0, then use use. This is the new default. It is a bit hacky, as it could screw the matrices for text unit 0 up when push/popmatrix are
+	//   not properly used. Or during all calls popMatrix is not used yet. But it is still better than a user crash. At the worst it will show a texture with a wrong matrix (scaling, roation etc).
 	llassert(mode < NUM_MATRIX_MODES);
+
+	if( mode >= NUM_MATRIX_MODES )
+	{
+		llwarns << "Matrix mode overflow: matrix mode:" << mode << " original matrix mode: " << origMode << " current texture unit: "
+				<< gGL.getCurrentTexUnitIndex() << " type of tex unit #0 " << getTexUnit(0)->getCurrType() << llendl;
+
+		getTexUnit( 0 )->unbind( getTexUnit(0)->getCurrType() );
+		mode = MM_TEXTURE0;
+	}
+	// </FS:ND>
+
 	mMatrixMode = mode;
 }
 

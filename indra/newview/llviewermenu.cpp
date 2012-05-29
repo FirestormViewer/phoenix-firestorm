@@ -3875,8 +3875,14 @@ class FSSelfCheckForceSit : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		bool new_value = gAgentAvatarp->isSitting();
-		return new_value;
+		// <FS:ND> don't use gAgentAvatarp if it's not valid yet/anymore.
+		//		bool new_value = gAgentAvatarp->isSitting();
+		//		return new_value;
+		if( !isAgentAvatarValid() )
+			return false;
+
+		return gAgentAvatarp->isSitting();
+		// </FS:ND>
 	}
 };
 
