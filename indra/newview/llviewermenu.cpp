@@ -92,6 +92,7 @@
 #include "lltoolpie.h"
 #include "lltoolselectland.h"
 #include "lltrans.h"
+#include "llviewerdisplay.h" //for gWindowResized
 #include "llviewergenericmessage.h"
 #include "llviewerhelp.h"
 #include "llviewermenufile.h"	// init_menu_file()
@@ -1211,6 +1212,7 @@ class LLAdvancedToggleWireframe : public view_listener_t
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 		gUseWireframe = (!gUseWireframe) && (!gRlvAttachmentLocks.hasLockedHUD());
 // [/RLVa:KB]
+		gWindowResized = TRUE;
 		LLPipeline::updateRenderDeferred();
 		gPipeline.resetVertexBuffers();
 		return true;
