@@ -353,6 +353,7 @@
            tooltip_ref="Command_Fly_Tooltip"
            execute_function="Agent.toggleFlying"
            is_running_function="Agent.getFlying"
+           is_enabled_function="Agent.enableFlying"
            />
 
 </commands>
