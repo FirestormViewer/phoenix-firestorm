@@ -77,33 +77,63 @@
   </menu_item_check>
   
   <menu_item_check
-     label="Report Crossing Draw Range"
-     name="RadarReportDrawRange">
+     label="Report Entering Draw Range"
+     name="RadarReportDrawRangeEnter">
 	 <menu_item_check.on_check
-     	control="RadarReportDrawRange" />
+     	control="RadarReportDrawRangeEnter" />
      <menu_item_check.on_click
         function="ToggleControl"
-        parameter="RadarReportDrawRange" />
+        parameter="RadarReportDrawRangeEnter" />
+  </menu_item_check>
+
+  <menu_item_check
+     label="Report Leaving Draw Range"
+     name="RadarReportDrawRangeLeave">
+    <menu_item_check.on_check
+       control="RadarReportDrawRangeLeave" />
+    <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="RadarReportDrawRangeLeave" />
   </menu_item_check>
   
   <menu_item_check
-     label="Report Crossing Chat Range"
-     name="RadarReportChatRange">
+     label="Report Entering Chat Range"
+     name="RadarReportChatRangeEnter">
 	 <menu_item_check.on_check
-     	control="RadarReportChatRange" />
+     	control="RadarReportChatRangeEnter" />
      <menu_item_check.on_click
         function="ToggleControl"
-        parameter="RadarReportChatRange" />
+        parameter="RadarReportChatRangeEnter" />
+  </menu_item_check>
+
+  <menu_item_check
+     label="Report Leaving Chat Range"
+     name="RadarReportChatRangeLeave">
+    <menu_item_check.on_check
+       control="RadarReportChatRangeLeave" />
+    <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="RadarReportChatRangeLeave" />
   </menu_item_check>
   
   <menu_item_check
-     label="Report Crossing your Region"
-     name="RadarReportSimRange">
+     label="Report Entering your Region"
+     name="RadarReportSimRangeEnter">
 	 <menu_item_check.on_check
-     	control="RadarReportSimRange" />
+     	control="RadarReportSimRangeEnter" />
      <menu_item_check.on_click
         function="ToggleControl"
-        parameter="RadarReportSimRange" />
+        parameter="RadarReportSimRangeEnter" />
+  </menu_item_check>
+
+  <menu_item_check
+     label="Report Leaving your Region"
+     name="RadarReportSimRangeLeave">
+    <menu_item_check.on_check
+       control="RadarReportSimRangeLeave" />
+    <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="RadarReportSimRangeLeave" />
   </menu_item_check>
   
   <menu_item_check

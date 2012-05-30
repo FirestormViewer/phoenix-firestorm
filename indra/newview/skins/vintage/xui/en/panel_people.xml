@@ -256,33 +256,66 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					follows="left|top"/>
 
 				<check_box
-					label="Report Crossing Draw Range"
+					label="Report Entering Draw Range"
 					left="0"
 					top_pad="2"
-					name="RadarReportDrawRange"
-					control_name="RadarReportDrawRange"
+					name="RadarReportDrawRangeEnter"
+					control_name="RadarReportDrawRangeEnter"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+          <check_box
+					label="Report Leaving Draw Range"
+					left="0"
+					top_pad="2"
+					name="RadarReportDrawRangeLeaving"
+					control_name="RadarReportDrawRangeLeaving"
 					right="-1"
 					height="16"
 					layout="topleft"
 					follows="left|top"/>
 
 				<check_box
-					label="Report Crossing Chat Range"
+					label="Report Entering Chat Range"
 					left="0"
 					top_pad="2"
-					name="RadarReportChatRange"
-					control_name="RadarReportChatRange"
+					name="RadarReportChatRangeEnter"
+					control_name="RadarReportChatRangeEnter"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+          <check_box
+					label="Report Leaving Chat Range"
+					left="0"
+					top_pad="2"
+					name="RadarReportChatRangeLeave"
+					control_name="RadarReportChatRangeLeave"
 					right="-1"
 					height="16"
 					layout="topleft"
 					follows="left|top"/>
 
 				<check_box
-					label="Report Crossing your Region"
+					label="Report Entering your Region"
 					left="0"
 					top_pad="2"
-					name="RadarReportSimRange"
-					control_name="RadarReportSimRange"
+					name="RadarReportSimRangeEnter"
+					control_name="RadarReportSimRangeEnter"
+					right="-1"
+					height="16"
+					layout="topleft"
+					follows="left|top"/>
+
+          <check_box
+					label="Report Leaving your Region"
+					left="0"
+					top_pad="2"
+					name="RadarReportSimRangeLeave"
+					control_name="RadarReportSimRangeLeave"
 					right="-1"
 					height="16"
 					layout="topleft"
