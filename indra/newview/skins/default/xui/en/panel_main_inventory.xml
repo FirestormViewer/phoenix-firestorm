@@ -129,6 +129,7 @@
      follows="all"
      height="338"
      label="RECENT"
+     sort_order_setting="RecentItemsSortOrder"
      help_topic="recent_inventory_tab"
      layout="topleft"
      left_delta="0"
