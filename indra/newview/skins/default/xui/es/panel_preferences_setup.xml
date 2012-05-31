@@ -67,5 +67,5 @@
 	<button label="Ajustar la configuración de proxy" label_selected="Elegir" name="set_proxy"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>

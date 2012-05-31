@@ -42,5 +42,5 @@
 	<button label="プロキシ設定を調整" label_selected="参照" name="set_proxy"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>

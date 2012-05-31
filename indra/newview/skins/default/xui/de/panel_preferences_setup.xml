@@ -71,5 +71,5 @@
 	<button label="Proxy-Einstellungen ändern" label_selected="Durchsuchen" name="set_proxy" width="180"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>

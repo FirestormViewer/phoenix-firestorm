@@ -42,5 +42,5 @@
 	<button label="Proxy ayarlarını yap" label_selected="Gözat" name="set_proxy"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>

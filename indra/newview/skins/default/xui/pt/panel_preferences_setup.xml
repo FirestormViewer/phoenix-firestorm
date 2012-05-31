@@ -42,5 +42,5 @@
 	<button label="Ajustar configurações de proxy" label_selected="Procurar" name="set_proxy"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>

@@ -62,5 +62,5 @@
 	<button label="Regola impostazioni proxy" label_selected="Sfoglia" name="set_proxy" width="150"/>
 
 		</layout_panel>
-	<layout_stack>
+	</layout_stack>
 </panel>
