@@ -169,6 +169,17 @@
         </check_box>
 
         <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Deactivate tracking beacon when reaching the targetted avatar (&lt;= 3m)"
+         left="15"
+         name="FSDisableAvatarTrackerAtCloseIn"
+         width="270"
+         control_name="FSDisableAvatarTrackerAtCloseIn"
+         tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targetted avatar is less than 3m. (Default)"/>
+
+        <check_box
          top_pad="15"
          control_name="UseLSLBridge"
          follows="left|top"
