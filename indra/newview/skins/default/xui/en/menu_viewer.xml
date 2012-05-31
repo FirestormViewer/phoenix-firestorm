@@ -1239,6 +1239,14 @@
            name="Scripts"
            tear_off="true">
           <menu_item_call
+             label="Script Info (Counter)"
+             name="Script Info">
+            <menu_item_call.on_click
+               function="Tools.ScriptInfo" />
+            <menu_item_call.on_enable
+               function="EditableSelected" />
+          </menu_item_call>
+          <menu_item_call
              label="Recompile Scripts (Mono)"
              name="Mono">
             <menu_item_call.on_click
@@ -1291,15 +1299,7 @@
                parameter="delete" />
             <menu_item_call.on_enable
                function="EditableSelected" />
-          </menu_item_call>
-          <menu_item_call
-             label="Script Info (Counter)"
-             name="Script Info">
-            <menu_item_call.on_click
-               function="Tools.ScriptInfo" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
+          </menu_item_call>          
         </menu>
 
         <menu_item_separator/>
