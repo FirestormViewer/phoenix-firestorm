@@ -97,6 +97,12 @@ const F32 COARSE_FREQUENCY = 2.2f;
 const F32 FIND_FREQUENCY = 29.7f;	// This results in a database query, so cut these back
 const F32 OFFLINE_SECONDS = FIND_FREQUENCY + 8.0f;
 
+
+// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
+enum ETrackerState { eUndef = 0, eStarted, eDead };
+ETrackerState sTrackerState;
+// </FS:ND>
+
 // static
 LLAvatarTracker LLAvatarTracker::sInstance;
 
@@ -116,10 +122,12 @@ LLAvatarTracker::LLAvatarTracker() :
 	//mInventoryObserver(NULL),
 	mModifyMask(0x0)	
 {
+	sTrackerState = eStarted;
 }
 
 LLAvatarTracker::~LLAvatarTracker()
 {
+	sTrackerState = eDead;
 	deleteTrackingData();
 	std::for_each(mObservers.begin(), mObservers.end(), DeletePointer());
 	std::for_each(mBuddyInfo.begin(), mBuddyInfo.end(), DeletePairedPointer());
@@ -1004,12 +1012,12 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 	return true;
 }
 
-// </FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
+// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
 // Make sure an observer gets removed once it dies.
 
 LLFriendObserver::~LLFriendObserver()
 {
-	LLAvatarTracker::instance().onObserverDied( this );
+	LLAvatarTracker::onObserverDied( this );
 }
 
 void removeDanglingObserver( std::map<LLUUID, std::set<LLFriendObserver*> > &aContainer, LLFriendObserver const *aObserver )
@@ -1031,18 +1039,21 @@ void removeDanglingObserver( std::map<LLUUID, std::set<LLFriendObserver*> > &aCo
 
 void LLAvatarTracker::onObserverDied( LLFriendObserver const *aObserver )
 {
-	for( observer_list_t::iterator itr = mObservers.begin(); itr != mObservers.end(); ++itr )
+	if( eDead == sTrackerState )
+		return;
+
+	for( observer_list_t::iterator itr = sInstance.mObservers.begin(); itr != sInstance.mObservers.end(); ++itr )
 	{
 		if( *itr == aObserver )
 		{
 			llwarns << "Removing dangling observer" << llendl;
-			mObservers.erase( itr );
+			sInstance.mObservers.erase( itr );
 			break;
 		}
 	}
 
-	removeDanglingObserver( mParticularFriendObserverMap, aObserver );
-	removeDanglingObserver( mFriendPermissionObserverMap, aObserver );
+	removeDanglingObserver( sInstance.mParticularFriendObserverMap, aObserver );
+	removeDanglingObserver( sInstance.mFriendPermissionObserverMap, aObserver );
 }
 
 // </FS:ND>
