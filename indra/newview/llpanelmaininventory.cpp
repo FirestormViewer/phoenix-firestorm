@@ -196,7 +196,10 @@ BOOL LLPanelMainInventory::postBuild()
 	if (recent_items_panel)
 	{
 		recent_items_panel->setSinceLogoff(TRUE);
-		recent_items_panel->setSortOrder(LLInventoryFilter::SO_DATE);
+		// <FS:Zi> Recent items panel should save sort order
+		// recent_items_panel->setSortOrder(LLInventoryFilter::SO_DATE);
+		recent_items_panel->setSortOrder(gSavedSettings.getU32(LLInventoryPanel::RECENTITEMS_SORT_ORDER));
+		// </FS:Zi>
 		recent_items_panel->setShowFolderState(LLInventoryFilter::SHOW_NON_EMPTY_FOLDERS);
 		recent_items_panel->getFilter()->markDefault();
 		recent_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, recent_items_panel, _1, _2));
@@ -468,7 +471,10 @@ void LLPanelMainInventory::setSortBy(const LLSD& userdata)
 	}
 
 	getActivePanel()->setSortOrder(sort_order_mask);
-	gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
+	// <FS:Zi> Recent items panel should save sort order
+	// gSavedSettings.setU32("InventorySortOrder", sort_order_mask);
+	gSavedSettings.setU32(getActivePanel()->mSortOrderSetting, sort_order_mask);
+	// </FS:Zi>
 }
 
 BOOL LLPanelMainInventory::isSortByChecked(const LLSD& userdata)
@@ -519,6 +525,10 @@ void LLPanelMainInventory::onClearSearch()
 		// ## Zi: Filter Links Menu
 		// We don't do this anymore, we have a menu option for it now. -Zi
 //		mActivePanel->setFilterLinks(LLInventoryFilter::FILTERLINK_INCLUDE_LINKS);
+		// <FS:Zi> make sure the dropdown shows "All Types" once again
+		LLInventoryFilter* filter=mActivePanel->getFilter();
+		updateFilterDropdown(filter);
+		// </FS:Zi>
 	}
 
 	if (finder)

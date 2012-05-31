@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Установки" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Сеть:">
 		Сеть:
 	</text>
@@ -9,6 +12,10 @@
 	<text name="text_box2">
 		kbit/s
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Свой порт" name="connection_port_enabled"/>
 	<spinner label="Номер порта:" name="connection_port"/>
     <text name="cache_size_label_l">
@@ -57,4 +64,7 @@
 		Включить прокси (Proxy):
 	</text>
 	<button label="Изменить настройки прокси" label_selected="Открыть" name="set_proxy" width="180"/>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

@@ -159,6 +159,48 @@ void LLFloaterScriptQueue::addObject(const LLUUID& id)
 
 BOOL LLFloaterScriptQueue::start()
 {
+	LLNotificationsUtil::add("ConfirmScriptModify", LLSD(), LLSD(), boost::bind(&LLFloaterScriptQueue::onScriptModifyConfirmation, this, _1, _2));
+	return true;
+	/*
+	// <FS:Ansariel> Show script compile floater
+	setTitle(mFloaterTitle);
+	setVisible(TRUE);
+
+	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
+	std::string buffer;
+
+	LLSelectMgr *mgr = LLSelectMgr::getInstance();
+	LLObjectSelectionHandle selectHandle = mgr->getSelection();
+	U32 n_objects = 0;
+	if (gSavedSettings.getBOOL("EditLinkedParts"))
+	{
+		n_objects = selectHandle->getObjectCount();
+	}
+	else
+	{
+		n_objects = selectHandle->getRootObjectCount();
+	}
+
+	LLStringUtil::format_map_t args;
+	args["[START]"] = mStartString;
+	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
+	buffer = getString ("Starting", args);
+	
+	// <FS:Ansariel> Add text to scroll list
+	//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
+	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
+	// </FS:Ansariel> Add text to scroll list
+
+	return nextObject();*/
+}
+
+bool LLFloaterScriptQueue::onScriptModifyConfirmation(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if (option != 0)// canceled
+	{
+		return true;
+	}
 	std::string buffer;
 
 	LLSelectMgr *mgr = LLSelectMgr::getInstance();

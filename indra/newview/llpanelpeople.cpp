@@ -881,9 +881,12 @@ void LLPanelPeople::updateNearbyList()
 		return;
 	
 	//Configuration
-	static LLCachedControl<bool> RadarReportChatRange(gSavedSettings, "RadarReportChatRange");
-	static LLCachedControl<bool> RadarReportDrawRange(gSavedSettings, "RadarReportDrawRange");
-	static LLCachedControl<bool> RadarReportSimRange(gSavedSettings, "RadarReportSimRange");
+	static LLCachedControl<bool> RadarReportChatRangeEnter(gSavedSettings, "RadarReportChatRangeEnter");
+	static LLCachedControl<bool> RadarReportChatRangeLeave(gSavedSettings, "RadarReportChatRangeLeave");
+	static LLCachedControl<bool> RadarReportDrawRangeEnter(gSavedSettings, "RadarReportDrawRangeEnter");
+	static LLCachedControl<bool> RadarReportDrawRangeLeave(gSavedSettings, "RadarReportDrawRangeLeave");
+	static LLCachedControl<bool> RadarReportSimRangeEnter(gSavedSettings, "RadarReportSimRangeEnter");
+	static LLCachedControl<bool> RadarReportSimRangeLeave(gSavedSettings, "RadarReportSimRangeLeave");
 	static LLCachedControl<bool> RadarEnterChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
 	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
 
@@ -1011,21 +1014,21 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			// chat alerts
-			if (RadarReportChatRange && (avRange <= CHAT_NORMAL_RADIUS) && avRange > -1)
+			if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS) && avRange > -1)
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
 				std::string message = getString("entering_chat_range", args);
 				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 			}
-			if (RadarReportDrawRange && (avRange <= drawRadius) && avRange > -1)
+			if (RadarReportDrawRangeEnter && (avRange <= drawRadius) && avRange > -1)
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
 				std::string message = getString("entering_draw_distance", args);
 				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 			}
-			if (RadarReportSimRange && (avRegion == regionSelf))
+			if (RadarReportSimRangeEnter && (avRegion == regionSelf))
 			{
 				if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 				{
@@ -1061,33 +1064,33 @@ void LLPanelPeople::updateNearbyList()
 			if (lastRadarSweep.count(avId) == 1) // normal case, check from last position
 			{
 				rf = lastRadarSweep.find(avId)->second;
-				if (RadarReportChatRange)
+				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave )
 				{
-					if ((avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+					if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if ((avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+					else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
 				}
-				if (RadarReportDrawRange)
+				if ( RadarReportDrawRangeEnter || RadarReportDrawRangeLeave )
 				{
-					if ((avRange <= drawRadius && avRange > -1) && (rf.lastDistance > drawRadius || rf.lastDistance == -1))
+					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > -1) && (rf.lastDistance > drawRadius || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_draw_distance", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if ((avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
+					else if ( RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
 				}
-				if (RadarReportSimRange)
+				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
 				{
-					if ((avRegion == regionSelf) && (avRegion != rf.lastRegion))
+					if ( RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
 					{
 						if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 						{
@@ -1099,7 +1102,7 @@ void LLPanelPeople::updateNearbyList()
 						else 
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
 					}
-					else if ((rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
 				}
 			}
@@ -1116,33 +1119,33 @@ void LLPanelPeople::updateNearbyList()
 				}
 				llinfos << "AO: Duplicates detected for " << avName <<" , most recent is " << rf.firstSeen << llendl;
 				
-				if (RadarReportChatRange)
+				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
 				{
-					if ((avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+					if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if ((avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+					else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
 				}
-				if (RadarReportDrawRange)
+				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
 				{
-					if ((avRange <= drawRadius && avRange > -1) && (rf.lastDistance > drawRadius || rf.lastDistance == -1))
+					if (RadarReportDrawRangeEnter && (avRange <= drawRadius && avRange > -1) && (rf.lastDistance > drawRadius || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_draw_distance", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if ((avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
+					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
 				}
-				if (RadarReportSimRange)
+				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 				{
-					if ((avRegion == regionSelf) && (avRegion != rf.lastRegion))
+					if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
 					{
 						if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 						{
@@ -1154,7 +1157,7 @@ void LLPanelPeople::updateNearbyList()
 						else 
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
 					}
-					else if ((rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
 				}
 			}
@@ -1314,11 +1317,11 @@ void LLPanelPeople::updateNearbyList()
 		if (!mNearbyList->contains(prevId))
 		{
 			radarFields rf = i->second;
-			if (RadarReportChatRange && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
+			if (RadarReportChatRangeLeave && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
-			if (RadarReportDrawRange && (rf.lastDistance <= drawRadius) && rf.lastDistance > -1)
+			if (RadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > -1)
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));
-			if (RadarReportSimRange && (rf.lastRegion == regionSelf))
+			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf))
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
 				
 			if (RadarLeaveChannelAlert)

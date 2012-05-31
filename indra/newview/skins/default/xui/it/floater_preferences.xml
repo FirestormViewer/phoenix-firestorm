@@ -3,7 +3,7 @@
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
 	<button label="Applica" name="Apply"/>
-	<tab_container name="pref core" tab_width="100">
+	<tab_container name="pref core" tab_width="110">
 		<panel label="Generale" name="general"/>
 		<panel label="Grafica" name="display"/>
 		<panel label="Audio e media" name="audio"/>
@@ -14,5 +14,6 @@
 		<panel label="Riservatezza" name="im"/>
 		<panel label="Impostazione" name="input"/>
 		<panel label="Avanzate" name="advanced1"/>
+		<panel label="Interfaccia" name="starlightUI1"/>
 	</tab_container>
 </floater>

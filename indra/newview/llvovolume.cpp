@@ -895,6 +895,32 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 	{
 		setDebugText(llformat("%.0f:%.0f", (F32) sqrt(min_vsize),(F32) sqrt(max_vsize)));
 	}
+	else if (gPipeline.hasRenderDebugMask(LLPipeline::RENDER_DEBUG_TEXTURE_SIZE))
+	{
+		mDrawable->getNumFaces();
+		std::set<LLViewerFetchedTexture*> tex_list;
+		std::string output="";
+		for(S32 i = 0 ; i < num_faces; i++)
+		{
+			LLFace* facep = mDrawable->getFace(i) ;
+			if(facep)
+			{						
+				LLViewerFetchedTexture* tex = dynamic_cast<LLViewerFetchedTexture*>(facep->getTexture()) ;
+				if(tex)
+				{
+					if(tex_list.find(tex) != tex_list.end())
+					{
+						continue ; //already displayed.
+					}
+					tex_list.insert(tex);
+					S32 width= tex->getWidth();
+					S32 height= tex->getWidth();
+					output+=llformat("%dx%d\n",width,height);
+				}
+			}
+		}
+		setDebugText(output);
+	}
 
 	if (mPixelArea == 0)
 	{ //flexi phasing issues make this happen

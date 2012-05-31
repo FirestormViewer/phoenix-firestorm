@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="設定" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		網路：
 	</text>
@@ -9,6 +12,10 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="自訂埠" name="connection_port_enabled"/>
 	<spinner label="埠號：" name="connection_port"/>
 	<text name="cache_size_label_l">
@@ -46,4 +53,7 @@
 		<combo_box.item label="自動安裝" name="Install_automatically"/>
 		<combo_box.item label="手動下載及安裝" name="Install_manual"/>
 	</combo_box>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

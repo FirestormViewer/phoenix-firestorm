@@ -80,6 +80,8 @@ protected:
 
 	static void onCloseBtn(void* user_data);
 
+	bool onScriptModifyConfirmation(const LLSD& notification, const LLSD& response);
+
 	// returns true if this is done
 	BOOL isDone() const;
 

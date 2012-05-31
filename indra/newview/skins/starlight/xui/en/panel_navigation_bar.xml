@@ -29,6 +29,7 @@
 <layout_panel
  background_opaque="true"
  background_visible="true"
+ bg_opaque_color="MouseGray"
  height="24"
  layout="topleft"
  border_size="0"
@@ -207,6 +208,7 @@
 <layout_panel
  background_opaque="true"
  background_visible="true"
+ bg_opaque_color="MouseGray"
  height="15"
  layout="topleft"
  border_size="0"

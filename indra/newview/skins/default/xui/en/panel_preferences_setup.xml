@@ -9,6 +9,21 @@
  width="540"
  label="Setup"
  name="Input panel">
+    <!-- <FS:Zi> Do not change the name of this layout stack, it's referenced in LLPanelPreference -->
+    <layout_stack
+     name="max_bandwidth_layout"
+     left="0"
+     top="0"
+     width="539"
+     height="439"
+     border_size="0"
+     orientation="vertical"
+     layout="topleft">
+    <layout_panel
+     name="bandwidth_panel"
+     width="539"
+     height="24"
+     auto_resize="false">
     <text
      type="string"
      length="1"
@@ -32,7 +47,7 @@
      initial_value="500"
      layout="topleft"
      left_delta="150"
-     max_val="1500"
+     max_val="3000"
      min_val="100"
      name="max_bandwidth"
      top_delta="-2"
@@ -50,6 +65,42 @@
      width="100">
         kbps
     </text>
+    </layout_panel>
+    <layout_panel
+     width="539"
+     height="24"
+     name="bandwidth_warning_visibility_panel"
+     visibility_control="BandwidthSettingTooHigh"
+     auto_resize="false">
+    <icon
+     follows="left|top"
+     image_name="Popup_Caution"
+     name="bandwidth_warning_icon"
+     left="15"
+     top="2"
+     width="16"
+     height="16"/>
+    <text
+     text_color="EmphasisColor"
+     font="SansSerif"
+     font.style="BOLD"
+     type="string"
+     length="1"
+     follows="left|top"
+     height="10"
+     layout="topleft"
+     left_pad="10"
+     top_delta="1"
+     name="bandwidth_warning_message"
+     width="540">
+    We strongly advise not to set the Bandwidth over 1500 kbps.
+    </text>
+    </layout_panel>
+    <layout_panel
+     name="other_settings_panel"
+     width="539"
+     height="415"
+     auto_resize="true">
     <check_box
      control_name="ConnectionPortEnabled"
      height="16"
@@ -57,7 +108,7 @@
      layout="topleft"
      left="20"
      name="connection_port_enabled"
-     top_pad="10"
+     top="10"
      width="256">
         <!-- check_box.commit_callback
          function="Notification.Show"
@@ -332,7 +383,7 @@
          layout="topleft"
          left_pad="0"
          name="external"
-         value="1"
+         value="true"
          top_delta="0"
          tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
          width="200" />
@@ -465,5 +516,6 @@
         <button.commit_callback
           function="Pref.Proxy" />
     </button>
-
+    </layout_panel>
+    </layout_stack>
 </panel>

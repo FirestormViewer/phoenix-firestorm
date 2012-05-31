@@ -44,14 +44,18 @@
 	<text name="text_box9">
 		URL
 	</text>
+	<color_swatch top_pad="-20" name="direct" />
 	<text name="text_box10">
 		Diretto
 	</text>
-	<text name="ScriptDialogBgLabel">
-		Script Dialog Bg
+	<text name="ScriptDialogBgLabel" height="20" top_delta="0">
+		Sfondo Menu
+degli Oggetti
 	</text>
-	<text name="ScriptDialogFgLabel">
-		Script Dialog Fg 
+	<color_swatch top_pad="-20" name="ScriptDialogFb" />
+	<text name="ScriptDialogFgLabel" height="20" top_delta="0" width="110">
+		Colore Scritta
+Menu degli Oggetti		
 	</text>
 	<text name="bubble_chat">
 		Colore sfondo etichetta nome (influenza anche Chat a vignetta):

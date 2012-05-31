@@ -56,7 +56,12 @@ public:
 		PERMS = 16,
 		ALL = 0xffffffff
 	};
-	virtual ~LLFriendObserver() {}
+	// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
+
+	//	virtual ~LLFriendObserver() {}
+	virtual ~LLFriendObserver();
+	// </FS:ND>
+
 	virtual void changed(U32 mask) = 0;
 };
 
@@ -220,6 +225,8 @@ public:
 	// don't you dare create or delete this object
 	LLAvatarTracker();
 	~LLAvatarTracker();
+
+	void onObserverDied( LLFriendObserver const* ); // </FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
 };
 
 // collect set of LLUUIDs we're a proxy for

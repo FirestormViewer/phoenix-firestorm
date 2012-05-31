@@ -186,8 +186,8 @@
     </panel.string>
   <panel
     height="18"
-    left="-375"
-    width="95"
+    left="-385"
+    width="105"
     top="0"
     follows="right|top"
     name="balance_bg"
@@ -244,8 +244,8 @@
      image_name="Draw_Distance"
      name="dd_icon"
      tool_tip="Draw Distance"
-     top="1"
-     left="0"
+     top="0"
+     left="1"
      visible="true"
      width="16"
      scale_image="false"/>
@@ -259,7 +259,7 @@
      initial_value="64"
      layout="topleft"
      tool_tip="Maximum distance away from camera to be rezzed (meters)"
-     top="4"
+     top="1"
      left_pad="2"
      max_val="992"
      min_val="32"

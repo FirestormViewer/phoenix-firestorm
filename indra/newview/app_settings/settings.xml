@@ -963,10 +963,46 @@
     <integer>0</integer>
   </map>
 
-  <key>RadarReportChatRange</key>
+  <key>RadarReportChatRangeEnter</key>
     <map>
       <key>Comment</key>
-      <string>Display a chat message when avatar leaves/enters chat distance</string>
+      <string>Display a chat message when avatar enters chat distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+	
+	<key>RadarReportChatRangeLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>Display a chat message when avatar leaves chat distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+	
+  <key>RadarReportDrawRangeEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>Display a chat message when avatar enters draw distance</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+	
+  <key>RadarReportDrawRangeLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>Display a chat message when avatar leaves draw distance</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -975,10 +1011,10 @@
       <integer>0</integer>
     </map>
 
-  <key>RadarReportDrawRange</key>
+  <key>RadarReportSimRangeEnter</key>
     <map>
       <key>Comment</key>
-      <string>Display a chat message when avatar leaves/enters draw distance</string>
+      <string>Display a chat message when avatar enteres local region</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -986,12 +1022,11 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
-
-  <key>RadarReportSimRange</key>
+	
+	<key>RadarReportSimRangeLeave</key>	
     <map>
       <key>Comment</key>
-      <string>Display a chat message when avatar leaves/enteres local region</string>
+      <string>Display a chat message when avatar leaves local region</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -999,7 +1034,6 @@
       <key>Value</key>
       <integer>0</integer>
     </map>
-
 
   <key>PermAllowScriptedMedia</key>
     <map>
@@ -9478,7 +9512,7 @@ Change of this parameter will affect the layout of buttons in notification toast
                 performance testing
 </string>
       <key>Persist</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -17069,6 +17103,19 @@ Change of this parameter will affect the layout of buttons in notification toast
   <map>
     <key>Comment</key>
     <string>Internal, volatile control variable to show if we are currently in mouselook.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>BandwidthSettingTooHigh</key>
+  <map>
+    <key>Comment</key>
+    <string>Internal, volatile control variable that tells the preferences panel if the bandwidth value is within supported range.</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>HideFromEditor</key>

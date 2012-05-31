@@ -1239,6 +1239,14 @@
            name="Scripts"
            tear_off="true">
           <menu_item_call
+             label="Script Info (Counter)"
+             name="Script Info">
+            <menu_item_call.on_click
+               function="Tools.ScriptInfo" />
+            <menu_item_call.on_enable
+               function="EditableSelected" />
+          </menu_item_call>
+          <menu_item_call
              label="Recompile Scripts (Mono)"
              name="Mono">
             <menu_item_call.on_click
@@ -1291,15 +1299,7 @@
                parameter="delete" />
             <menu_item_call.on_enable
                function="EditableSelected" />
-          </menu_item_call>
-          <menu_item_call
-             label="Script Info (Counter)"
-             name="Script Info">
-            <menu_item_call.on_click
-               function="Tools.ScriptInfo" />
-            <menu_item_call.on_enable
-               function="EditableSelected" />
-          </menu_item_call>
+          </menu_item_call>          
         </menu>
 
         <menu_item_separator/>
@@ -3212,6 +3212,16 @@
            function="Advanced.ToggleInfoDisplay"
            parameter="sculpt" />
 		</menu_item_check>
+    <menu_item_check
+          label="Texture Size"
+          name="Texture Size">
+      <menu_item_check.on_check
+        function="Advanced.CheckInfoDisplay"
+        parameter="texture size" />
+      <menu_item_check.on_click
+        function="Advanced.ToggleInfoDisplay"
+        parameter="texture size" />
+    </menu_item_check>
       </menu>
         <menu
          create_jump_keys="true"

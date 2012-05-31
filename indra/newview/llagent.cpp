@@ -734,12 +734,19 @@ void LLAgent::toggleFlying()
 // static
 bool LLAgent::enableFlying()
 {
-	BOOL sitting = FALSE;
-	if (isAgentAvatarValid())
+	// <FS:Zi> Fix "Agent.enableFlying" function for menu entry and toolbar button
+	// BOOL sitting = FALSE;
+	// if (isAgentAvatarValid())
+	// {
+	// 	sitting = gAgentAvatarp->isSitting();
+	// }
+	// return !sitting;
+	if(isAgentAvatarValid())
 	{
-		sitting = gAgentAvatarp->isSitting();
+		return gAgent.canFly() && (!gAgentAvatarp->isSitting());
 	}
-	return !sitting;
+	return false;
+	// </FS:Zi>
 }
 
 void LLAgent::standUp()

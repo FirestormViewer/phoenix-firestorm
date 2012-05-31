@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Impostazione" name="Input panel">
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+
 	<text name="Network:">
 		Rete:
 	</text>
@@ -12,6 +15,10 @@
 	<text name="text_box2">
 		kbps
 	</text>
+
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+
 	<check_box label="Porta personalizzata" name="connection_port_enabled"/>
 	<spinner label="Numero porta:" name="connection_port"/>
 	<text name="Cache location">
@@ -53,4 +60,7 @@
 		Impostazioni proxy:
 	</text>
 	<button label="Regola impostazioni proxy" label_selected="Sfoglia" name="set_proxy" width="150"/>
+
+		</layout_panel>
+	</layout_stack>
 </panel>

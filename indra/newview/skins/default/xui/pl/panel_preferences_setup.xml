@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Sieć/cache" name="Input panel">
-	<text name="Maximum bandwidth">
-		Maks. przepustowość
-	</text>
-	<check_box label="Własny port" name="connection_port_enabled"/>
-	<spinner label="Numer portu:" name="connection_port"/>
-	<text name="cache_size_label_l">
-		Rozmiar cache
-	</text>
-	<text name="Cache location">
-		Położenie cache:
-	</text>
-	<button label="Pokaż" label_selected="Pokaż" name="open_cache"/>
-	<button label="Ustaw" label_selected="Ustaw" name="set_cache"/>
-	<button label="Resetuj" label_selected="Resetuj" name="reset_cache"/>
-	<button label="Wyczyść" label_selected="Wyczyść" name="clear_cache"/>
-	<text name="log_path_desc">
-		Położenie logów czatów:
-	</text>
-	<button label="Pokaż" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
-	<button label="Ustaw" label_selected="Ustaw" name="log_path_button-panelsetup"/>
-	<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
-	<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
-	<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
-	<text name="Web:">
-		Przeglądarka internetowa:
-	</text>
-	<radio_group name="use_external_browser">
-		<radio_item label="Wbudowana" name="internal" tool_tip="Używa wbudowanej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Ta przeglądarka otwiera się jako nowe okno wewnątrz [APP_NAME]."/>
-		<radio_item label="Własna (np. Firefox, Safari)" name="external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie."/>
-	</radio_group>
-	<text name="numberwebfloaters_label">
-		Maksymalna liczba okien przeglądarki internetowej:
-	</text>
-	<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
-		<combo_box.item label="Bez limitu" name="web_unlimited"/>
-		<combo_box.item label="Jedno okno" name="web_1"/>
-		<combo_box.item label="Pięć okien" name="web_5"/>
-		<combo_box.item label="Dziesięć okien" name="web_10"/>
-	</combo_box>
-	<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
-	<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
-	<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
-	<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
-	<text name="Proxy Settings:">
-		Ustawienia proxy:
-	</text>
-	<button label="Dostosuj ustawienia" label_selected="Przeglądaj" name="set_proxy"/>
+	<layout_stack name="max_bandwidth_layout">
+		<layout_panel name="bandwidth_panel">
+			<text name="Maximum bandwidth">
+				Maks. przepustowość
+			</text>
+		</layout_panel>
+		<layout_panel name="bandwidth_warning_visibility_panel">
+			<text name="bandwidth_warning_message">
+				Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps.
+			</text>
+		</layout_panel>
+		<layout_panel name="other_settings_panel">
+			<check_box label="Własny port" name="connection_port_enabled"/>
+			<spinner label="Numer portu:" name="connection_port"/>
+			<text name="cache_size_label_l">
+				Rozmiar cache
+			</text>
+			<text name="Cache location">
+				Położenie cache:
+			</text>
+			<button label="Pokaż" label_selected="Pokaż" name="open_cache"/>
+			<button label="Ustaw" label_selected="Ustaw" name="set_cache"/>
+			<button label="Resetuj" label_selected="Resetuj" name="reset_cache"/>
+			<button label="Wyczyść" label_selected="Wyczyść" name="clear_cache"/>
+			<text name="log_path_desc">
+				Położenie logów czatów:
+			</text>
+			<button label="Pokaż" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
+			<button label="Ustaw" label_selected="Ustaw" name="log_path_button-panelsetup"/>
+			<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
+			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
+			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
+			<text name="Web:">
+				Przeglądarka internetowa:
+			</text>
+			<radio_group name="use_external_browser">
+				<radio_item label="Wbudowana" name="internal" tool_tip="Używa wbudowanej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Ta przeglądarka otwiera się jako nowe okno wewnątrz [APP_NAME]."/>
+				<radio_item label="Własna (np. Firefox, Safari)" name="external" tool_tip="Używa domyślnej systemowej przeglądarki internetowej do przeglądania plików pomocy, otwierania linków itp. Nie jest zalecane zaznaczanie tej opcji, jeśli uruchamiasz Second Life na pełnym ekranie."/>
+			</radio_group>
+			<text name="numberwebfloaters_label">
+				Maksymalna liczba okien przeglądarki internetowej:
+			</text>
+			<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
+				<combo_box.item label="Bez limitu" name="web_unlimited"/>
+				<combo_box.item label="Jedno okno" name="web_1"/>
+				<combo_box.item label="Pięć okien" name="web_5"/>
+				<combo_box.item label="Dziesięć okien" name="web_10"/>
+			</combo_box>
+			<check_box label="Włącz wtyczki" name="browser_plugins_enabled"/>
+			<check_box label="Akceptuj ciasteczka" name="cookies_enabled"/>
+			<check_box label="Włącz Javascript" name="browser_javascript_enabled"/>
+			<check_box label="Włącz wyskakujące okienka przeglądarki mediów" name="media_popup_enabled"/>
+			<text name="Proxy Settings:">
+				Ustawienia proxy:
+			</text>
+			<button label="Dostosuj ustawienia" label_selected="Przeglądaj" name="set_proxy"/>
+		</layout_panel>
+	</layout_stack>
 </panel>
