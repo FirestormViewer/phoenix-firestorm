@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="Outfits">
+	<accordion name="outfits_accordion" no_matched_tabs_text.value="Nie potrafisz znaleźć tego, czego potrzebujesz? Spróbuj [secondlife:///app/search/all/[SEARCH_TERM] wyszukać]." no_visible_tabs_text.value="Nie masz jeszcze żadnych strojów. Spróbuj [secondlife:///app/search/all/ wyszukać]" />
+	<panel name="bottom_panel">
+		<menu_button name="options_gear_btn" tool_tip="Pokaż dodatkowe opcje"/>
+		<button name="trash_btn" tool_tip="Usuń wybrany strój"/>
+	</panel>
+</panel>

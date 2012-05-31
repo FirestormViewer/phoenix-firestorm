@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="panel_group_notify">
+	<text name="group_notice" value="Ogł. grupowe" />
+	<text name="title" value="Imię nadawcy / Nazwa grupy" />
+	<text name="attachment_label" value="Załączono:" />
+	<panel name="attachment_container">
+		<text name="attachment" value="Załącznik" />
+	</panel>
+	<button label="Ogłoszenia" name="btn_notices" />
+</panel>

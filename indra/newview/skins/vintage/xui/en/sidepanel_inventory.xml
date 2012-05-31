@@ -100,6 +100,7 @@
 								right="-3"
 								top_pad="2" />
 							<panel
+								name="inbox_inventory_placeholder_upper"
 								follows="all"
 								left_delta="0"
 								height="50"
@@ -198,6 +199,7 @@
 								right="-3"
 								top_pad="2" />
 							<panel
+								name="outbox_inventory_placeholder_upperpanel"
 								follows="all"
 								left_delta="0"
 								height="50"
