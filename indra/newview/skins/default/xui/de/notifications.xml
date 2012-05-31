@@ -3452,4 +3452,12 @@ Soll die automatische Anzeige der Viewer-Version aktiviert werden?
 			<ignore name="ignore" text="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird."/>
 		</form>
 	</notification>
+	<notification name="ConfirmScriptModify">
+Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
+		<usetemplate
+			name="okcancelignore"
+			ignoretext="Bestätigen, bevor ich Skripte in einer Auswahl modifiziere."
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
 </notifications>

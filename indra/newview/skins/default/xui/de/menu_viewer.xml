@@ -388,6 +388,7 @@
 			<menu_item_check label="Wind-Vektoren" name="Wind Vectors"/>
 			<menu_item_check label="Render-Komplexität" name="rendercomplexity"/>
 			<menu_item_check label="Formen" name="Sculpt"/>
+			<menu_item_check label="Texturgröße" name="Texture Size"/>
 		</menu>
 		<menu label="Rendering" name="Rendering">
 			<menu_item_check label="Achsen" name="Axes"/>
