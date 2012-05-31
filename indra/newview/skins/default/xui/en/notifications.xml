@@ -8687,5 +8687,17 @@ Do you want to enable the automatic viewer version display?
 
   </notification>
   <!-- <FS:Zi> Viewer version popup -->
+  <notification
+     icon="alertmodal.tga"
+     name="ConfirmScriptModify"
+    type="alertmodal">
+    Are you sure you want to modify scripts in selected objects?
+    <tag>confirm</tag>
+    <usetemplate
+    ignoretext="Confirm before I modify scripts in selection"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
 
 </notifications>
