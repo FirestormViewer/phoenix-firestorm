@@ -418,6 +418,23 @@ void LLSpinCtrl::setLabel(const LLStringExplicit& label)
 	updateLabelColor();
 }
 
+// <FS:Ansariel> Allow setting an argument on the label
+BOOL LLSpinCtrl::setLabelArg(const std::string& key, const LLStringExplicit& text)
+{
+	if (mLabelBox)
+	{
+		mLabelBox->setTextArg(key, text);
+	}
+	else
+	{
+		llwarns << "Attempting to set label argument on LLSpinCtrl constructed without one " << getName() << llendl;
+	}
+	updateLabelColor();
+
+	return TRUE;
+}
+// </FS:Ansariel> Allow setting an argument on the label
+
 void LLSpinCtrl::setAllowEdit(BOOL allow_edit)
 {
 	mEditor->setEnabled(allow_edit);
