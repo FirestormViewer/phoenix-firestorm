@@ -3452,6 +3452,7 @@ Soll die automatische Anzeige der Viewer-Version aktiviert werden?
 			<ignore name="ignore" text="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird."/>
 		</form>
 	</notification>
+
 	<notification name="ConfirmScriptModify">
 Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 		<usetemplate
@@ -3460,4 +3461,13 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			notext="Abbrechen"
 			yestext="OK"/>
 	</notification>
+	
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+  <notification name="LSLColorCopiedToClipboard">
+Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
+   <form name="form">
+      <ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
+    </form>
+  </notification>
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
 </notifications>
