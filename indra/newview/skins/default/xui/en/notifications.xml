@@ -8700,4 +8700,17 @@ Do you want to enable the automatic viewer version display?
      yestext="OK"/>
   </notification>
 
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+  <notification
+   icon="notify.tga"
+   name="LSLColorCopiedToClipboard"
+   type="alertmodal">
+The LSL color string has been copied to your clipboard. You can now paste it into your script to use it.
+   <form name="form">
+      <ignore name="ignore"
+       text="An LSL color string was copied to my clipboard"/>
+    </form>
+  </notification>
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+
 </notifications>
