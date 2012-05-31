@@ -238,6 +238,7 @@ BOOL LLFloaterColorPicker::postBuild()
 	childSetCommitCallback("rspin_lsl", onTextCommit, (void*)this );
 	childSetCommitCallback("gspin_lsl", onTextCommit, (void*)this );
 	childSetCommitCallback("bspin_lsl", onTextCommit, (void*)this );
+	childSetCommitCallback("hex_value", onTextCommit, (void*)this );
 	// </FS:Zi>
 
 	LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterColorPicker::onColorSelect, this, _1));
@@ -716,6 +717,8 @@ void LLFloaterColorPicker::updateTextEntry ()
 	getChild<LLUICtrl>("rspin_lsl")->setValue(( getCurR () ) );
 	getChild<LLUICtrl>("gspin_lsl")->setValue(( getCurG () ) );
 	getChild<LLUICtrl>("bspin_lsl")->setValue(( getCurB () ) );
+
+	getChild<LLUICtrl>("hex_value")->setValue(llformat("%02x%02x%02x",(S32) (getCurR()*255.0),(S32) (getCurG()*255.0),(S32) (getCurB()*255.0)));
 	// </FS:Zi>
 }
 
@@ -774,6 +777,34 @@ void LLFloaterColorPicker::onTextEntryChanged ( LLUICtrl* ctrl )
 		{
 			bVal = (F32)ctrl->getValue().asReal();
 		}
+
+		// update current RGB (and implicitly HSL)
+		setCurRgb ( rVal, gVal, bVal );
+
+		updateTextEntry ();
+	}
+	else if ( name == "hex_value" )
+	{
+		// get current RGB
+		S32 r, g, b;
+		F32 rVal, gVal, bVal;
+		getCurRgb ( rVal, gVal, bVal );
+
+		std::string hex_string=ctrl->getValue().asString();
+
+		if(hex_string.length()!=6)
+			return;
+
+		LLStringUtil::toLower(hex_string);
+
+		if(hex_string.find_first_not_of("0123456789abcdef")!=std::string::npos)
+			return;
+
+		sscanf(hex_string.c_str(),"%02x%02x%02x", &r,&g,&b);
+
+		rVal=(F32) r/255.0;
+		gVal=(F32) g/255.0;
+		bVal=(F32) b/255.0;
 
 		// update current RGB (and implicitly HSL)
 		setCurRgb ( rVal, gVal, bVal );

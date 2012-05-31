@@ -196,6 +196,7 @@ class LLFloaterColorPicker
 
 	private:
 		LLButton* mCopyLSLBtn;
+		LLLineEditor* mHexValue;
 	// </FS:Zi>
 };
 

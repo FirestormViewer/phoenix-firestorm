@@ -14,6 +14,8 @@
  layout="topleft"
  left="4"
  top="24"
+ label_pad_left="6"
+ tab_width="35"
  width="130"
  height="93">
 <panel
@@ -173,6 +175,46 @@
      name="bspin_lsl"
      top_delta="0"
      width="50" />
+</panel>
+<panel
+ label="Hex"
+ follows="left|top"
+ layout="topleft">
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="20"
+     layout="topleft"
+     left="5"
+     top="16"
+     name="hex_text"
+     width="120">
+    Hex Code (#rrggbb):
+    </text>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="Monospace"
+     font.size="Large"
+     height="20"
+     layout="topleft"
+     top_pad="0"
+     left="12"
+     name="hex_hash_prefix"
+     width="10">
+    #
+    </text>
+    <line_editor
+     layout="topleft"
+     follows="left|top"
+     font="Monospace"
+     name="hex_value"
+     max_length_bytes="6"
+     left_pad="0"
+     height="20"
+     width="80" />
 </panel>
 </tab_container>
 
