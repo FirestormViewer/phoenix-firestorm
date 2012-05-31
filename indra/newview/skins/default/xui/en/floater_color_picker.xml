@@ -177,6 +177,7 @@
      width="50" />
 </panel>
 <panel
+ name="Hex"
  label="Hex"
  follows="left|top"
  layout="topleft">

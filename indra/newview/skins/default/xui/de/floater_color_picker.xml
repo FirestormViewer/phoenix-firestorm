@@ -23,6 +23,11 @@
 		Blau:
 	</text>
 		</panel>
+		<panel name="LSL">
+			<text name="hex_text">
+				Hex-Code (#rrggbb):
+			</text>
+		</panel>
 	</tab_container>
 	<text name="h_val_text">
 		Farbton:
