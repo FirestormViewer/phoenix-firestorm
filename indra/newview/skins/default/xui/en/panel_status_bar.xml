@@ -142,7 +142,7 @@
     height="18"
     name="damage_text"
     value="100%"
-    top="5"
+    top="3"
     left="194"
     visible="true"
     width="35"
@@ -158,7 +158,7 @@
        left="233"
        length="1"
        name="parcel_info_text"
-       top="5"
+       top="3"
        value="(loading...)"
        type="string"
        width="100"/>
