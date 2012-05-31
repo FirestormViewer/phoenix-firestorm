@@ -162,10 +162,6 @@ BOOL LLFloaterScriptQueue::start()
 	LLNotificationsUtil::add("ConfirmScriptModify", LLSD(), LLSD(), boost::bind(&LLFloaterScriptQueue::onScriptModifyConfirmation, this, _1, _2));
 	return true;
 	/*
-	// <FS:Ansariel> Show script compile floater
-	setTitle(mFloaterTitle);
-	setVisible(TRUE);
-
 	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
 	std::string buffer;
 
@@ -186,10 +182,7 @@ BOOL LLFloaterScriptQueue::start()
 	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
 	buffer = getString ("Starting", args);
 	
-	// <FS:Ansariel> Add text to scroll list
-	//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
 	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
-	// </FS:Ansariel> Add text to scroll list
 
 	return nextObject();*/
 }
