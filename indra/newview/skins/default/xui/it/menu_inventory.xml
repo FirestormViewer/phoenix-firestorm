@@ -50,6 +50,7 @@
 	<menu_item_call label="Apri" name="Sound Open"/>
 	<menu_item_call label="Sostituisci vestiti" name="Replace Outfit"/>
 	<menu_item_call label="Aggiungi al vestiario" name="Add To Outfit"/>
+	<menu_item_call label="Indossa Oggetto" name="Wear Items"/>
 	<menu_item_call label="Rimuovi dal vestiario attuale" name="Remove From Outfit"/>
 	<menu_item_call label="Trova originale" name="Find Original"/>
 	<menu_item_call label="Elimina oggetto" name="Purge Item"/>
@@ -59,11 +60,14 @@
 	<menu_item_call label="Proprietà" name="Properties"/>
 	<menu_item_call label="Rinomina" name="Rename"/>
 	<menu_item_call label="Copia UUID dell&apos;oggetto" name="Copy Asset UUID"/>
+	<menu_item_call label="Ripristina a ultima posizione" name="Restore to Last Position"/>
 	<menu_item_call label="Copia" name="Copy"/>
+	<menu_item_call label="Taglia" name="Cut"/>
 	<menu_item_call label="Incolla" name="Paste"/>
 	<menu_item_call label="Incolla come link" name="Paste As Link"/>
 	<menu_item_call label="Elimina" name="Remove Link"/>
 	<menu_item_call label="Cancella" name="Delete"/>
+	<menu_item_call label="Sposta negli Oggetti smarriti" name="Move to Lost And Found"/>
 	<menu_item_call label="Elimina la cartella di sistema" name="Delete System Folder"/>
 	<menu_item_call label="Inizia la conferenza chat" name="Conference Chat Folder"/>
 	<menu_item_call label="Esegui" name="Sound Play"/>

@@ -79,6 +79,7 @@
             </text>
 			<spinner tool_tip="Va da 0.25 a 1.0, 0.25 opacità minima, 1 per opacità massima" name="FSIMChatHistoryFade"/>
 			<check_box label="Annuncia chi sta iniziando a scriverti un IMs" name="FSAnnounceIncomingIM"/>
+			<check_box name="FSIMChatFlashOnFriendStatusChange" label="L'IM lampeggia quando Il tuo amico Entra/Esce"/>
 		</panel>
 		<!-- FIRESTORM -->
 		<panel name="ChatFirestorm">
