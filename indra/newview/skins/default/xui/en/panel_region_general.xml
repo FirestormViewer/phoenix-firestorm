@@ -38,7 +38,7 @@
      height="20"
      layout="topleft"
      top_delta="0"
-     right="-98"
+     right="-100"
      name="estate_id_lbl"
      width="80">
         Estate ID:
