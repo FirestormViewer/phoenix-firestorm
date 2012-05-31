@@ -23,7 +23,7 @@
 		Blau:
 	</text>
 		</panel>
-		<panel name="LSL">
+		<panel name="Hex">
 			<text name="hex_text">
 				Hex-Code (#rrggbb):
 			</text>

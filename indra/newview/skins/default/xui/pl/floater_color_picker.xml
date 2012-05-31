@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="WYBIERZ KOLOR">
-	<text name="r_val_text">
-		Czerwony:
-	</text>
-	<text name="g_val_text">
-		Zielony:
-	</text>
-	<text name="b_val_text">
-		Niebieski:
-	</text>
+	<tab_container name="scale_type_container">
+		<panel name="RGB">
+			<text name="r_val_text">
+				Czerwony:
+			</text>
+			<text name="g_val_text">
+				Zielony:
+			</text>
+			<text name="b_val_text">
+				Niebieski:
+			</text>
+		</panel>
+		<panel name="LSL">
+			<text name="r_val_text_lsl">
+				Czerwony:
+			</text>
+			<text name="g_val_text_lsl">
+				Zielony:
+			</text>
+			<text name="b_val_text_lsl">
+				Niebieski:
+			</text>
+		</panel>
+		<panel name="Hex">
+			<text name="hex_text">
+				Szesnastkowo (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
 		Odcień:
 	</text>
@@ -19,10 +39,11 @@
 		Luminacja:
 	</text>
 	<check_box label="Zastosuj teraz" name="apply_immediate"/>
-	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
+	<button label="Kopia LSL" tool_tip="Kopiuje wartości koloru do formatu wektora kolorów LSL w postaci &lt;r, g, b&gt;." name="copy_lsl_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
+	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
 	<text name="Current color:">
-		Obecny kolor:
+		^ Obecny kolor ^
 	</text>
 	<text name="(Drag below to save.)">
 		(Przeciągnij tutaj aby zapisać)

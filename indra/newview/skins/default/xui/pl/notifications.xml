@@ -3464,4 +3464,10 @@ Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
 		Na pewno chcesz zmodyfikować skrypty w zaznaczonych obiektach?
 		<usetemplate ignoretext="Potwierdzenie modyfikacji skryptów w zaznaczeniu" name="okcancelignore" notext="Anuluj" yestext="OK" />
 	</notification>
+	<notification name="LSLColorCopiedToClipboard">
+		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
+		<form name="form">
+			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
+		</form>
+	</notification>
 </notifications>
