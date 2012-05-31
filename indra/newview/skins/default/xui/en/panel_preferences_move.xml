@@ -466,6 +466,19 @@
          follows="left|top"
          height="16"
          initial_value="false"
+         label="Turn avatar towards camera direction on reset view"
+         layout="topleft"
+         left="30"
+         name="resetviewturnsavatar"
+         width="350"
+         control_name="ResetViewTurnsAvatar"
+         tool_tip="This option keeps the camera direction and turns the avatar when Reset View is selected (hit ESC key)."/>
+
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         initial_value="false"
          label="Allow the camera to move without constraints through prims"
          layout="topleft"
          left="30"
