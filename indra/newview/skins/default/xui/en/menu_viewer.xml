@@ -1587,7 +1587,7 @@
              <menu_item_call.on_click
              function="PromptShowURL"
              name="lindenxchange_url"
-             parameter="WebLaunchExternalTarget,https://secure-web30.secondlife.com/my/lindex/market.php" />
+             parameter="WebLaunchExternalTarget,https://secondlife.com/my/lindex/market.php" />
          <menu_item_call.on_visible
                  function="Currency.TypeCheck"
                  parameter="LindenXchange" />
