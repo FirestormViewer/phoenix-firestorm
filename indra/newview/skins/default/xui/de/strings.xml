@@ -938,10 +938,13 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Berechtigungen ändern
 	</string>
 	<string name="TrackYourCamera">
-		Kameraverfolgung
+		Kameraverfolgung aktivieren
 	</string>
 	<string name="ControlYourCamera">
-		Kamerasteuerung
+		Kamerasteuerung übernehmen
+	</string>
+	<string name="TeleportYourAgent">
+		Avatar teleportieren
 	</string>
 	<string name="NotConnected">
 		Nicht verbunden
