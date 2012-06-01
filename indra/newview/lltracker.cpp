@@ -273,7 +273,9 @@ void LLTracker::render3D()
 				instance()->mBeaconText->setDoFade(FALSE);
 			}
 			
-			F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->mTrackedPositionGlobal, 0.0f);
+			// <FS:Ansariel> Fix for VWR-29048 from Jonathan Yap
+			//F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->mTrackedPositionGlobal, 0.0f);
+			F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->getTrackedPositionGlobal(), 0.0f);
 			if (dist < DESTINATION_REACHED_RADIUS)
 			{
 				// <FS:Ansariel> Disable stop tracking when closing in
