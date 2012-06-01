@@ -466,7 +466,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</panel.string>
 			<check_box label="Öffentlichen Zugang erlauben (Hinweis: Deakt. erzeugt Bannlinien)" name="public_access"/>
 			<text name="Only Allow" width="400">
-				Zugang auf Einwohner beschränken, die überprüft wurden von:
+				Zugang auf Einwohner beschränken, die überprüft wurden anhand von:
 			</text>
 			<check_box label="Zahlungsinformation gespeichert [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Einwohner ohne Zahlungsinformation nicht zulassen."/>
 			<check_box label="Altersüberprüfung [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Einwohner ohne Altersüberprüfung nicht zulassen. Weitere Informationen finden Sie im [SUPPORT_SITE]."/>
