@@ -1310,7 +1310,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		
 	</string>
 	<string name="InventoryOutboxNotMerchant">
-		Falls Sie ein Händler werden möchten, müssen sie einen [[MARKETPLACE_CREATE_STORE_URL] Shop im Marktplatz erstellen].
+		Falls Sie ein Händler werden möchten, müssen Sie einen [[MARKETPLACE_CREATE_STORE_URL] Shop im Marktplatz erstellen].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
 		Die Outbox ist leer.
@@ -1392,7 +1392,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="No Filters" value="Keine"/>
 	<string name="Since Logoff" value=" - Seit Abmeldung"/>
 	<string name="InvFolder My Inventory">
-		Mein Inventar
+		Inventar
 	</string>
 	<string name="InvFolder Library">
 		Bibliothek
@@ -5036,7 +5036,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Wie führe ich gängige Aufgaben aus?
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		Ihr Eigentum anzeigen und benutzen
+		Eigentum anzeigen und benutzen
 	</string>
 	<string name="Command_Map_Tooltip">
 		Weltkarte
