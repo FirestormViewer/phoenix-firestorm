@@ -512,6 +512,11 @@ void LLScriptLibrary::init()
 
 	// Server 12.04.13.253827 new function
 	addFunction(0.f, 0.f, dummy_func, "llGetAgentList", "l", "il");
+	
+	// Server RC Magnum 12.05.25.258071 new functions:
+	addFunction(0.f, 0.f, dummy_func, "llAttachToAvatarTemp", NULL, "i");
+	addFunction(0.f, 0.f, dummy_func, "llTeleportAgent", NULL, "ksvv");
+	addFunction(0.f, 0.f, dummy_func, "llTeleportAgentGlobalCoords", NULL, "kvvv");
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 }
 

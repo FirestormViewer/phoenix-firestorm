@@ -2091,6 +2091,19 @@ Tries to moves the entire object so that the root prim is within 0.1m of positio
 list llGetAgentList(integer scope, list options)
 Requests a list of agents currently in the region, limited by the scope parameter.
 </string>
+<string name="LSLTipText_llAttachToAvatarTemp" translate="false">
+llAttachToAvatarTemp(integer attach_point)
+Attaches the object to the avatar who has granted permission to the script, with the exception that the object will not create new inventory for the user, and will disappear on detach or disconnect.
+</string>
+<string name="LSLTipText_llTeleportAgent" translate="false">
+llTeleportAgent(key avatar, string landmark, vector position, vector look_at)
+Requests a teleport of avatar to a landmark stored in the object's inventory. If no landmark is provided (an empty string), the avatar is teleported to the location position in the current region. In either case, the avatar is turned to face the position given by look_at in local coordinates.
+</string>
+<string name="LSLTipText_llTeleportAgentGlobalCoords" translate="false">
+llTeleportAgentGlobalCoords(key agent, vector global_coordinates, vector region_coordinates, vector look_at)
+Teleports an agent to set of a region_coordinates within a region at the specified global_coordinates. The agent lands facing the position defined by look_at local coordinates.
+A region's global coordinates can be retrieved using llRequestSimulatorData(region_name, DATA_SIM_POS)
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 
   <!-- Avatar busy/away mode -->
