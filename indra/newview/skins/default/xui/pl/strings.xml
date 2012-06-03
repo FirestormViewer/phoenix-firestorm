@@ -908,43 +908,46 @@ Spróbuj zalogować się ponownie za minutę.
 		Przełączanie do pobliskich rozmów głosowych
 	</string>
 	<string name="ScriptQuestionCautionChatGranted">
-		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], pozwala Ci na: [PERMISSIONS].
+		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], dostał zezwolenie na: [PERMISSIONS].
 	</string>
 	<string name="ScriptQuestionCautionChatDenied">
-		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], nie pozwala Ci na: [PERMISSIONS].
+		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], nie dostał zezwolenia na: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Zabiera Lindeny ([CUR]) od Ciebie
+		Zabierać Lindeny ([CUR]) od Ciebie
 	</string>
 	<string name="ActOnControlInputs">
-		Użyj klawiszy sterowania
+		Używać klawiszy sterowania
 	</string>
 	<string name="RemapControlInputs">
-		Zmień klawisze sterowania
+		Zmienić klawisze sterowania
 	</string>
 	<string name="AnimateYourAvatar">
-		Animuj Awatara
+		Animować Awatara
 	</string>
 	<string name="AttachToYourAvatar">
-		Dołącz do Awatara
+		Dołączać do Awatara
 	</string>
 	<string name="ReleaseOwnership">
-		Usuń prawo własności (zmień na publiczne)
+		Usunąć prawo własności (zmienić na publiczne)
 	</string>
 	<string name="LinkAndDelink">
-		Łącz / rozłącz z innymi obiektami
+		Łączyć/rozłączać z innymi obiektami
 	</string>
 	<string name="AddAndRemoveJoints">
-		Dodaj / usuń połączenia z innymi obiektami
+		Dodawać/usuwać połączenia z innymi obiektami
 	</string>
 	<string name="ChangePermissions">
-		Ustaw zezwolenia
+		Zmieniać zezwolenia
 	</string>
 	<string name="TrackYourCamera">
-		Śledź kamerę
+		Śledzić kamerę
 	</string>
 	<string name="ControlYourCamera">
-		Kontroluj kamerę
+		Kontrolować kamerę
+	</string>
+	<string name="TeleportYourAgent">
+		Teleportować Cię
 	</string>
 	<string name="NotConnected">
 		Brak połączenia
