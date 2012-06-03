@@ -1409,25 +1409,17 @@ void LLScrollListCtrl::drawItems()
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
 		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout, 0.4f, 0.f);
 
-		// <FS:Ansariel> Fix for FS-specific people list (radar)
-		std::string preparedFilterString(mFilterString);
-		if (mFilterColumn > -1)
-		{
-			std::transform(preparedFilterString.begin(), preparedFilterString.end(), preparedFilterString.begin(), ::tolower);
-		}
-		// </FS:Ansariel> Fix for FS-specific people list (radar)
-
 		item_list::iterator iter;
 		for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 		{
 			LLScrollListItem* item = *iter;
 			
 			// <FS:Ansariel> Fix for FS-specific people list (radar)
-			if (mFilterColumn > -1)
+			if (mFilterColumn > -1 && !mFilterString.empty())
 			{
 				std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
 				std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-				if (mFilterString.length() > 0 && filterColumnValue.find(preparedFilterString) == std::string::npos)
+				if (filterColumnValue.find(mFilterString) == std::string::npos)
 				{
 					continue;
 				}
@@ -3035,3 +3027,10 @@ void LLScrollListCtrl::onFocusLost()
 	LLUICtrl::onFocusLost();
 }
 
+// <FS:Ansariel> Fix for FS-specific people list (radar)
+void LLScrollListCtrl::setFilterString(const std::string& str)
+{
+	mFilterString = str;
+	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+}
+// </FS:Ansariel> Fix for FS-specific people list (radar)
