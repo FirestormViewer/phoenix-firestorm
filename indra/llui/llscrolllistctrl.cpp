@@ -199,7 +199,10 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mHoveredColor(p.hovered_color()),
 	mSearchColumn(p.search_column),
 	mColumnPadding(p.column_padding),
-	mContextMenuType(MENU_NONE)
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	//mContextMenuType(MENU_NONE)
+	mContextMenuType(MENU_NONE),
+	mFilterColumn(-1)
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -1406,11 +1409,31 @@ void LLScrollListCtrl::drawItems()
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
 		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout, 0.4f, 0.f);
 
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		std::string preparedFilterString(mFilterString);
+		if (mFilterColumn > -1)
+		{
+			std::transform(preparedFilterString.begin(), preparedFilterString.end(), preparedFilterString.begin(), ::tolower);
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 		item_list::iterator iter;
 		for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 		{
 			LLScrollListItem* item = *iter;
 			
+			// <FS:Ansariel> Fix for FS-specific people list (radar)
+			if (mFilterColumn > -1)
+			{
+				std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+				std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+				if (mFilterString.length() > 0 && filterColumnValue.find(preparedFilterString) == std::string::npos)
+				{
+					continue;
+				}
+			}
+			// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 			item_rect.setOriginAndSize( 
 				x, 
 				cur_y, 

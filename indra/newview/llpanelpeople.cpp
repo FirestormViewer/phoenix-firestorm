@@ -607,6 +607,7 @@ BOOL LLPanelPeople::postBuild()
 	// AO: radarlist takes over for nearbylist for presentation.
 	mRadarList = nearby_tab->getChild<LLRadarListCtrl>("radar_list");
 	mRadarList->sortByColumn("range",TRUE); // sort by range
+	mRadarList->setFilterColumn(0);
 	mRadarFrameCount = 0;
 	mRadarAlertRequest = false;
 	mRadarLastBulkOffsetRequestTime = 0;
@@ -1749,8 +1750,10 @@ void LLPanelPeople::onFilterEdit(const std::string& search_string)
 
 
 	// Apply new filter.
-	// AO: currently broken
+	// <FS:Ansariel> Changed for FS specific radar
 	// mNearbyList->setNameFilter(mFilterSubStringOrig);
+	mRadarList->setFilterString(mFilterSubStringOrig);
+	// </FS:Ansariel> Changed for FS specific radar
 	mOnlineFriendList->setNameFilter(mFilterSubStringOrig);
 	mAllFriendList->setNameFilter(mFilterSubStringOrig);
 	mRecentList->setNameFilter(mFilterSubStringOrig);
