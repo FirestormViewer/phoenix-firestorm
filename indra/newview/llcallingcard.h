@@ -226,7 +226,7 @@ public:
 	LLAvatarTracker();
 	~LLAvatarTracker();
 
-	static void onObserverDied( LLFriendObserver const* ); // </FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
+	void onObserverDied( LLFriendObserver const* ); // </FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
 };
 
 // collect set of LLUUIDs we're a proxy for
