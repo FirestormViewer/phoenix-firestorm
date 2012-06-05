@@ -2,7 +2,7 @@
 <floater
  open_positioning="cascading"
  can_tear_off="false"
- height="420"
+ height="425"
  layout="topleft"
  name="floaterland"
  help_topic="floaterland"
@@ -400,7 +400,7 @@ Loading...
              layout="topleft"
              left_delta="-199"
              name="For sale to"
-             top_delta="20"
+             top_delta="22"
              use_ellipses="true" 
              width="340">
                 For sale to: [BUYER]
@@ -413,7 +413,7 @@ Loading...
              layout="topleft"
              left_delta="0"
              name="Sell with landowners objects in parcel."
-             top_pad="-2"
+             top_pad="0"
              width="250">
                 Objects included in sale
             </text>
@@ -425,7 +425,7 @@ Loading...
              layout="topleft"
              left_delta="0"
              name="Selling with no objects in parcel."
-             top_delta="0"
+             top_delta="5"
              width="250">
                 Objects not included in sale
             </text>
@@ -448,7 +448,7 @@ Loading...
              layout="topleft"
              left="10"
              name="Claimed:"
-             top="268"
+             top="283"
              width="100">
                 Claimed:
             </text>
@@ -472,7 +472,7 @@ Loading...
              layout="topleft"
              left="10"
              name="PriceLabel"
-             top_pad="5"
+             top_pad="2"
              width="100">
                 Area:
             </text>
@@ -496,7 +496,7 @@ Loading...
              layout="topleft"
              left="10"
              name="Traffic:"
-             top="308"
+             top="315"
              width="100">
                 Traffic:
             </text>
