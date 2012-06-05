@@ -4341,6 +4341,11 @@ void handle_reset_view()
 		gAgentCamera.resetView();
 	// </FS:Zi>
 
+	// <FS:Zi> Camera focus and offset with CTRL/SHIFT + Scroll wheel
+	gSavedSettings.getControl("FocusOffsetRearView")->resetToDefault();
+	gSavedSettings.getControl("CameraOffsetRearView")->resetToDefault();
+	// </FS:Zi>
+
 	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();
