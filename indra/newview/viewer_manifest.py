@@ -694,6 +694,12 @@ class WindowsManifest(ViewerManifest):
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
 
         #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+        
+        # OLD METHOD, Still used for windows-based debugging
         symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
         symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
         symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
