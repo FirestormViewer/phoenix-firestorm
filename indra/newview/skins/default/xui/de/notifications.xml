@@ -687,25 +687,30 @@ Wählen Sie Objekte mit Skripts, die Sie bearbeiten dürfen.
 	<notification name="CannotResetSelectObjectsNoScripts">
 		„Zurücksetzen“ nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
+	</notification>
+	<notification name="CannotdeleteSelectObjectsNoScripts">
+		„Löschen“ nicht möglich.
+
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="CannotResetSelectObjectsNoPermission">
 		„Zurücksetzen“ nicht möglich.
 
-Wählen Sie Objekte mit Skripts, die Sie bearbeiten dürfen.
+Wählen Sie Objekte mit Skripten, die Sie bearbeiten dürfen.
 	</notification>
 	<notification name="CannotOpenScriptObjectNoMod">
 		Das Skript im Objekt kann nicht geöffnet werden, da keine Änderungs-Berechtigungen vorliegen.
 	</notification>
 	<notification name="CannotSetRunningSelectObjectsNoScripts">
-		„Ausführen“ von Skripts nicht möglich.
+		„Ausführen“ von Skripten nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="CannotSetRunningNotSelectObjectsNoScripts">
-		„Deaktivieren“ von Skripts nicht möglich.
+		„Deaktivieren“ von Skripten nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="NoFrontmostFloater">
 		Kein vorderster Floater zum Speichern.
