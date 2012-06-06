@@ -2856,7 +2856,7 @@ Details finden Sie in der Protokolldatei.
 für folgende Einwohner freigeben:
 
 [RESIDENTS]
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
 		Objekte wurden erfolgreich freigegeben.
@@ -3353,6 +3353,20 @@ Der Name der Debug-Einstellung wurde in die Zwischenablage kopiert. Er kann jetz
        text="Der Namen einer Debug-Einstellung wurde in die Zwischenablage kopiert"/>
     </form>
   </notification>
+  
+  <notification name="SanityCheck">
+[APP_NAME] hat ein mögliches Problem mit einer Einstellung erkannt:
+
+[SANITY_MESSAGE]
+
+Grund: [SANITY_COMMENT]
+
+Aktueller Wert: [CURRENT_VALUE]
+   <form name="form">
+      <ignore name="ignore"
+       text="Eine Einstellung hat die Prüfung auf einen sinnvollen Wert nicht bestanden."/>
+    </form>
+  </notification>  
   <!-- ## Zi: Debug Settings Editor -->
 
   <notification name="TeleportToAvatarNotPossible">
