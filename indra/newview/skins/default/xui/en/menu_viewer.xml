@@ -1949,7 +1949,7 @@
              parameter="HighResSnapshot" />
         </menu_item_check>
         <menu_item_check
-         label="Quiet Snapshots to Disk"
+         label="Quiet Snapshots"
          name="QuietSnapshotsToDisk">
             <menu_item_check.on_check
              function="CheckControl"
