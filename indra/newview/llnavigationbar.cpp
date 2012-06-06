@@ -29,6 +29,7 @@
 #include "llnavigationbar.h"
 
 #include "v2math.h"
+
 #include "llregionhandle.h"
 
 #include "llfloaterreg.h"
@@ -49,7 +50,6 @@
 #include "llurldispatcher.h"
 #include "llviewerinventory.h"
 #include "llviewermenu.h"
-#include "llviewernetwork.h"
 #include "llviewerparcelmgr.h"
 #include "llworldmapmessage.h"
 #include "llappviewer.h"
@@ -67,7 +67,6 @@
 
 
 #include "llstatusbar.h"
-#include "llnotificationsutil.h"
 
 //-- LLTeleportHistoryMenuItem -----------------------------------------------
 
@@ -523,18 +522,15 @@ void LLNavigationBar::onLocationSelection()
 	LLSLURL slurl = LLSLURL(typed_location);
 	if (slurl.getType() == LLSLURL::LOCATION)
 	{
-	  LL_DEBUGS( "SLURL") << "LLSLURL::LOCATION" << LL_ENDL;
 	  region_name = slurl.getRegion();
 	  local_coords = slurl.getPosition();
 	}
 	else if(!slurl.isValid())
 	{
-		LL_DEBUGS( "SLURL") << "!slurl.isValid()" << LL_ENDL;
 	  // we have to do this check after previous, because LLUrlRegistry contains handlers for slurl too  
 	  // but we need to know whether typed_location is a simple http url.
 	  if (LLUrlRegistry::instance().isUrl(typed_location)) 
 	    {
-		LL_DEBUGS( "SLURL") << "isUrl" << LL_ENDL;
 		// display http:// URLs in the media browser, or
 		// anything else is sent to the search floater
 		LLWeb::loadURL(typed_location);
@@ -542,39 +538,16 @@ void LLNavigationBar::onLocationSelection()
 	  }
 	  else
 	  {
-		LL_DEBUGS( "SLURL") << "assume user has typed region name" << LL_ENDL;
 	      // assume that an user has typed the {region name} or possible {region_name, parcel}
 	      region_name  = typed_location.substr(0,typed_location.find(','));
 	    }
 	}
 	else
 	{
-		LL_DEBUGS( "SLURL") << "was an app slurl, home, whatever.  Bail" << LL_ENDL;
 	  // was an app slurl, home, whatever.  Bail
 	  return;
 	}
-
-	std::string grid = slurl.getGrid();
-	std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
-
-	if(!slurl.getHypergrid() 
-		&& (grid != LLGridManager::getInstance()->getGrid())
-		&& (gatekeeper.empty()))
-	{
- 		std::string dest = slurl.getSLURLString();
-		if (!dest.empty())
-		{
-			LLSD args;
-			args["GRID"] = slurl.getGrid();
-			LLNotificationsUtil::add("CantTeleportToGrid", args);
-			return;
-		}
-	}
-	else if(!gatekeeper.empty())
-	{
-		region_name = gatekeeper + ":" + region_name;
-	}
-
+	
 	// Resolve the region name to its global coordinates.
 	// If resolution succeeds we'll teleport.
 	LLWorldMapMessage::url_callback_t cb = boost::bind(

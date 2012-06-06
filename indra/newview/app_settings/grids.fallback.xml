@@ -368,7 +368,7 @@
         <key>slurl_base</key>
             <string>hop://reactiongrid.com:8008/</string>
         </map>
-    <key>login.aditi.lindenlab.com</key>
+    <key>util.aditi.lindenlab.com</key>
         <map>
         <key>LastModified</key>
             <date>2011-08-28T12:00:00.00Z</date>
@@ -391,15 +391,15 @@
                 <string>https://login.aditi.lindenlab.com/cgi-bin/login.cgi</string>
             </array>
         <key>name</key>
-            <string>login.aditi.lindenlab.com</string>
+            <string>util.aditi.lindenlab.com</string>
         <key>slurl_base</key>
-            <string>secondlife://login.aditi.lindenlab.com/secondlife/</string>
+            <string>secondlife://util.aditi.lindenlab.com/secondlife/</string>
         <key>system_grid</key>
             <integer>1</integer>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         </map>
-    <key>login.agni.lindenlab.com</key>
+    <key>util.agni.lindenlab.com</key>
         <map>
         <key>LastModified</key>
             <date>2011-08-28T12:00:00.00Z</date>
@@ -424,7 +424,7 @@
                 <string>https://login.agni.lindenlab.com/cgi-bin/login.cgi</string>
             </array>
         <key>name</key>
-            <string>login.agni.lindenlab.com</string>
+            <string>util.agni.lindenlab.com</string>
         <key>slurl_base</key>
             <string>http://maps.secondlife.com/secondlife/</string>
         <key>app_slurl_base</key>
