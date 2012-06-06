@@ -1810,6 +1810,16 @@ Not able to perform &apos;reset&apos;.
 Select objects with scripts.
   <tag>fail</tag>
   </notification>
+  
+   <notification
+    icon="alertmodal.tga"
+    name="CannotdeleteSelectObjectsNoScripts"
+    type="alertmodal">
+Not able to perform &apos;remove&apos;.
+
+Select objects with scripts.
+  <tag>fail</tag>
+  </notification>
 
   <notification
    icon="alertmodal.tga"
