@@ -2,6 +2,7 @@
 
 <!-- height intentionally 1px too high to make room for filler panel at the bottom -->
 <panel
+ mouse_opaque="false"
  top="0"
  left="0"
  background_visible="false"
@@ -15,6 +16,7 @@
 
 <!-- Navigation and Favorites Bar visibility stack -->
 <layout_stack
+ mouse_opaque="false"
  top="0"
  left="0"
  follows="left|top|right"
@@ -27,6 +29,7 @@
 
 <!-- Navigation Bar visibility panel -->
 <layout_panel
+ mouse_opaque="false"
  background_opaque="true"
  background_visible="true"
  bg_opaque_color="MouseGray"
@@ -40,6 +43,7 @@
 
 	<!-- Layout stack for buttons, location input and search field -->
 	<layout_stack
+	 mouse_opaque="false"
 	 follows="left|top|right"
 	 layout="topleft"
 	 orientation="horizontal"
@@ -51,6 +55,7 @@
 
 	<!-- Contains the navigation buttons -->
 	<layout_panel
+	 mouse_opaque="false"
 	 name="navigation_buttons_visibility_panel"
 	 layout="topleft"
 	 right="193"
@@ -134,6 +139,7 @@
 
 	<!-- Contains the location bar -->
 	<layout_panel
+	 mouse_opaque="false"
 	 name="location_bar_visibility_panel"
 	 layout="topleft"
 	 width="587"
@@ -164,6 +170,7 @@
 
 	<!-- Contains the search bar, can be hidden by code -->
 	<layout_panel
+	 mouse_opaque="false"
 	 name="search_bar_visibility_panel"
 	 layout="topleft"
 	 width="244"
@@ -206,6 +213,7 @@
 
 <!-- Favorites Bar visibility panel -->
 <layout_panel
+ mouse_opaque="false"
  background_opaque="true"
  background_visible="true"
  bg_opaque_color="MouseGray"
@@ -246,6 +254,7 @@
 
 <!-- Filler panel at the bottom to push the opaque background away -->
 <layout_panel
+ mouse_opaque="false"
  background_opaque="false"
  background_visible="false"
  height="1"
