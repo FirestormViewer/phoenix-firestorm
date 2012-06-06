@@ -210,10 +210,10 @@
      height="23"
      label="Return Selected"
      layout="topleft"
-     left="112"
+     left="5"
      top_delta="0"
      name="return_selected_btn"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.ReturnSelected" />
     </button>
@@ -225,7 +225,7 @@
      left_pad="10"
      name="return_all_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.ReturnAll" />
     </button>
@@ -237,7 +237,7 @@
      left_pad="10"
      name="teleport_to_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.TeleportToObject" />
     </button>
@@ -250,7 +250,7 @@
      left_pad="10"
      name="profile_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.Profile" />
     </button>
@@ -260,9 +260,9 @@
      label="Disable Selected"
      layout="topleft"
 
-     left="112"
+     left="5"
      name="disable_selected_btn"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.DisableSelected" />
     </button>
@@ -274,7 +274,7 @@
      left_pad="10"
      name="disable_all_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.DisableAll" />
     </button>
@@ -287,7 +287,7 @@
      left_pad="10"
      name="script_info_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.ScriptInfo" />
     </button>
@@ -300,7 +300,7 @@
      left_pad="10"
      name="estate_kick_btn"
      top_delta="0"
-     width="130">
+     width="100">
       <button.commit_callback
           function="TopObjects.Kick" />
     </button>
