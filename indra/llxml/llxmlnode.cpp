@@ -820,12 +820,18 @@ bool LLXMLNode::parseStream(
 		{
 			llwarns << "Error parsing xml error code: "
 					<< XML_ErrorString(XML_GetErrorCode(my_parser))
+					// <FS:AW> Return false and a NULL node if failing instead of a broken node and true 
+					//<< " on lne " << XML_GetCurrentLineNumber(my_parser)
 					<< " line:   " << XML_GetCurrentLineNumber(my_parser)
 					<< " column: " << XML_GetCurrentColumnNumber(my_parser)
+					// </FS:AW> Return false and a NULL node if failing instead of a broken node and true 
 					<< llendl;
+			// <FS:AW> Return false and a NULL node if failing instead of a broken node and true 
+			//break;
 			delete []buffer;
 			node = NULL;
 			return false;
+			// </FS:AW> Return false and a NULL node if failing instead of a broken node and true 
 		}
 	}
 	
