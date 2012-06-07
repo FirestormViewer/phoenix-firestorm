@@ -220,7 +220,7 @@
 		<menu_item_check label="Ogranicz dystans selekcji" name="Limit Select Distance"/>
 		<menu_item_check label="Wyłącz ograniczenia zasięgu kamery" name="Disable Camera Distance"/>
 		<menu_item_check label="Zdjęcie wysokiej jakości" name="HighResSnapshot"/>
-		<menu_item_check label="Zapisuj zdjęcia na dysk twardy bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
+		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
 			<menu_item_call label="Pomiar lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki" name="Statistics Bar"/>
