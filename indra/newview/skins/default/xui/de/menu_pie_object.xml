@@ -21,7 +21,15 @@
 			<pie_separator name="export_placeholder" />
 			<pie_separator name="disable_placeholder" />
 			<pie_slice label="Blockieren" name="Object Mute"/>
-			<pie_slice label="Skript-Info" name="ScriptInfo"/>
+			<pie_menu label="Skripte &gt;" name="ScriptsMenu">
+				<pie_slice label="Kompilieren (Mono)" name="CompileMono"/>
+				<pie_slice label="Kompilieren (LSL)" name="CompileLSL"/>
+				<pie_slice label="Skripte zurücks." name="Object Reset Scripts"/>
+				<pie_slice label="Skripte starten" name="Object Set Scripts to Running"/>
+				<pie_slice label="Skripte stoppen" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Skripte löschen" name="Remove Scripts From Selection"/>
+				<pie_slice label="Skript-Info" name="ScriptInfo"/>
+			</pie_menu>
 			<pie_slice label="Untersuchen" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Kaufen..." name="Buy..."/>
