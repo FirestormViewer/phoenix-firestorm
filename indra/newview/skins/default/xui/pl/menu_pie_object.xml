@@ -20,7 +20,15 @@
 			<pie_slice label="Derenderuj" name="Derender"/>
 			<pie_slice label="Zgłoś..." name="Report Abuse..."/>
 			<pie_slice label="Wycisz" name="Object Mute"/>
-			<pie_slice label="Info o skryptach" name="ScriptInfo"/>
+			<pie_menu label="Skrypty &gt;" name="ScriptsMenu">
+				<pie_slice label="Kompiluj (Mono)" name="CompileMono"/>
+				<pie_slice label="Kompiluj (LSL)" name="CompileLSL"/>
+				<pie_slice label="Resetuj skrypty" name="Object Reset Scripts"/>
+				<pie_slice label="Włącz skrypty" name="Object Set Scripts to Running"/>
+				<pie_slice label="Wyłącz skrypty" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Usuń skrypty" name="Remove Scripts From Selection"/>
+				<pie_slice label="Informacje" name="ScriptInfo"/>
+			</pie_menu>
 			<pie_slice label="Inspekcja" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Kup" name="Buy..."/>

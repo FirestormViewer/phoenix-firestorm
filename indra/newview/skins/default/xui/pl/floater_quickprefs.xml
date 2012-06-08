@@ -4,9 +4,9 @@
         <text name="Draw Distance" tool_tip="Zmień swoje pole widzenia">
             Pole widzenia:
         </text>
-        <text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
+        <!-- <text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
             Maks. przepust.:
-        </text>
+        </text> -->
         <text name="Particles" tool_tip="Ilość cząsteczek do renderowania">
             Maks. cząstek:
         </text>
@@ -32,6 +32,10 @@
             Cele spojrzeń:
         </text>
         <check_box name="showlookat" label="Włącz" tool_tip="Włącz celowniczki pokazujące gdzie patrzą inne osoby."/>
+        <text name="DebugShowColor_label">
+            Kolor pod kursorem:
+        </text>
+        <check_box name="Show_Color_Under_Cursor" label="Włączony" tool_tip="Pokazuj kolor pod kursorem myszki."/>
         <radio_group name="Name_Tag_Preference">
          <radio_item label="Włącz" name="radio"/>
          <radio_item label="Wyłącz" name="radio2"/>
