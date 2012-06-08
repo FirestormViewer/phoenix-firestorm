@@ -358,7 +358,6 @@
         Web browser:
     </text>
     <radio_group
-    control_name="UseExternalBrowser"
     draw_border="false"
     follows="top|left"
     height="20"
@@ -373,7 +372,7 @@
           layout="topleft"
           left_delta="0"
           name="internal"
-          value=""
+          value="0"
           tool_tip="Use the built-in web browser for help, web links, etc. This browser opens as a new window inside [APP_NAME]."
           top="0"
           width="150" />
@@ -383,7 +382,7 @@
          layout="topleft"
          left_pad="0"
          name="external"
-         value="true"
+         value="1"
          top_delta="0"
          tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."
          width="200" />
