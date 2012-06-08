@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamCreator" title="AUSWAHLSTRAHL-FORM-EDITOR">
+	<text name="beamcreator_text">
+Um einen neuen Auswahlstrahl zu erstellen, mit der
+linken Maustaste klicken um ein Punkt mit der
+ausgewählten Farbe zu setzen. Mit der rechten
+Maustaste klicken, um Punkt zu entfernen.
+	</text>
+	<color_swatch label="Strahl-Farbe" name="beam_color_swatch" tool_tip="Klicken, um die Farbauswahl zu öffnen"/>
+	<button label="Speichern" name="beamshape_save"/>
+	<button label="Laden" name="beamshape_load"/>
+	<button label="Löschen" name="beamshape_clear"/>
+</floater>
