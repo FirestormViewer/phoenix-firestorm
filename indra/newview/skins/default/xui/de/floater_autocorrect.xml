@@ -9,6 +9,9 @@
 <floater.string name="Replace">
 	Ersetzung
 </floater.string>
+<floater.string name="AddNewEntryMessage">
+	Um einen neuen Eintrag hinzuzufügen, bitte im Chat folgenden Befehl eingeben: &quot;[COMMAND] [LISTNAME]|falschesWort|richtigesWort&quot;
+</floater.string>
 	<panel label="lgg_ac_panel" name="Autocorrect Settings">
 		<check_box width="160" label="Auto-Korrektur aktivieren" name="lgg_ac_enable" tool_tip="Diese Checkbox muss aktiviert sein, um die hier gemachten Einstellungen zu nutzen. Texteingaben werden daraufhin entsprechend ersetzt."/>
 		<button name="lgg_ac_loadlist" label="Liste laden" tool_tip="Lädt eine zuvor exportierte Liste."/>

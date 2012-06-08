@@ -437,13 +437,16 @@ void LGGAutoCorrectFloater::addEntry(void* data)
 		{
 			std::string listName= self->namesList->getFirstSelected()->getColumn(0)->getValue().asString();
 			LLChat chat;
-			chat.mText ="To add an entry, please type in chat \""+gSavedSettings.getString("FSCmdLineAutocorrect")+" "+listName+"|wrongWord|rightWord\"";
+			
+			LLStringUtil::format_map_t message_args;
+			message_args["[COMMAND]"] = gSavedSettings.getString("FSCmdLineAutocorrect");
+			message_args["[LISTNAME]"] = listName;
+			chat.mText = self->getString("AddNewEntryMessage", message_args);
 
 			chat.mSourceType = CHAT_SOURCE_SYSTEM;
 			LLSD args;
 			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-			
 		}
 	}
 	

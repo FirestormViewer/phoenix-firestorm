@@ -22,6 +22,9 @@
 <floater.string name="Replace">
 	Replace
 </floater.string>
+<floater.string name="AddNewEntryMessage">
+	To add an entry, please type in chat &quot;[COMMAND] [LISTNAME]|wrongWord|rightWord&quot;
+</floater.string>
 
 <panel
  border="true"
