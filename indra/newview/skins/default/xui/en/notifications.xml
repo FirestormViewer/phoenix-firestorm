@@ -8695,7 +8695,6 @@ Do you want to enable the automatic viewer version display?
      yestext="OK"/>
   </notification>
 
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="alertmodal.tga"
    name="LocalBitmapsUpdateFileNotFound"
