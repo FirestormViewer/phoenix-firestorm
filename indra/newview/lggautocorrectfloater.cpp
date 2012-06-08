@@ -450,17 +450,5 @@ void LGGAutoCorrectFloater::addEntry(void* data)
 }
 LGGAutoCorrectFloater* LGGAutoCorrectFloater::showFloater()
 {
-	LGGAutoCorrectFloater *floater = dynamic_cast<LGGAutoCorrectFloater*>(LLFloaterReg::getInstance("autocorrect"));
-	if(floater)
-	{
-		floater->setVisible(true);
-		floater->setFrontmost(true);
-		floater->center();
-		return floater;
-	}
-	else
-	{
-		LL_WARNS("LGGAutoCorrect") << "Can't find floater!" << LL_ENDL;
-		return NULL;
-	}
+	return LLFloaterReg::showTypedInstance<LGGAutoCorrectFloater>("autocorrect");
 }
