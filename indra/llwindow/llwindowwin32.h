@@ -214,6 +214,10 @@ protected:
 	U32				mKeyVirtualKey;
 
 	friend class LLWindowManager;
+// <FS:ND> Allow to query for window chrome sizes.
+public:
+	virtual void getWindowChrome( U32 &aChromeW, U32 &aChromeH );
+// </FS:ND>
 };
 
 class LLSplashScreenWin32 : public LLSplashScreen

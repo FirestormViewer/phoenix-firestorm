@@ -3837,5 +3837,24 @@ std::vector<std::string> LLWindowWin32::getDynamicFallbackFontList()
 	return std::vector<std::string>();
 }
 
+// <FS:ND> Allow to query for window chrome sizes.
+void LLWindowWin32::getWindowChrome( U32 &aChromeW, U32 &aChromeH )
+{
+	LLWindow::getWindowChrome( aChromeW, aChromeH );
+
+	RECT oClient, oWindow;
+
+	if( !::GetClientRect( mWindowHandle, &oClient ) || !::GetWindowRect( mWindowHandle, &oWindow ) )
+		return;
+
+	U32 nHeight = oWindow.bottom - oWindow.top;
+	U32 nWidth = oWindow.right - oWindow.left;
+	U32 nCHeight = oClient.bottom - oClient.top;
+	U32 nCWidth = oClient.right - oClient.left;
+
+	aChromeW = nWidth - nCWidth;
+	aChromeH = nHeight - nCHeight;
+}
+// </FS:ND>
 
 #endif // LL_WINDOWS

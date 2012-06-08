@@ -210,6 +210,12 @@ protected:
 	void handleUnicodeUTF16(U16 utf16, MASK mask);
 
 	friend class LLWindowManager;
+
+// <FS:ND> Allow to query for window chrome sizes. Default it none, only win32 windows override this.
+public:
+	virtual void getWindowChrome( U32 &aChromeW, U32 &aChromeH )
+	{ aChromeW = aChromeH = 0; }
+// </FS:ND>
 };
 
 
