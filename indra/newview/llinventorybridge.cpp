@@ -3387,7 +3387,9 @@ void LLFolderBridge::buildContextMenuBaseOptions(U32 flags)
 		mDisabledItems.push_back(std::string("Delete System Folder"));
 	}
 
-	if (!isOutboxFolder())
+	// <FS:AH/SJ> Don't offer sharing of trash folder (FIRE-1642, FIRE-6547)
+	//if (!isOutboxFolder())
+	if (!isOutboxFolder() && mUUID != trash_id)
 	{
 		mItems.push_back(std::string("Share"));
 		if (!canShare())
