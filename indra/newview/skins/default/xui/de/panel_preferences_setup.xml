@@ -49,8 +49,8 @@
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="In Meinen Browser (IE, Firefox, Safari)" name="external" tool_tip="Standard Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen." value="1"/>
-		<radio_item label="In Integrierten Browser" name="internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]." value=""/>
+		<radio_item label="In externem Browser (IE, Firefox, Safari)" name="external" tool_tip="Standard Webbrowser des Systems verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Bei Vollbildmodus nicht empfohlen." value="1"/>
+		<radio_item label="In integriertem Browser" name="internal" tool_tip="Integrierten Webbrowser verwenden, um die Hilfe, Weblinks usw. anzuzeigen. Dieser Browser öffnet als neues Fenster innerhalb von [APP_NAME]." value=""/>
 	</radio_group>
     <text name="numberwebfloaters_label">
         Maximale Anzahl an Webbrowser-Fenstern:
