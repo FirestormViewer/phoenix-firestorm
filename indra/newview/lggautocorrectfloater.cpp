@@ -228,11 +228,11 @@ void LGGAutoCorrectFloater::updateItemsList()
 		LLSD element;
 		element["id"] = wrong;
 		LLSD& s_column = element["columns"][0];
-		s_column["column"] = "Search";
+		s_column["column"] = getString("Search");
 		s_column["value"] = wrong;
 		s_column["font"] = "SANSSERIF";
 		LLSD& r_column = element["columns"][1];
-		r_column["column"] = "Replace";
+		r_column["column"] = getString("Replace");
 		r_column["value"] = right;
 		r_column["font"] = "SANSSERIF";
 
@@ -261,7 +261,7 @@ void LGGAutoCorrectFloater::updateNamesList()
 		LLSD element;
 		element["id"] = listName;
 		LLSD& friend_column = element["columns"][0];
-		friend_column["column"] = "Entries";
+		friend_column["column"] = getString("Entries");
 		friend_column["value"] = listName;
 		//friend_column["font"] = "SANSSERIF";
 		const LLSD& loc_map = (*loc_it).second;
