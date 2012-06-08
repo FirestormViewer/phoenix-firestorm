@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="FARBAUSWAHL">
+	<tab_container name="scale_type_container">
+		<panel name="RGB">
 	<text name="r_val_text">
 		Rot:
 	</text>
@@ -9,6 +11,24 @@
 	<text name="b_val_text">
 		Blau:
 	</text>
+		</panel>
+		<panel name="LSL">
+	<text name="r_val_text_lsl">
+		Rot:
+	</text>
+	<text name="g_val_text_lsl">
+		Grün:
+	</text>
+	<text name="b_val_text_lsl">
+		Blau:
+	</text>
+		</panel>
+		<panel name="Hex">
+			<text name="hex_text">
+				Hex-Code (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
 		Farbton:
 	</text>
@@ -22,8 +42,9 @@
 	<button label="" label_selected="" name="color_pipette"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
+	<button label="Kopiere LSL" label_selected="Kopiere LSL" name="copy_lsl_btn" tool_tip="Kopiert den Farbcode in einen LSL-Farbvektor im Format &lt;r, g, b&gt;."/>
 	<text name="Current color:">
-		Aktuelle Farbe:
+		^ Aktuelle Farbe ^
 	</text>
 	<text name="(Drag below to save.)">
 		(Nach unten ziehen)

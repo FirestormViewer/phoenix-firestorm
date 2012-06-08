@@ -228,11 +228,11 @@ void LGGAutoCorrectFloater::updateItemsList()
 		LLSD element;
 		element["id"] = wrong;
 		LLSD& s_column = element["columns"][0];
-		s_column["column"] = "Search";
+		s_column["column"] = getString("Search");
 		s_column["value"] = wrong;
 		s_column["font"] = "SANSSERIF";
 		LLSD& r_column = element["columns"][1];
-		r_column["column"] = "Replace";
+		r_column["column"] = getString("Replace");
 		r_column["value"] = right;
 		r_column["font"] = "SANSSERIF";
 
@@ -261,7 +261,7 @@ void LGGAutoCorrectFloater::updateNamesList()
 		LLSD element;
 		element["id"] = listName;
 		LLSD& friend_column = element["columns"][0];
-		friend_column["column"] = "Entries";
+		friend_column["column"] = getString("Entries");
 		friend_column["value"] = listName;
 		//friend_column["font"] = "SANSSERIF";
 		const LLSD& loc_map = (*loc_it).second;
@@ -437,30 +437,21 @@ void LGGAutoCorrectFloater::addEntry(void* data)
 		{
 			std::string listName= self->namesList->getFirstSelected()->getColumn(0)->getValue().asString();
 			LLChat chat;
-			chat.mText ="To add an entry, please type in chat \""+gSavedSettings.getString("FSCmdLineAutocorrect")+" "+listName+"|wrongWord|rightWord\"";
+			
+			LLStringUtil::format_map_t message_args;
+			message_args["[COMMAND]"] = gSavedSettings.getString("FSCmdLineAutocorrect");
+			message_args["[LISTNAME]"] = listName;
+			chat.mText = self->getString("AddNewEntryMessage", message_args);
 
 			chat.mSourceType = CHAT_SOURCE_SYSTEM;
 			LLSD args;
 			args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 			LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-			
 		}
 	}
 	
 }
 LGGAutoCorrectFloater* LGGAutoCorrectFloater::showFloater()
 {
-	LGGAutoCorrectFloater *floater = dynamic_cast<LGGAutoCorrectFloater*>(LLFloaterReg::getInstance("autocorrect"));
-	if(floater)
-	{
-		floater->setVisible(true);
-		floater->setFrontmost(true);
-		floater->center();
-		return floater;
-	}
-	else
-	{
-		LL_WARNS("LGGAutoCorrect") << "Can't find floater!" << LL_ENDL;
-		return NULL;
-	}
+	return LLFloaterReg::showTypedInstance<LGGAutoCorrectFloater>("autocorrect");
 }

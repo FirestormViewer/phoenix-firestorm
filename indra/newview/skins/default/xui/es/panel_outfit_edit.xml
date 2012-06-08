@@ -39,10 +39,10 @@
 		</layout_panel>
 	</layout_stack>
 	<panel name="no_add_wearables_button_bar">
-		<button name="shop_btn_1" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más ítems relacionados"/>
+		<button name="shop_btn_1" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más items relacionados"/>
 	</panel>
 	<panel name="add_wearables_button_bar">
-		<button name="shop_btn_2" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más ítems relacionados"/>
+		<button name="shop_btn_2" tool_tip="Visita SL Marketplace. También puedes seleccionar algo que lleves puesto y, a continuación, hacer clic aquí para ver más items relacionados"/>
 	</panel>
 	<panel name="save_revert_button_bar">
 		<layout_stack name="button_bar_ls">

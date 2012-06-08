@@ -58,9 +58,9 @@ Voice Server Version: [VOICE_VERSION]
 Settings mode: [MODE]
 Viewer Skin: [SKIN] ([THEME])
 Font Used: [FONT] ([FONT_SCREEN_DPI])
-Draw distance : [DRAW_DISTANCE]
-Bandwidth : [BANDWIDTH]
-LOD factor : [LOD]
+Draw distance: [DRAW_DISTANCE]
+Bandwidth: [BANDWIDTH]
+LOD factor: [LOD]
 </floater.string>
   <floater.string
      name="none">

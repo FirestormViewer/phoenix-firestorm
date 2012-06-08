@@ -1796,6 +1796,11 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+		return;
+	// </FS:ND>
+
 
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
@@ -1855,6 +1860,11 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+		return;
+	// </FS:ND>
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1913,6 +1923,11 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+		return;
+	// </FS:ND>
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1971,6 +1986,11 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+		return;
+	// </FS:ND>
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -2029,6 +2049,11 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+		return;
+	// </FS:ND>
+
 	if (status < 200 || status > 400)
 	{
 		//llwarns

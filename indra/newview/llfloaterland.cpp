@@ -2444,7 +2444,7 @@ BOOL LLPanelLandAccess::postBuild()
 	}
 
 	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLSpinCtrl>("PriceSpin")->setLabelArg(std::string("[CUR]"), type_currency);
+	getChild<LLSpinCtrl>("PriceSpin")->setLabelArg("[CUR]", type_currency);
 	return TRUE;
 }
 

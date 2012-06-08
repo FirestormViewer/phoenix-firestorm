@@ -164,13 +164,87 @@
             <pie_slice.on_enable
                 function="Object.EnableMute" />
         </pie_slice>
-        <pie_slice
-            enabled="true"
-            label="Script Info"
-            name="ScriptInfo">
-            <pie_slice.on_click
-                function="Tools.ScriptInfo" />
-        </pie_slice>
+		
+		<pie_menu
+			label="Scripts &gt;"
+			name="ScriptsMenu">
+			
+			<pie_slice
+				enabled="false"
+				label="Compile (Mono)"
+				name="CompileMono">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="compile mono" />
+				<pie_slice.on_enable
+					function="EditableSelectedMono" />
+			</pie_slice>
+
+			<pie_slice
+				enabled="false"
+				label="Compile (LSL)"
+				name="CompileLSL">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="compile lsl" />
+				<pie_slice.on_enable
+					function="EditableSelected" />
+			</pie_slice>
+
+			<pie_slice
+				enabled="false"
+				label="Reset Scripts"
+				name="Object Reset Scripts">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="reset" />
+				<pie_slice.on_enable
+					function="EditableSelected" />
+			</pie_slice>
+
+			<pie_slice
+				enabled="false"
+				label="Run Scripts"
+				name="Object Set Scripts to Running">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="start" />
+				<pie_slice.on_enable
+					function="EditableSelected" />
+			</pie_slice>
+
+			<pie_slice
+				enabled="false"
+				label="Stop Scripts"
+				name="Object Set Scripts to Not Running">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="stop" />
+				<pie_slice.on_enable
+					function="EditableSelected" />
+			</pie_slice>
+
+			<pie_slice
+				enabled="false"
+				label="Remove Scripts"
+				name="Remove Scripts From Selection">
+				<pie_slice.on_click
+					function="Tools.SelectedScriptAction"
+					parameter="delete" />
+				<pie_slice.on_enable
+					function="EditableSelected" />
+			</pie_slice>
+			
+			<pie_slice
+				enabled="true"
+				label="Script Info"
+				name="ScriptInfo">
+				<pie_slice.on_click
+					function="Tools.ScriptInfo" />
+			</pie_slice>
+		
+		</pie_menu>
+		
         <pie_slice
             label="Inspect"
             name="Object Inspect">

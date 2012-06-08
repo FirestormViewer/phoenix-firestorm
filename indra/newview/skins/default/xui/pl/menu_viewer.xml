@@ -143,13 +143,13 @@
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Skrypty" name="Scripts">
+			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
 			<menu_item_call label="Zrekompiluj skrypty (Mono)" name="Mono"/>
 			<menu_item_call label="Zrekompiluj skrypty (LSL)" name="LSL"/>
 			<menu_item_call label="Reset skryptów" name="Reset Scripts"/>
 			<menu_item_call label="Przestaw skrypty na stan Włączony" name="Set Scripts to Running"/>
 			<menu_item_call label="Przestaw skrypty na stan Wyłączony" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
-			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
 		</menu>
 		<menu label="Opcje" name="Options">
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>
@@ -220,7 +220,7 @@
 		<menu_item_check label="Ogranicz dystans selekcji" name="Limit Select Distance"/>
 		<menu_item_check label="Wyłącz ograniczenia zasięgu kamery" name="Disable Camera Distance"/>
 		<menu_item_check label="Zdjęcie wysokiej jakości" name="HighResSnapshot"/>
-		<menu_item_check label="Zapisuj zdjęcia na dysk twardy bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
+		<menu_item_check label="Wykonuj zdjęcia bez efektu dźwiękowego i animacji" name="QuietSnapshotsToDisk"/>
 		<menu label="Narzędzia wydajności" name="Performance Tools">
 			<menu_item_call label="Pomiar lagów" name="Lag Meter"/>
 			<menu_item_check label="Statystyki" name="Statistics Bar"/>
@@ -353,6 +353,7 @@
 			<menu_item_check label="Złożoność renderowania" name="rendercomplexity"/>
 			<menu_item_check label="Bajty załączników" name="attachment bytes"/>
 			<menu_item_check label="Skulpty" name="Sculpt"/>
+			<menu_item_check label="Rozmiar tekstury" name="Texture Size"/>
 		</menu>
 		<menu label="Renderowanie" name="Rendering">
 			<menu_item_check label="Osie" name="Axes"/>

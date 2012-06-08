@@ -79,6 +79,8 @@ public:
 	void			setLabelColor(const LLColor4& c)			{ mTextEnabledColor = c; updateLabelColor(); }
 	void			setDisabledLabelColor(const LLColor4& c)	{ mTextDisabledColor = c; updateLabelColor();}
 	void			setAllowEdit(BOOL allow_edit);
+	// <FS:Ansariel> Allow setting an argument on the label
+	virtual BOOL	setLabelArg(const std::string& key, const LLStringExplicit& text);
 
 	virtual void	onTabInto();
 

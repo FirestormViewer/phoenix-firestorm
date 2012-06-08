@@ -1198,12 +1198,28 @@ bool idle_startup()
 		progress += 0.02f;
 		display_startup();
 
+// <AW: crash report grid correctness>
+		eLastExecEvent last_exec_event = gLastExecEvent;
+		const std::string current_grid =LLGridManager::getInstance()->getGrid();
+		const std::string last_grid = gSavedSettings.getString("LastConnectedGrid");
+		if (!last_grid.empty() && last_grid != current_grid)
+		{
+			// don't report crashes on a different grid than the one connecting to,
+			// since a bad OpenSim setup can crash the viewer a lot
+			last_exec_event = LAST_EXEC_NORMAL;
+		}
+// </AW: crash report grid correctness>
+
 		// Setting initial values...
 		LLLoginInstance* login = LLLoginInstance::getInstance();
 		login->setNotificationsInterface(LLNotifications::getInstance());
 
 		login->setSerialNumber(LLAppViewer::instance()->getSerialNumber());
-		login->setLastExecEvent(gLastExecEvent);
+// <AW: crash report grid correctness>
+//		login->setLastExecEvent(gLastExecEvent);
+		login->setLastExecEvent(last_exec_event);
+// </AW: crash report grid correctness>
+
 		login->setUpdaterLauncher(boost::bind(&LLAppViewer::launchUpdater, LLAppViewer::instance()));
 
 		// This call to LLLoginInstance::connect() starts the 
@@ -1352,6 +1368,11 @@ bool idle_startup()
 		{
 			if(process_login_success_response())
 			{
+// <AW: crash report grid correctness>
+				const std::string current_grid = LLGridManager::getInstance()->getGrid();
+				gSavedSettings.setString("LastConnectedGrid", current_grid);
+// </AW: crash report grid correctness>
+
 				// Pass the user information to the voice chat server interface.
 				LLVoiceClient::getInstance()->userAuthorized(gUserCredential->userID(), gAgentID);
 				// create the default proximal channel

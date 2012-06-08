@@ -12,7 +12,7 @@
     <text name="theme_textbox2">
         (wymaga restartu)
     </text>
-    <check_box label="Resetuj przyciski na paskach po zmianie skórki (zalecane)" tool_tip="Gdy włączysz tą opcję, to predefiniowany układ przycisków ustawiony przez programistów Firestorma nadpisze Twój własny po zmianie skórki lub trybu logowania do świata." name="reset_toolbar_settings"/>
+    <check_box label="Resetuj przyciski na paskach po zmianie skórki" tool_tip="Gdy włączysz tą opcję, to predefiniowany układ przycisków ustawiony przez programistów Firestorma nadpisze Twój własny po zmianie skórki lub trybu logowania do świata." name="reset_toolbar_settings"/>
     <!-- <check_box label="Używaj stylu kursorów z Viewer 1.x" name="use _legacy_cursors" />
     <text name="theme_textbox3">
         (wymaga restartu)

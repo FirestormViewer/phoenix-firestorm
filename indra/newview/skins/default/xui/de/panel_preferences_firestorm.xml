@@ -16,9 +16,10 @@
 		<check_box label="Deaktiviere Fortschrittsanzeige während des Logouts" name="logout_screen_toggle" tool_tip="Deaktiviert die schwarze Fortschrittsanzeige während des Logouts."/>
 		<check_box label="Objekte immer mit der Landgruppe rezzen, falls möglich" name="grouplandrez" tool_tip="Versucht Objekte mit der Landgruppe zu rezzen, sofern du ein Mitglied der Gruppe bist, unabhängig davon, welche Gruppe gerade aktiv ist."/>
 		<check_box label="Kontaktliste immer nach Benutzername sortieren" name="sortcontactsbyun" tool_tip="Sortiert Kontaktlisten immer anhand des Benutzernamens, auch wenn Anzeigenamen aktiviert sind."/>
-		<check_box label="Blockierte Avatar als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
+		<check_box label="Blockierte Avatare als Partikelwolke darstellen" name="ShowMutedAvatarsAsCloud" tool_tip="Blockierte Avatare werden als Partikelwolke in einer speziellen Farbe dargestellt."/>
 		<check_box label="Leere Systemordner im Inventar verstecken" name="DebugHideEmptySystemFolders" tool_tip="Versteckt leere Systemordner wie z.B. Favoriten oder Landmarken usw. in den Inventarfenstern."/>
-		<check_box label="Ordner &quot;Empfangene Objekte&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert wird der Ordner &quot;Empfangene Objekte&quot; als normaler Ordner im Inventar angezeigt."/>
+		<check_box label="Ordner &quot;Empfangene Objekte&quot; im Inventar anzeigen" name="FSShowInboxFolder" tool_tip="Falls aktiviert, wird der Ordner &quot;Empfangene Objekte&quot; als normaler Ordner im Inventar angezeigt."/>
+		<check_box label="Deaktiviere Leitstrahl, wenn Zielavatar erreicht wird (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Falls aktiviert, wird der Leitstrahl zum Zielavatar deaktiviert, wenn die Distanz weniger als 3m beträgt. (Standard)"/>
 		<check_box name="UseLSLBridge" label="LSL-Client-Brücke aktivieren" tool_tip="Erlaub dem Viewer die Nutzung eines geskripteten Objektes (Brücke), um weitergehende Funktionen anzubieten."/>
 		<check_box name="UseLSLFlightAssist" label="Flug-Assistent der Brücke aktivieren" tool_tip="Aktiviert ein Skript, dass Fliegen und Schweben in größeren Höhen ermöglicht."/>
 	</panel>

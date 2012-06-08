@@ -112,7 +112,7 @@
          </menu_item_check>
    <menu_item_separator layout="topleft" />
         <menu_item_call
-                label="Compile(Mono)"
+                label="Compile (Mono)"
                 name="Mono">
           <menu_item_call.on_click
             function="Tools.SelectedScriptAction"
@@ -121,7 +121,7 @@
             function="EditableSelectedMono" />
         </menu_item_call>
         <menu_item_call
-          label="Compile(LSL)"
+          label="Compile (LSL)"
           name="LSL">
           <menu_item_call.on_click
             function="Tools.SelectedScriptAction"

@@ -175,7 +175,9 @@ void LLTracker::render3D()
 	}
 	
 	static LLUIColor map_track_color = LLUIColorTable::instance().getColor("MapTrackColor", LLColor4::white);
-	
+	// <FS:Ansariel> Disable stop tracking when closing in
+	static LLCachedControl<bool> fsDisableTrackerAtCloseIn(gSavedSettings, "FSDisableAvatarTrackerAtCloseIn");
+
 	// Arbitary location beacon
 	if( instance()->mIsTrackingLocation )
  	{
@@ -191,7 +193,19 @@ void LLTracker::render3D()
 		F32 dist = gFloaterWorldMap->getDistanceToDestination(pos_global, 0.5f);
 		if (dist < DESTINATION_REACHED_RADIUS)
 		{
-			instance()->stopTrackingLocation();
+			// <FS:Ansariel> Disable stop tracking when closing in
+			//instance()->stopTrackingLocation();
+			// Always disable tracker if we're not using the avatar tracker of the radar
+			if (fsDisableTrackerAtCloseIn || instance()->mTrackingLocationType != LLTracker::LOCATION_AVATAR)
+			{
+				instance()->stopTrackingLocation();
+			}
+			else
+			{
+				renderBeacon( instance()->mTrackedPositionGlobal, map_track_color, 
+					  		instance()->mBeaconText, instance()->mTrackedLocationName );
+			}
+			// </FS:Ansariel> Disable stop tracking when closing in
 		}
 		else
 		{
@@ -259,10 +273,23 @@ void LLTracker::render3D()
 				instance()->mBeaconText->setDoFade(FALSE);
 			}
 			
-			F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->mTrackedPositionGlobal, 0.0f);
+			// <FS:Ansariel> Fix for VWR-29048 from Jonathan Yap
+			//F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->mTrackedPositionGlobal, 0.0f);
+			F32 dist = gFloaterWorldMap->getDistanceToDestination(instance()->getTrackedPositionGlobal(), 0.0f);
 			if (dist < DESTINATION_REACHED_RADIUS)
 			{
-				instance()->stopTrackingAvatar();
+				// <FS:Ansariel> Disable stop tracking when closing in
+				//instance()->stopTrackingAvatar();
+				if (fsDisableTrackerAtCloseIn)
+				{
+					instance()->stopTrackingAvatar();
+				}
+				else
+				{
+					renderBeacon( av_tracker.getGlobalPos(), map_track_color, 
+						  		instance()->mBeaconText, av_tracker.getName() );
+				}
+				// </FS:Ansariel> Disable stop tracking when closing in
 			}
 			else
 			{

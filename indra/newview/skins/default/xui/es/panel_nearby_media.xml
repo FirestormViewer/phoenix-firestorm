@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="nearby_media">
 	<string name="media_item_count_format">
-		(%ld ítems media)
+		(%ld items media)
 	</string>
 	<string name="empty_item_text">
 		&lt;vacío&gt;

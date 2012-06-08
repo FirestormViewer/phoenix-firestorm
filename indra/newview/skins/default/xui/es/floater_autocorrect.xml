@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="autocorrect" title="Configuración de autocorrección">
+	<floater.string name="Entries">
+		Entradas
+	</floater.string>
+	<floater.string name="Search">
+		Buscar
+	</floater.string>
+	<floater.string name="Replace">
+		Remplazar
+	</floater.string>
+	<floater.string name="AddNewEntryMessage">
+		Para añadir una entrada, por favor escribe en el chat &quot;[COMMAND] [LISTNAME]|palabraerrónea|palabracorrecta&quot;
+	</floater.string>
 	<panel label="lgg_ac_panel" name="Autocorrect Settings">
 		<check_box label="Activar autocorrección" name="lgg_ac_enable" tool_tip="Debes tener activada esta casilla para usar cualquiera de estas configuraciones. Buscará en tu escritura las ocurrencias incluídas en la lista de búsqueda y las reemplazará por el texto corrrespondiente."/>
 		<button name="lgg_ac_loadlist" label="Cargar lista..." tool_tip="Pulsa para cargar una lista previamente exportada a un archivo."/>

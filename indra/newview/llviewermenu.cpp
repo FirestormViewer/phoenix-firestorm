@@ -4379,6 +4379,16 @@ void handle_reset_view()
 		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "my_outfits"));
 	}
 
+	// <FS:Zi> Added optional V1 behavior so the avatar turns into camera direction after hitting ESC
+	if(gSavedSettings.getBOOL("ResetViewTurnsAvatar"))
+		gAgentCamera.resetView();
+	// </FS:Zi>
+
+	// <FS:Zi> Camera focus and offset with CTRL/SHIFT + Scroll wheel
+	gSavedSettings.getControl("FocusOffsetRearView")->resetToDefault();
+	gSavedSettings.getControl("CameraOffsetRearView")->resetToDefault();
+	// </FS:Zi>
+
 	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();

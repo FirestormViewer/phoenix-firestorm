@@ -1298,6 +1298,8 @@ Prova ad accedere nuovamente tra un minuto.
 	</string>
 	<string name="WornOnAttachmentPoint" value="(indossato su [ATTACHMENT_POINT])"/>
 	<string name="ActiveGesture" value="[GESLABEL] (attivo)"/>
+	<string name="PermYes">Si</string>
+	<string name="PermNo">No</string>
 	<string name="Chat Message" value="Chat:"/>
 	<string name="Sound" value="Suono :"/>
 	<string name="Wait" value="--- Attendi :"/>
@@ -1312,8 +1314,8 @@ Prova ad accedere nuovamente tra un minuto.
 	<string name="Calling Cards" value="Biglietti da visita,"/>
 	<string name="Clothing" value="Vestiti,"/>
 	<string name="Gestures" value="Gesture,"/>
-	<string name="Landmarks" value="Punti di riferimento,"/>
-	<string name="Notecards" value="Biglietti,"/>
+	<string name="Landmarks" value="Landmarks,"/>
+	<string name="Notecards" value="Notecard,"/>
 	<string name="Objects" value="Oggetti,"/>
 	<string name="Scripts" value="Script,"/>
 	<string name="Sounds" value="Suoni,"/>
@@ -1337,7 +1339,7 @@ Prova ad accedere nuovamente tra un minuto.
 		Biglietti da visita
 	</string>
 	<string name="InvFolder Landmarks">
-		Punti di riferimento
+		Landmarks
 	</string>
 	<string name="InvFolder Scripts">
 		Script
@@ -1349,7 +1351,7 @@ Prova ad accedere nuovamente tra un minuto.
 		Oggetti
 	</string>
 	<string name="InvFolder Notecards">
-		Biglietti
+		Notecard
 	</string>
 	<string name="InvFolder New Folder">
 		Nuova cartella
@@ -1400,7 +1402,7 @@ Prova ad accedere nuovamente tra un minuto.
 		Accessori
 	</string>
 	<string name="InvFolder Meshes">
-		Reticoli
+		Mesh
 	</string>
 	<string name="InvFolder Friends">
 		Amici
@@ -4791,7 +4793,7 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 		Ricerca
 	</string>
 	<string name="Command_Snapshot_Label">
-		Istantanea
+		Foto
 	</string>
 	<string name="Command_Speak_Label">
 		Parla
@@ -4801,6 +4803,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Voice_Label">
 		Impostazioni voce
+	</string>
+	<string name="Command_Fly_Label">
+		Vola
 	</string>
 	<string name="Command_Webbrowser_Label">
 		Web
@@ -4882,6 +4887,9 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	</string>
 	<string name="Command_Snapshot_Tooltip">
 		Scatta una foto
+	</string>
+	<string name="Command_Fly_Tooltip">
+		Attiva/Disattiva volo se è possibile
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Parla con persone vicine usando il microfono

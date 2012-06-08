@@ -8,7 +8,7 @@
  can_resize="false"
  height="250"
  name="BeamColor"
- title="Beam Color Rotate"
+ title="BEAM COLOR ROTATE"
  width="410"
  save_rect="true">
     <panel
@@ -36,8 +36,8 @@
 	 height="40">
 Please use the mouse to select the colors for which
 you wish your beam color to start and stop on.
-Left Click Changes Start Position.
-Right Click Changes End Position.
+Left click changes start position.
+Right click changes end position.
 	</text>
 	<color_swatch
 	 border_color="0.45098, 0.517647, 0.607843, 1"

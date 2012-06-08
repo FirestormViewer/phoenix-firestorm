@@ -314,7 +314,7 @@ void LLFloaterTopObjects::updateSelectionInfo()
 	{
 		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
-		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
+		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar && object_id != gAgentID);
 	}
 	else
 	{
@@ -596,7 +596,7 @@ void LLFloaterTopObjects::onAvatarCheck(const LLUUID& avatar_id, LLAvatarName av
 	{
 		bool isAvatar = (av_name.mDisplayName != OBJECT_NOT_AVATAR_NAME);
 		getChild<LLButton>("profile_btn")->setEnabled(isAvatar);
-		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar);
+		getChild<LLButton>("estate_kick_btn")->setEnabled(isAvatar && avatar_id != gAgentID);
 	}
 }
 // </FS:Ansariel> Enable avatar-specific buttons if current selection is an avatar

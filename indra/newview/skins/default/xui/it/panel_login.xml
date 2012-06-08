@@ -12,6 +12,7 @@
 				Nome utente:
 			</text>
 			<combo_box name="username_combo" tool_tip="Il nome utente che hai scelto durante la registrazione, come robby12 o Stella Soleggiato"/>
+			<button label="Rimuovi questo utente" name="delete_saved_login_btn"/>
 			<text name="password_text">
 				Password:
 			</text>
@@ -32,6 +33,10 @@
 				<combo_box.item label="Casa mia" name="MyHome"/>
 				<combo_box.item label="&lt;Scrivi nome regione&gt;" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				Accedi alla Grid:
+			</text>
+			<button label="Gestisci Grid" name="grids_btn"/>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

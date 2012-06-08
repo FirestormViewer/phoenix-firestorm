@@ -199,7 +199,10 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	mHoveredColor(p.hovered_color()),
 	mSearchColumn(p.search_column),
 	mColumnPadding(p.column_padding),
-	mContextMenuType(MENU_NONE)
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	//mContextMenuType(MENU_NONE)
+	mContextMenuType(MENU_NONE),
+	mFilterColumn(-1)
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -1411,6 +1414,18 @@ void LLScrollListCtrl::drawItems()
 		{
 			LLScrollListItem* item = *iter;
 			
+			// <FS:Ansariel> Fix for FS-specific people list (radar)
+			if (mFilterColumn > -1 && !mFilterString.empty())
+			{
+				std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+				std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+				if (filterColumnValue.find(mFilterString) == std::string::npos)
+				{
+					continue;
+				}
+			}
+			// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 			item_rect.setOriginAndSize( 
 				x, 
 				cur_y, 
@@ -3012,3 +3027,10 @@ void LLScrollListCtrl::onFocusLost()
 	LLUICtrl::onFocusLost();
 }
 
+// <FS:Ansariel> Fix for FS-specific people list (radar)
+void LLScrollListCtrl::setFilterString(const std::string& str)
+{
+	mFilterString = str;
+	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+}
+// </FS:Ansariel> Fix for FS-specific people list (radar)

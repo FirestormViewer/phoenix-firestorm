@@ -16,6 +16,7 @@
         <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
         <check_box label="Pokaż folder &quot;Odebrane przedmioty&quot; normalnie w Szafie" name="FSShowInboxFolder" tool_tip="Gdy włączysz tą opcję, to w Szafie będzie można znaleźć folder &quot;Odebrane przedmioty&quot;." />
+        <check_box label="Wyłączaj emiter śledzenia po osiągnięciu awatara docelowego (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Gdy włączysz tą opcję, to emiter śledzenia będzie wyłączany automatycznie, jeśli dystans od awatara docelowego jest mniejszy niż 3m (domyślne)." />
         <check_box name="UseLSLBridge" label="Włącz Most w LScript Language" tool_tip="Pozwala Firestormowi na używanie oskryptowanego dodatku (Mostu), aby rozszerzyć znacznie swoje możliwości" />
         <check_box name="UseLSLFlightAssist" label="Włącz pomocnika lotu w Moście" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach" />
     </panel>

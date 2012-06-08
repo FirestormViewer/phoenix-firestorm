@@ -9,7 +9,7 @@
 	<text name="ItemcountText">
 		Objekte:
 	</text>
-	<filter_editor label="Inventar filtern" name="inventory search editor"/>
+	<filter_editor label="Inventar filtern" name="inventory search editor" tool_tip="Einen oder mehrere Suchbegriffe eingeben, getrennt durch '+'"/>
 	<button name="collapse_btn" label="Einklappen" />
 	<button name="expand_btn" label="Ausklappen" />
 	<text name="filter_label" value="Filter:"/>

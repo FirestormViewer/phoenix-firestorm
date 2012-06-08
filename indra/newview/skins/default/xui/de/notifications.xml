@@ -424,9 +424,9 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 		Die Port-Einstellungen werden nach einem Neustart von [APP_NAME] wirksam.
 	</notification>
 	<notification name="ChangeSkin">
-		Die neue Benutzeroberfläche wird nach einem Neustart von [APP_NAME] angezeigt.
+		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
 		<form name="form">
-			<ignore name="ignore" text="Eine andere Skin wurde ausgewählt."/>
+			<ignore name="ignore" text="Ein anderes Oberflächendesign wurde ausgewählt."/>
 		</form>
 	</notification>
 	<notification name="ChangeLanguage">
@@ -708,25 +708,30 @@ Wählen Sie Objekte mit Skripts, die Sie bearbeiten dürfen.
 	<notification name="CannotResetSelectObjectsNoScripts">
 		„Zurücksetzen“ nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
+	</notification>
+	<notification name="CannotdeleteSelectObjectsNoScripts">
+		„Löschen“ nicht möglich.
+
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="CannotResetSelectObjectsNoPermission">
 		„Zurücksetzen“ nicht möglich.
 
-Wählen Sie Objekte mit Skripts, die Sie bearbeiten dürfen.
+Wählen Sie Objekte mit Skripten, die Sie bearbeiten dürfen.
 	</notification>
 	<notification name="CannotOpenScriptObjectNoMod">
 		Das Skript im Objekt kann nicht geöffnet werden, da keine Änderungs-Berechtigungen vorliegen.
 	</notification>
 	<notification name="CannotSetRunningSelectObjectsNoScripts">
-		„Ausführen“ von Skripts nicht möglich.
+		„Ausführen“ von Skripten nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="CannotSetRunningNotSelectObjectsNoScripts">
-		„Deaktivieren“ von Skripts nicht möglich.
+		„Deaktivieren“ von Skripten nicht möglich.
 
-Wählen Sie Objekte mit Skripts.
+Wählen Sie Objekte mit Skripten.
 	</notification>
 	<notification name="NoFrontmostFloater">
 		Kein vorderster Floater zum Speichern.
@@ -2884,7 +2889,7 @@ Möchten Sie wirklich die folgenden Artikel:
 mit den folgenden Einwohnern teilen:
 
 [RESIDENTS]
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
 		Objekte wurden erfolgreich freigegeben.
@@ -3381,6 +3386,20 @@ Der Name der Debug-Einstellung wurde in die Zwischenablage kopiert. Er kann jetz
        text="Der Namen einer Debug-Einstellung wurde in die Zwischenablage kopiert"/>
     </form>
   </notification>
+  
+  <notification name="SanityCheck">
+[APP_NAME] hat ein mögliches Problem mit einer Einstellung erkannt:
+
+[SANITY_MESSAGE]
+
+Grund: [SANITY_COMMENT]
+
+Aktueller Wert: [CURRENT_VALUE]
+   <form name="form">
+      <ignore name="ignore"
+       text="Eine Einstellung hat die Prüfung auf einen sinnvollen Wert nicht bestanden."/>
+    </form>
+  </notification>  
   <!-- ## Zi: Debug Settings Editor -->
 
   <notification name="TeleportToAvatarNotPossible">
@@ -3485,4 +3504,22 @@ Soll die automatische Anzeige der Viewer-Version aktiviert werden?
 			<ignore name="ignore" text="Wenn dem Phoenix/Firestorm Support-Gruppenchat beigetreten wird."/>
 		</form>
 	</notification>
+
+	<notification name="ConfirmScriptModify">
+Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
+		<usetemplate
+			name="okcancelignore"
+			ignoretext="Bestätigen, bevor ich Skripte in einer Auswahl modifiziere."
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+  <notification name="LSLColorCopiedToClipboard">
+Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
+   <form name="form">
+      <ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
+    </form>
+  </notification>
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
 </notifications>

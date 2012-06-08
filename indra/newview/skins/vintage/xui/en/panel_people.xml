@@ -127,12 +127,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
 			width="313">
 
 			<tab_container
+				name="tabcont_radarpeople_main"
 				layout="topleft"
 				follows="all"
 				tab_position="bottom"
 				height="400">
 
 				<panel
+					name="radarmap_nearby_panel"
 					layout="topleft"
 					follows="all"
 					label="List"
@@ -238,6 +240,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				</panel>
 
 				<panel
+					name="radarmap_options_panel"
 					label="Options"
 					layout="topleft"
 					follows="all"
@@ -379,6 +382,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					wrap="false" />
 
 				<text
+					name="radarmap_range_label"
 					layout="topleft"
 					follows="left|top"
 					value="Radar Name Format:"
@@ -396,9 +400,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					name="RadarNameFormat"
 					control_name="RadarNameFormat"
 					enabled_control="UseDisplayNames">
-					<combo_box.item value="0" label="Username" />
-					<combo_box.item value="1" label="DisplayName (Username)" />
-					<combo_box.item value="2" label="Username (Displayname)" />
+					<combo_box.item name="RadarNameFormat_user" value="0" label="Username" />
+					<combo_box.item name="RadarNameFormat_displayuser" value="1" label="DisplayName (Username)" />
+					<combo_box.item name="RadarNameFormat_userdisplay" value="2" label="Username (Displayname)" />
 				</combo_box>
 
 			</panel>

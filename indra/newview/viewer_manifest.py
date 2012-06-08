@@ -694,6 +694,12 @@ class WindowsManifest(ViewerManifest):
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
 
         #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+        
+        # OLD METHOD, Still used for windows-based debugging
         symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
         symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
         symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
@@ -883,6 +889,21 @@ class DarwinManifest(ViewerManifest):
             self.run_command("chmod +x %r" % os.path.join(self.get_dst_prefix(), script))
 
     def package_finish(self):
+	# <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
+        # a standard map of strings for replacing in the templates
+        substitution_strings = {
+            'version' : '.'.join(self.args['version']),
+            'version_short' : '.'.join(self.args['version'][:-1]),
+            'version_dashes' : '-'.join(self.args['version']),
+            'grid':self.args['grid'],
+            'grid_caps':self.args['grid'].upper(),
+            'flags':self.flags_list().replace('"', '$\\"'),
+            'channel':self.channel(),
+            'channel_oneword':self.channel_oneword(),
+            'channel_unique':self.channel_unique(),
+            }
+	# </FS:AO>
+
         channel_standin = 'Firestorm'  # hah, our default channel is not usable on its own
         if not self.default_channel():
             channel_standin = self.channel()
@@ -1004,6 +1025,15 @@ class DarwinManifest(ViewerManifest):
         self.package_file = finalname
         self.remove(sparsename)
 
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-darwin.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-darwin.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+
+
+
+
 class LinuxManifest(ViewerManifest):
     def construct(self):
         super(LinuxManifest, self).construct()
@@ -1070,6 +1100,22 @@ class LinuxManifest(ViewerManifest):
         # a standard map of strings for replacing in the templates
         installer_name_components = ['Phoenix',self.channel_oneword(),self.args.get('arch'),'.'.join(self.args['version'])]
         installer_name = "_".join(installer_name_components)
+
+	# <FS:AO> Copied from windows manifest, since we're starting to use many of the same vars
+        # a standard map of strings for replacing in the templates
+        substitution_strings = {
+            'version' : '.'.join(self.args['version']),
+            'version_short' : '.'.join(self.args['version'][:-1]),
+            'version_dashes' : '-'.join(self.args['version']),
+            'grid':self.args['grid'],
+            'grid_caps':self.args['grid'].upper(),
+            'flags':self.flags_list().replace('"', '$\\"'),
+            'channel':self.channel(),
+            'channel_oneword':self.channel_oneword(),
+            'channel_unique':self.channel_unique(),
+            }
+	# </FS:AO>
+
         #if self.default_channel():
         #    if not self.default_grid():
         #        installer_name += '_' + self.args['grid'].upper()
@@ -1113,6 +1159,13 @@ class LinuxManifest(ViewerManifest):
             self.run_command("mv %(inst)s %(dst)s" % {
                 'dst': self.get_dst_prefix(),
                 'inst': self.build_path_of(installer_name)})
+
+        #AO: Try to package up symbols
+        # New Method, for reading cross platform stack traces on a linux/mac host
+        if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
+            # Rename to add version numbers
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+
 
 class Linux_i686Manifest(LinuxManifest):
     def construct(self):

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Profil" name="panel_profile">
+	<string name="status_online">
+		Obecnie Online
+	</string>
+	<string name="status_offline">
+		Obecnie Offline
+	</string>
+    <string name="no_partner_text" value="Brak" />
+    <string name="no_group_text" value="Brak" />
+    <string name="FSDev" value=" Programista" />
+    <string name="FSSupp" value=" Wsparcie" />
+        <text name="Key:" value="Klucz:" />
+        <text_editor name="user_key" value="(ładowanie...)" />
+		<button name="copy_uri_button" label="Kopiuj URI" />
+        <text name="Name:" value="Imię:" />
+		<button label="Imię:" name="set_name" tool_tip="Ustaw imię wyświetlane" />
+        <text_editor name="complete_name" value="(ładowanie...)" />
+		<button name="copy_name_button" label="Kopiuj imię" />
+		<text name="Photo:" value="Fotka:" />
+		<text name="status" value="Status Nieznany" />
+        <text name="label" value="Żyje:" />
+		<text name="register_date" value="(ładowanie...)" />
+        <text name="label2" value="Konto:" />
+        <text name="Groups:" value="Grupy:" />
+        <button name="group_invite" tool_tip="Zaproś do grupy" />
+        <text name="About:" value="Info:" />
+        <text name="Give item:" value="Podaruj:" />
+        <text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu, aby dać go tej osobie.">
+            Upuść przedmiot w tym miejscu.
+        </text>
+        <layout_stack name="buttonstack">
+            <layout_panel name="left_buttonstack">
+                <button label="Znajdź na mapie" label_selected="Znajdź na mapie" name="show_on_map_btn" tool_tip="Znajdź Rezydenta na mapie" />
+                <button label="Zapłać" label_selected="Zapłać" name="pay" tool_tip="Zapłać temu Rezydentowi lub udostępnij mu coś ze swojej Szafy"/>
+            </layout_panel>
+            <layout_panel name="middle_buttonstack">
+                <button label="Proponuj teleport" label_selected="Proponuj teleport" name="teleport" tool_tip="Zaproponuj teleport Rezydentowi" />
+                <button label="Czat prywatny (IM)" label_selected="Czat prywatny (IM)" name="im" tool_tip="Rozpocznij nową sesję czatu prywatnego (IM)" />
+            </layout_panel>
+            <layout_panel name="right_buttonstack">
+                <button label="Dodaj znajomego" label_selected="Dodaj znajomego" name="add_friend" tool_tip="Zaproponuj znajomość Rezydentowi" />
+                <button label="Zablokuj" name="block" tool_tip="Zablokuj tego Rezydenta" />
+                <button label="Odblokuj" name="unblock" tool_tip="Odblokuj tego Rezydenta" />
+            </layout_panel>
+        </layout_stack>
+        <check_box name="show_in_search_checkbox" label="Pokaż w wyszukiwarce" />
+</panel>

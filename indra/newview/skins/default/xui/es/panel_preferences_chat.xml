@@ -125,9 +125,14 @@
 			</text>
 		</panel>
 		<panel label="Radar" name="ChatRadar">
-			<check_box name="reportChatRange" label="El radar avisa cuando alguien entra o sale del alcance del chat"/>
-			<check_box name="reportDrawRange" label="El radar avisa cuando alguien entra o sale de tu distancia de dibujo"/>
-			<check_box name="RadarReportSimRange" label="El radar avisa cuando alguien entra o sale de la región"/>
+			<check_box name="reportChatRangeEnter" label="El radar avisa cuando alguien entra en el alcance del chat"/>
+			<check_box name="reportChatRangeLeave" label="El radar avisa cuando alguien sale del alcance del chat"/>
+			<check_box name="reportDrawRangeEnter" label="El radar avisa cuando alguien entra en tu distancia de dibujo"/>
+			<check_box name="reportDrawRangeLeaave" label="El radar avisa cuando alguien sale de tu distancia de dibujo"/>
+			<check_box name="RadarReportSimRangeEnter" label="El radar avisa cuando alguien entra en la región"/>
+			<check_box name="RadarReportSimRangeLeave" label="El radar avisa cuando alguien sale de la región"/>
+			<check_box name="RadarEnterChannelAlert" label="Reportar a los scripts los que entran en la región"/>
+			<check_box name="RadarLeaveChannelAlert" label="Reportar a los scripts los que salen de la región"/>
 		</panel>
 		<panel label="Alertas de chat" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Activar alertas de chat"/>

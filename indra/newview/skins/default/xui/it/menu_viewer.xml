@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
+<!--IO-->
 	<menu label="Io" name="Me">
 		<menu_item_call label="Preferenze" name="Preferences"/>
 		<menu_item_call label="Il mio Dashboard" name="Manage My Account">
@@ -43,6 +44,7 @@
 		<menu_item_call label="Nascondi tutti i controlli" name="Hide UI"/>
 		<menu_item_call label="Esci da [APP_NAME]" name="Quit"/>
 	</menu>
+<!--Comunica-->
 	<menu label="Comunica" name="Communicate">
 		<menu label="Stato online" name="Status">
 			<menu_item_check label="Autorisposta" name="Set Autorespond"/>
@@ -63,7 +65,9 @@
 		<menu_item_call label="Gruppi" name="My Groups"/>
 		<menu_item_call label="Persone vicine" name="Active Speakers"/>
 	</menu>
+<!--Mondo-->
 	<menu label="Mondo" name="World">
+		<menu_item_call label="Avatar nelle Vicinanze" name="Active Speakers" />
 		<menu_item_call label="Crea punto di riferimento per questo luogo" name="Create Landmark Here"/>
 		<menu_item_call label="Destinazioni..." name="Destinations"/>
 		<menu_item_check label="Mappamondo" name="World Map"/>
@@ -113,6 +117,7 @@
 			</menu>
 		</menu>
 	</menu>
+<!--Costruisci-->
 	<menu label="Costruisci" name="BuildTools">
 		<menu_item_check label="Costruisci" name="Show Build Tools"/>
 		<menu label="Seleziona strumento di costruzione" name="Select Tool">
@@ -147,6 +152,8 @@
 			<menu_item_call label="Reimposta script" name="Reset Scripts"/>
 			<menu_item_call label="Imposta gli script come in esecuzione" name="Set Scripts to Running"/>
 			<menu_item_call label="Imposta script come non in esecuzione" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Rimuovi script dalla selezione" name="Remove Scripts From Selection"/>
+			<menu_item_call label="Script Info (N.Script)" name="Script Info"/>
 		</menu>
 		<menu label="Opzioni" name="Options">
 			<menu_item_check label="Mostra autorizzazioni avanzate" name="DebugPermissions"/>
@@ -174,10 +181,12 @@
 		<menu_item_call label="Annulla" name="Undo"/>
 		<menu_item_call label="Ripeti" name="Redo"/>
 	</menu>
+<!--Contenuto-->
 	<menu label="Contenuto" name="Content">
 		<menu_item_check label="Cerca" name="Search"/>
 		<menu_item_call label="Bibleoteca Script" name="Script Library"/>
 	</menu>
+<!--Aiuto-->
 	<menu label="Aiuto" name="Help">
 		<menu_item_call label="Aiuto di [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_check label="Attiva suggerimenti" name="Enable Hints"/>
@@ -187,6 +196,7 @@
 		<menu_item_check label="Abilita tasto informazioni di sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informazioni su [APP_NAME]" name="About Second Life"/>
 	</menu>
+<!--Avanzate-->
 	<menu label="Avanzate" name="Advanced">
 		<menu_item_call label="Ridisegna le texture" name="Rebake Texture"/>
 		<menu_item_call label="Imposta dimensioni dell&apos;interfaccia sui valori predefiniti" name="Set UI Size to Default"/>
@@ -253,6 +263,7 @@
 		<menu_item_call label="Mostra impostazioni di debug" name="Debug Settings"/>
 		<menu_item_check label="Mostra menu sviluppo" name="Debug Mode"/>
 	</menu>
+<!--Sviluppo-->
 	<menu label="Sviluppo" name="Develop">
 		<menu label="Console" name="Consoles">
 			<menu_item_check label="Console texture" name="Texture Console"/>
@@ -380,6 +391,7 @@
 		<menu_item_call label="Lascia stato Admin" name="Leave Admin Options"/>
 		<menu_item_check label="Mostra menu Admin" name="View Admin Options"/>
 	</menu>
+<!--Admin-->
 	<menu label="Admin" name="Admin">
 		<menu label="Oggetto" name="AdminObject">
 			<menu_item_call label="Prendi copia" name="Admin Take Copy"/>

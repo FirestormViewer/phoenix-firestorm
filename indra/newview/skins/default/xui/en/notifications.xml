@@ -900,21 +900,6 @@ You need to enter either the Username or both the First and Last name of your av
 
   <notification
    icon="alertmodal.tga"
-   name="AddClassified"
-   type="alertmodal">
-Classified ads appear in the &apos;Classified&apos; section of the Search directory and on [http://secondlife.com/community/classifieds secondlife.com] for one week.
-Fill out your ad, then click &apos;Publish...&apos; to add it to the directory.
-You will be asked for a price to pay when clicking Publish.
-Paying more makes your ad appear higher in the list, and also appear higher when people search for keywords.
-    <usetemplate
-     ignoretext="How to create a new Classified ad"
-     name="okcancelignore"
-     notext="Cancel"
-     yestext="OK"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="DeleteClassified"
    type="alertmodal">
 Delete classified &apos;[NAME]&apos;?
@@ -1806,6 +1791,16 @@ Select objects with scripts that you have permission to modify.
    name="CannotResetSelectObjectsNoScripts"
    type="alertmodal">
 Not able to perform &apos;reset&apos;.
+
+Select objects with scripts.
+  <tag>fail</tag>
+  </notification>
+  
+   <notification
+    icon="alertmodal.tga"
+    name="CannotdeleteSelectObjectsNoScripts"
+    type="alertmodal">
+Not able to perform &apos;remove&apos;.
 
 Select objects with scripts.
   <tag>fail</tag>
@@ -8700,6 +8695,7 @@ Do you want to enable the automatic viewer version display?
      yestext="OK"/>
   </notification>
 
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="alertmodal.tga"
    name="LocalBitmapsUpdateFileNotFound"
@@ -8726,5 +8722,18 @@ Disabling future updates for this file.
 Attempted to add an invalid or unreadable image file [FNAME] which could not be opened or decoded.
 Attempt cancelled.
   </notification>
+  
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
+  <notification
+   icon="notify.tga"
+   name="LSLColorCopiedToClipboard"
+   type="alertmodal">
+The LSL color string has been copied to your clipboard. You can now paste it into your script to use it.
+   <form name="form">
+      <ignore name="ignore"
+       text="An LSL color string was copied to my clipboard"/>
+    </form>
+  </notification>
+  <!-- <FS:Zi> Add float LSL color entry widgets -->
   
 </notifications>

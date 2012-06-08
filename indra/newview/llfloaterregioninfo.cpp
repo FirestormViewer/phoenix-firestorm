@@ -375,6 +375,23 @@ void LLFloaterRegionInfo::processRegionInfo(LLMessageSystem* msg)
 	panel->getChildView("access_combo")->setEnabled(gAgent.isGodlike() || (region && region->canManageEstate() && !teen_grid));
 	panel->setCtrlsEnabled(allow_modify);
 	
+	// <FS:Zi> Add estate ID and region grid position to Region panel
+	S32 grid_pos_x=-1;
+	S32 grid_pos_y=-1;
+	U32 estate_id;
+	if(region)
+	{
+		//compute the grid position of the region
+		LLVector3d global_pos = region->getPosGlobalFromRegion(LLVector3::zero);
+		grid_pos_x = (S32) (global_pos.mdV[VX]/256.0f);
+		grid_pos_y = (S32) (global_pos.mdV[VY]/256.0f);
+	}
+	msg->getU32Fast(_PREHASH_RegionInfo, _PREHASH_EstateID, estate_id);
+
+	panel->getChild<LLLineEditor>("estate_id")->setValue(LLSD((F32) estate_id));
+	panel->getChild<LLLineEditor>("grid_position_x")->setValue(LLSD((F32) grid_pos_x));
+	panel->getChild<LLLineEditor>("grid_position_y")->setValue(LLSD((F32) grid_pos_y));
+	// </FS:Zi>
 
 	// DEBUG PANEL
 	panel = tab->getChild<LLPanel>("Debug");

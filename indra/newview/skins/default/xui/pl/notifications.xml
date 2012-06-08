@@ -328,13 +328,6 @@ Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć j
 	<notification name="InvalidCredentialFormat">
 		Należy wprowadzić nazwę użytkownika lub imię oraz nazwisko Twojego awatara w pole nazwy użytkownika, a następnie ponownie się zalogować.
 	</notification>
-	<notification name="AddClassified">
-		Reklamy pojawiają się w sekcji &apos;Classified&apos; w wyszukiwarce oraz na [http://secondlife.com/community/classifieds secondlife.com] przez jeden tydzień.
-Wypełnij reklamę i kliknij na &apos;Publikuj...&apos; aby dodać ją do katalogu.
-Pojawi się pytanie o kwotę do zapłacenia po kliknięciu.
-Płacąc więcej powodujesz, że reklama pojawia się wyżej na listach wyszukiwań.
-		<usetemplate ignoretext="Jak utworzyć reklamę" name="okcancelignore" notext="Anuluj" yestext="OK"/>
-	</notification>
 	<notification name="DeleteClassified">
 		Usunąć reklamę &apos;[NAME]&apos;?
 Pamiętaj! Nie ma rekompensaty za poniesione koszta.
@@ -686,6 +679,11 @@ Wybierz skryptowane obiekty do których masz prawa modyfikacji.
 		&apos;Resetowanie&apos; nie powiodło się.
 
 Wybierz obiekty zawierające skrypty.
+	</notification>
+	<notification name="CannotdeleteSelectObjectsNoScripts">
+		Nie można przeprowadzić &apos;usuń&apos;.
+
+Wybierz obiekty ze skryptami.
 	</notification>
 	<notification name="CannotResetSelectObjectsNoPermission">
 		&apos;Resetowanie&apos; nie powiodło się.
@@ -3458,6 +3456,16 @@ Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
 			<button name="OK_okcancelignore" text="Tak" />
 			<button name="Cancel_okcancelignore" text="Nie" />
 			<ignore name="ignore" text="Dołączenie do grupy wsparcia Phoenix/Firestorm" />
+		</form>
+	</notification>
+	<notification name="ConfirmScriptModify">
+		Na pewno chcesz zmodyfikować skrypty w zaznaczonych obiektach?
+		<usetemplate ignoretext="Potwierdzenie modyfikacji skryptów w zaznaczeniu" name="okcancelignore" notext="Anuluj" yestext="OK" />
+	</notification>
+	<notification name="LSLColorCopiedToClipboard">
+		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
+		<form name="form">
+			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
 		</form>
 	</notification>
 </notifications>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="BeamColor" title="AUSWAHLSTRAHL-FARBROTATION">
+	<text name="beamcolor_text">
+Bitte mit der Maus die Farben auszuwählen,
+bei denen die Rotation starten bzw. stoppen soll.
+Links-Klick ändert die Startfarbe.
+Rechts-Klick ändert die Endfarbe.
+	</text>
+	<color_swatch name="BeamColor_Preview" tool_tip="Klicken, um die Farbauswahl zu öffnen"/>
+	<text name="beamcolor_text2">
+		Vorschau
+	</text>
+	<slider name="BeamColor_Speed" label_width="100" label="Geschwindigkeit" tool_tip="Kontrolliert die Geschwindigkeit der Farbrotation"/>
+	<button label="Speichern" name="BeamColor_Save"/>
+	<button label="Laden" name="BeamColor_Load"/>
+	<button label="Abbrechen" name="BeamColor_Cancel"/>
+</floater>

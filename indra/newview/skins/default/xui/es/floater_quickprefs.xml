@@ -44,6 +44,10 @@
 			Puntos de mira:
 		</text>
 		<check_box name="showlookat" label="Activados" tool_tip="Muestra los puntos a los que otros están mirando"/>
+		<text name="DebugShowColor_label">
+			Color bajo el cursor:
+		</text>
+		<check_box name="Show_Color_Under_Cursor" label="Activado" tool_tip="Mostrar el color bajo el cursor"/>
 		<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 			Cielo WL:
 		</text>

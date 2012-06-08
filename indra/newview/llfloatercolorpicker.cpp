@@ -58,6 +58,8 @@
 #include "lldraghandle.h"
 #include "llwindow.h"
 
+#include "llnotificationsutil.h"		// <FS:Zi> Add float LSL color entry widgets
+
 // System includes
 #include <sstream>
 #include <iomanip>
@@ -228,6 +230,16 @@ BOOL LLFloaterColorPicker::postBuild()
 	childSetCommitCallback("hspin", onTextCommit, (void*)this );
 	childSetCommitCallback("sspin", onTextCommit, (void*)this );
 	childSetCommitCallback("lspin", onTextCommit, (void*)this );
+
+	// <FS:Zi> Add float LSL color entry widgets
+	mCopyLSLBtn = getChild<LLButton>( "copy_lsl_btn" );
+	mCopyLSLBtn->setClickedCallback ( onClickCopyLSL, this );
+
+	childSetCommitCallback("rspin_lsl", onTextCommit, (void*)this );
+	childSetCommitCallback("gspin_lsl", onTextCommit, (void*)this );
+	childSetCommitCallback("bspin_lsl", onTextCommit, (void*)this );
+	childSetCommitCallback("hex_value", onTextCommit, (void*)this );
+	// </FS:Zi>
 
 	LLToolPipette::getInstance()->setToolSelectCallback(boost::bind(&LLFloaterColorPicker::onColorSelect, this, _1));
 
@@ -700,6 +712,14 @@ void LLFloaterColorPicker::updateTextEntry ()
 	getChild<LLUICtrl>("hspin")->setValue(( getCurH () * 360.0f ) );
 	getChild<LLUICtrl>("sspin")->setValue(( getCurS () * 100.0f ) );
 	getChild<LLUICtrl>("lspin")->setValue(( getCurL () * 100.0f ) );
+
+	// <FS:Zi> Add float LSL color entry widgets
+	getChild<LLUICtrl>("rspin_lsl")->setValue(( getCurR () ) );
+	getChild<LLUICtrl>("gspin_lsl")->setValue(( getCurG () ) );
+	getChild<LLUICtrl>("bspin_lsl")->setValue(( getCurB () ) );
+
+	getChild<LLUICtrl>("hex_value")->setValue(llformat("%02x%02x%02x",(S32) (getCurR()*255.0),(S32) (getCurG()*255.0),(S32) (getCurB()*255.0)));
+	// </FS:Zi>
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -735,6 +755,63 @@ void LLFloaterColorPicker::onTextEntryChanged ( LLUICtrl* ctrl )
 
 		updateTextEntry ();
 	}
+	// <FS:Zi> Add float LSL color entry widgets
+	else if ( ( name == "rspin_lsl" ) || ( name == "gspin_lsl" ) || ( name == "bspin_lsl" ) )
+	{
+		// get current RGB
+		F32 rVal, gVal, bVal;
+		getCurRgb ( rVal, gVal, bVal );
+
+		// update component value with new value from text
+		if ( name == "rspin_lsl" )
+		{
+			rVal = (F32)ctrl->getValue().asReal();
+		}
+		else
+		if ( name == "gspin_lsl" )
+		{
+			gVal = (F32)ctrl->getValue().asReal();
+		}
+		else
+		if ( name == "bspin_lsl" )
+		{
+			bVal = (F32)ctrl->getValue().asReal();
+		}
+
+		// update current RGB (and implicitly HSL)
+		setCurRgb ( rVal, gVal, bVal );
+
+		updateTextEntry ();
+	}
+	else if ( name == "hex_value" )
+	{
+		// get current RGB
+		S32 r, g, b;
+		F32 rVal, gVal, bVal;
+		getCurRgb ( rVal, gVal, bVal );
+
+		std::string hex_string=ctrl->getValue().asString();
+
+		if(hex_string.length()!=6)
+			return;
+
+		LLStringUtil::toLower(hex_string);
+
+		if(hex_string.find_first_not_of("0123456789abcdef")!=std::string::npos)
+			return;
+
+		sscanf(hex_string.c_str(),"%02x%02x%02x", &r,&g,&b);
+
+		rVal=(F32) r/255.0;
+		gVal=(F32) g/255.0;
+		bVal=(F32) b/255.0;
+
+		// update current RGB (and implicitly HSL)
+		setCurRgb ( rVal, gVal, bVal );
+
+		updateTextEntry ();
+	}
+	// </FS:Zi>
 	else
 	// value in HSL boxes changed
 	if ( ( name == "hspin" ) || ( name == "sspin" ) || ( name == "lspin" ) )
@@ -1113,3 +1190,19 @@ void LLFloaterColorPicker::stopUsingPipette()
 		LLToolMgr::getInstance()->clearTransientTool();
 	}
 }
+
+// <FS:Zi> Add float LSL color entry widgets
+void LLFloaterColorPicker::onClickCopyLSL ( void* data )
+{
+	if (data)
+	{
+		LLFloaterColorPicker* self = ( LLFloaterColorPicker* )data;
+
+		if ( self )
+		{
+			getWindow()->copyTextToClipboard(utf8str_to_wstring(llformat("<%.3f, %.3f, %.3f>",self->getCurR(),self->getCurG(),self->getCurB())));
+			LLNotificationsUtil::add("LSLColorCopiedToClipboard");
+		}
+	}
+}
+// </FS:Zi>

@@ -12,7 +12,7 @@
 	<text name="theme_textbox2">
 		(Requiere reiniciar)
 	</text>
-	 <check_box label="Restablecer las barras de herramientas cuando se cambie de skin (recomendado)." tool_tip="Cuando está activa, esta opción preserva la disposición de las barras de herramientas tal como están diseñadas para la skin seleccionada, ignorando tu personalización cuando cambias de skin o de modo." name="reset_toolbar_settings"/>
+	 <check_box label="Restablecer las barras de herramientas cuando se cambie de skin." tool_tip="Cuando está activa, esta opción preserva la disposición de las barras de herramientas tal como están diseñadas para la skin seleccionada, ignorando tu personalización cuando cambias de skin o de modo." name="reset_toolbar_settings"/>
 	<check_box label="Usar cursores estilo Viewer 1" name="use _legacy_cursors"/>
 	<text name="theme_textbox3">
 		(Requiere reiniciar)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="block_list_panel">
+	<scroll_list name="blocked" tool_tip="Lista zablokowanych osób" />
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
+			<button tool_tip="Wróć do Ludzi" name="back"/>
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
+			<layout_stack name="block_list_blocklaystack">
+				<layout_panel name="block_panels_btnperson">
+					<button label="Blokuj osobę" name="Block resident..." tool_tip="Wybierz Rezydenta do zablokowania" />
+				</layout_panel>
+				<layout_panel name="block_panels_btnobject">
+					<button label="Blokuj obiekt" name="Block object by name..." tool_tip="Wybierz obiekt do zablokowania po nazwie" />
+				</layout_panel>
+				<layout_panel name="block_panels_btnunblock">
+					<button label="Odblokuj" name="Unblock" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych" />
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>

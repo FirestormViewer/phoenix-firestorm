@@ -699,7 +699,8 @@ void LLTextEditor::selectAll()
 	mSelectionStart = getLength();
 	mSelectionEnd = 0;
 	setCursorPos(mSelectionEnd);
-	updatePrimary();
+	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+	//updatePrimary();
 }
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
@@ -1027,7 +1028,8 @@ BOOL LLTextEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 		resetCursorBlink();
 
 		// take selection to 'primary' clipboard
-		updatePrimary();
+		// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+		//updatePrimary();
 
 		handled = TRUE;
 	}
@@ -1345,11 +1347,13 @@ BOOL LLTextEditor::handleSelectionKey(const KEY key, const MASK mask)
 		}
 	}
 
-	if( handled )
-	{
-		// take selection to 'primary' clipboard
-		updatePrimary();
-	}
+	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+	//if( handled )
+	//{
+	//	// take selection to 'primary' clipboard
+	//	updatePrimary();
+	//}
+	// </FS:AW> Linux primary "clipboard" tainted by auto-selection
  
 	return handled;
 }
@@ -1705,10 +1709,12 @@ BOOL LLTextEditor::handleControlKey(const KEY key, const MASK mask)
 		}
 	}
 
-	if (handled)
-	{
-		updatePrimary();
-	}
+	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
+	//if (handled)
+	//{
+	//	updatePrimary();
+	//}
+	// </FS:AW> Linux primary "clipboard" tainted by auto-selection
 
 	return handled;
 }

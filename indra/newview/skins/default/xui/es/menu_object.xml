@@ -12,9 +12,12 @@
 		<menu_item_call label="Enlazar" name="Object Link"/>
 		<menu_item_call label="Desenlazar" name="Object Unlink"/>
 		<menu_item_check label="Editar partes enlazadas" name="Object Edit Linked"/>
+		<menu_item_call label="Compilar (Mono)" name="Mono"/>
+		<menu_item_call label="Compilar (LSL)" name="LSL"/>
 		<menu_item_call label="Reiniciar scripts" name="Object Reset Scripts"/>
 		<menu_item_call label="Ejecutar scripts" name="Object Set Scripts to Running"/>
 		<menu_item_call label="Detener scripts" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="Eliminar scripts" name="Remove Scripts From Selection"/>
 	</context_menu>
 	<menu_item_call label="Enfocar" name="Zoom In"/>
 	<context_menu label="Ponérmelo..." name="Put On">

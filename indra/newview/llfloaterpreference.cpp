@@ -2018,6 +2018,13 @@ BOOL LLPanelPreference::postBuild()
 		updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
 	}
 
+	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
+	if (hasChild("use_external_browser", TRUE))
+	{
+		getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
+	}
+	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
+
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	//////////////////////PanelSpellCheck//////////////////////
 	if (hasChild("checkSpellCheck", TRUE))
@@ -2063,7 +2070,13 @@ LLPanelPreference::~LLPanelPreference()
 }
 void LLPanelPreference::apply()
 {
-	// no-op
+	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
+	if (hasChild("use_external_browser", TRUE))
+	{
+		BOOL useExternalBrowser = (getChild<LLRadioGroup>("use_external_browser")->getValue().asInteger() == 1);
+		gSavedSettings.setBOOL("UseExternalBrowser", useExternalBrowser);
+	}
+	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
 }
 
 void LLPanelPreference::saveSettings()

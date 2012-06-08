@@ -9,9 +9,12 @@
 		<menu_item_call label="NazwaKonta (Wyświetlane)" name="radarFmtUNDN"/>
 	</menu>
 	<menu_item_check label="Pierścień czatu lokalnego na minimapie" name="MiniMapChatRing"/>
-	<menu_item_check label="Powiadom o osobie w polu widzenia" name="RadarReportDrawRange"/>
-	<menu_item_check label="Powiadom o osobie w zasięgu czatu" name="RadarReportChatRange"/>
-	<menu_item_check label="Powiadom o osobie w zasięgu regionu" name="RadarReportSimRange"/>
+	<menu_item_check label="Powiadom o wejściu osoby w pole widzenia" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Powiadom o wyjściu osoby z pola widzenia" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Powiadom o wejściu osoby w zasięg czatu" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Powiadom o wyjściu osoby z zasięgu czatu" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Powiadom o wejściu osoby w zasięg regionu" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Powiadom o wyjściu osoby z zasięgu regionu" name="RadarReportSimRangeLeave"/>
 	<menu_item_check label="Wysyłaj alerty wejść do skryptów" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Wysyłaj alerty wyjść do skryptów" name="RadarLeaveChannelAlert"/>
 	<menu_item_call label="Pokaż zablokowanych Rezydentów i obiekty" name="show_blocked_list"/>

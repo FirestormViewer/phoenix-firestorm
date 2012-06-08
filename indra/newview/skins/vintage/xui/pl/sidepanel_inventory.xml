@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Rzeczy" name="objects panel">
+	<panel name="sidepanel__inventory_panel">
+		<tab_container name="inventory_tab_container">
+			<panel label="Szafa" name="panel_main_inventory" />
+			<panel label="Marketplace" name="inbox_outbox_layout_panel">
+				<layout_stack name="inbox_outbox_layout_stack_off">
+					<layout_panel name="inbox_layout_panel_off">
+						<panel name="marketplace_inbox">
+							<string name="InboxLabelWithArg">Otrzymane obiekty ([NUM])</string>
+							<string name="InboxLabelNoArg">Otrzymane obiekty</string>
+							<text value="Otrzymane obiekty" name="inbox_label" />
+							<text name="inbox_fresh_new_count">
+								[NUM] nowe/y
+							</text>
+							<panel name="inbox_inventory_placeholder_upper" tool_tip="Przeciągnij przedmioty do swojej Szafy, aby je używać">
+								<panel name="inbox_inventory_placeholder">
+									Rzeczy kupione na Marketplace będą tu dostarczane.
+								</panel>
+							</panel>
+						</panel>
+					</layout_panel>
+					<layout_panel name="outbox_layout_panel">
+						<panel name="marketplace_outbox">
+							<string name="OutboxLabelWithArg">Skrzynka nad. kupca ([NUM])</string>
+							<string name="OutboxLabelNoArg">Skrzynka nad. kupca</string>
+							<text value="Skrzynka nad. kupca" name="outbox_label" />
+							<button tool_tip="Wyślij na mój Marketplace" name="outbox_sync_btn" />
+							<panel name="outbox_inventory_placeholder_upperpanel">
+								<panel name="outbox_inventory_placeholder_panel">
+									<text name="outbox_inventory_placeholder_title">
+										Ładowanie...
+									</text>
+								</panel>
+							</panel>
+						</panel>
+					</layout_panel>
+				</layout_stack>
+			</panel>
+		</tab_container>
+	</panel>

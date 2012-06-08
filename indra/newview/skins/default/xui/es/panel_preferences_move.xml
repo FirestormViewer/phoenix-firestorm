@@ -54,6 +54,7 @@
 			<check_box label="Hacer clic en mi avatar mantiene la posición de la cámara" name="clickonavatarkeepscamera" tool_tip="Normalmente, hacer clic en tu avatar restablece la posición de la cámara. Esta configuración evita ese comportamiento."/>
 			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
 			<check_box label="Desactivar la distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva el límite de cercanía de la cámara a un objeto o avatar."/>
+			<check_box label="Orientar avatar hacia la dirección de la cámara al restablecer la vista" name="resetviewturnsavatar" tool_tip="Esta opción mantiene la dirección de la cámara y orienta al avatar cuando se restablece la vista (al pulsar la tecla ESC)."/>
 			<check_box label="Permitir a la cámara moverse a través de objetos" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos." width="285"/>
 			<text name="ignorecameraconstraints_requires_restart" top_pad="-2" top_delta="-1">
 				(requiere reiniciar)

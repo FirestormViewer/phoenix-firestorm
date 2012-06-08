@@ -9,8 +9,23 @@
  width="540"
  name="autocorrect"
  help_topic="fs_auto_correct"
- title="Autocorrect Settings">
- 
+ open_positioning="centered"
+ save_rect="true"
+ title="AUTOCORRECT SETTINGS">
+
+<floater.string name="Entries">
+	Entries
+</floater.string>
+<floater.string name="Search">
+	Search
+</floater.string>
+<floater.string name="Replace">
+	Replace
+</floater.string>
+<floater.string name="AddNewEntryMessage">
+	To add an entry, please type in chat &quot;[COMMAND] [LISTNAME]|wrongWord|rightWord&quot;
+</floater.string>
+
 <panel
  border="true"
  follows="all"

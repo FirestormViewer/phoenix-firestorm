@@ -9,7 +9,7 @@
         </text>
         <check_box label="Abilita doppio click teleport sulla Mappa del mondo" name="FSWorldMapDoubleclickTeleport" tool_tip="Abilita il doppio click per teleportarsi a destinazione sulla Mappa del mondo"/>
         <check_box label="Disabilita schermata Teleport" name="tp_screen_toggle" tool_tip="Disabilita la schermata nera durante tutti i Teleport." />
-        <check_box label="Disable Teleport Beacons" name="tp_beam_toggle" tool_tip="Disables the teleport destination beacons after teleports." />
+        <check_box label="Disabilita segnali Teleport" name="tp_beam_toggle" tool_tip="Disabilita tutti gli effetti del Teleport dopo essere arrivati a destinazione." />
         <check_box label="Disabilita schermata di Accesso" name="login_screen_toggle" tool_tip="Disabilita la schermata nera durante l'Accesso."/>
         <check_box label="Disabilita schermata di Uscita" name="logout_screen_toggle" tool_tip="Disabilita la schermata nera durante la Disconnessione" />
         <check_box label="Rezza sempre con il gruppo della land se è possibile" name="grouplandrez" tool_tip="Il viewer cercherà automaticamente di rezzare con il gruppo della land se ne fate parte." />
@@ -181,8 +181,8 @@
         <combo_box name="material">
              <combo_item name="Stone" label="Pietra"/>
              <combo_item name="Metal" label="Metallo"/>
-             <combo_item name="Glass" label="Vestro"/>
-             <combo_item name="Wood" label="Lego"/>
+             <combo_item name="Glass" label="Vetro"/>
+             <combo_item name="Wood" label="Legno"/>
              <combo_item name="Flesh" label="Carne"/>
              <combo_item name="Plastic" label="Plastica"/>
              <combo_item name="Rubber" label="Gomma"/>

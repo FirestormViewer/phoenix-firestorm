@@ -540,13 +540,20 @@ void LLAvatarTracker::notifyParticularFriendObservers(const LLUUID& buddy_id)
         return;
 
     // Notify observers interested in buddy_id.
-    observer_set_t& obs = obs_it->second;
+	
+	// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654; make a copy of observer_set. Just in case some implementation of changed() calls add/remove...Observer
+	
+	//    observer_set_t& obs = obs_it->second;
+    observer_set_t obs = obs_it->second;
+
+	// </FS:ND:
+
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
-		if (*ob_it)
-			(*ob_it)->changed(mModifyMask);
-		else
-			llwarns << "Invalid observer" << llendl;
+		(*ob_it)->changed(mModifyMask);
+
+		// <FS:ND/> Paranoia check. Of course someone could add x observer than add the same amount of x. That won't be found by comparing size alone, but it is good enough for a quick test 
+		llassert( obs.size() == obs_it->second.size() );
     }
 }
 
@@ -583,10 +590,20 @@ void LLAvatarTracker::notifyFriendPermissionObservers(const LLUUID& buddy_id)
 		return;
 	}
     // Notify observers interested in buddy_id.
-    observer_set_t& obs = obs_it->second;
+
+	// <FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654; make a copy of observer_set. Just in case some implementation of changed() calls add/remove...Observer
+
+	//    observer_set_t& obs = obs_it->second;
+    observer_set_t obs = obs_it->second;
+
+	// </FS:ND>
+
     for (observer_set_t::iterator ob_it = obs.begin(); ob_it != obs.end(); ob_it++)
     {
 		(*ob_it)->changed(LLFriendObserver::PERMS);
+		
+		// <FS:ND/> Paranoia check. Of course someone could add x observer than add the same amount of x. That won't be found by comparing size alone, but it is good enough for a quick test 
+		llassert( obs.size() == obs_it->second.size() );
     }
 }
 
@@ -1003,46 +1020,3 @@ bool LLCollectAllBuddies::operator()(const LLUUID& buddy_id, LLRelationship* bud
 	}
 	return true;
 }
-
-// </FS:ND> FIRE-6077; FIRE-6227; FIRE-6431; SUP-9654
-// Make sure an observer gets removed once it dies.
-
-LLFriendObserver::~LLFriendObserver()
-{
-	LLAvatarTracker::instance().onObserverDied( this );
-}
-
-void removeDanglingObserver( std::map<LLUUID, std::set<LLFriendObserver*> > &aContainer, LLFriendObserver const *aObserver )
-{
-	for( std::map<LLUUID, std::set<LLFriendObserver*> >::iterator itr = aContainer.begin(); itr != aContainer.end(); ++itr )
-	{
-		for( std::set<LLFriendObserver*>::iterator itr2 = itr->second.begin(); itr2 != itr->second.end(); ++itr2 )
-		{
-			if( *itr2 == aObserver )
-			{
-				llwarns << "Removing dangling observer" << llendl;
-				itr->second.erase( itr2 );
-					
-				break;
-			}
-		}
-	}
-}
-
-void LLAvatarTracker::onObserverDied( LLFriendObserver const *aObserver )
-{
-	for( observer_list_t::iterator itr = mObservers.begin(); itr != mObservers.end(); ++itr )
-	{
-		if( *itr == aObserver )
-		{
-			llwarns << "Removing dangling observer" << llendl;
-			mObservers.erase( itr );
-			break;
-		}
-	}
-
-	removeDanglingObserver( mParticularFriendObserverMap, aObserver );
-	removeDanglingObserver( mFriendPermissionObserverMap, aObserver );
-}
-
-// </FS:ND>
