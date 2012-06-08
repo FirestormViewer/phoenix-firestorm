@@ -188,7 +188,7 @@
 					function="Tools.SelectedScriptAction"
 					parameter="compile lsl" />
 				<pie_slice.on_enable
-					function="EditableSelectedMono" />
+					function="EditableSelected" />
 			</pie_slice>
 
 			<pie_slice
@@ -199,7 +199,7 @@
 					function="Tools.SelectedScriptAction"
 					parameter="reset" />
 				<pie_slice.on_enable
-					function="EditableSelectedMono" />
+					function="EditableSelected" />
 			</pie_slice>
 
 			<pie_slice
@@ -210,7 +210,7 @@
 					function="Tools.SelectedScriptAction"
 					parameter="start" />
 				<pie_slice.on_enable
-					function="EditableSelectedMono" />
+					function="EditableSelected" />
 			</pie_slice>
 
 			<pie_slice
@@ -221,7 +221,7 @@
 					function="Tools.SelectedScriptAction"
 					parameter="stop" />
 				<pie_slice.on_enable
-					function="EditableSelectedMono" />
+					function="EditableSelected" />
 			</pie_slice>
 
 			<pie_slice
@@ -232,7 +232,7 @@
 					function="Tools.SelectedScriptAction"
 					parameter="delete" />
 				<pie_slice.on_enable
-					function="EditableSelectedMono" />
+					function="EditableSelected" />
 			</pie_slice>
 			
 			<pie_slice
