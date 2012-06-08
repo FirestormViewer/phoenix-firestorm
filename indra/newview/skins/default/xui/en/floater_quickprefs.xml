@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="285"
+    height="295"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -53,7 +53,9 @@
             top_delta="-2"
             width="150"
             label_width="3"/>
-        <text
+			
+<!-- [FS:WF] Removing max bandwidth setting for now - FIRE-6340 -->
+<!--        <text
             type="string"
             length="1"
             follows="left|top"
@@ -81,7 +83,9 @@
             min_val="100"
             name="max_bandwidth"
             top_delta="-2"
-            width="149" />
+            width="149" /> 
+--> 			
+
         <text
             type="string"
             length="1"
@@ -316,12 +320,34 @@
          top_delta="0"
          follows="left|top"
          height="16"
-         left="107"
+         left="120"
          name="showlookat"
          label="Enabled"
          width="70"
          control_name="DebugLookAt"
          tool_tip="Enable crosshairs marking where people are looking."/>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="5"
+            layout="topleft"
+            left="5"
+            name="DebugShowColor_label"
+            top_pad="4"
+            width="105">
+            Color Under Cursor:
+        </text>
+        <check_box
+         top_delta="0"
+         follows="left|top"
+         height="16"
+         left="120"
+         name="Show_Color_Under_Cursor"
+         label="Enabled"
+         width="70"
+         control_name="DebugShowColor"
+         tool_tip="Show color under mouse cursor."/>
         <text
             type="string"
             length="1"
@@ -332,7 +358,7 @@
             name="WL Sky"
             tool_tip="Windlight presets for your sky"
             mouse_opaque="false"
-            top_delta="22"
+            top_delta="26"
             width="90">
             WL Sky:
         </text>
