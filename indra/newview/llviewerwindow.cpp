@@ -4299,15 +4299,12 @@ void LLViewerWindow::movieSize(S32 new_width, S32 new_height)
 	// {
 	//	gViewerWindow->getWindow()->setSize(new_size.convert());
 	// }
-#ifdef LL_WINDOWS
-	// The Windows functions get the size wrong. The OS X and Linux
-	// versions don't.
-	new_width += 16;
-	new_height += 38;
-#endif // LL_WINDOWS
+	U32 nChromeW(0), nChromeH(0);
+	gViewerWindow->getWindow()->getWindowChrome( nChromeW, nChromeH );
+
 	LLCoordScreen new_size;
-	new_size.mX = new_width;
-	new_size.mY = new_height;
+	new_size.mX = new_width + nChromeW;
+	new_size.mY = new_height + nChromeH;
 	gViewerWindow->getWindow()->setSize(new_size);
 	// FS:TS FIRE-6182 end
 }
