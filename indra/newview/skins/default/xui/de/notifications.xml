@@ -403,9 +403,9 @@ Hinweis: Der Cache wird dabei gelöscht/geleert.
 		Die Port-Einstellungen werden nach einem Neustart von [APP_NAME] wirksam.
 	</notification>
 	<notification name="ChangeSkin">
-		Die neue Benutzeroberfläche wird nach einem Neustart von [APP_NAME] angezeigt.
+		Das neue Oberflächendesign wird nach einem Neustart von [APP_NAME] angezeigt.
 		<form name="form">
-			<ignore name="ignore" text="Eine andere Skin wurde ausgewählt."/>
+			<ignore name="ignore" text="Ein anderes Oberflächendesign wurde ausgewählt."/>
 		</form>
 	</notification>
 	<notification name="ChangeLanguage">
