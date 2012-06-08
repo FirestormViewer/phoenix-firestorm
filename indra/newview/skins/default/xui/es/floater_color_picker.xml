@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="ColorPicker" title="SELECTOR DE COLOR">
-	<text name="r_val_text">
-		Rojo:
-	</text>
-	<text name="g_val_text">
-		Verde:
-	</text>
-	<text name="b_val_text">
-		Azul:
-	</text>
+	<tab_container name="scale_type_container">
+		<panel name="RGB" label="RGB">
+			<text name="r_val_text">
+				Rojo:
+			</text>
+			<text name="g_val_text">
+				Verde:
+			</text>
+			<text name="b_val_text">
+				Azul:
+			</text>
+		</panel>
+		<panel name="LSL" label="LSL">
+			<text name="r_val_text_lsl">
+				Rojo:
+			</text>
+			<text name="g_val_text_lsl">
+				Verde:
+			</text>
+			<text name="b_val_text_lsl">
+				Azul:
+			</text>
+		</panel>
+		<panel name="Hex" label="Hex">
+			<text name="hex_text">
+				Cód. Hex (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
 		Tono:
 	</text>
@@ -19,10 +39,11 @@
 		Lumin.:
 	</text>
 	<check_box label="Aplicar ahora" name="apply_immediate"/>
+	<button label="Copiar LSL" tool_tip="Copia el valor del color en un vector de color LSL en el formato de &lt;r, g, b&gt;." name="copy_lsl_btn"/>
+	<button label="Aceptar" label_selected="Aceptar" name="select_btn"/>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
-	<button label="OK" label_selected="OK" name="select_btn"/>
 	<text name="Current color:">
-		Color actual:
+		^ Color actual ^
 	</text>
 	<text name="(Drag below to save.)">
 		(arrástralo abajo para guardarlo)

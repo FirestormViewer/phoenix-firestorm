@@ -2,70 +2,68 @@
 <panel label="Configuración" name="Input panel">
 	<layout_stack name="max_bandwidth_layout">
 		<layout_panel name="bandwidth_panel">
-
-	<text name="Network:">
-		Red:
-	</text>
-	<text name="Maximum bandwidth">
-		Ancho de banda máximo
-	</text>
-	<text name="text_box2">
-		kbps
-	</text>
-
+			<text name="Maximum bandwidth">
+				Ancho de banda máximo
+			</text>
+			<text name="text_box2">
+				kbps
+			</text>
+		</layout_panel>
+		<layout_panel name="bandwidth_warning_visibility_panel">
+			<text name="bandwidth_warning_message">
+				Recomendamos encarecidamente no configurar por encima de 1500 kbps.
+			</text>
 		</layout_panel>
 		<layout_panel name="other_settings_panel">
-
-	<check_box label="Personalizar el puerto" name="connection_port_enabled"/>
-	<spinner label="Nº del puerto:" name="connection_port"/>
-	<text name="cache_size_label_l">
-		Tamaño de la caché
-	</text>
-	<text name="text_box5">
-		MB
-	</text>
-	<text name="Cache location">
-		Directorio de la caché:
-	</text>
-	<line_editor name="cache_location" width="215"/>
-	<button label="Abrir" label_selected="Abrir" name="open_cache" width="35"/>
-	<button label="Establecer" label_selected="Establecer" name="set_cache" width="68"/>
-	<button label="Restablecer" label_selected="Restablecer" name="reset_cache" width="75"/>
-	<button label="Limpiar caché" label_selected="Limpiar" name="clear_cache" width="88"/>
-	<text name="log_path_desc">
-		Directorio de registro de chat:
-	</text>
-	<line_editor name="log_path_string-panelsetup" width="215"/>
-	<button label="Abrir" label_selected="Abrir" name="open_log_path_button-panelsetup" width="35"/>
-	<button label="Establecer" label_selected="Establecer" name="log_path_button-panelsetup" width="68"/>
-	<button label="Restablecer" label_selected="Restablecer" name="reset_logpath" width="75"/>
-	<button label="Abrir registro de fallos" label_selected="Abrir registro de fallos" name="browse_crashlogs" width="135"/>
-	<button label="Abrir directorio de configuración" label_selected="Abrir directorio de configuración" name="browse_settingsdir" width="195"/>
-	<text name="Web:">
-		Navegador web:
-	</text>
-	<radio_group name="use_external_browser">
-		<radio_item label="Usar el navegador incorporado" name="internal" tool_tip="Usa el navegador incorporado para ayuda, enlaces web, etc. Este navegador se abre en una nueva ventana dentro de [APP_NAME]." width="200"/>
-		<radio_item label="Usar mi navegador (IE, Firefox, Safari)" name="external" tool_tip="Usa tu navegador por defecto para ayuda, enlaces web, etc. No es aconsejable si estás a pantalla completa."/>
-	</radio_group>
-	<text name="numberwebfloaters_label">
-		Máximo número de ventanas de navegador:
-	</text>
-	<combo_box tool_tip="Máximo número de ventanas de navegador interno que pueden abrirse a la vez" name="web_number_combobox">
-		<combo_box.item label="Ventanas ilimitadas" name="web_unlimited"/>
-		<combo_box.item label="Una ventana" name="web_1"/>
-		<combo_box.item label="Cinco ventanas" name="web_5"/>
-		<combo_box.item label="Diez ventanas" name="web_10"/>
-	</combo_box>
-	<check_box initial_value="true" label="Activar plugins" name="browser_plugins_enabled"/>
-	<check_box initial_value="true" label="Aceptar las &apos;cookies&apos;" name="cookies_enabled"/>
-	<check_box initial_value="true" label="Activar Javascript" name="browser_javascript_enabled"/>
-	<check_box initial_value="falso" label="Permitir las ventanas emergentes en el navegador" name="media_popup_enabled"/>
-	<text name="Proxy Settings:">
-		Configuración de proxy:
-	</text>
-	<button label="Ajustar la configuración de proxy" label_selected="Elegir" name="set_proxy"/>
-
+			<check_box label="Personalizar el puerto" name="connection_port_enabled"/>
+			<spinner label="Nº del puerto:" name="connection_port"/>
+			<text name="cache_size_label_l">
+				Tamaño de la caché
+			</text>
+			<text name="text_box5">
+				MB
+			</text>
+			<text name="Cache location">
+				Directorio de la caché:
+			</text>
+			<line_editor name="cache_location" width="215"/>
+			<button label="Abrir" label_selected="Abrir" name="open_cache" width="35"/>
+			<button label="Establecer" label_selected="Establecer" name="set_cache" width="68"/>
+			<button label="Restablecer" label_selected="Restablecer" name="reset_cache" width="75"/>
+			<button label="Limpiar caché" label_selected="Limpiar" name="clear_cache" width="88"/>
+			<text name="log_path_desc">
+				Directorio de registro de chat:
+			</text>
+			<line_editor name="log_path_string-panelsetup" width="215"/>
+			<button label="Abrir" label_selected="Abrir" name="open_log_path_button-panelsetup" width="35"/>
+			<button label="Establecer" label_selected="Establecer" name="log_path_button-panelsetup" width="68"/>
+			<button label="Restablecer" label_selected="Restablecer" name="reset_logpath" width="75"/>
+			<button label="Abrir registro de fallos" label_selected="Abrir registro de fallos" name="browse_crashlogs" width="135"/>
+			<button label="Abrir directorio de configuración" label_selected="Abrir directorio de configuración" name="browse_settingsdir" width="195"/>
+			<text name="Web:">
+				Navegador web:
+			</text>
+			<radio_group name="use_external_browser">
+				<radio_item label="Usar el navegador incorporado" name="internal" tool_tip="Usa el navegador incorporado para ayuda, enlaces web, etc. Este navegador se abre en una nueva ventana dentro de [APP_NAME]." width="200"/>
+				<radio_item label="Usar mi navegador (IE, Firefox, Safari)" name="external" tool_tip="Usa tu navegador por defecto para ayuda, enlaces web, etc. No es aconsejable si estás a pantalla completa."/>
+			</radio_group>
+			<text name="numberwebfloaters_label">
+				Máximo número de ventanas de navegador:
+			</text>
+			<combo_box tool_tip="Máximo número de ventanas de navegador interno que pueden abrirse a la vez" name="web_number_combobox">
+				<combo_box.item label="Ventanas ilimitadas" name="web_unlimited"/>
+				<combo_box.item label="Una ventana" name="web_1"/>
+				<combo_box.item label="Cinco ventanas" name="web_5"/>
+				<combo_box.item label="Diez ventanas" name="web_10"/>
+			</combo_box>
+			<check_box initial_value="true" label="Activar plugins" name="browser_plugins_enabled"/>
+			<check_box initial_value="true" label="Aceptar las &apos;cookies&apos;" name="cookies_enabled"/>
+			<check_box initial_value="true" label="Activar Javascript" name="browser_javascript_enabled"/>
+			<check_box initial_value="falso" label="Permitir las ventanas emergentes en el navegador" name="media_popup_enabled"/>
+			<text name="Proxy Settings:">
+				Configuración de proxy:
+			</text>
+			<button label="Ajustar la configuración de proxy" label_selected="Elegir" name="set_proxy"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

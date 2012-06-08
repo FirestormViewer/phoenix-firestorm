@@ -356,11 +356,6 @@ Necesitas una cuenta para acceder a [CURRENT_GRID]. ¿Te gustaría crear una aho
 	<notification name="InvalidCredentialFormat">
 		Escribe el nombre de usuario o el nombre y el apellido de tu avatar en el campo Nombre de usuario y reintenta el inicio de sesión.
 	</notification>
-	<notification name="AddClassified">
-		Los Anuncios Clasificados aparecen en la sección &apos;Clasificados&apos; del directorio de búsqueda y en [http://secondlife.com/community/classifieds secondlife.com] durante una semana.
-		Rellena tu anuncio y haz clic en &apos;Publicar...&apos; para añadirlo al directorio. Se te preguntará por un precio a pagar cuando lo vayas a publicar. Pagar más te hará aparecer más arriba en la lista, y también cuando la gente busque por palabras clave.
-		<usetemplate ignoretext="Cómo crear un nuevo Anuncio Clasificado" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
-	</notification>
 	<notification name="DeleteClassified">
 		¿Borrar el clasificado &apos;[NAME]&apos;?
 No se reembolsarán las cuotas pagadas.
@@ -522,14 +517,14 @@ La calidad gráfica puede ajustarse en Avatar &gt; Preferencias &gt; Gráficos.
 		Transacción cancelada.
 	</notification>
 	<notification name="TooManyItems">
-		No puedes dar más de 42 ítems en una única transferencia de inventario.
+		No puedes dar más de 42 items en una única transferencia de inventario.
 	</notification>
 	<notification name="NoItems">
 		No tienes permiso para transferir el ítem seleccionado.
 	</notification>
 	<notification name="CannotCopyCountItems">
 		No tienes permiso para copiar [COUNT] de los
-ítems seleccionados. Si los das, los perderás de tu inventario.
+items seleccionados. Si los das, los perderás de tu inventario.
 ¿Realmente quieres darlos?
 		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
@@ -698,6 +693,10 @@ Selecciona objetos con scripts de los que tengas permiso de modificación.
 
 Selecciona objetos con scripts.
 	</notification>
+	<notification name="CannotdeleteSelectObjectsNoScripts">
+		No se pudo &apos;eliminar&apos;.
+		
+Selecciona objetos con scripts.
 	<notification name="CannotResetSelectObjectsNoPermission">
 		No se pudo &apos;reiniciar&apos;.
 
@@ -1041,42 +1040,42 @@ Por favor, elige un pago mayor.
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLock">
-		Al menos uno de los ítems que has seleccionado está bloqueado.
+		Al menos uno de los items que has seleccionado está bloqueado.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoCopy">
-		Al menos uno de los ítems que has seleccionado no es copiable.
+		Al menos uno de los items que has seleccionado no es copiable.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoOwn">
-		No eres el propietario de, al menos, uno de los ítems que has seleccionado.
+		No eres el propietario de, al menos, uno de los items que has seleccionado.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopy">
 		Al menos un objeto está bloqueado.
 Al menos un objeto no es copiable.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoOwn">
 		Al menos un objeto está bloqueado.
 No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteNoCopyNoOwn">
 		Al menos un objeto no es copiable.
 No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectDeleteLockNoCopyNoOwn">
@@ -1084,13 +1083,13 @@ No eres propietario de, al menos, un objeto.
 Al menos un objeto no es copiable.
 No eres propietario de, al menos, un objeto.
 
-¿Estás seguro de que quieres borrar estos ítems?
+¿Estás seguro de que quieres borrar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectTakeLock">
 		Al menos un objeto está bloqueado.
 
-¿Estás seguro de que quieres tomar estos ítems?
+¿Estás seguro de que quieres tomar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectTakeNoOwn">
@@ -1098,7 +1097,7 @@ No eres propietario de, al menos, un objeto.
 Si sigues, se aplicarán los permisos marcados para el próximo propietario, y es posible que se restrinja tu posibilidad de hacer modificaciones o copias.
 Aún así, puedes tomar lo actualmente seleccionado.
 
-¿Estás seguro de que quieres tomar estos ítems?
+¿Estás seguro de que quieres tomar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmObjectTakeLockNoOwn">
@@ -1107,7 +1106,7 @@ No eres el propietario de todos los objetos que estás tomando.
 Si sigues, se aplicarán los permisos marcados para el próximo propietario, y es posible que se restrinja tu posibilidad de hacer modificaciones o copias.
 Aún así, puedes tomar lo actualmente seleccionado.
 
-¿Estás seguro de que quieres tomar estos ítems?
+¿Estás seguro de que quieres tomar estos items?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="CantBuyLandAcrossMultipleRegions">
@@ -1923,17 +1922,17 @@ Has actualizado la posición de este Destacado, pero los otros detalles permanec
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="MoveInventoryFromObject">
-		Has elegido ítems &apos;no copiables&apos; de tu inventario. Esos ítems desaparecerán de tu inventario, no se copiarán.
+		Has elegido items &apos;no copiables&apos; de tu inventario. Esos items desaparecerán de tu inventario, no se copiarán.
 
 ¿Mover el/los ítem(s) del inventario?
-		<usetemplate ignoretext="Avisarme antes de que mueva ítems &apos;no copiables&apos; desde un objeto" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Avisarme antes de que mueva items &apos;no copiables&apos; desde un objeto" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="MoveInventoryFromScriptedObject">
-		Has elegido ítems &apos;no copiables&apos; de tu inventario. Esos ítems se moverán a tu inventario, no se copiarán.
+		Has elegido items &apos;no copiables&apos; de tu inventario. Esos items se moverán a tu inventario, no se copiarán.
 Dado que estos objetos tienen scripts, moverlos a tu inventario puede provocar un mal funcionamiento del script.
 
 ¿Mover el/los ítem(s) del inventario?
-		<usetemplate ignoretext="Avisarme antes de que mueva ítems &apos;no copiables&apos; que puedan estropear un objeto con script" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Avisarme antes de que mueva items &apos;no copiables&apos; que puedan estropear un objeto con script" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ClickActionNotPayable">
 		Advertencia: la acción &apos;Pagar al objeto&apos; ha sido marcada, pero sólo funcionará si se añade un script con un evento money().
@@ -1942,7 +1941,7 @@ Dado que estos objetos tienen scripts, moverlos a tu inventario puede provocar u
 		</form>
 	</notification>
 	<notification name="OpenObjectCannotCopy">
-		En este objeto no hay ítems que estés autorizado a copiar.
+		En este objeto no hay items que estés autorizado a copiar.
 	</notification>
 	<notification name="WebLaunchAccountHistory">
 		¿Ir a tu [http://secondlife.com/account/ Panel de Control] para ver el historial de tu cuenta?
@@ -2748,7 +2747,7 @@ Algunos objetos (las pistolas, por ejemplo) te pedirán que, para usarlos, entre
 Los objetos que construyas aquí serán eliminados cuando la abandones; por tanto, no olvides pulsarlos con el botón derecho y elegir &apos;Tomar&apos; para que tu creación vaya a tu inventario.
 	</notification>
 	<notification name="MaxListSelectMessage">
-		Puedes seleccionar un máximo de [MAX_SELECT] ítems de esta lista.
+		Puedes seleccionar un máximo de [MAX_SELECT] items de esta lista.
 	</notification>
 	<notification name="VoiceInviteP2P">
 		[NAME] te está invitando a un chat de voz.
@@ -3044,7 +3043,7 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		Para cambiar la vista de la cámara, utiliza los controles Orbital y Panorámica. Para restablecer tu vista, pulsa Esc o camina.
 	</notification>
 	<notification label="Inventario" name="HintInventory">
-		Accede a tu inventario para buscar ítems. Los ítems más recientes se pueden encontrar fácilmente en la pestaña Recientes.
+		Accede a tu inventario para buscar items. Los items más recientes se pueden encontrar fácilmente en la pestaña Recientes.
 	</notification>
 	<notification label="¡Tienes dólares Linden!" name="HintLindenDollar">
 		Éste es tu saldo actual de [CUR]. Haz clic en Comprar [CUR] para comprar más dólares Linden.
@@ -3419,6 +3418,16 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 			<button name="OK_okcancelignore" text="Sí"/>
 			<button name="Cancel_okcancelignore" text="No"/>
 			<ignore name="ignore" text="Te has unido al Grupo de Soporte de Phoenix/Firestorm"/>
+		</form>
+	</notification>
+	<notification name="ConfirmScriptModify">
+		¿Estás seguro de que quieres modificar los scripts en los objetos seleccionados?
+		<usetemplate name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="LSLColorCopiedToClipboard">
+		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.
+		<form name="form">
+			<ignore name="ignore" text="Una cadena LSL se ha copiado a mi portapapeles"/>
 		</form>
 	</notification>
 </notifications>

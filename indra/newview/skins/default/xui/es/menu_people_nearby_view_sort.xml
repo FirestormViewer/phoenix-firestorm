@@ -9,9 +9,12 @@
 		<menu_item_call label="Nombre de usuario (DisplayName)" name="radarFmtUNDN"/>
 	</menu>
 	<menu_item_check label="Mostrar alcance del chat local en el minimapa" name="MiniMapChatRing"/>
-	<menu_item_check label="Reportar los que cruzan el límite de la distancia de dibujo" name="RadarReportDrawRange"/>
-	<menu_item_check label="Reportar los que cruzan el límite del chat local" name="RadarReportChatRange"/>
-	<menu_item_check label="Reportar los que cruzan los límites de la región" name="RadarReportSimRange"/>
+	<menu_item_check label="Reportar los que entran en tu distancia de dibujo" name="RadarReportDrawRangeEnter"/>
+	<menu_item_check label="Reportar los que salen de tu distancia de dibujo" name="RadarReportDrawRangeLeave"/>
+	<menu_item_check label="Reportar los que entran en tu alcance de chat local" name="RadarReportChatRangeEnter"/>
+	<menu_item_check label="Reportar los que salen de tu alcance de chat local" name="RadarReportChatRangeLeave"/>
+	<menu_item_check label="Reportar los que entran en la región" name="RadarReportSimRangeEnter"/>
+	<menu_item_check label="Reportar los que salen de la región" name="RadarReportSimRangeLeave"/>
 	<menu_item_check label="Reportar a los scripts los que entran en la región" name="RadarEnterChannelAlert"/>
 	<menu_item_check label="Reportar a los scripts los que salen de la región" name="RadarLeaveChannelAlert"/>
 	<menu_item_call label="Mostrar residentes y objetos bloqueados" name="show_blocked_list"/>

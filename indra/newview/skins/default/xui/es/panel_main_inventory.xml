@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Cosas" name="main inventory panel">
 	<panel.string name="ItemcountFetching">
-		Obtenidos [ITEM_COUNT] ítems... [FILTER]
+		Obtenidos [ITEM_COUNT] items... [FILTER]
 	</panel.string>
 	<panel.string name="ItemcountCompleted">
-		[ITEM_COUNT] ítems [FILTER]
+		[ITEM_COUNT] items [FILTER]
 	</panel.string>
 	<filter_editor label="Filtrar" name="inventory search editor" tool_tip="Escribe uno o más términos a buscar, separados por '+' "/>
 	<button name="collapse_btn" label="Contraer"/>

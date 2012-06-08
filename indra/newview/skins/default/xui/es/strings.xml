@@ -922,10 +922,13 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Cambiar sus permisos
 	</string>
 	<string name="TrackYourCamera">
-		Seguir su cámara
+		Seguir tu cámara
 	</string>
 	<string name="ControlYourCamera">
-		Controlar su cámara
+		Controlar tu cámara
+	</string>
+	<string name="TeleportYourAgent">
+		Teleportarte
 	</string>
 	<string name="NotConnected">
 		No conectado/a
@@ -1399,7 +1402,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="No Filters"
 		 value="No" />
 	<string name="Since Logoff"
-		 value="Desde la desconexión" />
+		 value="desde la desconexión" />
 	<string name="InvFolder My Inventory">
 		Inventario
 	</string>
@@ -1770,7 +1773,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		Fallo desconocido en la descarga
 	</string>
 	<string name="CompileQueueTitle">
-		Recompilando
+		Progreso de la recompilación
 	</string>
 	<string name="CompileQueueStart">
 		recompilar
@@ -1782,16 +1785,25 @@ Intenta iniciar sesión de nuevo en unos instantes.
 		restaurar
 	</string>
 	<string name="RunQueueTitle">
-		Configurar según se ejecuta
+		Configurando como ejecutándose
 	</string>
 	<string name="RunQueueStart">
-		Configurando según se ejecuta
+		ejecutar
 	</string>
 	<string name="NotRunQueueTitle">
-		Configurar sin ejecutar
+		Configurando como no ejecutándose
 	</string>
 	<string name="NotRunQueueStart">
-		Configurando sin ejecutarlo
+		no ejecutar
+	</string>
+	<string name="DeleteQueueTitle">
+		Progreso de la eliminación
+	</string>
+	<string name="DeleteQueueStart">
+		Eliminando
+	</string>
+	<string name="Compiling">
+		Compilando [NAME]
 	</string>
 	<string name="CompileSuccessful">
 		¡Compilación correcta!
@@ -3961,10 +3973,10 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Fallo al iniciar el visor
 	</string>
 	<string name="ItemsComingInTooFastFrom">
-		[APP_NAME]: Los ítems se reciben muy rápido de [FROM_NAME]; desactivada la vista previa automática durante [TIME] sgs.
+		[APP_NAME]: Los items se reciben muy rápido de [FROM_NAME]; desactivada la vista previa automática durante [TIME] sgs.
 	</string>
 	<string name="ItemsComingInTooFast">
-		[APP_NAME]: Los ítems se reciben muy rápido; desactivada la vista previa automática durante [TIME] sgs.
+		[APP_NAME]: Los items se reciben muy rápido; desactivada la vista previa automática durante [TIME] sgs.
 	</string>
 	<string name="IM_logging_string">
 		-- Activado el registro de los mensajes instantáneos --

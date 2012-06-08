@@ -25,7 +25,15 @@
 				<pie_slice name="Blacklist Sculpt" label="Esculpido"/>
 			</pie_menu>
 			<pie_slice label="Bloquear" name="Object Mute"/>
-			<pie_slice label="Info scripts" name="ScriptInfo"/>
+			<pie_menu label="Scripts &gt;" name="ScriptsMenu">
+				<pie_slice label="Compilar (Mono)" name="CompileMono"/>
+				<pie_slice label="Compilar (LSL)" name="CompileLSL"/>
+				<pie_slice label="Reinic. scripts" name="Object Reset Scripts"/>
+				<pie_slice label="Ejecutar scripts" name="Object Set Scripts to Running"/>
+				<pie_slice label="Detener scripts" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Eliminar scripts" name="Remove Scripts From Selection"/>
+				<pie_slice label="Información" name="ScriptInfo"/>
+			</pie_menu>
 			<pie_slice label="Inspeccionar" name="Object Inspect"/>
 		</pie_menu>
 		<pie_slice label="Comprar" name="Buy..."/>

@@ -6,12 +6,21 @@
 	<text name="region_text">
 		desconocida
 	</text>
+	<text name="estate_id_lbl">
+		ID de Estado:
+	</text>
+	<line_editor name="estate_id" initial_value="desconocido"/>
 	<text name="version_channel_text_lbl">
 		Versión:
 	</text>
 	<text name="version_channel_text" width="360">
 		desconocida
 	</text>
+	<text name="grid_position_lbl">
+		Pos. en la red:
+	</text>
+	<line_editor name="grid_position_x" initial_value="desconocida"/>
+	<line_editor name="grid_position_y" initial_value="desconocida"/>
 	<text name="region_type_lbl">
 		Tipo:
 	</text>

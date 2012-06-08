@@ -145,11 +145,13 @@
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Scripts" name="Scripts">
+			<menu_item_call label="Información de scripts (contador)" name="Script Info"/>
 			<menu_item_call label="Recompilar los scripts (Mono)" name="Mono"/>
 			<menu_item_call label="Recompilar los scripts (LSL)" name="LSL"/>
 			<menu_item_call label="Reiniciar los scripts" name="Reset Scripts"/>
 			<menu_item_call label="Iniciar la ejecución de los scripts" name="Set Scripts to Running"/>
 			<menu_item_call label="Detener la ejecución de los scripts" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Eliminar scripts de la selección" name="Remove Scripts From Selection"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
@@ -221,8 +223,8 @@
 		<menu_item_call label="Definir el tamaño de la ventana..." name="Set Window Size..."/>
 		<menu_item_check label="Limitar la distancia de selección" name="Limit Select Distance"/>
 		<menu_item_check label="Desactivar los límites de la cámara" name="Disable Camera Distance"/>
-		<menu_item_check label="Foto en Alta Resolución" name="HighResSnapshot"/>
-		<menu_item_check label="Silenciar el Guardar una foto" name="QuietSnapshotsToDisk"/>
+		<menu_item_check label="Foto en alta resolución" name="HighResSnapshot"/>
+		<menu_item_check label="Fotos silenciosas" name="QuietSnapshotsToDisk"/>
 		<menu label="Herramientas de rendimiento" name="Performance Tools">
 			<menu_item_call label="Medidor de lag" name="Lag Meter"/>
 			<menu_item_check label="Estadísticas" name="Statistics Bar"/>
@@ -354,6 +356,7 @@
 			<menu_item_check label="Complejidad del dibujo" name="rendercomplexity"/>
 			<menu_item_check label="Bytes de objetos anexados" name="attachment bytes"/>
 			<menu_item_check label="Esculpidos" name="Sculpt"/>
+			<menu_item_check label="Tamaño de textura" name="Texture Size"/>
 		</menu>
 		<menu label="Dibujo" name="Rendering">
 			<menu_item_check label="Ejes" name="Axes"/>
