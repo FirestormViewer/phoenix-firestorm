@@ -3034,6 +3034,7 @@ even though the user gets a free copy.
                 Repeats / Face
             </text>
             <spinner
+             decimal_digits="5"
              follows="left|top"
              height="19"
              initial_value="0"
@@ -3054,6 +3055,7 @@ even though the user gets a free copy.
              top_delta="0"
              width="70" />
             <spinner
+             decimal_digits="5"
              follows="left|top"
              height="19"
              initial_value="0"
@@ -3135,6 +3137,7 @@ even though the user gets a free copy.
                 Texture Params
             </text>
             <spinner
+             decimal_digits="5"
              follows="left|top"
              height="19"
              initial_value="0"
@@ -3156,6 +3159,7 @@ even though the user gets a free copy.
              width="68">
             </button>
             <spinner
+             decimal_digits="5"
              follows="left|top"
              height="19"
              initial_value="0"
