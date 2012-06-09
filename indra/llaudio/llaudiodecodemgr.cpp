@@ -591,7 +591,6 @@ void LLAudioDecodeMgr::Impl::processQueue(const F32 num_secs)
 						LLAudioData *adp = gAudiop->getAudioData(mCurrentDecodep->getUUID());
 						adp->setHasDecodedData(TRUE);
 						adp->setHasValidData(TRUE);
-						adp->setHasDecodeRequestPending( false ); // <FS:ND/> All done, buffer can be used.
 
 						// At this point, we could see if anyone needs this sound immediately, but
 						// I'm not sure that there's a reason to - we need to poll all of the playing
@@ -601,14 +600,6 @@ void LLAudioDecodeMgr::Impl::processQueue(const F32 num_secs)
 					else
 					{
 						llinfos << "Vorbis decode failed!!!" << llendl;
-
-						// <FS:ND> Decode failed, mark audiodata as not waiting for decoded data, then it can be reused.
-
-						LLAudioData *adp = gAudiop->getAudioData(mCurrentDecodep->getUUID());
-						if( adp )
-							adp->setHasDecodeRequestPending( false );
-
-						// </FS:ND>
 					}
 					mCurrentDecodep = NULL;
 				}
