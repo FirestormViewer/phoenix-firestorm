@@ -671,8 +671,11 @@ public:
 			addText(xpos, ypos, "View Matrix");
 			ypos += y_inc;
 		}
+		//<FS:AO improve use of controls with radiogroups>
 		//if (gSavedSettings.getBOOL("DebugShowColor"))
-		static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+		//static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+		static LLCachedControl<S32> debugShowColor(gSavedSettings, "DebugShowColor");
+		//</FS:AO>
 		if (debugShowColor)
 		{
 			U8 color[4];
