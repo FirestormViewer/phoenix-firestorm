@@ -41,6 +41,8 @@
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
+		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
+		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
 		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Unterhalten" name="Communicate">
