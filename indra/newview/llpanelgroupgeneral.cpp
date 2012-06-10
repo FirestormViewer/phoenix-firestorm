@@ -1004,5 +1004,5 @@ S32 LLPanelGroupGeneral::sortMembersList(S32 col_idx,const LLScrollListItem* i1,
 void LLPanelGroupGeneral::onCopyURI()
 {
     std::string name = "secondlife:///app/group/"+getChild<LLUICtrl>("group_key")->getValue().asString()+"/about";
-    gClipboard.copyFromString(utf8str_to_wstring(name));
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
 }

@@ -19,6 +19,7 @@
 			<menu_item_check label="Correr siempre" name="Always Run"/>
 			<menu_item_check label="Forzar sentarme en el suelo" name="Force Toggle Sitting"/>
 			<menu_item_check label="Modo fantasma" name="Avatar Phantom"/>
+			<menu_item_call label="Caminar / Correr / Volar..." name="Walk / run / fly"/>
 			<menu_item_check label="Salto rápido" name="Avatar Ignore Prejump"/>
 		</menu>
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>
@@ -40,8 +41,13 @@
 			<menu_item_call label="Masivo (múltiples archivos)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
 		</menu>
-		<menu_item_call label="Solicitar estatus de Administrador" name="Request Admin Options"/>
-		<menu_item_call label="Abandonar estatus de Administrador" name="Leave Admin Options"/>
+		<menu_item_call label="Comprar L$..." name="Buy and Sell L$"/>
+		<menu_item_call label="Panel de control de la cuenta..." name="Manage My Account">
+			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=es"/>
+		</menu_item_call>
+		<menu_item_call label="Preferencias..." name="Preferences"/>
+		<menu_item_call label="Botones de la barra de herramientas..." name="Toolbars"/>
+		<menu_item_call label="Ocultar todos los controles" name="Hide UI"/>
 		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
@@ -83,6 +89,7 @@
 			<menu_item_check label="Propiedades de la parcela" name="Parcel Properties"/>
 			<menu_item_check label="Menú Avanzado" name="Show Advanced Menu"/>
 		</menu>
+		<menu label="Sol" name="Sun">
 		<menu_item_call label="Teleportar a mi base" name="Teleport Home"/>
 		<menu_item_call label="Fijar mi base aquí" name="Set Home to Here"/>
 		<menu label="Posición del sol" name="Environment Settings">
@@ -241,9 +248,9 @@
 		<menu label="Objetos representados" name="Rendering Types">
 			<menu_item_check label="Simple" name="Rendering Type Simple"/>
 			<menu_item_check label="Alfa" name="Rendering Type Alpha"/>
-			<menu_item_check label="Árboles" name="Rendering Type Tree"/>
+			<menu_item_check label="Árbol" name="Rendering Type Tree"/>
 			<menu_item_check label="Avatares" name="Rendering Type Character"/>
-			<menu_item_check label="Parche de superficie" name="Rendering Type Surface Patch"/>
+			<menu_item_check label="Parcela de superficie" name="Rendering Type Surface Patch"/>
 			<menu_item_check label="Cielo" name="Rendering Type Sky"/>
 			<menu_item_check label="Agua" name="Rendering Type Water"/>
 			<menu_item_check label="Terreno" name="Rendering Type Ground"/>
@@ -251,10 +258,10 @@
 			<menu_item_check label="Hierba" name="Rendering Type Grass"/>
 			<menu_item_check label="Nubes" name="Rendering Type Clouds"/>
 			<menu_item_check label="Partículas" name="Rendering Type Particles"/>
-			<menu_item_check label="Relieve" name="Rendering Type Bump"/>
+			<menu_item_check label="Efectos de relieve" name="Rendering Type Bump"/>
 		</menu>
 		<menu label="Rasgos renderizados" name="Rendering Features">
-			<menu_item_check label="Interfaz de usuario" name="UI"/>
+			<menu_item_check label="Interfaz de usuario" name="ToggelUI"/>
 			<menu_item_check label="Seleccionado" name="Selected"/>
 			<menu_item_check label="Realzados" name="Highlighted"/>
 			<menu_item_check label="Texturas dinámicas" name="Dynamic Textures"/>
@@ -268,8 +275,6 @@
 		<menu_item_check label="Vista subjetiva suavizada" name="Mouse Smoothing"/>
 		<menu_item_call label="Liberar teclas" name="Release Keys"/>
 		<menu label="Atajos de teclado" name="Shortcuts">
-			<menu_item_call label="Subir imagen ([COST] [CUR])..." name="Upload Image"/>
-			<menu_item_check label="Buscar" name="Search"/>
 			<menu_item_check label="Mostrar el menú Avanzado - atajo clásico" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
 			<menu_item_check label="Correr siempre" name="Always Run"/>
@@ -351,6 +356,7 @@
 			<menu_item_check label="Cola de construcción" name="Build Queue"/>
 			<menu_item_check label="Luces" name="Lights"/>
 			<menu_item_check label="Armazón de colisión" name="Collision Skeleton"/>
+			<menu_item_check label="Bytes de adjunto" name="attachment bytes"/>
 			<menu_item_check label="Emisión de rayos" name="Raycast"/>
 			<menu_item_check label="Vectores del viento" name="Wind Vectors"/>
 			<menu_item_check label="Complejidad del dibujo" name="rendercomplexity"/>
@@ -388,13 +394,10 @@
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
-		<menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
-		<menu label="Grabadora" name="Recorder">
-			<menu_item_call label="Iniciar reproducción" name="Start Playback"/>
-			<menu_item_call label="Detener reproducción" name="Stop Playback"/>
-			<menu_item_check label="Reproducir en bucle" name="Loop Playback"/>
-			<menu_item_call label="Iniciar grabación" name="Start Record"/>
-			<menu_item_call label="Detener grabación"  name="Stop Record"/>
+		<menu label="Mundo virtual" name="DevelopWorld">
+			<menu_item_check label="Anular el sol del Sim" name="Sim Sun Override"/>
+			<menu_item_check label="Meteorología fija" name="Fixed Weather"/>
+			<menu_item_call label="Volcar la caché de objetos de la región" name="Dump Region Object Cache"/>
 		</menu>
 		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Ignorar sol de la región" name="Sim Sun Override"/>
@@ -464,6 +467,7 @@
 		<menu_item_check label="Texturas HTTP" name="HTTP Textures"/>
 		<menu_item_check label="Inventario HTTP" name="HTTP Inventory"/>
 		<menu_item_call label="Comprimir imágenes" name="Compress Images"/>
+		<menu label="Configurar el nivel de registro" name="Set Logging Level"/>
 		<menu_item_check label="Minivolcado de la salida del depurador" name="Output Debug Minidump"/>
 		<menu_item_check label="Ventana de consola en la próxima ejecución" name="Console Window"/>
 		<menu label="Nivel de registro" name="Set Logging Level">
@@ -479,12 +483,12 @@
 	</menu>
 	<menu label="Admin" name="Admin">
 		<menu label="Objeto" name="AdminObject">
-			<menu_item_call label="Tomar una copia" name="Take Copy"/>
-			<menu_item_call label="Tomar posesión" name="Force Owner To Me"/>
-			<menu_item_call label="Tomar posesión con todos los permisos" name="Force Owner Permissive"/>
+			<menu_item_call label="Tomar una copia" name="Admin Take Copy"/>
+			<menu_item_call label="Forzar que yo sea el propietario" name="Force Owner To Me"/>
+			<menu_item_call label="Forzar permiso al propietario" name="Force Owner Permissive"/>
 			<menu_item_call label="Eliminar" name="Delete"/>
 			<menu_item_call label="Bloquear" name="Lock"/>
-			<menu_item_call label="Tomar identificadores de activos" name="Get Assets IDs"/>
+			<menu_item_call label="Obtener ID de objetos" name="Get Assets IDs"/>
 		</menu>
 		<menu label="Parcela" name="Parcel">
 			<menu_item_call label="Tomar posesión" name="Owner To Me"/>

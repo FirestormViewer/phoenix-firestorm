@@ -15,7 +15,7 @@
 	<panel.string name="buycurrencylabel">
 		[CUR] [AMT]
 	</panel.string>
-	<panel name="balance_bg">
+	<panel left="-425" name="balance_bg" width="215">
 		<text name="balance" tool_tip="[CUR] bakiyenizi yenilemek için buraya tıklayın" value="[CUR]20"/>
 		<button label="[CUR] Satın Al" name="buyL" tool_tip="Daha fazla [CUR] satın almak için tıklayın"/>
 		<button label="Alışveriş yap" name="goShop" tool_tip="Second Life Pazaryeri Aç" width="95"/>

@@ -9,7 +9,7 @@
  width="540"
  name="autocorrect"
  help_topic="fs_auto_correct"
- open_positioning="centered"
+ positioning="centered"
  save_rect="true"
  title="AUTOCORRECT SETTINGS">
 

@@ -1140,7 +1140,7 @@ void LLStatusBar::onContextMenuItemClicked(const LLSD::String& item)
 		LLAgentUI::buildSLURL(slurl, false);
 		LLUIString location_str(slurl.getSLURLString());
 
-		gClipboard.copyFromString(location_str);
+		LLClipboard::instance().copyToClipboard( location_str, 0, location_str.length() );
 	}
 }
 

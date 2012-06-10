@@ -64,12 +64,12 @@ namespace LLFloaterEnums
 {
 	enum EOpenPositioning
 	{
-		OPEN_POSITIONING_NONE,
-		OPEN_POSITIONING_CASCADING,
-		OPEN_POSITIONING_CASCADE_GROUP,
-		OPEN_POSITIONING_CENTERED,
-		OPEN_POSITIONING_SPECIFIED,
-		OPEN_POSITIONING_COUNT
+		POSITIONING_RELATIVE,
+		POSITIONING_CASCADING,
+		POSITIONING_CASCADE_GROUP,
+		POSITIONING_CENTERED,
+		POSITIONING_SPECIFIED,
+		POSITIONING_COUNT
 	};
 }
 
@@ -167,10 +167,7 @@ public:
 								can_dock,
 								show_title;
 		
-		Optional<LLFloaterEnums::EOpenPositioning>	open_positioning;
-		Optional<S32>								specified_left;
-		Optional<S32>								specified_bottom;
-
+		Optional<LLFloaterEnums::EOpenPositioning>	positioning;
 		
 		Optional<S32>			header_height,
 								label_v_padding,	// <FS:Zi> Make vertical label padding a per-skin option
@@ -283,8 +280,6 @@ public:
 	BOOL			isResizable() const				{ return mResizable; }
 	void			setResizeLimits( S32 min_width, S32 min_height );
 	void			getResizeLimits( S32* min_width, S32* min_height ) { *min_width = mMinWidth; *min_height = mMinHeight; }
-	LLRect			getSavedRect() const;
-	bool			hasSavedRect() const;
 
 	static std::string		getControlName(const std::string& name, const LLSD& key);
 	static LLControlGroup*	getControlGroup();
@@ -369,7 +364,7 @@ public:
 		
 	void			enableResizeCtrls(bool enable, bool width = true, bool height = true);
 
-	bool			isPositioning(LLFloaterEnums::EOpenPositioning p) const { return (p == mOpenPositioning); }
+	bool			isPositioning(LLFloaterEnums::EOpenPositioning p) const { return (p == mPositioning); }
 protected:
 	void			applyControlsAndPosition(LLFloater* other);
 
@@ -377,7 +372,9 @@ protected:
 
 	virtual bool	applyRectControl();
 	bool			applyDockState();
-	void			applyPositioning(LLFloater* other);
+	void			applyPositioning(LLFloater* other, bool on_open);
+	void			applyRelativePosition();
+
 // [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
 	void			applyTearOffState();
 // [/SL:KB]
@@ -450,7 +447,10 @@ public:
 // [/SL:KB]
 
 protected:
+	bool			mSaveRect;
 	std::string		mRectControl;
+	std::string		mPosXControl;
+	std::string		mPosYControl;
 	std::string		mVisibilityControl;
 	std::string		mDocStateControl;
 // [SL:KB] - Patch: UI-FloaterTearOffState | Checked: 2011-09-30 (Catznip-3.2.0a) | Added: Catznip-3.0.0a
@@ -482,9 +482,7 @@ private:
 	BOOL			mDragOnLeft;
 	BOOL			mResizable;
 
-	LLFloaterEnums::EOpenPositioning	mOpenPositioning;
-	S32									mSpecifiedLeft;
-	S32									mSpecifiedBottom;
+	LLFloaterEnums::EOpenPositioning	mPositioning;
 	LLCoordFloater	mPosition;
 	
 	S32				mMinWidth;

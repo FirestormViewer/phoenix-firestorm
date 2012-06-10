@@ -520,7 +520,7 @@ void LLPanelMainInventory::onClearSearch()
 	if (mActivePanel)
 	{
 		mActivePanel->setFilterSubString(LLStringUtil::null);
-		mActivePanel->setFilterTypes(0xffffffff);
+		mActivePanel->setFilterTypes(0xffffffffffffffffULL);
 
 		// ## Zi: Filter Links Menu
 		// We don't do this anymore, we have a menu option for it now. -Zi
@@ -973,7 +973,7 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 void LLFloaterInventoryFinder::draw()
 {
 	LLMemType mt(LLMemType::MTYPE_INVENTORY_DRAW);
-	U32 filter = 0xffffffff;
+	U64 filter = 0xffffffffffffffffULL;
 	BOOL filtered_by_all_types = TRUE;
 
 	if (!getChild<LLUICtrl>("check_animation")->getValue())

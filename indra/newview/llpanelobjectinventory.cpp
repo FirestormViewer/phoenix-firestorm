@@ -128,7 +128,7 @@ public:
 	virtual void move(LLFolderViewEventListener* parent_listener);
 	virtual BOOL isItemCopyable() const;
 	virtual BOOL copyToClipboard() const;
-	virtual void cutToClipboard();
+	virtual BOOL cutToClipboard() const;
 	virtual BOOL isClipboardPasteable() const;
 	virtual void pasteFromClipboard();
 	virtual void pasteLinkFromClipboard();
@@ -581,8 +581,9 @@ BOOL LLTaskInvFVBridge::copyToClipboard() const
 	return FALSE;
 }
 
-void LLTaskInvFVBridge::cutToClipboard()
+BOOL LLTaskInvFVBridge::cutToClipboard() const
 {
+	return FALSE;
 }
 
 BOOL LLTaskInvFVBridge::isClipboardPasteable() const
@@ -1682,7 +1683,7 @@ void LLPanelObjectInventory::reset()
 	scroll_p.rect(scroller_rect);
 	scroll_p.tab_stop(true);
 	scroll_p.follows.flags(FOLLOWS_ALL);
-	mScroller = LLUICtrlFactory::create<LLScrollContainer>(scroll_p);
+	mScroller = LLUICtrlFactory::create<LLFolderViewScrollContainer>(scroll_p);
 	addChild(mScroller);
 	mScroller->addChild(mFolders);
 	

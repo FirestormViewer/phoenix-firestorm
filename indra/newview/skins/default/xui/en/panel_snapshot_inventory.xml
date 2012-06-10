@@ -113,6 +113,7 @@
      width="95" />
     <check_box
      top_pad="4"
+     height="10"
      follows="left|top"
      label="Constrain proportions"
      layout="topleft"

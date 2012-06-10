@@ -8695,6 +8695,33 @@ Do you want to enable the automatic viewer version display?
      yestext="OK"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="LocalBitmapsUpdateFileNotFound"
+   persist="true"
+   type="notify">
+[FNAME] could not be updated because the file could no longer be found.
+Disabling future updates for this file.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="LocalBitmapsUpdateFailedFinal"
+   persist="true"
+   type="notify">
+[FNAME] could not be opened or decoded for [NRETRIES] attempts, and is now considered broken.
+Disabling future updates for this file.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="LocalBitmapsVerifyFail"
+   persist="true"
+   type="notify">
+Attempted to add an invalid or unreadable image file [FNAME] which could not be opened or decoded.
+Attempt cancelled.
+  </notification>
+  
   <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"
@@ -8707,5 +8734,5 @@ The LSL color string has been copied to your clipboard. You can now paste it int
     </form>
   </notification>
   <!-- <FS:Zi> Add float LSL color entry widgets -->
-
+  
 </notifications>

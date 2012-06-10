@@ -1,15 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_merchant_outbox" title="HÄNDLER-OUTBOX">
-	<string name="OutboxFolderCount0"></string>
-	<string name="OutboxFolderCount1">1 Ordner</string>
-	<string name="OutboxFolderCountN">[NUM] Ordner</string>
-	<string name="OutboxImporting">Sende Ordner...</string>
-	<string name="OutboxInitializing">Initializiere...</string>
+	<string name="OutboxFolderCount1">
+		1 Ordner
+	</string>
+	<string name="OutboxFolderCountN">
+		[NUM] Ordner
+	</string>
+	<string name="OutboxImporting">
+		Ordner übertragen...
+	</string>
+	<string name="OutboxInitializing">
+		Initialisieren...
+	</string>
 	<panel name="panel_1">
 		<panel name="panel_2">
 			<panel name="outbox_inventory_placeholder_panel">
 				<text name="outbox_inventory_placeholder_title">
-					Wird geladen...
+					Laden...
 				</text>
 			</panel>
 		</panel>
@@ -19,7 +26,7 @@
 					Objekte hier ablegen, um Ordner zu erstellen
 				</text>
 			</panel>
-			<button label="Zum Marktplatz senden" tool_tip="Klicken, um Objekte zum Shop im Marktplatz zu senden" name="outbox_import_btn"/>
+			<button label="In Marktplatz übertragen" name="outbox_import_btn" tool_tip="In meinen Marktplatz-Laden verschieben"/>
 		</panel>
-  </panel>
+	</panel>
 </floater>

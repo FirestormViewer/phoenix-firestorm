@@ -1535,13 +1535,6 @@
             <on_enable
              function="Edit.EnableRedo" />
         </menu_item_call>        
-        <menu_item_call
-         label="Local Bitmap Browser"
-         name="Local Bitmap Browser">
-            <menu_item_call.on_click
-             function="Floater.Show"
-             parameter="local_bitmap_browser" />
-        </menu_item_call>     
     </menu>
     
     <!-- Content Menu -->
@@ -4084,6 +4077,14 @@
             <menu_item_call.on_click
              function="Advanced.CompressImage" />
         </menu_item_call>
+
+      <menu_item_call
+         label="Enable Visual Leak Detector"
+         name="Enable Visual Leak Detector">
+        <menu_item_call.on_click
+           function="Advanced.ToggleVisualLeakDetector" />
+        </menu_item_call>
+      
         <menu_item_check
          label="Output Debug Minidump"
          name="Output Debug Minidump">
@@ -4110,7 +4111,7 @@
          name="Set Logging Level"
          tear_off="true">
           <menu_item_check
-		    name="Debug Level Debug"
+            name="Debug"
             label="Debug">
             <menu_item_check.on_check
               function="Develop.CheckLoggingLevel"
@@ -4120,7 +4121,7 @@
              parameter="0" />
           </menu_item_check>
           <menu_item_check
-		    name="Debug Level Info"
+            name="Info"
             label="Info">
             <menu_item_check.on_check
               function="Develop.CheckLoggingLevel"
@@ -4130,7 +4131,7 @@
              parameter="1" />
           </menu_item_check>
           <menu_item_check
-		    name="Debug Level Warn"
+            name="Warning"
             label="Warning">
             <menu_item_check.on_check
               function="Develop.CheckLoggingLevel"
@@ -4140,7 +4141,7 @@
              parameter="2" />
           </menu_item_check>
           <menu_item_check
-		    name="Debug Level Error"
+            name="Error"
             label="Error">
             <menu_item_check.on_check
               function="Develop.CheckLoggingLevel"
@@ -4150,7 +4151,7 @@
              parameter="3" />
           </menu_item_check>
           <menu_item_check
-		    name="Debug Level None"
+            name="None"
             label="None">
             <menu_item_check.on_check
               function="Develop.CheckLoggingLevel"

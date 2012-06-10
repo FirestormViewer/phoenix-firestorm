@@ -19,7 +19,7 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] [CUR]
 	</panel.string>
-	<panel name="balance_bg">
+	<panel left="-410" name="balance_bg" width="200">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en [CUR]" value="??? [CUR]"/>
 		<button name="buyL" label="COMPRAR [CUR]" halign="left" tool_tip="Pulsa para comprar más [CUR]"/>
 	</panel>

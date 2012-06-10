@@ -167,7 +167,6 @@
 // [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
 #include "llfloatersearchreplace.h"
 // [/SL:KB]
-#include "llfloaterlocalbitmap.h"
 //<FS:KC legacy profiles>
 #include "fsfloaterprofile.h"
 //</FS:KC legacy profiles>
@@ -367,7 +366,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);
 	LLFloaterReg::add("contactsetsettings", "floater_contactsets_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloaterSettings>);
-	LLFloaterReg::add("local_bitmap_browser", "floater_local_bitmap.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterLocalBitmapBrowser>);
 
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
 	LLFloaterReg::add("lgg_beamshape", "floater_beamshape.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamMapFloater>);

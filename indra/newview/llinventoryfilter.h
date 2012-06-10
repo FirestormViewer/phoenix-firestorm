@@ -151,6 +151,7 @@ public:
 	BOOL 				checkAgainstPermissions(const LLFolderViewItem* item) const;
 	bool 				checkAgainstPermissions(const LLInventoryItem* item) const;
 	BOOL 				checkAgainstFilterLinks(const LLFolderViewItem* item) const;
+	bool				checkAgainstClipboard(const LLUUID& object_id) const;
 
 	std::string::size_type getStringMatchOffset() const;
 
@@ -195,6 +196,7 @@ public:
 	// +-------------------------------------------------------------------+
 	// + Default
 	// +-------------------------------------------------------------------+
+	BOOL 				isDefault() const;
 	BOOL 				isNotDefault() const;
 	void 				markDefault();
 	void 				resetDefault();

@@ -12,6 +12,7 @@
 	<menu_item_call label="Hinzufügen" name="add"/>
 	<menu_item_call label="Melden" name="report"/>
 	<menu_item_call label="Ignorieren" name="block"/>
+	<menu_item_call label="Freischalten" name="unblock"/>
 	<menu_item_call label="Hineinzoomen" name="zoom_in"/>
 	<menu_item_call label="Entfernen" name="remove"/>
 	<menu_item_call label="Weitere Infos" name="more_info"/>

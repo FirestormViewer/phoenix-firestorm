@@ -18,6 +18,7 @@
 	<text_chat
       top="3"
       left="30"
+      right="-10"
       height="120"
       text_color="White"
       word_wrap="true"

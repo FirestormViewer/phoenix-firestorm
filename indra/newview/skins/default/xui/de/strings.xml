@@ -172,8 +172,8 @@ Aktuelle Informationen finden Sie unter www.secondlife.com/status.
 	</string>
 	<string name="LoginFailedPremiumOnly">
 		Die Anmeldung bei Second Life ist vorübergehend eingeschränkt, um sicherzustellen, dass Einwohner, die sich bereits inworld aufhalten, das bestmögliche Erlebnis haben.
-	 	
-Benutzer mit kostenlosen Konten können sich während dieses Zeitraums nicht bei Second Life anmelden, damit die Kapazität den Benutzern zur Verfügung steht, die ein gebührenpflichtiges Premium-Konto besitzen.
+
+Benutzer mit kostenlosen Konten können sich während dieses Zeitraums nicht bei Second Life anmelden, damit die Kapazität Benutzern zur Verfügung steht, die ein gebührenpflichtiges Premium-Konto besitzen.
 	</string>
 	<string name="LoginFailedComputerProhibited">
 		Der Zugriff auf Second Life ist von diesem Computer aus nicht möglich.
@@ -330,29 +330,47 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Sie können nur ein einzelnes Objekt hierher ziehen
 	</string>
 	<string name="TooltipPrice" value="[AMOUNT] [CUR]"/>
+	<string name="TooltipOutboxDragToWorld">
+		Sie können Artikel nicht in Ihrer Händler-Outbox rezzen
+	</string>
 	<string name="TooltipFlagScript">
 		Skript
 	</string>
 	<string name="TooltipOutboxNoTransfer">
-		Eines oder mehrere dieser Objekte können nicht verkauft oder an einen anderen Benutzer übertragen werden.
+		Einer oder mehrere dieser Artikel können nicht verkauft oder übertragen werden.
+	</string>
+	<string name="TooltipOutboxNotInInventory">
+		Nur Artikel direkt aus Ihrem Inventar können in Ihre Händler-Outbox gelegt werden
 	</string>
 	<string name="TooltipFlagPhysics">
 		Physik
 	</string>
 	<string name="TooltipOutboxWorn">
-		Sie tragen eines oder mehrere dieser Objekte. Nehmen Sie es/sie von Ihrem Avatar ab und versuchen Sie dann erneut, es/sie zu verschieben.
+		Artikel, die Sie tragen, können nicht in Ihre Händler-Outbox gelegt werden.
+	</string>
+	<string name="TooltipOutboxCallingCard">
+		Sie können keine Visitenkarten in Ihre Händler-Outbox legen
 	</string>
 	<string name="TooltipFlagTouch">
 		Berühren
 	</string>
 	<string name="TooltipOutboxFolderLevels">
-		Dieser Ordner hat zu viele Unterordnerebenen. Ordnen Sie die Unterordner so an, dass maximal vier Verschachtelungsebenen vorhanden sind (Stammordner enthält A enthält B enthält C).
+		Tiefe der verschachtelten Ordner überschreitet 3
+	</string>
+	<string name="TooltipOutboxTooManyFolders">
+		Anzahl von Unterordnern im obersten Ordner überschreitet 20
 	</string>
 	<string name="TooltipFlagL$">
 		[CUR]
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
-		Dieser Ordner enthält mehr als 200 Objekte. Verpacken Sie einige dieser Artikel in Behältern, um die Anzahl zu verringern.
+		Anzahl von Artikeln im obersten Ordner überschreitet 200
+	</string>
+	<string name="TooltipDragOntoOwnChild">
+		Sie können einen Ordner nicht in einen seiner untergeordneten Ordner verschieben
+	</string>
+	<string name="TooltipDragOntoSelf">
+		Sie können einen Ordner nicht in sich selbst verschieben
 	</string>
 	<string name="TooltipFlagDropInventory">
 		Inventar fallen lassen
@@ -850,6 +868,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="anim_yes_head">
 		Ja
 	</string>
+	<string name="multiple_textures">
+		Mehrfach
+	</string>
 	<string name="texture_loading">
 		Wird geladen...
 	</string>
@@ -1023,6 +1044,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="choose_the_directory">
 		Verzeichnis auswählen
+	</string>
+	<string name="script_files">
+		Skripts
 	</string>
 	<string name="AvatarSetNotAway">
 		Nicht abwesend
@@ -1277,13 +1301,13 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Sie haben keine Kopie dieser Textur in Ihrem Inventar.
 	</string>
 	<string name="InventoryInboxNoItems">
-		Wenn Sie einen Artikel kaufen oder anderweitig erhalten, erscheint er hier, damit Sie ihn in einen Ordner in Ihrem Inventar ziehen bzw. löschen können, wenn Sie ihn nicht behalten möchten.
+		Einkäufe aus dem Marktplatz erscheinen hier. Sie können diese dann zur Verwendung in Ihr Inventar ziehen.
 	</string>
 	<string name="MarketplaceURL">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/Deutsche-Knowledge-Base/Verkaufen-von-Artikeln-im-Marktplatz/ta-p/1443499#Section_.3
+		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.4
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1294,32 +1318,19 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="MarketplaceURL_LearnMore">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/learn_more
 	</string>
-	<string name="InventoryOutboxCreationErrorTitle">
-		Ihre Händler-Outbox ist nicht richtig konfiguriert
-	</string>
-	<string name="InventoryOutboxCreationErrorTooltip">
-		Konfigurationsfehler in Händler-Outbox
-	</string>
-	<string name="InventoryOutboxCreationError">
-		Wenden Sie sich zur Behebung des Problems an den Kundendienst.
-	</string>
 	<string name="InventoryOutboxNotMerchantTitle">
-		Jeder kann Artikel im Marktplatz verkaufen
+		Jeder kann Artikel im Marktplatz verkaufen.
 	</string>
-	<string name="InventoryOutboxNotMerchantTooltip">
-		
-	</string>
+	<string name="InventoryOutboxNotMerchantTooltip"/>
 	<string name="InventoryOutboxNotMerchant">
 		Falls Sie ein Händler werden möchten, müssen Sie einen [[MARKETPLACE_CREATE_STORE_URL] Shop im Marktplatz erstellen].
 	</string>
 	<string name="InventoryOutboxNoItemsTitle">
-		Die Outbox ist leer.
+		Ihre Outbox ist leer.
 	</string>
-	<string name="InventoryOutboxNoItemsTooltip">
-		
-	</string>
+	<string name="InventoryOutboxNoItemsTooltip"/>
 	<string name="InventoryOutboxNoItems">
-		Ziehen Sie zu verkaufende Artikel oder Ordner in diesen Bereich. Wenn die Artikel in den Marktplatz übertragen werden sollen, klicken Sie auf die Schaltfläche „Zum Marktplatz senden“.
+		Ziehen Sie Ordner in dien Bereich und klicken Sie auf „In Marktplatz übertragen“, um sie im [[MARKETPLACE_DASHBOARD_URL] Marktplatz] zum Verkauf anzubieten.
 	</string>
 	<string name="Marketplace Error None">
 		Keine Fehler
@@ -4011,7 +4022,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		(Gespeichert am [LONG_TIMESTAMP])
 	</string>
 	<string name="IM_unblock_only_groups_friends">
-		Um diese Message sehen zu können, muss &apos;Nur Freunde und Gruppen können mich anrufen oder mir eine IM schicken&apos; in Einstellungen/Privatspäre deaktiviert sein.
+		Wenn Sie diese Meldung sehen, müssen Sie unter „Einstellungen“ &gt; „Privatsphäre“ die Option „Nur IMs und Anrufe von Freunden oder Gruppen durchstellen“ deaktivieren.
 	</string>
 	<string name="IM_announce_incoming">
 		Ankommende Instant Message von [NAME]
@@ -4212,8 +4223,8 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Online
 	</string>
 	<string name="uploading_abuse_report">
-		Bericht wird hochgeladen...
-  
+		Hochladen...
+
 Missbrauchsbericht
 	</string>
 	<string name="New Shape">
@@ -4947,6 +4958,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Move_Label">
 		Gehen / Rennen / Fliegen
 	</string>
+	<string name="Command_Outbox_Label">
+		Händler-Outbox
+	</string>
 	<string name="Command_People_Label">
 		Leute
 	</string>
@@ -5049,6 +5063,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Move_Tooltip">
 		Ihren Avatar bewegen
+	</string>
+	<string name="Command_Outbox_Tooltip">
+		Artikel zum Verkauf in den Marktplatz übertragen
 	</string>
 	<string name="Command_People_Tooltip">
 		Freunde, Gruppen und Leute in der Nähe

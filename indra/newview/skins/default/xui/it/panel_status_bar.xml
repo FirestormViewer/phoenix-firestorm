@@ -15,7 +15,7 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] L$
 	</panel.string>
-	<panel name="balance_bg">
+	<panel left="-405" name="balance_bg" width="195">
 		<text name="balance" tool_tip="Clicca per aggiornare il tuo saldo in L$" value="L$ ???"/>
 		<button label="Compra L$" left_pad="-5" name="buyL" tool_tip="Clicca per acquistare più L$"/>
 	</panel>

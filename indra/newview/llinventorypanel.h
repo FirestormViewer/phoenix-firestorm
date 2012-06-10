@@ -233,6 +233,7 @@ public:
 
 // private:	// <FS:Zi> Make this available so we can save sort order based on sort_order_setting in XUI
 	std::string					mSortOrderSetting;
+	int							mClipboardState;
 
 	//--------------------------------------------------------------------
 	// Hidden folders

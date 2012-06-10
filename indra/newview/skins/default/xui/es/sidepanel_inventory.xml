@@ -5,10 +5,10 @@
 			<layout_panel name="inbox_layout_panel">
 				<panel name="marketplace_inbox">
 					<string name="InboxLabelWithArg">
-						Items recibidos ([NUM])
+						Objetos recibidos ([NUM])
 					</string>
 					<string name="InboxLabelNoArg">
-						Items recibidos
+						Objetos recibidos
 					</string>
 					<button label="Objetos recibidos"  name="inbox_btn"/>
 					<text name="inbox_fresh_new_count">
@@ -16,12 +16,10 @@
 					</text>
 					<panel tool_tip="Arrastra items a tu inventario para usarlos">
 						<text name="inbox_inventory_placeholder">
-
-							Aquí se entregarán las compras realizadas en Marketplace.
+							Aquí se entregarán las compras realizadas en el mercado.
 						</text>
 					</panel>
 				</panel>
-			</layout_panel>
 		</layout_stack>
 		<panel name="button_panel">
 			<layout_stack name="button_panel_ls">

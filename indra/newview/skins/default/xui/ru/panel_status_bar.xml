@@ -15,7 +15,7 @@
 	<panel.string name="buycurrencylabel">
 		[CUR] [AMT]
 	</panel.string>
-	<panel name="balance_bg">
+	<panel left="-450" name="balance_bg" width="240">
 		<text name="balance" tool_tip="Щелкните для обновления вашего баланса [CUR]" value="[CUR]20"/>
 		<button label="Купить [CUR]" name="buyL" tool_tip="Щелкните для покупки [CUR]"/>
 		<button label="Торговый центр" name="goShop" tool_tip="Открыть торговый центр Second Life" width="121"/>

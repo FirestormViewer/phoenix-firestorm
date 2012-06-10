@@ -640,18 +640,18 @@ void FSPanelProfile::onCallButtonClick()
 void FSPanelProfile::onCopyToClipboard()
 {
     std::string name = getChild<LLUICtrl>("complete_name")->getValue().asString();
-    gClipboard.copyFromString(utf8str_to_wstring(name));
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
 }
 
 void FSPanelProfile::onCopyURI()
 {
     std::string name = "secondlife:///app/agent/"+getChild<LLUICtrl>("user_key")->getValue().asString()+"/about";
-    gClipboard.copyFromString(utf8str_to_wstring(name));
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(name), 0, name.size() );
 }
 
 void FSPanelProfile::onCopyKey()
 {
-    gClipboard.copyFromString(utf8str_to_wstring(getAvatarId().asString()));
+    LLClipboard::instance().copyToClipboard(utf8str_to_wstring(getAvatarId().asString()), 0, getAvatarId().asString().size() );
 }
 
 void FSPanelProfile::onGroupInvite()

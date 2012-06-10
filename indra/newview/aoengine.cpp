@@ -42,6 +42,7 @@
 #include "llvfs.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
+#include "llinventorybridge.h"
 
 //#define ROOT_FIRESTORM_FOLDER 	"#Firestorm" //moved to llinventoryfunctions.h
 #define ROOT_AO_FOLDER			"#AO"
@@ -762,7 +763,8 @@ BOOL AOEngine::findForeignItems(const LLUUID& uuid) const
 		if(move)
 		{
 			moved=TRUE;
-			change_item_parent(&gInventory,item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
+			LLInventoryModel* model = &gInventory;
+			model->changeItemParent(item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
 			lldebugs << item->getName() << " moved to lost and found!" << llendl;
 		}
 	}
@@ -785,7 +787,7 @@ void AOEngine::purgeFolder(const LLUUID& uuid) const
 	}
 
 	// trash it
-	remove_category(&gInventory,uuid);
+	gInventory.removeCategory(uuid);
 
 	// clean it
 	gInventory.purgeDescendentsOf(uuid);
@@ -829,7 +831,8 @@ BOOL AOEngine::removeAnimation(const AOSet* set,AOSet::AOState* state,S32 index)
 	// this item was not an animation link, move it to lost and found
 	if(move)
 	{
-		change_item_parent(&gInventory,item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
+		LLInventoryModel* model = &gInventory;
+		model->changeItemParent(item,gInventory.findCategoryUUIDForType(LLFolderType::FT_LOST_AND_FOUND),FALSE);
 		LLNotificationsUtil::add("AOForeignItemsFound", LLSD());
 		update();
 		return FALSE;

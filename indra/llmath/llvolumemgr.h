@@ -58,7 +58,6 @@ public:
 	LLVolume* refLOD(const S32 detail);
 	BOOL derefLOD(LLVolume *volumep);
 	S32 getNumRefs() const { return mRefs; }
-	LLVolume* getVolByLOD(S32 lod) const;  
 	
 	const LLVolumeParams* getVolumeParams() const { return &mVolumeParams; };
 

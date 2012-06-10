@@ -100,6 +100,7 @@ BOOL LLFloaterScriptQueue::postBuild()
 {
 	childSetAction("close",onCloseBtn,this);
 	getChildView("close")->setEnabled(FALSE);
+	setVisible(true);
 	return TRUE;
 }
 
@@ -161,10 +162,6 @@ BOOL LLFloaterScriptQueue::start()
 	LLNotificationsUtil::add("ConfirmScriptModify", LLSD(), LLSD(), boost::bind(&LLFloaterScriptQueue::onScriptModifyConfirmation, this, _1, _2));
 	return true;
 	/*
-	// <FS:Ansariel> Show script compile floater
-	setTitle(mFloaterTitle);
-	setVisible(TRUE);
-
 	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
 	std::string buffer;
 
@@ -185,26 +182,18 @@ BOOL LLFloaterScriptQueue::start()
 	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
 	buffer = getString ("Starting", args);
 	
-	// <FS:Ansariel> Add text to scroll list
-	//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
 	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
-	// </FS:Ansariel> Add text to scroll list
 
 	return nextObject();*/
 }
 
 bool LLFloaterScriptQueue::onScriptModifyConfirmation(const LLSD& notification, const LLSD& response)
 {
-	// <FS:Ansariel> Show script compile floater
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
 	if (option != 0)// canceled
 	{
 		return true;
 	}
-	setTitle(mFloaterTitle);
-	setVisible(TRUE);
-
-	//llinfos << "LLFloaterCompileQueue::start()" << llendl;
 	std::string buffer;
 
 	LLSelectMgr *mgr = LLSelectMgr::getInstance();
@@ -224,10 +213,7 @@ bool LLFloaterScriptQueue::onScriptModifyConfirmation(const LLSD& notification, 
 	args["[COUNT]"] = llformat ("%d", mObjectIDs.count());
 	buffer = getString ("Starting", args);
 	
-	// <FS:Ansariel> Add text to scroll list
-	//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
-	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
-	// </FS:Ansariel> Add text to scroll list
+	getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer, ADD_BOTTOM);
 
 	return nextObject();
 }
@@ -260,10 +246,7 @@ BOOL LLFloaterScriptQueue::nextObject()
 	if(isDone() && !mDone)
 	{
 		mDone = true;
-		// <FS:Ansariel> Append text
-		//getChild<LLScrollListCtrl>("queue output")->setCommentText(getString("Done"));
-		getChild<LLScrollListCtrl>("queue output")->addSimpleElement(getString("Done"));
-		// </FS:Ansariel> Append text
+		getChild<LLScrollListCtrl>("queue output")->addSimpleElement(getString("Done"), ADD_BOTTOM);
 		getChildView("close")->setEnabled(TRUE);
 	}
 	return successful_start;
@@ -329,10 +312,7 @@ public:
 			return;
 		}
 
-		// <FS:Ansariel> Append text
-		//queue->getChild<LLScrollListCtrl>("queue output")->setCommentText(message);
-		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message);
-		// </FS:Ansariel> Append text
+		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(message, ADD_BOTTOM);
 	}
 		
 private:
@@ -342,10 +322,7 @@ private:
 LLFloaterCompileQueue::LLFloaterCompileQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("CompileQueueTitle"));
-	mFloaterTitle = LLTrans::getString("CompileQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("CompileQueueTitle"));
 	setStartString(LLTrans::getString("CompileQueueStart"));
 														 															 
 	mUploadQueue = new LLAssetUploadQueue(new LLCompileFloaterUploadQueueSupplier(key.asUUID()));
@@ -522,10 +499,7 @@ void LLFloaterCompileQueue::scriptArrived(LLVFS *vfs, const LLUUID& asset_id,
 	}
 	if(queue && (buffer.size() > 0)) 
 	{
-		// <FS:Ansariel> Append text
-		//queue->getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
-		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
-		// </FS:Ansariel> Append text
+		queue->getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer, ADD_BOTTOM);
 	}
 	delete data;
 }
@@ -670,10 +644,7 @@ void LLFloaterCompileQueue::saveItemByItemID(const LLUUID& asset_id)
 LLFloaterResetQueue::LLFloaterResetQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("ResetQueueTitle"));
-	mFloaterTitle = LLTrans::getString("ResetQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("ResetQueueTitle"));
 	setStartString(LLTrans::getString("ResetQueueStart"));
 }
 
@@ -701,10 +672,7 @@ void LLFloaterResetQueue::handleInventory(LLViewerObject* viewer_obj,
 				LLInventoryItem* item = (LLInventoryItem*)((LLInventoryObject*)(*it));
 				std::string buffer;
 				buffer = getString("Resetting") + (": ") + item->getName();
-				// <FS:Ansariel> Append text
-				//getChild<LLScrollListCtrl>("queue output")->setCommentText(buffer);
-				getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer);
-				// </FS:Ansariel> Append text
+				getChild<LLScrollListCtrl>("queue output")->addSimpleElement(buffer, ADD_BOTTOM);
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_ScriptReset);
 				msg->nextBlockFast(_PREHASH_AgentData);
@@ -728,10 +696,7 @@ void LLFloaterResetQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterRunQueue::LLFloaterRunQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("RunQueueTitle"));
-	mFloaterTitle = LLTrans::getString("RunQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("RunQueueTitle"));
 	setStartString(LLTrans::getString("RunQueueStart"));
 }
 
@@ -760,10 +725,7 @@ void LLFloaterRunQueue::handleInventory(LLViewerObject* viewer_obj,
 				LLScrollListCtrl* list = getChild<LLScrollListCtrl>("queue output");
 				std::string buffer;
 				buffer = getString("Running") + (": ") + item->getName();
-				// <FS:Ansariel> Append text
-				//list->setCommentText(buffer);
-				list->addSimpleElement(buffer);
-				// </FS:Ansariel> Append text
+				list->addSimpleElement(buffer, ADD_BOTTOM);
 
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_SetScriptRunning);
@@ -789,10 +751,7 @@ void LLFloaterRunQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterNotRunQueue::LLFloaterNotRunQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("NotRunQueueTitle"));
-	mFloaterTitle = LLTrans::getString("NotRunQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("NotRunQueueTitle"));
 	setStartString(LLTrans::getString("NotRunQueueStart"));
 }
 
@@ -821,10 +780,7 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 				LLScrollListCtrl* list = getChild<LLScrollListCtrl>("queue output");
 				std::string buffer;
 				buffer = getString("NotRunning") + (": ") +item->getName();
-				// <FS:Ansariel> Append text
-				//list->setCommentText(buffer);
-				list->addSimpleElement(buffer);
-				// </FS:Ansariel> Append text
+				list->addSimpleElement(buffer, ADD_BOTTOM);
 	
 				LLMessageSystem* msg = gMessageSystem;
 				msg->newMessageFast(_PREHASH_SetScriptRunning);
@@ -851,10 +807,7 @@ void LLFloaterNotRunQueue::handleInventory(LLViewerObject* viewer_obj,
 LLFloaterDeleteQueue::LLFloaterDeleteQueue(const LLSD& key)
   : LLFloaterScriptQueue(key)
 {
-	// <FS:Ansariel> Proper floater title
-	//setTitle(LLTrans::getString("DeleteQueueTitle"));
-	mFloaterTitle = LLTrans::getString("DeleteQueueTitle");
-	// </FS:Ansariel> Proper floater title
+	setTitle(LLTrans::getString("DeleteQueueTitle"));
 	setStartString(LLTrans::getString("DeleteQueueStart"));
 }
 
