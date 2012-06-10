@@ -72,15 +72,15 @@
         <scroll_list.columns
           label="Restriction"
           name="behaviour"
-          width="70" />
+          width="100" />
         <scroll_list.columns
           label="Option"
           name="option"
-          width="115" />
+          width="105" />
         <scroll_list.columns
           label="Object Name"
           name="issuer"
-          width="115" />
+          width="105" />
       </scroll_list>
     </panel>
   </tab_container>
@@ -99,14 +99,16 @@
      height="25"
      image_hover_unselected="Toolbar_Left_Over"
      image_overlay="Copy"
+     image_overlay_alignment="left"
      image_selected="Toolbar_Left_Selected"
      image_unselected="Toolbar_Left_Off"
+     label="Copy to Clipboard"
      layout="topleft"
      left="3"
      name="copy_btn"
      top="1"
      tool_tip="Copy restrictions to clipboard"
-     width="31" />
+     width="131" />
     <icon
      follows="bottom|left|right"
      height="25"
@@ -114,6 +116,6 @@
      layout="topleft"
      left_pad="1"
      name="dummy_icon"
-     width="282"/>
+     width="182"/>
   </panel>
 </floater>
