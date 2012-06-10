@@ -2853,6 +2853,19 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		modifyOutfit(TRUE);
 		return;
 	}
+//-TT Patch: ReplaceWornItemsOnly
+	else if ("replaceitems" == action)
+	{
+		LLInventoryModel* model = getInventoryModel();
+		if(!model) return;
+		LLViewerInventoryCategory* cat = getCategory();
+		if(!cat) return;
+
+		gInventory.wearItemsOnAvatar(cat);
+		//		modifyOutfit(TRUE, TRUE);
+		return;
+	}
+//-TT 
 	else if ("cut" == action)
 	{
 		cutToClipboard();
