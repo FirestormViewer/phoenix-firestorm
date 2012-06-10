@@ -1046,7 +1046,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Verzeichnis auswählen
 	</string>
 	<string name="script_files">
-		Skripts
+		Skripte
 	</string>
 	<string name="AvatarSetNotAway">
 		Nicht abwesend
@@ -1307,7 +1307,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/
 	</string>
 	<string name="MarketplaceURL_CreateStore">
-		http://community.secondlife.com/t5/English-Knowledge-Base/Selling-in-the-Marketplace/ta-p/700193#Section_.4
+		http://community.secondlife.com/t5/Deutsche-Knowledge-Base/Verkaufen-von-Artikeln-im-Marktplatz/ta-p/1443499#Section_.3
 	</string>
 	<string name="MarketplaceURL_Dashboard">
 		https://marketplace.[MARKETPLACE_DOMAIN_NAME]/merchants/store/dashboard
@@ -1396,7 +1396,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="Landmarks" value=" Landmarken,"/>
 	<string name="Notecards" value=" Notizkarten,"/>
 	<string name="Objects" value=" Objekte,"/>
-	<string name="Scripts" value=" Skripts,"/>
+	<string name="Scripts" value=" Skripte,"/>
 	<string name="Sounds" value=" Sounds,"/>
 	<string name="Textures" value=" Texturen,"/>
 	<string name="Snapshots" value=" Fotos,"/>
