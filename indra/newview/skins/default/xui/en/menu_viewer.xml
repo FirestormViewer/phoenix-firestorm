@@ -491,24 +491,6 @@
              function="Floater.Toggle"
              parameter="people" />
             </menu_item_check>
-        <menu_item_call
-         label="Teleport History"
-         name="Teleport History"
-         visible="true"
-         shortcut="alt|H">
-            <menu_item_call.on_click
-             function="ToggleTeleportHistory"/>
-            </menu_item_call>
-        <menu_item_check
-         label="Places"
-         name="Places">
-            <menu_item_check.on_check
-             function="Floater.Visible"
-             parameter="places" />
-            <menu_item_check.on_click
-             function="Floater.Toggle"
-             parameter="places" />
-            </menu_item_check>
         <menu_item_check
          label="Conversations"
          name="Conversations"
@@ -585,6 +567,27 @@
              function="SideTray.PanelPeopleTab"
              parameter="nearby_panel" />
         </menu_item_call>
+
+        <menu_item_call
+         label="Teleport History"
+         name="Teleport History"
+         visible="false"
+         shortcut="alt|H">
+            <menu_item_call.on_click
+             function="ToggleTeleportHistory"/>
+            </menu_item_call>
+
+        <menu_item_check
+         label="Places / TP History"
+	 shortcut="alt|H"
+         name="Places">
+            <menu_item_check.on_check
+             function="Floater.Visible"
+             parameter="places" />
+            <menu_item_check.on_click
+             function="Floater.Toggle"
+             parameter="places" />
+            </menu_item_check>
             
         <menu_item_check
              label="Mini-Map"
