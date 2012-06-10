@@ -210,7 +210,7 @@
                 mouse_opaque="false">
 
   <button name="local_chat_button"
-          tool_tip="Shows/hides nearby chat window"
+          tool_tip="Shows/hides nearby chat window (CTRL+H)"
           control_name="floater_vis_nearby_chat"
           label="Nearby Chat"
           height="20"

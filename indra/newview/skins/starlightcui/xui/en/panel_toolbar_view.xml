@@ -208,7 +208,7 @@
                 background_opaque="true">
 
   <button name="local_chat_button"
-          tool_tip="Shows/hides nearby chat window"
+          tool_tip="Shows/hides nearby chat window (CTRL+H)"
           label="Nearby Chat"
           chrome="true"
           follows="left|top"
