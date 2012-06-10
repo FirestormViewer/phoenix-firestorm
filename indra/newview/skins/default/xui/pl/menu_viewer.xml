@@ -57,8 +57,6 @@
 		<menu_item_call label="Grupy" name="My Groups"/>
 		<menu_item_check label="Czat lokalny..." name="Nearby Chat"/>
 		<menu_item_check label="Ludzie" name="People"/>
-		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
-		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Rozmowy" name="Conversations"/>
 		<menu_item_check label="Gesty" name="Gestures"/>
 		<menu_item_check label="Przekształcanie głosu" name="ShowVoice"/>
@@ -66,6 +64,8 @@
 	</menu>
 	<menu label="Świat" name="World">
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
+		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
+		<menu_item_check label="Miejsca / historia TP" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa Świata" name="World Map"/>
 		<menu_item_call label="Zapamiętaj to miejsce (LM)" name="Create Landmark Here"/>
@@ -175,7 +175,6 @@
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
 		<menu_item_call label="Ponów" name="Redo"/>
-		<menu_item_call label="Przeglądarka lokalnych bitmap" name="Local Bitmap Browser"/>
 	</menu>
 	<menu label="Zawartość" name="Content">
 		<menu_item_check label="Wyszukiwarka" name="Search"/>
@@ -464,14 +463,15 @@
 		<menu_item_check label="Tekstury przez HTTP" name="HTTP Textures"/>
 		<menu_item_check label="Szafa przez HTTP" name="HTTP Inventory"/>
 		<menu_item_call label="Kompresuj obrazki" name="Compress Images"/>
+		<menu_item_call label="Włącz wizualny detektor wycieków pamięci" name="Enable Visual Leak Detector"/>
 		<menu_item_check label="Mały zrzut wyjścia debugowania" name="Output Debug Minidump"/>
 		<menu_item_check label="Aktywacja okna konsoli podczas następnego uruchomienia" name="Console Window"/>
 		<menu label="Ustaw poziom logowania" name="Set Logging Level">
-			<menu_item_check label="Debugowanie" name="Debug Level Debug"/>
-			<menu_item_check label="Informacje" name="Debug Level Info"/>
-			<menu_item_check label="Ostrzeżenia" name="Debug Level Warn"/>
-			<menu_item_check label="Błędy" name="Debug Level Error"/>
-			<menu_item_check label="Brak" name="Debug Level None"/>
+			<menu_item_check label="Debugowanie" name="Debug"/>
+			<menu_item_check label="Informacje" name="Info"/>
+			<menu_item_check label="Ostrzeżenia" name="Warning"/>
+			<menu_item_check label="Błędy" name="Error"/>
+			<menu_item_check label="Brak" name="None"/>
 		</menu>
 		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>

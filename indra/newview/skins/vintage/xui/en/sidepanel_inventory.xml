@@ -100,7 +100,7 @@
 								right="-3"
 								top_pad="2" />
 							<panel
-								name="inbox_inventory_placeholder_upper"
+								name="inbox_inventory_placeholder_panel"
 								follows="all"
 								left_delta="0"
 								height="50"

@@ -59,7 +59,7 @@
 	<menu_item_call label="Otwórz oryginalne" name="Open Original"/>
 	<menu_item_call label="Właściwości" name="Properties"/>
 	<menu_item_call label="Zmień nazwę" name="Rename"/>
-	<menu_item_call label="Kopiuj dane UUID" name="Copy Asset UUID"/>
+	<menu_item_call label="Kopiuj identyfikator UUID" name="Copy Asset UUID"/>
 	<menu_item_call label="Przywróć na ostatnią pozycję" name="Restore to Last Position"/>
 	<menu_item_call label="Kopiuj" name="Copy"/>
 	<menu_item_call label="Wytnij" name="Cut"/>

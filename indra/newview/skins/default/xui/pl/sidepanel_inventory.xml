@@ -10,7 +10,7 @@
 					<text name="inbox_fresh_new_count">
 						[NUM] nowe/y
 					</text>
-					<panel tool_tip="Przeciągnij przedmioty do swojej Szafy, aby je używać">
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="Przeciągnij przedmioty do swojej Szafy, aby je używać">
 						<text name="inbox_inventory_placeholder">
 							Rzeczy kupione na Marketplace będą tu dostarczane.
 						</text>

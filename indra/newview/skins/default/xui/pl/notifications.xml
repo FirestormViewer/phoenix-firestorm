@@ -80,7 +80,6 @@ Foldery nie zostały wysłane na Marketplace z powodu błędu sieci lub systemu.
 Inicjalizacja Marketplace nieudana z powodu błędu sieci lub systemu. Spróbuj później.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	
 	<notification name="CompileQueueSaveText">
 		W trakcie ładowania tekstu dla skryptu pojawił się problem z następującego powodu: [REASON]. Spróbuj ponownie za kilka minut.
 	</notification>
@@ -3461,6 +3460,18 @@ Chcesz włączyć automatyczne prezentowanie wersji Przeglądarki?
 	<notification name="ConfirmScriptModify">
 		Na pewno chcesz zmodyfikować skrypty w zaznaczonych obiektach?
 		<usetemplate ignoretext="Potwierdzenie modyfikacji skryptów w zaznaczeniu" name="okcancelignore" notext="Anuluj" yestext="OK" />
+	</notification>
+	<notification name="LocalBitmapsUpdateFileNotFound">
+		[FNAME] nie może zostać zaktualizowany, ponieważ plik nie może zostać znaleziony.
+Aktualizacje dla tego pliku wyłączone.
+	</notification>
+	<notification name="LocalBitmapsUpdateFailedFinal">
+		[FNAME] nie mógł zostać otwarty lub zdekodowany [NRETRIES] razy i został uznany za uszkodzony.
+Aktualizacje dla tego pliku wyłączone.
+	</notification>
+	<notification name="LocalBitmapsVerifyFail">
+		Próba dodania niewłaściwego lub niemożliwego do odczytania pliku graficznego [FNAME], który nie może zostać otwarty lub zdekodowany.
+Anulowano.
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.

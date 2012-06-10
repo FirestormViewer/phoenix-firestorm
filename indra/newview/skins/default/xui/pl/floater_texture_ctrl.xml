@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="texture picker" title="ULUBIONE MIEJSCE: TEKSTURA">
+<floater name="texture picker" title="WYBÓR: TEKSTURA">
 	<string name="choose_picture">
 		Kliknij by wybrać obraz
 	</string>
@@ -9,27 +9,24 @@
 	<text name="Multiple">
 		Wiele tekstur
 	</text>
+	<radio_group name="mode_selection">
+		<radio_item label="Szafa" name="inventory"/>
+		<radio_item label="Lokalna" name="local"/>
+	</radio_group>
 	<text name="unknown">
 		Rozmiar: [DIMENSIONS]
 	</text>
 	<button label="Domyślna" label_selected="Domyślna" name="Default"/>
-	<button label="Żadna" label_selected="Żadna" name="None"/>
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
-	<check_box label="Zastosuj teraz" name="apply_immediate_check"/>
-	<tab_container name="servloc_tabcont">
-		<panel label="Serwer" name="server_tab">
-			<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
-			<check_box label="Pokaż foldery" name="show_folders_check"/>
-		</panel>
-		<panel label="Lokalna" name="local_tab">
-			<button label="Dodaj" name="l_add_btn"/>
-			<button label="Usuń" name="l_del_btn"/>
-			<button label="Załaduj" name="l_upl_btn"/>
-			<scroll_list name="local_name_list">
-				<column name="unit_name" label="Nazwa"/>
-			</scroll_list> 
-		</panel>
-	</tab_container>
-	<button label="OK" label_selected="OK" name="Select"/>
+	<button label="Żadna" label_selected="Żadna" name="None"/>
+	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
+	<check_box label="Pokaż foldery" name="show_folders_check"/>
+	<button label="Dodaj" label_selected="Dodaj" name="l_add_btn"/>
+	<button label="Usuń" label_selected="Usuń" name="l_rem_btn"/>
+	<button label="Załaduj" label_selected="Załaduj" name="l_upl_btn"/>
+	<scroll_list name="l_name_list">
+		<column name="unit_name" label="Nazwa"/>
+	</scroll_list>
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
+	<check_box label="Zastosuj teraz" name="apply_immediate_check"/>
 </floater>

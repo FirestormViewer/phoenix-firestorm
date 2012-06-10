@@ -437,9 +437,6 @@ Teksturę:
 			<panel.string name="estate_override">
 				Jedna lub więcej z tych opcji ustawiona jest z poziomu Majątku
 			</panel.string>
-			<text name="Limit access to this parcel to:">
-				Dostęp do tej Posiadłości:
-			</text>
 			<check_box label="Dostęp publiczny (brak zaznaczenia tej opcji = widoczne linie zakazu)" name="public_access"/>
 			<text name="Only Allow">
 				Umożliwiaj dostęp tylko dla:
