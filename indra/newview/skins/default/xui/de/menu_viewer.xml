@@ -52,8 +52,10 @@
 		<menu_item_call label="Gruppen" name="My Groups"/>
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Leute" name="People"/>
+		<!--
         <menu_item_call label="Teleport-Liste" name="Teleport History"/>
         <menu_item_check label="Orte" name="Places"/>
+		-->
         <menu_item_check label="Gespräche" name="Conversations"/>
         <menu label="Online-Status" name="Status">
             <menu_item_check label="Abwesend" name="Set Away"/>
@@ -68,6 +70,8 @@
 	</menu>
 	<menu label="Welt" name="World">
         <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
+        <menu_item_call label="Teleport-Liste" name="Teleport History"/>
+        <menu_item_check label="Orte" name="Places"/>
 		<menu_item_check label="Minikarte" name="Mini-Map"/>
 		<menu_item_check label="Karte" name="World Map"/>
 		<menu_item_call label="Landmarke für diesen Ort setzen" name="Create Landmark Here"/>
