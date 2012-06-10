@@ -64,6 +64,9 @@
 #include "process.h"
 #endif
 
+#include "aoengine.h"
+#include "fslslbridge.h"
+
 // Increment this if the inventory contents change in a non-backwards-compatible way.
 // For viewer 2, the addition of link items makes a pre-viewer-2 cache incorrect.
 const S32 LLInventoryModel::sCurrentInvCacheVersion = 2;
@@ -1100,6 +1103,20 @@ void LLInventoryModel::changeItemParent(LLViewerInventoryItem* item,
 		LL_INFOS("Inventory") << "Moving '" << item->getName() << "' (" << item->getUUID()
 							  << ") from " << item->getParentUUID() << " to folder "
 							  << new_parent_id << LL_ENDL;
+
+		// <FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
+		// ## Zi: Animation Overrider
+		if(isObjectDescendentOf(item->getUUID(),AOEngine::instance().getAOFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+			return;
+		// ## Zi: Animation Overrider
+//-TT Client LSL Bridge
+		if(isObjectDescendentOf(item->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+			return;
+//-TT
+		// </FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
+
 		LLInventoryModel::update_list_t update;
 		LLInventoryModel::LLCategoryUpdate old_folder(item->getParentUUID(),-1);
 		update.push_back(old_folder);
@@ -1130,6 +1147,19 @@ void LLInventoryModel::changeCategoryParent(LLViewerInventoryCategory* cat,
 	{
 		return;
 	}
+
+	// <FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
+	// ## Zi: Animation Overrider
+	if((isObjectDescendentOf(cat->getUUID(),AOEngine::instance().getAOFolder())
+		&& gSavedPerAccountSettings.getBOOL("ProtectAOFolders"))
+//-TT Client LSL Bridge
+		|| (isObjectDescendentOf(cat->getUUID(),FSLSLBridge::instance().getBridgeFolder())
+			&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+//-TT
+		)
+		return;
+	// ## Zi: Animation Overrider
+	// </FS:Ansariel> Migrated over from llinventoryfunctions.cpp during LL V3.3.2 merge
 
 	LLInventoryModel::update_list_t update;
 	LLInventoryModel::LLCategoryUpdate old_folder(cat->getParentUUID(), -1);
