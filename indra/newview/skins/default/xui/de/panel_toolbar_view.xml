@@ -11,7 +11,7 @@
 					<layout_stack name="chat_bar_stand_fly_stack">
 						<!-- The chat bar itself -->
 						<layout_panel name="chat_bar_layout_panel">
-							<button name="local_chat_button" tool_tip="Zeigt/versteckt das Chat-in-der-Nähe-Fenster" label="Chat in der Nähe" width="100"/>
+							<button name="local_chat_button" tool_tip="Zeigt/versteckt das Chat-in-der-Nähe-Fenster (Strg+H)" label="Chat in der Nähe" width="100"/>
 							<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Aktuelle Voice-Aktivität in der Nähe"/>
 						</layout_panel>
 						<!-- The chat bar itself -->

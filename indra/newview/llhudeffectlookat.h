@@ -81,7 +81,10 @@ protected:
 
 public:
 	//static BOOL sDebugLookAt;
-	LLCachedControl<bool> mDebugLookAt;
+	//<FS:AO improve use of controls with radiogroups>
+	// LLCachedControl<bool> mDebugLookAt;
+	LLCachedControl<S32> mDebugLookAt;
+	//</FS:AO>
 
 private:
 	ELookAtType					mTargetType;

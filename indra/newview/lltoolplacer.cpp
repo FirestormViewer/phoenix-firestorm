@@ -217,6 +217,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	if (default_material == "Wood")			material = LL_MCODE_WOOD;
 	else if (default_material == "Stone")	material = LL_MCODE_STONE;
 	else if (default_material == "Metal")	material = LL_MCODE_METAL;
+	else if (default_material == "Glass")	material = LL_MCODE_GLASS;
 	else if (default_material == "Flesh")	material = LL_MCODE_FLESH;
 	else if (default_material == "Rubber")	material = LL_MCODE_RUBBER;
 	else if (default_material == "Plastic")	material = LL_MCODE_PLASTIC;

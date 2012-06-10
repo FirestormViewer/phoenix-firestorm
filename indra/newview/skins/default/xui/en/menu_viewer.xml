@@ -482,7 +482,8 @@
         </menu_item_check>
         <menu_item_check
          label="People"
-         name="People">
+         name="People"
+         shortcut="control|shift|A">
             <menu_item_check.on_check
              function="Floater.Visible"
              parameter="people" />
@@ -493,7 +494,7 @@
         <menu_item_call
          label="Teleport History"
          name="Teleport History"
-         visible="false"
+         visible="true"
          shortcut="alt|H">
             <menu_item_call.on_click
              function="ToggleTeleportHistory"/>

@@ -1226,11 +1226,11 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
 		// Need to mark data as bad to avoid constant rerequests.
 		LLAudioData *adp = gAudiop->getAudioData(uuid);
 		if (adp)
-        {
+        {	// Make sure everything is cleared
 			adp->setHasValidData(false);
 			adp->setHasLocalData(false);
 			adp->setHasDecodedData(false);
-			adp->setHasDecodeRequestPending( false ); // <FS:ND> Buffer has no data, can be reused.
+			adp->setHasCompletedDecode(true);
 		}
 	}
 	else
@@ -1243,9 +1243,9 @@ void LLAudioEngine::assetCallback(LLVFS *vfs, const LLUUID &uuid, LLAssetType::E
         }
 		else
 		{
+			// llinfos << "Got asset callback with good audio data for " << uuid << ", making decode request" << llendl;
 			adp->setHasValidData(true);
-			adp->setHasLocalData(true);
-			adp->setHasDecodeRequestPending( true ); // <FS:ND> Data must be decoded, wait for it.
+		    adp->setHasLocalData(true);
 		    gAudioDecodeMgrp->addDecodeRequest(uuid);
 		}
 	}
@@ -1311,23 +1311,18 @@ void LLAudioSource::update()
 
 	if (!getCurrentBuffer())
 	{
-		if (getCurrentData())
+		LLAudioData *adp = getCurrentData();
+		if (adp)
 		{
-			// <FS:ND> Don't try to load if still waiting for decoded data. Otherwise load fails, mCorrupted gets set and we never get a sound played.
-
-			if( getCurrentData()->hasDecodeRequestPending() )
-				return;
-
-			// </FS:ND>
-
 			// Hack - try and load the sound.  Will do this as a callback
 			// on decode later.
-			if (getCurrentData()->load() && getCurrentData()->getBuffer())
+			if (adp->load() && adp->getBuffer())
 			{
-				play(getCurrentData()->getID());
+				play(adp->getID());
 			}
-			else
+			else if (adp->hasCompletedDecode())		// Only mark corrupted after decode is done
 			{
+				llwarns << "Marking LLAudioSource corrupted for " << adp->getID() << llendl;
 				mCorrupted = true ;
 			}
 		}
@@ -1745,12 +1740,11 @@ LLAudioData::LLAudioData(const LLUUID &uuid) :
 	mBufferp(NULL),
 	mHasLocalData(false),
 	mHasDecodedData(false),
-	mHasValidData(true),
-	mHasDecodeRequest(true)
+	mHasCompletedDecode(false),
+	mHasValidData(true)
 {
 	if (uuid.isNull())
 	{
-		mHasDecodeRequest = false;
 		// This is a null sound.
 		return;
 	}
@@ -1758,16 +1752,13 @@ LLAudioData::LLAudioData(const LLUUID &uuid) :
 	if (gAudiop && gAudiop->hasDecodedFile(uuid))
 	{
 		// Already have a decoded version, don't need to decode it.
-		mHasLocalData = true;
-		mHasDecodedData = true;
-
-		mHasDecodeRequest = false;
+		setHasLocalData(true);
+		setHasDecodedData(true);
+		setHasCompletedDecode(true);
 	}
 	else if (gAssetStorage && gAssetStorage->hasLocalAsset(uuid, LLAssetType::AT_SOUND))
 	{
-		mHasLocalData = true;
-
-		mHasDecodeRequest = false;
+		setHasLocalData(true);
 	}
 }
 

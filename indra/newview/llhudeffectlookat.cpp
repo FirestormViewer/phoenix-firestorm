@@ -250,7 +250,10 @@ LLHUDEffectLookAt::LLHUDEffectLookAt(const U8 type) :
 	LLHUDEffect(type), 
 	mKillTime(0.f),
 	mLastSendTime(0.f),
-	mDebugLookAt( LLCachedControl<bool>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
+	//<FS:AO improve use of controls with radiogroups>
+	//mDebugLookAt( LLCachedControl<bool>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
+	mDebugLookAt( LLCachedControl<S32>(gSavedPerAccountSettings, "DebugLookAt", FALSE))
+	//</FS:AO>
 {
 	clearLookAtTarget();
 	// parse the default sets

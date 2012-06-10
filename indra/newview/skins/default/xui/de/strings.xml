@@ -5032,10 +5032,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Kompletten Avatar auswählen
 	</string>
 	<string name="Command_Build_Tooltip">
-		Objekte bauen und Terrain umformen
+		Objekte bauen und Terrain umformen (Strg+4)
 	</string>
 	<string name="Command_Chat_Tooltip">
-		Mit Leuten in der Nähe chatten
+		Mit Leuten in der Nähe chatten (Strg+T)
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompass
@@ -5044,22 +5044,22 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Ziele von Interesse
 	</string>
 	<string name="Command_Gestures_Tooltip">
-		Gesten für Ihren Avatar
+		Gesten für Ihren Avatar (Strg+G)
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Wie führe ich gängige Aufgaben aus?
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		Eigentum anzeigen und benutzen
+		Eigentum anzeigen und benutzen (Strg+I)
 	</string>
 	<string name="Command_Map_Tooltip">
-		Weltkarte
+		Weltkarte (Strg+M)
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		Einkaufen gehen
 	</string>
 	<string name="Command_MiniMap_Tooltip">
-		Leute in der Nähe anzeigen
+		Leute in der Nähe anzeigen (Strg+Umschalt+M)
 	</string>
 	<string name="Command_Move_Tooltip">
 		Ihren Avatar bewegen
@@ -5074,19 +5074,19 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Orte, die in Ihrem Profil als Favoriten angezeigt werden sollen
 	</string>
 	<string name="Command_Places_Tooltip">
-		Von Ihnen gespeicherte Orte
+		Von Ihnen gespeicherte Orte (Alt+H)
 	</string>
 	<string name="Command_Preferences_Tooltip">
-		Einstellungen
+		Einstellungen (Strg+P)
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Ihr Profil bearbeiten oder anzeigen
 	</string>
 	<string name="Command_Search_Tooltip">
-		Orte, Veranstaltungen, Leute finden
+		Orte, Veranstaltungen, Leute finden (Strg+F)
 	</string>
 	<string name="Command_Snapshot_Tooltip">
-		Foto aufnehmen
+		Foto aufnehmen (Strg+Umschalt+S)
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Über Ihr Mikrofon mit Leuten in der Nähe sprechen
@@ -5104,7 +5104,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Animation Overrider
 	</string>
 	<string name="Command_Webbrowser_Tooltip">
-		Öffnet den internen Webbrowser
+		Öffnet den internen Webbrowser (Strg+Umschalt+Z)
 	</string>
 	<string name="Command_Default_Chat_Bar_Tooltip">
 		Zeigt oder versteckt die Standard-Chatleiste
@@ -5113,13 +5113,13 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Umgebungssuche nach Objekten
 	</string>
 	<string name="Command_Settings_Debug_Tooltip">
-		Konfigurationseinstellungen des Viewers ändern
+		Konfigurationseinstellungen des Viewers ändern (Strg+Alt+Umschalt+S)
 	</string>
 	<string name="Command_Statistics_Tooltip">
-		Viewer-Statistiken anzeigen
+		Viewer-Statistiken anzeigen (Strg+Umschalt+1)
 	</string>
 	<string name="Command_Region_Tooltip">
-		Öffnet die Regions- und Grundbesitzverwaltung
+		Öffnet die Regions- und Grundbesitzverwaltung (Alt+R)
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten
