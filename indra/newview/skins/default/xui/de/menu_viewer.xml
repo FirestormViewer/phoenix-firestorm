@@ -52,6 +52,7 @@
 		<menu_item_call label="Gruppen" name="My Groups"/>
 		<menu_item_check label="Chat in der Nähe" name="Nearby Chat"/>
         <menu_item_check label="Leute" name="People"/>
+        <menu_item_check label="Teleport-Liste" name="Teleport History"/>
         <menu_item_check label="Orte" name="Places"/>
         <menu_item_check label="Gespräche" name="Conversations"/>
         <menu label="Online-Status" name="Status">
