@@ -4588,10 +4588,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Wybierz kompletnego awatara
 	</string>
 	<string name="Command_Build_Tooltip">
-		Budowanie obiektów i zmiana terenu
+		Budowanie obiektów i zmiana terenu (CTRL+4)
 	</string>
 	<string name="Command_Chat_Tooltip">
-		Rozmawiaj z ludźmi w pobliżu używając tekstu
+		Rozmawiaj z ludźmi w pobliżu używając tekstu (CTRL+T)
 	</string>
 	<string name="Command_Compass_Tooltip">
 		Kompas
@@ -4600,22 +4600,22 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Punkty, jakie mogą być interesujące
 	</string>
 	<string name="Command_Gestures_Tooltip">
-		Gesty Twojego awatara
+		Gesty Twojego awatara (CTRL+G)
 	</string>
 	<string name="Command_HowTo_Tooltip">
 		Jak wykonywać zwyczajne rzeczy
 	</string>
 	<string name="Command_Inventory_Tooltip">
-		Przeglądaj i używaj rzeczy, jakie należą do Ciebie
+		Przeglądaj i używaj rzeczy, jakie należą do Ciebie (CTRL+I)
 	</string>
 	<string name="Command_Map_Tooltip">
-		Mapa świata
+		Mapa świata (CTRL+M)
 	</string>
 	<string name="Command_Marketplace_Tooltip">
 		Idź na zakupy
 	</string>
 	<string name="Command_MiniMap_Tooltip">
-		Pokaż ludzi w pobliżu
+		Pokaż ludzi w pobliżu (CTRL+SHIFT+M)
 	</string>
 	<string name="Command_Move_Tooltip">
 		Poruszanie Twoim awatarem
@@ -4624,25 +4624,25 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Przenieś przedmioty na Marketplace, aby je sprzedać
 	</string>
 	<string name="Command_People_Tooltip">
-		Znajomi, grupy i ludzie w pobliżu
+		Znajomi, grupy i ludzie w pobliżu (CTRL+SHIFT+A)
 	</string>
 	<string name="Command_Picks_Tooltip">
 		Miejsca, które są pokazywane jako ulubione w Twoim profilu
 	</string>
 	<string name="Command_Places_Tooltip">
-		Miejsca (landmarki) zapisane przez Ciebie
+		Miejsca (landmarki) zapisane przez Ciebie (ALT+H)
 	</string>
 	<string name="Command_Preferences_Tooltip">
-		Ustawienia
+		Ustawienia (CTRL+P)
 	</string>
 	<string name="Command_Profile_Tooltip">
 		Edytuj lub zobacz swój profil
 	</string>
 	<string name="Command_Search_Tooltip">
-		Znajdź miejsca, wydarzenia i ludzi
+		Znajdź miejsca, wydarzenia i ludzi (CTRL+F)
 	</string>
 	<string name="Command_Snapshot_Tooltip">
-		Zrób zdjęcie
+		Zrób zdjęcie (CTRL+SHIFT+S)
 	</string>
 	<string name="Command_Speak_Tooltip">
 		Rozmawiaj z ludźmi w pobliżu używając mikrofonu
@@ -4660,7 +4660,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Zastępowanie animacji
 	</string>
 	<string name="Command_Webbrowser_Tooltip">
-		Otwórz wbudowaną przeglądarkę internetową
+		Otwórz wbudowaną przeglądarkę internetową (CTRL+SHIFT+Z)
 	</string>
 	<string name="Command_Default_Chat_Bar_Tooltip">
 		Pokaż lub ukryj domyślny pasek czatu
@@ -4669,13 +4669,13 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Poszukaj obiektów na obszarze
 	</string>
 	<string name="Command_Settings_Debug_Tooltip">
-		Zmień ustawienia konfiguracji przeglądarki
+		Zmień ustawienia konfiguracji przeglądarki (CTRL+ALT+SHIFT+S)
 	</string>
 	<string name="Command_Statistics_Tooltip">
-		Pokaż statystyki przeglądarki
+		Pokaż statystyki przeglądarki (CTRL+SHIFT+1)
 	</string>
 	<string name="Command_Region_Tooltip">
-		Otwiera narzędzia regionu/majątku
+		Otwiera narzędzia regionu/majątku (ALT+R)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

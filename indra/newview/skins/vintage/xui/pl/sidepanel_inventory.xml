@@ -7,9 +7,9 @@
 				<layout_stack name="inbox_outbox_layout_stack_off">
 					<layout_panel name="inbox_layout_panel_off">
 						<panel name="marketplace_inbox">
-							<string name="InboxLabelWithArg">Otrzymane obiekty ([NUM])</string>
-							<string name="InboxLabelNoArg">Otrzymane obiekty</string>
-							<text value="Otrzymane obiekty" name="inbox_label" />
+							<string name="InboxLabelWithArg">Odebrane przedmioty ([NUM])</string>
+							<string name="InboxLabelNoArg">Odebrane przedmioty</string>
+							<text value="Odebrane przedmioty" name="inbox_label" />
 							<text name="inbox_fresh_new_count">
 								[NUM] nowe/y
 							</text>

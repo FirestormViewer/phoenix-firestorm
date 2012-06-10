@@ -6,7 +6,7 @@
   <layout_panel name="chat_panel">
   <layout_stack name="bottom_chat_stack">
   <layout_panel name="bottom_chat_bar_panel">
-  <button name="local_chat_button" tool_tip="Pokaż/ukryj okno czatu lokalnego" label="Czat lokalny" />
+  <button name="local_chat_button" tool_tip="Pokaż/ukryj okno czatu lokalnego (CTRL+H)" label="Czat lokalny" />
   <nearby_chat_control name="default_chat_bar" label="Na czat lokalny" />
   </layout_panel>
   </layout_stack>
@@ -30,8 +30,8 @@
   </layout_panel>
   <layout_panel name="quick_preferences_button_layout_panel">
   <panel name="quick_preferences_button_panel">
-  <button name="enable_disable_ao_button" tool_tip="Włącz/wyłącz Zastępowanie Animacji w kliencie" />
-  <button name="show_ao_interface_button" tool_tip="Pokaż/ukryj interfejs Zastępowania Animacji w kliencie" />
+  <button name="enable_disable_ao_button" tool_tip="Włącz/wyłącz Animatora w kliencie" />
+  <button name="show_ao_interface_button" tool_tip="Pokaż/ukryj interfejs Animatora w kliencie" />
   <button name="show_quick_prefs_button" tool_tip="Podręczne ustawienia dla często zmienianych opcji" />
   </panel>
   </layout_panel>
