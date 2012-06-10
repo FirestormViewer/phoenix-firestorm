@@ -33,6 +33,8 @@ else(WINDOWS OR DARWIN)
   set(AUTOBUILD_LIBS_INSTALL_DIRS ${AUTOBUILD_INSTALL_DIR}/lib/${CMAKE_BUILD_TYPE_LOWER})
 endif(WINDOWS OR DARWIN)
 
+if( NOT STANDALONE ) # <FS:ND/> Don't add any autobuild dirs when building standalone
+
 # <FS:Ansariel> Changed for Firestorm
 #if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
@@ -46,8 +48,11 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}"
 #endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
 # </FS:Ansariel> Changed for Firestorm
+
 message(STATUS "For ${CMAKE_BUILD_TYPE}, AUTOBUILD_LIBS_INSTALL_DIRS: ${AUTOBUILD_LIBS_INSTALL_DIRS}")
 link_directories(${AUTOBUILD_LIBS_INSTALL_DIRS})
+
+endif( NOT STANDALONE ) # <FS:ND/> Don't add any autobuild dirs when building standalone
 
 if (LINUX)
   set(DL_LIBRARY dl)
