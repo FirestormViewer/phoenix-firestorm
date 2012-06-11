@@ -14,6 +14,11 @@
 	</text>
 
 		</layout_panel>
+		<layout_panel name="bandwidth_warning_visibility_panel">
+			<text name="bandwidth_warning_message">
+				Рекомендуется, пропускную способность не ставить выше 1500 кбит/с!
+			</text>
+		</layout_panel>
 		<layout_panel name="other_settings_panel">
 
 	<check_box label="Свой порт" name="connection_port_enabled"/>

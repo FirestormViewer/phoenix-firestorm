@@ -7,22 +7,29 @@
 		Ширина канала
 	</panel.string>
 	<panel.string name="time">
-		[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
+		[hour24, datetime, slt]:[min, datetime, slt] [timezone, datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
-		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
+		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[CUR] [AMT]
+		[AMT] [CUR]
 	</panel.string>
-	<panel left="-450" name="balance_bg" width="240">
-		<text name="balance" tool_tip="Щелкните для обновления вашего баланса [CUR]" value="[CUR]20"/>
-		<button label="Купить [CUR]" name="buyL" tool_tip="Щелкните для покупки [CUR]"/>
-		<button label="Торговый центр" name="goShop" tool_tip="Открыть торговый центр Second Life" width="121"/>
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Этот участок продается."/>
+		<button name="status_wl_btn" tool_tip="Настройки окружности"/>
+		<text name="parcel_info_text" value="(загрузка)" tool_tip="Название участка, на котором вы находитесь. Нажмите для информации."/>
+	</panel>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Щелкните для обновления вашего баланса [CUR]" value="??? [CUR]"/>
+		<button label="[CUR]-покупка" name="buyL" tool_tip="Щелкните для покупки [CUR]"/>
 	</panel>
 	<text name="TimeText" tool_tip="Текущее время (тихоокеанское)">
-		00:00 (тихоокеанское время)
+		24:00 H PST
 	</text>
-	<button name="media_toggle_btn" tool_tip="Запуск/остановка всех медиа (музыка, видео, веб-страницы)"/>
-	<button name="volume_btn" tool_tip="Регулятор громкости"/>
+	<panel name="time_and_media_bg">
+		<button name="stream_toggle_btn" tool_tip="Запуск/остановка  аудио (музика)"/>
+		<button name="media_toggle_btn" tool_tip="Запуск/остановка  медиа (видео, веб-страницы)"/>
+		<button name="volume_btn" tool_tip="Регулятор громкости"/>
+	</panel>
 </panel>
