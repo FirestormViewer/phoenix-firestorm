@@ -783,10 +783,11 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 		const LLVolumeFace &face = volume.getVolumeFace(f);
 		min = face.mExtents[0];
 		max = face.mExtents[1];
-		
-		llassert(less_than_max_mag(min));
-		llassert(less_than_max_mag(max));
 
+// <FS:AW>		
+// 		llassert(less_than_max_mag(min));
+// 		llassert(less_than_max_mag(max));
+// </FS:AW>
 		//min, max are in volume space, convert to drawable render space
 		LLVector4a center;
 		LLVector4a t;
@@ -796,10 +797,10 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 		LLVector4a size;
 		size.setSub(max, min);
 		size.mul(0.5f);
-
-		llassert(less_than_max_mag(min));
-		llassert(less_than_max_mag(max));
-
+// <FS:AW>
+// 		llassert(less_than_max_mag(min));
+// 		llassert(less_than_max_mag(max));
+// </FS:AW>
 		if (!global_volume)
 		{
 			//VECTORIZE THIS
@@ -837,7 +838,7 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 		
 		newMin = newMax = center;
 		
-		llassert(less_than_max_mag(center));
+// <FS:AW>		llassert(less_than_max_mag(center));
 		
 		for (U32 i = 0; i < 4; i++)
 		{
@@ -851,8 +852,10 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 			newMin.setMin(newMin,min);
 			newMax.setMax(newMax,max);
 
-			llassert(less_than_max_mag(newMin));
-			llassert(less_than_max_mag(newMax));
+// <FS:AW>
+// 			llassert(less_than_max_mag(newMin));
+// 			llassert(less_than_max_mag(newMax));
+// </FS:AW>
 		}
 
 		if (!mDrawablep->isActive())
@@ -861,22 +864,25 @@ BOOL LLFace::genVolumeBBoxes(const LLVolume &volume, S32 f,
 			offset.load3(mDrawablep->getRegion()->getOriginAgent().mV);
 			newMin.add(offset);
 			newMax.add(offset);
-			
-			llassert(less_than_max_mag(newMin));
-			llassert(less_than_max_mag(newMax));
+
+// <FS:AW>
+// 			llassert(less_than_max_mag(newMin));
+// 			llassert(less_than_max_mag(newMax));
+// </FS:AW>
+
 		}
 
 		t.setAdd(newMin, newMax);
 		t.mul(0.5f);
 
-		llassert(less_than_max_mag(t));
+// <FS:AW>		llassert(less_than_max_mag(t));
 		
 		//VECTORIZE THIS
 		mCenterLocal.set(t.getF32ptr());
-		
-		llassert(less_than_max_mag(newMin));
-		llassert(less_than_max_mag(newMax));
-
+// <FS:AW>		
+// 		llassert(less_than_max_mag(newMin));
+// 		llassert(less_than_max_mag(newMax));
+// </FS:AW>
 		t.setSub(newMax,newMin);
 		mBoundingSphereRadius = t.getLength3().getF32()*0.5f;
 
