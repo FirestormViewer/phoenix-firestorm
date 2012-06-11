@@ -1809,6 +1809,27 @@ class LLAdvancedToggleShowLookAt : public view_listener_t
 	}
 };
 
+// <AO>
+class LLAdvancedToggleShowColor : public view_listener_t
+{
+        bool handleEvent(const LLSD& userdata)
+        {
+                S32 value = !gSavedSettings.getS32("DebugShowColor");
+                gSavedSettings.setS32("DebugShowColor",value);
+                return true;
+        }
+};
+
+class LLAdvancedCheckShowColor : public view_listener_t
+{
+        bool handleEvent(const LLSD& userdata)
+        {
+                S32 new_value = gSavedSettings.getS32("DebugShowColor");
+                return (bool)new_value;
+        }
+};
+// </AO>
+
 class LLAdvancedCheckShowLookAt : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9603,6 +9624,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedToggleAnimationInfo(), "Advanced.ToggleAnimationInfo");
 	view_listener_t::addMenu(new LLAdvancedCheckAnimationInfo(), "Advanced.CheckAnimationInfo");
 	view_listener_t::addMenu(new LLAdvancedToggleShowLookAt(), "Advanced.ToggleShowLookAt");
+	view_listener_t::addMenu(new LLAdvancedToggleShowColor(), "Advanced.ToggleShowColor");
+	view_listener_t::addMenu(new LLAdvancedCheckShowColor(), "Advanced.CheckShowColor");
 	view_listener_t::addMenu(new LLAdvancedCheckShowLookAt(), "Advanced.CheckShowLookAt");
 	view_listener_t::addMenu(new LLAdvancedToggleShowPointAt(), "Advanced.ToggleShowPointAt");
 	view_listener_t::addMenu(new LLAdvancedCheckShowPointAt(), "Advanced.CheckShowPointAt");

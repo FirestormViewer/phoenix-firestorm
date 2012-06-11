@@ -2858,11 +2858,9 @@
              label="Show Color Under Cursor"
              name="Show Color Under Cursor">
                 <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="DebugShowColor" />
+                 function="Advanced.CheckShowColor" />
                 <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="DebugShowColor" />
+                 function="Advanced.ToggleShowColor" />
             </menu_item_check>
             <menu_item_check
                label="Show Memory"
