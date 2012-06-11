@@ -224,7 +224,7 @@
      left="2"
      name="panel_modes"
      top_pad="2"
-     width="158">
+     width="83">
         <button
          follows="left|bottom"
          height="19"

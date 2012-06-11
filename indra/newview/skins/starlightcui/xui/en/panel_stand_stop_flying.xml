@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
+<!-- Width and height of this panel is adapted in code to fit the parent panel -->
 <panel
- follows="right|top"
+ follows="all"
  height="21"
- layout="topright"
+ layout="topleft"
  name="panel_stand_stop_flying"
  mouse_opaque="false"
  visible="true"
- width="113">
+ width="210">
     <button
      follows="left|bottom"
      height="19"
@@ -18,7 +18,7 @@
      name="stand_btn"
      tool_tip="Click here to stand up"
      top="2"
-     visible="false"
+     visible="true"
      width="93" />
     <button
      follows="left|bottom"
@@ -33,12 +33,12 @@
      visible="false"
      width="93" />
 	<button
-     follows="left|bottom"
+     follows="right|bottom"
      height="19"
 	 image_unselected="PushButton_Selected"
      label="Flycam"
      layout="topleft"
-     left="10"
+     right="-10"
      name="flycam_btn"
      tool_tip="Stop Flycam Mode"
      top="2"

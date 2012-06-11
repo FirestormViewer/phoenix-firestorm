@@ -183,14 +183,14 @@
 
   <panel top="0"
          layout="topleft"
-         follows="left|bottom"
+         follows="right|bottom"
          height="30"
          right="-10"
          mouse_opaque="false"
          tab_stop="false"
          name="stand_stop_flying_container"
          visible="false"
-         width="113" />
+         width="210" />
 
   </layout_panel>
   <!-- Panel to house the stand fly buttons, will expand down if chatbar is hidden -->

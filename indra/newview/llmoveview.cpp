@@ -692,6 +692,12 @@ void LLPanelStandStopFlying::reparent(LLFloaterMove* move_view)
 		mAttached = false;
 		updatePosition(); // don't defer until next draw() to avoid flicker
 	}
+
+	// <FS:Zi> Make sure to resize the panel to fit the new parent. Important for
+	//         proper layouting of the buttons. Skins should adapt the parent container.
+	if(getParent())
+		reshape(getParent()->getRect().getWidth(),getParent()->getRect().getHeight(),FALSE);
+	// </FS:Zi>
 }
 
 //////////////////////////////////////////////////////////////////////////
