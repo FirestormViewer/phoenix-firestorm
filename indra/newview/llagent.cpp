@@ -111,6 +111,8 @@
 
 #include "utilitybar.h"		// <FS:Zi> show/hide utility bar in mouselook
 
+#include "boost/foreach.hpp" // <FS:LO> for boost::foreach
+
 using namespace LLVOAvatarDefines;
 
 extern LLMenuBarGL* gMenuBarView;
@@ -2131,6 +2133,12 @@ void LLAgent::endAnimationUpdateUI()
 			{
 				skip_list.insert(LLFloaterReg::findInstance("stats"));
 			}
+			// <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
+			BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+			{
+				skip_list.insert(tmp);
+			}
+			// </FS:LO>
 		
 			gFloaterView->popVisibleAll(skip_list);
 #endif
@@ -2257,6 +2265,7 @@ void LLAgent::endAnimationUpdateUI()
 		{
 			exceptions.insert("stats");
 		}
+		exceptions.insert("script_floater"); // <FS:LO> //FIRE-6385: Show all script dialogs still after leaving mouselook
 		LLFloaterReg::hideVisibleInstances(exceptions);
 #else // Use this for now
 		LLFloaterView::skip_list_t skip_list;
@@ -2265,6 +2274,12 @@ void LLAgent::endAnimationUpdateUI()
 		{
 			skip_list.insert(LLFloaterReg::findInstance("stats"));
 		}
+		// <FS:LO> //FIRE-6385: Show all script dialogs still when entering mouselook
+		BOOST_FOREACH(LLFloater *tmp, LLFloaterReg::getFloaterList("script_floater"))
+		{
+			skip_list.insert(tmp);
+		}
+		// </FS:LO>
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
 

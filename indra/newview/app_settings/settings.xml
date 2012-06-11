@@ -15524,16 +15524,18 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>LLSD</string>
       <key>Value</key>
       <array>
-	      <string>snapshot</string>
-	      <string>postcard</string>
-	      <string>mini_map</string>
-	      <string>nearby_chat</string>
-	      <string>im_container</string>
-	      <string>inventory</string>
-		  <string>beacons</string>
-		  <string>avatar_picker</string>
-        <string>stats</string>
-         <string>script_floater</string>
+          <string>snapshot</string>
+          <string>postcard</string>
+          <string>mini_map</string>
+          <string>nearby_chat</string>
+          <string>im_container</string>
+          <string>inventory</string>
+          <string>beacons</string>
+          <string>avatar_picker</string>
+          <string>stats</string>
+          <string>script_floater</string>
+          <string>world_map</string>
+          <string>preferences</string>
       </array>
     </map>
     <key>LandmarksSortedByDate</key>
