@@ -18,6 +18,8 @@
 	<check_box label="W tostach" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
 	<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
+	<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
+	<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
 	<text name="show_label">
 		Zawsze pokazuj:
 	</text>
