@@ -683,6 +683,7 @@ with the same filename but different name
   <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="false" />
 
   <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="true" />
+  <texture name="chatbar_18" file_name="bottomtray/chatbar_18.png" preload="true" />
   <texture name="nearbychat_18" file_name="toolbar_icons/nearbychat.png" preload="true" />
   <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="true" />
   <texture name="phoenix_18" file_name="toolbar_icons/phoenix.png" preload="true" />

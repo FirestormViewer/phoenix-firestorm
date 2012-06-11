@@ -297,7 +297,7 @@
    <!-- this uses control_name instead of the execute/is_running functions -Zi -->
   <command name="defaultchatbar"
            available_in_toybox="true"
-           icon="nearbychat_18"
+           icon="chatbar_18"
            label_ref="Command_Default_Chat_Bar_Label"
            tooltip_ref="Command_Default_Chat_Bar_Tooltip"
            control_name="MainChatbarVisible"
