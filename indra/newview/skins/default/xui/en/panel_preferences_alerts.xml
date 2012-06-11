@@ -140,7 +140,25 @@
      left_pad="0"
      name="OnlineOfflinetoNearbyChatHistory"
      width="180" />
-	
+     <check_box
+      control_name="FSEnableGrowl"
+      height="16"
+      label="Enable Growl Notifications"
+      layout="topleft"
+      left="10"
+      name="notify_growl_checkbox"
+      top_pad="2"
+      width="160" />
+     <check_box
+      enabled_control="FSEnableGrowl"
+      layout="topleft"
+      follows="left|top"
+      left_pad="30"
+      height="18"
+      control_name="FSGrowlWhenActive"
+      name="notify_growl_always_checkbox"
+      label="Enable Growl even if Firestorm is active"/>
+
     <text
      type="string"
      length="1"
@@ -155,7 +173,7 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="130"
+     height="123"
      layout="topleft"
      left="10"
      multi_select="true"
@@ -205,7 +223,7 @@
     </text>
     <scroll_list
      follows="top|left|right"
-     height="130"
+     height="123"
      layout="topleft"
      left="10"
      sort_column="0"
