@@ -2027,8 +2027,8 @@
                 <key>options</key>
                 <array>
                   <string></string>
-		          <string>--config</string>
-		          <string>--version</string>
+                  <string>--config</string>
+                  <string>--version</string>
                 </array>
               </map>
               <key>name</key>
@@ -2048,15 +2048,15 @@
                 <key>options</key>
                 <array>
                   <string></string>
-                          <string>--config</string>
-                          <string>--version</string>
+                  <string>--config</string>
+                  <string>--version</string>
                 </array>
               </map>
               <key>name</key>
               <string>ReleaseFS_open</string>
             </map>
 
-	    <key>RelWithDebInfoFS_open</key>
+            <key>RelWithDebInfoFS</key>
             <map>
               <key>configure</key>
               <map>
@@ -2069,9 +2069,31 @@
                 <key>options</key>
                 <array>
                   <string></string>
-			  <string>--btype RelWithDebInfo</string>
-                          <string>--config</string>
-                          <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--config</string>
+                  <string>--version</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
+            </map>
+
+            <key>RelWithDebInfoFS_open</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string></string>
+                </array>
+                <key>command</key>
+                <string>bash ../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string></string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--config</string>
+                  <string>--version</string>
                 </array>
               </map>
               <key>name</key>
@@ -2266,14 +2288,14 @@
                 </array>
               </map>
               <key>configure</key>
-`	      <map>
-		<key>options</key>
-		<array>
-		  <string>--fmod</string>
-		  <string>--kdu</string>
-		  <string>--platform darwin</string>
-		</array>
-	      </map>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                  <string>--platform darwin</string>
+                </array>
+              </map>
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
@@ -2292,15 +2314,46 @@
                 </array>
               </map>
               <key>configure</key>
-`             <map>
+              <map>
                 <key>options</key>
                 <array>
                   <string>--platform darwin</string>
-		  <string>--package</string>
+                  <string>--package</string>
                 </array>
               </map>
               <key>name</key>
               <string>ReleaseFS_open</string>
+            </map>
+
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--package</string>
+                  <string>--platform darwin</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--platform darwin</string>
+                  <string>--package</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
             </map>
 
             <key>RelWithDebInfoFS_open</key>
@@ -2318,12 +2371,12 @@
                 </array>
               </map>
               <key>configure</key>
-`             <map>
+              <map>
                 <key>options</key>
                 <array>
                   <string>--platform darwin</string>
                   <string>--package</string>
-		  <string>--btype RelWithDebInfo</string>
+                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -2502,7 +2555,7 @@
                 </array>
               </map>
               <key>configure</key>
-`             <map>
+              <map>
                 <key>options</key>
                 <array>
                   <string>--kdu</string>
@@ -2528,15 +2581,44 @@
                 </array>
               </map>
               <key>configure</key>
-`             <map>
+              <map>
                 <key>options</key>
                 <array>
                   <string>--platform linux32</string>
-		  <string>--package</string>
+                  <string>--package</string>
                 </array>
               </map>
               <key>name</key>
               <string>ReleaseFS_open</string>
+            </map>
+
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--platform linux32</string>
+                  <string>--package</string>
+                  <string>--btype RelWithDebInfo</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--kdu</string>
+                  <string>--fmod</string>
+                  <string>--platform linux32</string>
+                  <string>--package</string>
+                  <string>--btype RelWithDebInfo</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
             </map>
 
             <key>RelWithDebInfoFS_open</key>
@@ -2550,16 +2632,16 @@
                   <string>--build</string>
                   <string>--platform linux32</string>
                   <string>--package</string>
-		  <string>--btype RelWithDebInfo</string>
+                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>configure</key>
-`             <map>
+              <map>
                 <key>options</key>
                 <array>
                   <string>--platform linux32</string>
                   <string>--package</string>
-	          <string>--btype RelWithDebInfo</string>
+                  <string>--btype RelWithDebInfo</string>
                 </array>
               </map>
               <key>name</key>
@@ -2898,6 +2980,44 @@
               <string>ReleaseFS_open</string>
             </map>
 
+            <key>RelWithDebInfoFS</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=RelWithDebInfo</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
+                  <string>/p:Platform=Win32</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:4.0</string>
+                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                  <string>--package</string>
+                  <string>--version</string>
+                  <string>--btype RelWithDebInfo</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>RelWithDebInfoFS</string>
+            </map>
 
             <key>RelWithDebInfoFS_open</key>
             <map>
