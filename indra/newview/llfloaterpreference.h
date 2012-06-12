@@ -346,7 +346,6 @@ protected:
 	void onClickAdvanced();
 	void onSelectGrid();
 	void onSelectPlatform();
-	void onAddDoneCallback(std::string gridlabel);
 	
 protected:
 	LLComboBox* m_GridCombo;

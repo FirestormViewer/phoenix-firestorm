@@ -76,7 +76,7 @@ struct GridEntry
 	LLXMLNodePtr info_root;
 	bool set_current;
 	std::string last_http_error;
-	boost::function<void(std::string)> mOnDoneCallback;
+	boost::function<void()> mOnDoneCallback;
 };
 
 class LLInvalidGridName

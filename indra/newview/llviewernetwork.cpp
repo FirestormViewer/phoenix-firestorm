@@ -815,12 +815,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 
 	if (grid_entry)
 	{
-		std::string gridlabel;
-		if(grid_entry->grid.has(GRID_LABEL_VALUE)) {
-			gridlabel = grid_entry->grid[GRID_LABEL_VALUE].asString();
-		}
 		if(!grid_entry->mOnDoneCallback.empty()) {
-			grid_entry->mOnDoneCallback(gridlabel);
+			grid_entry->mOnDoneCallback();
 		}
 		delete grid_entry;
 		grid_entry = NULL;
