@@ -2971,7 +2971,6 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--package</string>
                   <string>--version</string>
                   <string>--platform win32</string>
                 </array>
@@ -3009,7 +3008,6 @@
                 <array>
                   <string>--fmod</string>
                   <string>--kdu</string>
-                  <string>--package</string>
                   <string>--version</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--platform win32</string>
@@ -3046,7 +3044,6 @@
               <map>
                 <key>options</key>
                 <array>
-                  <string>--package</string>
                   <string>--version</string>
                   <string>--btype RelWithDebInfo</string>
                   <string>--platform win32</string>
