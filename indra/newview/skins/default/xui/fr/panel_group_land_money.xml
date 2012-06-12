@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Terrain et argent" name="land_money_tab">
+<panel label="Terrain et L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Un avertissement apparaît si la surface utilisée par le groupe est supérieure ou égale au total des contributions.
 	</panel.string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Terreno y dinero" name="land_money_tab">
+<panel label="Terreno y L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Aparece una advertencia si el terreno total en uso es menor o igual a la contribución total.
 	</panel.string>

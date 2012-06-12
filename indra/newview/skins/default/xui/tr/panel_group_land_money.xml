@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Arazi ve nakit" name="land_money_tab">
+<panel label="Arazi ve L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Kullanılan Toplam Arazi, Toplam Katkı&apos;dan daha az veya buna eşit oluncaya kadar bir uyarı görünür.
 	</panel.string>

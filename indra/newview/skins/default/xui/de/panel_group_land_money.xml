@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Land und Geld" name="land_money_tab">
+<panel label="Land und L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Ein Warnhinweis wird angezeigt, solange der Wert für das insgesamt verwendete Land gleich oder weniger ist als der Gesamtbeitrag.
 	</panel.string>

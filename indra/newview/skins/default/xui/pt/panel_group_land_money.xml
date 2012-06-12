@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Terra &amp; dinheiro" name="land_money_tab">
+<panel label="Terra &amp; L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Será exibido um aviso até o Total de terrenos usados for igual ou inferior à contribuição total.
 	</panel.string>

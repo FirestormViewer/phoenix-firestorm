@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="土地とお金" name="land_money_tab">
+<panel label="土地とL$" name="land_money_tab">
 	<panel.string name="help_text">
 		「土地利用の合計」が「寄付総額」以下、または同じになるまで警告が表示されます。
 	</panel.string>

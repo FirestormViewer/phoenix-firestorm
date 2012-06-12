@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Земля и деньги" name="land_money_tab">
+<panel label="Земля и L$" name="land_money_tab">
 	<panel.string name="help_text">
 		Если общее количество использованной земли не превышает общий взнос, отобразится предупреждение.
 	</panel.string>
