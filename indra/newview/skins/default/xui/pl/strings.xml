@@ -1998,6 +1998,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="PanelDirCountFound">
 		[COUNT] odnalezionych
 	</string>
+	<string name="PanelDirTimeStr">
+		[hour,datetime,slt]:[min,datetime,slt]
+	</string>
 	<string name="PanelContentsTooltip">
 		Zawartość obiektu
 	</string>
