@@ -3514,6 +3514,21 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			yestext="OK"/>
 	</notification>
 	
+	<notification name="LocalBitmapsUpdateFileNotFound">
+[FNAME] konnte nicht aktualisiert werden, da die Datei nicht mehr gefunden wurde.
+Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
+	</notification>
+
+	<notification name="LocalBitmapsUpdateFailedFinal">
+[FNAME] konnte in [NRETRIES] Versuchen nicht geöffnet oder dekodiert werden und wird daher als defekt erachtet.
+Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
+	</notification>
+
+	<notification name="LocalBitmapsVerifyFail">
+Es wurde versucht eine ungültige oder unlesbare Grafikdatei [FNAME] hinzuzufügen, die nicht geöffnet oder dekodiert werden konnte.
+Hinzufügen wurde abgebrochen.
+	</notification>
+
   <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification name="LSLColorCopiedToClipboard">
 Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.

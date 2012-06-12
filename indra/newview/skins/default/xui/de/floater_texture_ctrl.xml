@@ -6,18 +6,24 @@
 	<text name="Multiple">
 		Mehrere Texturen
 	</text>
+	<radio_group name="mode_selection">
+		<radio_item label="Inventar" name="inventory"/>
+		<radio_item label="Lokal" name="local"/>
+	</radio_group>
 	<text name="unknown">
-		Größe: [DIMENSIONS]
+		Größe:
+[DIMENSIONS]
 	</text>
 	<button label="Standard" label_selected="Standard" name="Default"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<button label="Leer" label_selected="Leer" name="Blank"/>
+	<button top_delta="-15" name="Pipette"/>
 	<check_box label="Ordner anzeigen" name="show_folders_check"/>
 	<search_editor label="Texturen filtern" name="inventory search editor"/>
 	<check_box label="Jetzt übernehmen" name="apply_immediate_check"/>
 	<button label="" label_selected="" name="Pipette"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
-	<button label="OK" label_selected="OK" name="Select"/>
+	<button label="OK" label_selected="OK" name="Select" left="135"/>
 	<text name="pick title">
 		Auswählen:
 	</text>
