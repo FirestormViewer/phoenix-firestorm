@@ -931,7 +931,8 @@ void LLGestureMgr::stepGesture(LLMultiGesture* gesture)
 			LLGestureStepWait* wait_step = (LLGestureStepWait*)step;
 
 			F32 elapsed = gesture->mWaitTimer.getElapsedTimeF32();
-			if (elapsed > wait_step->mWaitSeconds)
+			//if (elapsed > wait_step->mWaitSeconds) // <FS:LO> Fix for fire-5819 Gestures sticking on wait states
+			if (elapsed > wait_step->mWaitSeconds || wait_step->mWaitSeconds == 19426740371009173000000000000000.0f) // Im not to happy with how this fixes gestures getting stuck in the wait state, but, it does fix the problem</FS:LO> 
 			{
 				// wait is done, continue execution
 				gesture->mWaitingTimer = FALSE;
