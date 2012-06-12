@@ -1,58 +1,88 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Main Menu">
 	<menu label="Я" name="Me">
+		<menu_item_call label="Аккаунт" name="Manage Account">
+			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=En"/>
+		</menu_item_call>
+		<menu_item_call label="Коробка-продовца..." name="MerchantOutbox"/>
+		<menu_item_call label="Купить[CUR]" name="Buy and Sell L$"/>
+		<menu_item_call label="Настройки" name="Preferences"/>
+		<menu_item_call label="Кнопки панели" name="Toolbar Buttons"/>
 		<menu_item_call label="Профиль…" name="Profile"/>
-		<menu_item_call label="Внешность..." name="ChangeOutfit"/>
-		<menu_item_call label="Выберите аватар..." name="Avatar Picker"/>
-		<menu_item_check label="Инвентарь..." name="Inventory"/>
-		<menu_item_call label="Новое окно инвентаря" name="NewInventoryWindow"/>
-		<menu_item_call label="Места..." name="Places"/>
-		<menu_item_call label="Подборка..." name="Picks"/>
-		<menu_item_call label="Управление камерой..." name="Camera Controls"/>
+		<menu_item_call label="Избранное" name="Picks"/>
+		<menu_item_call label="Внешность" name="ChangeOutfit"/>
+        <menu_item_call label="Снимок" name="Take Snapshot"/>
+		<menu_item_check label="Инвентарь" name="Inventory"/>
+		<menu_item_check label="Инвентарь" name="ShowSidetrayInventory"/>
+		<menu_item_check label="Управление" name="Movement Controls"/>
 		<menu label="Движение" name="Movement">
 			<menu_item_call label="Сесть" name="Sit Down Here"/>
 			<menu_item_check label="Полет" name="Fly"/>
 			<menu_item_check label="Всегда бегать" name="Always Run"/>
+            <menu_item_check label="Насильно сесть" name="Force Toggle Sitting"/>
+		    <menu_item_check label="Фантом-модус" name="Avatar Phantom"/>
+		</menu>
+        <menu_item_check label="Настройки камеры" name="Camera Controls"/>
+		<menu label="Полезности для Аватара" name="avhealth">
 			<menu_item_call label="Остановить анимацию" name="Stop Animating My Avatar"/>
-			<menu_item_call label="Ходьба / бег / полет..." name="Walk / run / fly"/>
+			<menu_item_call label="Перезагрузка текстур(Rebake)" name="Rebake Texture"/>
+			<menu_item_call label="Сброс на мужского аватара. (Нуб)" name="ResetDefaultAvM"/>
+            <menu_item_call label="Сброс на женского аватара. (Нуб)" name="ResetDefaultAvF"/>
+			<menu_item_check label="Показать вес аватаров(АРК)" name="Avatar Rendering Cost"/>
+			<menu_item_call label="Лаг-метр" name="Lag Meter"/>
+			<menu_item_call label="Пересоздать лсл мост" name="Recreate LSL Bridge"/>
 		</menu>
-		<menu label="Статус" name="Status">
-			<menu_item_call label="Нет на месте" name="Set Away"/>
-			<menu_item_call label="Не беспокоить" name="Set Busy"/>
+		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
+		<menu label="Передача" name="Upload">
+			<menu_item_call label="Изображение ([CUR][COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук ([CUR][COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация ([CUR][COST])..." name="Upload Animation"/>
+			<menu_item_call label="Модель..." name="Upload Model"/>
+			<menu_item_call label="Все сразу ([CUR][COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
-		<menu_item_call label="Купить L$..." name="Buy and Sell L$"/>
-		<menu_item_call label="Торговые исходящие..." name="MerchantOutbox"/>
-		<menu_item_call label="Информационная панель аккаунта..." name="Manage My Account"/>
-		<menu_item_call label="Настройки..." name="Preferences"/>
-		<menu_item_call label="Кнопки панели инструментов..." name="Toolbars"/>
-		<menu_item_call label="Скрыть все элементы управления" name="Hide UI"/>
-		<menu_item_call label="Выход из [APP_NAME]" name="Quit"/>
+		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
+		<menu_item_call label="Выход из статуса администратора" name="Leave Admin Options"/>
+		<menu_item_call label=" Закрыть[APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Общение" name="Communicate">
-		<menu_item_check label="Чат..." name="Nearby Chat"/>
-		<menu_item_check label="Говорить" name="Speak"/>
-		<menu_item_check label="Настройки голоса..." name="Nearby Voice"/>
-		<menu_item_check label="Изменение голоса..." name="ShowVoice"/>
-		<menu_item_check label="Жесты..." name="Gestures"/>
 		<menu_item_call label="Друзья" name="My Friends"/>
+		<menu_item_check label="Контакты" name="Contacts"/>
+		<menu_item_check label="Контакт-сеты" name="Contact Sets"/>
 		<menu_item_call label="Группы" name="My Groups"/>
-		<menu_item_call label="Люди неподалеку" name="Active Speakers"/>
+		<menu_item_check label="Люди неподалеку" name="Nearby Chat"/>
+        <menu_item_check label="Люди" name="People"/>
+		<!--
+        <menu_item_call label="Teleport-Liste" name="Teleport History"/>
+        <menu_item_check label="Orte" name="Places"/>
+		-->
+        <menu_item_check label="Разговоры" name="Conversations"/>
+        <menu label="Статус" name="Status">
+            <menu_item_check label="Нет на месте" name="Set Away"/>
+            <menu_item_check label="Автоматический ответ" name="Set Autorespond"/>
+            <menu_item_check label="Автоматический ответ не друзьям" name="Set Autorespond to non-friends"/>
+            <menu_item_check label="Не беспокоить" name="Set Busy"/>		
+        </menu>
+        <menu_item_check label="Жесты" name="Gestures"/>
+        <menu_item_check label="Изменение голоса..." name="ShowVoice"/>
+		<menu_item_call label="Люди которые рядом" name="Active Speakers"/>
+		<menu_item_check label="Голоса которые рядом" name="Nearby Voice"/>
 	</menu>
 	<menu label="Мир" name="World">
-		<menu_item_call label="Добавить закладку на это место" name="Create Landmark Here"/>
-		<menu_item_call label="Пункты..." name="Destinations"/>
-		<menu_item_check label="Карта мира" name="World Map"/>
+        <menu_item_call label="Люди которые рядом" name="Active Speakers"/>
+        <menu_item_call label="История телепортов" name="Teleport History"/>
+        <menu_item_check label="Места" name="Places"/>
 		<menu_item_check label="Миникарта" name="Mini-Map"/>
-		<menu_item_check label="Поиск" name="Search"/>
-		<menu_item_call label="Телепортация домой" name="Teleport Home"/>
-		<menu_item_call label="Установить дом здесь" name="Set Home to Here"/>
-		<menu_item_call label="Снимок" name="Take Snapshot"/>
+		<menu_item_check label="Карта" name="World Map"/>
+		<menu_item_call label="Добавить закладку на это место" name="Create Landmark Here"/>
 		<menu_item_call label="Профиль места" name="Place Profile"/>
 		<menu_item_call label="О земле" name="About Land"/>
 		<menu_item_call label="Регион/землевладение" name="Region/Estate"/>
-		<menu_item_call label="Мои владения..." name="My Land"/>
 		<menu_item_call label="Купить эту землю" name="Buy Land"/>
+		<menu_item_call label="Мои владения..." name="My Land"/>
 		<menu label="Показать" name="LandShow">
+			<menu_item_check label="Bewegungssteuerung" name="Movement Controls"/>
+			<menu_item_check label="Контроль камеры" name="Camera Controls"/>
 			<menu_item_check label="Линии запрета" name="Ban Lines"/>
 			<menu_item_check label="Метки" name="beacons"/>
 			<menu_item_check label="Границы собственности" name="Property Lines"/>
@@ -61,12 +91,14 @@
 			<menu_item_check label="Свойства участка" name="Parcel Properties"/>
 			<menu_item_check label="Меню «Дополнительно»" name="Show Advanced Menu"/>
 		</menu>
-		<menu label="Солнце" name="Sun">
+		<menu_item_call label="Телепортация домой" name="Teleport Home"/>
+		<menu_item_call label="Установить дом здесь" name="Set Home to Here"/>
+		<menu label="Солнце" name="Environment Settings">
 			<menu_item_call label="Восход" name="Sunrise"/>
 			<menu_item_call label="Полдень" name="Noon"/>
 			<menu_item_call label="Закат" name="Sunset"/>
 			<menu_item_call label="Полночь" name="Midnight"/>
-			<menu_item_call label="Использовать настройки региона" name="Use Region Settings"/>
+            <menu_item_call label="Использовать настройки региона" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Редактор среды" name="Environment Editor">
 			<menu_item_call label="Настройки среды..." name="Environment Settings"/>
@@ -86,6 +118,9 @@
 				<menu_item_call label="Удалить настройку..." name="delete_day_preset"/>
 			</menu>
 		</menu>
+		<menu_item_call label="Редактор среды" name="Environment Editor"/>
+        <menu_item_call label="Редактор неба" name="Windlight"/>
+		<menu_item_call label="Поиск окружности" name="area_search"/>
 	</menu>
 	<menu label="Строительство" name="BuildTools">
 		<menu_item_check label="Строительство" name="Show Build Tools"/>
@@ -111,6 +146,8 @@
 			<menu_item_call label="Купить" name="Menu Object Buy"/>
 			<menu_item_call label="Взять" name="Menu Object Take"/>
 			<menu_item_call label="Взять копию" name="Take Copy"/>
+			<menu_item_call label="Дублировать" name="Duplicate"/>
+			<menu_item_call label="редактировать частицы" name="Menu Object Edit Particles"/>
 			<menu_item_call label="Сохранить в моем инвентаре" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Сохранить в контенте объектов" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Вернуть объект" name="Return Object back to Owner"/>
@@ -121,6 +158,8 @@
 			<menu_item_call label="Сброс скриптов" name="Reset Scripts"/>
 			<menu_item_call label="Запустить скрипты" name="Set Scripts to Running"/>
 			<menu_item_call label="Остановить скрипты" name="Set Scripts to Not Running"/>
+			<menu_item_call label="Удалить скрипты в выбранном" name="Remove Scripts From Selection"/>
+			<menu_item_call label="Инфо скриптов (Counter)" name="Script Info"/>
 		</menu>
 		<menu label="Параметры" name="Options">
 			<menu_item_check label="Показать расширенные разрешения" name="DebugPermissions"/>
@@ -146,13 +185,41 @@
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>
 		<menu_item_call label="Вернуть" name="Redo"/>
+        <menu_item_call label="Локальный бит-мап браузер" name="Local Bitmap Browser"/>
+	</menu>
+	<menu label="Содержимое" name="Content">
+		<menu_item_check label="Поиск" name="Search"/>
+		<menu_item_check label="Маркетплейс" name="SL Marketplace"/>
+		<menu_item_check label="[CUR]-Курсы" name="LindenXchange"/>
+		<menu_item_check label="База скриптов" name="Script Library"/>
 	</menu>
 	<menu label="Справка" name="Help">
-		<menu_item_call label="Инструкции..." name="How To"/>
-		<menu_item_call label="Справка по [SECOND_LIFE]" name="Second Life Help"/>
-		<menu_item_call label="Жалоба" name="Report Abuse"/>
+		<menu_item_check label="Показать подсказки" name="Enable Hints"/>
+		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
+        <menu_item_call label="[CURRENT_GRID]-помощь" name="current_grid_help"/>
+        <menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
+		<menu_item_call label="Проверить статус грида" name="Grid Status"/>
+		<menu_item_call label="Написать рапорт" name="Report Abuse"/>
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
 		<menu_item_call label="О [APP_NAME]" name="About Second Life"/>
+	</menu>
+	<menu label="RLVa" name="RLVa Main">
+		<menu label="Debug" name="Debug">
+			<menu_item_check label="RLVa в строке меню" name="Show Top-level RLVa Menu"/>
+			<menu_item_check label="оказать отладочные сообщения" name="Show Debug Messages"/>
+			<menu_item_check label="Скрытие двойных сообщений" name="Hide Unset or Duplicate Messages"/>
+			<menu_item_check label="Старые имена" name="Enable Legacy Naming"/>
+			<menu_item_check label="Делится одеждой" name="Enable Shared Wear"/>
+			<menu_item_check label="Переименование общих объектов при ношении" name="Rename Shared Items on Wear"/>
+			<menu_item_check label="Запретить..." name="Locks"/>
+		</menu>
+		<menu_item_check label="Скрыть заблокированные слоя" name="Hide Locked Layers"/>
+		<menu_item_check label="Скрыть блокированые вложения " name="Hide Locked Attachments"/>
+		<menu_item_check label="OOC-Chat вкл" name="Allow OOC Chat"/>
+		<menu_item_check label="Запретить трансфер в RLV папку" name="Forbid Give to #RLV"/>
+		<menu_item_check label="Показать фильтрованый чат" name="Show Filtered Chat"/>
+		<menu_item_check label="Показать имена" name="Show Name Tags"/>
+		<menu_item_check label="Запреты..." name="Restrictions"/>
 	</menu>
 	<menu label="Дополнительно" name="Advanced">
 		<menu_item_call label="Обновить текстуры" name="Rebake Texture"/>
