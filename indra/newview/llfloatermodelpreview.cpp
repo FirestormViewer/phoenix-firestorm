@@ -5799,14 +5799,12 @@ void LLFloaterModelPreview::toggleCalculateButton(bool visible)
 
 	if (visible)
 	{
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		std::string tbd = getString("tbd");
 		childSetTextArg("prim_weight", "[EQ]", tbd);
 		childSetTextArg("download_weight", "[ST]", tbd);
 		childSetTextArg("server_weight", "[SIM]", tbd);
 		childSetTextArg("physics_weight", "[PH]", tbd);
 		childSetTextArg("upload_fee", "[FEE]", tbd);
-		childSetTextArg("upload_fee", "[CUR]", type_currency);
 		childSetTextArg("price_breakdown", "[STREAMING]", tbd);
 		childSetTextArg("price_breakdown", "[PHYSICS]", tbd);
 		childSetTextArg("price_breakdown", "[INSTANCES]", tbd);

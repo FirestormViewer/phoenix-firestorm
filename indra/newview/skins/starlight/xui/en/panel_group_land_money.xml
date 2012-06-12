@@ -2,7 +2,7 @@
 <panel
  border="false"
  height="500"
- label="Land &amp; Money"
+ label="Land &amp; [CUR]"
  layout="topleft"
  left="0"
  name="land_money_tab"
