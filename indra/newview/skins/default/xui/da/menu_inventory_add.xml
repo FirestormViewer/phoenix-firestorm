@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Hent" name="upload">
-		<menu_item_call label="Billede ([CUR][COST])..." name="Upload Image"/>
-		<menu_item_call label="Lyd ([CUR][COST])..." name="Upload Sound"/>
-		<menu_item_call label="Animation ([CUR][COST])..." name="Upload Animation"/>
+		<menu_item_call label="Billede (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Lyd (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Animation (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Model..." name="Upload Model"/>
 		<menu_item_call label="Model Wizard..." name="Upload Model Wizard"/>
-		<menu_item_call label="Hent mange ([CUR][COST] pr. fil)..." name="Bulk Upload"/>
+		<menu_item_call label="Hent mange (L$[COST] pr. fil)..." name="Bulk Upload"/>
 		<menu_item_call label="Sæt standardværdier for upload rettigheder" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Ny mappe" name="New Folder"/>

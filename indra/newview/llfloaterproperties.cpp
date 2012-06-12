@@ -55,7 +55,6 @@
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
 #include "llgroupactions.h"
-#include "llviewernetwork.h"
 
 #include "lluictrlfactory.h"
 
@@ -554,8 +553,6 @@ void LLFloaterProperties::refreshFromItem(LLInventoryItem* item)
 		comboSaleType->setCurrentByIndex(-1);
 		getChild<LLUICtrl>("Edit Cost")->setValue(llformat("%d",0));
 	}
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLUICtrl>("CurrencySymbol")->setTextArg("[CUR]", type_currency);
 }
 
 void LLFloaterProperties::onClickCreator()

@@ -151,13 +151,13 @@
 				你必須選取整個物件以設定權限
 			</panel.string>
 			<panel.string name="Cost Default">
-				價格： [CUR]
+				價格： L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				總價： [CUR]
+				總價： L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				單價每個： [CUR]
+				單價每個： L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Mixed Price
@@ -201,7 +201,7 @@
 				<combo_box.item label="內容" name="Contents"/>
 				<combo_box.item label="原件" name="Original"/>
 			</combo_box>
-			<spinner label="價格： [CUR]" name="Edit Cost"/>
+			<spinner label="價格： L$" name="Edit Cost"/>
 			<check_box label="顯示在搜尋中" name="search_check" tool_tip="讓其他人可以在搜尋結果中看到這物件"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -470,7 +470,7 @@
 			地段資訊
 		</text>
 		<text name="label_area_price">
-			價格： [CUR][PRICE] 購買 [AREA] m²
+			價格： L$[PRICE] 購買 [AREA] m²
 		</text>
 		<text name="label_area">
 			面積： [AREA] m²

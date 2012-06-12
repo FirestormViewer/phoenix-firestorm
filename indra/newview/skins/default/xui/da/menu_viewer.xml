@@ -3,7 +3,7 @@
 	<menu label="Mig" name="Me">
 		<menu_item_call label="Indstillinger" name="Preferences"/>
 		<menu_item_call label="Mit instrumentpanel" name="Manage My Account"/>
-		<menu_item_call label="Køb [CUR]" name="Buy and Sell [CUR]"/>
+		<menu_item_call label="Køb L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_call label="Udseende" name="ChangeOutfit"/>
 		<menu_item_check label="Beholdning" name="Inventory"/>
@@ -112,12 +112,12 @@
 			<menu_item_call label="Gitter indstillinger" name="Grid Options"/>
 		</menu>
 		<menu label="Send" name="Upload">
-			<menu_item_call label="Billede ([CUR][COST])..." name="Upload Image"/>
-			<menu_item_call label="Lyd ([CUR][COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([CUR][COST])..." name="Upload Animation"/>
+			<menu_item_call label="Billede (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Lyd (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model..." name="Upload Model"/>
 			<menu_item_call label="Model Wizard..." name="Upload Model Wizard"/>
-			<menu_item_call label="Mange ([CUR][COST] pr. fil)..." name="Bulk Upload"/>
+			<menu_item_call label="Mange (L$[COST] pr. fil)..." name="Bulk Upload"/>
 			<menu_item_call label="Sæt standardværdier for upload rettigheder" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Fortyd" name="Undo"/>

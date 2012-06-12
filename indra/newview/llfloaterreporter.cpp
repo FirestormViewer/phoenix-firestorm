@@ -180,8 +180,6 @@ BOOL LLFloaterReporter::postBuild()
 	std::string reporter = LLSLURL("agent", gAgent.getID(), "inspect").getSLURLString();
 	getChild<LLUICtrl>("reporter_field")->setValue(reporter);
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLUICtrl>("Fraud__L$")->setLabelArg("[CUR]", type_currency);
 	center();
 
 	return TRUE;

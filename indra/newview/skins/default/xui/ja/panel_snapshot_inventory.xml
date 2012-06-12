@@ -4,7 +4,7 @@
 		インベントリに保存
 	</text>
 	<text name="hint_lbl">
-		画像をインベントリに保存するには [CUR][UPLOAD_COST] の費用がかかります。画像をテクスチャとして保存するには平方形式の 1 つを選択してください。
+		画像をインベントリに保存するには L$[UPLOAD_COST] の費用がかかります。画像をテクスチャとして保存するには平方形式の 1 つを選択してください。
 	</text>
 	<combo_box label="解像度" name="texture_size_combo">
 		<combo_box.item label="現在のウィンドウ" name="CurrentWindow"/>

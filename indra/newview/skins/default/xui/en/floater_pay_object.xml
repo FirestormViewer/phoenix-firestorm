@@ -66,8 +66,8 @@
     </text>
    <button
      height="23"
-     label="[CUR]1"
-     label_selected="[CUR]1"
+     label="L$1"
+     label_selected="L$1"
      layout="topleft"
      left="25"
      name="fastpay 1"
@@ -75,16 +75,16 @@
      width="80" />
     <button
      height="23"
-     label="[CUR]5"
-     label_selected="[CUR]5"
+     label="L$5"
+     label_selected="L$5"
      layout="topleft"
      left_pad="15"
      name="fastpay 5"
      width="80" />
     <button
      height="23"
-     label="[CUR]10"
-     label_selected="[CUR]10"
+     label="L$10"
+     label_selected="L$10"
      layout="topleft"
      left="25"
      name="fastpay 10"
@@ -92,8 +92,8 @@
      width="80" />
     <button
      height="23"
-     label="[CUR]20"
-     label_selected="[CUR]20"
+     label="L$20"
+     label_selected="L$20"
      layout="topleft"
      left_pad="15"
      name="fastpay 20"

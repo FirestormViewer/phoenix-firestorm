@@ -100,7 +100,7 @@
 				Не для продажи
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Цена: [CUR][PRICE] ([CUR][PRICE_PER_SQM]/м²)
+				Цена: L$[PRICE] (L$[PRICE_PER_SQM]/м²)
 			</text>
 			<button label="Продать землю" name="Sell Land..."/>
 			<text name="For sale to">
@@ -330,7 +330,7 @@
 			<check_box label="Группа" name="check group scripts"/>
 			<check_box label="Безопасно (нет повреждений)" name="check safe" tool_tip="Если отмечено, то земля считается безопасной, отключены боевые повреждения. Если не отмечено, то боевые повреждения включены."/>
 			<check_box label="Не толкать" name="PushRestrictCheck" tool_tip="Запрещает скриптам функцию толкания. Этот параметр может оказаться полезным для предотвращения нежелательного поведения на вашей земле."/>
-			<check_box label="Показать место в поиске ([CUR]30/неделя)" name="ShowDirectoryCheck" tool_tip="Позволить людям видеть участок в результатах поиска"/>
+			<check_box label="Показать место в поиске (L$30/неделя)" name="ShowDirectoryCheck" tool_tip="Позволить людям видеть участок в результатах поиска"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Любая категория" name="item0"/>
 				<combo_box.item label="Место Linden" name="item1"/>
@@ -458,7 +458,7 @@
 				<combo_box.item label="Все" name="Anyone"/>
 				<combo_box.item label="Группа" name="Group"/>
 			</combo_box>
-			<spinner label="Цена в [CUR]:" name="PriceSpin"/>
+			<spinner label="Цена в L$:" name="PriceSpin"/>
 			<spinner label="Часы доступа:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Всегда разрешено" name="AllowedText">

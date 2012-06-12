@@ -17,10 +17,10 @@
 	<text name="object_name_text">
 		...
 	</text>
-	<button label="[CUR]1" label_selected="[CUR]1" name="fastpay 1"/>
-	<button label="[CUR]5" label_selected="[CUR]5" name="fastpay 5"/>
-	<button label="[CUR]10" label_selected="[CUR]10" name="fastpay 10"/>
-	<button label="[CUR]20" label_selected="[CUR]20" name="fastpay 20"/>
+	<button label="L$1" label_selected="L$1" name="fastpay 1"/>
+	<button label="L$5" label_selected="L$5" name="fastpay 5"/>
+	<button label="L$10" label_selected="L$10" name="fastpay 10"/>
+	<button label="L$20" label_selected="L$20" name="fastpay 20"/>
 	<text name="amount text">
 		金額を指定：
 	</text>

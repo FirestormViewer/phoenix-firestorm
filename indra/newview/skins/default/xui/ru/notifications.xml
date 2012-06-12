@@ -210,7 +210,7 @@
 		<usetemplate ignoretext="Подтверждать перед сбросом присоединений" name="okcancelignore" notext="Нет" yestext="Да"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		Вступление в эту группу стоит [CUR][COST].
+		Вступление в эту группу стоит L$[COST].
 Продолжить?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Вступить"/>
 	</notification>
@@ -220,22 +220,22 @@
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Вступить"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Вступление в эту группу стоит [CUR][COST].
-У вас не хватает [CUR] для вступления.
+		Вступление в эту группу стоит L$[COST].
+У вас не хватает L$ для вступления.
 	</notification>
 	<notification name="CreateGroupCost">
-		Создание этой группы стоит [CUR]100.
+		Создание этой группы стоит L$100.
 В группе должно быть более одного участника, иначе она будет удалена.
 Пригласите участников в ближайшие 48 часов.
-		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за [CUR]100"/>
+		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за L$100"/>
 	</notification>
 	<notification name="LandBuyPass">
-		За [CUR][COST] вы можете находиться на этой земле («[PARCEL_NAME]») в течение [TIME] часов.  Купить пропуск?
+		За L$[COST] вы можете находиться на этой земле («[PARCEL_NAME]») в течение [TIME] часов.  Купить пропуск?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
-		При продаже любому пользователю цена продажи должна быть больше [CUR]0.
-Выберите пользователя, чтобы продать ему за [CUR]0.
+		При продаже любому пользователю цена продажи должна быть больше L$0.
+Выберите пользователя, чтобы продать ему за L$0.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		Выбранные [LAND_SIZE] м² земли выставляются на продажу.
@@ -573,7 +573,7 @@
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Найти информацию по покупке [CUR] на [_URL]?
+Найти информацию по покупке L$ на [_URL]?
 		<url name="url">
 			http://secondlife.com/app/currency/
 		</url>
@@ -871,7 +871,7 @@
 	</notification>
 	<notification name="ReleaseLandWarning">
 		Вы собираетесь отказаться от [AREA] м² земли.
-При освобождении этого участка он будет исключен из ваших владений, но не принесет вам [CUR].
+При освобождении этого участка он будет исключен из ваших владений, но не принесет вам L$.
 
 Освободить эту землю?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
@@ -1029,7 +1029,7 @@
 		Необходимо указать имя для вашей рекламы.
 	</notification>
 	<notification name="MinClassifiedPrice">
-		Стоимость размещения рекламы должна быть как минимум [CUR][MIN_PRICE].
+		Стоимость размещения рекламы должна быть как минимум L$[MIN_PRICE].
 
 Введите более высокую цену.
 	</notification>
@@ -1228,7 +1228,7 @@
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Доверять"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [CUR] [PRICE] У вас недостаточно [CUR] для этого.
+		[NAME] L$ [PRICE] У вас недостаточно L$ для этого.
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] дал(а) вам разрешение на редактирование своих объектов.
@@ -1415,7 +1415,7 @@ http://secondlife.com/download.
 	</notification>
 	<notification name="DeedObjectToGroup">
 		В результате передачи этого объекта группа:
-* Получит [CUR] в уплату за объект
+* Получит L$ в уплату за объект
 		<usetemplate ignoretext="Подтверждать перед передачей объекта группе" name="okcancelignore" notext="Отмена" yestext="Передать"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1640,7 +1640,7 @@ http://secondlife.com/download.
 	<notification label="Изменить доступ к землевладению Linden" name="ChangeLindenAccess">
 		Вы собираетесь изменить список доступа к землевладению, которое принадлежит компании Linden (материк, сетка для подростков, ориентация и т.д.).
 
-Это действие ОПАСНО и допускается только для устранения нарушения, которое позволяет вводить и выводить объекты и [CUR] из сетки.
+Это действие ОПАСНО и допускается только для устранения нарушения, которое позволяет вводить и выводить объекты и L$ из сетки.
 Ваше изменение распространится на тысячи регионов и вызовет сбой сервера.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
@@ -1792,7 +1792,7 @@ http://secondlife.com/download.
 	<notification name="PublishClassified">
 		Помните, что плата за рекламу не возвращается.
 
-Опубликовать это рекламное объявление за [CUR][AMOUNT]?
+Опубликовать это рекламное объявление за L$[AMOUNT]?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1836,7 +1836,7 @@ http://secondlife.com/download.
 Выберите один объект и повторите попытку.
 	</notification>
 	<notification name="BuyOriginal">
-		Купить оригинальный объект от [OWNER] за [CUR][PRICE]?
+		Купить оригинальный объект от [OWNER] за L$[PRICE]?
 Вы станете владельцем этого объекта.
 Вы сможете:
  изменять: [MODIFYPERM]
@@ -1845,7 +1845,7 @@ http://secondlife.com/download.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		Купить оригинальный объект за [CUR][PRICE]?
+		Купить оригинальный объект за L$[PRICE]?
 Вы станете владельцем этого объекта.
 Вы сможете:
  изменять: [MODIFYPERM]
@@ -1854,7 +1854,7 @@ http://secondlife.com/download.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopy">
-		Купить копию от [OWNER] за [CUR][PRICE]?
+		Купить копию от [OWNER] за L$[PRICE]?
 Объект будет скопирован в ваш инвентарь.
 Вы сможете:
  изменять: [MODIFYPERM]
@@ -1863,7 +1863,7 @@ http://secondlife.com/download.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		Купить копию за [CUR][PRICE]?
+		Купить копию за L$[PRICE]?
 Объект будет скопирован в ваш инвентарь.
 Вы сможете:
  изменять: [MODIFYPERM]
@@ -1872,12 +1872,12 @@ http://secondlife.com/download.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BuyContents">
-		Купить содержимое от [OWNER] за [CUR][PRICE]?
+		Купить содержимое от [OWNER] за L$[PRICE]?
 Оно будет скопировано в ваш инвентарь.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
 	<notification name="BuyContentsNoOwner">
-		Купить содержимое за [CUR][PRICE]?
+		Купить содержимое за L$[PRICE]?
 Оно будет скопировано в ваш инвентарь.
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="OK"/>
 	</notification>
@@ -2100,7 +2100,7 @@ http://secondlife.com/download.
 		Вы не можете купить объект, пока он присоединен.
 	</notification>
 	<notification label="О запросах на разрешение дебетования" name="DebitPermissionDetails">
-		Принятие этого запроса дает скрипту постоянное разрешение на снятие Linden-долларов ([CUR]) с вашего счета. Для отзыва этого разрешения владелец объекта должен удалить объект или сбросить скрипты в нем.
+		Принятие этого запроса дает скрипту постоянное разрешение на снятие Linden-долларов (L$) с вашего счета. Для отзыва этого разрешения владелец объекта должен удалить объект или сбросить скрипты в нем.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
@@ -2164,7 +2164,7 @@ http://secondlife.com/download.
 (Занимает около 5 мин.)
 	</notification>
 	<notification name="UploadPayment">
-		Вы заплатили [CUR][AMOUNT] за передачу.
+		Вы заплатили L$[AMOUNT] за передачу.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Передача снимка веб-сайта завершена.
@@ -2645,7 +2645,7 @@ http://secondlife.com/download.
 	<notification name="BuyLindenDollarSuccess">
 		Благодарим за оплату!
 
-По окончании обработки баланс вашего счета в [CUR] будет обновлен. Если обработка займет более 20 мин, ваша транзакция может быть отменена. В этом случае сумма платежа будет записана на ваш баланс в долларах США.
+По окончании обработки баланс вашего счета в L$ будет обновлен. Если обработка займет более 20 мин, ваша транзакция может быть отменена. В этом случае сумма платежа будет записана на ваш баланс в долларах США.
 
 Состояние ваших платежей можно проверить на странице «Журнал транзакций» на вашей [http://secondlife.com/account/ информационной панели].
 	</notification>
@@ -2802,7 +2802,7 @@ http://secondlife.com/download.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Эта передача будет стоить [CUR][PRICE]. Продолжить передачу?
+		Эта передача будет стоить L$[PRICE]. Продолжить передачу?
 		<usetemplate name="okcancelbuttons" notext="Отмена" yestext="Передать"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -2861,7 +2861,7 @@ http://secondlife.com/download.
 	<notification name="ReleasedLandWithReclaim">
 		Земельный участок «[PARCEL_NAME]» площадью [AREA] м² освобожден.
 
-У вас есть [RECLAIM_PERIOD] ч, чтобы вернуть его за [CUR]0. После этого участок будет выставлен на свободную продажу.
+У вас есть [RECLAIM_PERIOD] ч, чтобы вернуть его за L$0. После этого участок будет выставлен на свободную продажу.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
 		Земельный участок «[PARCEL_NAME]» площадью [AREA] м² освобожден.
@@ -2978,7 +2978,7 @@ http://secondlife.com/download.
 		В вашем инвентаре можно искать разнообразные вещи. Самые новые вещи представлены на вкладке «Недавние».
 	</notification>
 	<notification label="Вы получили Linden-доллары!" name="HintLindenDollar">
-		Вот ваш текущий баланс в [CUR]. Чтобы купить еще Linden-долларов, щелкните  «Купить [CUR]».
+		Вот ваш текущий баланс в L$. Чтобы купить еще Linden-долларов, щелкните  «Купить L$».
 	</notification>
 	<notification name="LowMemory">
 		Недостаточный размер пула памяти. Некоторые функции Second Life отключены во избежание сбоя приложения. Закройте другие приложения. Если неполадка не исчезнет, перезапустите SL.

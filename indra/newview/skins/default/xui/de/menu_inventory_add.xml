@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Hochladen" name="upload">
-		<menu_item_call label="Bild ([COST] [CUR])..." name="Upload Image"/>
-		<menu_item_call label="Sound ([COST] [CUR])..." name="Upload Sound"/>
-		<menu_item_call label="Animation ([COST] [CUR])..." name="Upload Animation"/>
+		<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
+		<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
+		<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
 		<menu_item_call label="Modell..." name="Upload Model"/>
 		<menu_item_call label="Modellassistent..." name="Upload Model Wizard"/>
-		<menu_item_call label="Mehrfach-Upload ([COST] [CUR] pro Datei)..." name="Bulk Upload"/>
+		<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
 		<menu_item_call label="Hochlade-Berechtigungen (Standard) festlegen" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Neuer Ordner" name="New Folder"/>

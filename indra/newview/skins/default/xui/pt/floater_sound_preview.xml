@@ -7,5 +7,5 @@
 		Descrição:
 	</text>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
-	<button label="Upload ([CUR][AMOUNT])" label_selected="Upload ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Upload (L$[AMOUNT])" label_selected="Upload (L$[AMOUNT])" name="ok_btn"/>
 </floater>

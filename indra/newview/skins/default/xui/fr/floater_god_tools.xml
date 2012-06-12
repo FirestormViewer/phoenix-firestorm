@@ -42,7 +42,7 @@
 			</text>
 			<spinner left="320" name="billable factor" width="70"/>
 			<text left_delta="-120" name="land cost text">
-				[CUR] par m² :
+				L$ par m² :
 			</text>
 			<spinner left="320" name="land cost" width="70"/>
 			<button label="Rafraîchir" label_selected="Rafraîchir" name="Refresh" tool_tip="Cliquez ici pour rafraîchir les informations ci-dessus."/>

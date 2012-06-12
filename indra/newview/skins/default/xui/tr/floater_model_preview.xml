@@ -219,7 +219,7 @@
 			<button label="Karşıya Yükle" name="ok_btn" tool_tip="Simülatöre karşıya yükle"/>
 			<button label="Ayarları temizle ve formu sıfırla" name="reset_btn"/>
 			<text name="upload_fee">
-				Karşıya yükleme ücreti: [CUR] [FEE]
+				Karşıya yükleme ücreti: L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				Arazi etkisi [EQ]

@@ -371,7 +371,7 @@ Loading...
              left_delta="0"
              name="For Sale: Price L$[PRICE]."
              width="226">
-                Price: [CUR][PRICE] ([CUR][PRICE_PER_SQM]/m²)
+                Price: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
             </text>
             <text
              enabled="false"
@@ -1369,7 +1369,7 @@ Only large parcels can be listed in search.
              width="119" />
             <check_box
              height="16"
-             label="Show Place in Search ([CUR]30/week)"
+             label="Show Place in Search (L$30/week)"
              layout="topleft"
              left="18"
              name="ShowDirectoryCheck"
@@ -2060,7 +2060,7 @@ Only large parcels can be listed in search.
              height="23"
              increment="1"
              initial_value="10"
-             label="Price in [CUR]:"
+             label="Price in L$:"
              label_width="120"
              layout="topleft"
              left="28"

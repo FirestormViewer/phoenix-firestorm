@@ -167,7 +167,7 @@
 		（群組）
 	</string>
 	<string name="TooltipForSaleL$">
-		出售： [CUR][AMOUNT]
+		出售： L$[AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		群組建造
@@ -196,7 +196,7 @@
 	<string name="TooltipMustSingleDrop">
 		只有一個物品可以被拖曳到此處
 	</string>
-	<string name="TooltipPrice" value="[CUR][AMOUNT]:"/>
+	<string name="TooltipPrice" value="L$[AMOUNT]:"/>
 	<string name="TooltipHttpUrl">
 		點擊以察看這個網頁
 	</string>
@@ -664,7 +664,7 @@
 		離線
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] m² [CUR][PRICE]
+		[AREA] m² L$[PRICE]
 	</string>
 	<string name="worldmap_results_none_found">
 		沒有發現。
@@ -706,7 +706,7 @@
 		&apos;[OBJECTNAME]&apos;, an object owned by &apos;[OWNERNAME]&apos;, located in [REGIONNAME] at [REGIONPOS], has been denied permission to: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		由你身上拿走林登幣（[CUR]）
+		由你身上拿走林登幣（L$）
 	</string>
 	<string name="ActOnControlInputs">
 		Act on your control inputs
@@ -1187,7 +1187,7 @@
 		購買
 	</string>
 	<string name="BuyforL$">
-		Buy for [CUR]
+		Buy for L$
 	</string>
 	<string name="Stone">
 		石頭
@@ -1822,10 +1822,10 @@
 		取消
 	</string>
 	<string name="UploadingCosts">
-		花費 [CUR] [AMOUNT] 上傳 [NAME]
+		花費 L$ [AMOUNT] 上傳 [NAME]
 	</string>
 	<string name="BuyingCosts">
-		花費 [CUR] [AMOUNT] 購買這個
+		花費 L$ [AMOUNT] 購買這個
 	</string>
 	<string name="UnknownFileExtension">
 		未知的副檔名 .%s
@@ -3763,22 +3763,22 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] paid you [CUR][AMOUNT] [REASON].
+		[NAME] paid you L$[AMOUNT] [REASON].
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] paid you [CUR][AMOUNT].
+		[NAME] paid you L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars">
-		You paid [NAME] [CUR][AMOUNT] [REASON].
+		You paid [NAME] L$[AMOUNT] [REASON].
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		You paid [CUR][AMOUNT].
+		You paid L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		You paid [NAME] [CUR][AMOUNT].
+		You paid [NAME] L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		You paid [CUR][AMOUNT] [REASON].
+		You paid L$[AMOUNT] [REASON].
 	</string>
 	<string name="for item">
 		for [ITEM]
@@ -3805,19 +3805,19 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 		to publish a classified ad
 	</string>
 	<string name="giving">
-		Giving [CUR] [AMOUNT]
+		Giving L$ [AMOUNT]
 	</string>
 	<string name="uploading_costs">
-		上傳花費 [CUR] [AMOUNT]
+		上傳花費 L$ [AMOUNT]
 	</string>
 	<string name="this_costs">
-		This costs [CUR] [AMOUNT]
+		This costs L$ [AMOUNT]
 	</string>
 	<string name="buying_selected_land">
-		Buying selected land for [CUR] [AMOUNT]
+		Buying selected land for L$ [AMOUNT]
 	</string>
 	<string name="this_object_costs">
-		This object costs [CUR] [AMOUNT]
+		This object costs L$ [AMOUNT]
 	</string>
 	<string name="group_role_everyone">
 		任何人

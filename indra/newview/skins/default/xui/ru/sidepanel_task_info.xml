@@ -22,13 +22,13 @@
 		Этот объект содержит объединенные части
 	</panel.string>
 	<panel.string name="Cost Default">
-		Цена: [CUR]
+		Цена: L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		Всего: [CUR]
+		Всего: L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Цена за: [CUR]
+		Цена за: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Смешанная цена
@@ -93,7 +93,7 @@
 			<combo_box.item label="Контент" name="Contents"/>
 			<combo_box.item label="Оригинал" name="Original"/>
 		</combo_box>
-		<spinner label="Цена: [CUR]" name="Edit Cost"/>
+		<spinner label="Цена: L$" name="Edit Cost"/>
 		<check_box label="Показать в результатах поиска" name="search_check" tool_tip="Показывать объект в результатах поиска"/>
 		<text name="B:">
 			Н:

@@ -440,8 +440,8 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 		check = "gridnick";
 		if (node->hasName(check))
 		{
-			grid_entry->grid[GRID_NICK_VALUE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_NICK_VALUE] << LL_ENDL;
+			grid_entry->grid[check] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[check] << LL_ENDL;
 			continue;
 		}
 		check = "welcome";
@@ -468,71 +468,15 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 		check = "help";
 		if (node->hasName(check))
 		{
-			grid_entry->grid[GRID_HELP] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_HELP] << LL_ENDL;
+			grid_entry->grid[check] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[check] << LL_ENDL;
 			continue;
 		}
 		check = "about";
 		if (node->hasName(check))
 		{
-			grid_entry->grid[GRID_ABOUT] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_ABOUT] << LL_ENDL;
-			continue;
-		}
-		check = "search";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_SEARCH] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_SEARCH] << LL_ENDL;
-			continue;
-		}
-		check = "SendGridInfoToViewerOnLogin";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_SENDGRIDINFO] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_SENDGRIDINFO] << LL_ENDL;
-			continue;
-		}
-		check = "DirectoryFee";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_DIRECTORY_FEE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_DIRECTORY_FEE] << LL_ENDL;
-			continue;
-		}
-		check = "CurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "RealCurrencySymbol";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] << LL_ENDL;
-			continue;
-		}
-		check = "MaxGroups";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_MAXGROUPS] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MAXGROUPS] << LL_ENDL;
-			continue;
-		}
-		check = "platform";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_PLATFORM] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_PLATFORM] << LL_ENDL;
-			continue;
-		}
-		check = "message";
-		if (node->hasName(check))
-		{
-			grid_entry->grid[GRID_MESSAGE] = node->getTextContents();
-			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MESSAGE] << LL_ENDL;
+			grid_entry->grid[check] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[check] << LL_ENDL;
 			continue;
 		}
 		check = "helperuri";
@@ -815,20 +759,11 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 
 	if (grid_entry)
 	{
-		if(!grid_entry->mOnDoneCallback.empty()) {
-			grid_entry->mOnDoneCallback();
-		}
 		delete grid_entry;
 		grid_entry = NULL;
 	}
 }
 
-void LLGridManager::deleteGrid(const std::string& grid)
-{
-	if(MAINGRID == grid) return;
-	mGridList.erase(grid);
-	if(mGrid == grid) setGridChoice(MAINGRID);
-}
 //
 // LLGridManager::addSystemGrid - helper for adding a system grid.
 void LLGridManager::addSystemGrid(const std::string& label,
@@ -1042,20 +977,6 @@ std::string LLGridManager::getLoginPage()
 	}	
 	
 	return mGridList[mGrid][GRID_LOGIN_PAGE_VALUE];
-}
-
-std::string LLGridManager::getCurrency()
-{
-	std::string type_currency = "L$";
-	if(!(isInSLMain() || isInSLBeta())) {
-		if(mGridList[mGrid].has(GRID_CURRENCY_SYMBOL)) {
-			type_currency =  mGridList[mGrid][GRID_CURRENCY_SYMBOL].asString();
-		}
-		else {
-			type_currency = "OS$";
-		}
-	}
-	return type_currency;
 }
 
 // <AW opensim>

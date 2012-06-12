@@ -11,7 +11,7 @@
 		Mitgliedschaft kostenlos
 	</string>
 	<string name="CostToJoin">
-		Mitgliedschaft: [AMOUNT] [CUR]
+		Mitgliedschaft: [AMOUNT] L$
 	</string>
 	<string name="YouAreMember">
 		Sie sind Mitglied
@@ -24,7 +24,7 @@
 Hoch solln sie leben!  Elche forever! Und auch Mungos!
 	</text>
 	<text name="group_cost">
-		Mitgliedschaft: 123 [CUR]
+		Mitgliedschaft: 123 L$
 	</text>
 	<button label="Beitreten" name="join_btn"/>
 	<button label="Verlassen" name="leave_btn"/>

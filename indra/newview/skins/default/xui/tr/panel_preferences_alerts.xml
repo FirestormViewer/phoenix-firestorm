@@ -3,7 +3,7 @@
 	<text name="tell_me_label">
 		Bana söyle:
 	</text>
-	<check_box label="[CUR] harcadığımda veya aldığımda" name="notify_money_change_checkbox"/>
+	<check_box label="L$ harcadığımda veya aldığımda" name="notify_money_change_checkbox"/>
 	<check_box label="Arkadaşlarım oturum açtığında veya kapattığında" name="friends_online_notify_checkbox"/>
 	<text name="show_label">
 		Daima göster:

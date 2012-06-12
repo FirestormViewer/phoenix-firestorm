@@ -20,7 +20,7 @@ background_visible="true"
     </panel.string>
     <panel.string
      name="group_join_btn">
-        Join ([CUR][AMOUNT])
+        Join (L$[AMOUNT])
     </panel.string>
     <panel.string
      name="group_join_free">

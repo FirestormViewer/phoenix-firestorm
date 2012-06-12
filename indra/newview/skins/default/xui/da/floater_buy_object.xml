@@ -19,7 +19,7 @@
 		Indeholder:
 	</text>
 	<text name="buy_text">
-		Køb for [CUR][AMOUNT] af:
+		Køb for L$[AMOUNT] af:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?

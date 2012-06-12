@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_snapshot_options">
   <button label="Wyślij na mój Kanał" name="save_to_profile_btn" />
-  <button label="Zapisz do mojej Szafy ([AMOUNT][CUR])" name="save_to_inventory_btn" />
+  <button label="Zapisz do mojej Szafy ([AMOUNT]L$)" name="save_to_inventory_btn" />
   <button label="Zapisz na dysku twardym" name="save_to_computer_btn" />
 </panel>

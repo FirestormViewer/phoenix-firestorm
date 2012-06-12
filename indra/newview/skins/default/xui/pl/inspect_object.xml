@@ -8,7 +8,7 @@
 Właściciel [OWNER]
 	</string>
 	<string name="Price">
-		[AMOUNT][CUR]
+		[AMOUNT]L$
 	</string>
 	<string name="PriceFree">
 		Darmowe!

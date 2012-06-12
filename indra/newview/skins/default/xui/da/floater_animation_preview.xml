@@ -182,6 +182,6 @@ Maksimal animations længde er [MAX_LENGTH] sekunder.
 
 Vi anbefaler BVH filer der er exporteret fra Poser 4.
 	</text>
-	<button label="Hent ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Hent (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Annullér" name="cancel_btn"/>
 </floater>

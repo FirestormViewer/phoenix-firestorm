@@ -218,17 +218,6 @@ top_pad="0"
 name="server_combo"
 width="110"
   visible="true" />
-  <button
-follows="left|bottom"
-height="16"
-image_selected="PushButton_On_Selected"
-label="Grid Manager"
-label_color="White"
-layout="topleft"
-top_pad="0"
-name="grids_btn"
-width="106"
-tab_stop="false" />
 </layout_panel>
 <layout_panel
 tab_stop="false"

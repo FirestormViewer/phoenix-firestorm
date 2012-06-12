@@ -7,7 +7,7 @@
 		Contenu Général
 	</panel.string>
 	<panel.string name="l$_price">
-		[PRICE] [CUR]
+		[PRICE] L$
 	</panel.string>
 	<panel.string name="click_through_text_fmt">
 		[TELEPORT] téléporter, [MAP] carte, [PROFILE] profil

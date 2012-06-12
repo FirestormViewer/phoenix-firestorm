@@ -3,8 +3,8 @@
 	<text name="tell_me_label">
 		Powiadom mnie:
 	</text>
-	<check_box label="Gdy wydaję lub dostaję [CUR]" name="notify_money_change_checkbox"/>
-	<check_box name="FSPaymentInfoInChat" label="Pokazuj transakcje [CUR] w Czacie Lokalnym - nie w Tostach"/>
+	<check_box label="Gdy wydaję lub dostaję L$" name="notify_money_change_checkbox"/>
+	<check_box name="FSPaymentInfoInChat" label="Pokazuj transakcje L$ w Czacie Lokalnym - nie w Tostach"/>
 	<check_box label="Gdy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
 	<check_box label="Gdy ktoś zmieni Wyświetlane Imię" name="FSShowDisplayNameUpdateNotification"/>
 	<check_box label="Gdy wystąpi błąd skryptu to w:" name="show_script_errors"/>

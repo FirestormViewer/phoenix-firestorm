@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_classified_info">
 	<panel.string name="l$_price">
-		[PRICE] [CUR]
+		[PRICE] L$
 	</panel.string>
 	<panel.string name="click_through_text_fmt">
 		[TELEPORT] teleportes, [MAP] mapa, [PROFILE] perfil

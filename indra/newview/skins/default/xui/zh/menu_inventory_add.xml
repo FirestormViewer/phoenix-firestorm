@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="上傳" name="upload">
-		<menu_item_call label="圖像（[CUR][COST]）..." name="Upload Image"/>
-		<menu_item_call label="聲音（[CUR][COST]）..." name="Upload Sound"/>
-		<menu_item_call label="動作（[CUR][COST]）..." name="Upload Animation"/>
-		<menu_item_call label="大批（[CUR][COST] 每檔案）..." name="Bulk Upload"/>
+		<menu_item_call label="圖像（L$[COST]）..." name="Upload Image"/>
+		<menu_item_call label="聲音（L$[COST]）..." name="Upload Sound"/>
+		<menu_item_call label="動作（L$[COST]）..." name="Upload Animation"/>
+		<menu_item_call label="大批（L$[COST] 每檔案）..." name="Bulk Upload"/>
 		<menu_item_call label="設定預設上傳權限" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="新資料夾" name="New Folder"/>

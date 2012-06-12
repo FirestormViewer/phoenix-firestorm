@@ -121,7 +121,6 @@
 #include "lltoolgrab.h"
 #include "llwindow.h"
 #include "boost/unordered_map.hpp"
-#include "llviewernetwork.h"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
@@ -554,15 +553,6 @@ void init_menus()
 	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Bulk Upload", "[COST]", upload_cost);
-
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	gMenuHolder->childSetLabelArg("Upload Image", "[CUR]", type_currency);
-	gMenuHolder->childSetLabelArg("Upload Sound", "[CUR]", type_currency);
-	gMenuHolder->childSetLabelArg("Upload Animation", "[CUR]", type_currency);
-	gMenuHolder->childSetLabelArg("Bulk Upload", "[CUR]", type_currency);
-
-	gMenuHolder->childSetLabelArg("Buy and Sell L$", "[CUR]", type_currency);
-	gMenuHolder->childSetLabelArg("LindenXchange", "[CUR]", type_currency);
 	
 	gAFKMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Away", TRUE);
 	gBusyMenu = gMenuBarView->getChild<LLMenuItemCallGL>("Set Busy", TRUE);
@@ -2870,38 +2860,6 @@ bool enable_object_open()
 	return root->allowOpen();
 }
 
-bool enable_object_export()
-{
-	LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
-	bool new_value = (object != NULL);
-	if (new_value)
-	{
-		/*
-		struct ff : public LLSelectedNodeFunctor
-		{
-			ff(const LLSD& data) : LLSelectedNodeFunctor(), userdata(data)
-			{
-			}
-			const LLSD& userdata;
-			virtual bool apply(LLSelectNode* node)
-			{
-					// Note: the actual permission checking algorithm depends on the grid TOS and must be
-					// performed for each prim and texture. This is done later in llviewerobjectbackup.cpp.
-					// This means that even if the item is enabled in the menu, the export may fail should
-					// the permissions not be met for each exported asset. The permissions check below
-					// therefore only corresponds to the minimal permissions requirement common to all grids.
-					LLPermissions *item_permissions = node->mPermissions;
-					return (gAgent.getID() == item_permissions->getOwner() &&
-							(gAgent.getID() == item_permissions->getCreator() ||
-							 (item_permissions->getMaskOwner() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED));
-			}
-		};
-		ff * the_ff = new ff(userdata);
-		new_value = LLSelectMgr::getInstance()->getSelection()->applyToNodes(the_ff, false);
-		*/
-	}
-	return new_value;
-}
 
 class LLViewJoystickFlycam : public view_listener_t
 {
@@ -5256,10 +5214,8 @@ void handle_buy_or_take()
 		}
 		else
 		{
-			std::string type_currency = LLGridManager::getInstance()->getCurrency();
 			LLStringUtil::format_map_t args;
 			args["AMOUNT"] = llformat("%d", total_price);
-			args["CUR"] = type_currency;
 			LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString( "BuyingCosts", args ), total_price );
 		}
 	}
@@ -5381,13 +5337,11 @@ void show_buy_currency(const char* extra)
 	}
 	mesg << "Go to " << LLNotifications::instance().getGlobalString("BUY_CURRENCY_URL")<< "\nfor information on purchasing currency?";
 */
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	LLSD args;
 	if (extra != NULL)
 	{
 		args["EXTRA"] = extra;
 	}
-	args["CUR"] = type_currency;
 	LLNotificationsUtil::add("PromptGoToCurrencyPage", args);//, LLSD(), callback_show_buy_currency);
 }
 
@@ -5403,10 +5357,8 @@ void handle_buy()
 	
 	if (price > 0 && price > gStatusBar->getBalance())
 	{
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		LLStringUtil::format_map_t args;
 		args["AMOUNT"] = llformat("%d", price);
-		args["CUR"] = type_currency;
 		LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("this_object_costs", args), price );
 		return;
 	}
@@ -9159,11 +9111,8 @@ class LLUploadCostCalculator : public view_listener_t
 
 	bool handleEvent(const LLSD& userdata)
 	{
-		calculateCost();
 		std::string menu_name = userdata.asString();
 		gMenuHolder->childSetLabelArg(menu_name, "[COST]", mCostStr);
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
-		gMenuHolder->childSetLabelArg(menu_name, "[CUR]", type_currency);
 
 		return true;
 	}
@@ -9177,20 +9126,6 @@ public:
 	}
 };
 
-class LLCurrencyTypeCheck : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		std::string menu_name = userdata.asString();
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
-		gMenuHolder->childSetLabelArg(menu_name, "[CUR]", type_currency);
-
-		return true;
-	}
-
-public:
-	LLCurrencyTypeCheck() {}
-};
 class LLToggleUIHints : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9409,7 +9344,6 @@ void initialize_menus()
 	enable.add("IsGodCustomerService", boost::bind(&is_god_customer_service));
 
 	view_listener_t::addEnable(new LLUploadCostCalculator(), "Upload.CalculateCosts");
-	view_listener_t::addEnable(new LLCurrencyTypeCheck(), "Currency.TypeCheck");
 
 
 	commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));

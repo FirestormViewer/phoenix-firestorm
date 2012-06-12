@@ -13,7 +13,7 @@
 	<string name="none_text" value="(aucun)"/>
 	<string name="sale_pending_text" value="(vente en cours)"/>
 	<string name="group_owned_text" value="(propriété du groupe)"/>
-	<string name="price_text" value="[CUR]"/>
+	<string name="price_text" value="L$"/>
 	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="Tous les résidents"/>
 	<string name="group_text" value="Groupe"/>

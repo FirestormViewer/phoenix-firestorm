@@ -42,7 +42,6 @@
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 #include "lltrans.h"
-#include "llviewernetwork.h"
 
 class LLAvatarName;
 
@@ -162,11 +161,9 @@ void LLFloaterSellLandUI::SelectionObserver::changed()
 
 BOOL LLFloaterSellLandUI::postBuild()
 {
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	childSetCommitCallback("sell_to", onChangeValue, this);
 	childSetCommitCallback("price", onChangeValue, this);
 	getChild<LLLineEditor>("price")->setPrevalidate(LLTextValidate::validateNonNegativeS32);
-	getChild<LLUICtrl>("price_ld")->setTextArg("[CUR]", type_currency);
 	childSetCommitCallback("sell_objects", onChangeValue, this);
 	childSetAction("sell_to_select_agent", boost::bind( &LLFloaterSellLandUI::doSelectAgent, this));
 	childSetAction("cancel_btn", doCancel, this);
@@ -283,8 +280,6 @@ void LLFloaterSellLandUI::refreshUI()
 	{
 		F32 per_meter_price = 0;
 		per_meter_price = F32(mParcelPrice) / F32(mParcelActualArea);
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
-		getChild<LLUICtrl>("price_per_m")->setTextArg("[CUR]", type_currency);
 		getChild<LLUICtrl>("price_per_m")->setTextArg("[PER_METER]", llformat("%0.2f", per_meter_price));
 		getChildView("price_per_m")->setVisible(TRUE);
 
@@ -474,19 +469,14 @@ void LLFloaterSellLandUI::doSellLand(void *userdata)
 		&& (sale_price == 0) 
 		&& sell_to_anyone)
 	{
-		LLSD args;
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
-		args["CUR"] = type_currency;
-		LLNotificationsUtil::add("SalePriceRestriction", args);
+		LLNotificationsUtil::add("SalePriceRestriction");
 		return;
 	}
 
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	LLSD args;
 	args["LAND_SIZE"] = llformat("%d",area);
 	args["SALE_PRICE"] = llformat("%d",sale_price);
 	args["NAME"] = authorizedBuyerName;
-	args["CUR"] = type_currency;
 
 	LLNotification::Params params("ConfirmLandSaleChange");
 	params.substitutions(args)

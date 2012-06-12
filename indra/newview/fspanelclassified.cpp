@@ -55,8 +55,6 @@
 #include "lltrans.h"
 #include "llscrollcontainer.h"
 #include "llstatusbar.h"
-#include "llviewernetwork.h"
-#include "llspinctrl.h"
 
 const S32 MINIMUM_PRICE_FOR_LISTING = 50;	// L$
 
@@ -165,8 +163,6 @@ BOOL FSPanelClassifiedInfo::postBuild()
 	mSnapshotCtrl = getChild<LLTextureCtrl>("classified_snapshot");
 	mSnapshotRect = getDefaultSnapshotRect();
 
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLSpinCtrl>("price_for_listing")->setLabel(type_currency);
 	return TRUE;
 }
 
@@ -283,9 +279,7 @@ void FSPanelClassifiedInfo::processProperties(void* data, EAvatarProcessorType t
 				getString("auto_renew_on") : getString("auto_renew_off");
 			getChild<LLUICtrl>("auto_renew")->setValue(auto_renew_str);
 
-			std::string type_currency = LLGridManager::getInstance()->getCurrency();
 			price_str.setArg("[PRICE]", llformat("%d", c_info->price_for_listing));
-			price_str.setArg("[CUR]", type_currency);
 			getChild<LLUICtrl>("price_for_listing")->setValue(LLSD(price_str));
 
 			std::string date_str = date_fmt;

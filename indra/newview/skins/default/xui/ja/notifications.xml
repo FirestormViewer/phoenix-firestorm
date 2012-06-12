@@ -221,7 +221,7 @@
 		<usetemplate ignoretext="アタッチメントを下に落とす前の確認" name="okcancelignore" notext="いいえ" yestext="はい"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		このグループに参加するには、[CUR] [COST] かかります。
+		このグループに参加するには、L$ [COST] かかります。
 続行しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="参加"/>
 	</notification>
@@ -231,36 +231,36 @@
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="参加"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		このグループに加入するには、[CUR] [COST] 必要です。
-[CUR] が不足しているのでこのグループに参加することができません。
+		このグループに加入するには、L$ [COST] 必要です。
+L$ が不足しているのでこのグループに参加することができません。
 	</notification>
 	<notification name="CreateGroupCost">
-		このグループを作るには [CUR] 100 かかります。
+		このグループを作るには L$ 100 かかります。
 一人ではグループにならないので、永久に削除されてしまいます。
 48 時間以内にメンバーを勧誘し、入会してもらってください。
-		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="[CUR]100 でグループを作成"/>
+		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$100 でグループを作成"/>
 	</notification>
 	<notification name="LandBuyPass">
-		[CUR] [COST] で [TIME] 時間 [PARCEL_NAME] に入ることができます。
+		L$ [COST] で [TIME] 時間 [PARCEL_NAME] に入ることができます。
 入場許可を購入しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
 		不特定の人に売却する場合には、
-売却価格は[CUR] 0 以上に設定する必要があります。
-売却価格を[CUR] 0 に設定する場合は、
+売却価格はL$ 0 以上に設定する必要があります。
+売却価格をL$ 0 に設定する場合は、
 売却する個人を選択してください。
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		選択した [LAND_SIZE] 平方メートルの土地は、売り出し中に設定されています。
-売却価格 [CUR] [SALE_PRICE] で、[NAME] に売却を認可します。
+売却価格 L$ [SALE_PRICE] で、[NAME] に売却を認可します。
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		注意： 「誰にでも販売」をクリックすることで、あなたの土地はこのリージョンにいる人に限らず [CURRENT_GRID] コミュニティ全体で利用可能となります。
 
 選択した [LAND_SIZE] 平方メートルの土地は、販売対象に設定されました。
-販売価格 [CUR] [SALE_PRICE] で、[NAME] が販売対象者となります。
+販売価格 L$ [SALE_PRICE] で、[NAME] が販売対象者となります。
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
@@ -900,7 +900,7 @@
 	<notification name="ReleaseLandWarning">
 		あなたは、[AREA] 平方メートルの土地を破棄しようとしています。
 この区画を破棄するとあなたの土地ではなくなりますが、
-[CUR] は返金されません。
+L$ は返金されません。
 
 土地を破棄しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
@@ -1058,7 +1058,7 @@
 		クラシファイドの名前を指定してください。
 	</notification>
 	<notification name="MinClassifiedPrice">
-		広告料は最低 [CUR] [MIN_PRICE] 必要です。
+		広告料は最低 L$ [MIN_PRICE] 必要です。
 
 金額を増やしてください。
 	</notification>
@@ -1264,7 +1264,7 @@ SHA1 フィンガープリント： [MD5_DIGEST]
 		<usetemplate name="okcancelbuttons" notext="キャンセル" yestext="信用する"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [CUR][PRICE] 残高不足のため実行不可です。
+		[NAME] L$[PRICE] 残高不足のため実行不可です。
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] は、あなたにオブジェクトの編集権限を与えました。
@@ -1449,7 +1449,7 @@ http://secondlife.com/download から最新バージョンをダウンロード�
 	</notification>
 	<notification name="DeedObjectToGroup">
 		このオブジェクトを譲渡するとグループは以下のことが可能です：
-* オブジェクトに支払われた [CUR] を受領します。
+* オブジェクトに支払われた L$ を受領します。
 		<usetemplate ignoretext="オブジェクトをグループに譲渡する前の確認" name="okcancelignore" notext="取り消し" yestext="譲渡"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1833,7 +1833,7 @@ http://wiki.secondlife.com/wiki/Setting_your_display_name を参照してくだ�
 	<notification name="PublishClassified">
 		注意：クラシファイド広告の料金は払い戻しされません。
 
-[CUR] [AMOUNT] で、このクラシファイド広告を今すぐ公開しますか？
+L$ [AMOUNT] で、このクラシファイド広告を今すぐ公開しますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1879,7 +1879,7 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 単一のオブジェクトを選択し、もう一度試してください。
 	</notification>
 	<notification name="BuyOriginal">
-		オリジナルのオブジェクトを [OWNER] から [CUR] [PRICE] で購入しますか？
+		オリジナルのオブジェクトを [OWNER] から L$ [PRICE] で購入しますか？
 購入すると、あなたがオブジェクトの所有者となります。
 可能な操作は、
 修正：[MODIFYPERM]、コピー：[COPYPERM]、
@@ -1887,7 +1887,7 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		[CUR] [PRICE] でオリジナルのオブジェクトを購入しますか？
+		L$ [PRICE] でオリジナルのオブジェクトを購入しますか？
 購入すると、あなたがオブジェクトの所有者となります。
 可能な操作は、
 修正：[MODIFYPERM]、コピー：[COPYPERM]、
@@ -1895,7 +1895,7 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopy">
-		コピーを [OWNER] から [CUR] [PRICE] で購入しますか？
+		コピーを [OWNER] から L$ [PRICE] で購入しますか？
 購入したオブジェクトは、あなたのインベントリにコピーされます。
 可能な操作は、
 修正：[MODIFYPERM]、コピー：[COPYPERM]、
@@ -1903,7 +1903,7 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		[CUR] [PRICE] でコピーを購入しますか？
+		L$ [PRICE] でコピーを購入しますか？
 購入したオブジェクトは、あなたのインベントリにコピーされます。
 可能な操作は、
 修正：[MODIFYPERM]、コピー：[COPYPERM]、
@@ -1911,7 +1911,7 @@ Adult 専用リージョンに入るには、住人のアカウントが年齢�
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
 	<notification name="BuyContents">
-		中身を [OWNER] から [CUR] [PRICE] で購入しますか？
+		中身を [OWNER] から L$ [PRICE] で購入しますか？
 購入した中身は、あなたのインベントリにコピーされます。
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="OK"/>
 	</notification>
@@ -2212,7 +2212,7 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 （所要時間：約 5 分）
 	</notification>
 	<notification name="UploadPayment">
-		アップロードに [CUR] [AMOUNT] 支払いました。
+		アップロードに L$ [AMOUNT] 支払いました。
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Web サイトのスナップショットがアップロードされました。
@@ -2694,7 +2694,7 @@ Web ページにリンクすると、他人がこの場所に簡単にアクセ�
 	<notification name="BuyLindenDollarSuccess">
 		お支払ありがとうございます。
 
-あなたの [CUR] 残高は、処理が完了するとアップデートされます。 処理に 20 分以上かかった場合、お取り引きがキャンセルされることがあります。 その場合は、購入金額はあなたの US$ 残高に追加されます。
+あなたの L$ 残高は、処理が完了するとアップデートされます。 処理に 20 分以上かかった場合、お取り引きがキャンセルされることがあります。 その場合は、購入金額はあなたの US$ 残高に追加されます。
 
 [http://secondlife.com/account/ マイアカウント] の取引履歴ページで、支払状況を確認できます。
 	</notification>
@@ -2848,7 +2848,7 @@ M キーを押して変更します。
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		このアップロードは [CUR][PRICE] のコストがかかります。アップロードを続けますか？
+		このアップロードは L$[PRICE] のコストがかかります。アップロードを続けますか？
 		<usetemplate name="okcancelbuttons" notext="取り消し" yestext="アップロード"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -3024,7 +3024,7 @@ M キーを押して変更します。
 		インベントリにはあなたのアイテムがすべて含まれます。新しく追加されたアイテムは「最新」タブに一覧表示されています。
 	</notification>
 	<notification label="あなたのリンデンドル" name="HintLindenDollar">
-		これがあなたの [CUR] 残高です。リンデンドルを購入するには「[CUR] の購入」をクリックします。
+		これがあなたの L$ 残高です。リンデンドルを購入するには「L$ の購入」をクリックします。
 	</notification>
 	<notification name="LowMemory">
 		メモリプール残量が少なくなっています。クラッシュを避けるため SL の機能の一部は無効になりました。他のアプリケーションを終了し、状況が継続または再発する場合には SL を再起動してください。

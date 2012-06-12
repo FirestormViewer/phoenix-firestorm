@@ -7,5 +7,5 @@
 		Descripción:
 	</text>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn"/>
-	<button label="Subir ([AMOUNT] [CUR])" label_selected="Subir ([AMOUNT] [CUR])" name="ok_btn"/>
+	<button label="Subir ([AMOUNT] L$)" label_selected="Subir ([AMOUNT] L$)" name="ok_btn"/>
 </floater>

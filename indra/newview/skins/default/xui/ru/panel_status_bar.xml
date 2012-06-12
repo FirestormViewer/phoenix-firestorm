@@ -13,7 +13,7 @@
 		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Этот участок продается."/>
@@ -21,8 +21,8 @@
 		<text name="parcel_info_text" value="(загрузка)" tool_tip="Название участка, на котором вы находитесь. Нажмите для информации."/>
 	</panel>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Щелкните для обновления вашего баланса [CUR]" value="??? [CUR]"/>
-		<button label="[CUR]-покупка" name="buyL" tool_tip="Щелкните для покупки [CUR]"/>
+		<text name="balance" tool_tip="Щелкните для обновления вашего баланса L$" value="??? L$"/>
+		<button label="L$ -покупка" name="buyL" tool_tip="Щелкните для покупки L$"/>
 	</panel>
 	<text name="TimeText" tool_tip="Текущее время (тихоокеанское)">
 		24:00 H PST

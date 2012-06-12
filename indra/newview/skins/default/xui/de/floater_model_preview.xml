@@ -254,7 +254,7 @@
 			<button label="Hochladen" name="ok_btn" tool_tip="Auf Simulator hochladen"/>
 			<button label="Einstellungen löschen und Formular zurücksetzen" name="reset_btn" width="280"/>
 			<text name="upload_fee">
-				Gebühr für Hochladen: [FEE] [CUR]
+				Gebühr für Hochladen: [FEE] L$
 			</text>
 			<text name="prim_weight">
 				Auswirkung auf Land: [EQ]

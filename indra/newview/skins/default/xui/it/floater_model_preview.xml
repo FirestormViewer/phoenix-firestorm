@@ -219,7 +219,7 @@
 			<button label="Carica" name="ok_btn" tool_tip="Carica al simulatore"/>
 			<button label="Annulla impostazioni e ripristina modulo" name="reset_btn"/>
 			<text name="upload_fee">
-				Costo caricamento: [CUR] [FEE]
+				Costo caricamento: L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				Impatto sul terreno: [EQ]

@@ -38,7 +38,7 @@
 				Ценовой коэффициент:
 			</text>
 			<text name="land cost text">
-				[CUR] за м²:
+				L$ за м²:
 			</text>
 			<button label="Обновить" label_selected="Обновить" name="Refresh" tool_tip="Обновление приведенной выше информации"/>
 			<button label="Применить" label_selected="Применить" name="Apply" tool_tip="Применить все изменения выше"/>

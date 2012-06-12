@@ -181,6 +181,6 @@ Maksimum animasyon uzunluğu [LENGTH] saniye.
 
 Poser 4&apos;ten aktarılan BHV dosyalarını tavsiye ederiz.
 	</text>
-	<button label="Karşıya Yükle ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Karşıya Yükle (L$[AMOUNT])" name="ok_btn"/>
 	<button label="İptal" name="cancel_btn"/>
 </floater>

@@ -4,7 +4,7 @@
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; contains:
 	</text>
 	<text name="buy_text">
-		Køb for [CUR][AMOUNT] fra [NAME]?
+		Køb for L$[AMOUNT] fra [NAME]?
 	</text>
 	<button label="Annullér" label_selected="Annullér" name="cancel_btn"/>
 	<button label="Køb" label_selected="Køb" name="buy_btn"/>

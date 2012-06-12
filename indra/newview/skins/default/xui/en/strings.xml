@@ -153,7 +153,7 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipOwner">Owner:</string> <!-- Owner name follows -->
 	<string name="TooltipPublic">Public</string> <!-- Public permissions on an object -->
 	<string name="TooltipIsGroup">(Group)</string> <!-- The name before this text is that of a group -->
-	<string name="TooltipForSaleL$">For Sale: [CUR][AMOUNT]</string> <!-- [CUR] version -->
+	<string name="TooltipForSaleL$">For Sale: L$[AMOUNT]</string> <!-- L$ version -->
 	<string name="TooltipFlagGroupBuild">Group Build</string>
 	<string name="TooltipFlagNoBuild">No Build</string>
 	<string name="TooltipFlagNoEdit">No Edit</string>
@@ -163,11 +163,11 @@ Please try logging in again in a minute.</string>
 	<string name="TooltipFlagNoScripts">No Scripts</string>
 	<string name="TooltipLand">Land:</string>
 	<string name="TooltipMustSingleDrop">Only a single item can be dragged here</string>
-	<string name="TooltipPrice" value="[CUR][AMOUNT]: "/>
+	<string name="TooltipPrice" value="L$[AMOUNT]: "/>
 	<string name="TooltipFlagScript">Script</string>
 	<string name="TooltipFlagPhysics">Physics</string>
 	<string name="TooltipFlagTouch">Touch</string>
-	<string name="TooltipFlagL$">[CUR]</string>
+	<string name="TooltipFlagL$">L$</string>
 	<string name="TooltipFlagDropInventory">Drop Inventory</string>
 	<string name="TooltipFlagPhantom">Phantom</string>
 	<string name="TooltipFlagTemporary">Temporary</string>
@@ -391,7 +391,7 @@ Please try logging in again in a minute.</string>
 	<!-- world map -->
 	<string name="texture_loading">Loading...</string>
 	<string name="worldmap_offline">Offline</string>
-	<string name="worldmap_item_tooltip_format">[AREA] m² [CUR][PRICE]</string>
+	<string name="worldmap_item_tooltip_format">[AREA] m² L$[PRICE]</string>
 	<string name="worldmap_results_none_found">None found.</string>
 	<string name="worldmap_agent_position">You are here</string>
 	
@@ -415,7 +415,7 @@ Please try logging in again in a minute.</string>
   <string name="reconnect_nearby">You will now be reconnected to Nearby Voice Chat</string>
 	<string name="ScriptQuestionCautionChatGranted">'[OBJECTNAME]', an object owned by '[OWNERNAME]', located in [REGIONNAME] at [REGIONPOS], has been granted permission to: [PERMISSIONS].</string>
 	<string name="ScriptQuestionCautionChatDenied">'[OBJECTNAME]', an object owned by '[OWNERNAME]', located in [REGIONNAME] at [REGIONPOS], has been denied permission to: [PERMISSIONS].</string>
-	<string name="ScriptTakeMoney">Take Linden dollars ([CUR]) from you</string>
+	<string name="ScriptTakeMoney">Take Linden dollars (L$) from you</string>
 	<string name="ActOnControlInputs">Act on your control inputs</string>
 	<string name="RemapControlInputs">Remap your control inputs</string>
 	<string name="AnimateYourAvatar">Animate your avatar</string>
@@ -868,7 +868,7 @@ Returns a string that is src with all lower-case characters
 	</string>
 	<string name="LSLTipText_llGiveMoney" translate="false">
 llGiveMoney(key destination, integer amount)
-Transfers amount of [CUR] from script owner to destination
+Transfers amount of L$ from script owner to destination
 	</string>
 	<string name="LSLTipText_llMakeExplosion" translate="false">
 llMakeExplosion(integer particles, float scale, float vel, float lifetime, float arc, string texture, vector offset)
@@ -2056,7 +2056,7 @@ Note that if KFM_COMMAND is provided in the options list, it must be the only op
 </string>
 <string name="LSLTipText_llTransferLindenDollars" translate="false">
 key llTransferLindenDollars(key id, integer amount)
-Attempt to transfer amount of [CUR] from the owner of the object to 'id'. Requires PERMISSION_DEBIT.
+Attempt to transfer amount of L$ from the owner of the object to 'id'. Requires PERMISSION_DEBIT.
 Returns a key used in a matching transaction_result() event for the success or failure of the transfer.
 </string>
 <string name="LSLTipText_llGetParcelMusicURL" translate="false">
@@ -2336,7 +2336,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<!-- inventory FVBridge -->
 	<!--  This is used in llpanelinventory.cpp when constructing a context menu for an item for Sale  -->
 	<string name="Buy">Buy</string>
-	<string name="BuyforL$">Buy for [CUR]</string>
+	<string name="BuyforL$">Buy for L$</string>
 
 	<string name="Stone">Stone</string>
 	<string name="Metal">Metal</string>
@@ -2647,8 +2647,8 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<!-- Viewer menu -->
 	<string name="AcquiredItems">Acquired Items</string>
 	<string name="Cancel">Cancel</string>
-	<string name="UploadingCosts">Uploading [NAME] costs [CUR] [AMOUNT]</string>
-	<string name="BuyingCosts">Buying this costs [CUR] [AMOUNT]</string>
+	<string name="UploadingCosts">Uploading [NAME] costs L$ [AMOUNT]</string>
+	<string name="BuyingCosts">Buying this costs L$ [AMOUNT]</string>
 	<string name="UnknownFileExtension">
 		Unknown file extension .%s
 Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
@@ -3580,16 +3580,16 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="voice_morphing_url">http://secondlife.com/landing/voicemorphing</string>
 
   <!-- Financial operations strings -->
-  <string name="paid_you_ldollars">[NAME] paid you [CUR][AMOUNT] [REASON].</string>
-  <string name="paid_you_ldollars_no_reason">[NAME] paid you [CUR][AMOUNT].</string>
-  <string name="you_paid_ldollars">You paid [NAME] [CUR][AMOUNT] [REASON].</string>
-  <string name="you_paid_ldollars_no_info">You paid [CUR][AMOUNT].</string>
-  <string name="you_paid_ldollars_no_reason">You paid [NAME] [CUR][AMOUNT].</string>
-  <string name="you_paid_ldollars_no_name">You paid [CUR][AMOUNT] [REASON].</string>
-  <string name="you_paid_failure_ldollars">You failed to pay [NAME] [CUR][AMOUNT] [REASON].</string>
-  <string name="you_paid_failure_ldollars_no_info">You failed to pay [CUR][AMOUNT].</string>
-  <string name="you_paid_failure_ldollars_no_reason">You failed to pay [NAME] [CUR][AMOUNT].</string>
-  <string name="you_paid_failure_ldollars_no_name">You failed to pay [CUR][AMOUNT] [REASON].</string>
+  <string name="paid_you_ldollars">[NAME] paid you L$[AMOUNT] [REASON].</string>
+  <string name="paid_you_ldollars_no_reason">[NAME] paid you L$[AMOUNT].</string>
+  <string name="you_paid_ldollars">You paid [NAME] L$[AMOUNT] [REASON].</string>
+  <string name="you_paid_ldollars_no_info">You paid L$[AMOUNT].</string>
+  <string name="you_paid_ldollars_no_reason">You paid [NAME] L$[AMOUNT].</string>
+  <string name="you_paid_ldollars_no_name">You paid L$[AMOUNT] [REASON].</string>
+  <string name="you_paid_failure_ldollars">You failed to pay [NAME] L$[AMOUNT] [REASON].</string>
+  <string name="you_paid_failure_ldollars_no_info">You failed to pay L$[AMOUNT].</string>
+  <string name="you_paid_failure_ldollars_no_reason">You failed to pay [NAME] L$[AMOUNT].</string>
+  <string name="you_paid_failure_ldollars_no_name">You failed to pay L$[AMOUNT] [REASON].</string>
   <string name="for item">for [ITEM]</string>
   <string name="for a parcel of land">for a parcel of land</string>
   <string name="for a land access pass">for a land access pass</string>
@@ -3599,11 +3599,11 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="to upload">to upload</string>
   <string name="to publish a classified ad">to publish a classified ad</string>
 
-  <string name="giving">Giving [CUR] [AMOUNT]</string>
-  <string name="uploading_costs">Uploading costs [CUR] [AMOUNT]</string>
-  <string name="this_costs">This costs [CUR] [AMOUNT]</string>
-  <string name="buying_selected_land">Buying selected land for [CUR] [AMOUNT]</string>
-  <string name="this_object_costs">This object costs [CUR] [AMOUNT]</string>
+  <string name="giving">Giving L$ [AMOUNT]</string>
+  <string name="uploading_costs">Uploading costs L$ [AMOUNT]</string>
+  <string name="this_costs">This costs L$ [AMOUNT]</string>
+  <string name="buying_selected_land">Buying selected land for L$ [AMOUNT]</string>
+  <string name="this_object_costs">This object costs L$ [AMOUNT]</string>
 
   <string name="group_role_everyone">Everyone</string>
   <string name="group_role_officers">Officers</string>

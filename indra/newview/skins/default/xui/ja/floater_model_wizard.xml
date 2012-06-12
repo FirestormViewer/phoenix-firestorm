@@ -120,7 +120,7 @@
 				区画/リージョンへの負荷：[EQUIV] プリム換算値
 			</text>
 			<text name="review_fee">
-				[CUR] [FEE] のアップロード料金があなたのアカウントに請求されます。
+				L$ [FEE] のアップロード料金があなたのアカウントに請求されます。
 			</text>
 			<text name="review_confirmation">
 				アップロードボタンをクリックすることにより、モデルに含まれるマテリアルの所有権や使用許可の所持を認めたことになります。
@@ -140,7 +140,7 @@
 			それはインベントリの「オブジェクト」フォルダにあります。
 		</text>
 		<text name="charged_fee">
-			あなたのアカウントに [CUR] [FEE] が請求されました。
+			あなたのアカウントに L$ [FEE] が請求されました。
 		</text>
 	</panel>
 	<button label="&lt;&lt; 戻る" name="back"/>

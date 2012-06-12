@@ -5,7 +5,7 @@
 		<menu_item_call label="マイアカウント" name="Manage My Account">
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=ja"/>
 		</menu_item_call>
-		<menu_item_call label="[CUR] の購入" name="Buy and Sell L$"/>
+		<menu_item_call label="L$ の購入" name="Buy and Sell L$"/>
 		<menu_item_check label="インベントリ..." name="Inventory"/>
 		<menu_item_call label="新しいインベントリウィンドウ" name="NewInventoryWindow"/>
 		<menu_item_call label="プロフィール" name="Profile"/>
@@ -144,11 +144,11 @@
 			<menu_item_call label="グリッドオプション" name="Grid Options"/>
 		</menu>
 		<menu label="アップロード" name="Upload">
-			<menu_item_call label="画像（[CUR][COST]）..." name="Upload Image"/>
-			<menu_item_call label="サウンド（[CUR][COST]）..." name="Upload Sound"/>
-			<menu_item_call label="アニメーション（[CUR][COST]）..." name="Upload Animation"/>
+			<menu_item_call label="画像（L$[COST]）..." name="Upload Image"/>
+			<menu_item_call label="サウンド（L$[COST]）..." name="Upload Sound"/>
+			<menu_item_call label="アニメーション（L$[COST]）..." name="Upload Animation"/>
 			<menu_item_call label="モデル" name="Upload Model"/>
-			<menu_item_call label="一括 （ファイルにつき[CUR][COST]）..." name="Bulk Upload"/>
+			<menu_item_call label="一括 （ファイルにつきL$[COST]）..." name="Bulk Upload"/>
 			<menu_item_call label="デフォルトのアップロード権限を設定" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="元に戻す" name="Undo"/>

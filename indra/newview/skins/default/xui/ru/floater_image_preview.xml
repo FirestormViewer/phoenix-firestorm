@@ -27,5 +27,5 @@
 	</text>
 	<check_box label="Использовать сжатие без потерь" name="lossless_check"/>
 	<button label="Отмена" name="cancel_btn"/>
-	<button label="Передать ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Передать (L$[AMOUNT])" name="ok_btn"/>
 </floater>

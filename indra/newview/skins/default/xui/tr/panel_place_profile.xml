@@ -13,7 +13,7 @@
 	<string name="none_text" value="(hiçbiri)"/>
 	<string name="sale_pending_text" value="(Satış Bekliyor)"/>
 	<string name="group_owned_text" value="(Sahibi Olunan Grup)"/>
-	<string name="price_text" value="[CUR]"/>
+	<string name="price_text" value="L$"/>
 	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="Tüm Second Life Sakinleri"/>
 	<string name="group_text" value="Grup"/>

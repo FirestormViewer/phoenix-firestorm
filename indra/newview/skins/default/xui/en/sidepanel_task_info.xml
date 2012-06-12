@@ -37,15 +37,15 @@
             </panel.string>
             <panel.string
              name="Cost Default">
-                Price: [CUR]
+                Price: L$
             </panel.string>
             <panel.string
              name="Cost Total">
-                Total Price: [CUR]
+                Total Price: L$
             </panel.string>
             <panel.string
              name="Cost Per Unit">
-                Price Per: [CUR]
+                Price Per: L$
             </panel.string>
             <panel.string
              name="Cost Mixed">
@@ -432,7 +432,7 @@
         left="120"
         control_name="Edit Cost"
         name="Edit Cost"
-        label="Price: [CUR]"
+        label="Price: L$"
         label_width="65"
         width="150"
         min_val="1"

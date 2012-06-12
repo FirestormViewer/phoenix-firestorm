@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_snapshot_inventory">
 	<text name="hint_lbl">
-		Guardar una imagen en el inventario cuesta [UPLOAD_COST] [CUR]. Para guardar una imagen como textura, selecciona uno de los formatos cuadrados.
+		Guardar una imagen en el inventario cuesta [UPLOAD_COST] L$. Para guardar una imagen como textura, selecciona uno de los formatos cuadrados.
 	</text>
 	<combo_box label="Resolución" name="texture_size_combo">
 		<combo_box.item label="Ventana actual" name="CurrentWindow"/>

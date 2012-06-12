@@ -7,7 +7,7 @@
 		Bu değişiklikleri kaydetmek istiyor musunuz?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Katıl ([CUR][AMOUNT])
+		Katıl (L$[AMOUNT])
 	</panel.string>
 	<panel.string name="group_join_free">
 		Ücretsiz

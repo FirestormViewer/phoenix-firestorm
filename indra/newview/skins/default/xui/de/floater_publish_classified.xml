@@ -5,8 +5,8 @@
         
 Anzeigengebühren werden nicht zurückerstattet.
 	</text>
-	<spinner label="Preis: [CUR]" name="price_for_listing" tool_tip="Preis für Anzeige." value="50"/>
-	<text name="L$_text" value="[CUR]"/>
+	<spinner label="Preis: L$" name="price_for_listing" tool_tip="Preis für Anzeige." value="50"/>
+	<text name="l$_text" value="L$"/>
 	<text name="more_info_text">
 		Weitere Infos (Link zur Hilfe)
 	</text>

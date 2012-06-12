@@ -22,13 +22,13 @@
 		Questo oggetto ha parti collegate
 	</panel.string>
 	<panel.string name="Cost Default">
-		Prezzo: [CUR]
+		Prezzo: L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		Prezzo totale: [CUR]
+		Prezzo totale: L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Prezzo per: [CUR]
+		Prezzo per: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Prezzo misto
@@ -93,7 +93,7 @@
 			<combo_box.item label="Contenuto" name="Contents"/>
 			<combo_box.item label="Originale" name="Original"/>
 		</combo_box>
-		<spinner label="Prezzo: [CUR]" name="Edit Cost"/>
+		<spinner label="Prezzo: L$" name="Edit Cost"/>
 		<check_box label="Mostra nella ricerca" name="search_check" tool_tip="Permetti alle persone di vedere questo oggetto nei risultati della ricerca"/>
 		<text name="B:">
 			B:

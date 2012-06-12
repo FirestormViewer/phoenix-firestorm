@@ -28,5 +28,5 @@ Prøv at gemme billede som en 24 bit Targa fil (.tga).
 	</text>
 	<check_box label="Benyt komprimering uden tab" name="lossless_check"/>
 	<button label="Annullér" name="cancel_btn"/>
-	<button label="Hent ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Hent (L$[AMOUNT])" name="ok_btn"/>
 </floater>

@@ -678,7 +678,7 @@ Buildings</text>
 			 text_color="White"
 			 left="10"
 			 name="review_fee"
-			 height="16">Your account will be charged an upload fee of [CUR] [FEE].
+			 height="16">Your account will be charged an upload fee of L$ [FEE].
 			</text>
 			<text 
 			 top_pad="20"
@@ -755,7 +755,7 @@ Buildings</text>
 		 text_color="White"
 		 left="25"
 		 name="charged_fee"
-		 height="16">Your account has been charged [CUR] [FEE].
+		 height="16">Your account has been charged L$ [FEE].
 		</text>
 	</panel>
 

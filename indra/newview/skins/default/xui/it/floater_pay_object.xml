@@ -17,10 +17,10 @@
 	<text left="120" name="object_name_text">
 		Il mio oggetto con un nome veramente lungo
 	</text>
-	<button label="1 [CUR]" label_selected="1 [CUR]" name="fastpay 1" width="70"/>
-	<button label="5 [CUR]" label_selected="5 [CUR]" name="fastpay 5" width="70"/>
-	<button label="10 [CUR]" label_selected="10 [CUR]" name="fastpay 10" width="70"/>
-	<button label="20 [CUR]" label_selected="20 [CUR]" name="fastpay 20" width="70"/>
+	<button label="1 L$" label_selected="1 L$" name="fastpay 1" width="70"/>
+	<button label="5 L$" label_selected="5 L$" name="fastpay 5" width="70"/>
+	<button label="10 L$" label_selected="10 L$" name="fastpay 10" width="70"/>
+	<button label="20 L$" label_selected="20 L$" name="fastpay 20" width="70"/>
 	<text halign="left" left="5" name="amount text">
 		Oppure, scegli importo:
 	</text>

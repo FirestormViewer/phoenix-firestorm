@@ -46,7 +46,6 @@
 #include "llviewerobject.h"
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
-#include "llviewernetwork.h"
 #include "lltrans.h"
 
 LLFloaterBuy::LLFloaterBuy(const LLSD& key)
@@ -177,9 +176,7 @@ void LLFloaterBuy::show(const LLSaleInfo& sale_info)
 	// Add after columns added so appropriate heights are correct.
 	object_list->addElement(row);
 
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	floater->getChild<LLUICtrl>("buy_text")->setTextArg("[AMOUNT]", llformat("%d", sale_info.getSalePrice()));
-	floater->getChild<LLUICtrl>("buy_text")->setTextArg("[CUR]", type_currency);
 	floater->getChild<LLUICtrl>("buy_name_text")->setTextArg("[NAME]", owner_name);
 
 	// Must do this after the floater is created, because

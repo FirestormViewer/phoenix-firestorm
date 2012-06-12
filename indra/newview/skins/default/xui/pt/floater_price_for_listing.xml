@@ -11,7 +11,7 @@ Os anúncios de maior valor vão para o topo da lista e aparecem mais no topo do
 		Preço do anúncio:
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="OK" name="set_price_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

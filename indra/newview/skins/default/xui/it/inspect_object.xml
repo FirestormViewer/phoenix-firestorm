@@ -12,7 +12,7 @@
 Proprietario [OWNER]
 	</string>
 	<string name="Price">
-		[CUR] [AMOUNT]
+		L$ [AMOUNT]
 	</string>
 	<string name="PriceFree">
 		Gratis!
@@ -25,7 +25,7 @@ Proprietario [OWNER]
 	</string>
 	<text name="object_name" value="Nome oggetto di prova che si trova su due righe ed è molto lungo"/>
 	<text name="price_text">
-		[CUR] 30.000
+		L$ 30.000
 	</text>
 	<text name="object_description">
 		Questa è una descrizione di un oggetto che è molto lunga ed è di almeno 80 caratteri, ma potrebbe essere di 120 caratteri a questo punto. Chi lo sa veramente?

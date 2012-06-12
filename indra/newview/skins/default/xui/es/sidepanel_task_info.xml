@@ -22,13 +22,13 @@
 		Este objeto tiene partes enlazadas
 	</panel.string>
 	<panel.string name="Cost Default">
-		Precio: [CUR]
+		Precio: L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		Precio total: [CUR]
+		Precio total: L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Price Per: [CUR]
+		Price Per: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Mixed Price
@@ -93,7 +93,7 @@
 			<combo_box.item label="Contenidos" name="Contents"/>
 			<combo_box.item label="Original" name="Original"/>
 		</combo_box>
-		<spinner label="Precio: [CUR]" name="Edit Cost"/>
+		<spinner label="Precio: L$" name="Edit Cost"/>
 		<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda"/>
 		<text name="B:">
 			B:

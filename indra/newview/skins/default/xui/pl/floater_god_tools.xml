@@ -38,7 +38,7 @@
 				Czynnik płatności:
 			</text>
 			<text name="land cost text">
-				[CUR]/m²:
+				L$/m²:
 			</text>
 			<button label="Odśwież" label_selected="Odśwież" name="Refresh" tool_tip="Kliknij tutaj aby odswieżyć powyższe informacje"/>
 			<button label="Zastosuj" label_selected="Zastosuj" name="Apply" tool_tip="Kliknij tutaj aby zastosować powyższe zmiany"/>

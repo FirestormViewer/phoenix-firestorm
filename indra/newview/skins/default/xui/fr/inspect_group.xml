@@ -11,7 +11,7 @@
 		Inscription gratuite
 	</string>
 	<string name="CostToJoin">
-		Inscription : [AMOUNT] [CUR]
+		Inscription : [AMOUNT] L$
 	</string>
 	<string name="YouAreMember">
 		Vous êtes membre
@@ -24,7 +24,7 @@
 Méfiez-vous de l&apos;orignal ! Méfiez-vous ! Et de la mangouste aussi !
 	</text>
 	<text name="group_cost">
-		Inscription : 123 [CUR]
+		Inscription : 123 L$
 	</text>
 	<button label="Vous inscrire" name="join_btn"/>
 	<button label="Quitter" name="leave_btn"/>

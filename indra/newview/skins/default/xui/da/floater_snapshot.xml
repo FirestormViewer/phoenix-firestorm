@@ -5,7 +5,7 @@
 	</floater.string>
 	<radio_group label="foto type" name="snapshot_type_radio">
 		<radio_item label="Email" name="postcard"/>
-		<radio_item label="Min beholdning ([CUR][AMOUNT])" name="texture"/>
+		<radio_item label="Min beholdning (L$[AMOUNT])" name="texture"/>
 		<radio_item label="Gem til min computer" name="local"/>
 	</radio_group>
 	<text name="file_size_label">

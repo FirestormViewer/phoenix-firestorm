@@ -100,7 +100,7 @@
 				Satılık değil
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Fiyat: [CUR][PRICE] ([CUR][PRICE_PER_SQM]/m²)
+				Fiyat: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
 			</text>
 			<button label="Araziyi Sat" name="Sell Land..."/>
 			<text name="For sale to">
@@ -330,7 +330,7 @@ Sadece büyük parseller aramada görünür.
 			<check_box label="Grup" name="check group scripts"/>
 			<check_box label="Güvenli (hasar yok)" name="check safe" tool_tip="İşaretliyse, araziyi Güvenli moda getirerek hasar çarpışmasını etkinsizleştirir İşaretli değilse hasar çarpışması etkinleşir."/>
 			<check_box label="İtme Yok" name="PushRestrictCheck" tool_tip="Komut dosyalarının itmesini önler Bu seçeneğin işaretlenmesi arazinizdeki bozucu davranışları önlemeye yardımcı olabilir."/>
-			<check_box label="Konumu Arama sonuçlarında göster ([CUR]30/hafta)" name="ShowDirectoryCheck" tool_tip="Arama sonuçlarında bu parsel görünsün"/>
+			<check_box label="Konumu Arama sonuçlarında göster (L$30/hafta)" name="ShowDirectoryCheck" tool_tip="Arama sonuçlarında bu parsel görünsün"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Herh. Bir Kategori" name="item0"/>
 				<combo_box.item label="Linden Konumu" name="item1"/>
@@ -458,7 +458,7 @@ Sadece büyük parseller aramada görünür.
 				<combo_box.item label="Herkes" name="Anyone"/>
 				<combo_box.item label="Grup" name="Group"/>
 			</combo_box>
-			<spinner label="[CUR] olarak Fiyat:" name="PriceSpin"/>
+			<spinner label="L$ olarak Fiyat:" name="PriceSpin"/>
 			<spinner label="Erişim saatleri:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Her Zaman İzin Ver" name="AllowedText">

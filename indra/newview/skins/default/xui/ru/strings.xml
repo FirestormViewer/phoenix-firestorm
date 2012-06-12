@@ -309,7 +309,7 @@ support@secondlife.com.
 		(группа)
 	</string>
 	<string name="TooltipForSaleL$">
-		Продается: [CUR][AMOUNT]
+		Продается: L$[AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Стройка в составе группы
@@ -338,7 +338,7 @@ support@secondlife.com.
 	<string name="TooltipMustSingleDrop">
 		Сюда можно перетащить только одну вещь
 	</string>
-	<string name="TooltipPrice" value="[CUR][AMOUNT]:"/>
+	<string name="TooltipPrice" value="L$[AMOUNT]:"/>
 	<string name="TooltipOutboxDragToWorld">
 		Нельзя выложить предметы из папке «Торговые исходящие»
 	</string>
@@ -842,7 +842,7 @@ support@secondlife.com.
 		Не в сети
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] м² [CUR][PRICE]
+		[AREA] м² L$[PRICE]
 	</string>
 	<string name="worldmap_results_none_found">
 		Ничего не найдено.
@@ -1433,7 +1433,7 @@ support@secondlife.com.
 		Купить
 	</string>
 	<string name="BuyforL$">
-		Купить за [CUR]
+		Купить за L$
 	</string>
 	<string name="Stone">
 		Камень
@@ -2089,10 +2089,10 @@ support@secondlife.com.
 		Отмена
 	</string>
 	<string name="UploadingCosts">
-		Передача [NAME] стоит [CUR][AMOUNT]
+		Передача [NAME] стоит L$[AMOUNT]
 	</string>
 	<string name="BuyingCosts">
-		Стоимость покупки: [CUR][AMOUNT]
+		Стоимость покупки: L$[AMOUNT]
 	</string>
 	<string name="UnknownFileExtension">
 		Неизвестное расширение файла .%s
@@ -4036,34 +4036,34 @@ support@secondlife.com.
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		Житель [NAME] заплатил вам [CUR][AMOUNT] за [REASON].
+		Житель [NAME] заплатил вам L$[AMOUNT] за [REASON].
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		Житель [NAME] заплатил вам [CUR][AMOUNT].
+		Житель [NAME] заплатил вам L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars">
-		Вы заплатили жителю [NAME] [CUR][AMOUNT] за [REASON].
+		Вы заплатили жителю [NAME] L$[AMOUNT] за [REASON].
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		Вы заплатили [CUR][AMOUNT].
+		Вы заплатили L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Вы заплатили жителю [NAME] [CUR][AMOUNT].
+		Вы заплатили жителю [NAME] L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		Вы заплатили [CUR][AMOUNT] за [REASON].
+		Вы заплатили L$[AMOUNT] за [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars">
-		Вы не смогли заплатить пользователю [NAME] [CUR][AMOUNT]: [REASON].
+		Вы не смогли заплатить пользователю [NAME] L$[AMOUNT]: [REASON].
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		Вы не смогли заплатить [CUR][AMOUNT]
+		Вы не смогли заплатить L$[AMOUNT]
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		Вы не смогли заплатить пользователю [NAME] [CUR][AMOUNT]
+		Вы не смогли заплатить пользователю [NAME] L$[AMOUNT]
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		Вы не смогли заплатить [CUR][AMOUNT]: [REASON].
+		Вы не смогли заплатить L$[AMOUNT]: [REASON].
 	</string>
 	<string name="for item">
 		за [ITEM]
@@ -4090,19 +4090,19 @@ support@secondlife.com.
 		за публикацию рекламы
 	</string>
 	<string name="giving">
-		Уплата [CUR][AMOUNT]
+		Уплата L$[AMOUNT]
 	</string>
 	<string name="uploading_costs">
-		Передача стоит [CUR][AMOUNT]
+		Передача стоит L$[AMOUNT]
 	</string>
 	<string name="this_costs">
-		Это стоит [CUR][AMOUNT]
+		Это стоит L$[AMOUNT]
 	</string>
 	<string name="buying_selected_land">
-		Покупка выбранной земли за [CUR][AMOUNT]
+		Покупка выбранной земли за L$[AMOUNT]
 	</string>
 	<string name="this_object_costs">
-		Этот объект стоит [CUR][AMOUNT]
+		Этот объект стоит L$[AMOUNT]
 	</string>
 	<string name="group_role_everyone">
 		Все

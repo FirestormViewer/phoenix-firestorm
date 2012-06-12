@@ -7,7 +7,7 @@
 		Вы хотите сохранить эти изменения?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Присоединиться ([CUR][AMOUNT])
+		Присоединиться (L$[AMOUNT])
 	</panel.string>
 	<panel.string name="group_join_free">
 		Бесплатно

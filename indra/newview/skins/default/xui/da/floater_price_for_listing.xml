@@ -11,7 +11,7 @@ De annoncer der betales mest for vises øverst i lister og højere i søgeresult
 		Pris for annonce:
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="OK" name="set_price_btn"/>
 	<button label="Annullér" name="cancel_btn"/>

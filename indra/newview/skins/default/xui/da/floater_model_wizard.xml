@@ -140,7 +140,7 @@
 			</text>
 		</panel>
 		<text name="description">
-			Review the details below then click. Upload to upload your model. Your [CUR] balance will be charged when you click Upload.
+			Review the details below then click. Upload to upload your model. Your L$ balance will be charged when you click Upload.
 		</text>
 		<panel name="content">
 			<text name="lod_label">

@@ -58,7 +58,7 @@
 			Sono necessari più crediti del terreno per mantenere la terra in uso
 		</text>
 		<text name="group_money_heading">
-			[CUR] gruppo
+			L$ gruppo
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

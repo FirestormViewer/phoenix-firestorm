@@ -30,5 +30,5 @@ de 24 bites.
 	</text>
 	<check_box label="Usar compresión sin pérdida" name="lossless_check"/>
 	<button label="Cancelar" name="cancel_btn"/>
-	<button label="Subir ([AMOUNT][CUR])" name="ok_btn"/>
+	<button label="Subir ([AMOUNT]L$)" name="ok_btn"/>
 </floater>

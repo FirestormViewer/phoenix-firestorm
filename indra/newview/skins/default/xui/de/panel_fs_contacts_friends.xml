@@ -29,7 +29,7 @@
 	<button
 	 label="Zahlen..."
 	 name="pay_btn"
-	 tool_tip="Gib Linden-Dollar ([CUR]) an diesen Freund"
+	 tool_tip="Gib Linden-Dollar (L$) an diesen Freund"
 	 width="85" />
 	<button
 	 label="Entfernen..."

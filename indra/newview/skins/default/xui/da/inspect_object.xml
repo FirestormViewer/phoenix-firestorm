@@ -12,7 +12,7 @@
 Owner [OWNER]
 	</string>
 	<string name="Price">
-		[CUR][AMOUNT]
+		L$[AMOUNT]
 	</string>
 	<string name="PriceFree">
 		Gratis!
@@ -25,7 +25,7 @@ Owner [OWNER]
 	</string>
 	<text name="object_name" value="Test objekt navn der reelt er to linier og meget lang"/>
 	<text name="price_text">
-		[CUR]30,000
+		L$30,000
 	</text>
 	<text name="object_description">
 		Dette er en meget lang beskrivelse af et objekt udformet så den fylder mindst 80 karakterer i længden eller endda nærmere 120 på dette sted. Man kan aldrig vide....

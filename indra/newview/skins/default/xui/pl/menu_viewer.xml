@@ -3,7 +3,7 @@
 	<menu label="Awatar" name="Me">
 		<menu_item_call label="Zarządzaj kontem" name="Manage Account"/>
 		<menu_item_call label="Skrzynka nadawcza kupca..." name="MerchantOutbox"/>
-		<menu_item_call label="Kup [CUR]" name="Buy and Sell L$"/>
+		<menu_item_call label="Kup L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Ustawienia" name="Preferences"/>
 		<menu_item_call label="Przyciski na paskach" name="Toolbar Buttons"/>
 		<menu_item_call label="Mój Profil" name="Profile"/>
@@ -33,9 +33,9 @@
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST][CUR])..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST][CUR])..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST][CUR])..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
@@ -166,11 +166,11 @@
 			<menu_item_call label="Opcje siatki" name="Grid Options"/>
 		</menu>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST][CUR])..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST][CUR])..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST][CUR])..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
-			<menu_item_call label="Zbiór wielu plików ([COST][CUR] za plik)..." name="Bulk Upload"/>
+			<menu_item_call label="Zbiór wielu plików ([COST]L$ za plik)..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
@@ -179,7 +179,7 @@
 	<menu label="Zawartość" name="Content">
 		<menu_item_check label="Wyszukiwarka" name="Search"/>
 		<menu_item_call label="Marketplace Second Life" name="SL Marketplace"/>
-		<menu_item_call label="Dane z rynku [CUR]" name="LindenXchange"/>
+		<menu_item_call label="Dane z rynku L$" name="LindenXchange"/>
 		<menu_item_call label="Biblioteka skryptów" name="Script Library"/>
 	</menu>
 	<menu label="Pomoc" name="Help">
@@ -262,7 +262,7 @@
 		<menu_item_check label="Wygładzanie ruchu myszki" name="Mouse Smoothing"/>
 		<menu_item_call label="Zwolnij klawisze" name="Release Keys"/>
 		<menu label="Skróty" name="Shortcuts">
-			<menu_item_call label="Załaduj teksturę ([COST][CUR])..." name="Upload Image"/>
+			<menu_item_call label="Załaduj teksturę ([COST]L$)..." name="Upload Image"/>
 			<menu_item_check label="Wyszukiwarka" name="Search"/>
 			<menu_item_check label="Pokazuj menu Zaawansowane" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleportuj po podwójnym kliknięciu" name="DoubleClick Teleport"/>

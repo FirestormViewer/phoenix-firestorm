@@ -10,10 +10,10 @@
 		Przez obiekt:
 	</text>
 	<icon name="icon_object" tool_tip="Obiekty"/>
-	<button label="1[CUR]" label_selected="1[CUR]" name="fastpay 1"/>
-	<button label="5[CUR]" label_selected="5[CUR]" name="fastpay 5"/>
-	<button label="10[CUR]" label_selected="10[CUR]" name="fastpay 10"/>
-	<button label="20[CUR]" label_selected="20[CUR]" name="fastpay 20"/>
+	<button label="1L$" label_selected="1L$" name="fastpay 1"/>
+	<button label="5L$" label_selected="5L$" name="fastpay 5"/>
+	<button label="10L$" label_selected="10L$" name="fastpay 10"/>
+	<button label="20L$" label_selected="20L$" name="fastpay 20"/>
 	<text name="amount text">
 		lub wpisz kwotę:
 	</text>

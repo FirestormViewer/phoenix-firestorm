@@ -4,7 +4,7 @@
 		In meinem Inventar speichern
 	</text>
 	<text name="hint_lbl">
-		Das Speichern eines Bilds in Ihrem Inventar kostet [UPLOAD_COST] [CUR]. Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
+		Das Speichern eines Bilds in Ihrem Inventar kostet [UPLOAD_COST] L$. Um das Bild als Textur zu speichern, wählen Sie eines der quadratischen Formate aus.
 	</text>
 	<combo_box label="Auflösung" name="texture_size_combo">
 		<combo_box.item label="Aktuelles Fenster" name="CurrentWindow"/>

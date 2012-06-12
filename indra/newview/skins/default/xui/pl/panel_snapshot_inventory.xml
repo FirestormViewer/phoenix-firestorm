@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="panel_snapshot_inventory">
     <text name="hint_lbl">
-        Zapisanie zdjęcia do Szafy kosztuje [UPLOAD_COST][CUR]. Aby zapisać je jako teksturę wybierz jeden z kwadratowych formatów.
+        Zapisanie zdjęcia do Szafy kosztuje [UPLOAD_COST]L$. Aby zapisać je jako teksturę wybierz jeden z kwadratowych formatów.
     </text>
     <combo_box label="Rozdzielczość" name="texture_size_combo">
         <combo_box.item label="Obecne okno" name="CurrentWindow"/>

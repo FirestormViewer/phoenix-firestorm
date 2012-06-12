@@ -29,5 +29,5 @@ Spróbuj zapisać obraz jako 24 bitową Targa (.tga).
 	<check_box label="Kompresja bezstratna" name="lossless_check"/>
 	<check_box name="temp_check" label="Tymczas. (darmowy)" tooltip="Ustawia obraz na serwerze jako tymczasowy, a zatem jako darmowy, ale będzie on istnieć tylko przez krótki okres - po czym zostanie skasowany." />
 	<button label="Anuluj" name="cancel_btn"/>
-	<button label="Załaduj ([AMOUNT][CUR])" name="ok_btn"/>
+	<button label="Załaduj ([AMOUNT]L$)" name="ok_btn"/>
 </floater>

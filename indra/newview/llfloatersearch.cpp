@@ -38,7 +38,6 @@
 #include "llui.h"
 #include "llviewercontrol.h"
 #include "llweb.h"
-#include "llviewernetwork.h"
 
 // support secondlife:///app/search/{CATEGORY}/{QUERY} SLapps
 class LLSearchHandler : public LLCommandHandler
@@ -102,17 +101,6 @@ LLFloaterSearch::LLFloaterSearch(const Params& key) :
 	mCategoryPaths["wiki"]         = "search/wiki";
 	mCategoryPaths["destinations"] = "destinations";
 	mCategoryPaths["classifieds"]  = "classifieds";
-	if(LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta()) return;
-
-	//if not in sl
-	mCategoryPaths["all"]          = "Any Category";
-	mCategoryPaths["people"]       = "People";
-	mCategoryPaths["places"]       = "Places";
-	mCategoryPaths["events"]       = "Events";
-	mCategoryPaths["groups"]       = "Groups";
-	mCategoryPaths["wiki"]         = "Wiki";
-	mCategoryPaths["destinations"] = "Destinations";
-	mCategoryPaths["classifieds"]  = "Classifieds";
 }
 
 BOOL LLFloaterSearch::postBuild()
@@ -210,26 +198,8 @@ void LLFloaterSearch::search(const SearchQuery &p)
 	subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
 
 	// get the search URL and expand all of the substitutions
-	std::string url = gSavedSettings.getString("SearchURL");
-
-	//if not in sl
-	if(!(LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta())) {
-		//new sl type search
-		//http://search.secondlife.com/viewer/[CATEGORY]/?q=[QUERY]&amp;p=[AUTH_TOKEN]&amp;r=[MATURITY]&amp;lang=[LANGUAGE]&amp;sid=[SESSION_ID]
-
-		//old sl type search + opensim search
-		//(query) "q=[QUERY]&s=[COLLECTION]&" //[COLLECTION] == [CATEGORY] ?
-		//(template) "lang=[LANG]&mat=[MATURITY]&t=[TEEN]&region=[REGION]&x=[X]&y=[Y]&z=[Z]&session=[SESSION]" //still not used in opensim and aurora
-
-		LLSD grid_info;
-		LLGridManager::getInstance()->getGridData(grid_info);
-		if(grid_info.has(GRID_SEARCH)) {
-			url = grid_info[GRID_SEARCH].asString();
-			if(url.length() > 0 && url[url.length()-1] != '?') url += "?";
-			url += "q=[QUERY]&s=[CATEGORY]&";
-		}
-	}
 	// (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
+	std::string url = gSavedSettings.getString("SearchURL");
 	url = LLWeb::expandURLSubstitutions(url, subs);
 
 	// and load the URL in the web view

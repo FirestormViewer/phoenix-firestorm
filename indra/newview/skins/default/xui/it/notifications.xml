@@ -210,7 +210,7 @@ Aggiungi questo potere a &apos;[ROLE_NAME]&apos;?
 		<usetemplate ignoretext="Conferma prima di distaccare gli accessori" name="okcancelignore" notext="No" yestext="Sì"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		Iscriversi a questo gruppo costa [COST][CUR].
+		Iscriversi a questo gruppo costa [COST]L$.
 Vuoi proseguire?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Iscriviti"/>
 	</notification>
@@ -220,33 +220,33 @@ Continuare?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Iscriviti"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Iscriversi a questo gruppo costa [COST][CUR].
-Non hai abbastanza [CUR] per iscriverti a questo gruppo.
+		Iscriversi a questo gruppo costa [COST]L$.
+Non hai abbastanza L$ per iscriverti a questo gruppo.
 	</notification>
 	<notification name="CreateGroupCost">
-		La creazione di questo gruppo costerà [CUR] 100.
+		La creazione di questo gruppo costerà L$ 100.
 I gruppi devono avere più di un partecipante, o saranno eliminati definitivamente.
 Invita altri partecipanti entro le prossime 48 ore.
-		<usetemplate canceltext="Annulla" name="okcancelbuttons" notext="Annulla" yestext="Crea un gruppo per [CUR] 100"/>
+		<usetemplate canceltext="Annulla" name="okcancelbuttons" notext="Annulla" yestext="Crea un gruppo per L$ 100"/>
 	</notification>
 	<notification name="LandBuyPass">
-		Pagando [COST][CUR] puoi entrare in questa terra (&apos;[PARCEL_NAME]&apos;) per [TIME] ore.  Compri un pass?
+		Pagando [COST]L$ puoi entrare in questa terra (&apos;[PARCEL_NAME]&apos;) per [TIME] ore.  Compri un pass?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
-		Il prezzo di vendita deve essere superiore a 0[CUR] se vendi a tutti.
-Seleziona una vendita individuale per vendere a 0[CUR].
+		Il prezzo di vendita deve essere superiore a 0L$ se vendi a tutti.
+Seleziona una vendita individuale per vendere a 0L$.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		Il terreno selezionato di [LAND_SIZE] m² sta per essere messo in vendita.
-Il tuo prezzo di vendità è [SALE_PRICE][CUR] ed è autorizzato alla vendita a [NAME].
+Il tuo prezzo di vendità è [SALE_PRICE]L$ ed è autorizzato alla vendita a [NAME].
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		ATTENZIONE: Quando selezioni &apos;vendi a tutti&apos;, rendi questo terreno disponibile all&apos;intera comunità di [CURRENT_GRID], anche alle persone che non si trovano in questa regione.
 
 Il terrendo selezionato di [LAND_SIZE] m² sta per essere messo in vendita.
-Il prezzo di vendità sarà [SALE_PRICE][CUR] e [NAME] viene autorizzato alla vendita.
+Il prezzo di vendità sarà [SALE_PRICE]L$ e [NAME] viene autorizzato alla vendita.
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
@@ -571,7 +571,7 @@ Sposta tutti gli oggetti che vuoi acquisire su una sola regione.
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Vai su [_URL] per informazioni sull&apos;acquisto di [CUR]?
+Vai su [_URL] per informazioni sull&apos;acquisto di L$?
 		<url name="url">
 			http://secondlife.com/app/currency/?lang=it-IT
 		</url>
@@ -870,7 +870,7 @@ Seleziona un terreno intero, oppure dividi prima il tuo terreno.
 	</notification>
 	<notification name="ReleaseLandWarning">
 		Stai per rilasciare [AREA] m² di terreno.
-Rilasciare questo appezzamento di terreno lo toglierà dalle tue proprietà, ma non ti verranno dati [CUR].
+Rilasciare questo appezzamento di terreno lo toglierà dalle tue proprietà, ma non ti verranno dati L$.
 
 Rilasciare questo terreno?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
@@ -1028,7 +1028,7 @@ su TUTTI I TERRENI di questa sim?
 		Devi specificare un nome per il tuo annuncio.
 	</notification>
 	<notification name="MinClassifiedPrice">
-		Il prezzo da pagare per essere messo in lista deve essere almeno [MIN_PRICE][CUR].
+		Il prezzo da pagare per essere messo in lista deve essere almeno [MIN_PRICE]L$.
 
 Introduci un prezzo più alto.
 	</notification>
@@ -1229,7 +1229,7 @@ Accettare questa autorità?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Accetta"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [PRICE][CUR] Non hai abbastanza [CUR] per farlo.
+		[NAME] [PRICE]L$ Non hai abbastanza L$ per farlo.
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] ti ha dato il permesso di modificare i suoi oggetti.
@@ -1417,7 +1417,7 @@ Per installare l&apos;aggiornamento è necessario riavviare [APP_NAME].
 	</notification>
 	<notification name="DeedObjectToGroup">
 		La cessione di questo oggetto farà in modo che il gruppo:
-* Riceva i [CUR] pagati all&apos;oggetto
+* Riceva i L$ pagati all&apos;oggetto
 		<usetemplate ignoretext="Conferma la cessione di un oggetto al gruppo" name="okcancelignore" notext="Annulla" yestext="Cedi"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1645,7 +1645,7 @@ Vuoi procedere?
 	<notification label="Cambia la tipologia Linden di accesso alla proprietà" name="ChangeLindenAccess">
 		Stai per cambiare la lista di accesso per una proprietà Linden (mainland, griglia minorenni, orientamento, ecc.).
 
-Questo è PERICOLOSO e dovrebbe essere fatto soltanto per poter lanciare il programma che consente agli oggetti/[CUR] di essere trasferiti fra griglie diverse.
+Questo è PERICOLOSO e dovrebbe essere fatto soltanto per poter lanciare il programma che consente agli oggetti/L$ di essere trasferiti fra griglie diverse.
 Cambierà migliaia di regioni e produrrà seri problemi ai vari server.
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
@@ -1797,7 +1797,7 @@ Puoi cliccare su Cambia preferenze per modificare la categoria di accesso e quin
 	<notification name="PublishClassified">
 		Ricorda: le tariffe per gli annunci non sono rimborsabili.
 
-Pubblica questo annuncio adesso per [AMOUNT][CUR]?
+Pubblica questo annuncio adesso per [AMOUNT]L$?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1842,7 +1842,7 @@ Seleziona solo un oggetto e riprova.
 Scegli un solo oggetto e riprova.
 	</notification>
 	<notification name="BuyOriginal">
-		Compra l&apos;oggetto originale da [OWNER] per [PRICE][CUR]?
+		Compra l&apos;oggetto originale da [OWNER] per [PRICE]L$?
 Diventerai proprietario di questo oggetto.
 Sarai in grado di:
  Modificare: [MODIFYPERM]
@@ -1851,7 +1851,7 @@ Sarai in grado di:
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		Compra l&apos;oggetto originale per [PRICE][CUR]?
+		Compra l&apos;oggetto originale per [PRICE]L$?
 Diventerai proprietario di questo oggetto.
 Sarai in grado di:
  Modificare: [MODIFYPERM]
@@ -1860,7 +1860,7 @@ Sarai in grado di:
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopy">
-		Compra una copia da [OWNER] per [PRICE][CUR]?
+		Compra una copia da [OWNER] per [PRICE]L$?
 L&apos;oggetto verrà copiato nel tuo inventario.
 Sarai in grado di:
  Modificare: [MODIFYPERM]
@@ -1869,7 +1869,7 @@ Sarai in grado di:
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		Compra una copia per [PRICE][CUR]?
+		Compra una copia per [PRICE]L$?
 L&apos;oggetto verrà copiato nel tuo inventario.
 Sarai in grado di:
  Modificare: [MODIFYPERM]
@@ -1878,12 +1878,12 @@ Sarai in grado di:
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="BuyContents">
-		Compra il contenuto da [OWNER] per [PRICE][CUR]?
+		Compra il contenuto da [OWNER] per [PRICE]L$?
 Il contenuto verrà copiato nel tuo inventario.
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
 	<notification name="BuyContentsNoOwner">
-		Compra il contenuto per [PRICE][CUR]?
+		Compra il contenuto per [PRICE]L$?
 Il contenuto verrà copiato nel tuo inventario.
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="OK"/>
 	</notification>
@@ -2107,7 +2107,7 @@ Inseriscilo in una pagina web per dare ad altri un accesso facile a questa ubica
 		Non puoi comprare un oggetto mentre è unito.
 	</notification>
 	<notification label="Informazioni sulle richieste per il permesso di addebito" name="DebitPermissionDetails">
-		Accettare questa richiesta da allo script il permesso continuativo di prendere Linden dollar ([CUR]) dal tuo account. Per revocare questo permesso, il proprietario dell&apos;oggetto deve cancellare l&apos;oggetto oppure reimpostare gli script nell&apos;oggetto.
+		Accettare questa richiesta da allo script il permesso continuativo di prendere Linden dollar (L$) dal tuo account. Per revocare questo permesso, il proprietario dell&apos;oggetto deve cancellare l&apos;oggetto oppure reimpostare gli script nell&apos;oggetto.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
@@ -2171,7 +2171,7 @@ Verrà avviato il browser Web.
 (Durata circa 5 minuti.)
 	</notification>
 	<notification name="UploadPayment">
-		Hai pagato [AMOUNT][CUR] per il caricamento.
+		Hai pagato [AMOUNT]L$ per il caricamento.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Il caricamento della fotografia nel sito web è andato a buon fine.
@@ -2648,7 +2648,7 @@ Concedi questa richiesta?
 	<notification name="BuyLindenDollarSuccess">
 		Grazie per aver inviato il pagamento.
 
-Il tuo saldo in [CUR] sarà aggiornato al termine dell&apos;elaborazione. Se l&apos;elaborazione dovesse impiegare più di 20 minuti, la transazione verrà annullata. In quel caso l&apos;ammontare dell&apos;acquisto verrà accreditato sul tuo saldo in US$.
+Il tuo saldo in L$ sarà aggiornato al termine dell&apos;elaborazione. Se l&apos;elaborazione dovesse impiegare più di 20 minuti, la transazione verrà annullata. In quel caso l&apos;ammontare dell&apos;acquisto verrà accreditato sul tuo saldo in US$.
 
 Potrai controllare lo stato del pagamento nella pagina della cronologia delle transazioni nel tuo [http://secondlife.com/account/ Dashboard]
 	</notification>
@@ -2805,7 +2805,7 @@ Per sicurezza, verranno bloccati per alcuni secondi.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Questo caricamento costerà [CUR][PRICE]. Continuare con il caricamento?
+		Questo caricamento costerà L$[PRICE]. Continuare con il caricamento?
 		<usetemplate name="okcancelbuttons" notext="Annulla" yestext="Carica"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -2864,7 +2864,7 @@ Con i seguenti residenti:
 	<notification name="ReleasedLandWithReclaim">
 		Il lotto di [AREA] m² &apos;[PARCEL_NAME]&apos; è stato rilasciato.
 
-Hai [RECLAIM_PERIOD] ore per riprendere possesso per [CUR]0 prima che venga messo in vendita a chiunque altro.
+Hai [RECLAIM_PERIOD] ore per riprendere possesso per L$0 prima che venga messo in vendita a chiunque altro.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
 		Il lotto di [AREA] m² &apos;[PARCEL_NAME]&apos; è stato rilasciato.
@@ -2981,7 +2981,7 @@ Clicca e trascina dovunque nel mondo per ruotare la visuale
 		Trova oggetti nel tuo inventario. I più recenti si trovano nella scheda Elementi recenti.
 	</notification>
 	<notification label="Hai dollari Linden!" name="HintLindenDollar">
-		Ecco il saldo attuale in [CUR]. Clicca su Acquista [CUR] per acquistare altri dollari Linden.
+		Ecco il saldo attuale in L$. Clicca su Acquista L$ per acquistare altri dollari Linden.
 	</notification>
 	<notification name="LowMemory">
 		L&apos;allocazione di memoria è quasi esaurita. Alcune funzioni di SL sono state disattivate per evitare un crash. Chiudi le altre applicazioni. Se il problema persiste, riavvia SL.

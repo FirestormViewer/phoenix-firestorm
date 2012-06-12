@@ -120,7 +120,7 @@
 				Impacto en la parcela/región: [EQUIV] equivalentes en prim
 			</text>
 			<text name="review_fee">
-				Cargaremos en tu cuenta el precio de subida de [CUR] [FEE].
+				Cargaremos en tu cuenta el precio de subida de L$ [FEE].
 			</text>
 			<text name="review_confirmation">
 				Al pulsar en el botón de subida, confirmas que posees los derechos necesarios sobre el material que contiene el modelo.
@@ -140,7 +140,7 @@
 			Puedes buscar la carpeta Objetos en tu inventario.
 		</text>
 		<text name="charged_fee">
-			Se han cargado [FEE] [CUR] en tu cuenta.
+			Se han cargado [FEE] L$ en tu cuenta.
 		</text>
 	</panel>
 	<button label="&lt;&lt; Atrás" name="back"/>

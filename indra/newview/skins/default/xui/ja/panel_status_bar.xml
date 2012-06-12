@@ -13,11 +13,11 @@
 		[year, datetime, slt] [month, datetime, slt] [day, datetime, slt] （[weekday, datetime, slt]）
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[CUR] [AMT]
+		L$ [AMT]
 	</panel.string>
 	<panel left="-370" name="balance_bg" width="160">
-		<text name="balance" tool_tip="クリックして [CUR] 残高を更新" value="[CUR]???"/>
-		<button label="[CUR] の購入" name="buyL" tool_tip="クリックして [CUR] を購入します"/>
+		<text name="balance" tool_tip="クリックして L$ 残高を更新" value="L$???"/>
+		<button label="L$ の購入" name="buyL" tool_tip="クリックして L$ を購入します"/>
 		<button label="店" name="goShop" tool_tip="Second Life マーケットプレイスを開く"  width="40"/>
 	</panel>
 	<text name="TimeText" tool_tip="現在時刻（太平洋）">

@@ -120,7 +120,7 @@
 				Impact sur la parcelle/région : équivalent à [EQUIV] prims
 			</text>
 			<text name="review_fee">
-				Votre compte sera débité de [FEE] [CUR] de frais de chargement.
+				Votre compte sera débité de [FEE] L$ de frais de chargement.
 			</text>
 			<text name="review_confirmation">
 				En cliquant sur le bouton de chargement, vous confirmez que vous disposez des droits appropriés sur le contenu du modèle.
@@ -140,7 +140,7 @@
 			Vous le trouverez dans le dossier Objets de votre inventaire.
 		</text>
 		<text name="charged_fee">
-			Votre compte a été débité de [FEE] [CUR].
+			Votre compte a été débité de [FEE] L$.
 		</text>
 	</panel>
 	<button label="&lt;&lt; Préc." name="back"/>

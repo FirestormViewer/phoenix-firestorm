@@ -44,7 +44,7 @@ Hover your mouse over the options for more help.
 		</text>
 		<check_box label="任何人都可以加入" name="open_enrollement" tool_tip="Sets whether this group allows new members to join without being invited."/>
 		<check_box label="加入費用" name="check_enrollment_fee" tool_tip="Sets whether to require an enrollment fee to join the group"/>
-		<spinner label="[CUR]" name="spin_enrollment_fee" tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."/>
+		<spinner label="L$" name="spin_enrollment_fee" tool_tip="New members must pay this fee to join the group when Enrollment Fee is checked."/>
 		<combo_box name="group_mature_check" tool_tip="Sets whether your group contains information rated as Moderate">
 			<combo_item name="select_mature">
 				- 選擇內容分級 -

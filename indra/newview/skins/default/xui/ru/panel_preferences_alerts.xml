@@ -3,8 +3,8 @@
 	<text name="tell_me_label">
 		Сообщить мне:
 	</text>
-	<check_box label="Когда я трачу или получаю [CUR]" name="notify_money_change_checkbox" width="225"/>
-	<check_box left_pad="5" name="FSPaymentInfoInChat" label="Показать [CUR]-Сделки в локальном чате"/>
+	<check_box label="Когда я трачу или получаю L$" name="notify_money_change_checkbox" width="225"/>
+	<check_box left_pad="5" name="FSPaymentInfoInChat" label="Показать L$-Сделки в локальном чате"/>
 	<check_box label="Когда мои друзья online или offline" name="friends_online_notify_checkbox" width="230"/>
 	<check_box label="Только в локальном чате" name="OnlineOfflinetoNearbyChatHistory" left_pad="5"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="В локальном и консолье" width="160"/>

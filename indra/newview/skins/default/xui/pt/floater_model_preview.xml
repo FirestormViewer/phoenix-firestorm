@@ -219,7 +219,7 @@
 			<button label="Upload" name="ok_btn" tool_tip="Carregar no simulador"/>
 			<button label="Limpar configurações e redefinir formulário" name="reset_btn"/>
 			<text name="upload_fee">
-				Tarifa de upload: [CUR] [FEE]
+				Tarifa de upload: L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				Impacto no terreno: [EQ]

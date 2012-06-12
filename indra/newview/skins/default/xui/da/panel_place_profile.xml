@@ -13,7 +13,7 @@
 	<string name="none_text" value="(ingen)"/>
 	<string name="sale_pending_text" value="(Salg igang)"/>
 	<string name="group_owned_text" value="(Gruppe ejet)"/>
-	<string name="price_text" value="[CUR]"/>
+	<string name="price_text" value="L$"/>
 	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="Alle beboere"/>
 	<string name="group_text" value="Gruppe"/>

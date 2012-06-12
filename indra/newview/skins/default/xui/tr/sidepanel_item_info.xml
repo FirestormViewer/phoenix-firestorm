@@ -67,7 +67,7 @@
 				<combo_box.item label="Kopyala" name="Copy"/>
 				<combo_box.item label="Orijinal" name="Original"/>
 			</combo_box>
-			<spinner label="Fiyat: [CUR]" name="Edit Cost"/>
+			<spinner label="Fiyat: L$" name="Edit Cost"/>
 		</panel>
 	</scroll_container>
 	<panel name="button_panel">

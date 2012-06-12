@@ -7,7 +7,7 @@
 		Beschreibung:
 	</text>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
-	<button label="Hochladen ([AMOUNT] [CUR])" label_selected="Hochladen ([AMOUNT] [CUR])" name="ok_btn"/>
+	<button label="Hochladen ([AMOUNT] L$)" label_selected="Hochladen ([AMOUNT] L$)" name="ok_btn"/>
 	<text name="text">
 		Bitrate (kbit/s):
 	</text>

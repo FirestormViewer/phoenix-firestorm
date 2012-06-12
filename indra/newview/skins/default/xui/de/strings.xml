@@ -300,7 +300,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		(Gruppe)
 	</string>
 	<string name="TooltipForSaleL$">
-		Zum Verkauf: [AMOUNT] [CUR]
+		Zum Verkauf: [AMOUNT] L$
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Gruppenbau
@@ -329,7 +329,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="TooltipMustSingleDrop">
 		Sie können nur ein einzelnes Objekt hierher ziehen
 	</string>
-	<string name="TooltipPrice" value="[AMOUNT] [CUR]"/>
+	<string name="TooltipPrice" value="[AMOUNT] L$"/>
 	<string name="TooltipOutboxDragToWorld">
 		Sie können Artikel nicht in Ihrer Händler-Outbox rezzen
 	</string>
@@ -361,7 +361,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Anzahl von Unterordnern im obersten Ordner überschreitet 20
 	</string>
 	<string name="TooltipFlagL$">
-		[CUR]
+		L$
 	</string>
 	<string name="TooltipOutboxTooManyObjects">
 		Anzahl von Artikeln im obersten Ordner überschreitet 200
@@ -878,7 +878,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Offline
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[PRICE] [CUR] für [AREA] m²
+		[PRICE] L$ für [AREA] m²
 	</string>
 	<string name="worldmap_results_none_found">
 		Nicht gefunden.
@@ -932,7 +932,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Dem Objekt „[OBJECTNAME]“, ein Objekt von „[OWNERNAME]“, in [REGIONNAME] [REGIONPOS], wurde folgende Berechtigung verweigert: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Linden-Dollar ([CUR]) von Ihnen nehmen
+		Linden-Dollar (L$) von Ihnen nehmen
 	</string>
 	<string name="ActOnControlInputs">
 		Steuerung festlegen
@@ -1505,7 +1505,7 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Kaufen
 	</string>
 	<string name="BuyforL$">
-		Kaufen für [CUR]
+		Kaufen für L$
 	</string>
 	<string name="Stone">
 		Stein
@@ -2185,10 +2185,10 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 		Abbrechen
 	</string>
 	<string name="UploadingCosts">
-		Das Hochladen von [NAME] kostet [AMOUNT] [CUR]
+		Das Hochladen von [NAME] kostet [AMOUNT] L$
 	</string>
 	<string name="BuyingCosts">
-		Die Kosten betragen: [AMOUNT] [CUR]
+		Die Kosten betragen: [AMOUNT] L$
 	</string>
 	<string name="UnknownFileExtension">
 		Unbekanntes Dateiformat .%s
@@ -4142,34 +4142,34 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] hat Ihnen [REASON] [AMOUNT] [CUR] bezahlt.
+		[NAME] hat Ihnen [REASON] [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] hat Ihnen [AMOUNT] [CUR] bezahlt.
+		[NAME] hat Ihnen [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="you_paid_ldollars">
-		Sie haben [REASON] [AMOUNT] [CUR] an [NAME] bezahlt.
+		Sie haben [REASON] [AMOUNT] L$ an [NAME] bezahlt.
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		Sie haben [AMOUNT] [CUR] bezahlt.
+		Sie haben [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Sie haben [AMOUNT] [CUR] an [NAME] bezahlt.
+		Sie haben [AMOUNT] L$ an [NAME] bezahlt.
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		Sie haben [REASON] [AMOUNT] [CUR] bezahlt.
+		Sie haben [REASON] [AMOUNT] L$ bezahlt.
 	</string>
 	<string name="you_paid_failure_ldollars">
-		Sie haben [NAME] [AMOUNT] [CUR] [REASON] nicht bezahlt.
+		Sie haben [NAME] [AMOUNT] L$ [REASON] nicht bezahlt.
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		Sie haben [AMOUNT] [CUR] nicht bezahlt.
+		Sie haben [AMOUNT] L$ nicht bezahlt.
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		Sie haben [NAME] [AMOUNT] [CUR] nicht bezahlt.
+		Sie haben [NAME] [AMOUNT] L$ nicht bezahlt.
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		Sie haben [AMOUNT] [CUR] [REASON] nicht bezahlt.
+		Sie haben [AMOUNT] L$ [REASON] nicht bezahlt.
 	</string>
 	<string name="for item">
 		für [ITEM]
@@ -4196,19 +4196,19 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		um eine Anzeige aufzugeben
 	</string>
 	<string name="giving">
-		[AMOUNT] [CUR] werden bezahlt
+		[AMOUNT] L$ werden bezahlt
 	</string>
 	<string name="uploading_costs">
-		Kosten für Hochladen [AMOUNT] [CUR]
+		Kosten für Hochladen [AMOUNT] L$
 	</string>
 	<string name="this_costs">
-		Kosten: [AMOUNT] [CUR]
+		Kosten: [AMOUNT] L$
 	</string>
 	<string name="buying_selected_land">
-		Ausgewähltes Land wird für [AMOUNT] [CUR] gekauft.
+		Ausgewähltes Land wird für [AMOUNT] L$ gekauft.
 	</string>
 	<string name="this_object_costs">
-		Dieses Objekt kostet  [AMOUNT] [CUR]
+		Dieses Objekt kostet  [AMOUNT] L$
 	</string>
 	<string name="group_role_everyone">
 		Jeder

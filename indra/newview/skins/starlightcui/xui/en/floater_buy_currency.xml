@@ -4,14 +4,14 @@
  can_minimize="false"
  height="275"
  layout="topleft"
- title="BUY [CUR]"
+ title="BUY L$"
  name="buy currency"
  help_topic="buy_linden_dollars"
  single_instance="true"
  width="350">
     <floater.string
      name="buy_currency">
-        Buy [CUR] [LINDENS] for approx. [LOCALAMOUNT]
+        Buy L$ [LINDENS] for approx. [LOCALAMOUNT]
     </floater.string>
     <icon
      height="215"
@@ -33,7 +33,7 @@
      top="25"
      width="340"
      name="info_need_more">
-        You need more [CUR]
+        You need more L$
     </text>
     <text
      type="string"
@@ -58,7 +58,7 @@
      top="25"
      width="300"
      name="info_buying">
-        Buy [CUR]
+        Buy L$
     </text>
     <text
      type="string"
@@ -85,7 +85,7 @@
      name="balance_amount"
      top_delta="0"
      width="120">
-        [CUR] [AMT]
+        L$ [AMT]
     </text>
     <text
      type="string"
@@ -111,7 +111,7 @@
      left="217"
      name="currency_label"
      width="15">
-      [CUR]
+      L$
     </text>
     <line_editor
      type="string"
@@ -122,7 +122,7 @@
      follows="top|left"
      top_delta="-7"
      height="22"
-     label="[CUR]"
+     label="L$"
      left_pad="3"
      name="currency_amt"
      width="85">
@@ -210,7 +210,7 @@
      halign="right"
      name="total_amount"
      width="120">
-        [CUR] [AMT]
+        L$ [AMT]
     </text>
     <text
      type="string"
@@ -252,7 +252,7 @@ Re-enter amount to see the latest exchange rate.
      width="310"
      height="35"
      name="purchase_warning_repurchase">
-        Confirming this purchase only buys [CUR], not the object.
+        Confirming this purchase only buys L$, not the object.
     </text>
     <text
      type="string"
@@ -266,7 +266,7 @@ Re-enter amount to see the latest exchange rate.
      width="300"
      height="30"
      name="purchase_warning_notenough">
-        You aren&apos;t buying enough [CUR]. Please increase the amount.
+        You aren&apos;t buying enough L$. Please increase the amount.
     </text>
 
     <button

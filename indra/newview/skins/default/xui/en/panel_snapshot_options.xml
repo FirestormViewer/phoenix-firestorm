@@ -55,7 +55,7 @@
    image_overlay_alignment="left"
    image_top_pad="-2"
    imgoverlay_label_space="10"
-   label="Save to My Inventory ([CUR][AMOUNT])"
+   label="Save to My Inventory (L$[AMOUNT])"
    layout="topleft"
    left_delta="0"
    name="save_to_inventory_btn"

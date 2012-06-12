@@ -22,13 +22,13 @@
 		Diese Objekt verfügt über verknüpfte Teile
 	</panel.string>
 	<panel.string name="Cost Default">
-		Preis: [CUR]
+		Preis: L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		Summe: [CUR]
+		Summe: L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Stückpreis: [CUR]
+		Stückpreis: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Mischpreis
@@ -93,7 +93,7 @@
 			<combo_box.item label="Inhalt" name="Contents"/>
 			<combo_box.item label="Original" name="Original"/>
 		</combo_box>
-		<spinner label="Preis: [CUR]" name="Edit Cost"/>
+		<spinner label="Preis: L$" name="Edit Cost"/>
 		<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
 		<text name="B:">
 			B:

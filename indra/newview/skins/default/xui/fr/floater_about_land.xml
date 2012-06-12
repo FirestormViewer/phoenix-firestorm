@@ -108,7 +108,7 @@
 				Pas à vendre
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Prix : [PRICE] [CUR] ([PRICE_PER_SQM] [CUR]/m²)
+				Prix : [PRICE] L$ ([PRICE_PER_SQM] L$/m²)
 			</text>
 			<text name="SalePending"/>
 			<button label="Vendre le terrain" label_selected="Vendre le terrain..." name="Sell Land..."/>
@@ -345,7 +345,7 @@ Seules les parcelles de grande taille peuvent apparaître dans la recherche.
 			<check_box label="Groupe" name="check group scripts"/>
 			<check_box label="Sécurisé (pas de dégâts)" name="check safe" tool_tip="Si cette option est cochée, le terrain est sécurisé et il n&apos;y pas de risques de dommages causés par des combats. Si elle est décochée, des dommages causés par les combats peuvent avoir lieu."/>
 			<check_box label="Pas de bousculades" name="PushRestrictCheck" tool_tip="Empêche l&apos;utilisation de scripts causant des bousculades. Cette option est utile pour empêcher les comportements abusifs sur votre terrain."/>
-			<check_box label="Afficher le lieu dans la recherche (30 [CUR]/semaine)" name="ShowDirectoryCheck" tool_tip="Afficher la parcelle dans les résultats de recherche"/>
+			<check_box label="Afficher le lieu dans la recherche (30 L$/semaine)" name="ShowDirectoryCheck" tool_tip="Afficher la parcelle dans les résultats de recherche"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Toutes catégories" name="item0"/>
 				<combo_box.item label="Appartenant aux Lindens" name="item1"/>
@@ -480,7 +480,7 @@ musique :
 				<combo_box.item label="Tout le monde" name="Anyone"/>
 				<combo_box.item label="Groupe" name="Group"/>
 			</combo_box>
-			<spinner label="Prix en [CUR] :" name="PriceSpin"/>
+			<spinner label="Prix en L$ :" name="PriceSpin"/>
 			<spinner label="Durée en heures :" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Toujours autoriser" name="AllowedText">

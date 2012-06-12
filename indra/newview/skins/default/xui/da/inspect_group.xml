@@ -11,7 +11,7 @@
 		Åben tilmelding
 	</string>
 	<string name="CostToJoin">
-		Tilmeldingsgebyr: [CUR][AMOUNT]
+		Tilmeldingsgebyr: L$[AMOUNT]
 	</string>
 	<string name="YouAreMember">
 		Du er meldlem

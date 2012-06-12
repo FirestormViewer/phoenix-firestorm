@@ -274,15 +274,5 @@
     <key>Value</key>
     <integer>1</integer>
   </map> 
-
-  <key>ForceShowGrid</key>
-  <map>
-    <key>Comment</key>
-    <string>Always show grid dropdown on login screen</string>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
 </map>
 </llsd>

@@ -77,10 +77,10 @@ Spróbuj wybrać ponownie mniejszą powierzchnię Posiadłości.
 		Jesteś właścicielem [BUYER] m² ziemi.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Zapłać [SELLER] [AMOUNT][CUR] za Posiadłość
+		Zapłać [SELLER] [AMOUNT]L$ za Posiadłość
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Kup [CUR] [AMOUNT] za [LOCAL_AMOUNT],
+		Kup L$ [AMOUNT] za [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Podana posiadłość to [AMOUNT] m² ziemi.
@@ -105,16 +105,16 @@ wspiera [AMOUNT2] obiektów
 		Grupa [GROUP] musi mieć wystarczający kredyt na używanie Posiadłości żeby sfinalizować ten zakup.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Masz [AMOUNT][CUR] co wystarcza na zakup tej Posiadłości.
+		Masz [AMOUNT]L$ co wystarcza na zakup tej Posiadłości.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Masz tylko [AMOUNT][CUR] i potrzebujesz [AMOUNT2][CUR] dodatkowo.
+		Masz tylko [AMOUNT]L$ i potrzebujesz [AMOUNT2]L$ dodatkowo.
 	</floater.string>
 	<floater.string name="balance_left">
-		Po zakupie zostanie Ci [AMOUNT][CUR].
+		Po zakupie zostanie Ci [AMOUNT]L$.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Musisz dokupić [AMOUNT][CUR] żeby kupić tą Posiadłość.
+		Musisz dokupić [AMOUNT]L$ żeby kupić tą Posiadłość.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(niczego nie wybrano)
@@ -166,8 +166,8 @@ wspiera [AMOUNT2] obiektów
 		Cena:
 	</text>
 	<text name="info_price">
-		[CUR] 1500
-([CUR] 1.1/m²)
+		L$ 1500
+(L$ 1.1/m²)
 sprzedaż z obiektami
 	</text>
 	<text name="info_action">
@@ -196,19 +196,19 @@ sprzedaż z obiektami
 Posiadłość ta zawiera 512 m² ziemi.
 	</text>
 	<text name="purchase_action">
-		Zapłać Joe Resident 4000 [CUR] za posiadłość
+		Zapłać Joe Resident 4000 L$ za posiadłość
 	</text>
 	<text name="currency_reason">
-		Masz 2,100 [CUR].
+		Masz 2,100 L$.
 	</text>
 	<text name="currency_action">
-		Kup więcej [CUR]
+		Kup więcej L$
 	</text>
 	<text name="currency_est">
 		za [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Masz 2,100 [CUR].
+		Masz 2,100 L$.
 	</text>
 	<check_box label="Usuń [AMOUNT] m² z kontrybucji w grupie." name="remove_contribution"/>
 	<button label="Zakup" name="buy_btn"/>

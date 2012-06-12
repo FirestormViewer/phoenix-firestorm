@@ -67,7 +67,7 @@
 				<combo_box.item label="Копировать" name="Copy"/>
 				<combo_box.item label="Оригинал" name="Original"/>
 			</combo_box>
-			<spinner label="Цена: [CUR]" name="Edit Cost"/>
+			<spinner label="Цена: L$" name="Edit Cost"/>
 		</panel>
 	</scroll_container>
 	<panel name="button_panel">

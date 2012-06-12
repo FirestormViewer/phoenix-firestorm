@@ -2,6 +2,6 @@
 <panel name="panel_snapshot_options">
 	<button label="Поместить в мой профиль" name="save_to_profile_btn"/>
 	<button label="Отправить по почте" name="save_to_email_btn"/>
-	<button label="Сохранить в моем инвентаре ([CUR][AMOUNT])" name="save_to_inventory_btn"/>
+	<button label="Сохранить в моем инвентаре (L$[AMOUNT])" name="save_to_inventory_btn"/>
 	<button label="Сохранить на моем компьютере" name="save_to_computer_btn"/>
 </panel>

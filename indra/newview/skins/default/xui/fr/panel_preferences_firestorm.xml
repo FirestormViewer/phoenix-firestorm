@@ -262,7 +262,7 @@
 			<check_box name="PhoenixBoldGroupMods"
 				label="Afficher le texte des modérateurs en gras"/>
 			<check_box name="FSPaymentInfoInChat"
-				label="Afficher en console chat les transactions de [CUR] plutôt que dans le toaster (style Phoenix)"/>
+				label="Afficher en console chat les transactions de L$ plutôt que dans le toaster (style Phoenix)"/>
 			<check_box name="PhoenixMuteAllGroups"
 				label="Désactiver tous les chats de groupe"/>
 			<check_box name="PhoenixMuteGroupWhenNoticesDisabled"

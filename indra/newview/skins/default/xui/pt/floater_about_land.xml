@@ -107,7 +107,7 @@ Vá para o menu Mundo &gt; Sobre o terreno ou selecione outro lote para mostrar 
 				Não está à venda.
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Preço: [CUR][PRICE] ([CUR][PRICE_PER_SQM]/m²).
+				Preço: L$[PRICE] (L$[PRICE_PER_SQM]/m²).
 			</text>
 			<button label="Vender Terra" name="Sell Land..."/>
 			<text name="For sale to">
@@ -341,7 +341,7 @@ Apenas lotes maiores podem ser listados na busca.
 			<check_box label="Grupo" name="check group scripts"/>
 			<check_box label="Seguro (sem danos)" name="check safe" tool_tip="Se ativado, ajusta o terreno para Seguro, impedindo lutas com danos. Se não ativado, lutas com danos é habilitado."/>
 			<check_box label="Proibido empurrar" name="PushRestrictCheck" tool_tip="Evita scripts que empurram. Ativar essa opção ajuda a prevenir comportamentos desordeiros no seu terreno."/>
-			<check_box label="Mostrar terreno nos resultados de busca ([CUR]30/semana)" name="ShowDirectoryCheck" tool_tip="Permitir que as pessoas vejam este terreno nos resultados de busca"/>
+			<check_box label="Mostrar terreno nos resultados de busca (L$30/semana)" name="ShowDirectoryCheck" tool_tip="Permitir que as pessoas vejam este terreno nos resultados de busca"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Qualquer categoria" name="item0"/>
 				<combo_box.item label="Locação Linden" name="item1"/>
@@ -475,7 +475,7 @@ Mídia:
 				<combo_box.item label="Qualquer um" name="Anyone"/>
 				<combo_box.item label="Grupo" name="Group"/>
 			</combo_box>
-			<spinner label="Preço em [CUR]:" name="PriceSpin"/>
+			<spinner label="Preço em L$:" name="PriceSpin"/>
 			<spinner label="Horas de acesso:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Always Allow" name="AllowedText">

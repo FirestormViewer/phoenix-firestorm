@@ -300,7 +300,7 @@ support@secondlife.com にお問い合わせください。
 		（グループ）
 	</string>
 	<string name="TooltipForSaleL$">
-		売り出し中:[CUR] [AMOUNT]
+		売り出し中:L$ [AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		グループ作成
@@ -329,7 +329,7 @@ support@secondlife.com にお問い合わせください。
 	<string name="TooltipMustSingleDrop">
 		アイテムは 1 つだけここにドラッグできます
 	</string>
-	<string name="TooltipPrice" value="[CUR][AMOUNT]："/>
+	<string name="TooltipPrice" value="L$[AMOUNT]："/>
 	<string name="TooltipOutboxDragToWorld">
 		マーチャントボックス内のアイテムを Rez することはできません
 	</string>
@@ -836,7 +836,7 @@ support@secondlife.com にお問い合わせください。
 		オフライン
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] 平方メートル [CUR][PRICE]
+		[AREA] 平方メートル L$[PRICE]
 	</string>
 	<string name="worldmap_results_none_found">
 		見つかりませんでした。
@@ -884,7 +884,7 @@ support@secondlife.com にお問い合わせください。
 		[REGIONNAME] の [REGIONPOS] という場所にある、「 [OWNERNAME] 」が所有する「 [OBJECTNAME] 」というオブジェクトは、次の権限を拒否しました： [PERMISSIONS]
 	</string>
 	<string name="ScriptTakeMoney">
-		リンデンドル（[CUR]）を支払う
+		リンデンドル（L$）を支払う
 	</string>
 	<string name="ActOnControlInputs">
 		制御入力に基づいて行動
@@ -1433,7 +1433,7 @@ support@secondlife.com にお問い合わせください。
 		買う
 	</string>
 	<string name="BuyforL$">
-		[CUR] で購入
+		L$ で購入
 	</string>
 	<string name="Stone">
 		石
@@ -2089,10 +2089,10 @@ support@secondlife.com にお問い合わせください。
 		キャンセル
 	</string>
 	<string name="UploadingCosts">
-		[NAME] のアップロード料金は [CUR][AMOUNT] です
+		[NAME] のアップロード料金は L$[AMOUNT] です
 	</string>
 	<string name="BuyingCosts">
-		これを [CUR][AMOUNT] で購入します
+		これを L$[AMOUNT] で購入します
 	</string>
 	<string name="UnknownFileExtension">
 		不明の拡張子： %s
@@ -4039,34 +4039,34 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] は [REASON] のために [CUR][AMOUNT] を支払いました。
+		[NAME] は [REASON] のために L$[AMOUNT] を支払いました。
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] は [CUR][AMOUNT] を支払いました。
+		[NAME] は L$[AMOUNT] を支払いました。
 	</string>
 	<string name="you_paid_ldollars">
-		[NAME] に [CUR] [AMOUNT] を支払いました：[REASON]
+		[NAME] に L$ [AMOUNT] を支払いました：[REASON]
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		[CUR] [AMOUNT] を支払いました。
+		L$ [AMOUNT] を支払いました。
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		[NAME] に [CUR] [AMOUNT] を支払いました。
+		[NAME] に L$ [AMOUNT] を支払いました。
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		[CUR] [AMOUNT] を支払いました：[REASON]
+		L$ [AMOUNT] を支払いました：[REASON]
 	</string>
 	<string name="you_paid_failure_ldollars">
-		[NAME] に [REASON] の代金 [CUR] [AMOUNT] を支払えませんでした。
+		[NAME] に [REASON] の代金 L$ [AMOUNT] を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_info">
-		[CUR] [AMOUNT] を支払えませんでした。
+		L$ [AMOUNT] を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_reason">
-		[NAME] に [CUR] [AMOUNT] を支払えませんでした。
+		[NAME] に L$ [AMOUNT] を支払えませんでした。
 	</string>
 	<string name="you_paid_failure_ldollars_no_name">
-		[REASON] の 代金 [CUR] [AMOUNT] を支払えませんでした。
+		[REASON] の 代金 L$ [AMOUNT] を支払えませんでした。
 	</string>
 	<string name="for item">
 		[ITEM] 向け
@@ -4093,19 +4093,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 		クラシファイド広告を掲載する
 	</string>
 	<string name="giving">
-		[CUR][AMOUNT] を渡します
+		L$[AMOUNT] を渡します
 	</string>
 	<string name="uploading_costs">
-		アップロード料金は [CUR][AMOUNT] です
+		アップロード料金は L$[AMOUNT] です
 	</string>
 	<string name="this_costs">
-		料金は [CUR][AMOUNT] です
+		料金は L$[AMOUNT] です
 	</string>
 	<string name="buying_selected_land">
-		選択した土地を [CUR] [AMOUNT] で購入します
+		選択した土地を L$ [AMOUNT] で購入します
 	</string>
 	<string name="this_object_costs">
-		このオブジェクトは [CUR][AMOUNT] です
+		このオブジェクトは L$[AMOUNT] です
 	</string>
 	<string name="group_role_everyone">
 		全員

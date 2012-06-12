@@ -58,7 +58,7 @@
 			Для эффективного использования земли нужно больше земельных кредитов
 		</text>
 		<text name="group_money_heading">
-			Группы [CUR]
+			Группы L$
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

@@ -13,7 +13,7 @@
 		[weekday, datetime, slt], [day, datetime, slt]. [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Diese Parzelle steht zum Verkauf."/>
@@ -21,8 +21,8 @@
 		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
 	</panel>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Klicken, um [CUR]-Guthaben zu aktualisieren" value="??? [CUR]"/>
-		<button label="[CUR]-Kauf" name="buyL" tool_tip="Hier klicken, um mehr [CUR] zu kaufen"/>
+		<text name="balance" tool_tip="Klicken, um L$-Guthaben zu aktualisieren" value="??? L$"/>
+		<button label="L$-Kauf" name="buyL" tool_tip="Hier klicken, um mehr L$ zu kaufen"/>
 	</panel>
 	<text name="TimeText" tool_tip="Aktuelle Zeit (Pazifik)">
 		24:00 H PST

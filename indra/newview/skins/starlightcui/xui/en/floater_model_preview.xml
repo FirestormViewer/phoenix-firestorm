@@ -1283,7 +1283,7 @@
          top_pad="10"
          width="130"
          word_wrap="true">
-         Upload fee: [CUR] [FEE]
+         Upload fee: L$ [FEE]
        </text>
        <text
          height="15"

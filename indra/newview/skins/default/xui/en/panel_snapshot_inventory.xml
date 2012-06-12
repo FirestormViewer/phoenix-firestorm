@@ -49,7 +49,7 @@
      top="5"
      type="string"
      word_wrap="true">
-        Saving an image to your inventory costs [CUR][UPLOAD_COST]. To save your image as a texture select one of the square formats.
+        Saving an image to your inventory costs L$[UPLOAD_COST]. To save your image as a texture select one of the square formats.
     </text>
     <combo_box
      follows="top|left|right"

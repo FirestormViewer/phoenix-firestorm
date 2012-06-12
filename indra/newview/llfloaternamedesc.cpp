@@ -45,7 +45,6 @@
 #include "lluictrlfactory.h"
 #include "llstring.h"
 #include "lleconomy.h"
-#include "llviewernetwork.h"
 
 // linden includes
 #include "llassetstorage.h"
@@ -128,8 +127,6 @@ BOOL LLFloaterNameDesc::postBuild()
 
 	getChild<LLUICtrl>("ok_btn")->setLabelArg("[AMOUNT]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() ));
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLUICtrl>("ok_btn")->setLabelArg(std::string("[CUR]"), type_currency);
 	setDefaultBtn("ok_btn");
 	
 	return TRUE;

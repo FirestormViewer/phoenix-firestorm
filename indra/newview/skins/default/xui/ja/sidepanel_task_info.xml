@@ -22,13 +22,13 @@
 		このオブジェクトには、パーツがリンクされています
 	</panel.string>
 	<panel.string name="Cost Default">
-		価格： [CUR]
+		価格： L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		合計： [CUR]
+		合計： L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Price Per: [CUR]
+		Price Per: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Mixed Price
@@ -93,7 +93,7 @@
 			<combo_box.item label="中身" name="Contents"/>
 			<combo_box.item label="オリジナル" name="Original"/>
 		</combo_box>
-		<spinner label="価格： [CUR]" name="Edit Cost"/>
+		<spinner label="価格： L$" name="Edit Cost"/>
 		<check_box label="検索に表示" name="search_check" tool_tip="このオブジェクトを検索結果に表示します"/>
 		<text name="B:">
 			B.

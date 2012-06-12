@@ -147,7 +147,7 @@ Try saving image as 24 bit Targa (.tga).
     <button
      follows="bottom|left"
      height="20"
-     label="Upload ([CUR][AMOUNT])"
+     label="Upload (L$[AMOUNT])"
      layout="topleft"
      left_delta="-150"
      name="ok_btn"

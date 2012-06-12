@@ -94,7 +94,7 @@
      use_ellipses="true"
      width="260"
 	 word_wrap="true">
-Buy for [CUR][AMOUNT] from:
+Buy for L$[AMOUNT] from:
     </text>
   <text
      type="string"

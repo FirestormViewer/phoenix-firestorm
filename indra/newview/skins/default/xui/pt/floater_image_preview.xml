@@ -29,5 +29,5 @@ Tente salvar a imagem como 24 bit Targa (.tga).
 	</text>
 	<check_box label="Usar compressão com menor perda" name="lossless_check"/>
 	<button label="Cancelar" name="cancel_btn"/>
-	<button label="Upload ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Upload (L$[AMOUNT])" name="ok_btn"/>
 </floater>

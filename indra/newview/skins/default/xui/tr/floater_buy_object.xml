@@ -19,7 +19,7 @@
 		İçeriği:
 	</text>
 	<text name="buy_text">
-		[CUR][AMOUNT] karşılığında şuradan satın alın:
+		L$[AMOUNT] karşılığında şuradan satın alın:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?

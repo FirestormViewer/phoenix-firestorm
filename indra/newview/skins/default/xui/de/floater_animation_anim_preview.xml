@@ -6,6 +6,6 @@
 	<text name="description_label">
 		Beschreibung:
 	</text>
-	<button label="Hochladen ([AMOUNT][CUR])" name="ok_btn"/>
+	<button label="Hochladen ([AMOUNT]L$)" name="ok_btn" />
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
 </floater>

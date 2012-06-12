@@ -40,7 +40,7 @@
 			</text>
 			<text name="land cost text">
 				平方メートル当
-たり[CUR]：
+たりL$：
 			</text>
 			<button label="更新" label_selected="更新" name="Refresh" tool_tip="上記の情報を更新するには、ここをクリックします。"/>
 			<button label="適用" label_selected="適用" name="Apply" tool_tip="上記の変更を適用するには、ここをクリックします。"/>

@@ -43,7 +43,6 @@
 #include "roles_constants.h"
 
 #include "lluictrlfactory.h"
-#include "llviewernetwork.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"
@@ -211,8 +210,6 @@ void LLPanelLandInfo::refresh()
 								   &dwell);
 		if(is_public || (is_for_sale && LLViewerParcelMgr::getInstance()->getParcelSelection()->getWholeParcelSelected()))
 		{
-			std::string type_currency = LLGridManager::getInstance()->getCurrency();
-			getChild<LLUICtrl>("label_area_price")->setTextArg("[CUR]", type_currency);
 			getChild<LLUICtrl>("label_area_price")->setTextArg("[PRICE]", llformat("%d",claim_price));
 			getChild<LLUICtrl>("label_area_price")->setTextArg("[AREA]", llformat("%d",area));
 			getChildView("label_area_price")->setVisible(true);

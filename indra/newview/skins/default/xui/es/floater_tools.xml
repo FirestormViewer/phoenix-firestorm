@@ -161,13 +161,13 @@
 				Para configurar los permisos, debes seleccionar el objeto completo
 			</panel.string>
 			<panel.string name="Cost Default">
-				Precio: [CUR]
+				Precio: L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				Precio total: [CUR]
+				Precio total: L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Precio por: [CUR]
+				Precio por: L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Precio variable
@@ -216,7 +216,7 @@
                                 <combo_box.item name="Contents" label="Contenido"/>
 				<combo_box.item name="Original" label="Original"/>
 			</combo_box>
-			<spinner name="Edit Cost" label="Precio: [CUR]"/>
+			<spinner name="Edit Cost" label="Precio: L$"/>
 			<button label="Aplicar" name="button mark for sale" tool_tip="Marcar/Actualizar objeto(s) en venta."/>
 			<button label="Copiar claves" name="btnCopyKeys" tool_tip="Copia la clave de los objetos seleccionados al portapapeles."/>
 			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda."/>
@@ -538,7 +538,7 @@
 			Información de la parcela
 		</text>
 		<text name="label_area_price">
-			Precio: [CUR][PRICE] por [AREA] m²
+			Precio: L$[PRICE] por [AREA] m²
 		</text>
 		<text name="label_area">
 			Área: [AREA] m²

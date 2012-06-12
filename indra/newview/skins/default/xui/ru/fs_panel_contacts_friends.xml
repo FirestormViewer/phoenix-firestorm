@@ -58,7 +58,7 @@
 	 label="Заплатить..."
 	 left_delta="0"
 	 name="pay_btn"
-	 tool_tip="Дать ([CUR]) этому другу"
+	 tool_tip="Дать (L$) этому другу"
 	 width="80" />
 	<button
 	 bottom_delta="-25"

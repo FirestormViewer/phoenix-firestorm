@@ -64,7 +64,7 @@
 	</combo_box>
 	<spinner name="Edit Cost" label="Precio:"/>
 	<text name="CurrencySymbol">
-		[CUR]
+		L$
 	</text>
 	<text name="BaseMaskDebug">
 		B:

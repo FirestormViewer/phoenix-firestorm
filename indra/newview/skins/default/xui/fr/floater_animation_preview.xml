@@ -184,6 +184,6 @@ pendant
 
 Nous recommandons les fichiers BVH extraits de Poser 4.
 	</text>
-	<button label="Charger ([AMOUNT] [CUR])" name="ok_btn"/>
+	<button label="Charger ([AMOUNT] L$)" name="ok_btn"/>
 	<button label="Annuler" name="cancel_btn"/>
 </floater>

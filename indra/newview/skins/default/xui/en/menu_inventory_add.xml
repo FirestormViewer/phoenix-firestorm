@@ -13,7 +13,7 @@
              name="upload"
              tear_off="true">
                 <menu_item_call
-                 label="Image ([CUR][COST])..."
+                 label="Image (L$[COST])..."
                  layout="topleft"
                  name="Upload Image"
                  shortcut="control|U">
@@ -24,7 +24,7 @@
                      function="File.EnableUpload" />
                 </menu_item_call>
                 <menu_item_call
-                 label="Sound ([CUR][COST])..."
+                 label="Sound (L$[COST])..."
                  layout="topleft"
                  name="Upload Sound">
                     <menu_item_call.on_click
@@ -34,7 +34,7 @@
                      function="File.EnableUpload" />
                 </menu_item_call>
                 <menu_item_call
-                 label="Animation ([CUR][COST])..."
+                 label="Animation (L$[COST])..."
                  layout="topleft"
                  name="Upload Animation">
                     <menu_item_call.on_click
@@ -56,7 +56,7 @@
                 function="File.VisibleUploadModel"/>
                 </menu_item_call>
                 <menu_item_call
-                 label="Bulk ([CUR][COST] per file)..."
+                 label="Bulk (L$[COST] per file)..."
                  layout="topleft"
                  name="Bulk Upload">
                     <menu_item_call.on_click

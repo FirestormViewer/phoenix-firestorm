@@ -219,7 +219,7 @@
 			<button label="Передать" name="ok_btn" tool_tip="Передать в симулятор"/>
 			<button label="Очистить настройки и сбросить форму" name="reset_btn"/>
 			<text name="upload_fee">
-				Плата за передачу: [CUR] [FEE]
+				Плата за передачу: L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				Влияние земли: [EQ]

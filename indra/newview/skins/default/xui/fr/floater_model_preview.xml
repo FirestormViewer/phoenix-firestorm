@@ -219,7 +219,7 @@
 			<button label="Charger le modèle" name="ok_btn" tool_tip="Charger dans le simulateur"/>
 			<button label="Effacer les paramètres et réinitialiser le formulaire" name="reset_btn"/>
 			<text name="upload_fee">
-				Frais de chargement : [FEE] [CUR]
+				Frais de chargement : [FEE] L$
 			</text>
 			<text name="prim_weight">
 				Impact sur le terrain : [EQ]

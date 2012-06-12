@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Załaduj" name="upload">
-		<menu_item_call label="Obraz ([COST][CUR])..." name="Upload Image"/>
-		<menu_item_call label="Dźwięk ([COST][CUR])..." name="Upload Sound"/>
-		<menu_item_call label="Animację ([COST][CUR])..." name="Upload Animation"/>
+		<menu_item_call label="Obraz ([COST]L$)..." name="Upload Image"/>
+		<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
+		<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
 		<menu_item_call label="Model meszowy..." name="Upload Model"/>
-		<menu_item_call label="Zbiór plików ([COST][CUR] za jeden)..." name="Bulk Upload"/>
+		<menu_item_call label="Zbiór plików ([COST]L$ za jeden)..." name="Bulk Upload"/>
 		<menu_item_call label="Ustaw domyślne uprawnienia ładowania" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Nowy folder" name="New Folder"/>

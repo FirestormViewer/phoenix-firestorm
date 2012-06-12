@@ -47,16 +47,6 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_IS_FAVORITE_VALUE "favorite"
 #define GRID_REGISTER_NEW_ACCOUNT "register"
 #define GRID_FORGOT_PASSWORD "password"
-#define GRID_HELP "help"
-#define GRID_ABOUT "about"
-#define GRID_SEARCH	"search"
-#define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
-#define GRID_DIRECTORY_FEE "DirectoryFee"
-#define GRID_CURRENCY_SYMBOL "CurrencySymbol"
-#define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
-#define GRID_MAXGROUPS "MaxGroups"
-#define GRID_PLATFORM "platform"
-#define GRID_MESSAGE "message"
 // </AW opensim>
 #define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
 #define GRID_IS_FAVORITE_VALUE "favorite"
@@ -76,7 +66,6 @@ struct GridEntry
 	LLXMLNodePtr info_root;
 	bool set_current;
 	std::string last_http_error;
-	boost::function<void()> mOnDoneCallback;
 };
 
 class LLInvalidGridName
@@ -131,7 +120,6 @@ public:
 	void gridInfoResponderCB(GridEntry* grid_data);
 	// add a grid to the list of grids
 	void addGrid(GridEntry* grid_info, AddState state);	
-	void deleteGrid(const std::string& grid);
 
 	// retrieve a map of grid-name <-> label
 	// by default only return the user visible grids
@@ -159,7 +147,6 @@ public:
 	std::string getLoginPage(const std::string& grid) { return mGridList[grid][GRID_LOGIN_PAGE_VALUE]; }
 	void        getLoginIdentifierTypes(LLSD& idTypes) { idTypes = mGridList[mGrid][GRID_LOGIN_IDENTIFIER_TYPES]; }
 	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
-	std::string getCurrency();
 	
 	// get location slurl base for the given region within the selected grid
 	std::string getSLURLBase(const std::string& grid);

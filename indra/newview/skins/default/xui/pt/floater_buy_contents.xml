@@ -4,7 +4,7 @@
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; contains:
 	</text>
 	<text name="buy_text">
-		Comprar por [CUR][AMOUNT] de(a) [NAME]?
+		Comprar por L$[AMOUNT] de(a) [NAME]?
 	</text>
 	<button label="Cancelar" label_selected="Cancelar" name="cancel_btn" width="73"/>
 	<button label="Comprar" label_selected="Comprar" left_delta="-77" name="buy_btn" width="73"/>

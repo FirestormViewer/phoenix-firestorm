@@ -68,7 +68,6 @@
 #include "llviewerparcelmgr.h"
 #include "llviewerthrottle.h"
 #include "lluictrlfactory.h"
-#include "llviewernetwork.h"
 
 #include "llagentui.h"
 #include "llclipboard.h"
@@ -508,14 +507,9 @@ void LLStatusBar::setBalance(S32 balance)
 
 	LLStringUtil::format_map_t string_args;
 	string_args["[AMT]"] = llformat("%s", money_str.c_str());
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	string_args["[CUR]"] = llformat("%s", type_currency.c_str());
 	std::string label_str = getString("buycurrencylabel", string_args);
 	mBoxBalance->setValue(label_str);
 
-	getChild<LLButton>("buyL")->setLabelArg("[CUR]", type_currency);
-	getChild<LLButton>("buyL")->setToolTipArg(std::string("[CUR]"), type_currency);
-	getChild<LLTextBase>("balance")->setToolTipArg(std::string("[CUR]"), type_currency);
 	// Resize the L$ balance background to be wide enough for your balance plus the buy button
 	{
 		const S32 HPAD = 24;

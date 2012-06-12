@@ -68,7 +68,6 @@
 #include "lltrans.h"
 #include "llglheaders.h"
 #include "llpanelloginlistener.h"
-#include "lltabcontainer.h"
 
 #include "fsdata.h"
 
@@ -179,7 +178,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
 	childSetAction("delete_saved_login_btn", onClickDelete, this);
 	childSetAction("connect_btn", onClickConnect, this);
-	childSetAction("grids_btn", onClickGrids, this);
 
 	getChild<LLPanel>("login")->setDefaultBtn("connect_btn");
 
@@ -892,16 +890,7 @@ void LLPanelLogin::loadLoginPage()
 	curl_free(curl_version);
 
 	// Grid
-	char* curl_grid;
-	if(LLGridManager::getInstance()->isInSLMain()) {
-		curl_grid = curl_escape("Agni", 0);
-	}
-	else if(LLGridManager::getInstance()->isInSLBeta()) {
-		curl_grid = curl_escape("Aditi", 0);
-	}
-	else {
-		curl_grid = curl_escape(LLGridManager::getInstance()->getGridLabel().c_str(), 0);
-	}
+	char* curl_grid = curl_escape(LLGridManager::getInstance()->getGridLabel().c_str(), 0);
 	oStr << "&grid=" << curl_grid;
 	curl_free(curl_grid);
 	
@@ -1095,24 +1084,6 @@ void LLPanelLogin::onClickDelete(void*)
 			sInstance->getChild<LLUICtrl>("password_edit")->clear();
 		}
 		onSelectSavedLogin(saved_logins_combo,NULL);
-	}
-}
-
-//static
-void LLPanelLogin::onClickGrids(void*)
-{
-	// bring up the prefs floater
-	LLFloaterPreference* prefsfloater = dynamic_cast<LLFloaterPreference*>(LLFloaterReg::showInstance("preferences"));
-	if (prefsfloater)
-	{
-		// grab the 'grids' panel from the preferences floater and
-		// bring it the front!
-		LLTabContainer* tabcontainer = prefsfloater->getChild<LLTabContainer>("pref core");
-		LLPanel* gridspanel = prefsfloater->getChild<LLPanel>("grids");
-		if (tabcontainer && gridspanel)
-		{
-			tabcontainer->selectTabPanel(gridspanel);
-		}
 	}
 }
 

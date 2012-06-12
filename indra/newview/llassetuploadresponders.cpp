@@ -51,7 +51,6 @@
 #include "llviewerwindow.h"
 #include "lltexlayer.h"
 #include "lltrans.h"
-#include "llviewernetwork.h"
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
@@ -90,10 +89,8 @@ void on_new_single_inventory_upload_complete(
 		// and display something saying that it cost L$
 		LLStatusBar::sendMoneyBalanceRequest();
 
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		LLSD args;
 		args["AMOUNT"] = llformat("%d", upload_price);
-		args["CUR"] = type_currency;
 		LLNotificationsUtil::add("UploadPayment", args);
 	}
 
@@ -311,11 +308,9 @@ void LLAssetUploadResponder::uploadFailure(const LLSD& content)
 	// deal with L$ errors
 	if (reason == "insufficient funds")
 	{
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		S32 price = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 		LLStringUtil::format_map_t args;
 		args["AMOUNT"] = llformat("%d", price);
-		args["CUR"] = type_currency;
 		LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("uploading_costs", args), price );
 	}
 	else
@@ -1143,9 +1138,7 @@ void LLNewAgentInventoryVariablePriceResponder::showConfirmationDialog(
 		LLSD substitutions;
 		LLSD payload;
 
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		substitutions["PRICE"] = upload_price;
-		substitutions["CUR"] = type_currency;
 
 		payload["confirmation_url"] = confirmation_url;
 

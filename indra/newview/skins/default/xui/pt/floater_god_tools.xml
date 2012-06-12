@@ -38,7 +38,7 @@
 				Fator cobrança:
 			</text>
 			<text name="land cost text">
-				[CUR] por m²:
+				L$ por m²:
 			</text>
 			<button label="Atualizar" label_selected="Atualizar" name="Refresh" tool_tip="Clique aqui para atualizar a informação acima."/>
 			<button label="Aplicar" label_selected="Aplicar" name="Apply" tool_tip="Clique aqui para aplicar qualquer mudança acima"/>

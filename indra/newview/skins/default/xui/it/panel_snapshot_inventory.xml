@@ -4,7 +4,7 @@
 		Salva nell&apos;inventario
 	</text>
 	<text name="hint_lbl">
-		Salvare un&apos;immagine nell&apos;inventario costa [CUR][UPLOAD_COST]. Per salvare l&apos;immagine come texture, selezionare uno dei formati quadrati.
+		Salvare un&apos;immagine nell&apos;inventario costa L$[UPLOAD_COST]. Per salvare l&apos;immagine come texture, selezionare uno dei formati quadrati.
 	</text>
 	<combo_box label="Risoluzione" name="texture_size_combo">
 		<combo_box.item label="Finestra attuale" name="CurrentWindow"/>

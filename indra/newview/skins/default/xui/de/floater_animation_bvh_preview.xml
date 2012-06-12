@@ -182,6 +182,6 @@ Maximal erlaubt sind [MAX_LENGTH] Sekunden.
 Wir empfehlen exportierte BVH-Dateien aus Poser 4.
 	</text>
     <button label="Datei neu laden" name="reload_btn"/>
-	<button label="Hochladen ([CUR] [AMOUNT])" name="ok_btn"/>
+	<button label="Hochladen (L$ [AMOUNT])" name="ok_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>
 </floater>

@@ -13,7 +13,7 @@
 	<string name="none_text" value="（なし）"/>
 	<string name="sale_pending_text" value="（販売処理中）"/>
 	<string name="group_owned_text" value="（グループ所有）"/>
-	<string name="price_text" value="[CUR]"/>
+	<string name="price_text" value="L$"/>
 	<string name="area_text" value="平方メートル"/>
 	<string name="all_residents_text" value="すべての住人"/>
 	<string name="group_text" value="グループ"/>

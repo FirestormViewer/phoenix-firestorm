@@ -159,13 +159,13 @@
 				Musisz zaznaczyć cały obiekt by ustawić prawa
 			</panel.string>
 			<panel.string name="Cost Default">
-				Cena: [CUR]
+				Cena: L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				Cena całkowita: [CUR]
+				Cena całkowita: L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Cena za: [CUR]
+				Cena za: L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Cena mieszana
@@ -214,7 +214,7 @@
 				<combo_box.item label="Zawartość" name="Contents"/>
 				<combo_box.item label="Orginał" name="Original"/>
 			</combo_box>
-			<spinner label="Cena: [CUR]" name="Edit Cost"/>
+			<spinner label="Cena: L$" name="Edit Cost"/>
 			<button label="Zastosuj" name="button mark for sale" tool_tip="Ustawia/aktualizuje obiekt(y) do sprzedaży."/>
 			<button label="Kopiuj klucze" name="btnCopyKeys" tool_tip="Kopiuje Klucze zaznaczonego obiektu do schowka."/>
 			<check_box label="Pokaż w wyszukiwarce" name="search_check" tool_tip="Udostępnij wyświetlanie się tego przedmiotu w wynikach wyszukiwania"/>
@@ -515,7 +515,7 @@
 			Informacje o posiadłości
 		</text>
 		<text name="label_area_price">
-			Cena: [PRICE][CUR] za [AREA] m²
+			Cena: [PRICE]L$ za [AREA] m²
 		</text>
 		<text name="label_area">
 			Obszar: [AREA] m²

@@ -181,7 +181,7 @@
        <button label="Załaduj" name="ok_btn" tool_tip="Załaduj na serwer"/>
        <button label="Wyczyść i zresetuj" name="reset_btn"/>
        <text name="upload_fee">
-         Opłata: [FEE][CUR]
+         Opłata: [FEE]L$
        </text>
        <text name="prim_weight">
          Ziemia/wpływ: [EQ]

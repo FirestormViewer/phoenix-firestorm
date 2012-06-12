@@ -182,6 +182,6 @@ A duração máxima de animação permitida é de [MAX_LENGTH] segundos.
 Nós recomendamos exportar arquivos BVH do
 Poser 4.
 	</text>
-	<button label="Carregar ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Carregar (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>
 </floater>

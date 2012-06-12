@@ -3,7 +3,7 @@
 	<menu label="自己" name="Me">
 		<menu_item_call label="偏好設定" name="Preferences"/>
 		<menu_item_call label="我的塗鴉牆" name="Manage My Account"/>
-		<menu_item_call label="購買 [CUR]" name="Buy and Sell L$"/>
+		<menu_item_call label="購買 L$" name="Buy and Sell L$"/>
 		<menu_item_call label="我的個人檔案" name="Profile"/>
 		<menu_item_call label="我的外觀" name="ChangeOutfit"/>
 		<menu_item_check label="我的庫存" name="Inventory"/>
@@ -112,10 +112,10 @@
 			<menu_item_call label="格線選項" name="Grid Options"/>
 		</menu>
 		<menu label="上傳" name="Upload">
-			<menu_item_call label="圖像（[CUR][COST]）..." name="Upload Image"/>
-			<menu_item_call label="聲音（[CUR][COST]）..." name="Upload Sound"/>
-			<menu_item_call label="動作（[CUR][COST]）..." name="Upload Animation"/>
-			<menu_item_call label="大量上傳（每檔案 [CUR][COST] ）..." name="Bulk Upload"/>
+			<menu_item_call label="圖像（L$[COST]）..." name="Upload Image"/>
+			<menu_item_call label="聲音（L$[COST]）..." name="Upload Sound"/>
+			<menu_item_call label="動作（L$[COST]）..." name="Upload Animation"/>
+			<menu_item_call label="大量上傳（每檔案 L$[COST] ）..." name="Bulk Upload"/>
 			<menu_item_call label="設定預設上傳權限" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="復原" name="Undo"/>

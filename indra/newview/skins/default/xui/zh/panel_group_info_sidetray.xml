@@ -7,7 +7,7 @@
 		你要儲存這些變更嗎？
 	</panel.string>
 	<panel.string name="group_join_btn">
-		加入（[CUR][AMOUNT]）
+		加入（L$[AMOUNT]）
 	</panel.string>
 	<panel.string name="group_join_free">
 		免費

@@ -28,5 +28,5 @@
 	</text>
 	<check_box label="可逆圧縮" name="lossless_check"/>
 	<button label="取り消し" name="cancel_btn"/>
-	<button label="アップロードﾞ[CUR][AMOUNT]" name="ok_btn"/>
+	<button label="アップロードﾞL$[AMOUNT]" name="ok_btn"/>
 </floater>

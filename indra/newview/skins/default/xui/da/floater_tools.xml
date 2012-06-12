@@ -155,13 +155,13 @@
 				Du skal vælge hele objektet for at sætte rettigheder
 			</panel.string>
 			<panel.string name="Cost Default">
-				Pris: [CUR]
+				Pris: L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				Total pris: [CUR]
+				Total pris: L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Pris pr: [CUR]
+				Pris pr: L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Blandet pris
@@ -205,7 +205,7 @@
 				<combo_box.item label="Indhold" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Pris: [CUR]" name="Edit Cost"/>
+			<spinner label="Pris: L$" name="Edit Cost"/>
 			<check_box label="Vis i søgning" name="search_check" tool_tip="Lad folk se dette objekt i søgeresultater"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -491,7 +491,7 @@
 			Parcel information
 		</text>
 		<text name="label_area_price">
-			Pris: [CUR][PRICE] for [AREA] m²
+			Pris: L$[PRICE] for [AREA] m²
 		</text>
 		<text name="label_area">
 			Areal: [AREA] m²

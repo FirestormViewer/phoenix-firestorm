@@ -13,11 +13,11 @@
 		[weekday, datetime, slt] [sday, datetime, slt] [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel left="-405" name="balance_bg" width="195">
-		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en [CUR]." value="??? [CUR]"/>
-		<button label="ACHETER [CUR]" name="buyL" tool_tip="Cliquer pour acheter plus de [CUR]"/>
+		<text name="balance" tool_tip="Cliquer sur ce bouton pour actualiser votre solde en L$." value="??? L$"/>
+		<button label="ACHETER L$" name="buyL" tool_tip="Cliquer pour acheter plus de L$"/>
 	</panel>
 	<combo_box name="mode_combo" tool_tip="Sélectionnez un mode. Pour une exploration facile et rapide avec chat, choisissez Basique. Pour accéder à plus de fonctionnalités, choisissez Avancé.">
 		<combo_box.item label="Mode basique" name="Basic"/>

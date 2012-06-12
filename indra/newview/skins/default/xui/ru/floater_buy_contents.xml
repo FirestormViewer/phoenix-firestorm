@@ -13,7 +13,7 @@
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; содержит:
 	</text>
 	<text name="buy_text">
-		Купить за [CUR][AMOUNT] у жителя [NAME]?
+		Купить за L$[AMOUNT] у жителя [NAME]?
 	</text>
 	<check_box label="Надеть одежду сейчас" name="wear_check"/>
 	<button label="Купить" label_selected="Купить" name="buy_btn"/>

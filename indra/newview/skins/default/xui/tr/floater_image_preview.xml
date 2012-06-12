@@ -28,5 +28,5 @@ Görüntüyü 24 bit Targa .tga olarak kaydetmeyi dene.
 	</text>
 	<check_box label="Kayıpsız sıkıştırmayı kullan" name="lossless_check"/>
 	<button label="İptal" name="cancel_btn"/>
-	<button label="Karşıya Yükle ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Karşıya Yükle (L$[AMOUNT])" name="ok_btn"/>
 </floater>

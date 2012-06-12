@@ -7,7 +7,7 @@
 		Genel İçerik
 	</panel.string>
 	<panel.string name="l$_price">
-		[CUR][PRICE]
+		L$[PRICE]
 	</panel.string>
 	<panel.string name="click_through_text_fmt">
 		[TELEPORT] ışınlama, [MAP] harita, [PROFILE] profil

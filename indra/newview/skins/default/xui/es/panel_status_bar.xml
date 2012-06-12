@@ -18,11 +18,11 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en [CUR]" value="??? [CUR]"/>
-		<button name="buyL" label="COMPRAR [CUR]" halign="left" tool_tip="Pulsa para comprar más [CUR]"/>
+		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en L$" value="??? L$"/>
+		<button name="buyL" label="COMPRAR L$" halign="left" tool_tip="Pulsa para comprar más L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)">

@@ -12,7 +12,7 @@
 Besitzer [OWNER]
 	</string>
 	<string name="Price">
-		[AMOUNT] [CUR]
+		[AMOUNT] L$
 	</string>
 	<string name="PriceFree">
 		Kostenlos!
@@ -29,7 +29,7 @@ Besitzer [OWNER]
 Besitzer secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
 	</text>
 	<text name="price_text">
-		30.000 [CUR]
+		30.000 L$
 	</text>
 	<text name="object_description">
 		Dies ist eine wirklich lange Beschreibung für ein Objekt, mindestens 80 Zeichen lang oder jetzt schon mindestens 120 Zeichen lang und länger als der englische Originaltext. Niemand weiß es genau.

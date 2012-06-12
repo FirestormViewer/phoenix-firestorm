@@ -61,7 +61,6 @@
 #include "llspinctrl.h"
 #include "roles_constants.h"
 #include "llgroupactions.h"
-#include "llviewernetwork.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvhandler.h"
@@ -936,10 +935,7 @@ static bool callback_deed_to_group(const LLSD& notification, const LLSD& respons
 
 void LLSidepanelTaskInfo::onClickDeedToGroup(void *data)
 {
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	LLSD args;
-	args["CUR"] = type_currency;
-	LLNotificationsUtil::add("DeedObjectToGroup", args, LLSD(), callback_deed_to_group);
+	LLNotificationsUtil::add("DeedObjectToGroup", LLSD(), LLSD(), callback_deed_to_group);
 }
 
 ///----------------------------------------------------------------------------

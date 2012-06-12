@@ -136,7 +136,7 @@ Hover your mouse over the options for more help.
      visible="true"
      follows="top|right"
      layout="topleft">
-    Join ([CUR]00000)
+    Join (L$00000)
     </text>
 
     <button
@@ -378,7 +378,7 @@ Hover your mouse over the options for more help.
          left_pad="14"
          width="100"
          height="16"
-         label="[CUR]"
+         label="L$"
          label_width="20"
          decimal_digits="0"
          increment="1"

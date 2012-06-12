@@ -7,7 +7,7 @@
 		Czy chcesz zachować te zmiany?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Dołącz ([AMOUNT][CUR])
+		Dołącz ([AMOUNT]L$)
 	</panel.string>
 	<panel.string name="group_join_free">
 		Darmowe

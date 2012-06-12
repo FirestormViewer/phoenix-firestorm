@@ -120,7 +120,7 @@
 				Parsele/bölgeye etkisi: [EQUIV] prim eşdeğerleri
 			</text>
 			<text name="review_fee">
-				Hesabınızdan [CUR] [FEE] karşıya yükleme ücreti düşülecektir.
+				Hesabınızdan L$ [FEE] karşıya yükleme ücreti düşülecektir.
 			</text>
 			<text name="review_confirmation">
 				Karşıya yükleme düğmesine tıkladığınızda, modelde yer alan malzeme için ilgili haklara sahip olduğunuzu teyid edersiniz.
@@ -140,7 +140,7 @@
 			Bunu, envanterinizdeki Nesneler klasöründe bulacaksınız.
 		</text>
 		<text name="charged_fee">
-			Hesabınızdan [CUR] [FEE] düşüldü.
+			Hesabınızdan L$ [FEE] düşüldü.
 		</text>
 	</panel>
 	<button label="&lt;&lt; Geri" name="back"/>

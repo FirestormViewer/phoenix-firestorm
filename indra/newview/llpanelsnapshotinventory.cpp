@@ -34,7 +34,6 @@
 #include "llfloatersnapshot.h" // FIXME: replace with a snapshot storage model
 #include "llpanelsnapshot.h"
 #include "llviewercontrol.h" // gSavedSettings
-#include "llviewernetwork.h"
 
 /**
  * The panel provides UI for saving snapshot as an inventory texture.
@@ -82,9 +81,7 @@ BOOL LLPanelSnapshotInventory::postBuild()
 // virtual
 void LLPanelSnapshotInventory::onOpen(const LLSD& key)
 {
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	getChild<LLUICtrl>("hint_lbl")->setTextArg("[UPLOAD_COST]", llformat("%d", LLGlobalEconomy::Singleton::getInstance()->getPriceUpload()));
-	getChild<LLUICtrl>("hint_lbl")->setTextArg("[CUR]", type_currency);
 	LLPanelSnapshot::onOpen(key);
 }
 

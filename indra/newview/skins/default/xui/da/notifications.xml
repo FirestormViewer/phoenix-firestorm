@@ -173,20 +173,20 @@ Add this Ability to &apos;[ROLE_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Bliv medlem"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Tilmelding til denne gruppe koster [CUR][COST].
-Du har ikke nok [CUR] til denne tilmelding.
+		Tilmelding til denne gruppe koster L$[COST].
+Du har ikke nok L$ til denne tilmelding.
 	</notification>
 	<notification name="CreateGroupCost">
-		Oprettelse af denne gruppe vil koste [CUR]100.
+		Oprettelse af denne gruppe vil koste L$100.
 Grupper skal have mindst 2 medlemmer, ellers slettes de for altid.
 Invitér venligst medlemmer indenfor 48 timer.
-		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for [CUR]100"/>
+		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$100"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [CURRENT_GRID], også de som ikke er i denne region.
 
 Det valgte antal [LAND_SIZE] m² land bliver sat til salg.
-Salgprisen vil være [SALE_PRICE][CUR] og vil være til salg til [NAME].
+Salgprisen vil være [SALE_PRICE]L$ og vil være til salg til [NAME].
 	</notification>
 	<notification name="MultipleFacesSelected">
 		Flere overflader er valgt for øjeblikket.
@@ -286,7 +286,7 @@ og du vil miste dem fra din beholdning hvis du forærer dem væk. Er du sikker p
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Gå til [_URL] for information om køb af [CUR]?
+Gå til [_URL] for information om køb af L$?
 	</notification>
 	<notification name="SoundFileInvalidChunkSize">
 		Fejl i WAV fil (chunk size):
@@ -525,7 +525,7 @@ Subject Key Identifier: [SUBJECTKEYIDENTIFIER]
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Stol på"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [CUR] [PRICE] Du har ikke nok [CUR] til dette.
+		[NAME] L$ [PRICE] Du har ikke nok L$ til dette.
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] har givet dig rettighed til at redigere sine objekter.
@@ -1036,7 +1036,7 @@ Henvis til dette fra en hjemmeside for at give andre nem adgang til denne lokati
 (Tager omkring 5 minutter.)
 	</notification>
 	<notification name="UploadPayment">
-		Du betalte [CUR][AMOUNT] for at uploade.
+		Du betalte L$[AMOUNT] for at uploade.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Billeder fra www er uploadet.
@@ -1492,7 +1492,7 @@ Opfyld dette ønske?
 	<notification name="BuyLindenDollarSuccess">
 		Tak for din betaling!
 
-Din [CUR] balance vil blive opdateret når transaktionen er gennemført. Ved transaktionen tager mere end 20 min., vil den blive annulleret. I så fald vil beløbet blive krediteret din US$ balance.
+Din L$ balance vil blive opdateret når transaktionen er gennemført. Ved transaktionen tager mere end 20 min., vil den blive annulleret. I så fald vil beløbet blive krediteret din US$ balance.
 
 Status for din betaling kan ses i din &apos;Transaction History&apos; side på din [http://secondlife.com/account/ Dashboard]
 	</notification>
@@ -1649,7 +1649,7 @@ De vil blive blokeret nogle få sekunder af sikkerhedsmæssige årsager.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Dette upload vil koste [CUR][PRICE], ønsker du at sende?
+		Dette upload vil koste L$[PRICE], ønsker du at sende?
 		<usetemplate name="okcancelbuttons" notext="Annullér" yestext="Send"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -1688,7 +1688,7 @@ Me følgende beboere:
 	<notification name="ReleasedLandWithReclaim">
 		[AREA] m² parcellen &apos;[PARCEL_NAME]&apos; er blevet frigivet.
 
-Du har [RECLAIM_PERIOD] timer til at få den tilbage for [CUR]0 før den udbydes til salg til andre beboere.
+Du har [RECLAIM_PERIOD] timer til at få den tilbage for L$0 før den udbydes til salg til andre beboere.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
 		[AREA] m² parcel &apos;[PARCEL_NAME]&apos; er blevet frigivet.
@@ -1806,7 +1806,7 @@ Klik hvorsomhelst i verden for at rotere din visning
 		Undersøg din beholdning for at finde ting. Nyeste genstand findes lettes under fanen &quot;Nye ting&quot;
 	</notification>
 	<notification label="Der er kommet Linden Dollars" name="HintLindenDollar">
-		Her er din nuværende balance af [CUR]. Klik på Køb [CUR] for at købe flere Linden dollars.
+		Her er din nuværende balance af L$. Klik på Køb L$ for at købe flere Linden dollars.
 	</notification>
 	<notification name="PopupAttempt">
 		En pop-up blev hindret i at blive vist.

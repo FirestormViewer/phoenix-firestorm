@@ -283,7 +283,7 @@ Prøv venligst om lidt igen.
 		(Gruppe)
 	</string>
 	<string name="TooltipForSaleL$">
-		Til salg: [CUR][AMOUNT]
+		Til salg: L$[AMOUNT]
 	</string>
 	<string name="TooltipFlagGroupBuild">
 		Gruppe byg
@@ -312,7 +312,7 @@ Prøv venligst om lidt igen.
 	<string name="TooltipMustSingleDrop">
 		Kun et enkelt element kan trækkes ind her
 	</string>
-	<string name="TooltipPrice" value="[CUR][BELØB]:"/>
+	<string name="TooltipPrice" value="L$[BELØB]:"/>
 	<string name="TooltipHttpUrl">
 		Klik for at se denne hjemmeside
 	</string>
@@ -783,7 +783,7 @@ Prøv venligst om lidt igen.
 		Offline
 	</string>
 	<string name="worldmap_item_tooltip_format">
-		[AREA] m² [CUR][PRICE]
+		[AREA] m² L$[PRICE]
 	</string>
 	<string name="worldmap_results_none_found">
 		Ingen fundet.
@@ -831,7 +831,7 @@ Prøv venligst om lidt igen.
 		&apos;[OBJECTNAME]&apos;, en genstand, ejet af &apos;[OWNERNAME]&apos;, lokaliseret i [REGIONNAME] på [REGIONPOS], er afvist tilladelse til: [PERMISSIONS].
 	</string>
 	<string name="ScriptTakeMoney">
-		Tag Linden dollars ([CUR]) fra dig
+		Tag Linden dollars (L$) fra dig
 	</string>
 	<string name="ActOnControlInputs">
 		Reagér på dine kontrol-taster
@@ -1303,7 +1303,7 @@ Prøv venligst om lidt igen.
 		Køb
 	</string>
 	<string name="BuyforL$">
-		Køb for [CUR]
+		Køb for L$
 	</string>
 	<string name="Stone">
 		Sten
@@ -1932,10 +1932,10 @@ Prøv venligst om lidt igen.
 		Annullér
 	</string>
 	<string name="UploadingCosts">
-		Uploader [NAME] pris [CUR] [AMOUNT]
+		Uploader [NAME] pris L$ [AMOUNT]
 	</string>
 	<string name="BuyingCosts">
-		At købe dette koster [CUR] [AMOUNT]
+		At købe dette koster L$ [AMOUNT]
 	</string>
 	<string name="UnknownFileExtension">
 		Ukendt fil efternavn [.%s]
@@ -3807,22 +3807,22 @@ Hvis du bliver ved med at modtage denne besked, kontakt venligst [SUPPORT_SITE].
 		http://secondlife.com/landing/voicemorphing
 	</string>
 	<string name="paid_you_ldollars">
-		[NAME] betalte dig [CUR][AMOUNT] [REASON].
+		[NAME] betalte dig L$[AMOUNT] [REASON].
 	</string>
 	<string name="paid_you_ldollars_no_reason">
-		[NAME] betalte dig [CUR][AMOUNT].
+		[NAME] betalte dig L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars">
-		Du betalte [NAME] [CUR][AMOUNT] [REASON].
+		Du betalte [NAME] L$[AMOUNT] [REASON].
 	</string>
 	<string name="you_paid_ldollars_no_info">
-		Du betalte [CUR][AMOUNT].
+		Du betalte L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_reason">
-		Du betalte [NAME] [CUR][AMOUNT].
+		Du betalte [NAME] L$[AMOUNT].
 	</string>
 	<string name="you_paid_ldollars_no_name">
-		Du betalte [CUR][AMOUNT] [REASON].
+		Du betalte L$[AMOUNT] [REASON].
 	</string>
 	<string name="for item">
 		til [ITEM]
@@ -3849,19 +3849,19 @@ Hvis du bliver ved med at modtage denne besked, kontakt venligst [SUPPORT_SITE].
 		til offentliggørelse af annonce
 	</string>
 	<string name="giving">
-		Giver [CUR] [AMOUNT]
+		Giver L$ [AMOUNT]
 	</string>
 	<string name="uploading_costs">
-		Pris for upload er [CUR] [AMOUNT]
+		Pris for upload er L$ [AMOUNT]
 	</string>
 	<string name="this_costs">
-		Prisen er [CUR] [AMOUNT]
+		Prisen er L$ [AMOUNT]
 	</string>
 	<string name="buying_selected_land">
-		Køber valgte land [CUR] [AMOUNT]
+		Køber valgte land L$ [AMOUNT]
 	</string>
 	<string name="this_object_costs">
-		Dette objekt koster [CUR] [AMOUNT]
+		Dette objekt koster L$ [AMOUNT]
 	</string>
 	<string name="group_role_everyone">
 		Enhver

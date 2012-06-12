@@ -11,7 +11,7 @@
 		Katılım ücretsiz
 	</string>
 	<string name="CostToJoin">
-		Katılmak için [CUR][AMOUNT] gerekiyor
+		Katılmak için L$[AMOUNT] gerekiyor
 	</string>
 	<string name="YouAreMember">
 		Siz üyesiniz
@@ -24,7 +24,7 @@
 Geyikten korkun!  Korkun!  Firavun faresinden de!
 	</text>
 	<text name="group_cost">
-		Katılmak için [CUR]123 gerekiyor
+		Katılmak için L$123 gerekiyor
 	</text>
 	<button label="Katıl" name="join_btn"/>
 	<button label="Ayrıl" name="leave_btn"/>

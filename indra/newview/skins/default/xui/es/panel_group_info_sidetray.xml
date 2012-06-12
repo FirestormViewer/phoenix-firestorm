@@ -7,7 +7,7 @@
 		¿Quieres guardar estos cambios?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Entrar ([AMOUNT] [CUR])
+		Entrar ([AMOUNT] L$)
 	</panel.string>
 	<panel.string name="group_join_free">
 		Gratis

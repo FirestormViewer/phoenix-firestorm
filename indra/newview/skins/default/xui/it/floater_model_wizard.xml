@@ -120,7 +120,7 @@
 				Impatto sul lotto o sulla regione: [EQUIV] prim equivalenti
 			</text>
 			<text name="review_fee">
-				All&apos;account verrà accreditata una tariffa di caricamento pari a [CUR] [FEE].
+				All&apos;account verrà accreditata una tariffa di caricamento pari a L$ [FEE].
 			</text>
 			<text name="review_confirmation">
 				Facendo clic sul pulsante Carica, confermi di possedere i diritti relativi ai materiali contenuti nel modello.
@@ -140,7 +140,7 @@
 			Puoi trovarlo nella cartella Oggetti nel tuo inventario.
 		</text>
 		<text name="charged_fee">
-			La somma di [CUR] [FEE] è stata addebitata sul tuo account.
+			La somma di L$ [FEE] è stata addebitata sul tuo account.
 		</text>
 	</panel>
 	<button label="&lt;&lt; Indietro" name="back"/>

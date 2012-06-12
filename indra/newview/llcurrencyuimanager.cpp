@@ -567,8 +567,6 @@ void LLCurrencyUIManager::buy(const std::string& buy_msg)
 	}
 
 	LLUIString msg = buy_msg;
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	msg.setArg("[CUR]", type_currency);
 	msg.setArg("[LINDENS]", llformat("%d", impl.mUserCurrencyBuy));
 	msg.setArg("[LOCALAMOUNT]", getLocalEstimate());
 	LLConfirmationManager::confirm(impl.mSiteConfirm,

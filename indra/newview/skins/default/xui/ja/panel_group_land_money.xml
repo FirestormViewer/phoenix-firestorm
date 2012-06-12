@@ -58,7 +58,7 @@
 			土地利用をサポートするための土地クレジットが足りません
 		</text>
 		<text name="group_money_heading">
-			グループの [CUR]
+			グループの L$
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

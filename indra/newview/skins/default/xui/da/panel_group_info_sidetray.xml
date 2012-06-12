@@ -7,7 +7,7 @@
 		Ønsker du at gemme disse ændringer?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Tilmeld ([CUR][AMOUNT])
+		Tilmeld (L$[AMOUNT])
 	</panel.string>
 	<panel.string name="group_join_free">
 		Gratis

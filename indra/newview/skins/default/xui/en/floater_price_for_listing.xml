@@ -49,7 +49,7 @@ The highest paid ads go to the top of the list, and appear higher in searches.
      name="price_symbol"
      top_delta="0"
      width="20">
-        [CUR]
+        L$
     </text>
     <line_editor
      follows="top|left"

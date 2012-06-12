@@ -13,11 +13,11 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[CUR] [AMT]
+		L$ [AMT]
 	</panel.string>
 	<panel left="-410" name="balance_bg" width="200">
-		<text name="balance" tool_tip="Atualizar saldo de [CUR]" value="[CUR]???"/>
-		<button label="Comprar [CUR]" name="buyL" tool_tip="Comprar mais [CUR]"/>
+		<text name="balance" tool_tip="Atualizar saldo de L$" value="L$???"/>
+		<button label="Comprar L$" name="buyL" tool_tip="Comprar mais L$"/>
 		<button label="Comprar" name="goShop" tool_tip="Abrir Mercado do Second Life" width="80"/>
 	</panel>
 	<text name="TimeText" tool_tip="Hora atual (Pacífico)">

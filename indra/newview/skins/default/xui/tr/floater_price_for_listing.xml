@@ -11,7 +11,7 @@ En çok ücret ödenen ilanlar listenin tepesinde yer alır ve aramalarda daha y
 		İlan Ücreti:
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="Tamam" name="set_price_btn"/>
 	<button label="İptal" name="cancel_btn"/>

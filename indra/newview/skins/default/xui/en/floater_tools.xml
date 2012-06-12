@@ -886,15 +886,15 @@
             </panel.string>
             <panel.string
              name="Cost Default">
-                Price: [CUR]
+                Price: L$
             </panel.string>
             <panel.string
              name="Cost Total">
-                Total Price: [CUR]
+                Total Price: L$
             </panel.string>
             <panel.string
              name="Cost Per Unit">
-                Price Per: [CUR]
+                Price Per: L$
             </panel.string>
             <panel.string
              name="Cost Mixed">
@@ -1179,7 +1179,7 @@
            value="1" />
       </combo_box>
 <!-- NEW PRICE SPINNER
-Objects are allowed to be for sale for [CUR]0 to invoke buy UI behavior
+Objects are allowed to be for sale for L$0 to invoke buy UI behavior
 even though the user gets a free copy.
 -->
     <spinner
@@ -1190,7 +1190,7 @@ even though the user gets a free copy.
         left="10"
         control_name="Edit Cost"
         name="Edit Cost"
-        label="Price: [CUR]"
+        label="Price: L$"
         label_width="65"
         width="165"
         min_val="0"
@@ -3366,7 +3366,7 @@ even though the user gets a free copy.
          name="label_area_price"
          top="48"
          width="150">
-            Price: [CUR][PRICE] for [AREA] m²
+            Price: L$[PRICE] for [AREA] m²
         </text>
         <text
          type="string"

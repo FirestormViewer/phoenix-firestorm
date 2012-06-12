@@ -12,7 +12,7 @@
 Propriétaire [OWNER]
 	</string>
 	<string name="Price">
-		[AMOUNT] [CUR]
+		[AMOUNT] L$
 	</string>
 	<string name="PriceFree">
 		Gratuit !
@@ -29,7 +29,7 @@ Propriétaire [OWNER]
 owner secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
 	</text>
 	<text name="price_text">
-		30 000 [CUR]
+		30 000 L$
 	</text>
 	<text name="object_description">
 		This is a really long description for an object being as how it is at least 80 characters in length and so but maybe more like 120 at this point. Who knows, really?

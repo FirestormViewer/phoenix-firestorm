@@ -77,10 +77,10 @@ Verkleinern Sie Ihre Auswahl.
 		Sie besitzen [BUYER] m² Land.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		[SELLER] [AMOUNT] [CUR] für das Land bezahlen
+		[SELLER] [AMOUNT] L$ für das Land bezahlen
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Kaufen Sie [AMOUNT] [CUR] für ca. [LOCAL_AMOUNT],
+		Kaufen Sie [AMOUNT] L$ für ca. [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Diese Parzelle ist [AMOUNT] m².
@@ -102,24 +102,24 @@ unterstützt [AMOUNT2] Objekte
 		Objekte nicht im Verkauf mit eingeschlossen
 	</floater.string>
 	<floater.string name="info_price_string">
-		[PRICE] [CUR]
-([PRICE_PER_SQM] [CUR]/m²)
+		[PRICE] L$
+([PRICE_PER_SQM] L$/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
 		Die Gruppe [GROUP] benötigt ausreichende gespendete Landnutzungsrechte, um die Parzelle abzudecken, bevor der Kauf abgeschlossen werden kann.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Sie haben [AMOUNT] [CUR], genug zum Kauf dieses Landes.
+		Sie haben [AMOUNT] L$, genug zum Kauf dieses Landes.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Sie haben nur [AMOUNT] [CUR], brauchen aber mindestens [AMOUNT2] [CUR].
+		Sie haben nur [AMOUNT] L$, brauchen aber mindestens [AMOUNT2] L$.
 	</floater.string>
 	<floater.string name="balance_left">
-		Nach dem Einkauf verbleiben Ihnen noch [AMOUNT] [CUR].
+		Nach dem Einkauf verbleiben Ihnen noch [AMOUNT] L$.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Für dieses Land müssen Sie mindestens [AMOUNT] [CUR] kaufen.
+		Für dieses Land müssen Sie mindestens [AMOUNT] L$ kaufen.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(keine Parzelle ausgewählt)
@@ -181,8 +181,8 @@ unterstützt [AMOUNT2] Objekte
 		Preis:
 	</text>
 	<text name="info_price">
-		1500 [CUR]
-(1,1 [CUR]/m²)
+		1500 L$
+(1,1 L$/m²)
 Objekte im Verkauf eingeschlossen
 	</text>
 	<text name="info_action">
@@ -211,13 +211,13 @@ Objekte im Verkauf eingeschlossen
 Diese Parzelle ist 512 m² gross.
 	</text>
 	<text name="purchase_action">
-		Joe Resident 4000 [CUR] für das Land bezahlen
+		Joe Resident 4000 L$ für das Land bezahlen
 	</text>
 	<text name="currency_reason">
-		Sie haben 2.100 [CUR].
+		Sie haben 2.100 L$.
 	</text>
 	<text name="currency_action">
-		Mehr [CUR] kaufen
+		Mehr L$ kaufen
 	</text>
 	<line_editor name="currency_amt">
 		1000
@@ -226,7 +226,7 @@ Diese Parzelle ist 512 m² gross.
 		für ca. [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Sie haben 2.100 [CUR].
+		Sie haben 2.100 L$.
 	</text>
 	<check_box label="[AMOUNT] m² Beitrag von der Gruppe entfernen." name="remove_contribution"/>
 	<button label="Kaufen" name="buy_btn"/>

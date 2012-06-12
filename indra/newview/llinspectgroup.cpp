@@ -41,7 +41,6 @@
 #include "lltooltip.h"	// positionViewNearMouse()
 #include "lltrans.h"
 #include "lluictrl.h"
-#include "llviewernetwork.h"
 
 class LLFetchGroupData;
 
@@ -268,13 +267,11 @@ void LLInspectGroup::processGroupData()
 			}
 			else
 			{
-				std::string type_currency = LLGridManager::getInstance()->getCurrency();
 				std::string amount =
 					LLResMgr::getInstance()->getMonetaryString(
 						data->mMembershipFee);
 				LLStringUtil::format_map_t args;
 				args["[AMOUNT]"] = amount;
-				args["[CUR]"] = type_currency;
 				cost = getString("CostToJoin", args);
 			}
 		}

@@ -225,7 +225,7 @@ Hover your mouse over the options for more help.
          height="23"
          increment="1"
          label_width="15"
-         label="[CUR]"
+         label="L$"
          layout="topleft"
          max_val="99999"
          left="30"

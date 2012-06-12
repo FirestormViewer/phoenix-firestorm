@@ -19,7 +19,7 @@
 		Contient :
 	</text>
 	<text name="buy_text">
-		Acheter pour [AMOUNT] [CUR] à :
+		Acheter pour [AMOUNT] L$ à :
 	</text>
 	<text name="buy_name_text">
 		[NAME] ?

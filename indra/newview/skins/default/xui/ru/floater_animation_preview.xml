@@ -178,6 +178,6 @@
 		Невозможно прочитать файл анимации.
 Рекомендуется использовать BVH-файлы, экспортированные из Poser 4.
 	</text>
-	<button label="Передать ([CUR][AMOUNT])" name="ok_btn"/>
+	<button label="Передать (L$[AMOUNT])" name="ok_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
 </floater>

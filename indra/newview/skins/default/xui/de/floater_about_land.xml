@@ -112,7 +112,7 @@
 				Nicht zu verkaufen
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Preis: [PRICE] [CUR] ([PRICE_PER_SQM][CUR]/m²)
+				Preis: [PRICE] L$ ([PRICE_PER_SQM]L$/m²)
 			</text>
 			<text name="SalePending"/>
 			<button label="Land verkaufen" label_selected="Land verkaufen..." name="Sell Land..."/>
@@ -348,7 +348,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<check_box label="Gruppe" name="check group scripts"/>
 			<check_box label="Sicher (kein Schaden)" name="check safe" tool_tip="Falls aktiviert, wird Land auf Option „Sicher“ eingestellt, Kampfschäden sind deaktiviert. Ansonsten sind Kampfschäden aktiviert."/>
 			<check_box label="Kein Stoßen" name="PushRestrictCheck" tool_tip="Verhindert Stoßen durch Skripte. Durch Aktivieren dieser Option verhindern Sie störendes Verhalten auf Ihrem Land."/>
-			<check_box label="Ort in Suche anzeigen (30 [CUR]/Woche)" name="ShowDirectoryCheck" tool_tip="Diese Parzelle in Suchergebnissen anzeigen."/>
+			<check_box label="Ort in Suche anzeigen (30 L$/Woche)" name="ShowDirectoryCheck" tool_tip="Diese Parzelle in Suchergebnissen anzeigen."/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="Alle Kategorien" name="item0"/>
 				<combo_box.item label="Lindenort" name="item1"/>
@@ -476,7 +476,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				<combo_box.item label="Jeden" name="Anyone"/>
 				<combo_box.item label="Gruppe" name="Group"/>
 			</combo_box>
-			<spinner label="Preis in [CUR]:" name="PriceSpin"/>
+			<spinner label="Preis in L$:" name="PriceSpin"/>
 			<spinner label="Online-Zeit:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Immer erlauben" name="AllowedText">

@@ -39,7 +39,6 @@
 #include "llsliderctrl.h"
 #include "lltoolmgr.h"
 #include "llviewerwindow.h"
-#include "llviewernetwork.h"
 
 LLFloaterModelWizard* LLFloaterModelWizard::sInstance = NULL;
 
@@ -500,11 +499,8 @@ void LLFloaterModelWizard::onModelPhysicsFeeReceived(const LLSD& result, std::st
 	mUploadModelUrl = upload_url;
 
 	S32 fee = result["upload_price"].asInteger();
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	childSetTextArg("review_fee", "[FEE]", llformat("%d", fee));
-	childSetTextArg("review_fee", "[CUR]", type_currency);
 	childSetTextArg("charged_fee", "[FEE]", llformat("%d", fee));
-	childSetTextArg("charged_fee", "[CUR]", type_currency);
 
 	setState(REVIEW);
 }

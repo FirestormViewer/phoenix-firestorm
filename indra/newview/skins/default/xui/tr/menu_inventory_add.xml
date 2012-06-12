@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="menu_inventory_add">
 	<menu label="Karşıya Yükle" name="upload">
-		<menu_item_call label="Görüntü ([CUR][COST])..." name="Upload Image"/>
-		<menu_item_call label="Ses ([CUR][COST])..." name="Upload Sound"/>
-		<menu_item_call label="Animasyon ([CUR][COST])..." name="Upload Animation"/>
+		<menu_item_call label="Görüntü (L$[COST])..." name="Upload Image"/>
+		<menu_item_call label="Ses (L$[COST])..." name="Upload Sound"/>
+		<menu_item_call label="Animasyon (L$[COST])..." name="Upload Animation"/>
 		<menu_item_call label="Model..." name="Upload Model"/>
 		<menu_item_call label="Model Sihirbazı..." name="Upload Model Wizard"/>
-		<menu_item_call label="Toplu (dosya başına [CUR][COST])..." name="Bulk Upload"/>
+		<menu_item_call label="Toplu (dosya başına L$[COST])..." name="Bulk Upload"/>
 		<menu_item_call label="Varsayılan Karşıya Yükleme İzinlerini Ayarla" name="perm prefs"/>
 	</menu>
 	<menu_item_call label="Yeni Klasör" name="New Folder"/>

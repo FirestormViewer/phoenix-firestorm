@@ -154,13 +154,13 @@
 				İzinleri ayarlamak için tüm nesneyi seçmelisiniz
 			</panel.string>
 			<panel.string name="Cost Default">
-				Fiyat: [CUR]
+				Fiyat: L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				Toplam Fiyat: [CUR]
+				Toplam Fiyat: L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Birim Fiyatı: [CUR]
+				Birim Fiyatı: L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Karma Fiyat
@@ -204,7 +204,7 @@
 				<combo_box.item label="İçerik" name="Contents"/>
 				<combo_box.item label="Orijinal" name="Original"/>
 			</combo_box>
-			<spinner label="Fiyat: [CUR]" name="Edit Cost"/>
+			<spinner label="Fiyat: L$" name="Edit Cost"/>
 			<check_box label="Aramada göster" name="search_check" tool_tip="Kişiler arama sonuçlarında bu nesneyi görebilsin"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -490,7 +490,7 @@
 			Parsel Bilgisi
 		</text>
 		<text name="label_area_price">
-			Fiyat: [AREA] m² için [CUR][PRICE]
+			Fiyat: [AREA] m² için L$[PRICE]
 		</text>
 		<text name="label_area">
 			Alan: [AREA] m²

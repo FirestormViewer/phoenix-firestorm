@@ -54,7 +54,7 @@
 		([AMOUNT] max.)
 	</text>
 	<text name="group_money_heading" width="120">
-		Gruppen-[CUR]
+		Gruppen-L$
 	</text>
 	<icon image_name="Parcel_Exp_Color" left="100" name="group_over_limit_icon"/>
 	<text name="group_over_limit_text">

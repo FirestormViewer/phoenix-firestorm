@@ -77,10 +77,10 @@
 		あなたは、[BUYER] 平方メートルの土地を所有しています。
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		この土地の代金として、[SELLER]に[CUR][AMOUNT]を支払う
+		この土地の代金として、[SELLER]にL$[AMOUNT]を支払う
 	</floater.string>
 	<floater.string name="buy_for_US">
-		[CUR] [AMOUNT] を、約 [LOCAL_AMOUNT] で購入します。
+		L$ [AMOUNT] を、約 [LOCAL_AMOUNT] で購入します。
 	</floater.string>
 	<floater.string name="parcel_meters">
 		この区画は [AMOUNT] 平方メートルです。
@@ -102,24 +102,24 @@
 		オブジェクトは含まれていません
 	</floater.string>
 	<floater.string name="info_price_string">
-		[CUR] [PRICE]
-（[CUR][PRICE_PER_SQM]/平方メートル）
+		L$ [PRICE]
+（L$[PRICE_PER_SQM]/平方メートル）
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
 		この [GROUP] が区画の購入手続きを完了するには、 価格に見合うだけの寄付された土地の利用実績が必要です
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		あなたの所持する [CUR] [AMOUNT]で、この土地を購入できます
+		あなたの所持する L$ [AMOUNT]で、この土地を購入できます
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		あなたの所持金は [CUR] [AMOUNT]だけで、あと[CUR] [AMOUNT2] 必要です
+		あなたの所持金は L$ [AMOUNT]だけで、あとL$ [AMOUNT2] 必要です
 	</floater.string>
 	<floater.string name="balance_left">
-		購入後、あなたの残額は[CUR][AMOUNT]になります
+		購入後、あなたの残額はL$[AMOUNT]になります
 	</floater.string>
 	<floater.string name="balance_needed">
-		この土地を買うには、少なくとも [CUR] [AMOUNT] を購入する必要があります
+		この土地を買うには、少なくとも L$ [AMOUNT] を購入する必要があります
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(区画が選定されていません)
@@ -181,8 +181,8 @@
 		価格：
 	</text>
 	<text name="info_price">
-		[CUR] 1500
-([CUR] 1.1/平方メートル)
+		L$ 1500
+(L$ 1.1/平方メートル)
 オブジェクトも土地販売価格に含まれます
 	</text>
 	<text name="info_action">
@@ -211,13 +211,13 @@
 この区画の大きさは、512 平方メートルです。
 	</text>
 	<text name="purchase_action">
-		Joe Residentに[CUR]4000支払って土地を購入
+		Joe ResidentにL$4000支払って土地を購入
 	</text>
 	<text name="currency_reason">
-		所持金は [CUR]2,100です。
+		所持金は L$2,100です。
 	</text>
 	<text name="currency_action">
-		追加で[CUR]の購入
+		追加でL$の購入
 	</text>
 	<line_editor name="currency_amt">
 		1000
@@ -226,7 +226,7 @@
 		約 [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		所持金は [CUR]2,100です。
+		所持金は L$2,100です。
 	</text>
 	<check_box label="グループから [AMOUNT] 平方メートルの貢献を取り除きます。" name="remove_contribution"/>
 	<button label="購入" name="buy_btn"/>

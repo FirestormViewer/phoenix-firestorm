@@ -38,7 +38,7 @@
 				Faturalanabilir Çarpan:
 			</text>
 			<text name="land cost text">
-				m² başına [CUR]:
+				m² başına L$:
 			</text>
 			<button label="Yenile" label_selected="Yenile" name="Refresh" tool_tip="Yukarıdaki bilgileri yenilemek için buraya tıklayın"/>
 			<button label="Uygula" label_selected="Uygula" name="Apply" tool_tip="Yukarıdaki herhangi bir değişikliği uygulamak için buraya tıklayın"/>

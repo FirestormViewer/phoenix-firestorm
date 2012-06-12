@@ -29,5 +29,5 @@ Prova a salvare in formato targa (.tga) a 24 bit.
 	</text>
 	<check_box label="Usa compressione ottimizzata" name="lossless_check"/>
 	<button label="Annulla" name="cancel_btn"/>
-	<button label="Carica ([AMOUNT] [CUR])" name="ok_btn"/>
+	<button label="Carica ([AMOUNT] L$)" name="ok_btn"/>
 </floater>

@@ -12,7 +12,7 @@
 Owner [OWNER]
 	</string>
 	<string name="Price">
-		[CUR][AMOUNT]
+		L$[AMOUNT]
 	</string>
 	<string name="PriceFree">
 		Free!
@@ -28,7 +28,7 @@ Owner [OWNER]
 owner secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
 	</text>
 	<text name="price_text">
-		[CUR]30,000
+		L$30,000
 	</text>
 	<icon name="secure_browsing" tool_tip="Secure Browsing"/>
 	<text name="object_media_url">

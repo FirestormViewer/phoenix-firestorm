@@ -19,7 +19,7 @@
 		i jej zawartość:
 	</text>
 	<text name="buy_text">
-		Kup za [AMOUNT][CUR] od:
+		Kup za [AMOUNT]L$ od:
 	</text>
 	<button label="Kup" label_selected="Kup" name="buy_btn"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>

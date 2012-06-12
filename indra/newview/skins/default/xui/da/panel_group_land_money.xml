@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Land &amp; penge" name="land_money_tab">
+<panel label="Land &amp; L$" name="land_money_tab">
 	<panel.string name="help_text">
 		En advarsel vises indtil Total land i brug er mindre end eller lig med det totale bidrag.
 	</panel.string>
@@ -58,7 +58,7 @@
 			Der kræves flere penge for at supportere det land der er i brug
 		</text>
 		<text name="group_money_heading">
-			Gruppe [CUR]
+			Gruppe L$
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

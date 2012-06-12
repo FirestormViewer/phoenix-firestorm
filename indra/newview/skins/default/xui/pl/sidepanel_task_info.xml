@@ -22,13 +22,13 @@
 		Ten obiekt ma części zgrupowane
 	</panel.string>
 	<panel.string name="Cost Default">
-		Cena: [CUR]
+		Cena: L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		Cena całkowita: [CUR]
+		Cena całkowita: L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		Cena za jedn.: [CUR]
+		Cena za jedn.: L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		Cena mieszana
@@ -93,7 +93,7 @@
 			<combo_box.item label="Zawartość" name="Contents"/>
 			<combo_box.item label="Oryginał" name="Original"/>
 		</combo_box>
-		<spinner label="Cena: [CUR]" name="Edit Cost"/>
+		<spinner label="Cena: L$" name="Edit Cost"/>
 		<check_box label="Pokaż w wyszukiwarce" name="search_check" tool_tip="Udostępnij widzialność tego obiektu w wyszukiwarce"/>
 	</panel>
 	<panel name="button_panel">

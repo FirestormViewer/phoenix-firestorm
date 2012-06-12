@@ -176,11 +176,11 @@
 			<menu_item_call label="Параметры сетки" name="Grid Options"/>
 		</menu>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение ([CUR][COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук ([CUR][COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация ([CUR][COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу ([CUR][COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>

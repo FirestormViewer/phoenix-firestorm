@@ -25,7 +25,7 @@
     <check_box
      control_name="NotifyMoneyChange"
      height="16"
-     label="When I spend or get [CUR]"
+     label="When I spend or get L$"
      layout="topleft"
      left="10"
      name="notify_money_change_checkbox"
@@ -39,7 +39,7 @@
      height="18"
      control_name="FSPaymentInfoInChat"
      name="FSPaymentInfoInChat"
-     label="Show [CUR] transactions in nearby chat instead of toasts"/>
+     label="Show L$ transactions in nearby chat instead of toasts"/>
 
     <check_box
      control_name="FSLandmarkCreatedNotification"

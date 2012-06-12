@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy currency" title="KUP [CUR]">
+<floater name="buy currency" title="KUP L$">
 	<floater.string name="buy_currency">
-		Kup [LINDENS] [CUR] za [LOCALAMOUNT]
+		Kup [LINDENS] L$ za [LOCALAMOUNT]
 	</floater.string>
 	<text name="info_need_more">
-		Potrzebujesz więcej [CUR]
+		Potrzebujesz więcej L$
 	</text>
 	<text name="contacting">
 		Kontaktowanie z LindeX...
 	</text>
 	<text name="info_buying">
-		Kup [CUR]
+		Kup L$
 	</text>
 	<text name="balance_label">
 		Obecnie posiadam
 	</text>
 	<text name="balance_amount">
-		[AMT][CUR]
+		[AMT]L$
 	</text>
 	<text name="currency_action">
 		Chcę kupić
@@ -34,7 +34,7 @@
 		Mój nowy stan konta
 	</text>
 	<text name="total_amount">
-		[AMT][CUR]
+		[AMT]L$
 	</text>
 	<text name="currency_links">
 		[http://www.secondlife.com/my/account/payment_method_management.php metoda płatności] | [http://www.secondlife.com/my/account/currency.php waluta]
@@ -43,10 +43,10 @@
 		Wpisz ponownie kwotę aby zobaczyć ostatni kurs wymiany.
 	</text>
 	<text name="purchase_warning_repurchase">
-		Potwierdzasz zakup [CUR], nie obiektu.
+		Potwierdzasz zakup L$, nie obiektu.
 	</text>
 	<text name="purchase_warning_notenough">
-		Nie zakupiono wystarczającej ilości [CUR]. Proszę zwiększyć kwotę.
+		Nie zakupiono wystarczającej ilości L$. Proszę zwiększyć kwotę.
 	</text>
 	<button label="Kup teraz" name="buy_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>

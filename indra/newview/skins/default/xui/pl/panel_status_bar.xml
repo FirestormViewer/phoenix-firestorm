@@ -15,11 +15,11 @@
 		[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[AMT] [CUR]
+		[AMT] L$
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo [CUR]"/>
-		<button label="KUP [CUR]" name="buyL" tool_tip="Kliknij aby kupić więcej [CUR]"/>
+		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo L$"/>
+		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>

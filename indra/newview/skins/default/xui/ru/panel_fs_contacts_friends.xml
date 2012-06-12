@@ -117,7 +117,7 @@
 	 height="22"
 	 label="Платить..."
 	 name="pay_btn"
-	 tool_tip="Give Linden dollars ([CUR]) to this friend"
+	 tool_tip="Give Linden dollars (L$) to this friend"
 	 width="80" />
 	<button
 	 top_pad="3"

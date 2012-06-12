@@ -11,7 +11,7 @@ Los anuncios mejor pagados van al principio de la lista, y aparecen más arriba 
 		Precio por el anuncio:
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="Aceptar" name="set_price_btn"/>
 	<button label="Cancelar" name="cancel_btn"/>

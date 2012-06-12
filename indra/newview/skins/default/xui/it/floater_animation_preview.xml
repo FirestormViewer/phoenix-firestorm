@@ -182,6 +182,6 @@ La lunghezza massima è [MAX_LENGTH] secondi.
 Raccomandiamo file di tipo BVH esportati da
 Poser 4.
 	</text>
-	<button label="Importa ([AMOUNT][CUR])" name="ok_btn"/>
+	<button label="Importa ([AMOUNT]L$)" name="ok_btn"/>
 	<button label="Annulla" name="cancel_btn"/>
 </floater>

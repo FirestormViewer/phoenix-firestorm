@@ -52,7 +52,6 @@
 #include "llviewercontrol.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerregion.h"
-#include "llviewernetwork.h"
 // [RLVa:KB] - Checked: 2010-09-02 (RLVa-1.2.1b)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -544,9 +543,7 @@ void LLPanelPlaceProfile::displaySelectedParcelInfo(LLParcel* parcel,
 
 		mForSalePanel->setVisible(for_sale);
 
-		//const U8* sign = (U8*)getString("price_text").c_str();
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
-		const U8* sign = (U8*)type_currency.c_str();
+		const U8* sign = (U8*)getString("price_text").c_str();
 		const U8* sqm = (U8*)getString("area_text").c_str();
 
 		mSalesPriceText->setText(llformat("%s%d ", sign, parcel->getSalePrice()));
@@ -636,10 +633,8 @@ void LLPanelPlaceProfile::onForSaleBannerClick()
 
 			if(price - gStatusBar->getBalance() > 0)
 			{
-				std::string type_currency = LLGridManager::getInstance()->getCurrency();
 				LLStringUtil::format_map_t args;
 				args["AMOUNT"] = llformat("%d", price);
-				args["CUR"] = type_currency;
 				LLBuyCurrencyHTML::openCurrencyFloater( LLTrans::getString("buying_selected_land", args), price );
 			}
 			else

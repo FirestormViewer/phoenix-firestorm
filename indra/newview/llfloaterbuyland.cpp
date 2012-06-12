@@ -1018,7 +1018,6 @@ void LLFloaterBuyLandUI::onVisibilityChange ( const LLSD& new_visibility )
 
 void LLFloaterBuyLandUI::refreshUI()
 {
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	// section zero: title area
 	{
 		LLTextureCtrl* snapshot = getChild<LLTextureCtrl>("info_image");
@@ -1047,7 +1046,6 @@ void LLFloaterBuyLandUI::refreshUI()
 			LLStringUtil::format_map_t info_price_args;
 			info_price_args["[PRICE]"] = llformat("%d", mParcelPrice);
 			info_price_args["[PRICE_PER_SQM]"] = llformat("%.1f", cost_per_sqm);
-			info_price_args["[CUR]"] = type_currency;
 			if (mParcelSoldWithObjects)
 			{
 				info_price_args["[SOLD_WITH_OBJECTS]"] = getString("sold_with_objects");
@@ -1237,7 +1235,6 @@ void LLFloaterBuyLandUI::refreshUI()
 		LLStringUtil::format_map_t string_args;
 		string_args["[AMOUNT]"] = llformat("%d", mParcelPrice);
 		string_args["[SELLER]"] = mParcelSellerName;
-		string_args["[CUR]"] = type_currency;
 		getChild<LLUICtrl>("purchase_action")->setValue(getString("pay_to_for_land", string_args));
 		getChildView("purchase_action")->setVisible( mParcelValid);
 		
@@ -1247,7 +1244,6 @@ void LLFloaterBuyLandUI::refreshUI()
 		{
 			LLStringUtil::format_map_t string_args;
 			string_args["[AMOUNT]"] = llformat("%d", mAgentCashBalance);
-			string_args["[CUR]"] = type_currency;
 
 			getChild<LLUICtrl>("currency_reason")->setValue(getString("have_enough_lindens", string_args));
 		}
@@ -1256,7 +1252,6 @@ void LLFloaterBuyLandUI::refreshUI()
 			LLStringUtil::format_map_t string_args;
 			string_args["[AMOUNT]"] = llformat("%d", mAgentCashBalance);
 			string_args["[AMOUNT2]"] = llformat("%d", mParcelPrice - mAgentCashBalance);
-			string_args["[CUR]"] = type_currency;
 			
 			getChild<LLUICtrl>("currency_reason")->setValue(getString("not_enough_lindens", string_args));
 
@@ -1267,7 +1262,6 @@ void LLFloaterBuyLandUI::refreshUI()
 		{
 			LLStringUtil::format_map_t string_args;
 			string_args["[AMOUNT]"] = llformat("%d", finalBalance);
-			string_args["[CUR]"] = type_currency;
 
 			getChild<LLUICtrl>("currency_balance")->setValue(getString("balance_left", string_args));
 
@@ -1276,13 +1270,11 @@ void LLFloaterBuyLandUI::refreshUI()
 		{
 			LLStringUtil::format_map_t string_args;
 			string_args["[AMOUNT]"] = llformat("%d", mParcelPrice - mAgentCashBalance);
-			string_args["[CUR]"] = type_currency;
 	
 			getChild<LLUICtrl>("currency_balance")->setValue(getString("balance_needed", string_args));
 			
 		}
 
-		getChild<LLUICtrl>("currency_action")->setTextArg("[CUR]", type_currency);
 		getChild<LLUICtrl>("remove_contribution")->setValue(LLSD(groupContributionEnough));
 		getChildView("remove_contribution")->setEnabled(groupContributionEnough);
 		bool showRemoveContribution = mParcelIsGroupLand
@@ -1320,7 +1312,6 @@ void LLFloaterBuyLandUI::startBuyPreConfirm()
 {
 	std::string action;
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	if (mSiteMembershipUpgrade)
 	{
 		action += mSiteMembershipAction;
@@ -1344,7 +1335,6 @@ void LLFloaterBuyLandUI::startBuyPreConfirm()
 		LLStringUtil::format_map_t string_args;
 		string_args["[AMOUNT]"] = llformat("%d", mCurrency.getAmount());
 		string_args["[LOCAL_AMOUNT]"] = mCurrency.getLocalEstimate();
-		string_args["[CUR]"] = type_currency;
 		
 		action += getString("buy_for_US", string_args);
 	}
@@ -1352,7 +1342,6 @@ void LLFloaterBuyLandUI::startBuyPreConfirm()
 	LLStringUtil::format_map_t string_args;
 	string_args["[AMOUNT]"] = llformat("%d", mParcelPrice);
 	string_args["[SELLER]"] = mParcelSellerName;
-	string_args["[CUR]"] = type_currency;
 	action += getString("pay_to_for_land", string_args);
 		
 	

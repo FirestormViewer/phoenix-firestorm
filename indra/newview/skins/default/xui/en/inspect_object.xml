@@ -21,7 +21,7 @@
 By [CREATOR]
 Owner [OWNER]
   </string>
-  <string name="Price">[CUR][AMOUNT]</string>
+  <string name="Price">L$[AMOUNT]</string>
   <string name="PriceFree">Free!</string>
   <string name="Touch">Touch</string>
   <string name="Sit">Sit</string>
@@ -60,7 +60,7 @@ owner secondlife:///app/agent/0e346d8b-4433-4d66-a6b0-fd37083abc4c/about
    top="60"
    font_shadow="none"
    width="60">
-[CUR]30,000
+L$30,000
   </text>
   <text
    clip_partial="true"

@@ -24,13 +24,13 @@
 				Preis eingeben
 			</text>
 			<text name="price_ld">
-				[CUR]
+				L$
 			</text>
 			<line_editor name="price">
 				0
 			</line_editor>
 			<text name="price_per_m">
-				([PER_METER] [CUR] pro m²)
+				([PER_METER] L$ pro m²)
 			</text>
 			<text name="sell_to_label">
 				2. Land verkaufen an:

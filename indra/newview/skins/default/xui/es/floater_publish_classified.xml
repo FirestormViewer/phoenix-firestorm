@@ -5,8 +5,8 @@
         
 Recuerda, no se reembolsarán las cantidades abonadas por clasificados.
 	</text>
-	<spinner label="Precio: [CUR]" name="price_for_listing" tool_tip="Precio por publicarlo." value="50" top_pad="30"/>
-	<text name="l$_text" value="[CUR]"/>
+	<spinner label="Precio: L$" name="price_for_listing" tool_tip="Precio por publicarlo." value="50" top_pad="30"/>
+	<text name="l$_text" value="L$"/>
 	<text name="more_info_text">
 		Más información (enlace a ayuda de clasificados)
 	</text>

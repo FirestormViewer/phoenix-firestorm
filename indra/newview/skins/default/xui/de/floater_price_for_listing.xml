@@ -11,7 +11,7 @@ Die Anzeigen, für die am meisten bezahlt wird, werden am Anfang der Liste angez
 		Anzeigenpreis:
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="OK" name="set_price_btn"/>
 	<button label="Abbrechen" name="cancel_btn"/>

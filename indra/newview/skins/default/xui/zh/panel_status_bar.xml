@@ -13,11 +13,11 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[CUR] [AMT]
+		L$ [AMT]
 	</panel.string>
 	<panel name="balance_bg">
-		<text name="balance" tool_tip="點擊以重新更新你的 [CUR] 帳戶餘額" value="[CUR]???"/>
-		<button label="購買 [CUR]" name="buyL" tool_tip="點擊以購買更多 [CUR]"/>
+		<text name="balance" tool_tip="點擊以重新更新你的 L$ 帳戶餘額" value="L$???"/>
+		<button label="購買 L$" name="buyL" tool_tip="點擊以購買更多 L$"/>
 	</panel>
 	<text name="TimeText" tool_tip="目前時區（太平洋）">
 		24:00 AM PST

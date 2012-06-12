@@ -77,10 +77,10 @@ Daha küçük bir alan seçmeyi deneyin.
 		Elinizde [BUYER] m² arazi var.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Bu arazi için [SELLER]&apos;e [CUR][AMOUNT] ödeyin
+		Bu arazi için [SELLER]&apos;e L$[AMOUNT] ödeyin
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Yaklaşık [LOCAL_AMOUNT] için [CUR][AMOUNT] satın al,
+		Yaklaşık [LOCAL_AMOUNT] için L$[AMOUNT] satın al,
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Bu parsel [AMOUNT] m²
@@ -102,24 +102,24 @@ Daha küçük bir alan seçmeyi deneyin.
 		nesneler dahil değildir
 	</floater.string>
 	<floater.string name="info_price_string">
-		[CUR][PRICE]
-([CUR] [PRICE_PER_SQM]/m²)
+		L$[PRICE]
+(L$ [PRICE_PER_SQM]/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
 		[GROUP] grubu, satın almanın gerçekleşmesi için bu parselin fiyatını karşılamak amacıyla yeterli miktarda arazi kullanım kredisine ihtiyaç duyacaktır.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		[CUR] [AMOUNT] sahibisiniz, bu da bu araziyi almaya yeter.
+		L$ [AMOUNT] sahibisiniz, bu da bu araziyi almaya yeter.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Sadece [CUR] [AMOUNT] sahibisiniz, [CUR] [AMOUNT2]  kadar daha ihtiyacınız var.
+		Sadece L$ [AMOUNT] sahibisiniz, L$ [AMOUNT2]  kadar daha ihtiyacınız var.
 	</floater.string>
 	<floater.string name="balance_left">
-		Satın alımdan sonra elinizde [CUR] [AMOUNT] kalacak.
+		Satın alımdan sonra elinizde L$ [AMOUNT] kalacak.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Bu araziyi alabilmek için en az [CUR] [AMOUNT] almanız gerekir.
+		Bu araziyi alabilmek için en az L$ [AMOUNT] almanız gerekir.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(seçili parsel yok)
@@ -180,8 +180,8 @@ Daha küçük bir alan seçmeyi deneyin.
 		Fiyat:
 	</text>
 	<text name="info_price">
-		[CUR] 1500
-([CUR] 1,1/m²)
+		L$ 1500
+(L$ 1,1/m²)
 nesnelerle satılır
 	</text>
 	<text name="info_action">
@@ -210,13 +210,13 @@ nesnelerle satılır
 Bu parsel 512 m² arazidir.
 	</text>
 	<text name="purchase_action">
-		Arazi için Joe Sakine [CUR] 4000 ödeme yap
+		Arazi için Joe Sakine L$ 4000 ödeme yap
 	</text>
 	<text name="currency_reason">
-		[CUR] 2.100&apos;ünüz var.
+		L$ 2.100&apos;ünüz var.
 	</text>
 	<text name="currency_action">
-		İlave [CUR] satın al
+		İlave L$ satın al
 	</text>
 	<line_editor name="currency_amt">
 		1000
@@ -225,7 +225,7 @@ Bu parsel 512 m² arazidir.
 		yaklaşık [LOCAL_AMOUNT] için
 	</text>
 	<text name="currency_balance">
-		[CUR] 2.100&apos;ünüz var.
+		L$ 2.100&apos;ünüz var.
 	</text>
 	<check_box label="[AMOUNT] m² katkıyı gruptan kaldır." name="remove_contribution"/>
 	<button label="Satın Al" name="buy_btn"/>

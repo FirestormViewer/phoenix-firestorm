@@ -510,7 +510,7 @@ Add this ability to &apos;[ROLE_NAME]&apos;?
    icon="alertmodal.tga"
    name="JoinGroupCanAfford"
    type="alertmodal">
-Joining this group costs [CUR][COST].
+Joining this group costs L$[COST].
 Do you wish to proceed?
     <tag>confirm</tag>
     <tag>funds</tag>
@@ -540,8 +540,8 @@ Do you wish to proceed?
    icon="alertmodal.tga"
    name="JoinGroupCannotAfford"
    type="alertmodal">
-Joining this group costs [CUR][COST].
-You do not have enough [CUR] to join this group.
+Joining this group costs L$[COST].
+You do not have enough L$ to join this group.
     <tag>group</tag>
     <tag>fail</tag>
     <tag>funds</tag>
@@ -551,7 +551,7 @@ You do not have enough [CUR] to join this group.
    icon="alertmodal.tga"
    name="CreateGroupCost"
    type="alertmodal">
-Creating this group will cost [CUR]100.
+Creating this group will cost L$100.
 Groups need more than one member, or they are deleted forever.
 Please invite members within 48 hours.
     <tag>group</tag>
@@ -560,7 +560,7 @@ Please invite members within 48 hours.
      canceltext="Cancel"
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="Create group for [CUR]100"/>
+     yestext="Create group for L$100"/>
   </notification>
 
   <notification
@@ -568,7 +568,7 @@ Please invite members within 48 hours.
    name="LandBuyPass"
    type="alertmodal">
    <tag>fail</tag>
-For [CUR][COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hours.  Buy a pass?
+For L$[COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hours.  Buy a pass?
     <tag>funds</tag>
     <tag>confirm</tag>
     <usetemplate
@@ -581,8 +581,8 @@ For [CUR][COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] h
    icon="alertmodal.tga"
    name="SalePriceRestriction"
    type="alertmodal">
-Sale price must be set to more than [CUR]0 if selling to anyone.
-Please select an individual to sell to if selling for [CUR]0.
+Sale price must be set to more than L$0 if selling to anyone.
+Please select an individual to sell to if selling for L$0.
   <tag>fail</tag>
   </notification>
 
@@ -592,7 +592,7 @@ Please select an individual to sell to if selling for [CUR]0.
    priority="high"
    type="alertmodal">
 The selected [LAND_SIZE] m² land is being set for sale.
-Your selling price will be [CUR][SALE_PRICE] and will be authorized for sale to [NAME].
+Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
@@ -607,7 +607,7 @@ Your selling price will be [CUR][SALE_PRICE] and will be authorized for sale to 
 ATTENTION: Clicking &apos;Sell to anyone&apos; makes your land available to the entire [CURRENT_GRID] community, even those not in this region.
 
 The selected [LAND_SIZE] m² land is being set for sale.
-Your selling price will be [CUR][SALE_PRICE] and will be authorized for sale to [NAME].
+Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
@@ -1501,7 +1501,7 @@ Please move all objects to be acquired onto the same region.
    type="alertmodal">
 [EXTRA]
 
-Go to [_URL] for information on purchasing [CUR]?
+Go to [_URL] for information on purchasing L$?
     <tag>confirm</tag>
     <url option="0" name="url">
 
@@ -2213,7 +2213,7 @@ Select an entire parcel, or divide your parcel first.
    name="ReleaseLandWarning"
    type="alertmodal">
 You are about to release [AREA] m² of land.
-Releasing this parcel will remove it from your land holdings, but will not grant any [CUR].
+Releasing this parcel will remove it from your land holdings, but will not grant any L$.
 
 Release this land?
     <tag>confirm</tag>
@@ -2587,7 +2587,7 @@ You must specify a name for your classified.
    icon="alertmodal.tga"
    name="MinClassifiedPrice"
    type="alertmodal">
-Price to pay for listing must be at least [CUR][MIN_PRICE].
+Price to pay for listing must be at least L$[MIN_PRICE].
 
 Please enter a higher price.
   <tag>fail</tag>
@@ -2992,7 +2992,7 @@ Would you like to trust this authority?
    icon="alertmodal.tga"
    name="NotEnoughCurrency"
    type="alertmodal">
-[NAME] [CUR] [PRICE] You do not have enough [CUR] to do that.
+[NAME] L$ [PRICE] You do not have enough L$ to do that.
   <tag>fail</tag>
   <tag>funds</tag>
   </notification>
@@ -3419,7 +3419,7 @@ We must restart [APP_NAME] to install the update.
    name="DeedObjectToGroup"
    type="alertmodal">
 Deeding this object will cause the group to:
-* Receive [CUR] paid into the object
+* Receive L$ paid into the object
     <tag>group</tag>
     <tag>confirm</tag>
     <usetemplate
@@ -4058,7 +4058,7 @@ Proceed?
    type="alert">
 You are about to change the access list for a Linden owned estate (mainland, teen grid, orientation, etc.).
 
-This is DANGEROUS and should only be done to invoke the hack allowing objects/[CUR] to be transferred in/out of a grid.
+This is DANGEROUS and should only be done to invoke the hack allowing objects/L$ to be transferred in/out of a grid.
 It will change thousands of regions and make the spaceserver hiccup.
     <tag>confirm</tag>
     <usetemplate
@@ -4507,7 +4507,7 @@ Asset ID for notecard is missing from database.
    type="alert">
 Remember: Classified ad fees are non-refundable.
 
-Publish this classified now for [CUR][AMOUNT]?
+Publish this classified now for L$[AMOUNT]?
     <tag>confirm</tag>
   <tag>funds</tag>
     <usetemplate
@@ -4632,7 +4632,7 @@ Please select only one object and try again.
    icon="alertmodal.tga"
    name="BuyOriginal"
    type="alertmodal">
-Buy original object from [OWNER] for [CUR][PRICE]?
+Buy original object from [OWNER] for L$[PRICE]?
 You will become the owner of this object.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -4650,7 +4650,7 @@ You will be able to:
    icon="alertmodal.tga"
    name="BuyOriginalNoOwner"
    type="alertmodal">
-Buy original object for [CUR][PRICE]?
+Buy original object for L$[PRICE]?
 You will become the owner of this object.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -4668,7 +4668,7 @@ You will be able to:
    icon="alertmodal.tga"
    name="BuyCopy"
    type="alertmodal">
-Buy a copy from [OWNER] for [CUR][PRICE]?
+Buy a copy from [OWNER] for L$[PRICE]?
 The object will be copied to your inventory.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -4686,7 +4686,7 @@ You will be able to:
    icon="alertmodal.tga"
    name="BuyCopyNoOwner"
    type="alertmodal">
-Buy a copy for [CUR][PRICE]?
+Buy a copy for L$[PRICE]?
 The object will be copied to your inventory.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -4704,7 +4704,7 @@ You will be able to:
    icon="alertmodal.tga"
    name="BuyContents"
    type="alertmodal">
-Buy contents from [OWNER] for [CUR][PRICE]?
+Buy contents from [OWNER] for L$[PRICE]?
 They will be copied to your inventory.
   <tag>confirm</tag>
   <tag>funds</tag>
@@ -4718,7 +4718,7 @@ They will be copied to your inventory.
    icon="alertmodal.tga"
    name="BuyContentsNoOwner"
    type="alertmodal">
-Buy contents for [CUR][PRICE]?
+Buy contents for L$[PRICE]?
 They will be copied to your inventory.
   <tag>confirm</tag>
   <tag>funds</tag>
@@ -5269,7 +5269,7 @@ You cannot buy an object while it is attached.
    label="About Requests for the Debit Permission"
    name="DebitPermissionDetails"
    type="alertmodal">
-Granting this request gives a script ongoing permission to take Linden dollars ([CUR]) from your account. To revoke this permission, the object owner must delete the object or reset the scripts in the object.
+Granting this request gives a script ongoing permission to take Linden dollars (L$) from your account. To revoke this permission, the object owner must delete the object or reset the scripts in the object.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -5574,7 +5574,7 @@ Uploading in-world and web site snapshots.
    name="UploadPayment"
    persist="true"
    type="notify">
-You paid [CUR][AMOUNT] to upload.
+You paid L$[AMOUNT] to upload.
 <tag>funds</tag>
   </notification>
 
@@ -6792,8 +6792,8 @@ Grant this request?
    persist="true"
    type="notify">
    <tag>win</tag>
-You just received [CUR][AMOUNT].
-Your [CUR] balance is shown in the upper-right.
+You just received L$[AMOUNT].
+Your L$ balance is shown in the upper-right.
   </notification>
 
   <notification
@@ -6801,8 +6801,8 @@ Your [CUR] balance is shown in the upper-right.
    name="FirstBalanceDecrease"
    persist="true"
    type="notify">
-You just paid [CUR][AMOUNT].
-Your [CUR] balance is shown in the upper-right.
+You just paid L$[AMOUNT].
+Your L$ balance is shown in the upper-right.
   </notification>
 -->
 
@@ -6814,7 +6814,7 @@ Your [CUR] balance is shown in the upper-right.
     <tag>funds</tag>
 Thank you for your payment!
 
-Your [CUR] balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be cancelled. In that case, the purchase amount will be credited to your US$ balance.
+Your L$ balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be cancelled. In that case, the purchase amount will be credited to your US$ balance.
 
 The status of your payment can be checked on your Transaction History page on your [http://secondlife.com/account/ Dashboard]
   </notification>
@@ -7334,7 +7334,7 @@ Your voice has been muted by a moderator.
     icon="alertmodal.tga"
     name="UploadCostConfirmation"
     type="alertmodal">
-This upload will cost [CUR][PRICE], do you wish to continue with the upload?
+This upload will cost L$[PRICE], do you wish to continue with the upload?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -7461,7 +7461,7 @@ The parcel [PARCEL_NAME] can not be abandoned at this time.
    type="notifytip">
 The [AREA] m² parcel &apos;[PARCEL_NAME]&apos; has been released.
 
-You will have [RECLAIM_PERIOD] hours to reclaim for [CUR]0 before it is set for sale to anyone.
+You will have [RECLAIM_PERIOD] hours to reclaim for L$0 before it is set for sale to anyone.
    <tag>fail</tag>
   </notification>
 	
@@ -7725,7 +7725,7 @@ Click and drag anywhere on the world to rotate your view
   label="You've got Linden Dollars!"
   type="hint">
     <unique/>
-    Here's your current balance of [CUR]. Click Buy [CUR] to purchase more Linden Dollars.
+    Here's your current balance of L$. Click Buy L$ to purchase more Linden Dollars.
     <tag>funds</tag>
   </notification>
 

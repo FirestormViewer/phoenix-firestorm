@@ -58,7 +58,7 @@
 			O terreno em uso requer mais créditos
 		</text>
 		<text name="group_money_heading">
-			[CUR] do grupo
+			L$ do grupo
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

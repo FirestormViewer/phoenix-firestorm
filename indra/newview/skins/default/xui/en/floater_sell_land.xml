@@ -100,7 +100,7 @@
      left="40"
      name="price_ld"
      width="20">
-        [CUR]
+        L$
     </text>
     <line_editor
      follows="top|left"
@@ -117,7 +117,7 @@
      name="price_per_m"
      top_delta="25"
      width="200">
-        ([CUR][PER_METER] per m²)
+        (L$[PER_METER] per m²)
     </text>
     <text
      follows="top|left"

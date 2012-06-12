@@ -77,10 +77,10 @@ Sélectionnez une zone plus petite.
 		Vous détenez [BUYER] m² de terrain.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Payez [AMOUNT] [CUR] à [SELLER] pour ce terrain
+		Payez [AMOUNT] L$ à [SELLER] pour ce terrain
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Achetez [AMOUNT] [CUR] pour environ [LOCAL_AMOUNT],
+		Achetez [AMOUNT] L$ pour environ [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Cette parcelle fait [AMOUNT] m²
@@ -102,24 +102,24 @@ prend en charge [AMOUNT2] objets
 		objets non inclus
 	</floater.string>
 	<floater.string name="info_price_string">
-		[PRICE] [CUR]
-([PRICE_PER_SQM] [CUR]/m²)
+		[PRICE] L$
+([PRICE_PER_SQM] L$/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
 		Ce groupe, [GROUP], aura besoin de suffisamment de crédit pour payer les frais d&apos;occupation de terrain avant que l&apos;achat de cette parcelle ne soit finalisé.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Vous avez [AMOUNT] [CUR], ce qui est suffisant pour acheter ce terrain.
+		Vous avez [AMOUNT] L$, ce qui est suffisant pour acheter ce terrain.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Vous n&apos;avez que [AMOUNT] [CUR] et vous avez besoin de [AMOUNT2] [CUR] de plus.
+		Vous n&apos;avez que [AMOUNT] L$ et vous avez besoin de [AMOUNT2] L$ de plus.
 	</floater.string>
 	<floater.string name="balance_left">
-		Après cet achat, il vous restera [AMOUNT] [CUR].
+		Après cet achat, il vous restera [AMOUNT] L$.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Pour avoir les moyens d&apos;acquérir ce terrain, vous devez acheter au moins [AMOUNT] [CUR].
+		Pour avoir les moyens d&apos;acquérir ce terrain, vous devez acheter au moins [AMOUNT] L$.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(aucune parcelle sélectionnée)
@@ -181,8 +181,8 @@ prend en charge [AMOUNT2] objets
 		Prix :
 	</text>
 	<text name="info_price">
-		1500 [CUR]
-(1,1 [CUR]/m²)
+		1500 L$
+(1,1 L$/m²)
 vendu avec objets
 	</text>
 	<text name="info_action" width="380">
@@ -211,13 +211,13 @@ vendu avec objets
 Cette parcelle fait 512 m².
 	</text>
 	<text name="purchase_action">
-		Payez au résident X 4 000 [CUR] pour le terrain
+		Payez au résident X 4 000 L$ pour le terrain
 	</text>
 	<text name="currency_reason">
-		Vous avez 2 100 [CUR].
+		Vous avez 2 100 L$.
 	</text>
 	<text name="currency_action">
-		Acheter des [CUR]
+		Acheter des L$
 	</text>
 	<line_editor name="currency_amt">
 		1000
@@ -226,7 +226,7 @@ Cette parcelle fait 512 m².
 		pour environ [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Vous avez 2 100 [CUR].
+		Vous avez 2 100 L$.
 	</text>
 	<check_box label="Enlever [AMOUNT] m² de contribution du groupe." name="remove_contribution"/>
 	<button label="Acheter" name="buy_btn"/>

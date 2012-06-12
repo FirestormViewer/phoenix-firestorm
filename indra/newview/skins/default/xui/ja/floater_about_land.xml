@@ -107,7 +107,7 @@
 				販売対象外
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				価格： [CUR] [PRICE] （[CUR] [PRICE_PER_SQM] / 平方メートル）
+				価格： L$ [PRICE] （L$ [PRICE_PER_SQM] / 平方メートル）
 			</text>
 			<button label="土地を売る" label_selected="土地を販売..." name="Sell Land..."/>
 			<text name="For sale to">
@@ -343,7 +343,7 @@
 			<check_box label="グループ" name="check group scripts"/>
 			<check_box label="安全（ダメージなし）" name="check safe" tool_tip="チェックを入れるとこの土地でのダメージコンバットが無効になり、「安全」に設定されます。 チェックを外すとダメージコンバットが有効になります。"/>
 			<check_box label="プッシュ禁止" name="PushRestrictCheck" tool_tip="スクリプトによるプッシュを禁止します。 このオプションを選択することにより、あなたの土地での破壊的行動を防ぐことができます。"/>
-			<check_box label="検索に区画を表示（週 [CUR] 30）" name="ShowDirectoryCheck" tool_tip="この区画を検索結果に表示します"/>
+			<check_box label="検索に区画を表示（週 L$ 30）" name="ShowDirectoryCheck" tool_tip="この区画を検索結果に表示します"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="全カテゴリ" name="item0"/>
 				<combo_box.item label="Linden 所在地" name="item1"/>
@@ -474,7 +474,7 @@
 				<combo_box.item label="誰でも" name="Anyone"/>
 				<combo_box.item label="グループ" name="Group"/>
 			</combo_box>
-			<spinner label="価格（[CUR]）：" name="PriceSpin"/>
+			<spinner label="価格（L$）：" name="PriceSpin"/>
 			<spinner label="アクセス時間：" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="常に許可" name="AllowedText">

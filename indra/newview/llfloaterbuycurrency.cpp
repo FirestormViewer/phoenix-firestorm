@@ -41,7 +41,6 @@
 #include "llweb.h"
 #include "llwindow.h"
 #include "llappviewer.h"
-#include "llviewernetwork.h"
 
 static const S32 STANDARD_BUY_AMOUNT = 2000;
 static const S32 MINIMUM_BALANCE_AMOUNT = 0;
@@ -131,12 +130,9 @@ BOOL LLFloaterBuyCurrencyUI::postBuild()
 {
 	mManager.prepare();
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	std::string title = "BUY " + type_currency;
 	getChild<LLUICtrl>("buy_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickBuy, this));
 	getChild<LLUICtrl>("cancel_btn")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickCancel, this));
 	getChild<LLUICtrl>("error_web")->setCommitCallback( boost::bind(&LLFloaterBuyCurrencyUI::onClickErrorWeb, this));
-	setTitle(title);
 	
 	center();
 	
@@ -151,10 +147,7 @@ void LLFloaterBuyCurrencyUI::draw()
 	{
 		if (mManager.bought())
 		{
-			std::string type_currency = LLGridManager::getInstance()->getCurrency();
-			LLSD args;
-			args["CUR"] = type_currency;
-			LLNotificationsUtil::add("BuyLindenDollarSuccess", args);
+			LLNotificationsUtil::add("BuyLindenDollarSuccess");
 			closeFloater();
 			return;
 		}
@@ -239,30 +232,20 @@ void LLFloaterBuyCurrencyUI::updateUI()
 			}
 		}
 		
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		S32 balance = gStatusBar->getBalance();
 		getChildView("balance_label")->setVisible(TRUE);
 		getChildView("balance_amount")->setVisible(TRUE);
 		getChild<LLUICtrl>("balance_amount")->setTextArg("[AMT]", llformat("%d", balance));
-		getChild<LLUICtrl>("balance_amount")->setTextArg("[CUR]", type_currency);
 		
 		S32 buying = mManager.getAmount();
 		getChildView("buying_label")->setVisible(TRUE);
 		getChildView("buying_amount")->setVisible(TRUE);
 		getChild<LLUICtrl>("buying_amount")->setTextArg("[AMT]", llformat("%d", buying));
-		getChild<LLUICtrl>("buying_amount")->setTextArg("[CUR]", type_currency);
 		
 		S32 total = balance + buying;
 		getChildView("total_label")->setVisible(TRUE);
 		getChildView("total_amount")->setVisible(TRUE);
 		getChild<LLUICtrl>("total_amount")->setTextArg("[AMT]", llformat("%d", total));
-		getChild<LLUICtrl>("total_amount")->setTextArg("[CUR]", type_currency);
-
-		getChild<LLUICtrl>("info_need_more")->setTextArg("[CUR]", type_currency);
-		getChild<LLUICtrl>("info_buying")->setTextArg("[CUR]", type_currency);
-		getChild<LLUICtrl>("currency_label")->setTextArg("[CUR]", type_currency);
-		getChild<LLUICtrl>("purchase_warning_repurchase")->setTextArg("[CUR]", type_currency);
-		getChild<LLUICtrl>("purchase_warning_notenough")->setTextArg("[CUR]", type_currency);
 
 		if (mHasTarget)
 		{

@@ -4,7 +4,7 @@
 		Envanterime Kaydet
 	</text>
 	<text name="hint_lbl">
-		Bir görüntüyü envanterinize kaydetmenin maliyeti [CUR][UPLOAD_COST] olur. Görüntünüzü bir doku olarak kaydetmek için kare formatlardan birini seçin.
+		Bir görüntüyü envanterinize kaydetmenin maliyeti L$[UPLOAD_COST] olur. Görüntünüzü bir doku olarak kaydetmek için kare formatlardan birini seçin.
 	</text>
 	<combo_box label="Çözünürlük" name="texture_size_combo">
 		<combo_box.item label="Mevcut Pencere" name="CurrentWindow"/>

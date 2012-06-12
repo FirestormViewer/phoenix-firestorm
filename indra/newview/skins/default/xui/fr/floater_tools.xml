@@ -156,13 +156,13 @@
 				Sélectionnez l&apos;objet en entier
 			</panel.string>
 			<panel.string name="Cost Default">
-				Prix : [CUR]
+				Prix : L$
 			</panel.string>
 			<panel.string name="Cost Total">
-				Prix total : [CUR]
+				Prix total : L$
 			</panel.string>
 			<panel.string name="Cost Per Unit">
-				Prix par : [CUR]
+				Prix par : L$
 			</panel.string>
 			<panel.string name="Cost Mixed">
 				Prix mixte
@@ -206,7 +206,7 @@
 				<combo_box.item label="Contenus" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Prix : [CUR]" name="Edit Cost"/>
+			<spinner label="Prix : L$" name="Edit Cost"/>
 			<check_box label="Afficher dans la recherche" name="search_check" tool_tip="Afficher l&apos;objet dans les résultats de recherche"/>
 			<panel name="perms_build">
 				<text name="perm_modify">
@@ -492,7 +492,7 @@
 			Informations sur la parcelle
 		</text>
 		<text name="label_area_price">
-			Prix : [PRICE] [CUR] pour [AREA] m²
+			Prix : [PRICE] L$ pour [AREA] m²
 		</text>
 		<text name="label_area">
 			Surface : [AREA] m²

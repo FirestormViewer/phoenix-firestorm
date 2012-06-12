@@ -2,6 +2,6 @@
 <panel name="panel_snapshot_options">
 	<button label="プロフィールフィードに投稿する" name="save_to_profile_btn"/>
 	<button label="メール" name="save_to_email_btn"/>
-	<button label="インベントリに保存（[CUR]Amount]）" name="save_to_inventory_btn"/>
+	<button label="インベントリに保存（L$[Amount]）" name="save_to_inventory_btn"/>
 	<button label="コンピューターに保存" name="save_to_computer_btn"/>
 </panel>

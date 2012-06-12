@@ -51,7 +51,6 @@
 #include "llnotificationmanager.h"
 #include "llviewerobject.h"
 #include "llappearancemgr.h"
-#include "llviewernetwork.h"
 
 #include <boost/regex.hpp>
 #include <string>
@@ -288,12 +287,6 @@ void FSLSLBridge :: initBridge()
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
-		mBridgeCreating = false;
-		return;
-	}
-
-	if(LLGridManager::getInstance()->isInOpenSim()) {
-		llwarns << "Asked to create bridge, but we are in opensim, so no library items are available. Aborting." << llendl;
 		mBridgeCreating = false;
 		return;
 	}

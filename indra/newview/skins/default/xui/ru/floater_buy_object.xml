@@ -19,7 +19,7 @@
 		Содержимое:
 	</text>
 	<text name="buy_text">
-		Купить за [CUR][AMOUNT] у пользователя:
+		Купить за L$[AMOUNT] у пользователя:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?

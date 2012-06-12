@@ -210,7 +210,7 @@ Bu Yetenek &apos;[ROLE_NAME]&apos; rolüne eklensin mi?
 		<usetemplate ignoretext="Aksesuarları çıkarmadan önce doğrulama iste" name="okcancelignore" notext="Hayır" yestext="Evet"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		Bu gruba katılmanın maliyeti: [CUR] [COST].
+		Bu gruba katılmanın maliyeti: L$ [COST].
 Devam etmek istiyor musunuz?
 		<usetemplate name="okcancelbuttons" notext="İptal Et" yestext="Katıl"/>
 	</notification>
@@ -220,33 +220,33 @@ Devam etmek istiyor musunuz?
 		<usetemplate name="okcancelbuttons" notext="İptal Et" yestext="Katıl"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Bu gruba katılmanın maliyeti: [CUR] [COST].
-Bu gruba katılmak için yeterli [CUR]&apos;na sahip değilsiniz.
+		Bu gruba katılmanın maliyeti: L$ [COST].
+Bu gruba katılmak için yeterli L$&apos;na sahip değilsiniz.
 	</notification>
 	<notification name="CreateGroupCost">
-		Bu grubu oluşturmanın maliyeti: [CUR] 100.
+		Bu grubu oluşturmanın maliyeti: L$ 100.
 Grupların birden fazla üyeye sahip olması gereklidir, aksi takdirde grup kalıcı olarak silinir.
 Lütfen 48 saat içinde diğer üyeleri davet edin.
-		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="[CUR] 100 ödeyerek grubu oluştur"/>
+		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="L$ 100 ödeyerek grubu oluştur"/>
 	</notification>
 	<notification name="LandBuyPass">
-		[CUR] [COST] ödeyerek (&apos;[PARCEL_NAME]&apos;) arazisine [TIME] saat süreyle girebilirsiniz.  Giriş hakkı satın almak istiyor musunuz?
+		L$ [COST] ödeyerek (&apos;[PARCEL_NAME]&apos;) arazisine [TIME] saat süreyle girebilirsiniz.  Giriş hakkı satın almak istiyor musunuz?
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="SalePriceRestriction">
-		Herhangi birine satış yaparken satış fiyatı [CUR] 0&apos;dan daha yüksek bir değere ayarlanmalıdır.
-[CUR] 0 fiyatla satış yapıyorsanız lütfen satışın yapılacağı kişiyi seçin.
+		Herhangi birine satış yaparken satış fiyatı L$ 0&apos;dan daha yüksek bir değere ayarlanmalıdır.
+L$ 0 fiyatla satış yapıyorsanız lütfen satışın yapılacağı kişiyi seçin.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		Seçili [LAND_SIZE] m² arazi satışa çıkarılmak üzere ayarlanıyor.
-Satış fiyatınız [CUR] [SALE_PRICE] olacak ve [NAME] için satışa açık olacaktır.
+Satış fiyatınız L$ [SALE_PRICE] olacak ve [NAME] için satışa açık olacaktır.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		DİKKAT: &apos;Herkes için satışa açık&apos; seçeneğinin tıklanması, arazinizi tüm [SECOND_LIFE] topluluğuna açık hale getirir, bu bölgede bulunmayanlar da buna dahildir.
 
 Seçili [LAND_SIZE] m² arazi satışa çıkarılmak üzere ayarlanıyor.
-Satış fiyatınız [CUR] [SALE_PRICE] olacak ve [NAME] için satışa açık olacaktır.
+Satış fiyatınız L$ [SALE_PRICE] olacak ve [NAME] için satışa açık olacaktır.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
@@ -573,7 +573,7 @@ Lütfen alınacak tüm nesneleri aynı bölgeye taşıyın.
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-[CUR] satın alma ile ilgili bilgi edinmek için [_URL] adresine gidilsin mi?
+L$ satın alma ile ilgili bilgi edinmek için [_URL] adresine gidilsin mi?
 		<url name="url">
 			http://secondlife.com/app/currency/
 		</url>
@@ -871,7 +871,7 @@ Parselin tamamını seçin veya önce parselinizi bölün.
 	</notification>
 	<notification name="ReleaseLandWarning">
 		[AREA] m² araziyi bırakmak üzeresiniz.
-Bu parseli bırakmak onu sahip olduğunuz arazi parçalarından çıkaracak fakat [CUR] kazandırmayacak.
+Bu parseli bırakmak onu sahip olduğunuz arazi parçalarından çıkaracak fakat L$ kazandırmayacak.
 
 Arazi bırakılsın mı?
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
@@ -1029,7 +1029,7 @@ bu simdeki TÜM ARAZİLERDEN SİLMEK istediğinize emin misiniz?
 		İlanınız için bir ad belirtmelisiniz.
 	</notification>
 	<notification name="MinClassifiedPrice">
-		Listeleme için ödenmesi gereken tutar en az [CUR] [MIN_PRICE] olmalıdır.
+		Listeleme için ödenmesi gereken tutar en az L$ [MIN_PRICE] olmalıdır.
 
 Lütfen daha yüksek bir tutar girin.
 	</notification>
@@ -1228,7 +1228,7 @@ Bu yetkiliye güvenilsin mi?
 		<usetemplate name="okcancelbuttons" notext="İptal Et" yestext="Güven"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [PRICE] [CUR] Bunu yapmaya yetecek [CUR]&apos;nız yok.
+		[NAME] [PRICE] L$ Bunu yapmaya yetecek L$&apos;nız yok.
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] size kendi nesnelerini düzenleme izni verdi.
@@ -1415,7 +1415,7 @@ Güncellemeyi kurmak için [APP_NAME] uygulamasını yeniden başlatmalısınız
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Bu nesnenin devredilmesi grubun şunu yapmasına sebep olacak:
-* Nesneye ödenen [CUR]&apos;nı almasına
+* Nesneye ödenen L$&apos;nı almasına
 		<usetemplate ignoretext="Bir nesneyi bir gruba devretmeden önce doğrulama iste" name="okcancelignore" notext="İptal Et" yestext="Devret"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1640,7 +1640,7 @@ Devam edilsin mi?
 	<notification label="Linden Gayrimenkulüne Erişimi değiştirme" name="ChangeLindenAccess">
 		Linden çalışanlarına ait bir gayrimenkul (anakara, oryantasyon vb.) için erişim listesini değiştirmek üzeresiniz.
 
-Bu işlem TEHLİKELİDİR ve sadece saldırıya açık nesnelerin/[CUR]&apos;nın ağ içine/dışına aktarılmasını sağlamak için gerçekleştirilmelidir.
+Bu işlem TEHLİKELİDİR ve sadece saldırıya açık nesnelerin/L$&apos;nın ağ içine/dışına aktarılmasını sağlamak için gerçekleştirilmelidir.
 Binlerce bölgeyi değiştirecek ve alan sunucusunu kesintiye uğratacaktır.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
@@ -1792,7 +1792,7 @@ Erişkinlik Seviyesi tercihinizi şimdi yükseltmek ve araziye girebilmek için 
 	<notification name="PublishClassified">
 		Hatırla: İlan ücretleri iade edilmez.
 
-Şimdi [CUR] [AMOUNT] ödeyerek bu ilanı yayınlamak istiyor musunuz?
+Şimdi L$ [AMOUNT] ödeyerek bu ilanı yayınlamak istiyor musunuz?
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1836,7 +1836,7 @@ Lütfen sadece bir nesne seçin ve tekrar deneyin.
 Lütfen sadece bir nesne seçin ve tekrar deneyin.
 	</notification>
 	<notification name="BuyOriginal">
-		Özgün nesne [OWNER] kullanıcısından [CUR] [PRICE] karşılığında satın alınsın mı?
+		Özgün nesne [OWNER] kullanıcısından L$ [PRICE] karşılığında satın alınsın mı?
 Nesnenin sahibi siz olacaksınız.
 Şu işlemleri yapabileceksiniz:
  Değiştirme: [MODIFYPERM]
@@ -1845,7 +1845,7 @@ Nesnenin sahibi siz olacaksınız.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		Özgün nesne [CUR] [PRICE] karşılığında satın alınsın mı?
+		Özgün nesne L$ [PRICE] karşılığında satın alınsın mı?
 Nesnenin sahibi siz olacaksınız.
 Şu işlemleri yapabileceksiniz:
  Değiştirme: [MODIFYPERM]
@@ -1854,7 +1854,7 @@ Nesnenin sahibi siz olacaksınız.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="BuyCopy">
-		Bir kopyası [OWNER] kullanıcısından [CUR] [PRICE] karşılığında satın alınsın mı?
+		Bir kopyası [OWNER] kullanıcısından L$ [PRICE] karşılığında satın alınsın mı?
 Nesne envanterinize kopyalanacak.
 Şu işlemleri yapabileceksiniz:
  Değiştirme: [MODIFYPERM]
@@ -1863,7 +1863,7 @@ Nesne envanterinize kopyalanacak.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		Bir kopyası [CUR] [PRICE] karşılığında satın alınsın mı?
+		Bir kopyası L$ [PRICE] karşılığında satın alınsın mı?
 Nesne envanterinize kopyalanacak.
 Şu işlemleri yapabileceksiniz:
  Değiştirme: [MODIFYPERM]
@@ -1872,12 +1872,12 @@ Nesne envanterinize kopyalanacak.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="BuyContents">
-		İçerik [OWNER] kullanıcısından [CUR] [PRICE] karşılığında satın alınsın mı?
+		İçerik [OWNER] kullanıcısından L$ [PRICE] karşılığında satın alınsın mı?
 İçerik envanterinize kopyalanacak.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
 	<notification name="BuyContentsNoOwner">
-		İçerik [CUR] [PRICE] karşılığında satın alınsın mı?
+		İçerik L$ [PRICE] karşılığında satın alınsın mı?
 İçerik envanterinize kopyalanacak.
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Tamam"/>
 	</notification>
@@ -2100,7 +2100,7 @@ Diğer kişilerin bu konuma kolayca erişmesini sağlamak için bu adrese bir we
 		Bir nesne bir avatarın üzerinde takılı iken onu satın alamazsınız.
 	</notification>
 	<notification label="Borç Alma İzni Talep Etme Hakkında" name="DebitPermissionDetails">
-		Bu talebi kabul etmek, bir komut dosyasına, hesabınızdan Linden doları ([CUR]) alma konusunda sürekli bir izin verir. Bu izni iptal etmek için, nesne sahibi nesneyi silmeli ya da nesne içindeki komut dosyalarını yeniden ayarlamalıdır.
+		Bu talebi kabul etmek, bir komut dosyasına, hesabınızdan Linden doları (L$) alma konusunda sürekli bir izin verir. Bu izni iptal etmek için, nesne sahibi nesneyi silmeli ya da nesne içindeki komut dosyalarını yeniden ayarlamalıdır.
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
@@ -2164,7 +2164,7 @@ Bu adımda web tarayıcınızın başlatılacağına dikkat edin.
 (Yaklaşık 5 dakika sürecektir.)
 	</notification>
 	<notification name="UploadPayment">
-		Karşıya yüklemek için [CUR] [AMOUNT] ödediniz.
+		Karşıya yüklemek için L$ [AMOUNT] ödediniz.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Web sitesinde yer alan anlık görüntülerin karşıya yüklenmesi tamamlandı.
@@ -2645,7 +2645,7 @@ Talep kabul edilsin mi?
 	<notification name="BuyLindenDollarSuccess">
 		Ödeme yaptığınız için teşekkürler!
 
-İşlem tamamlandığında [CUR] bakiyeniz güncellenecektir. İşlem 20 dakikadan daha uzun sürerse, işlem iptal edilebilir. Bu durumda ödenen miktar US$ bakiyenize iade edilecektir.
+İşlem tamamlandığında L$ bakiyeniz güncellenecektir. İşlem 20 dakikadan daha uzun sürerse, işlem iptal edilebilir. Bu durumda ödenen miktar US$ bakiyenize iade edilecektir.
 
 Ödemenin durumunu [http://secondlife.com/account/ Kontrol Paneli] üzerinde İşlem Geçmişi sayfanızdan kontrol edebilirsiniz.
 	</notification>
@@ -2802,7 +2802,7 @@ Güvenliğiniz için birkaç saniye engellenecek.
 		<usetemplate name="okbutton" yestext="Tamam"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Bu karşıya yükleme işleminin maliyeti [CUR][PRICE] olacak, karşıya yüklemeye devam etmek istiyor musunuz?
+		Bu karşıya yükleme işleminin maliyeti L$[PRICE] olacak, karşıya yüklemeye devam etmek istiyor musunuz?
 		<usetemplate name="okcancelbuttons" notext="İptal" yestext="Karşıya Yükle"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -2861,7 +2861,7 @@ Paylaşmanın yapılacağı Second Life Sakinleri:
 	<notification name="ReleasedLandWithReclaim">
 		[AREA] m² alana sahip &apos;[PARCEL_NAME]&apos; parseli serbest bırakıldı.
 
-Başkalarına satışa çıkarılmadan önce [CUR]0 karşılığında geri almak için [RECLAIM_PERIOD] saat süreniz olacak.
+Başkalarına satışa çıkarılmadan önce L$0 karşılığında geri almak için [RECLAIM_PERIOD] saat süreniz olacak.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
 		[AREA] m² alana sahip &apos;[PARCEL_NAME]&apos; parseli serbest bırakıldı.
@@ -2978,7 +2978,7 @@ Görünümünüzü döndürmek için dünya üzerindeki herhangi bir yeri tıkla
 		Öğeleri bulmak için envanterinize bakın. Yeni eklenen öğeler Son Eklenenler sekmesinden kolayca bulunabilir.
 	</notification>
 	<notification label="Linden Dolarınız var!" name="HintLindenDollar">
-		[CUR] hesabınızın mevcut bakiyesini buradan görebilirsiniz. Daha fazla Linden Doları satın almak için [CUR] Satın Al&apos;ı tıklatın.
+		L$ hesabınızın mevcut bakiyesini buradan görebilirsiniz. Daha fazla Linden Doları satın almak için L$ Satın Al&apos;ı tıklatın.
 	</notification>
 	<notification name="LowMemory">
 		Bellek havuzunuz yetersiz. Çökmeyi önlemek için SL&apos;nin bazı işlevleri devre dışı bırakıldı. Lütfen diğer uygulamaları kapatın. Bu durum devam ederse SL&apos;yi yeniden başlatın.

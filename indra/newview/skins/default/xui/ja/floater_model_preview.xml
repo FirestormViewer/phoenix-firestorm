@@ -219,7 +219,7 @@
 			<button label="アップロード" name="ok_btn" tool_tip="シミュレーターにアップロード"/>
 			<button label="設定をクリアしてフォームをリセット" name="reset_btn"/>
 			<text name="upload_fee">
-				アップロード料金：[CUR] [FEE]
+				アップロード料金：L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				土地の負荷：[EQ]

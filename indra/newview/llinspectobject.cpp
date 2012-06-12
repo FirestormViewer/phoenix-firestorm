@@ -55,7 +55,6 @@
 #include "lltrans.h"
 #include "llui.h"				// positionViewNearMouse()
 #include "lluictrl.h"
-#include "llviewernetwork.h"
 
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0c)
@@ -189,8 +188,6 @@ BOOL LLInspectObject::postBuild(void)
 	LLSelectMgr::getInstance()->mUpdateSignal.connect(
 		boost::bind(&LLInspectObject::update, this) );
 
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	getChild<LLUICtrl>("pay_btn")->setToolTipArg(std::string("[CUR]"), type_currency);
 	return TRUE;
 }
 
@@ -561,15 +558,11 @@ void LLInspectObject::updatePrice(LLSelectNode* nodep)
 	else if (for_sale)
 	{
 		LLStringUtil::format_map_t args;
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		args["[AMOUNT]"] = LLResMgr::getInstance()->getMonetaryString(price);
-		args["[CUR]"] = type_currency;
 		line = getString("Price", args);
 		show_price_icon = true;
 	}
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	getChild<LLUICtrl>("price_text")->setValue(line);
-	getChild<LLUICtrl>("price_symbol")->setTextArg("[CUR]", type_currency);
 	getChild<LLUICtrl>("price_icon")->setVisible(show_price_icon);
 }
 

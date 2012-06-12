@@ -11,7 +11,7 @@
 		Бесплатное вступление
 	</string>
 	<string name="CostToJoin">
-		[CUR][AMOUNT] за вступление
+		L$[AMOUNT] за вступление
 	</string>
 	<string name="YouAreMember">
 		Вы участник группы
@@ -24,7 +24,7 @@
 Бойся лося!  Бойся!  И мангуста тоже!
 	</text>
 	<text name="group_cost">
-		[CUR]123 за вступление
+		L$123 за вступление
 	</text>
 	<button label="Вступить" name="join_btn"/>
 	<button label="Покинуть" name="leave_btn"/>

@@ -398,7 +398,7 @@
         name="CurrencySymbol"
         top_delta="5"
         width="18">
-      [CUR]
+      L$
     </text>
 
 </floater>

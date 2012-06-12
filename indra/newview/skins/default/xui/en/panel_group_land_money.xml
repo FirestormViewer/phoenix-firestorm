@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- label="Land &amp; [CUR]"
+ label="Land &amp; L$"
  name="land_money_tab"
  left="0"
  top="0"
@@ -217,7 +217,7 @@
      text_color="EmphasisColor"
      top_pad="0"
      width="100">
-        Group [CUR]
+        Group L$
     </text>
     <icon
      height="16"

@@ -33,7 +33,6 @@
 #include "lltracker.h"
 #include "lluistring.h"
 #include "llviewertexturelist.h"
-#include "llviewernetwork.h"
 #include "lltrans.h"
 
 // Timers to temporise database requests
@@ -521,11 +520,9 @@ bool LLWorldMap::insertItem(U32 x_world, U32 y_world, std::string& name, LLUUID&
 		case MAP_ITEM_LAND_FOR_SALE_ADULT:	// adult land for sale 
 		{
 			static LLUIString tooltip_fmt = LLTrans::getString("worldmap_item_tooltip_format");
-			std::string type_currency = LLGridManager::getInstance()->getCurrency();
 
 			tooltip_fmt.setArg("[AREA]",  llformat("%d", extra));
 			tooltip_fmt.setArg("[PRICE]", llformat("%d", extra2));
-			tooltip_fmt.setArg("[CUR]", type_currency);
 			new_item.setTooltip(tooltip_fmt.getString());
 
 			if (type == MAP_ITEM_LAND_FOR_SALE)

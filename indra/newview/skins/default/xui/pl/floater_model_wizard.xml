@@ -151,7 +151,7 @@ Budynki</text>
 				Wpływ na parcelę/region: odpowiada [EQUIV] primom
 			</text>
 			<text name="review_fee">
-				Twoje konto zostanie obciążone [FEE][CUR] za załadowanie.
+				Twoje konto zostanie obciążone [FEE]L$ za załadowanie.
 			</text>
 			<text  name="review_confirmation">
 				Klikając na przycisk ładowania potwierdzasz, że masz odpowiednie prawa do materiału zawartego w modelu.
@@ -171,7 +171,7 @@ Budynki</text>
 			Znajdziesz go w folderze Obiekty, w Szafie.
 		</text>
 		<text name="charged_fee">
-			Twoje konto zostało obciążone [FEE] [CUR].
+			Twoje konto zostało obciążone [FEE] L$.
 		</text>
 	</panel>
 	<button name="back" label="&lt;&lt; Wstecz" />

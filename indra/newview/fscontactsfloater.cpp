@@ -53,7 +53,6 @@
 #include "llviewercontrol.h"
 #include "llvoiceclient.h"
 #include "lggcontactsetsfloater.h"
-#include "llviewernetwork.h"
 
 //Maximum number of people you can select to do an operation on at once.
 #define MAX_FRIEND_SELECT 20
@@ -143,8 +142,6 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsTab->childSetAction("offer_teleport_btn", boost::bind(&FSFloaterContacts::onTeleportButtonClicked, this));
 	mFriendsTab->childSetAction("pay_btn", boost::bind(&FSFloaterContacts::onPayButtonClicked, this));
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
-	mFriendsTab->getChild<LLUICtrl>("pay_btn")->setToolTipArg(std::string("[CUR]"), type_currency);
 	mFriendsTab->childSetAction("remove_btn", boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked, this));
 	mFriendsTab->childSetAction("add_btn", boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked, this));
 	

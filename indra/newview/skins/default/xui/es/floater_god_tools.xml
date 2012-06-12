@@ -40,7 +40,7 @@
 				Factor cobrable:
 			</text>
 			<text name="land cost text" left="240" width="125">
-				[CUR] por m²:
+				L$ por m²:
 			</text>
 			<button label="Actualizar" label_selected="Actualizar" name="Refresh" tool_tip="Haga clic aquí para actualizar la información."/>
 			<button label="Aplicar" label_selected="Aplicar" name="Apply" tool_tip="Haga clic aquí para aplicar los cambios."/>

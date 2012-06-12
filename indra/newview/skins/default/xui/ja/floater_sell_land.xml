@@ -24,13 +24,13 @@
 				適正価格を設定してください。
 			</text>
 			<text name="price_ld">
-				[CUR]
+				L$
 			</text>
 			<line_editor name="price">
 				0
 			</line_editor>
 			<text name="price_per_m">
-				（1平方メートルあたり [CUR][PER_METER]）
+				（1平方メートルあたり L$[PER_METER]）
 			</text>
 			<text name="sell_to_label">
 				2. 特定の人に販売：

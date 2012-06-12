@@ -176,7 +176,7 @@ Add this Ability to &apos;[ROLE_NAME]&apos;?
 		<usetemplate ignoretext="在丟下附件前確認" name="okcancelignore" notext="否" yestext="是"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		加入此群組須花費 [CUR][COST]。
+		加入此群組須花費 L$[COST]。
 你確定要繼續嗎？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="加入"/>
 	</notification>
@@ -186,33 +186,33 @@ Do you wish to proceed?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="加入"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Joining this group costs [CUR][COST].
-You do not have enough [CUR] to join this group.
+		Joining this group costs L$[COST].
+You do not have enough L$ to join this group.
 	</notification>
 	<notification name="CreateGroupCost">
-		Creating this group will cost [CUR]100.
+		Creating this group will cost L$100.
 Groups need more than one member, or they are deleted forever.
 Please invite members within 48 hours.
-		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 [CUR]100 建立群組"/>
+		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 L$100 建立群組"/>
 	</notification>
 	<notification name="LandBuyPass">
-		For [CUR][COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hours.  Buy a pass?
+		For L$[COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hours.  Buy a pass?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="SalePriceRestriction">
-		Sale price must be set to more than [CUR]0 if selling to anyone.
-Please select an individual to sell to if selling for [CUR]0.
+		Sale price must be set to more than L$0 if selling to anyone.
+Please select an individual to sell to if selling for L$0.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		The selected [LAND_SIZE] m² land is being set for sale.
-Your selling price will be [CUR][SALE_PRICE] and will be authorized for sale to [NAME].
+Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		ATTENTION: Clicking &apos;sell to anyone&apos; makes your land available to the entire [CURRENT_GRID] community, even those not in this region.
 
 The selected [LAND_SIZE] m² land is being set for sale.
-Your selling price will be [CUR][SALE_PRICE] and will be authorized for sale to [NAME].
+Your selling price will be L$[SALE_PRICE] and will be authorized for sale to [NAME].
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
@@ -539,7 +539,7 @@ Please move all objects to be acquired onto the same region.
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Go to [_URL] for information on purchasing [CUR]?
+Go to [_URL] for information on purchasing L$?
 		<url name="url">
 			http://secondlife.com/app/currency/
 		</url>
@@ -837,7 +837,7 @@ Cannot find the region this land is in.
 	</notification>
 	<notification name="ReleaseLandWarning">
 		你釋出約 [AREA] m² 面積土地。
-釋出個地段將會由你所持有的土地中移除，但不會給予任何 [CUR]。
+釋出個地段將會由你所持有的土地中移除，但不會給予任何 L$。
 
 你確定要釋出這塊土地？
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
@@ -995,7 +995,7 @@ on ALL LAND in this sim?
 		You must specify a name for your classified.
 	</notification>
 	<notification name="MinClassifiedPrice">
-		Price to pay for listing must be at least [CUR][MIN_PRICE].
+		Price to pay for listing must be at least L$[MIN_PRICE].
 
 Please enter a higher price.
 	</notification>
@@ -1189,7 +1189,7 @@ Would you like to trust this authority?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="Trust"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [CUR] [PRICE] You don&apos;t have enough [CUR] to do that.
+		[NAME] L$ [PRICE] You don&apos;t have enough L$ to do that.
 	</notification>
 	<notification name="GrantedModifyRights">
 		[NAME] has given you permission to edit their objects.
@@ -1376,7 +1376,7 @@ We must restart [APP_NAME] to install the update.
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Deeding this object will cause the group to:
-* Receive [CUR] paid into the object
+* Receive L$ paid into the object
 		<usetemplate ignoretext="在我讓渡一個物件給群組前確認" name="okcancelignore" notext="取消" yestext="讓渡"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1597,7 +1597,7 @@ Proceed?
 	<notification label="Change Linden Estate Access" name="ChangeLindenAccess">
 		You are about to change the access list for a Linden owned estate (mainland, teen grid, orientation, etc.).
 
-This is DANGEROUS and should only be done to invoke the hack allowing objects/[CUR] to be transfered in/out of a grid.
+This is DANGEROUS and should only be done to invoke the hack allowing objects/L$ to be transfered in/out of a grid.
 It will change thousands of regions and make the spaceserver hiccup.
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
@@ -1749,7 +1749,7 @@ You can click &apos;Change Preference&apos; to raise your maturity Rating prefer
 	<notification name="PublishClassified">
 		Remember: Classified ad fees are non-refundable.
 
-Publish this classified now for [CUR][AMOUNT]?
+Publish this classified now for L$[AMOUNT]?
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1793,7 +1793,7 @@ Please select only one object and try again.
 Please select only one object and try again.
 	</notification>
 	<notification name="BuyOriginal">
-		Buy original object from [OWNER] for [CUR][PRICE]?
+		Buy original object from [OWNER] for L$[PRICE]?
 You will become the owner of this object.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -1802,7 +1802,7 @@ You will be able to:
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		Buy original object for [CUR][PRICE]?
+		Buy original object for L$[PRICE]?
 You will become the owner of this object.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -1811,7 +1811,7 @@ You will be able to:
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="BuyCopy">
-		Buy a copy from [OWNER] for [CUR][PRICE]?
+		Buy a copy from [OWNER] for L$[PRICE]?
 The object will be copied to your inventory.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -1820,7 +1820,7 @@ You will be able to:
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		Buy a copy for [CUR][PRICE]?
+		Buy a copy for L$[PRICE]?
 The object will be copied to your inventory.
 You will be able to:
  Modify: [MODIFYPERM]
@@ -1829,12 +1829,12 @@ You will be able to:
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="BuyContents">
-		Buy contents from [OWNER] for [CUR][PRICE]?
+		Buy contents from [OWNER] for L$[PRICE]?
 They will be copied to your inventory.
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
 	<notification name="BuyContentsNoOwner">
-		Buy contents for [CUR][PRICE]?
+		Buy contents for L$[PRICE]?
 They will be copied to your inventory.
 		<usetemplate name="okcancelbuttons" notext="取消" yestext="確定"/>
 	</notification>
@@ -2059,7 +2059,7 @@ Link to this from a web page to give others easy access to this location, or try
 		You can&apos;t buy an object while it is attached.
 	</notification>
 	<notification label="About Requests for the Debit Permission" name="DebitPermissionDetails">
-		Granting this request gives a script ongoing permission to take Linden dollars ([CUR]) from your account. To revoke this permission, the object owner must delete the object or reset the scripts in the object.
+		Granting this request gives a script ongoing permission to take Linden dollars (L$) from your account. To revoke this permission, the object owner must delete the object or reset the scripts in the object.
 		<usetemplate name="okbutton" yestext="確定"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
@@ -2122,7 +2122,7 @@ Link to this from a web page to give others easy access to this location, or try
 (Takes about 5 minutes.)
 	</notification>
 	<notification name="UploadPayment">
-		你支付 [CUR][AMOUNT] 上傳。
+		你支付 L$[AMOUNT] 上傳。
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Web site snapshot upload done.
@@ -2579,7 +2579,7 @@ Grant this request?
 	<notification name="BuyLindenDollarSuccess">
 		Thank you for your payment!
 
-Your [CUR] balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be cancelled. In that case, the purchase amount will be credited to your US$ balance.
+Your L$ balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be cancelled. In that case, the purchase amount will be credited to your US$ balance.
 
 The status of your payment can be checked on your Transaction History page on your [http://secondlife.com/account/ Dashboard]
 	</notification>
@@ -2872,7 +2872,7 @@ Click and drag anywhere on the world to rotate your view
 		Check your inventory to find items. Newest items can be easily found in the Recent tab.
 	</notification>
 	<notification label="你得到林登幣!" name="HintLindenDollar">
-		Here&apos;s your current balance of [CUR]. Click Buy [CUR] to purchase more Linden Dollars.
+		Here&apos;s your current balance of L$. Click Buy L$ to purchase more Linden Dollars.
 	</notification>
 	<notification name="PopupAttempt">
 		一個突顯式視窗開啟時被阻擋。

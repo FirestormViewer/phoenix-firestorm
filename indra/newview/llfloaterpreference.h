@@ -328,37 +328,5 @@ private:
 
 };
 
-class LLPanelPreferenceGrids : public LLPanelPreference
-{
-public:
-	LLPanelPreferenceGrids();
-	
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void apply();
-	/*virtual*/ void cancel();
-protected:
-	void onClickDelete();
-	void onClickNew();
-	void onClickCopy();
-	void onClickDefault();
-	void onClickAdd();
-	void onClickHelpRenderCompat();
-	void onClickAdvanced();
-	void onSelectGrid();
-	void onSelectPlatform();
-	
-protected:
-	LLComboBox* m_GridCombo;
-
-private:
-	enum State { NORMAL, ADD_NEW, ADD_COPY };
-	State mState;
-	std::string mCurGrid;
-
-	void loadCurGrid();
-	bool saveCurGrid();
-	void refresh();
-	void reset();
-};
 
 #endif  // LL_LLPREFERENCEFLOATER_H

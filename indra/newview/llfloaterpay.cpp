@@ -50,7 +50,6 @@
 #include "llselectmgr.h"
 #include "lltransactiontypes.h"
 #include "lluictrlfactory.h"
-#include "llviewernetwork.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -146,7 +145,6 @@ BOOL LLFloaterPay::postBuild()
 {
 	S32 i = 0;
 	
-	std::string type_currency = LLGridManager::getInstance()->getCurrency();
 	LLGiveMoneyInfo* info = new LLGiveMoneyInfo(this, PAY_BUTTON_DEFAULT_0);
 	mCallbackData.push_back(info);
 
@@ -154,8 +152,6 @@ BOOL LLFloaterPay::postBuild()
 	getChildView("fastpay 1")->setVisible(FALSE);
 
 	mQuickPayButton[i] = getChild<LLButton>("fastpay 1");
-	mQuickPayButton[i]->setLabelArg("[CUR]", type_currency);
-	mQuickPayButton[i]->setLabelSelected(mQuickPayButton[i]->getLabelUnselected());
 	mQuickPayInfo[i] = info;
 	++i;
 
@@ -166,8 +162,6 @@ BOOL LLFloaterPay::postBuild()
 	getChildView("fastpay 5")->setVisible(FALSE);
 
 	mQuickPayButton[i] = getChild<LLButton>("fastpay 5");
-	mQuickPayButton[i]->setLabelArg("[CUR]", type_currency);
-	mQuickPayButton[i]->setLabelSelected(mQuickPayButton[i]->getLabelUnselected());
 	mQuickPayInfo[i] = info;
 	++i;
 
@@ -178,8 +172,6 @@ BOOL LLFloaterPay::postBuild()
 	getChildView("fastpay 10")->setVisible(FALSE);
 
 	mQuickPayButton[i] = getChild<LLButton>("fastpay 10");
-	mQuickPayButton[i]->setLabelArg("[CUR]", type_currency);
-	mQuickPayButton[i]->setLabelSelected(mQuickPayButton[i]->getLabelUnselected());
 	mQuickPayInfo[i] = info;
 	++i;
 
@@ -190,8 +182,6 @@ BOOL LLFloaterPay::postBuild()
 	getChildView("fastpay 20")->setVisible(FALSE);
 
 	mQuickPayButton[i] = getChild<LLButton>("fastpay 20");
-	mQuickPayButton[i]->setLabelArg("[CUR]", type_currency);
-	mQuickPayButton[i]->setLabelSelected(mQuickPayButton[i]->getLabelUnselected());
 	mQuickPayInfo[i] = info;
 	++i;
 
@@ -280,14 +270,13 @@ void LLFloaterPay::processPayPriceReply(LLMessageSystem* msg, void **userdata)
 		S32 max_pay_amount = 0;
 		S32 padding_required = 0;
 
-		std::string type_currency = LLGridManager::getInstance()->getCurrency();
 		for (i=0;i<num_blocks;++i)
 		{
 			S32 pay_button;
 			msg->getS32Fast(_PREHASH_ButtonData,_PREHASH_PayButton,pay_button,i);
 			if (pay_button > 0)
 			{
-				std::string button_str = type_currency;
+				std::string button_str = "L$";
 				button_str += LLResMgr::getInstance()->getMonetaryString( pay_button );
 
 				self->mQuickPayButton[i]->setLabelSelected(button_str);
@@ -308,7 +297,7 @@ void LLFloaterPay::processPayPriceReply(LLMessageSystem* msg, void **userdata)
 		}
 
 		// build a string containing the maximum value and calc nerw button width from it.
-		std::string balance_str = type_currency;
+		std::string balance_str = "L$";
 		balance_str += LLResMgr::getInstance()->getMonetaryString( max_pay_amount );
 		const LLFontGL* font = LLFontGL::getFontSansSerif();
 		S32 new_button_width = font->getWidth( std::string(balance_str));

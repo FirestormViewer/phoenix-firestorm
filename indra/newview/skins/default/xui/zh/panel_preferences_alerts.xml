@@ -3,7 +3,7 @@
 	<text name="tell_me_label">
 		告訴我：
 	</text>
-	<check_box label="當我花費或取得 [CUR]" name="notify_money_change_checkbox"/>
+	<check_box label="當我花費或取得 L$" name="notify_money_change_checkbox"/>
 	<check_box label="當我的朋友上線或離線" name="friends_online_notify_checkbox"/>
 	<text name="show_label">
 		總是顯示：

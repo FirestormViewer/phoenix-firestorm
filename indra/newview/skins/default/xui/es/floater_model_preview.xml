@@ -254,7 +254,7 @@
 			<button label="subir" name="ok_btn" tool_tip="Subir al simulador"/>
 			<button label="Limpiar configuración y reiniciar formulario" name="reset_btn" width="260"/>
 			<text name="upload_fee">
-				Precio de subida: [CUR] [FEE]
+				Precio de subida: L$ [FEE]
 			</text>
 			<text name="prim_weight">
 				Impacto en el terreno: [EQ]

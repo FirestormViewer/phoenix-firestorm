@@ -100,7 +100,7 @@
 				不出售
 			</text>
 			<text name="For Sale: Price L$[PRICE].">
-				Price: [CUR][PRICE] ([CUR][PRICE_PER_SQM]/m²)
+				Price: L$[PRICE] (L$[PRICE_PER_SQM]/m²)
 			</text>
 			<button label="出售土地" name="Sell Land..."/>
 			<text name="For sale to">
@@ -331,7 +331,7 @@ Only large parcels can be listed in search.
 			</text>
 			<check_box label="安全（無傷害）" name="check safe" tool_tip="若勾選則設應土地為安全的，傷害性的戰鬥將被關閉。清除勾選後才能進行傷害性的戰鬥。"/>
 			<check_box label="禁止推撞" name="PushRestrictCheck" tool_tip="防止使用腳本推撞。勾選這個選項將可以有效防止你土地上的破壞行為。"/>
-			<check_box label="將地點刊登顯示在搜尋中（[CUR]30 / 每週）" name="ShowDirectoryCheck" tool_tip="讓其他人可以在搜尋結果中看到這塊地段"/>
+			<check_box label="將地點刊登顯示在搜尋中（L$30 / 每週）" name="ShowDirectoryCheck" tool_tip="讓其他人可以在搜尋結果中看到這塊地段"/>
 			<combo_box name="land category with adult">
 				<combo_box.item label="任何類別" name="item0"/>
 				<combo_box.item label="Linden Location" name="item1"/>
@@ -449,7 +449,7 @@ Only large parcels can be listed in search.
 				<combo_box.item label="Anyone" name="Anyone"/>
 				<combo_box.item label="群組" name="Group"/>
 			</combo_box>
-			<spinner label="Price in [CUR]:" name="PriceSpin"/>
+			<spinner label="Price in L$:" name="PriceSpin"/>
 			<spinner label="Hours of access:" name="HoursSpin"/>
 			<panel name="Allowed_layout_panel">
 				<text label="Always Allow" name="AllowedText">

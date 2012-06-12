@@ -5,7 +5,7 @@
 
 Pamiętaj, że opłaty nie podlegają prawu zwrotu.
 	</text>
-	<spinner label="Cena: [CUR]" name="price_for_listing" tool_tip="Cena za umieszczenie reklamy w wyszukiwarce."/>
+	<spinner label="Cena: L$" name="price_for_listing" tool_tip="Cena za umieszczenie reklamy w wyszukiwarce."/>
 	<button label="Publikuj" name="publish_btn"/>
 	<button label="Anuluj" name="cancel_btn"/>
 </floater>

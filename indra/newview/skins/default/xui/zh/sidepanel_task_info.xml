@@ -22,13 +22,13 @@
 		這個物件有聯結到其他部分
 	</panel.string>
 	<panel.string name="Cost Default">
-		價格： [CUR]
+		價格： L$
 	</panel.string>
 	<panel.string name="Cost Total">
-		總價： [CUR]
+		總價： L$
 	</panel.string>
 	<panel.string name="Cost Per Unit">
-		單價： [CUR]
+		單價： L$
 	</panel.string>
 	<panel.string name="Cost Mixed">
 		混合價格
@@ -93,7 +93,7 @@
 			<combo_box.item label="內容" name="Contents"/>
 			<combo_box.item label="原件" name="Original"/>
 		</combo_box>
-		<spinner label="價格： [CUR]" name="Edit Cost"/>
+		<spinner label="價格： L$" name="Edit Cost"/>
 		<check_box label="顯示在搜尋中" name="search_check" tool_tip="讓其他人可以在搜尋結果中察看到此物件"/>
 		<text name="B:">
 			B:

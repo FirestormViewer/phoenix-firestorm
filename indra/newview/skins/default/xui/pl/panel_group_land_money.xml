@@ -42,7 +42,7 @@
 		(maks. [AMOUNT])
 	</text>
 	<text name="group_money_heading">
-		[CUR] grupy
+		L$ grupy
 	</text>
 	<text name="group_over_limit_text">
 		Należy zwiększyć kredyt na używanie posiadłości.

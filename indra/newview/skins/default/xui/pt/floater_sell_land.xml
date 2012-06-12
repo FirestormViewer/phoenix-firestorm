@@ -24,13 +24,13 @@
 				Determine o preço adequado.
 			</text>
 			<text name="price_ld">
-				[CUR]
+				L$
 			</text>
 			<line_editor name="price">
 				0
 			</line_editor>
 			<text name="price_per_m">
-				([CUR][PER_METER] por m²)
+				(L$[PER_METER] por m²)
 			</text>
 			<text name="sell_to_label">
 				2. Vender para:

@@ -13,7 +13,7 @@
 	<string name="none_text" value="（無）"/>
 	<string name="sale_pending_text" value="（擱置銷售）"/>
 	<string name="group_owned_text" value="（群組所擁有）"/>
-	<string name="price_text" value="[CUR]"/>
+	<string name="price_text" value="L$"/>
 	<string name="area_text" value="m²"/>
 	<string name="all_residents_text" value="全部居民"/>
 	<string name="group_text" value="群組"/>

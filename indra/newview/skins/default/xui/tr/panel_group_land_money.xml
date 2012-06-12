@@ -58,7 +58,7 @@
 			Kullanılan alanı desteklemek için daha fazla arazi kredisi lazım
 		</text>
 		<text name="group_money_heading">
-			Grup [CUR]
+			Grup L$
 		</text>
 	</panel>
 	<tab_container name="group_money_tab_container">

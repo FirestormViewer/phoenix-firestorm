@@ -5,7 +5,7 @@
         
 Помните, оплата за рекламу не возвращается.
 	</text>
-	<spinner label="Цена: [CUR]" name="price_for_listing" tool_tip="Цена за размещение." value="50"/>
+	<spinner label="Цена: L$" name="price_for_listing" tool_tip="Цена за размещение." value="50"/>
 	<button label="Опубликовать" name="publish_btn"/>
 	<button label="Отмена" name="cancel_btn"/>
 </floater>

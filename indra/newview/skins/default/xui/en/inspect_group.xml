@@ -18,7 +18,7 @@
  width="228">
   <string name="PrivateGroup">Private group</string>
   <string name="FreeToJoin">Free to join</string>
-  <string name="CostToJoin">[CUR][AMOUNT] to join</string>
+  <string name="CostToJoin">L$[AMOUNT] to join</string>
   <string name="YouAreMember">You are a member</string>
   <text
      follows="all"
@@ -64,7 +64,7 @@ Fear the moose!  Fear it!  And the mongoose too!
    name="group_cost"
    top_pad="13"
    width="220">
-[CUR]123 to join
+L$123 to join
   </text>
   <icon
      follows="all"

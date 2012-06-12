@@ -28,5 +28,5 @@ Sauvegardez en Targa 24 bit (.tga).
 	</text>
 	<check_box label="Utiliser une compression sans perte" name="lossless_check"/>
 	<button label="Annuler" name="cancel_btn"/>
-	<button label="Charger ([AMOUNT] [CUR])" name="ok_btn"/>
+	<button label="Charger ([AMOUNT] L$)" name="ok_btn"/>
 </floater>

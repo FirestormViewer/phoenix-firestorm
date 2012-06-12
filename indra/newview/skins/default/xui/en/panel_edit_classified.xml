@@ -282,7 +282,7 @@
          height="23"
          increment="1"
          label_width="20"
-         label="[CUR]"
+         label="L$"
          v_pad="10"
          layout="topleft"
          left="10"

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="buy currency" title="ACQUISTA [CUR]">
+<floater name="buy currency" title="ACQUISTA L$">
 	<floater.string name="buy_currency">
-		acquistare [LINDENS] [CUR] per circa [LOCALAMOUNT]
+		acquistare [LINDENS] L$ per circa [LOCALAMOUNT]
 	</floater.string>
 	<text font="SansSerifLarge" left="5" name="info_need_more" right="-5">
-		Ti servono più [CUR]
+		Ti servono più L$
 	</text>
 	<text name="contacting">
 		Sto contattando il LindeX...
 	</text>
 	<text name="info_buying">
-		Acquista [CUR]
+		Acquista L$
 	</text>
 	<text name="balance_label">
 		Io ho
 	</text>
 	<text name="balance_amount">
-		[AMT][CUR]
+		[AMT]L$
 	</text>
 	<text name="currency_action" width="45">
 		Voglio acquistare
 	</text>
 	<text name="currency_label">
-		[CUR]
+		L$
 	</text>
-	<line_editor label="[CUR]" name="currency_amt">
+	<line_editor label="L$" name="currency_amt">
 		1234
 	</line_editor>
 	<text name="buying_label">
@@ -43,7 +43,7 @@
 		Il mio saldo sarà
 	</text>
 	<text name="total_amount">
-		[AMT][CUR]
+		[AMT]L$
 	</text>
 	<text name="currency_links">
 		[http://www.secondlife.com/my/account/payment_method_management.php metodo di pagamento] | [http://www.secondlife.com/my/account/currency.php valuta]
@@ -52,11 +52,11 @@
 		Riscrivi l&apos;importo per vedere l&apos;ultimo tasso al cambio.
 	</text>
 	<text name="purchase_warning_repurchase">
-		La conferma di questo acquisto compra solo [CUR], non 
+		La conferma di questo acquisto compra solo L$, non 
 l&apos;oggetto.
 	</text>
 	<text bottom_delta="16" name="purchase_warning_notenough">
-		Non stai acquistando abbastanza [CUR]. Aumenta l&apos;importo.
+		Non stai acquistando abbastanza L$. Aumenta l&apos;importo.
 	</text>
 	<button label="Acquista" name="buy_btn"/>
 	<button label="Annulla" name="cancel_btn"/>

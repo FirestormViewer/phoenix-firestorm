@@ -563,7 +563,7 @@ We recommend BVH files exported from Poser 4.
     bottom="-5"
    follows="bottom|left"
    height="23"
-   label="Upload ([CUR][AMOUNT])"
+   label="Upload (L$[AMOUNT])"
    layout="topleft"
    left="10"
    name="ok_btn"

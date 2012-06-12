@@ -120,7 +120,7 @@
 				Auswirkung auf Parzelle/Region: Prim-Äquivalenzwert [EQUIV]
 			</text>
 			<text name="review_fee">
-				Die für das Hochladen anfallende Gebühr in Höhe von [FEE] [CUR] wird von Ihrem Konto abgebucht.
+				Die für das Hochladen anfallende Gebühr in Höhe von [FEE] L$ wird von Ihrem Konto abgebucht.
 			</text>
 			<text name="review_confirmation">
 				Durch Klicken auf „Hochladen“ bestätigen Sie, dass Sie die erforderlichen Rechte für das im Modell enthaltene Material besitzen.
@@ -140,7 +140,7 @@
 			Sie finden das Modell im Objektordner Ihres Inventars.
 		</text>
 		<text name="charged_fee">
-			Von Ihrem Konto wurden [FEE] [CUR] abgebucht.
+			Von Ihrem Konto wurden [FEE] L$ abgebucht.
 		</text>
 	</panel>
 	<button label="&lt;&lt; Zurück" name="back"/>

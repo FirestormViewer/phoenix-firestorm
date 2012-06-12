@@ -11,7 +11,7 @@ Si vous choisissez de payer plus cher, votre publicité sera plus visible dans l
 		Coût de l&apos;annonce :
 	</text>
 	<text name="price_symbol">
-		[CUR]
+		L$
 	</text>
 	<button label="OK" name="set_price_btn"/>
 	<button label="Annuler" name="cancel_btn"/>

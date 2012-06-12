@@ -173,7 +173,7 @@ Dodać ten przywilej do funkcji &apos;[ROLE_NAME]&apos;?
 		<usetemplate ignoretext="Potwierdź przed upuszczeniem dodatku." name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="JoinGroupCanAfford">
-		Dołączenie do tej grupy kosztuje [COST][CUR].
+		Dołączenie do tej grupy kosztuje [COST]L$.
 Chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Dołącz"/>
 	</notification>
@@ -183,33 +183,33 @@ Czy chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Dołącz"/>
 	</notification>
 	<notification name="JoinGroupCannotAfford">
-		Członkostwo w tej grupie kosztuje [COST][CUR]
-Masz za mało [CUR] żeby zostać członkiem.
+		Członkostwo w tej grupie kosztuje [COST]L$
+Masz za mało L$ żeby zostać członkiem.
 	</notification>
 	<notification name="CreateGroupCost">
-		Stworzenie tej grupy kosztuje 100[CUR].
+		Stworzenie tej grupy kosztuje 100L$.
 W grupie powinien być więcej niż jeden członek, albo zostanie na zawsze skasowana.
 Zaproś proszę członków w ciągu 48 godzin.
-		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za 100[CUR]"/>
+		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za 100L$"/>
 	</notification>
 	<notification name="LandBuyPass">
-		Za [COST][CUR] możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
+		Za [COST]L$ możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
-		Cena sprzedaży musi być wyższa niż 0[CUR] jeżeli sprzedajesz komukolwiek.
-Musisz wybrać kupca jeżeli chcesz sprzedać za 0[CUR].
+		Cena sprzedaży musi być wyższa niż 0L$ jeżeli sprzedajesz komukolwiek.
+Musisz wybrać kupca jeżeli chcesz sprzedać za 0L$.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
 		Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
-Cena wynosi [SALE_PRICE][CUR], a sprzedaż będzie autoryzowana dla [NAME].
+Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją posiadłość do sprzedaży dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
 
 Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
-Cena wynosi [SALE_PRICE][CUR], a sprzedaż będzie autoryzowana dla [NAME].
+Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
@@ -553,7 +553,7 @@ Przemieść wszystkie otrzymywane obiekty do jednego regionu.
 	<notification name="PromptGoToCurrencyPage">
 		[EXTRA]
 
-Odwiedzić [_URL] po więcej informacji na temat zakupu [CUR]?
+Odwiedzić [_URL] po więcej informacji na temat zakupu L$?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="UnableToLinkObjects">
@@ -866,7 +866,7 @@ Wybierz całą posiadłość albo najpierw ją podziel.
 	</notification>
 	<notification name="ReleaseLandWarning">
 		Porzucasz posiadłość o powierzchni [AREA] m².
-Porzucenie tej posiadłości usunie ją z Twoich własności, ale nie otrzymasz za to żadnych [CUR].
+Porzucenie tej posiadłości usunie ją z Twoich własności, ale nie otrzymasz za to żadnych L$.
 
 Porzucić posiadłość?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
@@ -1025,7 +1025,7 @@ ze wszystkich posiadłości w tym symulatorze?
 		Musisz nadać tytuł Twojej reklamie.
 	</notification>
 	<notification name="MinClassifiedPrice">
-		Minimalna cena za publikację wynosi [MIN_PRICE][CUR].
+		Minimalna cena za publikację wynosi [MIN_PRICE]L$.
 
 Wybierz wyższą cenę.
 	</notification>
@@ -1220,7 +1220,7 @@ Czy chcesz zaufać temu wydawcy?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Zaufaj"/>
 	</notification>
 	<notification name="NotEnoughCurrency">
-		[NAME] [PRICE][CUR] Masz za mało [CUR].
+		[NAME] [PRICE]L$ Masz za mało L$.
 	</notification>
 	<notification name="GrantedModifyRights">
 		Masz teraz prawa modyfikacji obiektów należących do [NAME].
@@ -1404,7 +1404,7 @@ W celu instalacji aktualizacji musi zostać wykonany restart [APP_NAME].
 	</notification>
 	<notification name="DeedObjectToGroup">
 		Przekazanie tego obiektu spowoduje, że grupa:
-* Otrzyma [CUR] zapłacone temu obiektowi
+* Otrzyma L$ zapłacone temu obiektowi
 		<usetemplate ignoretext="Proszę potwierdzić decyzję przed przypisaniem obiektu do grupy" name="okcancelignore" notext="Anuluj" yestext="Przekaż"/>
 	</notification>
 	<notification name="WebLaunchExternalTarget">
@@ -1653,7 +1653,7 @@ Kontynuować?
 	<notification label="Zmiana Dostępu do Majątku Lindenów" name="ChangeLindenAccess">
 		Dokonujesz zmiany w liście dostępu Regionu głównego należącego do Lindenów (Regiony Główne, Teen Grid, Orientacja).
 
-Żądana operacja jest wyjątkowo niebezpieczna dla wszystkich Rezydentów przebywających w regionie i powinna być używana wyłącznie w celu zablokowania opcji pozwalającej na przeniesienie obiektów/[CUR] do/z sieci.
+Żądana operacja jest wyjątkowo niebezpieczna dla wszystkich Rezydentów przebywających w regionie i powinna być używana wyłącznie w celu zablokowania opcji pozwalającej na przeniesienie obiektów/L$ do/z sieci.
 Dodatkowo, zmiany dokonane w Regionie Głównym mogą spowodować problemy przestrzeni serwerowej innych regionów.
 
 Kontynuować?
@@ -1822,7 +1822,7 @@ Możesz wybrać &apos;Zmień Ustawienia&apos; by dokonać zmian w ustawieniach T
 	<notification name="PublishClassified">
 		Pamiętaj: Opłaty za reklamę są bezzwrotne.
 
-Zamieścić tą reklamę za [AMOUNT][CUR]?
+Zamieścić tą reklamę za [AMOUNT]L$?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SetClassifiedMature">
@@ -1867,7 +1867,7 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 	</notification>
 	<notification name="BuyOriginal">
-		Kupić oryginalny obiekt od [OWNER] za [PRICE][CUR]?
+		Kupić oryginalny obiekt od [OWNER] za [PRICE]L$?
 Zostaniesz właścicielem tego obiektu z następującymi prawami:
  Modyfikacje: [MODIFYPERM]
  Kopiowanie: [COPYPERM]
@@ -1875,7 +1875,7 @@ Zostaniesz właścicielem tego obiektu z następującymi prawami:
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BuyOriginalNoOwner">
-		Kupić oryginalny obiekt za [PRICE][CUR]?
+		Kupić oryginalny obiekt za [PRICE]L$?
 Zostaniesz właścicielem tego obiektu z następującymi prawami:
  Modyfikacje: [MODIFYPERM]
  Kopiowanie: [COPYPERM]
@@ -1883,7 +1883,7 @@ Zostaniesz właścicielem tego obiektu z następującymi prawami:
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopy">
-		Kupić kopię obiektu od [OWNER] za [PRICE][CUR]?
+		Kupić kopię obiektu od [OWNER] za [PRICE]L$?
 Obiekt zostanie skopiowany do Twojej szafy z następującymi prawami:
  Modyfikacje: [MODIFYPERM]
  Kopiowanie: [COPYPERM]
@@ -1891,7 +1891,7 @@ Obiekt zostanie skopiowany do Twojej szafy z następującymi prawami:
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BuyCopyNoOwner">
-		Kupić kopię obiektu za [PRICE][CUR]?
+		Kupić kopię obiektu za [PRICE]L$?
 Obiekt zostanie skopiowany do Twojej szafy z następującymi prawami:
  Modyfikacje: [MODIFYPERM]
  Kopiowanie: [COPYPERM]
@@ -1899,12 +1899,12 @@ Obiekt zostanie skopiowany do Twojej szafy z następującymi prawami:
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BuyContents">
-		Kupić zawartość od [OWNER] za [PRICE][CUR]?
+		Kupić zawartość od [OWNER] za [PRICE]L$?
 Zawartość zostanie skopiowana do Twojej szafy.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BuyContentsNoOwner">
-		Kupić zawartość za [PRICE][CUR]?
+		Kupić zawartość za [PRICE]L$?
 Zawartość zostanie skopiowana do Twojej szafy.
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
@@ -2128,8 +2128,8 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 	<notification name="Cannot_Purchase_an_Attachment">
 		Rzeczy nie mogą być kupione jeżeli są częścią dodatku.
 	</notification>
-	<notification label="Prośba o Zgodę na Pobieranie [CUR]" name="DebitPermissionDetails">
-		Akceptując tą prośbę wyrażasz zgodę na ciągłe pobieranie Lindenów ([CUR]) z Twojego konta. Żeby cofnąć to pozwolenie właściciel obiektu będzie musiał usunąć ten obiekt albo zresetować skrypty obiektu.
+	<notification label="Prośba o Zgodę na Pobieranie L$" name="DebitPermissionDetails">
+		Akceptując tą prośbę wyrażasz zgodę na ciągłe pobieranie Lindenów (L$) z Twojego konta. Żeby cofnąć to pozwolenie właściciel obiektu będzie musiał usunąć ten obiekt albo zresetować skrypty obiektu.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="AutoWearNewClothing">
@@ -2260,7 +2260,7 @@ URL: [MOAPURL]
 (Zajmuje około 5 minut.)
 	</notification>
 	<notification name="UploadPayment">
-		Ładowanie kosztowało [AMOUNT][CUR].
+		Ładowanie kosztowało [AMOUNT]L$.
 	</notification>
 	<notification name="UploadWebSnapshotDone">
 		Ładowanie obrazu z Internetu zakończone pomyślnie.
@@ -2727,7 +2727,7 @@ Czy się zgadzasz?
 	<notification name="BuyLindenDollarSuccess">
 		Dziękujemy za wpłatę!
 
-Twój stan konta [CUR] zostanie zaktualizowany w momencie zakończenia transakcji. Jeżeli zajmie to ponad 20 minut, to Twój balans konta nie ulegnie zmianie, a transakcja zostanie anulowana. W tym przypadku pobrana kwota zostanie zwrócona na stan konta w US$.
+Twój stan konta L$ zostanie zaktualizowany w momencie zakończenia transakcji. Jeżeli zajmie to ponad 20 minut, to Twój balans konta nie ulegnie zmianie, a transakcja zostanie anulowana. W tym przypadku pobrana kwota zostanie zwrócona na stan konta w US$.
 
 Status transakcji możesz sprawdzić odwiedzając Historię Transakcji swojego konta na [http://secondlife.com/account/ Tablicy]
 	</notification>
@@ -2886,7 +2886,7 @@ Zostaną zablokowane na kilka sekund dla bezpieczeństwa.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="UploadCostConfirmation">
-		Załadowanie tego na serwer będzie kosztować [PRICE][CUR], chcesz kontynuować?
+		Załadowanie tego na serwer będzie kosztować [PRICE]L$, chcesz kontynuować?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Załaduj"/>
 	</notification>
 	<notification name="ConfirmClearTeleportHistory">
@@ -2945,7 +2945,7 @@ następującym Rezydentom:
 	<notification name="ReleasedLandWithReclaim">
 		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
 
-Masz [RECLAIM_PERIOD] godzin na odzyskanie jej za 0[CUR] zanim zostanie wystawiona na sprzedaż każdemu.
+Masz [RECLAIM_PERIOD] godzin na odzyskanie jej za 0L$ zanim zostanie wystawiona na sprzedaż każdemu.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
 		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
@@ -3061,8 +3061,8 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	<notification label="Szafa" name="HintInventory">
 		Sprawdź swoją Szafę aby znaleźć obiekty. Najnowsze obiekty mogą być łatwo odnalezione w zakładce Ostatnie.
 	</notification>
-	<notification label="Otrzymano [CUR]!" name="HintLindenDollar">
-		Tutaj znajduje się Twój bieżący bilans [CUR]. Kliknij Kup aby kupić więcej [CUR].
+	<notification label="Otrzymano L$!" name="HintLindenDollar">
+		Tutaj znajduje się Twój bieżący bilans L$. Kliknij Kup aby kupić więcej L$.
 	</notification>
 	<notification name="LowMemory">
 		Masz zbyt mały zapas pamięci. Pewne funkcje SL zostały wyłączone, aby zapobiec awarii. Wyłącz inne aplikacje. Zrestartuj SL, jeśli problem pozostanie.

@@ -7,7 +7,7 @@
 		Vuoi salvare le modifiche?
 	</panel.string>
 	<panel.string name="group_join_btn">
-		Aderisci ([AMOUNT] [CUR])
+		Aderisci ([AMOUNT] L$)
 	</panel.string>
 	<panel.string name="group_join_free">
 		Gratis

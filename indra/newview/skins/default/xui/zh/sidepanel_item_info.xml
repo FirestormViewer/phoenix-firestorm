@@ -67,7 +67,7 @@
 				<combo_box.item label="副本" name="Copy"/>
 				<combo_box.item label="原件" name="Original"/>
 			</combo_box>
-			<spinner label="價格： [CUR]" name="Edit Cost"/>
+			<spinner label="價格： L$" name="Edit Cost"/>
 		</panel>
 	</scroll_container>
 	<panel name="button_panel">

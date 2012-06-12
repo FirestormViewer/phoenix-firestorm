@@ -181,6 +181,6 @@ Maximum animation length is [MAX_LENGTH] seconds.
 
 We recommend BVH files exported from Poser 4.
 	</text>
-	<button label="上傳（[CUR][AMOUNT]）" name="ok_btn"/>
+	<button label="上傳（L$[AMOUNT]）" name="ok_btn"/>
 	<button label="取消" name="cancel_btn"/>
 </floater>

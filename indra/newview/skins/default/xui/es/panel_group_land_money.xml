@@ -54,7 +54,7 @@
 		(máx. [AMOUNT])
 	</text>
 	<text name="group_money_heading">
-		[CUR] del grupo
+		L$ del grupo
 	</text>
 	<icon name="group_over_limit_icon" left="225"/>
 	<text name="group_over_limit_text" left_pad="2" width="210">

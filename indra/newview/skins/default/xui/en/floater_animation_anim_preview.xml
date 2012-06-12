@@ -58,7 +58,7 @@
     <button
      follows="left|bottom"
      height="22"
-     label="Upload ([CUR][AMOUNT])"
+     label="Upload (L$[AMOUNT])"
      layout="topleft"
      left="45"
      name="ok_btn"

@@ -62,6 +62,6 @@
 	</combo_box>
 	<spinner label="Fiyat:" name="Edit Cost"/>
 	<text name="CurrencySymbol">
-		[CUR]
+		L$
 	</text>
 </floater>

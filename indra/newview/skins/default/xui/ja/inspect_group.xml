@@ -11,7 +11,7 @@
 		参加費無料
 	</string>
 	<string name="CostToJoin">
-		参加費 [CUR][AMOUNT]
+		参加費 L$[AMOUNT]
 	</string>
 	<string name="YouAreMember">
 		あなたはメンバーです
@@ -24,7 +24,7 @@
 Fear the moose!  Fear it!  And the mongoose too!
 	</text>
 	<text name="group_cost">
-		[CUR]123 to join
+		L$123 to join
 	</text>
 	<button label="参加" name="join_btn"/>
 	<button label="脱退" name="leave_btn"/>

@@ -21,7 +21,7 @@
 				Wybierz cenę za posiadłość.
 			</text>
 			<text name="price_per_m">
-				([PER_METER][CUR] za m²)
+				([PER_METER]L$ za m²)
 			</text>
 			<text name="sell_to_label">
 				2. Sprzedaj posiadłość:

@@ -13,11 +13,11 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
 	</panel.string>
 	<panel.string name="buycurrencylabel">
-		[CUR] [AMT]
+		L$ [AMT]
 	</panel.string>
 	<panel left="-425" name="balance_bg" width="215">
-		<text name="balance" tool_tip="[CUR] bakiyenizi yenilemek için buraya tıklayın" value="[CUR]20"/>
-		<button label="[CUR] Satın Al" name="buyL" tool_tip="Daha fazla [CUR] satın almak için tıklayın"/>
+		<text name="balance" tool_tip="L$ bakiyenizi yenilemek için buraya tıklayın" value="L$20"/>
+		<button label="L$ Satın Al" name="buyL" tool_tip="Daha fazla L$ satın almak için tıklayın"/>
 		<button label="Alışveriş yap" name="goShop" tool_tip="Second Life Pazaryeri Aç" width="95"/>
 	</panel>
 	<text name="TimeText" tool_tip="Geçerli zaman (Pasifik)">

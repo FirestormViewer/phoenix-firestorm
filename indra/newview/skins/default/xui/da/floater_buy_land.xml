@@ -77,10 +77,10 @@ Prøv at vælge et mindre område.
 		Du ejer [BUYER] m² land.
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Betal [CUR] [AMOUNT] til [SELLER] for dette stykke jord
+		Betal L$ [AMOUNT] til [SELLER] for dette stykke jord
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Køb [CUR] [AMOUNT] for ca. [LOCAL_AMOUNT],
+		Køb L$ [AMOUNT] for ca. [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Denne parcel er på [AMOUNT] m²
@@ -102,8 +102,8 @@ kan indeholde [AMOUNT2] objekter
 		objekter ikke inkluderet
 	</floater.string>
 	<floater.string name="info_price_string">
-		[CUR] [PRICE]
-([CUR] [PRICE_PER_SQM]/m²)
+		L$ [PRICE]
+(L$ [PRICE_PER_SQM]/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
@@ -112,16 +112,16 @@ kredit for at dække dette parcel før købet vil blive
 gennemført.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Du har [CUR] [AMOUNT], hvilket er nok til at købe denne jord.
+		Du har L$ [AMOUNT], hvilket er nok til at købe denne jord.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Du har kun [CUR] [AMOUNT], og har brug for yderligere L$ [AMOUNT2].
+		Du har kun L$ [AMOUNT], og har brug for yderligere L$ [AMOUNT2].
 	</floater.string>
 	<floater.string name="balance_left">
-		Efter købet, vil du have [CUR] [AMOUNT] tilbage.
+		Efter købet, vil du have L$ [AMOUNT] tilbage.
 	</floater.string>
 	<floater.string name="balance_needed">
-		Du skal købe mindst [CUR] [AMOUNT] for at have råd til denne jord.
+		Du skal købe mindst L$ [AMOUNT] for at have råd til denne jord.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(intet parcel er valgt)
@@ -183,8 +183,8 @@ gennemført.
 		Pris:
 	</text>
 	<text left_delta="62" name="info_price">
-		[CUR] 1500
-([CUR] 1.1/m²)
+		L$ 1500
+(L$ 1.1/m²)
 solgt med objekter
 	</text>
 	<text name="info_action">
@@ -213,13 +213,13 @@ solgt med objekter
 Denne parcel er på 512 m².
 	</text>
 	<text name="purchase_action">
-		Betal Joe Resident [CUR] 4000 dette areal
+		Betal Joe Resident L$ 4000 dette areal
 	</text>
 	<text name="currency_reason">
-		Du har [CUR]2,100.
+		Du har L$2,100.
 	</text>
 	<text name="currency_action">
-		Køb yderligere [CUR]
+		Køb yderligere L$
 	</text>
 	<line_editor name="currency_amt">
 		1000
@@ -228,7 +228,7 @@ Denne parcel er på 512 m².
 		for ca. [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Du har [CUR]2,100.
+		Du har L$2,100.
 	</text>
 	<check_box label="Fjern [AMOUNT] m² af bidrag fra gruppe." name="remove_contribution"/>
 	<button label="Køb" name="buy_btn"/>

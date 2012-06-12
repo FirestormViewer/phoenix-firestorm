@@ -12,7 +12,7 @@
 Proprietário [OWNER]
 	</string>
 	<string name="Price">
-		[CUR][AMOUNT]
+		L$[AMOUNT]
 	</string>
 	<string name="PriceFree">
 		Grátis!
@@ -25,7 +25,7 @@ Proprietário [OWNER]
 	</string>
 	<text name="object_name" value="Test Object Name That Is actually two lines and Really Long"/>
 	<text name="price_text">
-		[CUR]30.000
+		L$30.000
 	</text>
 	<text name="object_description">
 		This is a really long description for an object being as how it is at least 80 characters in length and so but maybe more like 120 at this point. Who knows, really?

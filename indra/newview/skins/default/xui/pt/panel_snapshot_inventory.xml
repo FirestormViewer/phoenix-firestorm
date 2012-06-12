@@ -4,7 +4,7 @@
 		Salvar no meu inventário
 	</text>
 	<text name="hint_lbl">
-		Salvar uma imagem em seu inventário custa [CUR][UPLOAD_COST]. Para salvar sua imagem como uma textura, selecione um dos formatos quadrados.
+		Salvar uma imagem em seu inventário custa L$[UPLOAD_COST]. Para salvar sua imagem como uma textura, selecione um dos formatos quadrados.
 	</text>
 	<combo_box label="Resolução" name="texture_size_combo">
 		<combo_box.item label="Janela atual" name="CurrentWindow"/>

@@ -76,10 +76,10 @@ Tente selecionar uma área menor.
 		Você tem [BUYER] m².
 	</floater.string>
 	<floater.string name="pay_to_for_land">
-		Pagar [CUR] [AMOUNT] para [SELLER] por esta terra
+		Pagar L$ [AMOUNT] para [SELLER] por esta terra
 	</floater.string>
 	<floater.string name="buy_for_US">
-		Compre [CUR] [AMOUNT] por cerca de [LOCAL_AMOUNT],
+		Compre L$ [AMOUNT] por cerca de [LOCAL_AMOUNT],
 	</floater.string>
 	<floater.string name="parcel_meters">
 		Este lote tem [AMOUNT] m²
@@ -101,8 +101,8 @@ suporta [AMOUNT2] objetos
 		objetos não incluídos
 	</floater.string>
 	<floater.string name="info_price_string">
-		[CUR] [PRICE]
-([CUR] [PRICE_PER_SQM]/m²)
+		L$ [PRICE]
+(L$ [PRICE_PER_SQM]/m²)
 [SOLD_WITH_OBJECTS]
 	</floater.string>
 	<floater.string name="insufficient_land_credits">
@@ -110,16 +110,16 @@ suporta [AMOUNT2] objetos
 contribuídas para cobrir este lote antes da aquisição se completar.
 	</floater.string>
 	<floater.string name="have_enough_lindens">
-		Você tem [CUR] [AMOUNT], suficiente para comprar este lote.
+		Você tem L$ [AMOUNT], suficiente para comprar este lote.
 	</floater.string>
 	<floater.string name="not_enough_lindens">
-		Você tem somente [CUR] [AMOUNT], e precisa de mais [CUR] [AMOUNT2].
+		Você tem somente L$ [AMOUNT], e precisa de mais L$ [AMOUNT2].
 	</floater.string>
 	<floater.string name="balance_left">
-		Após a compra, restará [CUR] [AMOUNT].
+		Após a compra, restará L$ [AMOUNT].
 	</floater.string>
 	<floater.string name="balance_needed">
-		Você precisa comprar pelo menos [CUR] [AMOUNT] para ter recursos para este lote.
+		Você precisa comprar pelo menos L$ [AMOUNT] para ter recursos para este lote.
 	</floater.string>
 	<floater.string name="no_parcel_selected">
 		(nenhum lote selecionado)
@@ -181,8 +181,8 @@ contribuídas para cobrir este lote antes da aquisição se completar.
 		Preço:
 	</text>
 	<text name="info_price">
-		[CUR] 1500
-([CUR] 1,1/m²) inclui objetos
+		L$ 1500
+(L$ 1,1/m²) inclui objetos
 	</text>
 	<text name="info_action">
 		Comprar este lote irá:
@@ -210,13 +210,13 @@ contribuídas para cobrir este lote antes da aquisição se completar.
 Este lote mede 512 m².
 	</text>
 	<text name="purchase_action">
-		Pagar ao Residente Joe [CUR]4000 pela terra
+		Pagar ao Residente Joe L$4000 pela terra
 	</text>
 	<text name="currency_reason">
-		Você tem [CUR]2,100.
+		Você tem L$2,100.
 	</text>
 	<text name="currency_action" width="116">
-		Compre [CUR] adicionais
+		Compre L$ adicionais
 	</text>
 	<line_editor left="190" name="currency_amt" width="65">
 		1000
@@ -225,7 +225,7 @@ Este lote mede 512 m².
 		cerca de [LOCAL_AMOUNT]
 	</text>
 	<text name="currency_balance">
-		Você tem [CUR]2,100.
+		Você tem L$2,100.
 	</text>
 	<check_box label="Subtrair [AMOUNT] m² da minha contribuição." name="remove_contribution"/>
 	<button label="Adquirir" name="buy_btn"/>

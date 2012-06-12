@@ -2,6 +2,6 @@
 <panel name="panel_snapshot_options">
 	<button label="Publicar en los comentarios de mi perfil" name="save_to_profile_btn"/>
 	<button label="Enviar por correo electrónico" name="save_to_email_btn"/>
-	<button label="Guardar en mi inventario ([AMOUNT] [CUR])" name="save_to_inventory_btn"/>
+	<button label="Guardar en mi inventario ([AMOUNT] L$)" name="save_to_inventory_btn"/>
 	<button label="Guardar en mi ordenador" name="save_to_computer_btn"/>
 </panel>
