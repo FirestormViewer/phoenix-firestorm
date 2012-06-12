@@ -274,6 +274,7 @@
 			<menu_item_call label="Widok pierwszoosobowy" name="Mouselook"/>
 			<menu_item_call label="Wolna kamera" name="Joystick Flycam"/>
 			<menu_item_call label="Reset widoku" name="Reset View"/>
+			<menu_item_call label="Zresetuj kąty patrzenia kamery" name="Reset Camera Angles"/>
 			<menu_item_call label="Zobacz ostatniego rozmówcę" name="Look at Last Chatter"/>
 			<menu_item_call label="Przybliż" name="Zoom In"/>
 			<menu_item_call label="Domyślne przybliżenie" name="Zoom Default"/>

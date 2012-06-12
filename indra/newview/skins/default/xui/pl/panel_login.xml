@@ -29,7 +29,6 @@
 			<text name="grid_selection_text">
 				Loguj na siatkę:
 			</text>
-			<button label="Menedżer siatek" name="grids_btn"/>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">
