@@ -309,6 +309,7 @@
 			<menu_item_call label="Mouselook" name="Mouselook"/>
 			<menu_item_check label="Joystick-Flycam" name="Joystick Flycam"/>
 			<menu_item_call label="Ansicht zurücksetzen" name="Reset View"/>
+			<menu_item_call label="Kamera-Blickwinkel zurücksetzen" name="Reset Camera Angles"/>
 			<menu_item_call label="Letzten Chatter ansehen" name="Look at Last Chatter"/>
 			<menu_item_call label="Hineinzoomen" name="Zoom In"/>
 			<menu_item_call label="Zoom-Standard" name="Zoom Default"/>
