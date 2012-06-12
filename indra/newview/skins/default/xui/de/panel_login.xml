@@ -34,7 +34,6 @@
 			<text name="grid_selection_text">
 				Gridauswahl:
 			</text>
-			<button label="Grid-Manager" name="grids_btn"/>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

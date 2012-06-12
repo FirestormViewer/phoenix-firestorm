@@ -763,8 +763,6 @@ void LLPanelLogin::updateLocationCombo( bool force_visible )
 	sInstance->getChildView("server_combo_text")->setVisible( show_server);	
 	sInstance->getChildView("grid_selection_text")->setVisible( show_server);	
 	sInstance->getChildView("server_combo")->setVisible( show_server);
-	// <FS:Ansariel> Update visibility of Grid Manager button, too!
-	sInstance->getChildView("grids_btn")->setVisible( show_server);
 
 }
 

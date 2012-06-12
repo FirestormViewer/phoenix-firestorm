@@ -38,7 +38,6 @@
 			<text name="grid_selection_text">
 				Iniciar en la red:
 			</text>
-			<button label="Gestor de redes" name="grids_btn"/>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">
