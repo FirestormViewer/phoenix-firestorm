@@ -705,6 +705,7 @@ Selecciona objetos con scripts.
 		No se pudo &apos;eliminar&apos;.
 		
 Selecciona objetos con scripts.
+	</notification>
 	<notification name="CannotResetSelectObjectsNoPermission">
 		No se pudo &apos;reiniciar&apos;.
 
@@ -3442,7 +3443,7 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 	</notification>
 	<notification name="ConfirmScriptModify">
 		¿Estás seguro de que quieres modificar los scripts en los objetos seleccionados?
-		<usetemplate name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Confirmar antes de modificar scripts en la selección" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.

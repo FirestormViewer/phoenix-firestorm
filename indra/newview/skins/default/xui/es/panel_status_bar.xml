@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="La parcela está en venta"/>
 		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
-		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma."/>
+		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." value="(cargando...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Pérdida de paquetes
@@ -11,7 +12,7 @@
 		Ancho de banda
 	</panel.string>
 	<panel.string name="time">
-		[hour12, datetime, slt]:[min, datetime, slt] [ampm, datetime, slt] [timezone,datetime, slt]
+		[hour24, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
 	</panel.string>
 	<panel.string name="timeTooltip">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt]
@@ -19,13 +20,13 @@
 	<panel.string name="buycurrencylabel">
 		[AMT] [CUR]
 	</panel.string>
-	<panel left="-410" name="balance_bg" width="200">
+	<panel name="balance_bg">
 		<text name="balance" tool_tip="Haz clic para actualizar tu saldo en [CUR]" value="??? [CUR]"/>
 		<button name="buyL" label="COMPRAR [CUR]" halign="left" tool_tip="Pulsa para comprar más [CUR]"/>
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Hora actual (costa del Pacífico de EEUU)">
-			24:00 AM PST
+			24:00 PST
 		</text>
 		<button name="stream_toggle_btn" tool_tip="Iniciar/detener la reproducción del flujo de audio de la parcela"/>
 		<button name="media_toggle_btn" tool_tip="Iniciar/detener la reproducción de todos los medios (música, vídeo, páginas web)"/>
