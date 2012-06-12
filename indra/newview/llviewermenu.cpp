@@ -4411,15 +4411,21 @@ void handle_reset_view()
 		gAgentCamera.resetView();
 	// </FS:Zi>
 
-	// <FS:Zi> Camera focus and offset with CTRL/SHIFT + Scroll wheel
-	gSavedSettings.getControl("FocusOffsetRearView")->resetToDefault();
-	gSavedSettings.getControl("CameraOffsetRearView")->resetToDefault();
-	// </FS:Zi>
-
 	gAgentCamera.switchCameraPreset(CAMERA_PRESET_REAR_VIEW);
 	reset_view_final( TRUE );
 	LLFloaterCamera::resetCameraMode();
 }
+
+// <FS:Zi> Add reset camera angles menu
+void handle_reset_camera_angles()
+{
+	handle_reset_view();
+
+	// Camera focus and offset with CTRL/SHIFT + Scroll wheel
+	gSavedSettings.getControl("FocusOffsetRearView")->resetToDefault();
+	gSavedSettings.getControl("CameraOffsetRearView")->resetToDefault();
+}
+// </FS:Zi>
 
 class LLViewResetView : public view_listener_t
 {
@@ -4429,6 +4435,17 @@ class LLViewResetView : public view_listener_t
 		return true;
 	}
 };
+
+// <FS:Zi> Add reset camera angles menu
+class LLViewResetCameraAngles : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		handle_reset_camera_angles();
+		return true;
+	}
+};
+// </FS:Zi>
 
 // Note: extra parameters allow this function to be called from dialog.
 void reset_view_final( BOOL proceed ) 
@@ -9445,6 +9462,9 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLViewCheckHighlightTransparent(), "View.CheckHighlightTransparent");
 	view_listener_t::addMenu(new LLViewCheckRenderType(), "View.CheckRenderType");
 	view_listener_t::addMenu(new LLViewCheckHUDAttachments(), "View.CheckHUDAttachments");
+	// <FS:Zi> Add reset camera angles menu
+	view_listener_t::addMenu(new LLViewResetCameraAngles(), "View.ResetCameraAngles");
+	// </FS:Zi>
 
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
