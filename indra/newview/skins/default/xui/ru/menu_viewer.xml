@@ -5,7 +5,7 @@
 			<menu_item_call.on_click name="ManageMyAccount_url" parameter="WebLaunchJoinNow,http://secondlife.com/account/index.php?lang=En"/>
 		</menu_item_call>
 		<menu_item_call label="Коробка-продовца..." name="MerchantOutbox"/>
-		<menu_item_call label="Купить[CUR]" name="Buy and Sell L$"/>
+		<menu_item_call label="КупитьL$" name="Buy and Sell L$"/>
 		<menu_item_call label="Настройки" name="Preferences"/>
 		<menu_item_call label="Кнопки панели" name="Toolbar Buttons"/>
 		<menu_item_call label="Профиль…" name="Profile"/>
@@ -34,11 +34,11 @@
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение ([CUR][COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук ([CUR][COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация ([CUR][COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу ([CUR][COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
@@ -190,7 +190,7 @@
 	<menu label="Содержимое" name="Content">
 		<menu_item_check label="Поиск" name="Search"/>
 		<menu_item_check label="Маркетплейс" name="SL Marketplace"/>
-		<menu_item_check label="[CUR]-Курсы" name="LindenXchange"/>
+		<menu_item_check label="L$-Курсы" name="LindenXchange"/>
 		<menu_item_check label="База скриптов" name="Script Library"/>
 	</menu>
 	<menu label="Справка" name="Help">
