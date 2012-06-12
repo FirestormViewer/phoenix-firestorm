@@ -19,6 +19,5 @@
 		<panel label="Skórki" name="skins"/>
 		<panel label="Błędy" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
-		<panel label="Siatki" name="grids"/>
 	</tab_container>
 </floater>
