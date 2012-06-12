@@ -285,6 +285,7 @@
 			<menu_item_call label="Vista subjetiva" name="Mouselook"/>
 			<menu_item_check label="Flycam del joystick" name="Joystick Flycam"/>
 			<menu_item_call label="Volver a la vista por defecto" name="Reset View"/>
+			<menu_item_call label="Restablecer ángulos de cámara" name="Reset Camera Angles"/>
 			<menu_item_call label="Mirar al último que habló" name="Look at Last Chatter"/>
 			<menu_item_call label="Acercar el zoom" name="Zoom In"/>
 			<menu_item_call label="Zoom por defecto" name="Zoom Default"/>

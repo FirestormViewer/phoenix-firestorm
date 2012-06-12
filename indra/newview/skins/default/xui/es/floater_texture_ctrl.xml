@@ -4,33 +4,31 @@
 		Pulsa para elegir una imagen
 	</floater.string>
 	<floater.string name="pick title">
-		Destacado:
+		Seleccionar:
 	</floater.string>
 	<text name="Multiple">
 		Texturas múltiples
 	</text>
+	<radio_group name="mode_selection">
+		<radio_item label="Inventario" name="inventory"/>
+		<radio_item label="Local" name="local"/>
+	</radio_group>
 	<text name="unknown">
 		Tamaño: [DIMENSIONS]
 	</text>
-	<button label="Por defecto" label_selected="Por defecto" name="Default" width="84"/>
-	<button label="Ninguna" label_selected="Ninguna" left="90" name="None"/>
+	<button label="Por defecto" label_selected="Por defecto" name="Default"/>
 	<button label="Blanca" label_selected="Blanca" name="Blank"/>
-	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
-	<tab_container name="servloc_tabcont">
-		<panel label="Servidor" name="server_tab">
-			<filter_editor label="Filtrar" name="inventory search editor"/>
-			<check_box label="Mostrar carpetas" name="show_folders_check"/>
-		</panel>
-		<panel label="Local" name="local_tab">
-			<button label="Añadir" name="l_add_btn"/>
-			<button label="Eliminar" name="l_del_btn"/>
-			<button label="Subir" name="l_upl_btn"/>
-			<scroll_list name="local_name_list">
-				<column name="unit_name" label="Nombre"/>
-				<column name="unit_id_HIDDEN" label="ID"/>
-			</scroll_list> 
-		</panel>
-	</tab_container>
-	<button label="Aceptar" label_selected="Aceptar" name="Select"/>
+	<button label="Ninguna" label_selected="Ninguna" name="None"/>
+	<filter_editor label="Filtrar texturas" name="inventory search editor"/>
+	<check_box label="Mostrar carpetas" name="show_folders_check"/>
+	<button label="Añadir" name="l_add_btn"/>
+	<button label="Eliminar" name="l_rem_btn"/>
+	<button label="Subir" name="l_upl_btn"/>
+	<scroll_list name="local_name_list">
+		<column name="unit_name" label="Nombre"/>
+		<column name="unit_id_HIDDEN" label="ID"/>
+	</scroll_list>
+	<button label="Aceptar" label_selected="Aceptar" name="Select" left="105"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
+	<check_box label="Aplicar ahora" name="apply_immediate_check"/>
 </floater>
