@@ -235,26 +235,46 @@ BOOL LLLandmarksPanel::postBuild()
 // virtual
 void LLLandmarksPanel::onSearchEdit(const std::string& string)
 {
+	// <FS:Ansariel> Fix for landmark search (FIRE-6611): We don't have
+	//               accordion tabs but normal tabs!
 	// give FolderView a chance to be refreshed. So, made all accordions visible
-	for (accordion_tabs_t::const_iterator iter = mAccordionTabs.begin(); iter != mAccordionTabs.end(); ++iter)
+	//for (accordion_tabs_t::const_iterator iter = mAccordionTabs.begin(); iter != mAccordionTabs.end(); ++iter)
+	//{
+	//	LLAccordionCtrlTab* tab = *iter;
+	//	tab->setVisible(TRUE);
+
+	//	// expand accordion to see matched items in each one. See EXT-2014.
+	//	if (string != "")
+	//	{
+	//		tab->changeOpenClose(false);
+	//	}
+
+	//	LLPlacesInventoryPanel* inventory_list = dynamic_cast<LLPlacesInventoryPanel*>(tab->getAccordionView());
+	//	if (NULL == inventory_list) continue;
+
+	//	if (inventory_list->getFilter())
+	//	{
+	//		filter_list(inventory_list, string);
+	//	}
+	//}
+
+	if (mFavoritesInventoryPanel && mFavoritesInventoryPanel->getFilter())
 	{
-		LLAccordionCtrlTab* tab = *iter;
-		tab->setVisible(TRUE);
-
-		// expand accordion to see matched items in each one. See EXT-2014.
-		if (string != "")
-		{
-			tab->changeOpenClose(false);
-		}
-
-		LLPlacesInventoryPanel* inventory_list = dynamic_cast<LLPlacesInventoryPanel*>(tab->getAccordionView());
-		if (NULL == inventory_list) continue;
-
-		if (inventory_list->getFilter())
-		{
-			filter_list(inventory_list, string);
-		}
+		filter_list(mFavoritesInventoryPanel, string);
 	}
+	if (mLandmarksInventoryPanel && mLandmarksInventoryPanel->getFilter())
+	{
+		filter_list(mLandmarksInventoryPanel, string);
+	}
+	if (mMyInventoryPanel && mMyInventoryPanel->getFilter())
+	{
+		filter_list(mMyInventoryPanel, string);
+	}
+	if (mLibraryInventoryPanel && mLibraryInventoryPanel->getFilter())
+	{
+		filter_list(mLibraryInventoryPanel, string);
+	}
+	// </FS:Ansariel> Fix for landmark search (FIRE-6611)
 
 	if (sFilterSubString != string)
 		sFilterSubString = string;
