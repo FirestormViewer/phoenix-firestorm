@@ -2224,6 +2224,14 @@ void LLFloaterSnapshot::draw()
 
 void LLFloaterSnapshot::onOpen(const LLSD& key)
 {
+	// <FS:HG> FIRE-5811 Save Last Snapshot Tab 
+	LLTabContainer* tabcontainer = getChild<LLTabContainer>("panel_tab_container");
+	if (!tabcontainer->selectTab(gSavedSettings.getS32("LastSnapShotTab")))
+	{
+		tabcontainer->selectFirstTab();
+	}
+	// </FS:HG> FIRE-5811 Save Last Snapshot Tab
+
 	LLSnapshotLivePreview* preview = LLFloaterSnapshot::Impl::getPreviewView(this);
 	if(preview)
 	{
@@ -2235,12 +2243,17 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	gSnapshotFloaterView->setVisible(TRUE);
 	gSnapshotFloaterView->adjustToFitScreen(this, FALSE);
 
-	// Initialize default tab.
-	getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
+	// <FS:HG> FIRE-5811 Save Last Snapshot Tab 
+	// // Initialize default tab.
+	// getChild<LLSideTrayPanelContainer>("panel_container")->getCurrentPanel()->onOpen(LLSD());
+	// </FS:HG>
 }
 
 void LLFloaterSnapshot::onClose(bool app_quitting)
 {
+	// <FS:HG> FIRE-5811 Save Last Snapshot Tab 
+	gSavedSettings.setS32("LastSnapShotTab", getChild<LLTabContainer>("panel_tab_container")->getCurrentPanelIndex());
+	// </FS:HG>
 	getParent()->setMouseOpaque(FALSE);
 	LLFloaterSnapshot::Impl::updateLayout(this,TRUE);	// <FS:Zi> Fix snapshot freeze frame getting stuck
 }

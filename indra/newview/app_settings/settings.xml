@@ -17411,5 +17411,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>0</integer>
   </map>
   <!-- </FS:Zi> -->
+
+  <!-- <FS:HG> FIRE-5811 Save Last Snapshot Tab -->
+  <key>LastSnapShotTab</key>
+  <map>
+    <key>Comment</key>
+    <string>Last selected tab in SnapShot window</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>3</integer>
+  </map>
+  <!-- </FS:HG> -->
 </map>
 </llsd>
