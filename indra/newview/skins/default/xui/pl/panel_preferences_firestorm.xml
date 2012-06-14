@@ -83,7 +83,7 @@
         <button name="BeamColor_refresh" label="Odśwież listę" tool_tip="Odśwież listę Ustawień" />
         <slider name="FSMaxBeamsPerSecond" label="Aktualizacje/sek:" tool_tip="Ile aktualizacji wiązki wysyłać w ciągu sekundy. Domyślnie 40" />
         <check_box label="Włącz wiązkę wyboru" name="SLPartBeam" />
-        <check_box label="Czat cząsteczkowy" name="FSParticleChat" />
+        <check_box label="Czat cząsteczkowy" name="FSParticleChat" tool_tip="Wysyła informacje na kanał 9000" />
         <combo_box name="FSBeamShape_combo" tool_tip="Wybierz kształt wiązki cząsteczek" />
         <button name="delete_beam" label="Usuń" tool_tip="Usuń tą wiązkę" />
         <button name="custom_beam_btn" label="Utwórz nowy" tool_tip="Dopasuj kształt wiązki" />

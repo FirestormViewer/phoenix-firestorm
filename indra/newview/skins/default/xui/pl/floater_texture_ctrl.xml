@@ -14,11 +14,13 @@
 		<radio_item label="Lokalna" name="local"/>
 	</radio_group>
 	<text name="unknown">
-		Rozmiar: [DIMENSIONS]
+		Rozmiar:
+[DIMENSIONS]
 	</text>
 	<button label="Domyślna" label_selected="Domyślna" name="Default"/>
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
 	<button label="Żadna" label_selected="Żadna" name="None"/>
+	<button top_delta="-15" name="Pipette"/>
 	<filter_editor label="Filtruj tekstury" name="inventory search editor"/>
 	<check_box label="Pokaż foldery" name="show_folders_check"/>
 	<button label="Dodaj" label_selected="Dodaj" name="l_add_btn"/>
@@ -28,5 +30,5 @@
 		<column name="unit_name" label="Nazwa"/>
 	</scroll_list>
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
-	<check_box label="Zastosuj teraz" name="apply_immediate_check"/>
+	<check_box label="Stosuj teraz" name="apply_immediate_check"/>
 </floater>

@@ -11,6 +11,7 @@
 			<menu_item_call name="inventory_open" label="Otwórz" />
 			<menu_item_call name="inventory_share" label="Udostępnij" />
 			<menu_item_call name="inventory_new_window" label="Nowe okno" />
+			<menu_item_check name="add_inv_toggle" label="Dodawaj obiekty po dwukliku" />
 			<menu_item_call name="inventory_show_filters" label="Pokaż filtry" />
 			<menu_item_call name="inventory_reset_filters" label="Resetuj filtry" />
 			<menu_item_call name="inventory_close_all_folders" label="Zamknij wszystkie foldery" />

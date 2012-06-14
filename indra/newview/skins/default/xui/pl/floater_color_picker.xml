@@ -25,7 +25,7 @@
 		</panel>
 		<panel name="Hex">
 			<text name="hex_text">
-				Szesnastkowo (#rrggbb):
+				Szesnast. (#rrggbb):
 			</text>
 		</panel>
 	</tab_container>
@@ -38,7 +38,7 @@
 	<text name="l_val_text">
 		Luminacja:
 	</text>
-	<check_box label="Zastosuj teraz" name="apply_immediate"/>
+	<check_box label="Stosuj teraz" name="apply_immediate"/>
 	<button label="Kopia LSL" tool_tip="Kopiuje wartości koloru do formatu wektora kolorów LSL w postaci &lt;r, g, b&gt;." name="copy_lsl_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
 	<button label="Anuluj" label_selected="Anuluj" name="cancel_btn"/>
@@ -46,6 +46,6 @@
 		^ Obecny kolor ^
 	</text>
 	<text name="(Drag below to save.)">
-		(Przeciągnij tutaj aby zapisać)
+		(Przeciągnij by zapisać)
 	</text>
 </floater>
