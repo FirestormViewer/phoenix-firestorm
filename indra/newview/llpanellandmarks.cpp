@@ -1470,7 +1470,8 @@ static void collapse_all_folders(LLFolderView* root_folder)
 
 	// The top level folder is invisible, it must be open to
 	// display its sub-folders.
-	root_folder->openTopLevelFolders();
+	// <FS:Ansariel> Also collapse top level folders on Firestorm - we don't have accordions (FIRE-3961)
+	//root_folder->openTopLevelFolders();
 	root_folder->arrangeAll();
 }
 
