@@ -178,7 +178,7 @@
             <check_box
              enabled="false"
              height="16"
-             label="Email me IMs when I'm offline"
+             label="Email me IMs when I'm offline ([EMAIL])"
              layout="topleft"
              left_delta="0"
              name="send_im_to_email"

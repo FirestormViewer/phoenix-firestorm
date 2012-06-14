@@ -9,7 +9,7 @@
 		<radio_item label="Stor" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="Afspil skrive animation ved chat" name="play_typing_animation"/>
-	<check_box label="Send e-mail til mig når jeg modtager IM og er offline" name="send_im_to_email"/>
+	<check_box label="Send e-mail til mig når jeg modtager IM og er offline ([EMAIL])" name="send_im_to_email"/>
 	<check_box label="Åben for almindelig tekst i IM og chat historik" name="plain_text_chat_history"/>
 	<check_box label="Boble chat" name="bubble_text_chat"/>
 	<text name="show_ims_in_label">

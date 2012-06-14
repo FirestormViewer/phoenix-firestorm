@@ -9,7 +9,7 @@
 		<radio_item label="Büyük" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="Sohbet sırasında yazma animasyonunu oynat" name="play_typing_animation"/>
-	<check_box label="Çevrimdışı olduğunda Aİ&apos;ler e-posta ile bana gönderilsin" name="send_im_to_email"/>
+	<check_box label="Çevrimdışı olduğunda Aİ&apos;ler e-posta ile bana gönderilsin ([EMAIL])" name="send_im_to_email"/>
 	<check_box label="Düz metin Aİ&apos;ler ve sohbet geçmişini etkinleştir" name="plain_text_chat_history"/>
 	<check_box label="Balon Sohbeti" name="bubble_text_chat"/>
 	<text name="show_ims_in_label">

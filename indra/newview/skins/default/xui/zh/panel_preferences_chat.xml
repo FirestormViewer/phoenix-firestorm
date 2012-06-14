@@ -9,7 +9,7 @@
 		<radio_item label="大" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="聊天時播放打字動作" name="play_typing_animation"/>
-	<check_box label="當我離線時將收到的 IM 訊息郵寄給我" name="send_im_to_email"/>
+	<check_box label="當我離線時將收到的 IM 訊息郵寄給我 （[EMAIL]）" name="send_im_to_email"/>
 	<check_box label="啟用純本文 IM 與聊天歷史紀錄" name="plain_text_chat_history"/>
 	<check_box label="聊天泡泡" name="bubble_text_chat"/>
 	<text name="show_ims_in_label">

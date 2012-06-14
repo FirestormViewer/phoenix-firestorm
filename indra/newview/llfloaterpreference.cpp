@@ -541,6 +541,9 @@ BOOL LLFloaterPreference::postBuild()
 	onPieColorsOverrideChanged();
 // ## Zi: Pie menu
 
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", getString("LoginToChange"));
+
 	return TRUE;
 }
 
@@ -1716,7 +1719,15 @@ void LLFloaterPreference::setPersonalInfo(const std::string& visibility, bool im
 	}
 	childEnable("logfile_name_datestamp");	
 	std::string display_email(email);
-	getChild<LLUICtrl>("email_address")->setValue(display_email);
+	// <FS:Ansariel> Show email address in preferences (FIRE-1071)
+	//getChild<LLUICtrl>("email_address")->setValue(display_email);
+	if(display_email.size() > 30)
+	{
+		display_email.resize(30);
+		display_email += "...";
+	}
+	getChild<LLCheckBoxCtrl>("send_im_to_email")->setLabelArg("[EMAIL]", display_email);
+	// </FS:Ansariel> Show email address in preferences (FIRE-1071)
 
 }
 

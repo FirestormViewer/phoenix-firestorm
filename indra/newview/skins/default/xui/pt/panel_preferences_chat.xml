@@ -9,7 +9,7 @@
 		<radio_item label="Grande" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="Executar animação digitada quando estiver conversando" name="play_typing_animation"/>
-	<check_box label="Enviar MIs por email se estiver desconectado" name="send_im_to_email"/>
+	<check_box label="Enviar MIs por email se estiver desconectado ([EMAIL])" name="send_im_to_email"/>
 	<check_box label="Ativar MIs e bate-papos de texto simples" name="plain_text_chat_history"/>
 	<check_box label="Balão de bate-papo" name="bubble_text_chat"/>
 	<text name="show_ims_in_label">

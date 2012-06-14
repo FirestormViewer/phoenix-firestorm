@@ -9,7 +9,7 @@
 		<radio_item label="Grande" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="Exécuter l&apos;animation clavier quand vous écrivez" name="play_typing_animation"/>
-	<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté" name="send_im_to_email"/>
+	<check_box label="M&apos;envoyer les IM par e-mail une fois déconnecté ([EMAIL])" name="send_im_to_email"/>
   <check_box label="Désactiver les en-têtes dans le chat et les MI (Style v1)" name="plain_text_chat_history"/>
   <check_box label="Afficher les miniatures lorsque les en-têtes sont activés" name="ShowChatMiniIcons"/>
 	<check_box label="Bulles de chat" name="bubble_text_chat"/>

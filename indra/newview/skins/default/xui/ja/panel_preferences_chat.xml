@@ -9,7 +9,7 @@
 		<radio_item label="大" name="radio3" value="2"/>
 	</radio_group>
 	<check_box initial_value="true" label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
-	<check_box label="オフライン時に受け取った IM をメールで受信" name="send_im_to_email"/>
+	<check_box label="オフライン時に受け取った IM をメールで受信 （[EMAIL]）" name="send_im_to_email"/>
 	<check_box label="IM とチャット履歴に文字だけ表示する" name="plain_text_chat_history"/>
 	<check_box label="吹き出しチャット" name="bubble_text_chat"/>
 	<text name="show_ims_in_label">

@@ -11,6 +11,11 @@
  single_instance="true"
  title="PREFERENCES"
  width="658">
+	
+	<floater.string name="LoginToChange">
+		Login to change
+	</floater.string>
+ 
     <button
      follows="right|bottom"
      height="23"

@@ -32,7 +32,7 @@
 			<check_box initial_value="true" label="Воспроизводить анимацию набора когда пишете " name="play_typing_animation"/>
 			<check_box label="Воспроизводить анимации аватара (например, если кричит) " name="play_avatar_animations"/>
 			<check_box label="Воспроизводить звук когда пишут" name="play_typing_sound"/> 
-			<check_box label="Отправлять ЛС на E-Mail, если я offline" name="send_im_to_email"/>
+			<check_box label="Отправлять ЛС на E-Mail, если я offline ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="Убрать заголовки чата (вернуться к стилю V1)" name="plain_text_chat_history"/>
 			<check_box label="При использовании заголовков чата показывать мини-ярлыки" name="ShowChatMiniIcons"/>
 			<check_box label="Штамп времени в локальном чате" name="hide_timestamps_nearby_chat"/>

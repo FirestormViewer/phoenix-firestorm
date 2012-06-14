@@ -23,7 +23,7 @@
 			<check_box label="Reproducir sonido de tecleo cuando alguien escribe en el chat local" name="play_typing_sound"/>
 			<check_box label="Enviar notificación de escritura a otros avatares durante las sesiones de MI" name="FSSendTypingState"/>
 			<check_box name="FSChatbarGestureAutoCompleteEnable" label="Activar el autocompletado de los gestos en la barra de chat local"/>
-			<check_box label="Cuando estoy desconectado, enviarme los MI al correo electrónico" name="send_im_to_email"/>
+			<check_box label="Cuando estoy desconectado, enviarme los MI al correo electrónico ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="No usar cabeceras de chat (usar estilo V1)" name="plain_text_chat_history"/>
 			<check_box label="Al usar cabeceras de chat, mostrar mini-iconos" name="ShowChatMiniIcons"/>
 			<check_box label="Mostrar el chat en bocadillos sobre los avatares" name="bubble_text_chat"/>
