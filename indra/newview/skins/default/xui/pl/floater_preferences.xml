@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Preferences" title="USTAWIENIA">
+	<floater.string name="LoginToChange">
+		Zmiana po logowaniu
+	</floater.string>
 	<button label="Zastosuj" label_selected="Zastosuj" name="Apply"/>
 	<button label="OK" label_selected="OK" name="OK"/>
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
