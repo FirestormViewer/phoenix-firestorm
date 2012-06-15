@@ -69,7 +69,7 @@
 	</menu_bar>
 	<filter_editor label="Inventar filtern" name="inventory search editor"/>
 	<button name="collapse_btn" label="Einklappen" />
-	<button name="expand_btn" label="Ausklappen" />
+	<button name="expand_btn" label="Aufklappen" />
 	<text name="filter_label" value="Filter:"/>
 	<combo_box name="filter_combo_box" width="100">
 		<combo_box.item value="filter_type_all" label="Alle Typen" />
