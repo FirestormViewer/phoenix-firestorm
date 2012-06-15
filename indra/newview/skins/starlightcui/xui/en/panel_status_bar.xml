@@ -186,7 +186,7 @@
   <panel
     height="18"
     left="-385"
-    width="105"
+    width="90"
     top="0"
     follows="right|top"
     name="balance_bg"
@@ -198,7 +198,7 @@
      follows="all"
      height="18"
      left="0"
-	 right="30"
+	 right="24"
      name="balance"
      tool_tip="Click to refresh your L$ balance"
      v_pad="4"
