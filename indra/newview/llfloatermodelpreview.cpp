@@ -532,12 +532,14 @@ BOOL LLFloaterModelPreview::postBuild()
 		std::transform(grid_nick.begin(), grid_nick.end(), grid_nick.begin(), ::tolower);
 		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", grid_nick.c_str());
 	}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	else
 	{
 		// TODO: Opensim: Set it to something reasonable
 		validate_url = LLGridManager::getInstance()->getLoginPage();
 	}
 	// </Ansariel>
+#endif // <FS:AW optional opensim support>
 
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 

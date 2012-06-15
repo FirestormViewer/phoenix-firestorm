@@ -6651,7 +6651,7 @@ bool update_grid_help()
 
 	bool needs_seperator = false;
 
-
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("help"))
 	{
 		needs_seperator = true;
@@ -6661,10 +6661,12 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_help_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_help",false);
 		gMenuHolder->childSetVisible("current_grid_help_login",false);
 	}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("about"))
 	{
 		needs_seperator = true;
@@ -6674,6 +6676,7 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_about_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_about",false);
 		gMenuHolder->childSetVisible("current_grid_about_login",false);

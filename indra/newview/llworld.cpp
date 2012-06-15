@@ -144,7 +144,7 @@ void LLWorld::refreshLimits()
 	}
 
 	mLimitsNeedRefresh = false;
-
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	if(LLGridManager::getInstance()->isInOpenSim())
 	{
 		//llmath/xform.h
@@ -156,6 +156,7 @@ void LLWorld::refreshLimits()
 		mRegionMinHoleSize = OS_OBJECT_MIN_HOLE_SIZE;
 	}
 	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	{
 		//llmath/xform.h
 		mRegionMaxHeight = SL_MAX_OBJECT_Z;

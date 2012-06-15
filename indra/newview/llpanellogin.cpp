@@ -344,13 +344,15 @@ void LLPanelLogin::draw()
 		};
 	}
 	gGL.popMatrix();
-
 // <AW: opensim>
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	if(mGridEntries != LLGridManager::getInstance()->mGridEntries)
 	{
 		mGridEntries = LLGridManager::getInstance()->mGridEntries;
 		updateServerCombo();
 	}
+
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 
 	std::string login_page = LLGridManager::getInstance()->getLoginPage();
  	if(mLoginPage != login_page)
@@ -358,8 +360,7 @@ void LLPanelLogin::draw()
 		mLoginPage = login_page;
 		loadLoginPage();
 	}
-// </AW: opensim>
-	
+// </AW: opensim>	
 	LLPanel::draw();
 }
 
@@ -1017,20 +1018,24 @@ void LLPanelLogin::onClickConnect(void *)
 }
 
 // static
-// <AW: opensim>
+
 void LLPanelLogin::onClickNewAccount(void*)
 {
 	if ( !sInstance ) return;
-
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+// <AW: opensim>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 
 	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has(GRID_REGISTER_NEW_ACCOUNT))
 		LLWeb::loadURLInternal(grid_info[GRID_REGISTER_NEW_ACCOUNT]);
 	else
-		LLWeb::loadURLInternal(sInstance->getString("create_account_url"));
-}
 // </AW: opensim>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+		LLWeb::loadURLInternal(sInstance->getString("create_account_url"));
+
+}
+
 
 // static
 void LLPanelLogin::onClickVersion(void*)
@@ -1039,21 +1044,23 @@ void LLPanelLogin::onClickVersion(void*)
 }
 
 //static
-// <AW: opensim>
 void LLPanelLogin::onClickForgotPassword(void*)
 {
 	if (!sInstance) return;
 
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+// <AW: opensim>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 
 	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has(GRID_FORGOT_PASSWORD))
 		LLWeb::loadURLInternal(grid_info[GRID_FORGOT_PASSWORD]);
 	else
-		LLWeb::loadURLInternal(sInstance->getString( "forgot_password_url" ));
-
-}
 // </AW: opensim>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+		LLWeb::loadURLInternal(sInstance->getString( "forgot_password_url" ));
+}
+
 
 //static
 void LLPanelLogin::onClickHelp(void*)
@@ -1181,16 +1188,42 @@ void LLPanelLogin::updateSavedLoginsCombo()
 	{
 			std::string name=*login_choice;
 			LLStringUtil::trim(name);
+
 			std::string credname=name;
 			std::string gridname=name;
 			U32 arobase = gridname.find("@");
 			if (arobase != -1 && arobase +1 < gridname.length() && arobase>1){
 				gridname = gridname.substr(arobase+1, gridname.length() - arobase - 1);
 				name = name.substr(0,arobase);
+
 				LLSD grid_info;
 				LLGridManager::getInstance()->getGridData(gridname,grid_info);
-				name = (grid_info["gridname"].asString()=="Second Life")?name:name+" @ "+grid_info["gridname"].asString();
-				saved_logins_combo->add(name,LLSD(credname)); 
+// <FS:AW optional opensim support>
+				const std::string grid_label = grid_info[GRID_LABEL_VALUE].asString();
+
+				bool add_grid = false;
+				if ("Second Life" == grid_label)
+				{
+					add_grid= true;
+				}
+#ifdef HAS_OPENSIM_SUPPORT
+				else
+				{
+					name.append(" @ " + grid_label);
+					add_grid= true;
+				}
+#else  // HAS_OPENSIM_SUPPORT 
+				else if ("Second Life Beta" == grid_label)
+				{
+					name.append(" @ " + grid_label);
+					add_grid= true;
+				}
+#endif // HAS_OPENSIM_SUPPORT 
+				if (add_grid)
+				{
+					saved_logins_combo->add(name,LLSD(credname));
+				}
+// </FS:AW optional opensim support>
 			}
 	}
 
@@ -1329,6 +1362,7 @@ void LLPanelLogin::updateLoginPanelLinks()
 {
 	if(!sInstance) return;
 
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 
@@ -1337,6 +1371,14 @@ void LLPanelLogin::updateLoginPanelLinks()
 				&& grid_info.has(GRID_REGISTER_NEW_ACCOUNT);
 	bool has_password = LLGridManager::getInstance()->isInOpenSim() 
 				&& grid_info.has(GRID_FORGOT_PASSWORD);
+// <FS:AW optional opensim support>
+#else // HAS_OPENSIM_SUPPORT 
+	bool system_grid = true;
+	bool has_register = true;
+	bool has_password = true;
+#endif // HAS_OPENSIM_SUPPORT 
+// </FS:AW optional opensim support>
+
 	// need to call through sInstance, as it's called from onSelectServer, which
 	// is static.
 	sInstance->getChildView("create_new_account_text")->setVisible( system_grid || has_register);

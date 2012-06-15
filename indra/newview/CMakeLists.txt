@@ -491,7 +491,7 @@ set(viewer_SOURCE_FILES
     llsidepaneltaskinfo.cpp
     llsidetraypanelcontainer.cpp
     llsky.cpp
-    llslurl.cpp
+    #llslurl.cpp #<FS:AW optional opensim support>
     llspatialpartition.cpp
     llspeakers.cpp
     llspeakingindicatormanager.cpp
@@ -593,7 +593,7 @@ set(viewer_SOURCE_FILES
     llviewermenu.cpp
     llviewermenufile.cpp
     llviewermessage.cpp
-    llviewernetwork.cpp
+    #llviewernetwork.cpp #<FS:AW optional opensim support>
     llviewerobject.cpp
     llviewerobjectlist.cpp
     llviewerparcelmedia.cpp
@@ -685,6 +685,18 @@ set(viewer_SOURCE_FILES
     NACLantispam.cpp
     )
 
+if (HAS_OPENSIM_SUPPORT)
+    list(APPEND viewer_SOURCE_FILES
+                fsgridhandler.cpp
+                fsslurl.cpp
+        )
+else (HAS_OPENSIM_SUPPORT)
+    list(APPEND viewer_SOURCE_FILES
+                llslurl.cpp
+                llviewernetwork.cpp
+        )
+endif (HAS_OPENSIM_SUPPORT)
+
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
@@ -710,8 +722,10 @@ set(viewer_HEADER_FILES
     fslslbridgerequest.h
 	fslslpreproc.h
     fsfloaterprofile.h
+    fsgridhandler.h
     fspanelprofile.h
     fsradarlistctrl.h
+    fsslurl.h
 	#growlmanager.h
 	#growlnotifier.h
     lggautocorrect.h
@@ -2236,11 +2250,12 @@ if (LL_TESTS)
      llsecapi.cpp
     "${test_libs}"
     )
-
-  set(llslurl_test_sources
-      llslurl.cpp
-      llviewernetwork.cpp
-  )
+  if (NOT HAS_OPENSIM_SUPPORT)#<FS:AW optional opensim support>
+    set(llslurl_test_sources
+        llslurl.cpp
+        llviewernetwork.cpp
+    )
+  endif (NOT HAS_OPENSIM_SUPPORT)#<FS:AW optional opensim support>
 
 # RLVa - incompatible
 #  LL_ADD_INTEGRATION_TEST(llslurl

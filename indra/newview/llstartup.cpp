@@ -709,13 +709,21 @@ bool idle_startup()
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
 			LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
 		}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
 		LLGridManager::getInstance()->initGrids();
 		LLStartUp::setStartupState( STATE_FETCH_GRID_INFO );
+// <FS:AW optional opensim support>
+#else
+		LLGridManager::getInstance()->initialize(std::string());
+		LLStartUp::setStartupState( STATE_AUDIO_INIT );
+#endif // HAS_OPENSIM_SUPPORT 
+// </FS:AW optional opensim support>
 	}
 
 	if (STATE_FETCH_GRID_INFO == LLStartUp::getStartupState())
 	{
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 		static LLFrameTimer grid_timer;
 
 		const F32 grid_time = grid_timer.getElapsedTimeF32();
@@ -731,6 +739,12 @@ bool idle_startup()
 			ms_sleep(1);
 			return FALSE;
 		}
+// <FS:AW optional opensim support>
+#else
+		// we shouldn't even be here
+		LLStartUp::setStartupState( STATE_AUDIO_INIT );
+#endif 
+// </FS:AW optional opensim support>
 	}
 
 	if (STATE_AUDIO_INIT == LLStartUp::getStartupState())
@@ -1225,9 +1239,11 @@ bool idle_startup()
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.
 		login->connect(gUserCredential);
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // <AW: opensim>
 		LLGridManager::getInstance()->saveGridList();
 // </AW: opensim>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 		LLStartUp::setStartupState( STATE_LOGIN_CURL_UNSTUCK );
 		return FALSE;
 	}

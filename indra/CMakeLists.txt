@@ -32,6 +32,16 @@ if (NOT CMAKE_BUILD_TYPE)
       "Build type.  One of: Debug Release RelWithDebInfo" FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+#<FS:AW optional opensim support>
+set(HAS_OPENSIM_SUPPORT OFF)
+if (HAS_OPENSIM_SUPPORT)
+  add_definitions(-DHAS_OPENSIM_SUPPORT=1)
+  message("compiling with OpenSim support")
+else (HAS_OPENSIM_SUPPORT)
+  message("compiling without OpenSim support")
+endif (HAS_OPENSIM_SUPPORT)
+#</FS:AW optional opensim support>
+
 # For the library installation process;
 # see cmake/Prebuild.cmake for the counterpart code.
 if ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")
