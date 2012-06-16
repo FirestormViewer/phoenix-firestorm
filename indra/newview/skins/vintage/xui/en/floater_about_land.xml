@@ -2012,7 +2012,7 @@ Only large parcels can be listed in search.
             name="Allowed_layout_panel"
             follows="top|left"
             left="10"
-            height="170"
+            height="185"
              top_pad="8"
             width="240">
             <text
@@ -2061,7 +2061,7 @@ Only large parcels can be listed in search.
             <panel
             name="Banned_layout_panel"
             follows="top|right"
-            height="170"
+            height="185"
             width="240"
             left_pad="2">
             <text
