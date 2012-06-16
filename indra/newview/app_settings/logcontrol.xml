@@ -20,7 +20,7 @@
 					<key>tags</key>
 						<array>
 							<string>AppInit</string>
-              						<string>Capabilities</string>
+							<string>Capabilities</string>
 							<string>SystemInfo</string>
 							<string>TextureCache</string>
 							<string>AppCache</string>
@@ -42,10 +42,10 @@
 						</array>
 					<key>tags</key>
 						<array>
-						<string>parseFile</string>
-<!--						<string>AvNameCache</string> -->
-							<!-- sample entry for debugging a specific item	-->
-<!--						<string>Voice</string>		-->
+						<!-- sample entry for debugging specific items	
+						     <string>Avatar</string>
+						     <string>Voice</string> -->
+						     <string>parseFile</string>
 						</array>
 				</map>
 			</array>

@@ -1951,25 +1951,6 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>AuditTexture</key>
-  <map>
-    <key>Comment</key>
-    <string>Enable texture auditing.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-    <key>SanityCheckType</key>
-    <string>Equals</string>
-    <key>SanityValue</key>
-    <array>
-      <integer>0</integer>
-    </array>
-    <key>SanityComment</key>
-    <string>This is an experimental feature and might result in textures being rendered blurry or otherwise distorted.</string>
-  </map>
   <key>AutoAcceptNewInventory</key>
     <map>
       <key>Comment</key>
@@ -3605,7 +3586,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
     <key>DebugBeaconLineWidth</key>
     <map>
@@ -6298,6 +6279,17 @@
       <string>S32</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>LeapCommand</key>
+    <map>
+      <key>Comment</key>
+      <string>Zero or more command lines to run LLSD Event API Plugin programs.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>LLSD</string>
+      <key>Value</key>
+      <array />
     </map>
     <key>LSLFindCaseInsensitivity</key>
         <map>
@@ -9013,7 +9005,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>QAModeEventHostPort</key>
     <map>
       <key>Comment</key>
-      <string>Port on which lleventhost should listen</string>
+      <string>DEPRECATED: Port on which lleventhost should listen</string>
       <key>Persist</key>
       <integer>0</integer>
       <key>Type</key>
@@ -9031,6 +9023,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>S32</string>
       <key>Value</key>
       <integer>-1</integer>
+    </map>
+    <key>QAModeMetrics</key>
+    <map>
+      <key>Comment</key>
+      <string>"Enables QA features (logging, faster cycling) for metrics collector"</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>QuietSnapshotsToDisk</key>
     <map>
@@ -11019,28 +11022,19 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-    <key>RenderUseShaderLOD</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether we want to have different shaders for LOD</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>1</integer>
-    </map>
-    <key>RenderUseShaderNearParticles</key>
-    <map>
-      <key>Comment</key>
-      <string>Whether we want to use shaders on near particles</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
+    
+  <key>RenderAutoHideSurfaceAreaLimit</key>
+  <map>
+    <key>Comment</key>
+    <string>Maximum surface area of a set of proximal objects inworld before automatically hiding geometry to prevent system overload.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
     <key>RenderVBOEnable</key>
     <map>
       <key>Comment</key>
@@ -12758,6 +12752,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <real>20.0</real>
     </map>
+    <key>TexelPixelRatio</key>
+    <map>
+      <key>Comment</key>
+      <string>texel pixel ratio = texel / pixel</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>1.0</real>
+    </map>
+    <key>TextureCameraMotionThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>If the overall motion is lower than this value, textures will be loaded faster</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.2</real>
+    </map>
+    <key>TextureCameraMotionBoost</key>
+    <map>
+      <key>Comment</key>
+      <string>Progressive discard level decrement when the camera is still</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>3</integer>
+    </map>
     <key>TextureDecodeDisabled</key>
     <map>
       <key>Comment</key>
@@ -12807,6 +12834,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>This might cause textures to look blurry and sculpties might fail to load properly.</string>
     </map>
+    <key>TextureFetchDebuggerEnabled</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable the texture fetching debugger if set</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>TextureLoadFullRes</key>
     <map>
       <key>Comment</key>
@@ -12837,6 +12875,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>TextureNewByteRange</key>
+    <map>
+      <key>Comment</key>
+      <string>Use the new more accurate byte range computation for j2c discard levels</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>TexturePickerShowFolders</key>
     <map>
       <key>Comment</key>
@@ -12858,6 +12907,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>U32</string>
       <key>Value</key>
       <integer>2</integer>
+    </map>
+    <key>TextureReverseByteRange</key>
+    <map>
+      <key>Comment</key>
+      <string>Minimal percent of the optimal byte range allowed to render a given discard level</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>50</integer>
     </map>
     <key>ThrottleBandwidthKBPS</key>
     <map>

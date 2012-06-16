@@ -48,6 +48,8 @@
 //static
 std::string LLImage::sLastErrorMessage;
 LLMutex* LLImage::sMutex = NULL;
+bool LLImage::sUseNewByteRange = false;
+S32  LLImage::sMinimalReverseByteRangePercent = 75;
 LLPrivateMemoryPool* LLImageBase::sPrivatePoolp = NULL ;
 
 // <ND> Report amount of failed buffer allocations
@@ -66,8 +68,10 @@ U32 LLImageBase::getAllocationErrors()
 //</ND>
 
 //static
-void LLImage::initClass()
+void LLImage::initClass(bool use_new_byte_range, S32 minimal_reverse_byte_range_percent)
 {
+	sUseNewByteRange = use_new_byte_range;
+    sMinimalReverseByteRangePercent = minimal_reverse_byte_range_percent;
 	sMutex = new LLMutex(NULL);
 
 	LLImageBase::createPrivatePool() ;
@@ -1353,7 +1357,8 @@ LLImageFormatted::LLImageFormatted(S8 codec)
 	  mCodec(codec),
 	  mDecoding(0),
 	  mDecoded(0),
-	  mDiscardLevel(-1)
+	  mDiscardLevel(-1),
+	  mLevels(0)
 {
 	mMemType = LLMemType::MTYPE_IMAGEFORMATTED;
 }
@@ -1583,7 +1588,7 @@ void LLImageFormatted::appendData(U8 *data, S32 size)
 
 //----------------------------------------------------------------------------
 
-BOOL LLImageFormatted::load(const std::string &filename)
+BOOL LLImageFormatted::load(const std::string &filename, int load_size)
 {
 	resetLastError();
 
@@ -1602,14 +1607,19 @@ BOOL LLImageFormatted::load(const std::string &filename)
 		return FALSE;
 	}
 
+	// Constrain the load size to acceptable values
+	if ((load_size == 0) || (load_size > file_size))
+	{
+		load_size = file_size;
+	}
 	BOOL res;
-	U8 *data = allocateData(file_size);
-	apr_size_t bytes_read = file_size;
+	U8 *data = allocateData(load_size);
+	apr_size_t bytes_read = load_size;
 	apr_status_t s = apr_file_read(apr_file, data, &bytes_read); // modifies bytes_read
-	if (s != APR_SUCCESS || (S32) bytes_read != file_size)
+	if (s != APR_SUCCESS || (S32) bytes_read != load_size)
 	{
 		deleteData();
-		setLastError("Unable to read entire file",filename);
+		setLastError("Unable to read file",filename);
 		res = FALSE;
 	}
 	else

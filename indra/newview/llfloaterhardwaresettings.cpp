@@ -37,6 +37,7 @@
 #include "llspinctrl.h"
 #include "llstartup.h"
 #include "lltextbox.h"
+#include "llcombobox.h"
 #include "pipeline.h"
 
 // Linden library includes
@@ -114,6 +115,12 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 		getChildView("texture compression")->setEnabled(FALSE);
 	}
 
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
+		!gGLManager.mHasVertexBufferObject)
+	{
+		getChildView("texture compression")->setEnabled(FALSE);
+	}
+
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
 	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
@@ -156,6 +163,13 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 BOOL LLFloaterHardwareSettings::postBuild()
 {
 	childSetAction("OK", onBtnOK, this);
+
+	if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
+	{ //remove FSAA settings above "4x"
+		LLComboBox* combo = getChild<LLComboBox>("fsaa");
+		combo->remove("8x");
+		combo->remove("16x");
+	}
 
 	refresh();
 	center();

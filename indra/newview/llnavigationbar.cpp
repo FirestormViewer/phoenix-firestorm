@@ -271,7 +271,6 @@ LLNavigationBar::LLNavigationBar()
 	mBtnHome(NULL),
 	mCmbLocation(NULL),
 	mSearchComboBox(NULL),
-	mPurgeTPHistoryItems(false),
 	mSaveToLocationHistory(false)
 {
 	buildFromFile( "panel_navigation_bar.xml");
@@ -383,12 +382,6 @@ void LLNavigationBar::fillSearchComboBox()
 
 void LLNavigationBar::draw()
 {
-	if(mPurgeTPHistoryItems)
-	{
-		LLTeleportHistory::getInstance()->purgeItems();
-		mPurgeTPHistoryItems = false;
-	}
-
 	if (isBackgroundVisible())
 	{
 		static LLUICachedControl<S32> drop_shadow_floater ("DropShadowFloater", 0);
@@ -743,7 +736,7 @@ void LLNavigationBar::clearHistoryCache()
 	LLLocationHistory* lh = LLLocationHistory::getInstance();
 	lh->removeItems();
 	lh->save();	
-	mPurgeTPHistoryItems= true;
+	LLTeleportHistory::getInstance()->purgeItems();
 }
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control

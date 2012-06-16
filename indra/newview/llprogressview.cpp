@@ -40,6 +40,7 @@
 
 #include "llagent.h"
 #include "llbutton.h"
+#include "llcallbacklist.h"
 #include "llfocusmgr.h"
 #include "llnotifications.h"
 #include "llprogressbar.h"
@@ -123,6 +124,8 @@ LLProgressView::LLProgressView()
 	mStartupComplete(false)
 {
 	mUpdateEvents.listen("self", boost::bind(&LLProgressView::handleUpdate, this, _1));
+	mFadeToWorldTimer.stop();
+	mFadeFromLoginTimer.stop();
 }
 
 BOOL LLProgressView::postBuild()
@@ -142,8 +145,6 @@ BOOL LLProgressView::postBuild()
 	mProgressText=getChild<LLTextBox>("progress_text");
 	mMessageText=getChild<LLTextBox>("message_text");
 
-	mFadeToWorldTimer.stop();
-	mFadeFromLoginTimer.stop();
 
 	getChild<LLTextBox>("title_text")->setText(LLStringExplicit(LLAppViewer::instance()->getSecondLifeTitle()));
 
@@ -161,6 +162,9 @@ BOOL LLProgressView::postBuild()
 
 LLProgressView::~LLProgressView()
 {
+	// Just in case something went wrong, make sure we deregister our idle callback.
+	gIdleCallbacks.deleteFunction(onIdle, this);
+
 	gFocusMgr.releaseFocusIfNeeded( this );
 
 	sInstance = NULL;
@@ -209,6 +213,7 @@ void LLProgressView::revealIntroPanel()
 	}
 
 	mFadeFromLoginTimer.start();
+	gIdleCallbacks.addFunction(onIdle, this);
 }
 
 void LLProgressView::setStartupComplete()
@@ -312,13 +317,6 @@ void LLProgressView::draw()
 		}
 		
 		LLPanel::draw();
-
-		if (mFadeFromLoginTimer.getElapsedTimeF32() > FADE_TO_WORLD_TIME )
-		{
-			mFadeFromLoginTimer.stop();
-			LLPanelLogin::closePanel();
-		}
-
 		return;
 	}
 
@@ -498,5 +496,23 @@ void LLProgressView::handleMediaEvent(LLPluginClassMedia* self, EMediaEvent even
 			// show the progress bar
 			getChild<LLView>("stack1")->setVisible(true);
 		}
+	}
+}
+
+
+// static
+void LLProgressView::onIdle(void* user_data)
+{
+	LLProgressView* self = (LLProgressView*) user_data;
+
+	// Close login panel on mFadeToWorldTimer expiration.
+	if (self->mFadeFromLoginTimer.getStarted() &&
+		self->mFadeFromLoginTimer.getElapsedTimeF32() > FADE_TO_WORLD_TIME)
+	{
+		self->mFadeFromLoginTimer.stop();
+		LLPanelLogin::closePanel();
+
+		// Nothing to do anymore.
+		gIdleCallbacks.deleteFunction(onIdle, user_data);
 	}
 }
