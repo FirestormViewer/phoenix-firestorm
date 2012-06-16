@@ -505,6 +505,12 @@ Weitere Informationen finden Sie auf [_URL].
 		</url>
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification name="IntelOldDriver">
+		Es gibt möglicherweise einen neuen Treiber für Ihren Grafikchip. Ein Update des Grafikkartentreibers kann die Leistung verbessern.
+		
+Die Seite [_URL] öffnen, um nach neuen Treibern zu prüfen?
+		<usetemplate name="okcancelignore" notext="Nein" yestext="Ja" ignoretext="Mein Grafikkartentreiber ist veraltet."/>
+	</notification>
 	<notification name="UnknownGPU">
 		Ihr System verwendet eine Grafikkarte, die [APP_NAME] nicht erkennt.
 Dies passiert dann, wenn die neue Hardware noch nicht mit [APP_NAME] getestet wurde.  Wahrscheinlich wird das Programm richtig ausgeführt, aber Sie müssen eventuell ein paar Grafikeinstellungen vornehmen.
@@ -2655,16 +2661,13 @@ Ist das OK?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“, das „[NAME]“ gehört, stellt folgende Anfrage:
+		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht vollständige Kontrolle über Ihr Linden-Dollar-Konto. Wenn Sie diesem Objekt den Zugriff erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
 
-[QUESTIONS]
-Wenn Sie diesem Objekt und seinem Ersteller nicht vertrauen, sollten Sie diese Anfrage ablehnen.
+So eine Anfrage is äußerst selten seriös. Erlauben Sie dem Objekt auf keinen Fall den Zugriff wenn Sie genau wissen, warum es diesen Zugriff benötigt.
 
-Anfrage gestatten?
 		<form name="form">
-			<button name="Grant" text="Gewähren"/>
+			<button name="Grant" text="Vollen Zugriff erlauben"/>
 			<button name="Deny" text="Verweigern"/>
-			<button name="Details" text="Info..."/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">

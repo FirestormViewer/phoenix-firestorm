@@ -325,11 +325,10 @@
 			<menu_item_check label="Textur" name="Texture Console"/>
 			<menu_item_check label="Debug-Fenster" name="Debug Console"/>
 			<menu_item_call label="Meldungen" name="Notifications"/>
-			<menu_item_check label="Texturgröße" name="Texture Size"/>
-			<menu_item_check label="Texture-Kategorie" name="Texture Category"/>
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
 			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
+			<menu_item_check label="Texture-Fetch-Debug-Konsole" name="Texture Fetch Debug Console"/>
 			<menu_item_check label="Region-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_call label="Info zu Region in Debug-Fenster" name="Region Info to Debug Console"/>
 			<menu_item_call label="Gruppeninfo in Debug-Fenster" name="Group Info to Debug Console"/>
@@ -389,6 +388,12 @@
 			<menu_item_check label="Byte in Anhängen" name="attachment bytes"/>
 			<menu_item_check label="Formen" name="Sculpt"/>
 			<menu_item_check label="Texturgröße" name="Texture Size"/>
+			<menu label="Textur-Dichte" name="Texture Density">
+				<menu_item_check label="Keine" name="None"/>
+				<menu_item_check label="Aktuelle" name="Current"/>
+				<menu_item_check label="Gewünscht" name="Desired"/>
+				<menu_item_check label="Vollständig" name="Full"/>
+			</menu>
 		</menu>
 		<menu label="Rendering" name="Rendering">
 			<menu_item_check label="Achsen" name="Axes"/>
@@ -407,7 +412,6 @@
 			<menu_item_check label="Animationstexturen" name="Animation Textures"/>
 			<menu_item_check label="Texturen deaktivieren" name="Disable Textures"/>
 			<menu_item_check label="Texturen in Vollauflösung (gefährlich)" name="Full Res Textures"/>
-			<menu_item_check label="Texturen prüfen" name="Audit Textures"/>
 			<menu_item_check label="Textur-Atlas (experimentell)" name="Texture Atlas"/>
 			<menu_item_check label="Angehängte Lichter rendern" name="Render Attached Lights"/>
 			<menu_item_check label="Angehängte Partikel rendern" name="Render Attached Particles"/>

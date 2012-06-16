@@ -931,6 +931,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="ScriptQuestionCautionChatDenied">
 		Dem Objekt „[OBJECTNAME]“, ein Objekt von „[OWNERNAME]“, in [REGIONNAME] [REGIONPOS], wurde folgende Berechtigung verweigert: [PERMISSIONS].
 	</string>
+	<string name="AdditionalPermissionsRequestHeader">
+		Falls Sie den Zugriff auf Ihr Konto erlauben, erlauben Sie dem Objekt ebenfalls:
+	</string>
 	<string name="ScriptTakeMoney">
 		Linden-Dollar (L$) von Ihnen nehmen
 	</string>

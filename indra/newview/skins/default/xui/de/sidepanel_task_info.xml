@@ -61,10 +61,10 @@
 			Bei Linksklick:
 		</text>
 		<combo_box name="clickaction">
-			<combo_box.item label="Berühren (Standard)" name="Touch/grab(default)"/>
-			<combo_box.item label="Auf Objekt setzen" name="Sitonobject"/>
-			<combo_box.item label="Objekt kaufen" name="Buyobject"/>
-			<combo_box.item label="Objekt bezahlen" name="Payobject"/>
+			<combo_box.item label="Berühren" name="Touch/grab(default)"/>
+			<combo_box.item label="Sitzen" name="Sitonobject"/>
+			<combo_box.item label="Kaufen" name="Buyobject"/>
+			<combo_box.item label="Bezahlen" name="Payobject"/>
 			<combo_box.item label="Öffnen" name="Open"/>
 		</combo_box>
 		<panel name="perms_inv">
