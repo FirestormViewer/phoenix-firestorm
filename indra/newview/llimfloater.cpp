@@ -182,12 +182,7 @@ void LLIMFloater::onClose(bool app_quitting)
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
 	
-	LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
-	if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
-	{
-		llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
-		LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
-	}
+	LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
 	
 	gIMMgr->leaveSession(mSessionID);
 }
