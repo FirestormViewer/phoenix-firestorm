@@ -296,7 +296,6 @@ private:
 	LLViewerAssetStats::duration_t mMetricsStartTime;
 
 	// <FS:Ansariel> CURL timeout check
-	LLFrameTimer mHttpCallbackTimer;
 	S32 mHttpCallbackTimeoutCount;
 	// </FS:Ansariel> CURL timeout check
 };
@@ -1233,8 +1232,6 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				headers.push_back("Accept: image/x-j2c");
 				res = mFetcher->mCurlGetRequest->getByteRange(mUrl, headers, offset, mRequestedSize,
 															  new HTTPGetResponder(mFetcher, mID, LLTimer::getTotalTime(), mRequestedSize, offset, true));
-
-				mHttpCallbackTimer.reset(); // <FS:Ansariel> CURL timeout check
 			}
 			if (!res)
 			{
@@ -1398,22 +1395,20 @@ bool LLTextureFetchWorker::doWork(S32 param)
 		}
 		else
 		{
-//following was introduced in 3.3.3, however we have something different already.  FS:TM
-//			if(FETCHING_TIMEOUT < mRequestedTimer.getElapsedTimeF32())
-//			{
-//				//timeout, abort.
-//				mState = DONE;
-//				return true;
-//			}
-//
 			// <FS:Ansariel> CURL timeout check: In case CURL does not
 			//               fire the callback method, the fetch worker
 			//               thread would be stuck in the queue.
+			//if(FETCHING_TIMEOUT < mRequestedTimer.getElapsedTimeF32())
+			//{
+			//	//timeout, abort.
+			//	mState = DONE;
+			//	return true;
+			//}
+
 			//setPriority(LLWorkerThread::PRIORITY_LOW | mWorkPriority);
 			//return false;
-			const F32 HTTP_CALLBACK_TIMEOUT = 30.f;
 			const S32 MAX_HTTP_CALLBACK_TIMEOUTS = 3;
-			if (mHttpCallbackTimer.getElapsedTimeF32() > HTTP_CALLBACK_TIMEOUT)
+			if (mRequestedTimer.getElapsedTimeF32() > FETCHING_TIMEOUT)
 			{
 				mFetcher->removeFromHTTPQueue(mID);
 				mHttpCallbackTimeoutCount++;
@@ -1428,7 +1423,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				}
 				else
 				{
-					mHttpCallbackTimer.stop();
+					mRequestedTimer.stop();
 
 					// Maximum retries reached. Try via simulator
 					// fetch if possible. Abort if not.
