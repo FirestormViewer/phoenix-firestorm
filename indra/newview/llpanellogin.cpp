@@ -494,7 +494,12 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 	
 
 
-	if(identifier.has("startlocation")){
+// <FS:AW fix: custom start location "randomly" reset>
+//	if(identifier.has("startlocation")){
+	LLSLURL slurl = LLSLURL(sInstance->getChild<LLComboBox>("start_location_combo")->getValue());
+	if(LLSLURL::LOCATION != slurl.getType() && identifier.has("startlocation"))
+	{
+// <FS:AW fix: custom start location "randomly" reset>
 		llinfos << "Settings startlocation to: " << identifier["startlocation"].asString() << llendl;
 		LLStartUp::setStartSLURL(LLSLURL(identifier["startlocation"].asString()));
 		updateLocationCombo(false);
