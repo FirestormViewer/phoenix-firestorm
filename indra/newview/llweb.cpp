@@ -223,6 +223,10 @@ std::string LLWeb::expandURLSubstitutions(const std::string &url,
 	}
 	substitution["PARCEL_ID"] = llformat("%d", parcel_id);
 
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	substitution["SLURL_TYPE"] = "hop"; // <FS:AW  provide SLURL_TYPE url substitution>
+#endif // </FS:AW optional opensim support>
+
 	// expand all of the substitution strings and escape the url
 	std::string expanded_url = url;
 	LLStringUtil::format(expanded_url, substitution);
