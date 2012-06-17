@@ -590,9 +590,9 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		requested_options.append("currency");// <FS:AW opensim currency support>
+		requested_options.append("max_groups");// <FS:AW  opensim max groups support>
 		requested_options.append("search"); // <FS:AW  opensim search support>
 		//not in this patch
-		//requested_options.append("max_groups");
 		//requested_options.append("profile-server-url");
 		//requested_options.append("web-profile-url");
 	}
