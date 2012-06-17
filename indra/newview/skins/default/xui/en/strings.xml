@@ -4032,7 +4032,7 @@ Try enclosing path to the editor with double quotes.
 
   <!-- CmdLine Response Strings-->
   <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
-  <string name="FSCmdLineRSP">Maximum Bandwidth Set To: [VALUE]kbps.</string>
+  <string name="FSCmdLineRSP">Maximum Bandwidth Set To: [VALUE] kbps.</string>
   <string name="FSCmdLineBWTooHigh">We strongly advise not to set the Bandwidth over 1500 kbps.</string>
   <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 </strings>

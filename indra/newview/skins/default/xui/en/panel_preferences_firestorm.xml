@@ -799,7 +799,7 @@
       right="-1"
       follows="all"
       label="CmdLine 1"
-      name="tab1-3" >
+      name="tab-CmdLine1" >
     <check_box
       top="10"
       follows="left|top"
@@ -1029,7 +1029,7 @@
       right="-1"
       follows="all"
       label="CmdLine 2"
-      name="tab1-3" >
+      name="tab-CmdLine2" >
 
     <check_box
       top="10"
@@ -1037,7 +1037,7 @@
       height="16"
       label="Enable usage of chat bar as a command line"
       left="5"
-      name="chat_cmd_toggle"
+      name="chat_cmd_toggle2"
       width="270"
       control_name="FSCmdLine"/>
     <!--gtp-->
