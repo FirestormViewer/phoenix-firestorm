@@ -182,15 +182,9 @@ void LLIMFloater::onClose(bool app_quitting)
 		LLVoiceClient::getInstance()->removeObserver((LLVoiceClientStatusObserver*)this);
 	}
 	
-	//<FS:NP> FIRE-6077 et al: Always clean up observers when the floater dies
-	//LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
-	//if ((pIMSession) && (pIMSession->mSessionType == LLIMModel::LLIMSession::P2P_SESSION))
-	//{
-	//	llinfos << "AO: Cleaning up stray particularFriendObservers" << llendl;
-	//	LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
-	//}
+	//<FS:ND> FIRE-6077 et al: Always clean up observers when the floater dies
 	LLAvatarTracker::instance().removeParticularFriendObserver(mOtherParticipantUUID, this);
-	//</FS:NP> FIRE-6077 et al
+	//</FS:ND> FIRE-6077 et al
 	
 	gIMMgr->leaveSession(mSessionID);
 }
