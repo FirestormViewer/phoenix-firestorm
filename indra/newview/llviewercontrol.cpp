@@ -74,6 +74,7 @@
 #include "llcombobox.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
+#include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
 #include "llhunspell.h"
 // [/SL:KB]
@@ -97,6 +98,9 @@ std::string gLastRunVersion;
 extern BOOL gResizeScreenTexture;
 extern BOOL gDebugGL;
 extern BOOL gAuditTexture;
+
+LLTimer throttle_timer;//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+void cmdline_printchat(std::string message);//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 ////////////////////////////////////////////////////////////////////////////
 // Listeners
 
@@ -113,7 +117,23 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 	LLWorld::getInstance()->setLandFarClip(draw_distance);
 	return true;
 }
-
+//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+static bool handleBandWidthChanged(const LLSD& newvalue)
+{
+	F32 throttletimer = throttle_timer.getElapsedTimeF32();
+	if (throttletimer > 0.25f)
+	{
+		F32 bandwidth = (F32) newvalue.asReal();
+		gViewerThrottle.setMaxBandwidth((F32) bandwidth);
+		if ( gSavedSettings.getBOOL("BandwidthSettingTooHigh") )
+		{
+			cmdline_printchat(LLTrans::getString("FSCmdLineBWTooHigh"));
+		}
+		throttle_timer.reset();
+	}	
+	return true;
+}
+//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 static bool handleTerrainDetailChanged(const LLSD& newvalue)
 {
 	LLDrawPoolTerrain::sDetailMode = newvalue.asInteger();
@@ -676,6 +696,8 @@ void settings_setup_listeners()
 {
 	gSavedSettings.getControl("FirstPersonAvatarVisible")->getSignal()->connect(boost::bind(&handleRenderAvatarMouselookChanged, _2));
 	gSavedSettings.getControl("RenderFarClip")->getSignal()->connect(boost::bind(&handleRenderFarClipChanged, _2));
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&handleBandWidthChanged, _2));
 	gSavedSettings.getControl("RenderTerrainDetail")->getSignal()->connect(boost::bind(&handleTerrainDetailChanged, _2));
 	gSavedSettings.getControl("OctreeStaticObjectSizeFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));
 	gSavedSettings.getControl("OctreeDistanceFactor")->getSignal()->connect(boost::bind(&handleRepartition, _2));

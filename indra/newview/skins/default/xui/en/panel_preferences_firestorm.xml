@@ -790,373 +790,423 @@
          tool_tip="Change the scale of the shape used for the Phoenix Shaped Beam" />
 
     </panel>
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
+  <!--CmdLine1-->
+  <panel
+      top_pad="5"
+      bottom="-1"
+      left="1"
+      right="-1"
+      follows="all"
+      label="CmdLine 1"
+      name="tab1-3" >
+    <check_box
+      top="10"
+      follows="left|top"
+      height="16"
+      label="Enable usage of chat bar as a command line"
+      left="5"
+      name="chat_cmd_toggle"
+      width="270"
+      control_name="FSCmdLine"/>.
+    <!--calc-->
+    <text
+      top="25"
+      follows="left|top"
+      height="16"
+      left="10"
+      name="FSCmdLineCalc_txt"
+      width="250">
+      Calc. expressions (usage: cmd SIN(2+2))
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineCalc"
+      tool_tip=""
+      control_name="FSCmdLineCalc"
+      width="200"/>
+    <!--autocorrect-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineAutocorrect_txt"
+      width="250">
+      Add autocorrect word(cmd list|bad|good)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineAutocorrect"
+      tool_tip=""
+      control_name="FSCmdLineAutocorrect"
+      width="200"/>
+    <!--drawdistance-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineDrawDistance_txt"
+      width="250">
+      Change Draw Dist (usage: cmd meters)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineDrawDistance"
+      tool_tip=""
+      control_name="FSCmdLineDrawDistance"
+      width="200"/>
+    <!--bandwidth-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineBandWidth_txt"
+      width="250">
+      Max. Bandwidth (usage: cmd kbps)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineBandWidth"
+      tool_tip=""
+      control_name="FSCmdLineBandWidth"
+      width="200"/>
+    <!--rezplat-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineRezPlatform_txt"
+      width="250">
+      Rez a platform (usage: cmd 0 - 30)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineRezPlatform"
+      tool_tip=""
+      control_name="FSCmdLineRezPlatform"
+      width="200"/>
+    <slider
+      top_pad="4"
+      name="FSCmdLinePlatformSize"
+      control_name="FSCmdLinePlatformSize"
+      decimal_digits="1"
+      follows="left|top"
+      height="18"
+      increment="0.5"
+      initial_val="5"
+      label="Width"
+      label_width="30"
+      max_val="30"
+      min_val="5"
+      show_text="true"
+      width="200"
+      auto_resize="false"
+      tool_tip="How big do you want the platform to appear to be?"/>
 
-    <!--CmdLine-->
-    <panel
-     top_pad="5"
-     bottom="-1"
-     left="1"
-     right="-1"
-     follows="all"
-     label="CmdLine"
-     name="tab1-3" >
+    <view_border
+      bevel_style="none"
+      border_thickness="1"
+      top="25"
+      left="240"
+      bottom="-25"
+      width="0"
+      follows="top|left|bottom"
+      name="EmDivisor"/>
+    <!--key2name-->
+    <text
+      top="25"
+      follows="left|top"
+      height="16"
+      left_delta="10"
+      name="FSCmdLineKeyToName_txt"
+      width="250">
+      Get avatar name from key (usage: cmd key)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineKeyToName"
+      tool_tip=""
+      control_name="FSCmdLineKeyToName"
+      width="200"/>
+    <!--cao-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineAO_txt"
+      width="250">
+      Turn AO on/off (usage: cmd on/off)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineAO"
+      tool_tip=""
+      control_name="FSCmdLineAO"
+      width="200"/>
+    <!--clrchat-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineClearChat_txt"
+      width="250">
+      Clear the chat history (usage: cmd)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
+      name="FSCmdLineClearChat"
+      control_name="FSCmdLineClearChat"
+      width="200"/>
+    <!--media-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineMedia_txt"
+      width="250">
+      Set the media url (usage: cmd url type)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      tool_tip="Sets and plays your media stream to the entered url"
+      name="FSCmdLineMedia"
+      control_name="FSCmdLineMedia"
+      width="200"/>
+    <!--music-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineMusic_txt"
+      width="250">
+      Set the music stream url (usage: cmd url)
+    </text>
+    <line_editor
+      top_pad="0"
+      enabled="false"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      tool_tip="sets and plays your music stream to the entered url"
+      name="FSCmdLineMusic"
+      control_name="FSCmdLineMusic"
+      width="200"/>
+  </panel>
 
-        <check_box
-         top="10"
-         follows="left|top"
-         height="16"
-         label="Enable usage of chat bar as a command line"
-         left="5"
-         name="chat_cmd_toggle"
-         width="270"
-         control_name="FSCmdLine"/>
-        
-        <text
-         top="25"
-         follows="left|top"
-         height="16"
-         left="10"
-         name="FSCmdLinePos_txt"
-         width="250">
-         Teleport within sim (usage: cmd x y z)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLinePos"
-         tool_tip=""
-         control_name="FSCmdLinePos"
-         width="200"/>
+  <!--CmdLine2-->
+  <panel
+      top_pad="5"
+      bottom="-1"
+      left="1"
+      right="-1"
+      follows="all"
+      label="CmdLine 2"
+      name="tab1-3" >
 
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineGround_txt"
-         width="250">
-         Teleport to ground (usage: cmd)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineGround"
-         tool_tip=""
-         control_name="FSCmdLineGround"
-         width="200"/>
+    <check_box
+      top="10"
+      follows="left|top"
+      height="16"
+      label="Enable usage of chat bar as a command line"
+      left="5"
+      name="chat_cmd_toggle"
+      width="270"
+      control_name="FSCmdLine"/>
+    <!--gtp-->
+    <text
+      top="25"
+      follows="left|top"
+      height="16"
+      left="10"
+      name="FSCmdLinePos_txt"
+      width="250">
+      Teleport within sim (usage: cmd x y z)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLinePos"
+      tool_tip=""
+      control_name="FSCmdLinePos"
+      width="200"/>
+    <!--flr-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineGround_txt"
+      width="250">
+      Teleport to ground (usage: cmd)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineGround"
+      tool_tip=""
+      control_name="FSCmdLineGround"
+      width="200"/>
+    <!--gth-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineHeight_txt"
+      width="250">
+      Teleport to altitude (usage: cmd z)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineHeight"
+      tool_tip=""
+      control_name="FSCmdLineHeight"
+      width="200"/>
+    <!--mapto-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineMapTo_txt"
+      width="250">
+      Teleport to sim x (usage: cmd simname)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineMapTo"
+      tool_tip=""
+      control_name="FSCmdLineMapTo"
+      width="200"/>
+    <check_box
+      top_pad="4"
+      follows="left|top"
+      height="16"
+      label="Use same position between sims"
+      name="toggle"
+      width="270"
+      control_name="FSCmdLineMapToKeepPos"/>
 
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineHeight_txt"
-         width="250">
-        Teleport to altitude (usage: cmd z)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineHeight"
-         tool_tip=""
-         control_name="FSCmdLineHeight"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineTeleportHome_txt"
-         width="250">
-         Teleport home (usage: cmd)
-         </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineTeleportHome"
-         tool_tip=""
-         control_name="FSCmdLineTeleportHome"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineRezPlatform_txt"
-         width="250">
-          Rez a platform (usage: cmd 0 - 30)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineRezPlatform"
-         tool_tip=""
-         control_name="FSCmdLineRezPlatform"
-         width="200"/>
-        <slider
-         top_pad="4"
-         name="FSCmdLinePlatformSize"
-         control_name="FSCmdLinePlatformSize"
-         decimal_digits="1"
-         follows="left|top"
-         height="18"
-         increment="0.5"
-         initial_val="5"
-         label="Width"
-         label_width="30"
-         max_val="30"
-         min_val="5"
-         show_text="true"
-         width="200"
-         auto_resize="false"
-         tool_tip="How big do you want the platform to appear to be?"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineMapTo_txt"
-         width="250">
-           Teleport to sim x (usage: cmd simname)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineMapTo"
-         tool_tip=""
-         control_name="FSCmdLineMapTo"
-         width="200"/>
-        <check_box
-         top_pad="4"
-         follows="left|top"
-         height="16"
-         label="Use same position between sims"
-         name="toggle"
-         width="270"
-         control_name="FSCmdLineMapToKeepPos"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineCalc_txt"
-         width="250">
-           Calc. expressions (usage: cmd SIN(2+2))
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineCalc"
-         tool_tip=""
-         control_name="FSCmdLineCalc"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineAutocorrect_txt"
-         width="250">
-           Add autocorrect word(cmd list|bad|good)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineAutocorrect"
-         tool_tip=""
-         control_name="FSCmdLineAutocorrect"
-         width="200"/>
-
-        <view_border
-         bevel_style="none"
-         border_thickness="1"
-         top="25"
-         left="240"
-         bottom="-25"
-         width="0"
-         follows="top|left|bottom"
-         name="EmDivisor"/>
-
-        <text
-         top="25"
-         follows="left|top"
-         height="16"
-         left_delta="10"
-         name="FSCmdLineDrawDistance_txt"
-         width="250">
-          Change Draw Distance (usage: cmd meters)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineDrawDistance"
-         tool_tip=""
-         control_name="FSCmdLineDrawDistance"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdTeleportToCam_txt"
-         width="250">
-          Teleport to cam position (usage: cmd)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdTeleportToCam"
-         tool_tip=""
-         control_name="FSCmdTeleportToCam"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineKeyToName_txt"
-         width="250">
-          Get avatar name from key (usage: cmd key)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineKeyToName"
-         tool_tip=""
-         control_name="FSCmdLineKeyToName"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineOfferTp_txt"
-         width="250">
-          Offer teleport to avatar (usage: cmd key)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineOfferTp"
-         tool_tip=""
-         control_name="FSCmdLineOfferTp"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineTP2_txt"
-         width="250">
-          Teleport to avatar (usage: cmd name)
-        </text>
-        <line_editor
-         top_pad="0"
-         enabled="false"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         tool_tip="The syntax of this command allows partial names and is not case sensitive. Better results if used while the Radar is open."
-         name="FSCmdLineTP2"
-         control_name="FSCmdLineTP2"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineAO_txt"
-         width="250">
-          Turn AO on/off (usage: cmd on/off)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         name="FSCmdLineAO"
-         tool_tip=""
-         control_name="FSCmdLineAO"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineClearChat_txt"
-         width="250">
-          Clear the chat history (usage: cmd)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         tool_tip="Clears the Chat History to prevent lag effects from chat spammers."
-         name="FSCmdLineClearChat"
-         control_name="FSCmdLineClearChat"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineMedia_txt"
-         width="250">
-          Set the media url (usage: cmd url type)
-        </text>
-        <line_editor
-         top_pad="0"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         tool_tip="Sets and plays your media stream to the entered url"
-         name="FSCmdLineMedia"
-         control_name="FSCmdLineMedia"
-         width="200"/>
-
-        <text
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         name="FSCmdLineMusic_txt"
-         width="250">
-          Set the music stream url (usage: cmd url)
-        </text>
-        <line_editor
-         top_pad="0"
-         enabled="false"
-         follows="left|top"
-         height="20"
-         max_length="256"
-         tool_tip="sets and plays your music stream to the entered url"
-         name="FSCmdLineMusic"
-         control_name="FSCmdLineMusic"
-         width="200"/>
-    </panel>
-
+    <view_border
+      bevel_style="none"
+      border_thickness="1"
+      top="25"
+      left="240"
+      bottom="-25"
+      width="0"
+      follows="top|left|bottom"
+      name="EmDivisor"/>
+    <!--tp2cam-->
+    <text
+      top="25"
+      follows="left|top"
+      height="16"
+      left_delta="10"
+      name="FSCmdTeleportToCam_txt"
+      width="250">
+      Teleport to cam position (usage: cmd)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdTeleportToCam"
+      tool_tip=""
+      control_name="FSCmdTeleportToCam"
+      width="200"/>
+    <!--offertp-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineOfferTp_txt"
+      width="250">
+      Offer teleport to avatar (usage: cmd key)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineOfferTp"
+      tool_tip=""
+      control_name="FSCmdLineOfferTp"
+      width="200"/>
+    <!--tp2-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineTP2_txt"
+      width="250">
+      Teleport to avatar (usage: cmd name)
+    </text>
+    <line_editor
+      top_pad="0"
+      enabled="false"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      tool_tip="The syntax of this command allows partial names and is not case sensitive. Better results if used while the Radar is open."
+      name="FSCmdLineTP2"
+      control_name="FSCmdLineTP2"
+      width="200"/>
+    <!--tphome-->
+    <text
+      top_pad="5"
+      follows="left|top"
+      height="16"
+      name="FSCmdLineTeleportHome_txt"
+      width="250">
+      Teleport home (usage: cmd)
+    </text>
+    <line_editor
+      top_pad="0"
+      follows="left|top"
+      height="20"
+      max_length="256"
+      name="FSCmdLineTeleportHome"
+      tool_tip=""
+      control_name="FSCmdLineTeleportHome"
+      width="200"/>
+  </panel>
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 
     <!--Windlight-->
     <panel

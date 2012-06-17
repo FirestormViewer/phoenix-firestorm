@@ -130,7 +130,8 @@
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
 const F32 MIN_USER_FAR_CLIP = 64.f;
-const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
+//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+//const F32 BANDWIDTH_UPDATER_TIMEOUT = 0.5f;
 
 //control value for middle mouse as talk2push button
 const static std::string MIDDLE_MOUSE_CV = "MiddleMouse";
@@ -1886,55 +1887,59 @@ static void updateBandwidthWarning()
 }
 // </FS:Zi>
 
-static bool handleBandwidthChanged(const LLSD& newvalue)
-{
-	gViewerThrottle.setMaxBandwidth((F32) newvalue.asReal());
-	updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
-	return true;
-}
+//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+//static bool handleBandwidthChanged(const LLSD& newvalue)
+//{
+//	gViewerThrottle.setMaxBandwidth((F32) newvalue.asReal());
+//	updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
+//	return true;
+//}
 
-class LLPanelPreference::Updater : public LLEventTimer
-{
+//class LLPanelPreference::Updater : public LLEventTimer
+//{
 
-public:
+//public:
 
-	typedef boost::function<bool(const LLSD&)> callback_t;
+//	typedef boost::function<bool(const LLSD&)> callback_t;
 
-	Updater(callback_t cb, F32 period)
-	:LLEventTimer(period),
-	 mCallback(cb)
-	{
-		mEventTimer.stop();
-	}
+//	Updater(callback_t cb, F32 period)
+//	:LLEventTimer(period),
+//	 mCallback(cb)
+//	{
+//		mEventTimer.stop();
+//	}
 
-	virtual ~Updater(){}
+//	virtual ~Updater(){}
 
-	void update(const LLSD& new_value)
-	{
-		mNewValue = new_value;
-		mEventTimer.start();
-	}
+//	void update(const LLSD& new_value)
+//	{
+//		mNewValue = new_value;
+//		mEventTimer.start();
+//	}
 
-protected:
+//protected:
 
-	BOOL tick()
-	{
-		mCallback(mNewValue);
-		mEventTimer.stop();
+//	BOOL tick()
+//	{
+//		mCallback(mNewValue);
+//		mEventTimer.stop();
 
-		return FALSE;
-	}
+//		return FALSE;
+//	}
 
-private:
+//private:
 
-	LLSD mNewValue;
-	callback_t mCallback;
-};
-//----------------------------------------------------------------------------
+//	LLSD mNewValue;
+//	callback_t mCallback;
+//};
+//---------------------------------------------------------------------------- */
+//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+
 static LLRegisterPanelClassWrapper<LLPanelPreference> t_places("panel_preference");
 LLPanelPreference::LLPanelPreference()
-: LLPanel(),
-  mBandWidthUpdater(NULL)
+//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+//: LLPanel(),
+  //mBandWidthUpdater(NULL)
 {
 	mCommitCallbackRegistrar.add("Pref.setControlFalse",	boost::bind(&LLPanelPreference::setControlFalse,this, _2));
 	mCommitCallbackRegistrar.add("Pref.updateMediaAutoPlayCheckbox",	boost::bind(&LLPanelPreference::updateMediaAutoPlayCheckbox, this, _1));
@@ -2022,9 +2027,11 @@ BOOL LLPanelPreference::postBuild()
 	if (hasChild("max_bandwidth_layout"))
 	// </FS:Zi>
 	{
-		mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
-		gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
+		//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+		//mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
+		//gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
 		updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
+		//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	}
 
 	// <FS:Ansariel> Fix for visually broken browser choice radiobuttons
@@ -2061,10 +2068,12 @@ BOOL LLPanelPreference::postBuild()
 
 LLPanelPreference::~LLPanelPreference()
 {
-	if (mBandWidthUpdater)
-	{
-		delete mBandWidthUpdater;
-	}
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	//if (mBandWidthUpdater)
+	//{
+	//	delete mBandWidthUpdater;
+	//}
+	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 }
 void LLPanelPreference::apply()
 {

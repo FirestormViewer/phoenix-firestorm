@@ -15835,6 +15835,19 @@ Change of this parameter will affect the layout of buttons in notification toast
 			<key>Value</key>
 			<string>tp2</string>
 		</map>
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->  
+    <key>FSCmdLineBandWidth</key>
+    <map>
+      <key>Comment</key>
+      <string>Change max. bandwidth quickly</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>bw</string>
+    </map>
+<!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->  
 		<key>FSWLParcelEnabled</key>
 		<map>
 			<key>Comment</key>

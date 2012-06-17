@@ -82,7 +82,7 @@
 
 #include "llagentcamera.h"
 #include "lggcontactsetsfloater.h"
-
+#include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
 void cmdline_printchat(std::string message);
 void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
@@ -515,6 +515,8 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings,  "FSCmdLineMedia");
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings,  "FSCmdLineMusic");
 	static LLCachedControl<std::string> sFSCmdLineAutocorrect(gSavedSettings,  "FSCmdLineAutocorrect");
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
 	
 	if(sFSCmdLine)
 	{
@@ -593,6 +595,31 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					}
 				}
 			}
+
+			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+			else if(command == std::string(sFSCmdLineBandwidth))
+			{
+				int band_width;
+                if(i >> band_width) 
+                {
+                    if ( band_width < 100 )
+					{
+						band_width = 100;
+					}
+					else if (band_width > 3000 )
+					{
+						band_width = 3000;
+					}
+					gSavedSettings.setF32("ThrottleBandwidthKBPS", band_width);
+					LLStringUtil::format_map_t args;
+					std::string bw_cmd_respond;
+					args["[VALUE]"] = llformat ("%d", band_width);
+					bw_cmd_respond = LLTrans::getString("FSCmdLineRSP", args);
+					cmdline_printchat(bw_cmd_respond);
+					return false;
+                }
+			}
+			//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 #if 0
 			else if(command == std::string(sFSCmdLineMusic))
 			{

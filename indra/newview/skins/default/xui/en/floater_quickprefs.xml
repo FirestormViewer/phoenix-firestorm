@@ -52,10 +52,9 @@
             name="DrawDistance"
             top_delta="-2"
             width="150"
-            label_width="3"/>
-			
-<!-- [FS:WF] Removing max bandwidth setting for now - FIRE-6340 -->
-<!--        <text
+            label_width="3"/>			
+<!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+        <text
             type="string"
             length="1"
             follows="left|top"
@@ -78,14 +77,13 @@
             increment="100"
             initial_value="500"
             layout="topleft"
-            left_delta="100"
-            max_val="1500"
+            left_delta="99"
+            max_val="3000"
             min_val="100"
             name="max_bandwidth"
             top_delta="-2"
-            width="149" /> 
---> 			
-
+            width="144" />
+ <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
             length="1"

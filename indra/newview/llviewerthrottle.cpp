@@ -147,6 +147,10 @@ LLViewerThrottleGroup LLViewerThrottleGroup::operator-(const LLViewerThrottleGro
 void LLViewerThrottleGroup::sendToSim() const
 {
 	llinfos << "Sending throttle settings, total BW " << mThrottleTotal << llendl;
+	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
+	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);	
+	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	LLMessageSystem* msg = gMessageSystem;
 
 	msg->newMessageFast(_PREHASH_AgentThrottle);
