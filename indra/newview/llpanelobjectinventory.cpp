@@ -70,6 +70,8 @@
 #include "rlvlocks.h"
 // [/RLVa:KB]
 
+#include "tea.h" // <FS:AW opensim currency support>
+
 ///----------------------------------------------------------------------------
 /// Class LLTaskInvFVBridge
 ///----------------------------------------------------------------------------
@@ -713,7 +715,10 @@ void LLTaskInvFVBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info << LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+//			info << LLTrans::getString("BuyforL$") << price;
+			info << Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 
@@ -1058,7 +1063,10 @@ void LLTaskSoundBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info <<  LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+//			info <<  LLTrans::getString("BuyforL$") << price;
+			info <<  Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 
@@ -1430,7 +1438,10 @@ void LLTaskMeshBridge::buildContextMenu(LLMenuGL& menu, U32 flags)
 		else
 		{
 			std::ostringstream info;
-			info <<  LLTrans::getString("BuyforL$") << price;
+// <FS:AW opensim currency support>
+// 			info <<  LLTrans::getString("BuyforL$") << price;
+			info <<  Tea::wrapCurrency(LLTrans::getString("BuyforL$")) << price;
+// </FS:AW opensim currency support>
 			label.assign(info.str());
 		}
 

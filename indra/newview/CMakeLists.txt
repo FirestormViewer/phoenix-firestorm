@@ -36,6 +36,7 @@ include(LScript)
 include(Linking)
 include(NDOF)
 include(GooglePerfTools)
+include(Teapot)# <FS:AW opensim currency support>
 include(TemplateCheck)
 include(UI)
 include(UnixInstall)
@@ -79,6 +80,7 @@ include_directories(
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
 	${HACD_INCLUDE_DIR}
+    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
 set(viewer_SOURCE_FILES

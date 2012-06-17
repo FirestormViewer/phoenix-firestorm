@@ -199,6 +199,8 @@
 #include "llstartuplistener.h"
 #include "lltoolbarview.h"
 
+#include "tea.h" // <FS:AW opensim currency support>
+
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
@@ -3765,7 +3767,24 @@ bool process_login_success_response()
 		LL_INFOS("LLStartup") << "using gMaxAgentGroups default: "
 							  << gMaxAgentGroups << LL_ENDL;
 	}
-		
+
+// <FS:AW opensim currency support>
+	std::string currency = "L$";
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	if(response.has("currency"))
+	{
+		currency = response["currency"].asString();
+		LL_DEBUGS("OS_SETTINGS") << "currency " << currency << llendl;
+	}
+	else if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		currency = "OS$";
+		LL_DEBUGS("OS_SETTINGS") << "no currency in login response" << llendl;
+	}
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	Tea::setCurrency(currency);
+// </FS:AW opensim currency support>
+
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system
 	// in place.  Don't delete/clear gUserCredentials until then.

@@ -56,6 +56,7 @@
 #include "llsdutil.h"
 #include "llsdutil_math.h"
 #include "lltrans.h"
+#include "tea.h" // <FS:AW opensim currency support>
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -507,8 +508,10 @@ void LLFloaterAuction::doSellToAnyone()
 		
 		body["sale_price"] = parcelp->getArea();	// Sell for L$1 per square meter
 		body["auth_buyer_id"] = LLUUID::null;		// To anyone
-
-		llinfos << "Sending parcel update to sell to anyone for L$1 via capability to: "
+// <FS:AW opensim currency support>
+//		llinfos << "Sending parcel update to sell to anyone for L$1 via capability to: "
+		llinfos << Tea::wrapCurrency("Sending parcel update to sell to anyone for L$1 via capability to: ")
+// <FS:AW opensim currency support>
 			<< mParcelUpdateCapUrl << llendl;
 		LLHTTPClient::post(mParcelUpdateCapUrl, body, new LLHTTPClient::Responder());
 

@@ -583,7 +583,22 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 		gSavedSettings.setBOOL("UseDebugMenus", TRUE);
 		requested_options.append("god-connect");
 	}
-	
+
+// <FS:AW opensim currency support>
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	//TODO: make this more flexible
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		requested_options.append("currency");
+		//not in this patch
+		//requested_options.append("max_groups");
+		//requested_options.append("profile-server-url");
+		//requested_options.append("search");
+		//requested_options.append("web-profile-url");
+	}
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+// </FS:AW opensim currency support>
+
 	// (re)initialize the request params with creds.
 	LLSD request_params = user_credential->getLoginParams();
 

@@ -65,6 +65,7 @@
 #include "llsdserialize.h"
 #include "llsdutil.h"
 #include "llvfs.h"
+#include "tea.h" // <FS:AW opensim currency support>
 
 // When uploading multiple files, don't display any of them when uploading more than this number.
 static const S32 FILE_COUNT_DISPLAY_THRESHOLD = 5;
@@ -819,7 +820,10 @@ public:
 		// to be localized
 		if ( _INSUFFICIENT_FUNDS == error_identifier )
 		{
-			displayCannotUploadReason("You do not have a sufficient L$ balance to complete this upload.");
+// <FS:AW opensim currency support>
+//			displayCannotUploadReason("You do not have a sufficient L$ balance to complete this upload.");
+			displayCannotUploadReason(Tea::wrapCurrency("You do not have a sufficient L$ balance to complete this upload."));
+// </FS:AW opensim currency support>
 		}
 		else if ( _MISSING_REQUIRED_PARAMETER == error_identifier )
 		{

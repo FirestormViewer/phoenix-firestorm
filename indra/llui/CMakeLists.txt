@@ -13,6 +13,7 @@ include(LLWindow)
 include(LLVFS)
 include(LLXML)
 include(LLXUIXML)
+include(Teapot)# <FS:AW opensim currency support>
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -25,6 +26,7 @@ include_directories(
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
     ${LLXUIXML_INCLUDE_DIRS}
+    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
 set(llui_SOURCE_FILES
@@ -261,6 +263,7 @@ target_link_libraries(llui
     ${LLXUIXML_LIBRARIES}
     ${LLXML_LIBRARIES}
     ${LLMATH_LIBRARIES}
+    ${TEAPOT_LIBRARIES}# <FS:AW opensim currency support>
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )
 

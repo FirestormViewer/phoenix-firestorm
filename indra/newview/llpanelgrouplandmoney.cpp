@@ -54,6 +54,7 @@
 #include "llstatusbar.h"
 #include "llfloaterworldmap.h"
 #include "llviewermessage.h"
+#include "tea.h" // <FS:AW opensim currency support>
 
 static LLRegisterPanelClassWrapper<LLPanelGroupLandMoney> t_panel_group_money("panel_group_land_money");
 
@@ -824,7 +825,10 @@ void LLPanelGroupLandMoney::processPlacesReply(LLMessageSystem* msg, void**)
 	LLPanelGroupLandMoney* selfp = sGroupIDs.getIfThere(group_id);
 	if(!selfp)
 	{
-		llinfos << "Group Panel Land L$ " << group_id << " no longer in existence."
+// <FS:AW opensim currency support>
+//		llinfos << "Group Panel Land L$ " << group_id << " no longer in existence."
+		llinfos << Tea::wrapCurrency("Group Panel Land L$ ") << group_id << " no longer in existence."
+// </FS:AW opensim currency support>
 				<< llendl;
 		return;
 	}
@@ -1116,7 +1120,10 @@ void LLPanelGroupLandMoney::processGroupAccountDetailsReply(LLMessageSystem* msg
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
 	if (gAgent.getID() != agent_id)
 	{
-		llwarns << "Got group L$ history reply for another agent!" << llendl;
+// <FS:AW opensim currency support>
+//		llwarns << "Got group L$ history reply for another agent!" << llendl;
+		llwarns << Tea::wrapCurrency("Got group L$ history reply for another agent!") << llendl;
+// </FS:AW opensim currency support>
 		return;
 	}
 
@@ -1293,7 +1300,10 @@ void LLPanelGroupLandMoney::processGroupAccountTransactionsReply(LLMessageSystem
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
 	if (gAgent.getID() != agent_id)
 	{
-		llwarns << "Got group L$ history reply for another agent!" << llendl;
+// <FS:AW opensim currency support>
+//		llwarns << "Got group L$ history reply for another agent!" << llendl;
+		llwarns << Tea::wrapCurrency("Got group L$ history reply for another agent!") << llendl;
+// </FS:AW opensim currency support>
 		return;
 	}
 
@@ -1477,7 +1487,10 @@ void LLPanelGroupLandMoney::processGroupAccountSummaryReply(LLMessageSystem* msg
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
 	if (gAgent.getID() != agent_id)
 	{
-		llwarns << "Got group L$ history reply for another agent!" << llendl;
+// <FS:AW opensim currency support>
+//		llwarns << "Got group L$ history reply for another agent!" << llendl;
+		llwarns << Tea::wrapCurrency("Got group L$ history reply for another agent!") << llendl;
+// </FS:AW opensim currency support>
 		return;
 	}
 
@@ -1489,7 +1502,10 @@ void LLPanelGroupLandMoney::processGroupAccountSummaryReply(LLMessageSystem* msg
 	self = LLGroupMoneyTabEventHandler::sInstanceIDs.getIfThere(request_id);
 	if (!self)
 	{
-		llwarns << "GroupAccountSummary recieved for non-existent group L$ planning tab." << llendl;
+// <FS:AW opensim currency support>
+//		llwarns << "GroupAccountSummary recieved for non-existent group L$ planning tab." << llendl;
+		llwarns << Tea::wrapCurrency("GroupAccountSummary recieved for non-existent group L$ planning tab.") << llendl;
+// </FS:AW opensim currency support>
 		return;
 	}
 

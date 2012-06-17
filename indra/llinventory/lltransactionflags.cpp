@@ -30,6 +30,7 @@
 #include "lluuid.h"
 #include "lltransactionflags.h"
 #include "lltransactiontypes.h"
+#include "tea.h" // <FS:AW opensim currency support>
  
 const U8 TRANSACTION_FLAGS_NONE = 0;
 const U8 TRANSACTION_FLAG_SOURCE_GROUP = 1;
@@ -111,7 +112,10 @@ std::string build_transfer_message_to_source(
 		// *NOTE: Do not change these strings!  The viewer matches
 		// them in llviewermessage.cpp to perform localization.
 		// If you need to make changes, add a new, localizable message. JC
-		ostr << "You paid L$" << amount;
+// <FS:AW opensim currency support>
+//		ostr << "You paid L$" << amount;
+		ostr << Tea::wrapCurrency("You paid L$") << amount;
+// </FS:AW opensim currency support>
 		switch(transaction_type)
 		{
 		case TRANS_GROUP_CREATE:
@@ -129,7 +133,10 @@ std::string build_transfer_message_to_source(
 	}
 	else
 	{
-		ostr << "You paid " << dest_name << " L$" << amount;
+// <FS:AW opensim currency support>
+//		ostr << "You paid " << dest_name << " L$" << amount;
+		ostr << "You paid " << dest_name << Tea::wrapCurrency(" L$") << amount;
+// </FS:AW opensim currency support>
 		append_reason(ostr, transaction_type, description);
 	}
 	ostr << ".";
@@ -160,7 +167,10 @@ std::string build_transfer_message_to_destination(
 	// *NOTE: Do not change these strings!  The viewer matches
 	// them in llviewermessage.cpp to perform localization.
 	// If you need to make changes, add a new, localizable message. JC
-	ostr << source_name << " paid you L$" << amount;
+// <FS:AW opensim currency support>
+//	ostr << source_name << " paid you L$" << amount;
+	ostr << source_name << Tea::wrapCurrency(" paid you L$") << amount;
+// </FS:AW opensim currency support>
 	append_reason(ostr, transaction_type, description);
 	ostr << ".";
 	return ostr.str();

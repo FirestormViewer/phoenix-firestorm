@@ -87,6 +87,11 @@ if (VIEWER)
   # viewer media plugins
   add_subdirectory(${LIBS_OPEN_PREFIX}media_plugins)
 
+  # <FS:AW opensim currency support>
+  #teapot helper library
+  add_subdirectory(${LIBS_OPEN_PREFIX}teapot)
+  # </FS:AW opensim currency support>
+
   # llplugin testbed code (is this the right way to include it?)
   if (LL_TESTS AND NOT LINUX)
     add_subdirectory(${VIEWER_PREFIX}test_apps/llplugintest)

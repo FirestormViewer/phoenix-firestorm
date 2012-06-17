@@ -75,6 +75,7 @@ set(cmake_SOURCE_FILES
     PNG.cmake
     Python.cmake
     Prebuilt.cmake
+    Teapot.cmake # <FS:AW opensim currency support>
     TemplateCheck.cmake
     Tut.cmake
     UI.cmake

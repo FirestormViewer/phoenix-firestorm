@@ -142,7 +142,7 @@ const static boost::regex NEWLINES("\\n{1}");
 // [AO : Radar]
 #include "llpanelpeople.h"
 // [/AO]
-
+#include "tea.h" // <FS:AW opensim currency support>
 #if LL_MSVC
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
@@ -5903,8 +5903,12 @@ void process_money_balance_reply( LLMessageSystem* msg, void** )
 	msg->getS32("MoneyData", "SquareMetersCredit", credit);
 	msg->getS32("MoneyData", "SquareMetersCommitted", committed);
 	msg->getStringFast(_PREHASH_MoneyData, _PREHASH_Description, desc);
-	LL_INFOS("Messaging") << "L$, credit, committed: " << balance << " " << credit << " "
+// <FS:AW opensim currency support>
+//	LL_INFOS("Messaging") << "L$, credit, committed: " << balance << " " << credit << " "
+	LL_INFOS("Messaging") << Tea::wrapCurrency("L$, credit, committed: ") << balance << " " << credit << " "
+// <FS:AW opensim currency support>
 			<< committed << LL_ENDL;
+
     
 	if (gStatusBar)
 	{
@@ -6656,9 +6660,10 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::Singleton::getInstance());
 
 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-
-	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
-
+// <FS:AW opensim currency support>
+//	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
+	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << upload_cost << LL_ENDL;
+// <FS:AW opensim currency support>
 	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
 	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));

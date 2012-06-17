@@ -8,12 +8,14 @@ include(LLMath)
 include(LLMessage)
 include(LLVFS)
 include(LLXML)
+include(Teapot)# <FS:AW opensim currency support>
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
+    ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
 set(llinventory_SOURCE_FILES
