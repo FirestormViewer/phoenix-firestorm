@@ -3537,4 +3537,8 @@ Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skrip
     </form>
   </notification>
   <!-- <FS:Zi> Add float LSL color entry widgets -->
+
+	<notification name="FSCmdLineBWTooHigh">
+Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
+	</notification>
 </notifications>

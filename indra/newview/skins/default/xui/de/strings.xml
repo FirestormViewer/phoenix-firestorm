@@ -5273,7 +5273,4 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineRSP">
 		Maximale Bandbreite gesetzt auf: [VALUE] kbit/s.
 	</string>
-	<string name="FSCmdLineBWTooHigh">
-		Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
-	</string>
 </strings>
