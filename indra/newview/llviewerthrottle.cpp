@@ -33,7 +33,12 @@
 #include "llframetimer.h"
 #include "llviewerstats.h"
 #include "lldatapacker.h"
-#include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
+
+//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
+#include "lltrans.h"
+#include "llnotificationsutil.h"
+//</FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
+
 using namespace LLOldEvents;
 
 // consts
@@ -54,7 +59,6 @@ const F32 DYNAMIC_UPDATE_DURATION = 5.0f; // seconds
 
 LLViewerThrottle gViewerThrottle;
 void cmdline_printchat(std::string message);//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-bool bandwidth_warning_latch;//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
 
 // static
 const std:: string LLViewerThrottle::sNames[TC_EOF] = {
@@ -148,15 +152,16 @@ LLViewerThrottleGroup LLViewerThrottleGroup::operator-(const LLViewerThrottleGro
 
 void LLViewerThrottleGroup::sendToSim() const
 {
+	static bool bandwidth_warning_latch = false;//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
 	llinfos << "Sending throttle settings, total BW " << mThrottleTotal << llendl;
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);	
 	//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	//<FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat
-	if ( gSavedSettings.getBOOL("BandwidthSettingTooHigh") & !bandwidth_warning_latch )
+	if ( gSavedSettings.getBOOL("BandwidthSettingTooHigh") && !bandwidth_warning_latch )
 		{
-			cmdline_printchat(LLTrans::getString("FSCmdLineBWTooHigh"));			
+			LLNotificationsUtil::add("FSCmdLineBWTooHigh", LLSD());
 			bandwidth_warning_latch = true;
 		}
 	//</FS:HG> FIRE-6340, FIRE-6567 - addendum - don't spam chat

@@ -599,7 +599,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 			else if(command == std::string(sFSCmdLineBandwidth))
 			{
-				int band_width;
+				S32 band_width;
                 if(i >> band_width) 
                 {
                     if ( band_width < 100 )
