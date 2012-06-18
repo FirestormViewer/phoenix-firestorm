@@ -2274,77 +2274,28 @@ void LLFolderView::doIdle()
 		arrangeAll();
 	}
 
-//	if (mFilter->isModified() && mFilter->isNotDefault())
-//	{
-//		mNeedsAutoSelect = TRUE;
-//	}
+	if (mFilter->isModified() && mFilter->isNotDefault())
+	{
+		mNeedsAutoSelect = TRUE;
+	}
 	mFilter->clearModified();
-// [SL:KB] - Patch: Inventory-Selection | Checked: 2011-10-01 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
-	bool filter_modified_and_active = mCompletedFilterGeneration < mFilter->getCurrentGeneration() && mFilter->isNotDefault();
-	mNeedsAutoSelect |= filter_modified_and_active &&
-							!(gFocusMgr.childHasKeyboardFocus(mParentPanel) || gFocusMgr.getMouseCapture());
-// [/SL:KB]
 
 	// filter to determine visibility before arranging
 	filterFromRoot();
 
 	// automatically show matching items, and select first one if we had a selection
-//	if (mNeedsAutoSelect)
-// [SL:KB] - Patch: Inventory-Selection | Checked: 2011-10-04 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
-	if ( (mNeedsAutoSelect) && (!needsArrange()) )
-// [/SL:KB]
+	if (mNeedsAutoSelect)
 	{
 		LLFastTimer t3(FTM_AUTO_SELECT);
 		// select new item only if a filtered item not currently selected
-//		LLFolderViewItem* selected_itemp = mSelectedItems.empty() ? NULL : mSelectedItems.back();
-//		if (!mAutoSelectOverride && (!selected_itemp || !selected_itemp->potentiallyFiltered()))
-//		{
-//			// select first filtered item
-//			LLSelectFirstFilteredItem filter;
-//			applyFunctorRecursively(filter);
-//		}
-// [SL:KB] - Patch: Inventory-Selection | Checked: 2011-10-04 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
-		if ( (!mSelectedItems.empty()) && (!mAutoSelectOverride) )
+		LLFolderViewItem* selected_itemp = mSelectedItems.empty() ? NULL : mSelectedItems.back();
+		if (!mAutoSelectOverride && (!selected_itemp || !selected_itemp->potentiallyFiltered()))
 		{
-			LLFolderViewItem* pCurSelItem = mSelectedItems.back();
-
-			// Iterate through all currently selected items and only deselect those that don't match the filter (or are a folder with no filtered descendents)
-			for (selected_items_t::iterator itSelItem = mSelectedItems.begin(); itSelItem != mSelectedItems.end(); )
-			{
-				LLFolderViewItem* pSelItem = *itSelItem;
-				LLFolderViewFolder* pSelFolder = dynamic_cast<LLFolderViewFolder*>(pCurSelItem);
-				if ( ((pSelFolder) && (!pSelFolder->hasFilteredDescendants())) || ((!pSelFolder) && (!pSelItem->getFiltered())) )
-				{
-					removeFromSelectionList(pSelItem);
-					itSelItem = mSelectedItems.begin();
-				}
-				else
-				{
-					++itSelItem;
-				}
-			}
-
-			// If there are no selected items left then try to select the nearest visible item to the previous selection
-			if (mSelectedItems.empty())
-			{
-				LLFolderViewItem* pNewSelItem = pCurSelItem->getNextOpenNode(FALSE);
-				if (!pNewSelItem)
-					pNewSelItem = pCurSelItem->getPreviousOpenNode(FALSE);
-
-				if (pNewSelItem)
-				{
-					setSelectionFromRoot(pNewSelItem, pNewSelItem->isOpen(), mParentPanel->hasFocus());
-					if (pNewSelItem->getParentFolder())
-						pNewSelItem->getParentFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_UP);
-				}
-				else
-				{
-					setSelectionFromRoot(NULL, mParentPanel->hasFocus());
-				}
-			}
-			scrollToShowSelection();
+			// these are named variables to get around gcc not binding non-const references to rvalues
+			// and functor application is inherently non-const to allow for stateful functors
+			LLSelectFirstFilteredItem functor;
+			applyFunctorRecursively(functor);
 		}
-// [/SL:KB]
 
 		// Open filtered folders for folder views with mAutoSelectOverride=TRUE.
 		// Used by LLPlacesFolderView.
@@ -2356,10 +2307,7 @@ void LLFolderView::doIdle()
 			applyFunctorRecursively(functor);
 		}
 
-//		scrollToShowSelection();
-// [SL:KB] - Patch: Inventory-Selection | Checked: 2011-10-04 (Catznip-3.0.0a) | Added: Catznip-3.0.0a
-		mNeedsAutoSelect = FALSE;
-// [/SL:KB]
+		scrollToShowSelection();
 	}
 
 	BOOL filter_finished = mCompletedFilterGeneration >= mFilter->getCurrentGeneration() 
