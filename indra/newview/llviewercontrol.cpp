@@ -74,7 +74,7 @@
 #include "llcombobox.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
-#include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
 #include "llhunspell.h"
 // [/SL:KB]
@@ -100,7 +100,7 @@ extern BOOL gDebugGL;
 extern BOOL gAuditTexture;
 
 LLTimer throttle_timer;//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-void cmdline_printchat(std::string message);//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
+
 ////////////////////////////////////////////////////////////////////////////
 // Listeners
 
@@ -125,10 +125,6 @@ static bool handleBandWidthChanged(const LLSD& newvalue)
 	{
 		F32 bandwidth = (F32) newvalue.asReal();
 		gViewerThrottle.setMaxBandwidth((F32) bandwidth);
-		if ( gSavedSettings.getBOOL("BandwidthSettingTooHigh") )
-		{
-			cmdline_printchat(LLTrans::getString("FSCmdLineBWTooHigh"));
-		}
 		throttle_timer.reset();
 	}	
 	return true;
