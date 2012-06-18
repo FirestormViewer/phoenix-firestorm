@@ -6,7 +6,7 @@ na panelu poniżej i zdefiniuj go z wybranego koloru lub
 kliknij prawym przyciskiem, aby go usunąć. Kliknij na
 Zapisz, kiedy skończysz.
 	</text>
-	<color_swatch label="Kolor promienia" name="beam_color_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów i zmienić barwę kropki" />
+	<color_swatch label="Kolor" name="beam_color_swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów i zmienić barwę kropki" />
 	<button label="Zapisz" name="beamshape_save" />
 	<button label="Wczytaj" name="beamshape_load" />
 	<button label="Wyczyść" name="beamshape_clear" />

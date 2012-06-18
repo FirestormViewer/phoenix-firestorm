@@ -90,65 +90,71 @@
         <button name="refresh_beams" label="Odśwież listę" tool_tip="Odśwież listę wiązek" />
         <slider name="FSBeamShapeScale" label="Rozm.:" tool_tip="Zmień rozmiar użytego kształtu wiązki" />
     </panel>
-    <panel label="Wiersz poleceń" name="tab1-3">
+    <panel label="Polecenia 1" name="tab-CmdLine1">
         <check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle" />
-        <text name="FSCmdLinePos_txt">
-         Teleport wewn. sima (użycie: cmd x y z)
-        </text>
-        <text name="FSCmdLineGround_txt">
-         Teleport do ziemi (użycie: cmd)
-        </text>
-        <text name="FSCmdLineHeight_txt">
-        Teleport na wysokość (użycie: cmd z)
-        </text>
-        <text name="FSCmdLineTeleportHome_txt">
-         Teleport do Miejsca Startu (użycie: cmd)
-         </text>
-        <text name="FSCmdLineRezPlatform_txt">
-          Rezz platformy (użycie: cmd 0 - 30)
-        </text>
-        <slider name="FSCmdLinePlatformSize" label="Szer." tool_tip="Jak duża ma być platforma?" />
-        <text name="FSCmdLineMapTo_txt">
-           Teleport do sima x (użycie: cmd nazwa)
-        </text>
-        <check_box label="Ta sama pozycja między regionami" name="toggle" />
         <text name="FSCmdLineCalc_txt">
-           Kalkulator (użycie: cmd SIN(2+2))
+            Kalkulator (użycie: cmd SIN(2+2))
         </text>
         <text name="FSCmdLineAutocorrect_txt">
-           Nowe słowo autokor. (cmd list|bad|good)
+            Nowe słowo autokor. (cmd list|bad|good)
         </text>
         <text name="FSCmdLineDrawDistance_txt">
-          Zmiana pola widzenia (użycie: cmd metry)
+            Zmiana pola widzenia (użycie: cmd metry)
         </text>
-        <text name="FSCmdTeleportToCam_txt">
-          Teleport do pozycji kamery (użycie: cmd)
+        <text name="FSCmdLineBandWidth_txt">
+            Maks. przepustow. (użycie: cmd kbps)
         </text>
+        <text name="FSCmdLineRezPlatform_txt">
+            Rezz platformy (użycie: cmd 0 - 30)
+        </text>
+        <slider name="FSCmdLinePlatformSize" label="Szer." tool_tip="Jak duża ma być platforma?" />
         <text name="FSCmdLineKeyToName_txt">
-          Imię awatara z jego klucza (cmd klucz)
+            Imię awatara z jego klucza (cmd klucz)
         </text>
-        <text name="FSCmdLineOfferTp_txt">
-          Oferowanie teleportu (użycie: cmd klucz)
-        </text>
-        <text name="FSCmdLineTP2_txt">
-          Teleport do awatara (użycie: cmd imię)
-        </text>
-        <line_editor tool_tip="Składnia tej komendy pozwala na imiona podawane w części i nie zwraca uwagi na wielkość liter. Lepsze wyniki będą osiągane z otwartym radarem." name="FSCmdLineTP2" />
         <text name="FSCmdLineAO_txt">
-          Włącz/wyłącz AO (użycie: cmd on/off)
+            Włącz/wyłącz AO (użycie: cmd on/off)
         </text>
         <text name="FSCmdLineClearChat_txt">
-          Czyść historię czatu (użycie: cmd)
+            Czyść historię czatu (użycie: cmd)
         </text>
         <line_editor tool_tip="Czyści historię czatu, aby zapobiec lagom pochodzącym od spamerów." name="FSCmdLineClearChat" />
         <text name="FSCmdLineMedia_txt">
-          Ustaw URL mediów (użycie: cmd url typ)
+            Ustaw URL mediów (użycie: cmd url typ)
         </text>
         <line_editor tool_tip="Ustawia i odtwarza strumień mediów dla podanego URL" name="FSCmdLineMedia" />
         <text name="FSCmdLineMusic_txt">
-          Ustaw URL muzyki (użycie: cmd url)
+            Ustaw URL muzyki (użycie: cmd url)
         </text>
-      <line_editor tool_tip="Ustawia i odtwarza strumień muzyki dla podanego URL" name="FSCmdLineMusic" />
+        <line_editor tool_tip="Ustawia i odtwarza strumień muzyki dla podanego URL" name="FSCmdLineMusic" />
+    </panel>
+    <panel label="Polecenia 2" name="tab-CmdLine2">
+        <check_box label="Używaj paska czatu jak wiersza poleceń" name="chat_cmd_toggle2" />
+        <text name="FSCmdLinePos_txt">
+            Teleport wewn. sima (użycie: cmd x y z)
+        </text>
+        <text name="FSCmdLineGround_txt">
+            Teleport do ziemi (użycie: cmd)
+        </text>
+        <text name="FSCmdLineHeight_txt">
+            Teleport na wysokość (użycie: cmd z)
+        </text>
+        <text name="FSCmdLineMapTo_txt">
+            Teleport do sima x (użycie: cmd nazwa)
+        </text>
+        <check_box label="Ta sama pozycja między regionami" name="toggle" />
+        <text name="FSCmdTeleportToCam_txt">
+            Teleport do pozycji kamery (użycie: cmd)
+        </text>
+        <text name="FSCmdLineOfferTp_txt">
+            Oferowanie teleportu (użycie: cmd klucz)
+        </text>
+        <text name="FSCmdLineTP2_txt">
+            Teleport do awatara (użycie: cmd imię)
+        </text>
+        <line_editor tool_tip="Składnia tej komendy pozwala na imiona podawane w części i nie zwraca uwagi na wielkość liter. Lepsze wyniki będą osiągane z otwartym radarem." name="FSCmdLineTP2" />	
+        <text name="FSCmdLineTeleportHome_txt">
+            Teleport do Miejsca Startu (użycie: cmd)
+        </text>
     </panel>
     <panel label="System Windlight" name="WindlightTab">
         <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/parceli" name="UseEnvironmentFromRegionAlways" />
