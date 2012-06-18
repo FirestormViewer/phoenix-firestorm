@@ -3479,4 +3479,7 @@ Anulowano.
 			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
 		</form>
 	</notification>
+	<notification name="FSCmdLineBWTooHigh">
+		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps.
+	</notification>
 </notifications>

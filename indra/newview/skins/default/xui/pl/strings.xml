@@ -4830,7 +4830,4 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSCmdLineRSP">
 		Maks. przepustowość ustawiona na: [VALUE] kbps.
 	</string>
-	<string name="FSCmdLineBWTooHigh">
-		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps.
-	</string>
 </strings>
