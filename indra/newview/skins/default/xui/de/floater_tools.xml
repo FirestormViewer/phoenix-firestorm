@@ -173,7 +173,7 @@
 				Sie können diese Objekte nicht bearbeiten.
 			</panel.string>
 			<panel.string name="text modify warning">
-				Gesamtes Objekt wählen, um Berechtigungen festzulegen.
+				Ganzes Objekt wählen um Rechte festzulegen.
 			</panel.string>
 			<panel.string name="Cost Default">
 				Preis: L$
