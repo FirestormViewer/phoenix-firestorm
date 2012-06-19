@@ -3451,4 +3451,7 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 			<ignore name="ignore" text="Una cadena LSL se ha copiado a mi portapapeles"/>
 		</form>
 	</notification>
+	<notification name="FSCmdLineBWTooHigh">
+		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps.
+	</notification>
 </notifications>
