@@ -54,7 +54,12 @@ LLStatBar::LLStatBar(const Params& p)
 	  mDisplayMean(p.show_mean),
 	  mSetting(p.setting)
 {
-	S32 setting = LLUI::sSettingGroups["config"]->getS32(mSetting);
+	//S32 setting = LLUI::sSettingGroups["config"]->getS32(mSetting); // <FS:LO> dont crash if there is no setting for saving the current state of the item in, just go with the defaults
+	S32 setting = -1;
+	if(mSetting != "")
+	{
+		setting = LLUI::sSettingGroups["config"]->getS32(mSetting);
+	}
 	switch (setting)
 	{
 		default:
