@@ -45,6 +45,7 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_LOGIN_URI_VALUE "loginuri"
 #define GRID_HELPER_URI_VALUE "helperuri"
 #define GRID_LOGIN_PAGE_VALUE "loginpage"
+#define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
 #define GRID_IS_FAVORITE_VALUE "favorite"
 #define GRID_REGISTER_NEW_ACCOUNT "register"
 #define GRID_FORGOT_PASSWORD "password"
@@ -59,6 +60,8 @@ extern const char* DEFAULT_LOGIN_PAGE;
 // forms.
 #define GRID_SLURL_BASE "slurl_base"
 #define GRID_APP_SLURL_BASE "app_slurl_base"
+
+class GridInfoRequestResponder;
 
 // <AW opensim>
 struct GridEntry
@@ -115,13 +118,12 @@ public:
 	void initCmdLineGrids();
 
 	// grid list management
-	bool isReadyToLogin(){return mReadyToLogin;}
-	void incResponderCount(){++mResponderCount;}
-	void decResponderCount(){--mResponderCount;}
-	void gridInfoResponderCB(GridEntry* grid_data);
-	// add a grid to the list of grids
-	void addGrid(GridEntry* grid_info, AddState state);	
+ 	bool isReadyToLogin(){return mReadyToLogin;}
 
+	// add a grid to the list of grids
+	void addGrid(GridEntry* grid_info, AddState state);
+
+	void reFetchGrid();
 	// retrieve a map of grid-name <-> label
 	// by default only return the user visible grids
 	std::map<std::string, std::string> getKnownGrids(bool favorites_only=FALSE);
@@ -129,6 +131,8 @@ public:
 	// this was getGridInfo - renamed to avoid ambiguity with the OpenSim grid_info
 	void getGridData(const std::string& grid, LLSD &grid_info);
 	void getGridData(LLSD &grid_info) { getGridData(mGrid, grid_info); }
+
+	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
 // </AW opensim>	
 
 	// current grid management
@@ -139,7 +143,11 @@ public:
 	void setGridChoice(const std::string& grid);
 	
 	
-	std::string getGridLabel() { return mGridList[mGrid][GRID_LABEL_VALUE]; } 	
+	//get the grid label e.g. "Second Life"
+	std::string getGridLabel() { return mGridList[mGrid][GRID_LABEL_VALUE]; }
+	//get the grid nick e.g. "agni"
+	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
+	//get the grid e.g. "login.agni.lindenlab.com"
 	std::string getGrid() const { return mGrid; }
 	void getLoginURIs(std::vector<std::string>& uris);
 	std::string getHelperURI();
@@ -147,15 +155,27 @@ public:
 	std::string getGridLoginID() { return mGridList[mGrid][GRID_ID_VALUE]; }	
 	std::string getLoginPage(const std::string& grid) { return mGridList[grid][GRID_LOGIN_PAGE_VALUE]; }
 	void        getLoginIdentifierTypes(LLSD& idTypes) { idTypes = mGridList[mGrid][GRID_LOGIN_IDENTIFIER_TYPES]; }
-	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
-	
+
+	std::string trimHypergrid(const std::string& trim);
+
 	// get location slurl base for the given region within the selected grid
 	std::string getSLURLBase(const std::string& grid);
 	std::string getSLURLBase() { return getSLURLBase(mGrid); }
 
 	// get app slurl base for the given region within the selected grid
 	std::string getAppSLURLBase(const std::string& grid);
-	std::string getAppSLURLBase() { return getAppSLURLBase(mGrid); }	
+	std::string getAppSLURLBase() { return getAppSLURLBase(mGrid); }
+
+	bool hasGrid(const std::string& grid){ return mGridList.has(grid); }
+	bool isTemporary(){ return mGridList[mGrid].has("FLAG_TEMPORARY"); }
+	bool isTemporary(const std::string& grid){ return mGridList[grid].has("FLAG_TEMPORARY"); }
+
+	// tell if we got this from a Hypergrid SLURL
+	bool isHyperGrid(const std::string& grid) { return mGridList[grid].has("HG"); }
+
+	// tell if we know how to acess this grid via Hypergrid
+	std::string getGatekeeper(const std::string& grid) { return mGridList[grid].has("gatekeeper") ? mGridList[grid]["gatekeeper"].asString() : std::string(); }
+	
 	std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);
 
 // <AW opensim>
@@ -186,6 +206,13 @@ public:
 	int mGridEntries;
 // </AW opensim>
 	void clearFavorites();
+
+private:
+	friend class GridInfoRequestResponder;
+
+	void incResponderCount(){++mResponderCount;}
+	void decResponderCount(){--mResponderCount;}
+	void gridInfoResponderCB(GridEntry* grid_data);
 	
 protected:
 

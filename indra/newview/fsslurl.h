@@ -65,24 +65,27 @@ public:
 
 	LLSLURL(): mType(INVALID)  { }
 	LLSLURL(const std::string& slurl);
-	LLSLURL(const std::string& grid, const std::string& region);
-	LLSLURL(const std::string& region, const LLVector3& position);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position);
-	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position);
-	LLSLURL(const std::string& region, const LLVector3d& global_position);
+	LLSLURL(const std::string& grid, const std::string& region, bool hyper = false);
+	LLSLURL(const std::string& region, const LLVector3& position, bool hyper = false);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3& position, bool hyper = false);
+	LLSLURL(const std::string& grid, const std::string& region, const LLVector3d& global_position, bool hyper = false);
+	LLSLURL(const std::string& region, const LLVector3d& global_position, bool hyper = false);
 	LLSLURL(const std::string& command, const LLUUID&id, const std::string& verb);
+	LLSLURL(const LLSD& path_array, bool from_app);
 
 	SLURL_TYPE getType() const { return mType; }
 //<AW: opensim>
 	std::string getTypeHumanReadable() { return getTypeHumanReadable(mType); }
 	static std::string getTypeHumanReadable(SLURL_TYPE type);
 //</AW: opensim>
+
 	std::string getSLURLString() const;
 	std::string getLoginString() const;
 	std::string getLocationString() const; 
 	std::string getGrid() const { return mGrid; }
 	std::string getRegion() const { return mRegion; }
 	LLVector3   getPosition() const { return mPosition; }
+	bool        getHypergrid() const { return mHypergrid; }//<AW: opensim>
 	std::string getAppCmd() const { return mAppCmd; }
 	std::string getAppQuery() const { return mAppQuery; }
 	LLSD        getAppQueryMap() const { return mAppQueryMap; }
@@ -108,6 +111,7 @@ protected:
 	std::string mGrid;  // reference to grid manager grid
 	std::string mRegion;
 	LLVector3  mPosition;
+	bool mHypergrid;//<AW: opensim>
 };
 
 #endif // FS_SLURL_H
