@@ -13,6 +13,7 @@
  name="imcontacts"
  save_rect="true"
  save_visibility="true"
+ save_tearoff_state="true"
  single_instance="true"
  title="CONTACTS"
  width="395">

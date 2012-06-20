@@ -266,7 +266,7 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 	mAutoFocus(TRUE), // automatically take focus when opened
 	mCanDock(false),
 	mDocked(false),
-	mTornOff(true),
+	mTornOff(false),	// <FS:Zi> Start out as hosted, helps with fix for visibility
 	mHasBeenDraggedWhileMinimized(FALSE),
 	mPreviousMinimizedBottom(0),
 	mPreviousMinimizedLeft(0),
@@ -583,7 +583,13 @@ void LLFloater::storeVisibilityControl()
 {
 	if( !sQuitting && mVisibilityControl.size() > 1 )
 	{
-		getControlGroup()->setBOOL( mVisibilityControl, getVisible() );
+		// <FS:Zi> Make sure that hosted floaters always save "not visible", so they won't
+		//         pull up their host on restart
+		BOOL visible=FALSE;
+		if(mTornOff)
+			visible=getVisible();
+		// </FS:Zi>
+		getControlGroup()->setBOOL( mVisibilityControl, visible );
 	}
 }
 
@@ -925,8 +931,8 @@ void LLFloater::applyControlsAndPosition(LLFloater* other)
 	{
 		applyTearOffState();
 	}
-	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 // [/SL:KB]
+	applyDockState();	// <FS:Zi> Only now apply docked state so floaters don't forget their positions
 }
 
 bool LLFloater::applyRectControl()
@@ -1799,6 +1805,7 @@ void LLFloater::setTornOff(bool torn_off)
 	updateTitleButtons();
 
 	storeTearOffStateControl();
+	storeVisibilityControl();	// <FS:Zi> Make sure to update visibility, too
 }
 
 void LLFloater::onClickTearOff(LLFloater* self)
