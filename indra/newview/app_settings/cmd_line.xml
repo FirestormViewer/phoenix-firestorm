@@ -52,7 +52,8 @@
       <string>CmdLineGridChoice</string>
     </map>
 
-    <key>loginuri</key>
+<!-- FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
+<!--    <key>loginuri</key>
     <map>
       <key>desc</key>
       <string>login server and CGI script to use</string>
@@ -63,6 +64,17 @@
       <key>map-to</key>
       <string>CmdLineLoginURI</string>
     </map>
+-->
+    <key>loginuri</key>
+    <map>
+      <key>desc</key>
+      <string>login server and CGI script to use</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>CmdLineLoginURI1</string>
+    </map>
+<!-- /FS:AW  fix commandline loginuri (partial fix of FIRE-3448)-->
 
     <key>helperuri</key>
     <map>

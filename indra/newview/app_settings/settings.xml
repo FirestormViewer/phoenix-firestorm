@@ -3377,6 +3377,17 @@
         <string />
       </array>
     </map>
+    <key>CmdLineLoginURI1</key>
+    <map>
+      <key>Comment</key>
+      <string>Command line specified login server and CGI prefix to use.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
+    </map>
     <key>ConnectAsGod</key>
     <map>
       <key>Comment</key>
