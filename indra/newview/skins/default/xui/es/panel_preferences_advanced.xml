@@ -10,5 +10,13 @@
 	<check_box label="Permitir el inicio de sesión en otras redes (no todas las redes soportarán Firestorm)" name="show_grid_selection_check"/>
 	<check_box label="Mostrar el menú Avanzado" name="show_advanced_menu_check"/>
 	<check_box label="Mostrar el menú Desarrollo" name="show_develop_menu_check"/>
+	<panel name="debug_search_panel">
+		<check_box label="Búsqueda de depuración" name="DebugSearch"/>
+		<text name="search_url_debug_text" width="370">
+			Sustituir la actual URL de búsqueda por: (sin efecto si está vacío)
+		</text>
+		<button label="Limpiar" label_selected="Limpiar" name="clear_search_url_debug" width="60"/>
+		<button label="Escoger" name="pick_current_search_url" width="60"/>
+	</panel>
 	<button label="Restablecer todas las configuraciones" label_selected="Restablecer todas las configuraciones" name="clear_settings" width="250"/>
 </panel>

@@ -3215,6 +3215,14 @@ También puedes buscar en el Mapa lugares marcados como &quot;Puntos de Informac
 	<global name="You died and have been teleported to your home location">
 		Has muerto y has sido teleportado a tu Base.
 	</global>
+	<notification name="ConfirmClearDebugSearchURL">
+		¿Seguro que quieres limpiar la URL de búsqueda de depuración?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="ConfirmPickDebugSearchURL">
+		¿Seguro que quieres utilizar la URL de búsqueda actual como URL de búsqueda de depuración?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
 	<notification name="PhoenixAutoReplace">
 		&apos;[BEFORE]&apos; ha sido automáticamente reemplazada por &apos;[REPLACEMENT]&apos;
 basándose en tu lista [LISTNAME] list.
