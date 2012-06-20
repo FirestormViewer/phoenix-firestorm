@@ -3234,6 +3234,14 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 	<global name="You died and have been teleported to your home location">
 		Nastąpiła śmierć i teleportacja do Miejsca Startu.
 	</global>
+	<notification name="ConfirmClearDebugSearchURL">
+		Na pewno chcesz wyczyścić debugowany URL szukania?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="ConfirmPickDebugSearchURL">
+		Na pewno chcesz ustawić obecny URL szukania jako debugowany URL szukania?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
+	</notification>
 	<notification name="PhoenixAutoReplace">
 		&apos;[BEFORE]&apos; automatycznie zamieniony na &apos;[REPLACEMENT]&apos;
 bazując na liście [LISTNAME].
