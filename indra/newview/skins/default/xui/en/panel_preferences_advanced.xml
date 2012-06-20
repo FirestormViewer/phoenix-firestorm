@@ -62,8 +62,8 @@
     follows="all"
     height="56"
     layout="topleft"
-    left="1"
-    top_pad="0"
+    left="0"
+    top_pad="2"
     width="540"
     label=""
     name="debug_search_panel">
@@ -83,10 +83,10 @@
       follows="left|top"
       height="12"
       layout="topleft"
-      left="80"
+      left="50"
       name="search_url_debug_text"
-      top_pad="1"
-      width="300">
+      top_pad="5"
+      width="400">
         Override current search url: (no override if empty)
       </text>
       <line_editor
@@ -98,7 +98,7 @@
         font="SansSerif"
         height="19"
         layout="topleft"
-        left="80"
+        left="50"
         max_length="4096"
         name="search_url_debug"
         top_pad="5"

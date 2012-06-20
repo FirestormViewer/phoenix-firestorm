@@ -3541,4 +3541,15 @@ Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skrip
 	<notification name="FSCmdLineBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
 	</notification>
+
+<!-- <FS:AW>  opensim search support-->
+	<notification name="ConfirmClearDebugSearchURL">
+Soll die Debug-Such-URL wirklich gelöscht werden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="ConfirmPickDebugSearchURL">
+Soll die aktuelle Such-URL wirklich als Debug-Such-URL gesetzt werden?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+<!-- </FS:AW>  opensim search support-->
 </notifications>
