@@ -82,6 +82,7 @@
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
+#include "llnetmap.h"
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -686,6 +687,13 @@ static void handleAutohideChatbarChanged(const LLSD& new_value)
 }
 // </FS:Ansariel>
 
+// <FS:Ansariel> Synchronize tooltips throughout instances
+static void handleNetMapDoubleClickActionChanged()
+{
+	LLNetMap::updateToolTipMsg();
+}
+// </FS:Ansariel> Synchronize tooltips throughout instances
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -867,6 +875,9 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("_NACL_AntiSpamAmount")->getSignal()->connect(boost::bind(&handleNaclAntiSpamAmountChanged, _2));
 	// NaCl End
 	gSavedSettings.getControl("AutohideChatBar")->getSignal()->connect(boost::bind(&handleAutohideChatbarChanged, _2));
+
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
 }
 
 #if TEST_CACHED_CONTROL

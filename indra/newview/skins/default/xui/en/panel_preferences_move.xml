@@ -520,13 +520,48 @@
          top_pad="0"
          height="20"
          width="350" />
+		 
+        <text
+         follows="left|top"
+         type="string"
+         length="1"
+         height="10"
+         layout="topleft"
+         left="35"
+         name="netmap_double_click_action_lbl"
+         width="150"
+         top_pad="10">
+         Double click on Minimap:
+        </text>
+        <combo_box
+         control_name="FSNetMapDoubleClickAction"
+         height="23"
+         layout="topleft"
+         left_pad="10"
+         top_delta="-6"
+         name="netmap_double_click_action_combo"
+         width="200">
+            <combo_box.item
+             label="No action"
+             name="0"
+             value="0"/>
+            <combo_box.item
+             label="Open world map"
+             name="1"
+             value="1"/>
+            <combo_box.item
+             label="Teleport to clicked point"
+             name="2"
+             value="2"/>
+        </combo_box>
 
         <check_box
          control_name="FSAdvancedTooltips"
          name="FSAdvancedTooltips"
          label="Show extended information in hovertips (classic Phoenix style)"
          layout="topleft"
-         top_pad="0"
+         top_pad="2"
+         left="15"
          height="20"
          width="350" />
 

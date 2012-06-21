@@ -80,10 +80,17 @@ public:
 	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
 
 	void			setScale( F32 scale );
-	void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//void			setToolTipMsg(const std::string& msg) { mToolTipMsg = msg; }
+	static void		setToolTipMsg(const std::string& msg) { sToolTipMsg = msg; }
+	static void		updateToolTipMsg();
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 	LLUUID			getClosestAgentAtLastRightClick() const { return mClosestAgentAtLastRightClick; }
+
+	// <FS:Ansariel> Synchronize double click handling throughout instances
+	void			performDoubleClickAction(LLVector3d pos_global);
 
 private:
 	const LLVector3d& getObjectImageCenterGlobal()	{ return mObjectImageCenterGlobal; }
@@ -109,7 +116,7 @@ private:
 	LLUIColor		mBackgroundColor;
 
 	F32				mScale;					// Size of a region in pixels
-	static F32		sScale;					// Ansariel: Used to synchronize netmaps throughout instances
+	static F32		sScale;					// <FS:Ansariel> Used to synchronize netmaps throughout instances
 
 	F32				mPixelsPerMeter;		// world meters to map pixels
 	F32				mObjectMapTPM;			// texels per meter on map
@@ -132,7 +139,10 @@ private:
 	LLVector3d		mClosestAgentPosition;
 	LLVector3d		mClosestAgentAtLastRightClickPos;
 
-	std::string		mToolTipMsg;
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//std::string		mToolTipMsg;
+	static std::string	sToolTipMsg;
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 
 	static std::map<LLUUID, LLColor4> sAvatarMarksMap;
 

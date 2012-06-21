@@ -5273,4 +5273,16 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineRSP">
 		Maximale Bandbreite gesetzt auf: [VALUE] kbit/s.
 	</string>
+	
+	<!-- NetMap double click action tooltip messages -->
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION] (Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION] (Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+	</string>
+	<string name="NetMapDoubleClickNoActionToolTipMsg">
+		[REGION]
+	</string>
+	
 </strings>

@@ -623,8 +623,10 @@ BOOL LLPanelPeople::postBuild()
 	LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
 	minilayout->setMinDim(140);
 	mMiniMap = (LLNetMap*)getChildView("Net Map",true);
-	mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
-		getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//mMiniMap->setToolTipMsg(gSavedSettings.getBOOL("DoubleClickTeleport") ? 
+	//	getString("AltMiniMapToolTipMsg") :	getString("MiniMapToolTipMsg"));
+	// <//FS:Ansariel> Synchronize tooltips throughout instances
 	gSavedSettings.getControl("LimitRadarByRange")->getCommitSignal()->connect(boost::bind(&LLPanelPeople::handleLimitRadarByRange, this,  _2));
 	
 	mRecentList = getChild<LLPanel>(RECENT_TAB_NAME)->getChild<LLAvatarList>("avatar_list");

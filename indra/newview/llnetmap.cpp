@@ -95,8 +95,12 @@ const F64 COARSEUPDATE_MAX_Z = 1020.0f;
 const F32 WIDTH_PIXELS = 2.f;
 const S32 CIRCLE_STEPS = 100;
 
-std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // Ansariel
-F32 LLNetMap::sScale; // Ansariel: Synchronizing netmaps throughout instances
+std::map<LLUUID, LLColor4> LLNetMap::sAvatarMarksMap; // <FS:Ansariel>
+F32 LLNetMap::sScale; // <FS:Ansariel> Synchronizing netmaps throughout instances
+
+// <FS:Ansariel> Synchronize tooltips throughout instances
+std::string LLNetMap::sToolTipMsg;
+// </FS:Ansariel> Synchronize tooltips throughout instances
 
 LLNetMap::LLNetMap (const Params & p)
 :	LLUICtrl (p),
@@ -116,7 +120,8 @@ LLNetMap::LLNetMap (const Params & p)
 	mObjectImagep(),
 	mClosestAgentToCursor(),
 	mClosestAgentAtLastRightClick(),
-	mToolTipMsg(),
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//mToolTipMsg(),
 	mPopupMenu(NULL)
 {
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
@@ -125,10 +130,10 @@ LLNetMap::LLNetMap (const Params & p)
 
 LLNetMap::~LLNetMap()
 {
-	// <Ansariel> Fixing borked minimap zoom level persistance
+	// <FS:Ansariel> Fixing borked minimap zoom level persistance
 	//gSavedSettings.setF32("MiniMapScale", mScale);
 	gSavedSettings.setF32("MiniMapScale", sScale);
-	// </Ansariel> Fixing borked minimap zoom level persistance
+	// </FS:Ansariel> Fixing borked minimap zoom level persistance
 }
 
 BOOL LLNetMap::postBuild()
@@ -137,14 +142,17 @@ BOOL LLNetMap::postBuild()
 	
 	registrar.add("Minimap.Zoom", boost::bind(&LLNetMap::handleZoom, this, _2));
 	registrar.add("Minimap.Tracker", boost::bind(&LLNetMap::handleStopTracking, this, _2));
-	// <Ansariel>
+	// <FS:Ansariel>
 	registrar.add("Minimap.Mark", boost::bind(&LLNetMap::handleMark, this, _2));
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLNetMap::handleClearMarks, this));
-	// </Ansariel>
+	// </FS:Ansariel>
 	registrar.add("Minimap.Cam", boost::bind(&LLNetMap::handleCam, this));
 	registrar.add("Minimap.ShowProfile", boost::bind(&LLNetMap::handleShowProfile, this));
 	registrar.add("Minimap.StartTracking", boost::bind(&LLNetMap::handleStartTracking, this));
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
+
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	LLNetMap::updateToolTipMsg();
 	return TRUE;
 }
 
@@ -153,7 +161,8 @@ void LLNetMap::setScale( F32 scale )
 	scale = llclamp(scale, MAP_SCALE_MIN, MAP_SCALE_MAX);
 	mCurPan *= scale / mScale;
 	mScale = scale;
-	sScale = scale; // Ansariel: Synchronize scale throughout instances
+	// <FS:Ansariel> Synchronize scale throughout instances
+	sScale = scale;
 	
 	if (mObjectImagep.notNull())
 	{
@@ -178,11 +187,12 @@ void LLNetMap::setScale( F32 scale )
 
 void LLNetMap::draw()
 {
-	// Ansariel: Synchronize netmap scale throughout instances
+	// <FS:Ansariel>: Synchronize netmap scale throughout instances
 	if (mScale != sScale)
 	{
 		setScale(sScale);
 	}
+	// </FS:Ansariel>: Synchronize netmap scale throughout instances
 
  	static LLFrameTimer map_timer;
 	static LLUIColor map_avatar_color = LLUIColorTable::instance().getColor("MapAvatarColor", LLColor4::white);
@@ -421,11 +431,12 @@ void LLNetMap::draw()
 			if (muteListInstance->isMuted(uuid)) color = map_avatar_muted_color;
 			else if (gCacheName->getFullName(uuid, fullName) && muteListInstance->isLinden(fullName)) color = map_avatar_linden_color;			
 
-			// Mark Avatars with special colors - Ansariel
+			// <FS:Ansariel> Mark Avatars with special colors
 			if (LLNetMap::sAvatarMarksMap.find(uuid) != LLNetMap::sAvatarMarksMap.end())
 			{
 				color = LLNetMap::sAvatarMarksMap[uuid];
 			}
+			// </FS:Ansariel> Mark Avatars with special colors
 					
 			//color based on contact sets prefs
 			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid,FALSE,FALSE,FALSE,TRUE))
@@ -746,7 +757,9 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 // [RLVa:KB] - Checked: 2010-10-19 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
 		region_name = ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) ? region->getName() : RlvStrings::getString(RLV_STRING_HIDDEN_REGION));
 // [/RLVa:KB]
-		if (!region_name.empty())
+		// <FS:Ansariel> Synchronize tooltips throughout instances
+		//if (!region_name.empty())
+		if (!region_name.empty() && LLNetMap::sToolTipMsg != "[REGION]")
 		{
 			region_name += "\n";
 		}
@@ -754,7 +767,10 @@ BOOL LLNetMap::handleToolTip( S32 x, S32 y, MASK mask )
 
 //	LLStringUtil::format_map_t args;
 	args["[REGION]"] = region_name;
-	std::string msg = mToolTipMsg;
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//std::string msg = mToolTipMsg;
+	std::string msg = LLNetMap::sToolTipMsg;
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 	LLStringUtil::format(msg, args);
 	LLToolTipMgr::instance().show(LLToolTip::Params()
 		.message(msg)
@@ -832,7 +848,7 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			p.message(av_name.getCompleteName());
 		}
 		
-		// Ansariel: Get rid of the useless and clumsy I-button on the hovertip
+		// <FS:Ansariel> Get rid of the useless and clumsy I-button on the hovertip
 		//p.image.name("Inspector_I");
 		p.click_callback(boost::bind(showAvatarInspector, avatar_id));
 		p.visible_time_near(6.f);
@@ -982,9 +998,10 @@ void LLNetMap::createObjectImage()
 		memset( data, 0, img_size * img_size * 4 );
 		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), FALSE);
 	}
-	// Ansariel: Synchronize scale throughout instances
+	// <FS:Ansariel> Synchronize scale throughout instances
 	//setScale(mScale);
 	setScale(sScale);
+	// </FS:Ansariel> Synchronize scale throughout instances
 	mUpdateNow = true;
 }
 
@@ -1063,31 +1080,35 @@ BOOL LLNetMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	LLVector3d pos_global = viewPosToGlobal(x, y);
 
-	bool double_click_teleport = gSavedSettings.getBOOL("DoubleClickTeleport");
-	bool double_click_show_world_map = gSavedSettings.getBOOL("DoubleClickShowWorldMap");
+	// <FS:Ansariel> Synchronize double click handling throughout instances
+	//bool double_click_teleport = gSavedSettings.getBOOL("DoubleClickTeleport");
+	//bool double_click_show_world_map = gSavedSettings.getBOOL("DoubleClickShowWorldMap");
 
-	if (double_click_teleport || double_click_show_world_map)
-	{
-		// If we're not tracking a beacon already, double-click will set one 
-		if (!LLTracker::isTracking(NULL))
-		{
-			LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-			if (world_map)
-			{
-				world_map->trackLocation(pos_global);
-			}
-		}
-	}
+	//if (double_click_teleport || double_click_show_world_map)
+	//{
+	//	// If we're not tracking a beacon already, double-click will set one 
+	//	if (!LLTracker::isTracking(NULL))
+	//	{
+	//		LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+	//		if (world_map)
+	//		{
+	//			world_map->trackLocation(pos_global);
+	//		}
+	//	}
+	//}
 
-	if (double_click_teleport)
-	{
-		// If DoubleClickTeleport is on, double clicking the minimap will teleport there
-		gAgent.teleportViaLocationLookAt(pos_global);
-	}
-	else if (double_click_show_world_map)
-	{
-		LLFloaterReg::showInstance("world_map");
-	}
+	//if (double_click_teleport)
+	//{
+	//	// If DoubleClickTeleport is on, double clicking the minimap will teleport there
+	//	gAgent.teleportViaLocationLookAt(pos_global);
+	//}
+	//else if (double_click_show_world_map)
+	//{
+	//	LLFloaterReg::showInstance("world_map");
+	//}
+	performDoubleClickAction(pos_global);
+	// </FS:Ansariel> Synchronize double click handling throughout instances
+
 	return TRUE;
 }
 
@@ -1177,7 +1198,7 @@ void LLNetMap::handleStopTracking (const LLSD& userdata)
 	}
 }
 
-// <Ansariel> additional functions
+// <FS:Ansariel> additional functions
 void LLNetMap::handleMark(const LLSD& userdata)
 {
 	setAvatarMark(userdata);
@@ -1209,7 +1230,7 @@ void LLNetMap::clearAvatarMarks()
 {
 	LLNetMap::sAvatarMarksMap.clear();
 }
-//</Ansariel>
+//</FS:Ansariel>
 
 void LLNetMap::camAvatar()
 {
@@ -1249,7 +1270,7 @@ void LLNetMap::handleShowProfile()
 }
 
 
-// <Ansariel> Avatar tracking feature
+// <FS:Ansariel> Avatar tracking feature
 void LLNetMap::handleStartTracking()
 {
 	startTracking();
@@ -1266,4 +1287,58 @@ void LLNetMap::startTracking()
 		}
 	}
 }
-// </Ansariel> Avatar tracking feature
+// </FS:Ansariel> Avatar tracking feature
+
+// <FS:Ansariel> Synchronize tooltips throughout instances
+// static
+void LLNetMap::updateToolTipMsg()
+{
+	S32 fsNetMapDoubleClickAction = gSavedSettings.getS32("FSNetMapDoubleClickAction");
+	switch (fsNetMapDoubleClickAction)
+	{
+		case 1:
+			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickShowWorldMapToolTipMsg"));
+			break;
+		case 2:
+			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickTeleportToolTipMsg"));
+			break;
+		default:
+			LLNetMap::setToolTipMsg(LLTrans::getString("NetMapDoubleClickNoActionToolTipMsg"));
+			break;
+	}
+}
+// </FS:Ansariel> Synchronize tooltips throughout instances
+
+// <FS:Ansariel> Synchronize double click handling throughout instances
+void LLNetMap::performDoubleClickAction(LLVector3d pos_global)
+{
+	S32 fsNetMapDoubleClickAction = gSavedSettings.getS32("FSNetMapDoubleClickAction");
+	
+	// 1 = Double click show world map
+	// 2 = Double click teleport
+	if (fsNetMapDoubleClickAction == 1 || fsNetMapDoubleClickAction == 2)
+	{
+		// If we're not tracking a beacon already, double-click will set one 
+		if (!LLTracker::isTracking(NULL))
+		{
+			LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+			if (world_map)
+			{
+				world_map->trackLocation(pos_global);
+			}
+		}
+	}
+
+	switch (fsNetMapDoubleClickAction)
+	{
+		case 1:
+			LLFloaterReg::showInstance("world_map");
+			break;
+		case 2:
+			gAgent.teleportViaLocationLookAt(pos_global);
+			break;
+		default:
+			break;
+	}
+}
+// </FS:Ansariel> Synchronize double click handling throughout instances

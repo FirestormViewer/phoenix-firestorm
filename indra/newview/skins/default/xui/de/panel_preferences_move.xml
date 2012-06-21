@@ -67,6 +67,14 @@
 			</text>
 			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
 			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
+			<text name="netmap_double_click_action_lbl">
+				Doppelklick auf Minikarte:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Keine Aktion" name="0"/>
+				<combo_box.item label="Weltkarte öffnen" name="1"/>
+				<combo_box.item label="Zur Position teleportieren" name="2"/>
+			</combo_box>
 			<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>
 			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>

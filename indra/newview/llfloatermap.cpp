@@ -85,14 +85,16 @@ LLFloaterMap::~LLFloaterMap()
 BOOL LLFloaterMap::postBuild()
 {
 	mMap = getChild<LLNetMap>("Net Map");
-	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	{
-		mMap->setToolTipMsg(getString("AltToolTipMsg"));
-	}
-	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	{
-		mMap->setToolTipMsg(getString("ToolTipMsg"));
-	}
+	// <FS:Ansariel> Synchronize tooltips throughout instances
+	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	//{
+	//	mMap->setToolTipMsg(getString("AltToolTipMsg"));
+	//}
+	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	//{
+	//	mMap->setToolTipMsg(getString("ToolTipMsg"));
+	//}
+	// </FS:Ansariel> Synchronize tooltips throughout instances
 	sendChildToBack(mMap);
 	
 	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
@@ -152,25 +154,28 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
 	
-	// If we're not tracking a beacon already, double-click will set one 
-	if (!LLTracker::isTracking(NULL))
-	{
-		LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-		if (world_map)
-		{
-			world_map->trackLocation(pos_global);
-		}
-	}
-	
-	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	{
-		// If DoubleClickTeleport is on, double clicking the minimap will teleport there
-		gAgent.teleportViaLocationLookAt(pos_global);
-	}
-	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	{
-		LLFloaterReg::showInstance("world_map");
-    }
+	// <FS:Ansariel> Synchronize double click handling throughout instances
+	//// If we're not tracking a beacon already, double-click will set one 
+	//if (!LLTracker::isTracking(NULL))
+	//{
+	//	LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+	//	if (world_map)
+	//	{
+	//		world_map->trackLocation(pos_global);
+	//	}
+	//}
+	//
+	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	//{
+	//	// If DoubleClickTeleport is on, double clicking the minimap will teleport there
+	//	gAgent.teleportViaLocationLookAt(pos_global);
+	//}
+	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	//{
+	//	LLFloaterReg::showInstance("world_map");
+	//}
+	mMap->performDoubleClickAction(pos_global);
+	// </FS:Ansariel> Synchronize double click handling throughout instances
     return TRUE;
 }
 
@@ -359,9 +364,9 @@ void LLFloaterMap::handleShowProfile()
 	mMap->showProfile();
 }
 
-// <Ansariel> Avatar tracking feature
+// <FS:Ansariel> Avatar tracking feature
 void LLFloaterMap::handleStartTracking()
 {
 	mMap->startTracking();
 }
-// </Ansariel> Avatar tracking feature
+// </FS:Ansariel> Avatar tracking feature

@@ -17483,5 +17483,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <integer>3</integer>
   </map>
   <!-- </FS:HG> -->
+  
+  <key>FSNetMapDoubleClickAction</key>
+  <map>
+    <key>Comment</key>
+    <string>Defines the action happening if the a double click occurs on a minimap instance (minimap floater or within people panel): 0 = Nothing, 1 = Open world map, 2 = teleport to location</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>2</integer>
+  </map>
+  
 </map>
 </llsd>
