@@ -2776,11 +2776,33 @@ static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("pan
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
 {
 // <FS:AW  opensim search support>
-	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL",				boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
-	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL",				boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
 // </FS:AW  opensim search support>
+
+	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&LLPanelPreferenceOpensim::onClickAddGrid, this));
+	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&LLPanelPreferenceOpensim::onClickClearGrid, this));
 }
 
+void LLPanelPreferenceOpensim::onClickAddGrid()
+{
+
+	std::string new_grid = gSavedSettings.getString("OpensimPrefsAddGrid");
+
+	if (!new_grid.empty())
+	{
+		LLGridManager::getInstance()->addGrid(new_grid);
+		//TODO: add some visual feedback for the user
+		onClickClearGrid();
+	}
+}
+
+void LLPanelPreferenceOpensim::onClickClearGrid()
+{
+	gSavedSettings.setString("OpensimPrefsAddGrid", std::string());
+}
+
+// <FS:AW  opensim search support>
 void LLPanelPreferenceOpensim::onClickClearDebugSearchURL()
 {
 	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);

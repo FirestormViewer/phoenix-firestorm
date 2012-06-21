@@ -548,6 +548,15 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 	addGrid(grid_entry, FINISH);
 }
 
+void LLGridManager::addGrid(const std::string& loginuri)
+{
+	GridEntry* grid_entry = new GridEntry;
+	grid_entry->set_current = true;
+	grid_entry->grid = LLSD::emptyMap();	
+	grid_entry->grid[GRID_VALUE] = loginuri;
+	addGrid(grid_entry, FETCH);
+}
+
 //
 // LLGridManager::addGrid - add a grid to the grid list, populating the needed values
 // if they're not populated yet.

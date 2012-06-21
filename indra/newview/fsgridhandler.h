@@ -121,7 +121,7 @@ public:
  	bool isReadyToLogin(){return mReadyToLogin;}
 
 	// add a grid to the list of grids
-	void addGrid(GridEntry* grid_info, AddState state);
+	void addGrid(const std::string& loginuri);
 
 	void reFetchGrid();
 	// retrieve a map of grid-name <-> label
@@ -209,7 +209,7 @@ public:
 
 private:
 	friend class GridInfoRequestResponder;
-
+	void addGrid(GridEntry* grid_info, AddState state);
 	void incResponderCount(){++mResponderCount;}
 	void decResponderCount(){--mResponderCount;}
 	void gridInfoResponderCB(GridEntry* grid_data);

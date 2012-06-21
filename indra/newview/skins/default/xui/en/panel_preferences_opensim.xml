@@ -9,14 +9,63 @@
  width="540"
  label="Opensim"
  name="opensim_panel">
-
+  <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="12"
+    layout="topleft"
+    left="30"
+    name="add_grid_text"
+    top="25"
+    width="400">
+    Add new grid
+  </text>
+  <line_editor
+    control_name="OpensimPrefsAddGrid"
+    border_style="line"
+    border_thickness="1"
+    follows="left|top"
+    font="SansSerif"
+    height="19"
+    layout="topleft"
+    left="50"
+    max_length="4096"
+    name="add_grid"
+    top_pad="5"
+    width="270" />
+  <button
+    follows="left|top"
+    height="19"
+    label="Clear"
+    label_selected="Clear"
+    layout="topleft"
+    left_pad="2"
+    name="clear_grid"
+    top_delta="0"
+    width="50">
+    <button.commit_callback
+    function="Pref.ClearGrid" />
+  </button>
+  <button
+    follows="left|top"
+    height="19"
+    label="Apply"
+    layout="topleft"
+    left_pad="2"
+    name="apply_new_grid"
+    top_delta="0"
+    width="50">
+    <button.commit_callback
+      function="Pref.AddGrid" />
+  </button>
     <panel
     border="false"
     follows="all"
     height="56"
     layout="topleft"
     left="0"
-    top="25"
+    top_pad="10"
     width="540"
     label=""
     name="debug_search_panel">

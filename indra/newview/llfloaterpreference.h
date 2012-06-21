@@ -308,8 +308,11 @@ class LLPanelPreferenceOpensim : public LLPanelPreference
 {
 public:
 	LLPanelPreferenceOpensim();
-	
+
 protected:
+	void onClickAddGrid();
+	void onClickClearGrid();
+
 // <FS:AW  opensim search support>
 	void onClickClearDebugSearchURL();
 	void onClickPickDebugSearchURL();

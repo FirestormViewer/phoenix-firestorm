@@ -153,6 +153,17 @@
     <key>Value</key>
     <string/>
   </map>
+  <key>OpensimPrefsAddGrid</key>
+  <map>
+    <key>Comment</key>
+    <string>Transient string for adding new grids in Preferences > Opensim</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string/>
+  </map>
 
   <key>ShowMutedAvatarsAsCloud</key>
   <map>
