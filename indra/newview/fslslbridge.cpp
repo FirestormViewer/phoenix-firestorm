@@ -51,6 +51,7 @@
 #include "llnotificationmanager.h"
 #include "llviewerobject.h"
 #include "llappearancemgr.h"
+#include "aoengine.h"
 
 #include <boost/regex.hpp>
 #include <string>
@@ -132,7 +133,18 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 
 	lldebugs << message << llendl;
 	
-	std::string tag = message.substr(0,11);
+	//<FS:TS> FIRE-962: Script controls for built-in AO
+	if ((message[0]) != '<')
+		return false; 		// quick exit if no leading <
+	S32 closebracket = message.find('>');
+	S32 firstblank = message.find(' ');
+	S32 tagend = (closebracket < firstblank) ? closebracket : firstblank;
+	if (tagend == std::string::npos)
+		return false;
+	std::string tag = message.substr(0,tagend+1);
+	std::string ourBridge = gSavedPerAccountSettings.getString("FSLSLBridgeUUID");
+	//</FS:TS> FIRE-962
+	
 	bool status = false;
 	if (tag == "<bridgeURL>")
 	{
@@ -152,7 +164,6 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		// todo
 
 		// Verify Authorization
-		std::string ourBridge = gSavedPerAccountSettings.getString("FSLSLBridgeUUID");
 		if (ourBridge != bAuth)
 		{
 			llwarns << "BridgeURL message received from ("<< bAuth <<") , but not from our registered bridge ("<< ourBridge <<"). Ignoring." << llendl;
@@ -203,7 +214,29 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			updateBoolSettingValue("FSPublishRadarTag");
 			mIsFirstCallDone = true;
 		}
+		return true;
 	}
+	
+	//<FS:TS> FIRE-962: Script controls for built-in AO
+	if (fromID.asString() != ourBridge)
+		return false;		// ignore if not from the bridge
+	if (tag == "<clientAO ")
+	{
+		status = true;
+		S32 valuepos = message.find("state=")+6;
+		if (valuepos != std::string::npos)
+		{
+			if (message.substr(valuepos,2) == "on")
+			{
+				AOEngine::getInstance()->enable(TRUE);
+			}
+			else if (message.substr(valuepos,3) == "off")
+			{
+				AOEngine::getInstance()->enable(FALSE);
+			}
+		}
+	}
+	//</FS:TS> FIRE-962
 	return status;
 }
 
