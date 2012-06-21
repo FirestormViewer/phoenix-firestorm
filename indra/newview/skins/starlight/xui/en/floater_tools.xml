@@ -1284,6 +1284,7 @@ even though the user gets a free copy.
             </text>
             <check_box
              follows="left|top|right"
+             height="10"
              label="Modify"
              layout="topleft"
              left="10"
