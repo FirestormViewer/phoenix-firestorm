@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="edit_hair_panel">
+	<panel name="avatar_hair_color_panel">
+		<texture_picker label="Tekstura" name="Texture" tool_tip="Kliknij aby wybrać teksturę"/>
+	</panel>
+	<accordion name="wearable_accordion">
+		<panel name="hair_color_tab_holder" title="Kolor">
+			<accordion name="hair_color_accordion">
+				<accordion_tab name="hair_color_tab" title="Kolor"/>
+			</accordion>
+		</panel>
+		<panel name="hair_style_tab_holder" title="Styl">
+			<accordion name="hair_style_accordion">
+				<accordion_tab name="hair_style_tab" title="Styl"/>
+			</accordion>
+		</panel>
+		<panel name="hair_eyebrows_tab_holder" title="Brwi">
+			<accordion name="hair_eyebrows_accordion">
+				<accordion_tab name="hair_eyebrows_tab" title="Brwi"/>
+			</accordion>
+		</panel>
+		<panel name="hair_facial_tab_holder" title="Twarz">
+			<accordion name="hair_facial_accordion">
+				<accordion_tab name="hair_facial_tab" title="Twarz"/>
+			</accordion>
+		</panel>
+	</accordion>
+</panel>
