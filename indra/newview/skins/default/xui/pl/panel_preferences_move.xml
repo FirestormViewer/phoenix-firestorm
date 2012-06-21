@@ -61,6 +61,14 @@
 			</text>
 			<check_box label="Włącz rotację minimapy" name="minimaprotate" tool_tip="Obraca miniaturką mapy świata w zależności od tego, w którą stronę zwrócony jest awatar."/>
 			<check_box name="MiniMapChatRing" label="Pierścień na minimapie symbolizujący zasięg czatu lokalnego"/>
+			<text name="netmap_double_click_action_lbl">
+				Podwójny klik na minimapie:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Nie rób nic" name="0"/>
+				<combo_box.item label="Otwórz mapę świata" name="1"/>
+				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
+			</combo_box>
 			<check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach"/>
 			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>

@@ -4830,4 +4830,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSCmdLineRSP">
 		Maks. przepustowość ustawiona na: [VALUE] kbps.
 	</string>
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
+		[AGENT][REGION] (Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
+	</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">
+		[REGION] (Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
+	</string>
 </strings>
