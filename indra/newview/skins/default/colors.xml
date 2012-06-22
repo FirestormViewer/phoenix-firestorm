@@ -396,10 +396,10 @@
      reference="Unused?" />
     <color
      name="ButtonCautionImageColor"
-     reference="Unused?" />
+     reference="EmphasisColor" />
     <color
      name="ButtonColor"
-     reference="Unused?" />
+     reference="EmphasisColor" />
     <color
      name="ButtonFlashBgColor"
      reference="Unused?" />
