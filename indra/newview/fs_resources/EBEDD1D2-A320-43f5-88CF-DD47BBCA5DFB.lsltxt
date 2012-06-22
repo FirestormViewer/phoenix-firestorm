@@ -141,7 +141,7 @@
         }
 
         // Set the channel for the AO interface
-    aoSetChannel();
+        aoSetChannel();
         // Remove previous AO listener if present
         if (aoListener >= 0)
         {
@@ -613,6 +613,8 @@ default
     {
         makeSane();
         initBridge();
+        aoListen(NULL_KEY);
+        aoPingCollar();
         
         //<DEBUG>
         //debug=TRUE;
@@ -823,7 +825,7 @@ default
             // Sanity: Insure the av is not ourselves (from other, radar tag handling attachments)
             if (llGetOwnerKey(senderID) == owner)
             {
-        //disabled, pending a timer and flush mechanism to deal with typical "two bridge" scenarios during bridge creation.
+                //disabled, pending a timer and flush mechanism to deal with typical "two bridge" scenarios during bridge creation.
                 //llOwnerSay("Duplicate radar tag processing attachments detected ("+llKey2Name(senderID)+"). You may wish to wish to remove one of your attachments that processes radar tags.");
             }
                                     
