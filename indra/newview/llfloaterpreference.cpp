@@ -438,10 +438,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.BlockList",				boost::bind(&LLFloaterPreference::onClickBlockList, this));
 	mCommitCallbackRegistrar.add("Pref.Proxy",					boost::bind(&LLFloaterPreference::onClickProxySettings, this));
 	mCommitCallbackRegistrar.add("Pref.TranslationSettings",	boost::bind(&LLFloaterPreference::onClickTranslationSettings, this));
-// <FS:AW  opensim search support>
-	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL",				boost::bind(&LLFloaterPreference::onClickClearDebugSearchURL, this));
-	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL",				boost::bind(&LLFloaterPreference::onClickPickDebugSearchURL, this));
-// </FS:AW  opensim search support>
 	mCommitCallbackRegistrar.add("FS.ToggleSortContacts",		boost::bind(&LLFloaterPreference::onClickSortContacts, this));
 	mCommitCallbackRegistrar.add("NACL.AntiSpamUnblock",		boost::bind(&LLFloaterPreference::onClickClearSpamList, this));
 	mCommitCallbackRegistrar.add("NACL.SetPreprocInclude",		boost::bind(&LLFloaterPreference::setPreprocInclude, this));
@@ -585,6 +581,19 @@ BOOL LLFloaterPreference::postBuild()
 	}
 #endif // LL_SEND_CRASH_REPORTS
 // [/SL:KB]
+
+// <FS:AW  opensim preferences>
+#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+	// Hide the opensim tab if opensim isn't enabled
+	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
+	if (tab_container)
+	{
+		LLPanel* opensim_panel = tab_container->getPanelByName("opensim");
+		if (opensim_panel)
+			tab_container->removeTabPanel(opensim_panel);
+	}
+#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+// </FS:AW  opensim preferences>
 
 // ## Zi: Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
@@ -1068,19 +1077,6 @@ void LLFloaterPreference::onClickSetCache()
 	}
 }
 
-// <FS:AW  opensim search support>
-void LLFloaterPreference::onClickClearDebugSearchURL()
-{
-	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);
-}
-
-void LLFloaterPreference::onClickPickDebugSearchURL()
-{
-
-	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
-}
-// </FS:AW  opensim search support>
-
 void LLFloaterPreference::onClickBrowseCache()
 {
 	gViewerWindow->getWindow()->openFile(gDirUtilp->getExpandedFilename(LL_PATH_CACHE,""));
@@ -1423,21 +1419,8 @@ void LLFloaterPreference::refreshEnabledState()
 
 	// now turn off any features that are unavailable
 	disableUnavailableSettings();
-// <FS:AW  opensim search support>
-// getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
-	bool logged_in = LLLoginInstance::getInstance()->authSuccess();
-	getChildView("block_list")->setEnabled(logged_in);
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	getChildView("pick_current_search_url")->setEnabled(logged_in);
-	getChildView("DebugSearch")->setEnabled(logged_in);
-	getChildView("debug_search_panel")->setEnabled(logged_in);
-// <FS:AW optional opensim support>
-#else // HAS_OPENSIM_SUPPORT 
-	getChildView("debug_search_panel")->setVisible(false);
-#endif // HAS_OPENSIM_SUPPORT
-// </FS:AW optional opensim support>
 
-// </FS:AW  opensim search support>
+	getChildView("block_list")->setEnabled(LLLoginInstance::getInstance()->authSuccess());
 }
 
 void LLFloaterPreference::disableUnavailableSettings()
@@ -2785,3 +2768,30 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 		m_pSkinThemeCombo->selectFirstItem();
 }
 // </KB>
+
+#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+//<FS:AW  opensim preferences>
+static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
+
+LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference()
+{
+// <FS:AW  opensim search support>
+	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL",				boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
+	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL",				boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
+// </FS:AW  opensim search support>
+}
+
+void LLPanelPreferenceOpensim::onClickClearDebugSearchURL()
+{
+	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);
+}
+
+void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
+{
+
+	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
+}
+// </FS:AW  opensim search support>
+// </FS:AW  opensim preferences>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+

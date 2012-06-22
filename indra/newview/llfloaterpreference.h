@@ -93,10 +93,7 @@ protected:
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);
 
-// <FS:AW  opensim search support>
-	void onClickClearDebugSearchURL();
-	void onClickPickDebugSearchURL();
-// </FS:AW  opensim search support>
+
 
 	// ## Zi: Pie menu
 	// make sure controls get greyed out or enabled when pie color override is toggled
@@ -304,6 +301,23 @@ public:
 	void refresh();
 };
 // [/SL:KB]
+
+#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+// <FS:AW  opensim preferences>
+class LLPanelPreferenceOpensim : public LLPanelPreference
+{
+public:
+	LLPanelPreferenceOpensim();
+	
+protected:
+// <FS:AW  opensim search support>
+	void onClickClearDebugSearchURL();
+	void onClickPickDebugSearchURL();
+// </FS:AW  opensim search support>
+
+};
+// </FS:AW  opensim preferences>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 
 class LLFloaterPreferenceProxy : public LLFloater
 {

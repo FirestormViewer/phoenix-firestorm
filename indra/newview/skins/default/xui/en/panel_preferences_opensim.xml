@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+ border="true"
+ follows="all"
+ height="440"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Opensim"
+ name="opensim_panel">
+
+    <panel
+    border="false"
+    follows="all"
+    height="56"
+    layout="topleft"
+    left="0"
+    top="25"
+    width="540"
+    label=""
+    name="debug_search_panel">
+      <check_box
+        control_name="DebugSearch"
+        height="16"
+        initial_value="false"
+        label="Debug Search"
+        layout="topleft"
+        left="30"
+        name="DebugSearch"
+        top_pad="1"
+        width="256" />
+      <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="12"
+      layout="topleft"
+      left="50"
+      name="search_url_debug_text"
+      top_pad="5"
+      width="400">
+        Override current search url: (no override if empty)
+      </text>
+      <line_editor
+        control_name="SearchURLDebug"
+        enabled_control="DebugSearch"
+        border_style="line"
+        border_thickness="1"
+        follows="left|top"
+        font="SansSerif"
+        height="19"
+        layout="topleft"
+        left="50"
+        max_length="4096"
+        name="search_url_debug"
+        top_pad="5"
+        width="270" />
+      <button
+      enabled_control="DebugSearch"
+      follows="left|top"
+      height="19"
+      label="Clear"
+      label_selected="Clear"
+      layout="topleft"
+      left_pad="2"
+      name="clear_search_url_debug"
+      top_delta="0"
+      width="50">
+        <button.commit_callback
+        function="Pref.ClearDebugSearchURL" />
+      </button>
+      <button
+      enabled_control="DebugSearch"
+      follows="left|top"
+      height="19"
+      label="Pick"
+      layout="topleft"
+      left_pad="2"
+      name="pick_current_search_url"
+      top_delta="0"
+      width="50">
+        <button.commit_callback
+          function="Pref.PickDebugSearchURL" />
+      </button>
+    </panel>
+</panel>
