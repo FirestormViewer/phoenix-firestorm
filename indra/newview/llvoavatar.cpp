@@ -2297,6 +2297,7 @@ void LLVOAvatar::updateMeshData()
 					//the hardware skinning shader
 					rigid = true;
 				}
+				
 				mMeshLOD[k]->updateFaceData(facep, mAdjustedPixelArea, k == MESH_ID_HAIR, terse_update && !rigid);
 			}
 
@@ -5801,8 +5802,6 @@ BOOL LLVOAvatar::loadAvatar()
 		}
 	}
 
-#if 0
-#endif
 	
 	return TRUE;
 }
@@ -6620,6 +6619,7 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 	mRoot.updateWorldMatrixChildren();
 
 	stopMotion(ANIM_AGENT_BODY_NOISE);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -7613,8 +7613,6 @@ bool LLVOAvatar::visualParamWeightsAreDefault()
 
 	return rtn;
 }
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -9081,3 +9079,4 @@ BOOL LLVOAvatar::isTextureVisible(LLVOAvatarDefines::ETextureIndex type, LLWeara
 	// non-self avatars don't have wearables
 	return FALSE;
 }
+
