@@ -99,9 +99,6 @@ public:
 	void clearHistoryCache();
 
 // <FS:Zi> No size calculations in code please. XUI handles it all now with visibility_control
-// 	void showNavigationPanel(BOOL visible);
-// 	void showFavoritesPanel(BOOL visible);
-
 // 	int getDefNavBarHeight();
 // 	int getDefFavBarHeight();
 // </FS:Zi>
