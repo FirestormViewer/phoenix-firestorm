@@ -92,9 +92,6 @@ private:
 	S32 mPrintStats;
 	S32 mAverageCyclesPerTimer;
 	LLRect mGraphRect;
-
-	bool mOverLegend;
-	S32 mScrollOffset;
 };
 
 #endif
