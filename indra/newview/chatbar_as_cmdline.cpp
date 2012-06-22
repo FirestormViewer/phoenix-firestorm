@@ -649,11 +649,11 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 {
 					if (status == "on" )
 					{
-						AOEngine::getInstance()->enable(TRUE);
+						gSavedPerAccountSettings.setBOOL("UseAO",TRUE);
 					}
 					else if (status == "off" )
 					{
-						AOEngine::getInstance()->enable(FALSE);
+						gSavedPerAccountSettings.setBOOL("UseAO",FALSE);
 					}
 					else if (status == "sit" )
 					{

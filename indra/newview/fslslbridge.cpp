@@ -236,11 +236,11 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		{
 			if (message.substr(valuepos,2) == "on")
 			{
-				AOEngine::getInstance()->enable(TRUE);
+				gSavedPerAccountSettings.setBOOL("UseAO",TRUE);
 			}
 			else if (message.substr(valuepos,3) == "off")
 			{
-				AOEngine::getInstance()->enable(FALSE);
+				gSavedPerAccountSettings.setBOOL("UseAO",FALSE);
 			}
 		}
 	}
