@@ -69,7 +69,7 @@
 #define FS_BRIDGE_NAME "#Firestorm LSL Bridge v"
 #define FS_BRIDGE_CONTAINER_FOLDER "Landscaping"
 #define FS_BRIDGE_MAJOR_VERSION 2
-#define FS_BRIDGE_MINOR_VERSION 2
+#define FS_BRIDGE_MINOR_VERSION 3
 #define FS_MAX_MINOR_VERSION 99
 
 //current script version is 2.0
@@ -197,6 +197,9 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 			// or normal bridge startup.  Bridge creation isn't threadsafe yet.
 			return true;
 		}
+
+		// Save the inworld UUID of this attached bridge for later checking
+		mBridgeUUID = fromID;
 		
 		// Get URL
 		mCurrentURL = bURL;
@@ -223,7 +226,7 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 	}
 	
 	//<FS:TS> FIRE-962: Script controls for built-in AO
-	if (fromID.asString() != ourBridge)
+	if (fromID != mBridgeUUID)
 		return false;		// ignore if not from the bridge
 	if (tag == "<clientAO ")
 	{

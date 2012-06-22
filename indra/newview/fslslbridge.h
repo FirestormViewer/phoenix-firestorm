@@ -91,6 +91,7 @@ private:
 	LLUUID					mScriptItemID;	//internal script ID
 	LLUUID					mBridgeFolderID;
 	LLUUID					mBridgeContainerFolderID;
+	LLUUID					mBridgeUUID;
 
 	bool					mIsFirstCallDone; //initialization conversation
 
