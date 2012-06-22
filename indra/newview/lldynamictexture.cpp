@@ -221,16 +221,14 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		return TRUE;
 	}
 
-	// <FS:ND> Don't bake with FBO into mWaterDis. Or ATI cards end with pinkish/red textures.
+#if 0 //THIS CAUSES MAINT-1092
+	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete();
 
-	// bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete();
-	// 
-	// if (use_fbo)
-	// {
-	// 	gPipeline.mWaterDis.bindTarget();
-	// }
-
-	// </FS:ND>
+	if (use_fbo)
+	{
+		gPipeline.mWaterDis.bindTarget();
+	}
+#endif
 
 	LLGLSLShader::bindNoShader();
 	LLVertexBuffer::unbind();
@@ -265,14 +263,12 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		}
 	}
 
-	// <FS:ND> Don't bake with FBO into mWaterDis. Or ATI cards end with pinkish/red textures.
-
-	// if (use_fbo)
-	// {
-	// 	gPipeline.mWaterDis.flush();
-	// }
-
-	// </FS:ND>
+#if 0
+	if (use_fbo)
+	{
+		gPipeline.mWaterDis.flush();
+	}
+#endif
 
 	return ret;
 }

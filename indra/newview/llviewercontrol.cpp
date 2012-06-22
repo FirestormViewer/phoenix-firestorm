@@ -98,7 +98,6 @@ std::string gLastRunVersion;
 
 extern BOOL gResizeScreenTexture;
 extern BOOL gDebugGL;
-extern BOOL gAuditTexture;
 
 LLTimer throttle_timer;//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
@@ -439,12 +438,6 @@ static bool handleRenderUseImpostorsChanged(const LLSD& newvalue)
 	return true;
 }
 
-static bool handleAuditTextureChanged(const LLSD& newvalue)
-{
-	gAuditTexture = newvalue.asBoolean();
-	return true;
-}
-
 static bool handleRenderDebugGLChanged(const LLSD& newvalue)
 {
 	gDebugGL = newvalue.asBoolean() || gDebugSession;
@@ -754,7 +747,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderPerformanceTest")->getSignal()->connect(boost::bind(&handleRenderPerfTestChanged, _2));
 	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
-	gSavedSettings.getControl("AuditTexture")->getSignal()->connect(boost::bind(&handleAuditTextureChanged, _2));
 	gSavedSettings.getControl("ChatConsoleFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
 	gSavedSettings.getControl("NearbyToastLifeTime")->getSignal()->connect(boost::bind(&handleChatPersistTimeChanged, _2));
 	gSavedSettings.getControl("ConsoleMaxLines")->getSignal()->connect(boost::bind(&handleConsoleMaxLinesChanged, _2));

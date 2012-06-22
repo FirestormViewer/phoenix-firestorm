@@ -240,6 +240,7 @@ void LLIMFloaterContainer::removeFloater(LLFloater* floaterp)
 void LLIMFloaterContainer::onCloseFloater(LLUUID& id)
 {
 	mSessions.erase(id);
+	setFocus(TRUE);
 }
 
 void LLIMFloaterContainer::onNewMessageReceived(const LLSD& data)

@@ -568,6 +568,7 @@ LLCurl::Multi::Multi(F32 idle_time_out)
 	  mErrorCount(0),
 	  mState(STATE_READY),
 	  mDead(FALSE),
+	  mValid(TRUE),
 	  mMutexp(NULL),
 	  mDeletionMutexp(NULL),
 	  mEasyMutexp(NULL)
@@ -603,22 +604,33 @@ LLCurl::Multi::Multi(F32 idle_time_out)
 
 LLCurl::Multi::~Multi()
 {
-	cleanup() ;	
+	cleanup(true) ;	
+	
+	delete mDeletionMutexp ;
+	mDeletionMutexp = NULL ;	
 }
 
-void LLCurl::Multi::cleanup()
+void LLCurl::Multi::cleanup(bool deleted)
 {
 	if(!mCurlMultiHandle)
 	{
 		return ; //nothing to clean.
 	}
+	llassert_always(deleted || !mValid) ;
 
+	LLMutexLock lock(mDeletionMutexp);
+	
 	// Clean up active
 	for(easy_active_list_t::iterator iter = mEasyActiveList.begin();
 		iter != mEasyActiveList.end(); ++iter)
 	{
 		Easy* easy = *iter;
 		check_curl_multi_code(curl_multi_remove_handle(mCurlMultiHandle, easy->getCurlHandle()));
+
+		if(deleted)
+		{
+			easy->mResponder = NULL ; //avoid triggering mResponder.
+		}
 		delete easy;
 	}
 	mEasyActiveList.clear();
@@ -630,11 +642,9 @@ void LLCurl::Multi::cleanup()
 
 	check_curl_multi_code(LLCurl::deleteMultiHandle(mCurlMultiHandle));
 	mCurlMultiHandle = NULL ;
-
+	
 	delete mMutexp ;
 	mMutexp = NULL ;
-	delete mDeletionMutexp ;
-	mDeletionMutexp = NULL ;
 	delete mEasyMutexp ;
 	mEasyMutexp = NULL ;
 
@@ -664,10 +674,20 @@ void LLCurl::Multi::unlock()
 
 void LLCurl::Multi::markDead()
 {
-	LLMutexLock lock(mDeletionMutexp) ;
+	{
+		LLMutexLock lock(mDeletionMutexp) ;
 	
-	mDead = TRUE ;
-	LLCurl::getCurlThread()->setPriority(mHandle, LLQueuedThread::PRIORITY_URGENT) ; 
+		if(mCurlMultiHandle != NULL)
+		{
+			mDead = TRUE ;
+			LLCurl::getCurlThread()->setPriority(mHandle, LLQueuedThread::PRIORITY_URGENT) ; 
+
+			return;
+		}
+	}
+	
+	//not valid, delete it.
+	delete this;	
 }
 
 void LLCurl::Multi::setState(LLCurl::Multi::ePerformState state)
@@ -761,9 +781,13 @@ bool LLCurl::Multi::doPerform()
 		setState(STATE_COMPLETED) ;
 		mIdleTimer.reset() ;
 	}
-	else if(mIdleTimer.getElapsedTimeF32() > mIdleTimeOut) //idle for too long, remove it.
+	else if(!mValid && mIdleTimer.getElapsedTimeF32() > mIdleTimeOut) //idle for too long, remove it.
 	{
 		dead = true ;
+	}
+	else if(mValid && mIdleTimer.getElapsedTimeF32() > mIdleTimeOut - 1.f) //idle for too long, mark it invalid.
+	{
+		mValid = FALSE ;
 	}
 
 	return dead ;
@@ -986,14 +1010,7 @@ void LLCurlThread::killMulti(LLCurl::Multi* multi)
 		return ;
 	}
 
-	if(multi->isValid())
-	{
 	multi->markDead() ;
-}
-	else
-	{
-		deleteMulti(multi) ;
-	}
 }
 
 //private
@@ -1012,6 +1029,10 @@ void LLCurlThread::deleteMulti(LLCurl::Multi* multi)
 void LLCurlThread::cleanupMulti(LLCurl::Multi* multi) 
 {
 	multi->cleanup() ;
+	if(multi->isDead()) //check if marked dead during cleaning up.
+	{
+		deleteMulti(multi) ;
+	}
 }
 
 //------------------------------------------------------------
@@ -1526,16 +1547,8 @@ void LLCurl::cleanupClass()
 	delete sHandleMutexp ;
 	sHandleMutexp = NULL ;
 
-	// <FS:Ansariel> Replaced assert with a log warning. Crashing here is
-	//               pretty much pointless as the user won't notice
-	//               anyway during shutdown and we will only boost the
-	//               crash rate.
+	// removed as per https://jira.secondlife.com/browse/SH-3115
 	//llassert(Easy::sActiveHandles.empty());
-	if (!Easy::sActiveHandles.empty())
-	{
-		llwarns << "List of active CURL handles not empty: " << Easy::sActiveHandles.size() << " handles still active" << llendl;
-	}
-	// </FS:Ansariel>
 }
 
 //static 

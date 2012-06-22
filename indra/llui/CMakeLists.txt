@@ -12,7 +12,6 @@ include(LLRender)
 include(LLWindow)
 include(LLVFS)
 include(LLXML)
-include(LLXUIXML)
 include(Teapot)# <FS:AW opensim currency support>
 
 include_directories(
@@ -25,7 +24,6 @@ include_directories(
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
-    ${LLXUIXML_INCLUDE_DIRS}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
@@ -86,7 +84,6 @@ set(llui_SOURCE_FILES
     llscrolllistcolumn.cpp
     llscrolllistctrl.cpp
     llscrolllistitem.cpp
-    llsdparam.cpp
     llsearcheditor.cpp
     llslider.cpp
     llsliderctrl.cpp
@@ -103,11 +100,13 @@ set(llui_SOURCE_FILES
     lltextutil.cpp
     lltextvalidate.cpp
     lltimectrl.cpp
+    lltrans.cpp
     lltransutil.cpp
     lltoggleablemenu.cpp
     lltoolbar.cpp
     lltooltip.cpp
     llui.cpp
+    lluicolor.cpp
     lluicolortable.cpp
     lluictrl.cpp
     lluictrlfactory.cpp
@@ -124,6 +123,7 @@ set(llui_SOURCE_FILES
     llview.cpp
     llviewquery.cpp
     llwindowshade.cpp
+    llxuiparser.cpp
     )
     
 set(llui_HEADER_FILES
@@ -193,7 +193,6 @@ set(llui_HEADER_FILES
     llscrolllistcolumn.h
     llscrolllistctrl.h
     llscrolllistitem.h
-    llsdparam.h
     llsliderctrl.h
     llslider.h
     llspellcheckmenuhandler.h
@@ -213,6 +212,7 @@ set(llui_HEADER_FILES
     lltoggleablemenu.h
     lltoolbar.h
     lltooltip.h
+    lltrans.h
     lltransutil.h
     lluicolortable.h
     lluiconstants.h
@@ -220,6 +220,7 @@ set(llui_HEADER_FILES
     lluictrl.h
     lluifwd.h
     llui.h
+    lluicolor.h
     lluiimage.h
     lluistring.h
     llundo.h
@@ -233,6 +234,7 @@ set(llui_HEADER_FILES
     llview.h
     llviewquery.h
     llwindowshade.h
+    llxuiparser.h
     )
 
 set_source_files_properties(${llui_HEADER_FILES}

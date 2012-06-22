@@ -316,7 +316,7 @@ LLRect LLStatBar::getRequiredRect()
 	{
 		if (mDisplayHistory)
 		{
-			rect.mTop = 67;
+			rect.mTop = 35 + mStatp->getNumBins();
 		}
 		else
 		{
