@@ -138,7 +138,12 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 		return false; 		// quick exit if no leading <
 	S32 closebracket = message.find('>');
 	S32 firstblank = message.find(' ');
-	S32 tagend = (closebracket < firstblank) ? closebracket : firstblank;
+	S32 tagend;
+	if (closebracket == std::string::npos)
+		tagend = firstblank;
+	else if (firstblank == std::string::npos)
+		tagend = closebracket;
+	else tagend = (closebracket < firstblank) ? closebracket : firstblank;
 	if (tagend == std::string::npos)
 		return false;
 	std::string tag = message.substr(0,tagend+1);
