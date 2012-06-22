@@ -455,6 +455,12 @@ Odwiedzić [_URL], aby uzyskać więcej informacji?
 		</url>
 		<usetemplate ignoretext="Sprzęt w moim komputerze nie jest wspierany" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
+	<notification name="IntelOldDriver">
+		Prawdopodobnie istnieje nowszy sterownik dla Twojej karty graficznej.  Aktualizacja sterowników graficznych może znacznie zwiększyć wydajność.
+
+Odwiedzić [_URL] aby sprawdzić, czy są nowsze sterowniki?
+		<usetemplate ignoretext="Moje sterowniki grafiki są przestarzałe" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
 	<notification name="UnknownGPU">
 		Twój system jest wyposażony w kartę graficzną, która nie jest rozpoznana przez [APP_NAME].
 Zdarza się to często w przypadku nowego sprzętu, który nie był testowany z [APP_NAME].  Prawdopodobnie wystarczy dostosowanie ustawień grafiki aby działanie było poprawne.
@@ -2696,16 +2702,12 @@ Czy się zgadzasz?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, którego właścicielem jest &apos;[NAME]&apos; chciałby:
+		Uwaga: Obiekt &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; chciałby uzyskać pełny dostęp do Twojego konta Linden Dolarów (L$). Jeśli zezwolisz, to będzie on mógł usuwać środki z niego w dowolnej chwili lub opróżniać je cały czas, na bieżąco, bez dodatkowych ostrzeżeń.
 
-[QUESTIONS]
-Jeśli nie ufasz temu obiektowi i jego twórcy, odmów.
-
-Czy się zgadzasz?
+Rzadko się zdarza, aby taka prośba była uzasadniona. Nie zezwalaj, jeśli nie rozumiesz w pełni dlaczego chce on uzyskać dostęp do Twojego konta.
 		<form name="form">
-			<button name="Grant" text="Zaakceptuj"/>
+			<button name="Grant" text="Zezwól na całkowity dostęp"/>
 			<button name="Deny" text="Odmów"/>
-			<button name="Details" text="Szczegóły..."/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">

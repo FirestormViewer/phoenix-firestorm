@@ -913,6 +913,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="ScriptQuestionCautionChatDenied">
 		'[OBJECTNAME]', właściciel: '[OWNERNAME]', położenie: [REGIONNAME] w [REGIONPOS], nie dostał zezwolenia na: [PERMISSIONS].
 	</string>
+	<string name="AdditionalPermissionsRequestHeader">
+		Jeśli zezwolisz na dostęp do konta, to obiekt będzie mógł także:
+	</string>
 	<string name="ScriptTakeMoney">
 		Zabierać Lindeny (L$) od Ciebie
 	</string>

@@ -328,7 +328,7 @@
 			<menu_item_check label="Schnelle Timer" name="Fast Timers"/>
 			<menu_item_check label="Speicher" name="Memory"/>
 			<menu_item_check label="Szenestatistiken" name="Scene Statistics"/>
-			<menu_item_check label="Texture-Fetch-Debug-Konsole" name="Texture Fetch Debug Console"/>
+			<menu_item_call label="Texture-Fetch-Debug-Konsole" name="Texture Fetch Debug Console"/>
 			<menu_item_check label="Region-Debug-Konsole" name="Region Debug Console"/>
 			<menu_item_call label="Info zu Region in Debug-Fenster" name="Region Info to Debug Console"/>
 			<menu_item_call label="Gruppeninfo in Debug-Fenster" name="Group Info to Debug Console"/>
