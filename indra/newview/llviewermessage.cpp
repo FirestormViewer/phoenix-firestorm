@@ -6663,6 +6663,9 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 // <FS:AW opensim currency support>
 //	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
 	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << upload_cost << LL_ENDL;
+
+	// update L$ substitution for "Buy and Sell L$", it was set before we knew the currency
+	gMenuHolder->getChild<LLUICtrl>("Buy and Sell L$")->setLabelArg("L$", LLStringExplicit("L$"));
 // <FS:AW opensim currency support>
 	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));

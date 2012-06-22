@@ -33,7 +33,7 @@
 #include "tea.h"
 
 
-std::string Tea::sCurrency;
+std::string Tea::sCurrency="L$";
 
 Tea::Tea()
 {
