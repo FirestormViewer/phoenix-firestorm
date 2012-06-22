@@ -96,6 +96,8 @@ LLFastTimerView::LLFastTimerView(const LLSD& key)
 	FTV_NUM_TIMERS = LLFastTimer::NamedTimer::instanceCount();
 	mPrintStats = -1;	
 	mAverageCyclesPerTimer = 0;
+	mOverLegend = false;
+	mScrollOffset = 0;
 }
 
 void LLFastTimerView::onPause()
@@ -243,6 +245,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 	}
 	mHoverTimer = NULL;
 	mHoverID = NULL;
+	mOverLegend = false;
 
 	if(LLFastTimer::sPauseHistory && mBarRect.pointInRect(x, y))
 	{
@@ -295,6 +298,7 @@ BOOL LLFastTimerView::handleHover(S32 x, S32 y, MASK mask)
 		{
 			mHoverID = timer_id;
 		}
+		mOverLegend = true;
 	}
 	
 	return LLFloater::handleHover(x, y, mask);
@@ -339,10 +343,30 @@ BOOL LLFastTimerView::handleToolTip(S32 x, S32 y, MASK mask)
 
 BOOL LLFastTimerView::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
-	LLFastTimer::sPauseHistory = TRUE;
-	mScrollIndex = llclamp(	mScrollIndex + clicks,
-							0,
-							llmin(LLFastTimer::getLastFrameIndex(), (S32)LLFastTimer::NamedTimer::HISTORY_NUM - MAX_VISIBLE_HISTORY));
+	if(mOverLegend)
+	{
+		mScrollOffset += clicks;
+		S32 count = 0;
+		for (timer_tree_iterator_t it = begin_timer_tree(LLFastTimer::NamedTimer::getRootNamedTimer());
+			it != timer_tree_iterator_t();
+			++it)
+		{
+			count++;
+			LLFastTimer::NamedTimer* idp = (*it);
+			if (idp->getCollapsed()) 
+			{
+				it.skipDescendants();
+			}
+		}
+		mScrollOffset = llclamp(mScrollOffset,0,count-5);
+	}
+	else
+	{
+		LLFastTimer::sPauseHistory = TRUE;
+		mScrollIndex = llclamp(	mScrollIndex + clicks,
+								0,
+								llmin(LLFastTimer::getLastFrameIndex(), (S32)LLFastTimer::NamedTimer::HISTORY_NUM - MAX_VISIBLE_HISTORY));
+	}
 	return TRUE;
 }
 
@@ -460,11 +484,21 @@ void LLFastTimerView::draw()
 		S32 cur_line = 0;
 		ft_display_idx.clear();
 		std::map<LLFastTimer::NamedTimer*, S32> display_line;
+		S32 mScrollOffset_tmp = mScrollOffset;
 		for (timer_tree_iterator_t it = begin_timer_tree(LLFastTimer::NamedTimer::getRootNamedTimer());
 			it != timer_tree_iterator_t();
 			++it)
 		{
 			LLFastTimer::NamedTimer* idp = (*it);
+			if(mScrollOffset_tmp)
+			{
+				--mScrollOffset_tmp;
+				if (idp->getCollapsed()) 
+				{
+					it.skipDescendants();
+				}
+				continue;
+			}
 			display_line[idp] = cur_line;
 			ft_display_idx.push_back(idp);
 			cur_line++;
