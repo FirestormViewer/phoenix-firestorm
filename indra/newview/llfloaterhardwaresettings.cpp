@@ -108,13 +108,6 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
 #endif
 
-
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
-		!gGLManager.mHasVertexBufferObject)
-	{
-		getChildView("texture compression")->setEnabled(FALSE);
-	}
-
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
 		!gGLManager.mHasVertexBufferObject)
 	{
