@@ -7,7 +7,7 @@
 		<button name="ao_add" tool_tip="Crea nuovo set di animazioni." />
 		<button name="ao_remove" tool_tip="Rimuovi questo set di animazioni." />
 		<check_box name="ao_sit_override" label="Forza Seduta" tool_tip="Se spuntata, questa opzione permetterà di sovrascrivere le sedute degli oggetti." />
-		<check_box name="ao_smart" label="Sprytnie" tool_tip="Modalità Smart cerca di determinare se la sovrascrittura della seduta fosse in contrasto con l'animazione stessa dell'oggetto, in questo caso disabilita temporaneamente la Super Seduta." />
+		<check_box name="ao_smart" label="Smart" tool_tip="Modalità Smart cerca di determinare se la sovrascrittura della seduta fosse in contrasto con l'animazione stessa dell'oggetto, in questo caso disabilita temporaneamente la Super Seduta." />
 		<check_box name="ao_disable_stands_in_mouselook" label="Disabilita Stands in Mouselook" tool_tip="Jeśli chcesz zachować własną animację stania w miejscu, będąc w trybie pierwszoosobowym (mouselook), to zaznacz tą opcję." />
 		<combo_box name="ao_state_selection_combo" tool_tip="Seleziona quale tipo di animazione si vuole modificare." />
 		<panel name="ao_animation_move_trash_panel">

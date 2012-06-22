@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Movimento" name="move_panel">
 	<tab_container name="tabs">
-		<!--View-->
+		<!--Visualizza-->
 		<panel name="tab-view" label="Visualizza">
 			<slider label="Angolo di visuale" name="camera_fov"/>
 			<slider label="Distanza" name="camera_offset_scale"/>
@@ -21,7 +21,7 @@
 			</text>
 			<check_box label="Inverti" name="invert_mouse"/>
 		</panel>
-		<!--Movement-->
+		<!--Movimento-->
 		<panel name="tab-movement" label="Movimento">
 			<check_box label="Le frecce di direzione mi fanno sempre spostare" name="arrow_keys_move_avatar_check"/>
 			<check_box label="Usa la configurazione tastiera AZERTY" name="FSUseAzertyKeyboardLayout" />
@@ -49,6 +49,7 @@
 			</combo_box>
 			<button label="Altri dispositivi" name="joystick_setup_button"/>
 		</panel>
+		<!--Firestorm-->
 		<panel name="tab-firestorm">
 			<text name="camera_options_label">
 				Opzioni camera:
@@ -56,6 +57,7 @@
 			<check_box label="Cliccando il tuo avatar mantiene la posizione della telecamera" name="clickonavatarkeepscamera" tool_tip="Normalmente, cliccando sul tuo avatar la posizione della camera si resetta, spuntando questa opzione, si annulla tale effetto."/>
 			<check_box label="Ripristina posizione della telecamera dopo teleport (Dentro la stessa sim)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posizione della cam viene resettata quando ci si teletrasporta, spuntando questa opzione, si annulla tale effetto."/>
 			<check_box label="Disabilita limite di zoom della telecamera" name="disableminzoomdist" tool_tip="Disabilita il limite di zoom nell'avvicinarsi ad un'oggetto"/>
+			<check_box label="Gira l'avatar dove puntava la cam quando la resetti" name="resetviewturnsavatar" tool_tip="Mantiene la linea di vista della fotocamera e ruota l'avatar, se la visuale viene resettata (quando premi ESC)."/>
 			<check_box label="Consente alla cam di spostarsi senza bloccarsi sui prim" name="ignorecameraconstraints" tool_tip="Ignora la 'spinta', che riceve la cam dal simulatore, quando ci si avvicina troppo ad un prim."/>
 			<text name="ignorecameraconstraints_requires_restart">
 				(Richiesto riavvio)

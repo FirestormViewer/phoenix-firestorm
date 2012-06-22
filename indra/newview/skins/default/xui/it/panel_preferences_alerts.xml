@@ -18,6 +18,8 @@
 	<check_box label="Come Popups" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="Nella chat locale e nella console"/>
 	<check_box label="Solo nella chat locale" left_pad="10" name="OnlineOfflinetoNearbyChatHistory"/>
+	<check_box label="Abilita notifiche in Growl" name="notify_growl_checkbox"/>
+	<check_box label="Abilita notifiche in Growl se Firestorm è aperto" name="notify_growl_always_checkbox"/>
 	<text name="show_label">
 		Mostra sempre:
 	</text>

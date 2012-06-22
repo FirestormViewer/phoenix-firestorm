@@ -119,11 +119,17 @@
 			</text>
 		</panel>
 		<!-- RADAR -->
-		<panel name="ChatRadar">
-			<check_box name="reportChatRange" label="Il radar segnala quando qualcuno entra/esce dal raggio della chat"/>
-			<check_box name="reportDrawRange" label="Il radar segnala quando qualcuno entra/esce dalla draw distance"/>
-			<check_box name="RadarReportSimRange" label="Il radar segnala quando qualcuno entra/esce dalla regione"/>
-		</panel>
+		<panel label="Radar" name="ChatRadar">
+            <check_box name="reportChatRangeEnter" label="Il radar segnala quando un'avatar entra nel raggio della chat"/>
+            <check_box name="reportChatRangeLeave" label="Il radar segnala quando un'avatar esce dal raggio della chat"/>
+            <check_box name="reportDrawRangeEnter" label="Il radar segnala quando un'avatar entra nel raggio della Draw Distance"/>
+            <check_box name="reportDrawRangeLeaave" label="Il radar segnala quando un'avatar esce dal raggio della Draw Distance"/>
+            <check_box name="RadarReportSimRangeEnter" label="Il radar segnala quando un'avatar entra nella Sim"/>
+            <check_box name="RadarReportSimRangeLeave" label="Il radar segnala quando un'avatar esce dalla Sim"/>
+			<check_box name="RadarEnterChannelAlert" label="Segnala l'ingresso in Sim di script in allerta"/>
+			<check_box name="RadarLeaveChannelAlert" label="Segnala l'uscita dalla Sim di script in allerta"/>
+        </panel>
+		<!--Parole in allerta-->
 		<panel label="Parole in Allerta" name="ChatKeywordAlerts">
 			<check_box name="FSKeywordOn" label="Abilita allerta parole"/>
 			<check_box name="FSKeywordInChat" label="Cerca allerta parole in Local Chat"/>
@@ -138,6 +144,7 @@
 				UUID Suono di allerta:
 			</text>
 		</panel>
+		<!--Dizionari-->
 		<panel label="Dizionari" name="ChatTextInput">
 			<check_box label="Abilita controllo parole" name="checkSpellCheck"/>
 			<text name="textDictionaryMain">

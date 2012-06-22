@@ -18,7 +18,7 @@ cliccando sui loro nomi.
 			</panel.string>
 			<filter_editor label="Filtra Membri" name="filter_input"/>
 			<name_list name="member_list">
-				<name_list.columns label="Socio" name="name"/>
+				<name_list.columns label="Membro" name="name"/>
 				<name_list.columns label="Donazioni" name="donated"/>
 				<name_list.columns label="Stato" name="online"/>
 			</name_list>

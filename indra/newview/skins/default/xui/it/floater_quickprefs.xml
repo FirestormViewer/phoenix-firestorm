@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="quickprefs">
+	<panel name="quickprefs">
+		<text name="Draw Distance" tool_tip="Imposta la distanza massima in cui vengono caricati gli oggetti.">
+			Draw Distance:
+		</text>
+		<slider  name="DrawDistance"/>			
+		<text name="Particles" tool_tip="Il numero massimo di particle che verranno mostrate.">
+			Max. Particle:
+		</text>
+		<slider name="RenderMaxPartCount"/>
+		<text name="Avatar Physics LOD" tool_tip="Consente di impostare il livello di dettaglio della fisica dell'avatar.">
+			Fisica Avatar:
+		</text>
+		<slider name="RenderAvatarPhysicsLOD"/>		
+		<text name="LOD Factor" tool_tip="Consente di impostare il livello del dettaglio dei prim">
+			Fattore LOD:
+		</text>
+		<slider name="RenderVolumeLODFactor"/>		
+		<text name="Max Avatars" tool_tip="Il numero massimo di avatar che si devono caricare simultaneamente, oltre questo numero si attiva in automatico l'avatar impostor. Un valore basso migliora la velocità in luoghi affollati. [Default 12]">
+			Max. Avatar:
+		</text>
+		<slider name="RenderAvatarMaxVisible"/>		
+		<text name="Height Offset" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
+			Altezza Avatar:
+		</text>
+		<text name="Tag Offset" tool_tip="Consente di modificare l'altezza dell'avatar senza modificare la shape. Default 0">
+			Altezza Tag:
+		</text>
+		<slider name="FSNameTagZOffsetCorrection"/>
+		<slider name="AvatarZOffset"/>		
+		<text name="name_tags_textbox">
+			Tag Nome:
+		</text>
+		<text name="LookAt_Preferences_Label">
+			LookAt:
+		</text>
+		<check_box name="showlookat" left="130" label="Attiva" tool_tip="Attiva il LookAt"/>
+		<text name="DebugShowColor_label" width="130">
+			Colore sotto il cursore:
+		</text>
+		<check_box name="Show_Color_Under_Cursor" left="130" label="Attiva" tool_tip="Visualizza il colore dell'oggetto posizionato sotto il mouse."/>
+		<text name="WL Sky" tool_tip="Imposta il Windlight per il cielo.">
+			WL Cielo:
+		</text>
+		<combo_box name="WLPresetsCombo"/>
+		<text name="WL Water" tool_tip="Imposta il Windlight per l'acqua.">
+			WL Acqua:
+		</text>
+		<combo_box name="WaterPresetsCombo"/>
+		<icon name="SkyDayCycle"/>
+		<button name="UseRegionWL" tool_tip="Reimposta il Windlight come è impostato nella Regione"/>
+	</panel>
+</floater>

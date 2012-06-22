@@ -17,7 +17,15 @@
 		<pie_menu label="Avanti >" name="Object Pie More 2">
 			<pie_slice label="Aggiorna Tex" name="Texture Refresh"/>
 			<pie_slice label="Muta" name="Object Mute"/>
-			<pie_slice label="N. Script" name="ScriptInfo"/>
+			<pie_menu label="Script &gt;" name="ScriptsMenu">
+				<pie_slice label="Compila (Mono)" name="CompileMono"/>
+				<pie_slice label="Compila (LSL)" name="CompileLSL"/>
+				<pie_slice label="Resetta Script." name="Object Reset Scripts"/>
+				<pie_slice label="Attiva Script" name="Object Set Scripts to Running"/>
+				<pie_slice label="Ferma Script" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="Rimuovi Script" name="Remove Scripts From Selection"/>
+				<pie_slice label="N.Script" name="ScriptInfo"/>
+			</pie_menu>
 		</pie_menu>
 		<pie_slice label="Compra" name="Buy..."/>
 	</pie_menu>
