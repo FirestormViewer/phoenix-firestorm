@@ -2611,8 +2611,20 @@ void LLIMMgr::addMessage(
 		make_ui_sound("UISndNewIncomingIMSession");
 	}
 
-	bool skip_message = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") &&
-		LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);
+	//<FS:TS> FIRE-6650: Group chat for non-friends mutes when disabling voice chat from non-friends
+	bool skip_message = false;
+	LLIMModel::LLIMSession* session = LLIMModel::instance().findIMSession(new_session_id);
+	if (session)
+	{
+		if (session->isAdHoc())
+		{
+			skip_message = (other_participant_id != gAgentID && gSavedSettings.getBOOL("VoiceCallsFriendsOnly") &&
+				LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);
+		}
+	}
+	//bool skip_message = (gSavedSettings.getBOOL("VoiceCallsFriendsOnly") &&
+	//	LLAvatarTracker::instance().getBuddyInfo(other_participant_id) == NULL);
+	//</FS:TS> FIRE-6650
 
 	if (!LLMuteList::getInstance()->isMuted(other_participant_id, LLMute::flagTextChat) && !skip_message)
 	{
