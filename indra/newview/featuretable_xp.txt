@@ -35,7 +35,7 @@ RenderAvatarMaxVisible      1   12
 RenderAvatarVP				1	1
 RenderCubeMap				1	1
 RenderDelayVBUpdate			1	0
-RenderFarClip				1	192
+RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0
 RenderFogRatio				1	4.0
 RenderGamma					1	0
@@ -51,8 +51,8 @@ RenderTransparentWater		1	1
 RenderTreeLODFactor			1	1.0
 RenderUseImpostors			1	1
 RenderVBOEnable				1	1
-RenderVolumeLODFactor		1	4.0
 RenderVBOMappingDisable		1	1
+RenderVolumeLODFactor		1	4.0
 UseStartScreen				1	1
 UseOcclusion				1	1
 VertexShaderEnable			1	1
@@ -63,12 +63,12 @@ Disregard96DefaultDrawDistance	1	1
 RenderTextureMemoryMultiple		1	1.0
 RenderCompressTextures		1	1
 RenderShaderLightingMaxLevel	1	3
-RenderDeferred				1	1
-RenderDeferredSSAO			1	1
-RenderShadowDetail			1	2
-RenderFSAASamples			1	16
-WatchdogDisabled			1	1
+RenderDeferred				1	0
+RenderDeferredSSAO			1	0
+RenderShadowDetail			1	0
+WatchdogDisabled				1	1
 RenderUseStreamVBO			1	1
+RenderFSAASamples			1	16
 RenderMaxTextureIndex		1	16
 
 //
@@ -85,7 +85,7 @@ RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
 RenderLocalLights			1	0
-RenderMaxPartCount			1	0
+RenderMaxPartCount			1	128
 RenderObjectBump			1	0
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
@@ -93,7 +93,7 @@ RenderTerrainLODFactor		1	1
 RenderTransparentWater		1	0
 RenderTreeLODFactor			1	0
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	0.5
+RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	0
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
@@ -115,8 +115,8 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderMaxPartCount			1	250
 RenderLocalLights			1	0
+RenderMaxPartCount			1	128
 RenderObjectBump			1	0
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
@@ -124,13 +124,14 @@ RenderTerrainLODFactor		1	1.0
 RenderTransparentWater		1	0
 RenderTreeLODFactor			1	0
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	2.0
+RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
+RenderFSAASamples			1	0
 
 //
 // Mid Graphics Settings
@@ -160,6 +161,7 @@ WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
+RenderFSAASamples			1	0
 
 //
 // High Graphics Settings (purty)
@@ -189,6 +191,7 @@ WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
+RenderFSAASamples			1	2
 
 //
 // Ultra graphics (REALLY PURTY!)
