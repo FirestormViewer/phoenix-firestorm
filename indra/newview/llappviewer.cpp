@@ -5387,7 +5387,7 @@ void LLAppViewer::handleLoginComplete()
 
 	mOnLoginCompleted();
 
-//-TT Window Title Access
+	// <FS:TT> Window Title Access
 	std::string full_name;
 	const LLSD login_response = LLLoginInstance::getInstance()->getResponse();
 	if (login_response.has("first_name"))
@@ -5401,7 +5401,10 @@ void LLAppViewer::handleLoginComplete()
 			std::string temp_string = login_response["last_name"].asString();
 			LLStringUtil::replaceChar(temp_string, '"', ' ');
 			LLStringUtil::trim(temp_string);
-			full_name.append(" ").append(temp_string);
+			if (temp_string.compare("Resident") != 0)
+			{
+				full_name.append(" ").append(temp_string);
+			}
 		}
 	}
 	if (!full_name.empty())
@@ -5409,16 +5412,16 @@ void LLAppViewer::handleLoginComplete()
 		gWindowTitle += std::string(" - ") + full_name;
 		gViewerWindow->getWindow()->setTitle(gWindowTitle);
 	}
-//-TT
+	// </FS:TT>
 
 	writeDebugInfo();
 	
-	//AO : Warn users cache purge will affect usability
+	// <FS:AO> Warn users cache purge will affect usability
 	if (mPurgeCache)
 	{
 		LLNotificationsUtil::add("CacheEmpty");
 	}
-	// </AO>
+	// </FS:AO>
 	
 	// we logged in successfully, so save settings on logout -Zi
 	lldebugs << "Login successful, per account settings will be saved on logout." << llendl;
