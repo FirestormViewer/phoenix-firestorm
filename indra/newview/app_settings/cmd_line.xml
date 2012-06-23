@@ -117,30 +117,6 @@
       <string>h</string>
     </map>
 
-<!-- FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
-<!--    <key>loginuri</key>
-    <map>
-      <key>desc</key>
-      <string>login server and CGI script to use</string>
-      <key>count</key>
-      <integer>1</integer>
-      <key>compose</key>
-      <boolean>true</boolean>
-      <key>map-to</key>
-      <string>CmdLineLoginURI</string>
-    </map>
--->
-    <key>loginuri</key>
-    <map>
-      <key>desc</key>
-      <string>login server and CGI script to use</string>
-      <key>count</key>
-      <integer>1</integer>
-      <key>map-to</key>
-      <string>CmdLineLoginURI1</string>
-    </map>
-<!-- /FS:AW  fix commandline loginuri (partial fix of FIRE-3448)-->
-
     <key>helperuri</key>
     <map>
       <key>desc</key>
@@ -187,7 +163,9 @@
       <key>map-to</key>
       <string>UserLogFile</string>
     </map>
-    
+
+<!-- FS:AW FIRE-6721 (merge regression: command line -login not working) -->
+<!--
     <key>login</key>
     <map>
       <key>desc</key>
@@ -197,6 +175,17 @@
       <key>map-to</key>
       <string>UserLoginInfo</string>
     </map>
+-->
+    <key>login</key>
+    <map>
+      <key>desc</key>
+      <string>3 tokens: first, last and password</string>
+      <key>count</key>
+      <integer>3</integer>
+      <key>map-to</key>
+      <string>UserLoginInfo1</string>
+    </map>
+<!-- /FS:AW FIRE-6721 -->
 
     <key>loginpage</key>
     <map>
@@ -208,7 +197,8 @@
       <string>LoginPage</string>
     </map>
 
-    <key>loginuri</key>
+<!-- FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
+<!--    <key>loginuri</key>
     <map>
       <key>desc</key>
       <string>login server and CGI script to use</string>
@@ -219,6 +209,18 @@
       <key>map-to</key>
       <string>CmdLineLoginURI</string>
     </map>
+-->
+
+    <key>loginuri</key>
+    <map>
+      <key>desc</key>
+      <string>login server and CGI script to use</string>
+      <key>count</key>
+      <integer>1</integer>
+      <key>map-to</key>
+      <string>CmdLineLoginURI1</string>
+    </map>
+<!-- /FS:AW  fix commandline loginuri (partial fix of FIRE-3448)-->
 
     <key>logmetrics</key>
     <map>
