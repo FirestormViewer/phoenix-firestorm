@@ -92,11 +92,6 @@ private:
 	S32 mPrintStats;
 	S32 mAverageCyclesPerTimer;
 	LLRect mGraphRect;
-
-	// <FS:LO> Making the ledgend part of fast timers scrollable
-	bool mOverLegend;
-	S32 mScrollOffset;
-	// </FS:LO>
 };
 
 #endif
