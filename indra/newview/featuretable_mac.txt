@@ -161,7 +161,7 @@ WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
-RenderFSAASamples			1	0
+RenderFSAASamples			1	2
 
 //
 // High Graphics Settings (purty)
@@ -191,7 +191,7 @@ WLSkyDetail					1	48
 RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
-RenderFSAASamples			1	0
+RenderFSAASamples			1	2
 
 //
 // Ultra graphics (REALLY PURTY!)
@@ -221,7 +221,7 @@ WLSkyDetail					1	128
 RenderDeferred				1	1
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
-RenderFSAASamples			1	2
+RenderFSAASamples			1	4
 
 //
 // Class Unknown Hardware (unknown)
