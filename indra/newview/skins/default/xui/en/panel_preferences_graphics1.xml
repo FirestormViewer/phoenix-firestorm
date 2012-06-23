@@ -821,9 +821,7 @@
          name="vbo_stream"
          tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
          width="315" />
-      <!--removed for 4.0.1 release-->
         <text
-         visible="false"
          type="string"
          length="1"
          follows="left|top"
@@ -835,9 +833,7 @@
          width="188">
          Enable S3TC:
         </text>
-      <!--removed for 4.0.1 release-->
         <check_box
-         visible="false" 
          control_name="RenderCompressTextures"
          height="16"
          initial_value="false"
