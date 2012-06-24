@@ -3548,17 +3548,17 @@ Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
 <!-- <FS:AW>  opensim search support-->
 	<notification name="ConfirmClearDebugSearchURL">
 Soll die Debug-Such-URL wirklich gelöscht werden?
-		<usetemplate name="okcancelbuttons" ignoretext="Bestätigen, wenn eine Debug-Such-URL gelöscht wird" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, wenn eine Debug-Such-URL gelöscht wird" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmPickDebugSearchURL">
 Soll die aktuelle Such-URL wirklich als Debug-Such-URL gesetzt werden?
-		<usetemplate name="okcancelbuttons" ignoretext="Bestätigen, wenn eine Debug-Such-URL gesetzt wird" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, wenn eine Debug-Such-URL gesetzt wird" notext="Abbrechen" yestext="OK"/>
 	</notification>
 <!-- </FS:AW>  opensim search support-->
 <!-- <FS:AW  grid management-->
 	<notification name="ConfirmRemoveGrid">
 Soll [REMOVE_GRID] wirklich aus der Grid-Liste entfernt werden?
-		<usetemplate name="okcancelbuttons" ignoretext="Bestätigen, wenn Grids entfernt werden" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelignore" ignoretext="Bestätigen, wenn Grids entfernt werden" notext="Abbrechen" yestext="OK"/>
 	</notification>
 <!-- </FS:AW  grid management-->
 </notifications>
