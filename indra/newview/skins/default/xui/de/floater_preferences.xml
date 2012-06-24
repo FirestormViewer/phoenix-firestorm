@@ -20,5 +20,6 @@
 		<panel label="Benutzerinterface" name="starlightUI1"/>
 		<panel label="Oberflächendesign" name="skins"/>
 		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
 	</tab_container>
 </floater>

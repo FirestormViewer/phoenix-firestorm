@@ -7,13 +7,5 @@
 	<check_box label="Bei Anmeldung Gridauswahl anzeigen" name="show_grid_selection_check"/>
 	<check_box label="Menü „Erweitert“ anzeigen" name="show_advanced_menu_check"/>
 	<check_box label="Menü „Entwickler“ anzeigen" name="show_develop_menu_check"/>
-	<panel name="debug_search_panel">
-		<check_box label="Suche Debuggen" name="DebugSearch"/>
-		<text name="search_url_debug_text">
-			Aktuelle URL für die Suche überschreiben: (kein Überschreiben falls leer)
-		</text>
-		<button label="Löschen" label_selected="Löschen" width="60" name="clear_search_url_debug"/>
-		<button label="Setzen" name="pick_current_search_url"/>
-	</panel>
     <button label="Alle Einstellungen zurücksetzen" label_selected="Alle Einstellungen zurücksetzen..." name="clear_settings"/>
 </panel>

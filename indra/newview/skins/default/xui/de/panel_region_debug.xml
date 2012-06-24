@@ -40,5 +40,5 @@
 		Sekunden:
 	</text>
 	<spinner name="restart_delay" left_delta="65"/>
-	<button label="Neustart verzögern" name="cancel_restart_btn" tool_tip="Regionsneustart um eine Stunde verschieben"/>
+	<button label="Neustart abbrechen" name="cancel_restart_btn" tool_tip="Bricht den Regionsneustart ab"/>
 </panel>

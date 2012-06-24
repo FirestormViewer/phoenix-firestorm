@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="OpenSim" name="opensim_panel">
+	<panel name="grid_management_panel">
+		<text name="add_grid_text">
+			Neues Grid hinzufügen
+		</text>
+		<button label="Löschen" label_selected="Löschen" name="clear_grid" width="60"/>
+		<button label="Anwenden" name="apply_new_grid" width="70"/>
+		<text name="add_grid_text">
+			Grid-Verwaltung
+		</text>
+		<scroll_list name="grid_list">
+			<scroll_list.columns label="Name" name="grid_label"/>
+			<scroll_list.columns label="Login URI" name="login_uri"/>
+		</scroll_list>
+		<button label="Aktualisieren" name="refresh_grid" width="80"/>
+		<button label="Entfernen" name="remove_grid" width="80"/>
+	</panel>
+	<panel name="debug_search_panel">
+		<check_box label="Suche Debuggen" name="DebugSearch"/>
+		<text name="search_url_debug_text">
+			Aktuelle URL für die Suche überschreiben: (kein Überschreiben falls leer)
+		</text>
+		<button label="Löschen" label_selected="Löschen" width="60" name="clear_search_url_debug"/>
+		<button label="Setzen" name="pick_current_search_url"/>
+	</panel>
+</panel>
