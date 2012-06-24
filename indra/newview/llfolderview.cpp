@@ -1423,7 +1423,9 @@ void LLFolderView::cut()
 				listener->cutToClipboard();
 			}
 		}
-		LLFolderView::removeCutItems();
+		// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+		//LLFolderView::removeCutItems();
+		// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	}
 	mSearchString.clear();
 }

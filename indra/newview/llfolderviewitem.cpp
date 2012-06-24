@@ -1139,6 +1139,15 @@ void LLFolderViewItem::draw()
 	//--------------------------------------------------------------------------------//
 	// Draw the actual label text
 	//
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	if (!getRoot()->getFilter()->checkAgainstClipboard(mListener->getUUID()))
+	{
+		// Fade out item color to indicate it's being cut
+		color.mV[VALPHA] *= 0.5f;
+	}
+	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+
 	font->renderUTF8(mLabel, 0, text_left, y, color,
 					 LLFontGL::LEFT, LLFontGL::BOTTOM, LLFontGL::NORMAL, LLFontGL::NO_SHADOW,
 					 S32_MAX, getRect().getWidth() - (S32) text_left, &right_x, TRUE);

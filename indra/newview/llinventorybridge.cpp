@@ -1431,17 +1431,14 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 	else if ("cut" == action)
 	{
 		cutToClipboard();
-		LLFolderView::removeCutItems();
+		// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+		//LLFolderView::removeCutItems();
+		// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 		return;
 	}
 	else if ("copy" == action)
 	{
 		copyToClipboard();
-		return;
-	}
-	else if ("cut" == action)
-	{
-		cutToClipboard();
 		return;
 	}
 	else if ("paste" == action)
@@ -2869,7 +2866,9 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 	else if ("cut" == action)
 	{
 		cutToClipboard();
-		LLFolderView::removeCutItems();
+		// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+		//LLFolderView::removeCutItems();
+		// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 		return;
 	}
 	else if ("copy" == action)

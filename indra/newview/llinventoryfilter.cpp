@@ -144,8 +144,12 @@ const std::string& LLInventoryFilter::getSearchableTarget(const LLFolderViewItem
 BOOL LLInventoryFilter::check(const LLFolderViewItem* item) 
 {
 	// Clipboard cut items are *always* filtered so we need this value upfront
-	const LLFolderViewEventListener* listener = item->getListener();
-	const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const LLFolderViewEventListener* listener = item->getListener();
+	//const BOOL passed_clipboard = (listener ? checkAgainstClipboard(listener->getUUID()) : TRUE);
+	const BOOL passed_clipboard = TRUE;
+	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 
 	// If it's a folder and we're showing all folders, return automatically.
 	const BOOL is_folder = (dynamic_cast<const LLFolderViewFolder*>(item) != NULL);
@@ -204,7 +208,11 @@ bool LLInventoryFilter::check(const LLInventoryItem* item)
 
 	const bool passed_filtertype = checkAgainstFilterType(item);
 	const bool passed_permissions = checkAgainstPermissions(item);
-	const BOOL passed_clipboard = checkAgainstClipboard(item->getUUID());
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const BOOL passed_clipboard = checkAgainstClipboard(item->getUUID());
+	const BOOL passed_clipboard = TRUE;
+	// </FS:Ansariel> Don't filter cut items
 	const bool passed = (passed_filtertype &&
 						 passed_permissions &&
 						 passed_clipboard &&
@@ -238,7 +246,11 @@ bool LLInventoryFilter::checkFolder(const LLFolderViewFolder* folder) const
 bool LLInventoryFilter::checkFolder(const LLUUID& folder_id) const
 {
 	// Always check against the clipboard
-	const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
+	// <FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
+	// Don't hide cut items in inventory
+	//const BOOL passed_clipboard = checkAgainstClipboard(folder_id);
+	const BOOL passed_clipboard = TRUE;
+	// </FS:Ansariel> FIRE-6714: Don't move objects to trash during cut&paste
 	
 	// we're showing all folders, overriding filter
 	if (mFilterOps.mShowFolderState == LLInventoryFilter::SHOW_ALL_FOLDERS)
