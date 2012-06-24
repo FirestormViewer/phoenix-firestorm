@@ -10,9 +10,9 @@
  label="Opensim"
  name="opensim_panel">
   <panel
-  border="true"
+  border="false"
   follows="all"
-  height="240"
+  height="260"
   layout="topleft"
   left="0"
   top="0"
@@ -129,7 +129,7 @@
   height="56"
   layout="topleft"
   left="0"
-  top_pad="25"
+  top_pad="10"
   width="540"
   label=""
   name="debug_search_panel">
