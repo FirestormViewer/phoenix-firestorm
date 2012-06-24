@@ -102,6 +102,7 @@ private:
 	static void onSelectSavedLogin(LLUICtrl*, void*);
 	static void usernameLostFocus(LLFocusableElement* caller, void* userdata);
 //	static void onServerComboLostFocus(LLFocusableElement*);
+	static void gridListChanged(bool success);// <FS:AW  grid management>
 	static void updateServerCombo();
 	static void updateSavedLoginsCombo();
 	static void updateStartSLURL();
@@ -123,7 +124,6 @@ private:
 
 	static LLPanelLogin* sInstance;
 	static BOOL		sCapslockDidNotification;
-	int mGridEntries; 	// <AW: opensim>
 	std::string mLoginPage; // <AW: opensim>
 };
 

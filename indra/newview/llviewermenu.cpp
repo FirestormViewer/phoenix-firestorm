@@ -6712,6 +6712,12 @@ class LLShowHelp : public view_listener_t
 // <AW: OpenSim>
 bool update_grid_help()
 {
+// <FS:AW  grid management>
+	if (!gMenuHolder) //defend crash on shutdown
+	{
+		return false;
+	}
+// </FS:AW  grid management>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 	std::string grid_label = LLGridManager::getInstance()->getGridLabel();

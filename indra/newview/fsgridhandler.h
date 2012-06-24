@@ -30,6 +30,9 @@
 #define FS_GRIDHANDLER_H
 
 #include "llxmlnode.h"
+
+#include <boost/function.hpp>
+#include <boost/signals2.hpp>
                                                                                                        
 extern const char* DEFAULT_LOGIN_PAGE;
 //Kokua: for llviewernetwork_test
@@ -102,7 +105,8 @@ public:
 		LOCAL,
 		FINISH,
 		TRYLEGACY,
-		FAIL
+		FAIL,
+		REMOVE
 	} AddState;
 public:
 	
@@ -121,9 +125,12 @@ public:
  	bool isReadyToLogin(){return mReadyToLogin;}
 
 	// add a grid to the list of grids
+// <FS:AW  grid management>
 	void addGrid(const std::string& loginuri);
-
-	void reFetchGrid();
+	void removeGrid(const std::string& grid);
+	void reFetchGrid() { reFetchGrid(mGrid, true); }
+	void reFetchGrid(const std::string& grid, bool set_current = false);
+// </FS:AW  grid management>
 	// retrieve a map of grid-name <-> label
 	// by default only return the user visible grids
 	std::map<std::string, std::string> getKnownGrids(bool favorites_only=FALSE);
@@ -149,6 +156,11 @@ public:
 	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
 	//get the grid e.g. "login.agni.lindenlab.com"
 	std::string getGrid() const { return mGrid; }
+// <FS:AW  grid management>
+	// get the first (and very probably only) login URI of a specified grid
+	std::string getLoginURI(const std::string& grid);
+// </FS:AW  grid management>
+	// get the Login URIs of the current grid
 	void getLoginURIs(std::vector<std::string>& uris);
 	std::string getHelperURI();
 	std::string getLoginPage();
@@ -197,13 +209,18 @@ public:
 	// Not used anymore, keeping commented as reminder for merge conflicts
 	//void setFavorite() { mGridList[mGrid][GRID_IS_FAVORITE_VALUE] = TRUE; }
 // </AW opensim>
-	
+// <FS:AW  grid management>
+	typedef boost::function<void(bool success)> grid_list_changed_callback_t;
+	typedef boost::signals2::signal<void(bool success)> grid_list_changed_signal_t;
+
+	boost::signals2::connection addGridListChangedCallback(grid_list_changed_callback_t cb);
+	grid_list_changed_signal_t	mGridListChangedSignal;
+// <FS:AW  grid management>
 // <AW opensim>
 	bool isInSLMain();
 	bool isInSLBeta();
 	bool isInOpenSim();
 	void saveGridList();
-	int mGridEntries;
 // </AW opensim>
 	void clearFavorites();
 

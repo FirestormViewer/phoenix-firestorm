@@ -9,128 +9,192 @@
  width="540"
  label="Opensim"
  name="opensim_panel">
-  <text
-    type="string"
-    length="1"
-    follows="left|top"
-    height="12"
-    layout="topleft"
-    left="30"
-    name="add_grid_text"
-    top="25"
-    width="400">
-    Add new grid
-  </text>
-  <line_editor
-    control_name="OpensimPrefsAddGrid"
-    border_style="line"
-    border_thickness="1"
-    follows="left|top"
-    font="SansSerif"
-    height="19"
-    layout="topleft"
-    left="50"
-    max_length="4096"
-    name="add_grid"
-    top_pad="5"
-    width="270" />
-  <button
-    follows="left|top"
-    height="19"
-    label="Clear"
-    label_selected="Clear"
-    layout="topleft"
-    left_pad="2"
-    name="clear_grid"
-    top_delta="0"
-    width="50">
-    <button.commit_callback
-    function="Pref.ClearGrid" />
-  </button>
-  <button
-    follows="left|top"
-    height="19"
-    label="Apply"
-    layout="topleft"
-    left_pad="2"
-    name="apply_new_grid"
-    top_delta="0"
-    width="50">
-    <button.commit_callback
-      function="Pref.AddGrid" />
-  </button>
-    <panel
-    border="false"
-    follows="all"
-    height="56"
-    layout="topleft"
-    left="0"
-    top_pad="10"
-    width="540"
-    label=""
-    name="debug_search_panel">
-      <check_box
-        control_name="DebugSearch"
-        height="16"
-        initial_value="false"
-        label="Debug Search"
-        layout="topleft"
-        left="30"
-        name="DebugSearch"
-        top_pad="1"
-        width="256" />
-      <text
+  <panel
+  border="true"
+  follows="all"
+  height="240"
+  layout="topleft"
+  left="0"
+  top="0"
+  width="540"
+  label=""
+  name="grid_management_panel">
+    <text
       type="string"
       length="1"
       follows="left|top"
       height="12"
       layout="topleft"
-      left="50"
-      name="search_url_debug_text"
-      top_pad="5"
+      left="30"
+      name="add_grid_text"
+      top="25"
       width="400">
-        Override current search url: (no override if empty)
-      </text>
-      <line_editor
-        control_name="SearchURLDebug"
-        enabled_control="DebugSearch"
-        border_style="line"
-        border_thickness="1"
-        follows="left|top"
-        font="SansSerif"
-        height="19"
-        layout="topleft"
-        left="50"
-        max_length="4096"
-        name="search_url_debug"
-        top_pad="5"
-        width="270" />
-      <button
-      enabled_control="DebugSearch"
+      Add new grid
+    </text>
+    <line_editor
+      control_name="OpensimPrefsAddGrid"
+      border_style="line"
+      border_thickness="1"
+      follows="left|top"
+      font="SansSerif"
+      height="19"
+      layout="topleft"
+      left="50"
+      max_length="4096"
+      name="add_grid"
+      top_pad="5"
+      width="270" />
+    <button
       follows="left|top"
       height="19"
       label="Clear"
       label_selected="Clear"
       layout="topleft"
       left_pad="2"
-      name="clear_search_url_debug"
+      name="clear_grid"
       top_delta="0"
       width="50">
-        <button.commit_callback
-        function="Pref.ClearDebugSearchURL" />
-      </button>
-      <button
-      enabled_control="DebugSearch"
+      <button.commit_callback
+      function="Pref.ClearGrid" />
+    </button>
+    <button
       follows="left|top"
       height="19"
-      label="Pick"
+      label="Apply"
       layout="topleft"
       left_pad="2"
-      name="pick_current_search_url"
+      name="apply_new_grid"
       top_delta="0"
       width="50">
-        <button.commit_callback
-          function="Pref.PickDebugSearchURL" />
-      </button>
-    </panel>
+      <button.commit_callback
+        function="Pref.AddGrid" />
+    </button>
+    <text
+      type="string"
+      length="1"
+      follows="left|top"
+      height="12"
+      layout="topleft"
+      left="30"
+      name="add_grid_text"
+      top_pad="10"
+      width="400">
+      Manage Grids
+    </text>
+    <scroll_list
+      height="165"
+      layout="topleft"
+      left="50"
+      name="grid_list"
+      draw_heading="true"
+      top_pad="8"
+      width="370">
+        <scroll_list.columns
+          label="Grid name"
+          name="grid_label"
+          width="150" />
+        <scroll_list.columns
+          dynamic_width="true"
+          label="Login URI"
+          name="login_uri" />
+    </scroll_list>
+      <button
+      follows="left|top"
+      height="19"
+      label="Refresh"
+      layout="topleft"
+      left_pad="5"
+      name="refresh_grid"
+      top_delta="5"
+      width="75">
+      <button.commit_callback
+        function="Pref.RefreshGrid" />
+    </button>
+      <button
+      follows="left|top"
+      height="19"
+      label="Remove"
+      layout="topleft"
+      left_delta="0"
+      name="remove_grid"
+      top_pad="5"
+      width="75">
+      <button.commit_callback
+        function="Pref.RemoveGrid" />
+    </button>
+  </panel>
+  <panel
+  border="false"
+  follows="all"
+  height="56"
+  layout="topleft"
+  left="0"
+  top_pad="25"
+  width="540"
+  label=""
+  name="debug_search_panel">
+    <check_box
+      control_name="DebugSearch"
+      height="16"
+      initial_value="false"
+      label="Debug Search"
+      layout="topleft"
+      left="30"
+      name="DebugSearch"
+      top_pad="1"
+      width="256" />
+    <text
+    type="string"
+    length="1"
+    follows="left|top"
+    height="12"
+    layout="topleft"
+    left="50"
+    name="search_url_debug_text"
+    top_pad="5"
+    width="400">
+      Override current search url: (no override if empty)
+    </text>
+    <line_editor
+      control_name="SearchURLDebug"
+      enabled_control="DebugSearch"
+      border_style="line"
+      border_thickness="1"
+      follows="left|top"
+      font="SansSerif"
+      height="19"
+      layout="topleft"
+      left="50"
+      max_length="4096"
+      name="search_url_debug"
+      top_pad="5"
+      width="270" />
+    <button
+    enabled_control="DebugSearch"
+    follows="left|top"
+    height="19"
+    label="Clear"
+    label_selected="Clear"
+    layout="topleft"
+    left_pad="2"
+    name="clear_search_url_debug"
+    top_delta="0"
+    width="50">
+      <button.commit_callback
+      function="Pref.ClearDebugSearchURL" />
+    </button>
+    <button
+    enabled_control="DebugSearch"
+    follows="left|top"
+    height="19"
+    label="Pick"
+    layout="topleft"
+    left_pad="2"
+    name="pick_current_search_url"
+    top_delta="0"
+    width="50">
+      <button.commit_callback
+        function="Pref.PickDebugSearchURL" />
+    </button>
+  </panel>
 </panel>

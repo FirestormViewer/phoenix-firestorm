@@ -308,16 +308,28 @@ class LLPanelPreferenceOpensim : public LLPanelPreference
 {
 public:
 	LLPanelPreferenceOpensim();
+// <FS:AW  grid management>
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void apply();
+	/*virtual*/ void cancel();
 
 protected:
-	void onClickAddGrid();
-	void onClickClearGrid();
 
+	void onClickAddGrid();
+	void addedGrid(bool success);
+	void onClickClearGrid();
+	void onClickRefreshGrid();
+	void onClickRemoveGrid();
+	bool removeGridCB(const LLSD& notification, const LLSD& response);
+// </FS:AW  grid management>
 // <FS:AW  opensim search support>
 	void onClickClearDebugSearchURL();
 	void onClickPickDebugSearchURL();
 // </FS:AW  opensim search support>
 
+	void refreshGridList(bool success = true);
+	LLScrollListCtrl* mGridListControl;
+// 	boost::signals2::connection mGridListChanged;
 };
 // </FS:AW  opensim preferences>
 #endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>

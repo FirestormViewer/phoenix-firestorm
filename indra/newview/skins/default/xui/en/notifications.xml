@@ -8211,7 +8211,8 @@ You died and have been teleported to your home location.
 Are you sure you want to clear the debug search url?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
+     ignoretext="Confirm clearing debug search url"
+     name="okcancelignore"
      notext="Cancel"
      yestext="OK"/>
   </notification>
@@ -8222,11 +8223,26 @@ Are you sure you want to clear the debug search url?
 Are you sure you want to pick the current search url as debug search url?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
+     ignoretext="Confirm picking debug search url"
+     name="okcancelignore"
      notext="Cancel"
      yestext="OK"/>
   </notification>
 <!-- </FS:AW>  opensim search support-->
+<!-- <FS:AW  grid management-->
+  <notification
+   icon="alertmodal.tga"
+   name="ConfirmRemoveGrid"
+   type="alertmodal">
+Are you sure you want to remove [REMOVE_GRID] from the grid list?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Confirm removing grids"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+<!-- </FS:AW  grid management-->
 
   <notification
      icon="notifytip.tga"

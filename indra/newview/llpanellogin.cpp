@@ -120,7 +120,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	mLogoImage(),
 	mCallback(callback),
 	mCallbackData(cb_data),
-	mGridEntries(0),
 	mListener(new LLPanelLoginListener(this))
 {
 	setBackgroundVisible(FALSE);
@@ -345,15 +344,6 @@ void LLPanelLogin::draw()
 	}
 	gGL.popMatrix();
 // <AW: opensim>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	if(mGridEntries != LLGridManager::getInstance()->mGridEntries)
-	{
-		mGridEntries = LLGridManager::getInstance()->mGridEntries;
-		updateServerCombo();
-	}
-
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-
 	std::string login_page = LLGridManager::getInstance()->getLoginPage();
  	if(mLoginPage != login_page)
 	{
@@ -1109,7 +1099,6 @@ void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 	}
 }
 
-// <AW: opensim>
 void LLPanelLogin::updateServer()
 {
 	try 
@@ -1132,8 +1121,13 @@ void LLPanelLogin::updateServer()
 		// do nothing
 	}
 }
-// </AW: opensim>
 
+// <FS:AW  grid management>
+void LLPanelLogin::gridListChanged(bool success)
+{
+	updateServerCombo();
+}
+// </FS:AW  grid management>
 
 void LLPanelLogin::updateServerCombo()
 {
@@ -1141,6 +1135,9 @@ void LLPanelLogin::updateServerCombo()
 	{
 		return;	
 	}
+// <FS:AW  grid management>
+	LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
+// </FS:AW  grid management>
 	// We add all of the possible values, sorted, and then add a bar and the current value at the top
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");	
 	server_choice_combo->removeall();
@@ -1212,7 +1209,7 @@ void LLPanelLogin::updateSavedLoginsCombo()
 					add_grid= true;
 				}
 #ifdef HAS_OPENSIM_SUPPORT
-				else
+				else if (!grid_label.empty())
 				{
 					name.append(" @ " + grid_label);
 					add_grid= true;
