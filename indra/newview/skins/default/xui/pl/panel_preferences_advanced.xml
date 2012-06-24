@@ -10,13 +10,5 @@
 	<check_box label="Zezwól na logowanie do innych siatek (nie wszystkie będą obsługiwać Firestorma)" name="show_grid_selection_check"/>
 	<check_box label="Pokaż menu Zaawansowane (na własną odpowiedzialność!)" name="show_advanced_menu_check"/>
 	<check_box label="Pokaż menu Programista" name="show_develop_menu_check"/>
-	<panel name="debug_search_panel">
-		<check_box label="Debuguj szukanie" name="DebugSearch"/>
-		<text name="search_url_debug_text">
-			Nadpisz obecny URL szukania: (puste = brak nadpisywania)
-		</text>
-		<button label="Czyść" label_selected="Czyść" name="clear_search_url_debug"/>
-		<button label="Ustaw" name="pick_current_search_url"/>
-	</panel>
 	<button label="Resetuj wszystkie ustawienia" label_selected="Resetuj wszystkie ustawienia..." name="clear_settings"/>
 </panel>

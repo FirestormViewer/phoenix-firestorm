@@ -99,7 +99,7 @@
             Nowe słowo autokor. (cmd list|bad|good)
         </text>
         <text name="FSCmdLineDrawDistance_txt">
-            Zmiana pola widzenia (użycie: cmd metry)
+            Zmiana pola widzenia (cmd metry)
         </text>
         <text name="FSCmdLineBandWidth_txt">
             Maks. przepustow. (użycie: cmd kbps)
