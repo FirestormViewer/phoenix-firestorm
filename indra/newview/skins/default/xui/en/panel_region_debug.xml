@@ -210,11 +210,11 @@
     <button
      follows="left|top"
      height="20"
-     label="Delay Restart"
+     label="Cancel Restart"
      layout="topleft"
      left="10"
      name="cancel_restart_btn"
-     tool_tip="Delay region restart by one hour"
+     tool_tip="Cancel region restart"
      top_pad="10"
      width="130" />
 </panel>
