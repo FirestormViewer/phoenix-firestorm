@@ -25,8 +25,6 @@
  * $/LicenseInfo$
  */
 
-#ifndef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-
 #include "llviewerprecompiledheaders.h"
 
 #include "llslurl.h"
@@ -492,4 +490,3 @@ std::string LLSLURL::asString() const
     return result.str();
 }
 
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
