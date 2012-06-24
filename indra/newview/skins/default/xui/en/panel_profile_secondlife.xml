@@ -203,7 +203,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="left|top|right"
          bevel_style="in" />
-        <text
+        <text_editor
          top_delta="2"
          left_delta="2"
          right="-6"
@@ -211,7 +211,15 @@ KC: Use view_border's around text_editor's due to text render issues with border
          layout="topleft"
          follows="left|top|right"
          name="register_date"
-         max_length="254" />
+         max_length="254"
+         bg_visible="false"
+         border_visible="false"
+         allow_scroll="false"
+         h_pad="2"
+         v_pad="0"
+         read_only="true"
+         translate="false"
+         word_wrap="true"/>
 
         <text
          top_pad="7"
