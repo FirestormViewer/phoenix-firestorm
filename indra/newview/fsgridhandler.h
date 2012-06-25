@@ -120,7 +120,7 @@ public:
 	void initSystemGrids();
 	void initGridList(std::string grid_file, AddState state);
 	void initCmdLineGrids();
-
+	void resetGrids();
 	// grid list management
  	bool isReadyToLogin(){return mReadyToLogin;}
 
@@ -139,7 +139,6 @@ public:
 	void getGridData(const std::string& grid, LLSD &grid_info);
 	void getGridData(LLSD &grid_info) { getGridData(mGrid, grid_info); }
 
-	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
 // </AW opensim>	
 
 	// current grid management
@@ -230,7 +229,9 @@ private:
 	void incResponderCount(){++mResponderCount;}
 	void decResponderCount(){--mResponderCount;}
 	void gridInfoResponderCB(GridEntry* grid_data);
-	
+
+	void setGridData(const LLSD &grid_info) { mGridList[mGrid]=grid_info; }
+
 protected:
 
 	void updateIsInProductionGrid();
@@ -248,6 +249,7 @@ protected:
 	std::string mGridFile;
 	LLSD mGridList;
 // <AW opensim>
+	LLSD mConnectedGrid;
 	bool mIsInSLMain;
 	bool mIsInSLBeta;
 	bool mIsInOpenSim;

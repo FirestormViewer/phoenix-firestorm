@@ -2803,8 +2803,7 @@ void LLPanelPreferenceOpensim::apply()
 
 void LLPanelPreferenceOpensim::cancel()
 {
-	// AW: commented out for avoiding FIRE-6738
-	//LLGridManager::getInstance()->initGrids();
+	LLGridManager::getInstance()->resetGrids();
 }
 
 void LLPanelPreferenceOpensim::onClickAddGrid()
@@ -2846,9 +2845,18 @@ void LLPanelPreferenceOpensim::onClickRemoveGrid()
 {
 	std::string grid = mGridListControl->getSelectedValue();
 	LLSD args;
-	args["REMOVE_GRID"] = grid;
-	LLSD payload = grid;
-	LLNotificationsUtil::add("ConfirmRemoveGrid", args, payload, boost::bind(&LLPanelPreferenceOpensim::removeGridCB, this,  _1, _2));
+
+	if (grid != LLGridManager::getInstance()->getGrid())
+	{
+		args["REMOVE_GRID"] = grid;
+		LLSD payload = grid;
+		LLNotificationsUtil::add("ConfirmRemoveGrid", args, payload, boost::bind(&LLPanelPreferenceOpensim::removeGridCB, this,  _1, _2));
+	}
+	else
+	{
+		args["REMOVE_GRID"] = LLGridManager::getInstance()->getGridLabel();
+		LLNotificationsUtil::add("CanNotRemoveConnectedGrid", args);
+	}
 }
 
 bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD& response)
@@ -2885,17 +2893,25 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 		{
 			LLURI login_uri = LLURI(LLGridManager::getInstance()->getLoginURI(grid_iter->first));
 			LLSD element;
+			const std::string connected_grid = LLGridManager::getInstance()->getGrid();
+
+			std::string style = "NORMAL";
+			if (connected_grid == grid_iter->first)
+			{
+				style = "BOLD";
+			}
+
 			int col = 0;
 			element["id"] = grid_iter->first;
 			element["columns"][col]["column"] = "grid_label";
 			element["columns"][col]["value"] = grid_iter->second;
 			element["columns"][col]["font"]["name"] = "SANSSERIF";
-			element["columns"][col]["font"]["style"] = "SMALL";
+			element["columns"][col]["font"]["style"] = style;
 			col++;
 			element["columns"][col]["column"] = "login_uri";
 			element["columns"][col]["value"] = login_uri.authority();
 			element["columns"][col]["font"]["name"] = "SANSSERIF";
-			element["columns"][col]["font"]["style"] = "SMALL";
+			element["columns"][col]["font"]["style"] = style;
 	
 			mGridListControl->addElement(element);
 		}

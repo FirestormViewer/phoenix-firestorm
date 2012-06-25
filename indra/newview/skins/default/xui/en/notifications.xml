@@ -8242,6 +8242,18 @@ Are you sure you want to remove [REMOVE_GRID] from the grid list?
      notext="Cancel"
      yestext="OK"/>
   </notification>
+  <notification
+   icon="alertmodal.tga"
+   name="CanNotRemoveConnectedGrid"
+   type="alertmodal">
+You can not remove [REMOVE_GRID] while being connected to it.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Warn that the grid connected to can not be removed."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
 <!-- </FS:AW  grid management-->
 
   <notification

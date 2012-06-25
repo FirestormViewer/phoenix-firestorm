@@ -3560,5 +3560,9 @@ Soll die aktuelle Such-URL wirklich als Debug-Such-URL gesetzt werden?
 Soll [REMOVE_GRID] wirklich aus der Grid-Liste entfernt werden?
 		<usetemplate name="okcancelignore" ignoretext="Bestätigen, wenn Grids entfernt werden" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="CanNotRemoveConnectedGrid">
+[REMOVE_GRID] kann nicht aus der Grid-Liste entfernt solange eine Verbindung besteht.
+		<usetemplate name="okcancelignore" ignoretext="Warnung beim Versuch, ein verbundenes Grid zu entfernen." notext="Abbrechen" yestext="OK"/>
+	</notification>
 <!-- </FS:AW  grid management-->
 </notifications>

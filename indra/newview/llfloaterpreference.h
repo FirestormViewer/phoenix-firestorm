@@ -329,7 +329,6 @@ protected:
 
 	void refreshGridList(bool success = true);
 	LLScrollListCtrl* mGridListControl;
-// 	boost::signals2::connection mGridListChanged;
 };
 // </FS:AW  opensim preferences>
 #endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>

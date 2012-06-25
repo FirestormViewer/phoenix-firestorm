@@ -29,6 +29,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#include "lllogininstance.h"        // to check if logged in yet
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
 #include "llviewernetwork.h"
@@ -184,17 +185,24 @@ LLGridManager::LLGridManager()
 	mCommandLineDone(false),
 	mResponderCount(0)
 {
+	mGrid.clear() ;
 // <FS:AW  grid management>
-//	mGrid.clear() ;
 //	mGridList = LLSD();
 // <FS:AW  grid management>
 }
 
+void LLGridManager::resetGrids()
+{
+	initGrids();
+	if (!mGrid.empty())
+	{
+		setGridData(mConnectedGrid);
+	}
+}
 
 void LLGridManager::initGrids()
 {
 // <FS:AW  grid management>
-	mGrid.clear() ;
 	mGridList = LLSD();
 // <FS:AW  grid management>
 
@@ -314,17 +322,20 @@ void LLGridManager::initCmdLineGrids()
 //									//and  addGrid recurses here.
 	// NOTE: This isn't fixed in llviewernetwork because it seems upstream 
 	// is going to remove the commandline loginuri soon anyway.
+
+	std::string grid;
+
 	std::string cmd_line_login_uri = gSavedSettings.getString("CmdLineLoginURI1");
  	if (!cmd_line_login_uri.empty())
 	{
-		mGrid = cmd_line_login_uri;
+		grid = cmd_line_login_uri;
 
 		// clear in case setGridChoice tries to addGrid and addGrid recurses here;
 		// however this only happens refetching all grid infos.
 		gSavedSettings.setString("CmdLineLoginURI1",std::string());
-		LL_DEBUGS("GridManager") << "Setting grid from --loginuri " << mGrid << LL_ENDL;
+		LL_DEBUGS("GridManager") << "Setting grid from --loginuri " << grid << LL_ENDL;
 //</FS:AW fix commandline loginuri (partial fix of FIRE-3448)-->
-		setGridChoice(mGrid);
+		setGridChoice(grid);
 		return;
 	}
 
@@ -335,14 +346,14 @@ void LLGridManager::initCmdLineGrids()
 		// try to find the grid assuming the command line parameter is
 		// the case-insensitive 'label' of the grid.  ie 'Agni'
 		gSavedSettings.setString("CmdLineGridChoice",std::string());
-		mGrid = getGridByGridNick(cmd_line_grid);
+		grid = getGridByGridNick(cmd_line_grid);
 
-		if(mGrid.empty())
+		if(grid.empty())
 		{
-			mGrid = getGridByLabel(cmd_line_grid);
+			grid = getGridByLabel(cmd_line_grid);
 
 		}
-		if(mGrid.empty())
+		if(grid.empty())
 		{
 			// if we couldn't find it, assume the
 			// requested grid is the actual grid 'name' or index,
@@ -350,7 +361,7 @@ void LLGridManager::initCmdLineGrids()
 			// linden hosted grids)
 			// If the grid isn't there, that's ok, as it will be
 			// automatically added later.
-			mGrid = cmd_line_grid;
+			grid = cmd_line_grid;
 		}
 		
 	}
@@ -360,15 +371,15 @@ void LLGridManager::initCmdLineGrids()
 		// if a grid was not passed in via the command line, grab it from the CurrentGrid setting.
 		// if there's no current grid, that's ok as it'll be either set by the value passed
 		// in via the login uri if that's specified, or will default to maingrid
-		mGrid = gSavedSettings.getString("CurrentGrid");
-		LL_DEBUGS("GridManager") << "Setting grid from last selection " << mGrid << LL_ENDL;
+		grid = gSavedSettings.getString("CurrentGrid");
+		LL_DEBUGS("GridManager") << "Setting grid from last selection " << grid << LL_ENDL;
 	}
 	
-	if(mGrid.empty())
+	if(grid.empty())
 	{
 		// no grid was specified so default to maingrid
 		LL_DEBUGS("GridManager") << "Setting grid to MAINGRID as no grid has been specified " << LL_ENDL;
-		mGrid = MAINGRID;
+		grid = MAINGRID;
 	}
 	
 	// generate a 'grid list' entry for any command line parameter overrides
@@ -376,19 +387,19 @@ void LLGridManager::initCmdLineGrids()
 	// any grid list entries with.
 
 	
-	if(mGridList.has(mGrid))
+	if(mGridList.has(grid))
 	{
-// 		grid_entry->grid = mGridList[mGrid];
-		LL_DEBUGS("GridManager") << "Setting commandline grid " << mGrid << LL_ENDL;
-		setGridChoice(mGrid);
+// 		grid_entry->grid = mGridList[grid];
+		LL_DEBUGS("GridManager") << "Setting commandline grid " << grid << LL_ENDL;
+		setGridChoice(grid);
 	}
 	else
 	{
-		LL_DEBUGS("GridManager") << "Trying to fetch commandline grid " << mGrid << LL_ENDL;
+		LL_DEBUGS("GridManager") << "Trying to fetch commandline grid " << grid << LL_ENDL;
 		GridEntry* grid_entry = new GridEntry;
 		grid_entry->set_current = true;
 		grid_entry->grid = LLSD::emptyMap();	
-		grid_entry->grid[GRID_VALUE] = mGrid;
+		grid_entry->grid[GRID_VALUE] = grid;
 
 		// add the grid with the additional values, or update the
 		// existing grid if it exists with the given values
@@ -858,10 +869,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 
 			if(is_current)
 			{
-				mGrid = grid;
-	
-				LL_DEBUGS("GridManager") << "Selected grid is " << mGrid << LL_ENDL;		
-				setGridChoice(mGrid);
+				LL_DEBUGS("GridManager") << "Selected grid is " << grid << LL_ENDL;		
+				setGridChoice(grid);
 			}
 // <FS:AW  grid management>
 			if(list_changed)
@@ -998,7 +1007,11 @@ std::map<std::string, std::string> LLGridManager::getKnownGrids(bool favorite_on
 
 void LLGridManager::setGridChoice(const std::string& grid)
 {
-	if(grid.empty()) return;
+	if (grid.empty()) return;
+	if (LLLoginInstance::getInstance()->authSuccess())
+	{
+		return;
+	}
 
 	// Set the grid choice based on a string.
 	// The string can be:
@@ -1052,7 +1065,8 @@ void LLGridManager::setGridChoice(const std::string& grid)
 	else
 	{
 		LL_DEBUGS("GridManager")<< "setting grid choice: " << grid << LL_ENDL;
-		mGrid = grid;
+		mGrid = grid;// AW: don't set mGrid anywhere else
+		getGridData(mConnectedGrid);
 		gSavedSettings.setString("CurrentGrid", grid); 
 		updateIsInProductionGrid();
 		mReadyToLogin = true;
