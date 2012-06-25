@@ -1135,9 +1135,11 @@ void LLPanelLogin::updateServerCombo()
 	{
 		return;	
 	}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // <FS:AW  grid management>
 	LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
 // </FS:AW  grid management>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	// We add all of the possible values, sorted, and then add a bar and the current value at the top
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");	
 	server_choice_combo->removeall();
