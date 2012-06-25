@@ -20,7 +20,7 @@
 		<text name="Photo:" value="Fotka:" />
 		<text name="status" value="Status Nieznany" />
         <text name="label" value="Żyje:" />
-		<text name="register_date" value="(ładowanie...)" />
+		<text_editor name="register_date" value="(ładowanie...)" />
         <text name="label2" value="Konto:" />
         <text name="Groups:" value="Grupy:" />
         <button name="group_invite" tool_tip="Zaproś do grupy" />

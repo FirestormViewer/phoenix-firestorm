@@ -3238,15 +3238,19 @@ W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infoh
 	</global>
 	<notification name="ConfirmClearDebugSearchURL">
 		Na pewno chcesz wyczyścić debugowany URL szukania?
-		<usetemplate name="okcancelbuttons" ignoretext="Czyszczenie debugowanego URL szukania" notext="Anuluj" yestext="OK"/>
+		<usetemplate name="okcancelignore" ignoretext="Czyszczenie debugowanego URL szukania" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmPickDebugSearchURL">
 		Na pewno chcesz ustawić obecny URL szukania jako debugowany URL szukania?
-		<usetemplate name="okcancelbuttons" ignoretext="Potwierdzenie ustawiania debugowanego URL szukania" notext="Anuluj" yestext="OK"/>
+		<usetemplate name="okcancelignore" ignoretext="Potwierdzenie ustawiania debugowanego URL szukania" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmRemoveGrid">
 		Na pewno chcesz usunąć [REMOVE_GRID] z listy siatek?
 		<usetemplate ignoretext="Potwierdzenie usuwania siatki z listy siatek" name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="CanNotRemoveConnectedGrid">
+		Nie możesz usunąć siatki [REMOVE_GRID], gdy jesteś z nią połączony/a.
+		<usetemplate ignoretext="Ostrzeżenie przed usuwaniem siatki z aktywnym połączeniem" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PhoenixAutoReplace">
 		&apos;[BEFORE]&apos; automatycznie zamieniony na &apos;[REPLACEMENT]&apos;

@@ -33,5 +33,5 @@
 	<text name="label_restart_delay">
 		Sekundy:
 	</text>
-	<button label="Opóźnij restart" name="cancel_restart_btn" tool_tip="Opóźnij restart Regionu o godzinę"/>
+	<button label="Anuluj restart" name="cancel_restart_btn" tool_tip="Anuluj restart Regionu"/>
 </panel>
