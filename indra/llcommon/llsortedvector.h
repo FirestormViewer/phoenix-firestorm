@@ -34,7 +34,7 @@ class LLSortedVector
 
 	template< typename T > bool isEqual( std::type_info const* aLHS, std::type_info const* aRHS )
 	{	return *aLHS == *aRHS;	}
-	// </FS:NS>
+	// </FS:ND>
 
 public:
     typedef LLSortedVector<KEY, VALUE> self;
