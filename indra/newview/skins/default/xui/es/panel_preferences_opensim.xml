@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Opensim" name="opensim_panel">
+	<panel name="grid_management_panel">
+		<text name="add_grid_text">
+			Añadir nueva red
+		</text>
+		<button label="Limpiar" label_selected="Limpiar" name="clear_grid"/>
+		<button label="Aplicar" name="apply_new_grid"/>
+		<text name="add_grid_text">
+			Gestionar redes
+		</text>
+		<scroll_list name="grid_list">
+			<scroll_list.columns label="Nombre" name="grid_label"/>
+			<scroll_list.columns label="Login URI" name="login_uri"/>
+		</scroll_list>
+		<button label="Actualizar" name="refresh_grid"/>
+		<button label="Eliminar" name="remove_grid"/>
+	</panel>
+	<panel name="debug_search_panel">
+		<check_box label="Búsqueda de depuración" name="DebugSearch"/>
+		<text name="search_url_debug_text">
+			Substituir la actual URL de búsqueda (si no está vacío):
+		</text>
+		<button label="Limpiar" label_selected="Limpiar" name="clear_search_url_debug"/>
+		<button label="Elegir" name="pick_current_search_url"/>
+	</panel>
+</panel>

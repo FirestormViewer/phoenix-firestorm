@@ -38,5 +38,5 @@
 	<text name="label_restart_delay" width="70">
 		Segundos:
 	</text>
-	<button label="Retrasar el reinicio" name="cancel_restart_btn" tool_tip="Retrasar una hora el reinicio de la región"/>
+	<button label="Cancelar el reinicio" name="cancel_restart_btn" tool_tip="Cancelar el reinicio de la región"/>
 </panel>

@@ -19,5 +19,6 @@
 		<panel label="Skins" name="skins"/>
 		<panel label="Reporte de fallos" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
+		<panel label="Opensim" name="opensim"/>
 	</tab_container>
 </floater>

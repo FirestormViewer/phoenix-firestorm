@@ -61,10 +61,10 @@
 			Pulsa para:
 		</text>
 		<combo_box name="clickaction">
-			<combo_box.item label="Tocarlo (por defecto)" name="Touch/grab(default)"/>
-			<combo_box.item label="Sentarme en el objeto" name="Sitonobject"/>
-			<combo_box.item label="Comprar el objeto" name="Buyobject"/>
-			<combo_box.item label="Pagar el objeto" name="Payobject"/>
+			<combo_box.item label="Tocarlo" name="Touch/grab(default)"/>
+			<combo_box.item label="Sentarme" name="Sitonobject"/>
+			<combo_box.item label="Comprar" name="Buyobject"/>
+			<combo_box.item label="Pagar" name="Payobject"/>
 			<combo_box.item label="Abrir" name="Open"/>
 		</combo_box>
 		<panel name="perms_inv">

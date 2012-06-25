@@ -496,6 +496,12 @@ El objeto debe de haber sido borrado o estar fuera de alcance (&apos;out of rang
 		</url>
 		<usetemplate ignoretext="El hardware de mi ordenador no está admitido" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
+	<notification name="IntelOldDriver">
+		Probablemente hay un nuevo controlador para tu chip de gráficos. Actualizar los controladores gráficos puede mejorar sustancialmente el rendimiento.
+
+¿Quieres visitar [_URL] para comprobar la disponibilidad de nuevos controladores?
+		<usetemplate ignoretext="Mi controlador de gráficos está obsoleto" name="okcancelignore" notext="No" yestext="Sí"/>
+	</notification>
 	<notification name="UnknownGPU">
 		Tu sistema usa una tarjeta gráfica que [APP_NAME] no reconoce.
 Suele suceder con hardware nuevo que todavía no ha sido probado con [APP_NAME].  Probablemente todo irá bien, pero puede que tengas que ajustar tus configuraciones gráficas.
@@ -2710,16 +2716,13 @@ Del objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME]?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Un objeto de nombre &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, propiedad de &apos;[NAME]&apos;, quiere:
+		Un objeto de nombre &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, solicita acceso total a tu cuenta de dólares Linden. Si le permites el acceso, puede retirar fondos de tu cuenta en cualquier momento, o vaciarla completamente sin advertencia alguna.:
 
-[QUESTIONS]
-Si no confias en este objeto y en su creador, deberías rehusar esta petición.
+Este tipo de peticiones no suelen ser legítimas. No permitas el acceso si no estás totalmente seguro de por qué desea acceder a tu cuenta.
 
-¿Autorizar esta petición?
 		<form name="form">
 			<button name="Grant" text="Autorizar"/>
 			<button name="Deny" text="Denegar"/>
-			<button name="Details" text="Detalles..."/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">
@@ -3217,11 +3220,19 @@ También puedes buscar en el Mapa lugares marcados como &quot;Puntos de Informac
 	</global>
 	<notification name="ConfirmClearDebugSearchURL">
 		¿Seguro que quieres limpiar la URL de búsqueda de depuración?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Confirmar limpieza de URL de búsqueda de depuración" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmPickDebugSearchURL">
 		¿Seguro que quieres utilizar la URL de búsqueda actual como URL de búsqueda de depuración?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+		<usetemplate ignoretext="Confirmar la selección de URL de búsqueda de depuración" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="ConfirmRemoveGrid">
+		¿Seguro que quieres eliminar [REMOVE_GRID] de la lista de redes?
+		<usetemplate ignoretext="Confirmar la eliminación de redes" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="CanNotRemoveConnectedGrid">
+		No puedes eliminar la red [REMOVE_GRID] mientras estás conectado/a a ella.
+		<usetemplate ignoretext="Advertir que la red en uso no puede ser eliminada." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PhoenixAutoReplace">
 		&apos;[BEFORE]&apos; ha sido automáticamente reemplazada por &apos;[REPLACEMENT]&apos;

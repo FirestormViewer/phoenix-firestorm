@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map" title="">
 	<floater.string name="ToolTipMsg">
-		[AGENT][REGION](Haz doble clic para abrir el mapa, mayús. y arrastra para obtener una panorámica)
+		[AGENT][REGION] (Doble clic para abrir el Mapa, mayús. y arrastrar para obtener panorámica)
 	</floater.string>
 	<floater.string name="AltToolTipMsg">
-		[REGION](Haz doble clic para teleportarte, mayús. y arrastra para obtener una panorámica)
+		[REGION] (Doble clic para teleportarte, mayús. y arrastrar para obtener panorámica)
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		Minimapa
