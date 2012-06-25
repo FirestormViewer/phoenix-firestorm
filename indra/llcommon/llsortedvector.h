@@ -27,6 +27,15 @@
 template <typename KEY, typename VALUE>
 class LLSortedVector
 {
+	// <FS:ND> FIRE-6602 compare std::type_info via std::type_info::operator== and don't compare by pointer value.
+	// pointer value can be different even for same type_info.
+	template< typename T > bool isEqual( T const &aLHS, T const &aRHS )
+	{	return aLHS == aRHS; }
+
+	template< typename T > bool isEqual( std::type_info const* aLHS, std::type_info const* aRHS )
+	{	return *aLHS == *aRHS;	}
+	// </FS:NS>
+
 public:
     typedef LLSortedVector<KEY, VALUE> self;
     typedef KEY key_type;
@@ -74,7 +83,11 @@ public:
             // don't forget that push_back() invalidates 'found'
             return iterbool(mVector.begin() + index, true);
         }
-        if (found->first == pair.first)
+
+		// <FS:ND> FIRE-6602 Compare using std::type_info::operator==
+		// if (found->first == pair.first)
+		if( isEqual<key_type>( found->first, pair.first ) )
+		// </FS:ND>
         {
             return iterbool(found, false);
         }
@@ -99,7 +112,10 @@ public:
         iterator found = std::lower_bound(mVector.begin(), mVector.end(),
                                           value_type(key, mapped_type()),
                                           less<value_type>());
-        if (found == mVector.end() || found->first != key)
+		// <FS:ND> FIRE-6602 Compare using std::type_info::operator==
+		// if (found == mVector.end() || found->first != key)
+        if (found == mVector.end() || !isEqual<key_type>( found->first, key) )
+		// </FS:ND>
             return mVector.end();
         return found;
     }
