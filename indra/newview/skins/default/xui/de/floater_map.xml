@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Map" title="MINIKARTE">
 	<floater.string name="ToolTipMsg">
-		[AGENT][REGION] (Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+		[AGENT][REGION](Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
 	</floater.string>
 	<floater.string name="AltToolTipMsg">
-		[REGION] (Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+		[REGION](Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
 	</floater.string>
 	<floater.string name="mini_map_caption">
 		Minikarte

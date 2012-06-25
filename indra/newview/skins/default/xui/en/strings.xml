@@ -4037,8 +4037,8 @@ Try enclosing path to the editor with double quotes.
   <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   
   <!-- NetMap double click action tooltip messages -->
-  <string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION] (Double-click to open Map, shift-drag to pan)</string>
-  <string name="NetMapDoubleClickTeleportToolTipMsg">[REGION] (Double-click to teleport, shift-drag to pan)</string>
+  <string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Double-click to open Map, shift-drag to pan)</string>
+  <string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Double-click to teleport, shift-drag to pan)</string>
   <string name="NetMapDoubleClickNoActionToolTipMsg">[REGION]</string>
 
 </strings>

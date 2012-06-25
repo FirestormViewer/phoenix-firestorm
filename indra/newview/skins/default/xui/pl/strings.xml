@@ -4834,9 +4834,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Maks. przepustowość ustawiona na: [VALUE] kbps.
 	</string>
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION] (Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
+		[AGENT][REGION](Kliknij dwa razy by otworzyć Mapę, przeciągaj z shiftem by zmienić skalę)
 	</string>
 	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION] (Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
+		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
 	</string>
 </strings>

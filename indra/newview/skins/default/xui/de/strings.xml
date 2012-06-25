@@ -5279,10 +5279,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	
 	<!-- NetMap double click action tooltip messages -->
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">
-		[AGENT][REGION] (Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+		[AGENT][REGION](Doppelklicken, um Karte zu öffnen; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
 	</string>
 	<string name="NetMapDoubleClickTeleportToolTipMsg">
-		[REGION] (Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
+		[REGION](Doppelklicken, um zu teleportieren; Umschalt-Taste gedrückt halten und ziehen, um zu schwenken)
 	</string>
 	<string name="NetMapDoubleClickNoActionToolTipMsg">
 		[REGION]

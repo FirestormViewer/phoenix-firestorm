@@ -5199,6 +5199,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="UnknownRegion">(región desconocida)</string>
 	<string name="UnknownPosition">(posición desconocida)</string>
 	<string name="FSCmdLineRSP">Máximo ancho de banda establecido en: [VALUE]kbps.</string>
-	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION] (Doble clic para abrir el Mapa, mayús. y arrastrar para obtener panorámica)</string>
-	<string name="NetMapDoubleClickTeleportToolTipMsg">[REGION] (Doble clic para teleportarte, mayús. y arrastrar para obtener panorámica)</string>
+	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Doble clic para abrir el Mapa, mayús. y arrastrar para obtener panorámica)</string>
+	<string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Doble clic para teleportarte, mayús. y arrastrar para obtener panorámica)</string>
 </strings>
