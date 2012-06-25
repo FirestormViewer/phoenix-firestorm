@@ -43,13 +43,16 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}"
   # packages/lib/release directory to deal with autobuild packages that don't
   # provide (e.g.) lib/debug libraries.
   list(APPEND AUTOBUILD_LIBS_INSTALL_DIRS ${ARCH_PREBUILT_DIRS_RELEASE})
-  message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}, extending AUTOBUILD_LIBS_INSTALL_DIRS")
+
+#  message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}, extending AUTOBUILD_LIBS_INSTALL_DIRS")
+
 # <FS:Ansariel> Changed for Firestorm
 #endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
 # </FS:Ansariel> Changed for Firestorm
 
-message(STATUS "For ${CMAKE_BUILD_TYPE}, AUTOBUILD_LIBS_INSTALL_DIRS: ${AUTOBUILD_LIBS_INSTALL_DIRS}")
+#message(STATUS "For ${CMAKE_BUILD_TYPE}, AUTOBUILD_LIBS_INSTALL_DIRS: ${AUTOBUILD_LIBS_INSTALL_DIRS}")
+
 link_directories(${AUTOBUILD_LIBS_INSTALL_DIRS})
 
 endif( NOT STANDALONE ) # <FS:ND/> Don't add any autobuild dirs when building standalone
