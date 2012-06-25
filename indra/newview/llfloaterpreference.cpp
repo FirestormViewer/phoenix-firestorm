@@ -2803,7 +2803,8 @@ void LLPanelPreferenceOpensim::apply()
 
 void LLPanelPreferenceOpensim::cancel()
 {
-	LLGridManager::getInstance()->initGrids();
+	// AW: commented out for avoiding FIRE-6738
+	//LLGridManager::getInstance()->initGrids();
 }
 
 void LLPanelPreferenceOpensim::onClickAddGrid()
