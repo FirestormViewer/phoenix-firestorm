@@ -16184,10 +16184,11 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <string></string>
   </map>
-  <key>FSBoldGroupMods</key>
+  <!--<FS:HG> FS-1734 seperate name and text styles for moderator-->
+  <key>FSHighlightGroupMods</key>
   <map>
     <key>Comment</key>
-    <string>Boldify moderators' text in group chat</string>
+    <string>Enable group moderator message highlighting</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -16195,6 +16196,49 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>1</integer>
   </map>
+  <key>FSModNameStyle</key>
+  <map>
+    <key>Comment</key>
+    <string>
+      Font style settings for moderators' name if FSHighlightGroupMods enabled.
+      0=NORMAL
+      1=BOLD
+      2=ITALIC
+      3=BOLD ITALIC
+      4=UNDERLINE
+      5=BOLD UNDERLINE
+      6=ITALIC UNDERLINE
+      7=BOLD ITALIC UNDERLINE
+    </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <key>FSModTextStyle</key>
+  <map>
+    <key>Comment</key>
+    <string>
+      Font style settings for moderators' name if FSHighlightGroupMods enabled.
+      0=NORMAL
+      1=BOLD
+      2=ITALIC
+      3=BOLD ITALIC
+      4=UNDERLINE
+      5=BOLD UNDERLINE
+      6=ITALIC UNDERLINE
+      7=BOLD ITALIC UNDERLINE
+    </string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  <!--</FS:HG> FS-1734 seperate name and text styles for moderator-->
     <key>UseHTTPInventory</key>
     <map>
       <key>Comment</key>

@@ -963,12 +963,116 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		style_params.readonly_color(LLColor4::grey);
 	}
 	
+	//<FS:HG> FS-1734 seperate name and text styles for moderator
+
 	// Bold group moderators' chat -KC 
+	//if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
+	//{
+	//	// italics for emotes -Zi
+	//	style_params.font.style = (irc_me && gSavedSettings.getBOOL("EmotesUseItalic")) ? "ITALICBOLD" : "BOLD";
+	//}
+	bool moderator_style_active = false;
+	std::string moderator_name_style = "";
+	std::string moderator_txt_style = "";
+	U32 moderator_name_style_value = gSavedSettings.getU32("FSModNameStyle");
+	U32 moderator_txt_style_value = gSavedSettings.getU32("FSModTextStyle");
+
+	enum ModeratorOptions
+	{
+		NORMAL,
+		BOLD,
+		ITALIC,
+		BOLD_ITALIC,
+		UNDERLINE,
+		BOLD_UNDERLINE,
+		ITALIC_UNDERLINE,
+		BOLD_ITALIC_UNDERLINE
+	};
+
 	if (chat.mChatStyle == CHAT_STYLE_MODERATOR)
 	{
-		// italics for emotes -Zi
-		style_params.font.style = (irc_me && gSavedSettings.getBOOL("EmotesUseItalic")) ? "ITALICBOLD" : "BOLD";
+		moderator_style_active = true;
+
+		switch (moderator_name_style_value)
+		{
+			case NORMAL:
+				moderator_name_style = "NORMAL";
+				break;
+			case BOLD:
+				moderator_name_style = "BOLD";
+				break;
+			case ITALIC:
+				moderator_name_style = "ITALIC";
+				break;
+			case BOLD_ITALIC:
+				moderator_name_style = "BOLDITALIC";
+				break;
+			case UNDERLINE:
+				moderator_name_style = "UNDERLINE";
+				break;
+			case BOLD_UNDERLINE:
+				moderator_name_style = "BOLDUNDERLINE";
+				break;
+			case ITALIC_UNDERLINE:
+				moderator_name_style = "ITALICUNDERLINE";
+				break;
+			case BOLD_ITALIC_UNDERLINE:
+				moderator_name_style = "BOLDITALICUNDERLINE";
+				break;
+			default:
+				moderator_name_style = "NORMAL";
+				break;
+		}
+		style_params.font.style(moderator_name_style);
+
+		switch (moderator_txt_style_value)
+		{
+			case NORMAL:
+				moderator_txt_style = "NORMAL";
+				break;
+			case BOLD:
+				moderator_txt_style = "BOLD";
+				break;
+			case ITALIC:
+				moderator_txt_style = "ITALIC";
+				break;
+			case BOLD_ITALIC:
+				moderator_txt_style = "BOLDITALIC";
+				break;
+			case UNDERLINE:
+				moderator_txt_style = "UNDERLINE";
+				break;
+			case BOLD_UNDERLINE:
+				moderator_txt_style = "BOLDUNDERLINE";
+				break;
+			case ITALIC_UNDERLINE:
+				moderator_txt_style = "ITALICUNDERLINE";
+				break;
+			case BOLD_ITALIC_UNDERLINE:
+				moderator_txt_style = "BOLDITALICUNDERLINE";
+				break;
+			default:
+				moderator_txt_style = "NORMAL";
+				break;
+		}
+		style_params.font.style(moderator_txt_style);
+
+		if ( irc_me && gSavedSettings.getBOOL("EmotesUseItalic") )
+		{
+			if ( (ITALIC & moderator_name_style_value) != ITALIC )//HG: if ITALIC isn't one of the styles... add it
+			{
+				moderator_name_style += "ITALIC";
+				style_params.font.style(moderator_name_style);
+			}
+			if ( (ITALIC & moderator_txt_style_value) != ITALIC )
+			{
+				moderator_txt_style += "ITALIC";
+				style_params.font.style(moderator_txt_style);
+			}
+			style_params.font.style(moderator_txt_style);
+		}
 	}
+	//</FS:HG> FS-1734 seperate name and text styles for moderator
 
 	if (use_plain_text_chat_history)
 	{		
@@ -978,6 +1082,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			LLColor4 timestamp_color = LLUIColorTable::instance().getColor("ChatTimestampColor");
 			timestamp_style.color(timestamp_color);
 			timestamp_style.readonly_color(timestamp_color);
+			//<FS:HG> FS-1734 seperate name and text styles for moderator
+			if ( moderator_style_active )
+			{
+				timestamp_style.font.style(moderator_name_style);
+			}
+			//</FS:HG> FS-1734 seperate name and text styles for moderator			
 		}
         	// [FIRE-1641 : SJ]: Option to hide timestamps in nearby chat - only add timestamps when hide_timestamps_nearby_chat not TRUE
 		// mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getText().size() != 0, timestamp_style);
@@ -1067,6 +1177,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					}
 					else
 					{
+						//<FS:HG> FS-1734 seperate name and text styles for moderator
+						if ( moderator_style_active )
+						{
+							link_params.font.style(moderator_name_style);
+						}
+						//</FS:HG> FS-1734 seperate name and text styles for moderator	
 						mEditor->appendText(mDisplayName_Username, false, link_params);
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
@@ -1081,6 +1197,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					}
 					else
 					{
+						//<FS:HG> FS-1734 seperate name and text styles for moderator
+						if ( moderator_style_active )
+						{
+							link_params.font.style(moderator_name_style);
+						}
+						//</FS:HG> FS-1734 seperate name and text styles for moderator
 						mEditor->appendText(mDisplayName, false, link_params);
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
@@ -1095,6 +1217,12 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					}
 					else
 					{
+						//<FS:HG> FS-1734 seperate name and text styles for moderator
+						if ( moderator_style_active )
+						{
+							link_params.font.style(moderator_name_style);
+						}
+						//</FS:HG> FS-1734 seperate name and text styles for moderator
 						mEditor->appendText(chat.mFromName, false, link_params);
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name

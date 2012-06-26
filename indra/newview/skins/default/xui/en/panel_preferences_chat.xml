@@ -658,6 +658,7 @@
              width="400">
               Group Chat:
             </text>
+          <!--<FS:HG> FS-1734 seperate name and text styles for moderator--> 
             <check_box
              layout="topleft"
              follows="left|top"
@@ -665,9 +666,118 @@
              left="30"
              width="50"
              height="20"
-             control_name="FSBoldGroupMods"
-             name="FSBoldGroupMods"
-             label="Show group moderator messages in bold"/>
+             control_name="FSHighlightGroupMods"
+             name="FSHighlightGroupMods"
+             label="Enable group moderator message highlighting"/>
+            <text
+             name="Moderator Name Style"
+             layout="topleft"
+             follows="left|top"             
+             top_pad="3"
+             left="50"
+             height="16"
+             width="75">
+              Name Style:
+            </text>
+            <combo_box
+             control_name="FSModNameStyle"
+             layout="topleft"
+             follows="left|top"
+             height="20"             
+             left="130"
+             top="190"
+             min_value="0.0"
+             max_value="7.0" 
+             name="mod_name_style"
+             width="170">
+            <combo_box.item
+             label="NORMAL"
+             name="normal"
+             value="0" />
+            <combo_box.item
+             label="BOLD"
+             name="BOLD"
+             value="1" />
+            <combo_box.item
+             label="ITALIC"
+             name="ITALIC"
+             value="2" />
+            <combo_box.item
+             label="BOLD ITALIC"
+             name="BOLDITALIC"
+             value="3" />
+            <combo_box.item
+             label="UNDERLINE"
+             name="UNDERLINE"
+             value="4" />            
+            <combo_box.item
+             label="BOLD UNDERLINE"
+             name="BOLDUNDERLINE"
+             value="5" />
+            <combo_box.item
+             label="ITALIC UNDERLINE"
+             name="ITALICUNDERLINE"
+             value="6" />
+            <combo_box.item
+             label="BOLD ITALIC UNDERLINE"
+             name="BOLDITALICUNDERLINE"
+             value="7" />
+            </combo_box>
+            <text
+             name="Moderator Text Style"
+             layout="topleft"
+             follows="left|top"             
+             top_pad="3"
+             left="50"
+             height="16"
+             width="75">
+              Text Style:
+            </text>
+            <combo_box
+             control_name="FSModTextStyle"
+             layout="topleft"
+             follows="left|top"
+             height="20"
+             left="130"
+             top="210"
+             min_value="0.0"
+             max_value="7.0" 
+             name="mod_text_style"
+             width="170">
+            <combo_box.item
+              label="NORMAL"
+              name="normal"
+              value="0" />
+            <combo_box.item
+              label="BOLD"
+              name="BOLD"
+              value="1" />
+            <combo_box.item
+              label="ITALIC"
+              name="ITALIC"
+              value="2" />
+            <combo_box.item
+              label="BOLD ITALIC"
+              name="BOLDITALIC"
+              value="3" />
+            <combo_box.item
+              label="UNDERLINE"
+              name="UNDERLINE"
+              value="4" />
+            <combo_box.item
+              label="BOLD UNDERLINE"
+              name="BOLDUNDERLINE"
+              value="5" />
+            <combo_box.item
+              label="ITALIC UNDERLINE"
+              name="ITALICUNDERLINE"
+              value="6" />
+            <combo_box.item
+              label="BOLD ITALIC UNDERLINE"
+              name="BOLDITALICUNDERLINE"
+              value="7" />
+            </combo_box>
+          <!--</FS:HG> FS-1734 seperate name and text styles for moderator-->
             <check_box
              layout="topleft"
              follows="left|top"
