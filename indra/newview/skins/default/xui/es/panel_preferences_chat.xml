@@ -99,7 +99,33 @@
 			<text name="group_enhancements">
 				Chat de grupo:
 			</text>
-			<check_box name="FSBoldGroupMods" label="Mostrar los mensajes de los moderadores en negrita"/>
+			<check_box name="FSHighlightGroupMods" label="Resaltar los mensajes de los moderadores de grupo"/>
+			<text name="Moderator Name Style">
+				Nombres:
+			</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Negrita" name="BOLD"/>
+				<combo_box.item label="Cursiva" name="ITALIC"/>
+				<combo_box.item label="Negrita y cursiva" name="BOLDITALIC"/>
+				<combo_box.item label="Subrayado" name="UNDERLINE"/>            
+				<combo_box.item label="Negrita y subrayado" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Cursiva y subrayado" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Negrita, cursiva y subrayado" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Mensajes:
+			</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Negrita" name="BOLD"/>
+				<combo_box.item label="Cursiva" name="ITALIC"/>
+				<combo_box.item label="Negrita y cursiva" name="BOLDITALIC"/>
+				<combo_box.item label="Subrayado" name="UNDERLINE"/>            
+				<combo_box.item label="Negrita y subrayado" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Cursiva y subrayado" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Negrita, cursiva y subrayado" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
 			<check_box name="FSMuteAllGroups" label="Desactivar TODOS los chats de grupo"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Cuando 'Recibir avisos del grupo' está desactivado, desactivar también el chat del grupo" left="30"/>
 			<text name="logging_enhancements">
