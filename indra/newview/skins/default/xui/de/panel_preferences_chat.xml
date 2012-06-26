@@ -123,7 +123,33 @@
             <text name="group_enhancements">
               Gruppenchat:
             </text>
-            <check_box name="FSBoldGroupMods" label="Gruppenmoderatoren in Fettschrift anzeigen"/>
+			<check_box name="FSHighlightGroupMods" label="Hervorhebung von Nachrichten von Gruppenmoderatoren aktivieren"/>
+			<text name="Moderator Name Style" width="110">
+				Schriftstil für Name:
+			</text>
+			<combo_box name="mod_name_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Fett" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Fett &amp; Kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Unterstreichen" name="UNDERLINE"/>
+				<combo_box.item label="Fett &amp; Unterstreichen" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv &amp; Unterstreichen" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Fett, Kursiv &amp; Unterstreichen" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style" width="110">
+				Schriftstil für Text:
+			</text>
+			<combo_box name="mod_text_style" width="180">
+				<combo_box.item label="Normal" name="normal"/>
+				<combo_box.item label="Fett" name="BOLD"/>
+				<combo_box.item label="Kursiv" name="ITALIC"/>
+				<combo_box.item label="Fett &amp; Kursiv" name="BOLDITALIC"/>
+				<combo_box.item label="Unterstreichen" name="UNDERLINE"/>
+				<combo_box.item label="Fett &amp; Unterstreichen" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Kursiv &amp; Unterstreichen" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Fett, Kursiv &amp; Unterstreichen" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
             <check_box name="FSMuteAllGroups" label="ALLE Gruppenchats deaktivieren"/>
             <check_box name="FSMuteGroupWhenNoticesDisabled" label="Deaktivierung von 'Gruppenmitteilungen erhalten' deaktiviert auch Gruppenchat"/>
 

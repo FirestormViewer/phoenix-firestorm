@@ -507,7 +507,7 @@ Weitere Informationen finden Sie auf [_URL].
 	</notification>
 	<notification name="IntelOldDriver">
 		Es gibt möglicherweise einen neuen Treiber für Ihren Grafikchip. Ein Update des Grafikkartentreibers kann die Leistung verbessern.
-		
+
 Die Seite [_URL] öffnen, um nach neuen Treibern zu prüfen?
 		<usetemplate name="okcancelignore" notext="Nein" yestext="Ja" ignoretext="Mein Grafikkartentreiber ist veraltet."/>
 	</notification>
