@@ -64,6 +64,14 @@
 			</text>
 			<check_box label="Abilita rotazione Minimappa" name="minimaprotate" tool_tip="Rotazione della minimappa quando fate girare il vostro avatar"/>
 			<check_box name="MiniMapChatRing" label="Visualizza il raggio della local chat sulla minimappa"/>
+			<text name="netmap_double_click_action_lbl" width="170">
+				Doppio click sulla Minimappa:
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="Nessuna Azione" name="0"/>
+				<combo_box.item label="Apri la mappa" name="1"/>
+				<combo_box.item label="Teleport al punto cliccato" name="2"/>
+			</combo_box>
 			<check_box name="FSAdvancedTooltips" label="Mostra informazioni estese in hovertips (stile Phoenix)"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Mostra il titolo del gruppo in hovertips"/>
 			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>

@@ -2,27 +2,27 @@
 <panel label="Interfaccia Utente" name="Display panel">
 <tab_container label="Interfaccia" name="tabs">
     <panel label="Generale" name="UI Prefs Panel">
-        <text name="UI Size:">
+        <text name="UI Size:" width="250">
             Grandezza UI (può avere effetti collaterali):
         </text>
-        <text name="HoverTipText" width="300">
+        <text name="HoverTipText" width="270">
             Suggerimenti al passaggio del mouse (Hovertip):
         </text>
         <check_box label="Hover Tips di base (Setta prima questa)" name="ShowHoverTips" tool_tip="Impostando questa spunta, passando col mouse su un'avatar o altre cose, compariranno dei suggerimenti. (Impostare questa per prima)" />
         <check_box label="Su tutti gli oggetti" tool_tip="Zaznacz, aby włączyć chmurki na obiektach w świecie" name="ShowAllHoverTips" />
         <check_box label="Sul terreno" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
-        <text name="tooltip_textbox" left="300">
+        <text name="tooltip_textbox" left="288">
            Tempo comparsa degli Hovertip:
         </text>
-        <slider label="Interfaccia:" name="ToolTipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sull'interfaccia. es. Quando posizionate il mouse su un pulsante della tool bar (Default: 0.7)." />
+        <slider label="Interfaccia:" label_width="60" name="ToolTipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sull'interfaccia. es. Quando posizionate il mouse su un pulsante della tool bar (Default: 0.7)." />
         <text name="ToolTipDelay_text">
             Secondi
         </text>
-        <slider label="Avatar:" name="AvatarInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Default: 0.35)." />
+        <slider label="Avatar:" label_width="60" name="AvatarInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Default: 0.35)." />
         <text name="AvatarInspectorTooltipDelay_text">
             Secondi
         </text>
-        <slider label="Oggetti:" name="ObjectInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Defaut: 0.35)." />
+        <slider label="Oggetti:" label_width="60" name="ObjectInspectorTooltipDelay_slider" tool_tip="Ritardo di comparsa degli hovertips quando si lascia il mouse sugli avatar. (Defaut: 0.35)." />
         <text name="ObjectInspectorTooltipDelay_text">
             Secondi
         </text>

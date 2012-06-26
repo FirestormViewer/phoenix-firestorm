@@ -94,29 +94,9 @@
         <slider name="FSBeamShapeScale" label="Scala:" tool_tip="Cambia la grandezza dell'indicatore a forma della Fenice di Firestorm" />
     </panel>
 	<!--Comandi brevi-->
-    <panel label="CmdLine" name="tab1-3">
+    <panel label="CmdLine 1" name="tab-CmdLine1">
         <check_box label="Abilita comandi dalla Chat" name="chat_cmd_toggle" />
-        <text name="FSCmdLinePos_txt">
-         Teleport nella Sim (usa: cmd x y z)
-        </text>
-        <text name="FSCmdLineGround_txt">
-         Teleport al suolo (usa: cmd)
-        </text>
-        <text name="FSCmdLineHeight_txt">
-         Teleport ad altezza (usa: cmd z)
-        </text>
-        <text name="FSCmdLineTeleportHome_txt">
-         Teleport a casa (usa: cmd)
-         </text>
-        <text name="FSCmdLineRezPlatform_txt">
-         Rezza una piattaforma (usa: cmd n)
-        </text>
-        <slider name="FSCmdLinePlatformSize" label="Grandezza" tool_tip="Quanto vuoi che sia grande la piattaforma che apparirà?" />
-        <text name="FSCmdLineMapTo_txt">
-           Teleport alla sim X (usa: cmd NomeSim)
-        </text>
-        <check_box label="Usa la posizione attuale" name="toggle" />
-        <text name="FSCmdLineCalc_txt">
+		<text name="FSCmdLineCalc_txt">
            Calcolatrice (usa: cmd calcolo)
         </text>
         <text name="FSCmdLineAutocorrect_txt">
@@ -125,19 +105,18 @@
         <text name="FSCmdLineDrawDistance_txt">
           Cambia Draw Distance (usa: cmd metri)
         </text>
-        <text name="FSCmdTeleportToCam_txt">
-          Teleport alla posizione della Cam (usa: cmd)
+		<text name="FSCmdLineBandWidth_txt">
+			Max. Bandwidth (usa: cmd kbps)
+		</text>
+        <text name="FSCmdLineRezPlatform_txt">
+         Rezza una piattaforma (usa: cmd n)
         </text>
+        <slider name="FSCmdLinePlatformSize" label="Grandezza" tool_tip="Quanto vuoi che sia grande la piattaforma che apparirà?" />
+        <check_box label="Usa la posizione attuale" name="toggle" />
+        
         <text name="FSCmdLineKeyToName_txt">
           Trova il nome tramite Key(usa: cmd key)
         </text>
-        <text name="FSCmdLineOfferTp_txt">
-          Offri Teleport ad Avatar (usa: cmd key)
-        </text>
-        <text name="FSCmdLineTP2_txt">
-          Teleport ad avatar (usa: cmd nome)
-        </text>
-        <line_editor tool_tip="Potrete effettuare un Teleport per raggiungere un'altro avatar anche scrivendo parzialmente il nome della persona a cui arrivare. Funziona meglio se si ha il radar aperto." name="FSCmdLineTP2" />
         <text name="FSCmdLineAO_txt">
           AO on/off (usa: cmd on/off)
         </text>
@@ -154,6 +133,37 @@
         </text>
       <line_editor tool_tip="Setta nella parcella e riproduce lo streaming audio da URL" name="FSCmdLineMusic" />
     </panel>
+	<panel label="CmdLine 2" name="tab-CmdLine2">
+		<check_box label="Abilita comandi dalla Chat" name="chat_cmd_toggle2"/>
+        <text name="FSCmdLinePos_txt">
+         Teleport nella Sim (usa: cmd x y z)
+        </text>
+        <text name="FSCmdLineGround_txt">
+         Teleport al suolo (usa: cmd)
+        </text>
+        <text name="FSCmdLineHeight_txt">
+         Teleport ad altezza (usa: cmd z)
+        </text>
+		<text name="FSCmdLineMapTo_txt">
+           Teleport alla sim X (usa: cmd NomeSim)
+        </text>
+        <check_box label="Usa la posizione attuale" name="toggle" />
+		
+		<text name="FSCmdTeleportToCam_txt">
+          Teleport alla posizione della Cam (usa: cmd)
+        </text>
+		<text name="FSCmdLineOfferTp_txt">
+          Offri Teleport ad Avatar (usa: cmd key)
+        </text>
+		<text name="FSCmdLineTP2_txt">
+          Teleport ad avatar (usa: cmd nome)
+        </text>
+        <line_editor tool_tip="Potrete effettuare un Teleport per raggiungere un'altro avatar anche scrivendo parzialmente il nome della persona a cui arrivare. Funziona meglio se si ha il radar aperto." name="FSCmdLineTP2" />
+        <text name="FSCmdLineTeleportHome_txt">
+         Teleport a casa (usa: cmd)
+        </text>
+	</panel>
+	
 	<!-- Cielo e mare-->
     <panel label="Windlight" name="WindlightTab">
         <check_box label="Cambia automaticamente le impostazioni ambiente della Sim/Parcella" name="UseEnvironmentFromRegionAlways" />

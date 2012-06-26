@@ -1,37 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ColorPicker" title="SELETTORE DI COLORE">
+<floater name="ColorPicker" title="FARBAUSWAHL">
+	<tab_container name="scale_type_container">
+		<panel name="RGB">
 	<text name="r_val_text">
 		Rosso:
 	</text>
-	<spinner left="84" name="rspin" width="47"/>
 	<text name="g_val_text">
 		Verde:
 	</text>
-	<spinner left="84" name="gspin" width="47"/>
 	<text name="b_val_text">
 		Blu:
 	</text>
-	<spinner left="84" name="bspin" width="47"/>
+		</panel>
+		<panel name="LSL">
+	<text name="r_val_text_lsl">
+		Rosso:
+	</text>
+	<text name="g_val_text_lsl">
+		Verde
+	</text>
+	<text name="b_val_text_lsl">
+		Blu:
+	</text>
+		</panel>
+		<panel name="Hex">
+			<text name="hex_text">
+				Codice Hex (#rrggbb):
+			</text>
+		</panel>
+	</tab_container>
 	<text name="h_val_text">
-		Tonalità:
+		Ton.:
 	</text>
-	<spinner left="84" name="hspin" width="47"/>
 	<text name="s_val_text">
-		Saturazione:
+		Satu.:
 	</text>
-	<spinner left="84" name="sspin" width="47"/>
 	<text name="l_val_text">
-		Luminosità:
+		Lum.:
 	</text>
-	<spinner left="84" name="lspin" width="47"/>
 	<check_box label="Applica adesso" name="apply_immediate"/>
-	<button left_delta="150" name="color_pipette"/>
-	<button label="Annulla" label_selected="Annulla" left_delta="55" name="cancel_btn"/>
+	<button left_pad="25" name="color_pipette"/>
+	<button label="Annulla" label_selected="Abbrechen" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
+	<button label="Copia LSL" label_selected="Copia LSL" name="copy_lsl_btn" tool_tip="Copia il codice del colore in formato vettoriale LSL-color &lt;r, g, b&gt;."/>
 	<text name="Current color:">
-		Colore attuale:
+		^ Colore Attuale ^
 	</text>
 	<text name="(Drag below to save.)">
-		(Trascina sotto per salvare)
+		(Tira giù per salvare)
 	</text>
 </floater>

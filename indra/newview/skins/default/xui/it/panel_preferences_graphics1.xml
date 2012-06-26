@@ -91,10 +91,15 @@
 			<button label="Reset" name="Defaults"/>
 			<button label="Avanzate" name="Advanced"/>
 		</panel>
+		<!--Impostazioni Hardware-->
 		<panel label="Impostazioni Hardware" name="Hardware Settings">
 			<check_box label="Filtro Anisotropico (Rallenta se attivo)" name="ani"/>
 			<check_box label="Attiva OpenGL Vertex Buffer Oggetti" name="vbo" tool_tip="Abilitare questo su computer con schede video di ultima generazione per aumentare le prestazioni della scheda video.  Tuttavia, gli hardware vecchi spesso hanno una scarsa implementazione dei VBOs e questo può provocare crash improvvisi quando questa opzione è abilitata."/>
 			<check_box label="Abilitare Streamed VBOs" name="vbo_stream" tool_tip="La disattivazione di questa opzione può migliorare le prestazioni quando le VBOs sono abilitate. La disattivazione a mostrato diversi miglioramenti su molte GPU AMD (es: Schede video ATI)"/>
+		<text name="tc label">
+			Attiva S3TC:
+		</text>
+		<check_box label="Abilita Compressione Texture (richiesto riavvio)" name="texture compression" tool_tip="Le Texture vengono compresse nella memoria video, questo consente per le Texture con una risoluzione alta di essere caricate più rapidamente perdendo qualità nel colore."/>
 			<text name="Antialiasing:">
 				Antialiasing:
 			</text>

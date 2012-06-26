@@ -20,8 +20,9 @@
 			</radio_group>
 			<check_box label="Simula la battitura tasti quando scrivi" name="play_typing_animation"/>
 			<check_box label="Simula animazione avatar (Quando gridi)" name="play_avatar_animations"/>
-			<check_box label="Riproduci suono scrittura quando gli altri scrivono in local chat" name="play_typing_sound"/>
+			<check_box label="Riproduci suono scrittura quando gli altri scrivono in Local Chat" name="play_typing_sound"/>
 			<check_box label="Invia notifica di scrittura agli altri quando scrivi in IM" name="FSSendTypingState"/>
+			<check_box label="Abilita completamento automatico delle gesture nella Local Chat" name="FSChatbarGestureAutoCompleteEnable"/>
 			<check_box label="Quando sono Offline invia gli IM in e-mail ([EMAIL])" name="send_im_to_email"/>
 			<check_box label="Rimuovi nome in evidenza in chat (Viewer 1 Style)" name="plain_text_chat_history"/>
 			<check_box label="Quando usi i nomi in evidenzia, mostra le mini icone" name="ShowChatMiniIcons"/>
@@ -110,7 +111,7 @@
 			</text>
 			<check_box name="FSConsoleClassicDrawMode" label="Usa un popups unico per la chat" tool_tip="Se spuntato quando verrà scritto in local chat vedrete un unico riquadro con tutti i messagi, altrimenti per ogni messaggio verrà fatto un popups diverso"/>
 			<check_box name="ChatFullWidth" label="Utilizzare tutto lo schermo per la chat console"/>
-			<spinner label="Dissolvi chat dopo:" name="fade_chat_time"/>
+			<spinner label="Dissolvi chat dopo:" name="fade_chat_time" label_width="110" width="150" />
 			<text name="text_box4">
 				(secondi)
 			</text>
