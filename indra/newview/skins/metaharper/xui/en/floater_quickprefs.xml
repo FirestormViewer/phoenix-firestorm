@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="267"
+    height="290"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -53,6 +53,37 @@
         top_delta="-2"
         width="150"
         label_width="3"/>
+    <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+    <text
+        type="string"
+        length="1"
+        follows="left|top"
+        height="10"
+        layout="topleft"
+        left="5"
+        name="Maximum bandwidth"
+        tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
+        mouse_opaque="false"
+        top_delta="20"
+        width="90">
+      Max Bandwidth:
+    </text>
+    <slider
+        can_edit_text="true"
+        control_name="ThrottleBandwidthKBPS"
+        decimal_digits="0"
+        follows="left|top"
+        height="15"
+        increment="100"
+        initial_value="500"
+        layout="topleft"
+        left_delta="99"
+        max_val="3000"
+        min_val="100"
+        name="max_bandwidth"
+        top_delta="-2"
+        width="144" />
+    <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
     <text
         type="string"
         length="1"
