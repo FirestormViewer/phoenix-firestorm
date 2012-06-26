@@ -495,6 +495,11 @@ void FSPanelProfile::fillCommonData(const LLAvatarData* avatar_data)
     std::string register_date = getString("RegisterDateFormat", args);
     getChild<LLUICtrl>("register_date")->setValue(register_date );
     getChild<LLUICtrl>("sl_description_edit")->setValue(avatar_data->about_text);
+    // <FS:LO> Force profile picture boost level up so the full image loads
+    LLViewerFetchedTexture* tx=LLViewerTextureManager::getFetchedTexture(avatar_data->image_id);
+    tx->setBoostLevel(LLViewerFetchedTexture::BOOST_UI);
+    tx->forceImmediateUpdate();
+    // </FS:LO>
     getChild<LLUICtrl>("2nd_life_pic")->setValue(avatar_data->image_id);
 
     if (getAvatarId() == gAgent.getID())
