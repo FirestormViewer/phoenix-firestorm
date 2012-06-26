@@ -4,6 +4,9 @@
         <text name="Draw Distance" tool_tip="Zmień swoje pole widzenia">
             Pole widzenia:
         </text>
+        <text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
+            Maks. przepust.:
+        </text>
         <text name="Particles" tool_tip="Ilość cząsteczek do renderowania">
             Maks. cząstek:
         </text>

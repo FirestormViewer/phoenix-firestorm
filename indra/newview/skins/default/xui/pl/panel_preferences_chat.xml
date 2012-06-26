@@ -96,7 +96,33 @@
 			<text name="group_enhancements">
 				Czat grupowy:
 			</text>
-			<check_box name="FSBoldGroupMods" label="Pogrubiaj wiadomości moderatorów grup"/>
+			<check_box name="FSHighlightGroupMods" label="Podświetlaj wiadomości moderatorów grup"/>
+			<text name="Moderator Name Style">
+				Styl imion:
+			</text>
+			<combo_box name="mod_name_style">
+				<combo_box.item label="Normalny" name="normal"/>
+				<combo_box.item label="Pogrubiony" name="BOLD"/>
+				<combo_box.item label="Pochylony" name="ITALIC"/>
+				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>            
+				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
+			<text name="Moderator Text Style">
+				Styl tekstu:
+			</text>
+			<combo_box name="mod_text_style">
+				<combo_box.item label="Normalny" name="normal"/>
+				<combo_box.item label="Pogrubiony" name="BOLD"/>
+				<combo_box.item label="Pochylony" name="ITALIC"/>
+				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>            
+				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
+				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
+				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>
+			</combo_box>
 			<check_box name="FSMuteAllGroups" label="Wyłącz WSZYSTKIE czaty grupowe"/>
 			<check_box name="FSMuteGroupWhenNoticesDisabled" label="Gdy opcja 'otrzymuj ogłoszenia grupy' jest wyłączona - wyłączaj także czat grupy"/>
 			<text name="logging_enhancements">
