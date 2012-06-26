@@ -684,42 +684,42 @@
              layout="topleft"
              follows="left|top"
              height="20"             
-             left="130"
-             top="190"
+             left_pad="10"
+             top_delta="-3"
              min_value="0.0"
              max_value="7.0" 
              name="mod_name_style"
              width="170">
             <combo_box.item
-             label="NORMAL"
+             label="Normal"
              name="normal"
              value="0" />
             <combo_box.item
-             label="BOLD"
+             label="Bold"
              name="BOLD"
              value="1" />
             <combo_box.item
-             label="ITALIC"
+             label="Italic"
              name="ITALIC"
              value="2" />
             <combo_box.item
-             label="BOLD ITALIC"
+             label="Bold &amp; Italic"
              name="BOLDITALIC"
              value="3" />
             <combo_box.item
-             label="UNDERLINE"
+             label="Underline"
              name="UNDERLINE"
-             value="4" />            
+             value="4" />
             <combo_box.item
-             label="BOLD UNDERLINE"
+             label="Bold &amp; Underline"
              name="BOLDUNDERLINE"
              value="5" />
             <combo_box.item
-             label="ITALIC UNDERLINE"
+             label="Italic &amp; Underline"
              name="ITALICUNDERLINE"
              value="6" />
             <combo_box.item
-             label="BOLD ITALIC UNDERLINE"
+             label="Bold, Italic &amp; Underline"
              name="BOLDITALICUNDERLINE"
              value="7" />
             </combo_box>
@@ -738,42 +738,42 @@
              layout="topleft"
              follows="left|top"
              height="20"
-             left="130"
-             top="210"
+             left_pad="10"
+             top_delta="-3"
              min_value="0.0"
              max_value="7.0" 
              name="mod_text_style"
              width="170">
             <combo_box.item
-              label="NORMAL"
+              label="Normal"
               name="normal"
               value="0" />
             <combo_box.item
-              label="BOLD"
+              label="Bold"
               name="BOLD"
               value="1" />
             <combo_box.item
-              label="ITALIC"
+              label="Italic"
               name="ITALIC"
               value="2" />
             <combo_box.item
-              label="BOLD ITALIC"
+              label="Bold &amp; Italic"
               name="BOLDITALIC"
               value="3" />
             <combo_box.item
-              label="UNDERLINE"
+              label="Underline"
               name="UNDERLINE"
               value="4" />
             <combo_box.item
-              label="BOLD UNDERLINE"
+              label="Bold &amp; Underline"
               name="BOLDUNDERLINE"
               value="5" />
             <combo_box.item
-              label="ITALIC UNDERLINE"
+              label="Italic &amp; Underline"
               name="ITALICUNDERLINE"
               value="6" />
             <combo_box.item
-              label="BOLD ITALIC UNDERLINE"
+              label="Bold, Italic &amp; Underline"
               name="BOLDITALICUNDERLINE"
               value="7" />
             </combo_box>
