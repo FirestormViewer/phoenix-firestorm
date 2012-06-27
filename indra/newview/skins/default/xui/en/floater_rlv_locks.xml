@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater can_close="true" can_drag_on_left="false" can_minimize="true" can_resize="true"
-         height="425" min_height="200" min_width="375" name="rlvLocks" title="Active RLV Locks" width="350"
-         save_rect="true" save_visibility="true" single_instance="true">
-  <scroll_list top="0" draw_border="false" follows="top|left|bottom|right" height="400" multi_select="false"
-               name="lock_list" draw_heading="true" draw_stripes="true" layout="topleft">
-    <scroll_list.columns label="Lock Type" name="lock_type" width="110" />
-    <scroll_list.columns label="Add / Rem" name="lock_addrem" width="75" />
-    <scroll_list.columns label="Lock Target" name="lock_target" width="150" />
-    <scroll_list.columns label="Held By" name="lock_origin" width="150" />
-  </scroll_list>
+<floater
+ can_close="true"
+ can_drag_on_left="false"
+ can_minimize="true"
+ can_resize="true"
+ height="425"
+ min_height="200"
+ min_width="375"
+ name="rlvLocks"
+ title="ACTIVE RLV LOCKS"
+ width="350"
+ save_rect="true"
+ save_visibility="true"
+ single_instance="true">
+	<scroll_list
+	 top="0"
+	 draw_border="false"
+	 follows="top|left|bottom|right"
+	 height="400"
+	 multi_select="false"
+	 name="lock_list"
+	 draw_heading="true"
+	 draw_stripes="true"
+	 layout="topleft">
+		<scroll_list.columns
+		 label="Lock Type"
+		 name="lock_type"
+		 width="110" />
+		<scroll_list.columns
+		 label="Add / Rem"
+		 name="lock_addrem"
+		 width="75" />
+		<scroll_list.columns
+		 label="Lock Target"
+		 name="lock_target"
+		 width="150" />
+		<scroll_list.columns
+		 label="Held By"
+		 name="lock_origin"
+		 width="150" />
+	</scroll_list>
 </floater>
