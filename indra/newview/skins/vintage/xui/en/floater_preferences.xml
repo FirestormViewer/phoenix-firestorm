@@ -175,5 +175,12 @@
          layout="topleft"
          help_topic="preferences_firestorm_tab"
          name="firestorm" />
+        <panel
+         class="panel_preference_opensim"
+         filename="panel_preferences_opensim.xml"
+         label="Opensim"
+         layout="topleft"
+         help_topic="preferences_opensim_tab"
+         name="opensim" />
     </tab_container>
 </floater>
