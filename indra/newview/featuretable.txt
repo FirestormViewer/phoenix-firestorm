@@ -31,7 +31,7 @@ RenderAnisotropic			1	1
 RenderAvatarCloth			1	1
 RenderAvatarLODFactor		1	1.0
 RenderAvatarPhysicsLODFactor 1	1.0
-RenderAvatarMaxVisible      1   12
+RenderAvatarMaxVisible      1   24
 RenderAvatarVP				1	1
 RenderCubeMap				1	1
 RenderDelayVBUpdate			1	0
@@ -143,6 +143,7 @@ RenderAnisotropic			1	0
 RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	0.5
 RenderAvatarPhysicsLODFactor 1	0.75
+RenderAvatarMaxVisible		1	6
 RenderAvatarVP				1	1
 RenderFarClip				1	96
 RenderFlexTimeFactor		1	1.0
@@ -173,6 +174,7 @@ RenderAnisotropic			1	1
 RenderAvatarCloth			1	0
 RenderAvatarLODFactor		1	1.0
 RenderAvatarPhysicsLODFactor 1	1.0
+RenderAvatarMaxVisible		1	12
 RenderAvatarVP				1	1
 RenderFarClip				1	128
 RenderFlexTimeFactor		1	1.0
@@ -202,6 +204,7 @@ list Ultra
 RenderAnisotropic			1	1
 RenderAvatarCloth			1	1
 RenderAvatarLODFactor		1	1.0
+RenderAvatarMaxVisible		1	24
 RenderAvatarVP				1	1
 RenderFarClip				1	256
 RenderFlexTimeFactor		1	1.0
