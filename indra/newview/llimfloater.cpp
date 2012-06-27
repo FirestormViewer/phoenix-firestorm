@@ -58,14 +58,14 @@
 #include "llspeakers.h"
 #include "llviewerchat.h"
 
+// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 //AO: For moving callbacks from control panel into this class
 #include "llavataractions.h"
 #include "llgroupactions.h"
 #include "llvoicechannel.h"
-
-// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
-#include "rlvhandler.h"
-// [/RLVa:KB]
 
 //TL: for support group chat prefix
 #include "fsdata.h"

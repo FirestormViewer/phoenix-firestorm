@@ -364,7 +364,7 @@ void LLPanelPermissions::refresh()
 		// {
 			// Display last owner if public
 			std::string last_owner_name;
-			LLSelectMgr::getInstance()->selectGetLastOwner(mLastOwnerID, last_owner_name);
+			const BOOL last_owners_identical = LLSelectMgr::getInstance()->selectGetLastOwner(mLastOwnerID, last_owner_name);
 
 			// It should never happen that the last owner is null and the owner
 			// is null, but it seems to be a bug in the simulator right now. JC
@@ -389,21 +389,10 @@ void LLPanelPermissions::refresh()
 		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
 		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )
 			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
-	}
-//	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
-//	getChildView("Owner Name")->setEnabled(TRUE);
-// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
-// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-	{
-		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
-		if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
-			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
-
-		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
-		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )
-			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
+		// Only anonymize the last owner name if all of the selection was last owned by the same avie
+		if ( (last_owners_identical) && (mLastOwnerID != gAgent.getID()) )
+			last_owner_name = LLSLURL("agent", mLastOwnerID, "rlvanonym").getSLURLString();
 	}
 
 	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
@@ -411,10 +400,10 @@ void LLPanelPermissions::refresh()
 
 	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
 	getChildView("Owner Name")->setEnabled(TRUE);
+// [/RLVa:KB]
 	
 	getChild<LLUICtrl>("Last Owner Name")->setValue(last_owner_name);
 	getChildView("Last Owner Name")->setEnabled(TRUE);
-// [/RLVa:KB]
 
 	// update group text field
 	getChildView("Group:")->setEnabled(TRUE);

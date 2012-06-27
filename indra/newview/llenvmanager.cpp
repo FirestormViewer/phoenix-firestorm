@@ -35,11 +35,11 @@
 #include "llwaterparammanager.h"
 #include "llwlhandlers.h"
 #include "llwlparammanager.h"
-#include "kcwlinterface.h"
 // [RLVa:KB] - Checked: 2011-09-04 (RLVa-1.4.1a) | Added: RLVa-1.4.1a
 #include <boost/algorithm/string.hpp>
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "kcwlinterface.h"
 
 std::string LLEnvPrefs::getWaterPresetName() const
 {

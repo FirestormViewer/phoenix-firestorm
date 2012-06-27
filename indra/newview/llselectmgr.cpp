@@ -92,8 +92,6 @@
 #include "llvovolume.h"
 #include "pipeline.h"
 #include "llviewershadermgr.h"
-
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 // [/RLVa:KB]

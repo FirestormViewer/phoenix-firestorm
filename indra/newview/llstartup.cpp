@@ -443,13 +443,6 @@ bool idle_startup()
 		std::string lastGPU = gSavedSettings.getString("LastGPUString");
 		std::string thisGPU = LLFeatureManager::getInstance()->getGPUString();
 		
-#if HAS_GROWL
-		GrowlManager::InitiateManager();
-#endif
-
-		// fsdata: load dynamic xml data
-		FSData::getInstance()->startDownload();
-		
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a) | Modified: RLVa-0.2.1d
 		if ( (gSavedSettings.controlExists(RLV_SETTING_MAIN)) && (gSavedSettings.getBOOL(RLV_SETTING_MAIN)) )
 		{
@@ -457,6 +450,13 @@ bool idle_startup()
 		}
 // [/RLVa:KB]
 
+#if HAS_GROWL
+		GrowlManager::InitiateManager();
+#endif
+
+		// fsdata: load dynamic xml data
+		FSData::getInstance()->startDownload();
+		
 		if (LLFeatureManager::getInstance()->isSafe())
 		{
 			LLNotificationsUtil::add("DisplaySetToSafe");

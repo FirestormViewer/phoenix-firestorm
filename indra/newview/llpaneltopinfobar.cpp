@@ -492,6 +492,11 @@ void LLPanelTopInfoBar::onContextMenuItemClicked(const LLSD::String& item)
 
 void LLPanelTopInfoBar::onInfoButtonClicked()
 {
+// [RLVa:KB] - Checked: 2012-02-08 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+		return;
+// [/RLVa:KB]
+
 //	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
 	LLFloaterReg::showInstance("about_land");
 }

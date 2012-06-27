@@ -1279,8 +1279,11 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 			active_inv_floaterp->setMinimized(FALSE);
 		}
 	}	
-	else if (auto_open)
+//	else if (auto_open)
+// [RLVa:KB] - Checked: 2012-05-15 (RLVa-1.4.6)
+	else if ( (auto_open) && (LLFloaterReg::canShowInstance(floater_inventory->getInstanceName())) )
 	{
+// [/RLVa:KB]
 		floater_inventory->openFloater();
 
 		res = inventory_panel->getActivePanel();

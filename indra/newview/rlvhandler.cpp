@@ -656,16 +656,15 @@ bool RlvHandler::canSit(LLViewerObject* pObj, const LLVector3& posOffset /*= LLV
 	//   - not prevented from sitting
 	//   - not prevented from standing up or not currently sitting
 	//   - not standtp restricted or not currently sitting (if the user is sitting and tried to sit elsewhere the tp would just kick in)
-	//   - [regular sit] not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
-	//   - [force sit] not @sittp=n restricted by a *different* object than the one that issued the command or the object is within 1.5m
+	//   - not a regular sit (i.e. due to @sit:<uuid>=force)
+	//   - not @sittp=n or @fartouch=n restricted or if they clicked on a point within 1.5m of the avie's current position
 	return
 		( (pObj) && (LL_PCODE_VOLUME == pObj->getPCode()) ) &&
 		(!hasBehaviour(RLV_BHVR_SIT)) && 
 		( ((!hasBehaviour(RLV_BHVR_UNSIT)) && (!hasBehaviour(RLV_BHVR_STANDTP))) || 
 		  ((isAgentAvatarValid()) && (!gAgentAvatarp->isSitting())) ) &&
-		( ((NULL == getCurrentCommand() || (RLV_BHVR_SIT != getCurrentCommand()->getBehaviourType()))
-			? ((!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)))	// [regular sit]
-			: (!hasBehaviourExcept(RLV_BHVR_SITTP, getCurrentObject()))) ||				// [force sit]
+		( ( (NULL != getCurrentCommand()) && (RLV_BHVR_SIT == getCurrentCommand()->getBehaviourType()) ) ||
+		  ( (!hasBehaviour(RLV_BHVR_SITTP)) && (!hasBehaviour(RLV_BHVR_FARTOUCH)) ) ||
 		  (dist_vec_squared(gAgent.getPositionGlobal(), pObj->getPositionGlobal() + LLVector3d(posOffset)) < 1.5f * 1.5f) );
 }
 

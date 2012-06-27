@@ -234,8 +234,15 @@ void LLNearbyChatToastPanel::init(LLSD& notification)
 			style_params_name.font.name(font_name);
 			style_params_name.font.size(font_style_size);
 
-			style_params_name.link_href = notification["sender_slurl"].asString();
-			style_params_name.is_link = true;
+//			style_params_name.link_href = notification["sender_slurl"].asString();
+//			style_params_name.is_link = true;
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+			if (notification.has("sender_slurl"))
+			{
+				style_params_name.link_href = notification["sender_slurl"].asString();
+				style_params_name.is_link = true;
+			}
+// [/RLVa:KB]
 
 			msg_text->appendText(str_sender, FALSE, style_params_name);
 

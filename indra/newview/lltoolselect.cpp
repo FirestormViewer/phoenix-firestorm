@@ -91,7 +91,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 			if (!temp_select)
 				return LLSelectMgr::getInstance()->getSelection();
 			else if (LLToolMgr::instance().inBuildMode())
-				LLToolMgr::instance().toggleBuildMode("build");
+				LLToolMgr::instance().toggleBuildMode();
 		}
 		
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (object) && ((!object->isAttachment()) || (!object->permYouOwner())) &&
@@ -106,7 +106,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 				return LLSelectMgr::getInstance()->getSelection();
 			}
 			else if (LLToolMgr::instance().inBuildMode())
-				LLToolMgr::instance().toggleBuildMode("build");
+				LLToolMgr::instance().toggleBuildMode();
 		}
 	}
 // [/RLVa:KB]

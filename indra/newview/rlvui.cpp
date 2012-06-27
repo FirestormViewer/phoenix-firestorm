@@ -126,8 +126,8 @@ void RlvUIEnabler::onToggleEdit()
 			LLFloaterReg::hideInstance("beacons");
 
 		// Hide the build floater if it's currently visible
-		if (LLToolMgr::instance().inBuildMode())
-			LLToolMgr::instance().toggleBuildMode("build");
+		if (LLFloaterReg::instanceVisible("build"))
+			LLToolMgr::instance().toggleBuildMode();
 	}
 
 	// Start or stop filtering opening the beacons floater

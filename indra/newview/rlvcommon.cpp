@@ -503,14 +503,23 @@ bool rlvMenuEnableIfNot(const LLSD& sdParam)
 // Selection functors
 //
 
-// Checked: 2011-05-28 (RLVa-1.4.0a) | Modified: RLVa-1.4.0a
+// Checked: 2011-05-28 (RLVa-1.4.6) | Modified: RLVa-1.4.0
+bool rlvCanDeleteOrReturn(const LLViewerObject* pObj)
+{
+	// Block if: @rez=n restricted and owned by us or a group *or* @unsit=n restricted and being sat on by us
+	return
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || ((!pObj->permYouOwner()) && (!pObj->permGroupOwner())) ) &&
+		( (!gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (!isAgentAvatarValid()) || (!pObj->getRootEdit()->isChild(gAgentAvatarp)) );
+}
+
+// Checked: 2011-05-28 (RLVa-1.4.6) | Modified: RLVa-1.4.0
 bool rlvCanDeleteOrReturn()
 {
 	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) || (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) )
 	{
 		struct RlvCanDeleteOrReturn : public LLSelectedObjectFunctor
 		{
-			/*virtual*/ bool apply(LLViewerObject* pObj) { return pObj->isReturnable(); }
+			/*virtual*/ bool apply(LLViewerObject* pObj) { return rlvCanDeleteOrReturn(pObj); }
 		} f;
 		LLObjectSelectionHandle hSel = LLSelectMgr::getInstance()->getSelection();
 		return (hSel.notNull()) && (0 != hSel->getRootObjectCount()) && (hSel->applyToRootObjects(&f, false));

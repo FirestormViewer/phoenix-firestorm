@@ -4,84 +4,118 @@
   can_drag_on_left="false"
   can_minimize="true"
   can_resize="true"
-  height="455"
+  height="300"
   min_height="200"
-  min_width="375"
+  min_width="333"
   name="rlv_behaviours"
   save_rect="true"
   save_visibility="true"
   single_instance="true"
   title="Active RLV Restrictions"
-  width="350">
+  width="333">
 
   <tab_container
     follows="all"
-    top="10"
-    left="10"
-    height="405"
-    width="330"
+    height="267"
+    layout="topleft"
+    left="7"
     name="behaviour_tab"
+    tab_height="25"
+    tab_min_width="154"
     tab_position="top"
-    layout="topleft">
-    <panel
-      border="true"
-      label="Restrictions"
-      name="behaviour_panel">
+    top="2"
+    width="318">
+	<panel
+	 follows="all"
+	 height="242"
+	 label="RESTRICTIONS"
+	 layout="topleft"
+	 name="behaviour_panel"
+	 width="318">
       <scroll_list
-        top_pad="17"
-        follows="all"
         draw_border="false"
-        multi_select="false"
-        name="behaviour_list"
         draw_heading="true"
         draw_stripes="true"
-        layout="topleft">
+        follows="all"
+        height="242"
+        layout="topleft"
+        multi_select="false"
+        name="behaviour_list"
+        top="0">
         <scroll_list.columns
           label="Restriction"
           name="behaviour"
-          width="170" />
+          width="100" />
         <scroll_list.columns
           label="Object Name"
           name="issuer"
-          width="170" />
+          width="210" />
       </scroll_list>
     </panel>
-    <panel
-      border="true"
-      label="Exceptions"
-      name="exception_panel">
+	<panel
+	 follows="all"
+	 height="242"
+	 label="EXCEPTIONS"
+	 layout="topleft"
+	 name="exception_panel"
+	 width="318">
       <scroll_list
-        top_pad="17"
-        follows="all"
         draw_border="false"
-        multi_select="false"
-        name="exception_list"
         draw_heading="true"
         draw_stripes="true"
-        layout="topleft">
+        follows="all"
+        height="242"
+        layout="topleft"
+        multi_select="false"
+        name="exception_list"
+        top_pad="0">
         <scroll_list.columns
           label="Restriction"
           name="behaviour"
-          width="70" />
+          width="100" />
         <scroll_list.columns
           label="Option"
           name="option"
-          width="170" />
+          width="105" />
         <scroll_list.columns
           label="Object Name"
           name="issuer"
-          width="170" />
+          width="105" />
       </scroll_list>
     </panel>
   </tab_container>
-
-  <button
-    follows="bottom|left"
-    height="25"
-    label="Copy to Clipboard"
-    left="10"
-    name="copy_btn"
-    top_pad="5"
-    width="180" />
-
+  <panel
+   background_visible="false"
+   follows="left|right|bottom"
+   height="27"
+   label="bottom_panel"
+   layout="topleft"
+   left="7"
+   name="bottom_panel"
+   top_pad="0"
+   width="313">
+    <button
+     follows="bottom|left"
+     height="25"
+     image_hover_unselected="Toolbar_Left_Over"
+     image_overlay="Copy"
+     image_overlay_alignment="left"
+     image_selected="Toolbar_Left_Selected"
+     image_unselected="Toolbar_Left_Off"
+     label="Copy to Clipboard"
+     layout="topleft"
+     left="3"
+     name="copy_btn"
+     top="1"
+     tool_tip="Copy restrictions to clipboard"
+     width="131" />
+    <icon
+     follows="bottom|left|right"
+     height="25"
+     image_name="Toolbar_Right_Off"
+     layout="topleft"
+     left_pad="1"
+     name="dummy_icon"
+     width="182"/>
+  </panel>
 </floater>

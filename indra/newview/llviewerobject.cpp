@@ -534,10 +534,7 @@ bool LLViewerObject::isReturnable()
 	}
 		
 // [RLVa:KB] - Checked: 2011-05-28 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-	// Block if: @rez=n restricted and owned by us or a group *or* @unsit=n restricted and being sat on by us
-	if ( (rlv_handler_t::isEnabled()) &&
-		 ( ((gRlvHandler.hasBehaviour(RLV_BHVR_REZ)) && ((permYouOwner() || permGroupOwner()))) ||
-		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (getRootEdit()->isChild(gAgentAvatarp))) ) )
+	if ( (rlv_handler_t::isEnabled()) && (!rlvCanDeleteOrReturn(this)) )
 	{
 		return false;
 	}
