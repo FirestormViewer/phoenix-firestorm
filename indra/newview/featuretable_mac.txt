@@ -85,7 +85,7 @@ RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
 RenderLocalLights			1	0
-RenderMaxPartCount			1	0
+RenderMaxPartCount			1	128
 RenderObjectBump			1	0
 RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
