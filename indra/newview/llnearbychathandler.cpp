@@ -48,7 +48,6 @@
 #include "llrootview.h"
 #include "lllayoutstack.h"
 
-
 // [RLVa:KB] - Checked: 2010-04-21 (RLVa-1.2.0f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -542,7 +541,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 		return;//don't process empty messages
 
 	LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
-
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 	if (rlv_handler_t::isEnabled())
 	{
@@ -574,7 +572,11 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	notification["chat_type"] = (S32)chat_msg.mChatType;
 	notification["chat_style"] = (S32)chat_msg.mChatStyle;
 	// Pass sender info so that it can be rendered properly (STORM-1021).
-	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+//	notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [RLVa:KB] - Checked: 2011-12-13 (RLVa-1.4.6) | Added: RLVa-1.4.6
+	if ((CHAT_SOURCE_AGENT != chat_msg.mSourceType) || (!chat_msg.mRlvNamesFiltered))
+		notification["sender_slurl"] = LLViewerChat::getSenderSLURL(chat_msg, args);
+// [/RLVa:KB]
 
 	if (chat_msg.mChatType == CHAT_TYPE_DIRECT &&
 		chat_msg.mText.length() > 0 &&
@@ -767,6 +769,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 		{
 			//LLSD notification;
 			notification["id"] = id;
+// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			if (rlv_handler_t::isEnabled())
+				notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+// [/RLVa:KB]
 			notification["message"] = chat_msg.mText;
 			//notification["from"] = chat_msg.mFromName;
 			//notification["from_id"] = chat_msg.mFromID;
@@ -774,10 +780,6 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 			//notification["source"] = (S32)chat_msg.mSourceType;
 			//notification["chat_type"] = (S32)chat_msg.mChatType;
 			//notification["chat_style"] = (S32)chat_msg.mChatStyle;
-	// [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-			if (rlv_handler_t::isEnabled())
-				notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
-	// [/RLVa:KB]
 			
 			std::string r_color_name = "White";
 			F32 r_color_alpha = 1.0f; 

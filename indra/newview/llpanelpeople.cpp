@@ -616,9 +616,9 @@ BOOL LLPanelPeople::postBuild()
 	mNearbyList = nearby_tab->getChild<LLAvatarList>("avatar_list");
 	mNearbyListUpdater->setActive(true); // AO: always keep radar active, for chat and channel integration
 	//nearby_tab->setVisibleCallback(boost::bind(&Updater::setActive, mNearbyListUpdater, _2));
-	// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
 	mNearbyList->setRlvCheckShowNames(true);
-	// [/RLVa:KB]
+// [/RLVa:KB]
 	
 	LLLayoutPanel* minilayout = (LLLayoutPanel*)getChildView("minimaplayout",true);
 	minilayout->setMinDim(140);
@@ -1530,7 +1530,7 @@ void LLPanelPeople::updateButtons()
 		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
 		cur_panel->getChildView("minus_btn")->setEnabled(item_selected && selected_id.notNull());
 //		cur_panel->getChildView("activate_btn")->setEnabled(item_selected && !cur_group_active); // "none" or a non-active group selected
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
 		cur_panel->getChildView("activate_btn")->setEnabled(
 			item_selected && !cur_group_active && !gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)); // "none" or a non-active group selected
 // [/RLVa:KB]

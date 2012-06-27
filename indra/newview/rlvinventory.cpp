@@ -471,8 +471,13 @@ void RlvRenameOnWearObserver::doneIdle()
 					else
 					{
 						// "No modify" item with a non-renameable parent: create a new folder named and move the item into it
-						LLUUID idAttachFolder = gInventory.createNewCategory(pFolder->getUUID(), LLFolderType::FT_NONE, strFolderName);
-						move_inventory_item(gAgent.getID(), gAgent.getSessionID(), pItem->getUUID(), idAttachFolder, std::string(), NULL);
+						LLUUID idFolder = gInventory.createNewCategory(pFolder->getUUID(), LLFolderType::FT_NONE, strFolderName,
+						                                               &RlvRenameOnWearObserver::onCategoryCreate, new LLUUID(pItem->getUUID()));
+						if (idFolder.notNull())
+						{
+							// Not using the new 'CreateInventoryCategory' cap so manually invoke the callback
+							RlvRenameOnWearObserver::onCategoryCreate(LLSD().with("folder_id", idFolder), new LLUUID(pItem->getUUID()));
+						}
 					}
 				}
 			}
@@ -481,6 +486,18 @@ void RlvRenameOnWearObserver::doneIdle()
 	gInventory.notifyObservers();
 
 	delete this;
+}
+
+// Checked: 2012-03-22 (RLVa-1.4.6) | Added: RLVa-1.4.6
+void RlvRenameOnWearObserver::onCategoryCreate(const LLSD& sdData, void* pParam)
+{
+	LLUUID idFolder = sdData["folder_id"].asUUID();
+	LLUUID* pidItem = (LLUUID*)pParam;
+
+	if ( (idFolder.notNull()) && (pidItem) && (pidItem->notNull()) )
+		move_inventory_item(gAgent.getID(), gAgent.getSessionID(), *pidItem, idFolder, std::string(), NULL);
+
+	delete pidItem;
 }
 
 // ============================================================================

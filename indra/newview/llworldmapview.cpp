@@ -471,13 +471,6 @@ void LLWorldMapView::draw()
 		{
 			LLFontGL* font = LLFontGL::getFont(LLFontDescriptor("SansSerif", "Small", LLFontGL::BOLD));
 			std::string mesg;
-// [RLVa:KB]
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
-			{
-				mesg = RlvStrings::getString(RLV_STRING_HIDDEN);
-			}
-// [/RLVa:KB]
-			else
 			{
 				mesg = info->getName();
 

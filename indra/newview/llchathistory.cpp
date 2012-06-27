@@ -1003,24 +1003,11 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				{
 // [/RLVa:KB]
 					// for object IMs, create a secondlife:///app/objectim SLapp
-					/*std::string*/ url = LLSLURL("objectim", chat.mFromID, "").getSLURLString();
-					url += "?name=" + chat.mFromName;
-					url += "&owner=" + chat.mOwnerID.asString();
-
-					std::string slurl = args["slurl"].asString();
-					if (slurl.empty())
-					{
-						LLViewerRegion *region = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
-						if(region)
-						{
-							LLSLURL region_slurl(region->getName(), chat.mPosAgent);
-							slurl = region_slurl.getLocationString();
-						}
-					}
-					url += "&slurl=" + LLURI::escape(slurl);
+					/*std::string*/ url = LLViewerChat::getSenderSLURL(chat, args);
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
 				}
 // [/RLVa:KB]
+
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
 				LLStyle::Params link_params(style_params);

@@ -2348,12 +2348,8 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 			}
 		}
 
-// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
-		if ( (is_movable) && (rlv_handler_t::isEnabled()) && (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) )
+		if (is_movable)
 		{
-			is_movable = RlvFolderLocks::instance().canMoveFolder(cat_id, mUUID);
-			if(is_movable)
-			{
 			LLInventoryPanel* active_panel = LLInventoryPanel::getActiveInventoryPanel(FALSE);
 			is_movable = active_panel != NULL;
 
@@ -2384,9 +2380,15 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 					is_movable = check_category(model, cat_id, active_folder_view, filter);
 				}
 			}
-			}
+		}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Added: RLVa-1.3.0g
+		if ( (is_movable) && (rlv_handler_t::isEnabled()) && (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) )
+		{
+			is_movable = RlvFolderLocks::instance().canMoveFolder(cat_id, mUUID);
 		}
 // [/RLVa:KB]
+
 		// 
 		//--------------------------------------------------------------------------------
 

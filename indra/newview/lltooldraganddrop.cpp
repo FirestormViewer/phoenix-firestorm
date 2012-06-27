@@ -59,12 +59,11 @@
 #include "llvoavatarself.h"
 #include "llworld.h"
 #include "llclipboard.h"
-
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
+
 #include "llparcel.h"
 #include "llviewerparcelmgr.h"
 

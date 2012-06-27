@@ -43,7 +43,6 @@
 #include "lltoolgrab.h"
 #include "llhudeffectlookat.h"
 #include "llagentcamera.h"
-
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "llvoavatarself.h"

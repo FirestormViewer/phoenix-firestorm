@@ -3324,9 +3324,6 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 			}
 // [/RLVa:KB]
 		}
-		
-		
-		
 		else  // DISPLAY NAMES OFF
 		{
 			const LLFontGL* font = LLFontGL::getFontSansSerif();

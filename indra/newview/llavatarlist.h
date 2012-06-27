@@ -148,6 +148,9 @@ private:
 	bool mShowVoiceVolume;
 	bool mShowSpeakingIndicator;
 	bool mShowPermissions;
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
+	bool mRlvCheckShowNames;
+// [/RLVa:KB]
 	bool mShowRange;
 	bool mShowFirstSeen;
 	bool mShowStatusFlags;
@@ -162,10 +165,6 @@ private:
 	bool mUseRangeColors;
 	// [/Ansariel: Colorful radar]
 	
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-	bool mRlvCheckShowNames;
-// [/RLVa:KB]
-
 	LLTimer*				mLITUpdateTimer; // last interaction time update timer
 	std::string				mIconParamName;
 	std::string				mNameFilter;

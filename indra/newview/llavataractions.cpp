@@ -83,9 +83,6 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 #include "llsidepanelinventory.h"
-// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-#include "rlvhandler.h"
-// [/RLVa:KB]
 #include "fslslbridge.h"
 //<FS:KC legacy profiles>
 #include "fsfloaterprofile.h"
