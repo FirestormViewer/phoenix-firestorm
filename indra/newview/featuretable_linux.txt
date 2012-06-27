@@ -89,7 +89,7 @@ RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
 RenderTerrainLODFactor		1	1
 RenderTransparentWater		1	0
-RenderTreeLODFactor			1	0
+RenderTreeLODFactor			1	0.25
 RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	1
@@ -120,7 +120,7 @@ RenderReflectionDetail		1	0
 RenderTerrainDetail			1	0
 RenderTerrainLODFactor		1	1.0
 RenderTransparentWater		1	0
-RenderTreeLODFactor			1	0
+RenderTreeLODFactor			1	0.25
 RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	1.125
 VertexShaderEnable			1	0
@@ -180,7 +180,7 @@ RenderReflectionDetail		1	0
 RenderTerrainDetail			1	1
 RenderTerrainLODFactor		1	3.0
 RenderTransparentWater		1	1
-RenderTreeLODFactor			1	0.5
+RenderTreeLODFactor			1	0.75
 RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	1
