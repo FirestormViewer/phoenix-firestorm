@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="rlvLocks" title="AKTIVE RLV-SPERREN">
+	<scroll_list name="lock_list">
+		<scroll_list.columns label="Sperrtyp" name="lock_type"/>
+		<scroll_list.columns label="Hinzf. / Entf." name="lock_addrem"/>
+		<scroll_list.columns label="Sperrziel" name="lock_target"/>
+		<scroll_list.columns label="Gesetzt von" name="lock_origin"/>
+	</scroll_list>
+</floater>
