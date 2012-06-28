@@ -57,6 +57,7 @@
 #include "llsdutil_math.h"
 #include "lltrans.h"
 #include "tea.h" // <FS:AW opensim currency support>
+#include "llviewernetwork.h" // <FS:Ansariel> For grid manager
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -453,6 +454,8 @@ void LLFloaterAuction::onClickSellToAnyone(void* data)
 		args["LAND_SIZE"] = llformat("%d", area);
 		args["SALE_PRICE"] = llformat("%d", sale_price);
 		args["NAME"] = LLTrans::getString("Anyone");
+		// <FS:Ansariel> Fill [CURRENT_GRID] placeholder (FIRE-6777)
+		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 
 		LLNotification::Params params("ConfirmLandSaleChange");	// Re-use existing dialog
 		params.substitutions(args)
