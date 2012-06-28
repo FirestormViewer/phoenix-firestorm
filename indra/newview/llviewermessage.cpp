@@ -3642,7 +3642,9 @@ protected:
 
 	void handleFailure(int status, const std::string& err_msg)
 	{
-		llwarns << "Translation failed for mesg " << m_origMesg << " toLang " << mToLang << " fromLang " << mFromLang << llendl;
+		// <FS:Ansariel> Don't include message text in the log (FIRE-6683)
+		//llwarns << "Translation failed for mesg " << m_origMesg << " toLang " << mToLang << " fromLang " << mFromLang << llendl;
+		llwarns << "Message translation toLang " << mToLang << " fromLang " << mFromLang << "failed" << llendl;
 
 		//<FS:LO> Removing (useless?) annoying translation failed messages from local chat
 		//std::string msg = LLTrans::getString("TranslationFailed", LLSD().with("[REASON]", err_msg));
