@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlv_behaviours" title="Aktywne ograniczenia RLV">
+<floater name="rlv_behaviours" title="AKTYWNE OGRANICZENIA RLV">
   <tab_container name="behaviour_tab">
     <panel label="Ograniczenia" name="behaviour_panel">
       <scroll_list name="behaviour_list">
@@ -15,5 +15,7 @@
       </scroll_list>
     </panel>
   </tab_container>
-  <button label="Kopiuj do schowka" name="copy_btn" />
+  <panel label="bottom_panel" name="bottom_panel">
+    <button label="Kopiuj do schowka" name="copy_btn" />
+  </panel>
 </floater>

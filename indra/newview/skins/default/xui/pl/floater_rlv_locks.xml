@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlvLocks" title="Aktywne blokady RLV">
+<floater name="rlvLocks" title="AKTYWNE BLOKADY RLV">
   <scroll_list name="lock_list">
     <scroll_list.columns label="Typ blokady" name="lock_type" />
     <scroll_list.columns label="Dod / Usuw" name="lock_addrem" />
