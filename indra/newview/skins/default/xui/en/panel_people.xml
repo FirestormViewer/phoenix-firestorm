@@ -677,7 +677,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
      height="23"
      layout="topleft"
      left="8"
-     top_pad="4"
+     top_pad="1"
      name="button_bar"
      width="313">
 
