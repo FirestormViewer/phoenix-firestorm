@@ -56,6 +56,11 @@ const std::string LLInventoryPanel::INHERIT_SORT_ORDER = std::string("");
 //static const LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER;
 static LLInventoryFVBridgeBuilder INVENTORY_BRIDGE_BUILDER; // <ND/> const makes GCC >= 4.6 very angry about not user defined default ctor.
 
+// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+// remembers the last inventory panel that got focus
+LLInventoryPanel* LLInventoryPanel::sActiveInventoryPanel = NULL;
+// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Class LLInventoryPanelObserver
 //
@@ -187,6 +192,10 @@ void LLInventoryPanel::buildFolderView(const LLInventoryPanel::Params& params)
 																	root_id);
 	
 	mFolderRoot = createFolderView(new_listener, params.use_label_suffix());
+
+	// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+	sActiveInventoryPanel = this;
+	// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
 }
 
 void LLInventoryPanel::initFromParams(const LLInventoryPanel::Params& params)
@@ -286,6 +295,15 @@ LLInventoryPanel::~LLInventoryPanel()
 	delete mCompletionObserver;
 
 	mScroller = NULL;
+
+	// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+	// make sure to clear the last active inventory floater pointer, so we don't crash after
+	// closing this one and later referencing it.
+	if (sActiveInventoryPanel == this)
+	{
+		sActiveInventoryPanel = NULL;
+	}
+	// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
 }
 
 void LLInventoryPanel::draw()
@@ -958,6 +976,11 @@ void LLInventoryPanel::onFocusLost()
 
 void LLInventoryPanel::onFocusReceived()
 {
+	// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+	// this floater got focus last
+	sActiveInventoryPanel = this;
+	// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+
 	// inventory now handles cut/copy/paste/delete
 	LLEditMenuHandler::gEditMenuHandler = mFolderRoot;
 
@@ -1238,6 +1261,14 @@ BOOL is_inventorysp_active()
 // static
 LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 {
+	// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+	// in case we know the last floater that got focus, return this immediately.
+	if (sActiveInventoryPanel)
+	{
+		return sActiveInventoryPanel;
+	}
+	// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
+
 	S32 z_min = S32_MAX;
 	LLInventoryPanel* res = NULL;
 	LLFloater* active_inv_floaterp = NULL;
