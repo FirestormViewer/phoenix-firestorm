@@ -759,7 +759,10 @@ void LLPanelLogin::updateLocationCombo( bool force_visible )
 	sInstance->getChildView("server_combo_text")->setVisible( show_server);	
 	sInstance->getChildView("grid_selection_text")->setVisible( show_server);	
 	sInstance->getChildView("server_combo")->setVisible( show_server);
-
+	if (show_server)
+	{
+		updateServerCombo();
+	}
 }
 
 // static
