@@ -1,5 +1,8 @@
 /* Copyright (c) 2010 Discrete Dreamscape All rights reserved.
  *
+ * @file DesktopNotifierLinux.cpp
+ * @Implementation of desktop notification system (aka growl).
+ *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
  * conditions are met:
@@ -276,9 +279,10 @@ DesktopNotifierLinux::~DesktopNotifierLinux()
 
 void DesktopNotifierLinux::showNotification( const std::string& notification_title, const std::string& notification_message, const std::string& notification_type )
 {
-	LL_INFOS( "DesktopNotifierLinux" ) << "New notification title: " << notification_title << LL_ENDL;
-	LL_INFOS( "DesktopNotifierLinux" ) << "New notification message: " << notification_message << LL_ENDL;
-	LL_INFOS( "DesktopNotifierLinux" ) << "New notification type: " << notification_type << LL_ENDL;
+	//Dont Log messages that could contain user name info - FS:TM
+	//LL_INFOS( "DesktopNotifierLinux" ) << "New notification title: " << notification_title << LL_ENDL;
+	//LL_INFOS( "DesktopNotifierLinux" ) << "New notification message: " << notification_message << LL_ENDL;
+	//LL_INFOS( "DesktopNotifierLinux" ) << "New notification type: " << notification_type << LL_ENDL;
 
 	m_pLibNotify->mNotificationUpdate( m_pNotification,(gchar*)notification_title.c_str(), (gchar*)notification_message.c_str(), m_strIcon.c_str() );
 

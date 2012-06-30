@@ -790,12 +790,11 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//Enable on cards with less than 512MB ram and on all nvidia cards.
-	//Nvidia crads can compress without artifacts appering on textures.
-	//Set max to slightly lower than 512 do to some systems will report less 
-	// than true total or may have slightly less than 512 for other resions.
+	//Instead of enabeling based soley on amount of video ram, also enable based on total system ram
+	//Below show enable texture compression on systems with a video card that has 128MB or less mempory
+	// or a total system memory with 2GB or less
 	//FS:TM
-	if (!gGLManager.mIsNVIDIA && gGLManager.mVRAM > 480)
+	if (gSysMemory.getPhysicalMemoryKB() > 2100000 || gGLManager.mVRAM > 200)
 	{
 		maskFeatures("VRAMGT512");
 	}
