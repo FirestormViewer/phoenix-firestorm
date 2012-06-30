@@ -790,14 +790,12 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//Instead of enabeling based soley on amount of video ram, also enable based on total system ram
-	//Below show enable texture compression on systems with a video card that has 128MB or less mempory
-	// or a total system memory with 2GB or less
+	//Don't auto set texture compression
 	//FS:TM
-	if (gSysMemory.getPhysicalMemoryKB() > 2100000 || gGLManager.mVRAM > 200)
-	{
-		maskFeatures("VRAMGT512");
-	}
+	//if (gGLManager.mVRAM > 512)
+	//{
+	//	maskFeatures("VRAMGT512");
+	//}
 
 	// now mask by gpu string
 	// Replaces ' ' with '_' in mGPUString to deal with inability for parser to handle spaces
