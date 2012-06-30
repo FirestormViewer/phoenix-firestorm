@@ -180,6 +180,17 @@
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
 
         <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
+         label="Grant permissions to objects with the same owner as the object being sat on"
+         left="15"
+         name="PermissionsGrantToSitOwner"
+         width="270"
+         control_name="PermissionsGrantToSitOwner"
+         tool_tip="If enabled, sitting on an object will grant permissions to any other object with the same owner automatically as though you sat on it instead"/>
+
+        <check_box
          top_pad="15"
          control_name="UseLSLBridge"
          follows="left|top"
