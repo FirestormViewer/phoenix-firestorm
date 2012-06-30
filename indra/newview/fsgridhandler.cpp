@@ -1067,7 +1067,8 @@ void LLGridManager::setGridChoice(const std::string& grid)
 		LL_DEBUGS("GridManager")<< "setting grid choice: " << grid << LL_ENDL;
 		mGrid = grid;// AW: don't set mGrid anywhere else
 		getGridData(mConnectedGrid);
-		gSavedSettings.setString("CurrentGrid", grid); 
+		gSavedSettings.setString("CurrentGrid", grid);
+		LLTrans::setDefaultArg("CURRENT_GRID", getGridLabel()); //<FS:AW make CURRENT_GRID a default substitution>
 		updateIsInProductionGrid();
 		mReadyToLogin = true;
 	}

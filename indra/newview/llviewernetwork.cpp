@@ -550,6 +550,7 @@ void LLGridManager::setGridChoice(const std::string& grid)
 	}
 	mGrid = grid;
 	gSavedSettings.setString("CurrentGrid", grid);
+	LLTrans::setDefaultArg("CURRENT_GRID", getGridLabel()); //<FS:AW make CURRENT_GRID a default substitution>
 
 	updateIsInProductionGrid();
 }
