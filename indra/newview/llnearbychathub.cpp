@@ -159,24 +159,41 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	{
 		U32 next_split = split;
 
-		if(pos + next_split > total) next_split = total - pos;
-
-		// don't split utf-8 bytes
-		while((U8(utf8_out_text[pos + next_split]) >= 0x80)
-			&& (U8(utf8_out_text[pos + next_split]) < 0xC0)
-			&& (next_split > 0))
+		if (pos + next_split > total)
 		{
-			--next_split;
+			// just send the rest of the message
+			next_split = total - pos;
+		}
+		else
+		{
+			// first, try to split at a space
+			while((U8(utf8_out_text[pos + next_split]) != ' ')
+				&& (next_split > 0))
+			{
+				--next_split;
+			}
+			
+			if (next_split == 0)
+			{
+				next_split = split;
+				// no space found, split somewhere not in the middle of UTF-8
+				while((U8(utf8_out_text[pos + next_split]) >= 0x80)
+					&& (U8(utf8_out_text[pos + next_split]) < 0xC0)
+					&& (next_split > 0))
+				{
+					--next_split;
+				}
+			}
+
+			if(next_split == 0)
+			{
+				next_split = split;
+				LL_WARNS("Splitting") <<
+					"utf-8 couldn't be split correctly" << LL_ENDL;
+			}
 		}
 
-		if(next_split == 0)
-		{
-			next_split = split;
-			LL_WARNS("Splitting") <<
-				"utf-8 couldn't be split correctly" << LL_ENDL;
-		}
-
-		std::string send = utf8_out_text.substr(pos, pos + next_split);
+		std::string send = utf8_out_text.substr(pos, next_split);
 		pos += next_split;
 
 		// *FIXME: Queue messages and wait for server
