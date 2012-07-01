@@ -1253,7 +1253,17 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 
 	// Iterate through the inventory floaters and return whichever is on top.
 	LLFloaterReg::const_instance_list_t& inst_list = LLFloaterReg::getFloaterList("inventory");
-	for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+	// <FS:Ansariel> Fix for sharing inventory when multiple inventory floaters are open:
+	//               For the secondary floaters, we have registered those as
+	//               "secondary_inventory" in LLFloaterReg, so we have to add those
+	//               instances to the instance list!
+	//for (LLFloaterReg::const_instance_list_t::const_iterator iter = inst_list.begin(); iter != inst_list.end(); ++iter)
+	LLFloaterReg::const_instance_list_t& inst_list_secondary = LLFloaterReg::getFloaterList("secondary_inventory");
+	LLFloaterReg::instance_list_t combined_list;
+	combined_list.insert(combined_list.end(), inst_list.begin(), inst_list.end());
+	combined_list.insert(combined_list.end(), inst_list_secondary.begin(), inst_list_secondary.end());
+	for (LLFloaterReg::instance_list_t::const_iterator iter = combined_list.begin(); iter != combined_list.end(); ++iter)
+	// </FS:Ansariel>
 	{
 		LLFloaterSidePanelContainer* inventory_floater = dynamic_cast<LLFloaterSidePanelContainer*>(*iter);
 		inventory_panel = inventory_floater->findChild<LLSidepanelInventory>("main_panel");
