@@ -6743,16 +6743,15 @@ Is this OK? Selecting "Mute" will block all further messages from &apos;[NAME]&a
    priority="critical"
    persist="true"
    type="notify">
-Warning: The object &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; wants total access to your Linden Dollars account. If you allow access, it can remove funds from your account at any time, or empty your account completely, on an ongoing basis with no additional warnings.
-  
-It is rare that such a request is legitimate. Do not allow access if you do not fully understand why it wants access to your account.
-
+The object &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; wants access to take money from your Linden Dollar account. If you allow this, it can take any or all of your money from you at any time, with no further warning or request.
+   
+Before allowing this access, make sure you know what the object is and why it is making this request, as well as whether you trust the creator. If you're not certain, click Deny.
   <tag>confirm</tag>
     <form name="form">
       <button
        index="0"
        name="Grant"
-       text="Allow total access"/>
+       text="Allow access"/>
       <button
        default="true"
        index="1"
@@ -6763,6 +6762,11 @@ It is rare that such a request is legitimate. Do not allow access if you do not 
 [FOOTERTEXT]
     </footer>
   </notification>
+<!-- FS:TS FIRE-6752: The original message was:
+Warning: The object &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; wants total access to your Linden Dollars account. If you allow access, it can remove funds from your account at any time, or empty your account completely, on an ongoing basis with no additional warnings.
+  
+It is rare that such a request is legitimate. Do not allow access if you do not fully understand why it wants access to your account.
+-->
 
   <notification
    icon="notify.tga"
