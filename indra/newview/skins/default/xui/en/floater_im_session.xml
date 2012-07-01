@@ -372,6 +372,7 @@
         follows="all"/>
       </layout_panel>
     <layout_panel
+       name="panel_im_control_lp"
        left="0"
        top="0"
        height="200"

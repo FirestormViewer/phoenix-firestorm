@@ -35,7 +35,7 @@
 	<check_box label="Mostra il viewer in chat" name="FSSupportGroupChatPrefix_toggle" tool_tip="Aggiunge (FS) all'inizio dei vostri messaggi per facilitare gli helper del gruppo ad aiutarvi, e soprattutto per capire subito se il problema riguarda Firestorm o Phoenix. Spuntandola ci aiuterete ad aiutarvi! Ed è cosa buona e giusta!"/>
 	<button tool_tip="Invia informazioni del sistema" name="send_sysinfo_btn"/>
 	<layout_stack name="im_panels">
-		<layout_panel>
+		<layout_panel name="panel_im_control_lp">
 			<line_editor label="A" name="chat_editor"/>
 		</layout_panel>
 	</layout_stack>
