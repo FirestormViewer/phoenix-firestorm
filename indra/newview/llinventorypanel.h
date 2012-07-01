@@ -111,12 +111,6 @@ protected:
 	LLInventoryPanel(const Params&);
 	void initFromParams(const Params&);
 	friend class LLUICtrlFactory;
-
-	// <FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
-	// remembers the last inventory panel that got focus
-	static LLInventoryPanel* sActiveInventoryPanel;
-	// </FS:Ansariel> Re-applying Zi's share inventory fix from FIRE-958 for FIRE-6551
-
 public:
 	virtual ~LLInventoryPanel();
 
