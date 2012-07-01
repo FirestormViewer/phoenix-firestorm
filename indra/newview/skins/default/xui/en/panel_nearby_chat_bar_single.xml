@@ -33,7 +33,7 @@
         height="23"
         label="Click here to chat."
         layout="topleft"
-        max_length_bytes="1023"
+        max_length_bytes="3000"
         name="chat_box"
         text_pad_left="5"
         text_pad_right="25"
