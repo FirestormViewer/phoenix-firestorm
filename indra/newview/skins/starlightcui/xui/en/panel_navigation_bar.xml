@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- height intentionally 1px too high to make room for filler panel at the bottom -->
+<panel
+ mouse_opaque="false"
+ top="0"
+ left="0"
+ background_visible="false"
+ follows="left|bottom|right"
+ focus_root="true"
+ height="41"
+ layout="topleft"
+ name="navigation_bar"
+ chrome="true"
+ width="1024">
+
+<!-- Navigation and Favorites Bar visibility stack -->
+<layout_stack
+ mouse_opaque="false"
+ top="0"
+ left="0"
+ follows="left|top|right"
+ height="40"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_stack"
+ orientation="vertical"
+ width="1024">
+
+<!-- Navigation Bar visibility panel -->
+<layout_panel
+ mouse_opaque="false"
+ background_opaque="true"
+ background_visible="true"
+ height="24"
+ layout="topleft"
+ border_size="0"
+ name="navigation_bar_visibility_panel"
+ visibility_control="ShowNavbarNavigationPanel"
+ width="1024"
+ auto_resize="false">
+
+	<!-- Layout stack for buttons, location input and search field -->
+	<layout_stack
+	 mouse_opaque="false"
+	 follows="left|top|right"
+	 layout="topleft"
+	 orientation="horizontal"
+	 name="location_search_layout"
+	 width="1024"
+	 height="24"
+	 left="0"
+	 top="0">
+
+	<!-- Contains the navigation buttons -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="navigation_buttons_visibility_panel"
+	 layout="topleft"
+	 right="193"
+	 height="24"
+	 border_size="0"
+	 auto_resize="false">
+
+	     <pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Left_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left="5"
+	     name="back_btn"
+	     tool_tip="Go back to previous location"
+	     top="0"
+	     width="31" />
+	    <pull_button
+	     follows="left|top"
+	     direction="down"
+	     height="23"
+	     image_overlay="Arrow_Right_Off"
+	     image_bottom_pad="1"
+	     layout="topleft"
+	     left_pad="0"
+	     name="forward_btn"
+	     tool_tip="Go forward one location"
+	     top_delta="0"
+	     width="31" />
+	    <button
+	     follows="left|top"
+	     height="23"
+	     image_bottom_pad="1"
+	     image_overlay="Home_Off"
+	     layout="topleft"
+	     left_pad="6"
+	     name="home_btn"
+	     tool_tip="Teleport to home location"
+	     top_delta="0"
+	     width="32" />
+          <!-- About Land Button here -->         
+	    <button
+	     follows="left|top"
+	     height="23"
+	     image_bottom_pad="1"
+	     image_overlay="Info_Over"
+	     layout="topleft"
+	     left_pad="6"
+	     name="About_Land"
+	     tool_tip="Pops up Land Information window"
+	     top_delta="0"
+	     width="38">
+		 <button.init_callback
+               function="Button.SetFloaterToggle"
+               parameter="about_land" />
+		 </button>
+          <!-- end of About Land Button -->
+
+          <!-- Windlight Button here -->  
+	    <button
+	     follows="left|top"
+	     height="23"
+	     image_bottom_pad="1"
+	     image_overlay="Windlight_btn"
+	     layout="topleft"
+	     left_pad="6"
+	     name="Environment"
+	     tool_tip="Pops up Environment Settings window"
+	     top_delta="0"
+	     width="38">
+		 <button.commit_callback
+               function="World.EnvSettings"
+               parameter="editor" />
+		 </button>
+          <!-- end of Windlight Button -->
+
+	</layout_panel>
+	<!-- Contains the navigation buttons -->
+
+	<!-- Contains the location bar -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="location_bar_visibility_panel"
+	 layout="topleft"
+	 width="587"
+	 height="22"
+	 border_size="0"
+	 auto_resize="true">
+
+	    <location_input
+	     follows="all"
+	     halign="right"
+	     height="22"
+	     label="Location"
+	     layout="topleft"
+	     left="7"
+	     max_chars="254"
+	     mouse_opaque="false"
+	     name="location_combo"
+	     top="0"
+	     width="587">
+
+	    </location_input>
+         <combo_list
+		 height="24"
+         mouse_wheel_opaque="true"/>
+
+	</layout_panel>
+	<!-- Contains the location bar -->
+
+	<!-- Contains the search bar, can be hidden by code -->
+	<layout_panel
+	 mouse_opaque="false"
+	 name="search_bar_visibility_panel"
+	 layout="topleft"
+	 width="244"
+	 height="22"
+	 visibility_control="ShowSearchTopBar"
+	 auto_resize="false">
+
+        <search_combo_box
+	     follows="all"
+	     left="10"
+	     halign="right"
+	     height="22"
+	     label="Search"
+	     layout="topleft"
+	     mouse_opaque="false"
+	     name="search_combo_box"
+	     tool_tip="Search"
+	     top="0"
+	     width="234">
+         <combo_editor
+          label="Search MetaVerse"
+          name="search_combo_editor"/>
+         <combo_list
+          draw_border="true"
+          border.highlight_light_color="FocusColor"
+          border.highlight_dark_color="FocusColor"
+          border.shadow_light_color="FocusColor"
+          border.shadow_dark_color="FocusColor"
+          mouse_wheel_opaque="true" />
+        </search_combo_box>
+
+	</layout_panel>
+	<!-- Contains the search bar, can be hidden by code -->
+
+	</layout_stack>
+	<!-- Layout stack for buttons, location input and search field -->
+
+</layout_panel>
+<!-- Navigation Bar visibility panel -->
+
+<!-- Favorites Bar visibility panel -->
+<layout_panel
+ mouse_opaque="false"
+ background_opaque="true"
+ background_visible="true"
+ height="15"
+ layout="topleft"
+ border_size="0"
+ name="favorites_bar_visibility_panel"
+ visibility_control="ShowNavbarFavoritesPanel"
+ auto_resize="false">
+
+  <favorites_bar
+ 	 background_visible="false"
+ 	 bg_alpha_color="Transparent"
+ 	 color="Transparent"
+     follows="left|top|right"
+     top_pad="2"
+     font="SansSerifSmall"
+     height="15"
+     layout="topleft"
+     left="0"
+     name="favorite"
+     image_drag_indication="Accordion_ArrowOpened_Off"
+     tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
+     width="1024">
+              <!-- More button actually is a text box. -->
+              <more_button
+                follows="left|bottom"
+                name=">>"
+                tab_stop="false"
+                tool_tip="Show more of My Favorites"
+                top="13"
+                width="50"
+                bottom="0"
+                valign="bottom">
+                More &#9660;
+                </more_button>
+  </favorites_bar>
+
+</layout_panel>
+<!-- Favorites Bar visibility panel -->
+
+<!-- Filler panel at the bottom to push the opaque background away -->
+<layout_panel
+ mouse_opaque="false"
+ background_opaque="false"
+ background_visible="false"
+ height="1"
+ layout="topleft"
+ border_size="0"
+ name="navigation_favorites_bar_visibility_padding_panel"
+ width="1024"
+ auto_resize="true" />
+
+</layout_stack>
+<!-- Navigation and Favorites Bar visibility stack -->
+
+</panel>
