@@ -244,7 +244,6 @@ void LLIMFloater::sendMsg()
 	if (mInputEditor)
 	{
 		LLWString text = mInputEditor->getConvertedText();
-		llinfos << "Sending IM, length=" << text.length() << llendl;
 		if(!text.empty())
 		{
 			// Convert to UTF8 for transport
