@@ -1153,8 +1153,10 @@ void LLIMModel::sendLeaveSession(const LLUUID& session_id, const LLUUID& other_p
 	}
 }
 
-//*TODO this method is better be moved to the LLIMMgr
-void LLIMModel::sendMessage(const std::string& utf8_text,
+// *TODO this method is better be moved to the LLIMMgr
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+// This code is broken out for proper handling of multiple IMs after splitting.
+void deliverMessage(const std::string& utf8_text,
 					 const LLUUID& im_session_id,
 					 const LLUUID& other_participant_id,
 					 EInstantMessage dialog)
@@ -1222,6 +1224,64 @@ void LLIMModel::sendMessage(const std::string& utf8_text,
 		default: ; // do nothing
 		}
 	}
+}
+//</FS:TS> FIRE-787
+
+void LLIMModel::sendMessage(const std::string& utf8_text,
+					 const LLUUID& im_session_id,
+					 const LLUUID& other_participant_id,
+					 EInstantMessage dialog)
+{
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+	U32 split = MAX_MSG_BUF_SIZE - 1;
+	U32 pos = 0;
+	U32 total = utf8_text.length();
+
+	while(pos < total)
+	{
+		U32 next_split = split;
+
+		if (pos + next_split > total)
+		{
+			// just send the rest of the message
+			next_split = total - pos;
+		}
+		else
+		{
+			// first, try to split at a space
+			while((U8(utf8_text[pos + next_split]) != ' ')
+				&& (next_split > 0))
+			{
+				--next_split;
+			}
+			
+			if (next_split == 0)
+			{
+				next_split = split;
+				// no space found, split somewhere not in the middle of UTF-8
+				while((U8(utf8_text[pos + next_split]) >= 0x80)
+					&& (U8(utf8_text[pos + next_split]) < 0xC0)
+					&& (next_split > 0))
+				{
+					--next_split;
+				}
+			}
+
+			if(next_split == 0)
+			{
+				next_split = split;
+				LL_WARNS("Splitting") <<
+					"utf-8 couldn't be split correctly" << LL_ENDL;
+			}
+		}
+
+		std::string send = utf8_text.substr(pos, next_split);
+		pos += next_split;
+
+		// *FIXME: Queue messages and wait for server
+		deliverMessage(send, im_session_id, other_participant_id, dialog);
+	}
+//</FS:TS> FIRE-787
 
 	if((dialog == IM_NOTHING_SPECIAL) && 
 	   (other_participant_id.notNull()))
