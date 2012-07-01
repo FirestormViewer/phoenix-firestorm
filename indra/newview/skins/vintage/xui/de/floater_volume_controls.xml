@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="volume_controls" width="240">
+  <panel name="global_volume_controls_panel" width="240" />
+</floater>
