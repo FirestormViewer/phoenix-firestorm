@@ -538,7 +538,9 @@ void LLPanelMainInventory::onClearSearch()
 		mActivePanel->getRootFolder()->applyFunctorRecursively(opener);
 		mActivePanel->getRootFolder()->scrollToShowSelection();
 	}
-	mFilterSubString = "";
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	//mFilterSubString = "";
+	// </FS:Ansariel> 
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -554,8 +556,11 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 
 	LLInventoryModelBackgroundFetch::instance().start();
 
-	mFilterSubString = search_string;
-	if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	//mFilterSubString = search_string;
+	//if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
+	if (mActivePanel->getFilterSubString().empty() && search_string.empty())
+	// </FS:Ansariel>
 	{
 			// current filter and new filter empty, do nothing
 			return;
@@ -569,7 +574,10 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	}
 
 	// set new filter string
-	setFilterSubString(mFilterSubString);
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	//setFilterSubString(mFilterSubString);
+	setFilterSubString(search_string);
+	// </FS:Ansariel>
 }
 
 // ## Zi: Filter dropdown
@@ -705,7 +713,9 @@ void LLPanelMainInventory::onFilterSelected()
 		return;
 	}
 
-	setFilterSubString(mFilterSubString);
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	//setFilterSubString(mFilterSubString);
+	// </FS:Ansariel>
 	LLInventoryFilter* filter = mActivePanel->getFilter();
 	LLFloaterInventoryFinder *finder = getFinder();
 	if (finder)
@@ -772,7 +782,10 @@ void LLPanelMainInventory::draw()
 {
 	if (mActivePanel && mFilterEditor)
 	{
-		mFilterEditor->setText(mFilterSubString);
+		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+		//mFilterEditor->setText(mFilterSubString);
+		mFilterEditor->setText(mActivePanel->getFilterSubString());
+		// </FS:Ansariel>
 	}	
 	if (mActivePanel && mResortActivePanel)
 	{
@@ -1330,7 +1343,9 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		}
 		const LLUUID& item_id = current_item->getListener()->getUUID();
 		const std::string &item_name = current_item->getListener()->getName();
-		mFilterSubString = item_name;
+		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+		//mFilterSubString = item_name;
+		// </FS:Ansariel>
 		LLInventoryFilter *filter = mActivePanel->getFilter();
 		filter->setFilterSubString(item_name);
 		mFilterEditor->setText(item_name);
