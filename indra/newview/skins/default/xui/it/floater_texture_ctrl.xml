@@ -6,17 +6,30 @@
 	<text name="Multiple">
 		Texture multiple
 	</text>
+	<radio_group name="mode_selection">
+		<radio_item label="Invantario" name="inventory"/>
+		<radio_item label="Locale" name="local"/>
+	</radio_group>
 	<text name="unknown">
-		Dimensioni: [DIMENSIONS]
+		Dimensioni:
+[DIMENSIONS]
 	</text>
 	<button label="Default" label_selected="Default" name="Default"/>
 	<button label="Niente" label_selected="Niente" name="None"/>
 	<button label="Vuoto" label_selected="Vuoto" name="Blank"/>
+	<button top_delta="0" name="Pipette"/>
 	<check_box label="Mostra cartelle" name="show_folders_check"/>
 	<search_editor label="Filtro texture" name="inventory search editor"/>
 	<check_box label="Applica adesso" name="apply_immediate_check"/>
+	<button label="Aggiungi" label_selected="Aggiungi" name="l_add_btn"/>
+	<button label="Rimuovi" label_selected="Rimuovi" name="l_rem_btn"/>
+	<button label="Importa" label_selected="Importa" name="l_upl_btn"/>
+	<scroll_list name="l_name_list">
+		<column name="unit_name" label="Nome"/>
+		<column name="unit_id_HIDDEN" label="ID"/>
+	</scroll_list>
 	<button label="Annulla" label_selected="Annulla" name="Cancel"/>
-	<button label="OK" label_selected="OK" name="Select"/>
+	<button label="OK" label_selected="OK" name="Select" left="175"/>
 	<string name="pick title">
 		Scegli:
 	</string>
