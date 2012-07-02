@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Własne kolory" name="custom_colors_panel">
+  <text name="custom_colors_text">
+    Własne kolory UI:
+  </text>
+  <text name="text_boxc1">
+    Przyciski, paski przewijania itd.
+  </text>
+  <text name="text_boxc3">
+    Wyróżniony tekst
+  </text>
+  <text name="text_boxc4">
+    Przyciski - normalne
+  </text>
+  <text name="text_boxc6">
+    Przyciski - zaznaczone
+  </text>
+  <text name="text_boxbn">
+    Tło paneli - normalne
+  </text>
+  <text name="text_boxbn_restart">
+    (wymaga restartu)
+  </text>
+  <text name="text_boxbl">
+    Tło paneli - jaśniejsze
+  </text>
+  <text name="text_boxb1_restart">
+    (wymaga restartu)
+  </text>
+  <text name="general_colors_text">
+    Ogólne kolory UI (także w 'Kolorach' w Ustawieniach):
+  </text>
+  <text name="CustomScriptDialogBgLabel">
+    Tło powiadomień skryptów
+  </text>
+  <text name="CustomScriptDialogFgLabel">
+    1-szy plan powiadomień skryptów
+  </text>
+</panel>
