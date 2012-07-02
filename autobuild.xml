@@ -290,9 +290,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>be7321370b69b6d66938b82a9230a067</string>
+              <string>5962b0a3c8e0e7a4248492686f38f5ba</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-colladadom/rev/233450/arch/Linux/installer/colladadom-2.2-linux-20110621.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.2-linux-20120702.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
