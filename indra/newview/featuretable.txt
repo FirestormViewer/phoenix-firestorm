@@ -85,7 +85,7 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderMaxPartCount			1	128
+RenderMaxPartCount			1	256
 RenderObjectBump			1	0
 RenderLocalLights			1	0
 RenderReflectionDetail		1	0
@@ -117,7 +117,7 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderMaxPartCount			1	128
+RenderMaxPartCount			1	256
 RenderObjectBump			1	0
 RenderLocalLights			1	0
 RenderReflectionDetail		1	0
