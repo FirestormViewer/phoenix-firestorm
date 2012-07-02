@@ -484,17 +484,14 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 	
 
 
-// <FS:AW fix: custom start location "randomly" reset>
-//	if(identifier.has("startlocation")){
-	LLSLURL slurl = LLSLURL(sInstance->getChild<LLComboBox>("start_location_combo")->getValue());
-	if(LLSLURL::LOCATION != slurl.getType() && identifier.has("startlocation"))
-	{
-// <FS:AW fix: custom start location "randomly" reset>
+// <FS:AW FIRE-6492 Firestorm doesn't always honor the start location option>
+/*	if(identifier.has("startlocation")){
 		llinfos << "Settings startlocation to: " << identifier["startlocation"].asString() << llendl;
 		LLStartUp::setStartSLURL(LLSLURL(identifier["startlocation"].asString()));
 		updateLocationCombo(false);
 	}
-
+*/
+// </FS:AW FIRE-6492 Firestorm doesn't always honor the start location option>
 	sInstance->addFavoritesToStartLocation();
 	// if the password exists in the credential, set the password field with
 	// a filler to get some stars
@@ -640,6 +637,8 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		}
 	}
 
+// <FS:AW FIRE-6492 Firestorm doesn't always honor the start location option>
+/*
 	switch(LLSLURL(sInstance->getChild<LLComboBox>("start_location_combo")->getValue()).getType())
 	{
 		case LLSLURL::HOME_LOCATION:
@@ -669,8 +668,9 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 			break;
 		}
 	}
+*/
+// </FS:AW FIRE-6492 Firestorm doesn't always honor the start location option>
 
-	
 	credential = gSecAPIHandler->createCredential(credential_name(), identifier, authenticator);
 	remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
 }
