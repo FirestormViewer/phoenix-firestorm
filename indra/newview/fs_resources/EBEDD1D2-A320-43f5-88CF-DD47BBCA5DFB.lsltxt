@@ -76,11 +76,13 @@
     float   last_boost_height;
     float   average_boost;
     
-    // OpenCollar AO interface
-    integer aoChannel;
-    integer aoListener = -1;
+    // OpenCollar/LockMeister AO interface
+    integer aoChannelOC;
+    integer aoChannelLM = -8888;
+    integer aoListenerOC = -1;
+    integer aoListenerLM = -1;
     key     aoCollarKey = NULL_KEY;
-
+    
 //
 // Bridge platform helper functions
 //
@@ -140,14 +142,19 @@
             flight_init();
         }
 
-        // Set the channel for the AO interface
-        aoSetChannel();
-        // Remove previous AO listener if present
-        if (aoListener >= 0)
+        // Set the channel for the AO OC interface
+        aoSetChannelOC();
+        // Remove previous AO listeners if present
+        if (aoListenerOC >= 0)
         {
-            llListenRemove(aoListener);
-            aoListener = -1;
+            llListenRemove(aoListenerOC);
+            aoListenerOC = -1;
             aoCollarKey = NULL_KEY;
+        }
+        if (aoListenerLM >= 0)
+        {
+            llListenRemove(aoListenerLM);
+            aoListenerLM = -1;
         }
     }
 
@@ -372,31 +379,40 @@ reportTag(key av, integer tagIdx)
 }
 
 //
-// OpenCollar AO interface functions
+// OpenCollar/LockMeister AO interface functions
 //
 
-    aoSetChannel()
+    aoSetChannelOC()
     {
-        aoChannel = (integer)("0x" + llGetSubString(owner,30,-1));
-        if (aoChannel > 0)
+        aoChannelOC = (integer)("0x" + llGetSubString(owner,30,-1));
+        if (aoChannelOC > 0)
         {
-             aoChannel = -aoChannel;
+             aoChannelOC = -aoChannelOC;
         }
     }
 
-    aoPingCollar()
+    aoPingCollarOC()
     {
-        llWhisper(aoChannel, "OpenCollar?");
+        llWhisper(aoChannelOC, "OpenCollar?");
     }
 
-    aoListen(key collarid)
+    aoListenOC(key collarid)
     {
-        if (aoListener >= 0)
+        if (aoListenerOC >= 0)
         {
-            llListenRemove(aoListener);
+            llListenRemove(aoListenerOC);
         }
-        aoListener = llListen(aoChannel,"",collarid,"");
+        aoListenerOC = llListen(aoChannelOC,"",collarid,"");
         aoCollarKey = collarid;
+    }
+    
+    aoListenLM()
+    {
+        if (aoListenerLM >= 0)
+        {
+            llListenRemove(aoListenerLM);
+        }
+        aoListenerLM = llListen(aoChannelLM,"",NULL_KEY,"");
     }
 
     aoState(string newstate)
@@ -613,8 +629,9 @@ default
     {
         makeSane();
         initBridge();
-        aoListen(NULL_KEY);
-        aoPingCollar();
+        aoListenOC(NULL_KEY);
+        aoListenLM();
+        aoPingCollarOC();
         
         //<DEBUG>
         //debug=TRUE;
@@ -639,8 +656,9 @@ default
             initBridge();
             if (useTags)
                 enableTags(TRUE);
-            aoListen(NULL_KEY);
-            aoPingCollar();
+            aoListenOC(NULL_KEY);
+            aoPingCollarOC();
+            aoListenLM();
         }
     }
     
@@ -861,17 +879,17 @@ default
             }            
         } // end tagChan listen handler
 
-        else if (fromChan == aoChannel)     // OpenCollar AO interface
+        else if (fromChan == aoChannelOC)     // OpenCollar AO interface
         {
             integer zhaoPos;
             if ((aoCollarKey == NULL_KEY) &&    // no collar paired yet
                 (msg == "OpenCollar=Yes"))      // a collar is saying hello
             {
-                aoListen(senderID);     // pair with it
+                aoListenOC(senderID);     // pair with it
             }
             else if (msg == "OpenCollar=No")    // collar signing off
             {
-                aoListen(NULL_KEY);     // unpair with it
+                aoListenOC(NULL_KEY);     // unpair with it
             }
             else if ((zhaoPos = llSubStringIndex(msg,"ZHAO_")) >= 0)
             {
@@ -888,6 +906,25 @@ default
                 }
             }
         } // end OpenCollar AO interface listen handler
+        
+        else if (fromChan == aoChannelLM)        // LockMeister AO interface
+        {
+            key lmtarget = (key)llGetSubString(msg, 0, 35);
+            list templist = llParseStringKeepNulls(llGetSubString(msg, 36, -1),
+                                                    [ "|" ], []);
+            string command = llList2String(templist, 0);
+            if(lmtarget == owner)
+            {
+                if(command == "booton")
+                {
+                    aoState("on");
+                }
+                else if(command == "bootoff")
+                {
+                    aoState("off");
+                }
+            }
+        } // end LockMeister AO interface listen handler
     } // end listen
     
 }
