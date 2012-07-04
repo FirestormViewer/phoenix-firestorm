@@ -143,9 +143,7 @@ private:
 	bool						mResortActivePanel;
 	LLSaveFolderState*			mSavedFolderState;
 	std::string					mFilterText;
-	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
-	//std::string					mFilterSubString;
-	// </FS:Ansariel>
+	std::string					mFilterSubString;
 	LLTextBox*					mItemcountText;
 
 	// ## Zi: Filter dropdown

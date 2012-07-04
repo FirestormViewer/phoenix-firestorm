@@ -538,9 +538,7 @@ void LLPanelMainInventory::onClearSearch()
 		mActivePanel->getRootFolder()->applyFunctorRecursively(opener);
 		mActivePanel->getRootFolder()->scrollToShowSelection();
 	}
-	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
-	//mFilterSubString = "";
-	// </FS:Ansariel> 
+	mFilterSubString = "";
 }
 
 void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
@@ -556,11 +554,20 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 
 	LLInventoryModelBackgroundFetch::instance().start();
 
-	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
-	//mFilterSubString = search_string;
+	mFilterSubString = search_string;
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	//if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
-	if (mActivePanel->getFilterSubString().empty() && search_string.empty())
-	// </FS:Ansariel>
+	std::string search_for;
+	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		search_for = search_string;
+	}
+	else
+	{
+		search_for = mFilterSubString;
+	}
+	if (mActivePanel->getFilterSubString().empty() && search_for.empty())
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	{
 			// current filter and new filter empty, do nothing
 			return;
@@ -574,10 +581,17 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	}
 
 	// set new filter string
-	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	//setFilterSubString(mFilterSubString);
-	setFilterSubString(search_string);
-	// </FS:Ansariel>
+	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		setFilterSubString(search_string);
+	}
+	else
+	{
+		setFilterSubString(mFilterSubString);
+	}
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 }
 
 // ## Zi: Filter dropdown
@@ -713,9 +727,13 @@ void LLPanelMainInventory::onFilterSelected()
 		return;
 	}
 
-	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	//setFilterSubString(mFilterSubString);
-	// </FS:Ansariel>
+	if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		setFilterSubString(mFilterSubString);
+	}
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	LLInventoryFilter* filter = mActivePanel->getFilter();
 	LLFloaterInventoryFinder *finder = getFinder();
 	if (finder)
@@ -782,10 +800,18 @@ void LLPanelMainInventory::draw()
 {
 	if (mActivePanel && mFilterEditor)
 	{
-		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
+		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 		//mFilterEditor->setText(mFilterSubString);
-		mFilterEditor->setText(mActivePanel->getFilterSubString());
-		// </FS:Ansariel>
+		static LLCachedControl<bool> sfSplitInventorySearchOverTabs(gSavedSettings, "FSSplitInventorySearchOverTabs");
+		if (sfSplitInventorySearchOverTabs)
+		{
+			mFilterEditor->setText(mActivePanel->getFilterSubString());
+		}
+		else
+		{
+			mFilterEditor->setText(mFilterSubString);
+		}
+		// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	}	
 	if (mActivePanel && mResortActivePanel)
 	{
@@ -1343,9 +1369,7 @@ void LLPanelMainInventory::onCustomAction(const LLSD& userdata)
 		}
 		const LLUUID& item_id = current_item->getListener()->getUUID();
 		const std::string &item_name = current_item->getListener()->getName();
-		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913)
-		//mFilterSubString = item_name;
-		// </FS:Ansariel>
+		mFilterSubString = item_name;
 		LLInventoryFilter *filter = mActivePanel->getFilter();
 		filter->setFilterSubString(item_name);
 		mFilterEditor->setText(item_name);
