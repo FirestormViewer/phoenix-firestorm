@@ -1,10 +1,10 @@
 /**
- * @file fsfloaterprofile.h
- * @brief Legacy Profile Floater
+ * @file fswsassetblacklist.h
+ * @brief Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Kadah Coba
+ * Copyright (C) 2012, Wolfspirit Magic
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
