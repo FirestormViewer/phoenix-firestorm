@@ -1,6 +1,6 @@
 /**
- * @file fswsassetblacklist.h
- * @brief Asset Blacklist and Derender
+ * @file fsfloaterwsassetblacklist.h
+ * @brief Floater for Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -33,6 +33,7 @@
 
 
 class LLScrollListCtrl;
+
 
 
 class FSFloaterWSAssetBlacklist : public LLFloater

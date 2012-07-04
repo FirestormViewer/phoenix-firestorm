@@ -1,6 +1,6 @@
 /**
- * @file fswsassetblacklist.cpp
- * @brief Asset Blacklist and Derender
+ * @file fsfloaterwsassetblacklist.cpp
+ * @brief Floater for Asset Blacklist and Derender
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -130,7 +130,7 @@ void FSFloaterWSAssetBlacklist::onRemoveBtn()
 	for (std::vector<LLScrollListItem*>::iterator it = list.begin(); it != list.end(); it++)
 	{
 		LLScrollListItem* item = *it;
-
+		
 		FSWSAssetBlacklist::getInstance()->removeItemFromBlacklist(item->getUUID());
 	}
 
