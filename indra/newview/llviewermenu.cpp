@@ -3271,10 +3271,30 @@ bool enable_object_mute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-//		return !is_linden && !is_self;
+//             return !is_linden && !is_self;
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+//             return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
+
+		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
+		if(is_linden || is_self)
+			return false;
+
+		if(gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			return false;
+
+		LLNameValue *firstname = avatar->getNVPair("FirstName");
+
+		std::string name;
+		if (firstname && lastname)
+		{
+			name = LLCacheName::buildFullName(
+				firstname->getString(), lastname->getString());
+		}
+
+		LLMute mute(avatar->getID(),name,LLMute::AGENT);
+		return !LLMuteList::getInstance()->isMuted(mute.mID);
+		// </FS:Zi>
 	}
 	else
 	{
@@ -3297,7 +3317,22 @@ bool enable_object_unmute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-		return !is_linden && !is_self;
+		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
+		// return !is_linden && !is_self;
+		if(is_linden || is_self)
+			return false;
+
+		LLNameValue *firstname = avatar->getNVPair("FirstName");
+		std::string name;
+		if (firstname && lastname)
+		{
+			name = LLCacheName::buildFullName(
+				firstname->getString(), lastname->getString());
+		}
+
+		LLMute mute(avatar->getID(),name,LLMute::AGENT);
+		return LLMuteList::getInstance()->isMuted(mute.mID);
+		// </FS:Zi>
 	}
 	else
 	{
