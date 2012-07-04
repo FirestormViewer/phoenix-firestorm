@@ -92,6 +92,8 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
+    fswsassetblacklist.cpp
+    fsfloaterwsassetblacklist.cpp
     fsmoneytracker.cpp
     fsdata.cpp
     fsgrouptitles.cpp
@@ -716,6 +718,8 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fscontactsfloater.h
     fsareasearch.h
+    fswsassetblacklist.h
+    fsfloaterwsassetblacklist.h
     fsmoneytracker.h
     fsdata.h
     fsgrouptitles.h

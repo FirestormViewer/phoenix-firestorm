@@ -172,6 +172,10 @@
 //<FS:KC legacy profiles>
 #include "fsfloaterprofile.h"
 //</FS:KC legacy profiles>
+//<FS:WS asset blacklist>
+#include "fsfloaterwsassetblacklist.h"
+//</FS:WS>
+
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
 {
@@ -372,6 +376,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);
 	LLFloaterReg::add("contactsetsettings", "floater_contactsets_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloaterSettings>);
+
+	// WS: Firestorm Asset Blacklist
+	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
 
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
 	LLFloaterReg::add("lgg_beamshape", "floater_beamshape.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamMapFloater>);

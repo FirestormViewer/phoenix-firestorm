@@ -60,6 +60,9 @@ bool LLTextureFetchDebugger::sDebuggerEnabled = false ;
 LLStat LLTextureFetch::sCacheHitRate("texture_cache_hits", 128);
 LLStat LLTextureFetch::sCacheReadLatency("texture_cache_read_latency", 128);
 
+
+#include "fswsassetblacklist.h"
+
 //////////////////////////////////////////////////////////////////////////////
 class LLTextureFetchWorker : public LLWorkerClass
 {
@@ -900,6 +903,14 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 	if (mState == INIT)
 	{		
+		if(FSWSAssetBlacklist::getInstance()->isBlacklisted(mID,LLAssetType::AT_TEXTURE))
+		{
+			llinfos << "Blacklisted texture asset blocked." << llendl; 
+			mState = DONE;
+			return true;
+		}
+
+
 		mRawImage = NULL ;
 		mRequestedDiscard = -1;
 		mLoadedDiscard = -1;
