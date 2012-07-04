@@ -360,19 +360,20 @@ void NACLFloaterExploreSounds::blacklistSound(void* user_data)
 		LLSoundHistoryItem item = floater->getItem((*selection_iter)->getValue());
 		if(item.mID.isNull()) continue;
 
-		LLSD sound_data;
+		//LLSD sound_data;
+		std::string entry_name;
 		std::string agent;
 		gCacheName->getFullName(item.mOwnerID, agent);
 		LLViewerRegion* cur_region = gAgent.getRegion();
 
 		if(cur_region)
-		  sound_data["entry_name"] = llformat("Sound played by %s in region %s",agent.c_str(),cur_region->getName().c_str());
+		  /*sound_data["entry_name"]*/ entry_name = llformat("Sound played by %s in region %s",agent.c_str(),cur_region->getName().c_str());
 		else
-		  sound_data["entry_name"] = llformat("Sound played by %s",agent.c_str());
-		sound_data["entry_type"] = (LLAssetType::EType)item.mType;
-		sound_data["entry_agent"] = gAgent.getID();
+		  /*sound_data["entry_name"]*/ entry_name = llformat("Sound played by %s",agent.c_str());
+		//sound_data["entry_type"] = (LLAssetType::EType)item.mType;
+		//sound_data["entry_agent"] = gAgent.getID();
 		//NACLFloaterBlacklist::addEntry(item.mAssetID,sound_data); //for origonal asset blacklist
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID,"Sometext",LLAssetType::AT_SOUND,true);
+		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID,entry_name,LLAssetType::AT_SOUND,true);
 	}
 }
 

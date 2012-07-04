@@ -88,15 +88,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, LLAs
 	std::string input_date = curdate->asString();
 	input_date.replace(input_date.find("T"),1," ");
 	input_date.resize(input_date.size() - 1);
-
-	if(type==LLAssetType::AT_SOUND){
-		  gVFS->removeFile(id,LLAssetType::AT_SOUND);
-		  std::string wav_path;
-		  wav_path= gDirUtilp->getExpandedFilename(LL_PATH_CACHE,id.asString()) + ".dsf";
-		  if(LLAPRFile::isExist(wav_path, NULL, LL_APR_RPB))
-			LLAPRFile::remove(wav_path);
-	}
-
+	
 	LLSD data;
 	data["asset_name"]=name;
 	data["asset_type"]=type;
