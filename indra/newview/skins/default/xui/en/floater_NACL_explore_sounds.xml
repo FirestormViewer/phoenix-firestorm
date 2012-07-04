@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater can_close="true" can_minimize="true"  open_centered="true" can_resize="true" height="300" width="550" min_width="550" min_height="170" name="sound_explorer" title="Sounds"  save_rect="true"
+<floater can_close="true" can_minimize="true"  open_centered="true" can_resize="true" height="300" width="550" min_width="550" min_height="170" name="sound_explorer" title="SOUNDS"  save_rect="true"
  save_visibility="true"
  single_instance="true"
  help_topic="fs_sound_explorer">
