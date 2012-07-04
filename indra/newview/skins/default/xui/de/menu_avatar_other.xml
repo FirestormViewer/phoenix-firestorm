@@ -9,6 +9,7 @@
 	<menu_item_call label="In Gruppe einladen" name="Invite..."/>
 	<context_menu label="Belästigung" name="Remove">
 		<menu_item_call label="Ignorieren" name="Avatar Mute"/>
+		<menu_item_call label="Freischalten" name="Avatar Unmute"/>
 		<menu_item_call label="Melden" name="abuse"/>
 		<menu_item_call label="Einfrieren" name="Freeze..."/>
 		<menu_item_call label="Hinauswerfen" name="Eject..."/>	
@@ -16,4 +17,7 @@
 	<menu_item_call label="Fehler in Texturen beseitigen" name="Debug..."/>
 	<menu_item_call label="Hineinzoomen" name="Zoom In"/>
 	<menu_item_call label="Bezahlen" name="Pay..."/>
+	<menu_item_call label="Nicht anzeigen" name="Derender"/>
+	<menu_item_call label="Skript-Info" name="ScriptInfo"/>
+	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 </context_menu>

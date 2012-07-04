@@ -32,6 +32,7 @@
 	<context_menu label="Verwalten" name="Remove">
 		<menu_item_call label="Missbrauch melden" name="Report Abuse..."/>
 		<menu_item_call label="Ignorieren" name="Object Mute"/>
+		<menu_item_call label="Freischalten" name="Object Unmute"/>
 	</context_menu>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 	<menu_item_call label="Nicht anzeigen" name="Derender"/>
