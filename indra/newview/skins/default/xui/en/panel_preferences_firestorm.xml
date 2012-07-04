@@ -172,6 +172,18 @@
          top_pad="5"
          follows="left|top"
          height="16"
+         label="Allow separate search terms on each tab in inventory"
+         left="15"
+         name="FSSplitInventorySearchOverTabs"
+         width="270"
+         control_name="FSSplitInventorySearchOverTabs"
+         tool_tip="If enabled, it is possible to enter a different search term for each tab in inventory.">
+        </check_box>
+
+        <check_box
+         top_pad="5"
+         follows="left|top"
+         height="16"
          label="Deactivate tracking beacon when reaching the targeted avatar (&lt;= 3m)"
          left="15"
          name="FSDisableAvatarTrackerAtCloseIn"
