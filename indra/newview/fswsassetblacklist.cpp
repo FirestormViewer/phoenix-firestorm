@@ -151,7 +151,7 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(LLUUID id, LLAssetType::EType ty
 		std::stringstream typesstream;
 		typesstream << (int)type;
 		std::string types = typesstream.str();
-	std::map<LLAssetType::EType,std::vector<LLUUID>>::iterator it;
+	std::map<LLAssetType::EType,std::vector<LLUUID> >::iterator it;
 	it = BlacklistIDs.find(type);
 	
 	if(it==BlacklistIDs.end()){

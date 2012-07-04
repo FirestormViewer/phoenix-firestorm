@@ -31,7 +31,7 @@
 #include "llassettype.h"
 
 
-typedef std::map<LLAssetType::EType,std::vector<LLUUID>> BlacklistMAP;
+typedef std::map<LLAssetType::EType,std::vector<LLUUID> > BlacklistMAP;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 {
@@ -41,7 +41,7 @@ public:
 	void addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save=true);
 	void addNewItemToBlacklistData(LLUUID id, LLSD data, bool save=true);
 	void removeItemFromBlacklist(LLUUID id);
-	static std::map<LLUUID,LLSD> FSWSAssetBlacklist::BlacklistData;
+	static std::map<LLUUID,LLSD> BlacklistData;
 
 
 private:
@@ -50,7 +50,7 @@ private:
 	bool addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type);
 	
 
-	static std::string FSWSAssetBlacklist::blacklist_file_name;
-	static BlacklistMAP FSWSAssetBlacklist::BlacklistIDs;
+	static std::string blacklist_file_name;
+	static BlacklistMAP BlacklistIDs;
 
 };
