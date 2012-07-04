@@ -1,4 +1,6 @@
-// <edit>
+/** 
+ * @file NACLfloaterexploresounds.h
+ */
 
 #ifndef LL_LLFLOATEREXPLORESOUNDS_H
 #define LL_LLFLOATEREXPLORESOUNDS_H
@@ -32,7 +34,7 @@ private:
 	virtual ~NACLFloaterExploreSounds();
 	std::list<LLSoundHistoryItem> mLastHistory;
 
-// static stuff!
+// static
 public:
 	static NACLFloaterExploreSounds* sInstance;
 
@@ -40,4 +42,3 @@ public:
 };
 
 #endif
-// </edit>
