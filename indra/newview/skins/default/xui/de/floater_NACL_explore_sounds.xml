@@ -11,8 +11,7 @@
 		<columns label="Eigentümer" name="owner"/>
 		<columns label="Sounds" name="sound"/>
 	</scroll_list>
-	<button label="Abspielen: Lokal" name="play_locally_btn"/>
-	<button label="Abspielen: Umgebung" name="play_ambient_btn" width="130"/>
+	<button label="Lokal abspielen" name="play_locally_btn" width="130"/>
 	<button label="Fokussieren" name="look_at_btn" left_delta="135"/>
 	<button label="Stop" name="stop_btn"/>
 	<button label="Blacklist" name="bl_btn"/>
