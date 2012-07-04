@@ -155,6 +155,13 @@ class ViewerManifest(LLManifest):
                             self.path("*.png")
                             self.end_prefix("*/themes/*/textures")
 
+            # FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
+            if self.prefix(src="*/themes/*/xui"):
+                    self.path("*/*.xml")
+                    self.path("*/widgets/*.xml")
+                    self.end_prefix("*/themes/*/xui")
+            # END FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
+
                     self.path("*/*.xml")
 
                     # Local HTML files (e.g. loading screen)
