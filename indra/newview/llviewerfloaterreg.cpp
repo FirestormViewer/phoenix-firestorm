@@ -175,6 +175,9 @@
 //<FS:WS asset blacklist>
 #include "fsfloaterwsassetblacklist.h"
 //</FS:WS>
+// NaCl - Sound explorer
+#include "NACLfloaterexploresounds.h"
+// NaCl End
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -371,6 +374,10 @@ void LLViewerFloaterReg::registerFloaters()
 	// AO: Firestorm Money (tip) tracker 
 	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
 	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);  // Quick Preferences panel -WoLf
+	
+	// NaC - Sound explorer
+	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
+	// NaCl End
 
 	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);	// ## Zi: Animation Overrider
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
