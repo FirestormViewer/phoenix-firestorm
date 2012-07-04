@@ -704,7 +704,12 @@ class WindowsManifest(ViewerManifest):
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+            sName = "%s/Phoenix_%s_%s_symbols-windows.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes'])
+
+            if os.path.exists( sName ):
+                os.unlink( sName )
+
+            os.rename("%s/firestorm-symbols-windows.tar.bz2" % self.args['configuration'].lower(), sName )
         
         # OLD METHOD, Still used for windows-based debugging
         symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
