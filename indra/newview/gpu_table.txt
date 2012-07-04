@@ -296,9 +296,9 @@ Intel Media Graphics HD			.*Intel.*Media Graphics HD.*				0		1
 Intel Montara					.*Intel.*Montara.*							0		0
 Intel Pineview					.*Intel.*Pineview.*							0		1
 Intel Springdale				.*Intel.*Springdale.*						0		0
-Intel HD Graphics 2000			.*Intel.*HD2000.*							1		1
-Intel HD Graphics 3000			.*Intel.*HD3000.*							2		1
-Intel HD Graphics 4000			.*Intel.*HD4000.*							2		1
+Intel HD Graphics 2000			.*Intel.*HD Graphics 2000.*					1		1
+Intel HD Graphics 3000			.*Intel.*HD Graphics 3000.*					2		1
+Intel HD Graphics 4000			.*Intel.*HD Graphics 4000.*					2		1
 Intel HD Graphics				.*Intel.*HD Graphics.*						1		1
 Matrox							.*Matrox.*									0		0
 Mesa							.*Mesa.*									0		0
