@@ -43,6 +43,8 @@
 #include "llviewerwindow.h"
 #include "lltrans.h"
 
+#include "llviewernetwork.h" // For grid manager
+
 class LLAvatarName;
 
 // defined in llfloaterland.cpp
@@ -477,6 +479,8 @@ void LLFloaterSellLandUI::doSellLand(void *userdata)
 	args["LAND_SIZE"] = llformat("%d",area);
 	args["SALE_PRICE"] = llformat("%d",sale_price);
 	args["NAME"] = authorizedBuyerName;
+	// <FS:Ansariel> Fill [CURRENT_GRID] placeholder (FIRE-6777)
+	args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
 
 	LLNotification::Params params("ConfirmLandSaleChange");
 	params.substitutions(args)
