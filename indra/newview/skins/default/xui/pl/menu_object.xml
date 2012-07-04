@@ -30,6 +30,7 @@
 	<context_menu label="Irytacja?" name="Remove">
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse..."/>
 		<menu_item_call label="Zablokuj/wycisz" name="Object Mute"/>
+		<menu_item_call label="Odblokuj" name="Object Unmute"/>
 	</context_menu>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 	<menu_item_call label="Derenderuj" name="Derender"/>

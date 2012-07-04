@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ws_asset_blacklist" title="CZARNA LISTA ZASOBÓW DANYCH">
+	<floater.string name="asset_object">
+		Obiekt
+	</floater.string>
+	<floater.string name="asset_texture">
+		Tekstura
+	</floater.string>
+	<floater.string name="asset_sound">
+		Dźwięk
+	</floater.string>
+	<floater.string name="asset_unknown">
+		Nieznany
+	</floater.string>
+	<scroll_list name="result_list">
+		<scroll_list.columns name="name" label="Nazwa" />
+		<scroll_list.columns name="type" label="Typ" />
+		<scroll_list.columns name="date" label="Data" />
+	</scroll_list>
+	<button name="remove_btn" label="Usuń zaznaczone z czarnej listy" />
+</floater>

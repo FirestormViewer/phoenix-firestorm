@@ -95,10 +95,10 @@
 			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani"/>
 			<check_box label="Włącz OpenGL Vertex Buffer Object (opis geometrii obiektów)" name="vbo" tool_tip="Włączenie tej opcji na nowoczesnym sprzęcie spowoduje wzrost wydajności. Starszy sprzęt jednak ma często słabe wsparcie dla VBO i mogą wystąpić na nim awarie."/>
 			<check_box label="Włącz strumieniowe VBO" name="vbo_stream" tool_tip="Wyłączenie tej opcji może zwiększyć wydajność, gdy VBO jest włączone. Odnotowano zauważalny wzrost wydajności na różnych GPU ze stajni AMD przy wyłączonej tej pozycji."/>
-			<text name="tc label">
+			<!-- <text name="tc label">
 				Włącz S3TC:
-			</text>
-			<check_box label="Włącz kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu."/>
+			</text> -->
+			<check_box label="Włącz stratną kompresję tekstur (wymaga restartu)" name="texture compression" tool_tip="Kompresuje tekstury w pamięci wideo. Umożliwi to ładowanie tekstur w wyższej rozdzielczości / większej ich ilości, ale kosztem jakości obrazu."/>
 			<text name="Antialiasing:">
 				Antyaliasing:
 			</text>

@@ -8,6 +8,7 @@
 	<menu_item_call label="Zaproś do grupy" name="Invite..."/>
 	<context_menu label="Irytacja?" name="Annoyance">
 		<menu_item_call label="Wycisz" name="Avatar Mute"/>
+		<menu_item_call label="Odblokuj" name="Avatar Unmute"/>
 		<menu_item_call label="Zgłoś" name="abuse"/>
 		<menu_item_call label="Unieruchom" name="Freeze..."/>
 		<menu_item_call label="Wyrzuć" name="Eject..."/>
