@@ -13,7 +13,7 @@
 	<menu_item_call label="Nuovo script" name="New Script"/>
 	<menu_item_call label="Nuovo biglietto" name="New Note"/>
 	<menu_item_call label="Nuova gesture" name="New Gesture"/>
-	<menu label="Maglietta intima" name="New Clothes">
+	<menu label="Nuovo Indumento" name="New Clothes">
 		<menu_item_call label="Nuova camicia" name="New Shirt"/>
 		<menu_item_call label="Nuovi pantaloni" name="New Pants"/>
 		<menu_item_call label="Nuove scarpe" name="New Shoes"/>

@@ -5,6 +5,15 @@
 	<menu_item_check label="Mostra prima i più recenti" name="sort_by_recent"/>
 	<menu_item_check label="Ordina le cartelle sempre in base al nome" name="sort_folders_by_name"/>
 	<menu_item_check label="Ordina cartelle di sistema all&apos;inizio" name="sort_system_folders_to_top"/>
+	<!-- ## Zi: Extended Inventory Search -->
+	<menu label="Cerca per..." name="inventory_search_menu">
+		<menu_item_check name="inventory_search_by_name" label="Nome"/>
+		<menu_item_check name="inventory_search_by_creator" label="Creatore"/>
+		<menu_item_check name="inventory_search_by_description" label="Descrizione"/>
+		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
+		<menu_item_check name="inventory_search_by_all" label="Tutti"/>
+	</menu>
+	<menu_item_check label="Aggiungi oggetto con doppio click" name="add_inv_toggle"/>
 	<menu_item_call label="Mostra filtri" name="show_filters"/>
 	<menu_item_call label="Ripristina filtri" name="reset_filters"/>
 	<menu_item_call label="Chiudi tutte le cartelle" name="close_folders"/>
@@ -13,5 +22,10 @@
 	<menu_item_call label="Condividi" name="Share"/>
 	<menu_item_call label="Trova originale" name="Find Original"/>
 	<menu_item_call label="Trova tutti i link" name="Find All Links"/>
+	<!-- ## Zi: Filter Links Menu -->
+	<menu_item_check name="inventory_filter_show_links" label="Mostra Link"/>
+	<menu_item_check name="inventory_filter_only_links" label="Mostra solo i Link"/>
+	<menu_item_check name="inventory_filter_hide_links" label="Nascondi i Link"/>
+	<!-- ## Zi: Filter Links Menu -->
 	<menu_item_call label="Svuota cestino" name="empty_trash"/>
 </toggleable_menu>
