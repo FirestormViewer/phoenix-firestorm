@@ -2,7 +2,7 @@
 <floater
  name="ws_asset_blacklist"
  help_topic="ws_asset_blacklist"
- title="Asset Blacklist"
+ title="ASSET BLACKLIST"
  min_width="650"
  min_height="320"
  width="750"
@@ -70,7 +70,7 @@ Unknown
 	
 		<button
 	 name="remove_btn"
-	 label="Remove selected Items from Blacklist"
+	 label="Remove selected items from blacklist"
 	 font="SansSerif"
 	 mouse_opaque="true"
 	 height="20"
