@@ -349,14 +349,14 @@
 <!--End sys info button-->
   <layout_stack
    animate="false" 
-  follows="all"
-  height="308"
-  width="394"
-  layout="topleft"
-  orientation="horizontal"
-  name="im_panels"
-  top="40"
-  left="0">
+   follows="all"
+   height="308"
+   width="394"
+   layout="topleft"
+   orientation="horizontal"
+   name="im_panels"
+   top="40"
+   left="0">
     <layout_panel
       name="im_control_panel_holder"
       min_width="115"
@@ -375,31 +375,31 @@
        left="0"
        top="0"
        height="200"
-	   width="254"
+	   width="244"
        user_resize="true">
 
         <chat_history
-	 font="SansSerifSmall"
+         font="SansSerifSmall"
          follows="left|right|top|bottom"
          height="170"
          name="chat_history"
          parse_highlights="true"
          parse_urls="true"
-        left="1"
-         width="249">
+         left="3"
+         width="238">
         </chat_history>
         <line_editor
          bottom="0"
          follows="left|right|bottom"
-	 font="SansSerifSmall"
+         font="SansSerifSmall"
          height="20"
          label="To"
          layout="bottomleft"
-	 select_on_focus="true"
+         select_on_focus="true"
          spellcheck="true"
          name="chat_editor"
          tab_group="1"
-         width="249">
+         width="238">
         </line_editor>
     </layout_panel>
   </layout_stack>
