@@ -1951,23 +1951,39 @@ BOOL LLToolPie::handleRightClickPick()
 // [/RLVa:KB]
 				if (is_other_attachment)
 				{
-					gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
-					// ## Zi: Pie menu
+					// <FS:Zi> Pie menu
+					// gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// gMenuAttachmentOther->show(x, y);
 					if(gSavedSettings.getBOOL("UsePieMenu"))
+					{
+						gPieMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
 						gPieMenuAttachmentOther->show(x, y);
-					// ## Zi: Pie menu
+					}
 					else
-					gMenuAttachmentOther->show(x, y);
+					{
+						// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+						// gMenuAttachmentOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gMenuAttachmentOther->show(x, y);
+					}
+					// </FS:Zi>
 				}
 				else
 				{
-					gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
-					// ## Zi: Pie menu
+					// <FS:Zi> Pie menu
+					// gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+					// gMenuAvatarOther->show(x, y);
 					if(gSavedSettings.getBOOL("UsePieMenu"))
+					{
+						gPieMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
 						gPieMenuAvatarOther->show(x, y);
-					// ## Zi: Pie menu
+					}
 					else
-					gMenuAvatarOther->show(x, y);
+					{
+						// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+						// gMenuAvatarOther->getChild<LLUICtrl>("Avatar Mute")->setValue(mute_msg);
+						gMenuAvatarOther->show(x, y);
+					}
+					// </FS:Zi>
 				}
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
 			}
@@ -2012,13 +2028,21 @@ BOOL LLToolPie::handleRightClickPick()
 				 (!gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) )
 			{
 // [/RLVa:KB]
-				gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
-				// ## Zi: Pie menu
+				// <FS:Zi> Pie menu
+				// gMenuHolder->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+				// gMenuObject->show(x, y);
 				if(gSavedSettings.getBOOL("UsePieMenu"))
+				{
+					gPieMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
 					gPieMenuObject->show(x, y);
-				// ## Zi: Pie menu
+				}
 				else
-				gMenuObject->show(x, y);
+				{
+					// getChild() seems to fail for LLMenuItemCallGL items, so we changed the XML instead
+					// gMenuObject->getChild<LLUICtrl>("Object Mute")->setValue(mute_msg);
+					gMenuObject->show(x, y);
+				}
+				// </FS:Zi>
 
 				showVisualContextMenuEffect();
 // [RLVa:KB] - Checked: 2010-04-11 (RLVa-1.2.el) | Modified: RLVa-1.1.0l

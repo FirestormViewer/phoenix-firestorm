@@ -14,13 +14,13 @@
             parameter="shownames" />
     </pie_slice>
     <pie_slice
-        enabled="false"
+        enabled="true"
         label="Mute"
         name="Avatar Mute">
         <pie_slice.on_click
             function="Avatar.Mute" />
-        <pie_slice.on_enable
-            function="Avatar.EnableMute" />
+<!--        <pie_slice.on_enable
+                function="Avatar.EnableMute" /> -->
     </pie_slice>
     <pie_slice
         enabled="true"

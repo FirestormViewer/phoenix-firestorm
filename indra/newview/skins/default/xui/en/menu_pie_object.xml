@@ -156,13 +156,13 @@
         <pie_separator name="export_placeholder" />
         <pie_separator name="disable_placeholder" />
         <pie_slice
-            enabled="false"
+            enabled="true"
             label="Mute"
             name="Object Mute">
             <pie_slice.on_click
                 function="Object.Mute" />
-            <pie_slice.on_enable
-                function="Object.EnableMute" />
+<!--            <pie_slice.on_enable
+                    function="Object.EnableMute" /> -->
         </pie_slice>
 		
 		<pie_menu
