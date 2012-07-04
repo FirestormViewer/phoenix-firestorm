@@ -126,6 +126,8 @@
 				<menu_item_call label="Cancella valore predefinito..." name="delete_day_preset"/>
 			</menu>
 		</menu>
+		<menu_item_call label="Lista Suoni" name="Sound Explorer"/>
+     	<menu_item_call label="Asset Blacklist" name="asset_blacklist"/>
 	</menu>
 <!--Costruisci-->
 	<menu label="Costruisci" name="BuildTools">
