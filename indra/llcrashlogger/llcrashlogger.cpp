@@ -560,7 +560,11 @@ bool LLCrashLogger::init()
 	LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
 	// Default to the product name "Second Life" (this is overridden by the -name argument)
-	mProductName = "Second Life";
+	
+	// <FS:ND> Change default to Firestorm
+	//	mProductName = "Second Life";
+	mProductName = "Firestorm";
+	// </FS:ND>
 
 	// Rename current log file to ".old"
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "crashreport.log.old");
