@@ -210,7 +210,8 @@ void LLCrashLogger::gatherFiles()
 	gatherPlatformSpecificFiles();
 
 	mFileMap.erase( "SecondLifeLog" ); // <FS:ND/> Don't send any Firestorm.log. It's likely huge and won't help for crashdump processing.
-
+	mDebugLog.erase( "SLLog" ); // <FS:ND/> Remove SLLog, as it's a path that contains the OS user name.
+	
 	//Use the debug log to reconstruct the URL to send the crash report to
 	if(mDebugLog.has("CrashHostUrl"))
 	{
