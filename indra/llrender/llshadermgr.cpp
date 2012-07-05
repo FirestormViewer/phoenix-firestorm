@@ -723,20 +723,38 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		}
 		else if (major_version > 1 || minor_version >= 30)
 		{  //switches are supported in GLSL 1.30 and later
-			text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
-			text[count++] = strdup("\tswitch (vary_texture_index.r)\n");
-			text[count++] = strdup("\t{\n");
-		
-			//switch body
+
+			// <FS:ND> FIRE-6845 / VWR-29228 Yay for pink textures again :(
+			// replacing LL's version once again with the FS one that does not use a switch statement
+
+			// text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
+			// text[count++] = strdup("\tswitch (vary_texture_index.r)\n");
+			// text[count++] = strdup("\t{\n");
+			// 
+			// //switch body
+			// for (S32 i = 0; i < texture_index_channels; ++i)
+			// {
+			// 	std::string case_str = llformat("\t\tcase %d: ret = texture2D(tex%d, texcoord); break;\n", i, i);
+			// 	text[count++] = strdup(case_str.c_str());
+			// }
+			// 
+			// text[count++] = strdup("\t}\n");
+			// text[count++] = strdup("\treturn ret;\n");
+			// text[count++] = strdup("}\n");
+
+			text[count++] = strdup("float frVal = float( vary_texture_index.r );\n");
+			text[count++] = strdup("if ( frVal < 0 ) { return vec4(0,1,1,1); }\n");
+			
 			for (S32 i = 0; i < texture_index_channels; ++i)
 			{
-				std::string case_str = llformat("\t\tcase %d: ret = texture2D(tex%d, texcoord); break;\n", i, i);
-				text[count++] = strdup(case_str.c_str());
+				std::stringstream str;
+				str << "if ( frVal <= " << i << ".25 ) { return texture2D(tex" << i << ", texcoord); }\n";
+				text[count++] = strdup(str.str().c_str());
 			}
-
-			text[count++] = strdup("\t}\n");
-			text[count++] = strdup("\treturn ret;\n");
+			text[count++] = strdup("return vec4(1,0,1,1);\n");
 			text[count++] = strdup("}\n");
+
+			// </FS:ND>
 		}
 		else
 		{ //should never get here.  Indexed texture rendering requires GLSL 1.30 or later 
