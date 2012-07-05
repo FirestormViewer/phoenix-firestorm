@@ -32,7 +32,7 @@
      type="string"
      label="Logs:"
      name="textSaveMiniDumpType" >
-        Minidump Type :
+        Minidump Type:
     </text>
     <combo_box
      layout="topleft"
@@ -45,12 +45,15 @@
      name="comboSaveMiniDumpType"
      enabled="false" >
         <combo_box.item
+         name="Minimal"
          label="Minimal"
          value="0" />
         <combo_box.item
+         name="Default"
          label="Default"
          value="1" />
         <combo_box.item
+         name="Extended"
          label="Extended"
          value="2" />
     </combo_box>
@@ -157,8 +160,8 @@
      mouse_opaque="false"
      name="textInformation4"
      top_pad="20"
-     width="350"
+     width="500"
      font.style="BOLD" >
-        Privacy policy: http://privacy-placeholder
+        Privacy policy: http://www.phoenixviewer.com/privacy.php
     </text>
 </panel>
