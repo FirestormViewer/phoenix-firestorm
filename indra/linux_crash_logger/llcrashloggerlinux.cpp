@@ -44,15 +44,29 @@
 
 #define MAX_LOADSTRING 100
 
+// <FS:ND> Fire-901 / Crashreporting: Brand for FS, add URL to privacy policy
+
 // These need to be localized.
+// static const char dialog_text[] =
+// "Second Life appears to have crashed or frozen last time it ran.\n"
+// "This crash reporter collects information about your computer's hardware, operating system, and some Second Life logs, all of which are used for debugging purposes only.\n"
+// "\n"
+// "Send crash report?";
+// 
+// static const char dialog_title[] =
+// "Second Life Crash Logger";
+
 static const char dialog_text[] =
-"Second Life appears to have crashed or frozen last time it ran.\n"
-"This crash reporter collects information about your computer's hardware, operating system, and some Second Life logs, all of which are used for debugging purposes only.\n"
+"Firestorm appears to have crashed or frozen last time it ran.\n"
+"This crash reporter collects information about your computer's hardware, operating system which are used for debugging purposes only. SecondLife logs are not collected.\n"
+"This report will be send to phoenixviewer.com. Review our privacy policy at http://www.phoenixviewer.com/privacy.php for more information.\n"
 "\n"
 "Send crash report?";
 
 static const char dialog_title[] =
-"Second Life Crash Logger";
+"Firestorm Crash Logger";
+
+// </FS:ND>
 
 #if LL_GTK
 static void response_callback (GtkDialog *dialog,
