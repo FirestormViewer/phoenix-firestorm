@@ -103,10 +103,7 @@
 			<check_box label="Filtrado anisotrópico (más lento cuando está activado)" name="ani"/>
 			<check_box label="Activar OpenGL Vertex Buffer Objects" name="vbo" tool_tip="Proporciona un aumento de rendimiento cuando usas hardware moderno. Por contra, el hardware antiguo a menudo ofrece implementaciones muy pobres de VBOs y pueden provocar fallos cuando lo activas."/>
 			<check_box label="Activar VBOs en flujo" name="vbo_stream" tool_tip="Desactivarlo puede mejorar el rendimiento cuando los VBOs están activados, sobre todo en varias tarjetas gráficas de AMD(ATI)."/>
-			<text name="tc label">
-				Activar S3TC:
-			</text>
-			<check_box label="Activar compresión de texturas (requiere reiniciar)" name="texture compression" tool_tip="Comprime las texturas en la memoria de vídeo, permitiendo la carga de texturas de mayor resolución a costa de algo de calidad de color."/>
+			<check_box label="Activar compresión de texturas con pérdida (requiere reiniciar)" name="texture compression" tool_tip="Comprime las texturas en la memoria de vídeo, permitiendo la carga de texturas de mayor resolución a costa de algo de calidad de color."/>
 			<text name="Antialiasing:">
 				Antialiasing:
 			</text>

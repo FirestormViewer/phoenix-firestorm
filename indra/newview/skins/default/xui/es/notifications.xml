@@ -2716,12 +2716,11 @@ Del objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME]?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Un objeto de nombre &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos;, solicita acceso total a tu cuenta de dólares Linden. Si le permites el acceso, puede retirar fondos de tu cuenta en cualquier momento, o vaciarla completamente sin advertencia alguna.:
-
-Este tipo de peticiones no suelen ser legítimas. No permitas el acceso si no estás totalmente seguro de por qué desea acceder a tu cuenta.
-
+		El objeto &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; solicita acceso para obtener dinero de tu cuenta de dólares Linden. Si le permites el acceso, puede retirar algunos o todos los fondos de tu cuenta en cualquier momento, sin advertencia alguna.
+		
+		Antes de permitir ese acceso, asegúrate de que sabes qué es ese objeto y por qué te está solicitando tal acceso, así como de si confías en su creador. Si no estás seguro, deniégaselo.
 		<form name="form">
-			<button name="Grant" text="Autorizar"/>
+			<button name="Grant" text="Permitir"/>
 			<button name="Deny" text="Denegar"/>
 		</form>
 	</notification>
@@ -3470,7 +3469,8 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 			<ignore name="ignore" text="Una cadena LSL se ha copiado a mi portapapeles"/>
 		</form>
 	</notification>
-	<notification name="FSCmdLineBWTooHigh">
-		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps.
+	<notification name="FSBWTooHigh">
+		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps. Es improbable que funcione bien y casi seguro no mejorará el rendimiento.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 </notifications>
