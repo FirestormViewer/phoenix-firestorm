@@ -4,8 +4,13 @@
     <text label="Logi:" name="textSaveMiniDumpType">
         Typ zrzutu:
     </text>
+    <combo_box name="comboSaveMiniDumpType">
+        <combo_box.item name="Minimal" label="Minimalny" />
+        <combo_box.item name="Default" label="Domyślny" />
+        <combo_box.item name="Extended" label="Rozszerzony" />
+    </combo_box>
     <check_box label="Zawsze pytaj przed wysłaniem" name="checkSendCrashReportsAlwaysAsk" />
-    <check_box label="Dołącz settings.xml" name="checkSendSettings" />
+    <check_box label="Dołącz dane konfiguracyjne Firestorma - plik settings.xml" name="checkSendSettings" />
     <text name="textSendSettings">
         (zawiera nazwę konta Second Life)
     </text>
@@ -23,6 +28,6 @@
         jeśli uważasz, że mogą zawierać istotne informacje.
     </text>
     <text name="textInformation4">
-        Polityka prywatności: http://privacy-placeholder
+        Polityka prywatności: http://www.phoenixviewer.com/privacy.php
     </text>
 </panel>
