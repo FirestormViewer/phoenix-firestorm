@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Absturzmeldungen" name="crash_reports">
+	<check_box label="Absturzmeldungen an phoenixviewer.com senden" name="checkSendCrashReports"/>
+	<text name="textSaveMiniDumpType" width="120">
+		Typ Speicherabbild:
+	</text>
+	<combo_box name="comboSaveMiniDumpType">
+		<combo_box.item name="Minimal" label="Minimal"/>
+		<combo_box.item name="Default" label="Standard"/>
+		<combo_box.item name="Extended" label="Erweitert"/>
+	</combo_box>
+	<check_box label="Vor dem Senden immer fragen" name="checkSendCrashReportsAlwaysAsk"/>
+	<check_box label="Firestorm-Konfigurationsdatei settings.xml einschließen" name="checkSendSettings"/>
+	<text name="textSendSettings">
+		(enthält Benutzername)
+	</text>
+	<check_box label="Benutzername in Meldung einschließen" name="checkSendName"/>
+	<text name="textSendName">
+		(für eventuelle Rückfragen)
+	</text>
+	<text name="textInformation1">
+		Sofern nicht ausgewählt, enthalten die Meldungen nur absturzrelevante Informationen.
+	</text>
+	<text name="textInformation2">
+		Logdateien werden nicht gesendet - deren Inhalt bitte prüfen und separat schicken
+	</text>
+	<text name="textInformation3">
+		falls sie zusätzliche Informationen zum Absturz enthalten.
+	</text>
+	<text name="textInformation4">
+        Datenschutzerklärung: http://www.phoenixviewer.com/privacy.php
+    </text>
+</panel>
