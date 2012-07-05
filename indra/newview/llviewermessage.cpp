@@ -5071,21 +5071,26 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 void process_object_properties_family(LLMessageSystem *msg, void**user_data)
 {
 
-    	//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-    	//pre-fetching sit target owner for automatic permissions granting -SA
-	const LLViewerObject* pParent = (LLViewerObject*)gAgentAvatarp->getParent();
-	if (pParent) // if avatar is sitting somewhere
+	//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
+	//pre-fetching sit target owner for automatic permissions granting -SA
+	//<FS:TS> FIRE-6875: avoid crash if gAgentAvatarp is somehow NULL
+	if (gAgentAvatarp)
 	{
-		LLUUID object_id;
-		msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id);
-		// if object owner is also the owner of the sit object, query owner name
-		if (object_id == pParent->getID())
+		const LLViewerObject* pParent = (LLViewerObject*)gAgentAvatarp->getParent();
+		if (pParent) // if avatar is sitting somewhere
 		{
-			LLUUID owner_id;
-			msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id);		
-			gCacheName->getFullName(owner_id, gSitOwnerName);
+			LLUUID object_id;
+			msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id);
+			// if object owner is also the owner of the sit object, query owner name
+			if (object_id == pParent->getID())
+			{
+				LLUUID owner_id;
+				msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id);		
+				gCacheName->getFullName(owner_id, gSitOwnerName);
+			}
 		}
 	}
+	//</FS:TS> FIRE-6875
 	// /-SA
 	//</FS:TS> FIRE-6762
 	// Send the result to the corresponding requesters.
