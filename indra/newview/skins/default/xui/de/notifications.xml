@@ -2879,7 +2879,7 @@ Details finden Sie in der Protokolldatei.
 für folgende Einwohner freigeben:
 
 [RESIDENTS]
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		Es kann nur jeweils ein Ordner geteilt werden.
@@ -2891,7 +2891,7 @@ Möchten Sie wirklich die folgenden Artikel:
 mit den folgenden Einwohnern teilen:
 
 [RESIDENTS]
-		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
 		Objekte wurden erfolgreich freigegeben.
@@ -3540,8 +3540,8 @@ Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skrip
   </notification>
   <!-- <FS:Zi> Add float LSL color entry widgets -->
 
-	<notification name="FSCmdLineBWTooHigh">
-Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
+	<notification name="FSBWTooHigh">
+Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
 	</notification>
 
 <!-- <FS:AW>  opensim search support-->
