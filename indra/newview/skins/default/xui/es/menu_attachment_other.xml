@@ -9,6 +9,7 @@
 	<menu_item_call label="Invitar a grupo" name="Invite..."/>
 	<context_menu label="Molestia" name="Annoyance">
 		<menu_item_call label="Bloquear" name="Avatar Mute"/>
+		<menu_item_call label="Desbloquear" name="Avatar Unmute"/>
 		<menu_item_call label="Denunciar" name="abuse"/>
 		<menu_item_call label="Congelar" name="Freeze..."/>
 		<menu_item_call label="Expulsar" name="Eject..."/>

@@ -118,8 +118,8 @@
 			</menu>
 		</menu>
 		<menu_item_call label="Buscar en el área" name="area_search"/>
-		<menu_item_check label="Explorador de sonidos" name="Sound Explorer"/>
-		<menu_item_call label="Lista negra" name="Asset Blacklist"/>
+		<menu_item_call label="Explorador de sonidos" name="Sound Explorer"/>
+		<menu_item_call label="Lista negra" name="asset_blacklist"/>
 	</menu>
 	<menu label="Construir" name="BuildTools">
 		<menu_item_check label="Construir" name="Show Build Tools"/>

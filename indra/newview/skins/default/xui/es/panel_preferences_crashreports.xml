@@ -5,9 +5,9 @@
 		Tipo de volcado:
 	</text>
 	<combo_box name="comboSaveMiniDumpType">
-		<combo_box.item label="Mínimo" value="0"/>
-		<combo_box.item label="Por defecto" value="1"/>
-		<combo_box.item label="Extendido" value="2"/>
+		<combo_box.item name="Minimal" label="Mínimo" value="0"/>
+		<combo_box.item name="Default" label="Por defecto" value="1"/>
+		<combo_box.item name="Extended" label="Extendido" value="2"/>
 	</combo_box>
 	<check_box label="Preguntar siempre antes de enviar" name="checkSendCrashReportsAlwaysAsk"/>
 	<check_box label="Incluir settings.xml" name="checkSendSettings"/>
@@ -29,6 +29,6 @@ separadamente si crees que pueden contener información adicional.
 	<text name="textInformation3" height="0">
 	</text>
 	<text name="textInformation4">
-		Política de privacidad: http://privacy-placeholder
+		Política de privacidad: http://www.phoenixviewer.com/privacy.php
 	</text>
 </panel>

@@ -16,6 +16,7 @@
 			<check_box label="Representar avatares bloqueados como nubes de partículas" name="ShowMutedAvatarsAsCloud" tool_tip="Los avatares bloqueados se mostrarán como nubes de partículas de un color especial"/>
 			<check_box label="Ocultar carpetas de sistema vacías en el inventario" name="DebugHideEmptySystemFolders" tool_tip="Si lo activas, las ventanas de inventario no mostrará ninguna carpeta de sistema que esté vacía, como las de Favoritos, Hitos, etc."/>
 			<check_box label="Mostrar la carpeta Items Recibidos en el inventario" name="FSShowInboxFolder" tool_tip="Si lo activas, las ventanas de invantario también mostrarán la carpeta Items Recibidos"/>
+			<check_box label="Permitir diferentes términos de búsqueda independientes en cada pestaña del inventario" name="FSSplitInventorySearchOverTabs" tool_tip="Si lo activas se pueden usar diferentes términos de búsqueda en cada pestaña del inventario.">
 			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar" name="FSDisableAvatarTrackerAtCloseIn"/>
 			<check_box label="Conceder permisos a objetos del mismo propietario que en el que te sientes" name="PermissionsGrantToSitOwner" tool_tip="Si lo activas, al sentarte en un objeto estarás concediendo automáticamente permisos a cualquier otro objeto del mismo propietario, como si te hubieras sentado en ellos."/>
 			<check_box name="UseLSLBridge" label="Activar el LSL-Client Bridge" tool_tip="Permite al visor usar un accesorio con scripts (Bridge) para extender sus características"/>
