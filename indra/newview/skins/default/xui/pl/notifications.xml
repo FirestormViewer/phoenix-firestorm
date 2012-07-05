@@ -3500,7 +3500,8 @@ Anulowano.
 			<ignore name="ignore" text="Ciąg koloru w formacie LSL został skopiowany do schowka"/>
 		</form>
 	</notification>
-	<notification name="FSCmdLineBWTooHigh">
-		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps.
+	<notification name="FSBWTooHigh">
+		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps. Jest mało prawdopodobne, aby takie ustawienie nie sprawiało problemów i prawie na pewno nie spowoduje wzrostu wydajności.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 </notifications>
