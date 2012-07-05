@@ -482,10 +482,6 @@
 	</combo_box>
 
 	<tab_container
-		bg_alpha_color="DkGray"
-		bg_opaque_color="DkGray"
-		background_visible="true"
-		background_opaque="true"
 		follows="all"
 		halign="center"
 		height="212"

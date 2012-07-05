@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+	show_load_status="true"
+	accepts_drag_and_drop="true">
+	<scroll
+		name="Inventory Scroller"
+		follows="all"
+		reserve_scroll_corner="true"
+		tab_stop="true" />
+</panel>
