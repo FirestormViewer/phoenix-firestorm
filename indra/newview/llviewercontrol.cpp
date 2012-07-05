@@ -74,6 +74,7 @@
 #include "llcombobox.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
+#include "llnotificationsutil.h"
 
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
 #include "llhunspell.h"
@@ -120,13 +121,21 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 static bool handleBandWidthChanged(const LLSD& newvalue)
 {
+	//<FS:TS> FIRE-6795: Only complain about bandwidth setting once
+	static LLCachedControl<bool> alreadyComplainedAboutBW(gWarningSettings,"FSBandwidthTooHigh");
 	F32 throttletimer = throttle_timer.getElapsedTimeF32();
 	if (throttletimer > 0.25f)
 	{
 		F32 bandwidth = (F32) newvalue.asReal();
 		gViewerThrottle.setMaxBandwidth((F32) bandwidth);
 		throttle_timer.reset();
-	}	
+		if (!alreadyComplainedAboutBW && (bandwidth > 1500.0))
+		{
+			LLNotificationsUtil::add("FSBWTooHigh");
+			gWarningSettings.setBOOL("FSBandwidthTooHigh",TRUE);
+		}
+	//</FS:TS> FIRE-6795
+	}
 	return true;
 }
 //</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues

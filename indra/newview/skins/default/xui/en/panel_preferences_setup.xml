@@ -66,6 +66,8 @@
         kbps
     </text>
     </layout_panel>
+    <!-- <FS:TS> FIRE-6795: Remove repetitive warning -->
+    <!--
     <layout_panel
      width="539"
      height="24"
@@ -96,6 +98,7 @@
     We strongly advise not to set the Bandwidth over 1500 kbps.
     </text>
     </layout_panel>
+    -->
     <layout_panel
      name="other_settings_panel"
      width="539"

@@ -4033,7 +4033,7 @@ Try enclosing path to the editor with double quotes.
 
   <!-- CmdLine Response Strings-->
   <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
-  <string name="FSCmdLineRSP">Maximum Bandwidth Set To: [VALUE] kbps.</string>
+  <string name="FSCmdLineRSP">Maximum bandwidth set to [VALUE] KBPS.</string>
   <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
   
   <!-- NetMap double click action tooltip messages -->

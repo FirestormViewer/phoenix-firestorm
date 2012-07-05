@@ -1939,13 +1939,15 @@ void LLFloaterPreference::setCacheLocation(const LLStringExplicit& location)
 
 //------------------------------Updater---------------------------------------
 
+//<FS:TS> FIRE-6795: Remove repetitive warning at every login
 // <FS:Zi> Add warning on high bandwidth setting
-static void updateBandwidthWarning()
-{
-	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
-	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);
-}
+//static void updateBandwidthWarning()
+//{
+//	S32 newBandwidth=(S32) gSavedSettings.getF32("ThrottleBandwidthKBPS");
+//	gSavedSettings.setBOOL("BandwidthSettingTooHigh",newBandwidth>1500);
+//}
 // </FS:Zi>
+//</FS:TS> FIRE-6795
 
 //<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 //static bool handleBandwidthChanged(const LLSD& newvalue)
@@ -2090,7 +2092,9 @@ BOOL LLPanelPreference::postBuild()
 		//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 		//mBandWidthUpdater = new LLPanelPreference::Updater(boost::bind(&handleBandwidthChanged, _1), BANDWIDTH_UPDATER_TIMEOUT);
 		//gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&LLPanelPreference::Updater::update, mBandWidthUpdater, _2));
-		updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
+		//<FS:TS> FIRE-6795: Remove warning on every login
+		//updateBandwidthWarning();	// <FS:Zi> Add warning on high bandwidth setting
+		//</FS:TS> FIRE-6795
 		//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	}
 
