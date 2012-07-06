@@ -430,7 +430,7 @@
              follows="left|top"
              height="12"
              layout="topleft"
-             left_delta="291"
+             left_delta="296"
              name="DrawDistanceMeterText2"
              top_delta="0"
              width="128">
