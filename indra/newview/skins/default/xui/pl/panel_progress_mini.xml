@@ -1,4 +1,4 @@
 <panel name="mini_progress_panel">
 <button label="Anuluj" name="cancel_btn" />
-<text name="progress_text" value="Postêp..." />
+<text name="progress_text" value="PostÄ™p..." />
 </panel>

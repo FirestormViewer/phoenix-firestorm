@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="TexFetchDebugger" title="Debuger ładowania tekstur">
 	<text name="total_num_fetched_label">
 		1, Pobranych tekstur: [NUM]
