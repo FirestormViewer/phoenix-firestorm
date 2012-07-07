@@ -581,17 +581,17 @@ void LLIMFloater::updateButtons(bool is_call_started)
 	{
 		case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
 		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(200,20,true);
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(230,20,true);
 			break;
 		}
 		case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
 		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(140,20,true);
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(170,20,true);
 			break;
 		}
 		case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat
 		{
-			getChild<LLLayoutStack>("ls_control_panel")->reshape(120,20,true);
+			getChild<LLLayoutStack>("ls_control_panel")->reshape(150,20,true);
 			break;
 		}
 		default:
