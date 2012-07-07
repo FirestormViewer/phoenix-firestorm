@@ -1410,6 +1410,11 @@ void AOEngine::setCycleTime(AOSet::AOState* state,F32 time)
 
 void AOEngine::tick()
 {
+	// <FS:ND> make sure agent is alive and kicking before doing anything
+	if ( !isAgentAvatarValid() )
+		return;
+	// </FS:ND>
+
 	const LLUUID categoryID=gInventory.findCategoryByName(ROOT_FIRESTORM_FOLDER);
 
 	if(categoryID.isNull())
