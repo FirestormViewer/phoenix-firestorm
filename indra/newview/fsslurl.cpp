@@ -100,6 +100,12 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		    {
 				fixed_slurl += slurl.substr(1);
 		    }
+			// <FS:LO> FIRE-6898 - Explicitly ignore data URI's
+			else if(slurl.substr(0,4) == "data")
+			{
+				fixed_slurl = slurl;
+			}
+			// </FS:LO>
 			else
 		    {
 				fixed_slurl += slurl;
