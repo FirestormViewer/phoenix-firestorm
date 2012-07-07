@@ -2173,8 +2173,8 @@ To uruchomi przeglądarkę internetową.
 Włączyć filtr mediów?
 (Możesz zmienić potem tą opcję w Ustawienia &gt; Dźwięk i Media.)
 		<form name="form">
-			<button name="Enable" text="Enable"/>
-			<button name="Disable" text="Disable"/>
+			<button name="Enable" text="Włącz"/>
+			<button name="Disable" text="Wyłącz"/>
 		</form>
 	</notification>
 	<notification name="MediaAlert"> 

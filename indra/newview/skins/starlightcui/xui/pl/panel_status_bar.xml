@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel name="status">
+	<panel name="parcel_info_panel">
+		<button name="buy_land_btn" tool_tip="Posiadłość jest na sprzedaż"/>
+		<button name="status_wl_btn" tool_tip="Parcela dostarcza ustawienia dla systemu Windlight"/>
+		<text tool_tip="Nazwa parceli, na której się znajdujesz. Kliknij, aby zobaczyć informacje o posiadłości." name="parcel_info_text" value="(ładowanie...)"/>
+	</panel>
+	<panel.string name="packet_loss_tooltip">
+		Utracone pakiety
+	</panel.string>
+	<panel.string name="bandwidth_tooltip">
+		Przepustowość
+	</panel.string>
+	<panel.string name="time">
+		[hour, datetime, slt]:[min, datetime, slt] [timezone,datetime, slt]
+	</panel.string>
+	<panel.string name="buycurrencylabel">
+		[AMT] L$
+	</panel.string>
+	<panel name="balance_bg">
+		<text name="balance" tool_tip="Kliknij aby odświeżyć saldo L$"/>
+		<button label="KUP L$" name="buyL" tool_tip="Kliknij aby kupić więcej L$"/>
+	</panel>
+	<panel name="drawdistance_panel">
+		<icon name="dd_icon" tool_tip="Pole widzenia"/>
+		<slider tool_tip="Maksymalny dystans rezzowania od kamery (metry)" name="drawdistance"/>
+	</panel>
+	<panel name="time_and_media_bg">
+		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>
+		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej parceli"/>
+		<button name="media_toggle_btn" tool_tip="Odtwórz/Zatrzymaj wszystkie media (Muzyka, Wideo, WWW)"/>
+		<button name="volume_btn" tool_tip="Regulacja głośności"/>
+	</panel>
+</panel>

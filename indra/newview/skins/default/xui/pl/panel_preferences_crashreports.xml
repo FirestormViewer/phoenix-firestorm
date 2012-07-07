@@ -19,7 +19,7 @@
         (aby zapytać o dodatkowe info w razie potrzeby)
     </text>
     <text name="textInformation1">
-        Dopóki nie określono inaczej, to raport o błędach zawiera tylko informacje związane z awarią.
+        Dopóki nie określono inaczej, to raport zawiera tylko informacje związane z awarią.
     </text>
     <text name="textInformation2">
         Logi Second Life nie są wysyłane, proszę przejrzeć zawartość i wysłać osobny e-mail
