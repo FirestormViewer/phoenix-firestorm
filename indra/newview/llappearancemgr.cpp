@@ -60,6 +60,11 @@
 
 std::string self_av_string()
 {
+	// <FS:ND> On logout gAgentAvatarp can already be invalid
+	if ( !isAgentAvatarValid() )
+		return "";
+	// </FS:ND>
+
 	return gAgentAvatarp->avString();
 }
 
