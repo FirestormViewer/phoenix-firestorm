@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Segnalazione crash" name="crash_reports">
+    <check_box label="Invia segnalazione del crash a phoenixviewer.com" name="checkSendCrashReports" />
+    <text label="Log:" name="textSaveMiniDumpType">
+        Tipo Minidump:
+    </text>
+    <combo_box name="comboSaveMiniDumpType">
+        <combo_box.item name="Minimal" label="Minimo" />
+        <combo_box.item name="Default" label="Default" />
+        <combo_box.item name="Extended" label="Esteso" />
+    </combo_box>
+    <check_box label="Chiedi sempre prima di inviare" name="checkSendCrashReportsAlwaysAsk" />
+    <check_box label="Incude il file settings.xml" name="checkSendSettings" />
+    <text name="textSendSettings">
+        (contiene il vostro nome Second Life)
+    </text>
+    <check_box label="Includi nome Second Life)" name="checkSendName" />
+    <text name="textSendName">
+        (usato per chiedervi ulteriori informazioni se necessario)
+    </text>
+    <text name="textInformation1" width="500">
+        Tutte le spunte forniscono segnalazioni di crash contenenti solo le informazioni del crash.
+    </text>
+    <text name="textInformation2">
+        I Log di Second Life non vengono inviati, si prega di esaminare il contenuto ed inviarli
+    </text>
+    <text name="textInformation3">
+         con una e-mail a parte, se vuoi possono contenere informazioni aggiuntive.
+    </text>
+    <text name="textInformation4">
+        Tutela della privacy: http://www.phoenixviewer.com/privacy.php
+    </text>
+</panel>

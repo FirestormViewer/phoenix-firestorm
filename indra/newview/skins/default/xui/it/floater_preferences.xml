@@ -15,5 +15,6 @@
 		<panel label="Impostazione" name="input"/>
 		<panel label="Avanzate" name="advanced1"/>
 		<panel label="Interfaccia" name="starlightUI1"/>
+		<panel label="Segnala Crash" name="crashreports" />
 	</tab_container>
 </floater>
