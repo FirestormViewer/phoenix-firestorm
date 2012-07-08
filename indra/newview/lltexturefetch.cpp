@@ -862,7 +862,9 @@ void LLTextureFetchWorker::startWork(S32 param)
 // Called from LLWorkerThread::processRequest()
 bool LLTextureFetchWorker::doWork(S32 param)
 {
-	static const F32 FETCHING_TIMEOUT = 120.f;//seconds
+	// <FS:Ansariel> Don't block fetcher threads so long
+	//static const F32 FETCHING_TIMEOUT = 120.f;//seconds
+	static const F32 FETCHING_TIMEOUT = 30.f;//seconds
 
 	LLMutexLock lock(&mWorkMutex);
 
