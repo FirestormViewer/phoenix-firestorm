@@ -109,13 +109,6 @@
 
 #include "fsdata.h"
 
-//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-//SA: for querying sit object owner
-#include "message.h"
-extern bool gPermsGrantedSameOwner;
-extern LLUUID gPermsSameOwnerUUID;
-//</FS:TS> FIRE-6762
-
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -6599,21 +6592,6 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 		{
 			revokePermissionsOnObject(sit_object);
 		}
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		//SA: query object details so its owner can be known when scripts request runtime permissions
-		if (sit_object)
-		{
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_RequestObjectPropertiesFamily);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-			msg->nextBlockFast(_PREHASH_ObjectData);
-			msg->addU32Fast(_PREHASH_RequestFlags, 0 );
-			msg->addUUIDFast(_PREHASH_ObjectID, sit_object->getID());
-			gAgent.sendReliableMessage();
-		}
-		//</FS:TS> FIRE-6762
 	}
 
 	if (mDrawable.isNull())
@@ -6711,15 +6689,6 @@ void LLVOAvatar::getOffObject()
 		{
 			revokePermissionsOnObject(sit_object);
 		}
-
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		if (gPermsGrantedSameOwner && gSavedSettings.getBOOL("PermissionsGrantToSitOwner"))
-		{
-			revokePermissionsOnObject(gPermsSameOwnerUUID);
-			gPermsGrantedSameOwner = false;
-			gPermsSameOwnerUUID = LLUUID::null;
-		}
-		//</FS:TS> FIRE-6762
 	}
 }
 
@@ -6730,20 +6699,12 @@ void LLVOAvatar::revokePermissionsOnObject(LLViewerObject *sit_object)
 {
 	if (sit_object)
 	{
-		revokePermissionsOnObject(sit_object->getID());
-	}
-}
-
-void LLVOAvatar::revokePermissionsOnObject(LLUUID sit_object_ID)
-{
-	if (sit_object_ID != LLUUID::null)
-	{
 		gMessageSystem->newMessageFast(_PREHASH_RevokePermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		gMessageSystem->nextBlockFast(_PREHASH_Data);
-		gMessageSystem->addUUIDFast(_PREHASH_ObjectID, sit_object_ID);
+		gMessageSystem->addUUIDFast(_PREHASH_ObjectID, sit_object->getID());
 		gMessageSystem->addU32Fast(_PREHASH_ObjectPermissions, 0xFFFFFFFF);
 		gAgent.sendReliableMessage();
 	}
