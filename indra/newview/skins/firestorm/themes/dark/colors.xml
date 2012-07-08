@@ -55,8 +55,20 @@
   <color
    name="ObjectChatColor"
    reference="EmphasisColor" />
-     
-    
-     
+  <color
+   name="lineeditor_highlight"
+   reference="White" />
+  <color
+   name="lineeditor_preedit_bg"
+   reference="Black" />
+  <color
+   name="simpleeditor_bg_selected"
+   reference="White" />   
+  <color
+   name="ScriptEditorTextRColor"
+   reference="White" />
+  <color
+   name="ScriptEditorTextBgRColor"
+   reference="TextBgWriteableColor" />
     
 </colors>
