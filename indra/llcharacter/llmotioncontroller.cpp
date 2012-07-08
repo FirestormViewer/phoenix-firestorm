@@ -887,7 +887,10 @@ void LLMotionController::updateMotions(bool force_update)
 void LLMotionController::updateMotionsMinimal()
 {
 	// Always update mPrevTimerElapsed
-	mAnimTime = mPrevTimerElapsed = mTimer.getElapsedTimeF32();
+	//<FS:AO> backed out, causes face animation issues
+	//mAnimTime = mPrevTimerElapsed = mTimer.getElapsedTimeF32();
+        mPrevTimerElapsed = mTimer.getElapsedTimeF32();
+	//</FS:AO>
 
 	purgeExcessMotions();
 	updateLoadingMotions();
