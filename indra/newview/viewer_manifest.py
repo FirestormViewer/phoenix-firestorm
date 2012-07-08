@@ -155,12 +155,19 @@ class ViewerManifest(LLManifest):
                             self.path("*.png")
                             self.end_prefix("*/themes/*/textures")
 
-            # FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
-            if self.prefix(src="*/themes/*/xui"):
-                    self.path("*/*.xml")
-                    self.path("*/widgets/*.xml")
-                    self.end_prefix("*/themes/*/xui")
-            # END FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
+            # <FS:AO> - We intentionally do not package xui for themes, the reasoning is: 
+            #         Themes are defined as color/texture mods, not structual mods. Structural changes are done as "skins".
+            #         If a color is mentioned in xui, it can be refactored to use a more generic reference color, and
+            #         then overwritten by the theme-specific colors.xml. This saves us from having to maintain more XUI 
+            #         in more places than needed, and over time allows more and more of the viewer to be adjusted using
+            #         only color definitions.
+	 	
+            ## FS:Ansariel: Fix packaging for xui folders in themes (FIRE-6859)
+            #if self.prefix(src="*/themes/*/xui"):
+            #        self.path("*/*.xml")
+            #        self.path("*/widgets/*.xml")
+            #        self.end_prefix("*/themes/*/xui")
+            # </FS:AO>
 
                     self.path("*/*.xml")
 
