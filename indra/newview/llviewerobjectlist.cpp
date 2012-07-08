@@ -74,6 +74,7 @@
 #include "object_flags.h"
 
 #include "llappviewer.h"
+#include "fswsassetblacklist.h"
 
 extern F32 gMinObjectDistance;
 extern BOOL gAnimateTextures;
@@ -531,6 +532,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				continue;
 			}
 #endif
+
+
+			
+			if(FSWSAssetBlacklist::getInstance()->isBlacklisted(fullid,LLAssetType::AT_OBJECT))
+			{
+				llinfos << "Blacklisted object blocked." << llendl; 
+				continue;
+			}
 
 			objectp = createObject(pcode, regionp, fullid, local_id, gMessageSystem->getSender());
 			if (!objectp)

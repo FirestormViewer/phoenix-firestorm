@@ -2661,10 +2661,9 @@ Ist das OK?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht vollständige Kontrolle über Ihr Linden-Dollar-Konto. Wenn Sie diesem Objekt den Zugriff erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
+		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
 
-So eine Anfrage is äußerst selten seriös. Erlauben Sie dem Objekt auf keinen Fall den Zugriff wenn Sie genau wissen, warum es diesen Zugriff benötigt.
-
+Bevor Sie den Zugriff erlauben, sollten Sie wissen, um was für ein Objekt es sich handelt, warum es den Zugriff benötigt und ob Sie dem Ersteller vertrauen. Falls Sie unsicher sind, klicken Sie auf Verweigern.
 		<form name="form">
 			<button name="Grant" text="Vollen Zugriff erlauben"/>
 			<button name="Deny" text="Verweigern"/>
@@ -2880,7 +2879,7 @@ Details finden Sie in der Protokolldatei.
 für folgende Einwohner freigeben:
 
 [RESIDENTS]
-		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ShareFolderConfirmation">
 		Es kann nur jeweils ein Ordner geteilt werden.
@@ -2892,7 +2891,7 @@ Möchten Sie wirklich die folgenden Artikel:
 mit den folgenden Einwohnern teilen:
 
 [RESIDENTS]
-		<usetemplate ignoretext="Bestätigen, bevor ich ein Objekt teile" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="ItemsShared">
 		Objekte wurden erfolgreich freigegeben.
@@ -3541,8 +3540,8 @@ Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skrip
   </notification>
   <!-- <FS:Zi> Add float LSL color entry widgets -->
 
-	<notification name="FSCmdLineBWTooHigh">
-Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen!
+	<notification name="FSBWTooHigh">
+Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
 	</notification>
 
 <!-- <FS:AW>  opensim search support-->

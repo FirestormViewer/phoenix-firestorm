@@ -61,7 +61,7 @@ WLSkyDetail					1	128
 Disregard128DefaultDrawDistance	1	1
 Disregard96DefaultDrawDistance	1	1
 RenderTextureMemoryMultiple		1	1.0
-RenderCompressTextures		1	1
+//RenderCompressTextures		1	1
 RenderShaderLightingMaxLevel	1	3
 RenderDeferred				1	1
 RenderDeferredSSAO			1	1
@@ -85,7 +85,7 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderMaxPartCount			1	128
+RenderMaxPartCount			1	256
 RenderObjectBump			1	0
 RenderLocalLights			1	0
 RenderReflectionDetail		1	0
@@ -94,7 +94,7 @@ RenderTerrainLODFactor		1	1
 RenderTransparentWater		1	0
 RenderTreeLODFactor			1	0.25
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	1.125
+RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	0
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
@@ -117,7 +117,7 @@ RenderAvatarVP				1	0
 RenderFarClip				1	64
 RenderFlexTimeFactor		1	0
 RenderGlowResolutionPow		1	8
-RenderMaxPartCount			1	128
+RenderMaxPartCount			1	256
 RenderObjectBump			1	0
 RenderLocalLights			1	0
 RenderReflectionDetail		1	0
@@ -126,7 +126,7 @@ RenderTerrainLODFactor		1	1.0
 RenderTransparentWater		1	0
 RenderTreeLODFactor			1	0.25
 RenderUseImpostors			1	1
-RenderVolumeLODFactor		1	1.125
+RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	0
 WLSkyDetail					1	48
@@ -258,11 +258,12 @@ RenderVBOEnable				1	1
 list Class3
 RenderVBOEnable				1	1
 
-//
+//Don't auto set texture compression
+//FS:TM
 // VRAM > 512MB
 //
-list VRAMGT512
-RenderCompressTextures		1	0
+//list VRAMGT512
+//RenderCompressTextures		1	0
 
 //
 // No Pixel Shaders available

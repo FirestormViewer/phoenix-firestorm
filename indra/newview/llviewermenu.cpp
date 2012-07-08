@@ -137,6 +137,7 @@
 
 #include "particleeditor.h"
 #include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
+#include "fswsassetblacklist.h"
 
 using namespace LLVOAvatarDefines;
 
@@ -2670,6 +2671,7 @@ class LLObjectDerender : public view_listener_t
     {
 		LLSelectNode* nodep = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
 		LLViewerObject* objp = (nodep) ? nodep->getObject() : NULL;
+			
 
 //		if ( (objp) && (gAgentID != objp->getID()) )
 // [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
@@ -2678,6 +2680,33 @@ class LLObjectDerender : public view_listener_t
 // [/RLVa:KB]
 		{
 	        LLSelectMgr::getInstance()->removeObjectFromSelections(objp->getID());
+
+			
+			LLViewerRegion* cur_region = gAgent.getRegion();
+			std::string entry_name;
+			if(objp->isAvatar()){
+				LLNameValue* firstname = objp->getNVPair("FirstName");
+				LLNameValue* lastname = objp->getNVPair("LastName");
+				entry_name = llformat("Derendered: (AV) %s %s",firstname->getString(),lastname->getString());
+			} else {
+				if(!nodep->mName.empty()){
+					if(cur_region)
+						entry_name = llformat("Derendered: %s in region %s",nodep->mName.c_str(),cur_region->getName().c_str());
+					else
+						entry_name = llformat("Derendered: %s",nodep->mName.c_str());
+				}
+				else{
+					if(cur_region)
+						entry_name = llformat("Derendered: (unknown object) in region %s",cur_region->getName().c_str());
+					else
+						entry_name = "Derendered: (unkown object)";
+				}
+			}
+			
+			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(),entry_name,LLAssetType::AT_OBJECT);
+
+
+			LLSelectMgr::getInstance()->deselectAll();
 			gObjectList.killObject(objp);
 		}
         return true;
@@ -3242,10 +3271,30 @@ bool enable_object_mute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-//		return !is_linden && !is_self;
+//             return !is_linden && !is_self;
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+//             return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
+
+		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
+		if(is_linden || is_self)
+			return false;
+
+		if(gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+			return false;
+
+		LLNameValue *firstname = avatar->getNVPair("FirstName");
+
+		std::string name;
+		if (firstname && lastname)
+		{
+			name = LLCacheName::buildFullName(
+				firstname->getString(), lastname->getString());
+		}
+
+		LLMute mute(avatar->getID(),name,LLMute::AGENT);
+		return !LLMuteList::getInstance()->isMuted(mute.mID);
+		// </FS:Zi>
 	}
 	else
 	{
@@ -3268,7 +3317,22 @@ bool enable_object_unmute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-		return !is_linden && !is_self;
+		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
+		// return !is_linden && !is_self;
+		if(is_linden || is_self)
+			return false;
+
+		LLNameValue *firstname = avatar->getNVPair("FirstName");
+		std::string name;
+		if (firstname && lastname)
+		{
+			name = LLCacheName::buildFullName(
+				firstname->getString(), lastname->getString());
+		}
+
+		LLMute mute(avatar->getID(),name,LLMute::AGENT);
+		return LLMuteList::getInstance()->isMuted(mute.mID);
+		// </FS:Zi>
 	}
 	else
 	{

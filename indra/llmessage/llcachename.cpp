@@ -664,6 +664,34 @@ boost::signals2::connection LLCacheName::get(const LLUUID& id, bool is_group, co
 	return res;
 }
 
+// NaCl - Sound explorer
+BOOL LLCacheName::getIfThere(const LLUUID& id, std::string& fullname, BOOL& is_group)
+{
+	if(id.isNull())
+	{
+		fullname = "";
+		return FALSE;
+	}
+
+	LLCacheNameEntry* entry = get_ptr_in_map(impl.mCache, id );
+	if (entry)
+	{
+		if (entry->mIsGroup)
+		{
+			fullname = entry->mGroupName;
+		}
+		else
+		{
+			fullname = entry->mFirstName + " " + entry->mLastName;
+		}
+		is_group = entry->mIsGroup;
+		return TRUE;
+	}
+	fullname = "";
+	return FALSE;
+}
+// NaCl end
+
 boost::signals2::connection LLCacheName::getGroup(const LLUUID& group_id,
 												  const LLCacheNameCallback& callback)
 {

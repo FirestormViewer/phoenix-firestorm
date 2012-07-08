@@ -18,6 +18,7 @@
         <check_box label="Nascondi le cartelle di sistema vuote dall'inventario" name="DebugHideEmptySystemFolders" tool_tip="Se attiva nasconderà le cartelle vuote di sistema come Landmarks, Preferiti, Notecard ecc..."/>
 		<check_box label="Mostra la cartella Recived Items nell'inventario normalmente" name="FSShowInboxFolder" tool_tip="Se attiva, la finestra dell'inventario non presenterà la cartella Recived Items sotto l'inventario ma verrà visualizzata come una normale cartella di sistema"/>
         <check_box label="Disattivare il segnalatore quando l'avatar segnato viene raggiunto (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Se attivato, il segnalatore per indicare l'avatar si disattiva se la distanza è inferiore a 3m. (Default)"/>
+		<check_box label="Dai permessi a tutti gli oggetti che hanno lo stesso owner dell'oggetto su cui ti sei seduto" name="PermissionsGrantToSitOwner" tool_tip="Se abilitato, se ti seiedi su un oggetto si concedono le autorizzazioni a qualsiasi altro oggetto con lo stesso proprietario automaticamente come se si sedeva sopra agli altri oggetti che richiedevano l'autorizzazione."/>
 		<check_box label="Abilita LSL-Client Bridge" name="UseLSLBridge" tool_tip="Permette al Viewer di utilizare lo script del Bridge per consentire caratteristiche avanzate" />
         <check_box label="Volare oltre il Limite" name="UseLSLFlightAssist" tool_tip="Consente di volare oltre il limite tramite il Flight Assist (Piuma o altri HUD non più necessari)" />
     </panel>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="ws_asset_blacklist" title="Asset Blacklist">
+	<floater.string name="asset_object">
+		Oggetti
+	</floater.string>
+	<floater.string name="asset_texture">
+		Texture
+	</floater.string>
+	<floater.string name="asset_sound">
+		Suoni
+	</floater.string>
+	<floater.string name="asset_unknown">
+		Sconosciuto
+	</floater.string>
+	<scroll_list name="result_list">
+		<scroll_list.columns name="name" label="Nome"/>
+		<scroll_list.columns name="type" label="Tipo"/>
+		<scroll_list.columns name="date" label="Data"/>
+	</scroll_list>	
+	<button name="remove_btn" label="Rimuovi l'oggetto selezionato dalla Blacklist" />
+</floater>

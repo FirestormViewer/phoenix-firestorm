@@ -209,6 +209,9 @@ void LLCrashLogger::gatherFiles()
 
 	gatherPlatformSpecificFiles();
 
+	mFileMap.erase( "SecondLifeLog" ); // <FS:ND/> Don't send any Firestorm.log. It's likely huge and won't help for crashdump processing.
+	mDebugLog.erase( "SLLog" ); // <FS:ND/> Remove SLLog, as it's a path that contains the OS user name.
+	
 	//Use the debug log to reconstruct the URL to send the crash report to
 	if(mDebugLog.has("CrashHostUrl"))
 	{
@@ -557,7 +560,11 @@ bool LLCrashLogger::init()
 	LLError::initForApplication(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, ""));
 
 	// Default to the product name "Second Life" (this is overridden by the -name argument)
-	mProductName = "Second Life";
+	
+	// <FS:ND> Change default to Firestorm
+	//	mProductName = "Second Life";
+	mProductName = "Firestorm";
+	// </FS:ND>
 
 	// Rename current log file to ".old"
 	std::string old_log_file = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "crashreport.log.old");

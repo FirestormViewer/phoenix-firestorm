@@ -214,14 +214,25 @@
              function="Object.EnableReportAbuse" />
    </menu_item_call>
    <menu_item_call
-          enabled="false"
+          enabled="true"
           label="Block"
           name="Object Mute">
              <menu_item_call.on_click
               function="Object.Mute" />
-             <menu_item_call.on_enable
+             <menu_item_call.on_visible
               function="Object.EnableMute" />
    </menu_item_call>
+   <!-- <FS:Zi> Add unblock menu entry since renaming the context menu item doesn't seem to work -->
+   <menu_item_call
+          enabled="true"
+          label="Unblock"
+          name="Object Unmute">
+             <menu_item_call.on_click
+              function="Object.Mute" />
+             <menu_item_call.on_visible
+              function="Object.EnableUnmute" />
+   </menu_item_call>
+   <!-- </FS:Zi> -->
     </context_menu>
    <menu_item_separator layout="topleft" />
    	<menu_item_call

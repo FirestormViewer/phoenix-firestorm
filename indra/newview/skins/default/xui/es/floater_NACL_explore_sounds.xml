@@ -12,7 +12,6 @@
 		<columns label="Sonido" name="sound"/>
 	</scroll_list>
 	<button label="Reproducir localmente" name="play_locally_btn" width="140"/>
-	<button label="Reproducir en el mundo" name="play_ambient_btn" left_delta="145" width="140"/>
 	<button label="Mirarlo" name="look_at_btn" left_delta="145"/>
 	<button label="Detener" name="stop_btn" width="75"/>
 	<button label="Bloquear" name="bl_btn" width="75" right="-90"/>

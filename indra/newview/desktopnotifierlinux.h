@@ -1,5 +1,8 @@
 /* Copyright (c) 2010 Discrete Dreamscape All rights reserved.
  *
+ * @file DesktopNotifierLinux.h
+ * @Implementation of desktop notification system (aka growl).
+ *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
  * conditions are met:

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="sound_explorer" title="DŹWIĘKI">
+  <check_box name="avatars_chk" label="Awatary" />
+  <check_box name="objects_chk" label="Obiekty" />
+  <check_box name="collision_chk" label="Domyślne dźwięki kolizji" />
+  <check_box name="repeated_asset_chk" label="Powtarzające się" />
+  <check_box name="pause_chk" label="Pauzuj log" />
+  <scroll_list name="sound_list">
+    <columns label="Odtwarzane" name="playing" />
+    <columns label="Typ" name="type" />
+    <columns label="Właściciel" name="owner" />
+    <columns label="Dźwięk" name="sound" />
+  </scroll_list>
+  <button label="Odtwarzaj" name="play_locally_btn" />
+  <button label="Lokalizuj" name="look_at_btn" />
+  <button label="Czarna lista" name="bl_btn" />
+</floater>

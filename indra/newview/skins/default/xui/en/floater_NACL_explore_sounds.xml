@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater can_close="true" can_minimize="true"  open_centered="true" can_resize="true" height="300" width="550" min_width="550" min_height="170" name="sound_explorer" title="SOUNDS"  save_rect="true"
+ save_visibility="true"
+ single_instance="true"
+ help_topic="fs_sound_explorer">
+  <check_box follows="top|left" bottom_delta="20" left="5" width="64" name="avatars_chk" label="Avatars" control_name="FloaterSoundsLogAvatars" />
+  <check_box follows="top|left" bottom_delta="0" left_delta="64" width="64" name="objects_chk" label="Objects" initial_value="true" control_name="FloaterSoundsLogObjects" />
+  <check_box follows="top|left" bottom_delta="0" left_delta="64" width="160" name="collision_chk" label="Default Collision Sounds" control_name="FloaterSoundsLogCollisions" />
+  <check_box follows="top|left" bottom_delta="0" left_delta="160" width="110" name="repeated_asset_chk" label="Repeated Asset" control_name="FloaterSoundsLogRepeats" />
+  <check_box follows="top|left" bottom_delta="0" left_delta="110" width="80" name="pause_chk" label="Pause Log" initial_value="false"/>
+  <scroll_list can_resize="true" column_padding="0" draw_heading="true" follows="all" left="10" multi_select="true" name="sound_list" search_column="0" top="40" right="-10" bottom="-60">
+    <columns dynamicwidth="false" width="80" label="Playing" name="playing" />
+    <columns dynamicwidth="false" width="100" label="Type" name="type" />
+    <columns dynamicwidth="true" label="Owner" name="owner" />
+    <columns dynamicwidth="false" width="0" label="Sound" name="sound" />
+  </scroll_list>
+  <button bottom_delta="25" follows="left|bottom" height="20" label="Play Locally" name="play_locally_btn" left="10" width="95"/>
+  <button bottom_delta="0" follows="left|bottom" height="20" label="Look At" name="look_at_btn" left_delta="100" width="95"/>
+
+  <button bottom_delta="0" follows="left|bottom" height="20" label="Stop" name="stop_btn" right="-10" width="95"/>
+  <button bottom_delta="0" follows="left|bottom" height="20" label="Blacklist" name="bl_btn" right="-110" width="95"/>
+</floater>

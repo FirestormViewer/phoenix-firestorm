@@ -790,15 +790,12 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//Enable on cards with less than 512MB ram and on all nvidia cards.
-	//Nvidia crads can compress without artifacts appering on textures.
-	//Set max to slightly lower than 512 do to some systems will report less 
-	// than true total or may have slightly less than 512 for other resions.
+	//Don't auto set texture compression
 	//FS:TM
-	if (!gGLManager.mIsNVIDIA && gGLManager.mVRAM > 480)
-	{
-		maskFeatures("VRAMGT512");
-	}
+	//if (gGLManager.mVRAM > 512)
+	//{
+	//	maskFeatures("VRAMGT512");
+	//}
 
 	// now mask by gpu string
 	// Replaces ' ' with '_' in mGPUString to deal with inability for parser to handle spaces

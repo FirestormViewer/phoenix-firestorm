@@ -2,6 +2,28 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+  <key>FSFloaterBlacklistSortColumn</key>
+  <map>
+    <key>Comment</key>
+    <string>SortColumn for the Blacklist.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>date</string>
+  </map>
+  <key>FSFloaterBlacklistSortAscending</key>
+  <map>
+    <key>Comment</key>
+    <string>SortOrder for the Blacklist.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
   <key>FSLandmarkCreatedNotification</key>
   <map>
     <key>Comment</key>
@@ -1629,7 +1651,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string />
+      <string>http://crashlogs.phoenixviewer.com/upload</string>
     </map>
     <key>AFKTimeout</key>
     <map>
@@ -2908,7 +2930,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>512</integer>
+      <integer>2048</integer>
     </map>
     <key>CacheValidateCounter</key>
     <map>
@@ -17299,19 +17321,6 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>0</integer>
   </map>
-  <key>BandwidthSettingTooHigh</key>
-  <map>
-    <key>Comment</key>
-    <string>Internal, volatile control variable that tells the preferences panel if the bandwidth value is within supported range.</string>
-    <key>Persist</key>
-    <integer>0</integer>
-    <key>HideFromEditor</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>0</integer>
-  </map>
   <key>FSCreateGiveInventoryParticleEffect</key>
   <map>
     <key>Comment</key>
@@ -17609,6 +17618,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>S32</string>
     <key>Value</key>
     <integer>2</integer>
+  </map>
+  <key>FSSplitInventorySearchOverTabs</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the search terms for inventory can be entered for each tab individually.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
   </map>
   
 </map>

@@ -821,6 +821,7 @@
          name="vbo_stream"
          tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD GPUs."
          width="315" />
+<!-- <FS:WF> FIRE-6821
         <text
          type="string"
          length="1"
@@ -832,14 +833,14 @@
          top_pad="10"
          width="188">
          Enable S3TC:
-        </text>
+        </text> -->
         <check_box
          control_name="RenderCompressTextures"
-         height="16"
+         height="18"
          initial_value="false"
-         label="Enable Texture Compression (requires restart)"
+         label="Enable Lossy Texture Compression (requires restart)"
          layout="topleft"
-         left_pad="10"
+         left="10"
          name="texture compression"
          tool_tip="Compresses textures in video memory, allowing for higher resolution textures and/or more textures to be loaded at the cost of some color quality."
          width="315" />
@@ -851,7 +852,7 @@
          layout="topleft"
          left="10"
          name="Antialiasing:"
-         top_pad="7"
+         top_pad="10"
          width="180">
             Antialiasing:
         </text>

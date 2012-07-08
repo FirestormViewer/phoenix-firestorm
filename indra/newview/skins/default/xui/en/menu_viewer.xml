@@ -986,6 +986,20 @@
           function="Floater.Toggle"
           parameter="area_search" />
       </menu_item_call>
+      <menu_item_call
+        label="Sound Explorer"
+        name="Sound Explorer">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="sound_explorer" />
+      </menu_item_call>
+      <menu_item_call
+        label="Asset Blacklist"
+        name="asset_blacklist">
+        <menu_item_call.on_click
+          function="Floater.Toggle"
+          parameter="ws_asset_blacklist" />
+      </menu_item_call>
     
     </menu>
     <menu

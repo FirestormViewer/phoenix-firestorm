@@ -320,7 +320,9 @@ void LLIMFloater::sendMsg()
 			}
 
 			// Truncate for transport
-			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
+			//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+			//utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
+			//</FS:TS> FIRE-787
 			
 // [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
 			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
@@ -774,7 +776,9 @@ BOOL LLIMFloater::postBuild()
 	
 
 	mInputEditor = getChild<LLLineEditor>("chat_editor");
-	mInputEditor->setMaxTextLength(1023);
+	//<FS:TS> FIRE-5770: input text buffer is too small
+	mInputEditor->setMaxTextLength(3000);
+	//</FS:TS> FIRE-5770
 	// enable line history support for instant message bar
 	mInputEditor->setEnableLineHistory(TRUE);
 

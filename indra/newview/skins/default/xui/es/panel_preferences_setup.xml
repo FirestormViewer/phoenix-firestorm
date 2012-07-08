@@ -9,11 +9,6 @@
 				kbps
 			</text>
 		</layout_panel>
-		<layout_panel name="bandwidth_warning_visibility_panel">
-			<text name="bandwidth_warning_message">
-				Recomendamos encarecidamente no configurar por encima de 1500 kbps.
-			</text>
-		</layout_panel>
 		<layout_panel name="other_settings_panel">
 			<check_box label="Personalizar el puerto" name="connection_port_enabled"/>
 			<spinner label="Nº del puerto:" name="connection_port"/>

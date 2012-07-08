@@ -555,7 +555,19 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	LLInventoryModelBackgroundFetch::instance().start();
 
 	mFilterSubString = search_string;
-	if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+	//if (mActivePanel->getFilterSubString().empty() && mFilterSubString.empty())
+	std::string search_for;
+	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		search_for = search_string;
+	}
+	else
+	{
+		search_for = mFilterSubString;
+	}
+	if (mActivePanel->getFilterSubString().empty() && search_for.empty())
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	{
 			// current filter and new filter empty, do nothing
 			return;
@@ -569,7 +581,17 @@ void LLPanelMainInventory::onFilterEdit(const std::string& search_string )
 	}
 
 	// set new filter string
-	setFilterSubString(mFilterSubString);
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+	//setFilterSubString(mFilterSubString);
+	if (gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		setFilterSubString(search_string);
+	}
+	else
+	{
+		setFilterSubString(mFilterSubString);
+	}
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 }
 
 // ## Zi: Filter dropdown
@@ -705,7 +727,13 @@ void LLPanelMainInventory::onFilterSelected()
 		return;
 	}
 
-	setFilterSubString(mFilterSubString);
+	// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+	//setFilterSubString(mFilterSubString);
+	if (!gSavedSettings.getBOOL("FSSplitInventorySearchOverTabs"))
+	{
+		setFilterSubString(mFilterSubString);
+	}
+	// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	LLInventoryFilter* filter = mActivePanel->getFilter();
 	LLFloaterInventoryFinder *finder = getFinder();
 	if (finder)
@@ -772,7 +800,18 @@ void LLPanelMainInventory::draw()
 {
 	if (mActivePanel && mFilterEditor)
 	{
-		mFilterEditor->setText(mFilterSubString);
+		// <FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
+		//mFilterEditor->setText(mFilterSubString);
+		static LLCachedControl<bool> sfSplitInventorySearchOverTabs(gSavedSettings, "FSSplitInventorySearchOverTabs");
+		if (sfSplitInventorySearchOverTabs)
+		{
+			mFilterEditor->setText(mActivePanel->getFilterSubString());
+		}
+		else
+		{
+			mFilterEditor->setText(mFilterSubString);
+		}
+		// </FS:Ansariel> Seperate search for inventory tabs from Satomi Ahn (FIRE-913 & FIRE-6862)
 	}	
 	if (mActivePanel && mResortActivePanel)
 	{

@@ -224,7 +224,6 @@
   <nearby_chat_control layout="topleft"
                        name="default_chat_bar"
                        label="To nearby chat"
-                       max_length_bytes="1024"
                        left_pad="8"
                        height="20"
                        right="-4"

@@ -30,7 +30,7 @@
      height="46"
      label="Press Enter to say, Ctrl+Enter to shout"
      layout="topleft"
-     max_length="1024"
+     max_length="3000"
      name="chat_editor"
      top="0"
      use_ellipses="false"

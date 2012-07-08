@@ -124,6 +124,8 @@
 #include "fsareasearch.h"
 #include "fsdata.h"
 
+#include "fswsassetblacklist.h"
+
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 #include "sound_ids.h"
@@ -5117,6 +5119,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
+
+	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+		return;
+	}
+
 	// NaCl - Antispam Registry
 	bool bDoSpamCheck=1;
 	std::string sSound=sound_id.asString();
@@ -5177,8 +5184,10 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	if ((!gSavedSettings.getBOOL("EnableGestureSounds")) &&
 		(owner_id != gAgent.getID()) &&
 		(owner_id == object_id)) return;
-	
-	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global);
+
+  // NaCl - Sound Explorer
+	gAudiop->triggerSound(sound_id, owner_id, gain, LLAudioEngine::AUDIO_TYPE_SFX, pos_global, object_id);
+  // NaCl End
 }
 
 void process_preload_sound(LLMessageSystem *msg, void **user_data)
@@ -5188,6 +5197,8 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 		return;
 	}
 
+
+
 	LLUUID sound_id;
 	LLUUID object_id;
 	LLUUID owner_id;
@@ -5195,6 +5206,12 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
+
+	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+		return;
+	}
+
+
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundPreloadMulti(gSavedSettings,"_NACL_AntiSpamSoundPreloadMulti");
 	if(owner_id.isNull())
@@ -5242,6 +5259,11 @@ void process_attached_sound(LLMessageSystem *msg, void **user_data)
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_SoundID, sound_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_ObjectID, object_id);
 	msg->getUUIDFast(_PREHASH_DataBlock, _PREHASH_OwnerID, owner_id);
+
+	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
+		return;
+	}
+
 	// NaCl - Antispam Registry
 	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
 		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 

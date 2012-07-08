@@ -60,6 +60,11 @@
 #include "llviewerstats.h"
 // </FS:Zi>
 
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
+void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
+//</FS:TS> FIRE-787
+
 struct LLChatTypeTrigger {
 	std::string name;
 	EChatType type;
@@ -139,6 +144,72 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	}
 // [/RLVa:KB]
 
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+	U32 split = MAX_MSG_BUF_SIZE - 1;
+	U32 pos = 0;
+	U32 total = utf8_out_text.length();
+
+	// Don't break null messages
+	if(total == 0)
+	{
+		really_send_chat_from_viewer(utf8_out_text, type, channel);
+	}
+
+	while(pos < total)
+	{
+		U32 next_split = split;
+
+		if (pos + next_split > total)
+		{
+			// just send the rest of the message
+			next_split = total - pos;
+		}
+		else
+		{
+			// first, try to split at a space
+			while((U8(utf8_out_text[pos + next_split]) != ' ')
+				&& (next_split > 0))
+			{
+				--next_split;
+			}
+			
+			if (next_split == 0)
+			{
+				next_split = split;
+				// no space found, split somewhere not in the middle of UTF-8
+				while((U8(utf8_out_text[pos + next_split]) >= 0x80)
+					&& (U8(utf8_out_text[pos + next_split]) < 0xC0)
+					&& (next_split > 0))
+				{
+					--next_split;
+				}
+			}
+
+			if(next_split == 0)
+			{
+				next_split = split;
+				LL_WARNS("Splitting") <<
+					"utf-8 couldn't be split correctly" << LL_ENDL;
+			}
+		}
+
+		std::string send = utf8_out_text.substr(pos, next_split);
+		pos += next_split;
+
+		// *FIXME: Queue messages and wait for server
+		really_send_chat_from_viewer(send, type, channel);
+	}
+
+	// moved here so we don't bump the count for every message segment
+	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
+//</FS:TS> FIRE-787
+}
+
+//<FS:TS> FIRE-787: break up too long chat lines into multiple messages
+// This function just sends the message, with no other processing. Moved out
+//	of send_chat_from_viewer.
+void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
+{
 	LLMessageSystem* msg = gMessageSystem;
 	if(channel >= 0)
 	{
@@ -165,9 +236,8 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 	}
 
 	gAgent.sendReliableMessage();
-
-	LLViewerStats::getInstance()->incStat(LLViewerStats::ST_CHAT_COUNT);
 }
+//</FS:TS> FIRE-787
 
 void LLNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
 {

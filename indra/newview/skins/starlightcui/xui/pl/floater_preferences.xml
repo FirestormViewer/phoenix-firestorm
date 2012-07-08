@@ -22,5 +22,6 @@
 		<panel label="Skórki" name="skins"/>
 		<panel label="Błędy" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
+		<panel label="OpenSim" name="opensim"/>
 	</tab_container>
 </floater>
