@@ -249,4 +249,8 @@
 	<color
 		name="ChatTimestampColor"
 		value="0.5 0.5 0.5 1.0" />
+	<!-- nearby media list items -->
+	<color
+		name="MediaListItemColor"
+		reference="ScrollUnselectedColor" />
 </colors>

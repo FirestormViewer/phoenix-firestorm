@@ -463,7 +463,10 @@ void LLPanelNearByMedia::updateListItem(LLScrollListItem* item,
 		
 		// *TODO: Make these font styles/colors configurable via XUI
 		U8 font_style = LLFontGL::NORMAL;
-		LLColor4 cell_color = LLColor4::white;
+		// <FS:Zi> Make nearby media list entry color configurable
+		// LLColor4 cell_color = LLColor4::white;
+		LLColor4 cell_color = LLUIColorTable::instance().getColor("MediaListItemColor");
+		// </FS:Zi>
 		
 		// Only colorize by class in debug
 		if (mDebugInfoVisible)
