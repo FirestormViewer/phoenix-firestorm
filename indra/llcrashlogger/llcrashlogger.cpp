@@ -580,8 +580,8 @@ bool LLCrashLogger::init()
 							  "1 = always send crash report, "
 							  "2 = never send crash report)");
 
-	// llinfos << "Loading crash behavior setting" << llendl;
-	// mCrashBehavior = loadCrashBehaviorSetting();
+	llinfos << "Loading crash behavior setting" << llendl;
+	mCrashBehavior = loadCrashBehaviorSetting();
 
 	// If user doesn't want to send, bail out
 	if (mCrashBehavior == CRASH_BEHAVIOR_NEVER_SEND)
