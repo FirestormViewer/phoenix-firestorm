@@ -2601,7 +2601,6 @@ BOOL LLPanelPreferenceCrashReports::postBuild()
 
 void LLPanelPreferenceCrashReports::refresh()
 {
-#if LL_WINDOWS
 	LLCheckBoxCtrl* pSendCrashReports = getChild<LLCheckBoxCtrl>("checkSendCrashReports");
 	pSendCrashReports->setEnabled(TRUE);
 
@@ -2610,12 +2609,10 @@ void LLPanelPreferenceCrashReports::refresh()
 	getChild<LLUICtrl>("checkSendCrashReportsAlwaysAsk")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendSettings")->setEnabled(fEnable);
 	getChild<LLUICtrl>("checkSendName")->setEnabled(fEnable);
-#endif // LL_WINDOWS
 }
 
 void LLPanelPreferenceCrashReports::apply()
 {
-#if LL_WINDOWS
 	LLCheckBoxCtrl* pSendCrashReports = getChild<LLCheckBoxCtrl>("checkSendCrashReports");
 	LLCheckBoxCtrl* pSendAlwaysAsk = getChild<LLCheckBoxCtrl>("checkSendCrashReportsAlwaysAsk");
 	if (pSendCrashReports->get())
@@ -2628,7 +2625,6 @@ void LLPanelPreferenceCrashReports::apply()
 
 	LLCheckBoxCtrl* pSendName = getChild<LLCheckBoxCtrl>("checkSendName");
 	gCrashSettings.setBOOL("CrashSubmitName", pSendName->get());
-#endif // LL_WINDOWS
 }
 
 void LLPanelPreferenceCrashReports::cancel()
