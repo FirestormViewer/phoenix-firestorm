@@ -1978,9 +1978,8 @@ bool LLAppViewer::cleanup()
 		        per_account_settings_file << llendflush;
 	}
 
-	std::string crash_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, CRASH_SETTINGS_FILE);
-	// save all settings, even if equals defaults
-	gCrashSettings.saveToFile(crash_settings_filename, FALSE);
+	// We need to save all crash settings, even if they're defaults [see LLCrashLogger::loadCrashBehaviorSetting()]
+	gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"),FALSE);
 
 	//std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Warnings"));
 	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Warnings"));
@@ -2434,6 +2433,7 @@ bool LLAppViewer::initConfiguration()
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
         //gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Global")));
         gSavedSettings.setString("ClientSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Global")));
+        gSavedSettings.setString("CrashSettingsFile", gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "CrashSettings")));
 	
 #ifndef	LL_RELEASE_FOR_DOWNLOAD
 	// provide developer build only overrides for these control variables that are not
