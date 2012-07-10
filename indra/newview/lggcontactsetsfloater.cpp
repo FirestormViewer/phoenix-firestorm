@@ -38,7 +38,6 @@
 #include "llcontrol.h"
 #include "llscrolllistctrl.h"
 #include "llscrollingpanellist.h"
-#include "lggautocorrect.h"
 #include "llfilepicker.h"
 #include "llfile.h"
 #include "llsdserialize.h"

@@ -158,7 +158,6 @@
 #include "ao.h"				// ## Zi: Animation Overrider
 #include "kvfloaterflickrauth.h"
 #include "kvfloaterflickrupload.h"
-#include "lggautocorrectfloater.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "fsgrouptitles.h"
@@ -369,7 +368,6 @@ void LLViewerFloaterReg::registerFloaters()
 	// *NOTE: Please keep these alphabetized for easier merges
 	// ND: And for FS please put yours after this line, for easier merges too
 
-	LLFloaterReg::add("autocorrect", "floater_autocorrect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LGGAutoCorrectFloater>);
 	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
 	// AO: Firestorm Money (tip) tracker 
 	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);

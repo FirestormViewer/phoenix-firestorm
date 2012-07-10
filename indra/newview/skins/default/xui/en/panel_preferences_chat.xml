@@ -1153,29 +1153,6 @@
              name="comboDictionaryMain"
              top_pad="-15"
              width="175" />
-
-            <check_box
-             top_pad="20"
-             left="30"
-             height="16"
-             width="140"
-             follows="left|top"
-             layout="topleft"
-             label="Enable Autocorrect"
-             control_name="FSEnableAutoCorrect"
-             name="lgg_ac_enable"
-             tool_tip="You must have this check box enabled to use any of these settings, it will search your writable text entry, and replace any of the search entries with their replacement"/>
-            <button
-             follows="top|left"
-             height="20"
-             layout="topleft"
-             top_pad="-20"
-             left_pad="5"
-             name="lgg_ac_showgui"
-             commit_callback.function="FSPref.ShowAC"
-             label="AutoCorrect Settings"
-             width="150">
-            </button>
         </panel>
 </tab_container>
 </panel>

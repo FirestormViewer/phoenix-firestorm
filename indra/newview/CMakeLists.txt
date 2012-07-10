@@ -105,8 +105,6 @@ set(viewer_SOURCE_FILES
     fspanelprofile.cpp
     fsradarlistctrl.cpp
 	#growlmanager.cpp
-    lggautocorrect.cpp
-    lggautocorrectfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
     lggbeamscolors.cpp
@@ -735,8 +733,6 @@ set(viewer_HEADER_FILES
     fsslurl.h
 	#growlmanager.h
 	#growlnotifier.h
-    lggautocorrect.h
-    lggautocorrectfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
     lggbeamscolors.h
@@ -1595,7 +1591,6 @@ set(viewer_APPSETTINGS_FILES
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
     app_settings/settings.xml
-    app_settings/settings_autocorrect.xml
     app_settings/settings_crash_behavior.xml
     app_settings/settings_files.xml
     app_settings/settings_per_account.xml

@@ -267,9 +267,6 @@
 				label="Désactiver tous les chats de groupe"/>
 			<check_box name="PhoenixMuteGroupWhenNoticesDisabled"
 				label="Désactiver le chat de groupe lorsque 'Recevoir les notices' est décoché"/>
-			<button name="lgg_ac_showgui"
-                label="Paramètres d'autocorrection"
-                tool_tip="Cliquer ici pour ouvrir les paramètres des macros d'autocorrection."/>
 		</panel>
 	<!--Chat: Radar-->
 		<panel name="ChatRadar"
@@ -357,11 +354,6 @@
 		</text>
 		<line_editor name="PhoenixCmdLineCalc"
 			tool_tip="Utiliser la ligne de chat comme ligne d'entrée de calcul."/>
-		<text name="PhoenixCmdLineAutocorrect_txt">
-			Autocorrect. (Taper cmd liste|faux|juste)
-		</text>
-		<line_editor name="PhoenixCmdLineAutocorrect"
-			tool_tip="Ajouter un mot dans l'autocorrecteur (v. aussi l'onglet Chat/MI). La syntaxe est /addac NomDeLaListe|MotFaux|MotJuste. Par exemple : si vous tapez '/addac Abbreviations|bjr|bonjour', vous obtenez 'bonjour' lorsque vous tapez 'bjr' suivi d'un espace."/>
 		<text name="PhoenixCmdLineDrawDistance_txt">
 			Distance d'affichage (Taper cmd dist.)
 		</text>

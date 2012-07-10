@@ -51,7 +51,6 @@
 #include "lluictrlfactory.h"
 #include "llclipboard.h"
 #include "llmenugl.h"
-#include "../newview/lggautocorrect.h"
 #include "../newview/llviewercontrol.h"
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a)
 #include "llhunspell.h"
@@ -213,60 +212,6 @@ LLLineEditor::~LLLineEditor()
 
 	// calls onCommit() while LLLineEditor still valid
 	gFocusMgr.releaseFocusIfNeeded( this );
-}
-void LLLineEditor::autoCorrectText()
-{
-	static LLCachedControl<bool> doAnything(gSavedSettings, "FSEnableAutoCorrect");
-	if( (!mReadOnly) && (doAnything))// && (isDirty()))
-	{
-		S32 wordStart = 0;
-		S32 wordEnd = mCursorPos-1;
-		//llinfos <<"Checking Word, Cursor is at "<<mCursorPos<<" and text is "<<mText.getString().c_str()<<llendl;
-
-		if(wordEnd < 1)
-			return;
-
-		LLWString text = mText.getWString();
-
-		if(text.size()<1)
-			return;
-
-		if( LLWStringUtil::isPartOfWord( text[wordEnd] ))
-			return;//we only check on word breaks
-
-		wordEnd--;
-
-		if( LLWStringUtil::isPartOfWord( text[wordEnd] ) )
-		{
-			while ((wordEnd > 0) && (' '!=text[wordEnd-1]))
-			{
-				wordEnd--;
-			}
-
-			wordStart=wordEnd;		
-
-			while ((wordEnd < (S32)text.length()) && (' '!=text[wordEnd] ) )
-			{
-				wordEnd++;
-			}
-
-			std::string strLastWord = std::string(text.begin(), text.end());
-			std::string lastTypedWord = strLastWord.substr( wordStart, wordEnd-wordStart);
-			std::string correctedWord( LGGAutoCorrect::getInstance()->replaceWord(lastTypedWord));
-
-			if(correctedWord!=lastTypedWord)
-			{
-				LLWString strNew = utf8str_to_wstring( correctedWord );
-				LLWString strOld = utf8str_to_wstring( lastTypedWord );
-				int nDiff = strNew.size() - strOld.size();
-
-				//int wordStart = regText.find(lastTypedWord);
-				text.replace(wordStart,lastTypedWord.length(),strNew);
-				mText = wstring_to_utf8str(text);
-				mCursorPos+=nDiff;
-			}
-		}
-	}
 }
 
 void LLLineEditor::onFocusReceived()
@@ -1043,8 +988,6 @@ void LLLineEditor::addChar(const llwchar uni_char)
 	{
 		LLUI::reportBadKeystroke();
 	}
-
-	autoCorrectText();
 
 	getWindow()->hideCursorUntilMouseMove();
 }
