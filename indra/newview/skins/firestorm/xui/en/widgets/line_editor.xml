@@ -10,8 +10,8 @@
 			 text_pad_left="2"
              text_readonly_color="TextFgReadOnlyColor"
              text_tentative_color="TextFgTentativeColor"
-			 highlight_color="White"
-			 preedit_bg_color="Black"
+			 highlight_color="lineeditor_highlight"
+			 preedit_bg_color="lineeditor_preedit_bg"
              mouse_opaque="true"
              name="line_editor"
              font="SansSerifSmall">

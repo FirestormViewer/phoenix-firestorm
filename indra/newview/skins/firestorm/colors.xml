@@ -439,7 +439,34 @@
     <color
      name="FilterTextColor"
      reference="EmphasisColor" />
-     <color
+    <color
+     name="lineeditor_highlight"
+     reference="EmphasisColor" />
+    <color
+     name="lineeditor_preedit_bg"
+     reference="White" />
+    <color
+     name="simpleeditor_bg_selected"
+     reference="EmphasisColor" />
+    <color
+     name="inventory_bg_color"
+     reference="DkGray2"/>
+    <color
+     name="inventory_bg_color_a"
+     reference="DkGray2"/>
+    <color
+     name="floater_bg_color"
+     reference="drkgrey123"/>
+    <color
+     name="floater_bg_color_a"
+     reference="drkgrey123"/>
+    <color
+     name="ScriptEditorTextRColor"
+     reference="DkGray" />
+    <color
+     name="ScriptEditorTextBgRColor"
+     reference="TextBgWriteableColor" />
+    <color
      name="FloaterButtonImageColor"
      reference="LtGray" />
     <color

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-  bg_opaque_color="DkGray2_10"
-  bg_alpha_color="DkGray2_10"
+  bg_opaque_color="inventory_bg_color"
+  bg_alpha_color="invventory_bg_colora_a"
   background_visible="true"
   background_opaque="true"
   show_load_status="true"
