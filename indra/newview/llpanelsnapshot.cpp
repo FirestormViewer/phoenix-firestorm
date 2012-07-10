@@ -67,7 +67,10 @@ void LLPanelSnapshot::onOpen(const LLSD& key)
 		LLFloaterSnapshot::getInstance()->notify(LLSD().with("image-format-change", true));
 	}
 
-	updateCustomResControls();
+	// <FS:Zi> Save all settings
+	// updateCustomResControls();
+	onCustomResolutionCommit();
+	// </FS:Zi>
 }
 
 LLFloaterSnapshot::ESnapshotFormat LLPanelSnapshot::getImageFormat() const
@@ -129,7 +132,13 @@ void LLPanelSnapshot::updateCustomResControls()
 	// when a custom resolution is chosen.
 	LLComboBox* combo = getChild<LLComboBox>(getImageSizeComboName());
 	const bool show = combo->getFirstSelectedIndex() == (combo->getItemCount() - 1);
-	getChild<LLUICtrl>(getImageSizePanelName())->setVisible(show);
+	// <FS:Zi> Save all settings
+	// getChild<LLUICtrl>(getImageSizePanelName())->setVisible(show);
+	getChild<LLUICtrl>(getImageSizePanelName())->setEnabled(show);
+	getChild<LLUICtrl>(getWidthSpinnerName())->setEnabled(show);
+	getChild<LLUICtrl>(getHeightSpinnerName())->setEnabled(show);
+	getChild<LLUICtrl>(getAspectRatioCBName())->setEnabled(show);
+	// </FS:Zi>
 }
 
 void LLPanelSnapshot::updateImageQualityLevel()

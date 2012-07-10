@@ -350,6 +350,7 @@
              value="depth" />
         </combo_box>
         <check_box
+         control_name="RenderUIInSnapshot"
          label="Interface"
          layout="topleft"
          left="30"
@@ -357,6 +358,7 @@
          width="180"
          name="ui_check" />
         <check_box
+         control_name="RenderHUDInSnapshot"
          label="HUDs"
          layout="topleft"
          left="30"
@@ -364,6 +366,7 @@
          width="180"
          name="hud_check" />
         <check_box
+         control_name="UseFreezeFrame"
          label="Freeze frame (fullscreen)"
          layout="topleft"
          left="10"
@@ -371,6 +374,7 @@
          width="180"
          name="freeze_frame_check" />
         <check_box
+         control_name="AutoSnapshot"
          label="Auto-refresh"
          layout="topleft"
          left="10"

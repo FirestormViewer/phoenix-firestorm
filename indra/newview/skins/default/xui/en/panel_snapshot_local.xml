@@ -102,6 +102,7 @@
          visible="true">
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToDiskWidth"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -117,6 +118,7 @@
              width="95" />
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToDiskHeight"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -131,6 +133,7 @@
              top_delta="0"
              width="95" />
             <check_box
+             control_name="KeepAspectForDiskSnapshot"
              bottom_delta="20"
              height="10"
              follows="left|top"
@@ -172,6 +175,7 @@
                  value="BMP" />
             </combo_box>
             <slider
+             control_name="SnapshotToDiskQuality"
              decimal_digits="0"
              follows="left|top"
              height="15"

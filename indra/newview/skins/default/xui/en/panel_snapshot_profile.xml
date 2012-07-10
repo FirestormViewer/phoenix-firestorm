@@ -91,6 +91,7 @@
          visible="true">-->
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToProfileWidth"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -106,6 +107,7 @@
              width="95" />
             <spinner
              allow_text_entry="false"
+             control_name="LastSnapshotToProfileHeight"
              decimal_digits="0"
              follows="left|top"
              height="20"
@@ -120,6 +122,7 @@
              top_delta="0"
              width="95" />
             <check_box
+             control_name="KeepAspectForProfileSnapshot"
               height="10"
              bottom_delta="20"
              label="Constrain proportions"
@@ -164,6 +167,7 @@
              word_wrap="true">
             </text_editor>
             <check_box
+             control_name="SnapshotToProfileIncludeLocation"
              follows="left|bottom"
              initial_value="true"
              label="Include location"

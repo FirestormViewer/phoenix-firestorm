@@ -83,6 +83,7 @@
     </combo_box>
     <spinner
      allow_text_entry="false"
+     control_name="LastSnapshotToInventoryWidth"
      decimal_digits="0"
      follows="left|top"
      height="20"
@@ -98,6 +99,7 @@
      width="95" />
     <spinner
      allow_text_entry="false"
+     control_name="LastSnapshotToInventoryHeight"
      decimal_digits="0"
      follows="left|top"
      height="20"
@@ -112,6 +114,7 @@
      top_delta="0"
      width="95" />
     <check_box
+     control_name="KeepAspectForInventorySnapshot"
      top_pad="4"
      height="10"
      follows="left|top"
@@ -122,6 +125,7 @@
      visible="false" />
 	<!-- //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge. -->
     <check_box
+     control_name="SnapshotTemp"
      top_pad="4"
      follows="left|top"
      label="Temp upload"
