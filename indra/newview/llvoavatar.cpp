@@ -9104,7 +9104,10 @@ BOOL LLVOAvatar::isTextureDefined(LLVOAvatarDefines::ETextureIndex te, U32 index
 
 	// <FS:ND> getImage(te, index) can return 0 in some edge cases.
 	if( !getImage( te, index ) )
+	{
+		llwarns << "getImage( " << te << ", " << index << " ) returned 0" << llendl;
 		return FALSE;
+	}
 	// </FS:ND>
 
 	return (getImage(te, index)->getID() != IMG_DEFAULT_AVATAR && 
