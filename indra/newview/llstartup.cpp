@@ -460,6 +460,12 @@ bool idle_startup()
 
 		// fsdata: load dynamic xml data
 		FSData::getInstance()->startDownload();
+
+		// <FS:Ansariel> Store current font and skin for system info (FIRE-6806)
+		gSavedSettings.setString("FSInternalFontSettingsFile", gSavedSettings.getString("FSFontSettingsFile"));
+		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("SkinCurrent"));
+		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("SkinCurrentTheme"));
+		// </FS:Ansariel>
 		
 		if (LLFeatureManager::getInstance()->isSafe())
 		{

@@ -243,17 +243,18 @@ LLSD LLFloaterAbout::getInfo()
 	info["BUILD_DATE"] = __DATE__;
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
-	info["SKIN"] = gSavedSettings.getString("SkinCurrent");
-	info["THEME"] = gSavedSettings.getString("SkinCurrentTheme");
+	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
+	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");
 
 	//[FIRE 3113 : SJ] Added Font and fontsize to info
 	info["FONT"] = "Unknown Font";
-	if (gSavedSettings.getString("FSFontSettingsFile") == "fonts.xml") info["FONT"] = "Deja Vu";
-	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
-	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_liberation.xml") info["FONT"] = "Liberation";
-	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_droid.xml") info["FONT"] = "Droid Sans";
-	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
-	else if (gSavedSettings.getString("FSFontSettingsFile") == "fonts_roboto.xml") info["FONT"] = "Roboto";
+	std::string fsInternalFontSettingsFile = gSavedSettings.getString("FSInternalFontSettingsFile");
+	if (fsInternalFontSettingsFile == "fonts.xml") info["FONT"] = "Deja Vu";
+	else if (fsInternalFontSettingsFile == "fonts_ubuntu.xml") info["FONT"] = "Ubuntu Font Family";
+	else if (fsInternalFontSettingsFile == "fonts_liberation.xml") info["FONT"] = "Liberation";
+	else if (fsInternalFontSettingsFile == "fonts_droid.xml") info["FONT"] = "Droid Sans";
+	else if (fsInternalFontSettingsFile == "fonts_mobi.xml") info["FONT"] = "Mobi Sans";
+	else if (fsInternalFontSettingsFile == "fonts_roboto.xml") info["FONT"] = "Roboto";
 	
 	info["FONT_SIZE"] = gSavedSettings.getF32("FSFontSizeAdjustment");
 	info["FONT_SCREEN_DPI"] = gSavedSettings.getF32("FontScreenDPI");
