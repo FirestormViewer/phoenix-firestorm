@@ -152,7 +152,6 @@ Maximum 200 per group daily
          max_length="63"
          name="create_subject"
          prevalidate_callback="ascii"
-         spellcheck="true"
          width="371" />
 
         <text
@@ -173,7 +172,6 @@ Maximum 200 per group daily
          left_pad="0"
          max_length="511"
          name="create_message"
-         spellcheck="true"
          top_delta="0"
          width="369"
          word_wrap="true"

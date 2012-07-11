@@ -154,23 +154,6 @@ public:
 // [/SL:KB]
 //	BOOL			replaceText(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive, BOOL wrap = TRUE);
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	// LLSpellCheckMenuHandler overrides
-	/*virtual*/ std::string	getSuggestion(U32 idxSuggestion) const;
-	/*virtual*/ U32			getSuggestionCount() const;
-	/*virtual*/ void		replaceWithSuggestion(U32 idxSuggestion);
-
-	/*virtual*/ void		addToDictionary();
-	/*virtual*/ bool		canAddToDictionary() const;
-
-	/*virtual*/ void		addToIgnore();
-	/*virtual*/ bool		canAddToIgnore() const;
-
-	// Spell checking helper functions
-	std::string				getMisspelledWord(U32 posCursor) const;
-	bool					isMisspelledWord(U32 posCursor) const;
-// [/SL:KB]
-
 	void			replaceTextAll(const std::string& search_text, const std::string& replace_text, BOOL case_insensitive);
 	
 	// Undo/redo stack
@@ -355,11 +338,7 @@ private:
 	BOOL			mAllowEmbeddedItems;
 	bool			mShowContextMenu;
 	bool			mParseOnTheFly;
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	std::vector<std::string> mSuggestionList;
-// [/SL:KB]
-
+	
 	LLUUID			mSourceID;
 
 	LLCoordGL		mLastIMEPosition;		// Last position of the IME editor

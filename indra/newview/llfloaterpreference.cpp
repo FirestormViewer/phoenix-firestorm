@@ -123,10 +123,6 @@
 //-TT
 #include "NACLantispam.h"
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-#include "llhunspell.h"
-// [/SL:KB]
-
 #include "llviewernetwork.h" // <FS:AW  opensim search support>
 
 const F32 MAX_USER_FAR_CLIP = 512.f;
@@ -2101,22 +2097,7 @@ BOOL LLPanelPreference::postBuild()
 		getChild<LLRadioGroup>("use_external_browser")->setValue(gSavedSettings.getBOOL("UseExternalBrowser"));
 	}
 	// </FS:Ansariel> Fix for visually broken browser choice radiobuttons
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	//////////////////////PanelSpellCheck//////////////////////
-	if (hasChild("checkSpellCheck", TRUE))
-	{
-		std::vector<std::string> dictList;
-		if (LLHunspellWrapper::instance().getInstalledDictionaries(dictList))
-		{
-			LLComboBox* pMainDictionaryList = findChild<LLComboBox>("comboDictionaryMain");
-			for (std::vector<std::string>::const_iterator itDict = dictList.begin(); itDict != dictList.end(); ++itDict)
-				pMainDictionaryList->add(*itDict);
-			pMainDictionaryList->setControlName("SpellCheckDictionary");
-		}
-	}
-// [/SL:KB]
-
+	
 	////////////////////// PanelAlerts ///////////////////
 	if (hasChild("OnlineOfflinetoNearbyChat", TRUE))
 	{

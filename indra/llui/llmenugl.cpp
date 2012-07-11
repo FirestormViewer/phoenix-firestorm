@@ -3922,12 +3922,6 @@ void LLContextMenu::hide()
 		mHoverItem->setHighlight( FALSE );
 	}
 	mHoverItem = NULL;
-// ND_MERGE is this still needed? There are no such lines in mSpawningViewHandle.markDead(); in V/dev. Just a comment for a todo? Then it should be done, or this lines deleted.
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	// NOTE: this should be done *somewhere* but a menu item's onCommit() calls "hideMenus" before it fires the "onCommit" signal
-//	mSpawningViewHandle.markDead();
-// [/SL:KB]
-// /ND_MERGE
 }
 
 

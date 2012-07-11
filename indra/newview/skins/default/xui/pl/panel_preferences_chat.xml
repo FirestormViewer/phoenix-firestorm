@@ -168,12 +168,6 @@
 			</text>
 		</panel>
 		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
-			<check_box label="Sprawdzanie pisowni" name="checkSpellCheck"/>
-			<text name="textDictionaryMain">
-				Główny słownik:
-			</text>
-			<check_box label="Włącz autokorektę" name="lgg_ac_enable" tool_tip="To pole musi być zaznaczone, jeśli chcesz korzystać z opcji autokorekty. Autokorekta będzie sprawdzać wszystko co napiszesz w poszukiwaniu słów zdefiniowanych na pierwszej liście i wstawiać na ich na miejsce zamienniki z drugiej listy."/>
-			<button name="lgg_ac_showgui" label="Ustawienia autokorekty"/>
 		</panel>
 	</tab_container>
 </panel>

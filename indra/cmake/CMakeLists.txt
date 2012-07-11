@@ -39,7 +39,6 @@ set(cmake_SOURCE_FILES
     GooglePerfTools.cmake
     Growl.cmake
     HACD.cmake
-    Hunspell.cmake
     JPEG.cmake
     LLAddBuildTest.cmake
     LLAudio.cmake

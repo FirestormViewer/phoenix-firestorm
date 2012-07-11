@@ -30,9 +30,6 @@
 
 #include "v4color.h"
 #include "lleditmenuhandler.h"
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-#include "llspellcheckmenuhandler.h"
-// [/SL:KB]
 #include "llstyle.h"
 #include "llkeywords.h"
 #include "llpanel.h"
@@ -64,9 +61,6 @@ public:
 	virtual void				updateLayout(const class LLTextBase& editor);
 	virtual F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	virtual bool				canEdit() const;
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	virtual bool				canSpellCheck() const;
-// [/SL:KB]
 	virtual void				unlinkFromDocument(class LLTextBase* editor);
 	virtual void				linkToDocument(class LLTextBase* editor);
 
@@ -118,9 +112,6 @@ public:
 	/*virtual*/ S32					getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offset, S32 max_chars) const;
 	/*virtual*/ F32					draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect);
 	/*virtual*/ bool				canEdit() const { return true; }
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	/*virtual*/ bool				canSpellCheck() const { return true; }
-// [/SL:KB]
 	/*virtual*/ const LLColor4&		getColor() const					{ return mStyle->getColor(); }
 	/*virtual*/ LLStyleConstSP		getStyle() const					{ return mStyle; }
 //	/*virtual*/ void 				setStyle(LLStyleConstSP style)	{ mStyle = style; }
@@ -246,9 +237,6 @@ typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 class LLTextBase 
 :	public LLUICtrl,
 	protected LLEditMenuHandler
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-,	public LLSpellCheckMenuHandler
-// [/SL:KB]
 {
 public:
 	friend class LLTextSegment;
@@ -280,9 +268,6 @@ public:
 								border_visible,
 								track_end,
 								read_only,
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-								spellcheck,
-// [/SL:KB]
 								allow_scroll,
 								plain_text,
 								wrap,
@@ -334,12 +319,7 @@ public:
 	// LLEditMenuHandler interface
 	/*virtual*/ BOOL		canDeselect() const;
 	/*virtual*/ void		deselect();
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	// LLSpellCheckMenuHandler overrides
-	/*virtual*/ bool		useSpellCheck() const;
-// [/SL:KB]
-
+	
 //<FS:KC - expose ParseHTML setting>
                 void        setParseHTML(bool parse_html) { mParseHTML = parse_html; }
 //</FS:KC - expose ParseHTML setting>
@@ -539,11 +519,7 @@ protected:
 	// misc
 	void							updateRects();
 	void							needsScroll() { mScrollNeeded = TRUE; }
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	void							onSpellCheckSettingsChange();
-// [/SL:KB]
-
+	
 	struct URLLabelCallback;
 	// Replace a URL with a new icon and label, for example, when
 	// avatar names are looked up.
@@ -589,17 +565,7 @@ protected:
 	S32							mSelectionEnd;
 	
 	BOOL						mIsSelecting;		// Are we in the middle of a drag-select? 
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	BOOL						mSpellCheck;
-	BOOL						mNeedsSpellCheck;
-	LLTimer						mSpellCheckTimer;
-	std::list<std::pair<U32, U32> > mMisspellRanges;
-
-	// Constant
-	static const F32 SPELLCHECK_DELAY;
-// [/SL:KB]
-
+	
 	// configuration
 	S32							mHPad;				// padding on left of text
 	S32							mVPad;				// padding above text

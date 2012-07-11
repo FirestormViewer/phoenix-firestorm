@@ -189,15 +189,6 @@
 
         <!-- Chat: Text Input -->
         <panel label="Ввод текста" name="ChatTextInput">
-            <check_box label="Проверка орфографии" name="checkSpellCheck" width="200"/>
-                Источник:
-            <text name="textDictionaryMain" width="105">
-            </text>
-            <check_box label="Авто корректура" name="lgg_ac_enable"
-             tool_tip=""/>
-            <button name="lgg_ac_showgui" label="Настройки Авто-корректуры"
-             width="170">
-            </button>
         </panel>
 
 	</tab_container>

@@ -141,7 +141,6 @@
 	 font="SansSerifSmall"
          height="20"
          label="To nearby chat"
-         spellcheck="true"
          name="chat_box"
 		 tab_group="3" />
       </layout_panel>

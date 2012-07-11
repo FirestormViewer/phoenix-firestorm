@@ -682,20 +682,11 @@ public:
 			BOOL	appendContextSubMenu(LLContextMenu *menu);
 
 			LLHandle<LLContextMenu> getHandle() { return getDerivedHandle<LLContextMenu>(); }
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-			// NOTE: this is currently only used for spell checking so don't presume this will return something meaningful elsewhere
-			LLView*	getSpawningView() const { return mSpawningViewHandle.get(); }
-			void	setSpawningView(LLHandle<LLView> hSpawningView) { mSpawningViewHandle = hSpawningView; }
-// [/SL:KB]
-
+			
 protected:
 	BOOL						mHoveredAnyItem;
 	LLMenuItemGL*				mHoverItem;
 	LLRootHandle<LLContextMenu>	mHandle;
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	LLHandle<LLView>			mSpawningViewHandle;
-// [/SL:KB]
 };
 
 

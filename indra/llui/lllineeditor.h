@@ -40,9 +40,6 @@
 #include "llframetimer.h"
 
 #include "lleditmenuhandler.h"
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a)
-#include "llspellcheckmenuhandler.h"
-// [/SL:KB]
 #include "lluictrl.h"
 #include "lluiimage.h"
 #include "lluistring.h"
@@ -58,9 +55,6 @@ class LLContextMenu;
 
 class LLLineEditor
 : public LLUICtrl, public LLEditMenuHandler, protected LLPreeditor
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-, public LLSpellCheckMenuHandler
-// [/SL:KB]
 {
 public:
 
@@ -92,9 +86,6 @@ public:
 
 		Optional<bool>					select_on_focus,
 										revert_on_esc,
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
-										spellcheck,
-// [/SL:KB]
 										commit_on_focus_lost,
 										ignore_tab,
 										is_password;
@@ -154,25 +145,6 @@ public:
 
 	virtual void	deselect();
 	virtual BOOL	canDeselect() const;
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	// LLSpellCheckMenuHandler overrides
-	/*virtual*/ bool		useSpellCheck() const;
-
-	/*virtual*/ std::string	getSuggestion(U32 idxSuggestion) const;
-	/*virtual*/ U32			getSuggestionCount() const;
-	/*virtual*/ void		replaceWithSuggestion(U32 idxSuggestion);
-
-	/*virtual*/ void		addToDictionary();
-	/*virtual*/ bool		canAddToDictionary() const;
-
-	/*virtual*/ void		addToIgnore();
-	/*virtual*/ bool		canAddToIgnore() const;
-
-	// Spell checking helper functions
-	std::string				getMisspelledWord(U32 posCursor) const;
-	bool					isMisspelledWord(U32 posCursor) const;
-// [/SL:KB]
 
 	// view overrides
 	virtual void	draw();
@@ -298,11 +270,7 @@ private:
 	
 	// Draw the background image depending on enabled/focused state.
 	void			drawBackground();
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	void			onSpellCheckSettingsChange();
-// [/SL:KB]
-
+	
 	//
 	// private data members
 	//
@@ -356,13 +324,6 @@ protected:
 
 	LLTextValidate::validate_func_t mPrevalidateFunc;
 	LLTextValidate::validate_func_t mPrevalidateInputFunc;
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	BOOL		mSpellCheck;
-	BOOL		mNeedsSpellCheck;
-	LLTimer		mSpellCheckTimer;
-	std::list<std::pair<U32, U32> > mMisspellRanges;
-	std::vector<std::string>		mSuggestionList;
-// [/SL:KB]
 
 	LLFrameTimer mKeystrokeTimer;
 	LLTimer		mTripleClickTimer;

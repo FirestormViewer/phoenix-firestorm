@@ -209,15 +209,6 @@
 
         <!-- Chat: Text Input -->
         <panel label="Texteingabe" name="ChatTextInput">
-            <check_box label="Rechtschreibprüfung aktivieren" name="checkSpellCheck" width="200"/>
-            <text name="textDictionaryMain" width="105">
-                Haupt-Wörterbuch:
-            </text>
-            <check_box label="Auto-Korrektur" name="lgg_ac_enable"
-             tool_tip="Muss aktiviert sein um die Einstellungen für die Auto-Korrektur nutzen zu können"/>
-            <button name="lgg_ac_showgui" label="Auto-Korrektur-Einstellungen"
-             width="170">
-            </button>
         </panel>
 
 	</tab_container>

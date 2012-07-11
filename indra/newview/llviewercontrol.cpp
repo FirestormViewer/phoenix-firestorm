@@ -76,10 +76,6 @@
 #include "llupdaterservice.h"
 #include "llnotificationsutil.h"
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
-#include "llhunspell.h"
-// [/SL:KB]
-
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
@@ -573,21 +569,6 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
-bool handleSpellCheckChanged(const LLSD& sdValue)
-{
-	LLHunspellWrapper::setUseSpellCheck((sdValue.asBoolean()) ? gSavedSettings.getString("SpellCheckDictionary") : LLStringUtil::null);
-	return true;
-}
-
-bool handleSpellCheckDictChanged(const LLSD& sdValue)
-{
-	if (gSavedSettings.getBOOL("SpellCheck"))
-		LLHunspellWrapper::setUseSpellCheck(sdValue.asString());
-	return true;
-}
-// [/SL:KB]
-
 bool toggle_agent_pause(const LLSD& newvalue)
 {
 	if ( newvalue.asBoolean() )
@@ -861,10 +842,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
-// [/SL:KB]
-	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
-	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
-// [/SL:KB]
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
 	// <FS:Zi> Is done inside XUI now, using visibility_control

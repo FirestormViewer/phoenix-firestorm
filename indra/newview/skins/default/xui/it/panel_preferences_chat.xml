@@ -174,12 +174,6 @@
 		</panel>
 		<!--Dizionari-->
 		<panel label="Dizionari" name="ChatTextInput">
-			<check_box label="Abilita controllo parole" name="checkSpellCheck"/>
-			<text name="textDictionaryMain">
-				Dizionari:
-			</text>
-			<check_box label="Abilita autocorrezione" name="lgg_ac_enable" tool_tip="Spuntando questa casella abiliterete l'autocorrezione, in automatico cercherà le parole corrette e le sostituirà  alla parole digitate male, le parole verranno prese dal dizionario selezionato nel menu a tendina."/>
-			<button name="lgg_ac_showgui" label="Impostazioni Autocorrezione" width="180" />
 		</panel>
 	</tab_container>
 </panel>

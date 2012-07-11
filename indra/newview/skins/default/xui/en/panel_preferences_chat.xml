@@ -1119,40 +1119,7 @@
          follows="all"
          label="Text Input"
          name="ChatTextInput" >
-
-            <check_box
-             control_name="SpellCheck"
-             enabled="true"
-             follows="top|left"
-             height="16"
-             label="Enable spell checking"
-             layout="topleft"
-             left="30"
-             name="checkSpellCheck"
-             top="30"
-             width="150" />
-            <text
-             enabled_control="SpellCheck"
-             follows="top|left"
-             height="10"
-             layout="topleft"
-             left_pad="10"
-             mouse_opaque="false"
-             name="textDictionaryMain"
-             top_pad="-16"
-             type="string"
-             width="90" >
-                Main dictionary:
-            </text>
-            <combo_box
-             enabled_control="SpellCheck"
-             follows="top|left"
-             height="23"
-             layout="topleft"
-             left_pad="10"
-             name="comboDictionaryMain"
-             top_pad="-15"
-             width="175" />
+<!--Empty for 3.3.4 merge-->
         </panel>
 </tab_container>
 </panel>

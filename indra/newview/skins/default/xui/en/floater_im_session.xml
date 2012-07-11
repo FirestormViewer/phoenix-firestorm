@@ -397,7 +397,6 @@
          label="To"
          layout="bottomleft"
          select_on_focus="true"
-         spellcheck="true"
          name="chat_editor"
          tab_group="1"
          width="238">

@@ -183,11 +183,6 @@ public:
 	static bool isPunct(char a) { return ispunct((unsigned char)a) != 0; }
 	static bool isPunct(llwchar a) { return iswpunct(a) != 0; }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-18 (Catznip-2.8.0c) | Added: Catznip-2.8.0c
-	static bool isAlpha(char a) { return isalpha((unsigned char)a) != 0; }
-	static bool isAlpha(llwchar a) { return iswalpha(a) != 0; }
-// [/SL:KB]
-
 	static bool isAlnum(char a) { return isalnum((unsigned char)a) != 0; }
 	static bool isAlnum(llwchar a) { return iswalnum(a) != 0; }
 
