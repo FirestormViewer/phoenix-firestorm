@@ -350,6 +350,12 @@ void FSLSLBridge :: initBridge()
 // Gets called by the Init, when inventory loaded.
 void FSLSLBridge :: startCreation()
 {
+	if( !isAgentAvatarValid() )
+	{
+		llwarns << "AgentAvatar is not valid" << llendl;
+		return;
+	}
+
 	llinfos << "startCreation called. gInventory.isInventoryUsable=" << gInventory.isInventoryUsable() << llendl;
 
 	//if bridge object doesn't exist - create and attach it, update script.
@@ -708,6 +714,12 @@ void FSLSLBridgeRezCallback :: fire(const LLUUID& inv_item)
 		return;
 	}
 
+	if( gAgentAvatarp.isNull() )
+	{
+		llwarns << "Agent is 0, bailing out" << llendl;
+		return;
+	}
+
 	llinfos << "Bridge attach callback fired, looking for object..." << llendl;
 
 	LLViewerObject* obj = gAgentAvatarp->getWornAttachment(inv_item);
@@ -756,6 +768,13 @@ void FSLSLBridgeScriptCallback::fire(const LLUUID& inv_item)
 		return;
 	}
 	
+	if( gAgentAvatarp.isNull() )
+	{
+		llwarns << "Agent is 0, bailing out" << llendl;
+		return;
+	}
+
+
 	gInventory.updateItem(item);
 	gInventory.notifyObservers();
 
