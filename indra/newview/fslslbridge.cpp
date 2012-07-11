@@ -584,7 +584,12 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 {
-	llassert_always( isBridgeValid() );
+	if( isBridgeValid() )
+	{
+		llwarns << "Bridge not valid" << llendl;
+		return;
+	}
+
 	//modify the rock size and texture
 	llinfos << "Bridge container found after second attachment, resizing..." << llendl;
 	setupBridgePrim(object);
@@ -676,7 +681,12 @@ void FSLSLBridge :: setupBridgePrim(LLViewerObject *object)
 
 void FSLSLBridge :: create_script_inner(LLViewerObject* object)
 {
-	llassert_always( isBridgeValid() );
+	if( !isBridgeValid() )
+	{
+		llwarns << "Bridge no valid" << llendl;
+		return;
+	}
+
 
 	LLUUID catID = findFSCategory();
 
