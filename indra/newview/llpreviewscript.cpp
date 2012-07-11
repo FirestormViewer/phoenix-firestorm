@@ -1051,10 +1051,18 @@ void LLScriptEdCore::onErrorList(LLUICtrl*, void* user_data)
 		{
 			LLPanel* tab = self->getChild<LLPanel>("Preprocessed");
 			LLTabContainer* tabset = self->getChild<LLTabContainer>("Tabset");
-			if(tabset)tabset->selectTabByName("Preprocessed");
-			if(tab)tab->setFocus(TRUE);
-			self->mPostEditor->setFocus(TRUE);
-			self->mPostEditor->setCursor(row, column);
+
+			if(tabset)
+				tabset->selectTabByName("Preprocessed");
+
+			if(tab)
+				tab->setFocus(TRUE);
+
+			if( self->mPostEditor )
+			{
+				self->mPostEditor->setFocus(TRUE);
+				self->mPostEditor->setCursor(row, column);
+			}
 		}
 		else
 		{
