@@ -40,8 +40,8 @@
 		Web:
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="Usa il mio browser (IE, Firefox, Safari)" name="external" tool_tip="Utilizza il browser Web predefinito di sistema per l&apos;aiuto, per i link Web e così via. Sconsigliato durante l&apos;esecuzione a tutto schermo." value="true" left_pad="50"/>
-		<radio_item label="Utilizza il browser Web integrato" name="internal" tool_tip="Utilizza il browser Web integrato per l&apos;aiuto, per i link Web e così via. Questo browser si apre in una nuova finestra in [APP_NAME]." value=""/>
+		<radio_item label="Usa il mio browser (IE, Firefox, Safari)" name="external" tool_tip="Utilizza il browser Web predefinito di sistema per l&apos;aiuto, per i link Web e così via. Sconsigliato durante l&apos;esecuzione a tutto schermo." left_pad="50"/>
+		<radio_item label="Utilizza il browser Web integrato" name="internal" tool_tip="Utilizza il browser Web integrato per l&apos;aiuto, per i link Web e così via. Questo browser si apre in una nuova finestra in [APP_NAME]."/>
 	</radio_group>
 	<text name="numberwebfloaters_label">
 		Numero massimo di finestre nel browser Web integrato:
