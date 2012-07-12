@@ -33,8 +33,8 @@
 		網頁：
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="使用我的網頁瀏覽器（例如 IE, Firefox, Safari）" name="external" tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen." value="1"/>
-		<radio_item label="使用內建網頁瀏覽器" name="internal" tool_tip="Use the built-in web browser for help, web links, etc. This browser opens as a new window inside [APP_NAME]." value=""/>
+		<radio_item label="使用我的網頁瀏覽器（例如 IE, Firefox, Safari）" name="external" tool_tip="Use the default system web browser for help, web links, etc. Not recommended if running full screen."/>
+		<radio_item label="使用內建網頁瀏覽器" name="internal" tool_tip="Use the built-in web browser for help, web links, etc. This browser opens as a new window inside [APP_NAME]."/>
 	</radio_group>
 	<check_box initial_value="true" label="啟用外掛" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="接受 cookies" name="cookies_enabled"/>
