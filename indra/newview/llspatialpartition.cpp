@@ -4713,7 +4713,7 @@ public:
 					LLVOAvatar* avatar = (LLVOAvatar*) vobj;
 //					if (avatar->isSelf() && LLFloater::isVisible(gFloaterTools))
 // [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
-					if ( (avatar->isSelf()) && ((mPickRigged) || (LLFloater::isVisible(gFloaterTools))) )
+					if ( (mPickRigged) || ((avatar->isSelf()) && (LLFloater::isVisible(gFloaterTools))) )
 // [/SL:KB]
 					{
 //						LLViewerObject* hit = avatar->lineSegmentIntersectRiggedAttachments(mStart, mEnd, -1, mPickTransparent, mFaceHit, &intersection, mTexCoord, mNormal, mBinormal);
