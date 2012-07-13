@@ -330,20 +330,24 @@ const LLUUID AOEngine::override(const LLUUID& pMotion,BOOL start)
 	if(!state)
 	{
 		lldebugs << "No current AO state for motion " << motion << " (" << gAnimLibrary.animationName(motion) << ")." << llendl;
-		if(!gAnimLibrary.animStateToString(motion) && !start)
-		{
-			state=mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
-			if(state && state->mCurrentAnimationID==motion)
-			{
-				lldebugs << "Stop requested for current overridden animation UUID " << motion << " - Skipping." << llendl;
-			}
-			else
-			{
-				lldebugs << "Stop requested for unknown UUID " << motion << " - Stopping it just in case." << llendl;
-				gAgent.sendAnimationRequest(motion,ANIM_REQUEST_STOP);
-				gAgentAvatarp->LLCharacter::stopMotion(motion);
-			}
-		}
+//		This part of the code was added to capture an edge case where animations got stuck
+//		However, it seems it isn't needed anymore and breaks other, more important cases.
+//		So we disable this code for now, unless bad things happen and the stuck animations
+//		come back again. -Zi
+//		if(!gAnimLibrary.animStateToString(motion) && !start)
+//		{
+//			state=mCurrentSet->getStateByRemapID(mLastOverriddenMotion);
+//			if(state && state->mCurrentAnimationID==motion)
+//			{
+//				lldebugs << "Stop requested for current overridden animation UUID " << motion << " - Skipping." << llendl;
+//			}
+//			else
+//			{
+//				lldebugs << "Stop requested for unknown UUID " << motion << " - Stopping it just in case." << llendl;
+//				gAgent.sendAnimationRequest(motion,ANIM_REQUEST_STOP);
+//				gAgentAvatarp->LLCharacter::stopMotion(motion);
+//			}
+//		}
 		return animation;
 	}
 
