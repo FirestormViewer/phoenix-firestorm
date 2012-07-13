@@ -112,7 +112,10 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 	mMouseDownY = y;
 
 	//left mouse down always picks transparent
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
+//	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+// [/SL:KB]
 	mPick.mKeyMask = mask;
 
 	mMouseButtonDown = true;
@@ -127,7 +130,10 @@ BOOL LLToolPie::handleMouseDown(S32 x, S32 y, MASK mask)
 BOOL LLToolPie::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
 	// don't pick transparent so users can't "pay" transparent objects
-	mPick = gViewerWindow->pickImmediate(x, y, FALSE);
+//	mPick = gViewerWindow->pickImmediate(x, y, FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mPick = gViewerWindow->pickImmediate(x, y, FALSE, TRUE);
+// [/SL:KB]
 	mPick.mKeyMask = mask;
 
 	// claim not handled so UI focus stays same
@@ -572,7 +578,10 @@ void LLToolPie::selectionPropertiesReceived()
 
 BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 {
-	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
+//	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mHoverPick = gViewerWindow->pickImmediate(x, y, FALSE, FALSE);
+// [/SL:KB]
 	LLViewerObject *parent = NULL;
 	LLViewerObject *object = mHoverPick.getObject();
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
@@ -637,7 +646,10 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 	else
 	{
 		// perform a separate pick that detects transparent objects since they respond to 1-click actions
-		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
+//		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+		LLPickInfo click_action_pick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+// [/SL:KB]
 
 		LLViewerObject* click_action_object = click_action_pick.getObject();
 

@@ -65,7 +65,10 @@ LLToolSelect::LLToolSelect( LLToolComposite* composite )
 BOOL LLToolSelect::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	// do immediate pick query
-	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+	mPick = gViewerWindow->pickImmediate(x, y, TRUE, FALSE);
+// [/SL:KB]
+//	mPick = gViewerWindow->pickImmediate(x, y, TRUE);
 
 	// Pass mousedown to agent
 	LLTool::handleMouseDown(x, y, mask);

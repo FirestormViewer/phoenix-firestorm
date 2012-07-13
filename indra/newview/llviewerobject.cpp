@@ -3855,6 +3855,9 @@ LLViewerObject* LLViewerObject::getRootEdit() const
 BOOL LLViewerObject::lineSegmentIntersect(const LLVector3& start, const LLVector3& end,
 										  S32 face,
 										  BOOL pick_transparent,
+// [SL:KB] - Patch: UI-PickRiggedAttachment | Checked: 2012-07-12 (Catznip-3.3)
+										  BOOL pick_rigged,
+// [/SL:KB]
 										  S32* face_hit,
 										  LLVector3* intersection,
 										  LLVector2* tex_coord,
