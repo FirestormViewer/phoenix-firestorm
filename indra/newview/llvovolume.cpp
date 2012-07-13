@@ -1256,6 +1256,12 @@ BOOL LLVOVolume::calcLOD()
 	if (mDrawable->isState(LLDrawable::RIGGED))
 	{
 		LLVOAvatar* avatar = getAvatar(); 
+		
+		// <FS:ND> Crashfix: Not sure how this can really happen, but alas it does. Better exit here than crashing.
+		if( !avatar || !avatar->mDrawable )
+			return FALSE;
+		// </FS:ND>
+
 		distance = avatar->mDrawable->mDistanceWRTCamera;
 		radius = avatar->getBinRadius();
 	}
