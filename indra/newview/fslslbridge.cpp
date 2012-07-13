@@ -584,7 +584,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 
 void FSLSLBridge::configureBridgePrim(LLViewerObject* object)
 {
-	if( isBridgeValid() )
+	if( !isBridgeValid() )
 	{
 		llwarns << "Bridge not valid" << llendl;
 		return;
