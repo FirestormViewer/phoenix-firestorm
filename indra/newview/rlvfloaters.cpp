@@ -15,8 +15,10 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llappearancemgr.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
+#include "llinventoryfunctions.h"
 #include "llscrolllistctrl.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobjectlist.h"
@@ -30,6 +32,35 @@
 // ============================================================================
 // Helper functions
 //
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
+{
+	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
+		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
+	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
+		return llformat("%s (%s)", pItem->getName().c_str(), gAgentAvatarp->getAttachedPointName(pItem->getUUID()).c_str());
+	return (pItem) ? pItem->getName() : LLStringUtil::null;
+}
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+std::string rlvGetItemType(const LLViewerInventoryItem* pItem)
+{
+	if (pItem)
+	{
+		switch (pItem->getType())
+		{
+			case LLAssetType::AT_BODYPART:
+			case LLAssetType::AT_CLOTHING:
+				return "Wearable";
+			case LLAssetType::AT_OBJECT:
+				return "Attachment";
+			default:
+				break;
+		}
+	}
+	return "Unknown";
+}
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0g
 std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt = true)
@@ -232,7 +263,7 @@ void RlvFloaterBehaviours::refreshAll()
 // RlvFloaterLocks member functions
 //
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-11 (RLVa-1.2.0)
 void RlvFloaterLocks::onOpen(const LLSD& sdKey)
 {
 	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterLocks::onRlvCommand, this, _1, _2));
@@ -240,10 +271,18 @@ void RlvFloaterLocks::onOpen(const LLSD& sdKey)
 	refreshAll();
 }
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-11 (RLVa-1.2.0)
 void RlvFloaterLocks::onClose(bool fQuitting)
 {
 	m_ConnRlvCommand.disconnect();
+}
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+BOOL RlvFloaterLocks::postBuild()
+{
+	getChild<LLUICtrl>("refresh_btn")->setCommitCallback(boost::bind(&RlvFloaterLocks::refreshAll, this));
+
+	return TRUE;
 }
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -267,12 +306,10 @@ void RlvFloaterLocks::onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
 	}
 }
 
-// Checked: 2010-03-18 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-18 (RLVa-1.2.0)
 void RlvFloaterLocks::refreshAll()
 {
-	LLCtrlListInterface* pLockList = childGetListInterface("lock_list");
-	if (!pLockList)
-		return;
+	LLScrollListCtrl* pLockList = getChild<LLScrollListCtrl>("lock_list");
 	pLockList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
 	if (!isAgentAvatarValid())
@@ -360,6 +397,28 @@ void RlvFloaterLocks::refreshAll()
 		sdColumns[3]["value"] = rlvGetItemNameFromObjID(itWearableType->second);
 
 		pLockList->addElement(sdRow, ADD_BOTTOM);
+	}
+
+	//
+	// List "nostrip" (soft) locks
+	//
+	sdColumns[1]["value"] = "nostrip";
+	sdColumns[3]["value"] = "(Agent)";
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	LLFindWearablesEx f(true, true);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, FALSE, f);
+
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (!RlvForceWear::instance().isStrippable(pItem->getUUID()))
+		{
+			sdColumns[0]["value"] = rlvGetItemType(pItem);
+			sdColumns[2]["value"] = rlvGetItemName(pItem);
+
+			pLockList->addElement(sdRow, ADD_BOTTOM);
+		}
 	}
 }
 
