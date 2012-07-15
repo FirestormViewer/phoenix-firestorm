@@ -1528,7 +1528,7 @@ void LLFolderViewFolder::requestSort()
 
 void LLFolderViewFolder::setCompletedFilterGeneration(S32 generation, BOOL recurse_up)
 {
-	//mMostFilteredDescendantGeneration = llmin(mMostFilteredDescendantGeneration, generation);
+	mMostFilteredDescendantGeneration = llmin(mMostFilteredDescendantGeneration, generation);
 	mCompletedFilterGeneration = generation;
 	// only aggregate up if we are a lower (older) value
 	if (recurse_up
