@@ -1076,8 +1076,17 @@ LLToast* LLScreenChannel::getToastByNotificationID(LLUUID id)
 	std::vector<ToastElem>::iterator it = find(mStoredToastList.begin(),
 			mStoredToastList.end(), id);
 
+//	if (it == mStoredToastList.end())
+//		return NULL;
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Modified: Catznip-2.5.0a
 	if (it == mStoredToastList.end())
-		return NULL;
+	{
+		// If we can't find it among the stored toasts then widen it to "all visible toasts"
+		it = find(mToastList.begin(), mToastList.end(), id);
+		if (it == mToastList.end())
+			return NULL;
+	}
+// [/SL:KB]
 
 	return it->getToast();
 }

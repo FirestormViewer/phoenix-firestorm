@@ -2,6 +2,237 @@
 <llsd xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="llsd.xsd">
 <map>
+    <key>RestrainedLove</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles the RestrainedLove features (BDSM lockable toys support). Needs a restart of the viewer.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RestrainedLoveDebug</key>
+    <map>
+      <key>Comment</key>
+      <string>Toggles the RestrainedLove debug mode (displays the commands when in debug mode).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RestrainedLoveCanOOC</key>
+    <map>
+      <key>Comment</key>
+      <string>Allows sending OOC chat when send chat restricted, or seeing OOC chat when receive chat restricted</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RestrainedLoveForbidGiveToRLV</key>
+    <map>
+      <key>Comment</key>
+      <string>When TRUE, forbids to give sub-folders to the #RLV RestrainedLove folder.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RestrainedLoveNoSetEnv</key>
+    <map>
+      <key>Comment</key>
+      <string>When TRUE, forbids to set the environment (time of day and Windlight settings) via RestrainedLove. Needs a restart of the viewer.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RestrainedLoveOffsetAvatarZ</key>
+    <map>
+      <key>Comment</key>
+      <string>Offset the avatar.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>RestrainedLoveReplaceWhenFolderBeginsWith</key>
+    <map>
+      <key>Comment</key>
+      <string>If a folder name begins with this string, its attach behavior will always be "replace", never "stack". Default is blank (disabled).</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string></string>
+    </map>
+    <key>RestrainedLoveShowEllipsis</key>
+    <map>
+      <key>Comment</key>
+      <string>When TRUE, show "..." when someone speaks, while the avatar is prevented from hearing. When FALSE, don't show anything.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RestrainedLoveStackWhenFolderBeginsWith</key>
+    <map>
+      <key>Comment</key>
+      <string>If a folder name begins with this string, its attach behavior will always be "stack", never "replace". Default is "+".</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>+</string>
+    </map>
+    <key>RLVaDebugHideUnsetDuplicate</key>
+    <map>
+      <key>Comment</key>
+      <string>Suppresses reporting "unset" or "duplicate" command restrictions when RestrainedLoveDebug is TRUE</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RLVaEnableCompositeFolders</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables composite folders for shared inventory</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RLVaEnableLegacyNaming</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables legacy naming convention for folders</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RLVaEnableSharedWear</key>
+    <map>
+      <key>Comment</key>
+      <string>Attachments in the shared #RLV folder can be force-attached without needing to specify an attachment point</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RLVaHideLockedLayers</key>
+    <map>
+      <key>Comment</key>
+      <string>Hides "remove outfit" restricted worn clothing layers from @getoufit</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RLVaHideLockedAttachments</key>
+    <map>
+      <key>Comment</key>
+      <string>Hides non-detachable worn attachments from @getattach</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RLVaSharedInvAutoRename</key>
+    <map>
+      <key>Comment</key>
+      <string>Automatically renames shared inventory items when worn</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RLVaShowAssertionFailures</key>
+    <map>
+      <key>Comment</key>
+      <string>Notify the user when an assertion fails</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RLVaShowNameTags</key>
+    <map>
+      <key>Comment</key>
+      <string>Display of names above avatars is subject to the general "Show Names" setting when @shownames=n restricted</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>RLVaTopLevelMenu</key>
+    <map>
+      <key>Comment</key>
+      <string>Show the RLVa specific menu as a top level menu</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>RLVaWearReplaceUnlocked</key>
+    <map>
+      <key>Comment</key>
+      <string>Don't block wear replace when at least one attachment on the target attachment point is non-detachable</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>WarnFirstRLVGiveToRLV</key>
+    <map>
+      <key>Comment</key>
+      <string>Enables FirstRLVGiveToRLV warning dialog</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
 	<key>CrashHostUrl</key>
     <map>
       <key>Comment</key>
@@ -3875,6 +4106,17 @@
       <key>Value</key>
       <integer>255</integer>
     </map>
+    <key>ForceInitialCOFDelay</key>
+    <map>
+      <key>Comment</key>
+      <string>Number of seconds to delay initial processing of COF contents</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>0.0</integer>
+    </map>
     <key>ForceShowGrid</key>
     <map>
       <key>Comment</key>
@@ -3896,6 +4138,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>ForceMissingType</key>
+    <map>
+      <key>Comment</key>
+      <string>Force this wearable type to be missing from COF</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>255</integer>
     </map>
     <key>FreezeTime</key>
     <map>
@@ -6207,6 +6460,17 @@
       <string>S32</string>
       <key>Value</key>
       <integer>305</integer>
+    </map>
+    <key>NotificationCanEmbedInIM</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls notification panel embedding in IMs (0 = default, 1 = focused, 2 = never)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
     <key>NotificationToastLifeTime</key>
     <map>
@@ -9964,6 +10228,17 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>NearbyListShowMap</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/hide map above nearby people list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>NearbyListShowIcons</key>
     <map>
       <key>Comment</key>
@@ -12470,39 +12745,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <boolean>0</boolean>
-    </map>
-    <key>VerifyInitialWearables</key>
-    <map>
-      <key>Comment</key>
-      <string>Compares the initial wearables to the COF contents to determine which one to use for the intial outfit</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>VerifyInitialWearables</key>
-    <map>
-      <key>Comment</key>
-      <string>Compares the initial wearables to the COF contents to determine which one to use for the intial outfit</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>VerifyInitialWearables</key>
-    <map>
-      <key>Comment</key>
-      <string>Compares the initial wearables to the COF contents to determine which one to use for the intial outfit</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
     </map>
     <key>VertexShaderEnable</key>
     <map>

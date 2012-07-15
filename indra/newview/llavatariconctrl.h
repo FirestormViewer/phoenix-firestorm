@@ -81,6 +81,10 @@ protected:
 public:
 	virtual ~LLAvatarIconCtrl();
 
+// [SL:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
+// [/SL:KB]
+
 	virtual void setValue(const LLSD& value);
 
 	// LLAvatarPropertiesProcessor observer trigger

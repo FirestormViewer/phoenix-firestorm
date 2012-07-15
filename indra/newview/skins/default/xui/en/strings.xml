@@ -3273,6 +3273,9 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="inventory_item_offered-im">
     Inventory item offered
   </string>
+  <string name="inventory_item_offered_rlv">
+    Inventory item offered to [NAME]
+  </string>
   <string name="share_alert">
     Drag items from inventory here
   </string>

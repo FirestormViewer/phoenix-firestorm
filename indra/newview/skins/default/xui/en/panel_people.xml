@@ -112,6 +112,7 @@ Looking for people to hang out with? Try the [secondlife:///app/worldmap World M
              layout="topleft"
              min_dim="100"
              mouse_opaque="false"
+             name="Net Map Panel"
              user_resize="true"
              visibility_control="NearbyListShowMap"
              width="313">

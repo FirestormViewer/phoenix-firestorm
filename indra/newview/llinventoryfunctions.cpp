@@ -81,6 +81,10 @@
 #include "llviewerwindow.h"
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 #include <boost/foreach.hpp>
 
@@ -345,6 +349,14 @@ BOOL get_is_item_removable(const LLInventoryModel* model, const LLUUID& id)
 		}
 	}
 
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveItem(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
+
 	const LLInventoryObject *obj = model->getItem(id);
 	if (obj && obj->getIsLinkType())
 	{
@@ -372,6 +384,14 @@ BOOL get_is_category_removable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( ((rlv_handler_t::isEnabled()) && 
+		 (RlvFolderLocks::instance().hasLockedFolder(RLV_LOCK_ANY)) && (!RlvFolderLocks::instance().canRemoveFolder(id))) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	if (!isAgentAvatarValid()) return FALSE;
 
@@ -407,6 +427,13 @@ BOOL get_is_category_renameable(const LLInventoryModel* model, const LLUUID& id)
 	{
 		return FALSE;
 	}
+
+// [RLVa:KB] - Checked: 2011-03-29 (RLVa-1.3.0g) | Modified: RLVa-1.3.0g
+	if ( (rlv_handler_t::isEnabled()) && (model == &gInventory) && (!RlvFolderLocks::instance().canRenameFolder(id)) )
+	{
+		return FALSE;
+	}
+// [/RLVa:KB]
 
 	LLViewerInventoryCategory* cat = model->getCategory(id);
 
