@@ -50,6 +50,11 @@
 #include "llviewerregion.h"
 #include "llwearablelist.h"
 
+std::string self_av_string()
+{
+	return gAgentAvatarp->avString();
+}
+
 // RAII thingy to guarantee that a variable gets reset when the Setter
 // goes out of scope.  More general utility would be handy - TODO:
 // check boost.
@@ -156,6 +161,10 @@ public:
 	{
 		mCatID = cat_id;
 		mAppend = append;
+
+		LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
+		
+		selfStartPhase("wear_inventory_category_callback");
 	}
 	void fire(const LLUUID& item_id)
 	{
@@ -167,13 +176,16 @@ public:
 		 * after the last item has fired the event and dereferenced it -- if all
 		 * the events actually fire!
 		 */
+		LL_DEBUGS("Avatar") << self_av_string() << " fired on copied item, id " << item_id << LL_ENDL;
 	}
 
 protected:
 	~LLWearInventoryCategoryCallback()
 	{
-		llinfos << "done all inventory callbacks" << llendl;
+		LL_INFOS("Avatar") << self_av_string() << "done all inventory callbacks" << LL_ENDL;
 		
+		selfStopPhase("wear_inventory_category_callback");
+
 		// Is the destructor called by ordinary dereference, or because the app's shutting down?
 		// If the inventory callback manager goes away, we're shutting down, no longer want the callback.
 		if( LLInventoryCallbackManager::is_instantiated() )
@@ -182,7 +194,7 @@ protected:
 		}
 		else
 		{
-			llwarns << "Dropping unhandled LLWearInventoryCategoryCallback" << llendl;
+			llwarns << self_av_string() << "Dropping unhandled LLWearInventoryCategoryCallback" << llendl;
 		}
 	}
 
@@ -212,14 +224,18 @@ LLUpdateAppearanceOnDestroy::LLUpdateAppearanceOnDestroy(bool update_base_outfit
 	mFireCount(0),
 	mUpdateBaseOrder(update_base_outfit_ordering)
 {
+	selfStartPhase("update_appearance_on_destroy");
 }
 
 LLUpdateAppearanceOnDestroy::~LLUpdateAppearanceOnDestroy()
 {
-	llinfos << "done update appearance on destroy" << llendl;
-	
 	if (!LLApp::isExiting())
 	{
+		// speculative fix for MAINT-1150
+		LL_INFOS("Avatar") << self_av_string() << "done update appearance on destroy" << LL_ENDL;
+
+		selfStopPhase("update_appearance_on_destroy");
+
 		LLAppearanceMgr::instance().updateAppearanceFromCOF(mUpdateBaseOrder);
 	}
 }
@@ -229,7 +245,7 @@ void LLUpdateAppearanceOnDestroy::fire(const LLUUID& inv_item)
 	LLViewerInventoryItem* item = (LLViewerInventoryItem*)gInventory.getItem(inv_item);
 	const std::string item_name = item ? item->getName() : "ITEM NOT FOUND";
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "callback fired [ name:" << item_name << " UUID:" << inv_item << " count:" << mFireCount << " ] " << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "callback fired [ name:" << item_name << " UUID:" << inv_item << " count:" << mFireCount << " ] " << LL_ENDL;
 #endif
 	mFireCount++;
 }
@@ -343,11 +359,16 @@ LLWearableHoldingPattern::LLWearableHoldingPattern():
 			 
 	}
 	sActiveHoldingPatterns.insert(this);
+	selfStartPhase("holding_pattern");
 }
 
 LLWearableHoldingPattern::~LLWearableHoldingPattern()
 {
 	sActiveHoldingPatterns.erase(this);
+	if (isMostRecent())
+	{
+		selfStopPhase("holding_pattern");
+	}
 }
 
 bool LLWearableHoldingPattern::isMostRecent()
@@ -395,9 +416,10 @@ void LLWearableHoldingPattern::checkMissingWearables()
 {
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway why don't we actually skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 	}
-		
+
 	std::vector<S32> found_by_type(LLWearableType::WT_COUNT,0);
 	std::vector<S32> requested_by_type(LLWearableType::WT_COUNT,0);
 	for (found_list_t::iterator it = getFoundList().begin(); it != getFoundList().end(); ++it)
@@ -413,7 +435,7 @@ void LLWearableHoldingPattern::checkMissingWearables()
 	{
 		if (requested_by_type[type] > found_by_type[type])
 		{
-			llwarns << "got fewer wearables than requested, type " << type << ": requested " << requested_by_type[type] << ", found " << found_by_type[type] << llendl;
+			llwarns << self_av_string() << "got fewer wearables than requested, type " << type << ": requested " << requested_by_type[type] << ", found " << found_by_type[type] << llendl;
 		}
 		if (found_by_type[type] > 0)
 			continue;
@@ -430,11 +452,13 @@ void LLWearableHoldingPattern::checkMissingWearables()
 			mTypesToRecover.insert(type);
 			mTypesToLink.insert(type);
 			recoverMissingWearable((LLWearableType::EType)type);
-			llwarns << "need to replace " << type << llendl; 
+			llwarns << self_av_string() << "need to replace " << type << llendl; 
 		}
 	}
 
 	resetTime(60.0F);
+
+	selfStartPhase("get_missing_wearables");
 	if (!pollMissingWearables())
 	{
 		doOnIdleRepeating(boost::bind(&LLWearableHoldingPattern::pollMissingWearables,this));
@@ -450,13 +474,14 @@ void LLWearableHoldingPattern::onAllComplete()
 
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway need to skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 	}
 
 	// Activate all gestures in this folder
 	if (mGestItems.count() > 0)
 	{
-		llinfos << "Activating " << mGestItems.count() << " gestures" << llendl;
+		LL_DEBUGS("Avatar") << self_av_string() << "Activating " << mGestItems.count() << " gestures" << LL_ENDL;
 		
 		LLGestureMgr::instance().activateGestures(mGestItems);
 		
@@ -473,13 +498,14 @@ void LLWearableHoldingPattern::onAllComplete()
 	}
 
 	// Update wearables.
-	llinfos << "Updating agent wearables with " << mResolved << " wearable items " << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "Updating agent wearables with " << mResolved << " wearable items " << LL_ENDL;
 	LLAppearanceMgr::instance().updateAgentWearables(this, false);
 	
 // [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-03-22 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
 //	// Update attachments to match those requested.
 //	if (isAgentAvatarValid())
 //	{
+//		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << mObjItems.count() << " attachments" << LL_ENDL;
 //		llinfos << "Updating " << mObjItems.count() << " attachments" << llendl;
 //		LLAgentWearables::userUpdateAttachments(mObjItems);
 //	}
@@ -498,9 +524,12 @@ void LLWearableHoldingPattern::onAllComplete()
 
 void LLWearableHoldingPattern::onFetchCompletion()
 {
+	selfStopPhase("get_wearables");
+		
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 	}
 
 	checkMissingWearables();
@@ -511,7 +540,8 @@ bool LLWearableHoldingPattern::pollFetchCompletion()
 {
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
 // [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
 		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
@@ -526,14 +556,14 @@ bool LLWearableHoldingPattern::pollFetchCompletion()
 
 	if (done)
 	{
-		llinfos << "polling, done status: " << completed << " timed out " << timed_out
-				<< " elapsed " << mWaitTime.getElapsedTimeF32() << llendl;
+		LL_INFOS("Avatar") << self_av_string() << "polling, done status: " << completed << " timed out " << timed_out
+				<< " elapsed " << mWaitTime.getElapsedTimeF32() << LL_ENDL;
 
 		mFired = true;
 		
 		if (timed_out)
 		{
-			llwarns << "Exceeded max wait time for wearables, updating appearance based on what has arrived" << llendl;
+			llwarns << self_av_string() << "Exceeded max wait time for wearables, updating appearance based on what has arrived" << llendl;
 		}
 
 		onFetchCompletion();
@@ -555,6 +585,7 @@ public:
 		if (!mHolder->isMostRecent())
 		{
 			llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+			// runway skip here?
 		}
 
 		llinfos << "Recovered item link for type " << mType << llendl;
@@ -581,12 +612,12 @@ public:
 			}
 			else
 			{
-				llwarns << "inventory item not found for recovered wearable" << llendl;
+				llwarns << self_av_string() << "inventory item not found for recovered wearable" << llendl;
 			}
 		}
 		else
 		{
-			llwarns << "inventory link not found for recovered wearable" << llendl;
+			llwarns << self_av_string() << "inventory link not found for recovered wearable" << llendl;
 		}
 	}
 private:
@@ -608,7 +639,8 @@ public:
 	{
 		if (!mHolder->isMostRecent())
 		{
-			llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+			// runway skip here?
+			llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
 // [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
 			// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
@@ -616,7 +648,7 @@ public:
 // [/SL:KB]
 		}
 
-		llinfos << "Recovered item for type " << mType << llendl;
+		LL_DEBUGS("Avatar") << self_av_string() << "Recovered item for type " << mType << LL_ENDL;
 		LLViewerInventoryItem *itemp = gInventory.getItem(item_id);
 		mWearable->setItemID(item_id);
 		LLPointer<LLInventoryCallback> cb = new RecoveredItemLinkCB(mType,mWearable,mHolder);
@@ -643,7 +675,8 @@ void LLWearableHoldingPattern::recoverMissingWearable(LLWearableType::EType type
 {
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 	}
 	
 		// Try to recover by replacing missing wearable with a new one.
@@ -682,7 +715,7 @@ void LLWearableHoldingPattern::clearCOFLinksForMissingWearables()
 		if ((data.mWearableType < LLWearableType::WT_COUNT) && (!data.mWearable))
 		{
 			// Wearable link that was never resolved; remove links to it from COF
-			llinfos << "removing link for unresolved item " << data.mItemID.asString() << llendl;
+			LL_INFOS("Avatar") << self_av_string() << "removing link for unresolved item " << data.mItemID.asString() << LL_ENDL;
 			LLAppearanceMgr::instance().removeCOFItemLinks(data.mItemID,false);
 		}
 	}
@@ -705,7 +738,8 @@ bool LLWearableHoldingPattern::pollMissingWearables()
 {
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		// runway skip here?
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 
 // [SL:KB] - Patch: Appearance-COFCorruption | Checked: 2010-04-14 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
 		// If we were signalled to stop then we shouldn't do anything else except poll for when it's safe to delete ourselves
@@ -720,15 +754,17 @@ bool LLWearableHoldingPattern::pollMissingWearables()
 
 	if (!done)
 	{
-		llinfos << "polling missing wearables, waiting for items " << mTypesToRecover.size()
+		LL_INFOS("Avatar") << self_av_string() << "polling missing wearables, waiting for items " << mTypesToRecover.size()
 				<< " links " << mTypesToLink.size()
 				<< " wearables, timed out " << timed_out
 				<< " elapsed " << mWaitTime.getElapsedTimeF32()
-				<< " done " << done << llendl;
+				<< " done " << done << LL_ENDL;
 	}
 
 	if (done)
 	{
+		selfStopPhase("get_missing_wearables");
+
 		gAgentAvatarp->debugWearablesLoaded();
 
 		// BAP - if we don't call clearCOFLinksForMissingWearables()
@@ -758,14 +794,14 @@ void LLWearableHoldingPattern::handleLateArrivals()
 	}
 	if (!isMostRecent())
 	{
-		llwarns << "Late arrivals not handled - outfit change no longer valid" << llendl;
+		llwarns << self_av_string() << "Late arrivals not handled - outfit change no longer valid" << llendl;
 	}
 	if (!mIsAllComplete)
 	{
-		llwarns << "Late arrivals not handled - in middle of missing wearables processing" << llendl;
+		llwarns << self_av_string() << "Late arrivals not handled - in middle of missing wearables processing" << llendl;
 	}
 
-	llinfos << "Need to handle " << mLateArrivals.size() << " late arriving wearables" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "Need to handle " << mLateArrivals.size() << " late arriving wearables" << LL_ENDL;
 
 	// Update mFoundList using late-arriving wearables.
 	std::set<LLWearableType::EType> replaced_types;
@@ -841,19 +877,19 @@ void LLWearableHoldingPattern::onWearableAssetFetch(LLWearable *wearable)
 {
 	if (!isMostRecent())
 	{
-		llwarns << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
+		llwarns << self_av_string() << "skipping because LLWearableHolding pattern is invalid (superceded by later outfit request)" << llendl;
 	}
 	
 	mResolved += 1;  // just counting callbacks, not successes.
-	llinfos << "resolved " << mResolved << "/" << getFoundList().size() << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "resolved " << mResolved << "/" << getFoundList().size() << LL_ENDL;
 	if (!wearable)
 	{
-		llwarns << "no wearable found" << llendl;
+		llwarns << self_av_string() << "no wearable found" << llendl;
 	}
 
 	if (mFired)
 	{
-		llwarns << "called after holder fired" << llendl;
+		llwarns << self_av_string() << "called after holder fired" << llendl;
 		if (wearable)
 		{
 			mLateArrivals.insert(wearable);
@@ -879,7 +915,7 @@ void LLWearableHoldingPattern::onWearableAssetFetch(LLWearable *wearable)
 			// Failing this means inventory or asset server are corrupted in a way we don't handle.
 			if ((data.mWearableType >= LLWearableType::WT_COUNT) || (wearable->getType() != data.mWearableType))
 			{
-				llwarns << "recovered wearable but type invalid. inventory wearable type: " << data.mWearableType << " asset wearable type: " << wearable->getType() << llendl;
+				llwarns << self_av_string() << "recovered wearable but type invalid. inventory wearable type: " << data.mWearableType << " asset wearable type: " << wearable->getType() << llendl;
 				break;
 			}
 
@@ -1434,8 +1470,8 @@ void LLAppearanceMgr::filterWearableItems(
 
 // Create links to all listed items.
 void LLAppearanceMgr::linkAll(const LLUUID& cat_uuid,
-								  LLInventoryModel::item_array_t& items,
-								  LLPointer<LLInventoryCallback> cb)
+							  LLInventoryModel::item_array_t& items,
+							  LLPointer<LLInventoryCallback> cb)
 {
 	for (S32 i=0; i<items.count(); i++)
 	{
@@ -1451,7 +1487,7 @@ void LLAppearanceMgr::linkAll(const LLUUID& cat_uuid,
 		const LLViewerInventoryCategory *cat = gInventory.getCategory(cat_uuid);
 		const std::string cat_name = cat ? cat->getName() : "CAT NOT FOUND";
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-		llinfos << "Linking Item [ name:" << item->getName() << " UUID:" << item->getUUID() << " ] to Category [ name:" << cat_name << " UUID:" << cat_uuid << " ] " << llendl;
+		LL_DEBUGS("Avatar") << self_av_string() << "Linking Item [ name:" << item->getName() << " UUID:" << item->getUUID() << " ] to Category [ name:" << cat_name << " UUID:" << cat_uuid << " ] " << LL_ENDL;
 #endif
 	}
 }
@@ -1459,7 +1495,7 @@ void LLAppearanceMgr::linkAll(const LLUUID& cat_uuid,
 void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 {
 	LLViewerInventoryCategory *pcat = gInventory.getCategory(category);
-	llinfos << "starting, cat " << (pcat ? pcat->getName() : "[UNKNOWN]") << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "starting, cat '" << (pcat ? pcat->getName() : "[UNKNOWN]") << "'" << LL_ENDL;
 
 	const LLUUID cof = getCOF();
 
@@ -1521,26 +1557,26 @@ void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 	gInventory.notifyObservers();
 
 	// Create links to new COF contents.
-	llinfos << "creating LLUpdateAppearanceOnDestroy" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "creating LLUpdateAppearanceOnDestroy" << LL_ENDL;
 	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy(!append);
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking body items" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "Linking body items" << LL_ENDL;
 #endif
 	linkAll(cof, body_items, link_waiter);
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking wear items" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "Linking wear items" << LL_ENDL;
 #endif
 	linkAll(cof, wear_items, link_waiter);
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking obj items" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "Linking obj items" << LL_ENDL;
 #endif
 	linkAll(cof, obj_items, link_waiter);
 
 #ifndef LL_RELEASE_FOR_DOWNLOAD
-	llinfos << "Linking gesture items" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "Linking gesture items" << LL_ENDL;
 #endif
 	linkAll(cof, gest_items, link_waiter);
 
@@ -1549,7 +1585,7 @@ void LLAppearanceMgr::updateCOF(const LLUUID& category, bool append)
 	{
 		createBaseOutfitLink(category, link_waiter);
 	}
-	llinfos << "waiting for LLUpdateAppearanceOnDestroy" << llendl;
+	LL_DEBUGS("Avatar") << self_av_string() << "waiting for LLUpdateAppearanceOnDestroy" << LL_ENDL;
 }
 
 void LLAppearanceMgr::updatePanelOutfitName(const std::string& name)
@@ -1706,7 +1742,7 @@ void LLAppearanceMgr::enforceItemRestrictions()
 			 ++it)
 		{
 			LLViewerInventoryItem *item = *it;
-			llinfos << "purging duplicate or excess item " << item->getName() << llendl;
+			LL_DEBUGS("Avatar") << self_av_string() << "purging duplicate or excess item " << item->getName() << LL_ENDL;
 			gInventory.purgeObject(item->getUUID());
 		}
 		gInventory.notifyObservers();
@@ -1721,9 +1757,11 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		return;
 	}
 
+	LLVOAvatar::ScopedPhaseSetter(gAgentAvatarp,"update_appearance_from_cof");
+	
 	BoolSetter setIsInUpdateAppearanceFromCOF(mIsInUpdateAppearanceFromCOF);
 
-	llinfos << "starting" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
 
 	//checking integrity of the COF in terms of ordering of wearables, 
 	//checking and updating links' descriptions of wearables in the COF (before analyzed for "dirty" state)
@@ -1786,7 +1824,7 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		}
 
 		// Don't remove attachments until avatar is fully loaded (should reduce random attaching/detaching/reattaching at log-on)
-		llinfos << "Updating " << obj_items.count() << " attachments" << llendl;
+		LL_DEBUGS("Avatar") << self_av_string() << "Updating " << mObjItems.count() << " attachments" << LL_ENDL;
 		LLAgentWearables::userUpdateAttachments(obj_items, !gAgentAvatarp->isFullyLoaded());
 	}
 // [/SL:KB]
@@ -1850,12 +1888,14 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 		}
 	}
 
+	selfStartPhase("get_wearables");
+
 	for (LLWearableHoldingPattern::found_list_t::iterator it = holder->getFoundList().begin();
 		 it != holder->getFoundList().end(); ++it)
 	{
 		LLFoundData& found = *it;
 
-		lldebugs << "waiting for onWearableAssetFetch callback, asset " << found.mAssetID.asString() << llendl;
+		lldebugs << self_av_string() << "waiting for onWearableAssetFetch callback, asset " << found.mAssetID.asString() << llendl;
 
 		// Fetch the wearables about to be worn.
 		LLWearableList::instance().getAsset(found.mAssetID,
@@ -1942,11 +1982,15 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 {
 	if(!category) return;
 
+	selfClearPhases();
+	selfStartPhase("wear_inventory_category");
+
 	gAgentWearables.notifyLoadingStarted();
 
-	llinfos << "wearInventoryCategory( " << category->getName()
-			 << " )" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "wearInventoryCategory( " << category->getName()
+			 << " )" << LL_ENDL;
 
+	selfStartPhase("wear_inventory_category_fetch");
 	callAfterCategoryFetch(category->getUUID(),boost::bind(&LLAppearanceMgr::wearCategoryFinal,
 														   &LLAppearanceMgr::instance(),
 														   category->getUUID(), copy, append));
@@ -1954,7 +1998,9 @@ void LLAppearanceMgr::wearInventoryCategory(LLInventoryCategory* category, bool 
 
 void LLAppearanceMgr::wearCategoryFinal(LLUUID& cat_id, bool copy_items, bool append)
 {
-	llinfos << "starting" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "starting" << LL_ENDL;
+
+	selfStopPhase("wear_inventory_category_fetch");
 	
 	// We now have an outfit ready to be copied to agent inventory. Do
 	// it, and wear that outfit normally.
@@ -2037,8 +2083,8 @@ void LLAppearanceMgr::wearInventoryCategoryOnAvatar( LLInventoryCategory* catego
 	// wearables being dirty.
 	if(!category) return;
 
-	llinfos << "wearInventoryCategoryOnAvatar( " << category->getName()
-			 << " )" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "wearInventoryCategoryOnAvatar '" << category->getName()
+			 << "'" << LL_ENDL;
 			 	
 	if (gAgentCamera.cameraCustomizeAvatar())
 	{
@@ -2051,7 +2097,7 @@ void LLAppearanceMgr::wearInventoryCategoryOnAvatar( LLInventoryCategory* catego
 
 void LLAppearanceMgr::wearOutfitByName(const std::string& name)
 {
-	llinfos << "Wearing category " << name << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "Wearing category " << name << LL_ENDL;
 	//inc_busy_count();
 
 	LLInventoryModel::cat_array_t cat_array;
@@ -2374,7 +2420,7 @@ const std::string OTHER_GESTURES_FOLDER = "Other Gestures";
 
 void LLAppearanceMgr::copyLibraryGestures()
 {
-	llinfos << "Copying library gestures" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "Copying library gestures" << LL_ENDL;
 
 	// Copy gestures
 	LLUUID lib_gesture_cat_id =
@@ -2430,11 +2476,11 @@ void LLAppearanceMgr::copyLibraryGestures()
 		LLUUID cat_id = findDescendentCategoryIDByName(lib_gesture_cat_id,folder_name);
 		if (cat_id.isNull())
 		{
-			llwarns << "failed to find gesture folder for " << folder_name << llendl;
+			llwarns << self_av_string() << "failed to find gesture folder for " << folder_name << llendl;
 		}
 		else
 		{
-			llinfos << "initiating fetch and copy for " << folder_name << " cat_id " << cat_id << llendl;
+			LL_DEBUGS("Avatar") << self_av_string() << "initiating fetch and copy for " << folder_name << " cat_id " << cat_id << LL_ENDL;
 			callAfterCategoryFetch(cat_id,
 								   boost::bind(&LLAppearanceMgr::shallowCopyCategory,
 											   &LLAppearanceMgr::instance(),
@@ -2448,7 +2494,7 @@ void LLAppearanceMgr::autopopulateOutfits()
 	// If this is the very first time the user has logged into viewer2+ (from a legacy viewer, or new account)
 	// then auto-populate outfits from the library into the My Outfits folder.
 
-	llinfos << "avatar fully visible" << llendl;
+	LL_INFOS("Avatar") << self_av_string() << "avatar fully visible" << LL_ENDL;
 
 	static bool check_populate_my_outfits = true;
 	if (check_populate_my_outfits && 
@@ -2840,7 +2886,7 @@ void LLAppearanceMgr::dumpCat(const LLUUID& cat_id, const std::string& msg)
 }
 
 void LLAppearanceMgr::dumpItemArray(const LLInventoryModel::item_array_t& items,
-										const std::string& msg)
+									const std::string& msg)
 {
 	for (S32 i=0; i<items.count(); i++)
 	{
@@ -2851,9 +2897,8 @@ void LLAppearanceMgr::dumpItemArray(const LLInventoryModel::item_array_t& items,
 		{
 			asset_id = linked_item->getAssetUUID();
 		}
-		llinfos << msg << " " << i <<" " << (item ? item->getName() : "(nullitem)") << " " << asset_id.asString() << llendl;
+		LL_DEBUGS("Avatar") << self_av_string() << msg << " " << i <<" " << (item ? item->getName() : "(nullitem)") << " " << asset_id.asString() << LL_ENDL;
 	}
-	llinfos << llendl;
 }
 
 LLAppearanceMgr::LLAppearanceMgr():

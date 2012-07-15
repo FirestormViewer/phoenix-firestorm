@@ -243,6 +243,7 @@ public:
 	boost::signals2::connection				addInitialWearablesLoadedCallback(loaded_callback_t cb);
 // [/SL:KB]
 
+	bool									changeInProgress() const;
 	void									notifyLoadingStarted();
 	void									notifyLoadingFinished();
 
