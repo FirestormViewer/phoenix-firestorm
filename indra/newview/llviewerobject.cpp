@@ -4177,6 +4177,11 @@ void LLViewerObject::setTE(const U8 te, const LLTextureEntry &texture_entry)
 //	{
 		const LLUUID& image_id = getTE(te)->getID();
 		mTEImages[te] = LLViewerTextureManager::getFetchedTexture(image_id, TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+
+		// <FS:ND> Debug aid <ND:TODO> Remove again
+		if( !ndIsValidPtr( mTEImages[te].get() ) &&  mTEImages[te].get() != 0 )
+			llerrs << "Set invalid pointer to mTEImages" << llendl;
+		// </FS:ND>
 //	}
 }
 
@@ -4185,6 +4190,12 @@ void LLViewerObject::setTEImage(const U8 te, LLViewerTexture *imagep)
 	if (mTEImages[te] != imagep)
 	{
 		mTEImages[te] = imagep;
+
+		// <FS:ND> Debug aid <ND:TODO> Remove again
+		if( !ndIsValidPtr( mTEImages[te].get() ) &&  mTEImages[te].get() != 0 )
+			llerrs << "Set invalid pointer to mTEImages" << llendl;
+		// </FS:ND>
+
 		LLPrimitive::setTETexture(te, imagep->getID());
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
@@ -4203,6 +4214,12 @@ S32 LLViewerObject::setTETextureCore(const U8 te, const LLUUID& uuid, LLHost hos
 	{
 		retval = LLPrimitive::setTETexture(te, uuid);
 		mTEImages[te] = LLViewerTextureManager::getFetchedTexture(uuid, TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, host);
+
+		// <FS:ND> Debug aid <ND:TODO> Remove again
+		if( !ndIsValidPtr( mTEImages[te].get() ) &&  mTEImages[te].get() != 0 )
+			llerrs << "Set invalid pointer to mTEImages" << llendl;
+		// </FS:ND>
+
 		setChanged(TEXTURE);
 		if (mDrawable.notNull())
 		{
@@ -4220,6 +4237,9 @@ void LLViewerObject::changeTEImage(S32 index, LLViewerTexture* new_image)
 		return ;
 	}
 	mTEImages[index] = new_image ;
+
+	if( !ndIsValidPtr( mTEImages[index].get() ) &&  mTEImages[index].get() != 0 )
+		llerrs << "Set invalid pointer to mTEImages" << llendl;
 }
 
 S32 LLViewerObject::setTETexture(const U8 te, const LLUUID& uuid)
@@ -4473,6 +4493,12 @@ LLViewerTexture *LLViewerObject::getTEImage(const U8 face) const
 	if (face < getNumTEs())
 	{
 		LLViewerTexture* image = mTEImages[face];
+		if( !ndIsValidPtr( image ) )
+		{
+			llwarns << "mTEImages[" << face << "] = " << (void*)image << llendl;
+			return 0;
+		}
+
 		if (image)
 		{
 			return image;

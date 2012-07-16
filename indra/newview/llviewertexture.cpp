@@ -772,6 +772,12 @@ void LLViewerTexture::addFace(LLFace* facep)
 	{
 		mFaceList.resize(2 * mNumFaces + 1) ;		
 	}
+
+	// <FS:ND> Debug aid <ND:TODO> Remove again
+	if( facep && !ndIsValidPtr( facep ) )
+		llerrs << "Setting invalid face" << llendl;
+	// </FS:ND>
+
 	mFaceList[mNumFaces] = facep ;
 	facep->setIndexInTex(mNumFaces) ;
 	mNumFaces++ ;
@@ -1893,7 +1899,7 @@ void LLViewerFetchedTexture::updateVirtualSize()
 	{				
 		LLFace* facep = mFaceList[i] ;
 		// <FS:ND> Make sure we have a drawable before calling any method on it
-		if( !facep || !facep->getDrawable() )
+		if( !ndIsValidPtr(facep) || !facep->getDrawable() )
 			continue;
 		// </FS:ND>
 

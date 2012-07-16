@@ -515,4 +515,12 @@ void  LLPrivateMemoryPoolTester::operator delete[](void* addr)
 
 // LLSingleton moved to llsingleton.h
 
+// <FS:ND> HACK! There are times when there's pointer that are not 0, but 1
+// This is to find those and research where they are coming.
+inline bool ndIsValidPtr( void const *aPtr )
+{
+	return aPtr > (void*)0x3FF;
+}
+// </FS:ND>
+
 #endif

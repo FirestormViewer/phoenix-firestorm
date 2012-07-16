@@ -4827,7 +4827,7 @@ void LLVOAvatar::updateTextures()
 		// Not sure yet why it does, but of course it crashes when te->mScale? gets used. Put safeguard in place so this corner case get
 		// better handling and does not result in a crash.
 		F32 texel_area_ratio = 1.0f;
-		if( te )
+		if( te && ndIsValidPtr( te )  )
 			texel_area_ratio = fabs(te->mScaleS * te->mScaleT);
 		else
 			llwarns << "getTE( " << texture_index << " ) returned 0" <<llendl;
@@ -9103,9 +9103,9 @@ BOOL LLVOAvatar::isTextureDefined(LLVOAvatarDefines::ETextureIndex te, U32 index
 	}
 
 	// <FS:ND> getImage(te, index) can return 0 in some edge cases.
-	if( !getImage( te, index ) )
+	if( !getImage( te, index ) || !ndIsValidPtr( getImage( te, index) ) )
 	{
-		llwarns << "getImage( " << te << ", " << index << " ) returned 0" << llendl;
+		llwarns << "getImage( " << te << ", " << index << " ) returned invalid ptr" << llendl;
 		return FALSE;
 	}
 	// </FS:ND>
