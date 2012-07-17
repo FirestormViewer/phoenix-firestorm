@@ -46,7 +46,7 @@ static const U32 LENGTHOFCOLOR4U = 4;
 class LLColor4U
 {
 public:
-
+	//64bit compile fix - Do not put pointers into the LLColor4U union. FS:ND
 	//	union
 	//	{
 		U8         mV[LENGTHOFCOLOR4U];

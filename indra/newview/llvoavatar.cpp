@@ -986,7 +986,7 @@ void LLVOAvatar::deleteLayerSetCaches(bool clearAll)
 		}
 		if (mBakedTextureDatas[i].mMaskTexName)
 		{
-			glDeleteTextures(1, (GLuint*)&(mBakedTextureDatas[i].mMaskTexName));
+			LLImageGL::deleteTextures(LLTexUnit::TT_TEXTURE, 0, -1, 1, (GLuint*)&(mBakedTextureDatas[i].mMaskTexName));
 			mBakedTextureDatas[i].mMaskTexName = 0 ;
 		}
 	}
@@ -2160,11 +2160,17 @@ void LLVOAvatar::releaseMeshData()
 	if (mDrawable.notNull())
 	{
 		LLFace* facep = mDrawable->getFace(0);
-		facep->setSize(0, 0);
-		for(S32 i = mNumInitFaces ; i < mDrawable->getNumFaces(); i++)
+		if (facep)
 		{
-			facep = mDrawable->getFace(i);
 			facep->setSize(0, 0);
+			for(S32 i = mNumInitFaces ; i < mDrawable->getNumFaces(); i++)
+			{
+				facep = mDrawable->getFace(i);
+				if (facep)
+				{
+					facep->setSize(0, 0);
+				}
+			}
 		}
 	}
 	
@@ -2249,15 +2255,20 @@ void LLVOAvatar::updateMeshData()
 				part_index-- ;
 			}
 		
-			LLFace* facep ;
+			LLFace* facep = NULL;
 			if(f_num < mDrawable->getNumFaces()) 
 			{
 				facep = mDrawable->getFace(f_num);
 			}
 			else
 			{
-				facep = mDrawable->addFace(mDrawable->getFace(0)->getPool(), mDrawable->getFace(0)->getTexture()) ;
+				facep = mDrawable->getFace(0);
+				if (facep)
+				{
+					facep = mDrawable->addFace(facep->getPool(), facep->getTexture()) ;
+				}
 			}
+			if (!facep) continue;
 			
 			// resize immediately
 			facep->setSize(num_vertices, num_indices);
@@ -4506,10 +4517,14 @@ U32 LLVOAvatar::renderSkinned(EAvatarRenderPass pass)
 			mNeedsSkin = FALSE;
 			mLastSkinTime = gFrameTimeSeconds;
 
-			LLVertexBuffer* vb = mDrawable->getFace(0)->getVertexBuffer();
-			if (vb)
+			LLFace * face = mDrawable->getFace(0);
+			if (face)
 			{
-				vb->flush();
+				LLVertexBuffer* vb = face->getVertexBuffer();
+				if (vb)
+				{
+					vb->flush();
+				}
 			}
 		}
 	}
@@ -7915,7 +7930,7 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 			}
 
 			U32 gl_name;
-			LLImageGL::generateTextures(1, &gl_name );
+			LLImageGL::generateTextures(LLTexUnit::TT_TEXTURE, GL_ALPHA8, 1, &gl_name );
 			stop_glerror();
 
 			gGL.getTexUnit(0)->bindManual(LLTexUnit::TT_TEXTURE, gl_name);
@@ -7952,7 +7967,7 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 						maskData->mLastDiscardLevel = discard_level;
 						if (self->mBakedTextureDatas[baked_index].mMaskTexName)
 						{
-							LLImageGL::deleteTextures(1, &(self->mBakedTextureDatas[baked_index].mMaskTexName));
+							LLImageGL::deleteTextures(LLTexUnit::TT_TEXTURE, 0, -1, 1, &(self->mBakedTextureDatas[baked_index].mMaskTexName));
 						}
 						self->mBakedTextureDatas[baked_index].mMaskTexName = gl_name;
 						found_texture_id = true;
@@ -8818,7 +8833,7 @@ BOOL LLVOAvatar::updateLOD()
 	BOOL res = updateJointLODs();
 
 	LLFace* facep = mDrawable->getFace(0);
-	if (!facep->getVertexBuffer())
+	if (!facep || !facep->getVertexBuffer())
 	{
 		dirtyMesh(2);
 	}

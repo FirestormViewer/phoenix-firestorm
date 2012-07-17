@@ -24,6 +24,7 @@ include_directories(
     ${LLWINDOW_INCLUDE_DIRS}
     ${LLVFS_INCLUDE_DIRS}
     ${LLXML_INCLUDE_DIRS}
+    ${LIBS_PREBUILD_DIR}/include/hunspell
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
@@ -86,6 +87,7 @@ set(llui_SOURCE_FILES
     llsearcheditor.cpp
     llslider.cpp
     llsliderctrl.cpp
+    llspellcheck.cpp
     llspinctrl.cpp
     llstatbar.cpp
     llstatgraph.cpp
@@ -193,6 +195,8 @@ set(llui_HEADER_FILES
     llscrolllistitem.h
     llsliderctrl.h
     llslider.h
+    llspellcheck.h
+    llspellcheckmenuhandler.h
     llspinctrl.h
     llstatbar.h
     llstatgraph.h
@@ -262,6 +266,7 @@ target_link_libraries(llui
     ${LLXUIXML_LIBRARIES}
     ${LLXML_LIBRARIES}
     ${LLMATH_LIBRARIES}
+    ${HUNSPELL_LIBRARY}
     ${TEAPOT_LIBRARIES}# <FS:AW opensim currency support>
     ${LLCOMMON_LIBRARIES} # must be after llimage, llwindow, llrender
     )

@@ -1753,7 +1753,7 @@
       <key>Value</key>
       <integer>1</integer>
     </map>
-    <key>ApplyTextureImmediately</key>
+    <key>TextureLivePreview</key>
     <map>
       <key>Comment</key>
       <string>Preview selections in texture picker immediately</string>
@@ -1984,6 +1984,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>1</integer>
+    </map>
+    <key>AutoReplace</key>
+    <map>
+      <key>Comment</key>
+      <string>Replaces keywords with a configured word or phrase</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
   <key>AutoAcceptNewInventory</key>
     <map>
@@ -6033,6 +6044,17 @@
         <key>Value</key>
         <integer>0</integer>
     </map>
+    <key>InventoryInboxToggleState</key>
+    <map>
+        <key>Comment</key>
+        <string>Stores the open/closed state of inventory Received items panel</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>Boolean</string>
+        <key>Value</key>
+        <integer>0</integer>
+    </map>
 	<key>InventoryLinking</key>
 	<map>
 		<key>Comment</key>
@@ -8367,17 +8389,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>NumpadControl</key>
-    <map>
-      <key>Comment</key>
-      <string>How numpad keys control your avatar. 0 = Like the normal arrow keys, 1 = Numpad moves avatar when numlock is off, 2 = Numpad moves avatar regardless of numlock (use this if you have no numlock)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>S32</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>ObjectCacheEnabled</key>
     <map>
       <key>Comment</key>
@@ -9329,7 +9340,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>WebContentWindowLimit</key>
     <map>
       <key>Comment</key>
-      <string>Maximum number of web brower windows that can be open at once in the Web content floater (0 for no limit)</string>
+      <string>Maximum number of web browser windows that can be open at once in the Web content floater (0 for no limit)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -10148,6 +10159,18 @@ Change of this parameter will affect the layout of buttons in notification toast
     <real>0</real>
   </map>
 
+  <key>RenderDepthPrePass</key>
+  <map>
+    <key>Comment</key>
+    <string>EXPERIMENTAL: Prime the depth buffer with simple prim geometry before rendering with textures.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+  
   <key>RenderDepthOfField</key>
   <map>
     <key>Comment</key>
@@ -11238,7 +11261,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>RenderUseVAO</key>
     <map>
       <key>Comment</key>
-      <string>Use GL Vertex Array Objects</string>
+      <string>[EXPERIMENTAL] Use GL Vertex Array Objects</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -11246,7 +11269,19 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
-    <key>RenderVBOMappingDisable</key>
+  <key>RenderUseTransformFeedback</key>
+  <map>
+    <key>Comment</key>
+    <string>[EXPERIMENTAL] Use transform feedback shaders for LoD updates</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>RenderVBOMappingDisable</key>
     <map>
       <key>Comment</key>
       <string>Disable VBO glMapBufferARB</string>
@@ -13151,7 +13186,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>0.1</real>
-    </map>   <key>ToolTipFadeTime</key>
+    </map>
+    <key>ToolTipFadeTime</key>
     <map>
       <key>Comment</key>
       <string>Seconds over which tooltip fades away</string>
@@ -14703,6 +14739,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>Disabling this option might lead to severely degraded viewer performance and increased rezzing time.</string>
     </map>
+  <key>RenderSynchronousOcclusion</key>
+  <map>
+    <key>Comment</key>
+    <string>Don't let occlusion queries get more than one frame behind (block until they complete).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
     <key>RenderDelayVBUpdate</key>
     <map>
       <key>Comment</key>
@@ -14735,6 +14782,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>F32</string>
       <key>Value</key>
       <real>10.0</real>
+    </map>
+    <key>SpellCheck</key>
+    <map>
+      <key>Comment</key>
+      <string>Enable spellchecking on line and text editors</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>SpellCheckDictionary</key>
+    <map>
+      <key>Comment</key>
+      <string>Current primary and secondary dictionaries used for spell checking</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>English (United States),Second Life Glossary</string>
     </map>
     <key>UseNewWalkRun</key>
     <map>

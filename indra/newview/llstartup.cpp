@@ -907,7 +907,7 @@ bool idle_startup()
 		{
 			// <FS:Zi> Moved this to initBase() in llviewerwindow.cpp to get the edit menu set up
 			//         before any text widget uses it
-			// display_startup();
+			// initialize_spellcheck_menu();
 			// initialize_edit_menu();
 			// </FS:Zi>
 			display_startup();
@@ -3536,17 +3536,6 @@ bool process_login_success_response()
 		U32 preferredMaturity = (U32)LLAgent::convertTextToMaturity(text[0]);
 
 		gSavedSettings.setU32("PreferredMaturity", preferredMaturity);
-	}
-	// During the AO transition, this flag will be true. Then the flag will
-	// go away. After the AO transition, this code and all the code that
-	// uses it can be deleted.
-	text = response["ao_transition"].asString();
-	if (!text.empty())
-	{
-		if (text == "1")
-		{
-			gAgent.setAOTransition();
-		}
 	}
 
 	text = response["start_location"].asString();

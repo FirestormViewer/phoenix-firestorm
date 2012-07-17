@@ -98,11 +98,16 @@ class ViewerManifest(LLManifest):
 
                 # ... and the entire windlight directory
                 self.path("windlight")
-                # ... and the pre-installed spell checking dictionaries
-                self.path("dictionaries")
+
+                # ... and the included spell checking dictionaries
+                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+                if self.prefix(src=pkgdir,dst=""):
+                    self.path("dictionaries")
+                    self.end_prefix(pkgdir)
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
+
 
                 self.end_prefix("app_settings")
 
@@ -1209,9 +1214,11 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libopenjpeg.so*")
             self.path("libdirectfb-1.4.so.5")
             self.path("libfusion-1.4.so.5")
+            self.path("libdirect-1.4.so.5.0.4")
             self.path("libdirect-1.4.so.5")
             self.path("libhunspell-1.3.so")
             self.path("libhunspell-1.3.so.0")
+            self.path("libhunspell-1.3.so.0.0.0")
             self.path("libalut.so")
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname

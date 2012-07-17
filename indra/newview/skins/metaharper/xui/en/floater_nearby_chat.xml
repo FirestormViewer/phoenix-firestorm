@@ -138,11 +138,12 @@
          left="3"
          right="-1"
          follows="all"
-	 font="SansSerifSmall"
+         font="SansSerifSmall"
          height="20"
          label="To nearby chat"
+         spellcheck="true"
          name="chat_box"
-		 tab_group="3" />
+         tab_group="3" />
       </layout_panel>
 
       <layout_panel

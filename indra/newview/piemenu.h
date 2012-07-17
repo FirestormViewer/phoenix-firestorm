@@ -68,7 +68,7 @@ class PieMenu : public LLContextMenu
 		void draw();
 
 		// showing/hiding the menu
-		void show(S32 x,S32 y);
+		void show(S32 x, S32 y, LLView* spawning_view = NULL);
 		void hide();
 
 		// our item list type definition

@@ -398,7 +398,6 @@ mCalculateBtn(NULL)
 	sInstance = this;
 	mLastMouseX = 0;
 	mLastMouseY = 0;
-	mGLName = 0;
 	mStatusLock = new LLMutex(NULL);
 	mModelPreview = NULL;
 
@@ -563,11 +562,6 @@ LLFloaterModelPreview::~LLFloaterModelPreview()
 	if ( mModelPreview )
 	{
 		delete mModelPreview;
-	}
-
-	if (mGLName)
-	{
-		LLImageGL::deleteTextures(1, &mGLName );
 	}
 
 	delete mStatusLock;
@@ -5097,15 +5091,7 @@ BOOL LLModelPreview::render()
 
 	LLRect preview_rect;
 
-	LLFloaterModelWizard* floater_wizard = dynamic_cast<LLFloaterModelWizard*>(mFMP);
-	if (floater_wizard)
-	{
-		preview_rect = floater_wizard->getPreviewRect();
-	}
-	else
-	{
-		preview_rect = mFMP->getChildView("preview_panel")->getRect();
-	}
+	preview_rect = mFMP->getChildView("preview_panel")->getRect();
 
 	F32 aspect = (F32) preview_rect.getWidth()/preview_rect.getHeight();
 
@@ -5649,7 +5635,6 @@ void LLModelPreview::setPreviewLOD(S32 lod)
 		combo_box->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
 		mFMP->childSetText("lod_file_" + lod_name[mPreviewLOD], mLODFile[mPreviewLOD]);
 
-		// the wizard has three lod drop downs
 		LLComboBox* combo_box2 = mFMP->getChild<LLComboBox>("preview_lod_combo2");
 		combo_box2->setCurrentByIndex((NUM_LOD-1)-mPreviewLOD); // combo box list of lods is in reverse order
 		
