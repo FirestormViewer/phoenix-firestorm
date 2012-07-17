@@ -9105,7 +9105,7 @@ BOOL LLVOAvatar::isTextureDefined(LLVOAvatarDefines::ETextureIndex te, U32 index
 	// <FS:ND> getImage(te, index) can return 0 in some edge cases.
 	if( !getImage( te, index ) || !ndIsValidPtr( getImage( te, index) ) )
 	{
-		llwarns << "getImage( " << te << ", " << index << " ) returned invalid ptr" << llendl;
+		llwarns << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << llendl;
 		return FALSE;
 	}
 	// </FS:ND>

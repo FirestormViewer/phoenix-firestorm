@@ -4493,9 +4493,9 @@ LLViewerTexture *LLViewerObject::getTEImage(const U8 face) const
 	if (face < getNumTEs())
 	{
 		LLViewerTexture* image = mTEImages[face];
-		if( !ndIsValidPtr( image ) )
+		if( !ndIsValidPtr( image ) && image != 0 )
 		{
-			llwarns << "mTEImages[" << face << "] = " << (void*)image << llendl;
+			llwarns << "mTEImages[" << (S32)face << "] = " << (void*)image << llendl;
 			return 0;
 		}
 
