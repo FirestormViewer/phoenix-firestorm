@@ -355,5 +355,15 @@
            is_running_function="Agent.getFlying"
            is_enabled_function="Agent.enableFlying"
            />
+		   
+  <command name="groundsit"
+           available_in_toybox="true"
+           icon="groundsit"
+           label_ref="Command_Groundsit_Label"
+           tooltip_ref="Command_Groundsit_Tooltip"
+           execute_function="Self.ForceSit"
+           is_running_function="Self.getForceSit"
+           is_enabled_function="Self.EnableForceSit"
+           />
 
 </commands>

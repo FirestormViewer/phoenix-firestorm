@@ -3931,6 +3931,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Statistics_Label">Statistics</string>
   <string name="Command_Region_Label">Region/Estate</string>
   <string name="Command_Fly_Label">Fly</string>
+  <string name="Command_Groundsit_Label">Ground sit</string>
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -3966,6 +3967,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Settings_Debug_Tooltip">Change configuration settings of the viewer (CTRL+ALT+SHIFT+S)</string>
   <string name="Command_Statistics_Tooltip">Shows the viewer statistics (CTRL+SHIFT+1)</string>
   <string name="Command_Region_Tooltip">Opens the region/estate tools (ALT+R)</string>
+  <string name="Command_Groundsit_Tooltip">Toggle groundsit mode on/off (CTRL+ALT+S)</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
