@@ -35,6 +35,9 @@ ATTRIBUTE vec2 texcoord0;
 VARYING vec4 vertex_color;
 VARYING vec2 vary_texcoord0;
 
+// <FS:ND> FIRE-3661; Uniform variable for color.
+uniform vec4 color;
+// </FS:ND>
 
 vec4 calcLighting(vec3 pos, vec3 norm, vec4 color, vec4 baseCol);
 void calcAtmospherics(vec3 inPositionEye);
@@ -50,8 +53,12 @@ void main()
 
 	calcAtmospherics(pos.xyz);
 
-	vec4 color = calcLighting(pos.xyz, norm, vec4(1,1,1,1), vec4(0.));
-	vertex_color = color;
+// <FS:ND> USe color passed by uniform instead of hardcoded value
 
-	
+//	vec4 color = calcLighting(pos.xyz, norm, vec4(1,1,1,1), vec4(0.));
+//	vertex_color = color;
+
+	vertex_color = calcLighting(pos.xyz, norm, color, vec4(0.));
+// </FS:ND>	
+
 }

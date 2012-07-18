@@ -911,6 +911,11 @@ BOOL LLImagePreviewSculpted::render()
 	const F32 BRIGHTNESS = 0.9f;
 	gGL.color3f(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS);
 
+	// <FS:ND> FIRE-3661; set color to 1/1/1/1, this is the value that was 
+	// previously hard coded in previewV.glsl
+	gGL.diffuseColor4f( 1., 1., 1., 1. );
+	// </FS:ND>
+
 	mVertexBuffer->setBuffer(LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0);
 	mVertexBuffer->draw(LLRender::TRIANGLES, num_indices, 0);
 
