@@ -118,11 +118,11 @@
 	<text name="Bulldozer:">
 		Bulldozer:
 	</text>
-	<text name="Dozer Size:">
+	<text name="Dozer Size:" width="70">
 		Grandezza
 	</text>
 	<slider_bar initial_value="2.0" name="slider brush size"/>
-	<text name="Strength:">
+	<text name="Strength:" width="70">
 		Potenza
 	</text>
 	<button label="Applica" label_selected="Applica" name="button apply to selection" tool_tip="Modifica il terreno selezionato"/>
@@ -503,13 +503,13 @@
 		<text name="label_area">
 			Zona: [AREA] m²
 		</text>
-		<button label="Informazioni sui terreni" label_selected="Informazioni sui terreni" name="button about land"/>
+		<button label="Info sui terreni" label_selected="Informazioni sui terreni" name="button about land"/>
 		<check_box label="Mostra i proprietari" name="checkbox show owners" tool_tip="Colora i terreni in base ai loro proprietari:   Verde = il tuo terreno  Acqua = la terra del tuo gruppo  Rosso = posseduta da altri  Giallo = in vendita  Viola = in asta  Grigia = pubblica"/>
 		<text name="label_parcel_modify">
 			Modifica il terreno
 		</text>
 		<button label="Suddividi" label_selected="Suddividi" name="button subdivide land"/>
-		<button label="Iscriviti" label_selected="Iscriviti" name="button join land"/>
+		<button label="Unisci" label_selected="Unisci" name="button join land"/>
 		<text name="label_parcel_trans">
 			Transazioni terreno
 		</text>

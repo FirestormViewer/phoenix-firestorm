@@ -31,9 +31,9 @@
 	<text name="log_path_desc">
 		Posizione Log cache:
 	</text>
-	<button label="Apri" label_selected="Pokaż" name="open_log_path_button-panelsetup"/>
-	<button label="Set" label_selected="Ustaw" name="log_path_button-panelsetup"/>
-	<button label="Resetta" label_selected="Resetuj" name="reset_logpath"/>
+	<button label="Apri" label_selected="Apri" name="open_log_path_button-panelsetup"/>
+	<button label="Set" label_selected="Set" name="log_path_button-panelsetup"/>
+	<button label="Resetta" label_selected="Resetta" name="reset_logpath"/>
 	<button label="Apri cartella Crash Log" label_selected="Apri Crash Log" name="browse_crashlogs" width="150"/>
 	<button label="Apri cartella impostazioni" label_selected="Apri cartella impostazioni" name="browse_settingsdir" width="150"/>
 	<text name="Web:">
@@ -41,12 +41,12 @@
 	</text>
 	<radio_group name="use_external_browser">
 		<radio_item label="Usa il mio browser (IE, Firefox, Safari)" name="external" tool_tip="Utilizza il browser Web predefinito di sistema per l&apos;aiuto, per i link Web e così via. Sconsigliato durante l&apos;esecuzione a tutto schermo." left_pad="50"/>
-		<radio_item label="Utilizza il browser Web integrato" name="internal" tool_tip="Utilizza il browser Web integrato per l&apos;aiuto, per i link Web e così via. Questo browser si apre in una nuova finestra in [APP_NAME]."/>
+		<radio_item label="Utilizza il browser Web integrato" name="internal" tool_tip="Utilizza il browser Web integrato per l&apos;aiuto, per i link Web e così via. Questo browser si apre in una nuova finestra in [APP_NAME]." />
 	</radio_group>
 	<text name="numberwebfloaters_label">
 		Numero massimo di finestre nel browser Web integrato:
 	</text>
-	<combo_box tool_tip="Maksymalna liczba okien wbudowanej przeglądarki internetowej, jaka może być uruchomiona jednocześnie." name="web_number_combobox">
+	<combo_box tool_tip="Imposta il numero massimo di finestre apribili contemporaneamente nel browser integrato" name="web_number_combobox">
 		<combo_box.item label="Illimitate" name="web_unlimited"/>
 		<combo_box.item label="Una Finestra" name="web_1"/>
 		<combo_box.item label="Cinque Finestre" name="web_5"/>
