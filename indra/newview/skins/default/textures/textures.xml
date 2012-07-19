@@ -694,6 +694,7 @@ with the same filename but different name
   <texture name="regioninfo" file_name="toolbar_icons/region.png" preload="true" />
   <texture name="groundsit" file_name="toolbar_icons/groundsit.png" preload="true" />
   <texture name="sound_explorer" file_name="toolbar_icons/sound_explorer.png" preload="true" />
+  <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
