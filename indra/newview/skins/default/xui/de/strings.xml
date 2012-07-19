@@ -5025,6 +5025,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Label">
 		Fliegen
 	</string>
+	<string name="Command_Groundsit_Label">
+		Auf Boden sitzen
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Sound-Explorer
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5126,6 +5132,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Öffnet den Sound-Explorer
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
