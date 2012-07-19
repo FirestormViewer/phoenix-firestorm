@@ -4584,6 +4584,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Fly_Label">
 		Latanie
 	</string>
+	<string name="Command_Groundsit_Label">
+		Siądź na ziemi
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Eksploruj dźwięki
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4682,6 +4688,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Region_Tooltip">
 		Otwiera narzędzia regionu/majątku (ALT+R)
+	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Włącza lub wyłącza tryb siedzenia na ziemi (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Otwiera eksploratora dźwięków
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
