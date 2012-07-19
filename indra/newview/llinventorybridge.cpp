@@ -3469,6 +3469,14 @@ void LLFolderBridge::buildContextMenuBaseOptions(U32 flags)
 			mWearables=TRUE;
 		}
 	}
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	else if (isLostInventory())
+	{
+		mItems.push_back(std::string("Move to Lost And Found"));
+		if (0 == (flags & FIRST_SELECTED_ITEM))
+			mDisabledItems.push_back(std::string("Move to Lost And Found"));
+	}
+// [/SL:KB]
 
 	// Preemptively disable system folder removal if more than one item selected.
 	if ((flags & FIRST_SELECTED_ITEM) == 0)
