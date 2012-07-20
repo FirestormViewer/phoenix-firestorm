@@ -817,6 +817,18 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 	
 	U32 res_mod = RenderResolutionDivisor;
 
+	//<FS:TS> FIRE-7066: RenderResolutionDivisor broken if higher than
+	//		smallest screen dimension
+	if (res_mod >= resX)
+	{
+		res_mod = resX - 1;
+	}
+	if (res_mod >= resY)
+	{
+		res_mod = resY - 1;
+	}
+	//</FS:TS> FIRE-7066
+
 	if (res_mod > 1 && res_mod < resX && res_mod < resY)
 	{
 		resX /= res_mod;
