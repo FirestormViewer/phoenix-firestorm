@@ -602,7 +602,7 @@ Spróbuj zalogować się ponownie za minutę.
 		zdjęcia
 	</string>
 	<string name="lost and found">
-		Zgubione i odnalezione
+		Zagubione i odnalezione
 	</string>
 	<string name="targa image">
 		obraz typu targa
@@ -4590,6 +4590,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Sound_Explorer_Label">
 		Eksploruj dźwięki
 	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Czarna lista assetów
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4694,6 +4697,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Sound_Explorer_Tooltip">
 		Otwiera eksploratora dźwięków
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Otwiera listę obiektów, jakie masz na swojej czarnej liście zasobów danych (assetów)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

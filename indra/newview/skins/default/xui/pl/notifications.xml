@@ -2078,7 +2078,7 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
 	</notification>
 	<notification name="ConfirmEmptyLostAndFound">
-		Na pewno chcesz permanentnie usunąć zawartość Twojego folderu Zgubione i odnalezione?
+		Na pewno chcesz permanentnie usunąć zawartość Twojego folderu Zagubione i odnalezione?
 		<usetemplate ignoretext="Potwierdź przed usunięciem zawartości foldera Zagubione i odnalezione" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="CopySLURL">
