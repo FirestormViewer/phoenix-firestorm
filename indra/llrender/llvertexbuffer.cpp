@@ -534,8 +534,28 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 	gGL.syncMatrices();
 
 	U32 count = pos.size();
-	llassert_always(norm.size() >= pos.size());
-	llassert_always(count > 0);
+	
+	// <FS:ND> Don't crash, but just warn and exit out. This should be safe to do and won't disrupt the user with a crash
+
+	// llassert_always(norm.size() >= pos.size());
+	// llassert_always(count > 0);
+
+	llassert(norm.size() >= pos.size());
+	llassert(count > 0);
+
+	if( count == 0 )
+	{
+		llwarns << "Called drawArrays with 0 vertices" << llendl;
+		return;
+	}
+
+	if( norm.size() < pos.size() )
+	{
+		llwarns << "Called drawArrays with #" << norm.size() << " normals and #" << pos.size() << " vertices" << llendl;
+		return;
+	}
+	
+	// </FS:ND>
 
 	unbind();
 	
