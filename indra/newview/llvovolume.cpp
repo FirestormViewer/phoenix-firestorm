@@ -3853,6 +3853,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 		LLVector4a* pos = dst_face.mPositions;
 
+		// <FS:ND> Crashfix if weight or pos or mExtents is 0
+		if( pos && weight && dst_face.mExtents )
+		// </FS:ND>
+
 		{
 			LLFastTimer t(FTM_SKIN_RIGGED);
 
@@ -3913,6 +3917,10 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 			dst_face.mCenter->mul(0.5f);
 
 		}
+
+		// <FS:ND> Crashfix if mExtents is 0
+		if( dst_face.mExtents )
+		// </FS:ND>
 
 		{
 			LLFastTimer t(FTM_RIGGED_OCTREE);
