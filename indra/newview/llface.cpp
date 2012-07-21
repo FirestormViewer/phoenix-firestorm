@@ -1075,6 +1075,11 @@ bool LLFace::canRenderAsMask()
 
 	const LLTextureEntry* te = getTextureEntry();
 
+	// <FS:ND> Crashfix; Guard against 0 pointer
+	if( !te || !getViewerObject() || !getTexture() )
+		return false;
+	// </FS:ND>
+
 	if ((te->getColor().mV[3] == 1.0f) &&			// can't treat as mask if we have face alpha
 		(te->getGlow() == 0.f) &&					// glowing masks are hard to implement - don't mask
 		!getViewerObject()->isHUDAttachment() &&	// Fix from CoolVL: hud attachments are NOT maskable (else they would get affected by day light)
