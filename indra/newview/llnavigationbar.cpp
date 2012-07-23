@@ -553,9 +553,12 @@ void LLNavigationBar::onLocationSelection()
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
 	std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
 
-	if(!slurl.getHypergrid() 
-		&& (grid != current_grid)
-		&& (gatekeeper.empty()))
+	std::string current = LLGridManager::getInstance()->getGrid();
+	if((grid != current ) 
+		&& (!LLGridManager::getInstance()->isInOpenSim()
+			|| (!slurl.getHypergrid() && gatekeeper.empty() )
+		   )
+	  )
 	{
  		std::string dest = slurl.getSLURLString();
 		if (!dest.empty())

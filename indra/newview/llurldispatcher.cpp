@@ -152,8 +152,30 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 {
 	llinfos << "cmd: " << slurl.getAppCmd() << " path: " << slurl.getAppPath() << " query: " << slurl.getAppQuery() << llendl;
 	const LLSD& query_map = LLURI::queryMap(slurl.getAppQuery());
+
+// <FS:AW handle hop app teleports properly>
+// 	bool handled = LLCommandDispatcher::dispatch(
+// 			slurl.getAppCmd(), slurl.getAppPath(), query_map, web, nav_type, trusted_browser);
+	LLSD path;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	if ("teleport" == slurl.getAppCmd())
+	{
+		path = LLSD::emptyArray();
+		path.append(slurl.getGrid());
+		for(int i=0; slurl.getAppPath().size() > i; i++)
+		{
+			path.append(slurl.getAppPath()[i].asString());
+		}
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	{
+		path = slurl.getAppPath();
+	}
+
 	bool handled = LLCommandDispatcher::dispatch(
-			slurl.getAppCmd(), slurl.getAppPath(), query_map, web, nav_type, trusted_browser);
+			slurl.getAppCmd(), path, query_map, web, nav_type, trusted_browser);
+// </FS:AW handle hop app teleports properly>
 
 	// alert if we didn't handle this secondlife:///app/ SLURL
 	// (but still return true because it is a valid app SLURL)
@@ -193,9 +215,11 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 
 	std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
 
-	if(!hyper.getHypergrid() 
-		&& (grid != current_grid)
-		&& (gatekeeper.empty())
+	std::string current = LLGridManager::getInstance()->getGrid();
+	if((grid != current ) 
+		&& (!LLGridManager::getInstance()->isInOpenSim()
+			|| (!slurl.getHypergrid() && gatekeeper.empty() )
+		   )
 	  )
 	{
  		std::string dest = hyper.getSLURLString();
@@ -308,8 +332,43 @@ public:
 		if (tokens.size() < 1) return false;
  // <FS:AW optional opensim support>
 #ifdef HAS_OPENSIM_SUPPORT
-		LLSLURL dest(tokens, true);
-		LLWorldMapMessage::getInstance()->sendNamedRegionRequest(dest.getRegion(),
+		LLSLURL slurl(tokens, true);
+
+		std::string grid = slurl.getGrid();
+		std::string gatekeeper = LLGridManager::getInstance()->getGatekeeper(grid);
+		std::string region_name = slurl.getRegion();
+		std::string dest;
+		std::string current = LLGridManager::getInstance()->getGrid();
+		if((grid != current ) 
+			&& (!LLGridManager::getInstance()->isInOpenSim()
+				|| (!slurl.getHypergrid() && gatekeeper.empty() )
+			)
+		)
+		{
+			dest = slurl.getSLURLString();
+			if (!dest.empty())
+			{
+				LLSD args;
+				args["SLURL"] = dest;
+				args["GRID"] = grid;
+				args["CURRENT_GRID"] = current;
+				LLNotificationsUtil::add("CantTeleportToGrid", args);
+				return true;
+			}
+		}
+		else if(!gatekeeper.empty() && gatekeeper != LLGridManager::getInstance()->getGatekeeper())
+		{
+			region_name = gatekeeper + ":" + region_name;
+		}
+
+		dest = "hop://" + current + "/" + region_name;
+
+		for(int i=2; tokens.size() > i; i++)
+		{
+			dest.append("/" + tokens[i].asString());
+		}
+
+		LLWorldMapMessage::getInstance()->sendNamedRegionRequest(region_name,
 			LLURLDispatcherImpl::regionHandleCallback,
 			LLSLURL(dest).getSLURLString(),
 			true);	// teleport

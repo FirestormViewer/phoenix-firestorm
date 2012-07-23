@@ -249,8 +249,10 @@ LLSLURL::LLSLURL(const std::string& slurl)
 		      (slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM))
 			{
 				LL_DEBUGS("SLURL") << "slurl style slurl.com"  << LL_ENDL;
-				// slurl.com implies maingrid
-				mGrid = MAINGRID;
+				if (slurl_uri.hostName() == LLSLURL::MAPS_SECONDLIFE_COM)
+					mGrid = MAINGRID;
+				else
+					mGrid = default_grid;
 			}
 		    else
 			{
@@ -375,6 +377,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			
 			// Grab the parameters
 			mAppPath = path_array;
+
 			// and the query
 			mAppQuery = slurl_uri.query();
 			mAppQueryMap = slurl_uri.queryMap();
@@ -500,10 +503,7 @@ LLSLURL::LLSLURL(const LLSD& path_array, bool from_app)
 {
 	if (path_array.isArray() && path_array.size() > 0)
 	{
-		std::string query;
-		LLGridManager::getInstance()->isInOpenSim() ?
-			query="hop://" : query="secondlife://";
-
+ 		std::string query="hop://";
 		for(int i=0; path_array.size()>i; i++)
 		{
 			query += path_array[i].asString() + "/";
