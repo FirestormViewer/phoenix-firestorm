@@ -224,10 +224,10 @@ Devam etmek istiyor musunuz?
 Bu gruba katılmak için yeterli L$&apos;na sahip değilsiniz.
 	</notification>
 	<notification name="CreateGroupCost">
-		Bu grubu oluşturmanın maliyeti: L$ 100.
+		Bu grubu oluşturmanın maliyeti: L$ [COST].
 Grupların birden fazla üyeye sahip olması gereklidir, aksi takdirde grup kalıcı olarak silinir.
 Lütfen 48 saat içinde diğer üyeleri davet edin.
-		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="L$ 100 ödeyerek grubu oluştur"/>
+		<usetemplate canceltext="İptal" name="okcancelbuttons" notext="İptal" yestext="L$ [COST] ödeyerek grubu oluştur"/>
 	</notification>
 	<notification name="LandBuyPass">
 		L$ [COST] ödeyerek (&apos;[PARCEL_NAME]&apos;) arazisine [TIME] saat süreyle girebilirsiniz.  Giriş hakkı satın almak istiyor musunuz?

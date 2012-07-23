@@ -187,10 +187,10 @@ Czy chcesz kontynuować?
 Masz za mało L$ żeby zostać członkiem.
 	</notification>
 	<notification name="CreateGroupCost">
-		Stworzenie tej grupy kosztuje 100L$.
+		Stworzenie tej grupy kosztuje [COST]L$.
 W grupie powinien być więcej niż jeden członek, albo zostanie na zawsze skasowana.
 Zaproś proszę członków w ciągu 48 godzin.
-		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za 100L$"/>
+		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Za [COST]L$ możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?

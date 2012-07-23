@@ -224,10 +224,10 @@
 У вас не хватает L$ для вступления.
 	</notification>
 	<notification name="CreateGroupCost">
-		Создание этой группы стоит L$100.
+		Создание этой группы стоит L$[COST].
 В группе должно быть более одного участника, иначе она будет удалена.
 Пригласите участников в ближайшие 48 часов.
-		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за L$100"/>
+		<usetemplate canceltext="Отмена" name="okcancelbuttons" notext="Отмена" yestext="Создать группу за L$[COST]"/>
 	</notification>
 	<notification name="LandBuyPass">
 		За L$[COST] вы можете находиться на этой земле («[PARCEL_NAME]») в течение [TIME] часов.  Купить пропуск?

@@ -220,10 +220,10 @@ No podrás retirarles ese rol, sino que deberán renunciar a él por sí mismos.
 No tienes dinero suficiente para entrar.
 	</notification>
 	<notification name="CreateGroupCost">
-		Crear este grupo te costará 100 L$.
+		Crear este grupo te costará [COST] L$.
 Los grupos necesitan más de un miembro. Si no, son borrados permanentemente.
 Por favor, invita a miembros en las próximas 48 horas.
-		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Crear un grupo por 100 L$"/>
+		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Crear un grupo por [COST] L$"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Por [COST] L$ puedes entrar a este terreno (&apos;[PARCEL_NAME]&apos;) durante [TIME] horas. ¿Comprar un pase?

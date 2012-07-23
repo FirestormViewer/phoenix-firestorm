@@ -32,6 +32,8 @@
 #include "llagent.h"
 #include "roles_constants.h"
 
+#include "lleconomy.h" // <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+
 // UI elements
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -379,7 +381,12 @@ bool LLPanelGroupGeneral::apply(std::string& mesg)
 				return false;
 			}
 
-			LLNotificationsUtil::add("CreateGroupCost",  LLSD(), LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+// <FS:AW FIRE-7091 group creation cost inaccurate on opensim>
+			LLSD args;
+			S32 cost =  LLGlobalEconomy::Singleton::getInstance()->getPriceGroupCreate();
+			args["[COST]"] = llformat("%d", cost);
+			LLNotificationsUtil::add("CreateGroupCost",  args, LLSD(), boost::bind(&LLPanelGroupGeneral::createGroupCallback, this, _1, _2));
+// </FS:AW FIRE-7091 group creation cost inaccurate on opensim>
 
 			return false;
 		}

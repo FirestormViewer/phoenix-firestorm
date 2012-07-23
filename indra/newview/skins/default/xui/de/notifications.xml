@@ -230,10 +230,10 @@ Fortfahren?
 Sie haben nicht genug L$, um dieser Gruppe beizutreten.
 	</notification>
 	<notification name="CreateGroupCost">
-		Die Gründung dieser Gruppe kostet 100 L$.
+		Die Gründung dieser Gruppe kostet [COST] L$.
 Gruppen müssen mehr als ein Mitglied haben oder sie werden gelöscht.
 Bitte laden Sie innerhalb von 48 Stunden Mitglieder in Ihre Gruppe ein.
-		<usetemplate canceltext="Abbrechen" name="okcancelbuttons" notext="Abbrechen" yestext="Gruppe für 100 L$ erstellen"/>
+		<usetemplate canceltext="Abbrechen" name="okcancelbuttons" notext="Abbrechen" yestext="Gruppe für [COST] L$ erstellen"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Sie können dieses Land („[PARCEL_NAME]“) für [COST] L$

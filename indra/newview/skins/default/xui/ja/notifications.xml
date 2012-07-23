@@ -235,10 +235,10 @@
 L$ が不足しているのでこのグループに参加することができません。
 	</notification>
 	<notification name="CreateGroupCost">
-		このグループを作るには L$ 100 かかります。
+		このグループを作るには L$ [COST] かかります。
 一人ではグループにならないので、永久に削除されてしまいます。
 48 時間以内にメンバーを勧誘し、入会してもらってください。
-		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$100 でグループを作成"/>
+		<usetemplate canceltext="キャンセル" name="okcancelbuttons" notext="キャンセル" yestext="L$[COST] でグループを作成"/>
 	</notification>
 	<notification name="LandBuyPass">
 		L$ [COST] で [TIME] 時間 [PARCEL_NAME] に入ることができます。

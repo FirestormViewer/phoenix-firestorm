@@ -190,10 +190,10 @@ Do you wish to proceed?
 You do not have enough L$ to join this group.
 	</notification>
 	<notification name="CreateGroupCost">
-		Creating this group will cost L$100.
+		Creating this group will cost L$[COST].
 Groups need more than one member, or they are deleted forever.
 Please invite members within 48 hours.
-		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 L$100 建立群組"/>
+		<usetemplate canceltext="取消" name="okcancelbuttons" notext="取消" yestext="花費 L$[COST] 建立群組"/>
 	</notification>
 	<notification name="LandBuyPass">
 		For L$[COST] you can enter this land (&apos;[PARCEL_NAME]&apos;) for [TIME] hours.  Buy a pass?

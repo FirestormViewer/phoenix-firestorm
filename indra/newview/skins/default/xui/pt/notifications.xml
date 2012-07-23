@@ -223,10 +223,10 @@ Deseja continuar?
 Você não tem L$ suficientes para associar-se a este grupo.
 	</notification>
 	<notification name="CreateGroupCost">
-		Criar este grupo custa L$100.
+		Criar este grupo custa L$[COST].
 Grupos ser formados por mais de um membro, caso contrário serão definitivamente excluídos. 
 Convite outros membros dentro de 48 horas.
-		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Criar grupo por L$100"/>
+		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Criar grupo por L$[COST]"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Por L$[COST] você pode ingressar no terreno (&apos;[PARCEL_NAME]&apos;) por [TIME] horas.  Comprar um passe de acesso?
