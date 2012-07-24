@@ -212,7 +212,7 @@
 			<combo_box name="sale type">
 				<combo_box.item label="Kopia" name="Copy"/>
 				<combo_box.item label="Zawartość" name="Contents"/>
-				<combo_box.item label="Orginał" name="Original"/>
+				<combo_box.item label="Oryginał" name="Original"/>
 			</combo_box>
 			<spinner label="Cena: L$" name="Edit Cost"/>
 			<button label="Zastosuj" name="button mark for sale" tool_tip="Ustawia/aktualizuje obiekt(y) do sprzedaży."/>

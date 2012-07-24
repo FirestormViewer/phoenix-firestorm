@@ -54,7 +54,7 @@
 			Pracuję
 		</text>
 		<text name="refresh_lbl">
-			Odśwież by zapisać.
+			Zrób na nowo
 		</text>
 	</ui_ctrl>
 	<tab_container name="panel_tab_container">
