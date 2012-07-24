@@ -898,4 +898,9 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+	 
+	<!-- Groups visible in profiles -->
+	<color
+	 name="GroupHiddenInProfile"
+	 reference="EmphasisColor" />
 </colors>
