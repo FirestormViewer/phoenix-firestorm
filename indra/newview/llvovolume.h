@@ -342,7 +342,8 @@ public:
 	F32 mVolumeSurfaceArea; // ZK LBG
 private:
 	friend class LLDrawable;
-	
+	friend class LLFace;
+
 	BOOL		mFaceMappingChanged;
 	LLFrameTimer mTextureUpdateTimer;
 	S32			mLOD;
