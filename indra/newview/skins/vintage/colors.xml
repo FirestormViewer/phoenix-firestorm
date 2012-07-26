@@ -253,4 +253,8 @@
 	<color
 		name="MediaListItemColor"
 		reference="ScrollUnselectedColor" />
+    <!-- Groups visible in profiles -->
+    <color
+     name="GroupHiddenInProfile"
+     reference="OldGray_63" />
 </colors>
