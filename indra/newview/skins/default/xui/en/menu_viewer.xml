@@ -273,7 +273,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -287,7 +287,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -300,7 +300,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -328,9 +328,9 @@
              label="Bulk (Multi-file) upload..."
              layout="topleft"
              name="Bulk Upload">
-                <menu_item_call.on_click
-                 function="File.UploadBulk"
-                 parameter="" />
+               <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -1446,7 +1446,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -1460,7 +1460,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -1473,7 +1473,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -1498,12 +1498,15 @@
             function="File.VisibleUploadModel"/>
             </menu_item_call>
 	   <menu_item_call
-             label="Bulk (L$[COST] per file)..."
+             label="Bulk ([COST] per file)..."
              layout="topleft"
              name="Bulk Upload">
                 <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
+		<menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -2391,7 +2394,7 @@
          tear_off="true"
          visible="false">
           <menu_item_call
-             label="Upload Image (L$[COST])..."
+             label="Upload Image ([COST])..."
              name="Upload Image"
              shortcut="control|U">
             <menu_item_call.on_click

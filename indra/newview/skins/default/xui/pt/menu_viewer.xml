@@ -142,11 +142,11 @@
 			<menu_item_call label="Opções de grade" name="Grid Options"/>
 		</menu>
 		<menu label="Upload" name="Upload">
-			<menu_item_call label="Imagem (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Som (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animação (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagem ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Som ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animação ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelar..." name="Upload Model"/>
-			<menu_item_call label="Volume (L$[COST] por arquivo)..." name="Bulk Upload"/>
+			<menu_item_call label="Volume ([COST] por arquivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Autorizações de upload padrão" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Desfazer" name="Undo"/>

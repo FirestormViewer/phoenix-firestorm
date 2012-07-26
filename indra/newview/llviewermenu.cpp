@@ -547,10 +547,25 @@ void init_menus()
   
     gViewerWindow->setMenuBackgroundColor(false, 
         !LLGridManager::getInstance()->isInSLBeta());
-
-	// Assume L$10 for now, the server will tell us the real cost at login
-	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
-	const std::string upload_cost("10");
+// <FS:AW opensim currency support>
+//	// Assume L$10 for now, the server will tell us the real cost at login
+//	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
+//	const std::string upload_cost("10");
+	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
+	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	std::string upload_cost;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if(in_opensim)
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+	}
+// </FS:AW opensim currency support>
 	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", upload_cost);
@@ -9273,6 +9288,8 @@ class LLUploadCostCalculator : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string menu_name = userdata.asString();
+		// AW:this fights the update in llviewermessage
+		calculateCost();// <FS:AW opensim currency support>
 		gMenuHolder->childSetLabelArg(menu_name, "[COST]", mCostStr);
 
 		return true;
@@ -9283,7 +9300,9 @@ class LLUploadCostCalculator : public view_listener_t
 public:
 	LLUploadCostCalculator()
 	{
-		calculateCost();
+// <FS:AW opensim currency support> we don't know the costs yet
+//		calculateCost();
+// </FS:AW opensim currency support>
 	}
 };
 
@@ -9350,17 +9369,36 @@ class LLChangeMode : public view_listener_t
 
 void LLUploadCostCalculator::calculateCost()
 {
-	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+// <FS:AW opensim currency support>
+// 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+// 
+// 	// getPriceUpload() returns -1 if no data available yet.
+// 	if(upload_cost >= 0)
+// 	{
+// 		mCostStr = llformat("%d", upload_cost);
+// 	}
+// 	else
+// 	{
+// 		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+// 	}
 
-	// getPriceUpload() returns -1 if no data available yet.
-	if(upload_cost >= 0)
+	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
+	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	std::string upload_cost;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if(in_opensim)
 	{
-		mCostStr = llformat("%d", upload_cost);
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	{
-		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
+
+	mCostStr = upload_cost;
+// </FS:AW opensim currency support>
 }
 
 void show_navbar_context_menu(LLView* ctrl, S32 x, S32 y)

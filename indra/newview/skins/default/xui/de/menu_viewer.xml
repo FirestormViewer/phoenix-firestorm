@@ -34,9 +34,9 @@
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
@@ -178,11 +178,11 @@
 			<menu_item_call label="Rasteroptionen" name="Grid Options"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
-			<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
+			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
@@ -297,7 +297,7 @@
 		<menu_item_check label="Weiche Mausbewegung" name="Mouse Smoothing"/>
 		<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 		<menu label="Tastaturkürzel" name="Shortcuts">
-			<menu_item_call label="Bild hochladen ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Bild hochladen ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Suchen" name="Search"/>
 			<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>

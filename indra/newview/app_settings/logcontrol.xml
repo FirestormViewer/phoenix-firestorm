@@ -46,6 +46,7 @@
 						     <string>Avatar</string>
 						     <string>Voice</string> -->
 						     <string>parseFile</string>
+						     <string>GridManager</string>
 						</array>
 				</map>
 			</array>

@@ -33,9 +33,9 @@
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
@@ -168,11 +168,11 @@
 			<menu_item_call label="Opcje siatki" name="Grid Options"/>
 		</menu>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
-			<menu_item_call label="Zbiór wielu plików ([COST]L$ za plik)..." name="Bulk Upload"/>
+			<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
@@ -264,7 +264,7 @@
 		<menu_item_check label="Wygładzanie ruchu myszki" name="Mouse Smoothing"/>
 		<menu_item_call label="Zwolnij klawisze" name="Release Keys"/>
 		<menu label="Skróty" name="Shortcuts">
-			<menu_item_call label="Załaduj teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Załaduj teksturę ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Wyszukiwarka" name="Search"/>
 			<menu_item_check label="Pokazuj menu Zaawansowane" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleportuj po podwójnym kliknięciu" name="DoubleClick Teleport"/>

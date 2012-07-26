@@ -4521,6 +4521,11 @@ Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein Proble
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
+<!--  FS:AW opensim currency support -->
+	<string name="free">
+		 kostenlos
+	</string>
+<!--  /FS:AW opensim currency support -->
 	<string name="Membership">
 		Mitgliedschaft
 	</string>

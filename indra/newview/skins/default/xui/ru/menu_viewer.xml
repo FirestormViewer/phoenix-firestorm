@@ -34,11 +34,11 @@
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
@@ -176,11 +176,11 @@
 			<menu_item_call label="Параметры сетки" name="Grid Options"/>
 		</menu>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>

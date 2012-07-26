@@ -3735,6 +3735,9 @@ Abuse Report</string>
   <!--  currency formatting -->
   <string name="LocalEstimateUSD">US$ [AMOUNT]</string>
 
+  <!--  FS:AW opensim currency support -->
+  <string name="free">free</string>
+
   <!-- Group Profile roles and powers -->
   <string name="Membership">Membership</string>
   <string name="Roles">Roles</string>
