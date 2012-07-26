@@ -942,6 +942,10 @@
 	<color
 	 name="AvatarListItemBeyondShoutRange"
 	 reference="Red" />
+    <!-- Groups visible in profiles -->
+    <color
+     name="GroupHiddenInProfile"
+     reference="White_25" />
 	 
     <!-- Colours for Firestorm - same for all themes -->
     <color
