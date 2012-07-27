@@ -132,63 +132,68 @@ BOOL LLHandMotion::onUpdate(F32 time, U8* joint_mask)
 	{
 		if (mNewPose != HAND_POSE_RELAXED && mNewPose != mCurrentPose)
 		{
-			// <FS:Ansariel>
-			// mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+			// Only set param weight for poses other than
+			// default (HAND_POSE_SPREAD); HAND_POSE_SPREAD
+			// is not an animatable morph!
 			if (mNewPose != HAND_POSE_SPREAD)
 			{
 				mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
 			}
 
+			// Reset morph weight for current pose back to its
+			// full extend or it might be stuck somewhere in the middle if a
+			// pose is requested and the old pose is requested again shortly
+			// after while still blending to the other pose!
 			if (mCurrentPose != HAND_POSE_SPREAD)
 			{
 				mCharacter->setVisualParamWeight(gHandPoseNames[mCurrentPose], 1.f);
 			}
 
+			// Update visual params now if we won't blend
 			if (mCurrentPose == HAND_POSE_RELAXED)
 			{
 				mCharacter->updateVisualParams();
 			}
-			// </FS:Ansariel>
 		}
 		mNewPose = HAND_POSE_RELAXED;
 	}
 	else
 	{
-		// <FS:ND> Sometimes we seem to get garbage here, with poses that are out of bounds.
-		// <FS:Ansariel> Clamp requested pose before setting the new pose and request
-		//               relaxed hand pose instead as default.
-		if (*requestedHandPose < 0 || *requestedHandPose >= NUM_HAND_POSES)
+		// Sometimes we seem to get garbage here, with poses that are out of bounds.
+		// So check for a valid pose first.
+		if (*requestedHandPose >= 0 && *requestedHandPose < NUM_HAND_POSES)
 		{
-			llwarns << "Requested hand pose out of range. Using HAND_POSE_RELAXED." << llendl;
-			*requestedHandPose = HAND_POSE_RELAXED;
-		}
-		// </FS:ND>
+			// This is a new morph we didn't know about before:
+			// Reset morph weight for both current and new pose
+			// back their starting values while still blending.
+			if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose)
+			{
+				if (mNewPose != HAND_POSE_SPREAD)
+				{
+					mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
+				}
 
-		// this is a new morph we didn't know about before
-		// <FS:Ansariel>
-		//if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose && mNewPose != HAND_POSE_SPREAD)
-		//{
-		//	mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
-		//}
-		if (*requestedHandPose != mNewPose && mNewPose != mCurrentPose)
+				// Reset morph weight for current pose back to its full extend
+				// or it might be stuck somewhere in the middle if a pose is
+				// requested and the old pose is requested again shortly after
+				// while still blending to the other pose!
+				if (mCurrentPose != HAND_POSE_SPREAD)
+				{
+					mCharacter->setVisualParamWeight(gHandPoseNames[mCurrentPose], 1.f);
+				}
+
+				// Update visual params now if we won't blend
+				if (mCurrentPose == *requestedHandPose)
+				{
+					mCharacter->updateVisualParams();
+				}
+			}
+			mNewPose = *requestedHandPose;
+		}
+		else
 		{
-			if (mNewPose != HAND_POSE_SPREAD)
-			{
-				mCharacter->setVisualParamWeight(gHandPoseNames[mNewPose], 0.f);
-			}
-
-			if (mCurrentPose != HAND_POSE_SPREAD)
-			{
-				mCharacter->setVisualParamWeight(gHandPoseNames[mCurrentPose], 1.f);
-			}
-
-			if (mCurrentPose == *requestedHandPose)
-			{
-				mCharacter->updateVisualParams();
-			}
+			llwarns << "Requested hand pose out of range. Ignoring requested pose." << llendl;
 		}
-		// </FS:Ansariel>
-		mNewPose = *requestedHandPose;
 	}
 
 	mCharacter->removeAnimationData("Hand Pose");
