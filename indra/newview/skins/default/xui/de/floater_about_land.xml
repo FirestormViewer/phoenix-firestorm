@@ -327,6 +327,13 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<text name="allow_label">
 				Anderen Einwohnern gestatten:
 			</text>
+			<text name="allow_label1">
+				Terrain bearbeiten:
+			</text>
+			<check_box label="Jeder" name="edit land check" tool_tip="Falls aktiviert, kann jeder Einwohner das Terrain bearbeiten. Es wird empfohlen, diese Einstellung deaktiviert zu lassen, da als Eigentümer das Terrain jederzeit bearbeitet werden kann."/>
+			<text name="caution_text" left_pad="-75">
+				(Mit Vorsicht anwenden!)
+			</text>
 			<text name="allow_label0">
 				Fliegen:
 			</text>
