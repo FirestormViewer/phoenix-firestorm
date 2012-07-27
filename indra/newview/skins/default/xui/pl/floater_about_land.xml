@@ -302,7 +302,17 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label">
 				Udostępnij innym Rezydentom:
 			</text>
-			<check_box label="Latanie" name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
+			<text name="allow_label1">
+				Edycję terenu:
+			</text>
+			<check_box label="Wszyscy" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
+			<text name="caution_text">
+				(używaj ostrożnie!)
+			</text>
+			<text name="allow_label0">
+				Latanie:
+			</text>
+			<check_box label="Włącz latanie" name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
 			<text name="allow_label2">
 				Budowanie:
 			</text>
