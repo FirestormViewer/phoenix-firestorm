@@ -1191,6 +1191,32 @@ Only large parcels can be listed in search.
              right="-10">
                 Allow other Residents to:
             </text>
+			
+	<!-- <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land -->			
+          <check_box
+             height="14"
+             label="Edit Terrain"
+             layout="topleft"
+             name="edit land check"
+             tool_tip="If checked, anyone can terraform your land. It is best to leave this unchecked, as you can always edit your own land."
+             top_pad="8"
+             left="20"
+             width="130" />
+            <text
+             font="SansSerifSmall"
+             type="string"
+             text_color="0.85 0.85 1 0.55"
+             length="1"
+             follows="left|top"
+             height="16"
+             layout="topleft"
+             left_pad="-45"
+             name="caution_text"
+             width="200">
+                (Use with caution!)
+            </text>
+    <!-- <FS:WF> FIRE-6604 END -->
+			 
           <check_box
              height="14"
              label="Fly"
@@ -1476,7 +1502,8 @@ Only large parcels can be listed in search.
              height="150"
              layout="topleft"
              left="10"
-             bottom="-5"
+             bottom="-1"
+			 top_pad="50"
              name="snapshot_ctrl"
              fallback_image="default_land_picture.j2c" 
              tool_tip="Click to choose a picture"
@@ -1489,7 +1516,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="10"
              name="Snapshot:"
-             top_delta="-20"
+             top_delta="-15"
              width="200">
                 Snapshot:
             </text>
