@@ -210,8 +210,52 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 	m_fValid = true;
 }
 
+// Checked: 2012-07-28 (RLVa-1.4.7)
+class RlvCommandOptionGetPathCallback
+{
+public:
+	RlvCommandOptionGetPathCallback(const LLUUID& idAttachObj, RlvCommandOptionGetPath::getpath_callback_t cb)
+		: mObjectId(idAttachObj), mCallback(cb)
+	{
+		if (isAgentAvatarValid())
+			mAttachmentConnection = gAgentAvatarp->setAttachmentCallback(boost::bind(&RlvCommandOptionGetPathCallback::onAttachment, this, _1, _3));
+		gIdleCallbacks.addFunction(&onIdle, this);
+	}
+
+	~RlvCommandOptionGetPathCallback()
+	{
+		if (mAttachmentConnection.connected())
+			mAttachmentConnection.disconnect();
+		gIdleCallbacks.deleteFunction(&onIdle, this);
+	}
+
+	void onAttachment(LLViewerObject* pAttachObj, LLVOAvatarSelf::EAttachAction eAction)
+	{
+		if ( (LLVOAvatarSelf::ACTION_ATTACH == eAction) && (pAttachObj->getID() == mObjectId) )
+		{
+			uuid_vec_t idItems(1, pAttachObj->getAttachmentItemID());
+			mCallback(idItems);
+			delete this;
+		}
+	}
+
+	static void onIdle(void* pData)
+	{
+		RlvCommandOptionGetPathCallback* pInstance = reinterpret_cast<RlvCommandOptionGetPathCallback*>(pData);
+		if (pInstance->mExpirationTimer.getElapsedTimeF32() > 30.0f)
+			delete pInstance;
+	}
+
+protected:
+	LLUUID                      mObjectId;
+	RlvCommandOptionGetPath::getpath_callback_t mCallback;
+	boost::signals2::connection mAttachmentConnection;
+	LLFrameTimer                mExpirationTimer;
+};
+
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
+RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpath_callback_t cb)
+	: m_fCallback(false)
 {
 	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
@@ -228,12 +272,27 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
 		const LLViewerObject* pObj = gObjectList.findObject(rlvCmd.getObjectID());
-		if ( (pObj) && (pObj->isAttachment()) )
-			m_idItems.push_back(pObj->getAttachmentItemID());
+		if (pObj)
+		{
+			if (pObj->isAttachment())
+				m_idItems.push_back(pObj->getAttachmentItemID());
+		}
+		else if (!cb.empty())
+		{
+			new RlvCommandOptionGetPathCallback(rlvCmd.getObjectID(), cb);
+			m_fCallback = true;
+			return;
+		}
 	}
 	else										// ... but anything else isn't a valid option
 	{
 		m_fValid = false;
+		return;
+	}
+
+	if (!cb.empty())
+	{
+		cb(getItemIDs());
 	}
 }
 
