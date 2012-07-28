@@ -97,6 +97,88 @@ bool rlvGetShowException(ERlvBehaviour eBhvr)
 	}
 }
 
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvLockMaskToString(ERlvLockMask eLockType)
+{
+	switch (eLockType)
+	{
+		case RLV_LOCK_ADD:
+			return "add";
+		case RLV_LOCK_REMOVE:
+			return "rem";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockPermissionToString(RlvFolderLocks::ELockPermission eLockPermission)
+{
+	switch (eLockPermission)
+	{
+		case RlvFolderLocks::PERM_ALLOW:
+			return "allow";
+		case RlvFolderLocks::PERM_DENY:
+			return "deny";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockScopeToString(RlvFolderLocks::ELockScope eLockScope)
+{
+	switch (eLockScope)
+	{
+		case RlvFolderLocks::SCOPE_NODE:
+			return "node";
+		case RlvFolderLocks::SCOPE_SUBTREE:
+			return "subtree";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockSourceToTarget(RlvFolderLocks::folderlock_source_t lockSource)
+{
+	switch (lockSource.first)
+	{
+		case RlvFolderLocks::ST_ATTACHMENT:
+			{
+				std::string strAttachName = rlvGetItemNameFromObjID(boost::get<LLUUID>(lockSource.second));
+				return llformat("Attachment (%s)", strAttachName.c_str());
+			}
+		case RlvFolderLocks::ST_ATTACHMENTPOINT:
+			{
+				const LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockSource.second));
+				return llformat("Attachment point (%s)", (pAttachPt) ? pAttachPt->getName().c_str() : "Unknown");
+			}
+		case RlvFolderLocks::ST_FOLDER:
+			{
+				return "Folder: <todo>";
+			}
+		case RlvFolderLocks::ST_ROOTFOLDER:
+			{
+				return "Root folder";
+			}
+		case RlvFolderLocks::ST_SHAREDPATH:
+			{
+				const std::string& strPath = boost::get<std::string>(lockSource.second);
+				return llformat("Shared path (#RLV%s%s)", (!strPath.empty()) ? "/" : "", strPath.c_str());
+			}
+		case RlvFolderLocks::ST_WEARABLETYPE:
+			{
+				const std::string& strTypeName = LLWearableType::getTypeName(boost::get<LLWearableType::EType>(lockSource.second));
+				return llformat("Wearable type (%s)", strTypeName.c_str());
+			}
+		default:
+			{
+				return "(Unknown)";
+			}
+	}
+}
+
 // ============================================================================
 // RlvFloaterBehaviours member functions
 //
@@ -418,6 +500,54 @@ void RlvFloaterLocks::refreshAll()
 			sdColumns[2]["value"] = rlvGetItemName(pItem);
 
 			pLockList->addElement(sdRow, ADD_BOTTOM);
+		}
+	}
+
+	//
+	// List folder locks
+	//
+	{
+		// Folder lock descriptors
+		const RlvFolderLocks::folderlock_list_t& folderLocks = RlvFolderLocks::instance().getFolderLocks();
+		for (RlvFolderLocks::folderlock_list_t::const_iterator itFolderLock = folderLocks.begin(); 
+				itFolderLock != folderLocks.end(); ++itFolderLock)
+		{
+			const RlvFolderLocks::folderlock_descr_t* pLockDescr = *itFolderLock;
+			if (pLockDescr)
+			{
+				sdColumns[0]["value"] = "Folder Descriptor";
+				sdColumns[1]["value"] =
+					rlvLockMaskToString(pLockDescr->eLockType) + "/" +
+					rlvFolderLockPermissionToString(pLockDescr->eLockPermission) + "/" +
+					rlvFolderLockScopeToString(pLockDescr->eLockScope);
+				sdColumns[2]["value"] = rlvFolderLockSourceToTarget(pLockDescr->lockSource);
+				sdColumns[3]["value"] = rlvGetItemNameFromObjID(pLockDescr->idRlvObj);
+
+				pLockList->addElement(sdRow, ADD_BOTTOM);
+			}
+		}
+	}
+
+	{
+		// Folder locked attachments and wearables
+		uuid_vec_t idItems;
+		const uuid_vec_t& folderLockAttachmentsIds = RlvFolderLocks::instance().getAttachmentLookups();
+		idItems.insert(idItems.end(), folderLockAttachmentsIds.begin(), folderLockAttachmentsIds.end());
+		const uuid_vec_t& folderLockWearabels = RlvFolderLocks::instance().getWearableLookups();
+		idItems.insert(idItems.end(), folderLockWearabels.begin(), folderLockWearabels.end());
+
+		for (uuid_vec_t::const_iterator itItemId = idItems.begin(); itItemId != idItems.end(); ++itItemId)
+		{
+			const LLViewerInventoryItem* pItem = gInventory.getItem(*itItemId);
+			if (pItem)
+			{
+				sdColumns[0]["value"] = rlvGetItemType(pItem);
+				sdColumns[1]["value"] = rlvLockMaskToString(RLV_LOCK_REMOVE);
+				sdColumns[2]["value"] = rlvGetItemName(pItem);
+				sdColumns[3]["value"] = "<Folder Lock>";
+
+				pLockList->addElement(sdRow, ADD_BOTTOM);
+			}
 		}
 	}
 }
