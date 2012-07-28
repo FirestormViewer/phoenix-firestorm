@@ -297,7 +297,7 @@ public:
 	// Specifies options for the folder lock
 	enum ELockPermission { PERM_ALLOW = 0x1, PERM_DENY = 0x2, PERM_MASK_ANY = 0x3 };
 	enum ELockScope	{ SCOPE_NODE, SCOPE_SUBTREE } ;
-protected:
+
 	struct folderlock_descr_t
 	{
 		LLUUID				idRlvObj;
@@ -360,9 +360,14 @@ protected:
 	/*
 	 * Member variables
 	 */
+public:
+	typedef std::list<const folderlock_descr_t*> folderlock_list_t;
+	// Accessors for RlvFloaterLocks
+	const folderlock_list_t& getFolderLocks() { return m_FolderLocks; }
+	const uuid_vec_t& getAttachmentLookups()  { return m_LockedAttachmentRem; }
+	const uuid_vec_t& getWearableLookups()    { return m_LockedWearableRem; }
 protected:
 	// Map of folder locks (idRlvObj -> lockDescr)
-	typedef std::list<const folderlock_descr_t*> folderlock_list_t;
 	folderlock_list_t	m_FolderLocks;			// List of add and remove locked folder descriptions
 	S32					m_cntLockAdd;			// Number of RLV_LOCK_ADD locked folders in m_FolderLocks
 	S32					m_cntLockRem;			// Number of RLV_LOCK_REMOVE locked folders in m_FolderLocks
