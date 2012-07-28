@@ -1645,15 +1645,9 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 		case RLV_BHVR_ATTACHALLTHISOVER:
 		case RLV_BHVR_DETACHALLTHIS:
 			{
-				RlvCommandOptionGetPath rlvGetPathOption(rlvCmd);
+				RlvCommandOptionGetPath rlvGetPathOption(rlvCmd, boost::bind(&RlvHandler::onForceWearCallback, this, _1, rlvCmd.getBehaviourType()));
 				VERIFY_OPTION(rlvGetPathOption.isValid());
-
-				LLInventoryModel::cat_array_t folders;
-				if (RlvInventory::instance().getPath(rlvGetPathOption.getItemIDs(), folders))
-				{
-					for (S32 idxFolder = 0, cntFolder = folders.count(); idxFolder < cntFolder; idxFolder++)
-						onForceWear(folders.get(idxFolder), rlvCmd.getBehaviourType());
-				}
+				eRet = (!rlvGetPathOption.isCallback()) ? RLV_RET_SUCCESS : RLV_RET_SUCCESS_DELAYED;
 			}
 			break;
 		case RLV_BHVR_DETACHME:		// @detachme=force						- Checked: 2010-09-04 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -1809,6 +1803,20 @@ ERlvCmdRet RlvHandler::onForceWear(const LLViewerInventoryCategory* pFolder, ERl
 
 	RlvForceWear::instance().forceFolder(pFolder, eAction, eFlags);
 	return RLV_RET_SUCCESS;
+}
+
+void RlvHandler::onForceWearCallback(const uuid_vec_t& idItems, ERlvBehaviour eBhvr) const
+{
+	LLInventoryModel::cat_array_t folders;
+	if (RlvInventory::instance().getPath(idItems, folders))
+	{
+		for (S32 idxFolder = 0, cntFolder = folders.count(); idxFolder < cntFolder; idxFolder++)
+			onForceWear(folders.get(idxFolder), eBhvr);
+
+		// If we're not executing a command then we're a delayed callback and need to manually call done()
+		if ( (!getCurrentCommand()) && (RlvForceWear::instanceExists()) )
+			RlvForceWear::instance().done();
+	}
 }
 
 // ============================================================================

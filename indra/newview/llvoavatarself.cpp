@@ -180,6 +180,9 @@ LLVOAvatarSelf::LLVOAvatarSelf(const LLUUID& id,
 							   const LLPCode pcode,
 							   LLViewerRegion* regionp) :
 	LLVOAvatar(id, pcode, regionp),
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	mAttachmentSignal(NULL),
+// [/RLVa:KB]
 	mScreenp(NULL),
 	mLastRegionHandle(0),
 	mRegionCrossingCount(0),
@@ -799,6 +802,10 @@ void LLVOAvatarSelf::cleanup()
 LLVOAvatarSelf::~LLVOAvatarSelf()
 {
 	cleanup();
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	delete mAttachmentSignal;
+// [/RLVa:KB]
 }
 
 /**
@@ -1408,6 +1415,14 @@ LLViewerObject* LLVOAvatarSelf::getWornAttachment(const LLUUID& inv_item_id)
 	return NULL;
 }
 
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+boost::signals2::connection LLVOAvatarSelf::setAttachmentCallback(const attachment_signal_t::slot_type& cb)
+{
+	if (!mAttachmentSignal)
+		mAttachmentSignal = new attachment_signal_t();
+	return mAttachmentSignal->connect(cb);
+}
+// [/RLVa:KB]
 // [RLVa:KB] - Checked: 2010-03-14 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
 LLViewerJointAttachment* LLVOAvatarSelf::getWornAttachmentPoint(const LLUUID& idItem) const
 {
@@ -1474,6 +1489,10 @@ const LLViewerJointAttachment *LLVOAvatarSelf::attachObject(LLViewerObject *view
 
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
 		// NOTE: RLVa event handlers should be invoked *after* LLVOAvatar::attachObject() calls LLViewerJointAttachment::addObject()
+		if (mAttachmentSignal)
+		{
+			(*mAttachmentSignal)(viewer_object, attachment, ACTION_ATTACH);
+		}
 		if (rlv_handler_t::isEnabled())
 		{
 			RlvAttachmentLockWatchdog::instance().onAttach(viewer_object, attachment);
@@ -1602,6 +1621,10 @@ BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 			if (!attached_obj)
 			{
 				LLAppearanceMgr::instance().removeCOFItemLinks(item_id, false);
+			}
+			if (mAttachmentSignal)
+			{
+				(*mAttachmentSignal)(viewer_object, pAttachPt, ACTION_DETACH);
 			}
 		}
 		return TRUE;
