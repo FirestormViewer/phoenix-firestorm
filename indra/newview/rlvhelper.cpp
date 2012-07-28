@@ -228,7 +228,7 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
 		const LLViewerObject* pObj = gObjectList.findObject(rlvCmd.getObjectID());
-		if ( (pObj) || (pObj->isAttachment()) )
+		if ( (pObj) && (pObj->isAttachment()) )
 			m_idItems.push_back(pObj->getAttachmentItemID());
 	}
 	else										// ... but anything else isn't a valid option
