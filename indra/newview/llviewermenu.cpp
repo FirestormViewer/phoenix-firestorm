@@ -385,11 +385,22 @@ LLMenuParcelObserver::~LLMenuParcelObserver()
 
 void LLMenuParcelObserver::changed()
 {
-	gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL));
-	
+	// <FS:Ansariel> Cache controls
+	//gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL));
+	//
+	//BOOL buyable = enable_buy_land(NULL);
+	//gMenuHolder->childSetEnabled("Land Buy", buyable);
+	//gMenuHolder->childSetEnabled("Buy Land...", buyable);
+
+	static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
+	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
+	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
+
+	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL));
 	BOOL buyable = enable_buy_land(NULL);
-	gMenuHolder->childSetEnabled("Land Buy", buyable);
-	gMenuHolder->childSetEnabled("Buy Land...", buyable);
+	land_buy->setEnabled(buyable);
+	buy_land->setEnabled(buyable);
+	// </FS:Ansariel> Cache controls
 }
 
 

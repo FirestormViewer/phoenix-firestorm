@@ -560,7 +560,8 @@ void LLFloaterTools::refresh()
 	// - KC
 	std::string prim_count_string;
 	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
-	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
 #if 0
 	if (!gMeshRepo.meshRezEnabled())
 	{		
@@ -577,15 +578,18 @@ void LLFloaterTools::refresh()
 			std::string prim_cost_string;
 			S32 render_cost = LLSelectMgr::getInstance()->getSelection()->getSelectedObjectRenderCost();
 			LLResMgr::getInstance()->getIntegerString(prim_cost_string, render_cost);
-			getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
+			// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+			//getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
 		}
 		
 		// disable the object and prim counts if nothing selected
 		bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
 		getChildView("link_num_obj_count")->setEnabled(have_selection);
 		//getChildView("obj_count")->setEnabled(have_selection);
-		getChildView("prim_count")->setEnabled(have_selection);
-		getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+		// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+		//getChildView("prim_count")->setEnabled(have_selection);
+		// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+		//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 	}
 	else
 #endif
@@ -635,8 +639,10 @@ void LLFloaterTools::refresh()
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
 	//getChildView("obj_count")->setEnabled(have_selection);
 	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
-	getChildView("prim_count")->setEnabled(have_selection);
-	getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChildView("prim_count")->setEnabled(have_selection);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+	//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 
 	// Refresh child tabs
 	mPanelPermissions->refresh();
@@ -777,7 +783,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	mRadioGroupEdit->setVisible( edit_visible );
 	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
 	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
-	getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+	//getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
 
 	mBtnLink->setVisible(edit_visible);
 	mBtnUnlink->setVisible(edit_visible);
@@ -972,7 +979,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	}
 
 	//getChildView("link_num_obj_count")->setVisible( !land_visible);
-	getChildView("prim_count")->setVisible( !land_visible);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChildView("prim_count")->setVisible( !land_visible);
 
 	static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
 	mTab->setVisible(!land_visible && sFSToolboxExpanded);
