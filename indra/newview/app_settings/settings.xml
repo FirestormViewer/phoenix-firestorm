@@ -17824,6 +17824,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Value</key>
     <integer>100</integer>
   </map>
+  <key>FSMeshRequestTimeout</key>
+  <map>
+    <key>Comment</key>
+    <string>The timeout in seconds for a mesh header or LOD data request after that the request will be sent again.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <integer>10.0</integer>
+  </map>
   
 </map>
 </llsd>
