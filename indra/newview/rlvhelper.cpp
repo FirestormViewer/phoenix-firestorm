@@ -496,6 +496,9 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	RlvWearableItemCollector f(pFolder, eAction, eFlags);
 	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, TRUE);
 
+	// TRUE if we've already encountered this LLWearableType::EType (used only on wear actions and only for AT_CLOTHING)
+	bool fSeenWType[LLWearableType::WT_COUNT] = { false };
+
 	EWearAction eCurAction = eAction;
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
 	{
@@ -509,6 +512,8 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 		// Each folder can specify its own EWearAction override
 		if (isWearAction(eAction))
 			eCurAction = f.getWearAction(pRlvItem->getParentUUID());
+		else
+			eCurAction = eAction;
 
 		//  NOTES: * if there are composite items then RlvWearableItemCollector made sure they can be worn (or taken off depending)
 		//         * some scripts issue @remattach=force,attach:worn-items=force so we need to attach items even if they're currently worn
@@ -519,6 +524,10 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 			case LLAssetType::AT_CLOTHING:
 				if (isWearAction(eAction))
 				{
+					// The first time we encounter any given clothing type we use 'eCurAction' (replace or add)
+					// The second time we encounter a given clothing type we'll always add (rather than replace the previous iteration)
+					eCurAction = (!fSeenWType[pItem->getWearableType()]) ? eCurAction : ACTION_WEAR_ADD;
+
 					ERlvWearMask eWearMask = gRlvWearableLocks.canWear(pRlvItem);
 					if ( ((ACTION_WEAR_REPLACE == eCurAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
 						 ((ACTION_WEAR_ADD == eCurAction) && (eWearMask & RLV_WEAR_ADD)) )
@@ -526,6 +535,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 						// The check for whether we're replacing a currently worn composite item happens in onWearableArrived()
 						if (!isAddWearable(pItem))
 							addWearable(pRlvItem, eCurAction);
+						fSeenWType[pItem->getWearableType()] = true;
 					}
 				}
 				else
