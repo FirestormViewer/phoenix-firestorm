@@ -975,6 +975,10 @@ Stops hovering to a height
 llMinEventDelay(float delay)
 Sets the minimum time between events being handled
 	</string>
+	<string name="LSLTipText_llSound" translate="false">
+llSound(string sound, float volume, integer queue, integer loop)
+Plays sound at volume and whether it should loop or not
+	</string>
 	<string name="LSLTipText_llSoundPreload" translate="false">
 llSoundPreload(string sound)
 Preloads a sound on viewers within range
