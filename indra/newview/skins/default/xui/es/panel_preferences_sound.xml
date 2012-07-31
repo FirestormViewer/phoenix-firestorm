@@ -33,6 +33,9 @@
 			<text name="MaxMeters">
 				metros
 			</text>
+			<text name="money_change_threshold_label" tool_tip="Reproduce un sonido cuando se gasta o recibe una cantidad de dinero superior a la configurada.">
+				Umbral de L$:
+			</text>
 		</panel>
 		<panel label="Configuración de voz" name="Media Voice tab">
 			<check_box label="Activar voz" name="enable_voice_check"/>
