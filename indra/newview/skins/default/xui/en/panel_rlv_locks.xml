@@ -4,10 +4,10 @@
   height="200"
   label="ACTIVE RLV LOCKS"
   layout="topleft"
-  left="0"
+  left="5"
   name="panel_rlvLocks"
   top="0"
-  width="513">
+  width="503">
   <scroll_list
     top="0"
     draw_border="false"
@@ -19,10 +19,10 @@
     draw_heading="true"
     draw_stripes="true"
     layout="topleft"
-    width="507">
-    <scroll_list.columns label="Lock Type" name="lock_type" width="110" />
-    <scroll_list.columns label="Method" name="lock_addrem" width="44" />
-    <scroll_list.columns label="Target Object / Point" name="lock_target" width="150" />
+    width="499">
+    <scroll_list.columns label="Lock Type" name="lock_type" width="100" />
+    <scroll_list.columns label="Method" name="lock_addrem" width="50" />
+    <scroll_list.columns label="Target Object / Point" name="lock_target" />
     <scroll_list.columns label="Lock Origin" name="lock_origin" width="150" />
   </scroll_list>
   <panel
@@ -31,10 +31,10 @@
     height="27"
     label="bottom_panel"
     layout="topleft"
-    left="3"
+    left="0"
     name="bottom_panel"
     top_pad="0"
-    width="513">
+    width="503">
   <button
     follows="bottom|left"
     height="25"
@@ -56,6 +56,6 @@
     layout="topleft"
     left_pad="1"
     name="dummy_icon"
-    width="433"/>
+    width="429"/>
   </panel>
 </panel>
