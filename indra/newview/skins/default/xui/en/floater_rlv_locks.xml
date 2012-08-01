@@ -14,10 +14,10 @@
   reuse_instance="true"
   title="ACTIVE RLV LOCKS"
   width="513">
-      <panel
-        class="panel_rlvLocks"
-        name="panel_rlvLocks"
-        filename="panel_rlv_locks.xml"
-	follows="all"
-	top="0"/>
+  <panel
+    class="panel_rlvLocks"
+    name="panel_rlvLocks"
+    filename="panel_rlv_locks.xml"
+    follows="all"
+    top="0"/>
 </floater>
