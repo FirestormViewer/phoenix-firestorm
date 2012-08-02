@@ -85,7 +85,7 @@
         <text name="ToastGapText">
             pikseli
         </text>
-        <slider label="Wysokość dodatk. tosta:" tool_tip="Wysokość nadmiarowego tosta w pikselach" name="OverflowToastHeight" />
+        <slider label="Wysokość nadmiarowego tosta:" tool_tip="Wysokość nadmiarowego tosta w pikselach" name="OverflowToastHeight" />
         <text name="OverflowToastHeightText">
             pikseli
         </text>

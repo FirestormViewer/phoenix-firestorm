@@ -14,12 +14,12 @@
 	</text>
 	<button label="Otwórz Katalog Osobisty" name="add_button"/>
 	<name_list name="invitee_list" tool_tip="Przytrzymaj klawisz Ctrl i kliknij imię Rezydenta aby wybrać kilka osób."/>
-	<button label="Usuń z Listy" name="remove_button" tool_tip="Usuwa wybranych powyżej Rezydentów z listy zaproszeń."/>
+	<button label="Usuń z listy" name="remove_button" tool_tip="Usuwa wybranych powyżej Rezydentów z listy zaproszeń."/>
 	<text name="role_text">
 		Wybierz funkcję dla nowego członka:
 	</text>
 	<combo_box name="role_name" tool_tip="Wybierz z listy funkcje, które możesz przypisać członkom"/>
-	<button label="Wyślij Zaproszenia" name="ok_button"/>
+	<button label="Wyślij zaproszenia" name="ok_button"/>
 	<button label="Anuluj" name="cancel_button"/>
 	<string name="GroupInvitation">
 		Zaproszenie do grupy

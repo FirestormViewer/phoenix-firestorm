@@ -155,7 +155,7 @@ wspiera [AMOUNT2] obiektów
 	<text_editor name="covenant_editor">
 		Ładowanie...
 	</text_editor>
-	<check_box label="Zgadzam się na Powyższą Umowę." name="agree_covenant"/>
+	<check_box label="Zgadzam się na powyższą umowę." name="agree_covenant"/>
 	<text name="info_parcel_label">
 		Posiadłość:
 	</text>

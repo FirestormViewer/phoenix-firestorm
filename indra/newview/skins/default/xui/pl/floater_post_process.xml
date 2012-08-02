@@ -41,9 +41,9 @@
 			</text>
 		</panel>
 		<panel label="Dodatki" name="Extras">
-			<button label="ŁadujEfekt" label_selected="ŁadujEfekt" name="PPLoadEffect" />
-			<button label="ZapiszEfekt" label_selected="ZapiszEfekt" name="PPSaveEffect" />
-			<line_editor label="Nazwa Efektu" name="PPEffectNameEditor" />
+			<button label="Wczytaj efekt" label_selected="Wczytaj efekt" name="PPLoadEffect" />
+			<button label="Zapisz efekt" label_selected="Zapisz efekt" name="PPSaveEffect" />
+			<line_editor label="Nazwa efektu" name="PPEffectNameEditor" />
 		</panel>
 	</tab_container>
 </floater>

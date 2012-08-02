@@ -400,7 +400,7 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<line_editor name="url_description" tool_tip="Tekst wyświetlany obok przycisku odtwórz/załaduj"/>
 			<text name="Media texture:">
 				Zmień
-Teksturę:
+teksturę:
 			</text>
 			<texture_picker name="media texture" tool_tip="Kliknij by wybrać zdjęcie"/>
 			<text name="replace_texture_help">

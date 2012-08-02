@@ -7,6 +7,6 @@
 	<button label="Anuluj" name="cancel_btn" />
 	<button label="Wyczyść" name="clear_btn" />
 	<text name="loading_label">
-		Ładowanie...
+		Ładuję...
 	</text>
 </floater>

@@ -23,7 +23,7 @@
             Dostrój wys.:
         </text>
         <text name="Tag Offset" tool_tip="Zmienia przesunięcie tagów (imion) awatarów w osi Z (w górę lub w dół). Domyślnie 0">
-            Poz. tagów:
+            Pozycja tagów:
         </text>
         <text name="name_tags_textbox">
             Tagi imion:

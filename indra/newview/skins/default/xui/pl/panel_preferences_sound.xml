@@ -35,6 +35,9 @@
 			<text name="MaxMeters">
 				metry
 			</text>
+			<text name="money_change_threshold_label" tool_tip="Przeglądarka będzie odtwarzać 'dźwięk pieniędzy' tylko wtedy, gdy wydawana lub otrzymywana kwota jest wyższa niż wartość ustawiona tutaj.">
+				Próg zmiany ilości L$:
+			</text>
 		</panel>
 		<panel label="Rozmowy głosowe" name="Media Voice tab">
 			<check_box label="Włącz rozmowy głosowe" name="enable_voice_check"/>

@@ -16,6 +16,6 @@
     </panel>
   </tab_container>
   <panel label="bottom_panel" name="bottom_panel">
-    <button label="Kopiuj do schowka" name="copy_btn" />
+    <button label="Kopiuj do schowka" name="copy_btn" tool_tip="Kopiuj ograniczenia do schowka" />
   </panel>
 </floater>

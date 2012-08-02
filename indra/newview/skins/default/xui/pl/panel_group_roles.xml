@@ -63,7 +63,7 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 		<text name="role_title_label">
 			Tytuł funkcji
 		</text>
-		<check_box label="Publikuj pełniących funkcję" name="role_visible_in_list" tool_tip="Opcja ta pozwala określić widoczność członków pełniących tę funkcję dla ludzi spoza grupy."/>
+		<check_box label="Publikuj osoby z funkcją" name="role_visible_in_list" tool_tip="Opcja ta pozwala określić widoczność członków pełniących tę funkcję dla ludzi spoza grupy."/>
 		<text name="description_label">
 			Opis
 		</text>

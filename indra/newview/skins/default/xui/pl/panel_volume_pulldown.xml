@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="volumepulldown_floater">
     <slider label="Główny" name="System Volume"/>
-    <slider label="Przyciski" name="UI Volume"/>
+    <slider label="Interfejs" name="UI Volume"/>
     <slider label="Okolica" name="Wind Volume"/>
     <slider label="Efekty" name="SFX Volume"/>
     <check_box name="gesture_audio_play_btn" tool_tip="Włącz dźwięki gestów"/>

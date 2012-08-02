@@ -8,7 +8,7 @@
         </text>
         <check_box label="Włącz teleport przez dwuklik na mapie świata" name="FSWorldMapDoubleclickTeleport" tool_tip="Włącza teleportację do punktu docelowego przez podwójne kliknięcie klawiszem myszki na mapie świata."/>
         <check_box label="Wyłącz czarne ekrany teleportów" name="tp_screen_toggle" tool_tip="Wyłącza czarne ekrany podczas teleportowania się." />
-        <check_box label="Wyłącz znaki świetlne teleportów" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
+        <check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
         <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
@@ -26,7 +26,7 @@
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
         <check_box label="Pozwól skryptom na pokazywanie interfejsu mapy (llMapDestination)" name="ScriptsCanShowUI" />
         <text name="revokepermissions_txt">
-         Cofnij uprawnienia:
+         Cofnij zezwolenia:
          </text>
         <radio_group name="FSRevokePerms">
             <radio_item label="Nigdy (oryginalne zachowanie)" name="never_radio" />
