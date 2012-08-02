@@ -4522,6 +4522,9 @@ Denuncia de infracción
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
+	<string name="free">
+		gratis
+	</string>
 	<string name="Membership">
 		Membresía
 	</string>
