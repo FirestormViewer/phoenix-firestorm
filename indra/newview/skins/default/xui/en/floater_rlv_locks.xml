@@ -6,18 +6,16 @@
   can_resize="true"
   height="200"
   min_height="200"
-  min_width="513"
+  min_width="500"
   name="rlvLocks"
   save_rect="true"
   save_visibility="false"
   single_instance="true"
   reuse_instance="true"
   title="ACTIVE RLV LOCKS"
-  width="513">
+  width="500">
   <panel
     class="panel_rlvLocks"
     name="panel_rlvLocks"
-    filename="panel_rlv_locks.xml"
-    follows="all"
-    top="0"/>
+    filename="panel_rlv_locks.xml" />
 </floater>
