@@ -589,32 +589,48 @@ void LLMenuItemSeparatorGL::draw( void )
 BOOL LLMenuItemSeparatorGL::handleMouseDown(S32 x, S32 y, MASK mask)
 {
 	LLMenuGL* parent_menu = getMenu();
-	if (y > getRect().getHeight() / 2)
+// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
+	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
+	if (menu_item)
 	{
-		// the menu items are in the child list in bottom up order
-		LLView* prev_menu_item = parent_menu->findNextSibling(this);
-		return prev_menu_item ? prev_menu_item->handleMouseDown(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
+		return menu_item->handleMouseDown(x, y, mask);
 	}
-	else
-	{
-		LLView* next_menu_item = parent_menu->findPrevSibling(this);
-		return next_menu_item ? next_menu_item->handleMouseDown(x, 0, mask) : FALSE;
-	}
+	return LLMenuItemGL::handleMouseDown(x, y, mask);
+// [/SL:KB]
+//	if (y > getRect().getHeight() / 2)
+//	{
+//		// the menu items are in the child list in bottom up order
+//		LLView* prev_menu_item = parent_menu->findNextSibling(this);
+//		return prev_menu_item ? prev_menu_item->handleMouseDown(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
+//	}
+//	else
+//	{
+//		LLView* next_menu_item = parent_menu->findPrevSibling(this);
+//		return next_menu_item ? next_menu_item->handleMouseDown(x, 0, mask) : FALSE;
+//	}
 }
 
 BOOL LLMenuItemSeparatorGL::handleMouseUp(S32 x, S32 y, MASK mask) 
 {
 	LLMenuGL* parent_menu = getMenu();
-	if (y > getRect().getHeight() / 2)
+// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
+	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
+	if (menu_item)
 	{
-		LLView* prev_menu_item = parent_menu->findNextSibling(this);
-		return prev_menu_item ? prev_menu_item->handleMouseUp(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
+		return menu_item->handleMouseUp(x, y, mask);
 	}
-	else
-	{
-		LLView* next_menu_item = parent_menu->findPrevSibling(this);
-		return next_menu_item ? next_menu_item->handleMouseUp(x, 0, mask) : FALSE;
-	}
+	return LLMenuItemGL::handleMouseDown(x, y, mask);
+// [/SL:KB]
+//	if (y > getRect().getHeight() / 2)
+//	{
+//		LLView* prev_menu_item = parent_menu->findNextSibling(this);
+//		return prev_menu_item ? prev_menu_item->handleMouseUp(x, prev_menu_item->getRect().getHeight(), mask) : FALSE;
+//	}
+//	else
+//	{
+//		LLView* next_menu_item = parent_menu->findPrevSibling(this);
+//		return next_menu_item ? next_menu_item->handleMouseUp(x, 0, mask) : FALSE;
+//	}
 }
 
 BOOL LLMenuItemSeparatorGL::handleHover(S32 x, S32 y, MASK mask) 
