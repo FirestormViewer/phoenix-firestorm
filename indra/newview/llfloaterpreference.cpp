@@ -2808,6 +2808,7 @@ void LLPanelPreferenceOpensim::apply()
 void LLPanelPreferenceOpensim::cancel()
 {
 	LLGridManager::getInstance()->resetGrids();
+	LLPanelLogin::updateServer();
 }
 
 void LLPanelPreferenceOpensim::onClickAddGrid()
