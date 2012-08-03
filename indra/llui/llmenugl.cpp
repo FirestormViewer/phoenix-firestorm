@@ -89,7 +89,7 @@ const U32 SEPARATOR_HEIGHT_PIXELS = 8;
 const S32 TEAROFF_SEPARATOR_HEIGHT_PIXELS = 10;
 const S32 MENU_ITEM_PADDING = 4;
 
-const std::string SEPARATOR_NAME("separator");
+//const std::string SEPARATOR_NAME("separator");
 const std::string VERTICAL_SEPARATOR_LABEL( "|" );
 
 const std::string LLMenuGL::BOOLEAN_TRUE_PREFIX( "\xE2\x9C\x94" ); // U+2714 HEAVY CHECK MARK
@@ -2762,7 +2762,10 @@ LLMenuItemGL* LLMenuGL::highlightPrevItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	while(1)
 	{
 		// skip separators and disabled/invisible items
-		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
+//		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
+// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
+		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*prev_item_iter))
+// [/SL:KB]
 		{
 			(*prev_item_iter)->setHighlight(TRUE);
 			return (*prev_item_iter);
