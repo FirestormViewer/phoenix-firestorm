@@ -1,79 +1,15 @@
 <llsd>
-  <map>
-    <key>login.avination.net/</key>
-        <map>
-        <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
-        <key>about</key>
-            <string>https://login.avination.net/</string>
-        <key>grid_login_id</key>
-            <string>login.avination.net/</string>
-        <key>gridname</key>
-            <string>Avination</string>
-        <key>gridnick</key>
-            <string>craft</string>
-        <key>helperuri</key>
-            <string>https://secure.3dhosting.de/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>https://www.avination.com/welcome.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>login.avination.net/</string>
-            </array>
-        <key>name</key>
-            <string>login.avination.net/</string>
-        <key>register</key>
-            <string>https://www.avination.com/account.php</string>
-        <key>slurl_base</key>
-            <string>https://login.avination.net/</string>
-	</map>
-	    <key>grid.avatarconnection.com:8002/</key>
-        <map>
-        <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
-        <key>about</key>
-            <string>http://grid.avatarconnection.com:8002/</string>
-        <key>grid_login_id</key>
-            <string>grid.avatarconnection.com:8002/</string>
-        <key>gridname</key>
-            <string>Avatar Connection</string>
-        <key>gridnick</key>
-            <string>craft</string>
-        <key>helperuri</key>
-            <string>http://grid.avatarconnection.com:9000/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://avatarconnection.com/grid/index.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://grid.avatarconnection.com:8002/</string>
-            </array>
-        <key>name</key>
-            <string>grid.avatarconnection.com:8002/</string>
-        <key>register</key>
-            <string></string>
-        <key>slurl_base</key>
-            <string>http://grid.avatarconnection.com:8002/</string>
-	</map>
+    <map>
     <key>craft-world.org:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2012-08-03T15:33:03.16Z</date>
         <key>about</key>
             <string>http://www.craft-world.org/</string>
-        <key>grid_login_id</key>
+        <key>gatekeeper</key>
             <string>craft-world.org:8002</string>
         <key>gridname</key>
-            <string>Craft - The Friendly World</string>
+            <string>Craft World</string>
         <key>gridnick</key>
             <string>craft</string>
         <key>helperuri</key>
@@ -92,18 +28,16 @@
         <key>name</key>
             <string>craft-world.org:8002</string>
         <key>register</key>
-            <string>http://craft-world.org:8002/wifi/user/account</string>
+            <string>http://www.craft-world.org/page/en/register-an-avatar.php</string>
         <key>slurl_base</key>
             <string>hop://craft-world.org:8002/</string>
         </map>
     <key>grid.3rdrockgrid.com:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2012-08-03T15:32:54.31Z</date>
         <key>about</key>
             <string>http://3rdrockgrid.com/</string>
-        <key>grid_login_id</key>
-            <string>grid.3rdrockgrid.com:8002</string>
         <key>gridname</key>
             <string>3RD Rock Grid</string>
         <key>gridnick</key>
@@ -118,7 +52,7 @@
                 <string>account</string>
             </array>
         <key>loginpage</key>
-            <string>http://3rdrockgrid.com/startpage.php</string>
+            <string>http://grid.3rdrockgrid.com/3rg_login/</string>
         <key>loginuri</key>
             <array>
                 <string>http://grid.3rdrockgrid.com:8002/</string>
@@ -132,56 +66,55 @@
         <key>slurl_base</key>
             <string>hop://grid.3rdrockgrid.com:8002/</string>
         </map>
-    <key>grid.roleplayworlds.net:8002</key>
+    <key>grid.avatarconnection.com:8002/</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2012-08-03T15:36:57.31Z</date>
         <key>about</key>
-            <string>http://roleplayworlds.net</string>
-        <key>grid_login_id</key>
-            <string>grid.roleplayworlds.net:8002</string>
+            <string>http://avatarconnection.com/</string>
         <key>gridname</key>
-            <string>Role Play Worlds</string>
+            <string>Avatar Connection</string>
         <key>gridnick</key>
-            <string>roleplayworlds</string>
-        <key>help</key>
-            <string>http://roleplayworlds.net/help</string>
+            <string>AvatarConnection</string>
         <key>helperuri</key>
-            <string>http://grid.roleplayworlds.net/</string>
+            <string>http://grid.avatarconnection.com:9000/</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
         <key>loginpage</key>
-            <string>http://roleplayworlds.net/loginscreen</string>
+            <string>http://avatarconnection.com/grid/index.php</string>
         <key>loginuri</key>
             <array>
-                <string>http://grid.roleplayworlds.net:8002/</string>
+                <string>http://grid.avatarconnection.com:8002/</string>
             </array>
         <key>name</key>
-            <string>grid.roleplayworlds.net:8002</string>
-        <key>password</key>
-            <string>http://roleplayworlds.net/password</string>
+            <string>grid.avatarconnection.com:8002/</string>
         <key>register</key>
-            <string>http://roleplayworlds.net/register</string>
+            <string>http://avatarconnection.com/</string>
         <key>slurl_base</key>
-            <string>hop://grid.roleplayworlds.net:8002/</string>
+            <string>hop://grid.avatarconnection.com:8002//</string>
+        </map>
+    <key>grid.roleplayworlds.net:8002</key>
+        <map>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
+        <key>name</key>
+            <string>grid.roleplayworlds.net:8002</string>
         </map>
     <key>grid01.from-ne.com:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2012-08-03T15:36:53.60Z</date>
         <key>about</key>
             <string>http://www.youralternativelife.com</string>
-        <key>grid_login_id</key>
-            <string>grid01.from-ne.com:8002</string>
         <key>gridname</key>
             <string>Your Alternative Life</string>
         <key>gridnick</key>
             <string>YAL</string>
-        <key>helperuri</key>
-            <string>http://grid01.from-ne.com/tios/services/</string>
+        <key>help</key>
+            <string>http://grid01.from-ne.com/tios/support/</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
@@ -191,53 +124,21 @@
             <string>http://grid01.from-ne.com/tios/loginscreen3.php</string>
         <key>loginuri</key>
             <array>
-                <string>http://grid01.from-ne.com:8002</string>
+                <string>http://grid01.from-ne.com:8002/</string>
             </array>
         <key>name</key>
             <string>grid01.from-ne.com:8002</string>
+        <key>password</key>
+            <string>http://grid01.from-ne.com/tios/support/resetpw.php</string>
+        <key>register</key>
+            <string>http://grid01.from-ne.com/tios/support/createnew.php</string>
         <key>slurl_base</key>
             <string>hop://grid01.from-ne.com:8002/</string>
-        </map>
-    <key>inworldz.com:8002</key>
-        <map>
-        <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
-        <key>about</key>
-            <string>http://inworldz.com/</string>
-        <key>grid_login_id</key>
-            <string>inworldz.com:8002</string>
-        <key>gridname</key>
-            <string>Inworldz</string>
-        <key>gridnick</key>
-            <string>Inworldz</string>
-        <key>help</key>
-            <string>http://inworldz.com/faq.php</string>
-        <key>helperuri</key>
-            <string>http://inworldz.com/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://inworldz.com/loginscreen.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://inworldz.com:8002/</string>
-            </array>
-        <key>name</key>
-            <string>inworldz.com:8002</string>
-        <key>password</key>
-            <string>http://inworldz.com/</string>
-        <key>register</key>
-            <string>http://inworldz.com/register.php</string>
-        <key>slurl_base</key>
-            <string>hop://inworldz.com:8002/</string>
         </map>
     <key>localhost:9000</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2011-08-28T12:00:00Z</date>
         <key>grid_login_id</key>
             <string>localhost:9000</string>
         <key>gridname</key>
@@ -260,50 +161,53 @@
         <key>slurl_base</key>
             <string>hop://localhost:9000/</string>
         </map>
-    <key>login.danger.osgrid.org</key>
+    <key>login.avination.net/</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2012-08-03T15:33:01.02Z</date>
         <key>about</key>
-            <string>http://www.danger.osgrid.org/</string>
-        <key>grid_login_id</key>
-            <string>login.danger.osgrid.org</string>
+            <string>http://login.avination.net</string>
         <key>gridname</key>
-            <string>Danger Grid (OSGrid Testing)</string>
+            <string>Avination</string>
         <key>gridnick</key>
-            <string>osgrid_danger</string>
-        <key>help</key>
-            <string>http://www.danger.osgrid.org/</string>
+            <string>Avination</string>
         <key>helperuri</key>
-            <string>http://helper.danger.osgrid.org/</string>
+            <string>https://secure.3dhosting.de/</string>
         <key>login_identifier_types</key>
             <array>
                 <string>agent</string>
                 <string>account</string>
             </array>
         <key>loginpage</key>
-            <string>http://www.danger.osgrid.org/splash/</string>
+            <string>https://www.avination.com/welcome.php</string>
         <key>loginuri</key>
             <array>
-                <string>http://login.danger.osgrid.org/</string>
+                <string>https://login.avination.com</string>
             </array>
         <key>name</key>
-            <string>login.danger.osgrid.org</string>
+            <string>login.avination.net/</string>
         <key>password</key>
-            <string>http://www.danger.osgrid.org/</string>
+            <string>https://www.avination.com/pwrecover.php</string>
         <key>register</key>
-            <string>http://www.danger.osgrid.org/</string>
+            <string>https://www.avination.com/join.php</string>
         <key>slurl_base</key>
-            <string>hop://login.danger.osgrid.org/</string>
+            <string>hop://login.avination.net//</string>
+        </map>
+    <key>login.danger.osgrid.org</key>
+        <map>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
+        <key>name</key>
+            <string>login.danger.osgrid.org</string>
         </map>
     <key>login.osgrid.org</key>
         <map>
-		 <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+        <key>LastModified</key>
+            <date>2012-08-03T15:36:22.93Z</date>
         <key>about</key>
             <string>http://www.osgrid.org/</string>
-        <key>grid_login_id</key>
-            <string>login.osgrid.org</string>
+        <key>gatekeeper</key>
+            <string>hg.osgrid.org:80</string>
         <key>gridname</key>
             <string>OSGrid</string>
         <key>gridnick</key>
@@ -334,44 +238,15 @@
         </map>
     <key>reactiongrid.com:8008</key>
         <map>
-        <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
-        <key>about</key>
-            <string>http://reactiongrid.com/Default.aspx</string>
-        <key>grid_login_id</key>
-            <string>reactiongrid.com:8008</string>
-        <key>gridname</key>
-            <string>ReactionGrid</string>
-        <key>gridnick</key>
-            <string>ReactionGrid</string>
-        <key>help</key>
-            <string>http://reactiongrid.com/Support.aspx</string>
-        <key>helperuri</key>
-            <string>http://reactiongrid.com:9000/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://gsquared.info/portal</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://reactiongrid.com:8008/</string>
-            </array>
+        <key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>name</key>
             <string>reactiongrid.com:8008</string>
-        <key>password</key>
-            <string>http://www.reactiongrid.com/Support/PasswordReset.aspx</string>
-        <key>register</key>
-            <string>http://reactiongrid.com/Register.aspx</string>
-        <key>slurl_base</key>
-            <string>hop://reactiongrid.com:8008/</string>
         </map>
     <key>util.aditi.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2011-08-28T12:00:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>gridname</key>
@@ -396,13 +271,11 @@
             <string>secondlife://util.aditi.lindenlab.com/secondlife/</string>
         <key>system_grid</key>
             <integer>1</integer>
-        <key>app_slurl_base</key>
-            <string>secondlife:///app</string>
         </map>
     <key>util.agni.lindenlab.com</key>
         <map>
         <key>LastModified</key>
-            <date>2011-08-28T12:00:00.00Z</date>
+            <date>2011-08-28T12:00:00Z</date>
         <key>app_slurl_base</key>
             <string>secondlife:///app</string>
         <key>favorite</key>
@@ -427,8 +300,6 @@
             <string>util.agni.lindenlab.com</string>
         <key>slurl_base</key>
             <string>http://maps.secondlife.com/secondlife/</string>
-        <key>app_slurl_base</key>
-            <string>secondlife:///app</string>
         <key>system_grid</key>
             <integer>1</integer>
         </map>
