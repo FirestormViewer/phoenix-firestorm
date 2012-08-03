@@ -293,7 +293,7 @@ void LLGridManager::initGridList(std::string grid_file, AddState state)
 				try
 				{
 					addGrid(grid_entry, state);
-					LL_DEBUGS("GridManager") << "Added grid: " << key_name << LL_ENDL;
+					//LL_DEBUGS("GridManager") << "Added grid: " << key_name << LL_ENDL;
 				}
 				catch (...)
 				{
@@ -600,6 +600,11 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 		state = FAIL;
 	}
 
+	if (grid_entry->grid.has("USER_DELETED") || grid_entry->grid.has("DEPRECATED"))
+	{
+		state = REMOVE;
+	}
+
 	if ((FETCH == state) ||(FETCHTEMP == state) || (SYSTEM == state))
 	{
 		std::string grid = utf8str_tolower(grid_entry->grid[GRID_VALUE]);
@@ -804,6 +809,7 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 
 			if (!mGridList.has(grid)) //new grid
 			{
+				LL_DEBUGS("GridManager") << "new grid" << LL_ENDL;
 				if (!grid_entry->grid.has("USER_DELETED")
 					&& !grid_entry->grid.has("DEPRECATED"))
 				{
@@ -812,6 +818,13 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 					list_changed = true;// <FS:AW  grid management>
 					LL_DEBUGS("GridManager") << "Adding new entry: " << grid << LL_ENDL;
 				}
+				else if (grid_entry->grid.has("DEPRECATED"))
+				{
+					//add the deprecated entry but hide it
+					//so it doesn't get used from the user list
+					mGridList[grid] = grid_entry->grid;
+					LL_DEBUGS("GridManager") << "Marking entry as deprecated : " << grid << LL_ENDL;
+				}
 				else
 				{
 					LL_DEBUGS("GridManager") << "Removing entry marked for deletion: " << grid << LL_ENDL;
@@ -819,6 +832,8 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 			}
 			else
 			{
+				LL_DEBUGS("GridManager") << "existing grid" << LL_ENDL;
+
 				LLSD existing_grid = mGridList[grid];
 				if (existing_grid.has("DEPRECATED"))
 				{
