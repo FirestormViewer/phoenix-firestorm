@@ -4,10 +4,9 @@
   height="200"
   label="ACTIVE RLV LOCKS"
   layout="topleft"
-  left="9"
   name="panel_rlvLocks"
-  right="-8"
-  top="0">
+  top="0"
+  width="500">
   <scroll_list
     draw_border="false"
     draw_heading="true"
@@ -31,23 +30,23 @@
     layout="topleft"
     name="bottom_panel"
     top_pad="0" >
-  <button
-    image_hover_unselected="Toolbar_Left_Over"
-    image_overlay="Refresh_Off"
-    image_overlay_alignment="left"
-    image_selected="Toolbar_Left_Selected"
-    image_unselected="Toolbar_Left_Off"
-    label="Refresh"
-    left="0"
-    name="refresh_btn"
-    top="1"
-    width="74" />
-  <icon
-    follows="left|right"
-    image_name="Toolbar_Right_Off"
-    left_pad="1"
-    name="dummy_icon"
-    right="-1"
-    top="1"/>
+    <button
+      image_hover_unselected="Toolbar_Left_Over"
+      image_overlay="Refresh_Off"
+      image_overlay_alignment="left"
+      image_selected="Toolbar_Left_Selected"
+      image_unselected="Toolbar_Left_Off"
+      label="Refresh"
+      left="0"
+      name="refresh_btn"
+      top="1"
+      width="74" />
+    <icon
+      follows="left|right"
+      image_name="Toolbar_Right_Off"
+      left_pad="1"
+      name="dummy_icon"
+      top="1"
+      width="425" />
   </panel>
 </panel>

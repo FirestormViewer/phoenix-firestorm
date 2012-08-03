@@ -16,6 +16,10 @@
   width="500">
   <panel
     class="panel_rlvLocks"
+    filename="panel_rlv_locks.xml"
+    layout="topleft"
+    left="9" 
     name="panel_rlvLocks"
-    filename="panel_rlv_locks.xml" />
+    right="-8"
+    top="0" />
 </floater>
