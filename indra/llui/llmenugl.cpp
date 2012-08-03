@@ -2672,21 +2672,35 @@ LLMenuItemGL* LLMenuGL::highlightNextItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	while(1)
 	{
 		// skip separators and disabled/invisible items
-		if ((*next_item_iter)->getEnabled() && (*next_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter))
+// [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
+		bool fCanHighlight = ((*next_item_iter)->getVisible()) && (!dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter));
+		if ( (fCanHighlight) && ((*next_item_iter)->getEnabled()) )
 		{
-			if (cur_item)
-			{
-				cur_item->setHighlight(FALSE);
-			}
 			(*next_item_iter)->setHighlight(TRUE);
 			return (*next_item_iter);
 		}
 
-
-		if (!skip_disabled || next_item_iter == cur_item_iter)
+		// We always want to skip invisible items and separators so only break if it was actually disabled
+		if ( ((!skip_disabled) && (fCanHighlight)) || (next_item_iter == cur_item_iter) )
 		{
 			break;
 		}
+// [/SL:KB]
+//		if ((*next_item_iter)->getEnabled() && (*next_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*next_item_iter))
+//		{
+//			if (cur_item)
+//			{
+//				cur_item->setHighlight(FALSE);
+//			}
+//			(*next_item_iter)->setHighlight(TRUE);
+//			return (*next_item_iter);
+//		}
+//
+//
+//		if (!skip_disabled || next_item_iter == cur_item_iter)
+//		{
+//			break;
+//		}
 
 		next_item_iter++;
 		if (next_item_iter == mItems.end())
@@ -2762,19 +2776,30 @@ LLMenuItemGL* LLMenuGL::highlightPrevItem(LLMenuItemGL* cur_item, BOOL skip_disa
 	while(1)
 	{
 		// skip separators and disabled/invisible items
-//		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
 // [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
-		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && !dynamic_cast<LLMenuItemSeparatorGL*>(*prev_item_iter))
-// [/SL:KB]
+		bool fCanHighlight = ((*prev_item_iter)->getVisible()) && (!dynamic_cast<LLMenuItemSeparatorGL*>(*prev_item_iter));
+		if ( (fCanHighlight) && ((*prev_item_iter)->getEnabled()) )
 		{
 			(*prev_item_iter)->setHighlight(TRUE);
 			return (*prev_item_iter);
 		}
 
-		if (!skip_disabled || prev_item_iter == cur_item_iter)
+		// We always want to skip invisible items and separators (unless the iterator round-tripped)
+		if ( ((!skip_disabled) && (fCanHighlight)) || (prev_item_iter == cur_item_iter) )
 		{
 			break;
 		}
+// [/SL:KB]
+//		if ((*prev_item_iter)->getEnabled() && (*prev_item_iter)->getVisible() && (*prev_item_iter)->getName() != SEPARATOR_NAME)
+//		{
+//			(*prev_item_iter)->setHighlight(TRUE);
+//			return (*prev_item_iter);
+//		}
+//
+//		if (!skip_disabled || prev_item_iter == cur_item_iter)
+//		{
+//			break;
+//		}
 
 		prev_item_iter++;
 		if (prev_item_iter == mItems.rend())
