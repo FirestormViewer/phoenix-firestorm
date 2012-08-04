@@ -46,6 +46,7 @@ Windows Graphics Driver Version: [GRAPHICS_DRIVER_VERSION]
      name="AboutLibs">
 OpenGL Version: [OPENGL_VERSION]
 
+RestrainedLove API: [RLV_VERSION]
 libcurl Version: [LIBCURL_VERSION]
 J2C Decoder Version: [J2C_VERSION]
 Audio Driver Version: [AUDIO_DRIVER_VERSION]

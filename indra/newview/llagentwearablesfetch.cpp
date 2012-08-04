@@ -36,6 +36,9 @@
 // [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2011-09-10 (Catznip-3.0.0a)
 #include "llviewercontrol.h"
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c)
+#include "rlvhelper.h"
+// [/RLVa:KB]
 
 class LLOrderMyOutfitsOnDestroy: public LLInventoryCallback
 {
@@ -107,7 +110,14 @@ void LLInitialWearablesFetch::done()
 	// gInventory.notifyObservers.  The results will be handled in the next
 	// idle tick instead.
 	gInventory.removeObserver(this);
-	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+//	doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [RLVa:KB] - Checked: 2010-12-15 (RLVa-1.2.2c) | Added: RLVa-1.2.2c
+	F32 nDelay = gSavedSettings.getF32("ForceInitialCOFDelay");
+	if (0.0f == nDelay)
+		doOnIdleOneTime(boost::bind(&LLInitialWearablesFetch::processContents,this));
+	else
+		rlvCallbackTimerOnce(nDelay, boost::bind(&LLInitialWearablesFetch::processContents,this));
+// [/RLVa:KB]
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->getPhases().stopPhase("initial_wearables_fetch");
