@@ -1879,9 +1879,13 @@ S32 LLVOVolume::setTEColor(const U8 te, const LLColor4& color)
 	}
 	else if (color != tep->getColor())
 	{
-		if (color.mV[3] != tep->getColor().mV[3])
+		F32 old_alpha = tep->getColor().mV[3];
+		if (color.mV[3] != old_alpha)
 		{
 			gPipeline.markTextured(mDrawable);
+			//treat this alpha change as an LoD update since render batches may need to get rebuilt
+			mLODChanged = TRUE;
+			gPipeline.markRebuild(mDrawable, LLDrawable::REBUILD_VOLUME, FALSE);
 		}
 		retval = LLPrimitive::setTEColor(te, color);
 		if (mDrawable.notNull() && retval)
