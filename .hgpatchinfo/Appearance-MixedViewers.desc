@@ -1,0 +1,5 @@
+[Appearance/MixedViewers]
+- fixed : "Worn items in Viewer 2 and Viewer 1.x aren't synchronized" [see http://jira.secondlife.com/browse/VWR-17594]
+    -> current fix compares *only* the wearables in COF with the wearables specified by AgentWearablesUpdate
+    -> controlled by "VerifyInitialWearables" (defaults to FALSE with SL-3.0)
+- fixed : minor memory leak in LLInitialWearablesFetch::processWearablesMessage()
