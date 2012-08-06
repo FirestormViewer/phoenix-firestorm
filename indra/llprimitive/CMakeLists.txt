@@ -7,7 +7,6 @@ include(LLCommon)
 include(LLMath)
 include(LLMessage)
 include(LLXML)
-include(HACD)
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
@@ -16,7 +15,6 @@ include_directories(
     ${LLXML_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
-    ${HACD_INCLUDE_DIR}
     )
 
 set(llprimitive_SOURCE_FILES

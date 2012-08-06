@@ -18,7 +18,6 @@ include(JsonCpp)
 include(LLAudio)
 include(LLCharacter)
 include(LLCommon)
-include(LLConvexDecomposition)
 include(LLImage)
 include(LLImageJ2COJ)
 include(LLInventory)
@@ -77,7 +76,6 @@ include_directories(
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
-	${HACD_INCLUDE_DIR}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
 
@@ -1966,7 +1964,6 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLCONVEXDECOMP_LIBRARY}
     ${TCMALLOC_LIBRARIES}
     ${GROWL_LIBRARY}
-    ${HACD_LIBRARY}
     )
 	
 if (WINDOWS)
