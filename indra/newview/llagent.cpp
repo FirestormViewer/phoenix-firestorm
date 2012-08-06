@@ -90,6 +90,11 @@
 #include "llworld.h"
 #include "llworldmap.h"
 #include "stringize.h"
+// [RLVa:KB] - Checked: 2011-11-04 (RLVa-1.4.4a)
+#include "rlvhandler.h"
+#include "rlvhelper.h"
+#include "rlvui.h"
+// [/RLVa:KB]
 
 using namespace LLVOAvatarDefines;
 
@@ -340,7 +345,10 @@ LLAgent::LLAgent() :
 	mDoubleTapRunMode(DOUBLETAP_NONE),
 
 	mbAlwaysRun(false),
-	mbRunning(false),
+//	mbRunning(false),
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+	mbTempRun(false),
+// [/RLVa:KB]
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(new LLAgentAccess(gSavedSettings)),
@@ -694,6 +702,9 @@ void LLAgent::movePitch(F32 mag)
 // Does this parcel allow you to fly?
 BOOL LLAgent::canFly()
 {
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY)) return FALSE;
+// [/RLVa:KB]
 	if (isGodlike()) return TRUE;
 
 	LLViewerRegion* regionp = getRegion();
@@ -742,6 +753,13 @@ void LLAgent::setFlying(BOOL fly)
 
 	if (fly)
 	{
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0d) | Modified: RLVa-1.0.0c
+		if (gRlvHandler.hasBehaviour(RLV_BHVR_FLY))
+		{
+			return;
+		}
+// [/RLVa:KB]
+
 		BOOL was_flying = getFlying();
 		if (!canFly() && !was_flying)
 		{
@@ -804,7 +822,14 @@ bool LLAgent::enableFlying()
 
 void LLAgent::standUp()
 {
-	setControlFlags(AGENT_CONTROL_STAND_UP);
+//	setControlFlags(AGENT_CONTROL_STAND_UP);
+// [RLVa:KB] - Checked: 2010-03-07 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
+	if ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand()) )
+	{
+		setControlFlags(AGENT_CONTROL_STAND_UP);
+	}
+// [/RLVa:KB]
 }
 
 
@@ -893,7 +918,10 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 
 	LLSelectMgr::getInstance()->updateSelectionCenter();
 
-	LLFloaterMove::sUpdateFlyingStatus();
+//	LLFloaterMove::sUpdateFlyingStatus();
+// [RLVa:KB] - Checked: 2011-05-27 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
+	LLFloaterMove::sUpdateMovementStatus();
+// [/RLVa:KB]
 
 	if (teleport)
 	{
@@ -1100,7 +1128,14 @@ LLVector3d LLAgent::getPosGlobalFromAgent(const LLVector3 &pos_agent) const
 
 void LLAgent::sitDown()
 {
-	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+//	setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+// [RLVa:KB] - Checked: 2010-08-28 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+	// RELEASE-RLVa: [SL-2.0.0] Check this function's callers since usually they require explicit blocking
+	if ( (!rlv_handler_t::isEnabled()) || ((gRlvHandler.canStand()) && (!gRlvHandler.hasBehaviour(RLV_BHVR_SIT))) )
+	{
+		setControlFlags(AGENT_CONTROL_SIT_ON_GROUND);
+	}
+// [/RLVa:KB]
 }
 
 
@@ -2399,7 +2434,15 @@ void LLAgent::onAnimStop(const LLUUID& id)
 	}
 	else if (id == ANIM_AGENT_AWAY)
 	{
+//		clearAFK();
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Added: RLVa-1.1.0g
+#ifdef RLV_EXTENSION_CMD_ALLOWIDLE
+		if (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE))
+			clearAFK();
+#else
 		clearAFK();
+#endif // RLV_EXTENSION_CMD_ALLOWIDLE
+// [/RLVa:KB]
 	}
 	else if (id == ANIM_AGENT_STANDUP)
 	{
@@ -3065,7 +3108,36 @@ void LLAgent::sendAnimationRequest(const LLUUID &anim_id, EAnimRequest request)
 	sendReliableMessage();
 }
 
-void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::setAlwaysRun()
+{
+	mbAlwaysRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_ALWAYSRUN));
+	sendWalkRun();
+}
+
+void LLAgent::setTempRun()
+{
+	mbTempRun = (!rlv_handler_t::isEnabled()) || (!gRlvHandler.hasBehaviour(RLV_BHVR_TEMPRUN));
+	sendWalkRun();
+}
+
+void LLAgent::clearAlwaysRun()
+{
+	mbAlwaysRun = false;
+	sendWalkRun();
+}
+
+void LLAgent::clearTempRun()
+{
+	mbTempRun = false;
+	sendWalkRun();
+}
+// [/RLVa:KB]
+
+//void LLAgent::sendWalkRun(bool running)
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+void LLAgent::sendWalkRun()
+// [/RLVa:KB]
 {
 	LLMessageSystem* msgsys = gMessageSystem;
 	if (msgsys)
@@ -3074,7 +3146,10 @@ void LLAgent::sendWalkRun(bool running)
 		msgsys->nextBlockFast(_PREHASH_AgentData);
 		msgsys->addUUIDFast(_PREHASH_AgentID, getID());
 		msgsys->addUUIDFast(_PREHASH_SessionID, getSessionID());
-		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+//		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(running) );
+// [RLVa:KB] - Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
+		msgsys->addBOOLFast(_PREHASH_AlwaysRun, BOOL(getRunning()) );
+// [/RLVa:KB]
 		sendReliableMessage();
 	}
 }
@@ -3959,6 +4034,18 @@ void LLAgent::teleportRequest(
 // Landmark ID = LLUUID::null means teleport home
 void LLAgent::teleportViaLandmark(const LLUUID& landmark_asset_id)
 {
+// [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+	// NOTE: we'll allow teleporting home unless both @tplm=n *and* @tploc=n restricted
+	if ( (rlv_handler_t::isEnabled()) &&
+		 ( ( (landmark_asset_id.notNull()) ? gRlvHandler.hasBehaviour(RLV_BHVR_TPLM)
+		                                   : gRlvHandler.hasBehaviour(RLV_BHVR_TPLM) && gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC) ) ||
+		   ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (isAgentAvatarValid()) && (gAgentAvatarp->isSitting())) ))
+	{
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+		return;
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLandmark(landmark_asset_id));
 	startTeleportRequest();
 }
@@ -4038,6 +4125,25 @@ void LLAgent::teleportCancel()
 
 void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-03-02 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) )
+	{
+		// If we're getting teleported due to @tpto we should disregard any @tploc=n or @unsit=n restrictions from the same object
+		if ( (gRlvHandler.hasBehaviourExcept(RLV_BHVR_TPLOC, gRlvHandler.getCurrentObject())) ||
+		     ( (isAgentAvatarValid()) && (gAgentAvatarp->isSitting()) && 
+			   (gRlvHandler.hasBehaviourExcept(RLV_BHVR_UNSIT, gRlvHandler.getCurrentObject()))) )
+		{
+			RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+			return;
+		}
+
+		if ( (gRlvHandler.getCurrentCommand()) && (RLV_BHVR_TPTO == gRlvHandler.getCurrentCommand()->getBehaviourType()) )
+		{
+			gRlvHandler.setCanCancelTp(false);
+		}
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLocation(pos_global));
 	startTeleportRequest();
 }
@@ -4086,6 +4192,16 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 // Teleport to global position, but keep facing in the same direction 
 void LLAgent::teleportViaLocationLookAt(const LLVector3d& pos_global)
 {
+// [RLVa:KB] - Checked: 2010-10-07 (RLVa-1.2.1f) | Added: RLVa-1.2.1f
+	// RELEASE-RLVa: [SL-2.2.0] Make sure this isn't used for anything except double-click teleporting
+	if ( (rlv_handler_t::isEnabled()) && (!RlvUtil::isForceTp()) && 
+		 ((gRlvHandler.hasBehaviour(RLV_BHVR_SITTP)) || (!gRlvHandler.canStand())) )
+	{
+		RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_TELEPORT);
+		return;
+	}
+// [/RLVa:KB]
+
 	mTeleportRequest = LLTeleportRequestPtr(new LLTeleportRequestViaLocationLookAt(pos_global));
 	startTeleportRequest();
 }
@@ -4288,7 +4404,11 @@ void LLAgent::sendAgentSetAppearance()
 	// NOTE -- when we start correcting all of the other Havok geometry 
 	// to compensate for the COLLISION_TOLERANCE ugliness we will have 
 	// to tweak this number again
-	const LLVector3 body_size = gAgentAvatarp->mBodySize;
+//	const LLVector3 body_size = gAgentAvatarp->mBodySize;
+// [RLVa:KB] - Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+	LLVector3 body_size = gAgentAvatarp->mBodySize;
+	body_size.mV[VZ] += RlvSettings::getAvatarOffsetZ();
+// [/RLVa:KB]
 	msg->addVector3Fast(_PREHASH_Size, body_size);	
 
 	// To guard against out of order packets

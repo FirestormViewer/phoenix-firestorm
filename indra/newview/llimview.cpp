@@ -63,7 +63,9 @@
 #include "lltoolbarview.h"
 #include "llviewercontrol.h"
 #include "llviewerparcelmgr.h"
-
+// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
@@ -3258,6 +3260,20 @@ public:
 			{
 				return;
 			}
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_RECVIMFROM)) )
+			{
+				if (gAgent.isInGroup(session_id))						// Group chat: don't accept the invite if not an exception
+				{
+					if (!gRlvHandler.canReceiveIM(session_id))
+						return;
+				}
+				else if (!gRlvHandler.canReceiveIM(from_id))			// Conference chat: don't block; censor if not an exception
+				{
+					message = RlvStrings::getString(RLV_STRING_BLOCKED_RECVIM);
+				}
+			}
+// [/RLVa:KB]
 
 			// standard message, not from system
 			std::string saved;

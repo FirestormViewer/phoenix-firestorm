@@ -49,6 +49,10 @@
 #include "llvoavatarself.h"
 #include "llgesturemgr.h"
 #include <typeinfo>
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 //#define DIFF_INVENTORY_FILES
 #ifdef DIFF_INVENTORY_FILES
@@ -609,6 +613,28 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 	LLViewerInventoryItem* item = NULL;
 	item_array_t* item_array = get_ptr_in_map(mParentChildItemTree, id);
 
+	// Move onto items
+	if(item_array)
+	{
+		S32 count = item_array->count();
+		for(S32 i = 0; i < count; ++i)
+		{
+			item = item_array->get(i);
+			if(add(NULL, item))
+			{
+				items.put(item);
+			}
+		}
+	}
+
+// [RLVa:KB] - Checked: 2010-09-30 (RLVa-1.2.1d) | Added: RLVa-1.2.1d
+	// The problem is that we want some way for the functor to know that it's being asked to decide on a folder link
+	// but it won't know that until after it has encountered the folder link item (which doesn't happen until *after* 
+	// it has already collected all items from it the way the code was originally laid out)
+	// This breaks the "finish collecting all folders before collecting items (top to bottom and then bottom to top)" 
+	// assumption but no functor is (currently) relying on it (and likely never should since it's an implementation detail?)
+	// [Only LLAppearanceMgr actually ever passes in 'follow_folder_links == TRUE']
+// [/RLVa:KB]
 	// Follow folder links recursively.  Currently never goes more
 	// than one level deep (for current outfit support)
 	// Note: if making it fully recursive, need more checking against infinite loops.
@@ -635,20 +661,6 @@ void LLInventoryModel::collectDescendentsIf(const LLUUID& id,
 					}
 					collectDescendentsIf(linked_cat->getUUID(), cats, items, include_trash, add, FALSE);
 				}
-			}
-		}
-	}
-	
-	// Move onto items
-	if(item_array)
-	{
-		S32 count = item_array->count();
-		for(S32 i = 0; i < count; ++i)
-		{
-			item = item_array->get(i);
-			if(add(NULL, item))
-			{
-				items.put(item);
 			}
 		}
 	}
@@ -2735,6 +2747,14 @@ void LLInventoryModel::processSaveAssetIntoInventory(LLMessageSystem* msg,
 		llinfos << "LLInventoryModel::processSaveAssetIntoInventory item"
 			" not found: " << item_id << llendl;
 	}
+
+// [RLVa:KB] - Checked: 2010-03-05 (RLVa-1.2.0a) | Added: RLVa-0.2.0e
+	if (rlv_handler_t::isEnabled())
+	{
+		RlvAttachmentLockWatchdog::instance().onSavedAssetIntoInventory(item_id);
+	}
+// [/RLVa:KB]
+
 	if(gViewerWindow)
 	{
 		gViewerWindow->getWindow()->decBusyCount();
@@ -2785,6 +2805,20 @@ void LLInventoryModel::processBulkUpdateInventory(LLMessageSystem* msg, void**)
 			{
 				if(tfolder->getParentUUID() == folderp->getParentUUID())
 				{
+// [RLVa:KB] - Checked: 2010-04-18 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
+					// NOTE-RLVa: not sure if this is a hack or a bug-fix :o
+					//		-> if we rename the folder on the first BulkUpdateInventory message subsequent messages will still contain
+					//         the old folder name and gInventory.updateCategory() below will "undo" the folder name change but on the
+					//         viewer-side *only* so the folder name actually becomes out of sync with what's on the inventory server
+					//      -> so instead we keep the name of the existing folder and only do it for #RLV/~ in case this causes issues
+					//		-> a better solution would be to only do the rename *after* the transaction completes but there doesn't seem
+					//		   to be any way to accomplish that either *sighs*
+					if ( (rlv_handler_t::isEnabled()) && (!folderp->getName().empty()) && (tfolder->getName() != folderp->getName()) &&
+						 ((tfolder->getName().find(RLV_PUTINV_PREFIX) == 0)) )
+					{
+						tfolder->rename(folderp->getName());
+					}
+// [/RLVa:KB]
 					update[tfolder->getParentUUID()];
 				}
 				else

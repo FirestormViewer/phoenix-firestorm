@@ -64,6 +64,10 @@
 #include "lltextbase.h"
 #include "llstring.h"
 #include "lltrans.h"
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
+#include "llslurl.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 ///----------------------------------------------------------------------------
 /// Class llsidepaneltaskinfo
@@ -373,8 +377,9 @@ void LLSidepanelTaskInfo::refresh()
 	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID,
 																	  creator_name);
 
-	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
-	getChildView("Creator Name")->setEnabled(TRUE);
+//	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
+//	getChildView("Creator Name")->setEnabled(TRUE);
+// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
 
 	// Update owner text field
 	getChildView("Owner:")->setEnabled(TRUE);
@@ -402,8 +407,28 @@ void LLSidepanelTaskInfo::refresh()
 			}
 		}
 	}
+//	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
+//	getChildView("Owner Name")->setEnabled(TRUE);
+// [RLVa:KB] - Moved further down to avoid an annoying flicker when the text is set twice in a row
+
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
+	{
+		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
+		if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
+			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
+
+		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
+		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )
+			owner_name = LLSLURL("agent", mOwnerID, "rlvanonym").getSLURLString();
+	}
+
+	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
+	getChildView("Creator Name")->setEnabled(TRUE);
+
 	getChild<LLUICtrl>("Owner Name")->setValue(owner_name);
 	getChildView("Owner Name")->setEnabled(TRUE);
+// [/RLVa:KB]
 
 	// update group text field
 	getChildView("Group:")->setEnabled(TRUE);

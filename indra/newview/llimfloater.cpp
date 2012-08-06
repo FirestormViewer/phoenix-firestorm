@@ -57,6 +57,9 @@
 #include "llspeakers.h"
 #include "llviewerchat.h"
 #include "llautoreplace.h"
+// [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 LLIMFloater::LLIMFloater(const LLUUID& session_id)
   : LLTransientDockableFloater(NULL, true, session_id),
@@ -206,6 +209,56 @@ void LLIMFloater::sendMsg()
 			std::string utf8_text = wstring_to_utf8str(text);
 			utf8_text = utf8str_truncate(utf8_text, MAX_MSG_BUF_SIZE - 1);
 			
+// [RLVa:KB] - Checked: 2010-11-30 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
+			if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIM)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SENDIMTO)) )
+			{
+				LLIMModel::LLIMSession* pIMSession = LLIMModel::instance().findIMSession(mSessionID);
+				RLV_ASSERT(pIMSession);
+
+				bool fRlvFilter = !pIMSession;
+				if (pIMSession)
+				{
+					switch (pIMSession->mSessionType)
+					{
+						case LLIMModel::LLIMSession::P2P_SESSION:	// One-on-one IM
+							fRlvFilter = !gRlvHandler.canSendIM(mOtherParticipantUUID);
+							break;
+						case LLIMModel::LLIMSession::GROUP_SESSION:	// Group chat
+							fRlvFilter = !gRlvHandler.canSendIM(mSessionID);
+							break;
+						case LLIMModel::LLIMSession::ADHOC_SESSION:	// Conference chat: allow if all participants can be sent an IM
+							{
+								if (!pIMSession->mSpeakers)
+								{
+									fRlvFilter = true;
+									break;
+								}
+
+								LLSpeakerMgr::speaker_list_t speakers;
+								pIMSession->mSpeakers->getSpeakerList(&speakers, TRUE);
+								for (LLSpeakerMgr::speaker_list_t::const_iterator itSpeaker = speakers.begin(); 
+										itSpeaker != speakers.end(); ++itSpeaker)
+								{
+									const LLSpeaker* pSpeaker = *itSpeaker;
+									if ( (gAgent.getID() != pSpeaker->mID) && (!gRlvHandler.canSendIM(pSpeaker->mID)) )
+									{
+										fRlvFilter = true;
+										break;
+									}
+								}
+							}
+							break;
+						default:
+							fRlvFilter = true;
+							break;
+					}
+				}
+
+				if (fRlvFilter)
+					utf8_text = RlvStrings::getString(RLV_STRING_BLOCKED_SENDIM);
+			}
+// [/RLVa:KB]
+
 			if (mSessionInitialized)
 			{
 				LLIMModel::sendMessage(utf8_text, mSessionID,
