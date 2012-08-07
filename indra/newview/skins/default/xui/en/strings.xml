@@ -2037,8 +2037,8 @@ llGetPhysicsMaterial() returns the gravity multiplier, restitution, friction, an
 llGetMassMKS() returns the mass of the linkset in kilograms.
 	</string>
 	<string name="LSLTipText_llGenerateKey" translate="false">
-llGenerateKey()
-Retun a unique generated key
+key llGenerateKey()
+Return a unique generated key
 	</string>
 	<string name="LSLTipText_llSetKeyframedMotion" translate="false">
 llSetKeyframedMotion(list keyframes, list options)
