@@ -209,7 +209,10 @@ void LLGridManager::initialize(const std::string& grid_file)
 		if ( ! getGrid(last_grid).empty() )
 		{
 			LL_INFOS("GridManager")<<"Using last grid: "<<last_grid<<LL_ENDL;
-			mGrid = last_grid;
+// <FS:AW last grid might be unknown switching between SL/OpenSim flavour>
+//			mGrid = last_grid;
+			mGrid = getGrid(last_grid);
+// </FS:AW last grid might be unknown switching between SL/OpenSim flavour>
 		}
 		else
 		{
