@@ -163,6 +163,11 @@
 			<menu_item_call label="Skripte in Auswahl löschen" name="Remove Scripts From Selection"/>
 			<menu_item_call label="Skript-Info (Counter)" name="Script Info"/>
 		</menu>
+		<menu label="Pathfinding" name="Pathfinding">
+			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Charaktere..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Anzeigen / Testen..." name="pathfinding_console_menu_item"/>
+		</menu>
 		<menu label="Optionen" name="Options">
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
 			<menu_item_check label="Nur meine Objekte auswählen" name="Select Only My Objects"/>

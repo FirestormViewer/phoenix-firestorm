@@ -172,6 +172,12 @@
 			<panel.string name="text modify info 4">
 				Sie können diese Objekte nicht bearbeiten.
 			</panel.string>
+			<panel.string name="text modify info 5">
+				Sie können das Objekt nicht über Regionsgrenzen bearbeiten.
+			</panel.string>
+			<panel.string name="text modify info 6">
+				Sie können diese Objekte nicht über Regionsgrenzen bearbeiten.
+			</panel.string>
 			<panel.string name="text modify warning">
 				Ganzes Objekt wählen um Rechte festzulegen.
 			</panel.string>
@@ -224,12 +230,12 @@
 				<combo_box.item label="Zoom" name="Zoom"/>
 			</combo_box>
 			<check_box label="Zum Verkauf:" name="checkbox for sale"/>
+			<spinner label="Preis: L$" name="Edit Cost"/>
 			<combo_box name="sale type">
 				<combo_box.item label="Kopie" name="Copy"/>
 				<combo_box.item label="Inhalt" name="Contents"/>
 				<combo_box.item label="Original" name="Original"/>
 			</combo_box>
-			<spinner label="Preis: L$" name="Edit Cost"/>
 			<button label="Anwenden" name="button mark for sale" tool_tip="Objekt(e) zum Verkauf anbieten/aktualisieren."/>
 			<button label="UUIDs kopieren" name="btnCopyKeys" tool_tip="Kopiert die Schüssel der ausgewählten Objekte in die Zwischenablage." width="110"/>
 			<check_box label="In Suche anzeigen" name="search_check" tool_tip="Dieses Objekt in Suchergebnissen anzeigen"/>
@@ -265,6 +271,13 @@
 				</text>
 				<text name="F:">
 					F:
+				</text>
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Pathfinding-Attribute:
+				</text>
+				<text name="pathfinding_attributes_value">
 				</text>
 			</panel>
 		</panel>

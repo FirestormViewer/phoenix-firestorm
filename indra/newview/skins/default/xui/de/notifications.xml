@@ -37,6 +37,12 @@
 			<button name="Help" text="$helptext"/>
 		</form>
 	</template>
+	<template name="okhelpignore">
+		<form>
+			<button name="OK_okhelpignore" text="$yestext"/>
+			<button name="Help_okhelpignore" text="$helptext"/>
+		</form>
+	</template>
 	<template name="yesnocancelbuttons">
 		<form>
 			<button name="Yes" text="$yestext"/>
@@ -606,6 +612,9 @@ Sie können maximal [MAX] Objekte verknüpfen.
 		Verknüpfung nicht möglich, da Sie nicht alle Objekte bearbeiten dürfen.
 
 Stellen Sie sicher, dass kein Objekt gesperrt ist und alle Objekte Ihnen gehören.
+	</notification>
+	<notification name="CannotLinkPermanent">
+		Objekte können nicht über Regionsgrenzen hinweg verknüpft werden.
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
 		Verknüpfung nicht möglich, da nicht alle Objekte denselben Eigentümer haben.
@@ -2424,6 +2433,24 @@ Fliegen ist hier nicht möglich.
 	<notification name="NoBuild">
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
 	</notification>
+	<notification name="PathfindingDirty">
+		Die Region enthält ausstehende Pathfinding-Änderungen. Sofern Sie Baurechte besitzen, können Sie die Region aktualisieren, indem Sie auf den „Rebake region“-Button klicken.
+	</notification>
+	<notification name="DynamicPathfindingDisabled">
+		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Objekte mit LSL-Skripten, die Pathfinding-Funktionen nutzen, funktionieren eventuell nicht wie vorgesehen.
+	</notification>
+	<notification name="PathfindingRebakeNavmesh">
+		Das Ändern bestimmter Objekte innerhalb dieser Region kann dazu führen, dass sich andere bewegende Objekte fehlerhaft verhalten. Auf den „Rebake region“-Button klicken, damit sich bewegende Objekte korrekt verhalten. Klicken Sie auf „Hilfe“ für weitere Informationen.
+		<usetemplate
+			name="okhelpignore"
+			ignoretext="Ändern bestimmter Objekte innerhalb dieser Region kann dazu führen, dass sich andere bewegende Objekte fehlerhaft verhalten."
+			yestext="OK"
+			helptext="Hilfe" />
+	</notification>
+	<notification name="PathfindingCannotRebakeNavmesh">
+		Es ist ein Fehler aufgetreten. Es kann sich um ein Netzwerk- oder Serverproblem handeln oder Sie besitzen keine Baurechte. Manchmal behebt ein Aus- und erneutes Einloggen dieses Problem.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 	<notification name="SeeAvatars">
 		Diese Parzelle verbirgt Avatare und Text-Chat vor einer anderen Parzelle.   Sie können Einwohner außerhalb dieser Parzelle weder sehen noch von ihnen gesehen werden.  Regulärer Text-Chat auf Kanal 0 ist ebenfalls blockiert.
 	</notification>
@@ -3144,6 +3171,39 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 		Durch diese Aktion werden alle Menüelemente und Schaltflächen ausgeblendet. Um sie wieder anzuzeigen, klicken Sie erneut auf [SHORTCUT].
 		<usetemplate ignoretext="Vor Ausblenden der UI bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestricted">
+		Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Berechtigungen unzureichend sind. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+		<usetemplate
+			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnVolume">
+		Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist.
+		<usetemplate
+			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Form keine konvexe Hülle ist."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestrictedAndVolume">
+		Einige Linksets können wegen eingeschränkter Berechtigungen nicht auf '[REQUESTED_TYPE]' gesetzt werden. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+ Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist. Die Typen dieser Linksets werden nicht geändert.
+		<usetemplate
+			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind und die Form keine konvexe Hülle ist."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
+		Die ausgewählten Objekte haben Einfluss auf den Navmesh. Beim Ändern in einen Flexiblen Pfad werden sie vom Navmesh entfernt.
+		<usetemplate
+			ignoretext="Die ausgewählten Objekte haben Einfluss auf den Navmesh. Beim Ändern in einen Flexiblen Pfad werden sie vom Navmesh entfernt."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Ihr Computer entspricht nicht den Hardwareanforderungen von [APP_NAME]. [APP_NAME] setzt eine OpenGL-Grafikkarte mit Multitextur-Unterstützung voraus. Falls Ihre Grafikkarte diese Funktion unterstützt, installieren Sie die neuesten Treiber sowie die aktuellen Service Packs und Patches für Ihr Betriebssystem.
 
@@ -3292,12 +3352,15 @@ Dieses wird die folgenden Informationen an die aktuelle IM-Sitzung senden:
     <usetemplate name="okcancelbuttons" yestext="Senden" notext="Abbrechen" />
   </notification>
 
-  <notification name="InvalidGrid" type="alertmodal">
+  <notification name="InvalidGrid">
 '[GRID]' ist kein gültiger Gridname oder Adresse.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
   </notification>
+	<notification name="InvalidLocationSLURL">
+		Der Start-Ort enthielt kein gültiges Grid.
+	</notification>
 
 <!-- fsdata -->
   <notification name="BlockLoginInfo">
@@ -3529,6 +3592,22 @@ Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
 	<notification name="LocalBitmapsVerifyFail">
 Es wurde versucht eine ungültige oder unlesbare Grafikdatei [FNAME] hinzuzufügen, die nicht geöffnet oder dekodiert werden konnte.
 Hinzufügen wurde abgebrochen.
+	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Sie möchten [NUM_ITEMS] Objekte zurückgeben. Sind Sie sicher, dass Sie fortfahren möchten?
+		<usetemplate
+			ignoretext="Sind sie sicher, dass Sie mehrere Objekte zurückgeben möchten?"
+			name="okcancelignore"
+			notext="Nein"
+			yestext="Ja"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Sie möchten [NUM_ITEMS] Objekte löchen. Sind Sie sicher, dass Sie fortfahren möchten?
+		<usetemplate
+			ignoretext="Sind sie sicher, dass Sie mehrere Objekte löschen möchten?"
+			name="okcancelignore"
+			notext="Nein"
+			yestext="Ja"/>
 	</notification>
 
   <!-- <FS:Zi> Add float LSL color entry widgets -->
