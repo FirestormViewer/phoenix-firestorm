@@ -200,6 +200,7 @@ public:
 	bool isHyperGrid(const std::string& grid) { return mGridList[grid].has("HG"); }
 
 	// tell if we know how to acess this grid via Hypergrid
+	std::string getGatekeeper() { return getGatekeeper(mGrid); }
 	std::string getGatekeeper(const std::string& grid) { return mGridList[grid].has("gatekeeper") ? mGridList[grid]["gatekeeper"].asString() : std::string(); }
 	
 	std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);

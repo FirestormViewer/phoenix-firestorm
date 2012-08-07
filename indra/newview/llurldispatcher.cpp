@@ -346,7 +346,7 @@ public:
 				return true;
 			}
 		}
-		else if(!gatekeeper.empty() && gatekeeper != LLGridManager::getInstance()->getGatekeeper(grid))
+		else if(!gatekeeper.empty() && gatekeeper != LLGridManager::getInstance()->getGatekeeper())
 		{
 			region_name = gatekeeper + ":" + region_name;
 		}
