@@ -128,6 +128,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 				  DEFAULT_LOGIN_PAGE,
 				  "Aditi");
 
+#if 0 //<FS:AW disabled for meeting havok sublicense requirements/>
 	LLSD other_grids;
 	llifstream llsd_xml;
 	if (!grid_file.empty())
@@ -179,6 +180,7 @@ void LLGridManager::initialize(const std::string& grid_file)
 	{
 		LL_DEBUGS("GridManager")<<"no grid file specified"<<LL_ENDL;
 	}
+#endif //<FS:AW disabled for meeting havok sublicense requirements/>
 
 	// load a grid from the command line.
 	// if the actual grid name is specified from the command line,
