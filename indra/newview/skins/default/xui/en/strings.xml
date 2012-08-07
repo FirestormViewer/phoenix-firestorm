@@ -1980,12 +1980,14 @@ llScriptProfiler(integer flags)
 Enabled or disables script profiling options. Currently only supports PROFILE_SCRIPT_MEMORY (mono only) and PROFILE_NONE.
 MAY SIGNIFICANTLY REDUCE SCRIPT PERFORMANCE!
 	</string>
+<!-- FS:Ansariel: We already have a better version added previously
 	<string name="LSLTipText_llSetMemoryLimit" translate="false">
 integer llSetMemoryLimit(integer mem)
 	</string>
 	<string name="LSLTipText_llGetMemoryLimit" translate="false">
 integer llGetMemoryLimit()
 	</string>
+-->
 	<string name="LSLTipText_llSetLinkMedia" translate="false">
 llSetLinkMedia(integer link, integer face, list params)
 Set the media params for a particular face on linked prim.  List is a set of name/value pairs (in no particular order). The possible names are below, along with the types of values and what they mean.  If media is not already on this object, add it. Params not specified are unchanged, or if new media is added set to the default specified.
@@ -1998,9 +2000,11 @@ Get the media params for a particular face on linked prim, given the desired lis
 llClearLinkMedia(integer link, integer face)
 Clears (deletes) the media and all params from the given face on linked prim.
 	</string>
+<!-- FS:Ansariel: We already have a better version added previously
 	<string name="LSLTipText_llSetContentType" translate="false">
 llSetContentType(key id, integer content_type)
 	</string>
+-->
 	<string name="LSLTipText_llLinkSitTarget" translate="false">
 llLinkSitTarget(integer link, vector offset, rotation rot)
 Set the sit location for this object (if offset == &lt;0,0,0&gt; clear it)
@@ -2009,9 +2013,11 @@ Set the sit location for this object (if offset == &lt;0,0,0&gt; clear it)
 key llAvatarOnLinkSitTarget(integer link)
 If an avatar is sitting on the sit target, return the avatar&apos;s key, NULL_KEY otherwise
 	</string>
+<!-- FS:Ansariel: We already have a better version added previously
 	<string name="LSLTipText_llSetLinkCamera" translate="false">
 llSetLinkCamera(integer link, vector eye, vector at)
 	</string>
+-->
 	<string name="LSLTipText_llSetVelocity" translate="false">
 llSetVelocity(vector velocity, integer local)
 Sets an objects velocity, in local coords if local == TRUE (if the script is physical)
@@ -2107,23 +2113,6 @@ integer llGetUsedMemory()
 Get the maximum memory a script can use.
 Returns the integer amount of memory the script can use in bytes.
 </string>
-<string name="LSLTipText_llSetLinkMedia" translate="false">
-integer llSetLinkMedia(integer link, integer face, list params)
-Set the media params for a particular face on the 'link'ed prim without a delay.
-Returns an integer that is flag (STATUS_OK when sucessful, another of the STATUS_* flags on failure) which details the success/failure of the operation(s).
-Takes the same parameters as llSetPrimMediaParams()
-</string>
-<string name="LSLTipText_llGetLinkMedia" translate="false">
-list llGetLinkMedia(integer link, integer face, list params)
-Get the media params for a particular face on a 'link'ed prim(s), given the desired list of named params.
-Returns a list of values in the order requested (empty list if no media exists on the face).
-Takes the same parameters as llGetPrimMediaParams()
-</string>
-<string name="LSLTipText_llClearLinkMedia" translate="false">
-integer llClearLinkMedia(integer link, integer face)
-Clears (deletes) the media and all params from the given face on the linked prim(s).
-Returns an integer that is flag (STATUS_OK when sucessful, another of the STATUS_* flags on failure) which details the success/failure of the operation(s).
-</string>
 <string name="LSLTipText_llSetLinkCamera" translate="false">
 llSetLinkCamera(integer link, vector eye, vector at)
 Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.
@@ -2134,94 +2123,12 @@ llSetContentType(key request_id, integer content_type)
 Set the Internet media type of an LSL HTTP server response.
 content_type may be one of CONTENT_TYPE_TEXT (default) "text/plain", or CONTENT_TYPE_HTML "text/html", only valid for embedded browsers on content owned by the person viewing. Falls back to "text/plain" otherwise.
 </string>
-<string name="LSLTipText_llLinkSitTarget" translate="false">
-llLinkSitTarget(integer link, vector offset, rotation rot)
-Set the sit location for the 'link'ed prim(s). The sit location is relative to the prim's position and rotation.
-Equivalent to calling llSitTarget on link prim(s) in the link set.
-</string>
-<string name="LSLTipText_llAvatarOnLinkSitTarget" translate="false">
-key llAvatarOnLinkSitTarget(integer link)
-Returns a key that is the UUID of the user seated on the 'link'ed prim.
-Equivalent to calling llAvatarOnSitTarget on link prim in the link set.
-</string>
-<string name="LSLTipText_llSetVelocity" translate="false">
-llSetVelocity(vector force, integer local)
-Applies velocity with 'force' to object and 'local' a boolean (if TRUE, force is treated as a local directional vector instead of region directional vector).
-</string>
-<string name="LSLTipText_llSetAngularVelocity" translate="false">
-llSetAngularVelocity(vector force, integer local)
-Applies rotational velocity with 'force' to object and 'local' a boolean (if TRUE uses local axis, if FALSE uses region axis).
-</string>
-<string name="LSLTipText_llCastRay" translate="false">
-list llCastRay(vector start, vector end, list options)
-Cast a ray from start to end and report collision data for intersections with objects.
-</string>
-<string name="LSLTipText_llGetMassMKS" translate="false">
-float llGetMassMKS()
-Returns a float that is the mass in kilograms of the object the script is attached to.
-</string>
-<string name="LSLTipText_llSetPhysicsMaterial" translate="false">
-llSetPhysicsMaterial(integer material_bits, float gravity_multiplier, float restitution, float friction, float density)
-Sets the physics properties of the object the script is attached to.
-material_bits is a bitwise combination of DENSITY, FRICTION, RESTITUTION and GRAVITY_MULTIPLIER, specifying which floats to actually apply.
-</string>
-<string name="LSLTipText_llGetPhysicsMaterial" translate="false">
-list llGetPhysicsMaterial()
-Returns a list of the object physics properties: [ float gravity_multiplier, float restitution, float friction, float density ]
-</string>
 <string name="LSLTipText_llManageEstateAccess" translate="false">
 integer llManageEstateAccess(integer action, key id)
 To add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.
 Only works for objects owned by the Estate Owner or an Estate Manager.
 Returns TRUE if successful and FALSE if throttled, on invalid action, on invalid or null id, or if object owner is not allowed to manage the estate.
 'action' can be any of: ESTATE_ACCESS_ALLOWED_[AGENT/GROUP]_[ADD/REMOVE] or ESTATE_ACCESS_BANNED_AGENT_[ADD/REMOVE]
-</string>
-<string name="LSLTipText_llSetKeyframedMotion" translate="false">
-llSetKeyframedMotion(list keyframes, list options)
-Specify a list of times, positions, and orientations to be followed by an object.
-The object will be smoothly moved between keyframes by the simulator.
-list keyframes: strided keyframe list of the form:
-- vector position (optional via KFM_TRANSLATION and KFM_DATA)
-- rotation orientation (optional via KFM_ROTATION and KFM_DATA)
-- float time
-list options: modifiers among:
-- KFM_COMMAND followed by one of KFM_CMD_PLAY, KFM_CMD_STOP, KFM_CMD_PAUSE.
-- KFM_MODE followed by one of KFM_FORWARD, KFM_LOOP, KFM_PING_PONG, KFM_REVERSE.
-- KFM_DATA followed by KFM_ROTATION or KFM_TRANSLATION.
-Note that if KFM_COMMAND is provided in the options list, it must be the only option in the list, and cannot be specified in the same function call that sets the keyframes list.
-</string>
-<string name="LSLTipText_llTransferLindenDollars" translate="false">
-key llTransferLindenDollars(key id, integer amount)
-Attempt to transfer amount of L$ from the owner of the object to 'id'. Requires PERMISSION_DEBIT.
-Returns a key used in a matching transaction_result() event for the success or failure of the transfer.
-</string>
-<string name="LSLTipText_llGetParcelMusicURL" translate="false">
-string llGetParcelMusicURL()
-Returns the music URL of the object's current parcel if the script owner also owns the parcel.
-</string>
-<string name="LSLTipText_llScriptProfiler" translate="false">
-llScriptProfiler(integer flags)
-Enables or disables the scripts profiling state.
-Flags can be either of PROFILE_SCRIPT_NONE or PROFILE_SCRIPT_MEMORY.
-Applies to Mono-compiled scripts only.
-</string>
-<string name="LSLTipText_llGetSPMaxMemory" translate="false">
-integer llGetSPMaxMemory()
-Returns the integer of the most bytes used while llScriptProfiler() was last active.
-Only relevant for Mono-compiled scripts.
-</string>
-<string name="LSLTipText_llGetUsedMemory" translate="false">
-integer llGetUsedMemory()
-Returns the integer of the number of bytes of memory currently in use by the script.
-Only relevant for Mono-compiled scripts.
-</string>
-<string name="LSLTipText_llSetAngularVelocity" translate="false">
-llSetAngularVelocity(vector force, integer local)
-Applies rotational velocity to object.
-</string>
-<string name="LSLTipText_llSetRegionPos" translate="false">
-integer llSetRegionPos(vector position)
-Tries to moves the entire object so that the root prim is within 0.1m of position.
 </string>
 <string name="LSLTipText_llGetAgentList" translate="false">
 list llGetAgentList(integer scope, list options)
