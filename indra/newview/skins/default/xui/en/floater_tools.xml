@@ -881,6 +881,14 @@
                 You can't modify these objects
             </panel.string>
             <panel.string
+             name="text modify info 5">
+                You can't modify this object across a region boundary
+            </panel.string>
+            <panel.string
+             name="text modify info 6">
+                You can't modify these objects across a region boundary
+            </panel.string>
+            <panel.string
              name="text modify warning">
                 You must select entire object to set permissions
             </panel.string>
@@ -949,7 +957,7 @@
              left="10"
              length="1"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Creator:"
              width="75">
@@ -976,7 +984,7 @@
              length="1"
              left="10"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Owner:"
              top_pad="7"
@@ -1100,7 +1108,7 @@
              top_pad="10"
              left="10"
              name="label click action"
-             width="118">
+             width="82">
                 Click to:
             </text>
             <combo_box
@@ -1108,7 +1116,7 @@
              height="23"
              layout="topleft"
              name="clickaction"
-             width="148"
+             width="130"
              top_delta="-4"
              left_pad="10">
                 <combo_box.item
@@ -1152,19 +1160,39 @@
              layout="topleft"
              name="checkbox for sale"
              left="7"
-             width="100" />
-<!-- NEW SALE TYPE COMBO BOX -->
+             width="97" />
+  <!-- NEW PRICE SPINNER
+Objects are allowed to be for sale for L$0 to invoke buy UI behavior
+even though the user gets a free copy.
+-->
+  <spinner
+      follows="left|top"
+      decimal_digits="0"
+      increment="1"
+      left_pad="0"
+      control_name="Edit Cost"
+      name="Edit Cost"
+      label="L$"
+      label_width="15"
+      label_text.valign="center"
+      valign="center"
+      width="85"
+      min_val="0"
+      height="20"
+      max_val="999999999" />
+  <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
-            left_pad="10"
+            left_pad="8"
             layout="topleft"
             follows="left|top"
             allow_text_entry="false"
             height="23"
+            top_pad="-23"
             initial_value="2"
             max_chars="20"
             mouse_opaque="true"
             name="sale type"
-            width="168">
+            width="89">
         <combo_box.item
            name="Copy"
            label="Copy"
@@ -1178,24 +1206,8 @@
            label="Original"
            value="1" />
       </combo_box>
-<!-- NEW PRICE SPINNER
-Objects are allowed to be for sale for L$0 to invoke buy UI behavior
-even though the user gets a free copy.
--->
-    <spinner
-        follows="left|top"
-        decimal_digits="0"
-        increment="1"
         top_pad="5"
         left="10"
-        control_name="Edit Cost"
-        name="Edit Cost"
-        label="Price: L$"
-        label_width="65"
-        width="165"
-        min_val="0"
-        height="20"
-        max_val="999999999" />
 	<button
 	 left_pad="10"
 	 enabled="false"
@@ -1238,15 +1250,16 @@ even though the user gets a free copy.
          name="perms_build"
          left="0"
          top_pad="4"
-         height="105"
+         height="121"
          width="290">
             <text
              type="string"
              length="1"
              left="10"
+             word_wrap="true"
              top_pad="9"
              text_color="EmphasisColor"
-             height="16"
+             height="32"
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
@@ -1316,7 +1329,7 @@ even though the user gets a free copy.
              type="string"
              text_color="EmphasisColor"
              length="1"
-             top="9"
+             top="23"
              follows="left|top"
              layout="topleft"
              left="230"
@@ -1391,7 +1404,36 @@ even though the user gets a free copy.
                 F:
             </text>
         </panel>
-      </panel>
+		<panel
+         border="false"
+         follows="left|top"
+         layout="topleft"
+         mouse_opaque="false"
+         name="pathfinding_attrs_panel"
+         left="0"
+         top_pad="0"
+         height="25"
+         width="290">
+      <text
+         type="string"
+         follows="left|top"
+         name="pathfinding_attributes_label"
+         top_pad="4"
+         width="150"
+         left="10">
+        Pathfinding attributes:
+      </text>
+      <text
+         type="string"
+         follows="left|top"
+         text_color="EmphasisColor"
+         name="pathfinding_attributes_value"
+         width="130"
+         word_wrap="false"
+         left_pad="0">
+      </text>
+    </panel>
+  </panel>
       <!-- Object tab -->
       <panel
          border="false"
@@ -1438,8 +1480,7 @@ even though the user gets a free copy.
              tool_tip="Causes object to not collide with other objects or avatars"
              top_pad="0"
              width="123" />
-
-            <text
+        <text
              type="string"
              length="1"
              follows="left|top"

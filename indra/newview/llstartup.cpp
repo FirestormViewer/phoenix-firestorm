@@ -189,6 +189,7 @@
 #include "llappearancemgr.h"
 #include "llavatariconctrl.h"
 #include "llvoicechannel.h"
+#include "llpathfindingmanager.h"
 
 // [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
 #include "rlvhandler.h"
@@ -1220,7 +1221,7 @@ bool idle_startup()
 
 	if(STATE_LOGIN_AUTH_INIT == LLStartUp::getStartupState())
 	{
-		gDebugInfo["GridName"] = LLGridManager::getInstance()->getGridLabel();
+		gDebugInfo["GridName"] = LLGridManager::getInstance()->getGridId();
 
 		// Update progress status and the display loop.
 		auth_desc = LLTrans::getString("LoginInProgress");
@@ -1409,11 +1410,8 @@ bool idle_startup()
 				LLVoiceClient::getInstance()->userAuthorized(gUserCredential->userID(), gAgentID);
 				// create the default proximal channel
 				LLVoiceChannel::initClass();
-// <AW: opensim>
-				// Not used anymore
-				//LLGridManager::getInstance()->setFavorite();
- // </AW: opensim>
-				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);  
+				
+				gSecAPIHandler->saveCredential(gUserCredential, gRememberPassword);
 				LLStartUp::setStartupState( STATE_WORLD_INIT);
 			}
 			else
@@ -2215,7 +2213,8 @@ bool idle_startup()
 		{
 			llinfos << "gAgentStartLocation : " << gAgentStartLocation << llendl;
 			LLSLURL start_slurl = LLStartUp::getStartSLURL();
-			
+			LL_DEBUGS("AppInit") << "start slurl "<<start_slurl.asString()<<LL_ENDL;
+
 			if (((start_slurl.getType() == LLSLURL::LOCATION) && (gAgentStartLocation == "url")) ||
 				((start_slurl.getType() == LLSLURL::LAST_LOCATION) && (gAgentStartLocation == "last")) ||
 				((start_slurl.getType() == LLSLURL::HOME_LOCATION) && (gAgentStartLocation == "home")))
@@ -2470,6 +2469,9 @@ bool idle_startup()
 		LLIMFloater::initIMFloater();
 		display_startup();
 
+		llassert(LLPathfindingManager::getInstance() != NULL);
+		LLPathfindingManager::getInstance()->initSystem();
+
 		return TRUE;
 	}
 
@@ -2578,7 +2580,7 @@ bool login_alert_status(const LLSD& notification, const LLSD& response)
       //      break;
         case 2:     // Teleport
             // Restart the login process, starting at our home locaton
-	  LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_HOME));
+			LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_HOME));
             LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
             break;
         default:

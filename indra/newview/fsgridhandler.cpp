@@ -599,7 +599,7 @@ void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 	{
 		state = FAIL;
 	}
-
+	
 	if (grid_entry->grid.has("USER_DELETED") || grid_entry->grid.has("DEPRECATED"))
 	{
 		state = REMOVE;
@@ -1001,7 +1001,7 @@ boost::signals2::connection LLGridManager::addGridListChangedCallback(grid_list_
 // <FS:AW  grid management>
 
 // return a list of grid name -> grid label mappings for UI purposes
-std::map<std::string, std::string> LLGridManager::getKnownGrids(bool favorite_only)
+std::map<std::string, std::string> LLGridManager::getKnownGrids()
 {
 	std::map<std::string, std::string> result;
 	for(LLSD::map_iterator grid_iter = mGridList.beginMap();
@@ -1019,6 +1019,37 @@ std::map<std::string, std::string> LLGridManager::getKnownGrids(bool favorite_on
 	return result;
 }
 
+std::string LLGridManager::getGrid( const std::string &grid )
+{
+	std::string grid_name;
+
+	if (mGridList.has(grid))
+	{
+		// the grid was the long name, so we're good, return it
+		grid_name = grid;
+	}
+	else
+	{
+		grid_name = getGridByProbing(grid);
+	}
+	return grid_name;
+}
+
+std::string LLGridManager::getGridLabel(const std::string& grid)
+{
+	std::string grid_label;
+	std::string grid_name = getGrid(grid);
+	if (!grid.empty())
+	{
+		grid_label = mGridList[grid_name][GRID_LABEL_VALUE].asString();
+	}
+	else
+	{
+		LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+	}
+	LL_DEBUGS("GridManager") << "returning " << grid_label << LL_ENDL;
+	return grid_label;
+}
 
 void LLGridManager::setGridChoice(const std::string& grid)
 {
@@ -1140,6 +1171,22 @@ std::string LLGridManager::getGridByAttribute( const std::string &attribute, con
 	return std::string();
 }
 // </AW opensim>
+
+std::string LLGridManager::getGridId(const std::string& grid)
+{
+	std::string grid_id;
+	std::string grid_name = getGrid(grid);
+	if (!grid.empty())
+	{
+		grid_id = mGridList[grid_name][GRID_ID_VALUE].asString();
+	}
+	else
+	{
+		LL_WARNS("GridManager") << "invalid grid '" << grid << "'" << LL_ENDL;
+	}
+	LL_DEBUGS("GridManager") << "returning " << grid_id << LL_ENDL;
+	return grid_id;
+}
 
 // <FS:AW  grid management>
 // this assumes that there is anyway only one uri saved

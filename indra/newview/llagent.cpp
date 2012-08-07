@@ -61,6 +61,7 @@
 #include "llspeakers.h"
 // [/SL:KB]
 #include "llnotificationsutil.h"
+#include "llpanelpathfindingrebakenavmesh.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
 #include "llrendersphere.h"
@@ -275,6 +276,7 @@ LLAgent::LLAgent() :
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(new LLAgentAccess(gSavedSettings)),
+	mGodLevelChangeSignal(),
 	mCanEditParcel(false),
 	mTeleportSourceSLURL(new LLSLURL),
 	mTeleportState( TELEPORT_NONE ),
@@ -2108,6 +2110,7 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(TRUE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(TRUE);
+		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(TRUE);
 
 		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
 
@@ -2234,6 +2237,7 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(FALSE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
+		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(FALSE);
 
 		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
 		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
@@ -2719,6 +2723,12 @@ void LLAgent::setAdminOverride(BOOL b)
 void LLAgent::setGodLevel(U8 god_level)	
 { 
 	mAgentAccess->setGodLevel(god_level);
+	mGodLevelChangeSignal(god_level);
+}
+
+LLAgent::god_level_change_slot_t LLAgent::registerGodLevelChanageListener(god_level_change_callback_t pGodLevelChangeCallback)
+{
+	return mGodLevelChangeSignal.connect(pGodLevelChangeCallback);
 }
 
 void LLAgent::setAOTransition()

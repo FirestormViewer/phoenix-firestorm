@@ -74,6 +74,7 @@ struct GridEntry
 	bool set_current;
 	std::string last_http_error;
 };
+// </AW opensim>
 
 class LLInvalidGridName
 {
@@ -81,10 +82,11 @@ public:
 	LLInvalidGridName(std::string grid) : mGrid(grid)
 	{
 	}
+	std::string name() { return mGrid; }
 protected:
 	std::string mGrid;
 };
-// </AW opensim>
+
 
 /**
  * @brief A class to manage the grids available to the viewer
@@ -131,9 +133,9 @@ public:
 	void reFetchGrid() { reFetchGrid(mGrid, true); }
 	void reFetchGrid(const std::string& grid, bool set_current = false);
 // </FS:AW  grid management>
-	// retrieve a map of grid-name <-> label
-	// by default only return the user visible grids
-	std::map<std::string, std::string> getKnownGrids(bool favorites_only=FALSE);
+
+	/// Retrieve a map of grid-name -> label
+	std::map<std::string, std::string> getKnownGrids();
 	
 	// this was getGridInfo - renamed to avoid ambiguity with the OpenSim grid_info
 	void getGridData(const std::string& grid, LLSD &grid_info);
@@ -147,13 +149,26 @@ public:
 	// is not a known grid, then it's assumed to be a dns name for the
 	// grid, and the various URIs will be automatically generated.
 	void setGridChoice(const std::string& grid);
+
+	/// Return the name of a grid, given either its name or its id
+	std::string getGrid( const std::string &grid );
 	
+	/// Get the id (short form selector) for a given grid; example: "agni"
+	std::string getGridId(const std::string& grid);
+
+	/// Get the id (short form selector) for the selected grid; example: "agni"
+	std::string getGridId() { return getGridId(mGrid); }
+
+	/// Deprecated for compatibility with LL. Use getGridId() instead.
+	//std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
+
+	/// Get the user-friendly long form descriptor for a given grid; example: "Second Life"
+	std::string getGridLabel(const std::string& grid);
 	
-	//get the grid label e.g. "Second Life"
-	std::string getGridLabel() { return mGridList[mGrid][GRID_LABEL_VALUE]; }
-	//get the grid nick e.g. "agni"
-	std::string getGridNick() { return mGridList[mGrid][GRID_NICK_VALUE]; }
-	//get the grid e.g. "login.agni.lindenlab.com"
+	/// Get the user-friendly long form descriptor for the selected grid; example: "Second Life"
+	std::string getGridLabel() { return getGridLabel(mGrid); }
+	
+	/// Get the uri of  the selected grid; example: "login.agni.lindenlab.com"
 	std::string getGrid() const { return mGrid; }
 // <FS:AW  grid management>
 	// get the first (and very probably only) login URI of a specified grid
@@ -185,7 +200,6 @@ public:
 	bool isHyperGrid(const std::string& grid) { return mGridList[grid].has("HG"); }
 
 	// tell if we know how to acess this grid via Hypergrid
-	std::string getGatekeeper() { return getGatekeeper(mGrid); }
 	std::string getGatekeeper(const std::string& grid) { return mGridList[grid].has("gatekeeper") ? mGridList[grid]["gatekeeper"].asString() : std::string(); }
 	
 	std::string getGridByLabel( const std::string &grid_label, bool case_sensitive = false);

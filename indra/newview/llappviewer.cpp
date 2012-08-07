@@ -111,6 +111,7 @@
 #include "llvfsthread.h"
 #include "llvolumemgr.h"
 #include "llxfermanager.h"
+#include "llphysicsextensions.h"
 // [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
 #include "llhunspell.h"
 // [/SL:KB]
@@ -1754,6 +1755,9 @@ bool LLAppViewer::cleanup()
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
 
+	// shut down Havok
+	LLPhysicsExtensions::quitSystem();
+
 	// Must clean up texture references before viewer window is destroyed.
 	if(LLHUDManager::instanceExists())
 	{
@@ -3350,8 +3354,8 @@ void LLAppViewer::writeSystemInfo()
 	gDebugInfo["OSInfo"] = getOSInfo().getOSStringSimple();
 
 	// The user is not logged on yet, but record the current grid choice login url
-	// which may have been the intended grid. This can b
-	gDebugInfo["GridName"] = LLGridManager::getInstance()->getGridLabel();
+	// which may have been the intended grid. 
+	gDebugInfo["GridName"] = LLGridManager::getInstance()->getGridId();
 
 	// *FIX:Mani - move this down in llappviewerwin32
 #ifdef LL_WINDOWS
@@ -5444,7 +5448,7 @@ void LLAppViewer::launchUpdater()
 #endif
 	// *TODO change userserver to be grid on both viewer and sim, since
 	// userserver no longer exists.
-	query_map["userserver"] = LLGridManager::getInstance()->getGridLabel();
+	query_map["userserver"] = LLGridManager::getInstance()->getGridId();
 	query_map["channel"] = LLVersionInfo::getChannel();
 	// *TODO constantize this guy
 	// *NOTE: This URL is also used in win_setup/lldownloader.cpp

@@ -102,7 +102,7 @@
         </panel>
 		<!-- END FS:Ansariel: For chiclets and notices at bottom -->
       </layout_panel>
-      <layout_panel name="right_toolbar_panel"
+       <layout_panel name="right_toolbar_panel"
                     auto_resize="false"
                     height="500"
                     width="30"
@@ -188,7 +188,7 @@
          right="-10"
          mouse_opaque="false"
          tab_stop="false"
-         name="stand_stop_flying_container"
+         name="state_management_buttons_container"
          visible="false"
          width="158" />
 

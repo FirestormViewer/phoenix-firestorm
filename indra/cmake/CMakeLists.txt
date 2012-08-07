@@ -54,6 +54,7 @@ set(cmake_SOURCE_FILES
     LLMessage.cmake
     LLPlugin.cmake
     LLPrimitive.cmake
+    LLPhysicsExtensions.cmake
     LLRender.cmake
     LLScene.cmake
     LLTestCommand.cmake

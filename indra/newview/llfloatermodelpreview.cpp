@@ -504,7 +504,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	// <Ansariel> Changed grid detection and validation URL generation
 	//            because of grid manager. This will need adjustments
 	//            when OpenSims become mesh-capable!
-	//std::string current_grid = LLGridManager::getInstance()->getGridLabel();
+	//std::string current_grid = LLGridManager::getInstance()->getGridId();
 	//std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
 	//std::string validate_url;
 	//if (current_grid == "agni")
@@ -521,6 +521,9 @@ BOOL LLFloaterModelPreview::postBuild()
 	//	validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
 	//}
 
+	std::string current_grid = LLGridManager::getInstance()->getGridId();
+	std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
+
 	std::string validate_url;
 	if (LLGridManager::getInstance()->isInSLMain())
 	{
@@ -528,9 +531,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	}
 	else if (LLGridManager::getInstance()->isInSLBeta())
 	{
-		std::string grid_nick = LLGridManager::getInstance()->getGridNick();
-		std::transform(grid_nick.begin(), grid_nick.end(), grid_nick.begin(), ::tolower);
-		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", grid_nick.c_str());
+		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
 	}
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	else
@@ -5575,6 +5576,15 @@ BOOL LLModelPreview::render()
 							buffer->setBuffer(type_mask & buffer->getTypeMask());
 							gGL.diffuseColor4fv(material.mDiffuseColor.mV);
 							gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+							if (material.mDiffuseMap.notNull())
+							{
+								if (material.mDiffuseMap->getDiscardLevel() > -1)
+								{
+									gGL.getTexUnit(0)->bind(material.mDiffuseMap, true);
+									mTextureSet.insert(material.mDiffuseMap.get());
+								}
+							}
+						
 							buffer->draw(LLRender::TRIANGLES, buffer->getNumIndices(), 0);
 							gGL.diffuseColor3f(0.4f, 0.4f, 0.4f);
 

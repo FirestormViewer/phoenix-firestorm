@@ -413,13 +413,13 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 			gAgent.setTeleportState( LLAgent::TELEPORT_REQUESTED );
 			gAgent.setTeleportMessage(
-				LLAgent::sTeleportProgressMessages["requesting"]);
+				LLAgent::sTeleportProgressMessages["requesting"]);			
 			break;
 
 		case LLAgent::TELEPORT_REQUESTED:
 			// Waiting for source simulator to respond
 			gViewerWindow->setProgressPercent( llmin(teleport_percent, 37.5f) );
-			gViewerWindow->setProgressString(message);
+			gViewerWindow->setProgressString(message);		
 			break;
 
 		case LLAgent::TELEPORT_MOVING:
@@ -474,7 +474,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		case LLAgent::TELEPORT_NONE:
 			// No teleport in progress
 			gViewerWindow->setShowProgress(FALSE,FALSE);
-			gTeleportDisplay = FALSE;
+			gTeleportDisplay = FALSE;			
 			break;
 		}
 	}

@@ -265,23 +265,13 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
  // <FS:AW optional opensim support>
 #ifndef HAS_OPENSIM_SUPPORT
   // we can't teleport cross grid at this point
-	if((!LLGridManager::getInstance()->isSystemGrid(slurl.getGrid()) || !LLGridManager::getInstance()->isSystemGrid()) &&
-	   (slurl.getGrid() != LLGridManager::getInstance()->getGrid()))
+	if(   LLGridManager::getInstance()->getGrid(slurl.getGrid())
+	   != LLGridManager::getInstance()->getGrid())
 	{
 		LLSD args;
 		args["SLURL"] = slurl.getLocationString();
 		args["CURRENT_GRID"] = LLGridManager::getInstance()->getGridLabel();
-		LLSD grid_info;
-		LLGridManager::getInstance()->getGridData(slurl.getGrid(), grid_info);
-		
-		if(grid_info.has(GRID_LABEL_VALUE))
-		{
-			args["GRID"] = grid_info[GRID_LABEL_VALUE].asString();
-		}
-		else 
-		{
-			args["GRID"] = slurl.getGrid();
-		}
+		args["GRID"] = LLGridManager::getInstance()->getGridLabel(slurl.getGrid());
 		LLNotificationsUtil::add("CantTeleportToGrid", args);
 		return;
 	}
@@ -356,7 +346,7 @@ public:
 				return true;
 			}
 		}
-		else if(!gatekeeper.empty() && gatekeeper != LLGridManager::getInstance()->getGatekeeper())
+		else if(!gatekeeper.empty() && gatekeeper != LLGridManager::getInstance()->getGatekeeper(grid))
 		{
 			region_name = gatekeeper + ":" + region_name;
 		}

@@ -60,14 +60,13 @@ LLSLURL::LLSLURL(const std::string& slurl)
 {
 	// by default we go to agni.
 	mType = INVALID;
-	LL_INFOS("AppInit") << "SLURL: " << slurl << LL_ENDL;
+
 	if(slurl == SIM_LOCATION_HOME)
 	{
 		mType = HOME_LOCATION;
 	}
 	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST))
 	{
-
 		mType = LAST_LOCATION;
 	}
 	else
@@ -84,6 +83,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 			// these slurls are typically passed in from the 'starting location' box on the login panel,
 			// where the user can type in <regionname>/<x>/<y>/<z>
 			std::string fixed_slurl = LLGridManager::getInstance()->getSLURLBase();
+
 			// the slurl that was passed in might have a prepended /, or not.  So,
 			// we strip off the prepended '/' so we don't end up with http://slurl.com/secondlife/<region>/<x>/<y>/<z>
 			// or some such.
@@ -142,7 +142,7 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				// so parse the grid name to derive the grid ID
 				if (!slurl_uri.hostName().empty())
 				{
-					mGrid = LLGridManager::getInstance()->getGridByLabel(slurl_uri.hostName());
+					mGrid = LLGridManager::getInstance()->getGridId(slurl_uri.hostName());
 				}
 				else if(path_array[0].asString() == LLSLURL::SLURL_SECONDLIFE_PATH)
 				{
@@ -154,12 +154,13 @@ LLSLURL::LLSLURL(const std::string& slurl)
 				{
 					// for app style slurls, where no grid name is specified, assume the currently
 					// selected or logged in grid.
-					mGrid =  LLGridManager::getInstance()->getGrid();
+					mGrid =  LLGridManager::getInstance()->getGridId();
 				}
 
 				if(mGrid.empty())
 				{
 					// we couldn't find the grid in the grid manager, so bail
+					LL_WARNS("AppInit")<<"unable to find grid"<<LL_ENDL;
 					return;
 				}
 				// set the type as appropriate.
@@ -338,7 +339,7 @@ LLSLURL::LLSLURL(const std::string& grid,
 LLSLURL::LLSLURL(const std::string& region, 
 		 const LLVector3& position)
 {
-  *this = LLSLURL(LLGridManager::getInstance()->getGrid(),
+  *this = LLSLURL(LLGridManager::getInstance()->getGridId(),
 		  region, position);
 }
 
@@ -347,7 +348,7 @@ LLSLURL::LLSLURL(const std::string& grid,
 		 const std::string& region, 
 		 const LLVector3d& global_position)
 {
-  *this = LLSLURL(grid,
+	*this = LLSLURL(LLGridManager::getInstance()->getGridId(grid),
 		  region, LLVector3(global_position.mdV[VX],
 				    global_position.mdV[VY],
 				    global_position.mdV[VZ]));
@@ -357,7 +358,7 @@ LLSLURL::LLSLURL(const std::string& grid,
 LLSLURL::LLSLURL(const std::string& region, 
 		 const LLVector3d& global_position)
 {
-  *this = LLSLURL(LLGridManager::getInstance()->getGrid(),
+  *this = LLSLURL(LLGridManager::getInstance()->getGridId(),
 		  region, global_position);
 }
 
@@ -436,7 +437,7 @@ std::string LLSLURL::getLoginString() const
 			unescaped_start << "last";
 			break;
 		default:
-			LL_WARNS("AppInit") << "Unexpected SLURL type for login string" << (int)mType << LL_ENDL;
+			LL_WARNS("AppInit") << "Unexpected SLURL type ("<<(int)mType <<")for login string"<< LL_ENDL;
 			break;
 	}
 	return  xml_escape_string(unescaped_start.str());
@@ -475,18 +476,47 @@ std::string LLSLURL::getLocationString() const
 					(int)llround(mPosition[1]),
 					(int)llround(mPosition[2]));						 
 }
+
+// static
+const std::string LLSLURL::typeName[NUM_SLURL_TYPES] = 
+{
+	"INVALID", 
+	"LOCATION",
+	"HOME_LOCATION",
+	"LAST_LOCATION",
+	"APP",
+	"HELP"
+};
+		
+std::string LLSLURL::getTypeString(SLURL_TYPE type)
+{
+	std::string name;
+	if ( type >= INVALID && type < NUM_SLURL_TYPES )
+	{
+		name = LLSLURL::typeName[type];
+	}
+	else
+	{
+		name = llformat("Out of Range (%d)",type);
+	}
+	return name;
+}
+
+
 std::string LLSLURL::asString() const
 {
     std::ostringstream result;
-    result << "   mAppCmd:"  << getAppCmd() <<
-              "   mAppPath:" + getAppPath().asString() <<
-              "   mAppQueryMap:" + getAppQueryMap().asString() <<
-              "   mAppQuery: " + getAppQuery() <<
-              "   mGrid: " + getGrid() <<
-              "   mRegion: " + getRegion() <<
-              "   mPosition: "  <<
-              "   mType: " << mType <<
-              "   mPosition: " << mPosition;
+    result
+		<< "   mType: " << LLSLURL::getTypeString(mType)
+		<< "   mGrid: " + getGrid()
+		<< "   mRegion: " + getRegion()
+		<< "   mPosition: " << mPosition
+		<< "   mAppCmd:"  << getAppCmd()
+		<< "   mAppPath:" + getAppPath().asString()
+		<< "   mAppQueryMap:" + getAppQueryMap().asString()
+		<< "   mAppQuery: " + getAppQuery()
+		;
+	
     return result.str();
 }
 

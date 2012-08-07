@@ -101,7 +101,7 @@
     <key>grid</key>
     <map>
       <key>desc</key>
-      <string>Specify the name of the grid, local, or an IP address to connect to.</string>
+      <string>Specify the name of the grid to connect to.</string>
       <key>count</key>
       <integer>1</integer>
       <key>map-to</key>
@@ -221,7 +221,6 @@
       <string>CmdLineLoginURI1</string>
     </map>
 <!-- /FS:AW  fix commandline loginuri (partial fix of FIRE-3448)-->
-
     <key>logmetrics</key>
     <map>
       <key>desc</key>
@@ -252,7 +251,7 @@
     <map>
       <key>map-to</key>
       <string>NoAudio</string>
-    </map>
+    </map>    
 
     <key>noinvlib</key>
     <map>
@@ -268,7 +267,7 @@
       <string>User will not get any notifications. NOTE: All notifications that occur will get added to ignore file for future runs.</string>
       <key>map-to</key>
       <string>IgnoreAllNotifications</string>      
-    </map>    
+    </map>
 
     <key>nopreload</key>
     <map>
@@ -347,7 +346,7 @@
       <key>map-to</key>
       <string>QuitAfterSeconds</string>
     </map>
-    
+
     <key>replaysession</key>
     <map>
       <key>desc</key>
@@ -361,7 +360,7 @@
       <key>map-to</key>
       <string>RotateRight</string>
     </map>
-
+    
     <key>safe</key>
     <map>
       <key>desc</key>

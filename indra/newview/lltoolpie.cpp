@@ -327,7 +327,7 @@ BOOL LLToolPie::handleLeftClickPick()
 	// Switch to grab tool if physical or triggerable
 	if (object && 
 		!object->isAvatar() && 
-		((object->usePhysics() || (parent && !parent->isAvatar() && parent->usePhysics())) || touchable) 
+		((object->flagUsePhysics() || (parent && !parent->isAvatar() && parent->flagUsePhysics())) || touchable) 
 		)
 	{
 // [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Modified: RLVa-1.1.0l
@@ -651,8 +651,8 @@ BOOL LLToolPie::handleHover(S32 x, S32 y, MASK mask)
 			gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		}
 // [/RLVa:KB]
-		else if ((object && !object->isAvatar() && object->usePhysics()) 
-				 || (parent && !parent->isAvatar() && parent->usePhysics()))
+		else if ((object && !object->isAvatar() && object->flagUsePhysics()) 
+				 || (parent && !parent->isAvatar() && parent->flagUsePhysics()))
 		{
 			show_highlight = true;
 			gViewerWindow->setCursor(UI_CURSOR_TOOLGRAB);
@@ -1196,7 +1196,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				{
 					permissionsline += LLTrans::getString("TooltipFlagScript") + " ";
 				}
-				if (hover_object->usePhysics())
+				if (hover_object->flagUsePhysics())
 				{
 					permissionsline += LLTrans::getString("TooltipFlagPhysics") + " ";
 				}

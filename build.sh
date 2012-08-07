@@ -270,13 +270,24 @@ then
       upload_item quicklink "$package" binary/octet-stream
       [ -f summary.json ] && upload_item installer summary.json text/plain
 
-      # Upload crash reporter files.
+      # Upload crash reporter files and symbolfile for public llphysicsextensions build.
       case "$last_built_variant" in
       Release)
         for symbolfile in $symbolfiles
         do
           upload_item symbolfile "$build_dir/$symbolfile" binary/octet-stream
         done
+
+        mapfilepath=$build_dir/newview
+        gzip $mapfilepath/secondlife-bin.MAP
+        mapfile=secondlife-bin-$arch.MAP.gz
+        mv $mapfilepath/secondlife-bin.MAP.gz $mapfilepath/$mapfile
+        upload_item mapfile "$mapfilepath/$mapfile" binary/octet-stream
+        echo "Uploaded mapfile for $last_built_variant"
+
+        ;;
+      *)
+        echo "Skipping mapfile for $last_built_variant"
         ;;
       esac
 

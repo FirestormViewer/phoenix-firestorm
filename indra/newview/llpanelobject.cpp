@@ -148,7 +148,6 @@ BOOL	LLPanelObject::postBuild()
 	mCheckPhantom = getChild<LLCheckBoxCtrl>("Phantom Checkbox Ctrl");
 	childSetCommitCallback("Phantom Checkbox Ctrl",onCommitPhantom,this);
        
-
 	// Position
 	mLabelPosition = getChild<LLTextBox>("label position");
 	mCtrlPosX = getChild<LLSpinCtrl>("Pos X");
@@ -330,7 +329,7 @@ BOOL	LLPanelObject::postBuild()
 	childSetCommitCallback("sculpt mirror control", onCommitSculptType, this);
 	mCtrlSculptInvert = getChild<LLCheckBoxCtrl>("sculpt invert control");
 	childSetCommitCallback("sculpt invert control", onCommitSculptType, this);
-	
+
 	// Start with everyone disabled
 	clearCtrls();
 
@@ -342,7 +341,6 @@ LLPanelObject::LLPanelObject()
 	mIsPhysical(FALSE),
 	mIsTemporary(FALSE),
 	mIsPhantom(FALSE),
-	mCastShadows(TRUE),
 	mSelectedType(MI_BOX),
 	mSculptTextureRevert(LLUUID::null),
 	mSculptTypeRevert(0),
@@ -436,9 +434,9 @@ void LLPanelObject::getState( )
 	}
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
-	BOOL enable_move	= objectp->permMove() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
-	BOOL enable_scale	= objectp->permMove() && objectp->permModify();
-	BOOL enable_rotate	= objectp->permMove() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_move	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_scale	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && objectp->permModify();
+	BOOL enable_rotate	= objectp->permMove() && !objectp->isPermanentEnforced() && ((root_objectp == NULL) || !root_objectp->isPermanentEnforced()) && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
@@ -576,9 +574,16 @@ void LLPanelObject::getState( )
 		getChildView("select_single")->setVisible( TRUE);
 		getChildView("select_single")->setEnabled(TRUE);
 	}
+
+	BOOL is_flexible = volobjp && volobjp->isFlexible();
+	BOOL is_permanent = root_objectp->flagObjectPermanent();
+	BOOL is_permanent_enforced = root_objectp->isPermanentEnforced();
+	BOOL is_character = root_objectp->flagCharacter();
+	llassert(!is_permanent || !is_character); // should never have a permanent object that is also a character
+
 	// Lock checkbox - only modifiable if you own the object.
 	BOOL self_owned = (gAgent.getID() == owner_id);
-	mCheckLock->setEnabled( roots_selected > 0 && self_owned );
+	mCheckLock->setEnabled( roots_selected > 0 && self_owned && !is_permanent_enforced);
 
 	// More lock and debit checkbox - get the values
 	BOOL valid;
@@ -608,30 +613,27 @@ void LLPanelObject::getState( )
 		}
 	}
 
-	BOOL is_flexible = volobjp && volobjp->isFlexible();
-
 	// Physics checkbox
-	mIsPhysical = root_objectp->usePhysics();
+	mIsPhysical = root_objectp->flagUsePhysics();
+	llassert(!is_permanent || !mIsPhysical); // should never have a permanent object that is also physical
+
 	mCheckPhysics->set( mIsPhysical );
 	mCheckPhysics->setEnabled( roots_selected>0 
 								&& (editable || gAgent.isGodlike()) 
-								&& !is_flexible);
+								&& !is_flexible && !is_permanent);
 
 	mIsTemporary = root_objectp->flagTemporaryOnRez();
+	llassert(!is_permanent || !mIsTemporary); // should never has a permanent object that is also temporary
+
 	mCheckTemporary->set( mIsTemporary );
-	mCheckTemporary->setEnabled( roots_selected>0 && editable );
+	mCheckTemporary->setEnabled( roots_selected>0 && editable && !is_permanent);
 
 	mIsPhantom = root_objectp->flagPhantom();
+	BOOL is_volume_detect = root_objectp->flagVolumeDetect();
+	llassert(!is_character || !mIsPhantom); // should never have a character that is also a phantom
 	mCheckPhantom->set( mIsPhantom );
-	mCheckPhantom->setEnabled( roots_selected>0 && editable && !is_flexible );
+	mCheckPhantom->setEnabled( roots_selected>0 && editable && !is_flexible && !is_permanent_enforced && !is_character && !is_volume_detect);
 
-       
-#if 0 // 1.9.2
-	mCastShadows = root_objectp->flagCastShadows();
-	mCheckCastShadows->set( mCastShadows );
-	mCheckCastShadows->setEnabled( roots_selected==1 && editable );
-#endif
-	
 	//----------------------------------------------------------------------------
 
 	S32 selected_item	= MI_BOX;
@@ -669,7 +671,7 @@ void LLPanelObject::getState( )
 	{
 		// Only allowed to change these parameters for objects
 		// that you have permissions on AND are not attachments.
-		enabled = root_objectp->permModify();
+		enabled = root_objectp->permModify() && !root_objectp->isPermanentEnforced();
 		
 		// Volume type
 		const LLVolumeParams &volume_params = objectp->getVolume()->getParams();
@@ -1406,22 +1408,6 @@ void LLPanelObject::sendIsPhantom()
 	else
 	{
 		llinfos << "update phantom not changed" << llendl;
-	}
-}
-
-void LLPanelObject::sendCastShadows()
-{
-	BOOL value = mCheckCastShadows->get();
-	if( mCastShadows != value )
-	{
-		LLSelectMgr::getInstance()->selectionUpdateCastShadows(value);
-		mCastShadows = value;
-
-		llinfos << "update cast shadows sent" << llendl;
-	}
-	else
-	{
-		llinfos << "update cast shadows not changed" << llendl;
 	}
 }
 
@@ -2234,10 +2220,6 @@ void LLPanelObject::clearCtrls()
 	mCheckPhantom	->set(FALSE);
 	mCheckPhantom	->setEnabled( FALSE );
 	
-#if 0 // 1.9.2
-	mCheckCastShadows->set(FALSE);
-	mCheckCastShadows->setEnabled( FALSE );
-#endif
 	// Disable text labels
 	mLabelPosition	->setEnabled( FALSE );
 	mLabelSize		->setEnabled( FALSE );
@@ -2324,14 +2306,6 @@ void LLPanelObject::onCommitPhantom( LLUICtrl* ctrl, void* userdata )
 	LLPanelObject* self = (LLPanelObject*) userdata;
 	self->sendIsPhantom();
 }
-
-// static
-void LLPanelObject::onCommitCastShadows( LLUICtrl* ctrl, void* userdata )
-{
-	LLPanelObject* self = (LLPanelObject*) userdata;
-	self->sendCastShadows();
-}
-
 
 void LLPanelObject::onSelectSculpt(const LLSD& data)
 {
