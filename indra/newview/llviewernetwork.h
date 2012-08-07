@@ -124,9 +124,6 @@ class LLGridManager : public LLSingleton<LLGridManager>
 	void getLoginURIs(const std::string& grid, std::vector<std::string>& uris);
 	
 	/// Get the login uris for the selected grid
-	void getLoginURIs(const std::string& grid, std::vector<std::string>& uris);
-	
-	/// Get the login uris for the selected grid
 	void getLoginURIs(std::vector<std::string>& uris);
 	
 	/// Get the URI for webdev help functions for the specified grid

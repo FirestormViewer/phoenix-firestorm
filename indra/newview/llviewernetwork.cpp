@@ -63,7 +63,7 @@ const std::string DEFAULT_LOGIN_PAGE = "http://phoenixviewer.com/app/loginV3/";
 
 const std::string MAIN_GRID_LOGIN_URI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
 
-const std::string MAIN_GRID_LOGIN_URI = "https://login.agni.lindenlab.com/cgi-bin/login.cgi";
+const std::string MAIN_GRID_SLURL_BASE = "http://maps.secondlife.com/secondlife/";
 const std::string SYSTEM_GRID_APP_SLURL_BASE = "secondlife:///app";
 
 const char* SYSTEM_GRID_SLURL_BASE = "secondlife://%s/secondlife/";
@@ -312,20 +312,6 @@ bool LLGridManager::addGrid(LLSD& grid_data)
 			{
 				LL_WARNS("GridManager")<<"duplicate grid id'"<<grid_id<<"' ignored"<<LL_ENDL;
 			}
-			else
-			{
-				LL_WARNS("GridManager")<<"duplicate grid id'"<<grid_id<<"' ignored"<<LL_ENDL;
-			}
-		}
-		else
-		{
-			LL_WARNS("GridManager")<<"duplicate grid name '"<<grid<<"' ignored"<<LL_ENDL;
-		}
-	}
-	else
-	{
-		LL_WARNS("GridManager")<<"invalid value passed"<<LL_ENDL;
-	}
 		}
 		else
 		{
