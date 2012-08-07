@@ -8612,16 +8612,6 @@ This will send the following information to the current IM session:
      notext="Cancel" />
   </notification>
 
-  <notification
-   icon="alertmodal.tga"
-   name="InvalidGrid"
-   type="alertmodal">
-'[GRID]' is not a valid grid name or address.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
-
 <!-- fsdata -->
   <notification
    icon="alertmodal.tga"
