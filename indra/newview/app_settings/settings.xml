@@ -3919,6 +3919,39 @@
       <key>Value</key>
       <integer>-1</integer>
     </map>
+    <key>DebugStatObjCacheMiss</key>
+    <map>
+      <key>Comment</key>
+      <string>Mode of stat in Statistics floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
+    <key>DebugStatTextureCacheHits</key>
+    <map>
+      <key>Comment</key>
+      <string>Mode of stat in Statistics floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
+    <key>DebugStatTextureCacheReadLatency</key>
+    <map>
+      <key>Comment</key>
+      <string>Mode of stat in Statistics floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
     <key>DebugStatModeTextureCount</key>
     <map>
       <key>Comment</key>
@@ -4206,6 +4239,28 @@
       <integer>-1</integer>
     </map>
     <key>DebugStatModeSimActiveScripts</key>
+    <map>
+      <key>Comment</key>
+      <string>Mode of stat in Statistics floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
+    <key>DebugStatModeSimPCTScriptsRun</key>
+    <map>
+      <key>Comment</key>
+      <string>Mode of stat in Statistics floater</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>-1</integer>
+    </map>
+    <key>DebugStatModeSimScriptEvents</key>
     <map>
       <key>Comment</key>
       <string>Mode of stat in Statistics floater</string>
@@ -8481,6 +8536,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Expand Texture performance stats display</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>OpenDebugStatSimPathfinding</key>
+    <map>
+      <key>Comment</key>
+      <string>Expand Pathfinding performance stats display</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

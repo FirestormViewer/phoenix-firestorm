@@ -168,7 +168,8 @@
 				 label_spacing="20"
 				 show_history="true"
          show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatObjCacheMiss">
         </stat_bar>
 			</stat_view>
         <!--Texture Stats-->
@@ -188,7 +189,8 @@
 				 label_spacing="20"
 				 show_history="true"
          show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatTextureCacheHits">
         </stat_bar>
         <stat_bar
 				 name="texture_cache_read_latency"
@@ -201,7 +203,8 @@
 				 label_spacing="200"
 				 show_history="true"
          show_per_sec="false"
-				 show_bar="false">
+				 show_bar="false"
+				 setting="DebugStatTextureCacheReadLatency">
         </stat_bar>
         <stat_bar
 				 name="numimagesstat"
@@ -620,7 +623,8 @@
             precision="3"
             show_per_sec="false"
             show_bar="false"
-            show_mean="true">
+            show_mean="true"
+            setting="DebugStatModeSimPCTScriptsRun">
         </stat_bar>
 
 			<stat_bar
@@ -642,7 +646,8 @@
         <stat_view
             name="simpathfinding"
             label="Pathfinding"
-            show_label="true">
+            show_label="true"
+            setting="OpenDebugStatSimPathfinding">
           <stat_bar
               name="simsimaistepmsec"
               label="  AI Step Time"
@@ -655,7 +660,8 @@
               label_spacing="20.f"
               show_per_sec="false"
               show_bar="false"
-              show_mean="false" >
+              show_mean="false"
+            	setting="DebugStatModeSimSimAIStepMsec">
           </stat_bar>
           <stat_bar
               name="simsimskippedsilhouettesteps"
@@ -668,7 +674,8 @@
               tick_spacing="4"
               label_spacing="8"
               show_per_sec="false"
-              show_bar="false">
+              show_bar="false"
+            	setting="DebugStatModeSimSimSkippedSilhouettSteps">
           </stat_bar>
           <stat_bar
               name="simsimpctsteppedcharacters"
@@ -682,7 +689,8 @@
               precision="1"
               show_per_sec="false"
               show_bar="false"
-              show_mean="true">
+              show_mean="true"
+            	setting="DebugStatModeSimSimPCTSteppedCharacters">
           </stat_bar>
         </stat_view>
 
