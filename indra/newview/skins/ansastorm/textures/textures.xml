@@ -106,6 +106,9 @@
 	<texture name="Parcel_VoiceNo_Light"	file_name="legacy/status_no_voice.png" />
 	<texture name="Parcel_SeeAVsOff_Dark"	file_name="legacy/status_SeeAVsOff.tga" />
 
+	<texture name="Pathfinding_Dirty_Light" file_name="legacy/Pathfinding_Dirty_Light.png" preload="false" />
+	<texture name="Pathfinding_Disabled_Light" file_name="legacy/Pathfinding_Disabled_Light.png" preload="false" />
+
 	<texture name="Contacts_Online_Status_Button"			file_name="legacy/ff_online_status_button.tga" />
 	<texture name="Permission_Visible_Online_Mine_Button"	file_name="legacy/ff_visible_online_button.tga" />
 	<texture name="Permission_Visible_Online_Theirs_Button"	file_name="legacy/ff_visible_online_button_theirs.tga" />

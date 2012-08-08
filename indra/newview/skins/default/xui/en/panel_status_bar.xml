@@ -101,7 +101,7 @@
   <icon
     follows="right|top"
     height="18"
-    image_name="Pathfinding_Dirty"
+    image_name="Pathfinding_Dirty_Light"
     name="pathfinding_dirty_icon"
     top="0"
     left="148"
@@ -112,7 +112,7 @@
   <icon
     follows="right|top"
     height="18"
-    image_name="Pathfinding_Disabled"
+    image_name="Pathfinding_Disabled_Light"
     name="pathfinding_disabled_icon"
     top="0"
     left="170"
