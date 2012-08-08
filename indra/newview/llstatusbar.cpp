@@ -86,6 +86,13 @@
 #include "rlvhandler.h"
 #include "kcwlinterface.h"
 
+// <FS:Ansariel> Pathfinding support
+#include "llenvmanager.h"
+#include "llpathfindingmanager.h"
+#include "llpathfindingnavmesh.h"
+#include "llpathfindingnavmeshstatus.h"
+// </FS:Ansariel> Pathfinding support
+
 // library includes
 #include "imageids.h"
 #include "llfloaterreg.h"
@@ -152,6 +159,11 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mShowParcelIcons(TRUE),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
+	// <FS:Ansariel> Pathfinding support
+	mRegionCrossingSlot(),
+	mNavMeshSlot(),
+	mIsNavMeshDirty(false),
+	// </FS:Ansariel> Pathfinding support
 	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
 {
 	setRect(rect);
@@ -198,6 +210,18 @@ LLStatusBar::~LLStatusBar()
 	{
 		mShowCoordsCtrlConnection.disconnect();
 	}
+
+	// <FS:Ansariel> Pathfinding support
+	if (mRegionCrossingSlot.connected())
+	{
+		mRegionCrossingSlot.disconnect();
+	}
+
+	if (mNavMeshSlot.connected())
+	{
+		mNavMeshSlot.disconnect();
+	}
+	// </FS:Ansariel> Pathfinding support
 
 	// LLView destructor cleans up children
 }
@@ -351,6 +375,11 @@ BOOL LLStatusBar::postBuild()
 	{
 		updateNetstatVisibility(LLSD(FALSE));
 	}
+
+	// <FS:Ansariel> Pathfinding support
+	mRegionCrossingSlot = LLEnvManagerNew::getInstance()->setRegionChangeCallback(boost::bind(&LLStatusBar::onRegionBoundaryCrossed, this));
+	createNavMeshStatusListenerForCurrentRegion();
+	// </FS:Ansariel> Pathfinding support
 
 	return TRUE;
 }
@@ -804,6 +833,10 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[SCRIPTS_ICON] = getChild<LLIconCtrl>("scripts_icon");
 	mParcelIcon[DAMAGE_ICON] = getChild<LLIconCtrl>("damage_icon");
 	mParcelIcon[SEE_AVATARS_ICON] = getChild<LLIconCtrl>("see_avs_icon");
+	// <FS:Ansariel> Pathfinding support
+	mParcelIcon[PATHFINDING_DIRTY_ICON] = getChild<LLIconCtrl>("pathfinding_dirty_icon");
+	mParcelIcon[PATHFINDING_DISABLED_ICON] = getChild<LLIconCtrl>("pathfinding_disabled_icon");
+	// </FS:Ansariel> Pathfinding support
 
 	mParcelIcon[VOICE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, VOICE_ICON));
 	mParcelIcon[FLY_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, FLY_ICON));
@@ -812,6 +845,10 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[SCRIPTS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SCRIPTS_ICON));
 	mParcelIcon[DAMAGE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, DAMAGE_ICON));
 	mParcelIcon[SEE_AVATARS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SEE_AVATARS_ICON));
+	// <FS:Ansariel> Pathfinding support
+	mParcelIcon[PATHFINDING_DIRTY_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, PATHFINDING_DIRTY_ICON));
+	mParcelIcon[PATHFINDING_DISABLED_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, PATHFINDING_DISABLED_ICON));
+	// </FS:Ansariel> Pathfinding support
 
 	mDamageText->setText(LLStringExplicit("100%"));
 }
@@ -838,6 +875,34 @@ void LLStatusBar::onNavBarShowCoordinatesCtrlChanged()
 	buildLocationString(new_text, false);
 	setParcelInfoText(new_text);
 }
+
+// <FS:Ansariel> Pathfinding support
+void LLStatusBar::onRegionBoundaryCrossed()
+{
+	createNavMeshStatusListenerForCurrentRegion();
+}
+
+void LLStatusBar::onNavMeshStatusChange(const LLPathfindingNavMeshStatus &pNavMeshStatus)
+{
+	mIsNavMeshDirty = pNavMeshStatus.isValid() && (pNavMeshStatus.getStatus() != LLPathfindingNavMeshStatus::kComplete);
+	update();
+}
+
+void LLStatusBar::createNavMeshStatusListenerForCurrentRegion()
+{
+	if (mNavMeshSlot.connected())
+	{
+		mNavMeshSlot.disconnect();
+	}
+
+	LLViewerRegion *currentRegion = gAgent.getRegion();
+	if (currentRegion != NULL)
+	{
+		mNavMeshSlot = LLPathfindingManager::getInstance()->registerNavMeshListenerForRegion(currentRegion, boost::bind(&LLStatusBar::onNavMeshStatusChange, this, _2));
+		LLPathfindingManager::getInstance()->requestGetNavMeshForRegion(currentRegion, true);
+	}
+}
+// </FS:Ansariel> Pathfinding support
 
 void LLStatusBar::buildLocationString(std::string& loc_str, bool show_coords)
 {
@@ -970,6 +1035,8 @@ void LLStatusBar::updateParcelIcons()
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool has_pwl		= KCWindlightInterface::instance().getWLset();
+		// <FS:Ansariel> Pathfinding support
+		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -979,6 +1046,10 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mParcelIcon[SEE_AVATARS_ICON]->setVisible(!see_avatars);
+		// <FS:Ansariel> Pathfinding support
+		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(mIsNavMeshDirty);
+		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!mIsNavMeshDirty && !pathfinding_dynamic_enabled);
+		// </FS:Ansariel> Pathfinding support
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
@@ -1098,6 +1169,14 @@ void LLStatusBar::onParcelIconClick(EParcelIcon icon)
 	case SEE_AVATARS_ICON:
 		LLNotificationsUtil::add("SeeAvatars");
 		break;
+	// <FS:Ansariel> Pathfinding support
+	case PATHFINDING_DIRTY_ICON:
+		LLNotificationsUtil::add("PathfindingDirty");
+		break;
+	case PATHFINDING_DISABLED_ICON:
+		LLNotificationsUtil::add("DynamicPathfindingDisabled");
+		break;
+	// </FS:Ansariel> Pathfinding support
 	case ICON_COUNT:
 		break;
 	// no default to get compiler warning when a new icon gets added
