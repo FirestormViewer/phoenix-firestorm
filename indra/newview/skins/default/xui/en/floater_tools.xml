@@ -1116,7 +1116,7 @@
              height="23"
              layout="topleft"
              name="clickaction"
-             width="130"
+             width="148"
              top_delta="-4"
              left_pad="10">
                 <combo_box.item
@@ -1160,26 +1160,7 @@
              layout="topleft"
              name="checkbox for sale"
              left="7"
-             width="97" />
-  <!-- NEW PRICE SPINNER
-Objects are allowed to be for sale for L$0 to invoke buy UI behavior
-even though the user gets a free copy.
--->
-  <spinner
-      follows="left|top"
-      decimal_digits="0"
-      increment="1"
-      left_pad="0"
-      control_name="Edit Cost"
-      name="Edit Cost"
-      label="L$"
-      label_width="15"
-      label_text.valign="center"
-      valign="center"
-      width="85"
-      min_val="0"
-      height="20"
-      max_val="999999999" />
+             width="100" />
   <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
             left_pad="8"
@@ -1192,7 +1173,7 @@ even though the user gets a free copy.
             max_chars="20"
             mouse_opaque="true"
             name="sale type"
-            width="89">
+            width="168">
         <combo_box.item
            name="Copy"
            label="Copy"
@@ -1206,8 +1187,26 @@ even though the user gets a free copy.
            label="Original"
            value="1" />
       </combo_box>
-        top_pad="5"
-        left="10"
+  <!-- NEW PRICE SPINNER
+Objects are allowed to be for sale for L$0 to invoke buy UI behavior
+even though the user gets a free copy.
+-->
+  <spinner
+      follows="left|top"
+      decimal_digits="0"
+      increment="1"
+      top_pad="5"
+      left="10"
+      control_name="Edit Cost"
+      name="Edit Cost"
+      label="Price: L$"
+      label_width="65"
+      label_text.valign="center"
+      valign="center"
+      width="165"
+      min_val="0"
+      height="20"
+      max_val="999999999" />
 	<button
 	 left_pad="10"
 	 enabled="false"
@@ -1250,7 +1249,7 @@ even though the user gets a free copy.
          name="perms_build"
          left="0"
          top_pad="4"
-         height="121"
+         height="98"
          width="290">
             <text
              type="string"
@@ -1259,7 +1258,7 @@ even though the user gets a free copy.
              word_wrap="true"
              top_pad="9"
              text_color="EmphasisColor"
-             height="32"
+             height="16"
              follows="left|top|right"
              layout="topleft"
              name="perm_modify"
@@ -3368,7 +3367,7 @@ even though the user gets a free copy.
              border_visible="true"
              bevel_style="in"
              follows="left|top|right"
-             height="325"
+             height="345"
              layout="topleft"
              left="10"
              name="contents_inventory"
