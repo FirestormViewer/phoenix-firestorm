@@ -517,6 +517,21 @@ void LLScriptLibrary::init()
 	addFunction(0.f, 0.f, dummy_func, "llAttachToAvatarTemp", NULL, "i");
 	addFunction(0.f, 0.f, dummy_func, "llTeleportAgent", NULL, "ksvv");
 	addFunction(0.f, 0.f, dummy_func, "llTeleportAgentGlobalCoords", NULL, "kvvv");
+
+	// LSL functions received as per Pathfinding tools merge
+	addFunction(0.f, 0.f, dummy_func, "llGenerateKey", "k", NULL);
+	addFunction(0.f, 0.f, dummy_func, "llNavigateTo", NULL, "vl");
+	addFunction(0.f, 0.f, dummy_func, "llCreateCharacter", NULL, "l");
+	addFunction(0.f, 0.f, dummy_func, "llPursue", NULL, "kl");
+	addFunction(0.f, 0.f, dummy_func, "llWanderWithin", NULL, "vfl");
+	addFunction(0.f, 0.f, dummy_func, "llFleeFrom", NULL, "vfl");
+	addFunction(0.f, 0.f, dummy_func, "llPatrolPoints", NULL, "ll");
+	addFunction(0.f, 0.f, dummy_func, "llExecCharacterCmd", NULL, "il");
+	addFunction(0.f, 0.f, dummy_func, "llDeleteCharacter", NULL, NULL);
+	addFunction(0.f, 0.f, dummy_func, "llUpdateCharacter", NULL, "l");
+	addFunction(0.f, 0.f, dummy_func, "llEvade", NULL, "kl");
+	addFunction(0.f, 0.f, dummy_func, "llGetClosestNavPoint", "l", "vl");
+	addFunction(0.f, 0.f, dummy_func, "llGetStaticPath", "l", "vvfl");
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 }
 

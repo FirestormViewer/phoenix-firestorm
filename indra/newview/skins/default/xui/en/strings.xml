@@ -2102,6 +2102,11 @@ For AI Character: Get the closest navigable point to the point provided.
 	</string>
 
 <!-- FS:Ansariel: LSL function tooltip help texts manually added -->
+	<string name="LSLTipText_llGetStaticPath" translate="false">
+list llGetStaticPath(vector start, vector end, float radius, list params)
+Returns a list of position vectors indicating pathfinding waypoints between positions at start and end, for a character of a given radius.
+	</string>
+
 <string name="LSLTipText_llSetMemoryLimit" translate="false">
 integer llSetMemoryLimit(integer limit)
 Request limit bytes to be reserved for this script.
