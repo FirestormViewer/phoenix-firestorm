@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu name="Text editor context menu">
 	<menu_item_call label="(desconocida)" name="Suggestion 1"/>
 	<menu_item_call label="(desconocida)" name="Suggestion 2"/>
@@ -11,20 +11,5 @@
 	<menu_item_call label="Copiar" name="Copy"/>
 	<menu_item_call label="Pegar" name="Paste"/>
 	<menu_item_call label="Eliminar" name="Delete"/>
-	<menu_item_call label="Seleccionar todo" name="Select All"/>
-</context_menu>
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<context_menu name="Text editor context menu">
-	<menu_item_call label="(desconocida)" name="Suggestion 1"/>
-	<menu_item_call label="(desconocida)" name="Suggestion 2"/>
-	<menu_item_call label="(desconocida)" name="Suggestion 3"/>
-	<menu_item_call label="(desconocida)" name="Suggestion 4"/>
-	<menu_item_call label="(desconocida)" name="Suggestion 5"/>
-	<menu_item_call label="Añadir al diccionario" name="Add to Dictionary"/>
-	<menu_item_call label="Añadir a ignoradas" name="Add to Ignore"/>
-	<menu_item_call label="Cortar" name="Cut"/>
-	<menu_item_call label="Copiar" name="Copy"/>
-	<menu_item_call label="Pegar" name="Paste"/>
-	<menu_item_call label="Borrar" name="Delete"/>
 	<menu_item_call label="Seleccionar todo" name="Select All"/>
 </context_menu>
