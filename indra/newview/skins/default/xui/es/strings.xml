@@ -3958,6 +3958,12 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="LocationCtrlSeeAVsTooltip">
 		Los avatares son visibles y está permitido el chat fuera de esta parcela
 	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Los objetos móviles pueden no comportarse adecuadamente en esta región hasta que ésta sea recargada.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Pathfinding dinámico no activado en esta región.
+	</string>
 	<string name="UpdaterWindowTitle">
 		Actualizar [APP_NAME]
 	</string>
@@ -5142,6 +5148,11 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Normal">
 		Normal
 	</string>
+	<string name="Pathfinding_Wiki_URL">http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer</string>
+	<string name="Pathfinding_Object_Attr_None">Ninguno</string>
+	<string name="Pathfinding_Object_Attr_Permanent">Afecta al navmesh</string>
+	<string name="Pathfinding_Object_Attr_Character">Caracter</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">(Múltiple)</string>
 	<string name="snapshot_quality_very_low">
 		Muy bajo
 	</string>

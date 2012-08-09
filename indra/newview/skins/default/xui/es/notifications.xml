@@ -37,6 +37,13 @@
 			<button name="Help" text="$helptext"/>
 		</form>
 	</template>
+	<template name="okhelpignore">
+		<form>
+			<button name="OK_okhelpignore" text="$yestext"/>
+			<button name="Help_okhelpignore" text="$helptext"/>
+			<ignore text="$ignoretext"/>
+		</form>
+	</template>
 	<template name="yesnocancelbuttons">
 		<form>
 			<button name="Yes" text="$yestext"/>
@@ -601,6 +608,9 @@ seleccionar más de uno.
 todos los objetos.
 
 Por favor, asegúrate de que no hay ninguno bloqueado y de que eres el propietario de todos.
+	</notification>
+	<notification name="CannotLinkPermanent">
+		Los objetos no pueden ser enlazados a través del límite de la región.
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
 		Imposible enlazarlos porque hay objetos de distintos propietarios.
@@ -2479,6 +2489,20 @@ Aquí no puedes volar.
 	<notification name="NoBuild">
 		Este terreno tiene desactivada la capacidad para construir. Aquí no puedes ni construir ni crear objetos.
 	</notification>
+	<notification name="PathfindingDirty">
+		La región tiene cambios de pathfinding pendientes. Si tienes derechos de construcción, debes actualizar la región pulsando el botón "Recargar región”.
+	</notification>
+	<notification name="DynamicPathfindingDisabled">
+		Pathfinding dinámico no está activado en esta región. Los objetos con scripts que usen llamadas pathfinding LSL pueden no funcionar como se espera en esta región.
+	</notification>
+	<notification name="PathfindingRebakeNavmesh">
+		Cambiar ciertos objetos en esta región podría causar que otros objetos en movimiento se comporten de forma incorrecta. Para que los objetos en movimiento se comporten correctamente, pulsa el botón "Recargar región”. Pulsa “Ayuda” para más información.
+		<usetemplate name="okhelpignore" ignoretext="Cambiar ciertos objetos en esta región puede ocasionar un comportamiento incorrecto de otros objetos en movimiento." yestext="Aceptar" helptext="Ayuda"/>
+	</notification>
+	<notification name="PathfindingCannotRebakeNavmesh">
+		Ha ocurrido un error. Puede deberse a un problema en la conexión o en el servidor, o puede que no tengas permisos para construir. A veces desconectar y volver a conectar puede resolver este problema.
+	<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
 	<notification name="SeeAvatars">
 		Esta parcela oculta los avatares y el chat de texto de otras parcelas. No podrás ver a los residentes que estén fuera la parcela ni ellos podrán verte a ti. El chat de texto regular del canal 0 también está restringido a la parcela.
 	</notification>
@@ -3193,6 +3217,23 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		Esta acción ocultará todos los botones y elementos de menú. Para restaurarlos, pulsa otra vez en [SHORTCUT].
 		<usetemplate ignoretext="Confirmar antes de ocultar la IU" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestricted">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse a causa de restricciones de permisos en el linkset." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnVolume">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse porque la forma es no-convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestrictedAndVolume">
+		Algunos linksets seleccionados no pueden ser configurados como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa. Estos linksets no serán modificados.
+		<usetemplate ignoretext="Algunos linksets no pueden ser configurados a causa de restricciones de permisos en el linkset y porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
+		El objeto seleccionado afecta al navmesh. Cambiarlo a Camino Flexible lo eliminará del navmesh.
+		<usetemplate ignoretext="El objeto seleccionado afecta al navmesh. Cambiarlo a Camino Flexible lo eliminará del navmesh." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Parece que no tienes el hardware apropiado para [APP_NAME]. [APP_NAME] requiere una tarjeta gráfica OpenGL que admita texturas múltiples (&apos;multitexture support&apos;). Si la tienes, comprueba que tienes los últimos controladores para tu tarjeta gráfica, así como los últimos parches y &apos;service packs&apos; para tu sistema operativo.
 
@@ -3328,6 +3369,9 @@ El nombre NO puede contener los caracteres ":" o "|".
 		'[GRID]' no es una red o dirección válida.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
+	<notification name="InvalidLocationSLURL">
+		Tu posición de inicio no especifica una red válida.
+	</notification>
 	<notification name="BlockLoginInfo">
 		[REASON]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
@@ -3462,6 +3506,26 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 	<notification name="ConfirmScriptModify">
 		¿Estás seguro de que quieres modificar los scripts en los objetos seleccionados?
 		<usetemplate ignoretext="Confirmar antes de modificar scripts en la selección" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="LocalBitmapsUpdateFileNotFound">
+		[FNAME] no puede ser actualizado porque el archivo ya no existe.
+Se desactivarán futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsUpdateFailedFinal">
+		[FNAME] no se ha podido abrir o descodificar en [NRETRIES] intentos, y ahora se considera roto.
+Se desactivarán futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsVerifyFail">
+		Se ha intentado añadir un archivo de imagen inválido o ilegible, que no ha podido ser abierto o descodificado.
+Intento cancelado.
+	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Vas a devolver [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
+		<usetemplate ignoretext="¿Estás seguro/a de querer devolver múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Vas a eliminar [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
+		<usetemplate ignoretext="Estás seguro/a de querer eliminar múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.
