@@ -394,6 +394,7 @@ std::string LLSLURL::getSLURLString() const
 						? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z)) : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) ));
 
 // [/RLVa:KB]
+				return ret;
 			}
 		case APP:
 		{
