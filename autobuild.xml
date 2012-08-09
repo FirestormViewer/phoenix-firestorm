@@ -1422,9 +1422,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>83101cb8f655bf013333b22e4335967c</string>
+              <string>eb35e0da356163387272167bd81771f4</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/ndPhysicsStub-r65-darwin32.tar.bz2</string>
+              <string>http://phoenixviewer.com/app/packages/ndPhysicsStub-0.1.1-Darwin_ao10.5.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
