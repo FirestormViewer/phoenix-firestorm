@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="local_bitmap_browser_floater" title="Examinador local de imágenes" width="625" min_width="625">
 	<scroll_list name="bitmap_list">
 		<column name="bitmap_name" label="Nombre"/>
