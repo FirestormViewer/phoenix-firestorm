@@ -6,8 +6,11 @@
      label="Show Resident Profile"
      layout="topleft"
      name="show_agent">
+        <!-- FS:Ansariel: FS-7263 - Make sure the agent profile is opened instead of the inspect panel
         <menu_item_call.on_click
-         function="Url.Execute" />
+         function="Url.Execute" /> -->
+        <menu_item_call.on_click
+         function="Url.ShowProfile" />
     </menu_item_call>
     <menu_item_separator
      layout="topleft" />

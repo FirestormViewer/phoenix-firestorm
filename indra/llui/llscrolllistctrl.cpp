@@ -1798,6 +1798,10 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("Url.Execute", boost::bind(&LLScrollListCtrl::showNameDetails, id, is_group));
 			registrar.add("Url.CopyLabel", boost::bind(&LLScrollListCtrl::copyNameToClipboard, id, is_group));
 			registrar.add("Url.CopyUrl", boost::bind(&LLScrollListCtrl::copySLURLToClipboard, id, is_group));
+			// <FS:Ansariel> FS-7263: Register Url.ShowProfile for menu_url_agent.xml
+			//               so we can properly open agent profile from contact
+			//               list and textareas (nearby chat) context menus as well.
+			registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, "secondlife:///app/agent/" + id + "/about"));
 
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
