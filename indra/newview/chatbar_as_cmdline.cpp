@@ -454,41 +454,6 @@ void invrepair()
 	gInventory.collectDescendents(gInventory.getRootFolderID(),cats,items,FALSE);//,objectnamematches);
 }
 
-/*static BOOL *sFSCmdLine;
-static std::string *sFSCmdLinePos;
-static std::string *sFSCmdLineDrawDistance;
-static std::string *sFSCmdTeleportToCam;
-static std::string *sFSCmdLineAO;
-static std::string *sFSCmdLineKeyToName;
-static std::string *sFSCmdLineOfferTp;
-static std::string *sFSCmdLineGround;
-static std::string *sFSCmdLineHeight;
-static std::string *sFSCmdLineTeleportHome;
-static std::string *sFSCmdLineRezPlatform;
-static std::string *sFSCmdLineMapTo;
-static BOOL *sFSCmdLineMapToKeepPos;
-static std::string *sFSCmdLineCalc;
-static std::string *sFSCmdLineTP2;
-static std::string *sFSCmdLineClearChat;
-static F32 *sFSCmdLinePlatformSize;*/
-
-/*
-class another_rebind_group
-{
-	
-}
-
-template <class T>
-class another_rebind
-{
-	T *mVal;
-	static std::map<another_rebind*, std::map<std::string, T*> > instances;
-
-	
-	
-};
-*/
-
 
 #ifdef JC_PROFILE_GSAVED
 std::map<std::string, int> get_gsaved_calls();
@@ -932,18 +897,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				return false;
 			}
 #endif
-			else if (revised_text == "xyzzy")
-			{
-				//Zwag: I wonder how many people will actually get this?
-				cmdline_printchat("Nothing happens.");
-				return false;
-			}
-			else if (revised_text == "/pimps")
-			{
-				//Thanks to the pimp's horrible code for shutting down the site...
-				cmdline_printchat("Pimps can't code.");
-				return true;//dont block chat
-			}
 			else if(revised_text == "/cs")
 			{
 				LLFloaterReg::showInstance("contactsets");
