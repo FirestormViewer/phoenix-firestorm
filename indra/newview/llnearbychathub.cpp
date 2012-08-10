@@ -576,3 +576,44 @@ BOOL LLNearbyChat::defaultChatBarHasFocus() const
 
 	return FALSE;
 }
+
+
+class LLChatCommandHandler : public LLCommandHandler
+{
+public:
+	// not allowed from outside the app
+	LLChatCommandHandler() : LLCommandHandler("chat", UNTRUSTED_BLOCK) { }
+
+    // Your code here
+	bool handle(const LLSD& tokens, const LLSD& query_map,
+				LLMediaCtrl* web)
+	{
+		bool retval = false;
+		// Need at least 2 tokens to have a valid message.
+		if (tokens.size() < 2)
+		{
+			retval = false;
+		}
+		else
+		{
+		S32 channel = tokens[0].asInteger();
+			// VWR-19499 Restrict function to chat channels greater than 0.
+			if ((channel > 0) && (channel < CHAT_CHANNEL_DEBUG))
+			{
+				retval = true;
+		// Send unescaped message, see EXT-6353.
+		std::string unescaped_mesg (LLURI::unescape(tokens[1].asString()));
+		send_chat_from_viewer(unescaped_mesg, CHAT_TYPE_NORMAL, channel);
+			}
+			else
+			{
+				retval = false;
+				// Tell us this is an unsupported SLurl.
+			}
+		}
+		return retval;
+	}
+};
+
+// Creating the object registers with the dispatcher.
+LLChatCommandHandler gChatHandler;
