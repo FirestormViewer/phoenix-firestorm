@@ -259,10 +259,23 @@ Hover your mouse over the options for more help.
          top_pad="4"
          width="300" />
 
+        <!-- <exodus> -->
+        <check_box
+         height="16"
+         font="SansSerifSmall"
+         label="Receive group instant messages"
+         layout="topleft"
+         left="10"
+         name="receive_chat"
+         tool_tip="Sets whether you want to participate in group chat for this group."
+         top_pad="5"
+         width="300" />
+        <!-- </exodus> -->
+
          <text
          name="active_title_label"
          left="0"
-         top_pad="30"
+         top_pad="9"
          width="200"
          height="12"
          type="string"

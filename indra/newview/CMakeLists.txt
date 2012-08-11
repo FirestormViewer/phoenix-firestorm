@@ -99,6 +99,7 @@ set(viewer_SOURCE_FILES
     aoset.cpp
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
+    exogroupmutelist.cpp
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
@@ -742,6 +743,7 @@ set(viewer_HEADER_FILES
     aoset.h
     chatbar_as_cmdline.h
     kcwlinterface.h
+    exogroupmutelist.h
     floatermedialists.h
     fscontactsfloater.h
     fsareasearch.h

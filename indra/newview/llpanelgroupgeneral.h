@@ -109,6 +109,7 @@ private:
 	LLTextBox       *mActiveTitleLabel;
 	LLComboBox		*mComboActiveTitle;
 	LLComboBox		*mComboMature;
+	LLCheckBoxCtrl	*mCtrlReceiveGroupChat; // <exodus/>
 
 	LLGroupMgrGroupData::member_list_t::iterator mMemberProgress;
 	LLUUID mIteratorGroup; // <FS:ND/> FIRE-6074; UUID of the group mMemberProgress belongs to.
