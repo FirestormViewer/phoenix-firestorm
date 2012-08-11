@@ -173,6 +173,7 @@
                 <menu_item_check.on_enable
                  function="Self.EnableForceSit" />
            </menu_item_check>
+<!-- <FS:WF> FIRE-7286 : Hide or remove Client Phantom feature from menu - due to PATHBUG-122
 		   <menu_item_check
 			 label="Phantom"
              shortcut="control|alt|P"
@@ -182,6 +183,7 @@
                 <menu_item_check.on_click
                    function="Self.togglePhantom" />
 			</menu_item_check>
+     <FS:WF> FIRE-7286 END -->
 			<menu_item_check
 			 label="Quickjump"
              name="Avatar Ignore Prejump">
