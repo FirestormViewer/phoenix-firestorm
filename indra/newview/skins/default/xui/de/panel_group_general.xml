@@ -42,6 +42,7 @@ Bewegen Sie die Maus über die Optionen, um weitere Informationen anzuzeigen.
 				</text>
 				<check_box label="In meinem Profil anzeigen" name="list_groups_in_profile" tool_tip="Steuert, ob diese Gruppe in Ihrem Profil angezeigt wird"/>
 				<check_box label="Gruppenmitteilungen erhalten" name="receive_notices" tool_tip="Festlegen, ob Sie von dieser Gruppe Mitteilungen erhalten können.  Deaktivieren Sie diese Option, wenn Sie von der Gruppe Spam erhalten."/>
+				<check_box label="Am Gruppenchat teilnehmen" name="receive_chat" tool_tip="Festlegen, ob Sie am Gruppenchat dieser Gruppe teilnehmen möchten."/>
 				<text name="active_title_label">
 					Mein aktiver Titel:
 				</text>
