@@ -2,7 +2,7 @@
 <floater
  positioning="none"
  legacy_header_height="18"
- height="618"
+ height="638"
  layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
@@ -831,7 +831,7 @@
     width="282"/>
     <tab_container
      follows="left|top"
-     height="410"
+     height="430"
      halign="center"
      left="0"
      name="Object Info Tabs"
@@ -877,6 +877,14 @@
             <panel.string
              name="text modify info 4">
                 You can't modify these objects
+            </panel.string>
+            <panel.string
+             name="text modify info 5">
+                You can't modify this object across a region boundary
+            </panel.string>
+            <panel.string
+             name="text modify info 6">
+                You can't modify these objects across a region boundary
             </panel.string>
             <panel.string
              name="text modify warning">
@@ -1236,7 +1244,7 @@ even though the user gets a free copy.
          name="perms_build"
          left="0"
          top_pad="4"
-         height="105"
+         height="95"
          width="290">
             <text
              type="string"
@@ -1389,6 +1397,35 @@ even though the user gets a free copy.
                 F:
             </text>
         </panel>
+		<panel
+         border="false"
+         follows="left|top"
+         layout="topleft"
+         mouse_opaque="false"
+         name="pathfinding_attrs_panel"
+         left="0"
+         top_pad="0"
+         height="25"
+         width="290">
+      <text
+         type="string"
+         follows="left|top"
+         name="pathfinding_attributes_label"
+         top_pad="4"
+         width="150"
+         left="10">
+        Pathfinding attributes:
+      </text>
+      <text
+         type="string"
+         follows="left|top"
+         text_color="EmphasisColor"
+         name="pathfinding_attributes_value"
+         width="130"
+         word_wrap="false"
+         left_pad="0">
+      </text>
+    </panel>
       </panel>
       <!-- Object tab -->
       <panel

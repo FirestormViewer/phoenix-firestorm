@@ -31,6 +31,14 @@
                 You can't modify these objects
             </panel.string>
             <panel.string
+             name="text modify info 5">
+                You can't modify this object across a region boundary
+            </panel.string>
+            <panel.string
+             name="text modify info 6">
+                You can't modify these objects across a region boundary
+            </panel.string>
+            <panel.string
              name="text modify warning">
                 This object has linked parts
             </panel.string>
@@ -457,6 +465,24 @@
 	   left="120"
        name="search_check"
        tool_tip="Let people see this object in search results" />
+      <text
+        type="string"
+        follows="left|top"
+        name="pathfinding_attributes_label"
+        top_pad="6"
+        width="150"
+        left="5">
+      Pathfinding attributes:
+      </text>
+      <text
+        type="string"
+        follows="left|top"
+        text_color="EmphasisColor"
+        name="pathfinding_attributes_value"
+        width="130"
+        word_wrap="false"
+        left_pad="0">
+      </text>
             <text
              type="string"
              text_color="EmphasisColor"
