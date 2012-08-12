@@ -109,12 +109,31 @@
         width="214">
     </text>
   </panel>
+  
+  <!-- <FS:WF> FIRE-7261 : Remove this text once Havok is added -->
+         <text
+          font="SansSerifSmall"
+          type="string"
+          text_color="1 0 0 1"
+          length="1"
+          follows="left|top"
+          height="24"
+          layout="topleft"
+          left="12"
+		  top_pad="-10"
+          name="no_havok_warning"
+          width="200">
+           WARNING: These features are not
+                   fully implemented yet.
+         </text>
+  <!-- <FS:WF> FIRE-7261 : END -->
+		 
   <view_border
       bevel_style="none"
       follows="top|left"
       layout="topleft"
       left="12"
-      top="179"
+      top="182"
       height="305"
       width="213"
       visible="true" />
@@ -124,7 +143,7 @@
       tab_position="top"
       name="view_test_tab_container"
       left="12"
-      top="157"
+      top="161"
       height="328"
       width="214">
     <panel
