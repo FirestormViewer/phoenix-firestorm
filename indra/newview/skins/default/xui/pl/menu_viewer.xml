@@ -153,6 +153,11 @@
 			<menu_item_call label="Przestaw skrypty na stan Wyłączony" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
 		</menu>
+		<menu label="Odnajdywanie ścieżek" name="Pathfinding">
+			<menu_item_call label="Zbiory części (linków)..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Postacie..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Pokaż / testuj..." name="pathfinding_console_menu_item"/>
+		</menu>
 		<menu label="Opcje" name="Options">
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>
 			<menu_item_check label="Wybierz tylko moje obiekty" name="Select Only My Objects"/>

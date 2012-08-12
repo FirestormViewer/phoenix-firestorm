@@ -3896,6 +3896,12 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="LocationCtrlSeeAVsTooltip">
 		Awatary widoczne, czat poza parcelą dozwolony
 	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Obiekty poruszające się mogą nie zachowywać się poprawnie, póki region nie zostanie odświeżony.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Odnajdywanie ścieżek jest wyłączone w tym regionie.
+	</string>
 	<string name="UpdaterWindowTitle">
 		Aktualizacja [APP_NAME]
 	</string>
@@ -4381,6 +4387,9 @@ Raport o Nadużyciu
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
 	</string>
+	<string name="free">
+		darmowe
+	</string>
 	<string name="Membership">
 		Członkostwo
 	</string>
@@ -4462,22 +4471,22 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Podziel
 	</string>
 	<string name="BeaconParticle">
-		Podgląd emiterów cząsteczek (niebieski)
+		Emitery cząsteczek (niebieski)
 	</string>
 	<string name="BeaconPhysical">
-		Podgląd emiterów fizycznych obiektów (zielony)
+		Emitery fizycznych obiektów (zielony)
 	</string>
 	<string name="BeaconScripted">
-		Podgląd emiterów obiektów skryptowanych (czerwony)
+		Emitery obiektów skryptowanych (czerwony)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Podgląd emiterów obiektów skryptowanych z opcją dotyku (czerwony)
+		Emitery obiektów skryptowanych z opcją dotyku (czerwony)
 	</string>
 	<string name="BeaconSound">
-		Podgląd emiterów dźwięków (żółty)
+		Emitery dźwięków (żółty)
 	</string>
 	<string name="BeaconMedia">
-		Podgląd emiterów mediów (biały)
+		Emitery mediów (biały)
 	</string>
 	<string name="ParticleHiding">
 		Ukryj cząsteczki
@@ -4736,6 +4745,18 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Normal">
 		Normalne
+	</string>
+	<string name="Pathfinding_Object_Attr_None">
+		Brak
+	</string>
+	<string name="Pathfinding_Object_Attr_Permanent">
+		Wpływ na Navmesh
+	</string>
+	<string name="Pathfinding_Object_Attr_Character">
+		Postać
+	</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">
+		(Wiele)
 	</string>
 	<string name="snapshot_quality_very_low">
 		Bardzo niska

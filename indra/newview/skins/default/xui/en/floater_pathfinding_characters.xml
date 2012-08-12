@@ -32,7 +32,8 @@
       follows="left|top|right|bottom"
       layout="topleft"
       height="191"
-      width="635">
+      width="635"
+      name="pathfinding_chars_main">
     <scroll_list
         column_padding="0"
         draw_heading="true"
@@ -124,7 +125,8 @@
       layout="topleft"
       left="0"
       height="67"
-      width="635">
+      width="635"
+      name="pathfinding_chars_actions">
     <text
         height="13"
         word_wrap="false"

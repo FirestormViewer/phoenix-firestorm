@@ -47,7 +47,8 @@
       follows="left|top|right|bottom"
       layout="topleft"
       height="226"
-      width="999">
+      width="999"
+      name="pathfinding_linksets_main">
     <text
         height="13"
         word_wrap="false"
@@ -59,7 +60,8 @@
         layout="topleft"
         left="20"
         top_pad="14"
-        width="67">
+        width="67"
+        name="linksets_filter_label">
       Filter by:
     </text>
     <text
@@ -72,7 +74,8 @@
         follows="left|top"
         layout="topleft"
         left_pad="0"
-        width="62">
+        width="62"
+        name="linksets_name_label">
       Name
     </text>
     <line_editor
@@ -97,7 +100,8 @@
         layout="topleft"
         left_pad="22"
         top_pad="-15"
-        width="88">
+        width="88"
+        name="linksets_desc_label">
       Description
     </text>
     <line_editor
@@ -277,7 +281,8 @@
       layout="topleft"
       left="0"
       height="67"
-      width="950">
+      width="950"
+      name="pathfinding_linksets_actions">
     <text
         height="13"
         word_wrap="false"
@@ -290,7 +295,8 @@
         follows="left|bottom|right"
         layout="topleft"
         top_pad="8"
-        width="580">
+        width="580"
+        name="linksets_actions_label">
       Actions on selected linksets (If a linkset is removed from the world, its attributes may be lost):
     </text>
     <check_box
@@ -364,7 +370,8 @@
       layout="topleft"
       left="0"
       height="75"
-      width="950">
+      width="950"
+      name="pathfinding_linksets_attributes">
     <text
         height="13"
         word_wrap="false"
@@ -376,7 +383,8 @@
         layout="topleft"
         left="18"
         top_pad="8"
-        width="912">
+        width="912"
+        name="linksets_attributes_label">
       Edit attributes of selected linksets and press the button to apply changes
     </text>
     <combo_box

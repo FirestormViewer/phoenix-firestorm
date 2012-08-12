@@ -3,13 +3,15 @@
 	<menu_item_call label="Dotknij" name="Object Touch"/>
 	<menu_item_call label="Edytuj" name="Edit..."/>
 	<menu_item_call label="Buduj" name="Build"/>
+	<menu_item_call label="Pokaż w zb. części (ścieżki)" name="show_in_linksets"/>
+	<menu_item_call label="Pokaż w postaciach (ścieżki)" name="show_in_characters"/>
 	<menu_item_call label="Otwórz" name="Open"/>
 	<menu_item_call label="Usiądź tutaj" name="Object Sit"/>
 	<menu_item_call label="Wstań" name="Object Stand Up"/>
 	<context_menu label="Obiekt" name="Object Features">
 		<menu_item_call label="Profil" name="Object Inspect"/>
 		<menu_item_call label="Inspekcja" name="Object_Inspect_Floater"/>
-		<menu_item_call label="Info o skryptach (Licznik)" name="ScriptInfo"/>
+		<menu_item_call label="Info o skryptach" name="ScriptInfo"/>
 		<menu_item_call label="Scal" name="Object Link"/>
 		<menu_item_call label="Rozłącz" name="Object Unlink"/>
 		<menu_item_check label="Edytuj połączone części" name="Object Edit Linked Parts"/>

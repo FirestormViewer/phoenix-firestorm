@@ -155,6 +155,12 @@
 			<panel.string name="text modify info 4">
 				Nie możesz modyfikować tych obiektów
 			</panel.string>
+			<panel.string name="text modify info 5">
+				Nie można modyfikować tego obiektu przez granicę regionu
+			</panel.string>
+			<panel.string name="text modify info 6">
+				Nie można modyfikować tych obiektów przez granicę regionu
+			</panel.string>
 			<panel.string name="text modify warning">
 				Musisz zaznaczyć cały obiekt by ustawić prawa
 			</panel.string>
@@ -198,7 +204,7 @@
 			<check_box label="Udostępnij" name="checkbox share with group" tool_tip="Pozwól członkom grupy na dzielenie praw do modyfikacji tego obiektu. Musisz przypisać obiekt, aby uaktywnić ograniczenia dla ról."/>
 			<button label="Przypisz" label_selected="Przypisz" name="button deed" tool_tip="Przypisanie oddaje prawa następnemu właścicielowi. Obiekty posiadane przez grupę mogą zostać przypisane przez oficera grupy."/>
 			<text name="label click action">
-				Akcja po kliknięciu:
+				Akcja po kliku:
 			</text>
 			<combo_box name="clickaction">
 				<combo_box.item label="Dotknij (domyślne)" name="Touch/grab(default)"/>
@@ -233,23 +239,10 @@
 				<check_box label="Zmieniać" name="checkbox next owner can modify"/>
 				<check_box label="Kopiować" name="checkbox next owner can copy"/>
 				<check_box label="Transferować" name="checkbox next owner can transfer" tool_tip="Następny właściciel może oddawać lub sprzedawać ten obiekt"/>
-				<text name="B:">
-					B:
-				</text>
-				<text name="O:">
-					O:
-				</text>
-				<text name="G:">
-					G:
-				</text>
-				<text name="E:">
-					E:
-				</text>
-				<text name="N:">
-					N:
-				</text>
-				<text name="F:">
-					F:
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Atrybuty odnajd. ścieżek:
 				</text>
 			</panel>
 		</panel>

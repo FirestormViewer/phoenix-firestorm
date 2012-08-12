@@ -44,7 +44,8 @@
       left="12"
       top_pad="10"
       height="61"
-      width="214">
+      width="214"
+      name="pathfinding_console_main">
     <text
         height="13"
         word_wrap="true"
@@ -55,7 +56,8 @@
         layout="topleft"
         left="0"
         top_pad="0"
-        width="214">
+        width="214"
+        name="viewer_status_label">
       Viewer status
     </text>
     <text
@@ -80,7 +82,8 @@
       layout="topleft"
       left="12"
       height="66"
-      width="214">
+      width="214"
+      name="pathfinding_console_simulator">
     <text
         height="13"
         word_wrap="true"
@@ -91,7 +94,8 @@
         layout="topleft"
         left="0"
         top_pad="5"
-        width="214">
+        width="214"
+        name="simulator_status_label">
       Simulator status
     </text>
     <text
