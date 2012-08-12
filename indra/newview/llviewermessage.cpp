@@ -176,13 +176,6 @@ LLFrameTimer gThrottleTimer;
 const U32 OFFER_THROTTLE_MAX_COUNT=5; //number of items per time period
 const F32 OFFER_THROTTLE_TIME=10.f; //time period in seconds
 
-//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-//sit object owner name (global)
-std::string gSitOwnerName;		// name of owner of sit target
-bool gPermsGrantedSameOwner = false;	// sit perms granted because owner same
-LLUUID gPermsSameOwnerUUID = LLUUID::null;	// what we auto-granted permissions to
-//</FS:TS> FIRE-6762
-
 //script permissions
 const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] = 
 	{ 
@@ -5073,24 +5066,6 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 //ObjectPropertiesFamily  -KC
 void process_object_properties_family(LLMessageSystem *msg, void**user_data)
 {
-
-    	//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-    	//pre-fetching sit target owner for automatic permissions granting -SA
-	const LLViewerObject* pParent = (LLViewerObject*)gAgentAvatarp->getParent();
-	if (pParent) // if avatar is sitting somewhere
-	{
-		LLUUID object_id;
-		msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id);
-		// if object owner is also the owner of the sit object, query owner name
-		if (object_id == pParent->getID())
-		{
-			LLUUID owner_id;
-			msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id);		
-			gCacheName->getFullName(owner_id, gSitOwnerName);
-		}
-	}
-	// /-SA
-	//</FS:TS> FIRE-6762
 	// Send the result to the corresponding requesters.
 	LLSelectMgr::processObjectPropertiesFamily(msg, user_data);
 	
@@ -7051,9 +7026,7 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		}
 // [/RLVa:KB]
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g) | Modified: RLVa-0.2.0e
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		S32 questionsOther = questions;
-		//</FS:TS> FIRE-6762
+		S32 rlvQuestionsOther = questions;
 
 		if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
 		{
@@ -7063,35 +7036,13 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 //				if (pObj->permYouOwner())
 //				{
 					// PERMISSION_TAKE_CONTROLS and PERMISSION_ATTACH are only auto-granted to objects this avie owns
-					//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-					questionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
-					//</FS:TS> FIRE-6762
+					rlvQuestionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
 						LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
 //				}
 			}
 		}
-// [SA] Same automatic permissions for the objects owned by the owner of the object the avatar is sat on.
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		if (gSavedSettings.getBOOL("PermissionsGrantToSitOwner"))
-		{
-			if (gAgentAvatarp->isSitting() && LLCacheName::cleanFullName(owner_name) == gSitOwnerName)
-			{
-				questionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRIGGER_ANIMATION] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRACK_CAMERA] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_CONTROL_CAMERA]);
-				gPermsGrantedSameOwner = true;
-				gPermsSameOwnerUUID = taskid;
-			}
-		}
-		else
-		{
-			gPermsGrantedSameOwner = false;
-			gPermsSameOwnerUUID = LLUUID::null;
-                }
-		//</FS:TS> FIRE-6762
-// [/SA]
-		if ( (!caution) && (!questionsOther) )
+
+		if ( (!caution) && (!rlvQuestionsOther) )
 		{
 			LLNotifications::instance().forceResponse(
 				LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);

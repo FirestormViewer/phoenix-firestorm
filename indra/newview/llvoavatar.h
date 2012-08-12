@@ -912,7 +912,6 @@ public:
 	void 			sitOnObject(LLViewerObject *sit_object);
 	void 			getOffObject();
 	void 			revokePermissionsOnObject(LLViewerObject *sit_object);
-	void 			revokePermissionsOnObject(LLUUID sit_object_ID);
 private:
 	// set this property only with LLVOAvatar::sitDown method
 	BOOL 			mIsSitting;

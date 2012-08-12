@@ -8746,17 +8746,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>344</integer>
     </map>
-    <key>PermissionsGrantToSitOwner</key>
-    <map>
-      <key>Comment</key>
-      <string>Automatically grant permissions to animate, take controls, track camera and control camera to objects owned by the same avatar as the object you are sat on.</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>PickerContextOpacity</key>
     <map>
       <key>Comment</key>
