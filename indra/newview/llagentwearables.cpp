@@ -1507,7 +1507,8 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 //				pushWearable(type,new_wearable);
 //			}
 // [RLVa:KB] - Checked: 2010-06-08 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
-			else if ( (!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.hasLockedWearable(type)) || (!remove) )
+			else if ( (!rlv_handler_t::isEnabled()) || (!remove) || 
+			          ((gRlvWearableLocks.canWear(type)) && (!gRlvWearableLocks.hasLockedWearable(type))) )
 			{
 				// Sanity check: there shouldn't be any worn wearables for this type the first time we encounter it
 				RLV_ASSERT( (!remove) || (0 != idxCurPerType[type]) || (0 == getWearableCount(type)) );
@@ -1521,7 +1522,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 				{
 					// Skip adding if @addoutfit=n restricted *unless* the wearable made it into COF [see LLAppMgr::updateAgentWearables()]
 					if ( (RLV_WEAR_LOCKED == gRlvWearableLocks.canWear(type)) && 
-						 (!gInventory.isObjectDescendentOf(new_item->getUUID(), LLAppearanceMgr::instance().getCOF())) )
+						 (!LLAppearanceMgr::instance().isLinkInCOF(new_wearable->getItemID())) )
 					{
 						continue;
 					}

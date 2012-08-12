@@ -64,7 +64,7 @@ const S32 RLV_VERSION_BUILD = 0;
 // Implementation version
 const S32 RLVa_VERSION_MAJOR = 1;
 const S32 RLVa_VERSION_MINOR = 4;
-const S32 RLVa_VERSION_PATCH = 6;
+const S32 RLVa_VERSION_PATCH = 7;
 const S32 RLVa_VERSION_BUILD = 0;
 
 // Uncomment before a final release
@@ -243,6 +243,7 @@ enum ERlvCmdRet {
 	RLV_RET_SUCCESS		= 0x0100,	// Command executed succesfully
 	RLV_RET_SUCCESS_UNSET,			// Command executed succesfully (RLV_TYPE_REMOVE for an unrestricted behaviour)
 	RLV_RET_SUCCESS_DUPLICATE,		// Command executed succesfully (RLV_TYPE_ADD for an already restricted behaviour)
+	RLV_RET_SUCCESS_DELAYED,		// Command parsed valid but will execute at a later time
 	RLV_RET_FAILED		= 0x0200,	// Command failed (general failure)
 	RLV_RET_FAILED_SYNTAX,			// Command failed (syntax error)
 	RLV_RET_FAILED_OPTION,			// Command failed (invalid option)

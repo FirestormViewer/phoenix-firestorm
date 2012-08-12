@@ -6652,7 +6652,11 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 		std::string perms;
 		for (S32 i = 0; i < SCRIPT_PERMISSION_EOF; i++)
 		{
-			if ((orig_questions & LSCRIPTRunTimePermissionBits[i]) && SCRIPT_QUESTION_IS_CAUTION[i])
+//			if ((orig_questions & LSCRIPTRunTimePermissionBits[i]) && SCRIPT_QUESTION_IS_CAUTION[i])
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+			if ( (orig_questions & LSCRIPTRunTimePermissionBits[i]) && 
+				 ((SCRIPT_QUESTION_IS_CAUTION[i]) || (notification["payload"]["rlv_notify"].asBoolean())) )
+// [/RLVa:KB]
 			{
 				count++;
 				caution = TRUE;
@@ -6672,11 +6676,25 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 
 		// log a chat message as long as at least one requested permission
 		// is a caution permission
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLChat chat(notice.getString());
-	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+			LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+			if(nearby_chat)
+			{
+				LLChat chat_msg(notice.getString());
+				chat_msg.mFromName = SYSTEM_FROM;
+				chat_msg.mFromID = LLUUID::null;
+				chat_msg.mSourceType = CHAT_SOURCE_SYSTEM;
+				nearby_chat->addMessage(chat_msg);
+			}
 		}
+// [/RLVa:KB]
+//		if (caution)
+//		{
+//			LLChat chat(notice.getString());
+//	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+//		}
 	}
 }
 
@@ -6722,11 +6740,21 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 	msg->sendReliable(LLHost(notification["payload"]["sender"].asString()));
 
 	// only log a chat message if caution prompts are enabled
-	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+//	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (gSavedSettings.getBOOL("PermissionsCautionEnabled")) || (notification["payload"]["rlv_notify"].asBoolean()) )
+// [/RLVa:KB]
 	{
 		// log a chat message, if appropriate
 		notify_cautioned_script_question(notification, response, orig, allowed);
 	}
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (allowed) && (notification["payload"].has("rlv_blocked")) )
+	{
+		RlvUtil::notifyBlocked(notification["payload"]["rlv_blocked"], LLSD().with("OBJECT", notification["payload"]["object_name"]));
+	}
+// [/RLVa:KB]
 
 	if ( response["Mute"] ) // mute
 	{
@@ -6850,42 +6878,48 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		payload["object_name"] = object_name;
 		payload["owner_name"] = owner_name;
 
-// [RLVa:KB] - Checked: 2011-07-25 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach()) )
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+		if (rlv_handler_t::isEnabled())
 		{
-			// If only the attachment permission is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
-			if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+			if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & questions) )
 			{
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_PERMATTACH, LLSD().with("OBJECT", object_name));
-				LLNotifications::instance().forceResponse(
-					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 1/*NO*/);
-				return;
+				// Notify the user that we blocked it since they're not allowed to wear any new attachments
+				payload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
+				// If only attach is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
+				if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+				{
+					payload["questions"] = 0;
+					LLNotifications::instance().forceResponse(
+						LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
+					return;
+				}
+				else
+				{
+					questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+					payload["questions"] = questions;
+				}
 			}
-			else
+
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
 			{
-				questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
-				payload["questions"] = questions;
+				const LLViewerObject* pObj = gObjectList.findObject(taskid);
+				if (pObj)
+				{
+					if ( (pObj->permYouOwner()) && (!pObj->isAttachment()) )
+					{
+						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
+							LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
+					}
+					else
+					{
+						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS]);
+					}
+					payload["rlv_notify"] = !pObj->permYouOwner();
+				}
 			}
 		}
-// [/RLVa:KB]
-// [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g) | Modified: RLVa-0.2.0e
-		S32 rlvQuestionsOther = questions;
 
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
-		{
-			const LLViewerObject* pObj = gObjectList.findObject(taskid);
-			if (pObj)
-			{
-//				if (pObj->permYouOwner())
-//				{
-					// PERMISSION_TAKE_CONTROLS and PERMISSION_ATTACH are only auto-granted to objects this avie owns
-					rlvQuestionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
-						LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
-//				}
-			}
-		}
-
-		if ( (!caution) && (!rlvQuestionsOther) )
+		if ( (!caution) && (!questions) )
 		{
 			LLNotifications::instance().forceResponse(
 				LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);

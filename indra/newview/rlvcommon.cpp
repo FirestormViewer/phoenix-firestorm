@@ -232,6 +232,8 @@ const char* RlvStrings::getStringFromReturnCode(ERlvCmdRet eRet)
 			return "unset";
 		case RLV_RET_SUCCESS_DUPLICATE:
 			return "duplicate";
+		case RLV_RET_SUCCESS_DELAYED:
+			return "delayed";
 		case RLV_RET_FAILED_SYNTAX:
 			return "thingy error";
 		case RLV_RET_FAILED_OPTION:
