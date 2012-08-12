@@ -1309,7 +1309,6 @@ void cmdline_tp2name(std::string target)
 	}
 
 	cmdline_printchat("Avatar not found.");
-	return;
 }
 
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value
