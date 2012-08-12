@@ -1843,6 +1843,12 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			//               list and textareas (nearby chat) context menus as well.
 			registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, "secondlife:///app/agent/" + id + "/about"));
 
+			// <FS:Ansariel> Additional convenience options
+			registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom"));
+			registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto"));
+			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
+			// </FS:Ansariel> Additional convenience options
+
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
 			delete mPopupMenu;

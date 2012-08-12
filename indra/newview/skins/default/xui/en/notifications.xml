@@ -8853,6 +8853,22 @@ Teleport to this avatar not possible, because the exact position is unknown.
 
   <notification
    icon="alertmodal.tga"
+   name="ZoomToAvatarNotPossible"
+   type="alertmodal">
+Cannot zoom to this avatar, because it is out of reach.
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="TrackAvatarNotPossible"
+   type="alertmodal">
+Cannot track this avatar, because it is out of reach.
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="CacheEmpty"
    type="alertmodal">
 Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads.

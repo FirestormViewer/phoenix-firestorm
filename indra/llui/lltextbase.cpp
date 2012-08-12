@@ -1815,6 +1815,13 @@ void LLTextBase::createUrlContextMenu(S32 x, S32 y, const std::string &in_url)
 	registrar.add("Url.CopyLabel", boost::bind(&LLUrlAction::copyLabelToClipboard, url));
 	registrar.add("Url.CopyUrl", boost::bind(&LLUrlAction::copyURLToClipboard, url));
 
+	// <FS:Ansariel> Additional convenience options
+	std::string target_id = LLUrlAction::extractUuidFromSlurl(url).asString();
+	registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/zoom"));
+	registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/teleportto"));
+	registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + target_id + "/track"));
+	// </FS:Ansariel>
+
 	// create and return the context menu from the XUI file
 	delete mPopupMenu;
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLContextMenu>(xui_file, LLMenuGL::sMenuContainer,

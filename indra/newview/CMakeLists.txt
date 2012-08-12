@@ -112,6 +112,7 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
 	fslslpreproc.cpp
+    fsslurlcommand.cpp
     fsfloaterprofile.cpp
     fspanelprofile.cpp
     fsradarlistctrl.cpp
@@ -756,6 +757,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
 	fslslpreproc.h
+    fsslurlcommand.h
     fsfloaterprofile.h
     fsgridhandler.h
     fspanelprofile.h

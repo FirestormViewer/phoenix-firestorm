@@ -12,6 +12,29 @@
         <menu_item_call.on_click
          function="Url.ShowProfile" />
     </menu_item_call>
+    <menu_item_call
+     label="Zoom at Resident"
+     layout="topleft"
+     name="zoom_agent">
+        <menu_item_call.on_click
+         function="FS.ZoomIn" />
+    </menu_item_call>
+    <menu_item_call
+     label="Teleport to Resident"
+     layout="topleft"
+     name="teleportto_agent">
+        <menu_item_call.on_click
+         function="FS.TeleportToTarget" />
+        <menu_item_call.on_enable
+         function="FS.VisibleTeleportToTarget" />
+    </menu_item_call>
+    <menu_item_call
+     label="Track Resident"
+     layout="topleft"
+     name="track_agent">
+        <menu_item_call.on_click
+         function="FS.TrackAvatar" />
+    </menu_item_call>
     <menu_item_separator
      layout="topleft" />
     <menu_item_call

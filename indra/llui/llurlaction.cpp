@@ -157,3 +157,23 @@ void LLUrlAction::showProfile(std::string url)
 		}
 	}
 }
+
+
+// <FS:Ansariel> FSSlurlCommand support
+LLUUID LLUrlAction::extractUuidFromSlurl(const std::string& url)
+{
+	// Get id from 'secondlife:///app/{cmd}/{id}/{action}'
+	LLURI uri(url);
+	LLSD path_array = uri.pathArray();
+	if (path_array.size() >= 3)
+	{
+		std::string id_str = path_array.get(2).asString();
+		if (LLUUID::validate(id_str))
+		{
+			return LLUUID(id_str);
+		}
+	}
+
+	return LLUUID::null;
+}
+// </FS:Ansariel> FSSlurlCommand support
