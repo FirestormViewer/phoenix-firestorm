@@ -319,7 +319,7 @@
 	  <text
              type="string"
              length="1"
-             left="10"
+             left="5"
              top_pad="15"
              text_color="EmphasisColor"
 	     height="15"
@@ -487,7 +487,7 @@
              type="string"
              text_color="EmphasisColor"
              length="1"
-             top_pad="15"
+             top_pad="10"
              follows="left|top"
              layout="topleft"
              left="10"

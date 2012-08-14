@@ -56,7 +56,7 @@
 	 value="0.95 0.95 0.95 1" />
 	<color
 	 name="MouseGray"
-	 value="0.8 0.8 0.8 1" />
+	 value="0.9 0.9 0.9 0.35" />
 	<color
 	 name="Black"
 	 value="1 1 1 1" />
@@ -189,6 +189,21 @@
       <color
        name="MdBlue"
        value=".07 .38 .51 1" />
+  <color
+      name="LtRed"
+      value="1 0.2 0.2 1" />
+  <color
+      name="LtGreen"
+      value="0.2 1 0.2 1" />
+  <color
+      name="Red_80"
+      value="1 0 0 0.8" />
+  <color
+      name="Green_80"
+      value="0 1 0 0.8" />
+  <color
+      name="Blue_80"
+      value="0 0 1 0.8" />
 <!-- Colors below transparent in panel_notification.xml -->
 	<color
 	 name="Cerise_0"
@@ -767,6 +782,27 @@
     <color
      name="ParcelHoverColor"
      reference="White" />
+  <color
+      name="PathfindingErrorColor"
+      reference="LtRed" />
+  <color
+      name="PathfindingWarningColor"
+      reference="DrYellow" />
+  <color
+      name="PathfindingGoodColor"
+      reference="LtGreen" />
+  <color
+      name="PathfindingDefaultBeaconColor"
+      reference="Red_80" />
+  <color
+      name="PathfindingDefaultBeaconTextColor"
+      reference="SL-White" />
+  <color
+      name="PathfindingLinksetBeaconColor"
+      reference="Blue_80" />
+  <color
+      name="PathfindingCharacterBeaconColor"
+      reference="Red_80" />
     <color
      name="ScriptBgReadOnlyColor"
      reference="SL-TitaniumGray" />
@@ -988,6 +1024,12 @@
     <color
      name="NameTagBeyondShoutDistanceColor"
      reference="BrightRed" />
+    <color
+     name="MapChatRingColor"
+     value="1 1 0 0.3" />
+    <color
+     name="PieMenuTextColor"
+     value="1 1 1 0.85" />
 	
     <!-- for FS legacy profiles -->
     <color
@@ -997,12 +1039,14 @@
     <color
      name="StatusUserOffline"
      reference="BrightRed" />
-	 
-	 <!-- Colours for Kirstens Viewer - all themes -->	
-     <color
-     name="MapChatRingColor"
-     value="0.6 0.2 0.8 0.3" />
-	 <color
-     name="PieMenuTextColor"
-     value="1 1 1 0.85" />	
+
+    <!-- Colours for Dolphin Viewer - all themes -->	 	 
+    <color
+     name="InventoryProtectedColor"
+     reference="EmphasisColor" />
+
+    <!-- Colours for Exodus Viewer -->
+	<color
+	 name="DkGray_33"
+	 value="0.85 0.85 0.85 .33" />
 </colors>

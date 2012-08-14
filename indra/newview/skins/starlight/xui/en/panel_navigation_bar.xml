@@ -32,7 +32,7 @@
  mouse_opaque="false"
  background_opaque="true"
  background_visible="true"
- bg_opaque_color="MouseGray"
+ bg_opaque_color="DkGray2"
  height="24"
  layout="topleft"
  border_size="0"
@@ -216,7 +216,7 @@
  mouse_opaque="false"
  background_opaque="true"
  background_visible="true"
- bg_opaque_color="MouseGray"
+ bg_opaque_color="DkGray2"
  height="15"
  layout="topleft"
  border_size="0"
@@ -226,7 +226,7 @@
 
   <favorites_bar
      follows="left|top|right"
-     top_pad="2"
+     top_pad="0"
      font="SansSerifSmall"
      height="15"
      layout="topleft"
