@@ -154,7 +154,36 @@
                 function="Object.EnableReportAbuse" />
         </pie_slice>
         <pie_separator name="export_placeholder" />
-        <pie_separator name="disable_placeholder" />
+
+<!-- Phoenix has "Disable" here, which we haven't implemented yet.
+     Might get interesting when we finally do ... -->
+<!-- <pie_separator name="disable_placeholder" /> -->
+        <pie_menu
+         label="Pathfinding >"
+         name="Pathfinding">
+            <pie_slice
+             start_autohide="true"
+             label="Show in linksets"
+             name="show_in_linksets">
+                <pie_slice.on_click
+                 function="Pathfinding.Linksets.Select" />
+                <pie_slice.on_enable
+                 function="EnableSelectInPathfindingLinksets"/>
+            </pie_slice>
+
+            <pie_slice
+             autohide="true"
+             label="Show in characters"
+             name="show_in_characters">
+                <pie_slice.on_click
+                 function="Pathfinding.Characters.Select" />
+                <pie_slice.on_enable
+                 function="EnableSelectInPathfindingCharacters"/>
+            </pie_slice>
+            <!-- FIXME: pie menu crashes if the last item in a pie_menu is an autohide item -Zi -->
+            <pie_separator name="autohide_end_crash_protection" />
+        </pie_menu>
+
         <pie_slice
             enabled="true"
             label="Mute"
