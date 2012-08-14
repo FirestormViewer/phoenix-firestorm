@@ -323,12 +323,13 @@ private:
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;
 	boost::signals2::connection	mParcelMgrConnection;
-	
-	// <FS:Ansariel> Pathfinding support
-	boost::signals2::connection	mRegionCrossingSlot;
-	LLPathfindingNavMesh::navmesh_slot_t mNavMeshSlot;
-	bool mIsNavMeshDirty;
-	// </FS:Ansariel> Pathfinding support
+
+	// <FS:Zi> Pathfinding rebake functions
+	BOOL			rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+
+	LLFrameTimer	mRebakingTimer;
+	BOOL			mPathfindingFlashOn;
+	// </FS:Zi>
 };
 
 // *HACK: Status bar owns your cached money balance. JC

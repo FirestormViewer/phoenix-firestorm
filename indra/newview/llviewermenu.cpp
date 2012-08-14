@@ -142,6 +142,8 @@
 #include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
 #include "fswsassetblacklist.h"
 
+#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
+
 using namespace LLVOAvatarDefines;
 
 typedef LLPointer<LLViewerObject> LLViewerObjectPtr;
@@ -9568,6 +9570,18 @@ void toggleTeleportHistory()
 }
 // </FS:Ansariel> Toggle teleport history panel directly
 
+// <FS:Zi> Pathfinding rebake functions
+bool enable_rebake_region()
+{
+	return LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+}
+
+void handle_rebake_region()
+{
+	LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+}
+// </FS:Zi>
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -10107,4 +10121,9 @@ void initialize_menus()
 	commit.add("ToggleSettingsDebug", boost::bind(&toggleSettingsDebug));
 	// <FS:Ansariel> Toggle teleport history panel directly
 	commit.add("ToggleTeleportHistory", boost::bind(&toggleTeleportHistory));
+
+	// <FS:Zi> Pathfinding rebake functions
+	commit.add("World.RebakeRegion", boost::bind(&handle_rebake_region));
+	enable.add("World.RebakeRegion", boost::bind(&enable_rebake_region));
+	// </FS:Zi>
 }

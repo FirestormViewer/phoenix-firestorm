@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- <FS:Zi> This file is unused in Firestorm -->
+
 <panel
     height="25"
     layout="topleft"

@@ -49,9 +49,12 @@ public:
 	virtual void draw();
 	virtual BOOL handleToolTip( S32 x, S32 y, MASK mask );
 
-protected:
+// <FS:Zi> Pathfinding rebake functions
+//         Give status bar access to the enum
+// protected:
 
-private:
+// private:
+// <FS:Zi>
 	typedef enum
 	{
 		kRebakeNavMesh_Available,
@@ -61,13 +64,14 @@ private:
 		kRebakeNavMesh_Default = kRebakeNavMesh_NotAvailable
 	} ERebakeNavMeshMode;
 
+private:	// <FS:Zi> Pathfinding rebake functions
 	LLPanelPathfindingRebakeNavmesh();
 	virtual ~LLPanelPathfindingRebakeNavmesh();
 
 	static LLPanelPathfindingRebakeNavmesh* getPanel();
 
 	void               setMode(ERebakeNavMeshMode pRebakeNavMeshMode);
-	ERebakeNavMeshMode getMode() const;
+	// ERebakeNavMeshMode getMode() const;	// <FS:Zi> Pathfinding rebake functions
 	
 	void onNavMeshRebakeClick();
 
@@ -91,6 +95,15 @@ private:
 	LLPathfindingNavMesh::navmesh_slot_t     mNavMeshSlot;
 	boost::signals2::connection              mRegionCrossingSlot;
 	LLPathfindingManager::agent_state_slot_t mAgentStateSlot;
+
+// <FS:Zi> Pathfinding rebake functions
+//         Public accessor functions for llviewermenu.cpp to minimaze code changes
+public:
+	bool isRebakeNeeded();
+	bool isRebaking();
+	void rebakeNavmesh();
+	ERebakeNavMeshMode getMode() const;
+// </FS:Zi>
 };
 
 #endif // LL_LLPANELPATHFINDINGREBAKENAVMESH_H

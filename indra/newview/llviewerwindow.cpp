@@ -2027,8 +2027,13 @@ void LLViewerWindow::initWorldUI()
 	LLPanelStandStopFlying* panel_stand_stop_flying	= LLPanelStandStopFlying::getInstance();
 	panel_ssf_container->addChild(panel_stand_stop_flying);
 
-	LLPanelPathfindingRebakeNavmesh *panel_rebake_navmesh = LLPanelPathfindingRebakeNavmesh::getInstance();
-	panel_ssf_container->addChild(panel_rebake_navmesh);
+	// <FS:Zi> Pathfinding rebake functions
+	//         We don't use this panel, we use a menu item instead, so we only initialize the panel
+	//         but don't add it to the UI.
+	// LLPanelPathfindingRebakeNavmesh *panel_rebake_navmesh =	LLPanelPathfindingRebakeNavmesh::getInstance();
+	// panel_ssf_container->addChild(panel_rebake_navmesh);
+	LLPanelPathfindingRebakeNavmesh::getInstance();
+	// </FS:Zi>
 
 	panel_ssf_container->setVisible(TRUE);
 	

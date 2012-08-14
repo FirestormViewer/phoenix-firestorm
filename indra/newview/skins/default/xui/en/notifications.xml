@@ -6156,12 +6156,16 @@ This area has building disabled. You can&apos;t build or rez objects here.
   </notification>
 
   <notification
-     icon="notify.tga"
+     icon="alertmodal.tga"
      name="PathfindingDirty"
      persist="true"
-     type="notify">
+     type="alertmodal">
     <unique/>
-    The region has pending pathfinding changes.  If you have build rights, you may rebake the region by clicking on the “Rebake region” button.
+The region has pending pathfinding changes.  If you have build rights, you may rebake the region by clicking on the “Rebake” button.
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Rebake"
+     notext="Close" />
   </notification>
 
   <notification

@@ -267,3 +267,22 @@ void LLPanelPathfindingRebakeNavmesh::updatePosition()
 
 	setOrigin( x_pos, 0);
 }
+
+// <FS:Zi> Pathfinding rebake functions
+bool LLPanelPathfindingRebakeNavmesh::isRebakeNeeded()
+{
+	return mRebakeNavMeshMode==kRebakeNavMesh_Available;
+}
+
+bool LLPanelPathfindingRebakeNavmesh::isRebaking()
+{
+	return
+		mRebakeNavMeshMode==kRebakeNavMesh_RequestSent ||
+		mRebakeNavMeshMode==kRebakeNavMesh_InProgress;
+}
+
+void LLPanelPathfindingRebakeNavmesh::rebakeNavmesh()
+{
+	onNavMeshRebakeClick();
+}
+// </FS:Zi>
