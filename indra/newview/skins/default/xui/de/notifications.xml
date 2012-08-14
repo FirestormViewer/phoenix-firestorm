@@ -2438,7 +2438,7 @@ Die Region enthält ausstehende Pathfinding-Änderungen. Sofern Sie Baurechte be
 		<usetemplate
 			name="okcancelbuttons"
 			yestext="Rebake"
-			notext="Close"/>
+			notext="Schließen"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Objekte mit LSL-Skripten, die Pathfinding-Funktionen nutzen, funktionieren eventuell nicht wie vorgesehen.
