@@ -167,6 +167,7 @@
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Charaktere..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Anzeigen / Testen..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Rebake Regions-Navmesh" name="rebake_region_navmesh"/>
 		</menu>
 		<menu label="Optionen" name="Options">
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>

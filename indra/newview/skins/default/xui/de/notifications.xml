@@ -2434,13 +2434,17 @@ Fliegen ist hier nicht möglich.
 		In diesem Bereich ist das Bauen deaktiviert. Sie können keine Objekte bauen oder rezzen.
 	</notification>
 	<notification name="PathfindingDirty">
-		Die Region enthält ausstehende Pathfinding-Änderungen. Sofern Sie Baurechte besitzen, können Sie die Region aktualisieren, indem Sie auf den „Rebake region“-Button klicken.
+Die Region enthält ausstehende Pathfinding-Änderungen. Sofern Sie Baurechte besitzen, können Sie die Region aktualisieren, indem Sie auf den „Rebake-Button klicken.
+		<usetemplate
+			name="okcancelbuttons"
+			yestext="Rebake"
+			notext="Close"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Objekte mit LSL-Skripten, die Pathfinding-Funktionen nutzen, funktionieren eventuell nicht wie vorgesehen.
 	</notification>
 	<notification name="PathfindingRebakeNavmesh">
-		Das Ändern bestimmter Objekte innerhalb dieser Region kann dazu führen, dass sich andere bewegende Objekte fehlerhaft verhalten. Auf den „Rebake region“-Button klicken, damit sich bewegende Objekte korrekt verhalten. Klicken Sie auf „Hilfe“ für weitere Informationen.
+		Das Ändern bestimmter Objekte innerhalb dieser Region kann dazu führen, dass sich andere bewegende Objekte fehlerhaft verhalten. Ein Rebake des Regions-Navmesh durchführen, damit sich bewegende Objekte korrekt verhalten. Klicken Sie auf „Hilfe“ für weitere Informationen.
 		<usetemplate
 			name="okhelpignore"
 			ignoretext="Ändern bestimmter Objekte innerhalb dieser Region kann dazu führen, dass sich andere bewegende Objekte fehlerhaft verhalten."

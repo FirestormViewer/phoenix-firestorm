@@ -6182,7 +6182,7 @@ The region has pending pathfinding changes.  If you have build rights, you may r
    name="PathfindingRebakeNavmesh"
    type="alertmodal">
     <unique/>
-    Changing certain objects in this region could cause other moving objects to behave incorrectly.  To make moving objects behave correctly, click the “Rebake region” button.  Choose “Help” for more information.
+    Changing certain objects in this region could cause other moving objects to behave incorrectly.  To make moving objects behave correctly, force a rebake of the region navmesh.  Choose “Help” for more information.
     <url
       option="1"
       name="url"
