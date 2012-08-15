@@ -76,6 +76,12 @@
 			Stan symulatora
 		</text>
 	</panel>
+	<!-- FIRE-7261: Remove this text once Havok is added -->
+	<text name="no_havok_warning">
+		UWAGA: Te funkcje nie są jeszcze
+               w pełni zaimplementowane.
+	</text>
+	<!-- FIRE-7261: END -->
 	<tab_container name="view_test_tab_container">
 		<panel name="view_panel" label="Widok">
 			<text name="show_label">

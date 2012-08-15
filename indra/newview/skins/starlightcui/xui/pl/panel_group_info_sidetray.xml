@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Profil Grupy" name="GroupInfo">
+	<panel.string name="default_needs_apply_text">
+		Nie zapisałeś/aś zmian
+	</panel.string>
+	<panel.string name="want_apply_text">
+		Czy chcesz zachować te zmiany?
+	</panel.string>
+	<panel.string name="group_join_btn">
+		Dołącz ([AMOUNT]L$)
+	</panel.string>
+	<panel.string name="group_join_free">
+		Darmowe
+	</panel.string>
+	<panel name="group_info_top">
+		<text_editor name="group_name" value="(Ładowanie...)"/>
+		<line_editor label="Wpisz tutaj nową nazwę swojej grupy" name="group_name_editor"/>
+	</panel>
+	<layout_stack name="layout">
+		<layout_panel name="group_accordions">
+			<accordion name="groups_accordion">
+				<accordion_tab name="group_general_tab" title="Ogólne"/>
+				<accordion_tab name="group_roles_tab" title="Funkcje"/>
+				<accordion_tab name="group_notices_tab" title="Ogłoszenia"/>
+				<accordion_tab name="group_land_tab" title="Posiadłość/Majątek"/>
+			</accordion>
+		</layout_panel>
+	</layout_stack>
+	<layout_stack name="layout">
+		<layout_panel name="button_row">
+			<layout_stack name="button_row_ls">
+				<layout_panel name="btn_chat_lp">
+					<button label="Czat" name="btn_chat"/>
+				</layout_panel>
+				<layout_panel name="call_btn_lp">
+					<button label="Konf. głos." name="btn_call" tool_tip="Rozpocznij konferencję głosową w tej grupie"/>
+				</layout_panel>
+				<layout_panel name="btn_apply_lp">
+					<button label="Zapisz" label_selected="Zapisz" name="btn_apply"/>
+				</layout_panel>
+				<layout_panel name="btn_create_lp">
+					<button label="Stwórz grupę" name="btn_create" tool_tip="Stwórz nową grupę"/>
+				</layout_panel>
+			</layout_stack>
+		</layout_panel>
+	</layout_stack>
+</panel>
