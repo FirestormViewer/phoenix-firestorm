@@ -2490,7 +2490,8 @@ Aquí no puedes volar.
 		Este terreno tiene desactivada la capacidad para construir. Aquí no puedes ni construir ni crear objetos.
 	</notification>
 	<notification name="PathfindingDirty">
-		La región tiene cambios de pathfinding pendientes. Si tienes derechos de construcción, debes actualizar la región pulsando el botón "Recargar región”.
+		La región tiene cambios de pathfinding pendientes. Si tienes derechos de construcción, debes actualizar la región pulsando el botón "Actualizar”.
+		<usetemplate name="okcancelbuttons" yestext="Actualizar" notext="Cerrar"/>
 	</notification>
 	<notification name="DynamicPathfindingDisabled">
 		Pathfinding dinámico no está activado en esta región. Los objetos con scripts que usen llamadas pathfinding LSL pueden no funcionar como se espera en esta región.

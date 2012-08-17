@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_pathfinding_characters" title="Caracteres pathfinding">
+	<floater.string name="messaging_get_inprogress">Consultando caracteres pathfinding...</floater.string>
+	<floater.string name="messaging_get_error">Detectado error mientras se consultaban los caracteres pathfinding.</floater.string>
+	<floater.string name="messaging_complete_none_found">No hay caracteres pathfinding.</floater.string>
+	<floater.string name="messaging_complete_available">Seleccionados [NUM_SELECTED] de [NUM_TOTAL] caracteres.</floater.string>
+	<floater.string name="messaging_not_enabled">Esta región no está habilitada para pathfinding.</floater.string>
+	<floater.string name="character_cpu_time">[CPU_TIME] µs</floater.string>
+	<floater.string name="character_owner_loading">[Loading]</floater.string>
+	<floater.string name="character_owner_unknown">[Unknown]</floater.string>
+	<floater.string name="character_owner_group">[group]</floater.string>
+	<panel name="pathfinding_chars_main">
+		<scroll_list name="objects_scroll_list">
+			<scroll_list.columns label="Nombre" name="name"/>
+			<scroll_list.columns label="Descripción" name="description"/>
+			<scroll_list.columns label="Propietario" name="owner"/>
+			<scroll_list.columns label="CPU" name="cpu_time"/>
+			<scroll_list.columns label="Altitud" name="altitude"/>
+		</scroll_list>
+        top_pad="17"
+		<text name="messaging_status" width="178">
+			Caracteres:
+		</text>
+		<button label="Actualizar lista" name="refresh_objects_list" width="135"/>
+		<button label="Seleccionar todos" name="select_all_objects" width="135"/>
+		<button label="No seleccionar ninguno" name="select_none_objects" width="135"/>
+	</panel>
+	<panel name="pathfinding_chars_actions">
+		<text name="actions_label">
+			Acciones sobre los seleccionados:
+		</text>
+		<check_box label="Mostrar baliza" name="show_beacon"/>
+		<check_box label="Mostrar cápsula de física" name="show_physics_capsule"/>
+		<button label="Tomar" name="take_objects" width="104"/>
+		<button label="Tomar una copia" name="take_copy_objects" width="104"/>
+		<button label="Teleportarme allí" name="teleport_me_to_object" tool_tip="Activo sólo cuando hay un caracter seleccionado." width="139" left_pad="16"/>
+		<button label="Devolver" name="return_objects" width="104" left_pad="16"/>
+		<button label="Eliminar" name="delete_objects" width="104"/>
+	</panel>
+</floater>
