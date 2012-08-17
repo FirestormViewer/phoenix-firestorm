@@ -71,19 +71,15 @@ private:
 	 * LLFloater overrides
 	 */
 public:
-	virtual void onOpen(const LLSD& sdKey);
-	virtual void onClose(bool fQuitting);
-
-	/*
-	 * Event handlers
-	 */
-protected:
-	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
+	/*virtual*/ void onOpen(const LLSD& sdKey);
+	/*virtual*/ void onClose(bool fQuitting);
+	/*virtual*/ BOOL postBuild();
 
 	/*
 	 * Member functions
 	 */
 protected:
+	void onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet);
 	void refreshAll();
 
 	/*
