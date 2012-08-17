@@ -577,7 +577,7 @@
      reference="Unused?" />
     <color
      name="LoginProgressBoxBorderColor"
-     refencee="NavyBlue_0" />
+     reference="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
      reference="Black_78" />
