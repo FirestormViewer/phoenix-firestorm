@@ -442,14 +442,9 @@ S32 LLScrollListCtrl::getFirstSelectedIndex() const
 	{
 		LLScrollListItem* item  = *iter;
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
-		if (mFilterColumn > -1 && !mFilterString.empty())
+		if (isFiltered(item))
 		{
-			std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
-			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-			if (filterColumnValue.find(mFilterString) == std::string::npos)
-			{
-				continue;
-			}
+			continue;
 		}
 		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (item->getSelected())
@@ -855,14 +850,9 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 		}
 		
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
-		if (mFilterColumn > -1 && !mFilterString.empty())
+		if (isFiltered(itemp))
 		{
-			std::string filterColumnValue = itemp->getColumn(mFilterColumn)->getValue().asString();
-			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-			if (filterColumnValue.find(mFilterString) == std::string::npos)
-			{
-				continue;
-			}
+			continue;
 		}
 		// </FS:Ansariel> Fix for FS-specific people list (radar)
 
@@ -1039,14 +1029,9 @@ S32 LLScrollListCtrl::getItemIndex( LLScrollListItem* target_item ) const
 	{
 		LLScrollListItem *itemp = *iter;
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
-		if (mFilterColumn > -1 && !mFilterString.empty())
+		if (isFiltered(itemp))
 		{
-			std::string filterColumnValue = itemp->getColumn(mFilterColumn)->getValue().asString();
-			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-			if (filterColumnValue.find(mFilterString) == std::string::npos)
-			{
-				continue;
-			}
+			continue;
 		}
 		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (target_item == itemp)
@@ -1485,14 +1470,9 @@ void LLScrollListCtrl::drawItems()
 			LLScrollListItem* item = *iter;
 			
 			// <FS:Ansariel> Fix for FS-specific people list (radar)
-			if (mFilterColumn > -1 && !mFilterString.empty())
+			if (isFiltered(item))
 			{
-				std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
-				std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-				if (filterColumnValue.find(mFilterString) == std::string::npos)
-				{
-					continue;
-				}
+				continue;
 			}
 			// </FS:Ansariel> Fix for FS-specific people list (radar)
 
@@ -1724,14 +1704,9 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 						}
 						LLScrollListItem *item = *itor;
 						// <FS:Ansariel> Fix for FS-specific people list (radar)
-						if (mFilterColumn > -1 && !mFilterString.empty())
+						if (isFiltered(item))
 						{
-							std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
-							std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-							if (filterColumnValue.find(mFilterString) == std::string::npos)
-							{
-								continue;
-							}
+							continue;
 						}
 						// </FS:Ansariel> Fix for FS-specific people list (radar)
                         if (item == hit_item || item == lastSelected)
@@ -2014,14 +1989,9 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 	{
 		LLScrollListItem* item  = *iter;
 		// <FS:Ansariel> Fix for FS-specific people list (radar)
-		if (mFilterColumn > -1 && !mFilterString.empty())
+		if (isFiltered(item))
 		{
-			std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
-			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-			if (filterColumnValue.find(mFilterString) == std::string::npos)
-			{
-				continue;
-			}
+			continue;
 		}
 		// </FS:Ansariel> Fix for FS-specific people list (radar)
 
@@ -3129,5 +3099,19 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 {
 	mFilterString = str;
 	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+}
+
+bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
+{
+	if (mFilterColumn > -1 && !mFilterString.empty())
+	{
+		std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+		std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+		if (filterColumnValue.find(mFilterString) == std::string::npos)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 // </FS:Ansariel> Fix for FS-specific people list (radar)

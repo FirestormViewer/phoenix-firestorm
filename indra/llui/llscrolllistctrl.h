@@ -307,6 +307,7 @@ public:
 	// <FS:Ansariel> Fix for FS-specific people list (radar)
 	void			setFilterString(const std::string& str);
 	void			setFilterColumn(S32 col) { mFilterColumn = col; }
+	bool			isFiltered(const LLScrollListItem* item) const;
 	// </FS:Ansariel> Fix for FS-specific people list (radar)
 
 	// support right-click context menus for avatar/group lists
