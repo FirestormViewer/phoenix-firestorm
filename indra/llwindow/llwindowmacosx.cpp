@@ -2845,11 +2845,6 @@ const char* cursorIDToName(int id)
 		case UI_CURSOR_TOOLPAUSE:						return "UI_CURSOR_TOOLPAUSE";
 		case UI_CURSOR_TOOLMEDIAOPEN:					return "UI_CURSOR_TOOLMEDIAOPEN";
 		case UI_CURSOR_PIPETTE:							return "UI_CURSOR_PIPETTE";
-		//<FS:TS> gcc gets unhappy at duplicate case labels.
-		//case UI_CURSOR_TOOLSIT:							return "UI_CURSOR_TOOLSIT";
-		//case UI_CURSOR_TOOLBUY:							return "UI_CURSOR_TOOLBUY";
-		//case UI_CURSOR_TOOLOPEN:						return "UI_CURSOR_TOOLOPEN";
-		//</FS:TS>
 		case UI_CURSOR_TOOLPATHFINDING:					return "UI_CURSOR_PATHFINDING";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START:		return "UI_CURSOR_PATHFINDING_START";
 		case UI_CURSOR_TOOLPATHFINDING_PATH_START_ADD:	return "UI_CURSOR_PATHFINDING_START_ADD";
