@@ -261,5 +261,5 @@
        label="Settings"
        name="exo_panel_flickr_settings"
        filename="exo_panel_flickr_settings.xml" />
-    </panel_container>
+    </tab_container>
 </panel>
