@@ -84,4 +84,25 @@
     <button.commit_callback
      function="Snapshot.SaveToComputer" />
   </button>
+  <!-- <exodus> -->
+  <button
+   follows="left|top|right"
+   font="SansSerif"
+   halign="left"
+   height="38"
+   image_overlay="Snapshot_Exodus_Flickr"
+   image_overlay_alignment="left"
+   image_top_pad="-1"
+   imgoverlay_label_space="10"
+   label="Upload to Flickr"
+   layout="topleft"
+   left_delta="0"
+   name="save_to_flickr_btn"
+   pad_left="10"
+   right="-10"
+   top_pad="10">
+    <button.commit_callback
+     function="Snapshot.SaveToFlickr" />
+  </button>
+  <!-- </exodus> -->
 </panel>

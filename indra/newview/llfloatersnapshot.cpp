@@ -114,7 +114,8 @@ public:
 		SNAPSHOT_POSTCARD,
 		SNAPSHOT_TEXTURE,
 		SNAPSHOT_LOCAL,
-		SNAPSHOT_WEB
+		SNAPSHOT_WEB,
+		SNAPSHOT_FLICKR
 	};
 
 
@@ -1162,6 +1163,10 @@ LLSnapshotLivePreview::ESnapshotType LLFloaterSnapshot::Impl::getActiveSnapshotT
 	{
 		type = LLSnapshotLivePreview::SNAPSHOT_LOCAL;
 	}
+	else if (name == "panel_snapshot_flickr")
+	{
+		type = LLSnapshotLivePreview::SNAPSHOT_FLICKR;
+	}
 
 	return type;
 }
@@ -1478,6 +1483,12 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 		setResolution(floater, "local_size_combo");
 		floater->getChild<LLComboBox>("layer_types")->selectNthItem(gSavedSettings.getS32("SnapshotLayers")); // <FS:Zi> Save all settings
 		break;
+	  // <exodus>
+	  case LLSnapshotLivePreview::SNAPSHOT_FLICKR:
+		layer_type = LLViewerWindow::SNAPSHOT_TYPE_COLOR;
+		setResolution(floater, "flickr_size_combo");
+		break;
+	  // </exodus>
 	  default:
 		break;
 	}
@@ -2171,6 +2182,8 @@ BOOL LLFloaterSnapshot::postBuild()
 	getChild<LLComboBox>("local_size_combo")->selectNthItem(gSavedSettings.getS32("LastSnapshotToDiskResolution"));
 	getChild<LLComboBox>("local_format_combo")->selectNthItem(gSavedSettings.getS32("SnapshotFormat"));
 	getChild<LLComboBox>("layer_types")->selectNthItem(gSavedSettings.getS32("SnapshotLayers"));
+	getChild<LLComboBox>("flickr_size_combo")->selectNthItem(gSavedSettings.getS32("LastSnapshotToFlickrResolution"));
+	getChild<LLComboBox>("flickr_format_combo")->selectNthItem(gSavedSettings.getS32("FlickrSnapshotFormat"));
 	// </FS:Zi>
 
 	impl.mPreviewHandle = previewp->getHandle();

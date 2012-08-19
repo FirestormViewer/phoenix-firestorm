@@ -26,6 +26,10 @@
         Posting
     </string>
     <string
+     name="flickr_progress_str">
+        Talking to Flickr
+    </string>
+    <string
      name="inventory_progress_str">
         Saving to Inventory
     </string>
@@ -36,6 +40,10 @@
  	<string
  	 name="profile_succeeded_str">
  	    Image uploaded
+ 	</string>
+ 	<string
+ 	 name="flickr_succeeded_str">
+ 	    Image uploaded to Flickr
  	</string>
  	<string
  	 name="postcard_succeeded_str">
@@ -64,6 +72,10 @@
  	<string
  	 name="local_failed_str">
  	    Failed to save to computer.
+ 	</string>
+ 	<string
+ 	 name="flickr_failed_str">
+ 	    Flickr upload failed.
  	</string>
   <ui_ctrl
     follows="top|left|right"
@@ -286,6 +298,13 @@
        layout="topleft"
        name="panel_snapshot_local"
        filename="panel_snapshot_local.xml" />
+      <panel
+       class="exopanelsnapshotflickr"
+       follows="all"
+       label="Flickr"
+       layout="topleft"
+       name="panel_snapshot_flickr"
+       filename="exo_panel_snapshot_flickr.xml" />
     </tab_container>
 <!--     </panel_container> -->
     <panel

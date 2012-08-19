@@ -9009,4 +9009,57 @@ We strongly recommend that you not set the bandwidth above 1500 KBPS. This is un
   <!-- </FS:TS> FIRE-6795 -->
   <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 
+  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationExplanation"
+   type="alertmodal">
+To use the Flickr upload feature you must authorize [APP_NAME] to access your account. If you proceed, your web browser will open Flickr's website, where you will be prompted to log in and authorize [APP_NAME]. You will then be given a code to copy back into [APP_NAME].
+
+Would you like to authorize [APP_NAME] to post to your Flickr account?
+    <tag>fail</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationPrompt"
+   type="alertmodal">
+Please authorize Flickr in your web browser, then type the code given by the website below:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="oauth_verifier" type="text" default="true"/>
+      <button
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationFailed"
+   type="alertmodal">
+Flickr verification failed. Please try again, and be sure to double check the verification code.
+    <tag>fail</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="ExodusFlickrUploadComplete"
+   type="notifytip">
+Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
+  </notification>
+  <!-- </FS:TS> FIRE-5453 -->
+
 </notifications>

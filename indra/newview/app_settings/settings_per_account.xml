@@ -519,5 +519,75 @@
 	</array>
 	</map>
     <!-- End of Firestorm settings -->
+
+    <!-- Settings imported from Exodus -->
+    <key>ExodusFlickrToken</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr OAuth Token</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrTokenSecret</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr OAuth Token Secret</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrUsername</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrNSID</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr User ID</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrUsername</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrFullName</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <!-- End of settings imported from Exodus -->
+
     </map>
 </llsd>

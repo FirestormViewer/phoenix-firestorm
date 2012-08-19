@@ -89,6 +89,7 @@ include_directories(
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
+    ${CMAKE_BINARY_DIR}/newview #<FS:TS> Flickr upload
     )
 
 set(viewer_SOURCE_FILES
@@ -127,6 +128,9 @@ set(viewer_SOURCE_FILES
     lggcontactsetsfloater.cpp
     fspanelprofileclassifieds.cpp
     fspanelclassified.cpp
+    exopanelsnapshotflickr.cpp 
+    exoflickr.cpp
+    exoflickrauth.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -772,6 +776,8 @@ set(viewer_HEADER_FILES
     lggcontactsetsfloater.h
     fspanelprofileclassifieds.h
     fspanelclassified.h
+    exoflickr.h
+    exoflickrauth.h
 
     llaccountingcostmanager.h
     llagent.h
@@ -1360,6 +1366,16 @@ set(viewer_HEADER_FILES
 # AO Get our viewer version & channel at this point
 build_version(viewer)
 build_channel(viewer)
+
+# <exodus>
+# Generate the flickr keys header.
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/exoflickrkeys.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h
+    @ONLY
+)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
+# </exodus>
 
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
