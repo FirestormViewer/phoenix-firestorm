@@ -60,9 +60,6 @@
 #include "llworld.h"
 #include "llagentui.h"
 
-#include "kvfloaterflickrauth.h"
-#include "kvfloaterflickrupload.h"
-
 // Linden library includes
 #include "llfontgl.h"
 #include "llsys.h"
@@ -117,8 +114,7 @@ public:
 		SNAPSHOT_POSTCARD,
 		SNAPSHOT_TEXTURE,
 		SNAPSHOT_LOCAL,
-		SNAPSHOT_WEB,
-		SNAPSHOT_FLICKR
+		SNAPSHOT_WEB
 	};
 
 
@@ -171,7 +167,6 @@ public:
 	void setSnapshotBufferType(LLViewerWindow::ESnapshotType type) { mSnapshotBufferType = type; }
 	void updateSnapshot(BOOL new_snapshot, BOOL new_thumbnail = FALSE, F32 delay = 0.f);
 	void saveWeb();
-	KVFloaterFlickrUpload* uploadToFlickr();
 	void saveTexture();
 	BOOL saveLocal();
 
@@ -950,24 +945,6 @@ void LLSnapshotLivePreview::getSize(S32& w, S32& h) const
 	h = getHeight();
 }
 
-KVFloaterFlickrUpload* LLSnapshotLivePreview::uploadToFlickr()
-{	
-	// calculate and pass in image scale in case image data only use portion
-	// of viewerimage buffer
-	LLVector2 image_scale(1.f, 1.f);
-	if (!isImageScaled())
-	{
-		image_scale.setVec(llmin(1.f, (F32)mWidth[mCurImageIndex] / (F32)getCurrentImage()->getWidth()), llmin(1.f, (F32)mHeight[mCurImageIndex] / (F32)getCurrentImage()->getHeight()));
-	}
-
-	KVFloaterFlickrUpload* floater = KVFloaterFlickrUpload::showFromSnapshot(mFormattedImage, mViewerImage[mCurImageIndex], image_scale, mPosTakenGlobal);
-	mFormattedImage = NULL;
-	mDataSize = 0;
-	updateSnapshot(FALSE, FALSE);
-
-	return floater;
-}
-
 void LLSnapshotLivePreview::saveTexture()
 {
 	lldebugs << "saving texture: " << mPreviewImage->getWidth() << "x" << mPreviewImage->getHeight() << llendl;
@@ -1184,10 +1161,6 @@ LLSnapshotLivePreview::ESnapshotType LLFloaterSnapshot::Impl::getActiveSnapshotT
 	else if (name == "panel_snapshot_local")
 	{
 		type = LLSnapshotLivePreview::SNAPSHOT_LOCAL;
-	}
-	else if (name == "flickr")
-	{
-		type = LLSnapshotLivePreview::SNAPSHOT_FLICKR;
 	}
 
 	return type;

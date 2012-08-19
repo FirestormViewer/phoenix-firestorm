@@ -8022,16 +8022,6 @@ The site at &apos;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&apos; in realm &apos;
     </form>
   </notification>
 
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrNeedAuth"
-   type="alertmodal">
-You must authenticate [APP_NAME] before you can upload images to Flickr. Please login in and authorise [APP_NAME], then select "Upload to Flickr" again.
-
-(If you have already authorised [APP_NAME] and are still logged in, this process may be automatic)
-   <tag>confirm</tag>
-</notification>
-
    <notification
 	name="ModeChange"
 	label=""
@@ -8088,60 +8078,6 @@ Changing modes requires you to quit and restart.
    notext="Don't Quit"/>
 </notification>
 
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrHTTPFail"
-   type="alertmodal">
-Communication with Flickr failed. We don't know why.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrTokenRejected"
-   type="alertmodal">
-Flickr rejected your authentication token. This is probably because you revoked [APP_NAME]'s permissions. Please grant permission and try again.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrGenericFail"
-   type="alertmodal">
-Communication with Flickr failed ([CODE]):
-
-[ERROR]
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadCancelledAuthRejected"
-   type="notifytip">
-The upload was cancelled because you did not grant [APP_NAME] permission to access your Flickr account.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadComplete"
-   type="notifytip">
-[http://www.flickr.com/photos/upload/edit/?ids=[ID] [TITLE]] has been successfully uploaded to Flickr.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadFailed"
-   type="alert">
-Failed to upload "[TITLE]" to Flickr (error [CODE]):
-
-[ERROR]
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadFailedNoError"
-   type="alert">
-Failed dismally to upload "[TITLE]" to Flickr. Dunno why.
-  </notification>
-  
   <notification
  name="NoPicks"
  label=""

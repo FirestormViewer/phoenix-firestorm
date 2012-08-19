@@ -159,8 +159,6 @@
 #include "lggcontactsetsfloater.h"
 
 #include "ao.h"				// ## Zi: Animation Overrider
-#include "kvfloaterflickrauth.h"
-#include "kvfloaterflickrupload.h"
 #include "lggautocorrectfloater.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
@@ -412,9 +410,6 @@ void LLViewerFloaterReg::registerFloaters()
     LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
 //</FS:KC legacy profiles>
 
-	LLFloaterReg::add("flickr_auth", "floater_flickr_auth.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrAuth>);
-	LLFloaterReg::add("flickr_upload", "floater_flickr_upload.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<KVFloaterFlickrUpload>);
-	
 	// <FS:Ansariel> Secondary inventory for additional inventory button. Needs a different floater name
 	//               after the sidebar is gone or the floater toggle would toggle the main inventory window
 	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);

@@ -330,39 +330,6 @@
     <!-- End of back compatibility settings -->
     
     <!-- Firestorm settings -->
-    <key>KittyFlickrToken</key>
-    <map>
-      <key>Comment</key>
-          <string>Token used to authenticate with Flickr</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
-    <key>KittyFlickrUsername</key>
-    <map>
-      <key>Comment</key>
-          <string>Username associated with Flickr account</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
-    <key>KittyFlickrNSID</key>
-    <map>
-      <key>Comment</key>
-          <string>NSID associated with Flickr account</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
     <key>DebugLookAt</key>
         <map>
         <key>Comment</key>

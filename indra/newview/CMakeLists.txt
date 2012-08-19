@@ -698,9 +698,6 @@ set(viewer_SOURCE_FILES
     pieseparator.cpp
     pieslice.cpp
     pipeline.cpp
-    kvflickr.cpp
-    kvfloaterflickrauth.cpp
-    kvfloaterflickrupload.cpp
     qtoolalign.cpp
     quickprefs.cpp
     rlvhandler.cpp
@@ -1356,9 +1353,6 @@ set(viewer_HEADER_FILES
     utilitybar.h
     VertexCache.h
     VorbisFramework.h
-    kvflickr.h
-    kvfloaterflickrauth.h
-    kvfloaterflickrupload.h
     NACLantispam.h
 	NACLfloaterexploresounds.h
     )
@@ -1367,13 +1361,6 @@ set(viewer_HEADER_FILES
 build_version(viewer)
 build_channel(viewer)
 
-# Generate the Flickr Keys header
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/kvflickrkeys.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h
-  @ONLY
-)
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h)
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
