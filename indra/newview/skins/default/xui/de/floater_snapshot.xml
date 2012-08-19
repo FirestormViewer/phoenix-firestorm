@@ -9,6 +9,9 @@
 	<string name="profile_progress_str">
 		Posten
 	</string>
+	<string name="flickr_progress_str">
+        Hochladen auf Flickr
+	</string>
 	<string name="inventory_progress_str">
 		Speichern im Inventar
 	</string>
@@ -17,6 +20,9 @@
 	</string>
 	<string name="profile_succeeded_str">
 		Bild hochgeladen
+	</string>
+	<string name="flickr_succeeded_str">
+		Bild auf Flickr hochgeladen
 	</string>
 	<string name="postcard_succeeded_str">
 		E-Mail gesendet!
@@ -39,6 +45,9 @@
 	<string name="local_failed_str">
 		Fehler beim Speichern auf dem Computer.
 	</string>
+	<string name="flickr_failed_str">
+		Hochladen auf Flickr fehlgeschlagen.
+	</string>
 	<button name="advanced_options_btn" tool_tip="Erweiterte Optionen"/>
 	<text name="image_res_text">
 		[WIDTH] x [HEIGHT] px
@@ -50,7 +59,8 @@
 		<panel label="Profil" name="panel_snapshot_profile"/>
 		<panel label="E-Mail" name="panel_snapshot_postcard"/>
 		<panel label="Inventar" name="panel_snapshot_inventory"/>
-		<panel label="Festplatte" name="panel_snapshot_local"/>
+		<panel label="Lokal" name="panel_snapshot_local"/>
+		<panel label="Flickr" name="panel_snapshot_flickr"/>
     </tab_container>
 	<panel name="advanced_options_panel">
 		<text name="advanced_options_label">

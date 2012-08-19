@@ -4,4 +4,5 @@
 	<button label="E-Mail" name="save_to_email_btn"/>
 	<button label="In meinem Inventar speichern ([AMOUNT] L$)" name="save_to_inventory_btn"/>
 	<button label="Auf meinem Computer speichern" name="save_to_computer_btn"/>
+	<button label="Auf Flickr hochladen" name="save_to_flickr_btn"/>
 </panel>
