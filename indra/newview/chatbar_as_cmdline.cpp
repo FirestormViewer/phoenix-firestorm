@@ -90,13 +90,6 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llpanelpeople.h"
 
-void cmdline_printchat(std::string message);
-void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
-void cmdline_tp2name(std::string target);
-
-LLUUID cmdline_partial_name2key(std::string name);
-
-
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
 {
