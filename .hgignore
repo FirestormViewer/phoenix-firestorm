@@ -16,6 +16,7 @@ scripts/install.cache.*
 indra/newview/res/viewerRes.rc
 indra/llcommon/llversionserver.h
 indra/llcommon/llversionviewer.h
+indra/newview/exoflickrkeys.h
 indra/llcommon/res/llcommon.rc
 indra/newview/Info-SecondLife.plist
 indra/newview/info-Firestorm.plist
