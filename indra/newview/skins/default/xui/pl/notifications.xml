@@ -3245,18 +3245,57 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 		Ta akcja ukryje wszystkie menu i przyciski. Aby je pokazać użyj skrótu [SHORTCUT] ponownie.
 		<usetemplate name="okcancelignore" yestext="OK" notext="Anuluj" ignoretext="Potwierdź przed ukryciem interfejsu"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestricted">
+	<notification name="PathfindingLinksets_WarnOnPhantom">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted">
 		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Czy chcesz kontynuować?
 		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnVolume">
+	<notification name="PathfindingLinksets_MismatchOnVolume">
 		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+
+Czy chcesz kontynuować?
 		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestrictedAndVolume">
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
 		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
 Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+
+Czy chcesz kontynuować?
 		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha.
@@ -3497,6 +3536,12 @@ Obecne ustawienie: [CURRENT_VALUE]
 	</notification>
 	<notification name="TeleportToAvatarNotPossible">
 		Teleportacja do tego awatara nie jest możliwa, ponieważ dokładna pozycja nie jest znana.
+	</notification>
+	<notification name="ZoomToAvatarNotPossible">
+		Nie można przybliżyć do tego awatara, ponieważ jest poza zasięgiem.
+	</notification>
+	<notification name="TrackAvatarNotPossible">
+		Nie można śledzić tego awatara, ponieważ jest poza zasięgiem.
 	</notification>
 	<notification name="CacheEmpty">
 		Pamięć podręczna Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
