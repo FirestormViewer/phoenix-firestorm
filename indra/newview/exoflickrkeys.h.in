@@ -3,5 +3,5 @@
 // For Exodus release builds the latter is *required* to maintain the
 // secrecy of the API keys.
 
-#define EXO_FLICKR_API_KEY "@EXODUS_FLICKR_API_KEY@"
-#define EXO_FLICKR_API_SECRET "@EXODUS_FLICKR_API_SECRET@"
+#define EXO_FLICKR_API_KEY "@FLICKR_API_KEY@"
+#define EXO_FLICKR_API_SECRET "@FLICKR_API_SECRET@"
