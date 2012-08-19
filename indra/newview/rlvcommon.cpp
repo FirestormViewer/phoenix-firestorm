@@ -33,6 +33,7 @@
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 
+#include "lscript_byteformat.h"
 #include <boost/algorithm/string.hpp>
 
 // ============================================================================
@@ -347,6 +348,28 @@ void RlvUtil::filterNames(std::string& strUTF8Text, bool fFilterLegacy)
 			}
 		}
 	}
+}
+
+// Checked: 2012-08-19 (RLVa-1.4.7)
+void RlvUtil::filterScriptQuestions(S32& nQuestions, LLSD& sdPayload)
+{
+	// Check SCRIPT_PERMISSION_ATTACH
+	if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & nQuestions) )
+	{
+		// Notify the user that we blocked it since they're not allowed to wear any new attachments
+		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
+		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+	}
+
+	// Check SCRIPT_PERMISSION_TELEPORT
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_TPLOC)) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT] & nQuestions) )
+	{
+		// Notify the user that we blocked it since they're not allowed to teleport
+		sdPayload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMTELEPORT;
+		nQuestions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TELEPORT];		
+	}
+
+	sdPayload["questions"] = nQuestions;
 }
 
 // Checked: 2010-08-29 (RLVa-1.2.1c) | Added: RLVa-1.2.1c

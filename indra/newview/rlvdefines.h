@@ -328,6 +328,7 @@ enum ERlvAttachGroupType
 
 #define RLV_STRING_BLOCKED_GENERIC			"blocked_generic"
 #define RLV_STRING_BLOCKED_PERMATTACH		"blocked_permattach"
+#define RLV_STRING_BLOCKED_PERMTELEPORT		"blocked_permteleport"
 #define RLV_STRING_BLOCKED_RECVIM			"blocked_recvim"
 #define RLV_STRING_BLOCKED_RECVIM_REMOTE	"blocked_recvim_remote"
 #define RLV_STRING_BLOCKED_SENDIM			"blocked_sendim"
