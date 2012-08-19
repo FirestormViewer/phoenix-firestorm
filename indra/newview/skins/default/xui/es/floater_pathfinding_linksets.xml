@@ -10,11 +10,15 @@
 	<floater.string name="linkset_terrain_name">[Terrain]</floater.string>
 	<floater.string name="linkset_terrain_description">--</floater.string>
 	<floater.string name="linkset_terrain_owner">--</floater.string>
+	<floater.string name="linkset_terrain_scripted">--</floater.string>
 	<floater.string name="linkset_terrain_land_impact">--</floater.string>
 	<floater.string name="linkset_terrain_dist_from_you">--</floater.string>
 	<floater.string name="linkset_owner_loading">[Loading]</floater.string>
 	<floater.string name="linkset_owner_unknown">[Unknown]</floater.string>
 	<floater.string name="linkset_owner_group">[group]</floater.string>
+	<floater.string name="linkset_is_scripted">Sí</floater.string>
+	<floater.string name="linkset_is_not_scripted">No</floater.string>
+	<floater.string name="linkset_is_unknown_scripted">Desconocido</floater.string>
 	<floater.string name="linkset_use_walkable">Transitable</floater.string>
 	<floater.string name="linkset_use_static_obstacle">Obstáculos estáticos</floater.string>
 	<floater.string name="linkset_use_dynamic_obstacle">Obstáculos móviles</floater.string>
@@ -51,6 +55,7 @@
 			<scroll_list.columns label="Nombre (prim raíz)" name="name"/>
 			<scroll_list.columns label="Descripción (prim raíz)" name="description"/>
 			<scroll_list.columns label="Propietario" name="owner"/>
+			<scroll_list.columns label="Con scripts" name="scripted"/>
 			<scroll_list.columns label="Impacto" name="land_impact"/>
 			<scroll_list.columns label="Distancia" name="dist_from_you"/>
 			<scroll_list.columns label="Uso del linkset" name="linkset_use"/>

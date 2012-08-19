@@ -3218,18 +3218,56 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		Esta acción ocultará todos los botones y elementos de menú. Para restaurarlos, pulsa otra vez en [SHORTCUT].
 		<usetemplate ignoretext="Confirmar antes de ocultar la IU" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestricted">
-		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
-		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse a causa de restricciones de permisos en el linkset." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	<notification name="PathfindingLinksets_WarnOnPhantom">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma'" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnVolume">
+	
+	<notification name="PathfindingLinksets_MismatchOnRestricted">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+¿Deseas continuar?
+		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse a causa de restricciones de permisos en el linkset" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnVolume">
 		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+¿Deseas continuar?
 		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse porque la forma es no-convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestrictedAndVolume">
-		Algunos linksets seleccionados no pueden ser configurados como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
-		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa. Estos linksets no serán modificados.
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden ser configurados como se desea" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+		
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa. El tipo de uso de estos linksets no cambiará.
+
+¿Deseas continuar?	
 		<usetemplate ignoretext="Algunos linksets no pueden ser configurados a causa de restricciones de permisos en el linkset y porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+		
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden ser configurados a causa de restricciones de permisos o porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		El objeto seleccionado afecta al navmesh. Cambiarlo a Camino Flexible lo eliminará del navmesh.
@@ -3487,6 +3525,12 @@ Configuración actual: [CURRENT_VALUE]
 	<notification name="TeleportToAvatarNotPossible">
 		No es posible teleportarse a la posición de este avatar porque se desconoce su posición exacta.
 		<tag>fail</tag>
+	</notification>
+	<notification name="ZoomToAvatarNotPossible">
+		No se puede enfocar este avatar porque está fuera de tu alcance.
+	</notification>
+	<notification name="TrackAvatarNotPossible">
+		No se puede seguir a este avatar porque está fuera de tu alcance.
 	</notification>
 	<notification name="CacheEmpty">
 		La cache del visor está vacía. Por favor, ten en cuenta que puedes sufrir de lentitud de movimiento y de inventario mientras se carga el nuevo contenido.
