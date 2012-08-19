@@ -2907,7 +2907,11 @@ bool LLAppViewer::initConfiguration()
 	// will take care of it.
 	if ((clp.hasOption("login") || clp.hasOption("autologin")) && !clp.hasOption("url") && !clp.hasOption("slurl"))
 	{
-		LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
+// <FS:AW crash on startup>
+// also here LLSLURLs are not available at this point of startup
+//LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
+		LLStartUp::setStartSLURLString(gSavedSettings.getString("LoginLocation"));
+// </FS:AW crash on startup>
 	}
 
 	if (!gSavedSettings.getBOOL("AllowMultipleViewers"))
@@ -2961,7 +2965,11 @@ bool LLAppViewer::initConfiguration()
 	std::string nextLoginLocation = gSavedSettings.getString( "NextLoginLocation" );
 	if ( !nextLoginLocation.empty() )
 	{
-		LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
+// <FS:AW crash on startup>
+// also here LLSLURLs are not available at this point of startup
+//		LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
+		LLStartUp::setStartSLURLString(nextLoginLocation);
+// </FS:AW crash on startup>
 	};
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
