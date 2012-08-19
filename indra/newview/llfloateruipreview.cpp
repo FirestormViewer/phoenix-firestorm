@@ -639,6 +639,17 @@ void LLFloaterUIPreview::refreshList()
 	std::string name;
 	BOOL found = TRUE;
 
+	// <FS:Ansariel> Floaters from Exodus
+	while(found)				// for every firestorm custom file that matches the pattern
+	{
+		if((found = gDirUtilp->getNextFileInDir(getLocalizedDirectory(), "exo_*.xml", name)))	// get next file matching pattern
+		{
+			addFloaterEntry(name.c_str());	// and add it to the list (file name only; localization code takes care of rest of path)
+		}
+	}
+	found = TRUE;
+	// </FS:Ansariel> Floaters from Exodus
+
 	LLDirIterator floater_iter(getLocalizedDirectory(), "floater_*.xml");
 	while(found)				// for every floater file that matches the pattern
 	{
