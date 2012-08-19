@@ -9028,7 +9028,7 @@ Would you like to authorize [APP_NAME] to post to your Flickr account?
    icon="alertmodal.tga"
    name="ExodusFlickrVerificationPrompt"
    type="alertmodal">
-Please authorize Flickr in your web browser, then type the code given by the website below:
+Please authorize [APP_NAME] to post to your Flickr account in your web browser, then type the code given by the website below:
     <tag>confirm</tag>
     <form name="form">
       <input name="oauth_verifier" type="text" default="true"/>
