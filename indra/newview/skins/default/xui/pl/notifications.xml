@@ -3163,11 +3163,6 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 			<button name="cancel" text="Anuluj"/>
 		</form>
 	</notification>
-	<notification name="KittyFlickrNeedAuth">
-		Musisz autoryzować [APP_NAME] zanim będzie można ładować obrazki na Flickr. Zaloguj się i autoryzuj [APP_NAME], a następnie wybierz "Załaduj na Flickr" ponownie.
-
-(Jeśli [APP_NAME] został już autoryzowany i ciągle jesteś zalogowany/a, to ten proces może być automatyczny)
-	</notification>
 	<notification name="ModeChange">
 		Zmiana trybu wymaga zamknięcia i ponownego uruchomienia aplikacji.
 		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
@@ -3183,31 +3178,6 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	<notification name="NoPlaceInfo">
 		Oglądanie profilu miejsca jest możliwe tylko w trybie zaawansowanym. Czy chcesz wylogować się i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.
 		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
-	</notification>
-	<notification name="KittyFlickrHTTPFail">
-		Komunikacja z Flickr nie powiodła się. Nie wiemy dlaczego.
-	</notification>
-	<notification name="KittyFlickrTokenRejected">
-		Flickr odrzucił Twój token autoryzacji. Prawdopodobnie dlatego, że cofnąłeś/aś uprawnienia [APP_NAME]. Nadaj uprawnienia i spróbuj ponownie.
-	</notification>
-	<notification name="KittyFlickrGenericFail">
-		Komunikacja z Flickr nie powiodła się ([CODE]):
-
-[ERROR]
-	</notification>
-	<notification name="KittyFlickrUploadCancelledAuthRejected">
-		Ładowanie zostało anulowane, ponieważ uprawnienia dostępu do konta Flickr nie zostały nadane [APP_NAME].
-	</notification>
-	<notification name="KittyFlickrUploadComplete">
-		[http://www.flickr.com/photos/upload/edit/?ids=[ID] [TITLE]] został pomyślnie załadowany na Flickr.
-	</notification>
-	<notification name="KittyFlickrUploadFailed">
-		Nie można załadować "[TITLE]" na Flickr (błąd [CODE]):
-
-[ERROR]
-	</notification>
-	<notification name="KittyFlickrUploadFailedNoError">
-		Nie można załadować "[TITLE]" na Flickr. Nie wiemy dlaczego.
 	</notification>
 	<notification name="NoPicks">
 		Tworzenie i edycja Ulubionych jest możliwa jedynie w trybie zaawansowanym. Czy chcesz się wylogować i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.
@@ -3593,5 +3563,23 @@ Anulowano.
 	<notification name="FSBWTooHigh">
 		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps. Jest mało prawdopodobne, aby takie ustawienie nie sprawiało problemów i prawie na pewno nie spowoduje wzrostu wydajności.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Aby móc ładować zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
+
+Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Przeprowadź autoryzację [APP_NAME] dla wysyłania zdjęć na Flickr w przeglądarce internetowej i wpisz otrzymany kod poniżej:
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		Autoryzacja Flickr nie powiodła się. Spróbuj ponownie i sprawdź dokładnie kod weryfikacyjny.
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
 </notifications>

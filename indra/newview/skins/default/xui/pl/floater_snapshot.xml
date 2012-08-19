@@ -9,14 +9,20 @@
 	<string name="profile_progress_str">
 		Wysyłanie
 	</string>
+	<string name="flickr_progress_str">
+		Komunikacja z Flickr
+	</string>
 	<string name="inventory_progress_str">
-        Zapisywanie do Szafy
+		Zapisywanie do Szafy
 	</string>
 	<string name="local_progress_str">
 		Zapisywanie na komputer
 	</string>
 	<string name="profile_succeeded_str">
 		Obraz załadowany
+	</string>
+	<string name="flickr_succeeded_str">
+		Obraz załadowany na Flickr
 	</string>
 	<string name="postcard_succeeded_str">
 		Email wysłany
@@ -38,6 +44,9 @@
 	</string>
 	<string name="local_failed_str">
 		Zapis na komputerze nie powiódł się.
+	</string>
+	<string name="flickr_failed_str">
+		Ładowanie na Flickr nie powiodło się.
 	</string>
 	<ui_ctrl name="thumbnail_placeholder">
 		<panel name="succeeded_panel">
