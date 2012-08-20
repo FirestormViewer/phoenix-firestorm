@@ -583,7 +583,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support/>
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -592,8 +592,9 @@ BOOL LLFloaterPreference::postBuild()
 		if (opensim_panel)
 			tab_container->removeTabPanel(opensim_panel);
 	}
-#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // </FS:AW  opensim preferences>
+#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+
 
 // ## Zi: Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
@@ -2144,6 +2145,14 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+// <FS:AW Disable LSL bridge on opensim>
+	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
+	{
+ 		getChild<LLCheckBoxCtrl>("UseLSLBridge")->setEnabled(FALSE);
+	}
+// </FS:AW Disable LSL bridge on opensim>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
 
 	apply();
 	return true;
