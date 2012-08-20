@@ -2387,6 +2387,16 @@ bool idle_startup()
 		set_startup_status(1.0, "", "");
 		display_startup();
 
+// <FS:AW Disable LSL bridge on opensim>
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+		if (LLGridManager::getInstance()->isInOpenSim())
+		{
+			LLControlVariable* use_bridge = gSavedSettings.getControl("UseLSLBridge");
+			use_bridge->setValue(LLSD(FALSE), FALSE);
+		}
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+// </FS:AW Disable LSL bridge on opensim>
+
 //-TT Client LSL Bridge
 		if (gSavedSettings.getBOOL("UseLSLBridge"))
 			FSLSLBridge::instance().initBridge();
