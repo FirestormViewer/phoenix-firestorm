@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_snapshot_flickr">
+	<string name="upload_message">
+		Cargando...
+	</string>
+	<tab_container name="flickr_panel_container">
+		<panel label="Metadatos" name="panel_flickr_metadata">
+			<text name="title_label">
+				Título:
+			</text>
+			<line_editor name="title_form" value="Instantánea"/>
+			<text name="tags_label">
+				Tags:
+			</text>
+			<text name="rating_label">
+				Calific.:
+			</text>
+			<icons_combo_box label="Moderado" name="rating_combo">
+				<icons_combo_box.item label="General" name="Safe"/>
+				<icons_combo_box.item label="Moderado" name="Moderate"/>
+				<icons_combo_box.item label="Adulto" name="Restricted"/>
+			</icons_combo_box>
+			<check_box name="location_check" label="Incluir loc."/>
+			<text name="description_label">
+				Descripción (opcional):
+			</text>
+			<button label="Subir" name="upload_btn"/>
+		</panel>
+		<panel label="Configuración" name="exo_panel_flickr_settings"/>
+	</tab_container>
+</panel>

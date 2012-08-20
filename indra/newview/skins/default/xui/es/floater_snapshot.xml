@@ -9,6 +9,9 @@
 	<string name="profile_progress_str">
 		Publicando
 	</string>
+	<string name="flickr_progress_str">
+		Conectando con Flickr
+	</string>
 	<string name="inventory_progress_str">
 		Guardando en el inventario
 	</string>
@@ -18,6 +21,9 @@
 	<string name="profile_succeeded_str">
 		Imagen subida
 	</string>
+	<string name="flickr_succeeded_str">
+		Image subida a Flickr
+ 	</string>
 	<string name="postcard_succeeded_str">
 		Correo electrónico enviado
 	</string>
@@ -39,6 +45,9 @@
 	<string name="local_failed_str">
 		Error al guardar en el equipo.
 	</string>
+	<string name="flickr_failed_str">
+		Error al subirla a Flickr.
++ 	</string>
 	<ui_ctrl name="thumbnail_placeholder">
 		<panel name="succeeded_panel">
 			<text name="succeeded_lbl">
@@ -50,10 +59,10 @@
 				Falló
 			</text>
 		</panel>
-		<text name="working_lbl">
+		<text name="working_lbl" width="202">
 			Trabajando
 		</text>
-		<text name="refresh_lbl">
+		<text name="refresh_lbl" width="228">
 			Actualizar para guardar.
 		</text>
 	</ui_ctrl>
