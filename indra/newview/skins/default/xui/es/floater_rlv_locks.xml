@@ -6,4 +6,8 @@
 		<scroll_list.columns label="Objetivo" name="lock_target"/>
 		<scroll_list.columns label="Mantenido por" name="lock_origin"/>
 	</scroll_list>
+	<panel name="bottom_panel">
+		<button label="Actualizar" name="refresh_btn" width="90"/>
+		<icon name="dummy_icon" width="409"/>
+	</panel>
 </floater>

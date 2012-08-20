@@ -3582,4 +3582,24 @@ Intento cancelado.
 		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps. Es improbable que funcione bien y casi seguro no mejorará el rendimiento.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Para usar la característica de subida a Flickr debes autorizar a [APP_NAME] a acceder a tu cuenta. Si procedes, tu navegador web abrirá la página de Flickr, donde se te pedirá que inicies sesión y autorices a [APP_NAME]. Se te dará un código para usarlo en [APP_NAME].
+
+¿Deseas autorizar a [APP_NAME] a publicar en tu cuenta de Flickr?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Por favor, autoriza a [APP_NAME] a publicar en tu cuenta Flickr en tu navegador web, y copia abajo el código que se te dará:
+		<form name="form">
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		La verificación Flickr ha fallado. Por favor, inténtalo de nuevo, y asegúrate de que el código de verificación sea correcto.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Tu instantánea puede ser vista ahora [http://www.flickr.com/photos/upload/edit/?ids=[ID] aquí].
+	</notification>
 </notifications>

@@ -15,5 +15,8 @@
 			</scroll_list>
 		</panel>
 	</tab_container>
-	<button label="Copiar al portapapeles" name="copy_btn"/>
+	<panel name="bottom_panel">
+		<button label="Copiar al portapapeles" name="copy_btn" width="155"/>
+		<icon name="dummy_icon" width="158"/>
+	</panel>
 </floater>
