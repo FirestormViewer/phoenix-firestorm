@@ -210,8 +210,52 @@ RlvCommandOptionGeneric::RlvCommandOptionGeneric(const std::string& strOption)
 	m_fValid = true;
 }
 
+// Checked: 2012-07-28 (RLVa-1.4.7)
+class RlvCommandOptionGetPathCallback
+{
+public:
+	RlvCommandOptionGetPathCallback(const LLUUID& idAttachObj, RlvCommandOptionGetPath::getpath_callback_t cb)
+		: mObjectId(idAttachObj), mCallback(cb)
+	{
+		if (isAgentAvatarValid())
+			mAttachmentConnection = gAgentAvatarp->setAttachmentCallback(boost::bind(&RlvCommandOptionGetPathCallback::onAttachment, this, _1, _3));
+		gIdleCallbacks.addFunction(&onIdle, this);
+	}
+
+	~RlvCommandOptionGetPathCallback()
+	{
+		if (mAttachmentConnection.connected())
+			mAttachmentConnection.disconnect();
+		gIdleCallbacks.deleteFunction(&onIdle, this);
+	}
+
+	void onAttachment(LLViewerObject* pAttachObj, LLVOAvatarSelf::EAttachAction eAction)
+	{
+		if ( (LLVOAvatarSelf::ACTION_ATTACH == eAction) && (pAttachObj->getID() == mObjectId) )
+		{
+			uuid_vec_t idItems(1, pAttachObj->getAttachmentItemID());
+			mCallback(idItems);
+			delete this;
+		}
+	}
+
+	static void onIdle(void* pData)
+	{
+		RlvCommandOptionGetPathCallback* pInstance = reinterpret_cast<RlvCommandOptionGetPathCallback*>(pData);
+		if (pInstance->mExpirationTimer.getElapsedTimeF32() > 30.0f)
+			delete pInstance;
+	}
+
+protected:
+	LLUUID                      mObjectId;
+	RlvCommandOptionGetPath::getpath_callback_t mCallback;
+	boost::signals2::connection mAttachmentConnection;
+	LLFrameTimer                mExpirationTimer;
+};
+
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.3.0b
-RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
+RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpath_callback_t cb)
+	: m_fCallback(false)
 {
 	m_fValid = true;	// Assume the option will be a valid one until we find out otherwise
 
@@ -228,12 +272,27 @@ RlvCommandOptionGetPath::RlvCommandOptionGetPath(const RlvCommand& rlvCmd)
 	else if (rlvCmdOption.isEmpty())			// ... or it can be empty (in which case we act on the object that issued the command)
 	{
 		const LLViewerObject* pObj = gObjectList.findObject(rlvCmd.getObjectID());
-		if ( (pObj) || (pObj->isAttachment()) )
-			m_idItems.push_back(pObj->getAttachmentItemID());
+		if (pObj)
+		{
+			if (pObj->isAttachment())
+				m_idItems.push_back(pObj->getAttachmentItemID());
+		}
+		else if (!cb.empty())
+		{
+			new RlvCommandOptionGetPathCallback(rlvCmd.getObjectID(), cb);
+			m_fCallback = true;
+			return;
+		}
 	}
 	else										// ... but anything else isn't a valid option
 	{
 		m_fValid = false;
+		return;
+	}
+
+	if (!cb.empty())
+	{
+		cb(getItemIDs());
 	}
 }
 
@@ -437,6 +496,9 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 	RlvWearableItemCollector f(pFolder, eAction, eFlags);
 	gInventory.collectDescendentsIf(pFolder->getUUID(), folders, items, FALSE, f, TRUE);
 
+	// TRUE if we've already encountered this LLWearableType::EType (used only on wear actions and only for AT_CLOTHING)
+	bool fSeenWType[LLWearableType::WT_COUNT] = { false };
+
 	EWearAction eCurAction = eAction;
 	for (S32 idxItem = 0, cntItem = items.count(); idxItem < cntItem; idxItem++)
 	{
@@ -450,6 +512,8 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 		// Each folder can specify its own EWearAction override
 		if (isWearAction(eAction))
 			eCurAction = f.getWearAction(pRlvItem->getParentUUID());
+		else
+			eCurAction = eAction;
 
 		//  NOTES: * if there are composite items then RlvWearableItemCollector made sure they can be worn (or taken off depending)
 		//         * some scripts issue @remattach=force,attach:worn-items=force so we need to attach items even if they're currently worn
@@ -460,6 +524,10 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 			case LLAssetType::AT_CLOTHING:
 				if (isWearAction(eAction))
 				{
+					// The first time we encounter any given clothing type we use 'eCurAction' (replace or add)
+					// The second time we encounter a given clothing type we'll always add (rather than replace the previous iteration)
+					eCurAction = (!fSeenWType[pItem->getWearableType()]) ? eCurAction : ACTION_WEAR_ADD;
+
 					ERlvWearMask eWearMask = gRlvWearableLocks.canWear(pRlvItem);
 					if ( ((ACTION_WEAR_REPLACE == eCurAction) && (eWearMask & RLV_WEAR_REPLACE)) ||
 						 ((ACTION_WEAR_ADD == eCurAction) && (eWearMask & RLV_WEAR_ADD)) )
@@ -467,6 +535,7 @@ void RlvForceWear::forceFolder(const LLViewerInventoryCategory* pFolder, EWearAc
 						// The check for whether we're replacing a currently worn composite item happens in onWearableArrived()
 						if (!isAddWearable(pItem))
 							addWearable(pRlvItem, eCurAction);
+						fSeenWType[pItem->getWearableType()] = true;
 					}
 				}
 				else
@@ -698,13 +767,15 @@ bool RlvForceWear::isStrippable(const LLInventoryItem* pItem)
 		}
 
 		LLViewerInventoryCategory* pFolder = gInventory.getCategory(pItem->getParentUUID());
-		while ( (pFolder) && (gInventory.getRootFolderID() != pFolder->getParentUUID()) )
+		while (pFolder)
 		{
 			if (std::string::npos != pFolder->getName().find(RLV_FOLDER_FLAG_NOSTRIP))
 				return false;
 			// If the item's parent is a folded folder then we need to check its parent as well
-			pFolder = 
-				(RlvInventory::isFoldedFolder(pFolder, true)) ? gInventory.getCategory(pFolder->getParentUUID()) : NULL;
+			if ( (gInventory.getRootFolderID() != pFolder->getParentUUID()) && (RlvInventory::isFoldedFolder(pFolder, true)) )
+				pFolder = gInventory.getCategory(pFolder->getParentUUID());
+			else
+				pFolder = NULL;
 		}
 	}
 	return true;
