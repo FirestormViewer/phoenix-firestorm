@@ -281,7 +281,7 @@ static void JsonToLLSD(const Json::Value &root, LLSD &output)
 				output = root.asBool();
 				break;
 			case Json::nullValue:
-				output = NULL;
+				output = LLSD();
 				break;
 			default:
 				break;
