@@ -6828,7 +6828,7 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLNearbyChat* nearby_chat = LLNearbyChat::getInstance();
+			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
 			if(nearby_chat)
 			{
 				LLChat chat_msg(notice.getString());
