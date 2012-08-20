@@ -204,6 +204,7 @@
 	<menu label="Hilfe" name="Help">
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
 		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
         <menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
         <menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
