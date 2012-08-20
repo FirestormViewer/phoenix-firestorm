@@ -1313,6 +1313,28 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 	// from the command line.
 	updateServer();
 	updateLoginPanelLinks();
+
+// < FS:AW FIRE-6401 >
+// guesstimate if the user wants to switch to the same username on a different grid
+
+	LLComboBox* username_combo = sInstance->getChild<LLComboBox>("username_combo");
+	std::string credName = credential_name();
+	LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
+	if(credential->getIdentifier()["first_name"].asString().size()<=0 && credential->getIdentifier()["account_name"].asString().size()<=0 )
+	{
+		//if we have no saved login clear the username
+		username_combo->setValue("");
+		username_combo->setTextEntry((LLStringExplicit)"");
+
+	}
+	else
+	{
+		//if we have a saved login use it
+		username_combo->setSelectedByValue(credName, TRUE);
+	}
+
+	username_combo->setFocus(TRUE);
+// </ FS:AW FIRE-6401 >
 }
 
 
