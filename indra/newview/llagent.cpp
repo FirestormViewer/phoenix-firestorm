@@ -359,7 +359,7 @@ void LLAgent::updatePhoenixForceFly(const LLSD &data)
 	PhoenixForceFly = data.asBoolean();
 	if (PhoenixForceFly == TRUE) 
 	{
-		llinfos << "AO: Enabling Fly Override" << llendl;
+		llinfos << "Enabling Fly Override" << llendl;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
    		{
    			LLNotificationsUtil::add("FirstUseFlyOverride");
