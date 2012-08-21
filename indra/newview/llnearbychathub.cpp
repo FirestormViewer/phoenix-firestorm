@@ -211,6 +211,12 @@ void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channe
 void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel)
 {
 	LLMessageSystem* msg = gMessageSystem;
+
+	// <FS:ND> gMessageSystem can be 0, not sure how it is exactly to reproduce, maybe during viewer shutdown?
+	if( !msg )
+		return;
+	// </FS:ND>
+
 	if(channel >= 0)
 	{
 		msg->newMessageFast(_PREHASH_ChatFromViewer);
