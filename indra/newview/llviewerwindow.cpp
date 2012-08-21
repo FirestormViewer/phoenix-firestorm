@@ -705,7 +705,9 @@ public:
 		{
 			if (LLPipeline::getRenderMOAPBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing media beacons (white)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing media beacons (white)");
+				addText(xpos, ypos, beacon_media);
 				ypos += y_inc;
 			}
 
@@ -717,13 +719,17 @@ public:
 
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing particle beacons (blue)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing particle beacons (blue)");
+				addText(xpos, ypos, beacon_particle);
 				ypos += y_inc;
 			}
 
 			if (LLPipeline::getRenderSoundBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				addText(xpos, ypos, beacon_sound);
 				ypos += y_inc;
 			}
 
@@ -741,7 +747,9 @@ public:
 
 			if (LLPipeline::getRenderPhysicalBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing physical object beacons (green)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing physical object beacons (green)");
+				addText(xpos, ypos, beacon_physical);
 				ypos += y_inc;
 			}
 		}
