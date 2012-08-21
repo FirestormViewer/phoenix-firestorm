@@ -7299,6 +7299,9 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 		}
 	}
 
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
+
 	llinfos << "Teleport error, reason=" << reason << llendl;
 	if ((!gSavedSettings.getBOOL("UseLSLBridge")) ||
 		(reason != "Could not teleport closer to destination"))
