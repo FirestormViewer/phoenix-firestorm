@@ -6,4 +6,7 @@
     <scroll_list.columns label="Blokuje obiekt" name="lock_target" />
     <scroll_list.columns label="Trzymana przez" name="lock_origin" />
   </scroll_list>
+  <panel name="bottom_panel">
+    <button label="Odśwież" name="refresh_btn" />
+  </panel>
 </floater>
