@@ -3691,4 +3691,7 @@ Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] be
   </notification>
   <!-- </FS:TS> FIRE-5453 -->
 
+  <notification name="FirstUseFlyOverride">
+Warnung: Bitte verwende die Funktion zur Aufhebung der Flugbeschränkung verantwortungsvoll! Die Verwendung ohne die Zustimmung des Landeigentümers kann dazu führen, dass du von dem entsprechenden Land verbannt wirst.
+  </notification>
 </notifications>
