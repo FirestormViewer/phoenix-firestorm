@@ -4443,6 +4443,9 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
+
 	// Now do teleport effect for where you're going.
 	// VEFFECT: TeleportEnd
 	effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
@@ -7358,6 +7361,9 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 	{
 		gAgent.setFlying(FALSE);
 	}
+
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
 
 	gAgent.setPositionAgent(pos);
 	gAgentCamera.slamLookAt(look_at);
