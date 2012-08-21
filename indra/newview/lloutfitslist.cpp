@@ -49,6 +49,8 @@
 #include "llvoavatarself.h"
 #include "llwearableitemslist.h"
 
+#include "llviewercontrol.h" // <FS:ND/> for gSavedSettings
+
 static bool is_tab_header_clicked(LLAccordionCtrlTab* tab, S32 y);
 
 static const LLOutfitTabNameComparator OUTFIT_TAB_NAME_COMPARATOR;
@@ -465,6 +467,18 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 	// Create added and removed items vectors.
 	computeDifference(cat_array, vadded, vremoved);
+
+	// <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
+	if( vadded.size() > 128 )
+		llwarns << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnetcs" << llendl;
+
+	U32 nCap = gSavedSettings.getU32( "FSDisplaySavedOutfitsCap" );
+	if( nCap && nCap < vadded.size() )
+	{
+		vadded.resize( nCap );
+		llwarns << "Capped outfits to " << nCap << " due to debug setting FSDisplaySavedOutfitsCap" << llendl;
+	}
+	// </FS:ND>
 
 	// Handle added tabs.
 	for (uuid_vec_t::const_iterator iter = vadded.begin();
