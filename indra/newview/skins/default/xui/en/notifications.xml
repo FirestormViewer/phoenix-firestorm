@@ -9062,4 +9062,13 @@ Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[
   </notification>
   <!-- </FS:TS> FIRE-5453 -->
 
+  <notification
+   icon="alertmodal.tga"
+   name="FirstUseFlyOverride"
+   type="alertmodal">
+Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
 </notifications>

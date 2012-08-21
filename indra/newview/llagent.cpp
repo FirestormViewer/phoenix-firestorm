@@ -361,12 +361,9 @@ void LLAgent::updatePhoenixForceFly(const LLSD &data)
 	{
 		llinfos << "AO: Enabling Fly Override" << llendl;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
-    		{
-			LLSD args;
-    			args["MESSAGE"] = 
-    			llformat("Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying." );
-    			LLNotificationsUtil::add("GenericAlert", args);
-			gSavedSettings.setBOOL("FirstUseFlyOverride",FALSE);
+   		{
+   			LLNotificationsUtil::add("FirstUseFlyOverride");
+			gSavedSettings.setBOOL("FirstUseFlyOverride", FALSE);
 		}
 	}
 }
