@@ -3582,4 +3582,7 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 	<notification name="ExodusFlickrUploadComplete">
 		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
+	<notification name="FirstUseFlyOverride">
+		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela posiadłości może poskutkować zbanowaniem Twojego awatara z parceli, nad którą będziesz latać.		
+	</notification>
 </notifications>
