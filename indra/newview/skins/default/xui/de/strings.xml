@@ -4919,7 +4919,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Beacons für Skriptobjekte werden angezeigt (rot)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Beacons für Skriptobjekte mit Berührungsfunktion werden angezeigt (rot)
+		Beacons für Skriptobjekte mit Berührungsfunktion (rot)
 	</string>
 	<string name="BeaconSound">
 		Sound-Beacons werden angezeigt (gelb)
