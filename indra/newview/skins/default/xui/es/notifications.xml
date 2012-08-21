@@ -3602,4 +3602,8 @@ Intento cancelado.
 	<notification name="ExodusFlickrUploadComplete">
 		Tu instantánea puede ser vista ahora [http://www.flickr.com/photos/upload/edit/?ids=[ID] aquí].
 	</notification>
+	<notification name="FirstUseFlyOverride">
+		Precaución: ¡Usa la anulación de la prohibición de volar de forma responsable! Usarla sin el permiso del propietario del terreno puede derivar en la expulsión de tu avatar de la parcela en la que estás volando.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
 </notifications>

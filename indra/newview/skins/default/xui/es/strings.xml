@@ -4930,7 +4930,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Viendo balizas de objetos con script (rojas)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Viendo el objeto con script con balizas de función táctil (rojas)
+		Viendo balizas de objetos con script con función táctil (rojas)
 	</string>
 	<string name="BeaconSound">
 		Viendo balizas de sonido (amarillas)
