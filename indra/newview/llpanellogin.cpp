@@ -1230,7 +1230,6 @@ void LLPanelLogin::updateSavedLoginsCombo()
 				bool add_grid = false;
 				if (SECOND_LIFE_MAIN_LABEL == grid_label)
 				{
-					name.append(" @ " + grid_label);// <FS:AW FIRE-7362 />
 					add_grid= true;
 				}
 #ifdef HAS_OPENSIM_SUPPORT
