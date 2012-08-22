@@ -253,6 +253,11 @@
 	 <color
 	 name="AnsaStormBlue_Dk_Emphasis"
 	 value="0 0.5117 0.6992 0.66" />
+	 
+	 <color
+	 name="AnsaStorm_HtmlLink"
+	 value="0 0.6 0.82 1" />
+	 
 	 <!-- END AnsaStorm Definitions -->
 
   <!-- This color name makes potentially unused colors show up bright purple.
@@ -523,7 +528,7 @@
      value="0.5 0.5 0.5 1" />
     <color
      name="HTMLLinkColor"
-     reference="AccentColor" />
+     reference="AnsaStorm_HtmlLink" />
     <color
      name="HealthTextColor"
      reference="White" />
