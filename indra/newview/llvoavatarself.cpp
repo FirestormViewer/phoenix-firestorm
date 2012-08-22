@@ -1534,6 +1534,10 @@ BOOL LLVOAvatarSelf::detachObject(LLViewerObject *viewer_object)
 				RlvAttachmentLockWatchdog::instance().onDetach(viewer_object, pAttachPt);
 				gRlvHandler.onDetach(viewer_object, pAttachPt);
 			}
+			if (mAttachmentSignal)
+			{
+				(*mAttachmentSignal)(viewer_object, pAttachPt, ACTION_DETACH);
+			}
 
 //-TT Client LSL Bridge
 			if (pAttachPt->getName() == "Bridge" && gSavedSettings.getBOOL("UseLSLBridge"))
@@ -1621,10 +1625,6 @@ BOOL LLVOAvatarSelf::detachAttachmentIntoInventory(const LLUUID &item_id)
 			if (!attached_obj)
 			{
 				LLAppearanceMgr::instance().removeCOFItemLinks(item_id, false);
-			}
-			if (mAttachmentSignal)
-			{
-				(*mAttachmentSignal)(viewer_object, pAttachPt, ACTION_DETACH);
 			}
 		}
 		return TRUE;
