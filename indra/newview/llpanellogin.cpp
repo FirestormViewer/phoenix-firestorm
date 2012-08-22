@@ -198,6 +198,9 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
 	need_help_text->setClickedCallback(onClickHelp, NULL);
 	
+	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_mgr_help_text");
+	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
+	
 	// get the web browser control
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	web_browser->addObserver(this);
@@ -1089,6 +1092,18 @@ void LLPanelLogin::onClickDelete(void*)
 		onSelectSavedLogin(saved_logins_combo,NULL);
 	}
 }
+
+// <FS:TS> FIRE-7377: Add grid manager help button to explain how to do it
+//static
+void LLPanelLogin::onClickGridMgrHelp(void*)
+{
+	if (sInstance)
+	{
+		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
+		vhelp->showTopic(vhelp->gridMgrHelpTopic());
+	}
+}
+// </FS:TS> FIRE-7377
 
 // static
 void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)

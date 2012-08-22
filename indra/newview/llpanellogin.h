@@ -97,6 +97,7 @@ private:
 	static void onClickForgotPassword(void*);
 	static void onClickHelp(void*);
 	static void onClickDelete(void*);
+	static void onClickGridMgrHelp(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
 	static void onSelectServer(LLUICtrl*, void*);
 	static void onSelectSavedLogin(LLUICtrl*, void*);

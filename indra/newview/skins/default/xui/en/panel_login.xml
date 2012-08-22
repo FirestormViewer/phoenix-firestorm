@@ -218,6 +218,17 @@ top_pad="0"
           name="server_combo"
 width="110"
   visible="true" />
+  <text
+  follows="left|bottom"
+  font="SansSerifSmall"
+  text_color="SchemeLightest"
+  height="16"
+  layout="topleft"
+  top_pad="0"
+  name="grid_mgr_help_text"
+  width="110">
+  Grid Manager help
+  </text>
     </layout_panel>
     <layout_panel
         tab_stop="false"
