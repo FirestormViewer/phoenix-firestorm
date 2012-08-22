@@ -40,6 +40,10 @@
 #include "llwearableitemslist.h"
 #include "llsdserialize.h"
 #include "llclipboard.h"
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+#include "rlvcommon.h"
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Context menu and Gear menu helper.
 static void edit_outfit()
@@ -144,6 +148,9 @@ protected:
 		bool bp_selected			= false;	// true if body parts selected
 		bool clothes_selected		= false;
 		bool attachments_selected	= false;
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+		S32 rlv_locked_count = 0;
+// [/RLVa:KB]
 
 		// See what types of wearables are selected.
 		for (uuid_vec_t::const_iterator it = mUUIDs.begin(); it != mUUIDs.end(); ++it)
@@ -169,9 +176,18 @@ protected:
 			{
 				attachments_selected = true;
 			}
-		}
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+			if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(item)) )
+			{
+				rlv_locked_count++;
+			}
+// [/RLVa:KB]
+ 		}
 
 		// Enable/disable some menu items depending on the selection.
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+		bool rlv_blocked = (mUUIDs.size() == rlv_locked_count);
+// [/RLVa:KB]
 		bool allow_detach = !bp_selected && !clothes_selected && attachments_selected;
 		bool allow_take_off = !bp_selected && clothes_selected && !attachments_selected;
 
@@ -181,6 +197,10 @@ protected:
 // [/SL:KB]
 		menu->setItemVisible("take_off",	allow_take_off);
 		menu->setItemVisible("detach",		allow_detach);
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+		menu->setItemEnabled("take_off",	!rlv_blocked);
+		menu->setItemEnabled("detach",		!rlv_blocked);
+// [/RLVa:KB]
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
 		menu->setItemVisible("take_off_or_detach", (!allow_detach) && (!allow_take_off) && (clothes_selected) && (attachments_selected));
 // [/SL:KB]
