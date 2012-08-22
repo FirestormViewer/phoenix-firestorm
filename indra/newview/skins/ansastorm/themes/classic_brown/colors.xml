@@ -224,6 +224,10 @@
 	 name="MidBlue"
 	 value="0 0 0.5 1" />
 
+	<color
+	 name="AnsaStorm_HtmlLink"
+	 value="0.672 0.336 0 1" />
+
   <!-- This color name makes potentially unused colors show up bright purple.
   Leave this here until all Unused? are removed below, otherwise
   the viewer generates many warnings on startup. -->
@@ -492,7 +496,7 @@
      value="0.5 0.5 0.5 1" />
     <color
      name="HTMLLinkColor"
-     reference="AccentColor" />
+     reference="AnsaStorm_HtmlLink" />
     <color
      name="HealthTextColor"
      reference="White" />
