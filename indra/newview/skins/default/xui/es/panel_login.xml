@@ -38,6 +38,9 @@
 			<text name="grid_selection_text">
 				Iniciar en la red:
 			</text>
+			<text name="grid_mgr_help_text">
+				Ayuda sobre redes
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">
