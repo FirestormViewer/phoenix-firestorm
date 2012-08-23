@@ -27,7 +27,12 @@
 #include "llviewercontrol.h"
 #include "llbase64.h"
 
-#include "reader.h" // Json
+// third-party
+#if LL_STANDALONE
+#include "jsoncpp/reader.h" // JSON
+#else
+#include "reader.h" // JSON
+#endif
 
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
