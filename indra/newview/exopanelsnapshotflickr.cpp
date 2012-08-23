@@ -32,6 +32,9 @@
 #include "llviewerregion.h"
 #include "llslurl.h"
 #include "llnotificationsutil.h"
+#include "llviewerparcelmgr.h"
+
+#include <algorithm>
 
 #include "exoflickr.h"
 #include "exoflickrauth.h"
@@ -201,10 +204,14 @@ void exoPanelSnapshotFlickr::onUpload()
 		{
 			LLVector3 region_pos = region->getPosRegionFromGlobal(global);
 			std::string region_name = region->getName();
+			std::string parcel_name = LLViewerParcelMgr::instance().getAgentParcelName();
+			std::string parcel_name_tag(parcel_name); // We can't escape quotes, so just drop them.
+			parcel_name_tag.erase(std::remove(parcel_name_tag.begin(), parcel_name_tag.end(), '"'), parcel_name_tag.end());
 			tags << " \"secondlife:region=" << region_name << "\"";
 			tags << " secondlife:x=" << llround(region_pos[VX]);
 			tags << " secondlife:y=" << llround(region_pos[VY]);
 			tags << " secondlife:z=" << llround(region_pos[VZ]);
+			tags << " \"secondlife:parcel=" << parcel_name_tag << "\"";
 			
 			if(gSavedSettings.getBOOL("ExodusFlickrIncludeSLURL"))
 			{
@@ -214,7 +221,8 @@ void exoPanelSnapshotFlickr::onUpload()
 					description << "\n\n";
 				}
 				description << "<em><a href='" << url.getSLURLString() << "'>";
-				description << "Taken at " << region_name << " (";
+				description << "Taken at " << parcel_name;
+				description << ", " << region_name << " (";
 				description << llround(region_pos[VX]) << ", ";
 				description << llround(region_pos[VY]) << ", ";
 				description << llround(region_pos[VZ]) << ")";
