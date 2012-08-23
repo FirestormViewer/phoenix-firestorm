@@ -29,6 +29,9 @@
 			<text name="grid_selection_text">
 				Loguj na siatkę:
 			</text>
+			<text name="grid_mgr_help_text" width="117">
+				O Menedżerze Siatek
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">
