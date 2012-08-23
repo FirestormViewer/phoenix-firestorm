@@ -227,7 +227,7 @@ void exoPanelSnapshotFlickr::onUpload()
 		}
 		tags << " secondlife:global_x=" << global[VX];
 		tags << " secondlife:global_y=" << global[VY];
-		tags << " secondlfie:global_z=" << global[VZ];
+		tags << " secondlife:global_z=" << global[VZ];
 	}
 
 	params["tags"] = tags.str();
