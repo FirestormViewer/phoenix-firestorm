@@ -346,6 +346,9 @@ public:
 	static void sendGroupMemberEjects(const LLUUID& group_id,
 									  uuid_vec_t& member_ids);
 
+	// BAKER
+	void sendCapGroupMembersRequest(const LLUUID& group_id);
+
 	void cancelGroupRoleChanges(const LLUUID& group_id);
 
 	static void processGroupPropertiesReply(LLMessageSystem* msg, void** data);
