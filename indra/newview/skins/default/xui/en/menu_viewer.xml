@@ -806,7 +806,7 @@
             <menu_item_call
              label="Sunrise"
              name="Sunrise"
-			 shortcut="control|shift|E">
+			 shortcut="control|shift|U">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
@@ -1090,7 +1090,8 @@
         </menu_item_call>
         <menu_item_check
              label="Edit Linked Parts"
-             name="Edit Linked Parts">
+             name="Edit Linked Parts"
+             shortcut="control|shift|E">
                 <menu_item_check.on_check
                  control="EditLinkedParts" />
                 <menu_item_check.on_click
