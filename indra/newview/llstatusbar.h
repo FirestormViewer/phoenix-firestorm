@@ -158,6 +158,8 @@ private:
 
 	friend class LLParcelChangeObserver;
 
+	// <FS:Ansariel> This enum also defines the order of visibility in the
+	//               status bar in reverse order!
 	enum EParcelIcon
 	{
 		VOICE_ICON = 0,
@@ -165,12 +167,12 @@ private:
 		PUSH_ICON,
 		BUILD_ICON,
 		SCRIPTS_ICON,
-		DAMAGE_ICON,
 		SEE_AVATARS_ICON,
 		// <FS:Ansariel> Pathfinding support
 		PATHFINDING_DIRTY_ICON,
 		PATHFINDING_DISABLED_ICON,
 		// </FS:Ansariel> Pathfinding support
+		DAMAGE_ICON,
 		ICON_COUNT
 	};
 
