@@ -1,193 +1,41 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<pie_menu
-    name="Object Pie">
-
-   <pie_slice
-     enabled="false"
-     label="Открыть"
-     name="Open">
-        <pie_slice.on_click
-         function="Object.Open" />
-        <pie_slice.on_enable
-         function="Object.EnableOpen" />
-   </pie_slice>
-   <pie_slice
-        label="Создать"
-        name="Build">
-        <pie_slice.on_click
-            function="Object.Build" />
-        <pie_slice.on_enable
-            function="EnableEdit"/>
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Коснуться"
-        name="Object Touch">
-        <pie_slice.on_click
-            function="Object.Touch" />
-        <pie_slice.on_enable
-            function="Object.EnableTouch"
-            name="EnableTouch"
-            parameter="Touch" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        start_autohide="true"
-        label="Сесть"
-        name="Object Sit">
-        <pie_slice.on_click
-            function="Object.SitOrStand" />
-        <pie_slice.on_enable
-            function="Object.EnableSit" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        autohide="true"
-        label="Встать"
-        name="Object Stand Up">
-        <pie_slice.on_click
-            function="Object.SitOrStand" />
-        <pie_slice.on_enable
-            function="Object.EnableStandUp" />
-    </pie_slice>
-    <pie_slice
-        start_autohide="true"
-        enabled="false"
-        label="Купить"
-        name="Buy...">
-        <pie_slice.on_click
-            function="Object.Buy" />
-        <pie_slice.on_enable
-            function="Object.EnableBuy" />
-    </pie_slice>
-    <pie_slice
-        autohide="true"
-        label="Взять"
-        name="Pie Object Take">
-        <pie_slice.on_click
-            function="Object.Take"/>
-        <pie_slice.on_enable
-            function="Object.VisibleTake"/>
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Заплатить"
-        name="Заплатить">
-        <pie_slice.on_click
-            function="PayObject" />
-        <pie_slice.on_enable
-            function="EnablePayObject" />
-    </pie_slice>
-
-    <pie_menu
-        label="Еще >"
-        name="Object Pie More 1">
-
-    <pie_slice
-        enabled="false"
-        label="Удалить"
-        name="Delete">
-        <pie_slice.on_click
-            function="Object.Delete" />
-        <pie_slice.on_enable
-            function="Object.EnableDelete" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Одеть"
-        name="Wear">
-        <pie_slice.on_click
-            function="Object.AttachToAvatar" />
-        <pie_slice.on_enable
-            function="Object.EnableWear" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Взять копию"
-        name="Take Copy">
-        <pie_slice.on_click
-            function="Tools.TakeCopy" />
-        <pie_slice.on_enable
-            function="Tools.EnableTakeCopy" />
-    </pie_slice>
-    <pie_menu
-        label="Прикрепить HUD >"
-        name="Pie Object Attach HUD" />
-    <pie_menu
-        label="Прикрепить >"
-        name="Pie Object Attach" />
-    <pie_slice
-        enabled="false"
-        label="Вернуть"
-        name="Return...">
-        <pie_slice.on_click
-            function="Object.Return" />
-        <pie_slice.on_enable
-            function="Object.EnableReturn" />
-        </pie_slice>
-
-    <pie_menu
-        label="Еще >"
-        name="Object Pie More 2">
-
-        <pie_separator />
-        <pie_slice
-            enabled="true"
-            label="Скрыть"
-            name="Derender">
-            <pie_slice.on_click
-                function="Object.Derender" />
-        </pie_slice>
-        <pie_slice
-            enabled="false"
-            label="Отчет..."
-            name="Report Abuse...">
-            <pie_slice.on_click
-                function="Object.ReportAbuse" />
-            <pie_slice.on_enable
-                function="Object.EnableReportAbuse" />
-        </pie_slice>
-        <pie_separator name="export_placeholder" />
-        <pie_separator name="disable_placeholder" />
-        <pie_slice
-            enabled="false"
-            label="Mute"
-            name="Object Mute">
-            <pie_slice.on_click
-                function="Object.Mute" />
-            <pie_slice.on_enable
-                function="Object.EnableMute" />
-        </pie_slice>
-        <pie_separator name="script_count_placeholder" />
-        <pie_slice
-            label="Изучить"
-            name="Object Inspect">
-            <pie_slice.on_click
-                function="Floater.Show"
-                parameter="inspect" />
-        </pie_slice>
-
+<pie_menu name="Object Pie">
+   <pie_slice label="Открыть" name="Open"/>
+   <pie_slice label="Создать" name="Build"/>
+    <pie_slice label="Коснуться" name="Pie Object Touch"/>
+    <pie_slice label="Сесть" name="Pie Object Sit"/>
+    <pie_slice label="Встать" name="Object Stand Up"/>
+    <pie_slice label="Купить" name="Buy..."/>
+    <pie_slice label="Взять" name="Pie Object Take"/>
+    <pie_slice label="Заплатить" name="Pay..."/>
+    <pie_menu label="Еще >" name="Object Pie More 1">
+		<pie_slice label="Удалить" name="Delete"/>
+		<pie_slice label="Одеть" name="Wear"/>
+		<pie_slice label="Взять копию" name="Take Copy"/>
+		<pie_menu label="Прикрепить HUD >" name="Pie Object Attach HUD"/>
+		<pie_menu label="Прикрепить >" name="Pie Object Attach"/>
+		<pie_slice label="Вернуть" name="Return..."/>
+		<pie_menu label="Еще >" name="Object Pie More 2">
+			<pie_slice label="Скрыть" name="Derender"/>
+			<pie_slice label="Отчет..." name="Report Abuse..."/>
+			<pie_separator name="export_placeholder" />
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
+				<pie_slice label="В линксеты" name="show_in_linksets"/>
+				<pie_slice label="В характеры" name="show_in_characters"/>
+			</pie_menu>
+			<pie_slice label="Блокировать" name="Object Mute"/>
+			<pie_menu label="Скрипты &gt;" name="ScriptsMenu">
+				<pie_slice label="Компилировать (Mono)" name="CompileMono"/>
+				<pie_slice label="Компилировать (LSL)" name="CompileLSL"/>
+				<pie_slice label="Сброс" name="Object Reset Scripts"/>
+				<pie_slice label="Запустить" name="Object Set Scripts to Running"/>
+				<pie_slice label="Остановить" name="Object Set Scripts to Not Running"/>
+				<pie_slice label="удалить" name="Remove Scripts From Selection"/>
+				<pie_slice label="Скрипт-инфо" name="ScriptInfo"/>
+			</pie_menu>
+			<pie_slice label="Изучить" name="Object Inspect"/>
+		</pie_menu>
+		<pie_slice label="Купить..." name="Buy..."/>
     </pie_menu>
-
-    <pie_slice
-        enabled="false"
-        label="Купить"
-        name="Buy...">
-        <pie_slice.on_click
-            function="Object.Buy" />
-        <pie_slice.on_enable
-            function="Object.EnableBuy" />
-        </pie_slice>
-
-    </pie_menu>
-
-    <pie_slice
-        label="Изменить"
-        name="Edit...">
-        <pie_slice.on_click
-            function="Object.Edit" />
-        <pie_slice.on_enable
-            function="EnableEdit"/>
-    </pie_slice>
-
+    <pie_slice label="Изменить" name="Edit..."/>
 </pie_menu>
