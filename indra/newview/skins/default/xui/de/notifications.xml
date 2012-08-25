@@ -3694,4 +3694,11 @@ Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] be
   <notification name="FirstUseFlyOverride">
 Warnung: Bitte verwende die Funktion zur Aufhebung der Flugbeschränkung verantwortungsvoll! Die Verwendung ohne die Zustimmung des Landeigentümers kann dazu führen, dass du von dem entsprechenden Land verbannt wirst.
   </notification>
+
+  <notification name="ServerVersionChanged">
+Die betretene Region verwendet eine andere Simulator-Version.
+Aktueller Simulator: [NEWVERSION]
+Vorheriger Simulator: [OLDVERSION]
+  </notification>
+
 </notifications>

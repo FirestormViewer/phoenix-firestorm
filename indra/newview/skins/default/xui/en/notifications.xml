@@ -9071,4 +9071,13 @@ Caution: Use the Fly Override responsibily! Using the Fly Override without the l
      name="okbutton"
      yestext="OK"/>
   </notification>
+
+  <notification
+   icon="notifytip.tga" 
+   name="ServerVersionChanged"
+   type="notifytip">
+The region you have entered is running a different simulator version.
+Current simulator: [NEWVERSION]
+Previous simulator: [OLDVERSION]
+  </notification>
 </notifications>

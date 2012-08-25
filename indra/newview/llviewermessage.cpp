@@ -4664,6 +4664,16 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 		return;
 	}
 
+	// <FS:Ansariel> Bring back simulator version changed messages after TP
+	if (!gLastVersionChannel.empty() && gSavedSettings.getBOOL("FSShowServerVersionChangeNotice"))
+	{
+		LLSD args;
+		args["OLDVERSION"] = gLastVersionChannel;
+		args["NEWVERSION"] = version_channel;
+		LLNotificationsUtil::add("ServerVersionChanged", args);
+	}
+	// </FS:Ansariel>
+
 	gLastVersionChannel = version_channel;
 }
 
