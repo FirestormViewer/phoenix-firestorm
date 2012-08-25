@@ -49,8 +49,10 @@ FSFloaterWSAssetBlacklist::~FSFloaterWSAssetBlacklist()
 	}
 }
 
-std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type){
-	switch(type){
+std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type)
+{
+	switch (type)
+	{
 		case 0:
 			return getString("asset_texture");
 			break;
@@ -66,24 +68,22 @@ std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type){
 	}
 }
 
-
-void FSFloaterWSAssetBlacklist::BuildBlacklist(){
-
+void FSFloaterWSAssetBlacklist::BuildBlacklist()
+{
 	typedef std::map<LLUUID, LLSD>::iterator it_type;
 	std::map<LLUUID,LLSD> data = FSWSAssetBlacklist::getInstance()->BlacklistData;
 	
-
-	for(it_type iterator = data.begin(); iterator != data.end(); iterator++) {
-
+	for(it_type iterator = data.begin(); iterator != data.end(); iterator++)
+	{
 			LLSD data = iterator->second;
 			addElementToList(iterator->first, iterator->second);
 	}
 }
 
-void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data){
-
+void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data)
+{
 	LLSD element;
-	element["id"]=id;
+	element["id"] = id;
 	element["columns"][0]["column"] = "name";
 	element["columns"][0]["type"] = "text";
 	element["columns"][0]["value"] = data["asset_name"].asString();
@@ -97,7 +97,8 @@ void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data){
 	mResultList->addElement(element, ADD_BOTTOM);
 }
 
-void FSFloaterWSAssetBlacklist::removeElementFromList(LLUUID id){
+void FSFloaterWSAssetBlacklist::removeElementFromList(LLUUID id)
+{
 	mResultList->deleteSingleItem(mResultList->getItemIndex(id));
 }
 
@@ -115,10 +116,10 @@ BOOL FSFloaterWSAssetBlacklist::postBuild()
 	std::string order_by = gSavedSettings.getString("FSFloaterBlacklistSortColumn");
 	BOOL ascending = gSavedSettings.getBOOL("FSFloaterBlacklistSortAscending");
 
-	if(!order_by.empty()) mResultList->sortByColumn(order_by, ascending);
-
-
-
+	if (!order_by.empty())
+	{
+		mResultList->sortByColumn(order_by, ascending);
+	}
 
     return TRUE;
 }
@@ -130,14 +131,10 @@ void FSFloaterWSAssetBlacklist::onRemoveBtn()
 	for (std::vector<LLScrollListItem*>::iterator it = list.begin(); it != list.end(); it++)
 	{
 		LLScrollListItem* item = *it;
-		
 		FSWSAssetBlacklist::getInstance()->removeItemFromBlacklist(item->getUUID());
 	}
-
 	
 	mResultList->deleteSelectedItems();
-
-
 }
 
 void FSFloaterWSAssetBlacklist::onCancelBtn()

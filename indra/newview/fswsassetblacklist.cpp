@@ -42,9 +42,11 @@ std::string FSWSAssetBlacklist::blacklist_file_name;
 std::map<LLUUID,LLSD> FSWSAssetBlacklist::BlacklistData;
 BlacklistMAP FSWSAssetBlacklist::BlacklistIDs;
 
-LLAssetType::EType S32toAssetType(S32 assetindex){
+LLAssetType::EType S32toAssetType(S32 assetindex)
+{
 	LLAssetType::EType type;
-	switch(assetindex){
+	switch (assetindex)
+	{
 		case 0:
 			type = LLAssetType::AT_TEXTURE;
 			break;
@@ -55,53 +57,67 @@ LLAssetType::EType S32toAssetType(S32 assetindex){
 			type = LLAssetType::AT_OBJECT;
 			break;
 		default:
-			type= LLAssetType::AT_NONE;
+			type = LLAssetType::AT_NONE;
 	}
 	return type;
 }
 
-void FSWSAssetBlacklist::init(){
+void FSWSAssetBlacklist::init()
+{
 	blacklist_file_name = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
 	loadBlacklist();
 }
 
-bool FSWSAssetBlacklist::isBlacklisted(LLUUID id, LLAssetType::EType type){
-	if(BlacklistData.size()==0) return false;
+bool FSWSAssetBlacklist::isBlacklisted(LLUUID id, LLAssetType::EType type)
+{
+	if (BlacklistData.size() == 0)
+	{
+		return false;
+	}
 	
-	id = LLUUID::generateNewID(id.asString()+"hash");
+	id = LLUUID::generateNewID(id.asString() + "hash");
 
 	BlacklistMAP::iterator it;
 	it = BlacklistIDs.find(type);	
 	
-	if(it == BlacklistIDs.end()) return false;
+	if (it == BlacklistIDs.end())
+	{
+		return false;
+	}
 
-	std::vector<LLUUID> uuids=it->second;
-	if(std::find(uuids.begin(), uuids.end(), id) != uuids.end()) {
+	std::vector<LLUUID> uuids = it->second;
+	if (std::find(uuids.begin(), uuids.end(), id) != uuids.end())
+	{
 		return true;
 	}
 
 	return false;
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save){
-	LLDate* curdate = new LLDate(time_corrected());
-	std::string input_date = curdate->asString();
+void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save)
+{
+	LLDate curdate = LLDate(time_corrected());
+	std::string input_date = curdate.asString();
 	input_date.replace(input_date.find("T"),1," ");
 	input_date.resize(input_date.size() - 1);
 	
 	LLSD data;
-	data["asset_name"]=name;
-	data["asset_type"]=type;
-	data["asset_date"]=input_date;
+	data["asset_name"] = name;
+	data["asset_type"] = type;
+	data["asset_date"] = input_date;
 
-	addNewItemToBlacklistData(LLUUID::generateNewID(id.asString()+"hash"), data, save);
-
+	addNewItemToBlacklistData(LLUUID::generateNewID(id.asString() + "hash"), data, save);
 }
 
-void FSWSAssetBlacklist::removeItemFromBlacklist(LLUUID id){
+void FSWSAssetBlacklist::removeItemFromBlacklist(LLUUID id)
+{
 	std::map<LLUUID,LLSD>::iterator it;
 	it = BlacklistData.find(id);
-	if(it==BlacklistData.end()) return;
+	if (it == BlacklistData.end())
+	{
+		return;
+	}
+
 	LLSD data = it->second;
 	
 	BlacklistIDs[S32toAssetType(data["asset_type"].asInteger())].erase(
@@ -111,42 +127,43 @@ void FSWSAssetBlacklist::removeItemFromBlacklist(LLUUID id){
 
 	BlacklistData.erase(id);
 
-	saveBlacklist();
-	
+	saveBlacklist();	
 }
 
-
-void FSWSAssetBlacklist::addNewItemToBlacklistData(LLUUID id, LLSD data, bool save){
-	
+void FSWSAssetBlacklist::addNewItemToBlacklistData(LLUUID id, LLSD data, bool save)
+{
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
 	addEntryToBlacklistMap(id,type);
 	BlacklistData.insert(std::pair<LLUUID,LLSD>(id,data));
 
+	if (save)
+	{
+		saveBlacklist();
+	}
 
-
-	if(save) saveBlacklist();
-
-	FSFloaterWSAssetBlacklist *floater = dynamic_cast<FSFloaterWSAssetBlacklist*>(LLFloaterReg::getInstance("ws_asset_blacklist"));
+	FSFloaterWSAssetBlacklist* floater = LLFloaterReg::getTypedInstance<FSFloaterWSAssetBlacklist>("ws_asset_blacklist");
 	if (floater)
 	{
 		floater->addElementToList(id, data);
 	}
-
-
 }
 
+bool FSWSAssetBlacklist::addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type)
+{
+	if (id.isNull())
+	{
+		return false;
+	}
 
-bool FSWSAssetBlacklist::addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type){
-	if(id.isNull()) return false;
-
-		std::stringstream typesstream;
-		typesstream << (int)type;
-		std::string types = typesstream.str();
+	std::stringstream typesstream;
+	typesstream << (int)type;
+	std::string types = typesstream.str();
 	std::map<LLAssetType::EType,std::vector<LLUUID> >::iterator it;
 	it = BlacklistIDs.find(type);
 	
-	if(it==BlacklistIDs.end()){
+	if (it == BlacklistIDs.end())
+	{
 		std::vector<LLUUID> vec;
 		vec.push_back(id);
 		BlacklistIDs[type] = vec;
@@ -154,22 +171,23 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(LLUUID id, LLAssetType::EType ty
 		return true;
 	} 
 	
-	if(it!=BlacklistIDs.end()){
+	if (it != BlacklistIDs.end())
+	{
 		BlacklistIDs[type].push_back(id);
 		return true;
 	}
 	return false;
 }
 
-
 void FSWSAssetBlacklist::loadBlacklist()
 {
-
-	if(gDirUtilp->fileExists(blacklist_file_name)){
+	if (gDirUtilp->fileExists(blacklist_file_name))
+	{
 		llifstream blacklistdata(blacklist_file_name);
-		if(blacklistdata.is_open()){
+		if (blacklistdata.is_open())
+		{
 			LLSD data;
-			if(LLSDSerialize::fromXML(data,	blacklistdata) >= 1)
+			if (LLSDSerialize::fromXML(data, blacklistdata) >= 1)
 			{
 				for(LLSD::map_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
 				{
@@ -180,54 +198,64 @@ void FSWSAssetBlacklist::loadBlacklist()
 
 					if(type == LLAssetType::AT_NONE) continue;
 					
-					addNewItemToBlacklistData(uid,data,false);
+					addNewItemToBlacklistData(uid, data, false);
 				}
 			}
 		}
 		blacklistdata.close();
-	} else {
-		std::string old_file = gDirUtilp->getOSUserDir()+gDirUtilp->getDirDelimiter()+"SecondLife"+gDirUtilp->getDirDelimiter()+"user_settings"+gDirUtilp->getDirDelimiter()+"floater_blist_settings.xml";
-		if(gDirUtilp->fileExists(old_file)){
+	}
+	else
+	{
+		// Try to import old blacklist data from Phoenix
+		std::string old_file = gDirUtilp->getOSUserDir() + gDirUtilp->getDirDelimiter() + "SecondLife" + gDirUtilp->getDirDelimiter() + "user_settings" + gDirUtilp->getDirDelimiter() + "floater_blist_settings.xml";
+		if (gDirUtilp->fileExists(old_file))
+		{
 			LLSD datallsd;
 			llifstream oldfile;
 			oldfile.open(old_file.c_str());
 			if (oldfile.is_open())
 			{
 				LLSDSerialize::fromXMLDocument(datallsd, oldfile);
-				for(LLSD::map_iterator itr = datallsd.beginMap(); itr != datallsd.endMap(); ++itr)
+				for (LLSD::map_iterator itr = datallsd.beginMap(); itr != datallsd.endMap(); ++itr)
 				{
 					LLUUID uid = LLUUID(itr->first);
 					LLSD data = itr->second;
-					if(uid.isNull() || !data.has("entry_name") || !data.has("entry_type") || !data.has("entry_date")) continue;
+					if (uid.isNull() || !data.has("entry_name") || !data.has("entry_type") || !data.has("entry_date"))
+					{
+						continue;
+					}
 					LLAssetType::EType type = S32toAssetType(data["entry_type"].asInteger());
 					
 					LLSD newdata;
-					newdata["asset_name"]="[PHOENIX] "+data["entry_name"].asString();
-					newdata["asset_type"]=type;
-					newdata["asset_date"]=data["entry_date"].asString();
+					newdata["asset_name"] = "[PHOENIX] " + data["entry_name"].asString();
+					newdata["asset_type"] = type;
+					newdata["asset_date"] = data["entry_date"].asString();
 
-					if(!data["ID_hashed"].asBoolean()){
-						uid = LLUUID::generateNewID(uid.asString()+"hash");
+					if (!data["ID_hashed"].asBoolean())
+					{
+						uid = LLUUID::generateNewID(uid.asString() + "hash");
 					}				
 					
-					addNewItemToBlacklistData(uid,newdata,false);
+					addNewItemToBlacklistData(uid, newdata, false);
 				}
 			}
 			oldfile.close();
 			saveBlacklist();
 			llinfos << "Using old Phoenix file: " << old_file << llendl;
-		} else {
+		}
+		else
+		{
 			llinfos << "No Settings file found." << old_file << llendl;
 		}
 	}
 }
 
-
-
-void FSWSAssetBlacklist::saveBlacklist(){
+void FSWSAssetBlacklist::saveBlacklist()
+{
 	llofstream save_file(blacklist_file_name);
 	LLSD savedata;
-	for(std::map<LLUUID,LLSD>::iterator itr = BlacklistData.begin(); itr != BlacklistData.end(); ++itr)
+
+	for (std::map<LLUUID,LLSD>::iterator itr = BlacklistData.begin(); itr != BlacklistData.end(); ++itr)
 	{
 		savedata[itr->first.asString()] = itr->second;
 	}

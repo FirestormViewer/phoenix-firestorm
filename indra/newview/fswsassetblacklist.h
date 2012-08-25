@@ -38,19 +38,16 @@ class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 public:
 	void init();
 	bool isBlacklisted(LLUUID id, LLAssetType::EType type);
-	void addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save=true);
-	void addNewItemToBlacklistData(LLUUID id, LLSD data, bool save=true);
+	void addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save = true);
+	void addNewItemToBlacklistData(LLUUID id, LLSD data, bool save = true);
 	void removeItemFromBlacklist(LLUUID id);
 	static std::map<LLUUID,LLSD> BlacklistData;
-
 
 private:
 	void loadBlacklist();
 	void saveBlacklist();
 	bool addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type);
 	
-
 	static std::string blacklist_file_name;
 	static BlacklistMAP BlacklistIDs;
-
 };
