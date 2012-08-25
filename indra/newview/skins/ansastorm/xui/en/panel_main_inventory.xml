@@ -407,7 +407,7 @@
   
   
   <filter_editor
-   text_pad_left="10"
+   text_pad_left="4"
    follows="left|top|right"
    height="23"
    label="Filter Inventory"
@@ -417,7 +417,7 @@
    name="inventory search editor"
    tool_tip="Type in one or more words to search for, separated by '+' "
    top_pad="4"
-   width="322" />
+   width="310" />
 
   <button
    name="collapse_btn"
