@@ -3585,4 +3585,9 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 	<notification name="FirstUseFlyOverride">
 		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela posiadłości może poskutkować zbanowaniem Twojego awatara z parceli, nad którą będziesz latać.		
 	</notification>
+	<notification name="ServerVersionChanged">
+		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
+Obecny symulator: [NEWVERSION]
+Poprzedni symulator: [OLDVERSION]
+	</notification>
 </notifications>
