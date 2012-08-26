@@ -4729,201 +4729,83 @@ Prova a racchiudere il percorso dell&apos;editor in doppie virgolette.
 	<string name="ParticleHiding">
 		Particelle nascoste
 	</string>
-	<string name="Command_AboutLand_Label">
-		Info Terreno
-	</string>
-	<string name="Command_Appearance_Label">
-		Aspetto fisico
-	</string>
-	<string name="Command_Avatar_Label">
-		Avatar
-	</string>
-	<string name="Command_Build_Label">
-		Costruisci
-	</string>
-	<string name="Command_Chat_Label">
-		Chat
-	</string>
-	<string name="Command_Compass_Label">
-		Bussola
-	</string>
-	<string name="Command_Destinations_Label">
-		Destinazioni
-	</string>
-	<string name="Command_Gestures_Label">
-		Gesture
-	</string>
-	<string name="Command_HowTo_Label">
-		Istruzioni
-	</string>
-	<string name="Command_Inventory_Label">
-		Inventario
-	</string>
-	<string name="Command_Map_Label">
-		Mappa
-	</string>
-	<string name="Command_Marketplace_Label">
-		Mercato
-	</string>
-	<string name="Command_MiniMap_Label">
-		Mini mappa
-	</string>
-	<string name="Command_Move_Label">
-		Movimento
-	</string>
-	<string name="Command_Outbox_Label">
-		Casella in uscita del rivenditore
-	</string>
-	<string name="Command_People_Label">
-		Persone
-	</string>
-	<string name="Command_Picks_Label">
-		Preferiti
-	</string>
-	<string name="Command_Places_Label">
-		Luoghi
-	</string>
-	<string name="Command_Preferences_Label">
-		Preferenze
-	</string>
-	<string name="Command_Profile_Label">
-		Profilo
-	</string>
-	<string name="Command_Search_Label">
-		Ricerca
-	</string>
-	<string name="Command_Snapshot_Label">
-		Foto
-	</string>
-	<string name="Command_Speak_Label">
-		Parla
-	</string>
-	<string name="Command_View_Label">
-		Controlli fotocamera
-	</string>
-	<string name="Command_Voice_Label">
-		Impostazioni voce
-	</string>
-	<string name="Command_Fly_Label">
-		Vola
-	</string>
-	<string name="Command_Webbrowser_Label">
-		Web
-	</string>
-	<string name="Command_Default_Chat_Bar_Label">
-		Barra chat
-	</string>
-	<string name="Command_Settings_Debug_Label">
-		Menu Debug
-	</string>
-	<string name="Command_Statistics_Label">
-		Statistiche
-	</string>
-	<string name="Command_Region_Label">
-		Regione/Estate
-	</string>
-	<string name="Command_AboutLand_Tooltip">
-		Informazioni sul terreno che visiti
-	</string>
-	<string name="Command_Appearance_Tooltip">
-		Cambia l&apos;avatar
-	</string>
-	<string name="Command_Avatar_Tooltip">
-		Seleziona un avatar completo
-	</string>
-	<string name="Command_Build_Tooltip">
-		Costruzione oggetti e modifica terreno
-	</string>
-	<string name="Command_Chat_Tooltip">
-		Chatta con persone vicine usando il testo
-	</string>
-	<string name="Command_Compass_Tooltip">
-		Bussola
-	</string>
-	<string name="Command_Destinations_Tooltip">
-		Destinazioni interessanti
-	</string>
-	<string name="Command_Gestures_Tooltip">
-		Gesti per il tuo avatar
-	</string>
-	<string name="Command_HowTo_Tooltip">
-		Come eseguire le attività più comuni
-	</string>
-	<string name="Command_Inventory_Tooltip">
-		Visualizza e usa le tue cose
-	</string>
-	<string name="Command_Map_Tooltip">
-		Mappa del mondo
-	</string>
-	<string name="Command_Marketplace_Tooltip">
-		Vai allo shopping
-	</string>
-	<string name="Command_MiniMap_Tooltip">
-		Mostra le persone vicine
-	</string>
-	<string name="Command_Move_Tooltip">
-		Movimento avatar
-	</string>
-	<string name="Command_Outbox_Tooltip">
-		Trasferisci elementi al tuo mercato per la vendita
-	</string>
-	<string name="Command_People_Tooltip">
-		Amici, gruppi e persone vicine
-	</string>
-	<string name="Command_Picks_Tooltip">
-		Luoghi da mostrare come preferiti nel profilo
-	</string>
-	<string name="Command_Places_Tooltip">
-		Luoghi salvati
-	</string>
-	<string name="Command_Preferences_Tooltip">
-		Preferenze
-	</string>
-	<string name="Command_Profile_Tooltip">
-		Modifica o visualizza il tuo profilo
-	</string>
-	<string name="Command_Search_Tooltip">
-		Trova luoghi, eventi, persone
-	</string>
-	<string name="Command_Snapshot_Tooltip">
-		Scatta una foto
-	</string>
-	<string name="Command_Fly_Tooltip">
-		Attiva/Disattiva volo se è possibile
-	</string>
-	<string name="Command_Speak_Tooltip">
-		Parla con persone vicine usando il microfono
-	</string>
-	<string name="Command_View_Tooltip">
-		Modifica angolo fotocamera
-	</string>
-	<string name="Command_Voice_Tooltip">
-		I controlli per il volume per le chiamate e per le persone nelle vicinanze nel mondo virtuale
-	</string>
-	<string name="Command_Quickprefs_Tooltip">
-		Quick Preference -- Alcune impostazioni da settare rapidamente 
-	</string>
-	<string name="Command_AO_Tooltip">
-		AO come in Phoenix
-	</string>
-	<string name="Command_Webbrowser_Tooltip">
-		Apre il Web Browser interno al viewer
-	</string>
-	<string name="Command_Default_Chat_Bar_Tooltip">
-		Chat bar -- Mostra o nasconde la barra della chat come in Phoenix
-	</string>
-	<string name="Command_Areasearch_Tooltip">
-		Cerca oggetti nell'area
-	</string>
-	<string name="Command_Settings_Debug_Tooltip">
-		Apre il Menu di Debug per cambiare le impostazioni del viewer
-	</string>
-	<string name="Command_Statistics_Tooltip">
-		Mostra le statistiche del viewer (FPS, Banda, Ping ecc..)
-	</string>
-	<string name="Command_Region_Tooltip">
-		Apre il pannello di modifica Regione/Estate
-	</string>
+	<!-- Toolbar -->
+	<string name="Command_AboutLand_Label"> Info Terreno </string>
+	<string name="Command_Appearance_Label"> Aspetto fisico </string>
+	<string name="Command_Avatar_Label"> Avatar </string>
+	<string name="Command_Build_Label">	Costruisci </string>
+	<string name="Command_Chat_Label"> Chat </string>
+	<string name="Command_Compass_Label"> Bussola </string>
+	<string name="Command_Destinations_Label"> Destinazioni </string>
+	<string name="Command_Gestures_Label"> Gesture </string>
+	<string name="Command_HowTo_Label">	Istruzioni </string>
+	<string name="Command_Inventory_Label"> Inventario </string>
+	<string name="Command_Map_Label"> Mappa </string>
+	<!--<string name="Command_Marketplace_Label"> Mercato </string>-->
+	<string name="Command_MiniMap_Label"> Mini mappa </string>
+	<string name="Command_Move_Label"> Movimento </string>
+	<!--<string name="Command_Outbox_Label"> Casella in uscita del rivenditore </string>-->
+	<string name="Command_People_Label"> Persone </string>
+	<string name="Command_Picks_Label"> Preferiti </string>
+	<string name="Command_Places_Label"> Luoghi </string>
+	<string name="Command_Preferences_Label"> Preferenze </string>
+	<string name="Command_Profile_Label"> Profilo </string>
+	<string name="Command_Search_Label"> Ricerca </string>
+	<string name="Command_Snapshot_Label"> Foto </string>
+	<string name="Command_Speak_Label"> Parla </string>
+	<string name="Command_View_Label"> Controlli fotocamera </string>
+	<string name="Command_Voice_Label">	Impostazioni voce </string>
+	<string name="Command_Fly_Label"> Vola </string>
+	<string name="Command_Webbrowser_Label"> Web </string>
+	<string name="Command_Default_Chat_Bar_Label"> Barra chat </string>
+	<string name="Command_Settings_Debug_Label"> Menu Debug </string>
+	<string name="Command_Statistics_Label"> Statistiche </string>
+	<string name="Command_Region_Label"> Regione/Estate </string>
+	<string name="Command_Groundsit_Label">Siedi a terra</string>
+    <string name="Command_Sound_Explorer_Label">Lista Suoni</string>
+    <string name="Command_Asset_Blacklist_Label">Asset blacklist</string>
+	<!--Comandi Toolbar-->
+	
+	<!--Tooltips Toolbar-->
+	<string name="Command_AboutLand_Tooltip"> Informazioni sul terreno che visiti </string>
+	<string name="Command_Appearance_Tooltip"> Cambia l&apos;avatar </string>
+	<string name="Command_Avatar_Tooltip"> Seleziona un avatar completo </string>
+	<string name="Command_Build_Tooltip"> Costruzione oggetti e modifica terreno </string>
+	<string name="Command_Chat_Tooltip"> Chatta con persone vicine usando il testo </string>
+	<string name="Command_Compass_Tooltip">	Bussola </string>
+	<string name="Command_Destinations_Tooltip"> Destinazioni interessanti </string>
+	<string name="Command_Gestures_Tooltip"> Gesti per il tuo avatar </string>
+	<string name="Command_HowTo_Tooltip"> Come eseguire le attività più comuni </string>
+	<string name="Command_Inventory_Tooltip"> Visualizza e usa le tue cose </string>
+	<string name="Command_Map_Tooltip"> Mappa del mondo </string>
+	<string name="Command_Marketplace_Tooltip"> Vai allo shopping </string>
+	<string name="Command_MiniMap_Tooltip">	Mostra le persone vicine </string>
+	<string name="Command_Move_Tooltip"> Movimento avatar </string>
+	<string name="Command_Outbox_Tooltip"> Trasferisci elementi al tuo mercato per la vendita </string>
+	<string name="Command_People_Tooltip"> Amici, gruppi e persone vicine </string>
+	<string name="Command_Picks_Tooltip"> Luoghi da mostrare come preferiti nel profilo </string>
+	<string name="Command_Places_Tooltip"> Luoghi salvati </string>
+	<string name="Command_Preferences_Tooltip">	Preferenze </string>
+	<string name="Command_Profile_Tooltip">	Modifica o visualizza il tuo profilo </string>
+	<string name="Command_Search_Tooltip"> Trova luoghi, eventi, persone </string>
+	<string name="Command_Snapshot_Tooltip"> Scatta una foto </string>
+	<string name="Command_Fly_Tooltip">	Attiva/Disattiva volo se è possibile </string>
+	<string name="Command_Speak_Tooltip"> Parla con persone vicine usando il microfono </string>
+	<string name="Command_View_Tooltip"> Modifica angolo fotocamera	</string>
+	<string name="Command_Voice_Tooltip"> I controlli per il volume per le chiamate e per le persone nelle vicinanze nel mondo virtuale </string>
+	<string name="Command_Quickprefs_Tooltip"> Quick Preference -- Alcune impostazioni da settare rapidamente </string>
+	<string name="Command_AO_Tooltip"> AO come in Phoenix </string>
+	<string name="Command_Webbrowser_Tooltip"> Apre il Web Browser interno al viewer </string>
+	<string name="Command_Default_Chat_Bar_Tooltip"> Chat bar -- Mostra o nasconde la barra della chat come in Phoenix </string>
+	<string name="Command_Areasearch_Tooltip"> Cerca oggetti nell'area </string>
+	<string name="Command_Settings_Debug_Tooltip"> Apre il Menu di Debug per cambiare le impostazioni del viewer </string>
+	<string name="Command_Statistics_Tooltip"> Mostra le statistiche del viewer (FPS, Banda, Ping ecc..) </string>
+	<string name="Command_Region_Tooltip"> Apre il pannello di modifica Regione/Estate </string>
+	<string name="Command_Groundsit_Tooltip">Attivare/Disattivare la seduta a terra (CTRL+ALT+S)</string>
+	<string name="Command_Sound_Explorer_Tooltip">Apre la Lista suoni</string>
+	<string name="Command_Asset_Blacklist_Tooltip">Apre la lista di tutti gli oggetti che hai nell'Asset Blacklist</string>
+	<!--Toolbar Tooltips fine-->
+	
 	<string name="Toolbar_Bottom_Tooltip">
 		attualmente nella barra degli strumenti in basso
 	</string>
