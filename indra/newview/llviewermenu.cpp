@@ -2711,30 +2711,30 @@ class LLObjectDerender : public view_listener_t
 		{
 	        LLSelectMgr::getInstance()->removeObjectFromSelections(objp->getID());
 
-			
-			LLViewerRegion* cur_region = gAgent.getRegion();
 			std::string entry_name;
-			if(objp->isAvatar()){
+			std::string region_name;
+
+			if (objp->isAvatar())
+			{
 				LLNameValue* firstname = objp->getNVPair("FirstName");
 				LLNameValue* lastname = objp->getNVPair("LastName");
-				entry_name = llformat("Derendered: (AV) %s %s",firstname->getString(),lastname->getString());
-			} else {
-				if(!nodep->mName.empty()){
-					if(cur_region)
-						entry_name = llformat("Derendered: %s in region %s",nodep->mName.c_str(),cur_region->getName().c_str());
-					else
-						entry_name = llformat("Derendered: %s",nodep->mName.c_str());
+				entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
+			}
+			else
+			{
+				if (!nodep->mName.empty())
+				{
+					entry_name = nodep->mName;
 				}
-				else{
-					if(cur_region)
-						entry_name = llformat("Derendered: (unknown object) in region %s",cur_region->getName().c_str());
-					else
-						entry_name = "Derendered: (unkown object)";
+
+				LLViewerRegion* region = objp->getRegion();
+				if (region)
+				{
+					region_name = region->getName();
 				}
 			}
 			
-			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(),entry_name,LLAssetType::AT_OBJECT);
-
+			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
 
 			LLSelectMgr::getInstance()->deselectAll();
 			gObjectList.killObject(objp);

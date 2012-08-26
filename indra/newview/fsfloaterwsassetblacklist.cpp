@@ -86,13 +86,16 @@ void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data)
 	element["id"] = id;
 	element["columns"][0]["column"] = "name";
 	element["columns"][0]["type"] = "text";
-	element["columns"][0]["value"] = data["asset_name"].asString();
-	element["columns"][1]["column"] = "type";
+	element["columns"][0]["value"] = !data["asset_name"].asString().empty() ? data["asset_name"].asString() : getString("unknown_object");
+	element["columns"][1]["column"] = "region";
 	element["columns"][1]["type"] = "text";
-	element["columns"][1]["value"] = TypeToString(data["asset_type"].asInteger());
-	element["columns"][2]["column"] = "date";
+	element["columns"][1]["value"] = !data["asset_region"].asString().empty() ? data["asset_region"].asString() : getString("unknown_region");
+	element["columns"][2]["column"] = "type";
 	element["columns"][2]["type"] = "text";
-	element["columns"][2]["value"] = data["asset_date"].asString();
+	element["columns"][2]["value"] = TypeToString(data["asset_type"].asInteger());
+	element["columns"][3]["column"] = "date";
+	element["columns"][3]["type"] = "text";
+	element["columns"][3]["value"] = data["asset_date"].asString();
 
 	mResultList->addElement(element, ADD_BOTTOM);
 }

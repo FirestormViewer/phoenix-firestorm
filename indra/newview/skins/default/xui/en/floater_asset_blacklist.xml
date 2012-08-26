@@ -29,6 +29,14 @@ Sound
 		name="asset_unknown">
 Unknown
 	</floater.string>
+	<floater.string
+		name="unknown_object">
+Unknown object
+	</floater.string>
+	<floater.string
+		name="unknown_region">
+Unknown region
+	</floater.string>
 	<scroll_list
 	 name="result_list"
 	 left="10"
@@ -48,6 +56,11 @@ Unknown
 		 label="Name"
 		 dynamicwidth="true"
 		 />
+		<scroll_list.columns
+		 name="region"
+		 label="Region"
+		 width="100"
+		 />
     	<scroll_list.columns
 		 name="type"
 		 label="Type"
@@ -61,6 +74,7 @@ Unknown
 		 
       <row>
           <column column="name">[UNKOWN] Template item</column>
+          <column column="region">[UNKOWN] Template item</column>
           <column column="type">Unknown</column>
           <column column="date">2012-12-11 13:37:00</column>
       </row>

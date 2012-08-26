@@ -94,7 +94,7 @@ bool FSWSAssetBlacklist::isBlacklisted(LLUUID id, LLAssetType::EType type)
 	return false;
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, LLAssetType::EType type, bool save)
+void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, std::string region, LLAssetType::EType type, bool save)
 {
 	LLDate curdate = LLDate(time_corrected());
 	std::string input_date = curdate.asString();
@@ -103,6 +103,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, LLAs
 	
 	LLSD data;
 	data["asset_name"] = name;
+	data["asset_region"] = region;
 	data["asset_type"] = type;
 	data["asset_date"] = input_date;
 

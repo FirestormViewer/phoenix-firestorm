@@ -347,21 +347,27 @@ void NACLFloaterExploreSounds::blacklistSound()
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
-	for( ; selection_iter != selection_end; ++selection_iter)
+
+	for ( ; selection_iter != selection_end; ++selection_iter)
 	{
 		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
-		if(item.mID.isNull()) continue;
+		if (item.mID.isNull())
+		{
+			continue;
+		}
 
 		std::string entry_name;
 		std::string agent;
+		std::string region_name;
+
 		gCacheName->getFullName(item.mOwnerID, agent);
 		LLViewerRegion* cur_region = gAgent.getRegion();
 
-		if(cur_region)
-			entry_name = llformat("Sound played by %s in region %s",agent.c_str(),cur_region->getName().c_str());
-		else
-			entry_name = llformat("Sound played by %s",agent.c_str());
+		if (cur_region)
+		{
+			region_name = cur_region->getName();
+		}
 
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID,entry_name,LLAssetType::AT_SOUND,true);
+		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID, agent, region_name, LLAssetType::AT_SOUND, true);
 	}
 }
