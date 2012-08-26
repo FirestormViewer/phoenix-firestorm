@@ -7,7 +7,6 @@
  min_height="320"
  width="750"
  height="320"
- rect_control="FloaterAssetBlacklistRect"
  save_rect="true"
  can_resize="true"
  can_minimize="true"
