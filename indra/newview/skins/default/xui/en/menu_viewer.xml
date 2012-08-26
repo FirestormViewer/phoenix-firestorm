@@ -2466,6 +2466,9 @@
                parameter="" />
             <menu_item_call.on_enable
                function="File.EnableUpload" />
+            <menu_item_call.on_visible
+               function="Upload.CalculateCosts"
+               parameter="Upload Image" />
             </menu_item_call>
             <menu_item_check
                label="Search"
