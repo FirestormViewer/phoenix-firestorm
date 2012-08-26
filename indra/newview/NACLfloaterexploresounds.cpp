@@ -188,16 +188,22 @@ BOOL NACLFloaterExploreSounds::tick()
 		LLSD& playing_column = element["columns"][0];
 		playing_column["column"] = "playing";
 		if(item.mPlaying)
-			playing_column["value"] = " Playing";
+		{
+			playing_column["value"] = getString("Playing");
+		}
 		else
-			playing_column["value"] = llformat("%.1f min ago", (LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.f);
+		{
+			LLStringUtil::format_map_t format_args;
+			format_args["TIME"] = llformat("%.1f", (LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.f);
+			playing_column["value"] = getString("NotPlaying", format_args);
+		}
 
 		LLSD& type_column = element["columns"][1];
 		type_column["column"] = "type";
 		if(item.mType == LLAudioEngine::AUDIO_TYPE_UI)
 		{
 			// this shouldn't happen for now, as UI is forbidden in the log
-			type_column["value"] = "UI";
+			type_column["value"] = getString("Type_UI");
 		}
 		else
 		{
@@ -205,20 +211,24 @@ BOOL NACLFloaterExploreSounds::tick()
 
 			if(is_avatar)
 			{
-				type = "Avatar";
+				type = getString("Type_Avatar");
 			}
 			else
 			{
 				if(item.mIsTrigger)
 				{
-					type = "llTriggerSound";
+					type = getString("Type_llTriggerSound");
 				}
 				else
 				{
 					if(item.mIsLooped)
-						type = "llLoopSound";
+					{
+						type = getString("Type_llLoopSound");
+					}
 					else
-						type = "llPlaySound";
+					{
+						type = getString("Type_llPlaySound");
+					}
 				}
 			}
 
@@ -231,11 +241,18 @@ BOOL NACLFloaterExploreSounds::tick()
 		BOOL is_group;
 		if(gCacheName->getIfThere(item.mOwnerID, fullname, is_group))
 		{
-			if(is_group) fullname += " (Group)";
+			if (is_group)
+			{
+				LLStringUtil::format_map_t format_args;
+				format_args["NAME"] = fullname;
+				fullname = getString("GroupOwned", format_args);
+			}
 			owner_column["value"] = fullname;
 		}
 		else
+		{
 			owner_column["value"] = item.mOwnerID.asString();
+		}
 
 		LLSD& sound_column = element["columns"][3];
 		sound_column["column"] = "sound";
