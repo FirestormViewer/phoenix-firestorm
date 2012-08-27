@@ -9,6 +9,7 @@
 				<radio_item label="Mała" name="radio"/>
 				<radio_item label="Średnia" name="radio2"/>
 				<radio_item label="Duża" name="radio3"/>
+				<radio_item label="Ogromna" name="radio4"/>
 			</radio_group>
 			<text name="console_font_size">
 				Czcionka konsoli ekranu:
@@ -17,6 +18,7 @@
 				<radio_item label="Mała" name="consradio"/>
 				<radio_item label="Średnia" name="consradio2"/>
 				<radio_item label="Duża" name="consradio3"/>
+				<radio_item label="Ogromna" name="consradio4"/>
 			</radio_group>
 			<check_box label="Używaj animacji podczas pisania" name="play_typing_animation"/>
 			<check_box label="Odtwarzaj animacje awatara (np. krzyczenie)" name="play_avatar_animations"/>
