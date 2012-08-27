@@ -2109,11 +2109,12 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		}
 	}
 
-	if (new_rot != getRotation()
+	if (new_rot != mLastRot
 		|| new_angv != old_angv)
 	{
-		if (new_rot != getRotation())
+		if (new_rot != mLastRot)
 		{
+			mLastRot = new_rot;
 			setRotation(new_rot);
 		}
 		
