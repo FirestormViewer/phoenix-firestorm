@@ -722,8 +722,8 @@ class WindowsManifest(ViewerManifest):
         symbolZip = zipfile.ZipFile("Phoenix-%s_%s_SymbolsWin.zip" % (substitution_strings['channel_oneword'],substitution_strings['version_dashes']), 'w',zipfile.ZIP_DEFLATED)
         symbolZip.write("%s/Firestorm-bin.exe" % self.args['configuration'].lower(),"Firestorm-bin.exe")
         symbolZip.write("%s/Firestorm-bin.pdb" % self.args['configuration'].lower(),"Firestorm-bin.pdb")
-        symbolZip.write("../sharedlibs/%s/llcommon.dll" % self.args['configuration'].lower(),"llcommon.dll")
-        symbolZip.write("../sharedlibs/%s/llcommon.pdb" % self.args['configuration'].lower(),"llcommon.pdb")
+        # symbolZip.write("../sharedlibs/%s/llcommon.dll" % self.args['configuration'].lower(),"llcommon.dll")
+        # symbolZip.write("../sharedlibs/%s/llcommon.pdb" % self.args['configuration'].lower(),"llcommon.pdb")
         symbolZip.close()
 
 
