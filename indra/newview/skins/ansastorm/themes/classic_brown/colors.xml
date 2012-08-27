@@ -237,6 +237,13 @@
 
 
   <!-- UI Colors -->
+	<color
+        name="ScriptDialog"
+        value="0.223 0.216 0.207 1" />
+	<color 
+        name="ScriptDialogFg"
+        reference="White" />
+
 
     <color
      name="BottomTrayAlphaColor"
