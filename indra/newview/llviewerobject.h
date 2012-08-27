@@ -212,9 +212,6 @@ public:
 	virtual BOOL		updateLOD();
 	virtual BOOL		setDrawableParent(LLDrawable* parentp);
 	F32					getRotTime() { return mRotTime; }
-private:
-	void				resetRotTime();
-public:
 	void				resetRot();
 	void				applyAngularVelocity(F32 dt);
 
@@ -227,7 +224,7 @@ public:
 	LLViewerRegion* getRegion() const				{ return mRegionp; }
 
 	BOOL isSelected() const							{ return mUserSelected; }
-	virtual void setSelected(BOOL sel)				{ mUserSelected = sel; resetRot();}
+	virtual void setSelected(BOOL sel)				{ mUserSelected = sel; mRotTime = 0.f;}
 
 	const LLUUID &getID() const						{ return mID; }
 	U32 getLocalID() const							{ return mLocalID; }
