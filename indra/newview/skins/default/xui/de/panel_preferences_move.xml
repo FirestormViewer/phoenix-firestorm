@@ -17,6 +17,7 @@
 			<check_box initial_value="true" label="Seitenleiste" name="appearance_sidebar_positioning" tool_tip="Automatische Kameraposition für Seitenleiste verwenden"/>
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible"/>
+			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<text name="Mouse Sensitivity" width="195">
 				Mausempfindlichkeit für Mouselook:
 			</text>
