@@ -239,7 +239,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mNumFaces(0),
 	mTimeDilation(1.f),
 	mRotTime(0.f),
-	mAngularVelocityRot(),
 	mJointInfo(NULL),
 	mState(0),
 	mMedia(NULL),
@@ -270,7 +269,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	{
 		mPositionAgent = mRegionp->getOriginAgent();
 	}
-	resetRot();
 
 	LLViewerObject::sNumObjects++;
 }
@@ -2114,14 +2112,14 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	if (new_rot != getRotation()
 		|| new_angv != old_angv)
 	{
-		if (new_angv != old_angv)
+		if (new_rot != getRotation())
 		{
-			resetRot();
+			setRotation(new_rot);
 		}
-
-		// Set the rotation of the object followed by adjusting for the accumulated angular velocity (llSetTargetOmega)
-		setRotation(new_rot * mAngularVelocityRot);
+		
 		setChanged(ROTATED | SILHOUETTE);
+		
+		resetRot();
 	}
 
 
@@ -5560,13 +5558,8 @@ void LLViewerObject::applyAngularVelocity(F32 dt)
 
 		ang_vel *= 1.f/omega;
 		
-		// calculate the delta increment based on the object's angular velocity
 		dQ.setQuat(angle, ang_vel);
-
-		// accumulate the angular velocity rotations to re-apply in the case of an object update
-		mAngularVelocityRot *= dQ;
 		
-		// Just apply the delta increment to the current rotation
 		setRotation(getRotation()*dQ);
 		setChanged(MOVED | SILHOUETTE);
 	}
@@ -5575,9 +5568,6 @@ void LLViewerObject::applyAngularVelocity(F32 dt)
 void LLViewerObject::resetRot()
 {
 	mRotTime = 0.0f;
-
-	// Reset the accumulated angular velocity rotation
-	mAngularVelocityRot.loadIdentity(); 
 }
 
 U32 LLViewerObject::getPartitionType() const
