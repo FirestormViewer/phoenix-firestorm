@@ -15,6 +15,7 @@
 			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
+			<check_box label="Mostrar puntos de mira en vista subjetiva" name="ShowCrosshairs" tool_tip="Muestra los puntos de mira cuando te encuentras en vista subjetiva"/>
 			<text name="Mouse Sensitivity" width="220">
 				Sensibilidad del ratón en vista subjetiva
 			</text>
@@ -74,6 +75,8 @@
 			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box top_pad="5" label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
 			<check_box label="Mostrar informacion adicional de la región en el Mapa Mundial" name="FSAdvancedWorldmapRegionInfo" tool_tip="Muestra informaciones adicionales en el mapa del mundo (número de avatares y calificación de contenidos)."/>
+			<check_box label="Notificar los cambios de versión de simulador al cambiar de región" name="FSShowServerVersionChangeNotice" tool_tip="Muestra un aviso si la versión de simulador cambia durante un teleporte o al cruzar a otra región."/>
+			<check_box label="Mostrar canal del simulador en la barra de estado" name="FSStatusbarShowSimulatorVersion" tool_tip="Muestra el canal del simulador actual en la barra de estado estilo V1."/>
 		</panel>
 	</tab_container>
 </panel>

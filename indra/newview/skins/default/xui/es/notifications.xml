@@ -3606,4 +3606,9 @@ Intento cancelado.
 		Precaución: ¡Usa la anulación de la prohibición de volar de forma responsable! Usarla sin el permiso del propietario del terreno puede derivar en la expulsión de tu avatar de la parcela en la que estás volando.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
+	<notification name="ServerVersionChanged">
+		La región en la que has entrado funciona bajo una versión de simulador diferente.
+Simulador actual:   [NEWVERSION]
+Simulador anterior: [OLDVERSION]
+	</notification>
 </notifications>

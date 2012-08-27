@@ -12,10 +12,17 @@
 	<floater.string name="asset_unknown">
 		Desconocido
 	</floater.string>
+	<floater.string name="unknown_object">
+		Objeto desconocido
+	</floater.string>
+	<floater.string name="unknown_region">
+		Región desconocida
+	</floater.string>
 	<scroll_list name="result_list">
 		<scroll_list.columns name="name" label="Nombre"/>
+		<scroll_list.columns name="region" label="Region"/>
 		<scroll_list.columns name="type" label="Tipo"/>
 		<scroll_list.columns name="date" label="Fecha"/>
-	</scroll_list>	
+	</scroll_list>
 	<button name="remove_btn" label="Eliminar los seleccionados de la lista negra"/>
 </floater>
