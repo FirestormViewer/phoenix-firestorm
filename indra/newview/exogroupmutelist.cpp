@@ -26,32 +26,46 @@
 
 #include "exogroupmutelist.h"
 
+// <FS:Ansariel> Server-side storage
+#include "llmutelist.h"
+
 exoGroupMuteList::exoGroupMuteList()
 : mMuted()
 {
-	loadMuteList();
+	// <FS:Ansariel> Server-side storage
+	//loadMuteList();
 }
 
 bool exoGroupMuteList::isMuted(const LLUUID& group) const
 {
-	return mMuted.count(group);
+	// <FS:Ansariel> Server-side storage
+	//return mMuted.count(group);
+	return (bool)LLMuteList::instance().isMuted(LLUUID::null, getMutelistString(group));
+	// </FS:Ansariel> Server-side storage
 }
 
 void exoGroupMuteList::add(const LLUUID& group)
 {
 	LLGroupActions::endIM(group); // Actually kill ongoing conversation
-	if(mMuted.insert(group).second)
-	{
-		saveMuteList();
-	}
+
+	// <FS:Ansariel> Server-side storage
+	//if(mMuted.insert(group).second)
+	//{
+	//	saveMuteList();
+	//}
+	LLMuteList::instance().add(LLMute(LLUUID::null, getMutelistString(group), LLMute::BY_NAME));
+	// </FS:Ansariel> Server-side storage
 }
 
 void exoGroupMuteList::remove(const LLUUID& group)
 {
-	if(mMuted.erase(group))
-	{
-		saveMuteList();
-	}
+	// <FS:Ansariel> Server-side storage
+	//if(mMuted.erase(group))
+	//{
+	//	saveMuteList();
+	//}
+	LLMuteList::instance().remove(LLMute(LLUUID::null, getMutelistString(group), LLMute::BY_NAME));
+	// </FS:Ansariel> Server-side storage
 }
 
 bool exoGroupMuteList::loadMuteList()
@@ -103,3 +117,9 @@ std::string exoGroupMuteList::getFilePath() const
 	return gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "muted_groups.xml");
 }
 
+// <FS:Ansariel> Server-side storage
+std::string exoGroupMuteList::getMutelistString(const LLUUID& group) const
+{
+	return std::string("Group:" + group.asString());
+}
+// </FS:Ansariel> Server-side storage

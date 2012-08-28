@@ -36,6 +36,9 @@ private:
 	std::string getFilePath() const;
 	
 	std::set<LLUUID> mMuted;
+
+	// <FS:Ansariel> Server-side storage
+	std::string getMutelistString(const LLUUID& group) const;
 };
 
 #endif
