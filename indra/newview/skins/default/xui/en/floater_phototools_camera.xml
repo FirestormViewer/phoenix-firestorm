@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 <floater
-open_positioning="right"
+positioning="right"
 can_resize="false"
 can_dock="false"
 can_close="true"
