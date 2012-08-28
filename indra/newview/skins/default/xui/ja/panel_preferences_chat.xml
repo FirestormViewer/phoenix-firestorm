@@ -1,33 +1,221 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="チャット" name="chat">
-	<text name="font_size">
-		文字の大きさ：
-	</text>
-	<radio_group name="chat_font_size">
-		<radio_item label="小" name="radio" value="0"/>
-		<radio_item label="中" name="radio2" value="1"/>
-		<radio_item label="大" name="radio3" value="2"/>
-	</radio_group>
-	<check_box initial_value="true" label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
-	<check_box label="オフライン時に受け取った IM をメールで受信 （[EMAIL]）" name="send_im_to_email"/>
-	<check_box label="IM とチャット履歴に文字だけ表示する" name="plain_text_chat_history"/>
-	<check_box label="吹き出しチャット" name="bubble_text_chat"/>
-	<text name="show_ims_in_label">
-		IM の表示方法：
-	</text>
-	<text name="requires_restart_label">
-		（再起動後に反映）
-	</text>
-	<radio_group name="chat_window" tool_tip="インスタントメッセージを別フローター、または1つのフローターに複数タブで表示します（要再起動）">
-		<radio_item label="別々のウィンドウ" name="radio" value="0"/>
-		<radio_item label="タブ" name="radio2" value="1"/>
-	</radio_group>
-	<text name="disable_toast_label">
-		受信チャットのポップアップを有効にする
-	</text>
-	<check_box label="グループチャット" name="EnableGroupChatPopups" tool_tip="これを選択すると、グループチャットメッセージを受信した際にポップアップが表示されます"/>
-	<check_box label="IM チャット" name="EnableIMChatPopups" tool_tip="これを選択すると、インスタントメッセージを受信した際にポップアップが表示されます"/>
-	<spinner label="近くのチャットメッセージが表示される長さ：" name="nearby_toasts_lifetime"/>
-	<spinner label="近くのチャットメッセージが消えるまでの長さ：" name="nearby_toasts_fadingtime"/>
-	<button label="チャットの翻訳設定" name="ok_btn"/>
+<tab_container label="Firestorm Prefs" name="tabs">
+
+	<!-- チャット：一般 -->
+	<panel label="一般" name="ChatGeneral">
+		<text name="font_size">
+			チャット履歴の文字の大きさ：
+		</text>
+		<radio_group name="chat_font_size">
+			<radio_item label="小" name="radio" value="0"/>
+			<radio_item label="中" name="radio2" value="1"/>
+			<radio_item label="大" name="radio3" value="2"/>
+		</radio_group>
+		<text name="console_font_size">
+			画面コンソールの文字の大きさ：
+		</text>
+		<radio_group name="chat_console_font_size">
+			<radio_item label="小" name="consradio" value="0"/>
+			<radio_item label="中" name="consradio2" value="1"/>
+			<radio_item label="大" name="consradio3" value="2"/>
+		</radio_group>
+		
+		<check_box initial_value="true" label="チャット中にタイピング動作のアニメーションを再生" name="play_typing_animation"/>
+		<check_box label="アバターのアニメを再生（叫ぶ時など）" name="play_avatar_animations"/>
+		<check_box label="人が会話している時にタイピング音が聞こえるようにする" name="play_typing_sound"/>
+		<check_box label="IM中に入力中であることを相手に通知する" name="FSSendTypingState"/>
+		<check_box name="FSChatbarGestureAutoCompleteEnable" label="チャットバーでジェスチャーのオートコンプリートを使う" />
+		<check_box label="オフライン時に受け取った IM をメールで受信" name="send_im_to_email"/>
+		<check_box label="IM とチャット履歴に文字だけ表示する（V1形式）" name="plain_text_chat_history"/>
+		<check_box label="発言者のミニアイコンを表示" name="ShowChatMiniIcons"/>
+		<check_box label="吹き出しチャット" name="bubble_text_chat"/>
+		<check_box label="入力中に吹き出しを表示する" name="bubble_text_typing"/>
+		<text name="inworld_typing_rg_label">
+			文字キーを押した時：
+		</text>
+		<radio_group name="inworld_typing_preference">
+			<radio_item label="ローカルチャットを開始" name="radio_start_chat" value="1"/>
+			<radio_item label="ムーブメントに影響（WASD など）" name="radio_move" value="0"/>
+		</radio_group>
+
+		<text name="show_ims_in_label">
+			IM の表示方法：
+		</text>
+		<radio_group name="chat_window" tool_tip="インスタントメッセージを別フローター、または1つのフローターに複数タブで表示します（要再起動）">
+			<radio_item label="別々のウィンドウ" name="radio" value="0"/>
+			<radio_item label="タブ" name="radio2" value="1"/>
+		</radio_group>
+		<text name="req_restart_ims">
+			（再起動後に反映）
+		</text>
+	
+		<text name="tab_direction_label">
+			タブの方向
+		</text>
+		<radio_group name="chat_tab_direction" tool_tip="チャットやIMのタブが並ぶ方向を横に並べるか縦に並べるか切り替えます（要再起動）">
+			<radio_item label="横方向" name="radio_horizontal" value="0"/>
+			<radio_item label="縦方向" name="radio_vertical" value="1"/>
+		</radio_group>
+		<text name="req_restart_chattabs">
+			（再起動後に反映）
+		</text>
+	
+		<button label="チャット翻訳設定" name="translation_settings_btn"/>
+	</panel>
+	
+	<!-- チャット：通知 -->
+	<panel label="通知" name="ChatNotifications" >
+	
+		<text name="disable_toast_label">
+			受信チャットのポップアップを有効にする
+		</text>
+		<check_box label="グループチャット" name="EnableGroupChatPopups" tool_tip="これを選択すると、グループチャットメッセージを受信した際にポップアップが表示されます"/>
+		<check_box label="IM チャット" name="EnableIMChatPopups" tool_tip="これを選択すると、インスタントメッセージを受信した際にポップアップが表示されます"/>
+		<check_box label="ポップアップを通知ウィンドウでなく、画面左下のチャットコンソールに表示（V1.x 形式）" name="FSUseNearbyChatConsole"/>
+		<check_box label="IMとグループチャットを画面左下のチャットコンソールに表示" name="FSLogImToChatConsole"/>
+		<text name="FSShowGroupNameLength_label">
+			グループ名の長さをチャット履歴に表示
+        </text>
+		<check_box name="FSShowIMInChatHistory" label="IMをチャット履歴に表示"/>
+		 <check_box name="FSLogIMInChatHistory" label="IMをチャットログに保存"/>
+		 <text name="requires_save_chat_logs">
+			（周辺チャットログの保存が必要）
+         </text>
+		 <text name="FSIMChatHistoryFade_label">
+			チャット履歴ウィンドウでIMを薄く表示
+         </text>
+		<check_box label="相手が入力を始めたら、IMが来ることを事前に通知" name="FSAnnounceIncomingIM"/>
+		<check_box name="FSIMChatFlashOnFriendStatusChange" label="フレンドのオンラインステータスが変わったらIMタブを点滅"/>
+	</panel>
+	
+	<!-- チャット：Firestorm -->
+	<panel label="Firestorm" name="ChatFirestorm" >
+		<text name="chat_and_im_enhancements">
+			チャットとIMの上級機能
+		</text>
+		<check_box label="&quot;:&quot;を&quot;/me&quot;の代わりに使う" name="AllowMUpose"/>
+		<check_box label="感情表現（叫び、囁きなど）は斜字体にする" name="EmotesUseItalic"/>
+		<check_box label="((OOC))のかっこを自動的に閉じる" name="AutoCloseOOC"/>
+		
+		<!-- Localchat chat bar -->
+		<check_box label="チャット履歴にチャットバーを表示する" name="FSNearbyChatbar"/>
+		<check_box label="チャットバーにチャンネル選択を表示" name="FSShowChatChannel"/>
+		<check_box label="チャットバーを自動的に非表示にする" name="AutohideChatBar" tool_tip="チャットバーを画面下のボタンバーに表示しないようにし、必要な時だけ表示されるようにする"/>
+		<check_box label="メッセージ送信後はチャットバーが選択されていない状態にする" name="CloseChatOnReturn"/>
+		<check_box label="オブジェクトの発言には、会話の混乱を避けるため (no name) と表示する" name="FSMarkObjects"/>
+		
+		<!-- Groups -->
+		<text name="group_enhancements">
+			グループチャット：
+		</text>
+		<check_box label="グループチャットの議長の発言は太字にする" name="FSHighlightGroupMods"/>
+		<text name="Moderator Name Style">
+			名前のスタイル：
+        </text>
+		<combo_box name="mod_name_style">
+           <combo_box.item label="標準" name="normal" value="0" />
+            <combo_box.item label="太字" name="BOLD" value="1" />
+            <combo_box.item label="斜字体" name="ITALIC" value="2" />
+            <combo_box.item label="太字＋斜字体" name="BOLDITALIC" value="3" />
+            <combo_box.item label="下線" name="UNDERLINE" value="4" />
+            <combo_box.item label="太字＋下線" name="BOLDUNDERLINE" value="5" />
+            <combo_box.item label="斜字体＋下線" name="ITALICUNDERLINE" value="6" />
+            <combo_box.item label="太字＋斜字体＋下線" name="BOLDITALICUNDERLINE" value="7" />
+        </combo_box>
+		<text name="Moderator Text Style">
+			発言のスタイル：
+        </text>
+		<combo_box name="mod_text_style">
+            <combo_box.item label="標準" name="normal" value="0" />
+            <combo_box.item label="太字" name="BOLD" value="1" />
+            <combo_box.item label="斜字体" name="ITALIC" value="2" />
+            <combo_box.item label="太字＋斜字体" name="BOLDITALIC" value="3" />
+			<combo_box.item label="下線" name="UNDERLINE" value="4" />
+            <combo_box.item label="太字＋下線" name="BOLDUNDERLINE" value="5" />
+            <combo_box.item label="斜字体＋下線" name="ITALICUNDERLINE" value="6" />
+            <combo_box.item label="太字＋斜字体＋下線" name="BOLDITALICUNDERLINE" value="7" />
+            </combo_box>
+		<check_box label="グループチャットは全て表示しないようにする" name="FSMuteAllGroups"/>
+		<check_box label="グループ通知を無効にしている時、グループチャットも無効にする" name="FSMuteGroupWhenNoticesDisabled"/>
+		
+		<!-- Logging -->
+		<text name="logging_enhancements">
+			タイムスタンプ：
+		</text>
+		<check_box label="チャット履歴に時刻を表示しない" name="hide_timestamps_nearby_chat"/>
+		<check_box label="IMに時刻を表示しない" name="hide_timestamps_im"/>
+		<!-- Deleted Aug.21, 2012
+		<check_box label="IMをチャット履歴に表示" name="FSShowIMInChatHistory"/>
+		<check_box label="IMをチャットログに保存" name="FSLogIMInChatHistory"/>
+		<text name="requires_save_chat_logs">
+			周辺チャットのログの保存が必要
+		</text>
+		-->
+		<!-- Console -->
+		<text name="console_enhancements">
+			コンソール：
+		</text>
+		<check_box label="コンソール表示にクラシック描画モードを使用" name="FSConsoleClassicDrawMode" tool_tip="クラシック描画モードではコンソールの背景を一つの長方形で囲み、その幅は一番長い行のものとなります"/>
+		<check_box label="コンソールの幅は画面の幅一杯使用" name="ChatFullWidth"/>
+		<!-- Deleted Aug.21, 2012
+		<text name="requires_restart_label2">
+			（再起動が必要）
+		</text>
+		-->
+		<spinner label="チャットが消えるまで" name="fade_chat_time"/>
+		<text name="text_box4">
+			（秒）
+		</text>
+		<spinner name="max_chat_count"/>
+		<text name="text_box5">
+			（# 行）
+		</text>
+
+	</panel>
+	
+	<!-- チャット：レーダー -->
+	<panel label="レーダー" name="ChatRadar" >
+	
+		<check_box label="アバターがチャットレンジに入ってきたら通知" name="reportChatRangeEnter"/>
+		<check_box label="アバターがチャットレンジから出て行ったら通知" name="reportChatRangeLeave"/>
+		<check_box label="アバターが描画範囲に入ってきたら" name="reportDrawRangeEnter"/>
+		<check_box label="アバターが描画範囲から出て行ったら" name="reportDrawRangeLeaave"/>
+		<check_box label="アバターが同じSIMに入ってきたら通知" name="RadarReportSimRangeEnter"/>
+		<check_box label="アバターが同じSIMから出て行ったら通知" name="RadarReportSimRangeLeave"/>
+		<check_box name="RadarEnterChannelAlert" label="SIMに人が来た情報をスクリプトに転送" />
+		<check_box name="RadarLeaveChannelAlert" label="SIMから人が出て行った情報をスクリプトに転送" />
+	</panel>
+	
+	<!-- チャット：キーワード通知 -->
+	<panel label="キーワード" name="ChatKeywordAlerts">
+	
+		<check_box label="キーワード通知を有効にする" name="FSKeywordOn"/>
+		<check_box label="周辺チャットでキーワードを強調" name="FSKeywordInChat"/>
+		<check_box label="IMとグループチャットでキーワードを強調" name="FSKeywordInIM"/>
+		<text name="textFSKeywords">
+			キーワード（コンマで区切る）；
+		</text>
+		<check_box label="キーワードの色を変える" name="FSKeywordChangeColor"/>
+		<color_swatch name="colorswatch" tool_tip="クリックして色を選択します"/>
+		<check_box label="キーワードが出たら通知音を鳴らします" name="FSKeywordPlaySound"/>
+		<text name="textFSKeywordSound">
+			通知音のUUID:
+		</text>
+		
+	</panel>
+	
+	<!-- チャット：入力支援 -->
+	<panel label="入力支援" name="ChatTextInput" >
+		
+		<check_box label="スペルチェックを利用" name="checkSpellCheck"/>
+		<text name="textDictionaryMain">
+			メインで使用する辞書:
+		</text>
+		<check_box label="自動修正を利用" name="lgg_ac_enable" tool_tip="以下の設定を使用する際は、このチェックボックスを有効にしておく必要があります。これは、入力したテキストを検索で該当した内容に置き換えるものです。"/>
+		<button label="自動修正の設定" name="lgg_ac_showgui"/>
+	
+	</panel>
+	
+</tab_container>
 </panel>

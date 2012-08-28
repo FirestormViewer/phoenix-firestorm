@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<!-- *NOTE: See also menu_pie_attachment_other.xml -->
+
+<pie_menu
+    name="Avatar Pie">
+    <pie_slice
+        label="プロフィール..."
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="hit object" />
+        <pie_slice.on_enable
+            function="RLV.EnableIfNot"
+            parameter="shownames" />
+    </pie_slice>
+    <pie_slice
+        enabled="true"
+        label="無視"
+        name="Avatar Mute">
+        <pie_slice.on_click
+            function="Avatar.Mute" />
+		<!-- Deleted Aug.21, 2012
+        <pie_slice.on_enable
+            function="Avatar.EnableMute" />
+		-->
+    </pie_slice>
+    <pie_slice
+        enabled="true"
+        label="会いに行く"
+        name="Go to">
+        <pie_slice.on_click
+            function="GoToObject" />
+    </pie_slice>
+    <pie_slice
+        label="報告..."
+        name="abuse">
+        <pie_slice.on_click
+            function="Avatar.ReportAbuse" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="フレンドに追加..."
+        name="Add Friend">
+        <pie_slice.on_click
+            function="Avatar.AddFriend" />
+        <pie_slice.on_enable
+            function="Avatar.EnableAddFriend" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="支払い..."
+        name="Pay...">
+        <pie_slice.on_click
+            function="PayObject" />
+        <pie_slice.on_enable
+            function="EnablePayAvatar" />
+    </pie_slice>
+    <pie_menu
+        name="Avatar Pie More 1"
+        label="詳細＞">
+
+        <pie_slice
+            label="動けなくする"
+            name="Freeze..."
+			check_enable_once="true">
+            <pie_slice.on_click
+                function="Avatar.Freeze" />
+            <pie_slice.on_enable
+                function="Avatar.EnableFreezeEject"/>
+        </pie_slice>
+        <pie_slice
+            label="カードを贈る"
+            name="Add Calling Card">
+            <pie_slice.on_click
+                function="Avatar.AddContact" />
+        </pie_slice>
+        <pie_slice
+            label="グループ招待"
+            name="Group Invite...">
+            <pie_slice.on_click
+                function="Avatar.InviteToGroup" />
+            <pie_slice.on_enable
+                function="RLV.EnableIfNot"
+                parameter="shownames" />
+        </pie_slice>
+        <pie_separator />
+        <pie_slice
+            label="追放..."
+            name="Eject..."
+			check_enable_once="true">
+            <pie_slice.on_click
+                function="Avatar.Eject" />
+            <pie_slice.on_enable
+                function="Avatar.EnableFreezeEject"/>
+        </pie_slice>
+
+        <pie_menu
+            name="Avatar Pie More 2"
+            label="詳細＞">
+
+            <!-- ## Zi: Is this the right thing to use for avatar textures? -->
+            <pie_slice
+                label="デバッグ"
+                name="Debug...">
+                <pie_slice.on_click
+                    function="Avatar.Debug" />
+                <pie_slice.on_visible
+                    function="IsGodCustomerService"/>
+            </pie_slice>
+            <pie_slice
+	            enabled="true"
+	            label="Script Info"
+	            name="ScriptInfo">
+	            <pie_slice.on_click
+	                function="Tools.ScriptInfo" />
+	        </pie_slice>
+            <pie_slice
+                label="呼びかける"
+                name="Call">
+                <pie_slice.on_click
+                    function="Avatar.Call" />
+                <pie_slice.on_enable
+                    function="Avatar.EnableCall" />
+            </pie_slice>
+            <pie_slice
+                label="ズームイン"
+                name="Zoom In">
+                <pie_slice.on_click
+                    function="Tools.LookAtSelection"
+                    parameter="zoom" />
+            </pie_slice>
+            <pie_slice
+                enabled="true"
+                label="テクスチャ更新"
+                name="Texture Refresh">
+                <pie_slice.on_click
+                    function="Avatar.TexRefresh" />
+            </pie_slice>
+
+        </pie_menu>
+		<pie_separator />
+		<!-- Deleted Aug.21, 2012
+        <pie_slice
+            label="検査"
+            name="Avatar Inspect">
+            <pie_slice.on_click
+                function="Object.Inspect" />
+            <pie_slice.on_enable
+                function="Avatar.EnableCall" />
+        </pie_slice>
+		-->
+        <pie_slice
+            enabled="true"
+            label="表示しない"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        
+        
+    </pie_menu>
+
+    <pie_slice
+        label="IMを送信..."
+        name="Send IM...">
+        <pie_slice.on_click
+            function="Avatar.SendIM" />
+        <pie_slice.on_enable
+            function="RLV.EnableIfNot"
+            parameter="shownames" />
+    </pie_slice>
+
+</pie_menu>

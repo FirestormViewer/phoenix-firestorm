@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<pie_menu
+    name="Attachment Pie">
+
+    <pie_slice
+        label="プロフィール..."
+        name="Profile...">
+        <pie_slice.on_click
+            function="ShowAgentProfile"
+            parameter="agent" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="地面に置く"
+        name="Drop">
+        <pie_slice.on_click
+            function="Attachment.Drop" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDrop" />
+    </pie_slice>
+    <pie_menu
+        name="Attachment Pie More"
+        label="詳細">
+
+        <pie_slice
+            enabled="true"
+            label="テクスチャ更新"
+            name="Texture Refresh">
+            <pie_slice.on_click
+                function="Object.TexRefresh" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="スクリプト情報"
+            name="ScriptInfo">
+            <pie_slice.on_click
+                function="Tools.ScriptInfo" />
+        </pie_slice>
+        <pie_slice
+            enabled="false"
+            label="触る"
+            name="Attachment Object Touch">
+            <pie_slice.on_click
+                function="Object.Touch" />
+            <pie_slice.on_enable
+                function="Object.EnableTouch"
+                name="EnableTouch"/>
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="表示しない"
+            name="Derender">
+            <pie_slice.on_click
+                function="Object.Derender" />
+        </pie_slice>
+        <pie_separator name="inspect_placeholder" />
+
+    </pie_menu>
+    <pie_slice
+        label="ここに座る"
+        start_autohide="true"
+        name="Sit Down Here">
+        <pie_slice.on_click
+            function="Self.SitDown"
+            parameter="" />
+        <pie_slice.on_enable
+            function="Self.EnableSitDown" />
+    </pie_slice>
+    <pie_slice
+        label="立ち上がる"
+        autohide="true"
+        name="Stand Up">
+        <pie_slice.on_click
+            function="Self.StandUp" />
+        <pie_slice.on_enable
+            function="Self.EnableStandUp" />
+    </pie_slice>
+    <pie_slice
+        enabled="false"
+        label="取り外す"
+        name="Detach">
+        <pie_slice.on_click
+            function="Attachment.Detach" />
+        <pie_slice.on_enable
+            function="Attachment.EnableDetach" />
+    </pie_slice>
+    <pie_slice
+        label="ジェスチャー..."
+        name="Gestures">
+        <pie_slice.on_click
+            function="Floater.Toggle"
+            parameter="gestures" />
+    </pie_slice>
+
+    <pie_menu
+        label="容姿＞"
+        layout="topleft"
+        name="Appearance &gt;">
+
+        <pie_slice label="シェイプを編集"
+           layout="topleft"
+           name="Edit My Shape">
+           <pie_slice.on_click
+               function="EditShape" />
+           <pie_slice.on_enable
+               function="Edit.EnableEditShape" />
+        </pie_slice>
+
+        <pie_separator />
+        <pie_separator />
+        <pie_separator />
+
+        <pie_slice label="服装を編集"
+           layout="topleft"
+           name="Edit My Outfit">
+           <pie_slice.on_click
+               function="EditOutfit" />
+           <pie_slice.on_enable
+               function="Edit.EnableCustomizeAvatar" />
+        </pie_slice>
+
+    </pie_menu>
+
+    <pie_slice
+        enabled="false"
+        label="編集..."
+        name="Edit...">
+        <pie_slice.on_click
+            function="Object.Edit" />
+        <pie_slice.on_enable
+            function="EnableEdit" />
+    </pie_slice>
+
+</pie_menu>

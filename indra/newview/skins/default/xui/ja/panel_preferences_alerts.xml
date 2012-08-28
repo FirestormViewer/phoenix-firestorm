@@ -4,7 +4,29 @@
 		知らせる：
 	</text>
 	<check_box label="リンデンドルを使用・受け取るとき" name="notify_money_change_checkbox"/>
+	<check_box label="リンデンドル取引の通知はウィンドウでなくチャットで知らせる" name="FSPaymentInfoInChat"/>
+	<!-- Deleted Aug.21, 2012
 	<check_box label="フレンドがログイン・ログアウトするとき" name="friends_online_notify_checkbox"/>
+	<check_box label="チャット履歴とコンソールに表示" name="OnlineOfflinetoNearbyChat"/>
+	<check_box label="チャット履歴のみに表示" name="OnlineOfflinetoNearbyChatHistory"/>
+	-->
+	<check_box label="ランドマークを作成した時" name="landmark_created_checkbox"/>
+	<check_box label="誰かが表示名を変更した時" name="FSShowDisplayNameUpdateNotification" />
+	<check_box label="スクリプトエラーが発生した時" name="show_script_errors"/>
+	<radio_group name="show_script_errors_location">
+		<radio_item label="チャットに表示" name="script_0"/>
+		<radio_item label="別のウィンドウに表示" name="script_1"/>
+	</radio_group>
+	
+	<text name="friends_logon_label">
+        フレンドがログイン／ログアウトした時
+    </text>
+	<check_box label="トーストで通知" name="friends_online_notify_checkbox" />
+    <check_box name="OnlineOfflinetoNearbyChat" label="チャット履歴とコンソールで通知" />
+	<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
+     <check_box label="Growlで通知" name="notify_growl_checkbox" />
+	  <check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
+
 	<text name="show_label" width="300">
 		常に表示するメッセージ：
 	</text>

@@ -1,26 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="navigation_bar">
-	<layout_stack name="nvp_stack">
-		<layout_panel name="navigation_layout_panel">
-			<panel name="navigation_panel">
-				<pull_button name="back_btn" tool_tip="前の場所"/>
-				<pull_button name="forward_btn" tool_tip="次の場所"/>
-				<button name="home_btn" tool_tip="「ホーム」にテレポートします"/>
-				<location_input label="所在地" name="location_combo"/>
-		<search_combo_box label="検索" name="search_combo_box" tool_tip="検索">
-			<combo_editor label="[CURRENT_GRID] を検索：" name="search_combo_editor"/>
-		</search_combo_box>
-			</panel>
-		</layout_panel>
-		<layout_panel name="favorites_layout_panel">
-			<favorites_bar name="favorite" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
-				<label name="favorites_bar_label" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
-					お気に入りバー
-				</label>
-				<more_button name="&gt;&gt;" tool_tip="お気に入りをもっと表示">
-					詳細 ▼
-				</more_button>
-			</favorites_bar>
-		</layout_panel>
-	</layout_stack>
+
+<layout_stack name="navigation_favorites_bar_visibility_stack">
+
+	<layout_panel name="navigation_bar_visibility_panel">
+
+		<layout_stack name="location_search_layout">
+
+			<layout_panel name="navigation_buttons_visibility_panel">
+
+				<pull_button name="back_btn" tool_tip="前の場所に移動" />
+				<pull_button name="forward_btn" tool_tip="次の場所に移動" />
+				<button name="home_btn" tool_tip="「ホーム」にテレポートします。" />
+				<button name="About_Land" label="土地" tool_tip="土地情報のウィンドウを開きます。"/> 
+				<button name="Sky" label="空" tool_tip="空の環境設定ウィンドウを開きます。" />
+
+			</layout_panel>
+
+			<layout_panel name="location_bar_visibility_panel" >
+
+				<location_input label="場所" name="location_combo" >
+				</location_input>
+					<combo_list mouse_wheel_opaque="true"/>
+
+			</layout_panel>
+
+			<layout_panel name="search_bar_visibility_panel" >
+
+				<search_combo_box label="検索" name="search_combo_box" >
+					<combo_editor label="メタバース内を検索"/>
+					<combo_list draw_border="true"
+						border.highlight_light_color="FocusColor"
+						border.highlight_dark_color="FocusColor"
+						border.shadow_light_color="FocusColor"
+						border.shadow_dark_color="FocusColor"
+						mouse_wheel_opaque="true" />
+				</search_combo_box>
+
+			</layout_panel>
+
+		</layout_stack>
+		
+	</layout_panel>
+
+	<layout_panel name="favorites_bar_visibility_panel">
+
+		<favorites_bar name="favorite" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
+			<label name="favorites_bar_label" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
+				お気に入りバー
+			</label>
+			<chevron_button name=">>" />
+		</favorites_bar>
+
+	</layout_panel>
+
+
+</layout_stack>
+
 </panel>

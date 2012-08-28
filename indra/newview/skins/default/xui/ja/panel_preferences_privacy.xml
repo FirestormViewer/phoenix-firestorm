@@ -1,30 +1,102 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="チャット設定" name="im">
-	<panel.string name="log_in_to_change">
-		ログインして変更
-	</panel.string>
-	<button label="履歴を消去" name="clear_cache" tool_tip="ログイン画像、最後にいた場所、テレポート履歴、Web、テクスチャキャッシュを削除します"/>
-	<text name="cache_size_label_l">
-		（位置、画像、web、検索履歴）
-	</text>
-	<check_box label="検索結果に表示" name="online_searchresults"/>
-	<check_box label="私のオンライン状態を確認できるのは、フレンドとグループだけ" name="online_visibility"/>
-	<check_box label="フレンドとグループ以外からはコールと IM を受信しない" name="voice_call_friends_only_check"/>
-	<check_box label="コールが終了したら自動的にマイクのスイッチを切る" name="auto_disengage_mic_check"/>
-	<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
-	<text name="Logs:">
-		チャットログ：
-	</text>
-	<check_box label="近くのチャットログをコンピューターに保存する" name="log_nearby_chat"/>
-	<check_box label="IM ログをコンピューターに保存する" name="log_instant_messages"/>
-	<check_box label="チャットログでラインごとに時間を入れる" name="show_timestamps_check_im"/>
-	<check_box label="ログファイル名に日付を入れる。" name="logfile_name_datestamp"/>
-	<text name="log_path_desc">
-		ログの保存場所：
-	</text>
-	<button label="参照" label_selected="参照" name="log_path_button"/>
-	<button label="ブロックリスト" name="block_list"/>
-	<text name="block_list_label">
-		（あなたがブロックした住人/オブジェクト）
-	</text>
+	<tab_container label="プライバシー" name="tabs">
+	
+	
+		<!-- 一般 -->
+		
+		<panel label="一般" name="tab-general">
+		<panel.string name="log_in_to_change">
+			ログインして変更
+		</panel.string>
+		
+			<button label="履歴を消去" name="clear_cache" tool_tip="ログイン画像、最後にいた場所、テレポート履歴、Web、テクスチャキャッシュを削除します"/>
+			<text name="cache_size_label">
+				（位置、画像、web、検索履歴）
+			</text>
+			<check_box label="検索結果に表示" name="online_searchresults"/>
+			<check_box label="私のオンライン状態を確認できるのは、フレンドとグループだけ" name="online_visibility"/>
+			<check_box label="フレンドとグループ以外からはコールと IM を受信しない" name="voice_call_friends_only_check"/>
+			<check_box label="コールが終了したら自動的にマイクのスイッチを切る" name="auto_disengage_mic_check"/>
+			<check_box label="新しく持ち物に送られて来たものを自動的に受け取る" name="Auto_Accept_New_Inventory" />
+			<check_box label="V1形式の持ち物の受け取り／拒否のメッセージを使用する" name="FSUseLegacyInventoryAcceptMessages" tool_tip="このオプションをオンにした場合、ビューワは受け取りまたは拒否のボタンを押したあとに受け取り／拒否のメッセ時を送信します。オフの場合は、送られて来たものを受け取るとすぐに受け取りましたというメッセージが自動的に送信されます。このオプションは、送られてきたものを自動的に受領するかどうかには全く影響しません。" />
+			<check_box label="新しくものを受け取ると、自動的に持ち物フォルダを開いて表示する" name="Show_In_Inventory" />
+			<check_box label="ノートカード、画像、ランドマークは、受け取ったらすぐに表示する" name="Show_New_Inventory" />
+			<check_box label="他のアバターにものを送った時にはパーティクル効果が出る" name="FSCreateGiveInventoryParticleEffect" />
+			<check_box label="ログイン時にお気に入りのランドマークを表示（「開始地点」ドロップダウンメニュー経由）" name="favorites_on_login_check"/>
+			<text name="Logs:">
+				チャットログ：
+			</text>
+			<check_box label="近くのチャットログをコンピューターに保存する" name="log_nearby_chat"/>
+			<check_box label="IM ログをコンピューターに保存する" name="log_instant_messages"/>
+			<check_box label="チャットログでラインごとに時間を入れる" name="show_timestamps_check_im"/>
+			<check_box label="チャットやIMログの時間に秒を表示する" name="seconds_in_timestamps" />
+			<check_box label="ログファイル名に日付を入れる。" name="logfile_name_datestamp"/>
+			<button label="ブロック／無視リスト管理" name="block_list"/>
+		</panel>
+		
+
+		<!--LookAt-->
+
+		<panel label="視線" name="tab-lookat" >
+     
+			<check_box label="視線を表示する" name="showlookat" tool_tip="人の視線の先に十字の印を表示します。"/>
+			<text name="lookatshownames" tool_tip="視線の十字にアバター名を表示するか選択します。">
+				視線を当てているアバターの名前を表示
+			</text>
+			<combo_box name="lookatshownames_combobox">
+				<combo_box.item label="表示しない" name="None" value="0" />
+				<combo_box.item label="フル表示" name="Complete_Name" value="1" />
+				<combo_box.item label="表示名" name="Display_Name" value="2" />
+				<combo_box.item label="古い形式" name="Legacy_Name" value="3" />
+				<combo_box.item label="ユーザー名" name="User_Name" value="4" />
+			</combo_box>
+
+			<text name="mylookat">
+				自分の視線
+			</text>
+			<check_box label="自分の視線を表示しない" name="LookAtHideOwn" tool_tip="カメラの焦点を表す十字を表示しない" />
+			<check_box label="自分のカメラの焦点がどこにあるか他人には知らせない" name="privatelookat" tool_tip="他人があなたのカメラの焦点がどこにあるか知るのを防ぎます。" />
+			<check_box label="自分の画面上でもカメラの焦点がどこにあるかわからないようにする" name="privateLocalLookat" tool_tip="通常、カメラの焦点が当たっている方向にアバターの頭が向くように自分の画面では表示されています。この頭の動きは、このオプションのオン／オフに関わりなく、必ずしも他人に見えるものではありません。" />
+			<check_box label="自分が選択しているものを他人には知らせない" name="privatepointat" tool_tip="他人があなたが選択しているものが何かを知るのを防ぎます。" />
+
+		</panel>
+
+
+		<!--Autoresponse-->
+	
+		<panel label="自動応答" name="tab-autoresponse" >
+     
+			<text name="text_box3">
+				取り込みモード時の自動応答メッセージ：
+			</text>
+			<text_editor name="busy_response">
+				log_in_to_change
+			</text_editor>
+
+			<text name="autorespond_response_label">
+				誰にでも自動的に応答する時のメッセージ：
+			</text>
+			<text_editor name="autorespond_response">
+				log_in_to_change
+			</text_editor>
+
+			<text name="autorespond_nf_response_label">
+				フレンドでないアバターへの自動応答メッセージ
+			</text>
+			<text_editor name="autorespond_nf_response">
+				log_in_to_change
+			</text_editor>
+
+			<check_box label="無視しているアバターに自動応答する" name="send_muted_av_response" tool_tip="無視している人からIMが来た時に自動的に以下のメッセージを送信します。"/>
+			<text name="muted_avatar_response_label">
+				無視しているアバターへの自動応答メッセージ
+			</text>
+			<text_editor name="muted_avatar_response">
+				log_in_to_change
+			</text_editor>
+			
+		</panel>
+		
+	</tab_container>
 </panel>

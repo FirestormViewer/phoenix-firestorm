@@ -1,114 +1,210 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="表示" name="Display panel">
-	<text name="QualitySpeed">
-		クオリティとスピード：
-	</text>
-	<text name="FasterText">
-		速い
-	</text>
-	<text name="BetterText">
-		遅い
-	</text>
-	<text name="ShadersPrefText">
-		低
-	</text>
-	<text name="ShadersPrefText2">
-		中
-	</text>
-	<text name="ShadersPrefText3">
-		高
-	</text>
-	<text name="ShadersPrefText4">
-		超高
-	</text>
-	<panel label="カスタムグラフィック" name="CustomGraphics Panel">
-		<text name="ShadersText">
-			シェーダー：
+<tab_container label="Graphics Prefs" name="tabs">
+
+
+	<!-- 一般 -->
+	
+	<panel label="一般" name="General">
+	
+		<check_box label="フルスクリーンモード（再起動が必要）" name="Fullscreen Mode" tool_tip="Firestormをフルスクリーンモードで起動します。" />
+		<text name="QualitySpeed">
+			レンダリング・クォリティ（低い方が動作が軽い）：
 		</text>
-		<check_box initial_value="true" label="透明な水" name="TransparentWater"/>
-		<check_box initial_value="true" label="バンプマッピングと光沢" name="BumpShiny"/>
-		<check_box initial_value="true" label="近くの光" name="LocalLights"/>
-		<check_box initial_value="true" label="基本シェーダー" name="BasicShaders" tool_tip="このオプションを無効にすると、グラフィックカードのドライバの種類によっては、クラッシュするのを防ぎます。"/>
-		<check_box initial_value="true" label="周囲（大気）シェーダー" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="光と影" name="UseLightShaders"/>
-		<check_box initial_value="true" label="アンビエントオクルージョン" name="UseSSAO"/>
-		<check_box initial_value="true" label="フィールドの遠近感" name="UseDoF"/>
-		<text name="shadows_label">
-			影：
-		</text>
-		<combo_box name="ShadowDetail">
-			<combo_box.item label="なし" name="0"/>
-			<combo_box.item label="太陽/月" name="1"/>
-			<combo_box.item label="太陽/月・プロジェクタ" name="2"/>
-		</combo_box>
-		<text name="reflection_label">
-			水の反射：
-		</text>
-		<combo_box initial_value="true" label="水の反射" name="Reflections">
-			<combo_box.item label="最小" name="0"/>
-			<combo_box.item label="地形と樹木" name="1"/>
-			<combo_box.item label="すべての静止オブジェクト" name="2"/>
-			<combo_box.item label="すべてのアバターとオブジェクト" name="3"/>
-			<combo_box.item label="すべて" name="4"/>
-		</combo_box>
-		<slider label="アバターの物理作用：" name="AvatarPhysicsDetail"/>
-		<text name="AvatarPhysicsDetailText">
+		<text name="ShadersPrefText">
 			低
 		</text>
-		<slider label="描画距離：" name="DrawDistance"/>
-		<text name="DrawDistanceMeterText2">
-			m
+		<text name="ShadersPrefText2">
+			中
 		</text>
-		<slider label="最大パーティクル数：" name="MaxParticleCount"/>
-		<slider label="簡略化せずに描画するアバターの最大数：" name="MaxNumberAvatarDrawn"/>
-		<slider label="ポストプロセス品質：" name="RenderPostProcess"/>
-		<text name="MeshDetailText">
-			メッシュ詳細：
+		<text name="ShadersPrefText3">
+			高
 		</text>
-		<slider label="  オブジェクト：" name="ObjectMeshDetail"/>
-		<slider label="  フレキシプリム：" name="FlexibleMeshDetail"/>
-		<slider label="  樹木：" name="TreeMeshDetail"/>
-		<slider label="  アバター：" name="AvatarMeshDetail"/>
-		<slider label="  地形：" name="TerrainMeshDetail"/>
-		<slider label="  空：" name="SkyMeshDetail"/>
-		<text name="PostProcessText">
-			低
+		<text name="ShadersPrefText4">
+			超高
 		</text>
-		<text name="ObjectMeshDetailText">
-			低
-		</text>
-		<text name="FlexibleMeshDetailText">
-			低
-		</text>
-		<text name="TreeMeshDetailText">
-			低
-		</text>
-		<text name="AvatarMeshDetailText">
-			低
-		</text>
-		<text name="TerrainMeshDetailText">
-			低
-		</text>
-		<text name="SkyMeshDetailText">
-			低
-		</text>
-		<text name="AvatarRenderingText">
-			アバターレンダリング：
-		</text>
-		<check_box initial_value="true" label="アバターの描画を簡略化" name="AvatarImpostors"/>
-		<check_box initial_value="true" label="ハードウェアスキニング" name="AvatarVertexProgram"/>
-		<check_box initial_value="true" label="アバターの布" name="AvatarCloth"/>
-		<text name="TerrainDetailText">
-			地形詳細：
-		</text>
-		<radio_group name="TerrainDetailRadio">
-			<radio_item label="低" name="0"/>
-			<radio_item label="高" name="2"/>
-		</radio_group>
-		--&gt;
+		<panel label="カスタムグラフィック" name="CustomGraphics Panel">
+			<text name="ShadersText">
+				シェーダー：
+			</text>
+			<check_box initial_value="true" label="透明な水" name="TransparentWater"/>
+			<check_box initial_value="true" label="バンプマッピングと光沢" name="BumpShiny"/>
+			<check_box initial_value="true" label="近くの光" name="LocalLights"/>
+			<check_box initial_value="true" label="基本シェーダー" name="BasicShaders" tool_tip="このオプションを無効にすると、グラフィックカードのドライバの種類によっては、クラッシュするのを防ぎます。"/>
+			<check_box initial_value="true" label="環境（大気）シェーダー" name="WindLightUseAtmosShaders"/>
+			<check_box initial_value="true" label="光と影" name="UseLightShaders"/>
+			<check_box initial_value="true" label="アンビエントオクルージョン" name="UseSSAO"/>
+			<check_box initial_value="true" label="フィールドの遠近感" name="UseDoF"/>
+			<text name="shadows_label">
+				影：
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="なし" name="0"/>
+				<combo_box.item label="太陽/月" name="1"/>
+				<combo_box.item label="太陽/月・プロジェクタ" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				水の反射：
+			</text>
+			<combo_box initial_value="true" label="水の反射" name="Reflections">
+				<combo_box.item label="最小" name="0"/>
+				<combo_box.item label="地形と樹木" name="1"/>
+				<combo_box.item label="すべての静止オブジェクト" name="2"/>
+				<combo_box.item label="すべてのアバターとオブジェクト" name="3"/>
+				<combo_box.item label="すべて" name="4"/>
+			</combo_box>
+			<text name="local lights_label">
+                近くの光の強さ（再起動が必要）
+            </text>
+			<combo_box name="LocalLightsDetail">
+                <combo_box.item label="全開（デフォルト）" name="3" value="3"/>
+                <combo_box.item label="減少" name="2" value="2"/>
+                <combo_box.item label="太陽と月のみ" name="1" value="1"/>
+            </combo_box>
+			
+			<slider label="描画距離：" name="DrawDistance"/>
+			<text name="DrawDistanceMeterText2">
+				m
+			</text>
+			<slider label="最大パーティクル数：" name="MaxParticleCount"/>
+			<slider label="簡略化せずに描画するアバターの最大数：" name="MaxNumberAvatarDrawn"/>
+			<slider label="ポストプロセス品質：" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				低
+			</text>
+			<slider label="Windlightの空の詳細" name="SkyMeshDetail" />
+			<text name="MeshDetailText">
+				メッシュ詳細：
+			</text>
+			<slider label="  オブジェクト：" name="ObjectMeshDetail"/>
+			<slider label="  フレキシプリム：" name="FlexibleMeshDetail"/>
+			<slider label="  樹木：" name="TreeMeshDetail"/>
+			<slider label="  アバター：" name="AvatarMeshDetail"/>
+			<slider label="  地形：" name="TerrainMeshDetail"/>
+			<!-- Deleted Aug.22, 2012
+			<slider label="  空：" name="SkyMeshDetail"/>
+			-->
+			<slider label="　アバターの物理作用：" name="AvatarPhysicsDetail"/>
+			<text name="AvatarRenderingText">
+				アバターレンダリング：
+			</text>
+			<check_box initial_value="true" label="アバターの描画を簡略化" name="AvatarImpostors"/>
+			<check_box initial_value="true" label="ハードウェアスキニング" name="AvatarVertexProgram"/>
+			<check_box initial_value="true" label="アバターの布" name="AvatarCloth"/>
+			<text name="TerrainDetailText">
+				地形詳細：
+			</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="低" name="0"/>
+				<radio_item label="高" name="2"/>
+			</radio_group>
+
+		</panel>
+		
+		<button label="適用" label_selected="適用" name="Apply"/>
+		<button label="リセット" name="Defaults"/>
+		<button label="詳しい設定" name="Advanced"/>
+	
 	</panel>
-	<button label="適用" label_selected="適用" name="Apply"/>
-	<button label="リセット" name="Defaults"/>
-	<button label="詳しい設定" name="Advanced"/>
-	<button label="ハードウェア" label_selected="ハードウェア" name="GraphicsHardwareButton"/>
+	
+	
+	<!-- ハードウェア設定 -->
+	
+	<panel label="ハードウェア設定" name="Hardware Settings" >
+	
+        <check_box label="異方的フィルタリング（有効にすると速度が低下します）" name="ani" />
+        <check_box label="OpenGL Vertex Buffer Objectsを有効化" name="vbo" tool_tip="最新のハードウェアでこの設定を有効にすると、パフォーマンスが向上します。しかし、旧型のハードウェアではVBOの実装が貧弱な場合が多く、この設定を有効にすることでクラッシュにつながるおそれがあります。" />
+        <check_box label="VBOのストリームを有効にする" name="vbo_stream" tool_tip="VBOを有効にしている時に、このオプションをオフにするとパフォーマンスが向上する可能性があります。多くのAMDのGPUにおいて、このオプションをオフにしたことで顕著なパフォーマンスの向上が見られました。" />
+        <check_box label="テクスチャの不可逆圧縮（再起動が必要）" name="texture compression" tool_tip="ビデオメモリ内のテクスチャを圧縮することで、色の品質が低下する代わりに、より高解像度のテクスチャやより多くのテクスチャを読み込むことを可能にします。" />
+        <text name="Antialiasing:">
+            アンチエイリアス：
+        </text>
+        <combo_box label="Antialiasing" name="fsaa">
+            <combo_box.item label="使用しない" name="FSAADisabled" value="0" />
+            <combo_box.item label="2倍" name="2x" value="2" />
+            <combo_box.item label="4倍" name="4x" value="4" />
+            <combo_box.item label="8倍" name="8x" value="8" />
+            <combo_box.item label="16倍" name="16x" value="16" />
+        </combo_box>
+
+        <spinner label="ガンマ：" name="gamma" />
+        <text name="brightness text">
+            （0でデフォルト、低いほど明るい）
+        </text>
+        <slider label="テクスチャメモリ（MB）：" name="GraphicsCardTextureMemory" tool_tip="テクスチャに割り当てられたメモリの量。ビデオカードの既定値から512MBまで拡張可能。この値を下げるとパフォーマンスが向上しますが、テクスチャの精度が落ちることがあります。この値を512MBを越えて設定することはお勧めしません。ご利用のグラフィックカードが512MB以上に対応している場合でも、メインメモリがビューワに影響を与え、SLの動作が不安定になることがあります。" />
+        <spinner label="フォグの距離比率" name="fog" />
+		
+    </panel>
+	
+	
+	<!-- レンダリング -->
+
+    <panel label="レンダリング" name="Rendering" >
+	
+        <text name="World Updating">
+            インワールドの描画更新：
+        </text>
+<!-- world pauser -->
+        <check_box label="インワールドの描画更新を停止（全ての動きが停止します）" tool_tip="サーバから送られて来る更新情報を全て停止します。結果、インワールドの動作が全て停止します。但し、チャット、IM、ボイスへの影響はありません。" name="WorldPause" />
+
+        <text name="Texture Rendering">
+            テクスチャ・レンダリング：
+        </text>
+
+      <!-- HTTP textures -->
+        <check_box label="HTTPテクスチャを使用" tool_tip="HTTPプロトコルを使用してテクスチャを読み込む場合にオンにして下さい。もしレンダリングに問題があって、2010年7月以前及び１系のビューワで行っていた方法でテクスチャを読み込みたい場合はオフにして下さい。" name="TexturesHTTP" />
+
+<!-- Max Concurrent HTTP GET requests-->
+        <slider label="HTTP GETの要求を同時に受け取れる最大量" name="HTTPFetchMaxRequests" />
+
+<!-- New Texture detail 5 is lowest, 0 is highest -->
+        <text name="TextureDetailLabel">
+            テクスチャの読み込み精度
+        </text>
+        <combo_box name="TextureDetail"
+         width="150">
+            <combo_box.item label="標準品質" name="0" value="0"/>
+            <combo_box.item label="低品質" name="3" value="3"/>
+            <combo_box.item label="テクスチャなし" name="5" value="5"/>
+        </combo_box>
+
+        <text name="Alpha Mask Rendering">
+            アルファマスク・レンダリング：
+        </text>
+
+        <check_box label="「光と影」が有効でない時にアルファマスクをレンダリング" tool_tip="影のオプションが選択されていない時にここにチェックを入れるとアルファマスク（透明テクスチャ）が正確にレンダリングされます。" name="RenderAutoMaskAlphaNonDeferred" />
+        <check_box label="「光と影」が有効の時にアルファマスクをレンダリング" tool_tip="影のオプションが選択されている時にここにチェックを入れると、アルファマスク（透明テクスチャ）が正確にレンダリングされます。" name="RenderAutoMaskAlphaDeferred" />
+
+        <text name="Miscellaneous Rendering">
+            レンダリングその他：
+        </text>
+
+        <check_box label="グローをレンダリング" tool_tip="グロー（輝き）をレンダリングします。影のオプションが有効になっている時は、この効果を無効にするには強度を0にする必要があります。" name="RenderGlow" />
+		<slider label="強度：" tool_tip="グローの強度です。値が大きいほど、光の範囲が広く、スムーズになります。（2がデフォルト）" name="glow_strength" />
+		<check_box label="読み込みの終わっていないアバターを表示" name="RenderUnloadedAvatars" />
+        <slider label="世界を表示する前のプレキャッシングを遅らせる時間" tool_tip="あなたに世界が見える前に、あなたがオンラインになってから他の人に見えるようになるまでの時間。（6秒がデフォルト）" name="PrecachingDelay" />
+        <text name="PrecachingDelayText">
+            秒
+        </text>
+        <slider label="影の品質" tool_tip="文字通り影の品質です。（1がデフォルト） " name="ShadowResolution" />
+        <slider label="地面のテクスチャの精度（再起動が必要）" name="RenderTerrainScale" tool_tip="地面のテクスチャの精度を決定します。値が低いほどテクスチャの圧縮度が高まります。（再起動が必要）" />
+		
+	</panel>
+	
+	
+	<!-- 被写界深度 -->
+
+	<panel label="被写界深度（DOF）" name="DOF panel" >
+	
+        <slider label="カメラのF値（絞り）：" name="CameraFNum" tool_tip="DOF効果を得るためのカメラのF値（絞り）" />
+        <slider label="カメラの焦点距離（mm）：" name="CameraFocal" tool_tip="DOF効果を得るための焦点距離（単位はミリ）" />
+        <slider label="カメラの視野角（画角）：" name="Camera FOV" tool_tip="DOF効果を得るためのカメラの垂直画角（単位は度）" />
+        <slider label="カメラのアスペクト比：" name="CameraAspectRatio" tool_tip="DOF効果を得るためのカメラのアスペクト比" />
+        <slider label="DOF焦点移動時間：" name="CameraFocusTrans" tool_tip="焦点がある場所から次の場所へ遷移するのにかかる時間" />
+       <slider label="DOFレンダリング品質：" name="CameraDoFResScale" tool_tip="ボケの品質やレンダリングの処理時間に影響します。（値が大きいほど品質がよく、低いほど処理時間が短くなります。）" />
+	   
+    </panel>
+	
+</tab_container>
 </panel>
+
