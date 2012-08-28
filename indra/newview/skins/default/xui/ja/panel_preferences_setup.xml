@@ -1,34 +1,71 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="セットアップ" name="Input panel">
-	<layout_stack name="max_bandwidth_layout">
-		<layout_panel name="bandwidth_panel">
-
+	<!-- Deleted Aug.21, 2012
 	<text name="Network:">
 		ネットワーク：
 	</text>
+	-->
+	<layout_stack name="max_bandwidth_layout">
+    <layout_panel name="bandwidth_panel">
 	<text name="Maximum bandwidth">
 		最大帯域幅
 	</text>
 	<text name="text_box2">
 		kbps
 	</text>
-
-		</layout_panel>
-		<layout_panel name="other_settings_panel">
-
+	</layout_panel>
+	<layout_panel name="other_settings_panel">
 	<check_box label="カスタムポート" name="connection_port_enabled"/>
 	<spinner label="ポート番号：" name="connection_port"/>
+	<text name="cache_size_label_l">
+		キャッシュサイズ
+	</text>
+	<text name="text_box5">
+		MB
+	</text>
+	<text name="Cache location">
+		キャッシュの場所：
+	</text>
+
+	<button label="開く" name="open_cache"/>
+	<button label="設定" name="set_cache"/>
+	<button label="初期化" name="reset_cache"/>
+	<button label="キャッシュクリア" name="clear_cache"/>
+	
+	<text name="log_path_desc">
+		チャットログの場所：
+	</text>
+	<button label="開く" name="open_log_path_button-panelsetup"/>
+	<button label="設定" name="log_path_button-panelsetup"/>
+	<button label="初期化" name="reset_logpath"/>
+	<button label="クラッシュログを開く" name="browse_crashlogs"/>
+	<button label="設定フォルダを開く" name="browse_settingsdir"/>
+	
+	
 	<text name="Web:">
-		Web：
+		Webブラウザ：
 	</text>
 	<radio_group name="use_external_browser">
-		<radio_item label="指定のブラウザ（IE や Firefox）を使用" name="external" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。全画面で起動中にはおすすめしません。"/>
-		<radio_item label="内蔵ブラウザを使用" name="internal" tool_tip="内蔵ブラウザでヘルプや Web リンクなどを見ます。[APP_NAME] 内に新しいウィンドウでこのブラウザが開きます。"/>
+		<radio_item label="指定のブラウザ（IE や Firefox）を使用" name="external" tool_tip="デフォルトのシステム Web ブラウザでヘルプや Web リンク先などを見ます。全画面で起動中にはおすすめしません。" value="1"/>
+		<radio_item label="内蔵ブラウザを使用" name="internal" tool_tip="内蔵ブラウザでヘルプや Web リンクなどを見ます。[APP_NAME] 内に新しいウィンドウでこのブラウザが開きます。" value="0"/>
 	</radio_group>
+	
+	<text name="numberwebfloaters_label">
+		Webブラウザの最大ウィンドウ数：
+	</text>
+	<combo_box name="web_number_combobox" tool_tip="Webコンテンツのパネルで一度に開けるブラウザウィンドウの最大数を設定">
+		<combo_box.item label="無制限" name="web_unlimited" value="0" />
+		<combo_box.item label="１画面" name="web_1" value="1" />
+		<combo_box.item label="５画面まで" name="web_5" value="5" />
+		<combo_box.item label="10画面まで" name="web_10" value="10" />
+	</combo_box>
+
 	<check_box initial_value="true" label="プラグインを有効にする" name="browser_plugins_enabled"/>
 	<check_box initial_value="true" label="Cookie を受け入れる" name="cookies_enabled"/>
 	<check_box initial_value="true" label="Javascript を有効にする" name="browser_javascript_enabled"/>
 	<check_box initial_value="false" label="メディアブラウザのポップアップを有効にする" name="media_popup_enabled"/>
+	
+	<!-- 2012/02/22 deleted by Hiroshi Kumaki because of no description in English version>
 	<text name="Software updates:">
 		ソフトウェアアップデート：
 	</text>
@@ -36,11 +73,12 @@
 		<combo_box.item label="自動的にインストール" name="Install_automatically"/>
 		<combo_box.item label="手動でアップデートをダウンロード&amp;インストール" name="Install_manual"/>
 	</combo_box>
+	<2012/02/22 deleted by Hiroshi Kumaki -->
+	
 	<text name="Proxy Settings:">
 		プロキシ設定：
 	</text>
 	<button label="プロキシ設定を調整" label_selected="参照" name="set_proxy"/>
-
-		</layout_panel>
-	</layout_stack>
+	</layout_panel>
+    </layout_stack>
 </panel>

@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu_bar name="Login Menu">
-	<menu label="ミー" name="File">
+	<menu label="ビューワ" name="File">
 		<menu_item_call label="環境設定..." name="Preferences..."/>
 		<menu_item_call label="[APP_NAME] を終了" name="Quit"/>
 	</menu>
 	<menu label="ヘルプ" name="Help">
+		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki" />
+		<menu_item_separator />
+		<!-- Deleted Aug.28, 2012
 		<menu_item_call label="[APP_NAME] ヘルプ" name="Second Life Help"/>
+		-->
 		<menu_item_call label="[APP_NAME] について" name="About Second Life"/>
+		<menu_item_separator name="grid_help_seperator_login"/>
+		<menu_item_call label="[CURRENT_GRID] ヘルプ" name="current_grid_help_login" />
+        <menu_item_call label="[CURRENT_GRID] について" name="current_grid_about_login" />
+		<menu_item_separator/>
 	</menu>
 	<menu_item_check label="デバッグメニューを表示する" name="Show Debug Menu"/>
 	<menu label="デバッグ" name="Debug">
 		<menu_item_call label="デバッグ設定を表示" name="Debug Settings"/>
 		<menu_item_call label="UI/色の設定" name="UI/Color Settings"/>
 		<menu_item_call label="XUI プレビューツール" name="UI Preview Tool"/>
-		<menu label="UI テスト" name="UI Tests"/>
+		<menu label="UI テスト" name="UI Tests">
+			<menu_item_call label="テキストボックス" name="Textbox" />
+			<menu_item_call label="テキストエディタ" name="Text Editor" />
+			<menu_item_call label="ウィジェット" name="Widgets" />
+			<menu_item_call label="インスペクタ" name="Inspectors" />
+		</menu>
 		<menu_item_call label="ウィンドウのサイズを設定..." name="Set Window Size..."/>
 		<menu_item_call label="利用規約を表示" name="TOS"/>
 		<menu_item_call label="クリティカルメッセージを表示" name="Critical"/>
 		<menu_item_call label="Web コンテンツフローターのデバッグテスト" name="Web Content Floater Debug Test"/>
-		<menu label="ログレベルを設定" name="Set Logging Level"/>
+		<menu label="ログレベルを設定" name="Set Logging Level">
+			<menu_item_check name="Debug Level Debug" label="デバッグのみ" />
+			<menu_item_check name="Debug Level Info" label="情報のみ" />
+			<menu_item_check name="Debug Level Warn" label="警告のみ" />
+			<menu_item_check name="Debug Level Error" label="エラーのみ" />
+			<menu_item_check name="Debug Level None" label="デバッグなし" />
+		</menu>
 		<menu_item_check label="グリッドピッカーを表示する" name="Show Grid Picker"/>
 		<menu_item_call label="通知コンソールを表示する" name="Show Notifications Console"/>
 	</menu>

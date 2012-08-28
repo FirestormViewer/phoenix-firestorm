@@ -5,10 +5,26 @@
 	</menu_item_call>
 	<menu_item_call label="編集" name="Edit..."/>
 	<menu_item_call label="制作" name="Build"/>
+	<menu_item_call label="リンクセットで表示" name="show_in_linksets"/>
+	<menu_item_call label="キャラクターで表示" name="show_in_characters"/>
 	<menu_item_call label="開く" name="Open"/>
 	<menu_item_call label="ここに座る" name="Object Sit"/>
 	<menu_item_call label="立ち上がる" name="Object Stand Up"/>
-	<menu_item_call label="オブジェクトのプロフィール" name="Object Inspect"/>
+	<context_menu label="オブジェクト" name="Object Features">
+		<menu_item_call label="オブジェクトのプロフィール" name="Object Inspect"/>
+		<menu_item_call label="検査" name="Object_Inspect_Floater"/>
+		<menu_item_call label="スクリプト情報" name="ScriptInfo"/>
+		<menu_item_call label="リンクする" name="Object Link"/>
+		<menu_item_call label="リンク解除" name="Object Unlink"/>
+		<menu_item_check label="リンクした部分を編集" name="Object Edit Linked Parts"/>
+		<menu_item_separator />
+		<menu_item_call label="コンパイル（Mono）" name="Mono"/>
+		<menu_item_call label="コンパイル（LSL）" name="LSL"/>
+		<menu_item_call label="スクリプトリセット" name="Object Reset Scripts"/>
+		<menu_item_call label="スクリプト実行" name="Object Set Scripts to Running"/>
+		<menu_item_call label="スクリプト停止" name="Object Set Scripts to Not Running"/>
+		<menu_item_call label="スクリプト削除" name="Remove Scripts From Selection"/>
+	</context_menu>
 	<menu_item_call label="ズームイン" name="Zoom In"/>
 	<context_menu label="装着" name="Put On">
 		<menu_item_call label="装着" name="Wear"/>
@@ -19,8 +35,12 @@
 	<context_menu label="管理" name="Remove">
 		<menu_item_call label="嫌がらせの報告" name="Report Abuse..."/>
 		<menu_item_call label="ブロック" name="Object Mute"/>
-		<menu_item_call label="返却" name="Return..."/>
+		<menu_item_call label="ブロック解除" name="Object Unmute"/>
 	</context_menu>
+	<menu_item_separator />
+	<menu_item_call label="テクスチャ更新" name="Texture Refresh"/>
+	<menu_item_call label="表示しない" name="Derender"/>
+	<menu_item_call label="返却" name="Return..."/>
 	<menu_item_call label="取る" name="Pie Object Take"/>
 	<menu_item_call label="コピーを取る" name="Take Copy"/>
 	<menu_item_call label="支払う" name="Pay..."/>

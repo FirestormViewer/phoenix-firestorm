@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="UI-Pref" name="Display panel">
+<tab_container label="Firestorm Prefs" name="tabs" >
+
+
+    <!-- 一般 -->
+	
+    <panel label="一般" name="UI Prefs Panel" >
+
+        <text name="UI Size:" >
+            UIサイズ（副作用の可能性あり）：
+        </text>
+        <slider name="ui_scale_slider" />
+
+        <text name="HoverTipText">
+            ヒント：
+        </text>
+
+        <check_box label="マウスを重ねるとヒントを表示（最初に設定）" name="ShowHoverTips" tool_tip="アバターやその他インワールドのものにマウスを重ねるとヒントが表示されるようにします。ヒントを使うにはまず最初にここにチェックを入れて下さい。" />
+        <check_box label="全てのオブジェクトに表示" tool_tip="インワールドのオブジェクトについてのヒントを表示する場合にチェックして下さい。" name="ShowAllHoverTips" />
+        <check_box label="土地に表示" tool_tip="土地についてのヒントを表示する場合にチェックして下さい。" name="ShowLandHoverTips" />
+
+        <text name="tooltip_textbox">
+           ヒント表示までの時間：
+        </text>
+		
+        <slider label="ツール：" name="ToolTipDelay_slider" tool_tip="ボタンのようなユーザーインターフェイスに関するヒントを表示するまでの時間。（0.7秒がデフォルト）" />
+        <text name="ToolTipDelay_text">
+            秒
+        </text>
+		
+        <slider label="アバター：" name="AvatarInspectorTooltipDelay_slider" tool_tip="アバターに関するヒントを表示するまでの時間。（0.35秒がデフォルト）"  />
+        <text name="AvatarInspectorTooltipDelay_text">
+            秒
+        </text>
+		
+        <slider label="オブジェクト" name="ObjectInspectorTooltipDelay_slider" tool_tip="オブジェクトに関するヒントを表示するまでの時間。（0.35秒がデフォルト）" />
+        <text name="ObjectInspectorTooltipDelay_text">
+            秒
+        </text>
+
+		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
+
+		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
+
+		<text name="ScriptDialogsPerObjectLabel">
+			オブジェクトあたりのスクリプト情報表示：
+		</text>
+		<combo_box name="ScriptDialogPerObjectDropdown">
+			<combo_box.item label="１つのオブジェクトに対し１個" name="ScriptDialogOption_0" value="0"/>
+			<combo_box.item label="１つのオブジェクト及びチャンネルに対して１個" name="ScriptDialogOption_1" value="1"/>
+			<combo_box.item label="無制限" name="ScriptDialogOption_2" value="2"/>
+		</combo_box>
+      
+        <check_box label="スクリプトダイアログを右上に表示" name="ShowScriptDialogsTopRight" tool_tip="ここにチェックを入れると、スクリプトが出すダイアログ通知を画面の右上に表示します。（旧式の１系スタイル）" />
+        <check_box label="グループ通知や支払い通知を右上に表示" name="ShowGroupNoticesTopRight" tool_tip="ここにチェックを入れると、グループ通知や支払い通知などを画面の右上に表示します。（旧式の１系スタイル）" />
+        <text name="GroupTopRightRequiresRestart">
+            （再起動が必要）
+        </text>
+
+        <check_box name="ButtonFlashing" label="ボタンの点滅設定"/>
+        <slider label="ボタンの点滅回数：" tool_tip="何回ボタンを点滅させるかを設定します。" name="ButtonsFlashCount" />
+        <slider label="ボタン点滅の速さ：" tool_tip="ボタンが点滅する速さをHzで設定します。IMの通知に使用します。" name="ButtonFlashRate" />
+        <text name="ButtonFlashRateText">
+            Hz
+        </text>
+    </panel>
+	
+
+    <!-- トースト -->
+	
+    <panel label="トースト" name="UI-toasts-tab" >
+        <text name="ToastSettings">
+            通知の表示設定（ポップアップ、コンソール、トースト）：
+		</text>
+        <slider label="一番下のトーストと画面下のインターフェイスとの間隔" tool_tip="画面の下にあるユーザーインターフェイスと一番下のトーストとの間隔を設定します。" name="ToastSpace" />
+        <text name="ToastSpaceText">
+            ピクセル
+        </text>
+        <slider label="通知トースト表示時間：" tool_tip="通知のトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastLifetime" />
+        <text name="ToastLifetimeText">
+            秒
+        </text>
+        <slider label="ヒントトースト表示時間：" tool_tip="ヒントのトーストがフェードアウトし始めるまでの表示時間を設定します。" name="TipToastLifetime" />
+        <text name="TipToastLifetimeText">
+            秒
+        </text>
+        <slider label="周辺チャットトースト表示時間：" tool_tip="周辺チャットを表示するトーストがフェードアウトし始めるまでの表示時間を設定します。" name="NearbyToastLifetime" />
+        <text name="NearbyToastLifetimeText">
+            秒
+        </text>
+        <slider label="周辺チャットトーストの高さ：" tool_tip="周辺チャットを表示するトーストの高さを設定します。" name="FSNearbyChatToastsOffset" />
+        <text name="FSNearbyChatToastsOffsetText">
+            ピクセル
+        </text>
+        <slider label="周辺チャットのフェードアウト時間：" tool_tip="周辺チャットを表示するトーストがフェードアウトを始めて完全に消えるまでの時間を設定します。" name="NearbyToastFadingTime" />
+        <text name="NearbyToastFadingTimeText">
+            秒
+        </text>
+        <slider label="起動時トースト表示時間：" tool_tip="起動時に表示されるトーストがフェードアウトし始めるまでの表示時間を設定します。" name="StartupToastLifetime" />
+        <text name="StartupToastLifetimeText">
+            秒
+        </text>
+        <slider label="標準トースト表示時間：" tool_tip="その他の一般的なトーストがフェードアウトし始めるまでの表示時間を設定します。" name="ToastFadingTime" />
+        <text name="ToastFadingTimeText">
+            秒
+        </text>
+        <slider label="トーストとトーストの間隔：" tool_tip="トーストと別のトーストとの間隔をピクセルで設定します。" name="ToastGap" />
+        <text name="ToastGapText">
+            ピクセル
+        </text>
+        <slider label="トーストの高さの限界：" tool_tip="たくさんのトーストが一度に表示される場合に、表示される高さの限界を設定します。" name="OverflowToastHeight" />
+        <text name="OverflowToastHeightText">
+            ピクセル
+        </text>
+        <slider label="周辺チャットトーストの幅：" tool_tip="周辺チャットを表示する幅を、画面に対するパーセントで設定します。" name="NearbyToastWidth" />
+        <text name="NearbyToastWidthText">
+            %
+        </text>
+		<check_box label="トーストは必ず最前面に表示" name="FSShowToastsInFront" />
+		
+	</panel>
+	
+	
+    <!-- フォント -->
+	
+    <panel label="フォント" name="UI-font-tab" >
+
+        <text name="tooltip_textbox1">
+           フォント種類：
+        </text>
+        <combo_box name="Fontsettingsfile">
+            <combo_box.item label="Deja Vu" name="tt_item1" value="fonts.xml" />
+            <combo_box.item label="Ubuntuフォントファミリー" name="tt_item2" value="fonts_ubuntu.xml" />
+            <combo_box.item label="Liberation" name="tt_item3" value="fonts_liberation.xml" />
+            <combo_box.item label="Droid Sans" name="tt_item4" value="fonts_droid.xml" />
+            <combo_box.item label="Mobi Sans" name="tt_item5" value="fonts_mobi.xml" />
+            <combo_box.item label="Roboto" name="tt_item6" value="fonts_roboto.xml" />
+        </combo_box>
+        <text name="tooltip_textbox2">
+           （再起動が必要）
+        </text>
+
+        <text name="tooltip_textbox5">
+           フォントサイズ：
+        </text>
+        <spinner name="font_size_adj_slider" />
+        <text name="tooltip_textbox6" >
+           ポイント（再起動が必要）
+0がデフォルト。あまり大きいサイズはお勧めしません。
+        </text>
+
+        <text name="tooltip_textbox3">
+           チャットの行間：
+        </text>
+        <spinner name="chat_line_spacing_slider" />
+        <text name="tooltip_textbox4">
+          ピクセル（再起動が必要）
+0が２／３系のデフォルト、2が１系のデフォルトです。
+        </text>
+
+        <text name="Label_FolderItemViewHeight">
+           フォルダ表示の高さ：
+        </text>
+        <spinner name="FSFolderViewItemHeight" />
+        <text name="Label_FolderItemViewHeight_Scale">
+          pixels (requires restart)
+20が２／３系のデフォルト、18が１系のデフォルトです。
+        </text>
+
+    </panel>
+	
+</tab_container>
+</panel>
+
