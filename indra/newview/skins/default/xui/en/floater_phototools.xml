@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 <floater
-open_positioning="left"
+positioning="right"
 can_resize="false"
 can_dock="false"
 can_close="true"
 can_minimize="true"
-height="555"
+height="557"
 width="285"
 layout="topleft"
 save_rect="true"
@@ -25,22 +25,17 @@ top="0"
 left="0"
 tab_height="30"
 tab_group="0"
-tab_width="55"
+tab_width="41"
 tab_position="top">
 	
 <panel
 follows="all"
-name="ShadLights"
+name="EnvironmentTab"
 layout="topleft"
 width="285"
 top="0"
-label="Tools 1"
+label="WL"
 left="0">
-
-
-
-
-
 
 <panel
 follows="top|left"
@@ -277,15 +272,15 @@ height="20"
 word_wrap="true"
 width="135"/>
 
-			   	   <view_border
-     bevel_style="none"
-follows="left|top"
-     height="0"
-     layout="topleft"
-     left="10"
-     name="horiz_separator"
-     top_pad="-7"
-	 width="100"/>
+			<view_border
+			bevel_style="none"
+			follows="left|top"
+			height="0"
+			layout="topleft"
+			left="10"
+			name="horiz_separator"
+			top_pad="-7"
+			width="100"/>
 
 
 			<menu
@@ -562,18 +557,18 @@ background_visible="true">
 		top_pad="15"
 		width="80"
 		layout="topleft"
-		tool_tip="Determines the resolution/quality of water reflections. In order to see the changes to take effect, you must toggle the check box below."
+		tool_tip="Determines the resolution/quality of water reflections. In order for the changes to take effect, you must toggle off and on the 'Basic Shaders' check box below. Also, whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Tools 2'."
 		value="Resolution"/>
         <combo_box
         control_name="RenderWaterRefResolution"
 		enabled_control="VertexShaderEnable"
         height="22"
         layout="topleft"
-        left_pad="15"
+        left_pad="65"
         top_delta="-5"
 		follows="left|top"
         name="ReflectionRescombo"
-        width="165">
+        width="115">
         <combo_box.item
         label="Decent"
         name="0"
@@ -583,19 +578,19 @@ background_visible="true">
         name="1"
         value="512"/>
         <combo_box.item
-        label="Very Good"
+        label="Very Good          - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
         name="2"
         value="1024"/>
         <combo_box.item
-        label="Excellent"
+        label="Excellent            - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
         name="3"
         value="1536"/>
         <combo_box.item
-        label="Outstanding"
+        label="Outstanding      - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
         name="4"
         value="2048"/>
         <combo_box.item
-        label="Life-like"
+        label="Life-Like             - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
         name="5"
         value="4096"/>
         </combo_box>
@@ -623,7 +618,7 @@ background_visible="true">
 		tool_tip="This should ALWAYS be on. When you change the resolution setting above you must turn this box off and on for the change to take effect."
 		value="Basic Shaders  - Leave ON! (see tool tip!)"/>
 
-				<check_box
+		<check_box
 		control_name="RenderTransparentWater"
 		height="16"
 		initial_value="true"
@@ -676,7 +671,7 @@ follows="all"
 layout="topleft"
 width="285"
 top="0"
-label="Tools 2"
+label="Light"
 left="0">
 
 <panel
@@ -696,7 +691,7 @@ follows="left|top"
 layout="topleft"
 left="10"
 font="SansSerif"
-value="Shadows and Lights Settings"
+value="Lights and Shadows Settings"
 top_pad=""
 height="17"
 width="200"/>
@@ -708,7 +703,7 @@ layout="topleft"
 top_pad="5"
 left="4"
 width="275"
-height="75"
+height="70"
 border_visible="true"
 bg_alpha_color="DkGray_66" 
 background_visible="true">
@@ -719,7 +714,7 @@ background_visible="true">
 		enabled_control="VertexShaderEnable"
 		height="16"
 		initial_valuthe="true"
-		label="Enable Shadows and Dynamic Lights"
+		label="Enable Lighting and Shadows"
 		layout="topleft"
 		left="5"
 		name="UseLightShaders1"
@@ -751,7 +746,7 @@ background_visible="true">
 		follows="right|left"
 		name="Misc"
 		left="5"
-		top_pad="5"
+		top_pad="3"
 		tear_off="false">
 		<menu_item_check
 
@@ -825,7 +820,7 @@ layout="topleft"
 top_pad="5"
 left="4"
 width="275"
-height="75"
+height="95"
 border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">
@@ -835,7 +830,7 @@ background_visible="true">
 						left="5"
 						value="Shd. Res"
 						top_pad="10"
-						tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Tools 3' under Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
+						tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
@@ -874,7 +869,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -887,7 +882,7 @@ background_visible="true">
 						left="5"
 						value="Shd. Blur"
 						top_pad="5"
-						tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible."
+						tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
 						width="80"/>
 						<slider_bar
 						decimal_digits="2"
@@ -896,13 +891,11 @@ background_visible="true">
 						follows="left|right"
 						height="16"
 						increment="0.01"
-					
 						layout="topleft"
 						left_pad="-20"
 						min_val="0.00"
 						max_val="4"
 						top_delta="-2"
-						
 						width="127" />
 						<spinner
 						can_edit_text="true"
@@ -914,7 +907,7 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="2"
 						follows="top|left"
-						max_val="45"
+						max_val="1000"
 						min_val="0"
 						width="53"
 						increment="0.1"
@@ -927,7 +920,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -940,7 +933,7 @@ background_visible="true">
 						left="5"
 						value="Blur. Dist."
 						top_pad="5"
-						tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin."
+						tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
@@ -948,7 +941,6 @@ background_visible="true">
 						follows="left|right"
 						height="16"
 						increment="0.01"
-						
 						decimal_digits="2"
 						layout="topleft"
 						left_pad="-20"
@@ -966,7 +958,7 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="2"
 						follows="top|left"
-						max_val="1"
+						max_val="2"
 						min_val="0"
 						width="53"
 						increment="0.01"
@@ -979,31 +971,20 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
 						name="0"
 						value="0"/>
 						</combo_box>
-		</panel>
-		
-		<panel                        
-follows="top|left"
-layout="topleft"
-top_pad="5"
-left="4"
-width="275"
-height="75"
-border_visible="true"
-bg_alpha_color="DkGray_66"
-background_visible="true">
+						
 						<text
 						follows="top|left"
 						layout="topleft"
 						left="5"
 						value="FOV Cutoff"
-						top_pad="10"
+						top_pad="5"
 						tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
 						width="80"/>
 						<slider_bar
@@ -1013,7 +994,6 @@ background_visible="true">
 						height="16"
 						increment="0.1"
 						decimal_digits="2"
-						
 						layout="topleft"
 						left_pad="-20"
 						min_val="0"
@@ -1044,118 +1024,433 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
 						name="0.8"
 						value="0.8"/>
 						</combo_box>
-					
-						<text      
+		</panel>
+		
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="45"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+		<menu
+		mouse_opaque="false"
+		drop_shadow="false"
+		width="230"
+		create_jump_keys="false"
+		label=""
+		follows="right|left"
+		name="Misc"
+		left="5"
+		top_pad="7"
+		tear_off="false">
+		<menu_item_check
+		label="Show Bounding Boxes for All Lights in Scene"
+		name="Lights">
+		<menu_item_check.on_check
+		function="Advanced.CheckInfoDisplay"
+		parameter="lights" />
+		<menu_item_check.on_click
+		function="Advanced.ToggleInfoDisplay"
+		parameter="lights" />
+		</menu_item_check>
+		<menu_item_check
+
+			label="Show Light Radius for Selected Light(s)"
+		name="Show Light Radius for Selection">
+		<menu_item_check.on_check
+		control="RenderLightRadius" />
+		<menu_item_check.on_click
+		function="Tools.ShowSelectionLightRadius" />
+		</menu_item_check>
+			</menu>
+		</panel>
+
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="0"
+width="285"
+height="22"
+bg_alpha_color="EmphasisColor"
+border_visible="true"
+border_thickness="1"
+background_visible="true">
+
+<text
+follows="left|top"
+layout="topleft"
+left="10"
+font="SansSerif"
+value="Ambient Occlusion Settings"
+top_pad=""
+tool_tip=""
+height="17"
+width="250"/>
+</panel>
+
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="30"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+		<check_box
+		control_name="RenderDeferredSSAO"
+		enabled_control="RenderDeferred"
+		height="16"
+		initial_value="true"
+		label="Enable Ambient Occlusion (Depth Perception)"
+		layout="topleft"
+		left="5"
+		name="ssaolabel"
+		tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
+		top_pad="10"
+		width="110">
+		</check_box>
+		<!--slider
+		control_name="ExodusRenderSSAOEffect"
+		can_edit_text="true"
+		decimal_digits="3"
+		follows="left|top"
+		height="16"
+		increment=".001"
+		initial_value="40"
+		label="Quality"
+		label_width="55"
+		layout="topleft"
+		left="6"
+		max_val="3"
+		min_val="0"
+		name="SSAOQuality2"
+		top_pad="2"
+		width="240"/-->
+		
+		</panel>
+		
+		<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="75"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+						<text
 						follows="top|left"
 						layout="topleft"
 						left="5"
-						value="Sun Offset"
-						top_pad="5"
-						tool_tip="Sun Shadow Offset: If you notice that objects and their shadows caused by the Sun/Moon do not come together, adjust this setting."
+						value="Scale"
+						top_pad="10"
+						tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
-						control_name="RenderShadowOffset"
+						control_name="RenderSSAOScale"
 						follows="left|right"
 						height="16"
-						increment="0.001"
-						decimal_digits="2"
+						increment="1"
+						decimal_digits="0"
 						layout="topleft"
 						left_pad="-20"
-						min_val="-10"
-						max_val="10"
+						min_val="0"
+						max_val="10000"
 						top_delta="-2"
-						tool_tip=""
 						width="127" />
 						<spinner
 						can_edit_text="true"
-						control_name="RenderShadowOffset"
+						control_name="RenderSSAOScale"
 						top_delta="-3"
 						height=""
 						label=""
 						label_width="0"
 						left_pad="3"
-						decimal_digits="3"
+						decimal_digits="0"
 						follows="top|right"
-						max_val="50"
-						min_val="-50"
+						max_val="10000000"
+						min_val="-1000000"
 						width="53"
-						increment="0.1"
+						increment="1"
 						border_visible="false"/>
 						<combo_box
-						control_name="RenderShadowOffset"
+						control_name="RenderSSAOScale"
 						follows="top|left"
 						height="22"
 						layout="topleft"
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
-						name="0.010"
-						value="0.010"/>
+						name="500"
+						value="500"/>
+						</combo_box>
+
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Max Scale"
+						top_pad="5"
+						tool_tip="Controls maximum screen radius from which to sample from, to avoid graphics card cache misses and associated large performance penalty. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="RenderSSAOMaxScale"
+						follows="left|right"
+						height="16"
+						increment="1"
+						decimal_digits="0"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="10000"
+						top_delta="-2"
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="RenderSSAOMaxScale"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="0"
+						follows="top|right"
+						max_val="100000"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="RenderSSAOMaxScale"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						name="200"
+						value="200"/>
+						</combo_box>
+
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Factor"
+						top_pad="5"
+						tool_tip="Scaling factor for the effect (larger is darker). It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
+						width="80"/>
+						<slider_bar
+						decimal_digits="2"
+						can_edit_text="true"
+						control_name="RenderSSAOFactor"
+						follows="left|right"
+						height="16"
+						increment="1"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="250"
+						top_delta="-2"
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="RenderSSAOFactor"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="2"
+						follows="top|right"
+						max_val="100000"
+						min_val="0"
+						width="53"
+						increment="0.01"
+						border_visible="false"/>
+						<combo_box
+						control_name="RenderSSAOFactor"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value=".30"/>
+						</combo_box>
+</panel>
+
+
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="0"
+width="285"
+height="22"
+bg_alpha_color="EmphasisColor"
+border_visible="true"
+border_thickness="1"
+background_visible="true">
+
+<text
+follows="left|top"
+layout="topleft"
+left="10"
+font="SansSerif"
+value="Specular Highlight Settings"
+top_pad=""
+height="17"
+tool_tip="A specular highlight is the bright spot of light that appears on shiny objects when illuminated.(wikipedia)"
+width="285"/>
+</panel>
+
+		<panel                        
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="50"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+						
+					
+						<text      
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Smoothness"
+						top_pad="10"
+						tool_tip="Smoothness (Specular Exponent) is a user-chosen value that controls the apparent smoothness of the surface. "
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="RenderSpecularExponent"
+						follows="left|right"
+						height="16"
+						increment="1"
+						decimal_digits="0"
+						layout="topleft"
+						left_pad="-20"
+						min_val="-282"
+						max_val="10000"
+						top_delta="-2"
+						
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="RenderSpecularExponent"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="0"
+						follows="top|right"
+						max_val="10000"
+						min_val="-282"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="RenderSpecularExponent"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						name="384.000"
+						value="384.000"/>
 						</combo_box>
 						
 						<text
 						follows="top|left"
 						layout="topleft"
 						left="5"
-						value="Proj Offset"
+						value="Resolution"
 						top_pad="5"
-						tool_tip="Projection Light Shadow Offset: If you notice that objects and their shadows caused by the Projection Lights do not come together, adjust this setting."
+						tool_tip="Resolution (SpecularResX) Adjusts the resolution (quality) of the specular mapping."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
-						control_name="RenderSpotShadowOffset"
+						control_name="RenderSpecularResX"
 						follows="left|right"
 						height="16"
-						increment="0.001"
-						decimal_digits="3"
+						increment="1"
+						decimal_digits="0"
 						layout="topleft"
 						left_pad="-20"
-						min_val="-1"
-						max_val="1"
+						min_val="0"
+						max_val="8192"
 						top_delta="-2"
 						tool_tip=""
 						width="127" />
 						<spinner
 						can_edit_text="true"
-						control_name="RenderSpotShadowOffset"
+						control_name="RenderSpecularResX"
 						top_delta="-3"
 						height=""
 						label=""
 						label_width="0"
 						left_pad="3"
-						decimal_digits="3"
+						decimal_digits="0"
 						follows="top|right"
-						max_val="2"
-						min_val="-2"
+						max_val="8192"
+						min_val="0"
 						width="53"
-						increment="0.001"
+						increment="1"
 						border_visible="false"/>
 						<combo_box
-						control_name="RenderSpotShadowOffset"
+						control_name="RenderSpecularResX"
 						follows="top|left"
 						height="22"
 						layout="topleft"
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
-						name="0.040"
-						value="0.040"/>
+						name="512"
+						value="512"/>
 						</combo_box>
 		<!--slider
 		can_edit_text="true"
@@ -1213,300 +1508,13 @@ background_visible="true">
 
 </panel>
 
-
-<panel
-follows="top|left"
-layout="topleft"
-top_pad="5"
-left="4"
-width="275"
-height="45"
-border_visible="true"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-
-		<menu
-		mouse_opaque="false"
-		drop_shadow="false"
-		width="230"
-		create_jump_keys="false"
-		label=""
-		follows="right|left"
-		name="Misc"
-		left="5"
-		top_pad="7"
-		tear_off="false">
-		<menu_item_check
-		label="Show Bounding Boxes for All Lights in Scene"
-		name="Lights">
-		<menu_item_check.on_check
-		function="Advanced.CheckInfoDisplay"
-		parameter="lights" />
-		<menu_item_check.on_click
-		function="Advanced.ToggleInfoDisplay"
-		parameter="lights" />
-		</menu_item_check>
-		<menu_item_check
-
-			label="Show Light Radius for Selected Light(s)"
-		name="Show Light Radius for Selection">
-		<menu_item_check.on_check
-		control="RenderLightRadius" />
-		<menu_item_check.on_click
-		function="Tools.ShowSelectionLightRadius" />
-		</menu_item_check>
-			</menu>
-		</panel>
-
-<panel
-follows="top|left"
-layout="topleft"
-top_pad="10"
-left="0"
-width="285"
-height="22"
-bg_alpha_color="EmphasisColor"
-border_visible="true"
-border_thickness="1"
-background_visible="true">
-
-<text
-follows="left|top"
-layout="topleft"
-left="10"
-font="SansSerif"
-value="Ambient Occlusion Settings"
-top_pad=""
-tool_tip=""
-height="17"
-width="250"/>
-</panel>
-
-<panel
-follows="top|left"
-layout="topleft"
-top_pad="5"
-left="4"
-width="275"
-height="35"
-border_visible="true"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-		<check_box
-		control_name="RenderDeferredSSAO"
-		enabled_control="RenderDeferred"
-		height="16"
-		initial_value="true"
-		label="Enable Ambient Occlusion (Depth Perception)"
-		layout="topleft"
-		left="5"
-		name="ssaolabel"
-		tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
-		top_pad="15"
-		width="110">
-		</check_box>
-		<!--slider
-		control_name="ExodusRenderSSAOEffect"
-		can_edit_text="true"
-		decimal_digits="3"
-		follows="left|top"
-		height="16"
-		increment=".001"
-		initial_value="40"
-		label="Quality"
-		label_width="55"
-		layout="topleft"
-		left="6"
-		max_val="3"
-		min_val="0"
-		name="SSAOQuality2"
-		top_pad="2"
-		width="240"/-->
-		
-		</panel>
-		
-		<panel
-follows="top|left"
-layout="topleft"
-top_pad="5"
-left="4"
-width="275"
-height="75"
-border_visible="true"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-						<text
-						follows="top|left"
-						layout="topleft"
-						left="5"
-						value="Scale"
-						top_pad="10"
-						tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-						width="80"/>
-						<slider_bar
-						can_edit_text="true"
-						control_name="RenderSSAOScale"
-						follows="left|right"
-						height="16"
-						increment="1"
-						decimal_digits="0"
-						layout="topleft"
-						left_pad="-20"
-						min_val="0"
-						max_val="2000"
-						top_delta="-2"
-						width="127" />
-						<spinner
-						can_edit_text="true"
-						control_name="RenderSSAOScale"
-						top_delta="-3"
-						height=""
-						label=""
-						label_width="0"
-						left_pad="3"
-						decimal_digits="0"
-						follows="top|right"
-						max_val="2000"
-						min_val="0"
-						width="53"
-						increment="1"
-						border_visible="false"/>
-						<combo_box
-						control_name="RenderSSAOScale"
-						follows="top|left"
-						height="22"
-						layout="topleft"
-						left_pad="0"
-						top_delta="0"
-						width="20"
-						tool_tip="Click here to reset this setting to its default."
-						visible="true">
-						<combo_box.item
-						label="Default"
-						name="500"
-						value="500"/>
-						</combo_box>
-
-						<text
-						follows="top|left"
-						layout="topleft"
-						left="5"
-						value="Max Scale"
-						top_pad="5"
-						tool_tip="Controls maximum screen radius from which to sample from, to avoid graphics card cache misses and associated large performance penalty. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-						width="80"/>
-						<slider_bar
-						can_edit_text="true"
-						control_name="RenderSSAOMaxScale"
-						follows="left|right"
-						height="16"
-						increment="1"
-						decimal_digits="0"
-						layout="topleft"
-						left_pad="-20"
-						min_val="0"
-						max_val="400"
-						top_delta="-2"
-						width="127" />
-						<spinner
-						can_edit_text="true"
-						control_name="RenderSSAOMaxScale"
-						top_delta="-3"
-						height=""
-						label=""
-						label_width="0"
-						left_pad="3"
-						decimal_digits="0"
-						follows="top|right"
-						max_val="400"
-						min_val="0"
-						width="53"
-						increment="1"
-						border_visible="false"/>
-						<combo_box
-						control_name="RenderSSAOMaxScale"
-						follows="top|left"
-						height="22"
-						layout="topleft"
-						left_pad="0"
-						top_delta="0"
-						width="20"
-						tool_tip="Click here to reset this setting to its default."
-						visible="true">
-						<combo_box.item
-						label="Default"
-						name="200"
-						value="200"/>
-						</combo_box>
-
-						<text
-						follows="top|left"
-						layout="topleft"
-						left="5"
-						value="Factor"
-						top_pad="5"
-						tool_tip="Scaling factor for the effect (larger is darker). It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-						width="80"/>
-						<slider_bar
-						decimal_digits="2"
-						can_edit_text="true"
-						control_name="RenderSSAOFactor"
-						follows="left|right"
-						height="16"
-						increment="0.01"
-						layout="topleft"
-						left_pad="-20"
-						min_val="0"
-						max_val="10"
-						top_delta="-2"
-						width="127" />
-						<spinner
-						can_edit_text="true"
-						control_name="RenderSSAOFactor"
-						top_delta="-3"
-						height=""
-						label=""
-						label_width="0"
-						left_pad="3"
-						decimal_digits="2"
-						follows="top|right"
-						max_val="10"
-						min_val="0"
-						width="53"
-						increment="0.01"
-						border_visible="false"/>
-						<combo_box
-						control_name="RenderSSAOFactor"
-						follows="top|left"
-						height="22"
-						layout="topleft"
-						left_pad="0"
-						top_delta="0"
-						width="20"
-						tool_tip="Click here to reset this setting to its default."
-						visible="true">
-						<combo_box.item
-						label="Default"
-						value=".30"/>
-						</combo_box>
-
-
-
-		
-		
-</panel>
-
-
-
-
-
 </panel>
 
 <panel
 follows="top|left"
 layout="topleft"
 top_pad="0"
-label="Tools 3"
+label="DoF/Glow"
 left="0">
 
 <panel
@@ -1635,7 +1643,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1659,7 +1667,7 @@ background_visible="true">
 						layout="topleft"
 						left_pad="-20"
 						min_val=".1"
-						max_val="200"
+						max_val="180"
 						top_delta="-2"
 						tool_tip=""
 						width="127"/>
@@ -1673,8 +1681,8 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="1"
 						follows="left|top"
-						max_val="200"
-						min_val=".1"
+						max_val="360"
+						min_val="-360"
 						width="53"
 						increment="0.1"
 						border_visible="false"/>
@@ -1686,7 +1694,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1728,7 +1736,7 @@ background_visible="true">
 						decimal_digits="2"
 						follows="top|left"
 						max_val="128"
-						min_val=".01"
+						min_val="-128"
 						width="53"
 						increment=".01"
 						border_visible="false"/>
@@ -1740,7 +1748,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1765,7 +1773,7 @@ background_visible="true">
 						layout="topleft"
 						left_pad="-20"
 						min_val="1"
-						max_val="1000"
+						max_val="2000"
 						top_delta="-2"
 						tool_tip=""
 						width="127" />
@@ -1779,8 +1787,8 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="0"
 						follows="top|left"
-						max_val="1500"
-						min_val="1"
+						max_val="5000"
+						min_val="0"
 						width="53"
 						increment="1"
 						border_visible="false"/>
@@ -1792,7 +1800,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1845,7 +1853,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1858,7 +1866,7 @@ background_visible="true">
 						left="5"
 						value="CoC"
 						top_pad="5"
-						tool_tip="Circle of Confusion: This is a VERY IMPORTANT SETTING. It determines the strength of the blur itself. It does not change the depth of field, it adjusts how much those objects outside of it will be blurry."
+						tool_tip="Circle of Confusion: This is a VERY IMPORTANT SETTING. It determines the strength of the blur itself. It does not change the depth of field, it adjusts how much those objects outside of it will be blurry. Also you can access negative values for interesting effects in the spinner text box."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
@@ -1884,7 +1892,7 @@ background_visible="true">
 						decimal_digits="2"
 						follows="top|left"
 						max_val="150"
-						min_val=".00"
+						min_val="-150"
 						width="53"
 						increment="0.01"
 						border_visible="false"/>
@@ -1896,7 +1904,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1909,7 +1917,7 @@ background_visible="true">
 						left="5"
 						value="Resolution"
 						top_pad="5"
-						tool_tip="Resolution: This determines the quality of the DOF Effect. For non-photography uses '.25' is good. For setting up shots '.50' or '.70' is very nice. For shooting quality images '1.00' is best. High values will slow down your FPS!"
+						tool_tip="Resolution: This determines the quality of the DOF Effect. For non-photography uses '.25' is good. For setting up shots '.50' or '.70' is very nice. For shooting quality images '1.00' is best. High values will slow down your FPS! Also you can access negative values for interesting effects in the spinner text box."
 						width="80"/>
 						<slider_bar
 						can_edit_text="true"
@@ -1934,8 +1942,8 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="2"
 						follows="top|left"
-						max_val="1"
-						min_val="0"
+						max_val="100"
+						min_val="-100"
 						width="53"
 						increment="0.01"
 						border_visible="false"/>
@@ -1947,7 +1955,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -1998,7 +2006,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2010,7 +2018,7 @@ background_visible="true">
 <panel
 follows="top|left"
 layout="topleft"
-top_pad="10"
+top_pad="5"
 left="0"
 width="285"
 height="22"
@@ -2098,7 +2106,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2134,7 +2142,7 @@ background_visible="true">
 						layout="topleft"
 						left_pad="-20"
 						min_val="1"
-						max_val="16"
+						max_val="50"
 						top_delta="-2"
 						tool_tip=""
 						width="127" />
@@ -2148,7 +2156,7 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="0"
 						follows="top|left"
-						max_val="16"
+						max_val="50"
 						min_val="1"
 						width="53"
 						increment="1"
@@ -2161,7 +2169,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2186,7 +2194,7 @@ background_visible="true">
 						layout="topleft"
 						left_pad="-20"
 						min_val="0"
-						max_val="10"
+						max_val=".5"
 						top_delta="-2"
 						tool_tip=""
 						width="127" />
@@ -2198,12 +2206,12 @@ background_visible="true">
 						label=""
 						label_width="0"
 						left_pad="3"
-						decimal_digits="3"
+						decimal_digits="5"
 						follows="top|left"
 						max_val="10"
 						min_val="0"
 						width="53"
-						increment=".001"
+						increment=".00001"
 						border_visible="false"/>
 						<combo_box
 						control_name="RenderGlowStrength"
@@ -2213,7 +2221,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2237,7 +2245,7 @@ background_visible="true">
 						layout="topleft"
 						left_pad="-20"
 						min_val="0"
-						max_val="5"
+						max_val="2"
 						top_delta="-2"
 						tool_tip=""
 						width="127" />
@@ -2264,7 +2272,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2315,7 +2323,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2366,7 +2374,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2404,7 +2412,7 @@ background_visible="true">
 						left_pad="3"
 						decimal_digits="3"
 						follows="top|left"
-						max_val="1"
+						max_val="1000"
 						min_val="0"
 						width="53"
 						increment="0.001"
@@ -2417,7 +2425,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2433,7 +2441,7 @@ background_visible="true">
 follows="left|top"
 layout="topleft"
 top_pad="0"
-label="Tools 4"
+label="Gen"
 left="0">
 <panel
 follows="top|left"
@@ -2513,7 +2521,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2564,7 +2572,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2615,7 +2623,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2666,7 +2674,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2717,7 +2725,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2768,7 +2776,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2819,7 +2827,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2870,7 +2878,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2921,7 +2929,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -2972,7 +2980,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -3023,7 +3031,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -3075,7 +3083,7 @@ background_visible="true">
 						left_pad="0"
 						top_delta="0"
 						width="20"
-						tool_tip="Click here to reset this setting to its default."
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
 						label="Default"
@@ -3145,14 +3153,14 @@ background_visible="true">
 						width="240" />
 						<check_box
 						follows="left|top"
-						control_name="AgentPause"
+						control_name="RenderAnisotropic"
 						height="16"
 						initial_value="true"
-						label="Freeze updates to World (pause everything)"
+						label="Anisotropic Filtering (texture crispness)"
 						layout="topleft"
 						left="5"
-						tool_tip="This prevents your viewer from getting updates from the server about object and avatar position and other data. Can help in reducing lag and is useful if nothing is meant to move. You will still receive IM and Notices, it only affects rendering!"
-						name="Agent Pause feature"
+						tool_tip="This enables higher texture crispness.love"
+						name="Anisotrpic"
 						top_pad="2"
 						width="240"/>
 
@@ -3375,7 +3383,7 @@ background_visible="true">
 follows="left|top"
 layout="topleft"
 top_pad="0"
-label="Tools 5"
+label="Aids"
 left="0">
 
 <panel
@@ -3408,7 +3416,7 @@ label=""
 follows="left|top"
 name="Misc"
 left="7"
-top_pad="10"
+top_pad="5"
 tear_off="false">
 
 		<!--menu_item_check
@@ -3476,16 +3484,15 @@ tear_off="false">
 		function="Advanced.ToggleConsole"
 		parameter="texture" />
 		</menu_item_check>
-						<menu_item_check
-		label="Show RBG-I Color Values Under the Cursor"
-		name="Show Color Under Cursor">
-		<menu_item_check.on_check
-		function="CheckControl"
-		parameter="DebugShowColor" />
-		<menu_item_check.on_click
-		function="ToggleControl"
-		parameter="DebugShowColor" />
-		</menu_item_check>
+		            <menu_item_check
+             label="Show RGB-I Color Values Under Cursor"
+             name="Show Color Under Cursor">
+                <menu_item_check.on_check
+                 function="Advanced.CheckShowColor" />
+                <menu_item_check.on_click
+                 function="Advanced.ToggleShowColor" />
+            </menu_item_check>
+
 		
 		     <menu_item_separator/>
 		
@@ -3572,7 +3579,7 @@ width="260"/-->
 <panel
 follows="top|left"
 layout="topleft"
-top_pad="230"
+top_pad="237"
 left="0"
 width="285"
 height="22"
@@ -3627,7 +3634,6 @@ width="200"/>
 			
 			top_pad="0">
 			<stat_bar
-			
 			   name="fps"
 			   label="Frames Per Seccond"
 			   unit_label="fps"
@@ -3642,20 +3648,20 @@ width="200"/>
 			   tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 30 frames per second (FPS) is the rate for broadcast television."
 			   setting="DebugStatModeFPS">
 			</stat_bar>
-						<stat_bar
-			   name="bandwidth"
-			   label="Bandwidth"
-			   unit_label="kbps"
-			   stat="kbitstat"
-			   bar_min="0"
-			   bar_max="5000"
-			   tick_spacing="500"
-			   label_spacing="1000"
-				 precision="0"
-			   show_bar="true"
-			   show_history="false"
-			   tool_tip="Bandwidth: How much data is being transferred between your computer and the Second Life world. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
-			   setting="DebugStatModeBandwidth">
+			<stat_bar
+				name="bandwidth"
+				label="Bandwidth"
+				unit_label="kbps"
+				stat="kbitstat"
+				bar_min="0"
+				bar_max="5000"
+				tick_spacing="500"
+				label_spacing="1000"
+				precision="1"
+				show_bar="true"
+				show_history="false"
+				tool_tip="Bandwidth: How much data is being transferred between your computer and the Second Life world. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
+				setting="DebugStatModeBandwidth">
 			</stat_bar>
 			<stat_bar
 				 name="ktrisframe"
@@ -3734,12 +3740,985 @@ width="200"/>
 	   
 	   		</container_view>
     </scroll_container>
+	</panel>
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="0"
+label="Cam"
+left="0">
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="10"
+left="0"
+width="285"
+height="22"
+bg_alpha_color="EmphasisColor"
+border_visible="true"
+border_thickness="1"
+background_visible="true">
 
-
-
-
-
+<text
+follows="left|top"
+layout="topleft"
+left="10"
+font="SansSerif"
+value="3D Mouse (Joystick) Settings"
+top_pad=""
+height="17"
+width="200"/>
 </panel>
 
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="185"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Left/Right"
+						tool_tip="X axis"
+						top_pad="10"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale1"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale1"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale1"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="2"/>
+						</combo_box>
+	
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Up/Down"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale2"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale2"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale2"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="2"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="In/Out"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale0"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale0"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale0"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="2.1"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Tilt"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale4"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val=".5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale4"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale4"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value=".10"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Spin"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale5"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val=".5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale5"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale5"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value=".15"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Roll"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale3"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val=".5"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale3"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale3"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="0"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Zoom Spd"
+						tool_tip="X axis"
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamAxisScale6"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val=".05"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamAxisScale6"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="1024"
+						min_val="0"
+						width="53"
+						increment="1"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamAxisScale6"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value=".1"/>
+						</combo_box>
+						
+						<text
+						follows="top|left"
+						layout="topleft"
+						left="5"
+						value="Feathering"
+						tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing. "
+						top_pad="5"
+						width="80"/>
+						<slider_bar
+						can_edit_text="true"
+						control_name="FlycamFeathering"
+						follows="left|right"
+						decimal_digits="4"
+						height="16"
+						increment="0.0001"
+						layout="topleft"
+						left_pad="-20"
+						min_val="0"
+						max_val="3"
+						top_delta="-2"
+						tool_tip=""
+						width="127" />
+						<spinner
+						can_edit_text="true"
+						control_name="FlycamFeathering"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_pad="3"
+						decimal_digits="3"
+						follows="top|left"
+						max_val="100"
+						min_val="0"
+						width="53"
+						increment=".001"
+						border_visible="false"/>
+						<combo_box
+						control_name="FlycamFeathering"
+						follows="top|left"
+						height="22"
+						layout="topleft"
+						left_pad="0"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="2.75"/>
+						</combo_box>
+						
+		</panel>
+
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="140"
+border_visible="true"
+
+bg_alpha_color="DkGray_66"
+background_visible="true">
+	 <spinner
+	 follows="left|top"
+     control_name="JoystickAxis6"
+     decimal_digits="0"
+     increment="1"
+     label="Zoom Axis Mapping"
+     label_width="200"
+     layout="topleft"
+     left="10"
+     max_val="5"
+     min_val="-1"
+	 name="JoystickAxis6"
+	 tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."
+	 top_pad="7"
+     width="255" />
+	     <check_box
+     top_pad="20"
+     control_name="JoystickEnabled"
+     halign="left"
+     label="Enable 3D Mouse"
+     layout="topleft"
+     left="6"
+	 tool_tip="This turns on the 3D Mouse."
+     name="enable_joystick"
+     width="60" />
+	<check_box
+     control_name="ZoomDirect"
+	 label_width="15"
+     label="Enable Zoom Control (See Tool Tip!)"
+     layout="topleft"
+     left="6"
+	 top_pad="7"
+	 tool_tip="In order for the zooming control to work, you must set the 'Zoom Mapping' above to '4'."
+     width="15" />
+	 
+	 <check_box
+     control_name="AutoLeveling"
+	 label_width="15"
+     label="Enable Auto Leveling (Prevents Camera Roll)"
+     layout="topleft"
+     left="6"
+     top_pad="7"
+	 tool_tip="When enabled the camera will always remain level."
+	 width="15" />
+
+	 <check_box
+	 control_name="JoystickAvatarEnabled"
+	 label_width="15"
+	 label="Use the 3D Mouse to move the avatar"
+	 layout="topleft"
+     left="6"
+     top_pad="7"
+	 tool_tip="When enabled the mouse will move your avatar. "
+	 width="15" />
+	
+		 <check_box
+	 control_name="JoystickBuildEnabled"
+	 label_width="15"
+	 label="Use the 3D Mouse to move objects (building)"
+	 tool_tip="Uses the 3D mouse to move objects when building and editing."
+	 layout="topleft"
+     left="6"
+     top_pad="7"
+	 width="15" />
+	 
+	 	 				<menu
+				mouse_opaque="false"
+				drop_shadow="false"
+				width="0"
+				create_jump_keys="false"
+				label=""
+				follows="right|left"
+				name="Misc"
+				left="5"
+				top_pad="3"
+				tear_off="false">
+				<menu_item_check
+
+				label="Show the Current FOV of Viewer Screen"
+				tool_tip="This will show you the vertical field of view for the camera. In SL is possible to change the lens length just like in RL. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
+				name="FOV">
+				<menu_item_check.on_check
+				function="Advanced.CheckHUDInfo"
+				parameter="fov" />
+				<menu_item_check.on_click
+				function="Advanced.ToggleHUDInfo"
+				parameter="fov" />
+				</menu_item_check>
+				</menu>
+	 
+</panel>
+
+<panel
+follows="top|left"
+layout="topleft"
+top_pad="5"
+left="0"
+width="285"
+height="22"
+bg_alpha_color="EmphasisColor"
+border_visible="true"
+border_thickness="1"
+background_visible="true">
+
+<text
+follows="left|top"
+layout="topleft"
+left="10"
+font="SansSerif"
+value="Viewer Camera Menu Settings"
+top_pad=""
+height="17"
+width="200"/>
+</panel>
+
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="5"
+left="4"
+width="275"
+height="120"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+<tab_container
+follows="all"
+halign="center"
+name="tabs"
+layout="topleft"
+height="120"
+width="285"
+top="0"
+left="0"
+tab_height="20"
+tab_group="0"
+tab_width="65"
+tab_position="top">
+
+<panel
+follows="all"
+name="CamMov"
+layout="topleft"
+width="285"
+top="0"
+label="Camera Movement"
+left="0">
+
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="0"
+left="0"
+width="275"
+height="110"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+						<text
+						layout="topleft"
+						left="10"
+						value="Zoom"
+						top_pad="7"				
+						tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="CameraAngle"
+						follows="left|right"
+						height="16"
+						increment="0.002"
+						layout="topleft"
+						left_delta="100"
+						min_val="0.08"
+						max_val="3.06"
+						top_delta="-2"
+						width="135" />
+						<!--spinner
+						can_edit_text="true"
+						control_name="CameraAngle"
+						top_delta="-3"
+						height=""
+						label=""
+						label_width="0"
+						left_delta="120"
+						decimal_digits="3"
+						follows="top|right"
+						max_val="3.06"
+						min_val="0.08"
+						width="53"
+						increment="0.001"
+						border_visible="false"/-->
+						<combo_box
+						control_name="CameraAngle"
+						follows="right"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="1.047"/>
+						</combo_box>
+						
+						<text
+						layout="topleft"
+						left="10"
+						value="Zoom Speed"
+						top_pad="5"
+						tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smoother zoom."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="ZoomTime"
+						follows="left|right"
+						height="16"
+						increment=".1"
+						layout="topleft"
+						left_delta="100"
+						min_val="0"
+						max_val="30"
+						top_delta="-2"
+						tool_tip=""
+						width="135" />
+						<combo_box
+						control_name="ZoomTime"
+						follows="right"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="0.40000000596"/>
+						</combo_box>
+						
+						
+						<text
+						layout="topleft"
+						left="10"
+						value="Camera Lag"
+						top_pad="5"
+						tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity)."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="DynamicCameraStrength"
+						follows="left|right"
+						height="16"
+						increment=".1"
+						layout="topleft"
+						left_delta="100"
+						min_val="0"
+						max_val="30"
+						top_delta="-2"
+						tool_tip=""
+						width="135" />
+						<combo_box
+						control_name="DynamicCameraStrength"
+						follows="right"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="2"/>
+						</combo_box>
+						
+						<text
+						layout="topleft"
+						left="10"
+						value="Camera Offset"
+						top_pad="5"
+						tool_tip="Controls how far the camera is offset/distance from the default point of view."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="CameraOffsetScale"
+						follows="left|right"
+						height="16"
+						increment=".001"
+						layout="topleft"
+						left_delta="100"
+						min_val=".001"
+						max_val="25"
+						top_delta="-2"
+						tool_tip=""
+						width="135" />
+						<combo_box
+						control_name="CameraOffsetScale"
+						follows="right"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="1"/>
+						</combo_box>
+						
+						<text
+						layout="topleft"
+						left="10"
+						value="Cam. Smoothing"
+						top_pad="5"
+						tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="CameraPositionSmoothing"
+						follows="left|right"
+						height="16"
+						increment=".01"
+						layout="topleft"
+						left_delta="100"
+						min_val="0"
+						max_val="300"
+						top_delta="-2"
+						tool_tip=""
+						width="135" />
+						<combo_box
+						control_name="CameraPositionSmoothing"
+						follows="right"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="1"/>
+						</combo_box>
+</panel>
+</panel>
+
+<panel
+follows="all"
+name="ShadLights"
+layout="topleft"
+width="285"
+top="0"
+label="Mouse"
+left="0">
+
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="0"
+left="0"
+width="275"
+height="110"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+						<text
+						follows="left|top"
+						layout="topleft"
+
+						left="10"
+						value="Mouse Sensitivity "
+						top_pad="15"
+						tool_tip="Controls responsiveness of mouse when in mouselook mode."
+						width="100"/>
+						<slider
+						can_edit_text="true"
+						control_name="MouseSensitivity"
+						follows="left|top"
+						height="16"
+						increment=".1"
+						layout="topleft"
+						left_delta="100"
+						min_val="0"
+						max_val="15"
+						top_delta="-2"
+						tool_tip=""
+						width="135" />
+						<combo_box
+						control_name="MouseSensitivity"
+						follows="left|top"
+						height="16"
+						layout="topleft"
+						left="245"
+						top_delta="0"
+						width="20"
+						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
+						visible="true">
+						<combo_box.item
+						label="Default"
+						value="3"/>
+						</combo_box>
+												<check_box
+					   control_name="FirstPersonAvatarVisible"
+					   follows="left|top"
+					   height="16"
+					   label="Display avatar mouselook"
+					   layout="topleft"
+					   left="5"
+					   tool_tip="Displays avatar and attachments below neck while in mouselook. Default is OFF."
+					   name="first_person_avatar_visible"
+					   top_pad="10"
+					   width="250" />
+						 <check_box
+					   control_name="MouseSmooth"
+						 follows="left|top"
+					   height="16"
+					   label="Smooth Mouselook Movements"
+					   layout="topleft"
+					   left="5"
+					   tool_tip="Smooths out motion of mouse when in mouselook mode."
+					   name="MouseSmooth"
+					   top_pad="2"
+					   width="250" />	
+</panel>
+</panel>
+						
+<panel
+follows="all"
+name="ShadLights"
+layout="topleft"
+width="285"
+top="0"
+label="Misc Settings"
+left="0">
+
+<panel
+follows="left|top"
+layout="topleft"
+top_pad="0"
+left="0"
+width="275"
+height="110"
+border_visible="true"
+bg_alpha_color="DkGray_66"
+background_visible="true">
+
+						<check_box
+         top_pad="15"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Clicking your avatar keeps camera position"
+         layout="topleft"
+         left="10"
+         name="clickonavatarkeepscamera"
+         width="250"
+         control_name="ClickOnAvatarKeepsCamera"
+         tool_tip="Normally, clicking on your avatar resets the camera position. This option removes this behavior."/>
+
+        <check_box
+         top_pad="2"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Reset camera position after teleport"
+         layout="topleft"
+         left="10"
+         name="FSResetCameraOnTP"
+         width="250"
+         control_name="FSResetCameraOnTP"
+         tool_tip="Normally, the camera position gets reset when teleporting (within a region). This option prevents this behavior."/>
+		 
+		<check_box
+         top_pad="2"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Disable minimum camera zoom distance"
+         layout="topleft"
+         left="10"
+         name="disableminzoomdist"
+         width="250"
+         control_name="FSDisableMinZoomDist"
+         tool_tip="Disable the constraint on the closest distance the camera is allowed to get to an object."/>
+
+        <check_box
+         top_pad="2"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Allow the camera to move w/o constraints"
+         layout="topleft"
+         left="10"
+         name="ignorecameraconstraints"
+         width="250"
+         control_name="FSIgnoreSimulatorCameraConstraints"
+         tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+</panel>
+</panel>
+</tab_container>
+</panel>
+</panel>
 </tab_container>
 </floater>
