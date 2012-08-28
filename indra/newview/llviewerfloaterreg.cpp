@@ -421,5 +421,11 @@ void LLViewerFloaterReg::registerFloaters()
 
 	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
 
+	// <FS:Ansariel> Phototools; We currently build the floater with FloaterQuickPrefs to wire
+	//               up the WL controls events that are the same as in Quick Prefs. If there more
+	//               additions, we might consider cloning the Quick Prefs methods into a new
+	//               Phototools class.
+	LLFloaterReg::add("phototools", "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
+
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

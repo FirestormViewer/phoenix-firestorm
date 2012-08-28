@@ -386,6 +386,17 @@
            execute_parameters="ws_asset_blacklist"
            is_running_function="Floater.IsOpen"
            is_running_parameters="ws_asset_blacklist"
-           />		   
+           />
+		   
+  <command name="phototools"
+           available_in_toybox="true"
+           icon="phototools"
+           label_ref="Command_Phototools_Label"
+           tooltip_ref="Command_Phototools_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="phototools"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="phototools"
+           />
 
 </commands>
