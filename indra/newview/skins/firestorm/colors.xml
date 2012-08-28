@@ -863,4 +863,9 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+	 
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="LabelTextColor" />
 </colors>

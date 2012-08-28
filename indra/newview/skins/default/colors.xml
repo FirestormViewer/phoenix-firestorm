@@ -1091,4 +1091,9 @@
     name="MediaListItemColor"
     reference="white" />
   <!-- </FS:Zi> -->
+  
+    <!-- Balance at the top -->
+  <color
+      name="CurrencyColor"
+      reference="LabelTextColor" />
 </colors>

@@ -222,6 +222,8 @@
      left="0"
 	 right="24"
      name="balance"
+     text_color="CurrencyColor"
+     text_readonly_color="CurrencyColor"
      tool_tip="Click to refresh your L$ balance"
      v_pad="4"
      top="0"

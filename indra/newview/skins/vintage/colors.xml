@@ -257,4 +257,8 @@
     <color
      name="GroupHiddenInProfile"
      reference="OldGray_63" />
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="Green" />
 </colors>

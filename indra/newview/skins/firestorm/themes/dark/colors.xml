@@ -70,5 +70,9 @@
   <color
    name="ScriptEditorTextBgRColor"
    reference="TextBgWriteableColor" />
-    
+
+  <!-- Balance at the top -->
+  <color
+   name="CurrencyColor"
+   reference="LabelTextColor" />
 </colors>

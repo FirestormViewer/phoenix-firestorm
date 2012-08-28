@@ -1061,5 +1061,10 @@
 	 <color
      name="PieMenuTextColor"
      value="1 1 1 0.85" />	
+	 
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="LabelTextColor" />
 </colors>
 

@@ -914,4 +914,9 @@
 	<color
 	 name="GroupHiddenInProfile"
 	 reference="EmphasisColor" />
+	 
+    <!-- Balance at the top -->
+	<color
+	 name="CurrencyColor"
+	 reference="LabelTextColor" />
 </colors>

@@ -1048,5 +1048,10 @@
 	<color
 	 name="DkGray_33"
 	 value="0.125 0.125 0.125 .33" />
+	 
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="LabelTextColor" />
 </colors>
 
