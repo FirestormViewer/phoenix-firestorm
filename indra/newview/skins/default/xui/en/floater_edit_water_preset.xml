@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
  
 <floater
-open_positioning="left"
+positioning="left"
 height="390"
  layout="topleft"
  name="Edit Water Preset"
