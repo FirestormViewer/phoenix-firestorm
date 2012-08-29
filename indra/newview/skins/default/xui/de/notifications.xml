@@ -3175,27 +3175,82 @@ Durch Ausblenden der Schaltfläche „Sprechen“ wird die Sprechfunktion deakti
 		Durch diese Aktion werden alle Menüelemente und Schaltflächen ausgeblendet. Um sie wieder anzuzeigen, klicken Sie erneut auf [SHORTCUT].
 		<usetemplate ignoretext="Vor Ausblenden der UI bestätigen" name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestricted">
-		Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Berechtigungen unzureichend sind. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+	<notification name="PathfindingLinksets_WarnOnPhantom">
+Einige ausgewählte Linkssets werden das Phantom-Flag bekommen.
+
+Möchten Sie fortfahren?
+		<usetemplate
+			ignoretext="Einige ausgewählte Linkssets werden das Phantom-Flag bekommen."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted">
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Berechtigungen unzureichend sind. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+
+Möchten Sie fortfahren?
 		<usetemplate
 			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind."
 			name="okcancelignore"
 			notext="Abbrechen"
 			yestext="OK"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnVolume">
-		Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist.
+	<notification name="PathfindingLinksets_MismatchOnVolume">
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist.
+
+Möchten Sie fortfahren?
 		<usetemplate
 			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Form keine konvexe Hülle ist."
 			name="okcancelignore"
 			notext="Abbrechen"
 			yestext="OK"/>
 	</notification>
-	<notification name="PathfindingLinksets_SetLinksetUseMismatchOnRestrictedAndVolume">
-		Einige Linksets können wegen eingeschränkter Berechtigungen nicht auf '[REQUESTED_TYPE]' gesetzt werden. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
- Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist. Die Typen dieser Linksets werden nicht geändert.
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
+Einige ausgewählte Linkssets werden das Phantom-Flag bekommen.
+
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Berechtigungen unzureichend sind. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+
+Möchten Sie fortfahren?
+		<usetemplate
+			ignoretext="Einige ausgewählte Linkssets werden das Phantom-Flag bekommen und einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+Einige ausgewählte Linkssets werden das Phantom-Flag bekommen.
+
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist.
+
+Möchten Sie fortfahren?
+		<usetemplate
+			ignoretext="Einige ausgewählte Linkssets werden das Phantom-Flag bekommen und einige Linksets können nicht gesetzt werden, weil die Form keine konvexe Hülle ist."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
+Einige Linksets können wegen eingeschränkter Berechtigungen nicht auf '[REQUESTED_TYPE]' gesetzt werden. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist. Die Typen dieser Linksets werden nicht geändert.
+
+Möchten Sie fortfahren?
 		<usetemplate
 			ignoretext="Einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind und die Form keine konvexe Hülle ist."
+			name="okcancelignore"
+			notext="Abbrechen"
+			yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+Einige ausgewählte Linkssets werden das Phantom-Flag bekommen.
+
+Einige Linksets können wegen eingeschränkter Berechtigungen nicht auf '[REQUESTED_TYPE]' gesetzt werden. Diese Linksets werden daher auf '[RESTRICTED_TYPE]' gesetzt.
+
+Einige Linksets können nicht auf '[REQUESTED_TYPE]' gesetzt werden, weil die Form keine konvexe Hülle ist. Die Typen dieser Linksets werden nicht geändert.
+
+Möchten Sie fortfahren?
+		<usetemplate
+			ignoretext="Einige ausgewählte Linkssets werden das Phantom-Flag bekommen und einige Linksets können nicht gesetzt werden, weil die Berechtigungen unzureichend sind und die Form keine konvexe Hülle ist."
 			name="okcancelignore"
 			notext="Abbrechen"
 			yestext="OK"/>
