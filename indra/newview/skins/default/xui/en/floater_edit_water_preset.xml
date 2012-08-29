@@ -519,7 +519,7 @@ background_visible="true">
 	<check_box
      follows="left|top"
      height="15"
-     label="Make this preset my new sky setting."
+     label="Make this preset my new water setting."
      layout="topleft"
      left="7"
      name="make_default_cb"
