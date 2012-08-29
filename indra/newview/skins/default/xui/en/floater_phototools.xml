@@ -12,7 +12,8 @@ layout="topleft"
 save_rect="true"
 single_instance="true"
 title="PHOTOTOOLS MENU"
-name="phototools">
+name="phototools"
+help_topic="phototools_menu_floater">
 
 <tab_container
 follows="all"
