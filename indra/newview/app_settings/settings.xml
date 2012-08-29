@@ -17440,6 +17440,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>Value</key>
 		<integer>1</integer>
 	</map>
+    <key>FSWindlightInterpolateTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Timespan for interpolating between Windlight settings</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>3.0</real>
+    </map>
 	 
     <key>FSUseV1Menus</key>
     <map>

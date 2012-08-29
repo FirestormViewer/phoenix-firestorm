@@ -1311,6 +1311,34 @@
          width="256"
          tool_tip="Same as above options for Interpolation but for the ParcelWL." />
 
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="10"
+         name="wl_crossfade_label"
+         width="180">
+           Crossfading duration (seconds):
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="FSWindlightInterpolateTime"
+         decimal_digits="1"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="0.1"
+         initial_val="3.0"
+         max_val="60"
+         min_val="0.1"
+         name="FSWindlightInterpolateTime"
+         width="50"
+         tool_tip="The duration for crossfading from one preset to another [Default: 3]"/>
+		 
     </panel>
 
     <!--Build-->

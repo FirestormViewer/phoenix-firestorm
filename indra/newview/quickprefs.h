@@ -30,31 +30,39 @@
 
 #include "lltransientdockablefloater.h"
 #include "llwlparamset.h"
+#include "llmultisliderctrl.h"
+#include "llcombobox.h"
 
 class FloaterQuickPrefs : public LLTransientDockableFloater
 {
 	friend class LLFloaterReg;
 
-	private:
-		FloaterQuickPrefs(const LLSD& key);
-		~FloaterQuickPrefs();
+private:
+	FloaterQuickPrefs(const LLSD& key);
+	~FloaterQuickPrefs();
 	void onSunMoved(LLUICtrl* ctrl, void* userdata);
 
-	public:
-		/*virtual*/ BOOL postBuild();
-		/*virtual*/ void	draw();
-		void syncControls();
-		virtual void onOpen(const LLSD& key);
+public:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void	draw();
+	void syncControls();
+	virtual void onOpen(const LLSD& key);
 
-		void initCallbacks(void);
-		void onChangeWaterPreset(LLUICtrl* ctrl);
-		void onChangeSkyPreset(LLUICtrl* ctrl);
-		void deactivateAnimator();
-		void onClickSkyPrev();
-		void onClickSkyNext();
-		void onClickWaterPrev();
-		void onClickWaterNext();
-		void onClickRegionWL();
+	void initCallbacks(void);
+	void onChangeWaterPreset(LLUICtrl* ctrl);
+	void onChangeSkyPreset(LLUICtrl* ctrl);
+	void deactivateAnimator();
+	void onClickSkyPrev();
+	void onClickSkyNext();
+	void onClickWaterPrev();
+	void onClickWaterNext();
+	void onClickRegionWL();
+
+private:
+
+	LLMultiSliderCtrl*	mWLSunPos;
+	LLComboBox*			mWLPresetsCombo;
+	LLComboBox*			mWaterPresetsCombo;
 
 };
 #endif

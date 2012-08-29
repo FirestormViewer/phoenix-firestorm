@@ -319,6 +319,9 @@ public:
 	/// escape string in a way different from LLURI::escape()
 	static std::string escapeString(const std::string& str);
 
+	// <FS:Ansariel> Get list of all ParamSets
+	const std::map<LLWLParamKey, LLWLParamSet>& getParamList() const { return mParamList; };
+
 	// helper variables
 	LLWLAnimator mAnimator;
 
