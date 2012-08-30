@@ -15,15 +15,15 @@
 		Właściciel
 	</text>
 	<check_box label="Pozwól na nawigację i interaktywność" name="perms_owner_interact"/>
-	<check_box label="Pokaż pasek kontroli" name="perms_owner_control"/>
+	<check_box label="Pokaż pasek kontrolek" name="perms_owner_control"/>
 	<text name="group_label">
 		Grupa:
 	</text>
 	<check_box label="Pozwól na nawigację i interaktywność" name="perms_group_interact"/>
-	<check_box label="Pokaż pasek kontroli" name="perms_group_control"/>
+	<check_box label="Pokaż pasek kontrolek" name="perms_group_control"/>
 	<text name="anyone_label">
 		Każdy
 	</text>
 	<check_box label="Pozwól na nawigację i interaktywność" name="perms_anyone_interact"/>
-	<check_box label="Pokaż pasek kontroli" name="perms_anyone_control"/>
+	<check_box label="Pokaż pasek kontrolek" name="perms_anyone_control"/>
 </panel>

@@ -41,6 +41,7 @@ Deja el cursor sobre las opciones para obtener más ayuda.
 				</text>
 				<check_box label="Mostrarlo en mi perfil" name="list_groups_in_profile" tool_tip="Configura si quieres que este grupo se vea en tu perfil"/>
 				<check_box label="Recibir los avisos del grupo" name="receive_notices" tool_tip="Configura si quieres recibir avisos del grupo.  Desmárcalo si este grupo te envía &apos;spam&apos;."/>
+				<check_box label="Recibir chat de este grupo" name="receive_chat" tool_tip="Determina si quieres participar en los chats de este grupo."/>
 				<text name="active_title_label">
 					Mi etiqueta:
 				</text>

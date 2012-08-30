@@ -29,6 +29,9 @@
 
 #include "llpanel.h"
 
+// <FS:Ansariel> Pathfinding support
+#include "llpathfindingnavmesh.h"
+
 // "Constants" loaded from settings.xml at start time
 extern S32 STATUS_BAR_HEIGHT;
 
@@ -47,6 +50,8 @@ class LLIconCtrl;
 class LLParcelChangeObserver;
 class LLPanel;
 
+// <FS:Ansariel> Pathfinding support
+class LLPathfindingNavMeshStatus;
 
 class LLRegionDetails
 {
@@ -153,6 +158,8 @@ private:
 
 	friend class LLParcelChangeObserver;
 
+	// <FS:Ansariel> This enum also defines the order of visibility in the
+	//               status bar in reverse order!
 	enum EParcelIcon
 	{
 		VOICE_ICON = 0,
@@ -160,8 +167,12 @@ private:
 		PUSH_ICON,
 		BUILD_ICON,
 		SCRIPTS_ICON,
-		DAMAGE_ICON,
 		SEE_AVATARS_ICON,
+		// <FS:Ansariel> Pathfinding support
+		PATHFINDING_DIRTY_ICON,
+		PATHFINDING_DISABLED_ICON,
+		// </FS:Ansariel> Pathfinding support
+		DAMAGE_ICON,
 		ICON_COUNT
 	};
 
@@ -222,6 +233,11 @@ private:
 
 	void onBuyLandClicked();
 
+	// <FS:Ansariel> Pathfinding support
+	void onRegionBoundaryCrossed();
+	void onNavMeshStatusChange(const LLPathfindingNavMeshStatus &pNavMeshStatus);
+	void createNavMeshStatusListenerForCurrentRegion();
+	// </FS:Ansariel> Pathfinding support
 public:
 
 	/**
@@ -309,6 +325,13 @@ private:
 	boost::signals2::connection	mParcelPropsCtrlConnection;
 	boost::signals2::connection	mShowCoordsCtrlConnection;
 	boost::signals2::connection	mParcelMgrConnection;
+
+	// <FS:Zi> Pathfinding rebake functions
+	BOOL			rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+
+	LLFrameTimer	mRebakingTimer;
+	BOOL			mPathfindingFlashOn;
+	// </FS:Zi>
 };
 
 // *HACK: Status bar owns your cached money balance. JC

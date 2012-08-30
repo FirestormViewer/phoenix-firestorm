@@ -1328,7 +1328,7 @@ void lggContactSetsFloater::draw()
 			{
 				useFont = bigFont;
 			}
-			if (thisSize > 36)
+			if (thisSize > 46)
 			{
 				useFont = hugeFont;
 			}
@@ -1338,7 +1338,7 @@ void lggContactSetsFloater::draw()
 				{
 					useFont = bigFont;
 				}
-				if (thisSize > 25)
+				if (thisSize > 35)
 				{
 					useFont = hugeFont;
 				}
@@ -1854,7 +1854,7 @@ void lggContactSetsFloater::draw()
 				{
 					useFont = bigFont;
 				}
-				if (thisSize > 36)
+				if (thisSize > 46)
 				{
 					useFont = hugeFont;
 				}
@@ -1864,7 +1864,7 @@ void lggContactSetsFloater::draw()
 					{
 						useFont = bigFont;
 					}
-					if (thisSize > 25)
+					if (thisSize > 35)
 					{
 						useFont = hugeFont;
 					}

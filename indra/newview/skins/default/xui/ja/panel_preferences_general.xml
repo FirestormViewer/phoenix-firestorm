@@ -49,29 +49,55 @@
 	<check_box label="マイネーム" name="show_my_name_checkbox1"/>
 	<check_box label="ユーザー名" name="show_slids" tool_tip="bobsmith123 などユーザー名を表示"/>
 	<check_box label="グループタイトル" name="show_all_title_checkbox1" tool_tip="オフィサーまたはメンバーなど、グループタイトルを表示"/>
-	<check_box label="フレンドをハイライト表示" name="show_friends" tool_tip="フレンドの名前をハイライト表示"/>
+	<check_box label="自分のグループタイトルは隠す" name="RenderHideGroupTitle" tool_tip="自分や同じグループの仲間のグループタイトルを表示または隠します"/>
 	<check_box label="表示名を表示" name="display_names_check" tool_tip="これを選択すると、チャット、IM などで表示名が表示されます。"/>
-	<text name="inworld_typing_rg_label">
-		文字キーを押して次の操作：
-	</text>
-	<radio_group name="inworld_typing_preference">
-		<radio_item label="ローカル・チャットを始める" name="radio_start_chat" value="1"/>
-		<radio_item label="ムーブメントに影響（WASD など）" name="radio_move" value="0"/>
-	</radio_group>
+	<check_box label="古い形式の名前で表示" name="FSshow_legacyun" tool_tip="ユーザー名（firstname.lastname)でなく古い形式の名前（Firstname Lastname）で表示します。"/>
+	<check_box label="フレンドをハイライト表示" name="show_friends" tool_tip="フレンドの名前をハイライト表示"/>
+	
+	<!--
+	<check_box label="ビューワの UI ヒントを有効にする" name="viewer_hints_check"/>
+	-->
+	
 	<text name="title_afk_text">
 		一時退席までの時間：
+	</text>
+	<text name="title_afk_quit_text">
+		退席になったらログアウトする
 	</text>
 	<combo_box label="一時退席までの時間：" name="afk">
 		<combo_box.item label="2 分" name="item0"/>
 		<combo_box.item label="5 分" name="item1"/>
 		<combo_box.item label="10 分" name="item2"/>
 		<combo_box.item label="30 分" name="item3"/>
-		<combo_box.item label="一時退席設定なし" name="item4"/>
+		<combo_box.item label="60 分" name="item4"/>
+		<combo_box.item label="一時退席設定なし" name="item5"/>
 	</combo_box>
+		<combo_box label="退席からログアウトまでの時間：" name="quitafk">
+		<combo_box.item label="2 分" name="item0"/>
+		<combo_box.item label="5 分" name="item1"/>
+		<combo_box.item label="10 分" name="item2"/>
+		<combo_box.item label="30 分" name="item3"/>
+		<combo_box.item label="終了しない" name="item4"/>
+	</combo_box>
+	<check_box label="退席中は座る" name="AvatarSitOnAway"/>
 	<text name="text_box3">
 		取り込み中モード時の返事：
 	</text>
 	<text_editor name="busy_response">
 		log_in_to_change
 	</text_editor>
+	
+	<panel name="general_extras">
+		<text name="text_box3">
+			お好み：
+		</text>
+		<check_box label="普段はWebプロフィールを使用" name="FSUseWebProfiles" tool_tip="プロフィールの表示に、V1型のパネルでなく、Webページのプロフイールを表示"/>
+		<text name="inworld_typing_rg_label">
+			文字キーを押して次の操作：
+		</text>
+		<radio_group name="inworld_typing_preference">
+			<radio_item label="ローカル・チャットを始める" name="radio_start_chat" value="1"/>
+			<radio_item label="ムーブメントに影響（WASD など）" name="radio_move" value="0"/>
+		</radio_group>
+	</panel>
 </panel>

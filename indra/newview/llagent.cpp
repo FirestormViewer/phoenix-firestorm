@@ -61,6 +61,7 @@
 #include "llspeakers.h"
 // [/SL:KB]
 #include "llnotificationsutil.h"
+#include "llpanelpathfindingrebakenavmesh.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
 #include "llrendersphere.h"
@@ -375,6 +376,7 @@ LLAgent::LLAgent() :
 	mbTeleportKeepsLookAt(false),
 
 	mAgentAccess(new LLAgentAccess(gSavedSettings)),
+	mGodLevelChangeSignal(),
 	mCanEditParcel(false),
 	mTeleportSourceSLURL(new LLSLURL),
 	mTeleportRequest(),
@@ -468,14 +470,11 @@ void LLAgent::updatePhoenixForceFly(const LLSD &data)
 	PhoenixForceFly = data.asBoolean();
 	if (PhoenixForceFly == TRUE) 
 	{
-		llinfos << "AO: Enabling Fly Override" << llendl;
+		llinfos << "Enabling Fly Override" << llendl;
 		if (gSavedSettings.getBOOL("FirstUseFlyOverride") == TRUE)
-    		{
-			LLSD args;
-    			args["MESSAGE"] = 
-    			llformat("Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying." );
-    			LLNotificationsUtil::add("GenericAlert", args);
-			gSavedSettings.setBOOL("FirstUseFlyOverride",FALSE);
+   		{
+   			LLNotificationsUtil::add("FirstUseFlyOverride");
+			gSavedSettings.setBOOL("FirstUseFlyOverride", FALSE);
 		}
 	}
 }
@@ -2239,6 +2238,7 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(TRUE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(TRUE);
+		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(TRUE);
 
 		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
 
@@ -2365,6 +2365,7 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(FALSE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
+		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(FALSE);
 
 		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
 		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
@@ -3079,6 +3080,12 @@ void LLAgent::setAdminOverride(BOOL b)
 void LLAgent::setGodLevel(U8 god_level)	
 { 
 	mAgentAccess->setGodLevel(god_level);
+	mGodLevelChangeSignal(god_level);
+}
+
+LLAgent::god_level_change_slot_t LLAgent::registerGodLevelChanageListener(god_level_change_callback_t pGodLevelChangeCallback)
+{
+	return mGodLevelChangeSignal.connect(pGodLevelChangeCallback);
 }
 
 const LLAgentAccess& LLAgent::getAgentAccess()

@@ -72,14 +72,14 @@
 		<combo_box.item label="5 минут" name="item1"/>
 		<combo_box.item label="10 минут" name="item2"/>
 		<combo_box.item label="30 минут" name="item3"/>
-		<combo_box.item label="некогда" name="item4"/>
+		<combo_box.item label="никогда" name="item4"/>
 	</combo_box>
 	<combo_box  layout="topleft" left_pad="70" name="quitafk">
 		<combo_box.item label="2 минуты" name="item0"/>
 		<combo_box.item label="5 минут" name="item1"/>
 		<combo_box.item label="10 минут" name="item2"/>
 		<combo_box.item label="30 минут" name="item3"/>
-		<combo_box.item label="некогда" name="item4"/>
+		<combo_box.item label="никогда" name="item4"/>
 	</combo_box>
 	<check_box name="AvatarSitOnAway" label="Сесть, если статус 'Отошел'" left_pad="20"/>
 	<text name="text_box3">

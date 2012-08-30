@@ -70,6 +70,8 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+#include "exogroupmutelist.h"
+
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
 const static std::string NEARBY_P2P_BY_OTHER("nearby_P2P_by_other");
@@ -2658,7 +2660,9 @@ void LLIMMgr::addMessage(
 
 		// Logically it would make more sense to reject the session sooner, in another area of the
 		// code, but the session has to be established inside the server before it can be left.
-		if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+		//if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+		if ((LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
+			|| exoGroupMuteList::instance().isMuted(new_session_id)) // <exodus/>
 		{
 			llwarns << "Leaving IM session from initiating muted resident " << from << llendl;
 			if(!gIMMgr->leaveSession(new_session_id))

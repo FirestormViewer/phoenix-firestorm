@@ -1,154 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- *NOTE: See also menu_pie_avatar_other.xml -->
 
-<pie_menu
-    name="Avatar Pie">
-    <pie_slice
-        label="Профиль..."
-        name="Profile...">
-        <pie_slice.on_click
-            function="ShowAgentProfile"
-            parameter="hit object" />
-        <pie_slice.on_enable
-            function="RLV.EnableIfNot"
-            parameter="shownames" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Mute"
-        name="Avatar Mute">
-        <pie_slice.on_click
-            function="Avatar.Mute" />
-        <pie_slice.on_enable
-            function="Avatar.EnableMute" />
-    </pie_slice>
-    <pie_slice
-        enabled="true"
-        label="Идти к"
-        name="Go to">
-        <pie_slice.on_click
-            function="GoToObject" />
-    </pie_slice>
-    <pie_slice
-        label="Отчет..."
-        name="abuse">
-        <pie_slice.on_click
-            function="Avatar.ReportAbuse" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Сделать другом"
-        name="Add Friend">
-        <pie_slice.on_click
-            function="Avatar.AddFriend" />
-        <pie_slice.on_enable
-            function="Avatar.EnableAddFriend" />
-    </pie_slice>
-    <pie_slice
-        enabled="false"
-        label="Заплатить"
-        name="Pay...">
-        <pie_slice.on_click
-            function="PayObject" />
-        <pie_slice.on_enable
-            function="EnablePayAvatar" />
-    </pie_slice>
-    <pie_menu
-        name="Avatar Pie More 1"
-        label="Еще >">
-
-        <pie_slice
-            label="Заморозить"
-            name="Freeze...">
-            <pie_slice.on_click
-                function="Avatar.Freeze" />
-            <pie_slice.on_visible
-                function="Avatar.EnableFreezeEject"/>
-        </pie_slice>
-        <pie_slice
-            label="Дать визитку"
-            name="Add Calling Card">
-            <pie_slice.on_click
-                function="Avatar.AddContact" />
-        </pie_slice>
-        <pie_slice
-            label="В группу"
-            name="Group Invite...">
-            <pie_slice.on_click
-                function="Avatar.InviteToGroup" />
-            <pie_slice.on_enable
-                function="RLV.EnableIfNot"
-                parameter="shownames" />
-        </pie_slice>
-        <pie_separator />
-        <pie_slice
-            label="Выкинуть..."
-            name="Eject...">
-            <pie_slice.on_click
-                function="Avatar.Eject" />
-            <pie_slice.on_visible
-                function="Avatar.EnableFreezeEject"/>
-        </pie_slice>
-
-        <pie_menu
-            name="Avatar Pie More 2"
-            label="Еще >">
-
-            <!-- ## Zi: Is this the right thing to use for avatar textures? -->
-            <pie_slice
-                label="Отладить текстуры"
-                name="Отладить...">
-                <pie_slice.on_click
-                    function="Avatar.Debug" />
-                <pie_slice.on_visible
-                    function="IsGodCustomerService"/>
-            </pie_slice>
-            <pie_separator name="script count placeholder" />
-            <pie_slice
-                label="Позвонить"
-                name="Call">
-                <pie_slice.on_click
-                    function="Avatar.Call" />
-                <pie_slice.on_enable
-                    function="Avatar.EnableCall" />
-            </pie_slice>
-            <pie_slice
-                label="Увеличить"
-                name="Zoom In">
-                <pie_slice.on_click
-                    function="Tools.LookAtSelection"
-                    parameter="zoom" />
-            </pie_slice>
-
+<pie_menu name="Avatar Pie">
+    <pie_slice label="Профиль..." name="Profile..."/>
+    <pie_slice label="Блокировать" name="Avatar Mute"/>
+    <pie_slice label="Идти к" name="Go to"/>
+    <pie_slice label="Отчет..." name="abuse"/>
+    <pie_slice label="Сделать другом" name="Add Friend"/>
+    <pie_slice label="Заплатить" name="Pay..."/>
+    <pie_menu name="Avatar Pie More 1" label="Еще >">
+        <pie_slice label="Заморозить" name="Freeze..."/>
+        <pie_slice label="Дать визитку" name="Add Calling Card"/>
+        <pie_slice label="В группу"  name="Group Invite..."/>
+        <pie_slice label="Выкинуть..." name="Eject..."/>
+        <pie_menu name="Avatar Pie More 2" label="Еще >">
+            <pie_slice label="Отладить текстуры" name="Debug..."/>
+			<pie_slice label="Скрипты" name="ScriptInfo"/>
+            <pie_slice label="Позвонить" name="Call"/>
+            <pie_slice label="Увеличить" name="Zoom In"/>
         </pie_menu>
-
-        <pie_slice
-            label="Изучить"
-            name="Avatar Inspect">
-            <pie_slice.on_click
-                function="Floater.Show"
-                parameter="inspect" />
-            <pie_slice.on_enable
-                function="Object.EnableInspect" />
-        </pie_slice>
-        <pie_slice
-            enabled="true"
-            label="Скрыть"
-            name="Derender">
-            <pie_slice.on_click
-                function="Object.Derender" />
-        </pie_slice>
-
+        <pie_slice label="Изучить" name="Avatar Inspect"/>
+        <pie_slice label="Скрыть" name="Derender"/>
     </pie_menu>
-
-    <pie_slice
-        label="ИМ"
-        name="Send IM...">
-        <pie_slice.on_click
-            function="Avatar.SendIM" />
-        <pie_slice.on_enable
-            function="RLV.EnableIfNot"
-            parameter="shownames" />
-    </pie_slice>
-
+    <pie_slice label="ЛС" name="Send IM..."/>
 </pie_menu>

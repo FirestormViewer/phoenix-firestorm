@@ -33,9 +33,9 @@
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
 			<menu_item_call label="Zbiór wielu plików..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
@@ -153,6 +153,12 @@
 			<menu_item_call label="Przestaw skrypty na stan Wyłączony" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Usuń skrypty z zaznaczenia" name="Remove Scripts From Selection"/>
 		</menu>
+		<menu label="Odnajdywanie ścieżek" name="Pathfinding">
+			<menu_item_call label="Zbiory części (linków)..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Postacie..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Pokaż / testuj..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Odśwież Navmesh w regionie" name="rebake_region_navmesh"/>
+		</menu>
 		<menu label="Opcje" name="Options">
 			<menu_item_check label="Pokaż zaawansowane uprawnienia" name="DebugPermissions"/>
 			<menu_item_check label="Wybierz tylko moje obiekty" name="Select Only My Objects"/>
@@ -168,11 +174,11 @@
 			<menu_item_call label="Opcje siatki" name="Grid Options"/>
 		</menu>
 		<menu label="Załaduj" name="Upload">
-			<menu_item_call label="Teksturę ([COST]L$)..." name="Upload Image"/>
-			<menu_item_call label="Dźwięk ([COST]L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animację ([COST]L$)..." name="Upload Animation"/>
+			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animację ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model meszowy..." name="Upload Model"/>
-			<menu_item_call label="Zbiór wielu plików ([COST]L$ za plik)..." name="Bulk Upload"/>
+			<menu_item_call label="Zbiór wielu plików ([COST] za plik)..." name="Bulk Upload"/>
 			<menu_item_call label="Ustaw domyślne uprawnienia dla ładowania" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Cofnij" name="Undo"/>
@@ -187,10 +193,12 @@
 	<menu label="Pomoc" name="Help">
 		<menu_item_check label="Włącz podpowiedzi" name="Enable Hints"/>
 		<menu_item_call label="Wiki Firestorma" name="Firestorm Wiki"/>
+		<menu_item_call label="Dołącz do Grupy Wsparcia Firestorma" name="firestorm_support_group"/>
 		<menu_item_call label="Na temat [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Sprawdź stan świata (Siatki)" name="Grid Status"/>
 		<menu_item_call label="Zgłoś nadużycie" name="Report Abuse"/>
 		<menu_item_call label="Zgłoś błędy klienta" name="Report Bug"/>
+        <menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Włącz przycisk Sysinfo" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Informacje o [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -264,7 +272,7 @@
 		<menu_item_check label="Wygładzanie ruchu myszki" name="Mouse Smoothing"/>
 		<menu_item_call label="Zwolnij klawisze" name="Release Keys"/>
 		<menu label="Skróty" name="Shortcuts">
-			<menu_item_call label="Załaduj teksturę ([COST]L$)..." name="Upload Image"/>
+			<menu_item_call label="Załaduj teksturę ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Wyszukiwarka" name="Search"/>
 			<menu_item_check label="Pokazuj menu Zaawansowane" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleportuj po podwójnym kliknięciu" name="DoubleClick Teleport"/>
@@ -392,7 +400,6 @@
 			<menu_item_call label="Zagub pakiet" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Zrzut oskryptowanej kamery" name="Dump Scripted Camera"/>
-		<menu_item_call label="Zderzenia, popchnięcia i uderzenia" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Nagrywanie" name="Recorder">
 			<menu_item_call label="Rozpocznij odtwarzanie" name="Start Playback"/>
 			<menu_item_call label="Zatrzymaj odtwarzanie" name="Stop Playback"/>

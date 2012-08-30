@@ -192,17 +192,6 @@
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
 
         <check_box
-         top_pad="5"
-         follows="left|top"
-         height="16"
-         label="Grant permissions to objects with the same owner as the object being sat on"
-         left="15"
-         name="PermissionsGrantToSitOwner"
-         width="270"
-         control_name="PermissionsGrantToSitOwner"
-         tool_tip="If enabled, sitting on an object will grant permissions to any other object with the same owner automatically as though you sat on it instead"/>
-
-        <check_box
          top_pad="15"
          control_name="UseLSLBridge"
          follows="left|top"
@@ -1184,7 +1173,6 @@
     </text>
     <line_editor
       top_pad="0"
-      enabled="false"
       follows="left|top"
       height="20"
       max_length="256"
@@ -1305,6 +1293,34 @@
          width="256"
          tool_tip="Same as above options for Interpolation but for the ParcelWL." />
 
+        <text
+         top_pad="10"
+         type="string"
+         length="1"
+         follows="left|top"
+         height="15"
+         layout="topleft"
+         left="10"
+         name="wl_crossfade_label"
+         width="180">
+           Crossfading duration (seconds):
+        </text>
+        <spinner
+         top_delta="-5"
+         control_name="FSWindlightInterpolateTime"
+         decimal_digits="1"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="0"
+         increment="0.1"
+         initial_val="3.0"
+         max_val="60"
+         min_val="0.1"
+         name="FSWindlightInterpolateTime"
+         width="50"
+         tool_tip="The duration for crossfading from one preset to another [Default: 3]"/>
+		 
     </panel>
 
     <!--Build-->

@@ -137,8 +137,10 @@ protected:
 
 struct RlvCommandOptionGetPath : public RlvCommandOption
 {
-	RlvCommandOptionGetPath(const RlvCommand& rlvCmd);
+	typedef boost::function<void(const uuid_vec_t&)> getpath_callback_t;
+	RlvCommandOptionGetPath(const RlvCommand& rlvCmd, getpath_callback_t cb = NULL);
 
+	bool              isCallback() const { return m_fCallback; }
 	/*virtual*/ bool  isEmpty() const	 { return m_idItems.empty(); }
 	const uuid_vec_t& getItemIDs() const { return m_idItems; }
 
@@ -146,6 +148,7 @@ struct RlvCommandOptionGetPath : public RlvCommandOption
 	static bool getItemIDs(LLWearableType::EType wtType, uuid_vec_t& idItems, bool fClear = true);
 
 protected:
+	bool       m_fCallback; // TRUE if a callback is schedueled
 	uuid_vec_t m_idItems;
 };
 

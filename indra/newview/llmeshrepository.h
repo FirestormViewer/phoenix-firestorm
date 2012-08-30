@@ -261,6 +261,70 @@ public:
 		}
 	};
 
+	// <FS:Ansariel> Mesh header/LOD retry functionality
+	class ActiveHeaderRequest
+	{
+	public:
+		LLVolumeParams	mMeshParams;
+		F32				mFrameTimeStart;
+
+		ActiveHeaderRequest()
+		{
+			mMeshParams = LLVolumeParams();
+		}
+
+		ActiveHeaderRequest(const LLVolumeParams& mesh_params, S32 frametime = 0)
+			: mMeshParams(mesh_params), mFrameTimeStart(frametime)
+		{
+		}
+
+		bool operator==(const ActiveHeaderRequest& rhs) const
+		{
+			return (mMeshParams == rhs.mMeshParams);
+		}
+
+		bool operator<(const ActiveHeaderRequest& rhs) const
+		{
+			return (mMeshParams < rhs.mMeshParams);
+		}
+	};
+
+	class ActiveLODRequest
+	{
+	public:
+		LLVolumeParams	mMeshParams;
+		S32				mLOD;
+		F32				mFrameTimeStart;
+
+		ActiveLODRequest()
+		{
+			mMeshParams = LLVolumeParams();
+			mLOD = 0;
+		}
+
+		ActiveLODRequest(const LLVolumeParams& mesh_params, S32 lod, S32 frametime = 0)
+			: mMeshParams(mesh_params), mLOD(lod), mFrameTimeStart(frametime)
+		{
+		}
+
+		bool operator==(const ActiveLODRequest& rhs) const
+		{
+			return (mMeshParams == rhs.mMeshParams &&
+				mLOD == rhs.mLOD);
+		}
+
+		bool operator<(const ActiveLODRequest& rhs) const
+		{
+			if (mMeshParams == rhs.mMeshParams)
+			{
+				return (mLOD < rhs.mLOD);
+			}
+			return (mMeshParams < rhs.mMeshParams);
+		}
+
+	};
+	// </FS:Ansariel> Mesh header/LOD retry functionality
+
 	struct CompareScoreGreater
 	{
 		bool operator()(const LODRequest& lhs, const LODRequest& rhs)
@@ -304,6 +368,14 @@ public:
 
 	//queue of requested LODs
 	std::queue<LODRequest> mLODReqQ;
+
+	// <FS:Ansariel> Mesh header/LOD retry functionality
+	//map of currently running header requests via HTTP
+	std::set<ActiveHeaderRequest> mActiveHeaderRequests;
+
+	//map of currently running LOD requests via HTTP
+	std::set<ActiveLODRequest> mActiveLODRequests;
+	// </FS:Ansariel> Mesh header/LOD retry functionality
 
 	//queue of unavailable LODs (either asset doesn't exist or asset doesn't have desired LOD)
 	std::queue<LODRequest> mUnavailableQ;

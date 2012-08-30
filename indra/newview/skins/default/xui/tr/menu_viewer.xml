@@ -137,11 +137,11 @@
 			<menu_item_call label="Ağ Seçenekleri" name="Grid Options"/>
 		</menu>
 		<menu label="Karşıya Yükle" name="Upload">
-			<menu_item_call label="Görüntü (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Ses (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animasyon (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Görüntü ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Ses ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animasyon ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Model..." name="Upload Model"/>
-			<menu_item_call label="Toplu (dosya başına L$[COST])..." name="Bulk Upload"/>
+			<menu_item_call label="Toplu (dosya başına [COST])..." name="Bulk Upload"/>
 			<menu_item_call label="Varsayılan Karşıya Yükleme İzinlerini Ayarla" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Geri Al" name="Undo"/>
@@ -152,6 +152,7 @@
 		<menu_item_call label="[SECOND_LIFE] Yardımı" name="Second Life Help"/>
 		<menu_item_call label="Kötüye Kullanımı Bildir" name="Report Abuse"/>
 		<menu_item_call label="Hata Bildir" name="Report Bug"/>
+        <menu_item_call label="Toslamalar, İtmeler ve Vurmalar" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="[APP_NAME] Hakkında" name="About Second Life"/>
 	</menu>
 	<menu label="Gelişmiş" name="Advanced">
@@ -319,7 +320,6 @@
 			<menu_item_call label="Paket Bırakın" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Komut Dosyalı Kameranın Dökümünü Al" name="Dump Scripted Camera"/>
-		<menu_item_call label="Toslamalar, İtmeler ve Vurmalar" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Kaydedici" name="Recorder">
 			<menu_item_call label="Oynatmayı Başlat" name="Start Playback"/>
 			<menu_item_call label="Oynatmayı Durdur" name="Stop Playback"/>

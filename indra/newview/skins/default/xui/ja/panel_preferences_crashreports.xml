@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Crash Reports" name="crash_reports">
+    <check_box label="クラッシュレポートを phoenixviewer.com に送る" name="checkSendCrashReports" />
+
+    <text label="Logs:" name="textSaveMiniDumpType" >
+        ミニダンプのタイプ：
+    </text>
+    <combo_box name="comboSaveMiniDumpType" >
+        <combo_box.item name="Minimal" label="最小" value="0" />
+        <combo_box.item name="Default" label="デフォルト" value="1" />
+        <combo_box.item name="Extended" label="拡張" value="2" />
+    </combo_box>
+
+    <check_box label="送信前に必ず確認する" name="checkSendCrashReportsAlwaysAsk" />
+
+    <check_box label="settings.xml ファイルを含める" name="checkSendSettings" />
+    <text name="textSendSettings">
+        （セカンドライフ名が含まれています。）
+    </text>
+
+    <check_box label="セカンドライフ名を含める" name="checkSendName" />
+    <text name="textSendName">
+        （必要に応じて折り返し確認したいことがある時に使用されます。）
+    </text>
+
+    <text name="textInformation1">
+        上記の欄にチェックしない限り、クラッシュレポートの内容は当該クラッシュに関連する情報のみです。
+    </text>
+    <text name="textInformation2" >
+        セカンドライフのログは送信されません。従って、追加情報を送信したい場合は、内容をよく確認して、
+    </text>
+    <text name="textInformation3" >
+        別途メールで送るようにして下さい。
+    </text>
+
+    <text name="textInformation4" >
+        個人情報取扱方針　http://www.phoenixviewer.com/privacy.php
+    </text>
+</panel>

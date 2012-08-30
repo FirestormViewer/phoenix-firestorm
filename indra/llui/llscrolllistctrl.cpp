@@ -345,6 +345,26 @@ S32 LLScrollListCtrl::isEmpty() const
 
 S32 LLScrollListCtrl::getItemCount() const
 {
+	// <FS:Ansariel> Fix for FS-specific people list (radar)
+	if (mFilterColumn > -1 && !mFilterString.empty())
+	{
+		S32 count(0);
+		item_list::const_iterator iter;
+		for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
+		{
+			LLScrollListItem* item  = *iter;
+			std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+			std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+			if (filterColumnValue.find(mFilterString) == std::string::npos)
+			{
+				continue;
+			}
+			count++;
+		}
+		return count;
+	}
+	// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 	return mItemList.size();
 }
 
@@ -394,6 +414,22 @@ std::vector<LLScrollListItem*> LLScrollListCtrl::getAllSelected() const
 	return ret;
 }
 
+S32 LLScrollListCtrl::getNumSelected() const
+{
+	S32 numSelected = 0;
+
+	for(item_list::const_iterator iter = mItemList.begin(); iter != mItemList.end(); ++iter)
+	{
+		LLScrollListItem* item  = *iter;
+		if (item->getSelected())
+		{
+			++numSelected;
+		}
+	}
+
+	return numSelected;
+}
+
 S32 LLScrollListCtrl::getFirstSelectedIndex() const
 {
 	S32 CurSelectedIndex = 0;
@@ -405,6 +441,12 @@ S32 LLScrollListCtrl::getFirstSelectedIndex() const
 	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item  = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(item))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (item->getSelected())
 		{
 			return CurSelectedIndex;
@@ -807,6 +849,13 @@ BOOL LLScrollListCtrl::selectItemRange( S32 first_index, S32 last_index )
 			continue ;
 		}
 		
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(itemp))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 		if( index >= first_index && index <= last_index )
 		{
 			if( itemp->getEnabled() )
@@ -979,6 +1028,12 @@ S32 LLScrollListCtrl::getItemIndex( LLScrollListItem* target_item ) const
 	for (iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem *itemp = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(itemp))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 		if (target_item == itemp)
 		{
 			return index;
@@ -1415,14 +1470,9 @@ void LLScrollListCtrl::drawItems()
 			LLScrollListItem* item = *iter;
 			
 			// <FS:Ansariel> Fix for FS-specific people list (radar)
-			if (mFilterColumn > -1 && !mFilterString.empty())
+			if (isFiltered(item))
 			{
-				std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
-				std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
-				if (filterColumnValue.find(mFilterString) == std::string::npos)
-				{
-					continue;
-				}
+				continue;
 			}
 			// </FS:Ansariel> Fix for FS-specific people list (radar)
 
@@ -1653,6 +1703,12 @@ BOOL LLScrollListCtrl::selectItemAt(S32 x, S32 y, MASK mask)
 							break;
 						}
 						LLScrollListItem *item = *itor;
+						// <FS:Ansariel> Fix for FS-specific people list (radar)
+						if (isFiltered(item))
+						{
+							continue;
+						}
+						// </FS:Ansariel> Fix for FS-specific people list (radar)
                         if (item == hit_item || item == lastSelected)
 						{
 							selectItem(item, FALSE);
@@ -1782,6 +1838,16 @@ BOOL LLScrollListCtrl::handleRightMouseDown(S32 x, S32 y, MASK mask)
 			registrar.add("Url.Execute", boost::bind(&LLScrollListCtrl::showNameDetails, id, is_group));
 			registrar.add("Url.CopyLabel", boost::bind(&LLScrollListCtrl::copyNameToClipboard, id, is_group));
 			registrar.add("Url.CopyUrl", boost::bind(&LLScrollListCtrl::copySLURLToClipboard, id, is_group));
+			// <FS:Ansariel> FS-7263: Register Url.ShowProfile for menu_url_agent.xml
+			//               so we can properly open agent profile from contact
+			//               list and textareas (nearby chat) context menus as well.
+			registrar.add("Url.ShowProfile", boost::bind(&LLUrlAction::showProfile, "secondlife:///app/agent/" + id + "/about"));
+
+			// <FS:Ansariel> Additional convenience options
+			registrar.add("FS.ZoomIn", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/zoom"));
+			registrar.add("FS.TeleportToTarget", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/teleportto"));
+			registrar.add("FS.TrackAvatar", boost::bind(&LLUrlAction::executeSLURL, "secondlife:///app/firestorm/" + id + "/track"));
+			// </FS:Ansariel> Additional convenience options
 
 			// create the context menu from the XUI file and display it
 			std::string menu_name = is_group ? "menu_url_group.xml" : "menu_url_agent.xml";
@@ -1928,6 +1994,13 @@ LLScrollListItem* LLScrollListCtrl::hitItem( S32 x, S32 y )
 	for(iter = mItemList.begin(); iter != mItemList.end(); iter++)
 	{
 		LLScrollListItem* item  = *iter;
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		if (isFiltered(item))
+		{
+			continue;
+		}
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
+
 		if( mScrollLines <= line && line < mScrollLines + num_page_lines )
 		{
 			if( item->getEnabled() && item_rect.pointInRect( x, y ) )
@@ -3032,5 +3105,19 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 {
 	mFilterString = str;
 	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+}
+
+bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
+{
+	if (mFilterColumn > -1 && !mFilterString.empty())
+	{
+		std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
+		std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
+		if (filterColumnValue.find(mFilterString) == std::string::npos)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 // </FS:Ansariel> Fix for FS-specific people list (radar)

@@ -81,7 +81,7 @@
 #include "llviewerthrottle.h"
 #include "llvotree.h"
 #include "llvosky.h"
-
+#include "llfloaterpathfindingconsole.h"
 // linden library includes
 #include "llavatarnamecache.h"
 #include "llerror.h"
@@ -576,7 +576,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support/>
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -585,8 +585,9 @@ BOOL LLFloaterPreference::postBuild()
 		if (opensim_panel)
 			tab_container->removeTabPanel(opensim_panel);
 	}
-#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // </FS:AW  opensim preferences>
+#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+
 
 // ## Zi: Pie menu
 	gSavedSettings.getControl("OverridePieColors")->getSignal()->connect(boost::bind(&LLFloaterPreference::onPieColorsOverrideChanged, this));
@@ -789,6 +790,13 @@ void LLFloaterPreference::cancel()
 	{
 		advanced_proxy_settings->cancel();
 	}
+	//Need to reload the navmesh if the pathing console is up
+	LLHandle<LLFloaterPathfindingConsole> pathfindingConsoleHandle = LLFloaterPathfindingConsole::getInstanceHandle();
+	if ( !pathfindingConsoleHandle.isDead() )
+	{
+		LLFloaterPathfindingConsole* pPathfindingConsole = pathfindingConsoleHandle.get();
+		pPathfindingConsole->onRegionBoundaryCross();
+	}
 }
 
 void LLFloaterPreference::onOpen(const LLSD& key)
@@ -954,6 +962,14 @@ void LLFloaterPreference::onBtnOK()
 	}
 
 	LLPanelLogin::updateLocationCombo( false );
+	//Need to reload the navmesh if the pathing console is up
+	LLHandle<LLFloaterPathfindingConsole> pathfindingConsoleHandle = LLFloaterPathfindingConsole::getInstanceHandle();
+	if ( !pathfindingConsoleHandle.isDead() )
+	{
+		LLFloaterPathfindingConsole* pPathfindingConsole = pathfindingConsoleHandle.get();
+		pPathfindingConsole->onRegionBoundaryCross();
+	}
+	
 }
 
 // static 
@@ -2119,6 +2135,14 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+// <FS:AW Disable LSL bridge on opensim>
+	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
+	{
+ 		getChild<LLCheckBoxCtrl>("UseLSLBridge")->setEnabled(FALSE);
+	}
+// </FS:AW Disable LSL bridge on opensim>
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
 
 	apply();
 	return true;
@@ -2798,6 +2822,7 @@ void LLPanelPreferenceOpensim::apply()
 void LLPanelPreferenceOpensim::cancel()
 {
 	LLGridManager::getInstance()->resetGrids();
+	LLPanelLogin::updateServer();
 }
 
 void LLPanelPreferenceOpensim::onClickAddGrid()

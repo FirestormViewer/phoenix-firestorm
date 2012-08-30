@@ -2660,14 +2660,26 @@ void LLRightClickInventoryFetchDescendentsObserver::execute(bool clear_observer)
 		LLInventoryModel::item_array_t* item_array;
 		gInventory.getDirectDescendentsOf(*current_folder, cat_array, item_array);
 
-		S32 item_count = item_array->count();
-		S32 cat_count = cat_array->count();
+		// <FS:ND> Crashfix: pointers can be 0
+
+		// S32 item_count = item_array->count();
+		// S32 cat_count = cat_array->count();
 	
+		S32 item_count(0), cat_count(0);
+
+		if( item_array )
+			item_count = item_array->count();
+
+		if( cat_array )
+			cat_count = cat_array->count();
+
+		// </FS:ND>
+
 		// Move to next if current folder empty
 		if ((item_count == 0) && (cat_count == 0))
-	{
+		{
 			continue;
-	}
+		}
 
 		uuid_vec_t ids;
 		LLRightClickInventoryFetchObserver* outfit = NULL;
@@ -3469,6 +3481,14 @@ void LLFolderBridge::buildContextMenuBaseOptions(U32 flags)
 			mWearables=TRUE;
 		}
 	}
+// [SL:KB] - Patch: Inventory-Misc | Checked: 2011-05-28 (Catznip-2.6.0a) | Added: Catznip-2.6.0a
+	else if (isLostInventory())
+	{
+		mItems.push_back(std::string("Move to Lost And Found"));
+		if (0 == (flags & FIRST_SELECTED_ITEM))
+			mDisabledItems.push_back(std::string("Move to Lost And Found"));
+	}
+// [/SL:KB]
 
 	// Preemptively disable system folder removal if more than one item selected.
 	if ((flags & FIRST_SELECTED_ITEM) == 0)

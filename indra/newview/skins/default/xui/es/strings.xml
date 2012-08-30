@@ -3958,6 +3958,12 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="LocationCtrlSeeAVsTooltip">
 		Los avatares son visibles y está permitido el chat fuera de esta parcela
 	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Los objetos móviles pueden no comportarse adecuadamente en esta región hasta que ésta sea recargada.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Pathfinding dinámico no activado en esta región.
+	</string>
 	<string name="UpdaterWindowTitle">
 		Actualizar [APP_NAME]
 	</string>
@@ -4522,6 +4528,9 @@ Denuncia de infracción
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
+	<string name="free">
+		gratis
+	</string>
 	<string name="Membership">
 		Membresía
 	</string>
@@ -4921,7 +4930,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Viendo balizas de objetos con script (rojas)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Viendo el objeto con script con balizas de función táctil (rojas)
+		Viendo balizas de objetos con script con función táctil (rojas)
 	</string>
 	<string name="BeaconSound">
 		Viendo balizas de sonido (amarillas)
@@ -5016,6 +5025,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Statistics_Label">Estadísticas</string>
 	<string name="Command_Region_Label">Región/Estado</string>
 	<string name="Command_Fly_Label">Volar</string>
+	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
+	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
+	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5099,6 +5111,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Settings_Debug_Tooltip">Cambia valores de configuración del visor</string>
 	<string name="Command_Statistics_Tooltip">Muestra las estadísticas del visor</string>
 	<string name="Command_Region_Tooltip">Abre las herramientas de región/estado</string>
+	<string name="Command_Groundsit_Tooltip">Sentarse en / levantarse del suelo (CTRL+ALT+S)</string>
+	<string name="Command_Sound_Explorer_Tooltip">Abre el explorador de sonidos</string>
+	<string name="Command_Asset_Blacklist_Tooltip">Abre la lista de todos los items que has desdibujado</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
@@ -5133,6 +5148,11 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Normal">
 		Normal
 	</string>
+	<string name="Pathfinding_Wiki_URL">http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer</string>
+	<string name="Pathfinding_Object_Attr_None">Ninguno</string>
+	<string name="Pathfinding_Object_Attr_Permanent">Afecta al navmesh</string>
+	<string name="Pathfinding_Object_Attr_Character">Caracter</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">(Múltiple)</string>
 	<string name="snapshot_quality_very_low">
 		Muy bajo
 	</string>

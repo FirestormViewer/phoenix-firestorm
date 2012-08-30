@@ -128,6 +128,7 @@
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h"
+#include "llpanelpathfindingrebakenavmesh.h"
 #include "llpaneltopinfobar.h"
 #include "llpopupview.h"
 #include "llpreviewtexture.h"
@@ -705,7 +706,9 @@ public:
 		{
 			if (LLPipeline::getRenderMOAPBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing media beacons (white)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing media beacons (white)");
+				addText(xpos, ypos, beacon_media);
 				ypos += y_inc;
 			}
 
@@ -717,13 +720,17 @@ public:
 
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing particle beacons (blue)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing particle beacons (blue)");
+				addText(xpos, ypos, beacon_particle);
 				ypos += y_inc;
 			}
 
 			if (LLPipeline::getRenderSoundBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				addText(xpos, ypos, beacon_sound);
 				ypos += y_inc;
 			}
 
@@ -741,7 +748,9 @@ public:
 
 			if (LLPipeline::getRenderPhysicalBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing physical object beacons (green)");
+				// <FS:Ansariel> Localization fix for render beacon info (FIRE-7216)
+				//addText(xpos, ypos, "Viewing physical object beacons (green)");
+				addText(xpos, ypos, beacon_physical);
 				ypos += y_inc;
 			}
 		}
@@ -2020,11 +2029,21 @@ void LLViewerWindow::initWorldUI()
 		getRootView()->addChild(gHUDView);
 	}
 
-	LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("stand_stop_flying_container");
+	LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container");
+
 	LLPanelStandStopFlying* panel_stand_stop_flying	= LLPanelStandStopFlying::getInstance();
 	panel_ssf_container->addChild(panel_stand_stop_flying);
-	panel_ssf_container->setVisible(TRUE);
 
+	// <FS:Zi> Pathfinding rebake functions
+	//         We don't use this panel, we use a menu item instead, so we only initialize the panel
+	//         but don't add it to the UI.
+	// LLPanelPathfindingRebakeNavmesh *panel_rebake_navmesh =	LLPanelPathfindingRebakeNavmesh::getInstance();
+	// panel_ssf_container->addChild(panel_rebake_navmesh);
+	LLPanelPathfindingRebakeNavmesh::getInstance();
+	// </FS:Zi>
+
+	panel_ssf_container->setVisible(TRUE);
+	
 	// Load and make the toolbars visible
 	// Note: we need to load the toolbars only *after* the user is logged in and IW
 	if (gToolBarView)
@@ -3375,8 +3394,7 @@ void LLViewerWindow::updateLayout()
 			||	(tool != LLToolPie::getInstance()						// not default tool
 				&& tool != LLToolCompGun::getInstance()					// not coming out of mouselook
 				&& !suppress_toolbox									// not override in third person
-				&& LLToolMgr::getInstance()->getCurrentToolset() != gFaceEditToolset	// not special mode
-				&& LLToolMgr::getInstance()->getCurrentToolset() != gMouselookToolset
+				&& LLToolMgr::getInstance()->getCurrentToolset()->isShowFloaterTools()
 				&& (!captor || dynamic_cast<LLView*>(captor) != NULL)))						// not dragging
 		{
 			// Force floater tools to be visible (unless minimized)
@@ -3732,8 +3750,11 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 					{
 						LLSelectNode* nodep = *iter;
 						LLViewerObject* object = nodep->getObject();
+						LLViewerObject *root_object = (object == NULL) ? NULL : object->getRootEdit();
 						BOOL this_object_movable = FALSE;
-						if (object->permMove() && (object->permModify() || selecting_linked_set))
+						if (object->permMove() && !object->isPermanentEnforced() &&
+							((root_object == NULL) || !root_object->isPermanentEnforced()) &&
+							(object->permModify() || selecting_linked_set))
 						{
 							moveable_object_selected = TRUE;
 							this_object_movable = TRUE;

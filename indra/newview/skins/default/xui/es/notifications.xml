@@ -37,6 +37,13 @@
 			<button name="Help" text="$helptext"/>
 		</form>
 	</template>
+	<template name="okhelpignore">
+		<form>
+			<button name="OK_okhelpignore" text="$yestext"/>
+			<button name="Help_okhelpignore" text="$helptext"/>
+			<ignore text="$ignoretext"/>
+		</form>
+	</template>
 	<template name="yesnocancelbuttons">
 		<form>
 			<button name="Yes" text="$yestext"/>
@@ -220,10 +227,10 @@ No podrás retirarles ese rol, sino que deberán renunciar a él por sí mismos.
 No tienes dinero suficiente para entrar.
 	</notification>
 	<notification name="CreateGroupCost">
-		Crear este grupo te costará 100 L$.
+		Crear este grupo te costará [COST] L$.
 Los grupos necesitan más de un miembro. Si no, son borrados permanentemente.
 Por favor, invita a miembros en las próximas 48 horas.
-		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Crear un grupo por 100 L$"/>
+		<usetemplate canceltext="Cancelar" name="okcancelbuttons" notext="Cancelar" yestext="Crear un grupo por [COST] L$"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Por [COST] L$ puedes entrar a este terreno (&apos;[PARCEL_NAME]&apos;) durante [TIME] horas. ¿Comprar un pase?
@@ -601,6 +608,9 @@ seleccionar más de uno.
 todos los objetos.
 
 Por favor, asegúrate de que no hay ninguno bloqueado y de que eres el propietario de todos.
+	</notification>
+	<notification name="CannotLinkPermanent">
+		Los objetos no pueden ser enlazados a través del límite de la región.
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
 		Imposible enlazarlos porque hay objetos de distintos propietarios.
@@ -2479,6 +2489,21 @@ Aquí no puedes volar.
 	<notification name="NoBuild">
 		Este terreno tiene desactivada la capacidad para construir. Aquí no puedes ni construir ni crear objetos.
 	</notification>
+	<notification name="PathfindingDirty">
+		La región tiene cambios de pathfinding pendientes. Si tienes derechos de construcción, debes actualizar la región pulsando el botón "Actualizar”.
+		<usetemplate name="okcancelbuttons" yestext="Actualizar" notext="Cerrar"/>
+	</notification>
+	<notification name="DynamicPathfindingDisabled">
+		Pathfinding dinámico no está activado en esta región. Los objetos con scripts que usen llamadas pathfinding LSL pueden no funcionar como se espera en esta región.
+	</notification>
+	<notification name="PathfindingRebakeNavmesh">
+		Cambiar ciertos objetos en esta región podría causar que otros objetos en movimiento se comporten de forma incorrecta. Para que los objetos en movimiento se comporten correctamente, pulsa el botón "Recargar región”. Pulsa “Ayuda” para más información.
+		<usetemplate name="okhelpignore" ignoretext="Cambiar ciertos objetos en esta región puede ocasionar un comportamiento incorrecto de otros objetos en movimiento." yestext="Aceptar" helptext="Ayuda"/>
+	</notification>
+	<notification name="PathfindingCannotRebakeNavmesh">
+		Ha ocurrido un error. Puede deberse a un problema en la conexión o en el servidor, o puede que no tengas permisos para construir. A veces desconectar y volver a conectar puede resolver este problema.
+	<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
 	<notification name="SeeAvatars">
 		Esta parcela oculta los avatares y el chat de texto de otras parcelas. No podrás ver a los residentes que estén fuera la parcela ni ellos podrán verte a ti. El chat de texto regular del canal 0 también está restringido a la parcela.
 	</notification>
@@ -3193,6 +3218,61 @@ Al ocultar el botón Hablar se desactiva la función de voz.
 		Esta acción ocultará todos los botones y elementos de menú. Para restaurarlos, pulsa otra vez en [SHORTCUT].
 		<usetemplate ignoretext="Confirmar antes de ocultar la IU" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma'" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	
+	<notification name="PathfindingLinksets_MismatchOnRestricted">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+¿Deseas continuar?
+		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse a causa de restricciones de permisos en el linkset" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnVolume">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+¿Deseas continuar?
+		<usetemplate ignoretext="Algunos linksets seleccionados no pueden configurarse porque la forma es no-convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden ser configurados como se desea" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
+		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+		
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa. El tipo de uso de estos linksets no cambiará.
+
+¿Deseas continuar?	
+		<usetemplate ignoretext="Algunos linksets no pueden ser configurados a causa de restricciones de permisos en el linkset y porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+		
+		A algunos linksets seleccionados se les conmutará su marca 'fantasma'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
+
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+
+¿Deseas continuar?
+		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden ser configurados a causa de restricciones de permisos o porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
+		El objeto seleccionado afecta al navmesh. Cambiarlo a Camino Flexible lo eliminará del navmesh.
+		<usetemplate ignoretext="El objeto seleccionado afecta al navmesh. Cambiarlo a Camino Flexible lo eliminará del navmesh." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
 	<global name="UnsupportedGLRequirements">
 		Parece que no tienes el hardware apropiado para [APP_NAME]. [APP_NAME] requiere una tarjeta gráfica OpenGL que admita texturas múltiples (&apos;multitexture support&apos;). Si la tienes, comprueba que tienes los últimos controladores para tu tarjeta gráfica, así como los últimos parches y &apos;service packs&apos; para tu sistema operativo.
 
@@ -3328,6 +3408,9 @@ El nombre NO puede contener los caracteres ":" o "|".
 		'[GRID]' no es una red o dirección válida.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
+	<notification name="InvalidLocationSLURL">
+		Tu posición de inicio no especifica una red válida.
+	</notification>
 	<notification name="BlockLoginInfo">
 		[REASON]
 		<usetemplate name="okbutton" yestext="Aceptar"/>
@@ -3443,6 +3526,12 @@ Configuración actual: [CURRENT_VALUE]
 		No es posible teleportarse a la posición de este avatar porque se desconoce su posición exacta.
 		<tag>fail</tag>
 	</notification>
+	<notification name="ZoomToAvatarNotPossible">
+		No se puede enfocar este avatar porque está fuera de tu alcance.
+	</notification>
+	<notification name="TrackAvatarNotPossible">
+		No se puede seguir a este avatar porque está fuera de tu alcance.
+	</notification>
 	<notification name="CacheEmpty">
 		La cache del visor está vacía. Por favor, ten en cuenta que puedes sufrir de lentitud de movimiento y de inventario mientras se carga el nuevo contenido.
 	</notification>
@@ -3463,6 +3552,26 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 		¿Estás seguro de que quieres modificar los scripts en los objetos seleccionados?
 		<usetemplate ignoretext="Confirmar antes de modificar scripts en la selección" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
+	<notification name="LocalBitmapsUpdateFileNotFound">
+		[FNAME] no puede ser actualizado porque el archivo ya no existe.
+Se desactivarán futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsUpdateFailedFinal">
+		[FNAME] no se ha podido abrir o descodificar en [NRETRIES] intentos, y ahora se considera roto.
+Se desactivarán futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsVerifyFail">
+		Se ha intentado añadir un archivo de imagen inválido o ilegible, que no ha podido ser abierto o descodificado.
+Intento cancelado.
+	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Vas a devolver [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
+		<usetemplate ignoretext="¿Estás seguro/a de querer devolver múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Vas a eliminar [NUM_ITEMS] items. ¿Estás seguro/a de que quieres continuar?
+		<usetemplate ignoretext="Estás seguro/a de querer eliminar múltiples items?" name="okcancelignore" notext="No" yestext="Sí"/>
+	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		La cadena de color LSL ha sido copiada a tu portapapeles. Ahora puedes pegarla en tu script para usarla.
 		<form name="form">
@@ -3472,5 +3581,34 @@ Puedes activar y desactivar esta función en cualquier momento usando la casilla
 	<notification name="FSBWTooHigh">
 		Recomendamos encarecidamente no configurar el ancho de banda por encima de 1500 kbps. Es improbable que funcione bien y casi seguro no mejorará el rendimiento.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Para usar la característica de subida a Flickr debes autorizar a [APP_NAME] a acceder a tu cuenta. Si procedes, tu navegador web abrirá la página de Flickr, donde se te pedirá que inicies sesión y autorices a [APP_NAME]. Se te dará un código para usarlo en [APP_NAME].
+
+¿Deseas autorizar a [APP_NAME] a publicar en tu cuenta de Flickr?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Por favor, autoriza a [APP_NAME] a publicar en tu cuenta Flickr en tu navegador web, y copia abajo el código que se te dará:
+		<form name="form">
+			<button name="OK" text="Aceptar"/>
+			<button name="Cancel" text="Cancelar"/>
+		</form>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		La verificación Flickr ha fallado. Por favor, inténtalo de nuevo, y asegúrate de que el código de verificación sea correcto.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Tu instantánea puede ser vista ahora [http://www.flickr.com/photos/upload/edit/?ids=[ID] aquí].
+	</notification>
+	<notification name="FirstUseFlyOverride">
+		Precaución: ¡Usa la anulación de la prohibición de volar de forma responsable! Usarla sin el permiso del propietario del terreno puede derivar en la expulsión de tu avatar de la parcela en la que estás volando.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="ServerVersionChanged">
+		La región en la que has entrado funciona bajo una versión de simulador diferente.
+Simulador actual:   [NEWVERSION]
+Simulador anterior: [OLDVERSION]
 	</notification>
 </notifications>

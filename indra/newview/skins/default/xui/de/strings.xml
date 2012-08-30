@@ -3958,6 +3958,12 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="LocationCtrlSeeAVsTooltip">
 		Avatare sichtbar; Chat außerhalb dieser Parzelle gestattet
 	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Sich bewegende Objekte können sich fehlerhaft verhalten bis der Navmesh der Region aktualisiert wurde.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Dynamisches Pathfinding ist in dieser Region deaktiviert.
+	</string>
 	<string name="UpdaterWindowTitle">
 		[APP_NAME] Aktualisierung
 	</string>
@@ -4521,6 +4527,11 @@ Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein Proble
 	<string name="LocalEstimateUSD">
 		[AMOUNT] US$
 	</string>
+<!--  FS:AW opensim currency support -->
+	<string name="free">
+		 kostenlos
+	</string>
+<!--  /FS:AW opensim currency support -->
 	<string name="Membership">
 		Mitgliedschaft
 	</string>
@@ -4908,7 +4919,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Beacons für Skriptobjekte werden angezeigt (rot)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Beacons für Skriptobjekte mit Berührungsfunktion werden angezeigt (rot)
+		Beacons für Skriptobjekte mit Berührungsfunktion (rot)
 	</string>
 	<string name="BeaconSound">
 		Sound-Beacons werden angezeigt (gelb)
@@ -5025,6 +5036,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Label">
 		Fliegen
 	</string>
+	<string name="Command_Groundsit_Label">
+		Auf Boden sitzen
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Sound-Explorer
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Asset-Blacklist
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5127,6 +5147,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Fly_Tooltip">
 		Flugmodus ein-/ausschalten
 	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Aktiviert/Deaktiviert erzwungenes Sitzen auf dem Boden (Strg+Alt+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Öffnet den Sound-Explorer
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Öffnet die Asset-Blacklist mit einer Übersicht über alle geblockten Objekte
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
@@ -5159,6 +5188,22 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Normal">
 		Normal
+	</string>
+  <!-- Pathfinding -->
+	<string name="Pathfinding_Wiki_URL">
+		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+	</string>
+	<string name="Pathfinding_Object_Attr_None">
+		Keine
+	</string>
+	<string name="Pathfinding_Object_Attr_Permanent">
+		Beinflusst Navmesh
+	</string>
+	<string name="Pathfinding_Object_Attr_Character">
+		Charakter
+	</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">
+		(mehrere)
 	</string>
 	<string name="snapshot_quality_very_low">
 		Sehr niedrig

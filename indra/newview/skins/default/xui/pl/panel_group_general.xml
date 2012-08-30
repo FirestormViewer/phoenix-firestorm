@@ -41,6 +41,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 				</text>
 				<check_box label="Wyświetl grupę w profilu" name="list_groups_in_profile" tool_tip="Zaznacz, jeżeli chcesz by grupa wyświetlała się w Twoim profilu"/>
 				<check_box label="Otrzymuj ogłoszenia grupowe" name="receive_notices" tool_tip="Zaznacz, jeżeli chcesz otrzymywać ogłoszenia z tej grupy. Odznacz, jeśli grupa Cię spamuje."/>
+				<check_box label="Otrzymuj grupowe IM/czat" name="receive_chat" tool_tip="Zaznacz, jeśli chcesz uczestniczyć w czacie grupowym dla tej grupy."/>
 				<text name="active_title_label">
 					Aktywny tytuł:
 				</text>

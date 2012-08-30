@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Firestorm" name="firestorm">
+
+<tab_container label="Firestorm Prefs" name="tabs" >
+
+
+    <!-- 一般 -->
+	
+    <panel label="一般" name="tab-general" >
+	
+        <check_box name="checkMiscRLVa" label="他のビューワからのリモートコントロールを許可する。（RLVa機能）" />
+        <text name="textMiscRLVaRestart" left_pad="70" >
+            （再起動が必要）
+        </text>
+        
+        <check_box label="世界地図でダブルクリックテレポート" name="FSWorldMapDoubleclickTeleport" tool_tip="世界地図をダブルクリックしてその場所にテレポートできるようにします"/>
+        <check_box label="テレポート画面オフ" name="tp_screen_toggle" tool_tip="テレポートしている間表示される黒いテレポート画面を表示しないようにします。"/>
+        <check_box label="テレポートビーコンオフ" name="tp_beam_toggle" tool_tip="テレポートが完了したら、目的地点に表示されるビーコンが消えるようにします。"/>
+        <check_box label="ログイン画面オフ" name="login_screen_toggle" tool_tip="ログイン進行中に表示される黒いログイン画面を表示しないようにします。"/>
+        <check_box label="ログアウト画面オフ" name="logout_screen_toggle" tool_tip="ログアウト進行中に表示される黒いログアウト画面を表示しないようにします。"/>
+        <check_box label="可能であれば土地に設定されているグループでオブジェクトをRez" name="grouplandrez" tool_tip="土地に設定されているグループに自分が所属している場合、現在自分が表示しているグループタグに関わりなく、その土地に設定されているグループでオブジェクトをRezしようと試みます。"/>
+
+        <check_box label="表示名が表示されている場合でも、ユーザー名でコンタクトリストを並べ替える" name="sortcontactsbyun" tool_tip="ここにチェックを入れると、コンタクトリストは全てユーザー名で並べ替わるようになります。" />
+
+        <check_box label="ブロックしているアバターをパーティクルの雲で表示" name="ShowMutedAvatarsAsCloud" tool_tip="ブロックしているアバターは特別な色のパーティクルの雲で表示されるようになります。" />
+
+        <check_box label="空のシステムフォルダを持ち物に表示しない" name="DebugHideEmptySystemFolders" tool_tip="ここにチェックを入れると、持ち物ウィンドウにお気に入り、ランドマークといったシステムフォルダのうち、中身が空のものが表示されなくなります。" />
+
+        <check_box label="受け取りアイテムフォルダを通常の持ち物フォルダとして表示" name="FSShowInboxFolder" tool_tip="ここにチェックを入れると、持ち物ウィンドウにに受け取りアイテムフォルダが表示されるようになります。" />
+
+        <check_box label="持ち物のそれぞれのタブで異なる検索キーワードを設定可能にする" name="FSSplitInventorySearchOverTabs" tool_tip="ここにチェックを入れると、持ち物のそれぞれのタブに異なる検索キーワードを入力することが可能になります。" />
+
+        <check_box label="目標のアバターが3m以内に接近した場合、追跡ビーコンをオフにする" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="ここにチェックを入れると、目標とするアバターに3m以内（デフォルト値）まで接近した時、追跡ビーコンが自動的に消えるようになります。"/>
+
+        <check_box name="UseLSLBridge" label="LSLクライアントブリッジを使用" tool_tip="スクリプトの入った装着物（ブリッジ）を利用して、ビューワの機能を拡張できるようにします。"/>
+        <check_box name="UseLSLFlightAssist" label="ブリッジ飛行支援機能を使用" tool_tip="飛行やホバリングが、標準で定められているよりも高い場所でできるようにするスクリプトを有効にします。"/>
+		
+    </panel>
+
+
+    <!-- 保護 -->
+	
+    <panel label="保護" name="ProtectionTab">
+	
+        <check_box label="左クリックで座らないようにする" name="FSBlockClickSit" />
+        <check_box label="世界地図を開くスクリプト（llMapDestinatin）を許可する" name="ScriptsCanShowUI" />
+
+        <text name="revokepermissions_txt">
+			オブジェクトのアニメーション権限取消：
+		</text>
+        <radio_group name="FSRevokePerms" tool_tip="座ったり立ち上がったりした際に、それまで作用していたアニメーションを停止するか設定します">
+            <radio_item label="取消しない（標準の動作）" name="never_radio" value="0" />
+            <radio_item label="座る時に取消" name="sit_radio" value="1" />
+            <radio_item label="立ち上がる時に取消" layout="topleft" name="stand_radio" value="2" />
+            <radio_item label="座るまたは立ち上がる時に取消" value="3" />
+        </radio_group>
+
+        <text name="SurfaceAreaThreshholdLabel">
+			テクスチャ遅延保護（オブジェクトによっては表示がおかしくなります）：
+        </text>
+        <check_box label="広大なテクスチャ領域を有する巨大なオブジェクトを自動的に隠す　閾値：" name="RenderVolumeSAProtection" tool_tip="ここにチェックを入れることで、表面に広大なテクスチャ領域が広がっているようなオブジェクトを表示することでビューワがクラッシュするのを防ぎます。デフォルト値は5000平方メートルに設定してありますが、このオプションを有効にした時に、表示されないオブジェクトがある場合には、この値を上げる必要があるかもしれません。"/>
+        <spinner name="RenderVolumeSAFrameMax" />
+
+        <check_box label="スパムからの保護" name="UseAntiSpam" />
+        <text name="AntiSpamText1">
+           １メッセージあたりの最大受信行数：
+        </text>
+        <spinner name="_NACL_AntiSpamNewlines" tool_tip="１回のテキストメッセージで許容される最大行数。（70行がデフォルト）"/>
+        <text name="AntiSpamText2" >
+           同じソースからの最大受信イベント数：
+        </text>
+        <spinner name="_NACL_AntiSpamAmount" tool_tip="同じソースから2秒以内に送られて来る同様のイベントの許容数。（10回がデフォルト）"/>
+        <text name="AntiSpamText3" >
+           サウンド・プレイ・リクエストの許容回数：
+        </text>
+        <spinner name="_NACL_AntiSpamSoundMulti" tool_tip="Event multiplier for sound play requests [Default: 10]"/>
+        <text name="AntiSpamText4" >
+           サウンド・プリロード・リクエストの許容回数：
+        </text>
+        <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Event multiplier for sound preload requests [Default: 4]"/>
+        <button name="AntiSpamUnblock" label="スパム・ソースは全て無視する" />
+		 
+        <check_box label="オブジェクトからアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpam" />
+        <check_box label="他の住人からアイテムが一度にたくさん送られて来た場合に通知" name="FSNotifyIncomingObjectSpamFrom" />
+        <slider name="FSOfferThrottleMaxCount" label="オブジェクト受け取り量の閾値：" tool_tip="10秒以内に送られて来るオブジェクト個数の閾値を設定します。5個がデフォルトです。" />
+		 
+	</panel>
+
+
+    <!-- アバター -->
+	
+    <panel label="アバター" name="firestorm_avatar" >
+
+        <text name="HeadMovement" >
+            マウスを追いかけるアバターの頭の動き（動かしたくない時は0に設定）：
+        </text>
+        <slider label="マウスを追いかける時に頭が縦に動く範囲：" tool_tip="マウスを追いかける時に頭が垂直方向（上下）に動く範囲を度で設定します。" name="PitchFromMousePositionSlider" />
+        <text name="PitchFromMousePositionText">
+            度
+        </text>
+        <slider label="マウスを追いかける時に頭が横に動く範囲：" tool_tip="マウスを追いかける時に頭が水平方向（左右）に動く範囲を度で設定します。" name="YawFromMousePositionSlider" />
+        <text name="YawFromMousePositionText" >
+            度
+        </text>
+        <text name="note_lookat" >
+             （アバターの視線に関する設定は「プライバシー」タブにあります。）
+        </text>
+
+        <check_box label="アバター物理をサーバに送信しない（１系のビューワとの互換性確保）" name="dontsendavphysics" tool_tip="アバター物理情報をセカンドライフサーバに送信しないようにします。これによって１系ビューワとの互換性を保つようにします。"/>
+
+        <!-- LGGカラービーム -->
+		
+        <text name="BeamPrefs" >
+            選択ビームのパーティクル効果
+        </text>
+        <view_border name="BeamDivisor" />
+
+        <button name="BeamColor_delete" label="削除" tool_tip="現在の設定を削除します。" />
+
+        <combo_box name="BeamColor_combo" tool_tip="選択ビームの色設定を選択します。"/>
+
+        <button name="BeamColor_new" label="新規作成" tool_tip="色設定を新たに作成します" />
+
+        <button name="BeamColor_refresh" label="リスト更新" tool_tip="色設定のリストを更新します。" />
+
+        <button name="PhoenixBeamPrev_rainbow" label="" />
+
+        <slider name="FSMaxBeamsPerSecond" label="1秒あたりの発生数：" tool_tip="1秒間に発生するビームの数を秒単位で設定します。40がデフォルトです。" />
+
+        <check_box label="選択ビームを有効にする" name="SLPartBeam" />
+
+        <check_box label="SLパーティクルチャット" name="FSParticleChat" />
+
+        <view_border name="BeamDivisor2" />
+
+        <combo_box name="FSBeamShape_combo" tool_tip="パーティクルビームの形を選択します。" />
+
+        <button name="delete_beam" label="削除" tool_tip="現在設定されているビーム設定を削除します。" />
+
+        <button name="custom_beam_btn" label="新規作成" tool_tip="ビームの形をカスタマイズします。" />
+
+        <button name="refresh_beams" label="リスト更新" tool_tip="ビームのリストを更新します。" />
+
+        <button name="PhoenixBeamPrev_Phoenix" label="" />
+
+        <slider name="FSBeamShapeScale" label="大きさ：" tool_tip="ビームに表示されている形の幅を設定します。" />
+
+    </panel>
+	
+
+	<!-- コマンドライン１ -->
+	
+	<panel label="コマンドライン1" name="tab-CmdLine1" >
+    
+		<check_box label="チャットバーをコマンドラインとして使用" name="chat_cmd_toggle" />.
+		
+		<!-- 計算機 -->
+   		<text name="FSCmdLineCalc_txt">
+			式を計算（例：cmd SIN(2+2)）
+		</text>
+		<line_editor name="FSCmdLineCalc" />
+		
+		<!-- 自動修正リストに追加 -->
+		<text name="FSCmdLineAutocorrect_txt">
+			単語を自動修正リストに追加（使用法：cmd リスト名|修正前|修正後）
+		</text>
+		<line_editor name="FSCmdLineAutocorrect"/>
+		
+		<!-- 描画距離 -->
+		<text name="FSCmdLineDrawDistance_txt">
+			描画距離を変更（使用法：cmd 数字（m））
+		</text>
+		<line_editor name="FSCmdLineDrawDistance"/>
+		
+		<!-- 帯域幅 -->
+		<text name="FSCmdLineBandWidth_txt">
+			最大帯域幅を設定（使用法：cmd 数字（kbps））
+		</text>
+		<line_editor name="FSCmdLineBandWidth"/>
+		
+		<!-- プラットフォームをRez -->
+		<text name="FSCmdLineRezPlatform_txt">
+			プラットフォームをRez（使用法：cmd 0〜30）
+		</text>
+		<line_editor name="FSCmdLineRezPlatform"/>
+		<slider name="FSCmdLinePlatformSize" label="幅" tool_tip="Rezするプラットフォームの幅を設定します。"/>
+
+		<view_border name="EmDivisor"/>
+		
+		<!-- キーからアバター名取得 -->
+		<text name="FSCmdLineKeyToName_txt">
+			UUIDからアバター名を取得（使用法：cmd UUID）
+		</text>
+		<line_editor name="FSCmdLineKeyToName"/>
+		
+		<!-- AOオン／オフ -->
+		<text name="FSCmdLineAO_txt">
+			AOをオン／オフ（使用法：cmd on/off）
+		</text>
+		<line_editor name="FSCmdLineAO"/>
+		
+		<!-- チャットクリア -->
+		<text name="FSCmdLineClearChat_txt">
+			チャット履歴を消去（使用法：cmd）
+		</text>
+		<line_editor tool_tip="スパムチャットがあった時に、その影響でラグが発生するのを防ぐためにチャット履歴を消去します。" name="FSCmdLineClearChat"/>
+	  
+		<!-- メディア -->
+		<text name="FSCmdLineMedia_txt">
+			メディアURLを設定（使用法：cmd URL タイプ）
+		</text>
+		<line_editor tool_tip="入力したURLのメディアに設定、メディアをプレイします。" name="FSCmdLineMedia"/>
+	
+		<!-- 音楽 -->
+		<text name="FSCmdLineMusic_txt">
+			音楽ストリーミングURLを設定（使用法：cmd URL）
+		</text>
+		<line_editor tool_tip="入力したURLの音楽ストリーミングに設定、音楽をプレイします。" name="FSCmdLineMusic"/>
+	
+	</panel>
+  
+
+	<!-- コマンドライン２ -->
+  
+	<panel label="コマンドライン2" name="tab-CmdLine2" >
+
+		<check_box label="チャットバーをコマンドラインとして使用" name="chat_cmd_toggle2"/>
+	
+		<!-- SIM内テレポート-->
+		<text name="FSCmdLinePos_txt">
+			同じSIM内でテレポート（使用法：cmd x y z）
+		</text>
+		<line_editor name="FSCmdLinePos"/>
+		
+		<!-- 地上にテレポート -->
+		<text name="FSCmdLineGround_txt">
+			地上にテレポート（使用法：cmd）
+		</text>
+		<line_editor name="FSCmdLineGround"/>
+		
+		<!-- 指定高度にテレポート -->
+		<text name="FSCmdLineHeight_txt">
+			指定した高さにテレポート（使用法：cmd z）
+		</text>
+		<line_editor name="FSCmdLineHeight"/>
+		
+		<!-- 指定SIMに移動 -->
+		<text name="FSCmdLineMapTo_txt">
+			指定したSIMに移動（使用法：cmd SIM名）
+		</text>
+		<line_editor name="FSCmdLineMapTo"/>
+		<check_box label="目標SIMの同じ座標に移動" name="toggle"/>
+
+		<view_border name="EmDivisor"/>
+		
+		<!-- カメラ位置にテレポート -->
+		<text name="FSCmdTeleportToCam_txt">
+			カメラ位置にテレポート（使用法：cmd）
+		</text>
+		<line_editor name="FSCmdTeleportToCam"/>
+		
+		<!-- テレポートを送る -->
+		<text name="FSCmdLineOfferTp_txt">
+			アバターにテレポートを送る（使用法：cmd UUID）
+		</text>
+		<line_editor name="FSCmdLineOfferTp"/>
+		
+		<!-- アバターにテレポート -->
+		<text name="FSCmdLineTP2_txt">
+			アバターの所にテレポート（使用法：cmd アバター名）
+		</text>
+		<line_editor tool_tip="このコマンドで使用するアバター名はフルネームでなくてよく、また大文字小文字を区別しません。レーダーを開いて同様の名前の人がいないか確認してお使いになることをお勧めします。" name="FSCmdLineTP2"/>
+		
+		<!-- ホームにテレポート -->
+		<text name="FSCmdLineTeleportHome_txt">
+			ホームにテレポート（使用法：cmd）
+		</text>
+		<line_editor name="FSCmdLineTeleportHome"/>
+		
+  </panel>
+  
+
+    <!-- Windlight -->
+	
+    <panel label="Windlight" name="WindlightTab">
+
+        <check_box label="自動的に環境設定を地域／区画の設定に合わせる。" name="UseEnvironmentFromRegionAlways" />
+		<check_box label="クイック設定で空の設定を変更する際、現在の環境から徐々に変化させる" name="FSInterpolateSky" tool_tip="ここにチェックを入れると、Windlight設定を変更する際に、変更前の設定と変更後の設定が入り交じって幻想的に変化します。但し、コンピュータの性能が低い場合、変化の過程で数秒間にわたってFPSが低下する可能性があります。この効果が不要ですぐに変化を確認したい場合はこれら２つのオプションはオフにして下さい。" />
+        <check_box label="クイック設定で水の設定を変更する際、現在の環境から徐々に変化させる" name="FSInterpolateWater" tool_tip="上のオプションと同じで、こちらは水に対する効果です。" />
+
+        <text name="FSWLshare_txt">
+			Phoenix Windlight設定共有機能（試験段階）
+        </text>
+        <check_box label="Phoenixの区画Windlight設定共有機能を使用（試験段階）" name="FSWLParcelEnabled" />
+        <check_box label="フレンドの土地のWindlight設定を自動的に適用する" name="FSWLWhitelistFriends"/>
+        <check_box label="グループの土地のWindlight設定を自動的に適用する" name="FSWLWhitelistGroups" />
+        <check_box label="どんな土地区画のWindlight設定も自動的に適用する" name="FSWLWhitelistAll" />
+        <check_box label="土地区画に設定された環境設定に現在の設定から徐々に変化させる" name="FSInterpolateParcelWL" tool_tip="上にある地域／不動産の場合と同じ効果ですが、こちらは土地区画に設定されたWindlightに対する効果となります。" />
+
+    </panel>
+	
+
+    <!-- 制作 -->
+	
+    <panel label="制作" name="BuildTab">
+
+		<text name="text_box_objprams">
+			デフォルトのオブジェクトパラメータ
+        </text>
+        <view_border name="SizeBorder"/>
+        <spinner label="X方向の大きさ" name="X size" label_width="80" width="160"/>
+        <spinner label="Y方向の大きさ" name="Y size" label_width="80" width="160"/>
+        <spinner label="Z方向の大きさ" name="Z size" label_width="80" width="160"/>
+        <text name="text_box_objmaterial">
+			材質：
+        </text>
+        <combo_box name="material">
+             <combo_item name="Stone" value="Stone" label="石"/>
+             <combo_item name="Metal" value="Metal" label="金属"/>
+             <combo_item name="Glass" value="Glass" label="ガラス"/>
+             <combo_item name="Wood" value="Wood" label="木"/>
+             <combo_item name="Flesh" value="Flesh" label="肌"/>
+             <combo_item name="Plastic" value="Plastic" label="プラスチック"/>
+             <combo_item name="Rubber" value="Rubber" label="ゴム"/>
+        </combo_box>
+
+        <text name="text_box_pivotpoint">
+			回転の中心
+        </text>
+        <view_border name="PivotBorder"/>
+        <check_box label="回転軸を表す矢印をルートプリムに表示" tool_tip="デフォルトでは、回転を表す矢印はリンクセットの中心に表示されます。ここにチェックを入れると、そのリンクセットのルートプリムに回転軸が表示されます。" name="EmBuildPrefsActualRoot_toggle"/>
+        <spinner label="X軸の位置" name="X pos" label_width="80" width="160"/>
+        <spinner label="Y軸の位置" name="Y pos" label_width="80" width="160"/>
+        <spinner label="Z軸の位置" name="Z pos" label_width="80" width="160"/>
+        <check_box label="パーセントで設定" tool_tip="デフォルトではパーセントで設定、どの軸に対しても50%、つまり中央に設定されています。" name="EmPivotPercToggle"/>
+
+        <check_box label="選択したプリムを強調表示" tool_tip="このチェックを外した場合、黄色や青のプリムの輪郭が表示されなくなります。これにより、選択しているプリム数が多い場合に処理性能を向上させることができます。" name="EmBuildPrefsRenderHighlight_toggle"/>
+
+        <check_box label="旧式の「売り出し中」の動作を使用" tool_tip="ここにチェックを入れると、「販売対象」のチェックを入れた瞬間にデフォルトのL$10の価格が適用されます。標準では、「販売対象」にチェックを入れた後、価格を修正して「適用」ボタンを押した時に反映されるようになっています。" name="FSCommitForSaleOnChange_toggle"/>
+
+        <check_box label="持ち物内で編集したスクリプトはMonoとして保存" tool_tip="ここにチェックを入れると、持ち物内で直接編集したスクリプトをLSL2でなく、Monoの形式で保存します。" name="FSSaveInventoryScriptsAsMono_toggle"/>
+
+		<check_box label="LSLプリプロセッサを有効にする" tool_tip="ここにチェックを入れるとLSLプリプロセッサが利用できるようになります。" name="preproc_checkbox" />
+		<check_box label="スクリプト最適化" tool_tip="ここにチェックを入れると、他のスクリプトファイルを読み込んだ時に、参照されていない無駄なコードを表示せずに読みやすさを最適化します。" name="preprocoptimizer_checkbox" />
+		<check_box label="switch()文の利用" tool_tip="ここにチェックを入れると、スクリプトの制御構造にswitch()文が利用できるようになります。" name="preprocswitch_checkbox" />
+		<check_box label="簡単なリスト追加" tool_tip="ここにチェックを入れると、リストに値を追加する場合に簡単な方法を利用することができるようになります。" name="preproclazy_checkbox" />
+		<check_box label="#includeを使用" tool_tip="ここにチェックを入れると、ローカルディスク上のファイルを参照して#includeが利用できるようになります。" name="preprocinclude_checkbox" left_delta="130" />
+		<text name="lslpreprocinclude_textbox">
+			#includeで使用するファイルのパス：
+		</text>
+		<line_editor name="preprocinclude_location" />
+		<button label="参照" name="SetPreprocInclude" />
+		
+	</panel>
+
+
+    <!--Tags-->
+	
+</tab_container>
+</panel>

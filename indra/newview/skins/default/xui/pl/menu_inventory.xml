@@ -8,7 +8,7 @@
 	<menu_item_call label="Zmień nazwę" name="Task Rename"/>
 	<menu_item_call label="Usuń" name="Task Remove"/>
 	<menu_item_call label="Opróżnij Kosz" name="Empty Trash"/>
-	<menu_item_call label="Opróżnij Zgubione i odnalezione" name="Empty Lost And Found"/>
+	<menu_item_call label="Opróżnij Zagubione i odnalezione" name="Empty Lost And Found"/>
 	<menu_item_call label="Nowy folder" name="New Folder"/>
 	<menu_item_call label="Nowy skrypt" name="New Script"/>
 	<menu_item_call label="Nowa nota" name="New Note"/>
@@ -67,7 +67,7 @@
 	<menu_item_call label="Wklej jako link" name="Paste As Link"/>
 	<menu_item_call label="Usuń ten link" name="Remove Link"/>
 	<menu_item_call label="Usuń" name="Delete"/>
-	<menu_item_call label="Przenieś do Zgubionych i odnalezionych" name="Move to Lost And Found"/>
+	<menu_item_call label="Przenieś do Zagubionych i odnalezionych" name="Move to Lost And Found"/>
 	<menu_item_call label="Usuń folder systemowy" name="Delete System Folder"/>
 	<menu_item_call label="Rozpocznij konferencję czatową" name="Conference Chat Folder"/>
 	<menu_item_call label="Odtwarzaj" name="Sound Play"/>

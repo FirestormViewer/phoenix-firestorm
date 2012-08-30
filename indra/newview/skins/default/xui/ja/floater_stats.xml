@@ -51,6 +51,11 @@
 				<stat_bar label="アクティブなオブジェクト" name="simactiveobjects"/>
 				<stat_bar label="アクティブなスクリプト" name="simactivescripts"/>
 				<stat_bar label="スクリプトイベント" name="simscripteps"/>
+			<stat_view name="simpathfinding" label="パスファインディング">
+				<stat_bar name="simsimaistepmsec" label="  AIステップ時間"/>
+				<stat_bar name="simsimskippedsilhouettesteps" label="  スキップされたステップ"/>
+				<stat_bar name="simsimpctsteppedcharacters" label="  キャラクター更新率"/>
+			</stat_view>
 				<stat_bar label="パケットイン" name="siminpps"/>
 				<stat_bar label="パケットアウト" name="simoutpps"/>
 				<stat_bar label="保留中のダウンロード" name="simpendingdownloads"/>

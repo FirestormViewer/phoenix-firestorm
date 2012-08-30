@@ -14,12 +14,13 @@
 					<text name="inbox_fresh_new_count">
 						[NUM] nuevos
 					</text>
-					<panel tool_tip="Arrastra items a tu inventario para usarlos">
+					<panel name="inbox_inventory_placeholder_panel" tool_tip="Arrastra items a tu inventario para usarlos">
 						<text name="inbox_inventory_placeholder">
 							Aquí se entregarán las compras realizadas en el mercado.
 						</text>
 					</panel>
 				</panel>
+			</layout_panel>
 		</layout_stack>
 		<panel name="button_panel">
 			<layout_stack name="button_panel_ls">

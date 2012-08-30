@@ -60,6 +60,8 @@
 #include "llfloatergodtools.h"
 #include "llfloaterinventory.h"
 #include "llfloaterland.h"
+#include "llfloaterpathfindingcharacters.h"
+#include "llfloaterpathfindinglinksets.h"
 #include "llfloaterpay.h"
 #include "llfloaterreporter.h"
 #include "llfloatersearch.h"
@@ -119,6 +121,7 @@
 #include "lleconomy.h"
 #include "lltoolgrab.h"
 #include "llwindow.h"
+#include "llpathfindingmanager.h"
 #include "boost/unordered_map.hpp"
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
@@ -136,6 +139,8 @@
 #include "particleeditor.h"
 #include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
 #include "fswsassetblacklist.h"
+
+#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 
 using namespace LLVOAvatarDefines;
 
@@ -243,7 +248,6 @@ void near_sit_object();
 BOOL is_selection_buy_not_take();
 S32 selection_price();
 BOOL enable_take();
-void handle_take();
 void handle_object_show_inspector();
 void handle_avatar_show_inspector();
 bool confirm_take(const LLSD& notification, const LLSD& response, LLObjectSelectionHandle selection_handle);
@@ -382,11 +386,22 @@ LLMenuParcelObserver::~LLMenuParcelObserver()
 
 void LLMenuParcelObserver::changed()
 {
-	gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL));
-	
+	// <FS:Ansariel> Cache controls
+	//gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL));
+	//
+	//BOOL buyable = enable_buy_land(NULL);
+	//gMenuHolder->childSetEnabled("Land Buy", buyable);
+	//gMenuHolder->childSetEnabled("Buy Land...", buyable);
+
+	static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
+	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
+	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
+
+	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL));
 	BOOL buyable = enable_buy_land(NULL);
-	gMenuHolder->childSetEnabled("Land Buy", buyable);
-	gMenuHolder->childSetEnabled("Buy Land...", buyable);
+	land_buy->setEnabled(buyable);
+	buy_land->setEnabled(buyable);
+	// </FS:Ansariel> Cache controls
 }
 
 
@@ -544,10 +559,25 @@ void init_menus()
   
     gViewerWindow->setMenuBackgroundColor(false, 
         !LLGridManager::getInstance()->isInSLBeta());
-
-	// Assume L$10 for now, the server will tell us the real cost at login
-	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
-	const std::string upload_cost("10");
+// <FS:AW opensim currency support>
+//	// Assume L$10 for now, the server will tell us the real cost at login
+//	// *TODO:Also fix cost in llfolderview.cpp for Inventory menus
+//	const std::string upload_cost("10");
+	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
+	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	std::string upload_cost;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if(in_opensim)
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+	}
+// </FS:AW opensim currency support>
 	gMenuHolder->childSetLabelArg("Upload Image", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Upload Sound", "[COST]", upload_cost);
 	gMenuHolder->childSetLabelArg("Upload Animation", "[COST]", upload_cost);
@@ -2660,30 +2690,30 @@ class LLObjectDerender : public view_listener_t
 		{
 	        LLSelectMgr::getInstance()->removeObjectFromSelections(objp->getID());
 
-			
-			LLViewerRegion* cur_region = gAgent.getRegion();
 			std::string entry_name;
-			if(objp->isAvatar()){
+			std::string region_name;
+
+			if (objp->isAvatar())
+			{
 				LLNameValue* firstname = objp->getNVPair("FirstName");
 				LLNameValue* lastname = objp->getNVPair("LastName");
-				entry_name = llformat("Derendered: (AV) %s %s",firstname->getString(),lastname->getString());
-			} else {
-				if(!nodep->mName.empty()){
-					if(cur_region)
-						entry_name = llformat("Derendered: %s in region %s",nodep->mName.c_str(),cur_region->getName().c_str());
-					else
-						entry_name = llformat("Derendered: %s",nodep->mName.c_str());
+				entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
+			}
+			else
+			{
+				if (!nodep->mName.empty())
+				{
+					entry_name = nodep->mName;
 				}
-				else{
-					if(cur_region)
-						entry_name = llformat("Derendered: (unknown object) in region %s",cur_region->getName().c_str());
-					else
-						entry_name = "Derendered: (unkown object)";
+
+				LLViewerRegion* region = objp->getRegion();
+				if (region)
+				{
+					region_name = region->getName();
 				}
 			}
 			
-			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(),entry_name,LLAssetType::AT_OBJECT);
-
+			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
 
 			LLSelectMgr::getInstance()->deselectAll();
 			gObjectList.killObject(objp);
@@ -3181,6 +3211,16 @@ bool enable_object_edit()
 bool enable_object_build()
 {
 	return !enable_object_edit();
+}
+
+bool enable_object_select_in_pathfinding_linksets()
+{
+	return LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion() && LLSelectMgr::getInstance()->selectGetEditableLinksets();
+}
+
+bool enable_object_select_in_pathfinding_characters()
+{
+	return LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion() &&  LLSelectMgr::getInstance()->selectGetViewableCharacters();
 }
 
 class LLSelfRemoveAllAttachments : public view_listener_t
@@ -3794,7 +3834,7 @@ void append_aggregate(std::string& string, const LLAggregatePermissions& ag_perm
 bool enable_buy_object()
 {
     // In order to buy, there must only be 1 purchaseable object in
-    // the selection manger.
+    // the selection manager.
 	if(LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() != 1) return false;
     LLViewerObject* obj = NULL;
     LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
@@ -4858,8 +4898,9 @@ static bool get_derezzable_objects(
 		{
 		case DRD_TAKE_INTO_AGENT_INVENTORY:
 		case DRD_TRASH:
-			if( (node->mPermissions->allowTransferTo(gAgent.getID()) && object->permModify())
-				|| (node->allowOperationOnNode(PERM_OWNER, GP_OBJECT_MANIPULATE)) )
+			if (!object->isPermanentEnforced() &&
+				((node->mPermissions->allowTransferTo(gAgent.getID()) && object->permModify())
+				|| (node->allowOperationOnNode(PERM_OWNER, GP_OBJECT_MANIPULATE))))
 			{
 				can_derez_current = TRUE;
 			}
@@ -5295,9 +5336,10 @@ BOOL enable_take()
 			return TRUE;
 		}
 # endif
-		if((node->mPermissions->allowTransferTo(gAgent.getID())
+		if(!object->isPermanentEnforced() &&
+			((node->mPermissions->allowTransferTo(gAgent.getID())
 			&& object->permModify())
-		   || (node->mPermissions->getOwner() == gAgent.getID()))
+			|| (node->mPermissions->getOwner() == gAgent.getID())))
 		{
 			return TRUE;
 		}
@@ -5546,6 +5588,22 @@ class LLToolsSaveToObjectInventory : public view_listener_t
 			derez_objects(DRD_SAVE_INTO_TASK_INVENTORY, node->mFromTaskID);
 		}
 		return true;
+	}
+};
+
+class LLToolsEnablePathfinding : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return (LLPathfindingManager::getInstance() != NULL) && LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion();
+	}
+};
+
+class LLToolsEnablePathfindingView : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		return (LLPathfindingManager::getInstance() != NULL) && LLPathfindingManager::getInstance()->isPathfindingEnabledForCurrentRegion() && LLPathfindingManager::getInstance()->isPathfindingViewEnabled();
 	}
 };
 
@@ -5815,6 +5873,12 @@ class LLEditDelete : public view_listener_t
 	}
 };
 
+bool enable_object_return()
+{
+	return (!LLSelectMgr::getInstance()->getSelection()->isEmpty() &&
+		(gAgent.isGodlike() || can_derez(DRD_RETURN_TO_OWNER)));
+}
+
 void handle_spellcheck_replace_with_suggestion(const LLUICtrl* ctrl, const LLSD& param)
 {
 	const LLContextMenu* menu = dynamic_cast<const LLContextMenu*>(ctrl->getParent());
@@ -5900,6 +5964,49 @@ bool enable_object_delete()
 	LLSelectMgr::getInstance()->canDoDelete();
 #endif
 	return new_value;
+}
+
+class LLObjectsReturnPackage
+{
+public:
+	LLObjectsReturnPackage() : mObjectSelection(), mReturnableObjects(), mError(),	mFirstRegion(NULL) {};
+	~LLObjectsReturnPackage()
+	{
+		mObjectSelection.clear();
+		mReturnableObjects.clear();
+		mError.clear();
+		mFirstRegion = NULL;
+	};
+
+	LLObjectSelectionHandle mObjectSelection;
+	LLDynamicArray<LLViewerObjectPtr> mReturnableObjects;
+	std::string mError;
+	LLViewerRegion *mFirstRegion;
+};
+
+static void return_objects(LLObjectsReturnPackage *objectsReturnPackage, const LLSD& notification, const LLSD& response)
+{
+	if (LLNotificationsUtil::getSelectedOption(notification, response) == 0)
+	{
+		// Ignore category ID for this derez destination.
+		derez_objects(DRD_RETURN_TO_OWNER, LLUUID::null, objectsReturnPackage->mFirstRegion, objectsReturnPackage->mError, &objectsReturnPackage->mReturnableObjects);
+	}
+
+	delete objectsReturnPackage;
+}
+
+void handle_object_return()
+{
+	if (!LLSelectMgr::getInstance()->getSelection()->isEmpty())
+	{
+		LLObjectsReturnPackage *objectsReturnPackage = new LLObjectsReturnPackage();
+		objectsReturnPackage->mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
+
+		// Save selected objects, so that we still know what to return after the confirmation dialog resets selection.
+		get_derezzable_objects(DRD_RETURN_TO_OWNER, objectsReturnPackage->mError, objectsReturnPackage->mFirstRegion, &objectsReturnPackage->mReturnableObjects);
+
+		LLNotificationsUtil::add("ReturnToOwner", LLSD(), LLSD(), boost::bind(&return_objects, objectsReturnPackage, _1, _2));
+	}
 }
 
 void handle_object_delete()
@@ -6779,13 +6886,13 @@ bool update_grid_help()
 		return false;
 	}
 // </FS:AW  grid management>
-	LLSD grid_info;
-	LLGridManager::getInstance()->getGridData(grid_info);
-	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
 
 	bool needs_seperator = false;
 
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	LLSD grid_info;
+	LLGridManager::getInstance()->getGridData(grid_info);
+	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
 	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("help"))
 	{
 		needs_seperator = true;
@@ -7606,6 +7713,7 @@ BOOL object_selected_and_point_valid(const LLSD& sdParam)
 		(selection->getFirstRootObject()->getPCode() == LL_PCODE_VOLUME) && 
 		selection->getFirstRootObject()->permYouOwner() &&
 		selection->getFirstRootObject()->flagObjectMove() &&
+		!selection->getFirstRootObject()->flagObjectPermanent() &&
 		!((LLViewerObject*)selection->getFirstRootObject()->getRoot())->isAvatar() && 
 		(selection->getFirstRootObject()->getNVPair("AssetContainer") == NULL);
 }
@@ -8211,8 +8319,8 @@ BOOL enable_save_into_inventory(void*)
 			return TRUE;
 		}
 	}
-#endif
 	return FALSE;
+#endif
 }
 
 class LLToolsEnableSaveToInventory : public view_listener_t
@@ -9261,6 +9369,8 @@ class LLUploadCostCalculator : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		std::string menu_name = userdata.asString();
+		// AW:this fights the update in llviewermessage
+		calculateCost();// <FS:AW opensim currency support>
 		gMenuHolder->childSetLabelArg(menu_name, "[COST]", mCostStr);
 
 		return true;
@@ -9271,7 +9381,9 @@ class LLUploadCostCalculator : public view_listener_t
 public:
 	LLUploadCostCalculator()
 	{
-		calculateCost();
+// <FS:AW opensim currency support> we don't know the costs yet
+//		calculateCost();
+// </FS:AW opensim currency support>
 	}
 };
 
@@ -9338,17 +9450,36 @@ class LLChangeMode : public view_listener_t
 
 void LLUploadCostCalculator::calculateCost()
 {
-	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+// <FS:AW opensim currency support>
+// 	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+// 
+// 	// getPriceUpload() returns -1 if no data available yet.
+// 	if(upload_cost >= 0)
+// 	{
+// 		mCostStr = llformat("%d", upload_cost);
+// 	}
+// 	else
+// 	{
+// 		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+// 	}
 
-	// getPriceUpload() returns -1 if no data available yet.
-	if(upload_cost >= 0)
+	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
+	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	std::string upload_cost;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if(in_opensim)
 	{
-		mCostStr = llformat("%d", upload_cost);
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 	{
-		mCostStr = llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
+
+	mCostStr = upload_cost;
+// </FS:AW opensim currency support>
 }
 
 void show_navbar_context_menu(LLView* ctrl, S32 x, S32 y)
@@ -9426,6 +9557,18 @@ void toggleTeleportHistory()
 	}
 }
 // </FS:Ansariel> Toggle teleport history panel directly
+
+// <FS:Zi> Pathfinding rebake functions
+bool enable_rebake_region()
+{
+	return LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+}
+
+void handle_rebake_region()
+{
+	LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+}
+// </FS:Zi>
 
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
@@ -9620,6 +9763,9 @@ void initialize_menus()
 	enable.add("Tools.VisibleTakeObject", boost::bind(&tools_visible_take_object));
 	view_listener_t::addMenu(new LLToolsEnableSaveToInventory(), "Tools.EnableSaveToInventory");
 	view_listener_t::addMenu(new LLToolsEnableSaveToObjectInventory(), "Tools.EnableSaveToObjectInventory");
+
+	view_listener_t::addMenu(new LLToolsEnablePathfinding(), "Tools.EnablePathfinding");
+	view_listener_t::addMenu(new LLToolsEnablePathfindingView(), "Tools.EnablePathfindingView");
 
 	// Help menu
 	// most items use the ShowFloater method
@@ -9939,6 +10085,10 @@ void initialize_menus()
 	enable.add("EnablePayAvatar", boost::bind(&enable_pay_avatar));
 	enable.add("EnableEdit", boost::bind(&enable_object_edit));
 	enable.add("VisibleBuild", boost::bind(&enable_object_build));
+	commit.add("Pathfinding.Linksets.Select", boost::bind(&LLFloaterPathfindingLinksets::openLinksetsWithSelectedObjects));
+	enable.add("EnableSelectInPathfindingLinksets", boost::bind(&enable_object_select_in_pathfinding_linksets));
+	commit.add("Pathfinding.Characters.Select", boost::bind(&LLFloaterPathfindingCharacters::openCharactersWithSelectedObjects));
+	enable.add("EnableSelectInPathfindingCharacters", boost::bind(&enable_object_select_in_pathfinding_characters));
 
 	view_listener_t::addMenu(new LLFloaterVisible(), "FloaterVisible");
 	view_listener_t::addMenu(new LLSomethingSelected(), "SomethingSelected");
@@ -9962,4 +10112,9 @@ void initialize_menus()
 	commit.add("ToggleSettingsDebug", boost::bind(&toggleSettingsDebug));
 	// <FS:Ansariel> Toggle teleport history panel directly
 	commit.add("ToggleTeleportHistory", boost::bind(&toggleTeleportHistory));
+
+	// <FS:Zi> Pathfinding rebake functions
+	commit.add("World.RebakeRegion", boost::bind(&handle_rebake_region));
+	enable.add("World.RebakeRegion", boost::bind(&enable_rebake_region));
+	// </FS:Zi>
 }

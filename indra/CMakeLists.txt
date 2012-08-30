@@ -33,7 +33,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 #<FS:AW optional opensim support>
-set(HAS_OPENSIM_SUPPORT ON)
+option(HAS_OPENSIM_SUPPORT "OpenSim support" OFF)
 if (HAS_OPENSIM_SUPPORT)
   add_definitions(-DHAS_OPENSIM_SUPPORT=1)
   message("compiling with OpenSim support")

@@ -94,6 +94,7 @@
 #include "llviewermenu.h"
 #include "llviewerinventory.h"
 #include "llviewerjoystick.h"
+#include "llviewernetwork.h" // <FS:AW opensim currency support>
 #include "llviewerobjectlist.h"
 #include "llviewerparcelmgr.h"
 #include "llviewerstats.h"
@@ -176,13 +177,6 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg);
 LLFrameTimer gThrottleTimer;
 const U32 OFFER_THROTTLE_MAX_COUNT=5; //number of items per time period
 const F32 OFFER_THROTTLE_TIME=10.f; //time period in seconds
-
-//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-//sit object owner name (global)
-std::string gSitOwnerName;		// name of owner of sit target
-bool gPermsGrantedSameOwner = false;	// sit perms granted because owner same
-LLUUID gPermsSameOwnerUUID = LLUUID::null;	// what we auto-granted permissions to
-//</FS:TS> FIRE-6762
 
 //script permissions
 const std::string SCRIPT_QUESTIONS[SCRIPT_PERMISSION_EOF] = 
@@ -4630,6 +4624,9 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	}
 	// </FS:Ansariel>
 
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
+
 	// Now do teleport effect for where you're going.
 	// VEFFECT: TeleportEnd
 	effectp = (LLHUDEffectSpiral *)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
@@ -4847,6 +4844,16 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	{
 		return;
 	}
+
+	// <FS:Ansariel> Bring back simulator version changed messages after TP
+	if (!gLastVersionChannel.empty() && gSavedSettings.getBOOL("FSShowServerVersionChangeNotice"))
+	{
+		LLSD args;
+		args["OLDVERSION"] = gLastVersionChannel;
+		args["NEWVERSION"] = version_channel;
+		LLNotificationsUtil::add("ServerVersionChanged", args);
+	}
+	// </FS:Ansariel>
 
 	gLastVersionChannel = version_channel;
 }
@@ -5280,29 +5287,6 @@ void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
 //ObjectPropertiesFamily  -KC
 void process_object_properties_family(LLMessageSystem *msg, void**user_data)
 {
-
-	//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-	//pre-fetching sit target owner for automatic permissions granting -SA
-	//<FS:TS> FIRE-6875: avoid crash if gAgentAvatarp is somehow NULL
-	if (gAgentAvatarp)
-	{
-		const LLViewerObject* pParent = (LLViewerObject*)gAgentAvatarp->getParent();
-		if (pParent) // if avatar is sitting somewhere
-		{
-			LLUUID object_id;
-			msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_ObjectID, object_id);
-			// if object owner is also the owner of the sit object, query owner name
-			if (object_id == pParent->getID())
-			{
-				LLUUID owner_id;
-				msg->getUUIDFast(_PREHASH_ObjectData, _PREHASH_OwnerID, owner_id);		
-				gCacheName->getFullName(owner_id, gSitOwnerName);
-			}
-		}
-	}
-	//</FS:TS> FIRE-6875
-	// /-SA
-	//</FS:TS> FIRE-6762
 	// Send the result to the corresponding requesters.
 	LLSelectMgr::processObjectPropertiesFamily(msg, user_data);
 	
@@ -5675,6 +5659,18 @@ void process_sim_stats(LLMessageSystem *msg, void **user_data)
 		case LL_SIM_STAT_IOPUMPTIME:
 			LLViewerStats::getInstance()->mSimPumpIOMsec.addValue(stat_value);
 			break;
+		case LL_SIM_STAT_PCTSCRIPTSRUN:
+			LLViewerStats::getInstance()->mSimPctScriptsRun.addValue(stat_value);
+			break;
+		case LL_SIM_STAT_SIMAISTEPTIMEMS:
+			LLViewerStats::getInstance()->mSimSimAIStepMsec.addValue(stat_value);
+			break;
+		case LL_SIM_STAT_SKIPPEDAISILSTEPS_PS:
+			LLViewerStats::getInstance()->mSimSimSkippedSilhouetteSteps.addValue(stat_value);
+			break;
+		case LL_SIM_STAT_PCTSTEPPEDCHARACTERS:
+			LLViewerStats::getInstance()->mSimSimPctSteppedCharacters.addValue(stat_value);
+			break;
 		default:
 			// Used to be a commented out warning.
  			LL_DEBUGS("Messaging") << "Unknown stat id" << stat_id << LL_ENDL;
@@ -5784,7 +5780,7 @@ void process_avatar_animation(LLMessageSystem *mesgsys, void **user_data)
 				LLViewerObject* object = gObjectList.findObject(object_id);
 				if (object)
 				{
-					object->mFlags |= FLAGS_ANIM_SOURCE;
+					object->setFlagsWithoutUpdate(FLAGS_ANIM_SOURCE, TRUE);
 
 					BOOL anim_found = FALSE;
 					LLVOAvatar::AnimSourceIterator anim_it = avatarp->mAnimationSources.find(object_id);
@@ -5934,7 +5930,7 @@ void process_set_follow_cam_properties(LLMessageSystem *mesgsys, void **user_dat
 	LLViewerObject* objectp = gObjectList.findObject(source_id);
 	if (objectp)
 	{
-		objectp->mFlags |= FLAGS_CAMERA_SOURCE;
+		objectp->setFlagsWithoutUpdate(FLAGS_CAMERA_SOURCE, TRUE);
 	}
 
 	S32 num_objects = mesgsys->getNumberOfBlocks("CameraProperty");
@@ -7072,19 +7068,41 @@ void process_frozen_message(LLMessageSystem *msgsystem, void **user_data)
 void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 {
 	LLGlobalEconomy::processEconomyData(msg, LLGlobalEconomy::Singleton::getInstance());
-
-	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
-// <FS:AW opensim currency support>
+// <FS:AW opensim currency support> 
+// AW: from this point anything is bogus because it's all replaced by the LLUploadCostCalculator in llviewermenu
+//	S32 upload_cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 //	LL_INFOS_ONCE("Messaging") << "EconomyData message arrived; upload cost is L$" << upload_cost << LL_ENDL;
-	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << upload_cost << LL_ENDL;
+// 	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
+// 	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
+// 	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));
+// 	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", llformat("%d", upload_cost));
 
 	// update L$ substitution for "Buy and Sell L$", it was set before we knew the currency
 	gMenuHolder->getChild<LLUICtrl>("Buy and Sell L$")->setLabelArg("L$", LLStringExplicit("L$"));
+
+	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
+	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
+	std::string upload_cost;
+#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if(in_opensim)
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	{
+		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
+	}
+
+	LL_INFOS_ONCE("Messaging") << Tea::wrapCurrency("EconomyData message arrived; upload cost is L$") << upload_cost << LL_ENDL;
+
+	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]",  upload_cost);
+	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]",  upload_cost);
+	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", upload_cost);
+	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", upload_cost);
 // <FS:AW opensim currency support>
-	gMenuHolder->getChild<LLUICtrl>("Upload Image")->setLabelArg("[COST]", llformat("%d", upload_cost));
-	gMenuHolder->getChild<LLUICtrl>("Upload Sound")->setLabelArg("[COST]", llformat("%d", upload_cost));
-	gMenuHolder->getChild<LLUICtrl>("Upload Animation")->setLabelArg("[COST]", llformat("%d", upload_cost));
-	gMenuHolder->getChild<LLUICtrl>("Bulk Upload")->setLabelArg("[COST]", llformat("%d", upload_cost));
+
 }
 
 void notify_cautioned_script_question(const LLSD& notification, const LLSD& response, S32 orig_questions, BOOL granted)
@@ -7156,7 +7174,11 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 		std::string perms;
 		for (S32 i = 0; i < SCRIPT_PERMISSION_EOF; i++)
 		{
-			if ((orig_questions & LSCRIPTRunTimePermissionBits[i]) && SCRIPT_QUESTION_IS_CAUTION[i])
+//			if ((orig_questions & LSCRIPTRunTimePermissionBits[i]) && SCRIPT_QUESTION_IS_CAUTION[i])
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+			if ( (orig_questions & LSCRIPTRunTimePermissionBits[i]) && 
+				 ((SCRIPT_QUESTION_IS_CAUTION[i]) || (notification["payload"]["rlv_notify"].asBoolean())) )
+// [/RLVa:KB]
 			{
 				count++;
 				caution = TRUE;
@@ -7176,11 +7198,25 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 
 		// log a chat message as long as at least one requested permission
 		// is a caution permission
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLChat chat(notice.getString());
-	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			if(nearby_chat)
+			{
+				LLChat chat_msg(notice.getString());
+				chat_msg.mFromName = SYSTEM_FROM;
+				chat_msg.mFromID = LLUUID::null;
+				chat_msg.mSourceType = CHAT_SOURCE_SYSTEM;
+				nearby_chat->addMessage(chat_msg);
+			}
 		}
+// [/RLVa:KB]
+//		if (caution)
+//		{
+//			LLChat chat(notice.getString());
+//	//		LLFloaterChat::addChat(chat, FALSE, FALSE);
+//		}
 	}
 }
 
@@ -7226,11 +7262,21 @@ bool script_question_cb(const LLSD& notification, const LLSD& response)
 	msg->sendReliable(LLHost(notification["payload"]["sender"].asString()));
 
 	// only log a chat message if caution prompts are enabled
-	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+//	if (gSavedSettings.getBOOL("PermissionsCautionEnabled"))
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (gSavedSettings.getBOOL("PermissionsCautionEnabled")) || (notification["payload"]["rlv_notify"].asBoolean()) )
+// [/RLVa:KB]
 	{
 		// log a chat message, if appropriate
 		notify_cautioned_script_question(notification, response, orig, allowed);
 	}
+
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	if ( (allowed) && (notification["payload"].has("rlv_blocked")) )
+	{
+		RlvUtil::notifyBlocked(notification["payload"]["rlv_blocked"], LLSD().with("OBJECT", notification["payload"]["object_name"]));
+	}
+// [/RLVa:KB]
 
 	if ( response["Mute"] ) // mute
 	{
@@ -7362,66 +7408,48 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 		payload["object_name"] = object_name;
 		payload["owner_name"] = owner_name;
 
-// [RLVa:KB] - Checked: 2011-07-25 (RLVa-1.4.0a) | Added: RLVa-1.4.0a
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvAttachmentLocks.canAttach()) )
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+		if (rlv_handler_t::isEnabled())
 		{
-			// If only the attachment permission is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
-			if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+			if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & questions) )
 			{
-				RlvUtil::notifyBlocked(RLV_STRING_BLOCKED_PERMATTACH, LLSD().with("OBJECT", object_name));
-				LLNotifications::instance().forceResponse(
-					LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 1/*NO*/);
-				return;
+				// Notify the user that we blocked it since they're not allowed to wear any new attachments
+				payload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
+				// If only attach is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
+				if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
+				{
+					payload["questions"] = 0;
+					LLNotifications::instance().forceResponse(
+						LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
+					return;
+				}
+				else
+				{
+					questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
+					payload["questions"] = questions;
+				}
 			}
-			else
-			{
-				questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
-				payload["questions"] = questions;
-			}
-		}
-// [/RLVa:KB]
-// [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g) | Modified: RLVa-0.2.0e
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		S32 questionsOther = questions;
-		//</FS:TS> FIRE-6762
 
-		if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
-		{
-			const LLViewerObject* pObj = gObjectList.findObject(taskid);
-			if (pObj)
+			if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
 			{
-//				if (pObj->permYouOwner())
-//				{
-					// PERMISSION_TAKE_CONTROLS and PERMISSION_ATTACH are only auto-granted to objects this avie owns
-					//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-					questionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
-					//</FS:TS> FIRE-6762
-						LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
-//				}
+				const LLViewerObject* pObj = gObjectList.findObject(taskid);
+				if (pObj)
+				{
+					if ( (pObj->permYouOwner()) && (!pObj->isAttachment()) )
+					{
+						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] | 
+							LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH]);
+					}
+					else
+					{
+						questions &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS]);
+					}
+					payload["rlv_notify"] = !pObj->permYouOwner();
+				}
 			}
 		}
-// [SA] Same automatic permissions for the objects owned by the owner of the object the avatar is sat on.
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		if (gSavedSettings.getBOOL("PermissionsGrantToSitOwner"))
-		{
-			if (gAgentAvatarp->isSitting() && LLCacheName::cleanFullName(owner_name) == gSitOwnerName)
-			{
-				questionsOther &= ~(LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TAKE_CONTROLS] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRIGGER_ANIMATION] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_TRACK_CAMERA] |
-				    LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_CONTROL_CAMERA]);
-				gPermsGrantedSameOwner = true;
-				gPermsSameOwnerUUID = taskid;
-			}
-		}
-		else
-		{
-			gPermsGrantedSameOwner = false;
-			gPermsSameOwnerUUID = LLUUID::null;
-                }
-		//</FS:TS> FIRE-6762
-// [/SA]
-		if ( (!caution) && (!questionsOther) )
+
+		if ( (!caution) && (!questions) )
 		{
 			LLNotifications::instance().forceResponse(
 				LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
@@ -7644,6 +7672,9 @@ void process_teleport_failed(LLMessageSystem *msg, void**)
 		}
 	}
 
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
+
 	llinfos << "Teleport error, reason=" << reason << llendl;
 	if ((!gSavedSettings.getBOOL("UseLSLBridge")) ||
 		(reason != "Could not teleport closer to destination"))
@@ -7703,6 +7734,9 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 	{
 		gAgent.setFlying(FALSE);
 	}
+
+	// <FS:Ansariel> Stop typing after teleport (possible fix for FIRE-7273)
+	gAgent.stopTyping();
 
 	gAgent.setPositionAgent(pos);
 	gAgentCamera.slamLookAt(look_at);

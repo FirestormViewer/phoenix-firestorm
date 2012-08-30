@@ -82,12 +82,11 @@
 #include "lggcontactsetsfloater.h"
 #include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
-void cmdline_printchat(std::string message);
-void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
-//void cmdline_tp2name(std::string target);
-
-LLUUID cmdline_partial_name2key(std::string name);
-
+// For radar support
+#include "llavatarlist.h"
+#include "llavatarlistitem.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llpanelpeople.h"
 
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
@@ -451,41 +450,6 @@ void invrepair()
 	//ObjectContentNameMatches objectnamematches(ifolder);
 	gInventory.collectDescendents(gInventory.getRootFolderID(),cats,items,FALSE);//,objectnamematches);
 }
-
-/*static BOOL *sFSCmdLine;
-static std::string *sFSCmdLinePos;
-static std::string *sFSCmdLineDrawDistance;
-static std::string *sFSCmdTeleportToCam;
-static std::string *sFSCmdLineAO;
-static std::string *sFSCmdLineKeyToName;
-static std::string *sFSCmdLineOfferTp;
-static std::string *sFSCmdLineGround;
-static std::string *sFSCmdLineHeight;
-static std::string *sFSCmdLineTeleportHome;
-static std::string *sFSCmdLineRezPlatform;
-static std::string *sFSCmdLineMapTo;
-static BOOL *sFSCmdLineMapToKeepPos;
-static std::string *sFSCmdLineCalc;
-static std::string *sFSCmdLineTP2;
-static std::string *sFSCmdLineClearChat;
-static F32 *sFSCmdLinePlatformSize;*/
-
-/*
-class another_rebind_group
-{
-	
-}
-
-template <class T>
-class another_rebind
-{
-	T *mVal;
-	static std::map<another_rebind*, std::map<std::string, T*> > instances;
-
-	
-	
-};
-*/
 
 
 #ifdef JC_PROFILE_GSAVED
@@ -918,7 +882,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
-#if 0
 			else if(command == std::string(sFSCmdLineTP2))
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
@@ -927,19 +890,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					cmdline_tp2name(name);
 				}
 				return false;
-			}
-#endif
-			else if (revised_text == "xyzzy")
-			{
-				//Zwag: I wonder how many people will actually get this?
-				cmdline_printchat("Nothing happens.");
-				return false;
-			}
-			else if (revised_text == "/pimps")
-			{
-				//Thanks to the pimp's horrible code for shutting down the site...
-				cmdline_printchat("Pimps can't code.");
-				return true;//dont block chat
 			}
 			else if(revised_text == "/cs")
 			{
@@ -1257,78 +1207,52 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 }
 
 //case insensitive search for avatar in draw distance
-//TODO: make this use the avatar list floaters list so we have EVERYONE
-// even if they are out of draw distance.
-//TODO: re-hock this to the new radar system
-#if 0
 LLUUID cmdline_partial_name2key(std::string partial_name)
 {
-	std::vector<LLUUID> avatars;
 	std::string av_name;
 	LLStringUtil::toLower(partial_name);
-	LLWorld::getInstance()->getAvatars(&avatars);
-	typedef std::vector<LLUUID>::const_iterator av_iter;
-	bool has_avatarlist = (LLFloaterAvatarList::getInstance() ? true : false);
-	if(has_avatarlist)
-		LLFloaterAvatarList::getInstance()->updateAvatarList();
-	for(av_iter i = avatars.begin(); i != avatars.end(); ++i)
+
+	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	if (panel_people)
 	{
-		if(has_avatarlist)
+		std::vector<LLPanel*> items;
+		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();
+		nearbyList->getItems(items);
+
+		for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
 		{
-			LLAvatarListEntry* entry = LLFloaterAvatarList::getInstance()->getAvatarEntry(*i);
-			if(entry)
+			LLAvatarListItem* av = static_cast<LLAvatarListItem*>(*itItem);
+
+			av_name = av->getUserName();
+
+			LLStringUtil::toLower(av_name);
+			if (strstr(av_name.c_str(), partial_name.c_str()))
 			{
-				av_name = entry->getName();
+				return av->getAvatarId();
 			}
-		}
-		if (av_name.empty() && !gCacheName->getFullName(*i, av_name))
-		{
-			LLViewerObject *obj = gObjectList.findObject(*i);
-			if(obj)
-			{
-				LLVOAvatar* avatarp = dynamic_cast<LLVOAvatar*>(obj);
-				av_name = avatarp->getFullname();
-			}
-		}
-		LLStringUtil::toLower(av_name);
-		if(strstr(av_name.c_str(), partial_name.c_str()))
-		{
-			return *i;
 		}
 	}
 	return LLUUID::null;
 }
 
-
 void cmdline_tp2name(std::string target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	if(avkey.isNull())
+	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	if (avkey.notNull() && panel_people)
 	{
-		cmdline_printchat("Avatar not found.");
-		return;
-	}
-	LLFloaterAvatarList* avlist = LLFloaterAvatarList::getInstance();
-	LLViewerObject* obj = gObjectList.findObject(avkey);
-	if(obj)
-	{
-		LLVector3d pos = obj->getPositionGlobal();
-		pos.mdV[VZ] += 2.0;
-		gAgent.teleportViaLocation(pos);
-	}
-	else if(avlist)
-	{
-		LLAvatarListEntry* entry = avlist->getAvatarEntry(avkey);
-		if(entry)
+		LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avkey);
+		if (avatar_list_item)
 		{
-			LLVector3d pos = entry->getPosition();
+			LLVector3d pos = avatar_list_item->getPosition();
 			pos.mdV[VZ] += 2.0;
 			gAgent.teleportViaLocation(pos);
+			return;
 		}
 	}
-}
 
-#endif
+	cmdline_printchat("Avatar not found.");
+}
 
 void cmdline_rezplat(bool use_saved_value, F32 visual_radius) //cmdline_rezplat() will still work... just will use the saved value
 {

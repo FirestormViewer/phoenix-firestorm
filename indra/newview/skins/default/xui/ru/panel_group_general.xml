@@ -36,6 +36,7 @@
 	</text>
 	<combo_box name="active_title" tool_tip="Установить титул, который будет показан вместе с вашим именем, когда эта группа активна."/>
 	<check_box label="Получать уведомления от группы" name="receive_notices" tool_tip="Включите, если хотите получать уведомления от этой группы.  Снимите этот флажок, если группа шлет вам нежелательные сообщения."/>
+	<check_box label="Участвовать в чате группы" name="receive_chat" tool_tip="Использевать чат или нет"/>
 	<check_box label="Показывать в моем профиле" name="list_groups_in_profile" tool_tip="Включите, если хотите, чтобы группа отображалась в вашем профиле"/>
 	<panel name="preferences_container">
 		<text name="group_settngs_label">

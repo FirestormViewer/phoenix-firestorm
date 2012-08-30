@@ -577,7 +577,7 @@
      reference="Unused?" />
     <color
      name="LoginProgressBoxBorderColor"
-     refencee="NavyBlue_0" />
+     reference="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
      reference="Black_78" />
@@ -856,4 +856,9 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+	 
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="LabelTextColor" />
 </colors>

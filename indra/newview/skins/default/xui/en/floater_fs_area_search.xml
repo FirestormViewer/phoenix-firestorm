@@ -7,7 +7,6 @@
  min_height="250"
  width="600"
  height="400"
- rect_control="FloaterAreaSearchRect"
  save_rect="true"
  can_resize="true"
  can_minimize="true"

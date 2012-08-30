@@ -19,7 +19,10 @@
 			<pie_slice label="Nicht anzeigen" name="Derender"/>
 			<pie_slice label="Melden..." name="Report Abuse..."/>
 			<pie_separator name="export_placeholder" />
-			<pie_separator name="disable_placeholder" />
+			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
+				<pie_slice label="In Linksets" name="show_in_linksets"/>
+				<pie_slice label="In Charaktere" name="show_in_characters"/>
+			</pie_menu>
 			<pie_slice label="Blockieren" name="Object Mute"/>
 			<pie_menu label="Skripte &gt;" name="ScriptsMenu">
 				<pie_slice label="Kompilieren (Mono)" name="CompileMono"/>

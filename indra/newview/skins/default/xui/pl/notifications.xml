@@ -187,10 +187,10 @@ Czy chcesz kontynuować?
 Masz za mało L$ żeby zostać członkiem.
 	</notification>
 	<notification name="CreateGroupCost">
-		Stworzenie tej grupy kosztuje 100L$.
+		Stworzenie tej grupy kosztuje [COST]L$.
 W grupie powinien być więcej niż jeden członek, albo zostanie na zawsze skasowana.
 Zaproś proszę członków w ciągu 48 godzin.
-		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za 100L$"/>
+		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
 	<notification name="LandBuyPass">
 		Za [COST]L$ możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
@@ -327,6 +327,12 @@ Potrzebujesz konta aby się zalogować do [CURRENT_GRID]. Czy chcesz utworzyć j
 	<notification name="InvalidCredentialFormat">
 		Należy wprowadzić nazwę użytkownika lub imię oraz nazwisko Twojego awatara w pole nazwy użytkownika, a następnie ponownie się zalogować.
 	</notification>
+	<notification name="InvalidGrid">
+		'[GRID]' nie jest prawidłowym identyfikatorem siatki.
+	</notification>
+	<notification name="InvalidLocationSLURL">
+		Twój punkt startowy nie znajduje się na prawidłowej siatce.
+	</notification>
 	<notification name="DeleteClassified">
 		Usunąć reklamę &apos;[NAME]&apos;?
 Pamiętaj! Nie ma rekompensaty za poniesione koszta.
@@ -436,7 +442,7 @@ Obiekt może znajdować się zbyt daleko albo został usunięty.
 	</notification>
 	<notification name="StartRegionEmpty">
 		Twoje miejsce startu nie zostało określone.
-Wpisz proszę nazwę regionu w lokalizację startu w polu Lokalizacja Startu lub wybierz Moja ostatnia lokalizacja albo Miejsce Startu.
+Wpisz proszę nazwę regionu w lokalizację startu w polu Lokalizacja Startu lub wybierz &apos;Moja ostatnia lokalizacja&apos; albo &apos;Miejsce Startu&apos;.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CouldNotStartStopScript">
@@ -576,6 +582,9 @@ Maksymalnie można połączyć [MAX] obiektów.
 		Nie możesz połączyć obiektów, ponieważ nie masz praw modyfikacji dla wszystkich.
 
 Upewnij się, że żaden z obiektów nie jest zablokowany i wszystkie należą do Ciebie.
+	</notification>
+	<notification name="CannotLinkPermanent">
+		Nie możesz łączyć obiektów przez granice regionów.
 	</notification>
 	<notification name="CannotLinkDifferentOwners">
 		Nie możesz połączyć obiektów, ponieważ należą one do różnych osób.
@@ -2078,7 +2087,7 @@ Chcesz wyłączyć Tryb Zajętości przed zakończeniem tej transakcji?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Tak"/>
 	</notification>
 	<notification name="ConfirmEmptyLostAndFound">
-		Na pewno chcesz permanentnie usunąć zawartość Twojego folderu Zgubione i odnalezione?
+		Na pewno chcesz permanentnie usunąć zawartość Twojego folderu Zagubione i odnalezione?
 		<usetemplate ignoretext="Potwierdź przed usunięciem zawartości foldera Zagubione i odnalezione" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="CopySLURL">
@@ -2471,6 +2480,21 @@ Nie możesz tutaj latać.
 	</notification>
 	<notification name="NoBuild">
 		Ta posiadłość nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
+	</notification>
+	<notification name="PathfindingDirty">
+		W tym regionie są oczekujące zmiany w odnajdywaniu ścieżek. Jeśli posiadasz prawa budowania możesz odświeżyć region klikając na przycisk “Odśwież region”.
+		<usetemplate name="okcancelbuttons" yestext="Odśwież" notext="Zamknij"/>
+	</notification>
+	<notification name="DynamicPathfindingDisabled">
+		Dynamiczne odnajdywanie ścieżek nie jest włączone w tym regionie. Oskryptowane obiekty używające odwołań LSL wykorzystujących odnajdywanie ścieżek mogą nie działać zgodnie z oczekiwaniami.
+	</notification>
+	<notification name="PathfindingRebakeNavmesh">
+		Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych. Aby sprawić, żeby obiekty ruchome zachowywały się właściwie wymuś odświeżenie Navmeshu w regionie. Wybierz “Pomoc”, aby uzyskać więcej informacji.
+		<usetemplate name="okhelpignore" ignoretext="Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych." yestext="OK" helptext="Pomoc"/>
+	</notification>
+	<notification name="PathfindingCannotRebakeNavmesh">
+		Wystąpił błąd. To może być problem sieci, serwera lub Twojego braku praw do budowania. Czasami wylogowanie się i zalogowanie ponownie może naprawić problem.
+		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SeeAvatars">  
 		Ta posiadłość ukrywa czat tekstowy i awatary z innych posiadłości. Nie będziesz widzieć rezydentów na zewnątrz tej posiadłości - ani oni Ciebie. Wspólny kanał czatu 0 również jest zablokowany.
@@ -3139,11 +3163,6 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 			<button name="cancel" text="Anuluj"/>
 		</form>
 	</notification>
-	<notification name="KittyFlickrNeedAuth">
-		Musisz autoryzować [APP_NAME] zanim będzie można ładować obrazki na Flickr. Zaloguj się i autoryzuj [APP_NAME], a następnie wybierz "Załaduj na Flickr" ponownie.
-
-(Jeśli [APP_NAME] został już autoryzowany i ciągle jesteś zalogowany/a, to ten proces może być automatyczny)
-	</notification>
 	<notification name="ModeChange">
 		Zmiana trybu wymaga zamknięcia i ponownego uruchomienia aplikacji.
 		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
@@ -3159,31 +3178,6 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	<notification name="NoPlaceInfo">
 		Oglądanie profilu miejsca jest możliwe tylko w trybie zaawansowanym. Czy chcesz wylogować się i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.
 		<usetemplate name="okcancelbuttons" yestext="Zamknij" notext="Nie zamykaj"/>
-	</notification>
-	<notification name="KittyFlickrHTTPFail">
-		Komunikacja z Flickr nie powiodła się. Nie wiemy dlaczego.
-	</notification>
-	<notification name="KittyFlickrTokenRejected">
-		Flickr odrzucił Twój token autoryzacji. Prawdopodobnie dlatego, że cofnąłeś/aś uprawnienia [APP_NAME]. Nadaj uprawnienia i spróbuj ponownie.
-	</notification>
-	<notification name="KittyFlickrGenericFail">
-		Komunikacja z Flickr nie powiodła się ([CODE]):
-
-[ERROR]
-	</notification>
-	<notification name="KittyFlickrUploadCancelledAuthRejected">
-		Ładowanie zostało anulowane, ponieważ uprawnienia dostępu do konta Flickr nie zostały nadane [APP_NAME].
-	</notification>
-	<notification name="KittyFlickrUploadComplete">
-		[http://www.flickr.com/photos/upload/edit/?ids=[ID] [TITLE]] został pomyślnie załadowany na Flickr.
-	</notification>
-	<notification name="KittyFlickrUploadFailed">
-		Nie można załadować "[TITLE]" na Flickr (błąd [CODE]):
-
-[ERROR]
-	</notification>
-	<notification name="KittyFlickrUploadFailedNoError">
-		Nie można załadować "[TITLE]" na Flickr. Nie wiemy dlaczego.
 	</notification>
 	<notification name="NoPicks">
 		Tworzenie i edycja Ulubionych jest możliwa jedynie w trybie zaawansowanym. Czy chcesz się wylogować i zmienić tryb? Opcja wyboru trybu życia jest widoczna na ekranie logowania.
@@ -3219,7 +3213,63 @@ Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	</notification>
 	<notification name="ConfirmHideUI">
 		Ta akcja ukryje wszystkie menu i przyciski. Aby je pokazać użyj skrótu [SHORTCUT] ponownie.
-		<usetemplate name="okcancelignore" yestext="OK" notext="Cancel" ignoretext="Potwierdź przed ukryciem interfejsu"/>
+		<usetemplate name="okcancelignore" yestext="OK" notext="Anuluj" ignoretext="Potwierdź przed ukryciem interfejsu"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted">
+		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnVolume">
+		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
+		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
+
+Czy chcesz kontynuować?
+		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione ze względu na restrykcje zezwoleń zbioru części i niewypukły kształt." name="okcancelignore" notext="Anuluj" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
+		Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha.
+		<usetemplate ignoretext="Wybrany obiekt ma wpływ na Navmesh. Dodanie elastyczności spowoduje usunięcie go z Navmesha." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<global name="UnsupportedGLRequirements">
 		Wygląda na to, że Twój system nie spełnia wymagań sprzętowych [APP_NAME]. [APP_NAME] wymaga karty graficznej kompatybilnej z OpenGL z multiteksturami. Jeżeli masz taką kartę zainstaluj najnowsze sterowniki do niej i uaktualnienia systemu operacyjnego.
@@ -3346,10 +3396,6 @@ Nazwa nie może zawierać ":" lub "|".
 [SYSINFO]
 		<usetemplate name="okcancelbuttons" yestext="Wyślij" notext="Anuluj" />
 	</notification>
-	<notification name="InvalidGrid">
-		'[GRID]' nie jest prawidłową nazwą lub adresem siatki.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
 	<notification name="FireStormReqInfo">
 		[NAME] prosi o wysłanie jej/mu informacji o Twojej instalacji Firestorma.
 (To dokładnie to samo, co możesz znaleźć w Pomoc -> Informacje o Firestorm)
@@ -3461,6 +3507,12 @@ Obecne ustawienie: [CURRENT_VALUE]
 	<notification name="TeleportToAvatarNotPossible">
 		Teleportacja do tego awatara nie jest możliwa, ponieważ dokładna pozycja nie jest znana.
 	</notification>
+	<notification name="ZoomToAvatarNotPossible">
+		Nie można przybliżyć do tego awatara, ponieważ jest poza zasięgiem.
+	</notification>
+	<notification name="TrackAvatarNotPossible">
+		Nie można śledzić tego awatara, ponieważ jest poza zasięgiem.
+	</notification>
 	<notification name="CacheEmpty">
 		Pamięć podręczna Twojej Przeglądarki jest pusta. Miej na uwadze, że możesz przez jakiś czas odczuwać obniżoną wydajność i spowolnione doczytywanie obiektów z Szafy.
 	</notification>
@@ -3494,6 +3546,14 @@ Aktualizacje dla tego pliku wyłączone.
 		Próba dodania niewłaściwego lub niemożliwego do odczytania pliku graficznego [FNAME], który nie może zostać otwarty lub zdekodowany.
 Anulowano.
 	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Zwracasz [NUM_ITEMS] przedmiotów. Na pewno chcesz kontynuować?
+		<usetemplate ignoretext="Na pewno chcesz zwrócić wiele przedmiotów?" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Usuwasz [NUM_ITEMS] przedmiotów. Na pewno chcesz kontynuować?
+		<usetemplate ignoretext="Na pewno chcesz usunąć wiele przedmiotów?" name="okcancelignore" notext="Nie" yestext="Tak"/>
+	</notification>
 	<notification name="LSLColorCopiedToClipboard">
 		Ciąg koloru w formacie LSL został skopiowany do schowka. Możesz go teraz wkleić w swoim skrypcie i zacząć używać.
 		<form name="form">
@@ -3503,5 +3563,31 @@ Anulowano.
 	<notification name="FSBWTooHigh">
 		Mocno zalecamy nie ustawiać przepustowości powyżej 1500 kbps. Jest mało prawdopodobne, aby takie ustawienie nie sprawiało problemów i prawie na pewno nie spowoduje wzrostu wydajności.
 		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationExplanation">
+		Aby móc ładować zdjęcia na Flickr musisz autoryzować dostęp do konta dla [APP_NAME]. Jeśli kontynuujesz, to Twoja przeglądarka internetowa otworzy stronę Flickr, gdzie zostaniesz poproszony/a, aby autoryzować [APP_NAME]. Dostaniesz kod, który będzie trzeba wkleić w odpowiednie pole [APP_NAME].
+
+Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
+	</notification>
+	<notification name="ExodusFlickrVerificationPrompt">
+		Przeprowadź autoryzację [APP_NAME] dla wysyłania zdjęć na Flickr w przeglądarce internetowej i wpisz otrzymany kod poniżej:
+		<form name="form">
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="ExodusFlickrVerificationFailed">
+		Autoryzacja Flickr nie powiodła się. Spróbuj ponownie i sprawdź dokładnie kod weryfikacyjny.
+	</notification>
+	<notification name="ExodusFlickrUploadComplete">
+		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
+	</notification>
+	<notification name="FirstUseFlyOverride">
+		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela posiadłości może poskutkować zbanowaniem Twojego awatara z parceli, nad którą będziesz latać.		
+	</notification>
+	<notification name="ServerVersionChanged">
+		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
+Obecny symulator: [NEWVERSION]
+Poprzedni symulator: [OLDVERSION]
 	</notification>
 </notifications>

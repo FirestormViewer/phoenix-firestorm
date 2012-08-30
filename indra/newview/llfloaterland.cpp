@@ -1873,6 +1873,7 @@ LLPanelLandOptions::LLPanelLandOptions(LLParcelSelectionHandle& parcel)
 	mCheckEditGroupObjects(NULL),
 	mCheckAllObjectEntry(NULL),
 	mCheckGroupObjectEntry(NULL),
+	mCheckEditLand(NULL), // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
 	mCheckSafe(NULL),
 	mCheckFly(NULL),
 	mCheckGroupScripts(NULL),
@@ -1905,6 +1906,11 @@ BOOL LLPanelLandOptions::postBuild()
 
 	mCheckGroupObjectEntry = getChild<LLCheckBoxCtrl>( "group object entry check");
 	childSetCommitCallback("group object entry check", onCommitAny, this);
+	
+  // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+	mCheckEditLand = getChild<LLCheckBoxCtrl>( "edit land check");
+	childSetCommitCallback("edit land check", onCommitAny, this);
+  // <FS:WF>
 	
 	mCheckGroupScripts = getChild<LLCheckBoxCtrl>( "check group scripts");
 	childSetCommitCallback("check group scripts", onCommitAny, this);
@@ -2003,6 +2009,14 @@ void LLPanelLandOptions::refresh()
 
 		mCheckGroupObjectEntry	->set(FALSE);
 		mCheckGroupObjectEntry	->setEnabled(FALSE);
+	
+     // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+       if ( mCheckEditLand )
+       {	
+		    mCheckEditLand		->set(FALSE);
+		    mCheckEditLand		->setEnabled(FALSE);
+       }
+	 // <FS:WF>
 
 		mCheckSafe			->set(FALSE);
 		mCheckSafe			->setEnabled(FALSE);
@@ -2051,6 +2065,12 @@ void LLPanelLandOptions::refresh()
 
 		mCheckGroupObjectEntry	->set( parcel->getAllowGroupObjectEntry() ||  parcel->getAllowAllObjectEntry());
 		mCheckGroupObjectEntry	->setEnabled( can_change_options && !parcel->getAllowAllObjectEntry() );
+		
+	// <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+	    BOOL can_change_terraform = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_EDIT);
+		mCheckEditLand		->set( parcel->getAllowTerraform() );
+		mCheckEditLand		->setEnabled( can_change_terraform );
+	// <FS:WF>	
 		
 		mCheckSafe			->set( !parcel->getAllowDamage() );
 		mCheckSafe			->setEnabled( can_change_options );
@@ -2275,7 +2295,11 @@ void LLPanelLandOptions::onCommitAny(LLUICtrl *ctrl, void *userdata)
 	BOOL create_group_objects	= self->mCheckEditGroupObjects->get() || self->mCheckEditObjects->get();
 	BOOL all_object_entry		= self->mCheckAllObjectEntry->get();
 	BOOL group_object_entry	= self->mCheckGroupObjectEntry->get() || self->mCheckAllObjectEntry->get();
-	BOOL allow_terraform	= false; // removed from UI so always off now - self->mCheckEditLand->get();
+	
+ // <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land
+    BOOL allow_terraform	= self->mCheckEditLand->get();
+ //	BOOL allow_terraform	= false; // removed from UI so always off now - self->mCheckEditLand->get();
+ // <FS:WF>
 	BOOL allow_damage		= !self->mCheckSafe->get();
 	BOOL allow_fly			= self->mCheckFly->get();
 	BOOL allow_landmark		= TRUE; // cannot restrict landmark creation

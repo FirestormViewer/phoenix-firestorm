@@ -504,6 +504,36 @@
          width="90">
             meters
         </text>
+		
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left="26"
+         name="money_change_threshold_label"
+         tool_tip="Plays a sound when money is spent or received higher then the amount set here."
+         mouse_opaque="false"
+         top_delta="30"
+         width="117">
+            L$ change threshold:
+        </text>
+        <spinner
+         top_delta="-4"
+         control_name="UISndMoneyChangeThreshold"
+         enabled="true"
+         decimal_digits="0"
+         layout="topleft"
+         follows="left|top"
+         height="18"
+         left_pad="5"
+         increment="10"
+         initial_val="10"
+         max_val="10000"
+         min_val="0"
+         name="money_change_threshold"
+         width="60" />
 
     </panel>
 

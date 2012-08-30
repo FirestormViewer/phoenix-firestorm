@@ -34,9 +34,9 @@
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
@@ -163,6 +163,12 @@
 			<menu_item_call label="Skripte in Auswahl löschen" name="Remove Scripts From Selection"/>
 			<menu_item_call label="Skript-Info (Counter)" name="Script Info"/>
 		</menu>
+		<menu label="Pathfinding" name="Pathfinding">
+			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Charaktere..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Anzeigen / Testen..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Rebake Regions-Navmesh" name="rebake_region_navmesh"/>
+		</menu>
 		<menu label="Optionen" name="Options">
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
 			<menu_item_check label="Nur meine Objekte auswählen" name="Select Only My Objects"/>
@@ -178,11 +184,11 @@
 			<menu_item_call label="Rasteroptionen" name="Grid Options"/>
 		</menu>
 		<menu label="Hochladen" name="Upload">
-			<menu_item_call label="Bild ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Sound ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animation ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animation ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modell..." name="Upload Model"/>
-			<menu_item_call label="Mehrfach-Upload ([COST] L$ pro Datei)..." name="Bulk Upload"/>
+			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
@@ -198,11 +204,13 @@
 	<menu label="Hilfe" name="Help">
 		<menu_item_check label="Hinweise aktivieren" name="Enable Hints"/>
 		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Firestorm Support-Gruppe beitreten" name="firestorm_support_group"/>
         <menu_item_call label="[CURRENT_GRID]-Hilfe" name="current_grid_help"/>
         <menu_item_call label="Über [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Grid-Status prüfen" name="Grid Status"/>
 		<menu_item_call label="Missbrauch melden" name="Report Abuse"/>
 		<menu_item_call label="Fehler melden" name="Report Bug"/>
+		<menu_item_call label="Rempler, Stöße &amp; Schläge" name="Bumps, Pushes &amp;amp; Hits"/>
         <menu_item_check label="Sysinfo-Button aktivieren" name="Enable Sysinfo Button"/>
 		<menu_item_call label="INFO ÜBER [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -297,7 +305,7 @@
 		<menu_item_check label="Weiche Mausbewegung" name="Mouse Smoothing"/>
 		<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 		<menu label="Tastaturkürzel" name="Shortcuts">
-			<menu_item_call label="Bild hochladen ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Bild hochladen ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Suchen" name="Search"/>
 			<menu_item_call label="Tasten freigeben" name="Release Keys"/>
 			<menu_item_call label="UI-Größe auf Standard setzen" name="Set UI Size to Default"/>
@@ -428,7 +436,6 @@
 			<menu_item_call label="Ein Paket fallenlassen" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Geskriptete Kamera ausgeben" name="Dump Scripted Camera"/>
-		<menu_item_call label="Rempler, Stöße &amp; Schläge" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Rekorder" name="Recorder">
 			<menu_item_call label="Wiedergabe starten" name="Start Playback"/>
 			<menu_item_call label="Wiedergabe stoppen" name="Stop Playback"/>

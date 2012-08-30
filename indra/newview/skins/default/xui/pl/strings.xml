@@ -602,7 +602,7 @@ Spróbuj zalogować się ponownie za minutę.
 		zdjęcia
 	</string>
 	<string name="lost and found">
-		Zgubione i odnalezione
+		Zagubione i odnalezione
 	</string>
 	<string name="targa image">
 		obraz typu targa
@@ -1502,7 +1502,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Guma
 	</string>
 	<string name="Light">
-		Światło
+		Jasny
 	</string>
 	<string name="KBShift">
 		Shift
@@ -1599,6 +1599,15 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="Right Pec">
 		Prawa pierś
+	</string>
+	<string name="Bridge">
+		Most Przeglądarki
+	</string>
+	<string name="Neck">
+		Szyja
+	</string>
+	<string name="Avatar Center">
+		Środek awatara
 	</string>
 	<string name="Invalid Attachment">
 		Nieprawidłowy punkt dodatku
@@ -2433,16 +2442,16 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="5 O&apos;Clock Shadow">
-		Cień o godzinie 5
+		Cień na godzinie 5
 	</string>
 	<string name="All White">
-		Wszystko białe
+		Wszystko siwe
 	</string>
 	<string name="Anime Eyes">
 		Oczy z anime
 	</string>
 	<string name="Arced">
-		Obrócony
+		Wygięty
 	</string>
 	<string name="Arm Length">
 		Długość ramienia
@@ -2487,13 +2496,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Duża głowa
 	</string>
 	<string name="Big Pectorals">
-		Duże mięśnie piersiowe
+		Duże mięśnie
 	</string>
 	<string name="Big Spikes">
 		Duże kolce
 	</string>
 	<string name="Black">
-		Czarne
+		Czerń
 	</string>
 	<string name="Blonde">
 		Blond
@@ -2712,13 +2721,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Długość podbródka
 	</string>
 	<string name="Chin Heavy">
-		Ciężar podbródka
+		Więcej podbródka
 	</string>
 	<string name="Chin In">
-		Podbródek wewnątrz
+		Podbródek wewn.
 	</string>
 	<string name="Chin Out">
-		Podbródek zewnętrzny
+		Podbródek zewn.
 	</string>
 	<string name="Chin-Neck">
 		Podwójny podbródek
@@ -2772,10 +2781,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Szeroki rękaw
 	</string>
 	<string name="Dark">
-		Ciemne
+		Ciemny
 	</string>
 	<string name="Dark Green">
-		Ciemne zielone
+		Ciemna zieleń
 	</string>
 	<string name="Darker">
 		Ciemniejsze
@@ -2787,13 +2796,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Domyślne buty na obcasie
 	</string>
 	<string name="Dense">
-		Gęstość
+		Gęste
 	</string>
 	<string name="Double Chin">
 		Podwójny podbródek
 	</string>
 	<string name="Downturned">
-		Zwrócone w dół
+		Zwrócony w dół
 	</string>
 	<string name="Duffle Bag">
 		Torba
@@ -2886,7 +2895,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Rozszerzane rękawy
 	</string>
 	<string name="Flat">
-		Płaskie
+		Płaski
 	</string>
 	<string name="Flat Butt">
 		Płaskie pośladki
@@ -2904,7 +2913,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Kształt czoła
 	</string>
 	<string name="Forehead Heavy">
-		Ciężar czoła
+		Więcej czoła
 	</string>
 	<string name="Freckles">
 		Piegi
@@ -2913,7 +2922,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Przednia grzywka
 	</string>
 	<string name="Full Back">
-		Gęstość włosów z tyłu
+		Gęsty tył
 	</string>
 	<string name="Full Eyeliner">
 		Gęsta kredka do oczu
@@ -2928,7 +2937,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Gęste boki
 	</string>
 	<string name="Glossy">
-		Błyszczące
+		Błyszcząca
 	</string>
 	<string name="Glove Fingers">
 		Rękawiczki
@@ -2958,13 +2967,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Grubość włosów
 	</string>
 	<string name="Hair Tilt">
-		Przes. fryzury
+		Przechylenie
 	</string>
 	<string name="Hair Tilted Left">
-		Przes. fryzury L
+		W lewo
 	</string>
 	<string name="Hair Tilted Right">
-		Przes. fryzury P
+		W prawo
 	</string>
 	<string name="Hair Volume">
 		Włosy: objętość
@@ -3021,7 +3030,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Szerokość bioder
 	</string>
 	<string name="In">
-		W
+		Wewnętrznie
 	</string>
 	<string name="In Shdw Color">
 		Wewnętrzny kolor cienia
@@ -3108,7 +3117,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Mniej umięśnienia
 	</string>
 	<string name="Less Rosy">
-		Mniej zaróżowione
+		Mniej
 	</string>
 	<string name="Less Round">
 		Mniej zaokrąglone
@@ -3126,13 +3135,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Mniej
 	</string>
 	<string name="Lighter">
-		Lżejsze
+		Jaśniejsze
 	</string>
 	<string name="Lip Cleft">
-		Szerokość rozszczepienia górnej wargi
+		Szer. rozszcz. górnej wargi
 	</string>
 	<string name="Lip Cleft Depth">
-		Głębokość rozszczepienia górnej wargi
+		Gł. rozszcz. górnej wargi
 	</string>
 	<string name="Lip Fullness">
 		Pełne usta
@@ -3159,7 +3168,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Kolor szminki
 	</string>
 	<string name="Long">
-		Długie
+		Długość
 	</string>
 	<string name="Long Head">
 		Długa głowa
@@ -3174,7 +3183,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Długi kark
 	</string>
 	<string name="Long Pigtails">
-		Długi warkocz
+		Długie warkocze
 	</string>
 	<string name="Long Ponytail">
 		Długi kucyk
@@ -3231,7 +3240,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Więcej
 	</string>
 	<string name="More Blush">
-		Bardziej zarumienione
+		Zarumienione
 	</string>
 	<string name="More Body Fat">
 		Więcej tłuszczu
@@ -3240,7 +3249,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Większe kurtynki
 	</string>
 	<string name="More Eyeshadow">
-		Ciemniejszy cień oczu
+		Ciemny cień oczu
 	</string>
 	<string name="More Freckles">
 		Więcej piegów
@@ -3267,7 +3276,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Więcej umięśnienia
 	</string>
 	<string name="More Rosy">
-		Bardziej zaróżowione
+		Więcej
 	</string>
 	<string name="More Round">
 		Więcej zaokrąglenia
@@ -3345,7 +3354,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Brak kredki do oczu
 	</string>
 	<string name="No Eyeshadow">
-		Brak cienia pod powieką
+		Brak cienia
 	</string>
 	<string name="No Lipgloss">
 		Brak połysku
@@ -3360,13 +3369,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Brak lakieru
 	</string>
 	<string name="No Red">
-		Brak czerwieni
+		Brak rudego
 	</string>
 	<string name="No Spikes">
 		Brak szpiców
 	</string>
 	<string name="No White">
-		Brak białego
+		Brak siwego
 	</string>
 	<string name="No Wrinkles">
 		Brak zmarszczek
@@ -3423,7 +3432,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Otwarte z prawej
 	</string>
 	<string name="Orange">
-		Pomarańczowe
+		Pomarańczowy
 	</string>
 	<string name="Out">
 		Zewnętrznie
@@ -3450,7 +3459,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Pakunek
 	</string>
 	<string name="Painted Nails">
-		Pomalowane paznokcie
+		Pomalowane
 	</string>
 	<string name="Pale">
 		Blady
@@ -3471,10 +3480,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Zmarszczki spodni
 	</string>
 	<string name="Part">
-		Część
+		Podział
 	</string>
 	<string name="Part Bangs">
-		Część grzywki
+		Podział grzywki
 	</string>
 	<string name="Pectorals">
 		Mięśnie klatki piersiowej
@@ -3483,13 +3492,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Pigment
 	</string>
 	<string name="Pigtails">
-		Warkocz
+		Warkocze
 	</string>
 	<string name="Pink">
-		Różowe
+		Róż
 	</string>
 	<string name="Pinker">
-		Róż
+		Bardziej różowe
 	</string>
 	<string name="Platform Height">
 		Wysokie obcasy
@@ -3498,7 +3507,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Szerokie obcasy
 	</string>
 	<string name="Pointy">
-		Czubek
+		W czubek
 	</string>
 	<string name="Pointy Heels">
 		Obcasy z czubkiem
@@ -3522,10 +3531,10 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Spuchnięte powieki
 	</string>
 	<string name="Rainbow Color">
-		Kolor tęczy
+		Kolory tęczy
 	</string>
 	<string name="Red Hair">
-		Czerwone włosy
+		Rude włosy
 	</string>
 	<string name="Regular">
 		Regularne
@@ -3561,25 +3570,25 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Płytkie
 	</string>
 	<string name="Shear Back">
-		Tylne usunięcie włosów
+		Tylne wycięcie włosów
 	</string>
 	<string name="Shear Face">
 		Ścięcie twarzy
 	</string>
 	<string name="Shear Front">
-		Przednie usunięcie włosów
+		Przednie wycięcie włosów
 	</string>
 	<string name="Shear Left Up">
-		Usunięcie od lewej
+		Wycięcie od lewej
 	</string>
 	<string name="Shear Right Up">
-		Usunięcie od prawej
+		Wycięcie od prawej
 	</string>
 	<string name="Sheared Back">
-		Tylne usunięcie włosów
+		Wycięty tył
 	</string>
 	<string name="Sheared Front">
-		Przednie usunięcie włosów
+		Wycięty przód
 	</string>
 	<string name="Shift Left">
 		Przesuń w lewo
@@ -3603,7 +3612,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Wysokość buta
 	</string>
 	<string name="Short">
-		Krótkie
+		Krótkość
 	</string>
 	<string name="Short Arms">
 		Krótkie ramiona
@@ -3615,7 +3624,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Krótki kark
 	</string>
 	<string name="Short Pigtails">
-		Krótkie warkoczyki
+		Krótkie warkocze
 	</string>
 	<string name="Short Ponytail">
 		Krótki kucyk
@@ -3699,7 +3708,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Zarost na dolnej wardze
 	</string>
 	<string name="Sparse">
-		Rzadki
+		Rzadkie
 	</string>
 	<string name="Spiked Hair">
 		Kolczaste włosy
@@ -3720,7 +3729,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Zapadnięte
 	</string>
 	<string name="Sunken Chest">
-		Zapadnięta klatka piersiowa
+		Zapadnięta klatka
 	</string>
 	<string name="Sunken Eyes">
 		Zapadnięte oczy
@@ -3750,7 +3759,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Gruby palec
 	</string>
 	<string name="Thin">
-		Wąski
+		Wąskie
 	</string>
 	<string name="Thin Eyebrows">
 		Wąskie brwi
@@ -3813,25 +3822,25 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Górne policzki
 	</string>
 	<string name="Upper Chin Cleft">
-		Rozszczepienie górnego podbródka
+		Rozszcz. górnego podbr.
 	</string>
 	<string name="Upper Eyelid Fold">
 		Górna powieka
 	</string>
 	<string name="Upturned">
-		Zadarta
+		Zadarty
 	</string>
 	<string name="Very Red">
-		Bardzo czerwona
+		Bardzo rude
 	</string>
 	<string name="Waist Height">
 		Wysokość talii
 	</string>
 	<string name="Well-Fed">
-		Dobrze odżywiony
+		Dobrze odżywione
 	</string>
 	<string name="White Hair">
-		Białe włosy
+		Siwe włosy
 	</string>
 	<string name="Wide">
 		Szerokie
@@ -3846,7 +3855,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Szerokie usta
 	</string>
 	<string name="Wild">
-		Dzikość
+		Szalone
 	</string>
 	<string name="Wrinkles">
 		Zmarszczki
@@ -3895,6 +3904,12 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
 		Awatary widoczne, czat poza parcelą dozwolony
+	</string>
+	<string name="LocationCtrlPathfindingDirtyTooltip">
+		Obiekty poruszające się mogą nie zachowywać się poprawnie, póki region nie zostanie odświeżony.
+	</string>
+	<string name="LocationCtrlPathfindingDisabledTooltip">
+		Odnajdywanie ścieżek jest wyłączone w tym regionie.
 	</string>
 	<string name="UpdaterWindowTitle">
 		Aktualizacja [APP_NAME]
@@ -4381,6 +4396,9 @@ Raport o Nadużyciu
 	<string name="LocalEstimateUSD">
 		US$ [AMOUNT]
 	</string>
+	<string name="free">
+		darmowe
+	</string>
 	<string name="Membership">
 		Członkostwo
 	</string>
@@ -4462,22 +4480,22 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Podziel
 	</string>
 	<string name="BeaconParticle">
-		Podgląd emiterów cząsteczek (niebieski)
+		Emitery cząsteczek (niebieski)
 	</string>
 	<string name="BeaconPhysical">
-		Podgląd emiterów fizycznych obiektów (zielony)
+		Emitery fizycznych obiektów (zielony)
 	</string>
 	<string name="BeaconScripted">
-		Podgląd emiterów obiektów skryptowanych (czerwony)
+		Emitery obiektów skryptowanych (czerwony)
 	</string>
 	<string name="BeaconScriptedTouch">
-		Podgląd emiterów obiektów skryptowanych z opcją dotyku (czerwony)
+		Emitery obiektów skryptowanych z opcją dotyku (czerwony)
 	</string>
 	<string name="BeaconSound">
-		Podgląd emiterów dźwięków (żółty)
+		Emitery dźwięków (żółty)
 	</string>
 	<string name="BeaconMedia">
-		Podgląd emiterów mediów (biały)
+		Emitery mediów (biały)
 	</string>
 	<string name="ParticleHiding">
 		Ukryj cząsteczki
@@ -4584,6 +4602,15 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Fly_Label">
 		Latanie
 	</string>
+	<string name="Command_Groundsit_Label">
+		Siądź na ziemi
+	</string>
+	<string name="Command_Sound_Explorer_Label">
+		Eksploruj dźwięki
+	</string>
+	<string name="Command_Asset_Blacklist_Label">
+		Czarna lista assetów
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4683,6 +4710,15 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Region_Tooltip">
 		Otwiera narzędzia regionu/majątku (ALT+R)
 	</string>
+	<string name="Command_Groundsit_Tooltip">
+		Włącza lub wyłącza tryb siedzenia na ziemi (CTRL+ALT+S)
+	</string>
+	<string name="Command_Sound_Explorer_Tooltip">
+		Otwiera eksploratora dźwięków
+	</string>
+	<string name="Command_Asset_Blacklist_Tooltip">
+		Otwiera listę obiektów, jakie masz na swojej czarnej liście zasobów danych (assetów)
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
 	</string>
@@ -4718,6 +4754,18 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Normal">
 		Normalne
+	</string>
+	<string name="Pathfinding_Object_Attr_None">
+		Brak
+	</string>
+	<string name="Pathfinding_Object_Attr_Permanent">
+		Wpływ na Navmesh
+	</string>
+	<string name="Pathfinding_Object_Attr_Character">
+		Postać
+	</string>
+	<string name="Pathfinding_Object_Attr_MultiSelect">
+		(Wiele)
 	</string>
 	<string name="snapshot_quality_very_low">
 		Bardzo niska

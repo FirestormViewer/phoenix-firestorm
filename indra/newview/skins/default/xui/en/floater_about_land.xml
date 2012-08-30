@@ -1242,6 +1242,43 @@ Only large parcels can be listed in search.
              width="278">
                 Allow other Residents to:
             </text>
+	<!-- <FS:WF> FIRE-6604 : Reinstate the "Allow Other Residents to Edit Terrain" option in About Land -->
+          <text
+           type="string"
+           length="1"
+           follows="left|top"
+           height="16"
+           layout="topleft"
+           left="20"
+           name="allow_label1"
+           width="150">
+            Edit Terrain:
+          </text>
+
+          <check_box
+             height="16"
+             label="Everyone"
+             layout="topleft"
+             name="edit land check"
+             tool_tip="If checked, anyone can terraform your land. It is best to leave this unchecked, as you can always edit your own land."
+             left_pad="2"
+             width="130" />
+			 
+  	     <text
+          font="SansSerifSmall"
+          type="string"
+          text_color="White_50"
+          length="1"
+          follows="left|top"
+          height="16"
+          layout="topleft"
+          left_pad="-55"
+          name="caution_text"
+          width="200">
+           (Use with caution!)
+         </text>
+		 
+	<!-- <FS:WF> FIRE-6604 END -->
           <text
            type="string"
            length="1"
@@ -1344,8 +1381,8 @@ Only large parcels can be listed in search.
           <panel
             bevel_style="none"
             border="true"
-            top="146"
-            bottom="146"
+            top="160"
+            bottom="160"
             follows="left|bottom|right"
             left="20"
             right="-20"/>
@@ -1356,7 +1393,7 @@ Only large parcels can be listed in search.
              left="18"
              name="check safe"
              tool_tip="If checked, sets the land to Safe, disabling damage combat. If cleared, damage combat is enabled."
-             top="130"
+             top="140"
              width="200" />
             <check_box
              height="16"
@@ -1365,7 +1402,7 @@ Only large parcels can be listed in search.
              left_pad="5"
              name="PushRestrictCheck"
              tool_tip="Prevents scripts from pushing. Checking this option may be useful for preventing disruptive behavior on your land."
-             top="130"
+             top="140"
              width="119" />
             <check_box
              height="16"
@@ -1374,14 +1411,14 @@ Only large parcels can be listed in search.
              left="18"
              name="ShowDirectoryCheck"
              tool_tip="Let people see this parcel in search results"
-             top="150"
+             top="162"
              width="430" />
             <combo_box
              enabled="true"
              height="23"
              layout="topleft"
              left="20"
-             top="194"
+             top="204"
              name="land category"
              visible="true"
              width="140">
@@ -1444,7 +1481,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left="18"
              name="MatureCheck"
-             top="170"
+             top="184"
              label_text.valign="center" 
              label_text.v_pad="-1" 
              tool_tip=" "
@@ -1458,7 +1495,7 @@ Only large parcels can be listed in search.
              left="20"
              name="Snapshot:"
              text_color="White"
-             top="225"
+             top="235"
              width="200">
                 Snapshot:
             </text>
@@ -1479,8 +1516,8 @@ Only large parcels can be listed in search.
              text_color="LtGray"
              height="32"
              layout="topleft"
-             left="274"
-             top="150"
+             left="245"
+             top="184"
              name="allow_label5"
              width="205"
              wrap="true">
@@ -1490,8 +1527,8 @@ Only large parcels can be listed in search.
              height="16"
              follows="top"
              layout="topleft"
-             left="253"
-             top="150"
+             left="224"
+             top="184"
              name="SeeAvatarsCheck"
              tool_tip="Allows avatars on other parcels to see and chat with avatars on this parcel, and you to see and chat with them."
              width="10" />

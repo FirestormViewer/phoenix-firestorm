@@ -60,9 +60,6 @@
 #include "llworld.h"
 #include "llagentui.h"
 
-#include "kvfloaterflickrauth.h"
-#include "kvfloaterflickrupload.h"
-
 // Linden library includes
 #include "llfontgl.h"
 #include "llsys.h"
@@ -171,7 +168,6 @@ public:
 	void setSnapshotBufferType(LLViewerWindow::ESnapshotType type) { mSnapshotBufferType = type; }
 	void updateSnapshot(BOOL new_snapshot, BOOL new_thumbnail = FALSE, F32 delay = 0.f);
 	void saveWeb();
-	KVFloaterFlickrUpload* uploadToFlickr();
 	void saveTexture();
 	BOOL saveLocal();
 
@@ -950,24 +946,6 @@ void LLSnapshotLivePreview::getSize(S32& w, S32& h) const
 	h = getHeight();
 }
 
-KVFloaterFlickrUpload* LLSnapshotLivePreview::uploadToFlickr()
-{	
-	// calculate and pass in image scale in case image data only use portion
-	// of viewerimage buffer
-	LLVector2 image_scale(1.f, 1.f);
-	if (!isImageScaled())
-	{
-		image_scale.setVec(llmin(1.f, (F32)mWidth[mCurImageIndex] / (F32)getCurrentImage()->getWidth()), llmin(1.f, (F32)mHeight[mCurImageIndex] / (F32)getCurrentImage()->getHeight()));
-	}
-
-	KVFloaterFlickrUpload* floater = KVFloaterFlickrUpload::showFromSnapshot(mFormattedImage, mViewerImage[mCurImageIndex], image_scale, mPosTakenGlobal);
-	mFormattedImage = NULL;
-	mDataSize = 0;
-	updateSnapshot(FALSE, FALSE);
-
-	return floater;
-}
-
 void LLSnapshotLivePreview::saveTexture()
 {
 	lldebugs << "saving texture: " << mPreviewImage->getWidth() << "x" << mPreviewImage->getHeight() << llendl;
@@ -1185,7 +1163,7 @@ LLSnapshotLivePreview::ESnapshotType LLFloaterSnapshot::Impl::getActiveSnapshotT
 	{
 		type = LLSnapshotLivePreview::SNAPSHOT_LOCAL;
 	}
-	else if (name == "flickr")
+	else if (name == "panel_snapshot_flickr")
 	{
 		type = LLSnapshotLivePreview::SNAPSHOT_FLICKR;
 	}
@@ -1505,6 +1483,12 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 		setResolution(floater, "local_size_combo");
 		floater->getChild<LLComboBox>("layer_types")->selectNthItem(gSavedSettings.getS32("SnapshotLayers")); // <FS:Zi> Save all settings
 		break;
+	  // <exodus>
+	  case LLSnapshotLivePreview::SNAPSHOT_FLICKR:
+		layer_type = LLViewerWindow::SNAPSHOT_TYPE_COLOR;
+		setResolution(floater, "flickr_size_combo");
+		break;
+	  // </exodus>
 	  default:
 		break;
 	}
@@ -2198,6 +2182,8 @@ BOOL LLFloaterSnapshot::postBuild()
 	getChild<LLComboBox>("local_size_combo")->selectNthItem(gSavedSettings.getS32("LastSnapshotToDiskResolution"));
 	getChild<LLComboBox>("local_format_combo")->selectNthItem(gSavedSettings.getS32("SnapshotFormat"));
 	getChild<LLComboBox>("layer_types")->selectNthItem(gSavedSettings.getS32("SnapshotLayers"));
+	getChild<LLComboBox>("flickr_size_combo")->selectNthItem(gSavedSettings.getS32("LastSnapshotToFlickrResolution"));
+	getChild<LLComboBox>("flickr_format_combo")->selectNthItem(gSavedSettings.getS32("FlickrSnapshotFormat"));
 	// </FS:Zi>
 
 	impl.mPreviewHandle = previewp->getHandle();

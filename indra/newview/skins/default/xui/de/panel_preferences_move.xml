@@ -17,6 +17,7 @@
 			<check_box initial_value="true" label="Seitenleiste" name="appearance_sidebar_positioning" tool_tip="Automatische Kameraposition für Seitenleiste verwenden"/>
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible"/>
+			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<text name="Mouse Sensitivity" width="195">
 				Mausempfindlichkeit für Mouselook:
 			</text>
@@ -80,6 +81,8 @@
 			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
 			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
 			<check_box label="Erweiterte Regionsinformationen auf der Weltkarte anzeigen" name="FSAdvancedWorldmapRegionInfo" tool_tip="Zeigt erweiterte Regionsinformationen (Anzahl Avatare und Alterseinstufung) auf der Weltkarte an."/>
+			<check_box label="Info anzeigen, wenn sich der Simulator-Kanal beim Regionswechsel ändert" name="FSShowServerVersionChangeNotice" tool_tip="Zeigt an, falls sich beim einem Wechsel der Region oder durch einen Teleport die Version des Simulators ändert, auf dem die Region läuft."/>
+			<check_box label="Simulator-Kanal in der Statusleiste anzeigen" name="FSStatusbarShowSimulatorVersion" tool_tip="Zeigt den Kanal des Simulators an, auf dem die aktuelle Region läuft."/>
 		</panel>
 	</tab_container>
 </panel>

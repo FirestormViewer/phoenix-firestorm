@@ -112,9 +112,6 @@ void commit_select_component(void *data);
 void click_popup_info(void*);
 void click_popup_done(void*);
 void click_popup_minimize(void*);
-void click_popup_rotate_left(void*);
-void click_popup_rotate_reset(void*);
-void click_popup_rotate_right(void*);
 void commit_slider_dozer_force(LLUICtrl *);
 void click_apply_to_selection(void*);
 void commit_radio_group_focus(LLUICtrl* ctrl);
@@ -560,7 +557,8 @@ void LLFloaterTools::refresh()
 	// - KC
 	std::string prim_count_string;
 	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
-	getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
 #if 0
 	if (!gMeshRepo.meshRezEnabled())
 	{		
@@ -577,15 +575,18 @@ void LLFloaterTools::refresh()
 			std::string prim_cost_string;
 			S32 render_cost = LLSelectMgr::getInstance()->getSelection()->getSelectedObjectRenderCost();
 			LLResMgr::getInstance()->getIntegerString(prim_cost_string, render_cost);
-			getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
+			// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+			//getChild<LLUICtrl>("RenderingCost")->setTextArg("[COUNT]", prim_cost_string);
 		}
 		
 		// disable the object and prim counts if nothing selected
 		bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
 		getChildView("link_num_obj_count")->setEnabled(have_selection);
 		//getChildView("obj_count")->setEnabled(have_selection);
-		getChildView("prim_count")->setEnabled(have_selection);
-		getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+		// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+		//getChildView("prim_count")->setEnabled(have_selection);
+		// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+		//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 	}
 	else
 #endif
@@ -635,8 +636,10 @@ void LLFloaterTools::refresh()
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
 	//getChildView("obj_count")->setEnabled(have_selection);
 	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
-	getChildView("prim_count")->setEnabled(have_selection);
-	getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChildView("prim_count")->setEnabled(have_selection);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+	//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
 
 	// Refresh child tabs
 	mPanelPermissions->refresh();
@@ -777,7 +780,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	mRadioGroupEdit->setVisible( edit_visible );
 	//bool linked_parts = gSavedSettings.getBOOL("EditLinkedParts");
 	static LLCachedControl<bool> linked_parts(gSavedSettings,  "EditLinkedParts");
-	getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
+	//getChildView("RenderingCost")->setVisible( !linked_parts && (edit_visible || focus_visible || move_visible) && sShowObjectCost);
 
 	mBtnLink->setVisible(edit_visible);
 	mBtnUnlink->setVisible(edit_visible);
@@ -972,7 +976,8 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	}
 
 	//getChildView("link_num_obj_count")->setVisible( !land_visible);
-	getChildView("prim_count")->setVisible( !land_visible);
+	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
+	//getChildView("prim_count")->setVisible( !land_visible);
 
 	static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
 	mTab->setVisible(!land_visible && sFSToolboxExpanded);
@@ -1123,24 +1128,6 @@ void commit_slider_zoom(LLUICtrl *ctrl)
 	// renormalize value, since max "volume" level is 0.5 for some reason
 	F32 zoom_level = (F32)ctrl->getValue().asReal() * 2.f; // / 0.5f;
 	gAgentCamera.setCameraZoomFraction(zoom_level);
-}
-
-void click_popup_rotate_left(void*)
-{
-	LLSelectMgr::getInstance()->selectionRotateAroundZ( 45.f );
-	dialog_refresh_all();
-}
-
-void click_popup_rotate_reset(void*)
-{
-	LLSelectMgr::getInstance()->selectionResetRotation();
-	dialog_refresh_all();
-}
-
-void click_popup_rotate_right(void*)
-{
-	LLSelectMgr::getInstance()->selectionRotateAroundZ( -45.f );
-	dialog_refresh_all();
 }
 
 void commit_slider_dozer_force(LLUICtrl *ctrl)
@@ -1393,7 +1380,10 @@ void LLFloaterTools::getMediaState()
 		return;
 	}
 	
-	bool editable = (first_object->permModify() || selectedMediaEditable());
+	BOOL is_nonpermanent_enforced = (LLSelectMgr::getInstance()->getSelection()->getFirstRootNode() 
+		&& LLSelectMgr::getInstance()->selectGetRootsNonPermanentEnforced())
+		|| LLSelectMgr::getInstance()->selectGetNonPermanentEnforced();
+	bool editable = is_nonpermanent_enforced && (first_object->permModify() || selectedMediaEditable());
 
 	// Check modify permissions and whether any selected objects are in
 	// the process of being fetched.  If they are, then we're not editable

@@ -4,7 +4,7 @@
     <check_box label="Szukaj w górę" name="find_previous" />
     <button label="Szukaj" label_selected="Szukaj" name="search_btn" />
     <button label="Zamień" label_selected="Zamień" name="replace_btn" />
-    <button label="Zamień wszystko" label_selected="Zamień wsz." name="replace_all_btn" />
+    <button label="Zamień wsz." label_selected="Zamień wsz." name="replace_all_btn" />
     <text name="txt">
         Szukaj
     </text>

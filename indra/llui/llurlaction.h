@@ -77,6 +77,9 @@ public:
 	/// if the Url specifies an SL command in the form like 'app/{cmd}/{id}/*', show its profile
 	static void showProfile(std::string url);
 
+	// <FS:Ansariel> FSSlurlCommand support
+	static LLUUID extractUuidFromSlurl(const std::string& url);
+
 	/// specify the callbacks to enable this class's functionality
 	typedef boost::function<void (const std::string&)> url_callback_t;
 	typedef boost::function<bool(const std::string& url)> execute_url_callback_t;

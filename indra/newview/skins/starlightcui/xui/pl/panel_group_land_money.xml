@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<panel label="Posiadłości i L$" name="land_money_tab">
+	<panel.string name="help_text">
+		Ostrzeżenie pojawia się kiedy łączna powierzchnia posiadłości jest mniejsza lub = Kontrybucjom
+	</panel.string>
+	<panel.string name="cant_view_group_land_text">
+		Nie masz pozwolenia na oglądanie posiadłości grupy.
+	</panel.string>
+	<panel.string name="epmty_view_group_land_text">
+		Brak pozycji
+	</panel.string>
+	<panel.string name="cant_view_group_accounting_text">
+		Nie masz dostępu do finansów grupy.
+	</panel.string>
+	<panel.string name="loading_txt">
+		Ładowanie...
+	</panel.string>
+	<panel.string name="land_contrib_error">
+		Nie można ustalić Twoich kontrybucji.
+	</panel.string>
+	<panel name="layout_panel_landmoney">
+		<scroll_list name="group_parcel_list">
+			<scroll_list.columns label="Posiadłość" name="name"/>
+			<scroll_list.columns label="Region" name="location"/>
+			<scroll_list.columns label="Typ" name="type"/>
+			<scroll_list.columns label="Obszar" name="area"/>
+			<scroll_list.columns label="Ukryte" name="hidden"/>
+		</scroll_list>
+		<text name="total_contributed_land_label">
+			Kontrybucje:
+		</text>
+		<button label="Mapa" label_selected="Mapa" name="map_button"/>
+		<text name="total_land_in_use_label">
+			Używane posiadł.:
+		</text>
+		<text name="land_available_label">
+			Dostępne posiadł.:
+		</text>
+		<text name="your_contribution_label">
+			Twoje kontrybucje:
+		</text>
+		<text name="your_contribution_max_value">
+			(maks. [AMOUNT])
+		</text>
+		<text name="group_over_limit_text">
+			Należy zwiększyć kredyt na używanie posiadłości.
+		</text>
+		<text name="group_money_heading">
+			L$ grupy
+		</text>
+	</panel>
+	<tab_container name="group_money_tab_container">
+		<panel label="PLANOWANIE" name="group_money_planning_tab">
+			<text_editor name="group_money_planning_text">
+				Ładowanie...
+			</text_editor>
+		</panel>
+		<panel label="SZCZEGÓŁY" name="group_money_details_tab">
+			<text_editor name="group_money_details_text">
+				Ładowanie...
+			</text_editor>
+			<button name="earlier_details_button" tool_tip="Wcześniej"/>
+			<button name="later_details_button" tool_tip="Później"/>
+		</panel>
+		<panel label="SPRZEDAŻ" name="group_money_sales_tab">
+			<text_editor name="group_money_sales_text">
+				Ładowanie...
+			</text_editor>
+			<button name="earlier_sales_button" tool_tip="Wcześniej"/>
+			<button name="later_sales_button" tool_tip="Później"/>
+		</panel>
+	</tab_container>
+</panel>

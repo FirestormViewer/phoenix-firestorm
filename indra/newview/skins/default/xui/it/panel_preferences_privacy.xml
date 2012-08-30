@@ -10,7 +10,7 @@
 				(Luoghi, Immagini, Web, Cronologia Ricerca)
 			</text>
 			<check_box label="Mostrami nella lista della ricerca" name="online_searchresults"/>
-			<check_box label="Solo gli amici e i gruppi possono veremi on-line" name="online_visibility"/>
+			<check_box label="Solo gli amici e i gruppi possono vedermi on-line" name="online_visibility"/>
 			<check_box label="Solo gli amici e i gruppi possono chiamarmi o inviarmi IMs" name="voice_call_friends_only_check"/>
 			<check_box label="Chiudi il microfono automaticamente quando finisco le chiamate" name="auto_disengage_mic_check"/>
 			<check_box label="Accetta automaticamente oggetti nell'inventario" name="Auto_Accept_New_Inventory"/>

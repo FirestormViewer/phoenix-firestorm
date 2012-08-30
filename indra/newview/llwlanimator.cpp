@@ -131,10 +131,14 @@ void LLWLAnimator::update(LLWLParamSet& curParams)
 			return;
 		}
 
+		// <FS:Ansariel> Custom Windlight interpolate time
+		static LLCachedControl<F32> interpolate_time(gSavedSettings, "FSWindlightInterpolateTime");
 		
 		if (mIsInterpolatingSky)
 		{
-			weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			// <FS:Ansariel> Custom Windlight interpolate time
+			//weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			weight = (current - mInterpStartTime) / ((F64)interpolate_time * CLOCKS_PER_SEC);
 			curParams.mix(*mInterpBeginWL, *mInterpEndWL, weight);
 		}
 		else
@@ -147,7 +151,9 @@ void LLWLAnimator::update(LLWLParamSet& curParams)
 			buf.mix(LLWLParamManager::getInstance()->mParamList[mFirstIt->second], LLWLParamManager::getInstance()->mParamList[mSecondIt->second], weight);	// mix to determine moving target for interpolation finish (as below)
 
 			// mix from previous value to moving target
-			weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			// <FS:Ansariel> Custom Windlight interpolate time
+			//weight = (current - mInterpStartTime) / (INTERP_TOTAL_SECONDS * CLOCKS_PER_SEC);
+			weight = (current - mInterpStartTime) / ((F64)interpolate_time * CLOCKS_PER_SEC);
 			curParams.mix(*mInterpBeginWL, buf, weight);
 		}
 
@@ -244,7 +250,9 @@ void LLWLAnimator::startInterpolation(const LLSD& targetWater)
 	mInterpBeginWater->setAll(LLWaterParamManager::getInstance()->mCurParams.getAll());
 	
 	mInterpStartTime = clock();
-	mInterpEndTime = mInterpStartTime + clock_t(INTERP_TOTAL_SECONDS) * CLOCKS_PER_SEC;
+	// <FS:Ansariel> Custom Windlight interpolate time
+	//mInterpEndTime = mInterpStartTime + clock_t(INTERP_TOTAL_SECONDS) * CLOCKS_PER_SEC;
+	mInterpEndTime = mInterpStartTime + clock_t((F64)gSavedSettings.getF32("FSWindlightInterpolateTime")) * CLOCKS_PER_SEC;
 
 	// Don't set any ending WL -- this is continuously calculated as the animator updates since it's a moving target
 	mInterpEndWater->setAll(targetWater);

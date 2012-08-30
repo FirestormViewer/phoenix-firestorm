@@ -4,6 +4,12 @@
 		ビームの色（選択ビーム）：
 	</text>
 	<color_swatch name="effect_color_swatch" tool_tip="クリックしてカラーピッカーを開きます"/>
+	<text name="netmap_chatring_color_label">
+		チャットの届く範囲
+	</text>
+	<text name="netmap_shoutring_color_label">
+		シャウトの届く範囲
+	</text>
 	<text name="font_colors">
 		チャットの文字の色
 	</text>
@@ -22,8 +28,8 @@
 	<text name="text_box5">
 		エラー
 	</text>
-	<text name="text_box10">
-		ダイレクト
+	<text name="text_box6">
+		オブジェクトのIM
 	</text>
 	<text name="text_box7">
 		所有者
@@ -31,14 +37,37 @@
 	<text name="text_box9">
 		URL
 	</text>
+	<text name="text_box8">
+		チャット見出し
+	</text>
+	<text name="ScriptDialogBgLabel">
+		スクリプト通知背景
+	</text>
+	<text name="ScriptDialogFgLabel">
+		スクリプト通知文字
+	</text>
+	<text name="text_box10">
+		ダイレクト
+	</text>
+
+
 	<text name="bubble_chat">
 		名前の表示の背景色（吹き出しチャットにも適用）：
 	</text>
 	<color_swatch name="background" tool_tip="名前の表示色を選択"/>
 	<slider label="不透明度：" name="bubble_chat_opacity" tool_tip="名前の表示の不透明度を選択"/>
 	<text name="floater_opacity">
-		フローターの不透明度：
+		ウィンドウの不透明度：
 	</text>
 	<slider label="有効：" name="active"/>
 	<slider label="無効：" name="inactive"/>
+	<check_box label="スクリプトからの通知の背景は常に不透明にする" name="FSScriptDialogNoTransparency"/>
+	<check_box label="グループ通知の背景は常に不透明にする" name="FSGroupNotifyNoTransparency"/>
+	
+	<check_box label="パイメニュー背景色と不透明度の設定" name="override_pie_color_checkbox"/>
+	<color_swatch name="pie_bg_color_override" tool_tip="パイメニューの背景色を選択"/>
+	<color_swatch name="pie_selected_color_override" tool_tip="パイメニューで選択した時の色を選択"/>
+	<slider label="不透明度" name="pie_menu_opacity" tool_tip="パイメニューの不透明度を設定"/>
+	<slider label="ぼかし" name="pie_menu_fade_out" tool_tip="パイメニューの色が外に向かって薄くなっていく度合いを設定"/>
+	
 </panel>

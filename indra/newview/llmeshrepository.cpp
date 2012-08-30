@@ -75,7 +75,8 @@
 
 LLMeshRepository gMeshRepo;
 
-const U32 MAX_MESH_REQUESTS_PER_SECOND = 100;
+// <FS:Ansariel> Configurable request throttle
+//const U32 MAX_MESH_REQUESTS_PER_SECOND = 100;
 
 // Maximum mesh version to support.  Three least significant digits are reserved for the minor version, 
 // with major version changes indicating a format change that is not backwards compatible and should not
@@ -486,6 +487,11 @@ void LLMeshRepoThread::run()
 		llwarns << "convex decomposition unable to be loaded" << llendl;
 	}
 
+	// <FS:Ansariel> Configurable request throttle
+	static LLCachedControl<U32> fsMaxMeshRequestsPerSecond(gSavedSettings, "FSMaxMeshRequestsPerSecond");
+	// <FS:Ansariel> Mesh header/LOD retry functionality
+	static LLCachedControl<F32> fsMeshRequestTimeout(gSavedSettings, "FSMeshRequestTimeout");
+
 	while (!LLApp::isQuitting())
 	{
 		mWaiting = true;
@@ -502,11 +508,66 @@ void LLMeshRepoThread::run()
 			{ //a second has gone by, clear count
 				last_hundred = gFrameTimeSeconds;
 				count = 0;	
+
+				// <FS:Ansariel> Mesh header/LOD retry functionality
+				F32 curl_timeout = (F32)fsMeshRequestTimeout;
+
+				if (mMutex)
+				{
+					mMutex->lock();
+					// Handle header requests
+					std::set<ActiveHeaderRequest>::iterator header_it = mActiveHeaderRequests.begin();
+					std::list<ActiveHeaderRequest> active_header_clear_list;
+
+					for ( ; header_it != mActiveHeaderRequests.end(); header_it++)
+					{
+						ActiveHeaderRequest active_req = *header_it;
+						if (gFrameTimeSeconds - active_req.mFrameTimeStart > curl_timeout)
+						{
+							LL_WARNS("MeshRequestTimeout") << "Mesh header request timed out for SculptID=" << active_req.mMeshParams.getSculptID() << LL_ENDL;
+							HeaderRequest req(active_req.mMeshParams);
+							mHeaderReqQ.push(req);
+							active_header_clear_list.push_back(active_req);
+						}
+					}
+
+					for (std::list<ActiveHeaderRequest>::iterator it = active_header_clear_list.begin(); it != active_header_clear_list.end(); it++)
+					{
+						mActiveHeaderRequests.erase(*it);
+					}
+
+					// Handle LOD requests
+					std::set<ActiveLODRequest>::iterator lod_it = mActiveLODRequests.begin();
+					std::list<ActiveLODRequest> active_lod_clear_list;
+
+					for ( ; lod_it != mActiveLODRequests.end(); lod_it++)
+					{
+						ActiveLODRequest active_req = *lod_it;
+						if (gFrameTimeSeconds - active_req.mFrameTimeStart > curl_timeout)
+						{
+							LL_WARNS("MeshRequestTimeout") << "Mesh LOD request timed out for SculptID=" << active_req.mMeshParams.getSculptID() << " and LOD=" << active_req.mLOD << LL_ENDL;
+							LODRequest req(active_req.mMeshParams, active_req.mLOD);
+							mLODReqQ.push(req);
+							active_lod_clear_list.push_back(active_req);
+						}
+					}
+
+					for (std::list<ActiveLODRequest>::iterator it = active_lod_clear_list.begin(); it != active_lod_clear_list.end(); it++)
+					{
+						mActiveLODRequests.erase(*it);
+					}
+
+					mMutex->unlock();
+				}
+				// </FS:Ansariel> Mesh header/LOD retry functionality
 			}
 
 			// NOTE: throttling intentionally favors LOD requests over header requests
 			
-			while (!mLODReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveLODRequests < sMaxConcurrentRequests)
+			// <FS:Ansariel> Configurable request throttle
+			//while (!mLODReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveLODRequests < sMaxConcurrentRequests)
+			while (!mLODReqQ.empty() && count < (U32)fsMaxMeshRequestsPerSecond && sActiveLODRequests < sMaxConcurrentRequests)
+			// </FS:Ansariel> Configurable request throttle
 			{
 				if (mMutex)
 				{
@@ -524,7 +585,10 @@ void LLMeshRepoThread::run()
 				}
 			}
 
-			while (!mHeaderReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveHeaderRequests < sMaxConcurrentRequests)
+			// <FS:Ansariel> Configurable request throttle
+			//while (!mHeaderReqQ.empty() && count < MAX_MESH_REQUESTS_PER_SECOND && sActiveHeaderRequests < sMaxConcurrentRequests)
+			while (!mHeaderReqQ.empty() && count < (U32)fsMaxMeshRequestsPerSecond && sActiveHeaderRequests < sMaxConcurrentRequests)
+			// </FS:Ansariel> Configurable request throttle
 			{
 				if (mMutex)
 				{
@@ -958,6 +1022,18 @@ bool LLMeshRepoThread::fetchMeshHeader(const LLVolumeParams& mesh_params, U32& c
 		if(retval)
 		{
 			LLMeshRepository::sHTTPRequestCount++;
+
+			// <FS:Ansariel> Mesh header/LOD retry functionality
+			S32 frameTime = gFrameTimeSeconds;
+			LL_DEBUGS("MeshRequestTimeout") << "Mesh header request: SculptID=" << mesh_params.getSculptID() << ", gFrameTimeSeconds=" << frameTime << LL_ENDL;
+			if (mMutex)
+			{
+				mMutex->lock();
+				mActiveHeaderRequests.insert(ActiveHeaderRequest(mesh_params, frameTime));
+				LL_DEBUGS("MeshRequestTimeout") << "Active mesh header requests: " << mActiveHeaderRequests.size() << LL_ENDL;
+				mMutex->unlock();
+			}
+			// </FS:Ansariel> Mesh header/LOD retry functionality
 		}
 		count++;
 	}
@@ -1032,6 +1108,18 @@ bool LLMeshRepoThread::fetchMeshLOD(const LLVolumeParams& mesh_params, S32 lod, 
 				if(retval)
 				{
 					LLMeshRepository::sHTTPRequestCount++;
+
+					// <FS:Ansariel> Mesh header/LOD retry functionality
+					S32 frameTime = gFrameTimeSeconds;
+					LL_DEBUGS("MeshRequestTimeout") << "Mesh LOD request: SculptID=" << mesh_params.getSculptID() << ", LOD=" << lod << ", gFrameTimeSeconds=" << frameTime << LL_ENDL;
+					if (mMutex)
+					{
+						mMutex->lock();
+						mActiveLODRequests.insert(ActiveLODRequest(mesh_params, lod, frameTime));
+						LL_DEBUGS("MeshRequestTimeout") << "Active mesh LOD requests: " << mActiveLODRequests.size() << LL_ENDL;
+						mMutex->unlock();
+					}
+					// </FS:Ansariel> Mesh header/LOD retry functionality
 				}
 				count++;
 			}
@@ -1097,19 +1185,24 @@ bool LLMeshRepoThread::headerReceived(const LLVolumeParams& mesh_params, U8* dat
 			mMeshHeader[mesh_id] = header;
 			}
 
+
+		LLMutexLock lock(mMutex); // <FS:ND/> FIRE-7182, make sure only one thread access mPendingLOD at the same time.
+
 		//check for pending requests
 		pending_lod_map::iterator iter = mPendingLOD.find(mesh_params);
 		if (iter != mPendingLOD.end())
 		{
-			LLMutexLock lock(mMutex);
+			//			LLMutexLock lock(mMutex); <FS:ND/> FIRE-7182, lock was moved up, before calling mPendingLOD.find
 			for (U32 i = 0; i < iter->second.size(); ++i)
 			{
 				LODRequest req(mesh_params, iter->second[i]);
 				mLODReqQ.push(req);
 				LLMeshRepository::sLODProcessing++;
 			}
+
+			mPendingLOD.erase(iter); // <FS:ND/> FIRE-7182, only call erase if iter is really valid.
 		}
-		mPendingLOD.erase(iter);
+		//		mPendingLOD.erase(iter); // <FS:ND/> avoid crash by moving erase up.
 	}
 
 	return true;
@@ -1801,6 +1894,14 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 		return;
 	// </FS:ND>
 
+	// <FS:Ansariel> Mesh header/LOD retry functionality
+	{
+		LLMutexLock lock(gMeshRepo.mThread->mMutex);
+		LLMeshRepoThread::ActiveLODRequest Req(mMeshParams, mLOD);
+		gMeshRepo.mThread->mActiveLODRequests.erase(Req);
+		LL_DEBUGS("MeshRequestTimeout") << "Cleared active mesh LOD request: SculptID=" << mMeshParams.getSculptID() << ", LOD=" << mLOD << LL_ENDL;
+	}
+	// </FS:Ansariel> Mesh header/LOD retry functionality
 
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
@@ -2053,6 +2154,15 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 	if( !gMeshRepo.mThread )
 		return;
 	// </FS:ND>
+
+	// <FS:Ansariel> Mesh header/LOD retry functionality
+	{
+		LLMutexLock lock(gMeshRepo.mThread->mMutex);
+		LLMeshRepoThread::ActiveHeaderRequest Req(mMeshParams);
+		gMeshRepo.mThread->mActiveHeaderRequests.erase(Req);
+		LL_DEBUGS("MeshRequestTimeout") << "Cleared active mesh header request: " << mMeshParams.getSculptID() << LL_ENDL;
+	}
+	// </FS:Ansariel> Mesh header/LOD retry functionality
 
 	if (status < 200 || status > 400)
 	{

@@ -169,12 +169,12 @@ with the same filename but different name
   <texture name="Caret_Right_Icon"          file_name="toolbar_icons/caret_right.png"  preload="true" scale.left="5" scale.top="15" scale.right="28" scale.bottom="1" />
   <texture name="Caret_Left_Icon"           file_name="toolbar_icons/caret_left.png"   preload="true" scale.left="1" scale.top="15" scale.right="23" scale.bottom="1" />
   
-  <texture name="ComboButton_Disabled" file_name="widgets/ComboButton_Disabled.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_UpSelected" file_name="widgets/ComboButton_UpSelected.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
-  <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="2" scale.top="19" scale.right="18" scale.bottom="2" />
+  <texture name="ComboButton_Disabled" file_name="widgets/ComboButton_Disabled.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="ComboButton_Selected" file_name="widgets/ComboButton_Selected.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="ComboButton_UpSelected" file_name="widgets/ComboButton_UpSelected.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
   <texture name="Container" file_name="containers/Container.png" preload="false" />
   <texture name="Copy" file_name="icons/Copy.png" preload="false" />
   
@@ -430,7 +430,10 @@ with the same filename but different name
  <texture name="Parcel_ScriptsNo_Dark" file_name="icons/Parcel_ScriptsNo_Dark.png" preload="false" />
  <texture name="Parcel_Voice_Dark" file_name="icons/Parcel_Voice_Dark.png" preload="false" />
  <texture name="Parcel_VoiceNo_Dark" file_name="icons/Parcel_VoiceNo_Dark.png" preload="false" />
- 
+
+ <texture name="Pathfinding_Dirty" file_name="icons/Pathfinding_Dirty.png" preload="false" />
+ <texture name="Pathfinding_Disabled" file_name="icons/Pathfinding_Disabled.png" preload="false" />
+
  <texture name="Parcel_SeeAVsOff_Dark" file_name="icons/Parcel_SeeAVsOff_Dark.png" preload="false" />
  <texture name="Parcel_SeeAVsOn_Dark" file_name="icons/Parcel_SeeAVsOn_Dark.png" preload="false" />
  <texture name="Parcel_SeeAVsOff_Light" file_name="icons/Parcel_SeeAVsOff_Light.png" preload="false" />
@@ -462,18 +465,18 @@ with the same filename but different name
   <texture name="Play_Over" file_name="icons/Play_Over.png" preload="false" />
   <texture name="Play_Press" file_name="icons/Play_Press.png" preload="false" />
   
-  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="48" scale.bottom="3" />
+  <texture name="ProgressBar" file_name="widgets/ProgressBar.png" preload="true" scale.left="4" scale.top="11" scale.right="14" scale.bottom="3" />
   <texture name="ProgressTrack" file_name="widgets/ProgressTrack.png" preload="true" scale.left="4" scale.top="13" scale.right="148" scale.bottom="2" />
 
-  <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Off" file_name="widgets/PushButton_Off.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_On" file_name="widgets/PushButton_On.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_On_Selected" file_name="widgets/PushButton_On_Selected.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Over" file_name="widgets/PushButton_Over.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Press" file_name="widgets/PushButton_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Selected" file_name="widgets/PushButton_Selected.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Selected_Press" file_name="widgets/PushButton_Selected_Press.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
-  <texture name="PushButton_Selected_Disabled" file_name="widgets/PushButton_Selected_Disabled.png" preload="true" scale.left="4" scale.top="19" scale.right="28" scale.bottom="4" />
+  <texture name="PushButton_Disabled" file_name="widgets/PushButton_Disabled.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Off" file_name="widgets/PushButton_Off.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_On" file_name="widgets/PushButton_On.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_On_Selected" file_name="widgets/PushButton_On_Selected.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Over" file_name="widgets/PushButton_Over.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Press" file_name="widgets/PushButton_Press.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Selected" file_name="widgets/PushButton_Selected.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Selected_Press" file_name="widgets/PushButton_Selected_Press.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+  <texture name="PushButton_Selected_Disabled" file_name="widgets/PushButton_Selected_Disabled.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
 
   <texture name="RadioButton_Press" file_name="widgets/RadioButton_Press.png" preload="true" />
   <texture name="RadioButton_On_Press" file_name="widgets/RadioButton_On_Press.png" preload="true" />
@@ -500,8 +503,8 @@ with the same filename but different name
   <texture name="ScrollArrow_Right" file_name="widgets/ScrollArrow_Right.png" preload="true" scale.left="2" scale.top="13" scale.right="13" scale.bottom="2" />
   <texture name="ScrollArrow_Up" file_name="widgets/ScrollArrow_Up.png"	preload="true" scale.left="2" scale.top="13" scale.right="13" scale.bottom="2" />
 
-  <texture name="ScrollThumb_Horiz" file_name="widgets/ScrollThumb_Horiz.png" preload="true" scale.left="4" scale.top="0" scale.bottom="0" scale.right="2" />
-  <texture name="ScrollThumb_Vert" file_name="widgets/ScrollThumb_Vert.png" preload="true" scale.left="4" scale.top="53" scale.bottom="10" scale.right="4" />
+  <texture name="ScrollThumb_Horiz" file_name="widgets/ScrollThumb_Horiz.png" preload="true" scale.left="14" scale.top="0" scale.bottom="0" scale.right="14" />
+  <texture name="ScrollThumb_Vert" file_name="widgets/ScrollThumb_Vert.png" preload="true" scale.left="7" scale.top="14" scale.bottom="14" scale.right="7" />
   <texture name="ScrollTrack_Vert" file_name="widgets/ScrollTrack_Vert.png" preload="true" scale.left="2" scale.top="40" scale.bottom="13" scale.right="0" />
   <texture name="ScrollTrack_Horiz" file_name="widgets/ScrollTrack_Horiz.png" preload="true" scale.left="4" scale.top="0" scale.bottom="0" scale.right="2" />
 
@@ -834,6 +837,9 @@ with the same filename but different name
   <texture name="Parcel_Windlight" file_name="icons/Parcel_WindLight.png" preload="false" />
   <texture name="TabIcon_Translate_Off" file_name="taskpanel/translate_icon_24x24.png" preload="false" />
   <texture name="ao_toggle_18" file_name="toolbar_icons/animation_override.png" preload="false" />
+  <texture name="groundsit" file_name="toolbar_icons/groundsit.png" preload="true" />
+  <texture name="sound_explorer" file_name="toolbar_icons/sound_explorer.png" preload="true" />
+  <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
   <texture name="profile_icon_24x24" file_name="icons/profile_icon_24x24.png" preload="false" />
   <texture name="sale_icon_24x24" file_name="icons/sale_icon_24x24.png" preload="false" />
   <texture name="call_icon_24x24" file_name="icons/call_icon_24x24.png" preload="false" />
@@ -857,6 +863,10 @@ with the same filename but different name
   <texture name="icon_avatar_online"			file_name="icon_avatar_online.tga"		preload="false" />
   <texture name="icon_avatar_online_h"			file_name="icon_avatar_online_h.tga"                preload="false" />
   <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
+<!-- FS:Ansariel: Icons for V1 status bar -->
+  <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
+  <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
+
 
   <!-- Firstorm virtual system folders - added in FS 2.6.1 -->
   <texture name="Inv_FirestormOpen"		file_name="icons/Inv_SysOpen.png" />
@@ -905,4 +915,26 @@ with the same filename but different name
   <texture name="OutboxPush_Selected_Over" file_name="icons/OutboxPush_Selected_Over.png" preload="true" />
   <texture name="OutboxPush_Selected_Press" file_name="icons/OutboxPush_Selected_Press.png" preload="true" />
 
+<!-- Dolphin Textures -->  
+
+  <texture name="Avatar_Offset" file_name="icons/Arrow_UpDown.png" preload="true" />
+  <texture name="DrawDistance" file_name="icons/Icon_Horizon.png" preload="true" />
+  <texture name="Command_AOMenu_Icon"       file_name="toolbar_icons/ao_toggle_18.png" preload="true" />
+  <texture name="Command_AreaSearch_Icon"   file_name="toolbar_icons/areasearch.png"   preload="true" />
+  <texture name="Command_AOSwitch_Icon"     file_name="toolbar_icons/ao_onoff.png"     preload="true" />
+  <texture name="Command_Machinima_Icon"    file_name="toolbar_icons/video-icon.png"   preload="true" />
+  <texture name="Land_Off" file_name="navbar/Land_Off.png" preload="false" />
+  <texture name="Object_Sculpt" file_name="build/Object_Sculpt.png" preload="false" />
+  <texture name="Object_Sculpt_Selected" file_name="build/Object_Sculpt_Selected.png" preload="false" />
+  <texture name="Snapshot_Flickr" file_name="snapshot_flickr.png" preload="false" />
+<!-- Also in Catznip -->
+  <texture name="Permission_Ungranted" file_name="icons/Permission_Ungranted.png" preload="false" />      
+<!-- Also in RLV -->
+  <texture name="Command_Conversations_Icon" file_name="toolbar_icons/conversations.png" preload="true" /> 
+  
+<!-- Catznip Textures -->  
+ 
+  <texture name="Icon_Collapse_Foreground" file_name="windows/Icon_Collapse_Foreground.png" preload="true" />
+  <texture name="Icon_Collapse_Press" file_name="windows/Icon_Collapse_Press.png" preload="true" />
+  
 </textures>

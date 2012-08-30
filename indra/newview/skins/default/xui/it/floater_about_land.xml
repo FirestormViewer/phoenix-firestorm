@@ -273,7 +273,7 @@ o suddivisa.
 				Restituzione automatica degli oggetti di altri residenti (minuti, 0 per disattivarla):
 			</text>
 			<line_editor name="clean other time"/>
-			<text name="Object Owners:">
+			<text name="Object Owners:" width="180">
 				Proprietari degli oggetti:
 			</text>
 			<button label="Aggiorna Elenco" label_selected="Aggiorna Elenco" name="Refresh List" tool_tip="Refresh Object List"/>

@@ -53,6 +53,8 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+#include "exogroupmutelist.h"
+
 //
 // Globals
 //
@@ -413,6 +415,10 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 	LLGroupData group_data;
 	if (gAgent.getGroupData(group_id, group_data))
 	{
+		// <exodus>
+		// Unmute the group if the user tries to start a session with it.
+		exoGroupMuteList::instance().remove(group_id);
+		// </exodus>
 		LLUUID session_id = gIMMgr->addSession(
 			group_data.mName,
 			IM_SESSION_GROUP_START,

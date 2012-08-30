@@ -88,7 +88,7 @@
                mouse_opaque="false"
                name="chiclet_container"
                tab_stop="false"
-               top="0"
+               top="40"
                width="20">
         </panel>          
 		<!-- FS:Ansariel: For chiclets and notices at bottom -->
@@ -189,7 +189,7 @@
                left="350"
                mouse_opaque="false"
                tab_stop="false"
-               name="stand_stop_flying_container"
+               name="state_management_buttons_container"
                visible="true"
                width="158"/>
   </layout_panel>

@@ -274,5 +274,18 @@
     <key>Value</key>
     <integer>1</integer>
   </map> 
+
+  <key>FSDisplaySavedOutfitsCap</key>
+  <map>
+    <key>Comment</key>
+    <string>Display only so many saved outfits in edit appearance. 0 to disable.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>U32</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
 </map>
 </llsd>

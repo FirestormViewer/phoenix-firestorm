@@ -34,9 +34,9 @@
 		</menu>
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
 		<menu label="Subir" name="Upload">
-			<menu_item_call label="Imagen ([COST] L$)..." name="Upload Image"/>
-			<menu_item_call label="Sonido ([COST] L$)..." name="Upload Sound"/>
-			<menu_item_call label="Animación ([COST] L$)..." name="Upload Animation"/>
+			<menu_item_call label="Imagen ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sonido ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animación ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelo mesh..." name="Upload Model"/>
 			<menu_item_call label="Masivo (múltiples archivos)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
@@ -160,6 +160,12 @@
 			<menu_item_call label="Detener la ejecución de los scripts" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Eliminar scripts de la selección" name="Remove Scripts From Selection"/>
 		</menu>
+		<menu label="Pathfinding" name="Pathfinding">
+			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Caracteres..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Ver / probar..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Actualizar navmesh de la región" name="rebake_region_navmesh"/>
+		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
 			<menu_item_check label="Seleccionar sólo mis objetos" name="Select Only My Objects"/>
@@ -175,11 +181,11 @@
 			<menu_item_call label="Opciones de la rejilla" name="Grid Options"/>
 		</menu>
 		<menu label="Subir" name="Upload">
-			<menu_item_call label="Imagen (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Sonido (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animación (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagen ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Sonido ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animación ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelo mesh..." name="Upload Model"/>
-			<menu_item_call label="Masivo (L$[COST] por archivo)..." name="Bulk Upload"/>
+			<menu_item_call label="Masivo ([COST] por archivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Configurar permisos de subida por defecto" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Deshacer" name="Undo"/>
@@ -195,11 +201,13 @@
 	<menu label="Ayuda" name="Help">
 		<menu_item_check label="Mostrar consejos" name="Enable Hints"/>
 		<menu_item_call label="Firestorm Wiki" name="Firestorm Wiki"/>
+		<menu_item_call label="Unirse al Grupo de Soporte de Firestorm" name="firestorm_support_group"/>
 		<menu_item_call label="Ayuda de [CURRENT_GRID]" name="current_grid_help"/>
 		<menu_item_call label="Acerca de [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Estado de la red" name="Grid Status"/>
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse"/>
 		<menu_item_call label="Informar de un fallo" name="Report Bug"/>
+        <menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Activar botón de Información del Sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -275,7 +283,7 @@
 		<menu_item_check label="Vista subjetiva suavizada" name="Mouse Smoothing"/>
 		<menu_item_call label="Liberar teclas" name="Release Keys"/>
 		<menu label="Atajos de teclado" name="Shortcuts">
-			<menu_item_call label="Subir imagen ([COST] L$)..." name="Upload Image"/>
+			<menu_item_call label="Subir imagen ([COST])..." name="Upload Image"/>
 			<menu_item_check label="Búsqueda" name="Search"/>
 			<menu_item_check label="Mostrar el menú Avanzado - atajo clásico" name="Show Advanced Menu - legacy shortcut"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
@@ -401,7 +409,6 @@
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
-		<menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Grabadora" name="Recorder">
 			<menu_item_call label="Iniciar reproducción" name="Start Playback"/>
 			<menu_item_call label="Detener reprodución" name="Stop Playback"/>

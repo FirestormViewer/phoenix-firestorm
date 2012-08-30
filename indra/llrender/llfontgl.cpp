@@ -1002,7 +1002,7 @@ LLFontGL* LLFontGL::getFontSansSerifBig()
 //static 
 LLFontGL* LLFontGL::getFontSansSerifHuge()
 {
-	static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Large",0));
+	static LLFontGL* fontp = getFont(LLFontDescriptor("SansSerif","Huge",0));
 	return fontp;
 }
 

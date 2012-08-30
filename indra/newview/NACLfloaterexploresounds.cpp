@@ -47,25 +47,21 @@ const LLUUID collision_sounds[num_collision_sounds] =
 	LLUUID("063c97d3-033a-4e9b-98d8-05c8074922cb")
 };
 
-NACLFloaterExploreSounds* NACLFloaterExploreSounds::sInstance;
-
 NACLFloaterExploreSounds::NACLFloaterExploreSounds(const LLSD& key)
 :	LLFloater(key), LLEventTimer(0.25f)
 {
-	NACLFloaterExploreSounds::sInstance = this;
 }
 
 NACLFloaterExploreSounds::~NACLFloaterExploreSounds()
 {
-	NACLFloaterExploreSounds::sInstance = NULL;
 }
 
 BOOL NACLFloaterExploreSounds::postBuild(void)
 {
-	childSetAction("play_locally_btn", handle_play_locally, this);
-	childSetAction("look_at_btn", handle_look_at, this);
-	childSetAction("stop_btn", handle_stop, this);
-	childSetAction("bl_btn", blacklistSound, this);
+	getChild<LLButton>("play_locally_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_play_locally, this));
+	getChild<LLButton>("look_at_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_look_at, this));
+	getChild<LLButton>("stop_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::handle_stop, this));
+	getChild<LLButton>("bl_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this));
 
 	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
 	list->setDoubleClickCallback(boost::bind(&NACLFloaterExploreSounds::handle_play_locally, this));
@@ -119,7 +115,6 @@ public:
 	}
 };
 
-// static
 BOOL NACLFloaterExploreSounds::tick()
 {
 	//if(childGetValue("pause_chk").asBoolean()) return FALSE;
@@ -193,16 +188,22 @@ BOOL NACLFloaterExploreSounds::tick()
 		LLSD& playing_column = element["columns"][0];
 		playing_column["column"] = "playing";
 		if(item.mPlaying)
-			playing_column["value"] = " Playing";
+		{
+			playing_column["value"] = getString("Playing");
+		}
 		else
-			playing_column["value"] = llformat("%.1f min ago", (LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.f);
+		{
+			LLStringUtil::format_map_t format_args;
+			format_args["TIME"] = llformat("%.1f", (LLTimer::getElapsedSeconds() - item.mTimeStopped) / 60.f);
+			playing_column["value"] = getString("NotPlaying", format_args);
+		}
 
 		LLSD& type_column = element["columns"][1];
 		type_column["column"] = "type";
 		if(item.mType == LLAudioEngine::AUDIO_TYPE_UI)
 		{
 			// this shouldn't happen for now, as UI is forbidden in the log
-			type_column["value"] = "UI";
+			type_column["value"] = getString("Type_UI");
 		}
 		else
 		{
@@ -210,20 +211,24 @@ BOOL NACLFloaterExploreSounds::tick()
 
 			if(is_avatar)
 			{
-				type = "Avatar";
+				type = getString("Type_Avatar");
 			}
 			else
 			{
 				if(item.mIsTrigger)
 				{
-					type = "llTriggerSound";
+					type = getString("Type_llTriggerSound");
 				}
 				else
 				{
 					if(item.mIsLooped)
-						type = "llLoopSound";
+					{
+						type = getString("Type_llLoopSound");
+					}
 					else
-						type = "llPlaySound";
+					{
+						type = getString("Type_llPlaySound");
+					}
 				}
 			}
 
@@ -236,11 +241,18 @@ BOOL NACLFloaterExploreSounds::tick()
 		BOOL is_group;
 		if(gCacheName->getIfThere(item.mOwnerID, fullname, is_group))
 		{
-			if(is_group) fullname += " (Group)";
+			if (is_group)
+			{
+				LLStringUtil::format_map_t format_args;
+				format_args["NAME"] = fullname;
+				fullname = getString("GroupOwned", format_args);
+			}
 			owner_column["value"] = fullname;
 		}
 		else
+		{
 			owner_column["value"] = item.mOwnerID.asString();
+		}
 
 		LLSD& sound_column = element["columns"][3];
 		sound_column["column"] = "sound";
@@ -255,18 +267,16 @@ BOOL NACLFloaterExploreSounds::tick()
 	return FALSE;
 }
 
-// static
-void NACLFloaterExploreSounds::handle_play_locally(void* user_data)
+void NACLFloaterExploreSounds::handle_play_locally()
 {
-	NACLFloaterExploreSounds* floater = (NACLFloaterExploreSounds*)user_data;
-	LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>("sound_list");
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
 	std::vector<LLScrollListItem*> selection = list->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
 	for( ; selection_iter != selection_end; ++selection_iter)
 	{
-		LLSoundHistoryItem item = floater->getItem((*selection_iter)->getValue());
+		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
 		if(item.mID.isNull()) continue;
 		// Unique assets only
 		if(std::find(asset_list.begin(), asset_list.end(), item.mAssetID) == asset_list.end())
@@ -277,13 +287,11 @@ void NACLFloaterExploreSounds::handle_play_locally(void* user_data)
 	}
 }
 
-// static
-void NACLFloaterExploreSounds::handle_look_at(void* user_data)
+void NACLFloaterExploreSounds::handle_look_at()
 {
-	NACLFloaterExploreSounds* floater = (NACLFloaterExploreSounds*)user_data;
-	LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>("sound_list");
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
 	LLUUID selection = list->getSelectedValue().asUUID();
-	LLSoundHistoryItem item = floater->getItem(selection); // Single item only
+	LLSoundHistoryItem item = getItem(selection); // Single item only
 	if(item.mID.isNull()) return;
 
 	LLVector3d pos_global = item.mPosition;
@@ -312,18 +320,16 @@ void NACLFloaterExploreSounds::handle_look_at(void* user_data)
 	gAgentCamera.setCameraAnimating(FALSE);
 }
 
-// static
-void NACLFloaterExploreSounds::handle_stop(void* user_data)
+void NACLFloaterExploreSounds::handle_stop()
 {
-	NACLFloaterExploreSounds* floater = (NACLFloaterExploreSounds*)user_data;
-	LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>("sound_list");
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
 	std::vector<LLScrollListItem*> selection = list->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
 	for( ; selection_iter != selection_end; ++selection_iter)
 	{
-		LLSoundHistoryItem item = floater->getItem((*selection_iter)->getValue());
+		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
 		if(item.mID.isNull()) continue;
 		if(item.mPlaying)
 		{
@@ -351,29 +357,34 @@ void NACLFloaterExploreSounds::handle_stop(void* user_data)
 }
 
 //add sound to blacklist
-void NACLFloaterExploreSounds::blacklistSound(void* user_data)
+void NACLFloaterExploreSounds::blacklistSound()
 {
-	NACLFloaterExploreSounds* floater = (NACLFloaterExploreSounds*)user_data;
-	LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>("sound_list");
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("sound_list");
 	std::vector<LLScrollListItem*> selection = list->getAllSelected();
 	std::vector<LLScrollListItem*>::iterator selection_iter = selection.begin();
 	std::vector<LLScrollListItem*>::iterator selection_end = selection.end();
 	std::vector<LLUUID> asset_list;
-	for( ; selection_iter != selection_end; ++selection_iter)
+
+	for ( ; selection_iter != selection_end; ++selection_iter)
 	{
-		LLSoundHistoryItem item = floater->getItem((*selection_iter)->getValue());
-		if(item.mID.isNull()) continue;
+		LLSoundHistoryItem item = getItem((*selection_iter)->getValue());
+		if (item.mID.isNull())
+		{
+			continue;
+		}
 
 		std::string entry_name;
 		std::string agent;
+		std::string region_name;
+
 		gCacheName->getFullName(item.mOwnerID, agent);
 		LLViewerRegion* cur_region = gAgent.getRegion();
 
-		if(cur_region)
-			entry_name = llformat("Sound played by %s in region %s",agent.c_str(),cur_region->getName().c_str());
-		else
-			entry_name = llformat("Sound played by %s",agent.c_str());
+		if (cur_region)
+		{
+			region_name = cur_region->getName();
+		}
 
-		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID,entry_name,LLAssetType::AT_SOUND,true);
+		FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(item.mAssetID, agent, region_name, LLAssetType::AT_SOUND, true);
 	}
 }

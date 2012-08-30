@@ -177,10 +177,10 @@ Add this Ability to &apos;[ROLE_NAME]&apos;?
 Du har ikke nok L$ til denne tilmelding.
 	</notification>
 	<notification name="CreateGroupCost">
-		Oprettelse af denne gruppe vil koste L$100.
+		Oprettelse af denne gruppe vil koste L$[COST].
 Grupper skal have mindst 2 medlemmer, ellers slettes de for altid.
 Invitér venligst medlemmer indenfor 48 timer.
-		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$100"/>
+		<usetemplate canceltext="Annullér" name="okcancelbuttons" notext="Annullér" yestext="Oprete en gruppe for L$[COST]"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
 		ADVARSEL: Ved at vælge &apos;sælg til enhver&apos; bliver til land tilgængeligt for alle i hele [CURRENT_GRID], også de som ikke er i denne region.

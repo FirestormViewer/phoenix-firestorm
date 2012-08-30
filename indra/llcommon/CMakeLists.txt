@@ -273,13 +273,6 @@ list(APPEND llcommon_SOURCE_FILES ${llcommon_HEADER_FILES})
 
 if(LLCOMMON_LINK_SHARED)
   add_library (llcommon SHARED ${llcommon_SOURCE_FILES})
-  if(NOT WORD_SIZE EQUAL 32)
-    if(WINDOWS)
-      add_definitions(/FIXED:NO)
-    else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
-      add_definitions(-fPIC)
-    endif(WINDOWS)
-  endif(NOT WORD_SIZE EQUAL 32)
   if(WINDOWS)
     # always generate llcommon.pdb, even for "Release" builds
     set_target_properties(llcommon PROPERTIES LINK_FLAGS "/DEBUG")
@@ -288,6 +281,14 @@ if(LLCOMMON_LINK_SHARED)
 else(LLCOMMON_LINK_SHARED)
     add_library (llcommon ${llcommon_SOURCE_FILES})
 endif(LLCOMMON_LINK_SHARED)
+
+if(NOT WORD_SIZE EQUAL 32)
+  if(WINDOWS)
+    add_definitions(/FIXED:NO)
+  else(WINDOWS) # not windows therefore gcc LINUX and DARWIN
+    add_definitions(-fPIC)
+  endif(WINDOWS)
+endif(NOT WORD_SIZE EQUAL 32)
 
 target_link_libraries(
     llcommon

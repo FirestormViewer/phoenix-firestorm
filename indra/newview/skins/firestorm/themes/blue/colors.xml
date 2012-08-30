@@ -609,3 +609,8 @@
      name="DirectChatColor"
      reference="SpGreen" />
 	 
+    <!-- Balance at the top -->
+    <color
+     name="CurrencyColor"
+     reference="LabelTextColor" /> 
+</colors>

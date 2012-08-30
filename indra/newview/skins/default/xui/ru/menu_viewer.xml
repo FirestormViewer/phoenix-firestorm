@@ -34,11 +34,11 @@
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Запрос статуса администратора" name="Request Admin Options"/>
@@ -176,11 +176,11 @@
 			<menu_item_call label="Параметры сетки" name="Grid Options"/>
 		</menu>
 		<menu label="Передача" name="Upload">
-			<menu_item_call label="Изображение (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Звук (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Анимация (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Изображение ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Звук ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Анимация ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Модель..." name="Upload Model"/>
-			<menu_item_call label="Все сразу (L$[COST] за файл)..." name="Bulk Upload"/>
+			<menu_item_call label="Все сразу ([COST] за файл)..." name="Bulk Upload"/>
 			<menu_item_call label="Установить разрешения на передачу по умолчанию" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Отменить" name="Undo"/>
@@ -195,12 +195,14 @@
 	</menu>
 	<menu label="Справка" name="Help">
 		<menu_item_check label="Показать подсказки" name="Enable Hints"/>
+		<menu_item_call label="Вступить в группу поддержки" name="firestorm_support_group"/>
 		<menu_item_check label="Firestorm-Wiki" name="Firestorm Wiki"/>
         <menu_item_call label="[CURRENT_GRID]-помощь" name="current_grid_help"/>
         <menu_item_call label="О [CURRENT_GRID]" name="current_grid_about"/>
 		<menu_item_call label="Проверить статус грида" name="Grid Status"/>
 		<menu_item_call label="Написать рапорт" name="Report Abuse"/>
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
+        <menu_item_call label="Столкновения, толчки и удары" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="О [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="RLVa" name="RLVa Main">
@@ -386,7 +388,6 @@
 			<menu_item_call label="Опустить пакет" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
-		<menu_item_call label="Столкновения, толчки и удары" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Диктофон" name="Recorder">
 			<menu_item_call label="Начать воспроизведение" name="Start Playback"/>
 			<menu_item_call label="Остановить воспроизведение" name="Stop Playback"/>

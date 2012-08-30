@@ -475,6 +475,12 @@ with the same filename but different name
  <texture name="Parcel_Voice_Light" file_name="icons/Parcel_Voice_Light.png" preload="false" />
  <texture name="Parcel_VoiceNo_Light" file_name="icons/Parcel_VoiceNo_Light.png" preload="false" />
 
+  <texture name="Pathfinding_Dirty" file_name="icons/Pathfinding_Dirty.png" preload="false" />
+  <texture name="Pathfinding_Disabled" file_name="icons/Pathfinding_Disabled.png" preload="false" />
+<!-- FS:Ansariel: Icons for V1 status bar -->
+  <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
+  <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
+
   <texture name="Pause_Off" file_name="icons/Pause_Off.png" preload="false" />
   <texture name="Pause_Over" file_name="icons/Pause_Over.png" preload="false" />
   <texture name="Pause_Press" file_name="icons/Pause_Press.png" preload="false" />
@@ -605,6 +611,9 @@ with the same filename but different name
   <texture name="Snapshot_Email" file_name="snapshot_email.png" preload="false" />
   <texture name="Snapshot_Inventory" file_name="toolbar_icons/inventory.png" preload="false" />
   <texture name="Snapshot_Profile" file_name="toolbar_icons/profile.png" preload="false" />
+  <!-- <exodus> -->
+  <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
+  <!-- </exodus> -->
 
   <texture name="startup_logo"  file_name="windows/startup_logo.png" preload="true" />
 
@@ -694,6 +703,10 @@ with the same filename but different name
   <texture name="settings_debug" file_name="toolbar_icons/settings_debug.png" preload="true" />
   <texture name="statistics" file_name="toolbar_icons/statistics.png" preload="true" />
   <texture name="regioninfo" file_name="toolbar_icons/region.png" preload="true" />
+  <texture name="groundsit" file_name="toolbar_icons/groundsit.png" preload="true" />
+  <texture name="sound_explorer" file_name="toolbar_icons/sound_explorer.png" preload="true" />
+  <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
+  <texture name="phototools" file_name="toolbar_icons/phototools.png" preload="true" />
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />

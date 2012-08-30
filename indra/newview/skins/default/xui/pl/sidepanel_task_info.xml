@@ -18,6 +18,12 @@
 	<panel.string name="text modify info 4">
 		Nie możesz modyfikować tych obiektów
 	</panel.string>
+	<panel.string name="text modify info 5">
+		Nie możesz modyfikować tego obiektu przez granicę regionu
+	</panel.string>
+	<panel.string name="text modify info 6">
+		Nie możesz modyfikować tych obiektów przez granicę regionu
+	</panel.string>
 	<panel.string name="text modify warning">
 		Ten obiekt ma części zgrupowane
 	</panel.string>
@@ -95,6 +101,9 @@
 		</combo_box>
 		<spinner label="Cena: L$" name="Edit Cost"/>
 		<check_box label="Pokaż w wyszukiwarce" name="search_check" tool_tip="Udostępnij widzialność tego obiektu w wyszukiwarce"/>
+		<text name="pathfinding_attributes_label">
+			Atrybuty odnajd. ścieżek:
+		</text>
 	</panel>
 	<panel name="button_panel">
 		<button label="Otwórz" name="open_btn"/>

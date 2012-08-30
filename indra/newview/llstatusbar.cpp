@@ -1,3 +1,4 @@
+
 /** 
 * @file llstatusbar.cpp
 * @brief LLStatusBar class implementation
@@ -100,6 +101,8 @@
 // system includes
 #include <iomanip>
 
+#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
+
 //
 // Globals
 //
@@ -152,6 +155,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mShowParcelIcons(TRUE),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
+	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
 	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
 {
 	setRect(rect);
@@ -198,7 +202,6 @@ LLStatusBar::~LLStatusBar()
 	{
 		mShowCoordsCtrlConnection.disconnect();
 	}
-
 	// LLView destructor cleans up children
 }
 
@@ -419,6 +422,27 @@ void LLStatusBar::refresh()
 		LLStringUtil::format (dtStr, substitution);
 		mTextTime->setToolTip (dtStr);
 	}
+
+	// <FS:Zi> Pathfinding rebake functions
+	static LLPanelPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode=LLPanelPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
+	if(	LLPanelPathfindingRebakeNavmesh::getInstance()->isRebaking())
+	{
+		LLViewerRegion* agent_region=gAgent.getRegion();
+		if(	agent_region &&
+			agent_region->dynamicPathfindingEnabled() && 
+			mRebakingTimer.getElapsedTimeF32()>0.5f)
+		{
+			mRebakingTimer.reset();
+			mPathfindingFlashOn=!mPathfindingFlashOn;
+			updateParcelIcons();
+		}
+	}
+	else if(pathfinding_mode!=LLPanelPathfindingRebakeNavmesh::getInstance()->getMode())
+	{
+		pathfinding_mode=LLPanelPathfindingRebakeNavmesh::getInstance()->getMode();
+		updateParcelIcons();
+	}
+	// </FS:Zi>
 
 	LLRect r;
 	const S32 MENU_RIGHT = gMenuBarView->getRightmostMenuEdge();
@@ -804,6 +828,10 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[SCRIPTS_ICON] = getChild<LLIconCtrl>("scripts_icon");
 	mParcelIcon[DAMAGE_ICON] = getChild<LLIconCtrl>("damage_icon");
 	mParcelIcon[SEE_AVATARS_ICON] = getChild<LLIconCtrl>("see_avs_icon");
+	// <FS:Ansariel> Pathfinding support
+	mParcelIcon[PATHFINDING_DIRTY_ICON] = getChild<LLIconCtrl>("pathfinding_dirty_icon");
+	mParcelIcon[PATHFINDING_DISABLED_ICON] = getChild<LLIconCtrl>("pathfinding_disabled_icon");
+	// </FS:Ansariel> Pathfinding support
 
 	mParcelIcon[VOICE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, VOICE_ICON));
 	mParcelIcon[FLY_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, FLY_ICON));
@@ -812,6 +840,10 @@ void LLStatusBar::initParcelIcons()
 	mParcelIcon[SCRIPTS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SCRIPTS_ICON));
 	mParcelIcon[DAMAGE_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, DAMAGE_ICON));
 	mParcelIcon[SEE_AVATARS_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, SEE_AVATARS_ICON));
+	// <FS:Ansariel> Pathfinding support
+	mParcelIcon[PATHFINDING_DIRTY_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, PATHFINDING_DIRTY_ICON));
+	mParcelIcon[PATHFINDING_DISABLED_ICON]->setMouseDownCallback(boost::bind(&LLStatusBar::onParcelIconClick, this, PATHFINDING_DISABLED_ICON));
+	// </FS:Ansariel> Pathfinding support
 
 	mDamageText->setText(LLStringExplicit("100%"));
 }
@@ -970,6 +1002,18 @@ void LLStatusBar::updateParcelIcons()
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool has_pwl		= KCWindlightInterface::instance().getWLset();
+		// <FS:Ansariel> Pathfinding support
+		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
+
+		// <FS:Zi> Pathfinding rebake functions
+		bool pathfinding_navmesh_dirty=LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+		F32 pathfinding_dirty_icon_alpha=1.0;
+		if(LLPanelPathfindingRebakeNavmesh::getInstance()->isRebaking())
+		{
+			pathfinding_dirty_icon_alpha=mPathfindingFlashOn ? 1.0 : 0.25;
+			pathfinding_navmesh_dirty=true;
+		}
+		// </FS:Zi>
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -979,6 +1023,11 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mParcelIcon[SEE_AVATARS_ICON]->setVisible(!see_avatars);
+		// <FS:Ansariel> Pathfinding support
+		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(pathfinding_navmesh_dirty);
+		mParcelIcon[PATHFINDING_DIRTY_ICON]->setColor(LLColor4::white % pathfinding_dirty_icon_alpha);
+		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled);
+		// </FS:Ansariel> Pathfinding support
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
@@ -1098,6 +1147,17 @@ void LLStatusBar::onParcelIconClick(EParcelIcon icon)
 	case SEE_AVATARS_ICON:
 		LLNotificationsUtil::add("SeeAvatars");
 		break;
+	// <FS:Ansariel> Pathfinding support
+	case PATHFINDING_DIRTY_ICON:
+		// <FS:Zi> Pathfinding rebake functions
+		// LLNotificationsUtil::add("PathfindingDirty");
+		LLNotificationsUtil::add("PathfindingDirty",LLSD(),LLSD(),boost::bind(&LLStatusBar::rebakeRegionCallback,this,_1,_2));
+		// </FS:Zi>
+		break;
+	case PATHFINDING_DISABLED_ICON:
+		LLNotificationsUtil::add("DynamicPathfindingDisabled");
+		break;
+	// </FS:Ansariel> Pathfinding support
 	case ICON_COUNT:
 		break;
 	// no default to get compiler warning when a new icon gets added
@@ -1187,3 +1247,19 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
 	mBalancePanel->setRect(rect);
 }
+
+// <FS:Zi> Pathfinding rebake functions
+BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& response)
+{
+	std::string newSetName=response["message"].asString();
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	if(option==0)
+	{
+		if(LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
+			LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+		return TRUE;
+	}
+	return FALSE;
+}
+// </FS:Zi>

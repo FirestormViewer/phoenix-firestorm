@@ -1192,7 +1192,7 @@ L$ は返金されません。
 	</notification>
 	<notification name="ClothingLoading">
 		現在衣類をダウンロード中です。
-このまま [CURRENT_GRID] を通常通りご使用いただけます。他人からはあなたは正しく表示されます。
+このまま [APP_NAME] を通常通りご使用いただけます。他人からはあなたは正しく表示されます。
 		<form name="form">
 			<ignore name="ignore" text="衣類がダウンロードされるまで時間がかかっているとき"/>
 		</form>

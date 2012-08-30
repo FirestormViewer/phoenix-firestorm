@@ -1,32 +1,101 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="移動" name="move_panel">
 	<tab_container name="tabs">
+	
+	
 		<!--View-->
-		<panel name="tab-view">
+		
+		<panel label="表示" name="tab-view">
 			<slider label="視界角" name="camera_fov"/>
 			<slider label="距離" name="camera_offset_scale"/>
+			<slider label="ズーム移動時間" name="camera_transition_time" />
+			<slider label="スムージング" name="camera_position_smoothing" />
+			<check_box label="カメラ移動により自由を与える" name="DisableCameraConstraints" tool_tip="通常の限界を越えてカメラを動かしたい時や地面の下に潜りたい時に設定して下さい。カメラコントロールが苦手な方は、アングルなどのコントロールが難しくなります。" />
 			<text name="heading2">
 				自動ポジション：
 			</text>
 			<check_box label="制作・編集" name="edit_camera_movement" tool_tip="編集モードのオン・オフの切り替えに、自動カメラポジションを使います"/>
 			<check_box label="容姿" name="appearance_camera_movement" tool_tip="編集モードに入ったときに、自動カメラポジションを使います"/>
+			<check_box label="照明を追加する" name="EditAppearanceLighting" tool_tip="容姿の編集中に照明を追加することができます" />
+			<!-- Deleted Aug.21, 2012
 			<check_box initial_value="true" label="サイドバー" name="appearance_sidebar_positioning" tool_tip="サイドバーに自動カメラポジションを使います"/>
+			-->
 			<check_box label="一人称視点で表示する" name="first_person_avatar_visible"/>
+			<check_box label="マウスルックのガイドを表示" name="mouselook_instructions_visible" />
 			<text name="Mouse Sensitivity">
 				一人称視点のマウスの感度：
 			</text>
 			<check_box label="切り替え" name="invert_mouse"/>
 		</panel>
+		
+		
 		<!--Movement-->
-		<panel name="tab-movement">
+		
+		<panel label="移動" name="tab-movement">
 			<check_box label="常にキー操作で動くようにする" name="arrow_keys_move_avatar_check"/>
+			<check_box label="AZERTYキーボード配列（フランス式）を使用" name="FSUseAzertyKeyboardLayout" />
+			<text name="FSUseAzertyKeyboardLayout_requires_restart" left_pad ="60" width="80">
+				（再起動が必要）
+			</text>
 			<check_box label="上矢印キー2度押し+長押しで走る" name="tap_tap_hold_to_run"/>
-			<check_box label="ダブルクリックで次の操作：" name="double_click_chkbox"/>
-			<radio_group name="double_click_action">
-				<radio_item label="テレポート" name="radio_teleport"/>
-				<radio_item label="自動追跡" name="radio_autopilot"/>
-			</radio_group>
+			<check_box label="UP/DOWNキーの長押しで飛行／着地する" name="automatic_fly" />
+			<check_box label="テレポートサウンドを鳴らす" name="PlayTeleportSound" />
+			<check_box label="テレポート後は飛行状態のままにする" name="FSFlyAfterTeleport" />
+			<text name="single_click_action_lbl">
+				地面をシングルクリック：
+			</text>
+			<combo_box name="single_click_action_combo">
+				<combo_box.item label="何もしない" name="0" value="0"/>
+				<combo_box.item label="その場所に移動" name="1" value="1"/>
+				<combo_box.commit_callback function="Pref.ClickActionChange"/>
+			</combo_box>
+			<text name="double_click_action_lbl">
+				地面をダブルクリック：
+			</text>
+			<combo_box name="double_click_action_combo">
+				<combo_box.item label="何もしない" name="0" value="0"/>
+				<combo_box.item label="その場所に移動" name="1" value="1"/>
+				<combo_box.item label="その場所にテレポート" name="2" value="2"/>
+				<combo_box.commit_callback
+             function="Pref.ClickActionChange"/>
+			</combo_box>
+
 			<button label="その他のディバイス" name="joystick_setup_button"/>
 		</panel>
+		
+		
+		<!-- Firestorm -->
+		
+		<panel label="Firestorm" name="tab-firestorm" >
+			<text name="camera_options_label">
+				カメラ・オプション
+			</text>
+
+			<check_box label="アバターをクリックしてもカメラの位置を変更しない" name="clickonavatarkeepscamera" tool_tip="通常、アバターをクリックするとカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
+			<check_box label="（同じSIM内で）テレポートした後のカメラの位置を元に戻す" name="FSResetCameraOnTP" tool_tip="通常、テレポートする時にカメラの位置がリセットされます。このオプションはこの動作を回避します。"/>
+			<check_box label="至近距離の制限を解除" name="disableminzoomdist" tool_tip="オブジェクトにカメラが近づける距離には制限がありますが、この制限を解除して近づけます。"/>
+			<check_box label="カメラリセット時にアバターを振り返らせる" name="resetviewturnsavatar" tool_tip="Escキーでカメラをリセットすると、アバターがカメラの方を向きます。"/>
+			<check_box label="プリムの向こう側が見えるようにカメラ移動の制限を解除" name="ignorecameraconstraints" tool_tip="通常はプリムにぶつかるとそれより先にカメラを進めることはできないが、この制限を解除してプリムの向こう側にカメラを回ることができます。"/>
+			<text name="ignorecameraconstraints_requires_restart">
+				（再起動が必要）
+			</text>
+			<check_box label="ミニマップを回転" name="minimaprotate" tool_tip="アバターの向きに合わせてミニマップを回転します。"/>
+			<check_box name="MiniMapChatRing" label="ミニマップにチャット可能範囲を示す円を表示" />
+			<text name="netmap_double_click_action_lbl">
+				ミニマップをダブルクリック：
+			</text>
+			<combo_box name="netmap_double_click_action_combo">
+				<combo_box.item label="何もしない" name="0" value="0"/>
+            <combo_box.item label="世界地図を開く" name="1" value="1"/>
+            <combo_box.item label="その場所にテレポート" name="2" value="2"/>
+			</combo_box>
+
+			<check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示（Phoenixスタイル）" />
+			<check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />
+			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
+			<check_box label="世界地図上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="世界地図のランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
+			<check_box label="世界地図にその地域の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="世界地図上にその地域の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>
+		</panel>
+	 
 	</tab_container>
 </panel>

@@ -207,6 +207,16 @@
          name="mouselook_instructions_visible"
          tool_tip="Show Mouselook Instructions"
          width="256" />
+        <check_box
+         control_name="ShowCrosshairs"
+         follows="left|top"
+         height="16"
+         initial_value="true"
+         label="Show Mouselook Crosshairs"
+         layout="topleft"
+         name="ShowCrosshairs"
+         tool_tip="Display crosshairs when in mouselook mode"
+         width="256" />
         <text
          type="string"
          length="1"
@@ -215,7 +225,7 @@
          layout="topleft"
          left_delta="3"
          name="Mouse Sensitivity"
-         top_pad="5"
+         top_pad="7"
          width="160">
          Mouselook mouse sensitivity:
         </text>
@@ -605,6 +615,28 @@
          width="270"
          control_name="FSAdvancedWorldmapRegionInfo"
          tool_tip="Shows additional region infos on the world map (avatar count and maturity level)."/>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Notify if the simulator version changes while changing the region"
+         left="15"
+         name="FSShowServerVersionChangeNotice"
+         width="270"
+         control_name="FSShowServerVersionChangeNotice"
+         tool_tip="Displays a notice if the simulator version changes during a teleport or while crossing a region."/>
+
+        <check_box top_pad="5"
+         follows="left|top"
+         height="16"
+         initial_value="false"
+         label="Show simulator channel in status bar"
+         left="15"
+         name="FSStatusbarShowSimulatorVersion"
+         width="270"
+         control_name="FSStatusbarShowSimulatorVersion"
+         tool_tip="Shows the current simulator channel in the V1-like status bar."/>
 	 </panel>
 </tab_container>
 </panel>

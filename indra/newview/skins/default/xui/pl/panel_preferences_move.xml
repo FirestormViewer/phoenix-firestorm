@@ -15,6 +15,7 @@
 			<check_box label="Dodawaj dodatkowe oświetlenie" name="EditAppearanceLighting" tool_tip="Włącz lub wyłącz dodatkowe oświetlenie, gdy edytujesz wygląd."/>
 			<check_box label="Awatar widoczny w trybie pierwszoosobowym" name="first_person_avatar_visible"/>
 			<check_box label="Pokazuj instrukcje trybu pierwszoosobowego" name="mouselook_instructions_visible" tool_tip="Pokazuj instrukcje w trybie pierwszoosobowym"/>
+			<check_box label="Pokazuj celownik myszki" name="ShowCrosshairs" tool_tip="Pokazuj celownik myszki, gdy widok pierwszoosobowy jest włączony"/>
 			<text name="Mouse Sensitivity">
 				Czułość myszki w tym widoku:
 			</text>
@@ -74,6 +75,8 @@
 			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
 			<check_box label="Filtruj powtarzające się landmarki na mapie świata" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtruj zduplikowane landmarki w liście landmarków na mapie świata."/>
 			<check_box label="Pokazuj dodatkowe informacje o regionie na mapie świata" name="FSAdvancedWorldmapRegionInfo" tool_tip="Pokazuj dodatkowe informacje o regionie na mapie świata (liczbę awatarów i poziom dojrzałości)."/>
+			<check_box label="Powiadom, jeśli wersja symulatora ulegnie zmianie podczas zmiany regionu" name="FSShowServerVersionChangeNotice" tool_tip="Wyświetla powiadomienie, jeśli wersja symulatora ulegnie zmianie podczas teleportowania się lub przekraczania granicy regionu."/>
+			<check_box label="Pokazuj kanał symulatora w pasku statusu" name="FSStatusbarShowSimulatorVersion" tool_tip="Pokazuj obecny kanał symulatora na pasku statusu w stylu V1."/>
 		</panel>
 	</tab_container>
 </panel>

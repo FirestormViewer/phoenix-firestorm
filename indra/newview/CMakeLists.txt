@@ -18,12 +18,12 @@ include(JsonCpp)
 include(LLAudio)
 include(LLCharacter)
 include(LLCommon)
-include(LLConvexDecomposition)
 include(LLImage)
 include(LLImageJ2COJ)
 include(LLInventory)
 include(LLMath)
 include(LLMessage)
+include(LLPhysicsExtensions)
 include(LLPlugin)
 include(LLPrimitive)
 include(LLRender)
@@ -47,6 +47,16 @@ include(GLOD)
 include(CMakeCopyIfDifferent)
 include(Growl)
 
+# <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
+if( LLPHYSICSEXTENSIONS_SRC_DIR )
+# </FS:ND>
+
+  add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+
+# <FS:ND>
+endif( LLPHYSICSEXTENSIONS_SRC_DIR )
+# </FS:ND>
+
 include_directories(
     ${DBUSGLIB_INCLUDE_DIRS}
     ${JSONCPP_INCLUDE_DIR}
@@ -54,13 +64,14 @@ include_directories(
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
-    ${LLCONVEXDECOMP_INCLUDE_DIRS}
+    ${LLPHYSICS_INCLUDE_DIRS}
     ${FMOD_INCLUDE_DIR}
     ${LLIMAGE_INCLUDE_DIRS}
     ${LLKDU_INCLUDE_DIRS}
     ${LLINVENTORY_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
+    ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
     ${LLPLUGIN_INCLUDE_DIRS}
     ${LLPRIMITIVE_INCLUDE_DIRS}
     ${LLRENDER_INCLUDE_DIRS}
@@ -77,8 +88,8 @@ include_directories(
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
-	${HACD_INCLUDE_DIR}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
+    ${CMAKE_BINARY_DIR}/newview #<FS:TS> Flickr upload
     )
 
 set(viewer_SOURCE_FILES
@@ -89,6 +100,7 @@ set(viewer_SOURCE_FILES
     aoset.cpp
     chatbar_as_cmdline.cpp
     kcwlinterface.cpp
+    exogroupmutelist.cpp
     floatermedialists.cpp
     fscontactsfloater.cpp
     fsareasearch.cpp
@@ -101,6 +113,7 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
 	fslslpreproc.cpp
+    fsslurlcommand.cpp
     fsfloaterprofile.cpp
     fspanelprofile.cpp
     fsradarlistctrl.cpp
@@ -113,6 +126,9 @@ set(viewer_SOURCE_FILES
     lggcontactsetsfloater.cpp
     fspanelprofileclassifieds.cpp
     fspanelclassified.cpp
+    exopanelsnapshotflickr.cpp 
+    exoflickr.cpp
+    exoflickrauth.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -255,6 +271,10 @@ set(viewer_SOURCE_FILES
     llfloaterobjectweights.cpp
     llfloateropenobject.cpp
     llfloateroutbox.cpp
+    llfloaterpathfindingcharacters.cpp
+    llfloaterpathfindingconsole.cpp
+    llfloaterpathfindinglinksets.cpp
+    llfloaterpathfindingobjects.cpp
     llfloaterpay.cpp
     llfloaterperms.cpp
     llfloaterpostprocess.cpp
@@ -425,6 +445,7 @@ set(viewer_SOURCE_FILES
     llpanelonlinestatus.cpp
     llpaneloutfitedit.cpp
     llpaneloutfitsinventory.cpp
+    llpanelpathfindingrebakenavmesh.cpp
     llpanelpeople.cpp
     llpanelpeoplemenus.cpp
     llpanelpermissions.cpp
@@ -453,6 +474,17 @@ set(viewer_SOURCE_FILES
     llparcelselection.cpp
     llparticipantlist.cpp
     llpatchvertexarray.cpp
+    llpathfindingcharacter.cpp
+    llpathfindingcharacterlist.cpp
+    llpathfindinglinkset.cpp
+    llpathfindinglinksetlist.cpp
+    llpathfindingmanager.cpp
+    llpathfindingnavmesh.cpp
+    llpathfindingnavmeshstatus.cpp
+    llpathfindingnavmeshzone.cpp
+    llpathfindingobject.cpp
+    llpathfindingobjectlist.cpp
+    llpathfindingpathtool.cpp
     llphysicsmotion.cpp
     llphysicsshapebuilderutil.cpp
     llplacesinventorybridge.cpp
@@ -670,9 +702,6 @@ set(viewer_SOURCE_FILES
     pieseparator.cpp
     pieslice.cpp
     pipeline.cpp
-    kvflickr.cpp
-    kvfloaterflickrauth.cpp
-    kvfloaterflickrupload.cpp
     qtoolalign.cpp
     quickprefs.cpp
     rlvhandler.cpp
@@ -716,6 +745,7 @@ set(viewer_HEADER_FILES
     aoset.h
     chatbar_as_cmdline.h
     kcwlinterface.h
+    exogroupmutelist.h
     floatermedialists.h
     fscontactsfloater.h
     fsareasearch.h
@@ -728,6 +758,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
 	fslslpreproc.h
+    fsslurlcommand.h
     fsfloaterprofile.h
     fsgridhandler.h
     fspanelprofile.h
@@ -743,6 +774,8 @@ set(viewer_HEADER_FILES
     lggcontactsetsfloater.h
     fspanelprofileclassifieds.h
     fspanelclassified.h
+    exoflickr.h
+    exoflickrauth.h
 
     llaccountingcostmanager.h
     llagent.h
@@ -886,6 +919,10 @@ set(viewer_HEADER_FILES
     llfloaterobjectweights.h
     llfloateropenobject.h
     llfloateroutbox.h
+    llfloaterpathfindingcharacters.h
+    llfloaterpathfindingconsole.h
+    llfloaterpathfindinglinksets.h
+    llfloaterpathfindingobjects.h
     llfloaterpay.h
     llfloaterperms.h
     llfloaterpostprocess.h
@@ -1050,6 +1087,7 @@ set(viewer_HEADER_FILES
     llpanelonlinestatus.h
     llpaneloutfitedit.h
     llpaneloutfitsinventory.h
+    llpanelpathfindingrebakenavmesh.h
     llpanelpeople.h
     llpanelpeoplemenus.h
     llpanelpermissions.h
@@ -1073,6 +1111,17 @@ set(viewer_HEADER_FILES
     llparcelselection.h
     llparticipantlist.h
     llpatchvertexarray.h
+    llpathfindingcharacter.h
+    llpathfindingcharacterlist.h
+    llpathfindinglinkset.h
+    llpathfindinglinksetlist.h
+    llpathfindingmanager.h
+    llpathfindingnavmesh.h
+    llpathfindingnavmeshstatus.h
+    llpathfindingnavmeshzone.h
+    llpathfindingobject.h
+    llpathfindingobjectlist.h
+    llpathfindingpathtool.h
     llphysicsmotion.h
     llphysicsshapebuilderutil.h
     llplacesinventorybridge.h
@@ -1310,9 +1359,6 @@ set(viewer_HEADER_FILES
     utilitybar.h
     VertexCache.h
     VorbisFramework.h
-    kvflickr.h
-    kvfloaterflickrauth.h
-    kvfloaterflickrupload.h
     NACLantispam.h
 	NACLfloaterexploresounds.h
     )
@@ -1321,13 +1367,16 @@ set(viewer_HEADER_FILES
 build_version(viewer)
 build_channel(viewer)
 
-# Generate the Flickr Keys header
+# <exodus>
+# Generate the flickr keys header.
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/kvflickrkeys.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h
-  @ONLY
+    ${CMAKE_CURRENT_SOURCE_DIR}/exoflickrkeys.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h
+    @ONLY
 )
-list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/kvflickrkeys.h)
+list(APPEND viewer_HEADER_FILES ${CMAKE_CURRENT_BINARY_DIR}/exoflickrkeys.h)
+# </exodus>
+
 source_group("CMake Rules" FILES ViewerInstall.cmake)
 
 if (DARWIN)
@@ -1477,6 +1526,11 @@ if (WINDOWS)
         res/lltoolgrab.cur
         res/lltoolland.cur
         res/lltoolpan.cur
+        res/lltoolpathfinding.cur
+        res/lltoolpathfindingpathend.cur
+        res/lltoolpathfindingpathendadd.cur
+        res/lltoolpathfindingpathstart.cur
+        res/lltoolpathfindingpathstartadd.cur
         res/lltoolpipette.cur
         res/lltoolrotate.cur
         res/lltoolscale.cur
@@ -1698,9 +1752,9 @@ if (WINDOWS)
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
         #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc"
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
-        LINK_FLAGS_RELEASE "/OPT:REF"
+        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
         )
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
@@ -1912,6 +1966,17 @@ if (WINDOWS)
         #${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/event_host.tar.bz2)
 
     endif (PACKAGE)
+elseif (DARWIN)
+    set_target_properties(${VIEWER_BINARY_NAME}
+        PROPERTIES
+        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Xlinker -dead_strip -Xlinker -map -Xlinker ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_BINARY_NAME}.MAP"
+        )
+else (WINDOWS)
+        # Linux 
+    set_target_properties(${VIEWER_BINARY_NAME}
+        PROPERTIES
+        LINK_FLAGS_RELEASE "${LINK_FLAGS_RELEASE} -Wl,--Map=${VIEWER_BINARY_NAME}.MAP"
+        )
 endif (WINDOWS)
 
 # *NOTE - this list is very sensitive to ordering, test carefully on all
@@ -1961,11 +2026,10 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${OPENSSL_LIBRARIES}
     ${CRYPTO_LIBRARIES}
     ${LLLOGIN_LIBRARIES}
-    ${GOOGLE_PERFTOOLS_LIBRARIES}
-    ${LLCONVEXDECOMP_LIBRARY}
+    ${LLPHYSICS_LIBRARIES}
+    ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${TCMALLOC_LIBRARIES}
     ${GROWL_LIBRARY}
-    ${HACD_LIBRARY}
     )
 	
 if (WINDOWS)

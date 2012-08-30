@@ -67,6 +67,7 @@
 	<menu_item_call label="Als Link einfügen" name="Paste As Link"/>
 	<menu_item_call label="Löschen" name="Remove Link"/>
 	<menu_item_call label="Löschen" name="Delete"/>
+	<menu_item_call label="In Fundbüro verschieben" name="Move to Lost And Found"/>
 	<menu_item_call label="Systemordner löschen" name="Delete System Folder"/>
 	<menu_item_call label="Konferenz-Chat starten" name="Conference Chat Folder"/>
 	<menu_item_call label="Wiedergeben/Abspielen" name="Sound Play"/>

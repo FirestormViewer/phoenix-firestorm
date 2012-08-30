@@ -78,6 +78,15 @@
                  value="2"
                  top_delta="0"
                  width="60" />
+                <radio_item
+                 height="16"
+                 label="Huge"
+                 layout="topleft"
+                 left_delta="75"
+                 name="radio4"
+                 value="3"
+                 top_delta="0"
+                 width="60" />
             </radio_group>
             <text
              follows="left|top"
@@ -122,6 +131,15 @@
                  left_delta="75"
                  name="consradio3"
                  value="2"
+                 top_delta="0"
+                 width="60" />
+                <radio_item
+                 height="16"
+                 label="Huge"
+                 layout="topleft"
+                 left_delta="75"
+                 name="consradio4"
+                 value="3"
                  top_delta="0"
                  width="60" />
             </radio_group>

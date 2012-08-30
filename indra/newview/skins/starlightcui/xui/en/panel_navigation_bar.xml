@@ -227,7 +227,7 @@
  	 bg_alpha_color="Transparent"
  	 color="Transparent"
      follows="left|top|right"
-     top_pad="2"
+     top_pad="0"
      font="SansSerifSmall"
      height="15"
      layout="topleft"

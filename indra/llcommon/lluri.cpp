@@ -161,10 +161,14 @@ namespace
 		{ return LLURI::escape(s, unreserved() + sub_delims() +":"); }
 	std::string escapePathComponent(const std::string& s)
 		{ return LLURI::escape(s, unreserved() + sub_delims() + ":@"); }
+	// <exodus>
+	// Removed the '+' because some servers rely on it being removed and
+	// no server relies on the contrary.
 	std::string escapeQueryVariable(const std::string& s)
-		{ return LLURI::escape(s, unreserved() + ":@!$'()*+,"); }	 // sub_delims - "&;=" + ":@"
+		{ return LLURI::escape(s, unreserved() + ":@!$'()*,"); }	// sub_delims - "&;+=" + ":@"
 	std::string escapeQueryValue(const std::string& s)
-		{ return LLURI::escape(s, unreserved() + ":@!$'()*+,="); }	// sub_delims - "&;" + ":@"
+		{ return LLURI::escape(s, unreserved() + ":@!$'()*,="); }	// sub_delims - "&;+" + ":@"
+	// </exodus>
 }
 
 //static

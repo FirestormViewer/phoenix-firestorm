@@ -29,8 +29,17 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef CHATBAR_AS_CMDLINE_H
+#define CHATBAR_AS_CMDLINE_H
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llchat.h"
 
 bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture = false);
+void cmdline_printchat(std::string message);
+void cmdline_rezplat(bool use_saved_value = true, F32 visual_radius = 30.0);
+void cmdline_tp2name(std::string target);
+LLUUID cmdline_partial_name2key(std::string name);
+
+#endif // CHATBAR_AS_CMDLINE_H

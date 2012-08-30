@@ -34,6 +34,8 @@ class LLVector4;
 #include "llmath.h"
 #include "llsd.h"
 
+#include <string.h> // <FS:ND/> for strlen/strncpy
+
 //  LLColor3 = |r g b|
 
 static const U32 LENGTHOFCOLOR3 = 3;

@@ -253,6 +253,11 @@
 	 <color
 	 name="AnsaStormBlue_Dk_Emphasis"
 	 value="0 0.5117 0.6992 0.66" />
+	 
+	 <color
+	 name="AnsaStorm_HtmlLink"
+	 value="0 0.6 0.82 1" />
+	 
 	 <!-- END AnsaStorm Definitions -->
 
   <!-- This color name makes potentially unused colors show up bright purple.
@@ -264,6 +269,12 @@
 
 
   <!-- UI Colors -->
+	<color
+        name="ScriptDialog"
+        value="0.223 0.216 0.207 1" />
+	<color 
+        name="ScriptDialogFg"
+        reference="White" />
 
     <color
      name="BottomTrayAlphaColor"
@@ -523,7 +534,7 @@
      value="0.5 0.5 0.5 1" />
     <color
      name="HTMLLinkColor"
-     reference="AccentColor" />
+     reference="AnsaStorm_HtmlLink" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -613,7 +624,7 @@
      reference="Unused?" />
     <color
      name="LoginProgressBoxBorderColor"
-     refencee="NavyBlue_0" />
+     reference="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
      reference="Black_78" />
@@ -898,4 +909,14 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+	 
+	<!-- Groups visible in profiles -->
+	<color
+	 name="GroupHiddenInProfile"
+	 reference="EmphasisColor" />
+	 
+    <!-- Balance at the top -->
+	<color
+	 name="CurrencyColor"
+	 reference="LabelTextColor" />
 </colors>

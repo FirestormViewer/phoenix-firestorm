@@ -12,6 +12,12 @@
 	<floater.string name="asset_unknown">
 		Nieznany
 	</floater.string>
+	<floater.string name="unknown_object">
+		Nieznany obiekt
+	</floater.string>
+	<floater.string name="unknown_region">
+		Nieznany region
+	</floater.string>
 	<scroll_list name="result_list">
 		<scroll_list.columns name="name" label="Nazwa" />
 		<scroll_list.columns name="type" label="Typ" />

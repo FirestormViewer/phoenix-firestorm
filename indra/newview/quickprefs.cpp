@@ -36,6 +36,8 @@
 #include "llfloatereditsky.h"
 #include "llmultisliderctrl.h"
 #include "lltimectrl.h"
+#include "llenvmanager.h"
+#include "llviewercontrol.h"
 
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
 :	LLTransientDockableFloater(NULL,true,key)
@@ -65,9 +67,13 @@ void FloaterQuickPrefs::initCallbacks(void) {
 
 BOOL FloaterQuickPrefs::postBuild()
 {
+	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
+	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
+	mWLSunPos = getChild<LLMultiSliderCtrl>("WLSunPos");
+
 	LLEnvManagerNew& env_mgr = LLEnvManagerNew::instance();
-	LLComboBox* WWcomboBox = getChild<LLComboBox>("WaterPresetsCombo");
-	if(WWcomboBox != NULL) {
+	if (mWaterPresetsCombo != NULL)
+	{
 		
 		std::list<std::string> user_presets, system_presets;
 		LLWaterParamManager::instance().getPresetNames(user_presets, system_presets);
@@ -75,49 +81,51 @@ BOOL FloaterQuickPrefs::postBuild()
 		// Add user presets first.
 		for (std::list<std::string>::const_iterator mIt = user_presets.begin(); mIt != user_presets.end(); ++mIt)
 		{
-				if((*mIt).length()>0) WWcomboBox->add(*mIt);
+				if((*mIt).length()>0) mWaterPresetsCombo->add(*mIt);
 		}
 
 		
 		if (user_presets.size() > 0)
 		{
-			WWcomboBox->addSeparator();
+			mWaterPresetsCombo->addSeparator();
 		}
 
 		// Add system presets.
 		for (std::list<std::string>::const_iterator mIt = system_presets.begin(); mIt != system_presets.end(); ++mIt)
 		{
-				if((*mIt).length()>0) WWcomboBox->add(*mIt);
+				if((*mIt).length()>0) mWaterPresetsCombo->add(*mIt);
 		}
-		WWcomboBox->selectByValue(env_mgr.getWaterPresetName());
+		mWaterPresetsCombo->selectByValue(env_mgr.getWaterPresetName());
 	}
 
-	LLComboBox* WLcomboBox = getChild<LLComboBox>("WLPresetsCombo");
 	
-	if(WLcomboBox != NULL) {
+	if (mWLPresetsCombo != NULL)
+	{
 		LLWLParamManager::preset_name_list_t user_presets, sys_presets, region_presets;
 		LLWLParamManager::instance().getPresetNames(region_presets, user_presets, sys_presets);
 
 		// Add user presets.
 		for (LLWLParamManager::preset_name_list_t::const_iterator it = user_presets.begin(); it != user_presets.end(); ++it)
 		{
-			if((*it).length()>0) WLcomboBox->add(*it);
+			if((*it).length()>0) mWLPresetsCombo->add(*it);
 		}
 
 		if (!user_presets.empty())
 		{
-			WLcomboBox->addSeparator();
+			mWLPresetsCombo->addSeparator();
 		}
 
 		// Add system presets.
 		for (LLWLParamManager::preset_name_list_t::const_iterator it = sys_presets.begin(); it != sys_presets.end(); ++it)
 		{
-			if((*it).length()>0) WLcomboBox->add(*it);
+			if((*it).length()>0) mWLPresetsCombo->add(*it);
 		}
-		WLcomboBox->selectByValue(env_mgr.getSkyPresetName());
+		mWLPresetsCombo->selectByValue(env_mgr.getSkyPresetName());
 	}
-		getChild<LLMultiSliderCtrl>("WLSunPos")->addSlider(12.f);
-		initCallbacks();
+
+	mWLSunPos->addSlider(12.f);
+	initCallbacks();
+
 	return LLDockableFloater::postBuild();
 }
 
@@ -126,102 +134,153 @@ void FloaterQuickPrefs::onChangeWaterPreset(LLUICtrl* ctrl)
 	std::string data = ctrl->getValue().asString();
 	if(!data.empty())
 	{
-	//-TT 2.8.2 - changed from pointer to object call
-	//AO commented out for merge
-		LLEnvManagerNew::instance().setUseWaterPreset(data);
+		LLEnvManagerNew::instance().setUseWaterPreset(data, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
+		LLWaterParamManager::instance().getParamSet(data, LLWaterParamManager::instance().mCurParams);
 	}
 }
 
 void FloaterQuickPrefs::onChangeSkyPreset(LLUICtrl* ctrl)
 {
-
 	std::string data = ctrl->getValue().asString();
 	if(!data.empty())
 	{	
-		LLEnvManagerNew::instance().setUseSkyPreset(data);
+		LLEnvManagerNew::instance().setUseSkyPreset(data, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
+		LLWLParamManager::instance().getParamSet(LLWLParamKey(data, LLEnvKey::SCOPE_LOCAL), LLWLParamManager::instance().mCurParams);
 	}
 }
 
 void FloaterQuickPrefs::deactivateAnimator()
 {
-	//-TT 2.8.2 - commented out for merge
-	//LLWLParamManager::instance()->mAnimator.mIsRunning = false;
-	//LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
+	LLWLParamManager::instance().mAnimator.deactivate();
 }
 
 void FloaterQuickPrefs::onClickWaterPrev()
 {
-	LLComboBox* box = getChild<LLComboBox>("WaterPresetsCombo");
-	int curid=box->getCurrentIndex();
-	int lastitem=box->getItemCount()-1;
-	curid--;
-	if(curid<0) curid=lastitem;
-	else if(curid>lastitem) curid=0;
-	box->setCurrentByIndex(curid);
-	LLEnvManagerNew::instance().setUseWaterPreset(box->getValue().asString());
+	LLWaterParamManager& mgr = LLWaterParamManager::instance();
+	LLWaterParamSet& currentParams = mgr.mCurParams;
+
+	std::map<std::string, LLWaterParamSet> param_list = LLWaterParamManager::instance().getPresets();
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = param_list.find(currentParams.mName);
+
+	// if at the beginning, loop
+	if(mIt == param_list.begin()) 
+	{
+		std::map<std::string, LLWaterParamSet>::iterator last = param_list.end();
+		last--;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+
+	deactivateAnimator();
+
+	mWaterPresetsCombo->setSimple(mIt->first);
+	LLEnvManagerNew::instance().setUseWaterPreset(mIt->first, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
+	mgr.getParamSet(mIt->first, mgr.mCurParams);
 }
 
 void FloaterQuickPrefs::onClickWaterNext()
 {
+	LLWaterParamManager& mgr = LLWaterParamManager::instance();
+	LLWaterParamSet& currentParams = mgr.mCurParams;
 
-	LLComboBox* box = getChild<LLComboBox>("WaterPresetsCombo");
-	int curid=box->getCurrentIndex();
-	int lastitem=box->getItemCount()-1;
-	curid++;
-	if(curid<0) curid=lastitem;
-	else if(curid>lastitem) curid=0;
-	box->setCurrentByIndex(curid);
-	LLEnvManagerNew::instance().setUseWaterPreset(box->getValue().asString());
+	std::map<std::string, LLWaterParamSet> param_list = mgr.getPresets();
+
+	// find place of current param
+	std::map<std::string, LLWaterParamSet>::iterator mIt = param_list.find(currentParams.mName);
+
+	// if at the end, loop
+	std::map<std::string, LLWaterParamSet>::iterator last = param_list.end();
+	last--;
+	if(mIt == param_list.end()) 
+	{
+		mIt = param_list.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+
+	deactivateAnimator();
+
+	mWaterPresetsCombo->setSimple(mIt->first);
+	LLEnvManagerNew::instance().setUseWaterPreset(mIt->first, (bool)gSavedSettings.getBOOL("FSInterpolateWater"));
+	mgr.getParamSet(mIt->first, mgr.mCurParams);
 }
 
 void FloaterQuickPrefs::onClickSkyPrev()
 {
-	LLComboBox* box = getChild<LLComboBox>("WLPresetsCombo");
-	int curid=box->getCurrentIndex();
-	int lastitem=box->getItemCount()-1;
-	curid--;
-	if(curid<0) curid=lastitem;
-	else if(curid>lastitem) curid=0;
-	box->setCurrentByIndex(curid);
-	LLEnvManagerNew::instance().setUseSkyPreset(box->getValue().asString());
+	LLWLParamManager& mgr = LLWLParamManager::instance();
+	std::map<LLWLParamKey, LLWLParamSet> param_list = mgr.getParamList();
+
+	// find place of current param
+	std::map<LLWLParamKey, LLWLParamSet>::iterator mIt;
+	mIt = param_list.find(LLWLParamKey(mgr.mCurParams.mName, LLEnvKey::SCOPE_LOCAL));
+	
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == param_list.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
+	// if at the beginning, loop
+	if (mIt == param_list.begin())
+	{
+		std::map<LLWLParamKey, LLWLParamSet>::iterator last = param_list.end();
+		last--;
+		mIt = last;
+	}
+	else
+	{
+		mIt--;
+	}
+
+	deactivateAnimator();
+
+	mWLPresetsCombo->setSimple(mIt->first.name);
+	LLEnvManagerNew::instance().setUseSkyPreset(mIt->first.name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
+	mgr.getParamSet(mIt->first, mgr.mCurParams);
 }
 
 void FloaterQuickPrefs::onClickSkyNext()
 {
-	//-TT 2.8.2 - commented out for merge
-	//// find place of current param
-	//std::map<std::string, LLWLParamSet>::iterator mIt = 
-	//	LLWLParamManager::instance()->mParamList.find(LLWLParamManager::instance()->mCurParams.mName);
+	LLWLParamManager& mgr = LLWLParamManager::instance();
 
-	//// shouldn't happen unless you delete every preset but Default
-	//if (mIt == LLWLParamManager::instance()->mParamList.end())
-	//{
-	//	llwarns << "No more presets left!" << llendl;
-	//	return;
-	//}
+	std::map<LLWLParamKey, LLWLParamSet> param_list = mgr.getParamList();
 
-	//// if at the end, loop
-	//std::map<std::string, LLWLParamSet>::iterator last = LLWLParamManager::instance()->mParamList.end(); --last;
-	//if(mIt == last) 
-	//{
-	//	mIt = LLWLParamManager::instance()->mParamList.begin();
-	//}
-	//else
-	//{
-	//	mIt++;
-	//}
-	//	deactivateAnimator();
-	//LLWLParamManager::instance()->loadPreset(mIt->first, true);
-	LLComboBox* box = getChild<LLComboBox>("WLPresetsCombo");
-	//WLcomboBox->setSimple(mIt->first);
+	// find place of current param
+	std::map<LLWLParamKey, LLWLParamSet>::iterator mIt;
+	mIt = param_list.find(LLWLParamKey(mgr.mCurParams.mName, LLEnvKey::SCOPE_LOCAL));
+	
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == param_list.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
 
-	int curid=box->getCurrentIndex();
-	int lastitem=box->getItemCount()-1;
-	curid++;
-	if(curid<0) curid=lastitem;
-	else if(curid>lastitem) curid=0;
-	box->setCurrentByIndex(curid);
-	LLEnvManagerNew::instance().setUseSkyPreset(box->getValue().asString());
+	// if at the end, loop
+	std::map<LLWLParamKey, LLWLParamSet>::iterator last = param_list.end();
+	last--;
+	if (mIt == last)
+	{
+		mIt = param_list.begin();
+	}
+	else
+	{
+		mIt++;
+	}
+
+	deactivateAnimator();
+
+	mWLPresetsCombo->setSimple(mIt->first.name);
+	LLEnvManagerNew::instance().setUseSkyPreset(mIt->first.name, (bool)gSavedSettings.getBOOL("FSInterpolateSky"));
+	mgr.getParamSet(mIt->first, mgr.mCurParams);
 }
 
 void FloaterQuickPrefs::draw()
@@ -239,28 +298,38 @@ void FloaterQuickPrefs::syncControls()
 {
 	bool err;
 
-	LLWLParamManager * param_mgr = LLWLParamManager::getInstance();
+	LLWLParamManager& param_mgr = LLWLParamManager::instance();
 
-	F32 time24 = sun_pos_to_time24(param_mgr->mCurParams.getFloat("sun_angle",err) / F_TWO_PI);
-	getChild<LLMultiSliderCtrl>("WLSunPos")->setCurSliderValue(time24, TRUE);
+	F32 time24 = sun_pos_to_time24(param_mgr.mCurParams.getFloat("sun_angle", err) / F_TWO_PI);
+	mWLSunPos->setCurSliderValue(time24, TRUE);
+
+	std::string current_wlpreset = param_mgr.mCurParams.mName;
+	if (mWLPresetsCombo->getValue().asString() != current_wlpreset)
+	{
+		mWLPresetsCombo->setSimple(current_wlpreset);
+	}
+
+	std::string current_waterpreset = LLWaterParamManager::instance().mCurParams.mName;
+	if (mWaterPresetsCombo->getValue().asString() != current_waterpreset)
+	{
+		mWaterPresetsCombo->setSimple(current_waterpreset);
+	}
 }
 
 void FloaterQuickPrefs::onSunMoved(LLUICtrl* ctrl, void* userdata)
 {
-	LLMultiSliderCtrl* sun_msldr = getChild<LLMultiSliderCtrl>("WLSunPos");
-		F32 val = sun_msldr->getCurSliderValue() / 24.0f;
-	LLWLParamManager::getInstance()->mAnimator.setDayTime((F64)val);
-	LLWLParamManager::getInstance()->mAnimator.deactivate();
-	LLWLParamManager::getInstance()->mAnimator.update(
-		LLWLParamManager::getInstance()->mCurParams);
+	F32 val = mWLSunPos->getCurSliderValue() / 24.0f;
+
+	LLWLParamManager& mgr = LLWLParamManager::instance();
+	mgr.mAnimator.setDayTime((F64)val);
+	mgr.mAnimator.deactivate();
+	mgr.mAnimator.update(mgr.mCurParams);
 }
 
 void FloaterQuickPrefs::onClickRegionWL()
 {
-	LLComboBox* WLbox = getChild<LLComboBox>("WLPresetsCombo");
-	LLComboBox* WWbox = getChild<LLComboBox>("WaterPresetsCombo");
-	WLbox->setSimple(LLStringExplicit("Default"));
-	WWbox->setSimple(LLStringExplicit("Default"));
-	LLEnvManagerNew& env_mgr = LLEnvManagerNew::instance();
-	env_mgr.useRegionSettings();
+	mWLPresetsCombo->setSimple(LLStringExplicit("Default"));
+	mWaterPresetsCombo->setSimple(LLStringExplicit("Default"));
+	LLEnvManagerNew::instance().useRegionSettings();
+	LLWLParamManager::instance().getParamSet(LLWLParamKey("Default", LLEnvKey::SCOPE_LOCAL), LLWLParamManager::instance().mCurParams);
 }

@@ -4,7 +4,7 @@
  legacy_header_height="18"
  bg_opaque_image="floater_background"
  bg_opaque_image_overlay="White"
- height="618"
+ height="638"
  layout="topleft"
  name="toolbox floater"
  help_topic="toolbox_floater"
@@ -832,7 +832,7 @@
     width="282"/>
     <tab_container
      follows="left|top"
-     height="410"
+     height="430"
      halign="center"
      left="0"
      name="Object Info Tabs"
@@ -878,6 +878,14 @@
             <panel.string
              name="text modify info 4">
                 You can't modify these objects
+            </panel.string>
+            <panel.string
+             name="text modify info 5">
+                You can't modify this object across a region boundary
+            </panel.string>
+            <panel.string
+             name="text modify info 6">
+                You can't modify these objects across a region boundary
             </panel.string>
             <panel.string
              name="text modify warning">
@@ -948,7 +956,7 @@
              left="10"
              length="1"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Creator:"
              width="75">
@@ -975,7 +983,7 @@
              length="1"
              left="10"
              follows="left|top"
-             height="19"
+             height="29"
              layout="topleft"
              name="Owner:"
              top_pad="7"
@@ -1099,7 +1107,7 @@
              top_pad="10"
              left="10"
              name="label click action"
-             width="118">
+             width="82">
                 Click to:
             </text>
             <combo_box
@@ -1152,13 +1160,14 @@
              name="checkbox for sale"
              left="7"
              width="100" />
-<!-- NEW SALE TYPE COMBO BOX -->
+  <!-- NEW SALE TYPE COMBO BOX -->
       <combo_box
-            left_pad="10"
+            left_pad="8"
             layout="topleft"
             follows="left|top"
             allow_text_entry="false"
             height="23"
+            top_pad="-23"
             initial_value="2"
             max_chars="20"
             mouse_opaque="true"
@@ -1181,20 +1190,22 @@
 Objects are allowed to be for sale for L$0 to invoke buy UI behavior
 even though the user gets a free copy.
 -->
-    <spinner
-        follows="left|top"
-        decimal_digits="0"
-        increment="1"
-        top_pad="5"
-        left="10"
-        control_name="Edit Cost"
-        name="Edit Cost"
-        label="Price: L$"
-        label_width="65"
-        width="165"
-        min_val="0"
-        height="20"
-        max_val="999999999" />
+  <spinner
+      follows="left|top"
+      decimal_digits="0"
+      increment="1"
+      top_pad="5"
+      left="10"
+      control_name="Edit Cost"
+      name="Edit Cost"
+      label="Price: L$"
+      label_width="65"
+      label_text.valign="center"
+      valign="center"
+      width="165"
+      min_val="0"
+      height="20"
+      max_val="999999999" />
 	<button
 	 left_pad="10"
 	 enabled="false"
@@ -1237,12 +1248,13 @@ even though the user gets a free copy.
          name="perms_build"
          left="0"
          top_pad="4"
-         height="105"
+         height="98"
          width="290">
             <text
              type="string"
              length="1"
              left="10"
+             word_wrap="true"
              top_pad="9"
              text_color="EmphasisColor"
              height="16"
@@ -1315,7 +1327,7 @@ even though the user gets a free copy.
              type="string"
              text_color="EmphasisColor"
              length="1"
-             top="9"
+             top="23"
              follows="left|top"
              layout="topleft"
              left="230"
@@ -1390,7 +1402,36 @@ even though the user gets a free copy.
                 F:
             </text>
         </panel>
-      </panel>
+		<panel
+         border="false"
+         follows="left|top"
+         layout="topleft"
+         mouse_opaque="false"
+         name="pathfinding_attrs_panel"
+         left="0"
+         top_pad="0"
+         height="25"
+         width="290">
+      <text
+         type="string"
+         follows="left|top"
+         name="pathfinding_attributes_label"
+         top_pad="4"
+         width="150"
+         left="10">
+        Pathfinding attributes:
+      </text>
+      <text
+         type="string"
+         follows="left|top"
+         text_color="EmphasisColor"
+         name="pathfinding_attributes_value"
+         width="130"
+         word_wrap="false"
+         left_pad="0">
+      </text>
+    </panel>
+  </panel>
       <!-- Object tab -->
       <panel
          border="false"
@@ -1437,8 +1478,7 @@ even though the user gets a free copy.
              tool_tip="Causes object to not collide with other objects or avatars"
              top_pad="0"
              width="123" />
-
-            <text
+        <text
              type="string"
              length="1"
              follows="left|top"
@@ -3326,7 +3366,7 @@ even though the user gets a free copy.
              border_visible="true"
              bevel_style="in"
              follows="left|top|right"
-             height="325"
+             height="345"
              layout="topleft"
              left="10"
              name="contents_inventory"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_snapshot_flickr">
+	<string name="upload_message">
+		Hochladen...
+	</string>
+	<!-- <FS:TS> Removing extraneous icon and text, since we use a tab bar -->
+	<!--
+	<text name="title">
+		Flickr
+	</text>
+    <button label="Metadaten" name="metadata_btn"/>
+	<button label="Einstellungen" name="settings_btn"/>
+	-->
+	<tab_container name="flickr_panel_container">
+		<panel label="Metadaten" name="panel_flickr_metadata">
+			<text name="title_label">
+				Titel:
+			</text>
+			<text name="tags_label">
+				Tags:
+			</text>
+			<text name="rating_label">
+				Einstuf.:
+			</text>
+			<icons_combo_box label="Moderat" name="rating_combo">
+				<icons_combo_box.item label="Generell" name="Safe"/>
+				<icons_combo_box.item label="Moderat" name="Moderate"/>
+				<icons_combo_box.item label="Adult" name="Restricted"/>
+			</icons_combo_box>
+			<check_box name="location_check" label="Ort hinzuf."/>
+			<!-- bottom_delta="23" -->
+			<text name="description_label">
+				Beschreibung (optional):
+			</text>
+			<!-- <FS:TS> We don't use a cancel button on any other panel. -->
+			<!--
+			<button label="Abbrechen" name="cancel_btn"/>
+			-->
+			<!-- </FS:TS> -->
+			<button label="Hochladen" name="upload_btn"/>
+		</panel>
+		<panel label="Einstellungen" name="exo_panel_flickr_settings"/>
+    </tab_container>
+</panel>

@@ -15,8 +15,10 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+#include "llappearancemgr.h"
 #include "llavatarnamecache.h"
 #include "llclipboard.h"
+#include "llinventoryfunctions.h"
 #include "llscrolllistctrl.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobjectlist.h"
@@ -30,6 +32,35 @@
 // ============================================================================
 // Helper functions
 //
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+std::string rlvGetItemName(const LLViewerInventoryItem* pItem)
+{
+	if ( (pItem) && ((LLAssetType::AT_BODYPART == pItem->getType()) || (LLAssetType::AT_CLOTHING == pItem->getType())) )
+		return llformat("%s (%s)", pItem->getName().c_str(), LLWearableType::getTypeName(pItem->getWearableType()).c_str());
+	else if ( (pItem) && (LLAssetType::AT_OBJECT == pItem->getType()) && (isAgentAvatarValid()) )
+		return llformat("%s (%s)", pItem->getName().c_str(), gAgentAvatarp->getAttachedPointName(pItem->getUUID()).c_str());
+	return (pItem) ? pItem->getName() : LLStringUtil::null;
+}
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+std::string rlvGetItemType(const LLViewerInventoryItem* pItem)
+{
+	if (pItem)
+	{
+		switch (pItem->getType())
+		{
+			case LLAssetType::AT_BODYPART:
+			case LLAssetType::AT_CLOTHING:
+				return "Wearable";
+			case LLAssetType::AT_OBJECT:
+				return "Attachment";
+			default:
+				break;
+		}
+	}
+	return "Unknown";
+}
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Modified: RLVa-1.2.0g
 std::string rlvGetItemNameFromObjID(const LLUUID& idObj, bool fIncludeAttachPt = true)
@@ -63,6 +94,88 @@ bool rlvGetShowException(ERlvBehaviour eBhvr)
 			return true;
 		default:
 			return false;
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvLockMaskToString(ERlvLockMask eLockType)
+{
+	switch (eLockType)
+	{
+		case RLV_LOCK_ADD:
+			return "add";
+		case RLV_LOCK_REMOVE:
+			return "rem";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockPermissionToString(RlvFolderLocks::ELockPermission eLockPermission)
+{
+	switch (eLockPermission)
+	{
+		case RlvFolderLocks::PERM_ALLOW:
+			return "allow";
+		case RlvFolderLocks::PERM_DENY:
+			return "deny";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockScopeToString(RlvFolderLocks::ELockScope eLockScope)
+{
+	switch (eLockScope)
+	{
+		case RlvFolderLocks::SCOPE_NODE:
+			return "node";
+		case RlvFolderLocks::SCOPE_SUBTREE:
+			return "subtree";
+		default:
+			return "unknown";
+	}
+}
+
+// Checked: 2012-07-29 (RLVa-1.4.7)
+std::string rlvFolderLockSourceToTarget(RlvFolderLocks::folderlock_source_t lockSource)
+{
+	switch (lockSource.first)
+	{
+		case RlvFolderLocks::ST_ATTACHMENT:
+			{
+				std::string strAttachName = rlvGetItemNameFromObjID(boost::get<LLUUID>(lockSource.second));
+				return llformat("Attachment (%s)", strAttachName.c_str());
+			}
+		case RlvFolderLocks::ST_ATTACHMENTPOINT:
+			{
+				const LLViewerJointAttachment* pAttachPt = RlvAttachPtLookup::getAttachPoint(boost::get<S32>(lockSource.second));
+				return llformat("Attachment point (%s)", (pAttachPt) ? pAttachPt->getName().c_str() : "Unknown");
+			}
+		case RlvFolderLocks::ST_FOLDER:
+			{
+				return "Folder: <todo>";
+			}
+		case RlvFolderLocks::ST_ROOTFOLDER:
+			{
+				return "Root folder";
+			}
+		case RlvFolderLocks::ST_SHAREDPATH:
+			{
+				const std::string& strPath = boost::get<std::string>(lockSource.second);
+				return llformat("Shared path (#RLV%s%s)", (!strPath.empty()) ? "/" : "", strPath.c_str());
+			}
+		case RlvFolderLocks::ST_WEARABLETYPE:
+			{
+				const std::string& strTypeName = LLWearableType::getTypeName(boost::get<LLWearableType::EType>(lockSource.second));
+				return llformat("Wearable type (%s)", strTypeName.c_str());
+			}
+		default:
+			{
+				return "(Unknown)";
+			}
 	}
 }
 
@@ -232,7 +345,7 @@ void RlvFloaterBehaviours::refreshAll()
 // RlvFloaterLocks member functions
 //
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-11 (RLVa-1.2.0)
 void RlvFloaterLocks::onOpen(const LLSD& sdKey)
 {
 	m_ConnRlvCommand = gRlvHandler.setCommandCallback(boost::bind(&RlvFloaterLocks::onRlvCommand, this, _1, _2));
@@ -240,10 +353,18 @@ void RlvFloaterLocks::onOpen(const LLSD& sdKey)
 	refreshAll();
 }
 
-// Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-11 (RLVa-1.2.0)
 void RlvFloaterLocks::onClose(bool fQuitting)
 {
 	m_ConnRlvCommand.disconnect();
+}
+
+// Checked: 2012-07-14 (RLVa-1.4.7)
+BOOL RlvFloaterLocks::postBuild()
+{
+	getChild<LLUICtrl>("refresh_btn")->setCommitCallback(boost::bind(&RlvFloaterLocks::refreshAll, this));
+
+	return TRUE;
 }
 
 // Checked: 2010-03-11 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
@@ -267,12 +388,10 @@ void RlvFloaterLocks::onRlvCommand(const RlvCommand& rlvCmd, ERlvCmdRet eRet)
 	}
 }
 
-// Checked: 2010-03-18 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
+// Checked: 2010-03-18 (RLVa-1.2.0)
 void RlvFloaterLocks::refreshAll()
 {
-	LLCtrlListInterface* pLockList = childGetListInterface("lock_list");
-	if (!pLockList)
-		return;
+	LLScrollListCtrl* pLockList = getChild<LLScrollListCtrl>("lock_list");
 	pLockList->operateOnAll(LLCtrlListInterface::OP_DELETE);
 
 	if (!isAgentAvatarValid())
@@ -360,6 +479,76 @@ void RlvFloaterLocks::refreshAll()
 		sdColumns[3]["value"] = rlvGetItemNameFromObjID(itWearableType->second);
 
 		pLockList->addElement(sdRow, ADD_BOTTOM);
+	}
+
+	//
+	// List "nostrip" (soft) locks
+	//
+	sdColumns[1]["value"] = "nostrip";
+	sdColumns[3]["value"] = "(Agent)";
+
+	LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
+	LLFindWearablesEx f(true, true);
+	gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, FALSE, f);
+
+	for (LLInventoryModel::item_array_t::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
+	{
+		const LLViewerInventoryItem* pItem = *itItem;
+		if (!RlvForceWear::instance().isStrippable(pItem->getUUID()))
+		{
+			sdColumns[0]["value"] = rlvGetItemType(pItem);
+			sdColumns[2]["value"] = rlvGetItemName(pItem);
+
+			pLockList->addElement(sdRow, ADD_BOTTOM);
+		}
+	}
+
+	//
+	// List folder locks
+	//
+	{
+		// Folder lock descriptors
+		const RlvFolderLocks::folderlock_list_t& folderLocks = RlvFolderLocks::instance().getFolderLocks();
+		for (RlvFolderLocks::folderlock_list_t::const_iterator itFolderLock = folderLocks.begin(); 
+				itFolderLock != folderLocks.end(); ++itFolderLock)
+		{
+			const RlvFolderLocks::folderlock_descr_t* pLockDescr = *itFolderLock;
+			if (pLockDescr)
+			{
+				sdColumns[0]["value"] = "Folder Descriptor";
+				sdColumns[1]["value"] =
+					rlvLockMaskToString(pLockDescr->eLockType) + "/" +
+					rlvFolderLockPermissionToString(pLockDescr->eLockPermission) + "/" +
+					rlvFolderLockScopeToString(pLockDescr->eLockScope);
+				sdColumns[2]["value"] = rlvFolderLockSourceToTarget(pLockDescr->lockSource);
+				sdColumns[3]["value"] = rlvGetItemNameFromObjID(pLockDescr->idRlvObj);
+
+				pLockList->addElement(sdRow, ADD_BOTTOM);
+			}
+		}
+	}
+
+	{
+		// Folder locked attachments and wearables
+		uuid_vec_t idItems;
+		const uuid_vec_t& folderLockAttachmentsIds = RlvFolderLocks::instance().getAttachmentLookups();
+		idItems.insert(idItems.end(), folderLockAttachmentsIds.begin(), folderLockAttachmentsIds.end());
+		const uuid_vec_t& folderLockWearabels = RlvFolderLocks::instance().getWearableLookups();
+		idItems.insert(idItems.end(), folderLockWearabels.begin(), folderLockWearabels.end());
+
+		for (uuid_vec_t::const_iterator itItemId = idItems.begin(); itItemId != idItems.end(); ++itItemId)
+		{
+			const LLViewerInventoryItem* pItem = gInventory.getItem(*itItemId);
+			if (pItem)
+			{
+				sdColumns[0]["value"] = rlvGetItemType(pItem);
+				sdColumns[1]["value"] = rlvLockMaskToString(RLV_LOCK_REMOVE);
+				sdColumns[2]["value"] = rlvGetItemName(pItem);
+				sdColumns[3]["value"] = "<Folder Lock>";
+
+				pLockList->addElement(sdRow, ADD_BOTTOM);
+			}
+		}
 	}
 }
 

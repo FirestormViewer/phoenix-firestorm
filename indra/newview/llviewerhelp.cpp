@@ -122,6 +122,14 @@ std::string LLViewerHelp::f1HelpTopic()
 	return "f1_help";
 }
 
+// <FS:TS> FIRE-7377: Add grid manager help topic to login screen
+std::string LLViewerHelp::gridMgrHelpTopic()
+{
+	// *hack: to be done properly
+	return "fs_grid_manager";
+}
+// </FS:TS>
+
 //////////////////////////////
 // our own interfaces
 

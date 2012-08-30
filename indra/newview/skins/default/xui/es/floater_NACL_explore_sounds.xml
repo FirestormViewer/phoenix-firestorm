@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="sound_explorer" title="Sonidos" width="597">
+	<floater.string name="Playing">
+		Sonando
+	</floater.string>
+	<floater.string name="NotPlaying">
+		Hace [TIME] min.
+	</floater.string>
+	<floater.string name="Type_UI">
+		Interfaz
+	</floater.string>
+	<floater.string name="GroupOwned">
+		[NAME] (Grupo)
+	</floater.string>
 	<check_box name="avatars_chk" label="Avatares" width="75"/>
 	<check_box name="objects_chk" label="Objetos" width="69" left_delta="75"/>
 	<check_box name="collision_chk" label="Sonidos de colisión por defecto" width="194" left_delta="69"/>

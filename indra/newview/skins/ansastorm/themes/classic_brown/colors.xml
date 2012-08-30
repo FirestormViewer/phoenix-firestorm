@@ -29,6 +29,9 @@
 	 name="EmphasisColor"             
 	 value="0.56 0.36 0.25 1.0" />
 	<color
+	 name="EmphasisColorLight"             
+	 value="0.86 0.66 0.55 1.0" />
+	<color
 	 name="SchemeLightest"
 	 value="0.76 0.58 0.49 1.0" />
 	<color
@@ -221,6 +224,10 @@
 	 name="MidBlue"
 	 value="0 0 0.5 1" />
 
+	<color
+	 name="AnsaStorm_HtmlLink"
+	 value="0.672 0.336 0 1" />
+
   <!-- This color name makes potentially unused colors show up bright purple.
   Leave this here until all Unused? are removed below, otherwise
   the viewer generates many warnings on startup. -->
@@ -230,6 +237,13 @@
 
 
   <!-- UI Colors -->
+	<color
+        name="ScriptDialog"
+        value="0.223 0.216 0.207 1" />
+	<color 
+        name="ScriptDialogFg"
+        reference="White" />
+
 
     <color
      name="BottomTrayAlphaColor"
@@ -489,7 +503,7 @@
      value="0.5 0.5 0.5 1" />
     <color
      name="HTMLLinkColor"
-     reference="AccentColor" />
+     reference="AnsaStorm_HtmlLink" />
     <color
      name="HealthTextColor"
      reference="White" />
@@ -579,7 +593,7 @@
      reference="Unused?" />
     <color
      name="LoginProgressBoxBorderColor"
-     refencee="NavyBlue_0" />
+     reference="NavyBlue_0" />
     <color
      name="LoginProgressBoxCenterColor"
      reference="Black_78" />
@@ -861,4 +875,14 @@
     <color
      name="MenuBarProjectBgColor"
      reference="MdBlue" />
+	 
+	<!-- Groups visible in profiles -->
+	<color
+	 name="GroupHiddenInProfile"
+	 reference="EmphasisColor" />
+	 
+    <!-- Balance at the top -->
+	<color
+	 name="CurrencyColor"
+	 reference="LabelTextColor" />
 </colors>

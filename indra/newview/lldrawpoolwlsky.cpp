@@ -192,7 +192,18 @@ void LLDrawPoolWLSky::renderStars(void) const
 	bool error;
 	LLColor4 star_alpha(LLColor4::black);
 	star_alpha.mV[3] = LLWLParamManager::getInstance()->mCurParams.getFloat("star_brightness", error) / 2.f;
-	llassert_always(!error);
+
+	// <FS:ND> If case start_brightness is not set, don't crash but exit gracefully
+
+	//	llassert_always(!error);
+	if( error )
+	{
+		llwarns << "star_brightness missing in mCurParams" << llendl;
+		return;
+	}
+
+	// </FS:ND>
+
 
 	gGL.getTexUnit(0)->bind(gSky.mVOSkyp->getBloomTex());
 

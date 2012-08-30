@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel name="panel_navmesh_rebake">
+	<button label="Actualizar región" name="navmesh_btn" tool_tip="Pulsa para actualizar el navmesh de la región."/>
+	<button label="Solicitando actualización" name="navmesh_btn_sending" tool_tip="Enviando solicitud de actualización al servidor."/>
+	<button label="Actualizando región" name="navmesh_btn_baking" tool_tip="La región está siendo actualizada. Cuando finalice, desaparecerá este botón."/>
+</panel>

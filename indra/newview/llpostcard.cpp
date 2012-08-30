@@ -116,6 +116,14 @@ LLPostCard::result_callback_t LLPostCard::mResultCallback;
 // static
 void LLPostCard::send(LLPointer<LLImageFormatted> image, const LLSD& postcard_data)
 {
+	// <FS:ND> Crashfix; image can end up being 0
+	if( image.isNull() )
+	{
+		llwarns << "Passed invalid image into LLPostcard::send() [0 pointer]" << llendl;
+		return;
+	}
+	// </FS:ND>
+
 	LLTransactionID transaction_id;
 	LLAssetID asset_id;
 

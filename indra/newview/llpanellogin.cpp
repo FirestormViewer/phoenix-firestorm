@@ -198,6 +198,9 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
 	need_help_text->setClickedCallback(onClickHelp, NULL);
 	
+	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_mgr_help_text");
+	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
+	
 	// get the web browser control
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	web_browser->addObserver(this);
@@ -887,7 +890,7 @@ void LLPanelLogin::loadLoginPage()
 	curl_free(curl_version);
 
 	// Grid
-	char* curl_grid = curl_escape(LLGridManager::getInstance()->getGridLabel().c_str(), 0);
+	char* curl_grid = curl_escape(LLGridManager::getInstance()->getGridId().c_str(), 0);
 	oStr << "&grid=" << curl_grid;
 	curl_free(curl_grid);
 	
@@ -963,7 +966,7 @@ void LLPanelLogin::onClickConnect(void *)
 		catch (LLInvalidGridName ex)
 		{
 			LLSD args;
-			args["GRID"] = new_combo_value;
+			args["GRID"] = ex.name();
 			LLNotificationsUtil::add("InvalidGrid", args);
 			return;
 		}
@@ -1090,6 +1093,18 @@ void LLPanelLogin::onClickDelete(void*)
 	}
 }
 
+// <FS:TS> FIRE-7377: Add grid manager help button to explain how to do it
+//static
+void LLPanelLogin::onClickGridMgrHelp(void*)
+{
+	if (sInstance)
+	{
+		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
+		vhelp->showTopic(vhelp->gridMgrHelpTopic());
+	}
+}
+// </FS:TS> FIRE-7377
+
 // static
 void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 {
@@ -1121,7 +1136,11 @@ void LLPanelLogin::updateServer()
 	}
 	catch (LLInvalidGridName ex)
 	{
-		// do nothing
+		LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
+		LLSD args;
+		args["GRID"] = ex.name();
+		LLNotificationsUtil::add("InvalidGrid", args);	
+		return;
 	}
 }
 
@@ -1147,14 +1166,16 @@ void LLPanelLogin::updateServerCombo()
 	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");	
 	server_choice_combo->removeall();
 
-	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids(!gSavedSettings.getBOOL("ShowBetaGrids"));
+	std::string current_grid = LLGridManager::getInstance()->getGrid();
+	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
 
 	for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
 		 grid_choice != known_grids.end();
 		 grid_choice++)
 	{
-		if (!grid_choice->first.empty())
+		if (!grid_choice->first.empty() && current_grid != grid_choice->first)
 		{
+			LL_DEBUGS("AppInit")<<"adding "<<grid_choice->first<<LL_ENDL;
 			server_choice_combo->add(grid_choice->second, grid_choice->first);
 		}
 	}
@@ -1162,11 +1183,11 @@ void LLPanelLogin::updateServerCombo()
 	
 	server_choice_combo->addSeparator(ADD_TOP);
 	
+	LL_DEBUGS("AppInit")<<"adding current "<<current_grid<<LL_ENDL;
 	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(), 
-		LLGridManager::getInstance()->getGrid(), ADD_TOP);	
-	
+							 current_grid,
+							 ADD_TOP);	
 	server_choice_combo->selectFirstItem();
-
 	update_grid_help();
 }
 
@@ -1203,13 +1224,11 @@ void LLPanelLogin::updateSavedLoginsCombo()
 				gridname = gridname.substr(arobase+1, gridname.length() - arobase - 1);
 				name = name.substr(0,arobase);
 
-				LLSD grid_info;
-				LLGridManager::getInstance()->getGridData(gridname,grid_info);
 // <FS:AW optional opensim support>
-				const std::string grid_label = grid_info[GRID_LABEL_VALUE].asString();
+				const std::string grid_label = LLGridManager::getInstance()->getGridLabel(gridname);
 
 				bool add_grid = false;
-				if ("Second Life" == grid_label)
+				if (SECOND_LIFE_MAIN_LABEL == grid_label)
 				{
 					add_grid= true;
 				}
@@ -1220,7 +1239,7 @@ void LLPanelLogin::updateSavedLoginsCombo()
 					add_grid= true;
 				}
 #else  // HAS_OPENSIM_SUPPORT 
-				else if ("Second Life Beta" == grid_label)
+				else if (SECOND_LIFE_BETA_LABEL == grid_label)
 				{
 					name.append(" @ " + grid_label);
 					add_grid= true;
@@ -1245,7 +1264,6 @@ void LLPanelLogin::updateSavedLoginsCombo()
 		saved_logins_combo->add(current_creds,credential_name(),ADD_TOP);
 	}
 	saved_logins_combo->selectFirstItem();*/
-
 }
 
 // static
@@ -1254,7 +1272,7 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 	// *NOTE: The paramters for this method are ignored. 
 	// LLPanelLogin::onServerComboLostFocus(LLFocusableElement* fe, void*)
 	// calls this method.
-	LL_INFOS("AppInit") << "onSelectServer" << LL_ENDL;
+
 	// The user twiddled with the grid choice ui.
 	// apply the selection to the grid setting.
 //	LLPointer<LLCredential> credential; <- SA: is this ever used?
@@ -1265,6 +1283,7 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 	{
 		combo_val = combo->getValue();
 	}
+
 
 // <AW: opensim>
 	std::string new_combo_value = combo_val.asString();
@@ -1293,6 +1312,9 @@ void LLPanelLogin::onSelectServer(LLUICtrl*, void*)
 // </AW: opensim>
 	//Clear the PW for security reasons, if the Grid changed manually.
 	sInstance->getChild<LLLineEditor>("password_edit")->clear();
+
+	LL_INFOS("AppInit") << "onSelectServer " << new_combo_value << LL_ENDL;
+
 	
 	combo = sInstance->getChild<LLComboBox>("start_location_combo");	
 //	combo->setCurrentByIndex(1);  <- SA: Why???

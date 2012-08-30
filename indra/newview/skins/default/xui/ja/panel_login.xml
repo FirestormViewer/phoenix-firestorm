@@ -12,6 +12,7 @@
 				ユーザーネーム：
 			</text>
 			<combo_box name="username_combo" tool_tip="登録時に自分で選んだユーザー名（例：bobsmith12、Steller Sunshineなど）"/>
+			<button label="入力内容を消去" name="delete_saved_login_btn" />
 			<text name="password_text">
 				パスワード：
 			</text>
@@ -32,6 +33,13 @@
 				<combo_box.item label="ホーム" name="MyHome"/>
 				<combo_box.item label="＜地域名を入力＞" name="Typeregionname"/>
 			</combo_box>
+			<text name="grid_selection_text">
+				グリッド選択：
+			</text>
+			<combo_box name="server_combo" />
+			<text name="grid_mgr_help_text">
+				グリッド選択ヘルプ
+			</text>
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_new_account_text">

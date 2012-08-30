@@ -690,8 +690,10 @@ void LLAvatarNameCache::fireSignal(const LLUUID& agent_id,
 	signal(agent_id, av_name);
 }
 
-void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
+LLAvatarNameCache::callback_connection_t LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 {
+	callback_connection_t connection;
+
 	if (sRunning)
 	{
 		// ...only do immediate lookups when cache is running
@@ -720,7 +722,7 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 					// ...name already exists in cache, fire callback now
 					LL_DEBUGS("AvNameCache") << "DN cache hit valid" << llendl;
 					fireSignal(agent_id, slot, av_name);
-					return;
+					return connection;
 				}
 			
 				// If we get here, our DN is expired. 
@@ -739,7 +741,7 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 				LLAvatarName av_name;
 				buildLegacyName(full_name, &av_name);
 				fireSignal(agent_id, slot, av_name);
-				return;
+				return connection;
 			}
 		}
 	
@@ -763,15 +765,17 @@ void LLAvatarNameCache::get(const LLUUID& agent_id, callback_slot_t slot)
 	{
 		// ...new callback for this id
 		callback_signal_t* signal = new callback_signal_t();
-		signal->connect(slot);
+		connection = signal->connect(slot);
 		sSignalMap[agent_id] = signal;
 	}
 	else
 	{
 		// ...existing callback, bind additional slot
 		callback_signal_t* signal = sig_it->second;
-		signal->connect(slot);
+		connection = signal->connect(slot);
 	}
+
+	return connection;
 }
 
 // [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c

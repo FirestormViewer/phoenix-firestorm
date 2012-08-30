@@ -78,6 +78,21 @@
     </form>
   </template>
 
+  <template name="okhelpignore">
+    <form>
+      <button
+       default="true"
+       index="0"
+       name="OK_okhelpignore"
+       text="$yestext"/>
+      <button
+       index="1"
+       name="Help_okhelpignore"
+       text="$helptext"/>
+      <ignore text="$ignoretext"/>
+    </form>
+  </template>
+
   <template name="yesnocancelbuttons">
     <form>
       <button
@@ -551,7 +566,7 @@ You do not have enough L$ to join this group.
    icon="alertmodal.tga"
    name="CreateGroupCost"
    type="alertmodal">
-Creating this group will cost L$100.
+Creating this group will cost L$[COST].
 Groups need more than one member, or they are deleted forever.
 Please invite members within 48 hours.
     <tag>group</tag>
@@ -560,7 +575,7 @@ Please invite members within 48 hours.
      canceltext="Cancel"
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="Create group for L$100"/>
+     yestext="Create group for L$[COST]"/>
   </notification>
 
   <notification
@@ -897,7 +912,22 @@ You need an account to enter [CURRENT_GRID]. Would you like to create one now?
 You need to enter either the Username or both the First and Last name of your avatar into the Username field, then login again.
   </notification>
   
-
+  <notification
+   icon="alertmodal.tga"
+   name="InvalidGrid"
+   type="alertmodal">
+   <tag>fail</tag>
+'[GRID]' is not a valid grid identifier.
+  </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="InvalidLocationSLURL"
+   type="alertmodal">
+   <tag>fail</tag>
+Your start location did not specify a valid grid.
+  </notification>
+  
   <notification
    icon="alertmodal.tga"
    name="DeleteClassified"
@@ -1207,8 +1237,8 @@ There was a problem saving a compiled script due to the following reason: [REASO
    icon="alertmodal.tga"
    name="StartRegionEmpty"
    type="alertmodal">
-Your start region is not defined.
-Please type a region name in the Start Location box, or choose &apos;My Last Location&apos; or &apos;My Home&apos; as your start location.
+Your Start Region is not defined.
+Please type the Region name in Start Location box or choose My Last Location or My Home as your Start Location.
 <tag>fail</tag>
     <usetemplate
      name="okbutton"
@@ -1557,6 +1587,14 @@ Unable to link because you do not have modify permission on all the objects.
 
 Please make sure none are locked, and that you own all of them.
   <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="CannotLinkPermanent"
+   type="alertmodal">
+    Objects cannot be linked across region boundaries.
+    <tag>fail</tag>
   </notification>
 
   <notification
@@ -6364,6 +6402,60 @@ This area has building disabled. You can&apos;t build or rez objects here.
   </notification>
 
   <notification
+     icon="alertmodal.tga"
+     name="PathfindingDirty"
+     persist="true"
+     type="alertmodal">
+    <unique/>
+The region has pending pathfinding changes.  If you have build rights, you may rebake the region by clicking on the “Rebake” button.
+    <usetemplate
+     name="okcancelbuttons"
+     yestext="Rebake"
+     notext="Close" />
+  </notification>
+
+  <notification
+     icon="notify.tga"
+     name="DynamicPathfindingDisabled"
+     persist="true"
+     type="notify">
+    <unique/>
+    Dynamic pathfinding is not enabled on this region.  Scripted objects using pathfinding LSL calls may not operate as expected on this region.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingRebakeNavmesh"
+   type="alertmodal">
+    <unique/>
+    Changing certain objects in this region could cause other moving objects to behave incorrectly.  To make moving objects behave correctly, force a rebake of the region navmesh.  Choose “Help” for more information.
+    <url
+      option="1"
+      name="url"
+      target = "_external">
+      http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
+    </url>
+    <usetemplate
+     name="okhelpignore"
+     ignoretext="Changing certain objects in this region could cause other moving objects to behave incorrectly."
+     yestext="OK"
+     helptext="Help"
+     />
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingCannotRebakeNavmesh"
+   type="alertmodal">
+    <unique/>
+    An error occurred.  There may be a network or server problem, or you may not have build rights.  Sometimes logging out and back in will solve this problem.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"
+     />
+  </notification>
+
+  <notification
    icon="notify.tga"
    name="SeeAvatars"
    persist="true"
@@ -8158,16 +8250,6 @@ The site at &apos;&lt;nolink&gt;[HOST_NAME]&lt;/nolink&gt;&apos; in realm &apos;
     </form>
   </notification>
 
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrNeedAuth"
-   type="alertmodal">
-You must authenticate [APP_NAME] before you can upload images to Flickr. Please login in and authorise [APP_NAME], then select "Upload to Flickr" again.
-
-(If you have already authorised [APP_NAME] and are still logged in, this process may be automatic)
-   <tag>confirm</tag>
-</notification>
-
    <notification
 	name="ModeChange"
 	label=""
@@ -8224,60 +8306,6 @@ Changing modes requires you to quit and restart.
    notext="Don't Quit"/>
 </notification>
 
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrHTTPFail"
-   type="alertmodal">
-Communication with Flickr failed. We don't know why.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrTokenRejected"
-   type="alertmodal">
-Flickr rejected your authentication token. This is probably because you revoked [APP_NAME]'s permissions. Please grant permission and try again.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrGenericFail"
-   type="alertmodal">
-Communication with Flickr failed ([CODE]):
-
-[ERROR]
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadCancelledAuthRejected"
-   type="notifytip">
-The upload was cancelled because you did not grant [APP_NAME] permission to access your Flickr account.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadComplete"
-   type="notifytip">
-[http://www.flickr.com/photos/upload/edit/?ids=[ID] [TITLE]] has been successfully uploaded to Flickr.
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadFailed"
-   type="alert">
-Failed to upload "[TITLE]" to Flickr (error [CODE]):
-
-[ERROR]
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
-   name="KittyFlickrUploadFailedNoError"
-   type="alert">
-Failed dismally to upload "[TITLE]" to Flickr. Dunno why.
-  </notification>
-  
   <notification
  name="NoPicks"
  label=""
@@ -8403,7 +8431,135 @@ Failed dismally to upload "[TITLE]" to Flickr. Dunno why.
       notext="Cancel"
       ignoretext="Confirm before hiding UI"/>
   </notification>
-  
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_WarnOnPhantom"
+   type="alertmodal">
+Some selected linksets will have the Phantom flag toggled.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets phantom flag will be toggled."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_MismatchOnRestricted"
+   type="alertmodal">
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets cannot be set because of permission restrictions on the linkset."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_MismatchOnVolume"
+   type="alertmodal">
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets cannot be set because the shape is non-convex"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted"
+   type="alertmodal">
+Some selected linksets will have the Phantom flag toggled.
+
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets phantom flag will be toggled and others cannot be set because of permission restrictions on the linkset."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume"
+   type="alertmodal">
+Some selected linksets will have the Phantom flag toggled.
+
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets phantom flag will be toggled and others cannot be set because the shape is non-convex"
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume"
+   type="alertmodal">
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
+
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex. These linksets&apos; use types will not change.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets cannot be set because of permission restrictions on the linkset and because the shape is non-convex."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume"
+   type="alertmodal">
+Some selected linksets will have the Phantom flag toggled.
+
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because of permission restrictions on the linkset.  These linksets will be set to be '[RESTRICTED_TYPE]' instead.
+
+Some selected linksets cannot be set to be '[REQUESTED_TYPE]' because the shape is non-convex. These linksets&apos; use types will not change.
+
+Do you wish to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Some selected linksets phantom flag will be toggled and others cannot be set because of permission restrictions on the linkset and because the shape is non-convex."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingLinksets_ChangeToFlexiblePath"
+   type="alertmodal">
+    The selected object affects the navmesh.  Changing it to a Flexible Path will remove it from the navmesh.
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="The selected object affects the navmesh.  Changing it to a Flexible Path will remove it from the navmesh."
+     name="okcancelignore"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+
   <global name="UnsupportedGLRequirements">
 You do not appear to have the proper hardware requirements for [APP_NAME]. [APP_NAME] requires an OpenGL graphics card that has multitexture support. If this is the case, you may want to make sure that you have the latest drivers for your graphics card, and service packs and patches for your operating system.
 
@@ -8699,16 +8855,6 @@ This will send the following information to the current IM session:
      notext="Cancel" />
   </notification>
 
-  <notification
-   icon="alertmodal.tga"
-   name="InvalidGrid"
-   type="alertmodal">
-'[GRID]' is not a valid grid name or address.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
-
 <!-- fsdata -->
   <notification
    icon="alertmodal.tga"
@@ -8946,6 +9092,22 @@ Teleport to this avatar not possible, because the exact position is unknown.
 
   <notification
    icon="alertmodal.tga"
+   name="ZoomToAvatarNotPossible"
+   type="alertmodal">
+Cannot zoom to this avatar, because it is out of reach.
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="TrackAvatarNotPossible"
+   type="alertmodal">
+Cannot track this avatar, because it is out of reach.
+  <tag>fail</tag>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="CacheEmpty"
    type="alertmodal">
 Your viewer cache is currently empty. Please be aware that you may experience slow framerates and inventory loading for a short time while new content downloads.
@@ -9021,7 +9183,33 @@ Disabling future updates for this file.
 Attempted to add an invalid or unreadable image file [FNAME] which could not be opened or decoded.
 Attempt cancelled.
   </notification>
-  
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingReturnMultipleItems"
+   type="alertmodal">
+    You are returning [NUM_ITEMS] items.  Are you sure you want to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Are you sure you want to return multiple items?"
+     name="okcancelignore"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="PathfindingDeleteMultipleItems"
+   type="alertmodal">
+    You are deleting [NUM_ITEMS] items.  Are you sure you want to continue?
+    <tag>confirm</tag>
+    <usetemplate
+     ignoretext="Are you sure you want to delete multiple items?"
+     name="okcancelignore"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
+
   <!-- <FS:Zi> Add float LSL color entry widgets -->
   <notification
    icon="notify.tga"
@@ -9049,4 +9237,75 @@ We strongly recommend that you not set the bandwidth above 1500 KBPS. This is un
   <!-- </FS:TS> FIRE-6795 -->
   <!-- </FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues-->
 
+  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationExplanation"
+   type="alertmodal">
+To use the Flickr upload feature you must authorize [APP_NAME] to access your account. If you proceed, your web browser will open Flickr's website, where you will be prompted to log in and authorize [APP_NAME]. You will then be given a code to copy back into [APP_NAME].
+
+Would you like to authorize [APP_NAME] to post to your Flickr account?
+    <tag>fail</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationPrompt"
+   type="alertmodal">
+Please authorize [APP_NAME] to post to your Flickr account in your web browser, then type the code given by the website below:
+    <tag>confirm</tag>
+    <form name="form">
+      <input name="oauth_verifier" type="text" default="true"/>
+      <button
+       index="0"
+       name="OK"
+       text="OK"/>
+      <button
+       index="1"
+       name="Cancel"
+       text="Cancel"/>
+    </form>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="ExodusFlickrVerificationFailed"
+   type="alertmodal">
+Flickr verification failed. Please try again, and be sure to double check the verification code.
+    <tag>fail</tag>
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notifytip.tga"
+   name="ExodusFlickrUploadComplete"
+   type="notifytip">
+Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[ID] here].
+  </notification>
+  <!-- </FS:TS> FIRE-5453 -->
+
+  <notification
+   icon="alertmodal.tga"
+   name="FirstUseFlyOverride"
+   type="alertmodal">
+Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying.
+    <usetemplate
+     name="okbutton"
+     yestext="OK"/>
+  </notification>
+
+  <notification
+   icon="notifytip.tga" 
+   name="ServerVersionChanged"
+   type="notifytip">
+The region you have entered is running a different simulator version.
+Current simulator: [NEWVERSION]
+Previous simulator: [OLDVERSION]
+  </notification>
 </notifications>

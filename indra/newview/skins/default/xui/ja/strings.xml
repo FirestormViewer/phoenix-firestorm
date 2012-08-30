@@ -4889,6 +4889,19 @@ www.secondlife.com から最新バージョンをダウンロードしてくだ�
 	<string name="Command_Voice_Label">
 		ボイス設定
 	</string>
+	
+	<!-- Added Aug.25, 2012 -->
+	<string name="Command_Quickprefs_Label">クイック設定</string>
+	<string name="Command_AO_Label">AO</string>
+	<string name="Command_Webbrowser_Label">Webブラウザ</string>
+	<string name="Command_Default_Chat_Bar_Label">チャット</string>
+	<string name="Command_Areasearch_Label">エリアサーチ</string>
+	<string name="Command_Settings_Debug_Label">デバッグ設定</string>
+	<string name="Command_Statistics_Label">統計</string>
+	<string name="Command_Region_Label">地域／不動産</string>
+	<string name="Command_Fly_Label">飛行</string>
+	<!-- Added Aug.25, 2012 -->
+	
 	<string name="Command_AboutLand_Tooltip">
 		訪問先に関する情報
 	</string>

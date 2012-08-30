@@ -330,39 +330,6 @@
     <!-- End of back compatibility settings -->
     
     <!-- Firestorm settings -->
-    <key>KittyFlickrToken</key>
-    <map>
-      <key>Comment</key>
-          <string>Token used to authenticate with Flickr</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
-    <key>KittyFlickrUsername</key>
-    <map>
-      <key>Comment</key>
-          <string>Username associated with Flickr account</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
-    <key>KittyFlickrNSID</key>
-    <map>
-      <key>Comment</key>
-          <string>NSID associated with Flickr account</string>
-      <key>Persist</key>
-          <integer>1</integer>
-      <key>Type</key>
-          <string>String</string>
-      <key>Value</key>
-          <string></string>
-    </map>
     <key>DebugLookAt</key>
         <map>
         <key>Comment</key>
@@ -552,5 +519,75 @@
 	</array>
 	</map>
     <!-- End of Firestorm settings -->
+
+    <!-- Settings imported from Exodus -->
+    <key>ExodusFlickrToken</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr OAuth Token</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrTokenSecret</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr OAuth Token Secret</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrUsername</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrNSID</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr User ID</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrUsername</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <key>ExodusFlickrFullName</key>
+        <map>
+        <key>Comment</key>
+            <string>Flickr Username</string>
+        <key>Persist</key>
+            <integer>1</integer>
+        <key>Type</key>
+            <string>String</string>
+        <key>Value</key>
+            <string></string>
+        </map>
+    <!-- End of settings imported from Exodus -->
+
     </map>
 </llsd>

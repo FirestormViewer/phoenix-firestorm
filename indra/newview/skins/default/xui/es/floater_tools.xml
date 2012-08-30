@@ -157,6 +157,12 @@
 			<panel.string name="text modify info 4">
 				No puedes modificar estos objetos
 			</panel.string>
+			<panel.string name="text modify info 5">
+				No puedes modificar este objeto atravesando el límite de la región
+			</panel.string>
+			<panel.string name="text modify info 6">
+				No puedes modificar estos objetos atravesando el límite de la región
+			</panel.string>
 			<panel.string name="text modify warning">
 				Para configurar los permisos, debes seleccionar el objeto completo
 			</panel.string>
@@ -252,6 +258,11 @@
 				</text>
 				<text name="F:">
 					F:
+				</text>
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Atributos Pathfinding:
 				</text>
 			</panel>
 	  	</panel>

@@ -109,13 +109,6 @@
 
 #include "fsdata.h"
 
-//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-//SA: for querying sit object owner
-#include "message.h"
-extern bool gPermsGrantedSameOwner;
-extern LLUUID gPermsSameOwnerUUID;
-//</FS:TS> FIRE-6762
-
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
 extern F32 ANIM_SPEED_MAX;
@@ -4693,7 +4686,12 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 		}
 		// Can't test for baked hair being defined, since that won't always be the case (not all viewers send baked hair)
 		// TODO: 1.25 will be able to switch this logic back to calling isTextureVisible();
-		if (getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha)
+
+		// <FS:ND> Crashfix; make sure getImage() is valid
+		//		if (getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha)
+		if ( getImage(TEX_HAIR_BAKED, 0) && getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha)
+		// </FS:ND>
+
 		{
 			num_indices += mMeshLOD[MESH_ID_HAIR]->render(mAdjustedPixelArea, first_pass, mIsDummy);
 			first_pass = FALSE;
@@ -4842,7 +4840,7 @@ void LLVOAvatar::updateTextures()
 		// Not sure yet why it does, but of course it crashes when te->mScale? gets used. Put safeguard in place so this corner case get
 		// better handling and does not result in a crash.
 		F32 texel_area_ratio = 1.0f;
-		if( te )
+		if( te && ndIsValidPtr( te )  )
 			texel_area_ratio = fabs(te->mScaleS * te->mScaleT);
 		else
 			llwarns << "getTE( " << texture_index << " ) returned 0" <<llendl;
@@ -6627,21 +6625,6 @@ void LLVOAvatar::sitOnObject(LLViewerObject *sit_object)
 		{
 			revokePermissionsOnObject(sit_object);
 		}
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		//SA: query object details so its owner can be known when scripts request runtime permissions
-		if (sit_object)
-		{
-			LLMessageSystem* msg = gMessageSystem;
-			msg->newMessageFast(_PREHASH_RequestObjectPropertiesFamily);
-			msg->nextBlockFast(_PREHASH_AgentData);
-			msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-			msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-			msg->nextBlockFast(_PREHASH_ObjectData);
-			msg->addU32Fast(_PREHASH_RequestFlags, 0 );
-			msg->addUUIDFast(_PREHASH_ObjectID, sit_object->getID());
-			gAgent.sendReliableMessage();
-		}
-		//</FS:TS> FIRE-6762
 	}
 
 	if (mDrawable.isNull())
@@ -6739,15 +6722,6 @@ void LLVOAvatar::getOffObject()
 		{
 			revokePermissionsOnObject(sit_object);
 		}
-
-		//<FS:TS> FIRE-6762: Automatically grant sit permissions if same owner
-		if (gPermsGrantedSameOwner && gSavedSettings.getBOOL("PermissionsGrantToSitOwner"))
-		{
-			revokePermissionsOnObject(gPermsSameOwnerUUID);
-			gPermsGrantedSameOwner = false;
-			gPermsSameOwnerUUID = LLUUID::null;
-		}
-		//</FS:TS> FIRE-6762
 	}
 }
 
@@ -6758,20 +6732,12 @@ void LLVOAvatar::revokePermissionsOnObject(LLViewerObject *sit_object)
 {
 	if (sit_object)
 	{
-		revokePermissionsOnObject(sit_object->getID());
-	}
-}
-
-void LLVOAvatar::revokePermissionsOnObject(LLUUID sit_object_ID)
-{
-	if (sit_object_ID != LLUUID::null)
-	{
 		gMessageSystem->newMessageFast(_PREHASH_RevokePermissions);
 		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
 		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
 		gMessageSystem->nextBlockFast(_PREHASH_Data);
-		gMessageSystem->addUUIDFast(_PREHASH_ObjectID, sit_object_ID);
+		gMessageSystem->addUUIDFast(_PREHASH_ObjectID, sit_object->getID());
 		gMessageSystem->addU32Fast(_PREHASH_ObjectPermissions, 0xFFFFFFFF);
 		gAgent.sendReliableMessage();
 	}
@@ -9118,9 +9084,9 @@ BOOL LLVOAvatar::isTextureDefined(LLVOAvatarDefines::ETextureIndex te, U32 index
 	}
 
 	// <FS:ND> getImage(te, index) can return 0 in some edge cases.
-	if( !getImage( te, index ) )
+	if( !getImage( te, index ) || !ndIsValidPtr( getImage( te, index) ) )
 	{
-		llwarns << "getImage( " << te << ", " << index << " ) returned 0" << llendl;
+		llwarns << "getImage( " << (S32)te << ", " << index << " ) returned invalid ptr" << llendl;
 		return FALSE;
 	}
 	// </FS:ND>

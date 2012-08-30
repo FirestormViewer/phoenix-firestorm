@@ -243,6 +243,9 @@ LLFontGL* LLViewerChat::getChatFont()
 		case 2:
 			fontp = LLFontGL::getFontSansSerifBig();
 			break;
+		case 3:
+			fontp = LLFontGL::getFontSansSerifHuge();
+			break;
 	}
 	
 	return fontp;

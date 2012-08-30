@@ -43,7 +43,7 @@
 	<text name="obj_name_text">
 		Nazwa obiektu:
 	</text>
-	<button label="Filtr" name="filter_object_btn"/>
+	<button label="Filtruj" name="filter_object_btn"/>
 	<text name="owner_name_text">
 		Właściciel:
 	</text>
@@ -53,8 +53,8 @@
 	<button label="Zwróć wszystko" name="return_all_btn"/>
 	<button label="Teleportuj do" name="teleport_to_btn"/>
 	<button label="Profil" name="profile_btn"/>
-	<button label="Dezaktywuj wybrane" name="disable_selected_btn"/>
-	<button label="Dezaktywuj wszystko" name="disable_all_btn"/>
+	<button label="Dezakt. wybrane" name="disable_selected_btn"/>
+	<button label="Dezakt. wszystko" name="disable_all_btn"/>
 	<button label="O skryptach" name="script_info_btn"/>
 	<button label="Majątek: wyrzuć" name="estate_kick_btn"/>
 </floater>

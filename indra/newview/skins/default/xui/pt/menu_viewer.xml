@@ -142,11 +142,11 @@
 			<menu_item_call label="Opções de grade" name="Grid Options"/>
 		</menu>
 		<menu label="Upload" name="Upload">
-			<menu_item_call label="Imagem (L$[COST])..." name="Upload Image"/>
-			<menu_item_call label="Som (L$[COST])..." name="Upload Sound"/>
-			<menu_item_call label="Animação (L$[COST])..." name="Upload Animation"/>
+			<menu_item_call label="Imagem ([COST])..." name="Upload Image"/>
+			<menu_item_call label="Som ([COST])..." name="Upload Sound"/>
+			<menu_item_call label="Animação ([COST])..." name="Upload Animation"/>
 			<menu_item_call label="Modelar..." name="Upload Model"/>
-			<menu_item_call label="Volume (L$[COST] por arquivo)..." name="Bulk Upload"/>
+			<menu_item_call label="Volume ([COST] por arquivo)..." name="Bulk Upload"/>
 			<menu_item_call label="Autorizações de upload padrão" name="perm prefs"/>
 		</menu>
 		<menu_item_call label="Desfazer" name="Undo"/>
@@ -157,6 +157,7 @@
 		<menu_item_check label="Ativar dicas" name="Enable Hints"/>
 		<menu_item_call label="Denunciar abuso" name="Report Abuse"/>
 		<menu_item_call label="Relatar bug" name="Report Bug"/>
+        <menu_item_call label="Empurrões, trombadas e tapas" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="Sobre [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="Avançado" name="Advanced">
@@ -294,7 +295,6 @@
 			<menu_item_check label="Pausar avatar" name="AgentPause"/>
 			<menu_item_call label="Drop a Packet" name="Drop a Packet"/>
 		</menu>
-		<menu_item_call label="Empurrões, trombadas e tapas" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Mundo" name="DevelopWorld">
 			<menu_item_check label="Impor sobre sol de simulação" name="Sim Sun Override"/>
 			<menu_item_check label="Clima fixo" name="Fixed Weather"/>

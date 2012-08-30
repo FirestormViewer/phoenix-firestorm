@@ -326,6 +326,13 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<text name="allow_label">
 				Permitir a otros Residentes:
 			</text>
+			<text name="allow_label1">
+				Editar terreno:
+			</text>
+			<check_box label="Todos" name="edit land check" tool_tip="Si lo marcas, todos podrán alterar la orografía de tu terreno. Es mejor que no lo marques, tú siempre podrás editar el terreno de tu propiedad."/>
+			<text name="caution_text">
+				(¡Usa con precaución!)
+			</text>
 			<text name="allow_label0">
 				Volar:
 			</text>

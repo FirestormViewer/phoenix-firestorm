@@ -173,6 +173,7 @@
                 <menu_item_check.on_enable
                  function="Self.EnableForceSit" />
            </menu_item_check>
+<!-- <FS:WF> FIRE-7286 : Hide or remove Client Phantom feature from menu - due to PATHBUG-122
 		   <menu_item_check
 			 label="Phantom"
              shortcut="control|alt|P"
@@ -182,6 +183,7 @@
                 <menu_item_check.on_click
                    function="Self.togglePhantom" />
 			</menu_item_check>
+     <FS:WF> FIRE-7286 END -->
 			<menu_item_check
 			 label="Quickjump"
              name="Avatar Ignore Prejump">
@@ -273,7 +275,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -287,7 +289,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -300,7 +302,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -328,9 +330,12 @@
              label="Bulk (Multi-file) upload..."
              layout="topleft"
              name="Bulk Upload">
-                <menu_item_call.on_click
+               <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
+               <menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -816,7 +821,7 @@
             <menu_item_call
              label="Sunrise"
              name="Sunrise"
-			 shortcut="control|shift|E">
+			 shortcut="control|shift|U">
                 <menu_item_call.on_click
                  function="World.EnvSettings"
                  parameter="sunrise" />
@@ -1100,7 +1105,8 @@
         </menu_item_call>
         <menu_item_check
              label="Edit Linked Parts"
-             name="Edit Linked Parts">
+             name="Edit Linked Parts"
+             shortcut="control|shift|E">
                 <menu_item_check.on_check
                  control="EditLinkedParts" />
                 <menu_item_check.on_click
@@ -1326,7 +1332,56 @@
           </menu_item_call>          
         </menu>
 
+      <menu
+         create_jump_keys="true"
+         label="Pathfinding"
+         name="Pathfinding"
+         tear_off="false">
+        <menu_item_call
+            label="Linksets..."
+            name="pathfinding_linksets_menu_item">
+          <menu_item_call.on_click
+              function="Floater.ToggleOrBringToFront"
+              parameter="pathfinding_linksets" />
+          <menu_item_call.on_enable
+              function="Tools.EnablePathfinding" />
+        </menu_item_call>
+        <menu_item_call
+            label="Characters..."
+            name="pathfinding_characters_menu_item">
+          <menu_item_call.on_click
+              function="Floater.ToggleOrBringToFront"
+              parameter="pathfinding_characters" />
+          <menu_item_call.on_enable
+              function="Tools.EnablePathfinding" />
+        </menu_item_call>
+        <menu_item_call
+            label="View / test..."
+            name="pathfinding_console_menu_item">
+          <menu_item_call.on_click
+              function="Floater.ToggleOrBringToFront"
+              parameter="pathfinding_console" />
+          <menu_item_call.on_enable
+              function="Tools.EnablePathfindingView" />
+        </menu_item_call>
+
+        <!-- <FS:Zi> Pathfinding rebake functions -->
         <menu_item_separator/>
+
+        <menu_item_call
+          label="Rebake Region Navmesh"
+          name="rebake_region_navmesh">
+          <menu_item_call.on_click
+            function="World.RebakeRegion" />
+          <menu_item_call.on_enable
+            function="World.RebakeRegion" />
+        </menu_item_call>
+        <!-- </FS:Zi> -->
+
+      </menu>
+
+
+      <menu_item_separator/>
 
         <menu
          create_jump_keys="true"
@@ -1461,7 +1516,7 @@
          name="Upload"
          tear_off="true">
             <menu_item_call
-             label="Image (L$[COST])..."
+             label="Image ([COST])..."
              layout="topleft"
              name="Upload Image"
              shortcut="control|U">
@@ -1475,7 +1530,7 @@
                  parameter="Upload Image" />
             </menu_item_call>
             <menu_item_call
-             label="Sound (L$[COST])..."
+             label="Sound ([COST])..."
              layout="topleft"
              name="Upload Sound">
                 <menu_item_call.on_click
@@ -1488,7 +1543,7 @@
                  parameter="Upload Sound" />
             </menu_item_call>
             <menu_item_call
-             label="Animation (L$[COST])..."
+             label="Animation ([COST])..."
              layout="topleft"
              name="Upload Animation">
                 <menu_item_call.on_click
@@ -1513,12 +1568,15 @@
             function="File.VisibleUploadModel"/>
             </menu_item_call>
 	   <menu_item_call
-             label="Bulk (L$[COST] per file)..."
+             label="Bulk ([COST] per file)..."
              layout="topleft"
              name="Bulk Upload">
                 <menu_item_call.on_click
                  function="File.UploadBulk"
                  parameter="" />
+		<menu_item_call.on_visible
+                 function="Upload.CalculateCosts"
+                 parameter="Bulk Upload" />
             </menu_item_call>
             <menu_item_call
              label="Set Default Upload Permissions"
@@ -1638,6 +1696,15 @@
              name="script_library_url"
              parameter="WebLaunchExternalTarget,http://wiki.phoenixviewer.com" />
        </menu_item_call>
+	   
+        <menu_item_call
+         label="Join Firestorm Support Group"
+         name="firestorm_support_group">
+             <menu_item_call.on_click
+             function="Advanced.WebBrowserTest"
+             parameter="http://wiki.phoenixviewer.com/firestorm_support_groups_join" />
+        </menu_item_call>
+		
 <!--       <menu_item_call
          label="Second Life Help"
          name="Second Life Help">
@@ -1692,6 +1759,16 @@
                  parameter="file_a_jira" />
             </menu_item_call>
 
+        <menu_item_separator/>
+		
+        <menu_item_call
+             label="Bumps, Pushes &amp; Hits"
+             name="Bumps, Pushes &amp;amp; Hits">
+                <menu_item_call.on_click
+                 function="Floater.Show"
+                 parameter="bumps" />
+            </menu_item_call>
+			
         <menu_item_separator/>
 
         <menu_item_check
@@ -2397,7 +2474,7 @@
          tear_off="true"
          visible="false">
           <menu_item_call
-             label="Upload Image (L$[COST])..."
+             label="Upload Image ([COST])..."
              name="Upload Image"
              shortcut="control|U">
             <menu_item_call.on_click
@@ -2405,6 +2482,9 @@
                parameter="" />
             <menu_item_call.on_enable
                function="File.EnableUpload" />
+            <menu_item_call.on_visible
+               function="Upload.CalculateCosts"
+               parameter="Upload Image" />
             </menu_item_call>
             <menu_item_check
                label="Search"
@@ -3549,13 +3629,6 @@
             <menu_item_call.on_click
              function="Advanced.DumpScriptedCamera" />
         </menu_item_call>
-        <menu_item_call
-             label="Bumps, Pushes &amp; Hits"
-             name="Bumps, Pushes &amp;amp; Hits">
-                <menu_item_call.on_click
-                 function="Floater.Show"
-                 parameter="bumps" />
-            </menu_item_call>
 
         <menu
          create_jump_keys="true"

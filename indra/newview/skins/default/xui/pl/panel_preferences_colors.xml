@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Kolory" name="colors_panel">
 	<text name="effects_color_textbox">
-		Efekty wyboru (wiązka cząsteczek):
+		Efekty wyboru (wiązka cząstek):
 	</text>
 	<text name="netmap_color_textbox">
 		Minimapa:
@@ -14,7 +14,7 @@
 		Zasięg krzyku
 	</text>
 	<text name="font_colors">
-		Kolory czcionki interfejsu:
+		Kolory napisów:
 	</text>
 	<text name="text_box1">
 		Ja

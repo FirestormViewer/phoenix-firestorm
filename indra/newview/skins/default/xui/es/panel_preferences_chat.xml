@@ -2,21 +2,23 @@
 <panel label="Chat de texto" name="chat">
 	<tab_container label="Prefs. Firestorm" name="tabs">
 		<panel label="General" name="ChatGeneral">
-			<text name="font_size" width="245">
-				Tamaño de la fuente de la ventana de chat:
+			<text name="font_size" width="180">
+				Fuente de la ventana de chat:
 			</text>
-			<radio_group name="chat_font_size" top="16" left_delta="245">
-				<radio_item label="Pequeño" name="radio"/>
-				<radio_item label="Mediano" name="radio2" left_delta="75"/>
+			<radio_group name="chat_font_size" top="16" left_delta="180">
+				<radio_item label="Pequeña" name="radio"/>
+				<radio_item label="Mediana" name="radio2" left_delta="75"/>
 				<radio_item label="Grande" name="radio3"/>
+				<radio_item label="Enorme" name="radio4"/>
 			</radio_group>
-			<text name="console_font_size" top="32" width="245">
-				Tamaño de la fuente de consola:
+			<text name="console_font_size" top="32" width="180">
+				Fuente de consola:
 			</text>
-			<radio_group name="chat_console_font_size" top="33" left_delta="245">
-				<radio_item label="Pequeño" name="consradio"/>
-				<radio_item label="Mediano" name="consradio2" left_delta="75"/>
+			<radio_group name="chat_console_font_size" top="33" left_delta="180">
+				<radio_item label="Pequeña" name="consradio"/>
+				<radio_item label="Mediana" name="consradio2" left_delta="75"/>
 				<radio_item label="Grande" name="consradio3"/>
+				<radio_item label="Enorme" name="consradio4"/>
 			</radio_group>
 			<check_box label="Ejecutar la animación de escribir al hacerlo en el chat" name="play_typing_animation"/>
 			<check_box label="Ejecutar animaciones del avatar (como gritar)" name="play_avatar_animations"/>

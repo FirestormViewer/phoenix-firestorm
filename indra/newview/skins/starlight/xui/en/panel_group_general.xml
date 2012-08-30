@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  label="General"
- height="644"
+ height="656"
  width="304"
  class="panel_group_general"
  name="general_tab">
@@ -168,6 +168,18 @@ Hover your mouse over the options for more help.
          tool_tip="Sets whether you want to receive Notices from this group.  Uncheck this box if this group is spamming you."
          top_pad="5"
          width="300" />
+        <!-- <exodus> -->
+        <check_box
+         height="16"
+         font="SansSerifSmall"
+         label="Receive group instant messages"
+         layout="topleft"
+         left="10"
+         name="receive_chat"
+         tool_tip="Sets whether you want to participate in group chat for this group."
+         top_pad="5"
+         width="300" />
+        <!-- </exodus> -->
         <check_box
          height="16"
          label="Show in my profile"

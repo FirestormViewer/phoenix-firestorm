@@ -125,7 +125,7 @@
      visible="false" />
 	<!-- //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge. -->
     <check_box
-     control_name="SnapshotTemp"
+     control_name="TemporaryUpload"
      top_pad="4"
      follows="left|top"
      label="Temp upload"

@@ -94,7 +94,7 @@
 			<check_box name="FSShowChatChannel" label="Mostra selezione canale nella chat bar" />
 			<check_box label="Nascondi automaticamente la Chat bar principale" name="AutohideChatBar" tool_tip="Nascondi automaticamente la Chat bar principale dopo aver inviato il messaggio e ricomparirà quando inizierete a scrivere" />
 			<check_box label="Deseleziona la Chat Bar dopo aver inviato il messaggio" name="CloseChatOnReturn"/>
-			<check_box name="FSMarkObjects" label="Rinomina ogetto che parla con (no name) per evitare scambi di nomi"/>
+			<check_box name="FSMarkObjects" label="Rinomina oggetto che parla con (no name) per evitare scambi di nomi"/>
 			<text name="group_enhancements">
 				Chat di Gruppo:
 			</text>

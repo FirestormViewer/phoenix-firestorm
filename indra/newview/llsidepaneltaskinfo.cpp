@@ -61,6 +61,9 @@
 #include "llspinctrl.h"
 #include "roles_constants.h"
 #include "llgroupactions.h"
+#include "lltextbase.h"
+#include "llstring.h"
+#include "lltrans.h"
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.2a)
 #include "llslurl.h"
 #include "rlvhandler.h"
@@ -150,6 +153,7 @@ BOOL LLSidepanelTaskInfo::postBuild()
 	mDAEditCost = getChild<LLUICtrl>("Edit Cost");
 	mDALabelClickAction = getChildView("label click action");
 	mDAComboClickAction = getChild<LLComboBox>("clickaction");
+	mDAPathfindingAttributes = getChild<LLTextBase>("pathfinding_attributes_value");
 	mDAB = getChildView("B:");
 	mDAO = getChildView("O:");
 	mDAG = getChildView("G:");
@@ -246,6 +250,9 @@ void LLSidepanelTaskInfo::disableAll()
 		mDAComboClickAction->clear();
 	}
 
+	mDAPathfindingAttributes->setEnabled(FALSE);
+	mDAPathfindingAttributes->setValue(LLStringUtil::null);
+
 	mDAB->setVisible(FALSE);
 	mDAO->setVisible(FALSE);
 	mDAG->setVisible(FALSE);
@@ -305,6 +312,8 @@ void LLSidepanelTaskInfo::refresh()
 	// BUG: fails if a root and non-root are both single-selected.
 	const BOOL is_perm_modify = (mObjectSelection->getFirstRootNode() && LLSelectMgr::getInstance()->selectGetRootsModify()) ||
 		LLSelectMgr::getInstance()->selectGetModify();
+	const BOOL is_nonpermanent_enforced = (mObjectSelection->getFirstRootNode() && LLSelectMgr::getInstance()->selectGetRootsNonPermanentEnforced()) ||
+		LLSelectMgr::getInstance()->selectGetNonPermanentEnforced();
 
 	S32 string_index = 0;
 	std::string MODIFY_INFO_STRINGS[] =
@@ -312,11 +321,17 @@ void LLSidepanelTaskInfo::refresh()
 			getString("text modify info 1"),
 			getString("text modify info 2"),
 			getString("text modify info 3"),
-			getString("text modify info 4")
+			getString("text modify info 4"),
+			getString("text modify info 5"),
+			getString("text modify info 6")
 		};
 	if (!is_perm_modify)
 	{
 		string_index += 2;
+	}
+	else if (!is_nonpermanent_enforced)
+	{
+		string_index += 4;
 	}
 	if (!is_one_object)
 	{
@@ -324,6 +339,34 @@ void LLSidepanelTaskInfo::refresh()
 	}
 	getChildView("perm_modify")->setEnabled(TRUE);
 	getChild<LLUICtrl>("perm_modify")->setValue(MODIFY_INFO_STRINGS[string_index]);
+
+	std::string pfAttrName;
+
+	if ((mObjectSelection->getFirstRootNode() 
+		&& LLSelectMgr::getInstance()->selectGetRootsNonPathfinding())
+		|| LLSelectMgr::getInstance()->selectGetNonPathfinding())
+	{
+		pfAttrName = "Pathfinding_Object_Attr_None";
+	}
+	else if ((mObjectSelection->getFirstRootNode() 
+		&& LLSelectMgr::getInstance()->selectGetRootsPermanent())
+		|| LLSelectMgr::getInstance()->selectGetPermanent())
+	{
+		pfAttrName = "Pathfinding_Object_Attr_Permanent";
+	}
+	else if ((mObjectSelection->getFirstRootNode() 
+		&& LLSelectMgr::getInstance()->selectGetRootsCharacter())
+		|| LLSelectMgr::getInstance()->selectGetCharacter())
+	{
+		pfAttrName = "Pathfinding_Object_Attr_Character";
+	}
+	else
+	{
+		pfAttrName = "Pathfinding_Object_Attr_MultiSelect";
+	}
+
+	mDAPathfindingAttributes->setEnabled(TRUE);
+	mDAPathfindingAttributes->setValue(LLTrans::getString(pfAttrName));
 
 	getChildView("Permissions:")->setEnabled(TRUE);
 	
@@ -410,7 +453,7 @@ void LLSidepanelTaskInfo::refresh()
 		}
 	}
 	
-	getChildView("button set group")->setEnabled(owners_identical && (mOwnerID == gAgent.getID()));
+	getChildView("button set group")->setEnabled(owners_identical && (mOwnerID == gAgent.getID()) && is_nonpermanent_enforced);
 
 	getChildView("Name:")->setEnabled(TRUE);
 	LLLineEditor* LineEditorObjectName = getChild<LLLineEditor>("Object Name");
@@ -440,7 +483,7 @@ void LLSidepanelTaskInfo::refresh()
 
 	// figure out the contents of the name, description, & category
 	BOOL edit_name_desc = FALSE;
-	if (is_one_object && objectp->permModify())
+	if (is_one_object && objectp->permModify() && !objectp->isPermanentEnforced())
 	{
 		edit_name_desc = TRUE;
 	}
@@ -620,12 +663,12 @@ void LLSidepanelTaskInfo::refresh()
 	BOOL has_change_perm_ability = FALSE;
 	BOOL has_change_sale_ability = FALSE;
 
-	if (valid_base_perms &&
+	if (valid_base_perms && is_nonpermanent_enforced &&
 		(self_owned || (group_owned && gAgent.hasPowerInGroup(group_id, GP_OBJECT_MANIPULATE))))
 	{
 		has_change_perm_ability = TRUE;
 	}
-	if (valid_base_perms &&
+	if (valid_base_perms && is_nonpermanent_enforced &&
 	   (self_owned || (group_owned && gAgent.hasPowerInGroup(group_id, GP_OBJECT_SET_SALE))))
 	{
 		has_change_sale_ability = TRUE;
@@ -837,8 +880,8 @@ void LLSidepanelTaskInfo::refresh()
 			ComboClickAction->setCurrentByIndex((S32)click_action);
 		}
 	}
-	getChildView("label click action")->setEnabled(is_perm_modify && all_volume);
-	getChildView("clickaction")->setEnabled(is_perm_modify && all_volume);
+	getChildView("label click action")->setEnabled(is_perm_modify && is_nonpermanent_enforced && all_volume);
+	getChildView("clickaction")->setEnabled(is_perm_modify && is_nonpermanent_enforced && all_volume);
 
 	if (!getIsEditing())
 	{
