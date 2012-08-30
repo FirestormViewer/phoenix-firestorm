@@ -126,6 +126,7 @@
 		<menu_item_check label="啟用提示" name="Enable Hints"/>
 		<menu_item_call label="舉報濫用" name="Report Abuse"/>
 		<menu_item_call label="回報臭蟲" name="Report Bug"/>
+        <menu_item_call label="碰撞、推擠與打擊" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="關於 [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="進階" name="Advanced">
@@ -285,7 +286,6 @@
 			<menu_item_call label="Drop a Packet" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Dump Scripted Camera" name="Dump Scripted Camera"/>
-		<menu_item_call label="碰撞、推擠與打擊" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="錄製器" name="Recorder">
 			<menu_item_call label="開始播放" name="Start Playback"/>
 			<menu_item_call label="停止播放" name="Stop Playback"/>

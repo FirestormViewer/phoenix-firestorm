@@ -207,6 +207,7 @@
 		<menu_item_call label="Estado de la red" name="Grid Status"/>
 		<menu_item_call label="Denunciar una infracción" name="Report Abuse"/>
 		<menu_item_call label="Informar de un fallo" name="Report Bug"/>
+        <menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_check label="Activar botón de Información del Sistema" name="Enable Sysinfo Button"/>
 		<menu_item_call label="Acerca de [APP_NAME]" name="About Second Life"/>
 	</menu>
@@ -408,7 +409,6 @@
 			<menu_item_call label="Descartar un paquete" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Volcar cámara guionizada" name="Dump Scripted Camera"/>
-		<menu_item_call label="Golpes, empujones e impactos" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Grabadora" name="Recorder">
 			<menu_item_call label="Iniciar reproducción" name="Start Playback"/>
 			<menu_item_call label="Detener reprodución" name="Stop Playback"/>

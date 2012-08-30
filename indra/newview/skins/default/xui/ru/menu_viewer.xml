@@ -202,6 +202,7 @@
 		<menu_item_call label="Проверить статус грида" name="Grid Status"/>
 		<menu_item_call label="Написать рапорт" name="Report Abuse"/>
 		<menu_item_call label="Сообщить об ошибке" name="Report Bug"/>
+        <menu_item_call label="Столкновения, толчки и удары" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu_item_call label="О [APP_NAME]" name="About Second Life"/>
 	</menu>
 	<menu label="RLVa" name="RLVa Main">
@@ -387,7 +388,6 @@
 			<menu_item_call label="Опустить пакет" name="Drop a Packet"/>
 		</menu>
 		<menu_item_call label="Дамп камеры со скриптами" name="Dump Scripted Camera"/>
-		<menu_item_call label="Столкновения, толчки и удары" name="Bumps, Pushes &amp;amp; Hits"/>
 		<menu label="Диктофон" name="Recorder">
 			<menu_item_call label="Начать воспроизведение" name="Start Playback"/>
 			<menu_item_call label="Остановить воспроизведение" name="Stop Playback"/>
