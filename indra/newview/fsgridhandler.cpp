@@ -1178,7 +1178,11 @@ std::string LLGridManager::getGridId(const std::string& grid)
 	std::string grid_name = getGrid(grid);
 	if (!grid.empty())
 	{
-		grid_id = mGridList[grid_name][GRID_ID_VALUE].asString();
+		// FS:AW FIRE-7468 
+		// NOTE: GRID_ID_VALUE  has a different meaning in llviewernetwork 
+		// than here, which was inherited from the pathfinding changes.
+		// GRID_NICK_VALUE is the one we want *here*.
+		grid_id = mGridList[grid_name][GRID_NICK_VALUE].asString();
 	}
 	else
 	{
