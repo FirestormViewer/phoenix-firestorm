@@ -169,6 +169,10 @@
         <check_box label="Automatycznie stosuj ustawienia WL na parcelach moich grup" name="FSWLWhitelistGroups" />
         <check_box label="Automatycznie stosuj ustawienia WL na wszystkich parcelach" name="FSWLWhitelistAll" />
         <check_box label="Automatycznie zmieniaj środowisko dla WL parcel" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL parcel." />
+        <text name="wl_crossfade_label">
+         Czas przenikania (w sekundach):
+         </text>
+        <spinner tool_tip="Czas przenikania z jednego zestawu ustawień w inny [Domyślnie: 3]" name="FSWindlightInterpolateTime" />
     </panel>
     <panel label="Budowanie" name="BuildTab">
         <text name="text_box_objprams">

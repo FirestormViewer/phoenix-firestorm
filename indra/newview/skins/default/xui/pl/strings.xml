@@ -4611,6 +4611,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Asset_Blacklist_Label">
 		Czarna lista assetów
 	</string>
+	<string name="Command_Phototools_Label">
+		Fotograf
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Fotograf: kamera
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4718,6 +4724,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Asset_Blacklist_Tooltip">
 		Otwiera listę obiektów, jakie masz na swojej czarnej liście zasobów danych (assetów)
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Narzędzia do zaawansowanego tworzenia obrazów
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Zaawansowane ustawienia kamery fotograficznej
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

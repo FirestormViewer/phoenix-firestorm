@@ -305,14 +305,14 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label1">
 				Edycję terenu:
 			</text>
-			<check_box label="Wszyscy" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
+			<check_box label="Mod. ziemi" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
 			<text name="caution_text">
 				(używaj ostrożnie!)
 			</text>
 			<text name="allow_label0">
 				Latanie:
 			</text>
-			<check_box label="Wszyscy" name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
+			<check_box label="Włącz latanie" name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
 			<text name="allow_label2">
 				Budowanie:
 			</text>
@@ -368,9 +368,9 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			</text>
 			<texture_picker name="snapshot_ctrl" tool_tip="Kliknij by wybrać zdjęcie"/>
 			<text name="allow_label5">
-				Awatary na innych parcelach mogą rozmawiać/widzieć awatary na tej parceli
+				Awatary na innych parcelach mogą:
 			</text>
-			<check_box label="Widzieć awatary" name="SeeAvatarsCheck" tool_tip="Pozwala Rezydentom z innych posiadłości widzieć i rozmawiać z Rezydentami na tej Posiadłości - oraz Tobie, widzieć ich i rozmawiać z nimi."/>
+			<check_box label="Rozmawiać/widzieć awatary na tej parceli" name="SeeAvatarsCheck" tool_tip="Pozwala Rezydentom z innych posiadłości widzieć i rozmawiać z Rezydentami na tej Posiadłości - oraz Tobie, widzieć ich i rozmawiać z nimi."/>
 			<text name="landing_point">
 				Punkt Lądowania: [LANDING]
 			</text>
