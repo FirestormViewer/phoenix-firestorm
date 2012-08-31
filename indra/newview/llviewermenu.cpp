@@ -9695,9 +9695,6 @@ void initialize_menus()
 
 	// Me > Movement
 	view_listener_t::addMenu(new LLAdvancedAgentFlyingInfo(), "Agent.getFlying");
-
-	// Communicate
-	view_listener_t::addMenu(new LLCommunicateBlockList(), "Communicate.BlockList");
 	
 	// Communicate
 	view_listener_t::addMenu(new LLCommunicateBlockList(), "Communicate.BlockList");
