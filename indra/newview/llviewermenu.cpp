@@ -9699,6 +9699,9 @@ void initialize_menus()
 	// Communicate
 	view_listener_t::addMenu(new LLCommunicateBlockList(), "Communicate.BlockList");
 	
+	// Communicate
+	view_listener_t::addMenu(new LLCommunicateBlockList(), "Communicate.BlockList");
+	
 	// World menu
 	view_listener_t::addMenu(new LLWorldAlwaysRun(), "World.AlwaysRun");
 	view_listener_t::addMenu(new LLWorldCreateLandmark(), "World.CreateLandmark");

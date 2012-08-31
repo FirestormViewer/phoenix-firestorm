@@ -38,6 +38,7 @@
         filename="panel_nearby_chat.xml"
         name="nearby_chat" />
         spellcheck="true"
+        spellcheck="true"
   </panel>
 
     <panel width="380" height="31" left="0" bottom="-1" follows="left|right|bottom" name="panel_chat_bar_single" filename="panel_nearby_chat_bar_single.xml" />

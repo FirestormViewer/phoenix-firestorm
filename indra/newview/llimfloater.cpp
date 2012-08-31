@@ -66,7 +66,6 @@
 #include "llavataractions.h"
 #include "llgroupactions.h"
 #include "llvoicechannel.h"
-
 //TL: for support group chat prefix
 #include "fsdata.h"
 #include "llversioninfo.h"

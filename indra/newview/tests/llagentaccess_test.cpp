@@ -119,10 +119,6 @@ namespace tut
 		ensure("1 isAdult",    !aa.isAdult());
 #endif // HACKED_GODLIKE_VIEWER
 		
-#ifndef HACKED_GODLIKE_VIEWER
-#endif // HACKED_GODLIKE_VIEWER
-#ifndef HACKED_GODLIKE_VIEWER
-#endif // HACKED_GODLIKE_VIEWER
 		// check the conversion routine
 #ifndef HACKED_GODLIKE_VIEWER
 		ensure_equals("1 conversion", SIM_ACCESS_PG, aa.convertTextToMaturity('P'));
@@ -279,10 +275,6 @@ namespace tut
 		cgr.declareU32("PreferredMaturity", SIM_ACCESS_PG, "declared_for_test", FALSE);
 		LLAgentAccess aa(cgr);
 		
-#ifndef HACKED_GODLIKE_VIEWER
-#endif // HACKED_GODLIKE_VIEWER
-#ifndef HACKED_GODLIKE_VIEWER
-#endif // HACKED_GODLIKE_VIEWER
 		cgr.setU32("PreferredMaturity", SIM_ACCESS_ADULT);
 		aa.setMaturity('M');
 #ifndef HACKED_GODLIKE_VIEWER

@@ -915,6 +915,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="AdditionalPermissionsRequestHeader">
 		Si permites acceso a tu cuenta, también estarás permitiendo al objeto:
 	</string>
+	<string name="AdditionalPermissionsRequestHeader">
+		Si autorizas el acceso a tu cuenta, también permitirás al objeto:
+	</string>
 	<string name="ScriptTakeMoney">
 		Obtener de usted dólares Linden (L$)
 	</string>
@@ -953,6 +956,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="NotConnected">
 		No conectado/a
+	</string>
+	<string name="TeleportYourAgent">
+		Teleportarte
 	</string>
 	<string name="SIM_ACCESS_PG">
 		General

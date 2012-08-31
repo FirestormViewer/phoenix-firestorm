@@ -1248,7 +1248,12 @@ void LLFolderViewItem::draw()
 	//	End Multi-substring inventory search
 }
 
+bool LLFolderViewItem::isInSelection() const
+{
+	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
+}
 // <ND> Don't bother with unneeded tooltips in inventor
+
 BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
 {
 	if( childrenHandleToolTip( x, y, mask ) )

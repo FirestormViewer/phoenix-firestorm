@@ -3061,7 +3061,6 @@ void LLAgent::sendMaturityPreferenceToServer(U8 pPreferredMaturity)
 		}
 	}
 }
-
 BOOL LLAgent::getAdminOverride() const	
 { 
 	return mAgentAccess->getAdminOverride(); 

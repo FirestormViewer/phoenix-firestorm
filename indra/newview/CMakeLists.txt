@@ -51,7 +51,10 @@ include(Growl)
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
 # </FS:ND>
 
-  add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+if (NOT HAVOK_TPV)
+   # When using HAVOK_TPV, the library is precompiled, so no need for this
+   add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+endif (NOT HAVOK_TPV)
 
 # <FS:ND>
 endif( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -1750,9 +1753,7 @@ set(PACKAGE ON CACHE BOOL
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
-        # *TODO -reenable this once we get server usage sorted out
-        #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS}"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
         LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
         )
@@ -1771,7 +1772,7 @@ if (WINDOWS)
     # In the meantime, if you have any ideas on how to easily maintain one list, either here or in viewer_manifest.py
     # and have the build deps get tracked *please* tell me about it.
 
-    if(USE_GOOGLE_PERFTOOLS)
+    if(USE_TCMALLOC)
       # Configure a var for tcmalloc location, if used.
       # Note the need to specify multiple names explicitly.
       set(GOOGLE_PERF_TOOLS_SOURCE
@@ -1779,7 +1780,7 @@ if (WINDOWS)
         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libtcmalloc_minimal.dll
         ${SHARED_LIB_STAGING_DIR}/Debug/libtcmalloc_minimal-debug.dll
         )
-     endif(USE_GOOGLE_PERFTOOLS)
+     endif(USE_TCMALLOC)
 
 
     set(COPY_INPUT_DEPENDENCIES

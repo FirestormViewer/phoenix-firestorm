@@ -626,6 +626,7 @@ void LLLineEditor::onSpellCheckSettingsChange()
 	mMisspellRanges.clear();
 	mSpellCheckStart = mSpellCheckEnd = -1;
 }
+
 BOOL LLLineEditor::handleDoubleClick(S32 x, S32 y, MASK mask)
 {
 	setFocus( TRUE );
