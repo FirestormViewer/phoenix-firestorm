@@ -339,10 +339,6 @@ void LLPanelGroupGeneral::activate()
 		
 		if (!gdatap || !gdatap->isMemberDataComplete() )
 		{
-			//////////////////////////////////////////////////////////////////////////
-			// BAKER TODO:
-			//	Use cap here!
-			//////////////////////////////////////////////////////////////////////////
 			LLGroupMgr::getInstance()->sendCapGroupMembersRequest(mGroupID);
 			//LLGroupMgr::getInstance()->sendGroupMembersRequest(mGroupID);
 		}
@@ -779,7 +775,7 @@ void LLPanelGroupGeneral::updateMembers()
 	for( ; mMemberProgress != gdatap->mMembers.end() && i<UPDATE_MEMBERS_PER_FRAME; 
 			++mMemberProgress, ++i)
 	{
-		llinfos << "Adding " << mMemberProgress->first << ", " << mMemberProgress->second->getTitle() << llendl;
+		lldebugs << "Adding " << mMemberProgress->first << ", " << mMemberProgress->second->getTitle() << llendl;
 		LLGroupMemberData* member = mMemberProgress->second;
 		if (!member)
 		{
@@ -823,15 +819,15 @@ void LLPanelGroupGeneral::updateMembers()
 	}
 	sAllTime += all_timer.getElapsedTimeF32();
 
-	llinfos << "Updated " << i << " of " << UPDATE_MEMBERS_PER_FRAME << "members in the list." << llendl;
+	lldebugs << "Updated " << i << " of " << UPDATE_MEMBERS_PER_FRAME << "members in the list." << llendl;
 	if (mMemberProgress == gdatap->mMembers.end())
 	{
-		llinfos << "   member list completed." << llendl;
+		lldebugs << "   member list completed." << llendl;
 		mListVisibleMembers->setEnabled(TRUE);
 
-		llinfos << "All Time: " << sAllTime << llendl;
-		llinfos << "SD Time: " << sSDTime << llendl;
-		llinfos << "Element Time: " << sElementTime << llendl;
+		lldebugs << "All Time: " << sAllTime << llendl;
+		lldebugs << "SD Time: " << sSDTime << llendl;
+		lldebugs << "Element Time: " << sElementTime << llendl;
 	}
 	else
 	{
