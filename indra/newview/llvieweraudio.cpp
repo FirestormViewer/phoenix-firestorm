@@ -344,6 +344,7 @@ void init_audio()
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndObjectDelete")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndObjectRezIn")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndObjectRezOut")));
+		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndRegionRestart")));
 		gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndSnapshot")));
 		//gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndStartAutopilot")));
 		//gAudiop->preloadSound(LLUUID(gSavedSettings.getString("UISndStartFollowpilot")));

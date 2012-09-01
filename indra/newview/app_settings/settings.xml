@@ -14324,6 +14324,17 @@ Change of this parameter will affect the layout of buttons in notification toast
 		</map>
 <!-- ## Zi: Pie menu -->
 
+    <key>UISndRegionRestart</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file for the region restart alert (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>4174f859-0d3d-c517-c424-72923dc21f65</string>
+    </map>
     <key>UISndSnapshot</key>
     <map>
       <key>Comment</key>

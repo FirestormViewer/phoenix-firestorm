@@ -6864,6 +6864,11 @@ void process_alert_core(const std::string& message, BOOL modal)
 		snap_filename += SCREEN_HOME_FILENAME;
 		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
 	}
+	else if(message.find("estart") != -1 && message.find("egion") != -1)
+	{
+		// A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+		make_ui_sound("UISndRegionRestart");
+	}
 
 	const std::string ALERT_PREFIX("ALERT: ");
 	const std::string NOTIFY_PREFIX("NOTIFY: ");
