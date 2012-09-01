@@ -229,6 +229,7 @@
                        top="4"
                        right="-12"
                        follows="left|right|bottom"
+                       spellcheck="true"
                        visible="true" />
 
   <icon image_name="ChatBarHandle"

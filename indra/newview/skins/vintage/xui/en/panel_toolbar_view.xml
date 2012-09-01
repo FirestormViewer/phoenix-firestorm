@@ -227,6 +227,7 @@
                          left_pad="8"
                          height="20"
                          right="-4"
+                         spellcheck="true"
                          follows="all" />
   </layout_panel>
   <!-- Panel to house the chat bar in, will be set visible/invisible in code
