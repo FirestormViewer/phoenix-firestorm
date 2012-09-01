@@ -96,9 +96,6 @@
         <text name="FSCmdLineCalc_txt">
             Kalkulator (użycie: cmd SIN(2+2))
         </text>
-        <text name="FSCmdLineAutocorrect_txt">
-            Nowe słowo autokor. (cmd list|bad|good)
-        </text>
         <text name="FSCmdLineDrawDistance_txt">
             Zmiana pola widzenia (cmd metry)
         </text>

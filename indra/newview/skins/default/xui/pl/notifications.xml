@@ -983,6 +983,41 @@ Zaproponować znajomość [NAME]?
 			<button name="Cancel" text="Anuluj"/>
 		</form>
 	</notification>
+	<notification label="Nowa lista autokorekty" name="AddAutoReplaceList">
+		Nazwa nowej listy:
+		<form name="form">
+			<button name="SetName" text="OK"/>
+		</form>
+	</notification>
+	<notification label="Zmiana nazwy listy autokorekty" name="RenameAutoReplaceList">
+		Nazwa '[DUPNAME]' jest w użyciu
+    Wprowadź nową nazwę:
+		<form name="form">
+			<button name="ReplaceList" text="Zastąp obecną listę"/>
+			<button name="SetName" text="Użyj nowej nazwy"/>
+		</form>
+	</notification>
+	<notification name="InvalidAutoReplaceEntry">
+		Słowo kluczowe musi być pojedynczym ciągiem, a zamiennik nie może być pusty.
+	</notification>
+	<notification name="InvalidAutoReplaceList">
+		Lista zamienników nie jest prawidłowa.
+	</notification>
+	<notification name="SpellingDictImportRequired">
+		Musisz określić plik, nazwę i język.
+	</notification>
+	<notification name="SpellingDictIsSecondary">
+		Wygląda na to, że słownik [DIC_NAME] nie ma pliku "aff"; znaczy to, że jest słownikiem drugorzędnym.
+Może on być użyty jako dodatkowy, ale nie główny słownik.
+
+Zobacz https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
+	</notification>
+	<notification name="SpellingDictImportFailed">
+		Nie można skopiować
+    [FROM_NAME]
+    do
+    [TO_NAME]
+	</notification>
 	<notification label="Zapisz strój" name="SaveOutfitAs">
 		Zapisz to co noszę jako nowy strój:
 		<form name="form">
@@ -1161,7 +1196,7 @@ na &apos;[THIS_GPU]&apos;
 Zostałeś/aś przeniesiony/a do regionu sąsiedniego.
 	</notification>
 	<notification name="AvatarMovedLast">
-		Twoje ostatnie miejsce jest obecnie niedostępne.
+		Żądane przez Ciebie miejsce jest obecnie niedostępne.
 Zostałeś/aś przeniesiony/a do sąsiedniego regionu.
 	</notification>
 	<notification name="AvatarMovedHome">
@@ -1733,84 +1768,113 @@ Kontynuować?
 		Na pewno chcesz zmienić treść umowy dla tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
-	<notification name="RegionEntryAccessBlocked">
-		Ze względu na Twój wiek nie jesteś uprawniony/a do przebywania w tym regionie. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku.
-
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z menu Pomoc by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści.
+	<notification name="RegionEntryAccessBlocked_PreferencesOutOfSync">
+		Mamy trudności techniczne z Twoim wejściem w region, ponieważ Twoje preferencje są rozsynchronizowane z serwerem.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
-	<notification name="RegionEntryAccessBlocked_KB">
-		Ze względu na Twój wiek nie jesteś uprawniony/a do przebywania w tym regionie. 
-
-Odwiedzić bazę wiedzy, by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści?
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
-		</url>
-		<usetemplate ignoretext="Ze względu na Twój wiek, nie jesteś uprawniony/a do przebywania w tym regionie." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
+	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
+		Mamy trudności techniczne z Twoim teleportem, ponieważ Twoje preferencje są rozsynchronizowane z serwerem.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RegionEntryAccessBlocked">
+		Region, który próbujesz odwiedzić zawiera treści przekraczające Twoje bieżące preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked">
+		Region, który próbujesz odwiedzić zawiera treści przekraczające Twoje bieżące preferencje. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="RegionEntryAccessBlocked_AdultsOnlyContent">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
+		<usetemplate ignoretext="Zmiana regionu: Region, który próbujesz odwiedzić zawiera treści, które są dostępne tylko dla dorosłych." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
+		<usetemplate name="okcancelignore" yestext="Baza wiedzy" notext="Zamknij" ignoretext="Teleport: Region, który próbujesz odwiedzić zawiera treści, które są dostępne tylko dla dorosłych."/>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Notify">
-		Ze względu na Twój wiek, nie jesteś uprawniony/a do przebywania w tym regionie.
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_Notify">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+	</notification>
+	<notification name="RegionEntryAccessBlocked_NotifyAdultsOnly">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_NotifyAdultsOnly">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], które są dostępne tylko dla dorosłych.
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Change">
-		Nie masz zezwolenia na przebywanie w tym Regionie z powodu Twojego statusu ustawień wieku.
-
-W celu uzyskania dostępu do tego regionu zmień proszę swój status ustawień wieku. Będziesz mógł/mogła szukać i mieć dostęp do treści [REGIONMATURITY]. W celu cofnięcia zmian wybierz z menu Awatar &gt; Ustawienia &gt; Ogólne.
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
 		<form name="form">
-			<button name="OK" text="Zmień ustawienia"/>
-			<button default="true" name="Cancel" text="Zamknij"/>
-			<ignore name="ignore" text="Moje ustawienia wieku nie dopuszczają do regionu"/>
+			<button name="OK" text="Zmień preferencje"/>
+			<button name="Cancel" text="Anuluj"/>
+			<ignore name="ignore" text="Zmiana regionu: Region, który próbujesz odwiedzić zawiera treści, które są wykluczane przez Twoje preferencje."/>
+		</form>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_Change">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje albo anulować. Gdy zostaną zmienione możesz spróbować wejść do regionu ponownie.
+		<form name="form">
+			<button name="OK" text="Zmień preferencje"/>
+			<button name="Cancel" text="Anuluj"/>
+			<ignore name="ignore" text="Teleport (nierestartowalny): Region, który próbujesz odwiedzić zawiera treści, które są wykluczane przez Twoje preferencje."/>
+		</form>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_ChangeAndReTeleport">
+		Region, który próbujesz odwiedzić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
+		<form name="form">
+			<button name="OK" text="Zmień i kontynuuj"/>
+			<button name="Cancel" text="Anuluj"/>
+			<ignore name="ignore" text="Teleport (restartowalny): Region, który próbujesz odwiedzić zawiera treści, które są wykluczane przez Twoje preferencje."/>
 		</form>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		Twoja obecna klasyfikacja wieku to [RATING].
+		Nie będziesz już otrzymywać żadnych powiadomień związanych z odwiedzaniem regionów z treściami [RATING]. Możesz zmienić swoją preferencję treści w przyszłości używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
+	</notification>
+	<notification name="MaturityChangeError">
+		Nie można zmienić Twoich preferencji odnośnie treści [PREFERRED_MATURITY] w tej chwili. Twoje preferencje zostały zresetowane do oglądania treści [ACTUAL_MATURITY]. Możesz spróbować zmienić swoją preferencję treści ponownie używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości. Możesz potrzebować weryfikacji wieku bądź instalacji najnowszej wersji klienta.
-
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z bazy wiedzy by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="LandClaimAccessBlocked_KB">
-		Ze względu na Twój wiek, nie możesz odzyskać tej posiadłości. 
-
-Skorzystaj z bazy wiedzy by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
-		</url>
-		<usetemplate ignoretext="W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
-	</notification>
-	<notification name="LandClaimAccessBlocked_Notify">
-		Ze względu na Twój wiek, nie możesz odzyskać tej posiadłości.
-	</notification>
-	<notification name="LandClaimAccessBlocked_Change">
-		W związku ze statusem ustawień Twojego wieku, nie możesz odzyskać tej posiadłości.
-
-Możesz wybrać &apos;Zmień Ustawienia&apos; by dokonać zmian w ustawieniach Twojego wieku by uzyskać dostęp do regionu. Wówczas będziesz w stanie znaleźć oraz mieć dostęp do treści [REGIONMATURITY]. Jeżeli zdecydujesz się na powrót do poprzednich ustawień, wybierz Awatar &gt; Ustawienia &gt; Główne.
-		<usetemplate ignoretext="Ze względu na Twój wiek, nie możesz odzyskać tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="Zmień Ustawienia"/>
+		Ziemia, którą próbujesz odzyskać ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
 	<notification name="LandBuyAccessBlocked">
-		Ze względu na Twój wiek, nie możesz kupić tej posiadłości. Może być to wynikiem braku informacji na temat weryfikacji Twojego wieku.
-
-Upewnij się, że masz zainstalowaną najnowszą wersję klienta i skorzystaj z bazy wiedzy by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
-		<usetemplate name="okbutton" yestext="OK"/>
+		Ziemia, którą próbujesz kupić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
-	<notification name="LandBuyAccessBlocked_KB">
-		Ze względu na Twój wiek, nie możesz kupić tej posiadłości. 
-
-Skorzystaj z bazy wiedzy by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
-		</url>
-		<usetemplate ignoretext="Ze względu na Twój wiek, nie możesz kupić tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
+	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
+		Tylko dorośli mogą odzyskać tą ziemię.
+		<usetemplate ignoretext="Tylko dorośli mogą odzyskać tą ziemię." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
+	</notification>
+	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
+		Tylko dorośli mogą kupić tą ziemię.
+		<usetemplate ignoretext="Tylko dorośli mogą kupić tą ziemię." name="okcancelignore" notext="Zamknij" yestext="Baza wiedzy"/>
+	</notification>
+	<notification name="LandClaimAccessBlocked_Notify">
+		Ziemia, którą próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
 	</notification>
 	<notification name="LandBuyAccessBlocked_Notify">
-		Ze względu na Twój wiek, nie możesz kupić tej posiadłości.
+		Ziemia, którą próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY].
+	</notification>
+	<notification name="LandClaimAccessBlocked_NotifyAdultsOnly">
+		Ziemia, którą próbujesz odzyskać zawiera treści [REGIONMATURITY], dostępne tylko dla dorosłych.
+	</notification>
+	<notification name="LandBuyAccessBlocked_NotifyAdultsOnly">
+		Ziemia, którą próbujesz kupić zawiera treści [REGIONMATURITY], dostępne tylko dla dorosłych.
+	</notification>
+	<notification name="LandClaimAccessBlocked_Change">
+		Region, który próbujesz odzyskać zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować odzyskać region ponownie.
+		<form name="form">
+			<button name="OK" text="Zmień preferencje"/>
+			<button name="Cancel" text="Anuluj"/>
+			<ignore name="ignore" text="Region, który próbujesz odzyskać zawiera treści, które są wykluczane przez Twoje preferencje."/>
+		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked_Change">
-		W związku ze statusem ustawień Twojego wieku, nie możesz kupić tej posiadłości.
-
-Możesz wybrać &apos;Zmień Ustawienia&apos; by dokonać zmian w ustawieniach Twojego wieku by uzyskać dostęp do regionu. Wówczas będziesz w stanie znaleźć oraz mieć dostęp do treści [REGIONMATURITY]. Jeżeli zdecydujesz się na powrót do poprzednich ustawień, wybierz Awatar &gt; Ustawienia &gt; Główne.
-		<usetemplate ignoretext="W związku ze statusem ustawień Twojego wieku, nie możesz kupić tej posiadłości." name="okcancelignore" notext="Zamknij" yestext="Zmień Ustawienia"/>
+		Region, który próbujesz kupić zawiera treści [REGIONMATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGIONMATURITY]. Możesz zmienić swoje preferencje, a potem spróbować kupić region ponownie.
+		<form name="form">
+			<button name="OK" text="Zmień preferencje"/>
+			<button name="Cancel" text="Anuluj"/>
+			<ignore name="ignore" text="Region, który próbujesz kupić zawiera treści, które są wykluczane przez Twoje preferencje."/>
+		</form>
 	</notification>
 	<notification name="TooManyPrimsSelected">
 		Zbyt wiele wybranych obiektów. Wybierz [MAX_PRIM_COUNT] lub mniej i spróbuj ponownie
@@ -1864,10 +1928,8 @@ Zamieścić tą reklamę za [AMOUNT]L$?
 		</form>
 	</notification>
 	<notification label="Zmienione Restrykcje Wieku dla Regionu" name="RegionMaturityChange">
-		Ustawienie restrykcji wieku dla regionu zostało zmienione.
-Zazwyczaj musi upłynąć nieco czasu zanim ta zmiana zostanie odzwierciedlona na mapie.
-
-Aby wejść do regionu Adult, Rezydenci muszą posiadać zweryfikowane konto, albo w wyniku weryfikacji wieku albo płatności.
+		Klasyfikacja wieku dla tego regionu została zmieniona.
+Może minąć trochę czasu, zanim zmiana będzie odzwierciedlona na mapie.
 	</notification>
 	<notification label="Wersja Niezgodna z Systemem Rozmów" name="VoiceVersionMismatch">
 		Ta wersja [APP_NAME] nie jest kompatybilna z systemem rozmów w tym Regionie. Musisz zainstalować aktualną wersję [APP_NAME] aby komunikacja głosowa działała poprawnie.
@@ -2155,14 +2217,11 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		<usetemplate ignoretext="Załóż ubranie automatycznie będąc w trybie Edycji Wyglądu" name="okcancelignore" notext="Nie" yestext="Tak"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		Nie masz dostępu do tej posiadłości ze względu na brak weryfikacji Twojego wieku (minimum 18 lat). Odwiedź stronę weryfikacji wieku, aby potwierdzić, że masz minimum 18 lat.
-To uruchomi przeglądarkę internetową.
-
-[_URL]
-		<url name="url">
-			https://secondlife.com/account/verification.php
-		</url>
-		<usetemplate ignoretext="Brak weryfikacji wieku" name="okcancelignore" notext="Nie" yestext="Tak"/>
+		Miejsce, które próbujesz odwiedzić jest dostępne dla osób mających 18 lat lub więcej.
+		<usetemplate ignoretext="Nie mam odpowiedniego wieku do odwiedzania ograniczonych wiekowo stref" name="okignore" yestext="OK"/>
+	</notification>
+	<notification name="NotAgeVerified_Notify">
+		Miejsce dostępne dla osób mających 18 lat lub więcej.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
 		Nie masz dostępu do tej posiadłości ze względu na brak danych płatniczych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
@@ -2406,7 +2465,7 @@ Spróbuj wybrać mniejszy obszar.
 		Proszę wybrać przynajmniej jeden z podanych rodzajów treści jaką zawiera region podczas wyszukiwania (General, Moderate lub Adult).
 	</notification>
 	<notification name="EventNotification">
-		Zawiadomienie o imprezie:
+		Zawiadomienie o zdarzeniu:
 
 [NAME]
 [DATE]
@@ -2514,9 +2573,7 @@ Nie możesz tutaj latać.
 		Tylko publiczne posiadłości w tym regionie, co Ty, mogą być przejęte.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Ze względu na Twój wiek, nie jesteś uprawniony do przebywania w tym regionie. Możesz potrzebować weryfikacji wieku bądź instalacji najnowszej wersji klienta.
-
-Skorzystaj z bazy wiedzy, by uzyskać więcej informacji na temat dostępu do regionów z podanym rodzajem treści jaką zawiera.
+		Region, który próbujesz odwiedzić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
 	</notification>
 	<notification name="URBannedFromRegion">
 		Zostałeś zbanowany w regionie.
@@ -2527,11 +2584,11 @@ Skorzystaj z bazy wiedzy, by uzyskać więcej informacji na temat dostępu do re
 	<notification name="ImproperPaymentStatus">
 		Nie posiadasz odpowiedniego statusu płatniczego by uzyskać dostęp do regionu.
 	</notification>
-	<notification name="MustGetAgeRgion">
-		By móc przebywać w tym regionie wymagana jest weryfikacja Twojego wieku.
+	<notification name="MustGetAgeRegion">
+		Musisz mieć 18 lat lub więcej, aby móc wejść do tego regionu.
 	</notification>
 	<notification name="MustGetAgeParcel">
-		By móc przebywać na tej posiadłości wymagana jest weryfikacja Twojego wieku.
+		Musisz mieć 18 lat lub więcej, aby móc wejść do tej posiadłości.
 	</notification>
 	<notification name="NoDestRegion">
 		Żądana lokalizacja regionu nie została odnaleziona.
@@ -2629,11 +2686,32 @@ Chcesz zachować ten obiekt? Wybranie "Zablokuj" sprawi, że nie będziesz już 
 	<notification name="TeleportOffered" label="Propozycja teleportacji od [NAME_LABEL]">
 		[NAME_SLURL] proponuje Ci teleportację do siebie:
 
-[MESSAGE] - [MATURITY_STR] &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt;
++“[MESSAGE]”
++&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="Teleportuj"/>
 			<button name="Cancel" text="Anuluj"/>
 		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityExceeded">
+		[NAME_SLURL] proponuje Ci teleportację do siebie:
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Ten region zawiera treści [REGION_CONTENT_MATURITY], ale Twoje obecne preferencje są tak ustawiawione, aby odrzucać treści [REGION_CONTENT_MATURITY]. Możesz zmienić swoje preferencje i kontynuować teleport albo anulować go.
+		<form name="form">
+			<button name="Teleport" text="Zmień i teleportuj"/>
+			<button name="Cancel" text="Anuluj"/>
+		</form>
+	</notification>
+	<notification name="TeleportOffered_MaturityBlocked">
+		[NAME_SLURL] zaproponował/a Ci teleportację do siebie:
+
+“[MESSAGE]”
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+
+Ten region zawiera jednak treści tylko dla dorosłych.
 	</notification>
 	<notification name="TeleportOfferSent">
 		Oferta teleportacji wysłana do [TO_NAME]
@@ -3040,6 +3118,10 @@ Wstępne przetworzone tekstury [RESOLUTION] dla &apos;[BODYREGION]&apos; został
 		( [EXISTENCE] sekund w Second Life )
 Wstępne przetworzone tekstury [RESOLUTION] zostały lokalnie zaktualizowane dla &apos;[BODYREGION]&apos; po [TIME] sekundach.
 	</notification>
+	<notification name="LivePreviewUnavailable">
+		Nie można wyświetlić podglądu tej tekstury - jest niekopiowalna lub/oraz nietransferowalna.
+		<usetemplate ignoretext="Ostrzegaj, gdy podgląd na żywo nie może wyświetlić niekopiowalnych/nietransferowalnych tekstur" name="okignore" yestext="OK"/>
+	</notification>
 	<notification name="ConfirmLeaveCall">
 		Czy jesteś pewien/pewna, że chcesz zakończyć rozmowę?
 		<usetemplate ignoretext="Potwierdź zanim rozmowa głosowa zostanie zakończona" name="okcancelignore" notext="Nie" yestext="Tak"/>
@@ -3250,7 +3332,9 @@ Czy chcesz kontynuować?
 		<usetemplate ignoretext="Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom, a inne nie mogą zostać ustawione, ponieważ kształt nie jest wypukły." name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
-		Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
+		Niektórym z zaznaczoych zbiorów części zostanie przełączony status Phantom.
+	
+Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]' ze względu na restrykcje zezwoleń zbioru części. Te zbiory części zostaną zamiast tego ustawione na '[RESTRICTED_TYPE]'.
 
 Niektóre z zaznaczoych zbiorów części nie mogą zostać ustawione na '[REQUESTED_TYPE]', ponieważ kształt nie jest wypukły. Ich typ nie ulegnie zmianie.
 

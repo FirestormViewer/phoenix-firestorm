@@ -47,46 +47,46 @@
             <text name="vertices" value="Wierzchołki" />
             <text name="high_label" initial_value="Wysoki" value="Wysoki" />
             <combo_box name="lod_source_high">
-                <item name="lod_source_high_load_from_file" label="Ładuj z pliku" />
-                <item name="lod_source_high_generate" label="Generuj" />
+                <item name="Load from file" label="Ładuj z pliku" />
+                <item name="Generate" label="Generuj" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_high" />
             <combo_box name="lod_mode_high">
-                <item name="lod_mode_high_triangle_limit" label="Limit trójkątów" />
-                <item name="lod_mode_high_error_threshold" label="Próg błędu" />
+                <item name="Triangle Limit" label="Limit trójkątów" />
+                <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
             <text name="medium_label" initial_value="Średni" value="Średni" />
             <combo_box name="lod_source_medium">
-                <item name="lod_source_medium_load_from_file" label="Ładuj z pliku" />
-                <item name="lod_source_medium_generate" label="Generuj" />
-                <item name="lod_source_medium_use_lod_above" label="Użyj poziomu detali (LoD) powyżej" />
+                <item name="Load from file" label="Ładuj z pliku" />
+                <item name="Generate" label="Generuj" />
+                <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_medium" />
             <combo_box name="lod_mode_medium">
-                <item name="lod_mode_medium_triangle_limit" label="Limit trójkątów" />
-                <item name="lod_mode_medium_error_threshold" label="Próg błędu" />
+                <item name="Triangle Limit" label="Limit trójkątów" />
+                <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
             <text name="low_label" initial_value="Niski" value="Niski" />
             <combo_box name="lod_source_low">
-                <item name="lod_source_low_load_from_file" label="Ładuj z pliku" />
-                <item name="lod_source_low_generate" label="Generuj" />
-                <item name="lod_source_low_use_lod_above" label="Użyj poziomu detali (LoD) powyżej" />
+                <item name="Load from file" label="Ładuj z pliku" />
+                <item name="Generate" label="Generuj" />
+                <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_low" />
             <combo_box name="lod_mode_low">
-                <item name="lod_mode_low_triangle_limit" label="Limit trójkątów" />
-                <item name="lod_mode_low_error_threshold" label="Próg błędu" />
+                <item name="Triangle Limit" label="Limit trójkątów" />
+                <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
             <text initial_value="Najniższy" name="lowest_label" value="Najniższy" />
             <combo_box name="lod_source_lowest">
-                <item name="lod_source_lowest_load_from_file" label="Ładuj z pliku" />
-                <item name="lod_source_lowest_generate" label="Generuj" />
-                <item name="lod_source_lowest_use_lod_above" label="Użyj poziomu detali (LoD) powyżej" />
+                <item name="Load from file" label="Ładuj z pliku" />
+                <item name="Generate" label="Generuj" />
+                <item name="Use LoD above" label="Użyj poziomu detali (LoD) powyżej" />
             </combo_box>
             <button label="Przeglądaj" name="lod_browse_lowest" />
             <combo_box name="lod_mode_lowest">
-                <item name="lod_mode_lowest_triangle_limit" label="Limit trójkątów" />
-                <item name="lod_mode_lowest_error_threshold" label="Próg błędu" />
+                <item name="Triangle Limit" label="Limit trójkątów" />
+                <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
             <check_box label="Generuj Normalne" name="gen_normals" />
             <text initial_value="Kąt zagnieceń:" name="crease_label" value="Kąt zagnieceń:" />

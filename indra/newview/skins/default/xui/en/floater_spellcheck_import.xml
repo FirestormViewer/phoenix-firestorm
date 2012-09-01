@@ -17,7 +17,8 @@
    left="25"
    top="15"
    type="string"
-   width="65">
+   width="65"
+   name="import_dict">
    Dictionary:
   </text>
   <line_editor
@@ -47,7 +48,8 @@
    left="25"
    top_pad="8"
    type="string"
-   width="65">
+   width="65"
+   name="import_name">
    Name:
   </text>
   <line_editor
@@ -67,7 +69,8 @@
    left="25"
    top_pad="8"
    type="string"
-   width="65">
+   width="65"
+   name="import_lang">
    Language:
   </text>
   <line_editor

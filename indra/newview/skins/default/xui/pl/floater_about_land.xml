@@ -331,22 +331,6 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<check_box label="Bezpieczna (brak uszkodzeń)" name="check safe" tool_tip="Wybrana - Posiadłość jest bezpieczna - uszkodzenia w walce są zablokowane. Nie jest wybrana - uszkodzenia w walce są włączone."/>
 			<check_box label="Popychanie niedozwolone" name="PushRestrictCheck" tool_tip="Nie pozwalaj skryptom na popychanie. Wybranie tej opcji może być przydatne do ograniczenia zakłóceń spokoju w Twojej Posiadłości."/>
 			<check_box label="Wyświetlaj w wyszukiwarce (30L$/tyg.)" name="ShowDirectoryCheck" tool_tip="Udostępnij ukazywanie się nazwy Posiadłości w wyszukiwarce"/>
-			<combo_box name="land category with adult">
-				<combo_box.item label="Każda kategoria" name="item0"/>
-				<combo_box.item label="Lokalizacja Lindenów" name="item1"/>
-				<combo_box.item label="&apos;Adult&apos;" name="item2"/>
-				<combo_box.item label="Sztuka i kultura" name="item3"/>
-				<combo_box.item label="Biznes" name="item4"/>
-				<combo_box.item label="Edukacyjna" name="item5"/>
-				<combo_box.item label="Gra" name="item6"/>
-				<combo_box.item label="Poznawanie ludzi" name="item7"/>
-				<combo_box.item label="Przyjazne dla nowych" name="item8"/>
-				<combo_box.item label="Park i natura" name="item9"/>
-				<combo_box.item label="Mieszkalna" name="item10"/>
-				<combo_box.item label="Zakupy" name="item11"/>
-				<combo_box.item label="Wynajem" name="item13"/>
-				<combo_box.item label="Inna" name="item12"/>
-			</combo_box>
 			<combo_box name="land category">
 				<combo_box.item label="Każda kategoria" name="item0"/>
 				<combo_box.item label="Lokalizacja Lindenów" name="item1"/>
@@ -452,7 +436,7 @@ teksturę:
 				Umożliwiaj dostęp tylko dla:
 			</text>
 			<check_box label="Rezydentów zarejestrowanych w systemie płatniczym Linden Lab [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Zbanuj Rezydentów niezarejestrowanych w systemie płatniczym Linden Lab."/>
-			<check_box label="Rezydentów, którzy zweryfikowali wiek [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów niezweryfikowanych wiekowo. Odwiedź [SUPPORT_SITE] po więcej informacji."/>
+			<check_box label="Rezydentów, którzy mają 18+ lat [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Zbanuj Rezydetów, którzy mają mniej niż 18 lat. Odwiedź [SUPPORT_SITE] po więcej informacji."/>
 			<check_box label="Udostępnij wejście grupie [GROUP]" name="GroupCheck" tool_tip="Ustaw Grupę w głównej zakładce."/>
 			<check_box label="Sprzedaj przepustki:" name="PassCheck" tool_tip="Otwórz tymczasowy dostęp do tej Posiadłości"/>
 			<combo_box name="pass_combo">

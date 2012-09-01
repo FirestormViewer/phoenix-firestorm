@@ -4899,4 +4899,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="NetMapDoubleClickTeleportToolTipMsg">
 		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
 	</string>
+	<string name="TeleportMaturityExceeded">
+		Rezydent nie może odwiedzić tego regionu.
+	</string>
 </strings>

@@ -57,7 +57,7 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
-			<button label="Opcje tłumaczenia czatu" name="translation_settings_btn"/>
+			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 		</panel>
 		<panel label="Powiadomienia" name="ChatNotifications">
 			<text name="disable_toast_label">
@@ -170,6 +170,8 @@
 			</text>
 		</panel>
 		<panel label="Wprowadzanie tekstu" name="ChatTextInput">
+			<button name="autoreplace_showgui" label="Autokorekta"/>
+			<button name="spellcheck_showgui" label="Sprawdzanie pisowni"/>
 		</panel>
 	</tab_container>
 </panel>

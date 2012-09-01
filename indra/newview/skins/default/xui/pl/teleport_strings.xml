@@ -47,6 +47,9 @@ Spróbuj jeszcze raz za kilka minut.
 		<message name="no_inventory_host">
 			Szafa chwilowo nie działa.
 		</message>
+		<message name="MustGetAgeRegion">
+			Musisz mieć 18 lat lub więcej, aby wejść do tego regionu.
+		</message>
 	</message_set>
 	<message_set name="progress">
 		<message name="sending_dest">
@@ -81,6 +84,9 @@ Spróbuj jeszcze raz za kilka minut.
 		</message>
 		<message name="requesting">
 			Start teleportacji...
+		</message>
+		<message name="pending">
+			Teleport oczekuje...
 		</message>
 	</message_set>
 </teleport_messages>

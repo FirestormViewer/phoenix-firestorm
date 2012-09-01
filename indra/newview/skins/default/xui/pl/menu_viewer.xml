@@ -61,6 +61,7 @@
 		<menu_item_check label="Gesty" name="Gestures"/>
 		<menu_item_check label="Przekształcanie głosu" name="ShowVoice"/>
 		<menu_item_check label="Głos w pobliżu" name="Nearby Voice"/>
+		<menu_item_call label="Lista zablokowanych" name="Block List"/>
 	</menu>
 	<menu label="Świat" name="World">
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
@@ -240,7 +241,6 @@
 			<menu_item_check label="Ukryj cząsteczki" name="Hide Particles"/>
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
-			<menu_item_check label="Pokaż załączniki HUD" name="Show HUD Attachments"/>
 			<menu_item_check label="Pokaż celownik myszki" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="Rodzaje renderowania" name="Rendering Types">
@@ -456,7 +456,6 @@
 				<menu_item_call label="Zmień geometrię postaci" name="Toggle Character Geometry"/>
 				<menu_item_call label="Testowy mężczyzna" name="Test Male"/>
 				<menu_item_call label="Testowa kobieta" name="Test Female"/>
-				<menu_item_call label="Przełącz PG" name="Toggle PG"/>
 				<menu_item_check label="Pozwól na zaznaczanie awatarów" name="Allow Select Avatar"/>
 			</menu>
 			<menu_item_call label="Powrót do domyślnych parametrów" name="Force Params to Default"/>
@@ -490,6 +489,7 @@
 		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
 		<menu_item_check label="Pokaż menu administratora" name="View Admin Options"/>
+		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 	</menu>
 	<menu label="Administrator" name="Admin">
 		<menu label="Obiekt" name="AdminObject">
