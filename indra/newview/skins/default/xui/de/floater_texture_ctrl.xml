@@ -21,9 +21,12 @@
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<button label="Leer" label_selected="Leer" name="Blank"/>
 	<button top_delta="-15" name="Pipette"/>
+	<text name="preview_disabled">
+		Vorschau deaktiviert
+	</text>
 	<check_box label="Ordner anzeigen" name="show_folders_check"/>
 	<search_editor label="Texturen filtern" name="inventory search editor"/>
-	<check_box label="Jetzt übernehmen" name="apply_immediate_check"/>
+	<check_box label="Live-Vorschau" name="apply_immediate_check"/>
 	<button label="" label_selected="" name="Pipette"/>
 	<button label="Hinzufügen" label_selected="Hinzufügen" name="l_add_btn"/>
 	<button label="Entfernen" label_selected="Entfernen" name="l_rem_btn"/>

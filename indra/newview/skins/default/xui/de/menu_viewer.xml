@@ -43,6 +43,7 @@
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
+		<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
 		<menu_item_call label="[APP_NAME] beenden" name="Quit"/>
 	</menu>
 	<menu label="Unterhalten" name="Communicate">
@@ -67,6 +68,7 @@
         <menu_item_check label="Sprachfilter" name="ShowVoice"/>
 		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
+		<menu_item_check label="Liste ignorierter Einwohner" name="Block List"/>
 	</menu>
 	<menu label="Welt" name="World">
         <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
@@ -252,7 +254,6 @@
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
-			<menu_item_check label="HUD-Anhänge anzeigen" name="Show HUD Attachments"/>
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">
@@ -491,7 +492,6 @@
 				<menu_item_call label="Avatargeometrie ein-/ausschalten" name="Toggle Character Geometry"/>
 				<menu_item_call label="Männlich testen" name="Test Male"/>
 				<menu_item_call label="Weiblich testen" name="Test Female"/>
-				<menu_item_call label="PG ein-/ausschalten" name="Toggle PG"/>
 				<menu_item_check label="Avatarauswahl zulassen" name="Allow Select Avatar"/>
 			</menu>
 			<menu_item_call label="Param auf Standard erzwingen" name="Force Params to Default"/>

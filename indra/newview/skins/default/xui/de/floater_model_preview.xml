@@ -93,52 +93,52 @@
 				<text initial_value="Scheitelp." name="vertices" value="Scheitelp."/>
 				<text initial_value="Hoch" name="high_label" value="Hoch"/>
 				<combo_box name="lod_source_high">
-					<item name="lod_source_high_load_from_file" label="Aus Datei laden"/>
-					<item name="lod_source_high_generate" label="Generieren"/>
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
-					<item name="lod_mode_high_triangle_limit" label="Triangel-Limit"/>
-					<item name="lod_mode_high_error_threshold" label="Fehler-Schwellwert"/>
+					<item name="Triangle Limit" label="Triangel-Limit"/>
+					<item name="Error Threshold" label="Fehler-Schwellwert"/>
 				</combo_box>
 				<text initial_value="0" name="high_triangles" value="0"/>
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Mittel" name="medium_label" value="Mittel"/>
 				<combo_box name="lod_source_medium">
-					<item name="lod_source_medium_load_from_file" label="Aus Datei laden"/>
-					<item name="lod_source_medium_generate" label="Generieren"/>
-					<item name="lod_source_medium_use_lod_above" label="Obige Detailstufe verwenden"/>
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
-					<item name="lod_mode_medium_triangle_limit" label="Triangel-Limit"/>
-					<item name="lod_mode_medium_error_threshold" label="Fehler-Schwellwert" />
+					<item name="Triangle Limit" label="Triangel-Limit"/>
+					<item name="Error Threshold" label="Fehler-Schwellwert" />
 				</combo_box>
 				<text initial_value="0" name="medium_triangles" value="0"/>
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Niedrig" name="low_label" value="Niedrig"/>
 				<combo_box name="lod_source_low">
-					<item name="lod_source_low_load_from_file" label="Aus Datei laden"/>
-					<item name="lod_source_low_generate" label="Generieren"/>
-					<item name="lod_source_low_use_lod_above" label="Obige Detailstufe verwenden"/>
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
-					<item name="lod_mode_low_triangle_limit" label="Triangel-Limit"/>
-					<item name="lod_mode_low_error_threshold" label="Fehler-Schwellwert" />
+					<item name="Triangle Limit" label="Triangel-Limit"/>
+					<item name="Error Threshold" label="Fehler-Schwellwert" />
 				</combo_box>
 				<text initial_value="0" name="low_triangles" value="0"/>
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Niedrigste" name="lowest_label" value="Niedrigste"/>
 				<combo_box name="lod_source_lowest">
-					<item name="lod_source_lowest_load_from_file" label="Aus Datei laden"/>
-					<item name="lod_source_lowest_generate" label="Generieren"/>
-					<item name="lod_source_lowest_use_lod_above" label="Obige Detailstufe verwenden"/>
+					<item name="Load from file" label="Aus Datei laden"/>
+					<item name="Generate" label="Generieren"/>
+					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
-					<item name="lod_mode_lowest_triangle_limit" label="Triangel-Limit"/>
-					<item name="lod_mode_lowest_error_threshold" label="Fehler-Schwellwert" />
+					<item name="Triangle Limit" label="Triangel-Limit"/>
+					<item name="Error Threshold" label="Fehler-Schwellwert" />
 				</combo_box>
 				<text initial_value="0" name="lowest_triangles" value="0"/>
 				<text initial_value="0" name="lowest_vertices" value="0"/>

@@ -1051,6 +1051,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="script_files">
 		Skripte
 	</string>
+	<string name="dictionary_files">
+		Wörterbücher
+	</string>
 	<string name="AvatarSetNotAway">
 		Nicht abwesend
 	</string>
@@ -5333,4 +5336,12 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		[REGION]
 	</string>
 	
+	<string name="TeleportMaturityExceeded">
+		Der Einwohner kann dieser Region nicht betreten.
+	</string>
+	
+	<!-- Spell check settings floater -->
+	<string name="UserDictionary">
+		[User]
+	</string>
 </strings>

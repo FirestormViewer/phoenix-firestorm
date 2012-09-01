@@ -211,6 +211,8 @@
 
         <!-- Chat: Text Input -->
         <panel label="Texteingabe" name="ChatTextInput">
+			<button name="autoreplace_showgui" label="Automatische Ersetzung..."/>
+			<button name="spellcheck_showgui" label="Rechtschreibprüfung..."/>
         </panel>
 
 	</tab_container>

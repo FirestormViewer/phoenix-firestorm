@@ -39,6 +39,9 @@
 		<text name="money_change_threshold_label" tool_tip="Spielt einen Soundbenachrichtung ab, wenn der angegebene Geldbetrag empfangen oder ausgegeben wird." width="160">
 			Schwellwert für L$-Änderung:
 		</text>
+		<text name="textFSRegionRestart" width="230" tool_tip="UUID des Sounds, der bei einer Warnung für einen anstehenden Neustart der Region abgespielt wird.">
+			Sound-UUID für Regionsneustart-Warnung:
+		</text>
     </panel>
 
     <!-- Voice -->
