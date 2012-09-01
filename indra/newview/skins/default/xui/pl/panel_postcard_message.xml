@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_postcard_message"">
+<panel name="panel_postcard_message">
 	<text name="to_label">
 		Do:
     </text>
