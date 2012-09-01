@@ -42,6 +42,7 @@
 		</menu>
 		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
+		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 		<menu_item_call label="Wyłącz [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Komunikacja" name="Communicate">
@@ -489,7 +490,6 @@
 		<menu_item_call label="Uzyskaj status administratora" name="Request Admin Options"/>
 		<menu_item_call label="Porzuć status administratora" name="Leave Admin Options"/>
 		<menu_item_check label="Pokaż menu administratora" name="View Admin Options"/>
-		<menu_item_check label="Pokaż dodatki HUD" name="Show HUD Attachments"/>
 	</menu>
 	<menu label="Administrator" name="Admin">
 		<menu label="Obiekt" name="AdminObject">
