@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="texture picker" title="TEXTUR AUSWÄHLEN">
-	<string name="choose_picture">
+	<floater.string name="choose_picture">
 		Zum Auswählen eines Bildes hier klicken
-	</string>
+	</floater.string>
+	<floater.string name="pick title">
+		Auswählen:
+	</floater.string>
 	<text name="Multiple">
 		Mehrere Texturen
 	</text>
@@ -29,9 +32,8 @@
 		<column name="unit_name" label="Name"/>
 		<column name="unit_id_HIDDEN" label="ID"/>
 	</scroll_list>
+		<column label="ID" name="unit_id_HIDDEN"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="Cancel"/>
 	<button label="OK" label_selected="OK" name="Select" left="135"/>
-	<text name="pick title">
-		Auswählen:
-	</text>
+
 </floater>

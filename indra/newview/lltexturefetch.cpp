@@ -1312,7 +1312,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					++mHTTPFailCount;
 					llinfos << "HTTP GET failed for: " << mUrl
 							<< " Status: " << mGetStatus << " Reason: '" << mGetReason << "'"
-							<< " Attempt:" << mHTTPFailCount+1 << "/" << max_attempts << llendl;
+							<< " Attempt:" << mHTTPFailCount << "/" << max_attempts << llendl;
 				}
 
 				if (mHTTPFailCount >= max_attempts)

@@ -72,18 +72,18 @@
 #include "llpanellogin.h"
 #include "llpaneltopinfobar.h"
 #include "llcombobox.h"
+#include "llspellcheck.h"
 #include "llstatusbar.h"
 #include "llupdaterservice.h"
 #include "llnotificationsutil.h"
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-07-02 (Catznip-2.7.0a) | Added: Catznip-2.7.0a
-#include "llhunspell.h"
-// [/SL:KB]
 
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
 #include "llnetmap.h"
+
+// Third party library includes
+#include <boost/algorithm/string.hpp>
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
@@ -362,7 +362,7 @@ static bool handleJoystickChanged(const LLSD& newvalue)
 
 static bool handleUseOcclusionChanged(const LLSD& newvalue)
 {
-	LLPipeline::sUseOcclusion = (newvalue.asBoolean() && gGLManager.mHasOcclusionQuery 
+	LLPipeline::sUseOcclusion = (newvalue.asBoolean() && gGLManager.mHasOcclusionQuery && LLGLSLShader::sNoFixedFunction
 		&& LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion") && !gUseWireframe) ? 2 : 0;
 	return true;
 }
@@ -373,15 +373,6 @@ static bool handleUploadBakedTexOldChanged(const LLSD& newvalue)
 	return true;
 }
 
-
-static bool handleNumpadControlChanged(const LLSD& newvalue)
-{
-	if (gKeyboard)
-	{
-		gKeyboard->setNumpadDistinct(static_cast<LLKeyboard::e_numpad_distinct>(newvalue.asInteger()));
-	}
-	return true;
-}
 
 static bool handleWLSkyDetailChanged(const LLSD&)
 {
@@ -573,20 +564,24 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
-bool handleSpellCheckChanged(const LLSD& sdValue)
-{
-	LLHunspellWrapper::setUseSpellCheck((sdValue.asBoolean()) ? gSavedSettings.getString("SpellCheckDictionary") : LLStringUtil::null);
-	return true;
-}
-
-bool handleSpellCheckDictChanged(const LLSD& sdValue)
+bool handleSpellCheckChanged()
 {
 	if (gSavedSettings.getBOOL("SpellCheck"))
-		LLHunspellWrapper::setUseSpellCheck(sdValue.asString());
+	{
+		std::list<std::string> dict_list;
+		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
+		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
+		if (!dict_list.empty())
+		{
+			LLSpellChecker::setUseSpellCheck(dict_list.front());
+			dict_list.pop_front();
+			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
+			return true;
+		}
+	}
+	LLSpellChecker::setUseSpellCheck(LLStringUtil::null);
 	return true;
 }
-// [/SL:KB]
 
 bool toggle_agent_pause(const LLSD& newvalue)
 {
@@ -782,7 +777,6 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderUseStreamVBO")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("RenderPreferStreamDraw")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("WLSkyDetail")->getSignal()->connect(boost::bind(&handleWLSkyDetailChanged, _2));
-	gSavedSettings.getControl("NumpadControl")->getSignal()->connect(boost::bind(&handleNumpadControlChanged, _2));
 	gSavedSettings.getControl("JoystickAxis0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
 	gSavedSettings.getControl("JoystickAxis1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
 	gSavedSettings.getControl("JoystickAxis2")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
@@ -859,12 +853,10 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));
 	gSavedSettings.getControl("ForceShowGrid")->getSignal()->connect(boost::bind(&handleForceShowGrid, _2));
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
+	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
+	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
-// [/SL:KB]
-	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged, _2));
-	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckDictChanged, _2));
-// [/SL:KB]
 	gSavedSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
 	gSavedSettings.getControl("FSUseV1Menus")->getSignal()->connect(boost::bind(&show_v1_menus));	// V1 menu system	-WoLf
 	// <FS:Zi> Is done inside XUI now, using visibility_control

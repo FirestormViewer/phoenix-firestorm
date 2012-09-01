@@ -512,10 +512,13 @@ Weitere Informationen finden Sie auf [_URL].
 		<usetemplate ignoretext="Meine Hardware wird nicht unterstützt" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="IntelOldDriver">
-		Es gibt möglicherweise einen neuen Treiber für Ihren Grafikchip. Ein Update des Grafikkartentreibers kann die Leistung verbessern.
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
 
-Die Seite [_URL] öffnen, um nach neuen Treibern zu prüfen?
-		<usetemplate name="okcancelignore" notext="Nein" yestext="Ja" ignoretext="Mein Grafikkartentreiber ist veraltet."/>
+    Unter [_URL] nach aktualisierten Treibern suchen?
+		<url name="url">
+			http://www.intel.com/p/de_DE/support/detect/graphics
+		</url>
+		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	<notification name="UnknownGPU">
 		Ihr System verwendet eine Grafikkarte, die [APP_NAME] nicht erkennt.
@@ -2693,7 +2696,7 @@ Ist das OK?
 	</notification>
 	<notification name="ScriptQuestionCaution">
 		Warnung: Das Objekt „&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;“ wünscht Zugriff auf Ihr Linden-Dollar-Konto. Wenn Sie dies erlauben, kann es jederzeit Geld vom Konto abheben oder es komplett leeren ohne eine weitere Warnung.
-
+  
 Bevor Sie den Zugriff erlauben, sollten Sie wissen, um was für ein Objekt es sich handelt, warum es den Zugriff benötigt und ob Sie dem Ersteller vertrauen. Falls Sie unsicher sind, klicken Sie auf Verweigern.
 		<form name="form">
 			<button name="Grant" text="Vollen Zugriff erlauben"/>
@@ -3287,6 +3290,18 @@ Ansonsten können Sie auf der Karte nachsehen und dort Ort suchen, die als „In
 	<global name="You died and have been teleported to your home location">
 		Sie sind gestorben und wurden zu Ihrem Zuhause teleportiert.
 	</global>
+	<notification name="LocalBitmapsUpdateFileNotFound">
+		[FNAME] wurde nicht gefunden und konnte deshalb nicht aktualisiert werden.
+Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
+	</notification>
+	<notification name="LocalBitmapsUpdateFailedFinal">
+		[FNAME] konnte auch nach [NRETRIES] Versuchen nicht geöffnet oder decodiert werden und gilt als beschädigt.
+Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
+	</notification>
+	<notification name="LocalBitmapsVerifyFail">
+		Versuch, eine ungültige oder nicht lesbare Bilddatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
+Versuch abgebrochen.
+	</notification>
 	
   <notification name="PhoenixWL">
 &apos;[PARCEL_NAME]&apos;, im Besitz von &apos;[OWNER_NAME]&apos;, möchte deine visuellen Windlight-Umgebungseinstellungen ändern.

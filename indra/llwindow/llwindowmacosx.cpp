@@ -3023,6 +3023,7 @@ void LLWindowMacOSX::initCursors()
 	initPixmapCursor(UI_CURSOR_SIZENESW, 10, 10);
 	initPixmapCursor(UI_CURSOR_SIZEWE, 10, 10);
 	initPixmapCursor(UI_CURSOR_SIZENS, 10, 10);
+
 }
 
 void LLWindowMacOSX::captureMouse()

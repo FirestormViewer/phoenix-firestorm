@@ -54,6 +54,7 @@
 #include "llwindow.h"
 #include "lltextparser.h"
 #include "llscrollcontainer.h"
+#include "llspellcheck.h"
 #include "llpanel.h"
 #include "llurlregistry.h"
 #include "lltooltip.h"
@@ -61,10 +62,6 @@
 
 #include <queue>
 #include "llcombobox.h"
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-#include "llhunspell.h"
-// [/SL:KB]
 
 // 
 // Globals
@@ -81,6 +78,7 @@ template class LLTextEditor* LLView::getChild<class LLTextEditor>(
 const S32	UI_TEXTEDITOR_LINE_NUMBER_MARGIN = 32;
 const S32	UI_TEXTEDITOR_LINE_NUMBER_DIGITS = 4;
 const S32	SPACES_PER_TAB = 4;
+const F32	SPELLCHECK_DELAY = 0.5f;	// delay between the last keypress and spell checking the word the cursor is on
 
 ///////////////////////////////////////////////////////////////////
 
@@ -702,95 +700,6 @@ void LLTextEditor::selectAll()
 	// <FS:AW> Linux primary "clipboard" tainted by auto-selection
 	//updatePrimary();
 }
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-std::string LLTextEditor::getSuggestion(U32 idxSuggestion) const
-{
-	return (idxSuggestion < mSuggestionList.size()) ? mSuggestionList[idxSuggestion] : LLStringUtil::null;
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-U32 LLTextEditor::getSuggestionCount() const
-{
-	return mSuggestionList.size();
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-void LLTextEditor::replaceWithSuggestion(U32 idxSuggestion)
-{
-	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
-			itMisspell != mMisspellRanges.end(); ++itMisspell)
-	{
-		if ( (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
-		{
-			deselect();
-
-			// Delete the misspelled word
-			remove(itMisspell->first, itMisspell->second - itMisspell->first, TRUE);
-			setCursorPos(itMisspell->first);
-
-			// Insert the suggestion in its place
-			S32 cntCh = insert(mCursorPos, utf8str_to_wstring(mSuggestionList[idxSuggestion]), FALSE, LLTextSegmentPtr());
-			setCursorPos(mCursorPos + cntCh);
-
-			break;
-		}
-	}
-	mNeedsSpellCheck = TRUE;
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-void LLTextEditor::addToDictionary()
-{
-	if (canAddToDictionary())
-		LLHunspellWrapper::instance().addToCustomDictionary(getMisspelledWord(mCursorPos));
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-bool LLTextEditor::canAddToDictionary() const
-{
-	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-void LLTextEditor::addToIgnore()
-{
-	if (canAddToIgnore())
-		LLHunspellWrapper::instance().addToIgnoreList(getMisspelledWord(mCursorPos));
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-bool LLTextEditor::canAddToIgnore() const
-{
-	return (useSpellCheck()) && (isMisspelledWord(mCursorPos));
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-std::string LLTextEditor::getMisspelledWord(U32 posCursor) const
-{
-	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
-			itMisspell != mMisspellRanges.end(); ++itMisspell)
-	{
-		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
-			return wstring_to_utf8str(getWText().substr(itMisspell->first, itMisspell->second - itMisspell->first));
-	}
-	return LLStringUtil::null;
-}
-
-// Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-bool LLTextEditor::isMisspelledWord(U32 posCursor) const
-{
-	for (std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin(); 
-			itMisspell != mMisspellRanges.end(); ++itMisspell)
-	{
-		if ( (itMisspell->first <= posCursor) && (itMisspell->second >= posCursor) )
-			return true;
-	}
-	return false;
-}
-// [/SL:KB]
 
 BOOL LLTextEditor::handleMouseDown(S32 x, S32 y, MASK mask)
 {
@@ -2117,33 +2026,38 @@ void LLTextEditor::showContextMenu(S32 x, S32 y)
 
 	S32 screen_x, screen_y;
 	localPointToScreen(x, y, &screen_x, &screen_y);
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-09 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	// Move the cursor to where the user right-clicked (clear the current selection if the user right-clicked outside of it)
-	setCursorAtLocalPos(x, y, false);
-	if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
-		deselect();
-	else
-		setCursorPos(llmax(mSelectionStart, mSelectionEnd));
 
-	bool fUseSpellCheck = useSpellCheck(), fMisspelledWord = false;
-	if (fUseSpellCheck)
+	setCursorAtLocalPos(x, y, false);
+	if (hasSelection())
+	{
+		if ( (mCursorPos < llmin(mSelectionStart, mSelectionEnd)) || (mCursorPos > llmax(mSelectionStart, mSelectionEnd)) )
+		{
+			deselect();
+		}
+		else
+		{
+			setCursorPos(llmax(mSelectionStart, mSelectionEnd));
+		}
+	}
+
+	bool use_spellcheck = getSpellCheck(), is_misspelled = false;
+	if (use_spellcheck)
 	{
 		mSuggestionList.clear();
 
 		// If the cursor is on a misspelled word, retrieve suggestions for it
-		std::string strMisspelledWord = getMisspelledWord(mCursorPos);
-		if ((fMisspelledWord = !strMisspelledWord.empty()) == true)
-			LLHunspellWrapper::instance().getSuggestions(strMisspelledWord, mSuggestionList);
+		std::string misspelled_word = getMisspelledWord(mCursorPos);
+		if ((is_misspelled = !misspelled_word.empty()) == true)
+		{
+			LLSpellChecker::instance().getSuggestions(misspelled_word, mSuggestionList);
+		}
 	}
 
-	// Show/hide spell checking related menu items
-	mContextMenu->setItemVisible("Suggestion Separator", (fUseSpellCheck) && (!mSuggestionList.empty()));
-	mContextMenu->setItemVisible("Add to Dictionary", (fUseSpellCheck) && (fMisspelledWord));
-	mContextMenu->setItemVisible("Add to Ignore", (fUseSpellCheck) && (fMisspelledWord));
-	mContextMenu->setItemVisible("Spellcheck Separator", (fUseSpellCheck) && (fMisspelledWord));
-	mContextMenu->setSpawningView(getHandle());
-// [/SL:KB]
-	mContextMenu->show(screen_x, screen_y);
+	mContextMenu->setItemVisible("Suggestion Separator", (use_spellcheck) && (!mSuggestionList.empty()));
+	mContextMenu->setItemVisible("Add to Dictionary", (use_spellcheck) && (is_misspelled));
+	mContextMenu->setItemVisible("Add to Ignore", (use_spellcheck) && (is_misspelled));
+	mContextMenu->setItemVisible("Spellcheck Separator", (use_spellcheck) && (is_misspelled));
+	mContextMenu->show(screen_x, screen_y, this);
 }
 
 
@@ -3041,10 +2955,9 @@ void LLTextEditor::setKeystrokeCallback(const keystroke_signal_t::slot_type& cal
 void LLTextEditor::onKeyStroke()
 {
 	mKeystrokeSignal(this);
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	mNeedsSpellCheck = TRUE;
+
+	mSpellCheckStart = mSpellCheckEnd = -1;
 	mSpellCheckTimer.setTimerExpirySec(SPELLCHECK_DELAY);
-// [/SL:KB]
 }
 
 //virtual

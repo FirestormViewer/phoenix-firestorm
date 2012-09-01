@@ -113,7 +113,7 @@ BOOL PieMenu::handleHover(S32 x,S32 y,MASK mask)
 	return TRUE;
 }
 
-void PieMenu::show(S32 x,S32 y)
+void PieMenu::show(S32 x, S32 y, LLView* spawning_view)
 {
 	// if the menu is already there, do nothing
 	if(getVisible())

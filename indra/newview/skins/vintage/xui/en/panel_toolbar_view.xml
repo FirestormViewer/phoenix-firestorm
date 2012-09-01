@@ -221,14 +221,13 @@
                    parameter="nearby_chat" />
   </button>
 
-  <nearby_chat_control layout="topleft"
-                       name="default_chat_bar"
-                       label="To nearby chat"
-                       left_pad="8"
-                       height="20"
-                       right="-4"
-                       follows="all"
-                       spellcheck="true" />
+    <nearby_chat_control layout="topleft"
+                         name="default_chat_bar"
+                         label="To nearby chat"
+                         left_pad="8"
+                         height="20"
+                         right="-4"
+                         follows="all" />
   </layout_panel>
   <!-- Panel to house the chat bar in, will be set visible/invisible in code
        as parent of the chat control -->

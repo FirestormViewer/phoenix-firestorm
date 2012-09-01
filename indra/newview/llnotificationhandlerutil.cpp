@@ -140,6 +140,8 @@ const static std::string GRANTED_MODIFY_RIGHTS("GrantedModifyRights"),
 						FRIEND_ONLINE("FriendOnline"), FRIEND_OFFLINE("FriendOffline"),
 						SERVER_OBJECT_MESSAGE("ServerObjectMessage"),
 						TELEPORT_OFFERED("TeleportOffered"),
+						TELEPORT_OFFERED_MATURITY_EXCEEDED("TeleportOffered_MaturityExceeded"),
+						TELEPORT_OFFERED_MATURITY_BLOCKED("TeleportOffered_MaturityBlocked"),
 						TELEPORT_OFFER_SENT("TeleportOfferSent"),
 						IM_SYSTEM_MESSAGE_TIP("IMSystemMessageTip");
 
@@ -161,6 +163,8 @@ bool LLHandlerUtil::canLogToIM(const LLNotificationPtr& notification)
 			|| INVENTORY_DECLINED == notification->getName()
 			|| USER_GIVE_ITEM == notification->getName()
 			|| TELEPORT_OFFERED == notification->getName()
+			|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+			|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()
 			|| TELEPORT_OFFER_SENT == notification->getName()
 			|| IM_SYSTEM_MESSAGE_TIP == notification->getName();
 }
@@ -181,7 +185,9 @@ bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
 {
 //	return OFFER_FRIENDSHIP == notification->getName()
 //			|| USER_GIVE_ITEM == notification->getName()
-//			|| TELEPORT_OFFERED == notification->getName();
+//			|| TELEPORT_OFFERED == notification->getName()
+//			|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+//			|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 //	return 
 //		(canEmbedNotificationInIM(notification)) && 
@@ -193,7 +199,8 @@ bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
 		(canEmbedNotificationInIM(notification)) && 
 		( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(notification->getPayload()["from_id"].asUUID())) ) &&
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/RLVa:KB]
 }
 
@@ -219,12 +226,15 @@ bool LLHandlerUtil::canAddNotifPanelToIM(const LLNotificationPtr& notification)
 {
 //	return OFFER_FRIENDSHIP == notification->getName()
 //					|| USER_GIVE_ITEM == notification->getName()
-//					|| TELEPORT_OFFERED == notification->getName();
+//					|| TELEPORT_OFFERED == notification->getName()
+//					|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+//					|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 	return 
 		(canEmbedNotificationInIM(notification)) && 
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/SL:KB]
 }
 
@@ -233,12 +243,15 @@ bool LLHandlerUtil::isNotificationReusable(const LLNotificationPtr& notification
 {
 //	return OFFER_FRIENDSHIP == notification->getName()
 //		|| USER_GIVE_ITEM == notification->getName()
-//		|| TELEPORT_OFFERED == notification->getName();
+//		|| TELEPORT_OFFERED == notification->getName()
+//		|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+//		|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 	return 
 		(canEmbedNotificationInIM(notification)) && 
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
+		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/SL:KB]
 }
 
@@ -266,7 +279,9 @@ bool LLHandlerUtil::canSpawnToast(const LLNotificationPtr& notification)
 
 	if(OFFER_FRIENDSHIP == notification->getName()
 		|| USER_GIVE_ITEM == notification->getName()
-		|| TELEPORT_OFFERED == notification->getName())
+		|| TELEPORT_OFFERED == notification->getName()
+		|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
+		|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName())
 	{
 		// When ANY offer arrives, show toast, unless IM window is already open - EXT-5904
 //		return ! isIMFloaterOpened(notification);

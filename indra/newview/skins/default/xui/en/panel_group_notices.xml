@@ -343,6 +343,7 @@ Maximum 200 per group daily
          left_pad="4"
          max_length="63"
          name="view_subject"
+         spellcheck="true"
          top_delta="-1"
          visible="true"
          follows="left|right|top"
@@ -369,6 +370,7 @@ Maximum 200 per group daily
          layout="topleft"
          max_length="511"
          name="view_message"
+         spellcheck="true"
          word_wrap="true"
          follows="all" />
         <text

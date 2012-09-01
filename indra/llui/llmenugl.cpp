@@ -3854,7 +3854,7 @@ void LLContextMenu::setVisible(BOOL visible)
 }
 
 // Takes cursor position in screen space?
-void LLContextMenu::show(S32 x, S32 y)
+void LLContextMenu::show(S32 x, S32 y, LLView* spawning_view)
 {
 	if (getChildList()->empty())
 	{
@@ -3908,6 +3908,14 @@ void LLContextMenu::show(S32 x, S32 y)
 	setRect(rect);
 	arrange();
 
+	if (spawning_view)
+	{
+		mSpawningViewHandle = spawning_view->getHandle();
+	}
+	else
+	{
+		mSpawningViewHandle.markDead();
+	}
 	LLView::setVisible(TRUE);
 }
 
@@ -3922,12 +3930,6 @@ void LLContextMenu::hide()
 		mHoverItem->setHighlight( FALSE );
 	}
 	mHoverItem = NULL;
-// ND_MERGE is this still needed? There are no such lines in mSpawningViewHandle.markDead(); in V/dev. Just a comment for a todo? Then it should be done, or this lines deleted.
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-	// NOTE: this should be done *somewhere* but a menu item's onCommit() calls "hideMenus" before it fires the "onCommit" signal
-//	mSpawningViewHandle.markDead();
-// [/SL:KB]
-// /ND_MERGE
 }
 
 

@@ -177,13 +177,6 @@
 			</text>
 		</panel>
 		<panel label="Entrada de texto" name="ChatTextInput">
-			<check_box label="Activar corrección ortográfica" name="checkSpellCheck" left="20" width="190"/>
-			<text name="textDictionaryMain" width="113" left_pad="10" top_pad="-17">
-				Diccionario principal:
-			</text>
-			<combo_box left_pad="5" name="comboDictionaryMain"/>
-			<check_box label="Activar autocorreción" name="lgg_ac_enable" tool_tip="Debes marcar esta casilla para usar cualquiera de estas configuraciones. La autocorreción buscará en tu escritura y sustituirá las entradas configuradas por su texto de reemplazo" left="20"/>
-			<button name="lgg_ac_showgui" label="Configuración de autocorreción" width="200"/>
 		</panel>
 	</tab_container>
 </panel>

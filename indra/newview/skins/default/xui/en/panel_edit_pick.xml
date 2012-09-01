@@ -136,6 +136,7 @@
          top_pad="2"
          max_length="1023"
          name="pick_desc"
+         spellcheck="true"
          word_wrap="true" />
         <text
          type="string"

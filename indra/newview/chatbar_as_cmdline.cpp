@@ -75,8 +75,6 @@
 #include "llparcel.h"
 #include "llaudioengine.h"
 #include "llviewerparcelmediaautoplay.h"
-#include "lggautocorrectfloater.h"
-#include "lggautocorrect.h"
 
 #include "rlvhandler.h"
 
@@ -478,7 +476,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 	static LLCachedControl<std::string> sFSCmdLineClearChat(gSavedSettings,  "FSCmdLineClearChat");
 	static LLCachedControl<std::string> sFSCmdLineMedia(gSavedSettings,  "FSCmdLineMedia");
 	static LLCachedControl<std::string> sFSCmdLineMusic(gSavedSettings,  "FSCmdLineMusic");
-	static LLCachedControl<std::string> sFSCmdLineAutocorrect(gSavedSettings,  "FSCmdLineAutocorrect");
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
 	
@@ -900,53 +897,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				cmdline_printchat("Displaying Contact Sets Floater.");
 				return false;
 			}
-#ifdef LGG_AUTO_CORRECT
-			else if(revised_text == "/ac")
-			{
-				LGGAutoCorrectFloater::showFloater();
-				cmdline_printchat("Displaying Auto Correction Floater.");
-				return false;
-			}
-			else if(command == std::string(sFSCmdLineAutocorrect))
-			{
-				if (revised_text.length() < (std::string(sFSCmdLineAutocorrect)).length()+2)
-				{
-					cmdline_printchat("Wrong usage, correct usage is"+
-						std::string(sFSCmdLineAutocorrect)+" list Name|wrong word|right word.");
-					return false;
-				}
-				std::string info = revised_text.substr(std::string(sFSCmdLineAutocorrect).length()+1);
-				//addac list name|wrong word|right word
-				int bar = info.find("|");
-				if (bar==std::string::npos)
-				{
-					cmdline_printchat("Wrong usage, correct usage is"+
-						std::string(sFSCmdLineAutocorrect)+" list Name|wrong word|right word.");
-					return false;
-				}
-
-				std::string listName = info.substr(0,bar);
-				info = info.substr(bar+1);
-				
-				bar = info.find("|");
-				if (bar==std::string::npos)
-				{
-					cmdline_printchat("Wrong usage, correct usage is"+
-						std::string(sFSCmdLineAutocorrect)+" list Name|wrong word|right word.");
-					return false;
-				}
-
-				std::string wrong = info.substr(0,bar);
-				std::string right = info.substr(bar+1);
-				if(LGGAutoCorrect::getInstance()->addEntryToList(wrong,right,listName))
-				{
-					cmdline_printchat("Added "+wrong+"=>"+right+" to the "+listName+" list.");
-					LGGAutoCorrect::getInstance()->save();
-					return false;
-				}
-
- 			}
-#endif
 
 			else if(command == std::string(sFSCmdLineClearChat))
 			{

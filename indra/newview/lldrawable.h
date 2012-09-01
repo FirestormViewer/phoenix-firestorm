@@ -59,6 +59,7 @@ class LLViewerTexture;
 const U32 SILHOUETTE_HIGHLIGHT = 0;
 
 // All data for new renderer goes into this class.
+LL_ALIGN_PREFIX(16)
 class LLDrawable : public LLRefCount
 {
 public:
@@ -74,6 +75,16 @@ public:
 	}
 
 	static void initClass();
+
+	void* operator new(size_t size)
+	{
+		return ll_aligned_malloc_16(size);
+	}
+
+	void operator delete(void* ptr)
+	{
+		ll_aligned_free_16(ptr);
+	}
 
 	LLDrawable()				{ init(); }
 	MEM_TYPE_NEW(LLMemType::MTYPE_DRAWABLE);
@@ -109,6 +120,9 @@ public:
 	F32			          getIntensity() const			{ return llmin(mXform.getScale().mV[0], 4.f); }
 	S32					  getLOD() const				{ return mVObjp ? mVObjp->getLOD() : 1; }
 	F32					  getBinRadius() const			{ return mBinRadius; }
+	S32					  getBinIndex() const			{ return mBinIndex; }
+	void				  setBinIndex(S32 index) const	{ mBinIndex = index; }
+
 	void  getMinMax(LLVector3& min,LLVector3& max) const { mXform.getMinMax(min,max); }
 	LLXformMatrix*		getXform() { return &mXform; }
 
@@ -194,7 +208,7 @@ public:
 	S32 findReferences(LLDrawable *drawablep); // Not const because of @#$! iterators...
 
 	void setSpatialGroup(LLSpatialGroup *groupp);
-	LLSpatialGroup *getSpatialGroup() const			{ return mSpatialGroupp; }
+	LLSpatialGroup *getSpatialGroup() const;
 	LLSpatialPartition* getSpatialPartition();
 	
 	// Statics
@@ -277,11 +291,12 @@ public:
 		HAS_ALPHA		= 0x04000000,
 		RIGGED			= 0x08000000,
 		PARTITION_MOVE	= 0x10000000,
+		ANIMATED_CHILD  = 0x20000000,
 	} EDrawableFlags;
 
 private: //aligned members
-	LLVector4a		mExtents[2];
-	LLVector4a		mPositionGroup;
+	LL_ALIGN_16(LLVector4a		mExtents[2]);
+	LL_ALIGN_16(LLVector4a		mPositionGroup);
 	
 public:
 	LLXformMatrix       mXform;
@@ -314,6 +329,7 @@ private:
 	mutable U32		mVisible;
 	F32				mRadius;
 	F32				mBinRadius;
+	mutable S32		mBinIndex;
 	S32				mGeneration;
 	
 	LLVector3		mCurrentScale;
@@ -322,7 +338,7 @@ private:
 
 	static U32 sNumZombieDrawables;
 	static LLDynamicArrayPtr<LLPointer<LLDrawable> > sDeadList;
-};
+} LL_ALIGN_POSTFIX(16);
 
 
 inline LLFace* LLDrawable::getFace(const S32 i) const
@@ -333,35 +349,14 @@ inline LLFace* LLDrawable::getFace(const S32 i) const
 
 	if ((U32) i >= mFaces.size())
 	{
-		LLUUID objectID=getVObj()->getID();
-
-		// if our face list is empty, we have no real choice. -Zi
-		if(mFaces.empty())
-		{
-			llwarns << objectID << ": Empty face list." << llendl;
-			return NULL;
-		}
-
-		// otherwise try to return a valid face to avoid crashing. -Zi
-		llwarns << objectID << ": Invalid face index " << (U32) i << ". Max faces is: " << mFaces.size() << ". Returning face index 0." << llendl;
-		return mFaces[0];
+		llwarns << "Invalid face index." << llendl;
+		return NULL;
 	}
 
 	if (!mFaces[i])
 	{
-		LLUUID objectID=getVObj()->getID();
-
-		llwarns << objectID << ": Null face found at index " << (U32) i << ". Max faces is: " << mFaces.size() << "." << llendl;
-		if(i==0)
-		{
-			S32 max=getNumFaces();
-
-			// try to return a valid face to avoid crashing. If we only have one face, return NULL as last resort. -Zi
-			if(max>1)
-				return mFaces[max-1];
-			else
-				return NULL;
-		}
+		llwarns << "Null face found." << llendl;
+		return NULL;
 	}
 	
 	return mFaces[i];

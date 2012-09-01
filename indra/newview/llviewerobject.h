@@ -212,6 +212,9 @@ public:
 	virtual BOOL		updateLOD();
 	virtual BOOL		setDrawableParent(LLDrawable* parentp);
 	F32					getRotTime() { return mRotTime; }
+private:
+	void				resetRotTime();
+public:
 	void				resetRot();
 	void				applyAngularVelocity(F32 dt);
 
@@ -224,11 +227,13 @@ public:
 	LLViewerRegion* getRegion() const				{ return mRegionp; }
 
 	BOOL isSelected() const							{ return mUserSelected; }
-	virtual void setSelected(BOOL sel)				{ mUserSelected = sel; mRotTime = 0.f;}
+	virtual void setSelected(BOOL sel)				{ mUserSelected = sel; resetRot();}
 
 	const LLUUID &getID() const						{ return mID; }
 	U32 getLocalID() const							{ return mLocalID; }
 	U32 getCRC() const								{ return mTotalCRC; }
+	S32 getListIndex() const						{ return mListIndex; }
+	void setListIndex(S32 idx)						{ mListIndex = idx; }
 
 	virtual BOOL isFlexible() const					{ return FALSE; }
 	virtual BOOL isSculpted() const 				{ return FALSE; }
@@ -437,11 +442,14 @@ public:
 	// manager until we have better iterators.
 	void updateInventory(LLViewerInventoryItem* item, U8 key, bool is_new);
 	void updateInventoryLocal(LLInventoryItem* item, U8 key); // Update without messaging.
+	void updateTextureInventory(LLViewerInventoryItem* item, U8 key, bool is_new);
 	LLInventoryObject* getInventoryObject(const LLUUID& item_id);
 	void getInventoryContents(LLInventoryObject::object_list_t& objects);
 	LLInventoryObject* getInventoryRoot();
 	LLViewerInventoryItem* getInventoryItemByAsset(const LLUUID& asset_id);
 	S16 getInventorySerial() const { return mInventorySerialNum; }
+
+	bool isTextureInInventory(LLViewerInventoryItem* item);
 
 	// These functions does viewer-side only object inventory modifications
 	void updateViewerInventoryAsset(
@@ -607,6 +615,9 @@ public:
 	// Last total CRC received from sim, used for caching
 	U32				mTotalCRC;
 
+	// index into LLViewerObjectList::mActiveObjects or -1 if not in list
+	S32				mListIndex;
+
 	LLPointer<LLViewerTexture> *mTEImages;
 
 	// Selection, picking and rendering variables
@@ -704,6 +715,10 @@ protected:
 	F32				mAppAngle;	// Apparent visual arc in degrees
 	F32				mPixelArea; // Apparent area in pixels
 
+	// IDs of of all items in the object's content which are added to the object's content,
+	// but not updated on the server yet. After item was updated, its ID will be removed from this list.
+	std::list<LLUUID> mPendingInventoryItemsIDs;
+
 	// This is the object's inventory from the viewer's perspective.
 	LLInventoryObject::object_list_t* mInventory;
 	class LLInventoryCallbackInfo
@@ -730,7 +745,7 @@ protected:
 
 	F32				mTimeDilation;				// Time dilation sent with the object.
 	F32				mRotTime;					// Amount (in seconds) that object has rotated according to angular velocity (llSetTargetOmega)
-	LLQuaternion	mLastRot;					// last rotation received from the simulator
+	LLQuaternion	mAngularVelocityRot;		// accumulated rotation from the angular velocity computations
 
 	LLVOJointInfo*  mJointInfo;
 	U8				mState;	// legacy

@@ -840,24 +840,6 @@
       tool_tip=""
       control_name="FSCmdLineCalc"
       width="200"/>
-    <!--autocorrect-->
-    <text
-      top_pad="5"
-      follows="left|top"
-      height="16"
-      name="FSCmdLineAutocorrect_txt"
-      width="250">
-      Add autocorrect word(cmd list|bad|good)
-    </text>
-    <line_editor
-      top_pad="0"
-      follows="left|top"
-      height="20"
-      max_length="256"
-      name="FSCmdLineAutocorrect"
-      tool_tip=""
-      control_name="FSCmdLineAutocorrect"
-      width="200"/>
     <!--drawdistance-->
     <text
       top_pad="5"

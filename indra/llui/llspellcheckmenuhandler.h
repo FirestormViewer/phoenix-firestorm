@@ -1,40 +1,46 @@
 /** 
+ * @file llspellcheckmenuhandler.h
+ * @brief Interface used by spell check menu handling
  *
- * Copyright (c) 2010, Kitty Barnett
+ * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * Second Life Viewer Source Code
+ * Copyright (C) 2010, Linden Research, Inc.
  * 
- * The source code in this file is provided to you under the terms of the 
- * GNU Lesser General Public License, version 2.1, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
- * PARTICULAR PURPOSE. Terms of the LGPL can be found in doc/LGPL-licence.txt 
- * in this distribution, or online at http://www.gnu.org/licenses/lgpl-2.1.txt
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * version 2.1 of the License only.
  * 
- * By copying, modifying or distributing this software, you acknowledge that
- * you have read and understood your obligations described above, and agree to 
- * abide by those obligations.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * $/LicenseInfo$
  */
 
 #ifndef LLSPELLCHECKMENUHANDLER_H
 #define LLSPELLCHECKMENUHANDLER_H
 
-// ============================================================================
-
 class LLSpellCheckMenuHandler
 {
 public:
-	virtual bool		useSpellCheck() const		{ return false; }
+	virtual bool	getSpellCheck() const			{ return false; }
 
-	virtual std::string	getSuggestion(U32 idxSuggestion) const { return ""; }
-	virtual U32			getSuggestionCount() const	{ return 0; }
-	virtual void		replaceWithSuggestion(U32 idxSuggestion) {}
+	virtual const std::string& getSuggestion(U32 index) const	{ return LLStringUtil::null; }
+	virtual U32		getSuggestionCount() const		{ return 0; }
+	virtual void	replaceWithSuggestion(U32 index){}
 
-	virtual void		addToDictionary()			{}
-	virtual bool		canAddToDictionary() const	{ return false; }
+	virtual void	addToDictionary()				{}
+	virtual bool	canAddToDictionary() const		{ return false; }
 
-	virtual void		addToIgnore()				{}
-	virtual bool		canAddToIgnore() const		{ return false; }
+	virtual void	addToIgnore()					{}
+	virtual bool	canAddToIgnore() const			{ return false; }
 };
 
-// ============================================================================
-
-#endif
+#endif // LLSPELLCHECKMENUHANDLER_H

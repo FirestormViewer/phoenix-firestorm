@@ -504,10 +504,13 @@ El objeto debe de haber sido borrado o estar fuera de alcance (&apos;out of rang
 		<usetemplate ignoretext="El hardware de mi ordenador no está admitido" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="IntelOldDriver">
-		Probablemente hay un nuevo controlador para tu chip de gráficos. Actualizar los controladores gráficos puede mejorar sustancialmente el rendimiento.
+		Probablemente ya existe un controlador más reciente para tu procesador de gráficos. La actualización del controlador de gráficos puede mejorar sustancialmente el rendimiento.
 
-¿Quieres visitar [_URL] para comprobar la disponibilidad de nuevos controladores?
-		<usetemplate ignoretext="Mi controlador de gráficos está obsoleto" name="okcancelignore" notext="No" yestext="Sí"/>
+    ¿Deseas visitar [_URL] para comprobar si hay controladores actualizados?
+		<url name="url">
+			http://www.intel.com/p/es_XL/support/detect/graphics
+		</url>
+		<usetemplate ignoretext="Mi controlador de gráficos no está actualizado" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="UnknownGPU">
 		Tu sistema usa una tarjeta gráfica que [APP_NAME] no reconoce.
@@ -2741,29 +2744,23 @@ Del objeto: &lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;, propietario: [NAME]?
 		</form>
 	</notification>
 	<notification name="ScriptQuestionCaution">
-		El objeto &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; solicita acceso para obtener dinero de tu cuenta de dólares Linden. Si le permites el acceso, puede retirar algunos o todos los fondos de tu cuenta en cualquier momento, sin advertencia alguna.
-		
-		Antes de permitir ese acceso, asegúrate de que sabes qué es ese objeto y por qué te está solicitando tal acceso, así como de si confías en su creador. Si no estás seguro, deniégaselo.
+		Atención: El objeto &apos;&lt;nolink&gt;[OBJECTNAME]&lt;/nolink&gt;&apos; solicita un acceso total a tu cuenta de dólares Linden. Si le autorizas el acceso, podrá retirar fondos de tu cuenta en cualquier momento o vaciarla por completo, de manera permanente y sin más advertencias.
+  
+Estas solicitudes pocas veces son legítimas. No autorices el acceso si no conoces la razón exacta por la que desea el acceso a tu cuenta.
 		<form name="form">
-			<button name="Grant" text="Permitir"/>
+			<button name="Grant" text="Permitir acceso total"/>
 			<button name="Deny" text="Denegar"/>
 		</form>
 	</notification>
 	<notification name="ScriptDialog">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [NAME]
 [MESSAGE]
-		<form name="form">
-			<button name="Client_Side_Mute" text="Bloquear"/>
-			<button name="Client_Side_Ignore" text="Ignorar"/>
-		</form>
+		<form name="form"/>
 	</notification>
 	<notification name="ScriptDialogGroup">
 		&apos;&lt;nolink&gt;[TITLE]&lt;/nolink&gt;&apos; de [GROUPNAME]
 [MESSAGE]
-		<form name="form">
-			<button name="Client_Side_Mute" text="Bloquear"/>
-			<button name="Client_Side_Ignore" text="Ignorar"/>
-		</form>
+		<form name="form"/>
 	</notification>
 	<notification name="BuyLindenDollarSuccess">
 		¡Gracias por tu pago!
@@ -3297,6 +3294,18 @@ También puedes buscar en el Mapa lugares marcados como &quot;Puntos de Informac
 	<global name="You died and have been teleported to your home location">
 		Has muerto y has sido teleportado a tu Base.
 	</global>
+	<notification name="LocalBitmapsUpdateFileNotFound">
+		[FNAME] no se ha podido actualizar porque el archivo ya no se encuentra.
+Desactivando futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsUpdateFailedFinal">
+		[FNAME] se ha intentado abrir o descodificar durante [NRETRIES] intentos sin éxito, y ahora se considera roto.
+Desactivando futuras actualizaciones de este archivo.
+	</notification>
+	<notification name="LocalBitmapsVerifyFail">
+		Se ha intentado añadir un archivo de imagen [FNAME] no válido o ilegible, que no se puede abrir ni descodificar.
+Intento cancelado.
+	</notification>
 	<notification name="ConfirmClearDebugSearchURL">
 		¿Seguro que quieres limpiar la URL de búsqueda de depuración?
 		<usetemplate ignoretext="Confirmar limpieza de URL de búsqueda de depuración" name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>

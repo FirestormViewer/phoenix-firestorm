@@ -376,7 +376,7 @@
        left="0"
        top="0"
        height="200"
-	   width="244"
+	     width="244"
        user_resize="true">
 
         <chat_history
@@ -391,14 +391,15 @@
         </chat_history>
         <line_editor
          bottom="0"
+         left="3"
          follows="left|right|bottom"
          font="SansSerifSmall"
          height="20"
          label="To"
          layout="bottomleft"
          select_on_focus="true"
-         spellcheck="true"
          name="chat_editor"
+         spellcheck="true"
          tab_group="1"
          width="238">
         </line_editor>

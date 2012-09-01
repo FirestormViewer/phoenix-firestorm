@@ -59,6 +59,7 @@
    min_dim="54"
    mouse_opaque="false"
    name="panel_nearby_chat_bar"
+        spellcheck="true"
    user_resize="true"
    visible="true"
    width="380"

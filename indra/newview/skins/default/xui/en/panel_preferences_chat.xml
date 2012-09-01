@@ -387,7 +387,7 @@
             <button
                follows="left|top"
                height="23"
-               label="Chat Translation Settings"
+               label="Translation..."
                layout="topleft"
                left="30"
                name="translation_settings_btn"
@@ -1128,72 +1128,36 @@
         </panel>
 
         <!-- Chat: Text Input -->
-        <panel
-         border="true"
-         top_pad="1"
-         bottom="-1"
-         left="1"
-         right="-1"
-         follows="all"
-         label="Text Input"
-         name="ChatTextInput" >
-
-            <check_box
-             control_name="SpellCheck"
-             enabled="true"
-             follows="top|left"
-             height="16"
-             label="Enable spell checking"
-             layout="topleft"
-             left="30"
-             name="checkSpellCheck"
-             top="30"
-             width="150" />
-            <text
-             enabled_control="SpellCheck"
-             follows="top|left"
-             height="10"
-             layout="topleft"
-             left_pad="10"
-             mouse_opaque="false"
-             name="textDictionaryMain"
-             top_pad="-16"
-             type="string"
-             width="90" >
-                Main dictionary:
-            </text>
-            <combo_box
-             enabled_control="SpellCheck"
-             follows="top|left"
-             height="23"
-             layout="topleft"
-             left_pad="10"
-             name="comboDictionaryMain"
-             top_pad="-15"
-             width="175" />
-
-            <check_box
-             top_pad="20"
-             left="30"
-             height="16"
-             width="140"
-             follows="left|top"
-             layout="topleft"
-             label="Enable Autocorrect"
-             control_name="FSEnableAutoCorrect"
-             name="lgg_ac_enable"
-             tool_tip="You must have this check box enabled to use any of these settings, it will search your writable text entry, and replace any of the search entries with their replacement"/>
-            <button
-             follows="top|left"
-             height="20"
-             layout="topleft"
-             top_pad="-20"
-             left_pad="5"
-             name="lgg_ac_showgui"
-             commit_callback.function="FSPref.ShowAC"
-             label="AutoCorrect Settings"
-             width="150">
-            </button>
-        </panel>
+  <panel
+   border="true"
+   top_pad="1"
+   bottom="-1"
+   left="1"
+   right="-1"
+   follows="all"
+   label="Text Input"
+   name="ChatTextInput" >
+    <button
+     layout="topleft"
+     follows="left|top"
+     top="10"
+     left="20"
+     width="150"
+     height="20"
+     name="autoreplace_showgui"
+     commit_callback.function="Pref.AutoReplace"
+     label="Auto-Replace...">
+    </button>
+    <button
+     follows="top|left"
+     height="23"
+     layout="topleft"
+     left_pad="5"
+     name="spellcheck_showgui"
+     commit_callback.function="Pref.SpellChecker"
+     label="Spell Checking..."
+     width="150">
+    </button>
+  </panel>
 </tab_container>
 </panel>

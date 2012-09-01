@@ -29,8 +29,8 @@
 #include "llappviewer.h"
 
 // Viewer includes
-#include "llversionviewer.h"
 #include "llversioninfo.h"
+#include "llversionviewer.h"
 #include "llfeaturemanager.h"
 #include "lluictrlfactory.h"
 #include "lltexteditor.h"
@@ -89,6 +89,7 @@
 #include "lllogininstance.h"
 #include "llprogressview.h"
 #include "llvocache.h"
+#include "llvopartgroup.h"
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -98,6 +99,7 @@
 #include "llupdaterservice.h"
 #include "llcallfloater.h"
 #include "llfloatertexturefetchdebugger.h"
+#include "llspellcheck.h"
 
 // Linden library includes
 #include "llavatarnamecache.h"
@@ -112,9 +114,6 @@
 #include "llvolumemgr.h"
 #include "llxfermanager.h"
 #include "llphysicsextensions.h"
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2010-12-19 (Catznip-2.7.0a) | Added: Catznip-2.5.0a
-#include "llhunspell.h"
-// [/SL:KB]
 
 #include "llnotificationmanager.h"
 #include "llnotifications.h"
@@ -126,6 +125,7 @@
 // Third party library includes
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string.hpp>
 
 
 
@@ -669,7 +669,7 @@ LLAppViewer::LLAppViewer() :
 	mPurgeOnExit(false),
 	mSecondInstance(false),
 	mSavedFinalSnapshot(false),
-	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded. -Zi
+	mSavePerAccountSettings(false),		// don't save settings on logout unless login succeeded.
 	mForceGraphicsDetail(false),
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
@@ -726,6 +726,9 @@ bool LLAppViewer::init()
 
 	// initialize SSE options
 	LLVector4a::initClass();
+
+	//initialize particle index pool
+	LLVOPartGroup::initClass();
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
@@ -789,7 +792,6 @@ bool LLAppViewer::init()
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v3.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_minimal.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
-                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_autocorrect.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "password.dat"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "ignorable_dialogs.xml"));
@@ -1293,6 +1295,8 @@ void LLAppViewer::checkMemory()
 
 static LLFastTimer::DeclareTimer FTM_MESSAGES("System Messages");
 static LLFastTimer::DeclareTimer FTM_SLEEP("Sleep");
+static LLFastTimer::DeclareTimer FTM_YIELD("Yield");
+
 static LLFastTimer::DeclareTimer FTM_TEXTURE_CACHE("Texture Cache");
 static LLFastTimer::DeclareTimer FTM_DECODE("Image Decode");
 static LLFastTimer::DeclareTimer FTM_VFS("VFS Thread");
@@ -1478,6 +1482,7 @@ bool LLAppViewer::mainLoop()
 				// yield some time to the os based on command line option
 				if(mYieldTime >= 0)
 				{
+					LLFastTimer t(FTM_YIELD);
 					ms_sleep(mYieldTime);
 				}
 
@@ -1971,7 +1976,7 @@ bool LLAppViewer::cleanup()
 	}
 	// Only save per account settings if the previous login succeeded, otherwise
 	// we might end up with a cleared out settings file in case a previous login
-	// failed after loading per account settings. -Zi
+	// failed after loading per account settings.
 	else if (!mSavePerAccountSettings)
 	{
 		llinfos << "Not saving per-account settings; last login was not successful." << llendl;
@@ -2796,11 +2801,32 @@ bool LLAppViewer::initConfiguration()
 		if ( (themefolder) && (LLStringUtil::null != skinfolder->getValue().asString()) )
 			gDirUtilp->setSkinThemeFolder(themefolder->getValue().asString());
     }
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-06 (Catznip-2.8.0a) | Modified: Catznip-2.8.0a
+	
 	if (gSavedSettings.getBOOL("SpellCheck"))
-		LLHunspellWrapper::setUseSpellCheck(gSavedSettings.getString("SpellCheckDictionary"));
-// [/SL:KB]
+	{
+		std::list<std::string> dict_list;
+		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
+		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
+		if (!dict_list.empty())
+		{
+			LLSpellChecker::setUseSpellCheck(dict_list.front());
+			dict_list.pop_front();
+			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
+		}
+	}
+
+	if (gSavedSettings.getBOOL("SpellCheck"))
+	{
+		std::list<std::string> dict_list;
+		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
+		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
+		if (!dict_list.empty())
+		{
+			LLSpellChecker::setUseSpellCheck(dict_list.front());
+			dict_list.pop_front();
+			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
+		}
+	}
 
     mYieldTime = gSavedSettings.getS32("YieldTime");
 
@@ -2961,16 +2987,31 @@ bool LLAppViewer::initConfiguration()
         }
 	}
 
-   	// need to do this here - need to have initialized global settings first
+   	// NextLoginLocation is set from the command line option
 	std::string nextLoginLocation = gSavedSettings.getString( "NextLoginLocation" );
 	if ( !nextLoginLocation.empty() )
 	{
-// <FS:AW crash on startup>
-// also here LLSLURLs are not available at this point of startup
-//		LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
-		LLStartUp::setStartSLURLString(nextLoginLocation);
-// </FS:AW crash on startup>
-	};
+		LL_DEBUGS("AppInit")<<"set start from NextLoginLocation: "<<nextLoginLocation<<LL_ENDL;
+		LLStartUp::setStartSLURL(LLSLURL(nextLoginLocation));
+	}
+	else if (   (   clp.hasOption("login") || clp.hasOption("autologin"))
+			 && !clp.hasOption("url")
+			 && !clp.hasOption("slurl"))
+	{
+		// If automatic login from command line with --login switch
+		// init StartSLURL location.
+		std::string start_slurl_setting = gSavedSettings.getString("LoginLocation");
+		LL_DEBUGS("AppInit") << "start slurl setting '" << start_slurl_setting << "'" << LL_ENDL;
+		// <FS:AW crash on startup>
+		// also here LLSLURLs are not available at this point of startup
+		//	LLStartUp::setStartSLURL(LLSLURL(start_slurl_setting));
+			LLStartUp::setStartSLURLString(start_slurl_setting);
+		// </FS:AW crash on startup>
+	}
+	else
+	{
+		// the login location will be set by the login panel (see LLPanelLogin)
+	}
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
@@ -5436,9 +5477,9 @@ void LLAppViewer::handleLoginComplete()
 	}
 	// </FS:AO>
 	
-	// we logged in successfully, so save settings on logout -Zi
+	// we logged in successfully, so save settings on logout
 	lldebugs << "Login successful, per account settings will be saved on logout." << llendl;
-	mSavePerAccountSettings=TRUE;
+	mSavePerAccountSettings=true;
 }
 
 void LLAppViewer::launchUpdater()

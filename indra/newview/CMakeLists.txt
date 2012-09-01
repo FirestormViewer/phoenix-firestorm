@@ -51,7 +51,10 @@ include(Growl)
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
 # </FS:ND>
 
-  add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+if (NOT HAVOK_TPV)
+   # When using HAVOK_TPV, the library is precompiled, so no need for this
+   add_subdirectory(${LLPHYSICSEXTENSIONS_SRC_DIR} llphysicsextensions)
+endif (NOT HAVOK_TPV)
 
 # <FS:ND>
 endif( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -82,9 +85,9 @@ include_directories(
     ${LSCRIPT_INCLUDE_DIRS}
     ${LSCRIPT_INCLUDE_DIRS}/lscript_compile
     ${LLLOGIN_INCLUDE_DIRS}
-    ${LIBS_PREBUILD_DIR}/include/hunspell
-    ${LIBS_PREBUILT_DIR}/include/collada
     ${UPDATER_INCLUDE_DIRS}
+    ${LIBS_PREBUILT_DIR}/include/collada
+    ${LIBS_PREBUILD_DIR}/include/hunspell
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
     ${GROWL_INCLUDE_DIRS}
@@ -118,8 +121,6 @@ set(viewer_SOURCE_FILES
     fspanelprofile.cpp
     fsradarlistctrl.cpp
 	#growlmanager.cpp
-    lggautocorrect.cpp
-    lggautocorrectfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
     lggbeamscolors.cpp
@@ -152,6 +153,7 @@ set(viewer_SOURCE_FILES
     llassetuploadresponders.cpp
     llattachmentsmgr.cpp
     llaudiosourcevo.cpp
+    llautoreplace.cpp
     llavataractions.cpp
     llavatariconctrl.cpp
     llavatarlist.cpp
@@ -222,6 +224,7 @@ set(viewer_SOURCE_FILES
     llfloaterabout.cpp
     llfloaterbvhpreview.cpp
     llfloaterauction.cpp
+    llfloaterautoreplacesettings.cpp
     llfloateravatar.cpp
     llfloateravatarpicker.cpp
     llfloateravatartextures.cpp
@@ -265,7 +268,6 @@ set(viewer_SOURCE_FILES
     llfloatermemleak.cpp
     llfloatermodelpreview.cpp
     llfloatermodeluploadbase.cpp
-    llfloatermodelwizard.cpp
     llfloaternamedesc.cpp
     llfloaternearbychat.cpp
     llfloaternotificationsconsole.cpp
@@ -293,6 +295,7 @@ set(viewer_SOURCE_FILES
     llfloatersidepanelcontainer.cpp
     llfloatersnapshot.cpp
     llfloatersounddevices.cpp
+    llfloaterspellchecksettings.cpp
     llfloatertelehub.cpp
     llfloatertestinspectors.cpp
     llfloatertestlistview.cpp
@@ -766,8 +769,6 @@ set(viewer_HEADER_FILES
     fsslurl.h
 	#growlmanager.h
 	#growlnotifier.h
-    lggautocorrect.h
-    lggautocorrectfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
     lggbeamscolors.h
@@ -800,6 +801,7 @@ set(viewer_HEADER_FILES
     llassetuploadresponders.h
     llattachmentsmgr.h
     llaudiosourcevo.h
+    llautoreplace.h
     llavataractions.h
     llavatariconctrl.h
     llavatarlist.h
@@ -870,6 +872,7 @@ set(viewer_HEADER_FILES
     llfloaterabout.h
     llfloaterbvhpreview.h
     llfloaterauction.h
+    llfloaterautoreplacesettings.h
     llfloateravatar.h
     llfloateravatarpicker.h
     llfloateravatartextures.h
@@ -913,7 +916,6 @@ set(viewer_HEADER_FILES
     llfloatermemleak.h
     llfloatermodelpreview.h
     llfloatermodeluploadbase.h
-    llfloatermodelwizard.h
     llfloaternamedesc.h
     llfloaternearbychat.h
     llfloaternotificationsconsole.h
@@ -941,6 +943,7 @@ set(viewer_HEADER_FILES
     llfloatersidepanelcontainer.h
     llfloatersnapshot.h
     llfloatersounddevices.h
+    llfloaterspellchecksettings.h
     llfloatertelehub.h
     llfloatertestinspectors.h
     llfloatertestlistview.h
@@ -1649,7 +1652,6 @@ set(viewer_APPSETTINGS_FILES
     app_settings/settings_phoenix.xml
     app_settings/settings_v3.xml
     app_settings/settings.xml
-    app_settings/settings_autocorrect.xml
     app_settings/settings_crash_behavior.xml
     app_settings/settings_files.xml
     app_settings/settings_per_account.xml
@@ -1751,9 +1753,7 @@ set(PACKAGE ON CACHE BOOL
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
-        # *TODO -reenable this once we get server usage sorted out
-        #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS}"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
         LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
         )
@@ -1772,7 +1772,7 @@ if (WINDOWS)
     # In the meantime, if you have any ideas on how to easily maintain one list, either here or in viewer_manifest.py
     # and have the build deps get tracked *please* tell me about it.
 
-    if(USE_GOOGLE_PERFTOOLS)
+    if(USE_TCMALLOC)
       # Configure a var for tcmalloc location, if used.
       # Note the need to specify multiple names explicitly.
       set(GOOGLE_PERF_TOOLS_SOURCE
@@ -1780,7 +1780,7 @@ if (WINDOWS)
         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libtcmalloc_minimal.dll
         ${SHARED_LIB_STAGING_DIR}/Debug/libtcmalloc_minimal-debug.dll
         )
-     endif(USE_GOOGLE_PERFTOOLS)
+     endif(USE_TCMALLOC)
 
 
     set(COPY_INPUT_DEPENDENCIES

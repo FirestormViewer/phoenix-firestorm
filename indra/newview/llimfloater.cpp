@@ -57,7 +57,7 @@
 #include "llrootview.h"
 #include "llspeakers.h"
 #include "llviewerchat.h"
-
+#include "llautoreplace.h"
 // [RLVa:KB] - Checked: 2010-04-09 (RLVa-1.2.0e)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -66,7 +66,6 @@
 #include "llavataractions.h"
 #include "llgroupactions.h"
 #include "llvoicechannel.h"
-
 //TL: for support group chat prefix
 #include "fsdata.h"
 #include "llversioninfo.h"
@@ -781,6 +780,8 @@ BOOL LLIMFloater::postBuild()
 	//</FS:TS> FIRE-5770
 	// enable line history support for instant message bar
 	mInputEditor->setEnableLineHistory(TRUE);
+	// *TODO Establish LineEditor with autoreplace callback
+	mInputEditor->setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2));
 
 	LLFontGL* font = LLViewerChat::getChatFont();
 	mInputEditor->setFont(font);	

@@ -63,10 +63,10 @@ if(WINDOWS)
         libhunspell.dll
         )
 
-    if(USE_GOOGLE_PERFTOOLS)
+    if(USE_TCMALLOC)
       set(debug_files ${debug_files} libtcmalloc_minimal-debug.dll)
       set(release_files ${release_files} libtcmalloc_minimal.dll)
-    endif(USE_GOOGLE_PERFTOOLS)
+    endif(USE_TCMALLOC)
 
     if (FMOD)
       set(debug_files ${debug_files} fmod.dll)
@@ -217,12 +217,12 @@ elseif(DARWIN)
         libexpat.1.5.2.dylib
         libexpat.dylib
         libGLOD.dylib
-    libllqtwebkit.dylib
-    libminizip.a
+        libllqtwebkit.dylib
+        libminizip.a
         libndofdev.dylib
-        libhunspell-1.3.dylib
+        libhunspell-1.3.0.dylib
         libexception_handler.dylib
-    libcollada14dom.dylib
+        libcollada14dom.dylib
         #libgrowl.dylib # *TODO - test/fix/get mac growl working
        )
 
@@ -264,24 +264,28 @@ elseif(LINUX)
         libdb-5.1.so
         libexpat.so
         libexpat.so.1
-    libglod.so
+        libglod.so
         libgmock_main.so
         libgmock.so.0
         libgmodule-2.0.so
         libgobject-2.0.so
         libgtest_main.so
         libgtest.so.0
-    libminizip.so
+        libhunspell-1.3.so.0.0.0
+        libminizip.so
         libopenal.so
         libopenjpeg.so
         libssl.so
-        libtcmalloc_minimal.so
         libuuid.so.16
         libuuid.so.16.0.22
         libssl.so.1.0.0
         libfontconfig.so.1.4.4
         #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
+
+    if (USE_TCMALLOC)
+      set(release_files ${release_files} "libtcmalloc_minimal.so")
+    endif (USE_TCMALLOC)
 
     if (FMOD)
       set(release_files ${release_files} "libfmod-3.75.so")

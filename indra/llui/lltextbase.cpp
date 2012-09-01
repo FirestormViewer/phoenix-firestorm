@@ -32,6 +32,7 @@
 #include "lllocalcliprect.h"
 #include "llmenugl.h"
 #include "llscrollcontainer.h"
+#include "llspellcheck.h"
 #include "llstl.h"
 #include "lltextparser.h"
 #include "lltextutil.h"
@@ -43,16 +44,8 @@
 #include "llwindow.h"
 #include <boost/bind.hpp>
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-#include "llhunspell.h"
-// [/SL:KB]
-
 const F32	CURSOR_FLASH_DELAY = 1.0f;  // in seconds
 const S32	CURSOR_THICKNESS = 2;
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-08 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-const F32 LLTextBase::SPELLCHECK_DELAY = 0.5f;	// Delay between the last keypress and showing spell checking feedback for the word the cursor is on
-// [/SL:KB]
 
 LLTextBase::line_info::line_info(S32 index_start, S32 index_end, LLRect rect, S32 line_num) 
 :	mDocIndexStart(index_start), 
@@ -166,9 +159,7 @@ LLTextBase::Params::Params()
 	plain_text("plain_text",false),
 	track_end("track_end", false),
 	read_only("read_only", false),
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	spellcheck("spellcheck", false),
-// [/SL:KB]
 	v_pad("v_pad", 0),
 	h_pad("h_pad", 0),
 	clip("clip", true),
@@ -195,10 +186,9 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mFontShadow(p.font_shadow),
 	mPopupMenu(NULL),
 	mReadOnly(p.read_only),
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
 	mSpellCheck(p.spellcheck),
-	mNeedsSpellCheck( FALSE ),
-// [/SL:KB]
+	mSpellCheckStart(-1),
+	mSpellCheckEnd(-1),
 	mCursorColor(p.cursor_color),
 	mFgColor(p.text_color),
 	mBorderVisible( p.border_visible ),
@@ -260,12 +250,6 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	view_params.rect =  LLRect(0, 500, 500, 0);
 	view_params.mouse_opaque = false;
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	if (mSpellCheck)
-		LLHunspellWrapper::setSettingsChangeCallback(boost::bind(&LLTextBase::onSpellCheckSettingsChange, this));
-	mSpellCheckTimer.reset();
-// [/SL:KB]
-
 	mDocumentView = LLUICtrlFactory::create<LLView>(view_params);
 	if (mScroller)
 	{
@@ -275,6 +259,12 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	{
 		addChild(mDocumentView);
 	}
+
+	if (mSpellCheck)
+	{
+		LLSpellChecker::setSettingsChangeCallback(boost::bind(&LLTextBase::onSpellCheckSettingsChange, this));
+	}
+	mSpellCheckTimer.reset();
 
 	createDefaultSegment();
 
@@ -310,12 +300,23 @@ bool LLTextBase::truncate()
 	if (getLength() >= S32(mMaxTextByteLength / 4))
 	{	
 		// Have to check actual byte size
-		LLWString text(getWText());
-		S32 utf8_byte_size = wstring_utf8_length(text);
+		S32 utf8_byte_size = 0;
+		LLSD value = getViewModel()->getValue();
+		if (value.type() == LLSD::TypeString)
+		{
+			// save a copy for strings.
+			utf8_byte_size = value.size();
+		}
+		else
+		{
+			// non string LLSDs need explicit conversion to string
+			utf8_byte_size = value.asString().size();
+		}
+
 		if ( utf8_byte_size > mMaxTextByteLength )
 		{
 			// Truncate safely in UTF-8
-			std::string temp_utf8_text = wstring_to_utf8str(text);
+			std::string temp_utf8_text = value.asString();
 			temp_utf8_text = utf8str_truncate( temp_utf8_text, mMaxTextByteLength );
 			LLWString text = utf8str_to_wstring( temp_utf8_text );
 			// remove extra bit of current string, to preserve formatting, etc.
@@ -567,79 +568,93 @@ void LLTextBase::drawText()
 	{
 		return;
 	}
-
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
+	
 	// Perform spell check if needed
-	if ( (useSpellCheck()) && (getWText().length() > 2) )
+	if ( (getSpellCheck()) && (getWText().length() > 2) )
 	{
-		S32 idxStart = getLineStart(llmax(first_line - 1, 0)); static S32 idxPrevStart = -1;
-		S32 idxEnd = getLineEnd(llmin(last_line + 1, (S32)mLineInfoList.size() - 1)); static S32 idxPrevEnd = -1;
+		// Calculate start and end indices for the spell checking range
+		S32 start = line_start, end = getLineEnd(last_line);
 
-		if ( (mNeedsSpellCheck) || (idxStart != idxPrevStart) || (idxEnd != idxPrevEnd) )
+		if ( (mSpellCheckStart != start) || (mSpellCheckEnd != end) )
 		{
 			const LLWString& wstrText = getWText(); 
 			mMisspellRanges.clear();
 
-			segment_set_t::iterator itSegment = getSegIterContaining(idxStart); LLTextSegmentPtr pSegment;
-			while ( (mSegments.end() != itSegment) && (pSegment = *itSegment) && (pSegment->getStart() < idxEnd) )
+			segment_set_t::const_iterator seg_it = getSegIterContaining(start);
+			while (mSegments.end() != seg_it)
 			{
-				if (!pSegment->canSpellCheck())
+				LLTextSegmentPtr text_segment = *seg_it;
+				if ( (text_segment.isNull()) || (text_segment->getStart() >= end) )
 				{
-					++itSegment;
+					break;
+				}
+
+				if (!text_segment->canEdit())
+				{
+					++seg_it;
 					continue;
 				}
 
-				// Combine adjoining text segments into one (newly typed text will be one letter per text segment)
-				U32 idxSegmentStart = pSegment->getStart(), idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
-				while ( (mSegments.end() != ++itSegment) && 
-					    (pSegment = *itSegment) && (pSegment->canSpellCheck()) && (pSegment->getStart() < idxEnd) )
+				// Combine adjoining text segments into one
+				U32 seg_start = text_segment->getStart(), seg_end = llmin(text_segment->getEnd(), end);
+				while (mSegments.end() != ++seg_it)
 				{
-					idxSegmentEnd = llmin(pSegment->getEnd(), idxEnd);
+					text_segment = *seg_it;
+					if ( (text_segment.isNull()) || (!text_segment->canEdit()) || (text_segment->getStart() >= end) )
+					{
+						break;
+					}
+					seg_end = llmin(text_segment->getEnd(), end);
 				}
 
 				// Find the start of the first word
-				U32 idxWordStart = idxSegmentStart, idxWordEnd = -1;
-				while ( (idxWordStart < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[idxWordStart])) )
-					idxWordStart++;
+				U32 word_start = seg_start, word_end = -1;
+				while ( (word_start < wstrText.length()) && (!LLStringOps::isAlpha(wstrText[word_start])) )
+				{
+					word_start++;
+				}
+
 				// Iterate over all words in the text block and check them one by one
-				while (idxWordStart < idxSegmentEnd && idxWordStart < wstrText.length() )
+				while (word_start < seg_end)
 				{
 					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
-					idxWordEnd = idxWordStart + 1;
-					while ( (idxWordEnd < idxSegmentEnd) && (idxWordEnd < wstrText.length()) &&
-							((LLWStringUtil::isPartOfWord(wstrText[idxWordEnd])) ||
-								((L'\'' == wstrText[idxWordEnd]) && 
-								(LLStringOps::isAlnum(wstrText[idxWordEnd - 1])) && (LLStringOps::isAlnum(wstrText[idxWordEnd + 1])))) )
+					word_end = word_start + 1;
+					while ( (word_end < seg_end) && 
+							((LLWStringUtil::isPartOfWord(wstrText[word_end])) ||
+								((L'\'' == wstrText[word_end]) && 
+								(LLStringOps::isAlnum(wstrText[word_end - 1])) && (LLStringOps::isAlnum(wstrText[word_end + 1])))) )
 					{
-						idxWordEnd++;
+						word_end++;
 					}
-					if (idxWordEnd > idxSegmentEnd || idxWordEnd >= wstrText.length())
+					if (word_end > seg_end)
+					{
 						break;
+					}
 
 					// Don't process words shorter than 3 characters
-					std::string strWord = wstring_to_utf8str(wstrText.substr(idxWordStart, idxWordEnd - idxWordStart));
-					if ( (strWord.length() >= 3) && (!LLHunspellWrapper::instance().checkSpelling(strWord)) )
-						mMisspellRanges.push_back(std::pair<U32, U32>(idxWordStart, idxWordEnd));
+					std::string word = wstring_to_utf8str(wstrText.substr(word_start, word_end - word_start));
+					if ( (word.length() >= 3) && (!LLSpellChecker::instance().checkSpelling(word)) )
+					{
+						mMisspellRanges.push_back(std::pair<U32, U32>(word_start, word_end));
+					}
 
 					// Find the start of the next word
-					idxWordStart = idxWordEnd + 1;
-					while ( (idxWordStart < idxSegmentEnd) && (!LLWStringUtil::isPartOfWord(wstrText[idxWordStart])) )
-						idxWordStart++;
+					word_start = word_end + 1;
+					while ( (word_start < seg_end) && (!LLWStringUtil::isPartOfWord(wstrText[word_start])) )
+					{
+						word_start++;
+					}
 				}
 			}
 
-			idxPrevStart = idxStart;
-			idxPrevEnd = idxEnd;
-			mNeedsSpellCheck = FALSE;
+			mSpellCheckStart = start;
+			mSpellCheckEnd = end;
 		}
 	}
-// [/SL:KB]
 
 	LLTextSegmentPtr cur_segment = *seg_iter;
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-	std::list<std::pair<U32, U32> >::const_iterator itMisspell = mMisspellRanges.begin();
-// [/SL:KB]
+	std::list<std::pair<U32, U32> >::const_iterator misspell_it = std::lower_bound(mMisspellRanges.begin(), mMisspellRanges.end(), std::pair<U32, U32>(line_start, 0));
 	for (S32 cur_line = first_line; cur_line < last_line; cur_line++)
 	{
 		S32 next_line = cur_line + 1;
@@ -674,7 +689,8 @@ void LLTextBase::drawText()
 				cur_segment = *seg_iter;
 			}
 			
-			S32 clipped_end	=	llmin( line_end, cur_segment->getEnd() )  - cur_segment->getStart();
+			S32 seg_end = llmin(line_end, cur_segment->getEnd());
+			S32 clipped_end	= seg_end - cur_segment->getStart();
 
 			if (mUseEllipses								// using ellipses
 				&& clipped_end == line_end					// last segment on line
@@ -686,28 +702,45 @@ void LLTextBase::drawText()
 				text_rect.mRight -= 2;
 			}
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-			// Draw squiggly lines under any (visible) misspelled words
-			for (; (itMisspell != mMisspellRanges.end()) && ((itMisspell->first < line_end) && (itMisspell->second > line_start)); ++itMisspell)
+			// Draw squiggly lines under any visible misspelled words
+			while ( (mMisspellRanges.end() != misspell_it) && (misspell_it->first < seg_end) && (misspell_it->second > seg_start) )
 			{
 				// Skip the current word if the user is still busy editing it
-				if ( (!mSpellCheckTimer.hasExpired()) && (itMisspell->first <= (U32)mCursorPos) && (itMisspell->second >= (U32)mCursorPos) )
+				if ( (!mSpellCheckTimer.hasExpired()) && (misspell_it->first <= (U32)mCursorPos) && (misspell_it->second >= (U32)mCursorPos) )
+				{
+					++misspell_it;
  					continue;
+				}
 
-				S32 pxStart, pxEnd, pxTemp;
-				cur_segment->getDimensions(seg_start - cur_segment->getStart(), itMisspell->first - seg_start + 1, pxStart, pxTemp);
-				cur_segment->getDimensions(itMisspell->first - seg_start + 1, itMisspell->second - itMisspell->first, pxEnd, pxTemp);
-				pxEnd += pxStart;
+				U32 misspell_start = llmax<U32>(misspell_it->first, seg_start), misspell_end = llmin<U32>(misspell_it->second, seg_end);
+				S32 squiggle_start = 0, squiggle_end = 0, pony = 0;
+				cur_segment->getDimensions(seg_start - cur_segment->getStart(), misspell_start - seg_start, squiggle_start, pony);
+				cur_segment->getDimensions(misspell_start - cur_segment->getStart(), misspell_end - misspell_start, squiggle_end, pony);
+				squiggle_start += text_rect.mLeft;
+
+				pony = (squiggle_end + 3) / 6;
+				squiggle_start += squiggle_end / 2 - pony * 3;
+				squiggle_end = squiggle_start + pony * 6;
+
+				S32 squiggle_bottom = text_rect.mBottom + (S32)cur_segment->getStyle()->getFont()->getDescenderHeight();
 
 				gGL.color4ub(255, 0, 0, 200);
-				while (pxStart < pxEnd)
+				while (squiggle_start + 1 < squiggle_end)
 				{
-					gl_line_2d(pxStart, text_rect.mBottom - 2, pxStart + 3, text_rect.mBottom + 1);
-					gl_line_2d(pxStart + 3, text_rect.mBottom + 1, pxStart + 6, text_rect.mBottom - 2);
-					pxStart += 6;
+					gl_line_2d(squiggle_start, squiggle_bottom, squiggle_start + 2, squiggle_bottom - 2);
+					if (squiggle_start + 3 < squiggle_end)
+					{
+						gl_line_2d(squiggle_start + 2, squiggle_bottom - 3, squiggle_start + 4, squiggle_bottom - 1);
+					}
+					squiggle_start += 4;
 				}
+
+				if (misspell_it->second > seg_end)
+				{
+					break;
+				}
+				++misspell_it;
 			}
-// [/SL:KB]
 
 			text_rect.mLeft = (S32)(cur_segment->draw(seg_start - cur_segment->getStart(), clipped_end, selection_left, selection_right, text_rect));
 
@@ -723,8 +756,7 @@ void LLTextBase::drawText()
 
 S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::segment_vec_t* segments )
 {
-	LLWString text(getWText());
-	S32 old_len = text.length();		// length() returns character length
+	S32 old_len = getLength();		// length() returns character length
 	S32 insert_len = wstr.length();
 
 	pos = getEditableIndex(pos, true);
@@ -784,8 +816,7 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 		}
 	}
 
-	text.insert(pos, wstr);
-	getViewModel()->setDisplay(text);
+	getViewModel()->getEditableDisplay().insert(pos, wstr);
 
 	if ( truncate() )
 	{
@@ -800,7 +831,6 @@ S32 LLTextBase::insertStringNoUndo(S32 pos, const LLWString &wstr, LLTextBase::s
 
 S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
 {
-	LLWString text(getWText());
 	segment_set_t::iterator seg_iter = getSegIterContaining(pos);
 	while(seg_iter != mSegments.end())
 	{
@@ -846,8 +876,7 @@ S32 LLTextBase::removeStringNoUndo(S32 pos, S32 length)
 		++seg_iter;
 	}
 
-	text.erase(pos, length);
-	getViewModel()->setDisplay(text);
+	getViewModel()->getEditableDisplay().erase(pos, length);
 
 	// recreate default segment in case we erased everything
 	createDefaultSegment();
@@ -864,9 +893,7 @@ S32 LLTextBase::overwriteCharNoUndo(S32 pos, llwchar wc)
 	{
 		return 0;
 	}
-	LLWString text(getWText());
-	text[pos] = wc;
-	getViewModel()->setDisplay(text);
+	getViewModel()->getEditableDisplay()[pos] = wc;
 
 	onValueChange(pos, pos + 1);
 	needsReflow(pos);
@@ -1234,19 +1261,99 @@ void LLTextBase::deselect()
 	mIsSelecting = FALSE;
 }
 
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-bool LLTextBase::useSpellCheck() const
+bool LLTextBase::getSpellCheck() const
 {
-	return (LLHunspellWrapper::useSpellCheck()) && (!mReadOnly) && (mSpellCheck);
+	return (LLSpellChecker::getUseSpellCheck()) && (!mReadOnly) && (mSpellCheck);
+}
+
+const std::string& LLTextBase::getSuggestion(U32 index) const
+{
+	return (index < mSuggestionList.size()) ? mSuggestionList[index] : LLStringUtil::null;
+}
+
+U32 LLTextBase::getSuggestionCount() const
+{
+	return mSuggestionList.size();
+}
+
+void LLTextBase::replaceWithSuggestion(U32 index)
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator it = mMisspellRanges.begin(); it != mMisspellRanges.end(); ++it)
+	{
+		if ( (it->first <= (U32)mCursorPos) && (it->second >= (U32)mCursorPos) )
+		{
+			deselect();
+
+			// Delete the misspelled word
+			removeStringNoUndo(it->first, it->second - it->first);
+
+			// Insert the suggestion in its place
+			LLWString suggestion = utf8str_to_wstring(mSuggestionList[index]);
+			insertStringNoUndo(it->first, utf8str_to_wstring(mSuggestionList[index]));
+			setCursorPos(it->first + (S32)suggestion.length());
+
+			break;
+		}
+	}
+	mSpellCheckStart = mSpellCheckEnd = -1;
+}
+
+void LLTextBase::addToDictionary()
+{
+	if (canAddToDictionary())
+	{
+		LLSpellChecker::instance().addToCustomDictionary(getMisspelledWord(mCursorPos));
+	}
+}
+
+bool LLTextBase::canAddToDictionary() const
+{
+	return (getSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+void LLTextBase::addToIgnore()
+{
+	if (canAddToIgnore())
+	{
+		LLSpellChecker::instance().addToIgnoreList(getMisspelledWord(mCursorPos));
+	}
+}
+
+bool LLTextBase::canAddToIgnore() const
+{
+	return (getSpellCheck()) && (isMisspelledWord(mCursorPos));
+}
+
+std::string LLTextBase::getMisspelledWord(U32 pos) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator it = mMisspellRanges.begin(); it != mMisspellRanges.end(); ++it)
+	{
+		if ( (it->first <= pos) && (it->second >= pos) )
+		{
+			return wstring_to_utf8str(getWText().substr(it->first, it->second - it->first));
+		}
+	}
+	return LLStringUtil::null;
+}
+
+bool LLTextBase::isMisspelledWord(U32 pos) const
+{
+	for (std::list<std::pair<U32, U32> >::const_iterator it = mMisspellRanges.begin(); it != mMisspellRanges.end(); ++it)
+	{
+		if ( (it->first <= pos) && (it->second >= pos) )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 void LLTextBase::onSpellCheckSettingsChange()
 {
 	// Recheck the spelling on every change
-	mNeedsSpellCheck = TRUE;
+	mMisspellRanges.clear();
+	mSpellCheckStart = mSpellCheckEnd = -1;
 }
-// [/SL:KB]
-
 // Sets the scrollbar from the cursor position
 void LLTextBase::updateScrollFromCursor()
 {
@@ -1878,6 +1985,8 @@ static LLUIImagePtr image_from_icon_name(const std::string& icon_name)
 	}
 }
 
+static LLFastTimer::DeclareTimer FTM_PARSE_HTML("Parse HTML");
+
 void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Params& input_params)
 {
 	LLStyle::Params style_params(input_params);
@@ -1886,15 +1995,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 	S32 part = (S32)LLTextParser::WHOLE;
 	if (mParseHTML && !style_params.is_link) // Don't search for URLs inside a link segment (STORM-358).
 	{
+		LLFastTimer _(FTM_PARSE_HTML);
 		S32 start=0,end=0;
 		LLUrlMatch match;
 		std::string text = new_text;
 		while ( LLUrlRegistry::instance().findUrl(text, match,
 				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
 		{
-			
-			LLTextUtil::processUrlMatch(&match,this);
-
 			start = match.getStart();
 			end = match.getEnd()+1;
 
@@ -1930,6 +2037,8 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 					}
 			}
 
+			LLTextUtil::processUrlMatch(&match,this);
+
 			// move on to the rest of the text after the Url
 			if (end < (S32)text.length()) 
 			{
@@ -1953,8 +2062,11 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 	}
 }
 
+static LLFastTimer::DeclareTimer FTM_APPEND_TEXT("Append Text");
+
 void LLTextBase::appendText(const std::string &new_text, bool prepend_newline, const LLStyle::Params& input_params)
 {
+	LLFastTimer _(FTM_APPEND_TEXT);
 	if (new_text.empty()) 
 		return;
 
@@ -2817,9 +2929,6 @@ S32	LLTextSegment::getNumChars(S32 num_pixels, S32 segment_offset, S32 line_offs
 void LLTextSegment::updateLayout(const LLTextBase& editor) {}
 F32	LLTextSegment::draw(S32 start, S32 end, S32 selection_start, S32 selection_end, const LLRect& draw_rect) { return draw_rect.mLeft; }
 bool LLTextSegment::canEdit() const { return false; }
-// [SL:KB] - Patch: Misc-Spellcheck | Checked: 2011-09-07 (Catznip-2.8.0a) | Added: Catznip-2.8.0a
-bool LLTextSegment::canSpellCheck() const { return false; }
-// [/SL:KB]
 void LLTextSegment::unlinkFromDocument(LLTextBase*) {}
 void LLTextSegment::linkToDocument(LLTextBase*) {}
 const LLColor4& LLTextSegment::getColor() const { return LLColor4::white; }
