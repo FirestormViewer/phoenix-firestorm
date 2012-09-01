@@ -103,4 +103,5 @@
             <radio_item label="Писать в чат" name="radio_start_chat"/>
             <radio_item label="Ходить (WASD)" name="radio_move"/>
         </radio_group>
+	</panel>
 </panel>
