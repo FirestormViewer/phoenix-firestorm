@@ -60,8 +60,6 @@
 #include "llsdutil.h"
 #include <boost/foreach.hpp>
 
-#include "../newview/llviewercontrol.h" // This is a nasty hack ...
-
 // use this to control "jumping" behavior when Ctrl-Tabbing
 const S32 TABBED_FLOATER_OFFSET = 0;
 
@@ -293,9 +291,9 @@ LLFloater::LLFloater(const LLSD& key, const LLFloater::Params& p)
 
 	// <FS:Zi> Make vertical label padding a per-skin option
 	// if no padding is set, use default from settings.xml
-	if(mLabelVPadding==-1)
+	if (mLabelVPadding == -1)
 	{
-		mLabelVPadding=gSavedSettings.getS32("UIFloaterTitleVPad");
+		mLabelVPadding = LLControlGroup::getInstance("Global")->getS32("UIFloaterTitleVPad");
 	}
 	// </FS:Zi>
 
@@ -2695,8 +2693,8 @@ void LLFloaterView::getMinimizePosition(S32 *left, S32 *bottom)
 		// AO: offset minimized windows to not obscure title bars. Yes, this is a quick and dirty hack.
 		int offset = 0;
 		//LLFavoritesBarCtrl* fb = getChild<LLFavoritesBarCtrl>("favorite");
-		bool fbVisible = gSavedSettings.getBOOL("ShowNavbarFavoritesPanel");
-		bool nbVisible = gSavedSettings.getBOOL("ShowNavbarNavigationPanel");
+		bool fbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarFavoritesPanel");
+		bool nbVisible = LLControlGroup::getInstance("Global")->getBOOL("ShowNavbarNavigationPanel");
 		// TODO: Make this introspect controls to get the dynamic size.
 		if (fbVisible)
 			offset += 20;

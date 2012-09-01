@@ -39,8 +39,6 @@
 #include "llfloater.h"
 #include "lltrans.h"
 
-#include "../newview/llviewercontrol.h"
-
 
 //----------------------------------------------------------------------------
 
@@ -271,7 +269,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	// AO: Treat the IM tab container specially 
 	if (getName() == "im_box_tab_container")
 	{
-		if (gSavedSettings.getS32("ChatTabDirection") == 1)
+		if (LLControlGroup::getInstance("Global")->getS32("ChatTabDirection") == 1)
 		{
 			mIsVertical = TRUE;
 			mTabPosition = LLTabContainer::LEFT;
