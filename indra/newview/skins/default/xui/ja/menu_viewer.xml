@@ -606,7 +606,7 @@
     <menu label="Firestorm" name="V1-Firestorm">
     </menu>
     <!-- V1 menu: Advanced -->
-    <menu label="アドバンス"name="V1-Advanced">
+    <menu label="アドバンス" name="V1-Advanced">
 		<menu_item_check label="V1形式のメニューを使用" name="V1 Menus"/>
     </menu>
     <!-- END: V1 Menu System -WoLf -->   
