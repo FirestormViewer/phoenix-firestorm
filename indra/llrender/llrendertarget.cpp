@@ -163,11 +163,29 @@ bool LLRenderTarget::addColorAttachment(U32 color_fmt)
 	}
 
 	U32 offset = mTex.size();
-	if (offset >= 4 ||
-		(offset > 0 && (mFBO == 0 || !gGLManager.mHasDrawBuffers)))
+
+	// <FS:ND> Crashfix; Handle error gracefully
+	// if (offset >= 4 ||
+	// 	(offset > 0 && (mFBO == 0 || !gGLManager.mHasDrawBuffers)))
+	// {
+	// 	llerrs << "Too many color attachments!" << llendl;
+	// }
+
+	if( offset >= 4 )
 	{
-		llerrs << "Too many color attachments!" << llendl;
+		llwarns << "Too many color attachments" << llendl;
+		llassert( offset < 4 );
+		return false;
 	}
+	if( offset > 0 && (mFBO == 0 || !gGLManager.mHasDrawBuffers) )
+	{
+		llwarns << "FBO not used or no drawbuffers available; mFBO=" << (U32)mFBO << " gGLManager.mHasDrawBuffers=" << (U32)gGLManager.mHasDrawBuffers << llendl;
+		llassert(  mFBO != 0 );
+		llassert( gGLManager.mHasDrawBuffers );
+		return false;
+	}
+
+	// </FS:ND>	
 
 	U32 tex;
 	LLImageGL::generateTextures(mUsage, color_fmt, 1, &tex);
