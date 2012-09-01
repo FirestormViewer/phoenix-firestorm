@@ -142,7 +142,7 @@
      layout="topleft"
      left="4"
      name="apply_immediate_check"
-     top="262"
+     top="282"
      width="120" />
    <text
      follows="left|bottom"
@@ -150,7 +150,7 @@
      layout="topleft"
      left="8"
      name="preview_disabled"
-     top="266"
+     top="282"
      value="Preview Disabled"
      visible="false"
      width="120" />
@@ -181,7 +181,7 @@
      label="Show folders"
      layout="topleft"
      name="show_folders_check"
-     top_pad="0"
+     top_pad="5"
      left_delta="-3"
      width="200" />
 
@@ -259,14 +259,16 @@
      top_delta="0"
      name="Cancel"
      width="100" />
+<!-- FS:Ansariel - exists twice
     <check_box
      follows="left|bottom"
      height="20"
      initial_value="true"
      label="Apply now"
      layout="topleft"
-     left="6"
+     left="4"
      name="apply_immediate_check"
      top_delta="0"
      width="120" />
+-->
 </floater>
