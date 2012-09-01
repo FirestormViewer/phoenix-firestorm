@@ -53,7 +53,7 @@
 		<check_box label="Включить / Выключить микрофон, при нажатии:" name="push_to_talk_toggle_check" tool_tip="В режиме переключения однократное нажатие и отпускание данной клавиши включает/выключает микрофон. Если режим переключения отключен, то микрофон передает голос только когда клавиша нажата."/>
 		<line_editor label="Релиз речи:" name="modifier_combo"/>
 		<button label="Уст. кнопку" name="set_voice_hotkey_button"/>
-		<button name="set_voice_middlemouse_button" tool_tip="Сбросить на <ср. кн. Мыши>"/>
+		<button name="set_voice_middlemouse_button" tool_tip="Сбросить на &lt;ср. кн. Мыши&gt;"/>
         <button label="Настройки устройства" name="device_settings_btn"/>
         <panel name="device_settings_panel">
 			<panel.string name="default_text">
@@ -80,5 +80,5 @@
 			</text>
         </panel>
 	</panel>
-		
+</tab_container>
 </panel>
