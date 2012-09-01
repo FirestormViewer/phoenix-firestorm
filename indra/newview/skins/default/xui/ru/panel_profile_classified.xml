@@ -17,7 +17,7 @@
 	<panel name="buttons_cucks">
 		<layout_stack name="buttons_cucks_ls">
 			<layout_panel name="info_btn_lp">
-				<button label="Инфоe="info_btn" tool_tip="инфо"/>
+				<button label="Инфоe" name="info_btn" tool_tip="инфо"/>
 			</layout_panel>
 			<layout_panel name="teleport_btn_lp">
 				<button label="Телепорт" name="teleport_btn" tool_tip="Телепорт по рекламе"/>
