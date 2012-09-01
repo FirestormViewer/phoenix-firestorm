@@ -31,5 +31,5 @@
 		<column name="unit_name" label="Nazwa"/>
 	</scroll_list>
 	<button label="Anuluj" label_selected="Anuluj" name="Cancel"/>
-	<check_box label="Stosuj teraz" name="apply_immediate_check"/>
+	<check_box label="Podgląd" name="apply_immediate_check"/>
 </floater>

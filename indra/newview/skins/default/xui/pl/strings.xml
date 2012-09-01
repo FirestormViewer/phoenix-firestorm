@@ -1033,6 +1033,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="script_files">
 		Skrypty
 	</string>
+	<string name="dictionary_files">
+		Słowniki
+	</string>
 	<string name="AvatarSetNotAway">
 		Nie Śpij
 	</string>
