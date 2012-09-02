@@ -484,7 +484,7 @@ void LLNearbyChat::sendChat(LLWString text,EChatType type)
 				{
 					utf8text.replace(0, 1, "/me");
 				}
-				else if (isalpha(utf8text.at(1)))	// Do not prevent smileys and such.
+				else if (!isdigit(utf8text.at(1)) && !ispunct(utf8text.at(1)) && !isspace(utf8text.at(1)))	// Do not prevent smileys and such.
 				{
 					utf8text.replace(0, 1, "/me ");
 				}
