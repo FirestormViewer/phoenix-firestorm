@@ -29,6 +29,10 @@ elseif (HAVOK_TPV)
    set(LLPHYSICSEXTENSIONS_INCLUDE_DIRS ${LIBS_PREBUILT_DIR}/include/llphysicsextensions)
    # </FS:ND>
 
+   # <FS:ND> havok lib get installed to packages/lib
+   link_directories( ${LIBS_PREBUILT_DIR}/lib )
+   # </FS:ND>
+
 else (HAVOK)
    use_prebuilt_binary( ndPhysicsStub )
 
