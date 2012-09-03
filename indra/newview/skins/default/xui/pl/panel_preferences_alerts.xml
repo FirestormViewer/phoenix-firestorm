@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Alerty" name="popups">
+<tab_container name="tabs">
+ 
+    <!-- Notifications -->
+    <panel label="Notifications" name="tab-notifications">
 	<text name="tell_me_label">
 		Powiadom mnie:
 	</text>
@@ -20,10 +24,16 @@
 	<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
 	<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
 	<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
+    </panel>
+
+    <!-- Alerts -->
+    <panel label="Alerts" name="tab-alerts">
 	<text name="show_label">
 		Zawsze pokazuj:
 	</text>
 	<text name="dont_show_label">
 		Nigdy nie pokazuj:
 	</text>
+	</panel>
+</tab_container>
 </panel>

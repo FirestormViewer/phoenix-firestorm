@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="ポップアップ" name="popups" title="ポップアップ">
+<tab_container name="tabs">
+ 
+    <!-- Notifications -->
+    <panel label="Notifications" name="tab-notifications">
 	<text name="tell_me_label">
 		知らせる：
 	</text>
@@ -26,6 +30,10 @@
 	<check_box label="チャット履歴のみ" name="OnlineOfflinetoNearbyChatHistory" />
      <check_box label="Growlで通知" name="notify_growl_checkbox" />
 	  <check_box name="notify_growl_always_checkbox" label="Firestormが前面にあってもGrowlで通知"/>
+    </panel>
+
+    <!-- Alerts -->
+    <panel label="Alerts" name="tab-alerts">
 
 	<text name="show_label" width="300">
 		常に表示するメッセージ：
@@ -33,4 +41,6 @@
 	<text name="dont_show_label">
 		表示しないメッセージ：
 	</text>
+	</panel>
+</tab_container>
 </panel>

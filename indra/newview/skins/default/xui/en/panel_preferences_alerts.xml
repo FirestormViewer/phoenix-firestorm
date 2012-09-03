@@ -9,6 +9,28 @@
  width="540"
  label="Popups"
  name="popups">
+<tab_container
+ label="Alerts"
+ layout="topleft"
+ follows="all"
+ top="5"
+ bottom="-10"
+ left="1"
+ right="-1"
+ name="tabs"
+ tab_min_width="50"
+ tab_position="top">
+ 
+    <!-- Notifications -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Notifications"
+     name="tab-notifications">
+
     <text
      type="string"
      length="1"
@@ -19,7 +41,7 @@
      name="tell_me_label"
      top="8"
      width="300">
-        Tell me:
+        Notify me:
     </text>
 
     <check_box
@@ -35,7 +57,8 @@
      enabled_control="NotifyMoneyChange"
      layout="topleft"
      follows="left|top"
-     left_pad="30"
+     left="20"
+     top_pad="2"
      height="18"
      control_name="FSPaymentInfoInChat"
      name="FSPaymentInfoInChat"
@@ -56,7 +79,8 @@
      height="16"
      label="When somebody changes their display name"
      layout="topleft"
-     left_pad="10"
+     left="10"
+     top_pad="2"
      name="FSShowDisplayNameUpdateNotification"
      width="180" />
 
@@ -97,6 +121,25 @@
          top_delta="0"
          width="100" />
     </radio_group>
+     <check_box
+      control_name="FSEnableGrowl"
+      height="16"
+      label="Enable Growl Notifications"
+      layout="topleft"
+      left="10"
+      name="notify_growl_checkbox"
+      top_pad="2"
+      width="160" />
+     <check_box
+      enabled_control="FSEnableGrowl"
+      layout="topleft"
+      follows="left|top"
+      left="20"
+      top_pad="2"
+      height="18"
+      control_name="FSGrowlWhenActive"
+      name="notify_growl_always_checkbox"
+      label="Enable Growl even if Firestorm is active"/>
 
 	 <text
      type="string"
@@ -105,6 +148,7 @@
      height="15"
      layout="topleft"
      left="10"
+     top_pad="10"
      name="friends_logon_label"
      width="400">
         Show when my friends log in or out:
@@ -140,25 +184,17 @@
      left_pad="0"
      name="OnlineOfflinetoNearbyChatHistory"
      width="180" />
-     <check_box
-      control_name="FSEnableGrowl"
-      height="16"
-      label="Enable Growl Notifications"
-      layout="topleft"
-      left="10"
-      name="notify_growl_checkbox"
-      top_pad="2"
-      width="160" />
-     <check_box
-      enabled_control="FSEnableGrowl"
-      layout="topleft"
-      follows="left|top"
-      left_pad="30"
-      height="18"
-      control_name="FSGrowlWhenActive"
-      name="notify_growl_always_checkbox"
-      label="Enable Growl even if Firestorm is active"/>
+    </panel>
 
+    <!-- Alerts -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="Alerts"
+     name="tab-alerts">
     <text
      type="string"
      length="1"
@@ -231,4 +267,6 @@
      multi_select="true"
      name="disabled_popups"
      width="495" />
+    </panel>
+</tab_container>
 </panel>

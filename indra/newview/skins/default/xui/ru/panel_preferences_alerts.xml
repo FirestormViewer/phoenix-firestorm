@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Popups" name="popups" title="Popups">
+<tab_container name="tabs">
+ 
+    <!-- Notifications -->
+    <panel label="Notifications" name="tab-notifications">
 	<text name="tell_me_label">
 		Сообщить мне:
 	</text>
@@ -14,10 +18,16 @@
 		<radio_item label="Локоал. чате"  name="script_0"/>
 		<radio_item label="В отдельном окне" name="script_1"/>
 	</radio_group>
+    </panel>
+
+    <!-- Alerts -->
+    <panel label="Alerts" name="tab-alerts">
 	<text name="show_label">
 		Всегда показывать:
 	</text>
 	<text name="dont_show_label">
 		Никогда не показывать:
 	</text>
+	</panel>
+</tab_container>
 </panel>

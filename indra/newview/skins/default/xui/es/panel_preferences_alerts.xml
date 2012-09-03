@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Ventanas emergentes" name="popups" title="Ventanas emergentes">
+<tab_container name="tabs">
+ 
+    <!-- Notifications -->
+    <panel label="Notifications" name="tab-notifications">
 	<text name="tell_me_label">
 		Avisarme:
 	</text>
@@ -20,6 +24,10 @@
 	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
 	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>
 	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
+    </panel>
+
+    <!-- Alerts -->
+    <panel label="Alerts" name="tab-alerts">
 	<text name="show_label">
 		Mostrar siempre:
 	</text>
@@ -28,4 +36,6 @@
 		No mostrar nunca:
 	</text>
 	<scroll_list name="disabled_popups"/>
+    </panel>
+</tab_container>
 </panel>
