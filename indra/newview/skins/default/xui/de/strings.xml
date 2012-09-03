@@ -5336,6 +5336,26 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		[REGION]
 	</string>
 	
+	<!-- Nearby Chat Collision Messages -->
+	<string name="Collision_Bump">
+		[NAME] hat Sie gestoßen.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] hat Sie mit einem Skript gestoßen.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] hat Sie mit einem Objekt getroffen.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] hat Sie mit einem Skript-Objekt getroffen.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] hat Sie mit einem physischen Objekt getroffen.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] hat eine Kollision unbekannten Typs verursacht.
+	</string>
+
 	<string name="TeleportMaturityExceeded">
 		Der Einwohner kann dieser Region nicht betreten.
 	</string>

@@ -4110,6 +4110,14 @@ Try enclosing path to the editor with double quotes.
   <string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Double-click to teleport, shift-drag to pan)</string>
   <string name="NetMapDoubleClickNoActionToolTipMsg">[REGION]</string>
 
+  <!-- Nearby Chat Collision Messages -->
+  <string name="Collision_Bump">[NAME] bumped you.</string>
+  <string name="Collision_PushObject">[NAME] pushed you with a script.</string>
+  <string name="Collision_ObjectCollide">[NAME] hit you with an object.</string>
+  <string name="Collision_ScriptedObject">[NAME] hit you with a scripted object.</string>
+  <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
+  <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
+
   <string name="TeleportMaturityExceeded">The Resident cannot visit this region.</string>
 
   <!-- Spell check settings floater -->

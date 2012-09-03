@@ -18,6 +18,7 @@
 	</radio_group>
 	<check_box label="Growl-Benachrichtigungen aktivieren" name="notify_growl_checkbox"/>
 	<check_box label="Growl nutzen auch wenn Firestorm aktiv ist" name="notify_growl_always_checkbox"/>
+	<check_box label="Kollisionsmeldungen im Chat in der Nähe anzeigen" name="FSCollisionMessagesInChat"/>
 	<text name="friends_logon_label">
 		Anzeigen wenn meine Freunden sich an- oder abmelden:
 	</text>

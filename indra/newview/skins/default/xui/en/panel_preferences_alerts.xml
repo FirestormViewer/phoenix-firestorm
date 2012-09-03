@@ -140,6 +140,15 @@
       control_name="FSGrowlWhenActive"
       name="notify_growl_always_checkbox"
       label="Enable Growl even if Firestorm is active"/>
+    <check_box
+     control_name="FSCollisionMessagesInChat"
+     height="16"
+     label="Show collision notifications in nearby chat"
+     layout="topleft"
+     left="10"
+     top_pad="2"
+     name="FSCollisionMessagesInChat"
+     width="180" />
 
 	 <text
      type="string"

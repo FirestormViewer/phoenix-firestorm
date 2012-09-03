@@ -148,6 +148,8 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "llpanelpeople.h"
 // [/AO]
 #include "tea.h" // <FS:AW opensim currency support>
+#include "chatbar_as_cmdline.h"
+
 #if LL_MSVC
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
@@ -7028,6 +7030,38 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 		msgsystem->getU8Fast(_PREHASH_MeanCollision, _PREHASH_Type, u8type);
 
 		type = (EMeanCollisionType)u8type;
+
+		// <FS:Ansariel> Nearby Chat Collision Messages
+		if (gSavedSettings.getBOOL("FSCollisionMessagesInChat"))
+		{
+			std::string action;
+			LLStringUtil::format_map_t args;
+			args["NAME"] = llformat("secondlife:///app/agent/%s/inspect", perp.asString().c_str());
+
+			switch (type)
+			{
+				case MEAN_BUMP:
+					action = LLTrans::getString("Collision_Bump", args);
+					break;
+				case MEAN_LLPUSHOBJECT:
+					action = LLTrans::getString("Collision_PushObject", args);
+					break;
+				case MEAN_SELECTED_OBJECT_COLLIDE:
+					action = LLTrans::getString("Collision_ObjectCollide", args);
+					break;
+				case MEAN_SCRIPTED_OBJECT_COLLIDE:
+					action = LLTrans::getString("Collision_ScriptedObject", args);
+					break;
+				case MEAN_PHYSICAL_OBJECT_COLLIDE:
+					action = LLTrans::getString("Collision_PhysicalObject", args);
+					break;
+				default:
+					action = LLTrans::getString("Collision_UnknownType", args);
+					return;
+			}
+			cmdline_printchat(action);
+		}
+		// </FS:Ansariel> Nearby Chat Collision Messages
 
 		BOOL b_found = FALSE;
 
