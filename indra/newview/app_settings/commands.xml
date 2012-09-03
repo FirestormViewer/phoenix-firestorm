@@ -401,7 +401,7 @@
 
   <command name="phototools_view"
            available_in_toybox="true"
-           icon="Command_View_Icon"
+           icon="phototools_camera"
            label_ref="Command_Phototools_View_Label"
            tooltip_ref="Command_Phototools_View_Tooltip"
            execute_function="Floater.Toggle"
