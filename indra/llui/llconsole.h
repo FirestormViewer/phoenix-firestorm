@@ -57,7 +57,7 @@ public:
 			persist_time("persist_time", 0.f), // forever
 			font_size_index("font_size_index"),
 			parse_urls("parse_urls", false), // Ansariel: If lines should be parsed for URLs
-			background_image("background_image", "transparent") // Ansariel: Configurable background for different console types
+			background_image("background_image", "Console_Background") // Ansariel: Configurable background for different console types
 		{
 			changeDefault(mouse_opaque, false);
 		}

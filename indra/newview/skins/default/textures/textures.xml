@@ -879,4 +879,6 @@ with the same filename but different name
 <texture name="icon_avatar_online"			file_name="legacy/icon_avatar_online.tga"		preload="false" />
 <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
 
+  <texture name="Console_Background" file_name="Console_Background.png"/>
+
 </textures>
