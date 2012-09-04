@@ -98,7 +98,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
      label="Filter"
      max_length_chars="300"
      name="filter_input"
-     text_pad_left="10"
+     text_pad_left="4"
      top="3"
      width="303" />
     <tab_container
