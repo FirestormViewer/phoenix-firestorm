@@ -165,7 +165,7 @@
          follows="all"
          height="20" 
          increment="1.00"
-         initial_val="0"
+         initial_value="0"
          label="Chan"
          label_width="29"
          max_val="2147483647"

@@ -1130,7 +1130,7 @@
 		can_edit_text="false"
 		height="16"
 		increment="1"
-		initial_val="160"
+		initial_value="160"
 		label="Strength:"
 		tool_tip="Glow strength. Higher = wider and smoother (default is 2) "
 		label_width="50"

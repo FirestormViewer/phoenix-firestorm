@@ -423,7 +423,7 @@
          height="18"
          left_pad="5"
          increment="1"
-         initial_val="362394"
+         initial_value="362394"
          max_val="2147483647"
          min_val="1"
          name="StreamMetadataAnnounceChannel"
@@ -529,7 +529,7 @@
          height="18"
          left_pad="5"
          increment="10"
-         initial_val="10"
+         initial_value="10"
          max_val="10000"
          min_val="0"
          name="money_change_threshold"
@@ -551,7 +551,7 @@
          left_pad="5"
          height="20"
          max_length="256"
-         vname="UISndRegionRestart"
+         name="UISndRegionRestart"
          control_name="UISndRegionRestart"
          width="250"/>
 
