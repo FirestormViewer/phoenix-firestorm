@@ -361,7 +361,6 @@
         Web browser:
     </text>
     <radio_group
-    draw_border="false"
     follows="top|left"
     height="20"
     layout="topleft"

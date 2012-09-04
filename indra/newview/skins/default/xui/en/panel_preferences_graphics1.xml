@@ -722,7 +722,6 @@
             </text>
             <radio_group
              control_name="RenderTerrainDetail"
-             draw_border="false"
              height="38"
              layout="topleft"
              left_delta="0"

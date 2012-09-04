@@ -491,7 +491,6 @@
          min_val="1"
          show_text="true"
          width="350"
-         auto_resize="false"
          tool_tip="Sets the threshold of incoming object offers within 10 seconds before they get throttled. Default 5" />
 	</panel>
 
@@ -688,7 +687,6 @@
          min_val="4"
          show_text="true"
          width="250"
-         auto_resize="false"
          tool_tip="How many beam updates to send in a second. Default 40" />
 
         <check_box
@@ -798,7 +796,6 @@
          min_val="0.1"
          show_text="true"
          width="150"
-         auto_resize="false"
          tool_tip="Change the scale of the shape used for the Phoenix Shaped Beam" />
 
     </panel>
@@ -909,7 +906,6 @@
       min_val="5"
       show_text="true"
       width="200"
-      auto_resize="false"
       tool_tip="How big do you want the platform to appear to be?"/>
 
     <view_border
@@ -1907,7 +1903,6 @@
          min_val="-5"
          show_text="true"
          width="250"
-         auto_resize="false"
          tool_tip="Changes the Z-offset for avatar name tags. Default 0" />
 
     </panel>

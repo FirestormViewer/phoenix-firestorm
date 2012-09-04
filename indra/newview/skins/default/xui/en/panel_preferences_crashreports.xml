@@ -18,7 +18,6 @@
      height="16"
      label="Send crash reports to phoenixviewer.com"
      name="checkSendCrashReports"
-     parse_urls="false"
      enabled="false" />
 
     <text

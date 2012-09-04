@@ -704,8 +704,6 @@
              height="20"             
              left_pad="10"
              top_delta="-3"
-             min_value="0.0"
-             max_value="7.0" 
              name="mod_name_style"
              width="170">
             <combo_box.item
@@ -758,8 +756,6 @@
              height="20"
              left_pad="10"
              top_delta="-3"
-             min_value="0.0"
-             max_value="7.0" 
              name="mod_text_style"
              width="170">
             <combo_box.item
@@ -1067,7 +1063,6 @@
              top_delta="25"
              left="20"
              height="20"
-             max_length="256"
              name="FSKeywords"
              control_name="FSKeywords"
              width="450"/>
