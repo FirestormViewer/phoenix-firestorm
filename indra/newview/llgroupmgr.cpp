@@ -1834,9 +1834,7 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////// 
-// I DON'T KNOW WHERE TO PUT THIS
+// Responder class for capability group management
 class GroupMemberDataResponder : public LLHTTPClient::Responder
 {
 public:
@@ -1852,8 +1850,6 @@ void GroupMemberDataResponder::result(const LLSD& content)
 {
 	LLGroupMgr::processCapGroupMembersRequest(content);
 }
-//////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////// 
 
 
 // static
@@ -1868,8 +1864,8 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
 	// Check to make sure we have our capabilities
 	if(!currentRegion->capabilitiesReceived())
 	{
-		LL_INFOS("BAKER") << " Capabilities not received! -- OSHITSON --" << LL_ENDL;
-		// BAKER TODO: Handle this!
+		LL_INFOS("BAKER") << " Capabilities not received!" << LL_ENDL;
+		return;
 	}
 
 	// Get our capability
@@ -1878,10 +1874,10 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
 	// Post to our service.  Add a body containing the group_id.
 	LLSD body = LLSD::emptyMap();
 	body["group_id"]	= group_id;
-	// Session id?
 
 	LLHTTPClient::ResponderPtr grp_data_responder = new GroupMemberDataResponder();
-	 // This could take a while to finish, timeout after 10 minutes.
+	
+	// This could take a while to finish, timeout after 10 minutes.
 	LLHTTPClient::post(cap_url, body, grp_data_responder, LLSD(), 600);
 
 	mLastGroupMembersRequestFrame = gFrameCount;
@@ -1894,8 +1890,8 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 	// Did we get anything in content?
 	if(!content.size())
 	{
-		// BAKER TODO:
-		// Maybe display a popup saying something went wrong?
+		LL_DEBUGS("GrpMgr") << "No group member data received." << LL_ENDL;
+		return;
 	}
 
 	// If we have no members, there's no reason to do anything else
@@ -1941,8 +1937,7 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 
 		const LLUUID member_id(member_iter_start->first);
 		LLSD member_info = member_iter_start->second;
-
-		// Online Status
+		
 		if(member_info.has("last_login"))
 		{
 			online_status = member_info["last_login"];
@@ -1952,19 +1947,15 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 				formatDateString(online_status);
 		}
 
-		// Title
 		if(member_info.has("title"))
 			title = titles[member_info["title"].asInteger()];
 
-		// Powers
 		if(member_info.has("powers"))
 			member_powers = llstrtou64(member_info["powers"].asString().c_str(), NULL, 16);
 
-		// Land Contribution
 		if(member_info.has("donated_square_meters"))
 			contribution = member_info["donated_square_meters"];
 
-		// Owner Flag
 		if(member_info.has("owner"))
 			is_owner = true;
 
