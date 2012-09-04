@@ -65,7 +65,7 @@ public:
 	{
 		Alternative<S32> bytes, chars;
 		
-		MaxLength() : bytes("max_length_bytes", 254),
+		MaxLength() : bytes("max_length_bytes", 4096), // FS:TM needs to be this big for fields like entering in full path location to files on the local computer
 					  chars("max_length_chars", 0) 
 		{}
 	};

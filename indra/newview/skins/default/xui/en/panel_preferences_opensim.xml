@@ -40,7 +40,7 @@
       height="19"
       layout="topleft"
       left="50"
-      max_length="4096"
+      max_length_chars="4096"
       name="add_grid"
       top_pad="5"
       width="270" />
@@ -165,7 +165,7 @@
       height="19"
       layout="topleft"
       left="50"
-      max_length="4096"
+      max_length_chars="4096"
       name="search_url_debug"
       top_pad="5"
       width="270" />

@@ -1116,7 +1116,7 @@
              follows="left|top"
              left_pad="5"
              height="20"
-             max_length="256"
+             max_length_chars="256"
              name="FSKeywordSound"
              control_name="FSKeywordSound"
              width="250"/>

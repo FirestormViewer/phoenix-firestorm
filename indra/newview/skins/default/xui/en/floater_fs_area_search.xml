@@ -44,7 +44,7 @@
 	 bottom_delta="20"
 	 follows="left|top"
 	 font="SansSerifSmall"
-	 max_length="256"
+	 max_length_chars="256"
 	 mouse_opaque="true" />
 	<line_editor
 	 name="Description query chunk"
@@ -57,7 +57,7 @@
 	 bottom_delta="0"
 	 follows="left|top"
 	 font="SansSerifSmall"
-	 max_length="256"
+	 max_length_chars="256"
 	 mouse_opaque="true" />
 	<text
 	 name="owner_label"
@@ -89,7 +89,7 @@
 	 bottom_delta="20"
 	 follows="left|top"
 	 font="SansSerifSmall"
-	 max_length="256"
+	 max_length_chars="256"
 	 mouse_opaque="true" />
 	<line_editor
 	 name="Group query chunk"
@@ -103,7 +103,7 @@
 	 bottom_delta="0"
 	 follows="left|top"
 	 font="SansSerifSmall"
-	 max_length="256"
+	 max_length_chars="256"
 	 mouse_opaque="true" />
 	<scroll_list
 	 name="result_list"

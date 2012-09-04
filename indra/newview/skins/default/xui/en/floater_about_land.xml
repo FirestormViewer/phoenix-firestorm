@@ -152,7 +152,7 @@
              height="20"
              layout="topleft"
              left_pad="2"
-             max_length="63"
+             max_length_chars="63"
              name="UUID"
              top_delta="0"
              width="365" />
@@ -592,8 +592,7 @@ Loading...
          left="0"
          top="0"
          help_topic="land_covenant_tab"
-         name="land_covenant_panel"
-         word_wrap="true">
+         name="land_covenant_panel">
             <panel.string
              name="can_resell"
              word_wrap="true">

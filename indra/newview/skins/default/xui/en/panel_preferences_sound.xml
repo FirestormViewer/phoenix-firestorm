@@ -550,7 +550,7 @@
          follows="left|top"
          left_pad="5"
          height="20"
-         max_length="256"
+         max_length_chars="256"
          name="UISndRegionRestart"
          control_name="UISndRegionRestart"
          width="250"/>
