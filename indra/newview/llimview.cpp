@@ -2672,6 +2672,7 @@ void LLIMMgr::addMessage(
 			return;
 		}
 
+	// <FS:PP> Configurable IM souns
 		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
@@ -2680,6 +2681,7 @@ void LLIMMgr::addMessage(
 	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
+	// </FS:PP>
 	}
 
 	//<FS:TS> FIRE-6650: Group chat for non-friends mutes when disabling voice chat from non-friends

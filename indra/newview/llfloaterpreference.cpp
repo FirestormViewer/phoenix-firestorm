@@ -855,7 +855,7 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// Display selected maturity icons.
 	onChangeMaturity();
 	
-	// Load (double-)click to walk/teleport settings.
+	// <FS:PP> Load (double-)click to walk/teleport settings.
 	updateClickActionControls();
 	
 	// Load UI Sounds tabs settings.
@@ -1922,6 +1922,7 @@ void LLFloaterPreference::updateClickActionControls()
 	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
 }
 
+// <FS:PP> Load UI Sounds tabs settings
 void LLFloaterPreference::updateUISoundsControls()
 {
 	getChild<LLComboBox>("PlayModeUISndAlert")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndAlert"));
@@ -1961,6 +1962,7 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
 	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
 }
+// </FS:PP>
 
 //[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
 //void LLFloaterPreference::onChangeDoubleClickSettings()
