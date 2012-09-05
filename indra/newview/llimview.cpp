@@ -2672,6 +2672,13 @@ void LLIMMgr::addMessage(
 			return;
 		}
 
+		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0)
+		{
+			make_ui_sound("UISndNewIncomingIMSession");
+		}
+	}
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2)
+	{
 		make_ui_sound("UISndNewIncomingIMSession");
 	}
 

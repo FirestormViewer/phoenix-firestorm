@@ -313,7 +313,7 @@
          width="237"
          top_pad="0"/>
         <check_box
-         control_name="PlayTeleportSound"
+         control_name="PlayModeUISndTeleportOut"
          follows="left|top"
          height="20"
          label="Play sound effect when teleporting"

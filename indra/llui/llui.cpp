@@ -129,6 +129,20 @@ void make_ui_sound(const char* namep)
 		}
 		else if (LLUI::sAudioCallback != NULL)
 		{
+
+			// --- Silencer for FIRE-7556: Configurable User Interface sounds
+			if(name == "UISndNewIncomingIMSession")
+			{
+				if (!LLUI::sSettingGroups["config"]->getU32("PlayModeUISndNewIncomingIMSession")) // The only one U32 - 0, 1 or 2 value
+					return;
+			}
+			else
+			{
+				if (!LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name))
+					return;
+			}
+			// --- End
+			
 			if (LLUI::sSettingGroups["config"]->getBOOL("UISndDebugSpamToggle"))
 			{
 				llinfos << "UI sound name: " << name << llendl;	

@@ -120,6 +120,8 @@ protected:
 	void updateClickActionSettings();
 	// updates click/double-click action controls depending on values from settings.xml
 	void updateClickActionControls();
+	// updates UI Sounds controls depending on values from settings.xml
+	void updateUISoundsControls();
 	
 	// ## Zi: Optional Edit Appearance Lighting
 	// make sure controls get greyed out or enabled when appearance camera movement is toggled

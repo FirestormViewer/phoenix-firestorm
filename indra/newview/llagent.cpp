@@ -4174,8 +4174,7 @@ bool LLAgent::teleportCore(bool is_local)
 		// bit of a hack -KC
 		KCWindlightInterface::instance().setTPing(true);
 	}
-	if (gSavedSettings.getBOOL("PlayTeleportSound") == TRUE) //AO
-		make_ui_sound("UISndTeleportOut");
+	make_ui_sound("UISndTeleportOut"); //AO
 	
 	// MBW -- Let the voice client know a teleport has begun so it can leave the existing channel.
 	// This was breaking the case of teleporting within a single sim.  Backing it out for now.

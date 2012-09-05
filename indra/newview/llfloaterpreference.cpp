@@ -858,6 +858,9 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// Load (double-)click to walk/teleport settings.
 	updateClickActionControls();
 	
+	// Load UI Sounds tabs settings.
+	updateUISoundsControls();
+	
 	// Enabled/disabled popups, might have been changed by user actions
 	// while preferences floater was closed.
 	buildPopupLists();
@@ -1919,6 +1922,45 @@ void LLFloaterPreference::updateClickActionControls()
 	getChild<LLComboBox>("double_click_action_combo")->setValue(dbl_click_to_teleport ? 2 : (int)dbl_click_to_walk);
 }
 
+void LLFloaterPreference::updateUISoundsControls()
+{
+	getChild<LLComboBox>("PlayModeUISndAlert")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndAlert"));
+	getChild<LLComboBox>("PlayModeUISndBadKeystroke")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndBadKeystroke"));
+	getChild<LLComboBox>("PlayModeUISndClick")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndClick"));
+	getChild<LLComboBox>("PlayModeUISndClickRelease")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndClickRelease"));
+	getChild<LLComboBox>("PlayModeUISndHealthReductionF")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndHealthReductionF"));
+	getChild<LLComboBox>("PlayModeUISndHealthReductionM")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndHealthReductionM"));
+	getChild<LLComboBox>("PlayModeUISndInvalidOp")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndInvalidOp"));
+	getChild<LLComboBox>("PlayModeUISndMoneyChangeDown")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndMoneyChangeDown"));
+	getChild<LLComboBox>("PlayModeUISndMoneyChangeUp")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndMoneyChangeUp"));
+	getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2. Shared with Chat > General > "When receiving Instant Messages"
+	getChild<LLComboBox>("PlayModeUISndStartIM")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndStartIM"));
+	getChild<LLComboBox>("PlayModeUISndObjectCreate")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectCreate"));
+	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectDelete"));
+	getChild<LLComboBox>("PlayModeUISndObjectRezIn")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectRezIn"));
+	getChild<LLComboBox>("PlayModeUISndObjectRezOut")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectRezOut"));
+	getChild<LLComboBox>("QuietSnapshotsToDiskComboBox")->setValue((int)gSavedSettings.getBOOL("QuietSnapshotsToDisk")); // Shared with "Quiet Snapshots" option from Advanced menu
+	getChild<LLComboBox>("PlayModeUISndTeleportOut")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndTeleportOut")); // Shared with Move and View > Movement > "Play sound effect when teleporting"
+	getChild<LLComboBox>("PlayModeUISndRegionRestart")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndRegionRestart"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuAppear")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuAppear"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuHide")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuHide"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight0")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight0"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight1")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight1"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight2")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight2"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight3")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight3"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight4")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight4"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight5")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight5"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight6")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight6"));
+	getChild<LLComboBox>("PlayModeUISndPieMenuSliceHighlight7")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndPieMenuSliceHighlight7"));
+	getChild<LLComboBox>("FSPlayTypingSoundComboBox")->setValue((int)gSavedSettings.getBOOL("FSPlayTypingSound")); // Shared with Chat > General > "Hear typing sound when people type in local chat"
+	getChild<LLComboBox>("PlayModeUISndWindowClose")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndWindowClose"));
+	getChild<LLComboBox>("PlayModeUISndWindowOpen")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndWindowOpen"));
+	// Set proper option for Chat > General > "When receiving Instant Messages"
+	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2
+	// This sound is unused in Firestorm at the moment
+	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
+	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
+}
 
 //[FIX FIRE-1927 - enable DoubleClickTeleport shortcut : SJ]
 //void LLFloaterPreference::onChangeDoubleClickSettings()
