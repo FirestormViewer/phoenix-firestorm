@@ -148,6 +148,30 @@
      top_pad="2"
      name="FSCollisionMessagesInChat"
      width="180" />
+    <check_box
+     control_name="FSReportCollisionMessages"
+     height="16"
+     label="Report collision notifications to scripts on channel"
+     layout="topleft"
+     left="10"
+     top_pad="5"
+     name="FSReportCollisionMessages"
+     width="300" />
+	<spinner
+	 top_delta="-5"
+	 control_name="FSReportCollisionMessagesChannel"
+	 decimal_digits="0"
+	 layout="topleft"
+	 follows="left|top"
+	 height="18"
+	 left_pad="0"
+	 increment="1"
+	 initial_value="-25000"
+	 max_val="2147483647"
+	 min_val="-2147483648"
+	 name="FSReportCollisionMessagesChannel"
+	 width="90"
+	 tool_tip="The channel used for reporting collision messages to scripts [Default: -25000]"/>
 
 	 <text
      type="string"

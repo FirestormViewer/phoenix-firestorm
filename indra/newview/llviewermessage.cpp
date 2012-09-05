@@ -7062,6 +7062,24 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 			cmdline_printchat(action);
 		}
 		// </FS:Ansariel> Nearby Chat Collision Messages
+		// <FS:Ansariel> Report Collision Messages to scripts
+		if (gSavedSettings.getBOOL("FSReportCollisionMessages"))
+		{
+			std::string collision_data = llformat("%s,%.2f,%d", perp.asString().c_str(), mag, u8type);
+
+			LLMessageSystem* msgs = gMessageSystem;
+			msgs->newMessage(_PREHASH_ScriptDialogReply);
+			msgs->nextBlock(_PREHASH_AgentData);
+			msgs->addUUID(_PREHASH_AgentID, gAgent.getID());
+			msgs->addUUID(_PREHASH_SessionID, gAgent.getSessionID());
+			msgs->nextBlock(_PREHASH_Data);
+			msgs->addUUID(_PREHASH_ObjectID, gAgent.getID());
+			msgs->addS32(_PREHASH_ChatChannel, gSavedSettings.getS32("FSReportCollisionMessagesChannel"));
+			msgs->addS32(_PREHASH_ButtonIndex, 1);
+			msgs->addString(_PREHASH_ButtonLabel, collision_data.c_str());
+			gAgent.sendReliableMessage();
+		}
+		// </FS:Ansariel> Report Collision Messages to scripts
 
 		BOOL b_found = FALSE;
 
