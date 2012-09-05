@@ -216,7 +216,7 @@ LLViewerStats::LLViewerStats() :
 	mPacketsInStat("packetsinstat"),
 	mPacketsLostStat("packetsloststat"),
 	mPacketsOutStat("packetsoutstat"),
-	mPacketsLostPercentStat("packetslostpercentstat", 64),
+	mPacketsLostPercentStat("packetslostpercentstat", 32),
 	mTexturePacketsStat("texturepacketsstat"),
 	mActualInKBitStat("actualinkbitstat"),
 	mActualOutKBitStat("actualoutkbitstat"),
