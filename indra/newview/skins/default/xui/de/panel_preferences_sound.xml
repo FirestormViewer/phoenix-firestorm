@@ -86,5 +86,272 @@
 			</text>
         </panel>
 	</panel>
+	
+	<!-- UI Sounds 1 -->
+	<panel label="UI Sounds 1" name="UI Sounds tab 1">
+		<text name="textFSExplanation_tab1">
+			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
+Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
+		</text>
+		<text tool_tip="UUID des Klangs bei Standardwarnungen in Firestorm." name="textFSSndAlert">
+			Warnung (Standard):
+		</text>
+		<combo_box name="PlayModeUISndAlert">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei ungültiger Tastatureingabe." name="textFSBadKeystroke">
+			Ungültige Tastatureingabe:
+		</text>
+		<combo_box name="PlayModeUISndBadKeystroke">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei einem Mausklick." name="textFSClick">
+			Mausklick:
+		</text>
+		<combo_box name="PlayModeUISndClick">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Loslassen eines Mausknopfs." name="textFSClickRelease">
+            Loslassen Mausknopf:
+		</text>
+		<combo_box name="PlayModeUISndClickRelease">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs, wenn ein weiblicher Avatar Schaden nimmt." name="textFSHealthReductionF">
+			Treffer weiblicher Avatar:
+		</text>
+		<combo_box name="PlayModeUISndHealthReductionF">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs, wenn ein männlicher Avatar Schaden nimmt." name="textFSHealthReductionM">
+			Treffer männlicher Avatar:
+		</text>
+		<combo_box name="PlayModeUISndHealthReductionM">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei einer ungültigen Aktion." name="textFSInvalidOp">
+			Ungültige Aktion:
+		</text>
+		<combo_box name="PlayModeUISndInvalidOp">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Geldausgang." name="textFSMoneyChangeDown">
+			Geldausgang:
+		</text>
+		<combo_box name="PlayModeUISndMoneyChangeDown">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Geldeingang." name="textFSMoneyChangeUp">
+			Geldeingang:
+		</text>
+		<combo_box name="PlayModeUISndMoneyChangeUp">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei eingehenden Instant Messages. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Bei Eintreffen von Instant Messages:'." name="textFSNewIncomingIMSession">
+            Eingeh. Instant Messages:
+		</text>
+		<combo_box name="PlayModeUISndNewIncomingIMSession">
+			<combo_box.item label="Bei neuer IM" name="1"/>
+			<combo_box.item label="Bei jeder IM" name="2"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Starten einer neuen Instant-Messaging-Sitzung." name="textFSStartIM">
+			Start IM-Sitzung:
+		</text>
+		<combo_box name="PlayModeUISndStartIM">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Erzeugen eines neuen Objektes." name="textFSObjectCreate">
+			Objekterstellung:
+		</text>
+		<combo_box name="PlayModeUISndObjectCreate">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<!-- Note: This sound is unused in Firestorm at the moment -->
+		<text tool_tip="UUID des Klangs beim Löschen eines Objektes. Wird momentan nicht verwendet." name="textFSObjectDelete">
+			Objektlöschung:
+		</text>
+		<combo_box name="PlayModeUISndObjectDelete">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+		<!-- End of unused sound here -->
+
+		<text tool_tip="UUID des Klangs beim Rezzen eines Objektes." name="textFSObjectRezIn">
+            Objekt rezzen:
+		</text>
+		<combo_box name="PlayModeUISndObjectRezIn">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Derezzen eines Objektes." name="textFSObjectRezOut">
+			Objekt derezzen:
+		</text>
+		<combo_box name="PlayModeUISndObjectRezOut">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Erzeugen eines Fotos. Diese Einstellung ist gekoppelt an die Option 'Fotos leise speichern' im 'Erweitert'-Menü." name="textFSSnapshot">
+            Erstellen Schnappschuß:
+		</text>
+		<combo_box name="QuietSnapshotsToDiskComboBox">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSRegionRestart">
+			Teleportieren:
+		</text>
+		<combo_box name="PlayModeUISndTeleportOut">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
+			Warnung Regionsneustart:
+		</text>
+		<combo_box name="PlayModeUISndRegionRestart">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+    </panel>
+
+	<!-- UI Sounds 2 -->
+	<panel label="UI Sounds 2" name="UI Sounds tab 2">
+		<text name="textFSExplanation_tab2">
+			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
+Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
+		</text>
+
+		<text tool_tip="UUID des Klangs beim Öffnen des Pie-Menüs." name="textFSPieMenuAppear">
+            Öffnen Pie-Menü:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuAppear">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Schließen des Pie-Menüs." name="textFSPieMenuHide">
+            Schließen Pie-Menü:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuHide">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 1 im Pie-Menü." name="textFSPieMenuSliceHighlight0">
+			Pie-Menü Option 1:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight0">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 2 im Pie-Menü." name="textFSPieMenuSliceHighlight1">
+			Pie-Menü Option 2:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight1">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 3 im Pie-Menü." name="textFSPieMenuSliceHighlight2">
+			Pie-Menü Option 3:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight2">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 4 im Pie-Menü." name="textFSPieMenuSliceHighlight3">
+			Pie-Menü Option 4:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight3">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 5 im Pie-Menü." name="textFSPieMenuSliceHighlight4">
+			Pie-Menü Option 5:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight4">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 6 im Pie-Menü." name="textFSPieMenuSliceHighlight5">
+			Pie-Menü Option 6:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight5">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 7 im Pie-Menü." name="textFSPieMenuSliceHighlight6">
+			Pie-Menü Option 7:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight6">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei Auswahl von Option 8 im Pie-Menü." name="textFSPieMenuSliceHighlight7">
+			Pie-Menü Option 8:
+		</text>
+		<combo_box name="PlayModeUISndPieMenuSliceHighlight7">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Tippen einer Chat-Nachricht. Diese Einstellung ist gekoppelt an Chat &gt; Allgemein &gt; 'Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen'." name="textFSTyping">
+			Nachricht schreiben:
+		</text>
+		<combo_box name="FSPlayTypingSoundComboBox">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Schließen eines Fensters." name="textFSWindowClose">
+			Schließen eines Fensters:
+		</text>
+		<combo_box name="PlayModeUISndWindowClose">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Öffnen eines Fensters." name="textFSWindowOpen">
+			Öffnen eines Fensters:
+		</text>
+		<combo_box name="PlayModeUISndWindowOpen">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+    </panel>
+	
 	</tab_container>
 </panel>

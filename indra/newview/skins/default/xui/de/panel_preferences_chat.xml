@@ -103,6 +103,14 @@
 			<spinner tool_tip="0.25-1.0, 0.25 für maximales Ausblenden für 1 für kein Ausblenden" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Eingehende Instant Messages ankünden sobald Sender zu schreiben beginnt"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Blinkende IM-Reiter, wenn Freunde sich an- oder abmelden"/>
+			<text name="WhenPlayIMLabel" width="205">
+				Beim Eintreffen von Instant Messages:
+			</text>
+			<combo_box name="WhenPlayIM" width="265">
+				<combo_box.item label="Klang nur bei neuer IM-Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder empfangenen IM abspielen" name="2"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
         </panel>
 		
         <!-- Chat: Firestorm -->
