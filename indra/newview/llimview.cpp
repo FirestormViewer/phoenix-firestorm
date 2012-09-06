@@ -2672,7 +2672,7 @@ void LLIMMgr::addMessage(
 			return;
 		}
 
-	// <FS:PP> Configurable IM souns
+	// <FS:PP> Configurable IM sounds
 		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");

@@ -252,7 +252,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 	}
 
 	// Play creation sound
-	// <FS:PP> Configurable user sounds
+	// <FS:PP> Configurable UI sounds
 	//if (gAudiop)
 	if (gAudiop && gSavedSettings.getBOOL("PlayModeUISndObjectCreate"))
 	// </FS:PP>
