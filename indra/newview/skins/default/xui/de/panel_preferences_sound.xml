@@ -55,7 +55,8 @@
 			<radio_item label="Avatarposition" name="1"/>
 		</radio_group>
 		<check_box label="Avatarlippen beim Sprechen bewegen" name="enable_lip_sync"/>
-		<check_box label="Zeige Voice-Indikator und Lippen Bewegungen in P2P- und Gruppenchats." name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice Indicator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
+		<check_box label="Zeige Voice-Indikator über Avataren" name="FSShowVoiceVisualizer" tool_tip="Wenn diese Option aktiviert ist, wird der Voice-Indicator (weißer Punkt) über Avataren angezeigt."/>
+		<check_box label="Zeige Voice-Indikator und Lippenbewegungen in P2P- und Gruppenchats" name="Show_Voice_Visualizers_In_Calls" tool_tip="Wenn diese Option aktiviert ist, werden der Voice-Indicator und Lippen Bewegungen auch im P2P- sowie im Gruppenchat angezeigt."/>
 		<check_box label="Sprachfunktion beim Drücken folgender Taste(n) ein-/ausschalten:" name="push_to_talk_toggle_check" tool_tip="Wenn der Umschaltmodus aktiviert ist, drücken Sie die Auslöse-Taste EINMAL, um Ihr Mikrofon ein- oder auszuschalten. Wenn der Umschaltmodus nicht aktiviert ist, ist das Mikrofon nur dann eingeschaltet, wenn Sie die Auslösetaste gedrückt halten."/>
 		<line_editor label="Auslöser für Zum-Sprechen-drücken:" name="modifier_combo"/>
 		<button label="Taste festlegen" name="set_voice_hotkey_button"/>

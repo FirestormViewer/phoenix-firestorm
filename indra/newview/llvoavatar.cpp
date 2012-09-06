@@ -2589,12 +2589,24 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 	// Don't render the user's own voice visualizer when in mouselook, or when opening the mic is disabled.
 	if(isSelf())
 	{
-		if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("VoiceDisableMic"))
+		// <FS:Ansariel> Faster debug settings
+		//if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("VoiceDisableMic"))
+		static LLCachedControl<bool> voiceDisableMic(gSavedSettings, "VoiceDisableMic");
+		if (gAgentCamera.cameraMouselook() || voiceDisableMic)
+		// </FS:Ansariel>
 		{
 			render_visualizer = false;
 		}
 	}
 	
+	// <FS:Ansariel> FIRE-1916: Hide voice dots over avatars
+	static LLCachedControl<bool> fsShowVoiceVisualizer(gSavedSettings, "FSShowVoiceVisualizer");
+	if (!fsShowVoiceVisualizer)
+	{
+		render_visualizer = false;
+	}
+	// </FS:Ansariel>
+
 	mVoiceVisualizer->setVoiceEnabled(render_visualizer);
 	
 	if ( voice_enabled )

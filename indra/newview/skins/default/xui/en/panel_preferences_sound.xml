@@ -631,6 +631,17 @@
          top_pad="5"
          width="237"/>
         <check_box
+         control_name="FSShowVoiceVisualizer"
+         follows="left|top"
+         height="15"
+         label="Show voice visualizers over avatars"
+         tool_tip="Shows Voice Indicator (white dot) over avatars"
+         layout="topleft"
+         left="25"
+         name="FSShowVoiceVisualizer"
+         top_pad="3"
+         width="237"/>
+        <check_box
          control_name="ShowVoiceVisualizersInCalls"
          follows="left|top"
          height="15"
