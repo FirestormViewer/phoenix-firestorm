@@ -1172,9 +1172,9 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on money balance increase."
+         tool_tip="Sound UUID played on money balance decrease."
          name="textFSMoneyChangeDown">
-            Money balance increase:
+            Money balance decrease:
         </text>
         <line_editor
          tool_tip="104974e3-dfda-428b-99ee-b0d4e748d3a3"
@@ -1210,9 +1210,9 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on money balance decrease."
+         tool_tip="Sound UUID played on money balance increase."
          name="textFSMoneyChangeUp">
-            Money balance decrease:
+            Money balance increase:
         </text>
         <line_editor
          tool_tip="77a018af-098e-c037-51a6-178f05877c6f"
@@ -1248,7 +1248,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on incoming instant message. This setting is shared with Chat &gt; General &gt; 'When receiving Instant Messages'."
+         tool_tip="Sound UUID played on incoming instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving Instant Messages'."
          name="textFSNewIncomingIMSession">
             Incoming Instant Message:
         </text>
@@ -1696,7 +1696,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 0."
+         tool_tip="Sound UUID played, when selecting pie menu item 1."
          name="textFSPieMenuSliceHighlight0">
             Pie Menu option 1:
         </text>
@@ -1734,7 +1734,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 1."
+         tool_tip="Sound UUID played, when selecting pie menu item 2."
          name="textFSPieMenuSliceHighlight1">
             Pie Menu option 2:
         </text>
@@ -1772,7 +1772,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 2."
+         tool_tip="Sound UUID played, when selecting pie menu item 3."
          name="textFSPieMenuSliceHighlight2">
             Pie Menu option 3:
         </text>
@@ -1810,7 +1810,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 3."
+         tool_tip="Sound UUID played, when selecting pie menu item 4."
          name="textFSPieMenuSliceHighlight3">
             Pie Menu option 4:
         </text>
@@ -1848,7 +1848,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 4."
+         tool_tip="Sound UUID played, when selecting pie menu item 5."
          name="textFSPieMenuSliceHighlight4">
             Pie Menu option 5:
         </text>
@@ -1886,7 +1886,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 5."
+         tool_tip="Sound UUID played, when selecting pie menu item 6."
          name="textFSPieMenuSliceHighlight5">
             Pie Menu option 6:
         </text>
@@ -1924,7 +1924,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 6."
+         tool_tip="Sound UUID played, when selecting pie menu item 7."
          name="textFSPieMenuSliceHighlight6">
             Pie Menu option 7:
         </text>
@@ -1962,7 +1962,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played, when selecting pie menu item 7."
+         tool_tip="Sound UUID played, when selecting pie menu item 8."
          name="textFSPieMenuSliceHighlight7">
             Pie Menu option 8:
         </text>

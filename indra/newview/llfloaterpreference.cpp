@@ -1956,7 +1956,7 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("FSPlayTypingSoundComboBox")->setValue((int)gSavedSettings.getBOOL("FSPlayTypingSound")); // Shared with Chat > General > "Hear typing sound when people type in local chat"
 	getChild<LLComboBox>("PlayModeUISndWindowClose")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndWindowClose"));
 	getChild<LLComboBox>("PlayModeUISndWindowOpen")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndWindowOpen"));
-	// Set proper option for Chat > General > "When receiving Instant Messages"
+	// Set proper option for Chat > Notifications > "When receiving Instant Messages"
 	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2
 	// This sound is unused in Firestorm at the moment
 	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);

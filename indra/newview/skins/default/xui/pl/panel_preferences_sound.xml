@@ -140,21 +140,21 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy podniesie się stan środków na koncie." name="textFSMoneyChangeDown">
-				Przypływ gotówki:
+			<text tool_tip="UUID dźwięku odgrywany, gdy zmniejszy się stan środków na koncie." name="textFSMoneyChangeDown">
+				Odpływ gotówki:
 			</text>
 			<combo_box name="PlayModeUISndMoneyChangeDown">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy zmniejszy się stan środków na koncie." name="textFSMoneyChangeUp">
-				Odpływ gotówki:
+			<text tool_tip="UUID dźwięku odgrywany, gdy podniesie się stan środków na koncie." name="textFSMoneyChangeUp">
+				Przypływ gotówki:
 			</text>
 			<combo_box name="PlayModeUISndMoneyChangeUp">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość IM. To ustawienie jest wspólne z Czat &gt; Ogólne &gt; 'Gdy nadchodzi nowa wiadomość IM'." name="textFSNewIncomingIMSession">
+			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość IM. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi nowa wiadomość IM'." name="textFSNewIncomingIMSession">
 				Nadchodząca wiad. IM:
 			</text>
 			<combo_box name="PlayModeUISndNewIncomingIMSession">
@@ -238,56 +238,56 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 0 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight0">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 1 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight0">
 				Menu kołowe, opcja 1:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight0">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 1 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight1">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 2 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight1">
 				Menu kołowe, opcja 2:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight1">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 2 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight2">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 3 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight2">
 				Menu kołowe, opcja 3:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight2">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 3 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight3">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 4 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight3">
 				Menu kołowe, opcja 4:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight3">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 4 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight4">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 5 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight4">
 				Menu kołowe, opcja 5:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight4">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 5 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight5">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 6 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight5">
 				Menu kołowe, opcja 6:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight5">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 6 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight6">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 7 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight6">
 				Menu kołowe, opcja 7:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight6">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 7 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight7">
+			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 8 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight7">
 				Menu kołowe, opcja 8:
 			</text>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight7">
