@@ -1427,6 +1427,14 @@
                     <menu_item_check.on_click
                      function="Tools.SelectBySurrounding" />
             </menu_item_check>
+                <menu_item_check
+                 label="Include Group-Owned Objects"
+                 name="Include Group-Owned Objects">
+                    <menu_item_check.on_check
+                     control="FSSelectIncludeGroupOwned" />
+                    <menu_item_check.on_click
+                     function="Tools.SelectIncludeGroupOwned" />
+                </menu_item_check>
 
           <menu_item_separator/>
 

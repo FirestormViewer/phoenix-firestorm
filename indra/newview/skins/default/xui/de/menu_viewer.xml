@@ -175,6 +175,7 @@
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
 			<menu_item_check label="Nur meine Objekte auswählen" name="Select Only My Objects"/>
 			<menu_item_check label="Nur bewegliche Objekte auswählen" name="Select Only Movable Objects"/>
+			<menu_item_check label="Gruppen-Objekte einschließen" name="Include Group-Owned Objects"/>
 			<menu_item_check label="Nach Umgebung auswählen" name="Select By Surrounding"/>
 			<menu_item_check label="Auswahlumrandung anzeigen" name="Show Selection Outlines"/>
 			<menu_item_check label="Ausgeblendete Auswahl anzeigen" name="Show Hidden Selection"/>

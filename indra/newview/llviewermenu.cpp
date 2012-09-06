@@ -8460,6 +8460,20 @@ BOOL check_show_xui_names(void *)
 	return gSavedSettings.getBOOL("DebugShowXUINames");
 }
 
+// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
+class FSToolSelectIncludeGroupOwned : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		BOOL cur_val = gSavedSettings.getBOOL("FSSelectIncludeGroupOwned");
+
+		gSavedSettings.setBOOL("FSSelectIncludeGroupOwned", ! cur_val );
+
+		return true;
+	}
+};
+// </FS:Ansariel>
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9752,6 +9766,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSaveToInventory(), "Tools.SaveToInventory");
 	view_listener_t::addMenu(new LLToolsSaveToObjectInventory(), "Tools.SaveToObjectInventory");
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
+	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
+	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");

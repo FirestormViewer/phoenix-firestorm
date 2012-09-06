@@ -995,6 +995,13 @@ void LLSelectMgr::highlightObjectOnly(LLViewerObject* objectp)
 		return;
 	}
 
+	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
+	if (objectp->permGroupOwner() && !gSavedSettings.getBOOL("FSSelectIncludeGroupOwned"))
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	mRectSelectedObjects.insert(objectp);
 }
 
