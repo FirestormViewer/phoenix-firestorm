@@ -6,6 +6,7 @@
  width="470"
  can_close="true"
  can_resize="true"
+ save_rect="true"
  min_width="470">
     <panel
      background_visible="false"
