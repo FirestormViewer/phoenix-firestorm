@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Alerty" name="popups">
 <tab_container name="tabs">
- 
-    <!-- Notifications -->
-    <panel label="Notifications" name="tab-notifications">
-	<text name="tell_me_label">
-		Powiadom mnie:
-	</text>
-	<check_box label="Gdy wydaję lub dostaję L$" name="notify_money_change_checkbox"/>
-	<check_box name="FSPaymentInfoInChat" label="Pokazuj transakcje L$ w Czacie Lokalnym - nie w Tostach"/>
-	<check_box label="Gdy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
-	<check_box label="Gdy ktoś zmieni Wyświetlane Imię" name="FSShowDisplayNameUpdateNotification"/>
-	<check_box label="Gdy wystąpi błąd skryptu to w:" name="show_script_errors"/>
-	<radio_group name="show_script_errors_location">
-		<radio_item label="Czacie" name="script_0"/>
-		<radio_item label="Osobnym oknie" name="script_1"/>
-	</radio_group>
-	<text name="friends_logon_label">
-		Powiadom gdy znajomi się logują/wylogowywują:
-	</text>
-	<check_box label="W tostach" name="friends_online_notify_checkbox"/>
-	<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
-	<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
-	<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
-	<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
-    </panel>
-
-    <!-- Alerts -->
-    <panel label="Alerts" name="tab-alerts">
-	<text name="show_label">
-		Zawsze pokazuj:
-	</text>
-	<text name="dont_show_label">
-		Nigdy nie pokazuj:
-	</text>
+	<panel label="Powiadomienia" name="tab-notifications">
+		<text name="tell_me_label">
+			Powiadom mnie:
+		</text>
+		<check_box label="Gdy wydaję lub dostaję L$" name="notify_money_change_checkbox"/>
+		<check_box name="FSPaymentInfoInChat" label="Pokazuj transakcje L$ w Czacie Lokalnym - nie w Tostach"/>
+		<check_box label="Gdy zostanie utworzony Landmark" name="landmark_created_checkbox"/>
+		<check_box label="Gdy ktoś zmieni Wyświetlane Imię" name="FSShowDisplayNameUpdateNotification"/>
+		<check_box label="Gdy wystąpi błąd skryptu to w:" name="show_script_errors"/>
+		<radio_group name="show_script_errors_location">
+			<radio_item label="Czacie" name="script_0"/>
+			<radio_item label="Osobnym oknie" name="script_1"/>
+		</radio_group>
+		<check_box label="Włącz powiadomienia Growl" name="notify_growl_checkbox"/>
+		<check_box label="Włącz Growl nawet gdy Firestorm jest aktywny" name="notify_growl_always_checkbox"/>
+		<check_box label="Powiadomienia o kolizjach w czacie lokalnym" name="FSCollisionMessagesInChat"/>
+		<check_box label="Przesyłaj skryptom powiad. o kolizjach na kanał:" name="FSReportCollisionMessages"/>
+		<spinner name="FSReportCollisionMessagesChannel" tool_tip="Kanał używany do przesyłania skryptom powiadomień o kolizjach [Domyślnie: -25000]"/>
+		<text name="friends_logon_label">
+			Powiadom gdy znajomi się logują/wylogowywują:
+		</text>
+		<check_box label="W tostach" name="friends_online_notify_checkbox"/>
+		<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
+		<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
+	</panel>
+	<panel label="Ostrzeżenia" name="tab-alerts">
+		<text name="show_label">
+			Zawsze pokazuj:
+		</text>
+		<text name="dont_show_label">
+			Nigdy nie pokazuj:
+		</text>
 	</panel>
 </tab_container>
 </panel>

@@ -8,10 +8,10 @@
 		Słowniki dodatkowe:
 	</text>
 	<text name="spellcheck_available">
-		Dostępny
+		Dostępne
 	</text>
 	<text name="spellcheck_active">
-		Aktywny
+		Aktywne
 	</text>
 	<button label="Usuń" name="spellcheck_remove_btn" />
 	<button label="Importuj" name="spellcheck_import_btn" />

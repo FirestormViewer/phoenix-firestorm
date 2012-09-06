@@ -855,10 +855,10 @@ void LLFloaterPreference::onOpen(const LLSD& key)
 	// Display selected maturity icons.
 	onChangeMaturity();
 	
-	// <FS:PP> Load (double-)click to walk/teleport settings.
+	// Load (double-)click to walk/teleport settings.
 	updateClickActionControls();
 	
-	// Load UI Sounds tabs settings.
+	// <FS:PP> Load UI Sounds tabs settings.
 	updateUISoundsControls();
 	
 	// Enabled/disabled popups, might have been changed by user actions

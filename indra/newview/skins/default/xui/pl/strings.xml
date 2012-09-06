@@ -4902,6 +4902,24 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="NetMapDoubleClickTeleportToolTipMsg">
 		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
 	</string>
+	<string name="Collision_Bump">
+		[NAME] zderzył/a się z Tobą.
+	</string>
+	<string name="Collision_PushObject">
+		[NAME] popchnął/ęła Cię swoim skryptem.
+	</string>
+	<string name="Collision_ObjectCollide">
+		[NAME] uderzył/a Cię obiektem.
+	</string>
+	<string name="Collision_ScriptedObject">
+		[NAME] uderzył/a Cię skryptowanym obiektem.
+	</string>
+	<string name="Collision_PhysicalObject">
+		[NAME] uderzył/a Cię fizycznym obiektem.
+	</string>
+	<string name="Collision_UnknownType">
+		[NAME] spowodował/a nieznany typ kolizji.
+	</string>
 	<string name="TeleportMaturityExceeded">
 		Rezydent nie może odwiedzić tego regionu.
 	</string>

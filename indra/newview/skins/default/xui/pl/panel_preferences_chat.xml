@@ -82,6 +82,14 @@
 			<spinner tool_tip="0.25-1.0, 0.25 dla silnego wygaszania, 1 dla braku wygaszania" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
+			<text name="WhenPlayIMLabel">
+				Gdy nadchodzi nowa wiad. IM:
+			</text>
+			<combo_box name="WhenPlayIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
 		</panel>
 		<panel name="ChatFirestorm">
 			<text name="chat_and_im_enhancements">

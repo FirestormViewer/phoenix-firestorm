@@ -388,11 +388,11 @@
 			<color_swatch name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
 			<texture_picker name="light texture control" tool_tip="Kliknij, aby wybrać obraz (efekt występuje tylko z aktywowanym opóźnionym renderowaniem)"/>
 			<spinner label="Natężenie" name="Light Intensity"/>
-			<spinner label="Pole widzenia" name="Light FOV"/>
+			<spinner label="Pole widz." name="Light FOV"/>
 			<spinner label="Zasięg" name="Light Radius"/>
 			<spinner label="Skupienie" name="Light Focus"/>
 			<spinner label="Obniż. siły" name="Light Falloff"/>
-			<spinner label="Nastrojowość" name="Light Ambiance"/>
+			<spinner label="Nastrój" name="Light Ambiance"/>
 			<text name="label physicsshapetype">
 				Typ kształtu Fizycznego:
 			</text>
