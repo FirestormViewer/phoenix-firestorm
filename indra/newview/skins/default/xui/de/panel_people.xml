@@ -51,6 +51,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
 						<radar_list.columns label="NAME" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
+						<radar_list.columns label="" tool_tip="Spricht via Voice" name="voice_level"/>
 						<radar_list.columns label="" tool_tip="Ist in derselben Region" name="in_region"/>
 						<radar_list.columns label="" tool_tip="Hat Zahlungsinformationen hinterlegt" name="flags"/>
 						<radar_list.columns label="ALT." name="age"/>
