@@ -38,6 +38,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 						<layout_panel name="radarlayout">
 							<radar_list name="radar_list">
 								<radar_list.columns label="Imię" name="name" />
+								<radar_list.columns label="Rozmawia głosowo" name="voice_level" />
 								<radar_list.columns label="Zasięg" name="range" />
 								<radar_list.columns label="Widziany" name="seen" />
 								<radar_list.columns label="Wiek" name="age" />

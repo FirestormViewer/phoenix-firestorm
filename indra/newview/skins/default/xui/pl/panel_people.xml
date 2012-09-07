@@ -36,6 +36,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
 						<radar_list.columns label="IMIĘ" name="name" tool_tip="[TOTAL] awatarów, [IN_REGION] w tym samym regionie, [IN_CHAT_RANGE] w zasięgu czatu"/>
+						<radar_list.columns name="voice_level" tool_tip="Rozmawia głosowo"/>
 						<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie"/>
 						<radar_list.columns name="flags" tool_tip="Ma dane płatnicze na koncie"/>
 						<radar_list.columns label="WIEK" name="age"/>

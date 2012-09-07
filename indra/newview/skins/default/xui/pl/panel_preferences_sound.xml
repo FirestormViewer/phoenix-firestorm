@@ -49,7 +49,8 @@
 				<radio_item label="pozycji awatara" name="1"/>
 			</radio_group>
 			<check_box label="Poruszaj ustami awatara podczas mówienia" name="enable_lip_sync"/>
-			<check_box label="Pokazuj wskaźniki dźwięku w rozmowach prywatnych" tool_tip="Pokazuj wskaźniki dźwięku i poruszaj ustami awatara w świecie, gdy rozmawiasz w rozmowach prywatnych lub grupowych" name="Show_Voice_Visualizers_In_Calls"/>
+			<check_box label="Pokazuj wskaźniki dźwięku ponad awatarami" tool_tip="Pokazuj wskaźniki dźwięku (białe kropki) ponad awatarami" name="FSShowVoiceVisualizer"/>
+			<check_box label="Pokazuj wskaźniki dźwięku w rozmowach prywatnych i grupowych" tool_tip="Pokazuj wskaźniki dźwięku i poruszaj ustami awatara w świecie, gdy rozmawiasz w rozmowach prywatnych lub grupowych" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Włącz/wyłącz mikrofon kiedy naciskam:" name="push_to_talk_toggle_check" tool_tip="Kiedy aktywny jest tryb przełączania wciśnij i zwolnij przełącznik RAZ, aby włączyć lub wyłączyć mikrofon. Kiedy tryb przełączania nie jest aktywny mikrofon nadaje głos tylko wtedy, gdy przełącznik jest wciśnięty."/>
 			<line_editor label="Przełącznik naciśnij-by-mówić" name="modifier_combo"/>
 			<button label="Ustaw klawisz" name="set_voice_hotkey_button"/>
