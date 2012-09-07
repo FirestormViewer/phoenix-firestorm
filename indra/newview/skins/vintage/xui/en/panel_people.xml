@@ -208,7 +208,11 @@ Looking for people to hang out with? Use the search box to find topics or conten
 								<radar_list.columns
 									label="Name"
 									name="name"
-									relative_width="0.44" />
+									relative_width="0.37" />
+								<radar_list.columns
+									label=""
+									name="voice_level"
+									relative_width="0.07" />
 								<radar_list.columns
 									label="Distance"
 									name="range"

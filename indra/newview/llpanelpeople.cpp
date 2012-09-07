@@ -1178,24 +1178,27 @@ void LLPanelPeople::updateNearbyList()
 		row["value"] = avId;
 		row["columns"][0]["column"] = "name";
 		row["columns"][0]["value"] = avName;
-		row["columns"][1]["column"] = "in_region";
+		row["columns"][1]["column"] = "voice_level";
 		row["columns"][1]["type"] = "icon";
 		row["columns"][1]["value"] = "";
+		row["columns"][2]["column"] = "in_region";
+		row["columns"][2]["type"] = "icon";
+		row["columns"][2]["value"] = "";
 		if (regionSelf == avRegion)
 		{
-			row["columns"][1]["value"] = "avatar_in_region";
+			row["columns"][2]["value"] = "avatar_in_region";
 			inSameRegion++;
 		}
-		row["columns"][2]["column"] = "flags";
-		row["columns"][2]["value"] = avFlagStr;
-		row["columns"][3]["column"] = "age";
-		row["columns"][3]["value"] = avAgeStr;
-		row["columns"][4]["column"] = "seen";
-		row["columns"][4]["value"] = avSeenStr;
-		row["columns"][5]["column"] = "range";
-		row["columns"][5]["value"] = (avRange > -1 ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
-		row["columns"][6]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
-		row["columns"][6]["value"] = avId;
+		row["columns"][3]["column"] = "flags";
+		row["columns"][3]["value"] = avFlagStr;
+		row["columns"][4]["column"] = "age";
+		row["columns"][4]["value"] = avAgeStr;
+		row["columns"][5]["column"] = "seen";
+		row["columns"][5]["value"] = avSeenStr;
+		row["columns"][6]["column"] = "range";
+		row["columns"][6]["value"] = (avRange > -1 ? llformat("%3.2f", avRange) : llformat(">%3.2f", drawRadius));
+		row["columns"][7]["column"] = "uuid"; // invisible column for referencing av-key the row belongs to
+		row["columns"][7]["value"] = avId;
 		LLScrollListItem* radarRow = mRadarList->addElement(row);
 
 		//AO: Set any range colors / styles
@@ -1246,6 +1249,39 @@ void LLPanelPeople::updateNearbyList()
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, FALSE, FALSE, TRUE))
 		{
 			radarNameCell->setColor(LGGContactSets::getInstance()->getFriendColor(avId));
+		}
+
+		// Voice power level indicator
+		LLVoiceClient* voice_client = LLVoiceClient::getInstance();
+		if (voice_client->voiceEnabled() && voice_client->isVoiceWorking())
+		{
+			LLSpeaker* speaker = LLLocalSpeakerMgr::getInstance()->findSpeaker(avId);
+			if (speaker && speaker->isInVoiceChannel())
+			{
+				LLScrollListText* voiceLevelCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("voice_level")->mIndex);
+				EVoicePowerLevel power_level = voice_client->getPowerLevel(avId);
+				
+				switch (power_level)
+				{
+					case VPL_PTT_Off:
+						voiceLevelCell->setValue("VoicePTT_Off");
+						break;
+					case VPL_PTT_On:
+						voiceLevelCell->setValue("VoicePTT_On");
+						break;
+					case VPL_Level1:
+						voiceLevelCell->setValue("VoicePTT_Lvl1");
+						break;
+					case VPL_Level2:
+						voiceLevelCell->setValue("VoicePTT_Lvl2");
+						break;
+					case VPL_Level3:
+						voiceLevelCell->setValue("VoicePTT_Lvl3");
+						break;
+					default:
+						break;
+				}
+			}
 		}
 
 		//AO: Preserve selection

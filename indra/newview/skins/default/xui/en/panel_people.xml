@@ -164,7 +164,12 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		         label="NAME"
 		         name="name"
 				 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
-		         relative_width="0.44" />
+		         relative_width="0.37" />
+                <radar_list.columns
+                 label=""
+                 name="voice_level"
+                 tool_tip="Is talking on voice"
+                 relative_width="0.07" />
 		        <radar_list.columns
 		         label=""
 		         name="in_region"
