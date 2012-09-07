@@ -6867,7 +6867,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 	}
 	else if(message.find("estart") != -1 && message.find("egion") != -1)
 	{
-		// A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+		// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
 		make_ui_sound("UISndRegionRestart");
 	}
 
@@ -6901,6 +6901,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			LLStringUtil::convertToS32(text.substr(18), mins);
 			args["MINUTES"] = llformat("%d",mins);
 			LLNotificationsUtil::add("RegionRestartMinutes", args);
+			make_ui_sound("UISndRegionRestart"); // FIRE-317
 		}
 		else if (text.substr(0,17) == "RESTART_X_SECONDS")
 		{
@@ -6908,6 +6909,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			LLStringUtil::convertToS32(text.substr(18), secs);
 			args["SECONDS"] = llformat("%d",secs);
 			LLNotificationsUtil::add("RegionRestartSeconds", args);
+			make_ui_sound("UISndRegionRestart"); // FIRE-317
 		}
 		else
 		{
