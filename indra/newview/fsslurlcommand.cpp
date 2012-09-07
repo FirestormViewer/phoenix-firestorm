@@ -80,6 +80,16 @@ public:
 			return true;
 		}
 
+		if (verb == "offerteleport")
+		{
+			if (gAgentID != target_id)
+			{
+				LLAvatarActions::offerTeleport(target_id);
+			}
+
+			return true;
+		}
+
 		if (verb == "teleportto")
 		{
 			if (gAgentID != target_id)
