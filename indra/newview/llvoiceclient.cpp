@@ -39,10 +39,15 @@
 
 const F32 LLVoiceClient::OVERDRIVEN_POWER_LEVEL = 0.7f;
 
+// <FS:Ansariel> Centralized voice power level
+const F32 LLVoiceClient::POWER_LEVEL_0 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL / 3.f;
+const F32 LLVoiceClient::POWER_LEVEL_1 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL * 2.f / 3.f;
+const F32 LLVoiceClient::POWER_LEVEL_2 = LLVoiceClient::OVERDRIVEN_POWER_LEVEL;
+// </FS:Ansariel> Centralized voice power level
+
 const F32 LLVoiceClient::VOLUME_MIN = 0.f;
 const F32 LLVoiceClient::VOLUME_DEFAULT = 0.5f;
 const F32 LLVoiceClient::VOLUME_MAX = 1.0f;
-
 
 // Support for secondlife:///app/voice SLapps
 class LLVoiceHandler : public LLCommandHandler
@@ -786,6 +791,37 @@ void LLVoiceClient::setUserVolume(const LLUUID& id, F32 volume)
 {
 	if (mVoiceModule) mVoiceModule->setUserVolume(id, volume);
 }
+
+// <FS:Ansariel> Centralized voice power level
+EVoicePowerLevel LLVoiceClient::getPowerLevel(const LLUUID& id)
+{
+	F32 power = getCurrentPower(id);
+	if (getOnMuteList(id))
+	{
+		return VPL_MUTED;
+	}
+	else if (power == 0.f && !getIsSpeaking(id))
+	{
+		return VPL_PTT_Off;
+	}
+	else if (power < POWER_LEVEL_0)
+	{
+		return VPL_PTT_On;
+	}
+	else if (power < POWER_LEVEL_1)
+	{
+		return VPL_Level1;
+	}
+	else if (power < POWER_LEVEL_2)
+	{
+		return VPL_Level2;
+	}
+	else
+	{
+		return VPL_Level3;
+	}
+}
+// </FS:Ansariel> Centralized voice power level
 
 //--------------------------------------------------
 // status observers

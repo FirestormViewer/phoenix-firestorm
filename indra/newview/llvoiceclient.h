@@ -296,6 +296,18 @@ public:
 };
 
 
+// <FS:Ansariel> Centralized voice power level
+typedef enum e_voice_power_level
+{
+	VPL_MUTED,
+	VPL_PTT_Off,
+	VPL_PTT_On,
+	VPL_Level1,
+	VPL_Level2,
+	VPL_Level3
+} EVoicePowerLevel;
+// </FS:Ansariel> Centralized voice power level
+
 class LLVoiceClient: public LLSingleton<LLVoiceClient>
 {
 	LOG_CLASS(LLVoiceClient);
@@ -309,6 +321,12 @@ public:
 	const LLVoiceVersionInfo getVersion();
 	
 	static const F32 OVERDRIVEN_POWER_LEVEL;
+
+	// <FS:Ansariel> Centralized voice power level
+	static const F32 POWER_LEVEL_0;
+	static const F32 POWER_LEVEL_1;
+	static const F32 POWER_LEVEL_2;
+	// </FS:Ansariel> Centralized voice power level
 
 	static const F32 VOLUME_MIN;
 	static const F32 VOLUME_DEFAULT;
@@ -413,6 +431,10 @@ public:
 	F32 getCurrentPower(const LLUUID& id);		// "power" is related to "amplitude" in a defined way.  I'm just not sure what the formula is...
 	BOOL getOnMuteList(const LLUUID& id);
 	F32 getUserVolume(const LLUUID& id);
+
+	// <FS:Ansariel> Centralized voice power level
+	EVoicePowerLevel getPowerLevel(const LLUUID& id);
+	// </FS:Ansariel> Centralized voice power level
 
 	/////////////////////////////
 	BOOL getAreaVoiceDisabled();		// returns true if the area the avatar is in is speech-disabled.
