@@ -202,8 +202,8 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				Robienie zdjęcia:
 			</text>
 			<combo_box name="QuietSnapshotsToDiskComboBox">
-				<combo_box.item label="Odtwórz dźwięk" name="1"/>
-				<combo_box.item label="Wycisz dźwięk" name="0"/>
+				<combo_box.item label="Odtwórz dźwięk" name="0"/>
+				<combo_box.item label="Wycisz dźwięk" name="1"/>
 			</combo_box>
 			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSRegionRestart">
 				Teleportacja:

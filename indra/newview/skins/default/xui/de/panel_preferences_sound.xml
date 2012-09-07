@@ -218,8 +218,8 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
             Erstellen Schnappschuß:
 		</text>
 		<combo_box name="QuietSnapshotsToDiskComboBox">
-			<combo_box.item label="Abspielen" name="1"/>
-			<combo_box.item label="Stummschalten" name="0"/>
+			<combo_box.item label="Abspielen" name="0"/>
+			<combo_box.item label="Stummschalten" name="1"/>
 		</combo_box>
 
 		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSRegionRestart">

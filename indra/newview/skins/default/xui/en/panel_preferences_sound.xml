@@ -1517,11 +1517,11 @@ Hover your mouse cursor over UUID field to show its default value.
            <combo_box.item
              label="Play this sound"
              name="0"
-             value="1"/>
+             value="0"/>
            <combo_box.item
              label="Mute this sound"
              name="1"
-             value="0"/>
+             value="1"/>
         </combo_box>
 
         <text
