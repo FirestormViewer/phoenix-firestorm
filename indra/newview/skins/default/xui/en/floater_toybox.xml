@@ -14,7 +14,7 @@
   save_rect="true"
   single_instance="true"
   title="TOOLBAR BUTTONS"
-  width="650">
+  width="700">
   <text
     follows="left|top"
     font="SansSerifMedium"
