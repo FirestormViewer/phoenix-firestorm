@@ -18664,5 +18664,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSVintageLoginInfo</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows the "did you know about Phoenix mode?" message at login screen, once per installation. TRUE means, that notification won't be displayed.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>

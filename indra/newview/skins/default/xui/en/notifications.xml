@@ -9341,4 +9341,14 @@ The region you have entered is running a different simulator version.
 Current simulator: [NEWVERSION]
 Previous simulator: [OLDVERSION]
   </notification>
+  
+  <notification
+   name="VintageLoginInfo"
+   type="alertmodal">
+Did you know that you can get the classic view of Phoenix Viewer by selecting the appropriate option from the drop-down list next to the login button? If the newer interface is not suitable for you - give this option a try.
+     <usetemplate
+      name="okbutton"
+      yestext="OK"/>
+  </notification>
+  
 </notifications>
