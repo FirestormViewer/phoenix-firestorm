@@ -82,7 +82,11 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 	{
 		const F32 NOMINAL_MOUSE_SENSITIVITY = 0.0025f;
 
-		F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
+		// <FS:Ansariel> Use faster LLCachedControl
+		//F32 mouse_sensitivity = gSavedSettings.getF32("MouseSensitivity");
+		static LLCachedControl<F32> mouseSensitivity(gSavedSettings, "MouseSensitivity");
+		F32 mouse_sensitivity = (F32)mouseSensitivity;
+		// </FS:Ansariel> Use faster LLCachedControl
 		mouse_sensitivity = clamp_rescale(mouse_sensitivity, 0.f, 15.f, 0.5f, 2.75f) * NOMINAL_MOUSE_SENSITIVITY;
 
 		// ...move the view with the mouse
@@ -94,7 +98,10 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 		if (dx != 0 || dy != 0)
 		{
 			// ...actually moved off center
-			if (gSavedSettings.getBOOL("InvertMouse"))
+			// <FS:Ansariel> Use faster LLCachedControl
+			//if (gSavedSettings.getBOOL("InvertMouse"))
+			static LLCachedControl<bool> invertMouse(gSavedSettings, "InvertMouse");
+			if (invertMouse)
 			{
 				gAgent.pitch(mouse_sensitivity * -dy);
 			}
@@ -105,7 +112,10 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 			LLVector3 skyward = gAgent.getReferenceUpVector();
 			gAgent.rotate(mouse_sensitivity * dx, skyward.mV[VX], skyward.mV[VY], skyward.mV[VZ]);
 
-			if (gSavedSettings.getBOOL("MouseSun"))
+			// <FS:Ansariel> Use faster LLCachedControl
+			//if (gSavedSettings.getBOOL("MouseSun"))
+			static LLCachedControl<bool> mouseSun(gSavedSettings, "MouseSun");
+			if (mouseSun)
 			{
 				gSky.setSunDirection(LLViewerCamera::getInstance()->getAtAxis(), LLVector3(0.f, 0.f, 0.f));
 				gSky.setOverrideSun(TRUE);
@@ -131,7 +141,10 @@ BOOL LLToolGun::handleHover(S32 x, S32 y, MASK mask)
 
 void LLToolGun::draw()
 {
-	if( gSavedSettings.getBOOL("ShowCrosshairs") )
+	// <FS:Ansariel> Use faster LLCachedControl
+	//if( gSavedSettings.getBOOL("ShowCrosshairs") )
+	static LLCachedControl<bool> showCrosshairs(gSavedSettings, "ShowCrosshairs");
+	if (showCrosshairs)
 	{
 		LLUIImagePtr crosshair = LLUI::getUIImage("crosshairs.tga");
 		crosshair->draw(
