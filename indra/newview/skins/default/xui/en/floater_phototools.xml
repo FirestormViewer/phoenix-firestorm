@@ -39,6 +39,7 @@ label="WL"
 left="0">
 
 <panel
+name="PT_WL_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -51,6 +52,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_WL_Settings" 
 follows="left|top"
 layout="topleft"
 left="10"
@@ -62,6 +64,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_WL_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -90,6 +93,7 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_WL_Sky_Water"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -198,6 +202,7 @@ background_visible="true">
 			</panel>
 			
 <panel
+name="P_Sun"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -252,6 +257,7 @@ background_visible="true">
 			</panel>
 
 <panel
+name="P_Q_Windlights"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -263,6 +269,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 
 <text
+name="T_Q_Windlights"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -279,7 +286,7 @@ width="135"/>
 			height="0"
 			layout="topleft"
 			left="10"
-			name="horiz_separator"
+			name="horiz_separator1"
 			top_pad="-7"
 			width="100"/>
 
@@ -359,6 +366,7 @@ width="135"/>
 </panel>
 			
 	<panel
+name="P_WL_Presets"
 follows="top|left"
 layout="topleft"
 top_delta="0"
@@ -371,6 +379,7 @@ background_visible="true">
 
 
 <text
+name="T_WL_Presets"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -388,7 +397,7 @@ follows="left|top"
      height="0"
      layout="topleft"
      left="10"
-     name="horiz_separator"
+     name="horiz_separator2"
      top_pad="-7"
 	 width="100"/>
 		<menu
@@ -430,7 +439,7 @@ follows="left|top"
      height="0"
      layout="topleft"
      left="5"
-     name="horiz_separator"
+     name="horiz_separator3"
      top_pad="35"
      width="125"/>
 						<menu
@@ -468,6 +477,7 @@ drop_shadow="false"			 >
 
 
 <panel
+name="P_W_Reflections"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -480,6 +490,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_W_Reflections"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -491,6 +502,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_W_R_Types"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -501,6 +513,7 @@ border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">
 	   	<text
+		name="T_W_R_Types"
 		follows="left|top"
 		height="15"
 		left="10" 
@@ -542,6 +555,7 @@ background_visible="true">
 		</panel>
 		
 <panel
+name="P_R_Res"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -552,6 +566,7 @@ border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">		
 	   	<text
+		name="T_R_Res"
 		follows="left|top"
 		height="15"
 		left="10" 
@@ -609,6 +624,7 @@ background_visible="true">
 		function="Pref.VertexShaderEnable" />
 		</check_box>
 		<text
+		name="R_Toggle" 
 		follows="left|top"
 		height="15"
 		left="25" 
@@ -633,6 +649,7 @@ background_visible="true">
 		function="Pref.VertexShaderEnable" />
 		</check_box>
 		<text
+		name="Transp_Water"
 		follows="left|top"
 		height="15"
 		left="25" 
@@ -668,6 +685,7 @@ background_visible="true">
 
 
 <panel
+name="P_Lighting" 
 follows="all"
 layout="topleft"
 width="285"
@@ -676,6 +694,7 @@ label="Light"
 left="0">
 
 <panel
+name="PT_Light_Shadows"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -688,6 +707,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Light_Shadows"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -699,6 +719,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_L_S_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -745,7 +766,7 @@ background_visible="true">
 		create_jump_keys="false"
 		label=""
 		follows="right|left"
-		name="Misc"
+		name="M_Lights"
 		left="5"
 		top_pad="3"
 		tear_off="false">
@@ -769,6 +790,7 @@ background_visible="true">
 
 
 <panel
+name="P_Shadows"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -780,6 +802,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 
 		<text
+		name="T_Shadow_Types"
 		follows="left|top"
 		height="16"
 		left="5" 
@@ -816,6 +839,7 @@ background_visible="true">
 </panel>		
 
 <panel
+name="P_Shadow_Res"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -826,6 +850,7 @@ border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">
 						<text
+						name="T_Shadow_Res"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -834,6 +859,7 @@ background_visible="true">
 						tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
 						width="80"/>
 						<slider_bar
+						name="SB_Shadow_Res"
 						can_edit_text="true"
 						control_name="RenderShadowResolutionScale"
 						follows="left|right"
@@ -848,6 +874,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Shadow_Res"
 						can_edit_text="true"
 						control_name="RenderShadowResolutionScale"
 						top_delta="-3"
@@ -863,6 +890,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Shadow_Res"
 						control_name="RenderShadowResolutionScale"
 						follows="top|left"
 						height="22"
@@ -873,11 +901,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Shadow_Res"
 						label="Default"
 						value="1"/>
 						</combo_box>
 		
 						<text
+						name="T_Blur_Size"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -886,6 +916,7 @@ background_visible="true">
 						tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
 						width="80"/>
 						<slider_bar
+						name="SB_Blur_Size"
 						decimal_digits="2"
 						can_edit_text="true"
 						control_name="RenderShadowBlurSize"
@@ -899,6 +930,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Blur_Size"
 						can_edit_text="true"
 						control_name="RenderShadowBlurSize"
 						top_delta="-3"
@@ -914,6 +946,7 @@ background_visible="true">
 						increment="0.1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Blur_Reset"
 						control_name="RenderShadowBlurSize"
 						follows="top|left"
 						height="22"
@@ -924,11 +957,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Blur_Reset"
 						label="Default"
 						value="1.4"/>
 						</combo_box>
 		
 						<text
+						name="T_Blur_Dist"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -937,6 +972,7 @@ background_visible="true">
 						tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
 						width="80"/>
 						<slider_bar
+						name="SB_Blur_Dist"
 						can_edit_text="true"
 						control_name="RenderShadowBlurDistFactor"
 						follows="left|right"
@@ -950,6 +986,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Blur_Dist"
 						can_edit_text="true"
 						control_name="RenderShadowBlurDistFactor"
 						top_delta="-3"
@@ -965,6 +1002,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Blur_Dist_Reset"
 						control_name="RenderShadowBlurDistFactor"
 						follows="top|left"
 						height="22"
@@ -981,6 +1019,7 @@ background_visible="true">
 						</combo_box>
 						
 						<text
+						name="T_FOV_Cutoff"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -989,6 +1028,7 @@ background_visible="true">
 						tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
 						width="80"/>
 						<slider_bar
+						name="SB_FOV_Cutoff"
 						can_edit_text="true"
 						control_name="RenderShadowFOVCutoff"
 						follows="left|right"
@@ -1003,6 +1043,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_FOV_Cutoff"
 						can_edit_text="true"
 						control_name="RenderShadowFOVCutoff"
 						top_delta="-3"
@@ -1018,6 +1059,7 @@ background_visible="true">
 						increment="0.1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_FOV_Cutoff_Reset"
 						control_name="RenderShadowFOVCutoff"
 						follows="top|left"
 						height="22"
@@ -1035,6 +1077,7 @@ background_visible="true">
 		</panel>
 		
 <panel
+name="P_Light"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1052,7 +1095,7 @@ background_visible="true">
 		create_jump_keys="false"
 		label=""
 		follows="right|left"
-		name="Misc"
+		name="M_Bounding_Boxes"
 		left="5"
 		top_pad="7"
 		tear_off="false">
@@ -1079,6 +1122,7 @@ background_visible="true">
 		</panel>
 
 <panel
+name="P_Ambient_Occlusion"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1091,6 +1135,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Ambient_Occlusion"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -1103,6 +1148,7 @@ width="250"/>
 </panel>
 
 <panel
+name="P_Amb_Occ_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1146,6 +1192,7 @@ background_visible="true">
 		</panel>
 		
 		<panel
+name="P_Scale"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1156,6 +1203,7 @@ border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">
 						<text
+						name="T_Scale"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1164,6 +1212,7 @@ background_visible="true">
 						tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
 						width="80"/>
 						<slider_bar
+						name="SB_Scale"
 						can_edit_text="true"
 						control_name="RenderSSAOScale"
 						follows="left|right"
@@ -1177,6 +1226,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Scale"
 						can_edit_text="true"
 						control_name="RenderSSAOScale"
 						top_delta="-3"
@@ -1192,6 +1242,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Scale"
 						control_name="RenderSSAOScale"
 						follows="top|left"
 						height="22"
@@ -1208,6 +1259,7 @@ background_visible="true">
 						</combo_box>
 
 						<text
+						name="T_Max_Scale" 
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1216,6 +1268,7 @@ background_visible="true">
 						tool_tip="Controls maximum screen radius from which to sample from, to avoid graphics card cache misses and associated large performance penalty. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
 						width="80"/>
 						<slider_bar
+						name="SB_Max_Scale"
 						can_edit_text="true"
 						control_name="RenderSSAOMaxScale"
 						follows="left|right"
@@ -1229,6 +1282,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Max_Scale"
 						can_edit_text="true"
 						control_name="RenderSSAOMaxScale"
 						top_delta="-3"
@@ -1244,6 +1298,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Max_Scale"
 						control_name="RenderSSAOMaxScale"
 						follows="top|left"
 						height="22"
@@ -1260,6 +1315,7 @@ background_visible="true">
 						</combo_box>
 
 						<text
+						name="T_Scaling_Factor"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1268,6 +1324,7 @@ background_visible="true">
 						tool_tip="Scaling factor for the effect (larger is darker). It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
 						width="80"/>
 						<slider_bar
+						name="SB_Scaling_Factor"
 						decimal_digits="2"
 						can_edit_text="true"
 						control_name="RenderSSAOFactor"
@@ -1281,6 +1338,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Scaling_Factor"
 						can_edit_text="true"
 						control_name="RenderSSAOFactor"
 						top_delta="-3"
@@ -1296,6 +1354,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Scaling_Factor"
 						control_name="RenderSSAOFactor"
 						follows="top|left"
 						height="22"
@@ -1306,6 +1365,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Scaling_Factor"
 						label="Default"
 						value=".30"/>
 						</combo_box>
@@ -1313,6 +1373,7 @@ background_visible="true">
 
 
 <panel
+name="P_Specular_Highlight"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1325,6 +1386,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Specular_Highlight"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -1336,7 +1398,8 @@ tool_tip="A specular highlight is the bright spot of light that appears on shiny
 width="285"/>
 </panel>
 
-		<panel                        
+		<panel
+name="P_Spec_Highlight_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1348,7 +1411,8 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 						
 					
-						<text      
+						<text
+						name="T_Smoothness" 
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1357,6 +1421,7 @@ background_visible="true">
 						tool_tip="Smoothness (Specular Exponent) is a user-chosen value that controls the apparent smoothness of the surface. "
 						width="80"/>
 						<slider_bar
+						name="SB_Smoothness"
 						can_edit_text="true"
 						control_name="RenderSpecularExponent"
 						follows="left|right"
@@ -1371,6 +1436,7 @@ background_visible="true">
 						
 						width="127" />
 						<spinner
+						name="S_Smoothness"
 						can_edit_text="true"
 						control_name="RenderSpecularExponent"
 						top_delta="-3"
@@ -1386,6 +1452,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Smoothness"
 						control_name="RenderSpecularExponent"
 						follows="top|left"
 						height="22"
@@ -1402,6 +1469,7 @@ background_visible="true">
 						</combo_box>
 						
 						<text
+						name="T_Smooth_Res"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1439,7 +1507,8 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
-						control_name="RenderSpecularResX"
+						 name="CB_Reset_Smooth_Res"
+						 control_name="RenderSpecularResX"
 						follows="top|left"
 						height="22"
 						layout="topleft"
@@ -1512,6 +1581,7 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_DoF_Glow"
 follows="top|left"
 layout="topleft"
 top_pad="0"
@@ -1519,6 +1589,7 @@ label="DoF/Glow"
 left="0">
 
 <panel
+name="PT_DoF_Glow"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -1531,6 +1602,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_DoF"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -1542,6 +1614,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_DoF_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1571,15 +1644,14 @@ background_visible="true">
 				create_jump_keys="false"
 				label=""
 				follows="right|left"
-				name="Misc"
+				name="M_Show_FOV"
 				left="5"
 				top_pad="3"
 				tear_off="false">
 				<menu_item_check
-
+				name="MIC_Show_FOV"
 				label="Show the Current FOV of Viewer Screen"
-				tool_tip="This will show you the vertical field of view for the camera. In SL is possible to change the lens length just like in RL. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
-				name="FOV">
+				tool_tip="This will show you the vertical field of view for the camera. In SL is possible to change the lens length just like in RL. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!">
 				<menu_item_check.on_check
 				function="Advanced.CheckHUDInfo"
 				parameter="fov" />
@@ -1591,6 +1663,7 @@ background_visible="true">
 		
 		</panel>
 		<panel
+name="P_Zoom"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -1602,6 +1675,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 		
 						<text
+						name="T_Zoom"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1610,6 +1684,7 @@ background_visible="true">
 						tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 						width="80"/>
 						<slider_bar
+						name="SB_Zoom"
 						can_edit_text="true"
 						control_name="CameraAngle"
 						follows="left|top"
@@ -1622,6 +1697,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" />
 						<spinner
+						name="S_Zoom"
 						can_edit_text="true"
 						control_name="CameraAngle"
 						top_delta="-3"
@@ -1637,6 +1713,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Zoom"
 						control_name="CameraAngle"
 						follows="left|top"
 						height="22"
@@ -1647,11 +1724,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Zoom"
 						label="Default"
 						value="1.047"/>
 						</combo_box>
 	
 						<text
+						name="T_FOV"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -1660,6 +1739,7 @@ background_visible="true">
 						tool_tip="Field of View: This tells the viewer what FOV you would like to simulate for the DOF effect. It is best to set this to the current FOV of the viewer."
 						width="80"/>
 						<slider_bar
+						name="SB_FOV"
 						can_edit_text="true"
 						control_name="CameraFieldOfView"
 						follows="left|top"
@@ -1673,6 +1753,7 @@ background_visible="true">
 						tool_tip=""
 						width="127"/>
 						<spinner
+						name="S_FOV"
 						can_edit_text="true"
 						control_name="CameraFieldOfView"
 						top_delta="-3"
@@ -1688,6 +1769,7 @@ background_visible="true">
 						increment="0.1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_FOV"
 						control_name="CameraFieldOfView"
 						follows="left|top"
 						height="22"
@@ -1698,6 +1780,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_FOV"
 						label="Default"
 						value="60"/>
 						</combo_box>
@@ -1706,6 +1789,7 @@ background_visible="true">
 						
 						
 						<text
+						name="T_F_Number"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1714,6 +1798,7 @@ background_visible="true">
 						tool_tip="In real world terms this is the aperture setting for the lens and the lower the value the shorter the depth of field will be. The same applies to SL."
 						width="80"/>
 						<slider_bar
+						name="SB_F_Number"
 						can_edit_text="true"
 						control_name="CameraFNumber"
 						follows="top|left"
@@ -1727,6 +1812,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_F_Number"
 						can_edit_text="true"
 						control_name="CameraFNumber"
 						top_delta="-3"
@@ -1742,6 +1828,7 @@ background_visible="true">
 						increment=".01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_F_Number"
 						control_name="CameraFNumber"
 						follows="top|left"
 						height="22"
@@ -1752,12 +1839,14 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_F_Number"
 						label="Default"
 						value="9"/>
 						</combo_box>
 
 
 						<text
+						name="T_Focal_Length"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1766,6 +1855,7 @@ background_visible="true">
 						tool_tip="Focal Length (mm): This tells the viewer what Focal Length/Lens Length to simulate for the DOF effect. Higher numbers produce a narrower depth of field."
 						width="80"/>
 						<slider_bar
+						name="SB_Focal_Length"
 						can_edit_text="true"
 						control_name="CameraFocalLength"
 						follows="top|left"
@@ -1779,6 +1869,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Focal_Length"
 						can_edit_text="true"
 						control_name="CameraFocalLength"
 						top_delta="-3"
@@ -1794,6 +1885,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Focal_Length"
 						control_name="CameraFocalLength"
 						follows="top|left"
 						height="22"
@@ -1804,6 +1896,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Focal_Length"
 						label="Default"
 						value="50"/>
 						</combo_box>
@@ -1811,6 +1904,7 @@ background_visible="true">
 
 						
 						<text
+						name="T_Foc_Time"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1819,6 +1913,7 @@ background_visible="true">
 						tool_tip="Focus Time: This sets the time in seconds it take to the viewer to change focus from one object."
 						width="80"/>
 						<slider_bar
+						name="SB_Foc_Time"
 						can_edit_text="true"
 						control_name="CameraFocusTransitionTime"
 						follows="top|left"
@@ -1832,6 +1927,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Foc_Time"
 						can_edit_text="true"
 						control_name="CameraFocusTransitionTime"
 						top_delta="-3"
@@ -1847,6 +1943,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Foc_Time"
 						control_name="CameraFocusTransitionTime"
 						follows="top|left"
 						height="22"
@@ -1857,11 +1954,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Foc_Time"
 						label="Default"
 						value=".50"/>
 						</combo_box>
 						
 						<text
+						name="T_CoC"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1870,6 +1969,7 @@ background_visible="true">
 						tool_tip="Circle of Confusion: This is a VERY IMPORTANT SETTING. It determines the strength of the blur itself. It does not change the depth of field, it adjusts how much those objects outside of it will be blurry. Also you can access negative values for interesting effects in the spinner text box."
 						width="80"/>
 						<slider_bar
+						name="SB_CoC"
 						can_edit_text="true"
 						control_name="CameraMaxCoF"
 						follows="top|left"
@@ -1883,6 +1983,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_CoC"
 						can_edit_text="true"
 						control_name="CameraMaxCoF"
 						top_delta="-3"
@@ -1898,6 +1999,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_CoC"
 						control_name="CameraMaxCoF"
 						follows="top|left"
 						height="22"
@@ -1908,11 +2010,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_CoC"
 						label="Default"
 						value="10"/>
 						</combo_box>
 						
 						<text
+						name="T_Resolution"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1921,6 +2025,7 @@ background_visible="true">
 						tool_tip="Resolution: This determines the quality of the DOF Effect. For non-photography uses '.25' is good. For setting up shots '.50' or '.70' is very nice. For shooting quality images '1.00' is best. High values will slow down your FPS! Also you can access negative values for interesting effects in the spinner text box."
 						width="80"/>
 						<slider_bar
+						name="SB_Resolution"
 						can_edit_text="true"
 						control_name="CameraDoFResScale"
 						follows="left|right"
@@ -1934,6 +2039,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Resolution"
 						can_edit_text="true"
 						control_name="CameraDoFResScale"
 						top_delta="-3"
@@ -1949,6 +2055,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Resolution"
 						control_name="CameraDoFResScale"
 						follows="top|left"
 						height="22"
@@ -1959,11 +2066,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Resolution"
 						label="Default"
 						value="0.7"/>
 						</combo_box>
 						
 						<text
+						name="T_Aspect_Ratio"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -1972,6 +2081,7 @@ background_visible="true">
 						tool_tip="This is supposed to be aspect ratio of the camera you're modelling. For example, a 35mm camera has an aspect ratio of 3:2 (1.5). Second Life will use this as a frame of reference for how field of view and focal length must be adjusted depending on window size. IT SEEMS TO HAVE NO EFFECT!"
 						width="80"/>
 						<slider_bar
+						name="SB_Aspect_Ratio"
 						can_edit_text="true"
 						control_name="CameraAspectRatio"
 						follows="left|right"
@@ -1985,6 +2095,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Aspect_Ratio"
 						can_edit_text="true"
 						control_name="CameraAspectRatio"
 						top_delta="-3"
@@ -2000,6 +2111,7 @@ background_visible="true">
 						increment="0.01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Aspect_Ratio"
 						control_name="CameraAspectRatio"
 						follows="top|left"
 						height="22"
@@ -2010,6 +2122,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Aspect_Ratio"
 						label="Default"
 						value="0.7"/>
 						</combo_box>
@@ -2017,6 +2130,7 @@ background_visible="true">
 
 
 <panel
+name="P_Glow_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -2029,6 +2143,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Glow_Settings"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -2040,6 +2155,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_Glow_Quality"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -2064,6 +2180,7 @@ background_visible="true">
 		</check_box-->
 
 						<text
+						name="T_Glow_Quality" 
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2072,6 +2189,7 @@ background_visible="true">
 						tool_tip="This will determine the quality of the glow effect, higher is better. There is little visual difference between 8 and 10."
 						width="80"/>
 						<!--slider_bar
+						name="SB_Glow_Quality"
 						can_edit_text="true"
 						control_name="RenderGlowResolutionPow"
 						follows="top|left"
@@ -2085,6 +2203,7 @@ background_visible="true">
 						top_delta="-2"
 						width="127" /-->
 						<spinner
+						name="S_Glow_Quality"
 						can_edit_text="true"
 						control_name="RenderGlowResolutionPow"
 						top_delta="-3"
@@ -2100,6 +2219,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Glow_Quality"
 						control_name="RenderGlowResolutionPow"
 						follows="top|left"
 						height="22"
@@ -2110,12 +2230,14 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Glow_Quality"
 						label="Default"
 						value="9"/>
 						</combo_box>
 </panel>
 
 <panel
+name="P_Glow_Iterations"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -2126,6 +2248,7 @@ border_visible="true"
 bg_alpha_color="DkGray_66"
 background_visible="true">
 						<text
+						name="T_Glow_Iterations"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2134,6 +2257,7 @@ background_visible="true">
 						tool_tip="Number of times to iterate/repeat the glow (higher = wider and smoother and a bit slower)."
 						width="80"/>
 						<slider_bar
+						name="SB_Glow_Iterations"
 						can_edit_text="true"
 						control_name="RenderGlowIterations"
 						follows="top|left"
@@ -2148,6 +2272,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Glow_Iterations"
 						can_edit_text="true"
 						control_name="RenderGlowIterations"
 						top_delta="-3"
@@ -2163,6 +2288,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Glow_Iterations"
 						control_name="RenderGlowIterations"
 						follows="top|left"
 						height="22"
@@ -2173,11 +2299,12 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Glow_Iterations"
 						label="Default"
 						value="2"/>
 						</combo_box>
 						
-						<text
+						<text name="T_Glow_Strength"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2186,6 +2313,7 @@ background_visible="true">
 						tool_tip="Additive strength of glow. Very low values are needed to see this effect. Start low!"
 						width="80"/>
 						<slider_bar
+						name="SB_Glow_Strength"
 						can_edit_text="true"
 						control_name="RenderGlowStrength"
 						follows="top|left"
@@ -2200,6 +2328,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Glow_Strength"
 						can_edit_text="true"
 						control_name="RenderGlowStrength"
 						top_delta="-3"
@@ -2215,6 +2344,7 @@ background_visible="true">
 						increment=".00001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Glow_Strength"
 						control_name="RenderGlowStrength"
 						follows="top|left"
 						height="22"
@@ -2225,11 +2355,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Glow_Strength"
 						label="Default"
 						value="0.350"/>
 						</combo_box>
 						
 						<text
+						name="T_Luminance"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2238,6 +2370,7 @@ background_visible="true">
 						tool_tip="Minimum luminance intensity necessary to consider an object bright enough to automatically glow."
 						width="80"/>
 						<slider_bar
+						name="SB_Luminance"
 						can_edit_text="true"
 						control_name="RenderGlowMinLuminance"
 						follows="left|top"
@@ -2251,6 +2384,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Luminance"
 						can_edit_text="true"
 						control_name="RenderGlowMinLuminance"
 						top_delta="-3"
@@ -2266,6 +2400,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Luminance"
 						control_name="RenderGlowMinLuminance"
 						follows="top|left"
 						height="22"
@@ -2276,12 +2411,14 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Luminance"
 						label="Default"
 						value="5"/>
 						</combo_box>			
 
 
 						<text
+						name="T_Warmth"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2290,6 +2427,7 @@ background_visible="true">
 						tool_tip="Amount of warmth extraction to use (versus luminance extraction). 0 = lum, 1.0 = warmth. OFTEN HAS LITTLE OR NO EFFECT!"
 						width="80"/>
 						<slider_bar
+						name="SB_Warmth"
 						can_edit_text="true"		control_name="RenderGlowWarmthAmount"
 						follows="left|right"
 						height="16"
@@ -2302,6 +2440,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Warmth"
 						can_edit_text="true"
 						control_name="RenderGlowWarmthAmount"
 						top_delta="-3"
@@ -2317,6 +2456,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Warmth"
 						control_name="RenderGlowWarmthAmount"
 						follows="top|left"
 						height="22"
@@ -2327,11 +2467,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Warmth"
 						label="Default"
 						value="0"/>
 						</combo_box>
 
 						<text
+						name="T_Glow_Width"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2340,6 +2482,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Glow_Width"
 						can_edit_text="true"
 						control_name="RenderGlowWidth"
 						follows="left|right"
@@ -2353,6 +2496,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Glow_Width"
 						can_edit_text="true"
 						control_name="RenderGlowWidth"
 						top_delta="-3"
@@ -2368,6 +2512,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Glow_Width"
 						control_name="RenderGlowWidth"
 						follows="top|left"
 						height="22"
@@ -2378,11 +2523,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Glow_Width"
 						label="Default"
 						value="1.300"/>
 						</combo_box>
 		
 						<text
+						name="T_Alpha"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2391,6 +2538,7 @@ background_visible="true">
 						tool_tip="Basically how bright the glow is allowed to get."
 						width="80"/>
 						<slider_bar
+						name="SB_Alpha"
 						can_edit_text="true"
 						control_name="RenderGlowMaxExtractAlpha"
 						follows="left|right"
@@ -2404,6 +2552,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Alpha"
 						can_edit_text="true"
 						control_name="RenderGlowMaxExtractAlpha"
 						top_delta="-3"
@@ -2419,6 +2568,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Alpha"
 						control_name="RenderGlowMaxExtractAlpha"
 						follows="top|left"
 						height="22"
@@ -2429,6 +2579,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Alpha"
 						label="Default"
 						value="0.250"/>
 						</combo_box>
@@ -2439,12 +2590,14 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_General"
 follows="left|top"
 layout="topleft"
 top_pad="0"
 label="Gen"
 left="0">
 <panel
+name="PT_General"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -2457,6 +2610,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_General"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -2468,6 +2622,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_General_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -2479,6 +2634,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 						
 						<text
+						name="T_Draw_Distance"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2487,6 +2643,7 @@ background_visible="true">
 						tool_tip="This sets the furthest distance the viewer will draw anything. High values will slow your FPS!"
 						width="80"/>
 						<slider_bar
+						name="SB_Draw_Distance"
 						can_edit_text="true"
 						control_name="RenderFarClip"
 						follows="left|top"
@@ -2500,6 +2657,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Draw_Distance"
 						can_edit_text="true"
 						control_name="RenderFarClip"
 						top_delta="-3"
@@ -2515,6 +2673,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Draw_Distance"
 						control_name="RenderFarClip"
 						follows="left|top"
 						height="22"
@@ -2525,11 +2684,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Draw_Distance"
 						label="Default"
 						value="256"/>
 						</combo_box>
 						
 						<text
+						name="T_Avi_Count"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2538,6 +2699,7 @@ background_visible="true">
 						tool_tip="Maximum number of other avatars to render in a scene. Very helpful for situations where many avatars are slowing your FPS."
 						width="80"/>
 						<slider_bar
+						name="SB_Avi_Count"
 						can_edit_text="true"
 						control_name="RenderAvatarMaxVisible"
 						follows="left|top"
@@ -2551,6 +2713,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Avi_Count"
 						can_edit_text="true"
 						control_name="RenderAvatarMaxVisible"
 						top_delta="-3"
@@ -2566,6 +2729,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Avi_Count"
 						control_name="RenderAvatarMaxVisible"
 						follows="top|left"
 						height="22"
@@ -2576,11 +2740,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Avi_Count"
 						label="Default"
 						value="12"/>
 						</combo_box>
 
 						<text
+						name="T_Avi_Detail"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2589,6 +2755,7 @@ background_visible="true">
 						tool_tip="Sets the render quality of the avatars. Higher is better!"
 						width="80"/>
 						<slider_bar
+						name="SB_Avi_Detail"
 						can_edit_text="true"
 						control_name="RenderAvatarLODFactor"
 						follows="left|top"
@@ -2602,6 +2769,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Avi_Detail"
 						can_edit_text="true"
 						control_name="RenderAvatarLODFactor"
 						top_delta="-3"
@@ -2617,6 +2785,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Avi_Detail"
 						control_name="RenderAvatarLODFactor"
 						follows="top|left"
 						height="22"
@@ -2627,19 +2796,22 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Avi_Detail"
 						label="Default"
 						value=".5"/>
 						</combo_box>
 
 						<text
+						name="T_Avi_Physics"
 						follows="top|left"
 						layout="topleft"
 						left="5"
 						value="Avi Physics"
 						top_pad="5"
-						tool_tip="	Controls level of detail of avatar physics (such as chest physics). Higher is better."
+						tool_tip="Controls level of detail of avatar physics (such as chest physics). Higher is better."
 						width="80"/>
 						<slider_bar
+						name="SB_Avi_Physics"
 						can_edit_text="true"
 						control_name="RenderAvatarPhysicsLODFactor"
 						follows="left|top"
@@ -2653,6 +2825,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Avi_Physics"
 						can_edit_text="true"
 						control_name="RenderAvatarPhysicsLODFactor"
 						top_delta="-3"
@@ -2668,6 +2841,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Avi_Physics"
 						control_name="RenderAvatarPhysicsLODFactor"
 						follows="left|top"
 						height="22"
@@ -2678,11 +2852,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Avi_Physics"
 						label="Default"
 						value="1"/>
 						</combo_box>
 								
 						<text
+						name="T_Particle_Cnt"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -2691,6 +2867,7 @@ background_visible="true">
 						tool_tip="Sets the maximum number of particles to render."
 						width="80"/>
 						<slider_bar
+						name="SB_Particle_Cnt"
 						can_edit_text="true"
 						control_name="RenderMaxPartCount"
 						follows="left|top"
@@ -2704,6 +2881,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Particle_Cnt"
 						can_edit_text="true"
 						control_name="RenderMaxPartCount"
 						top_delta="-3"
@@ -2719,6 +2897,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Particle_Cnt"
 						control_name="RenderMaxPartCount"
 						follows="left|top"
 						height="22"
@@ -2729,11 +2908,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Particle_Cnt"
 						label="Default"
 						value="4096"/>
 						</combo_box>
 
 						<text
+						name="T_Terrain_Scale"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2742,6 +2923,7 @@ background_visible="true">
 						tool_tip="Sets the quality of the default Linden Labs ground (terrain) texture."
 						width="80"/>
 						<slider_bar
+						name="SB_Terrain_Scale"
 						can_edit_text="true"
 						control_name="RenderTerrainScale"
 						follows="left|top"
@@ -2755,6 +2937,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Terrain_Scale"
 						can_edit_text="true"
 						control_name="RenderTerrainScale"
 						top_delta="-3"
@@ -2770,6 +2953,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Terrain_Scale"
 						control_name="RenderTerrainScale"
 						follows="left|top"
 						height="22"
@@ -2780,11 +2964,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Terrain_Scale"
 						label="Default"
 						value="12"/>
 						</combo_box>
 					
 						<text
+						name="T_Terrain_Quality"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2793,6 +2979,7 @@ background_visible="true">
 						tool_tip="Sets the quality of terrain. High numbers mean more detailed terrain in the distance."
 						width="80"/>
 						<slider_bar
+						name="SB_Terrain_Quality"
 						can_edit_text="true"
 						control_name="RenderTerrainLODFactor"
 						follows="left|top"
@@ -2806,6 +2993,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Terrain_Quality"
 						can_edit_text="true"
 						control_name="RenderTerrainLODFactor"
 						top_delta="-3"
@@ -2821,6 +3009,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Terrain_Quality"
 						control_name="RenderTerrainLODFactor"
 						follows="left|top"
 						height="22"
@@ -2831,11 +3020,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Terrain_Quality"
 						label="Default"
 						value="1"/>
 						</combo_box>
 
 						<text
+						name="T_Object_Detail"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2844,6 +3035,7 @@ background_visible="true">
 						tool_tip="Controls the detail of prims. Higher values produce greater detail for objects."
 						width="80"/>
 						<slider_bar
+						name="SB_Object_Detail"
 						can_edit_text="true"
 						control_name="RenderVolumeLODFactor"
 						follows="left|top"
@@ -2857,6 +3049,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Object_Detail"
 						can_edit_text="true"
 						control_name="RenderVolumeLODFactor"
 						top_delta="-3"
@@ -2872,6 +3065,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Object_Detail"
 						control_name="RenderVolumeLODFactor"
 						follows="left|top"
 						height="22"
@@ -2882,11 +3076,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Object_Detail"
 						label="Default"
 						value="1"/>
 						</combo_box>
 
 						<text
+						name="T_Flexi_Detail"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2895,6 +3091,7 @@ background_visible="true">
 						tool_tip="Controls level of detail of flexible objects. Higher means more detail."
 						width="80"/>
 						<slider_bar
+						name="SB_Flexi_Detail"
 						can_edit_text="true"
 						control_name="RenderFlexTimeFactor"
 						follows="left|top"
@@ -2908,6 +3105,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Flexi_Detail"
 						can_edit_text="true"
 						control_name="RenderFlexTimeFactor"
 						top_delta="-3"
@@ -2923,6 +3121,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Flexi_Detail"
 						control_name="RenderFlexTimeFactor"
 						follows="left|top"
 						height="22"
@@ -2933,11 +3132,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Flexi_Detail"
 						label="Default"
 						value="1"/>
 						</combo_box>
 
 						<text
+						name="T_Tree_Detail"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2946,6 +3147,7 @@ background_visible="true">
 						tool_tip="Controls level of detail of vegetation . Higher numbers produce greater detail."
 						width="80"/>
 						<slider_bar
+						name="SB_Tree_Detail"
 						can_edit_text="true"
 						control_name="RenderTreeLODFactor"
 						follows="left|top"
@@ -2959,6 +3161,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Tree_Detail"
 						can_edit_text="true"
 						control_name="RenderTreeLODFactor"
 						top_delta="-3"
@@ -2974,6 +3177,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Tree_Detail"
 						control_name="RenderTreeLODFactor"
 						follows="left|top"
 						height="22"
@@ -2984,11 +3188,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Tree_Detail"
 						label="Default"
 						value=".5"/>
 						</combo_box>
 
 						<text
+						name="T_Sky_Detail"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -2997,6 +3203,7 @@ background_visible="true">
 						tool_tip="Controls vertex detail on the WindLight sky. Lower numbers will give better performance and less than lovely skies."
 						width="80"/>
 						<slider_bar
+						name="SB_Sky_Detail"
 						can_edit_text="true"
 						control_name="WLSkyDetail"
 						follows="left|top"
@@ -3010,6 +3217,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Sky_Detail"
 						can_edit_text="true"
 						control_name="WLSkyDetail"
 						top_delta="-3"
@@ -3025,6 +3233,7 @@ background_visible="true">
 						increment="4"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Sky_Detail"
 						control_name="WLSkyDetail"
 						follows="left|top"
 						height="22"
@@ -3035,11 +3244,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Sky_Detail"
 						label="Default"
 						value="64"/>
 						</combo_box>
 
 						<text
+						name="T_Av_Floor_Offset"
 						follows="left|top"
 						layout="topleft"
 						left="5"
@@ -3048,6 +3259,7 @@ background_visible="true">
 						tool_tip="Controls how far above or below the floor your avatar stands. Helpful if your find yourself above or below the floor."
 						width="110"/>
 						<slider_bar
+						name="SB_Av_Floor_Offset"
 						can_edit_text="true"
 						control_name="AvatarZOffset"
 						follows="left|top"
@@ -3062,6 +3274,7 @@ background_visible="true">
 						tool_tip=""
 						width="77" />
 						<spinner
+						name="S_Av_Floor_Offset"
 						can_edit_text="true"
 						control_name="AvatarZOffset"
 						top_delta="-3"
@@ -3077,6 +3290,7 @@ background_visible="true">
 						increment=".01"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Av_Floor_Offset"
 						control_name="AvatarZOffset"
 						follows="left|top"
 						height="22"
@@ -3087,6 +3301,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Av_Floor_Offset"
 						label="Default"
 						value="0"/>
 						</combo_box>
@@ -3099,11 +3314,12 @@ follows="left|top"
 height="0"
 layout="topleft"
 left="10"
-name="horiz_separator"
+name="horiz_separator4"
 top_pad="5"
 width="260"/-->
 
 <panel
+name="P_Render"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -3161,7 +3377,7 @@ background_visible="true">
 						layout="topleft"
 						left="5"
 						tool_tip="This enables higher texture crispness.love"
-						name="Anisotrpic"
+						name="Anisotropic"
 						top_pad="2"
 						width="240"/>
 
@@ -3176,7 +3392,7 @@ background_visible="true">
 						label=""
 						opaque="true"
 						follows="left|top"
-						name="Misc"
+						name="M_Av_Att_Particles"
 						left="10"
 						top_pad="0"
 						enabled="true"
@@ -3226,11 +3442,12 @@ follows="left|top"
 height="0"
 layout="topleft"
 left="10"
-name="horiz_separator"
+name="horiz_separator5"
 top_pad="5"
 width="260"/-->
 
 <panel
+name="P_Anti-aliasing"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -3243,6 +3460,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 		 
 						<text
+						name="T_Anti-aliasing"
 						follows="left|top"
 						height="18"
 						left="10" 
@@ -3290,6 +3508,7 @@ background_visible="true">
 							</panel>
 							
 						<panel
+name="P_Texture_Bumpiness"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -3303,6 +3522,7 @@ background_visible="true">
 				
 
 							<text
+							name="T_Texture_Bumpiness"
 							follows="left|top"
 							height="15"
 							left="10" 
@@ -3359,6 +3579,7 @@ background_visible="true">
 							top_pad="7"
 							width="20" />
 							<text
+							name="T_Basic_Shaders"
 							follows="left|top"
 							height="15"
 							left_pad="0" 
@@ -3381,6 +3602,7 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_Aids"
 follows="left|top"
 layout="topleft"
 top_pad="0"
@@ -3388,6 +3610,7 @@ label="Aids"
 left="0">
 
 <panel
+name="PT_Aids"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -3400,6 +3623,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Aids"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -3415,7 +3639,7 @@ mouse_opaque="false"
 create_jump_keys="false"
 label=""
 follows="left|top"
-name="Misc"
+name="M_Aids"
 left="7"
 top_pad="5"
 tear_off="false">
@@ -3573,11 +3797,12 @@ follows="left|top"
 height="0"
 layout="topleft"
 left="10"
-name="horiz_separator"
+name="horiz_separator6"
 top_pad="265"
 width="260"/-->
 
 <panel
+name="P_Quick_Stats"
 follows="top|left"
 layout="topleft"
 top_pad="237"
@@ -3590,6 +3815,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Quick_Stats"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -3743,12 +3969,14 @@ width="200"/>
     </scroll_container>
 	</panel>
 <panel
+name="P_Cam"
 follows="left|top"
 layout="topleft"
 top_pad="0"
 label="Cam"
 left="0">
 <panel
+name="PT_Cam"
 follows="top|left"
 layout="topleft"
 top_pad="10"
@@ -3761,6 +3989,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Cam"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -3772,6 +4001,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_Cam_Settings"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -3784,6 +4014,7 @@ background_visible="true">
 
 
 						<text
+						name="T_LR_Axis"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -3792,6 +4023,7 @@ background_visible="true">
 						top_pad="10"
 						width="80"/>
 						<slider_bar
+						name="SB_LR_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale1"
 						follows="left|right"
@@ -3806,6 +4038,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_LR_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale1"
 						top_delta="-3"
@@ -3821,6 +4054,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_LR_Axis"
 						control_name="FlycamAxisScale1"
 						follows="top|left"
 						height="22"
@@ -3831,11 +4065,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_LR_Axis"
 						label="Default"
 						value="2"/>
 						</combo_box>
 	
 						<text
+						name="T_UD_Axis"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -3844,6 +4080,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_UD_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale2"
 						follows="left|right"
@@ -3858,6 +4095,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_UD_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale2"
 						top_delta="-3"
@@ -3873,6 +4111,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_UD_Axis"
 						control_name="FlycamAxisScale2"
 						follows="top|left"
 						height="22"
@@ -3883,11 +4122,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_UD_Axis"
 						label="Default"
 						value="2"/>
 						</combo_box>
 						
 						<text
+						name="T_IO_Axis"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -3896,6 +4137,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_IO_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale0"
 						follows="left|right"
@@ -3910,6 +4152,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_IO_Axis"
 						can_edit_text="true"
 						control_name="FlycamAxisScale0"
 						top_delta="-3"
@@ -3925,6 +4168,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_IO_Axis"
 						control_name="FlycamAxisScale0"
 						follows="top|left"
 						height="22"
@@ -3935,11 +4179,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_IO_Axis"
 						label="Default"
 						value="2.1"/>
 						</combo_box>
 						
 						<text
+						name="T_Tilt"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -3948,6 +4194,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Tilt"
 						can_edit_text="true"
 						control_name="FlycamAxisScale4"
 						follows="left|right"
@@ -3962,6 +4209,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Tilt"
 						can_edit_text="true"
 						control_name="FlycamAxisScale4"
 						top_delta="-3"
@@ -3977,6 +4225,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Tilt"
 						control_name="FlycamAxisScale4"
 						follows="top|left"
 						height="22"
@@ -3987,11 +4236,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Tilt"
 						label="Default"
 						value=".10"/>
 						</combo_box>
 						
 						<text
+						name="T_Spin"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -4000,6 +4251,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Spin"
 						can_edit_text="true"
 						control_name="FlycamAxisScale5"
 						follows="left|right"
@@ -4014,6 +4266,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Spin"
 						can_edit_text="true"
 						control_name="FlycamAxisScale5"
 						top_delta="-3"
@@ -4029,6 +4282,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Spin"
 						control_name="FlycamAxisScale5"
 						follows="top|left"
 						height="22"
@@ -4039,11 +4293,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Spin"
 						label="Default"
 						value=".15"/>
 						</combo_box>
 						
 						<text
+						name="T_Roll"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -4052,6 +4308,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Roll"
 						can_edit_text="true"
 						control_name="FlycamAxisScale3"
 						follows="left|right"
@@ -4066,6 +4323,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Roll"
 						can_edit_text="true"
 						control_name="FlycamAxisScale3"
 						top_delta="-3"
@@ -4081,6 +4339,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Roll"
 						control_name="FlycamAxisScale3"
 						follows="top|left"
 						height="22"
@@ -4091,11 +4350,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Roll"
 						label="Default"
 						value="0"/>
 						</combo_box>
 						
 						<text
+						name="T_Zoom_Speed"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -4104,6 +4365,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Zoom_Speed"
 						can_edit_text="true"
 						control_name="FlycamAxisScale6"
 						follows="left|right"
@@ -4118,6 +4380,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Zoom_Speed"
 						can_edit_text="true"
 						control_name="FlycamAxisScale6"
 						top_delta="-3"
@@ -4133,6 +4396,7 @@ background_visible="true">
 						increment="1"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Zoom_Speed"
 						control_name="FlycamAxisScale6"
 						follows="top|left"
 						height="22"
@@ -4143,11 +4407,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Zoom_Speed"
 						label="Default"
 						value=".1"/>
 						</combo_box>
 						
 						<text
+						name="T_Feathering"
 						follows="top|left"
 						layout="topleft"
 						left="5"
@@ -4156,6 +4422,7 @@ background_visible="true">
 						top_pad="5"
 						width="80"/>
 						<slider_bar
+						name="SB_Feathering"
 						can_edit_text="true"
 						control_name="FlycamFeathering"
 						follows="left|right"
@@ -4170,6 +4437,7 @@ background_visible="true">
 						tool_tip=""
 						width="127" />
 						<spinner
+						name="S_Feathering"
 						can_edit_text="true"
 						control_name="FlycamFeathering"
 						top_delta="-3"
@@ -4185,6 +4453,7 @@ background_visible="true">
 						increment=".001"
 						border_visible="false"/>
 						<combo_box
+						name="CB_Reset_Feathering"
 						control_name="FlycamFeathering"
 						follows="top|left"
 						height="22"
@@ -4195,6 +4464,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Feathering"
 						label="Default"
 						value="2.75"/>
 						</combo_box>
@@ -4202,6 +4472,7 @@ background_visible="true">
 		</panel>
 
 <panel
+name="P_Axis_Mapping"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -4238,6 +4509,7 @@ background_visible="true">
      name="enable_joystick"
      width="60" />
 	<check_box
+	name="CB_ZoomDirect"
      control_name="ZoomDirect"
 	 label_width="15"
      label="Enable Zoom Control (See Tool Tip!)"
@@ -4248,6 +4520,7 @@ background_visible="true">
      width="15" />
 	 
 	 <check_box
+	 name="CB_AutoLeveling"
      control_name="AutoLeveling"
 	 label_width="15"
      label="Enable Auto Leveling (Prevents Camera Roll)"
@@ -4258,6 +4531,7 @@ background_visible="true">
 	 width="15" />
 
 	 <check_box
+	 name="CB_Move_Avatar"
 	 control_name="JoystickAvatarEnabled"
 	 label_width="15"
 	 label="Use the 3D Mouse to move the avatar"
@@ -4268,6 +4542,7 @@ background_visible="true">
 	 width="15" />
 	
 		 <check_box
+		 name="CB_Move_Objects"
 	 control_name="JoystickBuildEnabled"
 	 label_width="15"
 	 label="Use the 3D Mouse to move objects (building)"
@@ -4284,7 +4559,7 @@ background_visible="true">
 				create_jump_keys="false"
 				label=""
 				follows="right|left"
-				name="Misc"
+				name="M_Show_FOV2"
 				left="5"
 				top_pad="3"
 				tear_off="false">
@@ -4305,6 +4580,7 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_Viewer_Cam_Menu"
 follows="top|left"
 layout="topleft"
 top_pad="5"
@@ -4317,6 +4593,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="PT_Viewer_Cam_Menu"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -4328,6 +4605,7 @@ width="200"/>
 </panel>
 
 <panel
+name="P_Viewer_Cam_Menu_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -4339,9 +4617,9 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 
 <tab_container
+name="TC_Viewer_Cam_Menu_Settings"
 follows="all"
 halign="center"
-name="tabs"
 layout="topleft"
 height="120"
 width="285"
@@ -4362,6 +4640,7 @@ label="Camera Movement"
 left="0">
 
 <panel
+name="P_Cam2"
 follows="left|top"
 layout="topleft"
 top_pad="0"
@@ -4373,6 +4652,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 
 						<text
+						name="T_Zoom2"
 						layout="topleft"
 						left="10"
 						value="Zoom"
@@ -4380,6 +4660,7 @@ background_visible="true">
 						tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
 						width="100"/>
 						<slider
+						name="SB_Zoom2"
 						can_edit_text="true"
 						control_name="CameraAngle"
 						follows="left|right"
@@ -4392,6 +4673,7 @@ background_visible="true">
 						top_delta="-2"
 						width="135" />
 						<!--spinner
+						name="S_Zoom2"
 						can_edit_text="true"
 						control_name="CameraAngle"
 						top_delta="-3"
@@ -4407,6 +4689,8 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/-->
 						<combo_box
+						name="CB_Reset_Zoom2"
+						
 						control_name="CameraAngle"
 						follows="right"
 						height="16"
@@ -4417,11 +4701,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Zoom2"
 						label="Default"
 						value="1.047"/>
 						</combo_box>
 						
 						<text
+						name="T_Zoom_Speed2"
 						layout="topleft"
 						left="10"
 						value="Zoom Speed"
@@ -4429,6 +4715,7 @@ background_visible="true">
 						tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smoother zoom."
 						width="100"/>
 						<slider
+						name="S_Zoom_Speed2"
 						can_edit_text="true"
 						control_name="ZoomTime"
 						follows="left|right"
@@ -4442,6 +4729,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Zoom_Speed2"
 						control_name="ZoomTime"
 						follows="right"
 						height="16"
@@ -4452,12 +4740,14 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Zoom_Speed2"
 						label="Default"
 						value="0.40000000596"/>
 						</combo_box>
 						
 						
 						<text
+						name="T_Camera_Lag"
 						layout="topleft"
 						left="10"
 						value="Camera Lag"
@@ -4465,6 +4755,7 @@ background_visible="true">
 						tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity)."
 						width="100"/>
 						<slider
+						name="S_Camera_Lag"
 						can_edit_text="true"
 						control_name="DynamicCameraStrength"
 						follows="left|right"
@@ -4478,6 +4769,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Camera_Lag"
 						control_name="DynamicCameraStrength"
 						follows="right"
 						height="16"
@@ -4488,11 +4780,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Camera_Lag"
 						label="Default"
 						value="2"/>
 						</combo_box>
 						
 						<text
+						name="T_Camera_Offset"
 						layout="topleft"
 						left="10"
 						value="Camera Offset"
@@ -4500,6 +4794,7 @@ background_visible="true">
 						tool_tip="Controls how far the camera is offset/distance from the default point of view."
 						width="100"/>
 						<slider
+						name="S_Camera_Offset"
 						can_edit_text="true"
 						control_name="CameraOffsetScale"
 						follows="left|right"
@@ -4513,6 +4808,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Camera_Offset"
 						control_name="CameraOffsetScale"
 						follows="right"
 						height="16"
@@ -4523,11 +4819,13 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Camera_Offset"
 						label="Default"
 						value="1"/>
 						</combo_box>
 						
 						<text
+						name="T_Cam_Smoothing"
 						layout="topleft"
 						left="10"
 						value="Cam. Smoothing"
@@ -4535,6 +4833,7 @@ background_visible="true">
 						tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement."
 						width="100"/>
 						<slider
+						name="S_Cam_Smoothing"
 						can_edit_text="true"
 						control_name="CameraPositionSmoothing"
 						follows="left|right"
@@ -4548,6 +4847,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Cam_Smoothing"
 						control_name="CameraPositionSmoothing"
 						follows="right"
 						height="16"
@@ -4558,6 +4858,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Cam_Smoothing"
 						label="Default"
 						value="1"/>
 						</combo_box>
@@ -4566,7 +4867,7 @@ background_visible="true">
 
 <panel
 follows="all"
-name="ShadLights"
+name="P_Mouse"
 layout="topleft"
 width="285"
 top="0"
@@ -4574,6 +4875,7 @@ label="Mouse"
 left="0">
 
 <panel
+name="P_Mouse_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="0"
@@ -4585,6 +4887,7 @@ bg_alpha_color="DkGray_66"
 background_visible="true">
 
 						<text
+						name="T_Mouse_Sens"
 						follows="left|top"
 						layout="topleft"
 
@@ -4594,6 +4897,7 @@ background_visible="true">
 						tool_tip="Controls responsiveness of mouse when in mouselook mode."
 						width="100"/>
 						<slider
+						name="S_Mouse_Sens"
 						can_edit_text="true"
 						control_name="MouseSensitivity"
 						follows="left|top"
@@ -4607,6 +4911,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Mouse_Sens"
 						control_name="MouseSensitivity"
 						follows="left|top"
 						height="16"
@@ -4617,6 +4922,7 @@ background_visible="true">
 						tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Mouse_Sens"
 						label="Default"
 						value="3"/>
 						</combo_box>
@@ -4647,7 +4953,7 @@ background_visible="true">
 						
 <panel
 follows="all"
-name="ShadLights"
+name="P_Misc"
 layout="topleft"
 width="285"
 top="0"
@@ -4655,6 +4961,7 @@ label="Misc Settings"
 left="0">
 
 <panel
+name="P_Misc_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="0"

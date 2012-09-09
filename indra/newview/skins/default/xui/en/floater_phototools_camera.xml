@@ -53,6 +53,7 @@ tab_min_width="25">
 	
 
 <panel
+name="P_Cam_Controls_1
 follows="all"
 layout="topleft"
 top="0"
@@ -316,6 +317,7 @@ background_visible="true">
     </panel>
 	</panel>	
 <panel
+name="P_Cam_Mov_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -328,6 +330,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Cam_Mov_Settings"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -337,6 +340,7 @@ top_pad=""
 width="200"/>
 </panel>
 <panel
+name="P_Zoom"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -352,6 +356,7 @@ background_visible="true">
 
 	
 							<text
+						name="T_Zoom"
 						layout="topleft"
 						left="10"
 						value="Zoom"
@@ -359,6 +364,7 @@ background_visible="true">
 						tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
 						width="100"/>
 						<slider
+						name="SL_Zoom"
 	can_edit_text="true"		control_name="CameraAngle"
 						follows="left|right"
 						height="16"
@@ -370,6 +376,7 @@ background_visible="true">
 						top_delta="-2"
 						width="135" />
 						<!--spinner
+						name="S_Zoom"
 						can_edit_text="true"
 						control_name="CameraAngle"
 						top_delta="-3"
@@ -385,6 +392,7 @@ background_visible="true">
 						increment="0.001"
 						border_visible="false"/-->
 						<combo_box
+						name="CB_Reset_Camera_Angle"
 						control_name="CameraAngle"
 						follows="right"
 						height="16"
@@ -395,11 +403,13 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Camera_Angle"
 						label="Default"
 						value="1.047"/>
 						</combo_box>
 						
 						<text
+						name="T_Zoom_Speed"
 						layout="topleft"
 						left="10"
 						value="Zoom Speed"
@@ -407,6 +417,7 @@ background_visible="true">
 						tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smother zoom."
 						width="100"/>
 						<slider
+						name="SL_Zoom_Speed"
 						can_edit_text="true"
 						control_name="ZoomTime"
 						follows="left|right"
@@ -420,6 +431,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Zoom_Time"
 						control_name="ZoomTime"
 						follows="right"
 						height="16"
@@ -430,12 +442,14 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Zoom_Time"
 						label="Default"
 						value="0.40000000596"/>
 						</combo_box>
 						
 						
 						<text
+						name="T_Camera_Lag"
 						layout="topleft"
 						left="10"
 						value="Camera Lag"
@@ -443,6 +457,7 @@ background_visible="true">
 						tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity)."
 						width="100"/>
 						<slider
+						name="SL_Camera_Lag"
 						can_edit_text="true"
 						control_name="DynamicCameraStrength"
 						follows="left|right"
@@ -456,6 +471,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Camera_Lag"
 						control_name="DynamicCameraStrength"
 						follows="right"
 						height="16"
@@ -466,11 +482,13 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Camera_Lag"
 						label="Default"
 						value="2"/>
 						</combo_box>
 						
 													<text
+						name="T_Camera_Offset"
 						layout="topleft"
 						left="10"
 						value="Camera Offset"
@@ -478,6 +496,7 @@ background_visible="true">
 						tool_tip="Controls how far the camera is offset/distance from the default point of view."
 						width="100"/>
 						<slider
+						name="SL_Camera_Offset"
 						can_edit_text="true"
 						control_name="CameraOffsetScale"
 						follows="left|right"
@@ -491,6 +510,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Camera_Offset"
 						control_name="CameraOffsetScale"
 						follows="right"
 						height="16"
@@ -501,11 +521,13 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Camera_Offset"
 						label="Default"
 						value="1"/>
 						</combo_box>
 						
 													<text
+						name="T_Camera_Smoothing"
 						layout="topleft"
 						left="10"
 						value="Cam. Smoothing"
@@ -513,6 +535,7 @@ background_visible="true">
 						tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement."
 						width="100"/>
 						<slider
+						name="SL_Camera_Smoothing"
 						can_edit_text="true"
 						control_name="CameraPositionSmoothing"
 						follows="left|right"
@@ -526,6 +549,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Camera_Smoothing"
 						control_name="CameraPositionSmoothing"
 						follows="right"
 						height="16"
@@ -536,6 +560,7 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Camera_Smoothing"
 						label="Default"
 						value="1"/>
 						</combo_box>
@@ -546,6 +571,7 @@ background_visible="true">
 </panel>
 
 <panel
+name="P_Cam_Controls_2"
 follows="all"
 layout="topleft"
 top_pad="0"
@@ -554,6 +580,7 @@ height="350"
 left="0">
 
 <panel
+name="P_Mouse_Movement"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -566,6 +593,7 @@ border_thickness="1"
 background_visible="true">
 
 <text
+name="T_Mouse_Movement"
 follows="left|top"
 layout="topleft"
 left="10"
@@ -575,6 +603,7 @@ top_pad=""
 width="200"/>
 </panel>
 <panel
+name="P_Mouse_Movement_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -588,6 +617,7 @@ background_visible="true">
 
 
 						<text
+						name="T_Mouse_Sensitivity"
 						follows="left|top"
 						layout="topleft"
 
@@ -597,6 +627,7 @@ background_visible="true">
 						tool_tip="Controls responsiveness of mouse when in mouselook mode."
 						width="100"/>
 						<slider
+						name="SL_Mouse_Sensitivity"
 						can_edit_text="true"
 						control_name="MouseSensitivity"
 						follows="left|top"
@@ -610,6 +641,7 @@ background_visible="true">
 						tool_tip=""
 						width="135" />
 						<combo_box
+						name="CB_Reset_Mouse_Sensitivity"
 						control_name="MouseSensitivity"
 						follows="left|top"
 						height="16"
@@ -620,6 +652,7 @@ background_visible="true">
 						tool_tip="Click here to reset this setting to its default."
 						visible="true">
 						<combo_box.item
+						name="CBI_Reset_Mouse_Sensitivity"
 						label="Default"
 						value="3"/>
 						</combo_box>
@@ -650,6 +683,7 @@ background_visible="true">
 	</panel>
 	
 	<panel
+name="P_Additional_Camera_Options"
 follows="left|top"
 layout="topleft"
 top_pad="10"
@@ -671,6 +705,7 @@ top_pad=""
 width="200"/>
 </panel>
 <panel
+name="P_Add_Cam_Opt_Settings"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -738,6 +773,7 @@ background_visible="true">
 
 
 <panel
+name="P_3D_Mouse"
 follows="all"
 layout="topleft"
 top="0"
@@ -746,6 +782,7 @@ height="300"
 left="0">
 
 <panel
+name="P_3D_Mouse_Settings1"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -903,6 +940,7 @@ tool_tip="Adjusts the sensitivity of the Spin movement. If you find it difficult
      width="255" />
 	 </panel>
 	 <panel
+name="P_3D_Mouse_Settings2"
 follows="left|top"
 layout="topleft"
 top_pad="5"
@@ -939,6 +977,7 @@ background_visible="true">
      name="enable_joystick"
      width="60" />
 	<check_box
+     name="CB_Zoom_Control"
      control_name="ZoomDirect"
 	 label_width="15"
      label="Enable Zoom Control (See Tool Tip!)"
@@ -949,6 +988,7 @@ background_visible="true">
      width="15" />
 	 
 	 <check_box
+     name="CB_Auto_Leveling"
      control_name="AutoLeveling"
 	 label_width="15"
      label="Enable Auto Leveling (Prevents Camera Roll)"
@@ -958,6 +998,7 @@ background_visible="true">
 	 width="15" />
 
 	 <check_box
+	 name="CB_3D_Mouse_Avatar"
 	 control_name="JoystickAvatarEnabled"
 	 label_width="15"
 	 label="Use the 3D Mouse to move the avatar"
@@ -967,6 +1008,7 @@ background_visible="true">
 	 width="15" />
 	
 		 <check_box
+	 name="CB_3D_Mouse_Build"
 	 control_name="JoystickBuildEnabled"
 	 label_width="15"
 	 label="Use the 3D Mouse to move objects (building)"

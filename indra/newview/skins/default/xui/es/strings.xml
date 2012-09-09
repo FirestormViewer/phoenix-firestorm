@@ -5034,6 +5034,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
 	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
 	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
+	<string name="Command_Phototools_Label">Herramientas fotográficas</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5120,6 +5121,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Groundsit_Tooltip">Sentarse en / levantarse del suelo (CTRL+ALT+S)</string>
 	<string name="Command_Sound_Explorer_Tooltip">Abre el explorador de sonidos</string>
 	<string name="Command_Asset_Blacklist_Tooltip">Abre la lista de todos los items que has desdibujado</string>
+	<string name="Command_Phototools_Tooltip">Herramientas para aprovechar al máximo las posibilidades de la fotografía</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
