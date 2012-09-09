@@ -53,7 +53,7 @@ tab_min_width="25">
 	
 
 <panel
-name="P_Cam_Controls_1
+name="P_Cam_Controls_1"
 follows="all"
 layout="topleft"
 top="0"
