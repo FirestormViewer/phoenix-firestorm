@@ -1,906 +1,888 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
- 
 <floater
-positioning="left"
-height="600"
-layout="topleft"
-name="Edit Sky Preset"
-help_topic="sky_preset_atmosphere"
+ positioning="left"
+ height="600"
+ layout="topleft"
+ name="Edit Sky Preset"
+ help_topic="sky_preset_atmosphere"
  save_rect="true"
-title="Edit Sky Preset"
+ title="EDIT SKY PRESET"
+ width="260">
+	<string name="title_new">
+		Create a New Sky Preset
+	</string>
+	<string name="title_edit">
+		Edit Sky Preset
+	</string>
+	<string name="hint_new">
+	</string>
+	<string name="hint_edit">
+	</string>
+	<string name="combo_label">
+		-Select a preset-
+	</string>
 
-width="260">
-
-<string name="title_new">Create a New Sky Preset</string>
-    <string name="title_edit">Edit Sky Preset</string>
-    <string name="hint_new"></string>
-    <string name="hint_edit"> </string>
-    <string name="combo_label">-Select a preset-</string>
-	
 	<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="6"
-width="250"
-height="35"
-border_visible="true"
-bevel_style="in"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-	
-    <text
-     follows="left|top"
-     height="0"
-     layout="topleft"
-     left="10"
-     name="hint"
-     top="5"
-     width="200">
-     To edit your preset, adjust the controls then click "Save"
-     </text>
-    <text
-     follows="left|top"
-     font="SansSerif"
-     height="10"
-     layout="topleft"
-     left="10"
-     name="label"
-     top_pad="5"
-     width="150">
-        Name:
-    </text>
-    <combo_box
-     allow_text_entry="true"
-     follows="left|top"
-     layout="topleft"
-     left_delta="50"
-     max_chars="100"
-     name="sky_preset_combo"
-     top_delta="-3"
-     width="185"/>
-    <line_editor
-     height="20"
-     left_delta="0"
-     name="sky_preset_name"
-     top_delta="0"
-     width="170" />
-</panel>
-
-<tab_container
-tab_max_width="125"
-tab_min_width="125"
-layout="topleft"
-height="500"
-width="260"
-top_pad="5"
-left="0"
-tab_height="25"
-tab_group="1"
-tab_width="125"
-tab_position="top">
-
-
-
-<panel
-label="Atmosphere and Sun"
-name="ASUN"
-height="400"
-layout="topleft"
-follows="left|top">
-
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="0"
-width="255"
-height="22"
-bg_alpha_color="EmphasisColor"
-border_visible="true"
-border_thickness="1"
-background_visible="true">
-
-<text
-follows="left|top"
-layout="topleft"
-left="10"
-font="SansSerif"
-value="Atmosphere Settings"
-top_pad=""
-width="200"/>
-</panel>
-
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="65"
-border_visible="true"
-bevel_style="in"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-
-	    <text
-         type="string"
-         length="1"
-         follows="left|top"
-	     font="SansSerif"
-         height="16"
-         layout="topleft"
-         left="5"
-         name="BHText"
-         top_pad="10"
-		 tool_tip="Blue Horizon: The color of the sky. In meteorological terms, this setting affects 'atmospheric scattering'." 
-         width="50"
-		 value="BluHrz">
-           
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="25"
-		 label_height="0"
-         layout="topleft"
-         left_delta="55"
-         name="WLBlueHorizon"
-         top_delta="-5"
-         width="185" />
-		 <text
-         type="string"
-         length="1"
-         follows="left|top"
-		 font="SansSerif"
-         height="16"
-         layout="topleft"
-         left="5"
-         name="BDensText2"
-         top_pad="10"
-		 tool_tip="Blue Density: Affects the overall color saturation of your sky. If you move the Intensity (I) slider to the right, your colors will become brighter and more vibrant. If you move it all the way to the left, your colors will become duller, eventually fading to black and white. If you'd like to fine-tune your sky's color balance, you can control individual elements of saturation by using the Red/Green/Blue values." 
-         width="50">
-            BlueDen
-        </text>
-        <color_swatch
-         can_apply_immediately="true"
-         follows="left|top"
-         height="25"
-         label_height="0"
-         layout="topleft"
-         left_delta="55"
-         name="WLBlueDensity"
-         top_delta="-5"
-         width="185" />
-		</panel>
-		<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="95"
-border_visible="true" bevel_style="in"
-bg_alpha_color="DkGray_66"
-background_visible="true">
-		 
-        <slider
-		edit_text="true"
-
-		 control_name="WLHazeHorizon"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.25"
-		 label="HazHoz"
-	     label_width="50"
-		 layout="topleft"
-		 left="5"
-		 top_pad="5"
-		 name="WLHazeHorizon"
-		 max_val="5"
-		 tool_tip="Haze Horizon: Affects the height of haze on the horizon. At higher settings, the haze will reach up into the sky and obscure the actual horizon. Haze on the horizon can help to accentuate the sun, and create a dusty, smoggy, or humid effect. This setting will not work if Haze Density is set to zero. "
-		 width="245"/>
-		
-
-		
-		<slider
-	     can_edit_text="false"
-         control_name="WLHazeDensity"
-         decimal_digits="2"
-         follows="left|top"
-         height="16"
-         increment="0.01"
-         initial_value="0.7"
-		 label="HazDen"
-		 label_width="50"
-         layout="topleft"
-         left="5"
-         max_val="5"
-         name="WLHazeDensity"
-         top_pad="2"
-		 tool_tip="Haze Density: Affects the amount of haze you can see in the atmosphere. At lower settings, this can make for some great outdoor views in dusty or tropical environments, and at higher levels it can create a thick, vision-obscuring fog. If you set Haze Density to zero, the Haze Horizon setting will have no effect. "
-         width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLDensityMult"
-		 decimal_digits="4"
-		 follows="left|top"
-		 height="16"
-		 increment="0.0001"
-		 initial_value="0.1"
-		 label="DenMult"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="2"
-		 name="WLDensityMult"
-		 top_pad="2"
-		 tool_tip="Density Multiplier: Affects the overall atmospheric density. At lower settings, it creates a feeling of 'thin air', and at higher settings, it creates a very heavy, smoggy effect. "
-		 width="245" />
-        <slider
-		 can_edit_text="false"
-		 control_name="WLDistancMult"
-		 decimal_digits="1"
-		 follows="left|top"
-		 height="16"
-		 initial_value="1.0"
-		 label="DistMult"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="1000"
-		 min_val="0"
-		 name="WLDistanceMult"
-		 top_pad="2"
-		 tool_tip="Distance Multiplier: Affects your perceived clarity within the atmosphere. To make everything look hazy and distant, move the slider to the right. If you want to completely remove the 'Sky Settings' effects from terrain and objects, set the slider to zero."
-		 width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLMaxAltitude"
-		 decimal_digits="0"
-		 follows="left|top"
-		 height="16"
-		 increment="1"
-		 initial_value="500"
-		 label="MaxAlt"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="10000"
-		 
-		 name="WLMaxAltitude"
-		 top_pad="2"
-		 tool_tip="Max Altitude: Adjusts the altitude calculations Second Life makes when it is computing atmospheric lighting. At later times of day, it can be useful for calculating how 'deep' a sunset appears, while at noon it can be used to achieve proper brightness values."
-		 width="245" />
-
-		 </panel>
-
-		 <panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="0"
-width="255"
-height="22"
-bg_alpha_color="EmphasisColor"
-border_visible="true"
-border_thickness="1" 
-background_visible="true">
-
-<text
-follows="left|top"
-layout="topleft"
-left="10"
-font="SansSerif"
-value="Sun and Moon Settings"
-top_pad=""
-width="200"/>
-</panel>
-
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="65"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-
-		 <text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 layout="topleft"
-		 left="5"
-		 name="SLCText"
-		 top_pad="10"
-		 tool_tip="Sun/Moon Color - Affects the color of the light the sun and moon produce. Keep in mind that the color of your sunlight/moonlight will affect the color of your sky!"
-		 width="50">
-			S/M Colr
-		</text>
-		<color_swatch
-		 can_apply_immediately="true"
-		 follows="left|top"
-		 height="25"
-		 label_height="0"
-		 layout="topleft"
-		 left_delta="55"
-		 name="WLSunlight"
-		 top_delta="-5"
-		
-		 width="185" />
+	 name="P_Presetname"
+	 follows="left|top"
+	 layout="topleft"
+	 top_pad="5"
+	 left="6"
+	 width="250"
+	 height="35"
+	 border_visible="true"
+	 bevel_style="in"
+	 background_visible="true">
 		<text
-		 type="string"
-		 length="1"
 		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
+		 height="0"
 		 layout="topleft"
-		 left="5"
-		 name="WLAmbientText"
-		 top_pad="10"
-		  tool_tip="Ambient - Controls the color and intensity of ambient light in the atmosphere. This is used for simulating how the light from the sun is scattered by the atmosphere and other objects once it hits the Earth. You can create a very bright sun, and a relatively dark world (think of a sunset!) with an Ambient setting of zero, but if you want to simulate mid-day illumination while the the sun was low in the sky, you need to increase the Ambient setting."
-		 width="50">
-			Ambient
+		 left="10"
+		 name="hint"
+		 top="5"
+		 width="200">
+			To edit your preset, adjust the controls then click "Save"
 		</text>
-		<color_swatch
-		 can_apply_immediately="true"
-		 follows="left|top"
-		 height="25"
-		 label_height="0"
-		 layout="topleft"
-		 left_delta="55"
-		 name="WLAmbient"
-		 top_delta="-5"
-		 width="185" />
-		</panel>
-		
-		<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="80"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-		<slider
-	     can_edit_text="false"
-		 control_name="WLGlowB"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.1"
-		 label="SG.Foc"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="2"
-		 min_val="-2"
-		 name="WLGlowB"
-		 top_pad="6"
-		 tool_tip="Sun Glow: Focus - Adjusts how much the sun blurs over the sky. At very high settings, Focus can cause the sun to completely wash out a portion of the sky with brilliant light, and at zero, it will cause the sun (but not the light it casts) to disappear from the sky. "
-		 width="245" />
-         <slider
-		 can_edit_text="false"
-		 control_name="WLGlowR"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.25"
-		 label="SG.Size"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="1.99"
-		 min_val="0"
-		 name="WLGlowR"
-		 top_pad="2"
-		 tool_tip="Sun Glow: Size - defines the size of the sun image."
-		 width="245" />
-		 
-
-	
-		<slider
-		can_edit_text="false"
-		 control_name="WLStarAlpha"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.1"
-		 initial_value="0"
-		 label="Str.Brite"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="500"		 
-		 name="WLStarAlpha"
-		 tool_tip="Star Brightness - Defines how visible the stars are in the sky. If you play with this slider while the sun is up, you can see stars in the middle of the day."
-		 top_pad="2"
-		 width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLGamma"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="2"
-		 label="Gamma"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 max_val="10"
-		 min_val="0"
-		 name="WLGamma"
-		 tool_tip="Scene Gamma - Adjusts your screen's distribution of light and dark output. Lower settings will cause everything to appear dim, while higher settings may make the scene look gray and 'washed out'. It only affects the 3D view, not the menus and rest of your computer's screen. NOTE: A value of 1.0 is normal. "
-		 top_pad="2"
-		 width="245" />
-</panel>
-
-		<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="90"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-		         <icon
-            height="25"
-            image_name="icon_day_cycle_12am.tga"
-            layout="topleft"
-            left="5"
-            top_pad="5"
-            name="SkyDayCycle"
-            use_draw_context_alpha="false"
-            width="240"
-            tool_tip="Sun/Moon Position - Affects the vertical position of the sun and moon, from sunrise (0.0) through noon (0.25), sunset (0.5), midnight (0.75) and back to sunrise (1.0)."/>
-        <multi_slider
-            can_edit_text="false"
-            control_name="WLSunPos"
-            decimal_digits="0"
-            follows="left|top"
-            height="10"
-            increment="0.0166666"
-            initial_value="0"
-            layout="topleft"
-            left="5"
-            max_sliders="1"
-            max_val="24"
-            name="WLSunPos"
-            show_text="false"
-            top_pad="-1"
-            width="240" />
-		<time
-		 follows="left|top"
-		 height="16"
-		 label_width="0"
-		 layout="topleft"
-		 left="5"
-		 name="WLDayTime"
-		 top_pad="5"
-		 value="6:00 AM"
-		 tool_tip="Sun/Moon Position - Affects the vertical position of the sun and moon, from sunrise (0.0) through noon (0.25), sunset (0.5), midnight (0.75) and back to sunrise (1.0)." 
-		 width="240"/> 
-		<slider
-		 can_edit_text="false"
-		 control_name="WLEastAngle"
-		 decimal_digits="3"
-		 follows="left|top"
-		 height="16"
-		 increment="0.001"
-		 initial_value="0.0"
-		 label="Est Ang"
-		 label_width="50"
-		 layout="topleft"
-		 left="5"
-		 name="WLEastAngle"
-		 top_pad="12"
-		 tool_tip="East Angle - Changes the azimuth of sunrise clockwise relative to map East. At a setting of 0.5, the sun will rise in the West and set in the East, at a setting of 0.25 the sun will rise in the South and set in the North, etc. "
-		 width="245" />
-
-
-</panel>
-</panel>
-<panel
-label="Clouds"
-height="400"
-layout="topleft"
-follows="all">
-
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="0"
-width="255"
-height="22"
-bg_alpha_color="EmphasisColor"
-border_visible="true"
-border_thickness="1"
-background_visible="true">
-
-<text
-follows="left|top"
-layout="topleft"
-left="10"
-font="SansSerif"
-value="Cloud Settings"
-top_pad=""
-width="200"/>
-</panel>
-
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="50"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-
-<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudColorText"
-		 top_pad="15"
-		 tool_tip="Cloud Color - Affects the color of your clouds, if you have any. Use the individual Red/Green/Blue sliders to change the color, or the Intensity (I) slider to drag all three at once. "
-		 width="240">
-			CldColr
-		</text>
-		<color_swatch
-		 can_apply_immediately="true"
-		 follows="left|top"
-		 height="40"
-		 label_height="0"
-		 layout="topleft"
-		 left_delta="55"
-		 name="WLCloudColor"
-		 top_delta="-10"
-		 width="185" />
-		 </panel>
-	
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="100"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">	
-		 
 		<text
-		 type="string"
-		 length="1"
 		 follows="left|top"
 		 font="SansSerif"
-		 height="16"
+		 height="10"
 		 layout="topleft"
-		 left="5"
-		 name="WLCloudColorText2"
-		 top_pad="10"
-		 tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds. "
-		 width="240">
-			Cloud XY/Density
+		 left="10"
+		 name="label"
+		 top_pad="5"
+		 width="150">
+			Name:
 		</text>
-		<slider
-		can_edit_text="false"
-		 control_name="WLCloudX"
-		 decimal_digits="2"
+		<combo_box
+		 allow_text_entry="true"
 		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.5"
-		 label="X"
 		 layout="topleft"
-		 left="5"
-		 top_pad="6"
-		 name="WLCloudX"
-		 width="245" />
-		<slider
-		can_edit_text="false"
-		 control_name="WLCloudY"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.5"
-		 label="Y"
+		 left_delta="50"
+		 max_chars="100"
+		 name="sky_preset_combo"
+		 top_delta="-3"
+		 width="185"/>
+		<line_editor
+		 height="20"
+		 left_delta="0"
+		 name="sky_preset_name"
+		 top_delta="0"
+		 width="170" />
+	</panel>
+
+	<tab_container
+	 name="Main_Tab"
+	 tab_max_width="125"
+	 tab_min_width="125"
+	 layout="topleft"
+	 height="500"
+	 width="260"
+	 top_pad="5"
+	 left="0"
+	 tab_height="25"
+	 tab_group="1"
+	 tab_width="125"
+	 tab_position="top">
+		<panel
+		 label="Atmosphere and Sun"
+		 name="ASUN"
+		 height="400"
 		 layout="topleft"
-		 left="5"
-		 top_pad="6"
-		 name="WLCloudY"
-		 width="245" />
-		<slider
-		can_edit_text="false"
-		 control_name="WLCloudDensity"
-		 decimal_digits="4"
-		 follows="left|top"
-		 height="16"
-		 increment="0.0001"
-		 initial_value="1.0"
-		 label="D"
-		 layout="topleft"
-		 left="5"
-		 max_val="3"
-		 min_val="0"
-		 name="WLCloudDensity"
-		 top_pad="6"
-		 width="245" />
-		 
+		 follows="left|top">
+			<panel
+			 name="P_Atmosphere_Header"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="255"
+			 height="22"
+			 bg_alpha_color="EmphasisColor"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Atmosphere_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 value="Atmosphere Settings"
+				 top_pad=""
+				 width="200"/>
+			</panel>
+
+			<panel
+			 name="P_Blue_Horizon"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="65"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="BHText"
+				 top_pad="10"
+				 tool_tip="Blue Horizon: The color of the sky. In meteorological terms, this setting affects 'atmospheric scattering'." 
+				 width="50"
+				 value="BluHrz">
+				</text>
+				<color_swatch
+				 can_apply_immediately="true"
+				 follows="left|top"
+				 height="25"
+				 label_height="0"
+				 layout="topleft"
+				 left_delta="55"
+				 name="WLBlueHorizon"
+				 top_delta="-5"
+				 width="185" />
+				 <text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="BDensText2"
+				 top_pad="10"
+				 tool_tip="Blue Density: Affects the overall color saturation of your sky. If you move the Intensity (I) slider to the right, your colors will become brighter and more vibrant. If you move it all the way to the left, your colors will become duller, eventually fading to black and white. If you'd like to fine-tune your sky's color balance, you can control individual elements of saturation by using the Red/Green/Blue values." 
+				 width="50">
+					BlueDen
+				</text>
+				<color_swatch
+				 can_apply_immediately="true"
+				 follows="left|top"
+				 height="25"
+				 label_height="0"
+				 layout="topleft"
+				 left_delta="55"
+				 name="WLBlueDensity"
+				 top_delta="-5"
+				 width="185" />
+			</panel>
+
+			<panel
+			 name="P_Atmosphere_OtherSettings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="95"
+			 border_visible="true" bevel_style="in"
+			 background_visible="true">
+				<slider
+				 edit_text="true"
+				 control_name="WLHazeHorizon"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.25"
+				 label="HazHoz"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 name="WLHazeHorizon"
+				 max_val="5"
+				 tool_tip="Haze Horizon: Affects the height of haze on the horizon. At higher settings, the haze will reach up into the sky and obscure the actual horizon. Haze on the horizon can help to accentuate the sun, and create a dusty, smoggy, or humid effect. This setting will not work if Haze Density is set to zero. "
+				 width="245"/>
+				<slider
+				 can_edit_text="false"
+				 control_name="WLHazeDensity"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.7"
+				 label="HazDen"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="5"
+				 name="WLHazeDensity"
+				 top_pad="2"
+				 tool_tip="Haze Density: Affects the amount of haze you can see in the atmosphere. At lower settings, this can make for some great outdoor views in dusty or tropical environments, and at higher levels it can create a thick, vision-obscuring fog. If you set Haze Density to zero, the Haze Horizon setting will have no effect. "
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLDensityMult"
+				 decimal_digits="4"
+				 follows="left|top"
+				 height="16"
+				 increment="0.0001"
+				 initial_value="0.1"
+				 label="DenMult"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="2"
+				 name="WLDensityMult"
+				 top_pad="2"
+				 tool_tip="Density Multiplier: Affects the overall atmospheric density. At lower settings, it creates a feeling of 'thin air', and at higher settings, it creates a very heavy, smoggy effect. "
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLDistancMult"
+				 decimal_digits="1"
+				 follows="left|top"
+				 height="16"
+				 initial_value="1.0"
+				 label="DistMult"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="1000"
+				 min_val="0"
+				 name="WLDistanceMult"
+				 top_pad="2"
+				 tool_tip="Distance Multiplier: Affects your perceived clarity within the atmosphere. To make everything look hazy and distant, move the slider to the right. If you want to completely remove the 'Sky Settings' effects from terrain and objects, set the slider to zero."
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLMaxAltitude"
+				 decimal_digits="0"
+				 follows="left|top"
+				 height="16"
+				 increment="1"
+				 initial_value="500"
+				 label="MaxAlt"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="10000"
+				 name="WLMaxAltitude"
+				 top_pad="2"
+				 tool_tip="Max Altitude: Adjusts the altitude calculations Second Life makes when it is computing atmospheric lighting. At later times of day, it can be useful for calculating how 'deep' a sunset appears, while at noon it can be used to achieve proper brightness values."
+				 width="245" />
+			</panel>
+
+			<panel
+			 name="P_Sun_and_Moon_Header"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="255"
+			 height="22"
+			 bg_alpha_color="EmphasisColor"
+			 border_visible="true"
+			 border_thickness="1" 
+			 background_visible="true">
+				<text
+				 name="T_Sun_and_Moon_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 value="Sun and Moon Settings"
+				 top_pad=""
+				 width="200"/>
+			</panel>
+
+			<panel
+			 name="P_SM_Color"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="65"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="SLCText"
+				 top_pad="10"
+				 tool_tip="Sun/Moon Color - Affects the color of the light the sun and moon produce. Keep in mind that the color of your sunlight/moonlight will affect the color of your sky!"
+				 width="50">
+					S/M Colr
+				</text>
+				<color_swatch
+				 can_apply_immediately="true"
+				 follows="left|top"
+				 height="25"
+				 label_height="0"
+				 layout="topleft"
+				 left_delta="55"
+				 name="WLSunlight"
+				 top_delta="-5"		
+				 width="185" />
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLAmbientText"
+				 top_pad="10"
+				 tool_tip="Ambient - Controls the color and intensity of ambient light in the atmosphere. This is used for simulating how the light from the sun is scattered by the atmosphere and other objects once it hits the Earth. You can create a very bright sun, and a relatively dark world (think of a sunset!) with an Ambient setting of zero, but if you want to simulate mid-day illumination while the the sun was low in the sky, you need to increase the Ambient setting."
+				 width="50">
+					Ambient
+				</text>
+				<color_swatch
+				 can_apply_immediately="true"
+				 follows="left|top"
+				 height="25"
+				 label_height="0"
+				 layout="topleft"
+				 left_delta="55"
+				 name="WLAmbient"
+				 top_delta="-5"
+				 width="185" />
+			</panel>
+
+			<panel
+			 name="P_SM_OtherSettings"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="80"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<slider
+				 can_edit_text="false"
+				 control_name="WLGlowB"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.1"
+				 label="SG.Foc"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="2"
+				 min_val="-2"
+				 name="WLGlowB"
+				 top_pad="6"
+				 tool_tip="Sun Glow: Focus - Adjusts how much the sun blurs over the sky. At very high settings, Focus can cause the sun to completely wash out a portion of the sky with brilliant light, and at zero, it will cause the sun (but not the light it casts) to disappear from the sky. "
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLGlowR"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.25"
+				 label="SG.Size"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="1.99"
+				 min_val="0"
+				 name="WLGlowR"
+				 top_pad="2"
+				 tool_tip="Sun Glow: Size - defines the size of the sun image."
+				 width="245" />
+				<slider
+				can_edit_text="false"
+				 control_name="WLStarAlpha"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 initial_value="0"
+				 label="Str.Brite"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="500"		 
+				 name="WLStarAlpha"
+				 tool_tip="Star Brightness - Defines how visible the stars are in the sky. If you play with this slider while the sun is up, you can see stars in the middle of the day."
+				 top_pad="2"
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLGamma"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="2"
+				 label="Gamma"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 max_val="10"
+				 min_val="0"
+				 name="WLGamma"
+				 tool_tip="Scene Gamma - Adjusts your screen's distribution of light and dark output. Lower settings will cause everything to appear dim, while higher settings may make the scene look gray and 'washed out'. It only affects the 3D view, not the menus and rest of your computer's screen. NOTE: A value of 1.0 is normal. "
+				 top_pad="2"
+				 width="245" />
+			</panel>
+
+			<panel
+			 name="P_WL_Daycycle"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="90"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<icon
+				 height="25"
+				 image_name="icon_day_cycle_12am.tga"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 name="SkyDayCycle"
+				 use_draw_context_alpha="false"
+				 width="240"
+				 tool_tip="Sun/Moon Position - Affects the vertical position of the sun and moon, from sunrise (0.0) through noon (0.25), sunset (0.5), midnight (0.75) and back to sunrise (1.0)."/>
+				<multi_slider
+				 can_edit_text="false"
+				 control_name="WLSunPos"
+				 decimal_digits="0"
+				 follows="left|top"
+				 height="10"
+				 increment="0.0166666"
+				 initial_value="0"
+				 layout="topleft"
+				 left="5"
+				 max_sliders="1"
+				 max_val="24"
+				 name="WLSunPos"
+				 show_text="false"
+				 top_pad="-1"
+				 width="240" />
+				<time
+				 follows="left|top"
+				 height="16"
+				 label_width="0"
+				 layout="topleft"
+				 left="5"
+				 name="WLDayTime"
+				 top_pad="5"
+				 value="6:00 AM"
+				 tool_tip="Sun/Moon Position - Affects the vertical position of the sun and moon, from sunrise (0.0) through noon (0.25), sunset (0.5), midnight (0.75) and back to sunrise (1.0)." 
+				 width="240"/> 
+				<slider
+				 can_edit_text="false"
+				 control_name="WLEastAngle"
+				 decimal_digits="3"
+				 follows="left|top"
+				 height="16"
+				 increment="0.001"
+				 initial_value="0.0"
+				 label="Est Ang"
+				 label_width="50"
+				 layout="topleft"
+				 left="5"
+				 name="WLEastAngle"
+				 top_pad="12"
+				 tool_tip="East Angle - Changes the azimuth of sunrise clockwise relative to map East. At a setting of 0.5, the sun will rise in the West and set in the East, at a setting of 0.25 the sun will rise in the South and set in the North, etc. "
+				 width="245" />
+			</panel>
 		</panel>
 
-<panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="50"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">		
-		<slider
-		 can_edit_text="false"
-		 control_name="WLCloudCoverage"
-		 decimal_digits="2"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.5"
-		 label="Cld Cover"
-		 label_width="55"
+		<panel
+		 name="P_Clouds"
+		 label="Clouds"
+		 height="400"
 		 layout="topleft"
-		 left="5"
-		 max_val="1"
-		 min_val="0"
-		 name="WLCloudCoverage"
-		 top_pad="10"
-		 tool_tip="Cloud Coverage - Sets the fraction of cloud coverage."
-		 width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLCloudScale"
-		 decimal_digits="4"
-		 font="SansSerif"
-		 follows="left|top"
-		 height="16"
-		 increment="0.0002"
-		 initial_value="1.0"
-		 label="Cld Scale"
-		 label_width="55"
-		 layout="topleft"
-		 left="5"
-		 
-		 max_val="3"
-		 name="WLCloudScale"
-		 top_pad="2"
-		 tool_tip="Cloud Scale: Affects the perceived size of the clouds."
-		 width="245" />
-		 </panel>
-		 
-		 
-		 <panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="85"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudDetailText"
-		 top_pad="10"
-		 tool_tip="Cloud Detail (XY/Density) - Affects the position and detail imagery of your clouds. The X and Y sliders shift its horizontal position, and the D slider controls how puffy and/or fractured your clouds look."
-		 width="240">
-			Cloud Detail (XY/Density)
-		</text>
-		<slider
-		 can_edit_text="false"
-		 control_name="WLCloudDetailX"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.5"
-		 label="X"
-		 layout="topleft"
-		 left="5"
-		 top_pad="2"
-		 name="WLCloudDetailX"
-		 
-		 width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLCloudDetailY"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="0.5"
-		 label="Y"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudDetailY"
-		 top_pad="2"
-		 width="245" />
-		<slider
-		 can_edit_text="false"
-		 control_name="WLCloudDetailDensity"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment="0.01"
-		 initial_value="1.0"
-		 label="D"
-		 layout="topleft"
-		 left="5"
-		 max_val="2"
-		 name="WLCloudDetailDensity"
-		 top_pad="2"
-		 width="245" />
-		 </panel>
-		 
-		 <panel
-follows="left|top"
-layout="topleft"
-top_pad="5"
-left="5"
-width="250"
-height="130"
-border_visible="true"
-bg_alpha_color="DkGray_66" bevel_style="in"
-background_visible="true">
-		 
-		 <text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudScrollXText"
-		 top_pad="10"
-		 tool_tip="Cloud Scroll X - Affects the direction and speed at which the clouds move in the sky along the X axis."
-		 width="240">
-			Cloud Scroll X
-		</text>
-		<check_box
-		 control_name="WLCloudLockX"
-		 follows="left|top"
-		 height="16"
-		 label="Scroll Lock"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudLockX"
-		 top_pad="0"
-		 tool_tip="Scroll Lock - Prevent clouds from moving on the selected axis."
-		 width="200" />
-		<slider
-		can_edit_text="false"
-		control_name="WLCloudScrollX"
-		 decimal_digits="2"
-		 follows="left|top"
-		 height="16"
-		 increment=".1"
-		 initial_value="0.5"
-		 layout="topleft"
-		 left="5"
-		 max_val="300"
-		 min_val="-300"
-		 name="WLCloudScrollX"
-		 top_pad="2"
-		 width="245" />
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 font="SansSerif"
-		 height="16"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudScrollYText"
-		 tool_tip="Cloud Scroll Y - Affects the direction and speed at which the clouds move in the sky along the Y axis."
-		 top_pad="5"
-		 width="240">
-			Cloud Scroll Y
-		</text>
-		<check_box
-		 control_name="WLCloudLockY"
-		 follows="left|top"
-		 height="16"
-		 label="Scroll Lock"
-		 layout="topleft"
-		 left="5"
-		 name="WLCloudLockY"
-		 top_pad="0"
-		 tool_tip="Scroll Lock - Prevent clouds from moving on the selected axis."
-		 width="245" />
-		<slider
-		can_edit_text="false"
-		 control_name="WLCloudScrollY"
-		 decimal_digits="1"
-		 follows="left|top"
-		 height="16"
-		 increment="0.1"
-		 initial_value="0.5"
-		 layout="topleft"
-		 left="5"
-		 max_val="300"
-		 min_val="-300"
-		 name="WLCloudScrollY"
-		 top_pad="2"
-		 width="245" />
+		 follows="all">
+			<panel
+			 name="P_Clouds_Header"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="0"
+			 width="255"
+			 height="22"
+			 bg_alpha_color="EmphasisColor"
+			 border_visible="true"
+			 border_thickness="1"
+			 background_visible="true">
+				<text
+				 name="T_Clouds_Header"
+				 follows="left|top"
+				 layout="topleft"
+				 left="10"
+				 font="SansSerif"
+				 value="Cloud Settings"
+				 top_pad=""
+				 width="200"/>
+			</panel>
 
-</panel>
-</panel>
+			<panel
+			 name="P_Cloud_Color"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="50"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudColorText"
+				 top_pad="15"
+				 tool_tip="Cloud Color - Affects the color of your clouds, if you have any. Use the individual Red/Green/Blue sliders to change the color, or the Intensity (I) slider to drag all three at once. "
+				 width="240">
+					CldColr
+				</text>
+				<color_swatch
+				 can_apply_immediately="true"
+				 follows="left|top"
+				 height="40"
+				 label_height="0"
+				 layout="topleft"
+				 left_delta="55"
+				 name="WLCloudColor"
+				 top_delta="-10"
+				 width="185" />
+			</panel>
+		
+			<panel
+			 name="P_Cloud_Density"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="100"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">	
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudColorText2"
+				 top_pad="10"
+				 tool_tip="Cloud XY/Density - Use the X and Y sliders to change the horizontal position of all clouds in the sky. The D slider affects the overall density of the individual clouds; at low settings you will see thin, wispy clouds, and at higher settings you will see thicker, more solid clouds. "
+				 width="240">
+					Cloud XY/Density
+				</text>
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudX"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.5"
+				 label="X"
+				 layout="topleft"
+				 left="5"
+				 top_pad="6"
+				 name="WLCloudX"
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudY"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.5"
+				 label="Y"
+				 layout="topleft"
+				 left="5"
+				 top_pad="6"
+				 name="WLCloudY"
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudDensity"
+				 decimal_digits="4"
+				 follows="left|top"
+				 height="16"
+				 increment="0.0001"
+				 initial_value="1.0"
+				 label="D"
+				 layout="topleft"
+				 left="5"
+				 max_val="3"
+				 min_val="0"
+				 name="WLCloudDensity"
+				 top_pad="6"
+				 width="245" />
+			</panel>
 
+			<panel
+			 name="P_Cloud_CovScale"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="50"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">		
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudCoverage"
+				 decimal_digits="2"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.5"
+				 label="Cld Cover"
+				 label_width="55"
+				 layout="topleft"
+				 left="5"
+				 max_val="1"
+				 min_val="0"
+				 name="WLCloudCoverage"
+				 top_pad="10"
+				 tool_tip="Cloud Coverage - Sets the fraction of cloud coverage."
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudScale"
+				 decimal_digits="4"
+				 font="SansSerif"
+				 follows="left|top"
+				 height="16"
+				 increment="0.0002"
+				 initial_value="1.0"
+				 label="Cld Scale"
+				 label_width="55"
+				 layout="topleft"
+				 left="5"			 
+				 max_val="3"
+				 name="WLCloudScale"
+				 top_pad="2"
+				 tool_tip="Cloud Scale: Affects the perceived size of the clouds."
+				 width="245" />
+			</panel>
 
-</tab_container>
+			<panel
+			 name="P_Cloud_Detail"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="85"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudDetailText"
+				 top_pad="10"
+				 tool_tip="Cloud Detail (XY/Density) - Affects the position and detail imagery of your clouds. The X and Y sliders shift its horizontal position, and the D slider controls how puffy and/or fractured your clouds look."
+				 width="240">
+					Cloud Detail (XY/Density)
+				</text>
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudDetailX"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.5"
+				 label="X"
+				 layout="topleft"
+				 left="5"
+				 top_pad="2"
+				 name="WLCloudDetailX"			 
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudDetailY"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="0.5"
+				 label="Y"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudDetailY"
+				 top_pad="2"
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudDetailDensity"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment="0.01"
+				 initial_value="1.0"
+				 label="D"
+				 layout="topleft"
+				 left="5"
+				 max_val="2"
+				 name="WLCloudDetailDensity"
+				 top_pad="2"
+				 width="245" />
+			</panel>
 
-
-
-
+			<panel
+			 name="P_Cloud_Scroll"
+			 follows="left|top"
+			 layout="topleft"
+			 top_pad="5"
+			 left="5"
+			 width="250"
+			 height="130"
+			 border_visible="true"
+			 bevel_style="in"
+			 background_visible="true">
+				 <text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudScrollXText"
+				 top_pad="10"
+				 tool_tip="Cloud Scroll X - Affects the direction and speed at which the clouds move in the sky along the X axis."
+				 width="240">
+					Cloud Scroll X
+				</text>
+				<check_box
+				 control_name="WLCloudLockX"
+				 follows="left|top"
+				 height="16"
+				 label="Scroll Lock"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudLockX"
+				 top_pad="0"
+				 tool_tip="Scroll Lock - Prevent clouds from moving on the selected axis."
+				 width="200" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudScrollX"
+				 decimal_digits="2"
+				 follows="left|top"
+				 height="16"
+				 increment=".1"
+				 initial_value="0.5"
+				 layout="topleft"
+				 left="5"
+				 max_val="300"
+				 min_val="-300"
+				 name="WLCloudScrollX"
+				 top_pad="2"
+				 width="245" />
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 font="SansSerif"
+				 height="16"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudScrollYText"
+				 tool_tip="Cloud Scroll Y - Affects the direction and speed at which the clouds move in the sky along the Y axis."
+				 top_pad="5"
+				 width="240">
+					Cloud Scroll Y
+				</text>
+				<check_box
+				 control_name="WLCloudLockY"
+				 follows="left|top"
+				 height="16"
+				 label="Scroll Lock"
+				 layout="topleft"
+				 left="5"
+				 name="WLCloudLockY"
+				 top_pad="0"
+				 tool_tip="Scroll Lock - Prevent clouds from moving on the selected axis."
+				 width="245" />
+				<slider
+				 can_edit_text="false"
+				 control_name="WLCloudScrollY"
+				 decimal_digits="1"
+				 follows="left|top"
+				 height="16"
+				 increment="0.1"
+				 initial_value="0.5"
+				 layout="topleft"
+				 left="5"
+				 max_val="300"
+				 min_val="-300"
+				 name="WLCloudScrollY"
+				 top_pad="2"
+				 width="245" />
+			</panel>
+		</panel>
+	</tab_container>
 
 	<check_box
-     follows="left|top"
-     height="15"
-     label="Make this preset my new sky setting."
-     layout="topleft"
-     left="7"
-     name="make_default_cb"
-     top_pad="7"
-     width="240"/>
-    <button
-     follows="left|top"
-     height="23"
-     label="Save"
-     layout="topleft"
-     left="5"
-     name="save"
+	 follows="left|top"
+	 height="15"
+	 label="Make this preset my new sky setting."
+	 layout="topleft"
+	 left="7"
+	 name="make_default_cb"
+	 top_pad="7"
+	 width="240"/>
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Save"
+	 layout="topleft"
+	 left="5"
+	 name="save"
 	 top_pad="2"
-     width="120"/>
-    <button
-     follows="left|top"
-     height="23"
-     label="Cancel"
-     layout="topleft"
-     left_pad="10"
-     name="cancel"
-    width="120"/>
-
-
+	 width="120"/>
+	<button
+	 follows="left|top"
+	 height="23"
+	 label="Cancel"
+	 layout="topleft"
+	 left_pad="10"
+	 name="cancel"
+	 width="120"/>
 </floater>
 
