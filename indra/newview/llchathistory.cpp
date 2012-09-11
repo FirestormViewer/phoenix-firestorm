@@ -1392,6 +1392,16 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			message = chat.mFromName + message;
 		}
 
+		// <FS:Ansariel> Optional muted chat history
+		if (chat.mMuted)
+		{
+			LLUIColor muted_text_color = LLUIColorTable::instance().getColor("ChatHistoryMutedTextColor");
+			style_params.color = muted_text_color;
+			style_params.readonly_color = muted_text_color;
+			style_params.selected_color = muted_text_color;
+		}
+		// </FS:Ansariel> Optional muted chat history
+
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 		//if(chat.mChatType == CHAT_TYPE_IM)
@@ -1402,6 +1412,7 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			style_params.selected_color.alpha = FSIMChatHistoryFade;
 		}
 		// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
+
 		mEditor->appendText(message, FALSE, style_params);
 	}
 
