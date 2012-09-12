@@ -4428,6 +4428,13 @@ void LLAgent::teleportViaLocation(const LLVector3d& pos_global)
 void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 {
 	LLViewerRegion* regionp = getRegion();
+
+	// <FS:Ansariel> Possible crash fix
+	if (!regionp)
+	{
+		return;
+	}
+
 	U64 handle = to_region_handle(pos_global);
 	bool isLocal = (regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY]));
 	LLSimInfo* info = LLWorldMap::getInstance()->simInfoFromHandle(handle);
