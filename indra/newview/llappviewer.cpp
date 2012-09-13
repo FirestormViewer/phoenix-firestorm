@@ -2815,19 +2815,6 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
-	if (gSavedSettings.getBOOL("SpellCheck"))
-	{
-		std::list<std::string> dict_list;
-		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
-		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
-		if (!dict_list.empty())
-		{
-			LLSpellChecker::setUseSpellCheck(dict_list.front());
-			dict_list.pop_front();
-			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
-		}
-	}
-
     mYieldTime = gSavedSettings.getS32("YieldTime");
 
 	// Read skin/branding settings if specified.

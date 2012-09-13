@@ -3197,6 +3197,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 
 			chat.mSourceType = CHAT_SOURCE_OBJECT;
+			chat.mChatType = CHAT_TYPE_IM;
 
 			// To conclude that the source type of message is CHAT_SOURCE_SYSTEM it's not
 			// enough to check only from name (i.e. fromName = "Second Life"). For example

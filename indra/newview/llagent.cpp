@@ -4447,8 +4447,7 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 			(F32)(pos_global.mdV[VZ]));
 		teleportRequest(handle, pos_local);
 	}
-	else if(regionp && 
-		teleportCore(regionp->getHandle() == to_region_handle_global((F32)pos_global.mdV[VX], (F32)pos_global.mdV[VY])))
+	else if(regionp && teleportCore(isLocal))
 	{
 		llwarns << "Using deprecated teleportlocationrequest." << llendl; 
 		// send the message
