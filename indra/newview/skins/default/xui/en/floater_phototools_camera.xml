@@ -663,6 +663,7 @@
 			 border_thickness="1"
 			 background_visible="true">
 				<text
+				 name="T_Additional_Camera_Options"
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
