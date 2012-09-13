@@ -1082,7 +1082,7 @@ void LLPluginClassMedia::receivePluginMessage(const LLPluginMessage &message)
 			mAuthURL = message.getValue("url");
 			mAuthRealm = message.getValue("realm");
 			mediaEvent(LLPluginClassMediaOwner::MEDIA_EVENT_AUTH_REQUEST);
-		}		
+		}
 		else if(message_name == "debug_message")
 		{
 			mDebugMessageText = message.getValue("message_text");
