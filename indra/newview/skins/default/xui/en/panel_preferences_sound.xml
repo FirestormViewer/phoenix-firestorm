@@ -1301,6 +1301,48 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
+         tool_tip="Sound UUID played on incoming group instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving Group Instant Messages'."
+         name="textFSNewGroupIncomingIMSession">
+            Group Instant Message:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndNewIncomingGroupIMSession"
+         control_name="UISndNewIncomingGroupIMSession"
+         width="250"/>
+        <combo_box
+         control_name="PlayModeUISndNewIncomingGroupIMSession"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         name="PlayModeUISndNewIncomingGroupIMSession"
+         width="120">
+           <combo_box.item
+             label="Play only on new session"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Play on every message"
+             name="2"
+             value="2"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
          tool_tip="Sound UUID played, when starting new IM session."
          name="textFSStartIM">
             Starting IM session:
@@ -1532,7 +1574,7 @@ Hover your mouse cursor over UUID field to show its default value.
          height="14"
          width="150"
          tool_tip="Sound UUID played on teleporting. This setting is shared with Move and View &gt; Movement &gt; 'Play sound effect when teleporting'."
-         name="textFSRegionRestart">
+         name="textFSTeleportOut">
             Teleportation:
         </text>
         <line_editor
@@ -1551,44 +1593,6 @@ Hover your mouse cursor over UUID field to show its default value.
          top_delta="-1"
          left_pad="1"
          name="PlayModeUISndTeleportOut"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
-
-        <text
-         layout="topleft"
-         follows="left|top"
-         top_pad="7"
-         left="5"
-         height="14"
-         width="150"
-         tool_tip="Sound UUID played, when the region restart alert appears."
-         name="textFSRegionRestart">
-            Region restart alert:
-        </text>
-        <line_editor
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
-         follows="left|top"
-         left_pad="5"
-         height="20"
-         max_length_chars="256"
-         name="UISndRegionRestart"
-         control_name="UISndRegionRestart"
-         width="250"/>
-        <combo_box
-         control_name="PlayModeUISndRegionRestart"
-         height="20"
-         layout="topleft"
-         top_delta="-1"
-         left_pad="1"
-         name="PlayModeUISndRegionRestart"
          width="120">
            <combo_box.item
              label="Play this sound"
@@ -2107,6 +2111,44 @@ Hover your mouse cursor over UUID field to show its default value.
          top_delta="-1"
          left_pad="1"
          name="PlayModeUISndWindowOpen"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when the region restart alert appears."
+         name="textFSRegionRestart">
+            Region restart alert:
+        </text>
+        <line_editor
+         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndRegionRestart"
+         control_name="UISndRegionRestart"
+         width="250"/>
+        <combo_box
+         control_name="PlayModeUISndRegionRestart"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         name="PlayModeUISndRegionRestart"
          width="120">
            <combo_box.item
              label="Play this sound"

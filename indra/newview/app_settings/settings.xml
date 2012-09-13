@@ -14121,6 +14121,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>67cc2844-00f3-2b3c-b991-6418d01e1bb7</string>
     </map>
+    <key>UISndNewIncomingGroupIMSession</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file for new group instant message session(uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>67cc2844-00f3-2b3c-b991-6418d01e1bb7</string>
+    </map>
     <key>UISndObjectCreate</key>
     <map>
       <key>Comment</key>
@@ -18402,6 +18413,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Instant Messages'.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>PlayModeUISndNewIncomingGroupIMSession</key>
+    <map>
+      <key>Comment</key>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingGroupIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Group Instant Messages'.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

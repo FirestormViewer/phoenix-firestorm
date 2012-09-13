@@ -2673,14 +2673,22 @@ void LLIMMgr::addMessage(
 		}
 
 	// <FS:PP> Configurable IM sounds
-		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0)
+		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
+		else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0 && dialog != IM_NOTHING_SPECIAL)
+		{
+			make_ui_sound("UISndNewIncomingGroupIMSession");
+		}
 	}
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2)
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
+	}
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 2 && dialog != IM_NOTHING_SPECIAL)
+	{
+		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
 

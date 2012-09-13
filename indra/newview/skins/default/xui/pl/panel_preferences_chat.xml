@@ -83,9 +83,17 @@
 			<check_box name="FSAnnounceIncomingIM" label="Powiadamiaj o nowej IM, gdy tylko nadawca zacznie pisać"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Mrugaj kartami IM, gdy znajomi się logują/wylogowywują"/>
 			<text name="WhenPlayIMLabel">
-				Gdy nadchodzi nowa wiad. IM:
+				Gdy nadchodzi wiadomość IM:
 			</text>
 			<combo_box name="WhenPlayIM">
+				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
+				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
+				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>
+			</combo_box>
+			<text name="WhenPlayGroupIMLabel">
+				Gdy nadchodzi wiadomość grupy:
+			</text>
+			<combo_box name="WhenPlayGroupIM">
 				<combo_box.item label="Odtwarzaj dźwięk tylko na rozpoczęciu nowej sesji IM" name="1"/>
 				<combo_box.item label="Odtwarzaj dźwięk przy każdej otrzymanej wiadomości" name="2"/>
 				<combo_box.item label="Nie odtwarzaj żadnego dźwięku powiadomienia" name="0"/>

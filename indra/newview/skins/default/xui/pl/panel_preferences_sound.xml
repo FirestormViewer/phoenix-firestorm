@@ -155,10 +155,18 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość IM. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi nowa wiadomość IM'." name="textFSNewIncomingIMSession">
-				Nadchodząca wiad. IM:
+			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość IM. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi wiadomość IM'." name="textFSNewIncomingIMSession">
+				Nowa wiadomość IM:
 			</text>
 			<combo_box name="PlayModeUISndNewIncomingIMSession">
+				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
+				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
+				<combo_box.item label="Wycisz dźwięk" name="0"/>
+			</combo_box>
+			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość grupy. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi wiadomość grupy'." name="textFSNewGroupIncomingIMSession">
+				Nowa wiadomość grupy:
+			</text>
+			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
 				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -205,17 +213,10 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				<combo_box.item label="Odtwórz dźwięk" name="0"/>
 				<combo_box.item label="Wycisz dźwięk" name="1"/>
 			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSRegionRestart">
+			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSTeleportOut">
 				Teleportacja:
 			</text>
 			<combo_box name="PlayModeUISndTeleportOut">
-				<combo_box.item label="Odtwórz dźwięk" name="1"/>
-				<combo_box.item label="Wycisz dźwięk" name="0"/>
-			</combo_box>
-			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRegionRestart">
-				Alarm o restarcie regionu:
-			</text>
-			<combo_box name="PlayModeUISndRegionRestart">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
@@ -313,6 +314,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				Otwieranie okna:
 			</text>
 			<combo_box name="PlayModeUISndWindowOpen">
+				<combo_box.item label="Odtwórz dźwięk" name="1"/>
+				<combo_box.item label="Wycisz dźwięk" name="0"/>
+			</combo_box>
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRegionRestart">
+				Alarm o restarcie regionu:
+			</text>
+			<combo_box name="PlayModeUISndRegionRestart">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>

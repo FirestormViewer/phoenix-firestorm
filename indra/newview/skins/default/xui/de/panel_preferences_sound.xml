@@ -222,7 +222,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			<combo_box.item label="Stummschalten" name="1"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSRegionRestart">
+		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSTeleportOut">
 			Teleportieren:
 		</text>
 		<combo_box name="PlayModeUISndTeleportOut">
@@ -230,13 +230,6 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
-			Warnung Regionsneustart:
-		</text>
-		<combo_box name="PlayModeUISndRegionRestart">
-			<combo_box.item label="Abspielen" name="1"/>
-			<combo_box.item label="Stummschalten" name="0"/>
-		</combo_box>
     </panel>
 
 	<!-- UI Sounds 2 -->
@@ -346,6 +339,14 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			Öffnen eines Fensters:
 		</text>
 		<combo_box name="PlayModeUISndWindowOpen">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
+			Warnung Regionsneustart:
+		</text>
+		<combo_box name="PlayModeUISndRegionRestart">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
