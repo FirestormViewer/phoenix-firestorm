@@ -163,12 +163,21 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs bei eingehenden Instant Messages. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Bei Eintreffen von Instant Messages:'." name="textFSNewIncomingIMSession">
+		<text tool_tip="UUID des Klangs bei eingehenden Instant Messages. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Beim Eintreffen von Instant Messages:'." name="textFSNewIncomingIMSession">
             Eingeh. Instant Messages:
 		</text>
 		<combo_box name="PlayModeUISndNewIncomingIMSession">
 			<combo_box.item label="Bei neuer IM" name="1"/>
 			<combo_box.item label="Bei jeder IM" name="2"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei eingehenden Gruppenchats. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Beim Eintreffen von Gruppenchats:'." name="textFSNewGroupIncomingIMSession">
+            Eingeh. Gruppenchats:
+		</text>
+		<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+			<combo_box.item label="Bei neuer Nachr." name="1"/>
+			<combo_box.item label="Bei jeder Nachr." name="2"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
