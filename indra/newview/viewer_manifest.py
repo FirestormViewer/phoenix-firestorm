@@ -679,10 +679,10 @@ class WindowsManifest(ViewerManifest):
         
         #AO: Try to sign original executable first, if we can, using best available signing cert.
         try:
-            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\firestorm-bin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\slplugin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\SLVoice.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+self.final_exe()],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\firestorm-bin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\slplugin.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\SLVoice.exe"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+self.final_exe()],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
         except Exception, e:
             print "Couldn't sign final binary. Tried to sign %s" % self.args['configuration']+"\\"+self.final_exe()
             
@@ -705,9 +705,9 @@ class WindowsManifest(ViewerManifest):
         self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
         # self.remove(self.dst_path_of(tempfile))
 
-        #AO: Try to sign installer next, if we can, using best available signing cert.
+        #AO: Try to sign installer next, if we can, using "The Phoenix Viewer Project" signing cert.
         try:
-            subprocess.check_call(["signtool.exe","sign","/a","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+            subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
         except Exception, e:
             print "Working directory: %s" % os.getcwd()
             print "Couldn't sign windows installer. Tried to sign %s" % self.args['configuration']+"\\"+substitution_strings['installer_file']
