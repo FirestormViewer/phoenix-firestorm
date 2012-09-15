@@ -37,7 +37,7 @@ if( NOT STANDALONE ) # <FS:ND/> Don't add any autobuild dirs when building stand
 
 # <FS:Ansariel> Changed for Firestorm
 #if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
+if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_AVX" AND NOT STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
 # </FS:Ansariel> Changed for Firestorm
   # When we're building something other than Release, append the
   # packages/lib/release directory to deal with autobuild packages that don't
@@ -46,7 +46,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}"
 
 # <FS:Ansariel> Changed for Firestorm
 #endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
+endif (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_AVX" AND NOT STREQUAL "ReleaseFS" AND NOT "${CMAKE_BUILD_TYPE}" STREQUAL "ReleaseFS_open")
 # </FS:Ansariel> Changed for Firestorm
 
 link_directories(${AUTOBUILD_LIBS_INSTALL_DIRS})

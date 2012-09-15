@@ -2164,6 +2164,25 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
+            <!-- FS:Ansariel: [AVX Optimization] -->
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>configure</key>
+              <map>
+                <key>command</key>
+                <string>bash ../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--config</string>
+                  <string>--version</string>
+                  <string>-DHAS_OPENSIM_SUPPORT:BOOL=ON</string>
+                  <string>-DUSE_AVX_OPTIMIZATION:BOOL=ON</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>configure</key>
@@ -2434,6 +2453,34 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
+            <!-- FS:Ansariel: [AVX Optimization] -->
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--platform darwin</string>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                  <string>--platform darwin</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>
@@ -2693,6 +2740,32 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
+            <!-- FS:Ansariel: [AVX Optimization] -->
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>command</key>
+                <string>../scripts/configure_firestorm.sh</string>
+                <key>options</key>
+                <array>
+                  <string>--build</string>
+                  <string>--platform linux32</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--kdu</string>
+                  <string>--fmod</string>
+                  <string>--platform linux32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>
@@ -3080,6 +3153,44 @@
               <key>name</key>
               <string>ReleaseFS</string>
             </map>
+            <!-- FS:Ansariel: [AVX Optimization] -->
+            <key>ReleaseFS_AVX</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>Firestorm.sln</string>
+                </array>
+                <key>command</key>
+                <string>msbuild.exe</string>
+                <key>options</key>
+                <array>
+                  <string>/p:Configuration=Release</string>
+                  <string>/flp:LogFile=logs\FirestormBuild_win32.log</string>
+                  <string>/flp1:errorsonly;LogFile=logs\FirestormBuild_win32.err</string>
+                  <string>/p:Platform=Win32</string>
+                  <string>/t:Build</string>
+                  <string>/p:useenv=true</string>
+                  <string>/verbosity:normal</string>
+                  <string>/toolsversion:4.0</string>
+                  <string>/p:"VCBuildAdditionalOptions= /incremental"</string>
+                </array>
+              </map>
+              <key>configure</key>
+              <map>
+                <key>options</key>
+                <array>
+                  <string>--fmod</string>
+                  <string>--kdu</string>
+                  <string>--version</string>
+                  <string>--platform win32</string>
+                </array>
+              </map>
+              <key>name</key>
+              <string>ReleaseFS_AVX</string>
+            </map>
+            <!-- END FS:Ansariel: [AVX Optimization] -->
             <key>ReleaseFS_open</key>
             <map>
               <key>build</key>

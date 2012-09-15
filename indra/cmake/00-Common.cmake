@@ -57,22 +57,59 @@ if (WINDOWS)
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
   set(CMAKE_C_STANDARD_LIBRARIES "")
 
-  add_definitions(
-      /DLL_WINDOWS=1
-      /DDOM_DYNAMIC
-      /DUNICODE
-      /D_UNICODE 
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Zc:wchar_t-
-      /arch:SSE2
-      /fp:fast
-      )
+# <FS:Ansariel> [AVX Optimization]
+#  add_definitions(
+#      /DLL_WINDOWS=1
+#      /DDOM_DYNAMIC
+#      /DUNICODE
+#      /D_UNICODE 
+#      /GS
+#      /TP
+#      /W3
+#      /c
+#      /Zc:forScope
+#      /nologo
+#      /Oy-
+#      /Zc:wchar_t-
+#      /arch:SSE2
+#      /fp:fast
+#      )
+  if (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:AVX
+        /fp:fast
+        )
+  else (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:SSE2
+        /fp:fast
+        )
+  endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]	
      
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)
