@@ -95,6 +95,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany podczas domyślnych ostrzeżeń Firestorma." name="textFSSndAlert">
 				Domyślne ostrzeżenie:
 			</text>
+			<combo_box name="Def_UISndAlert" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndAlert">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -102,6 +105,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy nieprawidłowy klawisz zostanie naciśnięty." name="textFSBadKeystroke">
 				Nieprawidłowy klawisz:
 			</text>
+			<combo_box name="Def_UISndBadKeystroke" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndBadKeystroke">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -109,6 +115,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany po kliknięciu przyciskiem myszki." name="textFSClick">
 				Klikn. przyciskiem myszy:
 			</text>
+			<combo_box name="Def_UISndClick" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndClick">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -116,6 +125,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany po zwolnieniu przycisku myszki." name="textFSClickRelease">
 				Zwoln. przycisku myszy:
 			</text>
+			<combo_box name="Def_UISndClickRelease" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndClickRelease">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -123,6 +135,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy żeński awatar otrzymuje obrażenia." name="textFSHealthReductionF">
 				Uraz żeńskiego awatara:
 			</text>
+			<combo_box name="Def_UISndHealthReductionF" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndHealthReductionF">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -130,6 +145,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy męski awatar otrzymuje obrażenia." name="textFSHealthReductionM">
 				Uraz męskiego awatara:
 			</text>
+			<combo_box name="Def_UISndHealthReductionM" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndHealthReductionM">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -137,6 +155,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy nastąpi nieprawidłowa operacja." name="textFSInvalidOp">
 				Nieprawidłowa operacja:
 			</text>
+			<combo_box name="Def_UISndInvalidOp" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndInvalidOp">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -144,6 +165,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy zmniejszy się stan środków na koncie." name="textFSMoneyChangeDown">
 				Odpływ gotówki:
 			</text>
+			<combo_box name="Def_UISndMoneyChangeDown" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndMoneyChangeDown">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -151,6 +175,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy podniesie się stan środków na koncie." name="textFSMoneyChangeUp">
 				Przypływ gotówki:
 			</text>
+			<combo_box name="Def_UISndMoneyChangeUp" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndMoneyChangeUp">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -158,6 +185,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość IM. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi wiadomość IM'." name="textFSNewIncomingIMSession">
 				Nowa wiadomość IM:
 			</text>
+			<combo_box name="Def_UISndNewIncomingIMSession" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndNewIncomingIMSession">
 				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
 				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
@@ -166,6 +196,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy przychodzi wiadomość grupy. To ustawienie jest wspólne z Czat &gt; Powiadomienia &gt; 'Gdy nadchodzi wiadomość grupy'." name="textFSNewGroupIncomingIMSession">
 				Nowa wiadomość grupy:
 			</text>
+			<combo_box name="Def_UISndNewIncomingGroupIMSession" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
 				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
@@ -174,6 +207,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy rozpoczynana jest ręcznie nowa sesja IM." name="textFSStartIM">
 				Rozpoczynanie sesji IM:
 			</text>
+			<combo_box name="Def_UISndStartIM" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndStartIM">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -181,6 +217,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy tworzony jest obiekt." name="textFSObjectCreate">
 				Tworzenie obiektu:
 			</text>
+			<combo_box name="Def_UISndObjectCreate" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndObjectCreate">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -188,6 +227,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy usuwany jest obiekt. Uwaga: Ten dźwięk nie jest obecnie używany w Firestormie." name="textFSObjectDelete">
 				Usuwanie obiektu:
 			</text>
+			<combo_box name="Def_UISndObjectDelete" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndObjectDelete">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -195,6 +237,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy obiekt jest rezzowany." name="textFSObjectRezIn">
 				Rezzowanie obiektu:
 			</text>
+			<combo_box name="Def_UISndObjectRezIn" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndObjectRezIn">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -202,6 +247,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy obiekt jest derezzowany." name="textFSObjectRezOut">
 				Derezzowanie obiektu:
 			</text>
+			<combo_box name="Def_UISndObjectRezOut" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndObjectRezOut">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -209,6 +257,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy robione jest zdjęcie. To ustawienie jest wspólne z opcją 'Wykonuj zdjęcia bez efektu dźwiękowego i animacji' w menu Zaawansowane." name="textFSSnapshot">
 				Robienie zdjęcia:
 			</text>
+			<combo_box name="Def_UISndSnapshot" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="QuietSnapshotsToDiskComboBox">
 				<combo_box.item label="Odtwórz dźwięk" name="0"/>
 				<combo_box.item label="Wycisz dźwięk" name="1"/>
@@ -216,6 +267,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany podczas teleportacji. To ustawienie jest wspólne z Ruch i Widok &gt; Ruch &gt; 'Odtwórz dźwięk podczas teleportacji'." name="textFSTeleportOut">
 				Teleportacja:
 			</text>
+			<combo_box name="Def_UISndTeleportOut" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndTeleportOut">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -229,6 +283,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się menu kołowe (Pie Menu)." name="textFSPieMenuAppear">
 				Menu kołowe - pokaż:
 			</text>
+			<combo_box name="Def_UISndPieMenuAppear" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuAppear">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -236,6 +293,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy znika menu kołowe (Pie Menu)." name="textFSPieMenuHide">
 				Menu kołowe - ukryj:
 			</text>
+			<combo_box name="Def_UISndPieMenuHide" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuHide">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -243,6 +303,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 1 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight0">
 				Menu kołowe, opcja 1:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight0" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight0">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -250,6 +313,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 2 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight1">
 				Menu kołowe, opcja 2:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight1" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight1">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -257,6 +323,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 3 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight2">
 				Menu kołowe, opcja 3:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight2" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight2">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -264,6 +333,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 4 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight3">
 				Menu kołowe, opcja 4:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight3" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight3">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -271,6 +343,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 5 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight4">
 				Menu kołowe, opcja 5:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight4" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight4">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -278,6 +353,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 6 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight5">
 				Menu kołowe, opcja 6:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight5" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight5">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -285,6 +363,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 7 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight6">
 				Menu kołowe, opcja 7:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight6" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight6">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -292,6 +373,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy wybierana jest opcja o identyfikatorze 8 menu kołowego (Pie Menu)." name="textFSPieMenuSliceHighlight7">
 				Menu kołowe, opcja 8:
 			</text>
+			<combo_box name="Def_UISndPieMenuSliceHighlight7" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndPieMenuSliceHighlight7">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -299,6 +383,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy rozpoczyna się wpisywanie wiadomości czatu. To ustawienie jest wspólne z Czat &gt; Ogólne &gt; 'Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym'." name="textFSTyping">
 				Pisanie wiadomości:
 			</text>
+			<combo_box name="Def_UISndTyping" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="FSPlayTypingSoundComboBox">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -306,6 +393,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy okno jest zamykane." name="textFSWindowClose">
 				Zamykanie okna:
 			</text>
+			<combo_box name="Def_UISndWindowClose" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndWindowClose">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -313,6 +403,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy okno jest otwierane." name="textFSWindowOpen">
 				Otwieranie okna:
 			</text>
+			<combo_box name="Def_UISndWindowOpen" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndWindowOpen">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
@@ -320,6 +413,9 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ostrzeżenie o restarcie regionu." name="textFSRegionRestart">
 				Alarm o restarcie regionu:
 			</text>
+			<combo_box name="Def_UISndRegionRestart" tool_tip="Resetuj do domyślnego UUID.">
+				<combo_box.item name="Defoption" label="Domyślny"/>
+			</combo_box>
 			<combo_box name="PlayModeUISndRegionRestart">
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>

@@ -929,12 +929,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndAlert"
          control_name="UISndAlert"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndAlert"
+         name="Def_UISndAlert"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="ed124764-705d-d497-167a-182cd9fa2e6c"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndAlert"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndAlert"
          width="120">
@@ -967,12 +980,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndBadKeystroke"
          control_name="UISndBadKeystroke"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndBadKeystroke"
+         name="Def_UISndBadKeystroke"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="2ca849ba-2885-4bc3-90ef-d4987a5b983a"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndBadKeystroke"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndBadKeystroke"
          width="120">
@@ -1005,12 +1031,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClick"
          control_name="UISndClick"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndClick"
+         name="Def_UISndClick"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="4c8c3c77-de8d-bde2-b9b8-32635e0fd4a6"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndClick"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndClick"
          width="120">
@@ -1043,12 +1082,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClickRelease"
          control_name="UISndClickRelease"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndClickRelease"
+         name="Def_UISndClickRelease"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="4c8c3c77-de8d-bde2-b9b8-32635e0fd4a6"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndClickRelease"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndClickRelease"
          width="120">
@@ -1081,12 +1133,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionF"
          control_name="UISndHealthReductionF"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndHealthReductionF"
+         name="Def_UISndHealthReductionF"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="219c5d93-6c09-31c5-fb3f-c5fe7495c115"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndHealthReductionF"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndHealthReductionF"
          width="120">
@@ -1119,12 +1184,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionM"
          control_name="UISndHealthReductionM"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndHealthReductionM"
+         name="Def_UISndHealthReductionM"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="e057c244-5768-1056-c37e-1537454eeb62"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndHealthReductionM"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndHealthReductionM"
          width="120">
@@ -1157,12 +1235,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndInvalidOp"
          control_name="UISndInvalidOp"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndInvalidOp"
+         name="Def_UISndInvalidOp"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="4174f859-0d3d-c517-c424-72923dc21f65"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndInvalidOp"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndInvalidOp"
          width="120">
@@ -1195,12 +1286,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeDown"
          control_name="UISndMoneyChangeDown"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndMoneyChangeDown"
+         name="Def_UISndMoneyChangeDown"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="104974e3-dfda-428b-99ee-b0d4e748d3a3"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndMoneyChangeDown"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndMoneyChangeDown"
          width="120">
@@ -1233,12 +1337,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeUp"
          control_name="UISndMoneyChangeUp"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndMoneyChangeUp"
+         name="Def_UISndMoneyChangeUp"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="77a018af-098e-c037-51a6-178f05877c6f"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndMoneyChangeUp"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndMoneyChangeUp"
          width="120">
@@ -1271,12 +1388,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndNewIncomingIMSession"
          control_name="UISndNewIncomingIMSession"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndNewIncomingIMSession"
+         name="Def_UISndNewIncomingIMSession"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="67cc2844-00f3-2b3c-b991-6418d01e1bb7"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndNewIncomingIMSession"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndNewIncomingIMSession"
          width="120">
@@ -1313,12 +1443,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndNewIncomingGroupIMSession"
          control_name="UISndNewIncomingGroupIMSession"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndNewIncomingGroupIMSession"
+         name="Def_UISndNewIncomingGroupIMSession"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="67cc2844-00f3-2b3c-b991-6418d01e1bb7"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndNewIncomingGroupIMSession"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndNewIncomingGroupIMSession"
          width="120">
@@ -1355,12 +1498,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndStartIM"
          control_name="UISndStartIM"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndStartIM"
+         name="Def_UISndStartIM"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="c825dfbc-9827-7e02-6507-3713d18916c1"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndStartIM"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndStartIM"
          width="120">
@@ -1393,12 +1549,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectCreate"
          control_name="UISndObjectCreate"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndObjectCreate"
+         name="Def_UISndObjectCreate"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="f4a0660f-5446-dea2-80b7-6482a082803c"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndObjectCreate"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectCreate"
          width="120">
@@ -1432,12 +1601,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectDelete"
          control_name="UISndObjectDelete"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndObjectDelete"
+         name="Def_UISndObjectDelete"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="0cb7b00a-4c10-6948-84de-a93c09af2ba9"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndObjectDelete"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectDelete"
          width="120">
@@ -1471,12 +1653,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezIn"
          control_name="UISndObjectRezIn"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndObjectRezIn"
+         name="Def_UISndObjectRezIn"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="3c8fc726-1fd6-862d-fa01-16c5b2568db6"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndObjectRezIn"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectRezIn"
          width="120">
@@ -1509,12 +1704,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezOut"
          control_name="UISndObjectRezOut"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndObjectRezOut"
+         name="Def_UISndObjectRezOut"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="00000000-0000-0000-0000-000000000000"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndObjectRezOut"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectRezOut"
          width="120">
@@ -1547,12 +1755,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndSnapshot"
          control_name="UISndSnapshot"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndSnapshot"
+         name="Def_UISndSnapshot"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="3d09f582-3851-c0e0-f5ba-277ac5c73fb4"/>
+        </combo_box>
         <combo_box
          control_name="QuietSnapshotsToDisk"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="QuietSnapshotsToDiskComboBox"
          width="120">
@@ -1585,12 +1806,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTeleportOut"
          control_name="UISndTeleportOut"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndTeleportOut"
+         name="Def_UISndTeleportOut"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="d7a9a565-a013-2a69-797d-5332baa1a947"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndTeleportOut"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndTeleportOut"
          width="120">
@@ -1647,12 +1881,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuAppear"
          control_name="UISndPieMenuAppear"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuAppear"
+         name="Def_UISndPieMenuAppear"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="8eaed61f-92ff-6485-de83-4dcc938a478e"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuAppear"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuAppear"
          width="120">
@@ -1685,12 +1932,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuHide"
          control_name="UISndPieMenuHide"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuHide"
+         name="Def_UISndPieMenuHide"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="00000000-0000-0000-0000-000000000000"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuHide"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuHide"
          width="120">
@@ -1723,12 +1983,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight0"
          control_name="UISndPieMenuSliceHighlight0"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight0"
+         name="Def_UISndPieMenuSliceHighlight0"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="d9f73cf8-17b4-6f7a-1565-7951226c305d"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight0"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight0"
          width="120">
@@ -1761,12 +2034,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight1"
          control_name="UISndPieMenuSliceHighlight1"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight1"
+         name="Def_UISndPieMenuSliceHighlight1"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="f6ba9816-dcaf-f755-7b67-51b31b6233e5"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight1"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight1"
          width="120">
@@ -1799,12 +2085,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight2"
          control_name="UISndPieMenuSliceHighlight2"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight2"
+         name="Def_UISndPieMenuSliceHighlight2"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="7aff2265-d05b-8b72-63c7-dbf96dc2f21f"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight2"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight2"
          width="120">
@@ -1837,12 +2136,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight3"
          control_name="UISndPieMenuSliceHighlight3"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight3"
+         name="Def_UISndPieMenuSliceHighlight3"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="09b2184e-8601-44e2-afbb-ce37434b8ba1"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight3"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight3"
          width="120">
@@ -1875,12 +2187,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight4"
          control_name="UISndPieMenuSliceHighlight4"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight4"
+         name="Def_UISndPieMenuSliceHighlight4"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="bbe4c7fc-7044-b05e-7b89-36924a67593c"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight4"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight4"
          width="120">
@@ -1913,12 +2238,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight5"
          control_name="UISndPieMenuSliceHighlight5"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight5"
+         name="Def_UISndPieMenuSliceHighlight5"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="d166039b-b4f5-c2ec-4911-c85c727b016c"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight5"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight5"
          width="120">
@@ -1951,12 +2289,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight6"
          control_name="UISndPieMenuSliceHighlight6"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight6"
+         name="Def_UISndPieMenuSliceHighlight6"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="242af82b-43c2-9a3b-e108-3b0c7e384981"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight6"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight6"
          width="120">
@@ -1989,12 +2340,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight7"
          control_name="UISndPieMenuSliceHighlight7"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndPieMenuSliceHighlight7"
+         name="Def_UISndPieMenuSliceHighlight7"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="c1f334fb-a5be-8fe7-22b3-29631c21cf0b"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight7"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight7"
          width="120">
@@ -2027,12 +2391,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTyping"
          control_name="UISndTyping"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndTyping"
+         name="Def_UISndTyping"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="5e191c7b-8996-9ced-a177-b2ac32bfea06"/>
+        </combo_box>
         <combo_box
          control_name="FSPlayTypingSound"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="FSPlayTypingSoundComboBox"
          width="120">
@@ -2065,12 +2442,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowClose"
          control_name="UISndWindowClose"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndWindowClose"
+         name="Def_UISndWindowClose"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="2c346eda-b60c-ab33-1119-b8941916a499"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndWindowClose"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndWindowClose"
          width="120">
@@ -2103,12 +2493,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowOpen"
          control_name="UISndWindowOpen"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndWindowOpen"
+         name="Def_UISndWindowOpen"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="c80260ba-41fd-8a46-768a-6bf236360e3a"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndWindowOpen"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndWindowOpen"
          width="120">
@@ -2141,12 +2544,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndRegionRestart"
          control_name="UISndRegionRestart"
-         width="250"/>
+         width="230"/>
+        <combo_box
+         control_name="UISndRegionRestart"
+         name="Def_UISndRegionRestart"
+         height="20"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+           <combo_box.item
+             name="Defoption"
+             label="Default"
+             value="4174f859-0d3d-c517-c424-72923dc21f65"/>
+        </combo_box>
         <combo_box
          control_name="PlayModeUISndRegionRestart"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndRegionRestart"
          width="120">

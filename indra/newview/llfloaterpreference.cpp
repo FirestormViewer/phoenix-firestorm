@@ -1962,6 +1962,7 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2
 	// This sound is unused in Firestorm at the moment
 	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
+	getChild<LLComboBox>("Def_UISndObjectDelete")->setEnabled(FALSE);
 	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
 }
 // </FS:PP>
