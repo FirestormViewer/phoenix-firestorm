@@ -88,7 +88,7 @@
                 <item name="Triangle Limit" label="Limit trójkątów" />
                 <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
-            <check_box label="Generuj Normalne" name="gen_normals" />
+            <check_box label="Generuj wektory normalne" name="gen_normals" />
             <text initial_value="Kąt zagnieceń:" name="crease_label" value="Kąt zagnieceń:" />
         </panel>
         <panel label="Fizyka" name="physics_panel">

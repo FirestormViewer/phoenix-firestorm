@@ -344,7 +344,7 @@
 		</menu>
 		<menu label="Renderowanie metadanych" name="Render Metadata">
 			<menu_item_check label="Bryły brzegowe (Bounding Boxes)" name="Bounding Boxes"/>
-			<menu_item_check label="Normalne" name="Normals"/>
+			<menu_item_check label="Wektory normalne" name="Normals"/>
 			<menu_item_check label="Drzewo okluzji" name="Octree"/>
 			<menu_item_check label="Wzmocniona okluzja (Shadow Frusta)" name="Shadow Frusta"/>
 			<menu_item_check label="Kształty fizyczne" name="Physics Shapes"/>
