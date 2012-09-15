@@ -8074,6 +8074,18 @@ class LLCheckControl : public view_listener_t
 	}
 };
 
+// <FS:Ansariel> Reset to default control
+class FSResetControl : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		std::string callback_data = userdata.asString();
+		gSavedSettings.getControl(callback_data)->resetToDefault(true);
+		return true;
+	}
+};
+// </FS:Ansariel> Reset to default control
+
 // not so generic
 
 class LLAdvancedCheckRenderShadowOption: public view_listener_t
@@ -10093,6 +10105,10 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLCheckControl(), "CheckControl");
 	view_listener_t::addMenu(new LLGoToObject(), "GoToObject");
 	commit.add("PayObject", boost::bind(&handle_give_money_dialog));
+
+	// <FS:Ansariel> Reset to default control
+	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
+	// </FS:Ansariel> Reset to default control
 
 	// <FS:Ansariel> Commented out - already definied earlier in this method
 	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
