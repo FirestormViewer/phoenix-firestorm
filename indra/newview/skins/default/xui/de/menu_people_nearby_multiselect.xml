@@ -8,7 +8,7 @@
 	<menu_item_call label="Bezahlen" name="Pay"/>
 	<menu_item_call label="Teleport anbieten" name="teleport"/>
 	<menu_item_call label="Einfrieren" name="freeze"/>
-	<menu_item_call label="Parzelle: Entfernen/Verbannen" name="eject"/>
-	<menu_item_call label="Estate: Hinauswerfen/Verbannen" name="kick"/>
+	<menu_item_call label="Parzelle: Entfernen" name="eject"/>
+	<menu_item_call label="Estate: Hinauswerfen" name="kick"/>
 	<menu_item_call label="Estate: Teleport nach Hause" name="teleport_home"/>
 </context_menu>

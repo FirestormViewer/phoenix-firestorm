@@ -141,7 +141,7 @@
       function="Avatar.VisibleFreezeEject"/>
      </menu_item_call>
      <menu_item_call
-      label="Parcel Eject / Ban"
+      label="Parcel Eject"
       name="eject">
      <menu_item_call.on_click
       function="Avatar.Eject"/>
@@ -149,7 +149,7 @@
       function="Avatar.VisibleFreezeEject"/>
      </menu_item_call>
      <menu_item_call
-      label="Estate Kick / Ban"
+      label="Estate Kick"
       name="kick">
        <menu_item_call.on_click
           function="Avatar.Kick"/>
