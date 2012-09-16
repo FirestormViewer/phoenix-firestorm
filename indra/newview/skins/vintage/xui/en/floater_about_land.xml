@@ -2,7 +2,7 @@
 <floater
  positioning="cascading"
  can_tear_off="false"
- height="425"
+ height="430"
  layout="topleft"
  name="floaterland"
  help_topic="floaterland"
@@ -1331,7 +1331,7 @@ Only large parcels can be listed in search.
              tool_tip="Prevents scripts from pushing. Checking this option may be useful for preventing disruptive behavior on your land."
              width="119" />
             <check_box
-             height="16"
+             height="18"
              label="Show Place in Search (L$30/week) under"
              layout="topleft"
              left="20"
@@ -1340,10 +1340,9 @@ Only large parcels can be listed in search.
              width="270" />
             <combo_box
              enabled="true"
-             height="23"
+             height="20"
              layout="topleft"
-             left="20"
-             top="194"
+             left_pad="0"
              name="land category"
              visible="true"
              width="140">
@@ -1401,7 +1400,7 @@ Only large parcels can be listed in search.
                  value="other" />
             </combo_box>
             <check_box
-             height="16"
+             height="18"
              label="Moderate Content"
              layout="topleft"
              left="20"
@@ -1416,7 +1415,7 @@ Only large parcels can be listed in search.
              follows="left|right|top"
              height="14"
              layout="topleft"
-             top_pad="10"
+             top_pad="15"
              left="10"
              name="allow_label5"
              right="-10"
