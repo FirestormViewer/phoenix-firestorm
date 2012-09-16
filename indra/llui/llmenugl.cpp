@@ -591,7 +591,7 @@ BOOL LLMenuItemSeparatorGL::handleMouseDown(S32 x, S32 y, MASK mask)
 	LLMenuGL* parent_menu = getMenu();
 // [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
 	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
-	if (menu_item)
+	if ( (menu_item) && (this != menu_item) )
 	{
 		return menu_item->handleMouseDown(x, y, mask);
 	}
@@ -615,11 +615,11 @@ BOOL LLMenuItemSeparatorGL::handleMouseUp(S32 x, S32 y, MASK mask)
 	LLMenuGL* parent_menu = getMenu();
 // [SL:KB] - Patch: UI-Misc | Checked: 2012-08-03 (Catznip-3.3)
 	LLMenuItemGL* menu_item = (parent_menu) ? parent_menu->getHighlightedItem() : NULL;
-	if (menu_item)
+	if ( (menu_item) && (this != menu_item) )
 	{
 		return menu_item->handleMouseUp(x, y, mask);
 	}
-	return LLMenuItemGL::handleMouseDown(x, y, mask);
+	return LLMenuItemGL::handleMouseUp(x, y, mask);
 // [/SL:KB]
 //	if (y > getRect().getHeight() / 2)
 //	{
