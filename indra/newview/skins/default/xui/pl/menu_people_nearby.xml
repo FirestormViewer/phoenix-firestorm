@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Avatar Context Menu">
 	<menu_item_call label="Zobacz profil" name="View Profile"/>
-	<menu_item_call label="Nowy znajomy" name="Add Friend"/>
+	<menu_item_call label="Dodaj do znajomych" name="Add Friend"/>
 	<menu_item_call label="Usuń z listy znajomych" name="Remove Friend"/>
 	<menu_item_call label="Wiadomość IM" name="IM"/>
 	<menu_item_call label="Zadzwoń" name="Call"/>
@@ -17,7 +17,7 @@
 	<menu_item_check label="Zablokuj/Odblokuj" name="Block/Unblock"/>
 	<menu_item_call label="Zgłoś" name="report"/>
 	<menu_item_call label="Unieruchom" name="freeze"/>
-	<menu_item_call label="Parcela: wyrzuć/zbanuj" name="eject"/>
-	<menu_item_call label="Majątek: wyrzuć/zbanuj" name="kick"/>
-	<menu_item_call label="Odeślij do domu" name="teleport_home"/>
+	<menu_item_call label="Parcela: Wydal z ziemi" name="eject"/>
+	<menu_item_call label="Majątek: Wyrzuć" name="kick"/>
+	<menu_item_call label="Majątek: Odeślij do domu" name="teleport_home"/>
 </context_menu>
