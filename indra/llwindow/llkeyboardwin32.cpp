@@ -74,10 +74,11 @@ LLKeyboardWin32::LLKeyboardWin32()
 	mTranslateKeyMap[VK_OEM_COMMA]  = ',';
 	mTranslateKeyMap[VK_OEM_MINUS]  = '-';
 	mTranslateKeyMap[VK_OEM_PERIOD] = '.';
-	// Ansariel: Reverted back. This allows easy starting gestures in chat.
-	//           Shared Media prims borkage is worked around in llviewerkeyboard.cpp,
-	//           start_gesture( EKeystate s )
-	mTranslateKeyMap[VK_OEM_2] = KEY_PAD_DIVIDE; //'/';//This used to be KEY_PAD_DIVIDE, but that breaks typing into text fields in media prims
+	// <FS:Ansariel> Reverted back and changed to KEY_DIVIDE. This allows easy starting
+	//               gestures in chat.
+	//               Shared Media prims borkage is worked around in llviewerkeyboard.cpp,
+	//               start_gesture( EKeystate s )
+	mTranslateKeyMap[VK_OEM_2] = KEY_DIVIDE; //'/';//This used to be KEY_PAD_DIVIDE, but that breaks typing into text fields in media prims
 	mTranslateKeyMap[VK_OEM_3] = '`';
 	mTranslateKeyMap[VK_OEM_4] = '[';
 	mTranslateKeyMap[VK_OEM_5] = '\\';
