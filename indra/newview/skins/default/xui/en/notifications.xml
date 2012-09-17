@@ -9351,4 +9351,11 @@ Did you know that you can get the classic view of Phoenix Viewer by selecting th
       yestext="OK"/>
   </notification>
   
+  <notification
+   icon="alertmodal.tga"
+   name="CannotSaveSnapshot"
+   type="alertmodal">
+Unable to save snapshot.
+  <tag>fail</tag>
+  </notification>
 </notifications>
