@@ -1224,7 +1224,9 @@ std::string LLUrlEntryIcon::getIcon(const std::string &url)
 LLUrlEntryJira::LLUrlEntryJira()
 {
 	mPattern = boost::regex("((?:ARVD|CHOP|CTS|DOC|DN|ECC|EXP|FIRE|LEAP|LLSD|MAINT|MISC|OPEN|PATHBUG|PHOE|PLAT|PYO|SCR|SEC|SH|SINV|SNOW|SOCIAL|STORM|SVC|SPOT|VWR|WEB)-\\d+)",
-				boost::regex::perl|boost::regex::icase);
+				// <FS:Ansariel> FIRE-917: Match case to reduce number of false positives
+				//boost::regex::perl|boost::regex::icase);
+				boost::regex::perl);
 	mMenuName = "menu_url_http.xml";
 	mTooltip = LLTrans::getString("TooltipHttpUrl");
 }
