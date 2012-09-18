@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_voice_controls" title="Przełączniki Głosu">
 	<string name="title_nearby">
-		ROZMOWY GŁOSOWE W POBLIŻU
+		Rozmowy głosowe w pobliżu
 	</string>
 	<string name="title_group">
 		Rozmowa głosowa z grupą [GROUP]

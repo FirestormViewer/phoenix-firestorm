@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="window_size" title="WYMIARY OKNA">
+<floater name="window_size" title="Wymiary okna">
 	<text name="windowsize_text">
 		Ustaw rozmiar okna:
 	</text>

@@ -47,6 +47,6 @@
             Woda WL:
         </text>
         <icon name="SkyDayCycle" tool_tip="Zmień porę dnia"/>
-        <button name="UseRegionWL" tool_tip="Resetuj opcje systemu WindLight do domyślnych regionu"/>
+        <button name="UseRegionWL" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu"/>
 </panel>
 </floater>

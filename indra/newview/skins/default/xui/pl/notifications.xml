@@ -3676,4 +3676,7 @@ Poprzedni symulator: [OLDVERSION]
 		Czy wiesz, że możesz sprawić, aby przeglądarka wyglądała jak klasyczny Phoenix poprzez wybranie odpowiedniej pozycji z listy rozwijanej, która znajduje się obok przycisku logowania? Jeśli nowy interfejs Ci nie odpowiada - wypróbuj tą opcję.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="CannotSaveSnapshot">
+		Zapis zdjęcia zakończony niepowodzeniem.
+	</notification>
 </notifications>

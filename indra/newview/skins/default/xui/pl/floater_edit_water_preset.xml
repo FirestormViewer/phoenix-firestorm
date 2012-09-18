@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Edit Water Preset" title="EDYTUJ USTAWIENIE WODY">
+<floater name="Edit Water Preset" title="Edytuj ustawienie wody">
 	<string name="title_new">
 		Stwórz nowe Ustawienie wody
 	</string>

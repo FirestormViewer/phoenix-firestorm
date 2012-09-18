@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<floater name="avatarinfo" title="PROFIL">
+<floater name="avatarinfo" title="Profil">
 <panel name="panel_profile_view">
     <tab_container name="tabs">
         <panel label="Rezydent" name="panel_profile_secondlife" />

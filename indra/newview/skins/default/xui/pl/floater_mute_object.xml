@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="block by name" title="ZABLOKUJ OBIEKT WEDŁUG NAZWY">
+<floater name="block by name" title="Zablokuj obiekt według nazwy">
 	<text name="message">
 		Zablokuj obiekt:
 	</text>

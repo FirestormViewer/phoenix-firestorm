@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="outgoing call" title="ROZMOWA GŁOSOWA">
+<floater name="outgoing call" title="Rozmowa głosowa">
 	<floater.string name="localchat">
 		Rozmowy głosowe w pobliżu
 	</floater.string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_bumps" title="ZDERZENIA, POPCHNIĘCIA, UDERZENIA">
+<floater name="floater_bumps" title="Zderzenia, popchnięcia, uderzenia">
 	<floater.string name="none_detected">
 		Brak
 	</floater.string>

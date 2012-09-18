@@ -30,9 +30,9 @@
 		<combo_box.item value="filter_type_custom" label="Własny filtr..." />
 	</combo_box>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="WSZYSTKIE" name="All Items"/>
-		<recent_inventory_panel label="OSTATNIE" name="Recent Items"/>
-		<worn_inventory_panel label="ZAŁOŻONE" name="Worn Items"/>
+		<inventory_panel label="Wszystkie" name="All Items"/>
+		<recent_inventory_panel label="Ostatnie" name="Recent Items"/>
+		<worn_inventory_panel label="Założone" name="Worn Items"/>
 	</tab_container>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="toolbox floater" short_title="NARZĘDZIA BUDOWANIA">
+<floater name="toolbox floater" short_title="Narzędzia budowania">
 	<floater.string name="status_rotate">
 		Przeciągaj barwne pierścienie, by obracać obiekt
 	</floater.string>

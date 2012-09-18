@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<floater name="floater_people" title="LUDZIE">
+<floater name="floater_people" title="Ludzie">
     <panel_container name="main_panel">
       <panel name="panel_group_info_sidetray" label="Profil grupy"/>
       <panel name="panel_block_list_sidetray" label="Blokowani Rezydenci i obiekty"/>

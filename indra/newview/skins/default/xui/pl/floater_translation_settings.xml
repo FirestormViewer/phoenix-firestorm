@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_translation_settings" title="USTAWIENIA TŁUMACZENIA CZATU">
+<floater name="floater_translation_settings" title="Ustawienia tłumaczenia czatu">
  <string name="bing_api_key_not_verified">Nie można zweryfikować Bing appID. Spróbuj ponownie.</string>
  <string name="google_api_key_not_verified">Nie można zweryfikować klucza Google API. Spróbuj ponownie.</string>
  <string name="bing_api_key_verified">Bing appID zweryfikowany.</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Wydarzenie" name="Event" title="SZCZEGÓŁY WYDARZENIA">
+<floater label="Wydarzenie" name="Event" title="Szczegóły wydarzenia">
 	<floater.string name="loading_text">
 		Ładowanie...
 	</floater.string>

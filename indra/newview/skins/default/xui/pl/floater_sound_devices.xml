@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_sound_devices" title="URZĄDZENIA DŹWIĘKOWE">
+<floater name="floater_sound_devices" title="Urządzenia dźwiękowe">
   <text name="voice_label">
     Czat głos.
   </text>

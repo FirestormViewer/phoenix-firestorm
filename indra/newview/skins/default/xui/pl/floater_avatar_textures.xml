@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatar_texture_debug" title="TEKSTURY AWATARA">
+<floater name="avatar_texture_debug" title="Tekstury awatara">
 	<floater.string name="InvalidAvatar">
-		NIEWŁAŚCIWY AWATAR
+		Niewłaściwy awatar
 	</floater.string>
 	<scroll_container name="profile_scroll">
 		<panel name="scroll_content_panel">

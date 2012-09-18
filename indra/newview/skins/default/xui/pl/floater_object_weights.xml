@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="object_weights" title="ZAAWANSOWANE">
+<floater name="object_weights" title="Zaawansowane">
     <text name="selected_text" value="WYBRANE"/>
     <text name="objects_label" value="Obiekty"/>
     <text name="prims_label" value="Primy"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Toybox" title="PRZYCISKI NA PASKACH">
+<floater name="Toybox" title="Przyciski na paskach">
   <text name="toybox label 1">
       Możesz dodać lub usunąć przycisk z paska poprzez przeciąganie.
   </text>
