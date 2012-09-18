@@ -36,6 +36,7 @@
 #include "llspinctrl.h"
 #include "llviewercontrol.h"
 #include "llviewerinventory.h"
+#include "utilitybar.h"
 #include <boost/graph/graph_concepts.hpp>
 
 FloaterAO::FloaterAO(const LLSD& key)
@@ -286,6 +287,15 @@ void FloaterAO::enableStateControls(BOOL yes)
 
 void FloaterAO::onOpen(const LLSD& key)
 {
+	UtilityBar::instance().setAOInterfaceButtonExpanded(true);
+}
+
+void FloaterAO::onClose(bool app_quitting)
+{
+	if (!app_quitting)
+	{
+		UtilityBar::instance().setAOInterfaceButtonExpanded(false);
+	}
 }
 
 void FloaterAO::onSelectSet()
