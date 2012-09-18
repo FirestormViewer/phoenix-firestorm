@@ -2702,12 +2702,22 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			LLSD args;
 			args["MESSAGE"] = message;
 			LLNotificationsUtil::add("SystemMessage", args);
+			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+			if (message.find("estart") != -1 && message.find("egion") != -1)
+			{
+				make_ui_sound("UISndRegionRestart");
+			}
 		}
 		else if (to_id.isNull())
 		{
 			// Message to everyone from GOD, look up the fullname since
 			// server always slams name to legacy names
 			LLAvatarNameCache::get(from_id, boost::bind(god_message_name_cb, _2, chat, message));
+			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+			if (message.find("estart") != -1 && message.find("egion") != -1)
+			{
+				make_ui_sound("UISndRegionRestart");
+			}
 		}
 		else
 		{
