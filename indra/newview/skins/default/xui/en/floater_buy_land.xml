@@ -717,9 +717,9 @@ This parcel is 512 m² of land.
      height="20"
      label="Purchase"
      layout="topleft"
-     left="70"
+     left="440"
      name="buy_btn"
-     top="460"
+     top="454"
      width="100" />
     <button
      follows="bottom|right"
