@@ -8,7 +8,7 @@
  min_height="40"
  min_width="420"
  name="Test Floater"
- title="LAYOUTSTACK TESTS"
+ title="Layoutstack Tests"
  width="420">
   <layout_stack name="test_stack"
               left="0"

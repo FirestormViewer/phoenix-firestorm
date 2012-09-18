@@ -9,7 +9,7 @@
  name="script ed float"
  help_topic="lsl_reference"
  save_rect="true"
- title="LSL REFERENCE"
+ title="LSL Reference"
  width="370">
     <check_box
      follows="top|left"

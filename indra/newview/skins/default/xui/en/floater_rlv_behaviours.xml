@@ -11,7 +11,7 @@
   save_rect="true"
   save_visibility="true"
   single_instance="true"
-  title="ACTIVE RLV RESTRICTIONS"
+  title="Active RLV Restrictions"
   width="333">
 
   <tab_container
@@ -28,7 +28,7 @@
 	<panel
 	 follows="all"
 	 height="242"
-	 label="RESTRICTIONS"
+	 label="Restrictions"
 	 layout="topleft"
 	 name="behaviour_panel"
 	 width="318">
@@ -55,7 +55,7 @@
 	<panel
 	 follows="all"
 	 height="242"
-	 label="EXCEPTIONS"
+	 label="Exceptions"
 	 layout="topleft"
 	 name="exception_panel"
 	 width="318">

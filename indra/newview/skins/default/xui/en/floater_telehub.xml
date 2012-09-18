@@ -6,7 +6,7 @@
  layout="topleft"
  name="telehub"
  help_topic="telehub"
- title="TELEHUB"
+ title="Telehub"
  width="330">
     <text
      type="string"

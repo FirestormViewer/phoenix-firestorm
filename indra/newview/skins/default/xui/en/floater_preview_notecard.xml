@@ -11,7 +11,7 @@
  name="preview notecard"
  help_topic="preview_notecard"
  save_rect="true"
- title="NOTECARD:"
+ title="Notecard:"
  width="400">
     <floater.string
      name="no_object">

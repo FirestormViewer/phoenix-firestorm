@@ -9,7 +9,7 @@
  name="floater_about"
  help_topic="floater_about"
  save_rect="true"
- title="MEDIA BROWSER"
+ title="Media Browser"
  width="820">
     <floater.string
      name="home_page_url">

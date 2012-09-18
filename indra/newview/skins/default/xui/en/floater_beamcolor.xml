@@ -8,7 +8,7 @@
  can_resize="false"
  height="250"
  name="BeamColor"
- title="BEAM COLOR ROTATE"
+ title="Beam Color rotate"
  width="410"
  save_rect="true">
     <panel

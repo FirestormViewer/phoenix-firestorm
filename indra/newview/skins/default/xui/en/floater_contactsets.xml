@@ -12,7 +12,7 @@
  save_rect="true"
  save_visibility="true"
  single_instance="true"
- title="CONTACT SETS"
+ title="Contact Sets"
  width="600"
  help_topic="fs_contact_sets">
 	<floater.string name="AddToGroup" value="Add to: [GROUPNAME]"/>

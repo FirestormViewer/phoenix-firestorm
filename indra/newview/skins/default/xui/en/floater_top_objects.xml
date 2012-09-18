@@ -8,11 +8,11 @@
  min_width="545"
  name="top_objects"
  help_topic="top_objects"
- title="TOP OBJECTS"
+ title="Top Objects"
  width="800">
     <floater.string
      name="top_scripts_title">
-        TOP SCRIPTS
+        Top Scripts
     </floater.string>
     <floater.string
      name="top_scripts_text">
@@ -28,7 +28,7 @@
     </floater.string>
     <floater.string
      name="top_colliders_title">
-        TOP COLLIDERS
+        Top Colliders
     </floater.string>
     <floater.string
      name="top_colliders_text">

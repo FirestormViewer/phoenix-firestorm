@@ -5,7 +5,7 @@
  layout="topleft"
  name="groups"
  help_topic="groups"
- title="GROUPS"
+ title="Groups"
  width="280">
     <text
      type="string"

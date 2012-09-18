@@ -6,7 +6,7 @@
  layout="topleft"
  name="price_for_listing"
  help_topic="price_for_listing"
- title="PUBLISH CLASSIFIED AD"
+ title="Publish Classified Ad"
  width="320">
     <text
      type="string"

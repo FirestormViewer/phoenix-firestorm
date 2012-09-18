@@ -10,7 +10,7 @@
  name="avatarpicker"
  help_topic="avatarpicker"
  save_rect="true"
- title="CHOOSE RESIDENT"
+ title="Choose Resident"
  width="500">
     <floater.string
      name="not_found">

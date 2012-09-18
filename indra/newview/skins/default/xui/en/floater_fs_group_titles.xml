@@ -2,7 +2,7 @@
 <floater
  name="group_titles"
  help_topic="fs_group_titles"
- title="GROUP TITLES"
+ title="Group Titles"
  width="250"
  height="300"
  min_width="250"

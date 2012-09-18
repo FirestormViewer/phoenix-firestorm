@@ -11,7 +11,7 @@
  save_rect="true"
  save_visibility="true"
  reuse_instance="true"
- title="INVENTORY"
+ title="Inventory"
  width="333" >
    <panel
     class="sidepanel_inventory"

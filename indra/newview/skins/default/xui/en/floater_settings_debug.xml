@@ -10,7 +10,7 @@
 	min_width="430"
 	name="settings_debug"
 	help_topic="settings_debug"
-	title="DEBUG SETTINGS"
+	title="Debug Settings"
 	width="450">
 
 	<panel

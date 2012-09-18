@@ -11,7 +11,7 @@
     save_rect="true"
     save_visibility="false"
     reuse_instance="true"
-    title="MERCHANT OUTBOX"
+    title="Merchant Outbox"
     width="333">
   <string name="OutboxFolderCount0"></string>
   <string name="OutboxFolderCount1">1 folder</string>

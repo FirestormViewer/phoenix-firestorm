@@ -11,7 +11,7 @@
  save_rect="true"
  save_visibility="false"
  single_instance="true"
- title="SNAPSHOT PREVIEW"
+ title="Snapshot Preview"
  width="270">
     <floater.string
      name="unknown">

@@ -16,7 +16,7 @@
  help_topic="destinations"
  save_rect="true"
  save_visibility="true"
- title="DESTINATIONS"
+ title="Destinations"
  width="840">
     <web_browser
       top="25"

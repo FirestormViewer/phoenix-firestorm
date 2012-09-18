@@ -2,7 +2,7 @@
 <floater
  name="ws_asset_blacklist"
  help_topic="fs_asset_blacklist"
- title="ASSET BLACKLIST"
+ title="Asset Blacklist"
  min_width="650"
  min_height="320"
  width="750"

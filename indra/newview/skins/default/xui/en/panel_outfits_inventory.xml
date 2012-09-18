@@ -39,7 +39,7 @@
            bg_alpha_color="SL-Background_66"
            help_topic="my_outfits_tab"
            follows="all"
-           label="MY OUTFITS"
+           label="Outfits"
            layout="topleft"
            right="-1" />
          <panel
@@ -50,7 +50,7 @@
            follows="all"
            height="520"
            help_topic="now_wearing_tab"
-           label="WEARING"
+           label="Wearing"
            layout="topleft"
            name="cof_tab"
            right="-1" />

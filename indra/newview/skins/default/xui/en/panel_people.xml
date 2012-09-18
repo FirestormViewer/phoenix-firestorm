@@ -89,7 +89,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 	 value="[REGION] (Double-click to teleport, shift-drag to pan)"/>
 	<string
 	 name="avatar_name_count"
-	 value="NAME [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]" />
+	 value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]" />
 	<filter_editor
      follows="left|top|right"
      height="23"
@@ -122,7 +122,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
-         label="NEARBY"
+         label="Nearby"
          layout="topleft"
          left="0"
          help_topic="people_nearby_tab"
@@ -161,7 +161,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		     multi_select="true"
 		     width="311">
 		        <radar_list.columns
-		         label="NAME"
+		         label="Name"
 		         name="name"
 				 tool_tip="[TOTAL] avatars, [IN_REGION] in the same region, [IN_CHAT_RANGE] in chat range"
 		         relative_width="0.37" />
@@ -181,15 +181,15 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				 tool_tip="Has payment info on file"
 		         relative_width="0.03" />
 		        <radar_list.columns
-		         label="AGE"
+		         label="Age"
 		         name="age"
 		         relative_width="0.1" />
 		        <radar_list.columns
-		         label="SEEN"
+		         label="Seen"
 		         name="seen"
 		         relative_width="0.15" />
 		        <radar_list.columns
-		         label="RANGE"
+		         label="Range"
 		         name="range"
 		         relative_width="0.15" />
 		        <radar_list.columns
@@ -282,7 +282,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
-         label="FRIENDS"
+         label="Friends"
          layout="topleft"
          left="0"
          help_topic="people_friends_tab"
@@ -524,7 +524,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
-         label="GROUPS"
+         label="Groups"
          layout="topleft"
          left="0"
          help_topic="people_groups_tab"
@@ -609,7 +609,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
          bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
-         label="RECENT"
+         label="Recent"
          layout="topleft"
          left="0"
          help_topic="people_recent_tab"
