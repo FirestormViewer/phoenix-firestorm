@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="spellcheck_floater" title="EINSTELLUNGEN RECHTSCHREIBPRÜFUNG">
-	<check_box label="Rechtschreibprüfung aktivieren" name="spellcheck_enable" />
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="spellcheck_floater" title="Einstellungen für Rechtschreibprüfung">
+	<check_box label="Rechtschreibprüfung aktivieren" name="spellcheck_enable"/>
 	<text name="spellcheck_main" width="110">
-		Haupt-Wörterbuch:
+		Hauptwörterbuch:
 	</text>
-	<text label="Logi:" name="spellcheck_additional">
+	<text label="Protokolle:" name="spellcheck_additional">
 		Zusätzliche Wörterbücher:
 	</text>
 	<text name="spellcheck_available">
@@ -13,6 +13,6 @@
 	<text name="spellcheck_active">
 		Aktiv
 	</text>
-	<button label="Entfernen" name="spellcheck_remove_btn" />
-	<button label="Importieren" name="spellcheck_import_btn" />
+	<button label="Entfernen" name="spellcheck_remove_btn"/>
+	<button label="Importieren..." name="spellcheck_import_btn"/>
 </floater>

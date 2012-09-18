@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="lgg_fg_floater_settings" title="KONTAKT-SETS-EINSTELLUNGEN">
+<floater name="lgg_fg_floater_settings" title="Einstellungen Kontakt-Sets">
 	<color_swatch name="colordefault" tool_tip="Standardfarbe für Freunde, die nicht in einer Gruppe sind. Hat nur Auswirkungen auf die Anzeige der Liste der Freundegruppen."/>
 	<text name="lgg_fg_text2a">
 		Standardfarbe für

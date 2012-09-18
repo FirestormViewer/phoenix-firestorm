@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="settings_debug" title="DEBUG-EINSTELLUNGEN">
+<floater name="settings_debug" title="Debug-Einstellungen">
 	<panel name="debug_settings_search_panel">
 		<search_editor label="Hier suchen" name="search_settings_input" tool_tip="Den Suchbegriff hier eingeben. Es werden Treffer einer Volltextsuche im Namen und Kommentar einer Einstellung angezeigt."/>
 	</panel>

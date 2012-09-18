@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater min_width="460" name="inspect" title="OBJEKTE UNTERSUCHEN" width="460">
+<floater min_width="460" name="inspect" title="Objekte untersuchen" width="460">
 	<floater.string name="timeStamp">
 		[wkday,datetime,local] [mth,datetime,local] [day,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local] [year,datetime,local]
 	</floater.string>

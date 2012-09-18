@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="search replace" title="SUCHEN / ERSETZEN">
+<floater name="search replace" title="Suchen/Ersetzen">
 	<check_box label="Groß-/Kleinschreibung" left="45" name="case_text" width="140"/>
 	<check_box label="Aufwärts suchen" name="find_previous"/>
 	<button label="Suchen" label_selected="Suchen" name="search_btn"/>

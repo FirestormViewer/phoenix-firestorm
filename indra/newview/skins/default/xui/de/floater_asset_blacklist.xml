@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ws_asset_blacklist" title="ASSET-BLACKLIST">
+<floater name="ws_asset_blacklist" title="Asset-Blacklist">
 	<floater.string name="asset_object">
 		Objekt
 	</floater.string>

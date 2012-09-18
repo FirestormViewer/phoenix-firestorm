@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="local_bitmap_browser_floater" title="LOKALER BITMAP-BROWSER">
+<floater name="local_bitmap_browser_floater" title="Lokaler Bitmap-Browser">
 	<scroll_list name="bitmap_list">
 		<column name="bitmap_name" label="Name"/>
 	</scroll_list>

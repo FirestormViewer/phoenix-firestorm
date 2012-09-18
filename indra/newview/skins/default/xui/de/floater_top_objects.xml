@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="TOP-OBJEKTE" min_width="690">
+<floater name="top_objects" title="Top-Objekte" min_width="690">
 	<floater.string name="top_scripts_title">
 		TOP-SKRIPTE
 	</floater.string>

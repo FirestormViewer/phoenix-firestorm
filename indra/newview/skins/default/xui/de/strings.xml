@@ -3962,10 +3962,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Avatare sichtbar; Chat außerhalb dieser Parzelle gestattet
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
-		Sich bewegende Objekte können sich fehlerhaft verhalten bis der Navmesh der Region aktualisiert wurde.
+		Bewegliche Objekte verhalten sich in dieser Region u. U. erst dann korrekt, wenn die Region neu geformt wird.
 	</string>
 	<string name="LocationCtrlPathfindingDisabledTooltip">
-		Dynamisches Pathfinding ist in dieser Region deaktiviert.
+		Dynamisches Pathfinding ist in dieser Region nicht aktiviert.
 	</string>
 	<string name="UpdaterWindowTitle">
 		[APP_NAME] Aktualisierung
@@ -5192,7 +5192,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Normal">
 		Normal
 	</string>
-  <!-- Pathfinding -->
 	<string name="Pathfinding_Wiki_URL">
 		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
@@ -5200,10 +5199,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Keine
 	</string>
 	<string name="Pathfinding_Object_Attr_Permanent">
-		Beinflusst Navmesh
+		Wirkt sich auf Navmesh aus
 	</string>
 	<string name="Pathfinding_Object_Attr_Character">
-		Charakter
+		Figur
 	</string>
 	<string name="Pathfinding_Object_Attr_MultiSelect">
 		(mehrere)
@@ -5223,6 +5222,14 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="snapshot_quality_very_high">
 		Sehr hoch
 	</string>
+	<string name="TeleportMaturityExceeded">
+		Der Einwohner kann diese Region nicht besuchen.
+	</string>
+	<string name="UserDictionary">
+		[Benutzer]
+	</string>
+	
+<!-- Firestorm-specific translations -->
 	<string name="RlvEnabled">
 		RestrainedLove-Unterstützung ist beim nächsten Start eingeschaltet.
 	</string>
@@ -5354,14 +5361,5 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Collision_UnknownType">
 		[NAME] hat eine Kollision unbekannten Typs verursacht.
-	</string>
-
-	<string name="TeleportMaturityExceeded">
-		Der Einwohner kann dieser Region nicht betreten.
-	</string>
-	
-	<!-- Spell check settings floater -->
-	<string name="UserDictionary">
-		[User]
 	</string>
 </strings>

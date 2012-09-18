@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="object_weights" title="ERWEITERT">
+<floater name="object_weights" title="Erweitert">
 	<floater.string name="nothing_selected" value="--"/>
 	<text name="selected_text" value="AUSGEWÄHLT"/>
 	<text name="objects" value="--"/>

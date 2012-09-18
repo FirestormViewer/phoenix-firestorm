@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="sys_well_window" title="MELDUNGEN">
+<floater name="sys_well_window" title="Meldungen">
 	<string name="title_im_well_window">
-		GESPRÄCHE
+		Gespräche
 	</string>
 	<string name="title_notification_well_window">
-		BENACHRICHTIGUNGEN
+		Benachrichtigungen
 	</string>
 </floater>

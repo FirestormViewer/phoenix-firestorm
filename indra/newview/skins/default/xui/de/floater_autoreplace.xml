@@ -1,25 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="autoreplace_floater" title="EINSTELLUNGEN AUTOMATISCHE ERSETZUNG">
-	<check_box label="Automatische Ersetzung aktivieren" name="autoreplace_enable" tool_tip="Während der Texteingabe jedes der definierten Schlüsselwörter mit der entsprechenden Ersetzung ersetzen."/>
-	<button name="autoreplace_import_list" label="Importiere Liste" tool_tip="Lädt eine zuvor exportierte Liste aus einer Datei."/>
-	<button name="autoreplace_export_list" label="Exportiere Liste" tool_tip="Speichert die ausgewählte Liste in einer Datei."/>
-	<button name="autoreplace_new_list" label="Neue Liste" tool_tip="Erzeugt eine neue Liste."/>
-	<button name="autoreplace_delete_list" label="Liste löschen" tool_tip="Löscht die ausgewählte Liste."/>
-	<button name="autoreplace_list_up" tool_tip="Verschiebt diese List in der Priorität nach oben."/>
-	<button name="autoreplace_list_down" tool_tip="Verschiebt diese List in der Priorität nach unten."/>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="autoreplace_floater" title="Einstellungen für automatische Ersetzung...">
+	<check_box label="Automatische Ersetzung aktivieren..." name="autoreplace_enable" tool_tip="Eines oder mehrere Schlüsselwörter bei der Eingabe von Chat-Text durch die entsprechende Ersetzung substituieren"/>
+	<button label="Liste importieren..." name="autoreplace_import_list" tool_tip="Exportierte Liste aus einer Datei laden."/>
+	<button label="Liste exportieren..." name="autoreplace_export_list" tool_tip="Ausgewählte Liste zur Weitergabe in einer Datei speichern."/>
+	<button label="Neue Liste..." name="autoreplace_new_list" tool_tip="Neue Liste erstellen."/>
+	<button label="Liste löschen" name="autoreplace_delete_list" tool_tip="Ausgewählte Liste löschen."/>
+	<button name="autoreplace_list_up" tool_tip="Dieser Liste eine höhere Priorität einräumen."/>
+	<button name="autoreplace_list_down" tool_tip="Dieser Liste eine niedrigere Priorität einräumen."/>
 	<scroll_list name="autoreplace_list_replacements">
 		<scroll_list.columns label="Schlüsselwort" name="keyword"/>
 		<scroll_list.columns label="Ersetzung" name="replacement"/>
 	</scroll_list>
-	<button name="autoreplace_add_entry" label="Hinzufügen"/>
-	<button name="autoreplace_delete_entry" label="Löschen"/>
 	<text name="autoreplace_keyword_txt">
 		Schlüsselwort:
 	</text>
 	<text name="autoreplace_replacement_txt">
 		Ersetzung:
 	</text>
-	<button name="autoreplace_save_entry" label="Eintrag speich." tool_tip="Speichert diesen Eintrag."/>
-	<button name="autoreplace_save_changes" label="Änderungen speichern" tool_tip="Speichert alle Änderungen." width="140"/>
-	<button name="autoreplace_cancel" label="Abbrechen" tool_tip="Alle Änderungen verwerfen."/>
+	<button label="Hinzufügen..." name="autoreplace_add_entry"/>
+	<button label="Entfernen" name="autoreplace_delete_entry"/>
+	<button label="Eintrag speich." name="autoreplace_save_entry" tool_tip="Diesen Eintrag speichern."/>
+	<button label="Änderungen speichern" name="autoreplace_save_changes" tool_tip="Alle Änderungen speichern." width="140"/>
+	<button label="Abbrechen" name="autoreplace_cancel" tool_tip="Alle Änderungen löschen."/>
 </floater>
+<!--
+  <text 
+   top_pad="10"
+   left="10"
+   height="16"
+   width="260"
+   follows="left|top"
+   halign="center"
+   mouse_opaque="true"
+   name="autoreplace_text2">
+    Entries
+  </text>
+-->

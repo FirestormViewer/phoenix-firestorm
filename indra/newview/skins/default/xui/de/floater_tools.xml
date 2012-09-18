@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="toolbox floater" short_title="BAU-WERKZEUGE" title="">
+<floater name="toolbox floater" short_title="Bau-Werkzeuge" title="">
 	<floater.string name="grid_screen_text">
 		Bildschirm
 	</floater.string>
@@ -173,10 +173,10 @@
 				Sie können diese Objekte nicht bearbeiten.
 			</panel.string>
 			<panel.string name="text modify info 5">
-				Sie können das Objekt nicht über Regionsgrenzen bearbeiten.
+				Dieses Objekt kann nicht über eine Regionsgrenze hinweg geändert werden.
 			</panel.string>
 			<panel.string name="text modify info 6">
-				Sie können diese Objekte nicht über Regionsgrenzen bearbeiten.
+				Diese Objekte können nicht über eine Regionsgrenze hinweg geändert werden.
 			</panel.string>
 			<panel.string name="text modify warning">
 				Ganzes Objekt wählen um Rechte festzulegen.

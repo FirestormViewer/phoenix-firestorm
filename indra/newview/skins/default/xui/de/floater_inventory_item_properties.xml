@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="item properties" title="EIGENSCHAFTEN: INVENTAROBJEKT">
+<floater name="item properties" title="Eigenschaften: Inventarobjekt">
 	<floater.string name="unknown">
 		(unbekannt)
 	</floater.string>

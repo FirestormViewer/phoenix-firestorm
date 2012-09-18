@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_auction" title="LINDEN LAND VERKAUF STARTEN">
+<floater name="floater_auction" title="Linden-Land-Verkauf starten">
 	<floater.string name="already for sale">
 		Parzellen, die bereits zum Verkauf stehen, können nicht auktioniert werden.
 	</floater.string>

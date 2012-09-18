@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="BeamCreator" title="AUSWAHLSTRAHL-FORM-EDITOR">
+<floater name="BeamCreator" title="Auswahlstrahl-Formeditor">
 	<text name="beamcreator_text">
 Um einen neuen Auswahlstrahl zu erstellen, mit der
 linken Maustaste klicken um ein Punkt mit der
