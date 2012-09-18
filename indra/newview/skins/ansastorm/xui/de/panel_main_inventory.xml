@@ -90,9 +90,9 @@
 		<combo_box.item value="filter_type_custom" label="Benutzerdefiniert..." />
 	</combo_box>
 	<tab_container name="inventory filter tabs">
-		<inventory_panel label="INVENTAR" name="All Items"/>
-		<recent_inventory_panel label="AKTUELL" name="Recent Items"/>
-		<worn_inventory_panel label="ANGEZOGEN" name="Worn Items"/>		
+		<inventory_panel label="Inventar" name="All Items"/>
+		<recent_inventory_panel label="Aktuell" name="Recent Items"/>
+		<worn_inventory_panel label="Angezogen" name="Worn Items"/>		
 	</tab_container>
 	<panel name="bottom_panel">
 		<panel name="options_gear_btn_panel">

@@ -43,20 +43,20 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
-	<string name="avatar_name_count" value="NAME [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<filter_editor label="Filter" name="filter_input"/>
 	<tab_container name="tabs">
-		<panel label="IN DER NÄHE" name="nearby_panel">
+		<panel label="In der Nähe" name="nearby_panel">
 			<layout_stack name="radar_ls">
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
-						<radar_list.columns label="NAME" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
+						<radar_list.columns label="Name" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
 						<radar_list.columns label="" tool_tip="Spricht via Voice" name="voice_level"/>
 						<radar_list.columns label="" tool_tip="Ist in derselben Region" name="in_region"/>
 						<radar_list.columns label="" tool_tip="Hat Zahlungsinformationen hinterlegt" name="flags"/>
-						<radar_list.columns label="ALT." name="age"/>
-						<radar_list.columns label="ZEIT" name="seen"/>
-						<radar_list.columns label="DIST." name="range"/>
+						<radar_list.columns label="Alt." name="age"/>
+						<radar_list.columns label="Zeit" name="seen"/>
+						<radar_list.columns label="Dist." name="range"/>
 					</radar_list>
 				</layout_panel>
 			</layout_stack>
@@ -66,7 +66,7 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<slider label="Distanz (m):" name="NearMeRange"/>
 			</panel>
 		</panel>
-		<panel label="FREUNDE" name="friends_panel">
+		<panel label="Freunde" name="friends_panel">
 			<tab_container name="friends_accordion">
 				<panel name="tab_online" title="Online"/>
 				<panel name="tab_all" title="Alle"/>
@@ -78,14 +78,14 @@ Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
 				<dnd_button name="del_btn" tool_tip="Ausgewählte Person aus Ihrer Freundesliste entfernen"/>
 			</panel>
 		</panel>
-		<panel label="GRUPPEN" name="groups_panel">
+		<panel label="Gruppen" name="groups_panel">
 			<panel label="bottom_panel" name="bottom_panel_groups">
 				<menu_button name="groups_viewsort_btn" tool_tip="Optionen"/>
 				<button name="plus_btn" tool_tip="Gruppe beitreten/Neue Gruppe erstellen"/>
 				<button name="activate_btn" tool_tip="Ausgewählte Gruppe aktivieren"/>
 			</panel>
 		</panel>
-		<panel label="AKTUELL" name="recent_panel">
+		<panel label="Aktuell" name="recent_panel">
 			<panel label="bottom_panel" name="bottom_panel_recent">
 				<menu_button name="recent_viewsort_btn" tool_tip="Optionen"/>
 				<button name="add_friend_btn_recent" tool_tip="Ausgewählten Einwohner zur Freundeliste hinzufügen"/>
