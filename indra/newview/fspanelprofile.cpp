@@ -1825,11 +1825,13 @@ void FSPanelAvatarNotes::onOpen(const LLSD& key)
 
 void FSPanelAvatarNotes::apply()
 {
-    if (getIsLoaded())
-    {
+	// Ansariel: This check is too early! The notes text editor
+	//           commits on focus lost!!!
+    //if (getIsLoaded())
+    //{
         //likely overkill
         onCommitNotes();
-    }
+    //}
 }
 
 void FSPanelAvatarNotes::fillRightsData()
@@ -1854,8 +1856,11 @@ void FSPanelAvatarNotes::fillRightsData()
 
 void FSPanelAvatarNotes::onCommitNotes()
 {
-	std::string notes = mNotesEditor->getValue().asString();
-	LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(),notes);
+	if (getIsLoaded())
+	{
+		std::string notes = mNotesEditor->getValue().asString();
+		LLAvatarPropertiesProcessor::getInstance()->sendNotes(getAvatarId(),notes);
+	}
 }
 
 void FSPanelAvatarNotes::rightsConfirmationCallback(const LLSD& notification,
