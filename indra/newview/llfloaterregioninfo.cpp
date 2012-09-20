@@ -1709,7 +1709,10 @@ void LLPanelEstateInfo::accessAddCore3(const uuid_vec_t& ids, void* data)
 			LLSD args;
 			args["NUM_ADDED"] = llformat("%d",ids.size());
 			args["MAX_AGENTS"] = llformat("%d",ESTATE_MAX_ACCESS_IDS);
-			args["LIST_TYPE"] = "Allowed Residents";
+			// <FS:Ansariel> Fixed unlocalizable strings
+			//args["LIST_TYPE"] = "Allowed Residents";
+			args["LIST_TYPE"] = LLTrans::getString("RegionInfoListTypeAllowedAgents");
+			// </FS:Ansariel>
 			args["NUM_EXCESS"] = llformat("%d",(ids.size()+currentCount)-ESTATE_MAX_ACCESS_IDS);
 			LLNotificationsUtil::add("MaxAgentOnRegionBatch", args);
 			delete change_info;
@@ -1725,7 +1728,10 @@ void LLPanelEstateInfo::accessAddCore3(const uuid_vec_t& ids, void* data)
 			LLSD args;
 			args["NUM_ADDED"] = llformat("%d",ids.size());
 			args["MAX_AGENTS"] = llformat("%d",ESTATE_MAX_ACCESS_IDS);
-			args["LIST_TYPE"] = "Banned Residents";
+			// <FS:Ansariel> Fixed unlocalizable strings
+			//args["LIST_TYPE"] = "Banned Residents";
+			args["LIST_TYPE"] = LLTrans::getString("RegionInfoListTypeBannedAgents");
+			// </FS:Ansariel>
 			args["NUM_EXCESS"] = llformat("%d",(ids.size()+currentCount)-ESTATE_MAX_ACCESS_IDS);
 			LLNotificationsUtil::add("MaxAgentOnRegionBatch", args);
 			delete change_info;

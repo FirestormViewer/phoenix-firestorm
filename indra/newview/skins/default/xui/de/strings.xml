@@ -1891,6 +1891,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="RegionInfoBannedResidents">
 		Verbannte Einwohner: ([BANNEDAGENTS], max [MAXBANNED])
 	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		zulässige Einwohner
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		verbannte Einwohner
+	</string>
 	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parzellenskript-Speicher

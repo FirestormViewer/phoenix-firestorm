@@ -2555,6 +2555,8 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 	<!-- FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="RegionInfoEstateManagers">Estate Managers: ([ESTATEMANAGERS], max [MAXMANAGERS])</string>
 	<string name="RegionInfoBannedResidents">Banned Residents: ([BANNEDAGENTS], max [MAXBANNED])</string>
+	<string name="RegionInfoListTypeAllowedAgents">Allowed Residents</string>
+	<string name="RegionInfoListTypeBannedAgents">Banned Residents</string>
 	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	
 	<!-- script limits floater -->
