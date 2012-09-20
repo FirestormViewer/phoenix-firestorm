@@ -199,7 +199,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mID(id),
 	mLocalID(0),
 	mTotalCRC(0),
-	mListIndex(-1),
 	mTEImages(NULL),
 	mGLName(0),
 	mbCanSelect(TRUE),
@@ -236,6 +235,8 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mNumFaces(0),
 	mTimeDilation(1.f),
 	mRotTime(0.f),
+	mAngularVelocityRot(),
+	mPreviousRotation(),
 	mJointInfo(NULL),
 	mState(0),
 	mMedia(NULL),
@@ -266,6 +267,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	{
 		mPositionAgent = mRegionp->getOriginAgent();
 	}
+	resetRot();
 
 	LLViewerObject::sNumObjects++;
 }
@@ -1432,9 +1434,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 #else
 					val = (U16 *) &data[count];
 #endif
-					setAngularVelocity(	U16_to_F32(val[VX], -size, size),
-										U16_to_F32(val[VY], -size, size),
-										U16_to_F32(val[VZ], -size, size));
+					new_angv.set(U16_to_F32(val[VX], -size, size),
+						U16_to_F32(val[VY], -size, size),
+						U16_to_F32(val[VZ], -size, size));
+					setAngularVelocity(new_angv);
 					break;
 
 				case 16:
@@ -1458,9 +1461,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					new_rot.mQ[VZ] = U8_to_F32(data[11], -1.f, 1.f);
 					new_rot.mQ[VW] = U8_to_F32(data[12], -1.f, 1.f);
 
-					setAngularVelocity(	U8_to_F32(data[13], -size, size),
-										U8_to_F32(data[14], -size, size),
-										U8_to_F32(data[15], -size, size) );
+					new_angv.set(U8_to_F32(data[13], -size, size),
+						U8_to_F32(data[14], -size, size),
+						U8_to_F32(data[15], -size, size));
+					setAngularVelocity(new_angv);
 					break;
 				}
 
@@ -1532,9 +1536,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				dp->unpackU16(val[VX], "AccX");
 				dp->unpackU16(val[VY], "AccY");
 				dp->unpackU16(val[VZ], "AccZ");
-				setAngularVelocity(	U16_to_F32(val[VX], -64.f, 64.f),
-									U16_to_F32(val[VY], -64.f, 64.f),
-									U16_to_F32(val[VZ], -64.f, 64.f));
+				new_angv.set(U16_to_F32(val[VX], -64.f, 64.f),
+				             U16_to_F32(val[VY], -64.f, 64.f),
+				             U16_to_F32(val[VZ], -64.f, 64.f));
+				setAngularVelocity(new_angv);
 			}
 			break;
 			case OUT_FULL_COMPRESSED:
@@ -1578,8 +1583,8 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 
 				if (value & 0x80)
 				{
-					dp->unpackVector3(vec, "Omega");
-					setAngularVelocity(vec);
+					dp->unpackVector3(new_angv, "Omega");
+					setAngularVelocity(new_angv);
 				}
 
 				if (value & 0x20)
@@ -2068,17 +2073,31 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		}
 	}
 
-	if (new_rot != getRotation()
-		|| new_angv != old_angv)
+	if ((new_rot != getRotation())
+		|| (new_angv != old_angv))
 	{
-		if (new_rot != getRotation())
+		if (new_rot != mPreviousRotation)
 		{
-			setRotation(new_rot);
+			resetRot();
 		}
-		
+		else if (new_angv != old_angv)
+		{
+			if (flagUsePhysics() || new_angv.isExactlyZero())
+			{
+				resetRot();
+			}
+			else
+			{
+				resetRotTime();
+			}
+		}
+
+		// Remember the last rotation value
+		mPreviousRotation = new_rot;
+
+		// Set the rotation of the object followed by adjusting for the accumulated angular velocity (llSetTargetOmega)
+		setRotation(new_rot * mAngularVelocityRot);
 		setChanged(ROTATED | SILHOUETTE);
-		
-		resetRot();
 	}
 
 
@@ -2171,8 +2190,8 @@ BOOL LLViewerObject::isActive() const
 
 BOOL LLViewerObject::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 {
-	//static LLFastTimer::DeclareTimer ftm("Viewer Object");
-	//LLFastTimer t(ftm);
+	static LLFastTimer::DeclareTimer ftm("Viewer Object");
+	LLFastTimer t(ftm);
 
 	if (mDead)
 	{
@@ -4173,7 +4192,7 @@ S32 LLViewerObject::setTETextureCore(const U8 te, const LLUUID& uuid, LLHost hos
 	return retval;
 }
 
-
+//virtual
 void LLViewerObject::changeTEImage(S32 index, LLViewerTexture* new_image) 
 {
 	if(index < 0 || index >= getNumTEs())
@@ -4792,11 +4811,9 @@ void LLViewerObject::deleteParticleSource()
 // virtual
 void LLViewerObject::updateDrawable(BOOL force_damped)
 {
-	if (!isChanged(MOVED))
-	{ //most common case, having an empty if case here makes for better branch prediction
-	}
-	else if (mDrawable.notNull() && 
-		!mDrawable->isState(LLDrawable::ON_MOVE_LIST))
+	if (mDrawable.notNull() && 
+		!mDrawable->isState(LLDrawable::ON_MOVE_LIST) &&
+		isChanged(MOVED))
 	{
 		BOOL damped_motion = 
 			!isChanged(SHIFTED) &&										// not shifted between regions this frame and...
@@ -5533,16 +5550,29 @@ void LLViewerObject::applyAngularVelocity(F32 dt)
 
 		ang_vel *= 1.f/omega;
 		
+		// calculate the delta increment based on the object's angular velocity
 		dQ.setQuat(angle, ang_vel);
+
+		// accumulate the angular velocity rotations to re-apply in the case of an object update
+		mAngularVelocityRot *= dQ;
 		
+		// Just apply the delta increment to the current rotation
 		setRotation(getRotation()*dQ);
 		setChanged(MOVED | SILHOUETTE);
 	}
 }
 
-void LLViewerObject::resetRot()
+void LLViewerObject::resetRotTime()
 {
 	mRotTime = 0.0f;
+}
+
+void LLViewerObject::resetRot()
+{
+	resetRotTime();
+
+	// Reset the accumulated angular velocity rotation
+	mAngularVelocityRot.loadIdentity(); 
 }
 
 U32 LLViewerObject::getPartitionType() const
