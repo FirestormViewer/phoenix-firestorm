@@ -561,16 +561,9 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 			else if(command == std::string(sFSCmdLineBandwidth))
 			{
 				S32 band_width;
-                if(i >> band_width) 
+                if (i >> band_width)
                 {
-                    if ( band_width < 100 )
-					{
-						band_width = 100;
-					}
-					else if (band_width > 3000 )
-					{
-						band_width = 3000;
-					}
+					band_width = llclamp(band_width, 50, 3000);
 					gSavedSettings.setF32("ThrottleBandwidthKBPS", band_width);
 					LLStringUtil::format_map_t args;
 					std::string bw_cmd_respond;
