@@ -8,6 +8,7 @@
     <string name="blocked_sendim">*** IM zablokowana przez Przeglądarkę nadawcy</string>
     <string name="blocked_generic">Nie można tego zrobić ze względu na ograniczenia RLV</string>
     <string name="blocked_permattach">Założenie '[OBJECT]' zostało anulowane ze względu na ograniczenia RLV</string>
+    <string name="blocked_permteleport">Teleportacja poprzez obiekt '[OBJECT]' nie powiodła się ze względu na ograniczenia RLV</string>
     <string name="blocked_startim">Nie można rozpocząć sesji IM z [RECIPIENT] ze względu na ograniczenia RLV</string>
     <string name="blocked_startconf">Nie można rozpocząć konferencji z [RECIPIENT] ze względu na ograniczenia RLV</string>
     <string name="blocked_teleport">Nie można teleportować ze względu na ograniczenia RLV</string>

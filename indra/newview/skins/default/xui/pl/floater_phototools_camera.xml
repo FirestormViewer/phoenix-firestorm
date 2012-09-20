@@ -125,7 +125,7 @@
 			<panel name="P_3D_Mouse_Settings2">
 				<spinner label="Kalibrowanie powiększenia" name="JoystickAxis6" tool_tip="Kontroluje, do której osi myszy jest przypisana funkcja powiększania (z którym zestawem)."/>
 				<check_box label="Włącz mysz 3D" tool_tip="Włącza mysz 3D." name="enable_joystick"/>
-				<check_box name="CB_Zoom_Control" label="Kontrola powiększania (zobacz chmurkę)" tool_tip="Aby kotrolka do zmiany powiększania działała musisz ustawić 'Kalibrowanie powiększenia' ponad '4'."/>
+				<check_box name="CB_Zoom_Control" label="Kontrola powiększania (zobacz chmurkę)" tool_tip="Aby kontrolka do zmiany powiększania działała musisz ustawić 'Kalibrowanie powiększenia' ponad '4'."/>
 				<check_box name="CB_Auto_Leveling" label="Autopoziom (zapobiega obrotom kamery)"/>
 				<check_box name="CB_3D_Mouse_Avatar" label="Użyj myszy 3D, aby poruszać awatarem"/>
 				<check_box name="CB_3D_Mouse_Build" label="... aby poruszać obiektami (budowanie)" tool_tip="Użyj myszy 3D, aby poruszać obiektami podczas budowania i edytowania."/>

@@ -1851,6 +1851,12 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="RegionInfoAllowedGroups">
 		Dozwolone Grupy: ([ALLOWEDGROUPS], maks. [MAXACCESS])
 	</string>
+	<string name="RegionInfoEstateManagers">
+		Zarządcy Majątku: ([ESTATEMANAGERS], maks. [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Zbanowani Rezydenci: ([BANNEDAGENTS], maks. [MAXBANNED])
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Pamięć skryptów Posiadłości
 	</string>

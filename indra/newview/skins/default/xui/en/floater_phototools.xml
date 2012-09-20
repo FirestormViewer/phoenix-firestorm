@@ -2983,7 +2983,7 @@
 				 left="5"
 				 value="Tree Detail"
 				 top_pad="5"
-				 tool_tip="Controls level of detail of vegetation . Higher numbers produce greater detail."
+				 tool_tip="Controls level of detail of vegetation. Higher numbers produce greater detail."
 				 width="80"/>
 				<slider_bar
 				 name="SB_Tree_Detail"
@@ -3401,7 +3401,7 @@
 				 width="230"
 				 layout="topleft"
 				 word_wrap="true"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more.. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
+				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
 				 value="Basic Shaders  - Leave ON! (see tool tip!)"/>
 			</panel>
 		</panel>
@@ -3608,7 +3608,7 @@
 				 font="SansSerif"
 				 value="Quick Stats"
 				 top_pad=""
-				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking thier labels."
+				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking their labels."
 				 width="200"/>	
 			</panel>
 			
@@ -4401,7 +4401,7 @@
 							 left="10"
 							 value="Zoom"
 							 top_pad="7"
-							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
+							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 							 width="100"/>
 							<slider
 							 name="SB_Zoom2"
