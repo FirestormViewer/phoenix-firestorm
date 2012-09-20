@@ -1884,6 +1884,14 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="RegionInfoAllowedGroups">
 		Zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
 	</string>
+	<!-- FS:Ansariel: Estate managers and banned residents strings -->
+	<string name="RegionInfoEstateManagers">
+		Grundbesitzverwalter: ([ESTATEMANAGERS], max [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Verbannte Einwohner: ([BANNEDAGENTS], max [MAXBANNED])
+	</string>
+	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parzellenskript-Speicher
 	</string>

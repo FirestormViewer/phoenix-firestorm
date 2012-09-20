@@ -52,7 +52,7 @@
 	<check_box label="Verweigern - Zahlungsinfo verwendet" name="deny_transacted"/>
 	<button label="Übernehmen" name="apply_btn"/>
 	<text name="estate_manager_label">
-		Grundbesitzsverwalter:
+		Grundbesitzverwalter:
 	</text>
 	<text name="allow_resident_label">
 		Zulässige Einwohner:
