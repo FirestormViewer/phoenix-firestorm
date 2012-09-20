@@ -62,6 +62,9 @@ public:
 	virtual LLTool*		getOverrideTool(MASK mask);
 
 	LLPickInfo&			getPick() { return mPick; }
+// [RLVa:KB] - Checked: 2010-03-06 (RLVa-1.2.0c) | Added: RLVa-1.2.0a
+	LLPickInfo&			getHoverPick() { return mHoverPick; }
+// [/RLVa:KB]
 	U8					getClickAction() { return mClickAction; }
 	LLViewerObject*		getClickActionObject() { return mClickActionObject; }
 	LLObjectSelection*	getLeftClickSelection() { return (LLObjectSelection*)mLeftClickSelection; }

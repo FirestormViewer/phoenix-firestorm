@@ -1661,6 +1661,9 @@ void LLUI::initClass(const settings_map_t& settings,
 	// Used by menus along with Floater.Toggle to display visibility as a check-mark
 	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.Visible", boost::bind(&LLFloaterReg::instanceVisible, _2, LLSD()));
 	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.IsOpen", boost::bind(&LLFloaterReg::instanceVisible, _2, LLSD()));
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+	LLUICtrl::EnableCallbackRegistry::defaultRegistrar().add("Floater.CanShow", boost::bind(&LLFloaterReg::canShowInstance, _2, LLSD()));
+// [/RLVa:KB]
 
 	// Parse the master list of commands
 	LLCommandManager::load();

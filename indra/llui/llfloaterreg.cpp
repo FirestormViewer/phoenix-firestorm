@@ -45,6 +45,10 @@ std::set<std::string> LLFloaterReg::sAlwaysShowableList;
 
 static LLFloaterRegListener sFloaterRegListener;
 
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+LLFloaterReg::validate_signal_t LLFloaterReg::mValidateSignal;
+// [/RLVa:KB]
+
 //*******************************************************
 
 //static
@@ -240,12 +244,23 @@ LLFloaterReg::const_instance_list_t& LLFloaterReg::getFloaterList(const std::str
 
 // Visibility Management
 
+// [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5
+//static
+bool LLFloaterReg::canShowInstance(const std::string& name, const LLSD& key)
+{
+	return mValidateSignal(name, key);
+}
+// [/RLVa:KB]
+
 //static
 LLFloater* LLFloaterReg::showInstance(const std::string& name, const LLSD& key, BOOL focus) 
 {
-	if( sBlockShowFloaters
-			// see EXT-7090
-			&& sAlwaysShowableList.find(name) == sAlwaysShowableList.end())
+//	if( sBlockShowFloaters
+//			// see EXT-7090
+//			&& sAlwaysShowableList.find(name) == sAlwaysShowableList.end())
+// [RLVa:KB] - Checked: 2010-02-28 (RLVa-1.4.0a) | Modified: RLVa-1.2.0a
+	if ( (sBlockShowFloaters && sAlwaysShowableList.find(name) == sAlwaysShowableList.end()) || (!mValidateSignal(name, key)) )
+// [/RLVa:KB]
 		return 0;//
 	LLFloater* instance = getInstance(name, key); 
 	if (instance) 
@@ -496,8 +511,16 @@ void LLFloaterReg::toggleInstanceOrBringToFront(const LLSD& sdname, const LLSD& 
 	}
 	else if (!instance->isShown())
 	{
-		instance->openFloater(key);
-		instance->setVisibleAndFrontmost();
+// [RLVa:KB] - Checked: 2011-12-17 (RLVa-1.4.5a) | Added: RLVa-1.4.5a
+		// [See LLFloaterReg::showInstance()]
+		if ( ((!sBlockShowFloaters) || (sAlwaysShowableList.find(name) != sAlwaysShowableList.end())) && (mValidateSignal(name, key)) )
+		{
+			instance->openFloater(key);
+			instance->setVisibleAndFrontmost();
+		}
+// [/RLVa:KB]
+//		instance->openFloater(key);
+//		instance->setVisibleAndFrontmost();
 	}
 	else if (!instance->isFrontmost())
 	{

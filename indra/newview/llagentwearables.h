@@ -93,6 +93,10 @@ public:
 	// Accessors
 	//--------------------------------------------------------------------
 public:
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+	void				getWearableItemIDs(uuid_vec_t& idItems) const;
+	void				getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const;
+// [/RLVa:KB]
 	const LLUUID		getWearableItemID(LLWearableType::EType type, U32 index /*= 0*/) const;
 	const LLUUID		getWearableAssetID(LLWearableType::EType type, U32 index /*= 0*/) const;
 	const LLWearable*	getWearableFromItemID(const LLUUID& item_id) const;
@@ -211,8 +215,8 @@ public:
 	// Static UI hooks
 	//--------------------------------------------------------------------
 public:
-	static void		userRemoveWearable(const LLWearableType::EType &type, const U32 &index);
-	static void		userRemoveWearablesOfType(const LLWearableType::EType &type);
+//	static void		userRemoveWearable(const LLWearableType::EType &type, const U32 &index);
+//	static void		userRemoveWearablesOfType(const LLWearableType::EType &type);
 	
 	typedef std::vector<LLViewerObject*> llvo_vec_t;
 

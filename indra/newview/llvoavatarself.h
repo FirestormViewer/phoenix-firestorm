@@ -305,14 +305,25 @@ public:
 	void				addAttachmentRequest(const LLUUID& inv_item_id);
 	void				removeAttachmentRequest(const LLUUID& inv_item_id);
 	LLViewerObject* 	getWornAttachment(const LLUUID& inv_item_id);
+// [RLVa:KB] - Checked: 2009-12-18 (RLVa-1.1.0i) | Added: RLVa-1.1.0i
+	LLViewerJointAttachment* getWornAttachmentPoint(const LLUUID& inv_item_id) const;
+// [/RLVa:KB]
 	const std::string   getAttachedPointName(const LLUUID& inv_item_id) const;
 	/*virtual*/ const LLViewerJointAttachment *attachObject(LLViewerObject *viewer_object);
 	/*virtual*/ BOOL 	detachObject(LLViewerObject *viewer_object);
 	static BOOL			detachAttachmentIntoInventory(const LLUUID& item_id);
 
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	enum EAttachAction { ACTION_ATTACH, ACTION_DETACH };
+	typedef boost::signals2::signal<void (LLViewerObject*, const LLViewerJointAttachment*, EAttachAction)> attachment_signal_t;
+	boost::signals2::connection setAttachmentCallback(const attachment_signal_t::slot_type& cb);
+// [/RLVa:KB]
 private:
 	// Track attachments that have been requested but have not arrived yet.
 	mutable std::map<LLUUID,LLTimer> mAttachmentRequests;
+// [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
+	attachment_signal_t* mAttachmentSignal;
+// [/RLVa:KB]
 
 	//--------------------------------------------------------------------
 	// HUDs
