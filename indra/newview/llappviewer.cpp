@@ -89,6 +89,7 @@
 #include "lllogininstance.h"
 #include "llprogressview.h"
 #include "llvocache.h"
+#include "llvopartgroup.h"
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -725,6 +726,9 @@ bool LLAppViewer::init()
 
 	// initialize SSE options
 	LLVector4a::initClass();
+
+	//initialize particle index pool
+	LLVOPartGroup::initClass();
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
