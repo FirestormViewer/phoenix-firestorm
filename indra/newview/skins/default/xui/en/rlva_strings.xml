@@ -14,6 +14,7 @@
     <!-- Shown as notifications -->
     <string name="blocked_generic">Unable to perform action due to RLV restrictions</string>
     <string name="blocked_permattach">Attempt to attach '[OBJECT]' was denied due to RLV restrictions</string>
+    <string name="blocked_permteleport">'[OBJECT]' was denied permission to teleport you due to RLV restrictions</string>
     <string name="blocked_startim">Unable to start IM session with [RECIPIENT] due to RLV restrictions</string>
     <string name="blocked_startconf">Unable to start conference with [RECIPIENT] due to RLV restrictions</string>
     <string name="blocked_teleport">Unable to initiate teleport due to RLV restrictions</string>

@@ -87,6 +87,7 @@ public:
 	 */
 public:
 	// Accessors
+	const LLUUID&     getAgentGroup() const			{ return m_idAgentGroup; }					// @setgroup
 	bool              getCanCancelTp() const		{ return m_fCanCancelTp; }					// @accepttp and @tpto
 	void              setCanCancelTp(bool fAllow)	{ m_fCanCancelTp = fAllow; }				// @accepttp and @tpto
 	const LLVector3d& getSitSource() const						{ return m_posSitSource; }		// @standtp
@@ -213,7 +214,7 @@ protected:
 
 	bool				m_fCanCancelTp;				// @accepttp=n and @tpto=force
 	mutable LLVector3d	m_posSitSource;				// @standtp=n (mutable because onForceXXX handles are all declared as const)
-	LLUUID				m_idAgentGroup;				// @setgroup=n
+	mutable LLUUID		m_idAgentGroup;				// @setgroup=n
 
 	friend class RlvSharedRootFetcher;				// Fetcher needs access to m_fFetchComplete
 	friend class RlvGCTimer;						// Timer clear its own point at destruction
