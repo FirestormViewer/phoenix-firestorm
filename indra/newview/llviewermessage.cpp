@@ -6881,26 +6881,9 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (rlv_handler_t::isEnabled())
 		{
-			if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & questions) )
-			{
-				// Notify the user that we blocked it since they're not allowed to wear any new attachments
-				payload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
-				// If only attach is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
-				if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
-				{
-					payload["questions"] = 0;
-					LLNotifications::instance().forceResponse(
-						LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
-					return;
-				}
-				else
-				{
-					questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
-					payload["questions"] = questions;
-				}
-			}
+			RlvUtil::filterScriptQuestions(questions, payload);
 
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
+			if ( (questions) && (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION)) )
 			{
 				const LLViewerObject* pObj = gObjectList.findObject(taskid);
 				if (pObj)

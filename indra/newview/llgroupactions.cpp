@@ -248,8 +248,10 @@ void LLGroupActions::leave(const LLUUID& group_id)
 void LLGroupActions::activate(const LLUUID& group_id)
 {
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.4.1a) | Added: RLVa-1.3.0f
-	if (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP))
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SETGROUP)) && (gRlvHandler.getAgentGroup() != group_id) )
+	{
 		return;
+	}
 // [/RLVa:KB]
 
 	LLMessageSystem* msg = gMessageSystem;

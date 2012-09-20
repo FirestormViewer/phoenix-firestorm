@@ -422,6 +422,10 @@ bool RlvHandler::handleEvent(LLPointer<LLOldEvents::LLEvent> event, const LLSD& 
 		gAgent.sendReliableMessage();
 		return true;
 	}
+	else
+	{
+		m_idAgentGroup = gAgent.getGroupID();
+	}
 	return false;
 }
 
@@ -1253,15 +1257,6 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 				else
 					RlvBehaviourNotifyHandler::getInstance()->removeNotify(rlvCmd.getObjectID(), nChannel, strFilter);
 			}
-			break;
-		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
-			{
-				VERIFY_OPTION_REF(strOption.empty());
-
-				// Save the currently active group UUID since we'll need it when the user joins (or creates) a new group
-				m_idAgentGroup = gAgent.getGroupID();
-			}
-			break;
 		case RLV_BHVR_SHOWHOVERTEXT:		// @showhovertext:<uuid>=n|y		- Checked: 2010-03-27 (RLVa-1.2.0b) | Modified: RLVa-1.1.0h
 			{
 				// There should be an option and it should specify a valid UUID
@@ -1314,6 +1309,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 		case RLV_BHVR_TOUCHALL:				// @touchall=n|y					- Checked: 2011-01-21 (RLVa-1.3.0e) | Added: RLVa-1.3.0e
 		case RLV_BHVR_TOUCHME:				// @touchme=n|y						- Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
 		case RLV_BHVR_FLY:					// @fly=n|y							- Checked: 2010-03-02 (RLVa-1.2.0a)
+		case RLV_BHVR_SETGROUP:				// @setgroup=n|y					- Checked: 2011-05-22 (RLVa-1.4.1a) | Added: RLVa-1.3.1b
 		case RLV_BHVR_ALWAYSRUN:			// @alwaysrun=n|y					- Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
 		case RLV_BHVR_TEMPRUN:				// @temprun=n|y						- Checked: 2011-05-11 (RLVa-1.3.0i) | Added: RLVa-1.3.0i
 		case RLV_BHVR_UNSIT:				// @unsit=n|y						- Checked: 2009-12-05 (RLVa-1.1.0h) | Modified: RLVa-1.1.0h
@@ -1725,6 +1721,11 @@ ERlvCmdRet RlvHandler::onForceRemOutfit(const RlvCommand& rlvCmd) const
 // Checked: 2011-07-23 (RLVa-1.4.1a) | Modified: RLVa-1.4.1a
 ERlvCmdRet RlvHandler::onForceGroup(const RlvCommand& rlvCmd) const
 {
+	if (hasBehaviourExcept(RLV_BHVR_SETGROUP, rlvCmd.getObjectID()))
+	{
+		return RLV_RET_FAILED_LOCK;
+	}
+
 	LLUUID idGroup; bool fValid = false;
 	if (idGroup.set(rlvCmd.getOption()))
 	{
@@ -1739,7 +1740,10 @@ ERlvCmdRet RlvHandler::onForceGroup(const RlvCommand& rlvCmd) const
 	}
 
 	if (fValid)
+	{
+		m_idAgentGroup = idGroup;
 		LLGroupActions::activate(idGroup);
+	}
 
 	return (fValid) ? RLV_RET_SUCCESS : RLV_RET_FAILED_OPTION;
 }
