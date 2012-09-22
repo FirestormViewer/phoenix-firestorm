@@ -947,6 +947,19 @@ bool LLFloater::applyRectControl()
 	LLFloater* last_in_group = LLFloaterReg::getLastFloaterInGroup(mInstanceName);
 	if (last_in_group && last_in_group != this)
 	{
+		// <FS:Ansariel> Open other floaters in group in the stored size (this
+		//               is basically taken from the else-branch below)
+		if (!mRectControl.empty())
+		{
+			// If we have a saved rect, use it
+			const LLRect& rect = getControlGroup()->getRect(mRectControl);
+			if (rect.notEmpty() && mResizable)
+			{
+				reshape(llmax(mMinWidth, rect.getWidth()), llmax(mMinHeight, rect.getHeight()));
+			}
+		}
+		// </FS:Ansariel>
+
 		// other floaters in our group, position ourselves relative to them and don't save the rect
 		mRectControl.clear();
 		mPositioning = LLFloaterEnums::POSITIONING_CASCADE_GROUP;
