@@ -2,8 +2,8 @@
  * @file fsgrouptitles.cpp
  * @brief Group title overview and changer
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
- * Copyright (c) 2012 Ansariel Hiller
+ * $LicenseInfo:firstyear=2012&license=viewerlgpl$
+ * Copyright (c) 2012 Ansariel Hiller @ Second Life
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
