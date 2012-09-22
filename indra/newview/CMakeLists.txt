@@ -116,6 +116,7 @@ set(viewer_SOURCE_FILES
     fslslbridge.cpp
     fslslbridgerequest.cpp
 	fslslpreproc.cpp
+    fsnearbychatvoicemonitor.cpp
     fsslurlcommand.cpp
     fsfloaterprofile.cpp
     fspanelprofile.cpp
@@ -761,6 +762,7 @@ set(viewer_HEADER_FILES
     fslslbridge.h
     fslslbridgerequest.h
 	fslslpreproc.h
+    fsnearbychatvoicemonitor.h
     fsslurlcommand.h
     fsfloaterprofile.h
     fsgridhandler.h

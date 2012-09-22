@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nearby_chat_voice_monitor
+ voice_monitor_padding="5">
+	<nearby_voice_monitor
+	 name="nearby_voice_output_monitor"
+	 draw_border="false"
+	 label=""
+	 height="20"
+	 top_pad="2"
+	 right="0"
+	 layout="topleft"
+	 follows="top|right"
+	 auto_update="true"
+	 auto_hide="true"
+	 width="35" />
+</nearby_chat_voice_monitor>

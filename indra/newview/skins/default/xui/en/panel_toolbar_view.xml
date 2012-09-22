@@ -222,15 +222,15 @@
           parameter="nearby_chat" />
   </button>
 
-  <nearby_chat_control layout="topleft"
-                       name="default_chat_bar"
-                       height="22"
-                       left_pad="4"
-                       top="4"
-                       right="-12"
-                       follows="left|right|bottom"
-                       spellcheck="true"
-                       visible="true" />
+  <nearby_chat_voice_monitor layout="topleft"
+                             name="default_chat_bar"
+                             height="22"
+                             left_pad="4"
+                             top="4"
+                             right="-12"
+                             follows="left|right|bottom"
+                             spellcheck="true"
+                             visible="true" />
 
   <icon image_name="ChatBarHandle"
          top="2"
@@ -239,19 +239,6 @@
          height="25"
          follows="top|right"
          layout="topleft" />
-
-  <nearby_voice_monitor name="nearby_voice_output_monitor"
-          draw_border="false"
-          tool_tip="Current voice channel activity"
-          label=""
-          height="20"
-          top="4"
-          right="-10"
-          layout="topleft"
-          follows="top|right"
-          auto_update="true"
-          auto_hide="true"
-          width="40" />
 
   </layout_panel>
   <!-- The chat bar itself -->
