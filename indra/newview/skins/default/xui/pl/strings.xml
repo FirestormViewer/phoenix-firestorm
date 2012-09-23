@@ -4632,6 +4632,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Phototools_View_Label">
 		Fotograf: kamera
 	</string>
+	<string name="Command_Contact_Sets_Label">
+		Zestawy kontaktów
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4745,6 +4748,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Zaawansowane ustawienia kamery fotograficznej
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Otwiera interfejs Zestawów kontaktów (CTRL+ALT+SHIFT+C)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
