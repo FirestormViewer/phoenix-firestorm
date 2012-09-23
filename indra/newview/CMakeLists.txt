@@ -97,42 +97,43 @@ include_directories(
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
-    groupchatlistener.cpp
     ao.cpp
     aoengine.cpp
     aoset.cpp
     chatbar_as_cmdline.cpp
-    kcwlinterface.cpp
+    exoflickr.cpp
+    exoflickrauth.cpp
     exogroupmutelist.cpp
+    exopanelsnapshotflickr.cpp 
     floatermedialists.cpp
-    fscontactsfloater.cpp
     fsareasearch.cpp
-    fswsassetblacklist.cpp
-    fsfloaterwsassetblacklist.cpp
-    fsmoneytracker.cpp
+    fscontactsfloater.cpp
     fsdata.cpp
+    fsfloaterprofile.cpp
+    fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
-	fslslpreproc.cpp
+    fslslpreproc.cpp
+    fsmoneytracker.cpp
     fsnearbychatvoicemonitor.cpp
-    fsslurlcommand.cpp
-    fsfloaterprofile.cpp
+    fspanelclassified.cpp
+    fspanelprefs.cpp
     fspanelprofile.cpp
+    fspanelprofileclassifieds.cpp
     fsradarlistctrl.cpp
-	#growlmanager.cpp
+    fsslurlcommand.cpp
+    fswsassetblacklist.cpp
+    groupchatlistener.cpp
+    #growlmanager.cpp
+    kcwlinterface.cpp
+    lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
     lggbeamscolors.cpp
-    lggbeamcolormapfloater.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
-    fspanelprofileclassifieds.cpp
-    fspanelclassified.cpp
-    exopanelsnapshotflickr.cpp 
-    exoflickr.cpp
-    exoflickrauth.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -700,7 +701,6 @@ set(viewer_SOURCE_FILES
     llxmlrpclistener.cpp
     llxmlrpctransaction.cpp
     noise.cpp
-    fspanelprefs.cpp
     particleeditor.cpp
     piemenu.cpp
     pieseparator.cpp
@@ -743,44 +743,45 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
 
 # <Add FS includes below this line>
-    groupchatlistener.h
     ao.h
     aoengine.h
     aoset.h
     chatbar_as_cmdline.h
-    kcwlinterface.h
+    exoflickr.h
+    exoflickrauth.h
     exogroupmutelist.h
     floatermedialists.h
-    fscontactsfloater.h
     fsareasearch.h
-    fswsassetblacklist.h
-    fsfloaterwsassetblacklist.h
-    fsmoneytracker.h
+    fscontactsfloater.h
     fsdata.h
+    fsfloaterprofile.h
+    fsfloaterwsassetblacklist.h
+    fsgridhandler.h
     fsgrouptitles.h
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
-	fslslpreproc.h
+    fslslpreproc.h
+    fsmoneytracker.h
     fsnearbychatvoicemonitor.h
-    fsslurlcommand.h
-    fsfloaterprofile.h
-    fsgridhandler.h
+    fspanelclassified.h
+    fspanelprefs.h
     fspanelprofile.h
+    fspanelprofileclassifieds.h
     fsradarlistctrl.h
     fsslurl.h
-	#growlmanager.h
-	#growlnotifier.h
+    fsslurlcommand.h
+    fswsassetblacklist.h
+    groupchatlistener.h
+    #growlmanager.h
+    #growlnotifier.h
+    kcwlinterface.h
+    lggbeamcolormapfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
     lggbeamscolors.h
-    lggbeamcolormapfloater.h
     lggcontactsets.h
     lggcontactsetsfloater.h
-    fspanelprofileclassifieds.h
-    fspanelclassified.h
-    exoflickr.h
-    exoflickrauth.h
 
     llaccountingcostmanager.h
     llagent.h
@@ -1342,7 +1343,6 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
-    fspanelprefs.h
     particleeditor.h
     piemenu.h
     pieseparator.h
