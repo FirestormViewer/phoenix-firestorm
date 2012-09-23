@@ -5062,6 +5062,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Asset_Blacklist_Label">
 		Asset-Blacklist
 	</string>
+	<string name="Command_Phototools_Label">
+		Phototools
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Phototools-Kamera
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Kontakt-Sets
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5172,6 +5181,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Asset_Blacklist_Tooltip">
 		Öffnet die Asset-Blacklist mit einer Übersicht über alle geblockten Objekte
+	</string>
+	<string name="Command_Phototools_Tooltip">
+		Erweiterte Fotografie-Tools
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Erweiterte Kamerasteuerung für Fotografie-Tools
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Öffnet die Kontakt-Sets (Strg+Alt+Umschalt+C)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
