@@ -191,7 +191,11 @@ LLTool* LLTool::getOverrideTool(MASK mask)
 	{
 		return NULL;
 	}
-	if (gSavedSettings.getBOOL("EnableAltZoom"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (gSavedSettings.getBOOL("EnableAltZoom"))
+	static LLCachedControl<bool> enableAltZoom(gSavedSettings, "EnableAltZoom");
+	if (enableAltZoom)
+	// </FS:Ansariel>
 	{
 		if (mask & MASK_ALT)
 		{

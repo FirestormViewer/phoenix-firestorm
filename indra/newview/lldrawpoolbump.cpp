@@ -199,7 +199,11 @@ void LLDrawPoolBump::prerender()
 // static
 S32 LLDrawPoolBump::numBumpPasses()
 {
-	if (gSavedSettings.getBOOL("RenderObjectBump"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (gSavedSettings.getBOOL("RenderObjectBump"))
+	static LLCachedControl<bool> renderObjectBump(gSavedSettings, "RenderObjectBump");
+	if (renderObjectBump)
+	// </FS:Ansariel>
 	{
 		if (mVertexShaderLevel > 1)
 		{
