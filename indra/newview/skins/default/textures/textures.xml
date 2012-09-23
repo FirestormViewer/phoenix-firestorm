@@ -708,6 +708,8 @@ with the same filename but different name
   <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
   <texture name="phototools" file_name="toolbar_icons/phototools.png" preload="true" />
   <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
+  <texture name="contact_sets" file_name="toolbar_icons/contact_sets.png" preload="true" />
+  
 
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
