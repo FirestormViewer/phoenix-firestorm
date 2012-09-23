@@ -1410,6 +1410,14 @@ bool LLAppViewer::mainLoop()
 				{
 					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
 					joystick->scanJoystick();
+					// <FS:Ansariel> Chalice Yao's crouch toggle
+					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
+					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
+					if (fsCrouchToggle && fsCrouchToggleStatus)
+					{
+						gAgent.moveUp(-1);
+					}
+					// </FS:Ansariel>
 					gKeyboard->scanKeyboard();
 				}
 

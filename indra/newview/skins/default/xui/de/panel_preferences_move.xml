@@ -33,6 +33,7 @@
 			</text>
 			<check_box label="Drücken-drücken-halten, um zu rennen" name="tap_tap_hold_to_run" left_delta="-210"/>
 			<check_box label="Fliegen/Landen beim Drücken von auf/ab" name="automatic_fly" />
+			<check_box label="Kriech-Umschaltmodus aktivieren" name="crouch_toggle_mode"/>
 			<check_box label="Soundeffekte beim Teleportieren abspielen" name="PlayTeleportSound"/>
 			<check_box label="Nach einem Teleport immer fliegen" name="FSFlyAfterTeleport"/>
 			<text name="single_click_action_lbl">
