@@ -315,7 +315,8 @@ void LLIMFloater::sendMsg()
 			// TL: Allow user to send system info.
 			if(mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
 			{
-				utf8_text = FSData::getSystemInfo();
+				LLSD system_info = FSData::getSystemInfo();
+				utf8_text = system_info["Part1"].asString() + system_info["Part2"].asString();
 			}
 
 			// Truncate for transport
