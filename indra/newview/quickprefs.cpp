@@ -164,8 +164,15 @@ void FloaterQuickPrefs::onClickWaterPrev()
 	// find place of current param
 	std::map<std::string, LLWaterParamSet>::iterator mIt = param_list.find(currentParams.mName);
 
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == param_list.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
 	// if at the beginning, loop
-	if(mIt == param_list.begin()) 
+	if (mIt == param_list.begin()) 
 	{
 		std::map<std::string, LLWaterParamSet>::iterator last = param_list.end();
 		last--;
@@ -193,10 +200,17 @@ void FloaterQuickPrefs::onClickWaterNext()
 	// find place of current param
 	std::map<std::string, LLWaterParamSet>::iterator mIt = param_list.find(currentParams.mName);
 
+	// shouldn't happen unless you delete every preset but Default
+	if (mIt == param_list.end())
+	{
+		llwarns << "No more presets left!" << llendl;
+		return;
+	}
+
 	// if at the end, loop
 	std::map<std::string, LLWaterParamSet>::iterator last = param_list.end();
 	last--;
-	if(mIt == param_list.end()) 
+	if (mIt == last) 
 	{
 		mIt = param_list.begin();
 	}
