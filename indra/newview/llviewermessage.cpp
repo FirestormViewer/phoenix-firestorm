@@ -2678,6 +2678,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				gAgent.sendReliableMessage();
 			}
 
+			// <FS:Ansariel> checkfor and process reqinfo
+			if (gIMMgr->hasSession(session_id))
+			{
+				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+			}
+			// </FS:Ansariel>
+
 			// now store incoming IM in chat history
 
 			buffer = message;
