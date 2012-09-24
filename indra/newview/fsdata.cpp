@@ -648,7 +648,9 @@ std::string FSData::processRequestForInfo(LLUUID requester, std::string message,
 //static
 void FSData::sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog)
 {
-	std::string SystemInfo = getSystemInfo();
+	LLSD system_info = getSystemInfo();
+	std::string part1 = system_info["Part1"].asString();
+	std::string part2 = system_info["Part2"].asString();
 
 	pack_instant_message(
 		gMessageSystem,
@@ -657,7 +659,20 @@ void FSData::sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, 
 		gAgent.getSessionID(),
 		destination,
 		myName,
-		SystemInfo,
+		part1,
+		IM_ONLINE,
+		dialog,
+		sessionid
+		);
+	gAgent.sendReliableMessage();
+	pack_instant_message(
+		gMessageSystem,
+		gAgent.getID(),
+		FALSE,
+		gAgent.getSessionID(),
+		destination,
+		myName,
+		part2,
 		IM_ONLINE,
 		dialog,
 		sessionid
@@ -665,7 +680,7 @@ void FSData::sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, 
 	gAgent.sendReliableMessage();
 
 	gIMMgr->addMessage(gIMMgr->computeSessionID(dialog,destination),destination,myName,
-				"Information Sent: " + SystemInfo);
+				"Information Sent: " + part1 + "\n" + part2);
 }
 
 //static
@@ -704,42 +719,50 @@ void FSData::callbackReqInfo(const LLSD &notification, const LLSD &response)
 }
 
 //static
-std::string FSData::getSystemInfo()
+LLSD FSData::getSystemInfo()
 {
 	LLSD info=LLFloaterAbout::getInfo();
 
-	std::ostringstream support;
-	support <<
-		info["CHANNEL"].asString() << " " << info["VIEWER_VERSION_STR"].asString() << "\n" <<
-		"Sim: " << info["HOSTNAME"].asString() << "(" << info["HOSTIP"].asString() << ") " << info["SERVER_VERSION"].asString() << "\n" <<
-		"Packet loss: " << info["PACKETS_PCT"].asReal() << "% (" << info["PACKETS_LOST"].asReal() << "/" << info["PACKETS_IN"].asReal() << ")\n" <<
-		"CPU: " << info["CPU"].asString() << "\n" <<
-		"Memory: " << info["MEMORY_MB"].asInteger() << "\n" <<
-		"OS: " << info["OS_VERSION"].asString() << "\n" <<
-		"GPU: " << info["GRAPHICS_CARD_VENDOR"].asString() << " " << info["GRAPHICS_CARD"].asString() << "\n";
+	std::string sysinfo1("\n");
+	sysinfo1 += llformat("%s %s (%d) %s %s (%s)\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str());
+	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
+	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
+	sysinfo1 += llformat("%s\n", info["SERVER_VERSION"].asString().c_str());
 
-	if(info.has("GRAPHICS_DRIVER_VERSION"))
-		support << "Driver: " << info["GRAPHICS_DRIVER_VERSION"] << "\n";
+	std::string sysinfo2("\n");
+	sysinfo2 += llformat("CPU: %s\n", info["CPU"].asString().c_str());
+	sysinfo2 += llformat("Memory: %d MB\n", info["MEMORY_MB"].asInteger());
+	sysinfo2 += llformat("OS: %s\n", info["OS_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Graphics Card Vendor: %s\n", info["GRAPHICS_CARD_VENDOR"].asString().c_str());
+	sysinfo2 += llformat("Graphics Card: %s\n", info["GRAPHICS_CARD"].asString().c_str());
+	
+	if (info.has("GRAPHICS_DRIVER_VERSION"))
+	{
+		sysinfo2 += llformat("Graphics Card Driver Version: %s\n", info["GRAPHICS_DRIVER_VERSION"].asString().c_str());
+	}
 
-	support <<
-		"OpenGL: " << info["OPENGL_VERSION"].asString() << "\n" <<
-		"Skin: " << info["SKIN"].asString() << "(" << info["THEME"].asString() << ")\n" <<
-		"Mode: " << info["MODE"].asString() << "\n" <<
-		"Font: " << info["FONT"].asString() << "\n" <<
-		"Fontsize: " << info["FONT_SIZE"].asInteger() <<"\n" <<
-		"Font screen DPI: " << info["FONT_SCREEN_DPI"].asInteger() << "\n" <<
-		"Draw distance: " << info["DRAW_DISTANCE"].asInteger() << "\n" <<
-		"Bandwidth: " << info["BANDWIDTH"].asInteger() << "\n" <<
-		"LOD Factor: " << info["LOD"].asReal() << "\n" <<
-		"RLV: " << info["RLV_VERSION"].asString() << "\n" <<
-		"Curl: " << info ["LIBCURL_VERSION"].asString() << "\n" <<
-		"J2C: " << info["J2C_VERSION"].asString() << "\n" <<
-		"Audio: " << info["AUDIO_DRIVER_VERSION"].asString() << "\n" <<
-		"Webkit: " << info["QT_WEBKIT_VERSION"].asString() << "\n" <<
-		"Voice: " << info["VOICE_VERSION"].asString() <<
-		"Compiler: " << info["COMPILER"].asString() << " Version " << info["COMPILER_VERSION"].asInteger() << "\n"  
-		;
+	sysinfo2 += llformat("OpenGL Version: %s\n\n", info["OPENGL_VERSION"].asString().c_str());
+	sysinfo2 += llformat("libcurl Version: %s\n", info["LIBCURL_VERSION"].asString().c_str());
+	sysinfo2 += llformat("J2C Decoder Version: %s\n", info["J2C_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Audio Driver Version: %s\n", info["AUDIO_DRIVER_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Qt Webkit Version: %s\n", info["QT_WEBKIT_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Vivox Version: %s\n", info["VOICE_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Packets Lost: %.0f/%.0f (%.1f)\n\n", info["PACKETS_LOST"].asReal(), info["PACKETS_IN"].asReal(), info["PACKETS_PCT"].asReal());
 
-	return support.str();
+	sysinfo2 += llformat("RLVa: %s\n", info["RLV_VERSION"].asString().c_str());
+	sysinfo2 += llformat("Mode: %s\n", info["MODE"].asString().c_str());
+	sysinfo2 += llformat("Skin: %s (%s)\n", info["SKIN"].asString().c_str(), info["THEME"].asString().c_str());
+	sysinfo2 += llformat("Font: %s\n", info["FONT"].asString().c_str());
+	sysinfo2 += llformat("Font Size Adjustment: %d pt\n", info["FONT_SIZE"].asInteger());
+	sysinfo2 += llformat("Font Screen DPI: %d\n", info["FONT_SCREEN_DPI"].asInteger());
+	sysinfo2 += llformat("Draw Distance: %d m\n", info["DRAW_DISTANCE"].asInteger());
+	sysinfo2 += llformat("Bandwidth: %d kbit/s\n", info["BANDWIDTH"].asInteger());
+	sysinfo2 += llformat("LOD Factor: %.3f", info["LOD"].asReal());
+
+	LLSD sysinfos;
+	sysinfos["Part1"] = sysinfo1;
+	sysinfos["Part2"] = sysinfo2;
+
+	return sysinfos;
 }
 

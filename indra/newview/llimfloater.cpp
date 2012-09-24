@@ -483,8 +483,11 @@ void LLIMFloater::onHistoryButtonClicked()
 // support sysinfo button -Zi
 void LLIMFloater::onSysinfoButtonClicked()
 {
+	LLSD system_info = FSData::getSystemInfo();
 	LLSD args;
-	args["SYSINFO"] = FSData::getSystemInfo();
+	args["SYSINFO"] = system_info["Part1"].asString() + system_info["Part2"].asString();
+	args["Part1"] = system_info["Part1"];
+	args["Part2"] = system_info["Part2"];
 	LLNotificationsUtil::add("SendSysinfoToIM",args,LLSD(),boost::bind(&LLIMFloater::onSendSysinfo,this,_1,_2));
 }
 
@@ -494,15 +497,18 @@ BOOL LLIMFloater::onSendSysinfo(const LLSD& notification, const LLSD& response)
 
 	if(option==0)
 	{
-		std::string text=notification["substitutions"]["SYSINFO"];
+		std::string part1 = notification["substitutions"]["Part1"];
+		std::string part2 = notification["substitutions"]["Part2"];
 		if (mSessionInitialized)
 		{
-			LLIMModel::sendMessage(text, mSessionID,mOtherParticipantUUID,mDialog);
+			LLIMModel::sendMessage(part1, mSessionID,mOtherParticipantUUID,mDialog);
+			LLIMModel::sendMessage(part2, mSessionID,mOtherParticipantUUID,mDialog);
 		}
 		else
 		{
 			//queue up the message to send once the session is initialized
-			mQueuedMsgsForInit.append(text);
+			mQueuedMsgsForInit.append(part1);
+			mQueuedMsgsForInit.append(part2);
 		}
 		return TRUE;
 	}
