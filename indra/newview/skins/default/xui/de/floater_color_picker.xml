@@ -39,7 +39,7 @@
 		Hell.:
 	</text>
 	<check_box label="Sofort übernehmen" name="apply_immediate"/>
-	<button label="" label_selected="" name="color_pipette"/>
+	<button label="" label_selected="" name="color_pipette" left_pad="40"/>
 	<button label="Abbrechen" label_selected="Abbrechen" name="cancel_btn"/>
 	<button label="OK" label_selected="OK" name="select_btn"/>
 	<button label="Kopiere LSL" label_selected="Kopiere LSL" name="copy_lsl_btn" tool_tip="Kopiert den Farbcode in einen LSL-Farbvektor im Format &lt;r, g, b&gt;."/>
