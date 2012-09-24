@@ -2144,7 +2144,7 @@
                  function="ToggleControl"
                  parameter="ShowCrosshairs" />
             </menu_item_check>
-  <!-- <menu
+        <menu
          create_jump_keys="true"
          label="Hover Tips"
          name="Hover Tips"
@@ -2183,7 +2183,7 @@
                 <menu_item_check.on_enable
                  function="View.CheckShowHoverTips" />
             </menu_item_check>
-        </menu>-->
+        </menu>
 
         </menu>
 

@@ -79,7 +79,7 @@
          layout="topleft"
          left_delta="10"
          name="ShowHoverTips"
-         tool_tip="Set this to show hover tips on avatars and some other things - set this one first"
+         tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"
          top_pad="12"
          width="256" />
         <check_box
