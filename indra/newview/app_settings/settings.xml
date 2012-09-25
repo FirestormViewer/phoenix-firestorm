@@ -3170,7 +3170,7 @@
     <key>ChatFontSize</key>
     <map>
       <key>Comment</key>
-      <string>Size of chat text in chat floater (0 to 2, small to large)</string>
+      <string>Size of chat text in chat floater (0 to 3, small to huge)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -3181,7 +3181,7 @@
     <key>ChatConsoleFontSize</key>
     <map>
       <key>Comment</key>
-      <string>Size of chat text in chat console (0 to 2, small to large)</string>
+      <string>Size of chat text in chat console (0 to 3, small to huge)</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
