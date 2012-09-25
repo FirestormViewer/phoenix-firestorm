@@ -8,7 +8,7 @@
         <text name="HoverTipText">
             Chmurki pomocy:
         </text>
-        <check_box label="Włącz (zaznacz najpierw to)" name="ShowHoverTips" tool_tip="Zaznacz, aby pokazywać podstawowe chmurki informacyjne nad awatarami i kilkoma innymi rzeczami - zaznacz najpierw to" />
+        <check_box label="Pokaż chmurki pomocy" name="ShowHoverTips" tool_tip="Zaznacz, aby pokazywać podstawowe chmurki informacyjne nad awatarami i kilkoma innymi rzeczami - zaznacz najpierw to (CTRL+SHIFT+T)" />
         <check_box label="na wszystkich obiektach" tool_tip="Zaznacz, aby włączyć chmurki na obiektach w świecie" name="ShowAllHoverTips" />
         <check_box label="na terenie" tool_tip="Zaznacz, aby włączyć chmurki na terenie" name="ShowLandHoverTips" />
         <text name="tooltip_textbox">

@@ -244,6 +244,11 @@
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
 			<menu_item_check label="Pokaż celownik myszki" name="ShowCrosshairs"/>
+			<menu label="Chmurki pomocy" name="Hover Tips">
+				<menu_item_check label="Pokazuj chmurki pomocy" name="Show Tips"/>
+				<menu_item_check label="Pokazuj chmurki ponad terenem" name="Land Tips"/>
+				<menu_item_check label="Pokazuj chmurki dla wszystkich obiektów" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="Rodzaje renderowania" name="Rendering Types">
 			<menu_item_check label="Podstawowe" name="Rendering Type Simple"/>
