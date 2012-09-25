@@ -151,7 +151,7 @@ with the same filename but different name
   <texture name="Command_PF_Basic_Icon"     file_name="toolbar_icons/land.png"         preload="true" />
   <texture name="Command_PF_Characters_Icon" file_name="toolbar_icons/land.png"        preload="true" />
   <texture name="Command_PF_Linksets_Icon"  file_name="toolbar_icons/land.png"         preload="true" />
-  <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
+  <texture name="Command_Phototools_Icon"   file_name="toolbar_icons/phototools.png"   preload="true" />
   <texture name="Command_Picks_Icon"        file_name="toolbar_icons/picks.png"        preload="true" />
   <texture name="Command_Places_Icon"       file_name="toolbar_icons/places.png"       preload="true" />
   <texture name="Command_Preferences_Icon"  file_name="toolbar_icons/preferences.png"  preload="true" />
@@ -863,6 +863,13 @@ with the same filename but different name
   <texture name="icon_avatar_online"			file_name="icon_avatar_online.tga"		preload="false" />
   <texture name="icon_avatar_online_h"			file_name="icon_avatar_online_h.tga"                preload="false" />
   <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
+  <texture name="Console_Background" file_name="Console_Background.png"/>
+  <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
+  <texture name="phototools" file_name="toolbar_icons/phototools_fs.png" preload="true" />
+  <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
+  <!-- <exodus> inc in FS -->
+  <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
+  <!-- </exodus> inc in FS -->
 <!-- FS:Ansariel: Icons for V1 status bar -->
   <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
   <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />

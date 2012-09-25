@@ -8,7 +8,7 @@
  name="sell land"
  help_topic="sell_land"
  single_instance="true"
- title="SELL LAND"
+ title="Sell Land"
  width="313">
     <scroll_container
      color="SL-Background"
