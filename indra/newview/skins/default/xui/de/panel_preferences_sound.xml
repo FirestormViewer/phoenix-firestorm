@@ -391,6 +391,24 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Einloggen eines Freundes." name="textFSFriendOnline">
+			Einloggen Freund:
+		</text>
+		<button name="Def_UISndFriendOnline" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndFriendOnline">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Ausloggen eines Freundes." name="textFSFriendOffline">
+			Ausloggen Freund:
+		</text>
+		<button name="Def_UISndFriendOffline" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndFriendOffline">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
     </panel>
 	
 	</tab_container>
