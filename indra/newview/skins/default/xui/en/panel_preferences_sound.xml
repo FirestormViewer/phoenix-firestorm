@@ -2576,6 +2576,108 @@ Hover your mouse cursor over UUID field to show its default value.
              value="0"/>
         </combo_box>
 
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when your friend comes online."
+         name="textFSFriendOnline">
+            Friend comes online:
+        </text>
+        <line_editor
+         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFriendOnline"
+         control_name="UISndFriendOnline"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndFriendOnline"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFriendOnline"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndFriendOnline"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndFriendOnline"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when your friend goes offline."
+         name="textFSFriendOffline">
+            Friend goes offline:
+        </text>
+        <line_editor
+         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFriendOffline"
+         control_name="UISndFriendOffline"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndFriendOffline"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFriendOffline"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndFriendOffline"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndFriendOffline"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
     </panel>
 </tab_container>
 </panel>

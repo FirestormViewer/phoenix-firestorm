@@ -356,6 +356,22 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 				<combo_box.item label="Odtwórz dźwięk" name="1"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
+			<text tool_tip="UUID dźwięku odgrywany, gdy loguje się znajomy." name="textFSFriendOnline">
+				Znajomy się loguje:
+			</text>
+			<button name="Def_UISndFriendOnline" tool_tip="Resetuj do domyślnego UUID."/>
+			<combo_box name="PlayModeUISndFriendOnline">
+				<combo_box.item label="Odtwórz dźwięk" name="1"/>
+				<combo_box.item label="Wycisz dźwięk" name="0"/>
+			</combo_box>
+			<text tool_tip="UUID dźwięku odgrywany, gdy wylogowywuje się znajomy." name="textFSFriendOffline">
+				Znajomy się wylogowywuje:
+			</text>
+			<button name="Def_UISndFriendOffline" tool_tip="Resetuj do domyślnego UUID."/>
+			<combo_box name="PlayModeUISndFriendOffline">
+				<combo_box.item label="Odtwórz dźwięk" name="1"/>
+				<combo_box.item label="Wycisz dźwięk" name="0"/>
+			</combo_box>
 		</panel>
 	</tab_container>
 </panel>

@@ -25,6 +25,11 @@
 		<check_box label="W tostach" name="friends_online_notify_checkbox"/>
 		<check_box name="OnlineOfflinetoNearbyChat" label="W czacie lokalnym i konsoli"/>
 		<check_box label="Tylko w czacie lokalnym" name="OnlineOfflinetoNearbyChatHistory"/>
+		<text name="friends_logon_sounds_label">
+			Odtwórz dźwięk gdy moi znajomi:
+		</text>
+		<check_box label="Logują się" name="friends_notify_online_sound"/>
+		<check_box label="Wylogowywują się" name="friends_notify_offline_sound"/>
 	</panel>
 	<panel label="Ostrzeżenia" name="tab-alerts">
 		<text name="show_label">

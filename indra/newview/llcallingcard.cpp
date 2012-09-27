@@ -673,6 +673,7 @@ void LLAvatarTracker::processOnlineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOnlineNotification()" << llendl;
 	instance().processNotify(msg, true);
+	make_ui_sound("UISndFriendOnline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 // 	static
@@ -680,6 +681,7 @@ void LLAvatarTracker::processOfflineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOfflineNotification()" << llendl;
 	instance().processNotify(msg, false);
+	make_ui_sound("UISndFriendOffline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 void LLAvatarTracker::processChange(LLMessageSystem* msg)
