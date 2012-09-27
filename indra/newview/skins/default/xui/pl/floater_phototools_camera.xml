@@ -55,6 +55,8 @@
 					<button name="presets_btn" tool_tip="Widoki i tryby kamery"/>
 					<button name="pan_btn" tool_tip="Obróć, przybliż, panoramuj"/>
 					<button name="avatarview_btn" tool_tip="Tryby kamery"/>
+					<button name="store_camera_view_btn" tool_tip="Przechowaj aktualny widok kamery"/>
+					<button name="load_camera_view_btn" tool_tip="Załaduj przechowywany widok kamery"/>
 				</panel>
 			</panel>
 			<panel name="P_Cam_Mov_Settings">
