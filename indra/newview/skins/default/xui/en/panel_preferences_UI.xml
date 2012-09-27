@@ -750,6 +750,10 @@
              label="Roboto"
              name="tt_item6"
              value="fonts_roboto.xml" />
+			<combo_box.item
+             label="OpenDyslexia"
+             name="tt_item6"
+             value="fonts_dyslexia.xml" />
         </combo_box>
         <text
          name="tooltip_textbox2"
