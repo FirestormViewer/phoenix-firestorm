@@ -10149,4 +10149,9 @@ void initialize_menus()
 	commit.add("World.RebakeRegion", boost::bind(&handle_rebake_region));
 	enable.add("World.RebakeRegion", boost::bind(&enable_rebake_region));
 	// </FS:Zi>
+
+	// <FS:Ansariel> FIRE-7758: Save/load camera position
+	commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
+	commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
+	// </FS:Ansariel>
 }

@@ -262,7 +262,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left="47"
+					 left="21"
 					 is_toggle="true"
 					 image_overlay="Cam_Avatar_Off"
 					 image_selected="PushButton_Selected_Press"
@@ -275,7 +275,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left_pad="50"
+					 left_pad="25"
 					 top_delta="0"
 					 is_toggle="true"
 					 image_overlay="PanOrbit_Off"
@@ -288,7 +288,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left_pad="50"
+					 left_pad="25"
 					 top_delta="0"
 					 image_overlay="Cam_FreeCam_Off"
 					 image_selected="PushButton_Selected_Press"
@@ -296,6 +296,36 @@
 					 tab_stop="false"
 					 tool_tip="Camera modes"
 					 width="25"/>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Store_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="store_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Store current camera view"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.StoreView"/>
+					</button>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Load_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="load_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Load stored camera view"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.LoadView"/>
+					</button>
 				</panel>
 			</panel>
 

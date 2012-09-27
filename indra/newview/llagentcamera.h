@@ -389,6 +389,17 @@ private:
  **                                                                            **
  *******************************************************************************/
 
+// <FS:Ansariel> FIRE-7758: Save/load camera position
+public:
+	void			storeCameraPosition();
+	void			loadCameraPosition();
+
+private:
+	LLVector3d					mStoredCameraPos;
+	LLVector3d					mStoredCameraFocus;
+	LLPointer<LLViewerObject>	mStoredCameraFocusObject;
+	bool						mHasStoredCameraPos;
+// </FS:Ansariel>
 };
 
 extern LLAgentCamera gAgentCamera;

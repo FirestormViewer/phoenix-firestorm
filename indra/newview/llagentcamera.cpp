@@ -178,6 +178,13 @@ LLAgentCamera::LLAgentCamera() :
 	mPanInKey(0.f),
 	mPanOutKey(0.f),
 
+	// <FS:Ansariel> FIRE-7758: Save/load camera position
+	mStoredCameraPos(),
+	mStoredCameraFocus(),
+	mStoredCameraFocusObject(NULL),
+	mHasStoredCameraPos(false),
+	// </FS:Ansariel>
+
 	mPointAtObject(NULL)
 {
 	mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
@@ -2874,6 +2881,29 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 	return 0;
 }
 
+// <FS:Ansariel> FIRE-7758: Save/load camera position
+void LLAgentCamera::storeCameraPosition()
+{
+	mStoredCameraPos = getCameraPositionGlobal();
+	mStoredCameraFocus = getFocusTargetGlobal();
+	mStoredCameraFocusObject = getFocusObject();
+	mHasStoredCameraPos = true;
+}
+
+void LLAgentCamera::loadCameraPosition()
+{
+	if (mHasStoredCameraPos)
+	{
+		unlockView();
+		LLUUID focus_object_id;
+		if (mStoredCameraFocusObject)
+		{
+			focus_object_id = mStoredCameraFocusObject->getID();
+		}
+		setCameraPosAndFocusGlobal(mStoredCameraPos, mStoredCameraFocus, focus_object_id);
+	}
+}
+// </FS:Ansariel
 
 // EOF
 
