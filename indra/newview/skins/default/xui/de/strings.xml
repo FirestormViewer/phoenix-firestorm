@@ -5071,6 +5071,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Contact_Sets_Label">
 		Kontakt-Sets
 	</string>
+	<string name="Command_Mouselook_Label">
+		Mouselook-Modus
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5190,6 +5193,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
 		Öffnet die Kontakt-Sets (Strg+Alt+Umschalt+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Mouselook-Modus aktivieren (M)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
