@@ -80,6 +80,8 @@
 #include "llsdutil_math.h"
 #include "llregionhandle.h"
 
+#include "llworld.h" // <FS:Ansariel> For FIRE-1292
+
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
 static std::string OWNER_GROUP 		= "2";
@@ -1630,6 +1632,21 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		self->mFirstReply = FALSE;
 	}
 
+	// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
+	//               ParcelObjectOwnersReply message is broken and always returns offline!
+	std::vector<LLVector3d> positions;
+	std::vector<LLUUID> avatar_ids;
+	LLUUID own_region_id;
+
+	LLViewerRegion* own_region = gAgent.getRegion();
+	if (own_region)
+	{
+		own_region_id = own_region->getRegionID();
+	}
+
+	LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), 8192.f);
+	// </FS:Ansariel>
+
 	for(S32 i = 0; i < rows; ++i)
 	{
 		msg->getUUIDFast(_PREHASH_Data, _PREHASH_OwnerID,		owner_id,		i);
@@ -1644,6 +1661,23 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		{
 			continue;
 		}
+
+		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
+		//               ParcelObjectOwnersReply message is broken and always returns offline!
+		is_online = FALSE;
+		for (U32 i = 0; i < avatar_ids.size(); i++)
+		{
+			if (avatar_ids[i] == owner_id)
+			{
+				LLViewerRegion* avatar_region = LLWorld::getInstance()->getRegionFromPosGlobal(positions[i]);
+				if (avatar_region && avatar_region->getRegionID() == own_region_id)
+				{
+					is_online = TRUE;
+				}
+				break;
+			}
+		}
+		// </FS:Ansariel>
 
 		LLNameListCtrl::NameItem item_params;
 		item_params.value = owner_id;
