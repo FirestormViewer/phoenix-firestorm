@@ -420,5 +420,15 @@
            is_running_function="Floater.IsOpen"
            is_running_parameters="contactsets"
            />
+		   
+  <command name="mouselook_view"
+           available_in_toybox="true"
+           icon="mouselook"
+           label_ref="Command_Mouselook_Label"
+           tooltip_ref="Command_Mouselook_Tooltip"
+           execute_function="View.Mouselook"
+           is_enabled_function="View.EnableMouselook"
+           />
+		   
 
 </commands>

@@ -3995,6 +3995,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Phototools_Label">Phototools</string>
   <string name="Command_Phototools_View_Label">Phototools camera</string>
   <string name="Command_Contact_Sets_Label">Contact sets</string>
+  <string name="Command_Mouselook_Label">Mouselook</string>
+  
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -4036,6 +4038,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Phototools_Tooltip">Tools for full-featured image making.</string>
   <string name="Command_Phototools_View_Tooltip">Advanced phototools camera controls</string>
   <string name="Command_Contact_Sets_Tooltip">Opens contact sets (CTRL+ALT+SHIFT+C)</string>
+  <string name="Command_Mouselook_Tooltip">Enter mouselook mode (M)</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
