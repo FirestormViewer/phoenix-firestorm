@@ -1664,17 +1664,24 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 
 		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
 		//               ParcelObjectOwnersReply message is broken and always returns offline!
-		is_online = FALSE;
-		for (U32 i = 0; i < avatar_ids.size(); i++)
+		if (gAgentID == owner_id)
 		{
-			if (avatar_ids[i] == owner_id)
+			is_online = TRUE;
+		}
+		else
+		{
+			is_online = FALSE;
+			for (U32 i = 0; i < avatar_ids.size(); i++)
 			{
-				LLViewerRegion* avatar_region = LLWorld::getInstance()->getRegionFromPosGlobal(positions[i]);
-				if (avatar_region && avatar_region->getRegionID() == own_region_id)
+				if (avatar_ids[i] == owner_id)
 				{
-					is_online = TRUE;
+					LLViewerRegion* avatar_region = LLWorld::getInstance()->getRegionFromPosGlobal(positions[i]);
+					if (avatar_region && avatar_region->getRegionID() == own_region_id)
+					{
+						is_online = TRUE;
+					}
+					break;
 				}
-				break;
 			}
 		}
 		// </FS:Ansariel>
