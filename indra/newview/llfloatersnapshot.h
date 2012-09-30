@@ -53,6 +53,11 @@ public:
 	/*virtual*/ void onClose(bool app_quitting);
 	/*virtual*/ S32 notify(const LLSD& info);
 	
+	// <FS:Ansariel> FIRE-1180: Move snapshot floater to back when losing focus
+	/*virtual*/ void onFocusLost();
+	/*virtual*/ void onFocusReceived();
+	// </FS:Ansariel>
+
 	static void update();
 
 	// TODO: create a snapshot model instead
