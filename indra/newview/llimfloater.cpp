@@ -1801,3 +1801,10 @@ BOOL LLIMFloater::enableViewerVersionCallback(const LLSD& notification,const LLS
 	return result;
 }
 // </FS:Zi>
+
+// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+void LLIMFloater::setEnableAddFriendButton(BOOL enabled)
+{
+	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
+}
+// </FS:Ansariel>
