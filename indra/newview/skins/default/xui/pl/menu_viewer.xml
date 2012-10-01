@@ -17,7 +17,7 @@
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
 			<menu_item_check label="Zacznij latać" name="Fly"/>
 			<menu_item_check label="Zawsze biegnij" name="Always Run"/>
-			<menu_item_check label="Wymuś siadanie na ziemi" name="Force Toggle Sitting"/>
+			<menu_item_check label="Wymuś siadanie na ziemi" name="Force Toggle Sitting" shortcut="control|alt|K"/>
 			<menu_item_check label="Tryb widmowy" name="Avatar Phantom"/>
 			<menu_item_check label="Szybki skok" name="Avatar Ignore Prejump"/>
 		</menu>
