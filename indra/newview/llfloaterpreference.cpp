@@ -212,6 +212,10 @@ bool callback_clear_debug_search(const LLSD& notification, const LLSD& response)
 bool callback_pick_debug_search(const LLSD& notification, const LLSD& response);
 // </FS:AW  opensim search support>
 
+#ifdef LL_WINDOWS
+bool callback_growl_not_installed(const LLSD& notification, const LLSD& response);
+#endif
+
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 
@@ -229,6 +233,19 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 
 	return false;
 }
+
+#ifdef LL_WINDOWS
+bool callback_growl_not_installed(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 1 ) // NO
+	{
+		gSavedSettings.setBOOL("FSEnableGrowl", FALSE);
+	}
+
+	return false;
+}
+#endif
 
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response)
 {
@@ -2184,6 +2201,12 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
+#ifdef LL_WINDOWS
+	if (hasChild("notify_growl_checkbox", TRUE))
+	{
+		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&showGrowlNotInstalledWarning, _1, _2));
+	}
+#endif
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
 // <FS:AW Disable LSL bridge on opensim>
 	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
@@ -2277,6 +2300,16 @@ void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LL
 		LLNotificationsUtil::add("FavoritesOnLogin");
 	}
 }
+
+#ifdef LL_WINDOWS
+void LLPanelPreference::showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value)
+{
+	if (checkbox && checkbox->getValue())
+	{
+		LLNotificationsUtil::add("GrowlNotInstalled",LLSD(), LLSD(), callback_growl_not_installed);
+	}
+}
+#endif
 
 void LLPanelPreference::cancel()
 {
