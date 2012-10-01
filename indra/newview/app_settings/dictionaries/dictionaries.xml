@@ -19,11 +19,43 @@
     </map>
     <map>
       <key>name</key>
+      <string>da_dk</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>Dansk</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>de_de_neu</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>Deutsch</string>
+    </map>
+    <map>
+      <key>name</key>
       <string>es_es</string>
       <key>is_primary</key>
       <boolean>1</boolean>
       <key>language</key>
       <string>Español (España)</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>fr_fr</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>Français</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>pl_pl</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>Polski</string>
     </map>
     <map>
       <key>name</key>
