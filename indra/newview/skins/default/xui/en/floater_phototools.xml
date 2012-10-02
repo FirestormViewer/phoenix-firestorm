@@ -11,7 +11,7 @@
  layout="topleft"
  save_rect="true"
  single_instance="true"
- title="Phototools Menu"
+ title="Phototools"
  name="phototools"
  help_topic="phototools_menu_floater">
 
