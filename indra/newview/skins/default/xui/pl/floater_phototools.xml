@@ -103,9 +103,9 @@
 					Typy cieni
 				</text>
 				<combo_box name="ShadowDetail">
-					<combo_box.item label="Oświetlenie punktowe" name="0"/>
-					<combo_box.item label="Oświetlenie punktowe + Słońce/Księżyc" name="1"/>
-					<combo_box.item label="Oświetlenie punktowe + Słońce/Księżyc + inne źródła" name="2"/>
+					<combo_box.item label="Brak" name="0"/>
+					<combo_box.item label="Słońce/Księżyc" name="1"/>
+					<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
 				</combo_box>
 			</panel>
 			<panel name="P_Shadow_Res">

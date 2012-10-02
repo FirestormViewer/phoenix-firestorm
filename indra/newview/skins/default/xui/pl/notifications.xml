@@ -108,6 +108,12 @@ Wybierz pojedynczy obiekt i spróbuj jeszcze raz.
 		Pamiętaj: kiedy włączysz tą opcję to każdy kto używa tego komputera może zobaczyć Twoją listę ulubionych miejsc.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GrowlNotInstalled">
+		UWAGA: Jeśli Growl nie jest zainstalowany, to włączenie tej opcji będzie skutkować małymi zacięciami gdy ktoś wyśle do Ciebie wiadomość lub zaloguje/wyloguje się.
+Zobacz http://wiki.phoenixviewer.com/fs_growl, aby uzyskać więcej informacji.
+Ciągle chcesz włączyć tą opcję?
+		<usetemplate name="okcancelbuttons" notext="Nie" yestext="Tak"/>
+	</notification>
 	<notification name="GrantModifyRights">
 		Udzielenie praw modyfikacji innemu Rezydentowi umożliwia modyfikację, usuwanie lub wzięcie JAKIEGOKOLWIEK z Twoich obiektów. Używaj tej opcji z rozwagą!
 Czy chcesz udzielić prawa do modyfikacji [NAME]?
