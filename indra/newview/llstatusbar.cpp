@@ -110,6 +110,35 @@ LLStatusBar *gStatusBar = NULL;
 S32 STATUS_BAR_HEIGHT = 26;
 extern S32 MENU_BAR_HEIGHT;
 
+// <FS:LO> FIRE-7639 - Stop the blinking after a while
+LLViewerRegion* agent_region;
+bool bakingStarted = false;
+
+class LORebakeStuck;
+LORebakeStuck *bakeTimeout = NULL;
+
+class LORebakeStuck: public LLEventTimer
+{
+public:
+	LORebakeStuck(LLStatusBar *bar) : LLEventTimer(30.0f)
+	{
+		mbar=bar;
+	}
+	~LORebakeStuck()
+	{
+		bakeTimeout=NULL;
+	}
+	BOOL tick()
+	{
+		mbar->setRebakeStuck(true);
+		return TRUE;
+	}
+private:
+	LLStatusBar *mbar;
+};
+
+// </FS:LO>
+
 
 // TODO: these values ought to be in the XML too
 const S32 MENU_PARCEL_SPACING = 1;	// Distance from right of menu item to parcel information
@@ -156,7 +185,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
-	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
+	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
+	mRebakeStuck(FALSE)			// <FS:LO> FIRE-7639 - Stop the blinking after a while
 {
 	setRect(rect);
 	
@@ -425,9 +455,26 @@ void LLStatusBar::refresh()
 
 	// <FS:Zi> Pathfinding rebake functions
 	static LLPanelPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode=LLPanelPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
+	// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	LLViewerRegion* current_region = gAgent.getRegion();
+	if(current_region != agent_region)
+	{
+		agent_region=current_region;
+		bakingStarted = false;
+		mRebakeStuck = false;
+	}
+	// </FS:LO>
 	if(	LLPanelPathfindingRebakeNavmesh::getInstance()->isRebaking())
 	{
-		LLViewerRegion* agent_region=gAgent.getRegion();
+		// <FS:LO> FIRE-7639 - Stop the blinking after a while
+		if(!bakingStarted)
+		{
+			bakingStarted = true;
+			mRebakeStuck = false;
+			bakeTimeout = new LORebakeStuck(this);
+		}
+		// </FS:LO>
+		
 		if(	agent_region &&
 			agent_region->dynamicPathfindingEnabled() && 
 			mRebakingTimer.getElapsedTimeF32()>0.5f)
@@ -1010,7 +1057,16 @@ void LLStatusBar::updateParcelIcons()
 		F32 pathfinding_dirty_icon_alpha=1.0;
 		if(LLPanelPathfindingRebakeNavmesh::getInstance()->isRebaking())
 		{
-			pathfinding_dirty_icon_alpha=mPathfindingFlashOn ? 1.0 : 0.25;
+			// <FS:LO> FIRE-7639 - Stop the blinking after a while
+			if(mRebakeStuck)
+			{
+				pathfinding_dirty_icon_alpha = 0.5;
+			}
+			else
+			{
+				pathfinding_dirty_icon_alpha=mPathfindingFlashOn ? 1.0 : 0.25;
+			}
+			// </FS:LO>
 			pathfinding_navmesh_dirty=true;
 		}
 		// </FS:Zi>
