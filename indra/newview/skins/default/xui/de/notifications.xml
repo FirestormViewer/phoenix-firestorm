@@ -153,6 +153,12 @@ Wählen Sie ein einzelnes Objekt aus und versuchen Sie es erneut.
 		Hinweis: Bei Aktivierung dieser Option sehen alle Personen, die diesen Computer benutzen, Ihre Lieblingsorte.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
+	<notification name="GrowlNotInstalled">
+		WARNUNG: Wenn diese Funktion aktiviert wird, ohne dass Growl installiert ist, kann dieses zu kleinen Rucklern führen, wenn sich Freunde ein- oder ausloggen.
+Für weitere Informationen siehe http://wiki.phoenixviewer.com/fs_growl
+Soll diese Funktion dennoch aktiviert werden?
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
+	</notification>
 	<notification name="GrantModifyRights">
 		Wenn Sie einem anderen Einwohner Änderungsrechte gewähren, dann kann dieser JEDES Objekt, das Sie inworld besitzen, ändern, löschen oder an sich nehmen. Seien Sie daher beim Gewähren dieser Rechte sehr vorsichtig!
 Möchten Sie [NAME] Änderungsrechte gewähren?

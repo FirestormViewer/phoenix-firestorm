@@ -4053,6 +4053,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="IM_announce_incoming">
 		Ankommende Instant Message von [NAME]
 	</string>
+	<string name="IM_autoresponce_sent">
+		Automatische Antwort gesendet.
+	</string>
 	<string name="answered_call">
 		Ihr Anruf wurde entgegengenommen
 	</string>
