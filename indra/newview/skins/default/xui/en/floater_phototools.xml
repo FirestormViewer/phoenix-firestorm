@@ -765,15 +765,15 @@
 				 name="ShadowDetail"
 				 width="200">
 					<combo_box.item
-					 label="Point Lights"
+					 label="None"
 					 name="0"
 					 value="0"/>
 					<combo_box.item
-					 label="Point Lights + Sun/Moon"
+					 label="Sun/Moon"
 					 name="1"
 					 value="1"/>
 					<combo_box.item
-					 label="Point Lights + Sun/Moon + Projectors"
+					 label="Sun/Moon + Projectors"
 					 name="2"
 					 value="2"/>
 				</combo_box>
