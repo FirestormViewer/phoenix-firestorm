@@ -2676,6 +2676,21 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					IM_BUSY_AUTO_RESPONSE,
 					session_id);
 				gAgent.sendReliableMessage();
+				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+				gIMMgr->addMessage(
+					session_id,
+					from_id,
+					LLStringUtil::null, // Pass null value so no name gets prepended
+					LLTrans::getString("IM_autoresponce_sent"),
+					my_name,
+					IM_NOTHING_SPECIAL,
+					parent_estate_id,
+					region_id,
+					position,
+					false, // <-- Wow! This parameter is never handled!!!
+					TRUE
+					);
+				// </FS:LO>
 			}
 
 			// <FS:Ansariel> checkfor and process reqinfo
