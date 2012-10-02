@@ -371,19 +371,6 @@ Save all changes to clothing/body parts?
 
   <notification
    icon="alertmodal.tga"
-   name="GrowlNotInstalled"
-   type="alertmodal">
-     WARNING: Enabling this option without having growl installed will result in small freezes when someone messages you or goes on/offline.
-Read http://wiki.phoenixviewer.com/fs_growl for more information.
-Do you stil wish to enable it?
-    <usetemplate
-     name="okcancelbuttons"
-     notext="No"
-     yestext="Yes"/>
-  </notification>
-
-  <notification
-   icon="alertmodal.tga"
    name="GrantModifyRights"
    type="alertmodal">
 Granting modify rights to another resident allows them to change, delete or take ANY objects you may have in-world. Be VERY careful when handing out this permission.
