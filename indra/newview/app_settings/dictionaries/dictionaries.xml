@@ -3,7 +3,23 @@
   <array>
     <map>
       <key>name</key>
-      <string>en_gb</string>
+      <string>en_AU</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>English (Australia)</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>en_CA</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>English (Canada)</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>en_GB</string>
       <key>is_primary</key>
       <boolean>1</boolean>
       <key>language</key>
@@ -11,7 +27,7 @@
     </map>
     <map>
       <key>name</key>
-      <string>en_us</string>
+      <string>en_US</string>
       <key>is_primary</key>
       <boolean>1</boolean>
       <key>language</key>
@@ -64,6 +80,14 @@
       <boolean>1</boolean>
       <key>language</key>
       <string>Português (Brasil)</string>
+    </map>
+    <map>
+      <key>name</key>
+      <string>ru_RU</string>
+      <key>is_primary</key>
+      <boolean>1</boolean>
+      <key>language</key>
+      <string>Русский (Russian)</string>
     </map>
     <map>
       <key>name</key>
