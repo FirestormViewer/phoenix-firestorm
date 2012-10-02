@@ -368,6 +368,19 @@ Save all changes to clothing/body parts?
      name="okbutton"
      yestext="OK"/>
   </notification>
+	
+  <notification
+   icon="alertmodal.tga"
+   name="GrowlNotInstalled"
+   type="alertmodal">
+		WARNING: Enabling this option without having growl installed will result in small freezes when someone messages you or goes on/offline.
+Read http://wiki.phoenixviewer.com/fs_growl for more information.
+Do you stil wish to enable it?
+		<usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
 
   <notification
    icon="alertmodal.tga"
