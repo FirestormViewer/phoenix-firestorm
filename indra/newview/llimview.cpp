@@ -3401,7 +3401,7 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				session_id,
 				im_info->mFromID,
 				LLStringUtil::null, // Pass null value so no name gets prepended
-				LLTrans::getString("IM_autoresponce_sent"),
+				LLTrans::getString("IM_autoresponse_sent"),
 				im_info->mName,
 				IM_NOTHING_SPECIAL,
 				im_info->mParentEstateID,

@@ -3503,7 +3503,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">Incoming message from [NAME]</string>
-	<string name="IM_autoresponce_sent">Autoresponce Sent</string>
+	<string name="IM_autoresponse_sent">Autoresponse Sent</string>
 
 	<!-- voice calls -->
 	<string name="answered_call">Your call has been answered</string>
