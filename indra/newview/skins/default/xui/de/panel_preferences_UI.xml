@@ -8,15 +8,15 @@
 			UI-Skalierung (Nebeneffekte möglich):
 		</text>
 		<text name="HoverTipText">
-			Schwebetips:
+			Schwebe-Tipps:
 		</text>
-		<check_box label="Einfache Schwebetipps (zuerst aktivieren)" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
+		<check_box label="Schwebe-Tipps anzeigen" name="ShowHoverTips" tool_tip="Aktivieren, um Schwebetipps für Avatare und andere Dinge anzuzeigen - diese Option zuerst aktivieren"/>
 		<check_box label="für alle Objekte" tool_tip="Aktivieren, um Schwebetipps für Inworld-Objekte anzuzeigen." name="ShowAllHoverTips"/>
 		<check_box label="für Land" tool_tip="Aktivieren, um Schwebetipps für Land anzuzeigen." name="ShowLandHoverTips"/>
 		<text name="tooltip_textbox">
-			Verzögerungen für Schwebetips:
+			Verzögerungen für Schwebe-Tipps:
 		</text>
-		<slider label="Tooltips:" name="ToolTipDelay_slider" tool_tip="Verzögerung, nach der Tooltips für Bedienelemente der Benutzeroberfläche angezeigt werden. (Standardwert: 0.7)"/>
+		<slider label="Tooltipps:" name="ToolTipDelay_slider" tool_tip="Verzögerung, nach der Tooltips für Bedienelemente der Benutzeroberfläche angezeigt werden. (Standardwert: 0.7)"/>
 		<text name="ToolTipDelay_text">
 			Sekunden
 		</text>

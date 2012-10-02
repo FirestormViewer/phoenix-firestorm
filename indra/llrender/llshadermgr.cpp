@@ -723,8 +723,8 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 		}
 		else if (major_version > 1 || minor_version >= 30)
 		{  //switches are supported in GLSL 1.30 and later
-			if (gGLManager.mIsNVIDIA)
-			{ //switches are unreliable on some NVIDIA drivers
+			//if (gGLManager.mIsNVIDIA) //FS:TM we want to use this for everything, switches, while slightly less gpu intensive, are unreliable in general, causes pink.
+			//{ //switches are unreliable on some NVIDIA drivers -davep
 				for (U32 i = 0; i < texture_index_channels; ++i)
 				{
 					std::string if_string = llformat("\t%sif (vary_texture_index == %d) { return texture2D(tex%d, texcoord); }\n", i > 0 ? "else " : "", i, i); 
@@ -732,7 +732,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 				}
 				text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
 				text[count++] = strdup("}\n");
-			}
+/*			}
 			else
 			{
 				text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
@@ -749,8 +749,8 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 				text[count++] = strdup("\t}\n");
 				text[count++] = strdup("\treturn ret;\n");
 				text[count++] = strdup("}\n");
-			}
-		}
+			} */
+		} 
 		else
 		{ //should never get here.  Indexed texture rendering requires GLSL 1.30 or later 
 			// (for passing integers between vertex and fragment shaders)

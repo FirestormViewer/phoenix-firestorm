@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlv_behaviours" title="AKTYWNE OGRANICZENIA RLV">
+<floater name="rlv_behaviours" title="Aktywne ograniczenia RLV">
   <tab_container name="behaviour_tab">
     <panel label="Ograniczenia" name="behaviour_panel">
       <scroll_list name="behaviour_list">

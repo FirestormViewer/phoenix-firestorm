@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Joystick" title="KONFIGURACJA JOYSTICKA">
+<floater name="Joystick" title="Konfiguracja joysticka">
 	<string name="NoDevice">
 		nie wykryto urządzenia
 	</string>

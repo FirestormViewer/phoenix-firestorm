@@ -15,7 +15,7 @@
  save_visibility="true"
  save_tearoff_state="true"
  single_instance="true"
- title="CONTACTS"
+ title="Contacts"
  width="395">
  	<string
 	 name="no_friends"

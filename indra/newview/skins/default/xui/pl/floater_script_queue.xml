@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="queue" title="POSTĘP RESETOWANIA">
+<floater name="queue" title="Postęp resetowania">
 	<floater.string name="Starting">
 		[START] z [COUNT] obiektów.
 	</floater.string>

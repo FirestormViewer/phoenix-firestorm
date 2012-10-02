@@ -11,7 +11,7 @@
  min_width="190"
  name="floater_voice_controls"
  help_topic="floater_voice_controls"
- title="VOICE CONTROLS"
+ title="Voice Controls"
  save_dock_state="true"
  save_visibility="true"
  save_rect="true"
@@ -19,19 +19,19 @@
  width="282">
     <string
      name="title_nearby">
-        NEARBY VOICE
+        Nearby Voice
     </string>
     <string
      name="title_group">
-        GROUP CALL WITH [GROUP]
+        Group Call with [GROUP]
     </string>
     <string
      name="title_adhoc">
-        CONFERENCE CALL
+        Conference Call
     </string>
     <string
      name="title_peer_2_peer">
-        CALL WITH [NAME]
+        Call with [NAME]
     </string>
     <string
      name="no_one_near">

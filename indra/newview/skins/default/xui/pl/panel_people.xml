@@ -28,20 +28,20 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 	<string name="no_groups_msg" value="Chcesz dołączyć do jakiejś grupy? Spróbuj [secondlife:///app/search/groups Szukaj]."/>
 	<string name="MiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie otwiera mapę, przeciąganie z Shiftem przesuwa)"/>
 	<string name="AltMiniMapToolTipMsg" value="[REGION] (Podwójne kliknięcie aktywuje teleport, przeciąganie z Shiftem przesuwa)"/>
-	<string name="avatar_name_count" value="IMIĘ [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<string name="avatar_name_count" value="Imię [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
 	<filter_editor label="Filtr" name="filter_input"/>
 	<tab_container name="tabs">
-		<panel label="W POBLIŻU" name="nearby_panel">
+		<panel label="W pobliżu" name="nearby_panel">
 			<layout_stack name="radar_ls">
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
-						<radar_list.columns label="IMIĘ" name="name" tool_tip="[TOTAL] awatarów, [IN_REGION] w tym samym regionie, [IN_CHAT_RANGE] w zasięgu czatu"/>
+						<radar_list.columns label="Imię" name="name" tool_tip="[TOTAL] awatarów, [IN_REGION] w tym samym regionie, [IN_CHAT_RANGE] w zasięgu czatu"/>
 						<radar_list.columns name="voice_level" tool_tip="Rozmawia głosowo"/>
 						<radar_list.columns name="in_region" tool_tip="Jest w tym samym regionie"/>
 						<radar_list.columns name="flags" tool_tip="Ma dane płatnicze na koncie"/>
-						<radar_list.columns label="WIEK" name="age"/>
-						<radar_list.columns label="WIDZIANY" name="seen"/>
-						<radar_list.columns label="ODLEGŁOŚĆ" name="range"/>
+						<radar_list.columns label="Wiek" name="age"/>
+						<radar_list.columns label="Widziany" name="seen"/>
+						<radar_list.columns label="Odległość" name="range"/>
 					</radar_list>
 				</layout_panel>
 			</layout_stack>
@@ -51,7 +51,7 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 				<slider label="Zasięg(m):" name="NearMeRange" />
 			</panel>
 		</panel>
-		<panel label="ZNAJOMI" name="friends_panel">
+		<panel label="Znajomi" name="friends_panel">
 			<tab_container name="friends_accordion">
 				<panel name="tab_online" title="Dostępni"/>
 				<panel name="tab_all" title="Wszyscy"/>
@@ -63,14 +63,14 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 				<dnd_button name="del_btn" tool_tip="Usuń zaznaczoną osobę ze swojej listy znajomych"/>
 			</panel>
 		</panel>
-		<panel label="GRUPY" name="groups_panel">
+		<panel label="Grupy" name="groups_panel">
 			<panel name="bottom_panel_groups">
 				<menu_button name="groups_viewsort_btn" tool_tip="Opcje"/>
 				<button name="plus_btn" tool_tip="Dołącz do grupy/Stwórz nową grupę"/>
 				<button name="activate_btn" tool_tip="Aktywuj wybraną grupę"/>
 			</panel>
 		</panel>
-		<panel label="OSTATNIE" name="recent_panel">
+		<panel label="Ostatnie" name="recent_panel">
 			<panel name="bottom_panel_recent">
 				<menu_button name="recent_viewsort_btn" tool_tip="Opcje"/>
 				<button name="add_friend_btn_recent" tool_tip="Dodaj wybranego Rezydenta do znajomych"/>

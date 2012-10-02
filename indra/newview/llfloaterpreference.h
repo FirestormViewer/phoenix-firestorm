@@ -245,6 +245,10 @@ private:
  	//for "Show my Favorite Landmarks at Login"
 	static void showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LLSD& value);
 
+#ifdef LL_WINDOWS
+	static void showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value);
+#endif
+
 	typedef std::map<std::string, LLColor4> string_color_map_t;
 	string_color_map_t mSavedColors;
 

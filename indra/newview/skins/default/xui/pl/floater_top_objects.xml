@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="SZCZYTOWE OBIEKTY">
+<floater name="top_objects" title="Szczytowe obiekty">
 	<floater.string name="top_scripts_title">
-		GŁÓWNE SKRYPTY
+		Główne skrypty
 	</floater.string>
 	<floater.string name="top_scripts_text">
 		[COUNT] skryptów zabiera w sumie [TIME] ms
@@ -13,7 +13,7 @@
 		Czas Mono
 	</floater.string>
 	<floater.string name="top_colliders_title">
-		GŁÓWNE KOLIZJE
+		Główne kolizje
 	</floater.string>
 	<floater.string name="top_colliders_text">
 		[COUNT] obiektów odczuwa działanie wielu potencjalnych kolizji

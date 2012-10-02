@@ -174,7 +174,7 @@ Hover your mouse over the options for more help.
          font="SansSerifSmall"
          label="Receive group instant messages"
          layout="topleft"
-         left="10"
+         left="0"
          name="receive_chat"
          tool_tip="Sets whether you want to participate in group chat for this group."
          top_pad="5"

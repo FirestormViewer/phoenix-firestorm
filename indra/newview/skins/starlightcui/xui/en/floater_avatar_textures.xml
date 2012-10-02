@@ -5,12 +5,12 @@
  layout="topleft"
  name="avatar_texture_debug"
  help_topic="avatar_texture_debug"
- title="AVATAR TEXTURES"
+ title="Avatar Textures"
  width="940"
  can_resize="true">
     <floater.string
      name="InvalidAvatar">
-        INVALID AVATAR
+        Invalid Avatar
     </floater.string>
 
     <scroll_container

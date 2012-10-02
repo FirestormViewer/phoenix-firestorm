@@ -68,7 +68,7 @@
         <menu_item_check label="Sprachfilter" name="ShowVoice"/>
 		<menu_item_call label="Leute in der Nähe" name="Active Speakers"/>
 		<menu_item_check label="Stimmen in der Nähe" name="Nearby Voice"/>
-		<menu_item_check label="Liste ignorierter Einwohner" name="Block List"/>
+		<menu_item_check label="Blockierliste" name="Block List"/>
 	</menu>
 	<menu label="Welt" name="World">
         <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
@@ -86,7 +86,7 @@
 			<menu_item_check label="Bewegungssteuerung" name="Movement Controls"/>
 			<menu_item_check label="Ansichtsteuerung" name="Camera Controls"/>
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
-			<menu_item_check label="Leuchtmarkierung" name="beacons"/>
+			<menu_item_check label="Strahlen" name="beacons"/>
 			<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
 			<menu_item_check label="Landeigentümer" name="Land Owners"/>
 			<menu_item_check label="Koordinaten" name="Coordinates"/>
@@ -167,8 +167,8 @@
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="Charaktere..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="Anzeigen / Testen..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Figuren..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Anzeigen/Testen..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="Rebake Regions-Navmesh" name="rebake_region_navmesh"/>
 		</menu>
 		<menu label="Optionen" name="Options">
@@ -251,11 +251,16 @@
 			<menu_item_check label="Render-Weight für Avatare anzeigen (ARC-Ersatz)" name="Avatar Rendering Cost"/>
 		</menu>
 		<menu label="Hervorhebung und Sichtbarkeit" name="Highlighting and Visibility">
-			<menu_item_check label="Pulsierende Leuchtmarkierung" name="Cheesy Beacon"/>
+			<menu_item_check label="Pulsierende Strahlen" name="Cheesy Beacon"/>
 			<menu_item_check label="Partikel ausblenden" name="Hide Particles"/>
 			<menu_item_check label="Auswahl ausblenden" name="Hide Selected"/>
 			<menu_item_check label="Durchsichtig hervorheben" name="Highlight Transparent"/>
 			<menu_item_check label="Fadenkreuz für Mouselook anzeigen" name="ShowCrosshairs"/>
+			<menu label="Schwebe-Tipps" name="Hover Tips">
+				<menu_item_check label="Tipps anzeigen" name="Show Tips"/>
+				<menu_item_check label="Landtipps" name="Land Tips"/>
+				<menu_item_check label="Tipps zu allen Objekten" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="Darstellungstypen" name="Rendering Types">
 			<menu_item_check label="Einfach" name="Rendering Type Simple"/>

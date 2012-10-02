@@ -84,7 +84,7 @@ public:
 	LLSD allowed_login();
 
 	std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
-	static std::string getSystemInfo();
+	static LLSD getSystemInfo();
 	static void callbackReqInfo(const LLSD &notification, const LLSD &response);
 	static void sendInfo(LLUUID destination, LLUUID sessionid, std::string myName, EInstantMessage dialog);
 	

@@ -9,7 +9,7 @@
  name="outgoing call"
  help_topic="outgoing_call"
  save_dock_state="true"
- title="CALLING"
+ title="Calling"
  width="410">
     <floater.string
      name="lifetime">

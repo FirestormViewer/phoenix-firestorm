@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater label="Miejsca" name="voice_effects" title="PRZEKSZTAŁCANIE GŁOSU">
+<floater label="Miejsca" name="voice_effects" title="Przekształcanie głosu">
 	<string name="no_voice_effect">
 		(Bez Przekształcania)
 	</string>

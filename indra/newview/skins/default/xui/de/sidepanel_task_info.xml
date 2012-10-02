@@ -19,13 +19,13 @@
 		Sie können diese Objekte nicht bearbeiten.
 	</panel.string>
 	<panel.string name="text modify info 5">
-		Sie können das Objekt nicht über Regionsgrenzen bearbeiten.
+		Dieses Objekt kann nicht über eine Regionsgrenze hinweg geändert werden.
 	</panel.string>
 	<panel.string name="text modify info 6">
-		Sie können diese Objekte nicht über Regionsgrenzen bearbeiten.
+		Diese Objekte können nicht über eine Regionsgrenze hinweg geändert werden.
 	</panel.string>
 	<panel.string name="text modify warning">
-		Diese Objekt verfügt über verknüpfte Teile
+		Dieses Objekt verfügt über verknüpfte Teile.
 	</panel.string>
 	<panel.string name="Cost Default">
 		Preis: L$

@@ -2551,8 +2551,14 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
 		all estates that you manage for [OWNER]
 	</string>
 	<string name="RegionInfoAllowedResidents">Allowed Residents: ([ALLOWEDAGENTS], max [MAXACCESS])</string>
-	<string name="RegionInfoAllowedGroups">Allowed groups: ([ALLOWEDGROUPS], max [MAXACCESS])</string>
-
+	<string name="RegionInfoAllowedGroups">Allowed Groups: ([ALLOWEDGROUPS], max [MAXACCESS])</string>
+	<!-- FS:Ansariel: Estate managers and banned residents strings -->
+	<string name="RegionInfoEstateManagers">Estate Managers: ([ESTATEMANAGERS], max [MAXMANAGERS])</string>
+	<string name="RegionInfoBannedResidents">Banned Residents: ([BANNEDAGENTS], max [MAXBANNED])</string>
+	<string name="RegionInfoListTypeAllowedAgents">Allowed Residents</string>
+	<string name="RegionInfoListTypeBannedAgents">Banned Residents</string>
+	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
+	
 	<!-- script limits floater -->
 	<string name="ScriptLimitsParcelScriptMemory">Parcel Script Memory</string>
 	<string name="ScriptLimitsParcelsOwned">Parcels Listed: [PARCELS]</string>
@@ -3497,6 +3503,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 	
 	<!-- Additional IM messages -->
 	<string name="IM_announce_incoming">Incoming message from [NAME]</string>
+	<string name="IM_autoresponce_sent">Autoresponce Sent</string>
 
 	<!-- voice calls -->
 	<string name="answered_call">Your call has been answered</string>
@@ -3988,6 +3995,9 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Asset_Blacklist_Label">Asset blacklist</string>
   <string name="Command_Phototools_Label">Phototools</string>
   <string name="Command_Phototools_View_Label">Phototools camera</string>
+  <string name="Command_Contact_Sets_Label">Contact sets</string>
+  <string name="Command_Mouselook_Label">Mouselook</string>
+  
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
   <string name="Command_Appearance_Tooltip">Change your avatar</string>
@@ -4028,6 +4038,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Asset_Blacklist_Tooltip">Opens the list of all the items you have blacklisted</string>
   <string name="Command_Phototools_Tooltip">Tools for full-featured image making.</string>
   <string name="Command_Phototools_View_Tooltip">Advanced phototools camera controls</string>
+  <string name="Command_Contact_Sets_Tooltip">Opens contact sets (CTRL+ALT+SHIFT+C)</string>
+  <string name="Command_Mouselook_Tooltip">Enter mouselook mode (M)</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>

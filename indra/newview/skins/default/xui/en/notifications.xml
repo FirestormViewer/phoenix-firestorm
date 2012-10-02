@@ -371,6 +371,19 @@ Save all changes to clothing/body parts?
 
   <notification
    icon="alertmodal.tga"
+   name="GrowlNotInstalled"
+   type="alertmodal">
+     WARNING: Enabling this option without having growl installed will result in small freezes when someone messages you or goes on/offline.
+Read http://wiki.phoenixviewer.com/fs_growl for more information.
+Do you stil wish to enable it?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="No"
+     yestext="Yes"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="GrantModifyRights"
    type="alertmodal">
 Granting modify rights to another resident allows them to change, delete or take ANY objects you may have in-world. Be VERY careful when handing out this permission.
@@ -2656,7 +2669,6 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
    type="alertmodal">
 Are you sure you want to remove [NAME] from your Friends List?
     <tag>friendship</tag>
-Do you want to remove &lt;nolink&gt;[NAME]&lt;/nolink&gt; from your Friends List?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
@@ -9351,4 +9363,11 @@ Did you know that you can get the classic view of Phoenix Viewer by selecting th
       yestext="OK"/>
   </notification>
   
+  <notification
+   icon="alertmodal.tga"
+   name="CannotSaveSnapshot"
+   type="alertmodal">
+Unable to save snapshot.
+  <tag>fail</tag>
+  </notification>
 </notifications>

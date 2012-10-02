@@ -6,7 +6,7 @@
  layout="topleft"
  name="regioninfo"
  save_rect="true"
- title="REGION/ESTATE"
+ title="Region / Estate"
  width="530">
     <tab_container
      bottom="555"

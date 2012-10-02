@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floaterbulkperms" title="HURTOWA ZMIANA PRAW ZAWARTOŚCI">
+<floater name="floaterbulkperms" title="Wsadowa zmiana praw zawartości">
 	<floater.string name="nothing_to_modify_text">
 		Selekcja nie zawiera zawartości edytowalnej
 	</floater.string>

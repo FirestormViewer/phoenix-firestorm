@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlvLocks" title="AKTIVE RLV-SPERREN">
+<floater name="rlvLocks" title="Aktive RLV-Sperren">
 	<scroll_list name="lock_list">
 		<scroll_list.columns label="Sperrtyp" name="lock_type"/>
 		<scroll_list.columns label="Hinzf. / Entf." name="lock_addrem"/>

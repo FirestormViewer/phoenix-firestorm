@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="window_size" title="FENSTERGRÖSSE">
+<floater name="window_size" title="Fenstergröße">
 	<string name="resolution_format">
 		[RES_X] x [RES_Y]
 	</string>

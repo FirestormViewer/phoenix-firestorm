@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Model Preview" title="MODELL HOCHLADEN">
+<floater name="Model Preview" title="Modell hochladen">
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.
@@ -93,52 +93,87 @@
 				<text initial_value="Scheitelp." name="vertices" value="Scheitelp."/>
 				<text initial_value="Hoch" name="high_label" value="Hoch"/>
 				<combo_box name="lod_source_high">
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Load from file" value="Aus Datei laden"/>
+					<item name="Generate" value="Generieren"/>
+					-->
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="Generate" label="Generieren"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
-					<item name="Triangle Limit" label="Triangel-Limit"/>
-					<item name="Error Threshold" label="Fehler-Schwellwert"/>
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Triangle Limit" value="Dreiecklimit"/>
+					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="high_triangles" value="0"/>
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Mittel" name="medium_label" value="Mittel"/>
 				<combo_box name="lod_source_medium">
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Load from file" value="Aus Datei laden"/>
+					<item name="Generate" value="Generieren"/>
+					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
 				<button label="Auswählen" name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
-					<item name="Triangle Limit" label="Triangel-Limit"/>
-					<item name="Error Threshold" label="Fehler-Schwellwert" />
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Triangle Limit" value="Dreiecklimit"/>
+					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="medium_triangles" value="0"/>
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Niedrig" name="low_label" value="Niedrig"/>
 				<combo_box name="lod_source_low">
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Load from file" value="Aus Datei laden"/>
+					<item name="Generate" value="Generieren"/>
+					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
-				<button label="Auswählen" name="lod_browse_low"/>
+ 				<button label="Auswählen" name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
-					<item name="Triangle Limit" label="Triangel-Limit"/>
-					<item name="Error Threshold" label="Fehler-Schwellwert" />
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Triangle Limit" value="Dreiecklimit"/>
+					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="low_triangles" value="0"/>
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Niedrigste" name="lowest_label" value="Niedrigste"/>
 				<combo_box name="lod_source_lowest">
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Load from file" value="Aus Datei laden"/>
+					<item name="Generate" value="Generieren"/>
+					<item name="Use LoD above" value="Detailstufe oben verwenden"/>
+					-->
 					<item name="Load from file" label="Aus Datei laden"/>
 					<item name="Generate" label="Generieren"/>
-					<item name="Use LoD above" label="Obige Detailstufe verwenden"/>
+					<item name="Use LoD above" label="Detailstufe oben verwenden"/>
 				</combo_box>
-				<button label="Auswählen" name="lod_browse_lowest"/>
+ 				<button label="Auswählen" name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
-					<item name="Triangle Limit" label="Triangel-Limit"/>
-					<item name="Error Threshold" label="Fehler-Schwellwert" />
+					<!-- FS:Ansariel: Broken by LL
+					<item name="Triangle Limit" value="Dreiecklimit"/>
+					<item name="Error Threshold" value="Fehlerschwelle"/>
+					-->
+					<item name="Triangle Limit" label="Dreiecklimit"/>
+					<item name="Error Threshold" label="Fehlerschwelle"/>
 				</combo_box>
 				<text initial_value="0" name="lowest_triangles" value="0"/>
 				<text initial_value="0" name="lowest_vertices" value="0"/>

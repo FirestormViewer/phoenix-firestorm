@@ -5873,12 +5873,6 @@ class LLEditDelete : public view_listener_t
 	}
 };
 
-bool enable_object_return()
-{
-	return (!LLSelectMgr::getInstance()->getSelection()->isEmpty() &&
-		(gAgent.isGodlike() || can_derez(DRD_RETURN_TO_OWNER)));
-}
-
 void handle_spellcheck_replace_with_suggestion(const LLUICtrl* ctrl, const LLSD& param)
 {
 	const LLContextMenu* menu = dynamic_cast<const LLContextMenu*>(ctrl->getParent());
@@ -5949,6 +5943,12 @@ bool enable_spellcheck_add_to_ignore(const LLUICtrl* ctrl)
 	const LLContextMenu* menu = dynamic_cast<const LLContextMenu*>(ctrl->getParent());
 	const LLSpellCheckMenuHandler* spellcheck_handler = (menu) ? dynamic_cast<const LLSpellCheckMenuHandler*>(menu->getSpawningView()) : NULL;
 	return (spellcheck_handler) && (spellcheck_handler->canAddToIgnore());
+}
+
+bool enable_object_return()
+{
+	return (!LLSelectMgr::getInstance()->getSelection()->isEmpty() &&
+		(gAgent.isGodlike() || can_derez(DRD_RETURN_TO_OWNER)));
 }
 
 bool enable_object_delete()
@@ -8074,6 +8074,18 @@ class LLCheckControl : public view_listener_t
 	}
 };
 
+// <FS:Ansariel> Reset to default control
+class FSResetControl : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		std::string callback_data = userdata.asString();
+		gSavedSettings.getControl(callback_data)->resetToDefault(true);
+		return true;
+	}
+};
+// </FS:Ansariel> Reset to default control
+
 // not so generic
 
 class LLAdvancedCheckRenderShadowOption: public view_listener_t
@@ -10094,6 +10106,10 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLGoToObject(), "GoToObject");
 	commit.add("PayObject", boost::bind(&handle_give_money_dialog));
 
+	// <FS:Ansariel> Reset to default control
+	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
+	// </FS:Ansariel> Reset to default control
+
 	// <FS:Ansariel> Commented out - already definied earlier in this method
 	//commit.add("Inventory.NewWindow", boost::bind(&LLFloaterInventory::showAgentInventory));
 
@@ -10133,4 +10149,9 @@ void initialize_menus()
 	commit.add("World.RebakeRegion", boost::bind(&handle_rebake_region));
 	enable.add("World.RebakeRegion", boost::bind(&enable_rebake_region));
 	// </FS:Zi>
+
+	// <FS:Ansariel> FIRE-7758: Save/load camera position
+	commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
+	commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
+	// </FS:Ansariel>
 }

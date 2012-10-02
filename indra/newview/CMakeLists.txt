@@ -97,41 +97,43 @@ include_directories(
 
 set(viewer_SOURCE_FILES
 # <Add FS includes below this line>
-    groupchatlistener.cpp
     ao.cpp
     aoengine.cpp
     aoset.cpp
     chatbar_as_cmdline.cpp
-    kcwlinterface.cpp
+    exoflickr.cpp
+    exoflickrauth.cpp
     exogroupmutelist.cpp
+    exopanelsnapshotflickr.cpp 
     floatermedialists.cpp
-    fscontactsfloater.cpp
     fsareasearch.cpp
-    fswsassetblacklist.cpp
-    fsfloaterwsassetblacklist.cpp
-    fsmoneytracker.cpp
+    fscontactsfloater.cpp
     fsdata.cpp
+    fsfloaterprofile.cpp
+    fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
-	fslslpreproc.cpp
-    fsslurlcommand.cpp
-    fsfloaterprofile.cpp
+    fslslpreproc.cpp
+    fsmoneytracker.cpp
+    fsnearbychatvoicemonitor.cpp
+    fspanelclassified.cpp
+    fspanelprefs.cpp
     fspanelprofile.cpp
+    fspanelprofileclassifieds.cpp
     fsradarlistctrl.cpp
-	#growlmanager.cpp
+    fsslurlcommand.cpp
+    fswsassetblacklist.cpp
+    groupchatlistener.cpp
+    #growlmanager.cpp
+    kcwlinterface.cpp
+    lggbeamcolormapfloater.cpp
     lggbeammapfloater.cpp
     lggbeammaps.cpp
     lggbeamscolors.cpp
-    lggbeamcolormapfloater.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
-    fspanelprofileclassifieds.cpp
-    fspanelclassified.cpp
-    exopanelsnapshotflickr.cpp 
-    exoflickr.cpp
-    exoflickrauth.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -699,7 +701,6 @@ set(viewer_SOURCE_FILES
     llxmlrpclistener.cpp
     llxmlrpctransaction.cpp
     noise.cpp
-    fspanelprefs.cpp
     particleeditor.cpp
     piemenu.cpp
     pieseparator.cpp
@@ -742,43 +743,45 @@ set(viewer_HEADER_FILES
     ViewerInstall.cmake
 
 # <Add FS includes below this line>
-    groupchatlistener.h
     ao.h
     aoengine.h
     aoset.h
     chatbar_as_cmdline.h
-    kcwlinterface.h
+    exoflickr.h
+    exoflickrauth.h
     exogroupmutelist.h
     floatermedialists.h
-    fscontactsfloater.h
     fsareasearch.h
-    fswsassetblacklist.h
-    fsfloaterwsassetblacklist.h
-    fsmoneytracker.h
+    fscontactsfloater.h
     fsdata.h
+    fsfloaterprofile.h
+    fsfloaterwsassetblacklist.h
+    fsgridhandler.h
     fsgrouptitles.h
     fskeywords.h
     fslslbridge.h
     fslslbridgerequest.h
-	fslslpreproc.h
-    fsslurlcommand.h
-    fsfloaterprofile.h
-    fsgridhandler.h
+    fslslpreproc.h
+    fsmoneytracker.h
+    fsnearbychatvoicemonitor.h
+    fspanelclassified.h
+    fspanelprefs.h
     fspanelprofile.h
+    fspanelprofileclassifieds.h
     fsradarlistctrl.h
     fsslurl.h
-	#growlmanager.h
-	#growlnotifier.h
+    fsslurlcommand.h
+    fswsassetblacklist.h
+    groupchatlistener.h
+    #growlmanager.h
+    #growlnotifier.h
+    kcwlinterface.h
+    lggbeamcolormapfloater.h
     lggbeammapfloater.h
     lggbeammaps.h
     lggbeamscolors.h
-    lggbeamcolormapfloater.h
     lggcontactsets.h
     lggcontactsetsfloater.h
-    fspanelprofileclassifieds.h
-    fspanelclassified.h
-    exoflickr.h
-    exoflickrauth.h
 
     llaccountingcostmanager.h
     llagent.h
@@ -1340,7 +1343,6 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
-    fspanelprefs.h
     particleeditor.h
     piemenu.h
     pieseparator.h
@@ -1753,7 +1755,9 @@ set(PACKAGE ON CACHE BOOL
 if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS}"
+        # *TODO -reenable this once we get server usage sorted out
+        #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
         LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
         )
@@ -1772,7 +1776,7 @@ if (WINDOWS)
     # In the meantime, if you have any ideas on how to easily maintain one list, either here or in viewer_manifest.py
     # and have the build deps get tracked *please* tell me about it.
 
-    if(USE_TCMALLOC)
+    if(USE_GOOGLE_PERFTOOLS)
       # Configure a var for tcmalloc location, if used.
       # Note the need to specify multiple names explicitly.
       set(GOOGLE_PERF_TOOLS_SOURCE
@@ -1780,7 +1784,7 @@ if (WINDOWS)
         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libtcmalloc_minimal.dll
         ${SHARED_LIB_STAGING_DIR}/Debug/libtcmalloc_minimal-debug.dll
         )
-     endif(USE_TCMALLOC)
+     endif(USE_GOOGLE_PERFTOOLS)
 
 
     set(COPY_INPUT_DEPENDENCIES

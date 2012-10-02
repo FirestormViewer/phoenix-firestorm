@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Toybox" title="SYMBOLLEISTENSCHALTFLÄCHEN">
+<floater name="Toybox" title="Symbolleistenschaltflächen">
 	<text name="toybox label 1">
 		Sie können Schaltflächen durch Ziehen zu Symbolleisten hinzufügen oder daraus entfernen.
 	</text>

@@ -47,9 +47,10 @@ void UtilityBar::init()
 {
 	LLView* rootView=LLUI::getRootView();
 
-	mParcelStreamPlayButton=rootView->findChild<LLButton>("utility_parcel_audio_stream_button");
-	mParcelMediaPlayButton=rootView->findChild<LLButton>("utility_parcel_media_button");
-	mTalkButton=rootView->findChild<LLButton>("utility_talk_button");
+	mParcelStreamPlayButton = rootView->findChild<LLButton>("utility_parcel_audio_stream_button");
+	mParcelMediaPlayButton = rootView->findChild<LLButton>("utility_parcel_media_button");
+	mTalkButton = rootView->findChild<LLButton>("utility_talk_button");
+	mAOInterfaceButton = rootView->findChild<LLButton>("show_ao_interface_button");
 
 	if(mParcelStreamPlayButton)
 		mParcelStreamPlayButton->setCommitCallback(boost::bind(&UtilityBar::onParcelStreamClicked,this));
@@ -121,4 +122,19 @@ BOOL UtilityBar::tick()
 	}
 
 	return FALSE;
+}
+
+void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)
+{
+	if (mAOInterfaceButton)
+	{
+		if (expanded)
+		{
+			mAOInterfaceButton->setImageOverlay("arrow_down.tga");
+		}
+		else
+		{
+			mAOInterfaceButton->setImageOverlay("arrow_up.tga");
+		}
+	}
 }

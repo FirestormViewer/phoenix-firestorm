@@ -13,7 +13,7 @@
     reuse_instance="true"
     save_rect="false"
     single_instance="true"
-    title="Pathfinding linksets">
+    title="Pathfinding Linksets">
   <floater.string name="messaging_initial"></floater.string>
   <floater.string name="messaging_get_inprogress">Querying for pathfinding linksets ...</floater.string>
   <floater.string name="messaging_get_error">Error detected while querying for pathfinding linksets.</floater.string>

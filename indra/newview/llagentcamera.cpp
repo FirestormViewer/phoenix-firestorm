@@ -178,6 +178,13 @@ LLAgentCamera::LLAgentCamera() :
 	mPanInKey(0.f),
 	mPanOutKey(0.f),
 
+	// <FS:Ansariel> FIRE-7758: Save/load camera position
+	mStoredCameraPos(),
+	mStoredCameraFocus(),
+	mStoredCameraFocusObjectId(),
+	mHasStoredCameraPos(false),
+	// </FS:Ansariel>
+
 	mPointAtObject(NULL)
 {
 	mFollowCam.setMaxCameraDistantFromSubject( MAX_CAMERA_DISTANCE_FROM_AGENT );
@@ -2874,6 +2881,32 @@ S32 LLAgentCamera::directionToKey(S32 direction)
 	return 0;
 }
 
+// <FS:Ansariel> FIRE-7758: Save/load camera position feature
+// Copyright (C) 2012, Ansariel Hiller @ Second Life for Phoenix Firestorm Viewer
+// This code is licensed unter the GNU Lesser General Public License version 2.1
+void LLAgentCamera::storeCameraPosition()
+{
+	mStoredCameraPos = getCameraPositionGlobal();
+	mStoredCameraFocus = getFocusTargetGlobal();
+	mStoredCameraFocusObjectId = LLUUID::null;
+	if (mFocusObject)
+	{
+		mStoredCameraFocusObjectId = mFocusObject->getID();
+	}
+	mHasStoredCameraPos = true;
+}
+
+void LLAgentCamera::loadCameraPosition()
+{
+	F32 renderFarClip = gSavedSettings.getF32("RenderFarClip");
+	F32 far_clip_squared = renderFarClip * renderFarClip;
+	if (mHasStoredCameraPos && dist_vec_squared(gAgent.getPositionGlobal(), mStoredCameraPos) <= far_clip_squared)
+	{
+		unlockView();
+		setCameraPosAndFocusGlobal(mStoredCameraPos, mStoredCameraFocus, mStoredCameraFocusObjectId);
+	}
+}
+// </FS:Ansariel> FIRE-7758: Save/load camera position feature
 
 // EOF
 

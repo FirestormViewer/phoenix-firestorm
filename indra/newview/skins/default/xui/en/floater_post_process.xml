@@ -5,7 +5,7 @@
  layout="topleft"
  name="Post-Process Floater"
  help_topic="post_process_floater"
- title="POST-PROCESS SETTINGS"
+ title="Post-process Settings"
  width="400">
     <tab_container
      follows="left|top"

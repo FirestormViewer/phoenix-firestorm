@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Miejsca" name="places panel">
-	<string name="landmarks_tab_title" value="LANDMARKI"/>
-	<string name="teleport_history_tab_title" value="HISTORIA TELEPORTÓW"/>
+	<string name="landmarks_tab_title" value="Landmarki"/>
+	<string name="teleport_history_tab_title" value="Historia teleportów"/>
 	<filter_editor label="Filtruj Miejsca" name="Filter"/>
 	<panel name="button_panel">
 		<layout_stack name="bottom_bar_ls0">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script ed float" title="SKRIPT: NEUES SKRIPT">
+<floater name="script ed float" title="Skript: Neues Skript">
 	<floater.string name="not_allowed">
 		Dieses Skript kann nicht angezeigt oder bearbeitet werden, da als Berechtigung „kein kopieren&quot; festgelegt wurde. Um ein Skript innerhalb eines Objektes anzuzeigen oder zu bearbeiten, benötigen Sie die vollständige Berechtigung.
 	</floater.string>

@@ -29,6 +29,7 @@
 			</text>
 			<check_box label="Puk-puk-trzymaj, aby biec" name="tap_tap_hold_to_run"/>
 			<check_box label="Lataj/ląduj poprzez naciśnięcie góra/dół" name="automatic_fly"/>
+			<check_box label="Włącz tryb przełączania kucania" name="crouch_toggle_mode"/>
 			<check_box label="Odtwórz dźwięk podczas teleportacji" name="PlayTeleportSound"/>
 			<check_box label="Zawsze lataj po teleportacji" name="FSFlyAfterTeleport"/>
 			<text name="single_click_action_lbl">

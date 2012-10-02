@@ -40,7 +40,7 @@
            background_visible="false"
            help_topic="my_outfits_tab"
            follows="all"
-           label="OUTFITS"
+           label="Outfits"
            layout="topleft"
            width="315" />
          <panel
@@ -51,7 +51,7 @@
            follows="all"
            height="520"
            help_topic="now_wearing_tab"
-           label="WEARING"
+           label="Wearing"
            layout="topleft"
            name="cof_tab"
            width="315" />

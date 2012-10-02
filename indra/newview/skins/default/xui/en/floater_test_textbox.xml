@@ -8,7 +8,7 @@
  help_topic="floater_test_textbox"
  translate="false"
  width="875"
- title="TEXTBOX TESTS">
+ title="Textbox Tests">
 
     <text
         clip_partial="true"

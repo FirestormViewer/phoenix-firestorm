@@ -11,7 +11,7 @@
  name="script ed float"
  help_topic="script_ed_float"
  save_rect="true"
- title="SCRIPT: NEW SCRIPT"
+ title="Script: New script"
  width="508">
     <floater.string
      name="not_allowed">
@@ -23,7 +23,7 @@
     </floater.string>
     <floater.string
      name="Title">
-        SCRIPT: [NAME]
+        Script: [NAME]
     </floater.string>
     <panel
      bevel_style="none"

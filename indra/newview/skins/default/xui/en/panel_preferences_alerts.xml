@@ -216,6 +216,37 @@
      left_pad="0"
      name="OnlineOfflinetoNearbyChatHistory"
      width="180" />
+
+	 <text
+     type="string"
+     length="1"
+     follows="top|left"
+     height="15"
+     layout="topleft"
+     left="10"
+     top_pad="10"
+     name="friends_logon_sounds_label"
+     width="400">
+        Play a sound when my friends:
+    </text>
+	 
+    <check_box
+     control_name="PlayModeUISndFriendOnline"
+     name="friends_notify_online_sound"
+     label="Log in"
+     layout="topleft"
+     left="10"
+     top_pad="2"
+     height="16"
+     width="85" />
+    <check_box
+     control_name="PlayModeUISndFriendOffline"
+     name="friends_notify_offline_sound"
+     label="Log out"
+     layout="topleft"
+     left_pad="0"
+     height="18"
+     width="85" />
     </panel>
 
     <!-- Alerts -->

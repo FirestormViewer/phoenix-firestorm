@@ -4,7 +4,7 @@
 ### Constants
 ###
 
-TRUE=0 # Map the shell's idea of truth to a variable for better documentation
+TRUE=0  # Map the shell's idea of truth to a variable for better documentation
 FALSE=1
 
 #echo "DEBUG ARGS: $@"
@@ -43,78 +43,78 @@ LL_ARGS_PASSTHRU=""
 
 showUsage()
 {
-        echo
-        echo "Usage: "
-        echo "========================"
-        echo
-        echo "  --clean     : Remove past builds & configuration"
-        echo "  --config    : General a new architecture-specific config"
-	echo "  --build    : build firestorm"
-        echo "  --version   : Update version number"
-        echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
-        echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
-        echo "  --kdu       : Build with KDU"
-	echo "  --package   : Build installer"
-	echo "  --fmod      : Build fmod"
-	echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
-	echo 
-	echo "All arguments not in the above list will be passed through to LL's configure/build"
-	echo
+    echo
+    echo "Usage: "
+    echo "========================"
+    echo
+    echo "  --clean     : Remove past builds & configuration"
+    echo "  --config    : General a new architecture-specific config"
+    echo "  --build    : build firestorm"
+    echo "  --version   : Update version number"
+    echo "  --chan  [Release|Beta|Private]   : Private is the default, sets channel"
+    echo "  --btype [Release|RelWithDebInfo] : Release is default, whether to use symbols"
+    echo "  --kdu       : Build with KDU"
+    echo "  --package   : Build installer"
+    echo "  --fmod      : Build fmod"
+    echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
+    echo
+    echo "All arguments not in the above list will be passed through to LL's configure/build"
+    echo
 }
 
 getArgs()
 # $* = the options passed in from main
 {
-        if [ $# -gt 0 ]; then
-          while getoptex "clean build config version package fmod platform: kdu help chan: btype:" "$@" ; do
+    if [ $# -gt 0 ]; then
+      while getoptex "clean build config version package fmod platform: kdu help chan: btype:" "$@" ; do
 
-	      #insure options are valid
-	      if [  -z "$OPTOPT"  ] ; then
+          #insure options are valid
+          if [  -z "$OPTOPT"  ] ; then
                 showUsage
                 exit 1
-              fi
-        
-              case "$OPTOPT" in
-              clean)    WANTS_CLEAN=$TRUE;;
-              config)   WANTS_CONFIG=$TRUE;;
-              version)  WANTS_VERSION=$TRUE;;
-              chan)     CHANNEL="$OPTARG";;
-              btype)    if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
-	      			BTYPE="$OPTARG"
-			fi
-	      		;;
-              kdu)      WANTS_KDU=$TRUE;;
-	      fmod)	WANTS_FMOD=$TRUE;;
-	      package)	WANTS_PACKAGE=$TRUE;;
-	      build)	WANTS_BUILD=$TRUE;;
-	      platform)	PLATFORM="$OPTARG";;
-            
-              help)     showUsage && exit 0;;
-            
-              -*)       showUsage && exit 1;;
-              *)        showUsage && exit 1;;            
-              esac
-	      
-          done
-          shift $[OPTIND-1]
-          if [ $OPTIND -le 1 ] ; then
-              showUsage && exit 1
           fi
-        fi
+
+          case "$OPTOPT" in
+          clean)    WANTS_CLEAN=$TRUE;;
+          config)   WANTS_CONFIG=$TRUE;;
+          version)  WANTS_VERSION=$TRUE;;
+          chan)     CHANNEL="$OPTARG";;
+          btype)    if [ \( "$OPTARG" == "Release" \) -o \( "$OPTARG" == "RelWithDebInfo" \) -o \( "$OPTARG" == "Debug" \) ] ; then
+                      BTYPE="$OPTARG"
+                    fi
+                    ;;
+          kdu)      WANTS_KDU=$TRUE;;
+          fmod)    WANTS_FMOD=$TRUE;;
+          package)    WANTS_PACKAGE=$TRUE;;
+          build)    WANTS_BUILD=$TRUE;;
+          platform)    PLATFORM="$OPTARG";;
+
+          help)     showUsage && exit 0;;
+
+          -*)       showUsage && exit 1;;
+          *)        showUsage && exit 1;;
+          esac
+
+      done
+      shift $[OPTIND-1]
+      if [ $OPTIND -le 1 ] ; then
+          showUsage && exit 1
+      fi
+    fi
 
         if [ $WANTS_CLEAN -ne $TRUE ] && [ $WANTS_CONFIG -ne $TRUE ] && \
            [ $WANTS_VERSION -ne $TRUE ] && [ $WANTS_BUILD -ne $TRUE ] && \
            [ $WANTS_PACKAGE -ne $TRUE ] ; then
         # the user didn't say what to do, so assume he wants to do a basic rebuild
               WANTS_CONFIG=$TRUE
-	      WANTS_BUILD=$TRUE
+          WANTS_BUILD=$TRUE
               WANTS_VERSION=$TRUE
         fi
 
-	LOG="`pwd`/logs/build_$PLATFORM.log"
-	if [ -r "$LOG" ] ; then
-		rm -f `basename "$LOG"`/* #(remove old logfiles)
-	fi
+    LOG="`pwd`/logs/build_$PLATFORM.log"
+    if [ -r "$LOG" ] ; then
+        rm -f `basename "$LOG"`/* #(remove old logfiles)
+    fi
 }
 
 function b2a()
@@ -204,10 +204,10 @@ function getoptex()
           fi
         done
         #echo "$0: error: invalid option: $o"
-	LL_ARGS_PASSTHRU="$LL_ARGS_PASSTHRU $o"
-	return 0
-	#showUsage
-	#exit 1
+    LL_ARGS_PASSTHRU="$LL_ARGS_PASSTHRU $o"
+    return 0
+    #showUsage
+    #exit 1
   fi; fi
   OPTOPT="?"
   unset OPTARG
@@ -246,7 +246,7 @@ function getopt()
 
 ###
 ###  Main Logic
-### 
+###
 
 getArgs $*
 if [ ! -d `dirname "$LOG"` ] ; then
@@ -254,143 +254,134 @@ if [ ! -d `dirname "$LOG"` ] ; then
 fi
 
 echo -e "configure_firestorm.py" > $LOG
-echo -e "       PLATFORM: '$PLATFORM'"          | tee -a $LOG
-echo -e "	     KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
-echo -e "	    FMOD: `b2a $WANTS_FMOD`"    | tee -a $LOG
-echo -e "	 PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
-echo -e "	   CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
-echo -e "	   BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
-echo -e "	  CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
-echo -e "	PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
-echo -e "	   BTYPE: $BTYPE"               | tee -a $LOG
+echo -e "       PLATFORM: '$PLATFORM'"       | tee -a $LOG
+echo -e "         KDU: `b2a $WANTS_KDU`"     | tee -a $LOG
+echo -e "        FMOD: `b2a $WANTS_FMOD`"    | tee -a $LOG
+echo -e "     PACKAGE: `b2a $WANTS_PACKAGE`" | tee -a $LOG
+echo -e "       CLEAN: `b2a $WANTS_CLEAN`"   | tee -a $LOG
+echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
+echo -e "      CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
+echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
+echo -e "       BTYPE: $BTYPE"               | tee -a $LOG
 echo -e "       Logging to $LOG"
 
 
 if [ $PLATFORM == "win32" ] ; then
-	FIND=/usr/bin/find
+    FIND=/usr/bin/find
 else
-	FIND=find
+    FIND=find
 fi
 
 
 if [ -z $CHANNEL ] ; then
-	if [ $PLATFORM == "darwin" ] ; then
-		CHANNEL="private-`hostname -s` "
-	else 
-		CHANNEL="private-`hostname`"
-	fi
+    if [ $PLATFORM == "darwin" ] ; then
+        CHANNEL="private-`hostname -s` "
+    else
+        CHANNEL="private-`hostname`"
+    fi
 else
-	CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
+    CHANNEL=`echo $CHANNEL | sed -e "s/[^a-zA-Z0-9\-]*//g"` # strip out difficult characters from channel
 fi
 
 if [ \( $WANTS_CLEAN -eq $TRUE \) -a \( $WANTS_BUILD -eq $FALSE \) ] ; then
-	echo "Cleaning $PLATFORM...."
-	wdir=`pwd`
-	cd ..
-	rm -rf packages 
-	if [ $PLATFORM == "darwin" ] ; then
-	    if [ -d build-darwin-i386/packages ] ; then
-	    	mv build-darwin-i386/packages packages
-	    fi
-	    rm -rf build-darwin-i386/*
-	    if [ -d packages ] ; then
-	        mv packages build-darwin-i386/packages
-		mkdir build-darwin-i386/logs
-            fi
-	elif [ $PLATFORM == "win32" ] ; then
-            if [ -d build-vc100/packages ] ; then
-                mv build-vc100/packages packages
-            fi
-            rm -rf build-vc100/*
-            if [ -d packages ] ; then                
-		mv packages build-vc100/packages
-		mkdir build-vc100/logs
-            fi
-	elif [ $PLATFORM == "linux32" ] ; then
-            if [ -d build-linux-i686/packages ] ; then
-                mv build-linux-i686/packages packages
-            fi
-            rm -rf build-linux-i686/*
-            if [ -d packages ] ; then                
-	    	mv packages build-linux-i686/packages
-		mkdir build-linux-i686/logs
-	    fi
-	fi
+    echo "Cleaning $PLATFORM...."
+    wdir=`pwd`
+    pushd ..
 
-	cd $wdir
+    if [ $PLATFORM == "darwin" ] ; then
+        rm -rf build-darwin-i386/*
+        mkdir -p build-darwin-i386/logs
+
+    elif [ $PLATFORM == "win32" ] ; then
+        rm -rf build-vc100/*
+        mkdir -p build-vc100/logs
+
+    elif [ $PLATFORM == "linux32" ] ; then
+        rm -rf build-linux-i686/*
+        mkdir -p build-linux-i686/logs
+    fi
+
+    popd
 fi
 
 if [ \( $WANTS_VERSION -eq $TRUE \) -o \( $WANTS_CONFIG -eq $TRUE \) ] ; then
-	echo "Versioning..."
-	pushd ..
-        buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1 | grep "[0-9]*"`
-        majorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 1`
-        minorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 2`
-        patchVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 3`
-	echo "Channel : Firestorm-${CHANNEL}" 
-	echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
-	python ./scripts/update_version_files.py --channel="Firestorm-$CHANNEL" --version=${majorVer}.${minorVer}.${patchVer}.${buildVer}
-	popd
+    echo "Versioning..."
+    pushd ..
+    buildVer=`hg summary | head -1 | cut -d " "  -f 2 | cut -d : -f 1 | grep "[0-9]*"`
+    majorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 1`
+    minorVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 2`
+    patchVer=`cat indra/Version | cut -d "=" -f 2 | cut -d "." -f 3`
+    echo "Channel : Firestorm-${CHANNEL}"
+    echo "Version : ${majorVer}.${minorVer}.${patchVer}.${buildVer}"
+    python ./scripts/update_version_files.py --channel="Firestorm-$CHANNEL" --version=${majorVer}.${minorVer}.${patchVer}.${buildVer}
+    popd
 fi
 
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
-	echo "Configuring $PLATFORM..."
-        
-	if [ $WANTS_KDU -eq $TRUE ] ; then
-		KDU="-DUSE_KDU:BOOL=ON"
-	else
-		KDU="-DUSE_KDU:BOOL=OFF"
-	fi
-	if [ $WANTS_FMOD -eq $TRUE ] ; then
-		FMOD="-DFMOD:BOOL=ON"
-	else
-		FMOD="-DFMOD:BOOL=OFF"
-	fi
-	if [ $WANTS_PACKAGE -eq $TRUE ] ; then
-		PACKAGE="-DPACKAGE:BOOL=ON"
-		# Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
-		echo "Removing select previously packaged resources, they will refresh at build time"
-		for subdir in skins app_settings fs_resources ; do
-			for resourcedir in `$FIND . -type d -name $subdir` ; do 
-				rm -rf $resourcedir ; 
-			done	
-		done
-	else
-		PACKAGE="-DPACKAGE:BOOL=OFF"
-	fi
-	if [ $PLATFORM == "darwin" ] ; then
-		TARGET="Xcode"
-	elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
-		TARGET="Unix Makefiles"
-	elif [ \( $PLATFORM == "win32" \) ] ; then
-		TARGET="Visual Studio 10"
-	fi
-	
-	cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    echo "Configuring $PLATFORM..."
 
-	if [ $PLATFORM == "win32" ] ; then
+    if [ $WANTS_KDU -eq $TRUE ] ; then
+        KDU="-DUSE_KDU:BOOL=ON"
+    else
+        KDU="-DUSE_KDU:BOOL=OFF"
+    fi
+    if [ $WANTS_FMOD -eq $TRUE ] ; then
+        FMOD="-DFMOD:BOOL=ON"
+    else
+        FMOD="-DFMOD:BOOL=OFF"
+    fi
+    if [ $WANTS_PACKAGE -eq $TRUE ] ; then
+        PACKAGE="-DPACKAGE:BOOL=ON"
+        # Also delete easy-to-copy resource files, insuring that we properly refresh resoures from the source tree
+        if [ -d skins ] ; then
+            echo "Removing select previously packaged resources, they will refresh at build time"
+            for subdir in skins app_settings fs_resources ; do
+                for resourcedir in `$FIND . -type d -name $subdir` ; do
+                    rm -rf $resourcedir ;
+                done
+            done
+        fi
+    else
+        PACKAGE="-DPACKAGE:BOOL=OFF"
+    fi
+
+    #make sure log directory exists.
+    if [ ! -d "logs" ] ; then
+        echo "Creating logging dir `pwd`/logs"
+        mkdir -p "logs"
+    fi
+
+    if [ $PLATFORM == "darwin" ] ; then
+        TARGET="Xcode"
+    elif [ \( $PLATFORM == "linux32" \) -o \( $PLATFORM == "linux64" \) ] ; then
+        TARGET="Unix Makefiles"
+    elif [ \( $PLATFORM == "win32" \) ] ; then
+        TARGET="Visual Studio 10"
+    fi
+
+    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+
+    if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
-	fi
-	
+    fi
+
 fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
-	echo "Building $PLATFORM..."
-	if [ $PLATFORM == "darwin" ] ; then
-		if [ $OSTYPE == "darwin11" ] ; then
-			xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
-		else
-			xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
-		fi
-	elif [ $PLATFORM == "linux32" ] ; then
-		JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
-		make -j 3 | tee -a $LOG
-	elif [ $PLATFORM == "win32" ] ; then
-		# note: this is not used to do needing to source vsversall.bat first. Autobuild calls this directly.
-		if [ ! -d logs ] ; then mkdir logs ; fi
-		msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
-	fi	
+    echo "Building $PLATFORM..."
+    if [ $PLATFORM == "darwin" ] ; then
+        if [ $OSTYPE == "darwin11" ] ; then
+            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+        else
+            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+        fi
+    elif [ $PLATFORM == "linux32" ] ; then
+        JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
+        make -j 3 | tee -a $LOG
+    elif [ $PLATFORM == "win32" ] ; then
+        msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
+    fi
 fi
 
 echo "Finished"

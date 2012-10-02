@@ -9,7 +9,7 @@
  min_width="410"
  name="texture picker"
  help_topic="texture_picker"
- title="PICK: TEXTURE"
+ title="Pick: Texture"
  width="410">
  
 <!--  top static -->
@@ -134,16 +134,6 @@
      top_delta="-25"
      name="Pipette"
      width="28" />
-   <check_box
-     follows="left|bottom"
-     height="20"
-     initial_value="true"
-     label="Live Preview"
-     layout="topleft"
-     left="4"
-     name="apply_immediate_check"
-     top="282"
-     width="120" />
    <text
      follows="left|bottom"
      height="20"
@@ -259,7 +249,6 @@
      top_delta="0"
      name="Cancel"
      width="100" />
-<!-- FS:Ansariel - exists twice
     <check_box
      follows="left|bottom"
      height="20"
@@ -270,5 +259,4 @@
      name="apply_immediate_check"
      top_delta="0"
      width="120" />
--->
 </floater>

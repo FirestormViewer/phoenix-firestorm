@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_auction" title="ROZPOCZNIJ SPRZEDAŻ POSIADŁOŚCI LINDENÓW">
+<floater name="floater_auction" title="Rozpocznij sprzedaż posiadłości lindenów">
 	<floater.string name="already for sale">
 		Nie możesz umieścić Posiadłości na Aukcji, jeżeli już została wystawiona na sprzedaż.
 	</floater.string>

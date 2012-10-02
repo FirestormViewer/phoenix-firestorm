@@ -42,6 +42,16 @@ else (HAS_OPENSIM_SUPPORT)
 endif (HAS_OPENSIM_SUPPORT)
 #</FS:AW optional opensim support>
 
+# <FS:Ansariel> [AVX Optimization]
+option(USE_AVX_OPTIMIZATION "AVX optimization support" OFF)
+if (USE_AVX_OPTIMIZATION)
+  add_definitions(-DUSE_AVX_OPTIMIZATION=1)
+  message("compiling with AVX optimizations")
+else (USE_AVX_OPTIMIZATION)
+  message("compiling without AVX optimizations")
+endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]
+
 # For the library installation process;
 # see cmake/Prebuild.cmake for the counterpart code.
 if ("${CMAKE_SOURCE_DIR}/../autobuild.xml" IS_NEWER_THAN "${CMAKE_BINARY_DIR}/temp/sentinel_installed")

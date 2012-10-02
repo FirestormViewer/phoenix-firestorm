@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Environment Editor Floater" title="USTAWIENIA OTOCZENIA">
+<floater name="Environment Editor Floater" title="Ustawienia otoczenia">
 	<check_box label="Zawsze używaj ustawień parceli/regionu." name="use_env_from_region_always" tool_tip="Zaznaczenie tej opcji spowoduje, że otoczenie zawsze będzie używać poniższych ustawień."/>
 	<radio_group name="region_settings_radio_group">
 		<radio_item label="Użyj ustawień regionu" name="use_region_settings"/>

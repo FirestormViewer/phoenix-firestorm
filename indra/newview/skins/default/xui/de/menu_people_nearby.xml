@@ -17,7 +17,7 @@
 	<menu_item_check label="Ignorieren/Freischalten" name="Block/Unblock"/>
 	<menu_item_call label="Abuse-Report erstellen" name="report"/>
 	<menu_item_call label="Einfrieren" name="freeze"/>
-	<menu_item_call label="Parzelle: Entfernen/Verbannen" name="eject"/>
-	<menu_item_call label="Estate: Hinauswerfen/Verbannen" name="kick"/>
+	<menu_item_call label="Parzelle: Entfernen" name="eject"/>
+	<menu_item_call label="Estate: Hinauswerfen" name="kick"/>
 	<menu_item_call label="Estate: Teleport nach Hause" name="teleport_home"/>
 </context_menu>

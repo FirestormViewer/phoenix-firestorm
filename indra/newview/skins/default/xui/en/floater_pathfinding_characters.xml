@@ -13,7 +13,7 @@
     reuse_instance="true"
     save_rect="false"
     single_instance="true"
-    title="Pathfinding characters">
+    title="Pathfinding Characters">
   <floater.string name="messaging_initial"></floater.string>
   <floater.string name="messaging_get_inprogress">Querying for pathfinding characters ...</floater.string>
   <floater.string name="messaging_get_error">Error detected while querying for pathfinding characters.</floater.string>

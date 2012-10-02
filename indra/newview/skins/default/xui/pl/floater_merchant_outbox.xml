@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_merchant_outbox" title="SKRZYNKA NADAWCZA KUPCA">
+<floater name="floater_merchant_outbox" title="Skrzynka nadawcza kupca">
 	<string name="OutboxFolderCount1">1 folder</string>
 	<string name="OutboxFolderCountN">Folderów: [NUM]</string>
 	<string name="OutboxImporting">Wysyłanie folderów...</string>

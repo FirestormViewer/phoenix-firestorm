@@ -8,7 +8,7 @@
  layout="topleft"
  left="0"
  name="nearby_chat"
- title="NEARBY CHAT"
+ title="Nearby Chat"
  top="0"
  can_dock="false"
  can_close="true"
@@ -89,12 +89,44 @@
           image_selected="PushButton_Selected_Press"
           tool_tip="Open the nearby chat history."
           name="chat_history_btn"/>
+          <button
+          height="20"
+          follows="left|top"
+          left_pad="2"
+          image_overlay="Muted_Chat"
+          layout="topleft"
+          width="25"
+          control_name="FSShowMutedChatHistory"
+          image_pressed="PushButton_Press"
+          image_pressed_selected="PushButton_Selected_Press"
+          image_selected="PushButton_Selected_Press"
+          tool_tip="Shows the muted chat in nearby chat history."
+          name="chat_history_muted_btn">
+			<button.commit_callback
+			 function="ToggleControl"
+			 parameter="FSShowMutedChatHistory"/>
+		  </button>
         <chat_history
-		   top_pad="4"
-	 font="SansSerifSmall"
+         invisibility_control="FSShowMutedChatHistory"
+		 top_pad="4"
+         font="SansSerifSmall"
          follows="all"
          height="174"
+         mouse_opaque="false"
          name="chat_history"
+         parse_highlights="true"
+         parse_urls="true"
+         layout="topleft"
+         left="2"
+		 right="-2" />
+        <chat_history
+         visibility_control="FSShowMutedChatHistory"
+		 top_delta="0"
+         font="SansSerifSmall"
+         follows="all"
+         height="174"
+         mouse_opaque="false"
+         name="chat_history_muted"
          parse_highlights="true"
          parse_urls="true"
          layout="topleft"

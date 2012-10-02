@@ -43,6 +43,7 @@ class UtilityBar
 	public:
 		void init();
 		virtual BOOL tick();
+		void setAOInterfaceButtonExpanded(bool expanded);
 
 	protected:
 		void onParcelStreamClicked();
@@ -51,6 +52,7 @@ class UtilityBar
 		LLButton* mParcelStreamPlayButton;
 		LLButton* mParcelMediaPlayButton;
 		LLButton* mTalkButton;
+		LLButton* mAOInterfaceButton;
 };
 
 #endif // UTILITYBAR_H

@@ -16,7 +16,7 @@
  save_visibility="true"
  single_instance="true"
  chrome="true"
- title="MOVE"
+ title=""
  width="113">
     <string
      name="walk_forward_tooltip">

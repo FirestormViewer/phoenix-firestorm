@@ -567,7 +567,7 @@
              left="30"
              height="20"
              name="WhenPlayIMLabel"
-             width="185"
+             width="220"
              top_pad="15">
               When receiving Instant Messages:
             </text>
@@ -578,6 +578,38 @@
              layout="topleft"
              control_name="PlayModeUISndNewIncomingIMSession"
              name="WhenPlayIM"
+             width="245">
+                <combo_box.item
+                 label="Play sound only on new IM session"
+                 name="1"
+                 value="1"/>
+                <combo_box.item
+                 label="Play sound on every message received"
+                 name="2"
+                 value="2"/>
+                <combo_box.item
+                 label="Don't play any notification sound"
+                 name="0"
+                 value="0"/>
+            </combo_box>
+			
+            <text
+             follows="left|top"
+             layout="topleft"
+             left="30"
+             height="20"
+             name="WhenPlayGroupIMLabel"
+             width="220"
+             top_pad="5">
+              When receiving Group Instant Messages:
+            </text>
+            <combo_box
+             left_pad="5"
+             top_delta="-3"
+             height="20"
+             layout="topleft"
+             control_name="PlayModeUISndNewIncomingGroupIMSession"
+             name="WhenPlayGroupIM"
              width="245">
                 <combo_box.item
                  label="Play sound only on new IM session"

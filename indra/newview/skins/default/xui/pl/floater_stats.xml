@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Statistics" title="STATYSTYKI">
+<floater name="Statistics" title="Statystyki">
 	<scroll_container name="statistics_scroll">
 		<container_view name="statistics_view">
 			<stat_view label="Podstawowe" name="basic">

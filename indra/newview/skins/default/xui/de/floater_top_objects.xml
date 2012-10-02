@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="top_objects" title="TOP-OBJEKTE" min_width="690">
+<floater name="top_objects" title="Top-Objekte" min_width="690">
 	<floater.string name="top_scripts_title">
-		TOP-SKRIPTE
+		Top-Skripte
 	</floater.string>
 	<floater.string name="top_scripts_text">
 		[COUNT] Skripts benötigen insgesamt [TIME] ms
@@ -13,7 +13,7 @@
 		Mono-Uhrzeit:
 	</floater.string>
 	<floater.string name="top_colliders_title">
-		TOP-KOLLISIONSOBJEKTE
+		Top-Kollisionsobjekte
 	</floater.string>
 	<floater.string name="top_colliders_text">
 		Top [COUNT] Objekte mit vielen potenziellen Kollisionen

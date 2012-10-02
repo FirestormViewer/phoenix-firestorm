@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="quickprefs" title="SCHNELLEINSTELLUNGEN" width="280">
+<floater name="quickprefs" title="Schnelleinstellungen" width="280">
 	<panel name="quickprefs" width="280">
 		<text name="Draw Distance" width="105" tool_tip="Legt die Entfernung fest, bis zu der Objekte dargestellt werden.">
 			Draw Distance:

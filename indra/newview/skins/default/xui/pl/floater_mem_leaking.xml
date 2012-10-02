@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="MemLeak" title="SYMULACJA WYCIEKU PAMIĘCI">
+<floater name="MemLeak" title="Symulacja wycieku pamięci">
 	<spinner label="Prędkość wycieków (bajty na klatkę):" name="leak_speed"/>
 	<spinner label="Maks. wycieki (MB):" name="max_leak"/>
 	<text name="total_leaked_label">

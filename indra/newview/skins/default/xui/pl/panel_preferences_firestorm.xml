@@ -158,7 +158,7 @@
         <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/parceli" name="UseEnvironmentFromRegionAlways" />
         <check_box label="Płynne przenikanie ustawień regionu i moich Szybkich Preferencji" name="FSInterpolateSky" tool_tip="Opcja kontroluje płynne mieszanie się z sobą ustawień WL regionu i Szybkich Preferencji. Ten efekt może spowodować, że wolniejsze komputery mogą zwalniać na kilka sekund podczas zmiany otoczenia. Wyłącz te dwie opcje, aby pominąć efekt i stosować ustawienia natychmiast." />
         <check_box label="Płynne przenikanie ustawień wody i moich Szybkich Preferencji" name="FSInterpolateWater" tool_tip="To samo co powyżej, ale dla wody." />
-        <text name="FSWLshare_txt">
+        <text name="FSWLshare_txt" width="350">
           Dzielenie się WL Phoenixa dla parcel (eksperymentalne)
         </text>
         <check_box label="Używaj dzielenia się WL Phoenixa dla parcel (eksperymentalne)" name="FSWLParcelEnabled" />
@@ -198,6 +198,7 @@
         <spinner label="Poz. Z" name="Z pos" />
         <check_box label="Wartości w procentach" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="EmPivotPercToggle" />
         <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="EmBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Użyj starego zachowania &quot;Ustaw obiekt na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapsisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
         <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />

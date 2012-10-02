@@ -1,113 +1,109 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Edit Sky Preset" title="Edytuj Ustawienie nieba">
-    <string name="title_new">Stwórz nowe Ustawienie nieba</string>
-    <string name="title_edit">Edytuj Ustawienie nieba</string>
-    <string name="hint_new">Nazwij Ustawienie, ustaw co trzeba i kliknij na "Zapisz".</string>
-    <string name="hint_edit">Aby edytować Ustawienie ustaw co trzeba i kliknij na "Zapisz".</string>
-    <string name="combo_label">-Wybierz Ustawienie-</string>
-    <text name="hint">
-     Aby edytować Ustawienie ustaw co trzeba i kliknij na "Zapisz"
-     </text>
-    <text name="label">
-     Nazwa:
-    </text>
-    <text name="note">
-     Uwaga: jeśli zmienisz nazwę Ustawienia, to zaczniesz tworzyć nowe, a obecne pozostanie bez zmian.
-    </text>
-    <tab_container name="WindLight Tabs">
-    <panel label="ATMOSFERA" name="Atmosphere">
-        <text name="BHText">
-           Horyzont błękitu
-        </text>
-        <text name="BDensText">
-           Horyzont mgły
-        </text>
-        <text name="BDensText2">
-            Gęstość błękitu
-        </text>
-        <text name="HDText">
-            Gęstość mgły
-        </text>
-        <text name="DensMultText">
-           Mnożnik gęstości
-        </text>
-        <text name="WLDistanceMultText">
-           Mnożnik odległości
-        </text>
-        <text name="MaxAltText">
-           Maks. wysokość
-        </text>
-        </panel>
-        <panel label="OŚWIETLENIE" name="Lighting">
-            <text name="SLCText">
-                Kolor Słońca/Księżyca
-            </text>
-            <text name="WLAmbientText">
-                Otoczenie
-            </text>
-            <text name="SunGlowText">
-                Blask Słońca
-            </text>
-            <slider label="Skupienie" name="WLGlowB" />
-            <slider label="Rozmiar" name="WLGlowR" />
-            <text name="WLStarText">
-                Jasność gwiazd
-            </text>
-            <text name="SceneGammaText">
-                Gamma sceny
-            </text>
-            <text name="TODText">
-                Poz. Słońca/Księżyca
-            </text>
-            <text name="WL12am">
-                24:00
-            </text>
-            <text name="WL6am">
-                6:00
-            </text>
-            <text name="WL12pmHash">
-                12:00
-            </text>
-            <text name="WL6pm">
-                18:00
-            </text>
-            <text name="WL12am2">
-                24:00
-            </text>
-            <time name="WLDayTime" value="6:00"/>
-            <text name="WLEastAngleText">
-                Kąt wschodu
-            </text>
-        </panel>
-        <panel label="CHMURY" name="Clouds">
-            <text name="WLCloudColorText">
-                Kolor chmur
-            </text>
-            <text name="WLCloudColorText2">
-                XY/gęstość chmur
-            </text>
-            <slider label="G" name="WLCloudDensity" />
-            <text name="WLCloudCoverageText">
-                Pokrycie chmur
-            </text>
-            <text name="WLCloudScaleText">
-                Rozmiar chmur
-            </text>
-            <text name="WLCloudDetailText">
-                Detale chmur (XY/gęstość)
-            </text>
-            <slider label="G" name="WLCloudDetailDensity" />
-            <text name="WLCloudScrollXText">
-                Suwanie chmur X
-            </text>
-            <check_box label="Blokuj" name="WLCloudLockX" />
-            <text name="WLCloudScrollYText">
-                Suwanie chmur Y
-            </text>
-            <check_box label="Blokuj" name="WLCloudLockY" />
-        </panel>
-    </tab_container>
-    <check_box label="Ustaw jako moje Ustawienie nieba" name="make_default_cb"/>
-    <button label="Zapisz" name="save"/>
-    <button label="Anuluj" name="cancel"/>
- </floater>
+<floater name="Edit Sky Preset" title="Edytuj ustawienie nieba">
+	<string name="title_new">
+		Stwórz nowe Ustawienie nieba
+	</string>
+	<string name="title_edit">
+		Edytuj Ustawienie nieba
+	</string>
+	<string name="combo_label">
+		-Wybierz Ustawienie-
+	</string>
+	<panel name="P_Presetname">
+		<text name="hint">
+			Aby edytować Ustawienie ustaw co trzeba i kliknij na "Zapisz".
+		</text>
+		<text name="label">
+			Nazwa:
+		</text>
+	</panel>
+	<tab_container name="Main_Tab">
+		<panel label="Atmosfera i Słońce" name="ASUN">
+			<panel name="P_Atmosphere_Header">
+				<text name="T_Atmosphere_Header">
+					Ustawienia atmosfery
+				</text>
+			</panel>
+			<panel name="P_Blue_Horizon">
+				<text name="BHText" tool_tip="Horyzont błękitu: Kolor nieba. W ujęciu meteorologicznym to ustawienie wpływa na 'rozpraszanie atmosferyczne'.">
+					Kolor
+				</text>
+				<text name="BDensText2" tool_tip="Gęstość błękitu: Wpływa na ogólne nasycenie kolorów nieba. Jeśli przesuniesz suwak Intensywności (I) na prawo, to kolory staną się jaśniejsze i bardziej żywe. W miarę przesuwania go w lewo kolory będą stawać się ciemniejsze, w końcu zanikną w czerń i biel. Jeśli chcesz lepiej dostroić balans kolorów nieba możesz skonfigurować poszczególne elementy nasycenia za pomocą wartości kolorów czerwonego, zielonego i niebieskiego.">
+					Gęstość
+				</text>
+			</panel>
+			<panel name="P_Atmosphere_OtherSettings">
+				<slider label="HorMgły" name="WLHazeHorizon" tool_tip="Horyzont mgły: Wpływa na wysokość mgły na horyzoncie. Przy wyższych ustawieniach mgła dotrze do nieba i zacznie przesłaniać rzeczywisty horyzont. Mgła na horyzoncie może przyczynić się do podkreślenia Słońca i stworzenia zakurzonej, przydymionej, wilgotnej atmosfery. To ustawienie nie będzie działać, jeśli Gęstość Mgły jest ustawiona na zero."/>
+				<slider label="GęstMgły" name="WLHazeDensity" tool_tip="Gęstość mgły: Wpływa na ilość mgły widocznej w atmosferze. Niższe ustawienia sprawdzają się na zewnątrz, w środowisku zapylonym lub tropikalnym dając wspaniałe widoki, a wyższe mogą stworzyć gęstą, zasłaniającą wszystko, nieprzebytą mgłę. Jeśli ustawisz Gęstość Mgły na zero, to ustawienie Horyzontu Mgły nie będzie miało żadnego efektu."/>
+				<slider label="MnżGęst" name="WLDensityMult" tool_tip="Mnożnik gęstości: Wpływa to na ogólną gęstość atmosfery. Przy niższych ustawieniach stwarza efekt czystego, 'lekkiego' powietrza, a na wyższych bardzo 'ciężkiego' smogu."/>
+				<slider label="MnżOdl" name="WLDistanceMult" tool_tip="Mnożnik odległości: Wpływa na postrzeganą jasność/czystość w atmosferze. Aby wszystko wyglądało mgliste i odlegle przesuń suwak w prawo. Jeśli chcesz całkowicie usunąć skutki 'Ustawienia Nieba' z terenu i obiektów należy ustawić suwak na zero."/>
+				<slider label="MaksWys" name="WLMaxAltitude" tool_tip="Maks. wysokość: Reguluje wysokość przeliczania, na której Second Life przetwarza dane dla nastrojowego oświetlenia. W późniejszych porach dnia ta opcja może być przydatna do obliczania jak 'głęboko' pojawia się zachód słońca, a w południe może być stosowany w celu uzyskania odpowiedniej wartości jasności."/>
+			</panel>
+			<panel name="P_Sun_and_Moon_Header">
+				<text name="T_Sun_and_Moon_Header">
+					Słońce i Księżyc
+				</text>
+			</panel>
+			<panel name="P_SM_Color">
+				<text name="SLCText" tool_tip="Kolor Słońca/Księżyca - Wpływa na kolor światła emitowanego przez Słońce i Księżyc. Należy pamiętać, że światło słoneczne/księżycowe wpłynie na kolor nieba!">
+					Kolor
+				</text>
+				<text name="WLAmbientText" tool_tip="Otoczenie - Reguluje kolor i intensywność oświetlenia otoczenia w atmosferze. Jest to wykorzystywane do symulacji, jak światło słoneczne jest rozpraszane przez atmosferę i inne obiekty zanim dotrze do Ziemi. Możesz stworzyć bardzo jasne Słońce i stosunkowo ciemny świat (pomyśl o zachodzie słońca!) z Otoczeniem ustawionym na zero, ale jeśli chcesz zasymulować oświetlenie południa wraz ze Słońcem zawieszonym nisko na niebie musisz zwiększyć ustawienie Otoczenia.">
+					Otocz.
+				</text>
+			</panel>
+			<panel name="P_SM_OtherSettings">
+				<slider label="BS.Skup" name="WLGlowB" tool_tip="Blask Słońca: Skupienie - Reguluje jak mocno blask Słońca rozpościera się na niebie. Przy ustawieniach wysokich Skupienie może spowodować, że Słońce całkowicie przesłoni część nieba jasnym światłem, a na zerowych, że Słońce (ale nie światło, które rzuca) zniknie zupełnie z nieba."/>
+				<slider label="BS.Rozm" name="WLGlowR" tool_tip="Blask Słońca: Rozmiar - Określa rozmiar obrazu Słońca."/>
+				<slider label="Gwiazdy" name="WLStarAlpha" tool_tip="Jasność gwiazd - Określa jak bardzo gwiazdy są widoczne na niebie. Jeśli będziesz się bawić tym suwakiem podczas gdy Słońce będzie na niebie, to gwiazdy pojawią się w środku dnia."/>
+				<slider label="Gamma" name="WLGamma" tool_tip="Gamma sceny - Regulacja dystrybucją produkcji światła i ciemności na ekranie. Niższe ustawienia spowodują, że wszystko będzie wyglądać dość 'słabo' i ciemno, natomiast wyższe mogą wyszarzyć scenę i 'wypłowić' kolory. Wpływa tylko na widok 3D, nie na menu i resztę ekranu komputera. UWAGA: Wartość 1.0 jest domyślna."/>
+			</panel>
+			<panel name="P_WL_Daycycle">
+				<icon name="SkyDayCycle" tool_tip="Pozycja Słońca/Księżyca - Wpływa na pionowe położenie Słońca i Księżyca, od wschodu (0.0) poprzez południe (0.25), zachód (0.5), północ (0.75) z powrotem do wschodu (1.0)."/>
+				<time name="WLDayTime" tool_tip="Pozycja Słońca/Księżyca - Wpływa na pionowe położenie Słońca i Księżyca, od wschodu (0.0) poprzez południe (0.25), zachód (0.5), północ (0.75) z powrotem do wschodu (1.0)."/> 
+				<slider label="Kąt wsch." name="WLEastAngle" tool_tip="Kąt wschodu - Zmienia azymut wschodu Słońca zgodnie z ruchem wskazówek zegara, relatywnie do kierunku wschodniego na mapie. Przy ustawieniu 0,5 Słońce wzejdzie na zachodzie i zajdzie na wschodzie, przy 0.25 wzejdzie na południu i zajdzie na północy itd."/>
+			</panel>
+		</panel>
+		<panel name="P_Clouds" label="Chmury">
+			<panel name="P_Clouds_Header">
+				<text name="T_Clouds_Header">
+					Ustawienia chmur
+				</text>
+			</panel>
+			<panel name="P_Cloud_Color">
+				<text name="WLCloudColorText" tool_tip="Kolor chmur - Wpływa na kolor Twoich chmur, jeśli jakieś masz. Użyj suwaków Czerwieni/Zieleni/Błękitu do zmiany koloru indywidualnie lub suwaka natężenia (I) do regulacji wszystkich trzech na raz.">
+					Kolor
+				</text>
+			</panel>
+			<panel name="P_Cloud_Density">
+				<text name="WLCloudColorText2" tool_tip="Gęstość chmur XY - Użyj suwaków X oraz Y aby zmienić pozycję poziomą wszystkich chmur na niebie. Suwak G dotyczy ogólnej gęstości poszczególnych chmur; przy niskich ustawieniach widać cienkie, delikatne chmury, a na wyższych grubsze, bardziej masywne.">
+					Gęstość chmur XY
+				</text>
+				<slider label="G" name="WLCloudDensity"/>
+			</panel>
+			<panel name="P_Cloud_CovScale">
+				<slider label="Zachm." name="WLCloudCoverage" tool_tip="Zachmurzenie - Reguluje częstość pokrycia nieba chmurami."/>
+				<slider label="Rozmiar" name="WLCloudScale" tool_tip="Rozmiar chmur: Reguluje odczuwalną wielkość chmur."/>
+			</panel>
+			<panel name="P_Cloud_Detail">
+				<text name="WLCloudDetailText" tool_tip="Detale chmur (XY/Gęstość) - Wpływa na pozycję i szczegółowość chmur. Suwaki X oraz Y przesuwają je w poziomie, a suwak G kontroluje jak bardzo są puszyste/poszarpane.">
+					Detale chmur (XY/Gęstość)
+				</text>
+				<slider label="G" name="WLCloudDetailDensity"/>
+			</panel>
+			<panel name="P_Cloud_Scroll">
+				<text name="WLCloudScrollXText" tool_tip="Przesuwanie X - Wpływa na kierunek i prędkość, z jaką poruszają się chmury na niebie wzdłuż osi X.">
+					Przesuwanie X
+				</text>
+				<check_box label="Blokada przesuwania" name="WLCloudLockX" tool_tip="Blokada przesuwania - Chmury nie mogą poruszać się wzdłuż wybranej osi."/>
+				<text name="WLCloudScrollYText" tool_tip="Przesuwanie Y - Wpływa na kierunek i prędkość, z jaką poruszają się chmury na niebie wzdłuż osi Y.">
+					Przesuwanie Y
+				</text>
+				<check_box label="Blokada przesuwania" name="WLCloudLockY" tool_tip="Blokada przesuwania - Chmury nie mogą poruszać się wzdłuż wybranej osi."/>
+			</panel>
+		</panel>
+	</tab_container>
+	<check_box label="Ustaw jako moje Ustawienie Nieba" name="make_default_cb"/>
+	<button label="Zapisz" name="save"/>
+	<button label="Anuluj" name="cancel"/>
+</floater>

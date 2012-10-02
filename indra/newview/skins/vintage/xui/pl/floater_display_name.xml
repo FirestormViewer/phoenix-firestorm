@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Display Name" title="ZMIEŃ WYŚWIETLANĄ NAZWĘ">
+<floater name="Display Name" title="Zmień wyświetlaną nazwę">
 	<text name="info_text">
 		Nazwa, którą nadałaś/eś Twojemu awatarowi jest nazywana Wyświetlaną Nazwą. Możesz ją zmieniać raz w tygodniu.
 	</text>

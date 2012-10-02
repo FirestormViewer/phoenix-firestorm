@@ -6,7 +6,7 @@
  name="Edit Sky Preset"
  help_topic="sky_preset_atmosphere"
  save_rect="true"
- title="EDIT SKY PRESET"
+ title="Edit Sky Preset"
  width="260">
 	<string name="title_new">
 		Create a New Sky Preset

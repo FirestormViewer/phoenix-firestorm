@@ -448,6 +448,9 @@
       name="ChatHistoryTextColor"
       reference="LtGray" />
   <color
+      name="ChatHistoryMutedTextColor"
+      reference="White_70" />
+  <color
       name="ColorDropShadow"
       reference="Black_50" />
   <color

@@ -41,6 +41,11 @@ class LLTabContainer;
 class LLTextBox;
 class LLTextureCtrl;
 class LLMediaCtrl;
+class LLGroupList;
+class LLTextBase;
+class LLMenuButton;
+class LLLineEditor;
+class LLTextEditor;
 
 /**
 * Base class for any Profile View or My Profile Panel.
@@ -222,6 +227,20 @@ private:
     void                    openGroupProfile();
 
     LLTextBox*          mStatusText;
+	LLGroupList*		mGroupList;
+	LLCheckBoxCtrl*		mShowInSearchCheckbox;
+	LLTextureCtrl*		mSecondLifePic;
+	LLTextBase*			mDescriptionEdit;
+	LLButton*			mTeleportButton;
+	LLButton*			mShowOnMapButton;
+	LLButton*			mBlockButton;
+	LLButton*			mUnblockButton;
+	LLButton*			mDisplayNameButton;
+	LLButton*			mAddFriendButton;
+	LLButton*			mGroupInviteButton;
+	LLButton*			mPayButton;
+	LLButton*			mIMButton;
+	LLMenuButton*		mOverflowButton;
 
     bool                mVoiceStatus;
 };
@@ -269,6 +288,10 @@ private:
     std::string         mURLHome;
     std::string         mURLWebProfile;
     LLMediaCtrl*        mWebBrowser;
+	LLUICtrl*			mWebProfileButton;
+	LLUICtrl*			mLoadButton;
+	LLLineEditor*		mUrlEdit;
+
     LLFrameTimer        mPerformanceTimer;
     bool                mFirstNavigate;
     bool                mCompleted;
@@ -301,6 +324,9 @@ protected:
 private:
     LLCheckBoxCtrl *mWantChecks[8];
     LLCheckBoxCtrl *mSkillChecks[6];
+	LLLineEditor*	mWantToEditor;
+	LLLineEditor*	mSkillsEditor;
+	LLLineEditor*	mLanguagesEditor;
 };
 
 
@@ -387,7 +413,7 @@ protected:
     /**
      * Enables/disables "Save" button
      */
-    void enableSaveButton(bool enable);
+    void enableSaveButton(BOOL enable);
 
     /**
      * Called when snapshot image changes.
@@ -428,7 +454,11 @@ protected:
 
 protected:
 
-    LLTextureCtrl*            mSnapshotCtrl;
+    LLTextureCtrl*		mSnapshotCtrl;
+	LLLineEditor*		mPickName;
+	LLTextEditor*		mPickDescription;
+	LLButton*			mSetCurrentLocationButton;
+	LLButton*			mSaveButton;
 
     LLVector3d mPosGlobal;
     LLUUID mParcelId;
@@ -468,8 +498,10 @@ private:
     void onClickDelete();
     bool callbackDeletePick(const LLSD& notification, const LLSD& response);
 
-    LLTabContainer* mTabContainer;
-    LLUICtrl* mNoItemsLabel;
+    LLTabContainer*	mTabContainer;
+    LLUICtrl*		mNoItemsLabel;
+	LLButton*		mNewButton;
+	LLButton*		mDeleteButton;
 };
 
 
@@ -486,6 +518,8 @@ public:
 
     /*virtual*/ void onOpen(const LLSD& key);
 
+    /*virtual*/ BOOL postBuild();
+
     /*virtual*/ void processProperties(void* data, EAvatarProcessorType type);
 
     /**
@@ -495,6 +529,9 @@ public:
 
 protected:
     virtual void enableControls();
+
+	LLUICtrl*		mDescriptionEdit;
+	LLTextureCtrl*	mPicture;
 };
 
 /**
@@ -540,6 +577,11 @@ protected:
     void onCommitRights();
     void onCommitNotes();
     void enableCheckboxes(bool enable);
+
+	LLCheckBoxCtrl*		mOnlineStatus;
+	LLCheckBoxCtrl*		mMapRights;
+	LLCheckBoxCtrl*		mEditObjectRights;
+	LLTextEditor*		mNotesEditor;
 };
 
 #endif // FS_FSPANELPROFILE_H

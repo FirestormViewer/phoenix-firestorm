@@ -1,58 +1,72 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Edit Water Preset" title="Edytuj Ustawienie wody">
-  <string name="title_new">Stwórz nowe Ustawienie wody</string>
-  <string name="title_edit">Edytuj Ustawienie wody</string>
-  <string name="hint_new">Nazwij Ustawienie, ustaw co trzeba i kliknij na "Zapisz".</string>
-  <string name="hint_edit">Aby edytować Ustawienie ustaw co trzeba i kliknij na "Zapisz".</string>
-  <string name="combo_label">-Wybierz Ustawienie-</string>
-  <text name="hint">
-   	Aby edytować Ustawienie ustaw co trzeba i kliknij na "Zapisz"
-   </text>
-   <text name="label">
-   	Nazwa:
-   </text>
-   <text name="note">
-   	Uwaga: jeśli zmienisz nazwę Ustawienia, to zaczniesz tworzyć nowe, a obecne pozostanie bez zmian.
-   </text>
- <panel name="panel_water_preset"> 
-   <text name="water_color_label">
-       Kolor mgły wody
-   </text>
-   <text name="water_fog_density_label">
-    	Gęstość mgły
-   </text>
-   <text name="underwater_fog_modifier_label">
-    	Modyf. mgły pod wodą
-   </text>
-    <text name="BHText">
-        Kierunek Wielkiej Fali
-    </text>
-    <text name="BDensText">
-        Skala refleksji falkowej
-    </text>
-    <text name="HDText">
-        Skala Fresnela
-    </text>
-    <text name="FresnelOffsetText">
-        Przesun. Fresnela
-    </text>
-     <text name="BHText2">
-         Kierunek Małej Fali
-     </text>
-	 <text name="DensMultText">
-         Skala załamania ponad
-     </text>
-     <text name="WaterScaleBelowText">
-         Skala załamania poniżej
-     </text>
-     <text name="MaxAltText">
-         Mnożnik rozmycia
-     </text>
-      <text name="BHText3">
-          Mapa normalna
-      </text>
+<floater name="Edit Water Preset" title="Edytuj ustawienie wody">
+	<string name="title_new">
+		Stwórz nowe Ustawienie wody
+	</string>
+	<string name="title_edit">
+		Edytuj Ustawienie wody
+	</string>
+	<string name="combo_label">
+		-Wybierz Ustawienie-
+	</string>
+	<panel name="P_Presetname">
+		<text name="label">
+			Nazwa:
+		</text>
 	</panel>
+	<tab_container name="Main_Tab">
+		<panel name="P_Fog_and_Wave" label="Mgła i fale">
+			<panel name="P_Water_Fog">
+				<text name="water_color_label" tool_tip="Kolor mgły wody - Reguluje kolor zabarwienia wody, zasadniczo określa kolor samej wody. Jeśli woda nie ma mgły będzie wyglądać na krystalicznie czystą i bezbarwną.">
+					Kolor mgły wody
+				</text>
+				<text name="BHText3" tool_tip="Mapa wektorów normalnych - Obraz służący do określenia odbić i załamań. Każda tekstura może być użyta w tym miejscu, ale prawdziwe mapy wektorów normalnych działają najlepiej. Spróbuj wstawić tutaj skórę węża, płytki lub jakąkolwiek inną mapę wektorów normalnych, aby uzyskać różne zwariowane efekty!">
+					Mapa normalnych
+				</text>
+			</panel>
+			<panel name="P_Fog_Settings">
+				<text tool_tip="Gęstość mgły - Reguluje gęstość Twojej mgły wodnej; To ustawienie określa, jak głęboko pod taflę wody jesteś w stanie zobaczyć patrząc od góry." name="water_fog_density_label">
+					Gęstość mgły
+				</text>
+				<text tool_tip="Modyfikator mgły pod wodą - Reguluje jak zmienia się gęstość mgły wodnej, gdy jesteś pod powierzchnią wody. Przydatne do umożliwiania patrzenia daleko spod tafli wody przy zachowaniu samej powierzchni dość nieprzejrzystej. Na przykład przy ustawieniu 0,25 mgła wodna jest pod wodą gęsta w 1/4 tego, niż by to wynikało podczas patrzenia znad powierzchni." name="underwater_fog_modifier_label">
+					Modyfikator mgły pod wodą
+				</text>
+			</panel>
+			<panel name="P_Wave_Settings">
+				<text name="BHText" tool_tip="Kierunek Wielkiej Fali - Kontroluje kierunek i prędkość X oraz Y obrazu Wielkiej Fali.">
+					Kierunek Wielkiej Fali
+				</text>
+				<text name="BHText2" tool_tip="Kierunek Małej Fali - Kontroluje kierunek i prędkość X oraz Y obrazu Małej Fali.">
+					Kierunek Małej Fali
+				</text>
+			</panel>
+		</panel>
+		<panel name="P_Reflection" label="Odbicia">
+			<panel name="P_Wavelet">
+				<text name="BDensText" tool_tip="Skala odbicia falkowego - Kontroluje skalę trzech falek, które tworzą powierzchnię wody.">
+					Skala odbicia falkowego
+				</text>
+			</panel>
+			<panel name="P_Other_Settings">
+				<text name="HDText" tool_tip="Skala Fresnela - Określa, jak mocno światło odbija się pod różnymi kątami; Zwiększenie wartości tego suwaka zmniejsza efekty wizualne odbić na powierzchni wody.">
+					Skala Fresnela
+				</text>
+				<text name="FresnelOffsetText" tool_tip="Przesunięcie Fresnela - Określa, jak dużo światła ogółem jest odbijanego; Zwiększenie wartości tego suwaka zwiększa ilość światła odbitego od powierzchni wody.">
+					Przesunięcie Fresnela
+				</text>
+				<text name="DensMultText" tool_tip="Skala załamania ponad - Kontroluje ilość wizualnego załamania, jakie można zobaczyć patrząc z góry na powierzchnię wody; To jest efekt 'chybotania' gdy patrzy się na obiekt znajdujący się pod powierzchnią wody.">
+					Skala załamania ponad
+				</text>
+				<text name="WaterScaleBelowText" tool_tip="Skala załamania poniżej - Kontroluje ilość wizualnego załamania, jakie można zobaczyć patrząc od spodu na powierzchnię wody. To jest efekt 'chybotania' gdy patrzy się na obiekt znajdujący się nad powierzchnią wody.">
+					Skala załamania poniżej
+				</text>
+				<text name="MaxAltText" tool_tip="Mnożnik rozmycia - Kontroluje sposób, w jaki fale i odbicia są z sobą mieszane. Podniesienie wartości tego ustawienia zwiększy stopień zniekształceń widoczny w wyniku działania fal.">
+					Mnożnik rozmycia
+				</text>
+			</panel>
+		</panel>
+	</tab_container>
 	<check_box label="Ustaw jako moje Ustawienie Wody" name="make_default_cb"/>
-	<button label="Zapisz" name="save"/>	 
+	<button label="Zapisz" name="save"/>
 	<button label="Anuluj" name="cancel"/>
- </floater>
+</floater>

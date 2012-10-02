@@ -1414,7 +1414,7 @@
         </combo_box>
 
         <text
-         top="110"
+         top="100"
          left="10"
          follows="left|top"
          height="10"
@@ -1490,13 +1490,21 @@
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
         <check_box
-         top_pad="20"
+         top_pad="15"
          follows="left|top"
          height="16"
          label="Enable highlighting of selected prims"
          tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
          name="EmBuildPrefsRenderHighlight_toggle"
          control_name="RenderHighlightSelections"/>
+		 
+        <check_box
+         follows="left|top"
+         height="16"
+         label="Use Ctrl+mouse to grab and manipulate objects"
+         tool_tip="When checked, you will be able to grab and move objects with your mouse and CTRL key."
+         name="FSEnableGrab"
+         control_name="EnableGrab"/>
 
         <check_box
          follows="left|top"

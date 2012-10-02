@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Snapshot" title="FOTO-ANZEIGE">
+<floater name="Snapshot" title="Foto-Anzeige">
 	<floater.string name="unknown">
 		unbekannt
 	</floater.string>

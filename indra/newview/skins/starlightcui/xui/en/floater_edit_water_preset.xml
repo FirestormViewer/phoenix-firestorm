@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+ 
+<floater
+ open_positioning="left"
+ height="390"
+ layout="topleft"
+ name="Edit Water Preset"
+ help_topic="water_preset"
+ save_rect="true"
+ title="Edit Water Preset"
+ width="290">
+
+   <string name="title_new">Create Water Preset</string>
+   <string name="title_edit">Edit Water Preset</string>
+   <string name="hint_new">.</string>
+   <string name="hint_edit"></string>
+   <string name="combo_label">-Select a preset-</string>
+
+   <panel
+    name="P_Presetname"
+    follows="left|top"
+    layout="topleft"
+    top_pad="5"
+    left="15"
+    width="260"
+    height="35"
+    border_visible="true"
+    bevel_style="none"
+    bg_alpha_color="SL-CustomBackground_Light"
+    background_visible="true"> 
+      <text
+       follows="top|left|right"
+       font="SansSerif"
+       height="10"
+       layout="topleft"
+       left="5"
+       name="label"
+       top_pad="10"
+       width="80">
+         Preset Name:
+      </text>
+      <combo_box
+         allow_text_entry="true"
+         follows="top|left"
+         layout="topleft"
+         left_pad="10"
+         max_chars="100"
+         name="water_preset_combo"
+         top_delta="-3"
+         width="140"/>
+      <line_editor
+       height="20"
+       left_delta="0"
+       name="water_preset_name"
+       top_delta="0"
+       width="135" />
+   </panel>
+  
+   <tab_container
+    name="Main_Tab"
+    follows="left|top"
+    layout="topleft"
+    height="300"
+    width="260"
+    top_pad="5"
+    left="15"
+    tab_height="25"
+    tab_group="1"
+    tab_width="125"
+    tab_position="top">
+
+      <panel
+       name="P_Fog_and_Wave"
+       label="Fog and Wave"
+       layout="topleft"
+       follows="left|top"> 
+	
+         <panel
+          name="P_Water_Fog"
+          follows="left|top"
+          layout="topleft"
+          top_pad="0"
+          left="0"
+          width="260"
+          height="70"
+          border_visible="true"
+          bevel_style="none"
+          bg_alpha_color="SL-CustomBackground_Light"
+          background_visible="true">
+            <text
+             follows="top|left"
+             height="16"
+             font="SansSerifSmall"
+             layout="topleft"
+             left="20"    
+             name="water_color_label"
+             top_pad="5"
+             width="110"
+             tool_tip="Water Fog Color - This changes the color of the volume tint of the water, essentially defining the color of the water itself. If your water has no fog, it will appear crystal clear and colorless. "
+             word_wrap="true">
+              Water Fog Color
+            </text>
+            <text
+             follows="left|top|right"
+             font="SansSerifSmall"
+             height="16"
+             layout="topleft"
+             left_pad="20"
+             name="BHText3"
+             top_delta="0"
+             wrap="0"
+             tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best. Try snake skin, tiles, or any other normal map for some wacky effects! "
+             width="100">
+                 Normal Map
+            </text>
+            <color_swatch
+             can_apply_immediately="true"
+             follows="left|top"
+             height="37"
+             label_height="0"
+             layout="topleft"
+             left="20"
+             name="WaterFogColor"
+             top_pad="0"
+             width="90" />
+            <texture_picker
+             height="60"
+             layout="topleft"
+             left_pad="40"
+             name="WaterNormalMap"
+             top_delta="0"
+             width="65" />
+         </panel>
+         <panel
+          name="P_Fog_Settings"
+          follows="left|top"
+          layout="topleft"
+          top_pad="0"
+          left="0"
+          width="260"
+          height="82"
+          border_visible="true"
+          bevel_style="none"
+          bg_alpha_color="SL-CustomBackground_Light"
+          background_visible="true">
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             tool_tip="Fog Density Exponent - Controls the density of your water fog; this setting defines how far you are able to see into the water from above."
+             top_pad="8"
+             name="water_fog_density_label"
+             width="215">
+             Fog Density Exponent
+            </text>
+            <slider
+             decimal_digits="1"
+             follows="left|top"
+             height="10"
+             initial_value="0"
+             layout="topleft"
+             left="5"
+             max_val="10"
+             min_val="-10"
+             name="WaterFogDensity"
+             top_pad="1"
+             width="245"/>   
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             tool_tip="Underwater Fog Modifier - Controls how the fog density changes when you are underwater. Useful for creating far-seeing views when underwater while keeping the surface fairly opaque. For example, at a setting of 0.25, the water fog is 1/4 as dense while underwater as it appears from above the surface. "
+             top_pad="10"
+             name="underwater_fog_modifier_label"
+             width="215">
+             Underwater Fog Modifier
+            </text>
+            <slider
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             initial_value="0"
+             layout="topleft"
+             left="5"
+             increment=".01"
+             name="WaterUnderWaterFogMod"
+             top_pad="1"
+             width="245"/>
+         </panel>
+
+         <panel
+          name="P_Wave_Settings"
+          follows="left|top"
+          layout="topleft"
+          top_pad="0"
+          left="0"
+          width="260"
+          height="113"
+          border_visible="true"
+          bevel_style="none"
+          bg_alpha_color="SL-CustomBackground_Light"
+          background_visible="true">
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             name="BHText"
+             top_pad="8"
+             tool_tip="Big Wave Direction - Controls the X and Y direction and speed of the large wave image. "
+             width="215">
+              Big Wave Direction
+            </text>    
+            <slider
+             control_name="WaterWave1DirX"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             label="X"
+             layout="topleft"             
+             max_val="20"
+             min_val="-20"
+             name="WaterWave1DirX"
+             top_pad="1"
+             width="245"/>    
+            <slider
+             control_name="WaterWave1DirY"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             label="Y"
+             layout="topleft"
+             max_val="20"
+             min_val="-20"
+             name="WaterWave1DirY"
+             top_pad="5"
+             width="245"/>
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             name="BHText2"
+             top_pad="10"
+             tool_tip="Little Wave Direction - Controls the X and Y direction and speed of the small wave image. "
+             width="215">
+                   Little Wave Direction
+            </text>
+            <slider
+             control_name="WaterWave2DirX"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             label="X"
+             layout="topleft"
+             max_val="20"
+             min_val="-20"
+             name="WaterWave2DirX"
+             top_pad="1"
+             width="245" />
+            <slider
+             control_name="WaterWave2DirY"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             label="Y"
+             layout="topleft"
+             max_val="20"
+             min_val="-20"
+             name="WaterWave2DirY"
+             top_pad="5"
+             width="245" />
+         </panel>
+      </panel>
+
+      <panel
+       name="P_Reflection"
+       label="Reflection"
+       layout="topleft"
+       follows="left|top">
+      
+         <panel
+          name="P_Wavelet"
+          follows="left|top"
+          layout="topleft"
+          top_pad="0"
+          left="0"
+          width="260"
+          height="85"
+          border_visible="true"
+          bevel_style="none"
+          bg_alpha_color="SL-CustomBackground_Light"
+          background_visible="true">
+            <text
+              follows="left|top|right"
+              height="10"
+              layout="topleft"
+              left="5"
+              name="BDensText"
+              top_pad="8"
+              tool_tip="Reflection Wavelet Scale - Controls the scale of the three wavelets that make up the surface of the water. "
+              width="215">
+                Reflection Wavelet Scale
+             </text>
+             <slider
+              control_name="WaterNormalScaleX"
+              decimal_digits="1"
+              follows="left|top"
+              height="10"
+              initial_value="0.7"
+              layout="topleft"
+              max_val="10"
+              name="WaterNormalScaleX"
+              top_pad="10"
+              width="245"/>
+             <slider
+              control_name="WaterNormalScaleY"
+              decimal_digits="1"
+              follows="left|top"
+              height="10"
+              initial_value="0.7"
+              layout="topleft"
+              max_val="10"
+              name="WaterNormalScaleY"
+              top_pad="7"
+              width="245"/>
+             <slider
+              control_name="WaterNormalScaleZ"
+              decimal_digits="1"
+              follows="left|top"
+              height="10"
+              initial_value="0.7"
+              layout="topleft"
+              max_val="10"
+              name="WaterNormalScaleZ"
+              top_pad="7"
+              width="245"/>
+         </panel>
+
+         <panel
+          name="P_Other_Settings"
+          follows="left|top"
+          layout="topleft"
+          top_pad="0"
+          left="0"
+          width="260"
+          height="180"
+          border_visible="true"
+          bevel_style="none"
+          bg_alpha_color="SL-CustomBackground_Light"
+          background_visible="true">
+            <text
+             follows="left|top|right"
+             layout="topleft"
+             height="16"
+             left="5"
+             name="HDText"
+             top_pad="10"
+             tool_tip="Fresnel Scale - Determines how much light is reflected at different angles; increasing this slider reduces visual reflection effects on the water's surface. "
+             width="215">
+                Fresnel Scale
+            </text>
+            <slider
+             control_name="WaterFresnelScale"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             layout="topleft"
+             left="5"
+             name="WaterFresnelScale"
+             top_pad="1"
+             width="245"/>
+            <text
+             follows="left|top|right"
+             layout="topleft"
+             height="16"
+             left="5"
+             name="FresnelOffsetText"
+             tool_tip="Fresnel Offset - Determines how much total light is reflected; increasing this slider increases the amount of light reflected by the water's surface. "
+             top_pad="6"
+             width="215">
+               Fresnel Offset
+            </text>
+            <slider
+             control_name="WaterFresnelOffset"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.7"
+             layout="topleft"
+             left="5"
+             name="WaterFresnelOffset"
+             top_pad="1"
+             width="245"/> 
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             name="DensMultText"
+             top_pad="6"
+             tool_tip="Refract Scale Above - Controls the amount of visual refraction you can see from above the water's surface; this is the 'wobbly' effect you can see when you look at an object that is underwater. "
+             width="215">
+                Refract Scale Above
+            </text>
+            <slider
+             control_name="WaterScaleAbove"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0.1"
+             layout="topleft"
+             left="5"
+             name="WaterScaleAbove"
+             max_val="3"
+             top_pad="1"
+             width="245" />
+            <text
+             type="string"
+             length="1"
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             name="WaterScaleBelowText"
+             tool_tip="Refract Scale Below - Controls the amount of visual refraction you can see from below the water's surface. This is the 'wobbly' effect you can see when you look at an object that is above the water."
+             top_pad="6"
+             width="215">
+                Refract Scale Below
+            </text>
+            <slider
+             control_name="WaterScaleBelow"
+             decimal_digits="2"
+             follows="left|top"
+             height="10"
+             increment="0.01"
+             initial_value="0"
+             layout="topleft"
+             left="5"
+             name="WaterScaleBelow"
+             max_val="3"
+             top_pad="1"
+             width="245"/>
+            <text
+             follows="left|top|right"
+             height="16"
+             layout="topleft"
+             left="5"
+             name="MaxAltText"
+             top_pad="6"
+             tool_tip="Blur Multiplier - Controls how waves and reflections are mixed. Increasing this setting increases the amount of distortion you see in reflections as a result of wave activity. "
+             width="215">
+                Blur Multiplier
+            </text>
+            <slider
+             control_name="WaterBlurMult"
+             follows="left|top"
+             height="10"
+             increment="0.001"
+             initial_value="0"
+             layout="topleft"
+             left="5"
+             max_val=".5"
+             min_val="-.5"
+             name="WaterBlurMult"
+             top_pad="1"
+             width="245"/>
+         </panel>
+      </panel>
+   </tab_container>
+
+   <check_box
+    follows="left|top"
+    height="15"
+    label="Make this preset my new water setting."
+    layout="topleft"
+    left="15"
+    name="make_default_cb"
+    top_pad="0"
+    width="260"/>
+   <button
+    follows="left|top"
+    height="23"
+    label="Save"
+    layout="topleft"
+    left="15"
+    name="save"
+    top_pad="2"
+    width="125"/>
+   <button
+    follows="left|top"
+    height="23"
+    label="Cancel"
+    layout="topleft"
+    left_pad="10"
+    name="cancel"
+    width="125"/>
+ </floater>

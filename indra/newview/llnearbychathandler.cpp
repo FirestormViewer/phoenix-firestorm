@@ -535,7 +535,14 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 									  const LLSD &args)
 {
 	if(chat_msg.mMuted == TRUE)
+	// <FS:Ansariel> Optional muted chat history
+		//return;
+	{
+		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+		nearby_chat->addMessage(chat_msg, true, args);
 		return;
+	}
+	// </FS:Ansariel> Optional muted chat history
 
 	if(chat_msg.mText.empty())
 		return;//don't process empty messages

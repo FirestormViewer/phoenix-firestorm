@@ -94,6 +94,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Standardwarnungen in Firestorm." name="textFSSndAlert">
 			Warnung (Standard):
 		</text>
+		<button name="Def_UISndAlert" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndAlert">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -102,6 +103,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei ungültiger Tastatureingabe." name="textFSBadKeystroke">
 			Ungültige Tastatureingabe:
 		</text>
+		<button name="Def_UISndBadKeystroke" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndBadKeystroke">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -110,6 +112,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei einem Mausklick." name="textFSClick">
 			Mausklick:
 		</text>
+		<button name="Def_UISndClick" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndClick">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -118,6 +121,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Loslassen eines Mausknopfs." name="textFSClickRelease">
             Loslassen Mausknopf:
 		</text>
+		<button name="Def_UISndClickRelease" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndClickRelease">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -126,6 +130,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs, wenn ein weiblicher Avatar Schaden nimmt." name="textFSHealthReductionF">
 			Treffer weiblicher Avatar:
 		</text>
+		<button name="Def_UISndHealthReductionF" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndHealthReductionF">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -134,6 +139,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs, wenn ein männlicher Avatar Schaden nimmt." name="textFSHealthReductionM">
 			Treffer männlicher Avatar:
 		</text>
+		<button name="Def_UISndHealthReductionM" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndHealthReductionM">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -142,6 +148,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei einer ungültigen Aktion." name="textFSInvalidOp">
 			Ungültige Aktion:
 		</text>
+		<button name="Def_UISndInvalidOp" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndInvalidOp">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -150,6 +157,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Geldausgang." name="textFSMoneyChangeDown">
 			Geldausgang:
 		</text>
+		<button name="Def_UISndMoneyChangeDown" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndMoneyChangeDown">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -158,23 +166,36 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Geldeingang." name="textFSMoneyChangeUp">
 			Geldeingang:
 		</text>
+		<button name="Def_UISndMoneyChangeUp" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndMoneyChangeUp">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs bei eingehenden Instant Messages. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Bei Eintreffen von Instant Messages:'." name="textFSNewIncomingIMSession">
+		<text tool_tip="UUID des Klangs bei eingehenden Instant Messages. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Beim Eintreffen von Instant Messages:'." name="textFSNewIncomingIMSession">
             Eingeh. Instant Messages:
 		</text>
+		<button name="Def_UISndNewIncomingIMSession" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndNewIncomingIMSession">
 			<combo_box.item label="Bei neuer IM" name="1"/>
 			<combo_box.item label="Bei jeder IM" name="2"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
+		<text tool_tip="UUID des Klangs bei eingehenden Gruppenchats. Diese Einstellung ist gekoppelt mit Chat &gt; Benachrichtigungen &gt; 'Beim Eintreffen von Gruppenchats:'." name="textFSNewGroupIncomingIMSession">
+            Eingeh. Gruppenchats:
+		</text>
+		<button name="Def_UISndNewIncomingGroupIMSession" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+			<combo_box.item label="Bei neuer Nachr." name="1"/>
+			<combo_box.item label="Bei jeder Nachr." name="2"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
 		<text tool_tip="UUID des Klangs beim Starten einer neuen Instant-Messaging-Sitzung." name="textFSStartIM">
 			Start IM-Sitzung:
 		</text>
+		<button name="Def_UISndStartIM" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndStartIM">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -183,6 +204,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Erzeugen eines neuen Objektes." name="textFSObjectCreate">
 			Objekterstellung:
 		</text>
+		<button name="Def_UISndObjectCreate" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndObjectCreate">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -192,6 +214,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Löschen eines Objektes. Wird momentan nicht verwendet." name="textFSObjectDelete">
 			Objektlöschung:
 		</text>
+		<button name="Def_UISndObjectDelete" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndObjectDelete">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -201,6 +224,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Rezzen eines Objektes." name="textFSObjectRezIn">
             Objekt rezzen:
 		</text>
+		<button name="Def_UISndObjectRezIn" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndObjectRezIn">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -209,6 +233,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Derezzen eines Objektes." name="textFSObjectRezOut">
 			Objekt derezzen:
 		</text>
+		<button name="Def_UISndObjectRezOut" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndObjectRezOut">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -217,26 +242,21 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Erzeugen eines Fotos. Diese Einstellung ist gekoppelt an die Option 'Fotos leise speichern' im 'Erweitert'-Menü." name="textFSSnapshot">
             Erstellen Schnappschuß:
 		</text>
+		<button name="Def_UISndSnapshot" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="QuietSnapshotsToDiskComboBox">
 			<combo_box.item label="Abspielen" name="0"/>
 			<combo_box.item label="Stummschalten" name="1"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSRegionRestart">
+		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSTeleportOut">
 			Teleportieren:
 		</text>
+		<button name="Def_UISndTeleportOut" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndTeleportOut">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
-		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
-			Warnung Regionsneustart:
-		</text>
-		<combo_box name="PlayModeUISndRegionRestart">
-			<combo_box.item label="Abspielen" name="1"/>
-			<combo_box.item label="Stummschalten" name="0"/>
-		</combo_box>
     </panel>
 
 	<!-- UI Sounds 2 -->
@@ -249,6 +269,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Öffnen des Pie-Menüs." name="textFSPieMenuAppear">
             Öffnen Pie-Menü:
 		</text>
+		<button name="Def_UISndPieMenuAppear" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuAppear">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -257,6 +278,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Schließen des Pie-Menüs." name="textFSPieMenuHide">
             Schließen Pie-Menü:
 		</text>
+		<button name="Def_UISndPieMenuHide" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuHide">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -265,6 +287,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 1 im Pie-Menü." name="textFSPieMenuSliceHighlight0">
 			Pie-Menü Option 1:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight0" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight0">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -273,6 +296,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 2 im Pie-Menü." name="textFSPieMenuSliceHighlight1">
 			Pie-Menü Option 2:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight1" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight1">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -281,6 +305,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 3 im Pie-Menü." name="textFSPieMenuSliceHighlight2">
 			Pie-Menü Option 3:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight2" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight2">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -289,6 +314,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 4 im Pie-Menü." name="textFSPieMenuSliceHighlight3">
 			Pie-Menü Option 4:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight3" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight3">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -297,6 +323,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 5 im Pie-Menü." name="textFSPieMenuSliceHighlight4">
 			Pie-Menü Option 5:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight4" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight4">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -305,6 +332,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 6 im Pie-Menü." name="textFSPieMenuSliceHighlight5">
 			Pie-Menü Option 6:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight5" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight5">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -313,6 +341,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 7 im Pie-Menü." name="textFSPieMenuSliceHighlight6">
 			Pie-Menü Option 7:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight6" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight6">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -321,6 +350,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs bei Auswahl von Option 8 im Pie-Menü." name="textFSPieMenuSliceHighlight7">
 			Pie-Menü Option 8:
 		</text>
+		<button name="Def_UISndPieMenuSliceHighlight7" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndPieMenuSliceHighlight7">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -329,6 +359,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Tippen einer Chat-Nachricht. Diese Einstellung ist gekoppelt an Chat &gt; Allgemein &gt; 'Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen'." name="textFSTyping">
 			Nachricht schreiben:
 		</text>
+		<button name="Def_UISndTyping" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="FSPlayTypingSoundComboBox">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -337,6 +368,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Schließen eines Fensters." name="textFSWindowClose">
 			Schließen eines Fensters:
 		</text>
+		<button name="Def_UISndWindowClose" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndWindowClose">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
@@ -345,7 +377,35 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<text tool_tip="UUID des Klangs beim Öffnen eines Fensters." name="textFSWindowOpen">
 			Öffnen eines Fensters:
 		</text>
+		<button name="Def_UISndWindowOpen" tool_tip="Auf Standardwert zurücksetzen."/>
 		<combo_box name="PlayModeUISndWindowOpen">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs bei der Warnung vor einem Neustart der Region." name="textFSRegionRestart">
+			Warnung Regionsneustart:
+		</text>
+		<button name="Def_UISndRegionRestart" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndRegionRestart">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Einloggen eines Freundes." name="textFSFriendOnline">
+			Einloggen Freund:
+		</text>
+		<button name="Def_UISndFriendOnline" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndFriendOnline">
+			<combo_box.item label="Abspielen" name="1"/>
+			<combo_box.item label="Stummschalten" name="0"/>
+		</combo_box>
+
+		<text tool_tip="UUID des Klangs beim Ausloggen eines Freundes." name="textFSFriendOffline">
+			Ausloggen Freund:
+		</text>
+		<button name="Def_UISndFriendOffline" tool_tip="Auf Standardwert zurücksetzen."/>
+		<combo_box name="PlayModeUISndFriendOffline">
 			<combo_box.item label="Abspielen" name="1"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>

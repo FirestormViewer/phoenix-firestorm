@@ -9,11 +9,11 @@
  name="preview lsl text"
  help_topic="preview_lsl_text"
  save_rect="true"
- title="SCRIPT: ROTATION SCRIPT"
+ title="Script: Rotation script"
  width="508">
     <floater.string
      name="Title">
-        SCRIPT: [NAME]
+        Script: [NAME]
     </floater.string>
     <panel
      follows="left|top|right|bottom"

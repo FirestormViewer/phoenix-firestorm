@@ -163,7 +163,7 @@ Odwiedź www.secondlife.com/status i śledź wiadomości.
 	</string>
 	<string name="LoginFailedPremiumOnly">
 		Logowanie do Second Life jest tymczasowo ograniczone aby mieć pewność, że osoby już zalogowane nie stracą na wydajności.
-		
+
 Osoby posiadające darmowe konta nie mogą się teraz zalogować, aby ludzie posiadający te płatne mogli to zrobić.
 	</string>
 	<string name="LoginFailedComputerProhibited">
@@ -1810,10 +1810,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Stan
 	</string>
 	<string name="Credits">
-		Kredyty
+		Uznania
 	</string>
 	<string name="Debits">
-		Debety
+		Obciążenia
 	</string>
 	<string name="Total">
 		Suma
@@ -1850,6 +1850,18 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="RegionInfoAllowedGroups">
 		Dozwolone Grupy: ([ALLOWEDGROUPS], maks. [MAXACCESS])
+	</string>
+	<string name="RegionInfoEstateManagers">
+		Zarządcy Majątku: ([ESTATEMANAGERS], maks. [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Zbanowani Rezydenci: ([BANNEDAGENTS], maks. [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		Dozwoleni Rezydenci
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		Zbanowani Rezydenci
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Pamięć skryptów Posiadłości
@@ -2143,10 +2155,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Stan
 	</string>
 	<string name="GroupMoneyCredits">
-		Kredyty
+		Uznania
 	</string>
 	<string name="GroupMoneyDebits">
-		Debety
+		Obciążenia
 	</string>
 	<string name="ViewerObjectContents">
 		Zawartość
@@ -4072,11 +4084,11 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="message">
 		Wiadomość wysłana do [RECIPIENT] jest ciągle przetwarzana.
-		Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
+    Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
 	</string>
 	<string name="message_session_event">
 		Wiadomość wysłana do [RECIPIENT] jest ciągle przetwarzana.
-		Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
+    Jeśli nie pojawi się w ciągu kilku minut może to oznaczać, że została pominięta przez serwer.
 	</string>
 	<string name="mute">
 		Błąd podczas moderacji.
@@ -4185,7 +4197,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	</string>
 	<string name="uploading_abuse_report">
 		Ładowanie...
-  
+
 Raport o Nadużyciu
 	</string>
 	<string name="New Shape">
@@ -4372,8 +4384,8 @@ Raport o Nadużyciu
 	<string name="server_is_down">
 		Pomimo naszych najlepszych starań wystąpił niespodziewany problem.
 
-	Proszę sprawdzić czy na stronie status.secondlifegrid.net nie zostały umieszczone informacje o rozpoznanych problemach serwera.
-        Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia firewall.
+Proszę sprawdzić czy na stronie status.secondlifegrid.net nie zostały umieszczone informacje o rozpoznanych problemach serwera.
+Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia firewall.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Niedziela:Poniedziałek:Wtorek:Środa:Czwartek:Piątek:Sobota
@@ -4620,6 +4632,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Phototools_View_Label">
 		Fotograf: kamera
 	</string>
+	<string name="Command_Contact_Sets_Label">
+		Zestawy kontaktów
+	</string>
+	<string name="Command_Mouselook_Label">
+		Tryb pierwszoosobowy
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4733,6 +4751,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
 		Zaawansowane ustawienia kamery fotograficznej
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Otwiera interfejs Zestawów kontaktów (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Wejście w tryb pierwszoosobowy, widoku z oczu awatara (M)
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku

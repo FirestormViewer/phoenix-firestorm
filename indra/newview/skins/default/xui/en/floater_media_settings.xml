@@ -14,8 +14,8 @@
  min_width="365"
  mouse_opaque="true" 
  name="media_settings" 
- help_topic = "media_settings"
- title="MEDIA SETTINGS">
+ help_topic="media_settings"
+ title="Media Settings">
 	<button 
 	 bottom="525" 
 	 enabled="true" 

@@ -68,6 +68,7 @@
 // </FS:Zi>
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
+#include "llimfloater.h"
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -673,6 +674,7 @@ void LLAvatarTracker::processOnlineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOnlineNotification()" << llendl;
 	instance().processNotify(msg, true);
+	make_ui_sound("UISndFriendOnline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 // 	static
@@ -680,6 +682,7 @@ void LLAvatarTracker::processOfflineNotification(LLMessageSystem* msg, void**)
 {
 	lldebugs << "LLAvatarTracker::processOfflineNotification()" << llendl;
 	instance().processNotify(msg, false);
+	make_ui_sound("UISndFriendOffline"); // <FS:PP> FIRE-2731: Online/offline sound alert for friends
 }
 
 void LLAvatarTracker::processChange(LLMessageSystem* msg)
@@ -877,6 +880,15 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
 			at.mBuddyInfo[id] = buddy_info;
 			at.addChangedMask(LLFriendObserver::ADD, id);
 			at.notifyObservers();
+
+			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+			LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+			if (im_floater)
+			{
+				im_floater->setEnableAddFriendButton(FALSE);
+			}
+			// </FS:Ansariel>
 		}
 	}
 }
@@ -894,6 +906,15 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
 		at.addChangedMask(LLFriendObserver::REMOVE, id);
 		delete buddy;
 		at.notifyObservers();
+
+		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
+		LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+		if (im_floater)
+		{
+			im_floater->setEnableAddFriendButton(TRUE);
+		}
+		// </FS:Ansariel>
 	}
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="group_titles" title="GRUPPENTITEL">
+<floater name="group_titles" title="Gruppentitel">
 	<floater.string name="NoGroupTitle" value="&lt;Kein Titel&gt;"/>
 	<scroll_list name="title_list">
 		<column name="grouptitle" label="Titel"/>

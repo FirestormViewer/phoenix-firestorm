@@ -75,11 +75,11 @@
          control_name="ShowHoverTips"
          height="16"
          initial_value="true"
-         label="Basic Hover Tips (set this first)"
+         label="Show Hover Tips"
          layout="topleft"
          left_delta="10"
          name="ShowHoverTips"
-         tool_tip="Set this to show hover tips on avatars and some other things - set this one first"
+         tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"
          top_pad="12"
          width="256" />
         <check_box
@@ -89,7 +89,7 @@
          label="on All Objects"
          tool_tip="Set this to show hover tips on in-world objects"
          layout="topleft"
-         left_delta="0"
+         left_delta="10"
          name="ShowAllHoverTips"
          top_pad="2"
          width="256" />
@@ -750,6 +750,10 @@
              label="Roboto"
              name="tt_item6"
              value="fonts_roboto.xml" />
+			<combo_box.item
+             label="OpenDyslexia"
+             name="tt_item6"
+             value="fonts_dyslexia.xml" />
         </combo_box>
         <text
          name="tooltip_textbox2"

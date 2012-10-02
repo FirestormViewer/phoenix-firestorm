@@ -6,7 +6,7 @@
  name="Environment Editor Floater"
  help_topic="environment_editor_floater"
  save_rect="true"
- title="ENVIRONMENT SETTINGS"
+ title="Environment Settings"
  width="290">
  
  <check_box

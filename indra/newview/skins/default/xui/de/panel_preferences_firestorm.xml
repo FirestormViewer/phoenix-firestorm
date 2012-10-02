@@ -186,7 +186,7 @@
 		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
 		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
 		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>
-		<check_box label="Änderungen an den Umgebungseinstellunge überblenden" name="FSInterpolateParcelWL" tool_tip="Aktiviert einen Überblendeffekt bei Änderungen an den Umgebungseinstellungen beim Windlight-Sharing für Parzellen."/>
+		<check_box label="Änderungen an den Umgebungseinstellungen überblenden" name="FSInterpolateParcelWL" tool_tip="Aktiviert einen Überblendeffekt bei Änderungen an den Umgebungseinstellungen beim Windlight-Sharing für Parzellen."/>
 		<text name="wl_crossfade_label">
 			Überblenddauer (Sekunden):
 		</text>
@@ -224,6 +224,7 @@
 		<spinner label="Z-Position" name="Z pos" label_width="60" width="140"/>
 		<check_box label="Werte sind Prozentangaben" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="EmPivotPercToggle"/>
 		<check_box label="Hervorhebung ausgewählte Primitive aktivieren" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="EmBuildPrefsRenderHighlight_toggle"/>
+		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; aktivieren" tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>

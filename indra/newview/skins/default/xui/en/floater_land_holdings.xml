@@ -6,7 +6,7 @@
  layout="topleft"
  name="land holdings floater"
  help_topic="land_holdings_floater"
- title="OWNED LAND"
+ title="Owned Land"
  width="600">
     <floater.string
      name="area_string">

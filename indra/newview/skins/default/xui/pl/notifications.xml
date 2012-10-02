@@ -3672,4 +3672,11 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 Obecny symulator: [NEWVERSION]
 Poprzedni symulator: [OLDVERSION]
 	</notification>
+	<notification name="VintageLoginInfo">
+		Czy wiesz, że możesz sprawić, aby przeglądarka wyglądała jak klasyczny Phoenix poprzez wybranie odpowiedniej pozycji z listy rozwijanej, która znajduje się obok przycisku logowania? Jeśli nowy interfejs Ci nie odpowiada - wypróbuj tą opcję.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="CannotSaveSnapshot">
+		Zapis zdjęcia zakończony niepowodzeniem.
+	</notification>
 </notifications>

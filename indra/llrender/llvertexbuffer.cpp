@@ -38,6 +38,10 @@
 #include "llglslshader.h"
 #include "llmemory.h"
 
+#if LL_DARWIN
+#define LL_VBO_POOLING 1
+#else
+#endif
 //Next Highest Power Of Two
 //helper function, returns first number > v that is a power of 2, or v if v is already a power of 2
 U32 nhpo2(U32 v)
@@ -123,19 +127,26 @@ bool LLVertexBuffer::sPreferStreamDraw = false;
 
 U32 LLVBOPool::genBuffer()
 {
-	U32 ret = 0;
+	// <FS:ND> user-defined names was deprecated with OpenGL 3.1
 
-	if (mGLNamePool.empty())
-	{
-		ret = sCurGLName++;
-	}
-	else
-	{
-		ret = mGLNamePool.front();
-		mGLNamePool.pop_front();
-	}
-
+	// U32 ret = 0;
+	// 
+	// if (mGLNamePool.empty())
+	// {
+	// 	ret = sCurGLName++;
+	// }
+	// else
+	// {
+	// 	ret = mGLNamePool.front();
+	// 	mGLNamePool.pop_front();
+	// }
+	// 
+	// return ret;
+	GLuint ret(0);
+	glGenBuffersARB( 1, &ret );
 	return ret;
+
+	// </FS:ND>
 }
 
 void LLVBOPool::deleteBuffer(U32 name)
@@ -149,7 +160,14 @@ void LLVBOPool::deleteBuffer(U32 name)
 
 		llassert(std::find(mGLNamePool.begin(), mGLNamePool.end(), name) == mGLNamePool.end());
 
-		mGLNamePool.push_back(name);
+		// <FS:ND> user-defined names was deprecated with OpenGL 3.1
+
+		// mGLNamePool.push_back(name);
+
+		GLuint nBuffer( name );
+		glDeleteBuffersARB( 1, &nBuffer );
+
+		// </FS:ND>
 
 		glBindBufferARB(mType, 0);
 	}
@@ -288,7 +306,6 @@ void LLVBOPool::seedPool()
 		}
 	}
 }
-
 
 
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlv_behaviours" title="AKTIVE RLV-RESTRIKTIONEN">
+<floater name="rlv_behaviours" title="Aktive RLV-Restriktionen">
 	<tab_container name="behaviour_tab">
-		<panel label="RESTRIKTIONEN" name="behaviour_panel">
+		<panel label="Restriktionen" name="behaviour_panel">
 			<scroll_list name="behaviour_list">
 				<scroll_list.columns label="Restriktion" name="behaviour"/>
 				<scroll_list.columns label="Objekt-Name" name="issuer"/>
 			</scroll_list>
 		</panel>
-		<panel label="AUSNAHMEN" name="exception_panel">
+		<panel label="Ausnahmen" name="exception_panel">
 			<scroll_list name="exception_list">
 				<scroll_list.columns label="Restriktion" name="behaviour"/>
 				<scroll_list.columns label="Option" name="option"/>

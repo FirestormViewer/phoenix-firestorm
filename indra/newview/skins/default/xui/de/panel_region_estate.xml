@@ -19,6 +19,9 @@
 		Zugang nur Einwohnern gestatten, die:
 	</text>
 	<check_box label="Zahlungsinformationen hinterlegt haben" name="limit_payment" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner Zahlungsinformationen hinterlegt haben. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
+	<!-- FS:Ansariel: Proper German
+	<check_box label="Sind mindestens 18 Jahre alt" name="limit_age_verified" tool_tip="Nur Einwohner, die mindestens 18 Jahre alt sind, können diesen Grundbesitz betreten. Weitere Informationen finden Sie unter [SUPPORT_SITE]."/>
+	-->
 	<check_box label="18 Jahre oder älter sind" name="limit_age_verified" tool_tip="Um diesen Grundbesitz besuchen zu können, müssen Einwohner mindestens 18 Jahre oder älter sein. Weitere Informationen finden Sie auf [SUPPORT_SITE]."/>
 	<check_box label="Voice-Chat erlauben" name="voice_chat_check"/>
 	<button label="?" name="voice_chat_help"/>
@@ -49,7 +52,7 @@
 	<check_box label="Verweigern - Zahlungsinfo verwendet" name="deny_transacted"/>
 	<button label="Übernehmen" name="apply_btn"/>
 	<text name="estate_manager_label">
-		Grundbesitzsverwalter:
+		Grundbesitzverwalter:
 	</text>
 	<text name="allow_resident_label">
 		Zulässige Einwohner:

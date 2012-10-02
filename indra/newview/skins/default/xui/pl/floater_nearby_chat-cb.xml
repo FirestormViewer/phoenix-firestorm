@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="nearby_chat" title="CZAT LOKALNY">
+<floater name="nearby_chat" title="Czat lokalny">
   <layout_stack name="im_panels">
     <layout_panel>
           <button tool_tip="Użyj wybranej usługi tłumaczącej" name="translate_btn"/>

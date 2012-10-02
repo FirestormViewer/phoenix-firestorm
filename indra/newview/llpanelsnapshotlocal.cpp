@@ -36,6 +36,8 @@
 #include "llviewercontrol.h" // gSavedSettings
 #include "llviewerwindow.h"
 
+#include "llnotificationsutil.h"
+
 /**
  * The panel provides UI for saving snapshot to a local folder.
  */
@@ -169,6 +171,8 @@ void LLPanelSnapshotLocal::onSaveFlyoutCommit(LLUICtrl* ctrl)
 	}
 	else
 	{
+		// <FS:Ansariel> Notify user if we could not save file
+		LLNotificationsUtil::add("CannotSaveSnapshot");
 		cancel();
 	}
 }

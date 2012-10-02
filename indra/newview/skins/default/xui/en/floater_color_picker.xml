@@ -6,7 +6,7 @@
  layout="topleft"
  name="ColorPicker"
  help_topic="colorpicker"
- title="COLOR PICKER"
+ title="Color Picker"
  width="440">
 <tab_container
  name="scale_type_container"

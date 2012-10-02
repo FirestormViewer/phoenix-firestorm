@@ -9,7 +9,7 @@
  name="gui_preview_tool"
  help_topic="gui_preview_tool"
  single_instance="true"
- title="XUI PREVIEW TOOL"
+ title="XUI Preview Tool"
  translate="false"
  width="750">
      <string name="ExternalEditorNotSet">

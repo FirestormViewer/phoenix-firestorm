@@ -9,8 +9,8 @@
  width="980"
  min_width="980"
  name="Model Preview"
- title="UPLOAD MODEL"
- help_topic="upload_model" >
+ title="Upload Model"
+ help_topic="upload_model">
 
   <string name="status_idle"></string>
   <string name="status_parse_error">Error: Dae parsing issue - see log for details.</string>

@@ -2,7 +2,7 @@
  * @file fsslurlcommand.h
  * @brief SLurl command handler for Firestorm commands
  *
- * $LicenseInfo:firstyear=2001&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2012&license=viewerlgpl$
  * Copyright (c) 2012 Ansariel Hiller @ Second Life
  *
  * This library is free software; you can redistribute it and/or

@@ -75,6 +75,7 @@
 #include "llkeyboard.h"
 #include "llgesturemgr.h"
 #include "llmultigesture.h"
+#include "llautoreplace.h"
 
 // #include "llconsole.h"
 // #include "fscontactsfloater.h"
@@ -100,6 +101,7 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 LLNearbyChatControl::LLNearbyChatControl(const LLNearbyChatControl::Params& p) :
 	LLLineEditor(p)
 {
+	setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2));
 	setKeystrokeCallback(onKeystroke,this);
 	LLNearbyChat::instance().registerChatBar(this);
 

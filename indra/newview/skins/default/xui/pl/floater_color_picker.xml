@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="ColorPicker" title="WYBIERZ KOLOR">
+<floater name="ColorPicker" title="Wybierz kolor">
 	<tab_container name="scale_type_container">
 		<panel name="RGB">
 			<text name="r_val_text">

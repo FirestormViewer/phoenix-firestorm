@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="avatarpicker" title="WYBIERZ REZYDENTA">
+<floater name="avatarpicker" title="Wybierz rezydenta">
 	<floater.string name="not_found">
 		&apos;[TEXT]&apos; nie zostało odnalezione
 	</floater.string>

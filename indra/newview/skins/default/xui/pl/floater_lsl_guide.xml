@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="script ed float" title="INFORMACJE O LSL">
+<floater name="script ed float" title="Informacje o LSL">
 	<check_box label="Śledzenie" name="lock_check"/>
 	<combo_box label="Zablokuj" name="history_combo"/>
 	<button label="Wstecz" name="back_btn"/>

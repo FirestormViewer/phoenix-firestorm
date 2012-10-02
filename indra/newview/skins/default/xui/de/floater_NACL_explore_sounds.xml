@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="sound_explorer" title="SOUND-EXPLORER">
+<floater name="sound_explorer" title="Sound-Explorer">
 	<floater.string name="Playing">
 		Wird abgespielt
 	</floater.string>

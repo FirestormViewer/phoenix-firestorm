@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="Model Preview" title="ŁADOWANIE MODELU">
+<floater name="Model Preview" title="Ładowanie modelu">
   <string name="status_parse_error">Błąd: Problem z parsowaniem Dae, zobacz log.</string>
   <string name="status_material_mismatch">Błąd: Materiał nie jest podzbiorem modelu referencyjnego.</string>
   <string name="status_reading_file">Wczytywanie...</string>
@@ -88,7 +88,7 @@
                 <item name="Triangle Limit" label="Limit trójkątów" />
                 <item name="Error Threshold" label="Próg błędu" />
             </combo_box>
-            <check_box label="Generuj Normalne" name="gen_normals" />
+            <check_box label="Generuj wektory normalne" name="gen_normals" />
             <text initial_value="Kąt zagnieceń:" name="crease_label" value="Kąt zagnieceń:" />
         </panel>
         <panel label="Fizyka" name="physics_panel">

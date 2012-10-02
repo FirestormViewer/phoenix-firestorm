@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_lagmeter" title="LAG METER">
+<floater name="floater_lagmeter" title="Lag-Meter">
 	<floater.string name="max_title_msg">
 		Lag-Anzeige
 	</floater.string>

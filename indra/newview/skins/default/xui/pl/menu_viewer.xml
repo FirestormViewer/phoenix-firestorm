@@ -17,7 +17,7 @@
 			<menu_item_call label="Usiądź" name="Sit Down Here"/>
 			<menu_item_check label="Zacznij latać" name="Fly"/>
 			<menu_item_check label="Zawsze biegnij" name="Always Run"/>
-			<menu_item_check label="Wymuś siadanie na ziemi" name="Force Toggle Sitting"/>
+			<menu_item_check label="Wymuś siadanie na ziemi" name="Force Toggle Sitting" shortcut="control|alt|K"/>
 			<menu_item_check label="Tryb widmowy" name="Avatar Phantom"/>
 			<menu_item_check label="Szybki skok" name="Avatar Ignore Prejump"/>
 		</menu>
@@ -244,6 +244,11 @@
 			<menu_item_check label="Ukryj zaznaczone" name="Hide Selected"/>
 			<menu_item_check label="Pokaż przezroczyste obiekty" name="Highlight Transparent"/>
 			<menu_item_check label="Pokaż celownik myszki" name="ShowCrosshairs"/>
+			<menu label="Chmurki pomocy" name="Hover Tips">
+				<menu_item_check label="Pokazuj chmurki pomocy" name="Show Tips"/>
+				<menu_item_check label="Pokazuj chmurki ponad terenem" name="Land Tips"/>
+				<menu_item_check label="Pokazuj chmurki dla wszystkich obiektów" name="Tips On All Objects"/>
+			</menu>
 		</menu>
 		<menu label="Rodzaje renderowania" name="Rendering Types">
 			<menu_item_check label="Podstawowe" name="Rendering Type Simple"/>
@@ -344,7 +349,7 @@
 		</menu>
 		<menu label="Renderowanie metadanych" name="Render Metadata">
 			<menu_item_check label="Bryły brzegowe (Bounding Boxes)" name="Bounding Boxes"/>
-			<menu_item_check label="Normalne" name="Normals"/>
+			<menu_item_check label="Wektory normalne" name="Normals"/>
 			<menu_item_check label="Drzewo okluzji" name="Octree"/>
 			<menu_item_check label="Wzmocniona okluzja (Shadow Frusta)" name="Shadow Frusta"/>
 			<menu_item_check label="Kształty fizyczne" name="Physics Shapes"/>

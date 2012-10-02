@@ -212,6 +212,10 @@ bool callback_clear_debug_search(const LLSD& notification, const LLSD& response)
 bool callback_pick_debug_search(const LLSD& notification, const LLSD& response);
 // </FS:AW  opensim search support>
 
+#ifdef LL_WINDOWS
+bool callback_growl_not_installed(const LLSD& notification, const LLSD& response);
+#endif
+
 //bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 //bool callback_reset_dialogs(const LLSD& notification, const LLSD& response, LLFloaterPreference* floater);
 
@@ -229,6 +233,19 @@ bool callback_clear_cache(const LLSD& notification, const LLSD& response)
 
 	return false;
 }
+
+#ifdef LL_WINDOWS
+bool callback_growl_not_installed(const LLSD& notification, const LLSD& response)
+{
+	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
+	if ( option == 1 ) // NO
+	{
+		gSavedSettings.setBOOL("FSEnableGrowl", FALSE);
+	}
+
+	return false;
+}
+#endif
 
 bool callback_clear_browser_cache(const LLSD& notification, const LLSD& response)
 {
@@ -1929,12 +1946,15 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("PlayModeUISndBadKeystroke")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndBadKeystroke"));
 	getChild<LLComboBox>("PlayModeUISndClick")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndClick"));
 	getChild<LLComboBox>("PlayModeUISndClickRelease")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndClickRelease"));
+	getChild<LLComboBox>("PlayModeUISndFriendOffline")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndFriendOffline"));
+	getChild<LLComboBox>("PlayModeUISndFriendOnline")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndFriendOnline"));
 	getChild<LLComboBox>("PlayModeUISndHealthReductionF")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndHealthReductionF"));
 	getChild<LLComboBox>("PlayModeUISndHealthReductionM")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndHealthReductionM"));
 	getChild<LLComboBox>("PlayModeUISndInvalidOp")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndInvalidOp"));
 	getChild<LLComboBox>("PlayModeUISndMoneyChangeDown")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndMoneyChangeDown"));
 	getChild<LLComboBox>("PlayModeUISndMoneyChangeUp")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndMoneyChangeUp"));
 	getChild<LLComboBox>("PlayModeUISndNewIncomingIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2. Shared with Chat > General > "When receiving Instant Messages"
+	getChild<LLComboBox>("PlayModeUISndNewIncomingGroupIMSession")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2. Shared with Chat > General > "When receiving Group Instant Messages"
 	getChild<LLComboBox>("PlayModeUISndStartIM")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndStartIM"));
 	getChild<LLComboBox>("PlayModeUISndObjectCreate")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectCreate"));
 	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndObjectDelete"));
@@ -1958,8 +1978,10 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("PlayModeUISndWindowOpen")->setValue((int)gSavedSettings.getBOOL("PlayModeUISndWindowOpen"));
 	// Set proper option for Chat > Notifications > "When receiving Instant Messages"
 	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2
+	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2
 	// This sound is unused in Firestorm at the moment
 	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
+	getChild<LLButton>("Def_UISndObjectDelete")->setEnabled(FALSE);
 	getChild<LLComboBox>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
 }
 // </FS:PP>
@@ -2179,6 +2201,12 @@ BOOL LLPanelPreference::postBuild()
 	{
 		getChildView("OnlineOfflinetoNearbyChatHistory")->setEnabled(getChild<LLUICtrl>("OnlineOfflinetoNearbyChat")->getValue().asBoolean());
 	}
+#ifdef LL_WINDOWS
+	if (hasChild("notify_growl_checkbox", TRUE))
+	{
+		getChild<LLCheckBoxCtrl>("notify_growl_checkbox")->setCommitCallback(boost::bind(&showGrowlNotInstalledWarning, _1, _2));
+	}
+#endif
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
 // <FS:AW Disable LSL bridge on opensim>
 	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
@@ -2272,6 +2300,16 @@ void LLPanelPreference::showFavoritesOnLoginWarning(LLUICtrl* checkbox, const LL
 		LLNotificationsUtil::add("FavoritesOnLogin");
 	}
 }
+
+#ifdef LL_WINDOWS
+void LLPanelPreference::showGrowlNotInstalledWarning(LLUICtrl* checkbox, const LLSD& value)
+{
+	if (checkbox && checkbox->getValue())
+	{
+		LLNotificationsUtil::add("GrowlNotInstalled",LLSD(), LLSD(), callback_growl_not_installed);
+	}
+}
+#endif
 
 void LLPanelPreference::cancel()
 {

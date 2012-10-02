@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="beacons" title="EMITERY">
+<floater name="beacons" title="Emitery">
 	<panel name="beacons_panel">
 		<text name="label_show">
 			Pokaż:

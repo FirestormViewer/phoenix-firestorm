@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="perm prefs" title="DOMYŚLNE UPRAWNIENIA ŁADOWANIA">
+<floater name="perm prefs" title="Domyślne uprawnienia ładowania">
 	<panel label="Uprawnienia" name="permissions">
 		<check_box label="Udostępnij grupie" name="share_with_group"/>
 		<check_box label="Pozwól kopiować każdemu" name="everyone_copy"/>

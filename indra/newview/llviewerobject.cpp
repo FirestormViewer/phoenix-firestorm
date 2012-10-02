@@ -203,7 +203,6 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mID(id),
 	mLocalID(0),
 	mTotalCRC(0),
-	mListIndex(-1),
 	mTEImages(NULL),
 	mGLName(0),
 	mbCanSelect(TRUE),
@@ -241,6 +240,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mTimeDilation(1.f),
 	mRotTime(0.f),
 	mAngularVelocityRot(),
+	mPreviousRotation(),
 	mJointInfo(NULL),
 	mState(0),
 	mMedia(NULL),
@@ -2117,10 +2117,14 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		}
 	}
 
-	if (new_rot != getRotation()
-		|| new_angv != old_angv)
+	if ((new_rot != getRotation())
+		|| (new_angv != old_angv))
 	{
-		if (new_angv != old_angv)
+		if (new_rot != mPreviousRotation)
+		{
+			resetRot();
+		}
+		else if (new_angv != old_angv)
 		{
 			if (flagUsePhysics() || new_angv.isExactlyZero())
 			{
@@ -2131,6 +2135,9 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				resetRotTime();
 			}
 		}
+
+		// Remember the last rotation value
+		mPreviousRotation = new_rot;
 
 		// Set the rotation of the object followed by adjusting for the accumulated angular velocity (llSetTargetOmega)
 		setRotation(new_rot * mAngularVelocityRot);
@@ -2227,8 +2234,8 @@ BOOL LLViewerObject::isActive() const
 
 BOOL LLViewerObject::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 {
-	//static LLFastTimer::DeclareTimer ftm("Viewer Object");
-	//LLFastTimer t(ftm);
+	static LLFastTimer::DeclareTimer ftm("Viewer Object");
+	LLFastTimer t(ftm);
 
 	if (mDead)
 	{
@@ -4256,7 +4263,7 @@ S32 LLViewerObject::setTETextureCore(const U8 te, const LLUUID& uuid, LLHost hos
 	return retval;
 }
 
-
+//virtual
 void LLViewerObject::changeTEImage(S32 index, LLViewerTexture* new_image) 
 {
 	if(index < 0 || index >= getNumTEs())
@@ -4884,11 +4891,9 @@ void LLViewerObject::deleteParticleSource()
 // virtual
 void LLViewerObject::updateDrawable(BOOL force_damped)
 {
-	if (!isChanged(MOVED))
-	{ //most common case, having an empty if case here makes for better branch prediction
-	}
-	else if (mDrawable.notNull() && 
-		!mDrawable->isState(LLDrawable::ON_MOVE_LIST))
+	if (mDrawable.notNull() && 
+		!mDrawable->isState(LLDrawable::ON_MOVE_LIST) &&
+		isChanged(MOVED))
 	{
 		BOOL damped_motion = 
 			!isChanged(SHIFTED) &&										// not shifted between regions this frame and...

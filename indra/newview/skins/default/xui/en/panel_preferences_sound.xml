@@ -929,12 +929,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndAlert"
          control_name="UISndAlert"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndAlert"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndAlert"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndAlert"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndAlert"
          width="120">
@@ -967,12 +980,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndBadKeystroke"
          control_name="UISndBadKeystroke"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndBadKeystroke"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndBadKeystroke"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndBadKeystroke"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndBadKeystroke"
          width="120">
@@ -1005,12 +1031,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClick"
          control_name="UISndClick"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndClick"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndClick"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndClick"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndClick"
          width="120">
@@ -1043,12 +1082,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClickRelease"
          control_name="UISndClickRelease"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndClickRelease"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndClickRelease"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndClickRelease"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndClickRelease"
          width="120">
@@ -1081,12 +1133,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionF"
          control_name="UISndHealthReductionF"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndHealthReductionF"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndHealthReductionF"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndHealthReductionF"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndHealthReductionF"
          width="120">
@@ -1119,12 +1184,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionM"
          control_name="UISndHealthReductionM"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndHealthReductionM"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndHealthReductionM"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndHealthReductionM"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndHealthReductionM"
          width="120">
@@ -1157,12 +1235,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndInvalidOp"
          control_name="UISndInvalidOp"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndInvalidOp"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndInvalidOp"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndInvalidOp"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndInvalidOp"
          width="120">
@@ -1195,12 +1286,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeDown"
          control_name="UISndMoneyChangeDown"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndMoneyChangeDown"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndMoneyChangeDown"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndMoneyChangeDown"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndMoneyChangeDown"
          width="120">
@@ -1233,12 +1337,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeUp"
          control_name="UISndMoneyChangeUp"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndMoneyChangeUp"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndMoneyChangeUp"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndMoneyChangeUp"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndMoneyChangeUp"
          width="120">
@@ -1271,14 +1388,82 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndNewIncomingIMSession"
          control_name="UISndNewIncomingIMSession"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndNewIncomingIMSession"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndNewIncomingIMSession"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndNewIncomingIMSession"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndNewIncomingIMSession"
+         width="120">
+           <combo_box.item
+             label="Play only on new session"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Play on every message"
+             name="2"
+             value="2"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on incoming group instant message. This setting is shared with Chat &gt; Notifications &gt; 'When receiving Group Instant Messages'."
+         name="textFSNewGroupIncomingIMSession">
+            Group Instant Message:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndNewIncomingGroupIMSession"
+         control_name="UISndNewIncomingGroupIMSession"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndNewIncomingGroupIMSession"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndNewIncomingGroupIMSession"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndNewIncomingGroupIMSession"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndNewIncomingGroupIMSession"
          width="120">
            <combo_box.item
              label="Play only on new session"
@@ -1313,12 +1498,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndStartIM"
          control_name="UISndStartIM"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndStartIM"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndStartIM"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndStartIM"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndStartIM"
          width="120">
@@ -1351,12 +1549,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectCreate"
          control_name="UISndObjectCreate"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndObjectCreate"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndObjectCreate"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndObjectCreate"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectCreate"
          width="120">
@@ -1390,12 +1601,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectDelete"
          control_name="UISndObjectDelete"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndObjectDelete"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndObjectDelete"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndObjectDelete"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectDelete"
          width="120">
@@ -1429,12 +1653,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezIn"
          control_name="UISndObjectRezIn"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndObjectRezIn"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndObjectRezIn"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndObjectRezIn"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectRezIn"
          width="120">
@@ -1467,12 +1704,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezOut"
          control_name="UISndObjectRezOut"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndObjectRezOut"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndObjectRezOut"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndObjectRezOut"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndObjectRezOut"
          width="120">
@@ -1505,12 +1755,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndSnapshot"
          control_name="UISndSnapshot"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndSnapshot"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndSnapshot"/>
+		</button>
         <combo_box
          control_name="QuietSnapshotsToDisk"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="QuietSnapshotsToDiskComboBox"
          width="120">
@@ -1532,7 +1795,7 @@ Hover your mouse cursor over UUID field to show its default value.
          height="14"
          width="150"
          tool_tip="Sound UUID played on teleporting. This setting is shared with Move and View &gt; Movement &gt; 'Play sound effect when teleporting'."
-         name="textFSRegionRestart">
+         name="textFSTeleportOut">
             Teleportation:
         </text>
         <line_editor
@@ -1543,52 +1806,27 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTeleportOut"
          control_name="UISndTeleportOut"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndTeleportOut"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndTeleportOut"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndTeleportOut"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndTeleportOut"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
-
-        <text
-         layout="topleft"
-         follows="left|top"
-         top_pad="7"
-         left="5"
-         height="14"
-         width="150"
-         tool_tip="Sound UUID played, when the region restart alert appears."
-         name="textFSRegionRestart">
-            Region restart alert:
-        </text>
-        <line_editor
-         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
-         follows="left|top"
-         left_pad="5"
-         height="20"
-         max_length_chars="256"
-         name="UISndRegionRestart"
-         control_name="UISndRegionRestart"
-         width="250"/>
-        <combo_box
-         control_name="PlayModeUISndRegionRestart"
-         height="20"
-         layout="topleft"
-         top_delta="-1"
-         left_pad="1"
-         name="PlayModeUISndRegionRestart"
          width="120">
            <combo_box.item
              label="Play this sound"
@@ -1643,12 +1881,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuAppear"
          control_name="UISndPieMenuAppear"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuAppear"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuAppear"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuAppear"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuAppear"
          width="120">
@@ -1681,12 +1932,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuHide"
          control_name="UISndPieMenuHide"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuHide"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuHide"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuHide"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuHide"
          width="120">
@@ -1719,12 +1983,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight0"
          control_name="UISndPieMenuSliceHighlight0"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight0"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight0"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight0"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight0"
          width="120">
@@ -1757,12 +2034,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight1"
          control_name="UISndPieMenuSliceHighlight1"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight1"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight1"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight1"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight1"
          width="120">
@@ -1795,12 +2085,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight2"
          control_name="UISndPieMenuSliceHighlight2"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight2"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight2"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight2"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight2"
          width="120">
@@ -1833,12 +2136,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight3"
          control_name="UISndPieMenuSliceHighlight3"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight3"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight3"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight3"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight3"
          width="120">
@@ -1871,12 +2187,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight4"
          control_name="UISndPieMenuSliceHighlight4"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight4"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight4"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight4"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight4"
          width="120">
@@ -1909,12 +2238,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight5"
          control_name="UISndPieMenuSliceHighlight5"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight5"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight5"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight5"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight5"
          width="120">
@@ -1947,12 +2289,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight6"
          control_name="UISndPieMenuSliceHighlight6"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight6"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight6"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight6"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight6"
          width="120">
@@ -1985,12 +2340,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight7"
          control_name="UISndPieMenuSliceHighlight7"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndPieMenuSliceHighlight7"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndPieMenuSliceHighlight7"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndPieMenuSliceHighlight7"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight7"
          width="120">
@@ -2023,12 +2391,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTyping"
          control_name="UISndTyping"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndTyping"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndTyping"/>
+		</button>
         <combo_box
          control_name="FSPlayTypingSound"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="FSPlayTypingSoundComboBox"
          width="120">
@@ -2061,12 +2442,25 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowClose"
          control_name="UISndWindowClose"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndWindowClose"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndWindowClose"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndWindowClose"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndWindowClose"
          width="120">
@@ -2099,14 +2493,180 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowOpen"
          control_name="UISndWindowOpen"
-         width="250"/>
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndWindowOpen"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndWindowOpen"/>
+		</button>
         <combo_box
          control_name="PlayModeUISndWindowOpen"
          height="20"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
          name="PlayModeUISndWindowOpen"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when the region restart alert appears."
+         name="textFSRegionRestart">
+            Region restart alert:
+        </text>
+        <line_editor
+         tool_tip="4174f859-0d3d-c517-c424-72923dc21f65"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndRegionRestart"
+         control_name="UISndRegionRestart"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndRegionRestart"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndRegionRestart"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndRegionRestart"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndRegionRestart"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when your friend comes online."
+         name="textFSFriendOnline">
+            Friend comes online:
+        </text>
+        <line_editor
+         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFriendOnline"
+         control_name="UISndFriendOnline"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndFriendOnline"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFriendOnline"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndFriendOnline"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndFriendOnline"
+         width="120">
+           <combo_box.item
+             label="Play this sound"
+             name="1"
+             value="1"/>
+           <combo_box.item
+             label="Mute this sound"
+             name="0"
+             value="0"/>
+        </combo_box>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played, when your friend goes offline."
+         name="textFSFriendOffline">
+            Friend goes offline:
+        </text>
+        <line_editor
+         tool_tip="ed124764-705d-d497-167a-182cd9fa2e6c"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFriendOffline"
+         control_name="UISndFriendOffline"
+         width="230"/>
+        <button
+         follows="left|top"
+         name="Def_UISndFriendOffline"
+         height="20"
+         label="D"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="20"
+         tool_tip="Reset to the default UUID.">
+		    <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFriendOffline"/>
+		</button>
+        <combo_box
+         control_name="PlayModeUISndFriendOffline"
+         height="20"
+         layout="topleft"
+         left_pad="1"
+         name="PlayModeUISndFriendOffline"
          width="120">
            <combo_box.item
              label="Play this sound"

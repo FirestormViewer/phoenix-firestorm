@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Preferences" title="USTAWIENIA">
+<floater name="Preferences" title="Ustawienia">
 	<floater.string name="LoginToChange">
 		Zmiana po logowaniu
 	</floater.string>

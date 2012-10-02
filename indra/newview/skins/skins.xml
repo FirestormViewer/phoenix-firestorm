@@ -1,6 +1,28 @@
 <llsd>
     <array>
-	<map>
+        <map>
+        <key>name</key>
+            <string>AnsaStorm</string>
+        <key>folder</key>
+            <string>ansastorm</string>
+        <key>themes</key>
+            <array>
+                <map>
+                <key>name</key>
+                    <string>Bright Blue</string>
+                <key>folder</key>
+                    <string>bright_blue</string>
+                </map>
+                <map>
+                <key>name</key>
+                    <string>Classic Brown</string>
+                <key>folder</key>
+                    <string>classic_brown</string>
+                </map>
+            </array>
+        </map>
+
+		<map>
         <key>name</key>
             <string>Firestorm</string>
         <key>folder</key>
@@ -36,30 +58,14 @@
             </array>
         </map>
 
-	<map>
-        <key>name</key>
-            <string>Vintage</string>
-        <key>folder</key>
-            <string>vintage</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Classic</string>
-                <key>folder</key>
-                    <string>classic</string>
-                </map>
-            </array>
-        </map>
-
-        <map>
+		<map>
         <key>name</key>
             <string>MetaHarper Modern</string>
         <key>folder</key>
             <string>metaharper</string>
         <key>themes</key>
             <array>
-		<map>
+				<map>
                 <key>name</key>
                     <string>CoolOcean</string>
                 <key>folder</key>
@@ -71,7 +77,7 @@
                     <string>AppalachianSky</string>
                 <key>folder</key>
                     <string>appalachian_sky</string>
-		</map>
+				</map>
             </array>
         </map>
 
@@ -94,7 +100,7 @@
                 <key>folder</key>
                     <string>original_teal</string>
                 </map>
-		<map>
+				<map>
                 <key>name</key>
                     <string>Mono Teal</string>
                 <key>folder</key>
@@ -118,7 +124,6 @@
                 <key>folder</key>
                     <string>silver_pink</string>
                 </map>
-
             </array>
         </map>
 
@@ -144,24 +149,18 @@
             </array>
         </map>
 
-        <map>
+		<map>
         <key>name</key>
-            <string>AnsaStorm</string>
+            <string>Vintage</string>
         <key>folder</key>
-            <string>ansastorm</string>
+            <string>vintage</string>
         <key>themes</key>
             <array>
                 <map>
                 <key>name</key>
-                    <string>Bright Blue</string>
+                    <string>Classic</string>
                 <key>folder</key>
-                    <string>bright_blue</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Classic Brown</string>
-                <key>folder</key>
-                    <string>classic_brown</string>
+                    <string>classic</string>
                 </map>
             </array>
         </map>

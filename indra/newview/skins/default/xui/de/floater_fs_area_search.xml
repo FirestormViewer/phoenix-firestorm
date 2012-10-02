@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="area_search" title="UMGEBUNGSSUCHE">
+<floater name="area_search" title="Umgebungssuche">
 	<floater.string name="ListedPendingTotalBlank" value="Gelistet/Offen/Total"/>
 	<floater.string name="ListedPendingTotalFilled" value="[LISTED] Gelistet/[PENDING] Offen/[TOTAL] Total"/>
 	<text name="name_label">

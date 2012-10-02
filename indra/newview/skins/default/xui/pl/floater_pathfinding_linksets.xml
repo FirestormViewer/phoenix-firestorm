@@ -114,7 +114,7 @@
 	</panel>
 	<panel name="pathfinding_linksets_actions">
 		<text name="linksets_actions_label">
-			Akcje na zaznaczonych zbiorach (jeśli zbiór jest usunięty ze świata jego atrybuty mogą być utracone):
+			Akcje na zazn. zbiorach (jeśli zbiór jest usunięty ze świata jego atrybuty mogą być utracone):
 		</text>
 		<check_box label="Podświetlenie" name="show_beacon" />
 		<button label="Weź" name="take_objects" />

@@ -11,7 +11,7 @@
  layout="topleft"
  save_rect="true"
  single_instance="true"
- title="PHOTOTOOLS MENU"
+ title="Phototools Menu"
  name="phototools"
  help_topic="phototools_menu_floater">
 
@@ -689,7 +689,7 @@
 				 left="5"
 				 name="UseLightShaders1"
 				 top_pad="10"
-				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in SL. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'Tools 3."
+				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in SL. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'Tools 3'."
 				 width="110">
 					<check_box.commit_callback
 					 function="Pref.VertexShaderEnable" />
@@ -796,7 +796,7 @@
 				 left="5"
 				 value="Shd. Res"
 				 top_pad="10"
-				 tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
+				 tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under 'Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
 				 width="80"/>
 				<slider_bar
 				 name="SB_Shadow_Res"
@@ -829,22 +829,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Shadow_Res"
-				 control_name="RenderShadowResolutionScale"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Shadow_Res"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					  name="CBI_Reset_Shadow_Res"
-					  label="Default"
-					  value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowResolutionScale"/>
+				</button>
 
 				<text
 				 name="T_Blur_Size"
@@ -885,22 +883,20 @@
 				 width="53"
 				 increment="0.1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Blur_Reset"
-				 control_name="RenderShadowBlurSize"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Blur_Reset"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Blur_Reset"
-					 label="Default"
-					 value="1.4"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowBlurSize"/>
+				</button>
 		
 				<text
 				 name="T_Blur_Dist"
@@ -941,22 +937,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Blur_Dist_Reset"
-				 control_name="RenderShadowBlurDistFactor"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Blur_Dist_Reset"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="0"
-					 value="0"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowBlurDistFactor"/>
+				</button>
 						
 				<text
 				 name="T_FOV_Cutoff"
@@ -998,22 +992,20 @@
 				 width="53"
 				 increment="0.1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_FOV_Cutoff_Reset"
-				 control_name="RenderShadowFOVCutoff"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="FOV_Cutoff_Reset"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="0.8"
-					 value="0.8"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderShadowFOVCutoff"/>
+				</button>
 			</panel>
 		
 			<panel
@@ -1175,22 +1167,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Scale"
-				 control_name="RenderSSAOScale"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Scale"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="500"
-					 value="500"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOScale"/>
+				</button>
 
 				<text
 				 name="T_Max_Scale" 
@@ -1231,22 +1221,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Max_Scale"
-				 control_name="RenderSSAOMaxScale"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Max_Scale"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="200"
-					 value="200"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOMaxScale"/>
+				</button>
 
 				<text
 				 name="T_Scaling_Factor"
@@ -1287,22 +1275,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Scaling_Factor"
-				 control_name="RenderSSAOFactor"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Scaling_Factor"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Scaling_Factor"
-					 label="Default"
-					 value=".30"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSSAOFactor"/>
+				</button>
 			</panel>
 
 			<panel
@@ -1379,22 +1365,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Smoothness"
-				 control_name="RenderSpecularExponent"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Smoothness"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="384.000"
-					 value="384.000"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSpecularExponent"/>
+				</button>
 						
 				<text
 				 name="T_Smooth_Res"
@@ -1434,22 +1418,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Smooth_Res"
-				 control_name="RenderSpecularResX"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Smooth_Res"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 label="Default"
-					 name="512"
-					 value="512"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderSpecularResX"/>
+				</button>
 				<!--slider
 				 can_edit_text="true"
 				 control_name="RenderShadowSplitExponentX"
@@ -1633,22 +1615,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Zoom"
-				 control_name="CameraAngle"
+				<button
 				 follows="left|top"
+				 name="Reset_Zoom"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Zoom"
-					 label="Default"
-					 value="1.047"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraAngle"/>
+				</button>
 
 				<text
 				 name="T_FOV"
@@ -1689,22 +1669,20 @@
 				 width="53"
 				 increment="0.1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_FOV"
-				 control_name="CameraFieldOfView"
+				<button
 				 follows="left|top"
+				 name="Reset_FOV"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_FOV"
-					 label="Default"
-					 value="60"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraFieldOfView"/>
+				</button>
 
 				<text
 				 name="T_F_Number"
@@ -1745,22 +1723,20 @@
 				 width="53"
 				 increment=".01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_F_Number"
-				 control_name="CameraFNumber"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_F_Number"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_F_Number"
-					 label="Default"
-					 value="9"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraFNumber"/>
+				</button>
 
 				<text
 				 name="T_Focal_Length"
@@ -1801,22 +1777,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Focal_Length"
-				 control_name="CameraFocalLength"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Focal_Length"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Focal_Length"
-					 label="Default"
-					 value="50"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraFocalLength"/>
+				</button>
 
 				<text
 				 name="T_Foc_Time"
@@ -1857,22 +1831,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Foc_Time"
-				 control_name="CameraFocusTransitionTime"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Foc_Time"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Foc_Time"
-					 label="Default"
-					 value=".50"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraFocusTransitionTime"/>
+				</button>
 						
 				<text
 				 name="T_CoC"
@@ -1913,22 +1885,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_CoC"
-				 control_name="CameraMaxCoF"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_CoC"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_CoC"
-					 label="Default"
-					 value="10"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraMaxCoF"/>
+				</button>
 
 				<text
 				 name="T_Resolution"
@@ -1969,22 +1939,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Resolution"
-				 control_name="CameraDoFResScale"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Resolution"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Resolution"
-					 label="Default"
-					 value="0.7"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraDoFResScale"/>
+				</button>
 
 				<text
 				 name="T_Aspect_Ratio"
@@ -2025,22 +1993,20 @@
 				 width="53"
 				 increment="0.01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Aspect_Ratio"
-				 control_name="CameraAspectRatio"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Aspect_Ratio"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Aspect_Ratio"
-					 label="Default"
-					 value="0.7"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraAspectRatio"/>
+				</button>
 			</panel>
 
 			<panel
@@ -2130,22 +2096,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Glow_Quality"
-				 control_name="RenderGlowResolutionPow"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Glow_Quality"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Glow_Quality"
-					 label="Default"
-					 value="9"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowResolutionPow"/>
+				</button>
 			</panel>
 
 			<panel
@@ -2198,22 +2162,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Glow_Iterations"
-				 control_name="RenderGlowIterations"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Glow_Iterations"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Glow_Iterations"
-					 label="Default"
-					 value="2"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowIterations"/>
+				</button>
 
 				<text name="T_Glow_Strength"
 				 follows="top|left"
@@ -2254,22 +2216,20 @@
 				 width="53"
 				 increment=".00001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Glow_Strength"
-				 control_name="RenderGlowStrength"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Glow_Strength"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Glow_Strength"
-					 label="Default"
-					 value="0.350"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowStrength"/>
+				</button>
 
 				<text
 				 name="T_Luminance"
@@ -2310,22 +2270,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Luminance"
-				 control_name="RenderGlowMinLuminance"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Luminance"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Luminance"
-					 label="Default"
-					 value="5"/>
-				</combo_box>			
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowMinLuminance"/>
+				</button>
 
 				<text
 				 name="T_Warmth"
@@ -2366,22 +2324,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Warmth"
-				 control_name="RenderGlowWarmthAmount"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Warmth"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Warmth"
-					 label="Default"
-					 value="0"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowWarmthAmount"/>
+				</button>
 
 				<text
 				 name="T_Glow_Width"
@@ -2422,22 +2378,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Glow_Width"
-				 control_name="RenderGlowWidth"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Glow_Width"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Glow_Width"
-					 label="Default"
-					 value="1.300"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowWidth"/>
+				</button>
 
 				<text
 				 name="T_Alpha"
@@ -2478,22 +2432,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Alpha"
-				 control_name="RenderGlowMaxExtractAlpha"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Alpha"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Alpha"
-					 label="Default"
-					 value="0.250"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderGlowMaxExtractAlpha"/>
+				</button>
 			</panel>
 		</panel>
 
@@ -2577,22 +2529,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Draw_Distance"
-				 control_name="RenderFarClip"
+				<button
 				 follows="left|top"
+				 name="Reset_Draw_Distance"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Draw_Distance"
-					 label="Default"
-					 value="256"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderFarClip"/>
+				</button>
 
 				<text
 				 name="T_Avi_Count"
@@ -2633,22 +2583,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Avi_Count"
-				 control_name="RenderAvatarMaxVisible"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Avi_Count"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Avi_Count"
-					 label="Default"
-					 value="12"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderAvatarMaxVisible"/>
+				</button>
 
 				<text
 				 name="T_Avi_Detail"
@@ -2689,22 +2637,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Avi_Detail"
-				 control_name="RenderAvatarLODFactor"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Avi_Detail"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Avi_Detail"
-					 label="Default"
-					 value=".5"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderAvatarLODFactor"/>
+				</button>
 
 				<text
 				 name="T_Avi_Physics"
@@ -2745,22 +2691,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Avi_Physics"
-				 control_name="RenderAvatarPhysicsLODFactor"
+				<button
 				 follows="left|top"
+				 name="Reset_Avi_Physics"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Avi_Physics"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderAvatarPhysicsLODFactor"/>
+				</button>
 
 				<text
 				 name="T_Particle_Cnt"
@@ -2801,22 +2745,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Particle_Cnt"
-				 control_name="RenderMaxPartCount"
+				<button
 				 follows="left|top"
+				 name="Reset_Particle_Cnt"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Particle_Cnt"
-					 label="Default"
-					 value="4096"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderMaxPartCount"/>
+				</button>
 
 				<text
 				 name="T_Terrain_Scale"
@@ -2857,22 +2799,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Terrain_Scale"
-				 control_name="RenderTerrainScale"
+				<button
 				 follows="left|top"
+				 name="Reset_Terrain_Scale"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Terrain_Scale"
-					 label="Default"
-					 value="12"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderTerrainScale"/>
+				</button>
 
 				<text
 				 name="T_Terrain_Quality"
@@ -2913,22 +2853,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Terrain_Quality"
-				 control_name="RenderTerrainLODFactor"
+				<button
 				 follows="left|top"
+				 name="Reset_Terrain_Quality"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Terrain_Quality"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderTerrainLODFactor"/>
+				</button>
 
 				<text
 				 name="T_Object_Detail"
@@ -2969,22 +2907,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Object_Detail"
-				 control_name="RenderVolumeLODFactor"
+				<button
 				 follows="left|top"
+				 name="Reset_Object_Detail"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Object_Detail"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderVolumeLODFactor"/>
+				</button>
 
 				<text
 				 name="T_Flexi_Detail"
@@ -3025,22 +2961,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Flexi_Detail"
-				 control_name="RenderFlexTimeFactor"
+				<button
 				 follows="left|top"
+				 name="Reset_Flexi_Detail"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Flexi_Detail"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderFlexTimeFactor"/>
+				</button>
 
 				<text
 				 name="T_Tree_Detail"
@@ -3049,7 +2983,7 @@
 				 left="5"
 				 value="Tree Detail"
 				 top_pad="5"
-				 tool_tip="Controls level of detail of vegetation . Higher numbers produce greater detail."
+				 tool_tip="Controls level of detail of vegetation. Higher numbers produce greater detail."
 				 width="80"/>
 				<slider_bar
 				 name="SB_Tree_Detail"
@@ -3081,22 +3015,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Tree_Detail"
-				 control_name="RenderTreeLODFactor"
+				<button
 				 follows="left|top"
+				 name="Reset_Tree_Detail"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Tree_Detail"
-					 label="Default"
-					 value=".5"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="RenderTreeLODFactor"/>
+				</button>
 
 				<text
 				 name="T_Sky_Detail"
@@ -3137,22 +3069,20 @@
 				 width="53"
 				 increment="4"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Sky_Detail"
-				 control_name="WLSkyDetail"
+				<button
 				 follows="left|top"
+				 name="Reset_Sky_Detail"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Sky_Detail"
-					 label="Default"
-					 value="64"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="WLSkyDetail"/>
+				</button>
 
 				<text
 				 name="T_Av_Floor_Offset"
@@ -3194,22 +3124,20 @@
 				 width="53"
 				 increment=".01"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Av_Floor_Offset"
-				 control_name="AvatarZOffset"
+				<button
 				 follows="left|top"
+				 name="Reset_Av_Floor_Offset"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Av_Floor_Offset"
-					 label="Default"
-					 value="0"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="AvatarZOffset"/>
+				</button>
 			</panel>
 
 			<!--view_border
@@ -3473,7 +3401,7 @@
 				 width="230"
 				 layout="topleft"
 				 word_wrap="true"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more.. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
+				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
 				 value="Basic Shaders  - Leave ON! (see tool tip!)"/>
 			</panel>
 		</panel>
@@ -3680,7 +3608,7 @@
 				 font="SansSerif"
 				 value="Quick Stats"
 				 top_pad=""
-				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking thier labels."
+				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking their labels."
 				 width="200"/>	
 			</panel>
 			
@@ -3900,22 +3828,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_LR_Axis"
-				 control_name="FlycamAxisScale1"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_LR_Axis"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_LR_Axis"
-					 label="Default"
-					 value="2"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale1"/>
+				</button>
 
 				<text
 				 name="T_UD_Axis"
@@ -3957,22 +3883,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_UD_Axis"
-				 control_name="FlycamAxisScale2"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_UD_Axis"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_UD_Axis"
-					 label="Default"
-					 value="2"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale2"/>
+				</button>
 
 				<text
 				 name="T_IO_Axis"
@@ -4014,22 +3938,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_IO_Axis"
-				 control_name="FlycamAxisScale0"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_IO_Axis"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_IO_Axis"
-					 label="Default"
-					 value="2.1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale0"/>
+				</button>
 
 				<text
 				 name="T_Tilt"
@@ -4071,22 +3993,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Tilt"
-				 control_name="FlycamAxisScale4"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Tilt"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Tilt"
-					 label="Default"
-					 value=".10"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale4"/>
+				</button>
 
 				<text
 				 name="T_Spin"
@@ -4128,22 +4048,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Spin"
-				 control_name="FlycamAxisScale5"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Spin"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Spin"
-					 label="Default"
-					 value=".15"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale5"/>
+				</button>
 
 				<text
 				 name="T_Roll"
@@ -4185,22 +4103,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Roll"
-				 control_name="FlycamAxisScale3"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Roll"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Roll"
-					 label="Default"
-					 value="0"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale3"/>
+				</button>
 
 				<text
 				 name="T_Zoom_Speed"
@@ -4242,22 +4158,20 @@
 				 width="53"
 				 increment="1"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Zoom_Speed"
-				 control_name="FlycamAxisScale6"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Zoom_Speed"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Zoom_Speed"
-					 label="Default"
-					 value=".1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamAxisScale6"/>
+				</button>
 
 				<text
 				 name="T_Feathering"
@@ -4299,22 +4213,20 @@
 				 width="53"
 				 increment=".001"
 				 border_visible="false"/>
-				<combo_box
-				 name="CB_Reset_Feathering"
-				 control_name="FlycamFeathering"
-				 follows="top|left"
+				<button
+				 follows="left|top"
+				 name="Reset_Feathering"
 				 height="22"
+				 label="D"
 				 layout="topleft"
 				 left_pad="0"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Feathering"
-					 label="Default"
-					 value="2.75"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="FlycamFeathering"/>
+				</button>
 			</panel>
 
 			<panel
@@ -4489,7 +4401,7 @@
 							 left="10"
 							 value="Zoom"
 							 top_pad="7"
-							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpacenNavigator)."
+							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 							 width="100"/>
 							<slider
 							 name="SB_Zoom2"
@@ -4520,22 +4432,20 @@
 							 width="53"
 							 increment="0.001"
 							 border_visible="false"/-->
-							<combo_box
-							 name="CB_Reset_Zoom2"
-							 control_name="CameraAngle"
+							<button
 							 follows="right"
+							 name="Reset_Zoom2"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Reset_Zoom2"
-								 label="Default"
-								 value="1.047"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="CameraAngle"/>
+							</button>
 
 							<text
 							 name="T_Zoom_Speed2"
@@ -4559,22 +4469,20 @@
 							 top_delta="-2"
 							 tool_tip=""
 							 width="135" />
-							<combo_box
-							 name="CB_Reset_Zoom_Speed2"
-							 control_name="ZoomTime"
+							<button
 							 follows="right"
+							 name="Reset_Zoom_Speed2"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Reset_Zoom_Speed2"
-								 label="Default"
-								 value="0.40000000596"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="ZoomTime"/>
+							</button>
 
 							<text
 							 name="T_Camera_Lag"
@@ -4598,22 +4506,20 @@
 							 top_delta="-2"
 							 tool_tip=""
 							 width="135" />
-							<combo_box
-							 name="CB_Reset_Camera_Lag"
-							 control_name="DynamicCameraStrength"
+							<button
 							 follows="right"
+							 name="Reset_Camera_Lag"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Reset_Camera_Lag"
-								 label="Default"
-								 value="2"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="DynamicCameraStrength"/>
+							</button>
 
 							<text
 							 name="T_Camera_Offset"
@@ -4637,22 +4543,20 @@
 							 top_delta="-2"
 							 tool_tip=""
 							 width="135" />
-							<combo_box
-							 name="CB_Camera_Offset"
-							 control_name="CameraOffsetScale"
+							<button
 							 follows="right"
+							 name="Reset_Camera_Offset"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Camera_Offset"
-								 label="Default"
-								 value="1"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="CameraOffsetScale"/>
+							</button>
 
 							<text
 							 name="T_Cam_Smoothing"
@@ -4676,22 +4580,20 @@
 							 top_delta="-2"
 							 tool_tip=""
 							 width="135" />
-							<combo_box
-							 name="CB_Reset_Cam_Smoothing"
-							 control_name="CameraPositionSmoothing"
+							<button
 							 follows="right"
+							 name="Reset_Cam_Smoothing"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Reset_Cam_Smoothing"
-								 label="Default"
-								 value="1"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="CameraPositionSmoothing"/>
+							</button>
 						</panel>
 					</panel>
 
@@ -4736,22 +4638,20 @@
 							 top_delta="-2"
 							 tool_tip=""
 							 width="135" />
-							<combo_box
-							 name="CB_Reset_Mouse_Sens"
-							 control_name="MouseSensitivity"
-							 follows="left|top"
+							<button
+							 follows="right"
+							 name="Reset_Mouse_Sens"
 							 height="16"
+							 label="D"
 							 layout="topleft"
 							 left="245"
 							 top_delta="0"
 							 width="20"
-							 tool_tip="Click here and then click on the word 'Default' in the drop down menu to reset this setting to its default."
-							 visible="true">
-								<combo_box.item
-								 name="CBI_Reset_Mouse_Sens"
-								 label="Default"
-								 value="3"/>
-							</combo_box>
+							 tool_tip="Reset to the default value.">
+								<button.commit_callback
+								 function="ResetControl"
+								 parameter="MouseSensitivity"/>
+							</button>
 							<check_box
 							 control_name="FirstPersonAvatarVisible"
 							 follows="left|top"

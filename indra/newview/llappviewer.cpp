@@ -89,7 +89,6 @@
 #include "lllogininstance.h"
 #include "llprogressview.h"
 #include "llvocache.h"
-#include "llvopartgroup.h"
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -726,9 +725,6 @@ bool LLAppViewer::init()
 
 	// initialize SSE options
 	LLVector4a::initClass();
-
-	//initialize particle index pool
-	LLVOPartGroup::initClass();
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
@@ -1414,6 +1410,14 @@ bool LLAppViewer::mainLoop()
 				{
 					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
 					joystick->scanJoystick();
+					// <FS:Ansariel> Chalice Yao's crouch toggle
+					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
+					static LLCachedControl<bool> fsCrouchToggleStatus(gSavedSettings, "FSCrouchToggleStatus");
+					if (fsCrouchToggle && fsCrouchToggleStatus)
+					{
+						gAgent.moveUp(-1);
+					}
+					// </FS:Ansariel>
 					gKeyboard->scanKeyboard();
 				}
 
@@ -2802,19 +2806,6 @@ bool LLAppViewer::initConfiguration()
 			gDirUtilp->setSkinThemeFolder(themefolder->getValue().asString());
     }
 	
-	if (gSavedSettings.getBOOL("SpellCheck"))
-	{
-		std::list<std::string> dict_list;
-		std::string dict_setting = gSavedSettings.getString("SpellCheckDictionary");
-		boost::split(dict_list, dict_setting, boost::is_any_of(std::string(",")));
-		if (!dict_list.empty())
-		{
-			LLSpellChecker::setUseSpellCheck(dict_list.front());
-			dict_list.pop_front();
-			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
-		}
-	}
-
 	if (gSavedSettings.getBOOL("SpellCheck"))
 	{
 		std::list<std::string> dict_list;

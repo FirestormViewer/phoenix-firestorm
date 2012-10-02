@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="imcontacts" title="KONTAKTY">
+<floater name="imcontacts" title="Kontakty">
  	<string name="no_friends" value="Brak znajomych" />
     <string name="no_filtered_groups_msg" value="Nie udało Ci się znaleźć tego, czego szukasz? Spróbuj [secondlife:///app/search/groups/[SEARCH_TERM] wyszukać]." />
 	<string name="no_groups_msg" value="Szukasz grup, do jakich można by dołączyć? Spróbuj [secondlife:///app/search/groups wyszukać]." />

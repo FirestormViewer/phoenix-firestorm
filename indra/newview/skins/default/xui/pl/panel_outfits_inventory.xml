@@ -7,8 +7,8 @@
 		Załóż zaznaczone obiekty
 	</panel.string>
 	<tab_container name="appearance_tabs">
-		<panel label="MOJE STROJE" name="outfitslist_tab"/>
-		<panel label="ZAŁOŻONE" name="cof_tab"/>
+		<panel label="Moje stroje" name="outfitslist_tab"/>
+		<panel label="Założone" name="cof_tab"/>
 	</tab_container>
 	<panel name="bottom_panel">
 		<layout_stack name="bottom_panel_ls">

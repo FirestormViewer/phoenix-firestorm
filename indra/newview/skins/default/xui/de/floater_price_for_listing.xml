@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="price_for_listing" title="ANZEIGE VERÖFFENTLICHEN">
+<floater name="price_for_listing" title="Anzeige veröffentlichen">
 	<text name="explanation_text">
 		Ihre Anzeige wird für eine Woche veröffentlicht.
 

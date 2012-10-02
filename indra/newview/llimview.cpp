@@ -2673,14 +2673,22 @@ void LLIMMgr::addMessage(
 		}
 
 	// <FS:PP> Configurable IM sounds
-		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0)
+		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
+		else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0 && dialog != IM_NOTHING_SPECIAL)
+		{
+			make_ui_sound("UISndNewIncomingGroupIMSession");
+		}
 	}
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2)
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
+	}
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 2 && dialog != IM_NOTHING_SPECIAL)
+	{
+		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
 
@@ -3388,6 +3396,19 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				IM_BUSY_AUTO_RESPONSE,
 				session_id);
 			gAgent.sendReliableMessage();
+			gIMMgr->addMessage(
+				session_id,
+				im_info->mFromID,
+				LLStringUtil::null, // Pass null value so no name gets prepended
+				LLTrans::getString("IM_autoresponce_sent"),
+				im_info->mName,
+				IM_NOTHING_SPECIAL,
+				im_info->mParentEstateID,
+				im_info->mRegionID,
+				im_info->mPosition,
+				false, // <-- Wow! This parameter is never handled!!!
+				TRUE
+				);
 		}
 	}
 	// </Ansariel>

@@ -91,6 +91,8 @@ LLFloaterNearbyChat::LLFloaterNearbyChat(const LLSD& key)
 	: LLDockableFloater(NULL, false, false, key)
 	,mChatHistory(NULL)
 	,mInputEditor(NULL)
+	// <FS:Ansariel> Optional muted chat history
+	,mChatHistoryMuted(NULL)
 {
 }
 
@@ -151,6 +153,9 @@ BOOL LLFloaterNearbyChat::postBuild()
 	childSetCommitCallback("chat_history_btn",onHistoryButtonClicked,this);
 
 	mChatHistory = getChild<LLChatHistory>("chat_history");
+
+	// <FS:Ansariel> Optional muted chat history
+	mChatHistoryMuted = getChild<LLChatHistory>("chat_history_muted");
 	
 	// <vertical tab docking> -AO
 	if(isChatMultiTab())
@@ -206,12 +211,21 @@ void	LLFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 	}
 
 	
+	// <FS:Ansariel> Optional muted chat history
+	tmp_chat.mFromName = chat.mFromName;
+	LLSD chat_args = args;
+	chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+	chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+	mChatHistoryMuted->appendMessage(chat, chat_args);
+	// </FS:Ansariel> Optional muted chat history
 	if (!chat.mMuted)
 	{
-		tmp_chat.mFromName = chat.mFromName;
-		LLSD chat_args = args;
-		chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
-		chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		// <FS:Ansariel> Optional muted chat history
+		//tmp_chat.mFromName = chat.mFromName;
+		//LLSD chat_args = args;
+		//chat_args["use_plain_text_chat_history"] = use_plain_text_chat_history;
+		//chat_args["hide_timestamps_nearby_chat"] = hide_timestamps_nearby_chat;
+		// <(FS:Ansariel> Optional muted chat history
 		mChatHistory->appendMessage(chat, chat_args);
 	}
 
@@ -222,7 +236,10 @@ void	LLFloaterNearbyChat::addMessage(const LLChat& chat,bool archive,const LLSD 
 			mMessageArchive.erase(mMessageArchive.begin());
 	}
 
-	if (args["do_not_log"].asBoolean()) 
+	// <FS:Ansariel> Optional muted chat history
+	//if (args["do_not_log"].asBoolean()) 
+	if (args["do_not_log"].asBoolean() || chat.mMuted) 
+	// </FS:Ansariel> Optional muted chat history
 	{
 		return;
 	}
@@ -437,6 +454,8 @@ void LLFloaterNearbyChat::getAllowedRect(LLRect& rect)
 void LLFloaterNearbyChat::clearChatHistory()
 {
 	mChatHistory->clear();
+	// <FS:Ansariel> Optional muted chat history
+	mChatHistoryMuted->clear();
 }
 
 void LLFloaterNearbyChat::updateChatHistoryStyle()

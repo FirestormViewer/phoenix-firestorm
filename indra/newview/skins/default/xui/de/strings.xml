@@ -1884,6 +1884,20 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="RegionInfoAllowedGroups">
 		Zulässige Gruppen: ([ALLOWEDGROUPS], max [MAXACCESS])
 	</string>
+	<!-- FS:Ansariel: Estate managers and banned residents strings -->
+	<string name="RegionInfoEstateManagers">
+		Grundbesitzverwalter: ([ESTATEMANAGERS], max [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Verbannte Einwohner: ([BANNEDAGENTS], max [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		zulässige Einwohner
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		verbannte Einwohner
+	</string>
+	<!-- END FS:Ansariel: Estate managers and banned residents strings -->
 	<string name="ScriptLimitsParcelScriptMemory">
 		Parzellenskript-Speicher
 	</string>
@@ -3455,19 +3469,19 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Dicke
 	</string>
 	<string name="Nose Tip Angle">
-		Nasenspitze
+		Winkel Nasenspitze
 	</string>
 	<string name="Nose Tip Shape">
-		Nasenspitze
+		Form Nasenspitze
 	</string>
 	<string name="Nose Width">
 		Nasenbreite
 	</string>
 	<string name="Nostril Division">
-		Teilung
+		Nasenloch-Teilung
 	</string>
 	<string name="Nostril Width">
-		Größe
+		Nasenloch-Größe
 	</string>
 	<string name="Opaque">
 		Deckend
@@ -3962,10 +3976,10 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Avatare sichtbar; Chat außerhalb dieser Parzelle gestattet
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
-		Sich bewegende Objekte können sich fehlerhaft verhalten bis der Navmesh der Region aktualisiert wurde.
+		Bewegliche Objekte verhalten sich in dieser Region u. U. erst dann korrekt, wenn die Region neu geformt wird.
 	</string>
 	<string name="LocationCtrlPathfindingDisabledTooltip">
-		Dynamisches Pathfinding ist in dieser Region deaktiviert.
+		Dynamisches Pathfinding ist in dieser Region nicht aktiviert.
 	</string>
 	<string name="UpdaterWindowTitle">
 		[APP_NAME] Aktualisierung
@@ -5048,6 +5062,18 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Asset_Blacklist_Label">
 		Asset-Blacklist
 	</string>
+	<string name="Command_Phototools_Label">
+		Phototools
+	</string>
+	<string name="Command_Phototools_View_Label">
+		Phototools-Kamera
+	</string>
+	<string name="Command_Contact_Sets_Label">
+		Kontakt-Sets
+	</string>
+	<string name="Command_Mouselook_Label">
+		Mouselook-Modus
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5159,6 +5185,18 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Asset_Blacklist_Tooltip">
 		Öffnet die Asset-Blacklist mit einer Übersicht über alle geblockten Objekte
 	</string>
+	<string name="Command_Phototools_Tooltip">
+		Erweiterte Fotografie-Tools
+	</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Erweiterte Kamerasteuerung für Fotografie-Tools
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Öffnet die Kontakt-Sets (Strg+Alt+Umschalt+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Mouselook-Modus aktivieren (M)
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
 	</string>
@@ -5192,7 +5230,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Normal">
 		Normal
 	</string>
-  <!-- Pathfinding -->
 	<string name="Pathfinding_Wiki_URL">
 		http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 	</string>
@@ -5200,10 +5237,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Keine
 	</string>
 	<string name="Pathfinding_Object_Attr_Permanent">
-		Beinflusst Navmesh
+		Wirkt sich auf Navmesh aus
 	</string>
 	<string name="Pathfinding_Object_Attr_Character">
-		Charakter
+		Figur
 	</string>
 	<string name="Pathfinding_Object_Attr_MultiSelect">
 		(mehrere)
@@ -5223,6 +5260,14 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="snapshot_quality_very_high">
 		Sehr hoch
 	</string>
+	<string name="TeleportMaturityExceeded">
+		Der Einwohner kann diese Region nicht besuchen.
+	</string>
+	<string name="UserDictionary">
+		[Benutzer]
+	</string>
+	
+<!-- Firestorm-specific translations -->
 	<string name="RlvEnabled">
 		RestrainedLove-Unterstützung ist beim nächsten Start eingeschaltet.
 	</string>
@@ -5354,14 +5399,5 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Collision_UnknownType">
 		[NAME] hat eine Kollision unbekannten Typs verursacht.
-	</string>
-
-	<string name="TeleportMaturityExceeded">
-		Der Einwohner kann dieser Region nicht betreten.
-	</string>
-	
-	<!-- Spell check settings floater -->
-	<string name="UserDictionary">
-		[User]
 	</string>
 </strings>

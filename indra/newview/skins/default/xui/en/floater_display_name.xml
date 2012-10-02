@@ -8,7 +8,7 @@
  name="Display Name"
  help_topic="display_name"
  save_rect="false"
- title="CHANGE DISPLAY NAME" 
+ title="Change Display Name"
  width="445">
     <text
      type="string"

@@ -237,11 +237,9 @@ S32 LLImageGL::dataFormatComponents(S32 dataformat)
 
 //----------------------------------------------------------------------------
 
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_STATS("Image Stats");
 // static
 void LLImageGL::updateStats(F32 current_time)
 {
-	LLFastTimer t(FTM_IMAGE_UPDATE_STATS);
 	sLastFrameTime = current_time;
 	sBoundTextureMemoryInBytes = sCurBoundTextureMemory;
 	sCurBoundTextureMemory = 0;
@@ -1051,28 +1049,34 @@ BOOL LLImageGL::setSubImageFromFrameBuffer(S32 fb_x, S32 fb_y, S32 x_pos, S32 y_
 // static
 void LLImageGL::generateTextures(LLTexUnit::eTextureType type, U32 format, S32 numTextures, U32 *textures)
 {
-	bool empty = true;
+	// <FS:ND> user-defined names was deprecated with OpenGL 3.1. Just generate/delete using OpenGL function.
 
-	dead_texturelist_t::iterator iter = sDeadTextureList[type].find(format);
+	// bool empty = true;
+	// 
+	// dead_texturelist_t::iterator iter = sDeadTextureList[type].find(format);
+	// 
+	// if (iter != sDeadTextureList[type].end())
+	// {
+	// 	empty = iter->second.empty();
+	// }
+	// 
+	// for (S32 i = 0; i < numTextures; ++i)
+	// {
+	// 	if (!empty)
+	// 	{
+	// 		textures[i] = iter->second.front();
+	// 		iter->second.pop_front();
+	// 		empty = iter->second.empty();
+	// 	}
+	// 	else
+	// 	{
+	// 		textures[i] = sCurTexName++;
+	// 	}
+	// }
+
+	glGenTextures( numTextures, textures );
 	
-	if (iter != sDeadTextureList[type].end())
-	{
-		empty = iter->second.empty();
-	}
-	
-	for (S32 i = 0; i < numTextures; ++i)
-	{
-		if (!empty)
-		{
-			textures[i] = iter->second.front();
-			iter->second.pop_front();
-			empty = iter->second.empty();
-		}
-		else
-		{
-			textures[i] = sCurTexName++;
-		}
-	}
+	// </FS:ND>
 }
 
 // static
@@ -1080,28 +1084,34 @@ void LLImageGL::deleteTextures(LLTexUnit::eTextureType type, U32 format, S32 mip
 {
 	if (gGLManager.mInited)
 	{
-		if (format == 0 ||  type == LLTexUnit::TT_CUBE_MAP || mip_levels == -1)
-		{ //unknown internal format or unknown number of mip levels, not safe to reuse
-			glDeleteTextures(numTextures, textures);
-		}
-		else
-		{
-			for (S32 i = 0; i < numTextures; ++i)
-			{ //remove texture from VRAM by setting its size to zero
-				for (S32 j = 0; j <= mip_levels; j++)
-				{
-					gGL.getTexUnit(0)->bindManual(type, textures[i]);
+		// <FS:ND> user-defined names was deprecated with OpenGL 3.1. Just generate/delete using OpenGL function.
 
-					glTexImage2D(LLTexUnit::getInternalType(type), j, format, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-				}
+		// if (format == 0 ||  type == LLTexUnit::TT_CUBE_MAP || mip_levels == -1)
+		// { //unknown internal format or unknown number of mip levels, not safe to reuse
+		// 	glDeleteTextures(numTextures, textures);
+		// }
+		// else
+		// {
+		// 	for (S32 i = 0; i < numTextures; ++i)
+		// 	{ //remove texture from VRAM by setting its size to zero
+		// 		for (S32 j = 0; j <= mip_levels; j++)
+		// 		{
+		// 			gGL.getTexUnit(0)->bindManual(type, textures[i]);
+		// 
+		// 			glTexImage2D(LLTexUnit::getInternalType(type), j, format, 0, 0, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		// 		}
+		// 
+		// 		llassert(std::find(sDeadTextureList[type][format].begin(),
+		// 						   sDeadTextureList[type][format].end(), textures[i]) == 
+		// 						   sDeadTextureList[type][format].end());
+		// 
+		// 		sDeadTextureList[type][format].push_back(textures[i]);
+		// 	}	
+		// }
 
-				llassert(std::find(sDeadTextureList[type][format].begin(),
-								   sDeadTextureList[type][format].end(), textures[i]) == 
-								   sDeadTextureList[type][format].end());
+		glDeleteTextures(numTextures, textures);
 
-				sDeadTextureList[type][format].push_back(textures[i]);
-			}	
-		}
+		// </FS:ND>
 	}
 	
 	/*if (immediate)

@@ -420,7 +420,11 @@ void LLViewerParcelOverlay::uncompressLandOverlay(S32 chunk, U8 *packed_overlay)
 
 void LLViewerParcelOverlay::updatePropertyLines()
 {
-	if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	static LLCachedControl<bool> showPropertyLines(gSavedSettings, "ShowPropertyLines");
+	if (!showPropertyLines)
+	// </FS:Ansariel>
 		return;
 	
 	S32 row, col;
@@ -853,7 +857,11 @@ void LLViewerParcelOverlay::idleUpdate(bool force_update)
 
 S32 LLViewerParcelOverlay::renderPropertyLines	() 
 {
-	if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (!gSavedSettings.getBOOL("ShowPropertyLines"))
+	static LLCachedControl<bool> showPropertyLines(gSavedSettings, "ShowPropertyLines");
+	if (!showPropertyLines)
+	// </FS:Ansariel>
 	{
 		return 0;
 	}

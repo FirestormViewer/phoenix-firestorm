@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater 
-name="imcontacts" 
-title="KONTAKTE">
-	<string
-	name="no_friends"
-	value="keine Freunde" />
-	<string
-	name="no_filtered_groups_msg"
-	value="Nicht gefunden wonach du gesucht hast? Versuche [secondlife:///app/search/groups/[SEARCH_TERM] Search]." />
-	<string
-	name="no_groups_msg"
-	value="Du suchst nach Gruppen zum Beitreten? Versuche [secondlife:///app/search/groups Search]." />
-	<tab_container
-	name="friends_and_groups">
-
-	<panel
-	filename="panel_fs_contacts_friends.xml" 
-	label="Freunde"
-	name="friends_panel" />
-
-	<panel
-	filename="panel_fs_contacts_groups.xml"
-	label="Gruppen"
-	name="groups_panel" />
-
+<floater name="imcontacts" title="Kontakte">
+	<string name="no_friends" value="keine Freunde"/>
+	<string name="no_filtered_groups_msg" value="Nicht gefunden wonach du gesucht hast? Versuche [secondlife:///app/search/groups/[SEARCH_TERM] Search]."/>
+	<string name="no_groups_msg" value="Du suchst nach Gruppen zum Beitreten? Versuche [secondlife:///app/search/groups Search]."/>
+	<tab_container name="friends_and_groups">
+		<panel label="Freunde" name="friends_panel"/>
+		<panel label="Gruppen" name="groups_panel"/>
    </tab_container>
 </floater>

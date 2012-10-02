@@ -130,6 +130,9 @@ public:
 
 	virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
 
+	// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
+	void setEnableAddFriendButton(BOOL enabled);
+
 protected:
 	/* virtual */
 	void	onClickCloseBtn();

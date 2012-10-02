@@ -122,7 +122,11 @@ U32 LLDrawPoolTerrain::getVertexDataMask()
 void LLDrawPoolTerrain::prerender()
 {
 	mVertexShaderLevel = LLViewerShaderMgr::instance()->getVertexShaderLevel(LLViewerShaderMgr::SHADER_ENVIRONMENT);
-	sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
+	static LLCachedControl<S32> renderTerrainDetail(gSavedSettings, "RenderTerrainDetail");
+	sDetailMode = (S32)renderTerrainDetail;
+	// </FS:Ansariel>
 }
 
 void LLDrawPoolTerrain::beginRenderPass( S32 pass )
@@ -216,7 +220,11 @@ void LLDrawPoolTerrain::render(S32 pass)
 	}
 
 	// Special-case for land ownership feedback
-	if (gSavedSettings.getBOOL("ShowParcelOwners"))
+	// <FS:Ansariel> Use faster LLCachedControls for frequently visited locations
+	//if (gSavedSettings.getBOOL("ShowParcelOwners"))
+	static LLCachedControl<bool> showParcelOwners(gSavedSettings, "ShowParcelOwners");
+	if (showParcelOwners)
+	// </FS:Ansariel>
 	{
 		if (mVertexShaderLevel > 1)
 		{ //use fullbright shader for highlighting
@@ -292,34 +300,6 @@ void LLDrawPoolTerrain::renderShadow(S32 pass)
 	//glCullFace(GL_FRONT);
 	drawLoop();
 	//glCullFace(GL_BACK);
-}
-
-
-void LLDrawPoolTerrain::drawLoop()
-{
-	if (!mDrawFace.empty())
-	{
-		for (std::vector<LLFace*>::iterator iter = mDrawFace.begin();
-			 iter != mDrawFace.end(); iter++)
-		{
-			LLFace *facep = *iter;
-
-			LLMatrix4* model_matrix = &(facep->getDrawable()->getRegion()->mRenderMatrix);
-
-			if (model_matrix != gGLLastMatrix)
-			{
-				gGLLastMatrix = model_matrix;
-				gGL.loadMatrix(gGLModelView);
-				if (model_matrix)
-				{
-					gGL.multMatrix((GLfloat*) model_matrix->mMatrix);
-				}
-				gPipeline.mMatrixOpCount++;
-			}
-
-			facep->renderIndexed();
-		}
-	}
 }
 
 void LLDrawPoolTerrain::renderFullShader()

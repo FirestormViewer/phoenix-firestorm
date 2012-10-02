@@ -2,7 +2,7 @@
 <floater
  name="money_tracker"
  help_topic="fs_tip_tracker"
- title="TIP TRACKER"
+ title="Tip Tracker"
  width="200"
  height="188"
  save_rect="true"

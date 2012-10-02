@@ -49,7 +49,7 @@ if (WINDOWS)
       "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od /Zi /MD /Ob0 /MP -D_SECURE_STL=0"
       CACHE STRING "C++ compiler release-with-debug options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASE
-      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 /Oi /Ot /GF /Gy /arch:SSE2 -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
+      "${CMAKE_CXX_FLAGS_RELEASE} ${LL_CXX_FLAGS} /O2 /Zi /MD /MP /Ob2 /Oi /Ot /GF /Gy -D_SECURE_STL=0 -D_HAS_ITERATOR_DEBUGGING=0"
       CACHE STRING "C++ compiler release options" FORCE)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
 
@@ -57,22 +57,59 @@ if (WINDOWS)
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
   set(CMAKE_C_STANDARD_LIBRARIES "")
 
-  add_definitions(
-      /DLL_WINDOWS=1
-      /DDOM_DYNAMIC
-      /DUNICODE
-      /D_UNICODE 
-      /GS
-      /TP
-      /W3
-      /c
-      /Zc:forScope
-      /nologo
-      /Oy-
-      /Zc:wchar_t-
-      /arch:SSE2
-      /fp:fast
-      )
+# <FS:Ansariel> [AVX Optimization]
+#  add_definitions(
+#      /DLL_WINDOWS=1
+#      /DDOM_DYNAMIC
+#      /DUNICODE
+#      /D_UNICODE 
+#      /GS
+#      /TP
+#      /W3
+#      /c
+#      /Zc:forScope
+#      /nologo
+#      /Oy-
+#      /Zc:wchar_t-
+#      /arch:SSE2
+#      /fp:fast
+#      )
+  if (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:AVX
+        /fp:fast
+        )
+  else (USE_AVX_OPTIMIZATION)
+    add_definitions(
+        /DLL_WINDOWS=1
+        /DDOM_DYNAMIC
+        /DUNICODE
+        /D_UNICODE 
+        /GS
+        /TP
+        /W3
+        /c
+        /Zc:forScope
+        /nologo
+        /Oy-
+        /Zc:wchar_t-
+        /arch:SSE2
+        /fp:fast
+        )
+  endif (USE_AVX_OPTIMIZATION)
+# </FS:Ansariel> [AVX Optimization]	
      
   # Are we using the crummy Visual Studio KDU build workaround?
   if (NOT VS_DISABLE_FATAL_WARNINGS)

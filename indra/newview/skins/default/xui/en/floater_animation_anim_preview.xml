@@ -5,7 +5,7 @@
  layout="topleft"
  name="Anim Preview"
  help_topic="animation_anim_preview"
- title="ANIMATION.ANIM"
+ title="Animation.Anim"
  width="300">
     <text
      type="string"

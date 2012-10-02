@@ -47,7 +47,7 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 			Das Inventarsystem ist zurzeit nicht verfügbar.
 		</message>
 		<message name="MustGetAgeRegion">
-			Sie müssen mindestens 18 Jahre oder älter sein um diese Region betreten zu können.
+			Sie müssen mindestens 18 Jahre alt sein, um diese Region betreten zu können.
 		</message>
 	</message_set>
 	<message_set name="progress">
@@ -85,7 +85,7 @@ Ihre Teleport-Anfrage kann nicht sofort bearbeitet werden. Versuchen Sie es in e
 			Teleport wird initialisiert...
 		</message>
 		<message name="pending">
-			Teleport steht bevor...
+			Anstehender Teleport...
 		</message>
 	</message_set>
 </teleport_messages>

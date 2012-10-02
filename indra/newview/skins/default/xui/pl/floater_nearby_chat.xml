@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="nearby_chat" title="CZAT LOKALNY">
+<floater name="nearby_chat" title="Czat lokalny">
 	<layout_stack name="main_layout_stack">
 		<layout_panel name="chat_history_and_buttons_panel">
 			<button tool_tip="Użyj zdefiniowanej wcześniej usługi tłumaczącej" name="translate_btn"/>
 			<button tool_tip="Otwórz historię czatu lokalnego." name="chat_history_btn"/>
+			<button tool_tip="Pokazuj wyciszone wiadomości w oknie historii czatu lokalnego." name="chat_history_muted_btn"/>
 		</layout_panel>
 		<layout_panel name="chat_bar_visibility_panel">
 			<layout_stack name="chat_bar_channel_spinner_layout_stack">

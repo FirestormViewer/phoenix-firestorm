@@ -1,0 +1,1 @@
+This folder is no longer used when packaging.  It is only used when running from an IDE.  To add/make changes to the dictonaries, you will need to make a new autobuild package, see http://hg.secondlife.com/3p-dictionaries .

@@ -103,7 +103,9 @@ private:
 private:
 	LLHandle<LLView>	mPopupMenuHandle;
 	LLChatHistory*		mChatHistory;
-	
+	// <FS:Ansariel> Optional muted chat history
+	LLChatHistory*		mChatHistoryMuted;
+
 	std::vector<LLChat> mMessageArchive;
 	LLLineEditor* mInputEditor;
 

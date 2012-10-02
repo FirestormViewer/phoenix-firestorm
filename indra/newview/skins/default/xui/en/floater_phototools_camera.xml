@@ -12,7 +12,7 @@
  save_visibility="true"
  single_instance="true"
  save_dock_state="true"
- title="CAMERA CONTROLS"
+ title="Camera Controls"
  border_thickness="0"
  name="phototools_camera_floater"
  help_topic="phototools_camera_floater">
@@ -262,7 +262,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left="47"
+					 left="21"
 					 is_toggle="true"
 					 image_overlay="Cam_Avatar_Off"
 					 image_selected="PushButton_Selected_Press"
@@ -275,7 +275,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left_pad="50"
+					 left_pad="25"
 					 top_delta="0"
 					 is_toggle="true"
 					 image_overlay="PanOrbit_Off"
@@ -288,7 +288,7 @@
 					 height="23"
 					 label=""
 					 layout="topleft"
-					 left_pad="50"
+					 left_pad="25"
 					 top_delta="0"
 					 image_overlay="Cam_FreeCam_Off"
 					 image_selected="PushButton_Selected_Press"
@@ -296,6 +296,36 @@
 					 tab_stop="false"
 					 tool_tip="Camera modes"
 					 width="25"/>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Store_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="store_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Store current camera view"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.StoreView"/>
+					</button>
+					<button
+					 height="23"
+					 label=""
+					 layout="topleft"
+					 left_pad="25"
+					 top_delta="0"
+					 image_overlay="Cam_Load_Pos"
+					 image_selected="PushButton_Selected_Press"
+					 name="load_camera_view_btn"
+					 tab_stop="false"
+					 tool_tip="Load stored camera view"
+					 width="25">
+						<button.commit_callback
+						 function="Camera.LoadView"/>
+					</button>
 				</panel>
 			</panel>
 
@@ -370,22 +400,20 @@
 				 width="53"
 				 increment="0.001"
 				 border_visible="false"/-->
-				<combo_box
-				 name="CB_Reset_Camera_Angle"
-				 control_name="CameraAngle"
+				<button
 				 follows="right"
+				 name="Reset_Camera_Angle"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Camera_Angle"
-					 label="Default"
-					 value="1.047"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraAngle"/>
+				</button>
 
 				<text
 				 name="T_Zoom_Speed"
@@ -409,22 +437,20 @@
 				 top_delta="-2"
 				 tool_tip=""
 				 width="135" />
-				<combo_box
-				 name="CB_Reset_Zoom_Time"
-				 control_name="ZoomTime"
+				<button
 				 follows="right"
+				 name="Reset_Zoom_Time"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Zoom_Time"
-					 label="Default"
-					 value="0.40000000596"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="ZoomTime"/>
+				</button>
 
 				<text
 				 name="T_Camera_Lag"
@@ -448,22 +474,20 @@
 				 top_delta="-2"
 				 tool_tip=""
 				 width="135" />
-				<combo_box
-				 name="CB_Reset_Camera_Lag"
-				 control_name="DynamicCameraStrength"
+				<button
 				 follows="right"
+				 name="Reset_Camera_Lag"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Camera_Lag"
-					 label="Default"
-					 value="2"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="DynamicCameraStrength"/>
+				</button>
 
 				<text
 				 name="T_Camera_Offset"
@@ -487,22 +511,20 @@
 				 top_delta="-2"
 				 tool_tip=""
 				 width="135" />
-				<combo_box
-				 name="CB_Reset_Camera_Offset"
-				 control_name="CameraOffsetScale"
+				<button
 				 follows="right"
+				 name="Reset_Camera_Offset"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Camera_Offset"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraOffsetScale"/>
+				</button>
 
 				<text
 				 name="T_Camera_Smoothing"
@@ -526,22 +548,20 @@
 				 top_delta="-2"
 				 tool_tip=""
 				 width="135" />
-				<combo_box
-				 name="CB_Reset_Camera_Smoothing"
-				 control_name="CameraPositionSmoothing"
+				<button
 				 follows="right"
+				 name="Reset_Camera_Smoothing"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Camera_Smoothing"
-					 label="Default"
-					 value="1"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="CameraPositionSmoothing"/>
+				</button>
 			</panel>
 		</panel>
 
@@ -610,22 +630,20 @@
 				 top_delta="-2"
 				 tool_tip=""
 				 width="135" />
-				<combo_box
-				 name="CB_Reset_Mouse_Sensitivity"
-				 control_name="MouseSensitivity"
-				 follows="left|top"
+				<button
+				 follows="right"
+				 name="Reset_Mouse_Sensitivity"
 				 height="16"
+				 label="D"
 				 layout="topleft"
 				 left="245"
 				 top_delta="0"
 				 width="20"
-				 tool_tip="Click here to reset this setting to its default."
-				 visible="true">
-					<combo_box.item
-					 name="CBI_Reset_Mouse_Sensitivity"
-					 label="Default"
-					 value="3"/>
-				</combo_box>
+				 tool_tip="Reset to the default value.">
+					<button.commit_callback
+					 function="ResetControl"
+					 parameter="MouseSensitivity"/>
+				</button>
 				<check_box
 				control_name="FirstPersonAvatarVisible"
 				 follows="left|top"
@@ -663,6 +681,7 @@
 			 border_thickness="1"
 			 background_visible="true">
 				<text
+				 name="T_Additional_Camera_Options"
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="lgg_fg_floater" title="ZESTAWY KONTAKTÓW">
+<floater name="lgg_fg_floater" title="Zestawy Kontaktów">
 	<floater.string name="AddToGroup" value="Dodaj do: [GROUPNAME]"/>
 	<floater.string name="RemoveFromGroup" value="Usuń z: [GROUPNAME]"/>
 	<floater.string name="RemoveDisplayName" value="Usuń wyświetlane imię"/>

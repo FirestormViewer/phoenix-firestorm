@@ -27,6 +27,11 @@
 	<check_box label="Als Toasts" name="friends_online_notify_checkbox"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="In lokalem Chat &amp; Konsole"/>
 	<check_box label="Nur in lokalem Chat" name="OnlineOfflinetoNearbyChatHistory"/>
+	<text name="friends_logon_sounds_label">
+		Sound abspielen wenn sich Freunde:
+	</text>
+	<check_box label="Einloggen" name="friends_notify_online_sound"/>
+	<check_box label="Ausloggen" name="friends_notify_offline_sound"/>
     </panel>
 
     <!-- Alerts -->

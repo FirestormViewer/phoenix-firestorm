@@ -116,6 +116,11 @@ with the same filename but different name
   <texture name="Cam_Tracking_In" file_name="bottomtray/Cam_Tracking_In.png" preload="false" />
   <texture name="Cam_Tracking_Out" file_name="bottomtray/Cam_Tracking_Out.png" preload="false" />
 
+  <!-- FS:Ansariel: FIRE-7758: 7758 -->
+  <texture name="Cam_Store_Pos" file_name="bottomtray/camera_store.png" preload="false" />
+  <texture name="Cam_Load_Pos" file_name="bottomtray/camera_load.png" preload="false" />
+  <!-- END FS:Ansariel: FIRE-7758: 7758 -->
+  
   <texture name="Checkbox_Off_Disabled" file_name="widgets/Checkbox_Disabled.png" preload="true" />
   <texture name="Checkbox_On_Disabled" file_name="widgets/Checkbox_On_Disabled.png" preload="true" />
   <texture name="Checkbox_Off" file_name="widgets/Checkbox_Off.png" preload="true" />
@@ -708,7 +713,10 @@ with the same filename but different name
   <texture name="asset_blacklist" file_name="toolbar_icons/asset_blacklist.png" preload="true" />
   <texture name="phototools" file_name="toolbar_icons/phototools.png" preload="true" />
   <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
+  <texture name="contact_sets" file_name="toolbar_icons/contact_sets.png" preload="true" />
+  <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" /> 
 
+  
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
 
@@ -880,5 +888,6 @@ with the same filename but different name
 <texture name="slim_icon_16_viewer"				file_name="slim_icon_16_viewer.tga"					preload="false" />
 
   <texture name="Console_Background" file_name="Console_Background.png"/>
+  <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
 
 </textures>

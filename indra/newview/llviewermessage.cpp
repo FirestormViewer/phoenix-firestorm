@@ -169,7 +169,6 @@ static const U32 LLREQUEST_PERMISSION_THROTTLE_LIMIT	= 5;     // requests
 static const F32 LLREQUEST_PERMISSION_THROTTLE_INTERVAL	= 10.0f; // seconds
 
 extern BOOL gDebugClicks;
-extern bool gShiftFrame;
 
 // function prototypes
 bool check_offer_throttle(const std::string& from_name, bool check_only);
@@ -2677,7 +2676,27 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					IM_BUSY_AUTO_RESPONSE,
 					session_id);
 				gAgent.sendReliableMessage();
+				gIMMgr->addMessage(
+					session_id,
+					from_id,
+					LLStringUtil::null, // Pass null value so no name gets prepended
+					LLTrans::getString("IM_autoresponce_sent"),
+					my_name,
+					IM_NOTHING_SPECIAL,
+					parent_estate_id,
+					region_id,
+					position,
+					false, // <-- Wow! This parameter is never handled!!!
+					TRUE
+					);
 			}
+
+			// <FS:Ansariel> checkfor and process reqinfo
+			if (gIMMgr->hasSession(session_id))
+			{
+				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
+			}
+			// </FS:Ansariel>
 
 			// now store incoming IM in chat history
 
@@ -2703,12 +2722,22 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			LLSD args;
 			args["MESSAGE"] = message;
 			LLNotificationsUtil::add("SystemMessage", args);
+			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+			if (message.find("estart") != -1 && message.find("egion") != -1)
+			{
+				make_ui_sound("UISndRegionRestart");
+			}
 		}
 		else if (to_id.isNull())
 		{
 			// Message to everyone from GOD, look up the fullname since
 			// server always slams name to legacy names
 			LLAvatarNameCache::get(from_id, boost::bind(god_message_name_cb, _2, chat, message));
+			// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+			if (message.find("estart") != -1 && message.find("egion") != -1)
+			{
+				make_ui_sound("UISndRegionRestart");
+			}
 		}
 		else
 		{
@@ -3197,6 +3226,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			}
 
 			chat.mSourceType = CHAT_SOURCE_OBJECT;
+			chat.mChatType = CHAT_TYPE_IM;
 
 			// To conclude that the source type of message is CHAT_SOURCE_SYSTEM it's not
 			// enough to check only from name (i.e. fromName = "Second Life"). For example
@@ -4654,7 +4684,6 @@ void process_avatar_init_complete(LLMessageSystem* msg, void**)
 
 void process_agent_movement_complete(LLMessageSystem* msg, void**)
 {
-	gShiftFrame = true;
 	gAgentMovementCompleted = true;
 
 	LLUUID agent_id;
@@ -6865,12 +6894,8 @@ void process_alert_core(const std::string& message, BOOL modal)
 		snap_filename += SCREEN_HOME_FILENAME;
 		gViewerWindow->saveSnapshot(snap_filename, gViewerWindow->getWindowWidthRaw(), gViewerWindow->getWindowHeightRaw(), FALSE, FALSE);
 	}
-	else if(message.find("estart") != -1 && message.find("egion") != -1)
-	{
-		// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
-		make_ui_sound("UISndRegionRestart");
-	}
 
+	std::string processed_message = message;
 	const std::string ALERT_PREFIX("ALERT: ");
 	const std::string NOTIFY_PREFIX("NOTIFY: ");
 	if (message.find(ALERT_PREFIX) == 0)
@@ -6881,6 +6906,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 		if (!handle_special_alerts(alert_name))
 		{
 			LLNotificationsUtil::add(alert_name);
+			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
 		}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
@@ -6889,6 +6915,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 		// translated out of English.
 		std::string notify_name(message.substr(NOTIFY_PREFIX.length()));
 		LLNotificationsUtil::add(notify_name);
+		processed_message = notify_name; // <FS:PP> FIRE-317, region restart alert
 	}
 	else if (message[0] == '/')
 	{
@@ -6901,7 +6928,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			LLStringUtil::convertToS32(text.substr(18), mins);
 			args["MINUTES"] = llformat("%d",mins);
 			LLNotificationsUtil::add("RegionRestartMinutes", args);
-			make_ui_sound("UISndRegionRestart"); // FIRE-317
+			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		}
 		else if (text.substr(0,17) == "RESTART_X_SECONDS")
 		{
@@ -6909,7 +6936,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 			LLStringUtil::convertToS32(text.substr(18), secs);
 			args["SECONDS"] = llformat("%d",secs);
 			LLNotificationsUtil::add("RegionRestartSeconds", args);
-			make_ui_sound("UISndRegionRestart"); // FIRE-317
+			processed_message = "region restart"; // <FS:PP> FIRE-317, region restart alert
 		}
 		else
 		{
@@ -6925,6 +6952,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 // [/RLVa:KB]
 			args["MESSAGE"] = new_msg;
 			LLNotificationsUtil::add("SystemMessage", args);
+			processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 		}
 	}
 	else if (modal)
@@ -6942,6 +6970,7 @@ void process_alert_core(const std::string& message, BOOL modal)
 // [/RLVa:KB]
 		args["ERROR_MESSAGE"] = new_msg;
 		LLNotificationsUtil::add("ErrorMessage", args);
+		processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 	}
 	else
 	{
@@ -6967,7 +6996,13 @@ void process_alert_core(const std::string& message, BOOL modal)
 
 			args["MESSAGE"] = is_message_localized ? localized_msg : new_msg;
 			LLNotificationsUtil::add("SystemMessageTip", args);
+			processed_message = new_msg; // <FS:PP> FIRE-317, region restart alert
 		}
+	}
+	// <FS:PP> A small hack for FIRE-317: "Provide an acoustic warning to inform you about region restarts"
+	if (processed_message.find("estart") != -1 && processed_message.find("egion") != -1)
+	{
+		make_ui_sound("UISndRegionRestart");
 	}
 }
 
@@ -7471,26 +7506,9 @@ void process_script_question(LLMessageSystem *msg, void **user_data)
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (rlv_handler_t::isEnabled())
 		{
-			if ( (!gRlvAttachmentLocks.canAttach()) && (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] & questions) )
-			{
-				// Notify the user that we blocked it since they're not allowed to wear any new attachments
-				payload["rlv_blocked"] = RLV_STRING_BLOCKED_PERMATTACH;
-				// If only attach is requested we'll auto-deny it; otherwise let the user decide over remaining permissions
-				if (LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH] == questions)
-				{
-					payload["questions"] = 0;
-					LLNotifications::instance().forceResponse(
-						LLNotification::Params("ScriptQuestion").substitutions(args).payload(payload), 0/*YES*/);
-					return;
-				}
-				else
-				{
-					questions &= ~LSCRIPTRunTimePermissionBits[SCRIPT_PERMISSION_ATTACH];		
-					payload["questions"] = questions;
-				}
-			}
+			RlvUtil::filterScriptQuestions(questions, payload);
 
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION))
+			if ( (questions) && (gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTPERMISSION)) )
 			{
 				const LLViewerObject* pObj = gObjectList.findObject(taskid);
 				if (pObj)

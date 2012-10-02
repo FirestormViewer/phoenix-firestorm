@@ -80,6 +80,8 @@
 #include "llsdutil_math.h"
 #include "llregionhandle.h"
 
+#include "llworld.h" // <FS:Ansariel> For FIRE-1292
+
 static std::string OWNER_ONLINE 	= "0";
 static std::string OWNER_OFFLINE	= "1";
 static std::string OWNER_GROUP 		= "2";
@@ -1630,6 +1632,21 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		self->mFirstReply = FALSE;
 	}
 
+	// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
+	//               ParcelObjectOwnersReply message is broken and always returns offline!
+	std::vector<LLVector3d> positions;
+	std::vector<LLUUID> avatar_ids;
+	LLUUID own_region_id;
+
+	LLViewerRegion* own_region = gAgent.getRegion();
+	if (own_region)
+	{
+		own_region_id = own_region->getRegionID();
+	}
+
+	LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), 8192.f);
+	// </FS:Ansariel>
+
 	for(S32 i = 0; i < rows; ++i)
 	{
 		msg->getUUIDFast(_PREHASH_Data, _PREHASH_OwnerID,		owner_id,		i);
@@ -1644,6 +1661,30 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		{
 			continue;
 		}
+
+		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
+		//               ParcelObjectOwnersReply message is broken and always returns offline!
+		if (gAgentID == owner_id)
+		{
+			is_online = TRUE;
+		}
+		else
+		{
+			is_online = FALSE;
+			for (U32 i = 0; i < avatar_ids.size(); i++)
+			{
+				if (avatar_ids[i] == owner_id)
+				{
+					LLViewerRegion* avatar_region = LLWorld::getInstance()->getRegionFromPosGlobal(positions[i]);
+					if (avatar_region && avatar_region->getRegionID() == own_region_id)
+					{
+						is_online = TRUE;
+					}
+					break;
+				}
+			}
+		}
+		// </FS:Ansariel>
 
 		LLNameListCtrl::NameItem item_params;
 		item_params.value = owner_id;
@@ -2303,8 +2344,8 @@ void LLPanelLandOptions::onCommitAny(LLUICtrl *ctrl, void *userdata)
 	BOOL allow_damage		= !self->mCheckSafe->get();
 	BOOL allow_fly			= self->mCheckFly->get();
 	BOOL allow_landmark		= TRUE; // cannot restrict landmark creation
+	BOOL allow_group_scripts	= self->mCheckGroupScripts->get() || self->mCheckOtherScripts->get();
 	BOOL allow_other_scripts	= self->mCheckOtherScripts->get();
-	BOOL allow_group_scripts	= self->mCheckGroupScripts->get() || allow_other_scripts;
 	BOOL allow_publish		= FALSE;
 	BOOL mature_publish		= self->mMatureCtrl->get();
 	BOOL push_restriction	= self->mPushRestrictionCtrl->get();
@@ -2317,16 +2358,11 @@ void LLPanelLandOptions::onCommitAny(LLUICtrl *ctrl, void *userdata)
 	LLViewerRegion* region;
 	region = LLViewerParcelMgr::getInstance()->getSelectionRegion();
 
-	if (region && region->getAllowDamage())
-	{	// Damage is allowed on the region - server will always allow scripts
-		if ( (!allow_other_scripts && parcel->getParcelFlag(PF_ALLOW_OTHER_SCRIPTS)) ||
-			 (!allow_group_scripts && parcel->getParcelFlag(PF_ALLOW_GROUP_SCRIPTS)) )
-		{	// Don't allow turning off "Run Scripts" if damage is allowed in the region
-			self->mCheckOtherScripts->set(parcel->getParcelFlag(PF_ALLOW_OTHER_SCRIPTS));	// Restore UI to actual settings
-			self->mCheckGroupScripts->set(parcel->getParcelFlag(PF_ALLOW_GROUP_SCRIPTS));
-			LLNotificationsUtil::add("UnableToDisableOutsideScripts");
-			return;
-		}
+	if (!allow_other_scripts && region && region->getAllowDamage())
+	{
+
+		LLNotificationsUtil::add("UnableToDisableOutsideScripts");
+		return;
 	}
 
 	// Push data into current parcel

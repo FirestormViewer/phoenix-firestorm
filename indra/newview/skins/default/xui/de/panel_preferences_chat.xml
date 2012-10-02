@@ -108,7 +108,15 @@
 			</text>
 			<combo_box name="WhenPlayIM" width="265">
 				<combo_box.item label="Klang nur bei neuer IM-Sitzung abspielen" name="1"/>
-				<combo_box.item label="Klang bei jeder empfangenen IM abspielen" name="2"/>
+				<combo_box.item label="Klang bei jeder IM abspielen" name="2"/>
+				<combo_box.item label="Keinen Klang abspielen" name="0"/>
+			</combo_box>
+			<text name="WhenPlayGroupIMLabel" width="205">
+				Beim Eintreffen von Gruppenchats:
+			</text>
+			<combo_box name="WhenPlayGroupIM" width="265">
+				<combo_box.item label="Klang nur bei neuer Sitzung abspielen" name="1"/>
+				<combo_box.item label="Klang bei jeder Nachricht abspielen" name="2"/>
 				<combo_box.item label="Keinen Klang abspielen" name="0"/>
 			</combo_box>
         </panel>

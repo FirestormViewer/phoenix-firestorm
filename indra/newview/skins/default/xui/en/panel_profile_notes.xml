@@ -39,6 +39,7 @@
      follows="all"
      name="notes_edit"
      max_length="1000"
+     enabled="false"
      word_wrap="true" />
 
     <text

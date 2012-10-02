@@ -135,7 +135,7 @@ Maximum 200 per group daily
          height="16"
          layout="topleft"
          left_pad="3"
-         max_length_bytes="63"
+         max_length_chars="63"
          name="create_subject"
          prevalidate_callback="ascii"
          width="218" />
@@ -177,7 +177,7 @@ Maximum 200 per group daily
          enabled="false"
          height="19"
          layout="topleft"
-         max_length_bytes="90"
+         max_length_chars="90"
          mouse_opaque="false"
          name="create_inventory_name"
          top_pad="2"
@@ -293,8 +293,9 @@ Maximum 200 per group daily
          height="20"
          layout="topleft"
          left_pad="3"
-         max_length_bytes="63"
+         max_length_chars="63"
          name="view_subject"
+         spellcheck="true"
          top_delta="-1"
          visible="false"
          width="200" />
@@ -311,7 +312,7 @@ Maximum 200 per group daily
             Message:
         </text>
         <text_editor
-                     follows="top|left|right"
+         follows="top|left|right"
          enabled="false"
          height="160"
          layout="topleft"
@@ -319,6 +320,7 @@ Maximum 200 per group daily
          right="-1"
          max_length="511"
          name="view_message"
+         spellcheck="true"
          top_delta="-40"
          width="313"
          word_wrap="true" />
@@ -327,7 +329,7 @@ Maximum 200 per group daily
          height="20"
          layout="topleft"
          left="5"
-         max_length_bytes="63"
+         max_length_chars="63"
          mouse_opaque="false"
          name="view_inventory_name"
          top_pad="8"
