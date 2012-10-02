@@ -3396,19 +3396,6 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 				IM_BUSY_AUTO_RESPONSE,
 				session_id);
 			gAgent.sendReliableMessage();
-			gIMMgr->addMessage(
-				session_id,
-				im_info->mFromID,
-				LLStringUtil::null, // Pass null value so no name gets prepended
-				LLTrans::getString("IM_autoresponce_sent"),
-				im_info->mName,
-				IM_NOTHING_SPECIAL,
-				im_info->mParentEstateID,
-				im_info->mRegionID,
-				im_info->mPosition,
-				false, // <-- Wow! This parameter is never handled!!!
-				TRUE
-				);
 		}
 	}
 	// </Ansariel>
