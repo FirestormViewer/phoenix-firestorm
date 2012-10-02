@@ -2669,7 +2669,6 @@ See https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
    type="alertmodal">
 Are you sure you want to remove [NAME] from your Friends List?
     <tag>friendship</tag>
-Do you want to remove &lt;nolink&gt;[NAME]&lt;/nolink&gt; from your Friends List?
     <tag>confirm</tag>
     <usetemplate
      name="okcancelbuttons"
