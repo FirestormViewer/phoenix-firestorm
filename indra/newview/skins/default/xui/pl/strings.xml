@@ -3998,7 +3998,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 	<string name="IM_announce_incoming">
 		Nadchodzi wiadomość od [NAME]
 	</string>
-	<string name="IM_autoresponce_sent">
+	<string name="IM_autoresponse_sent">
 		Autoodpowiedź wysłana
 	</string>
 	<string name="answered_call">
