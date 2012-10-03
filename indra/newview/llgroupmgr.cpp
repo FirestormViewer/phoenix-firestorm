@@ -1866,6 +1866,13 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
 	
 	LLViewerRegion* currentRegion = gAgent.getRegion();
 
+	// <FS:Ansariel> Potential crash fix
+	if (!currentRegion)
+	{
+		return;
+	}
+	// </FS:Ansariel>
+
 	// Check to make sure we have our capabilities
 	if(!currentRegion->capabilitiesReceived())
 	{
@@ -1875,6 +1882,15 @@ void LLGroupMgr::sendCapGroupMembersRequest(const LLUUID& group_id)
 
 	// Get our capability
 	std::string cap_url =  currentRegion->getCapability("GroupMemberData");
+ 
+	// <FS:Ansariel> Fall back to UDP fetch if region doesn't support cap!
+	if (cap_url.empty())
+	{
+		LL_INFOS("GrpMgr") << "Region has no GroupMemberData capability. Falling back to UDP fetch." << LL_ENDL;
+		sendGroupMembersRequest(group_id);
+		return;
+	}
+	// </FS:Ansariel>
 
 	// Post to our service.  Add a body containing the group_id.
 	LLSD body = LLSD::emptyMap();
