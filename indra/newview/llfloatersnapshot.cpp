@@ -2193,20 +2193,6 @@ BOOL LLFloaterSnapshot::postBuild()
 	return TRUE;
 }
 
-// <FS:Ansariel> FIRE-1180: Move snapshot floater to back when losing focus
-void LLFloaterSnapshot::onFocusLost()
-{
-	getRootView()->getChildView("main_view")->sendChildToBack(gSnapshotFloaterView->getParent());
-	LLFloater::onFocusLost();
-}
-
-void LLFloaterSnapshot::onFocusReceived()
-{
-	getRootView()->getChildView("main_view")->sendChildToFront(gSnapshotFloaterView->getParent());
-	LLFloater::onFocusReceived();
-}
-// </FS:Ansariel>
-
 void LLFloaterSnapshot::draw()
 {
 	LLSnapshotLivePreview* previewp = impl.getPreviewView(this);
