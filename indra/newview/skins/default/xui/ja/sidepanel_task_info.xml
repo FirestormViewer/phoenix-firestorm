@@ -38,6 +38,7 @@
 	</panel.string>
 	<text name="title" value="オブジェクトのプロフィール"/>
 	<text name="where" value="（インワールド）"/>
+	<scroll_container name="item_profile_scroll">
 	<panel label="" name="properties_panel">
 		<text name="Name:">
 			名前：
@@ -114,10 +115,19 @@
 			F:
 		</text>
 	</panel>
-	<panel name="button_panel">
-		<button label="開く" name="open_btn"/>
-		<button label="支払う" name="pay_btn"/>
-		<button label="買う" name="buy_btn"/>
-		<button label="詳細" name="details_btn"/>
-	</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="開く" name="open_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_btn_panel">
+			<button label="支払う" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="買う" name="buy_btn"/>
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="詳細" name="details_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

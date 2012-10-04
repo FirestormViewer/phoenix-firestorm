@@ -97,8 +97,18 @@
      text_color="LtGray_50"
      value="(Inworld)"
      right="-10" />
+    <scroll_container
+     color="SL-Background"
+     follows="all"
+     layout="topleft"
+     left="9"
+     name="item_profile_scroll"
+     opaque="true"
+     height="490"
+     width="313"
+     top="45">
 	<panel
-         follows="all"
+         follows="left|top|right"
          height="490"
          label=""
          layout="topleft"
@@ -305,7 +315,7 @@
          left="0"
          top_pad="15"
          height="135"
-         width="313">
+         width="303">
 	  <text
              type="string"
              length="1"
@@ -547,49 +557,80 @@
                 F:
             </text>
 		</panel>
-    <panel
-		 height="25"
-		 layout="bottomright"
-		 name="button_panel"
-		 left="5"
-		 bottom="5"
-		 width="313">
-        <button
-		     follows="bottom|left"
+	</scroll_container>
+      <layout_stack
+		  follows="bottom|left|right"
+		  height="28"
+		  layout="topleft"
+		  left="5"
+		  name="buttons_ls"
+		  orientation="horizontal"
+		  botom="0"
+		  width="311">
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       layout="topleft"
+       name="open_btn_panel"
+       width="73">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Open"
+             auto_resize="true"
 		     layout="topleft"
-		     left="5"
 		     name="open_btn"
-		     top="0"
 		     width="73" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="pay_btn_panel"
+       width="73">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Pay"
 		     layout="topleft"
-		     left_pad="5"
 		     name="pay_btn"
-		     top="0"
 		     width="73" />
-	    <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="buy_btn_panel"
+       width="73">
+	          <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Buy"
 		     layout="topleft"
-		     left_pad="5"
 		     name="buy_btn"
-		     top="0"
 		     width="73" />
-        <button
-		     follows="bottom|left"
+      </layout_panel>
+      <layout_panel
+	  follows="bottom|left"
+       auto_resize="false"
+       height="25"
+       left_pad="5"
+       layout="topleft"
+       name="details_btn_panel"
+       width="74">
+                <button
+		     follows="top|left|right"
 		     height="23"
 		     label="Details"
 		     layout="topleft"
-		     left_pad="5"
 		     name="details_btn"
-		     top="0"
 		     width="74" />
 
-	</panel>
+	    </layout_panel>
+      </layout_stack>
 </panel>

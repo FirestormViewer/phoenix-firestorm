@@ -38,6 +38,7 @@
 	</panel.string>
 	<text name="title" value="Profil de l&apos;objet"/>
 	<text name="where" value="(dans Second Life)"/>
+	<scroll_container name="item_profile_scroll">
 	<panel label="" name="properties_panel">
 		<text name="Name:">
 			Nom :
@@ -114,10 +115,19 @@
 			F :
 		</text>
 	</panel>
-	<panel name="button_panel">
-		<button label="Ouvrir" name="open_btn"/>
-		<button label="Payer" name="pay_btn"/>
-		<button label="Acheter" name="buy_btn"/>
-		<button label="Détails" name="details_btn"/>
-	</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Ouvrir" name="open_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_btn_panel">
+			<button label="Payer" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Acheter" name="buy_btn"/>
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Détails" name="details_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

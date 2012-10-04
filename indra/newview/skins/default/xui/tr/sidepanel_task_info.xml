@@ -38,6 +38,7 @@
 	</panel.string>
 	<text name="title" value="Nesne Profili"/>
 	<text name="where" value="(SL Dünyası)"/>
+	<scroll_container name="item_profile_scroll">
 	<panel label="" name="properties_panel">
 		<text name="Name:">
 			Ad:
@@ -114,10 +115,19 @@
 			F:
 		</text>
 	</panel>
-	<panel name="button_panel">
-		<button label="Aç" name="open_btn"/>
-		<button label="Öde" name="pay_btn"/>
-		<button label="Satın Al" name="buy_btn"/>
-		<button label="Ayrıntl" name="details_btn"/>
-	</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Aç" name="open_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_btn_panel">
+			<button label="Öde" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Satın Al" name="buy_btn"/>
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Ayrıntl" name="details_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

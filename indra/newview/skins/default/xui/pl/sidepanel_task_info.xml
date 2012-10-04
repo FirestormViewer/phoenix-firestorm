@@ -44,6 +44,7 @@
 	</panel.string>
 	<text name="title" value="Profil obiektu"/>
 	<text name="where" value="(W świecie)"/>
+	<scroll_container name="item_profile_scroll">
 	<panel name="properties_panel">
 		<text name="Name:">
 			Nazwa:
@@ -105,10 +106,19 @@
 			Atrybuty odnajd. ścieżek:
 		</text>
 	</panel>
-	<panel name="button_panel">
-		<button label="Otwórz" name="open_btn"/>
-		<button label="Zapłać" name="pay_btn"/>
-		<button label="Kup" name="buy_btn"/>
-		<button label="Szczegóły" name="details_btn"/>
-	</panel>
+	</scroll_container>
+	<layout_stack name="buttons_ls">
+		<layout_panel name="open_btn_panel">
+			<button label="Otwórz" name="open_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_btn_panel">
+			<button label="Zapłać" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="buy_btn_panel">
+			<button label="Kup" name="buy_btn"/>
+		</layout_panel>
+		<layout_panel name="details_btn_panel">
+			<button label="Szczegóły" name="details_btn"/>
+		</layout_panel>
+	</layout_stack>
 </panel>
