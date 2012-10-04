@@ -1632,8 +1632,8 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 		self->mFirstReply = FALSE;
 	}
 
-	// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
-	//               ParcelObjectOwnersReply message is broken and always returns offline!
+	// <FS:Ansariel> FIRE-1292: Highlight avatars in same region; Online status in
+	//               ParcelObjectOwnersReply message was intentionally deprecated by LL!
 	std::vector<LLVector3d> positions;
 	std::vector<LLUUID> avatar_ids;
 	LLUUID own_region_id;
@@ -1662,8 +1662,8 @@ void LLPanelLandObjects::processParcelObjectOwnersReply(LLMessageSystem *msg, vo
 			continue;
 		}
 
-		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region;
-		//               ParcelObjectOwnersReply message is broken and always returns offline!
+		// <FS:Ansariel> FIRE-1292: Highlight avatars in same region; Online status in
+		//               ParcelObjectOwnersReply message was intentionally deprecated by LL!
 		if (gAgentID == owner_id)
 		{
 			is_online = TRUE;
