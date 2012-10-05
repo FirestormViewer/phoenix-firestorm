@@ -867,6 +867,9 @@ with the same filename but different name
   <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
   <texture name="phototools" file_name="toolbar_icons/phototools_fs.png" preload="true" />
   <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
+  <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" /> 
+  <texture name="Cam_Store_Pos" file_name="bottomtray/camera_store.png" preload="false" />
+  <texture name="Cam_Load_Pos" file_name="bottomtray/camera_load.png" preload="false" />
   <!-- <exodus> inc in FS -->
   <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
   <!-- </exodus> inc in FS -->
