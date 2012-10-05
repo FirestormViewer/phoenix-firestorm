@@ -157,6 +157,7 @@ static LLDefaultChildRegistry::Register<FSDropTarget> r("profile_drop_target");
 FSPanelProfileTab::FSPanelProfileTab()
 : LLPanel()
 , mAvatarId(LLUUID::null)
+, mLoaded(FALSE)
 {
 }
 
