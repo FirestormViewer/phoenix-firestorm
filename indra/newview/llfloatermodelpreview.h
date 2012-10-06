@@ -292,7 +292,10 @@ private:
 	LLButton* mCalculateBtn;
 };
 
-class LLMeshFilePicker : public LLFilePickerThread
+// <FS:CR Threaded Filepickers>
+//class LLMeshFilePicker : public LLFilePickerThread
+class LLMeshFilePicker : public LLLoadFilePickerThread
+// </FS:CR Threaded Filepickers>
 {
 public:
 	LLMeshFilePicker(LLModelPreview* mp, S32 lod);

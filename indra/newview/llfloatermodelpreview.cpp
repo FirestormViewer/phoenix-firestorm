@@ -375,7 +375,10 @@ BOOL stop_gloderror()
 
 
 LLMeshFilePicker::LLMeshFilePicker(LLModelPreview* mp, S32 lod)
-	: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// <FS:CR Threaded Filepickers>
+	//: LLFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+	: LLLoadFilePickerThread(LLFilePicker::FFLOAD_COLLADA)
+// </FS:CR Threaded Filepickers>
 	{
 		mMP = mp;
 		mLOD = lod;

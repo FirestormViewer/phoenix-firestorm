@@ -127,8 +127,19 @@ void LLFilePickerThread::getFile()
 #endif
 }
 
+// <FS:CR Threaded Filepickers>
+//static
+void LLFilePickerThread::initClass()
+{
+	sMutex = new LLMutex(NULL);
+}
+// </FS:CR Threaded Filepickers>
+
 //virtual 
-void LLFilePickerThread::run()
+// <FS:CR Threaded Filepickers>
+//void LLFilePickerThread::run()
+void LLLoadFilePickerThread::run()
+// </FS:CR Threaded Filepickers>
 {
 	LLFilePicker picker;
 #if LL_WINDOWS
@@ -150,11 +161,45 @@ void LLFilePickerThread::run()
 
 }
 
-//static
-void LLFilePickerThread::initClass()
+// <FS:CR Threaded Filepickers>
+////static
+//void LLFilePickerThread::initClass()
+//virtual 
+void LLSaveFilePickerThread::run()
 {
-	sMutex = new LLMutex(NULL);
+	//sMutex = new LLMutex(NULL);
+	LLFilePicker picker;
+#if LL_WINDOWS
+	if (picker.getSaveFile(mFilter, mDefaultFilename, false))
+	{
+		mFile = picker.getFirstFile();
+	}
+#else
+	if (picker.getSaveFile(mFilter, mDefaultFilename, true))
+	{
+		mFile = picker.getFirstFile();
+	}
+#endif
+
+	{
+		LLMutexLock lock(sMutex);
+		sDeadQ.push(this);
+	}
+
 }
+
+//virtual
+void LLGenericLoadFilePicker::notify(const std::string& filename)
+{
+	mSignal(filename);
+}
+
+//virtual
+void LLGenericSaveFilePicker::notify(const std::string& filename)
+{
+	mSignal(filename);
+}
+// </FS:CR Threaded Filepickers>
 
 //static
 void LLFilePickerThread::cleanupClass()
@@ -234,6 +279,12 @@ std::string build_extensions_string(LLFilePicker::ELoadFilter filter)
    returns the string to the full path filename, else returns NULL.
    Data is the load filter for the type of file as defined in LLFilePicker.
 **/
+
+// <FS:CR Threaded Filepickers>
+//! upload_pick has been superceded by threaded filepickers
+#if 0
+// </FS:CR Threaded Filepickers>
+
 const std::string upload_pick(void* data)
 {
  	if( gAgentCamera.cameraMouselook() )
@@ -341,16 +392,48 @@ const std::string upload_pick(void* data)
 	
 	return filename;
 }
+// <FS:CR Threaded Filepickers>
+#endif
+
+//static
+void show_floater_callback(const std::string& floater, const std::string& filename)
+{
+	if (!filename.empty() && !floater.empty())
+	{
+		LLFloaterReg::showInstance(floater, LLSD(filename));
+	}
+}
+
+//static
+void show_floater_anim_callback(const std::string& filename)
+{
+	if (!filename.empty())
+	{
+		if (filename.rfind(".anim") != std::string::npos)
+		{
+			LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
+		}
+		else
+		{
+			LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
+		}
+	}
+}
+
+// </FS:CR Threaded Filepickers>
 
 class LLFileUploadImage : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string filename = upload_pick((void *)LLFilePicker::FFLOAD_IMAGE);
-		if (!filename.empty())
-		{
-			LLFloaterReg::showInstance("upload_image", LLSD(filename));
-		}
+// <FS:CR Threaded Filepickers>
+		//std::string filename = upload_pick((void *)LLFilePicker::FFLOAD_IMAGE);
+		//if (!filename.empty())
+		//{
+		//	LLFloaterReg::showInstance("upload_image", LLSD(filename));
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback,"upload_image",_1)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return TRUE;
 	}
 };
@@ -373,11 +456,14 @@ class LLFileUploadSound : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_WAV);
-		if (!filename.empty())
-		{
-			LLFloaterReg::showInstance("upload_sound", LLSD(filename));
-		}
+// <FS:CR Threaded Filepickers>
+		//std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_WAV);
+		//if (!filename.empty())
+		//{
+		//	LLFloaterReg::showInstance("upload_sound", LLSD(filename));
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback,"upload_sound",_1)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return true;
 	}
 };
@@ -386,18 +472,24 @@ class LLFileUploadAnim : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		const std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_ANIM);
-		if (!filename.empty())
-		{
-			if (filename.rfind(".anim") != std::string::npos)
-			{
-				LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
-			}
-			else
-			{
-				LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
-			}
-		}
+// <FS:CR Threaded Filepickers>
+		/// This logic has been moved to show_floater_anim_callback to conform
+		/// with the rest of the threaded filepickers. -CR
+		//
+		//const std::string filename = upload_pick((void*)LLFilePicker::FFLOAD_ANIM);
+		//if (!filename.empty())
+		//{
+		//	if (filename.rfind(".anim") != std::string::npos)
+		//	{
+		//		LLFloaterReg::showInstance("upload_anim_anim", LLSD(filename));
+		//	}
+		//	else
+		//	{
+		//		LLFloaterReg::showInstance("upload_anim_bvh", LLSD(filename));
+		//	}
+		//}
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_ANIM, boost::bind(&show_floater_anim_callback,_1)))->getFile();
+// </FS:CR Threaded Filepickers>
 		return true;
 	}
 };
