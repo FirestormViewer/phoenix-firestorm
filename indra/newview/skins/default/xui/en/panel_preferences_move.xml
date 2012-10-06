@@ -164,19 +164,6 @@
          name="EditAppearanceLighting"
          tool_tip="Enable or disable the additional lighting used while editing avatar appearance."
          width="150" />
-<!-- This does not work.
-    <check_box
-     control_name="SidebarCameraMovement"
-     follows="left|top"
-     height="16"
-     initial_value="true"
-     label="Sidebar"
-     layout="topleft"
-     name="appearance_sidebar_positioning"
-     tool_tip="Use automatic camera positioning for sidebar"
-     width="242" />
--->
-
         <icon
          follows="left|top"
          height="18"
