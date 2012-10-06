@@ -13,13 +13,14 @@
 			<check_box label="Budowanie/Edycja" name="edit_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas włączania i wyłączania trybu edycji."/>
 			<check_box label="Wygląd" name="appearance_camera_movement" tool_tip="Używaj automatycznego pozycjonowania kamery podczas trybu edycji wyglądu."/>
 			<check_box label="Dodawaj dodatkowe oświetlenie" name="EditAppearanceLighting" tool_tip="Włącz lub wyłącz dodatkowe oświetlenie, gdy edytujesz wygląd."/>
+			<check_box label="Włącz funkcjonalność widoku pierwszoosobowego" name="EnableMouselook" tool_tip="Zezwól przeglądarce na używanie perspektywy pierwszej osoby oraz sterowanie w niej kamerą za pomocą myszy"/>
 			<check_box label="Awatar widoczny w trybie pierwszoosobowym" name="first_person_avatar_visible"/>
 			<check_box label="Pokazuj instrukcje trybu pierwszoosobowego" name="mouselook_instructions_visible" tool_tip="Pokazuj instrukcje w trybie pierwszoosobowym"/>
 			<check_box label="Pokazuj celownik myszki" name="ShowCrosshairs" tool_tip="Pokazuj celownik myszki, gdy widok pierwszoosobowy jest włączony"/>
 			<text name="Mouse Sensitivity">
 				Czułość myszki w tym widoku:
 			</text>
-			<check_box label="Zmień klaw. myszki" name="invert_mouse"/>
+			<check_box label="Zamień osie myszy" name="invert_mouse"/>
 		</panel>
 		<panel label="Ruch" name="tab-movement">
 			<check_box label="Przyciski ze strzałkami zawsze poruszają awatarem" name="arrow_keys_move_avatar_check"/>

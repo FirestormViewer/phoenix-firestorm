@@ -189,17 +189,31 @@
          top_pad="6"
          left="30" />
         <check_box
-         control_name="FirstPersonAvatarVisible"
+         control_name="EnableMouselook"
          follows="top"
          height="20"
-         label="Show avatar in Mouselook"
+         initial_value="true"
+         label="Enable Mouselook functionality"
          layout="topleft"
          left_pad="30"
+         name="EnableMouselook"
+         tool_tip="Allow first person perspective and mouse control of camera"
+         width="256" />
+        <check_box
+         control_name="FirstPersonAvatarVisible"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Show avatar in Mouselook"
+         layout="topleft"
+         left_delta="5"
+         top_pad="7"
          name="first_person_avatar_visible"
          width="256" />
         <check_box
          control_name="FSShowMouselookInstructions"
          follows="left|top"
+         enabled_control="EnableMouselook"
          height="16"
          initial_value="true"
          label="Show Mouselook instructions"
@@ -210,6 +224,7 @@
         <check_box
          control_name="ShowCrosshairs"
          follows="left|top"
+         enabled_control="EnableMouselook"
          height="16"
          initial_value="true"
          label="Show Mouselook Crosshairs"
@@ -232,6 +247,7 @@
         <slider
          control_name="MouseSensitivity"
          follows="left|top"
+         enabled_control="EnableMouselook"
          height="15"
          initial_value="2"
          layout="topleft"
@@ -243,6 +259,7 @@
          width="145" />
         <check_box
          control_name="InvertMouse"
+         enabled_control="EnableMouselook"
          height="16"
          label="Invert"
          layout="topleft"
