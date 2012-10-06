@@ -4716,7 +4716,7 @@ void LLAgent::sendAgentSetAppearance()
 //	const LLVector3 body_size = gAgentAvatarp->mBodySize;
 // [RLVa:KB] - Checked: 2010-10-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0e
 	LLVector3 body_size = gAgentAvatarp->mBodySize;
-	body_size.mV[VZ] += gSavedSettings.getF32("AvatarZOffset");
+	body_size.mV[VZ] += gSavedPerAccountSettings.getF32("AvatarZOffset");
 // [/RLVa:KB]
 	msg->addVector3Fast(_PREHASH_Size, body_size);	
 
