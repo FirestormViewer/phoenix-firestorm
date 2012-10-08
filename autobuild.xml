@@ -422,9 +422,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>06a6c49eb1873e95623d3d2d07aee903</string>
+              <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-dictionaries/rev/259873/arch/Darwin/installer/dictionaries-1-darwin-20120616.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -434,9 +434,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>4f0ca21d27e0cd0b002149062b0a4b25</string>
+              <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-dictionaries/rev/259873/arch/Linux/installer/dictionaries-1-linux-20120616.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -446,9 +446,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>7520d75f6af325328322201c888191d4</string>
+              <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-dictionaries/rev/259873/arch/CYGWIN/installer/dictionaries-1-windows-20120616.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
             </map>
             <key>name</key>
             <string>windows</string>
