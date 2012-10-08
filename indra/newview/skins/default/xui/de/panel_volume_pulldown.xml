@@ -4,6 +4,7 @@
 	<slider label="Master" name="System Volume" label_width="80" width="180"/>
     <slider label="Schaltflächen" label_width="80" width="180" name="UI Volume"/>
     <slider label="Umgebung" label_width="80" width="180" name="Wind Volume"/>
+	<check_box name="collisions_audio_play_btn" tool_tip="Sounds bei Kollisionen abspielen"/>
     <slider label="Soundeffekte" label_width="80" width="180" name="SFX Volume"/>
 	<check_box name="gesture_audio_play_btn" tool_tip="Sounds von Gesten abspielen"/>
     <slider label="Musikstream" label_width="80" width="180" name="Music Volume"/>

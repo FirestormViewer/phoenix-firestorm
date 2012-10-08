@@ -10,17 +10,18 @@
 		<check_box name="mute_when_minimized" label="Stummschalten, wenn minimiert"/>
 		<slider label="Schaltflächen" name="UI Volume"/>
 		<slider label="Umgebung" name="Wind Volume"/>
+		<check_box label="Sounds bei Kollisionen abspielen" name="collisions_audio_play_btn" tool_tip="Markieren, um Sounds bei Kollisionen zu hören"/>
 		<slider label="Soundeffekte" name="SFX Volume"/>
-		<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören" value="true"/>
+		<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören"/>
 		<slider label="Musikstream" name="Music Volume"/>
 		<check_box label="Aktiviert" name="enable_music"/>
 		<slider label="Medien" name="Media Volume"/>
 		<check_box label="Aktiviert" name="enable_media"/>
 		<slider label="Voice-Chat" name="Voice Volume"/>
 		<check_box label="Aktiviert" name="enable_voice_check"/>
-		<check_box label="Automatische Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben." value="true"/>
+		<check_box label="Automatische Wiedergabe zulassen" name="media_auto_play_btn" tool_tip="Hier aktivieren, um Medien automatisch wiederzugeben."/>
 		<check_box name="media_allowscript_btn" tool_tip="Erlaubt bzw. verbietet Scripten die Kontrolle über die Medienwiedergabe" label="Skripte erlauben Medien abzuspielen" />
-		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden." value="true"/>
+		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button" left_pad="45"/>
         <check_box name="ShowStreamMetadata" label="Musikstream-Titel im lokalem Chat anzeigen"/>
