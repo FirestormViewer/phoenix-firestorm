@@ -424,7 +424,7 @@
               <key>hash</key>
               <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -436,7 +436,7 @@
               <key>hash</key>
               <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -448,7 +448,7 @@
               <key>hash</key>
               <string>e25c5a59493c82dcc350e53a9cfbd317</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz</string>
+              <string>http://downloads.phoenixviewer.com/dictionaries-1-20121001.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
