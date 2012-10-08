@@ -80,7 +80,7 @@
      layout="topleft"
      left="30"
      name="online_visibility"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -90,7 +90,7 @@
      layout="topleft"
      left="30"
      name="voice_call_friends_only_check"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -101,7 +101,7 @@
      layout="topleft"
      left="30"
      name="auto_disengage_mic_check"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -111,7 +111,7 @@
      layout="topleft"
      left="30"
      name="Auto_Accept_New_Inventory"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -122,7 +122,7 @@
      left="30"
      name="FSUseLegacyInventoryAcceptMessages"
      tool_tip="If enabled, the viewer will only send accept and decline messages after pressing the according button. If disabled, the accept response will be sent automatically as soon as the inventory offer has been received. This option has no effect if inventory offers are accepted automatically."
-     top_pad="4"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -132,7 +132,7 @@
      layout="topleft"
      left="30"
      name="Show_In_Inventory"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 	 
 	 <check_box
@@ -142,7 +142,7 @@
      layout="topleft"
      left="30"
      name="Show_New_Inventory"
-     top_pad="4"
+     top_pad="3"
      width="350" />
 	 
 	 <check_box
@@ -152,7 +152,19 @@
      layout="topleft"
      left="30"
      name="FSCreateGiveInventoryParticleEffect"
-     top_pad="4"
+     top_pad="3"
+     width="350" />
+	 
+     <check_box
+     control_name="EffectScriptChatParticles"
+     height="16"
+     label="Create particle effects when scripts communicate"
+     layout="topleft"
+     left="30"
+     name="EffectScriptChatParticles"
+     tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
+     initial_value="true"
+     top_pad="3"
      width="350" />
 
     <check_box
@@ -162,7 +174,7 @@
      layout="topleft"
      left="30"
      name="favorites_on_login_check"
-     top_pad="4"
+     top_pad="3"
      height="16"
      width="350" />
 
@@ -198,7 +210,7 @@
      layout="topleft"
      left="30"
      name="log_instant_messages"
-     top_pad="4"
+     top_pad="3"
      width="350">
     </check_box>
     <check_box
@@ -209,7 +221,7 @@
      layout="topleft"
      left_delta="0"
      name="show_timestamps_check_im"
-     top_pad="4"
+     top_pad="3"
      width="237" />
     <check_box
      control_name="FSSecondsinChatTimestamps"
@@ -218,7 +230,7 @@
      layout="topleft"
      left_delta="0"
      name="seconds_in_timestamps"
-     top_pad="4"
+     top_pad="3"
      width="237" />
     <check_box
      control_name="LogFileNamewithDate"
@@ -228,7 +240,7 @@
      layout="topleft"
      left_delta="0"
      name="logfile_name_datestamp"
-     top_pad="4"
+     top_pad="3"
      width="350"/>
 
     <button
