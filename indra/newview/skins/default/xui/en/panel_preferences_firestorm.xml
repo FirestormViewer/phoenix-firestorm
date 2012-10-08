@@ -191,6 +191,18 @@
          control_name="FSDisableAvatarTrackerAtCloseIn"
          tool_tip="If enabled, the tracking beacon will be disabled automatically, if the distance to the targeted avatar is less than 3m. (Default)"/>
 
+		<check_box
+		 control_name="EffectScriptChatParticles"
+		 height="16"
+		 label="Create particle effects when scripts communicate"
+		 layout="topleft"
+		 left="15"
+		 name="EffectScriptChatParticles"
+		 tool_tip="If enabled scripted objects display swirling particle lights when the scripts communicate"
+		 initial_value="true"
+		 top_pad="5"
+		 width="350" />
+
         <check_box
          top_pad="15"
          control_name="UseLSLBridge"
