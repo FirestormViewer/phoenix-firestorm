@@ -9,6 +9,7 @@
 			<check_box label="Wycisz gdy zminimalizowane" name="mute_when_minimized"/>
 			<slider label="Interfejs" name="UI Volume"/>
 			<slider label="Otoczenie" name="Wind Volume"/>
+			<check_box name="collisions_audio_play_btn" tool_tip="Zaznacz, aby słyszeć domyślne dźwięki kolizji" label="Odtwarzaj dźwięki kolizji"/>
 			<slider label="Efekty dźwiękowe" name="SFX Volume"/>
 			<check_box name="gesture_audio_play_btn" tool_tip="Zaznacz, aby słyszeć dźwięki gestów" label="Odtwarzaj dźwięki gestów"/>
 			<slider label="Muz. strumieniowa" name="Music Volume"/>

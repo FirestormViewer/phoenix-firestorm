@@ -1664,9 +1664,10 @@ void LLFloaterPreference::onClickSetMiddleMouse()
 
 void LLFloaterPreference::onClickSetSounds()
 {
-	// Disable Enable gesture sounds checkbox if the master sound is disabled 
+	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
 	// or if sound effects are disabled.
 	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
 
 /*

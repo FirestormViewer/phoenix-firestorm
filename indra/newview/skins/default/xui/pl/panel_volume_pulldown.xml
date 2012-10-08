@@ -3,6 +3,7 @@
     <slider label="Główny" name="System Volume"/>
     <slider label="Interfejs" name="UI Volume"/>
     <slider label="Okolica" name="Wind Volume"/>
+    <check_box name="collisions_audio_play_btn" tool_tip="Włącz domyślne dźwięki kolizji"/>
     <slider label="Efekty" name="SFX Volume"/>
     <check_box name="gesture_audio_play_btn" tool_tip="Włącz dźwięki gestów"/>
     <slider label="Muzyka" name="Music Volume"/>

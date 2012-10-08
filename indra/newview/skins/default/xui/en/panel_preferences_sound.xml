@@ -147,6 +147,17 @@
          name="mute_audio"
          tab_stop="false"
          width="16" />
+        <check_box
+         name="collisions_audio_play_btn"
+         control_name="FSPlayCollisionSounds"
+         disabled_control="MuteAudio"
+         height="16"
+         layout="topleft"
+         left_pad="5"
+         tool_tip="Check this to hear default sounds from collisions"
+         label="Play sounds from collisions"
+         top_delta="2"
+         width="350"/>
         <slider
          control_name="AudioLevelSFX"
          disabled_control="MuteAudio"

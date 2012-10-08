@@ -5386,12 +5386,21 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	bool bDoSpamCheck=1;
 	std::string sSound=sound_id.asString();
  	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings,"_NACL_AntiSpamSoundMulti");
+	static LLCachedControl<bool> FSPlayCollisionSounds(gSavedSettings, "FSPlayCollisionSounds");
 	for(int i=0;i< COLLISION_SOUNDS_SIZE;i++) //AO: Should probably do this as a hashmap O(1) instead of O(n)
+	{
 		if(COLLISION_SOUNDS[i] == sSound)
-			bDoSpamCheck=0;
-		if(bDoSpamCheck)
-			if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
+		{
+			if(!FSPlayCollisionSounds)
+			{
 				return;
+			}
+			bDoSpamCheck=0;
+		}
+	}
+	if(bDoSpamCheck)
+		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND,object_id, _NACL_AntiSpamSoundMulti)) 
+			return;
 	// NaCl End
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ParentID, parent_id);
 	msg->getU64Fast(_PREHASH_SoundData, _PREHASH_Handle, region_handle);
