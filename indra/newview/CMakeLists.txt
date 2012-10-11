@@ -1567,7 +1567,7 @@ if (WINDOWS)
         # *TODO -reenable this once we get server usage sorted out
         LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS}"
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
-        LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
+        LINK_FLAGS_RELEASE "/MAP\"secondlife-bin.MAP\" /OPT:REF"
         )
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
