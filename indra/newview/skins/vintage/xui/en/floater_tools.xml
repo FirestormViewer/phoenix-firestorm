@@ -3337,30 +3337,43 @@ even though the user gets a free copy.
          width="295">
             <button
              follows="left|top"
-             height="23"
+             height="35"
              label="New Script"
              label_selected="New Script"
              layout="topleft"
              left="10"
              name="button new script"
-             top="10"
+             top="8"
              width="90" />
             <button
              follows="left|top"
-             height="23"
+             height="35"
              label="Permissions"
              layout="topleft"
-             left_pad="8"
+             left_pad="5"
              name="button permissions"
+             width="80" />
+            <button
+             top="8"
+             follows="left|top"
+             height="20"
+             label="Refresh"
+             layout="topleft"
+             left_pad="5"
+             name="button refresh"
              width="90" />
             <button
              follows="left|top"
-             height="23"
-             label="Refresh"
+             height="16"
+             label="Reset Scripts"
              layout="topleft"
-             left_pad="8"
-             name="button refresh"
-             width="75" />
+             top_pad="1"
+             name="button reset scripts"
+             width="90">
+               <button.commit_callback
+                function="Tools.SelectedScriptAction"
+                parameter="reset" />
+            </button>
             <panel_inventory_object
              border="true"
              border_visible="true"

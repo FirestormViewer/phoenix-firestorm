@@ -113,6 +113,7 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	if( !objectp )
 	{
 		getChildView("button new script")->setEnabled(FALSE);
+		getChildView("button reset scripts")->setEnabled(FALSE);
 		return;
 	}
 
@@ -144,12 +145,15 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 	}
 // [/RLVa:KB]
 
-	// Edit script button - ok if object is editable and there's an unambiguous destination for the object.
-	getChildView("button new script")->setEnabled(
-		editable &&
-		all_volume &&
-		((LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1)
-			|| (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)));
+	// Edit/reset script buttons - ok if object is editable and there's an unambiguous destination for the object.
+	bool objectIsOK = FALSE;
+	if( editable && all_volume && ( (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1) || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1) ) )
+	{
+		objectIsOK = TRUE;
+	}
+	
+	getChildView("button new script")->setEnabled(objectIsOK);
+	getChildView("button reset scripts")->setEnabled(objectIsOK);
 
 	getChildView("button permissions")->setEnabled(!objectp->isPermanentEnforced());
 	mPanelInventoryObject->setEnabled(!objectp->isPermanentEnforced());
