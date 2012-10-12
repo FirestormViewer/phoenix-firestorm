@@ -543,9 +543,10 @@
 			</panel>
 		</panel>
 		<panel label="Inhalt" name="Contents">
-			<button label="Neues Skript" label_selected="Neues Skript" name="button new script" width="85"/>
-			<button label="Berechtigungen" name="button permissions" width="95" left_pad="6"/>
-			<button label="Aktualisieren" name="button refresh" width="80" left_pad="6"/>
+			<button label="Neues Skript" label_selected="Neues Skript" name="button new script" width="80"/>
+			<button label="Berechtigungen" name="button permissions" width="95" left_pad="3"/>
+			<button label="Aktualisieren" name="button refresh" width="92" left_pad="3"/>
+			<button label="Skripte zurücks." name="button reset scripts" width="92"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">
