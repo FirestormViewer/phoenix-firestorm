@@ -146,12 +146,12 @@ void LLPanelContents::getState(LLViewerObject *objectp )
 // [/RLVa:KB]
 
 	// Edit/reset script buttons - ok if object is editable and there's an unambiguous destination for the object.
+	// <FS:PP> FIRE-3219: Reset Scripts button in Build floater
 	//	getChildView("button new script")->setEnabled(
 	//		editable &&
 	//		all_volume &&
 	//		((LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1)
 	//			|| (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1)));
-	// <FS:PP> FIRE-3219: Reset Scripts button in Build floater
 	bool objectIsOK = FALSE;
 	if( editable && all_volume && ( (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() == 1) || (LLSelectMgr::getInstance()->getSelection()->getObjectCount() == 1) ) )
 	{
