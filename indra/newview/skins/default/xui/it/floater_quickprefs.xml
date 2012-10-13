@@ -32,14 +32,12 @@
 		<text name="name_tags_textbox">
 			Tag Nome:
 		</text>
-		<text name="LookAt_Preferences_Label">
+		<text name="lookat_textbox">
 			LookAt:
 		</text>
-		<check_box name="showlookat" left="130" label="Attiva" tool_tip="Attiva il LookAt"/>
-		<text name="DebugShowColor_label" width="130">
+		<text name="ShowColor_QP_Label" width="250">
 			Colore sotto il cursore:
 		</text>
-		<check_box name="Show_Color_Under_Cursor" left="130" label="Attiva" tool_tip="Visualizza il colore dell'oggetto posizionato sotto il mouse."/>
 		<text name="WL Sky" tool_tip="Imposta il Windlight per il cielo.">
 			WL Cielo:
 		</text>

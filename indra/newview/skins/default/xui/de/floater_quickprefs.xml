@@ -36,17 +36,23 @@
 		<text name="name_tags_textbox">
 			Avatarnamen:
 		</text>
-		<text name="LookAt_Preferences_Label" width="105">
-			Kamerafokus:
-		</text>
-		<check_box name="showlookat" label="Anzeigen" width="70" left="117" tool_tip="Aktiviert Fadenkreuze, die die Kamerapositionen anderer Avatare markieren."/>
-		<text name="DebugShowColor_label" width="108">
-			Farber unter Cursor:
-		</text>
-		<check_box name="Show_Color_Under_Cursor" label="Anzeigen" width="70" left="117" tool_tip="Zeigt die aktuelle Farbe an der Position des Mauscursors an."/>
-		<radio_group left="45" name="Name_Tag_Preference">
+		<radio_group left="55" name="Name_Tag_Preference">
 			<radio_item label="An" name="radio"/>
 			<radio_item label="Aus" name="radio2"/>
+		</radio_group>		
+		<text name="lookat_textbox" width="250">
+			Kamerafokus:
+		</text>
+		<radio_group left="55" name="showlookat">
+			<radio_item label="An" name="radio"/>
+			<radio_item label="Aus" name="radio2"/>
+		</radio_group>
+		<text name="ShowColor_QP_Label" width="250">
+			Farber unter Cursor:
+		</text>
+		<radio_group left="55" name="Show_Color_Under_Cursor">
+			<radio_item label="An" name="radio5"/>
+			<radio_item label="Aus" name="radio6"/>
 		</radio_group>
 		<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
 			WL-Himmel:

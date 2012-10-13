@@ -272,15 +272,15 @@
             layout="topleft"
             left="5"
             name="name_tags_textbox"
-			top_pad="8"
-            width="400">
+            top_pad="8"
+            width="250">
             Name Tags:
         </text>
-		<radio_group
+        <radio_group
             control_name="AvatarNameTagMode"
             height="20"
             layout="topleft"
-            left="35"
+            left="55"
             top_pad="0" 
             name="Name_Tag_Preference">
          <radio_item
@@ -302,50 +302,83 @@
             value="0"
             width="75" />
         </radio_group>
-		<text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="0"
-            layout="topleft"
-            left="5"
-            name="LookAt_Preferences_Label"
-			top_pad="0"
-            width="90">
-            LookAt Target:
-        </text>
-        <check_box
-         top_delta="0"
-         follows="left|top"
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="0"
+		layout="topleft"
+		left="5"
+		name="lookat_textbox"
+		top_pad="0"
+		width="250">
+        LookAt Target:
+    </text>
+    <radio_group
+		 control_name="DebugLookAt"
+		 height="20"
+		 layout="topleft"
+		 left="55"
+		 top_pad="0"
+		 name="showlookat">
+      <radio_item
+         label="On"
+         name="radio"
+         top_delta="20"
+         layout="topleft"
          height="16"
-         left="120"
-         name="showlookat"
-         label="Enabled"
-         width="70"
-         control_name="DebugLookAt"
-         tool_tip="Enable crosshairs marking where people are looking."/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="5"
-            layout="topleft"
-            left="5"
-            name="DebugShowColor_label"
-            top_pad="4"
-            width="105">
-            Color Under Cursor:
-        </text>
-        <check_box
+         left="72"
+         value="1"
+         width="75" />
+      <radio_item
+         label="Off"
+         left_pad="-10"
+         layout="topleft"
          top_delta="0"
-         follows="left|top"
          height="16"
-         left="120"
-         name="Show_Color_Under_Cursor"
-         label="Enabled"
-         width="70"
-         control_name="DebugShowColor"
-         tool_tip="Show color under mouse cursor."/>
+         name="radio2"
+         value="0"
+         width="75" />
+	</radio_group>
+
+    <text
+		type="string"
+		length="1"
+		follows="left|top"
+		height="0"
+		layout="topleft"
+		left="5"
+		name="ShowColor_QP_Label"
+		top_pad="0"
+		width="250">
+        Color Under Cursor:
+    </text>	
+    <radio_group
+		 control_name="DebugShowColor"
+		 height="20"
+		 layout="topleft"
+		 left="55"
+		 top_pad="0"
+		 name="Show_Color_Under_Cursor">
+      <radio_item
+         label="On"
+         name="radio5"
+         top_delta="20"
+         layout="topleft"
+         height="16"
+         left="72"
+         value="1"
+         width="75" />
+      <radio_item
+         label="Off"
+         left_pad="-10"
+         layout="topleft"
+         top_delta="0"
+         height="16"
+         name="radio6"
+         value="0"
+         width="75" />
+	</radio_group>
         <text
             type="string"
             length="1"

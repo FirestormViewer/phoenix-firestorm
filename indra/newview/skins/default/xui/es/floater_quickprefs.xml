@@ -33,21 +33,27 @@
 			Altura etiquetas:
 		</text>
 		<slider name="FSNameTagZOffsetCorrection" left_delta="86"/>
-		<text name="name_tags_textbox" width="120">
+		<text name="name_tags_textbox" width="250">
 			Etiquetas:
 		</text>
 		<radio_group name="Name_Tag_Preference">
 			<radio_item label="Sí" name="radio"/>
 			<radio_item label="No" name="radio2"/>
 		</radio_group>
-		<text name="LookAt_Preferences_Label" width="120">
+		<text name="lookat_textbox" width="250">
 			Puntos de mira:
 		</text>
-		<check_box name="showlookat" label="Activados" tool_tip="Muestra los puntos a los que otros están mirando"/>
-		<text name="DebugShowColor_label">
+		<radio_group name="showlookat">
+			<radio_item label="Sí" name="radio"/>
+			<radio_item label="No" name="radio2"/>
+		</radio_group>		
+		<text name="ShowColor_QP_Label">
 			Color bajo el cursor:
 		</text>
-		<check_box name="Show_Color_Under_Cursor" label="Activado" tool_tip="Mostrar el color bajo el cursor"/>
+		<radio_group name="Show_Color_Under_Cursor">
+			<radio_item label="Sí" name="radio5"/>
+			<radio_item label="No" name="radio6"/>
+		</radio_group>
 		<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 			Cielo WL:
 		</text>
