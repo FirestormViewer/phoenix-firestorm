@@ -77,7 +77,7 @@ BROWSER_COMMANDS="      \
     netscape"
 for browser_cmd in $BROWSER_COMMANDS; do
     if which $browser_cmd >/dev/null; then
-	$browser_cmd "$URL" &
+	$browser_cmd "$URL" >/dev/null 2>&1 &
         exit
    fi
 done
