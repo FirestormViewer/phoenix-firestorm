@@ -31,20 +31,20 @@
         <text name="lookat_textbox">
             Cele spojrzeń:
         </text>
-		<radio_group left="55" name="showlookat">
-			<radio_item label="Włącz" name="radio"/>
-			<radio_item label="Wyłącz" name="radio2"/>
-		</radio_group>
+        <radio_group name="showlookat">
+            <radio_item label="Włącz" name="radio"/>
+            <radio_item label="Wyłącz" name="radio2"/>
+        </radio_group>
         <text name="ShowColor_QP_Label">
-            Kolor pod kursorem:
+            Kolor spod kursora:
         </text>
         <radio_group name="Show_Color_Under_Cursor">
-         <radio_item label="Włącz" name="radio5"/>
-         <radio_item label="Wyłącz" name="radio6"/>
+            <radio_item label="Włącz" name="radio5"/>
+            <radio_item label="Wyłącz" name="radio6"/>
         </radio_group>
         <radio_group name="Name_Tag_Preference">
-         <radio_item label="Włącz" name="radio"/>
-         <radio_item label="Wyłącz" name="radio2"/>
+            <radio_item label="Włącz" name="radio"/>
+            <radio_item label="Wyłącz" name="radio2"/>
         </radio_group>
         <text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
             Niebo WL:
