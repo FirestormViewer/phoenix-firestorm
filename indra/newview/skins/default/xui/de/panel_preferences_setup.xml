@@ -44,6 +44,7 @@
     <button label="Zurücksetzen" label_selected="Zurücksetzen" name="reset_logpath" width="85"/>
     <button label="Öffne Crash-Protokolle" label_selected="Öffne Crash-Protokolle" name="browse_crashlogs" width="140"/>
     <button label="Öffne Ordner mit Einstellungen" label_selected="Öffne Ordner mit Einstellungen" name="browse_settingsdir" width="190"/>
+    <check_box label="DSF (Sound) Cache-Dateien beim Ausloggen nicht löschen" tool_tip="Falls aktiviert, werden entpackte Sound-Dateien beim Ausloggen nicht aus dem Cache gelöscht, wodurch das Abspielen von Sounds verbessert werden kann. ACHTUNG: Hierdurch kann die Cache-Größe sehr schnell ansteigen und zudem wird Cache-Größenlimit in diesem Fall NICHT beachtet, wodurch mehr als 10GB an Festplattenspeicher belegt werden kann! Diese Option ist in Firestorm standardmäßig deaktiviert." name="keep_unpacked_cache"/>
 
 	<text name="Web:">
 		Web:
