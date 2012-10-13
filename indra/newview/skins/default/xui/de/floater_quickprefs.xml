@@ -48,7 +48,7 @@
 			<radio_item label="Aus" name="radio2"/>
 		</radio_group>
 		<text name="ShowColor_QP_Label" width="250">
-			Farber unter Cursor:
+			Farbe unter Cursor:
 		</text>
 		<radio_group left="55" name="Show_Color_Under_Cursor">
 			<radio_item label="An" name="radio5"/>
