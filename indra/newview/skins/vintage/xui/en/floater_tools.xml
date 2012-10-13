@@ -2075,7 +2075,7 @@ even though the user gets a free copy.
                 Hole Size
             </text>
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
@@ -2089,7 +2089,7 @@ even though the user gets a free copy.
              top_pad="4"
              width="68" />
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
@@ -2115,7 +2115,7 @@ even though the user gets a free copy.
                 Top Shear
             </text>
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
@@ -2130,7 +2130,7 @@ even though the user gets a free copy.
              top_pad="4"
              width="68" />
             <spinner
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
@@ -2224,7 +2224,7 @@ even though the user gets a free copy.
             </text>
             <spinner
 			 visible="false"
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
@@ -2239,7 +2239,7 @@ even though the user gets a free copy.
              width="68" />
             <spinner
 			 visible="false"
-             decimal_digits="2"
+             decimal_digits="3"
              follows="left|top"
              height="19"
              increment="0.05"
