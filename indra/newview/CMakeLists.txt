@@ -46,6 +46,7 @@ include(VisualLeakDetector)
 include(GLOD)
 include(CMakeCopyIfDifferent)
 include(Growl)
+include(ColladaDom)
 
 # <FS:ND> if using ndPhysicsstub this variable will be unset, we don't need to build any stub code viewer side in that case
 if( LLPHYSICSEXTENSIONS_SRC_DIR )
@@ -93,6 +94,7 @@ include_directories(
     ${GROWL_INCLUDE_DIRS}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     ${CMAKE_BINARY_DIR}/newview #<FS:TS> Flickr upload
+    ${COLLADA_INCLUDE_DIRS}
     )
 
 set(viewer_SOURCE_FILES
