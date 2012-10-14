@@ -1295,8 +1295,10 @@ void LLFloaterPreference::buildPopupLists()
 						}
 					}
 				}
-				row["columns"][1]["font"] = "SANSSERIF_SMALL";
-				row["columns"][1]["width"] = 360;
+				// <FS:LO> FIRE-7938 - Some Dialog Alerts text in preferences get truncated 
+				//row["columns"][1]["font"] = "SANSSERIF_SMALL";
+				//row["columns"][1]["width"] = 360;
+				// </FS:LO>
 			}
 			item = disabled_popups.addElement(row);
 		}
