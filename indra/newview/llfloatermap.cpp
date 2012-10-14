@@ -355,7 +355,7 @@ void LLFloaterMap::handleStopTracking (const LLSD& userdata)
 	if (mPopupMenu)
 	{
 		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		LLTracker::stopTracking ((void*)LLTracker::isTracking(NULL));
+		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
 	}
 }
 
