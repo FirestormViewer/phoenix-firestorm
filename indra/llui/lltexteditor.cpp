@@ -533,7 +533,12 @@ void LLTextEditor::getSegmentsInRange(LLTextEditor::segment_vec_t& segments_out,
 	segment_set_t::const_iterator end_it = getSegIterContaining(end - 1);
 	if (end_it != mSegments.end()) ++end_it;
 
-	for (segment_set_t::const_iterator it = first_it; it != end_it; ++it)
+	// <FS:ND> FIRE-3278; end_it can point before first_it (std::distance( first_it, mSegments.end() ) < std::distance( end_it, mSegments.end() ))
+	// In that case the loop below does not correctly terminate. Checking for it != mSegments.end() too, that will avoid that error
+
+	// for (segment_set_t::const_iterator it = first_it; it != end_it; ++it)
+	for (segment_set_t::const_iterator it = first_it; it != mSegments.end() && it != end_it; ++it)
+	// </FS:ND>
 	{
 		LLTextSegmentPtr segment = *it;
 		if (include_partial
