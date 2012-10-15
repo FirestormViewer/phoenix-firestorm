@@ -3592,7 +3592,7 @@
 			 name="P_Quick_Stats"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="237"
+			 top_pad="250"
 			 left="0"
 			 width="285"
 			 height="22"

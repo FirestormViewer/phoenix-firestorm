@@ -3634,7 +3634,7 @@
 			 name="P_Quick_Stats"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="230"
+			 top_pad="250"
 			 left="4"
 			 width="275"
 			 height="22"
