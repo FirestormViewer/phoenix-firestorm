@@ -1259,11 +1259,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					}
 // [/RLVa:KB]
 					
-					if (mDrawable.notNull())
-					{
-						setChanged(MOVED | SILHOUETTE);
-						gPipeline.markMoved(mDrawable, FALSE); // undamped
-					}
+					setChanged(MOVED | SILHOUETTE);
 				}
 				else if (mText.notNull())
 				{
@@ -2147,7 +2143,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		setRotation(new_rot * mAngularVelocityRot);
 		setChanged(ROTATED | SILHOUETTE);
 	}
-
 
 	if ( gShowObjectUpdates )
 	{
