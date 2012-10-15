@@ -605,16 +605,23 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 	av_name->mIsTemporaryName = true;
 	av_name->mExpires = F64_MAX; // not used because these are not cached
 
-        // Ansariel: Please leave this when merging! In case no display names
-        //           are used, you would have to retrieve mDisplayName to get
-        //           the legacy name - something that absolutely makes no
-        //           sense. And getLegacyName(), which is supposed to return
-        //           the legacy name, returns an empty string. By adding the
-        //           next two lines, getLegacyName() will function properly
-        //           in either display name or no display name case.
-        std::istringstream fname(full_name);
-        fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+    // <FS:Ansariel> Please leave this when merging! In case no display names
+    //               are used, you would have to retrieve mDisplayName to get
+    //               the legacy name - something that absolutely makes no
+    //               sense. And getLegacyName(), which is supposed to return
+    //               the legacy name, returns an empty string. By adding the
+    //               next two lines, getLegacyName() will function properly
+    //               in either display name or no display name case.
+    std::istringstream fname(full_name);
+    fname >> av_name->mLegacyFirstName >> av_name->mLegacyLastName;
+	// </FS:Ansariel>
 
+	// <FS:Ansariel> Also fill username for in case of disabled display names.
+	//               We need this for instance for FIRE-4297
+	av_name->mUsername = full_name;
+	LLStringUtil::toLower(av_name->mUsername);
+	LLStringUtil::replaceChar(av_name->mUsername, ' ', '.');
+	// </FS:Ansariel>
 
 	LL_DEBUGS("AvNameCache") << "LLAvatarNameCache::buildLegacyName "
 							 << full_name
