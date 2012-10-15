@@ -1,4 +1,10 @@
 # -*- cmake -*-
+
+# Silence warning about overriding findZLIB.cmake with our own copy.
+cmake_policy(SET CMP0017 OLD)
+# Silence warning about using policies to silence warnings about using policies.
+cmake_policy(SET CMP0011 NEW)
+
 include(Prebuilt)
 
 set(PNG_FIND_QUIETLY ON)
