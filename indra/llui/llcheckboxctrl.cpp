@@ -53,6 +53,9 @@ LLCheckBoxCtrl::Params::Params()
 :	initial_value("initial_value", false),
 	label_text("label_text"),
 	check_button("check_button"),
+	// <FS:Ansariel> on_check callback parameter
+	on_check("on_check"),
+	// </FS:Ansariel>
 	radio_style("radio_style")
 {}
 
@@ -116,6 +119,13 @@ LLCheckBoxCtrl::LLCheckBoxCtrl(const LLCheckBoxCtrl::Params& p)
 
 	mButton = LLUICtrlFactory::create<LLButton>(params);
 	addChild(mButton);
+
+	// <FS:Ansariel> on_check callback parameter
+	if (p.on_check.isProvided())
+	{
+		setCheckCallback(initEnableCallback(p.on_check));
+	}
+	// </FS:Ansariel>
 }
 
 LLCheckBoxCtrl::~LLCheckBoxCtrl()
@@ -250,3 +260,19 @@ void	LLCheckBoxCtrl::resetDirty()
 		mButton->resetDirty();
 	}
 }
+
+// <FS:Ansariel> on_check callback parameter
+// virtual
+void LLCheckBoxCtrl::draw()
+{
+	if (!mCheckSignal.empty())
+	{
+		bool checked = mCheckSignal(this, LLSD());
+		if (getValue().asBoolean() != checked)
+		{
+			setValue(checked);
+		}
+	}
+	LLUICtrl::draw();
+}
+// </FS:Ansariel>
