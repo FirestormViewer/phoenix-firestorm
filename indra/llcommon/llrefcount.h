@@ -28,6 +28,8 @@
 
 #include <boost/noncopyable.hpp>
 
+#include "ndintrin.h" // <FS:ND/> For FAA/FAD
+
 #define LL_REF_COUNT_DEBUG 0
 #if LL_REF_COUNT_DEBUG
 class LLMutex ;
@@ -54,13 +56,24 @@ public:
 #else
 	inline void ref() const
 	{ 
-		mRef++; 
+		// <FS:ND> Use intrinsic functions for threadsafe increment
+
+		//	++mRef;
+		ndIntrin::FAA( &mRef );
+
+		// </FS:ND>
 	} 
 
 	inline S32 unref() const
 	{
 		llassert(mRef >= 1);
-		if (0 == --mRef) 
+
+		// <FS:ND> Use intrinsic functions for threadsafe decrement
+
+		//		if (0 == --mRef) 
+		if (0 == ndIntrin::FAD( &mRef) )
+
+		// </FS:ND>
 		{
 			delete this; 
 			return 0;
@@ -77,7 +90,12 @@ public:
 	}
 
 private: 
-	mutable S32	mRef; 
+	// <FS:ND> Needs to be volatile and U32
+
+	//	mutable S32	mRef; 
+	mutable volatile U32 mRef; 
+
+	// </FS:ND>
 
 #if LL_REF_COUNT_DEBUG
 	LLMutex*  mMutexp ;

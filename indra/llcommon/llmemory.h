@@ -520,7 +520,10 @@ void  LLPrivateMemoryPoolTester::operator delete[](void* addr)
 // This is to find those and research where they are coming.
 inline bool ndIsValidPtr( void const *aPtr )
 {
-	return aPtr > (void*)0x3FF;
+	if( 0 == aPtr )
+		return false;
+	llassert_always( aPtr > (void*)0x3FF );
+	return true;
 }
 // </FS:ND>
 #endif

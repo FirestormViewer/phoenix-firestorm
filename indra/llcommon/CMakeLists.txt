@@ -108,6 +108,7 @@ set(llcommon_SOURCE_FILES
     reflective.cpp
     timing.cpp
     u64.cpp
+    ndintrin.cpp
     )
     
 set(llcommon_HEADER_FILES
@@ -264,6 +265,7 @@ set(llcommon_HEADER_FILES
     timer.h
     timing.h
     u64.h
+    ndintrin.h
     )
 
 set_source_files_properties(${llcommon_HEADER_FILES}
