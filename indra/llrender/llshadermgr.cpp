@@ -722,35 +722,53 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 			text[count++] = strdup("}\n");
 		}
 		else if (major_version > 1 || minor_version >= 30)
-		{  //switches are supported in GLSL 1.30 and later
-			//if (gGLManager.mIsNVIDIA) //FS:TM we want to use this for everything, switches, while slightly less gpu intensive, are unreliable in general, causes pink.
-			//{ //switches are unreliable on some NVIDIA drivers -davep
-				for (U32 i = 0; i < texture_index_channels; ++i)
-				{
-					std::string if_string = llformat("\t%sif (vary_texture_index == %d) { return texture2D(tex%d, texcoord); }\n", i > 0 ? "else " : "", i, i); 
-					text[count++] = strdup(if_string.c_str());
-				}
-				text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
-				text[count++] = strdup("}\n");
-/*			}
-			else
-			{
-				text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
-				text[count++] = strdup("\tswitch (vary_texture_index)\n");
-				text[count++] = strdup("\t{\n");
+		{
+			//switches are supported in GLSL 1.30 and later
 		
-				//switch body
-				for (S32 i = 0; i < texture_index_channels; ++i)
-				{
-					std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
-					text[count++] = strdup(case_str.c_str());
-				}
+			// <FS:ND> 2012-10-15. Yay for pink AGAIN! Replacing LL's version once again with ours.
 
-				text[count++] = strdup("\t}\n");
-				text[count++] = strdup("\treturn ret;\n");
-				text[count++] = strdup("}\n");
-			} */
-		} 
+			// if (gGLManager.mIsNVIDIA)
+			// { //switches are unreliable on some NVIDIA drivers
+			// 	for (U32 i = 0; i < texture_index_channels; ++i)
+			// 	{
+			// 		std::string if_string = llformat("\t%sif (vary_texture_index == %d) { return texture2D(tex%d, texcoord); }\n", i > 0 ? "else " : "", i, i); 
+			// 		text[count++] = strdup(if_string.c_str());
+			// 	}
+			// 	text[count++] = strdup("\treturn vec4(1,0,1,1);\n");
+			// 	text[count++] = strdup("}\n");
+			// }
+			// else
+			// {
+			// 	text[count++] = strdup("\tvec4 ret = vec4(1,0,1,1);\n");
+			// 	text[count++] = strdup("\tswitch (vary_texture_index)\n");
+			// 	text[count++] = strdup("\t{\n");
+			// 
+			// 	//switch body
+			// 	for (S32 i = 0; i < texture_index_channels; ++i)
+			// 	{
+			// 		std::string case_str = llformat("\t\tcase %d: return texture2D(tex%d, texcoord);\n", i, i);
+			// 		text[count++] = strdup(case_str.c_str());
+			// 	}
+			// 
+			// 	text[count++] = strdup("\t}\n");
+			// 	text[count++] = strdup("\treturn ret;\n");
+			// 	text[count++] = strdup("}\n");
+			// }
+
+			text[count++] = strdup("float frVal = float( vary_texture_index );\n");
+			text[count++] = strdup("if ( frVal < 0 ) { return vec4(0,1,1,1); }\n");
+
+			for (S32 i = 0; i < texture_index_channels; ++i)
+			{
+				std::stringstream str;
+				str << "if ( frVal <= " << i << ".25 ) { return texture2D(tex" << i << ", texcoord); }\n";
+				text[count++] = strdup(str.str().c_str());
+			}
+			text[count++] = strdup("return vec4(1,0,1,1);\n");
+			text[count++] = strdup("}\n");
+
+			// </FS:ND>
+		}
 		else
 		{ //should never get here.  Indexed texture rendering requires GLSL 1.30 or later 
 			// (for passing integers between vertex and fragment shaders)
