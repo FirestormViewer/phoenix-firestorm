@@ -69,30 +69,30 @@
     </panel>
   </tab_container>
   <panel
-    background_visible="false"
-    follows="left|right|bottom"
-    height="25"
-    label="bottom_panel"
-    layout="topleft"
-    name="bottom_panel"
-    top_pad="0">
+   background_visible="false"
+   follows="left|right|bottom"
+   height="25"
+   label="bottom_panel"
+   layout="topleft"
+   name="bottom_panel"
+   top_pad="0">
     <button
-      image_hover_unselected="Toolbar_Left_Over"
-      image_overlay="Copy"
-      image_overlay_alignment="left"
-      image_selected="Toolbar_Left_Selected"
-      image_unselected="Toolbar_Left_Off"
-      label="Copy to Clipboard"
-      left="0"
-      name="refresh_btn"
-      top="1"
-      width="129" />
+     image_hover_unselected="Toolbar_Left_Over"
+     image_overlay="Copy"
+     image_overlay_alignment="left"
+     image_selected="Toolbar_Left_Selected"
+     image_unselected="Toolbar_Left_Off"
+     label="Copy to Clipboard"
+     left="0"
+     name="copy_btn"
+     top="1"
+     width="129" />
     <icon
-      follows="left|right"
-      image_name="Toolbar_Right_Off"
-      left_pad="1"
-      name="dummy_icon"
-      top="1"
-      width="153" />
+     follows="left|right"
+     image_name="Toolbar_Right_Off"
+     left_pad="1"
+     name="dummy_icon"
+     top="1"
+     width="153" />
   </panel>
 </floater>
