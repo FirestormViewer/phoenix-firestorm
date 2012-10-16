@@ -90,10 +90,6 @@
 #include "llprogressview.h"
 #include "llvocache.h"
 #include "llvopartgroup.h"
-// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
@@ -127,6 +123,9 @@
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
 
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 
 #if LL_WINDOWS
