@@ -58,6 +58,7 @@ extern "C" {
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <stdio.h>
 #endif // LL_LINUX || LL_SOLARIS
 
 extern BOOL gDebugWindowProc;
@@ -2507,9 +2508,32 @@ void exec_cmd(const std::string& cmd, const std::string& arg)
 	{ // child
 		// disconnect from stdin/stdout/stderr, or child will
 		// keep our output pipe undesirably alive if it outlives us.
-		close(0);
-		close(1);
-		close(2);
+		// close(0);
+		// close(1);
+		// close(2);
+		// <FS:TS> Reopen stdin, stdout, and stderr to /dev/null.
+		//         It's good practice to always have those file
+		//         descriptors open to something, lest the exec'd
+		//         program actually try to use them.
+		FILE *result;
+		result = freopen("/dev/null","r",stdin);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stdin for web browser: "
+		                << strerror(errno) << llendl;
+                }
+		result = freopen("/dev/null","w",stdout);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stdout for web browser: "
+		                << strerror(errno) << llendl;
+                }
+		result = freopen("/dev/null","w",stderr);
+		if (result == NULL)
+		{
+		        llwarns << "Error reopening stderr for web browser: "
+		                << strerror(errno) << llendl;
+                }
 		// end ourself by running the command
 		execv(cmd.c_str(), argv);	/* Flawfinder: ignore */
 		// if execv returns at all, there was a problem.
