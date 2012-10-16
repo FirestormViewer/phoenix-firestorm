@@ -714,10 +714,10 @@ BOOL LLPanelPeople::postBuild()
 	enable_registrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
 
-    mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
-    mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
-    mGroupsGearButton = getChild<LLMenuButton>("groups_viewsort_btn");
-    mRecentGearButton = getChild<LLMenuButton>("recent_viewsort_btn");
+	mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
+	mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
+	mGroupsGearButton = getChild<LLMenuButton>("groups_viewsort_btn");
+	mRecentGearButton = getChild<LLMenuButton>("recent_viewsort_btn");
 
 	LLMenuGL* plus_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_group_plus.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGroupPlusMenuHandle  = plus_menu->getHandle();
