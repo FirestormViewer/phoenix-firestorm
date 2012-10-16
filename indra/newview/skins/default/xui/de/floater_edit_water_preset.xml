@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Edit Water Preset" title="Wasser-Voreinstellung bearbeiten">
+<!-- FS:Ansariel: Commented out for phototools water editor	
 	<string name="title_new">
 		Neue Wasser-Voreinstellung erstellen
 	</string>
@@ -67,6 +68,100 @@
 		</text>
 	</panel>
 	<check_box label="Diese Voreinstellung zu meiner neuen Wassereinstellung machen" name="make_default_cb" left="170" width="385"/>
+	<button label="Speichern" name="save"/>
+	<button label="Abbrechen" name="cancel"/>
+-->
+	<string name="title_new">
+		Wasser-Voreinstellung erstellen
+	</string>
+	<string name="title_edit">
+		Wasser-Voreinstellung-Editor
+	</string>
+	<string name="hint_new">
+	</string>
+	<string name="hint_edit">
+	</string>
+	<string name="combo_label">
+		-Voreinstellung auswählen-
+	</string>
+
+	<panel name="P_Presetname">
+		<text name="hint">
+		</text>
+		<text name="label" width="40">
+			Name:
+		</text>
+		<combo_box name="water_preset_combo" width="190"/>
+		<line_editor name="water_preset_name" width="190"/>
+		<text name="note">
+		</text>
+	</panel>
+
+	<tab_container name="Main_Tab">
+		<panel name="P_Fog_and_Wave" label="Trübung und Wellen">
+			<panel name="P_Water_Fog"> 
+				<text name="water_color_label" tool_tip="Trübungsfarbe: Diese Einstellung ändert die Farbe des Wassers. Falls keine Trübung ausgewählt wird, erscheint das Wasser kristallklar und farblos.">
+					Trübungsfarbe
+				</text>
+				<text name="BHText3" tool_tip="Normal-Map: Bild, das zur Bestimmung der Relektionen und Brechung verwendet wird. Jede Textur kann hierfür verwendet werden, allerdings funktionieren Normal-Maps am besten.">
+					Normal-Map
+				</text>
+			</panel>
+
+			<panel name="P_Fog_Settings">
+				<text tool_tip="Exponent für Trübungsdichte: Steuert die Dichte der Wassertrübung. Diese Einstellung bestimmt, wie tief man von oben ins Wasser schauen kann." name="water_fog_density_label">
+					Exponent für Trübungsdichte
+				</text>
+				<text tool_tip="Modifikator für Wassertrübung: Legt fest, wie stark sich die Wassertrübung unter Wasser verändert. Nützlich, um weitreichende Aussichten unter Wasser zu erzeugen, während die Oberfläche relativ undurchsichtig ist. Beispiel: Bei einem Wert von 0.25 ist die Trübung unter Wasser nur 1/4 so stark wie oberhalb des Wassers." name="underwater_fog_modifier_label">
+					Modifikator für Wassertrübung
+				</text>
+			</panel>
+
+			<panel name="P_Wave_Settings">
+				<text name="BHText" tool_tip="Richtung für große Wellen: Legt die X- und Y-Richtung und Geschwindigkeit für große Wellen fest.">
+					Richtung für große Wellen
+				</text>    
+				<slider label="X" name="WaterWave1DirX"/>
+				<slider label="Y" name="WaterWave1DirY"/>
+				<text name="BHText2" tool_tip="Richtung für kleine Wellen: Legt die X- und Y-Richtung und Geschwindigkeit für kleine Wellen fest.">
+					Richtung für kleine Wellen
+				</text>
+				<slider label="X" name="WaterWave2DirX"/>
+				<slider label="Y" name="WaterWave2DirY"/>
+			</panel>
+		</panel>
+
+		<panel name="P_Reflection" label="Reflektion">
+			<panel name="P_Wavelet">
+				<text name="BDensText" tool_tip="Reflexionswellengröße: Kontrolliert die Skalierung der drei Elementarwellen, die die Oberfläche des Wassers bilden.">
+					Reflexionswellengröße
+				</text>
+				<slider label="X" name="WaterNormalScaleX"/>
+				<slider label="Y" name="WaterNormalScaleY"/>
+				<slider label="Z" name="WaterNormalScaleZ"/>
+			</panel>
+
+			<panel name="P_Other_Settings">
+				<text name="HDText" tool_tip="Fresnel-Skalierung: Legt fest, wieviel Licht unter unterschiedlichen Winkel reflektiert wird. Bei einem höheren Wert wird weniger Licht auf der Wasseroberfläche reflektiert.">
+					Fresnel-Skalierung
+				</text>
+				<text name="FresnelOffsetText" tool_tip="Fresnel-Versatz: Legt fest, wieviel Licht insgesamt reflektiert wird. Bei einem höheren Wert wird mehr Licht von der Wasseroberfläche reflektiert.">
+					Fresnel-Versatz
+				</text>
+				<text name="DensMultText" tool_tip="Brechungsstärke oben: Steuert den Anteil der Lichtbrechung, die oberhalb der Wasseroberflächung wahrgenommen wird. Dies ist der Wackel-Effekt, der bei Objekten unterhalb der Wasseroberfläche auftritt.">
+					Brechungsstärke oben
+				</text>
+				<text name="WaterScaleBelowText" tool_tip="Brechungsstärke unten: Steuert den Anteil der Lichtbrechung, die unterhalb der Wasseroberflächung wahrgenommen wird. Dies ist der Wackel-Effekt, der bei Objekten oberhalb der Wasseroberfläche auftritt.">
+					Brechungsstärke unten
+				</text>
+				<text name="MaxAltText" tool_tip="Mischungsmultiplikator: Legt fest, wie Wellen und Reflektionen vermischt werden. Ein höherer Wert erzeugt eine größere Verzerrung in den Reflektionen als Resultat der Wellenbewegung.">
+					Mischungsmultiplikator
+				</text>
+			</panel>
+		</panel>
+	</tab_container>
+
+	<check_box label="Werte für aktuelles Wasser verwenden" name="make_default_cb"/>
 	<button label="Speichern" name="save"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>

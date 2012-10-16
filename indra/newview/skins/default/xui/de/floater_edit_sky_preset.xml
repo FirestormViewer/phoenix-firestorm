@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Edit Sky Preset" title="Himmel-Voreinstellung bearbeiten">
+<!-- FS:Ansariel: Commented out for phototools sky editor
 	<string name="title_new">
 		Neue Himmel-Voreinstellung erstellen
 	</string>
@@ -138,6 +139,165 @@
 		</panel>
 	</tab_container>
 	<check_box label="Diese Voreinstellung zu meiner neuen Himmeleinstellung machen" name="make_default_cb" left="270" width="390"/>
+	<button label="Speichern" name="save"/>
+	<button label="Abbrechen" name="cancel"/>
+-->
+	<string name="title_new">
+		Himmel-Voreinstellung erstellen
+	</string>
+	<string name="title_edit">
+		Himmel-Voreinstellung-Editor
+	</string>
+	<string name="hint_new">		
+	</string>
+	<string name="hint_edit">
+	</string>
+	<string name="combo_label">
+		-Voreinstellung auswählen-
+	</string>
+	
+	<panel name="P_Presetname">
+		<text name="hint">
+			Um Ihre Voreinstellung zu bearbeiten, passen Sie die Steuerungen an und klicken Sie auf „Speichern“.
+		</text>
+		<text name="label">
+			Name:
+		</text>
+	</panel>
+
+	<tab_container name="Main_Tab">
+		<panel label="Atmosphäre &amp; Sonne" name="ASUN">
+			<panel name="P_Atmosphere_Header">
+				<text name="T_Atmosphere_Header" value="Atmosphären-Einstellungen"/>
+			</panel>
+
+			<panel name="P_Blue_Horizon">
+				<text name="BHText" width="100" tool_tip="Blauer Horizont: Die Farbe des Himmels. Diese Einstellung beeinflusst die Trübung des Himmels.">
+					Blauer Horizont
+				</text>
+				<color_swatch left_delta="105" name="WLBlueHorizon" width="135"/>
+				<text name="BDensText2" width="100" tool_tip="Farbintensität: Beeinflusst die Farbsättigung des Himmels. Wird der Regler für die Intensität (I) nach rechts verschoben, werden die Farben heller und lebhafter. Beim Verschieben nach links werden die Farben matter. Eine Feineinstellung der einzelnen Elemente kann über die Werte für Rot/Grün/Blau vorgenommen werden.">
+					Farbintensität
+				</text>
+				<color_swatch left_delta="105" name="WLBlueDensity" width="135"/>
+			</panel>
+
+			<panel name="P_Atmosphere_OtherSettings">
+				<slider label="Trübung" label_width="70" name="WLHazeHorizon" tool_tip="Horizonttrübung: Beeinflusst die Höhe der Trübung am Horizont. Bei höheren Werten reicht die Trübung bis in den Himmel und verdeckt den eigentlichen Horizont. Trübung kann zur Akzentuierung der Sonne verwendet werden und um Effekte einer staubigen, tropischen oder smoghaltigen Atmosphäre zu erzeugen. Diese Einstellung hat keine Auswirkung, falls Trübungsintensität auf 0 gesetzt ist."/>
+				<slider label="Trübungsint." label_width="70" name="WLHazeDensity" tool_tip="Trübungsintensität: Legt fest, wie viel Trübung in der Atmosphäre zu sehen ist. Bei niedrigen Werten können dunstige oder tropische Umgebungen erzeugt werden, bei höheren Werten dichter, undurchdringlicher Nebel. Falls Trübungsintensität auf 0 gesetzt wird, hat die Horizonttrübung-Einstellung keine Auswirkung."/>
+				<slider label="Dichtemult." label_width="70" name="WLDensityMult" tool_tip="Dichtemultiplikator: Beeinflusst die allgemeine Dichte der Atmosphäre. Bei niedrigen Werten wird das Gefühl einer dünnen Luft erzeugt, bei höheren Werten wird ein starker Smog-Effekt erzeugt."/>
+				<slider label="Entf.-Mult." label_width="70" name="WLDistanceMult" tool_tip="Entfernungsmultiplikator: Beeinflusst die wahrgenommene Klarheit der Atmosphäre. Beim Verschieben des Reglers nach rechts wird ein diesiger und distanzierter Effekt erzeugt. Wird der Regler komplett nach links geschoben, werden die kompletten Effekte vom Terrain und Objekten entfernt."/>
+				<slider label="Max. Höhe" label_width="70" name="WLMaxAltitude" tool_tip="Maximale Höhe: Definiert die Höhe, die bei der Berechnung der atmosphärischen Effekte verwendet wird. Zu späteren Tageszeiten kann diese Einstellung genutzt werden um festzulegen, wie tief ein Sonnenuntergang erscheinen soll, während sie zur Mittagszeit dazu verwendet werden kann, ordentliche Helligkeitswerte zu erzeugen."/>
+			</panel>
+			
+			<panel name="P_Sun_and_Moon_Header">
+				<text name="T_Sun_and_Moon_Header" value="Einstellungen für Sonne und Mond"/>
+			</panel>
+
+			<panel name="P_SM_Color">
+				<text name="SLCText" width="70" tool_tip="Sonne/Mond-Farbe: Beeinflusst die Farbe des Lichts, das von Sonne und Mond erzeugt wird. Beachte, dass diese Farbe Einfluss auf die Farbe des Himmels hat!">
+					S/M-Farbe
+				</text>
+				<color_swatch left_delta="75" width="165" name="WLSunlight"/>
+				<text name="WLAmbientText" width="70" tool_tip="Umgebung: Kontrolliert die Farbe und Intensität des Umgebungslichts in der Atmosphäre. Es wird dazu verwendet zu simulieren, wie das Licht der Sonne durch die Atmosphäre und andere Objekte gestreut wird, sobald es auf die Erde trifft. Mit einem Wert von 0 kann eine sehr helle Sonne und relativ dunkle Welt erzeugt werden.">
+					Umgebung
+				</text>
+				<color_swatch left_delta="75" width="165" name="WLAmbient"/>
+			</panel>
+			
+			<panel name="P_SM_OtherSettings">
+				<slider label="SLK-Fok." name="WLGlowB" tool_tip="Sonnenleuchtkraft - Fokus: Legt fest, wie stark die Sonne vor dem Himmel verschwimmt. Bei sehr hohen Werten überstrahlt die Sonne komplette Bereiche des Himmels, bei einem Wert von 0 verschwindet sie komplett vom Himmel (allerdings nicht das ausgestrahlte Licht!)."/>
+				<slider label="SLK.-Gr." name="WLGlowR" tool_tip="Sonnenleuchtkraft - Größe: Legt die Größe der Sonne fest."/>
+				<slider label="Str.-LK" name="WLStarAlpha" tool_tip="Sternenleuchtkraft: Legt fest, wie stark Sterne am Himmel sichtbar sind. Hierdurch können beispielsweise Sterne am Himmel erzeugt werden, selbst wenn die Sonne zu sehen ist."/>
+				<slider label="Gamma" name="WLGamma" tool_tip="Gamma in Szene: Justiert die Helligkeitsverteilung der Bildschirmausgabe. Niedrige Werte lassen alles dunkel erscheinen, während höhere Werte die Szenerie grau und ausgewaschen erscheinen lassen. Diese Einstellung hat nur Auswirkungen auf die 3D-Ansicht. Hinweis: Ein Wert von 1.0 ist normal."/>
+			</panel>
+			
+			<panel name="P_WL_Daycycle">
+				<icon name="SkyDayCycle" tool_tip="Sonne/Mond-Stand: Beeinflusst die vertikale Position von Sonne und Mond, von Sonnenaufgang (0.0) über Mittag (0.25), Sonnenuntergang (0.5), Mitternacht (0.75) zurück zu Sonnenaufgang (1.0)."/>
+				<text name="WL12amHash">
+					|
+				</text>
+				<text name="WL6amHash">
+					|
+				</text>
+				<text name="WL12pmHash2">
+					|
+				</text>
+				<text name="WL6pmHash">
+					|
+				</text>
+				<text name="WL12amHash2">
+					|
+				</text>
+				<text name="WL12am">
+					0:00
+				</text>
+				<text name="WL6am">
+					3:00
+				</text>
+				<text name="WL12pmHash">
+					12:00
+				</text>
+				<text name="WL6pm">
+					18:00
+				</text>
+				<text name="WL12am2">
+					0:00
+				</text>
+				<time name="WLDayTime" value="6:00" tool_tip="Sonne/Mond-Stand: Beeinflusst die vertikale Position von Sonne und Mond, von Sonnenaufgang (0.0) über Mittag (0.25), Sonnenuntergang (0.5), Mitternacht (0.75) zurück zu Sonnenaufgang (1.0)."/>
+				<slider label="Ostausrichtung" label_width="90" name="WLEastAngle" tool_tip="Ostausrichtung: Ändert den Azimut des Sonnenaufgangs im Uhrzeigersinn relativ zum Osten. Bei einem Wert von 0.5 wird die Sonne im Westen aufgehen"/>
+			</panel>
+		</panel>
+			
+		<panel name="P_Clouds" label="Wolken">
+			<panel name="P_Clouds_Header">
+				<text name="T_Clouds_Header" value="Wolken-Einstellungen"/>
+			</panel>
+			
+			<panel name="P_Cloud_Color">
+				<text name="WLCloudColorText" tool_tip="Wolkenfarbe: Beeinflusst die Farbe der Wolken. Über den Intensitäts-Regler (I) kann die Intensität verändert werden, eine Feinabstimmung kann über die jeweiligen Regler für Rot/Grün/Blau erfolgen.">
+					Wolkenfarbe
+				</text>
+				<color_swatch left_delta="85" width="155" name="WLCloudColor"/>
+			</panel>
+
+			<panel name="P_Cloud_Density">
+				<text name="WLCloudColorText2" tool_tip="Wolken-XY/Dichte: Mit dem X- und Y-Regler kann die Position der Wolken am Himmel geändert werden. Der D-Regler bestimmt die allgemeine Dichte der Wolken: Bei einem niedrigen Wert werden dünne Wolken erzeugt, bei einem höheren Werte dickere und größere Wolken.">
+					Wolken-XY/Dichte
+				</text>
+				<slider label="X" name="WLCloudX"/>
+				<slider label="Y" name="WLCloudY"/>
+				<slider label="D" name="WLCloudDensity"/>
+			</panel>
+
+			<panel name="P_Cloud_CovScale">
+				<slider label="Wolkendichte" label_width="80" name="WLCloudCoverage" tool_tip="Wolkendichte: Definiert den Wolkenanteil am Himmel."/>
+				<slider label="Skalierung" label_width="80" name="WLCloudScale" tool_tip="Wolkenskalierung: Beeinflusst die wahrgenommene Größe der Wolken."/>
+			</panel>
+
+			<panel name="P_Cloud_Detail">
+				<text name="WLCloudDetailText" tool_tip="Wolkendetails (XY/Dichte): Beeinflusst die Position und den Detailgrad der Wolken. Der X- und Y-Regler verändern die horizontale Position, der D-Regler bestimmt, wie verschwollen und/oder gebrochen die Wolken aussehen.">
+					Wolkendetails (XY/Dichte)
+				</text>
+				<slider label="X" name="WLCloudDetailX"/>
+				<slider label="Y" name="WLCloudDetailY"/>
+				<slider label="D" name="WLCloudDetailDensity"/>
+			</panel>
+
+			<panel name="P_Cloud_Scroll">
+				<text name="WLCloudScrollXText" tool_tip="Wolkenbewegung X: Beeinflusst die Richtung und Geschwindigkeit der Wolken am Himmel entlang der X-Achse.">
+					Wolkenbewegung X
+				</text>
+				<check_box label="Sperren" name="WLCloudLockX" tool_tip="Sperren: Verhindert, dass sie die Wolken entlang der X-Achse bewegen."/>
+				<text name="WLCloudScrollYText" tool_tip="Wolkenbewegung Y: Beeinflusst die Richtung und Geschwindigkeit der Wolken am Himmel entlang der Y-Achse.">
+					Wolkenbewegung Y
+				</text>
+				<check_box label="Sperren" name="WLCloudLockY" tool_tip="Sperren: Verhindert, dass sie die Wolken entlang der Y-Achse bewegen."/>
+			</panel>
+		</panel>
+	</tab_container>
+			
+	<check_box label="Werte für aktuellen Himmel verwenden" name="make_default_cb" width="390"/>
 	<button label="Speichern" name="save"/>
 	<button label="Abbrechen" name="cancel"/>
 </floater>
