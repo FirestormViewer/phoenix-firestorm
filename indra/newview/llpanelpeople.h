@@ -152,6 +152,7 @@ private:
 	void					onGroupsViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRadarNameFmtClicked(const LLSD& userdata);
+	bool					radarNameFmtCheck(const LLSD& userdata);
 
 	//returns false only if group is "none"
 	bool					isRealGroup();

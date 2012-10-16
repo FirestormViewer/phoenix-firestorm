@@ -30,37 +30,49 @@
   <menu
     label="Radar Name Format"
     name="radarNameFormat">
-   	<menu_item_call
+   	<menu_item_check
     	label="DisplayName"
      	name="radarFmtDN"
      	enabled_control="UseDisplayNames">
-    	<menu_item_call.on_click
+    	<menu_item_check.on_check
+        	function="Radar.NameFmtCheck" 
+        	parameter="DN"/>
+    	<menu_item_check.on_click
         	function="Radar.NameFmt" 
         	parameter="DN"/>
-    </menu_item_call>
-   	<menu_item_call
+    </menu_item_check>
+   	<menu_item_check
     	label="Username"
      	name="radarFmtUN">
-    	<menu_item_call.on_click
+    	<menu_item_check.on_check
+        	function="Radar.NameFmtCheck" 
+        	parameter="UN"/>
+    	<menu_item_check.on_click
         	function="Radar.NameFmt" 
         	parameter="UN"/>
-    </menu_item_call>
-   	<menu_item_call
+    </menu_item_check>
+   	<menu_item_check
     	label="DisplayName (UserName)"
      	name="radarFmtDNUN"
      	enabled_control="UseDisplayNames">
-    	<menu_item_call.on_click
+    	<menu_item_check.on_check
+        	function="Radar.NameFmtCheck" 
+        	parameter="DNUN"/>
+    	<menu_item_check.on_click
         	function="Radar.NameFmt" 
         	parameter="DNUN"/>
-    </menu_item_call>
-   	<menu_item_call
+    </menu_item_check>
+   	<menu_item_check
     	label="Username (DisplayName)"
      	name="radarFmtUNDN"
      	enabled_control="UseDisplayNames">
-    	<menu_item_call.on_click
+    	<menu_item_check.on_check
+        	function="Radar.NameFmtCheck" 
+        	parameter="UNDN"/>
+    	<menu_item_check.on_click
         	function="Radar.NameFmt" 
         	parameter="UNDN"/>
-    </menu_item_call>
+    </menu_item_check>
    </menu>
   
   

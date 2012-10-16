@@ -3,10 +3,10 @@
 	<menu_item_check label="Karte oberhalb Radar anzeigen" name="ShowRadarMinimap"/>
 	<menu_item_check label="Anzeige auf definierten Radius beschränken" name="LimitRadarByRange"/>
 	<menu label="Radar-Namensformat" name="radarNameFormat">
-		<menu_item_call label="Anzeigename" name="radarFmtDN"/>
-		<menu_item_call label="Benutzername" name="radarFmtUN"/>
-		<menu_item_call label="Anzeigename (Benutzername)" name="radarFmtDNUN"/>
-		<menu_item_call label="Benutzername (Anzeigename)" name="radarFmtUNDN"/>
+		<menu_item_check label="Anzeigename" name="radarFmtDN"/>
+		<menu_item_check label="Benutzername" name="radarFmtUN"/>
+		<menu_item_check label="Anzeigename (Benutzername)" name="radarFmtDNUN"/>
+		<menu_item_check label="Benutzername (Anzeigename)" name="radarFmtUNDN"/>
 	</menu>
 	<menu_item_check label="Chat-Reichweite auf Karte anzeigen" name="MiniMapChatRing"/>
 	<menu_item_check label="Betreten der Draw Distance melden" name="RadarReportDrawRangeEnter"/>

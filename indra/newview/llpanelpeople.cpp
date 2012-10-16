@@ -700,23 +700,24 @@ BOOL LLPanelPeople::postBuild()
 	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
 	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
 	
-	registrar.add("People.Group.Plus.Action",  boost::bind(&LLPanelPeople::onGroupPlusMenuItemClicked,  this, _2));
-	registrar.add("People.Group.Minus.Action", boost::bind(&LLPanelPeople::onGroupMinusButtonClicked,  this));
-	registrar.add("People.Friends.ViewSort.Action",  boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemClicked,  this, _2));
+	registrar.add("People.Group.Plus.Action",		boost::bind(&LLPanelPeople::onGroupPlusMenuItemClicked,  this, _2));
+	registrar.add("People.Group.Minus.Action",		boost::bind(&LLPanelPeople::onGroupMinusButtonClicked,  this));
+	registrar.add("People.Friends.ViewSort.Action", boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Nearby.ViewSort.Action",  boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Groups.ViewSort.Action",  boost::bind(&LLPanelPeople::onGroupsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Recent.ViewSort.Action",  boost::bind(&LLPanelPeople::onRecentViewSortMenuItemClicked,  this, _2));
-	registrar.add("Radar.NameFmt",boost::bind(&LLPanelPeople::onRadarNameFmtClicked, this, _2));
+	registrar.add("Radar.NameFmt",					boost::bind(&LLPanelPeople::onRadarNameFmtClicked, this, _2));
 
-	enable_registrar.add("People.Group.Minus.Enable",	boost::bind(&LLPanelPeople::isRealGroup,	this));
+	enable_registrar.add("Radar.NameFmtCheck",					boost::bind(&LLPanelPeople::radarNameFmtCheck, this, _2));
+	enable_registrar.add("People.Group.Minus.Enable",			boost::bind(&LLPanelPeople::isRealGroup,	this));
 	enable_registrar.add("People.Friends.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Nearby.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onNearbyViewSortMenuItemCheck,	this, _2));
 
-        mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
-        mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
-        mGroupsGearButton = getChild<LLMenuButton>("groups_viewsort_btn");
-        mRecentGearButton = getChild<LLMenuButton>("recent_viewsort_btn");
+    mNearbyGearButton = getChild<LLMenuButton>("nearby_view_sort_btn");
+    mFriendsGearButton = getChild<LLMenuButton>("friends_viewsort_btn");
+    mGroupsGearButton = getChild<LLMenuButton>("groups_viewsort_btn");
+    mRecentGearButton = getChild<LLMenuButton>("recent_viewsort_btn");
 
 	LLMenuGL* plus_menu  = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_group_plus.xml",  gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	mGroupPlusMenuHandle  = plus_menu->getHandle();
@@ -2228,6 +2229,26 @@ void LLPanelPeople::onRadarNameFmtClicked(const LLSD& userdata)
 		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_DISPLAYNAME_USERNAME);
 	else if (chosen_item == "UNDN")
 		gSavedSettings.setU32("RadarNameFormat", NAMEFORMAT_USERNAME_DISPLAYNAME);
+}
+
+bool LLPanelPeople::radarNameFmtCheck(const LLSD& userdata)
+{
+	std::string menu_item = userdata.asString();
+	U32 name_format = gSavedSettings.getU32("RadarNameFormat");
+	switch (name_format)
+	{
+		case NAMEFORMAT_DISPLAYNAME:
+			return (menu_item == "DN");
+		case NAMEFORMAT_USERNAME:
+			return (menu_item == "UN");
+		case NAMEFORMAT_DISPLAYNAME_USERNAME:
+			return (menu_item == "DNUN");
+		case NAMEFORMAT_USERNAME_DISPLAYNAME:
+			return (menu_item == "UNDN");
+		default:
+			return false;
+	}
+	return false;
 }
 
 std::string LLPanelPeople::getRadarName(LLAvatarName avname)
