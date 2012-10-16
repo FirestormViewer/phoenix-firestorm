@@ -15,7 +15,6 @@
 		Edit a Water Preset
 	</string>
 	<string name="hint_new">
-		.
 	</string>
 	<string name="hint_edit">
 	</string>
@@ -33,7 +32,7 @@
 	 height="35"
 	 border_visible="true"
 	 bevel_style="in"
-	 background_visible="true"> 
+	 background_visible="true">
 		<text
 		 hidden="true"
 		 follows="top|left|right"
@@ -43,8 +42,8 @@
 		 name="hint"
 		 top="0"
 		 width="245"
-		 word_wrap="true"
-		 value=""/>
+		 word_wrap="true">
+		</text>
 		<text
 		 follows="top|left|right"
 		 font="SansSerif"
@@ -70,7 +69,7 @@
 		 left_delta="0"
 		 name="water_preset_name"
 		 top_delta="0"
-		 width="135" />
+		 width="135"/>
 		<text
 		 follows="top|left|right"
 		 height="0"
@@ -79,8 +78,8 @@
 		 name="note"
 		 top_pad="0"
 		 width="250"
-		 wrap="true"
-		 value=""/>
+		 wrap="true">
+		</text>
 	</panel>
 
 	<tab_container
@@ -98,7 +97,7 @@
 		 name="P_Fog_and_Wave"
 		 label="Fog and Wave"
 		 layout="topleft"
-		 follows="left|top"> 
+		 follows="left|top">
 			<panel
 			 name="P_Water_Fog"
 			 follows="left|top"
@@ -119,24 +118,24 @@
 				 left="20"
 				 name="WaterFogColor"
 				 top_pad="5"
-				 width="90" />
+				 width="90"/>
 				<texture_picker
 				 height="60"
 				 layout="topleft"
 				 left_pad="40"
 				 name="WaterNormalMap"
 				 top_delta="0"
-				 width="60" />
+				 width="60"/>
 				<text
 				 follows="top|left"
 				 height="20"
 				 font="SansSerifSmall"
 				 layout="topleft"
-				 left="20"    
+				 left="20"
 				 name="water_color_label"
 				 top_pad="-13"
 				 width="110"
-				 tool_tip="Water Fog Color - This changes the color of the volume tint of the water, essentially defining the color of the water itself. If your water has no fog, it will appear crystal clear and colorless. "
+				 tool_tip="Water Fog Color - This changes the color of the volume tint of the water, essentially defining the color of the water itself. If your water has no fog, it will appear crystal clear and colorless."
 				 word_wrap="true">
 					Water Fog Color
 				</text>
@@ -149,7 +148,7 @@
 				 name="BHText3"
 				 top_delta="0"
 				 wrap="0"
-				 tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best. Try snake skin, tiles, or any other normal map for some wacky effects! "
+				 tool_tip="Normal Map - Image used for determining reflections and refractions. Any texture may be used for this setting- but true normal maps work best. Try snake skin, tiles, or any other normal map for some wacky effects!"
 				 width="100">
 					Normal Map
 				</text>
@@ -194,7 +193,7 @@
 				 font="SansSerifSmall"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="Underwater Fog Modifier - Controls how the fog density changes when you are underwater. Useful for creating far-seeing views when underwater while keeping the surface fairly opaque. For example, at a setting of 0.25, the water fog is 1/4 as dense while underwater as it appears from above the surface. "
+				 tool_tip="Underwater Fog Modifier - Controls how the fog density changes when you are underwater. Useful for creating far-seeing views when underwater while keeping the surface fairly opaque. For example, at a setting of 0.25, the water fog is 1/4 as dense while underwater as it appears from above the surface."
 				 top_pad="10"
 				 name="underwater_fog_modifier_label"
 				 width="215">
@@ -231,7 +230,7 @@
 				 left="5"
 				 name="BHText"
 				 top_pad="5"
-				 tool_tip="Big Wave Direction - Controls the X and Y direction and speed of the large wave image. "
+				 tool_tip="Big Wave Direction - Controls the X and Y direction and speed of the large wave image."
 				 width="215">
 					Big Wave Direction
 				</text>    
@@ -268,7 +267,7 @@
 				 left="5"
 				 name="BHText2"
 				 top_pad="10"
-				 tool_tip="Little Wave Direction - Controls the X and Y direction and speed of the small wave image. "
+				 tool_tip="Little Wave Direction - Controls the X and Y direction and speed of the small wave image."
 				 width="215">
 					Little Wave Direction
 				</text>
@@ -284,7 +283,7 @@
 				 min_val="-20"
 				 name="WaterWave2DirX"
 				 top_pad="5"
-				 width="245" />
+				 width="245"/>
 				<slider
 				 control_name="WaterWave2DirY"
 				 decimal_digits="2"
@@ -297,7 +296,7 @@
 				 min_val="-20"
 				 name="WaterWave2DirY"
 				 top_pad="6"
-				 width="245" />
+				 width="245"/>
 			</panel>
 		</panel>
 
@@ -325,7 +324,7 @@
 				 left="5"
 				 name="BDensText"
 				 top_pad="5"
-				 tool_tip="Reflection Wavelet Scale - Controls the scale of the three wavelets that make up the surface of the water. "
+				 tool_tip="Reflection Wavelet Scale - Controls the scale of the three wavelets that make up the surface of the water."
 				 width="215">
 					Reflection Wavelet Scale
 				</text>
@@ -334,8 +333,8 @@
 				 decimal_digits="1"
 				 follows="left|top"
 				 initial_value="0.7"
+				 label="X"
 				 layout="topleft"
-				 left=""
 				 max_val="10"
 				 name="WaterNormalScaleX"
 				 top_pad="10"
@@ -345,6 +344,7 @@
 				 decimal_digits="1"
 				 follows="left|top"
 				 initial_value="0.7"
+				 label="Y"
 				 layout="topleft"
 				 max_val="10"
 				 name="WaterNormalScaleY"
@@ -355,6 +355,7 @@
 				 decimal_digits="1"
 				 follows="left|top"
 				 initial_value="0.7"
+				 label="Z"
 				 layout="topleft"
 				 max_val="10"
 				 name="WaterNormalScaleZ"
@@ -380,7 +381,7 @@
 				 left="5"
 				 name="HDText"
 				 top_pad="10"
-				 tool_tip="Fresnel Scale - Determines how much light is reflected at different angles; increasing this slider reduces visual reflection effects on the water's surface. "
+				 tool_tip="Fresnel Scale - Determines how much light is reflected at different angles; increasing this slider reduces visual reflection effects on the water's surface."
 				 width="215">
 					Fresnel Scale
 				</text>
@@ -402,7 +403,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="FresnelOffsetText"
-				 tool_tip="Fresnel Offset - Determines how much total light is reflected; increasing this slider increases the amount of light reflected by the water's surface. "
+				 tool_tip="Fresnel Offset - Determines how much total light is reflected; increasing this slider increases the amount of light reflected by the water's surface."
 				 top_pad="10"
 				 width="215">
 					Fresnel Offset
@@ -425,7 +426,7 @@
 				 left="5"
 				 name="DensMultText"
 				 top_pad="5"
-				 tool_tip="Refract Scale Above - Controls the amount of visual refraction you can see from above the water's surface; this is the 'wobbly' effect you can see when you look at an object that is underwater. "
+				 tool_tip="Refract Scale Above - Controls the amount of visual refraction you can see from above the water's surface; this is the 'wobbly' effect you can see when you look at an object that is underwater."
 				 width="215">
 					Refract Scale Above
 				</text>
@@ -440,7 +441,7 @@
 				 name="WaterScaleAbove"
 				 max_val="3"
 				 top_pad="0"
-				 width="245" />
+				 width="245"/>
 				<text
 				 type="string"
 				 length="1"
@@ -476,7 +477,7 @@
 				 left="5"
 				 name="MaxAltText"
 				 top_pad="10"
-				 tool_tip="Blur Multiplier - Controls how waves and reflections are mixed. Increasing this setting increases the amount of distortion you see in reflections as a result of wave activity. "
+				 tool_tip="Blur Multiplier - Controls how waves and reflections are mixed. Increasing this setting increases the amount of distortion you see in reflections as a result of wave activity."
 				 width="215">
 					Blur Multiplier
 				</text>
@@ -522,5 +523,5 @@
 	 layout="topleft"
 	 left_pad="10"
 	 name="cancel"
-	width="120"/>
+	 width="120"/>
 </floater>
