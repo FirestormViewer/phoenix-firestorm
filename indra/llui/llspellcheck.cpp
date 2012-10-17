@@ -391,7 +391,26 @@ void LLSpellChecker::initHunspell(const std::string& dict_language)
 // static
 const std::string LLSpellChecker::getDictionaryAppPath()
 {
-	std::string dict_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, DICT_DIR, "");
+	// <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
+	//std::string dict_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, DICT_DIR, "");
+	std::string dict_path;
+#if LL_WINDOWS
+	// On the windows dev builds, unpackaged, the dictionary files will 
+	// be located in indra/build-vc**/newview/<config>/app_settings.
+	dict_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, DICT_DIR, "");
+
+	if (!LLFile::isdir(dict_path.c_str())) 
+	{
+		dict_path = gDirUtilp->getExpandedFilename(LL_PATH_EXECUTABLE, "app_settings" + gDirUtilp->getDirDelimiter() + DICT_DIR, "");
+	}
+	else
+	{
+		dict_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, DICT_DIR, "");
+	}
+#else			
+	dict_path = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, DICT_DIR, "");
+#endif
+	// </FS:LO>
 	return dict_path;
 }
 

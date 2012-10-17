@@ -58,6 +58,16 @@ class ViewerManifest(LLManifest):
         self.exclude("*.svn*")
         self.path(src="../../scripts/messages/message_template.msg", dst="app_settings/message_template.msg")
         self.path(src="../../etc/message.xml", dst="app_settings/message.xml")
+        
+        # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
+        if self.prefix(src="app_settings"):
+            # ... and the included spell checking dictionaries
+            pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+            if self.prefix(src=pkgdir,dst=""):
+                self.path("dictionaries")
+                self.end_prefix(pkgdir)
+            self.end_prefix("app_settings")
+        # </FS:LO>
 
         if self.is_packaging_viewer():
             if self.prefix(src="app_settings"):
@@ -99,11 +109,13 @@ class ViewerManifest(LLManifest):
                 # ... and the entire windlight directory
                 self.path("windlight")
 
+                # <FS:LO> Copy dictionaries to a place where the viewer can find them if ran from visual studio
                 # ... and the included spell checking dictionaries
-                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
-                if self.prefix(src=pkgdir,dst=""):
-                    self.path("dictionaries")
-                    self.end_prefix(pkgdir)
+#                pkgdir = os.path.join(self.args['build'], os.pardir, 'packages')
+#                if self.prefix(src=pkgdir,dst=""):
+#                    self.path("dictionaries")
+#                    self.end_prefix(pkgdir)
+                # </FS:LO>
                 # include the entire beams directory
                 self.path("beams")
                 self.path("beamsColors")
