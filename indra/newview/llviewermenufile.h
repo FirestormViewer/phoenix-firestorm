@@ -32,7 +32,7 @@
 #include "llinventorytype.h"
 #include "llfilepicker.h"
 
-#include <boost\signals2.hpp> // <FS:CR Threaded Filepickers />
+#include <boost/signals2.hpp> // <FS:CR Threaded Filepickers />
 
 class LLTransactionID;
 
@@ -174,7 +174,7 @@ public:
 class LLGenericLoadFilePicker : public LLLoadFilePickerThread
 {
 public:
-	LLGenericLoadFilePicker::LLGenericLoadFilePicker(LLFilePicker::ELoadFilter filter, boost::function<void (const std::string&)> notify_slot)
+	LLGenericLoadFilePicker(LLFilePicker::ELoadFilter filter, boost::function<void (const std::string&)> notify_slot)
 		: LLLoadFilePickerThread(filter)
 	{
 		mSignal.connect(notify_slot);
@@ -187,7 +187,7 @@ protected:
 class LLGenericSaveFilePicker : public LLSaveFilePickerThread
 {
 public:
-	LLGenericSaveFilePicker::LLGenericSaveFilePicker(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
+	LLGenericSaveFilePicker(LLFilePicker::ESaveFilter filter, const std::string& default_name, boost::function<void (const std::string&)> notify_slot)
 		: LLSaveFilePickerThread(filter, default_name)
 	{
 		mSignal.connect(notify_slot);
@@ -197,8 +197,6 @@ protected:
 	boost::signals2::signal<void (const std::string&)> mSignal;
 };
 
-static void show_floater_callback(const std::string& floater, const std::string& filename);
-static void show_floater_anim_callback(const std::string& filename);
 // <FS:CR Threaded Filepickers>
 
 #endif

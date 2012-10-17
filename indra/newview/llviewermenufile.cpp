@@ -395,8 +395,7 @@ const std::string upload_pick(void* data)
 // <FS:CR Threaded Filepickers>
 #endif
 
-//static
-void show_floater_callback(const std::string& floater, const std::string& filename)
+static void show_floater_callback(const std::string& floater, const std::string& filename)
 {
 	if (!filename.empty() && !floater.empty())
 	{
@@ -404,8 +403,7 @@ void show_floater_callback(const std::string& floater, const std::string& filena
 	}
 }
 
-//static
-void show_floater_anim_callback(const std::string& filename)
+static void show_floater_anim_callback(const std::string& filename)
 {
 	if (!filename.empty())
 	{
