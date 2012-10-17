@@ -112,6 +112,10 @@ LLNearbyChatControl::LLNearbyChatControl(const LLNearbyChatControl::Params& p) :
 	setIgnoreTab( TRUE );
 	setReplaceNewlinesWithSpaces( FALSE );
 	setPassDelete( TRUE );
+	setFont(LLViewerChat::getChatFont());
+
+	// Register for font change notifications
+	LLViewerChat::setFontChangedCallback(boost::bind(&LLNearbyChatControl::setFont, this, _1));
 }
 
 LLNearbyChatControl::~LLNearbyChatControl()
