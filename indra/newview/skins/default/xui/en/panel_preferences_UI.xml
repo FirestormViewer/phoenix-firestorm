@@ -751,7 +751,7 @@
              name="tt_item6"
              value="fonts_roboto.xml" />
 			<combo_box.item
-             label="OpenDyslexia"
+             label="OpenDyslexic"
              name="tt_item6"
              value="fonts_dyslexia.xml" />
         </combo_box>
