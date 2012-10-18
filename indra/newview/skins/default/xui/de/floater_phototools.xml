@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<floater title="Phototools" name="phototools">
+	<tab_container name="tabs">
+		<panel name="EnvironmentTab" label="WL">
+			<panel name="PT_WL_Settings">
+				<text name="T_WL_Settings">
+					Windlight-Einstellungen
+				</text>
+			</panel>
+
+			<panel name="P_WL_Settings">
+				<check_box name="UseLightShaders1" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
+			</panel>
+
+			<panel name="P_WL_Sky_Water">
+				<text name="WL Sky" tool_tip="Windlight-Voreinstellungen für den Himmel.">
+					Himmel
+				</text>
+				<text name="WL Water" tool_tip="Windlight-Voreinstellungen für Wasser.">
+					Wasser
+				</text>
+			</panel>
+			
+			<panel name="P_Sun">
+				<icon name="SkyDayCycle" tool_tip="Ändert die Tageszeit. HINWEIS: HIERDURCH WIRD ÜBLICHERWEISE DIE WINDLIGHT-VOREINSTELLUNG AUF STANDARD ZURÜCKGESETZT! Um die Position der Sonne für eine spezifische Voreinstellung zu ändern, „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ auswählen."/>
+				<multi_slider name="WLSunPos" tool_tip="Diese Funktion funktioniert eventuell nicht korrekt. In diesem Fall „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ verwenden."/>
+				<button name="UseRegionWL" tool_tip="Windlight-Optionen auf Regionsstandard zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Q_Windlights">
+				<text name="T_Q_Windlights">
+					Standard-Windlights
+				</text>
+				<view_border name="horiz_separator1" width="110"/>
+				<button name="Sunrise" label="Sonnenaufgang" width="110"/>
+				<button name="Noon" label="Mittag" width="110"/>
+				<button name="Sunset" label="Sonnenuntergang" width="110"/>
+				<button name="Midnight" label="Mitternacht" width="110"/>
+				<button name="Revert to Region Default" label="Grundbesitzzeit" width="110"/>
+			</panel>
+			
+			<panel name="P_WL_Presets">
+				<text name="T_WL_Presets" tool_tip="Einen der nachfolgenden Button klicken, um eine neue Voreinstellung zu erzeugen oder eine existierende zu bearbeiten.">
+					WL-Voreinstellungen
+				</text>
+				<button name="new_sky_preset" label="Neuer Himmel"/>
+				<button name="edit_sky_preset" label="Himmel bearbeiten"/>
+				<button name="new_water_preset" label="Neues Wasser"/>
+				<button name="edit_water_preset" label="Wasser bearbeiten"/>
+			</panel>
+
+			<panel name="P_W_Reflections">
+				<text name="T_W_Reflections">
+					Einstellungen Wasser-Reflektionen
+				</text>
+			</panel>
+
+			<panel name="P_W_R_Types">
+				<text name="T_W_R_Types" tool_tip="Legt fest, was in den Wasser-Reflektionen sichtbar ist.">
+					Typ
+				</text>
+				<combo_box name="Reflections">
+					<combo_box.item label="Minimal" name="0"/>
+					<combo_box.item label="Terrain und Bäume" name="1"/>
+					<combo_box.item label="Alle statischen Objekte" name="2"/>
+					<combo_box.item label="Alle Avatare und Objekte" name="3"/>
+					<combo_box.item label="Alles" name="4"/>
+				</combo_box>
+			</panel>
+		
+			<panel name="P_R_Res">
+				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest. Damit Änderungen wirksam werden, muss „Einfache Shader“ aus- und wieder eingeschaltet werden. Falls eine Qualität von „Sehr gut“ oder höher verwendet wird, muss „Licht und Schatten“ aktiviert sein (siehe Reiter „Licht“).">
+					Qualität
+				</text>
+				<combo_box name="ReflectionRescombo">
+					<combo_box.item label="Annehmbar" name="0"/>
+					<combo_box.item label="Gut" name="1"/>
+					<combo_box.item label="Sehr gut                   - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="2"/>
+					<combo_box.item label="Exzellent                  - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="3"/>
+					<combo_box.item label="Überragend             - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="4"/>
+					<combo_box.item label="Lebensecht             - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="5"/>
+				</combo_box>
+				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein. Falls der Wert für die Qualität oben geändert wurde, muss diese Option aus- und wieder eingeschaltet werden, damit die Änderungen wirksam werden."/>
+				<check_box label="Transparentes Wasser" name="TransparentWater" tool_tip="Stellt Wasser transparent dar. Falls diese Einstellung deaktiert ist, wird Wasser undurchsichtig und mit einer einfachen Textur versehen dargestellt."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Lighting" label="Licht">
+			<panel name="PT_Light_Shadows">
+				<text name="T_Light_Shadows">
+					Einstellungen Licht und Schatten
+				</text>
+			</panel>
+
+			<panel name="P_L_S_Settings">
+				<check_box label="Licht und Schatten aktivieren" name="UseLightShaders1" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
+				<check_box label="Alle Lokalen Lichtquellen aktivieren" name="LocalLights" tool_tip="Diese Einstellung aktiviert alle lokalen Lichtquellen innerhalb der Welt. Wird sie deaktiviert, wird weiterhin das von Sonne und Mond ausgestrahlte Licht angezeigt. Nützlich, falls lokale Lichtquellen nicht und nur noch von Sonne und Mond angezeigt werden soll."/>
+				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
+			</panel>
+
+			<panel name="P_Shadows">
+				<text name="T_Shadow_Types" tool_tip="Diese Einstellung hat nur Einfluss auf Schatten, die von Lichtquellen erzeugt werden. Die Lichter funktionieren ansonsten ganz normal. Punktuelle Beleuchtung (Lichter, die keine Projektion aktiviert haben) erzeugt immer eine Art von Schatten, werfen diesen aber auf keine Oberfläche. Es ist zu beachten, dass unabhängig von der gewählten Einstellung Texturen, die von Projektoren ausgehen, weiterhin aktiviert sind.">
+					Schatten- Typen
+				</text>
+				<combo_box name="ShadowDetail">
+					<combo_box.item label="Keine" name="0"/>
+					<combo_box.item label="Sonne/Mond" name="1"/>
+					<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
+				</combo_box>
+			</panel>		
+
+			<panel name="P_Shadow_Res">
+				<text name="T_Shadow_Res" tool_tip="Schatten-Qualität: Eine besonders wichtige Einstellung. Sie legt die Qualität der Schatten fest. Zudem ist sie sehr recheninstensiv und beansprucht den Computer dementsprechend. Sofern kein Shooting stattfindet, sollte dieser Wert möglichst klein sein. Während den Vorbereitungen zu einem Shooting empfiehlt sich, den Wert auf 1.0 zu setzen. Anschließend den Regler langsam nach rechts bewegen, um den Wert zu erhöhen. Dabei sollte die Framerate im Auge behalten werden. Es ist hilfreich, das Statistik-Fenster hierfür zu aktivieren. HINWEIS: Wird die Einstellung zu hoch gewählt oder zu schnell bewegt, kann dies zum Absturz des Viewers führen!">
+					Sch.Qual.
+				</text>
+				<button name="Reset_Shadow_Res" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Blur_Size" tool_tip="Je höher der Wert ist, desto weicher werden die Schattenränder. Ein Wert von 0 erzeugt die höchstmögliche Schärfe. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
+					Sch.Unsch.
+				</text>
+				<button name="Blur_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+		
+				<text name="T_Blur_Dist" tool_tip="Legt den Punkt fest, ab dem Schatten relativ zur Kamera zu verschwimmen beginnen. Je kleiner der Wert, desto näher an der Kamera beginnen die Schatten unscharf zu werden. HINWEIS: Damit diese Einstellung eine Auswirkung hat, muss „Ambient Occlusion“ aktiviert sein.">
+					Unsch.Dist.
+				</text>
+				<button name="Blur_Dist_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+						
+				<text name="T_FOV_Cutoff" tool_tip="Legt den Punkt im Sichtbereich fest, an dem der Viewer zwischen orthogonaler und perspektivischer Projektion wechselt. Falls Schatten zackig und zerklüftet aussehen, sollte diese Einstellung justiert werden. Zusätzlich kann das justieren der XYZ-Werte für die Debug-Einstellung „RenderShadowSplitExponent“ äußerst hilfreich sein.">
+					FOV Cutoff
+				</text>
+				<button name="FOV_Cutoff_Reset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+		
+			<panel name="P_Light">
+				<check_box label="Bounding Boxes für Lichtquellen anzeigen" name="Lights"/>
+				<check_box label="Lichtradius für ausgewählte Lichter anzeigen" name="Show Light Radius for Selection"/>
+			</panel>
+
+			<panel name="P_Ambient_Occlusion">
+				<text name="T_Ambient_Occlusion">
+					Einstellungen Ambient Occlusion
+				</text>
+			</panel>
+
+			<panel name="P_Amb_Occ_Settings">
+				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="ssaolabel" tool_tip="Der Effekt ist in den meisten Szenen eher subtil und sorgt für eine verbesserte Tiefenwahrnehmung in Bereichen mit Licht und Schatten, zum Beispiel in Räumen. Größerer Einfluss kann bei komplexen und detaillierten Objekten mit Falten und Knittern wahrgenommen werden (zum Beispiel Dinosaurier-Sklelette). Der Effekt selbst manifestiert sich in leicht dunkleren Bereichen an den Kanten von Objekten, besonders solchen, die eng von anderen Objekten umgeben sind. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu verbessern."/>
+			</panel>
+		
+			<panel name="P_Scale">
+				<text name="T_Scale" tool_tip="Legt die Sampling-Region fest, wobei größere Region genauer sind. Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+					Skalierung
+				</text>
+				<button name="Reset_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Max_Scale" tool_tip="Legt den maximalen Bildschirmradius fest, von dem das Sample genommen wird, um Cache-Fehler der Grafikkarte und Performance-Einbußen zu verhindern. Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+					Max. Skal.
+				</text>
+				<button name="Reset_Max_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Scaling_Factor" tool_tip="Skalierungsfaktor für den Effekt (höherer Wert = dunkler). Es kann hilfreich sein, hier einen hohen Wert einzustellen und anschließend mit etwas Schattenunschärfe den Effekt abzumildern.">
+					Faktor
+				</text>
+				<button name="Reset_Scaling_Factor" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Specular_Highlight">
+				<text name="T_Specular_Highlight" tool_tip="Ein Specular Highlight ist ein heller Lichtpunkt, der auf glänzenden Objekten erscheint, wenn diese beleuchtet werden.">
+					Einstellungen Specular Highlight
+				</text>
+			</panel>
+
+			<panel name="P_Spec_Highlight_Settings">
+				<text name="T_Smoothness" tool_tip="Glätte (Specular-Exponent) steuert die offensichtliche Glätte auf der Oberfläche.">
+					Glätte
+				</text>
+				<button name="Reset_Smoothness" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+						
+				<text name="T_Smooth_Res" tool_tip="Justiert die Qualität des Specular Mappings (SpecularResX).">
+					Qualität
+				</text>
+				<button name="Reset_Smooth_Res" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+		</panel>
+
+		<panel name="P_DoF_Glow" label="DoF/Ltn">
+			<panel name="PT_DoF_Glow">
+				<text name="T_DoF">
+					Einstellungen Schärfentiefe (DoF)
+				</text>
+			</panel>
+
+			<panel name="P_DoF_Settings">
+				<check_box label="Schärfentiefe aktivieren" name="UseDepthofField" tool_tip="Diese Einstellung aktiviert die Schärfentiefe, die die Ausdehnung des Bildausschnitts festlegt, der noch scharf dargestellt wird. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu erhöhen. Falls diese Funktion nicht aktiviert werden kann oder kein Effekt sichtbar ist, muss „Licht und Schatten“ auf dem Reiter „Licht“ aktiviert werden."/>
+				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="MIC_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
+			</panel>
+
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="In der echten Welt handelt es sich hierbei um ein Zoom-Feature. Es ändert den Sichtwinkel innerhalb des Viewer-Fensters. Er hat dieselbe Funktion wie das Drücken von Strg-0 oder Strg-8. HINWEIS: Diese Funktion funktioniert nicht, wenn Flycam aktiviert ist (3D SpaceNavigator).">
+					Sichtwinkel
+				</text>
+				<button name="Reset_Zoom" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_FOV" tool_tip="Sichtfeld (Grad): Definitiert das Sichtfeld, dass für die Simulation der Schärfentiefe verwendet werden soll. Es sollte am besten auf denselben Wert wie das des Viewers gesetzt werden.">
+					Sichtfeld
+				</text>
+				<button name="Reset_FOV" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_F_Number" tool_tip="Dieser Wert definiert die Blendenöffnung der Linse. Je kleiner der Wert, desto kleiner der Effekt der Schärfentiefe.">
+					k-Wert
+				</text>
+				<button name="Reset_F_Number" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Focal_Length" tool_tip="Brennweite (mm): Dieser Wert definiert die Brennweite der Linse für den Effekt der Schärfentiefe. Höhere Werte sorgen für einen engeren Bereich an Schärfentiefe.">
+					Brennweite
+				</text>
+				<button name="Reset_Focal_Length" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Foc_Time" tool_tip="Fokus-Übergangszeit: Legt die Zeit in Sekunden fest, der der Viewer benötigt, den Fokus von einem Objekt auf ein anders zu setzen.">
+					Fokus-Zeit
+				</text>
+				<button name="Reset_Foc_Time" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+						
+				<text name="T_CoC" tool_tip="Circle of Confusion: Dieses ist eine SEHR WICHTIGE EINSTELLUNG. Sie legt die Stärke der Unschärfe fest. Es ändert nicht den Bereich der Schärfentiefe, sondern wie unscharf Objekte außerhalb des Bereichs dargestellt werden. Über die Auswahlbox können auch negative Werte für interessante Effekt ausgewählt werden.">
+					CoC
+				</text>
+				<button name="Reset_CoC" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Resolution" tool_tip="Qualität: Legt die Qualität für den Effekt der Schärfentiefe fest. Für die Nutzung außerhalb der Fotografie ist ein Wert von 0.25 gut. Zur Vorbereitung von Shootings kann ein Wert von 0.50 oder 0.70 verwendet werden. Für hochwertige Bilder ist ein Wert von 1.00 am besten. Höhere Werte reduzieren die Framerate! Über die Auswahlbox können auch negative Werte für interessante Effekt ausgewählt werden.">
+					Qualität
+				</text>
+				<button name="Reset_Resolution" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Aspect_Ratio" tool_tip="Hierbei handelt es sich um das Seiteneffekt der Kamera. Zum Beispiel hat eine 35mm-Kamera ein Seitenverhältnis von 3:2 (1.5) For example, a 35mm camera has an aspect ratio of 3:2 (1.5). Der Viewer nutzt diesen Wert als Referenz, wie das Sichtfeld und Brennweite ausgehend von der Fenstergröße angepasst werden müssen. (ANSCHEINEND OHNE FUNKTION!)">
+					Seitenverh.
+				</text>
+				<button name="Reset_Aspect_Ratio" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Glow_Settings">
+				<text name="T_Glow_Settings">
+					Einstellungen „Leuchten“
+				</text>
+			</panel>
+
+			<panel name="P_Glow_Quality">
+				<text name="T_Glow_Quality" tool_tip="Legt die Qualität von Leucht-Effekt fest, wobei ein höherer Wert eine höhere Qualität bedeutet. Zwischen 8 und 10 gibt es kaum sichtbare Unterschiede.">
+					Qualität
+				</text>
+				<button name="Reset_Glow_Quality" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Glow_Iterations">
+				<text name="T_Glow_Iterations" tool_tip="Anzahl an Iterationen/Wiederholungen des Leuchtens (Höherer Wert = ausgedehnter, weicher und etwas langsamer).">
+					Iterationen
+				</text>
+				<button name="Reset_Glow_Iterations" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Glow_Strength" tool_tip="Additive Stärke des Leuchtens. Sehr kleine Werte sind notwendig, um diesen Effekt zu beobachten.">
+					Stärke
+				</text>
+				<button name="Reset_Glow_Strength" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Luminance" tool_tip="Minimale Leuchtkraft-Intensität, die notwendig ist, damit ein Objekt als hell genug angesehen wird um zu leuchten.">
+					Leuchtkraft
+				</text>
+				<button name="Reset_Luminance" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Warmth" tool_tip="Menge an Wärme-Extraktion, die verwendet werden soll (im Vergleich zur Leuchtkraft-Extraktion). 0 = Kälte, 1.0 = Wärme. HAT OFTMALS WENIG ODER KEINEN EFFEKT!">
+					Wärme
+				</text>
+				<button name="Reset_Warmth" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Glow_Width" tool_tip="Größe des Leucht-Samples. Höherer Wert = breiteres und sanfteres Leuchten, aber eventuell pixeliger.">
+					Breite
+				</text>
+				<button name="Reset_Glow_Width" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Alpha" tool_tip="Maximale Helligkeit, die das Leuchten annehmen darf.">
+					Alpha
+				</text>
+				<button name="Reset_Alpha" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+		</panel>
+
+		<panel name="P_General" label="Alg.">
+			<panel name="PT_General">
+				<text name="T_General">
+					Allgemeine Rendering-Einstellungen
+				</text>
+			</panel>
+
+			<panel name="P_General_Settings">
+				<text name="T_Draw_Distance" tool_tip="Legt die größte Distanz, bis zu der der Viewer Objekte darstellt. Höhere Werte verringern die Framerate!">
+					Draw Dist.
+				</text>
+				<button name="Reset_Draw_Distance" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Avi_Count" tool_tip="Maximale Anzahl an Avataren, die gleichzeitig dargestellt werden. Hilfreich in Situationen, in denen zu viele Avatare die Framerate zu stark verringern.">
+					Max. Avat.
+				</text>
+				<button name="Reset_Avi_Count" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Avi_Detail" tool_tip="Legt die Darstellungsqualität von Avataren fest. Höher bedeutet bessere Qualität!">
+					Avat.Detail
+				</text>
+				<button name="Reset_Avi_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Avi_Physics" tool_tip="Steuert das Detaillevel der Avatar-Physik (zum Beispiel Brust-Physik). Höher ist besser.">
+					Ava.-Physik
+				</text>
+				<button name="Reset_Avi_Physics" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Particle_Cnt" tool_tip="Legt die maximale Anzahl an Partikeln fest, die dargestellt werden.">
+					Max. Part.
+				</text>
+				<button name="Reset_Particle_Cnt" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Terrain_Scale" tool_tip="Legt die Qualitöt der Standard-Bodentexturen (Terrain) fest.">
+					Terr.-Skal.
+				</text>
+				<button name="Reset_Terrain_Scale" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Terrain_Quality" tool_tip="Legt die Qualität des Terrains fest. Höhere Werte bedeuten detaillierteres Terrain in der Entfernung.">
+					Terr.-Qual.
+				</text>
+				<button name="Reset_Terrain_Quality" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Object_Detail" tool_tip="Legt den Detailgrad von Objekten fest. Höhere Werte erzeugen einen höheren Detailgrad von Objekten.">
+					Obj.-Detail.
+				</text>
+				<button name="Reset_Object_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Flexi_Detail" tool_tip="Legt den Detailgrad von flexiblen Objekten fest. Ein höherer Wert bedeutet einen höheren Detailgrad.">
+					Flexiprims
+				</text>
+				<button name="Reset_Flexi_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Tree_Detail" tool_tip="Legt den Detailgrad der Vegetation fest. Ein höherer Wert bedeutet einen höheren Detailgrad.">
+					Baum-Det.
+				</text>
+				<button name="Reset_Tree_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Sky_Detail" tool_tip="Legt den Detailgrad des Windlight-Himmels fest. Niedrigere Werte bedeuten bessere Performance, dafür aber nicht so schöne Himmel.">
+					Him-Det.
+				</text>
+				<button name="Reset_Sky_Detail" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Av_Floor_Offset" tool_tip="Legt fest, wie weit der eigene Avatar oberhalb des Bodens steht. Hilfreich, falls der Avatar über dem Boden schwebt oder in ihm steckt.">
+					Avat.-Höhenabstand
+				</text>
+				<button name="Reset_Av_Floor_Offset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Render">
+				<check_box label="Draw Distance aktivieren" name="UseFarClip" tool_tip="Aktiviert die Draw Distance. Wenn diese Einstellung deaktiviert wird, stellt der Viewer Objekte auch außerhalb der Draw Distance dar."/>
+				<check_box label="Detaillevel dynamisch anpassen" name="RednerLod1" tool_tip="Diese Einstellung bewirkt, dass der Viewer dynamisch das Detaillevel von Objekten anpasst, wenn der Abstand zu einem Objekt verändert wird. Hierdurch wird die Performance verbessert, allerdings kann auch die Darstellungsqualität von Objekten schlechter werden."/>
+				<check_box label="Nur Objekte im Sichtber. der Kamera rendern" name="UssOcclusion1" tool_tip="Falls diese Einstellung aktiviert wird, werden nur Objekte durch den Viewer verarbeitet/gerendered, die im aktuellen Sichtbereich der Kamera und die nicht durch andere Objekte verdeckt sind. Hierdurch wird normalerweise eine bessere Performance erreicht. Manchmal kann die Performance allerdings auch schlechter werden, wenn in der aktuellen Szenerie/Region wenig Objekte vorhanden sind. Ausprobieren, um diese Einstellung einen Vorteil bringt!"/>
+				<check_box label="Anisotropische Filterung" name="Anisotropic" tool_tip="Diese Einstellung erzeugt knusprigere Texturen."/>
+				<check_box label="Partikel von anderen Avataren anzeigen" name="Render Attached Particle" tool_tip="Falls diese Einstellung aktiviert ist, werden alle Arten von Partikeln angezeigt, die von Avataren ausgehen."/>
+			</panel>
+
+			<panel name="P_Anti-aliasing">
+				<text name="T_Anti-aliasing" tool_tip="Legt fest, wie scharf und weich die Kanten von Objekten dargestellt werden. Auf High-End-Grafikkarten haben höhere Werte praktisch KEINEN Einfluss auf die Performance, auf Low-End-Grafikkarten kann ein höherer Wert die Performance verschlechtern.">
+					Anti-Aliasing
+				</text>
+				<combo_box name="fsaa">
+					<combo_box.item label="Deaktiviert (Rauere Kanten)" name="FSAADisabled"/>
+					<combo_box.item label="2x (Weiche Kanten)" name="2x"/>
+					<combo_box.item label="4x (Weichere Kanten)" name="4x"/>
+					<combo_box.item label="8x (Noch weicher)" name="8x"/>
+					<combo_box.item label="16x (Am weichsten)" name="16x"/>
+				</combo_box>
+			</panel>
+
+			<panel name="P_Texture_Bumpiness">
+				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest. Die Einstellung „Einfache Shader“ muss aus- und wieder eingeschaltet werden, damit die Änderung wirksam wird.">
+					Textur-Holprigkeit
+				</text>
+				<combo_box name="BumpStrengthSelection">
+					<combo_box.item label="Sehr fein (sehr schwach)" name="0"/>
+					<combo_box.item label="Feiner (schwächer)" name="1"/>
+					<combo_box.item label="Fein (schwach)" name="2"/>
+					<combo_box.item label="Normal" name="3"/>
+					<combo_box.item label="Rau (stärker)" name="4"/>
+					<combo_box.item label="Rauer (sehr stark)" name="5"/>
+				</combo_box>
+				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders1" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Licht und Schatten, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird. Falls die Textur-Holprigkeit geändert wurde, muss diese Einstellung aus- und wieder eingeschaltet werden."/>
+			</panel>
+		</panel>
+
+		<panel name="P_Aids" label="Hilfen">
+			<panel name="PT_Aids">
+				<text name="T_Aids">
+					Benutzerschnittstellen-Hilfen
+				</text>
+			</panel>
+			
+			<check_box label="Bounding Boxes für Objekte anzeigen" name="Bounding Boxes"/>
+			<check_box label="Statistiken-Fenster anzeigen" name="Statistics Bar"/>
+			<check_box label="Detaillierte Kamerapositionsdaten anzeigen" name="Camera"/>
+			<check_box label="Detaillierte Texturlade-Informationen anzeig." name="Texture Console"/>
+			<check_box label="RGB-I-Farbwerte unter Mauszeiger anzeigen" name="Show Color Under Cursor"/>
+			<check_box label="Transparente Objekte in rot hervorheben" name="Highlight Transparent"/>
+			<check_box label="Szene als Wireframe darstellen" name="Wireframe"/>
+			<check_box label="Angehängte HUD-Objekte anzeigen" name="Show HUD Attachments"/>
+			<check_box label="Avatar verlangsamen (nur in eigenem Viewer)" name="Slow Motion Animations"/>
+			<button label="Aussehen aktualisieren (Rebake)" name="Rebake Texture"/>
+			<button label="Viewer-Fenstergröße festlegen..." name="Set Window Size..."/>
+			<button label="Debug-Einstellungen anzeigen" name="Debug Settings"/>
+
+			<panel name="P_Quick_Stats">
+				<text name="T_Quick_Stats"
+				 tool_tip="Hier werden einige nützliche Informationen zur Performance dargestellt. Werte können durch anklicken ein- bzw. ausgeklappt werden.">
+					Statistiken
+				</text>
+			</panel>
+			
+			<scroll_container name="statistics_scroll">
+				<container_view name="statistics_view">
+					<stat_view name="basic">
+						<stat_bar name="fps" label="Bilder pro Sekunde" tool_tip="FPS: Wie oft die Szene pro Sekunde neu angezeigt wird. Höhere Werte sind besser. Eine Framerate zwischen 12 und 15 ist üblich für Animationen, 24 ist Standard für Kinofilme und 25 (PAL)/30 (NTSC) für Fernsehen."/>
+						<stat_bar name="bandwidth" label="Bandbreite" tool_tip="Zeigt an, wie wiele Daten zwischen den Computer und der Virtuellen Welt übertragen werden. Der Wert hängt unter anderem davon ab, wie hoch die maximale Bandbreite gesetzt wurde, wo man sich innerhalb der Virtuellen Welt befindet, was gerade in der Szenerie passiert und ob Daten geladen werden (Texturen, Objekte, etc.). Falls die Bandbreite 0kbps beträgt, kann eventuell ein Problem vorliegen (zum Beispiel wurde die Verbindung getrennt)."/>
+						<stat_bar name="ktrisframe" label="KTris Drawn per Frame" tool_tip="KTris Drawn (pro Frame): Computergenerierte 3D-Objekte bestehen aus Dreiecken. Dieser Wert gibt an, wie viele dieser Dreiecke („tris“) in jedem Frame innerhalb der aktuellen Szenerie gezeichnet wurden."/>
+						<stat_bar name="ktrissec" label="KTris Drawn per Sec" tool_tip="KTris Drawn (pro Sekunde): Computergenerierte 3D-Objekte bestehen aus Dreiecken. Dieser Wert gibt an, wie viele dieser Dreiecke („tris“) pro Sekunde innerhalb der aktuellen Szenerie gezeichnet wurden."/>
+						<stat_bar name="objs" label="Anzahl Objekte" tool_tip="Die Anzahl an Objekten in der aktuellen Ansicht: Primitiva, Avatare, Terrain-Stücke, Partikel-Gruppen und Wasser-Stücke."/>
+						<stat_bar name="newobjs" label="Neue Objekte" tool_tip="Die Anzahl an neuen Objekte, die pro Sekunde heruntergeladen werden."/>
+						<stat_bar name="numimagesstat" label="Anzahl Texturen" tool_tip="Die Anzahl an geladenen Texturen."/>
+					</stat_view>
+				</container_view>
+			</scroll_container>
+		</panel>
+
+		<panel name="P_Cam" label="Kam.">
+			<panel name="PT_Cam">
+				<text name="T_Cam">
+					3D-Maus-(Joystick-)Einstellungen
+				</text>
+			</panel>
+
+			<panel name="P_Cam_Settings">
+				<text name="T_LR_Axis" tool_tip="Legt die Empfindlichkeit für Links/Rechts-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Links/Rechts
+				</text>
+				<button name="Reset_LR_Axis" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_UD_Axis" tool_tip="Legt die Empfindlichkeit für Hoch/Runter-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Hoch/Runter
+				</text>
+				<button name="Reset_UD_Axis" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_IO_Axis" tool_tip="Legt die Empfindlichkeit für Vor/Zurück-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Vor/Zurück
+				</text>
+				<button name="Reset_IO_Axis" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Tilt" tool_tip="Legt die Empfindlichkeit für Neigungs-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Neigung
+				</text>
+				<button name="Reset_IO_Axis" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Spin" tool_tip="Legt die Empfindlichkeit für Gierachsen-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Gierachse
+				</text>
+				<button name="Reset_Spin" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Roll" tool_tip="Legt die Empfindlichkeit für Rollachsen-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Rollachse
+				</text>
+				<button name="Reset_Roll" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Zoom_Speed" tool_tip="Legt die Empfindlichkeit für Zoom-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
+					Zoom
+				</text>
+				<button name="Reset_Zoom_Speed" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+				<text name="T_Feathering" tool_tip="Wird der Regler ganz nach rechts geschoben, wird die Kamera starr und ist direkt über den Joystick kontrollierbar. Wird der Regler nach ganz links geschoben, wird die Kamera träge.">
+					Auslaufen
+				</text>
+				<button name="Reset_Feathering" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+			</panel>
+
+			<panel name="P_Axis_Mapping">
+				<spinner label="Zoom-Achsen-Mapping" name="JoystickAxis6" tool_tip="Legt fest, auf welcher Maus-Achse die die Zoom-Funktion gelegt ist."/>
+				<check_box label="3D-Maus aktivieren" tool_tip="Diese Einstellung aktiviert die 3D-Maus." name="enable_joystick"/>
+				<check_box name="CB_ZoomDirect" label="Zoom-Steuerung aktivieren (siehe Tooltip!)" tool_tip="Damit die Zoom-Steuerung funktioniert, muss „Zoom-Achsen-Mapping“ auf einen Wert größer als 4 gesetzt werden."/>
+				<check_box name="CB_AutoLeveling" label="Automatisch ausrichten (kein Kamera-Rollen)" tool_tip="Falls aktiviert, wird die Kamera automatisch ausgerichtet."/>
+				<check_box name="CB_Move_Avatar" label="3D-Maus zur Avatarsteuerung verwenden" tool_tip="Falls aktiviert, wird der Avatar mit der Maus gesteuert."/>
+				<check_box name="CB_Move_Objects" label="3D-Maus zur Objektbewegung verwenden" tool_tip="Falls aktiviert, kann die 3D-Maus dazu benutzt werden, beim Bauen und Editieren Objekte zu bewegen."/>
+				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="CAM_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
+			</panel>
+
+			<panel name="P_Viewer_Cam_Menu">
+				<text name="PT_Viewer_Cam_Menu">
+					Viewer-Kameramenü-Einstellungen
+				</text>
+			</panel>
+
+			<panel name="P_Viewer_Cam_Menu_Settings">
+				<tab_container name="TC_Viewer_Cam_Menu_Settings">
+					<panel name="CamMov" label="Kamera-Bewegung">
+						<panel name="P_Cam2">
+							<text name="T_Zoom2" tool_tip="In der echten Welt handelt es sich hierbei um ein Zoom-Feature. Es ändert den Sichtwinkel innerhalb des Viewer-Fensters. Er hat dieselbe Funktion wie das Drücken von Strg-0 oder Strg-8. HINWEIS: Diese Funktion funktioniert nicht, wenn Flycam aktiviert ist (3D SpaceNavigator).">
+								Sichtwinkel
+							</text>
+							<button name="Reset_Zoom2" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+							<text name="T_Zoom_Speed2" tool_tip="Legt fest, wie schnell/langsam die Kamera hinein- und herauszoomt. Höhere Werte erzeugen einen langsameren und weicheren Zoom.">
+								Übergangszeit
+							</text>
+							<button name="Reset_Zoom_Speed2" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+							<text name="T_Camera_Lag" tool_tip="Legt fest, wie stark die Kamera der Avatarbewegung hinterherhinkt (0 = keine Verzögerung, 30 = Avatargeschwindigkeit).">
+								Verzögerung
+							</text>
+							<button name="Reset_Camera_Lag" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+							<text name="T_Camera_Offset" tool_tip="Legt fest, wie weit die Kamera vom Standard-Standpunkt entfernt ist.">
+								Abstand
+							</text>
+							<button name="Reset_Camera_Offset" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+
+							<text name="T_Cam_Smoothing" tool_tip="Legt fest, wie weich die Kamerabewegung startet und stoppt. Höhere Werte bedeuten eine weichere (und somit langsamere) Bewegung.">
+								Glättung
+							</text>
+							<button name="Reset_Cam_Smoothing" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+						</panel>
+					</panel>
+
+					<panel name="P_Mouse" label="Maus">
+						<panel name="P_Mouse_Settings">
+							<text name="T_Mouse_Sens" tool_tip="Legt die Empfindlichkeit der Maus im Mouselook-Modus fest.">
+								Empfindlichkeit
+							</text>
+							<button name="Reset_Mouse_Sens" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+							<check_box label="Avatar und Anhänge in Mouselook anzeigen" tool_tip="Zeigt den Avatar und Anhänge unterhalb des Halses im Mouselook-Modus an. Standardwert is AUS." name="first_person_avatar_visible"/>
+							<check_box label="Weiche Mouselook-Bewegungen" tool_tip="Glättet die Bewegungen der Maus im Mouselook-Modus." name="MouseSmooth"/>
+						</panel>
+					</panel>
+
+					<panel name="P_Misc" label="Sonstiges">
+						<panel name="P_Misc_Settings">
+							<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+							<check_box label="Kameraposition nach Teleport zurücksetzen" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+							<check_box label="Minimale Zoomdistanz aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
+							<check_box label="Kamerabewegung durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
+						</panel>
+					</panel>
+				</tab_container>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>
