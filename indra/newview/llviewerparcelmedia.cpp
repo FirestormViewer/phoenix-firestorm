@@ -49,6 +49,7 @@
 #include "llsdserialize.h"
 
 #include "lltrans.h"
+#include "llvieweraudio.h"
 
 // Static Variables
 
@@ -1125,8 +1126,7 @@ bool callback_enable_audio_filter(const LLSD& notification, const LLSD& response
 		gSavedSettings.setBOOL("MediaEnableFilter", FALSE);
 		if (gAudiop != NULL)
 		{
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 	}
 	return false;
@@ -1153,8 +1153,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 			// The music hasn't changed, so keep playing if we were.
 			if ((gAudiop != NULL) && sAudioLastActionPlay)
 			{
-				gAudiop->startInternetStream(media_url);
-				//LLOverlayBar::audioFilterPlay();
+				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 			}
 			sMusicQueueEmpty = true;
 			return;
@@ -1199,8 +1198,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		// Treat it as allowed; it'll get stopped elsewhere
 		if (gAudiop != NULL)
 		{
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		return;
 	}
@@ -1213,8 +1211,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		{
 			if (gAudiop != NULL)
 			{
-				gAudiop->startInternetStream(media_url);
-				//LLOverlayBar::audioFilterPlay();
+				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 			}
 		}
 		return;
@@ -1253,8 +1250,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		if (gAudiop != NULL)
 		{
 			llinfos << "Audio filter: URL allowed by whitelist" << llendl;
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		sAudioLastActionPlay = true;
 	}
@@ -1268,7 +1264,7 @@ void LLViewerParcelMedia::filterAudioUrl(std::string media_url)
 		LLSD args;
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
-		//LLOverlayBar::audioFilterStop();
+		LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 		sAudioLastActionPlay = false;
 	}
 	else
@@ -1326,8 +1322,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
@@ -1336,8 +1331,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
-			gAudiop->stopInternetStream();
-			//LLOverlayBar::audioFilterStop();
+			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
@@ -1355,8 +1349,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
@@ -1374,8 +1367,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
-			gAudiop->stopInternetStream();
-			//LLOverlayBar::audioFilterStop();
+			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
@@ -1393,8 +1385,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = media_url;
-			gAudiop->startInternetStream(media_url);
-			//LLOverlayBar::audioFilterPlay();
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(media_url);
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = true;
 	}
@@ -1412,8 +1403,7 @@ void callback_audio_alert2(const LLSD &notification, const LLSD &response, std::
 		if (gAudiop != NULL)
 		{
 			LLViewerParcelMedia::sCurrentMusic = "";
-			gAudiop->stopInternetStream();
-			//LLOverlayBar::audioFilterStop();
+			LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 		}
 		LLViewerParcelMedia::sAudioLastActionPlay = false;
 	}
