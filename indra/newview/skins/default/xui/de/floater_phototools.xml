@@ -10,6 +10,7 @@
 			</panel>
 
 			<panel name="P_WL_Settings">
+				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Licht und Schatten, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird."/>
 				<check_box name="UseLightShaders1" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
 			</panel>
 
@@ -70,7 +71,7 @@
 			</panel>
 		
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest. Damit Änderungen wirksam werden, muss „Einfache Shader“ aus- und wieder eingeschaltet werden. Falls eine Qualität von „Sehr gut“ oder höher verwendet wird, muss „Licht und Schatten“ aktiviert sein (siehe Reiter „Licht“).">
+				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest. Falls eine Qualität von „Sehr gut“ oder höher verwendet wird, muss „Licht und Schatten“ aktiviert sein (siehe Reiter „Licht“).">
 					Qualität
 				</text>
 				<combo_box name="ReflectionRescombo">
@@ -81,7 +82,6 @@
 					<combo_box.item label="Überragend             - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="4"/>
 					<combo_box.item label="Lebensecht             - HINWEIS: „Licht und Schatten“ muss aktiviert sein (Reiter „Licht“)" name="5"/>
 				</combo_box>
-				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein. Falls der Wert für die Qualität oben geändert wurde, muss diese Option aus- und wieder eingeschaltet werden, damit die Änderungen wirksam werden."/>
 				<check_box label="Transparentes Wasser" name="TransparentWater" tool_tip="Stellt Wasser transparent dar. Falls diese Einstellung deaktiert ist, wird Wasser undurchsichtig und mit einer einfachen Textur versehen dargestellt."/>
 			</panel>
 		</panel>
@@ -374,7 +374,7 @@
 			</panel>
 
 			<panel name="P_Texture_Bumpiness">
-				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest. Die Einstellung „Einfache Shader“ muss aus- und wieder eingeschaltet werden, damit die Änderung wirksam wird.">
+				<text name="T_Texture_Bumpiness" tool_tip="Legt die Stärke und Qualität von Normal- und Bump-Maps fest.">
 					Textur-Holprigkeit
 				</text>
 				<combo_box name="BumpStrengthSelection">
@@ -385,7 +385,6 @@
 					<combo_box.item label="Rau (stärker)" name="4"/>
 					<combo_box.item label="Rauer (sehr stark)" name="5"/>
 				</combo_box>
-				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders1" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Licht und Schatten, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird. Falls die Textur-Holprigkeit geändert wurde, muss diese Einstellung aus- und wieder eingeschaltet werden."/>
 			</panel>
 		</panel>
 

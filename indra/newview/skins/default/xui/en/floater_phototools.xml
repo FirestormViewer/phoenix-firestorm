@@ -68,9 +68,21 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="30"
+			 height="55"
 			 border_visible="true"
 			 background_visible="true">
+				<check_box
+				 control_name="VertexShaderEnable"
+				 height="16"
+				 initial_value="true"
+				 label="Basic Shaders - Leave ON! (see tool tip!)"
+				 layout="topleft"
+				 left="5"
+				 name="BasicShaders"
+				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
+				 top_pad="10"
+				 width="240">
+				</check_box>
 				<check_box
 				 control_name="WindLightUseAtmosShaders"
 				 enabled_control="VertexShaderEnable"
@@ -83,8 +95,6 @@
 				 top_pad="10"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="110">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable"/>
 				</check_box>
 			</panel>
 
@@ -538,7 +548,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="83"
+			 height="58"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -549,7 +559,7 @@
 				 top_pad="15"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections. In order for the changes to take effect, you must toggle off and on the 'Basic Shaders' check box below. Also, whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Light'.">
+				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Light'.">
 					Resolution
 				</text>
 				<combo_box
@@ -586,21 +596,9 @@
 					 label="Life-Like             - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
 					 name="5"
 					 value="4096"/>
+					<combo_box.commit_callback
+					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 initial_value="true"
-				 label="Basic Shaders  - Leave ON! (see tool tip!)"
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders"
-				 tool_tip="This should ALWAYS be on. When you change the resolution setting above you must turn this box off and on for the change to take effect."
-				 top_pad="10"
-				 width="240">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable"/>
-				</check_box>
 				<check_box
 				 control_name="RenderTransparentWater"
 				 height="16"
@@ -612,8 +610,6 @@
 				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
 				 top_pad="5"
 				 width="240">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable"/>
 				</check_box>
 				<!--slider
 				 control_name="RenderReflectionRes"
@@ -690,8 +686,6 @@
 				 top_pad="10"
 				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
 				 width="240">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable"/>
 				</check_box>
 				<check_box
 				 control_name="RenderLocalLights"
@@ -3224,10 +3218,10 @@
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="12"
+				 top_pad="25"
 				 width="110"
 				 layout="topleft"
-				 tool_tip="Controls the strength and resolution of normal and bump maps. You must toggle to check box below for changes to take effect.">
+				 tool_tip="Controls the strength and resolution of normal and bump maps.">
 					Texture Bumpiness
 				</text>
 				<combo_box
@@ -3264,20 +3258,8 @@
 					 name="5"
 					 value="16"/>
 					<combo_box.commit_callback
-					 function="Pref.QualityPerformance"/>
+					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 follows="left|top"
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 initial_value="true"
-				 label="Basic Shaders - Leave ON! (see tool tip!)"
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders1"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
-				 top_pad="7"
-				 width="230"/>
 			</panel>
 		</panel>
 
