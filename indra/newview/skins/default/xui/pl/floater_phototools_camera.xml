@@ -47,7 +47,7 @@
 					</panel>
 					<panel name="zoom">
 						<joystick_rotate name="cam_rotate_stick" tool_tip="Obróć kamerę wokół punktu skupienia"/>                      
-						<slider_bar name="zoom_slider" tool_tip="Ta opcja po prostu przesuwa kamerę w przód i w tył. UWAGA: To nie ma nic wspólnego z opcją powiększania (zoomowania) z prawdziwego życia! Nie ma żadnego wpływu na pole widzenia (FOV). Użyj suwaka 'Powiększanie', aby uzyskać prawdziwy efekt zoomowania."/>
+						<slider_bar name="zoom_slider" tool_tip="Ta opcja po prostu przesuwa kamerę w przód i w tył. UWAGA: To nie ma nic wspólnego z opcją powiększania (zoomowania) z prawdziwego życia! Nie ma żadnego wpływu na pole widzenia (FOV). Użyj suwaka 'Kąt widzenia', aby uzyskać prawdziwy efekt zoomowania."/>
 						<joystick_track name="cam_track_stick" tool_tip="Poruszaj kamerą w górę, w dół, w lewo i w prawo."/>
 					</panel>
 				</panel>
@@ -66,7 +66,7 @@
 			</panel>
 			<panel name="P_Zoom">
 				<text name="T_Zoom" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpacenNavigator).">
-					Powiększanie
+					Kąt widzenia
 				</text>
 				<button name="Reset_Camera_Angle" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_Zoom_Speed" tool_tip="Kontroluje jak szybko/wolno kamera będzie powiększać i pomniejszać obraz. Wyższe wartości powodują wolniejsze i gładsze powiększanie.">

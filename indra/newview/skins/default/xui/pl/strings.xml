@@ -4741,7 +4741,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Otwiera narzędzia regionu/majątku (ALT+R)
 	</string>
 	<string name="Command_Groundsit_Tooltip">
-		Włącza lub wyłącza tryb siedzenia na ziemi (CTRL+ALT+S)
+		Włącza lub wyłącza tryb siedzenia na ziemi (CTRL+ALT+K)
 	</string>
 	<string name="Command_Sound_Explorer_Tooltip">
 		Otwiera eksploratora dźwięków

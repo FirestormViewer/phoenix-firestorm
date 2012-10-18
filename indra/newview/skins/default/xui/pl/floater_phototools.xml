@@ -8,7 +8,8 @@
 				</text>
 			</panel>
 			<panel name="P_WL_Settings">
-				<check_box label="Włącz shadery atmosfery (Windlight)" name="UseLightShaders1" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' poniżej."/>
+				<check_box label="Podstawowe shadery - włącz! (chmurka)" name="BasicShaders" tool_tip="Ta opcja powinna być ZAWSZE włączona. Jeśli zmienisz ustawienia rozdzielczości znajdujące się powyżej musisz wyłączyć i włączyć tą opcję, aby zmiany odniosły skutek."/>
+				<check_box label="Włącz shadery atmosfery (Windlight)" name="UseLightShaders1" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Zapisane ustawienia systemu Windlight dla nieba.">
@@ -27,26 +28,20 @@
 				<text name="T_Q_Windlights">
 					Szybkie Windlighty
 				</text>
-				<menu name="Timeofday" label="Ustaw pozycję Słońca">
-					<menu_item_call label="Wschód" name="Sunrise"/>
-					<menu_item_call label="Południe" name="Noon"/>
-					<menu_item_call label="Zachód" name="Sunset"/>
-					<menu_item_call label="Północ" name="Midnight"/>
-					<menu_item_call label="Czas regionu" name="Revert to Region Default"/>
-				</menu>
+				<button name="Sunrise" label="Wschód"/>
+				<button name="Noon" label="Południe"/>
+				<button name="Sunset" label="Zachód"/>
+				<button name="Midnight" label="Północ"/>
+				<button name="Revert to Region Default" label="Czas regionu"/>
 			</panel>
 			<panel name="P_WL_Presets">
 				<text name="T_WL_Presets" tool_tip="Kliknij na jakiś element, aby utworzyć nowe ustawienie lub zmodyfikować istniejące.">
 					Zapisane Windlighty
 				</text>
-				<menu name="Sky Presets" label="Ustawienia nieba">
-					<menu_item_call label="Nowe ust. nieba" name="new_sky_preset"/>
-					<menu_item_call label="Edytuj ust. nieba" name="edit_sky_preset"/>
-				</menu>  
-				<menu name="Water Presets" label="Ustawienia wody">
-					<menu_item_call label="Nowe ust. wody" name="new_water_preset"/>
-					<menu_item_call label="Edytuj ust. wody" name="edit_water_preset"/>
-				</menu>
+				<button name="new_sky_preset" label="Nowe ust. nieba"/>
+				<button name="edit_sky_preset" label="Edytuj ust. nieba"/>
+				<button name="new_water_preset" label="Nowe ust. wody"/>
+				<button name="edit_water_preset" label="Edytuj ust. wody"/>
 			</panel>
 			<panel name="P_W_Reflections">
 				<text name="T_W_Reflections">
@@ -66,7 +61,7 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">		
-				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery' na dole. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Światła i cienie' w karcie 'Narzędzia 2'.">
+				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Światła i cienie' w karcie 'Światła'.">
 					Rozdzielczość
 				</text>
 				<combo_box name="ReflectionRescombo">
@@ -77,12 +72,7 @@
 					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="4"/>
 					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="5"/>
 				</combo_box>
-				<text name="R_Toggle" tool_tip="Ta opcja powinna być ZAWSZE włączona. Jeśli zmienisz ustawienia rozdzielczości znajdujące się powyżej musisz wyłączyć i włączyć tą opcję, aby zmiany odniosły skutek.">
-					Podstawowe shadery - włącz! (chmurka)
-				</text>
-				<text name="Transp_Water" tool_tip="Renderuj wodę jako powierzchnię przezroczystą. Wyłączenie tej opcji pokryje wodę nieprzejrzystą, prostą teksturą.">
-					Przezroczysta woda
-				</text>
+				<check_box label="Przezroczysta woda" name="TransparentWater" tool_tip="Renderuj wodę jako powierzchnię przezroczystą. Wyłączenie tej opcji pokryje wodę nieprzejrzystą, prostą teksturą."/>
 			</panel>
 		</panel>
 		<panel name="P_Lighting" label="Światła">
@@ -92,11 +82,9 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Włącz światła i cienie" name="UseLightShaders1" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w SL. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'Narzędzia 3'."/>
+				<check_box label="Włącz światła i cienie" name="UseLightShaders1" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
-				<menu name="M_Lights">
-					<menu_item_check tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy." label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights"/>
-				</menu>
+				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
 			<panel name="P_Shadows">
 				<text name="T_Shadow_Types" tool_tip="To ustawienie dotyczy tylko tych cieni, które są renderowane przez źródła światła - same światła będą dalej działały normalnie. Oświetlenie punktowe (światła, które nie posiadają włączonej funkcji projekcji) zawsze będą sprawiały wrażenie cieniowania, ale nie będą tego robić na każdej powierzchni. Warto zaznaczyć, że niezależnie od wybranego ustawienia tekstury rzucane od świateł projekcji będą nadal włączone.">
@@ -127,10 +115,8 @@
 				<button name="FOV_Cutoff_Reset" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 			</panel>
 			<panel name="P_Light">
-				<menu name="M_Bounding_Boxes">
-					<menu_item_check label="Bryły brzegowe wszystkich świateł sceny" name="Lights"/>
-					<menu_item_check label="Wizualny zasięg światła dla zaznaczenia" name="Show Light Radius for Selection"/>
-				</menu>
+				<check_box label="Bryły brzegowe wszystkich świateł sceny" name="Lights"/>
+				<check_box label="Wizualny zasięg światła dla zaznaczenia" name="Show Light Radius for Selection"/>
 			</panel>
 			<panel name="P_Ambient_Occlusion">
 				<text name="T_Ambient_Occlusion">
@@ -177,14 +163,12 @@
 				</text>
 			</panel>
 			<panel name="P_DoF_Settings">
-				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'cienie i dynamiczne oświetlenie' w karcie 'Narzędzia 2'."/>
-				<menu name="M_Show_FOV">
-					<menu_item_check name="MIC_Show_FOV" label="Pokazuj pole widzenia w przeglądarce" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
-				</menu>
+				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'cienie i dynamiczne oświetlenie' w karcie 'Światła'."/>
+				<check_box label="Pokazuj pole widzenia w przeglądarce" name="MIC_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
 			</panel>
 			<panel name="P_Zoom">
 				<text name="T_Zoom" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator).">
-					Powiększ.
+					Kąt widz.
 				</text>
 				<button name="Reset_Zoom" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 				<text name="T_FOV" tool_tip="Pole widzenia: Określa, jak duże pole widzenia chcesz symulować dla efektu głębi ostrości. Najlepiej pozostawić tą opcję w spokoju, aby przeglądarka sama nią zarządzała.">
@@ -211,7 +195,7 @@
 					Rozdzielcz.
 				</text>
 				<button name="Reset_Resolution" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Aspect_Ratio" tool_tip="Tutaj możesz zmienić współczynnik proporcji dla ustawianej kamery - na przykład kamera 35mm ma współczynnik proporcji 3:2 (1.5). Second Life będzie wykorzystać tą wartość jako punkt odniesienia dla tego, jak należy dostosować pole widzenia i długość ogniskowej w zależności od rozmiaru okna. WYDAJE SIĘ JEDNAK NIE MIEĆ ŻADNEGO WPŁYWU NA OBRAZ!">
+				<text name="T_Aspect_Ratio" tool_tip="Tutaj możesz zmienić współczynnik proporcji dla ustawianej kamery - na przykład kamera 35mm ma współczynnik proporcji 3:2 (1.5). Przeglądarka będzie wykorzystać tą wartość jako punkt odniesienia dla tego, jak należy dostosować pole widzenia i długość ogniskowej w zależności od rozmiaru okna. WYDAJE SIĘ JEDNAK NIE MIEĆ ŻADNEGO WPŁYWU NA OBRAZ!">
 					Proporcje
 				</text>
 				<button name="Reset_Aspect_Ratio" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
@@ -281,7 +265,7 @@
 					Ilość cząst.
 				</text>
 				<button name="Reset_Particle_Cnt" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Terrain_Scale" tool_tip="Rozmiar podłoża. Ustawia jakość domyślnej (Linden Labowej) tekstury podłoża.">
+				<text name="T_Terrain_Scale" tool_tip="Rozmiar podłoża. Ustawia jakość domyślnej tekstury podłoża (ziemi).">
 					Rozm. podł.
 				</text>
 				<button name="Reset_Terrain_Scale" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
@@ -315,9 +299,7 @@
 				<check_box label="Dynamicznie dobieraj poziom detali" name="RednerLod1" tool_tip="Ta opcja zezwala przeglądarce na dynamiczne dobieranie poziomu detali w scenie, gdy kamera jest ustawiona w dalszej odległości od obiektów. Pomaga polepszyć wydajność, może też zmniejszać szczegółowość przedmiotów sceny."/>
 				<check_box label="Renderuj tylko obiekty widoczne dla kamery" tool_tip="Ta opcja zezwala przeglądarce na przetwarzanie/rysowanie tylko tych obiektów, które są w polu widzenia kamery i nie są ukryte za czymkolwiek innym. Zazwyczaj ogromnie zwiększa wydajność, ale może ją czasami zmniejszyć gdy scena/region ma bardzo mało obiektów. Poeksperymentuj!" name="UssOcclusion1"/>
 				<check_box label="Filtr anizotropowy (wyraźniejsze tekstury)" tool_tip="Ta opcja włącza filtrowanie anizotropowe" name="Anisotropic"/>
-				<menu name="M_Av_Att_Particles">
-					<menu_item_check label="Renderuj cząsteczki innych awatarów" tool_tip="Pozwala przeglądarce na renderowanie każdych i wszystkich cząsteczek wchodzących/wychodzących do/z innych awatarów." name="Render Attached Particle"/>
-				</menu>
+				<check_box label="Renderuj cząsteczki innych awatarów" name="Render Attached Particle" tool_tip="Pozwala przeglądarce na renderowanie każdych i wszystkich cząsteczek wchodzących/wychodzących do/z innych awatarów."/>
 			</panel>
 			<panel name="P_Anti-aliasing">
 				<text name="T_Anti-aliasing" tool_tip="Określa, jak ostre / gładkie będą krawędzie obiektów. Na mocniejszych kartach graficznych większe wartości nie powodują widocznego spadku wydajności, ale na wolniejszych już tak.">
@@ -332,7 +314,7 @@
 				</combo_box>
 			</panel>
 			<panel name="P_Texture_Bumpiness">	
-				<text name="T_Texture_Bumpiness" tool_tip="Mapowanie wypukłości tekstur: Kontroluje siłę i rozdzielczość normalnych oraz mapowanych wypukłościowo tekstur. Musisz przełączyć opcję poniżej, aby zmiany odniosły skutek.">
+				<text name="T_Texture_Bumpiness" tool_tip="Mapowanie wypukłości tekstur: Kontroluje siłę i rozdzielczość normalnych oraz mapowanych wypukłościowo tekstur.">
 					Wypukłości tekstur
 				</text>
 				<combo_box name="BumpStrengthSelection">
@@ -343,9 +325,6 @@
 					<combo_box.item label="Ostre (silniejsze)" name="4"/>
 					<combo_box.item label="Ostrzejsze (bardzo silne)" name="5"/>
 				</combo_box>
-				<text name="T_Basic_Shaders" tool_tip="Ta opcja powinna ZAWSZE być włączona, bo jest wymagana przez głębię ostrości, cienie i światła, okluzję otoczenia, odbicia wody i wiele więcej. Jeśli zmienisz ustawienie mapowania wypukłości tekstur powyżej musisz wyłączyć i włączyć shadery, aby zmiany odniosły skutek.">
-					Podstawowe shadery - włącz! (chmurka)
-				</text>
 			</panel>
 		</panel>
 		<panel name="P_Aids" label="Pomoce">
@@ -354,20 +333,18 @@
 					Pomoce interfejsu
 				</text>
 			</panel>
-			<menu name="M_Aids">
-				<menu_item_check label="Pokaż bryły brzegowe obiektów na scenie" name="Bounding Boxes"/>
-				<menu_item_check label="Pokaż panel statystyk" name="Statistics Bar"/>
-				<menu_item_check label="Pokaż detale pozycji kamery" name="Camera"/>
-				<menu_item_check label="Pokaż detale ładowania tekstur" name="Texture Console"/>
-				<menu_item_check label="Pokaż wartość RGB-I spod kursora" name="Show Color Under Cursor"/>
-				<menu_item_check label="Podświetl przezroczystość na czerwono" name="Highlight Transparent"/>
-				<menu_item_check label="Pokaż scenę w trybie obrazu szkieletowego" name="Wireframe"/>
-				<menu_item_check label="Pokaż podczepione dodatki HUD" name="Show HUD Attachments"/>
-				<menu_item_check label="Spowolnij awatara (tylko w tej przeglądarce)" name="Slow Motion Animations"/>  
-				<menu_item_call label="Wymuś odświeżenie wyglądu (rebake)" name="Rebake Texture"/>
-				<menu_item_call label="Ustaw rozmiar okna..." name="Set Window Size..."/>
-				<menu_item_call label="Pokaż ustawienia debugowania" name="Debug Settings"/>
-			</menu>
+			<check_box label="Pokaż bryły brzegowe obiektów na scenie" name="Bounding Boxes"/>
+			<check_box label="Pokaż panel statystyk" name="Statistics Bar"/>
+			<check_box label="Pokaż detale pozycji kamery" name="Camera"/>
+			<check_box label="Pokaż detale ładowania tekstur" name="Texture Console"/>
+			<check_box label="Pokaż wartość RGB-I spod kursora" name="Show Color Under Cursor"/>
+			<check_box label="Podświetl przezroczystość na czerwono" name="Highlight Transparent"/>
+			<check_box label="Pokaż scenę w trybie obrazu szkieletowego" name="Wireframe"/>
+			<check_box label="Pokaż podczepione dodatki HUD" name="Show HUD Attachments"/>
+			<check_box label="Spowolnij awatara (tylko w tej przeglądarce)" name="Slow Motion Animations"/>
+			<button label="Wymuś odświeżenie wyglądu (rebake)" name="Rebake Texture"/>
+			<button label="Ustaw rozmiar okna..." name="Set Window Size..."/>
+			<button label="Pokaż ustawienia debugowania" name="Debug Settings"/>
 			<panel name="P_Quick_Stats">
 				<text name="T_Quick_Stats" tool_tip="Tutaj można znaleźć kilka bardzo przydatnych statystyk dla określenia wydajności systemu. Zwijaj/rozwijaj poszczególne pozycje klikając na etykietach.">
 					Szybkie statystyki
@@ -375,11 +352,11 @@
 			</panel>
 			<scroll_container name="statistics_scroll">
 				<container_view name="statistics_view">
-					<stat_view name="basic" label="Szybkie statystki (kliknij, aby rozwinąć)">
-						<stat_bar name="fps" label="Klatki/sek (FPS)" tool_tip="FPS: Ile razy Twój komputer rysuje ponownie (albo odświeża) to, co znajduje się na ekranie. Wyższe wartości są lepsze. Częstotliwość wyświetlania klatek pomiędzy 12 i 15 jest powszechna dla animacji, 24 jest standardem dla filmów, a 30 jest używana w telewizji szerokopasmowej."/>
-						<stat_bar name="bandwidth" label="Przepustowość" tool_tip="Przepustowość: Jak wiele danych jest transferowanych pomiędzy Twoim komputerem, a światem Second Life. Ta liczba jest bardzo zależna od Twoich ustawień przepustowości, gdzie znajdujesz się w świecie, co się dzieje i czy ciągle przeglądarka pobiera jakieś dane (obiekty, tekstury itp.) znajdujące się w Twoim polu widzenia. Jeśli przepustowość wskazuje 0kbps coś może być nie w porządku (możesz być częściowo rozłączony/a)."/>
+					<stat_view name="basic">
+						<stat_bar name="fps" label="Klatki/sek (FPS)" tool_tip="FPS: Ile razy Twój komputer rysuje ponownie (albo odświeża) to, co znajduje się na ekranie. Wyższe wartości są lepsze. Częstotliwość wyświetlania klatek pomiędzy 12 i 15 jest powszechna dla animacji, 24 jest standardem dla filmów, a 25 (PAL) / 30 (NTSC) jest używana w telewizji szerokopasmowej."/>
+						<stat_bar name="bandwidth" label="Przepustowość" tool_tip="Przepustowość: Jak wiele danych jest transferowanych pomiędzy Twoim komputerem, a światem wirtualnym. Ta liczba jest bardzo zależna od Twoich ustawień przepustowości, gdzie znajdujesz się w świecie, co się dzieje i czy ciągle przeglądarka pobiera jakieś dane (obiekty, tekstury itp.) znajdujące się w Twoim polu widzenia. Jeśli przepustowość wskazuje 0kbps coś może być nie w porządku (możesz być częściowo rozłączony/a)."/>
 						<stat_bar name="ktrisframe" label="KTris rysowane na kl." unit_label="/kl" tool_tip="Rysowanie KTris: (na klatkę) Obiekty generowanie komputerowo są zbudowane z trójkątów (podstawowy kształt geometryczny). Wartość tutaj to liczba trójkątów, lub 'tris', w każdej klatce sceny."/>
-						<stat_bar name="ktrissec" label="KTris rysowane na sek." unit_label="/sek" tool_tip="Rysowanie KTris: (na sekundę) Wartość tutaj to liczba trójkątów ('tris') rysowanych w każdej sekundzie."/>
+						<stat_bar name="ktrissec" label="KTris rysowane na sek." unit_label="/sek" tool_tip="Rysowanie KTris: (na sekundę) Wartość tutaj to liczba trójkątów ('tris') rysowanych w każdej sekundzie. Generowane komputerowo obiekty są złożone właśnie z nich (to podstawowy kształt geometryczny)."/>
 						<stat_bar name="objs" label="Wszystkie obiekty" tool_tip="Wszystkie obiekty: Liczba obiektów obecnie widocznych: Primy, awatary, połacie terenu, drzewa, cząsteczki i obszary wody."/>
 						<stat_bar name="newobjs" label="Nowe obiekty" unit_label="/sek" tool_tip="Nowe obiekty: Liczba obiektów pobieranych na sekundę."/>
 						<stat_bar name="numimagesstat" label="Ilość tekstur" tool_tip="Ilość tekstur: Liczba unikalnych tekstur załadowanych przez przeglądarkę."/>
@@ -394,31 +371,31 @@
 				</text>
 			</panel>
 			<panel name="P_Cam_Settings">
-				<text name="T_LR_Axis" tool_tip="Oś X">
+				<text name="T_LR_Axis" tool_tip="Ustawia czułość ruchu w lewo/prawo. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Lewo/Prawo
 				</text>
 				<button name="Reset_LR_Axis" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_UD_Axis" tool_tip="Oś X">
+				<text name="T_UD_Axis" tool_tip="Ustawia czułość ruchu górę/dół. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Góra/Dół
 				</text>
 				<button name="Reset_UD_Axis" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_IO_Axis" tool_tip="Oś X">
+				<text name="T_IO_Axis" tool_tip="Ustawia czułość ruchu do wewnątrz/zewnątrz (In/Out). Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					We/Wyj
 				</text>
 				<button name="Reset_IO_Axis" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Tilt" tool_tip="Oś X">
+				<text name="T_Tilt" tool_tip="Ustawia czułość ruchu dla przechylenia. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Przechyły
 				</text>
 				<button name="Reset_Tilt" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Spin" tool_tip="Oś X">
+				<text name="T_Spin" tool_tip="Ustawia czułość ruchu dla wirowania. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Wirowanie
 				</text>
 				<button name="Reset_Spin" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Roll" tool_tip="Oś X">
+				<text name="T_Roll" tool_tip="Ustawia czułość ruchu dla obracania. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Obroty
 				</text>
 				<button name="Reset_Roll" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
-				<text name="T_Zoom_Speed" tool_tip="Oś X">
+				<text name="T_Zoom_Speed" tool_tip="Ustawia czułość prędkości powiększania. Jeśli będziesz mieć problemy z precyzyjnym poruszaniem się użyj niższych wartości.">
 					Szyb. pow.
 				</text>
 				<button name="Reset_Zoom_Speed" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
@@ -434,9 +411,7 @@
 				<check_box name="CB_AutoLeveling" label="Autopoziom (zapobiega obrotom kamery)" tool_tip="Gdy włączone, to kamera zawsze utrzymuje ten sam poziom."/>
 				<check_box name="CB_Move_Avatar" label="Użyj myszy 3D, aby poruszać awatarem" tool_tip="Gdy włączone, to mysz będzie poruszać awatarem."/>
 				<check_box name="CB_Move_Objects" label="... aby poruszać obiektami (budowanie)" tool_tip="Użyj myszy 3D, aby poruszać obiektami podczas budowania i edytowania."/>
-				<menu name="M_Show_FOV2">
-					<menu_item_check label="Pokazuj pole widzenia w przeglądarce" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!" name="FOV"/>
-				</menu>
+				<check_box label="Pokazuj pole widzenia w przeglądarce" name="CAM_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
 			</panel>
 			<panel name="P_Viewer_Cam_Menu">
 				<text name="PT_Viewer_Cam_Menu">
@@ -448,7 +423,7 @@
 					<panel name="CamMov" label="Ruch kamery">
 						<panel name="P_Cam2">
 							<text name="T_Zoom2" tool_tip="W prawdziwym świecie to jest funkcja powiększania (zoom) - zmieni pole widzenia w oknie przeglądarki. Działa tak samo, jak naciskanie Ctrl+0 lub Ctrl+8. UWAGA: Ta opcja nie będzie działać, gdy będzie włączona 'wolna kamera' (3D SpaceNavigator).">
-								Powiększanie
+								Kąt widzenia
 							</text>
 							<button name="Reset_Zoom2" tool_tip="Kliknij tutaj, aby zresetować ustawienia do domyślnych."/>
 							<text name="T_Zoom_Speed2" tool_tip="Kontroluje jak szybko/wolno kamera będzie powiększać i pomniejszać obraz. Wyższe wartości powodują wolniejsze i gładsze powiększanie.">
