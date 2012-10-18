@@ -454,6 +454,7 @@
          can_edit_text="true"
          control_name="FSAudioMusicFadeIn"
          decimal_digits="2"
+         enabled_control="FSFadeAudioStream"
          label="Fade in"
          follows="left|top"
          height="15"
@@ -467,7 +468,7 @@
          top_delta="17"
          width="250"
          label_width="50"
-         tool_tip="Audio fade in time for parcel audio. Set to 0 to disable fading."/>
+         tool_tip="Audio fade in time for parcel audio."/>
         <text
          type="string"
          length="1"
@@ -485,6 +486,7 @@
          can_edit_text="true"
          control_name="FSAudioMusicFadeOut"
          decimal_digits="2"
+         enabled_control="FSFadeAudioStream"
          label="Fade out"
          follows="left|top"
          height="15"
@@ -498,7 +500,7 @@
          top_delta="15"
          width="250"
          label_width="50"
-         tool_tip="Audio fade out time for parcel audio. Set to 0 to disable fading."/>
+         tool_tip="Audio fade out time for parcel audio."/>
         <text
          type="string"
          length="1"
