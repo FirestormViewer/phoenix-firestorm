@@ -59,7 +59,7 @@
 			<text name="camera_options_label">
 			   Kamera-Optionen:
 			</text>
-			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wir die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
+			<check_box label="Klick auf Avatar hält Kameraposition" name="clickonavatarkeepscamera" tool_tip="Normalerweise wird die Kameraposition beim Anklicken des Avatars zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 			<check_box label="Kameraposition nach Teleport zurücksetzen (innerhalb einer Region)" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 			<check_box label="Minimale Zoomdistanz der Kamera aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
 			<check_box label="Beim Zurücksetzen der Ansicht Avatar in Blickrichtung der Kamera drehen" name="resetviewturnsavatar" tool_tip="Behält die Blickrichtung der Kamera bei und dreht den Avatar, wenn die Ansicht zurückgesetzt wird (Beim Drücken von ESC)."/>
