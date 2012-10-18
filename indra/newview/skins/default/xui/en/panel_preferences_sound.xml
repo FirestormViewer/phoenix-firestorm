@@ -356,7 +356,7 @@
          width="230"
          tool_tip="Check this to automatically start media when you log in or change regions."
          label="Allow Media to auto-play when entering a region"
-         top_pad="10"
+         top_pad="5"
          left="25"/>
         <check_box
          name="media_allowscript_btn"
@@ -411,7 +411,7 @@
          label="Show stream title in nearby chat"
          follows="left|top"
          layout="topleft"
-         top_pad="1"
+         top_pad="-2"
          left="25"
          height="18"
          width="200" />
@@ -440,6 +440,79 @@
          name="StreamMetadataAnnounceChannel"
          width="90" />
 
+        <check_box
+         name="FSFadeAudioStream"
+         control_name="FSFadeAudioStream"
+         follows="left|top"
+         layout="topleft"
+         height="16"
+         tool_tip="Check this if fading should be used when the parcel audio stream changes"
+         label="Enable Parcel Audio Fading:"
+         top_delta="28"
+         left="25"/>
+        <slider
+         can_edit_text="true"
+         control_name="FSAudioMusicFadeIn"
+         decimal_digits="2"
+         label="Fade in"
+         follows="left|top"
+         height="15"
+         increment="0.05"
+         initial_value="3"
+         layout="topleft"
+         left="45"
+         max_val="10"
+         min_val="0"
+         name="FSAudioMusicFadeIn"
+         top_delta="17"
+         width="250"
+         label_width="50"
+         tool_tip="Audio fade in time for parcel audio. Set to 0 to disable fading."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="255"
+         name="FSAudioMusicFadeInSeconds"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            seconds
+        </text>
+        <slider
+         can_edit_text="true"
+         control_name="FSAudioMusicFadeOut"
+         decimal_digits="2"
+         label="Fade out"
+         follows="left|top"
+         height="15"
+         increment="0.05"
+         initial_value="2"
+         layout="topleft"
+         left="45"
+         max_val="10"
+         min_val="0"
+         name="FSAudioMusicFadeOut"
+         top_delta="15"
+         width="250"
+         label_width="50"
+         tool_tip="Audio fade out time for parcel audio. Set to 0 to disable fading."/>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="10"
+         layout="topleft"
+         left_delta="255"
+         name="FSAudioMusicFadeOutSeconds"
+         mouse_opaque="false"
+         top_delta="2"
+         width="90">
+            seconds
+        </text>
+		 
         <text
          type="string"
          length="1"
@@ -449,7 +522,7 @@
          left="25"
          name="Media Rolloff"
          mouse_opaque="false"
-         top_delta="40"
+         top_delta="20"
          width="155">
             Media audio rolloff distance:
         </text>
@@ -467,8 +540,8 @@
          max_val="512"
          min_val="1"
          name="MediaRollOffMin"
-         top_delta="20"
-         width="200"
+         top_delta="17"
+         width="240"
          label_width="25"
          tool_tip="Minimum distance from the source for rolloff to begin taking effect."/>
         <text
@@ -477,7 +550,7 @@
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="205"
+         left_delta="245"
          name="MinMeters"
          mouse_opaque="false"
          top_delta="2"
@@ -499,7 +572,7 @@
          min_val="1"
          name="MediaRollOffMax"
          top_delta="15"
-         width="200"
+         width="240"
          label_width="25"
          tool_tip="Maximum distance from the source for rolloff to completely mute the sound."/>
         <text
@@ -508,7 +581,7 @@
          follows="left|top"
          height="10"
          layout="topleft"
-         left_delta="205"
+         left_delta="245"
          name="MaxMeters"
          mouse_opaque="false"
          top_delta="2"
@@ -526,7 +599,7 @@
          name="money_change_threshold_label"
          tool_tip="Plays a sound when money is spent or received higher then the amount set here."
          mouse_opaque="false"
-         top_delta="30"
+         top_delta="22"
          width="117">
             L$ change threshold:
         </text>

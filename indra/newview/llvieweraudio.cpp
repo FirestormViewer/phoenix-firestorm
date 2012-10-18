@@ -88,6 +88,14 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 	// Record the URI we are going to be switching to	
 	mNextStreamURI = streamURI;
 
+	// <FS:Ansariel> Optional audio stream fading
+	if (!gSavedSettings.getBOOL("FSFadeAudioStream"))
+	{
+		gAudiop->startInternetStream(mNextStreamURI);
+		return;
+	}
+	// </FS:Ansariel>
+
 	switch (mFadeState)
 	{
 		case FADE_IDLE:
@@ -187,6 +195,15 @@ bool LLViewerAudio::onIdleUpdate()
 
 void LLViewerAudio::stopInternetStreamWithAutoFade()
 {
+	// <FS:Ansariel> Optional audio stream fading
+	if (!gSavedSettings.getBOOL("FSFadeAudioStream"))
+	{
+		mNextStreamURI = LLStringUtil::null;
+		gAudiop->stopInternetStream();
+		return;
+	}
+	// </FS:Ansariel>
+
 	mFadeState = FADE_IDLE;
 	mNextStreamURI = LLStringUtil::null;
 	mDone = true;
@@ -197,8 +214,12 @@ void LLViewerAudio::stopInternetStreamWithAutoFade()
 
 void LLViewerAudio::startFading()
 {
-	const F32 AUDIO_MUSIC_FADE_IN_TIME = 3.0f;
-	const F32 AUDIO_MUSIC_FADE_OUT_TIME = 2.0f;
+	// <FS:Ansariel> Make fadint time configurable again
+	//const F32 AUDIO_MUSIC_FADE_IN_TIME = 3.0f;
+	//const F32 AUDIO_MUSIC_FADE_OUT_TIME = 2.0f;
+	F32 AUDIO_MUSIC_FADE_IN_TIME = gSavedSettings.getF32("FSAudioMusicFadeIn");
+	F32 AUDIO_MUSIC_FADE_OUT_TIME = gSavedSettings.getF32("FSAudioMusicFadeOut");
+	// </FS:Ansariel>
 	// This minimum fade time prevents divide by zero and negative times
 	const F32 AUDIO_MUSIC_MINIMUM_FADE_TIME = 0.01f;
 
@@ -260,6 +281,14 @@ void LLViewerAudio::onTeleportStarted()
 		// after a failed teleport or after an intra-parcel teleport.  Also, the music sometimes was not
 		// restarting after a successful intra-parcel teleport. Setting mWasPlaying fixes these issues.
 		LLViewerAudio::getInstance()->setWasPlaying(!gAudiop->getInternetStreamURL().empty());
+		
+		// <FS:Ansariel> Optional audio stream fading
+		if (!gSavedSettings.getBOOL("FSFadeAudioStream"))
+		{
+			return;
+		}
+		// </FS:Ansariel>
+		
 		LLViewerAudio::getInstance()->setForcedTeleportFade(true);
 		LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLStringUtil::null);
 		LLViewerAudio::getInstance()->setNextStreamURI(LLStringUtil::null);
