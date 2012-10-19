@@ -2115,7 +2115,7 @@ Returns a success/failure flag (STATUS_OK when sucessful, another of the STATUS_
 Only relevant for Mono-compiled scripts.
 </string>
 <string name="LSLTipText_llGetMemoryLimit" translate="false">
-integer llGetUsedMemory()
+integer llGetMemoryLimit()
 Get the maximum memory a script can use.
 Returns the integer amount of memory the script can use in bytes.
 </string>
