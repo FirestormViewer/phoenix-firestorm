@@ -532,6 +532,9 @@ void LLScriptLibrary::init()
 	addFunction(0.f, 0.f, dummy_func, "llEvade", NULL, "kl");
 	addFunction(0.f, 0.f, dummy_func, "llGetClosestNavPoint", "l", "vl");
 	addFunction(0.f, 0.f, dummy_func, "llGetStaticPath", "l", "vvfl");
+
+	// Server RC LeTigre 12.10.12.265819 new function
+	addFunction(0.f, 0.f, dummy_func, "llGetSimStats", "f", "i");
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 }
 

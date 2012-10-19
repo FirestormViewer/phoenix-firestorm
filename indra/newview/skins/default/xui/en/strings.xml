@@ -2153,6 +2153,10 @@ llTeleportAgentGlobalCoords(key agent, vector global_coordinates, vector region_
 Teleports an agent to set of a region_coordinates within a region at the specified global_coordinates. The agent lands facing the position defined by look_at local coordinates.
 A region's global coordinates can be retrieved using llRequestSimulatorData(region_name, DATA_SIM_POS)
 </string>
+<string name="LSLTipText_llGetSimStats" translate="false">
+float llGetAgentList(integer stat_type)
+Returns the value of a particular simulator statistic.
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 
   <!-- Avatar busy/away mode -->
