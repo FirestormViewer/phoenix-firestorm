@@ -2235,12 +2235,33 @@ void errorCallback(const std::string &error_string)
 	LLStringUtil::format_map_t map;
 	map["ERROR_DETAILS"]=error_string;
 	std::string error_display_string=LLTrans::getString("MBApplicationErrorDetails",map);
+	
+	// <FS:Ansariel> If we crash before loading the configuration, LLTrans
+	//               won't be able to find the localized string, so we
+	//               fall back to the English version instead of showing
+	//               a dialog saying "MissingString("<LocalizationStringId>".
+	std::string caption = LLTrans::getString("MBApplicationError");
+
+	if (error_display_string.find("MissingString(") != std::string::npos)
+	{
+		error_display_string = "We are sorry, but Firestorm has crashed and needs to be closed. If you see this issue happening repeatedly, please contact our support team and submit the following message:\n\n[ERROR_DETAILS]";
+		LLStringUtil::format(error_display_string, map);
+	}
+	if (caption.find("MissingString(") != std::string::npos)
+	{
+		caption = "Application Error - Don't Panic";
+	}
+	// </FS:Ansariel>
 
 #if !LL_RELEASE_FOR_DOWNLOAD
-	if (OSBTN_CANCEL == OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OKCANCEL))
+	// <FS:Ansariel> Changed to fix missing string error upon early crash
+	//if (OSBTN_CANCEL == OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OKCANCEL))
+	if (OSBTN_CANCEL == OSMessageBox(error_display_string, caption, OSMB_OKCANCEL))
 		return;
 #else
-	OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OK);
+	// <FS:Ansariel> Changed to fix missing string error upon early crash
+	//OSMessageBox(error_display_string, LLTrans::getString("MBApplicationError"), OSMB_OK);
+	OSMessageBox(error_display_string, caption, OSMB_OK);
 #endif // !LL_RELEASE_FOR_DOWNLOAD
 
 	//Set the ErrorActivated global so we know to create a marker file
