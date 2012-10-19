@@ -122,7 +122,7 @@
 
 		<spinner label="Gamma:" name="gamma"/>
 		<text name="brightness text">
-			(0 = Standard-Helligkeit, weniger = heller)
+			(0/1.0 = Standard-Helligkeit, weniger = heller)
 		</text>
 		<slider label="Texturen-Speicherbuffer (MB):" name="GraphicsCardTextureMemory" tool_tip="Speicherplatz, der für Texturen zur Verfügung steht. In der Regel handelt es sich um Grafikkartenspeicher, maximal 512 MB. Ein kleinerer Wert kann die Geschwindigkeit erhöhen, aber auch zu Texturunschärfen führen. Ein höherer Wert als 512 MB wird nicht empfohlen, auch wenn die Grafikkarte dies unterstützt, da die Auswirkungen auf den Speicherverbrauch des Viewers einen negativen Effekt haben können."/>
 		<spinner label="Nebeldistanzverhältnis:" name="fog"/>

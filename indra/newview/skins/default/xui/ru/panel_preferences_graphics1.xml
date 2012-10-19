@@ -118,7 +118,7 @@
 
 		<spinner label="Гамма:" name="gamma"/>
 		<text name="brightness text">
-			(0 = яркость по умолчанию, выше = ярче)
+			(0/1.0 = яркость по умолчанию, выше = ярче)
 		</text>
 		<slider label="Память текстур в(MB):" name="GraphicsCardTextureMemory" tool_tip=""/>
 		<spinner label="Туман:" name="fog"/>

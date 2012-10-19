@@ -106,7 +106,7 @@
 				<combo_box.item label="Wyłączony" name="FSAADisabled"/>
 			</combo_box>
 			<text name="brightness text">
-				(0 = domyślna jasność, niżej = jaśniej)
+				(0/1.0 = domyślna jasność, niżej = jaśniej)
 			</text>
 			<slider label="Bufor pamięci tekstur (MB):" name="GraphicsCardTextureMemory" tool_tip="Ilość pamięci przeznaczona na tekstury. Domyślnie jest to maksymalna wielkość pamięci karty graficznej, ale nie więcej niż 512 MB. Zmniejszenie tej wartości może spowodować wzrost wydajności, ale tekstury będą bardziej rozmazane. Zwiększanie tej wartości ponad 512 MB nie jest wskazane nawet, jeśli Twoja karta to obsługuje - ogólna wydajność Przeglądarki związana z pamięcią operacyjną widocznie spadnie."/>
 			<spinner label="Stosunek odległości dla mgły:" name="fog"/>

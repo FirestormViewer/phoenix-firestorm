@@ -909,11 +909,11 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left_pad="10"
+         left_pad="5"
          name="brightness text"
          top_delta="2"
          width="385">
-            (0 = default brightness, lower = brighter)
+            (0/1.0 = default brightness, lower = brighter)
         </text>
         <slider
          control_name="TextureMemory"

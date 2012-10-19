@@ -116,7 +116,7 @@
 			</combo_box>
 			<spinner label="Gamma:" name="gamma"/>
 			<text name="brightness text">
-				(0 = por defecto, más bajo = más brillante)
+				(0/1.0 = por defecto, más bajo = más brillante)
 			</text>
 			<slider label="Memoria para texturas (MB):" name="GraphicsCardTextureMemory" tool_tip="Cantidad de memoria a reservar para texturas. Por defecto, se ajusta a la memoria de la tarjeta gráfica hasta hun máximo de 512 MB. Reducirlo puede mejorar el rendimiento, pero también puede hacer que las texturas se vean borrosas. No se recomienda incrementar el valor por encima de 512 MB. Incluso si tu tarjeta gráfica lo soporta, el impacto en la memoria principal en el visor llevará probablemente a degradar la experiencia en el metaverso."/>
 			<spinner label="Relación de distancia de la niebla:" name="fog"/>

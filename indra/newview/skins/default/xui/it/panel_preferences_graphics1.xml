@@ -108,7 +108,7 @@
 			</combo_box>
 			<spinner name="gamma" label_width="160" width="226"/>
 			<text name="brightness text">
-				(0 = Luminosità di default, Più basso = Più luminoso)
+				(0/1.0 = Luminosità di def., Più basso = Più luminoso)
 			</text>
 			<slider label="Buffer di memoria delle Texture(MB):" name="GraphicsCardTextureMemory" tool_tip="Quantità di memoria da allocare per le texture. Di default nella memoria della scheda video è impostata a 512M. Ridurre questo valore può migliorare le prestazioni, ma può anche rendere le texture sfocate. Aumentando questo valore oltre 512M non è raccomandato. Anche se la vostra scheda grafica lo supporta, l'impatto sulla memoria principale rischia di peggiorare la vostra esperienza su Second Life. Aumentando si possono ottenere migliori prestazioni ma solo su hardware potenti"/>
 			<spinner label="Distanza della nebbia:" name="fog" label_width="160" width="226"/>
