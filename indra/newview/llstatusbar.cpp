@@ -102,6 +102,7 @@
 #include <iomanip>
 
 #include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
+#include "llvieweraudio.h"
 
 //
 // Globals
@@ -803,7 +804,7 @@ void LLStatusBar::toggleStream(bool enable)
 		{
 			// 'false' means unpause
 			//gAudiop->pauseInternetStream(false);
-			gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+			LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
 		}
 		else
 		{
@@ -813,13 +814,13 @@ void LLStatusBar::toggleStream(bool enable)
 			}
 			else
 			{
-				gAudiop->startInternetStream(LLViewerMedia::getParcelAudioURL());
+				LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLViewerMedia::getParcelAudioURL());
 			}
 		}
 	}
 	else
 	{
-		gAudiop->stopInternetStream();
+		LLViewerAudio::getInstance()->stopInternetStreamWithAutoFade();
 	}
 
 	// <FS:Zi> Split up handling cont.
