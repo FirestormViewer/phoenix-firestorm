@@ -527,16 +527,22 @@ void LLAvatarListItem::setAvatarIconVisible(bool visible)
 	updateChildren();
 }
 
-void LLAvatarListItem::showDisplayName(bool show)
+void LLAvatarListItem::showDisplayName(bool show, bool updateName /* = true*/)
 {
 	mShowDisplayName = show;
-	updateAvatarName();
+	if (updateName)
+	{
+		updateAvatarName();
+	}
 }
 
-void LLAvatarListItem::showUsername(bool show)
+void LLAvatarListItem::showUsername(bool show, bool updateName /* = true*/)
 {
 	mShowUsername = show;
-	updateAvatarName();
+	if (updateName)
+	{
+		updateAvatarName();
+	}
 }
 
 // [Ansariel: Colorful radar]

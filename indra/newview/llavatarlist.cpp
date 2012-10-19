@@ -248,8 +248,8 @@ LLAvatarList::LLAvatarList(const Params& p)
 , mShowVoiceVolume(p.show_voice_volume)
 , mShowRange(false)
 , mShowStatusFlags(false)
-, mShowUsername(true)
-, mShowDisplayName(true)
+, mShowUsername((bool)gSavedSettings.getBOOL("NameTagShowUsernames"))
+, mShowDisplayName((bool)gSavedSettings.getBOOL("UseDisplayNames"))
 , mIgnoreGlobalIcons(false)
 , mShowAge(false)
 , mShowPaymentStatus(false)
@@ -271,11 +271,27 @@ LLAvatarList::LLAvatarList(const Params& p)
 	}
 	
 	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
+
+	// <FS:Ansariel> FIRE-1089: List needs to update also if we change the username setting
+	gSavedSettings.getControl("NameTagShowUsernames")->getSignal()->connect(boost::bind(&LLAvatarList::handleDisplayNamesOptionChanged, this));
 }
 
 
 void LLAvatarList::handleDisplayNamesOptionChanged()
 {
+	// <FS:Ansariel> FIRE-1089: Set the proper name options for the AvatarListItem before we update the list.
+	mShowUsername = (bool)gSavedSettings.getBOOL("NameTagShowUsernames");
+	mShowDisplayName = (bool)gSavedSettings.getBOOL("UseDisplayNames");
+	std::vector<LLPanel*> items;
+	getItems(items);
+	for( std::vector<LLPanel*>::const_iterator it = items.begin(); it != items.end(); it++)
+	{
+		LLAvatarListItem* item = static_cast<LLAvatarListItem*>(*it);
+		item->showUsername(mShowUsername, false);
+		item->showDisplayName(mShowDisplayName, false);
+	}
+	// </FS:Ansariel>
+
 	mNeedUpdateNames = true;
 }
 

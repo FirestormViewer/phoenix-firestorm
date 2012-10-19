@@ -120,7 +120,7 @@ public:
 	time_t	getLastZOffsetTime();
 	void setZOffset(F32 offset);
 	F32  getZOffset();
-	void showDisplayName(bool show);
+	void showDisplayName(bool show, bool updateName = true);
 	void showFirstSeen(bool show);
 	void showStatusFlags(bool show);
 	void showAvatarAge(bool show);
@@ -128,7 +128,7 @@ public:
 	std::string getSeen();
 	void showPaymentStatus(bool show);
 	void updateFirstSeen();
-	void showUsername(bool show);
+	void showUsername(bool show, bool updateName = true);
 	void setShowPermissions(bool show);
 	void showLastInteractionTime(bool show);
 	void setAvatarIconVisible(bool visible);
