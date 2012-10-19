@@ -25,6 +25,15 @@
 			<button label="Zarządzaj witrynami" name="edit_media_lists_button"/>
 			<check_box name="ShowStreamMetadata" label="Pokazuj tytuł strumienia w czacie lokalnym"/>
 			<check_box name="StreamMetadataAnnounceToChat" label="Wysyłaj tytuł strum. na kanał:"/>
+			<check_box name="FSFadeAudioStream" tool_tip="Zaznacz to pole, jeśli wygładzanie ma być używane, gdy zmieni się muzyka strumieniowa na parceli" label="Płynnie wygładzaj przechodzenie między strumieniami muzyki na parcelach:"/>
+			<slider label="Wejście" name="FSAudioMusicFadeIn" tool_tip="Czas wygładzania dla dźwięku parceli przy wchodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
+			<text name="FSAudioMusicFadeInSeconds">
+				sekund
+			</text>
+			<slider label="Wyjście" name="FSAudioMusicFadeOut" tool_tip="Czas wygładzania dla dźwięku parceli przy wychodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
+			<text name="FSAudioMusicFadeOutSeconds">
+				sekund
+			</text>
 			<text name="Media Rolloff">
 				Rozchodzenie się dźwięku:
 			</text>
