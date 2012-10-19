@@ -5403,4 +5403,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Collision_UnknownType">
 		[NAME] hat eine Kollision unbekannten Typs verursacht.
 	</string>
+	
+	<string name="BusyResponse">
+		Beschäftigt-Nachricht
+	</string>
 </strings>

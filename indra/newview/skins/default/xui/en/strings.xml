@@ -311,7 +311,7 @@ Please try logging in again in a minute.</string>
 	<!-- llvoavatar. Displayed in the avatar chat bubble -->
 	<string name="AvatarEditingAppearance">(Editing Appearance)</string>
 	<string name="AvatarAway">Away</string>
-	<string name="AvatarBusy">Unavailable</string>
+	<string name="AvatarBusyBusy">Unavailable</string>
 	<string name="AvatarMuted">Blocked</string>
 
 	<!-- animations -->
@@ -4134,6 +4134,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
+  <string name="BusyResponse">busy reponse</string>
+  
   <string name="TeleportMaturityExceeded">The Resident cannot visit this region.</string>
 
   <!-- Spell check settings floater -->
