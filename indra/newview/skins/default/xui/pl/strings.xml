@@ -640,7 +640,7 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="AvatarAway">
 		Śpi
 	</string>
-	<string name="AvatarBusy">
+	<string name="AvatarBusyBusy">
 		Zajęty
 	</string>
 	<string name="AvatarMuted">
@@ -4946,6 +4946,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Collision_UnknownType">
 		[NAME] spowodował/a nieznany typ kolizji.
+	</string>
+	<string name="BusyResponse">
+		Wiadomość zajętości
 	</string>
 	<string name="TeleportMaturityExceeded">
 		Rezydent nie może odwiedzić tego regionu.
