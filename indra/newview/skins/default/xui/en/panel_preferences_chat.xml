@@ -145,6 +145,15 @@
             </radio_group>
 
             <check_box
+             control_name="FSChatsUppercase"
+             height="16"
+             label="Display Group chats, IM sessions and nearby chat always in uppercase"
+             layout="topleft"
+             left="30"
+             name="chat_always_in_uppercase"
+             top_pad="5"
+             width="400" />
+            <check_box
              control_name="PlayTypingAnim"
              height="16"
              initial_value="true"

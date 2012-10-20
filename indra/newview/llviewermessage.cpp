@@ -4143,6 +4143,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			}
 			return;
 		}
+		// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
+		static LLCachedControl<bool> aFSChatsUppercase(gSavedSettings, "FSChatsUppercase");
+		bool allowConvertChatUppercase = true;
+		// </FS:PP>
 
 		// Look for IRC-style emotes
 		if (ircstyle)
@@ -4177,6 +4181,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				{
 					mesg.erase(0, 1);
 					LLStringUtil::toLower(mesg);
+					allowConvertChatUppercase = false;
 
 					std::string strExecuted, strFailed, strRetained, *pstr;
 
@@ -4253,6 +4258,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				if  ( (rlv_handler_t::isEnabled()) && (chatter) && (chat.mSourceType == CHAT_SOURCE_OBJECT) &&
 					  (gSavedSettings.getBOOL("EffectScriptChatParticles")) )
 				{
+					allowConvertChatUppercase = false;
 					LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
 					psc->setSourceObject(chatter);
 					psc->setColor(color);
@@ -4272,15 +4278,26 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			case CHAT_TYPE_START:
 			case CHAT_TYPE_STOP:
 				LL_WARNS("Messaging") << "Got chat type start/stop in main chat processing." << LL_ENDL;
+				allowConvertChatUppercase = false;
 				break;
 			default:
 				LL_WARNS("Messaging") << "Unknown type " << chat.mChatType << " in chat!" << LL_ENDL;
+				allowConvertChatUppercase = false;
 				break;
 			}
 
 			chat.mText += mesg;
 		}
 		
+		// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
+		if (aFSChatsUppercase && allowConvertChatUppercase)
+		{
+			std::string chatMessageUppercase = chat.mText;
+			 LLStringUtil::toUpper(chatMessageUppercase);
+			 chat.mText = chatMessageUppercase;
+		}
+		// </FS:PP>
+
 		// We have a real utterance now, so can stop showing "..." and proceed.
 		if (chatter && chatter->isAvatar())
 		{
@@ -4293,6 +4310,15 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				std::string formated_msg = "";
 				LLViewerChat::formatChatMsg(chat, formated_msg);
 				LLChat chat_bubble = chat;
+
+				// <FS:PP> FIRE-7625: Option to display group chats, IM sessions and nearby chat always in uppercase
+				// Chat bubbles
+				if (aFSChatsUppercase && allowConvertChatUppercase)
+				{
+					LLStringUtil::toUpper(formated_msg);
+				}
+				// </FS:PP>
+
 				chat_bubble.mText = formated_msg;
 				((LLVOAvatar*)chatter)->addChat(chat_bubble);
 			}

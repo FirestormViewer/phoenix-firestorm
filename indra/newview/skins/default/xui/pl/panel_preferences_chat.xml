@@ -20,6 +20,7 @@
 				<radio_item label="Duża" name="consradio3"/>
 				<radio_item label="Ogromna" name="consradio4"/>
 			</radio_group>
+			<check_box label="Wyświetlaj czaty grupowe, wiadomości IM oraz czat lokalny zawsze dużymi literami" name="chat_always_in_uppercase"/>
 			<check_box label="Używaj animacji podczas pisania" name="play_typing_animation"/>
 			<check_box label="Odtwarzaj animacje awatara (np. krzyczenie)" name="play_avatar_animations"/>
 			<check_box label="Dźwięk pisania, gdy inne osoby piszą w czacie lokalnym" name="play_typing_sound"/>
