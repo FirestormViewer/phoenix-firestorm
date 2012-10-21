@@ -30,8 +30,9 @@
 				<radio_item label="Groß" name="consradio3"/>
 				<radio_item label="Riesig" name="consradio4"/>
 			</radio_group>
+			<check_box label="Gruppenchats, IM-Sitzungen und Chat in der Nähe immer in Großbuchstaben anzeigen" name="chat_always_in_uppercase"/>
 			<check_box label="Chateingabe nach Drücken der Returntaste beenden" name="CloseChatOnReturn"/>
-			<check_box initial_value="true" label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
+			<check_box label="Beim Chatten Tippanimation abspielen" name="play_typing_animation"/>
 			<check_box label="Beim Chatten Avataranimation abspielen, z.B. für Rufen" name="play_avatar_animations"/>
 			<check_box label="Tipp-Sound abspielen wenn Personen im Chat in der Nähe tippen" name="play_typing_sound"/> 
 			<check_box label="Andere Avatare während IM-Sitzungen benachrichtigen, wenn ich schreibe" name="FSSendTypingState"/>
