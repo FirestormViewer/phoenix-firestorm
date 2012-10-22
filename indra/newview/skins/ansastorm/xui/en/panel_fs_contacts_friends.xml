@@ -37,8 +37,7 @@
      draw_heading="true"
 	 heading_height="20"
 	 multi_select="true"
-     name="friend_list"
-     tool_tip="Select an object from this list to highlight it in-world" >
+     name="friend_list">
 		<scroll_list.column
 		 image="legacy/ff_online_status_button.tga"
 		 name="icon_online_status"

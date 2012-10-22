@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
 	<panel.string name="FriendCount" value="Amigos: [COUNT]"/>
-	<scroll_list name="friend_list" tool_tip="Selecciona un elemento de esta lista para resaltarlo en el mundo">
-		<scroll_list.column name="icon_online_status"
-		 tool_tip="Estado de conexión"/>
-		<scroll_list.column label="Usuario" name="user_name"
-		 tool_tip="Nombre de usuario de este contacto."/>
+	<scroll_list name="friend_list">
+		<scroll_list.column name="icon_online_status" tool_tip="Estado de conexión"/>
+		<scroll_list.column label="Usuario" name="user_name" tool_tip="Nombre de usuario de este contacto."/>
 		<scroll_list.column label="Nombre" name="full_name" tool_tip="Nombre por el que desea ser conocido este contacto."/>
 		<scroll_list.column name="icon_visible_online" tool_tip="Este contacto puede ver si estás conectado"/>
 		<scroll_list.column name="icon_visible_map" tool_tip="Este contacto puede localizarte en el mapa"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
 	<panel.string name="FriendCount" value="Znajomi: [COUNT]"/>
-	<scroll_list name="friend_list" tool_tip="Wybierz pozycję z tej listy, aby podświetlić ją w świecie">
+	<scroll_list name="friend_list">
 		<scroll_list.column name="icon_online_status" tool_tip="Status online"/>
 		<scroll_list.column label="Nazwa" name="user_name" tool_tip="Nazwa użytkownika tego kontaktu."/>
 		<scroll_list.column label="Imię" name="full_name" tool_tip="Wybrane imię tego kontaktu."/>
