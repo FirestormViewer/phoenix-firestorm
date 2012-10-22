@@ -84,8 +84,11 @@ public:
 	void start(void);
 
 	apr_pool_t *getAPRPool() { return mAPRPoolp; }
-	LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
 
+	// <FS:ND> Removed LLVolatileAPRPool
+	//	LLVolatileAPRPool* getLocalAPRFilePool() { return mLocalAPRFilePoolp ; }
+	// </FS:ND>
+	
 	U32 getID() const { return mID; }
 
 private:
@@ -107,7 +110,10 @@ protected:
 	//a local apr_pool for APRFile operations in this thread. If it exists, LLAPRFile::sAPRFilePoolp should not be used.
 	//Note: this pool is used by APRFile ONLY, do NOT use it for any other purposes.
 	//      otherwise it will cause severe memory leaking!!! --bao
-	LLVolatileAPRPool  *mLocalAPRFilePoolp ; 
+
+	// <FS:ND> Removed LLVolatileAPRPool
+	// LLVolatileAPRPool  *mLocalAPRFilePoolp ;
+	// </FS:ND>
 
 	void setQuitting();
 	

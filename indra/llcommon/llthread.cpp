@@ -115,7 +115,11 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
 	}
 	mRunCondition = new LLCondition(mAPRPoolp);
 
-	mLocalAPRFilePoolp = NULL ;
+	// <FS:ND> Removed LLVolatileAPRPool
+
+	// mLocalAPRFilePoolp = NULL ;
+
+	// </FS:ND>
 }
 
 
@@ -123,11 +127,15 @@ LLThread::~LLThread()
 {
 	shutdown();
 
-	if(mLocalAPRFilePoolp)
-	{
-		delete mLocalAPRFilePoolp ;
-		mLocalAPRFilePoolp = NULL ;
-	}
+	// <FS:ND> Removed LLVolatileAPRPool
+
+	// if(mLocalAPRFilePoolp)
+	// {
+	// 	delete mLocalAPRFilePoolp ;
+	// 	mLocalAPRFilePoolp = NULL ;
+	// }
+
+	// </FS:ND>
 }
 
 void LLThread::shutdown()
@@ -175,7 +183,10 @@ void LLThread::shutdown()
 	delete mRunCondition;
 	mRunCondition = 0;
 	
-	if (mIsLocalPool && mAPRPoolp)
+	// <FS:ND> Removed LLVolatileAPRPool
+	// if (mIsLocalPool && mAPRPoolp)
+	if ( mAPRPoolp)
+	// </FS:ND>
 	{
 		apr_pool_destroy(mAPRPoolp);
 		mAPRPoolp = 0;

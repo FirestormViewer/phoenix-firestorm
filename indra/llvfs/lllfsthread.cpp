@@ -67,10 +67,14 @@ LLLFSThread::LLLFSThread(bool threaded) :
 	LLQueuedThread("LFS", threaded),
 	mPriorityCounter(PRIORITY_LOWBITS)
 {
-	if(!mLocalAPRFilePoolp)
-	{
-		mLocalAPRFilePoolp = new LLVolatileAPRPool() ;
-	}
+	// <FS:ND> Removed LLVolatileAPRPool
+
+	// if(!mLocalAPRFilePoolp)
+	// {
+	// 	mLocalAPRFilePoolp = new LLVolatileAPRPool() ;
+	// }
+
+	// </FS:ND>
 }
 
 LLLFSThread::~LLLFSThread()
@@ -183,7 +187,12 @@ bool LLLFSThread::Request::processRequest()
 	{
 		llassert(mOffset >= 0);
 		LLAPRFile infile ; // auto-closes
-		infile.open(mFileName, LL_APR_RB, mThread->getLocalAPRFilePool());
+
+		// <FS:ND> Removed LLVolatileAPRPool
+		// infile.open(mFileName, LL_APR_RB, mThread->getLocalAPRFilePool());
+		infile.open(mFileName, LL_APR_RB, 0, 0);
+		// </FS:ND>
+
 		if (!infile.getFileHandle())
 		{
 			llwarns << "LLLFS: Unable to read file: " << mFileName << llendl;
@@ -206,7 +215,12 @@ bool LLLFSThread::Request::processRequest()
 		if (mOffset < 0)
 			flags |= APR_APPEND;
 		LLAPRFile outfile ; // auto-closes
-		outfile.open(mFileName, flags, mThread->getLocalAPRFilePool());
+
+		// <FS:ND> Removed LLVolatileAPRPool
+		// outfile.open(mFileName, flags, mThread->getLocalAPRFilePool());
+		outfile.open(mFileName, flags, 0, 0);
+		// </FS:ND>
+
 		if (!outfile.getFileHandle())
 		{
 			llwarns << "LLLFS: Unable to write file: " << mFileName << llendl;
