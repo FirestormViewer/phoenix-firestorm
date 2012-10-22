@@ -42,9 +42,9 @@
 		Affichage des noms :
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Désactivé" name="radio" value="0"/>
-		<radio_item label="Activé" name="radio2" value="1"/>
-		<radio_item label="Afficher brièvement" name="radio3" value="2"/>
+		<radio_item label="Désactivé" name="radio"/>
+		<radio_item label="Activé" name="radio2"/>
+		<radio_item label="Afficher brièvement" name="radio3"/>
 	</radio_group>
 	<check_box label="Mon nom" name="show_my_name_checkbox1"/>
 	<check_box label="Noms d&apos;utilisateur" name="show_slids" tool_tip="Afficher le nom d&apos;utilisateur, comme bobsmith123."/>
@@ -55,8 +55,8 @@
 		Appuyer sur les touches lettre :
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Lance le chat local" name="radio_start_chat" value="1"/>
-		<radio_item label="Affecte le déplacement (ZQSD/WASD)" name="radio_move" value="0"/>
+		<radio_item label="Lance le chat local" name="radio_start_chat"/>
+		<radio_item label="Affecte le déplacement (ZQSD/WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text">
 		Me montrer absent après :

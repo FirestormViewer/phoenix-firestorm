@@ -41,9 +41,9 @@
 		Etiquetas de los nombres:
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="No mostrar" name="radio" value="0" width="100"/>
-		<radio_item label="Mostrar" name="radio2" value="1"/>
-		<radio_item label="Mostrar brevemente" name="radio3" value="2"/>
+		<radio_item label="No mostrar" name="radio" width="100"/>
+		<radio_item label="Mostrar" name="radio2"/>
+		<radio_item label="Mostrar brevemente" name="radio3"/>
 	</radio_group>
 	<check_box label="Mi nombre" name="show_my_name_checkbox1"/>
 	<check_box label="Nombre de usuario" name="show_slids" tool_tip="Mostrar el nombre de usuario, como bobsmith123"/>
@@ -60,8 +60,8 @@
 		Si pulsas las teclas de letras:
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Inicia el chat local" name="radio_start_chat" value="1"/>
-		<radio_item label="Afecta al movimiento (por ejemplo, en las teclas WASD)" name="radio_move" value="0"/>
+		<radio_item label="Inicia el chat local" name="radio_start_chat"/>
+		<radio_item label="Afecta al movimiento (por ejemplo, en las teclas WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text">
 		Ausente tras:

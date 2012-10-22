@@ -42,9 +42,9 @@
 		Avatarnamen:
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Aus" name="radio" value="0" width="87"/>
-		<radio_item label="An" name="radio2" value="1" width="87"/>
-		<radio_item label="Kurz anzeigen" name="radio3" value="2" width="87"/>
+		<radio_item label="Aus" name="radio" width="87"/>
+		<radio_item label="An" name="radio2" width="87"/>
+		<radio_item label="Kurz anzeigen" name="radio3" width="87"/>
 	</radio_group>
 	<check_box label="Mein Name" name="show_my_name_checkbox1"/>
 	<check_box label="Benutzernamen" name="show_slids" tool_tip="Benutzernamen wie berndschmidt123 anzeigen" left_pad="75"/>
@@ -61,8 +61,8 @@
 		Drücken von Buchstabentasten:
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Startet lokalen Chat" name="radio_start_chat" value="1"/>
-		<radio_item label="Beeinflusst Bewegung (z. B. WASD)" name="radio_move" value="0"/>
+		<radio_item label="Startet lokalen Chat" name="radio_start_chat"/>
+		<radio_item label="Beeinflusst Bewegung (z. B. WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text" width="180">
 		Zeit bis zur Abwesenheit:

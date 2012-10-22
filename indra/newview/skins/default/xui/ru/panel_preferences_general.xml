@@ -40,9 +40,9 @@
 		Теги имен:
 	</text>
 	<radio_group name="Name_Tag_Preference">
-		<radio_item label="Выкл." name="radio" value="0"/>
-		<radio_item label="Вкл." name="radio2" value="1"/>
-		<radio_item label="Временный показ" name="radio3" value="2"/>
+		<radio_item label="Выкл." name="radio"/>
+		<radio_item label="Вкл." name="radio2"/>
+		<radio_item label="Временный показ" name="radio3"/>
 	</radio_group>
 	<check_box label="Мое имя" name="show_my_name_checkbox1"/>
 	<check_box label="Имена пользователей" name="show_slids" tool_tip="Показывать имя пользователя, например, bobsmith123"/>
@@ -58,8 +58,8 @@
 		Нажатие клавиш с буквами:
 	</text>
 	<radio_group name="inworld_typing_preference">
-		<radio_item label="Начинает локальный чат" name="radio_start_chat" value="1"/>
-		<radio_item label="Приводит к перемещению (т. е. WASD)" name="radio_move" value="0"/>
+		<radio_item label="Начинает локальный чат" name="radio_start_chat"/>
+		<radio_item label="Приводит к перемещению (т. е. WASD)" name="radio_move"/>
 	</radio_group>
 	<text name="title_afk_text" width="180">
 		Статус "Отошел" через:
