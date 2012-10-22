@@ -49,7 +49,7 @@
 		(
 	</text>
 	<text name="RenderNameShowTime_LabelSuffix">
-		seconds)
+		sekund)
 	</text>
 	<check_box label="Pokaż moje imię" name="show_my_name_checkbox1"/>
 	<check_box label="Nazwy użytkowników" name="show_slids" tool_tip="Pokaż nazwy kont użytkowników, np. bobsmith123"/>
