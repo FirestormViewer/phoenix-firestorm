@@ -1387,10 +1387,13 @@ std::string LLGridManager::getSLURLBase(const std::string& grid)
 
 		// deal with hand edited entries
 		std::string grid_norm = grid;
-		size_t pos = grid_norm.find_last_of("/");
-		if ( (grid_norm.length()-1) == pos )
+
+		if( grid_norm.size() )
 		{
-			grid_norm.erase(pos);
+			size_t pos = grid_norm.find_last_of("/");
+
+			if ( (grid_norm.length()-1) == pos )
+				grid_norm.erase(pos);
 		}
 
 		ret = llformat(DEFAULT_HOP_BASE, grid_norm.c_str());// <AW: hop:// protocol>

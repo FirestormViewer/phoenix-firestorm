@@ -73,9 +73,8 @@ LLSLURL::LLSLURL(const std::string& slurl)
 	{
 		mType = HOME_LOCATION;
 	}
-	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST))
+	else if(slurl.empty() || (slurl == SIM_LOCATION_LAST) || getGrid().empty())
 	{
-
 		mType = LAST_LOCATION;
 	}
 	else
