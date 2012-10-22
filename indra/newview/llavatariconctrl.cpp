@@ -152,11 +152,14 @@ LLAvatarIconCtrl::LLAvatarIconCtrl(const LLAvatarIconCtrl::Params& p)
 	mDrawTooltip(p.draw_tooltip),
 	mDefaultIconName(p.default_icon_name)
 {
-	mPriority = LLViewerFetchedTexture::BOOST_ICON;
+	// <FS:Ansariel> FIRE-1936: Don't use BOOST_ICON, it will call DontDiscard() and the texture stays in memory!
+	//mPriority = LLViewerFetchedTexture::BOOST_ICON;
+	mPriority = LLViewerFetchedTexture::BOOST_HUD;
 	
 	LLRect rect = p.rect;
-	mDrawWidth  = llmax(32, rect.getWidth()) ;
-	mDrawHeight = llmax(32, rect.getHeight()) ;
+	// <FS:Ansariel> FIRE-1936: Restricting the draw size seem to not fully load the image
+	//mDrawWidth  = llmax(32, rect.getWidth()) ;
+	//mDrawHeight = llmax(32, rect.getHeight()) ;
 
 	static LLUICachedControl<S32> llavatariconctrl_symbol_hpad("UIAvatariconctrlSymbolHPad", 2);
 	static LLUICachedControl<S32> llavatariconctrl_symbol_vpad("UIAvatariconctrlSymbolVPad", 2);
