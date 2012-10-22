@@ -2001,6 +2001,9 @@ void LLPipeline::grabReferences(LLCullResult& result)
 void LLPipeline::clearReferences()
 {
 	sCull = NULL;
+	// <FS:ND> FIRE-3737, save mGroupQ1 until it is safe to unref
+	mGroupSaveQ1.clear();
+	// </FS:ND>
 }
 
 void check_references(LLSpatialGroup* group, LLDrawable* drawable)
@@ -2576,6 +2579,10 @@ void LLPipeline::rebuildPriorityGroups()
 		group->rebuildGeom();
 		group->clearState(LLSpatialGroup::IN_BUILD_Q1);
 	}
+
+	// <FS:ND> FIRE-3737, save mGroupQ1 until it is safe to unref
+	mGroupSaveQ1 = mGroupQ1;
+	// </FS:ND>
 
 	mGroupQ1.clear();
 	mGroupQ1Locked = false;
