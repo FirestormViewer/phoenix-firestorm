@@ -35,6 +35,8 @@
 
 #include "llsd.h"
 
+#include "ndintrin.h"
+
 class LLIOPipe;
 class LLPumpIO;
 class LLBufferArray;
@@ -55,11 +57,11 @@ void pump_debug(const char *file, S32 line);
 /**
  * intrusive pointer support
  */
-namespace boost
-{
+//namespace boost
+//{
 	void intrusive_ptr_add_ref(LLIOPipe* p);
 	void intrusive_ptr_release(LLIOPipe* p);
-};
+//};
 
 /** 
  * @class LLIOPipe
@@ -250,25 +252,28 @@ protected:
 		LLPumpIO* pump) = 0;
 
 private:
-	friend void boost::intrusive_ptr_add_ref(LLIOPipe* p);
-	friend void boost::intrusive_ptr_release(LLIOPipe* p);
-	U32 mReferenceCount;
+//	friend void boost::intrusive_ptr_add_ref(LLIOPipe* p);
+//	friend void boost::intrusive_ptr_release(LLIOPipe* p);
+//	U32 mReferenceCount;
+	friend void intrusive_ptr_add_ref(LLIOPipe* p);
+	friend void intrusive_ptr_release(LLIOPipe* p);
+	volatile U32 mReferenceCount;
 };
 
-namespace boost
-{
+//namespace boost
+//{
 	inline void intrusive_ptr_add_ref(LLIOPipe* p)
 	{
-		++p->mReferenceCount;
+		ndIntrin::FAD(&p->mReferenceCount);
 	}
 	inline void intrusive_ptr_release(LLIOPipe* p)
 	{
-		if(p && 0 == --p->mReferenceCount)
+		if(p && 0 == ndIntrin::FAD( &p->mReferenceCount ))
 		{
 			delete p;
 		}
 	}
-};
+//};
 
 
 #if 0

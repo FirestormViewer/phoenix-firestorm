@@ -32,21 +32,21 @@
 #include "net.h"
 #include "message.h"
 
-namespace boost
-{
+//namespace boost
+//{
 	void intrusive_ptr_add_ref(LLRegionPresenceVerifier::Response* p)
 	{
-		++p->mReferenceCount;
+		ndIntrin::FAA( &p->mReferenceCount );
 	}
 	
 	void intrusive_ptr_release(LLRegionPresenceVerifier::Response* p)
 	{
-		if(p && 0 == --p->mReferenceCount)
+		if(p && 0 == ndIntrin::FAD( &p->mReferenceCount ))
 		{
 			delete p;
 		}
 	}
-};
+//};
 
 LLRegionPresenceVerifier::Response::~Response()
 {

@@ -127,7 +127,8 @@ public:
 			}
 
 	public: /* but not really -- don't touch this */
-		U32 mReferenceCount;
+//		U32 mReferenceCount;
+		volatile U32 mReferenceCount;
 
 	private:
 		std::string mURL;
@@ -378,11 +379,11 @@ private:
 	void cleanupMulti(LLCurl::Multi* multi) ;
 } ;
 
-namespace boost
-{
+//namespace boost
+//{
 	void intrusive_ptr_add_ref(LLCurl::Responder* p);
 	void intrusive_ptr_release(LLCurl::Responder* p);
-};
+//};
 
 
 class LLCurlRequest

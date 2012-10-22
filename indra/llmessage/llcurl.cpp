@@ -202,21 +202,21 @@ void LLCurl::Responder::completedHeader(U32 status, const std::string& reason, c
 
 }
 
-namespace boost
-{
+//namespace boost
+//{
 	void intrusive_ptr_add_ref(LLCurl::Responder* p)
 	{
-		++p->mReferenceCount;
+		ndIntrin::FAA( &p->mReferenceCount );
 	}
 	
 	void intrusive_ptr_release(LLCurl::Responder* p)
 	{
-		if (p && 0 == --p->mReferenceCount)
+		if (p && 0 == ndIntrin::FAD( &p->mReferenceCount ) )
 		{
 			delete p;
 		}
 	}
-};
+//};
 
 
 //////////////////////////////////////////////////////////////////////////////

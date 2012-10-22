@@ -139,7 +139,8 @@ void LLUpdateChecker::Implementation::checkVersion(std::string const & protocolV
 	// referential intrusive pointer to which we add a reference to keep the
 	// client from deleting the update checker implementation instance.
 	LLHTTPClient::ResponderPtr temporaryPtr(this);
-	boost::intrusive_ptr_add_ref(temporaryPtr.get());
+//	boost::intrusive_ptr_add_ref(temporaryPtr.get());
+	intrusive_ptr_add_ref(temporaryPtr.get());
 	mHttpClient.get(checkUrl, temporaryPtr);
 }
 

@@ -50,7 +50,8 @@ public:
 		virtual LLHTTPClientInterface& getHttpClient() = 0;
 
 	public: /* but not really -- don't touch this */
-		U32 mReferenceCount;		
+//		U32 mReferenceCount;		
+		volatile U32 mReferenceCount;		
 	};
 
 	typedef boost::intrusive_ptr<Response> ResponsePtr;
@@ -89,10 +90,10 @@ public:
 	};
 };
 
-namespace boost
-{
+//namespace boost
+//{
 	void intrusive_ptr_add_ref(LLRegionPresenceVerifier::Response* p);
 	void intrusive_ptr_release(LLRegionPresenceVerifier::Response* p);
-};
+//};
 
 #endif //LL_LLREGIONPRESENCEVERIFIER_H
