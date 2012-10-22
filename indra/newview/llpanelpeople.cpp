@@ -1009,8 +1009,8 @@ void LLPanelPeople::updateNearbyList()
 			}
 		}	
 		F32 avRange = (avPos[VZ] != -1 ? dist_vec(avPos, posSelf) : -1);
-		av->setRange(avRange); // maintain compatibility with underlying list, deprecated
-		av->setPosition(avPos); // maintain compatibility with underlying list, deprecated
+		av->setRange(avRange); // maintain compatibility with underlying list; used in other locations!
+		av->setPosition(avPos); // maintain compatibility with underlying list; used in other locations!
 		
 		//
 		//2b. Process newly detected avatars
