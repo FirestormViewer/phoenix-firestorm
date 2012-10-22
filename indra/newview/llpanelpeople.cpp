@@ -2246,7 +2246,7 @@ bool LLPanelPeople::radarNameFmtCheck(const LLSD& userdata)
 		case NAMEFORMAT_USERNAME_DISPLAYNAME:
 			return (menu_item == "UNDN");
 		default:
-			return false;
+			break;
 	}
 	return false;
 }
