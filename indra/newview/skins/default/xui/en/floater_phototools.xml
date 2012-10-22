@@ -2443,8 +2443,8 @@
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="2048"
+				 min_val="32"
+				 max_val="1024"
 				 top_delta="-2"
 				 width="127"/>
 				<spinner

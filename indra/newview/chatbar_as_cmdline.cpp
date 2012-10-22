@@ -514,14 +514,16 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				if(from_gesture)
 				{
 					cmdline_printchat("Due to the changes in code, it is no longer necessary to use this gesture.");
-					gSavedSettings.setBOOL("RenderFarClipStepping",TRUE);
+					// We don't have this debug setting
+					// gSavedSettings.setBOOL("RenderFarClipStepping",TRUE);
 					return false;
 				}
                 int drawDist;
                 if(i >> drawDist)
                 {
-                    gSavedSettings.setF32("RenderFarClip", drawDist);
-                    gAgentCamera.mDrawDistance=drawDist;
+					drawDist = llclamp(drawDist, 32, 1024);
+					gSavedSettings.setF32("RenderFarClip", drawDist);
+					gAgentCamera.mDrawDistance = drawDist;
 					cmdline_printchat(std::string(llformat("Draw distance set to: %dm",drawDist)));
 					return false;
                 }
