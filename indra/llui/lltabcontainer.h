@@ -148,6 +148,7 @@ public:
 	/*virtual*/ BOOL handleMouseUp( S32 x, S32 y, MASK mask );
 	/*virtual*/ BOOL handleToolTip(S32 x, S32 y, MASK mask);
 	/*virtual*/ BOOL handleKeyHere(KEY key, MASK mask);
+	/*virtual*/ BOOL handleScrollWheel(S32 x, S32 y, S32 clicks); // <FS:LO> FIRE-8024 Ability to scroll tab containers with the scroll wheel on the mouse
 	/*virtual*/ BOOL handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,
 									   EDragAndDropType type, void* cargo_data,
 									   EAcceptance* accept, std::string& tooltip);

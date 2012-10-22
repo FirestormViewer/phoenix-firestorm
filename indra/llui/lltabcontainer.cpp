@@ -844,6 +844,45 @@ BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 	return handled;
 }
 
+// <FS:LO> FIRE-8024 Ability to scroll tab containers with the scroll wheel on the mouse
+// virtual
+BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
+{
+	LLTabTuple* firsttuple = getTab(0);
+	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
+	BOOL has_scroll_arrows = (getMaxScrollPos() > 0);
+	LLRect clip;
+	if (mIsVertical)
+	{
+		clip = LLRect(firsttuple->mButton->getRect().mLeft,
+						has_scroll_arrows ? mPrevArrowBtn->getRect().mBottom - tabcntrv_pad : mPrevArrowBtn->getRect().mTop,
+						firsttuple->mButton->getRect().mRight,
+						has_scroll_arrows ? mNextArrowBtn->getRect().mTop + tabcntrv_pad : mNextArrowBtn->getRect().mBottom );
+	}
+	else
+	{
+		clip = LLRect(has_scroll_arrows ? mPrevArrowBtn->getRect().mRight : mJumpPrevArrowBtn->getRect().mLeft,
+						firsttuple->mButton->getRect().mTop,
+						has_scroll_arrows ? mNextArrowBtn->getRect().mLeft : mJumpNextArrowBtn->getRect().mRight,
+						firsttuple->mButton->getRect().mBottom );
+	}
+
+	if( clip.pointInRect( x, y ) )
+	{
+		if(clicks < 0)
+		{
+			setScrollPos(getScrollPos() - 1);
+		}
+		else
+		{
+			setScrollPos(getScrollPos() + 1);
+		}
+	}
+
+	return LLUICtrl::handleScrollWheel(x, y, clicks);
+}
+// </FS:LO>
+
 // virtual
 BOOL LLTabContainer::handleDragAndDrop(S32 x, S32 y, MASK mask,	BOOL drop,	EDragAndDropType type, void* cargo_data, EAcceptance *accept, std::string	&tooltip)
 {
