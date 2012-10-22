@@ -136,6 +136,7 @@ BOOL FSFloaterContacts::postBuild()
 		mFriendsList->sortByColumn(std::string("full_name"), TRUE);
 	}
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
+	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
 	
 	mFriendsTab->childSetAction("im_btn", boost::bind(&FSFloaterContacts::onImButtonClicked, this));
 	mFriendsTab->childSetAction("profile_btn", boost::bind(&FSFloaterContacts::onViewProfileButtonClicked, this));
