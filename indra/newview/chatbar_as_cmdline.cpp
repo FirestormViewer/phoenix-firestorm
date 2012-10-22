@@ -521,7 +521,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 int drawDist;
                 if(i >> drawDist)
                 {
-					drawDist = llclamp(drawDist, 32, 1024);
 					gSavedSettings.setF32("RenderFarClip", drawDist);
 					gAgentCamera.mDrawDistance = drawDist;
 					cmdline_printchat(std::string(llformat("Draw distance set to: %dm",drawDist)));
