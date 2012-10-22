@@ -44,6 +44,12 @@
 		<radio_item label="Вкл." name="radio2"/>
 		<radio_item label="Временный показ" name="radio3"/>
 	</radio_group>
+	<text left_pad="0" name="RenderNameShowTime_LabelPrefix">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		seconds)
+	</text>
 	<check_box label="Мое имя" name="show_my_name_checkbox1"/>
 	<check_box label="Имена пользователей" name="show_slids" tool_tip="Показывать имя пользователя, например, bobsmith123"/>
 	<check_box label="Титулы групп" name="show_all_title_checkbox1" tool_tip="Показывать титулы групп, например, Officer или Member"/>

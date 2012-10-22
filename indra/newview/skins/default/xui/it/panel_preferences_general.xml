@@ -46,6 +46,12 @@
 		<radio_item label="On" name="radio2"/>
 		<radio_item label="Mostra brevemente" name="radio3"/>
 	</radio_group>
+	<text left_pad="5" name="RenderNameShowTime_LabelPrefix">
+		(
+	</text>
+	<text name="RenderNameShowTime_LabelSuffix">
+		seconds)
+	</text>
 	<check_box label="Il mio nome" name="show_my_name_checkbox1"/>
 	<check_box label="Nomi utente" name="show_slids" tool_tip="Mostra il nome utente, come bobsmith123"/>
 	<check_box label="Titoli gruppo" name="show_all_title_checkbox1" tool_tip="Mostra titoli di gruppo, come Funzionario o Membro"/>

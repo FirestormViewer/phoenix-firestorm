@@ -269,6 +269,44 @@
          value="2"
          width="160" />
     </radio_group>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left_pad="-25"
+     name="RenderNameShowTime_LabelPrefix"
+     top_delta="0"
+     width="5">
+       (
+    </text>
+    <spinner
+     allow_text_entry="true"
+     control_name="RenderNameShowTime"
+     decimal_digits="0"
+     follows="left|top"
+     height="20"
+     increment="1"
+     layout="topleft"
+     left_pad="0"
+     max_val="60"
+     min_val="1"
+     name="RenderNameShowTime"
+     top_delta="-4"
+     width="40"/>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     height="15"
+     layout="topleft"
+     left_pad="3"
+     name="RenderNameShowTime_LabelSuffix"
+     top_delta="4"
+     width="80">
+       seconds)
+    </text>
     <check_box
      enabled_control="AvatarNameTagMode"
      control_name="RenderNameShowSelf"
