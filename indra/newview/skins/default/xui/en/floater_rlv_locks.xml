@@ -1,64 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
- can_close="true"
- can_minimize="true"
- can_resize="true"
- height="400"
- min_height="300"
- min_width="500"
- name="rlvLocks"
- save_rect="true"
- save_visibility="true"
- single_instance="true"
- title="Active RLV Locks"
- width="500">
-  <scroll_list
-   background_visible="false"
-   draw_border="false"
-   draw_heading="true"
-   draw_stripes="true"
-   follows="all"
-   height="373"
-   layout="topleft"
-   multi_select="false"
-   name="lock_list"
-   top="0"
-   width="500">
-    <scroll_list.columns label="Lock Type" name="lock_type" width="110" />
-    <scroll_list.columns label="Add / Rem" name="lock_addrem" width="75" />
-    <scroll_list.columns label="Lock Target" name="lock_target" width="150" />
-    <scroll_list.columns label="Held By" name="lock_origin" width="150" />
-  </scroll_list>
+  can_close="true"
+  can_minimize="true"
+  can_resize="true"
+  height="200"
+  min_height="200"
+  min_width="500"
+  name="rlvLocks"
+  save_rect="true"
+  save_visibility="false"
+  single_instance="true"
+  positioning="cascading"
+  reuse_instance="true"
+  title="ACTIVE RLV LOCKS"
+  width="500">
   <panel
-   background_visible="false"
-   follows="left|right|bottom"
-   height="27"
-   layout="topleft"
-   left="0"
-   name="bottom_panel"
-   top_pad="0"
-   width="500">
-    <button
-     follows="bottom|left"
-     height="25"
-     image_hover_unselected="Toolbar_Left_Over"
-     image_overlay="Refresh_Off"
-     image_overlay_alignment="left"
-     image_selected="Toolbar_Left_Selected"
-     image_unselected="Toolbar_Left_Off"
-     label="Refresh"
-     layout="topleft"
-     left="0"
-     name="refresh_btn"
-     top="1"
-     width="74" />
-    <icon
-     follows="bottom|left|right"
-     height="25"
-     image_name="Toolbar_Right_Off"
-     layout="topleft"
-     left_pad="1"
-     name="dummy_icon"
-     width="425"/>
-  </panel>
+    class="panel_rlvLocks"
+    filename="panel_rlv_locks.xml"
+    layout="topleft"
+    left="9" 
+    name="panel_rlvLocks"
+    right="-8"
+    top="0" />
 </floater>
