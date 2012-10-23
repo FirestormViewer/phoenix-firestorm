@@ -1342,16 +1342,16 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="no_transfer" value=" (bez transferowania)"/>
 	<string name="no_modify" value=" (bez modyfikowania)"/>
 	<string name="no_copy" value=" (bez kopiowania)"/>
-	<string name="worn" value=" (załóż)"/>
+	<string name="worn" value=" (założone)"/>
 	<string name="link" value=" (link)"/>
-	<string name="broken_link" value=" (broken_link)"/>
+	<string name="broken_link" value=" (zepsuty_link)"/>
 	<string name="LoadingContents">
 		Ładowanie zawartości...
 	</string>
 	<string name="NoContents">
 		Brak zawartości
 	</string>
-	<string name="WornOnAttachmentPoint" value=" (założony na [ATTACHMENT_POINT])"/>
+	<string name="WornOnAttachmentPoint" value=" (założone na [ATTACHMENT_POINT])"/>
 	<string name="ActiveGesture" value="[GESLABEL] (aktywny)"/>
 	<string name="PermYes">Tak</string>
 	<string name="PermNo">Nie</string>
