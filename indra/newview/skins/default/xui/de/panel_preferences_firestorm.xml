@@ -140,7 +140,7 @@
 		</text>
 		<line_editor tool_tip="Setzt den Medienstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMedia"/>
 		<text name="FSCmdLineMusic_txt">
-			Musikstream-URL setzen (usage: cmd URL)
+			Musikstream-URL setzen (Befehl: cmd URL)
 		</text>
 		<line_editor tool_tip="Setzt die Musikstream auf die angegebene URL und spielt ihn ab." name="FSCmdLineMusic"/>
 	</panel>

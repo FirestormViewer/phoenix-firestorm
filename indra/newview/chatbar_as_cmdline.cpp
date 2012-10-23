@@ -88,6 +88,7 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llpanelpeople.h"
 
+#include "llvieweraudio.h"
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
 {
@@ -542,22 +543,40 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					if(i >> type)
 					{
 						LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-						parcel->setMediaURL(url);
-						parcel->setMediaType(type);
-						if (gSavedSettings.getBOOL("MediaEnableFilter"))
+						if (parcel)
 						{
-							LLViewerParcelMedia::filterMediaUrl(parcel);
+							parcel->setMediaURL(url);
+							parcel->setMediaType(type);
+							if (gSavedSettings.getBOOL("MediaEnableFilter"))
+							{
+								LLViewerParcelMedia::filterMediaUrl(parcel);
+							}
+							else
+							{
+								LLViewerParcelMedia::play(parcel);
+							}
+							LLViewerParcelMediaAutoPlay::playStarted();
+							return false;
 						}
-						else
-						{
-							LLViewerParcelMedia::play(parcel);
-						}
-						LLViewerParcelMediaAutoPlay::playStarted();
-						return false;
 					}
 				}
 			}
-
+			else if(command == std::string(sFSCmdLineMusic))
+			{
+				std::string status;
+				if(i >> status)
+				{
+					if (gSavedSettings.getBOOL("MediaEnableFilter"))
+					{
+						LLViewerParcelMedia::filterAudioUrl(status);
+					}
+					else
+					{
+						LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(status);
+					}
+					return false;
+				}
+			}
 			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 			else if(command == std::string(sFSCmdLineBandwidth))
 			{
@@ -575,28 +594,6 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
 			}
 			//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-#if 0
-			else if(command == std::string(sFSCmdLineMusic))
-			{
-				std::string status;
-				if(i >> status)
-				{
-					if(!gOverlayBar->musicPlaying())
-					{
-						gOverlayBar->toggleMusicPlay(gOverlayBar);
-					}
-					if (gSavedSettings.getBOOL("MediaEnableFilter"))
-					{
-						LLViewerParcelMedia::filterAudioUrl(parcel);
-					}
-					else
-					{
-						gAudiop->startInternetStream(status);
-					}
-					return false;
-				}
-			}
-#endif
 			else if(command == std::string(sFSCmdLineAO))
             {
 				std::string status;

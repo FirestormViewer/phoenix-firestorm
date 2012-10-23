@@ -1013,7 +1013,6 @@
     </text>
     <line_editor
       top_pad="0"
-      enabled="false"
       follows="left|top"
       height="20"
       max_length_chars="256"
