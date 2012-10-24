@@ -353,7 +353,7 @@
      height="16"
      control_name="FSKeepUnpackedCacheFiles"
      label="Don't delete unpacked DSF (sound) cache files when logging out"
-     tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill up your cache directory very quickly, and will not adhear to the max cache value. This may result in use of more than 10GB of disk space. This option is disabled by default in Firestorm."
+     tool_tip="If checked, the viewer won't delete unpacked sound files from the cache when logging out, which may improve experience with playing inworld sounds. Please note: Enabling this will likely fill your cache directory very quickly, and does not adhere to the max cache setting. This may result in excessive disk space usage. Disabled by default."
      left="15"
      mouse_opaque="true"
      name="keep_unpacked_cache"
