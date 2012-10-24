@@ -4,7 +4,7 @@
   </object>
   <array count="7" name="allObjects">
     <object class="IBCarbonStaticText" id="181">
-      <string name="title">Firestorm appears to have crashed or frozen the last time it ran.&#10;&#10;This crash reporter collects information about your computer&apos;s hardware configuration, operating system, and some Firestorm logs, all of which are used for debugging purposes only.&#10;&#10;In the space below, please briefly describe what you were doing or trying to do just prior to the crash.  Thank you for your help!&#10;&#10;If you don&apos;t wish to send the Firestorm development team a crash report, press Cancel.&#10; &#10;</string>
+      <string name="title">Firestorm appears to have crashed or frozen on its last run.&#10;&#10;You can help improve Firestorm by submitting a crash report our developers. &#10;&#10;The crash reporter collects information about your computer&apos;s hardware configuration, operating system, and some Firestorm logs, all of which are used soley for debugging the problem.&#10;&#10;In the space below, please briefly describe what you were doing or trying to do just prior to the crash and click Send Report. &#10; &#10;</string>
       <string name="bounds">20 20 231 487 </string>
     </object>
     <object class="IBCarbonEditText" id="185">
@@ -19,7 +19,7 @@
       <string name="bounds">414 390 434 487 </string>
     </object>
     <object class="IBCarbonStaticText" id="181">
-      <string name="title">Firestorm appears to have crashed or frozen the last time it ran.&#10;&#10;This crash reporter collects information about your computer&apos;s hardware configuration, operating system, and some Firestorm logs, all of which are used for debugging purposes only.&#10;&#10;In the space below, please briefly describe what you were doing or trying to do just prior to the crash.  Thank you for your help!&#10;&#10;If you don&apos;t wish to send the Firestorm development team a crash report, press Cancel.&#10; &#10;</string>
+      <string name="title">Firestorm appears to have crashed or frozen on its last run.&#10;&#10;You can help improve Firestorm by submitting a crash report our developers. &#10;&#10;The crash reporter collects information about your computer&apos;s hardware configuration, operating system, and some Firestorm logs, all of which are used soley for debugging the problem.&#10;&#10;In the space below, please briefly describe what you were doing or trying to do just prior to the crash and click Send Report. &#10; &#10;</string>
       <string name="bounds">20 20 231 487 </string>
     </object>
     <object class="IBCarbonWindow" id="166">
