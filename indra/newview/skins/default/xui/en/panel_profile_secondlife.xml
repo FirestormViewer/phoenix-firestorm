@@ -320,8 +320,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="group_invite"
          label="+"
          label_selected="+"
-         tool_tip="Invite to Group"
-         commit_callback.function="Profile.GroupInvite" />
+         tool_tip="Invite to Group" />
 
         <group_list
          top_delta="-20"
