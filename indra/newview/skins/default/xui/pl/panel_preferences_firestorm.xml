@@ -258,17 +258,24 @@
         <check_box label="Pokazuj swój kolor" name="FSShowOwnTagColor_toggle" tool_tip="Gdy zaznaczysz tą opcję, to Twój tag będzie pokazywany w wybranym przez Ciebie kolorze." />
         <check_box label="Koloruj nazwy kont odmiennie" name="FSColorUsername_toggle" tool_tip="Koloruje nazwy kont odmiennie (zastępuje kolory tagów dla nazw kont)" />
         <color_swatch name="usernamecolorswatch" tool_tip="Kliknij, aby otworzyć paletę kolorów" />
-		<check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
-		<check_box label="Pokazuj odległość w tagach" name="FSTagShowDistance" tool_tip="W tagach awatarów będzie widoczny dystans po zaznaczeniu tej opcji, zgodnie z kolorami ustawionymi poniżej."/>
-		<text name="NameTagChatDistanceColor_Label">
-			Zasięg czatu
-		</text>
-		<text name="NameTagShoutDistanceColor_Label">
-			Zasięg krzyku
-		</text>
-		<text name="NameTagBeyondShoutDistanceColor_Label">
-			Poza zasięgiem krzyku
-		</text>
+        <check_box label="Koloruj tagi na podstawie odległości" name="FSTagShowDistanceColors" tool_tip="Koloruje tagi w zależności od tego, czy awatary są w zasięgu czatu, krzyku lub poza zasięgiem krzyku. Zastępuje kolory tagów przeglądarek, ale nie znajomych lub z Zestawów Kontaktów." />
+        <check_box label="Pokazuj odległość w tagach" name="FSTagShowDistance" tool_tip="W tagach awatarów będzie widoczny dystans po zaznaczeniu tej opcji, zgodnie z kolorami ustawionymi poniżej."/>
+        <color_swatch name="NameTagWhisperDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
+        <text name="NameTagWhisperDistanceColor_Label">
+          Zasięg szeptu
+        </text>
+        <color_swatch name="NameTagChatDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
+        <text name="NameTagChatDistanceColor_Label">
+          Zasięg czatu
+        </text>
+        <color_swatch name="NameTagShoutDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
+        <text name="NameTagShoutDistanceColor_Label">
+          Zasięg krzyku
+        </text>
+        <color_swatch name="NameTagBeyondShoutDistanceColor_Color_Swatch" tool_tip="Kliknij, aby otworzyć paletę kolorów"/>
+        <text name="NameTagBeyondShoutDistanceColor_Label">
+          Poza zasięgiem krzyku
+        </text>
         <slider name="FSNameTagZOffsetCorrection" label="Przesuń w pionie:" tool_tip="Zmienia przesunięcie w pionie dla tagów imion. Domyślnie 0" />
     </panel>
 </tab_container>

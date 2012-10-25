@@ -32,7 +32,7 @@
 			<button label="Resetuj" label_selected="Resetuj" name="reset_logpath"/>
 			<button label="Logi błędów" label_selected="Logi błędów" name="browse_crashlogs"/>
 			<button label="Folder ustawień" label_selected="Folder ustawień" name="browse_settingsdir"/>
-			<check_box label="Nie usuwaj wypakowanych plików DSF (dźwięków) z cache podczas wylogowywania" tool_tip="Gdy zaznaczysz tą opcję, to przeglądarka nie będzie usuwać wypakowanych plików dźwiękowych z pamięci podręcznej podczas wylogowywania, co może poprawić wydajność podczas odtwarzania ich w świecie. Pamiętaj proszę, że włączenie tej opcji spowoduje bardzo szybkie zapełnienie się katalogu pamięci podręcznej, a także że nie obowiązuje w jej wypadku ustawienie maksymalnego jej limitu. Może to doprowadzić do wykorzystywania więcej niż 10GB powierzchni dyskowej. Ta opcja jest domyślnie wyłączona w Firestormie." name="keep_unpacked_cache"/>
+			<check_box label="Nie usuwaj wypakowanych plików DSF (dźwięków) z cache podczas wylogowywania" tool_tip="Gdy zaznaczysz tą opcję, to przeglądarka nie będzie usuwać wypakowanych plików dźwiękowych z pamięci podręcznej podczas wylogowywania, co może poprawić wydajność podczas odtwarzania ich w świecie. Pamiętaj proszę, że włączenie tej opcji spowoduje bardzo szybkie zapełnienie się katalogu pamięci podręcznej, a także że nie obowiązuje w jej wypadku ustawienie maksymalnego jej limitu. Może to doprowadzić do wykorzystywania powierzchni dyskowej ponad miarę. Ta opcja jest domyślnie wyłączona." name="keep_unpacked_cache"/>
 			<text name="Web:">
 				Przeglądarka internetowa:
 			</text>
