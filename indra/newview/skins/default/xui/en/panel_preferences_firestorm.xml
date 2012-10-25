@@ -1817,6 +1817,7 @@
             top_pad="5"
             left="40"
             name="NameTagWhisperDistanceColor_Color_Swatch"
+            tool_tip="Click to open color picker"
             width="15">
             <color_swatch.init_callback
             function="Pref.getUIColor"
@@ -1835,9 +1836,9 @@
             layout="topleft"
             left_pad="5"
             mouse_opaque="false"
-            name="NameTagChatDistanceColor_Label"
+            name="NameTagWhisperDistanceColor_Label"
             top_delta="3"
-            width="85">
+            width="200">
             Whisper range
         </text>
         <color_swatch
@@ -1847,8 +1848,9 @@
          label_height="0"
          layout="topleft"
          top_delta="-3"
-         left_pad="4"
+         left="250"
          name="NameTagChatDistanceColor_Color_Swatch"
+         tool_tip="Click to open color picker"
          width="15">
             <color_swatch.init_callback
              function="Pref.getUIColor"
@@ -1869,7 +1871,7 @@
          mouse_opaque="false"
          name="NameTagChatDistanceColor_Label"
          top_delta="3"
-         width="85">
+         width="200">
             Chat range
         </text>
         <color_swatch
@@ -1878,10 +1880,11 @@
          height="15"
          label_height="0"
          layout="topleft"
-         left_pad="4"
+         left="40"
          name="NameTagShoutDistanceColor_Color_Swatch"
+         tool_tip="Click to open color picker"
          width="15"
-		 top_delta="-3">
+		 top_pad="10">
             <color_swatch.init_callback
              function="Pref.getUIColor"
              parameter="NameTagShoutDistanceColor" />
@@ -1901,7 +1904,7 @@
          mouse_opaque="false"
          name="NameTagShoutDistanceColor_Label"
          top_delta="3"
-         width="85">
+         width="200">
             Shout range
         </text>
         <color_swatch
@@ -1910,8 +1913,9 @@
          height="15"
          label_height="0"
          layout="topleft"
-         left_pad="4"
+         left="250"
          name="NameTagBeyondShoutDistanceColor_Color_Swatch"
+         tool_tip="Click to open color picker"
          width="15"
 		 top_delta="-3">
             <color_swatch.init_callback
@@ -1933,7 +1937,7 @@
          mouse_opaque="false"
          name="NameTagBeyondShoutDistanceColor_Label"
          top_delta="3"
-         width="120">
+         width="200">
             Beyond Shout range
         </text>
 		 
