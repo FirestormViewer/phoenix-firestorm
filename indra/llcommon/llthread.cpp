@@ -111,7 +111,17 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
 	else
 	{
 		mIsLocalPool = TRUE;
-		apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
+		// <FS:ND> Make sure the pool gets its own allocator
+
+		// apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
+
+		apr_allocator_t *pAlloc(0);
+
+		apr_allocator_create( &pAlloc );
+		apr_pool_create_ex( &mAPRPoolp, 0, 0, pAlloc );
+
+		// <FS:ND>
+
 	}
 	mRunCondition = new LLCondition(mAPRPoolp);
 

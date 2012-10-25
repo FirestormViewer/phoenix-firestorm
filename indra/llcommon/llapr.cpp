@@ -51,7 +51,17 @@ void ll_init_apr()
 	{
 		// Initialize APR and create the global pool
 		apr_initialize();
-		apr_pool_create(&gAPRPoolp, NULL);
+		
+		// <FS:ND> Make sure the pool gets its own allocator
+
+		// apr_pool_create(&gAPRPoolp, NULL);
+
+		apr_allocator_t *pAlloc(0);
+
+		apr_allocator_create( &pAlloc );
+		apr_pool_create_ex( &gAPRPoolp, 0, 0, pAlloc );
+
+		// <FS:ND>
 		
 		// Initialize the logging mutex
 		apr_thread_mutex_create(&gLogMutexp, APR_THREAD_MUTEX_UNNESTED, gAPRPoolp);
@@ -125,8 +135,19 @@ void LLAPRPool::createAPRPool()
 		return ;
 	}
 
-	mStatus = apr_pool_create(&mPool, mParent);
+	// <FS:ND> Use on allocator for each pool
+
+	// mStatus = apr_pool_create(&mPool, mParent);
+	// ll_apr_warn_status(mStatus) ;
+
+	apr_allocator_t *pAlloc(0);
+
+	mStatus = apr_allocator_create( &pAlloc );
 	ll_apr_warn_status(mStatus) ;
+	mStatus = apr_pool_create_ex( &mPool, mParent, 0, pAlloc );
+	ll_apr_warn_status(mStatus) ;
+
+	// <FS:ND>
 
 	if(mMaxSize > 0) //size is the number of blocks (which is usually 4K), NOT bytes.
 	{
