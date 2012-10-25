@@ -828,6 +828,9 @@
     <color
      name="NameTagBeyondShoutDistanceColor"
      reference="BrightRed" />
+    <color
+    name="NameTagWhisperDistanceColor"
+    reference="Green" />
   <color
       name="NameTagFriend"
      value="0.75 0.92 0.49 1.0" />

@@ -3256,6 +3256,9 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// <FS:Ansariel> Color name tags based on distance
 	static LLCachedControl<bool> show_distance_color_tag(gSavedSettings, "FSTagShowDistanceColors");
 	static LLCachedControl<bool> show_distance_in_tag(gSavedSettings, "FSTagShowDistance");
+    // <FS:CR> FIRE-6664: Add whisper range to color tags
+    static LLUIColor tag_whisper_color = LLUIColorTable::instance().getColor("NameTagWhisperDistanceColor", LLColor4::green);
+    // </FS:CR> FIRE-6664: Add whisper range to color tags
 	static LLUIColor tag_chat_color = LLUIColorTable::instance().getColor("NameTagChatDistanceColor", LLColor4::green);
 	static LLUIColor tag_shout_color = LLUIColorTable::instance().getColor("NameTagShoutDistanceColor", LLColor4::yellow);
 	static LLUIColor tag_beyond_shout_color = LLUIColorTable::instance().getColor("NameTagBeyondShoutDistanceColor", LLColor4::red);
@@ -3266,7 +3269,14 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 		static const F64 SHOUT_RANGE_SQUARED = 10000.f;
 
 		F64 distance_squared = dist_vec_squared(getPositionGlobal(), gAgent.getPositionGlobal());
-		if (distance_squared <= CHAT_RANGE_SQUARED)
+    // <FS:CR> FIRE-6664: Add whisper range color tag
+        if (distance_squared <= CHAT_WHISPER_RADIUS_SQUARED)
+        {
+            distance_color = tag_whisper_color;
+        }
+		//if (distance_squared <= CHAT_RANGE_SQUARED)
+        else if (distance_squared <= CHAT_RANGE_SQUARED)
+    // <FS:CR> FIRE-6664: Add whisper range color tag
 		{
 			distance_color = tag_chat_color;
 		}

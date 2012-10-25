@@ -1809,13 +1809,45 @@
          tool_tip="When checked, the tag of other avatars shows their distance, using the colors set below." />
 
         <color_swatch
+            can_apply_immediately="true"
+            follows="left|top"
+            height="15"
+            label_height="0"
+            layout="topleft"
+            top_pad="5"
+            left="40"
+            name="NameTagWhisperDistanceColor_Color_Swatch"
+            width="15">
+            <color_swatch.init_callback
+            function="Pref.getUIColor"
+            parameter="NameTagWhisperDistanceColor" />
+            <color_swatch.commit_callback
+            function="Pref.applyUIColor"
+            parameter="NameTagWhisperDistanceColor" />
+            <color_swatch.caption_text
+            height="0" />
+        </color_swatch>
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left_pad="5"
+            mouse_opaque="false"
+            name="NameTagChatDistanceColor_Label"
+            top_delta="3"
+            width="85">
+            Whisper range
+        </text>
+        <color_swatch
          can_apply_immediately="true"
          follows="left|top"
          height="15"
          label_height="0"
          layout="topleft"
-         top_pad="5"
-         left="40"
+         top_delta="-3"
+         left_pad="4"
          name="NameTagChatDistanceColor_Color_Swatch"
          width="15">
             <color_swatch.init_callback
@@ -1837,7 +1869,7 @@
          mouse_opaque="false"
          name="NameTagChatDistanceColor_Label"
          top_delta="3"
-         width="95">
+         width="85">
             Chat range
         </text>
         <color_swatch
@@ -1846,7 +1878,7 @@
          height="15"
          label_height="0"
          layout="topleft"
-         left="175"
+         left_pad="4"
          name="NameTagShoutDistanceColor_Color_Swatch"
          width="15"
 		 top_delta="-3">
@@ -1869,7 +1901,7 @@
          mouse_opaque="false"
          name="NameTagShoutDistanceColor_Label"
          top_delta="3"
-         width="95">
+         width="85">
             Shout range
         </text>
         <color_swatch
@@ -1878,7 +1910,7 @@
          height="15"
          label_height="0"
          layout="topleft"
-         left="310"
+         left_pad="4"
          name="NameTagBeyondShoutDistanceColor_Color_Swatch"
          width="15"
 		 top_delta="-3">
@@ -1901,7 +1933,7 @@
          mouse_opaque="false"
          name="NameTagBeyondShoutDistanceColor_Label"
          top_delta="3"
-         width="150">
+         width="120">
             Beyond Shout range
         </text>
 		 
