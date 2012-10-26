@@ -44,6 +44,8 @@
 #include "llthread.h"
 #include "llqueuedthread.h"
 #include "llframetimer.h"
+#include "llpointer.h"
+
 
 class LLMutex;
 class LLCurlThread;
@@ -67,7 +69,7 @@ public:
 		F64 mSpeedDownload;
 	};
 	
-	class Responder
+	class Responder : public LLThreadSafeRefCount
 	{
 	//LOG_CLASS(Responder);
 	public:
@@ -126,14 +128,10 @@ public:
 				return false;
 			}
 
-	public: /* but not really -- don't touch this */
-//		U32 mReferenceCount;
-		volatile U32 mReferenceCount;
-
 	private:
 		std::string mURL;
 	};
-	typedef boost::intrusive_ptr<Responder>	ResponderPtr;
+	typedef LLPointer<Responder>	ResponderPtr;
 
 
 	/**
@@ -378,12 +376,6 @@ private:
 	void deleteMulti(LLCurl::Multi* multi) ;
 	void cleanupMulti(LLCurl::Multi* multi) ;
 } ;
-
-//namespace boost
-//{
-	void intrusive_ptr_add_ref(LLCurl::Responder* p);
-	void intrusive_ptr_release(LLCurl::Responder* p);
-//};
 
 
 class LLCurlRequest

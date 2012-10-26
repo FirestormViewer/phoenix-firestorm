@@ -83,6 +83,7 @@
 // [/RLVa:KB]
 
 extern LLPointer<LLViewerTexture> gStartTexture;
+extern bool gShiftFrame;
 
 LLPointer<LLViewerTexture> gDisconnectedImagep = NULL;
 
@@ -166,8 +167,11 @@ void display_startup()
 	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
+static LLFastTimer::DeclareTimer FTM_UPDATE_CAMERA("Update Camera");
+
 void display_update_camera()
 {
+	LLFastTimer t(FTM_UPDATE_CAMERA);
 	LLMemType mt_uc(LLMemType::MTYPE_DISPLAY_UPDATE_CAMERA);
 	// TODO: cut draw distance down if customizing avatar?
 	// TODO: cut draw distance on per-parcel basis?
@@ -221,6 +225,11 @@ static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_CLASS("Class");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_BUMP("Bump");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_LIST("List");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_DELETE("Delete");
+static LLFastTimer::DeclareTimer FTM_RESIZE_WINDOW("Resize Window");
+static LLFastTimer::DeclareTimer FTM_HUD_UPDATE("HUD Update");
+static LLFastTimer::DeclareTimer FTM_DISPLAY_UPDATE_GEOM("Update Geom");
+static LLFastTimer::DeclareTimer FTM_TEXTURE_UNBIND("Texture Unbind");
+static LLFastTimer::DeclareTimer FTM_TELEPORT_DISPLAY("Teleport Display");
 
 // Paint the display!
 void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
@@ -230,6 +239,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	if (gWindowResized)
 	{ //skip render on frames where window has been resized
+		LLFastTimer t(FTM_RESIZE_WINDOW);
 		gGL.flush();
 		glClear(GL_COLOR_BUFFER_BIT);
 		gViewerWindow->getWindow()->swapBuffers();
@@ -366,6 +376,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	if (gTeleportDisplay)
 	{
+		LLFastTimer t(FTM_TELEPORT_DISPLAY);
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Teleport");
 		const F32 TELEPORT_ARRIVAL_DELAY = 2.f; // Time to preload the world before raising the curtain after we've actually already arrived.
 
@@ -615,6 +626,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				
 		// *TODO: merge these two methods
 		{
+			LLFastTimer t(FTM_HUD_UPDATE);
 			LLMemType mt_uh(LLMemType::MTYPE_DISPLAY_UPDATE_HUD);
 			LLHUDManager::getInstance()->updateEffects();
 			LLHUDObject::updateAll();
@@ -622,6 +634,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		}
 
 		{
+			LLFastTimer t(FTM_DISPLAY_UPDATE_GEOM);
 			LLMemType mt_ug(LLMemType::MTYPE_DISPLAY_UPDATE_GEOM);
 			const F32 max_geom_update_time = 0.005f*10.f*gFrameIntervalSeconds; // 50 ms/second update time
 			gPipeline.createObjects(max_geom_update_time);
@@ -631,6 +644,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		}
 
 		gPipeline.updateGL();
+		
 		stop_glerror();
 
 		S32 water_clip = 0;
@@ -962,14 +976,18 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			stop_glerror();
 		}
 
-		for (U32 i = 0; i < gGLManager.mNumTextureImageUnits; i++)
-		{ //dummy cleanup of any currently bound textures
-			if (gGL.getTexUnit(i)->getCurrType() != LLTexUnit::TT_NONE)
-			{
-				gGL.getTexUnit(i)->unbind(gGL.getTexUnit(i)->getCurrType());
-				gGL.getTexUnit(i)->disable();
+		{
+			LLFastTimer t(FTM_TEXTURE_UNBIND);
+			for (U32 i = 0; i < gGLManager.mNumTextureImageUnits; i++)
+			{ //dummy cleanup of any currently bound textures
+				if (gGL.getTexUnit(i)->getCurrType() != LLTexUnit::TT_NONE)
+				{
+					gGL.getTexUnit(i)->unbind(gGL.getTexUnit(i)->getCurrType());
+					gGL.getTexUnit(i)->disable();
+				}
 			}
 		}
+
 		LLAppViewer::instance()->pingMainloopTimeout("Display:RenderFlush");		
 		
 		if (to_texture)
@@ -1035,6 +1053,8 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	display_stats();
 				
 	LLAppViewer::instance()->pingMainloopTimeout("Display:Done");
+
+	gShiftFrame = false;
 }
 
 void render_hud_attachments()

@@ -292,6 +292,7 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 	// occasionally checks to see if the app is in an error state, and sees if it needs to be run.
 
 #if LL_WINDOWS
+#if LL_SEND_CRASH_REPORTS
 	// This sets a callback to handle w32 signals to the console window.
 	// The viewer shouldn't be affected, sicne its a windowed app.
 	SetConsoleCtrlHandler( (PHANDLER_ROUTINE) ConsoleCtrlHandler, TRUE);
@@ -322,7 +323,7 @@ void LLApp::setupErrorHandling(EMiniDumpType minidump_type)
 			(MINIDUMP_TYPE)maskMiniDumpType, NULL, NULL);
 // [/SL:KB]
 	}
-
+#endif
 #else
 	//
 	// Start up signal handling.
