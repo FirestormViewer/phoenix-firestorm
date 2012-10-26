@@ -1374,7 +1374,7 @@ LLParcel::ECategory category_string_to_category(const std::string& s)
             //return (LLParcel::ECategory)i;
 			if (i == LLParcel::C_COUNT)
 			{
-				return (LLParcel::ECategory)(i + 1);
+				return LLParcel::C_ANY;
 			}
 			else
 			{
