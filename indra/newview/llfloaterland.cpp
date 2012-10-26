@@ -2262,8 +2262,12 @@ void LLPanelLandOptions::refreshSearch()
 	// Set by string in case the order in UI doesn't match the order by index.
 	// *TODO:Translate
 	LLParcel::ECategory cat = parcel->getCategory();
-	const std::string& category_string = LLParcel::getCategoryUIString(cat);
-	mCategoryCombo->setSimple(category_string);
+	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+	//const std::string& category_string = LLParcel::getCategoryUIString(cat);
+	//mCategoryCombo->setSimple(category_string);
+	const std::string& category_string = LLParcel::getCategoryString(cat);
+	mCategoryCombo->setValue(category_string);
+	// </FS:Ansariel>
 
 	std::string tooltip;
 	bool enable_show_directory = false;

@@ -56,7 +56,10 @@ static const std::string PARCEL_OWNERSHIP_STATUS_STRING[LLParcel::OS_COUNT+1] =
 // * Web site "create event" tools
 // DO NOT DELETE ITEMS FROM THIS LIST WITHOUT DEEPLY UNDERSTANDING WHAT YOU'RE DOING.
 //
-static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT] =
+// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+//static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT] =
+static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT + 1] =
+// </FS:Ansariel>
 {
     "none",
     "linden",
@@ -72,7 +75,11 @@ static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT] =
     "shopping",
     "stage",
     "other",
-	"rental"
+	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+	//"rental"
+	"rental",
+	"any"
+	// </FS:Ansariel>
 };
 static const std::string PARCEL_CATEGORY_UI_STRING[LLParcel::C_COUNT + 1] =
 {
@@ -1329,6 +1336,13 @@ const std::string& category_to_string(LLParcel::ECategory category)
     {
         index = category;
     }
+	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+    else
+    {
+        // C_ANY = -1 , but the "Any" string is at the end of the list
+        index = ((S32) LLParcel::C_COUNT);
+    }
+	// </FS:Ansariel>
     return PARCEL_CATEGORY_STRING[index];
 }
 
@@ -1349,11 +1363,24 @@ const std::string& category_to_ui_string(LLParcel::ECategory category)
 
 LLParcel::ECategory category_string_to_category(const std::string& s)
 {
-    for(S32 i = 0; i < LLParcel::C_COUNT; ++i)
+	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+    //for(S32 i = 0; i < LLParcel::C_COUNT; ++i)
+	for(S32 i = 0; i < LLParcel::C_COUNT + 1; ++i)
+	// </FS:Ansariel>
     {
         if(s == PARCEL_CATEGORY_STRING[i])
         {
-            return (LLParcel::ECategory)i;
+			// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
+            //return (LLParcel::ECategory)i;
+			if (i == LLParcel::C_COUNT)
+			{
+				return (LLParcel::ECategory)(i + 1);
+			}
+			else
+			{
+				return (LLParcel::ECategory)i;
+			}
+			// </FS:Ansariel>
         }
     }
     llwarns << "Parcel category outside of possibilities " << s << llendl;
