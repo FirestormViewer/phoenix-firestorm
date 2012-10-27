@@ -70,8 +70,6 @@
 				<combo_box.item label="Abrir mapa mundial" name="1"/>
 				<combo_box.item label="Teleportarme a ese punto" name="2"/>
 			</combo_box>
-			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>
 			<check_box label="Hacer girar al avatar cuando camina hacia atrás" name="backwardsturnavatar" tool_tip="Gira el avatar para encarar la cámara cuando lo haces caminar hacia atrás"/>
 			<check_box top_pad="5" label="Filtrar hitos duplicados en el mapa mundial" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra las entradas de hitos en la lista de hitos del mapa mundial"/>
 			<check_box label="Mostrar informacion adicional de la región en el Mapa Mundial" name="FSAdvancedWorldmapRegionInfo" tool_tip="Muestra informaciones adicionales en el mapa del mundo (número de avatares y calificación de contenidos)."/>

@@ -28,6 +28,8 @@
 		<text name="ObjectInspectorTooltipDelay_text">
 			Sekunden
 		</text>
+        <check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
+        <check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>		
 		<text name="ScriptDialogsPerObjectLabel">
 			Skriptdialoge pro Objekt:
 		</text>

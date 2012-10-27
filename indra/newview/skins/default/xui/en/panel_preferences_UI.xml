@@ -207,6 +207,25 @@
          width="80">
             seconds
         </text>
+		
+        <check_box
+         control_name="FSAdvancedTooltips"
+         name="FSAdvancedTooltips"
+         label="Show extended information in hovertips (classic Phoenix style)"
+         layout="topleft"
+         top_pad="4"
+         left="15"
+         height="20"
+         width="350" />
+
+        <check_box
+         control_name="FSShowGroupTitleInTooltip"
+         name="FSShowGroupTitleInTooltip"
+         label="Show avatar group titles in hovertips"
+         layout="topleft"
+         top_pad="0"
+         height="20"
+         width="350" />		
 
       <check_box
        control_name="UsePieMenu"
@@ -217,7 +236,7 @@
        left="5"
        name="UsePieMenu"
        tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top_pad="10"
+       top_pad="13"
        width="256" />
 
       <check_box

@@ -57,7 +57,6 @@
 			</text>
 			<check_box label="Повернуть радар по поз. аватара" name="minimaprotate" tool_tip=""/>
 			<check_box name="MiniMapChatRing" label="Показать кольцо на радаре, который указывает диапазона чата"/>
-			<check_box name="FSAdvancedTooltips" label="Доп. информация в подсказках"/>
 			<check_box label="Повернуть Аватара если он идёт задом" name="backwardsturnavatar" tool_tip="Задом, в смысле тороны..."/>
 			<check_box label="Фильтра дубликатов закладок(LM) на карте мира" name="WorldmapFilterDuplicateLandmarks" tool_tip=""/>
 		</panel>

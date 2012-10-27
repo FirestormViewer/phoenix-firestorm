@@ -72,8 +72,6 @@
 				<combo_box.item label="Apri la mappa" name="1"/>
 				<combo_box.item label="Teleport al punto cliccato" name="2"/>
 			</combo_box>
-			<check_box name="FSAdvancedTooltips" label="Mostra informazioni estese in hovertips (stile Phoenix)"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="Mostra il titolo del gruppo in hovertips"/>
 			<check_box label="Girare l'avatar quando si cammina all'indietro" name="backwardsturnavatar" tool_tip="Gira l'avatar verso la telecamera quando cammini all'indietro"/>
 			<check_box label="Filtra i Landmarks sulla World Map" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtra i Lanmarks doppi quando si effettua la visualizzazione del posto dalla World Map"/>
 			<check_box label="Mostra ulteriori informazioni sulla regione nella Mappa del mondo" name="FSAdvancedWorldmapRegionInfo" tool_tip="Mostra informazioni aggiuntive sulla Mappa del mondo(Numero degli avatar in sim e livello di accesso)."/>

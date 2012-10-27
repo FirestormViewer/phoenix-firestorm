@@ -90,8 +90,6 @@
             <combo_box.item label="その場所にテレポート" name="2" value="2"/>
 			</combo_box>
 
-			<check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示（Phoenixスタイル）" />
-			<check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />
 			<check_box label="後退する時に、アバターに正面を向いて歩かせるようにする" name="backwardsturnavatar" tool_tip="通常後退させると後ろ向きに歩きますが、正面を向いて歩くようにします。"/>
 			<check_box label="世界地図上で同じランドマークをダブって表示しない" name="WorldmapFilterDuplicateLandmarks" tool_tip="世界地図のランドマークリストに、同じランドマークが何度も表示されないようにします。"/>
 			<check_box label="世界地図にその地域の追加情報を表示" name="FSAdvancedWorldmapRegionInfo" tool_tip="世界地図上にその地域の追加情報（現在のアバター数やレーティング・レベルなど）を表示します。"/>

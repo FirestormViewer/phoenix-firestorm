@@ -26,6 +26,8 @@
         <text name="ObjectInspectorTooltipDelay_text">
             sek.
         </text>
+        <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)"/>
+        <check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach"/>		
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <text name="ScriptDialogsPerObjectLabel">

@@ -77,8 +77,6 @@
 				<combo_box.item label="Weltkarte öffnen" name="1"/>
 				<combo_box.item label="Zur Position teleportieren" name="2"/>
 			</combo_box>
-			<check_box name="FSAdvancedTooltips" label="Erweiterte Informationen in den Hovertips anzeigen (klassischer Phoenix-Stil)"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="Gruppentitel von Avataren in Hovertips anzeigen"/>
 			<check_box label="Avatar umdrehen beim Rückwärtsgehen" name="backwardsturnavatar" tool_tip="Dreht den Avatar mit dem Gesicht zur Kamera beim Rückwärtsgehen."/>
 			<check_box label="Doppelte Landmarken auf der Weltkarte filtern" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtert doppelte (identische) Landmarken in der Übersicht der Landmarken auf der Weltkarte."/>
 			<check_box label="Erweiterte Regionsinformationen auf der Weltkarte anzeigen" name="FSAdvancedWorldmapRegionInfo" tool_tip="Zeigt erweiterte Regionsinformationen (Anzahl Avatare und Alterseinstufung) auf der Weltkarte an."/>
