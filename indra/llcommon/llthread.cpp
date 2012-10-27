@@ -119,6 +119,7 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
 
 		apr_allocator_create( &pAlloc );
 		apr_pool_create_ex( &mAPRPoolp, 0, 0, pAlloc );
+		apr_allocator_owner_set( pAlloc, mAPRPoolp );
 
 		// <FS:ND>
 

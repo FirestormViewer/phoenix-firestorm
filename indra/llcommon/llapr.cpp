@@ -60,6 +60,7 @@ void ll_init_apr()
 
 		apr_allocator_create( &pAlloc );
 		apr_pool_create_ex( &gAPRPoolp, 0, 0, pAlloc );
+		apr_allocator_owner_set( pAlloc, gAPRPoolp );
 
 		// <FS:ND>
 		
@@ -146,6 +147,7 @@ void LLAPRPool::createAPRPool()
 	ll_apr_warn_status(mStatus) ;
 	mStatus = apr_pool_create_ex( &mPool, mParent, 0, pAlloc );
 	ll_apr_warn_status(mStatus) ;
+	apr_allocator_owner_set( pAlloc, mPool );
 
 	// <FS:ND>
 
