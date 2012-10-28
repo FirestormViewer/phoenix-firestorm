@@ -140,6 +140,16 @@ LLTextBase::LineSpacingParams::LineSpacingParams()
 {
 }
 
+// <FS:Ansariel> Optional icon position
+namespace LLInitParam
+{
+	void TypeValues<LLTextBaseEnums::EIconPositioning>::declareValues()
+	{
+		declare("left",   LLTextBaseEnums::LEFT);
+		declare("right",  LLTextBaseEnums::RIGHT);
+	}
+}
+// </FS:Ansariel> Optional icon position
 
 LLTextBase::Params::Params()
 :	cursor_color("cursor_color"),
@@ -169,6 +179,9 @@ LLTextBase::Params::Params()
 	font_shadow("font_shadow"),
 	wrap("wrap"),
 	use_ellipses("use_ellipses", false),
+	// <FS:Ansariel> Optional icon position
+	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
+	// </FS:Ansariel> Optional icon position
 	parse_urls("parse_urls", false),
 	parse_highlights("parse_highlights", false)
 {
@@ -226,6 +239,9 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mParseHighlights(p.parse_highlights),
 	mBGVisible(p.bg_visible),
 	mScroller(NULL),
+	// <FS:Ansariel> Optional icon position
+	mIconPositioning(p.icon_positioning),
+	// </FS:Ansariel> Optional icon position
 	mStyleDirty(true)
 {
 	if(p.allow_scroll)
@@ -2003,6 +2019,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 		while ( LLUrlRegistry::instance().findUrl(text, match,
 				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
 		{
+			// <FS:Ansariel> Optional icon position
+			if (mIconPositioning == LLTextBaseEnums::LEFT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
+
 			start = match.getStart();
 			end = match.getEnd()+1;
 
@@ -2038,7 +2061,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 					}
 			}
 
-			LLTextUtil::processUrlMatch(&match,this);
+			// <FS:Ansariel> Optional icon position
+			//LLTextUtil::processUrlMatch(&match,this);
+			if (mIconPositioning == LLTextBaseEnums::RIGHT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
 
 			// move on to the rest of the text after the Url
 			if (end < (S32)text.length()) 
