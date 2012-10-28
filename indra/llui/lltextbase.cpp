@@ -147,6 +147,7 @@ namespace LLInitParam
 	{
 		declare("left",   LLTextBaseEnums::LEFT);
 		declare("right",  LLTextBaseEnums::RIGHT);
+		declare("none",   LLTextBaseEnums::NONE);
 	}
 }
 // </FS:Ansariel> Optional icon position
@@ -2019,13 +2020,6 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 		while ( LLUrlRegistry::instance().findUrl(text, match,
 				boost::bind(&LLTextBase::replaceUrl, this, _1, _2, _3)) )
 		{
-			// <FS:Ansariel> Optional icon position
-			if (mIconPositioning == LLTextBaseEnums::LEFT)
-			{
-				LLTextUtil::processUrlMatch(&match,this);
-			}
-			// </FS:Ansariel> Optional icon position
-
 			start = match.getStart();
 			end = match.getEnd()+1;
 
@@ -2047,6 +2041,14 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				std::string subtext=text.substr(0,start);
 				appendAndHighlightText(subtext, part, style_params); 
 			}
+
+			// <FS:Ansariel> Optional icon position
+			if (mIconPositioning == LLTextBaseEnums::LEFT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
+
 			// output the styled Url
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			

@@ -236,7 +236,8 @@ namespace LLTextBaseEnums
 	enum EIconPositioning
 	{
 		LEFT,
-		RIGHT
+		RIGHT,
+		NONE
 	};
 }
 
