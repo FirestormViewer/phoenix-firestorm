@@ -277,6 +277,7 @@ KC: Use view_border's around text_editor's due to text render issues with border
          name="info_border4"
          bevel_style="in" />
         <text
+         icon_positioning="left"
          top_delta="2"
          left_delta="2"
          right="-6"
