@@ -85,18 +85,6 @@ LLSimInfo::LLSimInfo(U64 handle)
 
 void LLSimInfo::setLandForSaleImage (LLUUID image_id) 
 {
-// <FS:CR> Aurora Sim
-	if (mMapImageID.isNull() && image_id.notNull()) {
-		mOverlayImage = LLViewerTextureManager::findFetchedTexture(image_id);
-		if(mOverlayImage.notNull()) {
-			//mOverlayImage->destroyRawImage();
-			//mOverlayImage->destroySavedRawImage();
-			//mOverlayImage->destroyGLTexture();
-			//mOverlayImage->destroyTexture();
-			LLAppViewer::getTextureCache()->removeFromCache(image_id);
-		}
-	}
-// </FS:CR> Aurora Sim
 	mMapImageID = image_id;
 
 	// Fetch the image
