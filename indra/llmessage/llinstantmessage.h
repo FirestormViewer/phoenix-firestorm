@@ -222,6 +222,7 @@ extern const U32 NO_TIMESTAMP;
 // <FS:CR> Aurora Sim
 //extern const std::string SYSTEM_FROM;
 extern std::string SYSTEM_FROM;
+// </FS:CR> Aurora Sim
 extern const std::string INTERACTIVE_SYSTEM_FROM;
 
 // Number of retry attempts on sending the im.
