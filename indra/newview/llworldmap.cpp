@@ -35,14 +35,6 @@
 #include "llviewertexturelist.h"
 #include "lltrans.h"
 
-// <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
-#include "llviewernetwork.h"
-#include "llappviewer.h"
-#include "lltexturecache.h"
-#endif //HAS_OPENSIM_SUPPORT
-// </FS:CR> Aurora Sim
-
 // Timers to temporise database requests
 const F32 AGENTS_UPDATE_TIMER = 60.0;			// Seconds between 2 agent requests for a region
 const F32 REQUEST_ITEMS_TIMER = 10.f * 60.f;	// Seconds before we consider re-requesting item data for the grid
@@ -74,11 +66,7 @@ LLSimInfo::LLSimInfo(U64 handle)
 	mAgentsUpdateTime(0),
 	mAccess(0x0),
 	mRegionFlags(0x0),
-	mFirstAgentRequest(true),
-// <FS:CR> Aurora Sim
-	mSizeX(REGION_WIDTH_UNITS),
-	mSizeY(REGION_WIDTH_UNITS)
-// </FS:CR> Aurora Sim
+	mFirstAgentRequest(true)
 //	mWaterHeight(0.f)
 {
 }
@@ -91,9 +79,6 @@ void LLSimInfo::setLandForSaleImage (LLUUID image_id)
 	if (mMapImageID.notNull())
 	{
 		mOverlayImage = LLViewerTextureManager::getFetchedTexture(mMapImageID, MIPMAP_TRUE, LLViewerTexture::BOOST_MAP, LLViewerTexture::LOD_TEXTURE);
-// <FS:CR> Aurora Sim
-		mOverlayImage->forceImmediateUpdate();
-// </FS:CR> Aurora Sim
 		mOverlayImage->setAddressMode(LLTexUnit::TAM_CLAMP);
 	}
 	else
@@ -339,32 +324,11 @@ LLSimInfo* LLWorldMap::simInfoFromPosGlobal(const LLVector3d& pos_global)
 
 LLSimInfo* LLWorldMap::simInfoFromHandle(const U64 handle)
 {
-// <FS:CR> Aurora Sim
-	//sim_info_map_t::iterator it = mSimInfoMap.find(handle);
-	//if (it != mSimInfoMap.end())
-	//{
-		//return it->second;
-		std::map<U64, LLSimInfo*>::const_iterator it;
-	for (it = LLWorldMap::getInstance()->mSimInfoMap.begin(); it != LLWorldMap::getInstance()->mSimInfoMap.end(); ++it)
+	sim_info_map_t::iterator it = mSimInfoMap.find(handle);
+	if (it != mSimInfoMap.end())
 	{
-		const U64 hndl = (*it).first;
-		LLSimInfo* info = (*it).second;
-		if(hndl == handle)
-		{
-			return info;
-		}
-		U32 x = 0, y = 0;
-		from_region_handle(handle, &x, &y);
-		U32 checkRegionX, checkRegionY;
-		from_region_handle(hndl, &checkRegionX, &checkRegionY);
-
-		if(x >= checkRegionX && x < (checkRegionX + info->mSizeX) &&
-			y >= checkRegionY && y < (checkRegionY + info->mSizeY))
-		{
-			return info;
-		}
+		return it->second;
 	}
-// <FS:CR> Aurora Sim
 	return NULL;
 }
 
@@ -427,10 +391,7 @@ void LLWorldMap::reloadItems(bool force)
 // static public
 // Insert a region in the region map
 // returns true if region inserted, false otherwise
-// <FS:CR> Aurora Sim
-//bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, std::string& name, LLUUID& image_id, U32 accesscode, U32 region_flags)
-bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, std::string& name, LLUUID& image_id, U32 accesscode, U32 region_flags)
-// </FS:CR> Aurora Sim
+bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, std::string& name, LLUUID& image_id, U32 accesscode, U32 region_flags)
 {
 	// This region doesn't exist
 	if (accesscode == 255)
@@ -459,9 +420,6 @@ bool LLWorldMap::insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, 
 		siminfo->setRegionFlags(region_flags);
 	//	siminfo->setWaterHeight((F32) water_height);
 		siminfo->setLandForSaleImage(image_id);
-// <FS:CR> Aurora Sim
-		siminfo->setSize(x_size, y_size);
-// </FS:CR> Aurora Sim
 
 		// Handle the location tracking (for teleport, UI feedback and info display)
 		if (LLWorldMap::getInstance()->isTrackingInRectangle( x_world, y_world, x_world + REGION_WIDTH_UNITS, y_world + REGION_WIDTH_UNITS))

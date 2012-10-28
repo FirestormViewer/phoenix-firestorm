@@ -58,7 +58,6 @@
 // [RLVa:KB] - Checked: 2010-04-19 (RLVa-1.2.0f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
-#include "llviewernetwork.h" // <FS:CR> Aurora Sim
 
 #include "llglheaders.h"
 
@@ -379,12 +378,8 @@ void LLWorldMapView::draw()
 		// When the view isn't panned, 0,0 = center of rectangle
 		F32 bottom =    sPanY + half_height + relative_y;
 		F32 left =      sPanX + half_width + relative_x;
-// <FS:CR> Aurora Sim
-		//F32 top =       bottom + sMapScale ;
-		//F32 right =     left + sMapScale ;
-		F32 top =		bottom+ (sMapScale * (info->mSizeY / REGION_WIDTH_METERS));
-		F32 right =		left  + (sMapScale * (info->mSizeX / REGION_WIDTH_METERS));
-// </FS:CR> Aurora Sim
+		F32 top =       bottom + sMapScale ;
+		F32 right =     left + sMapScale ;
 
 		// Discard if region is outside the screen rectangle (not visible on screen)
 		if ((top < 0.f)   || (bottom > height) ||
@@ -445,16 +440,8 @@ void LLWorldMapView::draw()
 			if (overlayimage)
 			{
 				// Inform the fetch mechanism of the size we need
-// <FS:CR> Aurora Sim
-				//S32 draw_size = llround(sMapScale);
-				//overlayimage->setKnownDrawSize(llround(draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(draw_size * LLUI::sGLScaleFactor.mV[VY]));
-				S32 x_draw_size = llround(sMapScale);
-				S32 y_draw_size = llround(sMapScale);
-				x_draw_size *= (info->mSizeX / REGION_WIDTH_METERS);
-				y_draw_size *= (info->mSizeY / REGION_WIDTH_METERS);
-
-				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(y_draw_size * LLUI::sGLScaleFactor.mV[VY]));
-// </FS:CR> Aurora Sim
+				S32 draw_size = llround(sMapScale);
+				overlayimage->setKnownDrawSize(llround(draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(draw_size * LLUI::sGLScaleFactor.mV[VY]));
 				// Draw something whenever we have enough info
 				if (overlayimage->hasGLTexture())
 				{

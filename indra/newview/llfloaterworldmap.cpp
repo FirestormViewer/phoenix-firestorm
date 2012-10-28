@@ -664,14 +664,8 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	}
 	
 	std::string sim_name = sim_info->getName();
-// <FS:CR> Aurora Sim
-	//F32 region_x = (F32)fmod( pos_global.mdV[VX], (F64)REGION_WIDTH_METERS );
-	//F32 region_y = (F32)fmod( pos_global.mdV[VY], (F64)REGION_WIDTH_METERS );
-	U32 locX, locY;
-	from_region_handle(sim_info->getHandle(), &locX, &locY);
-	F32 region_x = pos_global.mdV[VX] - locX;
-	F32 region_y = pos_global.mdV[VY] - locY;
-// </FS:CR> Aurora Sim
+	F32 region_x = (F32)fmod( pos_global.mdV[VX], (F64)REGION_WIDTH_METERS );
+	F32 region_y = (F32)fmod( pos_global.mdV[VY], (F64)REGION_WIDTH_METERS );
 	std::string full_name = llformat("%s (%d, %d, %d)", 
 									 sim_name.c_str(), 
 									 llround(region_x), 
@@ -723,20 +717,11 @@ void LLFloaterWorldMap::enableTeleportCoordsDisplay( bool enabled )
 void LLFloaterWorldMap::updateTeleportCoordsDisplay( const LLVector3d& pos )
 {
 	// if we're going to update their value, we should also enable them
-// <FS:CR> Aurora Sim
-	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos );
-//<FS:CR> Aurora Sim
 	enableTeleportCoordsDisplay( true );
 	
 	// convert global specified position to a local one
-// <FS:CR> Aurora Sim
-	//F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
-	//F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
-	U32 locX, locY;
-	from_region_handle(sim_info->getHandle(), &locX, &locY);
-	F32 region_local_x = pos.mdV[VX] - locX;
-	F32 region_local_y = pos.mdV[VY] - locY;
-// </FS:CR> Aurora Sim
+	F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
+	F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
 	//F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
 	F32 region_local_z = (F32)pos.mdV[VZ];
 
