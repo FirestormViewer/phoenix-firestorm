@@ -301,7 +301,10 @@ LLSD transform_cert_args(LLPointer<LLCertificate> cert);
 void general_cert_done(const LLSD& notification, const LLSD& response);
 void trust_cert_done(const LLSD& notification, const LLSD& response);
 void apply_udp_blacklist(const std::string& csv);
-bool process_login_success_response();
+// <FS:CR> Aurora Sim
+//bool process_login_success_response();
+bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y);
+// </FS:CR> Aurora Sim
 void transition_back_to_login_panel(const std::string& emsg);
 void cmdline_printchat(std::string message);
 
@@ -396,6 +399,10 @@ bool idle_startup()
 	static std::string auth_desc;
 	static std::string auth_message;
 
+// <FS:CR> Aurora Sim
+	static U32 first_sim_size_x = 256;
+	static U32 first_sim_size_y = 256;
+// </FS:CR> Aurora Sim
 	static LLVector3 initial_sun_direction(1.f, 0.f, 0.f);
 	static LLVector3 agent_start_position_region(10.f, 10.f, 10.f);		// default for when no space server
 
@@ -1399,7 +1406,10 @@ bool idle_startup()
 		}
 		else if(LLLoginInstance::getInstance()->authSuccess())
 		{
-			if(process_login_success_response())
+// <FS:CR> Aurora Sim
+			//if(process_login_success_response())
+			if(process_login_success_response(first_sim_size_x,first_sim_size_y))
+// </FS:CR> Aurora Sim
 			{
 // <AW: crash report grid correctness>
 				const std::string current_grid = LLGridManager::getInstance()->getGrid();
@@ -1500,7 +1510,10 @@ bool idle_startup()
 		gAgent.initOriginGlobal(from_region_handle(gFirstSimHandle));
 		display_startup();
 
-		LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim);
+// <FS:CR> Aurora Sim
+		//LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim);
+LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, first_sim_size_y);
+// </FS:CR> Aurora Sim
 		display_startup();
 
 		LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromHandle(gFirstSimHandle);
@@ -3461,7 +3474,10 @@ void apply_udp_blacklist(const std::string& csv)
 	
 }
 
-bool process_login_success_response()
+// <FS:CR> Aurora Sim
+//bool process_login_success_response()
+bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y)
+// </FS:CR> Aurora Sim
 {
 	LLSD response = LLLoginInstance::getInstance()->getResponse();
 
@@ -3588,6 +3604,17 @@ bool process_login_success_response()
 		gFirstSimHandle = to_region_handle(region_x, region_y);
 	}
 	
+// <FS:CR> Aurora Sim
+	text = response["region_size_x"].asString();
+	if(!text.empty()) {
+		first_sim_size_x = strtoul(text.c_str(), NULL, 10);
+		LLViewerParcelMgr::getInstance()->init(first_sim_size_x);
+	}
+
+	//region Y size is currently unused, major refactoring required. - Patrick Sapinski (2/10/2011)
+	text = response["region_size_y"].asString();
+	if(!text.empty()) first_sim_size_y = strtoul(text.c_str(), NULL, 10);
+// </FS:CR> Aurora Sim	
 	const std::string look_at_str = response["look_at"];
 	if (!look_at_str.empty())
 	{

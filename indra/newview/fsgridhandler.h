@@ -52,6 +52,19 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_IS_FAVORITE_VALUE "favorite"
 #define GRID_REGISTER_NEW_ACCOUNT "register"
 #define GRID_FORGOT_PASSWORD "password"
+// <FS:CR> Aurora Sim
+#define GRID_HELP "help"
+#define GRID_ABOUT "about"
+#define GRID_SEARCH	"search"
+#define GRID_PROFILE_URI_VALUE "profileuri"
+#define GRID_SENDGRIDINFO "SendGridInfoToViewerOnLogin"
+#define GRID_DIRECTORY_FEE "DirectoryFee"
+#define GRID_CURRENCY_SYMBOL "CurrencySymbol"
+#define GRID_REAL_CURRENCY_SYMBOL "RealCurrencySymbol"
+#define GRID_MAXGROUPS "MaxGroups"
+#define GRID_PLATFORM "platform"
+#define GRID_MESSAGE "message"
+// <FS:CR> Aurora Sim
 // </AW opensim>
 #define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
 #define GRID_IS_FAVORITE_VALUE "favorite"
@@ -235,6 +248,9 @@ public:
 	bool isInSLMain();
 	bool isInSLBeta();
 	bool isInOpenSim();
+// <FS:CR> Aurora Sim
+	bool isInAuroraSim();
+// </FS:CR> Aurora Sim
 	void saveGridList();
 // </AW opensim>
 	void clearFavorites();
@@ -269,6 +285,9 @@ protected:
 	bool mIsInSLMain;
 	bool mIsInSLBeta;
 	bool mIsInOpenSim;
+// <FS:CR> Aurora Sim
+	bool mIsInAuroraSim;
+// </FS:CR> Aurora Sim
 	int mResponderCount;
 	bool mReadyToLogin;
 	bool mCommandLineDone;

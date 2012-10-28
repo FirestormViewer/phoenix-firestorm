@@ -86,6 +86,9 @@ public:
 	LLViewerParcelMgr();
 	~LLViewerParcelMgr();
 
+// <FS:CR> Aurora Sim
+	void init(F32 region_size);
+// </FS:CR> Aurora Sim
 	static void cleanupGlobals();
 
 	BOOL	selectionEmpty() const;

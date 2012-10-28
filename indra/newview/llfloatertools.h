@@ -65,6 +65,9 @@ public:
 	static	void*	createPanelContents(void*	vdata);
 	static	void*	createPanelLandInfo(void*	vdata);
 
+// <FS:CR> Aurora Sim
+	void updateToolsSizeLimits();
+// </FS:CR> Aurora Sim
 	LLFloaterTools(const LLSD& key);
 	virtual ~LLFloaterTools();
 

@@ -531,7 +531,10 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	// You can't move more than some distance from your original mousedown point.
 	if (gSavedSettings.getBOOL("LimitDragDistance"))
 	{
-		F32 max_drag_distance = gSavedSettings.getF32("MaxDragDistance");
+// <FS:CR> Aurora Sim
+		//F32 max_drag_distance = gSavedSettings.getF32("MaxDragDistance");
+		F32 max_drag_distance = LLWorld::getInstance()->getMaxDragDistance(); 
+// </FS:CR> Aurora Sim
 
 		if (relative_move.magVecSquared() > max_drag_distance * max_drag_distance)
 		{

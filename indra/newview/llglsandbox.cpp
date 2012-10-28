@@ -291,7 +291,10 @@ void LLWind::renderVectors()
 	S32 i,j;
 	F32 x,y;
 
-	F32 region_width_meters = LLWorld::getInstance()->getRegionWidthInMeters();
+// <FS:CR> Aurora Sim
+	//F32 region_width_meters = LLWorld::getInstance()->getRegionWidthInMeters();
+	F32 region_width_meters = gAgent.getRegion()->getWidth();
+// </FS:CR> Aurora Sim
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 	gGL.pushMatrix();
@@ -497,7 +500,10 @@ void LLViewerParcelMgr::renderOneSegment(F32 x1, F32 y1, F32 x2, F32 y2, F32 hei
 {
 	// HACK: At edge of last region of world, we need to make sure the region
 	// resolves correctly so we can get a height value.
-	const F32 BORDER = REGION_WIDTH_METERS - 0.1f;
+// <FS:CR> Aurora Sim
+	//const F32 BORDER = REGION_WIDTH_METERS - 0.1f;
+	const F32 BORDER = regionp->getWidth() - 0.1f;
+// </FS:CR> Aurora Sim
 
 	F32 clamped_x1 = x1;
 	F32 clamped_y1 = y1;

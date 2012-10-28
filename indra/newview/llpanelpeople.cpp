@@ -1018,7 +1018,10 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			// chat alerts
-			if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS) && avRange > -1)
+// <FS:CR> Aurora Sim
+			//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS) && avRange > -1)
+			if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance()) && avRange > -1)
+// </FS:CR> Aurora Sim
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
@@ -1070,14 +1073,20 @@ void LLPanelPeople::updateNearbyList()
 				rf = lastRadarSweep.find(avId)->second;
 				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave )
 				{
-					if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+// <FS:CR> Aurora Sim
+					//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+					if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance() && avRange > -1) && (rf.lastDistance > LLWorld::getInstance()->getSayDistance() || rf.lastDistance == -1))
+// </FS:CR> Aurora Sim
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+// <FS:CR> Aurora Sim
+					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
+// </FS:CR> Aurora Sim
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
 				}
 				if ( RadarReportDrawRangeEnter || RadarReportDrawRangeLeave )
@@ -1125,14 +1134,20 @@ void LLPanelPeople::updateNearbyList()
 				
 				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
 				{
-					if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+// <FS:CR> Aurora Sim
+					//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
+					if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance() && avRange > -1) && (rf.lastDistance > LLWorld::getInstance()->getSayDistance() || rf.lastDistance == -1))
+// </FS:CR> Aurora Sim
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+// <FS:CR> Aurora Sim
+					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
+					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
+// </FS:CR> Aurora Sim
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
 				}
 				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
@@ -1357,7 +1372,10 @@ void LLPanelPeople::updateNearbyList()
 		if (!mNearbyList->contains(prevId))
 		{
 			radarFields rf = i->second;
-			if (RadarReportChatRangeLeave && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
+// <FS:CR> Aurora Sim
+			//if (RadarReportChatRangeLeave && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
+			if (RadarReportChatRangeLeave && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance()) && rf.lastDistance > -1)
+// </FS:CR> Aurora Sim
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
 			if (RadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > -1)
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));

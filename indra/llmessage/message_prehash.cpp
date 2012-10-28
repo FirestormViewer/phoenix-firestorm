@@ -1376,3 +1376,10 @@ char const* const _PREHASH_ProductSKU = LLMessageStringTable::getInstance()->get
 char const* const _PREHASH_SeeAVs = LLMessageStringTable::getInstance()->getString("SeeAVs");
 char const* const _PREHASH_AnyAVSounds = LLMessageStringTable::getInstance()->getString("AnyAVSounds");
 char const* const _PREHASH_GroupAVSounds = LLMessageStringTable::getInstance()->getString("GroupAVSounds");
+
+// <FS:CR> Aurora Sim
+char const* const _PREHASH_RegionSizeX = LLMessageStringTable::getInstance()->getString("RegionSizeX");
+char const* const _PREHASH_RegionSizeY = LLMessageStringTable::getInstance()->getString("RegionSizeY");
+char const* const _PREHASH_SizeX = LLMessageStringTable::getInstance()->getString("SizeX");
+char const* const _PREHASH_SizeY = LLMessageStringTable::getInstance()->getString("SizeY");
+// </FS:CR> Aurora Sim

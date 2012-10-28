@@ -947,7 +947,10 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 	U16 valswizzle[4];
 #endif
 	U16	*val;
-	const F32 size = LLWorld::getInstance()->getRegionWidthInMeters();	
+// <FS:CR> Aurora Sim
+	//const F32 size = LLWorld::getInstance()->getRegionWidthInMeters();	
+	const F32 size = mRegionp->getWidth();	
+// </FS:CR> Aurora Sim
 	const F32 MAX_HEIGHT = LLWorld::getInstance()->getRegionMaxHeight();
 	const F32 MIN_HEIGHT = LLWorld::getInstance()->getRegionMinHeight();
 	S32 length;

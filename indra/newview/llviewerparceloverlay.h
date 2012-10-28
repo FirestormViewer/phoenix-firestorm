@@ -103,6 +103,9 @@ private:
 	LLViewerRegion*	mRegion;
 
 	S32				mParcelGridsPerEdge;
+// <FS:CR> Aurora Sim
+	S32				mRegionSize;
+// </FS:CR> Aurora Sim
 
 	LLPointer<LLViewerTexture> mTexture;
 	LLPointer<LLImageRaw> mImageRaw;
