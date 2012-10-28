@@ -19,7 +19,7 @@
 		Inhalt:
 	</text>
 	<text name="buy_text">
-		[AMOUNT] L$ kaufen von:
+		Für [AMOUNT] L$ kaufen von:
 	</text>
 	<text name="buy_name_text">
 		[NAME]?
