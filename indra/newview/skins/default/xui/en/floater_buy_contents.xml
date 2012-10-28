@@ -54,6 +54,7 @@
          relative_width="1" />
     </scroll_list>
     <text
+     icon_positioning="left"
      type="string"
      length="1"
      follows="left|right|bottom"
