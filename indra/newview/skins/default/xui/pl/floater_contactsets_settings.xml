@@ -32,10 +32,10 @@
       Starego typu
     </combo_item>
     <combo_item name="Display Names (with Username)">
-      Imiona wyświetlane (z nazwą konta)
+      Imiona Wyświetlane (z nazwą konta)
     </combo_item>
     <combo_item name="Display Names only">
-      Tylko imiona wyświetlane
+      Tylko Imiona Wyświetlane
     </combo_item>
   </combo_box>
   <text name="lgg_fg_text4">
@@ -46,10 +46,10 @@
       Po starym typie
     </combo_item>
     <combo_item name="Display Names (with Username)">
-      Po imionach wyświetlanych (z nazwą konta)
+      Po Imionach Wyświetlanych (z nazwą konta)
     </combo_item>
     <combo_item name="Display Names only">
-      Tylko po imionach wyświetlanych
+      Tylko po Imionach Wyświetlanych
     </combo_item>
   </combo_box>
 </floater>

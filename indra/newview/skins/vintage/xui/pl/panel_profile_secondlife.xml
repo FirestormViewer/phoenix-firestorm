@@ -14,7 +14,7 @@
         <text_editor name="user_key" value="(ładowanie...)" />
 		<button name="copy_uri_button" label="Kopiuj URI" />
         <text name="Name:" value="Imię:" />
-		<button label="Imię:" name="set_name" tool_tip="Ustaw imię wyświetlane" />
+		<button label="Imię:" name="set_name" tool_tip="Ustaw Imię Wyświetlane" />
         <text_editor name="complete_name" value="(ładowanie...)" />
 		<button name="copy_name_button" label="Kopiuj imię" />
 		<text name="Photo:" value="Fotka:" />

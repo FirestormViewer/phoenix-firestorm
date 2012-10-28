@@ -6,7 +6,7 @@
     <string name="FSSupp" value=" Wsparcie" />
         <text name="Name:" value="Imię:" />
         <text_editor name="complete_name" value="(ładowanie...)" />
-        <button name="set_name" tool_tip="Ustaw imię wyświetlane" />
+        <button name="set_name" tool_tip="Ustaw Imię Wyświetlane" />
         <text name="Key:" value="Klucz:" />
         <text_editor name="user_key" value="(ładowanie...)" />
         <text name="label" value="Żyje:" />

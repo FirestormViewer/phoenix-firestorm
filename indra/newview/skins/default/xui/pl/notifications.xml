@@ -1605,39 +1605,39 @@ Wiadomości przychodzące od osób spoza listy znajomych będą teraz otrzymywa�
 	<notification name="SetDisplayNameSuccess">
 		Witaj [DISPLAY_NAME]!
 
-Podobnie jak w realnym życiu potrzeba trochę czasu zanim wszyscy dowiedzą się o nowej nazwie. Kolejne kilka dni zajmie [http://wiki.secondlife.com/wiki/Setting_your_display_name aktualizacja nazwy] w obiektach, skryptach, wyszukiwarce, etc.
+Podobnie jak w realnym życiu potrzeba trochę czasu zanim wszyscy dowiedzą się o nowym imieniu. Kolejne kilka dni zajmie [http://wiki.secondlife.com/wiki/Setting_your_display_name aktualizacja imienia] w obiektach, skryptach, wyszukiwarce, etc.
 	</notification>
 	<notification name="SetDisplayNameBlocked">
-		Przepraszamy, nie można zmienić Twojej wyświetlanej nazwy. Jeśli uważasz ze jest to spowodowane błędem skontaktuj się z obsługą klienta.
+		Przepraszamy, nie można zmienić Twojego Wyświetlanego Imienia. Jeśli uważasz, że jest to spowodowane błędem skontaktuj się z obsługą klienta.
 	</notification>
 	<notification name="SetDisplayNameFailedLength">
-		Przepraszamy, ta nazwa jest zbyt długa. Wyświetlana nazwa może mieć maksymalnie [LENGTH] znaków.
+		Przepraszamy, to imię jest zbyt długie. Wyświetlane Imię może mieć maksymalnie [LENGTH] znaków.
 
-Proszę wprowadzić krótszą nazwę.
+Proszę wprowadzić krótsze imię.
 	</notification>
 	<notification name="SetDisplayNameFailedGeneric">
-		Przepraszamy, nie można ustawić Twojej wyświetlanej nazwy. Spróbuj ponownie później.
+		Przepraszamy, nie można ustawić Twojego Wyświetlanego Imienia. Spróbuj ponownie później.
 	</notification>
 	<notification name="SetDisplayNameMismatch">
-		Podana wyświetlana nazwa nie pasuje. Proszę wprowadzić ją ponownie.
+		Podane Wyświetlane Imię nie pasuje. Proszę wprowadzić je ponownie.
 	</notification>
 	<notification name="AgentDisplayNameUpdateThresholdExceeded">
-		Przepraszamy, musisz jeszcze poczekać zanim będzie można zmienić Twoją wyświetlaną nazwę.
+		Przepraszamy, musisz jeszcze poczekać zanim będzie można zmienić Twoje Wyświetlane Imię.
 
 Zobacz http://wiki.secondlife.com/wiki/Setting_your_display_name
 
 Proszę spróbować ponownie później.
 	</notification>
 	<notification name="AgentDisplayNameSetBlocked">
-		Przepraszamy, nie można ustawić wskazanej nazwy, ponieważ zawiera zabronione słowa.
+		Przepraszamy, nie można ustawić wskazanego imienia, ponieważ zawiera zabronione słowa.
  
- Proszę spróbować wprowadzić inną nazwę.
+Proszę spróbować wprowadzić inne imię.
 	</notification>
 	<notification name="AgentDisplayNameSetInvalidUnicode">
-		Wyświetlana nazwa, którą chcesz ustawić zawiera niepoprawne znaki.
+		Wyświetlane Imię, które chcesz ustawić zawiera niepoprawne znaki.
 	</notification>
 	<notification name="AgentDisplayNameSetOnlyPunctuation">
-		Twoje wyświetlane imię musi zawierać litery inne niż znaki interpunkcyjne.
+		Twoje Wyświetlane Imię musi zawierać litery inne niż znaki interpunkcyjne.
 	</notification>
 	<notification name="DisplayNameUpdate">
 		[OLD_NAME] ([SLID]) jest od tej pory znana/y jako [NEW_NAME].
@@ -1645,7 +1645,7 @@ Proszę spróbować ponownie później.
 	
 	<notification name="DisplayNameUpdateRemoveAlias">
 	[OLD_NAME] ([SLID]) jest od tej pory znana/y jako [NEW_NAME].
-Ta osoba ma zestawiony alias, który zastąpi [NEW_NAME]
+Ta osoba ma ustawiony alias, który zastąpi [NEW_NAME]
 Czy chcesz go usunąć?
 		<form name="form">
 			<button name="Yes" text="Tak"/>
@@ -3169,8 +3169,8 @@ Kliknij gdziekolwiek na ziemi aby przejść do wskazanego miejsca.
 2. Kliknij i przeciągnij aby zmienić widok.
 Kliknij i przeciągnij gdziekolwiek aby obrócić widok.
 	</notification>
-	<notification label="Wyświetlana nazwa" name="HintDisplayName">
-		Ustaw wyświetlaną nazwę, którą możesz zmieniać tutaj. Jest ona dodatkiem do unikatowej nazwy użytkownika, która nie może być zmieniona. Możesz zmienić sposób w jaki widzisz nazwy innych osób w Twoich Ustawieniach.
+	<notification label="Wyświetlane Imię" name="HintDisplayName">
+		Możesz zmieniać tutaj swoje Wyświetlane Imię. Jest ono dodatkiem do unikatowej nazwy użytkownika, która nie może być zmieniona. Możesz zmienić sposób w jaki widzisz imiona innych osób w Twoich Ustawieniach.
 	</notification>
 	<notification label="Widok" name="HintView">
 		Aby zmienić widok kamery użyj narzędzi służących do okrążania i panoramowania. Zresetuj widok poprzez wciśnięcie klawisza Esc lub poruszając się.

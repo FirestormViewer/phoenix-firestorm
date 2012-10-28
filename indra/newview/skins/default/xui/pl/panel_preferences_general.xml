@@ -55,7 +55,7 @@
 	<check_box label="Nazwy użytkowników" name="show_slids" tool_tip="Pokaż nazwy kont użytkowników, np. bobsmith123"/>
 	<check_box label="Pokaż tytuły grupowe" name="show_all_title_checkbox1" tool_tip="Wyświetl tytuł grupowy np. Oficer"/>
 	<check_box label="Ukryj własny tytuł grupowy" name="RenderHideGroupTitle" tool_tip="Pokaż lub ukryj własny tytuł grupowy dla Ciebie i wszystkich innych."/>
-	<check_box label="Pokaż imiona" name="display_names_check" tool_tip="Pokaż wyświetlane imiona w czacie, IM, tagach ponad awatarami itd."/>
+	<check_box label="Imiona Wyświetlane" name="display_names_check" tool_tip="Pokaż Imiona Wyświetlane (Display Names) w czacie, IM, tagach ponad awatarami itd."/>
 	<check_box label="Stary sposób wyświetlania nazw" name="FSshow_legacyun" tool_tip="Prezentuj nazwy w stary sposób (Imię Nazwisko) zamiast w sposób kont użytkownika (imię.nazwisko)"/>
 	<check_box label="Podświetl znajomych" name="show_friends" tool_tip="Podświetlaj imiona Twoich znajomych."/>
 	<check_box label="Udostępniaj tag Radaru skryptom LSL" name="FSPublishRadarTag" tool_tip="Zaznaczenie tej opcji spowoduje włączenie udostępniania specjalnym oskryptowanym HUDom tagu 'Firestorm' podczas wyświetlania informacji o Twoim awatarze. Ta funkcjonalność zwiększa możliwości niektórych HUDów radarowych używając Mostu LSL Firestorma."/>
