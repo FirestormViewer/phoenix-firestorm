@@ -1391,6 +1391,13 @@ bool LLGridManager::isInOpenSim()
 	return mIsInOpenSim;
 }
 
+// <FS:CR> Aurora Sim
+bool LLGridManager::isInAuroraSim()
+{
+	return mIsInAuroraSim;
+}
+// </FS:CR> Aurora Sim
+
 void LLGridManager::saveGridList()
 {
 	// filter out just those which are not hardcoded anyway

@@ -136,6 +136,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
+	llpanelopenregionsettings.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
