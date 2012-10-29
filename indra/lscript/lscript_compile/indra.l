@@ -57,9 +57,9 @@ void parse_string();
 #define ECHO do { } while (0)
 
 #if defined(__cplusplus)
-extern int yylex( void );
-extern int yyparse( void );
-extern int yyerror(const char *fmt, ...);
+extern "C" { int yylex( void ); }
+extern "C" { int yyparse( void ); }
+extern "C" { int yyerror(const char *fmt, ...); }
 #endif
 
 %}

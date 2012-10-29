@@ -542,9 +542,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>1451d216c5a118eae4c642b6adaa6c0a</string>
+              <string>a3e8784c5640d3e3d7ff4db16c5bb0ae</string>
               <key>url</key>
-              <string>https://bitbucket.org/cinderblocks/ragnarok/downloads/fmod-3.75-darwin-20120829.tar.bz2</string>
+              <string>file:///opt/firestorm/fmod-3.75-darwin-20110620.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -2438,6 +2438,7 @@
                   <string>--build</string>
                   <string>--platform darwin</string>
                   <string>--fmod</string>
+                  <string>--kdu</string>
                 </array>
               </map>
               <key>configure</key>
@@ -2445,6 +2446,7 @@
                 <key>options</key>
                 <array>
                   <string>--fmod</string>
+                  <string>--kdu</string>
                   <string>--platform darwin</string>
                 </array>
               </map>
@@ -2463,6 +2465,7 @@
                   <string>--build</string>
                   <string>--platform darwin</string>
                   <string>--fmod</string>
+                  <string>--kdu</string>
                 </array>
               </map>
               <key>configure</key>
@@ -2470,6 +2473,7 @@
                 <key>options</key>
                 <array>
                   <string>--fmod</string>
+                  <string>--kdu</string>
                   <string>--platform darwin</string>
                 </array>
               </map>
