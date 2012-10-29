@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Regionseinstellungen" name="RegionSettings">
+	<spinner label="Standard-Draw-Distance" name="draw_distance"/>
+	<check_box label="Draw Distance erzwingen" name="force_draw_distance"/>
+	<button label="?" name="force_draw_distance_help"/>
+	<spinner label="Max. Drag Distance" name="max_drag_distance"/>
+	<spinner label="Max. Prim-Skalierung" name="max_prim_scale"/>
+	<spinner label="Min. Prim-Skalierung" name="min_prim_scale"/>
+	<spinner label="Max. physik. Prim-Skalierung" name="max_phys_prim_scale"/>
+	<spinner label="Max. Hohl-Größe" name="max_hollow_size"/>
+	<spinner label="Min. Loch-Größe" name="min_hole_size"/>
+	<spinner label="Max. Link-Anzahl" name="max_link_count"/>
+	<spinner label="Max. pyhsikalische Link-Anzahl" name="max_link_count_phys"/>
+	<spinner label="Max. Inventarobj. zum Transfer." name="max_inventory_items_transfer"/>
+	<spinner label="Terraindetail-Skalierung" name="terrain_detail_scale"/>
+	<button label="?" name="max_inventory_items_transfer_help"/>
+	<spinner label="Tags anzeigen" name="show_tags"/>
+	<button label="?" name="show_tags_help"/>
+	<spinner label="Max. Anzahl an Gruppen" name="max_groups"/>
+	<button label="?" name="max_groups_help"/>
+	<check_box label="Wasser anzeigen" name="render_water"/>
+	<button label="?" name="render_water_help"/>
+	<check_box label="Mini-Karte erlauben" name="allow_minimap"/>
+	<button label="?" name="allow_minimap_help"/>
+	<check_box label="Physikalische Primitiva erlauben" name="allow_physical_prims"/>
+	<button label="?" name="allow_physical_prims_help"/>
+	<check_box label="Maximale Baubeschränkungen erzwingen" name="enforce_max_build"/>
+	<check_box label="Parzellen-Windlight erlauben" name="allow_parcel_windlight"/>
+	<button label="?" name="allow_parcel_windlight_help"/>
+	<button label="Anwenden" name="apply_ors_btn"/>
+</panel>
