@@ -628,7 +628,7 @@
         initial_value="128"
         layout="topleft"
         left_pad="4"
-        max_val="255"
+        max_val="8191"
         min_val="0"
         name="teleport_coordinate_x"
         width="44" >
@@ -644,7 +644,7 @@
         initial_value="128"
         layout="topleft"
         left_pad="4"
-        max_val="255"
+        max_val="8191"
         min_val="0"
         name="teleport_coordinate_y"
 		width="44">
@@ -660,7 +660,7 @@
         initial_value="128"
         layout="topleft"
         left_pad="4"
-        max_val="5000"
+        max_val="10000"
         min_val="0"
         name="teleport_coordinate_z"
         right="-9">

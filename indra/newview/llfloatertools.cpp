@@ -91,6 +91,8 @@
 #include "llselectmgr.h"
 #include "llmeshrepository.h"
 
+#include "llviewernetwork.h" // <FS:CR> Aurora Sim
+
 // Globals
 LLFloaterTools *gFloaterTools = NULL;
 bool LLFloaterTools::sShowObjectCost = true;
@@ -219,6 +221,13 @@ LLPCode toolData[]={
 	LLViewerObject::LL_VO_TRIANGLE_TORUS,
 	LL_PCODE_LEGACY_TREE,
 	LL_PCODE_LEGACY_GRASS};
+
+// <FS:CR> Aurora Sim
+void LLFloaterTools::updateToolsSizeLimits()
+{
+	mPanelObject->updateLimits();
+}
+// </FS:CR> Aurora Sim
 
 BOOL	LLFloaterTools::postBuild()
 {	

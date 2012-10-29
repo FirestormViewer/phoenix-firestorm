@@ -136,7 +136,11 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-			F32 dist_near_chat = gAgent.getNearChatRadius();
+// <FS:CR> Aurora Sim
+			//F32 dist_near_chat = gAgent.getNearChatRadius();
+			//if (!avatarp || dist_vec_squared(avatarp->getPositionAgent(), gAgent.getPositionAgent()) > say_distance_squared)
+			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
+// </FS:CR> Aurora Sim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat
@@ -210,7 +214,10 @@ void LLViewerChat::getChatColor(const LLChat& chat, std::string& r_color_name, F
 		{
 			LLVector3 pos_agent = gAgent.getPositionAgent();
 			F32 distance_squared = dist_vec_squared(pos_agent, chat.mPosAgent);
-			F32 dist_near_chat = gAgent.getNearChatRadius();
+// <FS:CR> Aurora som
+			//F32 dist_near_chat = gAgent.getNearChatRadius();
+			F32 dist_near_chat = LLWorld::getInstance()->getSayDistance();
+// </FS:CR> Aurora sim
 			if (distance_squared > dist_near_chat * dist_near_chat)
 			{
 				// diminish far-off chat

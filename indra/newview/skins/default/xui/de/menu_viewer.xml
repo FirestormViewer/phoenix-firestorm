@@ -11,7 +11,7 @@
 		<menu_item_call label="Profil" name="Profile"/>
 		<menu_item_call label="Auswahlen" name="Picks"/>
 		<menu_item_call label="Outfit ändern" name="ChangeOutfit"/>
-        <menu_item_call label="Schnappschuss" name="Take Snapshot"/>
+        <menu_item_call label="Foto machen" name="Take Snapshot"/>
 		<menu_item_check label="Inventar" name="Inventory"/>
 		<menu_item_check label="Inventar" name="ShowSidetrayInventory"/>
 		<menu_item_check label="Steuerung" name="Movement Controls"/>
@@ -243,7 +243,7 @@
 		<menu_item_call label="Fenstergröße einstellen..." name="Set Window Size..."/>
 		<menu_item_check label="Auswahldistanz einschränken" name="Limit Select Distance"/>
 		<menu_item_check label="Kamerabeschränkungen deaktivieren" name="Disable Camera Distance"/>
-		<menu_item_check label="Foto (hohe Auflösung)" name="HighResSnapshot"/>
+		<menu_item_check label="Fotos in hoher Auflösung speichern" name="HighResSnapshot"/>
 		<menu_item_check label="Fotos leise speichern" name="QuietSnapshotsToDisk"/>
 		<menu label="Performance-Tools" name="Performance Tools">
 			<menu_item_call label="Lag-Anzeige" name="Lag Meter"/>

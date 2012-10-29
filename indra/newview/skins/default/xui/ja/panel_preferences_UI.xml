@@ -38,6 +38,9 @@
         <text name="ObjectInspectorTooltipDelay_text">
             秒
         </text>
+		
+        <check_box name="FSAdvancedTooltips" label="ヒントに詳細情報を表示（Phoenixスタイル）" />
+        <check_box name="FSShowGroupTitleInTooltip" label="ヒントにアバターのグループタイトルを表示" />		
 
 		<check_box label="パイメニューを使用" name="UsePieMenu" tool_tip="土地や中バー、オブジェクト、装着物を右クリックした時に、諜報兼のコンテキストメニューでなく、１系の丸いメニューを使用します。" />
 

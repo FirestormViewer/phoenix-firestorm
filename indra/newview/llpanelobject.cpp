@@ -334,6 +334,10 @@ BOOL	LLPanelObject::postBuild()
 	// Start with everyone disabled
 	clearCtrls();
 
+// <FS:CR> Aurora Sim
+	updateLimits();
+// </FS:CR> Aurora Sim
+
 	return TRUE;
 }
 
@@ -367,10 +371,16 @@ void LLPanelObject::updateLimits()
 {
 	mLimitsNeedUpdate = false;
 
-	mRegionMaxHeight = LLWorld::getInstance()->getRegionMaxHeight();
-	mCtrlPosZ->setMaxValue(mRegionMaxHeight);
-
-
+// <FS:CR> Aurora Sim
+	//mRegionMaxHeight = LLWorld::getInstance()->getRegionMaxHeight();
+	//mCtrlPosZ->setMaxValue(mRegionMaxHeight);
+	mCtrlPosX->setMinValue(LLWorld::getInstance()->getMinPrimXPos());
+	mCtrlPosX->setMaxValue(LLWorld::getInstance()->getMaxPrimXPos());
+	mCtrlPosY->setMinValue(LLWorld::getInstance()->getMinPrimYPos());
+	mCtrlPosY->setMaxValue(LLWorld::getInstance()->getMaxPrimYPos());
+	mCtrlPosZ->setMinValue(LLWorld::getInstance()->getMinPrimZPos());
+	mCtrlPosZ->setMaxValue(LLWorld::getInstance()->getMaxPrimZPos());
+// </FS:CR> Aurora Sim
 	mMinScale = LLWorld::getInstance()->getRegionMinPrimScale();
 	mMaxScale = LLWorld::getInstance()->getRegionMaxPrimScale();
 	mCtrlScaleX->setMinValue(mMinScale);
@@ -386,6 +396,9 @@ void LLPanelObject::updateLimits()
 	mMinHoleSize = LLWorld::getInstance()->getRegionMinHoleSize();
 	mSpinScaleX->setMinValue(mMinHoleSize);
 	mSpinScaleY->setMinValue(mMinHoleSize);
+// <FS:CR> Aurora Sim
+	mCheckPhysics->setEnabled(LLWorld::getInstance()->getAllowPhysicalPrims());
+// </FS:CR> Aurora Sim
 }
 // </AW: opensim-limits>
 
@@ -2400,8 +2413,12 @@ void LLPanelObject::onPastePos(const LLSD& data)
 	//clamp pos on non-attachments, just keep the prims on the sim
 	if (!mObject->isAttachment())
 	{
-		mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, 256.f);
-		mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, 256.f);
+// <FS:CR> Aurora Sim
+		//mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, 256.f);
+		//mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, 256.f);
+		mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, gAgent.getRegion()->getWidth());
+		mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, gAgent.getRegion()->getWidth());
+// </FS:CR> Aurora Sim
 		//height will get properly clammed by sendPosition
 	}
 

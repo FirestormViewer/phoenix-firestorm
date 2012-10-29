@@ -31,6 +31,7 @@
 		<text name="GroupTopRightRequiresRestart">
 			(рестарт)
 		</text>
+        <check_box name="FSAdvancedTooltips" label="Доп. информация в подсказках"/>		
 		<text name="UsePieMenuLabel">
 			Использовать круглое меню
 		</text>

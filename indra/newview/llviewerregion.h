@@ -134,6 +134,9 @@ public:
 
 	void setWaterHeight(F32 water_level);
 	F32 getWaterHeight() const;
+// <FS:CR> Aurora Sim
+	void rebuildWater();
+// </FS:CR> Aurora Sim
 
 	BOOL isVoiceEnabled() const;
 

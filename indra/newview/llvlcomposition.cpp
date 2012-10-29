@@ -155,7 +155,10 @@ BOOL LLVLComposition::generateHeights(const F32 x, const F32 y,
 	const F32 xyScaleInv = (1.f / xyScale);
 	const F32 zScaleInv = (1.f / zScale);
 
-	const F32 inv_width = 1.f/mWidth;
+// <FS:CR> Aurora Sim
+	//const F32 inv_width = 1.f/mWidth;
+	const F32 inv_width = 1.f/(F32)mWidth;
+// </FS:CR> Aurora Sim
 
 	// OK, for now, just have the composition value equal the height at the point.
 	for (S32 j = y_begin; j < y_end; j++)

@@ -183,6 +183,13 @@ void display_update_camera()
 	{
 		final_far *= 0.5f;
 	}
+// <FS:CR> Aurora sim
+	if(LLWorld::getInstance()->getLockedDrawDistance())
+	{
+		//Reset the draw distance and do not update with the new val
+		final_far = LLViewerCamera::getInstance()->getFar();
+	}
+// </FS:CR> Aurora sim
 	LLViewerCamera::getInstance()->setFar(final_far);
 	gViewerWindow->setup3DRender();
 	
@@ -358,7 +365,15 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 	LLImageGL::updateStats(gFrameTimeSeconds);
 	
-	LLVOAvatar::sRenderName = gSavedSettings.getS32("AvatarNameTagMode");
+// <FS:CR> Aurora sim
+	//LLVOAvatar::sRenderName = gSavedSettings.getS32("AvatarNameTagMode");
+	S32 RenderName = gSavedSettings.getS32("AvatarNameTagMode");
+
+	if(RenderName > LLWorld::getInstance()->getAllowRenderName())//The most restricted gets set here
+		RenderName = LLWorld::getInstance()->getAllowRenderName();
+	LLVOAvatar::sRenderName = RenderName;
+// <FS:CR> Aurora sim
+
 	LLVOAvatar::sRenderGroupTitles = (gSavedSettings.getBOOL("NameTagShowGroupTitles") && gSavedSettings.getS32("AvatarNameTagMode"));
 	
 	gPipeline.mBackfaceCull = TRUE;

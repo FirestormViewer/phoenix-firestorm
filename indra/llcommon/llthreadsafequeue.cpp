@@ -55,6 +55,7 @@ LLThreadSafeQueueImplementation::LLThreadSafeQueueImplementation(apr_pool_t * po
 
 		apr_status_t status =  apr_allocator_create( &pAlloc );
 		status = apr_pool_create_ex( &mPool, 0, 0, pAlloc );
+		apr_allocator_owner_set( pAlloc, mPool );
 
 		if(status != APR_SUCCESS)
 			throw LLThreadSafeQueueError("failed to allocate pool");

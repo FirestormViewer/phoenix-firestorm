@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Ustawienia regionu" name="RegionSettings">
+	<spinner label="Domyślne pole widzenia" name="draw_distance" />
+	<check_box label="Wymuszaj pole widzenia" name="force_draw_distance" />
+	<spinner label="Maks. odległość przeciągania" name="max_drag_distance" />
+	<spinner label="Maksymalny rozmiar primy" name="max_prim_scale" />
+	<spinner label="Minimalny rozmiar primy" name="min_prim_scale" />
+	<spinner label="Maks. rozmiar primy fizycznej" name="max_phys_prim_scale" />
+	<spinner label="Maksymalny rozmiar otworu" name="max_hollow_size" />
+	<spinner label="Minimalny rozmiar otworu" name="min_hole_size" />
+	<spinner label="Maksymalna ilość części" name="max_link_count" />
+	<spinner label="Maks. ilość części fizycznych" name="max_link_count_phys" />
+	<spinner label="Maks. il. przedm. w transferze" name="max_inventory_items_transfer" />
+	<spinner label="Rozm. szczegółów terenu" name="terrain_detail_scale" />
+	<spinner label="Pokaż tagi" name="show_tags" />
+	<spinner label="Maksymalna ilość grup" name="max_groups" />
+	<check_box label="Renderuj wodę" name="render_water" />
+	<check_box label="Zezwól na mipmapy" name="allow_minimap" />
+	<check_box label="Zezwól na primy fizyczne" name="allow_physical_prims" />
+	<check_box label="Wymuś ograniczenia budowania" name="enforce_max_build" />
+	<check_box label="Zezwól na system WindLight" name="allow_parcel_windlight" />
+	<button label="Zastosuj" name="apply_ors_btn" />
+</panel>

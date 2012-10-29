@@ -47,6 +47,7 @@
 
 #include "rlvhandler.h"
 #include "llviewermenu.h"
+#include "llworld.h"	// <FS:CR> Aurora Sim />
 
 //
 // Constants
@@ -269,7 +270,13 @@ void LLFloaterMap::draw()
 		mPopupMenu->setItemEnabled("Stop Tracking", true);
 	}
 	
-	LLFloater::draw();
+// <FS:CR> Aurora Sim
+	//LLFloater::draw();
+	if(LLWorld::getInstance()->getAllowMinimap())
+	{
+		LLFloater::draw();
+	}
+// <FS:CR> Aurora Sim
 }
 
 void LLFloaterMap::stretchMiniMap(S32 width,S32 height)

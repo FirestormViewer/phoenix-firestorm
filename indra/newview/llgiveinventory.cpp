@@ -51,6 +51,7 @@
 #include "rlvhandler.h"
 #include "rlvui.h"
 // [/RLVa:KB]
+#include "llworld.h"	// <FS:CR> Aurora Sim
 
 // MAX ITEMS is based on (sizeof(uuid)+2) * count must be < MTUBYTES
 // or 18 * count < 1200 => count < 1200/18 => 66. I've cut it down a
@@ -269,7 +270,10 @@ bool LLGiveInventory::doGiveInventoryCategory(const LLUUID& to_agent,
 		give_successful = false;
 	}
 	count = items.count() + cats.count();
-	if (count > MAX_ITEMS)
+// <FS:CR> Aurora Sim
+	//if (count > MAX_ITEMS)
+	if (count > LLWorld::getInstance()->getMaxInventoryItemsTransfer())
+// </FS:CR> Aurora Sim
 	{
 		LLNotificationsUtil::add("TooManyItems");
 		give_successful = false;
@@ -552,7 +556,10 @@ bool LLGiveInventory::commitGiveInventoryCategory(const LLUUID& to_agent,
 	// MTUBYTES or 18 * count < 1200 => count < 1200/18 =>
 	// 66. I've cut it down a bit from there to give some pad.
 	S32 count = items.count() + cats.count();
-	if (count > MAX_ITEMS)
+// <FS:CR> Aurora Sim>
+	//if (count > MAX_ITEMS)
+	if (count > LLWorld::getInstance()->getMaxInventoryItemsTransfer())
+// <FS:CR> Aurora Sim
 	{
 		LLNotificationsUtil::add("TooManyItems");
 		give_successful = false;

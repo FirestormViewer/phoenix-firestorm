@@ -53,6 +53,8 @@
 #include "llnotificationsutil.h"
 #include "llvoiceclient.h"
 
+#include "llworld.h" // <FS:CR> Aurora Sim
+
 bool LLAvatarListItem::sStaticInitialized = false;
 S32 LLAvatarListItem::sLeftPadding = 0;
 S32 LLAvatarListItem::sNameRightPadding = 0;
@@ -443,9 +445,15 @@ void LLAvatarListItem::setRange(F32 distance)
 	// Get default style params
 	LLStyle::Params rangeHighlight = LLStyle::Params();
 	
-	if (mUseRangeColors && mDistance > CHAT_NORMAL_RADIUS)
+// <FS:CR> Aurora Sim
+	//if (mUseRangeColors && mDistance > CHAT_NORMAL_RADIUS)
+	if (mUseRangeColors && mDistance > LLWorld::getInstance()->getSayDistance())
+// </FS:CR> Aurora Sim
 	{
-		if (mDistance < CHAT_SHOUT_RADIUS)
+// <FS:CR> Aurora Sim
+		//if (mDistance < CHAT_SHOUT_RADIUS)
+		if (mDistance < LLWorld::getInstance()->getShoutDistance())
+// </FS:CR> Aurora Sim
 		{
 			rangeHighlight.color = mShoutRangeColor;
 		}

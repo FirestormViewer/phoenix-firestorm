@@ -140,6 +140,17 @@ LLTextBase::LineSpacingParams::LineSpacingParams()
 {
 }
 
+// <FS:Ansariel> Optional icon position
+namespace LLInitParam
+{
+	void TypeValues<LLTextBaseEnums::EIconPositioning>::declareValues()
+	{
+		declare("left",   LLTextBaseEnums::LEFT);
+		declare("right",  LLTextBaseEnums::RIGHT);
+		declare("none",   LLTextBaseEnums::NONE);
+	}
+}
+// </FS:Ansariel> Optional icon position
 
 LLTextBase::Params::Params()
 :	cursor_color("cursor_color"),
@@ -169,6 +180,9 @@ LLTextBase::Params::Params()
 	font_shadow("font_shadow"),
 	wrap("wrap"),
 	use_ellipses("use_ellipses", false),
+	// <FS:Ansariel> Optional icon position
+	icon_positioning("icon_positioning", LLTextBaseEnums::RIGHT),
+	// </FS:Ansariel> Optional icon position
 	parse_urls("parse_urls", false),
 	parse_highlights("parse_highlights", false)
 {
@@ -226,6 +240,9 @@ LLTextBase::LLTextBase(const LLTextBase::Params &p)
 	mParseHighlights(p.parse_highlights),
 	mBGVisible(p.bg_visible),
 	mScroller(NULL),
+	// <FS:Ansariel> Optional icon position
+	mIconPositioning(p.icon_positioning),
+	// </FS:Ansariel> Optional icon position
 	mStyleDirty(true)
 {
 	if(p.allow_scroll)
@@ -2024,6 +2041,14 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 				std::string subtext=text.substr(0,start);
 				appendAndHighlightText(subtext, part, style_params); 
 			}
+
+			// <FS:Ansariel> Optional icon position
+			if (mIconPositioning == LLTextBaseEnums::LEFT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
+
 			// output the styled Url
 			appendAndHighlightTextImpl(match.getLabel(), part, link_params, match.underlineOnHoverOnly());
 			
@@ -2038,7 +2063,13 @@ void LLTextBase::appendTextImpl(const std::string &new_text, const LLStyle::Para
 					}
 			}
 
-			LLTextUtil::processUrlMatch(&match,this);
+			// <FS:Ansariel> Optional icon position
+			//LLTextUtil::processUrlMatch(&match,this);
+			if (mIconPositioning == LLTextBaseEnums::RIGHT)
+			{
+				LLTextUtil::processUrlMatch(&match,this);
+			}
+			// </FS:Ansariel> Optional icon position
 
 			// move on to the rest of the text after the Url
 			if (end < (S32)text.length()) 

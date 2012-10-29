@@ -2,7 +2,7 @@
 <floater name="lgg_fg_floater" title="Zestawy Kontaktów">
 	<floater.string name="AddToGroup" value="Dodaj do: [GROUPNAME]"/>
 	<floater.string name="RemoveFromGroup" value="Usuń z: [GROUPNAME]"/>
-	<floater.string name="RemoveDisplayName" value="Usuń wyświetlane imię"/>
+	<floater.string name="RemoveDisplayName" value="Usuń Wyświetlane Imię"/>
 	<floater.string name="ResetNameModification" value="Resetuj modyfikację imienia"/>
 	<floater.string name="RemoveFromList" value="Usuń z listy"/>
 	<floater.string name="ShowProfile" value="Pokaż profil"/>

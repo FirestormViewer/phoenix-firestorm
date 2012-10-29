@@ -72,8 +72,6 @@
 				<combo_box.item label="Otwórz mapę świata" name="1"/>
 				<combo_box.item label="Teleportuj do klikniętego punktu" name="2"/>
 			</combo_box>
-			<check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)"/>
-			<check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach"/>
 			<check_box label="Obróć awatara podczas cofania się" name="backwardsturnavatar" tool_tip="Obracaj awatara podczas cofania się w taki sposób, aby twarz była skierowana w stronę kamery."/>
 			<check_box label="Filtruj powtarzające się landmarki na mapie świata" name="WorldmapFilterDuplicateLandmarks" tool_tip="Filtruj zduplikowane landmarki w liście landmarków na mapie świata."/>
 			<check_box label="Pokazuj dodatkowe informacje o regionie na mapie świata" name="FSAdvancedWorldmapRegionInfo" tool_tip="Pokazuj dodatkowe informacje o regionie na mapie świata (liczbę awatarów i poziom dojrzałości)."/>

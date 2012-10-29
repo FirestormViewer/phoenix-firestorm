@@ -59,6 +59,9 @@ protected:
 	U32 mLandBits;
 	U32 mWindBits;
 	U32 mCloudBits;
+// <FS:CR> Aurora Sim
+	U32 mWaterBits;
+// </FS:CR> Aurora Sim
 };
 
 class LLVLData

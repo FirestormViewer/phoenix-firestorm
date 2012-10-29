@@ -181,6 +181,9 @@ LLGridManager::LLGridManager()
 :	mIsInSLMain(false),
 	mIsInSLBeta(false),
 	mIsInOpenSim(false),
+// <FS:CR> Aurora Sim
+	mIsInAuroraSim(false),
+// </FS:CR> Aurora Sim
 	mReadyToLogin(false),
 	mCommandLineDone(false),
 	mResponderCount(0)
@@ -539,6 +542,71 @@ void LLGridManager::gridInfoResponderCB(GridEntry* grid_entry)
 			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[check] << LL_ENDL;
 			continue;
 		}
+// <FS:CR> Aurora Sim
+		check = "search";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_SEARCH] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_SEARCH] << LL_ENDL;
+			continue;
+		}
+		check = "profileuri";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_PROFILE_URI_VALUE] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_PROFILE_URI_VALUE] << LL_ENDL;
+			continue;
+		}
+		check = "SendGridInfoToViewerOnLogin";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_SENDGRIDINFO] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_SENDGRIDINFO] << LL_ENDL;
+			continue;
+		}
+		check = "DirectoryFee";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_DIRECTORY_FEE] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_DIRECTORY_FEE] << LL_ENDL;
+			continue;
+		}
+		check = "CurrencySymbol";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_CURRENCY_SYMBOL] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_CURRENCY_SYMBOL] << LL_ENDL;
+			continue;
+		}
+		check = "RealCurrencySymbol";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_REAL_CURRENCY_SYMBOL] << LL_ENDL;
+			continue;
+		}
+		check = "MaxGroups";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_MAXGROUPS] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MAXGROUPS] << LL_ENDL;
+			continue;
+		}
+		check = "platform";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_PLATFORM] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_PLATFORM] << LL_ENDL;
+			continue;
+		}
+		check = "message";
+		if (node->hasName(check))
+		{
+			grid_entry->grid[GRID_MESSAGE] = node->getTextContents();
+			LL_DEBUGS("GridManager") << "[\""<<check<<"\"]: " << grid_entry->grid[GRID_MESSAGE] << LL_ENDL;
+			continue;
+		}
+// </FS:CR> Aurora Sim
 		check = "helperuri";
 		if (node->hasName(check))
 		{
@@ -1253,6 +1321,9 @@ void LLGridManager::updateIsInProductionGrid()
 	mIsInSLMain = false;
 	mIsInSLBeta = false;
 	mIsInOpenSim = false;
+// <FS:CR> Aurora Sim
+	mIsInAuroraSim = false;
+// </FS:CR> Aurora Sim
 
 	// *NOTE:Mani This used to compare GRID_INFO_AGNI to gGridChoice,
 	// but it seems that loginURI trumps that.
@@ -1280,6 +1351,15 @@ void LLGridManager::updateIsInProductionGrid()
 		mIsInSLBeta = true;
 		return;
 	}
+
+// <FS:CR> Aurora Sim
+	if(mGridList[mGrid][GRID_PLATFORM].asString() == "Aurora") {
+		LL_DEBUGS("GridManager")<< "uri: "<< uris[0] << "set isInAuroraSim" << LL_ENDL;		
+		mIsInAuroraSim = true;
+		mIsInOpenSim = true; //also enable opensim related options here
+		return;
+	}
+// </FS:CR> Aurora Sim
 
 	// TPVP compliance: a SL login screen must connect to SL.
 	// NOTE: This is more TPVP compliant than LLs own viewer, where
@@ -1310,6 +1390,13 @@ bool LLGridManager::isInOpenSim()
 {
 	return mIsInOpenSim;
 }
+
+// <FS:CR> Aurora Sim
+bool LLGridManager::isInAuroraSim()
+{
+	return mIsInAuroraSim;
+}
+// </FS:CR> Aurora Sim
 
 void LLGridManager::saveGridList()
 {

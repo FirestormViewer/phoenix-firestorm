@@ -230,6 +230,27 @@ private:
 
 typedef LLPointer<LLTextSegment> LLTextSegmentPtr;
 
+// <FS:Ansariel> Optional icon position
+namespace LLTextBaseEnums
+{
+	enum EIconPositioning
+	{
+		LEFT,
+		RIGHT,
+		NONE
+	};
+}
+
+namespace LLInitParam
+{
+	template<>
+	struct TypeValues<LLTextBaseEnums::EIconPositioning> : public TypeValuesHelper<LLTextBaseEnums::EIconPositioning>
+	{
+		static void declareValues();
+	};
+}
+// </FS:Ansariel> Optional icon position
+
 ///
 /// The LLTextBase class provides a base class for all text fields, such
 /// as LLTextEditor and LLTextBox. It implements shared functionality
@@ -290,6 +311,9 @@ public:
 		Optional<S32>			max_text_length;
 
 		Optional<LLFontGL::ShadowType>	font_shadow;
+
+		// <FS:Ansariel> Optional icon position
+		Optional<LLTextBaseEnums::EIconPositioning>	icon_positioning;
 
 		Params();
 	};
@@ -633,6 +657,8 @@ protected:
 	// Fired when a URL link is clicked
 	commit_signal_t*			mURLClickSignal;
 
+	// <FS:Ansariel> Optional icon position
+	LLTextBaseEnums::EIconPositioning	mIconPositioning;
 };
 
 #endif

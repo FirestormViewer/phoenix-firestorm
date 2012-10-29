@@ -97,6 +97,7 @@
 Buy for L$[AMOUNT] from:
     </text>
   <text
+     icon_positioning="left"
      type="string"
      length="1"
      follows="left|right|bottom"

@@ -1376,4 +1376,11 @@ extern char const* const _PREHASH_ProductSKU;
 extern char const* const _PREHASH_SeeAVs;
 extern char const* const _PREHASH_AnyAVSounds;
 extern char const* const _PREHASH_GroupAVSounds;
+
+// <FS:CR> Aurora Sim
+extern char const* const _PREHASH_RegionSizeX;
+extern char const* const _PREHASH_RegionSizeY;
+extern char const* const _PREHASH_SizeX;
+extern char const* const _PREHASH_SizeY;
+// <FS:CR> Aurora Sim
 #endif

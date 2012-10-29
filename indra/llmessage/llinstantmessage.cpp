@@ -54,7 +54,10 @@ const S32 VOTE_UNANIMOUS = 2;
 const char EMPTY_BINARY_BUCKET[] = "";
 const S32 EMPTY_BINARY_BUCKET_SIZE = 1;
 const U32 NO_TIMESTAMP = 0;
-const std::string SYSTEM_FROM("Second Life");
+// <FS:CR> Aurora Sim
+//const std::string SYSTEM_FROM("Second Life");
+std::string SYSTEM_FROM("Second Life");
+// </FS:CR> Aurora Sim
 const std::string INTERACTIVE_SYSTEM_FROM("F387446C-37C4-45f2-A438-D99CBDBB563B");
 const S32 IM_TTL = 1;
 

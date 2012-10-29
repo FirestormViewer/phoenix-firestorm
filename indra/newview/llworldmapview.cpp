@@ -354,6 +354,7 @@ void LLWorldMapView::draw()
 
 	// Draw the image tiles
 	drawMipmap(width, height);
+
 	gGL.flush();
 
 	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
