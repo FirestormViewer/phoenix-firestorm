@@ -84,7 +84,11 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data);
 void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_data);
-void process_object_properties_family(LLMessageSystem *msg, void**user_data);
+
+// <FS:Techwolf Lupindo> area search
+// send object properties to all classes that need it
+void process_object_properties(LLMessageSystem *msg, void**user_data);
+// </FS:Techwolf Lupindo> area search
 
 void send_simulator_throttle_settings(const LLHost &host);
 void process_kill_object(	LLMessageSystem *mesgsys, void **user_data);

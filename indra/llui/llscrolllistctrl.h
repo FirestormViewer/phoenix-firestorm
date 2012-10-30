@@ -156,6 +156,9 @@ public:
 	// Adds a single column descriptor: ["name" : string, "label" : string, "width" : integer, "relwidth" : integer ]
 	virtual void addColumn(const LLScrollListColumn::Params& column, EAddPosition pos = ADD_BOTTOM);
 	virtual void addColumn(const LLSD& column, EAddPosition pos = ADD_BOTTOM);	
+	// <FS:Techwolf Lupindo> area search, allow deleting a column
+	virtual LLScrollListColumn::Params delColumn(std::string name);
+	// </FS:Techwolf Lupindo> area search
 	virtual void clearColumns();
 	virtual void setColumnLabel(const std::string& column, const std::string& label);
 	virtual bool 	preProcessChildNode(LLXMLNodePtr child);
