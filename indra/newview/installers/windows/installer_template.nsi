@@ -110,7 +110,10 @@ InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTN
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 
 Page license
-Page directory dirPre
+; <FS:Ansariel> Optional start menu entry
+;Page directory dirPre
+Page directory dirPre "" dirPost
+; </FS:Ansariel>
 Page instfiles
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -125,6 +128,7 @@ Var SHORTCUT_LANG_PARAM ; "--set InstallLanguage de", passes language to viewer
 Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall 
                         ; GUI and the defaults.
 Var DO_UNINSTALL_V2     ; If non-null, path to a previous Viewer 2 installation that will be uninstalled.
+Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 
 ;;; Function definitions should go before file includes, because calls to
 ;;; DLLs like LangDLL trigger an implicit file include, so if that call is at
@@ -168,6 +172,21 @@ Function dirPre
     StrCmp $SKIP_DIALOGS "true" 0 +2
 	Abort
 FunctionEnd    
+
+; <FS:Ansariel> Optional start menu entry
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Post-directory page callback
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function dirPost
+    StrCmp $SKIP_DIALOGS "true" label_create_start_menu
+	
+    MessageBox MB_YESNO|MB_ICONQUESTION $(CreateStartMenuEntry) IDYES label_create_start_menu
+    StrCpy $NO_STARTMENU "true"
+
+label_create_start_menu:
+
+FunctionEnd
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make sure we're not on Windows 98 / ME
@@ -990,6 +1009,10 @@ StrCpy $SHORTCUT_LANG_PARAM "--set InstallLanguage $(LanguageCode)"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Shortcuts in start menu
+; <FS:Ansariel> Optional start menu entry
+StrCmp $NO_STARTMENU "true" label_skip_start_menu
+; </FS:Ansariel>
+
 CreateDirectory	"$SMPROGRAMS\$INSTSHORTCUT"
 SetOutPath "$INSTDIR"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
@@ -1007,6 +1030,10 @@ WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
                 "http://wiki.secondlife.com/wiki/LSL_Portal"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
+
+; <FS:Ansariel> Optional start menu entry
+label_skip_start_menu:
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Other shortcuts
