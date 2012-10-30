@@ -2758,6 +2758,54 @@ void LLScrollListCtrl::addColumn(const LLScrollListColumn::Params& column_params
 	dirtyColumns();
 }
 
+// <FS:Techwolf Lupindo> area search
+// area search support for deleting a column
+LLScrollListColumn::Params LLScrollListCtrl::delColumn(std::string name)
+{
+	std::vector<LLScrollListColumn::Params> column_params;
+	LLScrollListColumn::Params params;
+
+	// save params for each column
+	ordered_columns_t::iterator column_itor;
+	for (column_itor = mColumnsIndexed.begin(); column_itor != mColumnsIndexed.end(); ++column_itor)
+	{
+		LLScrollListColumn* column = (*column_itor);
+		params.header.label = column->mLabel;
+		params.name = column->mName;
+		params.width.dynamic_width = column->mDynamicWidth;
+		params.width.relative_width = column->mRelWidth;
+		params.width.pixel_width = column->getWidth();
+		params.halign = column->mFontAlignment;
+
+		LLScrollColumnHeader *header = column->mHeader;
+		if (header)
+		{
+			params.tool_tip = header->getToolTip();
+		}
+	
+		column_params.push_back(params);
+	}
+
+	clearColumns();
+
+	// restore colums except named column.
+	for (std::vector<LLScrollListColumn::Params>::iterator iter = column_params.begin(); iter != column_params.end(); ++iter)
+	{
+		std::string i_name = iter->name;
+		if (i_name != name)
+		{
+			addColumn((*iter));
+		}
+		else
+		{
+			params = (*iter);
+		}
+	}
+
+	return params;
+}
+// </FS:Techwolf Lupindo> area search
+
 // static
 void LLScrollListCtrl::onClickColumn(void *userdata)
 {

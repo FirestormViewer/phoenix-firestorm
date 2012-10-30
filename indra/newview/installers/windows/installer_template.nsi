@@ -99,16 +99,21 @@ WindowIcon on							; show our icon in left corner
 BGGradient off							; no big background window
 CRCCheck on								; make sure CRC is OK
 InstProgressFlags smooth colored		; new colored smooth look
-ShowInstDetails nevershow				; no details, no "show" button
+; <FS:Ansariel> Expose details button (details hidden by default)
+;ShowInstDetails nevershow				; no details, no "show" button
 SetOverwrite on							; stomp files by default
-AutoCloseWindow true					; after all files install, close window
+; <FS:Ansariel> Don't auto-close so we can check details
+;AutoCloseWindow true					; after all files install, close window
 
 InstallDir "$PROGRAMFILES\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTNAME}" ""
 DirText $(DirectoryChooseTitle) $(DirectoryChooseSetup)
 
 Page license
-Page directory dirPre
+; <FS:Ansariel> Optional start menu entry
+;Page directory dirPre
+Page directory dirPre "" dirPost
+; </FS:Ansariel>
 Page instfiles
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -123,6 +128,7 @@ Var SHORTCUT_LANG_PARAM ; "--set InstallLanguage de", passes language to viewer
 Var SKIP_DIALOGS        ; set from command line in  .onInit. autoinstall 
                         ; GUI and the defaults.
 Var DO_UNINSTALL_V2     ; If non-null, path to a previous Viewer 2 installation that will be uninstalled.
+Var NO_STARTMENU        ; <FS:Ansariel> Optional start menu entry
 
 ;;; Function definitions should go before file includes, because calls to
 ;;; DLLs like LangDLL trigger an implicit file include, so if that call is at
@@ -166,6 +172,21 @@ Function dirPre
     StrCmp $SKIP_DIALOGS "true" 0 +2
 	Abort
 FunctionEnd    
+
+; <FS:Ansariel> Optional start menu entry
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Post-directory page callback
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Function dirPost
+    StrCmp $SKIP_DIALOGS "true" label_create_start_menu
+	
+    MessageBox MB_YESNO|MB_ICONQUESTION $(CreateStartMenuEntry) IDYES label_create_start_menu
+    StrCpy $NO_STARTMENU "true"
+
+label_create_start_menu:
+
+FunctionEnd
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Make sure we're not on Windows 98 / ME
@@ -537,10 +558,13 @@ FunctionEnd
 Function RemoveOldXUI
 
 ;; remove old XUI and texture files
-RmDir /r "$INSTDIR\skins\html"
-RmDir /r "$INSTDIR\skins\xui"
-RmDir /r "$INSTDIR\skins\textures"
-Delete "$INSTDIR\skins\*.txt"
+; <FS:Ansariel> FIRE-869: Delete all existing skins prior installation
+;RmDir /r "$INSTDIR\skins\html"
+;RmDir /r "$INSTDIR\skins\xui"
+;RmDir /r "$INSTDIR\skins\textures"
+;Delete "$INSTDIR\skins\*.txt"
+RMDir /r "$INSTDIR\skins"
+; </FS:Ansariel>
 
 FunctionEnd
 
@@ -874,8 +898,13 @@ Function .onInit
     ${GetParameters} $COMMANDLINE              ; get our command line
 
     ${GetOptions} $COMMANDLINE "/SKIP_DIALOGS" $0   
-    IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ; <FS:Ansariel> Auto-close if auto-updating
+    ; IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ;    StrCpy $SKIP_DIALOGS "true"
+    IfErrors +3 0 ; If error jump past setting SKIP_DIALOGS
         StrCpy $SKIP_DIALOGS "true"
+        SetAutoClose true
+    ; </FS:Ansariel>
 
     ${GetOptions} $COMMANDLINE "/LANGID=" $0   ; /LANGID=1033 implies US English
     ; If no language (error), then proceed
@@ -980,6 +1009,10 @@ StrCpy $SHORTCUT_LANG_PARAM "--set InstallLanguage $(LanguageCode)"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Shortcuts in start menu
+; <FS:Ansariel> Optional start menu entry
+StrCmp $NO_STARTMENU "true" label_skip_start_menu
+; </FS:Ansariel>
+
 CreateDirectory	"$SMPROGRAMS\$INSTSHORTCUT"
 SetOutPath "$INSTDIR"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
@@ -997,6 +1030,10 @@ WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\LSL Scripting Language Help.url" \
                 "http://wiki.secondlife.com/wiki/LSL_Portal"
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
+
+; <FS:Ansariel> Optional start menu entry
+label_skip_start_menu:
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Other shortcuts
@@ -1018,6 +1055,13 @@ WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\$INSTPROG" "
 WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\$INSTPROG" "Exe" "$INSTEXE"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayName" "$INSTPROG (remove only)"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "UninstallString" '"$INSTDIR\uninst.exe"'
+; <FS:Ansariel> Add additional data for uninstall list in Windows
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "Publisher" "The Phoenix Viewer Project Inc."
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLInfoAbout" "http://www.phoenixviewer.com"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.phoenixviewer.com/downloads.php"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "http://www.phoenixviewer.com/support.php"
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Write URL registry info

@@ -3685,4 +3685,8 @@ Poprzedni symulator: [OLDVERSION]
 	<notification name="CannotSaveSnapshot">
 		Zapis zdjęcia zakończony niepowodzeniem.
 	</notification>
+	<notification name="RegExFail">
+		Błąd w wyrażeniu regularnym:
+[EWHAT]
+	</notification>
 </notifications>

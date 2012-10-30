@@ -2668,7 +2668,7 @@ Drag folders to this area and click "Send to Marketplace" to list them for sale 
   <!-- FS:KC legacy profiles -->
   <string name="NoPicksText">You haven't created any Picks.</string>
   <string name="NoAvatarPicksText">User has no picks</string>
-  <string name="NoClassifiedsText">You haven't created any Classifieds.</string>
+  <string name="NoClassifiedsText">You haven't created any Classifieds. Click the Plus button below to create a Classified.</string>
   <string name="NoAvatarClassifiedsText">User has no classifieds</string>
 
 	<!-- Multi Preview Floater -->

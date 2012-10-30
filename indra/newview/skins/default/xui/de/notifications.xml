@@ -3867,4 +3867,9 @@ Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoeni
   <notification name="CannotSaveSnapshot">
 Foto konnte nicht gespeichert werden.
   </notification>
+
+  <notification name="RegExFail">
+Fehler im Regulären Ausdruck:
+[EWHAT]
+  </notification>
 </notifications>

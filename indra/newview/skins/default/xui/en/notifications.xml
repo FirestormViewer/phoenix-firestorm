@@ -9370,4 +9370,13 @@ Did you know you can get the classic Phoenix Viewer look with Firestorm? Go to t
 Unable to save snapshot.
   <tag>fail</tag>
   </notification>
+  
+  <notification
+   icon="alertmodal.tga"
+   name="RegExFail"
+   type="alertmodal">
+Error in the regular expression:
+[EWHAT]
+  <tag>fail</tag>
+  </notification>
 </notifications>

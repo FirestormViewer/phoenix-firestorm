@@ -1,28 +1,101 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="area_search" title="Przeszukiwanie obszaru pod kątem obiektów">
-	<floater.string name="ListedPendingTotalBlank" value="Wylistowane/Oczekujące/Wszystkie"/>
-	<floater.string name="ListedPendingTotalFilled" value="[LISTED] wylistowanych/[PENDING] oczekujących/[TOTAL] wszystkich"/>
-	<text name="name_label">
-	 Przeszukaj nazwy:
-	</text>
-	<text name="desc_label">
-	 Przeszukaj opisy:
-	</text>
-	<text name="owner_label">
-	 Przeszukaj właścicieli:
-	</text>
-	<text name="group_label">
-	 Przeszukaj grupy:
-	</text>
-	<scroll_list name="result_list">
-		<column name="Name" label="Nazwa" tool_tip="Kliknij podwójnie na pozycję, a zobaczysz podświetlenie lokalizacji"/>
-    	<column name="Description" label="Opis" tool_tip="Kliknij podwójnie na pozycję, a zobaczysz podświetlenie lokalizacji"/>
-    	<column name="Owner" label="Właściciel" tool_tip="Kliknij podwójnie na pozycję, a zobaczysz podświetlenie lokalizacji"/>
-		<column name="Group" label="Grupa" tool_tip="Kliknij podwójnie na pozycję, a zobaczysz podświetlenie lokalizacji"/>
-	</scroll_list>
-	<button name="Refresh" label="Odśwież"/>
-	<button name="Stop" label="Zatrzymaj"/>
-	<text name="counter">
-	 Wylistowane/Oczekujące/Wszystkie
-	</text>
+	<tab_container name="area_searchtab">
+		<panel name="area_search_list_panel" label="Lista">
+			<panel.string name="ListedPendingTotalBlank" value="Wylistowane | Oczekujące | Wszystkie"/>
+			<panel.string name="ListedPendingTotalFilled" value="[LISTED] Wylistowane | [PENDING] Oczekujące | [TOTAL] Wszystkie"/>
+			<scroll_list name="result_list">
+				<scroll_list.columns name="distance" label="Odl."/>
+				<scroll_list.columns name="name" label="Nazwa"/>
+				<scroll_list.columns name="description" label="Opis"/>
+				<scroll_list.columns name="owner" label="Właściciel"/>
+				<scroll_list.columns name="group" label="Grupa" tool_tip="Na jaką grupę ustawiony jest obiekt."/>
+				<scroll_list.columns name="creator" label="Twórca"/>
+				<scroll_list.columns name="last_owner" label="Ostatni właściciel" tool_tip="Do kogo obiekt ostatnio należał."/>
+			</scroll_list>
+			<button name="Refresh" label="Odśwież"/>
+			<text name="counter">
+				Wylistowane | Oczekujące | Wszystkie
+			</text>
+			<check_box name="beacons" label="Pokazuj emitery"/>
+		</panel>
+		<panel label="Szukanie" name="area_search_find_panel">
+			<text name="name_label">
+				Nazwa:
+			</text>
+			<text name="desc_label">
+				Opis:
+			</text>
+			<text name="owner_label">
+				Właściciel:
+			</text>
+			<text name="group_label">
+				Grupa:
+			</text>
+			<text name="creator_label">
+				Twórca:
+			</text>
+			<text name="last_owner_label">
+				Ostatni właściciel:
+			</text>
+			<check_box name="regular_expression" label="Użyj wyrażeń regularnych"/>
+			<button name="search" label="Szukaj"/>
+			<button name="clear" label="Wyczyść"/>
+		</panel>
+		<panel label="Filtrowanie" name="area_search_filter_panel">
+			<text name="only_list">
+				Pokaż na liście tylko obiekty, które są:
+			</text>
+			<check_box name="filter_locked" label="Zablokowane" width="100"/>
+			<check_box name="filter_physical" label="Fizyczne"/>
+			<check_box name="filter_phantom" label="Widmowe"/>
+			<check_box name="filter_temporary" label="Tymczasowe" width="100"/>
+			<check_box name="filter_attachment" label="Dodatkami"/>
+			<check_box name="filter_for_sale" label="Do kupienia między" width="135"/>
+			<text name="and" width="30">
+				oraz
+			</text>
+			<text name="mouse_text">
+				Akcja po kliku
+			</text>
+			<combo_box name="click_action" tool_tip="Akcja, jaka jest wywoływana po kliknięciu na obiekcie.">
+				<combo_box.item label="Jakakolwiek" name="click_any"/>
+				<combo_box.item label="Dotknij" name="click_touch"/>
+				<combo_box.item label="Usiądź" name="click_sit"/>
+				<combo_box.item label="Kup" name="click_buy"/>
+				<combo_box.item label="Zapłać" name="click_pay"/>
+				<combo_box.item label="Otwórz" name="click_open"/>
+				<combo_box.item label="Graj" name="click_play"/>
+				<combo_box.item label="Otwórz media" name="click_open_media"/>
+				<combo_box.item label="Przybliż" name="click_zoom"/>
+			</combo_box>
+			<check_box name="filter_distance" label="Odległość między" width="135"/>
+			<text name="and2" width="30">
+				oraz
+			</text>
+			<text name="only_list">
+				Wyklucz obiekty, które są:
+			</text>
+			<check_box name="exclude_attachment" label="Dodatkami"/>
+			<check_box name="exclude_physical" label="Fizyczne"/>
+			<check_box name="exclude_temporary" label="Tymczasowe"/>
+			<button name="apply" label="Zastosuj"/>
+		</panel>
+		<panel label="Opcje" name="area_search_options_panel">
+			<text name="display_column">
+				Pokaż kolumny:
+			</text>
+			<check_box name="show_distance" label="Odległość"/>
+			<check_box name="show_name" label="Nazwa"/>
+			<check_box name="show_description" label="Opis"/>
+			<check_box name="show_owner" label="Właściciel"/>
+			<check_box name="show_group" label="Grupa"/>
+			<check_box name="show_creator" label="Twórca"/>
+			<check_box name="show_last_owner" label="Ostatni właściciel"/>
+		</panel>
+		<panel label="Zaawansowane" name="area_search_advanced_panel">
+			<check_box name="double_click_touch" label="Podwójny klik myszką Dotyka obiekt"/>
+			<check_box name="double_click_buy" label="Podwójny klik myszką Kupuje obiekt"/>
+		</panel>
+	</tab_container>
 </floater>
