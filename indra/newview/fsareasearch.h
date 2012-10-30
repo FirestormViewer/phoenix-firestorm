@@ -111,7 +111,7 @@ public:
 	void clearSearchText();
 	void onButtonClickedSearch();
 	void onCommitCheckboxRegex();
-		bool isSearchableObject (LLViewerObject* objectp, LLViewerRegion* our_region);
+	bool isSearchableObject (LLViewerObject* objectp, LLViewerRegion* our_region);
 	
 	std::map<LLUUID, FSObjectProperties> mObjectDetails;
 
@@ -145,7 +145,7 @@ public:
 private:
 	void requestObjectProperties(const std::vector<U32>& request_list, bool select);
 	void matchObject(FSObjectProperties& details, LLViewerObject* objectp);
-	void getName(LLUUID& id, std::string& name, BOOL group, bool& name_requested);
+	void getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested);
 
 	void updateCounterText();
 	bool regexTest(std::string text);

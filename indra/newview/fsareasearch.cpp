@@ -663,10 +663,10 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	std::string object_description = details.description;
 
 	details.name_requested = false;
-	getName(details.ownership_id, owner_name, details.group_owned, details.name_requested);
-	getName(details.creator_id, creator_name, false, details.name_requested);
-	getName(details.last_owner_id, last_owner_name, false, details.name_requested);
-	getName(details.group_id, group_name, true, details.name_requested);
+	getNameFromUUID(details.ownership_id, owner_name, details.group_owned, details.name_requested);
+	getNameFromUUID(details.creator_id, creator_name, false, details.name_requested);
+	getNameFromUUID(details.last_owner_id, last_owner_name, false, details.name_requested);
+	getNameFromUUID(details.group_id, group_name, true, details.name_requested);
 
 	if (mRegexSearch)
 	{
@@ -824,7 +824,7 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	}
 }
 
-void FSAreaSearch::getName(LLUUID& id, std::string& name, BOOL group, bool& name_requested)
+void FSAreaSearch::getNameFromUUID(LLUUID& id, std::string& name, BOOL group, bool& name_requested)
 {
 	BOOL is_group;
 	
