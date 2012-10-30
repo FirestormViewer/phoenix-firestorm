@@ -537,10 +537,13 @@ FunctionEnd
 Function RemoveOldXUI
 
 ;; remove old XUI and texture files
-RmDir /r "$INSTDIR\skins\html"
-RmDir /r "$INSTDIR\skins\xui"
-RmDir /r "$INSTDIR\skins\textures"
-Delete "$INSTDIR\skins\*.txt"
+; <FS:Ansariel> FIRE-869: Delete all existing skins prior installation
+;RmDir /r "$INSTDIR\skins\html"
+;RmDir /r "$INSTDIR\skins\xui"
+;RmDir /r "$INSTDIR\skins\textures"
+;Delete "$INSTDIR\skins\*.txt"
+RMDir /r "$INSTDIR\skins"
+; </FS:Ansariel>
 
 FunctionEnd
 
