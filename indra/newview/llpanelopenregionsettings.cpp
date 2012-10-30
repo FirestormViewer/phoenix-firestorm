@@ -75,7 +75,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		{
 			regionlimits->setAllowPhysicalPrims(body["AllowPhysicalPrims"].asInteger() == 1);
 		}
-		if ( gSavedSettings.getBOOL("OpenregionsettingsEnableDrawdistance") )
+		if ( gSavedSettings.getBOOL("OpenRegionSettingsEnableDrawDistance") )
 		{
 			if ( body.has("DrawDistance") )
 			{
