@@ -35,7 +35,6 @@
 #include "llpermissions.h"
 #include "llviewerobject.h"
 #include <boost/regex.hpp>
-#include <boost/graph/graph_concepts.hpp>
 #include "llscrolllistcolumn.h"
 
 class LLTextBox;
