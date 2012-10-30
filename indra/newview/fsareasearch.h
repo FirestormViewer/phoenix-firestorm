@@ -285,6 +285,7 @@ public:
 	virtual ~FSPanelAreaSearchFind();
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key,MASK mask);
 
 	LLLineEditor* mNameLineEditor;
 	LLLineEditor* mDescriptionLineEditor;

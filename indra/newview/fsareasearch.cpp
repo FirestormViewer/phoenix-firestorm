@@ -1455,6 +1455,19 @@ void FSPanelAreaSearchFind::onButtonClickedClear()
 	mFSAreaSearch->clearSearchText();
 }
 
+// handle the "enter" key
+BOOL FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
+{
+	if( KEY_RETURN == key )
+	{
+		mFSAreaSearch->onButtonClickedSearch();
+		return TRUE;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
+}
+
+
 //---------------------------------------------------------------------------
 // Filter panel
 //---------------------------------------------------------------------------
