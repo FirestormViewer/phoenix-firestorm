@@ -99,9 +99,11 @@ WindowIcon on							; show our icon in left corner
 BGGradient off							; no big background window
 CRCCheck on								; make sure CRC is OK
 InstProgressFlags smooth colored		; new colored smooth look
-ShowInstDetails nevershow				; no details, no "show" button
+; <FS:Ansariel> Expose details button (details hidden by default)
+;ShowInstDetails nevershow				; no details, no "show" button
 SetOverwrite on							; stomp files by default
-AutoCloseWindow true					; after all files install, close window
+; <FS:Ansariel> Don't auto-close so we can check details
+;AutoCloseWindow true					; after all files install, close window
 
 InstallDir "$PROGRAMFILES\${INSTNAME}"
 InstallDirRegKey HKEY_LOCAL_MACHINE "SOFTWARE\The Phoenix Viewer Project\${INSTNAME}" ""
@@ -877,8 +879,13 @@ Function .onInit
     ${GetParameters} $COMMANDLINE              ; get our command line
 
     ${GetOptions} $COMMANDLINE "/SKIP_DIALOGS" $0   
-    IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ; <FS:Ansariel> Auto-close if auto-updating
+    ; IfErrors +2 0 ; If error jump past setting SKIP_DIALOGS
+    ;    StrCpy $SKIP_DIALOGS "true"
+    IfErrors +3 0 ; If error jump past setting SKIP_DIALOGS
         StrCpy $SKIP_DIALOGS "true"
+        SetAutoClose true
+    ; </FS:Ansariel>
 
     ${GetOptions} $COMMANDLINE "/LANGID=" $0   ; /LANGID=1033 implies US English
     ; If no language (error), then proceed
