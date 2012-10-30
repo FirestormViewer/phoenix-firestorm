@@ -151,11 +151,11 @@ void FSPanelClassifieds::processProperties(void* data, EAvatarProcessorType type
         {
             if(getAvatarId() == gAgentID)
             {
-                mNoItemsLabel->setValue(LLTrans::getString("NoPicksClassifiedsText"));
+                mNoItemsLabel->setValue(LLTrans::getString("NoClassifiedsText"));
             }
             else
             {
-                mNoItemsLabel->setValue(LLTrans::getString("NoAvatarPicksClassifiedsText"));
+                mNoItemsLabel->setValue(LLTrans::getString("NoAvatarClassifiedsText"));
             }
         }
 
