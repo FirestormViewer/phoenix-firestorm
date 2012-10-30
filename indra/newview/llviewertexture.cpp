@@ -2194,7 +2194,10 @@ bool LLViewerFetchedTexture::updateFetch()
 
 void LLViewerFetchedTexture::clearFetchedResults()
 {
-	llassert_always(!mNeedsCreateTexture && !mIsFetching);
+	// <FS:Ansariel> For texture refresh
+	//llassert_always(!mNeedsCreateTexture && !mIsFetching);
+	mIsMissingAsset = FALSE;
+	// </FS:Ansariel>
 	
 	cleanup();
 	destroyGLTexture();

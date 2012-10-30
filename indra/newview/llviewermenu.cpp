@@ -141,6 +141,7 @@
 #include "fswsassetblacklist.h"
 
 #include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
+#include "llvovolume.h"
 
 using namespace LLVOAvatarDefines;
 
@@ -2760,10 +2761,10 @@ class LLEditParticleSource : public view_listener_t
 void destroy_texture(LLUUID id)		// will be used by the texture refresh functions below
 {
 	LLViewerFetchedTexture* tx=LLViewerTextureManager::getFetchedTexture(id);
-	tx->destroyRawImage();
-	tx->destroySavedRawImage();
-	tx->destroyGLTexture();
-	tx->destroyTexture();
+	if (tx)
+	{
+		tx->clearFetchedResults();
+	}
 	LLAppViewer::getTextureCache()->removeFromCache(id);
 }
 
@@ -2793,6 +2794,32 @@ class LLObjectTexRefresh : public view_listener_t
 			map_t::iterator it;
 			for (it = faces_per_texture.begin(); it != faces_per_texture.end(); ++it)
 				destroy_texture(it->first);
+
+			// Refresh sculpt texture
+			if(node->getObject()->isSculpted())
+			{
+				LLSculptParams *sculpt_params = (LLSculptParams *)node->getObject()->getParameterEntry(LLNetworkData::PARAMS_SCULPT);
+				if(sculpt_params)
+				{
+					LLUUID sculpt_uuid = sculpt_params->getSculptTexture();
+
+					LLViewerFetchedTexture* tx = LLViewerTextureManager::getFetchedTexture(sculpt_uuid);
+					if (tx)
+					{
+						S32 num_volumes = tx->getNumVolumes();
+						const LLViewerTexture::ll_volume_list_t* pVolumeList = tx->getVolumeList();
+
+						destroy_texture(sculpt_uuid);
+
+						for (S32 idxVolume = 0; idxVolume < num_volumes; ++idxVolume)
+						{
+							LLVOVolume* pVolume = pVolumeList->at(idxVolume);
+							if (pVolume)
+								pVolume->notifyMeshLoaded();
+						}
+					}
+				}
+			}
 		}
 
         return true;
