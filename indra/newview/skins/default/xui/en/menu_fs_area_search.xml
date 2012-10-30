@@ -2,76 +2,76 @@
 <context_menu
  layout="topleft"
  name="Object List popup">
-    <menu_item_call
-     label="Script Info"
-     layout="topleft"
-     name="script_info">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="script" />
-    </menu_item_call>
-    <menu_item_call
-     label="Touch"
-     layout="topleft"
-     name="touch_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="touch" />
-    </menu_item_call>
-    <menu_item_call
-     label="Teleport to"
-     layout="topleft"
-     name="teleport_to_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="p_teleport" />
-        <menu_item_call.on_enable
-         function="AreaSearch.Enable"
-         parameter="one" />
-    </menu_item_call>
-    <menu_item_call
-     label="Inspect"
-     layout="topleft"
-     name="inspect_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="inspect" />
-    </menu_item_call>
-    <menu_item_call
-     label="Edit"
-     layout="topleft"
-     name="edit_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="edit" />
-    </menu_item_call>
-    <menu_item_call
-     label="Return"
-     layout="topleft"
-     name="return_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="return" />
-    </menu_item_call>
-    <menu_item_call
-     label="Delete"
-     layout="topleft"
-     name="delete_object">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="delete" />
-    </menu_item_call>
+	<menu_item_call
+	 label="Script Info"
+	 layout="topleft"
+	 name="script_info">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="script"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Touch"
+	 layout="topleft"
+	 name="touch_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="touch"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Teleport to"
+	 layout="topleft"
+	 name="teleport_to_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="p_teleport"/>
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="one"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Inspect"
+	 layout="topleft"
+	 name="inspect_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="inspect"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Edit"
+	 layout="topleft"
+	 name="edit_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="edit"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Return"
+	 layout="topleft"
+	 name="return_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="return"/>
+	</menu_item_call>
+	<menu_item_call
+	 label="Delete"
+	 layout="topleft"
+	 name="delete_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="delete"/>
+	</menu_item_call>
 <!-- <menu_item_separator
-     layout="topleft" />  -->
-    <menu_item_call
-     label="Buy object"
-     layout="topleft"
-     name="object_buy">
-        <menu_item_call.on_click
-         function="AreaSearch.Action"
-         parameter="buy" />
-        <menu_item_call.on_enable
-         function="AreaSearch.Enable"
-         parameter="one" />
-    </menu_item_call>
+	 layout="topleft"/>  -->
+	<menu_item_call
+	 label="Buy object"
+	 layout="topleft"
+	 name="object_buy">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="buy"/>
+		<menu_item_call.on_enable
+		 function="AreaSearch.Enable"
+		 parameter="one"/>
+	</menu_item_call>
 </context_menu>
