@@ -161,16 +161,18 @@
         <key>slurl_base</key>
             <string>hop://localhost:9000/</string>
         </map>
-    <key>login.avination.net/</key>
+    <key>login.avination.com/</key>
         <map>
         <key>LastModified</key>
-            <date>2012-08-03T15:33:01.02Z</date>
+            <date>2011-08-28T12:00:00.00Z</date>
         <key>about</key>
-            <string>http://login.avination.net</string>
+            <string>https://www.avination.com/</string>
+        <key>grid_login_id</key>
+            <string>login.avination.com/</string>
         <key>gridname</key>
             <string>Avination</string>
         <key>gridnick</key>
-            <string>Avination</string>
+            <string>avination</string>
         <key>helperuri</key>
             <string>https://secure.3dhosting.de/</string>
         <key>login_identifier_types</key>
@@ -182,17 +184,14 @@
             <string>https://www.avination.com/welcome.php</string>
         <key>loginuri</key>
             <array>
-                <string>https://login.avination.com</string>
+                <string>https://login.avination.com/</string>
             </array>
         <key>name</key>
-            <string>login.avination.net/</string>
-        <key>password</key>
-            <string>https://www.avination.com/pwrecover.php</string>
+            <string>login.avination.com/</string>
         <key>register</key>
-            <string>https://www.avination.com/join.php</string>
+            <string>https://www.avination.com/join.html</string>
         <key>slurl_base</key>
-            <string>hop://login.avination.net//</string>
-        </map>
+            <string>https://login.avination.com/</string>
     <key>login.danger.osgrid.org</key>
         <map>
         <key>DEPRECATED</key>
