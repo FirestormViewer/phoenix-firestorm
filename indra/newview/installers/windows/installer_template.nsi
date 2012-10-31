@@ -353,6 +353,9 @@ Function CheckWillUninstallV2
 
   StrCpy $DO_UNINSTALL_V2 ""
 
+  ; <FS:Ansariel> Don't mess with the official viewer
+  Return
+
   StrCmp $SKIP_DIALOGS "true" 0 CHECKV2_DONE
   StrCmp $INSTDIR "$PROGRAMFILES\SecondLifeViewer2" CHECKV2_DONE ; don't uninstall our own install dir.
   IfFileExists "$PROGRAMFILES\SecondLifeViewer2\uninst.exe" CHECKV2_FOUND CHECKV2_DONE
