@@ -1577,6 +1577,9 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("CopyInventoryFromNotecard");
 	capabilityNames.append("CreateInventoryCategory");
 	capabilityNames.append("DispatchRegionInfo");
+// <FS:CR> Aurora Sim
+	capabilityNames.append("DispatchOpenRegionSettings");
+// </FS:CR> Aurora Sim
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
 	capabilityNames.append("EnvironmentSettings");

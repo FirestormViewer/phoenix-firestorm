@@ -59,6 +59,10 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
+#ifdef HAS_OPENSIM_SUPPORT
+#include "llviewernetwork.h"	// <FS:CR> Aurora Sim
+#endif
+
 #include "llglheaders.h"
 
 // Basically a C++ implementation of the OCEAN_COLOR defined in mapstitcher.py 
@@ -353,7 +357,15 @@ void LLWorldMapView::draw()
 	gGL.setColorMask(true, true);
 
 	// Draw the image tiles
+// <FS:CR> Aurora Sim
+#ifdef HAS_OPENSIM_SUPPORT
+	if(!LLGridManager::getInstance()->isInAuroraSim()) {
+		drawMipmap(width, height);
+	}
+#else
 	drawMipmap(width, height);
+#endif //HAS_OPENSIM_SUPPORT
+// </FS:CR> Aurora Sim
 
 	gGL.flush();
 
@@ -378,8 +390,12 @@ void LLWorldMapView::draw()
 		// When the view isn't panned, 0,0 = center of rectangle
 		F32 bottom =    sPanY + half_height + relative_y;
 		F32 left =      sPanX + half_width + relative_x;
-		F32 top =       bottom + sMapScale ;
-		F32 right =     left + sMapScale ;
+// <FS:CR> Aurora Sim
+		//F32 top =       bottom + sMapScale ;
+		//F32 right =     left + sMapScale ;
+		F32 top =		bottom+ (sMapScale * (info->mSizeY / REGION_WIDTH_METERS));
+		F32 right =		left  + (sMapScale * (info->mSizeX / REGION_WIDTH_METERS));
+// </FS:CR> Aurora Sim
 
 		// Discard if region is outside the screen rectangle (not visible on screen)
 		if ((top < 0.f)   || (bottom > height) ||
@@ -433,15 +449,28 @@ void LLWorldMapView::draw()
 			gGL.end();
 		}
 		 **********************/
+// <FS:CR> Aurora Sim
+#ifdef HAS_OPENSIM_SUPPORT
+		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
+#else
 		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
+#endif //HAS_OPENSIM_SUPPORT
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
 			if (overlayimage)
 			{
 				// Inform the fetch mechanism of the size we need
-				S32 draw_size = llround(sMapScale);
-				overlayimage->setKnownDrawSize(llround(draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(draw_size * LLUI::sGLScaleFactor.mV[VY]));
+// <FS:CR> Aurora Sim
+				//S32 draw_size = llround(sMapScale);
+				//overlayimage->setKnownDrawSize(llround(draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(draw_size * LLUI::sGLScaleFactor.mV[VY]));
+				S32 x_draw_size = llround(sMapScale);
+				S32 y_draw_size = llround(sMapScale);
+				x_draw_size *= (info->mSizeX / REGION_WIDTH_METERS);
+				y_draw_size *= (info->mSizeY / REGION_WIDTH_METERS);
+
+				overlayimage->setKnownDrawSize(llround(x_draw_size * LLUI::sGLScaleFactor.mV[VX]), llround(y_draw_size * LLUI::sGLScaleFactor.mV[VY]));
+// </FS:CR> Aurora Sim
 				// Draw something whenever we have enough info
 				if (overlayimage->hasGLTexture())
 				{
