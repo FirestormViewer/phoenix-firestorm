@@ -288,7 +288,14 @@ void LLViewerAudio::onTeleportStarted()
 			return;
 		}
 		// </FS:Ansariel>
-		
+
+		// <FS:TM> FIRE-7093 - Don't attempt to switch music streams when the URL hasn't changed 
+		if (mNextStreamURI == gAudiop->getInternetStreamURL())
+		{
+			return;
+		}
+		//</FS:TM>
+
 		LLViewerAudio::getInstance()->setForcedTeleportFade(true);
 		LLViewerAudio::getInstance()->startInternetStreamWithAutoFade(LLStringUtil::null);
 		LLViewerAudio::getInstance()->setNextStreamURI(LLStringUtil::null);
