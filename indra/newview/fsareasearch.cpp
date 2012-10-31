@@ -98,6 +98,7 @@ FSAreaSearch::FSAreaSearch(const LLSD& key) :
 	mFilterLocked(false),
 	mFilterPhantom(false),
 	mFilterAttachment(false),
+	mFilterMOTP(false),
 	mFilterDistance(false),
 	mFilterDistanceMin(0),
 	mFilterDistanceMax(999999),
@@ -651,6 +652,25 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	if (mFilterAttachment && !objectp->isAttachment())
 	{
 		return;
+	}
+	
+	if (mFilterMOTP)
+	{
+		bool motp = false;
+		U8 texture_count = objectp->getNumTEs();
+		for(U8 i = 0; i < texture_count; i++)
+		{
+			if(objectp->getTE(i)->hasMedia())
+			{
+				motp = true;
+				break;
+			}
+		}
+
+		if(!motp)
+		{
+			return;
+		}
 	}
 
 	//-----------------------------------------------------------------------
@@ -1537,6 +1557,9 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mSpinDistanceMaxValue= getChild<LLSpinCtrl>("max_distance");
 	mSpinDistanceMaxValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 	
+	mCheckboxMOTP = getChild<LLCheckBoxCtrl>("filter_motp");
+	mCheckboxMOTP->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
 	return LLPanel::postBuild();
 }
 
@@ -1550,6 +1573,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	mFSAreaSearch->setFilterPhantom(mCheckboxPhantom->get());
 	mFSAreaSearch->setFilterForSale(mCheckboxForSale->get());
 	mFSAreaSearch->setFilterDistance(mCheckboxDistance->get());
+	mFSAreaSearch->setFilterMOTP(mCheckboxMOTP->get());
 
 	if (mCheckboxExcludePhysics->get())
 	{

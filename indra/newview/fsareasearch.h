@@ -123,6 +123,7 @@ public:
 	void setFilterTemporary(bool b) { mFilterTemporary = b; }
 	void setFilterPhantom(bool b) { mFilterPhantom = b; }
 	void setFilterAttachment(bool b) { mFilterAttachment = b; }
+	void setFilterMOTP(bool b) { mFilterMOTP = b; }
 	
 	void setRegexSearch(bool b) { mRegexSearch = b; }
 	void setBeacons(bool b) { mBeacons = b; }
@@ -205,6 +206,7 @@ private:
 	bool mFilterTemporary;
 	bool mFilterPhantom;
 	bool mFilterAttachment;
+	bool mFilterMOTP;
 
 	bool mFilterForSale;
 	S32 mFilterForSaleMin;
@@ -330,6 +332,7 @@ private:
 	LLCheckBoxCtrl* mCheckboxTemporary;
 	LLCheckBoxCtrl* mCheckboxLocked;
 	LLCheckBoxCtrl* mCheckboxPhantom;
+	LLCheckBoxCtrl* mCheckboxMOTP;
 	LLCheckBoxCtrl* mCheckboxDistance;
 	LLSpinCtrl* mSpinDistanceMinValue;
 	LLSpinCtrl* mSpinDistanceMaxValue;

@@ -331,6 +331,13 @@
 			 width="80"/>
 			<check_box
 			 follows="top|left"
+			 layout="topleft"
+			 name="filter_motp"
+			 label="MOTP"
+			 left_pad="0"
+			 width="80"/>
+			<check_box
+			 follows="top|left"
 			 height="20"
 			 layout="topleft"
 			 left="10"
