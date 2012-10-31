@@ -80,6 +80,9 @@
 #include "aoengine.h"
 // </FS:TT>
 
+#include "llparcel.h"
+#include "llviewerparcelmgr.h"
+
 // Marketplace outbox current disabled
 #define ENABLE_MERCHANT_OUTBOX_CONTEXT_MENU	1
 #define ENABLE_MERCHANT_SEND_TO_MARKETPLACE_CONTEXT_MENU 0
@@ -1509,6 +1512,32 @@ void LLItemBridge::restoreToWorld()
 	if (itemp)
 	{
 		LLMessageSystem* msg = gMessageSystem;
+
+		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+		{
+			LLUUID group_id = gAgent.getGroupID();
+			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+			LLUUID parcel_group_id = parcel->getGroupID();
+			if (gAgent.isInGroup(parcel_group_id))
+			{
+				if (group_id != parcel_group_id)
+				{
+					//Agent is not in the required group.
+					gAgent.restoreToWorld = true;
+					gAgent.restoreToWorldGroup = group_id;
+					gAgent.restoreToWorldItem = itemp;
+					LLMessageSystem* msg = gMessageSystem;
+					msg->newMessageFast(_PREHASH_ActivateGroup);
+					msg->nextBlockFast(_PREHASH_AgentData);
+					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+					msg->addUUIDFast(_PREHASH_GroupID, parcel_group_id);
+					gAgent.sendReliableMessage();
+					return;
+				}
+			}
+		}
+
 		msg->newMessage("RezRestoreToWorld");
 		msg->nextBlockFast(_PREHASH_AgentData);
 		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
@@ -1517,7 +1546,6 @@ void LLItemBridge::restoreToWorld()
 		msg->nextBlockFast(_PREHASH_InventoryData);
 		itemp->packMessage(msg);
 		msg->sendReliable(gAgent.getRegion()->getHost());
-
 		//remove local inventory copy, sim will deal with permissions and removing the item
 		//from the actual inventory if its a no-copy etc
 		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
