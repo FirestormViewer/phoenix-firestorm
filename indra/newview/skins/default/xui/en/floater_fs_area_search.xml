@@ -300,42 +300,43 @@
 			 left="10"
 			 name="filter_locked"
 			 label="Locked"
-			 width="80"/>
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 left_pad="0"
 			 name="filter_physical"
 			 label="Physical"
-			 width="80"/>
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 name="filter_phantom"
 			 label="Phantom"
 			 left_pad="0"
-			 width="80"/>
+			 width="100"/>
 			<check_box
 			 follows="top|left"
+			 top_pad="10"
 			 layout="topleft"
 			 name="filter_temporary"
 			 label="Temporary"
-			 left_pad="0"
-			 width="80"/>
+			 left="10"
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
 			 name="filter_attachment"
 			 label="Attachment"
 			 left_pad="0"
-			 width="80"/>
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 layout="topleft"
-			 name="filter_motp"
-			 label="MOTP"
+			 name="filter_moap"
+			 label="Shared Media"
 			 left_pad="0"
-			 width="80"/>
+			 width="100"/>
 			<check_box
 			 follows="top|left"
 			 height="20"

@@ -46,11 +46,12 @@
 			<text name="only_list">
 				Pokaż na liście tylko obiekty, które są:
 			</text>
-			<check_box name="filter_locked" label="Zablokowane" width="100"/>
+			<check_box name="filter_locked" label="Zablokowane">
 			<check_box name="filter_physical" label="Fizyczne"/>
 			<check_box name="filter_phantom" label="Widmowe"/>
-			<check_box name="filter_temporary" label="Tymczasowe" width="100"/>
+			<check_box name="filter_temporary" label="Tymczasowe"/>
 			<check_box name="filter_attachment" label="Dodatkami"/>
+			<check_box name="filter_moap" label="Z Shared Media"/>
 			<check_box name="filter_for_sale" label="Do kupienia między" width="135"/>
 			<text name="and" width="30">
 				oraz

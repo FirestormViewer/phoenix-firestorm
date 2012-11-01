@@ -47,10 +47,11 @@
 				Nur Objekte mit folgenden Eigenschaften:
 			</text>
 			<check_box name="filter_locked" label="Gesperrt"/>
-			<check_box name="filter_physical" label="Physikalisch" width="90"/>
+			<check_box name="filter_physical" label="Physikalisch">
 			<check_box name="filter_phantom" label="Phantom"/>
 			<check_box name="filter_temporary" label="Temporär"/>
 			<check_box name="filter_attachment" label="Anhang"/>
+			<check_box name="filter_moap" label="Shared Media"/>
 			<check_box name="filter_for_sale" label="Zum Verkauf zwischen" width="150"/>
 			<text name="and">
 				und
