@@ -27,6 +27,28 @@
 #define LLMEMORY_H
 
 #include "llmemtype.h"
+namespace ndAllocators
+{
+#ifdef ND_USE_ND_ALLOCS
+void *ndMalloc( size_t aSize, size_t aAlign );
+void ndFree( void* ptr );
+void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
+#else
+inline void *ndMalloc( size_t aSize, size_t aAlign )
+{
+	return malloc( aSize );
+}
+inline void ndFree( void* ptr )
+{
+	return free( ptr );
+}
+void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
+{
+	return realloc( ptr, aSize );
+}
+#endif
+}
+
 #if LL_DEBUG
 inline void* ll_aligned_malloc( size_t size, int align )
 {
@@ -96,12 +118,14 @@ inline void ll_aligned_free_32(void *p)
 }
 #else // LL_DEBUG
 // ll_aligned_foo are noops now that we use tcmalloc everywhere (tcmalloc aligns automatically at appropriate intervals)
-#define ll_aligned_malloc( size, align ) malloc(size)
-#define ll_aligned_free( ptr ) free(ptr)
-#define ll_aligned_malloc_16 malloc
-#define ll_aligned_free_16 free
-#define ll_aligned_malloc_32 malloc
-#define ll_aligned_free_32 free
+#define ll_aligned_malloc( size, align ) ndAllocators::ndMalloc(size, align)
+#define ll_aligned_free( ptr ) ndAllocators::ndFree(ptr)
+#define ll_aligned_malloc_16( size ) ndAllocators::ndMalloc( size, 16 )
+#define ll_aligned_free_16( ptr ) ndAllocators::ndFree( ptr )
+#define ll_aligned_malloc_32(size) ndAllocators::ndMalloc( size, 32 )
+#define ll_aligned_free_32( ptr ) ndAllocators::ndFree( ptr )
+#define ll_aligned_realloc_16( ptr, size ) ndAllocators::ndRealloc( ptr, size, 16 )
+
 #endif // LL_DEBUG
 
 #ifndef __DEBUG_PRIVATE_MEM__
@@ -423,6 +447,12 @@ public:
 	static void  freeMem(LLPrivateMemoryPool* poolp, void* addr) ;
 };
 
+#ifdef ND_USE_ND_ALLOCS
+#define ALLOCATE_MEM(poolp, size) ll_aligned_malloc_16(size);
+#define FREE_MEM(poolp, addr) ll_aligned_free_16( addr );
+
+#else
+
 //-------------------------------------------------------------------------------------
 #if __DEBUG_PRIVATE_MEM__
 #define ALLOCATE_MEM(poolp, size) LLPrivateMemoryPoolManager::allocate((poolp), (size), __FUNCTION__, __LINE__)
@@ -431,6 +461,8 @@ public:
 #endif
 #define FREE_MEM(poolp, addr) LLPrivateMemoryPoolManager::freeMem((poolp), (addr))
 //-------------------------------------------------------------------------------------
+
+#endif
 
 //
 //the below singleton is used to test the private memory pool.
@@ -515,7 +547,6 @@ void  LLPrivateMemoryPoolTester::operator delete[](void* addr)
 
 // LLSingleton moved to llsingleton.h
 
-
 // <FS:ND> HACK! There are times when there's pointer that are not 0, but 1
 // This is to find those and research where they are coming.
 inline bool ndIsValidPtr( void const *aPtr )
@@ -526,4 +557,5 @@ inline bool ndIsValidPtr( void const *aPtr )
 	return true;
 }
 // </FS:ND>
+
 #endif

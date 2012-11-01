@@ -1,6 +1,3 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -26,36 +23,49 @@
  */
 
 
-#ifndef LL_STDTYPES_H
-	#if LL_WINDOWS
-		typedef unsigned long U32;
-	#else
-		typedef unsigned int U32;
-	#endif
+#include <new>
+#include <stdlib.h>
+#include <stdint.h>
+#include "ndmemorypool.h"
 
-	typedef unsigned char U8;
-#endif
+#ifdef ND_USE_ND_ALLOCS
 
-namespace ndIntrin
+namespace ndAllocators
 {
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	void *ndMalloc( size_t aSize, size_t aAlign )
+	{
+		return ndMemoryPool::malloc( aSize, aAlign );
+	}
 
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
+	{
+		return ndMemoryPool::realloc( ptr, aSize, aAlign );
+	}
 
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
+	void ndFree( void* ptr )
+	{
+		return ndMemoryPool::free( ptr );
+	}
+}
+using namespace ndAllocators;
 
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
+void *operator new(size_t nSize )
+{
+	return ndMalloc( nSize, 16 );
 }
 
+void *operator new[](size_t nSize )
+{
+	return ndMalloc( nSize, 16 );
+}
+
+void operator delete( void *pMem )
+{
+	ndFree( pMem );
+}
+
+void operator delete[]( void *pMem )
+{
+	ndFree( pMem );
+}
 #endif

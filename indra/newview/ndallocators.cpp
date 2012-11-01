@@ -1,6 +1,3 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -26,36 +23,9 @@
  */
 
 
-#ifndef LL_STDTYPES_H
-	#if LL_WINDOWS
-		typedef unsigned long U32;
-	#else
-		typedef unsigned int U32;
-	#endif
-
-	typedef unsigned char U8;
-#endif
-
-namespace ndIntrin
-{
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
-
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
-}
-
-#endif
+// Yes, that a hack :(
+// MSVC really complains badly if you do not compiler the pch header into every source files that uses it.
+// Usage of pch could be disabled for ../llcommon/ndallocators in newview/CMakeLists.txt, but that's even more magic
+// that needs to be merged when upstream changes CMakeLists.txt
+#include "llviewerprecompiledheaders.h"
+#include "../llcommon/ndallocators.cpp"

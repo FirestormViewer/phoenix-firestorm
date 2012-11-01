@@ -276,13 +276,17 @@ elseif(LINUX)
         libopenal.so
         libopenjpeg.so
         libssl.so
-        libtcmalloc_minimal.so
+#        libtcmalloc_minimal.so
         libuuid.so.16
         libuuid.so.16.0.22
         libssl.so.1.0.0
         libfontconfig.so.1.4.4
         #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
+
+    if(USE_GOOGLE_PERFTOOLS)
+      set(release_files ${release_files} "libtcmalloc_minimal.so")
+    endif(USE_GOOGLE_PERFTOOLS)
 
     if (FMOD)
       set(release_files ${release_files} "libfmod-3.75.so")
