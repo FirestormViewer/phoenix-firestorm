@@ -46,7 +46,7 @@
 			<text name="only_list">
 				Pokaż na liście tylko obiekty, które są:
 			</text>
-			<check_box name="filter_locked" label="Zablokowane">
+			<check_box name="filter_locked" label="Zablokowane"/>
 			<check_box name="filter_physical" label="Fizyczne"/>
 			<check_box name="filter_phantom" label="Widmowe"/>
 			<check_box name="filter_temporary" label="Tymczasowe"/>

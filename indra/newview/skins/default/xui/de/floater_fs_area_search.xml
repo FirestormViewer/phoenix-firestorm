@@ -47,7 +47,7 @@
 				Nur Objekte mit folgenden Eigenschaften:
 			</text>
 			<check_box name="filter_locked" label="Gesperrt"/>
-			<check_box name="filter_physical" label="Physikalisch">
+			<check_box name="filter_physical" label="Physikalisch"/>
 			<check_box name="filter_phantom" label="Phantom"/>
 			<check_box name="filter_temporary" label="Temporär"/>
 			<check_box name="filter_attachment" label="Anhang"/>
