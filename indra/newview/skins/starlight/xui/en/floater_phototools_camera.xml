@@ -216,8 +216,7 @@
 						 tool_tip="This simply moves the camera in and out. NOTE: It does not make the camera ZOOM in RL terms! It has no effect on the FOV. Use the 'Zoom' slider for real zooming."
 						 top_pad="0"
 						 min_val="0"
-						 max_val="1" 
-						 width="">
+						 max_val="1">
 							<commit_callback function="Slider.value_changed"/>
 						</slider_bar>
 						<button
@@ -390,8 +389,6 @@
 				 can_edit_text="true"
 				 control_name="CameraAngle"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_delta="120"
 				 decimal_digits="3"
@@ -436,7 +433,6 @@
 				 min_val="0"
 				 max_val="30"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="135" />
 				<button
 				 follows="right"
@@ -473,8 +469,7 @@
 				 min_val="0"
 				 max_val="30"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="135" />
+				 width="135"/>
 				<button
 				 follows="right"
 				 name="Reset_Camera_Lag"
@@ -510,8 +505,7 @@
 				 min_val=".001"
 				 max_val="25"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="135" />
+				 width="135"/>
 				<button
 				 follows="right"
 				 name="Reset_Camera_Offset"
@@ -547,8 +541,7 @@
 				 min_val="0"
 				 max_val="300"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="135" />
+				 width="135"/>
 				<button
 				 follows="right"
 				 name="Reset_Camera_Smoothing"
@@ -613,7 +606,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 value="Mouse Sensitivity "
+				 value="Mouse Sensitivity"
 				 top_pad="15"
 				 tool_tip="Controls responsiveness of mouse when in mouselook mode."
 				 width="100"/>
@@ -629,8 +622,7 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="135" />
+				 width="135"/>
 				<button
 				 follows="right"
 				 name="Reset_Mouse_Sensitivity"
@@ -646,7 +638,7 @@
 					 parameter="MouseSensitivity"/>
 				</button>
 				<check_box
-				control_name="FirstPersonAvatarVisible"
+				 control_name="FirstPersonAvatarVisible"
 				 follows="left|top"
 				 height="16"
 				 label="Display avatar mouselook"
@@ -655,7 +647,7 @@
 				 tool_tip="Display avatar and attachments below neck while in mouselook. Default is OFF."
 				 name="first_person_avatar_visible"
 				 top_pad="10"
-				 width="250" />
+				 width="250"/>
 				<check_box
 				 control_name="MouseSmooth"
 				 follows="left|top"
@@ -666,7 +658,7 @@
 				 tool_tip="Smooths out motion of mouse when in mouselook mode."
 				 name="MouseSmooth"
 				 top_pad="5"
-				 width="250" />	
+				 width="250"/>	
 			</panel>
 
 			<panel
@@ -688,7 +680,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Addtional Camera Options"
-				 top_pad=""
 				 width="200"/>
 			</panel>
 
@@ -791,7 +782,7 @@
 				 name="FlycamAxisScale1b"
 				 top_pad="9"
 				 tool_tip="Adjusts the sensitivity of the Left/Right movement. If you find it difficult to move with precision, use lower scale values. "
-				 width="255" />
+				 width="255"/>
 				<slider
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale2"
@@ -836,16 +827,16 @@
 				 increment="0.001"
 				 height="16"
 				 initial_value="0.1"
-				 label="Tilt"
-				 label_width="50"
+				 label="Pitch"
+				 label_width="75"
 				 layout="topleft"
 				 left="10"
 				 max_val=".5"
 				 min_val="0"
 				 name="FlycamAxisScale4"
-				 tool_tip="Adjusts the sensitivity of the Tilt movement. If you find it difficult to move with precision, use lower scale values. "
+				 tool_tip="Adjusts the sensitivity of the Pitch movement. If you find it difficult to move with precision, use lower scale values. "
 				 top_pad="2"
-				 width="255" />
+				 width="255"/>
 				<slider
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale5"
@@ -854,16 +845,16 @@
 				 height="16"
 				 increment="0.001"
 				 initial_value="0.1"
-				 label="Spin"
-				 label_width="50"
+				 label="Yaw"
+				 label_width="75"
 				 layout="topleft"
 				 left="10"
 				 max_val=".5"
 				 min_val="0"
 				 name="FlycamAxisScale5"
 				 top_pad="2"
-				 tool_tip="Adjusts the sensitivity of the Spin movement. If you find it difficult to move with precision, use lower scale values. "
-				 width="255" />
+				 tool_tip="Adjusts the sensitivity of the Yaw movement. If you find it difficult to move with precision, use lower scale values. "
+				 width="255"/>
 				<slider
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale3"
@@ -881,7 +872,7 @@
 				 name="FlycamAxisScale3"
 				 tool_tip="Adjusts the sensitivity of the Roll movement. If you find it difficult to move with precision, use lower scale values. "
 				 top_pad="2"
-				 width="255" />
+				 width="255"/>
 				<slider
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale6"
@@ -891,7 +882,7 @@
 				 increment="0.0001"
 				 initial_value="0.01"
 				 label="Zoom Speed"
-				 label_width="50"
+				 label_width="75"
 				 layout="topleft"
 				 left="10"
 				 max_val="0.1"
@@ -899,7 +890,7 @@
 				 name="FlycamAxisScale6"
 				 tool_tip="Adjusts the sensitivity of the Zoom speed. If you find it difficult to zoom with precision, use lower scale values. "
 				 top_pad="2"
-				 width="255" />
+				 width="255"/>
 				<slider
 				 can_edit_text="true"
 				 control_name="FlycamFeathering"
@@ -909,7 +900,7 @@
 				 increment=".01"
 				 initial_value="1"
 				 label="Feather"
-				 label_width="50"
+				 label_width="75"
 				 layout="topleft"
 				 left="10"
 				 max_val="10"
@@ -917,7 +908,7 @@
 				 name="FlycamFeathering"
 				 top_pad="2"
 				 tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing."
-				 width="255" />
+				 width="255"/>
 			</panel>
 
 			<panel
@@ -946,7 +937,7 @@
 				 name="JoystickAxis6"
 				 tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."
 				 top_pad="2"
-				 width="255" />
+				 width="255"/>
 				<check_box
 				 top_pad="20"
 				 control_name="JoystickEnabled"
@@ -956,7 +947,7 @@
 				 left="6"
 				 tool_tip="This turns on the 3D Mouse."
 				 name="enable_joystick"
-				 width="60" />
+				 width="60"/>
 				<check_box
 				 name="CB_Zoom_Control"
 				 control_name="ZoomDirect"
@@ -965,8 +956,8 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 tool_tip="In order for the zooming control to work, you must set the 'Zoom Mapping' above to '4'."
-				 width="15" />
+				 tool_tip="In order for the zooming control to work, you must set the 'Zoom Axis Mapping' above to '4'."
+				 width="15"/>
 				<check_box
 				 name="CB_Auto_Leveling"
 				 control_name="AutoLeveling"
@@ -975,7 +966,7 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 width="15" />
+				 width="15"/>
 				<check_box
 				 name="CB_3D_Mouse_Avatar"
 				 control_name="JoystickAvatarEnabled"
@@ -984,7 +975,7 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 width="15" />
+				 width="15"/>
 				<check_box
 				 name="CB_3D_Mouse_Build"
 				 control_name="JoystickBuildEnabled"
@@ -994,7 +985,7 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 width="15" />
+				 width="15"/>
 			</panel>
 		</panel>
 	</tab_container>
