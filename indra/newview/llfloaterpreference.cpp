@@ -331,6 +331,16 @@ void handleDisplayNamesOptionChanged(const LLSD& newvalue)
 	LLVOAvatar::invalidateNameTags();
 }
 
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+void handleLegacyTrimOptionChanged(const LLSD& newvalue)
+{
+	gSavedSettings.setBOOL("DontTrimLegacyNames",newvalue.asBoolean());
+	LLCacheName::sDontTrimLegacyNames = newvalue.asBoolean();
+	LLAvatarNameCache::clear();
+	LLVOAvatar::invalidateNameTags();
+}
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+
 //-TT Client LSL Bridge
 void handleFlightAssistOptionChanged(const LLSD& newvalue)
 {
@@ -469,6 +479,9 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("NameTagShowFriends")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
 	gSavedSettings.getControl("UseDisplayNames")->getCommitSignal()->connect(boost::bind(&handleDisplayNamesOptionChanged,  _2));
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	gSavedSettings.getControl("DontTrimLegacyNames")->getCommitSignal()->connect(boost::bind(&handleLegacyTrimOptionChanged,  _2));
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	gSavedSettings.getControl("UseLSLFlightAssist")->getCommitSignal()->connect(boost::bind(&handleFlightAssistOptionChanged,  _2));
 	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	

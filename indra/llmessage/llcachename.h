@@ -77,6 +77,10 @@ public:
 	BOOL getUUID(const std::string& first, const std::string& last, LLUUID& id);
 	BOOL getUUID(const std::string& fullname, LLUUID& id);
 
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	static bool sDontTrimLegacyNames;
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+
 	// IDEVO Temporary code
 	// Clean up new-style "bobsmith123 Resident" names to "bobsmith123" for display
 	static std::string buildFullName(const std::string& first, const std::string& last);

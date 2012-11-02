@@ -86,6 +86,9 @@ namespace LLAvatarNameCache
 	void setForceDisplayNames(bool force);
 // [/RLVa:KB]
 
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	void clear();
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 	void erase(const LLUUID& agent_id);
 
     /// Provide some fallback for agents that return errors

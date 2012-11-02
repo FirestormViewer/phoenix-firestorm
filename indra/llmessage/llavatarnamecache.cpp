@@ -823,6 +823,13 @@ bool LLAvatarNameCache::useDisplayNames()
 	return sUseDisplayNames && !sNameLookupURL.empty();
 }
 
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+void LLAvatarNameCache::clear()
+{
+	sCache.clear();
+}
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
+
 void LLAvatarNameCache::erase(const LLUUID& agent_id)
 {
 	sCache.erase(agent_id);

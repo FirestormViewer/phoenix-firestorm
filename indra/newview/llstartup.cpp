@@ -3133,6 +3133,9 @@ void LLStartUp::initNameCache()
 	// capabilities for display name lookup
 	LLAvatarNameCache::initClass(false);
 	LLAvatarNameCache::setUseDisplayNames(gSavedSettings.getBOOL("UseDisplayNames"));
+// <FS:CR> FIRE-6659: Legacy "Resident" name toggle
+	LLCacheName::sDontTrimLegacyNames = gSavedSettings.getBOOL("DontTrimLegacyNames");
+// </FS:CR> FIRE-6659: Legacy "Resident" name toggle
 }
 
 void LLStartUp::cleanupNameCache()
