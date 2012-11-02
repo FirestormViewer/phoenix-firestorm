@@ -53,6 +53,7 @@
 #include "fslslbridge.h"
 #include "llcombobox.h"
 #include "llnotificationsutil.h"
+#include "fswsassetblacklist.h"
 
 
 // max number of objects that can be (de-)selected in a single packet.
@@ -1281,6 +1282,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	{
 	case 't': // touch
 	case 's': // script
+	case 'l': // blacklist
 	{
 		std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
 
@@ -1300,6 +1302,23 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 				break;
 			case 's': // script
 				FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + (*item_it)->getUUID().asString());
+				break;
+			case 'l': // blacklist
+			{
+				LLUUID object_id = (*item_it)->getUUID();
+				LLViewerObject* objectp = gObjectList.findObject(object_id);
+				if (objectp)
+				{
+					std::string region_name;
+					LLViewerRegion* region = objectp->getRegion();
+					if (region)
+					{
+						region_name = objectp->getRegion()->getName();
+					}
+					FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(object_id, mFSAreaSearch->mObjectDetails[object_id].name, region_name, LLAssetType::AT_OBJECT);
+					gObjectList.killObject(objectp);
+				}
+			}
 				break;
 			default:
 				break;

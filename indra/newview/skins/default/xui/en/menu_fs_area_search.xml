@@ -61,6 +61,14 @@
 		 function="AreaSearch.Action"
 		 parameter="delete"/>
 	</menu_item_call>
+	<menu_item_call
+	 label="Blacklist"
+	 layout="topleft"
+	 name="blacklist_object">
+		<menu_item_call.on_click
+		 function="AreaSearch.Action"
+		 parameter="l_blacklist"/>
+	</menu_item_call>
 <!-- <menu_item_separator
 	 layout="topleft"/>  -->
 	<menu_item_call
