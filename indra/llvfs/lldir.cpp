@@ -631,7 +631,10 @@ void LLDir::setChatLogsDir(const std::string &path)
 	}
 }
 
-void LLDir::setPerAccountChatLogsDir(const std::string &username)
+// <FS:CR> FIRE-7343: Seperate chat logs per grid
+//void LLDir::setPerAccountChatLogsDir(const std::string &username)
+void LLDir::setPerAccountChatLogsDir(const std::string &gridname, const std::string &username, bool append)
+// <//FS:CR> FIRE-7343: Seperate chat logs per grid
 {
 	// if both first and last aren't set, assume we're grabbing the cached dir
 	if (!username.empty())
@@ -641,9 +644,21 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
+// <FS:CR> FIRE-7343: Seperate chat logs per grid
+		std::string gridlower(gridname);
+		LLStringUtil::toLower(gridlower);
+		LLStringUtil::replaceChar(gridlower, ' ', '_');
+// </FS:CR> FIRE-7343: Seperate chat logs per grid
 		mPerAccountChatLogsDir = getChatLogsDir();
 		mPerAccountChatLogsDir += mDirDelimiter;
 		mPerAccountChatLogsDir += userlower;
+// <FS:CR> FIRE-7343: Seperate chat logs per grid
+		// If the user has elected, append the grid name to chat log directories
+		if (append && !gridname.empty())
+		{
+			mPerAccountChatLogsDir += "." + gridlower;
+		}
+				
 	}
 	else
 	{

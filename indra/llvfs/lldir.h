@@ -160,7 +160,10 @@ class LLDir
 	static std::string getForbiddenFileChars();
 
 	virtual void setChatLogsDir(const std::string &path);		// Set the chat logs dir to this user's dir
-	virtual void setPerAccountChatLogsDir(const std::string &username);		// Set the per user chat log directory.
+// <FS:CR> FIRE-7343: Seperate chat logs per grid
+	//virtual void setPerAccountChatLogsDir(const std::string &username);		// Set the per user chat log directory.
+	virtual void setPerAccountChatLogsDir(const std::string &gridname, const std::string &username, bool append);		// Set the per user chat log directory.
+// </FS:CR> FIRE-7343: Seperate chat logs per grid
 	virtual void setLindenUserDir(const std::string &username);		// Set the linden user dir to this user's dir
 	virtual void setSkinFolder(const std::string &skin_folder);
 	virtual void setSkinThemeFolder(const std::string &theme_folder); // KB: Catznip Viewer-skins

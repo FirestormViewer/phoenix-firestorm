@@ -1115,7 +1115,11 @@ bool idle_startup()
 		{
 			gDirUtilp->setChatLogsDir(gSavedPerAccountSettings.getString("InstantMessageLogPath"));		
 		}
-		gDirUtilp->setPerAccountChatLogsDir(userid);  
+// <FS:CR> FIRE-7343: Seperate chat logs per grid
+		//gDirUtilp->setPerAccountChatLogsDir(userid);
+		static LLCachedControl<bool> AppendGrid(gSavedSettings, "FSAppendGridToLogFolder");
+		gDirUtilp->setPerAccountChatLogsDir(LLGridManager::getInstance()->getGridLabel(), userid, AppendGrid);
+// </FS:CR> FIRE-7343: Seperate chat logs per grid
 		
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
