@@ -226,7 +226,7 @@ background_visible="true"
 				height="23"
 				layout="topleft"
 				mouse_opaque="false"
-				name="bottom_bar_ls3"
+				name="bottom_bar_ls"
 				left="0"
 				orientation="horizontal"
 				top="0"
@@ -265,7 +265,7 @@ background_visible="true"
 				left="0"
 				orientation="horizontal"
 				top="0"
-				width="120">
+				width="112">
 					<layout_panel
 					follows="bottom|left|right"
 					height="23"
@@ -274,18 +274,18 @@ background_visible="true"
 					mouse_opaque="false"
 					name="close_btn_lp"
 					top="0"
-				    auto_resize="true"
-					width="61">
+               auto_resize="true"
+					width="51">
 						<button
 				         follows="bottom|left|right"
 				         height="23"
 				         label="Close"
 				         layout="topleft"
-						 mouse_opaque="false"
+                     mouse_opaque="false"
 				         name="close_btn"
 				         left="1"
 				         top="0"
-				         width="60" />	
+				         width="50"/>	
 					</layout_panel>
 				</layout_stack>
 
