@@ -26,7 +26,7 @@
 #include <new>
 #include <stdlib.h>
 #include <stdint.h>
-#include "ndmemorypool.h"
+#include "ndallocators.h"
 
 #ifdef ND_USE_ND_ALLOCS
 

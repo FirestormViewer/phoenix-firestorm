@@ -27,27 +27,7 @@
 #define LLMEMORY_H
 
 #include "llmemtype.h"
-namespace ndAllocators
-{
-#ifdef ND_USE_ND_ALLOCS
-void *ndMalloc( size_t aSize, size_t aAlign );
-void ndFree( void* ptr );
-void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
-#else
-inline void *ndMalloc( size_t aSize, size_t aAlign )
-{
-	return malloc( aSize );
-}
-inline void ndFree( void* ptr )
-{
-	return free( ptr );
-}
-void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
-{
-	return realloc( ptr, aSize );
-}
-#endif
-}
+#include "ndallocators.h"
 
 #if LL_DEBUG
 inline void* ll_aligned_malloc( size_t size, int align )

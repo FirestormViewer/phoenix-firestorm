@@ -26,7 +26,6 @@ set(win_crash_logger_SOURCE_FILES
     win_crash_logger.cpp
     llcrashloggerwindows.cpp
     llcrashlookupwindows.cpp
-    ../llcommon/ndallocators.cpp
     )
 
 set(win_crash_logger_HEADER_FILES

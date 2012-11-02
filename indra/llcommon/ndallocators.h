@@ -23,9 +23,35 @@
  */
 
 
-// Yes, that a hack :(
-// MSVC really complains badly if you do not compiler the pch header into every source files that uses it.
-// Usage of pch could be disabled for ../llcommon/ndallocators in newview/CMakeLists.txt, but that's even more magic
-// that needs to be merged when upstream changes CMakeLists.txt
-#include "llviewerprecompiledheaders.h"
-#include "../llcommon/ndallocators.cpp"
+#ifndef NdAllocators_H
+#define NdAllocators_H
+
+
+#include <new>
+#include <stdlib.h>
+#include <stdint.h>
+#include "ndmemorypool.h"
+
+namespace ndAllocators
+{
+#ifdef ND_USE_ND_ALLOCS
+void *ndMalloc( size_t aSize, size_t aAlign );
+void ndFree( void* ptr );
+void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
+#else
+inline void *ndMalloc( size_t aSize, size_t aAlign )
+{
+	return malloc( aSize );
+}
+inline void ndFree( void* ptr )
+{
+	return free( ptr );
+}
+void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
+{
+	return realloc( ptr, aSize );
+}
+#endif
+}
+
+#endif //NdAllocators_H
