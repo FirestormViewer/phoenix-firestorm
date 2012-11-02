@@ -18873,5 +18873,141 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+
+    <!-- Start: Sounds for Prefs > Chat > Radar -->
+    <key>PlayModeUISndRadarChatEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars enter chat range. Also depends on RadarReportChatRangeEnter.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarChatEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars enter chat range (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarChatLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars leave chat range. Also depends on RadarReportChatRangeLeave.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarChatLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars leave chat range (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarDrawEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars enter draw distance. Also depends on RadarReportDrawRangeEnter.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarDrawEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars enter draw distance (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarDrawLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars leave draw distance. Also depends on RadarReportDrawRangeLeave.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarDrawLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars leave draw distance (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarSimEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars enter the region. Also depends on RadarReportSimRangeEnter.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarSimEnter</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars enter the region (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <key>PlayModeUISndRadarSimLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled: plays the sound when avatars leave the region. Also depends on RadarReportSimRangeLeave.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>UISndRadarSimLeave</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file played when avatars leave the region (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
+    </map>
+    <!-- End: Sounds for Prefs > Chat > Radar -->
+
 </map>
 </llsd>
