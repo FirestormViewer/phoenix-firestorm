@@ -230,7 +230,15 @@
      name="logfile_name_datestamp"
      top_pad="3"
      width="350"/>
-
+    <check_box
+     control_name="FSAppendGridToLogFolder"
+     height="16"
+     label="Append the grid name to chat log folders (Set at login)"
+     layout="topleft"
+     left_delta="0"
+     name="grid_append_chat_log_folder"
+     top_pad="3"
+     width="350"/>
     <button
      follows="left|top"
      height="23"
