@@ -2404,7 +2404,8 @@ BOOL LLFolderBridge::dragCategoryIntoFolder(LLInventoryCategory* inv_cat,
 				{
 					// Check whether the folder being dragged from active inventory panel
 					// passes the filter of the destination panel.
-					is_movable = check_category(model, cat_id, active_folder_view, filter);
+					// <FS:Ansariel> FIRE-7219: Allow DnD operation on filtered folder views
+					//is_movable = check_category(model, cat_id, active_folder_view, filter);
 				}
 			}
 		}
