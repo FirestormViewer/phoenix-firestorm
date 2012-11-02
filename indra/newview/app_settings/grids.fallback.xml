@@ -192,6 +192,7 @@
             <string>https://www.avination.com/join.html</string>
         <key>slurl_base</key>
             <string>https://login.avination.com/</string>
+        </map>
     <key>login.danger.osgrid.org</key>
         <map>
         <key>DEPRECATED</key>
