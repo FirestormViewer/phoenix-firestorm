@@ -111,26 +111,11 @@ LLThread::LLThread(const std::string& name, apr_pool_t *poolp) :
 	else
 	{
 		mIsLocalPool = TRUE;
-		// <FS:ND> Make sure the pool gets its own allocator
-
-		// apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
-
-		apr_allocator_t *pAlloc(0);
-
-		apr_allocator_create( &pAlloc );
-		apr_pool_create_ex( &mAPRPoolp, 0, 0, pAlloc );
-		apr_allocator_owner_set( pAlloc, mAPRPoolp );
-
-		// <FS:ND>
-
+		apr_pool_create(&mAPRPoolp, NULL); // Create a subpool for this thread
 	}
 	mRunCondition = new LLCondition(mAPRPoolp);
 
-	// <FS:ND> Removed LLVolatileAPRPool
-
-	// mLocalAPRFilePoolp = NULL ;
-
-	// </FS:ND>
+	mLocalAPRFilePoolp = NULL ;
 }
 
 
@@ -138,15 +123,11 @@ LLThread::~LLThread()
 {
 	shutdown();
 
-	// <FS:ND> Removed LLVolatileAPRPool
-
-	// if(mLocalAPRFilePoolp)
-	// {
-	// 	delete mLocalAPRFilePoolp ;
-	// 	mLocalAPRFilePoolp = NULL ;
-	// }
-
-	// </FS:ND>
+	if(mLocalAPRFilePoolp)
+	{
+		delete mLocalAPRFilePoolp ;
+		mLocalAPRFilePoolp = NULL ;
+	}
 }
 
 void LLThread::shutdown()
@@ -194,10 +175,7 @@ void LLThread::shutdown()
 	delete mRunCondition;
 	mRunCondition = 0;
 	
-	// <FS:ND> Removed LLVolatileAPRPool
-	// if (mIsLocalPool && mAPRPoolp)
-	if ( mAPRPoolp)
-	// </FS:ND>
+	if (mIsLocalPool && mAPRPoolp)
 	{
 		apr_pool_destroy(mAPRPoolp);
 		mAPRPoolp = 0;

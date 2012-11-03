@@ -39,33 +39,12 @@ LLThreadSafeQueueImplementation::LLThreadSafeQueueImplementation(apr_pool_t * po
 	mPool(pool),
 	mQueue(0)
 {
-
-	// <FS:ND> Make sure the pool gets its own allocator
-
-	// if(mOwnsPool) {
-	// 	apr_status_t status = apr_pool_create(&mPool, 0);
-	// 	if(status != APR_SUCCESS) throw LLThreadSafeQueueError("failed to allocate pool");
-	// } else {
-	// 	; // No op.
-	// }
-	
-	if(mOwnsPool)
-	{
-		apr_allocator_t *pAlloc(0);
-
-		apr_status_t status =  apr_allocator_create( &pAlloc );
-		status = apr_pool_create_ex( &mPool, 0, 0, pAlloc );
-		apr_allocator_owner_set( pAlloc, mPool );
-
-		if(status != APR_SUCCESS)
-			throw LLThreadSafeQueueError("failed to allocate pool");
-	}
-	else
-	{
+	if(mOwnsPool) {
+		apr_status_t status = apr_pool_create(&mPool, 0);
+		if(status != APR_SUCCESS) throw LLThreadSafeQueueError("failed to allocate pool");
+	} else {
 		; // No op.
 	}
-	
-	// <FS:ND>
 	
 	apr_status_t status = apr_queue_create(&mQueue, capacity, mPool);
 	if(status != APR_SUCCESS) throw LLThreadSafeQueueError("failed to allocate queue");

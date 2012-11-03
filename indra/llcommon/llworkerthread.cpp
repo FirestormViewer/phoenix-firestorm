@@ -39,14 +39,10 @@ LLWorkerThread::LLWorkerThread(const std::string& name, bool threaded, bool shou
 {
 	mDeleteMutex = new LLMutex(NULL);
 
-	// <FS:ND> Removed LLVolatileAPRPool
-
-	// if(!mLocalAPRFilePoolp)
-	// {
-	// 	mLocalAPRFilePoolp = new LLVolatileAPRPool() ;
-	// }
-
-	// </FS:ND>
+	if(!mLocalAPRFilePoolp)
+	{
+		mLocalAPRFilePoolp = new LLVolatileAPRPool() ;
+	}
 }
 
 LLWorkerThread::~LLWorkerThread()

@@ -142,11 +142,7 @@ private:
 	U32                  mNumEntries;
 	std::string          mHeaderFileName ;
 	std::string          mObjectCacheDirName;
-
-	// <FS:ND> Removed LLVolatileAPRPool
-	// LLVolatileAPRPool*   mLocalAPRFilePoolp ;
-	// </FS:ND>
-
+	LLVolatileAPRPool*   mLocalAPRFilePoolp ; 	
 	header_entry_queue_t mHeaderEntryQueue;
 	handle_entry_map_t   mHandleEntryMap;	
 
