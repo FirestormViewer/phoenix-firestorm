@@ -35,6 +35,7 @@ endif (DARWIN)
 
 set(media_plugin_quicktime_SOURCE_FILES
     media_plugin_quicktime.cpp
+    ../../llcommon/ndallocators.cpp
     )
 
 add_library(media_plugin_quicktime

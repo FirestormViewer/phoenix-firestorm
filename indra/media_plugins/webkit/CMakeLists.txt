@@ -43,6 +43,7 @@ endif(NOT WORD_SIZE EQUAL 32)
 
 set(media_plugin_webkit_SOURCE_FILES
     media_plugin_webkit.cpp
+    ../../llcommon/ndallocators.cpp
     )
 
 set(media_plugin_webkit_HEADER_FILES

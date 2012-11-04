@@ -24,6 +24,7 @@ endif (DARWIN)
 
 set(SLPlugin_SOURCE_FILES
     slplugin.cpp
+    ../../llcommon/ndallocators.cpp
     )
 
 if (DARWIN)

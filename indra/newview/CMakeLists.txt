@@ -738,6 +738,10 @@ else (HAS_OPENSIM_SUPPORT)
         )
 endif (HAS_OPENSIM_SUPPORT)
 
+if( ND_USE_ND_ALLOCS )
+  list(APPEND viewer_SOURCE_FILES ndallocators.cpp)
+endif( ND_USE_ND_ALLOCS )
+
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
