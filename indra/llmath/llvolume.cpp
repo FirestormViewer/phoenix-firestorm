@@ -7036,14 +7036,14 @@ void LLVolumeFace::pushVertex(const LLVector4a& pos, const LLVector4a& norm, con
 //	S32 old_size = mNumVertices*16;
 
 	//positions
-	mPositions = (LLVector4a*) ll_aligned_realloc_16(mPositions, new_size);
+	mPositions = (LLVector4a*) realloc(mPositions, new_size);
 	
 	//normals
-	mNormals = (LLVector4a*) ll_aligned_realloc_16(mNormals, new_size);
+	mNormals = (LLVector4a*) realloc(mNormals, new_size);
 	
 	//tex coords
 	new_size = ((new_verts*8)+0xF) & ~0xF;
-	mTexCoords = (LLVector2*) ll_aligned_realloc_16(mTexCoords, new_size);
+	mTexCoords = (LLVector2*) realloc(mTexCoords, new_size);
 	
 
 	//just clear binormals
@@ -7096,7 +7096,7 @@ void LLVolumeFace::pushIndex(const U16& idx)
 	S32 old_size = ((mNumIndices*2)+0xF) & ~0xF;
 	if (new_size != old_size)
 	{
-		mIndices = (U16*) ll_aligned_realloc_16(mIndices, new_size);
+		mIndices = (U16*) realloc(mIndices, new_size);
 	}
 	
 	mIndices[mNumIndices++] = idx;
@@ -7137,11 +7137,11 @@ void LLVolumeFace::appendFace(const LLVolumeFace& face, LLMatrix4& mat_in, LLMat
 	}
 
 	//allocate new buffer space
-	mPositions = (LLVector4a*) ll_aligned_realloc_16(mPositions, new_count*sizeof(LLVector4a));
+	mPositions = (LLVector4a*) realloc(mPositions, new_count*sizeof(LLVector4a));
 	assert_aligned(mPositions, 16);
-	mNormals = (LLVector4a*) ll_aligned_realloc_16(mNormals, new_count*sizeof(LLVector4a));
+	mNormals = (LLVector4a*) realloc(mNormals, new_count*sizeof(LLVector4a));
 	assert_aligned(mNormals, 16);
-	mTexCoords = (LLVector2*) ll_aligned_realloc_16(mTexCoords, (new_count*sizeof(LLVector2)+0xF) & ~0xF);
+	mTexCoords = (LLVector2*) realloc(mTexCoords, (new_count*sizeof(LLVector2)+0xF) & ~0xF);
 	assert_aligned(mTexCoords, 16);
 	
 	mNumVertices = new_count;
@@ -7188,7 +7188,7 @@ void LLVolumeFace::appendFace(const LLVolumeFace& face, LLMatrix4& mat_in, LLMat
 	new_count = mNumIndices + face.mNumIndices;
 
 	//allocate new index buffer
-	mIndices = (U16*) ll_aligned_realloc_16(mIndices, (new_count*sizeof(U16)+0xF) & ~0xF);
+	mIndices = (U16*) realloc(mIndices, (new_count*sizeof(U16)+0xF) & ~0xF);
 	
 	//get destination address into new index buffer
 	U16* dst_idx = mIndices+mNumIndices;

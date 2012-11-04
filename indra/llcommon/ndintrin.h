@@ -28,7 +28,7 @@
 
 #ifndef LL_STDTYPES_H
 	#if LL_WINDOWS
-		typedef unsigned long U32;
+		typedef LONG U32;
 	#else
 		typedef unsigned int U32;
 	#endif

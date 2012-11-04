@@ -738,10 +738,6 @@ else (HAS_OPENSIM_SUPPORT)
         )
 endif (HAS_OPENSIM_SUPPORT)
 
-if( ND_USE_ND_ALLOCS )
-  list(APPEND viewer_SOURCE_FILES ndallocators.cpp)
-endif( ND_USE_ND_ALLOCS )
-
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
 
@@ -1764,7 +1760,7 @@ if (WINDOWS)
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
         #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${FORCE_TCMALLOC_LINK_INCLUDE} "
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
         LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
         LINK_FLAGS_RELEASE "/FORCE:MULTIPLE /MAP\"secondlife-bin.MAP\" /OPT:REF"
         )

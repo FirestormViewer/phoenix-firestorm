@@ -42,7 +42,6 @@ set(media_plugin_gstreamer010_SOURCE_FILES
     media_plugin_gstreamer010.cpp
     llmediaimplgstreamer_syms.cpp
     llmediaimplgstreamervidplug.cpp
-    ../../llcommon/ndallocators.cpp
     )
 
 set(media_plugin_gstreamer010_HEADER_FILES
