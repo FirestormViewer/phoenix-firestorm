@@ -491,6 +491,7 @@ void LLNetMap::draw()
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-07-26 (Catznip-3.3)
 		if (s_fShowObjects)
 		{
+			gGL.color4f(1.f, 1.f, 1.f, 1.f);
 			gGL.getTexUnit(0)->bind(mObjectImagep);
 // [/SL:KB]
 			gGL.begin(LLRender::QUADS);
@@ -514,6 +515,7 @@ void LLNetMap::draw()
 			map_center_agent.mV[VX] *= mScale / region_width;
 			map_center_agent.mV[VY] *= mScale / region_width;
 
+			gGL.color4f(1.f, 1.f, 1.f, 1.f);
 			gGL.getTexUnit(0)->bind(mParcelImagep);
 			gGL.begin(LLRender::QUADS);
 				gGL.texCoord2f(0.f, 1.f);
