@@ -87,7 +87,8 @@
      name="unknown"
      top_pad="4"
      width="">
-        Size: [DIMENSIONS]
+        Size:
+[DIMENSIONS]
     </text>
     
 <!--  middle: inventory mode -->
@@ -105,24 +106,34 @@
      top="215"/>
     <button
      follows="left|top"
-     height="20"
+     height="18"
      label="Blank"
      label_selected="Blank"
      layout="topleft"
      left_delta="0"
      name="Blank"
-     top_pad="5"
+     top_pad="0"
+     width="73" />
+    <button
+     follows="left|top"
+     height="18"
+     label="Transparent"
+     label_selected="Transparent"
+     layout="topleft"
+     left_delta="0"
+     name="Transparent"
+     top_pad="0"
      width="73" />
      <button
      enabled="false"
      follows="left|top"
-     height="20"
+     height="18"
      label="None"
      label_selected="None"
      layout="topleft"
      left_delta="0"
      name="None"
-     top_pad="5"
+     top_pad="0"
      width="73" />
     <button
      follows="left|top"
