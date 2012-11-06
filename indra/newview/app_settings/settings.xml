@@ -13791,6 +13791,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>5748decc-f629-461c-9a36-a35a221fe21f</string>
     </map>
+    <key>UIImgTransparentUUID</key>
+    <map>
+      <key>Comment</key>
+      <string />
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>8dcd4a48-2d37-4909-9f78-f7a9eb4ef903</string>
+    </map>
     <key>UIImgInvisibleUUID</key>
     <map>
       <key>Comment</key>

@@ -19,6 +19,7 @@
 	</text>
 	<button label="Domyślna" label_selected="Domyślna" name="Default"/>
 	<button label="Pusta" label_selected="Pusta" name="Blank"/>
+	<button label="Przezrocz." label_selected="Przezrocz." name="Transparent"/>
 	<button label="Żadna" label_selected="Żadna" name="None"/>
 	<button top_delta="-15" name="Pipette"/>
 	<text name="preview_disabled" value="Podgląd wyłączony"/>
