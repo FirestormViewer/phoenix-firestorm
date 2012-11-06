@@ -4556,7 +4556,7 @@
 							 control_name="FirstPersonAvatarVisible"
 							 follows="left|top"
 							 height="16"
-							 label="Display avatar mouselook"
+							 label="Display avatar &amp; attachments in mouselook"
 							 layout="topleft"
 							 left="5"
 							 tool_tip="Displays avatar and attachments below neck while in mouselook. Default is OFF."
