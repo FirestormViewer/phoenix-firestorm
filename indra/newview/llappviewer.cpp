@@ -2069,7 +2069,14 @@ void errorCallback(const std::string &error_string)
 	//Set the ErrorActivated global so we know to create a marker file
 	gLLErrorActivated = true;
 	
+//	LLError::crashAndLoop(error_string);
+// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
+#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
+	DebugBreak();
+#else
 	LLError::crashAndLoop(error_string);
+#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
+// [/SL:KB]
 }
 
 bool LLAppViewer::initLogging()
