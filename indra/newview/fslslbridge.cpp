@@ -837,7 +837,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	rewind( fpIn );
 
 	std::vector< char > vctData;
-	vctData.resize( lSize, 0 );
+	vctData.resize( lSize+1, 0 );
 	if( lSize != fread( &vctData[0], 1, lSize, fpIn ) )
 		llwarns << "Size mismatch during read" << llendl;
 
