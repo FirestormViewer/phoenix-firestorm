@@ -838,7 +838,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 
 	std::vector< char > vctData;
 	vctData.resize( lSize, 0 );
-	if( lSize != fread( &vctData[0], lSize, 1, fpIn ) )
+	if( lSize != fread( &vctData[0], 1, lSize, fpIn ) )
 		llwarns << "Size mismatch during read" << llendl;
 
 	LLFile::close( fpIn );
@@ -852,7 +852,7 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 
 	LLFILE *fpOut = LLFile::fopen( fNew, "wt" );
 
-	if( bridgeScript.size() != fwrite( bridgeScript.c_str(), bridgeScript.size(), 1, fpOut ) )
+	if( bridgeScript.size() != fwrite( bridgeScript.c_str(), 1, bridgeScript.size(), fpOut ) )
 		llwarns << "Size mismatch during write" << llendl;
 	LLFile::close( fpOut );
 
