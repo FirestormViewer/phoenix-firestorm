@@ -608,7 +608,7 @@ Push $0
 Push $1
 Push $2
 
-  DetailPrint "Deleting files in Documents and Settings folder"
+  DetailPrint $(DeleteDocumentAndSettingsDP)
 
   StrCpy $0 0 ; Index number used to iterate via EnumRegKey
 
@@ -641,7 +641,7 @@ Push $2
     Goto LOOP
   DONE:
   
-  MessageBox MB_OK "This uninstall will NOT delete your Firestorm chat logs and other private files. If you want to do that yourself, delete the Firestorm folder within your user Application data folder"
+  MessageBox MB_OK $(UnChatlogsNoticeMB)
 
 Pop $2
 Pop $1
@@ -697,7 +697,7 @@ FunctionEnd
 ;
 Function un.RemovePassword
 
-DetailPrint "Removing Firestorm saved passwords"
+DetailPrint $(UnRemovePasswordsDP)
 
 SetShellVarContext current
 Delete "$APPDATA\Firestorm\user_settings\password.dat"
