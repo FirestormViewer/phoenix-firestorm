@@ -164,5 +164,15 @@ endif (LINUX AND SERVER AND VIEWER)
 
 set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header directives where supported.")
 
+# <FS:ND> When using Havok, we have to turn OpenSim support off
+if( HAVOK_TPV )
+ if( HAS_OPENSIM_SUPPORT )
+  message( "Compiling with Havok, turning OpenSim support off" )
+ endif( HAS_OPENSIM_SUPPORT )
+  
+ set( HAS_OPENSIM_SUPPORT OFF )
+endif( HAVOK_TPV )
+# </FS:ND>
+
 source_group("CMake Rules" FILES CMakeLists.txt)
 

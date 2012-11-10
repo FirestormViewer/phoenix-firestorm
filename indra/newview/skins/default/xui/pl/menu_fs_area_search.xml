@@ -7,5 +7,6 @@
 	<menu_item_call label="Edytuj" name="edit_object" />
 	<menu_item_call label="Zwróć" name="return_object" />
 	<menu_item_call label="Usuń" name="delete_object" />
+	<menu_item_call label="Na czarną listę" name="blacklist_object" />
 	<menu_item_call label="Kup obiekt" name="object_buy" />
 </context_menu>

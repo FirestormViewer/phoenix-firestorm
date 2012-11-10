@@ -12,7 +12,7 @@
 
    <string name="title_new">Create Water Preset</string>
    <string name="title_edit">Edit Water Preset</string>
-   <string name="hint_new">.</string>
+   <string name="hint_new"></string>
    <string name="hint_edit"></string>
    <string name="combo_label">-Select a preset-</string>
 
@@ -318,6 +318,7 @@
               follows="left|top"
               height="10"
               initial_value="0.7"
+              label="X"
               layout="topleft"
               max_val="10"
               name="WaterNormalScaleX"
@@ -329,6 +330,7 @@
               follows="left|top"
               height="10"
               initial_value="0.7"
+              label="Y"
               layout="topleft"
               max_val="10"
               name="WaterNormalScaleY"
@@ -340,6 +342,7 @@
               follows="left|top"
               height="10"
               initial_value="0.7"
+              label="Z"
               layout="topleft"
               max_val="10"
               name="WaterNormalScaleZ"

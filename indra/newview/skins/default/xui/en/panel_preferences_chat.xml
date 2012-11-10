@@ -1013,59 +1013,178 @@
              top_pad="15"
              height="20"
              width="400" />
-          
+            <check_box
+             enabled_control="RadarReportChatRangeEnter"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarChatEnter"
+             name="PlayModeUISndRadarChatEnter"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportChatRangeEnter"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarChatEnter"
+             control_name="UISndRadarChatEnter"
+             width="250"/>
+
             <check_box
              control_name="RadarReportChatRangeLeave"
              name="reportChatRangeLeave"
              label="Radar reports when avatars leave chat range"
              layout="topleft"
              left="24"
-             top_pad="0"
+             top_pad="5"
              height="20"
              width="400" />
+            <check_box
+             enabled_control="RadarReportChatRangeLeave"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarChatLeave"
+             name="PlayModeUISndRadarChatLeave"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportChatRangeLeave"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarChatLeave"
+             control_name="UISndRadarChatLeave"
+             width="250"/>
           
             <check_box
              control_name="RadarReportDrawRangeEnter"
              name="reportDrawRangeEnter"
              label="Radar reports when avatars enter draw distance"
              layout="topleft"
-             top_pad="0"
+             left="24"
+             top_pad="5"
              height="20"
              width="400" />
+            <check_box
+             enabled_control="RadarReportDrawRangeEnter"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarDrawEnter"
+             name="PlayModeUISndRadarDrawEnter"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportDrawRangeEnter"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarDrawEnter"
+             control_name="UISndRadarDrawEnter"
+             width="250"/>
           
             <check_box
              control_name="RadarReportDrawRangeLeave"
              name="reportDrawRangeLeaave"
              label="Radar reports when avatars leave draw distance"
              layout="topleft"
-             top_pad="0"
+             left="24"
+             top_pad="5"
              height="20"
              width="400" />
+            <check_box
+             enabled_control="RadarReportDrawRangeLeave"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarDrawLeave"
+             name="PlayModeUISndRadarDrawLeave"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportDrawRangeLeave"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarDrawLeave"
+             control_name="UISndRadarDrawLeave"
+             width="250"/>
           
             <check_box
              control_name="RadarReportSimRangeEnter"
              name="RadarReportSimRangeEnter"
              label="Radar reports when avatars enter the region"
              layout="topleft"
-             top_pad="0"
+             left="24"
+             top_pad="5"
              height="20"
              width="400" />
+            <check_box
+             enabled_control="RadarReportSimRangeEnter"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarSimEnter"
+             name="PlayModeUISndRadarSimEnter"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportSimRangeEnter"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarSimEnter"
+             control_name="UISndRadarSimEnter"
+             width="250"/>
           
             <check_box
              control_name="RadarReportSimRangeLeave"
              name="RadarReportSimRangeLeave"
              label="Radar reports when avatars leave the region"
              layout="topleft"
-             top_pad="0"
+             left="24"
+             top_pad="5"
              height="20"
              width="400" />
+            <check_box
+             enabled_control="RadarReportSimRangeLeave"
+             layout="topleft"
+             top_pad="-2"
+             left="35"
+             width="115"
+             height="20"
+             control_name="PlayModeUISndRadarSimLeave"
+             name="PlayModeUISndRadarSimLeave"
+             label="Play sound UUID:"/>
+            <line_editor
+             enabled_control="RadarReportSimRangeLeave"
+             follows="left|top"
+             left_pad="5"
+             height="20"
+             max_length_chars="256"
+             name="UISndRadarSimLeave"
+             control_name="UISndRadarSimLeave"
+             width="250"/>
 
           <check_box
            control_name="RadarEnterChannelAlert"
            name="RadarEnterChannelAlert"
            label="Report enter alerts to scripts"
            layout="topleft"
-           top_pad="0"
+           left="24"
+           top_pad="5"
            height="20"
            width="400" />
 

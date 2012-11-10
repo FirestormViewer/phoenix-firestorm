@@ -164,11 +164,17 @@
 		</panel>
 		<panel name="ChatRadar">
 			<check_box name="reportChatRangeEnter" label="Radar ma informować, gdy awatar wchodzi w zasięg czatu"/>
+			<check_box name="PlayModeUISndRadarChatEnter" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="reportChatRangeLeave" label="Radar ma informować, gdy awatar opuszcza zasięg czatu"/>
+			<check_box name="PlayModeUISndRadarChatLeave" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="reportDrawRangeEnter" label="Radar ma informować, gdy awatar wchodzi w zasięg pola widzenia"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="reportDrawRangeLeaave" label="Radar ma informować, gdy awatar opuszcza zasięg pola widzenia"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="RadarReportSimRangeEnter" label="Radar ma informować, gdy awatar pojawia się w regionie"/>
+			<check_box name="PlayModeUISndRadarSimEnter" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="RadarReportSimRangeLeave" label="Radar ma informować, gdy awatar opuszcza region"/>
+			<check_box name="PlayModeUISndRadarSimLeave" width="150" label="Odtwórz UUID dźwięku:"/>
 			<check_box name="RadarEnterChannelAlert" label="Zgłaszaj alerty wejść skryptom"/>
 			<check_box name="RadarLeaveChannelAlert" label="Zgłaszaj alerty wyjść skryptom"/>
 		</panel>

@@ -447,7 +447,8 @@ LLAgent::LLAgent() :
 	mMouselookModeInSignal(NULL),
 	mMouselookModeOutSignal(NULL),
 	
-	mPhantom(FALSE)
+	mPhantom(FALSE),
+	restoreToWorld(false)
 {
 	for (U32 i = 0; i < TOTAL_CONTROLS; i++)
 	{
@@ -3819,7 +3820,47 @@ void LLAgent::processAgentDataUpdate(LLMessageSystem *msg, void **)
 		gAgent.mGroupID.setNull();
 		gAgent.mGroupPowers = 0;
 		gAgent.mGroupName.clear();
-	}		
+	}
+	if (gAgent.restoreToWorld)
+	{
+		//This fires if we're trying to restore an item to world using the correct group.
+		bool remove_from_inventory = false;
+		msg->newMessage("RezRestoreToWorld");
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+
+		msg->nextBlockFast(_PREHASH_InventoryData);
+		gAgent.restoreToWorldItem->packMessage(msg);
+		msg->sendReliable(gAgent.getRegion()->getHost());
+		//remove local inventory copy, sim will deal with permissions and removing the item
+		//from the actual inventory if its a no-copy etc
+		if(!gAgent.restoreToWorldItem->getPermissions().allowCopyBy(gAgent.getID()))
+		{
+			remove_from_inventory = true;
+		}
+		
+		// Check if it's in the trash. (again similar to the normal rez logic)
+		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+		if(gInventory.isObjectDescendentOf(gAgent.restoreToWorldItem->getUUID(), trash_id))
+		{
+			remove_from_inventory = true;
+		}
+		if(remove_from_inventory)
+		{
+			gInventory.deleteObject(gAgent.restoreToWorldItem->getUUID());
+			gInventory.notifyObservers();
+		}
+
+		//Now, restore the old group
+		gAgent.restoreToWorld = false;
+		msg->newMessageFast(_PREHASH_ActivateGroup);
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+		msg->addUUIDFast(_PREHASH_GroupID, gAgent.restoreToWorldGroup);
+		gAgent.sendReliableMessage();
+	}
 	update_group_floaters(active_id);
 
 	// <FS:Ansariel> Fire event for group title overview

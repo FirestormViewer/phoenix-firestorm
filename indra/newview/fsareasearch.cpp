@@ -53,6 +53,7 @@
 #include "fslslbridge.h"
 #include "llcombobox.h"
 #include "llnotificationsutil.h"
+#include "fswsassetblacklist.h"
 
 
 // max number of objects that can be (de-)selected in a single packet.
@@ -88,16 +89,20 @@ private:
 FSAreaSearch::FSAreaSearch(const LLSD& key) :  
 	LLFloater(key),
 	mActive(false),
-	mFilterForSale(FALSE),
+	mFilterForSale(false),
 	mFilterForSaleMin(0),
 	mFilterForSaleMax(999999),
-	mFilterPhysicial(FALSE),
-	mFilterTemporary(FALSE),
-	mRegexSearch(FALSE),
+	mFilterPhysicial(false),
+	mFilterTemporary(false),
+	mRegexSearch(false),
 	mFilterClickAction(false),
 	mFilterLocked(false),
 	mFilterPhantom(false),
 	mFilterAttachment(false),
+	mFilterMoaP(false),
+	mFilterDistance(false),
+	mFilterDistanceMin(0),
+	mFilterDistanceMax(999999),
 	mBeaconColor(),
 	mBeaconTextColor(),
 	mBeacons(false),
@@ -648,6 +653,25 @@ void FSAreaSearch::matchObject(FSObjectProperties& details, LLViewerObject* obje
 	if (mFilterAttachment && !objectp->isAttachment())
 	{
 		return;
+	}
+	
+	if (mFilterMoaP)
+	{
+		bool moap = false;
+		U8 texture_count = objectp->getNumTEs();
+		for(U8 i = 0; i < texture_count; i++)
+		{
+			if(objectp->getTE(i)->hasMedia())
+			{
+				moap = true;
+				break;
+			}
+		}
+
+		if(!moap)
+		{
+			return;
+		}
 	}
 
 	//-----------------------------------------------------------------------
@@ -1258,6 +1282,7 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 	{
 	case 't': // touch
 	case 's': // script
+	case 'l': // blacklist
 	{
 		std::vector<LLScrollListItem*> selected = mResultList->getAllSelected();
 
@@ -1277,6 +1302,23 @@ bool FSPanelAreaSearchList::onContextMenuItemClick(const LLSD& userdata)
 				break;
 			case 's': // script
 				FSLSLBridge::instance().viewerToLSL("getScriptInfo|" + (*item_it)->getUUID().asString());
+				break;
+			case 'l': // blacklist
+			{
+				LLUUID object_id = (*item_it)->getUUID();
+				LLViewerObject* objectp = gObjectList.findObject(object_id);
+				if (objectp)
+				{
+					std::string region_name;
+					LLViewerRegion* region = objectp->getRegion();
+					if (region)
+					{
+						region_name = objectp->getRegion()->getName();
+					}
+					FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(object_id, mFSAreaSearch->mObjectDetails[object_id].name, region_name, LLAssetType::AT_OBJECT);
+					gObjectList.killObject(objectp);
+				}
+			}
 				break;
 			default:
 				break;
@@ -1455,6 +1497,19 @@ void FSPanelAreaSearchFind::onButtonClickedClear()
 	mFSAreaSearch->clearSearchText();
 }
 
+// handle the "enter" key
+BOOL FSPanelAreaSearchFind::handleKeyHere(KEY key, MASK mask)
+{
+	if( KEY_RETURN == key )
+	{
+		mFSAreaSearch->onButtonClickedSearch();
+		return TRUE;
+	}
+
+	return LLPanel::handleKeyHere(key, mask);
+}
+
+
 //---------------------------------------------------------------------------
 // Filter panel
 //---------------------------------------------------------------------------
@@ -1521,6 +1576,9 @@ BOOL FSPanelAreaSearchFilter::postBuild()
 	mSpinDistanceMaxValue= getChild<LLSpinCtrl>("max_distance");
 	mSpinDistanceMaxValue->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitSpin, this));
 	
+	mCheckboxMoaP = getChild<LLCheckBoxCtrl>("filter_moap");
+	mCheckboxMoaP->setCommitCallback(boost::bind(&FSPanelAreaSearchFilter::onCommitCheckbox, this));
+	
 	return LLPanel::postBuild();
 }
 
@@ -1534,6 +1592,7 @@ void FSPanelAreaSearchFilter::onCommitCheckbox()
 	mFSAreaSearch->setFilterPhantom(mCheckboxPhantom->get());
 	mFSAreaSearch->setFilterForSale(mCheckboxForSale->get());
 	mFSAreaSearch->setFilterDistance(mCheckboxDistance->get());
+	mFSAreaSearch->setFilterMoaP(mCheckboxMoaP->get());
 
 	if (mCheckboxExcludePhysics->get())
 	{

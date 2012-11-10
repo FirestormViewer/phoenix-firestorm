@@ -11,9 +11,9 @@
 		<slider label="Schaltflächen" name="UI Volume"/>
 		<slider label="Umgebung" name="Wind Volume"/>
 		<check_box label="Sounds bei Kollisionen abspielen" name="collisions_audio_play_btn" tool_tip="Markieren, um Sounds bei Kollisionen zu hören"/>
-		<slider label="Soundeffekte" name="SFX Volume"/>
-		<check_box label="Sounds von Gesten abspielen" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören"/>
-		<slider label="Musikstream" name="Music Volume"/>
+		<slider label="Sounds" name="SFX Volume"/>
+		<check_box label="Sounds von Gesten aktivieren" name="gesture_audio_play_btn" tool_tip="Markieren, um Sounds von Gesten zu hören"/>
+		<slider label="Musik" name="Music Volume"/>
 		<check_box label="Aktiviert" name="enable_music"/>
 		<slider label="Medien" name="Media Volume"/>
 		<check_box label="Aktiviert" name="enable_media"/>

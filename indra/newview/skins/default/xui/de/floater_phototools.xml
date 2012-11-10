@@ -456,7 +456,7 @@
 				<text name="T_Tilt" tool_tip="Legt die Empfindlichkeit für Neigungs-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
 					Neigung
 				</text>
-				<button name="Reset_IO_Axis" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
+				<button name="Reset_Tilt" label="S" tool_tip="Auf Standardwert zurücksetzen."/>
 
 				<text name="T_Spin" tool_tip="Legt die Empfindlichkeit für Gierachsen-Bewegungen fest. Bei Schwierigkeiten mit der Präzision bei Bewegungen sollte ein kleinerer Wert verwendet werden.">
 					Gierachse

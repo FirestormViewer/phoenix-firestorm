@@ -96,32 +96,25 @@ protected:
 //which clears memory automatically.
 //so it can not hold static data or data after memory is cleared
 //
+class LL_COMMON_API LLVolatileAPRPool : public LLAPRPool
+{
+public:
+	LLVolatileAPRPool(BOOL is_local = TRUE, apr_pool_t *parent = NULL, apr_size_t size = 0, BOOL releasePoolFlag = TRUE);
+	virtual ~LLVolatileAPRPool();
 
-// <FS:ND> Not thread safe
+	/*virtual*/ apr_pool_t* getAPRPool() ; //define this virtual function to avoid any mistakenly calling LLAPRPool::getAPRPool().
+	apr_pool_t* getVolatileAPRPool() ;	
+	void        clearVolatileAPRPool() ;
 
-// class LL_COMMON_API LLVolatileAPRPool : public LLAPRPool
-// {
-// public:
-// 	LLVolatileAPRPool(BOOL is_local = TRUE, apr_pool_t *parent = NULL, apr_size_t size = 0, BOOL releasePoolFlag = TRUE);
-// 	virtual ~LLVolatileAPRPool();
-// 
-// 	/*virtual*/ apr_pool_t* getAPRPool() ; //define this virtual function to avoid any mistakenly calling LLAPRPool::getAPRPool().
-// 	apr_pool_t* getVolatileAPRPool() ;	
-// 	void        clearVolatileAPRPool() ;
-// 
-// 	BOOL        isFull() ;
-// 	
-// private:
-// 	S32 mNumActiveRef ; //number of active pointers pointing to the apr_pool.
-// 	S32 mNumTotalRef ;  //number of total pointers pointing to the apr_pool since last creating.  
-// 
-// 	apr_thread_mutex_t *mMutexp;
-// 	apr_pool_t         *mMutexPool;
-// } ;
+	BOOL        isFull() ;
+	
+private:
+	S32 mNumActiveRef ; //number of active pointers pointing to the apr_pool.
+	S32 mNumTotalRef ;  //number of total pointers pointing to the apr_pool since last creating.  
 
-typedef void LLVolatileAPRPool;
-
-// </FS:ND>
+	apr_thread_mutex_t *mMutexp;
+	apr_pool_t         *mMutexPool;
+} ;
 
 /** 
  * @class LLScopedLock
@@ -212,8 +205,7 @@ class LL_COMMON_API LLAPRFile : boost::noncopyable
 	// make this non copyable since a copy closes the file
 private:
 	apr_file_t* mFile ;
-	LLAPRPool m_Pool;
-	//	LLVolatileAPRPool *mCurrentFilePoolp ; //currently in use apr_pool, could be one of them: sAPRFilePoolp, or a temp pool. 
+	LLVolatileAPRPool *mCurrentFilePoolp ; //currently in use apr_pool, could be one of them: sAPRFilePoolp, or a temp pool. 
 
 public:
 	LLAPRFile() ;
@@ -242,13 +234,11 @@ private:
 //static components
 //
 public:
-	//	static LLVolatileAPRPool *sAPRFilePoolp ; //a global apr_pool for APRFile, which is used only when local pool does not exist.
+	static LLVolatileAPRPool *sAPRFilePoolp ; //a global apr_pool for APRFile, which is used only when local pool does not exist.
 
 private:
-	// static apr_file_t* open(const std::string& filename, LLVolatileAPRPool* pool, apr_int32_t flags);
-	// static apr_status_t close(apr_file_t* file, LLVolatileAPRPool* pool) ;
-	static apr_file_t* open(const std::string& filename, LLAPRPool* pool, apr_int32_t flags);
-	static apr_status_t close(apr_file_t* file, LLAPRPool* pool) ;
+	static apr_file_t* open(const std::string& filename, LLVolatileAPRPool* pool, apr_int32_t flags);
+	static apr_status_t close(apr_file_t* file, LLVolatileAPRPool* pool) ;
 	static S32 seek(apr_file_t* file, apr_seek_where_t where, S32 offset);
 public:
 	// returns false if failure:
@@ -277,9 +267,6 @@ bool LL_COMMON_API ll_apr_warn_status(apr_status_t status, apr_dso_handle_t* han
 void LL_COMMON_API ll_apr_assert_status(apr_status_t status);
 void LL_COMMON_API ll_apr_assert_status(apr_status_t status, apr_dso_handle_t* handle);
 
-// <FS:ND> Not thread safe at all, but must do for now
 extern "C" LL_COMMON_API apr_pool_t* gAPRPoolp; // Global APR memory pool
-// </FS:ND>
-
 
 #endif // LL_LLAPR_H

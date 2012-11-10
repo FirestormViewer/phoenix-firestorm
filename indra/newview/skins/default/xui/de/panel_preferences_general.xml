@@ -60,6 +60,7 @@
 	<check_box label="Viewer-Kennung anzeigen" name="show_viewerID" tool_tip="Zeigen den namen des erkannten Viewers neben dem Avatarnamen (verzögerter Effekt)" left_pad="75"/>
 	<check_box label="Altes Namensformat statt Benutzernamen" name="FSshow_legacyun" tool_tip="Zeigt den Avatarnamen im ursprünglichen Namensformat (Vorname Nachname) anstelle des Benutzernames (vorname.nachname)" left_pad="75" />
 	<check_box label="Freunde hervorheben" name="show_friends" tool_tip="Avatarnamen Ihrer Freunde hervorheben"/>
+	<check_box label="Im alten Namensformat „Resident“ nicht abschneiden" name="legacy_trim_check" tool_tip="Schneidet den Nachnamen „Resident“ im alten Namensformat nicht ab." left_pad="75"/>
 	<check_box label="Radar-Tags veröffentlichen und anzeigen (in Arbeit)" left_pad="75" name="FSPublishRadarTag" tool_tip="Zeigt die von anderen veröffentlichen Radar-Tags an und veröffentlicht gleichzeitig den eigenen 'Firestorm'-Tag. Diese Funktion benötigt die Firestorm-LSL-Brücke und ist momentan noch nicht vollständig implementiert."/>
 
 	<check_box label="Viewer-UI-Tipps aktivieren" name="viewer_hints_check"/>

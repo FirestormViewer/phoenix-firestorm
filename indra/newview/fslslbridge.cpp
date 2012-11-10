@@ -831,30 +831,31 @@ std::string FSLSLBridgeScriptCallback::prepUploadFile()
 	std::string fName = gDirUtilp->getExpandedFilename(LL_PATH_FS_RESOURCES, UPLOAD_SCRIPT_CURRENT);
 	std::string fNew = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,UPLOAD_SCRIPT_CURRENT);
 
-	//open script text file
-	typedef std::istream_iterator<char> istream_iterator;
-	std::ifstream file(fName.c_str());
+	LLFILE *fpIn = LLFile::fopen( fName, "rt" );
+	fseek( fpIn, 0, SEEK_END );
+	long lSize = ftell( fpIn );
+	rewind( fpIn );
 
-	typedef std::ostream_iterator<char> ostream_iterator;
-	std::ofstream tempFile(fNew.c_str());
-	if (!tempFile)
-	{
-		llwarns << "Cannot open script output file " << fNew.c_str() <<" for writing. Aborting." << llendl;
-		return "";
-	}
+	std::vector< char > vctData;
+	vctData.resize( lSize+1, 0 );
+	if( lSize != fread( &vctData[0], 1, lSize, fpIn ) )
+		llwarns << "Size mismatch during read" << llendl;
 
-	std::string bridgeScript((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-	file.close();
+	LLFile::close( fpIn );
+
+	std::string bridgeScript( (char const*)&vctData[0] );
 
 	std::string bridgekey = "BRIDGEKEY";
 	std::string newauth = LLUUID::generateNewID().asString();
 	bridgeScript.replace(bridgeScript.find(bridgekey),bridgekey.length(),newauth);
 	gSavedPerAccountSettings.setString("FSLSLBridgeUUID",newauth);
-	tempFile.write(bridgeScript.c_str(),std::strlen(bridgeScript.c_str()));
-	tempFile.close();
-	
-	//file >> std::noskipws;
-	//std::copy(istream_iterator(file), istream_iterator(), ostream_iterator(tempFile));
+
+	LLFILE *fpOut = LLFile::fopen( fNew, "wt" );
+
+	if( bridgeScript.size() != fwrite( bridgeScript.c_str(), 1, bridgeScript.size(), fpOut ) )
+		llwarns << "Size mismatch during write" << llendl;
+	LLFile::close( fpOut );
+
 
 	return fNew;
 }

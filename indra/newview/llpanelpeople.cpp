@@ -1026,6 +1026,7 @@ void LLPanelPeople::updateNearbyList()
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
 				std::string message = getString("entering_chat_range", args);
+				make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 			}
 			if (RadarReportDrawRangeEnter && (avRange <= drawRadius) && avRange > -1)
@@ -1033,10 +1034,12 @@ void LLPanelPeople::updateNearbyList()
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
 				std::string message = getString("entering_draw_distance", args);
+				make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 			}
 			if (RadarReportSimRangeEnter && (avRegion == regionSelf))
 			{
+				make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 				{
 					LLStringUtil::format_map_t args;
@@ -1081,13 +1084,17 @@ void LLPanelPeople::updateNearbyList()
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
+						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
 // <FS:CR> Aurora Sim
 					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
 					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
 // </FS:CR> Aurora Sim
+					{
+						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
+					}
 				}
 				if ( RadarReportDrawRangeEnter || RadarReportDrawRangeLeave )
 				{
@@ -1096,15 +1103,20 @@ void LLPanelPeople::updateNearbyList()
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_draw_distance", args);
+						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
 					else if ( RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
+					{
+						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
+					}
 				}
 				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave )
 				{
 					if ( RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
 					{
+						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 						{
 							LLStringUtil::format_map_t args;
@@ -1116,7 +1128,10 @@ void LLPanelPeople::updateNearbyList()
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
 					}
 					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					{
+						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
+					}
 				}
 			}
 			else if (lastRadarSweep.count(avId) > 1) // handle duplicates, from sim crossing oddness
@@ -1142,13 +1157,17 @@ void LLPanelPeople::updateNearbyList()
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_chat_range", args);
+						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
 // <FS:CR> Aurora Sim
 					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
 					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
 // </FS:CR> Aurora Sim
+					{
+						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
+					}
 				}
 				if (RadarReportDrawRangeEnter || RadarReportDrawRangeLeave)
 				{
@@ -1157,15 +1176,20 @@ void LLPanelPeople::updateNearbyList()
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
 						std::string message = getString("entering_draw_distance", args);
+						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
 					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
+					{
+						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
+					}
 				}
 				if (RadarReportSimRangeEnter || RadarReportSimRangeLeave)
 				{
 					if (RadarReportSimRangeEnter && (avRegion == regionSelf) && (avRegion != rf.lastRegion))
 					{
+						make_ui_sound("UISndRadarSimEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						if (avPos[VZ] != -1) // Don't report an inaccurate range in localchat, if the true range is not known.
 						{
 							LLStringUtil::format_map_t args;
@@ -1177,7 +1201,10 @@ void LLPanelPeople::updateNearbyList()
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
 					}
 					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
+					{
+						make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
+					}
 				}
 			}
 			//If we were manually asked to update an external source for all existing avatars, add them to the queue.
@@ -1376,11 +1403,20 @@ void LLPanelPeople::updateNearbyList()
 			//if (RadarReportChatRangeLeave && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
 			if (RadarReportChatRangeLeave && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance()) && rf.lastDistance > -1)
 // </FS:CR> Aurora Sim
+			{
+				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
+			}
 			if (RadarReportDrawRangeLeave && (rf.lastDistance <= drawRadius) && rf.lastDistance > -1)
+			{
+				make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));
+			}
 			if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf))
+			{
+				make_ui_sound("UISndRadarSimLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_region")));
+			}
 				
 			if (RadarLeaveChannelAlert)
 				mRadarLeaveAlerts.push_back(prevId);

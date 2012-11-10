@@ -1193,6 +1193,9 @@ void LLPanelLogin::updateServerCombo()
 							 ADD_TOP);	
 	server_choice_combo->selectFirstItem();
 	update_grid_help();
+// <FS:CR> FIRE-6401
+	updateSavedLoginsCombo(); // Let's refresh the saved user combo too. Our list may have changed.
+// </FS:CR> FIRE-6401
 }
 
 
@@ -1232,18 +1235,24 @@ void LLPanelLogin::updateSavedLoginsCombo()
 				const std::string grid_label = LLGridManager::getInstance()->getGridLabel(gridname);
 
 				bool add_grid = false;
+				/// <FS:CR> We only want to append a grid label when the user has enabled logging into other grids,
+				/// that way users who only want Second Life Agni can remain blissfully ignorant.
+				/// We will also not show them any saved credential that isn't Agni because they don't want them.
+				static LLCachedControl<bool> sShowServer(gSavedSettings, "ForceShowGrid", false);
 				if (SECOND_LIFE_MAIN_LABEL == grid_label)
 				{
+					if (sShowServer)
+						name.append( " @ " + grid_label);
 					add_grid= true;
 				}
 #ifdef HAS_OPENSIM_SUPPORT
-				else if (!grid_label.empty())
+				else if (!grid_label.empty() && sShowServer)
 				{
 					name.append(" @ " + grid_label);
 					add_grid= true;
 				}
 #else  // HAS_OPENSIM_SUPPORT 
-				else if (SECOND_LIFE_BETA_LABEL == grid_label)
+				else if (SECOND_LIFE_BETA_LABEL == grid_label && sShowServer)
 				{
 					name.append(" @ " + grid_label);
 					add_grid= true;
@@ -1358,7 +1367,7 @@ void LLPanelLogin::onSelectSavedLogin(LLUICtrl*, void*)
 	
 	std::string credName = combo_val.asString();
 	
-	if(combo_val.asString().find("@")<0)		
+	if(combo_val.asString().find("@") == std::string::npos)
 		return;
 
 

@@ -910,7 +910,13 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		//}
 
 		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
-		
+
+// <FS:CR> Aurora Sim
+		if (!LLWorld::getInstance()->getAllowRenderWater())
+		{
+			LLPipeline::sUnderWaterRender = FALSE;
+		}
+// </FS:CR> Aurora Sim
 		LLGLState::checkStates();
 		LLGLState::checkClientArrays();
 

@@ -123,6 +123,7 @@ public:
 	void setFilterTemporary(bool b) { mFilterTemporary = b; }
 	void setFilterPhantom(bool b) { mFilterPhantom = b; }
 	void setFilterAttachment(bool b) { mFilterAttachment = b; }
+	void setFilterMoaP(bool b) { mFilterMoaP = b; }
 	
 	void setRegexSearch(bool b) { mRegexSearch = b; }
 	void setBeacons(bool b) { mBeacons = b; }
@@ -205,6 +206,7 @@ private:
 	bool mFilterTemporary;
 	bool mFilterPhantom;
 	bool mFilterAttachment;
+	bool mFilterMoaP;
 
 	bool mFilterForSale;
 	S32 mFilterForSaleMin;
@@ -285,6 +287,7 @@ public:
 	virtual ~FSPanelAreaSearchFind();
 
 	/*virtual*/ BOOL postBuild();
+	/*virtual*/ BOOL handleKeyHere(KEY key,MASK mask);
 
 	LLLineEditor* mNameLineEditor;
 	LLLineEditor* mDescriptionLineEditor;
@@ -329,6 +332,7 @@ private:
 	LLCheckBoxCtrl* mCheckboxTemporary;
 	LLCheckBoxCtrl* mCheckboxLocked;
 	LLCheckBoxCtrl* mCheckboxPhantom;
+	LLCheckBoxCtrl* mCheckboxMoaP;
 	LLCheckBoxCtrl* mCheckboxDistance;
 	LLSpinCtrl* mSpinDistanceMinValue;
 	LLSpinCtrl* mSpinDistanceMaxValue;

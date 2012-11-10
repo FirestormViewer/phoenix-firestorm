@@ -189,25 +189,28 @@ FunctionEnd
 ; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Make sure we're not on Windows 98 / ME
+; Make sure we're not on a verion of windows older than XP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Function CheckWindowsVersion
 	DetailPrint "Checking Windows version..."
 	Call GetWindowsVersion
 	Pop $R0
-	; Just get first two characters, ignore 4.0 part of "NT 4.0"
-	StrCpy $R0 $R0 2
 	; Blacklist certain OS versions
 	StrCmp $R0 "95" win_ver_bad
 	StrCmp $R0 "98" win_ver_bad
 	StrCmp $R0 "ME" win_ver_bad
+	StrCmp $R0 "2000" win_ver_bad
+	; Just get first two characters, ignore 4.0 part of "NT 4.0"
+	StrCpy $R0 $R0 2
+	; Blacklist Win NT versions
 	StrCmp $R0 "NT" win_ver_bad
 	Return
 win_ver_bad:
-	StrCmp $SKIP_DIALOGS "true" +2 ; If skip_dialogs is set just install
-            MessageBox MB_YESNO $(CheckWindowsVersionMB) IDNO win_ver_abort
-	Return
-win_ver_abort:
+;FS:TM Dont allow installing on unsuported OSs
+;	StrCmp $SKIP_DIALOGS "true" +2 ; If skip_dialogs is set just install
+            MessageBox MB_OK $(CheckWindowsVersionMB)
+;	Return
+;win_ver_abort:
 	Quit
 FunctionEnd
 
@@ -352,6 +355,9 @@ FunctionEnd
 Function CheckWillUninstallV2
 
   StrCpy $DO_UNINSTALL_V2 ""
+
+  ; <FS:Ansariel> Don't mess with the official viewer
+  Return
 
   StrCmp $SKIP_DIALOGS "true" 0 CHECKV2_DONE
   StrCmp $INSTDIR "$PROGRAMFILES\SecondLifeViewer2" CHECKV2_DONE ; don't uninstall our own install dir.
@@ -800,91 +806,104 @@ SectionEnd 				; end of uninstall section
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; (From the NSIS documentation, JC)
-; GetWindowsVersion
+; GetWindowsVersion 2.0 (2008-01-07) http://nsis.sourceforge.net/Get_Windows_version
 ;
 ; Based on Yazno's function, http://yazno.tripod.com/powerpimpit/
-; Updated by Joost Verburg
+; Update by Joost Verburg
+; Update (Macro, Define, Windows 7 detection) - John T. Haller of PortableApps.com - 2008-01-07
+; Update Windows 8 detection - TankMaster Finesmith - 2012-11-1
 ;
-; Returns on top of stack
+; Usage: ${GetWindowsVersion} $R0
 ;
-; Windows Version (95, 98, ME, NT x.x, 2000, XP, 2003)
-; or
-; '' (Unknown Windows Version)
-;
-; Usage:
-;   Call GetWindowsVersion
-;   Pop $R0
-;   ; at this point $R0 is "NT 4.0" or whatnot
+; $R0 contains: 95, 98, ME, NT x.x, 2000, XP, 2003, Vista, 7, 8 or '' (for unknown)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
 Function GetWindowsVersion
  
-   Push $R0
-   Push $R1
+  Push $R0
+  Push $R1
  
-   ReadRegStr $R0 HKLM \
-   "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
-
-   IfErrors 0 lbl_winnt
+  ClearErrors
+ 
+  ReadRegStr $R0 HKLM \
+  "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
+ 
+  IfErrors 0 lbl_winnt
+ 
+  ; we are not NT
+  ReadRegStr $R0 HKLM \
+  "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
+ 
+  StrCpy $R1 $R0 1
+  StrCmp $R1 '4' 0 lbl_error
+ 
+  StrCpy $R1 $R0 3
+ 
+  StrCmp $R1 '4.0' lbl_win32_95
+  StrCmp $R1 '4.9' lbl_win32_ME lbl_win32_98
+ 
+  lbl_win32_95:
+    StrCpy $R0 '95'
+  Goto lbl_done
+ 
+  lbl_win32_98:
+    StrCpy $R0 '98'
+  Goto lbl_done
+ 
+  lbl_win32_ME:
+    StrCpy $R0 'ME'
+  Goto lbl_done
+ 
+  lbl_winnt:
+ 
+  StrCpy $R1 $R0 1
+ 
+  StrCmp $R1 '3' lbl_winnt_x
+  StrCmp $R1 '4' lbl_winnt_x
+ 
+  StrCpy $R1 $R0 3
+ 
+  StrCmp $R1 '5.0' lbl_winnt_2000
+  StrCmp $R1 '5.1' lbl_winnt_XP
+  StrCmp $R1 '5.2' lbl_winnt_2003
+  StrCmp $R1 '6.0' lbl_winnt_vista
+  StrCmp $R1 '6.1' lbl_winnt_7
+  StrCmp $R1 '6.2' lbl_winnt_8 lbl_error
+ 
+  lbl_winnt_x:
+    StrCpy $R0 "NT $R0" 6
+  Goto lbl_done
+ 
+  lbl_winnt_2000:
+    Strcpy $R0 '2000'
+  Goto lbl_done
+ 
+  lbl_winnt_XP:
+    Strcpy $R0 'XP'
+  Goto lbl_done
+ 
+  lbl_winnt_2003:
+    Strcpy $R0 '2003'
+  Goto lbl_done
+ 
+  lbl_winnt_vista:
+    Strcpy $R0 'Vista'
+  Goto lbl_done
+ 
+  lbl_winnt_7:
+    Strcpy $R0 '7'
+  Goto lbl_done
+ 
+  lbl_winnt_8:
+    Strcpy $R0 '8'
+  Goto lbl_done
    
-   ; we are not NT
-   ReadRegStr $R0 HKLM \
-   "SOFTWARE\Microsoft\Windows\CurrentVersion" VersionNumber
+  lbl_error:
+    Strcpy $R0 ''
+  lbl_done:
  
-   StrCpy $R1 $R0 1
-   StrCmp $R1 '4' 0 lbl_error
- 
-   StrCpy $R1 $R0 3
- 
-   StrCmp $R1 '4.0' lbl_win32_95
-   StrCmp $R1 '4.9' lbl_win32_ME lbl_win32_98
- 
-   lbl_win32_95:
-     StrCpy $R0 '95'
-   Goto lbl_done
- 
-   lbl_win32_98:
-     StrCpy $R0 '98'
-   Goto lbl_done
- 
-   lbl_win32_ME:
-     StrCpy $R0 'ME'
-   Goto lbl_done
- 
-   lbl_winnt:
- 
-   StrCpy $R1 $R0 1
- 
-   StrCmp $R1 '3' lbl_winnt_x
-   StrCmp $R1 '4' lbl_winnt_x
- 
-   StrCpy $R1 $R0 3
- 
-   StrCmp $R1 '5.0' lbl_winnt_2000
-   StrCmp $R1 '5.1' lbl_winnt_XP
-   StrCmp $R1 '5.2' lbl_winnt_2003 lbl_error
- 
-   lbl_winnt_x:
-     StrCpy $R0 "NT $R0" 6
-   Goto lbl_done
- 
-   lbl_winnt_2000:
-     Strcpy $R0 '2000'
-   Goto lbl_done
- 
-   lbl_winnt_XP:
-     Strcpy $R0 'XP'
-   Goto lbl_done
- 
-   lbl_winnt_2003:
-     Strcpy $R0 '2003'
-   Goto lbl_done
- 
-   lbl_error:
-     Strcpy $R0 ''
-   lbl_done:
- 
-   Pop $R1
-   Exch $R0
+  Pop $R1
+  Exch $R0
  
 FunctionEnd
 
@@ -971,12 +990,12 @@ StrCpy $INSTEXE "${INSTEXE}"
 StrCpy $INSTSHORTCUT "${SHORTCUT}"
 
 Call CheckWindowsVersion		; warn if on Windows 98/ME
-Call CheckCPUFlags			; Make sure we have SSE2 support
+Call CheckCPUFlags				; Make sure we have SSE2 support
 Call CheckIfAdministrator		; Make sure the user can install/uninstall
 Call CheckIfAlreadyCurrent		; Make sure that we haven't already installed this version
 Call CloseSecondLife			; Make sure we're not running
 Call CheckNetworkConnection		; ping secondlife.com
-Call CheckWillUninstallV2               ; See if a V2 install exists and will be removed.
+Call CheckWillUninstallV2		; See if a V2 install exists and will be removed.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 StrCmp $DO_UNINSTALL_V2 "" PRESERVE_DONE
@@ -1061,6 +1080,8 @@ WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninst
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "URLUpdateInfo" "http://www.phoenixviewer.com/downloads.php"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "HelpLink" "http://www.phoenixviewer.com/support.php"
 WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayIcon" '"$INSTDIR\$INSTEXE"'
+WriteRegStr HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "DisplayVersion" "${VERSION_LONG}"
+WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Uninstall\$INSTPROG" "EstimatedSize" "0x0002BC00" ; 175 MB
 ; </FS:Ansariel>
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -85,8 +85,6 @@
 				 top_pad="10"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="110">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable" />
 				</check_box>
 			</panel>
 
@@ -133,8 +131,7 @@
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
-				 label=""
-				 label_selected=""
+
 				 image_overlay="Arrow_Left_Off"
 				 scale_image="true" />
 				<button
@@ -145,8 +142,6 @@
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
-				 label=""
-				 label_selected=""
 				 image_overlay="Arrow_Right_Off"
 				 scale_image="true" />
 				<text
@@ -224,7 +219,6 @@
 				 can_edit_text="false"
 				 control_name="WLSunPos"
 				 decimal_digits="0"
-				 follows=""
 				 height="10"
 				 increment="0.0833333"
 				 initial_value="0"
@@ -236,7 +230,7 @@
 				 show_text="false"
 				 top_pad="3"
 				 tool_tip="This may not function correctly. Use 'New Sky Present' or 'Edit Sky Preset' if you encounter difficulty."
-				 width="240" />
+				 width="240"/>
 				<button
 				 enabled="true"
 				 name="UseRegionWL"
@@ -245,8 +239,6 @@
 				 width="20"
 				 top_delta="-35"
 				 left_pad="5"
-				 label=""
-				 label_selected=""
 				 image_overlay="StopReload_Off"
 				 scale_image="true"
 				 tool_tip="Reset the WindLight options to region default." />
@@ -283,65 +275,86 @@
 				 name="horiz_separator1"
 				 top_pad="-7"
 				 width="100"/>
-				<menu
-				 bg_visible="false"
-				 name="Timeofday"
-				 label="Set Sun Position"
+				<button
+				 follows="left|top"
+				 name="Sunrise"
+				 height="20"
+				 label="Sunrise"
+				 layout="topleft"
 				 left="10"
-				 top_pad="10"
-				 drop_shadow="false">
-					<menu_item_call
-					 highlight="false"
-					 label="Sunrise"
-					 name="Sunrise">
-						<menu_item_call.on_click
-						 function="World.EnvSettings"
-						 parameter="sunrise" />
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Noon"
-					 name="Noon">
-						<menu_item_call.on_click
-						 function="World.EnvSettings"
-						 parameter="noon" />
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Sunset"
-					 name="Sunset">
-						<menu_item_call.on_click
-						 function="World.EnvSettings"
-						 parameter="sunset" />
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Midnight"
-					 name="Midnight">
-						<menu_item_call.on_click
-						 function="World.EnvSettings"
-						 parameter="midnight" />
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Estate Time"
-					 name="Revert to Region Default">
-						<menu_item_call.on_click
-						 function="World.EnvSettings"
-						 parameter="default" />
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-				</menu>
+				 top_pad="5"
+				 width="100">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="sunrise"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Noon"
+				 height="20"
+				 label="Noon"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="100">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="noon"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Sunset"
+				 height="20"
+				 label="Sunset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="100">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="sunset"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Midnight"
+				 height="20"
+				 label="Midnight"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="100">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="midnight"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Revert to Region Default"
+				 height="20"
+				 label="Estate Time"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="100">
+					<button.commit_callback
+					 function="World.EnvSettings"
+					 parameter="default"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
 			</panel>
 			
 			<panel
@@ -376,37 +389,39 @@
 				 name="horiz_separator2"
 				 top_pad="-7"
 				 width="100"/>
-				<menu
-				 bg_visible="false"
-				 create_jump_keys="true"
-				 name="Sky Presets"
-				 label="Sky Presets"
-				 left="2"
-				 top_pad="10"
-				 visible="true"
-				 tear_off="false"
-				 drop_shadow="false">
-					<menu_item_call
-					 label="New Sky Preset"
-					 name="new_sky_preset">
-						<menu_item_call.on_click
-						 function="World.EnvPreset"
-						 parameter="new_sky"/>
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Edit Sky Preset"
-					 name="edit_sky_preset">
-						<menu_item_call.on_click
-						 function="World.EnvPreset"
-						 parameter="edit_sky"/>
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-				</menu>  
+				<button
+				 follows="left|top"
+				 name="new_sky_preset"
+				 height="20"
+				 label="New Sky Preset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="5"
+				 width="120">
+					<button.commit_callback
+					 function="World.EnvPreset"
+					 parameter="new_sky"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="edit_sky_preset"
+				 height="20"
+				 label="Edit Sky Preset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="120">
+					<button.commit_callback
+					 function="World.EnvPreset"
+					 parameter="edit_sky"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+  
 			
 				<view_border
 				 bevel_style="none"
@@ -415,36 +430,40 @@
 				 layout="topleft"
 				 left="5"
 				 name="horiz_separator3"
-				 top_pad="35"
-				 width="125"/>
-				<menu
-				 bg_visible="false"
-				 name="Water Presets"
-				 label="Water Presets"
-				 left="2"
 				 top_pad="10"
-				 drop_shadow="false">
-					<menu_item_call
-					 label="New Water Preset"
-					 name="new_water_preset">
-						<menu_item_call.on_click
-						 function="World.EnvPreset"
-						 parameter="new_water"/>
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-					<menu_item_call
-					 label="Edit Water Preset"
-					 name="edit_water_preset">
-						<menu_item_call.on_click
-						 function="World.EnvPreset"
-						 parameter="edit_water"/>
-						<menu_item_call.on_enable
-						 function="RLV.EnableIfNot"
-						 parameter="setenv" />
-					</menu_item_call>
-				</menu>
+				 width="125"/>
+				<button
+				 follows="left|top"
+				 name="new_water_preset"
+				 height="20"
+				 label="New Water Preset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="10"
+				 width="120">
+					<button.commit_callback
+					 function="World.EnvPreset"
+					 parameter="new_water"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="edit_water_preset"
+				 height="20"
+				 label="Edit Water Preset"
+				 layout="topleft"
+				 left="10"
+				 top_pad="2"
+				 width="120">
+					<button.commit_callback
+					 function="World.EnvPreset"
+					 parameter="edit_water"/>
+					<button.on_enable
+					 function="RLV.EnableIfNot"
+					 parameter="setenv"/>
+				</button>
 			</panel>
 
 			<panel
@@ -498,7 +517,7 @@
 				 height="22"
 				 layout="topleft"
 				 left_pad="20"
-				 top_delta ="-5"
+				 top_delta="-5"
 				 name="Reflections"
 				 width="165"
 				 follows="left|right">
@@ -706,9 +725,7 @@
 				 name="UseLightShaders1"
 				 top_pad="10"
 				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in SL. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'Tools 3'."
-				 width="110">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable" />
+				 width="240">
 				</check_box>
 				<check_box
 				 control_name="RenderLocalLights"
@@ -720,33 +737,23 @@
 				 name="LocalLights"
 				 tool_tip="This will turn on all in-world lights. If you disable this feature, light from Sun and Moon will still appear. Useful when you wish to eliminate SIM lighting and use only the Sun and Moon light."
 				 top_pad="4"
-				 width="240" />
-				<menu
-				 bg_visible="false"
-				 mouse_opaque="false"
-				 drop_shadow="false"
-				 width="230"
-				 create_jump_keys="false"
-				 label=""
-				 follows="right|left"
-				 name="M_Lights"
-				 left="6"
-				 top_pad="3"
-				 tear_off="false">
-					<menu_item_check
-					 height="10"
-					 mouse_opaque="false"
-					 tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
-					 label="Enable Attached Lights (Face Lights)"
-					 name="Render Attached Lights">
-						<menu_item_check.on_check
-						 function="CheckControl"
-						 parameter="RenderAttachedLights" />
-						<menu_item_check.on_click
-						 function="Advanced.HandleAttachedLightParticles"
-						 parameter="RenderAttachedLights" />
-					</menu_item_check>
-				</menu>
+				 width="240"/>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 height="16"
+				 label="Enable Attached Lights (Face Lights)"
+				 tool_tip="This will enable any lights, such as face lights, avatars have attached to them. Useful for turning off facelights when necessary."
+				 name="Render Attached Lights">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="RenderAttachedLights"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.HandleAttachedLightParticles"
+					 parameter="RenderAttachedLights"/>
+				</check_box>
 			</panel>
 
 			<panel
@@ -838,8 +845,6 @@
 				 can_edit_text="true"
 				 control_name="RenderShadowResolutionScale"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -892,8 +897,6 @@
 				 can_edit_text="true"
 				 control_name="RenderShadowBlurSize"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -946,8 +949,6 @@
 				 can_edit_text="true"
 				 control_name="RenderShadowBlurDistFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -994,15 +995,12 @@
 				 min_val="0"
 				 max_val="100"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_FOV_Cutoff"
 				 can_edit_text="true"
 				 control_name="RenderShadowFOVCutoff"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="1"
@@ -1040,37 +1038,35 @@
           bevel_style="none"
           bg_alpha_color="DkGray_66"
           background_visible="true">
-				<menu
-				 bg_visible="false"
-				 mouse_opaque="false"
-				 drop_shadow="false"
-				 width="230"
-				 create_jump_keys="false"
-				 label=""
-				 follows="right|left"
-				 name="M_Bounding_Boxes"
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
 				 left="5"
-				 top_pad="7"
-				 tear_off="false">
-					<menu_item_check
-					 label="Show Bounding Boxes for All Lights in Scene"
-					 name="Lights">
-						<menu_item_check.on_check
-						 function="Advanced.CheckInfoDisplay"
-						 parameter="lights" />
-						<menu_item_check.on_click
-						 function="Advanced.ToggleInfoDisplay"
-						 parameter="lights" />
-					</menu_item_check>
-					<menu_item_check
-					 label="Show Light Radius for Selected Light(s)"
-					 name="Show Light Radius for Selection">
-						<menu_item_check.on_check
-						 control="RenderLightRadius" />
-						<menu_item_check.on_click
-						 function="Tools.ShowSelectionLightRadius" />
-					</menu_item_check>
-				</menu>
+				 top_pad="5"
+				 height="16"
+				 label="Show Bounding Boxes for All Lights in Scene"
+				 name="Lights">
+					<check_box.on_check
+					 function="Advanced.CheckInfoDisplay"
+					 parameter="lights"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleInfoDisplay"
+					 parameter="lights"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="5"
+				 height="16"
+				 label="Show Light Radius for Selected Light(s)"
+				 name="Show Light Radius for Selection">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="RenderLightRadius"/>
+					<check_box.check_button.commit_callback
+					 function="Tools.ShowSelectionLightRadius"/>
+				</check_box>
 			</panel>
 
 			<panel
@@ -1092,8 +1088,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Ambient Occlusion Settings"
-				 top_pad=""
-				 tool_tip=""
 				 height="17"
 				 width="250"/>
 			</panel>
@@ -1121,7 +1115,7 @@
 				 name="ssaolabel"
 				 tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
 				 top_pad="10"
-				 width="110">
+				 width="230">
 				</check_box>
 				<!--slider
 				 control_name="ExodusRenderSSAOEffect"
@@ -1182,8 +1176,6 @@
 				 can_edit_text="true"
 				 control_name="RenderSSAOScale"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -1230,14 +1222,12 @@
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Max_Scale"
 				 can_edit_text="true"
 				 control_name="RenderSSAOMaxScale"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -1290,8 +1280,6 @@
 				 can_edit_text="true"
 				 control_name="RenderSSAOFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -1336,7 +1324,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Specular Highlight Settings"
-				 top_pad=""
 				 height="17"
 				 tool_tip="A specular highlight is the bright spot of light that appears on shiny objects when illuminated.(wikipedia)"
 				 width="285"/>
@@ -1382,8 +1369,6 @@
 				 can_edit_text="true"
 				 control_name="RenderSpecularExponent"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -1429,14 +1414,11 @@
 				 min_val="0"
 				 max_val="8192"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 can_edit_text="true"
 				 control_name="RenderSpecularResX"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -1512,7 +1494,7 @@
 				 name="ShadowsOffsetError"
 				 tool_tip="D=0.000"
 				 top_pad="2"
-				 width="240" /-->
+				 width="240"/-->
 			</panel>
 		</panel>
 
@@ -1570,31 +1552,23 @@
 				 name="UseDepthofField"
 				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image'(wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Shadows and Dynamic Lights' in Tools 2."
 				 top_pad="10"
-				 width="110"/>
-				<menu
-				 bg_visible="false"
-				 mouse_opaque="false"
-				 drop_shadow="false"
-				 width="0"
-				 create_jump_keys="false"
-				 label=""
-				 follows="right|left"
-				 name="M_Show_FOV"
+				 width="230"/>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
 				 left="5"
 				 top_pad="3"
-				 tear_off="false">
-					<menu_item_check
-					 name="MIC_Show_FOV"
-					 label="Show the Current FOV of Viewer Screen"
-					 tool_tip="This will show you the vertical field of view for the camera. In SL is possible to change the lens length just like in RL. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!">
-						<menu_item_check.on_check
-						 function="Advanced.CheckHUDInfo"
-						 parameter="fov" />
-						<menu_item_check.on_click
-						 function="Advanced.ToggleHUDInfo"
-						 parameter="fov" />
-					</menu_item_check>
-				</menu>
+				 height="16"
+				 label="Show the Current FOV of Viewer Screen"
+				 tool_tip="This will show you the vertical field of view for the camera. Within the viewer it is possible to change the lens length just like in real life. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'http://en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
+				 name="MIC_Show_FOV">
+					<check_box.on_check
+					 function="Advanced.CheckHUDInfo"
+					 parameter="fov"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleHUDInfo"
+					 parameter="fov"/>
+				</check_box>
 			</panel>
 
 			<panel
@@ -1636,8 +1610,6 @@
 				 can_edit_text="true"
 				 control_name="CameraAngle"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -1683,15 +1655,12 @@
 				 min_val=".1"
 				 max_val="180"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127"/>
 				<spinner
 				 name="S_FOV"
 				 can_edit_text="true"
 				 control_name="CameraFieldOfView"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="1"
@@ -1737,15 +1706,12 @@
 				 min_val=".01"
 				 max_val="22"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_F_Number"
 				 can_edit_text="true"
 				 control_name="CameraFNumber"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -1791,15 +1757,12 @@
 				 min_val="1"
 				 max_val="2000"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Focal_Length"
 				 can_edit_text="true"
 				 control_name="CameraFocalLength"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -1845,15 +1808,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Foc_Time"
 				 can_edit_text="true"
 				 control_name="CameraFocusTransitionTime"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -1899,15 +1859,12 @@
 				 min_val="0"
 				 max_val="50"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_CoC"
 				 can_edit_text="true"
 				 control_name="CameraMaxCoF"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -1953,15 +1910,12 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Resolution"
 				 can_edit_text="true"
 				 control_name="CameraDoFResScale"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -2007,15 +1961,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Aspect_Ratio"
 				 can_edit_text="true"
 				 control_name="CameraAspectRatio"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -2060,7 +2011,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Glow Settings"
-				 top_pad=""
 				 height="17"
 				 width="200"/>
 			</panel>
@@ -2119,8 +2069,6 @@
 				 can_edit_text="true"
 				 control_name="RenderGlowResolutionPow"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="110"
 				 decimal_digits="0"
@@ -2180,15 +2128,12 @@
 				 min_val="1"
 				 max_val="50"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Glow_Iterations"
 				 can_edit_text="true"
 				 control_name="RenderGlowIterations"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2234,15 +2179,12 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Glow_Strength"
 				 can_edit_text="true"
 				 control_name="RenderGlowStrength"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="5"
@@ -2288,15 +2230,12 @@
 				 min_val="0"
 				 max_val="2"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Luminance"
 				 can_edit_text="true"
 				 control_name="RenderGlowMinLuminance"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -2342,15 +2281,12 @@
 				 min_val="0"
 				 max_val="30"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Warmth"
 				 can_edit_text="true"
 				 control_name="RenderGlowWarmthAmount"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -2396,15 +2332,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Glow_Width"
 				 can_edit_text="true"
 				 control_name="RenderGlowWidth"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -2450,15 +2383,12 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Alpha"
 				 can_edit_text="true"
 				 control_name="RenderGlowMaxExtractAlpha"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -2511,7 +2441,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="General Render Settings"
-				 top_pad=""
 				 height="17"
 				 width="200"/>
 			</panel>
@@ -2549,15 +2478,12 @@
 				 min_val="0"
 				 max_val="2048"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Draw_Distance"
 				 can_edit_text="true"
 				 control_name="RenderFarClip"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2603,15 +2529,12 @@
 				 min_val="0"
 				 max_val="100"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Avi_Count"
 				 can_edit_text="true"
 				 control_name="RenderAvatarMaxVisible"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2657,15 +2580,12 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Avi_Detail"
 				 can_edit_text="true"
 				 control_name="RenderAvatarLODFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2711,15 +2631,12 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Avi_Physics"
 				 can_edit_text="true"
 				 control_name="RenderAvatarPhysicsLODFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2765,15 +2682,12 @@
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Particle_Cnt"
 				 can_edit_text="true"
 				 control_name="RenderMaxPartCount"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2819,15 +2733,12 @@
 				 min_val="0"
 				 max_val="24"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Terrain_Scale"
 				 can_edit_text="true"
 				 control_name="RenderTerrainScale"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2873,15 +2784,12 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Terrain_Quality"
 				 can_edit_text="true"
 				 control_name="RenderTerrainLODFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2927,15 +2835,12 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Object_Detail"
 				 can_edit_text="true"
 				 control_name="RenderVolumeLODFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -2981,15 +2886,12 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Flexi_Detail"
 				 can_edit_text="true"
 				 control_name="RenderFlexTimeFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -3035,15 +2937,12 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Tree_Detail"
 				 can_edit_text="true"
 				 control_name="RenderTreeLODFactor"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -3089,15 +2988,12 @@
 				 min_val="4"
 				 max_val="512"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Sky_Detail"
 				 can_edit_text="true"
 				 control_name="WLSkyDetail"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="0"
@@ -3144,15 +3040,12 @@
 				 min_val="-2"
 				 max_val="2"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="77" />
 				<spinner
 				 name="S_Av_Floor_Offset"
 				 can_edit_text="true"
 				 control_name="AvatarZOffset"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="2"
@@ -3211,7 +3104,7 @@
 				 left="5"
 				 name="UseFarClip"
 				 tool_tip="Enable Draw Distance, if you disable this feature the Viewer will render past your set draw distance."
-				 width="240" />
+				 width="240"/>
 				<check_box
 				 follows="left|top"
 				 control_name="RenderDynamicLOD"
@@ -3223,19 +3116,19 @@
 				 name="RednerLod1"
 				 tool_tip="This enables the feature that allows the viewer to dynamically adjust the level of detail in scene as you move further away from objects. It helps improve performance, it also can reduce the quality of the objects in the scene."
 				 top_pad="2"
-				 width="240" />
+				 width="240"/>
 				<check_box
 				 follows="left|top"
 				 control_name="UseOcclusion"
 				 height="16"
 				 initial_value="true"
-				 label="Render only Objects Visible to the Camera"
+				 label="Render only Objects visible to the Camera"
 				 layout="topleft"
 				 left="5"
 				 tool_tip="This allows the viewer only to process/draw those objects that are within the camera field of view and not hidden behind anything else. Usually this is a performance booster. Sometimes it can actually reduce performance especially when the scene/sim has few objects. Toggle to see if it helps or not!"
 				 name="UssOcclusion1"
 				 top_pad="2"
-				 width="240" />
+				 width="240"/>
 				<check_box
 				 follows="left|top"
 				 control_name="RenderAnisotropic"
@@ -3244,58 +3137,26 @@
 				 label="Anisotropic Filtering (texture crispness)"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="This enables higher texture crispness.love"
+				 tool_tip="This enables higher texture crispness"
 				 name="Anisotropic"
 				 top_pad="2"
 				 width="240"/>
-				<menu
-				 bg_visible="false"
-				 mouse_opaque="true"
-				 drop_shadow="false"
-				 width="250"
-				 create_jump_keys="false"
-				 label=""
-				 follows="left|top"
-				 name="M_Av_Att_Particles"
-				 left="8"
-				 top_pad="0"
-				 tear_off="false">
-					<menu_item_check
-					 label="Render Particles Attached to other Avatars"
-					 tool_tip="Enables the viewer to render any and all particles attached to/coming from other avatars."
-					 name="Render Attached Particle">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="RenderAttachedParticles" />
-					<menu_item_check.on_click
-					 function="Advanced.HandleAttachedLightParticles"
-					 parameter="RenderAttachedParticles" />
-					</menu_item_check>
-				</menu>
-				<!--check_box
-				 follows="left|top"
-				 commit_on_return="true"
-				 control_name="RenderAttachedParticles"
-				 height="16"
-				 initial_value="fasle"
-				 label=""
-				 mouse_opaque="false"
+				<check_box
+				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 enabled="false"
-				 is_toggle="false"
+				 top_pad="2"
+				 height="16"
+				 label="Render Particles Attached to other Avatars"
 				 tool_tip="Enables the viewer to render any and all particles attached to/coming from other avatars."
-				 name="Render Attached Particle"
-				 top_delta="0"
-				 width="240">
-					<check_box.check_button 
-					 image_unselected="Checkbox_Off"
-					 image_selected="Checkbox_Off"
-					 image_disabled="Checkbox_Off"
-					 image_disabled_selected="Checkbox_Off"
-					 image_pressed="Checkbox_Off"
-					 image_pressed_selected="Checkbox_Off"/>
-				</check_box-->
+				 name="Render Attached Particle">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="RenderAttachedParticles"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.HandleAttachedLightParticles"
+					 parameter="RenderAttachedParticles"/>
+				</check_box>
 			</panel>
 
 			<!--view_border
@@ -3326,7 +3187,7 @@
 				 height="18"
 				 left="10" 
 				 top_pad="11"
-				 width="110"
+				 width="80"
 				 layout="topleft"
 				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance."
 				 value="Anti-aliasing"/>
@@ -3339,28 +3200,27 @@
 				 left_pad="0"
 				 name="fsaa"
 				 top_delta="-5"
-				 width="145">
+				 width="180">
 					<combo_box.item
 					 label="Disabled (Rougher Edges)"
 					 name="FSAADisabled"
-					 value="0" />
+					 value="0"/>
 					<combo_box.item
 					 label="2x (Smooth Edges)"
 					 name="2x"
-					 value="2" />
+					 value="2"/>
 					<combo_box.item
 					 label="4x (Smoother Edges) "
 					 name="4x"
-					 value="4" />
+					 value="4"/>
 					<combo_box.item
 					 label="8x (Even Smoother)"
 					 name="8x"
-					 value="8" />
+					 value="8"/>
 					<combo_box.item
 					 label="16x (Smoothest)"
 					 name="16x"
-					 shortcut="N"
-					 value="16" />
+					 value="16"/>
 				</combo_box>
 			</panel>
 
@@ -3375,7 +3235,7 @@
 			 border_visible="true"
 			 bevel_style="none"
           bg_alpha_color="DkGray_66"
-			 background_visible="true">	
+			 background_visible="true">
 				<text
 				 name="T_Texture_Bumpiness"
 				 follows="left|top"
@@ -3394,7 +3254,7 @@
 				 follows="left|top"
 				 top_delta="-5"
 				 name="BumpStrengthSelection"
-				 width="145">
+				 width="150">
 					<combo_box.item
 					 label="Very fine (very weak)"
 					 name="0"
@@ -3420,7 +3280,7 @@
 					 name="5"
 					 value="16"/>
 					<combo_box.commit_callback
-					 function="Pref.QualityPerformance"/>
+					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
 				<check_box
 				 follows="left|top"
@@ -3473,152 +3333,180 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Interface Aids"
-				 top_pad=""
 				 height="17"
 				 width="150"/>
 			</panel>
 
-			<menu
-			 bg_visible="true"
-			 drop_shadow="false"
-			 mouse_opaque="false"
-			 create_jump_keys="false"
-			 label=""
-			 follows="left|top"
-			 name="M_Aids"
-			 left="8"
+			<panel
+			 name="Aids_Settings_CB"
+			 follows="top|left"
+			 layout="topleft"
 			 top_pad="0"
+			 left="4"
+			 width="275"
+			 height="248"
+			 border_visible="true"
+          bevel_style="none"
           bg_alpha_color="DkGray_66"
-			 tear_off="false">
-				<!--menu_item_check
-				 label="Shadow Frusta"
-				 name="Shadow Frusta">
-					<menu_item_check.on_check
-					 function="Advanced.CheckInfoDisplay"
-					 parameter="shadow frusta" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleInfoDisplay"
-					 parameter="shadow frusta" />
-				</menu_item_check>
-				<menu_item_check
-				 label="LOD Info"
-				 name="LOD Info">
-					<menu_item_check.on_check
-					 function="Advanced.CheckInfoDisplay"
-					 parameter="lod info" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleInfoDisplay"
-					 parameter="lod info" />
-				</menu_item_check-->
-				<menu_item_check
-				 label="Show Bounding Boxes for Objects in Scene"
-				 name="Bounding Boxes">
-					<menu_item_check.on_check
-					 function="Advanced.CheckInfoDisplay"
-					 parameter="bboxes" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleInfoDisplay"
-					 parameter="bboxes" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Show the Statistics Bar"
-				 name="Statistics Bar">
-					<menu_item_check.on_check
-					 function="Floater.Visible"
-					 parameter="stats" />
-					<menu_item_check.on_click
-					 function="Floater.Toggle"
-					 parameter="stats" />
-				</menu_item_check>
-				<menu_item_check
-				 label="Show Detailed Camera Position Data"
-				 name="Camera">
-					<menu_item_check.on_check
-					 function="Advanced.CheckHUDInfo"
-					 parameter="camera" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleHUDInfo"
-					 parameter="camera" />
-				</menu_item_check>	
-				<menu_item_check
-				 label="Show Detail Texture Loading Information"
-				 name="Texture Console"
-				 use_mac_ctrl="true">
-					<menu_item_check.on_check
-					 function="Advanced.CheckConsole"
-					 parameter="texture" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleConsole"
-					 parameter="texture" />
-				</menu_item_check>
-				<menu_item_check
-				 label="Show RGB-I Color Values Under Cursor"
-				 name="Show Color Under Cursor">
-					<menu_item_check.on_check
-					 function="Advanced.CheckShowColor" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleShowColor" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Highlight Transparent Objects in Red"
-				 name="Highlight Transparent">
-					<menu_item_check.on_check
-					 function="View.CheckHighlightTransparent" />
-					<menu_item_check.on_click
-					 function="View.HighlightTransparent" />
-				</menu_item_check>
-				<menu_item_check
-				 label="Show the Scene as Wireframe"
-				 name="Wireframe">
-					<menu_item_check.on_check
-					 function="Advanced.CheckWireframe"
-					 parameter="Wireframe" />
-					<menu_item_check.on_click
-					 function="Advanced.ToggleWireframe" />
-				</menu_item_check>
-				<menu_item_check
-				 label="Show the HUD attached to Your Avatar"
-				 name="Show HUD Attachments">
-					<menu_item_check.on_check
-					 function="View.CheckHUDAttachments" />
-					<menu_item_check.on_click
-					 function="View.ShowHUDAttachments" />
-				</menu_item_check>
-				<menu_item_separator/>
-				<menu_item_check
-				 label="Slow-mo Your Avatar (in your viewer only)"
-				 name="Slow Motion Animations">
-					<menu_item_check.on_check
-					 function="CheckControl"
-					 parameter="SlowMotionAnimation" />
-					<menu_item_check.on_click
-					 function="ToggleControl"
-					 parameter="SlowMotionAnimation" />
-				</menu_item_check>    
-				<menu_item_call
-				 label="Force Appearance Update (Rebake)"
-				 name="Rebake Texture">
-					<menu_item_call.on_click
-					 function="Advanced.RebakeTextures" />
-				</menu_item_call>
-				<menu_item_separator/>
-				<menu_item_call
-				 label="Set Window Viewer Size..."
-				 name="Set Window Size...">
-					<menu_item_call.on_click
-					 function="Floater.Show"
-					 parameter="window_size" />
-				</menu_item_call>
-				<menu_item_call
-				 label="Show Debug Settings Menu"
-				 name="Debug Settings">
-					<menu_item_call.on_click
-					 function="Advanced.ShowDebugSettings"
-					 parameter="all" />
-				</menu_item_call>
-			</menu>
+          background_visible="true">
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="10"
+             label="Show Bounding Boxes for Objects in Scene"
+             name="Bounding Boxes">
+               <check_box.on_check
+                function="Advanced.CheckInfoDisplay"
+                parameter="bboxes"/>
+               <check_box.check_button.commit_callback
+                function="Advanced.ToggleInfoDisplay"
+                parameter="bboxes"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show the Statistics Bar"
+             name="Statistics Bar">
+               <check_box.on_check
+                function="Floater.Visible"
+                parameter="stats"/>
+               <check_box.check_button.commit_callback
+                function="Floater.Toggle"
+                parameter="stats"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show Detailed Camera Position Data"
+             name="Camera">
+               <check_box.on_check
+                function="Advanced.CheckHUDInfo"
+                parameter="camera"/>
+               <check_box.check_button.commit_callback
+                function="Advanced.ToggleHUDInfo"
+                parameter="camera"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show Detailed Texture Loading Information"
+             name="Texture Console">
+               <check_box.on_check
+                function="Advanced.CheckConsole"
+                parameter="texture"/>
+               <check_box.check_button.commit_callback
+                function="Advanced.ToggleConsole"
+                parameter="texture"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show RGB-I Color Values Under Cursor"
+             name="Show Color Under Cursor">
+               <check_box.on_check
+                function="Advanced.CheckShowColor"/>
+               <check_box.check_button.commit_callback
+                function="Advanced.ToggleShowColor"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Highlight Transparent Objects in Red"
+             name="Highlight Transparent">
+               <check_box.on_check
+                function="View.CheckHighlightTransparent"/>
+               <check_box.check_button.commit_callback
+                function="View.HighlightTransparent"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show the Scene as Wireframe"
+             name="Wireframe">
+               <check_box.on_check
+                function="Advanced.CheckWireframe"
+                parameter="Wireframe"/>
+               <check_box.check_button.commit_callback
+                function="Advanced.ToggleWireframe"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Show the HUD attached to Your Avatar"
+             name="Show HUD Attachments">
+               <check_box.on_check
+                function="View.CheckHUDAttachments"/>
+               <check_box.check_button.commit_callback
+                function="View.ShowHUDAttachments"/>
+            </check_box>
+            <check_box
+             follows="top|left"
+             layout="topleft"
+             left="5"
+             top_pad="9"
+             label="Slow-mo Your Avatar (in your viewer only)"
+             name="Slow Motion Animations">
+               <check_box.on_check
+                function="CheckControl"
+                parameter="SlowMotionAnimation"/>
+               <check_box.check_button.commit_callback
+                function="ToggleControl"
+                parameter="SlowMotionAnimation"/>
+            </check_box>
+            <button
+             follows="left|top"
+             name="Rebake Texture"
+             height="22"
+             label="Force Appearance Update (Rebake)"
+             layout="topleft"
+             left="5"
+             top_pad="2"
+             width="262">
+               <button.commit_callback
+                function="Advanced.RebakeTextures"/>
+            </button>
+            <button
+             follows="left|top"
+             name="Set Window Size..."
+             height="22"
+             label="Set Window Viewer Size..."
+             layout="topleft"
+             left="5"
+             top_pad="2"
+             width="262">
+               <button.commit_callback
+                function="Floater.Show"
+                parameter="window_size"/>
+            </button>
+            <button
+             follows="left|top"
+             name="Debug Settings"
+             height="22"
+             label="Show Debug Settings Menu"
+             layout="topleft"
+             left="5"
+             top_pad="2"
+             width="262">
+               <button.commit_callback
+                function="Advanced.ShowDebugSettings"
+                parameter="all"/>
+            </button>
+         </panel>
 
 			<!--view_border
 			 bevel_style="none"
@@ -3634,7 +3522,7 @@
 			 name="P_Quick_Stats"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="250"
+			 top_pad="0"
 			 left="4"
 			 width="275"
 			 height="22"
@@ -3649,7 +3537,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="Quick Stats"
-				 top_pad=""
 				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking their labels."
 				 width="200"/>	
 			</panel>
@@ -3695,7 +3582,7 @@
 						 precision="1"
 						 show_bar="true"
 						 show_history="true"
-						 tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 30 frames per second (FPS) is the rate for broadcast television."
+						 tool_tip="FPS: The number of times per second your computer is redrawing (or refreshing) what's on the screen. Higher numbers are better. A framerate between 12 to 15 is common for animations, 24 is the standard for motion pictures, and 25 (PAL)/30 (NTSC) frames per second (FPS) is the rate for broadcast television."
 						 setting="DebugStatModeFPS">
 						</stat_bar>
 						<stat_bar
@@ -3710,7 +3597,7 @@
 						 precision="1"
 						 show_bar="true"
 						 show_history="false"
-						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Second Life world. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
+						 tool_tip="Bandwidth: How much data is being transferred between your computer and the Virtual World. This number varies wildly depending on what bandwidth settings you've used, where you are inworld, what's going on, and whether you're still loading some things (objects/textures/etc) that are in your field of view. If bandwidth is 0kbps, something may be wrong (you may be partially disconnected)."
 						 setting="DebugStatModeBandwidth">
 						</stat_bar>
 						<stat_bar
@@ -3768,7 +3655,7 @@
 						 label_spacing="400"
 						 show_per_sec="true"
 						 show_bar="false"
-						 tool_tip="New Objs: The number of objects being downloaded per second. "
+						 tool_tip="New Objs: The number of objects being downloaded per second."
 						 setting="DebugStatModeNewObjs">
 						</stat_bar>
 						<stat_bar
@@ -3781,7 +3668,7 @@
 						 label_spacing="4000.f" 
 						 show_per_sec="false"
 						 show_bar="false"
-						 tool_tip="Count: The number of unique textures loaded by the viewer. "
+						 tool_tip="Count: The number of unique textures loaded by the viewer."
 						 setting="DebugStatModeTextureCount">
 						</stat_bar>
 					</stat_view>
@@ -3815,7 +3702,6 @@
 				 left="10"
 				 font="SansSerif"
 				 value="3D Mouse (Joystick) Settings"
-				 top_pad=""
 				 height="17"
 				 width="200"/>
 			</panel>
@@ -3838,7 +3724,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="Left/Right"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Left/Right movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="10"
 				 width="80"/>
 				<slider_bar
@@ -3854,15 +3740,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_LR_Axis"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale1"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -3893,7 +3776,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="Up/Down"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Up/Down movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
 				 width="80"/>
 				<slider_bar
@@ -3909,15 +3792,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_UD_Axis"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale2"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -3948,7 +3828,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="In/Out"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the In/Out movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
 				 width="80"/>
 				<slider_bar
@@ -3964,15 +3844,12 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_IO_Axis"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale0"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4003,7 +3880,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="Tilt"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Pitch movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
 				 width="80"/>
 				<slider_bar
@@ -4019,15 +3896,12 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Tilt"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale4"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4058,7 +3932,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="Spin"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Spin movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
 				 width="80"/>
 				<slider_bar
@@ -4074,15 +3948,12 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Spin"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale5"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4113,7 +3984,7 @@
 				 layout="topleft"
 				 left="5"
 				 value="Roll"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Roll movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
 				 width="80"/>
 				<slider_bar
@@ -4129,15 +4000,12 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Roll"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale3"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4184,15 +4052,12 @@
 				 min_val="0"
 				 max_val=".05"
 				 top_delta="-2"
-				 tool_tip=""
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Zoom_Speed"
 				 can_edit_text="true"
 				 control_name="FlycamAxisScale6"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4239,15 +4104,12 @@
 				 min_val="0"
 				 max_val="3"
 				 top_delta="-2"
-				 tool_tip=""
 				 width="127" />
 				<spinner
 				 name="S_Feathering"
 				 can_edit_text="true"
 				 control_name="FlycamFeathering"
 				 top_delta="-3"
-				 height=""
-				 label=""
 				 label_width="0"
 				 left_pad="3"
 				 decimal_digits="3"
@@ -4299,7 +4161,7 @@
 				 name="JoystickAxis6"
 				 tool_tip="Controls which mouse axis the zooming function is mapped to (set to work with)."
 				 top_pad="6"
-				 width="255" />
+				 width="255"/>
 				<check_box
 				 top_pad="16"
 				 control_name="JoystickEnabled"
@@ -4309,7 +4171,7 @@
 				 left="6"
 				 tool_tip="This turns on the 3D Mouse."
 				 name="enable_joystick"
-				 width="60" />
+				 width="230"/>
 				<check_box
 				 name="CB_ZoomDirect"
 				 control_name="ZoomDirect"
@@ -4329,7 +4191,7 @@
 				 left="6"
 				 top_pad="7"
 				 tool_tip="When enabled the camera will always remain level."
-				 width="15" />
+				 width="230"/>
 				<check_box
 				 name="CB_Move_Avatar"
 				 control_name="JoystickAvatarEnabled"
@@ -4339,7 +4201,7 @@
 				 left="6"
 				 top_pad="7"
 				 tool_tip="When enabled the mouse will move your avatar. "
-				 width="15" />
+				 width="230"/>
 				<check_box
 				 name="CB_Move_Objects"
 				 control_name="JoystickBuildEnabled"
@@ -4349,30 +4211,22 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 width="15" />
-				<menu
-				 bg_visible="false"
-				 mouse_opaque="false"
-				 drop_shadow="false"
-				 create_jump_keys="false"
-				 label=""
-				 follows="right|left"
-				 name="M_Show_FOV2"
-				 left="7"
-				 top_pad="3"
-				 tear_off="false">
-					<menu_item_check
-					 label="Show the Current FOV of Viewer Screen"
-					 tool_tip="This will show you the vertical field of view for the camera. In SL is possible to change the lens length just like in RL. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
-					 name="FOV">
-						<menu_item_check.on_check
-						 function="Advanced.CheckHUDInfo"
-						 parameter="fov" />
-						<menu_item_check.on_click
-						 function="Advanced.ToggleHUDInfo"
-						 parameter="fov" />
-					</menu_item_check>
-				</menu>
+				 width="230"/>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="6"
+				 top_pad="7"
+				 label="Show the Current FOV of Viewer Screen"
+				 tool_tip="This will show you the vertical field of view for the camera. Within the viewer it is possible to change the lens length just like in real life. The smaller the FOV the longer the camera lens. A 50mm lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. Please see: 'http://en.wikipedia.org/wiki/Angle_of_view' for a table showing the relationship between FOV and Lens Focal Length (mm). TURN IT OFF BEFORE YOU TAKE SNAPSHOTS OR IT WILL BE IN THE PICTURE!"
+				 name="CAM_Show_FOV">
+					<check_box.on_check
+					 function="Advanced.CheckHUDInfo"
+					 parameter="fov"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleHUDInfo"
+					 parameter="fov"/>
+				</check_box>
 			</panel>
 
 			<panel
@@ -4448,7 +4302,7 @@
 							 name="T_Zoom2"
 							 layout="topleft"
 							 left="10"
-							 value="Zoom"
+							 value="View angle"
 							 top_pad="7"
 							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
 							 width="100"/>
@@ -4470,8 +4324,6 @@
 							 can_edit_text="true"
 							 control_name="CameraAngle"
 							 top_delta="-3"
-							 height=""
-							 label=""
 							 label_width="0"
 							 left_delta="120"
 							 decimal_digits="3"
@@ -4516,8 +4368,7 @@
 							 min_val="0"
 							 max_val="30"
 							 top_delta="-2"
-							 tool_tip=""
-							 width="135" />
+							 width="135"/>
 							<button
 							 follows="right"
 							 name="Reset_Zoom_Speed2"
@@ -4553,7 +4404,6 @@
 							 min_val="0"
 							 max_val="30"
 							 top_delta="-2"
-							 tool_tip=""
 							 width="135" />
 							<button
 							 follows="right"
@@ -4590,7 +4440,6 @@
 							 min_val=".001"
 							 max_val="25"
 							 top_delta="-2"
-							 tool_tip=""
 							 width="135" />
 							<button
 							 follows="right"
@@ -4628,7 +4477,7 @@
 							 max_val="300"
 							 top_delta="-2"
 							 tool_tip=""
-							 width="135" />
+							 width="135"/>
 							<button
 							 follows="right"
 							 name="Reset_Cam_Smoothing"
@@ -4688,7 +4537,7 @@
 							 max_val="15"
 							 top_delta="-2"
 							 tool_tip=""
-							 width="135" />
+							 width="135"/>
 							<button
 							 follows="right"
 							 name="Reset_Mouse_Sens"
@@ -4707,13 +4556,13 @@
 							 control_name="FirstPersonAvatarVisible"
 							 follows="left|top"
 							 height="16"
-							 label="Display avatar mouselook"
+							 label="Display avatar &amp; attachments in mouselook"
 							 layout="topleft"
 							 left="5"
 							 tool_tip="Displays avatar and attachments below neck while in mouselook. Default is OFF."
 							 name="first_person_avatar_visible"
 							 top_pad="10"
-							 width="250" />
+							 width="250"/>
 							<check_box
 							 control_name="MouseSmooth"
 							 follows="left|top"

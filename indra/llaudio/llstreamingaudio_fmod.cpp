@@ -97,6 +97,10 @@ void LLStreamingAudio_FMOD::start(const std::string& url)
 	//	return;
 	//}
 
+	// <FS:TM> FIRE-7093 - Don't attempt to switch music streams when the URL hasn't changed 
+	if (mCurrentInternetStreamp && mURL == url) return;
+	// </FS:TM>
+
 	// "stop" stream but don't clear url, etc. in case url == mInternetStreamURL
 	stop();
 

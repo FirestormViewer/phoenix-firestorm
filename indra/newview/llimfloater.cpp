@@ -298,26 +298,35 @@ void LLIMFloater::sendMsg()
 			}
 //-TT /Patch MU_OOC from Satomi Ahn
 
-			// TL: Support group chat prefix
+			// <FS:Techwolf Lupindo> Support group chat prefix
 			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
 			if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 			{
 				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
-					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() +
+#ifdef HAS_OPENSIM_SUPPORT
+					" os" +
+#endif
+					") "));
 				}
 				else
 				{
-					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + ") "));
+					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() +
+#ifdef HAS_OPENSIM_SUPPORT
+					" os" +
+#endif
+					") "));
 				}
 			}
 
-			// TL: Allow user to send system info.
+			// <FS:Techwolf Lupindo> Allow user to send system info.
 			if(mDialog == IM_NOTHING_SPECIAL && utf8_text.find("/sysinfo") == 0)
 			{
 				LLSD system_info = FSData::getSystemInfo();
 				utf8_text = system_info["Part1"].asString() + system_info["Part2"].asString();
 			}
+			// </FS:Techwolf Lupindo> 
 
 			// Truncate for transport
 			//<FS:TS> FIRE-787: break up too long chat lines into multiple messages

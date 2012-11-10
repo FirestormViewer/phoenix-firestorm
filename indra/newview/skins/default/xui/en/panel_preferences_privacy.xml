@@ -175,7 +175,7 @@
      left="30"
      mouse_opaque="false"
      name="Logs:"
-     top_pad="10"
+     top_pad="5"
      width="350">
         Chat Logs:
     </text>
@@ -187,7 +187,7 @@
      layout="topleft"
      left="30"
      name="log_nearby_chat"
-     top_pad="10"
+     top_pad="6"
      width="350">
     </check_box>
     <check_box
@@ -230,7 +230,15 @@
      name="logfile_name_datestamp"
      top_pad="3"
      width="350"/>
-
+    <check_box
+     control_name="FSAppendGridToLogFolder"
+     height="16"
+     label="Append the grid name to chat log folders (Set at login)"
+     layout="topleft"
+     left_delta="0"
+     name="grid_append_chat_log_folder"
+     top_pad="3"
+     width="350"/>
     <button
      follows="left|top"
      height="23"

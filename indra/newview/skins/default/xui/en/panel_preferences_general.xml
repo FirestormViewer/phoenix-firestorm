@@ -388,6 +388,20 @@
      tool_tip="Highlight the name tags of your friends."
      top_delta="0" />
 
+  <check_box
+   control_name="DontTrimLegacyNames"
+   height="16"
+   label="Don't trim 'Resident' from legacy names"
+   layout="topleft"
+   left_pad="50"
+   name="legacy_trim_check"
+   width="100"
+   tool_tip="Don't trim 'Resident' from legacy names"
+   top_delta="0">
+    <check_box.commit_callback
+     function="FS.ToggleSortContacts" />
+  </check_box>
+
   <!--    FIRE-5505 Commented out "Publish radar tags to LSL" for now
   <check_box
      control_name="FSPublishRadarTag"

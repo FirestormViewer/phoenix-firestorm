@@ -255,6 +255,14 @@ private:
 	std::set<U64>	mRegionsVisited;		// Stat - what distinct regions has the avatar been to?
 	F64				mDistanceTraveled;		// Stat - how far has the avatar moved?
 	LLVector3d		mLastPositionGlobal;	// Used to calculate travel distance
+
+	//------------------------------------------------------------------------
+	// Inventory
+	//------------------------------------------------------------------------
+	public:
+		bool restoreToWorld;
+		LLUUID restoreToWorldGroup;
+		LLViewerInventoryItem* restoreToWorldItem;
 	
 /**                    Position
  **                                                                            **
