@@ -221,7 +221,7 @@ Function CheckWindowsServPack
   ${OrIf} ${IsWin2008R2}
   ${AndIfNot} ${IsServicePack} 1
     MessageBox MB_OK $(CheckWindowsServPackMB)
-    DetailPrint "Please use Windows Update to install the latest Service Pack."
+    DetailPrint $(UseLatestServPackDP)
   ${EndIf}
 FunctionEnd
 
