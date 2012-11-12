@@ -1030,22 +1030,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndAlert"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndAlert"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndAlert"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1081,22 +1073,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndBadKeystroke"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndBadKeystroke"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndBadKeystroke"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1132,22 +1116,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndClick"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndClick"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndClick"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1183,22 +1159,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndClickRelease"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndClickRelease"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndClickRelease"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1234,22 +1202,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndHealthReductionF"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndHealthReductionF"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndHealthReductionF"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1285,22 +1245,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndHealthReductionM"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndHealthReductionM"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndHealthReductionM"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1336,22 +1288,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndInvalidOp"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndInvalidOp"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndInvalidOp"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1387,22 +1331,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndMoneyChangeDown"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndMoneyChangeDown"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndMoneyChangeDown"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1438,22 +1374,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndMoneyChangeUp"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndMoneyChangeUp"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndMoneyChangeUp"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1599,22 +1527,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndStartIM"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndStartIM"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndStartIM"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1650,22 +1570,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndObjectCreate"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndObjectCreate"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndObjectCreate"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
 		<!-- Note: This sound is unused in Firestorm at the moment -->
         <text
@@ -1702,22 +1614,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndObjectDelete"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndObjectDelete"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndObjectDelete"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 		<!-- End of unused sound here -->
 
         <text
@@ -1754,22 +1658,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndObjectRezIn"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndObjectRezIn"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndObjectRezIn"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1805,22 +1701,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndObjectRezOut"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndObjectRezOut"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndObjectRezOut"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -1856,22 +1744,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndSnapshot"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="QuietSnapshotsToDisk"
          height="20"
+         label="Play this sound"
          layout="topleft"
+         name="QuietSnapshotsToDiskCheckBox"
          left_pad="1"
-         name="QuietSnapshotsToDiskComboBox"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="0"
-             value="0"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="1"
-             value="1"/>
-        </combo_box>
+         width="120" />
 
         <text
          layout="topleft"
@@ -1907,22 +1787,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndTeleportOut"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndTeleportOut"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndTeleportOut"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
     </panel>
 
@@ -1982,22 +1854,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuAppear"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuAppear"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuAppear"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2033,22 +1897,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuHide"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuHide"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuHide"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2084,22 +1940,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight0"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight0"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight0"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2135,22 +1983,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight1"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight1"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight1"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2186,22 +2026,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight2"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight2"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight2"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2237,22 +2069,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight3"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight3"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight3"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2288,22 +2112,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight4"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight4"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight4"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2339,22 +2155,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight5"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight5"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight5"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2390,22 +2198,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight6"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight6"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight6"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2441,22 +2241,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndPieMenuSliceHighlight7"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndPieMenuSliceHighlight7"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndPieMenuSliceHighlight7"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2492,22 +2284,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndTyping"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="FSPlayTypingSound"
          height="20"
+         label="Play this sound"
          layout="topleft"
+         name="FSPlayTypingSoundCheckBox"
          left_pad="1"
-         name="FSPlayTypingSoundComboBox"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         width="120" />
 
         <text
          layout="topleft"
@@ -2543,22 +2327,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndWindowClose"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndWindowClose"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndWindowClose"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2594,22 +2370,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndWindowOpen"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndWindowOpen"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndWindowOpen"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2645,22 +2413,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndRegionRestart"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndRegionRestart"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndRegionRestart"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2696,22 +2456,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndFriendOnline"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndFriendOnline"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndFriendOnline"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
         <text
          layout="topleft"
@@ -2747,22 +2499,14 @@ Hover your mouse cursor over UUID field to show its default value.
              function="ResetControl"
              parameter="UISndFriendOffline"/>
 		</button>
-        <combo_box
+        <check_box
          control_name="PlayModeUISndFriendOffline"
          height="20"
+         label="Play this sound"
          layout="topleft"
-         left_pad="1"
          name="PlayModeUISndFriendOffline"
-         width="120">
-           <combo_box.item
-             label="Play this sound"
-             name="1"
-             value="1"/>
-           <combo_box.item
-             label="Mute this sound"
-             name="0"
-             value="0"/>
-        </combo_box>
+         left_pad="1"
+         width="120" />
 
     </panel>
 </tab_container>
