@@ -137,7 +137,7 @@ void make_ui_sound(const char* namep)
 			}
 			else
 			{
-				if (!LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name))
+				if ( (name != "UISndSnapshot" && !LLUI::sSettingGroups["config"]->getBOOL("PlayMode"+name)) || (name == "UISndSnapshot" && LLUI::sSettingGroups["config"]->getBOOL("PlayModeUISndSnapshot")) )
 					return;
 			}
 			// </FS:PP>

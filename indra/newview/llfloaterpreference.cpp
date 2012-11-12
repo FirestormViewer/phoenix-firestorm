@@ -471,6 +471,10 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	//[ADD - Clear Settings : SJ]
 	mCommitCallbackRegistrar.add("Pref.ClearSettings",			boost::bind(&LLFloaterPreference::onClickClearSettings, this));
 	mCommitCallbackRegistrar.add("Pref.Online_Notices",			boost::bind(&LLFloaterPreference::onClickChatOnlineNotices, this));
+	
+	// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+	mCommitCallbackRegistrar.add("PreviewUISound",				boost::bind(&LLFloaterPreference::onClickPreviewUISound, this, _2));
+	// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 
 	sSkin = gSavedSettings.getString("SkinCurrent");
 
@@ -1685,6 +1689,14 @@ void LLFloaterPreference::onClickSetSounds()
 	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
 }
 
+// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
+{
+	std::string uisndid = ui_sound_id.asString();
+	make_ui_sound(uisndid.c_str());
+}
+// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+
 /*
 void LLFloaterPreference::onClickSkipDialogs()
 {
@@ -1969,6 +1981,7 @@ void LLFloaterPreference::updateUISoundsControls()
 	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2
 	// This sound is unused in Firestorm at the moment
 	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
+	getChild<LLButton>("Prev_UISndObjectDelete")->setEnabled(FALSE);
 	getChild<LLButton>("Def_UISndObjectDelete")->setEnabled(FALSE);
 	getChild<LLCheckBoxCtrl>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
 }

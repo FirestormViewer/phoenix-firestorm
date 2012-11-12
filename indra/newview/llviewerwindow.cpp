@@ -4426,7 +4426,10 @@ BOOL LLViewerWindow::saveSnapshot( const std::string& filepath, S32 image_width,
 
 void LLViewerWindow::playSnapshotAnimAndSound()
 {
-	if (gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+	// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+	// if (gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+	if (gSavedSettings.getBOOL("PlayModeUISndSnapshot"))
+	// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 	{
 		return;
 	}

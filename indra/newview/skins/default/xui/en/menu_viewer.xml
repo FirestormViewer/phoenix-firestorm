@@ -2047,10 +2047,10 @@
          name="QuietSnapshotsToDisk">
             <menu_item_check.on_check
              function="CheckControl"
-             parameter="QuietSnapshotsToDisk" />
+             parameter="PlayModeUISndSnapshot" />
             <menu_item_check.on_click
              function="ToggleControl"
-             parameter="QuietSnapshotsToDisk" />
+             parameter="PlayModeUISndSnapshot" />
         </menu_item_check>
 
         <menu_item_separator/>

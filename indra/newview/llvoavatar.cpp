@@ -5207,8 +5207,13 @@ BOOL LLVOAvatar::processSingleAnimationStateChange( const LLUUID& anim_id, BOOL 
 					//	gAudiop->triggerSound(LLUUID(gSavedSettings.getString("UISndTyping")), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
 					//}
 					//else
-					static LLCachedControl<bool> fsPlayTypingSound(gSavedSettings, "FSPlayTypingSound");
-					if (fsPlayTypingSound)
+
+					// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+					// static LLCachedControl<bool> FSPlayTypingSound(gSavedSettings, "FSPlayTypingSound");
+					// if (FSPlayTypingSound)
+					static LLCachedControl<bool> PlayModeUISndTyping(gSavedSettings, "PlayModeUISndTyping");
+					if (PlayModeUISndTyping)
+					// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 					{
 						static LLCachedControl<std::string> uiSndTyping(gSavedSettings, "UISndTyping");
 						LLUUID sound_id = LLUUID(uiSndTyping);

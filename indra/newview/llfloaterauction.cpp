@@ -191,7 +191,10 @@ void LLFloaterAuction::onClickSnapshot(void* data)
 		self->mTransactionID.generate();
 		self->mImageID = self->mTransactionID.makeAssetID(gAgent.getSecureSessionID());
 
-		if(!gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+		// <FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
+		// if(!gSavedSettings.getBOOL("QuietSnapshotsToDisk"))
+		if(!gSavedSettings.getBOOL("PlayModeUISndSnapshot"))
+		// </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 		{
 			gViewerWindow->playSnapshotAnimAndSound();
 		}

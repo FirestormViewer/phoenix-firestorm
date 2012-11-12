@@ -174,7 +174,7 @@
              name="play_avatar_animations"
              width="400" />
             <check_box
-             control_name="FSPlayTypingSound"
+             control_name="PlayModeUISndTyping"
              follows="left|top"
              height="16"
              label="Hear typing sound when people type in nearby chat"

@@ -1015,16 +1015,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndAlert"
          control_name="UISndAlert"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndAlert"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndAlert"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndAlert"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1058,16 +1071,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndBadKeystroke"
          control_name="UISndBadKeystroke"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndBadKeystroke"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndBadKeystroke"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndBadKeystroke"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1101,16 +1127,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClick"
          control_name="UISndClick"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndClick"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndClick"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndClick"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1144,16 +1183,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndClickRelease"
          control_name="UISndClickRelease"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndClickRelease"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndClickRelease"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndClickRelease"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1187,16 +1239,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionF"
          control_name="UISndHealthReductionF"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndHealthReductionF"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndHealthReductionF"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndHealthReductionF"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1230,16 +1295,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndHealthReductionM"
          control_name="UISndHealthReductionM"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndHealthReductionM"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndHealthReductionM"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndHealthReductionM"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1273,16 +1351,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndInvalidOp"
          control_name="UISndInvalidOp"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndInvalidOp"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndInvalidOp"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndInvalidOp"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1316,16 +1407,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeDown"
          control_name="UISndMoneyChangeDown"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndMoneyChangeDown"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndMoneyChangeDown"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndMoneyChangeDown"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1359,16 +1463,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndMoneyChangeUp"
          control_name="UISndMoneyChangeUp"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndMoneyChangeUp"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndMoneyChangeUp"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndMoneyChangeUp"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1402,16 +1519,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndNewIncomingIMSession"
          control_name="UISndNewIncomingIMSession"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndNewIncomingIMSession"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndNewIncomingIMSession"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndNewIncomingIMSession"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1457,16 +1587,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndNewIncomingGroupIMSession"
          control_name="UISndNewIncomingGroupIMSession"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndNewIncomingGroupIMSession"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndNewIncomingGroupIMSession"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndNewIncomingGroupIMSession"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1512,16 +1655,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndStartIM"
          control_name="UISndStartIM"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndStartIM"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndStartIM"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndStartIM"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1555,16 +1711,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectCreate"
          control_name="UISndObjectCreate"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndObjectCreate"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndObjectCreate"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndObjectCreate"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1599,16 +1768,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectDelete"
          control_name="UISndObjectDelete"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndObjectDelete"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndObjectDelete"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndObjectDelete"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1643,16 +1825,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezIn"
          control_name="UISndObjectRezIn"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndObjectRezIn"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndObjectRezIn"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndObjectRezIn"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1686,16 +1881,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndObjectRezOut"
          control_name="UISndObjectRezOut"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndObjectRezOut"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndObjectRezOut"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndObjectRezOut"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1729,23 +1937,36 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndSnapshot"
          control_name="UISndSnapshot"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndSnapshot"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndSnapshot"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndSnapshot"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
              parameter="UISndSnapshot"/>
 		</button>
         <check_box
-         control_name="QuietSnapshotsToDisk"
+         control_name="PlayModeUISndSnapshot"
          height="20"
          label="Mute this sound"
          layout="topleft"
@@ -1772,16 +1993,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTeleportOut"
          control_name="UISndTeleportOut"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndTeleportOut"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndTeleportOut"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndTeleportOut"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1839,16 +2073,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuAppear"
          control_name="UISndPieMenuAppear"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuAppear"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuAppear"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuAppear"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1882,16 +2129,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuHide"
          control_name="UISndPieMenuHide"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuHide"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuHide"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuHide"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1925,16 +2185,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight0"
          control_name="UISndPieMenuSliceHighlight0"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight0"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight0"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight0"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -1968,16 +2241,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight1"
          control_name="UISndPieMenuSliceHighlight1"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight1"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight1"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight1"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2011,16 +2297,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight2"
          control_name="UISndPieMenuSliceHighlight2"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight2"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight2"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight2"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2054,16 +2353,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight3"
          control_name="UISndPieMenuSliceHighlight3"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight3"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight3"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight3"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2097,16 +2409,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight4"
          control_name="UISndPieMenuSliceHighlight4"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight4"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight4"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight4"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2140,16 +2465,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight5"
          control_name="UISndPieMenuSliceHighlight5"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight5"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight5"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight5"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2183,16 +2521,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight6"
          control_name="UISndPieMenuSliceHighlight6"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight6"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight6"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight6"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2226,16 +2577,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndPieMenuSliceHighlight7"
          control_name="UISndPieMenuSliceHighlight7"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndPieMenuSliceHighlight7"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndPieMenuSliceHighlight7"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndPieMenuSliceHighlight7"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2269,23 +2633,36 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndTyping"
          control_name="UISndTyping"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndTyping"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndTyping"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndTyping"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
              parameter="UISndTyping"/>
 		</button>
         <check_box
-         control_name="FSPlayTypingSound"
+         control_name="PlayModeUISndTyping"
          height="20"
          label="Play this sound"
          layout="topleft"
@@ -2312,16 +2689,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowClose"
          control_name="UISndWindowClose"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndWindowClose"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndWindowClose"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndWindowClose"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2355,16 +2745,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndWindowOpen"
          control_name="UISndWindowOpen"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndWindowOpen"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndWindowOpen"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndWindowOpen"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2398,16 +2801,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndRegionRestart"
          control_name="UISndRegionRestart"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndRegionRestart"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndRegionRestart"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndRegionRestart"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2441,16 +2857,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndFriendOnline"
          control_name="UISndFriendOnline"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndFriendOnline"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndFriendOnline"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndFriendOnline"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"
@@ -2484,16 +2913,29 @@ Hover your mouse cursor over UUID field to show its default value.
          max_length_chars="256"
          name="UISndFriendOffline"
          control_name="UISndFriendOffline"
-         width="230"/>
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndFriendOffline"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+		    <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndFriendOffline"/>
+		</button>
         <button
          follows="left|top"
          name="Def_UISndFriendOffline"
          height="20"
          label="D"
          layout="topleft"
-         top_delta="-1"
          left_pad="1"
-         width="20"
+         width="15"
          tool_tip="Reset to the default UUID.">
 		    <button.commit_callback
              function="ResetControl"

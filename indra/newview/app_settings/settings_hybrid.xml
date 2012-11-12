@@ -459,7 +459,7 @@
     <integer>1</integer>
   </map>
 
-  <key>QuietSnapshotsToDisk</key>
+  <key>PlayModeUISndSnapshot</key>
   <map>
     <key>Comment</key>
     <string>Take snapshots to disk without playing animation or sound</string>
