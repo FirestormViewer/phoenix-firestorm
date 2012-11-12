@@ -211,7 +211,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
             Erstellen Schnappschuß:
 		</text>
 		<button name="Def_UISndSnapshot" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="QuietSnapshotsToDiskCheckBox"/>
+		<check_box label="Stummschalten" name="QuietSnapshotsToDiskCheckBox"/>
 
 		<text tool_tip="UUID des Klangs beim Teleportieren. Diese Einstellung ist gekoppelt an die Option Bewegen/Anzeigen &gt; Bewegung &gt; 'Soundeffekte beim Teleportieren abspielen'." name="textFSTeleportOut">
 			Teleportieren:

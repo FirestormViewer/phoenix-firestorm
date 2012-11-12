@@ -1747,7 +1747,7 @@ Hover your mouse cursor over UUID field to show its default value.
         <check_box
          control_name="QuietSnapshotsToDisk"
          height="20"
-         label="Play this sound"
+         label="Mute this sound"
          layout="topleft"
          name="QuietSnapshotsToDiskCheckBox"
          left_pad="1"
