@@ -4953,4 +4953,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="TeleportMaturityExceeded">
 		Rezydent nie może odwiedzić tego regionu.
 	</string>
+	<string name="LoadCameraPositionNoneSaved">
+		Żadne ustawienie kamery nie zostało jeszcze zapisane.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Nie można załadować widoku kamery, ponieważ zapisana jej pozycja znajduje się poza polem widzenia.
+	</string>
 </strings>
