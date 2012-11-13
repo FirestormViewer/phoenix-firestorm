@@ -148,7 +148,7 @@ void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 
 	//	if( (length > 0) && (raw_text[0] != '/') )  // forward slash is used for escape (eg. emote) sequences
 	// [RLVa:KB] - Checked: 2010-03-26 (RLVa-1.2.0b) | Modified: RLVa-1.0.0d
-	if ( (length > 0) && (raw_text[0] != '/') && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
+	if ( (length > 0) && (raw_text[0] != '/') && (!(gSavedSettings.getBOOL("AllowMUpose") && raw_text[0] == ':')) && (!gRlvHandler.hasBehaviour(RLV_BHVR_REDIRCHAT)) )
 		// [/RLVa:KB]
 	{
 		// only start typing animation if we are chatting without / on channel 0 -Zi
