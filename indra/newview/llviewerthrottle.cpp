@@ -58,7 +58,6 @@ const F32 EASE_THROTTLE_THRESHOLD = 0.5f; // packet loss % per s
 const F32 DYNAMIC_UPDATE_DURATION = 5.0f; // seconds
 
 LLViewerThrottle gViewerThrottle;
-void cmdline_printchat(std::string message);//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 
 // static
 const std:: string LLViewerThrottle::sNames[TC_EOF] = {

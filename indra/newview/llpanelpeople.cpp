@@ -85,6 +85,8 @@
 #include "fslslbridge.h"
 #include "fslslbridgerequest.h"
 #include "lltracker.h"
+#include "fscommon.h"
+
 using namespace std;
 using namespace boost;
 
@@ -1573,17 +1575,6 @@ void LLPanelPeople::buttonSetAction(const std::string& btn_name, const commit_si
 	// To make sure we're referencing the right widget (a child of the button bar).
 	LLButton* button = getChild<LLView>("button_bar")->getChild<LLButton>(btn_name);
 	button->setClickedCallback(cb);
-}
-
-void LLPanelPeople::reportToNearbyChat(std::string message)
-// small utility method for radar alerts.
-{	
-	LLChat chat;
-    chat.mText = message;
-	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-	LLSD args;
-	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
 }
 
 void LLPanelPeople::updateButtons()

@@ -112,7 +112,6 @@ private:
 	void					buttonSetAction(const std::string& btn_name, const commit_signal_t::slot_type& cb);
 	void					showGroupMenu(LLMenuGL* menu);
 	void					setSortOrder(LLAvatarList* list, ESortOrder order, bool save = true);
-	void					reportToNearbyChat(std::string message);
 	void					handleLimitRadarByRange(const LLSD& newalue);
 	std::string				getRadarName(LLUUID avId);
 	std::string				getRadarName(LLAvatarName avName);

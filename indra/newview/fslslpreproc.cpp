@@ -52,6 +52,8 @@
 #include "llvoavatarself.h"
 // NaCl End
 
+#include "fscommon.h"
+
 #ifdef __GNUC__
 // There is a sprintf( ... "%d", size_t_value) buried inside boost::wave. In order to not mess with system header, I rather disable that warning here.
 #pragma GCC diagnostic ignored "-Wformat"
@@ -100,8 +102,6 @@ LLUUID FSLSLPreprocessor::findInventoryByName(std::string name)
 	return LLUUID::null;
 }
 
-
-////void cmdline_printchat(std::string message);
 
 std::map<std::string,LLUUID> FSLSLPreprocessor::cached_assetids;
 
@@ -171,7 +171,7 @@ std::string FSLSLPreprocessor::decode(std::string script)
 	if(tip != encode_start)
 	{
 		
-		//cmdline_printchat("no start");
+		//reportToNearbyChat("no start");
 		//if(sp != -1)trigger warningg/error?
 		return script;
 	}
@@ -181,13 +181,13 @@ std::string FSLSLPreprocessor::decode(std::string script)
 	if(end == -1)
 	{
 		
-		//cmdline_printchat("no end");
+		//reportToNearbyChat("no end");
 		return script;
 	}
 	
 
 	std::string data = script.substr(startpoint,end-startpoint);
-	//cmdline_printchat("data="+data);
+	//reportToNearbyChat("data="+data);
 	
 
 	std::string otext = data;
@@ -334,7 +334,7 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 				int pos = TOPfmatch.position(boost::match_results<std::string::const_iterator>::size_type(0));
 				std::string funcb = scopeript2(top, pos);
 				functions[funcname] = funcb;
-				//cmdline_printchat("func "+funcname+" added to list["+funcb+"]");
+				//reportToNearbyChat("func "+funcname+" added to list["+funcb+"]");
 				top.erase(pos,funcb.size());
 			}
 			
@@ -410,12 +410,12 @@ std::string FSLSLPreprocessor::lslopt(std::string script)
 		std::string err = "not a valid regular expression: \"";
 		err += e.what();
 		err += "\"; optimization skipped";
-		////cmdline_printchat(err);
+		////reportToNearbyChat(err);
 	}
 	catch (...)
 	{
 		
-		////cmdline_printchat("unexpected exception caught; optimization skipped");
+		////reportToNearbyChat("unexpected exception caught; optimization skipped");
 	}
 	return script;
 }
@@ -432,12 +432,12 @@ std::string FSLSLPreprocessor::lslcomp(std::string script)
 		std::string err = "not a valid regular expression: \"";
 		err += e.what();
 		err += "\"; compression skipped";
-		////cmdline_printchat(err);
+		////reportToNearbyChat(err);
 	}
 	catch (...)
 	{
 		
-		////cmdline_printchat("unexpected exception caught; compression skipped");
+		////reportToNearbyChat("unexpected exception caught; compression skipped");
 	}
 	return script;
 }
@@ -474,7 +474,7 @@ public:
         std::string const &filename, bool include_next)
 	{
 		std::string cfilename = filename.substr(1,filename.length()-2);
-		//cmdline_printchat(cfilename+":found_include_directive");
+		//reportToNearbyChat(cfilename+":found_include_directive");
 		LLUUID item_id = FSLSLPreprocessor::findInventoryByName(cfilename);
 		if(item_id.notNull())
 		{
@@ -589,7 +589,7 @@ void cache_script(std::string name, std::string content)
 {
 	
 	content += "\n";/*hack!*/
-	//cmdline_printchat("writing "+name+" to cache");
+	//reportToNearbyChat("writing "+name+" to cache");
 	std::string path = gDirUtilp->getExpandedFilename(LL_PATH_CACHE,"lslpreproc",name);
 	LLAPRFile infile(path.c_str(), LL_APR_WB);
 	apr_file_t *fp = infile.getFileHandle();
@@ -601,7 +601,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 {
 	
 	LLUUID uuid = iuuid;
-	//cmdline_printchat("cachecallback called");
+	//reportToNearbyChat("cachecallback called");
 	ProcCacheInfo* info =(ProcCacheInfo*)userdata;
 	LLViewerInventoryItem* item = info->item;
 	FSLSLPreprocessor* self = info->self;
@@ -626,13 +626,13 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 			delete buffer;
 			if(boost::filesystem::native(name))
 			{
-				//cmdline_printchat("native name of "+name);
+				//reportToNearbyChat("native name of "+name);
 				self->mCore->mErrorList->setCommentText(std::string("Cached ")+name);
 				cache_script(name, content);
 				std::set<std::string>::iterator loc = self->caching_files.find(name);
 				if(loc != self->caching_files.end())
 				{
-					//cmdline_printchat("finalizing cache");
+					//reportToNearbyChat("finalizing cache");
 					self->caching_files.erase(loc);
 					//self->cached_files.insert(name);
 					if(uuid.isNull())uuid.generate();
@@ -641,7 +641,7 @@ void FSLSLPreprocessor::FSProcCacheCallback(LLVFS *vfs, const LLUUID& iuuid, LLA
 					self->start_process();
 				}else
 				{
-					////cmdline_printchat("something fucked");
+					////reportToNearbyChat("something fucked");
 				}
 			}else self->mCore->mErrorList->setCommentText(std::string("Error: script named '")+name+"' isn't safe to copy to the filesystem. This include will fail.");
 		}else
@@ -782,10 +782,10 @@ std::string reformat_switch_statements(std::string script)
 				//arg *will have* () around it
 				if(arg == "begin out of bounds" || arg == "end out of bounds")
 				{
-					////cmdline_printchat(arg);
+					////reportToNearbyChat(arg);
 					break;
 				}
-				//cmdline_printchat("arg=["+arg+"]");
+				//reportToNearbyChat("arg=["+arg+"]");
 				std::string rstate = scopeript2(buffer, res+slen+arg.length()-1);
 
 				int cutlen = slen;
@@ -798,7 +798,7 @@ std::string reformat_switch_statements(std::string script)
 				//rip off the scope edges
 				int slicestart = rstate.find("{")+1;
 				rstate = rstate.substr(slicestart,(rstate.rfind("}")-slicestart)-1);
-				//cmdline_printchat("rstate=["+rstate+"]");
+				//reportToNearbyChat("rstate=["+rstate+"]");
 
 
 
@@ -820,19 +820,19 @@ std::string reformat_switch_statements(std::string script)
 						if(case_end != -1)
 						{
 							std::string casearg = rstate.substr(case_start+caselen,case_end-(case_start+caselen));
-							//cmdline_printchat("casearg=["+casearg+"]");
+							//reportToNearbyChat("casearg=["+casearg+"]");
 							std::string label = quicklabel();
 							ifs[casearg] = label;
-							//cmdline_printchat("BEFORE["+rstate+"]");
+							//reportToNearbyChat("BEFORE["+rstate+"]");
 							bool addcurl = (case_end == next_curl ? 1 : 0);
 							label = "@"+label+";\n";
 							if(addcurl)label += "{";
 							rstate.erase(case_start,(case_end-case_start) + 1);
 							rstate.insert(case_start,label);
-							//cmdline_printchat("AFTER["+rstate+"]");
+							//reportToNearbyChat("AFTER["+rstate+"]");
 						}else
 						{
-							////cmdline_printchat("error in regex case_end != -1");
+							////reportToNearbyChat("error in regex case_end != -1");
 							rstate.erase(case_start,caselen);
 							rstate.insert(case_start,"error; cannot find { or :");
 						}
@@ -860,7 +860,7 @@ std::string reformat_switch_statements(std::string script)
 					arg = argl;
 				}else
 				{
-					cmdline_printchat("type="+type);
+					reportToNearbyChat("type="+type);
 				}*/
 
 				std::map<std::string, std::string>::iterator ifs_it;
@@ -881,7 +881,7 @@ std::string reformat_switch_statements(std::string script)
 				}
 				rstate = rstate + "}";
 
-				//cmdline_printchat("replacing["+buffer.substr(res,cutlen)+"] with ["+rstate+"]");
+				//reportToNearbyChat("replacing["+buffer.substr(res,cutlen)+"] with ["+rstate+"]");
 				buffer.erase(res,cutlen);
 				buffer.insert(res,rstate);
 
@@ -899,11 +899,11 @@ std::string reformat_switch_statements(std::string script)
 			std::string err = "not a valid regular expression: \"";
 			err += e.what();
 			err += "\"; switch statements skipped";
-			////cmdline_printchat(err);
+			////reportToNearbyChat(err);
 		}
 		catch (...)
 		{
-			////cmdline_printchat("unexpected exception caught; buffer=["+buffer+"]");
+			////reportToNearbyChat("unexpected exception caught; buffer=["+buffer+"]");
 		}
 	}
 	return script;
@@ -913,7 +913,7 @@ void FSLSLPreprocessor::start_process()
 {
 	if(waving)
 	{
-		////cmdline_printchat("already waving?");
+		////reportToNearbyChat("already waving?");
 		return;
 	}
 	waving = TRUE;
@@ -952,7 +952,7 @@ void FSLSLPreprocessor::start_process()
 	//display the settings
 	 mCore->mErrorList->setCommentText(std::string(settings));
 	 
-	 ////cmdline_printchat(settings);
+	 ////reportToNearbyChat(settings);
 	BOOL errored = FALSE;
 	std::string err;
 	try
@@ -1041,7 +1041,7 @@ void FSLSLPreprocessor::start_process()
 		errored = TRUE;
 		// some preprocessing error
 		err = name + "(" + llformat("%d",e.line_no()) + "): " + e.description();
-		////cmdline_printchat(err);
+		////reportToNearbyChat(err);
 		mCore->mErrorList->setCommentText(err);
 	}
 	catch(std::exception const& e)
@@ -1050,7 +1050,7 @@ void FSLSLPreprocessor::start_process()
 		errored = TRUE;
 		err = std::string(current_position.get_file().c_str()) + "(" + llformat("%d",current_position.get_line()) + "): ";
 		err += std::string("exception caught: ") + e.what();
-		////cmdline_printchat(err);
+		////reportToNearbyChat(err);
 		mCore->mErrorList->setCommentText(err);
 	}
 	catch (...)
@@ -1059,7 +1059,7 @@ void FSLSLPreprocessor::start_process()
 		errored = TRUE;
 		err = std::string(current_position.get_file().c_str()) + llformat("%d",current_position.get_line());
 		err += std::string("): unexpected exception caught.");
-		////cmdline_printchat(err);
+		////reportToNearbyChat(err);
 		mCore->mErrorList->setCommentText(err);
 	}
 

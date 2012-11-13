@@ -130,6 +130,7 @@
 //-TT Client LSL Bridge
 #include "fslslbridge.h"
 //-TT
+#include "fscommon.h"
 
 // ## Zi: Texture Refresh
 #include "llavatarpropertiesprocessor.h"
@@ -372,8 +373,6 @@ public:
 static LLMenuParcelObserver* gMenuParcelObserver = NULL;
 
 static LLUIListener sUIListener;
-
-void cmdline_printchat(std::string message);
 
 LLMenuParcelObserver::LLMenuParcelObserver()
 {
@@ -740,7 +739,7 @@ class LLAdvancedToggleHUDInfo : public view_listener_t
 		}
 		else if ("badge" == info_type)
 		{
-			cmdline_printchat("hippos!");
+			reportToNearbyChat("hippos!");
 		}
 		return true;
 	}

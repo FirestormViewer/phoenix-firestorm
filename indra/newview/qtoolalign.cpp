@@ -25,6 +25,7 @@
 #include "llviewerwindow.h"
 #include "lleventtimer.h"
 
+#include "fscommon.h"
 
 const F32 MANIPULATOR_SIZE = 5.0;
 const F32 MANIPULATOR_SELECT_SIZE = 20.0;
@@ -32,7 +33,6 @@ const F32 MANIPULATOR_SELECT_SIZE = 20.0;
 
 
 AlignThread* AlignThread::sInstance = NULL;
-void cmdline_printchat(std::string message);
 
 QToolAlign::QToolAlign()
 :	LLTool(std::string("Align"))
@@ -454,11 +454,11 @@ void QToolAlign::align()
 {
 	if(AlignThread::sInstance)
 	{
-		cmdline_printchat("The align tool is still working.");
+		reportToNearbyChat("The align tool is still working.");
 	}
 	else
 	{
-		cmdline_printchat("Please hold, the align tool is busy working.");
+		reportToNearbyChat("Please hold, the align tool is busy working.");
 		AlignThread::sInstance = new AlignThread();
 		AlignThread::sInstance->start();
 	}
@@ -479,7 +479,7 @@ public:
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
 		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-		cmdline_printchat("The align tool is finished.");
+		reportToNearbyChat("The align tool is finished.");
 		return TRUE;
 	}
 };

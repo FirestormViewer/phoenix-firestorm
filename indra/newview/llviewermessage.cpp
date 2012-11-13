@@ -148,7 +148,7 @@ const static boost::regex NEWLINES("\\n{1}");
 #include "llpanelpeople.h"
 // [/AO]
 #include "tea.h" // <FS:AW opensim currency support>
-#include "chatbar_as_cmdline.h"
+#include "fscommon.h"
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -7172,7 +7172,7 @@ void process_mean_collision_alert_message(LLMessageSystem *msgsystem, void **use
 					action = LLTrans::getString("Collision_UnknownType", args);
 					return;
 			}
-			cmdline_printchat(action);
+			reportToNearbyChat(action);
 		}
 		// </FS:Ansariel> Nearby Chat Collision Messages
 		// <FS:Ansariel> Report Collision Messages to scripts

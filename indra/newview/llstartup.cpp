@@ -306,7 +306,6 @@ void apply_udp_blacklist(const std::string& csv);
 bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y);
 // </FS:CR> Aurora Sim
 void transition_back_to_login_panel(const std::string& emsg);
-void cmdline_printchat(std::string message);
 
 void callback_cache_name(const LLUUID& id, const std::string& full_name, bool is_group)
 {

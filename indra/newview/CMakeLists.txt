@@ -109,6 +109,7 @@ set(viewer_SOURCE_FILES
     exopanelsnapshotflickr.cpp 
     floatermedialists.cpp
     fsareasearch.cpp
+    fscommon.cpp
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterprofile.cpp
@@ -755,6 +756,7 @@ set(viewer_HEADER_FILES
     exogroupmutelist.h
     floatermedialists.h
     fsareasearch.h
+    fscommon.h
     fscontactsfloater.h
     fsdata.h
     fsfloaterprofile.h
