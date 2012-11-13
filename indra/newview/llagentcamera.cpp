@@ -52,6 +52,8 @@
 // [RLVa:KB] - Checked: 2010-05-10 (RLVa-1.2.0g)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "fscommon.h"
+#include "lltrans.h"
 
 using namespace LLVOAvatarDefines;
 
@@ -2900,11 +2902,21 @@ void LLAgentCamera::loadCameraPosition()
 {
 	F32 renderFarClip = gSavedSettings.getF32("RenderFarClip");
 	F32 far_clip_squared = renderFarClip * renderFarClip;
-	if (mHasStoredCameraPos && dist_vec_squared(gAgent.getPositionGlobal(), mStoredCameraPos) <= far_clip_squared)
+
+	if (!mHasStoredCameraPos)
 	{
-		unlockView();
-		setCameraPosAndFocusGlobal(mStoredCameraPos, mStoredCameraFocus, mStoredCameraFocusObjectId);
+		reportToNearbyChat(LLTrans::getString("LoadCameraPositionNoneSaved"));
+		return;
 	}
+
+	if (dist_vec_squared(gAgent.getPositionGlobal(), mStoredCameraPos) > far_clip_squared)
+	{
+		reportToNearbyChat(LLTrans::getString("LoadCameraPositionOutsideDrawDistance"));
+		return;
+	}
+
+	unlockView();
+	setCameraPosAndFocusGlobal(mStoredCameraPos, mStoredCameraFocus, mStoredCameraFocusObjectId);
 }
 // </FS:Ansariel> FIRE-7758: Save/load camera position feature
 

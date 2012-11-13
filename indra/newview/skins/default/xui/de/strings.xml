@@ -5410,4 +5410,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="BusyResponse">
 		Beschäftigt-Nachricht
 	</string>
+
+	<string name="LoadCameraPositionNoneSaved">
+		Es wurde noch keine Kamerasicht gespeichert.
+	</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">
+		Kamerasicht kann nicht wiederhergestellt werden, da sich die Kameraposition außerhalb der Draw Distance befindet.
+	</string>
 </strings>
