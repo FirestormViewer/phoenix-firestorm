@@ -114,7 +114,10 @@ void handle_take();
 void handle_take_copy();
 void handle_look_at_selection(const LLSD& param);
 void handle_script_info();
-void handle_zoom_to_object(LLUUID object_id);
+// <FS:Ansariel> Option to try via exact position
+//void handle_zoom_to_object(LLUUID object_id);
+void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos = LLVector3d(-1.f, -1.f, -1.f));
+// </FS:Ansariel> Option to try via exact position
 void handle_object_return();
 void handle_object_delete();
 

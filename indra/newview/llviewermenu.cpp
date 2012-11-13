@@ -6594,7 +6594,10 @@ void handle_look_at_selection(const LLSD& param)
 	}
 }
 
-void handle_zoom_to_object(LLUUID object_id)
+// <FS:Ansariel> Option to try via exact position
+//void handle_zoom_to_object(LLUUID object_id)
+void handle_zoom_to_object(LLUUID object_id, const LLVector3d& object_pos)
+// </FS:Ansariel> Option to try via exact position
 {
 	const F32 PADDING_FACTOR = 2.f;
 
@@ -6618,6 +6621,19 @@ void handle_zoom_to_object(LLUUID object_id)
 											object_center_global, 
 											object_id );
 	}
+	// <FS:Ansariel> Option to try via exact position
+	else if (object_pos != LLVector3d(-1.f, -1.f, -1.f))
+	{
+		LLVector3d obj_to_cam = object_pos - gAgent.getPositionGlobal();
+		obj_to_cam.normVec();
+		obj_to_cam = obj_to_cam * -4.f;
+		obj_to_cam.mdV[VZ] += 0.5;
+
+		gAgentCamera.changeCameraToThirdPerson();
+		gAgentCamera.unlockView();
+		gAgentCamera.setCameraPosAndFocusGlobal(object_pos + obj_to_cam, object_pos, object_id);
+	}
+	// </FS:Ansariel> Option to try via exact position
 }
 
 class LLAvatarInviteToGroup : public view_listener_t

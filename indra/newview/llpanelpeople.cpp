@@ -1902,6 +1902,8 @@ void LLPanelPeople::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 	LLAvatarActions::startIM(clicked_id);
 }
 
+// <FS:Ansariel> Not used; see LLPanelPeople::onRadarListDoubleClicked()
+#if 0
 void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
 {
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
@@ -1913,15 +1915,28 @@ void LLPanelPeople::onNearbyListDoubleClicked(LLUICtrl* ctrl)
 	LLUUID clicked_id = item->getAvatarId();
 	LLAvatarActions::zoomIn(clicked_id);
 }
+#endif
+// </FS:Ansariel>
 
 void LLPanelPeople::onRadarListDoubleClicked()
 {
 	LLScrollListItem* item = mRadarList->getFirstSelected();
-	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
-
-	if (gObjectList.findObject(clicked_id))
+	if (!item)
 	{
-		LLAvatarActions::zoomIn(clicked_id);
+		return;
+	}
+
+	LLUUID clicked_id = item->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID();
+	LLAvatarListItem* avl_item = mNearbyList->getAvatarListItem(clicked_id);
+
+	if (!avl_item)
+	{
+		return;
+	}
+
+	if (avl_item->getRange() <= gSavedSettings.getF32("RenderFarClip"))
+	{
+		handle_zoom_to_object(clicked_id, avl_item->getPosition());
 	}
 	else
 	{
