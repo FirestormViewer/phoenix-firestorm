@@ -225,7 +225,7 @@ LLPCode toolData[]={
 // <FS:CR> Aurora Sim
 void LLFloaterTools::updateToolsSizeLimits()
 {
-	mPanelObject->updateLimits();
+	mPanelObject->updateLimits(FALSE);
 }
 // </FS:CR> Aurora Sim
 

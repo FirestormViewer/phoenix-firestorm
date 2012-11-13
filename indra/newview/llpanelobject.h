@@ -54,7 +54,7 @@ public:
 	virtual void	draw();
 	virtual void 	clearCtrls();
 
-	void 			updateLimits();// <AW: opensim-limits>
+	void 			updateLimits(BOOL attachment);// <AW: opensim-limits>
 	void			refresh();
 
 	static bool		precommitValidate(const LLSD& data);
@@ -130,7 +130,6 @@ protected:
 	LLSpinCtrl*		mSpinCutBegin;
 	LLSpinCtrl*		mSpinCutEnd;
 // <AW: opensim-limits>
-	bool mLimitsNeedUpdate;
 	F32			mRegionMaxHeight;
 
 	F32			mMinScale;

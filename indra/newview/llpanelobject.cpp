@@ -335,7 +335,7 @@ BOOL	LLPanelObject::postBuild()
 	clearCtrls();
 
 // <FS:CR> Aurora Sim
-	updateLimits();
+	updateLimits(FALSE);	// default to non-attachment
 // </FS:CR> Aurora Sim
 
 	return TRUE;
@@ -355,8 +355,7 @@ LLPanelObject::LLPanelObject()
 	mHasParamClipboard(FALSE),
 	mHasFlexiParam(FALSE),
 	mHasSculptParam(FALSE),
-	mHasLightParam(FALSE),
-	mLimitsNeedUpdate(true)	// <AW: opensim-limits>
+	mHasLightParam(FALSE)
 {
 }
 
@@ -367,19 +366,33 @@ LLPanelObject::~LLPanelObject()
 }
 
 // <AW: opensim-limits>
-void LLPanelObject::updateLimits()
+void LLPanelObject::updateLimits(BOOL attachment)
 {
-	mLimitsNeedUpdate = false;
-
 // <FS:CR> Aurora Sim
 	//mRegionMaxHeight = LLWorld::getInstance()->getRegionMaxHeight();
 	//mCtrlPosZ->setMaxValue(mRegionMaxHeight);
-	mCtrlPosX->setMinValue(LLWorld::getInstance()->getMinPrimXPos());
-	mCtrlPosX->setMaxValue(LLWorld::getInstance()->getMaxPrimXPos());
-	mCtrlPosY->setMinValue(LLWorld::getInstance()->getMinPrimYPos());
-	mCtrlPosY->setMaxValue(LLWorld::getInstance()->getMaxPrimYPos());
-	mCtrlPosZ->setMinValue(LLWorld::getInstance()->getMinPrimZPos());
-	mCtrlPosZ->setMaxValue(LLWorld::getInstance()->getMaxPrimZPos());
+//<FS:TS> FIRE-8205: Unable to edit attachments to negative coordinates
+//  Only apply region size limits to position spinners if editing something
+//    that's not an attachment. Attachments have their own limits.
+	if (attachment)
+	{
+		mCtrlPosX->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosX->setMaxValue(MAX_ATTACHMENT_DIST);
+		mCtrlPosY->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosY->setMaxValue(MAX_ATTACHMENT_DIST);
+		mCtrlPosZ->setMinValue(-MAX_ATTACHMENT_DIST);
+		mCtrlPosZ->setMaxValue(MAX_ATTACHMENT_DIST);
+	}
+	else
+	{
+		mCtrlPosX->setMinValue(LLWorld::getInstance()->getMinPrimXPos());
+		mCtrlPosX->setMaxValue(LLWorld::getInstance()->getMaxPrimXPos());
+		mCtrlPosY->setMinValue(LLWorld::getInstance()->getMinPrimYPos());
+		mCtrlPosY->setMaxValue(LLWorld::getInstance()->getMaxPrimYPos());
+		mCtrlPosZ->setMinValue(LLWorld::getInstance()->getMinPrimZPos());
+		mCtrlPosZ->setMaxValue(LLWorld::getInstance()->getMaxPrimZPos());
+	}
+//</FS:TS> FIRE-8205: Unable to edit attachments to negative coordinates
 // </FS:CR> Aurora Sim
 	mMinScale = LLWorld::getInstance()->getRegionMinPrimScale();
 	mMaxScale = LLWorld::getInstance()->getRegionMaxPrimScale();
@@ -455,6 +468,11 @@ void LLPanelObject::getState( )
 	S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 	BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 						 && (selected_count == 1);
+
+//<FS:TS> FIRE-8205: Unable to edit attachment to negative coordinates
+//  Update the position limits depending on whether this is an attachment.
+	updateLimits(objectp->isAttachment());
+//</FS:TS> FIRE-8205
 
 	if (LLSelectMgr::getInstance()->getSelection()->getRootObjectCount() > 1)
 	{
@@ -2124,13 +2142,6 @@ void LLPanelObject::sendSculpt()
 
 void LLPanelObject::refresh()
 {
-// <AW: opensim-limits>
-	if(mLimitsNeedUpdate)
-	{
-		updateLimits();
-	}
-// </AW: opensim-limits>
-
 	getState();
 	if (mObject.notNull() && mObject->isDead())
 	{
