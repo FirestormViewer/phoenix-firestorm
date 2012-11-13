@@ -174,7 +174,7 @@ void LLWorld::refreshLimits()
 		mMaxLinkedPrims = 10000;
 		mMaxPhysLinkedPrims = 10000;
 		mMaxInventoryItemsTransfer = 42;
-		mAllowRenderName = gSavedSettings.getS32("AvatarNameTagMode");
+		mAllowRenderName = 2;
 		mAllowMinimap = TRUE;
 		mAllowPhysicalPrims = TRUE;
 		mAllowRenderWater = TRUE;
@@ -185,7 +185,7 @@ void LLWorld::refreshLimits()
 		mMinPrimXPos = 0.f;
 		mMinPrimYPos = 0.f;
 		mMinPrimZPos = 0.f;
-		mMaxDragDistance = gSavedSettings.getF32("MaxDragDistance");
+		mMaxDragDistance = 10000.f;
 		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = TRUE;
 		mEnableTeenMode = FALSE; //get saved settings?
@@ -218,7 +218,7 @@ void LLWorld::refreshLimits()
 		mMaxLinkedPrims = MAX_CHILDREN_PER_TASK;
 		mMaxPhysLinkedPrims = MAX_CHILDREN_PER_PHYSICAL_TASK;
 		mMaxInventoryItemsTransfer = 42;
-		mAllowRenderName = gSavedSettings.getS32("AvatarNameTagMode");
+		mAllowRenderName = 2;
 		mAllowMinimap = TRUE;
 		mAllowPhysicalPrims = TRUE;
 		mAllowRenderWater = TRUE;
@@ -229,7 +229,7 @@ void LLWorld::refreshLimits()
 		mMinPrimXPos = 0.f;
 		mMinPrimYPos = 0.f;
 		mMinPrimZPos = 0.f;
-		mMaxDragDistance = gSavedSettings.getF32("MaxDragDistance");
+		mMaxDragDistance = 10000.f;
 		mClassicCloudsEnabled = FALSE;
 		mAllowParcelWindLight = FALSE;
 		mEnableTeenMode = FALSE; //get saved settings?
