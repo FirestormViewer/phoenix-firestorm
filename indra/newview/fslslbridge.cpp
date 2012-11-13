@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2011, The Phoenix Viewer Project, Inc.
+ * Copyright (C) 2011-2012, The Phoenix Viewer Project, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
