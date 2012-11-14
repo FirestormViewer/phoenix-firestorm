@@ -33,63 +33,31 @@
 
 #include "chatbar_as_cmdline.h"
 
-#include "llcalc.h"
-
+#include "aoengine.h"
+#include "fscommon.h"
 #include "llagent.h"
-#include "stdtypes.h"
-#include "llviewerregion.h"
-#include "llworld.h"
-#include "lluuid.h"
-#include "llviewercontrol.h"
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychat.h"
+#include "llagentcamera.h"
+#include "llavatarlist.h"
+#include "llcalc.h"
 #include "llfloaternearbychat.h"
-// </FS:Zi>
-
-#include "material_codes.h"
-#include "llvolume.h"
-#include "object_flags.h"
-#include "llvolumemessage.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llinventorymodel.h"
+#include "llnotificationmanager.h"
+#include "llpanelpeople.h"
+#include "llparcel.h"
+#include "lltooldraganddrop.h"
+#include "lltrans.h"
 #include "llurldispatcher.h"
+#include "llvieweraudio.h"
+#include "llviewerparcelmedia.h"
+#include "llviewerparcelmediaautoplay.h"
+#include "llviewerparcelmgr.h"
+#include "llvolumemessage.h"
 #include "llworld.h"
 #include "llworldmap.h"
-//#include "floateravatarlist.h"
-#include "aoengine.h"
-#include "llviewerobjectlist.h"
-#include "llviewertexteditor.h"
-#include "llvoavatar.h"
-#include "lltooldraganddrop.h"
-#include "llinventorymodel.h"
-#include "llselectmgr.h"
-
-#include <iosfwd>
-
-#include <float.h>
-
-
-#include "llnotificationmanager.h"
-#include "llfloaterreg.h"
-
-#include "llviewerparcelmgr.h"
-#include "llviewerparcelmedia.h"
-#include "llparcel.h"
-#include "llaudioengine.h"
-#include "llviewerparcelmediaautoplay.h"
-
 #include "rlvhandler.h"
 
-#include "llagentcamera.h"
-#include "lggcontactsetsfloater.h"
-#include "lltrans.h"			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-
-// For radar support
-#include "llavatarlist.h"
-#include "llavatarlistitem.h"
-#include "llfloatersidepanelcontainer.h"
-#include "llpanelpeople.h"
-
-#include "llvieweraudio.h"
-#include "fscommon.h"
 
 LLViewerInventoryItem::item_array_t findInventoryInFolder(const std::string& ifolder)
 {
