@@ -204,7 +204,11 @@ void display_update_camera()
 // Write some stats to llinfos
 void display_stats()
 {
-	F32 fps_log_freq = gSavedSettings.getF32("FPSLogFrequency");
+	// <FS:Ansariel> gSavedSettings replacement
+	//F32 fps_log_freq = gSavedSettings.getF32("FPSLogFrequency");
+	static LLCachedControl<F32> fpsLogFrequency(gSavedSettings, "FPSLogFrequency");
+	F32 fps_log_freq = (F32)fpsLogFrequency;
+	// </FS:Ansariel>
 	if (fps_log_freq > 0.f && gRecentFPSTime.getElapsedTimeF32() >= fps_log_freq)
 	{
 		F32 fps = gRecentFrameCount / fps_log_freq;
@@ -212,7 +216,11 @@ void display_stats()
 		gRecentFrameCount = 0;
 		gRecentFPSTime.reset();
 	}
-	F32 mem_log_freq = gSavedSettings.getF32("MemoryLogFrequency");
+	// <FS:Ansariel> gSavedSettings replacement
+	//F32 mem_log_freq = gSavedSettings.getF32("MemoryLogFrequency");
+	static LLCachedControl<F32> memoryLogFrequency(gSavedSettings, "MemoryLogFrequency");
+	F32 mem_log_freq = (F32)memoryLogFrequency;
+	// </FS:Ansariel>
 	if (mem_log_freq > 0.f && gRecentMemoryTime.getElapsedTimeF32() >= mem_log_freq)
 	{
 		gMemoryAllocated = LLMemory::getCurrentRSS();
@@ -367,14 +375,19 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	
 // <FS:CR> Aurora sim
 	//LLVOAvatar::sRenderName = gSavedSettings.getS32("AvatarNameTagMode");
-	S32 RenderName = gSavedSettings.getS32("AvatarNameTagMode");
+	static LLCachedControl<S32> avatarNameTagMode(gSavedSettings, "AvatarNameTagMode");
+	S32 RenderName = (S32)avatarNameTagMode;
 
 	if(RenderName > LLWorld::getInstance()->getAllowRenderName())//The most restricted gets set here
 		RenderName = LLWorld::getInstance()->getAllowRenderName();
 	LLVOAvatar::sRenderName = RenderName;
 // <FS:CR> Aurora sim
 
-	LLVOAvatar::sRenderGroupTitles = (gSavedSettings.getBOOL("NameTagShowGroupTitles") && gSavedSettings.getS32("AvatarNameTagMode"));
+	// <FS:Ansariel> gSavedSettings replacement
+	//LLVOAvatar::sRenderGroupTitles = (gSavedSettings.getBOOL("NameTagShowGroupTitles") && gSavedSettings.getS32("AvatarNameTagMode"));
+	static LLCachedControl<bool> nameTagShowGroupTitles(gSavedSettings, "NameTagShowGroupTitles");
+	LLVOAvatar::sRenderGroupTitles = (nameTagShowGroupTitles && LLVOAvatar::sRenderName);
+	// </FS:Ansariel>
 	
 	gPipeline.mBackfaceCull = TRUE;
 	gFrameCount++;
@@ -954,7 +967,11 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
 			LLMemType mt_rg(LLMemType::MTYPE_DISPLAY_RENDER_GEOM);
 
-			if (gSavedSettings.getBOOL("RenderDepthPrePass") && LLGLSLShader::sNoFixedFunction)
+			// <FS:Ansariel> gSavedSettings replacement
+			//if (gSavedSettings.getBOOL("RenderDepthPrePass") && LLGLSLShader::sNoFixedFunction)
+			static LLCachedControl<bool> renderDepthPrePass(gSavedSettings, "RenderDepthPrePass");
+			if (renderDepthPrePass && LLGLSLShader::sNoFixedFunction)
+			// </FS:Ansariel>
 			{
 				gGL.setColorMask(false, false);
 				
@@ -1106,7 +1123,11 @@ void render_hud_attachments()
 		hud_cam.setAxes(LLVector3(1,0,0), LLVector3(0,1,0), LLVector3(0,0,1));
 		LLViewerCamera::updateFrustumPlanes(hud_cam, TRUE);
 
-		bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && gSavedSettings.getBOOL("RenderHUDParticles");
+		// <FS:Ansariel> gSavedSettings replacement
+		//bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && gSavedSettings.getBOOL("RenderHUDParticles");
+		static LLCachedControl<bool> renderHUDParticles(gSavedSettings, "RenderHUDParticles");
+		bool render_particles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES) && renderHUDParticles;
+		// </FS:Ansariel>
 		
 		//only render hud objects
 		gPipeline.pushRenderTypeMask();
@@ -1444,7 +1465,11 @@ void render_ui_3d()
 	}
 
 	// Coordinate axes
-	if (gSavedSettings.getBOOL("ShowAxes"))
+	// <FS:Ansariel> gSavedSettings replacement
+	//if (gSavedSettings.getBOOL("ShowAxes"))
+	static LLCachedControl<bool> showAxes(gSavedSettings, "ShowAxes");
+	if (showAxes)
+	// </FS:Ansariel>
 	{
 		draw_axes();
 	}
@@ -1500,7 +1525,11 @@ void render_ui_2d()
 	}
 	
 
-	if (gSavedSettings.getBOOL("RenderUIBuffer"))
+	// <FS:Ansariel> gSavedSettings replacement
+	//if (gSavedSettings.getBOOL("RenderUIBuffer"))
+	static LLCachedControl<bool> renderUIBuffer(gSavedSettings, "RenderUIBuffer");
+	if (renderUIBuffer)
+	// </FS:Ansariel>
 	{
 		if (LLUI::sDirty)
 		{

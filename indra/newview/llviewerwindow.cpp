@@ -3746,7 +3746,11 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 					BOOL moveable_object_selected = FALSE;
 					BOOL all_selected_objects_move = TRUE;
 					BOOL all_selected_objects_modify = TRUE;
-					BOOL selecting_linked_set = !gSavedSettings.getBOOL("EditLinkedParts");
+					// <FS:Ansariel> gSavedSettings replacement
+					//BOOL selecting_linked_set = !gSavedSettings.getBOOL("EditLinkedParts");
+					static LLCachedControl<bool> editLinkedParts(gSavedSettings, "EditLinkedParts");
+					BOOL selecting_linked_set = !(BOOL)editLinkedParts;
+					// </FS:Ansariel>
 
 					for (LLObjectSelection::iterator iter = LLSelectMgr::getInstance()->getSelection()->begin();
 						 iter != LLSelectMgr::getInstance()->getSelection()->end(); iter++)
