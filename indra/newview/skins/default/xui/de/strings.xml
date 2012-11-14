@@ -101,13 +101,13 @@
 		Kleidung wird geladen...
 	</string>
 	<string name="InvalidCertificate">
-		Der Server hat ein ungültiges oder korruptes Zertifikate zurückgegeben. Bitte kontaktieren Sie den Grid-Administrator.
+		Der Server hat ein ungültiges oder korruptes Zertifikat zurückgegeben. Bitte kontaktieren Sie den Grid-Administrator.
 	</string>
 	<string name="CertInvalidHostname">
 		Ein ungültiger Hostname wurde verwendet, um auf den Server zuzugreifen. Bitte überprüfen Sie Ihre SLURL oder den Grid-Hostnamen.
 	</string>
 	<string name="CertExpired">
-		Das vom Grid ausgegebene Zertifikate ist abgelaufen.  Bitte überprüfen Sie Ihre Systemuhr oder kontaktieren Sie Ihren Grid-Administrator.
+		Das vom Grid ausgegebene Zertifikat ist abgelaufen.  Bitte überprüfen Sie Ihre Systemuhr oder kontaktieren Sie Ihren Grid-Administrator.
 	</string>
 	<string name="CertKeyUsage">
 		Das vom Server ausgegebene Zertifikat konnte nicht für SSL verwendet werden.  Bitte kontaktieren Sie Ihren Grid-Administrator.
