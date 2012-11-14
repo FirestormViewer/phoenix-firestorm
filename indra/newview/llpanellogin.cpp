@@ -259,6 +259,11 @@ void LLPanelLogin::addFavoritesToStartLocation()
 	// Load favorites into the combo.
 	std::string user_defined_name = getChild<LLComboBox>("username_combo")->getSimple();
 	std::string canonical_user_name = canonicalize_username(user_defined_name);
+// <FS:CR> FIRE-8147 - We want to trim the grid from the username to compare it with our user's settings path
+	U32 arobase = canonical_user_name.find("@");
+	if(arobase > 0)
+		canonical_user_name = canonical_user_name.substr(0, arobase - 1);
+// </FS:CR> FIRE-8147
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "stored_favorites.xml");
 	LLSD fav_llsd;
 	llifstream file;
@@ -272,6 +277,7 @@ void LLPanelLogin::addFavoritesToStartLocation()
 		// a single word account name, so it can be compared case-insensitive with the
 		// user defined "firstname lastname".
 		S32 res = LLStringUtil::compareInsensitive(canonical_user_name, iter->first);
+		lldebugs << "Comparing: \"" << canonical_user_name << "\" and \"" << iter->first << "\"" << llendl;
 		if (res != 0)
 		{
 			lldebugs << "Skipping favorites for " << iter->first << llendl;
