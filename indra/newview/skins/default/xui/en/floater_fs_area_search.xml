@@ -552,7 +552,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_distance"
-			 label="Sistance"
+			 label="Distance"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
