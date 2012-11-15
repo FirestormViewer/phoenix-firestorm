@@ -552,7 +552,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_distance"
-			 label="distance"
+			 label="Sistance"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -565,7 +565,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_name"
-			 label="name"
+			 label="Name"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -578,7 +578,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_description"
-			 label="description"
+			 label="Description"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -591,7 +591,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_owner"
-			 label="owner"
+			 label="Owner"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -604,7 +604,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_group"
-			 label="group"
+			 label="Group"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -617,7 +617,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_creator"
-			 label="creator"
+			 label="Creator"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
@@ -630,7 +630,7 @@
 			 layout="topleft"
 			 left="8"
 			 name="show_last_owner"
-			 label="last owner"
+			 label="Last owner"
 			 top_pad="10"
 			 initial_value="true">
 				<check_box.commit_callback
