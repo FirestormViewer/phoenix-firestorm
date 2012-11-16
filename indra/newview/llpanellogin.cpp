@@ -550,7 +550,8 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 	// grid changed so show new splash screen (possibly)
 	updateServer();
 	updateLoginPanelLinks();
-	sInstance->addFavoritesToStartLocation();
+	// <FS:CR> This is redudant to line 504 and causes the password to be wiped on a saved credential. Remove it.
+	//sInstance->addFavoritesToStartLocation();
 	
 }
 
@@ -1498,6 +1499,7 @@ std::string LLPanelLogin::credential_name()
 	U32 arobase = username.find("@");
 	if (arobase != std::string::npos && arobase + 1 < username.length())
 		username = username.substr(0,arobase);
+	LLStringUtil::trim(username);
 	
 	return username + "@" +  LLGridManager::getInstance()->getGrid();
 }
