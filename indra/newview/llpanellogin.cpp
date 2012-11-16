@@ -1233,7 +1233,7 @@ void LLPanelLogin::updateSavedLoginsCombo()
 			std::string credname=name;
 			std::string gridname=name;
 			U32 arobase = gridname.find("@");
-			if (arobase != std::string::npos && arobase + 1 < gridname.length() && arobase>1)
+			if (arobase != std::string::npos && arobase + 1 < gridname.length() && arobase > 1)
 			{
 				gridname = gridname.substr(arobase + 1, gridname.length() - arobase - 1);
 				name = name.substr(0,arobase);
@@ -1497,7 +1497,7 @@ std::string LLPanelLogin::credential_name()
 
 	U32 arobase = username.find("@");
 	if (arobase != std::string::npos && arobase + 1 < username.length())
-		username = username.substr(0,arobase - 1);
+		username = username.substr(0,arobase);
 	
 	return username + "@" +  LLGridManager::getInstance()->getGrid();
 }
