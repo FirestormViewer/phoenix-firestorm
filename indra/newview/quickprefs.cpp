@@ -41,6 +41,10 @@
 #include "lldrawpoolbump.h"
 #include "llviewertexturelist.h"
 
+#include "llfeaturemanager.h"
+#include "rlvhandler.h"
+#include "llcheckboxctrl.h"
+
 // Ansariel: Copied from llviewercontrol.cpp, handleSetShaderChanged()
 static void handleShaderChanged()
 {
@@ -79,10 +83,21 @@ void FloaterQuickPrefs::initCallbacks(void)
 	getChild<LLUICtrl>("WWNextPreset")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickWaterNext, this));
 	getChild<LLUICtrl>("UseRegionWL")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickRegionWL, this));
 	getChild<LLUICtrl>("WLSunPos")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this, _1, &param_mgr.mLightnorm));
+
+	// Phototools additions
+	gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+	gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 }
 
 BOOL FloaterQuickPrefs::postBuild()
 {
+	// Phototools additions
+	mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
+	mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
+	mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
+	refreshSettings();
+
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
 	mWLSunPos = getChild<LLMultiSliderCtrl>("WLSunPos");
@@ -362,4 +377,25 @@ void FloaterQuickPrefs::onClickRegionWL()
 	mWaterPresetsCombo->setSimple(LLStringExplicit("Default"));
 	LLEnvManagerNew::instance().useRegionSettings();
 	LLWLParamManager::instance().getParamSet(LLWLParamKey("Default", LLEnvKey::SCOPE_LOCAL), LLWLParamManager::instance().mCurParams);
+}
+
+// Phototools additions
+void FloaterQuickPrefs::refreshSettings()
+{
+	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
+	mCtrlShaderEnable->setEnabled(
+		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
+	BOOL shaders = mCtrlShaderEnable->get();
+
+	bool fCtrlWindLightEnable = fCtrlShaderEnable && shaders;
+	mCtrlWindLight->setEnabled(
+		fCtrlWindLightEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("WindLightUseAtmosShaders"))) );
+
+	BOOL enabled = LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") && 
+						shaders && 
+						gGLManager.mHasFramebufferObject &&
+						gSavedSettings.getBOOL("RenderAvatarVP") &&
+						(mCtrlWindLight->get()) ? TRUE : FALSE;
+
+	mCtrlDeferred->setEnabled(enabled);
 }

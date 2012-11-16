@@ -9,7 +9,7 @@
 			</panel>
 			<panel name="P_WL_Settings">
 				<check_box label="Podstawowe shadery - włącz! (chmurka)" name="BasicShaders" tool_tip="Ta opcja powinna być ZAWSZE włączona. Jeśli zmienisz ustawienia rozdzielczości znajdujące się powyżej musisz wyłączyć i włączyć tą opcję, aby zmiany odniosły skutek."/>
-				<check_box label="Włącz shadery atmosfery (Windlight)" name="UseLightShaders1" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
+				<check_box label="Włącz shadery atmosfery (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Ta opcja włącza pełną funkcjonalność systemu Windlight (shadery atmosfery). Jeśli nie można włączyć tej funkcji to należy upewnić się, że są zaznaczone 'podstawowe shadery' powyżej."/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Zapisane ustawienia systemu Windlight dla nieba.">
@@ -82,7 +82,7 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Włącz światła i cienie" name="UseLightShaders1" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
+				<check_box label="Włącz światła i cienie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>

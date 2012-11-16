@@ -11,7 +11,7 @@
 
 			<panel name="P_WL_Settings">
 				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Licht und Schatten, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird."/>
-				<check_box name="UseLightShaders1" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
+				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
@@ -94,7 +94,7 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="Licht und Schatten aktivieren" name="UseLightShaders1" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
+				<check_box label="Licht und Schatten aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
 				<check_box label="Alle Lokalen Lichtquellen aktivieren" name="LocalLights" tool_tip="Diese Einstellung aktiviert alle lokalen Lichtquellen innerhalb der Welt. Wird sie deaktiviert, wird weiterhin das von Sonne und Mond ausgestrahlte Licht angezeigt. Nützlich, falls lokale Lichtquellen nicht und nur noch von Sonne und Mond angezeigt werden soll."/>
 				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
 			</panel>

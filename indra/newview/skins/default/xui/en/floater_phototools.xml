@@ -91,7 +91,7 @@
 				 label="Enable Atmospheric Shaders (Windlight)"
 				 layout="topleft"
 				 left="5"
-				 name="UseLightShaders1"
+				 name="WindLightUseAtmosShaders"
 				 top_pad="10"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="110">
@@ -682,7 +682,7 @@
 				 label="Enable Lighting and Shadows"
 				 layout="topleft"
 				 left="5"
-				 name="UseLightShaders1"
+				 name="RenderDeferred"
 				 top_pad="10"
 				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
 				 width="240">

@@ -58,11 +58,18 @@ public:
 	void onClickWaterNext();
 	void onClickRegionWL();
 
+	// Phototools additions
+	void refreshSettings();
+
 private:
 
 	LLMultiSliderCtrl*	mWLSunPos;
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
 
+	// Phototools additions
+	LLCheckBoxCtrl*		mCtrlShaderEnable;
+	LLCheckBoxCtrl*		mCtrlWindLight;
+	LLCheckBoxCtrl*		mCtrlDeferred;
 };
 #endif
