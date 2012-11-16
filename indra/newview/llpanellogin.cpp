@@ -529,8 +529,8 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
 
 
 		U32 arobase = credName.find("@");
-	if (arobase != -1 && arobase +1 < credName.length())
-		credName = credName.substr(arobase+1, credName.length() - arobase - 1);
+	if (arobase != std::string::npos && arobase + 1 < credName.length())
+		credName = credName.substr(arobase + 1, credName.length() - arobase - 1);
 // <SA: opensim>
 	if(LLGridManager::getInstance()->getGrid() == credName)
 	{
@@ -582,7 +582,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 	LLStringUtil::trim(username);
 	U32 arobase = username.find("@");
 
-	if(arobase>0) username = username.substr(0, arobase);
+	if(arobase != std::string::npos) username = username.substr(0, arobase);
 
 	std::string password = sInstance->getChild<LLUICtrl>("password_edit")->getValue().asString();
 
@@ -614,7 +614,7 @@ void LLPanelLogin::getFields(LLPointer<LLCredential>& credential,
 		std::string last;
 		if (separator_index != username.npos)
 		{
-			last = username.substr(separator_index+1, username.npos);
+			last = username.substr(separator_index + 1, username.npos);
 		LLStringUtil::trim(last);
 		}
 		else
@@ -1233,8 +1233,9 @@ void LLPanelLogin::updateSavedLoginsCombo()
 			std::string credname=name;
 			std::string gridname=name;
 			U32 arobase = gridname.find("@");
-			if (arobase != -1 && arobase +1 < gridname.length() && arobase>1){
-				gridname = gridname.substr(arobase+1, gridname.length() - arobase - 1);
+			if (arobase != std::string::npos && arobase + 1 < gridname.length() && arobase>1)
+			{
+				gridname = gridname.substr(arobase + 1, gridname.length() - arobase - 1);
 				name = name.substr(0,arobase);
 
 // <FS:AW optional opensim support>
@@ -1475,7 +1476,7 @@ std::string canonicalize_username(const std::string& name)
 	std::string last;
 	if (separator_index != cname.npos)
 	{
-		last = cname.substr(separator_index+1, cname.npos);
+		last = cname.substr(separator_index + 1, cname.npos);
 		LLStringUtil::trim(last);
 	}
 	else
@@ -1495,8 +1496,8 @@ std::string LLPanelLogin::credential_name()
 	LLStringUtil::trim(username);
 
 	U32 arobase = username.find("@");
-	if (arobase != -1 && arobase +1 < username.length())
-		username = username.substr(0,arobase);
+	if (arobase != std::string::npos && arobase + 1 < username.length())
+		username = username.substr(0,arobase - 1);
 	
 	return username + "@" +  LLGridManager::getInstance()->getGrid();
 }
