@@ -371,7 +371,7 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $PLATFORM..."
     if [ $PLATFORM == "darwin" ] ; then
-        if [ $OSTYPE == "darwin11" ] ; then
+        if [ $OSTYPE == "darwin11" -o $OSTYPE == "darwin12" ] ; then
             xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
         else
             xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
