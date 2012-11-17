@@ -1031,7 +1031,36 @@
              max_length_chars="256"
              name="UISndRadarChatEnter"
              control_name="UISndRadarChatEnter"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportChatRangeEnter"
+             follows="left|top"
+             name="Prev_UISndRadarChatEnter"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarChatEnter"/>
+            </button>
+            <button
+             enabled_control="RadarReportChatRangeEnter"
+             follows="left|top"
+             name="Def_UISndRadarChatEnter"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarChatEnter"/>
+            </button>
 
             <check_box
              control_name="RadarReportChatRangeLeave"
@@ -1060,7 +1089,36 @@
              max_length_chars="256"
              name="UISndRadarChatLeave"
              control_name="UISndRadarChatLeave"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportChatRangeLeave"
+             follows="left|top"
+             name="Prev_UISndRadarChatLeave"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarChatLeave"/>
+            </button>
+            <button
+             enabled_control="RadarReportChatRangeLeave"
+             follows="left|top"
+             name="Def_UISndRadarChatLeave"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarChatLeave"/>
+            </button>
           
             <check_box
              control_name="RadarReportDrawRangeEnter"
@@ -1089,7 +1147,36 @@
              max_length_chars="256"
              name="UISndRadarDrawEnter"
              control_name="UISndRadarDrawEnter"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportDrawRangeEnter"
+             follows="left|top"
+             name="Prev_UISndRadarDrawEnter"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarDrawEnter"/>
+            </button>
+            <button
+             enabled_control="RadarReportDrawRangeEnter"
+             follows="left|top"
+             name="Def_UISndRadarDrawEnter"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarDrawEnter"/>
+            </button>
           
             <check_box
              control_name="RadarReportDrawRangeLeave"
@@ -1118,7 +1205,36 @@
              max_length_chars="256"
              name="UISndRadarDrawLeave"
              control_name="UISndRadarDrawLeave"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportDrawRangeLeave"
+             follows="left|top"
+             name="Prev_UISndRadarDrawLeave"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarDrawLeave"/>
+            </button>
+            <button
+             enabled_control="RadarReportDrawRangeLeave"
+             follows="left|top"
+             name="Def_UISndRadarDrawLeave"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarDrawLeave"/>
+            </button>
           
             <check_box
              control_name="RadarReportSimRangeEnter"
@@ -1147,7 +1263,36 @@
              max_length_chars="256"
              name="UISndRadarSimEnter"
              control_name="UISndRadarSimEnter"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportSimRangeEnter"
+             follows="left|top"
+             name="Prev_UISndRadarSimEnter"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarSimEnter"/>
+            </button>
+            <button
+             enabled_control="RadarReportSimRangeEnter"
+             follows="left|top"
+             name="Def_UISndRadarSimEnter"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarSimEnter"/>
+            </button>
           
             <check_box
              control_name="RadarReportSimRangeLeave"
@@ -1176,7 +1321,36 @@
              max_length_chars="256"
              name="UISndRadarSimLeave"
              control_name="UISndRadarSimLeave"
-             width="250"/>
+             width="220"/>
+            <button
+             enabled_control="RadarReportSimRangeLeave"
+             follows="left|top"
+             name="Prev_UISndRadarSimLeave"
+             height="20"
+             label="P"
+             layout="topleft"
+             top_delta="-1"
+             left_pad="1"
+             width="17"
+             tool_tip="Preview this sound.">
+                 <button.commit_callback
+                  function="PreviewUISound"
+                  parameter="UISndRadarSimLeave"/>
+            </button>
+            <button
+             enabled_control="RadarReportSimRangeLeave"
+             follows="left|top"
+             name="Def_UISndRadarSimLeave"
+             height="20"
+             label="D"
+             layout="topleft"
+             left_pad="1"
+             width="15"
+             tool_tip="Reset to the default UUID.">
+                 <button.commit_callback
+                  function="ResetControl"
+                  parameter="UISndRadarSimLeave"/>
+            </button>
 
           <check_box
            control_name="RadarEnterChannelAlert"

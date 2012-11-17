@@ -202,16 +202,28 @@
         <panel label="Radar" name="ChatRadar">
             <check_box name="reportChatRangeEnter" label="Radar meldet, wenn Avatare die Chatreichweite betreten"/>
 			<check_box width="140" name="PlayModeUISndRadarChatEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarChatEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarChatEnter" tool_tip="Auf Standardwert zurücksetzen."/>
             <check_box name="reportChatRangeLeave" label="Radar meldet, wenn Avatare die Chatreichweite verlassen"/>
 			<check_box width="140" name="PlayModeUISndRadarChatLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarChatLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarChatLeave" tool_tip="Auf Standardwert zurücksetzen."/>
             <check_box name="reportDrawRangeEnter" label="Radar meldet, wenn Avatare die Draw Distance betreten"/>
 			<check_box width="140" name="PlayModeUISndRadarDrawEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarDrawEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarDrawEnter" tool_tip="Auf Standardwert zurücksetzen."/>
             <check_box name="reportDrawRangeLeaave" label="Radar meldet, wenn Avatare die Draw Distance verlassen"/>
 			<check_box width="140" name="PlayModeUISndRadarDrawLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarDrawLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarDrawLeave" tool_tip="Auf Standardwert zurücksetzen."/>
             <check_box name="RadarReportSimRangeEnter" label="Radar meldet, wenn Avatare die Region betreten"/>
 			<check_box width="140" name="PlayModeUISndRadarSimEnter" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarSimEnter" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarSimEnter" tool_tip="Auf Standardwert zurücksetzen."/>
             <check_box name="RadarReportSimRangeLeave" label="Radar meldet, wenn Avatare die Region verlassen"/>
 			<check_box width="140" name="PlayModeUISndRadarSimLeave" label="Klang-UUID abspielen:"/>
+			<button label="V" name="Prev_UISndRadarSimLeave" tool_tip="Vorschau zu diesem Sound."/>
+			<button label="S" name="Def_UISndRadarSimLeave" tool_tip="Auf Standardwert zurücksetzen."/>
 			<check_box name="RadarEnterChannelAlert" label="Betreten-Meldungen an Skripte weiterleiten"/>
 			<check_box name="RadarLeaveChannelAlert" label="Verlassen-Meldungen an Skripte weiterleiten"/>
         </panel>
