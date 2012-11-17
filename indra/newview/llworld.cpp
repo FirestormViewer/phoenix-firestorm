@@ -1318,22 +1318,32 @@ void LLWorld::updateWaterObjects()
 
 	// Use the water height of the region we're on for areas where there is no region
 	F32 water_height = gAgent.getRegion()->getWaterHeight();
-
 	// Now, get a list of the holes
 	S32 x, y;
-	for (x = min_x; x <= max_x; x += rwidth)
+// <FS:CR> Fix water height on regions larger than 2048x2048
+	S32 step = 256;
+	//for (x = min_x; x <= max_x; x += rwidth)
+	for (x = min_x; x <= max_x; x += step)
 	{
-		for (y = min_y; y <= max_y; y += rwidth)
+		//for (y = min_y; y <= max_y; y += rwidth)
+		for (y = min_y; y <= max_y; y += step)
+// </FS:CR> Fix water height on regions larger than 2048x2048
 		{
 			U64 region_handle = to_region_handle(x, y);
 			if (!getRegionFromHandle(region_handle))
 			{	// No region at that area, so make water
 				LLVOWater* waterp = (LLVOWater *)gObjectList.createObjectViewer(LLViewerObject::LL_VO_WATER, gAgent.getRegion());
 				waterp->setUseTexture(FALSE);
-				waterp->setPositionGlobal(LLVector3d(x + rwidth/2,
-													 y + rwidth/2,
+// <FS:CR> Fix water height on regions larger than 2048x2048
+				//waterp->setPositionGlobal(LLVector3d(x + rwidth/2,
+				//									 y + rwidth/2,
+				//									 256.f + water_height));
+				//waterp->setScale(LLVector3((F32)rwidth, (F32)rwidth, 512.f));
+				waterp->setPositionGlobal(LLVector3d(x + step/2,
+													 y + step/2,
 													 256.f + water_height));
-				waterp->setScale(LLVector3((F32)rwidth, (F32)rwidth, 512.f));
+				waterp->setScale(LLVector3((F32)step, (F32)step, 512.f));
+// </FS:CR> Fix water height on regions larger than 2048x2048
 				gPipeline.createObject(waterp);
 				mHoleWaterObjects.push_back(waterp);
 			}
@@ -1343,14 +1353,22 @@ void LLWorld::updateWaterObjects()
 	// Update edge water objects
 	S32 wx, wy;
 	S32 center_x, center_y;
-	wx = (max_x - min_x) + rwidth;
-	wy = (max_y - min_y) + rwidth;
+// <FS:CR>Fix water height on regions larger than 2048x2048
+	//wx = (max_x - min_x) + rwidth;
+	//wy = (max_y - min_y) + rwidth;
+	wx = (max_x - min_x) + step;
+	wy = (max_y - min_y) + step;
+// </FS:CR> Fix water height on regions larger than 2048x2048
 	center_x = min_x + (wx >> 1);
 	center_y = min_y + (wy >> 1);
 
 	S32 add_boundary[4] = {
-		512 - (max_x - region_x),
-		512 - (max_y - region_y),
+// <FS:CR> Fix water height on regions larger than 2048x2048
+		//512 - (max_x - region_x),
+		//512 - (max_y - region_y),
+		512 - (max_x - (rwidth - 256) - region_x),
+		512 - (max_y - (rwidth - 256) - region_y),
+// </FS:CR> Fix water height on regions larger than 2048x2048
 		512 - (region_x - min_x),
 		512 - (region_y - min_y) };
 		
