@@ -1891,6 +1891,11 @@ BOOL LLFolderView::search(LLFolderViewItem* first_item, const std::string &searc
 			{
 				break;
 			}
+
+			//<FS:TS> FIRE-8253: Hang when typing at inventory window
+			// Ensure this loop doesn't execute more than one more time.
+			original_search_item = search_item;
+			//</FS:TS> FIRE-8253
 		}
 
 		const std::string current_item_label(search_item->getSearchableLabel());
