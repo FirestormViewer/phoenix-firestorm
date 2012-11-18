@@ -274,5 +274,66 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
+
+  <key>DontTrimLegacyNames</key>
+  <map>
+    <key>Comment</key>
+    <string>Don&apos;t trim &quot;Resident&quot; from Legacy Names</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSPaymentInfoInChat</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, L$ balance changes will be shown in nearby chat instead of toasts.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSShowInboxFolder</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the Received Items folder aka Inbox is shown in the inventory as folder.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseLegacyInventoryAcceptMessages</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, the viewer will send accept/decline response for inventory offers after the according button has been pressed and not if the item has been received at the receiver&apos;s inventory already.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSLogImToChatConsole</key>
+  <map>
+    <key>Comment</key>
+    <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
 </map>
 </llsd>
