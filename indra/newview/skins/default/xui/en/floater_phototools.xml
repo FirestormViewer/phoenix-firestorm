@@ -285,9 +285,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -301,9 +298,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -317,9 +311,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -333,9 +324,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -349,9 +337,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="default"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 			</panel>
 			
@@ -398,9 +383,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -414,9 +396,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_sky"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 			
 				<view_border
@@ -440,9 +419,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -456,9 +432,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_water"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 			</panel>
 

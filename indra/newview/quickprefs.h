@@ -32,6 +32,7 @@
 #include "llwlparamset.h"
 #include "llmultisliderctrl.h"
 #include "llcombobox.h"
+#include "rlvdefines.h"
 
 class FloaterQuickPrefs : public LLTransientDockableFloater
 {
@@ -60,6 +61,8 @@ public:
 
 	// Phototools additions
 	void refreshSettings();
+	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
+	void enableWindlightButtons(BOOL enable);
 
 private:
 

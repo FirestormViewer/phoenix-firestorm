@@ -93,6 +93,8 @@ void FloaterQuickPrefs::initCallbacks(void)
 		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 	}
+
+	gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -168,6 +170,11 @@ BOOL FloaterQuickPrefs::postBuild()
 
 	mWLSunPos->addSlider(12.f);
 	initCallbacks();
+
+	if (gRlvHandler.isEnabled())
+	{
+		enableWindlightButtons(!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV));
+	}
 
 	return LLDockableFloater::postBuild();
 }
@@ -524,5 +531,44 @@ void FloaterQuickPrefs::refreshSettings()
 
 		mCtrlDeferred->setEnabled(FALSE);
 		mCtrlDeferred->setValue(FALSE);
+	}
+}
+
+void FloaterQuickPrefs::updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type)
+{
+	if (behavior == RLV_BHVR_SETENV)
+	{
+		if (type == RLV_TYPE_ADD)
+		{
+			enableWindlightButtons(FALSE);
+		}
+		else
+		{
+			enableWindlightButtons(TRUE);
+		}
+	}
+}
+
+void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
+{
+	childSetEnabled("WLPresetsCombo", enable);
+	childSetEnabled("WLPrevPreset", enable);
+	childSetEnabled("WLNextPreset", enable);
+	childSetEnabled("WaterPresetsCombo", enable);
+	childSetEnabled("WWPrevPreset", enable);
+	childSetEnabled("WWNextPreset", enable);
+	childSetEnabled("UseRegionWL", enable);
+
+	if (getName() == "phototools")
+	{
+		childSetEnabled("Sunrise", enable);
+		childSetEnabled("Noon", enable);
+		childSetEnabled("Sunset", enable);
+		childSetEnabled("Midnight", enable);
+		childSetEnabled("Revert to Region Default", enable);
+		childSetEnabled("new_sky_preset", enable);
+		childSetEnabled("edit_sky_preset", enable);
+		childSetEnabled("new_water_preset", enable);
+		childSetEnabled("edit_water_preset", enable);
 	}
 }
