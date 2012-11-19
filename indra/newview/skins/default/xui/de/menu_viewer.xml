@@ -223,13 +223,13 @@
 			<menu_item_check label="Debug-Meldungen anzeigen" name="Show Debug Messages"/>
 			<menu_item_check label="Deaktivierungs- oder doppelte Nachrichten verstecken" name="Hide Unset or Duplicate Messages"/>
 			<menu_item_check label="Assertion-Fehler anzeigen" name="Show Assertion Failures"/>
+			<menu_item_check label="Gesperrte Layer ausblenden" name="Hide Locked Layers"/>
+			<menu_item_check label="Gesperrte Anhänge ausblenden" name="Hide Locked Attachments"/>
 			<menu_item_check label="Altes Namensschame verwenden" name="Enable Legacy Naming"/>
 			<menu_item_check label="Teilen von Kleidung aktivieren" name="Enable Shared Wear"/>
 			<menu_item_check label="Geteilte Gegenstände beim Tragen umbenennen" name="Rename Shared Items on Wear"/>
 			<menu_item_check label="Sperren..." name="Locks"/>
 		</menu>
-		<menu_item_check label="Gesperrte Layer ausblenden" name="Hide Locked Layers"/>
-		<menu_item_check label="Gesperrte Anhänge ausblenden" name="Hide Locked Attachments"/>
 		<menu_item_check label="OOC-Chat erlauben" name="Allow OOC Chat"/>
 		<menu_item_check label="Übergabe an #RLV-Ordner verbieten" name="Forbid Give to #RLV"/>
 		<menu_item_check label="Gefilterten Chat anzeigen" name="Show Filtered Chat"/>
