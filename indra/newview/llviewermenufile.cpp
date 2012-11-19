@@ -169,7 +169,7 @@ void LLSaveFilePickerThread::run()
 {
 	//sMutex = new LLMutex(NULL);
 	LLFilePicker picker;
-#if !LL_DARWIN
+#if LL_WINDOWS
 	if (picker.getSaveFile(mFilter, mDefaultFilename, false))
 	{
 		mFile = picker.getFirstFile();
