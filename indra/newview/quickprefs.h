@@ -71,5 +71,9 @@ private:
 	LLCheckBoxCtrl*		mCtrlShaderEnable;
 	LLCheckBoxCtrl*		mCtrlWindLight;
 	LLCheckBoxCtrl*		mCtrlDeferred;
+	LLCheckBoxCtrl*		mCtrlUseSSAO;
+	LLCheckBoxCtrl*		mCtrlUseDoF;
+	LLComboBox*			mCtrlShadowDetail;
+	LLComboBox*			mCtrlReflectionDetail;
 };
 #endif

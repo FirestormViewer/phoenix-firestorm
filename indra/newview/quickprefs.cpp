@@ -44,6 +44,7 @@
 #include "llfeaturemanager.h"
 #include "rlvhandler.h"
 #include "llcheckboxctrl.h"
+#include "llcubemap.h"
 
 // Ansariel: Copied from llviewercontrol.cpp, handleSetShaderChanged()
 static void handleShaderChanged()
@@ -88,6 +89,7 @@ void FloaterQuickPrefs::initCallbacks(void)
 	gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 	gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+	gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -96,6 +98,10 @@ BOOL FloaterQuickPrefs::postBuild()
 	mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
 	mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 	mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
+	mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
+	mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDoF");
+	mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
+	mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
 	refreshSettings();
 
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
@@ -382,6 +388,11 @@ void FloaterQuickPrefs::onClickRegionWL()
 // Phototools additions
 void FloaterQuickPrefs::refreshSettings()
 {
+	BOOL reflections = gSavedSettings.getBOOL("VertexShaderEnable") 
+		&& gGLManager.mHasCubeMap
+		&& LLCubeMap::sUseCubeMaps;
+	mCtrlReflectionDetail->setEnabled(reflections);
+
 	bool fCtrlShaderEnable = LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable");
 	mCtrlShaderEnable->setEnabled(
 		fCtrlShaderEnable && ((!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV)) || (!gSavedSettings.getBOOL("VertexShaderEnable"))) );
@@ -398,4 +409,114 @@ void FloaterQuickPrefs::refreshSettings()
 						(mCtrlWindLight->get()) ? TRUE : FALSE;
 
 	mCtrlDeferred->setEnabled(enabled);
+
+	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO") && (mCtrlDeferred->get() ? TRUE : FALSE);
+		
+	mCtrlUseSSAO->setEnabled(enabled);
+	mCtrlUseDoF->setEnabled(enabled);
+
+	enabled = enabled && LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail");
+
+	mCtrlShadowDetail->setEnabled(enabled);
+
+
+	// if vertex shaders off, disable all shader related products
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("VertexShaderEnable"))
+	{
+		mCtrlShaderEnable->setEnabled(FALSE);
+		mCtrlShaderEnable->setValue(FALSE);
+		
+		mCtrlWindLight->setEnabled(FALSE);
+		mCtrlWindLight->setValue(FALSE);
+		
+		mCtrlReflectionDetail->setEnabled(FALSE);
+		mCtrlReflectionDetail->setValue(0);
+
+		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setValue(0);
+		
+		mCtrlUseSSAO->setEnabled(FALSE);
+		mCtrlUseSSAO->setValue(FALSE);
+
+		mCtrlUseDoF->setEnabled(FALSE);
+		mCtrlUseDoF->setValue(FALSE);
+
+		mCtrlDeferred->setEnabled(FALSE);
+		mCtrlDeferred->setValue(FALSE);
+	}
+	
+	// disabled windlight
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("WindLightUseAtmosShaders"))
+	{
+		mCtrlWindLight->setEnabled(FALSE);
+		mCtrlWindLight->setValue(FALSE);
+
+		//deferred needs windlight, disable deferred
+		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setValue(0);
+		
+		mCtrlUseSSAO->setEnabled(FALSE);
+		mCtrlUseSSAO->setValue(FALSE);
+
+		mCtrlUseDoF->setEnabled(FALSE);
+		mCtrlUseDoF->setValue(FALSE);
+
+		mCtrlDeferred->setEnabled(FALSE);
+		mCtrlDeferred->setValue(FALSE);
+	}
+
+	// disabled deferred
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferred") ||
+		!gGLManager.mHasFramebufferObject)
+	{
+		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setValue(0);
+		
+		mCtrlUseSSAO->setEnabled(FALSE);
+		mCtrlUseSSAO->setValue(FALSE);
+
+		mCtrlUseDoF->setEnabled(FALSE);
+		mCtrlUseDoF->setValue(FALSE);
+
+		mCtrlDeferred->setEnabled(FALSE);
+		mCtrlDeferred->setValue(FALSE);
+	}
+	
+	// disabled deferred SSAO
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderDeferredSSAO"))
+	{
+		mCtrlUseSSAO->setEnabled(FALSE);
+		mCtrlUseSSAO->setValue(FALSE);
+	}
+	
+	// disabled deferred shadows
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderShadowDetail"))
+	{
+		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setValue(0);
+	}
+
+	// disabled reflections
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderReflectionDetail"))
+	{
+		mCtrlReflectionDetail->setEnabled(FALSE);
+		mCtrlReflectionDetail->setValue(FALSE);
+	}
+
+	// disabled av
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderAvatarVP"))
+	{
+		//deferred needs AvatarVP, disable deferred
+		mCtrlShadowDetail->setEnabled(FALSE);
+		mCtrlShadowDetail->setValue(0);
+		
+		mCtrlUseSSAO->setEnabled(FALSE);
+		mCtrlUseSSAO->setValue(FALSE);
+
+		mCtrlUseDoF->setEnabled(FALSE);
+		mCtrlUseDoF->setValue(FALSE);
+
+		mCtrlDeferred->setEnabled(FALSE);
+		mCtrlDeferred->setValue(FALSE);
+	}
 }
