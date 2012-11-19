@@ -86,23 +86,29 @@ void FloaterQuickPrefs::initCallbacks(void)
 	getChild<LLUICtrl>("WLSunPos")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this, _1, &param_mgr.mLightnorm));
 
 	// Phototools additions
-	gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
-	gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
-	gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
-	gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+	if (getName() == "phototools")
+	{
+		gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("RenderDeferred")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+		gSavedSettings.getControl("RenderAvatarVP")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+	}
 }
 
 BOOL FloaterQuickPrefs::postBuild()
 {
 	// Phototools additions
-	mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
-	mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
-	mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
-	mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
-	mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDoF");
-	mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
-	mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
-	refreshSettings();
+	if (getName() == "phototools")
+	{
+		mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
+		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
+		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
+		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("ssaolabel");
+		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
+		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
+		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
+		refreshSettings();
+	}
 
 	mWaterPresetsCombo = getChild<LLComboBox>("WaterPresetsCombo");
 	mWLPresetsCombo = getChild<LLComboBox>("WLPresetsCombo");
