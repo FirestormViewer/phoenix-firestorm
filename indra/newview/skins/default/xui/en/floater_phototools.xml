@@ -1063,7 +1063,7 @@
 				 label="Enable Ambient Occlusion (Depth Perception)"
 				 layout="topleft"
 				 left="5"
-				 name="ssaolabel"
+				 name="UseSSAO"
 				 tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
 				 top_pad="10"
 				 width="230">

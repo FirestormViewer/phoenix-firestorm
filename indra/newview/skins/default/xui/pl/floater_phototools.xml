@@ -124,7 +124,7 @@
 				</text>
 			</panel>
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="ssaolabel" tool_tip="Efekt jest subtelny w większości scen - zwiększa delikatnie percepcję głębi w zacienionych miejscach, takich jak sceny wewnątrz pomieszczeń. Najbardziej widoczne zmiany obrazu są widoczna w złożonych obiektach posiadających powłoki i zmarszczki (na przykład szkielety dinozaurów). Przejawia się w lekkim przyciemnianiu krawędzi obiektów - zwłaszcza tych, które są w bliskim sąsiedztwie innych. Jeśli nie korzystasz z tej funkcji - WYŁĄCZ JĄ! Pomoże to zwiększyć ilość klatek wyświetlanych na sekundę."/>
+				<check_box label="Włącz okluzję otoczenia (percepcję głębi)" name="UseSSAO" tool_tip="Efekt jest subtelny w większości scen - zwiększa delikatnie percepcję głębi w zacienionych miejscach, takich jak sceny wewnątrz pomieszczeń. Najbardziej widoczne zmiany obrazu są widoczna w złożonych obiektach posiadających powłoki i zmarszczki (na przykład szkielety dinozaurów). Przejawia się w lekkim przyciemnianiu krawędzi obiektów - zwłaszcza tych, które są w bliskim sąsiedztwie innych. Jeśli nie korzystasz z tej funkcji - WYŁĄCZ JĄ! Pomoże to zwiększyć ilość klatek wyświetlanych na sekundę."/>
 			</panel>
 			<panel name="P_Scale">
 				<text name="T_Scale" tool_tip="Kontroluje obszar próbkowania; większe regiony są bardziej dokładne. Dobrym pomysłem może być ustawienie tych wartości wysoko, a następnie dodanie nieco rozmycia cieni, aby złagodzić efekt.">

@@ -144,7 +144,7 @@
 			</panel>
 
 			<panel name="P_Amb_Occ_Settings">
-				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="ssaolabel" tool_tip="Der Effekt ist in den meisten Szenen eher subtil und sorgt für eine verbesserte Tiefenwahrnehmung in Bereichen mit Licht und Schatten, zum Beispiel in Räumen. Größerer Einfluss kann bei komplexen und detaillierten Objekten mit Falten und Knittern wahrgenommen werden (zum Beispiel Dinosaurier-Sklelette). Der Effekt selbst manifestiert sich in leicht dunkleren Bereichen an den Kanten von Objekten, besonders solchen, die eng von anderen Objekten umgeben sind. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu verbessern."/>
+				<check_box label="Ambient Occlusion aktivieren (Tiefenwahrn.)" name="UseSSAO" tool_tip="Der Effekt ist in den meisten Szenen eher subtil und sorgt für eine verbesserte Tiefenwahrnehmung in Bereichen mit Licht und Schatten, zum Beispiel in Räumen. Größerer Einfluss kann bei komplexen und detaillierten Objekten mit Falten und Knittern wahrgenommen werden (zum Beispiel Dinosaurier-Sklelette). Der Effekt selbst manifestiert sich in leicht dunkleren Bereichen an den Kanten von Objekten, besonders solchen, die eng von anderen Objekten umgeben sind. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu verbessern."/>
 			</panel>
 		
 			<panel name="P_Scale">

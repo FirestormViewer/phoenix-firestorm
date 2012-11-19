@@ -103,7 +103,7 @@ BOOL FloaterQuickPrefs::postBuild()
 		mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
 		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
 		mCtrlDeferred = getChild<LLCheckBoxCtrl>("RenderDeferred");
-		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("ssaolabel");
+		mCtrlUseSSAO = getChild<LLCheckBoxCtrl>("UseSSAO");
 		mCtrlUseDoF = getChild<LLCheckBoxCtrl>("UseDepthofField");
 		mCtrlShadowDetail = getChild<LLComboBox>("ShadowDetail");
 		mCtrlReflectionDetail = getChild<LLComboBox>("Reflections");
