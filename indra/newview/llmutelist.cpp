@@ -609,8 +609,12 @@ BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) c
 	}
 
 	// empty names can't be legacy-muted
-	bool avatar = mute_object && mute_object->isAvatar();
-	if (name.empty() || avatar) return FALSE;
+	// <FS:Ansariel> FIRE-8268: Revert STORM-1004 or objects muted by name
+	//               won't be muted if worn as attachments
+	//bool avatar = mute_object && mute_object->isAvatar();
+	//if (name.empty() || avatar) return FALSE;
+	if (name.empty()) return FALSE;
+	// </FS:Ansariel>
 
 	// Look in legacy pile
 	string_set_t::const_iterator legacy_it = mLegacyMutes.find(name);
