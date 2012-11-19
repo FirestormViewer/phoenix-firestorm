@@ -1185,7 +1185,9 @@ class LLAdvancedCheckInfoDisplay : public view_listener_t
 		U32 info_display = info_display_from_string( userdata.asString() );
 		bool new_value = false;
 
-		LL_INFOS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
+		// <FS:Ansariel> Silence log spam
+		//LL_INFOS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
+		LL_DEBUGS("ViewerMenu") << "check " << userdata.asString() << LL_ENDL;
 
 		if ( info_display != 0 )
 		{
