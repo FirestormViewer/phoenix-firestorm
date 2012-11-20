@@ -513,6 +513,13 @@ void LLQueuedThread::run()
 			mIdleThread = TRUE;
 			ms_sleep(1);
 		}
+
+		// <FS:LO> Hackish fix for FS eating a second CPU core from CURL sitting idle.
+		if(mName == "curlthread" && res == 1)
+		{
+			ms_sleep(1);
+		}
+		// </FS:LO>
 		//LLThread::yield(); // thread should yield after each request		
 	}
 	llinfos << "LLQueuedThread " << mName << " EXITING." << llendl;
