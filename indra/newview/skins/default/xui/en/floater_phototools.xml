@@ -1328,6 +1328,7 @@
 					Resolution
 				</text>
 				<slider_bar
+				 name="SB_Smooth_Res"
 				 can_edit_text="true"
 				 control_name="RenderSpecularResX"
 				 follows="left|right"
@@ -1341,6 +1342,7 @@
 				 top_delta="-2"
 				 width="127"/>
 				<spinner
+				 name="S_Smooth_Res"
 				 can_edit_text="true"
 				 control_name="RenderSpecularResX"
 				 top_delta="-3"
