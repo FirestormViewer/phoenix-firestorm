@@ -425,7 +425,7 @@ void LLViewerFloaterReg::registerFloaters()
 	//               up the WL controls events that are the same as in Quick Prefs. If there more
 	//               additions, we might consider cloning the Quick Prefs methods into a new
 	//               Phototools class.
-	LLFloaterReg::add("phototools", "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
+	LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving

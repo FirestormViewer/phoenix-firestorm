@@ -34,6 +34,8 @@
 #include "llcombobox.h"
 #include "rlvdefines.h"
 
+const std::string PHOTOTOOLS_FLOATER = "phototools";
+
 class FloaterQuickPrefs : public LLTransientDockableFloater
 {
 	friend class LLFloaterReg;
@@ -59,10 +61,12 @@ public:
 	void onClickWaterNext();
 	void onClickRegionWL();
 
-	// Phototools additions
-	void refreshSettings();
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(BOOL enable);
+
+	// Phototools additions
+	void refreshSettings();
+	bool getIsPhototools() const { return getName() == PHOTOTOOLS_FLOATER; };
 
 private:
 

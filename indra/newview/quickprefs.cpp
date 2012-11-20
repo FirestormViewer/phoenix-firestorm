@@ -86,7 +86,7 @@ void FloaterQuickPrefs::initCallbacks(void)
 	getChild<LLUICtrl>("WLSunPos")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onSunMoved, this, _1, &param_mgr.mLightnorm));
 
 	// Phototools additions
-	if (getName() == "phototools")
+	if (getIsPhototools())
 	{
 		gSavedSettings.getControl("VertexShaderEnable")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
 		gSavedSettings.getControl("WindLightUseAtmosShaders")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
@@ -100,7 +100,7 @@ void FloaterQuickPrefs::initCallbacks(void)
 BOOL FloaterQuickPrefs::postBuild()
 {
 	// Phototools additions
-	if (getName() == "phototools")
+	if (getIsPhototools())
 	{
 		mCtrlShaderEnable = getChild<LLCheckBoxCtrl>("BasicShaders");
 		mCtrlWindLight = getChild<LLCheckBoxCtrl>("WindLightUseAtmosShaders");
@@ -559,7 +559,7 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("WWNextPreset", enable);
 	childSetEnabled("UseRegionWL", enable);
 
-	if (getName() == "phototools")
+	if (getIsPhototools())
 	{
 		childSetEnabled("Sunrise", enable);
 		childSetEnabled("Noon", enable);
