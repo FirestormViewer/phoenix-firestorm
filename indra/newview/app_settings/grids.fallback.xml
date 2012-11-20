@@ -236,6 +236,32 @@
         <key>slurl_base</key>
             <string>hop://login.osgrid.org/</string>
         </map>
+    <key>osgrid.kitely.com:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2012-11-20T02:21:28.55Z</date>
+        <key>gridname</key>
+            <string>Kitely</string>
+        <key>gridnick</key>
+            <string>kitely</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <undef />
+        <key>loginuri</key>
+            <array>
+                <string>http://osgrid.kitely.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>osgrid.kitely.com:8002</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>slurl_base</key>
+            <string>hop://osgrid.kitely.com:8002/</string>
+        </map>
     <key>reactiongrid.com:8008</key>
         <map>
         <key>DEPRECATED</key>
