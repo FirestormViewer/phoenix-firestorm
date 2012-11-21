@@ -22,7 +22,7 @@
 		Restzeit
 	</floater.string>
 	<tab_container name="landtab" tab_min_width="40" width="489">
-		<panel label="ALLGEMEIN" name="land_general_panel">
+		<panel label="Allgemein" name="land_general_panel">
 			<panel.string name="new users only">
 				Nur neue Benutzer
 			</panel.string>
@@ -152,7 +152,7 @@
 			<button label="Land aufgeben" label_selected="Land aufgeben..." name="Abandon Land..."/>
 			<button label="Land in Besitz nehmen" label_selected="Land in Besitz nehmen..." name="Reclaim Land..."/>
 		</panel>
-		<panel label="VERTRAG" name="land_covenant_panel">
+		<panel label="Vertrag" name="land_covenant_panel">
 			<panel.string name="can_resell">
 				Gekauftes Land in dieser Region kann wiederverkauft werden.
 			</panel.string>
@@ -215,7 +215,7 @@
 werden.
 			</text>
 		</panel>
-		<panel label="OBJEKTE" name="land_objects_panel">
+		<panel label="Objekte" name="land_objects_panel">
 			<panel.string name="objects_available_text">
 				[COUNT] von [MAX] ([AVAILABLE] verfügbar)
 			</panel.string>
@@ -289,7 +289,7 @@ werden.
 				<name_list.columns label="Aktuellstes" name="mostrecent"/>
 			</name_list>
 		</panel>
-		<panel label="OPTIONEN" name="land_options_panel">
+		<panel label="Optionen" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
 				Diese Parzelle in Suchergebnissen anzeigen.
 			</panel.string>
@@ -394,7 +394,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 				<combo_box.item label="Überall" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MEDIEN" name="land_media_panel">
+		<panel label="Medien" name="land_media_panel">
 			<text name="with media:">
 				Typ:
 			</text>
@@ -428,7 +428,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			</text>
 			<check_box label="Schleife" name="media_loop" tool_tip="Spielt das Medium in einer Schleife ab.  Der Abspielvorgang wird immer wieder von vorne fortgesetzt."/>
 		</panel>
-		<panel label="SOUND" name="land_audio_panel">
+		<panel label="Sound" name="land_audio_panel">
 			<text name="MusicURL:">
 				Musik-URL:
 			</text>
@@ -448,7 +448,7 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<check_box label="Voice aktivieren (vom Grundbesitz eingerichtet)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Voice auf diese Parzelle beschränken" name="parcel_enable_voice_channel_local"/>
 		</panel>
-		<panel label="ZUGANG" name="land_access_panel">
+		<panel label="Zugang" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Durch Grundbesitz festgelegt)
 			</panel.string>
