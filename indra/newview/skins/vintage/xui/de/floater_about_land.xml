@@ -327,11 +327,17 @@ Nur große Parzellen können in der Suche aufgeführt werden.
 			<text name="allow_label">
 				Anderen Einwohnern gestatten:
 			</text>
-			<check_box label="Terrain bearbeiten" name="edit land check" tool_tip="Falls aktiviert, kann jeder Einwohner das Terrain bearbeiten. Es wird empfohlen, diese Einstellung deaktiviert zu lassen, da als Eigentümer das Terrain jederzeit bearbeitet werden kann."/>
+			<check_box label="" name="edit land check" tool_tip="Falls aktiviert, kann jeder Einwohner das Terrain bearbeiten. Es wird empfohlen, diese Einstellung deaktiviert zu lassen, da als Eigentümer das Terrain jederzeit bearbeitet werden kann."/>
+			<text name="edit_terrain_label" width="105">
+				Terrain bearbeiten
+			</text>
 			<text name="caution_text" left_pad="0">
 				(Mit Vorsicht anwenden!)
 			</text>
-			<check_box label="Fliegen" name="check fly" tool_tip="Falls aktiviert, können Einwohner auf Ihrem Land fliegen. Falls nicht aktiviert, können Einwohner lediglich auf Ihr Land fliegen und dort landen (dann jedoch nicht wieder weiterfliegen) oder über Ihr Land hinweg fliegen."/>
+			<check_box label="" name="check fly" tool_tip="Falls aktiviert, können Einwohner auf Ihrem Land fliegen. Falls nicht aktiviert, können Einwohner lediglich auf Ihr Land fliegen und dort landen (dann jedoch nicht wieder weiterfliegen) oder über Ihr Land hinweg fliegen."/>
+			<text name="fly_label" left_delta="-105">
+				Fliegen
+			</text>
 			<text name="allow_label2">
 				Bauen:
 			</text>
