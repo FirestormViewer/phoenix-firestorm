@@ -1231,7 +1231,7 @@ Only large parcels can be listed in search.
              layout="topleft"
              left_delta="1"
              top_delta="-21"
-             name="allow_label1"
+             name="edit_terrain_label"
              width="70">
                 Edit Terrain
             </text>
@@ -1255,8 +1255,8 @@ Only large parcels can be listed in search.
              layout="topleft"
              top_pad="6"
              left_delta="-70"
-             name="allow_label0"
-             width="20">
+             name="fly_label"
+             width="130">
                 Fly
             </text>
             <text
