@@ -149,6 +149,13 @@ BOOL LLPreviewTexture::postBuild()
 	getChild<LLButton>("openprofile")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickProfile, this));
 	// </FS:Techwolf Lupindo>
 
+	// <FS:Ansariel> Need to disable line editors from code or the floater would
+	//               be dragged around if trying to mark text
+	getChild<LLLineEditor>("uploader")->setEnabled(FALSE);
+	getChild<LLLineEditor>("upload_time")->setEnabled(FALSE);
+	getChild<LLLineEditor>("uuid")->setEnabled(FALSE);
+	// </FS:Ansariel>
+
 	return LLPreview::postBuild();
 }
 
