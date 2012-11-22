@@ -566,34 +566,34 @@ void LLPreviewTexture::updateDimensions()
 			}
 		}
 
-		// If this is 100% correct???
-		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
-		S32 floater_target_height = mImage->getFullHeight() + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
-
-		// Scale down by factor 0.5 if image would exceed viewer window
-		if (gViewerWindow->getWindowWidthRaw() < floater_target_width || gViewerWindow->getWindowHeightRaw() < floater_target_height)
-		{
-			floater_target_width = mImage->getFullWidth() / 2 + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
-			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
-		}
-
 		// <FS:Techwolf Lupindo> texture comment metadata reader
 		// add extra space for uploader and date_time
+		S32 additional_height = 0;
 		if (mImage->mComment.find("a") != mImage->mComment.end())
 		{
 			getChildView("uploader_label")->setVisible(TRUE);
 			getChildView("uploader")->setVisible(TRUE);
 			getChildView("openprofile")->setVisible(TRUE);
-			floater_target_height += getChildView("uploader")->getRect().getHeight() + PREVIEW_VPAD;
+			additional_height += getChildView("uploader")->getRect().getHeight() + PREVIEW_VPAD;
 		}
 		if (mImage->mComment.find("z") != mImage->mComment.end())
 		{
 			getChildView("upload_time_label")->setVisible(TRUE);
 			getChildView("upload_time")->setVisible(TRUE);
-			floater_target_height += getChildView("upload_time")->getRect().getHeight() + PREVIEW_VPAD;
+			additional_height += getChildView("upload_time")->getRect().getHeight() + PREVIEW_VPAD;
 		}
 		// </FS:Techwolf Lupindo>
 
+		// If this is 100% correct???
+		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+		S32 floater_target_height = mImage->getFullHeight() + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight() + additional_height;
+
+		// Scale down by factor 0.5 if image would exceed viewer window
+		if (gViewerWindow->getWindowWidthRaw() < floater_target_width || gViewerWindow->getWindowHeightRaw() < floater_target_height)
+		{
+			floater_target_width = mImage->getFullWidth() / 2 + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
+			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight() + additional_height;
+		}
 		
 		// Preserve minimum floater size
 		floater_target_width = llmax(floater_target_width, getMinWidth());
@@ -651,8 +651,11 @@ void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarNa
 
 void LLPreviewTexture::onButtonClickProfile()
 {
-	LLUUID id = LLUUID(mImage->mComment["a"]);
-	LLAvatarActions::showProfile(id);
+	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end()))
+	{
+		LLUUID id = LLUUID(mImage->mComment["a"]);
+		LLAvatarActions::showProfile(id);
+	}
 }
 // </FS:Techwolf Lupindo> texture comment decoder
 
