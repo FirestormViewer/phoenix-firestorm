@@ -609,15 +609,15 @@ void LLPreviewTexture::updateDimensions()
 		{
 			LLUUID id = LLUUID(mImage->mComment["a"]);
 			std::string name;
-			BOOL linden_lab_bad_boolen = FALSE; // FALSE resolves to int reference, so have to pass BOOL type FALSE via local variable
-			if(gCacheName->getIfThere(id, name, linden_lab_bad_boolen))
+			LLAvatarName avatar_name;
+			if (LLAvatarNameCache::get(id, &avatar_name))
 			{
-				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", name);
+				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", avatar_name.getCompleteName());
 			}
 			else
 			{
 				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
-				gCacheName->get(id, false, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+				LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
 			}
 		}
 
@@ -633,9 +633,9 @@ void LLPreviewTexture::updateDimensions()
 	}
 }
 
-void LLPreviewTexture::callbackLoadName(const LLUUID& id, const std::string& full_name)
+void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", full_name);
+	getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", av_name.getCompleteName());
 }
 
 void LLPreviewTexture::onButtonClickProfile()

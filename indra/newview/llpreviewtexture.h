@@ -32,6 +32,9 @@
 #include "llframetimer.h"
 #include "llviewertexture.h"
 
+// <FS:Ansariel> Metadata reader
+#include "llavatarnamecache.h"
+
 class LLComboBox;
 class LLImageRaw;
 
@@ -83,7 +86,7 @@ public:
 	/*virtual*/ void setObjectID(const LLUUID& object_id);
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
-	void callbackLoadName(const LLUUID& id, const std::string& full_name);
+	void callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name);
 	void onButtonClickProfile();
 	// </FS:Techwolf Lupindo>
 	
