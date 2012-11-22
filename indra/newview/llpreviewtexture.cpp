@@ -351,7 +351,11 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	// 1 additional line: uploader and date time
-	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
+	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end()))
+	{
+		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
+	}
+	if (mImage && (mImage->mComment.find("z") != mImage->mComment.end()))
 	{
 		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
 	}
@@ -575,11 +579,18 @@ void LLPreviewTexture::updateDimensions()
 
 		// <FS:Techwolf Lupindo> texture comment metadata reader
 		// add extra space for uploader and date_time
-		if (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end())
+		if (mImage->mComment.find("a") != mImage->mComment.end())
 		{
-			getChildView("uploader_date_time")->setVisible(TRUE);
+			getChildView("uploader_label")->setVisible(TRUE);
+			getChildView("uploader")->setVisible(TRUE);
 			getChildView("openprofile")->setVisible(TRUE);
-			floater_target_height += getChildView("uploader_date_time")->getRect().getHeight() + PREVIEW_VPAD;
+			floater_target_height += getChildView("uploader")->getRect().getHeight() + PREVIEW_VPAD;
+		}
+		if (mImage->mComment.find("z") != mImage->mComment.end())
+		{
+			getChildView("upload_time_label")->setVisible(TRUE);
+			getChildView("upload_time")->setVisible(TRUE);
+			floater_target_height += getChildView("upload_time")->getRect().getHeight() + PREVIEW_VPAD;
 		}
 		// </FS:Techwolf Lupindo>
 
@@ -612,11 +623,11 @@ void LLPreviewTexture::updateDimensions()
 			LLAvatarName avatar_name;
 			if (LLAvatarNameCache::get(id, &avatar_name))
 			{
-				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", avatar_name.getCompleteName());
+				childSetText("uploader", avatar_name.getCompleteName());
 			}
 			else
 			{
-				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
+				getChild<LLTextBox>("uploader")->setText(LLTrans::getString("AvatarNameWaiting"));
 				LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
 			}
 		}
@@ -628,14 +639,14 @@ void LLPreviewTexture::updateDimensions()
 			substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
 			date_time = getString("DateTime"); // reuse date_time variable
 			LLStringUtil::format(date_time, substitution);
-			getChild<LLTextBox>("uploader_date_time")->setTextArg("[DATE_TIME]", date_time);
+			childSetText("upload_time", date_time);
 		}
 	}
 }
 
 void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", av_name.getCompleteName());
+	childSetText("uploader", av_name.getCompleteName());
 }
 
 void LLPreviewTexture::onButtonClickProfile()

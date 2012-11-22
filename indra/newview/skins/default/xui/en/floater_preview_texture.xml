@@ -46,30 +46,71 @@
      max_length="127"
      name="desc"
      width="440" />
+
     <text
      type="string"
      length="1"
      follows="left|top"
-     visible="false"
      font="SansSerif"
      height="19"
      layout="topleft"
      left="10"
-     name="uploader_date_time"
+     name="uploader_label"
+     visible="false"
      top_delta="21"
-     width="467">
-        Uploaded by [UPLOADER] on [DATE_TIME]
+     read_only="true"
+     width="90">
+        Uploader:
     </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     visible="false"
+     name="uploader"
+     width="377" />
     <button
      follows="right|top"
-     visible="false"
-     font="SansSerif"
+     font="SansSerifSmall"
      height="18"
      label="Profile"
      left_pad="3"
+     visible="false"
      name="openprofile"
      width="60" />
-	
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="upload_time_label"
+     visible="false"
+     top_delta="21"
+     width="90">
+        Date:
+    </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     visible="false"
+     name="upload_time"
+     width="440" />
+	 
 	<panel
 	 name="dimensions_panel"
 	 left="10"
