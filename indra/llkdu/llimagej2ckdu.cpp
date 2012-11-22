@@ -455,6 +455,10 @@ BOOL LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 		}
 	}
 
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	raw_image.mComment.assign(mCodeStreamp->get_comment().get_text());
+	// </FS:Techwolf Lupindo>
+
 	// These can probably be grabbed from what's saved in the class.
 	kdu_dims dims;
 	mCodeStreamp->get_dims(0,dims);

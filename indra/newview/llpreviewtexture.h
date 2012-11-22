@@ -81,6 +81,12 @@ public:
 	static void			onSaveAsBtn(LLUICtrl* ctrl, void* data);
 
 	/*virtual*/ void setObjectID(const LLUUID& object_id);
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	void callbackLoadName(const LLUUID& id, const std::string& full_name);
+	void onButtonClickProfile();
+	// </FS:Techwolf Lupindo>
+	
 protected:
 	void				init();
 	/* virtual */ BOOL	postBuild();

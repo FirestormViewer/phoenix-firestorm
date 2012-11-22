@@ -519,6 +519,11 @@ public:
 	void        setCanUseHTTP(bool can_use_http) {mCanUseHTTP = can_use_http;}
 
 	void        forceToDeleteRequest();
+	
+	// <FS:Techwolf Lupindo> texture comment decoder
+	std::map<std::string,std::string> mComment;
+	// </FS:Techwolf Lupindo>
+	
 protected:
 	/*virtual*/ void switchToCachedImage();
 	S32 getCurrentDiscardLevelForFetching() ;

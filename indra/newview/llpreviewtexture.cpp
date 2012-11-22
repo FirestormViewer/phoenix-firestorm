@@ -31,6 +31,7 @@
 #include "llpreviewtexture.h"
 
 #include "llagent.h"
+#include "llavataractions.h"
 #include "llbutton.h"
 #include "llcombobox.h"
 #include "llfilepicker.h"
@@ -51,6 +52,8 @@
 #include "lllineeditor.h"
 
 #include "llimagepng.h"
+
+#include "fscommon.h"
 
 const S32 CLIENT_RECT_VPAD = 4;
 
@@ -141,7 +144,11 @@ BOOL LLPreviewTexture::postBuild()
 	childSetCommitCallback("combo_aspect_ratio", onAspectRatioCommit, this);
 	LLComboBox* combo = getChild<LLComboBox>("combo_aspect_ratio");
 	combo->setCurrentByIndex(0);
-	
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	getChild<LLButton>("openprofile")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickProfile, this));
+	// </FS:Techwolf Lupindo>
+
 	return LLPreview::postBuild();
 }
 
@@ -341,6 +348,15 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	LLRect client_rect(horiz_pad, getRect().getHeight(), getRect().getWidth() - horiz_pad, 0);
 	client_rect.mTop -= (PREVIEW_HEADER_SIZE + CLIENT_RECT_VPAD);
+
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	// 1 additional line: uploader and date time
+	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
+	{
+		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
+	}
+	// </FS:Techwolf Lupindo>
+
 	client_rect.mBottom += PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height ;
 
 	S32 client_width = client_rect.getWidth();
@@ -557,6 +573,17 @@ void LLPreviewTexture::updateDimensions()
 			floater_target_height = mImage->getFullHeight() / 2 + 3 * CLIENT_RECT_VPAD + PREVIEW_BORDER + dimensions_panel->getRect().mTop + getChildView("desc")->getRect().getHeight();
 		}
 
+		// <FS:Techwolf Lupindo> texture comment metadata reader
+		// add extra space for uploader and date_time
+		if (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end())
+		{
+			getChildView("uploader_date_time")->setVisible(TRUE);
+			getChildView("openprofile")->setVisible(TRUE);
+			floater_target_height += getChildView("uploader_date_time")->getRect().getHeight() + PREVIEW_VPAD;
+		}
+		// </FS:Techwolf Lupindo>
+
+		
 		// Preserve minimum floater size
 		floater_target_width = llmax(floater_target_width, getMinWidth());
 		floater_target_height = llmax(floater_target_height, getMinHeight());
@@ -576,9 +603,47 @@ void LLPreviewTexture::updateDimensions()
 		LLRect dim_rect(getChildView("dimensions")->getRect());
 		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
 		getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
+
+		// <FS:Techwolf Lupindo> texture comment metadata reader
+		if (mImage->mComment.find("a") != mImage->mComment.end())
+		{
+			LLUUID id = LLUUID(mImage->mComment["a"]);
+			std::string name;
+			BOOL linden_lab_bad_boolen = FALSE; // FALSE resolves to int reference, so have to pass BOOL type FALSE via local variable
+			if(gCacheName->getIfThere(id, name, linden_lab_bad_boolen))
+			{
+				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", name);
+			}
+			else
+			{
+				getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
+				gCacheName->get(id, false, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+			}
+		}
+
+		if (mImage->mComment.find("z") != mImage->mComment.end())
+		{
+			std::string date_time = mImage->mComment["z"];
+			LLSD substitution;
+			substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+			date_time = getString("DateTime"); // reuse date_time variable
+			LLStringUtil::format(date_time, substitution);
+			getChild<LLTextBox>("uploader_date_time")->setTextArg("[DATE_TIME]", date_time);
+		}
 	}
 }
 
+void LLPreviewTexture::callbackLoadName(const LLUUID& id, const std::string& full_name)
+{
+	getChild<LLTextBox>("uploader_date_time")->setTextArg("[UPLOADER]", full_name);
+}
+
+void LLPreviewTexture::onButtonClickProfile()
+{
+	LLUUID id = LLUUID(mImage->mComment["a"]);
+	LLAvatarActions::showProfile(id);
+}
+// </FS:Techwolf Lupindo> texture comment decoder
 
 // Return true if everything went fine, false if we somewhat modified the ratio as we bumped on border values
 bool LLPreviewTexture::setAspectRatio(const F32 width, const F32 height)

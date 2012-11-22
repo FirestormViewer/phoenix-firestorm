@@ -18,6 +18,10 @@
      name="Copy">
         Copy To Inventory
     </floater.string>
+    <floater.string
+     name="DateTime">
+        [wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt][ampm,datetime,slt] [timezone,datetime,slt] [year,datetime,slt]
+    </floater.string>
     <text
      type="string"
      length="1"
@@ -42,6 +46,29 @@
      max_length="127"
      name="desc"
      width="440" />
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     visible="false"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="uploader_date_time"
+     top_delta="21"
+     width="467">
+        Uploaded by [UPLOADER] on [DATE_TIME]
+    </text>
+    <button
+     follows="right|top"
+     visible="false"
+     font="SansSerif"
+     height="18"
+     label="Profile"
+     left_pad="3"
+     name="openprofile"
+     width="60" />
 	
 	<panel
 	 name="dimensions_panel"

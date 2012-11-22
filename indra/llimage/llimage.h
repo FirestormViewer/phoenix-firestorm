@@ -272,6 +272,9 @@ protected:
 public:
 	static S32 sGlobalRawMemory;
 	static S32 sRawImageCount;
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	std::string mComment;
+	// </FS:Techwolf Lupindo>
 };
 
 // Compressed representation of image.

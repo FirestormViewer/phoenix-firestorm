@@ -121,9 +121,45 @@ BOOL LLImageJ2COJ::initEncode(LLImageJ2C &base, LLImageRaw &raw_image, int block
 
 BOOL LLImageJ2COJ::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 decode_time, S32 first_channel, S32 max_channel_count)
 {
-	//
-	// FIXME: Get the comment field out of the texture
-	//
+	// <FS:Techwolf Lupindo> texture comment metadata reader
+	U8* c_data = base.getData();
+	S32 c_size =  base.getDataSize();
+	S32 position = 0;
+
+	while (position < 1024 && position < (c_size - 7)) // the comment field should be in the first 1024 bytes.
+	{
+		if (c_data[position] == 0xff && c_data[position + 1] == 0x64)
+		{
+			U8 high_byte = c_data[position + 2];
+			U8 low_byte = c_data[position + 3];
+			S32 c_length = (high_byte * 256) + low_byte; // This size also counts the markers, 00 01 and itself
+			if (c_length > 200) // sanity check
+			{
+				// While comments can be very long, anything longer then 200 is suspect. 
+				break;
+			}
+
+			if (position + 2 + c_length > c_size)
+			{
+				// comment extends past end of data, corruption, or all data not retrived yet.
+				break;
+			}
+
+			// if the comment block does not end at the end of data, check to see if the next
+			// block starts with 0xFF
+			if (position + 2 + c_length < c_size && c_data[position + 2 + c_length] != 0xff)
+			{
+				// invalied comment block
+				break;
+			}
+
+			// extract the comment minus the markers, 00 01
+			raw_image.mComment.assign((char*)(c_data + position + 6), c_length - 4);
+			break;
+		}
+		position++;
+	}
+	// </FS:Techwolf Lupindo>
 
 	LLTimer decode_timer;
 

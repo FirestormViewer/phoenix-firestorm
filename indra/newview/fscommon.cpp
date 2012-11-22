@@ -26,6 +26,11 @@
 #include "fscommon.h"
 #include "llnotificationmanager.h"
 
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+using namespace boost::posix_time;
+using namespace boost::gregorian;
+
 void reportToNearbyChat(const std::string& message)
 {
 	LLChat chat;
@@ -34,4 +39,19 @@ void reportToNearbyChat(const std::string& message)
 	LLSD args;
 	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+}
+
+S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::string& str)
+{
+	// LLDateUtil::secondsSinceEpochFromString does not handle time, only the date.
+	// copied that function here and added the needed code to handle time fields.  -- TL
+	time_input_facet *facet = new time_input_facet(format);
+	std::stringstream ss;
+	ss << str;
+	ss.imbue(std::locale(ss.getloc(), facet));
+	ptime time_t_date;
+	ss >> time_t_date;
+	ptime time_t_epoch(date(1970,1,1));
+	time_duration diff = time_t_date - time_t_epoch;
+	return diff.total_seconds();
 }
