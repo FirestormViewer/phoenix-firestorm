@@ -5417,4 +5417,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="LoadCameraPositionOutsideDrawDistance">
 		Kamerasicht kann nicht wiederhergestellt werden, da sich die Kameraposition außerhalb der Draw Distance befindet.
 	</string>
+	
+	<string name="DrawDistanceSteppingGestureObsolete">
+		Aufgrund von Änderungen im Code ist es nicht mehr notwendig, diese Geste zu benutzen. Progressives Draw-Distance-Stepping wurde aktiviert.
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Draw Distance wurde auf [DISTANCE]m gesetzt.
+	</string>
 </strings>

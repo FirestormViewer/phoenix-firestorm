@@ -24,6 +24,8 @@
 		<check_box label="Partikeleffekte erzeugen, wenn Skripte kommunizieren" name="EffectScriptChatParticles" tool_tip="Falls aktiviert, werden Partikeleffekte um kommunizierende Objekte erzeugt."/>
 		<check_box name="UseLSLBridge" label="LSL-Client-Brücke aktivieren" tool_tip="Erlaub dem Viewer die Nutzung eines geskripteten Objektes (Brücke), um weitergehende Funktionen anzubieten."/>
 		<check_box name="UseLSLFlightAssist" label="Flug-Assistent der Brücke aktivieren" tool_tip="Aktiviert ein Skript, dass Fliegen und Schweben in größeren Höhen ermöglicht."/>
+		<check_box label="Aktiviere progressives Draw-Distance-Stepping" name="FSRenderFarClipStepping" tool_tip="Falls aktiviert wird Firestorm nach einem Teleport die Draw Distance progressiv erhöhen." width="270"/>
+		<slider name="progressive_draw_distance_interval" tool_tip="Intervall in Sekunden zwischen den jeweiligen Erhöhungen der Draw Distance."/>
 	</panel>
 
 

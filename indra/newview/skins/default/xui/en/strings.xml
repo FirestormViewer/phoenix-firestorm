@@ -4143,4 +4143,7 @@ Try enclosing path to the editor with double quotes.
   
   <string name="LoadCameraPositionNoneSaved">No camera view has been saved yet.</string>
   <string name="LoadCameraPositionOutsideDrawDistance">Can't restore camera view because the camera position is beyond draw distance.</string>
+
+  <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
+  <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
 </strings>

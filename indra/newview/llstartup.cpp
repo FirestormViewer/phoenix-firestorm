@@ -2470,6 +2470,19 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLStartUp::setStartupState( STATE_STARTED );
 		display_startup();
 
+		// <FS:Ansariel> Draw Distance stepping
+		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
+		{
+			// progressive draw distance stepping if requested.
+			F32 dist1 = gSavedSettings.getF32("RenderFarClip");
+			F32 dist2 = gSavedSettings.getF32("FSSavedRenderFarClip");
+			gSavedDrawDistance = (dist1 >= dist2 ? dist1 : dist2);
+			gSavedSettings.setF32("FSSavedRenderFarClip", gSavedDrawDistance);
+			gSavedSettings.setF32("RenderFarClip", 32.0f);
+			gLastDrawDistanceStep = 32.0f;
+		}
+		// </FS:Ansariel>
+
 		// Unmute audio if desired and setup volumes.
 		// Unmute audio if desired and setup volumes.
 		// This is a not-uncommon crash site, so surround it with

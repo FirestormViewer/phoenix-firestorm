@@ -95,6 +95,9 @@ BOOL		 gTeleportDisplay = FALSE;
 LLFrameTimer gTeleportDisplayTimer;
 LLFrameTimer gTeleportArrivalTimer;
 const F32		RESTORE_GL_TIME = 5.f;	// Wait this long while reloading textures before we raise the curtain
+// <FS:Ansariel> Draw Distance stepping
+F32			gSavedDrawDistance = 0.0f;
+F32			gLastDrawDistanceStep = 0.0f;
 
 BOOL gForceRenderLandFence = FALSE;
 BOOL gDisplaySwapBuffers = FALSE;
@@ -563,6 +566,43 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 			gViewerWindow->setProgressPercent( percent_done );
 		}
 	}
+
+	// <FS::Ansariel> Draw Distance stepping
+	// Progressively increase draw distance after TP when required.
+	static LLCachedControl<F32> renderFarClip(gSavedSettings, "RenderFarClip");
+	if (gSavedDrawDistance > 0.0f && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
+	{
+		if (gLastDrawDistanceStep != (F32)renderFarClip)
+		{
+			gSavedDrawDistance = 0.0f;
+			gLastDrawDistanceStep = 0.0f;
+			gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);
+		}
+
+		if (gTeleportArrivalTimer.getElapsedTimeF32() >=
+			(F32)gSavedSettings.getU32("FSRenderFarClipSteppingInterval"))
+		{
+			gTeleportArrivalTimer.reset();
+			F32 current = gSavedSettings.getF32("RenderFarClip");
+			if (gSavedDrawDistance > current)
+			{
+				current *= 2.0;
+				if (current > gSavedDrawDistance)
+				{
+					current = gSavedDrawDistance;
+				}
+				gSavedSettings.setF32("RenderFarClip", current);
+				gLastDrawDistanceStep = current;
+			}
+			if (current >= gSavedDrawDistance)
+			{
+				gSavedDrawDistance = 0.0f;
+				gLastDrawDistanceStep = 0.0f;
+				gSavedSettings.setF32("FSSavedRenderFarClip", 0.0f);
+			}
+		}
+	}
+	// </FS::Ansariel>
 
 	//////////////////////////
 	//

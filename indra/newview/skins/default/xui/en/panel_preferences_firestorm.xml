@@ -203,6 +203,33 @@
 		 top_pad="5"
 		 width="350" />
 
+		<check_box
+		 control_name="FSRenderFarClipStepping"
+		 height="16"
+		 label="Enable progressive draw distance stepping"
+		 layout="topleft"
+		 left="15"
+		 name="FSRenderFarClipStepping"
+		 tool_tip="If enabled, Firestorm will use a progressive draw distance stepping after teleporting."
+		 initial_value="true"
+		 top_pad="5"
+		 width="250" />
+		<slider
+		 name="progressive_draw_distance_interval"
+		 control_name="FSRenderFarClipSteppingInterval"
+		 enabled_control="FSRenderFarClipStepping"
+		 decimal_digits="0"
+		 left_pad="5"
+		 top_delta="0"
+		 follows="left|top"
+		 height="18"
+		 increment="1"
+		 initial_val="20"
+		 max_val="30"
+		 min_val="5"
+		 width="150"
+		 tool_tip="Interval in seconds between each draw distance increment"/>
+
         <check_box
          top_pad="15"
          control_name="UseLSLBridge"

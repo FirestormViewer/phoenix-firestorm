@@ -19019,6 +19019,38 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>a3f48b85-c29f-1f97-ebb6-644b7c053512</string>
     </map>
     <!-- End: Sounds for Prefs > Chat > Radar -->
-
+    <key>FSSavedRenderFarClip</key>
+    <map>
+      <key>Comment</key>
+      <string>Saved draw distance (used in case of logout during progressive draw distance stepping)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.0</real>
+    </map>
+    <key>FSRenderFarClipStepping</key>
+    <map>
+      <key>Comment</key>
+      <string>Set to TRUE to increase performance via progressive draw distance stepping</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSRenderFarClipSteppingInterval</key>
+    <map>
+      <key>Comment</key>
+      <string>Interval in seconds between each draw distance increment</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>20</integer>
+    </map>
 </map>
 </llsd>

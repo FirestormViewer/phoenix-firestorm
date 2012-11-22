@@ -42,4 +42,8 @@ extern BOOL			gForceRenderLandFence;
 extern BOOL gResizeScreenTexture;
 extern BOOL gWindowResized;
 
+// <FS:Ansariel> Draw Distance stepping
+extern F32 gSavedDrawDistance;
+extern F32 gLastDrawDistanceStep;
+
 #endif // LL_LLVIEWERDISPLAY_H
