@@ -456,7 +456,12 @@ BOOL LLImageJ2CKDU::decodeImpl(LLImageJ2C &base, LLImageRaw &raw_image, F32 deco
 	}
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
-	raw_image.mComment.assign(mCodeStreamp->get_comment().get_text());
+	// <FS:LO> get_text() will return a NULL pointer if no comment exists, but will return a proper null terminated string even if the comment is ""
+	if(mCodeStreamp->get_comment().get_text())
+	{
+		raw_image.mComment.assign(mCodeStreamp->get_comment().get_text());
+	}
+	// </FS:LO>
 	// </FS:Techwolf Lupindo>
 
 	// These can probably be grabbed from what's saved in the class.
