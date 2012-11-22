@@ -20,7 +20,7 @@
     </floater.string>
     <floater.string
      name="DateTime">
-        [wkday,datetime,slt] [mth,datetime,slt] [day,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt][ampm,datetime,slt] [timezone,datetime,slt] [year,datetime,slt]
+        [weekday,datetime,slt] [month,datetime,slt] [day,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt][ampm,datetime,slt] [timezone,datetime,slt] [year,datetime,slt]
     </floater.string>
     <text
      type="string"

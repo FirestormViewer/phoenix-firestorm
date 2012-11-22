@@ -7,7 +7,7 @@
 		In Inventar kopieren
 	</floater.string>
 	<floater.string name="DateTime">
-		[wkday,datetime,slt], [day,datetime,slt]. [mth,datetime,slt] [year,datetime,slt], [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+		[weekday,datetime,slt], [day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
 	<text name="desc txt">
 		Beschreibung:
