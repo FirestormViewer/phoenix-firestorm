@@ -449,46 +449,40 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 	//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
 	static LLCachedControl<std::string> sFSCmdLineBandwidth(gSavedSettings,  "FSCmdLineBandWidth");
 	
-	if(sFSCmdLine)
+	if (sFSCmdLine)
 	{
 		std::istringstream i(revised_text);
 		std::string command;
 		i >> command;
-		if(command != "")
+		if (command != "")
 		{
 			if(command == std::string(sFSCmdLinePos))
 			{
-				F32 x,y,z;
-				if (i >> x)
+				F32 x, y, z;
+				if (i >> x && i >> y && i >> z)
 				{
-					if (i >> y)
+					LLVector3 agentPos = gAgent.getPositionAgent();
+					LLViewerRegion* agentRegionp = gAgent.getRegion();
+					if (agentRegionp)
 					{
-						if (i >> z)
-						{
-							LLVector3 agentPos = gAgent.getPositionAgent();
-							LLViewerRegion* agentRegionp = gAgent.getRegion();
-							if(agentRegionp)
-							{
-								LLVector3 targetPos(x,y,z);
-								LLVector3d pos_global = from_region_handle(agentRegionp->getHandle());
-								pos_global += LLVector3d((F64)targetPos.mV[0],(F64)targetPos.mV[1],(F64)targetPos.mV[2]);
-								gAgent.teleportViaLocation(pos_global);
-								return false;
-							}
-						}
+						LLVector3 targetPos(x, y, z);
+						LLVector3d pos_global = from_region_handle(agentRegionp->getHandle());
+						pos_global += LLVector3d((F64)targetPos.mV[VX], (F64)targetPos.mV[VY], (F64)targetPos.mV[VZ]);
+						gAgent.teleportViaLocation(pos_global);
+						return false;
 					}
 				}
 			}
-			else if(command == std::string(sFSCmdLineDrawDistance))
+			else if (command == std::string(sFSCmdLineDrawDistance))
 			{
-				if(from_gesture)
+				if (from_gesture)
 				{
 					reportToNearbyChat(LLTrans::getString("DrawDistanceSteppingGestureObsolete"));
 					gSavedSettings.setBOOL("FSRenderFarClipStepping", TRUE);
 					return false;
 				}
                 int drawDist;
-                if(i >> drawDist)
+                if (i >> drawDist)
                 {
 					gSavedSettings.setF32("RenderFarClip", drawDist);
 					gAgentCamera.mDrawDistance = drawDist;
@@ -498,43 +492,40 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
                 }
 			}
-			else if(command == std::string(sFSCmdTeleportToCam))
+			else if (command == std::string(sFSCmdTeleportToCam))
             {
 				gAgent.teleportViaLocation(gAgentCamera.getCameraPositionGlobal());
 				return false;
             }
-			else if(command == std::string(sFSCmdLineMedia))
+			else if (command == std::string(sFSCmdLineMedia))
 			{
 				std::string url;
 				std::string type;
 
-				if(i >> url)
+				if (i >> url && i >> type)
 				{
-					if(i >> type)
+					LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+					if (parcel)
 					{
-						LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-						if (parcel)
+						parcel->setMediaURL(url);
+						parcel->setMediaType(type);
+						if (gSavedSettings.getBOOL("MediaEnableFilter"))
 						{
-							parcel->setMediaURL(url);
-							parcel->setMediaType(type);
-							if (gSavedSettings.getBOOL("MediaEnableFilter"))
-							{
-								LLViewerParcelMedia::filterMediaUrl(parcel);
-							}
-							else
-							{
-								LLViewerParcelMedia::play(parcel);
-							}
-							LLViewerParcelMediaAutoPlay::playStarted();
-							return false;
+							LLViewerParcelMedia::filterMediaUrl(parcel);
 						}
+						else
+						{
+							LLViewerParcelMedia::play(parcel);
+						}
+						LLViewerParcelMediaAutoPlay::playStarted();
+						return false;
 					}
 				}
 			}
-			else if(command == std::string(sFSCmdLineMusic))
+			else if (command == std::string(sFSCmdLineMusic))
 			{
 				std::string status;
-				if(i >> status)
+				if (i >> status)
 				{
 					if (gSavedSettings.getBOOL("MediaEnableFilter"))
 					{
@@ -548,7 +539,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 			}
 			//<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-			else if(command == std::string(sFSCmdLineBandwidth))
+			else if (command == std::string(sFSCmdLineBandwidth))
 			{
 				S32 band_width;
                 if (i >> band_width)
@@ -564,10 +555,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
 			}
 			//</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues
-			else if(command == std::string(sFSCmdLineAO))
+			else if (command == std::string(sFSCmdLineAO))
             {
 				std::string status;
-                if(i >> status)
+                if (i >> status)
                 {
 					if (status == "on" )
 					{
@@ -581,7 +572,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					{
 						AOSet* tmp;
 						tmp = AOEngine::instance().getSetByName(AOEngine::instance().getCurrentSetName());
-						if(i >> status)
+						if (i >> status)
 						{
 							if(status == "off")
 							{
@@ -600,10 +591,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
             }
-			else if(command == std::string(sFSCmdLineKeyToName))
+			else if (command == std::string(sFSCmdLineKeyToName))
             {
                 LLUUID targetKey;
-                if(i >> targetKey)
+                if (i >> targetKey)
                 {
                     std::string object_name;
                     gCacheName->getFullName(targetKey, object_name);
@@ -617,10 +608,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
 				return false;
             }
-			else if(command == "/touch")
+			else if (command == "/touch")
             {
                 LLUUID targetKey;
-                if(i >> targetKey)
+                if (i >> targetKey)
                 {
 					LLViewerObject* myObject = gObjectList.findObject(targetKey);
 					char buffer[DB_IM_MSG_BUF_SIZE * 2];
@@ -632,7 +623,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 						return false;
 					}
 
-					if((!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(myObject)))
+					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canTouch(myObject)))
 					{
 						LLMessageSystem	*msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_ObjectGrab);
@@ -674,10 +665,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
 				return false;
             }
-			else if(command == "/siton")
+			else if (command == "/siton")
             {
                 LLUUID targetKey;
-                if(i >> targetKey)
+                if (i >> targetKey)
                 {
 					LLViewerObject* myObject = gObjectList.findObject(targetKey);
 					char buffer[DB_IM_MSG_BUF_SIZE * 2];
@@ -688,7 +679,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 						reportToNearbyChat(std::string(buffer));
 						return false;
 					}
-					if((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(myObject, LLVector3::zero)))
+					if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(myObject, LLVector3::zero)))
 					{
 						LLMessageSystem	*msg = gMessageSystem;
 						msg->newMessageFast(_PREHASH_AgentRequestSit);
@@ -706,24 +697,24 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
 				return false;
             }
-			else if(command == "/standup")
+			else if (command == "/standup")
             {
-				if((!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand(	)))
+				if ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canStand(	)))
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					reportToNearbyChat(std::string("Standing up"));
 				}
 				return false;
             }
-			else if(command == std::string(sFSCmdLineOfferTp))
+			else if (command == std::string(sFSCmdLineOfferTp))
             {
                 std::string avatarKey;
 //				llinfos << "CMD DEBUG 0 " << command << " " << avatarName << llendl;
-                if(i >> avatarKey)
+                if (i >> avatarKey)
                 {
 //				llinfos << "CMD DEBUG 0 afterif " << command << " " << avatarName << llendl;
                     LLUUID tempUUID;
-                    if(LLUUID::parseUUID(avatarKey, &tempUUID))
+                    if (LLUUID::parseUUID(avatarKey, &tempUUID))
                     {
                         char buffer[DB_IM_MSG_BUF_SIZE * 2];
                         LLDynamicArray<LLUUID> ids;
@@ -738,7 +729,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                         msg->addU8Fast(_PREHASH_LureType, (U8)0); 
 
                         msg->addStringFast(_PREHASH_Message, tpMsg);
-                        for(LLDynamicArray<LLUUID>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
+                        for (LLDynamicArray<LLUUID>::iterator itr = ids.begin(); itr != ids.end(); ++itr)
                         {
                             msg->nextBlockFast(_PREHASH_TargetData);
                             msg->addUUIDFast(_PREHASH_TargetID, *itr);
@@ -751,7 +742,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
                 }
             }
 			
-			else if(command == std::string(sFSCmdLineGround))
+			else if (command == std::string(sFSCmdLineGround))
 			{
 				LLVector3 agentPos = gAgent.getPositionAgent();
 				U64 agentRegion = gAgent.getRegion()->getHandle();
@@ -761,28 +752,28 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				gAgent.teleportViaLocation(pos_global);
 				return false;
 			}
-			else if(command == std::string(sFSCmdLineHeight))
+			else if (command == std::string(sFSCmdLineHeight))
 			{
 				F32 z;
-				if(i >> z)
+				if (i >> z)
 				{
 					LLVector3 agentPos = gAgent.getPositionAgent();
 					U64 agentRegion = gAgent.getRegion()->getHandle();
 					LLVector3 targetPos(agentPos.mV[0],agentPos.mV[1],z);
 					LLVector3d pos_global = from_region_handle(agentRegion);
-					pos_global += LLVector3d((F64)targetPos.mV[0],(F64)targetPos.mV[1],(F64)targetPos.mV[2]);
+					pos_global += LLVector3d((F64)targetPos.mV[VX],(F64)targetPos.mV[VY],(F64)targetPos.mV[VZ]);
 					gAgent.teleportViaLocation(pos_global);
 					return false;
 				}
 			}
-			else if(command == std::string(sFSCmdLineTeleportHome))
+			else if (command == std::string(sFSCmdLineTeleportHome))
 			{
 				gAgent.teleportHome();
 				return false;
             }
-			else if(command == std::string(sFSCmdLineRezPlatform))
+			else if (command == std::string(sFSCmdLineRezPlatform))
             {
-				if(!(gRlvHandler.hasBehaviour(RLV_BHVR_REZ)))
+				if (!(gRlvHandler.hasBehaviour(RLV_BHVR_REZ)))
 				{
 					F32 width;
 					if (i >> width) cmdline_rezplat(false, width);
@@ -790,7 +781,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == std::string(sFSCmdLineMapTo))
+			else if (command == std::string(sFSCmdLineMapTo))
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
@@ -813,11 +804,11 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == std::string(sFSCmdLineCalc))//Cryogenic Blitz
+			else if (command == std::string(sFSCmdLineCalc))//Cryogenic Blitz
 			{
 				bool success;
 				F32 result = 0.f;
-				if(revised_text.length() > command.length() + 1)
+				if (revised_text.length() > command.length() + 1)
 				{
 
 					std::string expr = revised_text.substr(command.length()+1);
@@ -843,7 +834,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					return false;
 				}
 			}
-			else if(command == std::string(sFSCmdLineTP2))
+			else if (command == std::string(sFSCmdLineTP2))
 			{
 				if (revised_text.length() > command.length() + 1) //Typing this command with no argument was causing a crash. -Madgeek
 				{
@@ -852,42 +843,42 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(revised_text == "/cs")
+			else if (revised_text == "/cs")
 			{
 				LLFloaterReg::showInstance("contactsets");
 				reportToNearbyChat("Displaying Contact Sets Floater.");
 				return false;
 			}
 
-			else if(command == std::string(sFSCmdLineClearChat))
+			else if (command == std::string(sFSCmdLineClearChat))
 			{
 				LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
-				if(chat)
+				if (chat)
 				{
 					chat->clearChatHistory();
 					return false;
 				}
 			}
 
-			else if(command == "zdrop")
+			else if (command == "zdrop")
 			{
 				std::string setting;
-				if(i >> setting)
+				if (i >> setting)
 				{
-					if(setting == "on")
+					if (setting == "on")
 					{
-						if(zdrop != NULL)
+						if (zdrop != NULL)
 						{
 							reportToNearbyChat("Zdrop is already active.");
 						}
 						else
 						{
 							std::string loldest;
-							if(i >> loldest)
+							if (i >> loldest)
 							{
 								reportToNearbyChat("Beginning Zdrop.");
 								reportToNearbyChat("Verifying destination prim is present inworld...");
-								if(loldest.length() != 36)
+								if (loldest.length() != 36)
 								{
 									reportToNearbyChat("UUID entered is of an invalid length! (Hint: use the \"copy key\" button in the build menu.)");
 								}
@@ -899,7 +890,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 								{
 									std::string lolfolder;
 									std::string tmp;
-									while(i >> tmp)
+									while (i >> tmp)
 									{
 										lolfolder = lolfolder + tmp+ " ";
 									}
@@ -907,17 +898,17 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 									{
 										lolfolder = lolfolder.substr(0,lolfolder.length() - 1);
 										LLUUID folder = gInventory.findCategoryByName(lolfolder);
-										if(folder.notNull())
+										if (folder.notNull())
 										{
 											reportToNearbyChat("Verifying folder location...");
 											std::stack<LLViewerInventoryItem*> lolstack;
 											LLDynamicArray<LLPointer<LLViewerInventoryItem> > lolinv = findInventoryInFolder(lolfolder);
-											for(LLDynamicArray<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
+											for (LLDynamicArray<LLPointer<LLViewerInventoryItem> >::iterator it = lolinv.begin(); it != lolinv.end(); ++it)
 											{
 												LLViewerInventoryItem* item = *it;
 												lolstack.push(item);
 											}
-											if(lolstack.size())
+											if (lolstack.size())
 											{
 												reportToNearbyChat(llformat("Found folder \"%s\".", lolfolder.c_str()));
 												reportToNearbyChat(llformat("Found prim \"%s\".", loldest.c_str()));
@@ -935,7 +926,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 											reportToNearbyChat("Zdrop cannot work if the folder is inside another folder.");
 										}
 									}
-									catch(std::out_of_range e)
+									catch (std::out_of_range e)
 									{
 										reportToNearbyChat("The Zdrop command transfers items from your inventory to a rezzed prim without the need to wait for the contents of the prim to load.  No-copy items are moved to the prim. All other items are copied.");
 										reportToNearbyChat("Valid command: Zdrop (rezzed prim UUID) (source inventory folder name)");
@@ -948,9 +939,9 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 							}
 						}
 					}
-					else if(setting == "off")
+					else if (setting == "off")
 					{
-						if(zdrop == NULL)
+						if (zdrop == NULL)
 						{
 							reportToNearbyChat("Zdrop is already deactivated.");
 						}
@@ -973,14 +964,14 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == "ztake")
+			else if (command == "ztake")
 			{
 				std::string setting;
-				if(i >> setting)
+				if (i >> setting)
 				{
-					if(setting == "on")
+					if (setting == "on")
 					{
-						if(ztake != NULL)
+						if (ztake != NULL)
 						{
 							reportToNearbyChat("Ztake is already active.");
 						}
@@ -990,7 +981,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 							reportToNearbyChat("Verifying folder location...");
 							std::string folder_name;
 							std::string tmp;
-							while(i >> tmp)
+							while (i >> tmp)
 							{
 								folder_name = folder_name + tmp + " ";
 							}
@@ -998,7 +989,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 							{
 								folder_name = folder_name.substr(0,folder_name.length() - 1);
 								LLUUID folder = gInventory.findCategoryByName(folder_name);
-								if(folder.notNull())
+								if (folder.notNull())
 								{
 									reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
 									ztake = new JCZtake(folder);
@@ -1009,15 +1000,15 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 									reportToNearbyChat("Ztake cannot work if the folder is inside another folder.");
 								}
 							}
-							catch(std::out_of_range e)
+							catch (std::out_of_range e)
 							{
 								reportToNearbyChat("Please specify a destination folder in your inventory.");
 							}
 						}
 					}
-					else if(setting == "off")
+					else if (setting == "off")
 					{
-						if(ztake == NULL)
+						if (ztake == NULL)
 						{
 							reportToNearbyChat("Ztake is already deactivated.");
 						}
@@ -1041,13 +1032,13 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == "lpackage")
+			else if (command == "lpackage")
 			{
 				std::string loldest;
-				if(i >> loldest)
+				if (i >> loldest)
 				{
 					reportToNearbyChat("Verifying destination prim is present inworld...");
-					if(loldest.length() != 36)
+					if (loldest.length() != 36)
 					{
 						reportToNearbyChat("UUID entered is of an invalid length! (Hint: use the \"copy key\" button in the build menu.)");
 					}
@@ -1059,7 +1050,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 					{
 						std::string folder_name;
 						std::string tmp;
-						while(i >> tmp)
+						while (i >> tmp)
 						{
 							folder_name = folder_name + tmp + " ";
 						}
@@ -1067,7 +1058,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 						{
 							folder_name = folder_name.substr(0,folder_name.length() - 1);
 							LLUUID folder = gInventory.findCategoryByName(folder_name);
-							if(folder.notNull())
+							if (folder.notNull())
 							{
 								reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
 								ztake = new JCZtake(folder, true, LLUUID(loldest), folder_name);
@@ -1078,7 +1069,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 								reportToNearbyChat("The packager cannot work if the folder is inside another folder.");
 							}
 						}
-						catch(std::out_of_range e)
+						catch (std::out_of_range e)
 						{
 							reportToNearbyChat("Please specify a destination folder in your inventory.");
 						}
@@ -1090,14 +1081,14 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == "mtake")
+			else if (command == "mtake")
 			{
 				std::string setting;
-				if(i >> setting)
+				if (i >> setting)
 				{
-					if(setting == "on")
+					if (setting == "on")
 					{
-						if(mtake != NULL)
+						if (mtake != NULL)
 						{
 							reportToNearbyChat("Mtake is already active.");
 						}
@@ -1107,7 +1098,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 							reportToNearbyChat("Verifying folder location...");
 							std::string folder_name;
 							std::string tmp;
-							while(i >> tmp)
+							while (i >> tmp)
 							{
 								folder_name = folder_name + tmp + " ";
 							}
@@ -1115,7 +1106,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 							{
 								folder_name = folder_name.substr(0,folder_name.length() - 1);
 								LLUUID folder = gInventory.findCategoryByName(folder_name);
-								if(folder.notNull())
+								if (folder.notNull())
 								{
 									reportToNearbyChat(llformat("Found destination folder \"%s\".", folder_name.c_str()));
 									mtake = new TMZtake(folder);
@@ -1126,15 +1117,15 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 									reportToNearbyChat("Mtake cannot work if the folder is inside another folder.");
 								}
 							}
-							catch(std::out_of_range e)
+							catch (std::out_of_range e)
 							{
 								reportToNearbyChat("Please specify a destination folder in your inventory.");
 							}
 						}
 					}
-					else if(setting == "off")
+					else if (setting == "off")
 					{
-						if(mtake == NULL)
+						if (mtake == NULL)
 						{
 							reportToNearbyChat("Mtake is already deactivated.");
 						}
@@ -1158,7 +1149,7 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 				}
 				return false;
 			}
-			else if(command == "invrepair")
+			else if (command == "invrepair")
 			{
 				invrepair();
 			}
