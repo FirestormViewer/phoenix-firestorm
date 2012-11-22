@@ -55,10 +55,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Windlight Settings"
-				 top_pad=""
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Windlight Settings
+				</text>
 			</panel>
 
 			<panel
@@ -68,11 +68,22 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="30"
+			 height="55"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
+				<check_box
+				 control_name="VertexShaderEnable"
+				 height="16"
+				 label="Basic Shaders - Leave ON! (see tool tip!)"
+				 layout="topleft"
+				 left="5"
+				 name="BasicShaders"
+				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
+				 top_pad="10"
+				 width="240">
+				</check_box>
 				<check_box
 				 control_name="WindLightUseAtmosShaders"
 				 enabled_control="VertexShaderEnable"
@@ -81,7 +92,7 @@
 				 label="Enable Atmospheric Shaders (Windlight)"
 				 layout="topleft"
 				 left="5"
-				 name="UseLightShaders1"
+				 name="WindLightUseAtmosShaders"
 				 top_pad="10"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
 				 width="110">
@@ -97,9 +108,9 @@
 			 width="275"
 			 height="80"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 type="string"
 				 length="1"
@@ -111,8 +122,8 @@
 				 tool_tip="Windlight presets for your sky."
 				 mouse_opaque="false"
 				 top_pad="20"
-				 width="90"
-				 value="WL Sky">
+				 width="90">
+					WL Sky
 				</text>
 				<combo_box
 				 allow_text_entry="true"
@@ -122,7 +133,7 @@
 				 follows="top|left"
 				 name="WLPresetsCombo"
 				 top_delta="-5"
-				 width="170" />
+				 width="170"/>
 				<button
 				 enabled="true"
 				 name="WLPrevPreset"
@@ -131,9 +142,8 @@
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
-
 				 image_overlay="Arrow_Left_Off"
-				 scale_image="true" />
+				 scale_image="true"/>
 				<button
 				 enabled="true"
 				 name="WLNextPreset"
@@ -143,7 +153,7 @@
 				 bottom_delta="-0"
 				 left_pad="0"
 				 image_overlay="Arrow_Right_Off"
-				 scale_image="true" />
+				 scale_image="true"/>
 				<text
 				 type="string"
 				 length="1"
@@ -155,8 +165,8 @@
 				 tool_tip="Windlight presets for your water."
 				 mouse_opaque="false"
 				 top_pad="12"
-				 width="90"
-				 value="WL Water">
+				 width="90">
+				 WL Water
 				</text>
 				<combo_box
 				 allow_text_entry="true"
@@ -166,7 +176,7 @@
 				 left_delta="58"
 				 name="WaterPresetsCombo"
 				 top_delta="-4"
-				 width="170" />
+				 width="170"/>
 				<button
 				 enabled="true"
 				 name="WWPrevPreset"
@@ -175,10 +185,8 @@
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="-3"
-				 label=""
-				 label_selected=""
 				 image_overlay="Arrow_Left_Off"
-				 scale_image="true" />
+				 scale_image="true"/>
 				<button
 				 enabled="true"
 				 name="WWNextPreset"
@@ -187,10 +195,8 @@
 				 width="20"
 				 bottom_delta="-0"
 				 left_pad="0"
-				 label=""
-				 label_selected=""
 				 image_overlay="Arrow_Right_Off"
-				 scale_image="true" />
+				 scale_image="true"/>
 			</panel>
 			
 			<panel
@@ -202,9 +208,9 @@
 			 width="275"
 			 height="62"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<icon
 				 height="32"
 				 image_name="icon_day_cycle_12am.tga"
@@ -221,7 +227,6 @@
 				 decimal_digits="0"
 				 height="10"
 				 increment="0.0833333"
-				 initial_value="0"
 				 layout="topleft"
 				 left="6"
 				 max_sliders="1"
@@ -241,7 +246,7 @@
 				 left_pad="5"
 				 image_overlay="StopReload_Off"
 				 scale_image="true"
-				 tool_tip="Reset the WindLight options to region default." />
+				 tool_tip="Reset the WindLight options to region default."/>
 			</panel>
 
 			<panel
@@ -253,19 +258,20 @@
 			 width="137"
 			 height="140"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Q_Windlights"
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 value="Quick Windlights"
 				 top_pad="10"
 				 height="20"
 				 word_wrap="true"
-				 width="137"/>
+				 width="137">
+					Quick Windlights
+				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
@@ -287,9 +293,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunrise"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -303,9 +306,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="noon"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -319,9 +319,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="sunset"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -335,9 +332,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="midnight"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -351,9 +345,6 @@
 					<button.commit_callback
 					 function="World.EnvSettings"
 					 parameter="default"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 			</panel>
 			
@@ -366,20 +357,21 @@
 			 width="138"
 			 height="140"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_WL_Presets"
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 value="Windlight Presets"
 				 top_pad="10"
 				 height="20"
 				 word_wrap="true"
 				 tool_tip="Click an item below to create new preset or modify an existing one."
-				 width="132"/>
+				 width="132">
+					Windlight Presets
+				</text>
 				<view_border
 				 bevel_style="none"
 				 follows="left|top"
@@ -401,9 +393,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_sky"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -417,11 +406,7 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_sky"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
-  
 			
 				<view_border
 				 bevel_style="none"
@@ -444,9 +429,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="new_water"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 				<button
 				 follows="left|top"
@@ -460,9 +442,6 @@
 					<button.commit_callback
 					 function="World.EnvPreset"
 					 parameter="edit_water"/>
-					<button.on_enable
-					 function="RLV.EnableIfNot"
-					 parameter="setenv"/>
 				</button>
 			</panel>
 
@@ -484,10 +463,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Water Reflection Settings"
-				 top_pad=""
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Water Reflection Settings
+				</text>
 			</panel>
 
 			<panel
@@ -499,9 +478,9 @@
 			 width="275"
 			 height="40"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_W_R_Types"
 				 follows="left|top"
@@ -510,8 +489,9 @@
 				 top_pad="15"
 				 width="75"
 				 layout="topleft"
-				 tool_tip="Determine what will show up in water reflections."
-				 value="Type"/>
+				 tool_tip="Determine what will show up in water reflections.">
+					Type
+				</text>
 				<combo_box
 				 control_name="RenderReflectionDetail"
 				 height="22"
@@ -551,11 +531,11 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="88"
+			 height="63"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">		
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_R_Res"
 				 follows="left|top"
@@ -564,8 +544,9 @@
 				 top_pad="15"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections. In order for the changes to take effect, you must toggle off and on the 'Basic Shaders' check box below. Also, whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Tools 2'."
-				 value="Resolution"/>
+				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Lighting and Shadows' in tab 'Light'.">
+					Resolution
+				</text>
 				<combo_box
 				 control_name="RenderWaterRefResolution"
 				 enabled_control="VertexShaderEnable"
@@ -600,55 +581,20 @@
 					 label="Life-Like             - NOTE: You must also enable 'Lighting and Shadows' (Light Tab)"
 					 name="5"
 					 value="4096"/>
+					<combo_box.commit_callback
+					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 initial_value="true"
-				 label=""
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders"
-				 top_pad="10"
-				 width="240">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable" />
-				</check_box>
-				<text
-				 name="R_Toggle" 
-				 follows="left|top"
-				 height="15"
-				 left="25" 
-				 top_delta="0"
-				 width="230"
-				 layout="topleft"
-				 word_wrap="true"
-				 tool_tip="This should ALWAYS be on. When you change the resolution setting above you must turn this box off and on for the change to take effect."
-				 value="Basic Shaders  - Leave ON! (see tool tip!)"/>
 				<check_box
 				 control_name="RenderTransparentWater"
 				 height="16"
-				 initial_value="true"
-				 label=""
+				 label="Transparent Water"
 				 layout="topleft"
 				 left="5"
 				 name="TransparentWater"
+				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
 				 top_pad="5"
 				 width="240">
-					<check_box.commit_callback
-					 function="Pref.VertexShaderEnable" />
 				</check_box>
-				<text
-				 name="Transp_Water"
-				 follows="left|top"
-				 height="15"
-				 left="25" 
-				 top_delta="0"
-				 width="230"
-				 layout="topleft"
-				 word_wrap="true"
-				 tool_tip="Render water as transparent. Disabling renders water as opaque with a simple texture applied."
-				 value="Transparent Water"/>
 				<!--slider
 				 control_name="RenderReflectionRes"
 				 can_edit_text="true"
@@ -656,7 +602,6 @@
 				 follows="left|top"
 				 height="16"
 				 increment="1"
-				 initial_value="0"
 				 label="Resolution"
 				 label_width="75"
 				 layout="topleft"
@@ -696,10 +641,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Lights and Shadows Settings"
-				 top_pad=""
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Lights and Shadows Settings
+				</text>
 			</panel>
 
 			<panel
@@ -711,9 +656,9 @@
 			 width="275"
 			 height="69"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<check_box
 				 control_name="RenderDeferred"
 				 enabled_control="VertexShaderEnable"
@@ -722,15 +667,14 @@
 				 label="Enable Lighting and Shadows"
 				 layout="topleft"
 				 left="5"
-				 name="UseLightShaders1"
+				 name="RenderDeferred"
 				 top_pad="10"
-				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in SL. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'Tools 3'."
+				 tool_tip="This will enable shadows from the Sun and Moon and in-world light sources. It will also allow you to turn on Depth of Field and other graphic features. Basically you need to turn this on to see most of the 'eye candy' in-world. If you cannot enable this feature or see its effect, first ensure both Atmospheric Shaders and Basic Shaders are enabled in tab 'WL'."
 				 width="240">
 				</check_box>
 				<check_box
 				 control_name="RenderLocalLights"
 				 height="16"
-				 initial_value="true"
 				 label="Enable All Local Lights"
 				 layout="topleft"
 				 left="5"
@@ -765,9 +709,9 @@
 			 width="275"
 			 height="35"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Shadow_Types"
 				 follows="left|top"
@@ -777,8 +721,9 @@
 				 width="50"
 				 word_wrap="true"
 				 layout="topleft"
-				 tool_tip="This setting only affects the shadows that are rendered from light sources, the lights will still function normally otherwise. Point light (lights that do not have the projection feature enabled) will always create a sense of shadows, yet they will not cast them upon any surface. It is important to note that regardless of the setting you choose here, textures projected from projection lights will still be enabled."
-				 value="Shadow Types"/>
+				 tool_tip="This setting only affects the shadows that are rendered from light sources, the lights will still function normally otherwise. Point light (lights that do not have the projection feature enabled) will always create a sense of shadows, yet they will not cast them upon any surface. It is important to note that regardless of the setting you choose here, textures projected from projection lights will still be enabled.">
+					Shadow Types
+				</text>
 				<combo_box
 				 control_name="RenderShadowDetail"
 				 enabled_control="RenderDeferred"
@@ -813,18 +758,19 @@
 			 width="275"
 			 height="101"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Shadow_Res"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Shd. Res"
 				 top_pad="13"
 				 tool_tip="Shadow Resolution: This is a VERY important setting. It determines the quality of the shadows. It also is VERY heavy on the computer. It is a good idea to leave this setting as LOW as possible when you are not shooting. When you are shooting, set it to 1.0 while preparing your shot. When you are ready to take your shot, slowly raise the slider bar to the right. You need to be careful of your framerate while you raise this setting. It is helpful to turn on the Statistics Bar (in tab 'Aids' under 'Interface aids') when you do this for the first few times so you can be familiar with the level of shadows that works best with your system. NOTE: Setting this too high or moving it too fast will cause viewer crashes."
-				 width="80"/>
+				 width="80">
+					Shd. Res
+				</text>
 				<slider_bar
 				 name="SB_Shadow_Res"
 				 can_edit_text="true"
@@ -833,13 +779,12 @@
 				 height="16"
 				 decimal_digits="2"
 				 increment="0.01"
-				 initial_value="1"
 				 layout="topleft"
 				 left_pad="-20"
 				 min_val="0.00"
 				 max_val="4"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Shadow_Res"
 				 can_edit_text="true"
@@ -874,10 +819,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Shd. Blur"
 				 top_pad="5"
 				 tool_tip="The higher the number, the softer the shadow edges. Set to '0' for the sharpest shadows possible. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
-				 width="80"/>
+				 width="80">
+					Shd. Blur
+				</text>
 				<slider_bar
 				 name="SB_Blur_Size"
 				 decimal_digits="2"
@@ -891,7 +837,7 @@
 				 min_val="0.00"
 				 max_val="4"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Blur_Size"
 				 can_edit_text="true"
@@ -926,10 +872,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Blur. Dist."
 				 top_pad="5"
 				 tool_tip="This will determine the point at which the shadows will begin to blur relative to the camera. The lower the value the closer the point of shadow blur will begin. PLEASE NOTE: Ambient Oclussion must be enabled for this setting to work."
-				 width="80"/>
+				 width="80">
+					Blur. Dist.
+				</text>
 				<slider_bar
 				 name="SB_Blur_Dist"
 				 can_edit_text="true"
@@ -943,7 +890,7 @@
 				 min_val="0.00"
 				 max_val="1"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Blur_Dist"
 				 can_edit_text="true"
@@ -978,10 +925,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="FOV Cutoff"
 				 top_pad="5"
 				 tool_tip="This determines the FOV cutoff at which the viewer will switch between ortho instead of perspective projection. If you are getting shadows that are 'jaggedy' try adjusting this setting for improvement. Also adjusting the XYZ values for the debug setting RenderShadowSplitExponent can be VERY helpful."
-				 width="80"/>
+				 width="80">
+					FOV Cutoff
+				</text>
 				<slider_bar
 				 name="SB_FOV_Cutoff"
 				 can_edit_text="true"
@@ -995,7 +943,7 @@
 				 min_val="0"
 				 max_val="100"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_FOV_Cutoff"
 				 can_edit_text="true"
@@ -1035,9 +983,9 @@
 			 width="275"
 			 height="45"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<check_box
 				 follows="top|left"
 				 layout="topleft"
@@ -1087,9 +1035,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Ambient Occlusion Settings"
 				 height="17"
-				 width="250"/>
+				 width="250">
+					Ambient Occlusion Settings
+				</text>
 			</panel>
 
 			<panel
@@ -1101,18 +1050,17 @@
 			 width="275"
 			 height="30"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<check_box
 				 control_name="RenderDeferredSSAO"
 				 enabled_control="RenderDeferred"
 				 height="16"
-				 initial_value="true"
 				 label="Enable Ambient Occlusion (Depth Perception)"
 				 layout="topleft"
 				 left="5"
-				 name="ssaolabel"
+				 name="UseSSAO"
 				 tool_tip="The effect is subtle in most scenes, acting simply to increase depth perception in shadowed areas such as indoor scenes. The most dramatic change is seen in complex, detailed objects which contain tucks and creases (dinosaur skeletons, for example). It manifests itself as a slight darkening around the edges of some objects, especially those which are surrounded closely by other objects. If you are not using this feature DISABLE IT! It will help speed up your frame rate."
 				 top_pad="10"
 				 width="230">
@@ -1124,7 +1072,6 @@
 				 follows="left|top"
 				 height="16"
 				 increment=".001"
-				 initial_value="40"
 				 label="Quality"
 				 label_width="55"
 				 layout="topleft"
@@ -1145,18 +1092,19 @@
 			 width="275"
 			 height="81"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Scale"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Scale"
 				 top_pad="13"
 				 tool_tip="Controls sampling region; larger regions are more accurate. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80"/>
+				 width="80">
+					Scale
+				</text>
 				<slider_bar
 				 name="SB_Scale"
 				 can_edit_text="true"
@@ -1170,7 +1118,7 @@
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Scale"
 				 can_edit_text="true"
@@ -1205,10 +1153,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Max Scale"
 				 top_pad="5"
 				 tool_tip="Controls maximum screen radius from which to sample from, to avoid graphics card cache misses and associated large performance penalty. It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80"/>
+				 width="80">
+					Max Scale
+				</text>
 				<slider_bar
 				 name="SB_Max_Scale"
 				 can_edit_text="true"
@@ -1257,10 +1206,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Factor"
 				 top_pad="5"
 				 tool_tip="Scaling factor for the effect (larger is darker). It can be helpful to set these values high and then add a bit of shadow blur to soften their effect."
-				 width="80"/>
+				 width="80">
+					Factor
+				</text>
 				<slider_bar
 				 name="SB_Scaling_Factor"
 				 decimal_digits="2"
@@ -1274,7 +1224,7 @@
 				 min_val="0"
 				 max_val="250"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Scaling_Factor"
 				 can_edit_text="true"
@@ -1323,10 +1273,11 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Specular Highlight Settings"
 				 height="17"
-				 tool_tip="A specular highlight is the bright spot of light that appears on shiny objects when illuminated.(wikipedia)"
-				 width="285"/>
+				 tool_tip="A specular highlight is the bright spot of light that appears on shiny objects when illuminated. (Wikipedia)"
+				 width="285">
+					Specular Highlight Settings
+				</text>
 			</panel>
 
 			<panel
@@ -1338,18 +1289,19 @@
 			 width="275"
 			 height="57"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Smoothness" 
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Smoothness"
 				 top_pad="13"
-				 tool_tip="Smoothness (Specular Exponent) is a user-chosen value that controls the apparent smoothness of the surface. "
-				 width="80"/>
+				 tool_tip="Smoothness (Specular Exponent) is a user-chosen value that controls the apparent smoothness of the surface."
+				 width="80">
+					Smoothness
+				</text>
 				<slider_bar
 				 name="SB_Smoothness"
 				 can_edit_text="true"
@@ -1363,7 +1315,7 @@
 				 min_val="-282"
 				 max_val="10000"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Smoothness"
 				 can_edit_text="true"
@@ -1398,11 +1350,13 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Resolution"
 				 top_pad="5"
-				 tool_tip="Resolution (SpecularResX) Adjusts the resolution (quality) of the specular mapping."
-				 width="80"/>
+				 tool_tip="Resolution (SpecularResX) adjusts the resolution (quality) of the specular mapping."
+				 width="80">
+					Resolution
+				</text>
 				<slider_bar
+				 name="SB_Smooth_Res"
 				 can_edit_text="true"
 				 control_name="RenderSpecularResX"
 				 follows="left|right"
@@ -1414,8 +1368,9 @@
 				 min_val="0"
 				 max_val="8192"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
+				 name="S_Smooth_Res"
 				 can_edit_text="true"
 				 control_name="RenderSpecularResX"
 				 top_delta="-3"
@@ -1449,7 +1404,6 @@
 				 follows="left|top"
 				 height="16"
 				 increment=".01"
-				 initial_value="4"
 				 label="Shad Per."
 				 label_width="50"
 				 layout="topleft"
@@ -1466,7 +1420,6 @@
 				 follows="left|top"
 				 height="16"
 				 increment=".001"
-				 initial_value="0.01"
 				 label="ShdOff-.01-"
 				 label_width="70"
 				 layout="topleft"
@@ -1476,7 +1429,7 @@
 				 name="ShadowsOffset"
 				 tool_tip="D=0.010"
 				 top_pad="2"
-				 width="240" />
+				 width="240"/>
 				<slider_bar
 				 can_edit_text="true"
 				 control_name="RenderShadowOffsetError"
@@ -1484,7 +1437,6 @@
 				 follows="left|top"
 				 height="16"
 				 increment=".001"
-				 initial_value="0"
 				 label="ShdOffErr-0-"
 				 label_width="70"
 				 layout="topleft"
@@ -1494,7 +1446,7 @@
 				 name="ShadowsOffsetError"
 				 tool_tip="D=0.000"
 				 top_pad="2"
-				 width="240"/-->
+				 width="240" /-->
 			</panel>
 		</panel>
 
@@ -1523,10 +1475,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Depth of Field Settings"
-				 top_pad=""
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Depth of Field Settings
+				</text>
 			</panel>
 
 			<panel
@@ -1538,19 +1490,18 @@
 			 width="275"
 			 height="50"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<check_box
 				 control_name="RenderDepthOfField"
 				 enabled_control="RenderDeferred"
 				 height="16"
-				 initial_value="true"
-				 label="Enable Depth of Field (DOF)"
+				 label="Enable Depth of Field (DoF)"
 				 layout="topleft"
 				 left="5"
 				 name="UseDepthofField"
-				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image'(wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Shadows and Dynamic Lights' in Tools 2."
+				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Lighting and Shadows' ob tab 'Light'."
 				 top_pad="10"
 				 width="230"/>
 				<check_box
@@ -1580,18 +1531,19 @@
 			 width="275"
 			 height="195"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Zoom"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Zoom"
 				 top_pad="15"
 				 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
-				 width="80"/>
+				 width="80">
+					View angle
+				</text>
 				<slider_bar
 				 name="SB_Zoom"
 				 can_edit_text="true"
@@ -1604,7 +1556,7 @@
 				 min_val="0.08"
 				 max_val="3.06"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Zoom"
 				 can_edit_text="true"
@@ -1639,10 +1591,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="FOV"
 				 top_pad="5"
 				 tool_tip="Field of View: This tells the viewer what FOV you would like to simulate for the DOF effect. It is best to set this to the current FOV of the viewer."
-				 width="80"/>
+				 width="80">
+					FOV
+				</text>
 				<slider_bar
 				 name="SB_FOV"
 				 can_edit_text="true"
@@ -1690,10 +1643,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="f-number"
 				 top_pad="5"
 				 tool_tip="In real world terms this is the aperture setting for the lens and the lower the value the shorter the depth of field will be. The same applies to SL."
-				 width="80"/>
+				 width="80">
+					f-number
+				</text>
 				<slider_bar
 				 name="SB_F_Number"
 				 can_edit_text="true"
@@ -1706,7 +1660,7 @@
 				 min_val=".01"
 				 max_val="22"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_F_Number"
 				 can_edit_text="true"
@@ -1741,10 +1695,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Foc Length"
 				 top_pad="5"
 				 tool_tip="Focal Length (mm): This tells the viewer what Focal Length/Lens Length to simulate for the DOF effect. Higher numbers produce a narrower depth of field."
-				 width="80"/>
+				 width="80">
+					Foc Length
+				</text>
 				<slider_bar
 				 name="SB_Focal_Length"
 				 can_edit_text="true"
@@ -1757,7 +1712,7 @@
 				 min_val="1"
 				 max_val="2000"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Focal_Length"
 				 can_edit_text="true"
@@ -1792,10 +1747,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Foc Time"
 				 top_pad="5"
-				 tool_tip="Focus Time: This sets the time in seconds it take to the viewer to change focus from one object."
-				 width="80"/>
+				 tool_tip="Focus Transition Time: This sets the time in seconds it take to the viewer to change focus from one object."
+				 width="80">
+					Foc Time
+				</text>
 				<slider_bar
 				 name="SB_Foc_Time"
 				 can_edit_text="true"
@@ -1808,7 +1764,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Foc_Time"
 				 can_edit_text="true"
@@ -1843,10 +1799,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="CoC"
 				 top_pad="5"
 				 tool_tip="Circle of Confusion: This is a VERY IMPORTANT SETTING. It determines the strength of the blur itself. It does not change the depth of field, it adjusts how much those objects outside of it will be blurry. Also you can access negative values for interesting effects in the spinner text box."
-				 width="80"/>
+				 width="80">
+					CoC
+				</text>
 				<slider_bar
 				 name="SB_CoC"
 				 can_edit_text="true"
@@ -1859,7 +1816,7 @@
 				 min_val="0"
 				 max_val="50"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_CoC"
 				 can_edit_text="true"
@@ -1894,10 +1851,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Resolution"
 				 top_pad="5"
 				 tool_tip="Resolution: This determines the quality of the DOF Effect. For non-photography uses '.25' is good. For setting up shots '.50' or '.70' is very nice. For shooting quality images '1.00' is best. High values will slow down your FPS! Also you can access negative values for interesting effects in the spinner text box."
-				 width="80"/>
+				 width="80">
+					Resolution
+				</text>
 				<slider_bar
 				 name="SB_Resolution"
 				 can_edit_text="true"
@@ -1910,7 +1868,7 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Resolution"
 				 can_edit_text="true"
@@ -1945,10 +1903,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Aspect Ratio"
 				 top_pad="5"
-				 tool_tip="This is supposed to be aspect ratio of the camera you're modelling. For example, a 35mm camera has an aspect ratio of 3:2 (1.5). Second Life will use this as a frame of reference for how field of view and focal length must be adjusted depending on window size. IT SEEMS TO HAVE NO EFFECT!"
-				 width="80"/>
+				 tool_tip="This is supposed to be aspect ratio of the camera you're modelling. For example, a 35mm camera has an aspect ratio of 3:2 (1.5). The viewer will use this as a frame of reference for how field of view and focal length must be adjusted depending on window size. IT SEEMS TO HAVE NO EFFECT!"
+				 width="80">
+					Aspect Ratio
+				</text>
 				<slider_bar
 				 name="SB_Aspect_Ratio"
 				 can_edit_text="true"
@@ -1961,7 +1920,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Aspect_Ratio"
 				 can_edit_text="true"
@@ -2010,9 +1969,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Glow Settings"
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Glow Settings
+				</text>
 			</panel>
 
 			<panel
@@ -2024,15 +1984,14 @@
 			 width="275"
 			 height="45"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<!--
 				<check_box
 				 control_name="RenderGlow"
 				 enabled_control="VertexShaderEnable"
 				 height="16"
-				 initial_value="true"
 				 label="Enable Glow Effect (please read the tool tip)"
 				 layout="topleft"
 				 left="5"
@@ -2046,10 +2005,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Quality"
 				 top_pad="15"
 				 tool_tip="This will determine the quality of the glow effect, higher is better. There is little visual difference between 8 and 10."
-				 width="80"/>
+				 width="80">
+					Quality
+				</text>
 				<!--slider_bar
 				 name="SB_Glow_Quality"
 				 can_edit_text="true"
@@ -2103,18 +2063,19 @@
 			 width="275"
 			 height="150"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Glow_Iterations"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Iterations"
 				 top_pad="15"
 				 tool_tip="Number of times to iterate/repeat the glow (higher = wider and smoother and a bit slower)."
-				 width="80"/>
+				 width="80">
+					Iterations
+				</text>
 				<slider_bar
 				 name="SB_Glow_Iterations"
 				 can_edit_text="true"
@@ -2128,7 +2089,7 @@
 				 min_val="1"
 				 max_val="50"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Glow_Iterations"
 				 can_edit_text="true"
@@ -2162,10 +2123,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Strength"
 				 top_pad="5"
 				 tool_tip="Additive strength of glow. Very low values are needed to see this effect. Start low!"
-				 width="80"/>
+				 width="80">
+					Strength
+				</text>
 				<slider_bar
 				 name="SB_Glow_Strength"
 				 can_edit_text="true"
@@ -2179,7 +2141,7 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Glow_Strength"
 				 can_edit_text="true"
@@ -2214,10 +2176,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Luminance"
 				 top_pad="5"
 				 tool_tip="Minimum luminance intensity necessary to consider an object bright enough to automatically glow."
-				 width="80"/>
+				 width="80">
+					Luminance
+				</text>
 				<slider_bar
 				 name="SB_Luminance"
 				 can_edit_text="true"
@@ -2230,7 +2193,7 @@
 				 min_val="0"
 				 max_val="2"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Luminance"
 				 can_edit_text="true"
@@ -2265,10 +2228,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Warmth"
 				 top_pad="5"
 				 tool_tip="Amount of warmth extraction to use (versus luminance extraction). 0 = lum, 1.0 = warmth. OFTEN HAS LITTLE OR NO EFFECT!"
-				 width="80"/>
+				 width="80">
+					Warmth
+				</text>
 				<slider_bar
 				 name="SB_Warmth"
 				 can_edit_text="true"
@@ -2316,10 +2280,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Width"
 				 tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Width
+				</text>
 				<slider_bar
 				 name="SB_Glow_Width"
 				 can_edit_text="true"
@@ -2332,7 +2297,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Glow_Width"
 				 can_edit_text="true"
@@ -2367,10 +2332,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Alpha"
 				 top_pad="5"
 				 tool_tip="Basically how bright the glow is allowed to get."
-				 width="80"/>
+				 width="80">
+					Alpha
+				</text>
 				<slider_bar
 				 name="SB_Alpha"
 				 can_edit_text="true"
@@ -2383,7 +2349,7 @@
 				 min_val="0"
 				 max_val="1"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Alpha"
 				 can_edit_text="true"
@@ -2440,9 +2406,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="General Render Settings"
 				 height="17"
-				 width="200"/>
+				 width="200">
+					General Render Settings
+				</text>
 			</panel>
 
 			<panel
@@ -2454,18 +2421,19 @@
 			 width="275"
 			 height="275"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Draw_Distance"
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Draw Dist."
 				 top_pad="10"
 				 tool_tip="This sets the furthest distance the viewer will draw anything. High values will slow your FPS!"
-				 width="80"/>
+				 width="80">
+					Draw Dist.
+				</text>
 				<slider_bar
 				 name="SB_Draw_Distance"
 				 can_edit_text="true"
@@ -2475,10 +2443,10 @@
 				 increment="1"
 				 layout="topleft"
 				 left_pad="-20"
-				 min_val="0"
-				 max_val="2048"
+				 min_val="32"
+				 max_val="1024"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Draw_Distance"
 				 can_edit_text="true"
@@ -2513,10 +2481,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Avi Count"
 				 top_pad="5"
 				 tool_tip="Maximum number of other avatars to render in a scene. Very helpful for situations where many avatars are slowing your FPS."
-				 width="80"/>
+				 width="80">
+					Avi Count
+				</text>
 				<slider_bar
 				 name="SB_Avi_Count"
 				 can_edit_text="true"
@@ -2529,7 +2498,7 @@
 				 min_val="0"
 				 max_val="100"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Avi_Count"
 				 can_edit_text="true"
@@ -2564,10 +2533,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Avi Detail"
 				 top_pad="5"
 				 tool_tip="Sets the render quality of the avatars. Higher is better!"
-				 width="80"/>
+				 width="80">
+					Avi Detail
+				</text>
 				<slider_bar
 				 name="SB_Avi_Detail"
 				 can_edit_text="true"
@@ -2580,7 +2550,7 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Avi_Detail"
 				 can_edit_text="true"
@@ -2615,10 +2585,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Avi Physics"
 				 top_pad="5"
 				 tool_tip="Controls level of detail of avatar physics (such as chest physics). Higher is better."
-				 width="80"/>
+				 width="80">
+					Avi Physics
+				</text>
 				<slider_bar
 				 name="SB_Avi_Physics"
 				 can_edit_text="true"
@@ -2631,7 +2602,7 @@
 				 min_val="0"
 				 max_val="10"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Avi_Physics"
 				 can_edit_text="true"
@@ -2666,10 +2637,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Particle Cnt."
 				 top_pad="5"
 				 tool_tip="Sets the maximum number of particles to render."
-				 width="80"/>
+				 width="80">
+					Particle Cnt.
+				</text>
 				<slider_bar
 				 name="SB_Particle_Cnt"
 				 can_edit_text="true"
@@ -2682,7 +2654,7 @@
 				 min_val="0"
 				 max_val="10000"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Particle_Cnt"
 				 can_edit_text="true"
@@ -2717,10 +2689,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Terr. Scale"
 				 top_pad="5"
-				 tool_tip="Sets the quality of the default Linden Labs ground (terrain) texture."
-				 width="80"/>
+				 tool_tip="Sets the quality of the default ground (terrain) texture."
+				 width="80">
+					Terr. Scale
+				</text>
 				<slider_bar
 				 name="SB_Terrain_Scale"
 				 can_edit_text="true"
@@ -2733,7 +2706,7 @@
 				 min_val="0"
 				 max_val="24"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Terrain_Scale"
 				 can_edit_text="true"
@@ -2768,10 +2741,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Terrain Qal"
 				 top_pad="5"
 				 tool_tip="Sets the quality of terrain. High numbers mean more detailed terrain in the distance."
-				 width="80"/>
+				 width="80">
+					Terrain Qal
+				</text>
 				<slider_bar
 				 name="SB_Terrain_Quality"
 				 can_edit_text="true"
@@ -2819,10 +2793,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Obj. Detail"
 				 top_pad="5"
 				 tool_tip="Controls the detail of prims. Higher values produce greater detail for objects."
-				 width="80"/>
+				 width="80">
+					Obj. Detail
+				</text>
 				<slider_bar
 				 name="SB_Object_Detail"
 				 can_edit_text="true"
@@ -2835,7 +2810,7 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Object_Detail"
 				 can_edit_text="true"
@@ -2870,10 +2845,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Flexiprims"
 				 top_pad="5"
 				 tool_tip="Controls level of detail of flexible objects. Higher means more detail."
-				 width="80"/>
+				 width="80">
+					Flexiprims
+				</text>
 				<slider_bar
 				 name="SB_Flexi_Detail"
 				 can_edit_text="true"
@@ -2921,10 +2897,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Tree Detail"
 				 top_pad="5"
 				 tool_tip="Controls level of detail of vegetation. Higher numbers produce greater detail."
-				 width="80"/>
+				 width="80">
+					Tree Detail
+				</text>
 				<slider_bar
 				 name="SB_Tree_Detail"
 				 can_edit_text="true"
@@ -2937,7 +2914,7 @@
 				 min_val="0"
 				 max_val="15"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Tree_Detail"
 				 can_edit_text="true"
@@ -2972,10 +2949,11 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Sky Detail"
 				 top_pad="5"
 				 tool_tip="Controls vertex detail on the WindLight sky. Lower numbers will give better performance and less than lovely skies."
-				 width="80"/>
+				 width="80">
+					Sky Detail
+				</text>
 				<slider_bar
 				 name="SB_Sky_Detail"
 				 can_edit_text="true"
@@ -2988,7 +2966,7 @@
 				 min_val="4"
 				 max_val="512"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Sky_Detail"
 				 can_edit_text="true"
@@ -3023,24 +3001,24 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="5"
-				 value="Avatar Floor Offset"
 				 top_pad="5"
 				 tool_tip="Controls how far above or below the floor your avatar stands. Helpful if your find yourself above or below the floor."
-				 width="110"/>
+				 width="110">
+					Avatar Floor Offset
+				</text>
 				<slider_bar
 				 name="SB_Av_Floor_Offset"
 				 can_edit_text="true"
 				 control_name="AvatarZOffset"
 				 follows="left|top"
 				 height="16"
-				 initial_value="0.0"
 				 increment=".001"
 				 layout="topleft"
 				 left_pad="0"
 				 min_val="-2"
 				 max_val="2"
 				 top_delta="-2"
-				 width="77" />
+				 width="77"/>
 				<spinner
 				 name="S_Av_Floor_Offset"
 				 can_edit_text="true"
@@ -3091,13 +3069,12 @@
 			 height="98"
 			 border_visible="true"
 			 bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
+			 bg_alpha_color="SL-CustomBackground_Light"
 			 background_visible="true">
 				<check_box
 				 follows="left|top"
 				 control_name="RenderUseFarClip"
 				 height="16"
-				 initial_value="true"
 				 label="Enable Draw Distance"
 				 layout="topleft"
 				 top_pad="8" 
@@ -3109,7 +3086,6 @@
 				 follows="left|top"
 				 control_name="RenderDynamicLOD"
 				 height="16"
-				 initial_value="true"
 				 label="Dynamically adjust level of detail"
 				 layout="topleft"
 				 left="5"
@@ -3121,7 +3097,6 @@
 				 follows="left|top"
 				 control_name="UseOcclusion"
 				 height="16"
-				 initial_value="true"
 				 label="Render only Objects visible to the Camera"
 				 layout="topleft"
 				 left="5"
@@ -3133,11 +3108,10 @@
 				 follows="left|top"
 				 control_name="RenderAnisotropic"
 				 height="16"
-				 initial_value="true"
 				 label="Anisotropic Filtering (texture crispness)"
 				 layout="topleft"
 				 left="5"
-				 tool_tip="This enables higher texture crispness"
+				 tool_tip="This enables higher texture crispness."
 				 name="Anisotropic"
 				 top_pad="2"
 				 width="240"/>
@@ -3179,8 +3153,8 @@
 			 height="33"
 			 border_visible="true"
 			 bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_Anti-aliasing"
 				 follows="left|top"
@@ -3189,8 +3163,9 @@
 				 top_pad="11"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance."
-				 value="Anti-aliasing"/>
+				 tool_tip="Determines how sharp and smooth the edges of objects will be. On top level graphics cards, higher values have virtually NO performance impact. On lower graphics cards, higher values can slow performance.">
+					Anti-aliasing
+				</text>
 				<combo_box
 				 control_name="RenderFSAASamples"
 				 height="22"						
@@ -3210,7 +3185,7 @@
 					 name="2x"
 					 value="2"/>
 					<combo_box.item
-					 label="4x (Smoother Edges) "
+					 label="4x (Smoother Edges)"
 					 name="4x"
 					 value="4"/>
 					<combo_box.item
@@ -3234,7 +3209,7 @@
 			 height="56"
 			 border_visible="true"
 			 bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
+			 bg_alpha_color="SL-CustomBackground_Light"
 			 background_visible="true">
 				<text
 				 name="T_Texture_Bumpiness"
@@ -3244,8 +3219,9 @@
 				 top_pad="11"
 				 width="110"
 				 layout="topleft"
-				 tool_tip="Controls the strength and resolution of normal and bump maps. You must toggle to check box below for changes to take effect."
-				 value="Texture Bumpiness"/>
+				 tool_tip="Controls the strength and resolution of normal and bump maps.">
+					Texture Bumpiness
+				</text>
 				<combo_box
 				 control_name="RenderNormalMapScale"
 				 height="22"
@@ -3282,28 +3258,6 @@
 					<combo_box.commit_callback
 					 function="Quickprefs.ShaderChanged"/>
 				</combo_box>
-				<check_box
-				 follows="left|top"
-				 control_name="VertexShaderEnable"
-				 height="16"
-				 initial_value="true"
-				 label=""
-				 layout="topleft"
-				 left="5"
-				 name="BasicShaders1"
-				 top_pad="7"
-				 width="20" />
-				<text
-				 name="T_Basic_Shaders"
-				 follows="left|top"
-				 height="15"
-				 left_pad="0" 
-				 top_delta="0"
-				 width="230"
-				 layout="topleft"
-				 word_wrap="true"
-				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more. When you change the Texture Bumpiness setting above you must turn this box off and on for the change to take effect."
-				 value="Basic Shaders  - Leave ON! (see tool tip!)"/>
 			</panel>
 		</panel>
 
@@ -3332,9 +3286,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Interface Aids"
 				 height="17"
-				 width="150"/>
+				 width="150">
+					Interface Aids
+				</text>
 			</panel>
 
 			<panel
@@ -3344,170 +3299,170 @@
 			 top_pad="0"
 			 left="4"
 			 width="275"
-			 height="248"
+			 height="255"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="10"
-             label="Show Bounding Boxes for Objects in Scene"
-             name="Bounding Boxes">
-               <check_box.on_check
-                function="Advanced.CheckInfoDisplay"
-                parameter="bboxes"/>
-               <check_box.check_button.commit_callback
-                function="Advanced.ToggleInfoDisplay"
-                parameter="bboxes"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show the Statistics Bar"
-             name="Statistics Bar">
-               <check_box.on_check
-                function="Floater.Visible"
-                parameter="stats"/>
-               <check_box.check_button.commit_callback
-                function="Floater.Toggle"
-                parameter="stats"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show Detailed Camera Position Data"
-             name="Camera">
-               <check_box.on_check
-                function="Advanced.CheckHUDInfo"
-                parameter="camera"/>
-               <check_box.check_button.commit_callback
-                function="Advanced.ToggleHUDInfo"
-                parameter="camera"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show Detailed Texture Loading Information"
-             name="Texture Console">
-               <check_box.on_check
-                function="Advanced.CheckConsole"
-                parameter="texture"/>
-               <check_box.check_button.commit_callback
-                function="Advanced.ToggleConsole"
-                parameter="texture"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show RGB-I Color Values Under Cursor"
-             name="Show Color Under Cursor">
-               <check_box.on_check
-                function="Advanced.CheckShowColor"/>
-               <check_box.check_button.commit_callback
-                function="Advanced.ToggleShowColor"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Highlight Transparent Objects in Red"
-             name="Highlight Transparent">
-               <check_box.on_check
-                function="View.CheckHighlightTransparent"/>
-               <check_box.check_button.commit_callback
-                function="View.HighlightTransparent"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show the Scene as Wireframe"
-             name="Wireframe">
-               <check_box.on_check
-                function="Advanced.CheckWireframe"
-                parameter="Wireframe"/>
-               <check_box.check_button.commit_callback
-                function="Advanced.ToggleWireframe"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Show the HUD attached to Your Avatar"
-             name="Show HUD Attachments">
-               <check_box.on_check
-                function="View.CheckHUDAttachments"/>
-               <check_box.check_button.commit_callback
-                function="View.ShowHUDAttachments"/>
-            </check_box>
-            <check_box
-             follows="top|left"
-             layout="topleft"
-             left="5"
-             top_pad="9"
-             label="Slow-mo Your Avatar (in your viewer only)"
-             name="Slow Motion Animations">
-               <check_box.on_check
-                function="CheckControl"
-                parameter="SlowMotionAnimation"/>
-               <check_box.check_button.commit_callback
-                function="ToggleControl"
-                parameter="SlowMotionAnimation"/>
-            </check_box>
-            <button
-             follows="left|top"
-             name="Rebake Texture"
-             height="22"
-             label="Force Appearance Update (Rebake)"
-             layout="topleft"
-             left="5"
-             top_pad="2"
-             width="262">
-               <button.commit_callback
-                function="Advanced.RebakeTextures"/>
-            </button>
-            <button
-             follows="left|top"
-             name="Set Window Size..."
-             height="22"
-             label="Set Window Viewer Size..."
-             layout="topleft"
-             left="5"
-             top_pad="2"
-             width="262">
-               <button.commit_callback
-                function="Floater.Show"
-                parameter="window_size"/>
-            </button>
-            <button
-             follows="left|top"
-             name="Debug Settings"
-             height="22"
-             label="Show Debug Settings Menu"
-             layout="topleft"
-             left="5"
-             top_pad="2"
-             width="262">
-               <button.commit_callback
-                function="Advanced.ShowDebugSettings"
-                parameter="all"/>
-            </button>
-         </panel>
-
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="15"
+				 label="Show Bounding Boxes for Objects in Scene"
+				 name="Bounding Boxes">
+					<check_box.on_check
+					 function="Advanced.CheckInfoDisplay"
+					 parameter="bboxes"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleInfoDisplay"
+					 parameter="bboxes"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show the Statistics Bar"
+				 name="Statistics Bar">
+					<check_box.on_check
+					 function="Floater.Visible"
+					 parameter="stats"/>
+					<check_box.check_button.commit_callback
+					 function="Floater.Toggle"
+					 parameter="stats"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show Detailed Camera Position Data"
+				 name="Camera">
+					<check_box.on_check
+					 function="Advanced.CheckHUDInfo"
+					 parameter="camera"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleHUDInfo"
+					 parameter="camera"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show Detailed Texture Loading Information"
+				 name="Texture Console">
+					<check_box.on_check
+					 function="Advanced.CheckConsole"
+					 parameter="texture"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleConsole"
+					 parameter="texture"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show RGB-I Color Values Under Cursor"
+				 name="Show Color Under Cursor">
+					<check_box.on_check
+					 function="Advanced.CheckShowColor"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleShowColor"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Highlight Transparent Objects in Red"
+				 name="Highlight Transparent">
+					<check_box.on_check
+					 function="View.CheckHighlightTransparent"/>
+					<check_box.check_button.commit_callback
+					 function="View.HighlightTransparent"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show the Scene as Wireframe"
+				 name="Wireframe">
+					<check_box.on_check
+					 function="Advanced.CheckWireframe"
+					 parameter="Wireframe"/>
+					<check_box.check_button.commit_callback
+					 function="Advanced.ToggleWireframe"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Show the HUD attached to Your Avatar"
+				 name="Show HUD Attachments">
+					<check_box.on_check
+					 function="View.CheckHUDAttachments"/>
+					<check_box.check_button.commit_callback
+					 function="View.ShowHUDAttachments"/>
+				</check_box>
+				<check_box
+				 follows="top|left"
+				 layout="topleft"
+				 left="5"
+				 top_pad="9"
+				 label="Slow-mo Your Avatar (in your viewer only)"
+				 name="Slow Motion Animations">
+					<check_box.on_check
+					 function="CheckControl"
+					 parameter="SlowMotionAnimation"/>
+					<check_box.check_button.commit_callback
+					 function="ToggleControl"
+					 parameter="SlowMotionAnimation"/>
+				</check_box>
+				<button
+				 follows="left|top"
+				 name="Rebake Texture"
+				 height="22"
+				 label="Force Appearance Update (Rebake)"
+				 layout="topleft"
+				 left="5"
+				 top_pad="2"
+				 width="262">
+					<button.commit_callback
+					 function="Advanced.RebakeTextures"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Set Window Size..."
+				 height="22"
+				 label="Set Window Viewer Size..."
+				 layout="topleft"
+				 left="5"
+				 top_pad="2"
+				 width="262">
+					<button.commit_callback
+					 function="Floater.Show"
+					 parameter="window_size"/>
+				</button>
+				<button
+				 follows="left|top"
+				 name="Debug Settings"
+				 height="22"
+				 label="Show Debug Settings Menu"
+				 layout="topleft"
+				 left="5"
+				 top_pad="2"
+				 width="262">
+					<button.commit_callback
+					 function="Advanced.ShowDebugSettings"
+					 parameter="all"/>
+				</button>
+			</panel>
+			
 			<!--view_border
 			 bevel_style="none"
 			 follows="left|top"
@@ -3536,9 +3491,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Quick Stats"
 				 tool_tip="Here you can find some very useful stats for gauging system performance. Expand/Collapse the items below by clicking their labels."
-				 width="200"/>	
+				 width="200">
+					Quick Stats
+				</text>
 			</panel>
 			
 			<scroll_container
@@ -3548,7 +3504,7 @@
 			 left="4"
 			 name="statistics_scroll"
 			 reserve_scroll_corner="false"
-			 top_pad="0"
+			 top_pad="1"
 			 bevel_style="out"
 			 opaque="false"
 			 color="SL-CustomBackground_Light"
@@ -3565,7 +3521,6 @@
 					<stat_view
 					 follows="left|top"
 					 name="basic"
-					 label="Quick Stats (Click to Expand)"
 					 show_label="false"
 					 setting="OpenDebugStatBasic"
 					 left="0"
@@ -3626,13 +3581,12 @@
 						 label_spacing="50000"
 						 precision="0"
 						 show_bar="false"
-						 tool_tip="KTris Drawn: (per second) This is a count of the number of triangles ('tris') drawn every second."
+						 tool_tip="KTris Drawn: (per second) Computer-generated 3D objects are built out of triangles (the basic geometric shape). This is a count of the number of triangles ('tris') drawn every second."
 						 setting="DebugStatModeKTrisDrawnSec">
 						</stat_bar>
 						<stat_bar
 						 name="objs"
 						 label="Total Objects"
-						 unit_label=""
 						 stat="numobjectsstat"
 						 bar_min="0"
 						 bar_max="50000"
@@ -3701,9 +3655,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="3D Mouse (Joystick) Settings"
 				 height="17"
-				 width="200"/>
+				 width="200">
+					3D Mouse (Joystick) Settings
+				</text>
 			</panel>
 
 			<panel
@@ -3715,18 +3670,19 @@
 			 width="275"
 			 height="185"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<text
 				 name="T_LR_Axis"
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Left/Right"
 				 tool_tip="Adjusts the sensitivity of the Left/Right movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="10"
-				 width="80"/>
+				 width="80">
+					Left/Right
+				</text>
 				<slider_bar
 				 name="SB_LR_Axis"
 				 can_edit_text="true"
@@ -3740,7 +3696,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_LR_Axis"
 				 can_edit_text="true"
@@ -3775,10 +3731,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Up/Down"
 				 tool_tip="Adjusts the sensitivity of the Up/Down movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Up/Down
+				</text>
 				<slider_bar
 				 name="SB_UD_Axis"
 				 can_edit_text="true"
@@ -3792,7 +3749,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_UD_Axis"
 				 can_edit_text="true"
@@ -3827,10 +3784,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="In/Out"
 				 tool_tip="Adjusts the sensitivity of the In/Out movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					In/Out
+				</text>
 				<slider_bar
 				 name="SB_IO_Axis"
 				 can_edit_text="true"
@@ -3844,7 +3802,7 @@
 				 min_val="0"
 				 max_val="5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_IO_Axis"
 				 can_edit_text="true"
@@ -3879,10 +3837,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Tilt"
 				 tool_tip="Adjusts the sensitivity of the Pitch movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Pitch
+				</text>
 				<slider_bar
 				 name="SB_Tilt"
 				 can_edit_text="true"
@@ -3931,10 +3890,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Spin"
-				 tool_tip="Adjusts the sensitivity of the Spin movement. If you find it difficult to move with precision, use lower scale values."
+				 tool_tip="Adjusts the sensitivity of the Yaw movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Yaw
+				</text>
 				<slider_bar
 				 name="SB_Spin"
 				 can_edit_text="true"
@@ -3948,7 +3908,7 @@
 				 min_val="0"
 				 max_val=".5"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Spin"
 				 can_edit_text="true"
@@ -3983,10 +3943,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Roll"
 				 tool_tip="Adjusts the sensitivity of the Roll movement. If you find it difficult to move with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Roll
+				</text>
 				<slider_bar
 				 name="SB_Roll"
 				 can_edit_text="true"
@@ -4035,10 +3996,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Zoom Spd"
-				 tool_tip="X axis"
+				 tool_tip="Adjusts the sensitivity of the Zoom speed. If you find it difficult to zoom with precision, use lower scale values."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Zoom Spd
+				</text>
 				<slider_bar
 				 name="SB_Zoom_Speed"
 				 can_edit_text="true"
@@ -4087,10 +4049,11 @@
 				 follows="top|left"
 				 layout="topleft"
 				 left="5"
-				 value="Feathering"
-				 tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing. "
+				 tool_tip="Setting the slider all the way to the right will make the camera very rigid, giving complete control to the joystick. Setting the slider all the way to the left will make the camera very fluid like the camera weighs a lot; good for fly-by shots, not good for framing."
 				 top_pad="5"
-				 width="80"/>
+				 width="80">
+					Feathering
+				</text>
 				<slider_bar
 				 name="SB_Feathering"
 				 can_edit_text="true"
@@ -4104,7 +4067,7 @@
 				 min_val="0"
 				 max_val="3"
 				 top_delta="-2"
-				 width="127" />
+				 width="127"/>
 				<spinner
 				 name="S_Feathering"
 				 can_edit_text="true"
@@ -4144,9 +4107,9 @@
 			 width="275"
 			 height="135"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<spinner
 				 follows="left|top"
 				 control_name="JoystickAxis6"
@@ -4180,8 +4143,8 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 tool_tip="In order for the zooming control to work, you must set the 'Zoom Mapping' above to '4'."
-				 width="15" />
+				 tool_tip="In order for the zooming control to work, you must set the 'Zoom Axis Mapping' above to '4'."
+				 width="230"/>
 				<check_box
 				 name="CB_AutoLeveling"
 				 control_name="AutoLeveling"
@@ -4200,7 +4163,7 @@
 				 layout="topleft"
 				 left="6"
 				 top_pad="7"
-				 tool_tip="When enabled the mouse will move your avatar. "
+				 tool_tip="When enabled the mouse will move your avatar."
 				 width="230"/>
 				<check_box
 				 name="CB_Move_Objects"
@@ -4247,10 +4210,10 @@
 				 layout="topleft"
 				 left="10"
 				 font="SansSerif"
-				 value="Viewer Camera Menu Settings"
-				 top_pad=""
 				 height="17"
-				 width="200"/>
+				 width="200">
+					Viewer Camera Menu Settings
+				</text>
 			</panel>
 
 			<panel
@@ -4262,9 +4225,9 @@
 			 width="275"
 			 height="120"
 			 border_visible="true"
-          bevel_style="none"
-          bg_alpha_color="SL-CustomBackground_Light"
-          background_visible="true">
+			 bevel_style="none"
+			 bg_alpha_color="SL-CustomBackground_Light"
+			 background_visible="true">
 				<tab_container
 				 name="TC_Viewer_Cam_Menu_Settings"
 				 follows="all"
@@ -4295,17 +4258,18 @@
 						 width="275"
 						 height="110"
 						 border_visible="true"
-                   bevel_style="none"
-                   bg_alpha_color="SL-CustomBackground_Light"
-                   background_visible="true">
+						 bevel_style="none"
+						 bg_alpha_color="SL-CustomBackground_Light"
+						 background_visible="true">
 							<text
 							 name="T_Zoom2"
 							 layout="topleft"
 							 left="10"
-							 value="View angle"
 							 top_pad="7"
 							 tool_tip="In real world terms this is a Zoom feature. This will change the field of view in you viewer window. It is the same as hitting Ctrl + 0 or Ctrl+8. NOTE: This will not function if you have flycam enabled (3D SpaceNavigator)."
-							 width="100"/>
+							 width="100">
+								View angle
+							</text>
 							<slider
 							 name="SB_Zoom2"
 							 can_edit_text="true"
@@ -4318,7 +4282,7 @@
 							 min_val="0.08"
 							 max_val="3.06"
 							 top_delta="-2"
-							 width="135" />
+							 width="135"/>
 							<!--spinner
 							 name="S_Zoom2"
 							 can_edit_text="true"
@@ -4352,10 +4316,11 @@
 							 name="T_Zoom_Speed2"
 							 layout="topleft"
 							 left="10"
-							 value="Zoom Speed"
 							 top_pad="5"
 							 tool_tip="Controls how fast/slow the camera will zoom in and out. Higher values produce slower and smoother zoom."
-							 width="100"/>
+							 width="100">
+								Zoom Speed
+							</text>
 							<slider
 							 name="S_Zoom_Speed2"
 							 can_edit_text="true"
@@ -4388,10 +4353,11 @@
 							 name="T_Camera_Lag"
 							 layout="topleft"
 							 left="10"
-							 value="Camera Lag"
 							 top_pad="5"
 							 tool_tip="Amount camera lags behind avatar motion (0 = none, 30 = avatar velocity)."
-							 width="100"/>
+							 width="100">
+								Camera Lag
+							</text>
 							<slider
 							 name="S_Camera_Lag"
 							 can_edit_text="true"
@@ -4404,7 +4370,7 @@
 							 min_val="0"
 							 max_val="30"
 							 top_delta="-2"
-							 width="135" />
+							 width="135"/>
 							<button
 							 follows="right"
 							 name="Reset_Camera_Lag"
@@ -4424,10 +4390,11 @@
 							 name="T_Camera_Offset"
 							 layout="topleft"
 							 left="10"
-							 value="Camera Offset"
 							 top_pad="5"
 							 tool_tip="Controls how far the camera is offset/distance from the default point of view."
-							 width="100"/>
+							 width="100">
+								Camera Offset
+							</text>
 							<slider
 							 name="S_Camera_Offset"
 							 can_edit_text="true"
@@ -4440,7 +4407,7 @@
 							 min_val=".001"
 							 max_val="25"
 							 top_delta="-2"
-							 width="135" />
+							 width="135"/>
 							<button
 							 follows="right"
 							 name="Reset_Camera_Offset"
@@ -4460,10 +4427,11 @@
 							 name="T_Cam_Smoothing"
 							 layout="topleft"
 							 left="10"
-							 value="Cam. Smoothing"
 							 top_pad="5"
 							 tool_tip="Controls how smoothly the camera starts and stops. Higher values produce smoother (and somewhat slower) movement."
-							 width="100"/>
+							 width="100">
+								Cam. Smoothing
+							</text>
 							<slider
 							 name="S_Cam_Smoothing"
 							 can_edit_text="true"
@@ -4476,7 +4444,6 @@
 							 min_val="0"
 							 max_val="300"
 							 top_delta="-2"
-							 tool_tip=""
 							 width="135"/>
 							<button
 							 follows="right"
@@ -4512,18 +4479,19 @@
 						 width="275"
 						 height="110"
 						 border_visible="true"
-                   bevel_style="none"
-                   bg_alpha_color="SL-CustomBackground_Light"
-                   background_visible="true">
+						 bevel_style="none"
+						 bg_alpha_color="SL-CustomBackground_Light"
+						 background_visible="true">
 							<text
 							 name="T_Mouse_Sens"
 							 follows="left|top"
 							 layout="topleft"
 							 left="10"
-							 value="Mouse Sensitivity "
 							 top_pad="15"
 							 tool_tip="Controls responsiveness of mouse when in mouselook mode."
-							 width="100"/>
+							 width="100">
+								Mouse Sensitivity
+							</text>
 							<slider
 							 name="S_Mouse_Sens"
 							 can_edit_text="true"
@@ -4536,7 +4504,6 @@
 							 min_val="0"
 							 max_val="15"
 							 top_delta="-2"
-							 tool_tip=""
 							 width="135"/>
 							<button
 							 follows="right"
@@ -4573,7 +4540,7 @@
 							 tool_tip="Smooths out motion of mouse when in mouselook mode."
 							 name="MouseSmooth"
 							 top_pad="2"
-							 width="250" />	
+							 width="250"/>
 						</panel>
 					</panel>
 
@@ -4594,14 +4561,13 @@
 						 width="275"
 						 height="110"
 						 border_visible="true"
-                   bevel_style="none"
-                   bg_alpha_color="SL-CustomBackground_Light"
-                   background_visible="true">
+						 bevel_style="none"
+						 bg_alpha_color="SL-CustomBackground_Light"
+						 background_visible="true">
 							<check_box
 							 top_pad="15"
 							 follows="left|top"
 							 height="16"
-							 initial_value="false"
 							 label="Clicking your avatar keeps camera position"
 							 layout="topleft"
 							 left="10"
@@ -4613,7 +4579,6 @@
 							 top_pad="2"
 							 follows="left|top"
 							 height="16"
-							 initial_value="false"
 							 label="Reset camera position after teleport"
 							 layout="topleft"
 							 left="10"
@@ -4625,7 +4590,6 @@
 							 top_pad="2"
 							 follows="left|top"
 							 height="16"
-							 initial_value="false"
 							 label="Disable minimum camera zoom distance"
 							 layout="topleft"
 							 left="10"
@@ -4637,7 +4601,6 @@
 							 top_pad="2"
 							 follows="left|top"
 							 height="16"
-							 initial_value="false"
 							 label="Allow the camera to move w/o constraints"
 							 layout="topleft"
 							 left="10"
