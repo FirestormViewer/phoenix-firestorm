@@ -128,7 +128,7 @@
 		</text>
 		<slider name="FSCmdLinePlatformSize" label="Breite" label_width="37" tool_tip="Legt die Größe der zu rezzenden Plattform fest."/>
 		<text name="FSCmdLineKeyToName_txt">
-			Avatarname anhand UUID bestimmen (Befehl: cmd key)
+			Av.-Name via UUID bestimmen (Befehl: cmd key)
 		</text>
 		<text name="FSCmdLineAO_txt">
 			AO ein-/ausschalten (Befehl: cmd on/off)

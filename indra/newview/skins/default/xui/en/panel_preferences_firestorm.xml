@@ -963,7 +963,7 @@
       height="16"
       left_delta="10"
       name="FSCmdLineKeyToName_txt"
-      width="250">
+      width="270">
       Get avatar name from key (usage: cmd key)
     </text>
     <line_editor
