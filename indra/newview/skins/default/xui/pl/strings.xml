@@ -4959,4 +4959,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="LoadCameraPositionOutsideDrawDistance">
 		Nie można załadować widoku kamery, ponieważ zapisana jej pozycja znajduje się poza polem widzenia.
 	</string>
+	<string name="DrawDistanceSteppingGestureObsolete">
+		Ze względu na zmiany w kodzie używanie tego gestu nie jest już potrzebne. Stopniowe powiększanie pola widzenia zostało włączone.
+	</string>
+	<string name="FSCmdLineDrawDistanceSet">
+		Pole widzenia zostało ustawione na [DISTANCE]m.
+	</string>
 </strings>

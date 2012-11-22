@@ -21,6 +21,8 @@
         <check_box label="Oddzielne frazy wyszukiwania dla każdej z zakładek Szafy" name="FSSplitInventorySearchOverTabs" tool_tip="Gdy włączysz tą opcję, to będzie możliwe wprowadzanie oddzielnych fraz wyszukiwania dla każdej z zakładek Szafy." />
         <check_box name="UseLSLBridge" label="Włącz Most w LScript Language" tool_tip="Pozwala Firestormowi na używanie oskryptowanego dodatku (Mostu), aby rozszerzyć znacznie swoje możliwości" />
         <check_box name="UseLSLFlightAssist" label="Włącz pomocnika lotu w Moście" tool_tip="Włącza skrypt pomagający latać i zawisać na większych wysokościach" />
+        <check_box label="Stopniowe powiększanie pola widzenia" name="FSRenderFarClipStepping" tool_tip="Jeśli włączysz tą opcję, to Firestorm będzie stopniowo zwiększać pole widzenia po teleportacji." />
+        <slider name="progressive_draw_distance_interval" tool_tip="Odstęp w sekundach pomiędzy każdym kolejnym powiększeniem pola widzenia." />
     </panel>
     <panel label="Ochrona" name="ProtectionTab">
         <check_box label="Blokuj siadanie na obiektach przez kliknięcie lewym przyciskiem myszy" name="FSBlockClickSit" />
