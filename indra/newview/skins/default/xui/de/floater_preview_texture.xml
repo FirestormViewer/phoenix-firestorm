@@ -16,7 +16,7 @@
 		Uploader:
 	</text>
 	<button label="Profil" name="openprofile"/>
-	<text name="uploader_label">
+	<text name="upload_time_label">
 		Datum:
 	</text>
 	<panel name="dimensions_panel">
