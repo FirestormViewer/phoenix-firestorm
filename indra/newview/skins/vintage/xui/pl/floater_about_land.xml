@@ -22,7 +22,7 @@
 		pozostały
 	</floater.string>
 	<tab_container name="landtab">
-		<panel label="OGÓLNE" name="land_general_panel">
+		<panel label="Ogólne" name="land_general_panel">
 			<panel.string name="new users only">
 				Tylko nowi Rezydenci
 			</panel.string>
@@ -148,7 +148,7 @@
 			<button label="Porzuć Posiadłość" name="Abandon Land..."/>
 			<button label="Odzyskaj Posiadłość" name="Reclaim Land..."/>
 		</panel>
-		<panel label="UMOWA" name="land_covenant_panel">
+		<panel label="Umowa" name="land_covenant_panel">
 			<panel.string name="can_resell">
 				Posiadłość zakupiona w tym Regionie może być odsprzedana.
 			</panel.string>
@@ -212,7 +212,7 @@
 łączona/dzielona.
 			</text>
 		</panel>
-		<panel label="OBIEKTY" name="land_objects_panel">
+		<panel label="Obiekty" name="land_objects_panel">
 			<panel.string name="objects_available_text">
 				[COUNT] z [MAX] ([AVAILABLE] jest dostępnych)
 			</panel.string>
@@ -267,7 +267,7 @@
 				<name_list.columns label="Najbardziej aktualne" name="mostrecent"/>
 			</name_list>
 		</panel>
-		<panel label="OPCJE" name="land_options_panel">
+		<panel label="Opcje" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
 				Udostępnij tą Posiadłość w wyszukiwarce
 			</panel.string>
@@ -302,17 +302,17 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<text name="allow_label">
 				Udostępnij innym Rezydentom:
 			</text>
-			<text name="allow_label1">
-				Edycję terenu:
+			<check_box name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
+			<check_box name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
+			<text name="edit_terrain_label">
+				Mod. ziemi
 			</text>
-			<check_box label="Mod. ziemi" name="edit land check" tool_tip="Gdy ta opcja jest włączona każda osoba może edytować Twój teren. Najlepiej pozostawić ją wyłączoną, w końcu Ty zawsze możesz zmieniać swoją ziemię."/> 
 			<text name="caution_text">
 				(używaj ostrożnie!)
 			</text>
-			<text name="allow_label0">
-				Latanie:
+			<text name="fly_label">
+				Latanie
 			</text>
-			<check_box label="Włącz latanie" name="check fly" tool_tip="Wybrana - Rezydenci mogą latać na Twojej Posiadłości. Nie jest wybrana - mogą tylko wlatywać do lub latać ponad Twoją Posiadłością."/>
 			<text name="allow_label2">
 				Budowanie:
 			</text>
@@ -330,7 +330,7 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 			<check_box label="Grupa" name="check group scripts"/>
 			<check_box label="Bezpieczna (brak uszkodzeń)" name="check safe" tool_tip="Wybrana - Posiadłość jest bezpieczna - uszkodzenia w walce są zablokowane. Nie jest wybrana - uszkodzenia w walce są włączone."/>
 			<check_box label="Popychanie niedozwolone" name="PushRestrictCheck" tool_tip="Nie pozwalaj skryptom na popychanie. Wybranie tej opcji może być przydatne do ograniczenia zakłóceń spokoju w Twojej Posiadłości."/>
-			<check_box label="Wyświetlaj w wyszukiwarce (30L$/tyg.)" name="ShowDirectoryCheck" tool_tip="Udostępnij ukazywanie się nazwy Posiadłości w wyszukiwarce"/>
+			<check_box label="Wyświetlaj w wyszukiwarce (30L$/tyg.) w:" name="ShowDirectoryCheck" tool_tip="Udostępnij ukazywanie się nazwy Posiadłości w wyszukiwarce"/>
 			<combo_box name="land category">
 				<combo_box.item label="Każda kategoria" name="item0"/>
 				<combo_box.item label="Lokalizacja Lindenów" name="item1"/>
@@ -369,7 +369,7 @@ Jedynie większe posiadłości mogą być umieszczone w bazie wyszukiwarki.
 				<combo_box.item label="Gdziekolwiek" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MEDIA" name="land_media_panel">
+		<panel label="Media" name="land_media_panel">
 			<text name="with media:">
 				Typ mediów:
 			</text>
@@ -404,7 +404,7 @@ teksturę:
 			</text>
 			<check_box label="Powtarzaj odtwarzanie" name="media_loop" tool_tip="Powtarzaj odtwarzanie mediów w pętli. Po wyświetleniu materiału odtwarzanie rozpocznie się od początku."/>
 		</panel>
-		<panel label="DŹWIĘK" name="land_audio_panel">
+		<panel label="Dźwięk" name="land_audio_panel">
 			<text name="MusicURL:">
 				URL muzyki:
 			</text>
@@ -424,7 +424,7 @@ teksturę:
 			<check_box label="Rozmowy włączone (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
 			<check_box label="Ogranicz komunikację głosową do tej Posiadłości." name="parcel_enable_voice_channel_local"/>
 		</panel>
-		<panel label="DOSTĘP" name="land_access_panel">
+		<panel label="Dostęp" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Zdefiniowane przez Majątek)
 			</panel.string>

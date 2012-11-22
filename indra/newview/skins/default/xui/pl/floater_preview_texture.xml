@@ -6,9 +6,16 @@
 	<floater.string name="Copy">
 		Kopiuj do Szafy
 	</floater.string>
+	<floater.string name="DateTime">
+		[wkday, datetime, slt], [day, datetime, slt] [mth, datetime, slt] [year, datetime, slt], [hour, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
+	</floater.string>
 	<text name="desc txt">
 		Opis:
 	</text>
+	<text name="uploader_date_time">
+		Załadowane przez [UPLOADER]: [DATE_TIME]
+	</text>
+	<button label="Profil" name="openprofile"/>
 	<panel name="dimensions_panel">
 		<text name="aspect_ratio">
 			Zobacz proporcje
