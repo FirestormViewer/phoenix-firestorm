@@ -360,6 +360,12 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
 	}
 	// </FS:Techwolf Lupindo>
+	// <FS:Ansariel> Asset UUID
+	if (mIsCopyable)
+	{
+		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
+	}
+	// </FS:Ansariel>
 
 	client_rect.mBottom += PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height ;
 
@@ -583,6 +589,14 @@ void LLPreviewTexture::updateDimensions()
 			additional_height += getChildView("upload_time")->getRect().getHeight() + PREVIEW_VPAD;
 		}
 		// </FS:Techwolf Lupindo>
+		// <FS:Ansariel> Asset UUID
+		if (mIsCopyable)
+		{
+			getChildView("uuid_label")->setVisible(TRUE);
+			getChildView("uuid")->setVisible(TRUE);
+			additional_height += getChildView("uuid")->getRect().getHeight() + PREVIEW_VPAD;
+		}
+		// </FS:Ansariel>
 
 		// If this is 100% correct???
 		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
@@ -641,6 +655,13 @@ void LLPreviewTexture::updateDimensions()
 			LLStringUtil::format(date_time, substitution);
 			childSetText("upload_time", date_time);
 		}
+
+		// <FS:Ansariel> Asset UUID
+		if (mIsCopyable)
+		{
+			childSetText("uuid", mImageID.asString());
+		}
+		// </FS:Ansariel>
 	}
 }
 
