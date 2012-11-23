@@ -376,6 +376,24 @@ LLModel::EModelStatus load_face_from_dom_polylist(std::vector<LLVolumeFace>& fac
 
 			if (pos_source)
 			{
+				// <FS:ND> FIRE-8139/BUG-670; Make sure there is no invalid data in this dae model
+				if( llisnan( v[idx[cur_idx+pos_offset]*3+0] ) )
+				{
+					llwarns << "Found NaN while loading positions from DAE-Model, invalid model." << llendl;
+					return LLModel::BAD_ELEMENT;
+				}
+				if( llisnan( v[idx[cur_idx+pos_offset]*3+1] ) )
+				{
+					llwarns << "Found NaN while loading positions from DAE-Model, invalid model." << llendl;
+					return LLModel::BAD_ELEMENT;
+				}
+				if( llisnan( v[idx[cur_idx+pos_offset]*3+2] ) )
+				{
+					llwarns << "Found NaN while loading positions from DAE-Model, invalid model." << llendl;
+					return LLModel::BAD_ELEMENT;
+				}
+				// </FS:ND>
+				
 				cv.getPosition().set(v[idx[cur_idx+pos_offset]*3+0],
 									v[idx[cur_idx+pos_offset]*3+1],
 									v[idx[cur_idx+pos_offset]*3+2]);
