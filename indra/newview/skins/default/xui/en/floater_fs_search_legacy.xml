@@ -3,6 +3,7 @@
 	can_resize="true"
 	default_tab_group="1"
 	height="590"
+	help_topic="fs_legacy_search"
 	layout="topleft"
 	legacy_header_height="0"
 	min_height="590"
@@ -50,413 +51,413 @@
 		top="1"
 		width="780"
 		name="panel_legacy_search">
-	<loading_indicator
-		top="24"
-		left="118"
-		height="23"
-		width="23"
-		layout="topleft"
-		follows="top|left"
-		name="loading"
-		visible="false" />
-	<text
-		type="string"
-		follows="left|top"
-		height="16"
-		layout="topleft"
-		left="10"
-		name="search_category_label"
-		top="12"
-		width="156">
-		Select a search category:
-	</text>
-    <radio_group
-		control_name="SearchCategory"
-		height="35"
-		width="370"
-		layout="topleft"
-		left_pad="3"
-		top_delta="-3"
-		name="search_category_radio">
-        <radio_item
-			label="People"
-			name="people"
+		<loading_indicator
+			top="24"
+			left="118"
+			height="23"
+			width="23"
 			layout="topleft"
+			follows="top|left"
+			name="loading"
+			visible="false" />
+		<text
+			type="string"
+			follows="left|top"
 			height="16"
-			value="0"
-			width="125" />
-		<radio_item
-			label="Groups"
-			name="groups"
-			top_delta="0"
 			layout="topleft"
-			height="16"
-			left_pad="1"
-			value="1"
-			width="125" />
-		<radio_item
-			label="Places"
-			name="places"
-			top_delta="0"
+			left="10"
+			name="search_category_label"
+			top="12"
+			width="156">
+			Select a search category:
+		</text>
+		<radio_group
+			control_name="SearchCategory"
+			height="35"
+			width="370"
 			layout="topleft"
-			height="16"
-			left_pad="1"
-			value="2"
-			width="125" />
-		<radio_item
-			label="Land"
-			name="land"
-			top_pad="0"
-			layout="topleft"
-			height="16"
-			left_delta="-252"
-			value="3"
-			width="125"
-			enabled="false"/>
-		 <radio_item
-			label="Events"
-			name="events"
-			top_delta="0"
-			layout="topleft"
-			height="16"
-			left_pad="1"
-			value="4"
-			width="125"
-			enabled="false"/>
-		<radio_item
-			label="Classifieds"
-			name="classifieds"
-			top_delta="0"
-			layout="topleft"
-			height="16"
-			left_pad="1"
-			value="5"
-			width="125"/>
-	</radio_group>
-	<!-- Maturity settings -->
-	<check_box
-		control_name="ShowPGSearchAll"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_all"
-		top="12"
-		width="15"
-		enabled="false"/>
-	<icon
-		follows="right|top"
-		height="16"
-		image_name="Parcel_PG_Dark"
-		layout="topleft"
-		left_pad="2"
-		name="rating_icon_general"
-		top_delta="-1"
-		width="18"/>
-	<check_box
-		control_name="ShowMatureSearchAll"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="2"
-		name="mature_all"
-		top_delta="1"
-		width="15"
-		enabled="false"/>
-	<icon
-		follows="right|top"
-		height="16"
-		image_name="Parcel_M_Dark"
-		layout="topleft"
-		left_pad="2"
-		name="rating_icon_moderate"
-		top_delta="-1"
-		width="18"/>
-	<check_box
-		control_name="ShowAdultSearchAll"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="2"
-		name="adult_all"
-		top_delta="1"
-		width="15"
-		enabled="false"/>
-	<icon
-		follows="right|top"
-		height="16"
-		image_name="Parcel_R_Dark"
-		layout="topleft"
-		left_pad="2"
-		name="rating_icon_adult"
-		top_delta="-1"
-		width="18"/>
-	<!-- Group Settings-->
-	<check_box
-		control_name="ShowPGGroups"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_group"
-		top="12"
-		width="15"/>
-	<check_box
-		control_name="ShowMatureGroups"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="21"
-		name="mature_group"
-		width="15"/>
-	<check_box
-		control_name="ShowAdultGroups"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="22"
-		name="adult_group"
-		width="15"/>
-	<!-- Places Settings-->
-	<check_box
-		control_name="ShowPGSims"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_sims"
-		top="12"
-		width="15"/>
-	<check_box
-		control_name="ShowMatureSims"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="21"
-		name="mature_sims"
-		width="15"/>
-	<check_box
-		control_name="ShowAdultSims"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="22"
-		name="adult_sims"
-		width="15"/>
-	<!-- Land Settings-->
-	<check_box
-		control_name="ShowPGLand"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_land"
-		top="12"
-		width="15"/>
-	<check_box
-		control_name="ShowMatureLand"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="21"
-		name="mature_land"
-		width="15"/>
-	<check_box
-		control_name="ShowAdultland"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="22"
-		name="adult_land"
-		width="15"/>
-	<!-- Events Settings-->
-	<check_box
-		control_name="ShowPGEvents"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_events"
-		top="12"
-		width="15"/>
-	<check_box
-		control_name="ShowMatureEvents"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="21"
-		name="mature_events"
-		width="15"/>
-	<check_box
-		control_name="ShowAdultEvents"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="22"
-		name="adult_events"
-		width="15"/>
-	<!-- Classifieds Settings-->
+			left_pad="3"
+			top_delta="-3"
+			name="search_category_radio">
+			<radio_item
+				label="People"
+				name="people"
+				layout="topleft"
+				height="16"
+				value="0"
+				width="125" />
+			<radio_item
+				label="Groups"
+				name="groups"
+				top_delta="0"
+				layout="topleft"
+				height="16"
+				left_pad="1"
+				value="1"
+				width="125" />
+			<radio_item
+				label="Places"
+				name="places"
+				top_delta="0"
+				layout="topleft"
+				height="16"
+				left_pad="1"
+				value="2"
+				width="125" />
+			<radio_item
+				label="Land"
+				name="land"
+				top_pad="0"
+				layout="topleft"
+				height="16"
+				left_delta="-252"
+				value="3"
+				width="125"
+				enabled="false"/>
+			 <radio_item
+				label="Events"
+				name="events"
+				top_delta="0"
+				layout="topleft"
+				height="16"
+				left_pad="1"
+				value="4"
+				width="125"
+				enabled="false"/>
+			<radio_item
+				label="Classifieds"
+				name="classifieds"
+				top_delta="0"
+				layout="topleft"
+				height="16"
+				left_pad="1"
+				value="5"
+				width="125"/>
+		</radio_group>
+		<!-- Maturity settings -->
 		<check_box
-		control_name="ShowPGClassifieds"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left="660"
-		name="pg_classifieds"
-		top="12"
-		width="15"/>
-	<check_box
-		control_name="ShowMatureClassifieds"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="21"
-		name="mature_classifieds"
-		width="15"/>
-	<check_box
-		control_name="ShowAdultClassifieds"
-		follows="right|top"
-		height="16"
-		label=""
-		layout="topleft"
-		left_pad="22"
-		name="adult_classifieds"
-		width="15"/>
-	<text
-		type="string"
-		length="1"
-		follows="left|top"
-		top_pad="5"
-		layout="topleft"
-		left="10"
-		name="search_text"
-		top="30"
-		height="16"
-		width="156">
-		Enter search terms:
-	</text>
-	<line_editor
-		bevel_style="none"
-		border_style="line"
-		border.border_thickness="0"
-		commit_on_focus_lost="false"
-		follows="left|top|right"
-		height="23"
-		left_delta="0"
-		name="Edit"
-		top="46"
-		width="590" />
-	<button
-		follows="top|right"
-		height="23"
-		label="Find"
-		layout="topleft"
-		left_pad="2"
-		name="Find"
-		width="45" />
-	<combo_box
-		follows="right|top"
-		layout="topleft"
-		height="23"
-		allow_text_entry="false"
-		top="45"
-		left="650"
-		name="places_category"
-		width="122"/>
-	<combo_box
-		control_name="FindLandType"
-		follows="right|top"
-		layout="topleft"
-		height="23"
-		allow_text_entry="false"
-		top="45"
-		left="650"
-		name="land_category"
-		width="122">
-		<combo_box.item label="All Categories" name="All" value="ST_ALL"/>
-		<combo_box.item label="Auction" name="Auction" value="ST_AUCTION"/>
-		<combo_box.item label="Mainland Sales" name="Mainland" value="ST_MAINLAND"/>
-		<combo_box.item label="Estate Sales" name="Estate" value="ST_ESTATE"/>
-		</combo_box>
-	<combo_box
-		follows="right|top"
-		layout="topleft"
-		height="23"
-		allow_text_entry="false"
-		top="45"
-		left="650"
-		name="events_category"
-		width="122"/>
-	<combo_box
-		follows="right|top"
-		layout="topleft"
-		height="23"
-		allow_text_entry="false"
-		top="45"
-		left="650"
-		name="classifieds_category"
-		width="122"/>
-	<check_box
-		control_name="FindLandPrice"
-		follows="left|top"
-		height="16"
-		label="Price:"
-		layout="topleft"
-		left="538"
-		name="price_check"
-		top="10"
-		width="20"/>
-	<check_box
-		control_name="FindLandArea"
-		follows="left|top"
-		height="16"
-		label="Area:"
-		layout="topleft"
-		left="538"
-		name="area_check"
-		top_pad="2"
-		width="20"/>
-	<line_editor
-		enabled_control="FindLandPrice"
-		bevel_style="none"
-		border_style="line"
-		border.border_thickness="0"
-		commit_on_focus_lost="false"
-		follows="left|top"
-		height="18"
-		left="592"
-		name="edit_price"
-		top="7"
-		width="40" />
+			control_name="ShowPGSearchAll"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_all"
+			top="12"
+			width="15"
+			enabled="false"/>
+		<icon
+			follows="right|top"
+			height="16"
+			image_name="Parcel_PG_Dark"
+			layout="topleft"
+			left_pad="2"
+			name="rating_icon_general"
+			top_delta="-1"
+			width="18"/>
+		<check_box
+			control_name="ShowMatureSearchAll"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="2"
+			name="mature_all"
+			top_delta="1"
+			width="15"
+			enabled="false"/>
+		<icon
+			follows="right|top"
+			height="16"
+			image_name="Parcel_M_Dark"
+			layout="topleft"
+			left_pad="2"
+			name="rating_icon_moderate"
+			top_delta="-1"
+			width="18"/>
+		<check_box
+			control_name="ShowAdultSearchAll"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="2"
+			name="adult_all"
+			top_delta="1"
+			width="15"
+			enabled="false"/>
+		<icon
+			follows="right|top"
+			height="16"
+			image_name="Parcel_R_Dark"
+			layout="topleft"
+			left_pad="2"
+			name="rating_icon_adult"
+			top_delta="-1"
+			width="18"/>
+		<!-- Group Settings-->
+		<check_box
+			control_name="ShowPGGroups"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_group"
+			top="12"
+			width="15"/>
+		<check_box
+			control_name="ShowMatureGroups"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="21"
+			name="mature_group"
+			width="15"/>
+		<check_box
+			control_name="ShowAdultGroups"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="22"
+			name="adult_group"
+			width="15"/>
+		<!-- Places Settings-->
+		<check_box
+			control_name="ShowPGSims"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_sims"
+			top="12"
+			width="15"/>
+		<check_box
+			control_name="ShowMatureSims"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="21"
+			name="mature_sims"
+			width="15"/>
+		<check_box
+			control_name="ShowAdultSims"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="22"
+			name="adult_sims"
+			width="15"/>
+		<!-- Land Settings-->
+		<check_box
+			control_name="ShowPGLand"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_land"
+			top="12"
+			width="15"/>
+		<check_box
+			control_name="ShowMatureLand"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="21"
+			name="mature_land"
+			width="15"/>
+		<check_box
+			control_name="ShowAdultland"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="22"
+			name="adult_land"
+			width="15"/>
+		<!-- Events Settings-->
+		<check_box
+			control_name="ShowPGEvents"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_events"
+			top="12"
+			width="15"/>
+		<check_box
+			control_name="ShowMatureEvents"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="21"
+			name="mature_events"
+			width="15"/>
+		<check_box
+			control_name="ShowAdultEvents"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="22"
+			name="adult_events"
+			width="15"/>
+		<!-- Classifieds Settings-->
+			<check_box
+			control_name="ShowPGClassifieds"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left="660"
+			name="pg_classifieds"
+			top="12"
+			width="15"/>
+		<check_box
+			control_name="ShowMatureClassifieds"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="21"
+			name="mature_classifieds"
+			width="15"/>
+		<check_box
+			control_name="ShowAdultClassifieds"
+			follows="right|top"
+			height="16"
+			label=""
+			layout="topleft"
+			left_pad="22"
+			name="adult_classifieds"
+			width="15"/>
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			top_pad="5"
+			layout="topleft"
+			left="10"
+			name="search_text"
+			top="30"
+			height="16"
+			width="156">
+			Enter search terms:
+		</text>
 		<line_editor
-		enabled_control="FindLandArea"
-		bevel_style="none"
-		border_style="line"
-		border.border_thickness="0"
-		commit_on_focus_lost="false"
-		follows="left|top"
-		height="18"
-		left="592"
-		name="edit_area"
-		top_pad="1"
-		width="40" />
+			bevel_style="none"
+			border_style="line"
+			border.border_thickness="0"
+			commit_on_focus_lost="false"
+			follows="left|top|right"
+			height="23"
+			left_delta="0"
+			name="Edit"
+			top="46"
+			width="590" />
+		<button
+			follows="top|right"
+			height="23"
+			label="Find"
+			layout="topleft"
+			left_pad="2"
+			name="Find"
+			width="45" />
+		<combo_box
+			follows="right|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			top="45"
+			left="650"
+			name="places_category"
+			width="122"/>
+		<combo_box
+			control_name="FindLandType"
+			follows="right|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			top="45"
+			left="650"
+			name="land_category"
+			width="122">
+			<combo_box.item label="All Categories" name="All" value="ST_ALL"/>
+			<combo_box.item label="Auction" name="Auction" value="ST_AUCTION"/>
+			<combo_box.item label="Mainland Sales" name="Mainland" value="ST_MAINLAND"/>
+			<combo_box.item label="Estate Sales" name="Estate" value="ST_ESTATE"/>
+		</combo_box>
+		<combo_box
+			follows="right|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			top="45"
+			left="650"
+			name="events_category"
+			width="122"/>
+		<combo_box
+			follows="right|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			top="45"
+			left="650"
+			name="classifieds_category"
+			width="122"/>
+		<check_box
+			control_name="FindLandPrice"
+			follows="left|top"
+			height="16"
+			label="Price:"
+			layout="topleft"
+			left="538"
+			name="price_check"
+			top="10"
+			width="20"/>
+		<check_box
+			control_name="FindLandArea"
+			follows="left|top"
+			height="16"
+			label="Area:"
+			layout="topleft"
+			left="538"
+			name="area_check"
+			top_pad="2"
+			width="20"/>
+		<line_editor
+			enabled_control="FindLandPrice"
+			bevel_style="none"
+			border_style="line"
+			border.border_thickness="0"
+			commit_on_focus_lost="false"
+			follows="left|top"
+			height="18"
+			left="592"
+			name="edit_price"
+			top="7"
+			width="40" />
+		<line_editor
+			enabled_control="FindLandArea"
+			bevel_style="none"
+			border_style="line"
+			border.border_thickness="0"
+			commit_on_focus_lost="false"
+			follows="left|top"
+			height="18"
+			left="592"
+			name="edit_area"
+			top_pad="1"
+			width="40" />
 	</panel>
 	<!-- Let's give them what they want; Results! -->
 	<panel
@@ -468,155 +469,155 @@
 		top="80"
 		width="425"
 		name="panel_legacy_results">
-	<scroll_list
-		draw_heading="true"
-		follows="all"
-		height="480"
-		layout="topleft"
-		left="0"
-		name="search_results_people"
-		top="0"
-		width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Name"
-			name="username"
-			width="450" />
-	</scroll_list>
-	<scroll_list
-		draw_heading="true"
-		follows="all"
-		height="480"
-		layout="topleft"
-		left="0"
-		name="search_results_groups"
-		top="0"
-		width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Group Name"
-			name="group_name"
-			width="340" />
-		<columns
-			label="Members"
-			name="members"
-			width="60" />
-		<columns
-			label="Score"
-			name="score"
-			width="60" />
-	</scroll_list>
-	<scroll_list
-		draw_heading="true"
-		follows="all"
-		height="480"
-		layout="topleft"
-		left="0"
-		name="search_results_places"
-		top="0"
-		width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Name"
-			name="place_name"
-			width="340" />
-		<columns
-			label="Traffic"
-			name="dwell"
-			width="120" />
-	</scroll_list>
-	<scroll_list
-		draw_heading="true"
-		follows="all"
-		height="480"
-		layout="topleft"
-		left="0"
-		name="search_results_land"
-		top="0"
-		width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Name"
-			name="land_name"
-			width="230" />
-		<columns
-			label="Price"
-			name="price"
-			width="35" />
-		<columns
-			label="Area"
-			name="area"
-			width="35" />
-		<columns
-			label="L$/m"
-			name="ppm"
-			width="35" />
-		<columns
-			label="Type"
-			name="land_type"
-			width="50" />
-	</scroll_list>
-	<scroll_list
-		draw_heading="true"
-		follows="all"
-		height="480"
-		layout="topleft"
-		left="0"
-		name="search_results_classifieds"
-		top="0"
-		width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Name"
-			name="classified_name"
-			width="340" />
-		<columns
-			label="Listing Price"
-			name="price"
-			width="120"/>
-	</scroll_list>
-	<scroll_list
+		<scroll_list
 			draw_heading="true"
 			follows="all"
 			height="480"
 			layout="topleft"
 			left="0"
-			name="search_results_events"
+			name="search_results_people"
 			top="0"
 			width="425">
-		<columns
-			label=""
-			name="icon"
-			width="20" />
-		<columns
-			label="Event Name"
-			name="event_name"
-			width="300" />
-		<columns
-			label="Date"
-			name="date"
-			width="100" />
-		<columns
-			label="Time"
-			name="time"
-			width="100"/>
-	</scroll_list>
-		</panel>
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Name"
+				name="username"
+				width="450" />
+		</scroll_list>
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="480"
+			layout="topleft"
+			left="0"
+			name="search_results_groups"
+			top="0"
+			width="425">
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Group Name"
+				name="group_name"
+				width="340" />
+			<columns
+				label="Members"
+				name="members"
+				width="60" />
+			<columns
+				label="Score"
+				name="score"
+				width="60" />
+		</scroll_list>
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="480"
+			layout="topleft"
+			left="0"
+			name="search_results_places"
+			top="0"
+			width="425">
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Name"
+				name="place_name"
+				width="340" />
+			<columns
+				label="Traffic"
+				name="dwell"
+				width="120" />
+		</scroll_list>
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="480"
+			layout="topleft"
+			left="0"
+			name="search_results_land"
+			top="0"
+			width="425">
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Name"
+				name="land_name"
+				width="230" />
+			<columns
+				label="Price"
+				name="price"
+				width="35" />
+			<columns
+				label="Area"
+				name="area"
+				width="35" />
+			<columns
+				label="L$/m"
+				name="ppm"
+				width="35" />
+			<columns
+				label="Type"
+				name="land_type"
+				width="50" />
+		</scroll_list>
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="480"
+			layout="topleft"
+			left="0"
+			name="search_results_classifieds"
+			top="0"
+			width="425">
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Name"
+				name="classified_name"
+				width="340" />
+			<columns
+				label="Listing Price"
+				name="price"
+				width="120"/>
+		</scroll_list>
+		<scroll_list
+				draw_heading="true"
+				follows="all"
+				height="480"
+				layout="topleft"
+				left="0"
+				name="search_results_events"
+				top="0"
+				width="425">
+			<columns
+				label=""
+				name="icon"
+				width="20" />
+			<columns
+				label="Event Name"
+				name="event_name"
+				width="300" />
+			<columns
+				label="Date"
+				name="date"
+				width="100" />
+			<columns
+				label="Time"
+				name="time"
+				width="100"/>
+		</scroll_list>
+	</panel>
 	<button
 		layout="topleft"
 		follows="left|bottom"
@@ -633,7 +634,6 @@
 		name="Next"
 		width="70"
 		left_pad="1" />
-	
 	<panel
 		layout="topleft"
 		name="panel_details"
