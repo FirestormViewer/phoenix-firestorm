@@ -341,6 +341,9 @@ BOOL LLFloaterTexturePicker::handleDragAndDrop(
 		{
 			if (drop)
 			{
+				// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+				setCanApply(true, true);
+				// </FS:Ansariel>
 				setImageID( item->getAssetUUID() );
 				commitIfImmediateSet();
 			}
@@ -721,7 +724,10 @@ PermissionMask LLFloaterTexturePicker::getFilterPermMask()
 
 void LLFloaterTexturePicker::commitIfImmediateSet()
 {
-	if (!mNoCopyTextureSelected && mOwner && mCanApply)
+	// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+	//if (!mNoCopyTextureSelected && mOwner && mCanApply)
+	if (!mNoCopyTextureSelected && mOwner && mCanApply && mCanPreview)
+	// </FS:Ansariel>
 	{
 		mOwner->onFloaterCommit(LLTextureCtrl::TEXTURE_CHANGE);
 	}
@@ -842,6 +848,9 @@ void LLFloaterTexturePicker::onSelectionChange(const std::deque<LLFolderViewItem
 			{
 				mNoCopyTextureSelected = TRUE;
 			}
+			// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+			setCanApply(true, true);
+			// </FS:Ansariel>
 			mImageAssetID = itemp->getAssetUUID();
 			mViewModel->setDirty(); // *TODO: shouldn't we be using setValue() here?
 			if (user_action && mCanPreview)
@@ -951,7 +960,10 @@ void LLFloaterTexturePicker::onLocalScrollCommit(LLUICtrl* ctrl, void* userdata)
 	{
 		LLUUID tracking_id = (LLUUID)self->mLocalScrollCtrl->getSelectedItemLabel(LOCAL_TRACKING_ID_COLUMN); 
 		LLUUID inworld_id = LLLocalBitmapMgr::getWorldID(tracking_id);
-		self->mOwner->setImageAssetID(inworld_id);
+		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+		//self->mOwner->setImageAssetID(inworld_id);
+		self->setImageID(inworld_id);
+		// </FS:Ansariel>
 
 		if (self->childGetValue("apply_immediate_check").asBoolean())
 		{
@@ -983,7 +995,9 @@ void LLFloaterTexturePicker::onApplyImmediateCheck(LLUICtrl* ctrl, void *user_da
 
 	LLCheckBoxCtrl* check_box = (LLCheckBoxCtrl*)ctrl;
 	gSavedSettings.setBOOL("TextureLivePreview", check_box->get());
-
+	// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+	picker->setCanApply(true, true);
+	// </FS:Ansariel>
 	picker->updateFilterPermMask();
 	picker->commitIfImmediateSet();
 }
@@ -1043,6 +1057,9 @@ void LLFloaterTexturePicker::onTextureSelect( const LLTextureEntry& te )
 	if (inventory_item_id.notNull())
 	{
 		LLToolPipette::getInstance()->setResult(TRUE, "");
+		// <FS:Ansariel> FIRE-8298: Apply now checkbox has no effect
+		setCanApply(true, true);
+		// </FS:Ansariel>
 		setImageID(te.getID());
 
 		mNoCopyTextureSelected = FALSE;
