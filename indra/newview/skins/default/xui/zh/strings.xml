@@ -1957,7 +1957,8 @@
 	<string name="Adult">
 		完全成人
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		藝術與文化
 	</string>
 	<string name="Business">
@@ -1975,7 +1976,8 @@
 	<string name="Newcomer Friendly">
 		新手友善
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		公園與自然
 	</string>
 	<string name="Residential">

@@ -24,27 +24,27 @@
 	<floater.string name="TooltipIM" value="Wiadomość IM"/>
 	<floater.string name="TooltipProfile" value="Pokaż profil"/>
 	<floater.string name="TooltipNameChanged" value="Imię zostało zmienione"/>
-    <text name="lgg_fg_text1">
-        Zestaw:</text>
-    <text name="lgg_fg_text2a">
-        Powiadamiaj
-    </text>
-    <text name="lgg_fg_text2b">
-        dla tego Zest.
-    </text>
-    <button label="Ustawienia" name="lgg_fg_openSettings"/>
-    <button label="Usuń Zestaw" name="lgg_fg_groupDelete"/>
-    <color_swatch label="Ustaw kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
-    <text name="lgg_fg_text3">
-        Pokaż:
-    </text>
-    <text name="lgg_fg_text4a">
-        Inne
-    </text>
-    <text name="lgg_fg_text4b">
-        Zest.
-    </text>
-    <check_box label="Wszyscy" name="lgg_fg_showAllFriends"/>
-    <line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zest."/>
-    <button label="Nowy Zestaw" name="lgg_fg_groupCreate"/>
+	<text name="lgg_fg_text1">
+		Zestaw:</text>
+	<text name="lgg_fg_text2a">
+		Powiadamiaj
+	</text>
+	<text name="lgg_fg_text2b">
+		dla tego Zest.
+	</text>
+	<button label="Ustawienia" name="lgg_fg_openSettings"/>
+	<button label="Usuń Zestaw" name="lgg_fg_groupDelete"/>
+	<color_swatch label="Ustaw kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+	<text name="lgg_fg_text3">
+		Pokaż:
+	</text>
+	<text name="lgg_fg_text4a">
+		Inne
+	</text>
+	<text name="lgg_fg_text4b">
+		Zest.
+	</text>
+	<check_box label="Wszyscy" name="lgg_fg_showAllFriends"/>
+	<line_editor name="lgg_fg_groupNewName" label="Nowa nazwa Zest."/>
+	<button label="Nowy Zestaw" name="lgg_fg_groupCreate"/>
 </floater>

@@ -19052,5 +19052,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>20</integer>
     </map>
+	<key>SearchCategory</key>
+    <map>
+	  <key>Comment</key>
+	  <string>Category selection for legacy search: 0 = People, 1 = Groups, 2 = Places, 3 = Land, 4 = Events, 5 = Classifieds</string>
+	  <key>Persist</key>
+	  <integer>0</integer>
+	  <key>Type</key>
+	  <string>U32</string>
+	  <key>Value</key>
+	  <string>0</string>
+    </map>
 </map>
 </llsd>

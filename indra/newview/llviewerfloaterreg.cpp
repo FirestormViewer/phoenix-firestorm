@@ -178,6 +178,9 @@
 // NaCl - Sound explorer
 #include "NACLfloaterexploresounds.h"
 // NaCl End
+// <FS:CR> FIRE-6310: Include Legacy Search
+#include "fsfloatersearchlegacy.h"
+// </FS:CR> FIRE-6310
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -427,6 +430,8 @@ void LLViewerFloaterReg::registerFloaters()
 	//               Phototools class.
 	LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
+	// <FS:CR> FIRE-6310: Include Legacy Search
+	LLFloaterReg::add("search_legacy", "floater_fs_search_legacy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearchLegacy>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

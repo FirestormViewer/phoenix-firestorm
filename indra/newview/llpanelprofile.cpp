@@ -53,10 +53,26 @@ std::string getProfileURL(const std::string& agent_name)
 	}
 	else
 	{
-		//OpenSimFIXME: get from grid - but how?
-		// possibilities: 	* grid_info  (profiles accessible outside the grid)
-		// 			* login message (profiles only within the grid)
-		//			* capability (better for decentaliced environment)
+// <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
+		std::string match = "?name=[AGENT_NAME]";
+		if (LLGridManager::getInstance()->isInAuroraSim()) {
+			url = gSavedSettings.getString("WebProfileURL");
+		}
+		else if(LLGridManager::getInstance()->getGridId() == "osgrid") {
+			url = "http://my.osgrid.org/?name=[AGENT_NAME]";
+		}
+		else {
+			LLSD grid_info;
+			LLGridManager::getInstance()->getGridData(grid_info);
+			url = grid_info[GRID_PROFILE_URI_VALUE].asString();
+			
+			if (url.empty())
+				url = gSavedSettings.getString("WebProfileURL");
+		}
+
+		if(std::string::npos == url.find(match)) url += match;
+        gSavedSettings.setString("WebProfileURL", url);
+// </FS:CR> 
 	}
 
 	LLSD subs;

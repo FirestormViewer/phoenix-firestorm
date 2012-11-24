@@ -2230,7 +2230,8 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="Adult">
 		Adulte
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Arts et culture
 	</string>
 	<string name="Business">
@@ -2248,7 +2249,8 @@ Veuillez réessayer de vous connecter dans une minute.
 	<string name="Newcomer Friendly">
 		Accueil pour les nouveaux
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parcs et nature
 	</string>
 	<string name="Residential">
@@ -4833,7 +4835,7 @@ Essayez avec le chemin d&apos;accès à l&apos;éditeur entre guillemets doubles
 		Construire
 	</string>
 	<string name="Command_Chat_Label">
-		Chat
+		Conversations
 	</string>
 	<string name="Command_Compass_Label">
 		Boussole

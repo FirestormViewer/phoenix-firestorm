@@ -124,7 +124,7 @@
 				<combo_box.item label="Pogrubiony" name="BOLD"/>
 				<combo_box.item label="Pochylony" name="ITALIC"/>
 				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
-				<combo_box.item label="Podkreślony" name="UNDERLINE"/>            
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>
 				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
 				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
 				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>
@@ -137,7 +137,7 @@
 				<combo_box.item label="Pogrubiony" name="BOLD"/>
 				<combo_box.item label="Pochylony" name="ITALIC"/>
 				<combo_box.item label="Pogrubiony i pochylony" name="BOLDITALIC"/>
-				<combo_box.item label="Podkreślony" name="UNDERLINE"/>            
+				<combo_box.item label="Podkreślony" name="UNDERLINE"/>
 				<combo_box.item label="Pogrubiony i podkreślony" name="BOLDUNDERLINE"/>
 				<combo_box.item label="Pochylony i podkreślony" name="ITALICUNDERLINE"/>
 				<combo_box.item label="Pogrubiony, pochylony i podkreślony" name="BOLDITALICUNDERLINE"/>

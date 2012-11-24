@@ -764,8 +764,13 @@ void LLPanelLogin::updateLocationCombo( bool force_visible )
 	
 	sInstance->getChildView("start_location_combo")->setVisible( show_start);
 	sInstance->getChildView("start_location_text")->setVisible( show_start);
-	
+// <FS:CR> Open-Sim builds should always show the grid manager
+#ifdef HAS_OPENSIM_SUPPORT
+	BOOL show_server = TRUE;
+#else
 	BOOL show_server = gSavedSettings.getBOOL("ForceShowGrid");
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR> Open-sim builds should always show the grid manager
 	sInstance->getChildView("server_combo_text")->setVisible( show_server);	
 	sInstance->getChildView("grid_selection_text")->setVisible( show_server);	
 	sInstance->getChildView("server_combo")->setVisible( show_server);

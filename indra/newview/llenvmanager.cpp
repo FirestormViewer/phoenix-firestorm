@@ -510,9 +510,11 @@ void LLEnvManagerNew::onRegionSettingsResponse(const LLSD& content)
 
 	// Let interested parties know about the region settings update.
 	mRegionSettingsChangeSignal();
-
+	
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
 	// reset
-	mInterpNextChangeMessage = false;
+	//mInterpNextChangeMessage = false;
+// </FS:CR>
 }
 
 void LLEnvManagerNew::onRegionSettingsApplyResponse(bool ok)
@@ -702,3 +704,50 @@ void LLEnvManagerNew::onRegionChange(bool interpolate)
 	// Let interested parties know agent region has been changed.
 	mRegionChangeSignal();
 }
+
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
+class WindLightRefresh : public LLHTTPNode
+{
+	/*virtual*/ void post(
+		LLHTTPNode::ResponsePtr response,
+		const LLSD& context,
+		const LLSD& input) const
+	{
+		if (!input || !context || !input.isMap() || !input.has("body")) {
+			llinfos << "malformed WindLightRefresh!" << llendl;	 
+			return;
+		}
+
+		//std::string dump = input["body"].asString();
+		//llwarns << dump << llendl;
+
+		LLSD body = input["body"];
+		LLEnvManagerNew *env = &LLEnvManagerNew::instance();
+
+		LLViewerRegion* regionp = gAgent.getRegion();
+		LLUUID region_uuid = regionp ? regionp->getRegionID() : LLUUID::null;
+
+		env->mNewRegionPrefs.clear();
+		env->mCurRegionUUID = region_uuid;
+
+		if(body.has("Interpolate")) {
+			if(body["Interpolate"].asInteger() == 1) {
+				env->mInterpNextChangeMessage = true;
+			}
+			else {
+				env->mInterpNextChangeMessage = false;
+			}
+		}
+		else {
+			env->mInterpNextChangeMessage = true;
+		}
+		llinfos << "Windlight Refresh , interpolate:" << env->mInterpNextChangeMessage << llendl;
+		env->requestRegionSettings();
+		env->mRegionChangeSignal();
+	}
+};
+
+LLHTTPRegistration<WindLightRefresh>
+gHTTPRegistrationWindLightRefresh(
+	"/message/WindLightRefresh");
+// </FS:CR> FIRE-8063: Aurora-sim windlight refresh

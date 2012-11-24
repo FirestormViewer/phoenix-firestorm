@@ -2,10 +2,10 @@
 <panel name="panel_postcard_message">
 	<text name="to_label">
 		Do:
-    </text>
+	</text>
 	<text name="name_label">
 		Od:
-    </text>
+	</text>
 	<text name="subject_label">
 		Temat:
 	</text>

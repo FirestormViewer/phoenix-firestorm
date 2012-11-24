@@ -890,4 +890,8 @@ with the same filename but different name
   <texture name="Console_Background" file_name="Console_Background.png"/>
   <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
 
+<texture name="Icon_Place" file_name="icon_place.tga" preload="false" />
+<texture name="Icon_Auction" file_name="icon_auction.tga" preload="false" />
+<texture name="Icon_Group" file_name="icon_group.png" preload="false" />
+
 </textures>

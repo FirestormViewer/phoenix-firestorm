@@ -113,6 +113,7 @@ set(viewer_SOURCE_FILES
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterprofile.cpp
+    fsfloatersearchlegacy.cpp
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
@@ -137,7 +138,7 @@ set(viewer_SOURCE_FILES
     lggbeamscolors.cpp
     lggcontactsets.cpp
     lggcontactsetsfloater.cpp
-	llpanelopenregionsettings.cpp
+    llpanelopenregionsettings.cpp
 
     llaccountingcostmanager.cpp
     llagent.cpp
@@ -724,7 +725,7 @@ set(viewer_SOURCE_FILES
     streamtitledisplay.cpp
     utilitybar.cpp
     NACLantispam.cpp
-	NACLfloaterexploresounds.cpp
+    NACLfloaterexploresounds.cpp
     )
 
 if (HAS_OPENSIM_SUPPORT)
@@ -760,6 +761,7 @@ set(viewer_HEADER_FILES
     fscontactsfloater.h
     fsdata.h
     fsfloaterprofile.h
+    fsfloatersearchlegacy.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fsgrouptitles.h
@@ -1370,7 +1372,7 @@ set(viewer_HEADER_FILES
     VertexCache.h
     VorbisFramework.h
     NACLantispam.h
-	NACLfloaterexploresounds.h
+    NACLfloaterexploresounds.h
     )
 
 # AO Get our viewer version & channel at this point

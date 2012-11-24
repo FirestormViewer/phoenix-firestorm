@@ -281,6 +281,9 @@ BOOL LLWalkAdjustMotion::onUpdate(F32 time, U8* joint_mask)
 
 		// planted foot speed is avatar velocity - foot slip amount along avatar movement direction
 		F32 foot_speed = speed - ((foot_slip_vector * avatar_movement_dir) / delta_time);
+// <FS:CR> Prevent slow walking animation bug
+		if(foot_speed < 0.0f) foot_speed = 0.0f;
+// </FS:CR>
 
 		// multiply animation playback rate so that foot speed matches avatar speed
 		F32 min_speed_multiplier = clamp_rescale(speed, 0.f, 1.f, 0.f, 0.1f);

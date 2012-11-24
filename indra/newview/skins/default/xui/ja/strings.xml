@@ -2230,7 +2230,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		アートとカルチャー
 	</string>
 	<string name="Business">
@@ -2248,7 +2249,8 @@ support@secondlife.com にお問い合わせください。
 	<string name="Newcomer Friendly">
 		新住人に優しい
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		公園と自然
 	</string>
 	<string name="Residential">

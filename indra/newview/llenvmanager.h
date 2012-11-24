@@ -33,6 +33,9 @@
 class LLWLParamManager;
 class LLWaterParamManager;
 class LLWLAnimator;
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
+class WindLightRefresh;
+// </FS:CR>
 
 // generic key
 struct LLEnvKey
@@ -250,6 +253,9 @@ public:
 	bool useRegionWater();
 
 private:
+// <FS:CR> FIRE-8063: Aurora-sim windlight refresh
+	friend class WindLightRefresh;
+// </FS:CR>
 	bool useDefaultSky();
 	bool useDefaultWater();
 
