@@ -228,6 +228,7 @@
 #include "fscontactsfloater.h"		// <FS:ND> Fix for FIRE-3066
 
 #include "fswsassetblacklist.h" // <FS:WS> For Assetblacklist init on startup
+#include "fsfloatersearchlegacy.h"	// <FS:CR> FIRE-6310
 
 
 
@@ -2811,6 +2812,14 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	msg->setHandlerFunc("PlacesReply", process_places_reply);
 	msg->setHandlerFunc("GroupNoticesListReply", LLPanelGroupNotices::processGroupNoticesListReply);
 
+// <FS:CR> FIRE-6310 - Legacy search handlers
+	msg->setHandlerFunc("DirPeopleReply", FSFloaterSearchLegacy::processSearchPeopleReply);
+	msg->setHandlerFunc("DirPlacesReply", FSFloaterSearchLegacy::processSearchPlacesReply);
+	msg->setHandlerFunc("DirGroupsReply", FSFloaterSearchLegacy::processSearchGroupsReply);
+	msg->setHandlerFunc("DirEventsReply", FSFloaterSearchLegacy::processSearchEventsReply);
+	msg->setHandlerFunc("DirLandReply",   FSFloaterSearchLegacy::processSearchLandReply);
+	msg->setHandlerFunc("DirClassifiedReply",  FSFloaterSearchLegacy::processSearchClassifiedsReply);
+// </FS:CR> FIRE-6310
 	msg->setHandlerFunc("AvatarPickerReply", LLFloaterAvatarPicker::processAvatarPickerReply);
 
 	msg->setHandlerFunc("MapBlockReply", LLWorldMapMessage::processMapBlockReply);

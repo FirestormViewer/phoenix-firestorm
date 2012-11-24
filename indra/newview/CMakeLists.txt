@@ -113,6 +113,7 @@ set(viewer_SOURCE_FILES
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterprofile.cpp
+	fsfloatersearchlegacy.cpp
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
@@ -760,6 +761,7 @@ set(viewer_HEADER_FILES
     fscontactsfloater.h
     fsdata.h
     fsfloaterprofile.h
+    fsfloatersearchlegacy.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fsgrouptitles.h
