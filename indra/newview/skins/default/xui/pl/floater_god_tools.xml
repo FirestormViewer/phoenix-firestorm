@@ -46,9 +46,9 @@
 			<button label="Autozapisz teraz" label_selected="Autozapisz teraz" name="Autosave now" tool_tip="Zapisz spakowany gzipem stan do katalogu autozapisu"/>
 		</panel>
 		<panel label="Obiekty" name="objects">
-            <panel.string name="no_target">
-                (brak celu)
-            </panel.string>
+			<panel.string name="no_target">
+				(brak celu)
+			</panel.string>
 			<text name="Region Name:">
 				Nazwa Regionu:
 			</text>

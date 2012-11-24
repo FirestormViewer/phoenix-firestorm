@@ -836,7 +836,7 @@ Wiele posiadłości jest wybranych.
 
 Spróbuj wybrać pojedynczą posiadłość.
 	</notification>
-	<notification name="ParcelCanPlayMedia">   
+	<notification name="ParcelCanPlayMedia">
 		W tej lokalizacji można odtwarzać media, co może wymagać większej przepustowości sieci.
 
 Odtwarzać media, gdy są dostępne?
