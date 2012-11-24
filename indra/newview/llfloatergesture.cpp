@@ -229,8 +229,11 @@ BOOL LLFloaterGesture::postBuild()
 // <FS:PP> FIRE-5646: Option to show only active gestures
 void LLFloaterGesture::refreshForActiveSort()
 {
-	mItems.clear();
-	mGestureList->deleteAllItems();
+	if(gSavedPerAccountSettings.getBOOL("FSShowOnlyActiveGestures"))
+	{
+		mItems.clear();
+		mGestureList->deleteAllItems();
+	}
 	refreshAll();
 }
 // </FS:PP> FIRE-5646: Option to show only active gestures
