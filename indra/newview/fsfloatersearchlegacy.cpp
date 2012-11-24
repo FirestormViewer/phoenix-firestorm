@@ -503,7 +503,7 @@ void FSFloaterSearchLegacy::resetSearch()
 
 void FSFloaterSearchLegacy::onSelectItem()
 {
-	LLScrollListCtrl* list;
+	LLScrollListCtrl* list = NULL;
 	switch(ESearchMode)
 	{
 		case SM_PEOPLE:
@@ -524,6 +524,10 @@ void FSFloaterSearchLegacy::onSelectItem()
 		case SM_CLASSIFIEDS:
 			list = getChild<LLScrollListCtrl>("search_results_classifieds");
 			break;
+	}
+	if (list == NULL)
+	{
+		return;
 	}
 	refreshActionButtons();
 	mSelectedID = list->getSelectedValue();
@@ -785,10 +789,10 @@ void FSFloaterSearchLegacy::find()
 			static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
 			if (!(inc_pg || inc_mature || inc_adult))
 			{
-                LLNotificationsUtil::add("NoContentToSearch");
-                return;
+				LLNotificationsUtil::add("NoContentToSearch");
+		                return;
 			}
-			U32 scope;
+			U32 scope = 0;
 			if (gAgent.wantsPGOnly())
 				scope |= DFQ_PG_SIMS_ONLY;
 			bool adult_enabled = gAgent.canAccessAdult();
@@ -827,7 +831,7 @@ void FSFloaterSearchLegacy::find()
 			
 			U32 category = findChild<LLComboBox>("land_category")->getSelectedValue().asInteger();
 
-			U32 scope;
+			U32 scope = 0;
 			if (gAgent.wantsPGOnly())
 				scope |= DFQ_PG_SIMS_ONLY;
 			bool adult_enabled = gAgent.canAccessAdult();
