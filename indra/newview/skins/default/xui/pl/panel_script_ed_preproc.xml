@@ -40,7 +40,7 @@
 			<menu_item_call label="Pomoc - słowa kluczowe..." name="Keyword Help..."/>
 		</menu>
 	</menu_bar>
-    <tab_container name="Tabset">
+	<tab_container name="Tabset">
 		<panel name="Script" label="Skrypt">
 			<text_editor name="Script Editor">
 				Ładowanie...

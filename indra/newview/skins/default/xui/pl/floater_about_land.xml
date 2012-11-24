@@ -452,15 +452,15 @@ teksturę:
 				<name_list name="AccessList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_allowed"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_allowed"/>
-            </panel>
-            <panel name="Banned_layout_panel">
+			</panel>
+			<panel name="Banned_layout_panel">
 				<text label="Banuj" name="BanCheck">
 					Zbanowani Rezydenci
 				</text>
 				<name_list name="BannedList" tool_tip="([LISTED] na liście, [MAX] maksimum)"/>
 				<button label="Dodaj" name="add_banned"/>
 				<button label="Usuń" label_selected="Usuń" name="remove_banned"/>
-            </panel>
+			</panel>
 		</panel>
 	</tab_container>
 </floater>

@@ -32,8 +32,7 @@ Wersja sterownika dźwięku (Audio Driver): [AUDIO_DRIVER_VERSION]
 Wersja Qt Webkit: [QT_WEBKIT_VERSION]
 Wersja serwera głosu (Voice Server): [VOICE_VERSION]
 	</floater.string>
-	<floater.string
-     name="AboutSettings">
+	<floater.string name="AboutSettings">
 		Tryb ustawień (Settings Mode): [MODE]
 Skórka i schemat (Skin): [SKIN] ([THEME])
 Czcionka (Font): [FONT] ([FONT_SCREEN_DPI])
@@ -52,10 +51,10 @@ Mnożnik poziomu detali (LOD Factor): [LOD]
 	</floater.string>
 	<tab_container name="about_tab">
 		<panel label="Informacje" name="support_panel">
-			<text name="support_intro">    
+			<text name="support_intro">
 				Najnowsze informacje o Firestorm są dostępne pod adresem 
 http://www.phoenixviewer.com
-    		</text>
+			</text>
 			<button label="Kopiuj do schowka" name="copy_btn"/>
 		</panel>
 		<panel label="Podziękowania" name="credits_panel">
@@ -71,23 +70,23 @@ Lindeni to:
 				i tłumaczeniami od:
 			</text>
 		</panel>
-		<panel label="Firestorm" name="fs_credits_panel">      
+		<panel label="Firestorm" name="fs_credits_panel">
 			<text name="firestorm_intro">
-				Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Viewer Project, Inc., organizacji non-profit.          
-          
+				Firestorm jest programistycznym projektem społecznościowym mającym na celu poprawę jakości doświadczeń płynących z używania SecondLife(tm) Viewer. Scalamy wkład różnych programistów udzielających się w społeczności razem z kodem Linden Lab i naszym własnym, aby tworzyć dobrą, bogatą w funkcje przeglądarkę świata nad którą czuwa zespół wsparcia złożony z wolontariuszy. Firestorm istnieje dzięki The Phoenix Viewer Project, Inc., organizacji non-profit.
+
 Zespół programistów Firestorma:
-     		 </text>
-      		<text name="fs_contrib_intro">
+			</text>
+			<text name="fs_contrib_intro">
 				Dodatkowy wkład w rozwój kodu Firestorma:
-      		</text>
-      		<text name="fs_support_intro">
+			</text>
+			<text name="fs_support_intro">
 				Specjalne podziękowania dla naszego zespołu wsparcia, edytorów wiki, nauczycieli i tłumaczy:
-      		</text>
-      		<text name="fs_art_intro">
+			</text>
+			<text name="fs_art_intro">
 				Firestorm zawiera Starlight, zmodyfikowany dla Firestorma. Jest on tworzony przez rezydentów dla rezydentów, z intencją dostarczenia alternatywnego, jaśniejszego i w założeniach łatwiejszego w użytkowaniu interfejsu. Więcej szczegółów pod &lt;nolink&gt;https://wiki.secondlife.com/wiki/Viewer_Skins/Starlight&lt;/nolink&gt;.
 
 Artyści i projektanci interfejsu:
-      		</text>
+			</text>
 		</panel>
 		<panel label="Licencje" name="licenses_panel" />
 	</tab_container>

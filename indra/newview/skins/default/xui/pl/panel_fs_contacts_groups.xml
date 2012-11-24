@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="groups">
 	<group_list name="group_list"/>
-    <text name="groupcount">
+	<text name="groupcount">
 Należysz do [COUNT] z [MAX] grup.
-    </text>
+	</text>
 	<button label="IM/Dzwoń" name="chat_btn" tool_tip="Otwórz sesję IM"/>
 	<button label="Informacje" name="info_btn"/>
 	<button label="Aktywuj" name="activate_btn"/>

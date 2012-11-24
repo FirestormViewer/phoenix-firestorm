@@ -7,7 +7,7 @@
 	Tekstury: [COUNT]
   </text>
   <text name="status">
-    Status: [STATUS]
+	Status: [STATUS]
   </text>
    <button name="cancel" label="Anuluj"/>
    <button name="ok" label="OK" />
