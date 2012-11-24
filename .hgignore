@@ -82,3 +82,5 @@ glob:indra/newview/avatar_icons_cache.txt
 glob:indra/newview/avatar_lad.log
 glob:*.diff
 glob:fmod*
+syntax: regexp
+^indra/build
