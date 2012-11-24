@@ -38,7 +38,13 @@ typedef LLAtomic32<U32> LLAtomicU32;
 class LLErrorThread;
 class LLLiveFile;
 #if LL_LINUX
+// glibc 2.16 fully defines siginfo_t
+#define LL_GLIBC_VERSION (__GLIBC__ * 100 + __GLIBC_MINOR__)
+#if LL_GLIBC_VERSION >= 216
+#include <signal.h>
+#else
 typedef struct siginfo siginfo_t;
+#endif
 #endif
 
 typedef void (*LLAppErrorHandler)();
