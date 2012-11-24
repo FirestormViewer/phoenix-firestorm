@@ -508,15 +508,11 @@ void LLQueuedThread::run()
 		threadedUpdate();
 		
 		int res = processNextRequest();
-		if (res == 0)
+		//if (res == 0)
+		// <FS:LO> FIRE-4972 - Hackish fix for FS eating a second CPU core from LLQueuedThread sometimes having one item stuck in the que
+		if (res <= 1)
 		{
 			mIdleThread = TRUE;
-			ms_sleep(1);
-		}
-
-		// <FS:LO> Hackish fix for FS eating a second CPU core from CURL sitting idle.
-		if(mName == "curlthread" && res == 1)
-		{
 			ms_sleep(1);
 		}
 		// </FS:LO>
