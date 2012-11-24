@@ -454,7 +454,33 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 	LLInventoryModel::item_array_t item_array;
 
 	// Collect all sub-categories of a given category.
-	LLIsType is_category(LLAssetType::AT_CATEGORY);
+
+	// <FS:ND> FIRE-6958/VWR-2862; Make sure to only collect folders of type FT_OUTFIT
+
+	class ndOutfitsCollector: public LLIsType
+	{
+	public:
+		ndOutfitsCollector()
+			: LLIsType( LLAssetType::AT_CATEGORY )
+		{ }
+
+		virtual bool operator()(LLInventoryCategory* cat, LLInventoryItem* item)
+		{
+			if( !LLIsType::operator()( cat, item ) )
+				return false;
+
+			if( cat && LLFolderType::FT_OUTFIT == cat->getPreferredType() )
+				return true;
+
+			return false;
+		}
+	};
+
+	//	LLIsType is_category(LLAssetType::AT_CATEGORY);
+	ndOutfitsCollector is_category;
+
+	// </FS:ND>
+	
 	gInventory.collectDescendentsIf(
 		category_id,
 		cat_array,
@@ -470,7 +496,7 @@ void LLOutfitsList::refreshList(const LLUUID& category_id)
 
 	// <FS:ND> FIRE-6958/VWR-2862; Handle large amounts of outfits, write a least a warning into the logs.
 	if( vadded.size() > 128 )
-		llwarns << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnetcs" << llendl;
+		llwarns << "Large amount of outfits found: " << vadded.size() << " this may cause hangs and disconnects" << llendl;
 
 	U32 nCap = gSavedSettings.getU32( "FSDisplaySavedOutfitsCap" );
 	if( nCap && nCap < vadded.size() )
