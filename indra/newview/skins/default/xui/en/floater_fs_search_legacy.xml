@@ -2,7 +2,7 @@
 <floater
 	can_resize="true"
 	default_tab_group="1"
-	height="765"
+	height="590"
 	layout="topleft"
 	legacy_header_height="0"
 	min_height="590"
@@ -463,7 +463,7 @@
 	<panel
 		border="false"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="6"
 		top="80"
@@ -472,7 +472,7 @@
 	<scroll_list
 		draw_heading="true"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="0"
 		name="search_results_people"
@@ -490,7 +490,7 @@
 	<scroll_list
 		draw_heading="true"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="0"
 		name="search_results_groups"
@@ -516,7 +516,7 @@
 	<scroll_list
 		draw_heading="true"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="0"
 		name="search_results_places"
@@ -538,7 +538,7 @@
 	<scroll_list
 		draw_heading="true"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="0"
 		name="search_results_land"
@@ -572,7 +572,7 @@
 	<scroll_list
 		draw_heading="true"
 		follows="all"
-		height="650"
+		height="480"
 		layout="topleft"
 		left="0"
 		name="search_results_classifieds"
@@ -594,7 +594,7 @@
 	<scroll_list
 			draw_heading="true"
 			follows="all"
-			height="650"
+			height="480"
 			layout="topleft"
 			left="0"
 			name="search_results_events"
@@ -624,7 +624,7 @@
 		height="23"
 		label="Back"
 		name="Back"
-		top="735"
+		top="561"
 		left="5"
 		width="70" />
 	<button
@@ -641,7 +641,7 @@
 		follows="top|right|bottom"
 		top="80"
 		left="433"
-		height="682"
+		height="508"
 		width="344">
         <text_editor
 			left="2"
@@ -674,7 +674,7 @@
 		<text_editor
 			left="10"
 			top_pad="5"
-			height="174"
+			height="154"
 			width="324"
 			layout="topleft"
 			follows="left|top|right"
@@ -693,7 +693,7 @@
 			height="23"
 			label="Profile"
 			name="people_profile_btn"
-			top="655"
+			top="481"
 			left="16"
 			width="100" />
 		<button
@@ -715,7 +715,7 @@
 			height="23"
 			label="Profile"
 			name="group_profile_btn"
-			top="655"
+			top="481"
 			left="16"
 			width="100" />
 		<button
@@ -737,7 +737,7 @@
 			height="23"
 			label="Teleport"
 			name="parcel_teleport_btn"
-			top="655"
+			top="481"
 			left="16"
 			width="100" />
 		<button
