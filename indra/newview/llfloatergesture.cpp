@@ -113,6 +113,7 @@ LLFloaterGesture::LLFloaterGesture(const LLSD& key)
 	mCommitCallbackRegistrar.add("Gesture.Action.ShowPreview", boost::bind(&LLFloaterGesture::onClickEdit, this));
 	mCommitCallbackRegistrar.add("Gesture.Action.CopyPaste", boost::bind(&LLFloaterGesture::onCopyPasteAction, this, _2));
 	mCommitCallbackRegistrar.add("Gesture.Action.SaveToCOF", boost::bind(&LLFloaterGesture::addToCurrentOutFit, this));
+	mCommitCallbackRegistrar.add("Gesture.Action.RefreshList", boost::bind(&LLFloaterGesture::refreshForActiveSort, this)); // <FS:PP> FIRE-5646: Option to show only active gestures
 
 	mEnableCallbackRegistrar.add("Gesture.EnableAction", boost::bind(&LLFloaterGesture::isActionEnabled, this, _2));
 }
@@ -191,6 +192,8 @@ BOOL LLFloaterGesture::postBuild()
 	getChild<LLUICtrl>("stop_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickPlay, this));
 	getChild<LLButton>("activate_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onActivateBtnClick, this));
 	
+	getChild<LLUICtrl>("FSShowOnlyActiveGestures")->setCommitCallback(boost::bind(&LLFloaterGesture::refreshForActiveSort, this)); // <FS:PP> FIRE-5646: Option to show only active gestures
+
 	getChild<LLUICtrl>("new_gesture_btn")->setCommitCallback(boost::bind(&LLFloaterGesture::onClickNew, this));
 	getChild<LLButton>("del_btn")->setClickedCallback(boost::bind(&LLFloaterGesture::onDeleteSelected, this));
 
@@ -223,6 +226,14 @@ BOOL LLFloaterGesture::postBuild()
 	return TRUE;
 }
 
+// <FS:PP> FIRE-5646: Option to show only active gestures
+void LLFloaterGesture::refreshForActiveSort()
+{
+	mItems.clear();
+	mGestureList->deleteAllItems();
+	refreshAll();
+}
+// </FS:PP> FIRE-5646: Option to show only active gestures
 
 void LLFloaterGesture::refreshAll()
 {
@@ -260,7 +271,10 @@ void LLFloaterGesture::buildGestureList()
 	{
 		addGesture(it->first,it->second, mGestureList);
 	}
-	if (gInventory.isCategoryComplete(mGestureFolderID))
+	// <FS:PP> FIRE-5646: Option to show only active gestures
+	// if (gInventory.isCategoryComplete(mGestureFolderID))
+	if (gInventory.isCategoryComplete(mGestureFolderID) && !gSavedPerAccountSettings.getBOOL("FSShowOnlyActiveGestures"))
+	// </FS:PP> FIRE-5646: Option to show only active gestures
 	{
 		LLIsType is_gesture(LLAssetType::AT_GESTURE);
 		LLInventoryModel::cat_array_t categories;

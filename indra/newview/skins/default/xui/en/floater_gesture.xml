@@ -101,6 +101,19 @@
                  tool_tip="Activate/Deactivate selected gesture"
                  top="10"
                  width="10" />
+              <check_box
+                 control_name="FSShowOnlyActiveGestures"
+                 height="18"
+                 label="Active only"
+                 layout="topleft"
+                 follows="bottom|left"
+                 left_pad="65"
+                 top="5"
+                 name="FSShowOnlyActiveGestures"
+                 width="100">
+                   <check_box.commit_callback
+                    function="Gesture.Action.RefreshList" />
+              </check_box>
               <button
                  follows="bottom|right"
                  font="SansSerifBigBold"

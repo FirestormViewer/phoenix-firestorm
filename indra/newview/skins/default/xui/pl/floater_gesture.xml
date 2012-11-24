@@ -18,6 +18,7 @@
 		<menu_button name="gear_btn" tool_tip="Więcej opcji"/>
 		<button name="new_gesture_btn" tool_tip="Stwórz nowy gest"/>
 		<button name="activate_btn" tool_tip="Aktywuj/Dezaktywuj wybrany gest"/>
+		<check_box label="Tylko aktywne" name="FSShowOnlyActiveGestures"/>
 		<button name="del_btn" tool_tip="Usuń gest"/>
 	</panel>
 	<button label="Edytuj" name="edit_btn"/>

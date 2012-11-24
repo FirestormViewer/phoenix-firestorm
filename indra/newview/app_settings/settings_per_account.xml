@@ -529,6 +529,17 @@
 	    <real>1.0</real>
 	</array>
 	</map>
+	<key>FSShowOnlyActiveGestures</key>
+	<map>
+		<key>Comment</key>
+			<string>Show only active gestures in the gestures floater</string>
+		<key>Persist</key>
+			<integer>1</integer>
+		<key>Type</key>
+			<string>Boolean</string>
+		<key>Value</key>
+			<string>0</string>
+	</map>
     <!-- End of Firestorm settings -->
 
     <!-- Settings imported from Exodus -->
