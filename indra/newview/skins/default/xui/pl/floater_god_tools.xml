@@ -13,7 +13,7 @@
 			<check_box label="Resetuj Start po teleportacji" name="check reset home" tool_tip="Gdy Rezydent się wyteleportowywuje, to jego pozycja startowa zostaje ustawiona na pozycję docelową."/>
 			<check_box label="Widoczny" name="check visible" tool_tip="Wybierz tą opcję by ustawić region widocznym dla wszystkich."/>
 			<check_box label="Uszkodzenia" name="check damage" tool_tip="Wybierz tę opcję by uruchomić opcję uszkodzeń w regionie."/>
-			<check_box label="Zablokuj śledzenie ruchu" name="block dwell" tool_tip="Wybierz tą opcję by zablokować monitorowanie trafficu w regionie."/>
+			<check_box label="Zablokuj śledzenie ruchu" name="block dwell" tool_tip="Wybierz tą opcję by zablokować monitorowanie ruchu (trafficu) w regionie."/>
 			<check_box label="Zablokuj terraformowanie" name="block terraform" tool_tip="Wybierz tą opcję by zablokować terraforming w regionie"/>
 			<check_box label="Piaskownica" name="is sandbox" tool_tip="Ustawia region jako piaskownicę (sandbox)"/>
 			<button label="Ustal teren" label_selected="Ustal teren" name="Bake Terrain" tool_tip="(Bake Terrain) Zapamiętaj obecny teren jako początkowy dla cofnięcia modyfikacji terenu."/>

@@ -974,16 +974,16 @@ Spróbuj zalogować się ponownie za minutę.
 		(nieznany)
 	</string>
 	<string name="Estate / Full Region">
-		Majątek / Region
+		Majątek / Pełny Region
 	</string>
 	<string name="Estate / Homestead">
-		Majątek / Ziemia
+		Majątek / Homestead
 	</string>
 	<string name="Mainland / Homestead">
-		Region Główny / Ziemia
+		Mainland / Homestead
 	</string>
 	<string name="Mainland / Full Region">
-		Region Główny / Pełny Region
+		Mainland / Pełny Region
 	</string>
 	<string name="all_files">
 		Wszystkie pliki
@@ -1825,7 +1825,7 @@ Spróbuj zalogować się ponownie za minutę.
 		majątek rodziców
 	</string>
 	<string name="IMMainland">
-		region główny
+		mainland
 	</string>
 	<string name="IMTeen">
 		dla niepełnoletnich
@@ -4641,6 +4641,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Mouselook_Label">
 		Tryb pierwszoosobowy
 	</string>
+	<string name="Command_Legacy_Search_Label">
+		Klasyczne szukanie
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4772,6 +4775,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Włącz/wyłącz tryb latania
+	</string>
+	<string name="Command_Legacy_Search_Tooltip">
+		Znajdź miejsca, grupy oraz ludzi używając klasycznego sposobu wyszukiwania
 	</string>
 	<string name="Retain%">
 		%Zachowania
