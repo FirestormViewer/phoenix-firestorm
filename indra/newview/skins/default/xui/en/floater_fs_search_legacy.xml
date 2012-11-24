@@ -83,7 +83,6 @@
 			name="people"
 			layout="topleft"
 			height="16"
-			left=""
 			value="0"
 			width="125" />
 		<radio_item
@@ -658,8 +657,7 @@
 			v_pad="0"
 			halign="center"
 			enabled="false"
-			font="SansSerifHugeBold"
-			value=""/>
+			font="SansSerifHugeBold"/>
 		<texture_picker
 			enabled="false"
 			fallback_image="Generic_Person_Large"
