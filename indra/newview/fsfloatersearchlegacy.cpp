@@ -525,8 +525,6 @@ void FSFloaterSearchLegacy::onSelectItem()
 			list = getChild<LLScrollListCtrl>("search_results_classifieds");
 			break;
 	}
-	if (!list)
-		return;
 	refreshActionButtons();
 	mSelectedID = list->getSelectedValue();
 	LLAvatarPropertiesProcessor* mAvatarPropertiesProcessor = LLAvatarPropertiesProcessor::getInstance();
