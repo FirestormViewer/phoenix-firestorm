@@ -177,7 +177,17 @@ bool LLLocalBitmap::updateSelf(EUpdateType optional_firstupdate)
 		if (gDirUtilp->fileExists(mFilename))
 		{
 			// verifying that the file has indeed been modified
-			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(mFilename));
+
+			// <FS:ND> FIRE-8200; MAINT-1901: Make sure to handle unicode filenames for windows
+
+			// const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(mFilename));
+
+			std::string ndConvertFilename( std::string const &aFilename );
+			std::string strFName = ndConvertFilename( mFilename );
+			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path( strFName ) );
+
+			// </FS:ND>
+
 			LLSD new_last_modified = asctime(localtime(&temp_time));
 
 			if (mLastModified.asString() != new_last_modified.asString())
