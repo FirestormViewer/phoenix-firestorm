@@ -53,6 +53,7 @@ std::string getProfileURL(const std::string& agent_name)
 	}
 	else
 	{
+#if HAS_OPENSIM_SUPPORT
 // <FS:CR> FIRE-8063: Web profiles for aurora, opensim, and osgrid
 		std::string match = "?name=[AGENT_NAME]";
 		if (LLGridManager::getInstance()->isInAuroraSim()) {
@@ -70,9 +71,13 @@ std::string getProfileURL(const std::string& agent_name)
 				url = gSavedSettings.getString("WebProfileURL");
 		}
 
-		if(std::string::npos == url.find(match)) url += match;
-        gSavedSettings.setString("WebProfileURL", url);
+		if(std::string::npos == url.find(match))
+		{
+			url += match;
+		}
+		gSavedSettings.setString("WebProfileURL", url);
 // </FS:CR> 
+#endif
 	}
 
 	LLSD subs;
