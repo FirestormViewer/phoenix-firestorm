@@ -9,7 +9,7 @@
  save_rect="true"
  save_visibility="true"
  single_instance="true"
- title="SEARCH"
+ title="Search"
  width="400">
     <tab_container
      follows="left|right|top|bottom"
