@@ -2349,7 +2349,8 @@ Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .bvh
 	<string name="Adult">
 		Adulto
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Arte y Cultura
 	</string>
 	<string name="Business">
@@ -2367,7 +2368,8 @@ Se esperaba .wav, .tga, .bmp, .jpg, .jpeg, o .bvh
 	<string name="Newcomer Friendly">
 		Para recién llegados
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parques y Naturaleza
 	</string>
 	<string name="Residential">

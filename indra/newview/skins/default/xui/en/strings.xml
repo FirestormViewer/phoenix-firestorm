@@ -2766,13 +2766,15 @@ Expected .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="None">None</string>
 	<string name="Linden Location">Linden Location</string>
 	<string name="Adult">Adult</string>
-	<string name="Arts&amp;Culture">Arts &amp; Culture</string>
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">Arts &amp; Culture</string>
 	<string name="Business">Business</string>
 	<string name="Educational">Educational</string>
 	<string name="Gaming">Gaming</string>
 	<string name="Hangout">Hangout</string>
 	<string name="Newcomer Friendly">Newcomer Friendly</string>
-	<string name="Parks&amp;Nature">Parks &amp; Nature</string>
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">Parks &amp; Nature</string>
 	<string name="Residential">Residential</string>
 	<!--<string name="Shopping">Shopping</string>	-->
 	<string name="Stage">Stage</string>

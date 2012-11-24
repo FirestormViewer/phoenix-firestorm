@@ -2205,7 +2205,8 @@ Tipi conosciuti .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Arte &amp; Cultura
 	</string>
 	<string name="Business">
@@ -2223,7 +2224,8 @@ Tipi conosciuti .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Newcomer Friendly">
 		Accoglienza nuovi residenti
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parchi &amp; Natura
 	</string>
 	<string name="Residential">

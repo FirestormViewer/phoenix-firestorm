@@ -2230,7 +2230,8 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="Adult">
 		Yetişkin
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Sanat ve Kültür
 	</string>
 	<string name="Business">
@@ -2248,7 +2249,8 @@ Lütfen bir dakika içerisinde tekrar oturum açmayı deneyin.
 	<string name="Newcomer Friendly">
 		Yeni Gelenlere Yardım Sunan
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Park ve Doğa
 	</string>
 	<string name="Residential">

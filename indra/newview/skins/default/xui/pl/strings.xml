@@ -2305,7 +2305,8 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Sztuka i Kultura
 	</string>
 	<string name="Business">
@@ -2323,7 +2324,8 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 	<string name="Newcomer Friendly">
 		Przyjazne dla nowych
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parki i Natura
 	</string>
 	<string name="Residential">

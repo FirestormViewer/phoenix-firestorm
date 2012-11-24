@@ -2058,7 +2058,8 @@ Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Kunst &amp; kultur
 	</string>
 	<string name="Business">
@@ -2076,7 +2077,8 @@ Forventet .wav, .tga, .bmp, .jpg, .jpeg, or .bvh
 	<string name="Newcomer Friendly">
 		Nybegynder venligt
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parker &amp; natur
 	</string>
 	<string name="Residential">

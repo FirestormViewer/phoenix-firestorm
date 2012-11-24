@@ -2343,7 +2343,8 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Adult">
 		Adult
 	</string>
-	<string name="Arts&amp;Culture">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Arts and Culture">
 		Kunst &amp; Kultur
 	</string>
 	<string name="Business">
@@ -2361,7 +2362,8 @@ Gültige Formate: .wav, .tga, .bmp, .jpg, .jpeg oder .bvh
 	<string name="Newcomer Friendly">
 		Anfängergerecht
 	</string>
-	<string name="Parks&amp;Nature">
+	<!-- FS:Ansariel: Fixed to match PARCEL_CATEGORY_UI_STRING array -->
+	<string name="Parks and Nature">
 		Parks und Natur
 	</string>
 	<string name="Residential">

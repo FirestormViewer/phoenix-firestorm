@@ -261,7 +261,7 @@ BOOL FSFloaterSearchLegacy::postBuild()
 	for (int category = LLParcel::C_LINDEN; category < LLParcel::C_COUNT; category++)
 	{
 		LLParcel::ECategory eCategory = (LLParcel::ECategory)category;
-		places_combobox->add(LLParcel::getCategoryUIString(eCategory), LLParcel::getCategoryString(eCategory));
+		places_combobox->add(LLTrans::getString(LLParcel::getCategoryUIString(eCategory)), LLParcel::getCategoryString(eCategory));
 	}
 	
 	LLComboBox* classifieds_combobox = getChild<LLComboBox>("classifieds_category");
