@@ -1245,7 +1245,10 @@ std::string LLUrlEntryJira::getUrl(const std::string &string) const
 {
 	if (boost::ifind_first(string, "PHOE") ||
 		boost::ifind_first(string, "FIRE") ||
-		boost::ifind_first(string, "SPOT"))
+		boost::ifind_first(string, "SPOT") ||
+		//<FS:TS> FIRE-8319: SUP JIRAs link to secondlife.com
+		boost::ifind_first(string, "SUP"))
+		//</FS:TS> FIRE-8319
 	{
 		return llformat("http://jira.phoenixviewer.com/browse/%s", string.c_str());
 	}
