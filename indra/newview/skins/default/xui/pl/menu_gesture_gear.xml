@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <toggleable_menu name="menu_gesture_gear">
-	<menu_item_call label="Dodaj/Usuń z Ulubionych" name="activate"/>
+	<menu_item_call label="Aktywuj/dezaktywuj wybrany gest" name="activate"/>
 	<menu_item_call label="Kopiuj" name="copy_gesture"/>
 	<menu_item_call label="Wklej" name="paste"/>
 	<menu_item_call label="Kopiuj UUID" name="copy_uuid"/>
