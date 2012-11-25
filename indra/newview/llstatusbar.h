@@ -190,6 +190,13 @@ private:
 	 * Handles clicks on the info buttons.
 	 */
 	void onInfoButtonClicked();
+	
+	// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+	/**
+	 * Handles clicks on the connection status indicator.
+	 */
+	void onBandwidthGraphButtonClicked();
+	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
 	/**
 	 * Handles clicks on the parcel wl info button.
@@ -299,6 +306,7 @@ private:
 	LLTextBox	*mBoxBalance;
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
 	LLButton	*mMediaToggle;
+	LLButton	*mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 	LLView		*mScriptOut;
 	LLFrameTimer	mClockUpdateTimer;
 

@@ -177,6 +177,7 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mTextTime(NULL),
 	mSGBandwidth(NULL),
 	mSGPacketLoss(NULL),
+	mBandwidthButton(NULL), // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 	mBtnStats(NULL),
 	mBtnVolume(NULL),
 	mBoxBalance(NULL),
@@ -292,6 +293,22 @@ BOOL LLStatusBar::postBuild()
 	S32 x = getRect().getWidth() - 2;
 	S32 y = 0;
 	LLRect r;
+	
+	// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+	r.set( x-((SIM_STAT_WIDTH*2)+2), y+MENU_BAR_HEIGHT-1, x, y+1);
+	LLButton::Params BandwidthButton;
+	BandwidthButton.name(std::string("BandwidthGraphButton"));
+	BandwidthButton.label("");
+	BandwidthButton.rect(r);
+	BandwidthButton.follows.flags(FOLLOWS_BOTTOM | FOLLOWS_RIGHT);
+	BandwidthButton.click_callback.function(boost::bind(&LLStatusBar::onBandwidthGraphButtonClicked, this));
+	mBandwidthButton = LLUICtrlFactory::create<LLButton>(BandwidthButton);
+	addChild(mBandwidthButton);
+	LLColor4 BandwidthButtonOpacity;
+	BandwidthButtonOpacity.setAlpha(0);
+	mBandwidthButton->setColor(BandwidthButtonOpacity);
+	// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+	
 	r.set( x-SIM_STAT_WIDTH, y+MENU_BAR_HEIGHT-1, x, y+1);
 	LLStatGraph::Params sgp;
 	sgp.name("BandwidthGraph");
@@ -554,6 +571,7 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	BOOL showNetStats = gSavedSettings.getBOOL("ShowNetStats");
 	mSGBandwidth->setVisible(visible && showNetStats);
 	mSGPacketLoss->setVisible(visible && showNetStats);
+	mBandwidthButton->setVisible(visible && showNetStats); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 	mTimeMediaPanel->setVisible(visible);
 	setBackgroundVisible(visible);
 }
@@ -844,6 +862,13 @@ void LLStatusBar::onVolumeChanged(const LLSD& newvalue)
 {
 	refresh();
 }
+
+// <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
+void LLStatusBar::onBandwidthGraphButtonClicked()
+{
+	LLFloaterReg::toggleInstance("lagmeter");
+}
+// </FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
 // Implements secondlife:///app/balance/request to request a L$ balance
 // update via UDP message system. JC
@@ -1295,6 +1320,7 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 
 	mSGBandwidth->setVisible(showNetStat);
 	mSGPacketLoss->setVisible(showNetStat);
+	mBandwidthButton->setVisible(showNetStat); // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
 
 	LLRect rect = mTimeMediaPanel->getRect();
 	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
