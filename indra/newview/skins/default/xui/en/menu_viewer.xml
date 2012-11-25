@@ -999,6 +999,28 @@
 	     	 	</menu_item_call>
 	     	</menu>
 	    </menu>
+		<menu
+			 create_jump_keys="true"
+			 name="photo_and_video"
+			 label="Photo and Video"
+			 tear_off="true">
+				<menu_item_call
+				label="Phototools"
+				name="phototools_item_call"
+				shortcut="control|alt|P">
+					<menu_item_call.on_click
+					function="Floater.Toggle"
+					parameter="phototools" />
+				</menu_item_call>
+				<menu_item_call
+				label="Cameratools"
+				name="cameratools_item_call"
+				shortcut="control|shift|C">
+					<menu_item_call.on_click
+					function="Floater.Toggle"
+					parameter="phototools_camera" />
+				</menu_item_call>
+		</menu>
       <menu_item_call
         label="Area Search"
         name="area_search">
