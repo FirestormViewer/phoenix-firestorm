@@ -411,7 +411,7 @@ teksturę:
 			<text name="Sound:">
 				Dźwięk:
 			</text>
-			<check_box label="Ogranicz dźwięki gestów i obiektów do tej Posiadłości" name="check sound local"/>
+			<check_box label="Ogranicz dźwięki gestów i obiektów do obszaru tej Posiadłości" name="check sound local"/>
 			<text name="Avatar Sounds:">
 				Dźwięki awatarów:
 			</text>
@@ -422,7 +422,7 @@ teksturę:
 			</text>
 			<check_box label="Rozmowy włączone" name="parcel_enable_voice_channel"/>
 			<check_box label="Rozmowy włączone (ustawione przez Majątek)" name="parcel_enable_voice_channel_is_estate_disabled"/>
-			<check_box label="Ogranicz komunikację głosową do tej Posiadłości." name="parcel_enable_voice_channel_local"/>
+			<check_box label="Ogranicz komunikację głosową do obszaru tej Posiadłości" name="parcel_enable_voice_channel_local"/>
 		</panel>
 		<panel label="DOSTĘP" name="land_access_panel">
 			<panel.string name="access_estate_defined">
