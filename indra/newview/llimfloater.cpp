@@ -291,7 +291,7 @@ void LLIMFloater::sendMsg()
 				{
 					utf8_text.replace(0, 1, "/me");
  				}
-				else if (isalpha(utf8_text.at(1)))	// Do not prevent smileys and such.
+				else if (!isdigit(utf8_text.at(1)) && !ispunct(utf8_text.at(1)) && !isspace(utf8_text.at(1)))	// Do not prevent smileys and such.
 				{
 					utf8_text.replace(0, 1, "/me ");
 				}
