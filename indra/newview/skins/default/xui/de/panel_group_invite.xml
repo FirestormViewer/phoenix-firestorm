@@ -20,7 +20,7 @@
 	</text>
 	<combo_box name="role_name" tool_tip="Wählen Sie aus der Liste der Rollen, die Sie an Mitglieder vergeben dürfen."/>
 	<button label="Einladungen versenden" name="ok_button"/>
-	<button label="Abbrechen" name="cancel_button"/>
+	<button label="Abbr." name="cancel_button"/>
 	<string name="GroupInvitation">
 		Gruppeneinladung
 	</string>
