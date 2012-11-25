@@ -59,6 +59,7 @@
 #include "llanimationstates.h"	// ANIM_AGENT_WHISPER, ANIM_AGENT_TALK, ANIM_AGENT_SHOUT
 #include "llviewerstats.h"
 // </FS:Zi>
+#include "fscommon.h"
 
 //<FS:TS> FIRE-787: break up too long chat lines into multiple messages
 void send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32 channel);
@@ -439,57 +440,10 @@ void LLNearbyChat::sendChat(LLWString text,EChatType type)
 		std::string utf8_revised_text;
 		if (0 == channel)
 		{
-//-TT Satomi Ahn - Patch MU_OOC	
-			if (gSavedSettings.getBOOL("AutoCloseOOC"))
-			{
-				// Try to find any unclosed OOC chat (i.e. an opening
-				// double parenthesis without a matching closing double
-				// parenthesis.
-				if (utf8text.find("(( ") != -1 && utf8text.find("))") == -1)
-				{
-					// add the missing closing double parenthesis.
-					utf8text += " ))";
-				}
-				else if (utf8text.find("((") != -1 && utf8text.find("))") == -1)
-				{
-					if (utf8text.at(utf8text.length() - 1) == ')')
-					{
-						// cosmetic: add a space first to avoid a closing triple parenthesis
-						utf8text += " ";
-					}
-					// add the missing closing double parenthesis.
-					utf8text += "))";
-				}
-				else if (utf8text.find("[[ ") != -1 && utf8text.find("]]") == -1)
-				{
-					// add the missing closing double parenthesis.
-					utf8text += " ]]";
-				}
-				else if (utf8text.find("[[") != -1 && utf8text.find("]]") == -1)
-				{
-					if (utf8text.at(utf8text.length() - 1) == ']')
-					{
-						// cosmetic: add a space first to avoid a closing triple parenthesis
-						utf8text += " ";
-					}
-					// add the missing closing double parenthesis.
-					utf8text += "]]";
-				}
-			}
+			// Convert OOC and MU* style poses
+			utf8text = applyAutoCloseOoc(utf8text);
+			utf8text = applyMuPose(utf8text);
 
-			// Convert MU*s style poses into IRC emotes here.
-			if (gSavedSettings.getBOOL("AllowMUpose") && utf8text.find(":") == 0 && utf8text.length() > 3)
-			{
-				if (utf8text.find(":'") == 0)
-				{
-					utf8text.replace(0, 1, "/me");
-				}
-				else if (!isdigit(utf8text.at(1)) && !ispunct(utf8text.at(1)) && !isspace(utf8text.at(1)))	// Do not prevent smileys and such.
-				{
-					utf8text.replace(0, 1, "/me ");
-				}
-			}				
-//-TT Satomi Ahn - Patch MU_OOC	
 			// discard returned "found" boolean
 			LLGestureMgr::instance().triggerAndReviseString(utf8text, &utf8_revised_text);
 		}

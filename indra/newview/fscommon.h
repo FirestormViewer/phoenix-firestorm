@@ -27,6 +27,8 @@
 #include "llchat.h"
 
 void reportToNearbyChat(const std::string& message);
+std::string applyAutoCloseOoc(const std::string& message);
+std::string applyMuPose(const std::string& message);
 
 namespace FSCommon
 {
