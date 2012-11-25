@@ -50,7 +50,6 @@ public:
 	
 	BOOL postBuild();
 	
-	const LLUUID& getQueryID() const { return mQueryID; }
 	static void sendSearchQuery(LLMessageSystem* msg, const LLUUID& query_id, const std::string& text, U32 flags, S32 query_start);
 	static void sendPlacesSearchQuery(LLMessageSystem* msg, const LLUUID& query_id, const std::string& text, U32 flags, S8 category, S32 query_start);
 	static void sendLandSearchQuery(LLMessageSystem* msg, const LLUUID& query_id, U32 flags, U32 category, S32 price, S32 area, S32 query_start);
@@ -66,6 +65,7 @@ public:
 	void groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group);
 	void processGroupData();
 	LLUUID& getSelectedID() { return mSelectedID; }
+	const LLUUID& getQueryID() const { return mQueryID; }
 protected:
 	S32 showNextButton(S32);
 	void setAvatarID(const LLUUID& id);

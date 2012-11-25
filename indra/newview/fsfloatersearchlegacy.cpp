@@ -540,6 +540,8 @@ void FSFloaterSearchLegacy::onSelectItem()
 			setLoadingProgress(true);
 			break;
 		case SM_GROUPS:
+			if (mGroupPropertiesRequest)
+				delete mGroupPropertiesRequest;
 			mGroupPropertiesRequest = new FSLegacySearchGroupInfoObserver(getSelectedID(), this);
 			setLoadingProgress(true);
 			break;
@@ -575,12 +577,13 @@ void FSFloaterSearchLegacy::processGroupData()
 	if (data)
 	{
 		setSelectionDetails(LLTrans::getString("LoadingData"), LLSD(data->mCharter), LLSD(data->mInsigniaID));
-		delete mGroupPropertiesRequest;
 		gCacheName->getGroup(getSelectedID(),
 							 boost::bind(&FSFloaterSearchLegacy::groupNameUpdatedCallback,
 										 this, _1, _2, _3));
 		setLoadingProgress(false);
 	}
+	delete mGroupPropertiesRequest;
+	mGroupPropertiesRequest = NULL;
 }
 
 //virtual
@@ -1029,7 +1032,7 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("GroupEdit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(self->getString("not_found", map));
 			self->setLoadingProgress(false);
@@ -1165,7 +1168,7 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("GroupEdit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(self->getString("not_found", map));
 			self->setLoadingProgress(false);
@@ -1219,7 +1222,7 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 			{
 				lldebugs << "No results returned for QueryID: " << query_id << llendl;
 				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = self->getChild<LLUICtrl>("GroupEdit")->getValue().asString();
+				map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
 				search_results->setEnabled(FALSE);
 				search_results->setCommentText(self->getString("not_found", map));
 			}
@@ -1303,7 +1306,7 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("GroupEdit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(self->getString("not_found", map));
 			self->setLoadingProgress(false);
@@ -1627,7 +1630,7 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("GroupEdit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(self->getString("not_found", map));
 			self->setLoadingProgress(false);
