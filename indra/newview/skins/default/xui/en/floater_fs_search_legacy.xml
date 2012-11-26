@@ -657,6 +657,7 @@
 			v_pad="0"
 			halign="center"
 			enabled="false"
+			use_ellipses="true"
 			font="SansSerifHugeBold"/>
 		<texture_picker
 			enabled="false"
