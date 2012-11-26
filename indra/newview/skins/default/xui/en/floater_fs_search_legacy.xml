@@ -503,7 +503,7 @@
 			<columns
 				label="Group Name"
 				name="group_name"
-				width="340" />
+				width="285" />
 			<columns
 				label="Members"
 				name="members"
@@ -585,7 +585,7 @@
 			<columns
 				label="Name"
 				name="classified_name"
-				width="340" />
+				width="285" />
 			<columns
 				label="Listing Price"
 				name="price"
@@ -607,7 +607,7 @@
 			<columns
 				label="Event Name"
 				name="event_name"
-				width="300" />
+				width="200" />
 			<columns
 				label="Date"
 				name="date"
