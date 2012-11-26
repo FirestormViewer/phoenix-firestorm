@@ -113,8 +113,8 @@
 				</menu>
 		</menu>
 		<menu name="photo_and_video" label="Foto i Wideo">
-			<menu_item_call label="Narzędzia fotograficzne"/>
-			<menu_item_call label="Fotograf: Kamera" name="cameratools_item_call"/>
+			<menu_item_call label="Narzędzia fotograficzne" name="phototools_item_call"/>
+			<menu_item_call label="Fotograf: kamera" name="cameratools_item_call"/>
 		</menu>
 		<menu_item_call label="Przeszukiwanie obszaru" name="area_search"/>
 		<menu_item_call label="Eksplorator dźwięków" name="Sound Explorer"/>
