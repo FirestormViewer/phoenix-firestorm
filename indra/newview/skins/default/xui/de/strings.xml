@@ -5432,4 +5432,11 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSCmdLineDrawDistanceSet">
 		Draw Distance wurde auf [DISTANCE]m gesetzt.
 	</string>
+	
+	<string name="FSWithHavok">
+		mit Havok-Unterstützung
+	</string>
+	<string name="FSWithOpensim">
+		mit OpenSimulator-Unterstützung
+	</string>
 </strings>
