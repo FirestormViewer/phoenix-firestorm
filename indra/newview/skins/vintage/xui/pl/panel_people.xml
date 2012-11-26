@@ -59,9 +59,10 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 					<check_box label="Ogranicz odl.:" tool_tip="Ogranicza wyniki do określonego zasięgu" name="LimitRadarByRange" />
 					<text name="radarmap_range_label" value="Format nazw radaru:"/>
 					<combo_box name="RadarNameFormat">
-						<combo_box.item name="RadarNameFormat_user" label="Nazwakonta" />
-						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwakonta)" />
-						<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwakonta (Wyświetlane)" />
+						<combo_box.item name="RadarNameFormat_display" label="Wyświetlane" />
+						<combo_box.item name="RadarNameFormat_user" label="NazwaKonta" />
+						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (NazwaKonta)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" label="NazwaKonta (Wyświetlane)" />
 					</combo_box>
 				</panel>
 				<panel name="panel_block_list_sidetray" label="Blokowani" />
