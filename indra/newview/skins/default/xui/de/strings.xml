@@ -5071,10 +5071,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Asset-Blacklist
 	</string>
 	<string name="Command_Phototools_Label">
-		Phototools
+		Fototools
 	</string>
 	<string name="Command_Phototools_View_Label">
-		Phototools-Kamera
+		Kameratools
 	</string>
 	<string name="Command_Contact_Sets_Label">
 		Kontakt-Sets
@@ -5200,7 +5200,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Erweiterte Fotografie-Tools
 	</string>
 	<string name="Command_Phototools_View_Tooltip">
-		Erweiterte Kamerasteuerung für Fotografie-Tools
+		Erweiterte Kameratools
 	</string>
 	<string name="Command_Contact_Sets_Tooltip">
 		Öffnet die Kontakt-Sets (Strg+Alt+Umschalt+C)

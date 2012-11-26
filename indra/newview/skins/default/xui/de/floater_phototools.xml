@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
-<floater title="Phototools" name="phototools">
+<floater title="Fototools" name="phototools">
 	<tab_container name="tabs">
 		<panel name="EnvironmentTab" label="WL">
 			<panel name="PT_WL_Settings">

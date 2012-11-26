@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Kamera-Steuerung" name="phototools_camera_floater">
+<floater title="Kameratools" name="phototools_camera_floater">
 	<floater.string name="rotate_tooltip">
 		Kamera um Fokus drehen
 	</floater.string>

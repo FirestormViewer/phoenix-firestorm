@@ -83,8 +83,6 @@
 		<menu_item_call label="Dieses Land kaufen" name="Buy Land"/>
 		<menu_item_call label="Mein Land" name="My Land"/>
 		<menu label="Anzeigen" name="LandShow">
-			<menu_item_check label="Bewegungssteuerung" name="Movement Controls"/>
-			<menu_item_check label="Ansichtsteuerung" name="Camera Controls"/>
 			<menu_item_check label="Bannlinien" name="Ban Lines"/>
 			<menu_item_check label="Strahlen" name="beacons"/>
 			<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
@@ -120,8 +118,10 @@
 				<menu_item_call label="Voreinstellung löschen..." name="delete_day_preset"/>
 			</menu>
 		</menu>
-		<menu_item_call label="Umwelt-Editor" name="Environment Editor"/>
-        <menu_item_call label="Himmel-Editor" name="Windlight"/>
+		<menu label="Foto und Video" name="photo_and_video">
+			<menu_item_call label="Fototools" name="phototools_item_call"/>
+			<menu_item_call label="Kameratools" name="cameratools_item_call"/>
+		</menu>
 		<menu_item_call label="Umgebungssuche" name="area_search"/>
 		<menu_item_call label="Sound-Explorer" name="Sound Explorer"/>
 		<menu_item_call label="Asset-Blacklist" name="asset_blacklist"/>
