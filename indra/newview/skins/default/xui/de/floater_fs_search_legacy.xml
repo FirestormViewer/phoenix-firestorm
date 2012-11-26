@@ -57,7 +57,7 @@
 			<columns label="" name="icon"/>
 			<columns label="Gruppenname" name="group_name"/>
 			<columns label="Mitglieder" name="members"/>
-			<columns label="Bew." name="score"/>
+			<columns label="Bewert." name="score"/>
 		</scroll_list>
 		<scroll_list name="search_results_places">
 			<columns label="" name="icon"/>
