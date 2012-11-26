@@ -3504,7 +3504,7 @@
 			 left="4"
 			 name="statistics_scroll"
 			 reserve_scroll_corner="false"
-			 top_pad="0"
+			 top_pad="1"
 			 bevel_style="out"
 			 opaque="false"
 			 color="DkGray_66"
