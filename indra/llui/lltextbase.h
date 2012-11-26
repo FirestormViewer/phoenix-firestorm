@@ -531,8 +531,8 @@ protected:
 	LLTextSegmentPtr    			getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_end_of_line = true);
 	segment_set_t::iterator			getEditableSegIterContaining(S32 index);
 	segment_set_t::const_iterator	getEditableSegIterContaining(S32 index) const;
-	segment_set_t::iterator			getSegIterContaining(S32 index);
-	segment_set_t::const_iterator	getSegIterContaining(S32 index) const;
+	segment_set_t::iterator			getSegIterContaining(S32 index, bool fix_position = true);
+	segment_set_t::const_iterator	getSegIterContaining(S32 index, bool fix_position = true) const;
 	void                			clearSegments();
 	void							createDefaultSegment();
 	virtual void					updateSegments();
