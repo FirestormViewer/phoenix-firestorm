@@ -63,7 +63,7 @@ public:
 	void sendParcelDetails(const LLVector3d &global_pos, const std::string& name, const std::string& desc, const LLUUID& snapshot_id);
 	void avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name);
 	void groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group);
-	void processGroupData();
+	void setGroupID(const LLUUID& group_id);
 	LLUUID& getSelectedID() { return mSelectedID; }
 	const LLUUID& getQueryID() const { return mQueryID; }
 protected:
@@ -74,7 +74,7 @@ protected:
 private:
 	static void	onModeSelect(LLUICtrl* ctrl, void *userdata);
 	void refreshSearchJunk();
-	void refreshActionButtons();
+	void resetActionButtons();
 	void onSelectItem();
 	
 	void find();

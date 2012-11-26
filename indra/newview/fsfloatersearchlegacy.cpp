@@ -134,6 +134,8 @@ public:
 	mFloater(floater)
 	{
 		LLGroupMgr* groupmgr = LLGroupMgr::getInstance();
+		groupmgr->removeObserver(this);
+		mID = group_id;
 		groupmgr->addObserver(this);
 		groupmgr->sendGroupPropertiesRequest(group_id);
 	}
@@ -147,11 +149,12 @@ public:
 	{
 		if (gc == GC_PROPERTIES)
 		{
-			mFloater->processGroupData();
+			mFloater->setGroupID(mID);
 		}
 	}
 private:
 	FSFloaterSearchLegacy* mFloater;
+	LLUUID mID;
 };
 
 /////////////////////////////////////////
@@ -389,16 +392,16 @@ void FSFloaterSearchLegacy::refreshSearchJunk()
 	//Yipee!
 }
 
-void FSFloaterSearchLegacy::refreshActionButtons()
+void FSFloaterSearchLegacy::resetActionButtons()
 {
-	childSetVisible("people_profile_btn", isPeople());
-	childSetVisible("people_message_btn", isPeople());
-	childSetVisible("people_friend_btn", isPeople());
-	childSetVisible("group_profile_btn", isGroups());
-	childSetVisible("group_chat_btn", isGroups());
-	childSetVisible("group_join_btn", isGroups());
-	childSetVisible("parcel_teleport_btn", (isPlaces() || isLand() || isClassifieds()));
-	childSetVisible("parcel_map_btn", (isPlaces() || isLand() || isClassifieds()));
+	childSetVisible("people_profile_btn", false);
+	childSetVisible("people_message_btn", false);
+	childSetVisible("people_friend_btn", false);
+	childSetVisible("group_profile_btn", false);
+	childSetVisible("group_chat_btn", false);
+	childSetVisible("group_join_btn", false);
+	childSetVisible("parcel_teleport_btn", false);
+	childSetVisible("parcel_map_btn", false);
 }
 
 void FSFloaterSearchLegacy::onBtnFind()
@@ -529,7 +532,7 @@ void FSFloaterSearchLegacy::onSelectItem()
 	{
 		return;
 	}
-	refreshActionButtons();
+	resetActionButtons();
 	mSelectedID = list->getSelectedValue();
 	LLAvatarPropertiesProcessor* mAvatarPropertiesProcessor = LLAvatarPropertiesProcessor::getInstance();
 	switch(ESearchMode)
@@ -540,8 +543,6 @@ void FSFloaterSearchLegacy::onSelectItem()
 			setLoadingProgress(true);
 			break;
 		case SM_GROUPS:
-			if (mGroupPropertiesRequest)
-				delete mGroupPropertiesRequest;
 			mGroupPropertiesRequest = new FSLegacySearchGroupInfoObserver(getSelectedID(), this);
 			setLoadingProgress(true);
 			break;
@@ -570,20 +571,28 @@ void FSFloaterSearchLegacy::setSelectionDetails(const std::string& title, const 
 	mSnapshotCtrl->setValue(id);
 }
 
-void FSFloaterSearchLegacy::processGroupData()
+void FSFloaterSearchLegacy::setGroupID(const LLUUID& group_id)
 {
-	LLGroupMgrGroupData* data = LLGroupMgr::getInstance()->getGroupData(getSelectedID());
+	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id);
 	
-	if (data)
+	if (gdatap)
 	{
-		setSelectionDetails(LLTrans::getString("LoadingData"), LLSD(data->mCharter), LLSD(data->mInsigniaID));
-		gCacheName->getGroup(getSelectedID(),
+		setSelectionDetails(LLTrans::getString("LoadingData"), LLSD(gdatap->mCharter), LLSD(gdatap->mInsigniaID));
+		LLGroupData agent_gdatap;
+		bool is_member = gAgent.getGroupData(group_id,agent_gdatap) || gAgent.isGodlike();
+		bool join_btn_visible = !is_member && gdatap->mOpenEnrollment;
+		childSetVisible("group_profile_btn", true);
+		childSetVisible("group_chat_btn", true);
+		childSetVisible("group_join_btn", true);
+		getChildView("group_chat_btn")->setEnabled(is_member);
+		getChildView("group_join_btn")->setEnabled(join_btn_visible);
+		gCacheName->getGroup(group_id,
 							 boost::bind(&FSFloaterSearchLegacy::groupNameUpdatedCallback,
 										 this, _1, _2, _3));
 		setLoadingProgress(false);
 	}
-	delete mGroupPropertiesRequest;
 	mGroupPropertiesRequest = NULL;
+	delete mGroupPropertiesRequest;
 }
 
 //virtual
@@ -594,10 +603,15 @@ void FSFloaterSearchLegacy::processProperties(void* data, EAvatarProcessorType t
 		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 		if (avatar_data)
 		{
-			setSelectionDetails("[loading]", avatar_data->about_text, avatar_data->image_id);
+			setSelectionDetails(LLTrans::getString("LoadingData"), avatar_data->about_text, avatar_data->image_id);
 			LLAvatarNameCache::get(avatar_data->avatar_id,
 								   boost::bind(&FSFloaterSearchLegacy::avatarNameUpdatedCallback,
 											   this, _1, _2));
+			childSetVisible("people_profile_btn", true);
+			childSetVisible("people_message_btn", true);
+			childSetVisible("people_friend_btn", true);
+			getChildView("people_friend_btn")->setEnabled(!LLAvatarActions::isFriend(avatar_data->avatar_id));
+				
 			LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data->avatar_id, this);
 		}
 	}
@@ -606,8 +620,7 @@ void FSFloaterSearchLegacy::processProperties(void* data, EAvatarProcessorType t
 		LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
 		if(c_info && getSelectedID() == c_info->classified_id)
 		{
-			setSelectionDetails(c_info->name, c_info->description, c_info->snapshot_id);
-			mParcelGlobal = c_info->pos_global;
+			sendParcelDetails(c_info->pos_global, c_info->name, c_info->description, c_info->snapshot_id);
 			setLoadingProgress(false);
 			LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
 			std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
@@ -650,6 +663,8 @@ void FSFloaterSearchLegacy::sendParcelDetails(const LLVector3d &global_pos,
 {
 	mParcelGlobal = global_pos;
 	setSelectionDetails(name, desc, snapshot_id);
+	childSetVisible("parcel_teleport_btn", true);
+	childSetVisible("parcel_map_btn", true);
 	setLoadingProgress(false);
 }
 
@@ -1066,62 +1081,51 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
-	if (num_new_rows == 0)
+	for (S32 i = 0; i < num_new_rows; i++)
 	{
-		llinfos << "No results returned for QueryID: " << query_id << llendl;
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
-		search_results->setCommentText(self->getString("not_found", map));
-	}
-	else
-	{
-		for (S32 i = 0; i < num_new_rows; i++)
+		msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_FirstName,	first_name, i);
+		msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_LastName,	last_name, i);
+		msg->getUUIDFast(	_PREHASH_QueryReplies,	_PREHASH_AgentID,	agent_id, i);
+		//msg->getU8Fast(	_PREHASH_QueryReplies,	_PREHASH_Online,	online, i);
+		
+		if (agent_id.isNull())
 		{
-			msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_FirstName,	first_name, i);
-			msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_LastName,	last_name, i);
-			msg->getUUIDFast(	_PREHASH_QueryReplies,	_PREHASH_AgentID,	agent_id, i);
-			//msg->getU8Fast(	_PREHASH_QueryReplies,	_PREHASH_Online,	online, i);
+			llinfos << "Null result returned for QueryID: " << query_id << llendl;
+			LLStringUtil::format_map_t map;
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(self->getString("not_found", map));
+		}
+		else
+		{
+			lldebugs << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << llendl;
+			search_results->setEnabled(TRUE);
+			found_one = TRUE;
+				
+			std::string avatar_name;
+			avatar_name = LLCacheName::buildFullName(first_name, last_name);
+				
+			LLSD content;
+			LLSD element;
 			
-			if (agent_id.isNull())
-			{
-				llinfos << "Null result returned for QueryID: " << query_id << llendl;
-				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-				search_results->setEnabled(FALSE);
-				search_results->setCommentText(self->getString("not_found", map));
-			}
-			else
-			{
-				lldebugs << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << llendl;
-				search_results->setEnabled(TRUE);
-				found_one = TRUE;
-				
-				std::string avatar_name;
-				avatar_name = LLCacheName::buildFullName(first_name, last_name);
-				
-				LLSD content;
-				LLSD element;
-				
-				element["id"] = agent_id;
-				
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "icon_avatar_offline.tga";
-				
-				element["columns"][1]["column"]	= "username";
-				element["columns"][1]["value"]	= avatar_name;
-				
-				content["username"] = avatar_name;
-				
-				search_results->addElement(element, ADD_BOTTOM);
-				self->mResultsContent[agent_id.asString()] = content;
-			}
+			element["id"] = agent_id;
+			
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "icon_avatar_offline.tga";
+			
+			element["columns"][1]["column"]	= "username";
+			element["columns"][1]["value"]	= avatar_name;
+			
+			content["username"] = avatar_name;
+			
+			search_results->addElement(element, ADD_BOTTOM);
+			self->mResultsContent[agent_id.asString()] = content;
 		}
 	}
-	
 	if (found_one)
 	{
+		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
 	self->setLoadingProgress(false);
@@ -1202,64 +1206,53 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
 	
-	if (num_new_rows == 0)
+	for (S32 i = 0; i < num_new_rows; i++)
 	{
-		llinfos << "Null result returned for QueryID: " << query_id << llendl;
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
-		search_results->setCommentText(self->getString("not_found", map));
-	}
-	else
-	{
-		for (S32 i = 0; i < num_new_rows; i++)
+		msg->getUUIDFast(	_PREHASH_QueryReplies,	_PREHASH_GroupID,		group_id,	i);
+		msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_GroupName,		group_name,	i);
+		msg->getS32Fast(	_PREHASH_QueryReplies,	_PREHASH_Members,		members,	i);
+		msg->getF32Fast(	_PREHASH_QueryReplies,	_PREHASH_SearchOrder,	search_order,i);
+		if (group_id.isNull())
 		{
-			msg->getUUIDFast(	_PREHASH_QueryReplies,	_PREHASH_GroupID,		group_id,	i);
-			msg->getStringFast(	_PREHASH_QueryReplies,	_PREHASH_GroupName,		group_name,	i);
-			msg->getS32Fast(	_PREHASH_QueryReplies,	_PREHASH_Members,		members,	i);
-			msg->getF32Fast(	_PREHASH_QueryReplies,	_PREHASH_SearchOrder,	search_order,i);
-			if (group_id.isNull())
-			{
-				lldebugs << "No results returned for QueryID: " << query_id << llendl;
-				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-				search_results->setEnabled(FALSE);
-				search_results->setCommentText(self->getString("not_found", map));
-			}
-			else
-			{
-				lldebugs << "Got: " << group_name << " GroupID: " << group_id << llendl;
-				search_results->setEnabled(TRUE);
-				found_one = TRUE;
+			lldebugs << "No results returned for QueryID: " << query_id << llendl;
+			LLStringUtil::format_map_t map;
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(self->getString("not_found", map));
+		}
+		else
+		{
+			lldebugs << "Got: " << group_name << " GroupID: " << group_id << llendl;
+			search_results->setEnabled(TRUE);
+			found_one = TRUE;
 				
-				LLSD content;
-				LLSD element;
+			LLSD content;
+			LLSD element;
 				
-				element["id"] = group_id;
+			element["id"] = group_id;
+			
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "Icon_Group";
 				
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "Icon_Group";
+			element["columns"][1]["column"]	= "group_name";
+			element["columns"][1]["value"]	= group_name;
+			
+			element["columns"][2]["column"]	= "members";
+			element["columns"][2]["value"]	= members;
+			
+			element["columns"][3]["column"]	= "score";
+			element["columns"][3]["value"]	= search_order;
 				
-				element["columns"][1]["column"]	= "group_name";
-				element["columns"][1]["value"]	= group_name;
+			content["GroupName"] = group_name;
 				
-				element["columns"][2]["column"]	= "members";
-				element["columns"][2]["value"]	= members;
-				
-				element["columns"][3]["column"]	= "score";
-				element["columns"][3]["value"]	= search_order;
-				
-				content["GroupName"] = group_name;
-				
-				search_results->addElement(element, ADD_BOTTOM);
-				self->mResultsContent[group_id.asString()] = content;
-			}
+			search_results->addElement(element, ADD_BOTTOM);
+			self->mResultsContent[group_id.asString()] = content;
 		}
 	}
-	
 	if (found_one)
 	{
+		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
 	self->setLoadingProgress(false);
@@ -1339,84 +1332,73 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
-	if (num_new_rows == 0)
+
+	for (S32 i = 0; i < num_new_rows; i++)
 	{
-		lldebugs << "No results returned for QueryID: " << query_id << llendl;
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
-		search_results->setCommentText(self->getString("not_found", map));
-	}
-	else
-	{
-		for (S32 i = 0; i < num_new_rows; i++)
+		msg->getUUID(	"QueryReplies",	"ParcelID",	parcel_id,	i);
+		msg->getString(	"QueryReplies",	"Name",		name,		i);
+		msg->getBOOL(	"QueryReplies",	"ForSale",	is_for_sale,i);
+		msg->getBOOL(	"QueryReplies",	"Auction",	is_auction,	i);
+		msg->getF32(	"QueryReplies",	"Dwell",	dwell,		i);
+		if (parcel_id.isNull())
 		{
-			msg->getUUID(	"QueryReplies",	"ParcelID",	parcel_id,	i);
-			msg->getString(	"QueryReplies",	"Name",		name,		i);
-			msg->getBOOL(	"QueryReplies",	"ForSale",	is_for_sale,i);
-			msg->getBOOL(	"QueryReplies",	"Auction",	is_auction,	i);
-			msg->getF32(	"QueryReplies",	"Dwell",	dwell,		i);
-			if (parcel_id.isNull())
+			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			LLStringUtil::format_map_t map;
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(self->getString("not_found", map));
+		}
+		else
+		{
+			lldebugs << "Got: " << name << " ParcelID: " << parcel_id << llendl;
+			search_results->setEnabled(TRUE);
+			found_one = TRUE;
+			
+			std::string place_name;
+			
+			LLSD content;
+			LLSD element;
+			
+			element["id"] = parcel_id;
+			
+			if (is_auction)
 			{
-				lldebugs << "Null result returned for QueryID: " << query_id << llendl;
-				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-				search_results->setEnabled(FALSE);
-				search_results->setCommentText(self->getString("not_found", map));
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_Auction";
+			}
+			else if (is_for_sale)
+			{
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_For_Sale";
 			}
 			else
 			{
-				lldebugs << "Got: " << name << " ParcelID: " << parcel_id << llendl;
-				search_results->setEnabled(TRUE);
-				found_one = TRUE;
-				
-				std::string place_name;
-				
-				LLSD content;
-				LLSD element;
-				
-				element["id"] = parcel_id;
-				
-				if (is_auction)
-				{
-					element["columns"][0]["column"]	= "icon";
-					element["columns"][0]["type"]	= "icon";
-					element["columns"][0]["value"]	= "Icon_Auction";
-				}
-				else if (is_for_sale)
-				{
-					element["columns"][0]["column"]	= "icon";
-					element["columns"][0]["type"]	= "icon";
-					element["columns"][0]["value"]	= "Icon_For_Sale";
-				}
-				else
-				{
-					element["columns"][0]["column"]	= "icon";
-					element["columns"][0]["type"]	= "icon";
-					element["columns"][0]["value"]	= "Icon_Place";
-				}
-				
-				element["columns"][1]["column"]	= "place_name";
-				element["columns"][1]["value"]	= name;
-
-				content["place_name"] = name;
-				
-				std::string buffer = llformat("%.0f", (F64)dwell);
-				element["columns"][2]["column"]	= "dwell";
-				element["columns"][2]["value"]	= buffer;
-				
-				search_results->addElement(element, ADD_BOTTOM);
-				self->mResultsContent[parcel_id.asString()] = content;
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_Place";
 			}
+			
+			element["columns"][1]["column"]	= "place_name";
+			element["columns"][1]["value"]	= name;
+
+			content["place_name"] = name;
+				
+			std::string buffer = llformat("%.0f", (F64)dwell);
+			element["columns"][2]["column"]	= "dwell";
+			element["columns"][2]["value"]	= buffer;
+			
+			search_results->addElement(element, ADD_BOTTOM);
+			self->mResultsContent[parcel_id.asString()] = content;
 		}
-		
-		if (found_one)
-		{
-			search_results->setFocus(TRUE);
-		}
-		self->setLoadingProgress(false);
 	}
+	if (found_one)
+	{
+		search_results->selectFirstItem();
+		search_results->setFocus(TRUE);
+	}
+	self->setLoadingProgress(false);
 }
 
 // static
@@ -1463,111 +1445,101 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	
-	if (num_new_rows == 0)
+	S32 for_sale = 0;
+	for (S32 i = 0; i < num_new_rows; i++)
 	{
-		lldebugs << "No results returned for QueryID: " << query_id << llendl;
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
-		search_results->setCommentText(self->getString("not_found", map));
-	}
-	else
-	{
-		S32 for_sale = 0;
-		for (S32 i = 0; i < num_new_rows; i++)
+		msg->getUUID(	"QueryReplies", "ParcelID",		parcel_id,	i);
+		msg->getString(	"QueryReplies", "Name",			name,		i);
+		msg->getBOOL(	"QueryReplies", "Auction",		is_auction,	i);
+		msg->getBOOL(	"QueryReplies", "ForSale",		is_for_sale,i);
+		msg->getS32(	"QueryReplies", "SalePrice",	price,		i);
+		msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
+		
+		if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
 		{
-			msg->getUUID(	"QueryReplies", "ParcelID",		parcel_id,	i);
-			msg->getString(	"QueryReplies", "Name",			name,		i);
-			msg->getBOOL(	"QueryReplies", "Auction",		is_auction,	i);
-			msg->getBOOL(	"QueryReplies", "ForSale",		is_for_sale,i);
-			msg->getS32(	"QueryReplies", "SalePrice",	price,		i);
-			msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
-			
-			if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
-			{
-				msg->getStringFast(	_PREHASH_QueryReplies, _PREHASH_ProductSKU, land_sku, i);
-				land_type = LLProductInfoRequestManager::instance().getDescriptionForSku(land_sku);
-			}
-			else
-			{
-				land_sku.clear();
-				land_type = LLTrans::getString("land_type_unknown");
-			}
-			if (parcel_id.isNull())
-				continue;
-			if (use_price && (price > limit_price))
-				continue;
-			if (use_area && (area < limit_area))
-				continue;
-			
-			LLSD content;
-			LLSD element;
-			
-			element["id"] = parcel_id;
-			if (is_auction)
-			{
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "Icon_Auction";
-			}
-			else if (is_for_sale)
-			{
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "Icon_For_Sale";
-			}
-			else
-			{
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "Icon_Place";
-			}
-			
-			element["columns"][1]["column"]	= "land_name";
-			element["columns"][1]["value"]	= name;
-			
-			content["place_name"] = name;
-			
-			std::string buffer = "Auction";
-			if (!is_auction)
-			{
-				buffer = llformat("%d", price);
-				for_sale++;
-			}
-			element["columns"][2]["column"]	= "price";
-			element["columns"][2]["value"]	= price;
-			
-			element["columns"][3]["column"]	= "area";
-			element["columns"][3]["value"]	= area;
-			if (!is_auction)
-			{
-				F32 ppm;
-				if (area > 0)
-					ppm = (F32)price / (F32)area;
-				else
-					ppm = 0.f;
-				std::string buffer = llformat("%.1f", ppm);
-				element["columns"][4]["column"]	= "ppm";
-				element["columns"][4]["value"]	= buffer;
-			}
-			else
-			{
-				element["columns"][4]["column"]	= "ppm";
-				element["columns"][4]["column"]	= "1.0";
-			}
-			
-			element["columns"][5]["column"]	= "land_type";
-			element["columns"][5]["value"]	= land_type;
-			
-			search_results->addElement(element, ADD_BOTTOM);
-			self->mResultsContent[parcel_id.asString()] = content;
+			msg->getStringFast(	_PREHASH_QueryReplies, _PREHASH_ProductSKU, land_sku, i);
+			land_type = LLProductInfoRequestManager::instance().getDescriptionForSku(land_sku);
 		}
-		// We test against non-auction properties because they don't count towards the page limit.
-		self->showNextButton(for_sale);
+		else
+		{
+			land_sku.clear();
+			land_type = LLTrans::getString("land_type_unknown");
+		}
+		if (parcel_id.isNull())
+			continue;
+		if (use_price && (price > limit_price))
+			continue;
+		if (use_area && (area < limit_area))
+			continue;
+		
+		LLSD content;
+		LLSD element;
+		
+		element["id"] = parcel_id;
+		if (is_auction)
+		{
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "Icon_Auction";
+		}
+		else if (is_for_sale)
+		{
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "Icon_For_Sale";
+		}
+		else
+		{
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "Icon_Place";
+		}
+		
+		element["columns"][1]["column"]	= "land_name";
+		element["columns"][1]["value"]	= name;
+		
+		content["place_name"] = name;
+		
+		std::string buffer = "Auction";
+		if (!is_auction)
+		{
+			buffer = llformat("%d", price);
+			for_sale++;
+		}
+		element["columns"][2]["column"]	= "price";
+		element["columns"][2]["value"]	= price;
+		
+		element["columns"][3]["column"]	= "area";
+		element["columns"][3]["value"]	= area;
+		if (!is_auction)
+		{
+			F32 ppm;
+			if (area > 0)
+				ppm = (F32)price / (F32)area;
+			else
+				ppm = 0.f;
+			std::string buffer = llformat("%.1f", ppm);
+			element["columns"][4]["column"]	= "ppm";
+			element["columns"][4]["value"]	= buffer;
+		}
+		else
+		{
+			element["columns"][4]["column"]	= "ppm";
+			element["columns"][4]["column"]	= "1.0";
+		}
+		
+		element["columns"][5]["column"]	= "land_type";
+		element["columns"][5]["value"]	= land_type;
+		
+		search_results->addElement(element, ADD_BOTTOM);
+		self->mResultsContent[parcel_id.asString()] = content;
 	}
+	// We test against non-auction properties because they don't count towards the page limit.
+	self->showNextButton(for_sale);
 	
 	if (found_one)
 	{
+		search_results->selectFirstItem();
 		search_results->setFocus(TRUE);
 	}
 	self->setLoadingProgress(false);
@@ -1663,63 +1635,53 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-	
-	if (num_new_rows == 0)
+
+	for (S32 i = 0; i < num_new_rows; i++)
 	{
-		lldebugs << "No results returned for QueryID: " << query_id << llendl;
-		LLStringUtil::format_map_t map;
-		map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-		search_results->setEnabled(FALSE);
-		search_results->setCommentText(self->getString("not_found", map));
+		msg->getUUID(	"QueryReplies", "ClassifiedID",		classified_id,	i);
+		msg->getString(	"QueryReplies", "Name",				name,			i);
+		msg->getU32(	"QueryReplies", "CreationDate",		creation_date,	i);
+		msg->getU32(	"QueryReplies", "ExpirationDate",	expiration_date,i);
+		msg->getS32(	"QueryReplies", "PriceForListing",	price_for_listing,i);
+		if (classified_id.isNull())
+		{
+			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			LLStringUtil::format_map_t map;
+			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(self->getString("not_found", map));
+		}
+		else
+		{
+			lldebugs << "Got: " << name << " ClassifiedID: " << classified_id << llendl;
+			search_results->setEnabled(TRUE);
+			found_one = TRUE;
+			
+			std::string classified_name;
+			
+			LLSD content;
+			LLSD element;
+			
+			element["id"] = classified_id;
+			
+			element["columns"][0]["column"]	= "icon";
+			element["columns"][0]["type"]	= "icon";
+			element["columns"][0]["value"]	= "icon_top_pick.tga";
+			
+			element["columns"][1]["column"]	= "classified_name";
+			element["columns"][1]["value"]	= name;
+			
+			element["columns"][2]["column"]	= "price";
+			element["columns"][2]["value"]	= price_for_listing;
+			
+			search_results->addElement(element, ADD_BOTTOM);
+			self->mResultsContent[classified_id.asString()] = content;
+		}
 	}
-	else
+	if (found_one)
 	{
-		for (S32 i = 0; i < num_new_rows; i++)
-		{
-			msg->getUUID(	"QueryReplies", "ClassifiedID",		classified_id,	i);
-			msg->getString(	"QueryReplies", "Name",				name,			i);
-			msg->getU32(	"QueryReplies", "CreationDate",		creation_date,	i);
-			msg->getU32(	"QueryReplies", "ExpirationDate",	expiration_date,i);
-			msg->getS32(	"QueryReplies", "PriceForListing",	price_for_listing,i);
-			if (classified_id.isNull())
-			{
-				lldebugs << "Null result returned for QueryID: " << query_id << llendl;
-				LLStringUtil::format_map_t map;
-				map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
-				search_results->setEnabled(FALSE);
-				search_results->setCommentText(self->getString("not_found", map));
-			}
-			else
-			{
-				lldebugs << "Got: " << name << " ClassifiedID: " << classified_id << llendl;
-				search_results->setEnabled(TRUE);
-				found_one = TRUE;
-				
-				std::string classified_name;
-				
-				LLSD content;
-				LLSD element;
-				
-				element["id"] = classified_id;
-				
-				element["columns"][0]["column"]	= "icon";
-				element["columns"][0]["type"]	= "icon";
-				element["columns"][0]["value"]	= "icon_top_pick.tga";
-				
-				element["columns"][1]["column"]	= "classified_name";
-				element["columns"][1]["value"]	= name;
-				
-				element["columns"][2]["column"]	= "price";
-				element["columns"][2]["value"]	= price_for_listing;
-				
-				search_results->addElement(element, ADD_BOTTOM);
-				self->mResultsContent[classified_id.asString()] = content;
-			}
-		}
-		if (found_one)
-		{
-			search_results->setFocus(TRUE);
-		}
-		self->setLoadingProgress(false);
+		search_results->selectFirstItem();
+		search_results->setFocus(TRUE);
 	}
+	self->setLoadingProgress(false);
 }
