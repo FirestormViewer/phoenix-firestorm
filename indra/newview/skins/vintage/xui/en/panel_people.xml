@@ -404,9 +404,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
 					name="RadarNameFormat"
 					control_name="RadarNameFormat"
 					enabled_control="UseDisplayNames">
-					<combo_box.item name="RadarNameFormat_user" value="0" label="Username" />
-					<combo_box.item name="RadarNameFormat_displayuser" value="1" label="DisplayName (Username)" />
-					<combo_box.item name="RadarNameFormat_userdisplay" value="2" label="Username (Displayname)" />
+					<combo_box.item name="RadarNameFormat_user" value="0" label="DisplayName only" />
+					<combo_box.item name="RadarNameFormat_user" value="1" label="Username only" />
+					<combo_box.item name="RadarNameFormat_displayuser" value="2" label="DisplayName (Username)" />
+					<combo_box.item name="RadarNameFormat_userdisplay" value="3" label="Username (DisplayName)" />
 				</combo_box>
 
 			</panel>
