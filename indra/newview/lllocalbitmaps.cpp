@@ -182,7 +182,7 @@ bool LLLocalBitmap::updateSelf(EUpdateType optional_firstupdate)
 
 			// const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path(mFilename));
 
-			std::string ndConvertFilename( std::string const &aFilename );
+			std::string ndConvertFilename( std::string const &aFilename ); // Function declaration, function is defined in llapr.cpp
 			std::string strFName = ndConvertFilename( mFilename );
 			const std::time_t temp_time = boost::filesystem::last_write_time(boost::filesystem::path( strFName ) );
 
