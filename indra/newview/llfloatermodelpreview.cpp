@@ -542,6 +542,11 @@ BOOL LLFloaterModelPreview::postBuild()
 		validate_url = LLGridManager::getInstance()->getLoginPage();
 	}
 	// </Ansariel>
+// <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
+	LLSD args;
+	args["FEATURE"] = "mesh upload with physics";
+	LLNotificationsUtil::add("NoHavok", args);
+// </FS:CR>
 #endif // <FS:AW optional opensim support>
 
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);

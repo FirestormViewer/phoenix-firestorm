@@ -405,6 +405,7 @@ void init_default_trans_args()
 	default_trans_args.insert("CURRENT_GRID"); //<FS:AW make CURRENT_GRID a default substitution>
 	default_trans_args.insert("SECOND_LIFE_GRID");
 	default_trans_args.insert("SUPPORT_SITE");
+	default_trans_args.insert("DOWNLOAD_URL"); //<FS:CR> Viewer download url
 }
 
 //----------------------------------------------------------------------------
