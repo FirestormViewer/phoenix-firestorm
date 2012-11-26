@@ -965,7 +965,7 @@
    <!-- Colours for Firestorm - change for each theme as necessary -->	
 	<color
      name="ScriptDialog"
-     reference="SL-White" />
+     reference="DkGray" />
     <color
      name="ScriptDialogFg"
      reference="SL-Black" />

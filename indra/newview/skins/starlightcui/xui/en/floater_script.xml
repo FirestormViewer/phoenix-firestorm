@@ -2,6 +2,8 @@
 <floater
  legacy_header_height="18"
  background_visible="true"
+ bg_alpha_color="ScriptDialog"
+ bg_opaque_color="ScriptDialog"
  height="250"
  layout="topleft"
  name="script_floater"

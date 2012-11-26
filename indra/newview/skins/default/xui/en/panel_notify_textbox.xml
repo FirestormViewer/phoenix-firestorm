@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-   background_visible="true"
+   background_visible="false"
+   bg_alpha_color="ScriptDialog"
+   bg_opaque_color="ScriptDialog"
    height="220"
    label="instant_message"
    layout="topleft"
@@ -22,7 +24,8 @@
    top="0"
    width="305">    
     <text_editor
-     bg_readonly_color="SL-Background"
+     bg_readonly_color="ScriptDialog"
+	 border_visible="false"
      enabled="false"
      follows="left|right|top|bottom"
      font="SansSerif"
@@ -32,14 +35,17 @@
      mouse_opaque="false"
      name="text_editor_box"
      read_only="true"
-     text_color="white"
-     text_readonly_color="white"
+     text_color="ScriptDialogFg"
+     text_readonly_color="ScriptDialogFg"
      top="10"
+     value="informational text"
      width="285"
      wrap="true"
      parse_highlights="true"
      parse_urls="true"/>
     <text_editor
+	 border_visible="true"
+	 bevel_style="in"
      parse_urls="true"
      enabled="true"
      follows="all"

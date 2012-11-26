@@ -967,7 +967,7 @@
      value="0.275 0.667 1 1" />
     <color
      name="ScriptDialogFg"
-     reference="White" />
+     reference="Black" />
     <color
      name="AlertTextColor"
      reference="White" />

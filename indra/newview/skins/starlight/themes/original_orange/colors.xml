@@ -963,7 +963,7 @@
     <!-- Colours for Firestorm - change for each theme as necessary -->	
 	<color
      name="ScriptDialog"
-     value="0.81 0.325 0 1" />
+     reference="DkGray" />
     <color
      name="ScriptDialogFg"
      reference="White" />
