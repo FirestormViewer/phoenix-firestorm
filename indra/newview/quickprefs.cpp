@@ -349,7 +349,10 @@ void FloaterQuickPrefs::onClickSkyNext()
 
 void FloaterQuickPrefs::draw()
 {
-	syncControls();
+	if (!hasFocus())
+	{
+		syncControls();
+	}
 	LLFloater::draw();
 }
 
