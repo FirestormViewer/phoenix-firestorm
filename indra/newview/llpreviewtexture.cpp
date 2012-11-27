@@ -154,6 +154,17 @@ BOOL LLPreviewTexture::postBuild()
 	mUploaderDateTime = getString("UploaderDateTime");
 	// </FS:Techwolf Lupindo>
 
+	// <FS:Ansariel> AnsaStorm skin: Need to disable line editors from
+	//               code or the floater would be dragged around if
+	//               trying to mark text
+	if (findChild<LLLineEditor>("uploader"))
+	{
+		getChild<LLLineEditor>("uploader")->setEnabled(FALSE);
+		getChild<LLLineEditor>("upload_time")->setEnabled(FALSE);
+		getChild<LLLineEditor>("uuid")->setEnabled(FALSE);
+	}
+	// </FS:Ansariel>
+
 	return LLPreview::postBuild();
 }
 
@@ -356,9 +367,17 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	// 1 additional line: uploader and date time
-	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
+	if (findChild<LLTextEditor>("uploader_date_time"))
 	{
-		client_rect.mTop -= (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight() + CLIENT_RECT_VPAD);
+		if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
+		{
+			client_rect.mTop -= (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight() + CLIENT_RECT_VPAD);
+		}
+	}
+	else if (findChild<LLLineEditor>("uploader"))
+	{
+		// AnsaStorm skin
+		client_rect.mTop -= 3 * (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
 	}
 	// </FS:Techwolf Lupindo>
 
@@ -569,51 +588,108 @@ void LLPreviewTexture::updateDimensions()
 		}
 
 		// <FS:Techwolf Lupindo> texture comment metadata reader
-		bool adjust_height = false;
-		if (mImage->mComment.find("a") != mImage->mComment.end())
+		S32 additional_height = 0;
+		if (findChild<LLTextEditor>("uploader_date_time"))
 		{
-			getChildView("uploader_date_time")->setVisible(TRUE);
-			LLUUID id = LLUUID(mImage->mComment["a"]);
-			std::string name;
-			LLAvatarName avatar_name;
-			if (LLAvatarNameCache::get(id, &avatar_name))
-			{
-				mUploaderDateTime.setArg("[UPLOADER]", avatar_name.getCompleteName());
-			}
-			else
-			{
-				if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
-				{
-					mDisplayNameCallback = true;
-					mUploaderDateTime.setArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
-					LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
-				}
-			}
-			getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
-			adjust_height = true;
-		}
-
-		if (mImage->mComment.find("z") != mImage->mComment.end())
-		{
-			if (!adjust_height)
+			bool adjust_height = false;
+			if (mImage->mComment.find("a") != mImage->mComment.end())
 			{
 				getChildView("uploader_date_time")->setVisible(TRUE);
+				LLUUID id = LLUUID(mImage->mComment["a"]);
+				std::string name;
+				LLAvatarName avatar_name;
+				if (LLAvatarNameCache::get(id, &avatar_name))
+				{
+					mUploaderDateTime.setArg("[UPLOADER]", avatar_name.getCompleteName());
+				}
+				else
+				{
+					if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
+					{
+						mDisplayNameCallback = true;
+						mUploaderDateTime.setArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
+						LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+					}
+				}
+				getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
 				adjust_height = true;
 			}
-			std::string date_time = mImage->mComment["z"];
-			LLSD substitution;
-			substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
-			date_time = getString("DateTime"); // reuse date_time variable
-			LLStringUtil::format(date_time, substitution);
-			mUploaderDateTime.setArg("[DATE_TIME]", date_time);
-			getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+
+			if (mImage->mComment.find("z") != mImage->mComment.end())
+			{
+				if (!adjust_height)
+				{
+					getChildView("uploader_date_time")->setVisible(TRUE);
+					adjust_height = true;
+				}
+				std::string date_time = mImage->mComment["z"];
+				LLSD substitution;
+				substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+				date_time = getString("DateTime"); // reuse date_time variable
+				LLStringUtil::format(date_time, substitution);
+				mUploaderDateTime.setArg("[DATE_TIME]", date_time);
+				getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+			}
+			// add extra space for uploader and date_time
+			if (adjust_height)
+			{
+				getChildView("openprofile")->setVisible(TRUE);
+				additional_height += (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight());
+			}
 		}
-		// add extra space for uploader and date_time
-		S32 additional_height = 0;
-		if (adjust_height)
+		else if (findChild<LLLineEditor>("uploader"))
 		{
+			// AnsaStorm skin
+			if (mImage->mComment.find("a") != mImage->mComment.end())
+			{
+				getChild<LLButton>("openprofile")->setEnabled(TRUE);
+				LLUUID id = LLUUID(mImage->mComment["a"]);
+				std::string name;
+				LLAvatarName avatar_name;
+				if (LLAvatarNameCache::get(id, &avatar_name))
+				{
+					childSetText("uploader", avatar_name.getCompleteName());
+				}
+				else
+				{
+					if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
+					{
+						mDisplayNameCallback = true;
+						getChild<LLLineEditor>("uploader")->setText(LLTrans::getString("AvatarNameWaiting"));
+						LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+					}
+				}
+			}
+
+			if (mImage->mComment.find("z") != mImage->mComment.end())
+			{
+				std::string date_time = mImage->mComment["z"];
+				LLSD substitution;
+				substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+				date_time = getString("DateTime"); // reuse date_time variable
+				LLStringUtil::format(date_time, substitution);
+				childSetText("upload_time", date_time);
+			}
+
+ 			if (mIsCopyable)
+ 			{
+				childSetText("uuid", mImageID.asString());
+ 			}
+
+			LLView* uploader_view = getChildView("uploader");
+			LLView* uploadtime_view = getChildView("upload_time");
+			LLView* uuid_view = getChildView("uuid");
+				
+			uploader_view->setVisible(TRUE);
+			uploadtime_view->setVisible(TRUE);
+			uuid_view->setVisible(TRUE);
 			getChildView("openprofile")->setVisible(TRUE);
-			additional_height += (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight());
+			getChildView("copyuuid")->setVisible(TRUE);
+			getChildView("uploader_label")->setVisible(TRUE);
+			getChildView("upload_time_label")->setVisible(TRUE);
+			getChildView("uuid_label")->setVisible(TRUE);
+
+			additional_height = uploader_view->getRect().getHeight() + uploadtime_view->getRect().getHeight() + uuid_view->getRect().getHeight() + 3 * PREVIEW_VPAD;
 		}
 		// </FS:Techwolf Lupindo>
 
@@ -651,8 +727,9 @@ void LLPreviewTexture::updateDimensions()
 		// <FS:Ansariel> Asset UUID
 		if (mIsCopyable)
 		{
-			getChildView("copyuuid")->setVisible(TRUE);
-			getChildView("copyuuid")->setEnabled(TRUE);
+			LLView* copy_uuid_btn = getChildView("copyuuid");
+			copy_uuid_btn->setVisible(TRUE);
+			copy_uuid_btn->setEnabled(TRUE);
 		}
 		// </FS:Ansariel>
 	}
@@ -662,9 +739,17 @@ void LLPreviewTexture::updateDimensions()
 // <FS:Techwolf Lupindo> texture comment metadata reader
 void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	mUploaderDateTime.setArg("[UPLOADER]", av_name.getCompleteName());
-	getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
-	mUpdateDimensions = TRUE;
+	if (findChild<LLTextEditor>("uploader_date_time"))
+	{
+		mUploaderDateTime.setArg("[UPLOADER]", av_name.getCompleteName());
+		getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+		mUpdateDimensions = TRUE;
+	}
+	else if (findChild<LLLineEditor>("uploader"))
+	{
+		// AnsaStorm skin
+		childSetText("uploader", av_name.getCompleteName());
+	}
 }
 
 void LLPreviewTexture::onButtonClickProfile()
