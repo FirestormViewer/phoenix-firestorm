@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_pathfinding_console" title="Podgląd odnajdywania ścieżek">
+	<floater.string name="no_havok">
+		wyświetlanie Navmeshu dla systemu odnajdywania ścieżek
+	</floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Nie można znaleźć implementacji biblioteki szukania ścieżek.
 	</floater.string>
@@ -76,12 +79,6 @@
 			Stan symulatora
 		</text>
 	</panel>
-	<!-- FIRE-7261: Remove this text once Havok is added -->
-	<text name="no_havok_warning">
-		UWAGA: Te funkcje nie są jeszcze
-               w pełni zaimplementowane.
-	</text>
-	<!-- FIRE-7261: END -->
 	<tab_container name="view_test_tab_container">
 		<panel name="view_panel" label="Widok">
 			<text name="show_label">
