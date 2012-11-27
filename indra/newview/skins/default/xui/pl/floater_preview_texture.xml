@@ -10,7 +10,7 @@
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
 	<floater.string name="UploaderDateTime">
-		Załadował/a [UPLOADER] dnia [DATE_TIME]
+		Załadował/a [UPLOADER]: [DATE_TIME]
 	</floater.string>
 	<text name="desc txt">
 		Opis:
