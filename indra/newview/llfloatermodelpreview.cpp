@@ -544,7 +544,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	// </Ansariel>
 // <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
 	LLSD args;
-	args["FEATURE"] = "mesh upload with physics";
+	args["FEATURE"] = getString("no_havok");
 	LLNotificationsUtil::add("NoHavok", args);
 // </FS:CR>
 #endif // <FS:AW optional opensim support>

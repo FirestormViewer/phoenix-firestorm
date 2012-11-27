@@ -11,6 +11,8 @@
     single_instance="true"
     title="Pathfinding view / test"
     width="240">
+  <floater.string name="no_havok">navmesh for pathfinding</floater.string>
+	
   <floater.string name="navmesh_viewer_status_unknown"></floater.string>
   <floater.string name="navmesh_viewer_status_library_not_implemented">Cannot find pathing library implementation.</floater.string>
   <floater.string name="navmesh_viewer_status_region_not_enabled">This region is not enabled for pathfinding.</floater.string>
