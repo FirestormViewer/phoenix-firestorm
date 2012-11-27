@@ -33,6 +33,7 @@
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llbutton.h"
+#include "llclipboard.h"
 #include "llcombobox.h"
 #include "llfilepicker.h"
 #include "llfloaterreg.h"
@@ -50,6 +51,7 @@
 #include "lluictrlfactory.h"
 #include "llviewerwindow.h"
 #include "lllineeditor.h"
+#include "lltexteditor.h"
 
 #include "llimagepng.h"
 
@@ -76,7 +78,8 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mPreviewToSave(FALSE),
 	  mImage(NULL),
 	  mImageOldBoostLevel(LLViewerTexture::BOOST_NONE),
-	  mShowingButtons(false)
+	  mShowingButtons(false),
+	  mDisplayNameCallback(false)
 {
 	updateImageID();
 	if (key.has("save_as"))
@@ -147,14 +150,9 @@ BOOL LLPreviewTexture::postBuild()
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	getChild<LLButton>("openprofile")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickProfile, this));
+	getChild<LLButton>("copyuuid")->setClickedCallback(boost::bind(&LLPreviewTexture::onButtonClickUUID, this));
+	mUploaderDateTime = getString("UploaderDateTime");
 	// </FS:Techwolf Lupindo>
-
-	// <FS:Ansariel> Need to disable line editors from code or the floater would
-	//               be dragged around if trying to mark text
-	getChild<LLLineEditor>("uploader")->setEnabled(FALSE);
-	getChild<LLLineEditor>("upload_time")->setEnabled(FALSE);
-	getChild<LLLineEditor>("uuid")->setEnabled(FALSE);
-	// </FS:Ansariel>
 
 	return LLPreview::postBuild();
 }
@@ -358,21 +356,12 @@ void LLPreviewTexture::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	// 1 additional line: uploader and date time
-	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end()))
+	if (mImage && (mImage->mComment.find("a") != mImage->mComment.end() || mImage->mComment.find("z") != mImage->mComment.end()))
 	{
-		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
-	}
-	if (mImage && (mImage->mComment.find("z") != mImage->mComment.end()))
-	{
-		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
+		client_rect.mTop -= (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight() + CLIENT_RECT_VPAD);
 	}
 	// </FS:Techwolf Lupindo>
-	// <FS:Ansariel> Asset UUID
-	if (mIsCopyable)
-	{
-		client_rect.mTop -= (PREVIEW_LINE_HEIGHT + CLIENT_RECT_VPAD);
-	}
-	// </FS:Ansariel>
+
 
 	client_rect.mBottom += PREVIEW_BORDER + CLIENT_RECT_VPAD + info_height ;
 
@@ -580,30 +569,53 @@ void LLPreviewTexture::updateDimensions()
 		}
 
 		// <FS:Techwolf Lupindo> texture comment metadata reader
-		// add extra space for uploader and date_time
-		S32 additional_height = 0;
+		bool adjust_height = false;
 		if (mImage->mComment.find("a") != mImage->mComment.end())
 		{
-			getChildView("uploader_label")->setVisible(TRUE);
-			getChildView("uploader")->setVisible(TRUE);
-			getChildView("openprofile")->setVisible(TRUE);
-			additional_height += getChildView("uploader")->getRect().getHeight() + PREVIEW_VPAD;
+			getChildView("uploader_date_time")->setVisible(TRUE);
+			LLUUID id = LLUUID(mImage->mComment["a"]);
+			std::string name;
+			LLAvatarName avatar_name;
+			if (LLAvatarNameCache::get(id, &avatar_name))
+			{
+				mUploaderDateTime.setArg("[UPLOADER]", avatar_name.getCompleteName());
+			}
+			else
+			{
+				if (!mDisplayNameCallback) // prevents a possible callbackLoadName loop due to server error.
+				{
+					mDisplayNameCallback = true;
+					mUploaderDateTime.setArg("[UPLOADER]", LLTrans::getString("AvatarNameWaiting"));
+					LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
+				}
+			}
+			getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+			adjust_height = true;
 		}
+
 		if (mImage->mComment.find("z") != mImage->mComment.end())
 		{
-			getChildView("upload_time_label")->setVisible(TRUE);
-			getChildView("upload_time")->setVisible(TRUE);
-			additional_height += getChildView("upload_time")->getRect().getHeight() + PREVIEW_VPAD;
+			if (!adjust_height)
+			{
+				getChildView("uploader_date_time")->setVisible(TRUE);
+				adjust_height = true;
+			}
+			std::string date_time = mImage->mComment["z"];
+			LLSD substitution;
+			substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
+			date_time = getString("DateTime"); // reuse date_time variable
+			LLStringUtil::format(date_time, substitution);
+			mUploaderDateTime.setArg("[DATE_TIME]", date_time);
+			getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+		}
+		// add extra space for uploader and date_time
+		S32 additional_height = 0;
+		if (adjust_height)
+		{
+			getChildView("openprofile")->setVisible(TRUE);
+			additional_height += (getChild<LLTextEditor>("uploader_date_time")->getTextBoundingRect().getHeight());
 		}
 		// </FS:Techwolf Lupindo>
-		// <FS:Ansariel> Asset UUID
-		if (mIsCopyable)
-		{
-			getChildView("uuid_label")->setVisible(TRUE);
-			getChildView("uuid")->setVisible(TRUE);
-			additional_height += getChildView("uuid")->getRect().getHeight() + PREVIEW_VPAD;
-		}
-		// </FS:Ansariel>
 
 		// If this is 100% correct???
 		S32 floater_target_width = mImage->getFullWidth() + 2 * (LLPANEL_BORDER_WIDTH + PREVIEW_PAD) + PREVIEW_RESIZE_HANDLE_SIZE;;
@@ -636,45 +648,23 @@ void LLPreviewTexture::updateDimensions()
 		LLRect aspect_label_rect(getChildView("aspect_ratio")->getRect());
 		getChildView("aspect_ratio")->setVisible( dim_rect.mRight < aspect_label_rect.mLeft);
 
-		// <FS:Techwolf Lupindo> texture comment metadata reader
-		if (mImage->mComment.find("a") != mImage->mComment.end())
-		{
-			LLUUID id = LLUUID(mImage->mComment["a"]);
-			std::string name;
-			LLAvatarName avatar_name;
-			if (LLAvatarNameCache::get(id, &avatar_name))
-			{
-				childSetText("uploader", avatar_name.getCompleteName());
-			}
-			else
-			{
-				getChild<LLTextBox>("uploader")->setText(LLTrans::getString("AvatarNameWaiting"));
-				LLAvatarNameCache::get(id, boost::bind(&LLPreviewTexture::callbackLoadName, this, _1, _2));
-			}
-		}
-
-		if (mImage->mComment.find("z") != mImage->mComment.end())
-		{
-			std::string date_time = mImage->mComment["z"];
-			LLSD substitution;
-			substitution["datetime"] = FSCommon::secondsSinceEpochFromString("%Y%m%d%H%M%S", date_time);
-			date_time = getString("DateTime"); // reuse date_time variable
-			LLStringUtil::format(date_time, substitution);
-			childSetText("upload_time", date_time);
-		}
-
 		// <FS:Ansariel> Asset UUID
 		if (mIsCopyable)
 		{
-			childSetText("uuid", mImageID.asString());
+			getChildView("copyuuid")->setVisible(TRUE);
+			getChildView("copyuuid")->setEnabled(TRUE);
 		}
 		// </FS:Ansariel>
 	}
 }
 
+
+// <FS:Techwolf Lupindo> texture comment metadata reader
 void LLPreviewTexture::callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name)
 {
-	childSetText("uploader", av_name.getCompleteName());
+	mUploaderDateTime.setArg("[UPLOADER]", av_name.getCompleteName());
+	getChild<LLTextEditor>("uploader_date_time")->setText(mUploaderDateTime.getString());
+	mUpdateDimensions = TRUE;
 }
 
 void LLPreviewTexture::onButtonClickProfile()
@@ -684,6 +674,12 @@ void LLPreviewTexture::onButtonClickProfile()
 		LLUUID id = LLUUID(mImage->mComment["a"]);
 		LLAvatarActions::showProfile(id);
 	}
+}
+
+void LLPreviewTexture::onButtonClickUUID()
+{
+	std::string uuid = mImageID.asString();
+	LLClipboard::instance().copyToClipboard(utf8str_to_wstring(uuid), 0, uuid.size());
 }
 // </FS:Techwolf Lupindo> texture comment decoder
 
