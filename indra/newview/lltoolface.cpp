@@ -151,16 +151,19 @@ void LLToolFace::pickCallback(const LLPickInfo& pick_info)
 		}
 
 		// <FS:Zi> Add control to drag texture faces around
-		// if the same object and face was clicked as before, assume the user wants to grab it
-		if(LLToolFace::mTextureObject==hit_obj && LLToolFace::mFaceGrabbed==pick_info.mObjectFace)
+		if(gSavedSettings.getBOOL("FSExperimentalDragTexture"))
 		{
-			LLToolFace::mTextureGrabbed=TRUE;
-			gViewerWindow->hideCursor();
-		}
-		else
-		{
-			LLToolFace::mTextureGrabbed=FALSE;
-			gViewerWindow->showCursor();
+			// if the same object and face was clicked as before, assume the user wants to grab it
+			if(LLToolFace::mTextureObject==hit_obj && LLToolFace::mFaceGrabbed==pick_info.mObjectFace)
+			{
+				LLToolFace::mTextureGrabbed=TRUE;
+				gViewerWindow->hideCursor();
+			}
+			else
+			{
+				LLToolFace::mTextureGrabbed=FALSE;
+				gViewerWindow->showCursor();
+			}
 		}
 
 		// remember the object being selected so we can check for grabbing later
