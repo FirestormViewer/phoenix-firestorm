@@ -42,7 +42,7 @@ extern BOOL			gForceRenderLandFence;
 extern BOOL gResizeScreenTexture;
 extern BOOL gWindowResized;
 
-// <FS:Ansariel> Draw Distance stepping
+// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 extern F32 gSavedDrawDistance;
 extern F32 gLastDrawDistanceStep;
 

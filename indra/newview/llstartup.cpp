@@ -2471,7 +2471,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		LLStartUp::setStartupState( STATE_STARTED );
 		display_startup();
 
-		// <FS:Ansariel> Draw Distance stepping
+		// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
 		{
 			// progressive draw distance stepping if requested.

@@ -95,7 +95,7 @@ BOOL		 gTeleportDisplay = FALSE;
 LLFrameTimer gTeleportDisplayTimer;
 LLFrameTimer gTeleportArrivalTimer;
 const F32		RESTORE_GL_TIME = 5.f;	// Wait this long while reloading textures before we raise the curtain
-// <FS:Ansariel> Draw Distance stepping
+// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 F32			gSavedDrawDistance = 0.0f;
 F32			gLastDrawDistanceStep = 0.0f;
 
@@ -567,7 +567,7 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		}
 	}
 
-	// <FS::Ansariel> Draw Distance stepping
+	// <FS::Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 	// Progressively increase draw distance after TP when required.
 	static LLCachedControl<F32> renderFarClip(gSavedSettings, "RenderFarClip");
 	if (gSavedDrawDistance > 0.0f && gAgent.getTeleportState() == LLAgent::TELEPORT_NONE)
