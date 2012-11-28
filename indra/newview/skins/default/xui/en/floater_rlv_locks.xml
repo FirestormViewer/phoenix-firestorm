@@ -12,7 +12,7 @@
   single_instance="true"
   positioning="cascading"
   reuse_instance="true"
-  title="ACTIVE RLV LOCKS"
+  title="Active RLV Locks"
   width="500">
   <panel
     class="panel_rlvLocks"

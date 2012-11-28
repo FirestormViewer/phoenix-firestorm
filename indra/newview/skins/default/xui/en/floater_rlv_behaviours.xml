@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
-  open_positioning="cascading"
+  positioning="cascading"
   can_close="true"
   can_minimize="true"
   can_resize="true"
@@ -11,7 +11,7 @@
   save_rect="true"
   save_visibility="false"
   single_instance="true"
-  title="ACTIVE RLV RESTRICTIONS"
+  title="Active RLV Restrictions"
   width="300">
   <tab_container
     follows="all"

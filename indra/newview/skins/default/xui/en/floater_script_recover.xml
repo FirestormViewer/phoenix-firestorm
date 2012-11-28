@@ -4,7 +4,7 @@
   can_minimize="false"
   can_resize="false"
   height="275"
-  open_positioning="centered"
+  positioning="centered"
   name="script_recover"
   single_instance="true"
   title="Script Recovery"
