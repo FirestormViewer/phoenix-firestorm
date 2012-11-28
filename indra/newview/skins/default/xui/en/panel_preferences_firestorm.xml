@@ -1368,7 +1368,7 @@
      name="BuildTab">
 
         <text
-         top="5"
+         top="10"
          follows="left|top|right"
          height="10"
          left="10"
@@ -1379,12 +1379,13 @@
         <view_border
          top_pad="5"
          left="10"
-         right="-10"
-         height="75"
+         right="-270"
+         height="85"
          follows="left|top|right"
          bevel_style="none"
          border_thickness="1"
-         name="SizeBorder"/>
+         name="SizeBorder"
+         width="100"/>
         <spinner
          top_delta="10"
          left_delta="5"
@@ -1400,7 +1401,7 @@
          width="120"
          control_name="FSBuildPrefs_Xsize"/>
         <spinner
-         top_pad="3"
+         top_pad="7"
          decimal_digits="5"
          follows="left|top"
          height="16"
@@ -1413,7 +1414,7 @@
          width="120"
          control_name="FSBuildPrefs_Ysize"/>
         <spinner
-         top_pad="3"
+         top_pad="7"
          decimal_digits="5"
          follows="left|top"
          height="16"
@@ -1426,7 +1427,7 @@
          width="120"
          control_name="FSBuildPrefs_Zsize"/>
         <text
-         top="45"
+         top="40"
          left_pad="15"
          follows="left|top"
          height="15"
@@ -1435,7 +1436,7 @@
          Material:
          </text>
         <combo_box
-         left_pad="2"
+         left="150"
          height="18"
          width="80"
          allow_text_entry="false"
@@ -1452,8 +1453,8 @@
         </combo_box>
 
         <text
-         top="100"
-         left="10"
+         top="10"
+         left="280"
          follows="left|top"
          height="10"
          name="text_box_pivotpoint"
@@ -1465,11 +1466,12 @@
          bevel_style="none"
          border_thickness="1"
          follows="top|left"
-         height="110"
+         height="120"
          name="PivotBorder"
-         width="235"/>
+         width="250"/>
         <check_box
          top_delta="10"
+         left_delta="3"
          follows="left|top"
          label="Show axis arrow on root prim position"
          tool_tip="Default behaviour is to show the axis on the center of mass of a linkset. If enabled, the axis will be shown on the root prim of the linkset instead."
@@ -1490,7 +1492,7 @@
          width="120"
          control_name="FSBuildPrefs_PivotX"/>
         <spinner
-         top_pad="3"
+         top_pad="7"
          decimal_digits="5"
          follows="left|top"
          height="16"
@@ -1503,7 +1505,7 @@
          width="120"
          control_name="FSBuildPrefs_PivotY"/>
         <spinner
-         top_pad="3"
+         top_pad="7"
          decimal_digits="5"
          follows="left|top"
          height="16"
@@ -1517,7 +1519,7 @@
          control_name="FSBuildPrefs_PivotZ"/>
         <check_box
          top_pad="10"
-         left_delta="-5"
+         left_delta="-3"
          enabled="true"
          follows="left|top"
          height="16"
@@ -1528,9 +1530,10 @@
          control_name="FSBuildPrefs_PivotIsPercent"/>
 
         <check_box
-         top_pad="15"
+         top="140"
          follows="left|top"
          height="16"
+		 left="10"
          label="Enable highlighting of selected prims"
          tool_tip="When unchecked, the yellow/blue outline effects are not rendered, improving performance when large numbers of prims are selected."
          name="EmBuildPrefsRenderHighlight_toggle"
@@ -1543,6 +1546,15 @@
          tool_tip="When checked, you will be able to grab and move objects with your mouse and CTRL key."
          name="FSEnableGrab"
          control_name="EnableGrab"/>
+		 
+        <check_box
+         follows="left|top"
+         height="16"
+		 initial_value="false"
+         label="Allow click-drag or click-scale (together with caps lock) of a texture face in build mode"
+         tool_tip="If enabled, allows to click-drag or click-scale (together with caps lock) a texture face in build mode. This feature is still experimental and should be used with caution."
+         name="FSExperimentalDragTexture"
+         control_name="FSExperimentalDragTexture"/>
 
         <check_box
          follows="left|top"
@@ -1563,6 +1575,7 @@
 	<check_box
    follows="left|top"
 	 height="16"
+	 top="300"
 	 label="Enable LSL preprocessor"
 	 tool_tip="When checked, the LSL preprocessor is enabled."
 	 name="preproc_checkbox"
