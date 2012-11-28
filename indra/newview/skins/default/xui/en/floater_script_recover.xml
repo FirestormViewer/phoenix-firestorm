@@ -12,7 +12,7 @@
 
   <text
    follows="top|left|right"
-   height="48"
+   height="60"
    layout="topleft"
    left="15"
    length="1"
@@ -36,7 +36,7 @@ If you choose to recover these scripts they will be placed in the 'Lost and Foun
    left="10"
    multi_select="false"
    name="script_list"
-   top_pad="20"
+   top_pad="10"
    width="330">
     <scroll_list.columns
       label=""
