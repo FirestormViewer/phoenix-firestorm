@@ -227,7 +227,7 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 	{
 		if (itFile->second["name"].asString() != pItem->getName())
 			continue;
-		strFileName = itFile->second["path"];
+		strFileName = itFile->second["path"].asString();
 		itFile->second["item"] = idItem;
 		break;
 	}
