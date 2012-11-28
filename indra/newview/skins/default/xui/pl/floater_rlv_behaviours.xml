@@ -10,7 +10,7 @@
     <panel label="Wyjątki" name="exception_panel">
       <scroll_list name="exception_list">
         <scroll_list.columns label="Restrykcja" name="behaviour" />
-        <scroll_list.columns label="Opcja" name="option" />
+        <scroll_list.columns label="Źródło" name="option" />
         <scroll_list.columns label="Obiekt" name="issuer" />
       </scroll_list>
     </panel>
