@@ -1311,7 +1311,7 @@ bool LLScriptEdContainer::onBackupTimer()
 	{
 		if (mBackupFilename.empty())
 			mBackupFilename = getBackupFileName();
-		mScriptEd->writeToFile(mBackupFilename);
+		mScriptEd->writeToFile(mBackupFilename, true);
 	}
 	return false;
 }
