@@ -8128,6 +8128,15 @@ class FSResetControl : public view_listener_t
 		return true;
 	}
 };
+class FSResetPerAccountControl : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		std::string callback_data = userdata.asString();
+		gSavedPerAccountSettings.getControl(callback_data)->resetToDefault(true);
+		return true;
+	}
+};
 // </FS:Ansariel> Reset to default control
 
 // not so generic
@@ -10152,6 +10161,7 @@ void initialize_menus()
 
 	// <FS:Ansariel> Reset to default control
 	view_listener_t::addMenu(new FSResetControl(), "ResetControl");
+	view_listener_t::addMenu(new FSResetPerAccountControl(), "ResetPerAccountControl");
 	// </FS:Ansariel> Reset to default control
 
 	// <FS:Ansariel> Commented out - already definied earlier in this method

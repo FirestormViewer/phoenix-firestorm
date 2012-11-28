@@ -3044,7 +3044,7 @@
 				 width="20"
 				 tool_tip="Reset to the default value.">
 					<button.commit_callback
-					 function="ResetControl"
+					 function="ResetPerAccountControl"
 					 parameter="AvatarZOffset"/>
 				</button>
 			</panel>
