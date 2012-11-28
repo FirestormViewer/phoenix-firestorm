@@ -1819,6 +1819,8 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getEditableSegIterContaini
 	return orig_it;
 }
 
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */)
 {
 
@@ -1844,26 +1846,28 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, 
 	
 	if (fsFixCursorPosition)
 	{
-	if (fix_position)
-	{
-		LLTextSegment* seg=*it;
-		if(!seg->canEdit())
+		if (fix_position)
 		{
-			if(it!=mSegments.begin())
+			LLTextSegment* seg=*it;
+			if(!seg->canEdit())
 			{
-				--it;
+				if(it!=mSegments.begin())
+				{
+					--it;
 
-				seg=*it;
-				if(!seg->canEdit())
-					++it;
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
 			}
 		}
-	}
 	}
 
 	return it;
 }
 
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index) const
 LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */) const
 {
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
@@ -1886,21 +1890,21 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 	
 	if (fsFixCursorPosition)
 	{
-	if (fix_position)
-	{
-		LLTextSegment* seg=*it;
-		if(!seg->canEdit())
+		if (fix_position)
 		{
-			if(it!=mSegments.begin())
+			LLTextSegment* seg=*it;
+			if(!seg->canEdit())
 			{
-				--it;
+				if(it!=mSegments.begin())
+				{
+					--it;
 
-				seg=*it;
-				if(!seg->canEdit())
-					++it;
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
 			}
 		}
-	}
 	}
 
 	return it;
@@ -1916,6 +1920,8 @@ LLTextSegmentPtr LLTextBase::getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_e
 	
 	// Find the cursor position at the requested local screen position
 	S32 offset = getDocIndexFromLocalCoord( x, y, FALSE, hit_past_end_of_line);
+	// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+	//segment_set_t::iterator seg_iter = getSegIterContaining(offset);
 	segment_set_t::iterator seg_iter = getSegIterContaining(offset, false);
 	if (seg_iter != mSegments.end())
 	{
