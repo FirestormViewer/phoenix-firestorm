@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  can_close="false"
+  can_minimize="false"
+  can_resize="false"
+  height="275"
+  open_positioning="centered"
+  name="script_recover"
+  single_instance="true"
+  title="Script Recovery"
+  width="350">
+
+  <text
+   follows="top|left|right"
+   height="48"
+   layout="topleft"
+   left="15"
+   length="1"
+   name="txt2"
+   top="10"
+   type="string"
+   word_wrap="true"
+   width="330">
+      [APP_NAME] has detected recoverable scripts that may have been left over from a recent viewer crash.
+  
+If you choose to recover these scripts they will be placed in the 'Lost and Found' folder of your inventory.
+  </text>
+
+  <scroll_list
+   draw_border="false"
+   draw_heading="true"
+   draw_stripes="true"
+   follows="all"
+   height="150"
+   layout="topleft"
+   left="10"
+   multi_select="false"
+   name="script_list"
+   top_pad="20"
+   width="330">
+    <scroll_list.columns
+      label=""
+      name="script_check"
+      width="20" />
+    <scroll_list.columns
+      label="Script Name"
+      name="script_name"
+      width="170" />
+  </scroll_list>
+
+  <button
+    follows="bottom|left"
+    height="25"
+    label="Recover"
+    left="65"
+    name="recover_btn"
+    top_pad="10"
+    width="100" />
+  <button
+    follows="bottom|left"
+    height="25"
+    label="Cancel"
+    left_pad="20"
+    name="cancel_btn"
+    width="100" />
+
+</floater>

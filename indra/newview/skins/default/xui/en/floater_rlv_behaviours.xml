@@ -1,121 +1,98 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+  open_positioning="cascading"
   can_close="true"
-  can_drag_on_left="false"
   can_minimize="true"
   can_resize="true"
   height="300"
-  min_height="200"
-  min_width="333"
+  min_height="300"
+  min_width="300"
   name="rlv_behaviours"
   save_rect="true"
-  save_visibility="true"
+  save_visibility="false"
   single_instance="true"
-  title="Active RLV Restrictions"
-  width="333">
-
+  title="ACTIVE RLV RESTRICTIONS"
+  width="300">
   <tab_container
     follows="all"
-    height="267"
     layout="topleft"
-    left="7"
+    left="8"  
     name="behaviour_tab"
-    tab_height="25"
-    tab_min_width="154"
+    height="266"
+    right="-8"   
+    tab_height="23"
+    tab_min_width="120"
     tab_position="top"
-    top="2"
-    width="318">
-	<panel
-	 follows="all"
-	 height="242"
-	 label="Restrictions"
-	 layout="topleft"
-	 name="behaviour_panel"
-	 width="318">
+    top="0" >
+    <panel
+      follows="all"  height="265"
+      label="RESTRICTIONS"
+      layout="topleft"
+      name="behaviour_panel"
+      top="0">
       <scroll_list
-        draw_border="false"
-        draw_heading="true"
-        draw_stripes="true"
-        follows="all"
-        height="242"
-        layout="topleft"
-        multi_select="false"
-        name="behaviour_list"
-        top="0">
-        <scroll_list.columns
-          label="Restriction"
-          name="behaviour"
-          width="100" />
-        <scroll_list.columns
-          label="Object Name"
-          name="issuer"
-          width="210" />
+	draw_border="false"
+	draw_heading="true"
+	draw_stripes="true"
+	follows="all"
+	height="266"
+	layout="topleft"
+	multi_select="false"
+	name="behaviour_list"
+	tool_tip="List of current RLVa restrictions."
+	top_pad="0" >
+        <scroll_list.columns label="Restriction" name="behaviour" width="70" />
+        <scroll_list.columns label="Object Name" name="issuer" />
       </scroll_list>
     </panel>
-	<panel
-	 follows="all"
-	 height="242"
-	 label="Exceptions"
-	 layout="topleft"
-	 name="exception_panel"
-	 width="318">
+    <panel
+      follows="all"  height="265"
+      label="EXCEPTIONS"
+      layout="topleft"
+      name="exception_panel"
+      top="0"> 
       <scroll_list
-        draw_border="false"
-        draw_heading="true"
-        draw_stripes="true"
-        follows="all"
-        height="242"
-        layout="topleft"
-        multi_select="false"
-        name="exception_list"
-        top_pad="0">
-        <scroll_list.columns
-          label="Restriction"
-          name="behaviour"
-          width="100" />
-        <scroll_list.columns
-          label="Option"
-          name="option"
-          width="105" />
-        <scroll_list.columns
-          label="Object Name"
-          name="issuer"
-          width="105" />
+	draw_border="false"
+	draw_heading="true"
+	draw_stripes="true"
+	follows="all"
+	height="266"
+	layout="topleft"
+	multi_select="false"
+	name="exception_list"
+	tool_tip="List of current RLVa exceptions."
+	top_pad="0" >
+        <scroll_list.columns label="Exception" name="behaviour" width="70" />
+        <scroll_list.columns label="Source" name="option" width="105" />
+        <scroll_list.columns label="Object Name" name="issuer" />
       </scroll_list>
     </panel>
   </tab_container>
   <panel
    background_visible="false"
    follows="left|right|bottom"
-   height="27"
+   height="25"
    label="bottom_panel"
    layout="topleft"
-   left="7"
    name="bottom_panel"
-   top_pad="0"
-   width="313">
+   top_pad="0">
     <button
-     follows="bottom|left"
-     height="25"
      image_hover_unselected="Toolbar_Left_Over"
      image_overlay="Copy"
      image_overlay_alignment="left"
      image_selected="Toolbar_Left_Selected"
      image_unselected="Toolbar_Left_Off"
      label="Copy to Clipboard"
-     layout="topleft"
-     left="3"
+     left="0"
      name="copy_btn"
      top="1"
-     tool_tip="Copy restrictions to clipboard"
-     width="131" />
+     width="129" />
     <icon
-     follows="bottom|left|right"
-     height="25"
+     follows="left|right"
      image_name="Toolbar_Right_Off"
-     layout="topleft"
      left_pad="1"
      name="dummy_icon"
-     width="182"/>
+     top="1"
+     width="153" />
   </panel>
 </floater>

@@ -20,6 +20,7 @@
 #include "llinventoryobserver.h"
 #include "llstartup.h"
 #include "llviewerfoldertype.h"
+#include "llviewermessage.h"
 #include "llviewerobject.h"
 #include "llvoavatarself.h"
 
@@ -377,6 +378,27 @@ S32 RlvInventory::getDirectDescendentsItemCount(const LLInventoryCategory* pFold
 		}
 	}
 	return cntType;
+}
+
+// Checked: 2012-11-28 (RLVa-1.4.8)
+bool RlvInventory::isGiveToRLVOffer(const LLOfferInfo& offerInfo)
+{
+	if ( (!RlvSettings::getForbidGiveToRLV()) && (RlvInventory::instance().getSharedRoot()) )
+	{
+		if (offerInfo.mFromObject)
+		{
+			return 
+				(IM_TASK_INVENTORY_OFFERED == offerInfo.mIM) && 
+				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 1);
+		}
+		else
+		{
+			return
+				(IM_INVENTORY_OFFERED == offerInfo.mIM) && 
+				(LLAssetType::AT_CATEGORY == offerInfo.mType) && (offerInfo.mDesc.find(RLV_PUTINV_PREFIX) == 0);
+		}
+	}
+	return false;
 }
 
 // ============================================================================
