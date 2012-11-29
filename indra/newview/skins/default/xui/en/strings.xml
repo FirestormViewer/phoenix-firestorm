@@ -11,6 +11,7 @@
 	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
+	<string name="DOWNLOAD_URL">http://www.phoenixviewer.com/downloads.php</string>
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
@@ -4150,4 +4151,8 @@ Try enclosing path to the editor with double quotes.
 
   <string name="DrawDistanceSteppingGestureObsolete">Due to the changes in code, it is no longer necessary to use this gesture. Progressive Draw Distance stepping has been enabled.</string>
   <string name="FSCmdLineDrawDistanceSet">Draw Distance set to [DISTANCE]m.</string>
+
+  <!-- Build types for about floater -->
+  <string name="FSWithHavok">with Havok support</string>
+  <string name="FSWithOpensim">with OpenSimulator support</string>
 </strings>

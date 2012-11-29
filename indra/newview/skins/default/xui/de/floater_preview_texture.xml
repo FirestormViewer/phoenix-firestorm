@@ -9,6 +9,9 @@
 	<floater.string name="DateTime">
 		[weekday,datetime,slt], [day,datetime,slt]. [month,datetime,slt] [year,datetime,slt], [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
 	</floater.string>
+	<floater.string name="UploaderDateTime">
+		Hochgeladen von [UPLOADER] am [DATE_TIME].
+	</floater.string>
 	<text name="desc txt">
 		Beschreibung:
 	</text>
@@ -16,18 +19,13 @@
 		Uploader:
 	</text>
 	<button label="Profil" name="openprofile"/>
-	<text name="upload_time_label">
-		Datum:
-	</text>
-	<text name="uuid_label">
-		UUID:
-	</text>
 	<panel name="dimensions_panel">
 		<text name="dimensions">
 			[WIDTH]px x [HEIGHT]px
 		</text>
+		<button label="UUID" name="copyuuid" tool_tip="Kopiert die UUID in die Zwischenablage"/>
 		<text name="aspect_ratio">
-			Seitenverhältnis anzeigen
+			Seitenverhältnis
 		</text>
 		<combo_box name="combo_aspect_ratio" tool_tip="Mit einem vordefinierten Seitenverhältnis anzeigen">
 			<combo_item name="Unconstrained">

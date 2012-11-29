@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+  follows="all"
+  height="200"
+  label="ACTIVE RLV LOCKS"
+  layout="topleft"
+  name="panel_rlvLocks"
+  top="0"
+  width="500">
+  <scroll_list
+    draw_border="false"
+    draw_heading="true"
+    draw_stripes="true"
+    follows="all"
+    height="167"
+    layout="topleft"
+    multi_select="false"
+    name="lock_list"
+    top_pad="0" >
+    <scroll_list.columns label="Lock Type" name="lock_type" width="100" />
+    <scroll_list.columns label="Method" name="lock_addrem" width="60" />
+    <scroll_list.columns label="Target Object / Point" name="lock_target" />
+    <scroll_list.columns label="Lock Origin" name="lock_origin" width="150" />
+  </scroll_list>
+  <panel
+    background_visible="false"
+    follows="left|right|bottom"
+    height="25"
+    label="bottom_panel"
+    layout="topleft"
+    name="bottom_panel"
+    top_pad="0" >
+    <button
+      image_hover_unselected="Toolbar_Left_Over"
+      image_overlay="Refresh_Off"
+      image_overlay_alignment="left"
+      image_selected="Toolbar_Left_Selected"
+      image_unselected="Toolbar_Left_Off"
+      label="Refresh"
+      left="0"
+      name="refresh_btn"
+      top="1"
+      width="74" />
+    <icon
+      follows="left|right"
+      image_name="Toolbar_Right_Off"
+      left_pad="1"
+      name="dummy_icon"
+      top="1"
+      width="425" />
+  </panel>
+</panel>

@@ -2555,7 +2555,7 @@ Cada um pode ver o status do outro (definição padrão).
 		Oferta de amizada aceita.
 	</notification>
 	<notification name="FriendshipDeclinedByMe">
-		Oferta de amizada aceita.
+		Oferta de amizade recusada.
 	</notification>
 	<notification name="OfferCallingCard">
 		[NOME] está te oferecendo um cartão de visita.

@@ -10,13 +10,13 @@
 		<panel label="Ausnahmen" name="exception_panel">
 			<scroll_list name="exception_list">
 				<scroll_list.columns label="Restriktion" name="behaviour"/>
-				<scroll_list.columns label="Option" name="option"/>
+				<scroll_list.columns label="Ursprung" name="option"/>
 				<scroll_list.columns label="Objekt-Name" name="issuer"/>
 			</scroll_list>
 		</panel>
 	</tab_container>
 	<panel name="bottom_panel">
 		<button label="In Zwischenablage kopieren" name="copy_btn" tool_tip="Kopiert die Restriktionen in die Zwischenablage" width="181"/>
-		<icon name="dummy_icon" width="132"/>
+		<icon name="dummy_icon" width="101"/>
 	</panel>
 </floater>

@@ -183,7 +183,7 @@
 			<text name="text_box_objmaterial">
 				Material:
 			</text>
-			<combo_box name="material">
+			<combo_box name="material" left="165">
 				<combo_item name="Stone" label="Piedra"/>
 				<combo_item name="Metal" label="Metal"/>
 				<combo_item name="Glass" label="Cristal"/>
@@ -195,8 +195,8 @@
 			<text name="text_box_pivotpoint">
 				Punto de pivotaje
 			</text>
-			<view_border name="PivotBorder" width="275"/>
-			<check_box label="Mostrar eje en la posición de la primitiva raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="EmBuildPrefsActualRoot_toggle"/>
+			<view_border name="PivotBorder" width="250"/>
+			<check_box label="Mostrar eje en la posición de la prim raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="EmBuildPrefsActualRoot_toggle"/>
 			<spinner label="Pos. X" name="X pos" label_width="60" width="135"/>
 			<spinner label="Pos. Y" name="Y pos" label_width="60" width="135"/>
 			<spinner label="Pos. Z" name="Z pos" label_width="60" width="135"/>

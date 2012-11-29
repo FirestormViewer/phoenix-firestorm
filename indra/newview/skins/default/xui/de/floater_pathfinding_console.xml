@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_pathfinding_console" title="Pathfinding-Ansicht/-Test">
+	<floater.string name="no_havok">
+		Navmesh für Pathfinding
+	</floater.string>
 	<floater.string name="navmesh_viewer_status_library_not_implemented">
 		Pathfinding-Bibliotheksimplementierung nicht gefunden.
 	</floater.string>

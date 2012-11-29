@@ -20,22 +20,20 @@
 	</string>
 	<button name="back_btn" tool_tip="Zurück"/>
 	<text name="title" value="Ortsprofil"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
-			<text name="region_title" value="SampleRegion"/>
-			<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
-			<expandable_text name="description" value="Du waltz die spritz"/>
-			<text name="maturity_value" value="unbekannt"/>
-			<panel name="landmark_info_panel">
-				<text name="owner_label" value="Eigentümer:"/>
-				<text name="creator_label" value="Ersteller:"/>
-				<text name="created_label" value="Erstellt:"/>
-			</panel>
-			<panel name="landmark_edit_panel">
-				<text name="title_label" value="Titel:"/>
-				<text name="notes_label" value="Meine Notizen:"/>
-				<text name="folder_label" value="Landmarken-Position:"/>
-			</panel>
-		</panel>
-	</scroll_container>
+	<text name="region_title" value="unbekannt"/>
+	<text name="maturity_value" value="unbekannt"/>
+	<text name="parcel_title" value="unbekannt"/>
+	<panel name="description_panel">
+		<expandable_text name="description" value="unbekannt"/>
+	</panel>
+	<panel name="landmark_info_panel">
+		<text name="owner_label" value="Eigentümer:" width="70"/>
+		<text name="creator_label" value="Ersteller:" width="70"/>
+		<text name="created_label" value="Erstellt:" width="70"/>
+	</panel>
+	<panel name="landmark_edit_panel">
+		<text name="title_label" value="Titel:" width="70"/>
+		<text name="notes_label" value="Meine Notizen:"/>
+		<text name="folder_label" value="Landmarken-Position:"/>
+	</panel>
 </panel>

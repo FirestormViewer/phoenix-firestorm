@@ -4226,7 +4226,7 @@ bool LLAgent::teleportCore(bool is_local)
 		//release geometry from old location
 		gPipeline.resetVertexBuffers();
 		
-		// <FS:Ansariel> Draw Distance stepping
+		// <FS:Ansariel> Draw Distance stepping; originally based on SpeedRez by Henri Beauchamp, licensed under LGPL
 		if (gSavedSettings.getBOOL("FSRenderFarClipStepping"))
 		{
 			F32 draw_distance = gSavedSettings.getF32("RenderFarClip");

@@ -314,7 +314,7 @@
         <text name="text_box_objmaterial">
 			材質：
         </text>
-        <combo_box name="material">
+        <combo_box name="material" left="180">
              <combo_item name="Stone" value="Stone" label="石"/>
              <combo_item name="Metal" value="Metal" label="金属"/>
              <combo_item name="Glass" value="Glass" label="ガラス"/>

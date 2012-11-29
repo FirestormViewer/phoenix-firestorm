@@ -20,7 +20,7 @@
 	<button label="Standard" label_selected="Standard" name="Default"/>
 	<button label="Keine" label_selected="Keine" name="None"/>
 	<button label="Leer" label_selected="Leer" name="Blank"/>
-	<button label="Transparent" label_selected="Transparent" name="Transparent"/>
+	<button label="Transparent" label_selected="Transparent" name="Transparent" tool_tip="Hinweis: Falls eine transparente Textur oder eine andere Textur mit teilweiser Transparenz gewählt wird, wird kein Licht projiziert."/>
 	<button label="" label_selected="" top_delta="-15" name="Pipette"/>
 	<check_box label="Live-Vorschau" name="apply_immediate_check"/>
 	<text name="preview_disabled">

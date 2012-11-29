@@ -122,6 +122,7 @@
      layout="topleft"
      left_delta="0"
      name="Transparent"
+     tool_tip="Note: If transparent texture is selected, or another texture with partial transperancy, light will not project."
      top_pad="0"
      width="73" />
      <button

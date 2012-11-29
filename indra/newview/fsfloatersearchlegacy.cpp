@@ -252,6 +252,7 @@ BOOL FSFloaterSearchLegacy::postBuild()
 	//childSetAction("parcel_profile_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelProfile, this));
 	childSetAction("parcel_teleport_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelTeleport, this));
 	childSetAction("parcel_map_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelMap, this));
+	childSetAction("search_results_land", boost::bind(&FSFloaterSearchLegacy::onBtnFind, this));
 	getChildView("Next")->setEnabled(FALSE);
 	getChildView("Back")->setEnabled(FALSE);
 	
@@ -388,6 +389,7 @@ void FSFloaterSearchLegacy::refreshSearchJunk()
 	childSetVisible("edit_area", isLand());
 	childSetVisible("price_check", isLand());
 	childSetVisible("area_check", isLand());
+	childSetVisible("ascending_check", isLand());
 	getChildView("Edit")->setEnabled(!isLand());;
 	//Yipee!
 }
@@ -847,8 +849,18 @@ void FSFloaterSearchLegacy::find()
                 return;
 			}
 			
-			U32 category = findChild<LLComboBox>("land_category")->getSelectedValue().asInteger();
-
+			U32 category = ST_ALL;
+			const std::string& selection = findChild<LLComboBox>("land_category")->getSelectedValue().asString();
+			if (!selection.empty())
+			{
+				if (selection == "Auction")
+					category = ST_AUCTION;
+				else if (selection == "Mainland")
+					category = ST_MAINLAND;
+				else if (selection == "Estate")
+					category = ST_ESTATE;
+			}
+			
 			U32 scope = 0;
 			if (gAgent.wantsPGOnly())
 				scope |= DFQ_PG_SIMS_ONLY;
@@ -861,6 +873,24 @@ void FSFloaterSearchLegacy::find()
 				scope |= DFQ_INC_MATURE;
 			if (inc_adult && adult_enabled)
 				scope |= DFQ_INC_ADULT;
+			const std::string& sort = findChild<LLComboBox>("land_sort_combo")->getSelectedValue().asString();
+			if (!sort.empty())
+			{
+				if (sort == "Name")
+					scope |= DFQ_NAME_SORT;
+				else if (sort == "Price")
+					scope |= DFQ_PRICE_SORT;
+				else if (sort == "PPM")
+					scope |= DFQ_PER_METER_SORT;
+				else if (sort == "Area")
+					scope |= DFQ_AREA_SORT;
+			}
+			else
+			{
+				scope |= DFQ_PRICE_SORT;
+			}
+			if (childGetValue("ascending_check").asBoolean())
+				scope |= DFQ_SORT_ASC;
 			if (limit_price)
 				scope |= DFQ_LIMIT_BY_PRICE;
 			if (limit_area)
@@ -875,8 +905,9 @@ void FSFloaterSearchLegacy::find()
 								price,
 								area,
 								mStartSearch);
-			getChild<LLScrollListCtrl>("search_results_land")->deleteAllItems();
-			getChild<LLScrollListCtrl>("search_results_land")->setCommentText(getString("searching"));
+			LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_land");
+			search_results->deleteAllItems();
+			search_results->setCommentText(getString("searching"));
 			setLoadingProgress(true);
 			break;
 		}
@@ -978,7 +1009,7 @@ void FSFloaterSearchLegacy::sendLandSearchQuery(LLMessageSystem* msg,
 	msg->addS32("QueryStart", query_start);
 	gAgent.sendReliableMessage();
 	
-	llinfos << "Firing off places search request: " << query_id << llendl;
+	llinfos << "Firing off places search request: " << query_id << category << llendl;
 }
 
 void FSFloaterSearchLegacy::sendClassifiedsSearchQuery(LLMessageSystem* msg,
@@ -1420,7 +1451,7 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	llinfos << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
 	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
 	// floater is closed or these are not results from our last request
@@ -1454,89 +1485,99 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 		msg->getBOOL(	"QueryReplies", "ForSale",		is_for_sale,i);
 		msg->getS32(	"QueryReplies", "SalePrice",	price,		i);
 		msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
-		
-		if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
-		{
-			msg->getStringFast(	_PREHASH_QueryReplies, _PREHASH_ProductSKU, land_sku, i);
-			land_type = LLProductInfoRequestManager::instance().getDescriptionForSku(land_sku);
-		}
-		else
-		{
-			land_sku.clear();
-			land_type = LLTrans::getString("land_type_unknown");
-		}
 		if (parcel_id.isNull())
-			continue;
-		if (use_price && (price > limit_price))
-			continue;
-		if (use_area && (area < limit_area))
-			continue;
-		
-		LLSD content;
-		LLSD element;
-		
-		element["id"] = parcel_id;
-		if (is_auction)
 		{
-			element["columns"][0]["column"]	= "icon";
-			element["columns"][0]["type"]	= "icon";
-			element["columns"][0]["value"]	= "Icon_Auction";
-		}
-		else if (is_for_sale)
-		{
-			element["columns"][0]["column"]	= "icon";
-			element["columns"][0]["type"]	= "icon";
-			element["columns"][0]["value"]	= "Icon_For_Sale";
+			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(self->getString("no_results"));
 		}
 		else
 		{
-			element["columns"][0]["column"]	= "icon";
-			element["columns"][0]["type"]	= "icon";
-			element["columns"][0]["value"]	= "Icon_Place";
-		}
-		
-		element["columns"][1]["column"]	= "land_name";
-		element["columns"][1]["value"]	= name;
-		
-		content["place_name"] = name;
-		
-		std::string buffer = "Auction";
-		if (!is_auction)
-		{
-			buffer = llformat("%d", price);
-			for_sale++;
-		}
-		element["columns"][2]["column"]	= "price";
-		element["columns"][2]["value"]	= price;
-		
-		element["columns"][3]["column"]	= "area";
-		element["columns"][3]["value"]	= area;
-		if (!is_auction)
-		{
-			F32 ppm;
-			if (area > 0)
-				ppm = (F32)price / (F32)area;
+			lldebugs << "Got: " << name << " ClassifiedID: " << parcel_id << llendl;
+			search_results->setEnabled(TRUE);
+			found_one = TRUE;
+			if ( msg->getSizeFast(_PREHASH_QueryReplies, i, _PREHASH_ProductSKU) > 0 )
+			{
+				msg->getStringFast(	_PREHASH_QueryReplies, _PREHASH_ProductSKU, land_sku, i);
+				land_type = LLProductInfoRequestManager::instance().getDescriptionForSku(land_sku);
+			}
 			else
-				ppm = 0.f;
-			std::string buffer = llformat("%.1f", ppm);
-			element["columns"][4]["column"]	= "ppm";
-			element["columns"][4]["value"]	= buffer;
-		}
-		else
-		{
-			element["columns"][4]["column"]	= "ppm";
-			element["columns"][4]["column"]	= "1.0";
-		}
+			{
+				land_sku.clear();
+				land_type = LLTrans::getString("land_type_unknown");
+			}
+			if (parcel_id.isNull())
+				continue;
+			if (use_price && (price > limit_price))
+				continue;
+			if (use_area && (area < limit_area))
+				continue;
 		
-		element["columns"][5]["column"]	= "land_type";
-		element["columns"][5]["value"]	= land_type;
+			LLSD content;
+			LLSD element;
 		
-		search_results->addElement(element, ADD_BOTTOM);
-		self->mResultsContent[parcel_id.asString()] = content;
+			element["id"] = parcel_id;
+			if (is_auction)
+			{
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_Auction";
+			}
+			else if (is_for_sale)
+			{
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_For_Sale";
+			}
+			else
+			{
+				element["columns"][0]["column"]	= "icon";
+				element["columns"][0]["type"]	= "icon";
+				element["columns"][0]["value"]	= "Icon_Place";
+			}
+		
+			element["columns"][1]["column"]	= "land_name";
+			element["columns"][1]["value"]	= name;
+		
+			content["place_name"] = name;
+		
+			std::string buffer = "Auction";
+			if (!is_auction)
+			{
+				buffer = llformat("%d", price);
+				for_sale++;
+			}
+			element["columns"][2]["column"]	= "price";
+			element["columns"][2]["value"]	= price;
+		
+			element["columns"][3]["column"]	= "area";
+			element["columns"][3]["value"]	= area;
+			if (!is_auction)
+			{
+				F32 ppm;
+				if (area > 0)
+					ppm = (F32)price / (F32)area;
+				else
+					ppm = 0.f;
+				std::string buffer = llformat("%.1f", ppm);
+				element["columns"][4]["column"]	= "ppm";
+				element["columns"][4]["value"]	= buffer;
+			}
+			else
+			{
+				element["columns"][4]["column"]	= "ppm";
+				element["columns"][4]["value"]	= "1.0";
+			}
+		
+			element["columns"][5]["column"]	= "land_type";
+			element["columns"][5]["value"]	= land_type;
+		
+			search_results->addElement(element, ADD_BOTTOM);
+			self->mResultsContent[parcel_id.asString()] = content;
+		}
+		// We test against non-auction properties because they don't count towards the page limit.
+		self->showNextButton(for_sale);
 	}
-	// We test against non-auction properties because they don't count towards the page limit.
-	self->showNextButton(for_sale);
-	
 	if (found_one)
 	{
 		search_results->selectFirstItem();

@@ -112,8 +112,7 @@
 				height="16"
 				left_delta="-252"
 				value="3"
-				width="125"
-				enabled="false"/>
+				width="125"/>
 			 <radio_item
 				label="Events"
 				name="events"
@@ -391,10 +390,10 @@
 			left="650"
 			name="land_category"
 			width="122">
-			<combo_box.item label="All Categories" name="All" value="ST_ALL"/>
-			<combo_box.item label="Auction" name="Auction" value="ST_AUCTION"/>
-			<combo_box.item label="Mainland Sales" name="Mainland" value="ST_MAINLAND"/>
-			<combo_box.item label="Estate Sales" name="Estate" value="ST_ESTATE"/>
+			<combo_box.item label="All Categories" name="All" value="All"/>
+			<combo_box.item label="Auction" name="Auction" value="Auction"/>
+			<combo_box.item label="Mainland Sales" name="Mainland" value="Mainland"/>
+			<combo_box.item label="Estate Sales" name="Estate" value="Estate"/>
 		</combo_box>
 		<combo_box
 			follows="right|top"
@@ -634,6 +633,28 @@
 		name="Next"
 		width="70"
 		left_pad="1" />
+	<combo_box
+		follows="left|bottom"
+		layout="topleft"
+		height="23"
+		allow_text_entry="false"
+		left_pad="5"
+		name="land_sort_combo"
+		width="120">
+		<combo_box.item label="Name" name="Name_item" value="Name"/>
+		<combo_box.item label="Price" name="Price_item" value="Price"/>
+		<combo_box.item label="Price per meter" name="PPM_item" value="PPM"/>
+		<combo_box.item label="Area" name="Area_item" value="Area"/>
+	</combo_box>
+	<check_box
+		top_delta="5"
+		follows="left|bottom"
+		height="16"
+		label="Sort all ascending"
+		layout="topleft"
+		left_pad="3"
+		name="ascending_check"
+		width="100"/>
 	<panel
 		layout="topleft"
 		name="panel_details"

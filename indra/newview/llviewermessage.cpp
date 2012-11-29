@@ -2019,8 +2019,13 @@ void inventory_offer_handler(LLOfferInfo* info)
 	//	&& (info->mType == LLAssetType::AT_NOTECARD
 	//		|| info->mType == LLAssetType::AT_LANDMARK
 	//		|| info->mType == LLAssetType::AT_TEXTURE))
-	if (gSavedSettings.getBOOL("AutoAcceptNewInventory"))
+//	if (gSavedSettings.getBOOL("AutoAcceptNewInventory"))
 	// </FS:Ansariel> Auto-accept any kind of inventory (FIRE-4128)
+// [RLVa:KB]
+	// Don't auto-accept give-to-RLV inventory offers
+	if ( (gSavedSettings.getBOOL("AutoAcceptNewInventory")) &&
+		 ( (!rlv_handler_t::isEnabled()) || (!RlvInventory::instance().isGiveToRLVOffer(*info)) ) )
+// [/RLVa:KB]
 	{
 		// For certain types, just accept the items into the inventory,
 		// and possibly open them on receipt depending upon "ShowNewInventory".

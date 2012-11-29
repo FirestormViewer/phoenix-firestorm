@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="Modell hochladen">
+	<string name="no_havok">
+		Mesh-Upload mit Physics
+	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Fehler: Fehler beim DAE-Parsen – Details siehe Protokoll.

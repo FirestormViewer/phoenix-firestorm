@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+ positioning="centered"
+ legacy_header_height="18"
+ can_resize="true"
+ height="495"
+ layout="topleft"
+ min_height="200"
+ min_width="400"
+ name="preview_texture"
+ help_topic="preview_texture"
+ width="555">
+   <floater.string
+     name="Title">
+        Texture: [NAME]
+    </floater.string>
+    <floater.string
+     name="Copy">
+        Copy To Inventory
+    </floater.string>
+    <floater.string
+     name="DateTime">
+        [weekday,datetime,slt] [month,datetime,slt] [day,datetime,slt] [hour12,datetime,slt]:[min,datetime,slt]:[second,datetime,slt][ampm,datetime,slt] [timezone,datetime,slt] [year,datetime,slt]
+    </floater.string>
+	<floater.string name="UploaderDateTime"/>
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="desc txt"
+     top="21"
+     width="90">
+        Description:
+    </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     name="desc"
+     width="440" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="uploader_label"
+     top_delta="21"
+     read_only="true"
+     visible="false"
+     width="90">
+        Uploader:
+    </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     name="uploader"
+     visible="false"
+     width="377" />
+    <button
+     enabled="false"
+     follows="right|top"
+     font="SansSerifSmall"
+     height="18"
+     label="Profile"
+     left_pad="3"
+     name="openprofile"
+     visible="false"
+     width="60" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="upload_time_label"
+     top_delta="21"
+     visible="false"
+     width="90">
+        Date:
+    </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     name="upload_time"
+     visible="false"
+     width="440" />
+
+    <text
+     type="string"
+     length="1"
+     follows="left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left="10"
+     name="uuid_label"
+     top_delta="21"
+     visible="false"
+     width="90">
+        UUID:
+    </text>
+    <line_editor
+     border_style="line"
+     border_thickness="1"
+     follows="right|left|top"
+     font="SansSerif"
+     height="19"
+     layout="topleft"
+     left_pad="0"
+     max_length="127"
+     name="uuid"
+     visible="false"
+     width="377" />
+    <button
+     enabled="false"
+     follows="right|top"
+     font="SansSerifSmall"
+     height="18"
+     label="Copy"
+     left_pad="3"
+     name="copyuuid"
+     visible="false"
+     width="60" />
+	 
+	<panel
+	 name="dimensions_panel"
+	 left="10"
+     follows="left|right|bottom"
+     layout="topleft"
+     bottom="-1"
+     height="23"
+	 width="545"
+	 visible="false">
+	 
+		 <text
+		 type="string"
+		 halign="left"
+		 length="1"
+		 follows="left|top"
+		 height="16"
+		 layout="topleft"
+		 left="0"
+		 name="dimensions"
+		 width="100">
+			[WIDTH]px x [HEIGHT]px
+		</text>
+		<text
+		 top_delta="0"
+		 type="string"
+		 halign="right"
+		 length="1"
+		 follows="right|top"
+		 height="16"
+		 layout="topleft"
+		 right="-128"
+		 name="aspect_ratio"
+		 width="128">
+			Preview aspect ratio
+		</text>
+		<combo_box
+		 allow_text_entry="true" 
+		 top_delta="-4" 
+		 follows="right|bottom" 
+		 height="23"
+		 left_pad="10"
+		 max_chars="20"
+		 mouse_opaque="true"
+		 enabled="true"
+		 width="108"
+		 name="combo_aspect_ratio"
+		 tool_tip="Preview at a fixed aspect ratio">
+			<combo_item name="Unconstrained" value="Unconstrained">
+				Unconstrained
+			</combo_item>
+		<combo_item name="1:1" value="1:1" tool_tip="Group insignia or Additional profile info">
+			1:1
+		</combo_item>
+		<combo_item name="4:3" value="4:3" tool_tip="[CURRENT_GRID] profile">
+			4:3
+		</combo_item>
+		<combo_item name="10:7" value="10:7" tool_tip="Classifieds and search listings, landmarks">
+			10:7
+		</combo_item>
+		<combo_item name="3:2" value="3:2" tool_tip="About land">
+			3:2
+		</combo_item>
+		<combo_item name="16:10" value="16:10">
+			16:10
+		</combo_item>
+		<combo_item name="16:9" value="16:9" tool_tip="Profile picks">
+			16:9
+		</combo_item>
+		<combo_item name="2:1" value="2:1">
+			2:1
+		</combo_item>
+		</combo_box>
+	
+	</panel>
+	<panel
+	 name="button_panel"
+	 left="10"
+     follows="left|right|bottom"
+     layout="topleft"
+     bottom="-1"
+     height="32"
+	 width="545"
+	 visible="false">
+	 
+		<button
+		 follows="left|bottom"
+		 height="22"
+		 label="OK"
+		 layout="topleft"
+		 left="6"
+		 name="Keep"
+		 bottom="-10"
+		 width="110" />
+		<button
+		 follows="left|bottom"
+		 height="22"
+		 label="Discard"
+		 layout="topleft"
+		 left_pad="5"
+		 name="Discard"
+		 top_delta="0"
+		 width="110" />
+		<flyout_button
+		 follows="left|bottom"
+		 height="22"
+		 label="Save As TGA"
+		 layout="topleft"
+		 left_pad="5"
+		 name="save_tex_btn"
+		 top_delta="0"
+		 width="110">
+			<flyout_button.item
+			 label="Save As TGA"
+			 name="save_item_tga"
+			 value="format_tga" />
+			<flyout_button.item
+			 label="Save As PNG"
+			 name="save_item_png"
+			 value="format_png" />	 
+		</flyout_button>
+	</panel>
+</floater>

@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="rlvLocks" title="Aktywne blokady RLV">
-  <scroll_list name="lock_list">
-    <scroll_list.columns label="Typ blokady" name="lock_type" />
-    <scroll_list.columns label="Dod / Usuw" name="lock_addrem" />
-    <scroll_list.columns label="Blokuje obiekt" name="lock_target" />
-    <scroll_list.columns label="Trzymana przez" name="lock_origin" />
-  </scroll_list>
-  <panel name="bottom_panel">
-    <button label="Odśwież" name="refresh_btn" />
-  </panel>
-</floater>
+<floater name="rlvLocks" title="Aktywne blokady RLV" />

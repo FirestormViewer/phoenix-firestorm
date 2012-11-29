@@ -1819,7 +1819,9 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getEditableSegIterContaini
 	return orig_it;
 }
 
-LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
+LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */)
 {
 
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
@@ -1839,23 +1841,34 @@ LLTextBase::segment_set_t::iterator LLTextBase::getSegIterContaining(S32 index)
 
 	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
 	// but only if that segment is editable -Zi
-	LLTextSegment* seg=*it;
-	if(!seg->canEdit())
-	{
-		if(it!=mSegments.begin())
-		{
-			--it;
 
-			seg=*it;
+	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
+	
+	if (fsFixCursorPosition)
+	{
+		if (fix_position)
+		{
+			LLTextSegment* seg=*it;
 			if(!seg->canEdit())
-				++it;
+			{
+				if(it!=mSegments.begin())
+				{
+					--it;
+
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
+			}
 		}
 	}
 
 	return it;
 }
 
-LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index) const
+// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+//LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index) const
+LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 index, bool fix_position /* = true */) const
 {
 	static LLPointer<LLIndexSegment> index_segment = new LLIndexSegment();
 
@@ -1873,16 +1886,24 @@ LLTextBase::segment_set_t::const_iterator LLTextBase::getSegIterContaining(S32 i
 
 	// This goes reports one segment backwards if the cursor is inside a non-editable segment,
 	// but only if that segment is editable -Zi
-	LLTextSegment* seg=*it;
-	if(!seg->canEdit())
+	static LLCachedControl<bool> fsFixCursorPosition(*LLUI::sSettingGroups["config"], "FSFixCursorPosition", true);
+	
+	if (fsFixCursorPosition)
 	{
-		if(it!=mSegments.begin())
+		if (fix_position)
 		{
-			--it;
-
-			seg=*it;
+			LLTextSegment* seg=*it;
 			if(!seg->canEdit())
-				++it;
+			{
+				if(it!=mSegments.begin())
+				{
+					--it;
+
+					seg=*it;
+					if(!seg->canEdit())
+						++it;
+				}
+			}
 		}
 	}
 
@@ -1899,7 +1920,9 @@ LLTextSegmentPtr LLTextBase::getSegmentAtLocalPos( S32 x, S32 y, bool hit_past_e
 	
 	// Find the cursor position at the requested local screen position
 	S32 offset = getDocIndexFromLocalCoord( x, y, FALSE, hit_past_end_of_line);
-	segment_set_t::iterator seg_iter = getSegIterContaining(offset);
+	// <FS:Ansariel> Changed for FIRE-1574, FIRE-2983, FIRE-3534 & 4650
+	//segment_set_t::iterator seg_iter = getSegIterContaining(offset);
+	segment_set_t::iterator seg_iter = getSegIterContaining(offset, false);
 	if (seg_iter != mSegments.end())
 	{
 		return *seg_iter;

@@ -9,27 +9,25 @@
 	<floater.string name="DateTime">
 		[weekday, datetime, slt], [day, datetime, slt] [month, datetime, slt] [year, datetime, slt], [hour24, datetime, slt]:[min, datetime, slt]:[second, datetime, slt] [timezone, datetime, slt]
 	</floater.string>
+	<floater.string name="UploaderDateTime">
+		Załadował/a [UPLOADER]: [DATE_TIME]
+	</floater.string>
 	<text name="desc txt">
 		Opis:
 	</text>
-	<text name="uploader_label">
-		Załadował/a:
-	</text>
 	<button label="Profil" name="openprofile"/>
-	<text name="upload_time_label">
-		Data:
-	</text>
 	<panel name="dimensions_panel">
+		<button name="copyuuid" tool_tip="Skopiuj UUID do schowka"/>
 		<text name="aspect_ratio">
-			Zobacz proporcje
+			Podgląd proporcji
 		</text>
 		<combo_box name="combo_aspect_ratio" tool_tip="Wyświetl w stałych proporcjach">
 			<combo_item name="Unconstrained">
 				Swobodny
 			</combo_item>
-			<combo_item name="1:1" tool_tip="Insygnia Grupy lub realny Profil"/>
-			<combo_item name="4:3" tool_tip="[CURRENT_GRID] profil"/>
-			<combo_item name="10:7" tool_tip="Reklamy i wyniki wyszukiwania, landmarki"/>
+			<combo_item name="1:1" tool_tip="Emblemat grupy lub sekcja dodatkowych informacji profilu"/>
+			<combo_item name="4:3" tool_tip="Profil [CURRENT_GRID]"/>
+			<combo_item name="10:7" tool_tip="Reklamy, wyniki wyszukiwania i landmarki"/>
 			<combo_item name="3:2" tool_tip="O Posiadłości"/>
 			<combo_item name="16:9" tool_tip="Miejsca"/>
 		</combo_box>

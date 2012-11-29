@@ -84,7 +84,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	}
 
 // [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Modified: RLVa-1.3.0c
-	if (rlv_handler_t::isEnabled())
+	if ( (object) && (rlv_handler_t::isEnabled()) )
 	{
 		if (!gRlvHandler.canEdit(object))
 		{
@@ -94,7 +94,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 				LLToolMgr::instance().toggleBuildMode();
 		}
 		
-		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && (object) && ((!object->isAttachment()) || (!object->permYouOwner())) &&
+		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_FARTOUCH)) && ((!object->isAttachment()) || (!object->permYouOwner())) &&
 			 (dist_vec_squared(gAgent.getPositionAgent(), object->getPositionRegion()) > 1.5f * 1.5f) )
 		{
 			// NOTE: see behaviour notes for a rather lengthy explanation of why we're doing things this way

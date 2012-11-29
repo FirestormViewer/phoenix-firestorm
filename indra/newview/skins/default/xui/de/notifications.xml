@@ -3844,4 +3844,13 @@ Foto konnte nicht gespeichert werden.
 Fehler im Regulären Ausdruck:
 [EWHAT]
   </notification>
+
+  <notification name="NoHavok">
+Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte [APP_NAME] für Second Life hier herunter:
+[DOWNLOAD_URL]
+    <form name="form">
+      <ignore name="ignore" text="Kein-Havok-Warnung"/>
+    </form>
+  </notification>
+
 </notifications>

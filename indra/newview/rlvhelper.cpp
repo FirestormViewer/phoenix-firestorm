@@ -1091,7 +1091,7 @@ void RlvBehaviourNotifyHandler::sendNotification(const std::string& strText, con
 		for (std::multimap<LLUUID, notifyData>::const_iterator itNotify = pThis->m_Notifications.begin(); 
 				itNotify != pThis->m_Notifications.end(); ++itNotify)
 		{
-			if ( (itNotify->second.strFilter.empty()) || (std::string::npos != strText.find(itNotify->second.strFilter)) )
+			if ( (itNotify->second.strFilter.empty()) || (boost::icontains(strText, itNotify->second.strFilter)) )
 				RlvUtil::sendChatReply(itNotify->second.nChannel, "/" + strText + strSuffix);
 		}
 	}

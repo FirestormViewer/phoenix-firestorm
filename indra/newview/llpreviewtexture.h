@@ -88,6 +88,7 @@ public:
 	// <FS:Techwolf Lupindo> texture comment metadata reader
 	void callbackLoadName(const LLUUID& agent_id, const LLAvatarName& av_name);
 	void onButtonClickProfile();
+	void onButtonClickUUID();
 	// </FS:Techwolf Lupindo>
 	
 protected:
@@ -120,6 +121,8 @@ private:
 	F32 mAspectRatio;
 
 	bool mShowingButtons;
+	bool mDisplayNameCallback;
+	LLUIString mUploaderDateTime;
 
 	LLLoadedCallbackEntry::source_callback_list_t mCallbackTextureList ; 
 };

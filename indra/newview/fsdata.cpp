@@ -724,7 +724,10 @@ LLSD FSData::getSystemInfo()
 	LLSD info=LLFloaterAbout::getInfo();
 
 	std::string sysinfo1("\n");
-	sysinfo1 += llformat("%s %s (%d) %s %s (%s)\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str());
+	sysinfo1 += llformat("%s %s (%d) %s %s (%s) %s\n\n", LLAppViewer::instance()->getSecondLifeTitle().c_str(), LLVersionInfo::getShortVersion().c_str(), LLVersionInfo::getBuild(), info["BUILD_DATE"].asString().c_str(), info["BUILD_TIME"].asString().c_str(), LLVersionInfo::getChannel().c_str(),
+//<FS:CR> FIRE-8273: Add Havok/Opensim indicator to getSystemInfo()
+		info["BUILD_TYPE"].asString().c_str());
+// </FS:CR>
 	sysinfo1 += llformat("Build with %s version %s\n\n", info["COMPILER"].asString().c_str(), info["COMPILER_VERSION"].asString().c_str());
 	sysinfo1 += llformat("I am in %s located at %s (%s)\n", info["REGION"].asString().c_str(), info["HOSTNAME"].asString().c_str(), info["HOSTIP"].asString().c_str());
 	sysinfo1 += llformat("%s\n", info["SERVER_VERSION"].asString().c_str());

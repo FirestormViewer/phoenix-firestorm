@@ -11,6 +11,8 @@
     single_instance="true"
     title="Pathfinding view / test"
     width="240">
+  <floater.string name="no_havok">navmesh for pathfinding</floater.string>
+	
   <floater.string name="navmesh_viewer_status_unknown"></floater.string>
   <floater.string name="navmesh_viewer_status_library_not_implemented">Cannot find pathing library implementation.</floater.string>
   <floater.string name="navmesh_viewer_status_region_not_enabled">This region is not enabled for pathfinding.</floater.string>
@@ -113,24 +115,6 @@
         width="214">
     </text>
   </panel>
-  
-  <!-- <FS:WF> FIRE-7261 : Remove this text once Havok is added -->
-         <text
-          font="SansSerifSmall"
-          type="string"
-          text_color="1 0 0 1"
-          length="1"
-          follows="left|top"
-          height="24"
-          layout="topleft"
-          left="12"
-		  top_pad="-10"
-          name="no_havok_warning"
-          width="200">
-           WARNING: These features are not
-                   fully implemented yet.
-         </text>
-  <!-- <FS:WF> FIRE-7261 : END -->
 		 
   <view_border
       bevel_style="none"
