@@ -65,7 +65,14 @@ ATI ASUS EAH45xx				.*ATI.*ASUS.*EAH45.*						1		1
 ATI ASUS EAH48xx				.*ATI.*ASUS.*EAH48.*						3		1
 ATI ASUS EAH57xx				.*ATI.*ASUS.*EAH57.*						3		1
 ATI ASUS EAH58xx				.*ATI.*ASUS.*EAH58.*						3		1
-ATI ASUS EAH6xxx				.*ATI.*ASUS.*EAH6.*							3		1
+ATI ASUS EAH62xx				.*ATI.*ASUS.*EAH62.*						2		1
+ATI ASUS EAH63xx				.*ATI.*ASUS.*EAH63.*						2		1
+ATI ASUS EAH64xx				.*ATI.*ASUS.*EAH64.*						2		1
+ATI ASUS EAH65xx				.*ATI.*ASUS.*EAH65.*						2		1
+ATI ASUS EAH66xx				.*ATI.*ASUS.*EAH66.*						3		1
+ATI ASUS EAH67xx				.*ATI.*ASUS.*EAH67.*						3		1
+ATI ASUS EAH68xx				.*ATI.*ASUS.*EAH68.*						3		1
+ATI ASUS EAH69xx				.*ATI.*ASUS.*EAH69.*						3		1
 ATI ASUS Radeon X1xxx			.*ATI.*ASUS.*X1.*							3		1
 ATI Radeon X7xx					.*ATI.*ASUS.*X7.*							1		1
 ATI Radeon X19xx				.*ATI.*(Radeon|Diamond) X19.* ?.*			3		1
@@ -85,9 +92,6 @@ ATI FirePro M5800				.*ATI.*FirePro.*M58.*						3		1
 ATI FirePro M7740				.*ATI.*FirePro.*M77.*						3		1
 ATI FirePro M7820				.*ATI.*FirePro.*M78.*						3		1
 ATI FireMV						.*ATI.*FireMV.*								0		1
-ATI Geforce 9500 GT				.*ATI.*Geforce 9500 *GT.*					2		1
-ATI Geforce 9600 GT				.*ATI.*Geforce 9600 *GT.*					2		1
-ATI Geforce 9800 GT				.*ATI.*Geforce 9800 *GT.*					2		1
 ATI Generic						.*ATI.*Generic.*							0		0
 ATI Hercules 9800				.*ATI.*Hercules.*9800.*						1		1
 ATI IGP 340M					.*ATI.*IGP.*340M.*							0		0
@@ -266,8 +270,6 @@ ATI FirePro 4000				.*ATI.*FirePro V4.*							2		1
 ATI FirePro 5000				.*ATI.*FirePro V5.*							3		1
 ATI FirePro 7000				.*ATI.*FirePro V7.*							3		1
 ATI FirePro M					.*ATI.*FirePro M.*							3		1
-ATI Technologies				.*ATI *Technologies.*						0		1
-// This entry is last to work around the "R300" driver problem.
 ATI R300 (9700)					.*R300.*									1		1
 ATI Radeon						.*ATI.*(Diamond|Radeon).*					0		1
 Intel X3100						.*Intel.*X3100.*							0		1
@@ -290,16 +292,23 @@ Intel Broadwater				.*Intel.*Broadwater.*						0		0
 Intel Brookdale					.*Intel.*Brookdale.*						0		0
 Intel Cantiga					.*Intel.*Cantiga.*							0		0
 Intel Eaglelake					.*Intel.*Eaglelake.*						0		1
-Intel Graphics Media HD			.*Intel.*Graphics Media.*HD.*				0		1
+Intel Graphics Media HD			.*Intel.*Graphics Media.*HD.*				1		1
+Intel HD Graphics 2000			.*Intel.*HD Graphics 2.*					2		1
+Intel HD Graphics 3000			.*Intel.*HD Graphics 3.*					3		1
+Intel HD Graphics 4000			.*Intel.*HD Graphics 4.*					3		1
+Intel HD2000					.*Intel.*HD2000.*							2		1
+Intel HD3000					.*Intel.*HD3000.*							3		1
+Intel HD Graphics				.*Intel.*HD Graphics.*						2		1
 Intel Mobile 4 Series			.*Intel.*Mobile.* 4 Series.*				0		1
+Intel 4 Series Internal			.*Intel.* 4 Series Internal.*				1		1
 Intel Media Graphics HD			.*Intel.*Media Graphics HD.*				0		1
 Intel Montara					.*Intel.*Montara.*							0		0
 Intel Pineview					.*Intel.*Pineview.*							0		1
 Intel Springdale				.*Intel.*Springdale.*						0		0
-Intel HD Graphics 2000			.*Intel.*HD Graphics 2000.*					1		1
-Intel HD Graphics 3000			.*Intel.*HD Graphics 3000.*					2		1
-Intel HD Graphics 4000			.*Intel.*HD Graphics 4000.*					2		1
-Intel HD Graphics				.*Intel.*HD Graphics.*						1		1
+Intel Grantsdale				.*Intel.*Grantsdale.*						1		1
+Intel Q45/Q43					.*Intel.*Q4.*								1		1
+Intel B45/B43					.*Intel.*B4.*								1		1
+Intel 3D-Analyze				.*Intel.*3D-Analyze.*						2		1
 Matrox							.*Matrox.*									0		0
 Mesa							.*Mesa.*									0		0
 NVIDIA 205						.*NVIDIA .*GeForce 205.*					2		1
@@ -327,6 +336,7 @@ NVIDIA G 315					.*NVIDIA .*315(M)?.*						2		1
 NVIDIA G 320M					.*NVIDIA .*320(M)?.*						2		1
 NVIDIA G 405					.*NVIDIA .*405(M)?.*						1		1
 NVIDIA G 410M					.*NVIDIA .*410(M)?.*						1		1
+NVIDIA G 610M					.*NVIDIA .*610(M)?.*						1		1
 NVIDIA GT 120M					.*NVIDIA .*GT *120(M)?.*					2		1
 NVIDIA GT 120					.*NVIDIA .*GT.*120							2		1
 NVIDIA GT 130M					.*NVIDIA .*GT *130(M)?.*					2		1
@@ -360,6 +370,7 @@ NVIDIA GT 620M					.*NVIDIA .*GT *620(M)?.*					3		1
 NVIDIA GT 630M					.*NVIDIA .*GT *630(M)?.*					3		1
 NVIDIA GT 635M					.*NVIDIA .*GT *635(M)?.*					3		1
 NVIDIA GT 640M					.*NVIDIA .*GT *640(M)?.*					3		1
+NVIDIA GT 650M					.*NVIDIA .*GT *650(M)?.*					3		1
 NVIDIA GTS 160M					.*NVIDIA .*GT(S)? *160(M)?.*				2		1
 NVIDIA GTS 240					.*NVIDIA .*GTS *24.*						3		1
 NVIDIA GTS 250					.*NVIDIA .*GTS *25.*						3		1
@@ -396,6 +407,7 @@ NVIDIA GTX 675M					.*NVIDIA .*GTX *675M.*						3		1
 NVIDIA GTX 670					.*NVIDIA .*GTX *67.*						3		1
 NVIDIA GTX 680M					.*NVIDIA .*GTX *680M.*						3		1
 NVIDIA GTX 680					.*NVIDIA .*GTX *68.*						3		1
+NVIDIA GTX 690M					.*NVIDIA .*GTX *690M.*						3		1
 NVIDIA GTX 690					.*NVIDIA .*GTX *69.*						3		1
 NVIDIA C51						.*NVIDIA .*C51.*							0		1
 NVIDIA G72						.*NVIDIA .*G72.*							1		1
@@ -490,7 +502,7 @@ NVIDIA D9M						.*NVIDIA .*D9M.*							1		1
 NVIDIA G94						.*NVIDIA .*G94.*							3		1
 NVIDIA GeForce Go 6				.*GeForce Go 6.*							1		1
 NVIDIA ION 2					.*NVIDIA .*ION 2.*							2		1
-NVIDIA ION 						.*NVIDIA .*ION.*							2		1
+NVIDIA ION 						.*NVIDIA Corporation.*ION.*					2		1
 NVIDIA NB8M						.*NVIDIA .*NB8M.*							1		1
 NVIDIA NB8P						.*NVIDIA .*NB8P.*							2		1
 NVIDIA NB9E						.*NVIDIA .*NB9E.*							3		1
@@ -561,3 +573,4 @@ VIA								VIA.*										0		0
 Apple Generic					Apple.*Generic.*							0		0
 Apple Software Renderer			Apple.*Software Renderer.*					0		0
 Oracle VirtualBox Graphics		Humper.*									0		1
+PowerVR SGX545					.*PowerVR SGX.*								1		1
