@@ -86,6 +86,13 @@
 	</panel>
 	<button label="Zurück" name="Back"/>
 	<button label="Vor" name="Next"/>
+	<combo_box name="land_sort_combo">
+		<combo_box.item label="Name" name="Name_item" />
+		<combo_box.item label="Preis" name="Price_item" />
+		<combo_box.item label="Preis/Meter" name="PPM_item" />
+		<combo_box.item label="Größe" name="Area_item" />
+	</combo_box>
+	<check_box label="Aufsteigend sortieren" name="ascending_check" />
 	<panel name="panel_details">
 		<button label="Profil" name="people_profile_btn"/>
 		<button label="Instant Message" name="people_message_btn"/>
