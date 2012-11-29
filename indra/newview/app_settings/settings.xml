@@ -5438,7 +5438,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.10</real>
     </map>
     <key>FlycamAxisScale1</key>
     <map>
@@ -5449,7 +5449,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
     </map>
     <key>FlycamAxisScale2</key>
     <map>
@@ -5460,7 +5460,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>2.0</real>
     </map>
     <key>FlycamAxisScale3</key>
     <map>
@@ -5471,7 +5471,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.0</real>
     </map>
     <key>FlycamAxisScale4</key>
     <map>
@@ -5482,7 +5482,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.1</real>
     </map>
     <key>FlycamAxisScale5</key>
     <map>
@@ -5493,7 +5493,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.15</real>
     </map>
     <key>FlycamAxisScale6</key>
     <map>
@@ -5504,7 +5504,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.0</real>
+      <real>0.1</real>
     </map>
     <key>FlycamBuildModeScale</key>
     <map>
@@ -5526,7 +5526,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>16.0</real>
+      <real>2.75</real>
     </map>
     <key>FlycamZoomDirect</key>
     <map>
