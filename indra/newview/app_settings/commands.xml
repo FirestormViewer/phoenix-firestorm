@@ -431,7 +431,7 @@
            />
   <command name="legacy_search"
            available_in_toybox="true"
-           icon="Command_Search_Icon"
+           icon="lsearch"
            label_ref="Command_Legacy_Search_Label"
            tooltip_ref="Command_Legacy_Search_Tooltip"
            execute_function="Floater.Toggle"
