@@ -20,11 +20,11 @@
 	</string>
 	<button name="back_btn" tool_tip="Zurück"/>
 	<text name="title" value="Ortsprofil"/>
-	<text name="region_title" value="SampleRegion"/>
+	<text name="region_title" value="unbekannt"/>
 	<text name="maturity_value" value="unbekannt"/>
-	<text name="parcel_title" value="SampleParcel, Name Long (145, 228, 26)"/>
+	<text name="parcel_title" value="unbekannt"/>
 	<panel name="description_panel">
-		<expandable_text name="description" value="Du waltz die spritz"/>
+		<expandable_text name="description" value="unbekannt"/>
 	</panel>
 	<panel name="landmark_info_panel">
 		<text name="owner_label" value="Eigentümer:" width="70"/>
