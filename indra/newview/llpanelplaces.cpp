@@ -823,7 +823,11 @@ void LLPanelPlaces::onOverflowButtonClicked()
 		// STORM-411
 		// Creating landmarks for remote locations is impossible.
 		// So hide menu item "Make a Landmark" in "Teleport History Profile" panel.
-		menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
+		// <FS:Ansariel> If it doesn't work for remote locations, disable
+		//               it properly for ALL displays of remote locations!
+		//menu->setItemVisible("landmark", mPlaceInfoType != TELEPORT_HISTORY_INFO_TYPE);
+		menu->setItemVisible("landmark", is_agent_place_info_visible);
+		// </FS:Ansariel>
 		menu->arrangeAndClear();
 	}
 	else if (mPlaceInfoType == LANDMARK_INFO_TYPE && mLandmarkMenu != NULL)
