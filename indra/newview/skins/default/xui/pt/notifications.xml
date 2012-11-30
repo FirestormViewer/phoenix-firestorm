@@ -2552,7 +2552,7 @@ Cada um pode ver o status do outro (definição padrão).
 		&lt;nolink&gt;[NAME]&lt;/nolink&gt; rejeitou sua oferta de amizade.
 	</notification>
 	<notification name="FriendshipAcceptedByMe">
-		Oferta de amizada aceita.
+		Oferta de amizade aceita.
 	</notification>
 	<notification name="FriendshipDeclinedByMe">
 		Oferta de amizade recusada.
