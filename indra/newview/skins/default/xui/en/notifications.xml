@@ -9385,7 +9385,7 @@ Error in the regular expression:
 	name="NoHavok"
 	type="alertmodal">
 	Some functions like [FEATURE] are not included in [APP_NAME] for OpenSimulator. If you would like to use [FEATURE], please download [APP_NAME] for Second Life from
-	[DOWNLOAD_URL]
+[DOWNLOAD_URL]
 	<form name="form">
 		<ignore name="ignore"
 		text="No Havok Warning"/>
