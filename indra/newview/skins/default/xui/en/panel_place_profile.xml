@@ -281,7 +281,7 @@
              text_color="white"
              top_pad="5"
              use_ellipses="true"
-             value="unbekannt"
+             value="unknown"
              width="290" />
             <text
              parse_urls="false"
