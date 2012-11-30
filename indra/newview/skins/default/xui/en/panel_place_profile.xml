@@ -281,7 +281,7 @@
              text_color="white"
              top_pad="5"
              use_ellipses="true"
-             value="SampleRegion"
+             value="unbekannt"
              width="290" />
             <text
              parse_urls="false"
@@ -292,7 +292,7 @@
              name="parcel_title"
              top_pad="4"
              use_ellipses="true"
-             value="SampleParcel, Name Long (145, 228, 26)"
+             value="unknown"
              width="285" />
             <expandable_text
              follows="left|top|right"
@@ -301,7 +301,7 @@
              left="5"
              name="description"
              top_pad="10"
-             value="Du waltz die spritz"
+             value="unknown"
              width="300" />
             <text
              follows="left|top"
@@ -321,7 +321,7 @@
              left_pad="1"
              name="owner_value"
              top_delta="0"
-             value="Alex Superduperlongenamenton"
+             value="unknown"
              use_ellipses="true" 
              width="200" />
             <icon
