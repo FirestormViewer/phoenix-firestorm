@@ -49,11 +49,13 @@
      name="title_text"
      text_color="White"
      top="5"
+     use_ellipses="true"
      width="250">
         Block List
      </text>
 	 
 	</layout_panel>
+
 	<layout_panel
 		name="block_list_blocklaypanels"
 		auto_resize="true"
