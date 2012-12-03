@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+  positioning="cascading"
+  can_close="true"
+  can_resize="true"
+  height="305"
+  help_topic="fs_blocklist"
+  min_height="250"
+  min_width="210"
+  layout="topleft"
+  name="floater_blocklist"
+  save_rect="true"
+  save_visibility="true"
+  single_instance="true"
+  reuse_instance="true"
+  title="Blocked Residents &amp; Objects"
+  width="310">
+      <panel
+        class="panel_block_list_sidetray"
+        name="panel_block_list_sidetray"
+        filename="panel_block_list_sidetray.xml"
+        label="Blocked Residents &amp; Objects"
+        font="SansSerifBold"
+        top="0"
+        left="0"
+        height="305"
+        width="310"/>
+</floater>

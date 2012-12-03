@@ -8,8 +8,27 @@
  help_topic="blocked_list"
  min_height="305"
  min_width="240"
- width="280">
-        <button
+ width="298">
+	<layout_stack
+		name="block_list_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="0"
+		left="0"
+		width="295"
+		height="300"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="back_button_container"
+		auto_resize="false"
+		height="30"
+		width="295"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+ 
+    <button
      follows="top|left"
      height="24"
      image_hover_unselected="BackButton_Over"
@@ -33,6 +52,16 @@
      width="250">
         Block List
      </text>
+	 
+	</layout_panel>
+	<layout_panel
+		name="block_list_blocklaypanels"
+		auto_resize="true"
+		height="275"
+		width="295"
+		layout="topleft"
+		follows="all">
+	 
     <scroll_list
      follows="all"
      height="190"
@@ -40,8 +69,8 @@
      left="5"
      name="blocked"
      tool_tip="List of currently blocked Residents"
-     top="30"
-     width="270">
+     top="0"
+     width="290">
         <scroll_list.columns
          name="item_name" />
         <scroll_list.columns
@@ -57,7 +86,7 @@
      name="Block resident..."
      tool_tip="Pick a Resident to block"
      top_pad="4"
-     width="210">
+     width="190">
         <button.commit_callback
          function="Block.ClickPick" />
     </button>
@@ -70,7 +99,7 @@
      name="Block object by name..."
      tool_tip="Pick an object to block by name"
      top_pad="4"
-     width="210" >
+     width="190" >
         <button.commit_callback
          function="Block.ClickBlockByName" />
     </button>
@@ -84,8 +113,11 @@
      name="Unblock"
      tool_tip="Remove Resident or object from blocked list"
      top_pad="4"
-     width="210" >
+     width="190" >
         <button.commit_callback
          function="Block.ClickRemove" />
     </button>
+
+	</layout_panel>
+	</layout_stack>
 </panel>

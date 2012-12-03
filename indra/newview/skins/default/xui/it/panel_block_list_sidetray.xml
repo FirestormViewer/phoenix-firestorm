@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="block_list_panel">
+	<layout_stack name="block_list_sidetray_main">
+		<layout_panel name="back_button_container">
 	<text name="title_text">
 		Blocca lista
 	</text>
+		</layout_panel>
+		<layout_panel name="block_list_blocklaypanels">
 	<scroll_list name="blocked" tool_tip="Lista degli attuali residenti bloccati"/>
 	<button label="Blocca il residente..." label_selected="Blocca il residente..." name="Block resident..." tool_tip="Scegli un residente da bloccare"/>
 	<button label="Blocca l&apos;oggetto per nome..." label_selected="Blocca l&apos;oggetto per nome..." name="Block object by name..."/>
 	<button label="Sblocca" label_selected="Sblocca" name="Unblock" tool_tip="Rimuovi un residente o un oggetto dalla lista bloccati"/>
+		</layout_panel>
+	</layout_stack>
 </panel>

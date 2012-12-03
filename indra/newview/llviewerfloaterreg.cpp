@@ -186,6 +186,7 @@
 // </FS:CR> FIRE-6310
 #include "fsfloaterteleporthistory.h"
 #include "fsfloaterplacedetails.h"
+#include "fsfloaterblocklist.h"
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -445,6 +446,9 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
 	// <FS:Ansariel> FIRE-817: Separate place details floater
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
+
+	// <FS:Ansariel> Optional standalone blocklist floater
+	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

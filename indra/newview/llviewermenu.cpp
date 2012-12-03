@@ -6339,7 +6339,17 @@ class LLCommunicateBlockList : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+		// <FS:Ansariel> Optional standalone blocklist floater
+		//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+		if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+		{
+			LLFloaterReg::showInstance("fs_blocklist", LLSD());
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+		}
+		// </FS:Ansariel>
 		return true;
 	}
 };

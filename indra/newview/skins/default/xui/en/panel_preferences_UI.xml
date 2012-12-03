@@ -61,7 +61,7 @@
         <text
          type="string"
          left="5"
-         top_pad="10"
+         top_pad="7"
          length="1"
          follows="left|top"
          height="12"
@@ -273,6 +273,17 @@
        width="270"
        tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
 
+      <check_box
+       top_pad="2"
+       control_name="FSUseStandaloneBlocklistFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneBlocklistFloater"
+       label="Use stand-alone window for the block/mute list"
+       left="5"
+       width="270"
+       tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+
       <text
        type="string"
        left="5"
@@ -315,7 +326,7 @@
          left_delta="-10"
          name="ShowScriptDialogsTopRight"
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="12"
+         top_pad="8"
          width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
@@ -345,8 +356,7 @@
          control_name="FSGlobalButtonFlashOverride"
          type="string"
          left="7"
-         top_pad="15"
-         length="1"
+         top_pad="10"
          follows="left|top"
          height="12"
          layout="topleft"

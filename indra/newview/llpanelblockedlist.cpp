@@ -40,6 +40,8 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llsidetraypanelcontainer.h"
 
+#include "llviewercontrol.h"
+
 static LLRegisterPanelClassWrapper<LLPanelBlockedList> t_panel_blocked_list("panel_block_list_sidetray");
 
 //
@@ -112,7 +114,17 @@ void LLPanelBlockedList::selectBlocked(const LLUUID& mute_id)
 
 void LLPanelBlockedList::showPanelAndSelect(const LLUUID& idToSelect)
 {
-	LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+	// <FS:Ansariel> Optional standalone blocklist floater
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+	{
+		LLFloaterReg::showInstance("fs_blocklist", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with(BLOCKED_PARAM_NAME, idToSelect));
+	}
+	// </FS:Ansariel>
 }
 
 

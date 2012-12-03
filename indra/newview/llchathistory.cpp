@@ -157,7 +157,17 @@ public:
 		{
 			LLMuteList::getInstance()->add(LLMute(getAvatarId(), mFrom, LLMute::OBJECT));
 
-			LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
+			// <FS:Ansariel> Optional standalone blocklist floater
+			//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
+			if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+			{
+				LLFloaterReg::showInstance("fs_blocklist", LLSD().with("blocked_to_select", getAvatarId()));
+			}
+			else
+			{
+				LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD().with("blocked_to_select", getAvatarId()));
+			}
+			// </FS:Ansariel>
 		}
 	}
 

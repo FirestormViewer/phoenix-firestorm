@@ -1920,7 +1920,17 @@ void LLFloaterPreference::onChangeMaturity()
 // but the UI for this will still be enabled
 void LLFloaterPreference::onClickBlockList()
 {
-	LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+	// </FS:Ansariel> Optional standalone blocklist floater
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+	{
+		LLFloaterReg::showInstance("fs_blocklist", LLSD());
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("people", "panel_block_list_sidetray", LLSD());
+	}
+	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::onClickSortContacts()
