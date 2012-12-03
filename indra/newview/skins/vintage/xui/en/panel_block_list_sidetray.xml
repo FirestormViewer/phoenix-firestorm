@@ -29,7 +29,7 @@
 		follows="bottom|left|right"
 		top_pad="4"
 		left="0"
-		width="304"
+		width="300"
 		height="20"
 		border_size="2"
 		orientation="horizontal">
@@ -72,7 +72,7 @@
 		follows="bottom|left|right"
 		top="0"
 		left="0"
-		width="272"
+		width="270"
 		height="20"
 		border_size="2"
 		orientation="horizontal">
@@ -80,7 +80,7 @@
 	<layout_panel
 		name="block_panels_btnperson"
 		height="20"
-		width="100"
+		width="90"
 		layout="topleft"
 		follows="all">
 
@@ -93,7 +93,7 @@
 		name="Block resident..."
 		tool_tip="Pick a Resident to block"
 		top="0"
-		width="100">
+		width="90">
 		<button.commit_callback
 			function="Block.ClickPick" />
 	</button>
@@ -103,7 +103,7 @@
 	<layout_panel
 		name="block_panels_btnobject"
 		height="20"
-		width="100"
+		width="90"
 		layout="topleft"
 		follows="all">
 
@@ -116,7 +116,7 @@
 		name="Block object by name..."
 		tool_tip="Pick an object to block by name"
 		top="0"
-		width="100" >
+		width="90" >
 		<button.commit_callback
 			function="Block.ClickBlockByName" />
 	</button>
@@ -126,7 +126,7 @@
 	<layout_panel
 		name="block_panels_btnunblock"
 		height="20"
-		width="100"
+		width="90"
 		layout="topleft"
 		follows="all">
 
@@ -140,7 +140,7 @@
 		name="Unblock"
 		tool_tip="Remove Resident or object from blocked list"
 		top="0"
-		width="100" >
+		width="90" >
 		<button.commit_callback
 			function="Block.ClickRemove" />
 	</button>
