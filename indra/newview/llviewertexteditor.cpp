@@ -80,7 +80,18 @@ public:
 		LLSD key;
 		key["type"] = "landmark";
 		key["id"] = landmark_inv_id;
-		LLFloaterSidePanelContainer::showPanel("places", key);
+
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 
 // [SL:KB] - Patch: UI-Notecards | Checked: 2010-09-05 (Catznip-2.1.2a) | Added: Catznip-2.1.2a
@@ -91,7 +102,18 @@ public:
 		key["x"] = global_pos.mdV[0];
 		key["y"] = global_pos.mdV[1];
 		key["z"] = global_pos.mdV[2];
-		LLFloaterSidePanelContainer::showPanel("panel_places", key);
+
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 // [/SL:KB]
 

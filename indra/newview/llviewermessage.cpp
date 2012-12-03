@@ -1264,7 +1264,17 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 						LLInventoryCategory* parent_folder = gInventory.getCategory(item->getParentUUID());
 						if ("inventory_handler" == from_name)
 						{
-							LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							// <FS:Ansariel> FIRE-817: Separate place details floater
+							//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+							{
+								LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							}
+							else
+							{
+								LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "landmark").with("id", item->getUUID()));
+							}
+							// </FS:Ansariel>
 						}
 						else if("group_offer" == from_name)
 						{
@@ -1273,7 +1283,18 @@ void open_inventory_offer(const uuid_vec_t& objects, const std::string& from_nam
 							LLSD args;
 							args["type"] = "landmark";
 							args["id"] = obj_id;
-							LLFloaterSidePanelContainer::showPanel("places", args);
+
+							// <FS:Ansariel> FIRE-817: Separate place details floater
+							//LLFloaterSidePanelContainer::showPanel("places", args);
+							if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+							{
+								LLFloaterReg::showInstance("fs_placedetails", args);
+							}
+							else
+							{
+								LLFloaterSidePanelContainer::showPanel("places", args);
+							}
+							// </FS:Ansariel>
 
 							continue;
 						}

@@ -6518,7 +6518,17 @@ class LLWorldCreateLandmark : public view_listener_t
 			return true;
 // [/RLVa:KB]
 
-		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "create_landmark"));
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "create_landmark"));
+		}
+		// </FS:Ansariel>
 
 		return true;
 	}
@@ -9626,13 +9636,20 @@ void toggleSettingsDebug()
 // <FS:Ansariel> Toggle teleport history panel directly
 void toggleTeleportHistory()
 {
-	if (LLFloaterReg::instanceVisible("places"))
+	if (gSavedSettings.getBOOL("FSUseStandaloneTeleportHistoryFloater"))
 	{
-		LLFloaterReg::hideInstance("places");
+		LLFloaterReg::toggleInstance("fs_teleporthistory");
 	}
 	else
 	{
-		LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_teleport_history_tab"));
+		if (LLFloaterReg::instanceVisible("places"))
+		{
+			LLFloaterReg::hideInstance("places");
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "open_teleport_history_tab"));
+		}
 	}
 }
 // </FS:Ansariel> Toggle teleport history panel directly

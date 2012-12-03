@@ -236,7 +236,7 @@
        left="5"
        name="UsePieMenu"
        tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top_pad="13"
+       top_pad="8"
        width="256" />
 
       <check_box
@@ -251,10 +251,32 @@
        width="270"
        tool_tip="Show lag meter in the Status Overlay"/>
 
+      <check_box
+       top_pad="2"
+       control_name="FSUseStandaloneTeleportHistoryFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneTeleportHistoryFloater"
+       label="Use stand-alone window for teleport history"
+       left="5"
+       width="270"
+       tool_tip="If enabled, using the shortcut for teleport history will open the history in a separate window."/>
+
+      <check_box
+       top_pad="2"
+       control_name="FSUseStandalonePlaceDetailsFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandalonePlaceDetailsFloater"
+       label="Use stand-alone windows for landmarks, place details and teleport history details"
+       left="5"
+       width="270"
+       tool_tip="If enabled, landmarks, place details and teleport history details will open in separate windows."/>
+
       <text
        type="string"
        left="5"
-       top_pad="20"
+       top_pad="8"
        width="170"
        follows="left|top"
        height="16"

@@ -253,6 +253,13 @@ void LLPanelPlaceInfo::processParcelInfo(const LLParcelData& parcel_data)
 	{
 		mParcelName->setText(getString("not_available"));
 	}
+
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	if (!mParcelDetailLoadedSignal.empty())
+	{
+		mParcelDetailLoadedSignal(parcel_data);
+	}
+	// </FS:Ansariel>
 }
 
 // virtual
@@ -313,3 +320,12 @@ void LLPanelPlaceInfo::onAvatarNameCache(const LLUUID& agent_id,
 {
 	text->setText( av_name.getCompleteName() );
 }
+
+
+// <FS:Ansariel> FIRE-817: Separate place details floater
+void LLPanelPlaceInfo::setEnableHeader(BOOL enable)
+{
+	mTitle->setVisible(enable);
+	getChildView("back_btn")->setVisible(enable);
+}
+// </FS:Ansariel>

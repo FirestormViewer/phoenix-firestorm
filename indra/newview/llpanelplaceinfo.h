@@ -96,6 +96,19 @@ public:
 	// by global_pos.
 	void createPick(const LLVector3d& pos_global, LLPanelPickEdit* pick_panel);
 
+// <FS:Ansariel> FIRE-817: Separate place details floater
+	void setEnableHeader(BOOL enable);
+
+	typedef boost::signals2::signal<void (const LLParcelData& parcel_data)> parcel_detail_loaded_t;
+	boost::signals2::connection setParcelDetailLoadedCallback( const parcel_detail_loaded_t::slot_type& cb )
+	{
+		return mParcelDetailLoadedSignal.connect(cb);
+	}
+
+private:
+	parcel_detail_loaded_t mParcelDetailLoadedSignal;
+// </FS:Ansariel>
+
 protected:
 	static void onNameCache(LLTextBox* text, const std::string& full_name);
 	static void onAvatarNameCache(const LLUUID& agent_id,

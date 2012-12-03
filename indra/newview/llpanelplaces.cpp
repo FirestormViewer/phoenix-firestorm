@@ -118,7 +118,18 @@ public:
 				LLSD key;
 				key["type"] = "remote_place";
 				key["id"] = parcel_id;
-				LLFloaterSidePanelContainer::showPanel("places", key);
+				
+				// <FS:Ansariel> FIRE-817: Separate place details floater
+				//LLFloaterSidePanelContainer::showPanel("places", key);
+				if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+				{
+					LLFloaterReg::showInstance("fs_placedetails", key);
+				}
+				else
+				{
+					LLFloaterSidePanelContainer::showPanel("places", key);
+				}
+				// </FS:Ansariel>
 				return true;
 			}
 		}

@@ -112,8 +112,10 @@ set(viewer_SOURCE_FILES
     fscommon.cpp
     fscontactsfloater.cpp
     fsdata.cpp
+    fsfloaterplacedetails.cpp
     fsfloaterprofile.cpp
     fsfloatersearchlegacy.cpp
+    fsfloaterteleporthistory.cpp
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
@@ -761,8 +763,10 @@ set(viewer_HEADER_FILES
     fscommon.h
     fscontactsfloater.h
     fsdata.h
+    fsfloaterplacedetails.h
     fsfloaterprofile.h
     fsfloatersearchlegacy.h
+    fsfloaterteleporthistory.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fsgrouptitles.h

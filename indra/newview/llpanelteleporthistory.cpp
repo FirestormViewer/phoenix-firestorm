@@ -46,6 +46,8 @@
 #include "lllandmarkactions.h"
 #include "llclipboard.h"
 
+#include "llviewercontrol.h"
+
 // Maximum number of items that can be added to a list in one pass.
 // Used to limit time spent for items list update per frame.
 static const U32 ADD_LIMIT = 50;
@@ -221,7 +223,17 @@ void LLTeleportHistoryFlatItem::showPlaceInfoPanel(S32 index)
 	params["id"] = index;
 	params["type"] = "teleport_history";
 
-	LLFloaterSidePanelContainer::showPanel("places", params);
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	//LLFloaterSidePanelContainer::showPanel("places", params);
+	if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+	{
+		LLFloaterReg::showInstance("fs_placedetails", params);
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("places", params);
+	}
+	// </FS:Ansariel>
 }
 
 void LLTeleportHistoryFlatItem::onProfileBtnClick()

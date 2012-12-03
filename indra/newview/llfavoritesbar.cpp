@@ -1157,7 +1157,17 @@ void LLFavoritesBarCtrl::doToSelected(const LLSD& userdata)
 		key["type"] = "landmark";
 		key["id"] = mSelectedItemID;
 
-		LLFloaterSidePanelContainer::showPanel("places", key);
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 	else if (action == "copy_slurl")
 	{

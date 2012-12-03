@@ -184,6 +184,8 @@
 // <FS:CR> FIRE-6310: Include Legacy Search
 #include "fsfloatersearchlegacy.h"
 // </FS:CR> FIRE-6310
+#include "fsfloaterteleporthistory.h"
+#include "fsfloaterplacedetails.h"
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
@@ -438,6 +440,11 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
 	// <FS:CR> FIRE-6310: Include Legacy Search
 	LLFloaterReg::add("search_legacy", "floater_fs_search_legacy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearchLegacy>);
+
+	// <FS:Ansariel> FIRE-816: Separate teleport history floater
+	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }

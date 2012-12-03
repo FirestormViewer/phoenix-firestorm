@@ -4739,7 +4739,17 @@ void LLLandmarkBridge::performAction(LLInventoryModel* model, std::string action
 			key["type"] = "landmark";
 			key["id"] = item->getUUID();
 
-			LLFloaterSidePanelContainer::showPanel("places", key);
+			// <FS:Ansariel> FIRE-817: Separate place details floater
+			//LLFloaterSidePanelContainer::showPanel("places", key);
+			if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+			{
+				LLFloaterReg::showInstance("fs_placedetails", key);
+			}
+			else
+			{
+				LLFloaterSidePanelContainer::showPanel("places", key);
+			}
+			// </FS:Ansariel>
 		}
 	}
 	else

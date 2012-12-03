@@ -42,6 +42,7 @@
 #include "llworldmapmessage.h"
 #include "llurldispatcherlistener.h"
 #include "llviewernetwork.h"
+#include "llviewercontrol.h"
 
 // library includes
 #include "llnotificationsutil.h"
@@ -299,7 +300,17 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 		key["y"] = global_pos.mdV[VY];
 		key["z"] = global_pos.mdV[VZ];
 
-		LLFloaterSidePanelContainer::showPanel("places", key);
+		// <FS:Ansariel> FIRE-817: Separate place details floater
+		//LLFloaterSidePanelContainer::showPanel("places", key);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", key);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", key);
+		}
+		// </FS:Ansariel>
 	}
 }
 

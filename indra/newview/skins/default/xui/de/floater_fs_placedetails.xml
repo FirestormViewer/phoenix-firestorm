@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Landmarke">
+	<string name="title_remote_place">
+		Ortsprofil
+	</string>
+	<string name="title_remote_place_detail">
+		Ortsprofil: [NAME]
+	</string>
+	<string name="title_landmark">
+		Landmarke
+	</string>
+	<string name="title_landmark_detail">
+		Landmarke: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Landmarke erstellen
+	</string>
+	<string name="title_teleport_history_item">
+		Teleport-Liste-Detail: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+		       <layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleportieren" name="teleport_btn" tool_tip="Zu ausgewähltem Standort teleportieren"/>
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Karte" name="map_btn" tool_tip="Den entsprechenden Standort auf der Karte anzeigen"/>
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Bearbeiten" name="edit_btn" tool_tip="Landmarken-Info bearbeiten"/>
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Schließen" name="close_btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Speichern" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Abbrechen" name="cancel_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

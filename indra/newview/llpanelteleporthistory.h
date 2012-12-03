@@ -41,6 +41,9 @@ class LLFlatListView;
 
 class LLTeleportHistoryPanel : public LLPanelPlacesTab
 {
+	// <FS:Ansariel> FIRE-816: Separate teleport history floater
+	friend class FSFloaterTeleportHistory;
+
 public:
 	// *TODO: derive from LLListContextMenu?
 	class ContextMenu
