@@ -123,6 +123,7 @@
 				</text>
 				<combo_box
 				 allow_text_entry="true"
+				 max_chars="50"
 				 height="23"
 				 layout="topleft"
 				 left_delta="58"
@@ -166,6 +167,7 @@
 				</text>
 				<combo_box
 				 allow_text_entry="true"
+				 max_chars="50"
 				 height="23"
 				 follows="top|left"
 				 layout="topleft"
