@@ -47,7 +47,8 @@
     // Note: the radar tag system is optional, opt-in, off by default. It can be enabled in viewer preferences.
 
 
-    // Teleport 
+    // Teleport
+    float   TP_TARGET_DISTANCE = 1.0;// Distance to target when move to target should stop
     integer MAX_TIME_TO_TP = 10;     // (seconds) should be set to 10 for normal use
     float   TP_TIMER_TICK = 0.05;
     vector  mttVector;               // target for llMoveToTarget() teleport
@@ -434,7 +435,7 @@ reportTag(key av, integer tagIdx)
         //debugOutput("current: " + (string)loc + " target: " + (string)targ + " tp distance: " + (string)dist);
         
         //if we are out of time or distance - stop
-        if((dist < 2.0) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
+        if((dist < TP_TARGET_DISTANCE) ||  (llGetUnixTime() - MAX_TIME_TO_TP > startTPTimer) || (mttVector == loc))
         {    
             llStopMoveToTarget();
             timerMask = timerMask ^ TIMER_TYPE_TP; // remove our timer if we finish
