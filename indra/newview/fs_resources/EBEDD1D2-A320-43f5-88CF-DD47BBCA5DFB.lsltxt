@@ -452,17 +452,12 @@ reportTag(key av, integer tagIdx)
                 llMoveToTarget(loc+llVecNorm(targ)*60, TP_TIMER_TICK);
             }
         }
-            
-        // if we get this far, set our the timer for the next tick
-        if ((timerInterval > TP_TIMER_TICK) || (timerInterval < 0.1))
+        
+        // If we're not close to target and time is not up yet, check again
+        if (timerMask & TIMER_TYPE_TP)
         {
             timerInterval = TP_TIMER_TICK;
             llSetTimerEvent(timerInterval);
-        }
-        else
-        {
-            //else no more timers. In this case, make EXTRA sure that we're not moving.
-            llStopMoveToTarget();
         }
     }
 
