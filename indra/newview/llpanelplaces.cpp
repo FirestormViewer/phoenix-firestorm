@@ -232,7 +232,9 @@ public:
 	}
 	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
 	{
-		llerrs << "Can't complete remote parcel request. Http Status: "
+		// <FS:Ansariel> Don't error out because of a HTTP error!
+		//llerrs << "Can't complete remote parcel request. Http Status: "
+		llwarns << "Can't complete remote parcel request. Http Status: "
 			   << status << ". Reason : " << reason << llendl;
 	}
 
