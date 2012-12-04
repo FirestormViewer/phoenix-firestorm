@@ -2159,7 +2159,7 @@ if (DARWIN)
     MACOSX_BUNDLE_BUNDLE_NAME "Firestorm"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "asdf"
     MACOSX_BUNDLE_BUNDLE_VERSION "asdf"
-    MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2011 The Phoenix Viewer Project, Inc."
+    MACOSX_BUNDLE_COPYRIGHT "Copyright 2010-2012 The Phoenix Firestorm Project, Inc."
     )
 
   add_custom_command(

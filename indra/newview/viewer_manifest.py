@@ -718,7 +718,7 @@ class WindowsManifest(ViewerManifest):
         self.run_command('"' + proper_windows_path(NSIS_path) + '" /V2 ' + self.dst_path_of(tempfile))
         # self.remove(self.dst_path_of(tempfile))
 
-        #AO: Try to sign installer next, if we can, using "The Phoenix Viewer Project" signing cert.
+        #AO: Try to sign installer next, if we can, using "The Phoenix Firestorm Project" signing cert.
         try:
             subprocess.check_call(["signtool.exe","sign","/n","Phoenix","/d","Firestorm","/du","http://www.phoenixviewer.com",self.args['configuration']+"\\"+substitution_strings['installer_file']],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
         except Exception, e:

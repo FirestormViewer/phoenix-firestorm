@@ -71,7 +71,7 @@ Second Life vi è offerto dai Linden:
 <!-- Firestorm Credits -->
       <panel label="Firestorm" name="fs_credits_panel">      
 			<text name="firestorm_intro" height="100" >
-Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Viewer Project, Inc., a non-profit organization.          
+Firestorm is a community development project to improve the SecondLife(tm) Viewer experience.  We package contributions from various community developers along with code from Linden Lab and ourselves to bring you a quality, feature-rich viewer experience backed up by a large volunteer support team.  Firestorm is brought to you by The Phoenix Firestorm Project, Inc., a non-profit organization.          
           
 The Firestorm Development Team:
      		 </text>

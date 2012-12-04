@@ -151,11 +151,11 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "The Phoenix Viewer Project"
+            VALUE "CompanyName", "The Phoenix Firestorm Project, Inc."
             VALUE "FileDescription", "Firestorm"
             VALUE "FileVersion", "2.1.1.0"
             VALUE "InternalName", "Second Life"
-            VALUE "LegalCopyright", "Copyright � 2001-2010, The Phoenix Viewer Project"
+            VALUE "LegalCopyright", "Copyright � 2001-2012, The Phoenix Firestorm Project, Inc."
             VALUE "OriginalFilename", "Firestorm.exe"
             VALUE "ProductName", "Second Life"
             VALUE "ProductVersion", "2.1.1.0"

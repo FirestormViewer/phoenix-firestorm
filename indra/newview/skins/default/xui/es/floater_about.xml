@@ -48,7 +48,7 @@ Los Linden son:
 		</panel>
 		<panel label="Créditos de Firestorm" name="fs_credits_panel">
 			<text name="firestorm_intro" height="110">
-				Firestorm es un proyecto de desarrollo de la comunidad para mejorar la experiencia de uso del Visor de SecondLife(tm). Compilamos contribuciones de varios desarrolladores de la comunidad junto con el código de Linden lab y el nuestro propio para brindarte un visor de calidad, enriquecido con nuevas características y respaldado por un amplio equipo de voluntarios para darte soporte. Firestorm llega a ti a través de The Phoenix Viewer Project, Inc., una organización sin ánimo de lucro.
+				Firestorm es un proyecto de desarrollo de la comunidad para mejorar la experiencia de uso del Visor de SecondLife(tm). Compilamos contribuciones de varios desarrolladores de la comunidad junto con el código de Linden lab y el nuestro propio para brindarte un visor de calidad, enriquecido con nuevas características y respaldado por un amplio equipo de voluntarios para darte soporte. Firestorm llega a ti a través de The Phoenix Firestorm Project, Inc., una organización sin ánimo de lucro.
 
 Forman el Equipo de Desarrollo de Firestorm:
 			</text>
