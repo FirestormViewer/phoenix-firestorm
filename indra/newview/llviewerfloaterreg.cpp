@@ -147,46 +147,30 @@
 // #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
-// [RLVa:KB] - Checked: 2010-03-11
-#include "rlvfloaters.h"
-// [/RLVa:KB]
 
 // ND: And for FS please put yours after this line, for easier merges too
-
-#include "fscontactsfloater.h"
+#include "ao.h"
 #include "floatermedialists.h"
 #include "fsareasearch.h"
+#include "fscontactsfloater.h"
+#include "fsfloaterblocklist.h"
+#include "fsfloaterplacedetails.h"
+#include "fsfloaterprofile.h"
+#include "fsfloatersearchlegacy.h"
+#include "fsfloaterteleporthistory.h"
+#include "fsfloaterwsassetblacklist.h"
+#include "fsgrouptitles.h"
 #include "fsmoneytracker.h"
-#include "particleeditor.h"
-#include "quickprefs.h"	// Quick Preferences panel	-WoLf
-#include "lggcontactsetsfloater.h"
-
-#include "ao.h"				// ## Zi: Animation Overrider
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
-#include "fsgrouptitles.h"
-
-//-TT - Patch : ShowGroupFloaters
-#include "llpanelgroup.h"
-//-TT
-// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
+#include "lggcontactsetsfloater.h"
 #include "llfloatersearchreplace.h"
-// [/SL:KB]
-//<FS:KC legacy profiles>
-#include "fsfloaterprofile.h"
-//</FS:KC legacy profiles>
-//<FS:WS asset blacklist>
-#include "fsfloaterwsassetblacklist.h"
-//</FS:WS>
-// NaCl - Sound explorer
+#include "llpanelgroup.h"
 #include "NACLfloaterexploresounds.h"
-// NaCl End
-// <FS:CR> FIRE-6310: Include Legacy Search
-#include "fsfloatersearchlegacy.h"
-// </FS:CR> FIRE-6310
-#include "fsfloaterteleporthistory.h"
-#include "fsfloaterplacedetails.h"
-#include "fsfloaterblocklist.h"
+#include "particleeditor.h"
+#include "quickprefs.h"
+#include "rlvfloaters.h"
+
 
 // handle secondlife:///app/openfloater/{NAME} URLs
 class LLFloaterOpenHandler : public LLCommandHandler
