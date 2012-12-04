@@ -72,16 +72,15 @@ ATI ASUS EAH65xx				.*ATI.*ASUS.*EAH65.*						2		1
 ATI ASUS EAH66xx				.*ATI.*ASUS.*EAH66.*						3		1
 ATI ASUS EAH67xx				.*ATI.*ASUS.*EAH67.*						3		1
 ATI ASUS EAH68xx				.*ATI.*ASUS.*EAH68.*						3		1
-ATI ASUS EAH69xx				.*ATI.*ASUS.*EAH69.*						3		1
-ATI ASUS EAH72xx				.*ATI.*ASUS.*EAH72.*						2		1
-ATI ASUS EAH73xx				.*ATI.*ASUS.*EAH73.*						2		1
-ATI ASUS EAH74xx				.*ATI.*ASUS.*EAH74.*						2		1
-ATI ASUS EAH75xx				.*ATI.*ASUS.*EAH75.*						3		1
-ATI ASUS EAH76xx				.*ATI.*ASUS.*EAH76.*						3		1
-ATI ASUS HD7700					.*ATI.*ASUS.*HD77.*							3		1
-ATI ASUS EAH77xx				.*ATI.*ASUS.*EAH77.*						3		1
-ATI ASUS EAH78xx				.*ATI.*ASUS.*EAH78.*						3		1
-ATI ASUS EAH79xx				.*ATI.*ASUS.*EAH79.*						3		1
+ATI ASUS EAH69xx				.*ATI.*ASUS.*EAH69.*						2		1
+ATI ASUS HD72xx					.*ATI.*ASUS.*HD72.*							2		1
+ATI ASUS HD73xx					.*ATI.*ASUS.*HD73.*							2		1
+ATI ASUS HD74xx					.*ATI.*ASUS.*HD74.*							3		1
+ATI ASUS HD75xx					.*ATI.*ASUS.*HD75.*							3		1
+ATI ASUS HD76xx					.*ATI.*ASUS.*HD76.*							3		1
+ATI ASUS HD77xx					.*ATI.*ASUS.*HD77.*							3		1
+ATI ASUS HD78xx					.*ATI.*ASUS.*HD78.*							3		1
+ATI ASUS HD79xx					.*ATI.*ASUS.*HD79.*							3		1
 ATI ASUS Radeon X1xxx			.*ATI.*ASUS.*X1.*							3		1
 ATI Radeon X7xx					.*ATI.*ASUS.*X7.*							1		1
 ATI Radeon X19xx				.*ATI.*(Radeon|Diamond) X19.* ?.*			3		1
