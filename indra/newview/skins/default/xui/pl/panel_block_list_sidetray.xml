@@ -2,15 +2,15 @@
 <panel name="block_list_panel">
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
-	<text name="title_text">
-		Lista blokad
-	</text>
+			<text name="title_text">
+				Lista blokad
+			</text>
 		</layout_panel>
 		<layout_panel name="block_list_blocklaypanels">
-	<scroll_list name="blocked" tool_tip="Lista zablokowanych osób"/>
-	<button label="Zablokuj Rezydenta..." label_selected="Zablokuj Rezydenta..." name="Block resident..." tool_tip="Wybierz Rezydenta do zablokowania"/>
-	<button label="Zablokuj obiekt według nazwy..." label_selected="Zablokuj obiekt według nazwy..." name="Block object by name..." tool_tip="Wybierz obiekt do zablokowania"/>
-	<button label="Odblokuj" label_selected="Odblokuj" name="Unblock" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych"/>
+			<scroll_list name="blocked" tool_tip="Lista zablokowanych osób"/>
+			<button label="Zablokuj Rezydenta..." label_selected="Zablokuj Rezydenta..." name="Block resident..." tool_tip="Wybierz Rezydenta do zablokowania"/>
+			<button label="Zablokuj obiekt według nazwy..." label_selected="Zablokuj obiekt według nazwy..." name="Block object by name..." tool_tip="Wybierz obiekt do zablokowania"/>
+			<button label="Odblokuj" label_selected="Odblokuj" name="Unblock" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

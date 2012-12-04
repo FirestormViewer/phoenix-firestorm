@@ -3,7 +3,7 @@
 	<panel name="animation_overrider_panel">
 		<combo_box name="ao_set_selection_combo" tool_tip="Wybierz zestaw animacji do edycji." />
 		<button name="ao_activate" tool_tip="Aktywuj ten zestaw animacji." />
-		<check_box name="ao_default" label="Domyślny" tool_tip="Ustaw ten zestaw animacji jako domyślny." />
+		<check_box name="ao_default" label="Domyślny" tool_tip="Ustaw ten zestaw animacji jako domyślnie uruchamiany po zalogowaniu się." />
 		<button name="ao_add" tool_tip="Utwórz nowy zestaw animacji." />
 		<button name="ao_remove" tool_tip="Usuń ten zestaw animacji." />
 		<check_box name="ao_sit_override" label="Siadanie" tool_tip="Zaznacz tą opcję, jeśli Animator ma też podmieniać animacje siedzenia." />

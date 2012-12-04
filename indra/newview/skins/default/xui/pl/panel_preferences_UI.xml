@@ -32,6 +32,7 @@
         <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
         <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Używaj osobnego okna dla historii teleportacji" tool_tip="Gdy włączysz tą opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
         <check_box name="FSUseStandalonePlaceDetailsFloater" label="Używaj osobnych okien dla landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tą opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />
+        <check_box name="FSUseStandaloneBlocklistFloater" label="Używaj osobnego okna dla listy wyciszonych / zablokowanych" tool_tip="Gdy włączysz tą opcję, to lista wyciszonych / zablokowanych rezydentów i obiektów będzie otwierana w osobnym oknie." />
         <text name="ScriptDialogsPerObjectLabel">
             Komunikatów skr. na obiekt:
         </text>
