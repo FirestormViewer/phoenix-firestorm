@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
+ background_visible="false"
  follows="left|top|right|bottom"
  height="305"
  layout="topleft"
