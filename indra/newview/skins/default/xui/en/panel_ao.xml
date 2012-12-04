@@ -54,7 +54,7 @@
 		<check_box
 			name="ao_default"
 			label="Default"
-			tool_tip="Make this animation set the default."
+			tool_tip="Make this animation set the default set that plays when you log in."
 			left="0"
 			top_pad="8"
 			width="20"
