@@ -618,7 +618,14 @@ void LLAvatarNameCache::buildLegacyName(const std::string& full_name,
 
 	// <FS:Ansariel> Also fill username for in case of disabled display names.
 	//               We need this for instance for FIRE-4297
-	av_name->mUsername = full_name;
+	if (LLCacheName::sDontTrimLegacyNames && av_name->mLegacyLastName == "Resident")
+	{
+		av_name->mUsername = av_name->mLegacyFirstName;
+	}
+	else
+	{
+		av_name->mUsername = full_name;
+	}
 	LLStringUtil::toLower(av_name->mUsername);
 	LLStringUtil::replaceChar(av_name->mUsername, ' ', '.');
 	// </FS:Ansariel>
