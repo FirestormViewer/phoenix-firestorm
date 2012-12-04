@@ -1249,9 +1249,14 @@ void LLPanelLogin::updateSavedLoginsCombo()
 
 				bool add_grid = false;
 				/// <FS:CR> We only want to append a grid label when the user has enabled logging into other grids,
-				/// that way users who only want Second Life Agni can remain blissfully ignorant.
-				/// We will also not show them any saved credential that isn't Agni because they don't want them.
+				/// or they are using the OpenSim build. That way users who only want Second Life Agni can remain
+				/// blissfully ignorant. We will also not show them any saved credential that isn't Agni because
+				/// they don't want them.
+#ifdef HAS_OPENSIM_SUPPORT
+				bool sShowServer = true;
+#else
 				static LLCachedControl<bool> sShowServer(gSavedSettings, "ForceShowGrid", false);
+#endif // HAS_OPENSIM_SUPPORT
 				if (SECOND_LIFE_MAIN_LABEL == grid_label)
 				{
 					if (sShowServer)

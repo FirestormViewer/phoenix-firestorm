@@ -64,7 +64,7 @@ extern const char* DEFAULT_LOGIN_PAGE;
 #define GRID_MAXGROUPS "MaxGroups"
 #define GRID_PLATFORM "platform"
 #define GRID_MESSAGE "message"
-// <FS:CR> Aurora Sim
+// </FS:CR> Aurora Sim
 // </AW opensim>
 #define GRID_IS_SYSTEM_GRID_VALUE "system_grid"
 #define GRID_IS_FAVORITE_VALUE "favorite"
