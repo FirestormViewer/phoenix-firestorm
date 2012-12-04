@@ -6,7 +6,7 @@
 	<panel name="animation_overrider_panel">
 		<combo_box name="ao_set_selection_combo" tool_tip="Animationsset zum Editieren auswählen."/>
 		<button	name="ao_activate" tool_tip="Aktiviere aktuelles Animationsset."/>
-		<check_box name="ao_default" label="Standard" tool_tip="Dieses Animationsset als Standard definieren."/>
+		<check_box name="ao_default" label="Standard" tool_tip="Dieses Animationsset als Standard definieren, das nach dem Einloggen verwendet wird."/>
 		<button	name="ao_add" tool_tip="Neues Animationsset erstellen."/>
 		<button	name="ao_remove" tool_tip="Dieses Animationsset löschen."/>
 		<check_box name="ao_sit_override" label="Sitzen überst." tool_tip="Aktiviert die Übersteuerung von Sitzanimationen."/>
