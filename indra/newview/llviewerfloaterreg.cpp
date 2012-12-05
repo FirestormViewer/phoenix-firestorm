@@ -96,9 +96,6 @@
 #include "llfloaterreporter.h"
 #include "llfloaterscriptdebug.h"
 #include "llfloaterscriptlimits.h"
-// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0)
-#include "llfloaterscriptrecover.h"
-// [/SL:KB]
 #include "llfloatersearch.h"
 #include "llfloatersellland.h"
 #include "llfloatersettingsdebug.h"
@@ -133,7 +130,6 @@
 // <//FS:Zi>
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
-#include "fspanelclassified.h"
 #include "llpreviewanim.h"
 #include "llpreviewgesture.h"
 #include "llpreviewnotecard.h"
@@ -161,9 +157,11 @@
 #include "fsfloaterwsassetblacklist.h"
 #include "fsgrouptitles.h"
 #include "fsmoneytracker.h"
+#include "fspanelclassified.h"
 #include "lggbeamcolormapfloater.h"
 #include "lggbeammapfloater.h"
 #include "lggcontactsetsfloater.h"
+#include "llfloaterscriptrecover.h"
 #include "llfloatersearchreplace.h"
 #include "llpanelgroup.h"
 #include "NACLfloaterexploresounds.h"
@@ -199,7 +197,6 @@ LLFloaterOpenHandler gFloaterOpenHandler;
 void LLViewerFloaterReg::registerFloaters()
 {
 	// *NOTE: Please keep these alphabetized for easier merges
-	// ND: And for FS please put yours after this line, for easier merges too
 
 	LLFloaterAboutUtil::registerFloater();
 	LLFloaterReg::add("fast_timers", "floater_fast_timers.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFastTimerView>);
@@ -311,7 +308,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("preview_texture", "floater_preview_texture.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPreviewTexture>, "preview");
 	LLFloaterReg::add("properties", "floater_inventory_item_properties.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterProperties>);
 	LLFloaterReg::add("publish_classified", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLPublishClassifiedFloater>);
-	LLFloaterReg::add("publish_classified_fs", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSPublishClassifiedFloater>);
 
 	LLFloaterReg::add("telehubs", "floater_telehub.xml",&LLFloaterReg::build<LLFloaterTelehub>);
 	LLFloaterReg::add("test_inspectors", "floater_test_inspectors.xml", &LLFloaterReg::build<LLFloaterTestInspectors>);
@@ -326,18 +322,11 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("reset_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterResetQueue>);
 	LLFloaterReg::add("region_debug_console", "floater_region_debug_console.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterRegionDebugConsole>);
 	LLFloaterReg::add("region_info", "floater_region_info.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterRegionInfo>);
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
-	LLFloaterReg::add("rlv_behaviours", "floater_rlv_behaviours.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterBehaviours>);
-	LLFloaterReg::add("rlv_locks", "floater_rlv_locks.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterLocks>);
-// [/RLVa:KB]
 	
 	LLFloaterReg::add("script_debug", "floater_script_debug.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptDebug>);
 	LLFloaterReg::add("script_debug_output", "floater_script_debug_panel.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptDebugOutput>);
 	LLFloaterReg::add("script_floater", "floater_script.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLScriptFloater>);
 	LLFloaterReg::add("script_limits", "floater_script_limits.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptLimits>);
-// [SL:KB] - Patch: Build-ScriptRecover | Checked: 2011-11-24 (Catznip-3.2.0) | Added: Catznip-3.2.0
-	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
-// [/SL:KB]
 	LLFloaterReg::add("sell_land", "floater_sell_land.xml", &LLFloaterSellLand::buildFloater);
 	LLFloaterReg::add("settings_debug", "floater_settings_debug.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSettingsDebug>);
 	LLFloaterReg::add("sound_devices", "floater_sound_devices.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundDevices>);
@@ -369,70 +358,36 @@ void LLViewerFloaterReg::registerFloaters()
 
 	// *NOTE: Please keep these alphabetized for easier merges
 	// ND: And for FS please put yours after this line, for easier merges too
-
-	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
-	// AO: Firestorm Money (tip) tracker 
-	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
-	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);  // Quick Preferences panel -WoLf
-	
-	// NaC - Sound explorer
-	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
-	// NaCl End
-
-	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);	// ## Zi: Animation Overrider
+	LLFloaterReg::add("animation_overrider", "floater_ao.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterAO>);
 	LLFloaterReg::add("area_search", "floater_fs_area_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSAreaSearch>);
 	LLFloaterReg::add("contactsets", "floater_contactsets.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloater>);
 	LLFloaterReg::add("contactsetsettings", "floater_contactsets_settings.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggContactSetsFloaterSettings>);
-
-	// WS: Firestorm Asset Blacklist
-	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
-
+	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
+	LLFloaterReg::add("floater_group_view", "floater_group_view.xml",&LLFloaterReg::build<LLFloaterGroupView>);
+	LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
+	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
+	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
+	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
+	LLFloaterReg::add("group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSGroupTitles>);
+	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
 	LLFloaterReg::add("lgg_beamshape", "floater_beamshape.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamMapFloater>);
 	LLFloaterReg::add("media_lists", "floater_media_lists.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterMediaLists>);	
+	LLFloaterReg::add("money_tracker", "floater_fs_money_tracker.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSMoneyTracker>);
 	LLFloaterReg::add("particle_editor","floater_particle_editor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<ParticleEditor>);
-// [SL:KB] - Patch: UI-FloaterSearchReplace | Checked: 2010-10-26 (Catznip-2.3.0a) | Added: Catznip-2.3.0a
-	LLFloaterReg::add("search_replace", "floater_search_replace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearchReplace>);	
-// [/SL:KB]
-// [RLVa:KB] - Checked: 2010-03-11 (RLVa-1.2.0e) | Added: RLVa-1.2.0a
-	LLFloaterReg::add("rlv_behaviours", "floater_rlv_behaviours.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterBehaviours>);
-	LLFloaterReg::add("rlv_locks", "floater_rlv_locks.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterLocks>);
-// [/RLVa:KB]
-//-TT - Patch : ShowGroupFloaters
-	LLFloaterReg::add("floater_group_view", "floater_group_view.xml",&LLFloaterReg::build<LLFloaterGroupView>);
-//-TT
-
-//<FS:KC legacy profiles>
-    LLFloaterReg::add("floater_profile", "floater_profile_view.xml",&LLFloaterReg::build<FSFloaterProfile>);
-//</FS:KC legacy profiles>
-
-	// <FS:Ansariel> Secondary inventory for additional inventory button. Needs a different floater name
-	//               after the sidebar is gone or the floater toggle would toggle the main inventory window
-	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
-
-	LLFloaterReg::add("volume_controls", "floater_volume_controls.xml", &LLFloaterReg::build<LLFloater>);
-
-	// <FS:Ansariel> Group titles
-	LLFloaterReg::add("group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSGroupTitles>);
-
-	LLFloaterReg::add("delete_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterDeleteQueue>);
-
-	// <FS:Ansariel> Phototools; We currently build the floater with FloaterQuickPrefs to wire
-	//               up the WL controls events that are the same as in Quick Prefs. If there more
-	//               additions, we might consider cloning the Quick Prefs methods into a new
-	//               Phototools class.
 	LLFloaterReg::add(PHOTOTOOLS_FLOATER, "floater_phototools.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
 	LLFloaterReg::add("phototools_camera", "floater_phototools_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
-	// <FS:CR> FIRE-6310: Include Legacy Search
+	LLFloaterReg::add("publish_classified_fs", "floater_publish_classified.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSPublishClassifiedFloater>);
+	LLFloaterReg::add("quickprefs", "floater_quickprefs.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FloaterQuickPrefs>);
+	LLFloaterReg::add("rlv_behaviours", "floater_rlv_behaviours.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterBehaviours>);
+	LLFloaterReg::add("rlv_locks", "floater_rlv_locks.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<RlvFloaterLocks>);
 	LLFloaterReg::add("search_legacy", "floater_fs_search_legacy.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearchLegacy>);
-
-	// <FS:Ansariel> FIRE-816: Separate teleport history floater
-	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
-	// <FS:Ansariel> FIRE-817: Separate place details floater
-	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
-
-	// <FS:Ansariel> Optional standalone blocklist floater
-	LLFloaterReg::add("fs_blocklist", "floater_fs_blocklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterBlocklist>);
+	LLFloaterReg::add("search_replace", "floater_search_replace.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearchReplace>);	
+	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
+	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
+	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
+	LLFloaterReg::add("volume_controls", "floater_volume_controls.xml", &LLFloaterReg::build<LLFloater>);
+	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving
 }
