@@ -122,10 +122,6 @@ LLWorld::LLWorld() :
 	mDefaultWaterTexturep = LLViewerTextureManager::getLocalTexture(raw.get(), FALSE);
 	gGL.getTexUnit(0)->bind(mDefaultWaterTexturep);
 	mDefaultWaterTexturep->setAddressMode(LLTexUnit::TAM_CLAMP);
-
-// <FS:CR> Aurora Sim>
-	refreshLimits();
-// </FS:CR> Aurora Sim>
 }
 
 
@@ -664,7 +660,7 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host,
 
 			if(dir == NORTH || dir == SOUTH) adj_x += WORLD_PATCH_SIZE;
 			if(dir == EAST || dir == WEST) adj_y += WORLD_PATCH_SIZE;
-// <FS:CR> Aurora Sim
+// </FS:CR> Aurora Sim
 		}
 	}
 
