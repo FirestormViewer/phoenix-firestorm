@@ -132,14 +132,72 @@ BOOL LLFloaterTOS::postBuild()
 	editor->setVisible( FALSE );
 
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("tos_html");
-	if ( web_browser )
+// <FS:CR> FIRE-8063 - Aurora and OpenSim TOS
+	bool use_web_browser = false;
+#ifdef HAS_OPENSIM_SUPPORT
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		//Check to see if the message is a link to display
+		std::string token = "http://";
+		std::string::size_type iIndex = mMessage.rfind(token);
+		//IF it has http:// in it, we use the web browser
+		if(iIndex != std::string::npos && mMessage.length() >= 2)
+		{
+			// it exists
+			use_web_browser = true;
+		}
+	}
+	else
+#endif // HAS_OPENSIM_SUPPORT
+	{
+		use_web_browser = true;
+	}
+
+	//if ( web_browser )
+	if (web_browser && use_web_browser)
+// </FS:CR>
 	{
 		web_browser->addObserver(this);
 
-		// Don't use the start_url parameter for this browser instance -- it may finish loading before we get to add our observer.
-		// Store the URL separately and navigate here instead.
-		web_browser->navigateTo( getString( "loading_url" ) );
+// <FS:CR> FIRE-8063 - Aurora and OpenSim TOS
+		// Next line moved into logic below...
+		//web_browser->navigateTo( getString( "loading_url" ) );
+#ifdef HAS_OPENSIM_SUPPORT
+		if (LLGridManager::getInstance()->isInOpenSim())
+		{
+			mRealNavigateBegun = true;
+			tos_agreement->setEnabled(true);
+			web_browser->navigateTo(mMessage);
+		}
+		else
+#endif // HAS_OPENSIM_SUPPORT
+		{
+			// Don't use the start_url parameter for this browser instance -- it may finish loading before we get to add our observer.
+			// Store the URL separately and navigate here instead.
+			web_browser->navigateTo( getString( "loading_url" ) );
+		}
 	}
+#ifdef HAS_OPENSIM_SUPPORT
+	else if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		std::string showTos = "data:text/html,%3Chtml%3E%3Chead%3E"
+							  "%3Cstyle%3E%0A"
+							  "body%20%7B%0A"
+							  "background-color%3Argb%2831%2C%2031%2C%2031%29%3B%0A"
+							  "margin%3A5px%2020px%205px%2030px%3B%0A"
+							  "padding%3A0%3B%0A%7D%0A"
+							  "pre%20%7B%0Afont-size%3A12px%3B%0A"
+							  "font-family%3A%22Deja%20Vu%20Sans%22%2C%20Helvetica%2C%20Arial%2C%20sans-serif%3B%0A"
+							  "color%3A%23fff%3B%0A%7D%0A"
+							  "%3C/style%3E"
+			                  "%3C/head%3E%3Cbody%3E%3Cpre%3E" + mMessage + "%3C/pre%3E%3C/body%3E%3C/html%3E";
+
+		mRealNavigateBegun = true;
+		tos_agreement->setEnabled(true);
+		web_browser->navigateTo(showTos);
+	}
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 
 	return TRUE;
 }
