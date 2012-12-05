@@ -741,3 +741,19 @@ void LLMuteList::notifyObservers()
 		it = mObservers.upper_bound(observer);
 	}
 }
+
+// <FS:Ansariel> Agent profile button
+LLMute LLMuteList::getMute(const LLUUID& id)
+{
+	LLMute mute(id);
+	mute_set_t::iterator found = mMutes.find(mute);
+	if (found != mMutes.end())
+	{
+		return (*found);
+	}
+	else
+	{
+		return LLMute(LLUUID::null);
+	}
+}
+// </FS:Ansariel>

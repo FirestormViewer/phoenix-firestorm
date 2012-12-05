@@ -72,6 +72,10 @@ private:
 	void onRemoveBtnClick();
 	void onPickBtnClick();
 	void onBlockByNameClick();
+	// <FS:Ansariel> Profile button
+	void onProfileBtnClick();
+	void onSelectionChanged();
+	// </FS:Ansariel>
 
 	void callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names);
 	static void callbackBlockByName(const std::string& text);

@@ -2,7 +2,7 @@
 <panel
  background_visible="false"
  follows="left|top|right|bottom"
- height="305"
+ height="332"
  layout="topleft"
  name="block_list_panel"
  help_topic="blocked_list"
@@ -16,7 +16,7 @@
 		top="0"
 		left="0"
 		width="295"
-		height="300"
+		height="327"
 		border_size="0"
 		orientation="vertical">
 	<layout_panel
@@ -59,7 +59,7 @@
 	<layout_panel
 		name="block_list_blocklaypanels"
 		auto_resize="true"
-		height="275"
+		height="302"
 		width="295"
 		layout="topleft"
 		follows="all">
@@ -118,6 +118,20 @@
      width="190" >
         <button.commit_callback
          function="Block.ClickRemove" />
+    </button>
+    <button
+     enabled="false"
+     follows="left|bottom"
+     height="23"
+     label="Profile"
+     layout="topleft"
+     left_delta="0"
+     name="Profile"
+     tool_tip="Opens the profile of a muted resident"
+     top_pad="4"
+     width="190" >
+        <button.commit_callback
+         function="Block.ClickProfile" />
     </button>
 
 	</layout_panel>

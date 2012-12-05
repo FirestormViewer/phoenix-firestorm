@@ -11,6 +11,7 @@
 	<button label="Einwohner ignorieren" label_selected="Einwohner ignorieren..." name="Block resident..." tool_tip="Wählen Sie einen Einwohner, um ihn zu ignorieren"/>
 	<button label="Objekt nach Name ignorieren" label_selected="Objekt nach Name ignorieren..." name="Block object by name..." tool_tip="Ein Objekt auswählen, um nach Namen zu ignorieren."/>
 	<button label="Freischalten" label_selected="Freischalten" name="Unblock" tool_tip="Einwohner oder Objekt von der Liste der ignorierten Einwohner oder Objekte entfernen"/>
+	<button label="Profil" label_selected="Profil" name="Profile" tool_tip="Öffnet das Profil eines ignorierten Einwohners."/>
 		</layout_panel>
 	</layout_stack>
 </panel>

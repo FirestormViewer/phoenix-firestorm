@@ -40,6 +40,7 @@
 #include "llfloatersidepanelcontainer.h"
 #include "llsidetraypanelcontainer.h"
 
+#include "llavataractions.h"
 #include "llviewercontrol.h"
 
 static LLRegisterPanelClassWrapper<LLPanelBlockedList> t_panel_blocked_list("panel_block_list_sidetray");
@@ -59,6 +60,8 @@ LLPanelBlockedList::LLPanelBlockedList()
 	mCommitCallbackRegistrar.add("Block.ClickPick",			boost::bind(&LLPanelBlockedList::onPickBtnClick, this));
 	mCommitCallbackRegistrar.add("Block.ClickBlockByName",	boost::bind(&LLPanelBlockedList::onBlockByNameClick, this));
 	mCommitCallbackRegistrar.add("Block.ClickRemove",		boost::bind(&LLPanelBlockedList::onRemoveBtnClick, this));
+	// <FS:Ansariel> Profile button
+	mCommitCallbackRegistrar.add("Block.ClickProfile",		boost::bind(&LLPanelBlockedList::onProfileBtnClick, this));
 }
 
 LLPanelBlockedList::~LLPanelBlockedList()
@@ -70,6 +73,8 @@ BOOL LLPanelBlockedList::postBuild()
 {
 	mBlockedList = getChild<LLScrollListCtrl>("blocked");
 	mBlockedList->setCommitOnSelectionChange(TRUE);
+	// <FS:Ansariel> Profile button
+	mBlockedList->setCommitCallback(boost::bind(&LLPanelBlockedList::onSelectionChanged, this));
 
 	// <FS:Zi> Make sure user can go back blocked user list if it's in a skin without
 	//         sidebar <Back button
@@ -237,6 +242,19 @@ void LLPanelBlockedList::onBlockByNameClick()
 	}
 	// </FS:Ansariel>
 }
+
+// <FS:Ansariel> Profile button
+void LLPanelBlockedList::onSelectionChanged()
+{
+	LLMute mute = LLMuteList::getInstance()->getMute(mBlockedList->getStringUUIDSelectedItem());
+	getChildView("Profile")->setEnabled(mute.mID.notNull() && mute.mType == LLMute::AGENT);
+}
+
+void LLPanelBlockedList::onProfileBtnClick()
+{
+	LLAvatarActions::showProfile(mBlockedList->getStringUUIDSelectedItem());
+}
+// </FS:Ansariel>
 
 void LLPanelBlockedList::callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
 {

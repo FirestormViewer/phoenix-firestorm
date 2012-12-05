@@ -117,6 +117,9 @@ public:
 	// call this method on logout to save everything.
 	void cache(const LLUUID& agent_id);
 
+	// <FS:Ansariel> Agent profile button
+	LLMute getMute(const LLUUID& id);
+
 private:
 	BOOL loadFromFile(const std::string& filename);
 	BOOL saveToFile(const std::string& filename);

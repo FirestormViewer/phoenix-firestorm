@@ -3,7 +3,7 @@
   positioning="cascading"
   can_close="true"
   can_resize="true"
-  height="305"
+  height="332"
   help_topic="fs_blocklist"
   min_height="250"
   min_width="210"
@@ -23,6 +23,6 @@
         font="SansSerifBold"
         top="0"
         left="0"
-        height="305"
+        height="332"
         width="310"/>
 </floater>
