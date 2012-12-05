@@ -100,7 +100,8 @@ BOOL LLPanelBlockedList::postBuild()
 
 void LLPanelBlockedList::draw()
 {
-	updateButtons();
+	// <FS:Ansariel> Only update if selection changes
+	//updateButtons();
 	LLPanel::draw();
 }
 
@@ -192,6 +193,8 @@ void LLPanelBlockedList::onRemoveBtnClick()
 			// else select the item after the last item previously selected
 			mBlockedList->selectNthItem(last_selected);
 		}
+		// <FS:Ansariel> Only update if selection changes
+		onSelectionChanged();
 	}
 }
 
@@ -246,6 +249,7 @@ void LLPanelBlockedList::onBlockByNameClick()
 // <FS:Ansariel> Profile button
 void LLPanelBlockedList::onSelectionChanged()
 {
+	updateButtons();
 	LLMute mute = LLMuteList::getInstance()->getMute(mBlockedList->getStringUUIDSelectedItem());
 	getChildView("Profile")->setEnabled(mute.mID.notNull() && mute.mType == LLMute::AGENT);
 }
