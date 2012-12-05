@@ -11,6 +11,7 @@
 			<button label="Zablokuj Rezydenta..." label_selected="Zablokuj Rezydenta..." name="Block resident..." tool_tip="Wybierz Rezydenta do zablokowania"/>
 			<button label="Zablokuj obiekt według nazwy..." label_selected="Zablokuj obiekt według nazwy..." name="Block object by name..." tool_tip="Wybierz obiekt do zablokowania"/>
 			<button label="Odblokuj" label_selected="Odblokuj" name="Unblock" tool_tip="Usuń Rezydenta lub obiekt z listy zablokowanych"/>
+			<button label="Profil" label_selected="Profil" name="Profile" tool_tip="Otwiera profil zablokowanego Rezydenta"/>
 		</layout_panel>
 	</layout_stack>
 </panel>
