@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="mute by name" title="IGNORER L&apos;OBJET PAR NOM">
+<floater name="block by name" title="IGNORER L&apos;OBJET PAR NOM">
 	<text name="message">
 		Ignorer un objet :
 	</text>

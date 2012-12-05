@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="mute by name" title="BLOKÉR OBJEKT VIA NAVN">
+<floater name="block by name" title="BLOKÉR OBJEKT VIA NAVN">
 	<text name="message">
 		Blokér et objekt:
 	</text>
