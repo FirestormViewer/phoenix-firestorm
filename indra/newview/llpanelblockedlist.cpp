@@ -194,16 +194,48 @@ void LLPanelBlockedList::onPickBtnClick()
 {
 	const BOOL allow_multiple = FALSE;
 	const BOOL close_on_select = TRUE;
-	/*LLFloaterAvatarPicker* picker = */LLFloaterAvatarPicker::show(boost::bind(&LLPanelBlockedList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
+	// <FS:Ansariel> Standalone blocklist floater
+	/*LLFloaterAvatarPicker* picker = *///LLFloaterAvatarPicker::show(boost::bind(&LLPanelBlockedList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
 
 	// *TODO: mantipov: should LLFloaterAvatarPicker be closed when panel is closed?
 	// old Floater dependency is not enable in panel
 	// addDependentFloater(picker);
+
+	// <FS:Ansariel> Standalone blocklist floater
+	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+	{
+		LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&LLPanelBlockedList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
+		LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
+		if (parent)
+		{
+			parent->addDependentFloater(picker);
+		}
+	}
+	else
+	{
+		LLFloaterAvatarPicker::show(boost::bind(&LLPanelBlockedList::callbackBlockPicked, this, _1, _2), allow_multiple, close_on_select);
+	}
+	// </FS:Ansariel>
 }
 
 void LLPanelBlockedList::onBlockByNameClick()
 {
-	LLFloaterGetBlockedObjectName::show(&LLPanelBlockedList::callbackBlockByName);
+	// <FS:Ansariel> Standalone blocklist floater
+	//LLFloaterGetBlockedObjectName::show(&LLPanelBlockedList::callbackBlockByName);
+	if (gSavedSettings.getBOOL("FSUseStandaloneBlocklistFloater"))
+	{
+		LLFloaterGetBlockedObjectName* picker = LLFloaterGetBlockedObjectName::show(&LLPanelBlockedList::callbackBlockByName);
+		LLFloater* parent = dynamic_cast<LLFloater*>(getParent());
+		if (parent)
+		{
+			parent->addDependentFloater(picker);
+		}
+	}
+	else
+	{
+		LLFloaterGetBlockedObjectName::show(&LLPanelBlockedList::callbackBlockByName);
+	}
+	// </FS:Ansariel>
 }
 
 void LLPanelBlockedList::callbackBlockPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
