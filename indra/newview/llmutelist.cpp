@@ -372,6 +372,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 		
 		// Must be after erase.
 		setLoaded();  // why is this here? -MG
+
+		// <FS:Ansariel> Return correct return value
+		found = TRUE;
 	}
 	else
 	{
@@ -385,6 +388,9 @@ BOOL LLMuteList::remove(const LLMute& mute, U32 flags)
 			mLegacyMutes.erase(legacy_it);
 			// Must be after erase.
 			setLoaded(); // why is this here? -MG
+
+			// <FS:Ansariel> Return correct return value
+			found = TRUE;
 		}
 	}
 	
