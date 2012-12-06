@@ -26,7 +26,6 @@
 #include "fsfloatergroup.h"
 
 #include "llfloaterreg.h"
-#include "llviewercontrol.h"
 
 FSFloaterGroup::FSFloaterGroup(const LLSD& seed)
 	: LLFloater(seed),
