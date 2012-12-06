@@ -40,9 +40,7 @@
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
-//-TT  ShowGroupFloaters
-#include "llpanelgroup.h"
-//-TT
+
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 #include "llslurl.h"
 #include "rlvhandler.h"
@@ -54,6 +52,11 @@
 // [/RLVa:KB]
 
 #include "exogroupmutelist.h"
+
+// <FS:Ansariel> Standalone group floater
+#include "fsfloatergroup.h"
+#include "llpanelgroup.h"
+// </FS:Ansariel>
 
 //
 // Globals
@@ -294,22 +297,21 @@ void LLGroupActions::show(const LLUUID& group_id)
 	if (group_id.isNull())
 		return;
 
-//-TT - Patch : ShowGroupFloaters
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
-	{
-//-TT
-		LLSD params;
-		params["group_id"] = group_id;
-		params["open_tab_name"] = "panel_group_info_sidetray";
+	LLSD params;
+	params["group_id"] = group_id;
+	params["open_tab_name"] = "panel_group_info_sidetray";
 
-		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-//-TT - Patch : ShowGroupFloaters
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
+	{
+		FSFloaterGroup::openGroupFloater(group_id);
 	}
 	else
 	{
-		LLFloaterReg::showInstance("floater_group_view", LLSD().with("group_id", group_id));
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
 	}
-//-TT
+	// </FS:Ansariel>
 }
 
 // static
@@ -322,46 +324,82 @@ void LLGroupActions::show(const LLUUID& group_id, const std::string& tab_name)
 	params["group_id"] = group_id;
 	params["open_tab_name"] = tab_name;
 
-	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
+	{
+		FSFloaterGroup::openGroupFloater(params);
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	}
+	// </FS:Ansariel>
 }
 
-void LLGroupActions::refresh_notices()
+// <FS:Ansariel> Standalone group floaters
+//void LLGroupActions::refresh_notices()
+void LLGroupActions::refresh_notices(const LLUUID& group_id /*= LLUUID::null*/)
 {
-	if(!isGroupUIVisible())
-		return;
+	// <FS:Ansariel> Standalone group floaters
+	//if(!isGroupUIVisible())
+	//	return;
+	// </FS:Ansariel>
 
 	LLSD params;
 	params["group_id"] = LLUUID::null;
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh_notices";
 
-//-TT - Patch : ShowGroupFloaters
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-//-TT
-		// AO: We don't change modals on people unless they manually request this
-//	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-//-TT - Patch : ShowGroupFloaters
+		if (FSFloaterGroup::isFloaterVisible(group_id))
+		{
+			FSFloaterGroup::openGroupFloater(LLSD().with("group_id", group_id).with("open_tab_name", "panel_group_info_sidetray").with("action", "refresh_notices"));
+		}
 	}
 	else
 	{
-		LLFloaterReg::showInstance("floater_group_view", params); //LLSD().with("group_id", LLUUID::null));
+		if (isGroupUIVisible())
+		{
+			LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		}
 	}
-//-TT
+	// </FS:Ansariel>
 }
 
 //static 
 void LLGroupActions::refresh(const LLUUID& group_id)
 {
-	if(!isGroupUIVisible())
-		return;
+	// <FS:Ansariel> Standalone group floaters
+	//if(!isGroupUIVisible())
+	//	return;
+	// </FS:Ansariel>
 
 	LLSD params;
 	params["group_id"] = group_id;
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "refresh";
 
-	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
+	{
+		if (FSFloaterGroup::isFloaterVisible(group_id))
+		{
+			FSFloaterGroup::openGroupFloater(params);
+		}
+	}
+	else
+	{
+		if (isGroupUIVisible())
+		{
+			LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		}
+	}
+	// </FS:Ansariel>
 }
 
 //static 
@@ -372,32 +410,45 @@ void LLGroupActions::createGroup()
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "create";
 
-	LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
+	{
+		FSFloaterGroup::openGroupFloater(params);
+	}
+	else
+	{
+		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	}
+	// </FS:Ansariel>
 }
 //static
 void LLGroupActions::closeGroup(const LLUUID& group_id)
 {
-	if(!isGroupUIVisible())
-		return;
+	// <FS:Ansariel> Standalone group floaters
+	//if(!isGroupUIVisible())
+	//	return;
+	// </FS:Ansariel>
 
 	LLSD params;
 	params["group_id"] = group_id;
 	params["open_tab_name"] = "panel_group_info_sidetray";
 	params["action"] = "close";
 
-//-TT - Patch : ShowGroupFloaters
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	// <FS:Ansariel> Standalone group floaters
+	//LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-//-TT
-		LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
-//-TT - Patch : ShowGroupFloaters
+		FSFloaterGroup::closeGroupFloater(group_id);
 	}
 	else
 	{
-		LLFloaterReg::showInstance("floater_group_view", params);  //LLSD().with("group_id", group_id));
+		if (isGroupUIVisible())
+		{
+			LLFloaterSidePanelContainer::showPanel("people", "panel_group_info_sidetray", params);
+		}
 	}
-//-TT}
+	// </FS:Ansariel>
 }
 
 // static
@@ -544,12 +595,12 @@ bool LLGroupActions::onLeaveGroup(const LLSD& notification, const LLSD& response
 	LLUUID group_id = notification["payload"]["group_id"].asUUID();
 	if(option == 0)
 	{
-//-TT - Patch : ShowGroupFloaters
-		if (gSavedSettings.getBOOL("ShowGroupFloaters")) 
+		// <FS:Ansariel> Standalone group floaters
+		if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 		{
-			LLFloaterReg::destroyInstance("floater_group_view", LLSD().with("group_id", group_id));
+			FSFloaterGroup::closeGroupFloater(group_id);
 		}
-//-TT}
+		// </FS:Ansariel>
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_LeaveGroupRequest);
 		msg->nextBlockFast(_PREHASH_AgentData);

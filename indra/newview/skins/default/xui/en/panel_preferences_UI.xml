@@ -253,6 +253,17 @@
 
       <check_box
        top_pad="2"
+       control_name="FSUseStandaloneGroupFloater"
+       follows="left|top"
+       height="16"
+       name="FSUseStandaloneGroupFloater"
+       label="Use stand-alone windows for group profiles"
+       left="5"
+       width="270"
+       tool_tip="If enabled, group profiles will open in separate windows."/>
+
+      <check_box
+       top_pad="2"
        control_name="FSUseStandaloneTeleportHistoryFloater"
        follows="left|top"
        height="16"
@@ -287,8 +298,8 @@
       <text
        type="string"
        left="5"
-       top_pad="8"
-       width="170"
+       top_pad="10"
+       width="140"
        follows="left|top"
        height="16"
        layout="topleft"
@@ -299,8 +310,8 @@
        control_name="ScriptDialogPerObject"
        height="23"
        layout="topleft"
-       left="17"
-       top_pad ="5"
+       left_pad="10"
+       top_delta="-5"
        name="ScriptDialogPerObjectDropdown"
        width="180">
         <combo_box.item
@@ -323,7 +334,7 @@
          initial_value="true"
          label="Script Dialogs in Top Right"
          layout="topleft"
-         left_delta="-10"
+         left="5"
          name="ShowScriptDialogsTopRight"
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
          top_pad="8"
@@ -355,7 +366,7 @@
         <check_box
          control_name="FSGlobalButtonFlashOverride"
          type="string"
-         left="7"
+         left="5"
          top_pad="10"
          follows="left|top"
          height="12"

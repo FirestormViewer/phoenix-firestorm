@@ -54,9 +54,11 @@
 #include "llaccordionctrl.h"
 
 #include "lltrans.h"
-//-TT - Patch : ShowGroupFloaters
+
+// <FS:Ansariel> Standalone group floaters
+#include "fsfloatergroup.h"
 #include "llviewercontrol.h"
-//-TT
+// </FS:Ansariel>
 
 static LLRegisterPanelClassWrapper<LLPanelGroup> t_panel_group("panel_group_info_sidetray");
 
@@ -177,20 +179,14 @@ BOOL LLPanelGroup::postBuild()
 
 	getChild<LLButton>("btn_create")->setVisible(false);
 
-//	childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
-//-TT - Patch : ShowGroupFloaters
-	LLFloater* pParentView = dynamic_cast<LLFloater*>(getParent());
-	if (!pParentView)
+	// <FS:Ansariel> Standalone group floaters
+	//childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
+	if (!gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
 	{
 		childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
 	}
-	else
-	{
-		pParentView->setTitle(getLabel());
-		childSetVisible("back", false);
-		//Aligning remaining controls here
-	}
-//-TT
+	// </FS:Ansariel>
+
 	childSetCommitCallback("btn_create",boost::bind(&LLPanelGroup::onBtnCreate,this),NULL);
 	
 	childSetCommitCallback("btn_cancel",boost::bind(&LLPanelGroup::onBtnCancel,this),NULL);
@@ -351,9 +347,25 @@ void LLPanelGroup::update(LLGroupChange gc)
 	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(mID);
 	if(gdatap)
 	{
-		std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
-		childSetValue("group_name", group_name);
-		childSetToolTip("group_name",group_name);
+		// <FS:Ansariel> Standalone group floaters
+		//std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
+		//childSetValue("group_name", group_name);
+		//childSetToolTip("group_name",group_name);
+		if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
+		{
+			FSFloaterGroup* parent = dynamic_cast<FSFloaterGroup*>(getParent());
+			if (parent)
+			{
+				parent->setGroupName(gdatap->mName);
+			}
+		}
+		else
+		{
+			std::string group_name =  gdatap->mName.empty() ? LLTrans::getString("LoadingData") : gdatap->mName;
+			childSetValue("group_name", group_name);
+			childSetToolTip("group_name",group_name);
+		}
+		// </FS:Ansariel>
 		
 		LLGroupData agent_gdatap;
 		bool is_member = gAgent.getGroupData(mID,agent_gdatap) || gAgent.isGodlike();
@@ -620,10 +632,24 @@ void LLPanelGroup::showNotice(const std::string& subject,
 //static
 void LLPanelGroup::refreshCreatedGroup(const LLUUID& group_id)
 {
-	LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
-	if(!panel)
-		return;
-	panel->setGroupID(group_id);
+	// <FS:Ansariel> Standalone group floaters
+	//LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
+	//if(!panel)
+	//	return;
+	//panel->setGroupID(group_id);
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
+	{
+		FSFloaterGroup::closeGroupFloater(LLUUID::null);
+		FSFloaterGroup::openGroupFloater(group_id);
+	}
+	else
+	{
+		LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
+		if(!panel)
+			return;
+		panel->setGroupID(group_id);
+	}
+	// </FS:Ansariel>
 }
 
 //static
@@ -635,21 +661,25 @@ void LLPanelGroup::showNotice(const std::string& subject,
 					   const std::string& inventory_name,
 					   LLOfferInfo* inventory_offer)
 {
-//	LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
-//-TT - Patch : ShowGroupFloaters
-	LLPanelGroup* panel(0);
+	// <FS:Ansariel> Standalone group floaters
+	//LLPanelGroup* panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
+	LLPanelGroup* panel(NULL);
 
-	if (!gSavedSettings.getBOOL("ShowGroupFloaters")) 
+	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people");
+		FSFloaterGroup* floater = FSFloaterGroup::openGroupFloater(group_id);
+		if (!floater)
+		{
+			return;
+		}
+		panel = floater->getGroupPanel();
 	}
 	else
 	{
-		LLFloater *floater = LLFloaterReg::getInstance("floater_group_view", LLSD().with("group_id", group_id));
-
-		panel = floater->findChild<LLPanelGroup>("panel_group_info_sidetray");
+		panel = LLFloaterSidePanelContainer::getPanel<LLPanelGroup>("people", "panel_group_info_sidetray");
 	}
-//-TT
+	// </FS:Ansariel>
+
 	if(!panel)
 		return;
 

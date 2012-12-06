@@ -113,6 +113,7 @@ set(viewer_SOURCE_FILES
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterblocklist.cpp
+    fsfloatergroup.cpp
     fsfloaterplacedetails.cpp
     fsfloaterprofile.cpp
     fsfloatersearchlegacy.cpp
@@ -765,6 +766,7 @@ set(viewer_HEADER_FILES
     fscontactsfloater.h
     fsdata.h
     fsfloaterblocklist.h
+    fsfloatergroup.h
     fsfloaterplacedetails.h
     fsfloaterprofile.h
     fsfloatersearchlegacy.h

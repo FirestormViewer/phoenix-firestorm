@@ -100,7 +100,9 @@ bool LLGroupHandler::processNotification(const LLSD& notify)
 		// send a signal to the counter manager
 		mNewNotificationSignal();
 
-		LLGroupActions::refresh_notices();
+		// <FS:Ansariel> Standalone group floaters
+		//LLGroupActions::refresh_notices();
+		LLGroupActions::refresh_notices(notification->getPayload()["group_id"].asUUID());
 	}
 	else if (notify["sigtype"].asString() == "delete")
 	{

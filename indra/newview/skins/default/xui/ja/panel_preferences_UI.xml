@@ -46,7 +46,7 @@
 
 		<check_box name="ShowNetStats" label="ラグメーターを表示" tool_tip="メニューバーの右上にラグメーターを表示します。"/>
 
-		<text name="ScriptDialogsPerObjectLabel">
+		<text name="ScriptDialogsPerObjectLabel" width="200">
 			オブジェクトあたりのスクリプト情報表示：
 		</text>
 		<combo_box name="ScriptDialogPerObjectDropdown">

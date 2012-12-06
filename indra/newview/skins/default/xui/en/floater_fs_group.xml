@@ -1,6 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater
+ positioning="centered"
+ name="group_info"
  height="565"
+ help_topic="group_info"
  layout="topleft"
  min_height="565"
  width="470"
@@ -8,6 +11,15 @@
  can_resize="true"
  save_rect="true"
  min_width="470">
+	<floater.string name="title_create_group">
+		Create new group...
+	</floater.string>
+	<floater.string name="title_loading">
+		Group Profile - Loading...
+	</floater.string>
+	<floater.string name="title">
+		Group Profile - [NAME]
+	</floater.string>
     <panel
      background_visible="false"
      top="5"

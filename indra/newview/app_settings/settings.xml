@@ -12073,10 +12073,10 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>ShowGroupFloaters</key>
+  <key>FSUseStandaloneGroupFloater</key>
     <map>
       <key>Comment</key>
-      <string>Shows group info in a floater rather than the side tray</string>
+      <string>If enabled, Firestorm will use a standalone floater for the blocklist.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

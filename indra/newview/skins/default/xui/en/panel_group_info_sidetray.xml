@@ -26,6 +26,26 @@ background_visible="true"
      name="group_join_free">
         Free
     </panel.string>
+
+	<layout_stack
+		name="group_info_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="0"
+		left="0"
+		width="331"
+		height="570"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="header_container"
+		auto_resize="false"
+		height="30"
+		width="331"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+
     <panel
       name="group_info_top"
       follows="top|left"
@@ -79,6 +99,16 @@ background_visible="true"
      height="20"
      visible="false" />
     </panel>
+	
+	</layout_panel>
+	<layout_panel
+		name="group_info_content"
+		auto_resize="true"
+		height="540"
+		width="331"
+		layout="topleft"
+		follows="all">
+
    <layout_stack
      name="layout"
      orientation="vertical"
@@ -277,5 +307,8 @@ background_visible="true"
                  	 width="90" />	
 				</layout_panel>
 		   </layout_stack>
-  
+
+	</layout_panel>
+	</layout_stack> 
+
 </panel>

@@ -12,10 +12,18 @@
 	<panel.string name="group_join_free">
 		Darmowe
 	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<panel name="group_info_top">
 		<text_editor name="group_name" value="(Ładowanie...)"/>
 		<line_editor label="Wpisz tutaj nową nazwę swojej grupy" name="group_name_editor"/>
 	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
 	<layout_stack name="layout">
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
@@ -36,6 +44,9 @@
 		<layout_panel name="btn_apply_lp">
 			<button label="Zapisz" label_selected="Zapisz" name="btn_apply"/>
 			<button label="Stwórz grupę" name="btn_create" tool_tip="Stwórz nową grupę"/>
+		</layout_panel>
+	</layout_stack>
+
 		</layout_panel>
 	</layout_stack>
 </panel>

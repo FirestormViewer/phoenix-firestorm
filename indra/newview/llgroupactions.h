@@ -73,7 +73,9 @@ public:
 	/**
 	 * Refresh group notices panel.
 	 */
-	static void refresh_notices();
+	// <FS:Ansariel> Standalone group floaters
+	//static void refresh_notices();
+	static void refresh_notices(const LLUUID& group_id = LLUUID::null);
 
 	/**
 	 * Refresh group information panel.

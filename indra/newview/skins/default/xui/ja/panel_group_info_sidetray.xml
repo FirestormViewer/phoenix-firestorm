@@ -12,10 +12,18 @@
 	<panel.string name="group_join_free">
 		無料
 	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<panel name="group_info_top">
 		<text_editor name="group_name" value="（ローディング...）"/>
 		<line_editor label="新しいグループの名前を入力してください" name="group_name_editor"/>
 	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
 	<layout_stack name="layout">
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
@@ -36,6 +44,9 @@
 		<layout_panel name="btn_apply_lp">
 			<button label="保存" label_selected="保存" name="btn_apply"/>
 			<button label="グループを作成" name="btn_create" tool_tip="新しいグループを作成"/>
+		</layout_panel>
+	</layout_stack>
+
 		</layout_panel>
 	</layout_stack>
 </panel>

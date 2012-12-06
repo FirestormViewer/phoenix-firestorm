@@ -31,7 +31,7 @@
 			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
-			<text name="ScriptDialogsPerObjectLabel">
+			<text name="ScriptDialogsPerObjectLabel" width="160">
 				Diálogos de script por objeto:
 			</text>
 			<combo_box name="ScriptDialogPerObjectDropdown">

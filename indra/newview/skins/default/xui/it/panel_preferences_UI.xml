@@ -30,7 +30,7 @@
         <check_box name="FSShowGroupTitleInTooltip" label="Mostra il titolo del gruppo in hovertips"/>
         <check_box label="Usa Menu a torta (pie menu)" name="UsePieMenu" tool_tip="Utilizza il menu circolare (a torta) come quello del Viewer 1.x invece dei menu contestuali rettangolari del Viewer 2/3" />
         <check_box name="ShowNetStats" label="Mostra l'indicatore lag" tool_tip="Mostra l'indicatore della lagg nella barra di stato (Vicino l'orario di SL)" />
-        <text name="ScriptDialogsPerObjectLabel" width="200">
+        <text name="ScriptDialogsPerObjectLabel" width="180">
             Quanti menu Script per oggetto:
         </text>
         <combo_box name="ScriptDialogPerObjectDropdown">

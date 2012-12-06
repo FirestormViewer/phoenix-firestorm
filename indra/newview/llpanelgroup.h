@@ -26,9 +26,6 @@
 #ifndef LL_LLPANELGROUP_H
 #define LL_LLPANELGROUP_H
 
-//-TT - Patch : ShowGroupFloaters
-#include "llfloater.h"
-//-TT
 #include "llgroupmgr.h"
 #include "llpanel.h"
 #include "lltimer.h"
@@ -173,19 +170,4 @@ protected:
 	BOOL mHasModal;
 };
 
-//-TT - Patch : ShowGroupFloaters
-class LLFloaterGroupView : public LLFloater
-{
-public:
-	LLFloaterGroupView(const LLSD& seed) : LLFloater(seed) {}
-	~LLFloaterGroupView() {}
-	
-	void onOpen(const LLSD& key)
-	{
-		LLPanel* panel = findChild<LLPanel>("panel_group_info_sidetray");
-		if(panel)
-			panel->onOpen(key);
-	}
-};
-//-TT
 #endif // LL_LLPANELGROUP_H

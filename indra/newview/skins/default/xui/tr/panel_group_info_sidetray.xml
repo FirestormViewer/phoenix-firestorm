@@ -12,10 +12,18 @@
 	<panel.string name="group_join_free">
 		Ücretsiz
 	</panel.string>
+
+	<layout_stack name="group_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<panel name="group_info_top">
 		<text_editor name="group_name" value="(yükleniyor...)"/>
 		<line_editor label="Grup adınızı buraya girin" name="group_name_editor"/>
 	</panel>
+
+		</layout_panel>
+		<layout_panel name="group_info_content">
+
 	<layout_stack name="layout">
 		<layout_panel name="group_accordions">
 			<accordion name="groups_accordion">
@@ -36,6 +44,9 @@
 		<layout_panel name="btn_apply_lp">
 			<button label="Kaydet" label_selected="Kaydet" name="btn_apply"/>
 			<button label="Grup Oluştur" name="btn_create" tool_tip="Yeni bir Grup oluştur"/>
+		</layout_panel>
+	</layout_stack>
+
 		</layout_panel>
 	</layout_stack>
 </panel>
