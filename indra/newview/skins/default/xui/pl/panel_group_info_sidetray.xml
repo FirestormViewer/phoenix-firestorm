@@ -12,41 +12,36 @@
 	<panel.string name="group_join_free">
 		Darmowe
 	</panel.string>
-
 	<layout_stack name="group_info_sidetray_main">
 		<layout_panel name="header_container">
-
-	<panel name="group_info_top">
-		<text_editor name="group_name" value="(Ładowanie...)"/>
-		<line_editor label="Wpisz tutaj nową nazwę swojej grupy" name="group_name_editor"/>
-	</panel>
-
+			<panel name="group_info_top">
+				<text_editor name="group_name" value="(Ładowanie...)"/>
+				<line_editor label="Wpisz tutaj nową nazwę swojej grupy" name="group_name_editor"/>
+			</panel>
 		</layout_panel>
 		<layout_panel name="group_info_content">
-
-	<layout_stack name="layout">
-		<layout_panel name="group_accordions">
-			<accordion name="groups_accordion">
-				<accordion_tab name="group_general_tab" title="Ogólne"/>
-				<accordion_tab name="group_roles_tab" title="Funkcje"/>
-				<accordion_tab name="group_notices_tab" title="Ogłoszenia"/>
-				<accordion_tab name="group_land_tab" title="Posiadłość/Majątek"/>
-			</accordion>
-		</layout_panel>
-	</layout_stack>
-	<layout_stack name="button_row_ls">
-		<layout_panel name="btn_chat_lp">
-			<button label="Czat" name="btn_chat"/>
-		</layout_panel>
-		<layout_panel name="call_btn_lp">
-			<button label="Konferencja głosowa" name="btn_call" tool_tip="Rozpocznij konferencję głosową w tej grupie"/>
-		</layout_panel>
-		<layout_panel name="btn_apply_lp">
-			<button label="Zapisz" label_selected="Zapisz" name="btn_apply"/>
-			<button label="Stwórz grupę" name="btn_create" tool_tip="Stwórz nową grupę"/>
-		</layout_panel>
-	</layout_stack>
-
+			<layout_stack name="layout">
+				<layout_panel name="group_accordions">
+					<accordion name="groups_accordion">
+						<accordion_tab name="group_general_tab" title="Ogólne"/>
+						<accordion_tab name="group_roles_tab" title="Funkcje"/>
+						<accordion_tab name="group_notices_tab" title="Ogłoszenia"/>
+						<accordion_tab name="group_land_tab" title="Posiadłość/Majątek"/>
+					</accordion>
+				</layout_panel>
+			</layout_stack>
+			<layout_stack name="button_row_ls">
+				<layout_panel name="btn_chat_lp">
+					<button label="Czat" name="btn_chat"/>
+				</layout_panel>
+				<layout_panel name="call_btn_lp">
+					<button label="Konferencja głosowa" name="btn_call" tool_tip="Rozpocznij konferencję głosową w tej grupie"/>
+				</layout_panel>
+				<layout_panel name="btn_apply_lp">
+					<button label="Zapisz" label_selected="Zapisz" name="btn_apply"/>
+					<button label="Stwórz grupę" name="btn_create" tool_tip="Stwórz nową grupę"/>
+				</layout_panel>
+			</layout_stack>
 		</layout_panel>
 	</layout_stack>
 </panel>
