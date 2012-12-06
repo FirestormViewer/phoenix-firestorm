@@ -672,11 +672,7 @@ bool join_group_response(const LLSD& notification, const LLSD& response)
 
 	if (option == 2 && !group_id.isNull())
 	{
-		//<FS:LO> Dont break the info button
-		// AO: Don't assume we want to popup/change windows on join
-		//LLGroupActions::show(group_id);  
 		LLGroupActions::show(group_id);
-		//</FS:LO>
 		LLSD args;
 		args["MESSAGE"] = message;
 		LLNotificationsUtil::add("JoinGroup", args, notification["payload"]);
