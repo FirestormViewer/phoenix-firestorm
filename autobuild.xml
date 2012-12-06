@@ -1990,9 +1990,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>f3d171190a9e89fc813d46e5541879d8</string>
+              <string>f891419f7fe93be0f0d6eed6375db29c</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/zlib-1.2.5-windows-20120713.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/zlib-1.2.5-windows-20121206.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>
