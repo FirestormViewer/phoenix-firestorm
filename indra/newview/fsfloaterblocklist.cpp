@@ -1,5 +1,5 @@
 /**
- * @file fsfloaterteleporthistory.cpp
+ * @file fsfloaterblocklist.cpp
  * @brief Class for the standalone blocklist in Firestorm
  *
  * $LicenseInfo:firstyear=2012&license=viewerlgpl$
