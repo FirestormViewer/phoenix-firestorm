@@ -52,15 +52,13 @@
 #include "llviewerobject.h"
 #include "llappearancemgr.h"
 #include "aoengine.h"
+#include "fscommon.h"
 
 #include <boost/regex.hpp>
 #include <string>
 #include <fstream>
 #include <streambuf>
 
-
-//<FS_AO:Appears unused>
-//#define phoenix_folder_name "#Phoenix"
 
 #define LIB_ROCK_NAME "Rock - medium, round"
 
@@ -1058,25 +1056,6 @@ LLViewerInventoryItem* FSLSLBridge :: findInvObject(std::string obj_name, LLUUID
 		return item;
 	}
 	return NULL;
-}
-
-void FSLSLBridge :: reportToNearbyChat(std::string message)
-// AO small utility method for chat alerts.
-{	
-	LLChat chat;
-	chat.mText = message;
-	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-	LLSD args;
-	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-	LLNotificationsUI::LLNotificationManager* notification_manager = LLNotificationsUI::LLNotificationManager::getInstance();
-	if (notification_manager)
-	{
-		notification_manager->onChat(chat, args);
-	}
-	else
-	{
-		llwarns << "Tried to write notification to chat, but LLNotificationManager was NULL!" << llendl;
-	}
 }
 
 void FSLSLBridge :: cleanUpBridgeFolder(std::string nameToCleanUp)
