@@ -40,19 +40,13 @@
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
 #include "llimfloater.h"
-
-// [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-#include "llslurl.h"
-#include "rlvhandler.h"
-// [/RLVa:KB]
 #include "groupchatlistener.h"
+
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f)
 #include "llslurl.h"
 #include "rlvhandler.h"
 // [/RLVa:KB]
-
 #include "exogroupmutelist.h"
-
 // <FS:Ansariel> Standalone group floater
 #include "fsfloatergroup.h"
 #include "llpanelgroup.h"
