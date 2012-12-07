@@ -65,6 +65,7 @@
 		follows="all">
 	 
     <scroll_list
+     draw_heading="true"
      follows="all"
      height="190"
      layout="topleft"
@@ -74,8 +75,10 @@
      top="0"
      width="290">
         <scroll_list.columns
+         label="Name"
          name="item_name" />
         <scroll_list.columns
+         label="Type"
          name="item_type"
          width="96" />
     </scroll_list>

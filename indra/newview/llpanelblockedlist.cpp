@@ -75,6 +75,8 @@ BOOL LLPanelBlockedList::postBuild()
 	mBlockedList->setCommitOnSelectionChange(TRUE);
 	// <FS:Ansariel> Profile button
 	mBlockedList->setCommitCallback(boost::bind(&LLPanelBlockedList::onSelectionChanged, this));
+	mBlockedList->sortByColumn("item_name", TRUE);
+	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
 
 	// <FS:Zi> Make sure user can go back blocked user list if it's in a skin without
 	//         sidebar <Back button
