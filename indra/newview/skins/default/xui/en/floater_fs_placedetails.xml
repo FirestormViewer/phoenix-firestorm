@@ -12,11 +12,14 @@
  min_height="550"
  min_width="250"
  width="322">
+	<string name="title_place">
+		Place Details
+	</string>
 	<string name="title_remote_place">
-		Parcel Details
+		Place Details
 	</string>
 	<string name="title_remote_place_detail">
-		Parcel Details: [NAME]
+		Place Details: [NAME]
 	</string>
 	<string name="title_landmark">
 		Landmark

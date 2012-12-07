@@ -26,21 +26,23 @@
 
 #include "llfloater.h"
 #include "llpointer.h"
+#include "llsafehandle.h"
 #include "llinventory.h"
 #include "llinventorymodel.h"
+#include "llparcelselection.h"
 #include "llviewerinventory.h"
 
 class LLLandmark;
 class LLMenuButton;
 class LLPanelLandmarkInfo;
 class LLPanelPickEdit;
-class LLPanelPlaceInfo;
+class LLPanelPlaceProfile;
 struct LLParcelData;
 class LLToggleableMenu;
 class LLVector3d;
 class FSPlaceDetailsInventoryObserver;
 class FSPlaceDetailsRemoteParcelInfoObserver;
-
+class FSPlaceDetailsPlacesParcelObserver;
 
 class FSFloaterPlaceDetails : public LLFloater
 {
@@ -53,6 +55,7 @@ public:
 
 	void showAddedLandmarkInfo(const uuid_vec_t& items);
 	void changedGlobalPos(const LLVector3d& global_pos);
+	void changedParcelSelection();
 	void processParcelDetails(const LLParcelData& parcel_details);
 	void togglePickPanel(BOOL visible);
 
@@ -63,7 +66,8 @@ private:
 		LANDMARK,
 		CREATE_LANDMARK,
 		REMOTE_PLACE,
-		TELEPORT_HISTORY_ITEM
+		TELEPORT_HISTORY_ITEM,
+		AGENT
 	};
 
 	void onLandmarkLoaded(LLLandmark* landmark);
@@ -83,19 +87,24 @@ private:
 
 	LLPanelPickEdit*						mPickPanel;
 	LLPanelLandmarkInfo*					mPanelLandmarkInfo;
-	LLPanelPlaceInfo*						mPanelPlaceInfo;
+	LLPanelPlaceProfile*					mPanelPlaceInfo;
 
+	LLSafeHandle<LLParcelSelection>			mParcel;
 	LLPointer<LLInventoryItem>				mItem;
 	FSPlaceDetailsInventoryObserver*		mInventoryObserver;
 	FSPlaceDetailsRemoteParcelInfoObserver*	mRemoteParcelObserver;
+	FSPlaceDetailsPlacesParcelObserver*		mParcelObserver;
 	LLMenuButton*							mOverflowBtn;
 	LLToggleableMenu*						mPlaceMenu;
 	LLToggleableMenu*						mLandmarkMenu;
+	LLTimer									mResetInfoTimer;
 
 	bool				mIsInEditMode;
 	bool				mIsInCreateMode;
 	LLVector3d			mGlobalPos;
 	ePlaceDisplayInfo	mDisplayInfo;
+
+	boost::signals2::connection mAgentParcelChangedConnection;
 };
 
 #endif // FS_FLOATERPLACEDETAILS_H

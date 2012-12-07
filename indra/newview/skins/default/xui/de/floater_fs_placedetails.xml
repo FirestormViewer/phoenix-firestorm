@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_placedetails" title="Landmarke">
+	<string name="title_place">
+		Ortsprofil
+	</string>
 	<string name="title_remote_place">
 		Ortsprofil
 	</string>

@@ -517,6 +517,16 @@ void LLPanelTopInfoBar::onInfoButtonClicked()
 		return;
 // [/RLVa:KB]
 
-//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+	// <FS:Ansariel> FIRE-817: Separate place details floater
+	//LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+	//if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+	//{
+	//	LLFloaterReg::showInstance("fs_placedetails", LLSD().with("type", "agent"));
+	//}
+	//else
+	//{
+	//	LLFloaterSidePanelContainer::showPanel("places", LLSD().with("type", "agent"));
+	//}
+	// </FS:Ansariel>
 	LLFloaterReg::showInstance("about_land");
 }

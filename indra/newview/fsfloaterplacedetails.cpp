@@ -42,11 +42,29 @@
 #include "lllandmarklist.h"
 #include "llnotificationsutil.h"
 #include "llpanelpick.h"
-#include "llpanelplaceinfo.h"
+#include "llpanelplaceprofile.h"
 #include "llpanellandmarkinfo.h"
+#include "llparcel.h"
 #include "llteleporthistorystorage.h"
 #include "llviewermessage.h"
 #include "llviewermenu.h"
+#include "llviewerparcelmgr.h"
+#include "llviewerwindow.h"
+
+static const F32 FS_PLACE_INFO_UPDATE_INTERVAL = 3.0;
+
+static bool fs_is_agent_in_selected_parcel(LLParcel* parcel)
+{
+	LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();
+
+	LLViewerRegion* region = parcel_mgr->getSelectionRegion();
+	if (!region || !parcel)
+		return false;
+
+	return	region == gAgent.getRegion() &&
+			parcel->getLocalID() == parcel_mgr->getAgentParcel()->getLocalID();
+}
+
 
 /////////////////////////////////
 // Inventory added observer
@@ -72,7 +90,7 @@ private:
 
 
 /////////////////////////////////
-// Parcel info observer
+// Remote Parcel info observer
 /////////////////////////////////
 
 class FSPlaceDetailsRemoteParcelInfoObserver : public LLRemoteParcelInfoObserver
@@ -130,6 +148,30 @@ private:
 };
 
 
+/////////////////////////////////
+// Parcel info observer
+/////////////////////////////////
+
+class FSPlaceDetailsPlacesParcelObserver : public LLParcelObserver
+{
+public:
+	FSPlaceDetailsPlacesParcelObserver(FSFloaterPlaceDetails* place_details_floater) :
+		LLParcelObserver(),
+		mPlaceDetails(place_details_floater)
+	{}
+
+	/*virtual*/ void changed()
+	{
+		if (mPlaceDetails)
+		{
+			mPlaceDetails->changedParcelSelection();
+		}
+	}
+
+private:
+	FSFloaterPlaceDetails*		mPlaceDetails;
+};
+
 ///////////////////////////////////////
 // FSFloaterPlaceDetails implementation
 ///////////////////////////////////////
@@ -144,9 +186,13 @@ FSFloaterPlaceDetails::FSFloaterPlaceDetails(const LLSD& seed)
 	mDisplayInfo(NONE),
 	mPickPanel(NULL)
 {
+	mParcelObserver = new FSPlaceDetailsPlacesParcelObserver(this);
 	mRemoteParcelObserver = new FSPlaceDetailsRemoteParcelInfoObserver(this);
 	mInventoryObserver = new FSPlaceDetailsInventoryObserver(this);
 	gInventory.addObserver(mInventoryObserver);
+
+	mAgentParcelChangedConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
+			boost::bind(&FSFloaterPlaceDetails::updateVerbs, this));
 }
 
 FSFloaterPlaceDetails::~FSFloaterPlaceDetails()
@@ -155,14 +201,23 @@ FSFloaterPlaceDetails::~FSFloaterPlaceDetails()
 	{
 		gInventory.removeObserver(mInventoryObserver);
 	}
+	LLViewerParcelMgr::getInstance()->removeObserver(mParcelObserver);
+	mParcel.clear();
+
 	delete mInventoryObserver;
 	delete mRemoteParcelObserver;
+	delete mParcelObserver;
+
+	if (mAgentParcelChangedConnection.connected())
+	{
+		mAgentParcelChangedConnection.disconnect();
+	}
 }
 
 BOOL FSFloaterPlaceDetails::postBuild()
 {
 	mPanelLandmarkInfo = findChild<LLPanelLandmarkInfo>("panel_landmark_info");
-	mPanelPlaceInfo = findChild<LLPanelPlaceInfo>("panel_place_profile");
+	mPanelPlaceInfo = findChild<LLPanelPlaceProfile>("panel_place_profile");
 
 	if (!mPanelLandmarkInfo || !mPanelPlaceInfo)
 	{
@@ -320,6 +375,28 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			updateVerbs();
 		}
+		else if (key_type == "agent")
+		{
+			mDisplayInfo = AGENT;
+
+			setTitle(getString("title_place"));
+
+			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::AGENT);
+			mPanelPlaceInfo->setEnableHeader(false);
+			mPanelPlaceInfo->setVisible(TRUE);
+			mPanelLandmarkInfo->setVisible(FALSE);
+
+			LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();
+			if (!parcel_mgr)
+			{
+				return;
+			}
+			// We don't know if we are already added to LLViewerParcelMgr observers list
+			// so try to remove observer not to add an extra one.
+			parcel_mgr->removeObserver(mParcelObserver);
+			parcel_mgr->addObserver(mParcelObserver);
+			parcel_mgr->selectParcelAt(gAgent.getPositionGlobal());
+		}
 	}
 }
 
@@ -355,6 +432,16 @@ void FSFloaterPlaceDetails::updateVerbs()
 	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM)
 	{
 		getChildView("teleport_btn")->setVisible(TRUE);
+		getChildView("map_btn")->setVisible(TRUE);
+		getChildView("edit_btn")->setVisible(FALSE);
+		getChildView("save_btn")->setVisible(FALSE);
+		getChildView("cancel_btn")->setVisible(FALSE);
+		getChildView("close_btn")->setVisible(FALSE);
+	}
+	else if (mDisplayInfo == AGENT)
+	{
+		getChildView("teleport_btn")->setVisible(TRUE);
+		getChildView("teleport_btn")->setEnabled(have_position && !LLViewerParcelMgr::getInstance()->inAgentParcel(mGlobalPos));
 		getChildView("map_btn")->setVisible(TRUE);
 		getChildView("edit_btn")->setVisible(FALSE);
 		getChildView("save_btn")->setVisible(FALSE);
@@ -484,7 +571,7 @@ void FSFloaterPlaceDetails::onTeleportButtonClicked()
 		args["LOCATION"] = mItem->getName(); 
 		LLNotificationsUtil::add("TeleportFromLandmark", args, payload);
 	}
-	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM)
+	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM || mDisplayInfo == AGENT)
 	{
 		LLFloaterWorldMap* worldmap_instance = LLFloaterWorldMap::getInstance();
 		if (!mGlobalPos.isExactlyZero() && worldmap_instance)
@@ -517,7 +604,7 @@ void FSFloaterPlaceDetails::onShowOnMapButtonClicked()
 			LLFloaterReg::showInstance("world_map", "center");
 		}
 	}
-	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM)
+	else if (mDisplayInfo == REMOTE_PLACE || mDisplayInfo == TELEPORT_HISTORY_ITEM || mDisplayInfo == AGENT)
 	{
 		if (!mGlobalPos.isExactlyZero())
 		{
@@ -603,14 +690,14 @@ void FSFloaterPlaceDetails::onOverflowButtonClicked()
 {
 	LLToggleableMenu* menu;
 
-	if ((mDisplayInfo == TELEPORT_HISTORY_ITEM || mDisplayInfo == REMOTE_PLACE) && mPlaceMenu)
+	if ((mDisplayInfo == TELEPORT_HISTORY_ITEM || mDisplayInfo == REMOTE_PLACE || mDisplayInfo == AGENT) && mPlaceMenu)
 	{
 		menu = mPlaceMenu;
 
 		// STORM-411
 		// Creating landmarks for remote locations is impossible.
 		// So hide menu item "Make a Landmark" in "Teleport History Profile" panel.
-		menu->setItemVisible("landmark", FALSE);
+		menu->setItemVisible("landmark", mDisplayInfo == AGENT);
 		menu->arrangeAndClear();
 	}
 	else if ((mDisplayInfo == LANDMARK || mDisplayInfo == CREATE_LANDMARK) && mLandmarkMenu)
@@ -754,3 +841,50 @@ void FSFloaterPlaceDetails::processParcelDetails(const LLParcelData& parcel_deta
 	args["[NAME]"] = parcel_details.name.c_str();
 	setTitle(getString("title_remote_place_detail", args));
 }
+
+void FSFloaterPlaceDetails::changedParcelSelection()
+{
+	if (!mPanelPlaceInfo)
+		return;
+
+	LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();
+	mParcel = parcel_mgr->getFloatingParcelSelection();
+	LLParcel* parcel = mParcel->getParcel();
+	LLViewerRegion* region = parcel_mgr->getSelectionRegion();
+	if (!region || !parcel)
+	{
+		return;
+	}
+
+	LLVector3d prev_pos_global = mGlobalPos;
+
+	// If agent is inside the selected parcel show agent's region<X, Y, Z>,
+	// otherwise show region<X, Y, Z> of agent's selection point.
+	bool is_current_parcel = fs_is_agent_in_selected_parcel(parcel);
+	if (is_current_parcel)
+	{
+		mGlobalPos = gAgent.getPositionGlobal();
+	}
+	else
+	{
+		LLVector3d pos_global = gViewerWindow->getLastPick().mPosGlobal;
+		if (!pos_global.isExactlyZero())
+		{
+			mGlobalPos = pos_global;
+		}
+	}
+
+	// Reset location info only if global position has changed
+	// and update timer has expired to reduce unnecessary text and icons updates.
+	if (prev_pos_global != mGlobalPos && mResetInfoTimer.hasExpired())
+	{
+		mPanelPlaceInfo->resetLocation();
+		mResetInfoTimer.setTimerExpirySec(FS_PLACE_INFO_UPDATE_INTERVAL);
+	}
+
+	mPanelPlaceInfo->displaySelectedParcelInfo(parcel, region, mGlobalPos, is_current_parcel);
+
+	updateVerbs();
+}
+
+
