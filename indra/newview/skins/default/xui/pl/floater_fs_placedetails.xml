@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="floater_placedetails" title="Landmark">
+	<string name="title_place">
+		Szczegóły miejsca
+	</string>
 	<string name="title_remote_place">
-		Szczegóły parceli
+		Szczegóły miejsca
 	</string>
 	<string name="title_remote_place_detail">
-		Szczegóły parceli: [NAME]
+		Szczegóły miejsca: [NAME]
 	</string>
 	<string name="title_landmark">
 		Landmark
