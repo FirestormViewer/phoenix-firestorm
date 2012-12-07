@@ -285,6 +285,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 				return;
 			}
 
+			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::LANDMARK);
 			mPanelLandmarkInfo->setEnableHeader(false);
 			
@@ -310,6 +311,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 				mGlobalPos = gAgent.getPositionGlobal();
 			}
 
+			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::CREATE_LANDMARK);
 			mPanelLandmarkInfo->setEnableHeader(false);
 			mPanelLandmarkInfo->displayParcelInfo(LLUUID(), mGlobalPos);
@@ -344,6 +346,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 				mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 			}
 
+			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::PLACE);
 			mPanelPlaceInfo->setEnableHeader(false);
 			mPanelPlaceInfo->setVisible(TRUE);
@@ -366,6 +369,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 			args["[NAME]"] = hist_items[index].mTitle.c_str();
 			setTitle(getString("title_teleport_history_item", args));
 
+			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::TELEPORT_HISTORY);
 			mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 
@@ -381,6 +385,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			setTitle(getString("title_place"));
 
+			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::AGENT);
 			mPanelPlaceInfo->setEnableHeader(false);
 			mPanelPlaceInfo->setVisible(TRUE);
