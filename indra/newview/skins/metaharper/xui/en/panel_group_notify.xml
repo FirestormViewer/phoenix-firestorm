@@ -23,26 +23,25 @@
      height="20"
      layout="topleft"
      left="10"
-     right="-10"
      name="group_notice"
      text_color="GroupNotifyTextColor"
      top_pad="5"
      use_ellipses="true"
      value="Group Notice"
-     halign="right" />
+     width="380"/>
     <text
      follows="left|top|right"
      font="SansSerif"
      height="20"
+     icon_positioning="none"
      layout="topleft"
      left="10"
-     right="-10"
      name="title"
      text_color="GroupNotifyTextColor"
      top_pad="5"
      use_ellipses="true"
-     value="Sent by Sender Name, Group Name" 
-     halign="right" />
+     width="380"
+     value="Sent by Sender Name, Group Name"/>
     <icon
      follows="left|top"
      height="64"
