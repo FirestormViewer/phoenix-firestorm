@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater
+ positioning="centered"
+ legacy_header_height="18"
+ can_resize="true"
+ height="480"
+ layout="topleft"
+ name="floater_tphistory"
+ help_topic="floater_tphistory"
+ save_rect="true"
+ reuse_instance="true"
+ title="Teleport History"
+ min_height="200"
+ min_width="325"
+ width="325">
+	<filter_editor
+	 text_pad_left="4"
+	 follows="left|top|right"
+	 font="SansSerifSmall"
+	 height="23"
+	 layout="topleft"
+	 left="10"
+	 label="Filter Places"
+	 max_length_chars="300"
+	 name="Filter"
+	 top="23"
+	 width="303"/>
+
+	<panel
+	 top="50"
+	 left="5"
+	 width="315"
+	 height="400"
+	 name="history_placeholder"
+	 layout="topleft"
+	 follows="all"/>
+ 
+	<panel
+	 top="453"
+	 follows="bottom|left|right"
+	 height="23"
+	 layout="topleft"
+	 left="0"
+	 name="button_panel"
+	 width="315">
+		<layout_stack
+		 follows="bottom|left|right"
+		 height="23"
+		 layout="topleft"
+		 mouse_opaque="false"
+		 name="bottom_bar_ls0"
+		 left="4"
+		 orientation="horizontal"
+		 top="0"
+		 width="315">
+
+			<layout_panel
+			 follows="bottom|left|right"
+			 height="23"
+			 layout="bottomleft"
+			 left="0"
+			 mouse_opaque="false"
+			 name="show_lm_panel"
+			 auto_resize="true"
+			 width="193">
+
+				<layout_stack
+				 follows="bottom|left|right"
+				 height="23"
+				 layout="topleft"
+				 mouse_opaque="false"
+				 name="bottom_bar_ls1"
+				 left="0"
+				 orientation="horizontal"
+				 top="0"
+				 width="193">
+					<layout_panel
+					 follows="bottom|left|right"
+					 height="23"
+					 layout="bottomleft"
+					 left="0"
+					 mouse_opaque="false"
+					 name="teleport_btn_lp"
+					 auto_resize="true"
+					 width="109">
+						<button
+						 follows="bottom|left|right"
+						 height="23"
+						 label="Teleport"
+						 layout="topleft"
+						 left="1"
+						 name="teleport_btn"
+						 tool_tip="Teleport to the selected area"
+						 top="0"
+						 width="108" />
+					</layout_panel>
+
+					<layout_panel
+					 follows="bottom|left|right"
+					 height="23"
+					 layout="bottomleft"
+					 left_pad="3"
+					 mouse_opaque="false"
+					 name="chat_btn_lp"
+					 auto_resize="true"
+					 width="86">
+						<button
+						 follows="bottom|left|right"
+						 height="23"
+						 label="Map"
+						 layout="topleft"
+						 left="1"
+						 name="map_btn"
+						 tool_tip="Show the corresponding area on the World Map"
+						 top="0"
+						 width="85"/>
+					</layout_panel>
+
+					<layout_panel
+					 follows="bottom|left|right"
+					 height="23"
+					 layout="bottomleft"
+					 left_pad="3"
+					 mouse_opaque="false"
+					 name="chat_btn_lp"
+					 auto_resize="true"
+					 width="86">
+						<button
+						 follows="bottom|left|right"
+						 height="23"
+						 label="Show Profile"
+						 layout="topleft"
+						 left="1"
+						 name="profile_btn"
+						 tool_tip="Show the profile of this location"
+						 top="0"
+						 width="85" />
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>	
+	</panel>
+</floater>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+background_visible="true"
+ default_tab_group="1"
+ follows="all"
+ height="570"
+ label="Places"
+ layout="topleft"
+ min_height="350"
+ name="places panel"
+ top="0"
+ left="0"
+ width="333">
+    <string
+     name="landmarks_tab_title"
+     value="Landmarks" />
+    <string
+     name="teleport_history_tab_title"
+     value="Teleport History" />
+    <filter_editor
+     text_pad_left="4"
+     follows="left|top|right"
+     font="SansSerifSmall"
+     height="23"
+     layout="topleft"
+     left="10"
+     label="Filter Places"
+     max_length_chars="300"
+     name="Filter"
+     top="3"
+     width="303" />
+    <tab_container
+     follows="all"
+     halign="center"
+     height="503"
+     layout="topleft"
+     left="6"
+     name="Places Tabs"
+     tab_group="1"
+     tab_position="top"
+     top_pad="10"
+     width="315" />
+    <panel
+     class="panel_place_profile"
+     filename="panel_place_profile.xml"
+     follows="all"
+     height="533"
+     layout="topleft"
+     left="0"
+     help_topic="place_profile"
+     name="panel_place_profile"
+     top="5"
+     visible="false"
+     width="315" />
+    <panel
+     class="panel_landmark_info"
+     filename="panel_landmark_info.xml"
+     follows="all"
+     height="533"
+     layout="topleft"
+     left="0"
+     help_topic="landmark"
+     name="panel_landmark_info"
+     top="5"
+     visible="false"
+     width="315" />
+    <panel
+     follows="bottom|left|right"
+     height="23"
+     layout="topleft"
+     left="4"
+     name="button_panel"
+     width="315">
+     
+       <layout_stack
+     	follows="bottom|left|right"
+		height="23"
+		layout="topleft"
+		mouse_opaque="false"
+		name="bottom_bar_ls0"
+		left="4"
+		orientation="horizontal"
+		top="0"
+		width="315">	
+			<layout_panel
+			follows="bottom|left|right"
+			height="23"
+			layout="bottomleft"
+			left="0"			
+			mouse_opaque="false"
+			name="lp1"
+		    auto_resize="true"
+			width="193">
+			
+		<!--*********************** Teleport, Map buttons ***********************-->
+     	
+		       <layout_stack
+		     	follows="bottom|left|right"
+				height="23"
+				layout="topleft"
+				mouse_opaque="false"
+				name="bottom_bar_ls1"
+				left="0"
+				orientation="horizontal"
+				top="0"
+				width="193">	
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left="0"			
+					mouse_opaque="false"
+					name="teleport_btn_lp"
+				    auto_resize="true"
+					width="109">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Teleport"
+				         layout="topleft"
+				         left="1"
+				         name="teleport_btn"
+				         tool_tip="Teleport to the selected area"
+				         top="0"
+				         width="108" />		
+					</layout_panel>
+					
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="3"
+					mouse_opaque="false"
+					name="chat_btn_lp"
+				    auto_resize="true"
+					width="86">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Map"
+				         layout="topleft"
+				         left="1"
+				         name="map_btn"
+				         tool_tip="Show the corresponding area on the World Map"
+				         top="0"
+				         width="85" />		
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+			
+			<layout_panel
+			follows="bottom|left|right"
+			height="23"
+			layout="bottomleft"
+			left_pad="0"			
+			mouse_opaque="false"
+			name="lp2"
+		    auto_resize="true"
+			width="116">
+			
+		<!--*********************** Edit, Options buttons ***********************-->		
+		
+				<layout_stack
+		     	follows="bottom|left|right"
+				height="23"
+				layout="topleft"
+				mouse_opaque="false"
+				name="bottom_bar_ls3"
+				left="0"
+				orientation="horizontal"
+				top="0"
+				width="113">
+		
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="0"
+					mouse_opaque="false"
+					name="edit_btn_lp"
+				    auto_resize="true"
+					width="84">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Edit"
+				         layout="topleft"
+				         left="1"
+						 mouse_opaque="false"
+				         name="edit_btn"
+				         tool_tip="Edit landmark information"
+				         top="0"
+				         width="83" />
+					</layout_panel>
+					
+					<layout_panel
+					follows="bottom|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="0"
+					mouse_opaque="false"
+					name="overflow_btn_lp"
+				    auto_resize="true"
+					width="24">
+						<menu_button
+				         follows="bottom|right"
+				         height="23"
+						 image_disabled="ComboButton_UpOff"
+						 image_unselected="ComboButton_UpOff"
+						 image_selected="ComboButton_UpSelected"
+				         layout="topleft"
+						 mouse_opaque="false"
+				         name="overflow_btn"
+				         tool_tip="Show additional options"
+				         top="0"
+				         left="1"		         
+				         width="23" />			
+					</layout_panel>
+				</layout_stack>
+		
+		<!--*********************** Profile button ***********************-->		
+				
+				<layout_stack
+		     	follows="bottom|left|right"
+				height="23"
+				layout="topleft"
+				mouse_opaque="false"
+				name="bottom_bar_profile_ls"
+				left="0"
+				orientation="horizontal"
+				top="0"
+				width="110">		
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="3"			
+					mouse_opaque="false"
+					name="profile_btn_lp"
+				    auto_resize="true"
+					width="102">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Profile"
+				         layout="topleft"
+						 mouse_opaque="false"
+				         name="profile_btn"
+				         left="1"
+				         tool_tip="Show place profile"
+				         top="0"
+				         width="101" />		
+					</layout_panel>
+				</layout_stack>
+		
+		<!--*********************** Close button ***********************-->
+				
+				<layout_stack
+		     	follows="bottom|left|right"
+				height="23"
+				layout="topleft"
+				mouse_opaque="false"
+				name="bottom_bar_close_ls3"
+				left="0"
+				orientation="horizontal"
+				top="0"
+				width="112">
+					<layout_panel
+					follows="bottom|left|right"
+					height="23"
+					layout="bottomleft"
+					left_pad="3"			
+					mouse_opaque="false"
+					name="close_btn_lp"
+					top="0"
+				    auto_resize="true"
+					width="51">
+						<button
+				         follows="bottom|left|right"
+				         height="23"
+				         label="Close"
+				         layout="topleft"
+						 mouse_opaque="false"
+				         name="close_btn"
+				         left="1"
+				         top="0"
+				         width="50" />	
+					</layout_panel>
+				</layout_stack>
+
+					
+			</layout_panel>
+		</layout_stack>	
+
+<!--*********************** Save, Cancel buttons ***********************-->		
+		
+		<layout_stack
+     	follows="bottom|left|right"
+		height="23"
+		layout="topleft"
+		mouse_opaque="false"
+		name="bottom_bar_ls2"
+		left="4"
+		orientation="horizontal"
+		top="0"
+		width="313">
+		
+			<layout_panel
+			follows="bottom|left|right"
+			height="23"
+			layout="bottomleft"
+			left_pad="3"
+			mouse_opaque="false"
+			name="save_btn_lp"
+			top="0"
+		    auto_resize="true"
+			width="153">
+				<button
+		         follows="bottom|left|right"
+		         height="23"
+		         label="Save"
+		         layout="topleft"
+				 mouse_opaque="false"
+		         name="save_btn"
+		         left="1"
+		         top_pad="0"
+		         width="152"/>		
+			</layout_panel>
+			
+			<layout_panel
+			follows="bottom|left|right"
+			height="23"
+			layout="bottomleft"
+			left_pad="3"
+			mouse_opaque="false"
+			name="cancel_btn_lp"
+			top="0"
+		    auto_resize="true"
+			width="154">
+				<button
+		         follows="bottom|left|right"
+		         height="23"
+		         label="Cancel"
+		         layout="topleft"
+				 mouse_opaque="false"
+		         name="cancel_btn"
+		         left="1"
+		         top="0"
+		         width="153" />		
+			</layout_panel>		
+		</layout_stack>
+    </panel>
+</panel>
