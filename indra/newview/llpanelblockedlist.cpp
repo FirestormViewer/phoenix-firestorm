@@ -180,6 +180,9 @@ void LLPanelBlockedList::onRemoveBtnClick()
 	LLUUID id = mBlockedList->getStringUUIDSelectedItem();
 	LLMute mute(id, name);
 	
+	// <FS:Ansariel> Keep scroll position
+	S32 scroll_pos = mBlockedList->getScrollPos();
+
 	S32 last_selected = mBlockedList->getFirstSelectedIndex();
 	if (LLMuteList::getInstance()->remove(mute))
 	{
@@ -197,6 +200,9 @@ void LLPanelBlockedList::onRemoveBtnClick()
 		}
 		// <FS:Ansariel> Only update if selection changes
 		onSelectionChanged();
+
+	// <FS:Ansariel> Keep scroll position
+	mBlockedList->setScrollPos(scroll_pos);
 	}
 }
 
