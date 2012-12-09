@@ -8276,7 +8276,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>60</integer>
+      <integer>30</integer>
     </map>
     <key>NotificationTipToastLifeTime</key>
     <map>
