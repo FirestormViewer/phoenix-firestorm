@@ -1991,11 +1991,6 @@ void LLFloaterPreference::updateUISoundsControls()
 	// Set proper option for Chat > Notifications > "When receiving Instant Messages"
 	getChild<LLComboBox>("WhenPlayIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession")); // 0, 1, 2
 	getChild<LLComboBox>("WhenPlayGroupIM")->setValue((int)gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession")); // 0, 1, 2
-	// This sound is unused in Firestorm at the moment
-	getChild<LLUICtrl>("UISndObjectDelete")->setEnabled(FALSE);
-	getChild<LLButton>("Prev_UISndObjectDelete")->setEnabled(FALSE);
-	getChild<LLButton>("Def_UISndObjectDelete")->setEnabled(FALSE);
-	getChild<LLCheckBoxCtrl>("PlayModeUISndObjectDelete")->setEnabled(FALSE);
 }
 // </FS:PP>
 

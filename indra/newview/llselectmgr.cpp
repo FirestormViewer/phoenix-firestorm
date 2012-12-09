@@ -51,6 +51,7 @@
 // viewer includes
 #include "llagent.h"
 #include "llagentcamera.h"
+#include "llaudioengine.h" // <FS:PP> For object deletion sound
 #include "llviewerwindow.h"
 #include "lldrawable.h"
 #include "llfloaterinspect.h"
@@ -3473,6 +3474,13 @@ bool LLSelectMgr::confirmDelete(const LLSD& notification, const LLSD& response, 
 				duration += LLSelectMgr::getInstance()->mSelectedObjects->getObjectCount() / 64.f;
 				effectp->setDuration(duration);
 			}
+			
+			// <FS:PP> Configurable UI sounds
+			if (gAudiop && gSavedSettings.getBOOL("PlayModeUISndObjectDelete"))
+			{
+				gAudiop->triggerSound( LLUUID(gSavedSettings.getString("UISndObjectDelete")), gAgent.getID(), 1.0f, LLAudioEngine::AUDIO_TYPE_UI);
+			}
+			// </FS:PP> Configurable UI sounds
 
 			gAgentCamera.setLookAt(LOOKAT_TARGET_CLEAR);
 

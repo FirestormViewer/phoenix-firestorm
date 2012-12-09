@@ -200,14 +200,12 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndObjectCreate" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndObjectCreate"/>
 
-		<!-- Note: This sound is unused in Firestorm at the moment -->
-		<text tool_tip="UUID des Klangs beim Löschen eines Objektes. Wird momentan nicht verwendet." name="textFSObjectDelete">
+		<text tool_tip="UUID des Klangs beim Löschen eines Objektes." name="textFSObjectDelete">
 			Objektlöschung:
 		</text>
 		<button label="V" name="Prev_UISndObjectDelete" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndObjectDelete" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndObjectDelete"/>
-		<!-- End of unused sound here -->
 
 		<text tool_tip="UUID des Klangs beim Rezzen eines Objektes." name="textFSObjectRezIn">
             Objekt rezzen:

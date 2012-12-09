@@ -1748,7 +1748,6 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="120" />
 
-		<!-- Note: This sound is unused in Firestorm at the moment -->
         <text
          layout="topleft"
          follows="left|top"
@@ -1756,7 +1755,7 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on object deletion. Note: This sound is unused in Firestorm at the moment."
+         tool_tip="Sound UUID played on object deletion."
          name="textFSObjectDelete">
             Object deletion:
         </text>
@@ -1804,7 +1803,6 @@ Hover your mouse cursor over UUID field to show its default value.
          name="PlayModeUISndObjectDelete"
          left_pad="1"
          width="120" />
-		<!-- End of unused sound here -->
 
         <text
          layout="topleft"
