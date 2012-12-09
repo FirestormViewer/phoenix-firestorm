@@ -601,6 +601,13 @@ BOOL LLMuteList::isMuted(const LLUUID& id, const std::string& name, U32 flags) c
 	LLViewerObject* mute_object = get_object_to_mute_from_id(id);
 	LLUUID id_to_check  = (mute_object) ? mute_object->getID() : id;
 
+	// <FS:Ansariel> FIRE-8540: Make sure we don't mute ourself if we added
+	//               a legacy mute by name with our name.
+	if (id_to_check == gAgentID)
+	{
+		return FALSE;
+	}
+
 	// don't need name or type for lookup
 	LLMute mute(id_to_check);
 	mute_set_t::const_iterator mute_it = mMutes.find(mute);
