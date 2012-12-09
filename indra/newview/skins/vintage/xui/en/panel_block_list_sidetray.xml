@@ -13,6 +13,7 @@
 		layout="topleft"
 		left="0"
 		name="blocked"
+		multi_select="true"
 		tool_tip="List of currently blocked Residents"
 		top="0"
 		width="304">

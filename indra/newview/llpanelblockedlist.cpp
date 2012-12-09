@@ -176,34 +176,68 @@ void LLPanelBlockedList::onBackBtnClick()
 
 void LLPanelBlockedList::onRemoveBtnClick()
 {
-	std::string name = mBlockedList->getSelectedItemLabel();
-	LLUUID id = mBlockedList->getStringUUIDSelectedItem();
-	LLMute mute(id, name);
+	//std::string name = mBlockedList->getSelectedItemLabel();
+	//LLUUID id = mBlockedList->getStringUUIDSelectedItem();
+	//LLMute mute(id, name);
+	//
+	//// <FS:Ansariel> Keep scroll position
+	//S32 scroll_pos = mBlockedList->getScrollPos();
+
+	//S32 last_selected = mBlockedList->getFirstSelectedIndex();
+	//if (LLMuteList::getInstance()->remove(mute))
+	//{
+	//	// Above removals may rebuild this dialog.
+	//	
+	//	if (last_selected == mBlockedList->getItemCount())
+	//	{
+	//		// we were on the last item, so select the last item again
+	//		mBlockedList->selectNthItem(last_selected - 1);
+	//	}
+	//	else
+	//	{
+	//		// else select the item after the last item previously selected
+	//		mBlockedList->selectNthItem(last_selected);
+	//	}
+	//	// <FS:Ansariel> Only update if selection changes
+	//	onSelectionChanged();
+
+	//	// <FS:Ansariel> Keep scroll position
+	//	mBlockedList->setScrollPos(scroll_pos);
+	//}
 	
-	// <FS:Ansariel> Keep scroll position
+	// <FS:Ansariel> Allow bulk removals
 	S32 scroll_pos = mBlockedList->getScrollPos();
-
 	S32 last_selected = mBlockedList->getFirstSelectedIndex();
-	if (LLMuteList::getInstance()->remove(mute))
-	{
-		// Above removals may rebuild this dialog.
-		
-		if (last_selected == mBlockedList->getItemCount())
-		{
-			// we were on the last item, so select the last item again
-			mBlockedList->selectNthItem(last_selected - 1);
-		}
-		else
-		{
-			// else select the item after the last item previously selected
-			mBlockedList->selectNthItem(last_selected);
-		}
-		// <FS:Ansariel> Only update if selection changes
-		onSelectionChanged();
 
-	// <FS:Ansariel> Keep scroll position
-	mBlockedList->setScrollPos(scroll_pos);
+	// Remove observer before bulk operation or it would refresh the
+	// list after each removal, sending us straight into a crash!
+	LLMuteList::getInstance()->removeObserver(this);
+
+	std::vector<LLScrollListItem*> selected_items = mBlockedList->getAllSelected();
+	for (std::vector<LLScrollListItem*>::iterator it = selected_items.begin(); it != selected_items.end(); it++)
+	{
+		std::string name = (*it)->getColumn(0)->getValue().asString();
+		LLUUID id = (*it)->getUUID();
+		LLMute mute(id, name);
+		LLMuteList::getInstance()->remove(mute);
 	}
+
+	LLMuteList::getInstance()->addObserver(this);
+	refreshBlockedList();
+
+	if (last_selected == mBlockedList->getItemCount())
+	{
+		// we were on the last item, so select the last item again
+		mBlockedList->selectNthItem(last_selected - 1);
+	}
+	else
+	{
+		// else select the item after the last item previously selected
+		mBlockedList->selectNthItem(last_selected);
+	}
+	onSelectionChanged();
+	mBlockedList->setScrollPos(scroll_pos);
+	// </FS:Ansariel>
 }
 
 void LLPanelBlockedList::onPickBtnClick()

@@ -70,6 +70,7 @@
      height="190"
      layout="topleft"
      left="5"
+     multi_select="true"
      name="blocked"
      tool_tip="List of currently blocked Residents"
      top="0"
