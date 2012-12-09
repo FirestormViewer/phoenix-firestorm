@@ -335,5 +335,17 @@
     <integer>1</integer>
   </map>
 
+  <key>FSDisableIMChiclets</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
 </map>
 </llsd>

@@ -47,6 +47,10 @@
         <text name="GroupTopRightRequiresRestart">
             (wymaga restartu)
         </text>
+        <check_box label="Ukryj ikony czatów IM oraz grup" name="FSDisableIMChiclets" tool_tip="Zaznacz, aby Firestorm ukrył ikony czatów IM oraz grup (koperta z powiadomieniami i suma wszystkich IM pozostaną na ekranie)" />
+        <text name="FSDisableIMChicletsRestartText">
+            (wymaga restartu)
+        </text>
         <checkbox name="ButtonFlashing" label="Globalne mruganie przycisków:" />
         <slider label="Ile razy mrugają przyciski:" tool_tip="Ile razy mrugają przyciski" name="ButtonsFlashCount" />
         <slider label="Szybkość mrugania:" tool_tip="Szybkość mrugania (w Hercach) - używane przy powiadomieniach IM" name="ButtonFlashRate" />

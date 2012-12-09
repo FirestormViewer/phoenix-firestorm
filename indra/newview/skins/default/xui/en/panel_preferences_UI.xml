@@ -337,7 +337,7 @@
          left="5"
          name="ShowScriptDialogsTopRight"
          tool_tip="Set this to move script dialog notifications to the top right corner of the screen (Classic V1.x behavior)."
-         top_pad="8"
+         top_pad="4"
          width="256" />
         <check_box
          control_name="ShowGroupNoticesTopRight"
@@ -362,12 +362,34 @@
          name="GroupTopRightRequiresRestart">
             (requires restart)
         </text>
+        <check_box
+         control_name="FSDisableIMChiclets"
+         height="16"
+         label="Hide group and IM chat chiclets"
+         layout="topleft"
+         left="5"
+         name="FSDisableIMChiclets"
+         tool_tip="If checked, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."
+         top_pad="4"
+         width="256" />
+        <text
+         type="string"
+         left_delta="200"
+         top_pad="-15"
+         width="128"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         text_color="White_50"
+         name="FSDisableIMChicletsRestartText">
+            (requires restart)
+        </text>
 
         <check_box
          control_name="FSGlobalButtonFlashOverride"
          type="string"
          left="5"
-         top_pad="10"
+         top_pad="8"
          follows="left|top"
          height="12"
          layout="topleft"
@@ -388,7 +410,7 @@
          min_val="0"
          max_val="16"
          name="ButtonsFlashCount"
-         top_pad="5"
+         top_pad="2"
          width="471" />
         <slider
          control_name="FSButtonFlashRate"
