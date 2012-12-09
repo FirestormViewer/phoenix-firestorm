@@ -543,7 +543,7 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 	// <ND> Don't recompile shaders if it is already loaded.
 	if( mShaderObjects.end() != mShaderObjects.find(filename) )
 	{
-		LL_WARNS("ShaderLoading") << "Reusing compiled shader for " << filename << LL_ENDL;
+		LL_INFOS("ShaderLoading") << "Reusing compiled shader for " << filename << LL_ENDL;
 		return mShaderObjects[ filename ];
 	}
 	// </ND>
