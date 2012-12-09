@@ -75,6 +75,7 @@ BOOL LLPanelBlockedList::postBuild()
 	mBlockedList->setCommitOnSelectionChange(TRUE);
 	// <FS:Ansariel> Profile button
 	mBlockedList->setCommitCallback(boost::bind(&LLPanelBlockedList::onSelectionChanged, this));
+	mBlockedList->setDoubleClickCallback(boost::bind(&LLPanelBlockedList::onProfileBtnClick, this));
 	mBlockedList->sortByColumn("item_name", TRUE);
 	mBlockedList->setSearchColumn(mBlockedList->getColumn("item_name")->mIndex);
 
@@ -298,7 +299,11 @@ void LLPanelBlockedList::onSelectionChanged()
 
 void LLPanelBlockedList::onProfileBtnClick()
 {
-	LLAvatarActions::showProfile(mBlockedList->getStringUUIDSelectedItem());
+	LLMute mute = LLMuteList::getInstance()->getMute(mBlockedList->getStringUUIDSelectedItem());
+	if (mute.mID.notNull() && mute.mType == LLMute::AGENT)
+	{
+		LLAvatarActions::showProfile(mute.mID);
+	}
 }
 // </FS:Ansariel>
 
