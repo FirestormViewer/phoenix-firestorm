@@ -71,6 +71,9 @@ public:
 	 */
 	void showWellButton(const std::string& well_name, bool visible);
 
+	// <FS:Ansariel> Option to hide IM/Group chat chiclets
+	void updateVisibility(const LLSD &data);
+
 private:
 	/**
 	 * Updates child controls size and visibility when it is necessary to reduce total width.

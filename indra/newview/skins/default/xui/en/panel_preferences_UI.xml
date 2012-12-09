@@ -372,24 +372,12 @@
          tool_tip="If checked, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen)."
          top_pad="4"
          width="256" />
-        <text
-         type="string"
-         left_delta="200"
-         top_pad="-15"
-         width="128"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         text_color="White_50"
-         name="FSDisableIMChicletsRestartText">
-            (requires restart)
-        </text>
 
         <check_box
          control_name="FSGlobalButtonFlashOverride"
          type="string"
          left="5"
-         top_pad="8"
+         top_pad="6"
          follows="left|top"
          height="12"
          layout="topleft"

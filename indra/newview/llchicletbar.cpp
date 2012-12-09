@@ -164,11 +164,8 @@ BOOL LLChicletBar::postBuild()
 	LLPanelTopInfoBar::instance().setVisibleCallback(boost::bind(&LLChicletBar::fitWithTopInfoBar, this));
 
 	// <FS:PP> Option to hide IM/Group chat chiclets
-	static LLCachedControl<bool> FSDisableIMChiclets(gSavedSettings, "FSDisableIMChiclets");
-	if(FSDisableIMChiclets)
-	{
-		mChicletPanel->setVisible(FALSE);
-	}
+	gSavedSettings.getControl("FSDisableIMChiclets")->getSignal()->connect(boost::bind(&LLChicletBar::updateVisibility, this, _2));
+	mChicletPanel->setVisible(!gSavedSettings.getBOOL("FSDisableIMChiclets"));
 	// </FS:PP> Option to hide IM/Group chat chiclets
 
 	return TRUE;
@@ -351,3 +348,10 @@ void LLChicletBar::fitWithTopInfoBar()
 	setRect(rect);
 	LLPanel::reshape(width, rect.getHeight(), false);
 }
+
+// <FS:Ansariel> Option to hide IM/Group chat chiclets
+void LLChicletBar::updateVisibility(const LLSD &data)
+{
+	mChicletPanel->setVisible(!data.asBoolean());
+}
+// </FS:Ansariel>
