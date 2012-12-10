@@ -86,9 +86,7 @@ private:
 
 	void onGetByOwnerName();
 	void onGetByObjectName();
-
-//	static void onGetByOwnerNameClicked(void* data)  { onGetByOwnerName(NULL, data); };
-//	static void onGetByObjectNameClicked(void* data) { onGetByObjectName(NULL, data); };
+	void onGetByParcelName();
 
 	void showBeacon();
 

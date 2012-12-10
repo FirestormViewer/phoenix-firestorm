@@ -90,7 +90,7 @@ public:
 
 	BOOL isInRole(const LLUUID& role_id) { return (mRolesList.find(role_id) != mRolesList.end()); }
 
-protected:
+private:
 	LLUUID	mID;
 	S32		mContribution;
 	U64		mAgentPowers;
@@ -243,6 +243,9 @@ public:
 //	BOOL isRoleMemberDataComplete() { return mRoleMemberDataComplete; }
 //	BOOL isGroupPropertiesDataComplete() { return mGroupPropertiesDataComplete; }
 
+	F32 getAccessTime() const { return mAccessTime; }
+	void setAccessed();
+
 public:
 	typedef	std::map<LLUUID,LLGroupMemberData*> member_list_t;
 	typedef	std::map<LLUUID,LLGroupRoleData*> role_list_t;
@@ -290,6 +293,7 @@ private:
 	BOOL				mGroupPropertiesDataComplete;
 
 	BOOL				mPendingRoleMemberRequest;
+	F32					mAccessTime;
 };
 
 struct LLRoleAction

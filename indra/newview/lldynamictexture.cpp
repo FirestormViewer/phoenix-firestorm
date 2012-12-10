@@ -129,16 +129,11 @@ void LLViewerDynamicTexture::preRender(BOOL clear_depth)
 	llassert(mFullHeight <= 512);
 	llassert(mFullWidth <= 512);
 
-	// <FS:ND> Don't bake with FBO into mWaterDis. Or ATI cards end with pinkish/red textures.
-
-	// if (gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete())
-	// { //using offscreen render target, just use the bottom left corner
-	// 	mOrigin.set(0, 0);
-	// }
-	// else
-
-	// </FS:ND>
-
+	if (gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete() && !gGLManager.mIsATI)
+	{ //using offscreen render target, just use the bottom left corner
+		mOrigin.set(0, 0);
+	}
+	else
 	{ // force rendering to on-screen portion of frame buffer
 		LLCoordScreen window_pos;
 		gViewerWindow->getWindow()->getPosition( &window_pos );
@@ -221,14 +216,12 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		return TRUE;
 	}
 
-#if 0 //THIS CAUSES MAINT-1092
-	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete();
+	bool use_fbo = gGLManager.mHasFramebufferObject && gPipeline.mWaterDis.isComplete() && !gGLManager.mIsATI;
 
 	if (use_fbo)
 	{
 		gPipeline.mWaterDis.bindTarget();
 	}
-#endif
 
 	LLGLSLShader::bindNoShader();
 	LLVertexBuffer::unbind();
@@ -263,12 +256,10 @@ BOOL LLViewerDynamicTexture::updateAllInstances()
 		}
 	}
 
-#if 0
 	if (use_fbo)
 	{
 		gPipeline.mWaterDis.flush();
 	}
-#endif
 
 	return ret;
 }

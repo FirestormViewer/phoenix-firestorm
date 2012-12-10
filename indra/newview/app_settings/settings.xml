@@ -10199,7 +10199,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0</real>
+    <real>-0.007</real>
   </map>
   <key>RenderShadowOffsetError</key>
   <map>

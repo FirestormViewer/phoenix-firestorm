@@ -1595,8 +1595,12 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 
 	LLNotifications::instance().getChannel("VW_alerts")->connectChanged(&LLViewerWindow::onAlert);
 	LLNotifications::instance().getChannel("VW_alertmodal")->connectChanged(&LLViewerWindow::onAlert);
-	LLNotifications::instance().setIgnoreAllNotifications(gSavedSettings.getBOOL("IgnoreAllNotifications"));
-	llinfos << "NOTE: ALL NOTIFICATIONS THAT OCCUR WILL GET ADDED TO IGNORE LIST FOR LATER RUNS." << llendl;
+	bool ignore = gSavedSettings.getBOOL("IgnoreAllNotifications");
+	LLNotifications::instance().setIgnoreAllNotifications(ignore);
+	if (ignore)
+	{
+		llinfos << "NOTE: ALL NOTIFICATIONS THAT OCCUR WILL GET ADDED TO IGNORE LIST FOR LATER RUNS." << llendl;
+	}
 
 	// Default to application directory.
 	LLViewerWindow::sSnapshotBaseName = "Snapshot";
@@ -1841,6 +1845,7 @@ void LLViewerWindow::initBase()
 	LLMenuGL::sMenuContainer = gMenuHolder;
 
 	// Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them -Zi
+	LL_DEBUGS("AppInit") << "initializing menu bar" << LL_ENDL;
 	initialize_edit_menu();
 	initialize_spellcheck_menu();
 	// <FS:Zi>

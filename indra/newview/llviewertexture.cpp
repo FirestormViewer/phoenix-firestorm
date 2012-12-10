@@ -2270,7 +2270,8 @@ void LLViewerFetchedTexture::setIsMissingAsset()
 	}
 	else
 	{
-		llwarns << mUrl << ": Marking image as missing" << llendl;
+		//it is normal no map tile on an empty region.
+		//llwarns << mUrl << ": Marking image as missing" << llendl;
 	}
 	if (mHasFetcher)
 	{

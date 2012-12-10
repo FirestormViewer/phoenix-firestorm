@@ -1221,7 +1221,6 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 		Instalacja [APP_NAME] zakończona.
 
 Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
-Czy chcesz przejść na stronę [http://join.secondlife.com secondlife.com] żeby stworzyć nowe konto?
 		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Nowe konto..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">

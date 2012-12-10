@@ -379,7 +379,7 @@ Sie müssen den Benutzernamen Ihres Avatars eingeben.
 
 Sie benötigen ein Konto, um [CURRENT_GRID] betreten zu können. Möchten Sie jetzt ein Konto erstellen?
 		<url name="url">
-			https://join.secondlife.com/index.php?lang=de-DE
+			[create_account_url]
 		</url>
 		<usetemplate name="okcancelbuttons" notext="Erneut versuchen" yestext="Neues Benutzerkonto anlegen"/>
 	</notification>
@@ -1254,7 +1254,6 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
 Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
-Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu erstellen?
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Konto erstellen..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">

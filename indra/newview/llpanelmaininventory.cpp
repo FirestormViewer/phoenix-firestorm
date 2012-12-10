@@ -433,6 +433,7 @@ void LLPanelMainInventory::newWindow()
 
 void LLPanelMainInventory::doCreate(const LLSD& userdata)
 {
+	reset_inventory_filter();
 	menu_create_inventory_item(getPanel()->getRootFolder(), NULL, userdata);
 }
 
