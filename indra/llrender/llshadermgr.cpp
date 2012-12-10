@@ -709,7 +709,16 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 
 		if (texture_index_channels > 1)
 		{
-			text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
+			// <FS:ND> Fix for pink on old ATI drivers
+
+			// text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
+			
+			if( gGLManager.mIsATI )
+				text[count++] = strdup("VARYING int vary_texture_index;\n");
+			else
+				text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
+
+			// </FS:ND>
 		}
 
 		text[count++] = strdup("vec4 diffuseLookup(vec2 texcoord)\n");
