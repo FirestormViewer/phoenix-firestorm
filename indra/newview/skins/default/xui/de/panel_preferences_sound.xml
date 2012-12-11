@@ -172,6 +172,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<combo_box name="PlayModeUISndNewIncomingIMSession">
 			<combo_box.item label="Bei neuer IM" name="1"/>
 			<combo_box.item label="Bei jeder IM" name="2"/>
+			<combo_box.item label="Wenn kein Fokus" name="3"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
@@ -183,6 +184,7 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 			<combo_box.item label="Bei neuer Nachr." name="1"/>
 			<combo_box.item label="Bei jeder Nachr." name="2"/>
+			<combo_box.item label="Wenn kein Fokus" name="3"/>
 			<combo_box.item label="Stummschalten" name="0"/>
 		</combo_box>
 
