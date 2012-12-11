@@ -13,8 +13,8 @@
   </layout_panel>
   <layout_panel name="utility_bar_layout_panel">
   <panel name="utility_bar_panel">
-  <button name="utility_parcel_audio_stream_button" tool_tip="Odtwórz/Wstrzymaj muzykę strumieniową na parceli" />
-  <button name="utility_parcel_media_button" tool_tip="Odtwórz/Wstrzymaj media na parceli" />
+  <button name="utility_parcel_audio_stream_button" tool_tip="Odtwórz/Wstrzymaj muzykę strumieniową na działce" />
+  <button name="utility_parcel_media_button" tool_tip="Odtwórz/Wstrzymaj media na działce" />
   <slider name="System Volume" tool_tip="Dostrój głośność" />
   <button name="mute_audio" tool_tip="Wycisz dźwięki" />
   <button name="show_volume_controls_button" tool_tip="Pokaż kontrolę głośności" />

@@ -24,7 +24,7 @@
 		Opcje:
 	</text>
 	<check_box label="Ze skryptami" name="return_scripts" tool_tip="Odeślij wyłącznie obiekty ze skryptami"/>
-	<check_box label="Wyłącznie obiekty, które są na posiadłościach innych osób" name="return_other_land" tool_tip="Odeślij wyłącznie obiekty, które są na posiadłościach innych osób"/>
+	<check_box label="Wyłącznie obiekty, które są na działkach innych osób" name="return_other_land" tool_tip="Odeślij wyłącznie obiekty, które są na działkach innych osób"/>
 	<check_box label="W każdym regionie tego majątku" name="return_estate_wide" tool_tip="Odeślij obiekty z wszystkich regionów w tym majątku"/>
 	<button label="Odeślij" name="return_btn"/>
 	<button label="Szczytowe kolizje" name="top_colliders_btn" tool_tip="Lista obiektów doświadczających najwięcej potencjalnych kolizji"/>

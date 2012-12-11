@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="PAMIĘĆ REGIONU" name="script_limits_region_memory_panel">
 	<text name="script_memory">
-		Pamięć skryptów na posiadłości
+		Pamięć skryptów na działce
 	</text>
 	<text name="loading_text">
 		Ładowanie...
@@ -11,7 +11,7 @@
 		<scroll_list.columns label="URLe" name="urls"/>
 		<scroll_list.columns label="Nazwa obiektu" name="name"/>
 		<scroll_list.columns label="Właściciel" name="owner"/>
-		<scroll_list.columns label="Parcela" name="parcel"/>
+		<scroll_list.columns label="Działka" name="parcel"/>
 		<scroll_list.columns label="Lokalizacja" name="location"/>
 	</scroll_list>
 	<button label="Odśwież listę" name="refresh_list_btn"/>

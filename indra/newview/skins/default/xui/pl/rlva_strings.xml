@@ -2,7 +2,7 @@
 <rlva_strings>
   <strings>
     <string name="hidden_generic">(Ukryte)</string>
-    <string name="hidden_parcel">(Ukryta parcela)</string>
+    <string name="hidden_parcel">(Ukryta działka)</string>
     <string name="hidden_region">(Ukryty region)</string>
     <string name="blocked_recvim">*** IM zablokowana przez Twoją Przeglądarkę</string>
     <string name="blocked_sendim">*** IM zablokowana przez Przeglądarkę nadawcy</string>

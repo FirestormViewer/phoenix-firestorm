@@ -12,7 +12,7 @@
 		Informacje o miejscu nie są dostępne w tej chwili. Prosimy sprobować później.
 	</string>
 	<string name="server_forbidden_text">
-		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem posiadłości.
+		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.
 	</string>
 	<button name="back_btn" tool_tip="Cofnij"/>
 	<text name="title" value="Profil miejsca"/>

@@ -506,7 +506,7 @@
 	</tab_container>
 	<panel name="land info panel">
 		<text name="label_parcel_info">
-			Informacje o posiadłości
+			Informacje o działce
 		</text>
 		<text name="label_area_price">
 			Cena: [PRICE]L$ za [AREA] m²
@@ -514,17 +514,17 @@
 		<text name="label_area">
 			Obszar: [AREA] m²
 		</text>
-		<button label="O Posiadłości" label_selected="O Posiadłości" name="button about land"/>
-		<check_box label="Pokaż właścicieli" name="checkbox show owners" tool_tip="Pokoloruj parcele zgodnie z przynależnością do właściciela: &#10;&#10;Zielony = Twoja posiadłość &#10;Morski = posiadłość Twojej grupy &#10;Czerwony = posiadłości innych &#10;Żółty = Na sprzedaż &#10;Purpurowy = Na aukcję &#10;Szary = Publiczna"/>
+		<button label="O działce" label_selected="O działce" name="button about land"/>
+		<check_box label="Pokaż właścicieli" name="checkbox show owners" tool_tip="Pokoloruj działki zgodnie z przynależnością do właściciela: &#10;&#10;Zielony = Twoja działka &#10;Morski = działka Twojej grupy &#10;Czerwony = działki innych &#10;Żółty = Na sprzedaż &#10;Purpurowy = Na aukcję &#10;Szary = Publiczna"/>
 		<text name="label_parcel_modify">
-			Modyfikuj posiadłość
+			Modyfikuj działkę
 		</text>
 		<button label="Podziel" label_selected="Podziel" name="button subdivide land"/>
 		<button label="Złącz" label_selected="Złącz" name="button join land"/>
 		<text name="label_parcel_trans">
-			Transakcje na posiadłości
+			Transakcje na działce
 		</text>
-		<button label="Kup posiadłość" label_selected="Kup posiadłość" name="button buy land"/>
-		<button label="Porzuć posiadłość" label_selected="Porzuć posiadłość" name="button abandon land"/>
+		<button label="Kup działkę" label_selected="Kup działkę" name="button buy land"/>
+		<button label="Porzuć działkę" label_selected="Porzuć działkę" name="button abandon land"/>
 	</panel>
 </floater>

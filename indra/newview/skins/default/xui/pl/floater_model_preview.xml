@@ -31,14 +31,14 @@
           Ten model to...
         </text>
         <combo_box name="model_category_combo">
-          <combo_item name="Choose one" label="Wybierz..." value="MUT_Unspecified"/>
-          <combo_item name="Avatar shape" label="Kształt awatara" value="MUT_AvatarShape"/>
-          <combo_item name="Avatar attachment" label="Dodatek awatara" value="MUT_AvatarAttachment"/>
-          <combo_item name="Moving object (vehicle, animal)" label="Poruszający się obiekt (pojazd, zwierzę)" value="MUT_MovingObject"/>
-          <combo_item name="Building Component" label="Element budynku" value="MUT_BuildingComponent"/>
-          <combo_item name="Large, non moving etc" label="Duży obiekt, statyczny" value="MUT_LargeStationary"/>
-          <combo_item name="Smaller, non-moving etc" label="Mały obiekt, statyczny" value="MUT_SmallStationary"/>
-          <combo_item name="Not really any of these" label="Żadne z powyższych" value="MUT_Other"/>
+          <combo_item name="Choose one" label="Wybierz..."/>
+          <combo_item name="Avatar shape" label="Kształt awatara"/>
+          <combo_item name="Avatar attachment" label="Dodatek awatara"/>
+          <combo_item name="Moving object (vehicle, animal)" label="Poruszający się obiekt (pojazd, zwierzę)"/>
+          <combo_item name="Building Component" label="Element budynku"/>
+          <combo_item name="Large, non moving etc" label="Duży obiekt, statyczny"/>
+          <combo_item name="Smaller, non-moving etc" label="Mały obiekt, statyczny"/>
+          <combo_item name="Not really any of these" label="Żadne z powyższych"/>
          </combo_box>
     </panel>
     <tab_container name="import_tab">

@@ -29,7 +29,7 @@
 		<scroll_list.columns label="Nazwa" name="name"/>
 		<scroll_list.columns label="Właściciel" name="owner"/>
 		<scroll_list.columns label="Miejsce" name="location"/>
-		<scroll_list.columns label="Parcela" name="parcel"/>
+		<scroll_list.columns label="Działka" name="parcel"/>
 		<scroll_list.columns label="Czas" name="time"/>
 		<scroll_list.columns label="URLe" name="URLs"/>
 		<scroll_list.columns label="Pamięć (KB)" name="memory"/>
@@ -47,7 +47,7 @@
 	</text>
 	<button label="Filtruj" name="filter_owner_btn"/>
 	<text name="parcel_name_text">
-		Parcela:
+		Działka:
 	</text>
 	<button label="Filtruj" name="filter_parcel_btn"/>
 	<button label="Odśwież" name="refresh_btn"/>

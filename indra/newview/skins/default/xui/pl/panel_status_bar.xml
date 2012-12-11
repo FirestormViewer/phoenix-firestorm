@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="status">
 	<panel name="parcel_info_panel">
-		<button name="buy_land_btn" tool_tip="Posiadłość jest na sprzedaż"/>
-		<button name="status_wl_btn" tool_tip="Parcela dostarcza ustawienia dla systemu Windlight"/>
-		<text tool_tip="Nazwa parceli, na której się znajdujesz. Kliknij, aby zobaczyć informacje o posiadłości." name="parcel_info_text" value="(ładowanie...)"/>
+		<button name="buy_land_btn" tool_tip="Działka jest na sprzedaż"/>
+		<button name="status_wl_btn" tool_tip="Działka dostarcza ustawienia dla systemu Windlight"/>
+		<text tool_tip="Nazwa działki, na której się znajdujesz. Kliknij, aby zobaczyć informacje o działce." name="parcel_info_text" value="(ładowanie...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
 		Utracone pakiety
@@ -23,7 +23,7 @@
 	</panel>
 	<panel name="time_and_media_bg">
 		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>
-		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej parceli"/>
+		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej działki"/>
 		<button name="media_toggle_btn" tool_tip="Odtwórz/Zatrzymaj wszystkie media (Muzyka, Wideo, WWW)"/>
 		<button name="volume_btn" tool_tip="Regulacja głośności"/>
 	</panel>

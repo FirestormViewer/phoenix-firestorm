@@ -16,16 +16,16 @@
 	<string name="all_residents_text" value="Każdemu"/>
 	<string name="group_text" value="Grupie"/>
 	<string name="can_resell">
-		Posiadłość zakupiona w tym regionie może być odsprzedana.
+		Działka zakupiona w tym regionie może być odsprzedana.
 	</string>
 	<string name="can_not_resell">
-		Posiadłość zakupiona w tym regionie nie może być odsprzedana.
+		Działka zakupiona w tym regionie nie może być odsprzedana.
 	</string>
 	<string name="can_change">
-		Posiadłość zakupiona w tym regionie może być łączona/dzielona.
+		Działka zakupiona w tym regionie może być łączona/dzielona.
 	</string>
 	<string name="can_not_change">
-		Posiadłość zakupiona w tym regionie nie może być łączona/dzielona.
+		Działka zakupiona w tym regionie nie może być łączona/dzielona.
 	</string>
 	<string name="server_update_text">
 		Informacje o tym miejscu nie będą dostępne bez aktualizacji serwera.
@@ -34,7 +34,7 @@
 		Informacje o tym miejscu są obecnie niedostępne, spróbuj później.
 	</string>
 	<string name="server_forbidden_text">
-		Dostęp do informacji o tym miejscu jest ograniczony. Zweryfikuj swoje przywileje z właścicielem posiadłości.
+		Dostęp do informacji o tym miejscu jest ograniczony. Zweryfikuj swoje przywileje z właścicielem działki.
 	</string>
 	<button name="back_btn" tool_tip="Cofnij"/>
 	<text name="title" value="Profil Miejsca"/>
@@ -43,7 +43,7 @@
 			<text name="owner_label" value="Właściciel:"/>
 			<text name="maturity_value" value="nieznany"/>
 			<accordion name="advanced_info_accordion">
-				<accordion_tab name="parcel_characteristics_tab" title="Posiadłość">
+				<accordion_tab name="parcel_characteristics_tab" title="Działka">
 					<panel name="parcel_characteristics_panel">
 						<text name="rating_label" value="Rodzaj:"/>
 						<text name="rating_value" value="nieznany"/>
@@ -61,7 +61,7 @@
 						<text name="damage_value" value="Wyłączone"/>
 						<text name="see_avatars_label" value="Inne awatary:"/>
 						<text name="see_avatars_value" value="Wyłączone"/>
-						<button label="O Posiadłości" name="about_land_btn"/>
+						<button label="O działce" name="about_land_btn"/>
 					</panel>
 				</accordion_tab>
 				<accordion_tab name="region_information_tab">

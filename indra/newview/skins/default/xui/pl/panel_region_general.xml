@@ -30,7 +30,7 @@
 	<check_box label="Zablokuj popychanie" name="restrict_pushobject"/>
 	<check_box label="Odsprzedaż dozwolona" name="allow_land_resell_check"/>
 	<check_box label="Łączenie/dzielenie dozwolone" name="allow_parcel_changes_check"/>
-	<check_box label="Zablokuj w wyszukiwaniu" name="block_parcel_search_check" tool_tip="Pozwól na wyświetlanie nazwy regionu i posiadłości w wynikach wyszukiwania"/>
+	<check_box label="Zablokuj w wyszukiwaniu" name="block_parcel_search_check" tool_tip="Pozwól na wyświetlanie nazwy regionu i działki w wynikach wyszukiwania"/>
 	<spinner label="Limit gości" name="agent_limit_spin"/>
 	<spinner label="Ekstra obiekty" name="object_bonus_spin"/>
 	<text label="Ograniczenia wieku" name="access_text">

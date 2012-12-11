@@ -60,8 +60,8 @@
 			<text name="target_avatar_name">
 				(brak celu)
 			</text>
-			<button label="Usuń oskryptowane obiekty celu na innych posiadłościach" label_selected="Usuń oskryptowane obiekty celu na innych posiadłościach" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Skasuj wszystkie oskryptowane obiekty posiadane przez cel na Posiadłości, której nie jest właścicielem (obiekty bez praw kopiowania zostaną zwrócone)."/>
-			<button label="Usuń oskryptowane obiekty celu na jakichkolwiek posiadłościach" label_selected="Usuń oskryptowane obiekty celu na jakichkolwiek posiadłościach" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Skasuj wszystkie oksryptowane obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
+			<button label="Usuń oskryptowane obiekty celu na innych działkach" label_selected="Usuń oskryptowane obiekty celu na innych działkach" name="Delete Target&apos;s Scripted Objects On Others Land" tool_tip="Skasuj wszystkie oskryptowane obiekty posiadane przez cel na działki, której nie jest właścicielem (obiekty bez praw kopiowania zostaną zwrócone)."/>
+			<button label="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" label_selected="Usuń oskryptowane obiekty celu na jakichkolwiek działkach" name="Delete Target&apos;s Scripted Objects On *Any* Land" tool_tip="Skasuj wszystkie oksryptowane obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
 			<button label="Usuń wszystkie obiekty celu" label_selected="Usuń wszystkie obiekty celu" name="Delete *ALL* Of Target&apos;s Objects" tool_tip="Skasuj wszystkie obiekty posiadane przez cel w tym Regionie (obiekty bez praw kopiowania zostaną zwrócone)."/>
 			<button label="Główne kolizje" label_selected="Główne kolizje" name="Get Top Colliders" tool_tip="Lista obiektów, które najbardziej doświadczają kolizji"/>
 			<button label="Główne skrypty" label_selected="Główne skrypty" name="Get Top Scripts" tool_tip="Lista obiektów, które najdłużej podtrzymują działanie skryptów"/>

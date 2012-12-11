@@ -32,7 +32,7 @@
 			<combo_item name="1:1" tool_tip="Emblemat grupy lub sekcja dodatkowych informacji profilu"/>
 			<combo_item name="4:3" tool_tip="Profil [CURRENT_GRID]"/>
 			<combo_item name="10:7" tool_tip="Reklamy, wyniki wyszukiwania i landmarki"/>
-			<combo_item name="3:2" tool_tip="O Posiadłości"/>
+			<combo_item name="3:2" tool_tip="O działce"/>
 			<combo_item name="16:9" tool_tip="Miejsca"/>
 		</combo_box>
 	</panel>

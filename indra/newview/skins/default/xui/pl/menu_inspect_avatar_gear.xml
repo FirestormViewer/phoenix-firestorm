@@ -10,7 +10,7 @@
 	<menu_item_call label="Odblokuj" name="unblock"/>
 	<menu_item_call label="Zgłoś" name="report"/>
 	<menu_item_call label="Unieruchom" name="freeze"/>
-	<menu_item_call label="Wyrzuć (parcela)" name="eject"/>
+	<menu_item_call label="Wyrzuć (działka)" name="eject"/>
 	<menu_item_call label="Wyrzuć (majątek)" name="kick"/>
 	<menu_item_call label="CSR" name="csr"/>
 	<menu_item_call label="Debugowanie tekstur" name="debug"/>

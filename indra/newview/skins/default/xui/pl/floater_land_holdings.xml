@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="land holdings floater" title="Moja posiadłość">
+<floater name="land holdings floater" title="Moja działka">
 	<scroll_list name="parcel list">
-		<column label="Posiadłość" name="name"/>
+		<column label="Działka" name="name"/>
 		<column label="Region" name="location"/>
 		<column label="Typ" name="type"/>
 		<column label="Obszar" name="area"/>
 	</scroll_list>
-	<button label="Teleportuj" label_selected="Teleportuj" name="Teleport" tool_tip="Teleportuj się do centrum tej Posiadłości."/>
+	<button label="Teleportuj" label_selected="Teleportuj" name="Teleport" tool_tip="Teleportuj się do centrum tej działki."/>
 	<button label="Mapa" label_selected="Mapa" name="Show on Map" tool_tip="Pokaż to miejsce na mapie świata."/>
 	<text name="contrib_label">
 		Kontrybucje do Twoich Grup:
@@ -19,9 +19,9 @@
 		Dozwolone udziały przy obecnym planie płatności:
 	</text>
 	<text name="current_label">
-		Udziały w Posiadłościach:
+		Udziały w działkach:
 	</text>
 	<text name="available_label">
-		Dostępne na zakup Posiadłości:
+		Dostępne na zakup działek:
 	</text>
 </floater>

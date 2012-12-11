@@ -41,7 +41,7 @@
 		<combo_box.item label="Zakłócanie spokoju &gt; Ciągły spam" name="Disturbing_the_peace__Repetitive_spam"/>
 		<combo_box.item label="Zakłócanie spokoju &gt; Niepożądany spam reklamowy" name="Disturbing_the_peace__Unwanted_advert_spam"/>
 		<combo_box.item label="Oszustwo &gt; L$" name="Fraud__L$"/>
-		<combo_box.item label="Oszustwo &gt; Posiadłości" name="Fraud__Land"/>
+		<combo_box.item label="Oszustwo &gt; Działki" name="Fraud__Land"/>
 		<combo_box.item label="Oszustwo &gt; Piramidy albo łańcuszki internetowe" name="Fraud__Pyramid_scheme_or_chain_letter"/>
 		<combo_box.item label="Oszustwo &gt; US$" name="Fraud__US$"/>
 		<combo_box.item label="Prześladowanie &gt; Farmy reklamowe / wizualny spam" name="Harassment__Advert_farms___visual_spam"/>
@@ -57,10 +57,10 @@
 		<combo_box.item label="Naruszenie własności intelektualnej &gt; Usunięcie treści" name="Intellectual_property_infringement_Content_Removal"/>
 		<combo_box.item label="Naruszenie własności intelektualnej &gt; CopyBot albo nadużycie przywilejów" name="Intellectual_property_infringement_CopyBot_or_Permissions_Exploit"/>
 		<combo_box.item label="Nietolerancja" name="Intolerance"/>
-		<combo_box.item label="Posiadłości &gt; Nadużywanie piaskownicy" name="Land__Abuse_of_sandbox_resources"/>
-		<combo_box.item label="Posiadłości &gt; Wtargnięcie &gt; Obiekty/tekstury" name="Land__Encroachment__Objects_textures"/>
-		<combo_box.item label="Posiadłości &gt; Wtargnięcie &gt; Cząsteczki" name="Land__Encroachment__Particles"/>
-		<combo_box.item label="Posiadłości &gt; Wtargnięcie &gt; Drzewa/rośliny" name="Land__Encroachment__Trees_plants"/>
+		<combo_box.item label="Działki &gt; Nadużywanie piaskownicy" name="Land__Abuse_of_sandbox_resources"/>
+		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Obiekty/tekstury" name="Land__Encroachment__Objects_textures"/>
+		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Cząsteczki" name="Land__Encroachment__Particles"/>
+		<combo_box.item label="Działki &gt; Wtargnięcie &gt; Drzewa/rośliny" name="Land__Encroachment__Trees_plants"/>
 		<combo_box.item label="Zakłady/Hazard" name="Wagering_gambling"/>
 		<combo_box.item label="Inne" name="Other"/>
 	</combo_box>

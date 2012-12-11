@@ -22,7 +22,7 @@
 				<accordion_tab name="group_general_tab" title="Ogólne"/>
 				<accordion_tab name="group_roles_tab" title="Funkcje"/>
 				<accordion_tab name="group_notices_tab" title="Ogłoszenia"/>
-				<accordion_tab name="group_land_tab" title="Posiadłość/Majątek"/>
+				<accordion_tab name="group_land_tab" title="Działka/Majątek"/>
 			</accordion>
 		</layout_panel>
 	</layout_stack>

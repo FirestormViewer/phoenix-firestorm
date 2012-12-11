@@ -8,7 +8,7 @@
 	<menu_item_call label="Zapłać" name="Pay"/>
 	<menu_item_call label="Proponuj teleport" name="teleport"/>
 	<menu_item_call label="Unieruchom" name="freeze"/>
-	<menu_item_call label="Parcela: Wydal z ziemi" name="eject"/>
+	<menu_item_call label="Działka: Wydal z ziemi" name="eject"/>
 	<menu_item_call label="Majątek: Wyrzuć" name="kick"/>
 	<menu_item_call label="Majątek: Odeślij do domu" name="teleport_home"/>
 </context_menu>

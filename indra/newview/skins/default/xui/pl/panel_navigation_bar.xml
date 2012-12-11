@@ -3,12 +3,12 @@
 	<layout_stack name="navigation_favorites_bar_visibility_stack">
 		<layout_panel name="navigation_bar_visibility_panel">
 			<layout_stack name="location_search_layout">
-				<layout_panel name="navigation_buttons_visibility_panel" right="215">
+				<layout_panel name="navigation_buttons_visibility_panel" right="225">
 					<pull_button name="back_btn" tool_tip="Wróć do poprzedniej lokalizacji"/>
 					<pull_button name="forward_btn" tool_tip="Idź do następnej lokalizacji"/>
 					<button name="home_btn" tool_tip="Teleportuj do miejsca startu"/>
-					<button name="About_Land" label="Ziemia" tool_tip="Pokazuje okno informacyjne o Posiadłości" width="51"/>
-					<button name="Sky" label="Niebo" tool_tip="Pokazuje okno edytora nieba" width="44"/>
+					<button name="About_Land" label="Działka" tool_tip="Pokazuje okno informacyjne o działce" width="60"/>
+					<button name="Sky" label="Niebo" tool_tip="Pokazuje okno edytora nieba" width="45"/>
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">
 					<location_input label="Lokalizacja" name="location_combo"/>

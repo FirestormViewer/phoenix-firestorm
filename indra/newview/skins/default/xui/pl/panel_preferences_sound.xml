@@ -25,12 +25,12 @@
 			<button label="Zarządzaj witrynami" name="edit_media_lists_button"/>
 			<check_box name="ShowStreamMetadata" label="Pokazuj tytuł strumienia w czacie lokalnym"/>
 			<check_box name="StreamMetadataAnnounceToChat" label="Wysyłaj tytuł strum. na kanał:"/>
-			<check_box name="FSFadeAudioStream" tool_tip="Zaznacz to pole, jeśli wygładzanie ma być używane, gdy zmieni się muzyka strumieniowa na parceli" label="Płynnie wygładzaj przechodzenie między strumieniami muzyki na parcelach:"/>
-			<slider label="Wejście" name="FSAudioMusicFadeIn" tool_tip="Czas wygładzania dla dźwięku parceli przy wchodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
+			<check_box name="FSFadeAudioStream" tool_tip="Zaznacz to pole, jeśli wygładzanie ma być używane, gdy zmieni się muzyka strumieniowa na działce" label="Płynnie wygładzaj przechodzenie między strumieniami muzyki na działkach:"/>
+			<slider label="Wejście" name="FSAudioMusicFadeIn" tool_tip="Czas wygładzania dla dźwięku działki przy wchodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
 			<text name="FSAudioMusicFadeInSeconds">
 				sekund
 			</text>
-			<slider label="Wyjście" name="FSAudioMusicFadeOut" tool_tip="Czas wygładzania dla dźwięku parceli przy wychodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
+			<slider label="Wyjście" name="FSAudioMusicFadeOut" tool_tip="Czas wygładzania dla dźwięku działki przy wychodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
 			<text name="FSAudioMusicFadeOutSeconds">
 				sekund
 			</text>
@@ -174,6 +174,7 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<combo_box name="PlayModeUISndNewIncomingIMSession">
 				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
 				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
+				<combo_box.item label="Odtw. dźwięk tylko gdy okno jest w tle" name="3"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
 
@@ -185,6 +186,7 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
 				<combo_box.item label="Odtw. dźwięk tylko na nowej sesji" name="1"/>
 				<combo_box.item label="Odtw. dźwięk przy każdej wiadomości" name="2"/>
+				<combo_box.item label="Odtw. dźwięk tylko gdy okno jest w tle" name="3"/>
 				<combo_box.item label="Wycisz dźwięk" name="0"/>
 			</combo_box>
 

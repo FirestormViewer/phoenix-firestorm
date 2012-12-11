@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="floater_auction" title="Rozpocznij sprzedaż posiadłości lindenów">
+<floater name="floater_auction" title="Rozpocznij sprzedaż działki lindenów">
 	<floater.string name="already for sale">
-		Nie możesz umieścić Posiadłości na Aukcji, jeżeli już została wystawiona na sprzedaż.
+		Nie możesz umieścić działki na Aukcji, jeżeli już została wystawiona na sprzedaż.
 	</floater.string>
 	<check_box label="Dołącz żółte ogrodzenie" name="fence_check"/>
 	<button label="Zdjęcie" label_selected="Zdjęcie" name="snapshot_btn"/>

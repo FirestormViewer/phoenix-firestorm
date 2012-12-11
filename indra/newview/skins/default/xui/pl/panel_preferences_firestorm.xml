@@ -11,7 +11,7 @@
         <check_box label="Wyłącz znaki świetlne (czerwone strzałki) po teleportowaniu się" name="tp_beam_toggle" tool_tip="Wyłącza znaki świetlne wskazujące cel lądowania podczas teleportowania się." />
         <check_box label="Wyłącz ekran postępu logowania się" name="login_screen_toggle" tool_tip="Wyłącza czarny ekran postępu logowania się" />
         <check_box label="Wyłącz ekran postępu wylogowywania się" name="logout_screen_toggle" tool_tip="Wyłącza czarny ekran postępu wylogowywania się." />
-        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej Posiadłością niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
+        <check_box label="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką" name="grouplandrez" tool_tip="Zawsze próbuj rezzować obiekty jako członek grupy zarządzającej działką niezależnie od tego, czy masz ją akurat aktywną, czy nie." />
         <check_box label="Porządkuj listę kontaktów ZAWSZE według nazw kont" name="sortcontactsbyun" tool_tip="Nie zwracaj uwagi na Imiona Wyświetlane" />
         <check_box label="Zablokowane awatary jako chmury cząsteczek" name="ShowMutedAvatarsAsCloud" tool_tip="Zablokowane awatary będą renderowane jako chmury cząsteczek o specjalnym kolorze." />
         <check_box label="Ukryj puste foldery systemowe w Szafie" name="DebugHideEmptySystemFolders" tool_tip="Gdy ta opcja jest włączona, to wszystkie puste foldery systemowe - takie jak Ulubione czy Landmarki - są ukrywane" />
@@ -158,17 +158,17 @@
         </text>
     </panel>
     <panel label="System Windlight" name="WindlightTab">
-        <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/parceli" name="UseEnvironmentFromRegionAlways" />
+        <check_box label="Automatycznie zmieniaj środowisko na ustawione w regionie/działce" name="UseEnvironmentFromRegionAlways" />
         <check_box label="Płynne przenikanie ustawień regionu i moich Szybkich Preferencji" name="FSInterpolateSky" tool_tip="Opcja kontroluje płynne mieszanie się z sobą ustawień WL regionu i Szybkich Preferencji. Ten efekt może spowodować, że wolniejsze komputery mogą zwalniać na kilka sekund podczas zmiany otoczenia. Wyłącz te dwie opcje, aby pominąć efekt i stosować ustawienia natychmiast." />
         <check_box label="Płynne przenikanie ustawień wody i moich Szybkich Preferencji" name="FSInterpolateWater" tool_tip="To samo co powyżej, ale dla wody." />
         <text name="FSWLshare_txt" width="350">
-          Dzielenie się WL Phoenixa dla parcel (eksperymentalne)
+          Dzielenie się WL Phoenixa dla działek (testowe)
         </text>
-        <check_box label="Używaj dzielenia się WL Phoenixa dla parcel (eksperymentalne)" name="FSWLParcelEnabled" />
-        <check_box label="Automatycznie stosuj ustawienia WL na parcelach znajomych" name="FSWLWhitelistFriends" />
-        <check_box label="Automatycznie stosuj ustawienia WL na parcelach moich grup" name="FSWLWhitelistGroups" />
-        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich parcelach" name="FSWLWhitelistAll" />
-        <check_box label="Automatycznie zmieniaj środowisko dla WL parcel" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL parcel." />
+        <check_box label="Używaj dzielenia się WL Phoenixa dla działek (testowe)" name="FSWLParcelEnabled" />
+        <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
+        <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
+        <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />
+        <check_box label="Automatycznie zmieniaj środowisko dla WL działek" name="FSInterpolateParcelWL" tool_tip="To samo, co dla opcji przenikania powyżej, ale dla WL działek." />
         <text name="wl_crossfade_label">
          Czas przenikania (w sekundach):
          </text>

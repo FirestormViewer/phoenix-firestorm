@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<panel label="Posiadłości i L$" name="land_money_tab">
+<panel label="Działki i L$" name="land_money_tab">
 	<panel.string name="help_text">
-		Ostrzeżenie pojawia się kiedy łączna powierzchnia posiadłości jest mniejsza lub = Kontrybucjom
+		Ostrzeżenie pojawia się kiedy łączna powierzchnia działek jest mniejsza lub = Kontrybucjom
 	</panel.string>
 	<panel.string name="cant_view_group_land_text">
-		Nie masz pozwolenia na oglądanie posiadłości grupy.
+		Nie masz pozwolenia na oglądanie działek grupy.
 	</panel.string>
 	<panel.string name="epmty_view_group_land_text">
 		Brak pozycji
@@ -20,7 +20,7 @@
 	</panel.string>
 	<panel name="layout_panel_landmoney">
 		<scroll_list name="group_parcel_list">
-			<scroll_list.columns label="Posiadłość" name="name"/>
+			<scroll_list.columns label="Działka" name="name"/>
 			<scroll_list.columns label="Region" name="location"/>
 			<scroll_list.columns label="Typ" name="type"/>
 			<scroll_list.columns label="Obszar" name="area"/>
@@ -31,10 +31,10 @@
 		</text>
 		<button label="Mapa" label_selected="Mapa" name="map_button"/>
 		<text name="total_land_in_use_label">
-			Używane posiadł.:
+			Używane działki:
 		</text>
 		<text name="land_available_label">
-			Dostępne posiadł.:
+			Dostępne działki:
 		</text>
 		<text name="your_contribution_label">
 			Twoje kontrybucje:
@@ -43,7 +43,7 @@
 			(maks. [AMOUNT])
 		</text>
 		<text name="group_over_limit_text">
-			Należy zwiększyć kredyt na używanie posiadłości.
+			Należy zwiększyć kredyt na używanie działek.
 		</text>
 		<text name="group_money_heading">
 			L$ grupy

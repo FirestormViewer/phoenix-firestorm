@@ -315,7 +315,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Skrypty zabronione
 	</string>
 	<string name="TooltipLand">
-		Posiadłość:
+		Działka:
 	</string>
 	<string name="TooltipMustSingleDrop">
 		Tylko pojedynczy obiekt może być tutaj przeciągnięty
@@ -343,13 +343,13 @@ Spróbuj zalogować się ponownie za minutę.
 		Primów: [COUNT]
 	</string>
 	<string name="TooltipPrimEquivalent">
-		, wpływ na posiadłość: [PEWEIGHT] PE
+		, wpływ na działkę: [PEWEIGHT] PE
 	</string>
 	<string name="TooltipPrimEquivalentLoading">
-		, sprawdzanie wpływu na posiadłość...
+		, sprawdzanie wpływu na działkę...
 	</string>
 	<string name="TooltipPrimEquivalentUnavailable">
-		, wpływ na posiadłość niedostępny
+		, wpływ na działkę niedostępny
 	</string>
 	<string name="TooltipDistance">
 		Odległość: [DISTANCE] m
@@ -427,7 +427,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Kliknij aby zobaczyć tę reklamę
 	</string>
 	<string name="TooltipParcelUrl">
-		Kliknij aby zobaczyć opis tej posiadłości
+		Kliknij aby zobaczyć opis tej działki
 	</string>
 	<string name="TooltipTeleportUrl">
 		Kliknij aby teleportować się do tego miejsca
@@ -1864,10 +1864,10 @@ Spróbuj zalogować się ponownie za minutę.
 		Zbanowani Rezydenci
 	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
-		Pamięć skryptów Posiadłości
+		Pamięć skryptów działki
 	</string>
 	<string name="ScriptLimitsParcelsOwned">
-		Posiadłości: [PARCELS]
+		Działki: [PARCELS]
 	</string>
 	<string name="ScriptLimitsMemoryUsed">
 		Pamięć wykorzystana: [COUNT] kb z [MAX] kb; [AVAILABLE] kb pozostało
@@ -1876,7 +1876,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Pamięć wykorzystana: [COUNT] kb
 	</string>
 	<string name="ScriptLimitsParcelScriptURLs">
-		Skrypty URL Posiadłości
+		Skrypty URL działki
 	</string>
 	<string name="ScriptLimitsURLsUsed">
 		URL: [COUNT] z [MAX]; [AVAILABLE] dostępne
@@ -1888,7 +1888,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Błąd wyszukiwania informacji
 	</string>
 	<string name="ScriptLimitsRequestNoParcelSelected">
-		Posiadłość nie została wybrana
+		Działka nie została wybrana
 	</string>
 	<string name="ScriptLimitsRequestWrongRegion">
 		Błąd: informacja o skrypcie jest dostępna tylko w obecnym regionie.
@@ -1897,7 +1897,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Wyszukiwanie informacji...
 	</string>
 	<string name="ScriptLimitsRequestDontOwnParcel">
-		Nie masz pozwolenia na sprawdzenie posiadłości.
+		Nie masz pozwolenia na sprawdzenie działki.
 	</string>
 	<string name="SITTING_ON">
 		Usiądź na
@@ -2056,7 +2056,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Brak umowy dla tego majątku.
 	</string>
 	<string name="RegionNoCovenantOtherOwner">
-		Brak umowy dla tego majątku. Posiadłość w tym majątku została sprzedana przez właściciela majątku, a nie przez Linden Lab. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
+		Brak umowy dla tego majątku. Działka w tym majątku została sprzedana przez właściciela majątku, a nie przez Linden Lab. Skontaktuj się z właścicielem majątku w celu uzyskania szczegółów sprzedaży.
 	</string>
 	<string name="covenant_last_modified" value="Ostatnia modyfikacja: "/>
 	<string name="none_text" value=" (brak) "/>
@@ -2276,7 +2276,7 @@ Oczekiwane .wav, .tga, .bmp, .jpg, .jpeg, lub .bvh
 		Wynajem ziemi
 	</string>
 	<string name="Property Rental">
-		Wynajem Posiadłości
+		Wynajem działek
 	</string>
 	<string name="Special Attraction">
 		Specjalne Oferty
@@ -3890,7 +3890,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Historia odwiedzonych miejsc
 	</string>
 	<string name="LocationCtrlForSaleTooltip">
-		Kup tą posiadłość
+		Kup tą działkę
 	</string>
 	<string name="LocationCtrlVoiceTooltip">
 		Głos niedostępny w tym miejscu
@@ -3920,7 +3920,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Region ogólny
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Awatary widoczne, czat poza parcelą dozwolony
+		Awatary widoczne, czat poza działką dozwolony
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Obiekty poruszające się mogą nie zachowywać się poprawnie, póki region nie zostanie odświeżony.
@@ -4153,13 +4153,13 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		dla [ITEM]
 	</string>
 	<string name="for a parcel of land">
-		za Posiadłość
+		za działkę
 	</string>
 	<string name="for a land access pass">
-		za przepustkę na Posiadłość
+		za przepustkę na działkę
 	</string>
 	<string name="for deeding land">
-		dla przypisania Posiadłości
+		dla przypisania działki
 	</string>
 	<string name="to create a group">
 		aby stworzyć grupę
@@ -4183,7 +4183,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		To kosztuje [AMOUNT]L$
 	</string>
 	<string name="buying_selected_land">
-		Kupno wybranej Posiadłości za [AMOUNT]L$
+		Kupno wybranej działki za [AMOUNT]L$
 	</string>
 	<string name="this_object_costs">
 		Ten obiekt kosztuje [AMOUNT]L$
@@ -4429,22 +4429,22 @@ Jeśli problemy będą występowały nadal, proszę sprawdź sieć i ustawienia 
 		Status grupy
 	</string>
 	<string name="Parcel Management">
-		Zarządzanie parcelą
+		Zarządzanie działką
 	</string>
 	<string name="Parcel Identity">
-		Status parceli
+		Status działki
 	</string>
 	<string name="Parcel Settings">
-		Ustawienia parceli
+		Ustawienia działki
 	</string>
 	<string name="Parcel Powers">
-		Możliwości parceli
+		Możliwości działki
 	</string>
 	<string name="Parcel Access">
-		Dostęp do posiadłości
+		Dostęp do działki
 	</string>
 	<string name="Parcel Content">
-		Zawartość parceli
+		Zawartość działki
 	</string>
 	<string name="Object Management">
 		Zarządzanie obiektami
@@ -4521,7 +4521,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Ukryj cząsteczki
 	</string>
 	<string name="Command_AboutLand_Label">
-		O posiadłości
+		O działce
 	</string>
 	<string name="Command_Appearance_Label">
 		Wygląd

@@ -7,7 +7,7 @@
 					<pull_button name="back_btn" tool_tip="Wróć do poprzedniej lokalizacji"/>
 					<pull_button name="forward_btn" tool_tip="Idź do następnej lokalizacji"/>
 					<button name="home_btn" tool_tip="Teleportuj do miejsca startu"/>
-					<button name="About_Land" tool_tip="Pokazuje okno informacyjne o Posiadłości"/>
+					<button name="About_Land" tool_tip="Pokazuje okno informacyjne o działce"/>
 					<button name="Environment" tool_tip="Pokazuje okno Edytora Środowiska"/>
 				</layout_panel>
 				<layout_panel name="location_bar_visibility_panel">

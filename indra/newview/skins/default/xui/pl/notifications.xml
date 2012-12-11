@@ -199,7 +199,7 @@ Zaproś proszę członków w ciągu 48 godzin.
 		<usetemplate canceltext="Anuluj" name="okcancelbuttons" notext="Anuluj" yestext="Stwórz grupę za [COST]L$"/>
 	</notification>
 	<notification name="LandBuyPass">
-		Za [COST]L$ możesz odwiedzić tą posiadłość (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
+		Za [COST]L$ możesz odwiedzić tą działkę (&apos;[PARCEL_NAME]&apos;) na [TIME] godzin. Chcesz kupić przepustkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="SalePriceRestriction">
@@ -207,19 +207,19 @@ Zaproś proszę członków w ciągu 48 godzin.
 Musisz wybrać kupca jeżeli chcesz sprzedać za 0L$.
 	</notification>
 	<notification name="ConfirmLandSaleChange">
-		Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
+		Działka o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
 Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmLandSaleToAnyoneChange">
-		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją posiadłość do sprzedaży dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
+		UWAGA: Wybierając opcję &quot;Sprzedaj Każdemu&quot; udostępniasz swoją działkę na sprzedaż dla jakiegokolwiek Rezydenta [CURRENT_GRID] , nawet osób nieobecnych w tym regionie.
 
-Posiadłość o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
+Działka o powierzchni [LAND_SIZE] m² zostaje wystawiona na sprzedaż.
 Cena wynosi [SALE_PRICE]L$, a sprzedaż będzie autoryzowana dla [NAME].
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsDeededToGroup">
-		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;[NAME]&apos; na tej posiadłości do szaf ich poprzednich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty udostępnione grupie &apos;[NAME]&apos; na tej działce do szaf ich poprzednich właścicieli?
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów
 udostępnionych grupie, które nie mają praw transferu!
@@ -228,19 +228,19 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsOwnedByUser">
-		Czy na pewno chcesz zwrócić wszystkie obiekty należące do Rezydenta &apos;[NAME]&apos; znajdujące się na tej posiadłości do szafy właściciela?
+		Czy na pewno chcesz zwrócić wszystkie obiekty należące do Rezydenta &apos;[NAME]&apos; znajdujące się na tej działce do szafy właściciela?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsOwnedBySelf">
-		Czy na pewno chcesz zwrócić wszystkie Twoje obiekty znajdujące się na tej posiadłości do swojej szafy?
+		Czy na pewno chcesz zwrócić wszystkie Twoje obiekty znajdujące się na tej działce do swojej szafy?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedBySelf">
-		Czy na pewno chcesz zwrócić wszystkie obiekty, których nie jesteś właścicielem znajdujące się na tej posiadłości do szaf właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty, których nie jesteś właścicielem znajdujące się na tej działce do szaf właścicieli?
 Wszystkie obiekty udostępnione grupie z prawem transferu zostaną zwrócone poprzednim właścicielom.
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów udostępnionych grupie, które nie mają praw transferu!
@@ -249,7 +249,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByUser">
-		Czy na pewno chcesz zwrócić wszystkie obiekty, które nie należą do [NAME], a znajdujące się na tej posiadłości - do szaf właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie obiekty, które nie należą do [NAME], a znajdujące się na tej działce - do szaf właścicieli?
 Wszystkie obiekty udostępnione grupie z prawem transferu, zostaną zwrócone poprzednim właścicielom.
 
 *UWAGA* Wybrana opcja spowoduje usunięcie wszystkich obiektów udostępnionych grupie, które nie mają praw transferu!
@@ -258,7 +258,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnAllTopObjects">
-		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej posiadłości do szaf ich właścicieli?
+		Czy na pewno chcesz zwrócić wszystkie wymienione obiekty znajdujące się na tej działce do szaf ich właścicieli?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DisableAllTopObjects">
@@ -266,7 +266,7 @@ Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ReturnObjectsNotOwnedByGroup">
-		Zwrócić obiekty z tej posiadłości, które nie są udostępnione grupie [NAME] do ich właścicieli?
+		Zwrócić obiekty z tej działki, które nie są udostępnione grupie [NAME] do ich właścicieli?
 
 Obiekty: [N]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
@@ -283,7 +283,7 @@ W celu umieszczenia mediów tylko na jednej powierzchni skorzystaj z narzędzia 
 		<usetemplate ignoretext="Media zostaną ustawione na wielu zaznaczonych powierzchniach" name="okcancelignore" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="MustBeInParcel">
-		Musisz znajdować się wewnątrz posiadłości żeby wybrać punkt lądowania.
+		Musisz znajdować się wewnątrz działki, żeby wybrać punkt lądowania.
 	</notification>
 	<notification name="PromptRecipientEmail">
 		Proszę wpisać prawidłowy adres e-mail odbiorcy.
@@ -538,25 +538,25 @@ Nie będą mogły tymczasowo się poruszać, używać czatu (IM) lub oddziaływa
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Odblokuj" yestext="Unieruchom"/>
 	</notification>
 	<notification name="EjectAvatarFullname">
-		Wyrzucić [AVATAR_NAME] z Twojej posiadłości?
+		Wyrzucić [AVATAR_NAME] z Twojej działki?
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wyrzuć i zabroń wstępu (ban)" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarNoBan">
-		Wyrzucić tego awatara z Twojej posiadłości?
+		Wyrzucić tego awatara z Twojej działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarFullnameNoBan">
-		Wyrzucić [AVATAR_NAME] z Twojej posiadłości?
+		Wyrzucić [AVATAR_NAME] z Twojej działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarMultiple">
-		Wyrzucić poniższe awatary z Twojej posiadłości?
+		Wyrzucić poniższe awatary z Twojej działki?
 
 [RESIDENTS]
 		<usetemplate canceltext="Anuluj" name="yesnocancelbuttons" notext="Wyrzuć i zabroń wstępu (ban)" yestext="Wyrzuć"/>
 	</notification>
 	<notification name="EjectAvatarMultipleNoBan">
-		Wyrzucić poniższe awatary z Twojej posiadłości?
+		Wyrzucić poniższe awatary z Twojej działki?
 
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Wyrzuć"/>
@@ -686,7 +686,7 @@ Spróbuj jeszcze raz później.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CannotCreateLandmarkNotOwner">
-		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel posiadłości nie pozwala na to.
+		Nie możesz zapamiętać tego miejsca (LM) ponieważ właściciel działki nie pozwala na to.
 	</notification>
 	<notification name="CannotRecompileSelectObjectsNoScripts">
 		&apos;Rekompilacja&apos; nie powiodła się.
@@ -780,61 +780,61 @@ Jeżeli nadal otrzymujesz tę wiadomość proponujemy odwiedzić stronę [SUPPOR
 		Szafa chwilowo nie działa.
 	</notification>
 	<notification name="CannotSetLandOwnerNothingSelected">
-		Nie można wybrać właściciela posiadłości.
-Posiadłość nie została wybrana.
+		Nie można wybrać właściciela działki.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotSetLandOwnerMultipleRegions">
-		Nie można wybrać właściciela posiadłości ponieważ wybrany obszar przekracza granicę regionów. Wybierz mniejszy obszar i spróbuj jeszcze raz.
+		Nie można wybrać właściciela działki, ponieważ wybrany obszar przekracza granicę regionów. Wybierz mniejszy obszar i spróbuj jeszcze raz.
 	</notification>
 	<notification name="ForceOwnerAuctionWarning">
-		Ta posiadłość jest wystawiona na aukcję. Wymuszenie własności anuluje aukcję i potencjalnie może zdenerwować zainteresowanych Rezydentów, jeżeli licytacja już się rozpoczęła.
+		Ta działka jest wystawiona na aukcję. Wymuszenie własności anuluje aukcję i potencjalnie może zdenerwować zainteresowanych Rezydentów, jeżeli licytacja już się rozpoczęła.
 Wymusić własność?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotContentifyNothingSelected">
 		Nie można sfinalizować:
-Posiadłość nie została wybrana.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotContentifyNoRegion">
 		Nie można sfinalizować:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotReleaseLandNothingSelected">
-		Nie można porzucić posiadłości:
-Posiadłość nie została wybrana.
+		Nie można porzucić działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotReleaseLandNoRegion">
-		Nie można porzucić posiadłości:
+		Nie można porzucić działki:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotBuyLandNothingSelected">
-		Nie można kupić posiadłości:
-Posiadłość nie została wybrana.
+		Nie można kupić działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotBuyLandNoRegion">
-		Nie można kupić posiadłości:
+		Nie można kupić działki:
 Region nie znaleziony.
 	</notification>
 	<notification name="CannotCloseFloaterBuyLand">
 		Okno zakupu ziemi nie może zostać zamknięte dopóki aplikacja [APP_NAME] nie określi ceny dla tej transakcji.
 	</notification>
 	<notification name="CannotDeedLandNothingSelected">
-		Nie można przekazać posiadłości:
-Posiadłość nie została wybrana.
+		Nie można przekazać działki:
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotDeedLandNoGroup">
-		Nie można przekazać posiadłości:
+		Nie można przekazać działki:
 Grupa nie została wybrana.
 	</notification>
 	<notification name="CannotDeedLandNoRegion">
-		Brak możliwości przypisania posiadłości grupie:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości przypisania działki grupie:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotDeedLandMultipleSelected">
-		Nie można przekazać posiadłości:
-Wiele posiadłości jest wybranych.
+		Nie można przekazać działki:
+Wiele działek jest wybranych.
 
-Spróbuj wybrać pojedynczą posiadłość.
+Spróbuj wybrać pojedynczą działkę.
 	</notification>
 	<notification name="ParcelCanPlayMedia">
 		W tej lokalizacji można odtwarzać media, co może wymagać większej przepustowości sieci.
@@ -848,100 +848,100 @@ Odtwarzać media, gdy są dostępne?
 		</form>
 	</notification>
 	<notification name="CannotDeedLandWaitingForServer">
-		Nie można przekazać posiadłości:
+		Nie można przekazać działki:
 Serwer aktualizuje dane własności.
 
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="CannotDeedLandNoTransfer">
-		Nie możesz przekazać posiadłości:
-Region [REGION] nie pozwala na transfer posiadłości.
+		Nie możesz przekazać działki:
+Region [REGION] nie pozwala na transfer działki.
 	</notification>
 	<notification name="CannotReleaseLandWatingForServer">
-		Nie można porzucić posiadłości:
-Serwer aktualizuje dane posiadłości.
+		Nie można porzucić działki:
+Serwer aktualizuje dane działki.
 
 Spróbuj jeszcze raz później.
 	</notification>
 	<notification name="CannotReleaseLandSelected">
-		Nie możesz porzucić posiadłości:
-Nie jesteś właścicielem wszystkich wybranych posiadłości.
+		Nie możesz porzucić działki:
+Nie jesteś właścicielem wszystkich wybranych działek.
 
-Wybierz pojedynczą posiadłość.
+Wybierz pojedynczą działkę.
 	</notification>
 	<notification name="CannotReleaseLandDontOwn">
-		Nie możesz porzucić posiadłości:
-Nie masz praw do porzucenia tej posiadłości.
-Twoje posiadłości są podświetlone na zielono.
+		Nie możesz porzucić działki:
+Nie masz praw do porzucenia tej działki.
+Twoje działki są podświetlone na zielono.
 	</notification>
 	<notification name="CannotReleaseLandRegionNotFound">
-		Brak możliwości porzucenia posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości porzucenia działki:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotReleaseLandNoTransfer">
-		Nie możesz porzucić posiadłości:
-Region [REGION] nie pozwala na transfer posiadłości.
+		Nie możesz porzucić działki:
+Region [REGION] nie pozwala na transfer działki.
 	</notification>
 	<notification name="CannotReleaseLandPartialSelection">
-		Nie można porzucić posiadłości:
-Musisz wybrać całą posiadłość by ją porzucić.
+		Nie można porzucić działki:
+Musisz wybrać całą działkę by ją porzucić.
 
-Wybierz całą posiadłość albo najpierw ją podziel.
+Wybierz całą działkę albo najpierw ją podziel.
 	</notification>
 	<notification name="ReleaseLandWarning">
-		Porzucasz posiadłość o powierzchni [AREA] m².
-Porzucenie tej posiadłości usunie ją z Twoich własności, ale nie otrzymasz za to żadnych L$.
+		Porzucasz działkę o powierzchni [AREA] m².
+Porzucenie tej działki usunie ją z Twoich własności, ale nie otrzymasz za to żadnych L$.
 
-Porzucić posiadłość?
+Porzucić działkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotDivideLandNothingSelected">
-		Nie można podzielić posiadłości:
+		Nie można podzielić działki:
 
-Posiadłość nie została wybrana.
+Działka nie została wybrana.
 	</notification>
 	<notification name="CannotDivideLandPartialSelection">
-		Nie można podzielić posiadłości:
+		Nie można podzielić działki:
 
-Posiadłość została wybrana w całości.
-Spróbuj wybrać część posiadłości.
+Działka została wybrana w całości.
+Spróbuj wybrać część działki.
 	</notification>
 	<notification name="LandDivideWarning">
-		Podział tej posiadłości stworzy dwie posiadłości, z których każda będzie mogła mieć indywidualne ustawienia.
+		Podział tej działki stworzy dwie działki, z których każda będzie mogła mieć indywidualne ustawienia.
 Niektóre ustawienia zostaną zmienione na domyślne po tej operacji.
 
-Podzielić posiadłość?
+Podzielić działkę?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CannotDivideLandNoRegion">
-		Brak możliwości podziału posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości podziału działki:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotJoinLandNoRegion">
-		Brak możliwości złączenia posiadłości:
-Region, gdzie posiadłość się znajduje nie został odnaleziony.
+		Brak możliwości złączenia działek:
+Region, gdzie działka się znajduje nie został odnaleziony.
 	</notification>
 	<notification name="CannotJoinLandNothingSelected">
-		Nie można połączyć posiadłości:
-Posiadłości nie zostały wybrane.
+		Nie można połączyć działek:
+Działki nie zostały wybrane.
 	</notification>
 	<notification name="CannotJoinLandEntireParcelSelected">
-		Nie można połączyć posiadłości:
-Tylko jedna posiadłość została wybrana.
+		Nie można połączyć działek:
+Tylko jedna działka została wybrana.
 
-Wybierz obszar usytuowany na obu posiadłościach.
+Wybierz obszar usytuowany na obu działkach.
 	</notification>
 	<notification name="CannotJoinLandSelection">
-		Nie można połączyć posiadłości:
-Musisz wybrać więcej niż jedną posiadłość.
+		Nie można połączyć działek:
+Musisz wybrać więcej niż jedną działkę.
 
-Wybierz obszar usytuowany na obu posiadłościach.
+Wybierz obszar usytuowany na obu działkach.
 	</notification>
 	<notification name="JoinLandWarning">
-		Połączenie tego obszaru utworzy jedną większą posiadłość ze wszystkich posiadłości przecinających wybrany prostokąt.
-Nazwa i opcje posiadłości będą musiały zostać skonfigurowane.
+		Połączenie tego obszaru utworzy jedną większą działkę ze wszystkich działek przecinających wybrany prostokąt.
+Nazwa i opcje działki będą musiały zostać skonfigurowane.
 
-Połączyć posiadłości?
+Połączyć działki?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="ConfirmNotecardSave">
@@ -974,8 +974,8 @@ Zazwyczaj jest to tymczasowy problem. Możesz kontynuować modyfikacje i zapisa�
 		<usetemplate name="okcancelbuttons" notext="Wyłącz" yestext="Pokaż IM/czat"/>
 	</notification>
 	<notification name="OnlyOfficerCanBuyLand">
-		Nie możesz kupić posiadłości dla grupy.
-Nie masz praw kupowania posiadłości dla Twojej aktywnej grupy.
+		Nie możesz kupić działek dla grupy.
+Nie masz praw kupowania działek dla Twojej aktywnej grupy.
 	</notification>
 	<notification label="Add Friend" name="AddFriendWithMessage">
 		Znajomi mogą pozwalać na odnajdywanie się wzajemnie na mapie i na otrzymywanie informacji o statusie online.
@@ -1065,19 +1065,19 @@ Zobacz https://wiki.secondlife.com/wiki/Adding_Spelling_Dictionaries
 	<notification name="GodDeleteAllScriptedPublicObjectsByUser">
 		Na pewno chcesz usunąć wszystkie skryptowane obiekty należące do
 ** [AVATAR_NAME] **
-z posiadłości innych w tym symulatorze?
+z działek innych w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="GodDeleteAllScriptedObjectsByUser">
 		Na pewno chcesz usunąć wszystkie skryptowane obiekty należące do
 ** [AVATAR_NAME] **
-ze wszystkich posiadłości w tym symulatorze?
+ze wszystkich działek w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="GodDeleteAllObjectsByUser">
 		Na pewno chcesz usunąć wszystkie obiekty (skryptowane i nie) należące do
 ** [AVATAR_NAME] **
-ze wszystkich posiadłości w tym symulatorze?
+ze wszystkich działek w tym symulatorze?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="BlankClassifiedName">
@@ -1163,23 +1163,23 @@ Na pewno chcesz wziąć te obiekty?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="CantBuyLandAcrossMultipleRegions">
-		Nie możesz kupić posiadłości ponieważ wybrany obszar przekracza granicę regionów.
+		Nie możesz kupić działki, ponieważ wybrany obszar przekracza granicę regionów.
 
 Wybierz mniejszy obszar i spróbuj jeszcze raz.
 	</notification>
 	<notification name="DeedLandToGroup">
-		Po przekazaniu tej posiadłości grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie posiadłości.
-Cena zakupu posiadłości nie jest zwracana właścicielowi. Jeżeli przekazana posiadłość zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
+		Po przekazaniu tej działki grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie działki.
+Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą posiadłość o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DeedLandToGroupWithContribution">
-		Po przekazaniu tej posiadłości grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie posiadłości.
-Przekazanie będzie zawierać równoczesne przypisanie posiadłości do grupy od &apos;[NAME]&apos;.
-Cena zakupu posiadłości nie jest zwracana właścicielowi. Jeżeli przekazana posiadłość zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
+		Po przekazaniu tej działki grupa będzie musiała mieć i utrzymywać wystarczający kredyt na używanie działki.
+Przekazanie będzie zawierać równoczesne przypisanie działki do grupy od &apos;[NAME]&apos;.
+Cena zakupu działki nie jest zwracana właścicielowi. Jeżeli przekazana działka zostanie sprzedana, cena sprzedaży zostanie podzielona pomiędzy członków grupy.
 
-Przekazać tą posiadłość o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
+Przekazać tą działkę o powierzchni [AREA] m² grupie &apos;[GROUP_NAME]&apos;?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
 	<notification name="DisplaySetToSafe">
@@ -1518,7 +1518,7 @@ Chcesz opuścić grupę?
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="CannotStartAuctionAlreadyForSale">
-		Aukcja nie może zostać rozpoczęta w posiadłości, która została już wcześniej wystawiona na sprzedaż. Dezaktywuj opcję sprzedaży posiadłości, jeżeli chcesz rozpocząć aukcję.
+		Aukcja nie może zostać rozpoczęta dla działki, która została już wcześniej wystawiona na sprzedaż. Dezaktywuj opcję sprzedaży działki, jeżeli chcesz rozpocząć aukcję.
 	</notification>
 	<notification label="Zablokuj obiekty według nazwy" name="MuteByNameFailed">
 		Rezydent/obiekt jest już zablokowany.
@@ -2229,7 +2229,7 @@ Zamieść go na stronie internetowej żeby umożliwić innym łatwy dostęp do t
 		Miejsce dostępne dla osób mających 18 lat lub więcej.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
-		Nie masz dostępu do tej posiadłości ze względu na brak danych płatniczych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
+		Nie masz dostępu do tej działki ze względu na brak danych płatniczych o Twoim koncie. Czy chcesz odwiedzić stronę [CURRENT_GRID] żeby to zmienić?
 
 [_URL]
 		<url name="url">
@@ -2251,7 +2251,7 @@ Włączyć filtr mediów?
 		</form>
 	</notification>
 	<notification name="MediaAlert"> 
-		Ta parcela dostarcza media z:
+		Ta działka dostarcza media z:
 
 Domena: [MEDIADOMAIN]
 URL: [MEDIAURL]
@@ -2272,7 +2272,7 @@ URL: [MEDIAURL]
 		</form>
 	</notification>
 	<notification name="AudioAlert"> 
-		Ta parcela dostarcza muzykę z:
+		Ta działka dostarcza muzykę z:
 
 Domena: [AUDIODOMAIN]
 URL: [AUDIOURL]
@@ -2480,7 +2480,7 @@ Spróbuj wybrać mniejszy obszar.
 		</form>
 	</notification>
 	<notification name="TransferObjectsHighlighted">
-		Obiekty na tej posiadłości, które zostaną przekazane kupcowi tej posiadłości są teraz podświetlone.
+		Obiekty na tej działce, które zostaną przekazane kupcowi tej działki są teraz podświetlone.
 
 * Drzewa i trawy, które zostaną przekazane nie są podświetlone.
 		<form name="form">
@@ -2493,7 +2493,7 @@ Spróbuj wybrać mniejszy obszar.
 	</notification>
 	<notification name="NoQuickTime">
 		Wygląda na to, że Apple QuickTime nie jest zainstalowany na Twoim komputerze.
-Jeżeli chcesz odtwarzać media na tej posiadłości, które używają QuickTime idź do [http://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
+Jeżeli chcesz odtwarzać media na tej działce, które używają QuickTime idź do [http://www.apple.com/quicktime strony QuickTime] i zainstaluj odtwarzacz.
 	</notification>
 	<notification name="NoPlugin">
 		Nie znaleziono wtyczki mediów dla typu mime "[MIME_TYPE]". Media tego typu będą niedostępne.
@@ -2508,42 +2508,42 @@ Zainstaluj wtyczki ponownie lub skontaktuj się z dostawcą, jeśli problem nada
 		</form>
 	</notification>
 	<notification name="OwnedObjectsReturned">
-		Twoje obiekty z wybranej posiadłości zostały zwrócone do Twojej Szafy.
+		Twoje obiekty z wybranej działki zostały zwrócone do Twojej Szafy.
 	</notification>
 	<notification name="OtherObjectsReturned">
-		Obiekty należące do [NAME] na wybranej posiadłości zostały zwrócone do Szafy tej osoby.
+		Obiekty należące do [NAME] na wybranej działce zostały zwrócone do Szafy tej osoby.
 	</notification>
 	<notification name="OtherObjectsReturned2">
-		Obiekty z posiadłości należącej do Rezydenta [NAME] zostały zwrócone do jego Szafy.
+		Obiekty z działki należącej do Rezydenta [NAME] zostały zwrócone do jego Szafy.
 	</notification>
 	<notification name="GroupObjectsReturned">
-		Obiekty z wybranej posiadłości przypisane do grupy [GROUPNAME] zostały zwrócone do szaf ich właścicieli.
+		Obiekty z wybranej działki przypisane do grupy [GROUPNAME] zostały zwrócone do szaf ich właścicieli.
 Przekazywalne obiekty przekazane grupie zostały zwrócone do ich poprzednich właścicieli.
 Nieprzekazywalne obiekty przekazane grupie zostały usunięte.
 	</notification>
 	<notification name="UnOwnedObjectsReturned">
-		Obiekty z wybranej posiadłości które nie należą do Ciebie zostały zwrócone do ich właścicieli.
+		Obiekty z wybranej działki które nie należą do Ciebie zostały zwrócone do ich właścicieli.
 	</notification>
 	<notification name="ServerObjectMessage">
 		Wiadomość od [NAME]:
 &lt;nolink&gt;[MSG]&lt;/nolink&gt;
 	</notification>
 	<notification name="NotSafe">
-		Ta posiadłość pozwala na uszkodzenia.
+		Ta działka pozwala na uszkodzenia.
 Możesz doznać tutaj urazu. Jeżeli zginiesz nastąpi teleportacja do Twojego miejsca startu.
 	</notification>
 	<notification name="NoFly">
-		Ta posiadłość nie pozwala na latanie.
+		Ta działka nie pozwala na latanie.
 Nie możesz tutaj latać.
 	</notification>
 	<notification name="PushRestricted">
-		Popychanie niedozwolone. Nie możesz tutaj popychać innych chyba, że jesteś właścicielem tej posiadłości.
+		Popychanie niedozwolone. Nie możesz tutaj popychać innych chyba, że jesteś właścicielem tej działki.
 	</notification>
 	<notification name="NoVoice">
-		Ta posiadłość nie pozwala na rozmowy głosowe.
+		Ta działka nie pozwala na rozmowy głosowe.
 	</notification>
 	<notification name="NoBuild">
-		Ta posiadłość nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
+		Ta działka nie pozwala na budowanie. Nie możesz tworzyć tutaj obiektów.
 	</notification>
 	<notification name="PathfindingDirty">
 		W tym regionie są oczekujące zmiany w odnajdywaniu ścieżek. Jeśli posiadasz prawa budowania możesz odświeżyć region klikając na przycisk “Odśwież region”.
@@ -2561,7 +2561,7 @@ Nie możesz tutaj latać.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="SeeAvatars">  
-		Ta posiadłość ukrywa czat tekstowy i awatary z innych posiadłości. Nie będziesz widzieć rezydentów na zewnątrz tej posiadłości - ani oni Ciebie. Wspólny kanał czatu 0 również jest zablokowany.
+		Ta działka ukrywa czat tekstowy i awatary z innych działek. Nie będziesz widzieć rezydentów na zewnątrz tej działki - ani oni Ciebie. Wspólny kanał czatu 0 również jest zablokowany.
 	</notification>
 	<notification name="ScriptsStopped">
 		Administrator czasowo zatrzymał skrypty w tym regionie.
@@ -2570,12 +2570,12 @@ Nie możesz tutaj latać.
 		Żadne skrypty nie działają w tym regionie.
 	</notification>
 	<notification name="NoOutsideScripts">
-		Ta posiadłość nie pozwala na zewnętrzne skrypty.
+		Ta działka nie pozwala na zewnętrzne skrypty.
 
-Żadne skrypty nie będą tutaj działać za wyjątkiem skryptów należących do właściciela posiadłości.
+Żadne skrypty nie będą tutaj działać za wyjątkiem skryptów należących do właściciela działki.
 	</notification>
 	<notification name="ClaimPublicLand">
-		Tylko publiczne posiadłości w tym regionie, co Ty, mogą być przejęte.
+		Tylko publiczne działki w tym regionie, co Ty, mogą być przejęte.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
 		Region, który próbujesz odwiedzić ma klasyfikację treści przekraczającą Twoje obecne preferencje treści. Możesz je zmienić używając Awatar &gt; Ustawienia &gt; Ogólne w pasku menu.
@@ -2593,7 +2593,7 @@ Nie możesz tutaj latać.
 		Musisz mieć 18 lat lub więcej, aby móc wejść do tego regionu.
 	</notification>
 	<notification name="MustGetAgeParcel">
-		Musisz mieć 18 lat lub więcej, aby móc wejść do tej posiadłości.
+		Musisz mieć 18 lat lub więcej, aby móc wejść na tą działkę.
 	</notification>
 	<notification name="NoDestRegion">
 		Żądana lokalizacja regionu nie została odnaleziona.
@@ -2602,7 +2602,7 @@ Nie możesz tutaj latać.
 		Brak dostępu do podanej lokalizacji.
 	</notification>
 	<notification name="RegionParcelBan">
-		Nie możesz przejść przez zamkniętą posiadłość. Spróbuj skorzystać z innej drogi.
+		Nie możesz przejść przez zamkniętą działkę. Spróbuj skorzystać z innej drogi.
 	</notification>
 	<notification name="TelehubRedirect">
 		Zostałeś/aś przeniesiony/a do teleportera (telehuba).
@@ -2651,7 +2651,7 @@ Spróbuj ponownie za kilka minut.
 		Niepoprawny punkt lądowania.
 	</notification>
 	<notification name="NoValidParcel">
-		Niepoprawna posiadłość.
+		Niepoprawna działka.
 	</notification>
 	<notification name="ObjectGiveItem">
 		Obiekt o nazwie &lt;nolink&gt;[OBJECTFROMNAME]&lt;/nolink&gt; należący do [NAME_SLURL] dał Tobie [OBJECTTYPE]:
@@ -2944,13 +2944,13 @@ Wybierz Zaakceptuj żeby zacząć czat albo Odmów żeby nie przyjąć zaproszen
 		Nowe Przekształcenia Głosu są dostępne!
 	</notification>
 	<notification name="Cannot enter parcel: not a group member">
-		Nie masz dostępu do posiadłości, nie należysz do właściwej grupy.
+		Nie masz dostępu do działki, nie należysz do właściwej grupy.
 	</notification>
 	<notification name="Cannot enter parcel: banned">
-		Masz wzbroniony wstęp na tą posiadłość (ban).
+		Masz wzbroniony wstęp na tą działkę (ban).
 	</notification>
 	<notification name="Cannot enter parcel: not on access list">
-		Nie masz dostępu do posiadłości, nie jesteś na liście dostępu.
+		Nie masz dostępu do działki, nie jesteś na liście dostępu.
 	</notification>
 	<notification name="VoiceNotAllowed">
 		Nie masz pozwolenia na połączenie z rozmową [VOICE_CHANNEL_NAME].
@@ -3052,15 +3052,15 @@ następującym Rezydentom:
 		Przekazanie grupie nie powiodło się.
 	</notification>
 	<notification name="ReleaseLandThrottled">
-		Parcela [PARCEL_NAME] nie może teraz zostać porzucona.
+		Działka [PARCEL_NAME] nie może teraz zostać porzucona.
 	</notification>
 	<notification name="ReleasedLandWithReclaim">
-		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
+		Działka &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została porzucona.
 
 Masz [RECLAIM_PERIOD] godzin na odzyskanie jej za 0L$ zanim zostanie wystawiona na sprzedaż każdemu.
 	</notification>
 	<notification name="ReleasedLandNoReclaim">
-		Parcela &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została uwolniona.
+		Działka &apos;[PARCEL_NAME]&apos; o obszarze [AREA] m² została porzucona.
 
 Jest teraz dostępna do kupienia dla każdego.
 	</notification>
@@ -3370,7 +3370,7 @@ Jeżeli wciąż masz problemy sprawdź: [SUPPORT_SITE].
 		- Pamięć Twojego systemu nie spełnia minimalnych wymagań.
 	</global>
 	<global name="You can only set your 'Home Location' on your land or at a mainland Infohub.">
-		Jeśli jesteś właścicielem posiadłości, to możesz ustawić na niej miejsce startu.
+		Jeśli jesteś właścicielem działki, to możesz ustawić na niej miejsce startu.
 W innym przypadku możesz poszukać na mapie miejsc oznaczonych jako &quot;Infohub&quot;.
 	</global>
 	<global name="You died and have been teleported to your home location">
@@ -3670,7 +3670,7 @@ Czy chcesz autoryzować [APP_NAME] do ładowania zdjęć na Flickr?
 		Możesz znaleźć swoje zdjęcie [http://www.flickr.com/photos/upload/edit/?ids=[ID] tutaj].
 	</notification>
 	<notification name="FirstUseFlyOverride">
-		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela posiadłości może poskutkować zbanowaniem Twojego awatara z parceli, nad którą będziesz latać.		
+		Uwaga: Używaj Wymuszania Latania z rozwagą! Stosowanie tej opcji bez zezwolenia właściciela działki może poskutkować zbanowaniem Twojego awatara z działki, nad którą będziesz latać.		
 	</notification>
 	<notification name="ServerVersionChanged">
 		Region, w którym się właśnie pojawiłeś/aś działa na innej wersji symulatora.
