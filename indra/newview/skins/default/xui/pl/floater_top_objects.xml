@@ -9,9 +9,6 @@
 	<floater.string name="scripts_score_label">
 		Czas
 	</floater.string>
-	<floater.string name="scripts_mono_time_label">
-		Czas Mono
-	</floater.string>
 	<floater.string name="top_colliders_title">
 		Główne kolizje
 	</floater.string>
@@ -32,9 +29,10 @@
 		<scroll_list.columns label="Nazwa" name="name"/>
 		<scroll_list.columns label="Właściciel" name="owner"/>
 		<scroll_list.columns label="Miejsce" name="location"/>
+		<scroll_list.columns label="Parcela" name="parcel"/>
 		<scroll_list.columns label="Czas" name="time"/>
-		<scroll_list.columns label="Czas Mono" name="mono_time"/>
 		<scroll_list.columns label="URLe" name="URLs"/>
+		<scroll_list.columns label="Pamięć (KB)" name="memory"/>
 	</scroll_list>
 	<text name="id_text">
 		ID obiektu:
@@ -48,6 +46,10 @@
 		Właściciel:
 	</text>
 	<button label="Filtruj" name="filter_owner_btn"/>
+	<text name="parcel_name_text">
+		Parcela:
+	</text>
+	<button label="Filtruj" name="filter_parcel_btn"/>
 	<button label="Odśwież" name="refresh_btn"/>
 	<button label="Zwróć wybrane" name="return_selected_btn"/>
 	<button label="Zwróć wszystko" name="return_all_btn"/>

@@ -9,6 +9,9 @@
 	<panel.string name="already_in_group">
 		Niektórzy Rezydenci, których wybrałeś już należą do grupy i nie otrzymali zaproszenia.
 	</panel.string>
+	<panel.string name="invite_selection_too_large">
+		Zaproszenia nie zostały wysłane: wybrano zbyt wielu Rezydentów. Limit to 100 zaproszeń na jedno żądanie.
+	</panel.string>
 	<text name="help_text">
 		Możesz zaprosić kilku Rezydentów do swojej grupy. Wybierz &apos;Otwórz Katalog Osobisty&apos; aby rozpocząć.
 	</text>

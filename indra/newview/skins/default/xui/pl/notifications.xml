@@ -1221,7 +1221,7 @@ Możesz normalnie używać [APP_NAME], inni użytkownicy będą Cię widzieli po
 		Instalacja [APP_NAME] zakończona.
 
 Jeżeli używasz [CURRENT_GRID] po raz pierwszy to musisz stworzyć konto żeby móc się zalogować.
-		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Nowe konto..."/>
+		<usetemplate name="okcancelbuttons" notext="Kontynuuj" yestext="Stwórz konto..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
 		Problemy z połączeniem. Problem może być spowodowany Twoim połączeniem z Internetem albo może istnieć po stronie [SECOND_LIFE_GRID].
