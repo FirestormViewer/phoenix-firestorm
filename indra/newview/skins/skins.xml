@@ -1,169 +1,168 @@
 <llsd>
-    <array>
+  <array>
+    <map>
+      <key>name</key>
+      <string>AnsaStorm</string>
+      <key>folder</key>
+      <string>ansastorm</string>
+      <key>themes</key>
+      <array>
         <map>
-        <key>name</key>
-            <string>AnsaStorm</string>
-        <key>folder</key>
-            <string>ansastorm</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Bright Blue</string>
-                <key>folder</key>
-                    <string>bright_blue</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Classic Brown</string>
-                <key>folder</key>
-                    <string>classic_brown</string>
-                </map>
-            </array>
+          <key>name</key>
+          <string>Bright Blue</string>
+          <key>folder</key>
+          <string>bright_blue</string>
         </map>
-
-		<map>
-        <key>name</key>
-            <string>Firestorm</string>
-        <key>folder</key>
-            <string>firestorm</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Grey</string>
-                <key>folder</key>
-                    <string>grey</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Dark</string>
-                <key>folder</key>
-                    <string>dark</string>
-                </map>
-                <!-- Thea Brianna's blue theme -->
-                <map>
-                <key>name</key>
-                    <string>Blue</string>
-                <key>folder</key>
-                    <string>Blue</string>
-                </map>
-				<!-- Ansariel Hiller's high contrast theme -->
-                <map>
-                <key>name</key>
-                    <string>High Contrast</string>
-                <key>folder</key>
-                    <string>highcontrast</string>
-                </map>
-            </array>
+        <map>
+          <key>name</key>
+          <string>Classic Brown</string>
+          <key>folder</key>
+          <string>classic_brown</string>
         </map>
+      </array>
+    </map>
 
-		<map>
-        <key>name</key>
-            <string>MetaHarper Modern</string>
-        <key>folder</key>
-            <string>metaharper</string>
-        <key>themes</key>
-            <array>
-				<map>
-                <key>name</key>
-                    <string>CoolOcean</string>
-                <key>folder</key>
-                    <string>cool_ocean</string>
-                </map>
+    <map>
+      <key>name</key>
+      <string>Firestorm</string>
+      <key>folder</key>
+      <string>firestorm</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>Grey</string>
+          <key>folder</key>
+          <string>grey</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Dark</string>
+          <key>folder</key>
+          <string>dark</string>
+        </map>
+        <!-- Thea Brianna's blue theme -->
+        <map>
+          <key>name</key>
+          <string>Blue</string>
+          <key>folder</key>
+          <string>Blue</string>
+        </map>
+        <!-- Ansariel Hiller's high contrast theme -->
+        <map>
+          <key>name</key>
+          <string>High Contrast</string>
+          <key>folder</key>
+          <string>highcontrast</string>
+        </map>
+      </array>
+    </map>
 
-                <map>
-                <key>name</key>
-                    <string>AppalachianSky</string>
-                <key>folder</key>
-                    <string>appalachian_sky</string>
-				</map>
-            </array>
+    <map>
+      <key>name</key>
+      <string>MetaHarper Modern</string>
+      <key>folder</key>
+      <string>metaharper</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>CoolOcean</string>
+          <key>folder</key>
+          <string>cool_ocean</string>
         </map>
 
         <map>
-        <key>name</key>
-            <string>StarLight</string>
-        <key>folder</key>
-            <string>starlight</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Original Orange</string>
-                <key>folder</key>
-                    <string>original_orange</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Original Teal</string>
-                <key>folder</key>
-                    <string>original_teal</string>
-                </map>
-				<map>
-                <key>name</key>
-                    <string>Mono Teal</string>
-                <key>folder</key>
-                    <string>mono_teal</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Nostalgia Blue</string>
-                <key>folder</key>
-                    <string>nostalgia_blue</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Silver Blue</string>
-                <key>folder</key>
-                    <string>silver_blue</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Silver Pink</string>
-                <key>folder</key>
-                    <string>silver_pink</string>
-                </map>
-            </array>
+          <key>name</key>
+          <string>AppalachianSky</string>
+          <key>folder</key>
+          <string>appalachian_sky</string>
         </map>
+      </array>
+    </map>
 
+    <map>
+      <key>name</key>
+      <string>StarLight</string>
+      <key>folder</key>
+      <string>starlight</string>
+      <key>themes</key>
+      <array>
         <map>
-        <key>name</key>
-            <string>StarLight CUI</string>
-        <key>folder</key>
-            <string>starlightcui</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Custom Dark</string>
-                <key>folder</key>
-                    <string>custom_dark</string>
-                </map>
-                <map>
-                <key>name</key>
-                    <string>Custom Light</string>
-                <key>folder</key>
-                    <string>custom_Light</string>
-                </map>
-            </array>
+          <key>name</key>
+          <string>Original Orange</string>
+          <key>folder</key>
+          <string>original_orange</string>
         </map>
+        <map>
+          <key>name</key>
+          <string>Original Teal</string>
+          <key>folder</key>
+          <string>original_teal</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Mono Teal</string>
+          <key>folder</key>
+          <string>mono_teal</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Nostalgia Blue</string>
+          <key>folder</key>
+          <string>nostalgia_blue</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Silver Blue</string>
+          <key>folder</key>
+          <string>silver_blue</string>
+        </map>
+        <map>
+          <key>name</key>
+          <string>Silver Pink</string>
+          <key>folder</key>
+          <string>silver_pink</string>
+        </map>
+      </array>
+    </map>
 
-		<map>
-        <key>name</key>
-            <string>Vintage</string>
-        <key>folder</key>
-            <string>vintage</string>
-        <key>themes</key>
-            <array>
-                <map>
-                <key>name</key>
-                    <string>Classic</string>
-                <key>folder</key>
-                    <string>classic</string>
-                </map>
-            </array>
+    <map>
+      <key>name</key>
+      <string>StarLight CUI</string>
+      <key>folder</key>
+      <string>starlightcui</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>Custom Dark</string>
+          <key>folder</key>
+          <string>custom_dark</string>
         </map>
-    </array>
+        <map>
+          <key>name</key>
+          <string>Custom Light</string>
+          <key>folder</key>
+          <string>custom_Light</string>
+        </map>
+      </array>
+    </map>
+
+    <map>
+      <key>name</key>
+      <string>Vintage</string>
+      <key>folder</key>
+      <string>vintage</string>
+      <key>themes</key>
+      <array>
+        <map>
+          <key>name</key>
+          <string>Classic</string>
+          <key>folder</key>
+          <string>classic</string>
+        </map>
+      </array>
+    </map>
+  </array>
 </llsd>
-

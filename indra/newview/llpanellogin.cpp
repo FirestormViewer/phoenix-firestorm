@@ -27,7 +27,6 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "llpanellogin.h"
-#include "lllayoutstack.h"
 
 #include "indra_constants.h"		// for key and mask constants
 #include "llfloaterreg.h"
@@ -179,7 +178,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	childSetAction("delete_saved_login_btn", onClickDelete, this);
 	childSetAction("connect_btn", onClickConnect, this);
 
-	getChild<LLPanel>("links_login_panel")->setDefaultBtn("connect_btn");
+	getChild<LLPanel>("login")->setDefaultBtn("connect_btn");
 
 	std::string channel = LLVersionInfo::getChannel();
 	std::string version = llformat("%s (%d)",
@@ -193,7 +192,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLTextBox* forgot_password_text = getChild<LLTextBox>("forgot_password_text");
 	forgot_password_text->setClickedCallback(onClickForgotPassword, NULL);
 
-	childSetAction("create_new_account_btn", onClickNewAccount, NULL);
+	LLTextBox* create_new_account_text = getChild<LLTextBox>("create_new_account_text");
+	create_new_account_text->setClickedCallback(onClickNewAccount, NULL);
 
 	LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
 	need_help_text->setClickedCallback(onClickHelp, NULL);

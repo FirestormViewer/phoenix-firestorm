@@ -1845,7 +1845,6 @@ void LLViewerWindow::initBase()
 	LLMenuGL::sMenuContainer = gMenuHolder;
 
 	// Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them -Zi
-	LL_DEBUGS("AppInit") << "initializing menu bar" << LL_ENDL;
 	initialize_edit_menu();
 	initialize_spellcheck_menu();
 	// <FS:Zi>
