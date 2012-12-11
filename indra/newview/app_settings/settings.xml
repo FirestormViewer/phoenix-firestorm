@@ -18229,7 +18229,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <integer>10.0</integer>
+    <real>10.0</real>
   </map>
     <key>ExodusFlickrLastTags</key>
     <map>
@@ -18860,7 +18860,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <value>1</value>
+      <integer>1</integer>
     </map>
     <key>DontTrimLegacyNames</key>
     <map>
