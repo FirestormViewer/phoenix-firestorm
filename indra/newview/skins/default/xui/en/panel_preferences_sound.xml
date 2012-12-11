@@ -1563,6 +1563,10 @@ Hover your mouse cursor over UUID field to show its default value.
              name="2"
              value="2"/>
            <combo_box.item
+             label="Play only if not in focus"
+             name="3"
+             value="3"/>
+           <combo_box.item
              label="Mute this sound"
              name="0"
              value="0"/>
@@ -1630,6 +1634,10 @@ Hover your mouse cursor over UUID field to show its default value.
              label="Play on every message"
              name="2"
              value="2"/>
+           <combo_box.item
+             label="Play sound only if not in focus"
+             name="3"
+             value="3"/>
            <combo_box.item
              label="Mute this sound"
              name="0"

@@ -18478,7 +18478,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>PlayModeUISndNewIncomingIMSession</key>
     <map>
       <key>Comment</key>
-      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Instant Messages'.</string>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message, 3 = Play only if not in focus.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Instant Messages'.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -18489,7 +18489,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>PlayModeUISndNewIncomingGroupIMSession</key>
     <map>
       <key>Comment</key>
-      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingGroupIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Group Instant Messages'.</string>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndNewIncomingGroupIMSession. 0 = Mute this sound, 1 = Play only on new session, 2 = Play on every message, 3 = Play only if not in focus.  This setting is shared with Chat &gt; Notifications &gt; 'When receiving Group Instant Messages'.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

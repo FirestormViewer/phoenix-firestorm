@@ -597,6 +597,10 @@
                  name="2"
                  value="2"/>
                 <combo_box.item
+                 label="Play sound only if not in focus"
+                 name="3"
+                 value="3"/>
+                <combo_box.item
                  label="Don't play any notification sound"
                  name="0"
                  value="0"/>
@@ -628,6 +632,10 @@
                  label="Play sound on every message received"
                  name="2"
                  value="2"/>
+                <combo_box.item
+                 label="Play sound only if not in focus"
+                 name="3"
+                 value="3"/>
                 <combo_box.item
                  label="Don't play any notification sound"
                  name="0"

@@ -2691,6 +2691,24 @@ void LLIMMgr::addMessage(
 		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
+	// <FS:WoLf> IM Sounds only for sessions not in focus
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 3 && dialog == IM_NOTHING_SPECIAL)
+	{
+		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		if (im_floater && !im_floater->hasFocus())
+		{
+			make_ui_sound("UISndNewIncomingIMSession");
+		}
+	}
+	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 3 && dialog != IM_NOTHING_SPECIAL)
+	{
+		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		if (im_floater && !im_floater->hasFocus())
+		{
+			make_ui_sound("UISndNewIncomingGroupIMSession");
+		}
+	}
+	// </FS:WoLf>
 
 	//<FS:TS> FIRE-6650: Group chat for non-friends mutes when disabling voice chat from non-friends
 	bool skip_message = false;
