@@ -3924,6 +3924,11 @@ bool move_task_inventory_callback(const LLSD& notification, const LLSD& response
 // Returns true if the item can be moved to Current Outfit or any outfit folder.
 static BOOL can_move_to_outfit(LLInventoryItem* inv_item, BOOL move_is_into_current_outfit)
 {
+	// <FS:ND> FIRE-8434/BUG-988 Viewer crashes when copying and pasting an empty outfit folder
+	if( !inv_item )
+		return FALSE;
+	// </FS:ND>
+
 	if ((inv_item->getInventoryType() != LLInventoryType::IT_WEARABLE) &&
 		(inv_item->getInventoryType() != LLInventoryType::IT_GESTURE) &&
 		(inv_item->getInventoryType() != LLInventoryType::IT_ATTACHMENT) &&
