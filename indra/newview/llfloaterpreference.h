@@ -208,6 +208,9 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
+
+	// <FS:Ansariel> Fix for FIRE-8245: Only cancel if the floater is really open
+	bool mIsOpen;
 };
 
 class LLPanelPreference : public LLPanel

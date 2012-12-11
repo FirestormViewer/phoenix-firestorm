@@ -413,6 +413,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mLanguageChanged(false),
 	mAvatarDataInitialized(false),
 	mClickActionDirty(false)
+	// <FS:Ansariel> Fix for FIRE-8245: Only cancel if the floater is really open
+	,mIsOpen(false)
 {
 	
 	//Build Floater is now Called from 	LLFloaterReg::add("preferences", "floater_preferences.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterPreference>);
@@ -838,7 +840,9 @@ void LLFloaterPreference::cancel()
 
 void LLFloaterPreference::onOpen(const LLSD& key)
 {
-	
+	// <FS:Ansariel> Fix for FIRE-8245: Only cancel if the floater is really open
+	mIsOpen = true;
+
 	// this variable and if that follows it are used to properly handle busy mode response message
 	static bool initialized = FALSE;
 	// if user is logged in and we haven't initialized busy_response yet, do it
@@ -961,7 +965,14 @@ void LLFloaterPreference::onClose(bool app_quitting)
 {
 	gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
 	LLPanelLogin::setAlwaysRefresh(false);
-	cancel();
+	// <FS:Ansariel> Fix for FIRE-8245: Only cancel if the floater is really open
+	//cancel();
+	if (mIsOpen)
+	{
+		cancel();
+	}
+	mIsOpen = false;
+	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::onOpenHardwareSettings()
