@@ -582,15 +582,13 @@
         <menu_item_call
          label="Teleport History"
          name="Teleport History"
-         visible="false"
          shortcut="alt|H">
             <menu_item_call.on_click
              function="ToggleTeleportHistory"/>
             </menu_item_call>
 
         <menu_item_check
-         label="Places / TP History"
-	 shortcut="alt|H"
+         label="Places"
          name="Places">
             <menu_item_check.on_check
              function="Floater.Visible"
