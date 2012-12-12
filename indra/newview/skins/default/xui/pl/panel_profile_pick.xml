@@ -3,9 +3,9 @@
     <panel.string name="location_notice">
 (zostanie zaktualizowane po zapisaniu)
     </panel.string>
-    <text name="pick_location">
+    <line_editor name="pick_location">
         ładowanie...
-    </text>
+    </line_editor>
     <button label="Teleportuj" name="teleport_btn" />
     <button label="Pokaż na mapie" name="show_on_map_btn" />
     <button label="Ustaw lokalizację" tool_tip="Ustaw na bieżącą lokalizację" name="set_to_curr_location_btn" />

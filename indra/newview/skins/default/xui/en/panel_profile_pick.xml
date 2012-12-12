@@ -49,8 +49,8 @@
      word_wrap="true"
      allow_html="true" />
 
-    <text
-     top_pad="10"
+    <line_editor
+     top_pad="8"
      left="10"
      height="20"
      width="290"
@@ -58,12 +58,11 @@
      follows="left|top"
      name="pick_location"
      border_visible="true"
-     enabled="false"
      type="string"
      length="1"
-     word_wrap="false" >
-        loading...
-    </text>
+     word_wrap="false">
+        Loading...
+    </line_editor>
 
     <button
      left="10"
@@ -72,6 +71,7 @@
      layout="topleft"
      follows="left|top"
      label="Teleport"
+     top_pad="6"
      name="teleport_btn" />
 
     <button

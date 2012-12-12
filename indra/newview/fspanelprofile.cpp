@@ -1283,6 +1283,8 @@ BOOL FSPanelPick::postBuild()
 
     mPickDescription->setKeystrokeCallback(boost::bind(&FSPanelPick::onPickChanged, this, _1));
 
+	getChild<LLUICtrl>("pick_location")->setEnabled(FALSE);
+
     return TRUE;
 }
 
