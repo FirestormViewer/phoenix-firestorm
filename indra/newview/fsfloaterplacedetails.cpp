@@ -293,7 +293,6 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 			mPanelLandmarkInfo->setVisible(TRUE);
 
 			setItem(item);
-			updateVerbs();
 		}
 		else if (key_type == "create_landmark")
 		{
@@ -832,6 +831,7 @@ void FSFloaterPlaceDetails::onLandmarkLoaded(LLLandmark* landmark)
 	landmark->getRegionID(region_id);
 	landmark->getGlobalPos(mGlobalPos);
 	mPanelLandmarkInfo->displayParcelInfo(region_id, mGlobalPos);
+	updateVerbs();
 }
 
 void FSFloaterPlaceDetails::changedGlobalPos(const LLVector3d& global_pos)
