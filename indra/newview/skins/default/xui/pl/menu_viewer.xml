@@ -67,7 +67,7 @@
 	<menu label="Świat" name="World">
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
-		<menu_item_check label="Miejsca / historia TP" name="Places"/>
+		<menu_item_check label="Miejsca" name="Places"/>
 		<menu_item_check label="Minimapa" name="Mini-Map"/>
 		<menu_item_check label="Mapa Świata" name="World Map"/>
 		<menu_item_call label="Zapamiętaj to miejsce (LM)" name="Create Landmark Here"/>
