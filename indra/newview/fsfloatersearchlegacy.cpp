@@ -288,12 +288,12 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 	FSPanelSearchLand* panel_land		= findChild<FSPanelSearchLand>("panel_ls_land");
 	FSPanelSearchClassifieds* panel_classifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
 	
-	panel_people->onOpen(this);
-	panel_groups->onOpen(this);
-	panel_places->onOpen(this);
-	panel_events->onOpen(this);
-	panel_land->onOpen(this);
-	panel_classifieds->onOpen(this);
+	panel_people->onSearchPanelOpen(this);
+	panel_groups->onSearchPanelOpen(this);
+	panel_places->onSearchPanelOpen(this);
+	panel_events->onSearchPanelOpen(this);
+	panel_land->onSearchPanelOpen(this);
+	panel_classifieds->onSearchPanelOpen(this);
 }
 
 BOOL FSFloaterSearch::postBuild()
@@ -566,8 +566,7 @@ FSPanelSearchPeople::~FSPanelSearchPeople()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchPeople::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchPeople::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }
@@ -841,8 +840,7 @@ FSPanelSearchGroups::~FSPanelSearchGroups()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchGroups::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchGroups::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }
@@ -1117,8 +1115,7 @@ FSPanelSearchPlaces::~FSPanelSearchPlaces()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchPlaces::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchPlaces::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }
@@ -1445,8 +1442,7 @@ FSPanelSearchLand::~FSPanelSearchLand()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchLand::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchLand::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }
@@ -1806,8 +1802,7 @@ FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchClassifieds::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchClassifieds::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }
@@ -2119,8 +2114,7 @@ FSPanelSearchEvents::~FSPanelSearchEvents()
 	sInstance = NULL;
 }
 
-// virtual
-void FSPanelSearchEvents::onOpen(FSFloaterSearch* parent)
+void FSPanelSearchEvents::onSearchPanelOpen(FSFloaterSearch* parent)
 {
 	mParent = parent;
 }

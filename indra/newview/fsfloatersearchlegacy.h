@@ -103,7 +103,7 @@ class FSPanelSearchPeople : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchPeople();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
@@ -137,7 +137,7 @@ class FSPanelSearchGroups : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchGroups();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
@@ -170,7 +170,7 @@ class FSPanelSearchPlaces : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchPlaces();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
@@ -203,7 +203,7 @@ class FSPanelSearchLand : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchLand();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
@@ -236,7 +236,7 @@ class FSPanelSearchClassifieds : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchClassifieds();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
@@ -269,7 +269,7 @@ class FSPanelSearchEvents : public LLPanel
 	LOG_CLASS(FSFloaterSearch);
 public:
 	FSPanelSearchEvents();
-	virtual void onOpen(FSFloaterSearch* parent);
+	void onSearchPanelOpen(FSFloaterSearch* parent);
 	static void processSearchReply(LLMessageSystem* msg, void**);
 protected:
 private:
