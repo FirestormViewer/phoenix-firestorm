@@ -370,6 +370,7 @@ void LLAvatarPropertiesProcessor::processClassifiedInfoReply(LLMessageSystem* ms
 	self->removePendingRequest(c_info.creator_id, APT_CLASSIFIED_INFO);
 	self->notifyObservers(c_info.creator_id, &c_info, APT_CLASSIFIED_INFO);
 // <FS:CR> FIRE-6310: Legacy search - Legacy search opens observers with the classified_id
+	self->removePendingRequest(c_info.classified_id, APT_CLASSIFIED_INFO);
 	self->notifyObservers(c_info.classified_id, &c_info, APT_CLASSIFIED_INFO);
 // </FS:CR>
 }

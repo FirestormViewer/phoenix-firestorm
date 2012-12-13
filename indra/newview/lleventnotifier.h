@@ -42,6 +42,10 @@ public:
 
 	void update();	// Notify the user of the event if it's coming up
 	bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName);
+// <FS:CR> FIRE-6310 - Legacy search - send more event info for legacy search to use
+	bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName,
+			 const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos);
+// <FS:CR>
 	void add(U32 eventId);
 
 	
@@ -59,6 +63,11 @@ public:
 protected:
 	en_map	mEventNotifications;
 	LLFrameTimer	mNotificationTimer;
+	
+// <FS:CR> FIRE-6310 - Legacy Search
+private:
+	bool isEventNotice;
+// </FS:CR>
 };
 
 

@@ -2813,12 +2813,12 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 	msg->setHandlerFunc("GroupNoticesListReply", LLPanelGroupNotices::processGroupNoticesListReply);
 
 // <FS:CR> FIRE-6310 - Legacy search handlers
-	msg->setHandlerFunc("DirPeopleReply", FSFloaterSearchLegacy::processSearchPeopleReply);
-	msg->setHandlerFunc("DirPlacesReply", FSFloaterSearchLegacy::processSearchPlacesReply);
-	msg->setHandlerFunc("DirGroupsReply", FSFloaterSearchLegacy::processSearchGroupsReply);
-	msg->setHandlerFunc("DirEventsReply", FSFloaterSearchLegacy::processSearchEventsReply);
-	msg->setHandlerFunc("DirLandReply",   FSFloaterSearchLegacy::processSearchLandReply);
-	msg->setHandlerFunc("DirClassifiedReply",  FSFloaterSearchLegacy::processSearchClassifiedsReply);
+	msg->setHandlerFunc("DirPeopleReply", FSPanelSearchPeople::processSearchReply);
+	msg->setHandlerFunc("DirPlacesReply", FSPanelSearchPlaces::processSearchReply);
+	msg->setHandlerFunc("DirGroupsReply", FSPanelSearchGroups::processSearchReply);
+	msg->setHandlerFunc("DirEventsReply", FSPanelSearchEvents::processSearchReply);
+	msg->setHandlerFunc("DirLandReply",   FSPanelSearchLand::processSearchReply);
+	msg->setHandlerFunc("DirClassifiedReply",  FSPanelSearchClassifieds::processSearchReply);
 // </FS:CR> FIRE-6310
 	msg->setHandlerFunc("AvatarPickerReply", LLFloaterAvatarPicker::processAvatarPickerReply);
 

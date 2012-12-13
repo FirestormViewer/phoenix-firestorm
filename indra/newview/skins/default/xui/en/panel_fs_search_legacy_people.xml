@@ -1,0 +1,98 @@
+<panel
+	border="false"
+	follows="all"
+	height="566"
+	layout="topleft"
+	left="1"
+	width="780"
+	label="People"
+	name="panel_ls_people">
+	<panel
+		border="false"
+		follows="all"
+		height="53"
+		layout="topleft"
+		left="0"
+		width="780"
+		name="panel_ls_input">
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			top_pad="5"
+			layout="topleft"
+			left="6"
+			name="search_text"
+			top="12"
+			height="16"
+			width="156">
+			Enter search terms:
+		</text>
+		<line_editor
+		bevel_style="none"
+		border_style="line"
+		border.border_thickness="0"
+		commit_on_focus_lost="false"
+		layout="topleft"
+		follows="left|top|right"
+		height="23"
+		left_delta="0"
+		name="people_edit"
+		top="29"
+		width="670" />
+		<button
+		follows="top|right"
+		height="23"
+		label="Search"
+		layout="topleft"
+		left_pad="2"
+		name="people_find"
+		width="100" />
+	</panel>
+	<!-- Search Pane -->
+	<panel
+		border="true"
+		follows="all"
+		height="510"
+		layout="topleft"
+		left="1"
+		width="410"
+		top_pad="1"
+		name="panel_ls_scrolllist">
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="485"
+			layout="topleft"
+			left="0"
+			name="search_results_people"
+			top="0"
+			width="410">
+			<columns
+			label=""
+			name="icon"
+			width="20" />
+			<columns
+			label="Name"
+			name="username"
+			width="450" />
+		</scroll_list>
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Back"
+		name="people_back"
+		top_pad="2"
+		left="3"
+		width="100" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Next"
+		name="people_next"
+		width="100"
+		left_pad="1" />
+	</panel>
+</panel>

@@ -4155,4 +4155,13 @@ Try enclosing path to the editor with double quotes.
   <!-- Build types for about floater -->
   <string name="FSWithHavok">with Havok support</string>
   <string name="FSWithOpensim">with OpenSimulator support</string>
+    
+  <!-- Firestorm search -->
+  <string name="not_found">&apos;[TEXT]&apos; not found</string>
+  <string name="no_results">No results</string>
+  <string name="searching">Searching...</string>
+  <string name="all_categories">All Categories</string>
+  <string name="search_banned">Some terms in your search query were excluded due to content restrictions as clarified in the Community Standards.</string>
+  <string name="search_short">Your search terms were too short so no search was performed.</string>
+  <string name="search_disabled">Legacy Search has been disabled in this region.</string>
 </strings>

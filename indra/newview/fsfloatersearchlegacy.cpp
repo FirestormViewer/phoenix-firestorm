@@ -1,6 +1,6 @@
 /**
- * @file fsfloatersearchlegacy.cpp
- * @brief Legacy Search Floater
+ * @file fsfloatersearch.cpp
+ * @brief Firestorm Search Floater
  *
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -35,6 +35,8 @@
 #include "llclassifiedflags.h"
 #include "llclassifiedstatsresponder.h"
 #include "llqueryflags.h"
+#include "lleventflags.h"
+#include "lleventnotifier.h"
 #include "llgroupmgr.h"
 #include "llparcel.h"
 #include "llclassifiedinfo.h"
@@ -73,14 +75,14 @@ LLComboBox*		mCategoryEvents;
 //          Observer Classes          //
 ////////////////////////////////////////
 
-class FSLegacySearchRemoteParcelInfoObserver : public LLRemoteParcelInfoObserver
+class FSSearchRemoteParcelInfoObserver : public LLRemoteParcelInfoObserver
 {
 public:
-	FSLegacySearchRemoteParcelInfoObserver(FSFloaterSearchLegacy* floater) : LLRemoteParcelInfoObserver(),
-		mFloater(floater)
+	FSSearchRemoteParcelInfoObserver(FSFloaterSearch* floater) : LLRemoteParcelInfoObserver(),
+		mParent(floater)
 	{}
 	
-	~FSLegacySearchRemoteParcelInfoObserver()
+	~FSSearchRemoteParcelInfoObserver()
 	{
 		// remove any in-flight observers
 		std::set<LLUUID>::iterator it;
@@ -94,14 +96,9 @@ public:
 	
 	/*virtual*/ void processParcelInfo(const LLParcelData& parcel_data)
 	{
-		if (mFloater)
+		if (mParent)
 		{
-			mFloater->sendParcelDetails(LLVector3d(parcel_data.global_x,
-												   parcel_data.global_y,
-												   parcel_data.global_z),
-										parcel_data.name,
-										parcel_data.desc,
-										parcel_data.snapshot_id);
+			mParent->sendParcelDetails(parcel_data);
 		}
 		mParcelIDs.erase(parcel_data.parcel_id);
 		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(parcel_data.parcel_id, this);
@@ -123,24 +120,88 @@ public:
 	}
 private:
 	std::set<LLUUID>	mParcelIDs;
-	FSFloaterSearchLegacy*		mFloater;
+	FSFloaterSearch*		mParent;
 };
 
-class FSLegacySearchGroupInfoObserver : public LLGroupMgrObserver
+///// Avatar Properties Observer /////
+
+class FSSearchAvatarPropertiesObserver : public LLAvatarPropertiesObserver
 {
 public:
-	FSLegacySearchGroupInfoObserver(const LLUUID& group_id, FSFloaterSearchLegacy* floater) :
-	LLGroupMgrObserver(group_id),
-	mFloater(floater)
+	FSSearchAvatarPropertiesObserver(FSFloaterSearch* floater) : LLAvatarPropertiesObserver(),
+	mParent(floater)
+	{}
+	
+	~FSSearchAvatarPropertiesObserver()
 	{
-		LLGroupMgr* groupmgr = LLGroupMgr::getInstance();
-		groupmgr->removeObserver(this);
-		mID = group_id;
-		groupmgr->addObserver(this);
-		groupmgr->sendGroupPropertiesRequest(group_id);
+		// remove any in-flight observers
+		std::set<LLUUID>::iterator it;
+		for (it = mAvatarIDs.begin(); it != mAvatarIDs.end(); ++it)
+		{
+			const LLUUID &id = *it;
+			LLAvatarPropertiesProcessor::getInstance()->removeObserver(id, this);
+		}
+		mAvatarIDs.clear();
 	}
 	
-	~FSLegacySearchGroupInfoObserver()
+	void processProperties(void* data, EAvatarProcessorType type)
+	{
+		if (APT_PROPERTIES == type)
+		{
+			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
+			if (avatar_data)
+			{
+				mParent->sendAvatarDetails(avatar_data);
+				LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data->avatar_id, this);
+			}
+		}
+		if (APT_CLASSIFIED_INFO == type)
+		{
+			LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
+			if(c_info)
+			{
+				mParent->sendClassifiedDetails(c_info);
+				LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
+				std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
+				if (!url.empty())
+				{
+					llinfos << "Classified stat request via capability" << llendl;
+					LLSD body;
+					body["classified_id"] = c_info->classified_id;
+					LLHTTPClient::post(url, body, new LLClassifiedStatsResponder(c_info->classified_id));
+				}
+			}
+		}
+	}
+	
+	/*virtual*/ void setErrorStatus(U32 status, const std::string& reason)
+	{
+		llerrs << "Can't complete remote parcel request. Http Status: " << status << ". Reason : " << reason << llendl;
+	}
+private:
+	std::set<LLUUID>	mAvatarIDs;
+	FSFloaterSearch*		mParent;
+};
+
+///// Group Info Observer /////
+
+class FSSearchGroupInfoObserver : public LLGroupMgrObserver
+{
+public:
+	FSSearchGroupInfoObserver(const LLUUID& group_id, FSFloaterSearch* parent) :
+	LLGroupMgrObserver(group_id),
+	mParent(parent)
+	{
+		LLGroupMgr* groupmgr = LLGroupMgr::getInstance();
+		if (!group_id.isNull() && groupmgr)
+		{
+			groupmgr->addObserver(this);
+			mID = group_id;
+			groupmgr->sendGroupPropertiesRequest(group_id);
+		}
+	}
+	
+	~FSSearchGroupInfoObserver()
 	{
 		LLGroupMgr::getInstance()->removeObserver(this);
 	}
@@ -149,11 +210,13 @@ public:
 	{
 		if (gc == GC_PROPERTIES)
 		{
-			mFloater->setGroupID(mID);
+			LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(mID);
+			mParent->sendGroupDetails(group_data);
+			LLGroupMgr::getInstance()->removeObserver(this);
 		}
 	}
 private:
-	FSFloaterSearchLegacy* mFloater;
+	FSFloaterSearch* mParent;
 	LLUUID mID;
 };
 
@@ -164,8 +227,7 @@ private:
 class FSDispatchClassifiedClickThrough : public LLDispatchHandler
 {
 public:
-	virtual bool operator()(
-							const LLDispatcher* dispatcher,
+	virtual bool operator()(const LLDispatcher* dispatcher,
 							const std::string& key,
 							const LLUUID& invoice,
 							const sparam_t& strings)
@@ -202,475 +264,208 @@ public:
 //         The floater itself         //
 ////////////////////////////////////////
 
-FSFloaterSearchLegacy::FSFloaterSearchLegacy(const LLSD& key)
-:	LLFloater(key),
-	ESearchMode(SM_PEOPLE),
-	mStartSearch(0),
-	mResultsPerPage(100),
-	mResultsReceived(0),
-	mResultsContent()
+FSFloaterSearch::FSFloaterSearch(const LLSD& key)
+:	LLFloater(key)
 {
-	mRemoteParcelObserver = new FSLegacySearchRemoteParcelInfoObserver(this);
+	mRemoteParcelObserver = new FSSearchRemoteParcelInfoObserver(this);
+	mAvatarPropertiesObserver = new FSSearchAvatarPropertiesObserver(this);
 }
 
-FSFloaterSearchLegacy::~FSFloaterSearchLegacy()
+FSFloaterSearch::~FSFloaterSearch()
 {
-	mQueryID.setNull();
 	delete mRemoteParcelObserver;
+	delete mAvatarPropertiesObserver;
 	gGenericDispatcher.addHandler("classifiedclickthrough", NULL);
 }
 
-BOOL FSFloaterSearchLegacy::postBuild()
+// virtual
+void FSFloaterSearch::onOpen(const LLSD& key)
 {
-	LLLineEditor* search_bar = findChild<LLLineEditor>("Edit");
-	if (search_bar)
-	{
-		search_bar->setCommitOnFocusLost(false);
-		search_bar->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::find, this));
-	}
-	LLLineEditor* price_edit = findChild<LLLineEditor>("price_edit");
-	if (price_edit)
-	{
-		price_edit->setCommitOnFocusLost(false);
-		price_edit->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::find, this));
-	}
-	LLLineEditor* area_edit = findChild<LLLineEditor>("area_edit");
-	if (area_edit)
-	{
-		area_edit->setCommitOnFocusLost(false);
-		area_edit->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::find, this));
-	}
-	childSetAction("Find", boost::bind(&FSFloaterSearchLegacy::onBtnFind, this));
-	childSetAction("Next", boost::bind(&FSFloaterSearchLegacy::onBtnNext, this));
-	childSetAction("Back", boost::bind(&FSFloaterSearchLegacy::onBtnBack, this));
-	childSetAction("people_profile_btn", boost::bind(&FSFloaterSearchLegacy::onBtnPeopleProfile, this));
-	childSetAction("people_message_btn", boost::bind(&FSFloaterSearchLegacy::onBtnPeopleIM, this));
-	childSetAction("people_friend_btn", boost::bind(&FSFloaterSearchLegacy::onBtnPeopleFriend, this));
-	childSetAction("group_profile_btn", boost::bind(&FSFloaterSearchLegacy::onBtnGroupProfile, this));
-	childSetAction("group_chat_btn", boost::bind(&FSFloaterSearchLegacy::onBtnGroupChat, this));
-	childSetAction("group_join_btn", boost::bind(&FSFloaterSearchLegacy::onBtnGroupJoin, this));
-	//childSetAction("parcel_profile_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelProfile, this));
-	childSetAction("parcel_teleport_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelTeleport, this));
-	childSetAction("parcel_map_btn", boost::bind(&FSFloaterSearchLegacy::onBtnParcelMap, this));
-	childSetAction("search_results_land", boost::bind(&FSFloaterSearchLegacy::onBtnFind, this));
-	getChildView("Next")->setEnabled(FALSE);
-	getChildView("Back")->setEnabled(FALSE);
+	FSPanelSearchPeople* panel_people	= findChild<FSPanelSearchPeople>("panel_ls_people");
+	FSPanelSearchGroups* panel_groups	= findChild<FSPanelSearchGroups>("panel_ls_groups");
+	FSPanelSearchPlaces* panel_places	= findChild<FSPanelSearchPlaces>("panel_ls_places");
+	FSPanelSearchEvents* panel_events	= findChild<FSPanelSearchEvents>("panel_ls_events");
+	FSPanelSearchLand* panel_land		= findChild<FSPanelSearchLand>("panel_ls_land");
+	FSPanelSearchClassifieds* panel_classifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
 	
-	mSearchRadio = getChild<LLRadioGroup>("search_category_radio");
-	mSearchRadio->setCommitCallback(onModeSelect, this);
+	panel_people->onOpen(this);
+	panel_groups->onOpen(this);
+	panel_places->onOpen(this);
+	panel_events->onOpen(this);
+	panel_land->onOpen(this);
+	panel_classifieds->onOpen(this);
+}
+
+BOOL FSFloaterSearch::postBuild()
+{
+	childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
+	childSetAction("people_message_btn", boost::bind(&FSFloaterSearch::onBtnPeopleIM, this));
+	childSetAction("people_friend_btn", boost::bind(&FSFloaterSearch::onBtnPeopleFriend, this));
+	childSetAction("group_profile_btn", boost::bind(&FSFloaterSearch::onBtnGroupProfile, this));
+	childSetAction("group_message_btn", boost::bind(&FSFloaterSearch::onBtnGroupChat, this));
+	childSetAction("group_join_btn", boost::bind(&FSFloaterSearch::onBtnGroupJoin, this));
+	childSetAction("event_reminder_btn", boost::bind(&FSFloaterSearch::onBtnEventReminder, this));
+	childSetAction("teleport_btn", boost::bind(&FSFloaterSearch::onBtnTeleport, this));
+	childSetAction("map_btn", boost::bind(&FSFloaterSearch::onBtnMap, this));
+	resetVerbs();
 	
-	LLComboBox* places_combobox = findChild<LLComboBox>("places_category");
-	places_combobox->add(getString("all_categories"), LLSD("any"));
-	places_combobox->addSeparator();
-	for (int category = LLParcel::C_LINDEN; category < LLParcel::C_COUNT; category++)
-	{
-		LLParcel::ECategory eCategory = (LLParcel::ECategory)category;
-		places_combobox->add(LLTrans::getString(LLParcel::getCategoryUIString(eCategory)), LLParcel::getCategoryString(eCategory));
-	}
+	mDetailTitle =		getChild<LLTextEditor>("title");
+	mDetailDesc =		getChild<LLTextEditor>("desc");
+	mDetailSnapshot =	getChild<LLTextureCtrl>("snapshot");
+	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	
-	LLComboBox* classifieds_combobox = getChild<LLComboBox>("classifieds_category");
-	LLClassifiedInfo::cat_map::iterator iter;
-	classifieds_combobox->add(getString("all_categories"), LLSD("any"));
-	classifieds_combobox->addSeparator();
-	for (iter = LLClassifiedInfo::sCategories.begin();
-		 iter != LLClassifiedInfo::sCategories.end();
-		 iter++)
-	{
-		classifieds_combobox->add(LLTrans::getString(iter->second));
-	}
-	
-	LLScrollListCtrl* search_results_people = getChild<LLScrollListCtrl>("search_results_people");
-	search_results_people->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_people->setEnabled(FALSE);
-	search_results_people->setCommentText(getString("no_results"));
-	
-	LLScrollListCtrl* search_results_groups = getChild<LLScrollListCtrl>("search_results_groups");
-	search_results_groups->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_groups->setEnabled(FALSE);
-	search_results_groups->setCommentText(getString("no_results"));
-	
-	LLScrollListCtrl* search_results_places = getChild<LLScrollListCtrl>("search_results_places");
-	search_results_places->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_places->setEnabled(FALSE);
-	search_results_places->setCommentText(getString("no_results"));
-	
-	LLScrollListCtrl* search_results_land = getChild<LLScrollListCtrl>("search_results_land");
-	search_results_land->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_land->setEnabled(FALSE);
-	search_results_land->setCommentText(getString("no_results"));
-	
-	LLScrollListCtrl* search_results_events = getChild<LLScrollListCtrl>("search_results_events");
-	search_results_events->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_events->setEnabled(FALSE);
-	search_results_events->setCommentText(getString("no_results"));
-	
-	LLScrollListCtrl* search_results_classifieds = getChild<LLScrollListCtrl>("search_results_classifieds");
-	search_results_classifieds->setCommitCallback(boost::bind(&FSFloaterSearchLegacy::onSelectItem, this));
-	search_results_classifieds->setEnabled(FALSE);
-	search_results_classifieds->setCommentText(getString("no_results"));
-	
-	childSetVisible("people_profile_btn", false);
-	childSetVisible("people_message_btn", false);
-	childSetVisible("people_friend_btn", false);
-	childSetVisible("group_profile_btn", false);
-	childSetVisible("group_chat_btn", false);
-	childSetVisible("group_join_btn", false);
-	childSetVisible("parcel_profile_btn", false);
-	childSetVisible("parcel_teleport_btn", false);
-	childSetVisible("parcel_map_btn", false);
-	
-	mDetailTitle =	getChild<LLTextEditor>("detail_title");
-	mDetailDesc =	getChild<LLTextEditor>("detail_desc");
-	mSnapshotCtrl = getChild<LLTextureCtrl>("snapshot");
-	childSetVisible("snapshot", false);
-	
-	setSelectionDetails(LLStringUtil::null, LLStringUtil::null, LLUUID::null);
 	mParcelGlobal.setZero();
-	refreshSearchJunk();
+	mDetailsPanel->setVisible(false);
 	
 	return TRUE;
 }
 
-// static
-void FSFloaterSearchLegacy::onModeSelect(LLUICtrl* ctrl, void *userdata)
+void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, int type)
 {
-	FSFloaterSearchLegacy* self = (FSFloaterSearchLegacy*) userdata;
-	LLCachedControl<U32> search_mode(gSavedSettings, "SearchCategory");
+	if (!selected_item.isNull())
+	{
+		mSelectedID = selected_item;
+		resetVerbs();
+		switch (type)
+		{
+			case 1:
+				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+				LLAvatarPropertiesProcessor::getInstance()->sendAvatarPropertiesRequest(selected_item);
+				break;
+			case 2:
+				mGroupPropertiesRequest = new FSSearchGroupInfoObserver(selected_item, this);
+				break;
+			case 3:
+				mRemoteParcelObserver->setParcelID(selected_item);
+				break;
+			case 4:
+				LLAvatarPropertiesProcessor::getInstance()->addObserver(selected_item, mAvatarPropertiesObserver);
+				LLAvatarPropertiesProcessor::getInstance()->sendClassifiedInfoRequest(selected_item);
+				gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void FSFloaterSearch::onSelectedEvent(const S32 selected_event)
+{
+	resetVerbs();
 	
-	if(search_mode == 0)
-		self->ESearchMode = SM_PEOPLE;
-	else if (search_mode == 1)
-		self->ESearchMode = SM_GROUPS;
-	else if (search_mode == 2)
-		self->ESearchMode = SM_PLACES;
-	else if (search_mode == 3)
-		self->ESearchMode = SM_LAND;
-	else if (search_mode == 4)
-		self->ESearchMode = SM_EVENTS;
-	else if (search_mode == 5)
-		self->ESearchMode = SM_CLASSIFIEDS;
-	else
-		llwarns << "Unsupported mode. Make sure SearchCategory is set to something valid and stay out of the goddamn debug settings." << llendl;
-	self->refreshSearchJunk();
-	self->resetSearch();
+	gMessageSystem->newMessageFast(_PREHASH_EventInfoRequest);
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID() );
+	gMessageSystem->nextBlockFast(_PREHASH_EventData);
+	gMessageSystem->addU32Fast(_PREHASH_EventID, selected_event);
+	gAgent.sendReliableMessage();
 }
 
-void FSFloaterSearchLegacy::refreshSearchJunk()
+void FSFloaterSearch::sendParcelDetails(const LLParcelData& parcel_data)
 {
-	childSetVisible("pg_all", isPeople());
-	childSetVisible("mature_all", isPeople());
-	childSetVisible("adult_all", isPeople());
-	childSetVisible("pg_group", isGroups());
-	childSetVisible("mature_group", isGroups());
-	childSetVisible("adult_group", isGroups());
-	childSetVisible("pg_sims", isPlaces());
-	childSetVisible("mature_sims", isPlaces());
-	childSetVisible("adult_sims", isPlaces());
-	childSetVisible("pg_land", isLand());
-	childSetVisible("mature_land", isLand());
-	childSetVisible("adult_land", isLand());
-	childSetVisible("pg_events", isEvents());
-	childSetVisible("mature_events", isEvents());
-	childSetVisible("adult_events", isEvents());
-	childSetVisible("pg_classifieds", isClassifieds());
-	childSetVisible("mature_classifieds", isClassifieds());
-	childSetVisible("adult_classifieds", isClassifieds());
-	childSetVisible("places_category", isPlaces());
-	childSetVisible("land_category", isLand());
-	childSetVisible("events_category", isEvents());
-	childSetVisible("classifieds_category", isClassifieds());
-	childSetVisible("search_results_people", isPeople());
-	childSetVisible("search_results_groups", isGroups());
-	childSetVisible("search_results_places", isPlaces());
-	childSetVisible("search_results_land", isLand());
-	childSetVisible("search_results_events", isEvents());
-	childSetVisible("search_results_classifieds", isClassifieds());
-	childSetVisible("edit_price", isLand());
-	childSetVisible("edit_area", isLand());
-	childSetVisible("price_check", isLand());
-	childSetVisible("area_check", isLand());
-	childSetVisible("ascending_check", isLand());
-	getChildView("Edit")->setEnabled(!isLand());;
-	//Yipee!
+	mParcelGlobal = LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z);
+	mDetailsPanel->setVisible(true);
+	mDetailTitle->setValue(parcel_data.name);
+	mDetailDesc->setValue(parcel_data.desc);
+	mDetailSnapshot->setValue(parcel_data.snapshot_id);
+	//flags
+	//sim_name
+	//auction_id
+	//owner_id
+	childSetVisible("teleport_btn", true);
+	childSetVisible("map_btn", true);
 }
 
-void FSFloaterSearchLegacy::resetActionButtons()
+void FSFloaterSearch::sendAvatarDetails(LLAvatarData*& avatar_data)
 {
-	childSetVisible("people_profile_btn", false);
-	childSetVisible("people_message_btn", false);
-	childSetVisible("people_friend_btn", false);
-	childSetVisible("group_profile_btn", false);
-	childSetVisible("group_chat_btn", false);
-	childSetVisible("group_join_btn", false);
-	childSetVisible("parcel_teleport_btn", false);
-	childSetVisible("parcel_map_btn", false);
-}
-
-void FSFloaterSearchLegacy::onBtnFind()
-{	
-	find();
-}
-
-void FSFloaterSearchLegacy::onBtnNext()
-{
-	mStartSearch += mResultsPerPage;
-	getChildView("Back")->setEnabled(TRUE);
-	
-	find();
-}
-
-void FSFloaterSearchLegacy::onBtnBack()
-{
-	mStartSearch -= mResultsPerPage;
-	getChildView("Back")->setEnabled(mStartSearch > 0);
-	
-	find();
-}
-
-void FSFloaterSearchLegacy::onBtnPeopleProfile()
-{
-	LLAvatarActions::showProfile(getSelectedID());
-}
-
-void FSFloaterSearchLegacy::onBtnPeopleIM()
-{
-	LLAvatarActions::startIM(getSelectedID());
-}
-
-void FSFloaterSearchLegacy::onBtnPeopleFriend()
-{
-	LLAvatarActions::requestFriendshipDialog(getSelectedID());
-}
-
-void FSFloaterSearchLegacy::onBtnGroupProfile()
-{
-	LLGroupActions::show(getSelectedID());
-}
-
-void FSFloaterSearchLegacy::onBtnGroupChat()
-{
-	LLGroupActions::startIM(getSelectedID());
-}
-
-void FSFloaterSearchLegacy::onBtnGroupJoin()
-{
-	LLGroupActions::join(getSelectedID());
-}
-
-//void FSFloaterSearchLegacy::onBtnParcelProfile()
-//{
-//	llinfos << "Pop up a crazy cool window chock full of fun parcel details!" << llendl;
-//}
-
-void FSFloaterSearchLegacy::onBtnParcelTeleport()
-{
-	if (!mParcelGlobal.isExactlyZero())
+	if (avatar_data)
 	{
-		gAgent.teleportViaLocation(mParcelGlobal);
-		LLFloaterWorldMap::getInstance()->trackLocation(mParcelGlobal);
+		mDetailsPanel->setVisible(true);
+		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
+		mDetailDesc->setValue(avatar_data->about_text);
+		mDetailSnapshot->setValue(avatar_data->image_id);
+		//born_on
+		LLAvatarNameCache::get(avatar_data->avatar_id,
+							   boost::bind(&FSFloaterSearch::avatarNameUpdatedCallback,this, _1, _2));
+		childSetVisible("people_profile_btn", true);
+		childSetVisible("people_message_btn", true);
+		childSetVisible("people_friend_btn", true);
+		getChildView("people_friend_btn")->setEnabled(!LLAvatarActions::isFriend(avatar_data->avatar_id));
 	}
 }
 
-void FSFloaterSearchLegacy::onBtnParcelMap()
+void FSFloaterSearch::sendGroupDetails(LLGroupMgrGroupData*& group_data)
 {
-	LLFloaterWorldMap::getInstance()->trackLocation(mParcelGlobal);
-	LLFloaterReg::showInstance("world_map", "center");
-}
-
-S32 FSFloaterSearchLegacy::showNextButton(S32 rows)
-{
-	bool show_next_button = (mResultsReceived > mResultsPerPage);
-	getChildView("Next")->setEnabled(show_next_button);
-	if (show_next_button)
+	if (group_data)
 	{
-		rows -= (mResultsReceived - mResultsPerPage);
-	}
-	return rows;
-}
-
-void FSFloaterSearchLegacy::setupSearch()
-{
-	mResultsReceived = 0;
-	if (mQueryID.notNull())
-		mQueryID.setNull();
-}
-
-void FSFloaterSearchLegacy::resetSearch()
-{
-	mStartSearch = 0;
-	if (ESearchMode == SM_EVENTS)
-		mResultsPerPage = 200;
-	else
-		mResultsPerPage = 100;
-	getChildView("Back")->setEnabled(FALSE);
-	getChildView("Next")->setEnabled(FALSE);
-}
-
-void FSFloaterSearchLegacy::onSelectItem()
-{
-	LLScrollListCtrl* list = NULL;
-	switch(ESearchMode)
-	{
-		case SM_PEOPLE:
-			list = getChild<LLScrollListCtrl>("search_results_people");
-			break;
-		case SM_GROUPS:
-			list = getChild<LLScrollListCtrl>("search_results_groups");
-			break;
-		case SM_PLACES:
-			list = getChild<LLScrollListCtrl>("search_results_places");
-			break;
-		case SM_LAND:
-			list = getChild<LLScrollListCtrl>("search_results_land");
-			break;
-		case SM_EVENTS:
-			list = getChild<LLScrollListCtrl>("search_results_events");
-			break;
-		case SM_CLASSIFIEDS:
-			list = getChild<LLScrollListCtrl>("search_results_classifieds");
-			break;
-	}
-	if (list == NULL)
-	{
-		return;
-	}
-	resetActionButtons();
-	mSelectedID = list->getSelectedValue();
-	LLAvatarPropertiesProcessor* mAvatarPropertiesProcessor = LLAvatarPropertiesProcessor::getInstance();
-	switch(ESearchMode)
-	{
-		case SM_PEOPLE:
-			mAvatarPropertiesProcessor->addObserver(getSelectedID(), this);
-			mAvatarPropertiesProcessor->sendAvatarPropertiesRequest(getSelectedID());
-			setLoadingProgress(true);
-			break;
-		case SM_GROUPS:
-			mGroupPropertiesRequest = new FSLegacySearchGroupInfoObserver(getSelectedID(), this);
-			setLoadingProgress(true);
-			break;
-		case SM_PLACES:
-		case SM_LAND:
-			mRemoteParcelObserver->setParcelID(getSelectedID());
-			setLoadingProgress(true);
-			break;
-		case SM_EVENTS:
-			// Implement me!
-			break;
-		case SM_CLASSIFIEDS:
-			mAvatarPropertiesProcessor->addObserver(getSelectedID(), this);
-			mAvatarPropertiesProcessor->sendClassifiedInfoRequest(getSelectedID());
-			gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
-			setLoadingProgress(true);
-			break;
-	}
-}
-
-void FSFloaterSearchLegacy::setSelectionDetails(const std::string& title, const std::string& desc, const LLUUID& id)
-{
-	mDetailTitle->setValue(title);
-	mDetailDesc->setValue(desc);
-	mSnapshotCtrl->setVisible(true);
-	mSnapshotCtrl->setValue(id);
-}
-
-void FSFloaterSearchLegacy::setGroupID(const LLUUID& group_id)
-{
-	LLGroupMgrGroupData* gdatap = LLGroupMgr::getInstance()->getGroupData(group_id);
-	
-	if (gdatap)
-	{
-		setSelectionDetails(LLTrans::getString("LoadingData"), LLSD(gdatap->mCharter), LLSD(gdatap->mInsigniaID));
+		mDetailsPanel->setVisible(true);
+		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
+		mDetailDesc->setValue(group_data->mCharter);
+		mDetailSnapshot->setValue(group_data->mInsigniaID);
 		LLGroupData agent_gdatap;
-		bool is_member = gAgent.getGroupData(group_id,agent_gdatap) || gAgent.isGodlike();
-		bool join_btn_visible = !is_member && gdatap->mOpenEnrollment;
+		bool is_member = gAgent.getGroupData(getSelectedID(),agent_gdatap) || gAgent.isGodlike();
+		bool join_btn_visible = !is_member && group_data->mOpenEnrollment;
 		childSetVisible("group_profile_btn", true);
-		childSetVisible("group_chat_btn", true);
+		childSetVisible("group_message_btn", true);
 		childSetVisible("group_join_btn", true);
-		getChildView("group_chat_btn")->setEnabled(is_member);
+		getChildView("group_message_btn")->setEnabled(is_member);
 		getChildView("group_join_btn")->setEnabled(join_btn_visible);
-		gCacheName->getGroup(group_id,
-							 boost::bind(&FSFloaterSearchLegacy::groupNameUpdatedCallback,
-										 this, _1, _2, _3));
-		setLoadingProgress(false);
+		gCacheName->getGroup(getSelectedID(),
+							 boost::bind(&FSFloaterSearch::groupNameUpdatedCallback, this, _1, _2, _3));
 	}
-	mGroupPropertiesRequest = NULL;
-	delete mGroupPropertiesRequest;
 }
 
-//virtual
-void FSFloaterSearchLegacy::processProperties(void* data, EAvatarProcessorType type)
+void FSFloaterSearch::sendClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 {
-	if (APT_PROPERTIES == type)
+	if (c_info)
 	{
-		LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
-		if (avatar_data)
-		{
-			setSelectionDetails(LLTrans::getString("LoadingData"), avatar_data->about_text, avatar_data->image_id);
-			LLAvatarNameCache::get(avatar_data->avatar_id,
-								   boost::bind(&FSFloaterSearchLegacy::avatarNameUpdatedCallback,
-											   this, _1, _2));
-			childSetVisible("people_profile_btn", true);
-			childSetVisible("people_message_btn", true);
-			childSetVisible("people_friend_btn", true);
-			getChildView("people_friend_btn")->setEnabled(!LLAvatarActions::isFriend(avatar_data->avatar_id));
-				
-			LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data->avatar_id, this);
-		}
-	}
-	if (APT_CLASSIFIED_INFO == type)
-	{
-		LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
-		if(c_info && getSelectedID() == c_info->classified_id)
-		{
-			sendParcelDetails(c_info->pos_global, c_info->name, c_info->description, c_info->snapshot_id);
-			setLoadingProgress(false);
-			LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
-			std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
-			if (!url.empty())
-			{
-				llinfos << "Classified stat request via capability" << llendl;
-				LLSD body;
-				body["classified_id"] = getSelectedID();
-				LLHTTPClient::post(url, body, new LLClassifiedStatsResponder(getSelectedID()));
-			}
-		}
+		mDetailsPanel->setVisible(true);
+		mParcelGlobal = c_info->pos_global;
+		mDetailTitle->setValue(c_info->name);
+		mDetailDesc->setValue(c_info->description);
+		mDetailSnapshot->setValue(c_info->snapshot_id);
+		//Price for Listing
+		//sim_name
+		childSetVisible("teleport_btn", true);
+		childSetVisible("map_btn", true);
 	}
 }
 
-void FSFloaterSearchLegacy::groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group)
+void FSFloaterSearch::sendEventDetails(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos)
 {
-	if (id == getSelectedID())
-	{
-		mDetailTitle->setValue( LLSD(name) );
-		setLoadingProgress(false);
-	}
-	// Otherwise possibly a request for an older inspector, ignore it.
+	mParcelGlobal = eventGlobalPos;
+	mEventID = eventId;
+	mDetailsPanel->setVisible(true);
+	mDetailTitle->setValue(eventName);
+	mDetailDesc->setValue(eventDesc);
+	mDetailSnapshot->setValue(NULL);
+	childSetVisible("teleport_btn", true);
+	childSetVisible("map_btn", true);
+	childSetVisible("event_reminder_btn", true);
 }
 
-void FSFloaterSearchLegacy::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name)
+void FSFloaterSearch::avatarNameUpdatedCallback(const LLUUID& id, const LLAvatarName& av_name)
 {
 	if (id == getSelectedID())
 	{
 		mDetailTitle->setValue(av_name.getCompleteName());
-		setLoadingProgress(false);
+		//setLoadingProgress(false);
 	}
-	// Otherwise possibly a request for an older inspector, ignore it.
+	// Otherwise possibly a request for an older selection, ignore it.
 }
 
-
-void FSFloaterSearchLegacy::sendParcelDetails(const LLVector3d &global_pos,
-											  const std::string& name,
-											  const std::string& desc,
-											  const LLUUID& snapshot_id)
+void FSFloaterSearch::groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group)
 {
-	mParcelGlobal = global_pos;
-	setSelectionDetails(name, desc, snapshot_id);
-	childSetVisible("parcel_teleport_btn", true);
-	childSetVisible("parcel_map_btn", true);
-	setLoadingProgress(false);
+	if (id == getSelectedID())
+	{
+		mDetailTitle->setValue( LLSD(name) );
+		//setLoadingProgress(false);
+	}
+	// Otherwise possibly a request for an older selection, ignore it.
 }
 
-void FSFloaterSearchLegacy::setLoadingProgress(bool started)
+void FSFloaterSearch::setLoadingProgress(bool started)
 {
 	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
 	
@@ -681,365 +476,227 @@ void FSFloaterSearchLegacy::setLoadingProgress(bool started)
     else
         indicator->stop();
 }
-					
-BOOL FSFloaterSearchLegacy::isPeople()
+
+void FSFloaterSearch::resetVerbs()
 {
-	if (ESearchMode == SM_PEOPLE)
-	{
-		return true;
-	}
-	return false;
+	childSetVisible("people_profile_btn", false);
+	childSetVisible("people_message_btn", false);
+	childSetVisible("people_friend_btn", false);
+	childSetVisible("group_profile_btn", false);
+	childSetVisible("group_message_btn", false);
+	childSetVisible("group_join_btn", false);
+	childSetVisible("event_reminder_btn", false);
+	childSetVisible("teleport_btn", false);
+	childSetVisible("map_btn", false);
 }
-BOOL FSFloaterSearchLegacy::isGroups()
+
+void FSFloaterSearch::onBtnPeopleProfile()
 {
-	if (ESearchMode == SM_GROUPS)
-	{
-		return true;
-	}
-	return false;
+	LLAvatarActions::showProfile(getSelectedID());
 }
-					
-BOOL FSFloaterSearchLegacy::isPlaces()
+
+void FSFloaterSearch::onBtnPeopleIM()
 {
-	if (ESearchMode == SM_PLACES)
-	{
-		return true;
-	}
-	return false;
+	LLAvatarActions::startIM(getSelectedID());
 }
-					
-BOOL FSFloaterSearchLegacy::isLand()
+
+void FSFloaterSearch::onBtnPeopleFriend()
 {
-	if (ESearchMode == SM_LAND)
-	{
-		return true;
-	}
-	return false;
+	LLAvatarActions::requestFriendshipDialog(getSelectedID());
 }
-					
-BOOL FSFloaterSearchLegacy::isEvents()
+
+void FSFloaterSearch::onBtnGroupProfile()
 {
-	if (ESearchMode == SM_EVENTS)
-	{
-		return true;
-	}
-	return false;
+	LLGroupActions::show(getSelectedID());
 }
-					
-BOOL FSFloaterSearchLegacy::isClassifieds()
+
+void FSFloaterSearch::onBtnGroupChat()
 {
-	if (ESearchMode == SM_CLASSIFIEDS)
+	LLGroupActions::startIM(getSelectedID());
+}
+
+void FSFloaterSearch::onBtnGroupJoin()
+{
+	LLGroupActions::join(getSelectedID());
+}
+
+void FSFloaterSearch::onBtnTeleport()
+{
+	if (!mParcelGlobal.isExactlyZero())
 	{
-		return true;
+		gAgent.teleportViaLocation(mParcelGlobal);
+		LLFloaterWorldMap::getInstance()->trackLocation(mParcelGlobal);
 	}
-	return false;
+}
+
+void FSFloaterSearch::onBtnMap()
+{
+	if (!mParcelGlobal.isExactlyZero())
+	{
+		LLFloaterWorldMap::getInstance()->trackLocation(mParcelGlobal);
+		LLFloaterReg::showInstance("world_map", "center");
+	}
+}
+
+void FSFloaterSearch::onBtnEventReminder()
+{
+	gEventNotifier.add(mEventID);
 }
 
 ////////////////////////////////////////
-/// Someone's looking for junk!       //
-/// They want us to help. Let's help! //
+//         People Search Panel        //
 ////////////////////////////////////////
 
-void FSFloaterSearchLegacy::find()
+static LLRegisterPanelClassWrapper<FSPanelSearchPeople> t_panel_fs_search_people("panel_ls_people");
+FSPanelSearchPeople* FSPanelSearchPeople::sInstance;
+
+FSPanelSearchPeople::FSPanelSearchPeople() :
+	LLPanel(),
+	mParent(NULL),
+	mQueryID(NULL),
+	mStartSearch(0),
+	mResultsReceived(0),
+	mResultsContent()
 {
-	std::string text = getChild<LLUICtrl>("Edit")->getValue().asString();
+	sInstance = this;
+}
+
+FSPanelSearchPeople::~FSPanelSearchPeople()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchPeople::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchPeople::postBuild()
+{
+	LLLineEditor* search_bar = findChild<LLLineEditor>("people_edit");
+	if (search_bar)
+	{
+		search_bar->setCommitOnFocusLost(false);
+		search_bar->setCommitCallback(boost::bind(&FSPanelSearchPeople::onBtnFind, this));
+	}
+	childSetAction("people_find", boost::bind(&FSPanelSearchPeople::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchPeople::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	childSetAction("people_next", boost::bind(&FSPanelSearchPeople::onBtnNext, this));
+	childSetAction("people_back", boost::bind(&FSPanelSearchPeople::onBtnBack, this));
+	getChildView("people_next")->setEnabled(FALSE);
+	getChildView("people_back")->setEnabled(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchPeople::find()
+{
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
+	std::string text = getChild<LLUICtrl>("people_edit")->getValue().asString();
 	/// FIXME: This stops the user from sending single-word two queries that
 	/// are too small, but they can still search for multiple item queries
 	/// too small to search. eg. "to be pi"
 	boost::trim(text);
-	if (text.size() < MIN_SEARCH_STRING_SIZE && (!isLand()))
+	if (text.size() < MIN_SEARCH_STRING_SIZE)
 	{
-		getChild<LLScrollListCtrl>("search_results_people")->setCommentText(getString("search_short"));
+		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
 	
-	setupSearch();
-	
+	mResultsReceived = 0;
 	if (mQueryID.notNull())
 		mQueryID.setNull();
 	mQueryID.generate();
 	
-	switch(ESearchMode)
-	{
-		case SM_PEOPLE:
-		{
-			U32 scope = DFQ_PEOPLE;
-			sendSearchQuery(gMessageSystem,
-							mQueryID,
-							text,
-							scope,
-							mStartSearch);
-			getChild<LLScrollListCtrl>("search_results_people")->deleteAllItems();
-			getChild<LLScrollListCtrl>("search_results_people")->setCommentText(getString("searching"));
-			setLoadingProgress(true);
-			break;
-		}
-		case SM_GROUPS:
-		{
-			static LLUICachedControl<bool> inc_pg("ShowPGGroups", 1);
-			static LLUICachedControl<bool> inc_mature("ShowMatureGroups", 0);
-			static LLUICachedControl<bool> inc_adult("ShowAdultGroups", 0);
-			if (!(inc_pg || inc_mature || inc_adult))
-			{
-                LLNotificationsUtil::add("NoContentToSearch");
-                return;
-			}
-			U32 scope = DFQ_GROUPS;
-			if (inc_pg)
-                scope |= DFQ_INC_PG;
-			if (inc_mature)
-                scope |= DFQ_INC_MATURE;
-			if (inc_adult)
-                scope |= DFQ_INC_ADULT;
-			sendSearchQuery(gMessageSystem,
-							 mQueryID,
-							 text,
-							 scope,
-							 mStartSearch);
-			getChild<LLScrollListCtrl>("search_results_groups")->deleteAllItems();
-			getChild<LLScrollListCtrl>("search_results_groups")->setCommentText(getString("searching"));
-			setLoadingProgress(true);
-			break;
-			
-		}
-		case SM_PLACES:
-		{
-			static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
-			static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
-			static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
-			if (!(inc_pg || inc_mature || inc_adult))
-			{
-				LLNotificationsUtil::add("NoContentToSearch");
-		                return;
-			}
-			U32 scope = 0;
-			if (gAgent.wantsPGOnly())
-				scope |= DFQ_PG_SIMS_ONLY;
-			bool adult_enabled = gAgent.canAccessAdult();
-			bool mature_enabled = gAgent.canAccessMature();
-			if (inc_pg)
-                scope |= DFQ_INC_PG;
-			if (inc_mature && mature_enabled)
-                scope |= DFQ_INC_MATURE;
-			if (inc_adult && adult_enabled)
-                scope |= DFQ_INC_ADULT;
-			S8 category = LLParcel::getCategoryFromString(findChild<LLComboBox>("places_category")->getSelectedValue().asString());
-			scope |= DFQ_DWELL_SORT;
-			sendPlacesSearchQuery(gMessageSystem,
-								  mQueryID,
-								  text,
-								  scope,
-								  category,
-								  mStartSearch);
-			getChild<LLScrollListCtrl>("search_results_places")->deleteAllItems();
-			getChild<LLScrollListCtrl>("search_results_places")->setCommentText(getString("searching"));
-			setLoadingProgress(true);
-			break;
-		}
-		case SM_LAND:
-		{
-			static LLUICachedControl<bool> inc_pg("ShowPGLand", 1);
-			static LLUICachedControl<bool> inc_mature("ShowMatureLand", 0);
-			static LLUICachedControl<bool> inc_adult("ShowAdultLand", 0);
-			static LLUICachedControl<bool> limit_price("FindLandPrice", 1);
-			static LLUICachedControl<bool> limit_area("FindLandArea", 1);
-			if (!(inc_pg || inc_mature || inc_adult))
-			{
-                LLNotificationsUtil::add("NoContentToSearch");
-                return;
-			}
-			
-			U32 category = ST_ALL;
-			const std::string& selection = findChild<LLComboBox>("land_category")->getSelectedValue().asString();
-			if (!selection.empty())
-			{
-				if (selection == "Auction")
-					category = ST_AUCTION;
-				else if (selection == "Mainland")
-					category = ST_MAINLAND;
-				else if (selection == "Estate")
-					category = ST_ESTATE;
-			}
-			
-			U32 scope = 0;
-			if (gAgent.wantsPGOnly())
-				scope |= DFQ_PG_SIMS_ONLY;
-			bool adult_enabled = gAgent.canAccessAdult();
-			bool mature_enabled = gAgent.canAccessMature();
-			
-			if (inc_pg)
-				scope |= DFQ_INC_PG;
-			if (inc_mature && mature_enabled)
-				scope |= DFQ_INC_MATURE;
-			if (inc_adult && adult_enabled)
-				scope |= DFQ_INC_ADULT;
-			const std::string& sort = findChild<LLComboBox>("land_sort_combo")->getSelectedValue().asString();
-			if (!sort.empty())
-			{
-				if (sort == "Name")
-					scope |= DFQ_NAME_SORT;
-				else if (sort == "Price")
-					scope |= DFQ_PRICE_SORT;
-				else if (sort == "PPM")
-					scope |= DFQ_PER_METER_SORT;
-				else if (sort == "Area")
-					scope |= DFQ_AREA_SORT;
-			}
-			else
-			{
-				scope |= DFQ_PRICE_SORT;
-			}
-			if (childGetValue("ascending_check").asBoolean())
-				scope |= DFQ_SORT_ASC;
-			if (limit_price)
-				scope |= DFQ_LIMIT_BY_PRICE;
-			if (limit_area)
-				scope |= DFQ_LIMIT_BY_AREA;
-			S32 price = childGetValue("edit_price").asInteger();
-			S32 area = childGetValue("edit_area").asInteger();
-			
-			sendLandSearchQuery(gMessageSystem,
-								mQueryID,
-								scope,
-								category,
-								price,
-								area,
-								mStartSearch);
-			LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_land");
-			search_results->deleteAllItems();
-			search_results->setCommentText(getString("searching"));
-			setLoadingProgress(true);
-			break;
-		}
-		case SM_EVENTS:
-		{
-			llwarns << "Event searching is not implimented yet. Stay tuned!" << llendl;
-			break;
-		}
-		case SM_CLASSIFIEDS:
-		{
-			static LLUICachedControl<bool> inc_pg("ShowPGClassifieds", 1);
-			static LLUICachedControl<bool> inc_mature("ShowMatureClassifieds", 0);
-			static LLUICachedControl<bool> inc_adult("ShowAdultClassifieds", 0);
-			if (!(inc_pg || inc_mature || inc_adult))
-			{
-                LLNotificationsUtil::add("NoContentToSearch");
-                return;
-			}
-			U32 category = childGetValue("classifieds_category").asInteger();
-			BOOL auto_renew = FALSE;
-			U32 flags = pack_classified_flags_request(auto_renew, inc_pg, inc_mature, inc_adult);
-			sendClassifiedsSearchQuery(gMessageSystem,
-									  mQueryID,
-									  text,
-									  flags,
-									  category,
-									  mStartSearch);
-			getChild<LLScrollListCtrl>("search_results_classifieds")->deleteAllItems();
-			getChild<LLScrollListCtrl>("search_results_classifieds")->setCommentText(getString("searching"));
-			setLoadingProgress(true);
-			break;
-		}
-	}
+	gMessageSystem->newMessage("DirFindQuery");
+	gMessageSystem->nextBlock("AgentData");
+	gMessageSystem->addUUID("AgentID", gAgent.getID());
+	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->nextBlock("QueryData");
+	gMessageSystem->addUUID("QueryID", getQueryID());
+	gMessageSystem->addString("QueryText", text);
+	gMessageSystem->addU32("QueryFlags", DFQ_PEOPLE);
+	gMessageSystem->addS32("QueryStart", mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off search request: " << getQueryID() << llendl;
+	
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
 	mNumResultsReturned = 0;
 }
 
-// static
-void FSFloaterSearchLegacy::sendSearchQuery(LLMessageSystem* msg,
-											const LLUUID& query_id,
-											const std::string& text,
-											U32 flags,
-											S32 query_start)
+void FSPanelSearchPeople::onBtnFind()
 {
-	msg->newMessage("DirFindQuery");
-	msg->nextBlock("AgentData");
-	msg->addUUID("AgentID", gAgent.getID());
-	msg->addUUID("SessionID", gAgent.getSessionID());
-	msg->nextBlock("QueryData");
-	msg->addUUID("QueryID", query_id);
-	msg->addString("QueryText", text);
-	msg->addU32("QueryFlags", flags);
-	msg->addS32("QueryStart", query_start);
-	gAgent.sendReliableMessage();
-	
-	llinfos << "Firing off search request: " << query_id << llendl;
+	find();
 }
 
-void FSFloaterSearchLegacy::sendPlacesSearchQuery(LLMessageSystem* msg,
-												  const LLUUID& query_id,
-												  const std::string& text,
-												  U32 flags,
-												  S8 category,
-												  S32 query_start)
-{	
-	msg->newMessage("DirPlacesQuery");
-	msg->nextBlock("AgentData");
-	msg->addUUID("AgentID", gAgent.getID());
-	msg->addUUID("SessionID", gAgent.getSessionID());
-	msg->nextBlock("QueryData");
-	msg->addUUID("QueryID", query_id);
-	msg->addString("QueryText", text);
-	msg->addU32("QueryFlags", flags);
-	msg->addS8("Category", category);
-	msg->addString("SimName", "");
-	msg->addS32("QueryStart", query_start);
-	gAgent.sendReliableMessage();
-	
-	llinfos << "Firing off places search request: " << query_id << llendl;
-}
-
-void FSFloaterSearchLegacy::sendLandSearchQuery(LLMessageSystem* msg,
-												const LLUUID& query_id,
-												U32 flags,
-												U32 category,
-												S32 price,
-												S32 area,
-												S32 query_start)
+void FSPanelSearchPeople::onBtnNext()
 {
-	msg->newMessage("DirLandQuery");
-	msg->nextBlock("AgentData");
-	msg->addUUID("AgentID", gAgent.getID());
-	msg->addUUID("SessionID", gAgent.getSessionID());
-	msg->nextBlock("QueryData");
-	msg->addUUID("QueryID", query_id);
-	msg->addU32("QueryFlags", flags);
-	msg->addU32("SearchType", category);
-	msg->addS32("Price", price);
-	msg->addS32("Area", area);
-	msg->addS32("QueryStart", query_start);
-	gAgent.sendReliableMessage();
+	mStartSearch += 100;
+	getChildView("people_back")->setEnabled(TRUE);
 	
-	llinfos << "Firing off places search request: " << query_id << category << llendl;
+	find();
 }
 
-void FSFloaterSearchLegacy::sendClassifiedsSearchQuery(LLMessageSystem* msg,
-													   const LLUUID& query_id,
-													   const std::string& text,
-													   U32 flags,
-													   U32 category,
-													   S32 query_start)
+void FSPanelSearchPeople::onBtnBack()
 {
-	msg->newMessageFast(_PREHASH_DirClassifiedQuery);
-	msg->nextBlockFast(_PREHASH_AgentData);
-	msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
-	msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-	msg->nextBlockFast(_PREHASH_QueryData);
-	msg->addUUIDFast(_PREHASH_QueryID, query_id );
-	msg->addStringFast(_PREHASH_QueryText, text);
-	msg->addU32Fast(_PREHASH_QueryFlags, flags);
-	msg->addU32Fast(_PREHASH_Category, category);
-	msg->addS32Fast(_PREHASH_QueryStart, query_start);
-	gAgent.sendReliableMessage();
+	mStartSearch -= 100;
+	getChildView("people_back")->setEnabled(mStartSearch > 0);
 	
-	llinfos << "Firing off classified ad search request: " << query_id << llendl;
+	find();
 }
 
-////////////////////////////////////////
-//       Process search replies       //
-////////////////////////////////////////
+void FSPanelSearchPeople::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchPeople::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("people_back")->setEnabled(FALSE);
+	getChildView("people_next")->setEnabled(FALSE);
+}
+
+S32 FSPanelSearchPeople::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("people_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchPeople::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_people");
+	if (!list)
+	{
+		return;
+	}
+	mParent->FSFloaterSearch::onSelectedItem(list->getSelectedValue(), 1);
+	
+}
 
 // static
-void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void**)
+void FSPanelSearchPeople::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID query_id;
 	std::string   first_name;
@@ -1055,9 +712,9 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 	if (agent_id != gAgent.getID()) return;
 	lldebugs << "received search results - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
-	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
+	FSPanelSearchPeople* self = dynamic_cast<FSPanelSearchPeople*>(sInstance);
 	// floater is closed or these are not results from our last request
-	if (NULL == self || query_id != self->mQueryID)
+	if (NULL == self || query_id != self->getQueryID())
 	{
 		return;
 	}
@@ -1078,30 +735,30 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_short"));
+			search_results->setCommentText(LLTrans::getString("search_short"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_banned"));
+			search_results->setCommentText(LLTrans::getString("search_banned"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_disabled"));
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			self->setLoadingProgress(false);
 			return;
 		}
@@ -1123,19 +780,19 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 		{
 			llinfos << "Null result returned for QueryID: " << query_id << llendl;
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("people_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			lldebugs << "Got: " << first_name << " " << last_name << " AgentID: " << agent_id << llendl;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
-				
+			
 			std::string avatar_name;
 			avatar_name = LLCacheName::buildFullName(first_name, last_name);
-				
+			
 			LLSD content;
 			LLSD element;
 			
@@ -1148,7 +805,7 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 			element["columns"][1]["column"]	= "username";
 			element["columns"][1]["value"]	= avatar_name;
 			
-			content["username"] = avatar_name;
+			content["name"] = avatar_name;
 			
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[agent_id.asString()] = content;
@@ -1162,8 +819,158 @@ void FSFloaterSearchLegacy::processSearchPeopleReply(LLMessageSystem* msg, void*
 	self->setLoadingProgress(false);
 }
 
+////////////////////////////////////////
+//         Groups Search Panel        //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchGroups> t_panel_fs_search_groups("panel_ls_groups");
+FSPanelSearchGroups* FSPanelSearchGroups::sInstance;
+
+FSPanelSearchGroups::FSPanelSearchGroups() :
+LLPanel(),
+mQueryID(NULL),
+mStartSearch(0),
+mResultsReceived(0),
+mResultsContent()
+{
+	sInstance = this;
+}
+
+FSPanelSearchGroups::~FSPanelSearchGroups()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchGroups::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchGroups::postBuild()
+{
+	LLLineEditor* search_bar = findChild<LLLineEditor>("groups_edit");
+	if (search_bar)
+	{
+		search_bar->setCommitOnFocusLost(false);
+		search_bar->setCommitCallback(boost::bind(&FSPanelSearchGroups::onBtnFind, this));
+	}
+	childSetAction("groups_find", boost::bind(&FSPanelSearchGroups::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_groups");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchGroups::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	childSetAction("groups_next", boost::bind(&FSPanelSearchGroups::onBtnNext, this));
+	childSetAction("groups_back", boost::bind(&FSPanelSearchGroups::onBtnBack, this));
+	getChildView("groups_next")->setEnabled(FALSE);
+	getChildView("groups_back")->setEnabled(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchGroups::find()
+{
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_groups");
+	std::string text = getChild<LLUICtrl>("groups_edit")->getValue().asString();
+	/// FIXME: This stops the user from sending single-word two queries that
+	/// are too small, but they can still search for multiple item queries
+	/// too small to search. eg. "to be pi"
+	boost::trim(text);
+	if (text.size() < MIN_SEARCH_STRING_SIZE)
+	{
+		search_results->setCommentText(LLTrans::getString("search_short"));
+		return;
+	}
+	
+	mResultsReceived = 0;
+	if (mQueryID.notNull())
+		mQueryID.setNull();
+	mQueryID.generate();
+	
+	gMessageSystem->newMessage("DirFindQuery");
+	gMessageSystem->nextBlock("AgentData");
+	gMessageSystem->addUUID("AgentID", gAgent.getID());
+	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->nextBlock("QueryData");
+	gMessageSystem->addUUID("QueryID", getQueryID());
+	gMessageSystem->addString("QueryText", text);
+	gMessageSystem->addU32("QueryFlags", DFQ_GROUPS);
+	gMessageSystem->addS32("QueryStart", mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off search request: " << getQueryID() << llendl;
+	
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
+	mNumResultsReturned = 0;
+}
+
+void FSPanelSearchGroups::onBtnFind()
+{
+	find();
+}
+
+void FSPanelSearchGroups::onBtnNext()
+{
+	mStartSearch += 100;
+	getChildView("groups_back")->setEnabled(TRUE);
+	
+	find();
+}
+
+void FSPanelSearchGroups::onBtnBack()
+{
+	mStartSearch -= 100;
+	getChildView("groups_back")->setEnabled(mStartSearch > 0);
+	
+	find();
+}
+
+void FSPanelSearchGroups::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchGroups::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("groups_back")->setEnabled(FALSE);
+	getChildView("groups_next")->setEnabled(FALSE);
+}
+
+S32 FSPanelSearchGroups::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("groups	_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchGroups::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_groups");
+	if (!list)
+	{
+		return;
+	}
+	mParent->FSFloaterSearch::onSelectedItem(list->getSelectedValue(), 2);
+}
+
 // static
-void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void**)
+void FSPanelSearchGroups::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID query_id;
 	LLUUID group_id;
@@ -1179,8 +986,7 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 	if (agent_id != gAgent.getID()) return;
 	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
-	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
-	
+	FSPanelSearchGroups* self = dynamic_cast<FSPanelSearchGroups*>(sInstance);
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
@@ -1203,30 +1009,30 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_short"));
+			search_results->setCommentText(LLTrans::getString("search_short"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_banned"));
+			search_results->setCommentText(LLTrans::getString("search_banned"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_disabled"));
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			self->setLoadingProgress(false);
 			return;
 		}
@@ -1247,25 +1053,25 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 		{
 			lldebugs << "No results returned for QueryID: " << query_id << llendl;
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("groups_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
 			lldebugs << "Got: " << group_name << " GroupID: " << group_id << llendl;
 			search_results->setEnabled(TRUE);
 			found_one = TRUE;
-				
+			
 			LLSD content;
 			LLSD element;
-				
+			
 			element["id"] = group_id;
 			
 			element["columns"][0]["column"]	= "icon";
 			element["columns"][0]["type"]	= "icon";
 			element["columns"][0]["value"]	= "Icon_Group";
-				
+			
 			element["columns"][1]["column"]	= "group_name";
 			element["columns"][1]["value"]	= group_name;
 			
@@ -1274,9 +1080,9 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 			
 			element["columns"][3]["column"]	= "score";
 			element["columns"][3]["value"]	= search_order;
-				
-			content["GroupName"] = group_name;
-				
+			
+			content["name"] = group_name;
+			
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[group_id.asString()] = content;
 		}
@@ -1289,15 +1095,200 @@ void FSFloaterSearchLegacy::processSearchGroupsReply(LLMessageSystem* msg, void*
 	self->setLoadingProgress(false);
 }
 
+////////////////////////////////////////
+//         Places Search Panel        //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchPlaces> t_panel_fs_search_places("panel_ls_places");
+FSPanelSearchPlaces* FSPanelSearchPlaces::sInstance;
+
+FSPanelSearchPlaces::FSPanelSearchPlaces() :
+LLPanel(),
+mQueryID(NULL),
+mStartSearch(0),
+mResultsReceived(0),
+mResultsContent()
+{
+	sInstance = this;
+}
+
+FSPanelSearchPlaces::~FSPanelSearchPlaces()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchPlaces::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchPlaces::postBuild()
+{
+	LLLineEditor* search_bar = findChild<LLLineEditor>("places_edit");
+	if (search_bar)
+	{
+		search_bar->setCommitOnFocusLost(false);
+		search_bar->setCommitCallback(boost::bind(&FSPanelSearchPlaces::onBtnFind, this));
+	}
+	childSetAction("places_find", boost::bind(&FSPanelSearchPlaces::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_places");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchPlaces::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	LLComboBox* places_combobox = findChild<LLComboBox>("places_category");
+	places_combobox->add(LLTrans::getString("all_categories"), LLSD("any"));
+	places_combobox->addSeparator();
+	for (int category = LLParcel::C_LINDEN; category < LLParcel::C_COUNT; category++)
+	{
+		LLParcel::ECategory eCategory = (LLParcel::ECategory)category;
+		places_combobox->add(LLTrans::getString(LLParcel::getCategoryUIString(eCategory)), LLParcel::getCategoryString(eCategory));
+	}
+	childSetAction("places_next", boost::bind(&FSPanelSearchPlaces::onBtnNext, this));
+	childSetAction("places_back", boost::bind(&FSPanelSearchPlaces::onBtnBack, this));
+	//childSetAction("parcel_profile_btn", boost::bind(&FSFloaterSearch::onBtnParcelProfile, this));
+	//childSetAction("parcel_teleport_btn", boost::bind(&FSFloaterSearch::onBtnParcelTeleport, this));
+	//childSetAction("parcel_map_btn", boost::bind(&FSFloaterSearch::onBtnParcelMap, this));
+	getChildView("places_next")->setEnabled(FALSE);
+	getChildView("places_back")->setEnabled(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchPlaces::find()
+{
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_places");
+	std::string text = getChild<LLUICtrl>("places_edit")->getValue().asString();
+	/// FIXME: This stops the user from sending single-word two queries that
+	/// are too small, but they can still search for multiple item queries
+	/// too small to search. eg. "to be pi"
+	boost::trim(text);
+	if (text.size() < MIN_SEARCH_STRING_SIZE)
+	{
+		search_results->setCommentText(LLTrans::getString("search_short"));
+		return;
+	}
+	
+	static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
+	if (!(inc_pg || inc_mature || inc_adult))
+	{
+		LLNotificationsUtil::add("NoContentToSearch");
+		return;
+	}
+	U32 scope = 0;
+	if (gAgent.wantsPGOnly())
+		scope |= DFQ_PG_SIMS_ONLY;
+	bool adult_enabled = gAgent.canAccessAdult();
+	bool mature_enabled = gAgent.canAccessMature();
+	if (inc_pg)
+		scope |= DFQ_INC_PG;
+	if (inc_mature && mature_enabled)
+		scope |= DFQ_INC_MATURE;
+	if (inc_adult && adult_enabled)
+		scope |= DFQ_INC_ADULT;
+	S8 category = LLParcel::getCategoryFromString(findChild<LLComboBox>("places_category")->getSelectedValue().asString());
+	scope |= DFQ_DWELL_SORT;
+	
+	mResultsReceived = 0;
+	if (mQueryID.notNull())
+		mQueryID.setNull();
+	mQueryID.generate();
+	
+	gMessageSystem->newMessage("DirPlacesQuery");
+	gMessageSystem->nextBlock("AgentData");
+	gMessageSystem->addUUID("AgentID", gAgent.getID());
+	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->nextBlock("QueryData");
+	gMessageSystem->addUUID("QueryID", getQueryID());
+	gMessageSystem->addString("QueryText", text);
+	gMessageSystem->addU32("QueryFlags", scope);
+	gMessageSystem->addS8("Category", category);
+	gMessageSystem->addString("SimName", "");
+	gMessageSystem->addS32("QueryStart", mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off places search request: " << getQueryID() << llendl;
+	
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
+	mNumResultsReturned = 0;
+}
+
+void FSPanelSearchPlaces::onBtnFind()
+{
+	find();
+}
+
+void FSPanelSearchPlaces::onBtnNext()
+{
+	mStartSearch += 100;
+	getChildView("places_back")->setEnabled(TRUE);
+	
+	find();
+}
+
+void FSPanelSearchPlaces::onBtnBack()
+{
+	mStartSearch -= 100;
+	getChildView("places_back")->setEnabled(mStartSearch > 0);
+	
+	find();
+}
+
+void FSPanelSearchPlaces::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchPlaces::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("places_back")->setEnabled(FALSE);
+	getChildView("places_next")->setEnabled(FALSE);
+}
+
+S32 FSPanelSearchPlaces::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("places_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchPlaces::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_places");
+	if (!list)
+	{
+		return;
+	}
+	mParent->FSFloaterSearch::onSelectedItem(list->getSelectedValue(), 3);
+}
+
 // static
-void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void**)
+void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID	agent_id;
 	LLUUID	query_id;
 	LLUUID	parcel_id;
 	std::string	name;
-	BOOL	is_for_sale;
-	BOOL	is_auction;
+	BOOL	for_sale;
+	BOOL	auction;
 	F32		dwell;
 	
 	msg->getUUID("AgentData", "AgentID", agent_id);
@@ -1307,9 +1298,9 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 	if (agent_id != gAgent.getID()) return;
 	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
-	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
+	FSPanelSearchPlaces* self = dynamic_cast<FSPanelSearchPlaces*>(sInstance);
 	// floater is closed or these are not results from our last request
-	if (NULL == self || query_id != self->mQueryID)
+	if (NULL == self || query_id != self->getQueryID())
 	{
 		return;
 	}
@@ -1330,30 +1321,30 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_short"));
+			search_results->setCommentText(LLTrans::getString("search_short"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_banned"));
+			search_results->setCommentText(LLTrans::getString("search_banned"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_disabled"));
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			self->setLoadingProgress(false);
 			return;
 		}
@@ -1363,21 +1354,21 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-
+	
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUID(	"QueryReplies",	"ParcelID",	parcel_id,	i);
 		msg->getString(	"QueryReplies",	"Name",		name,		i);
-		msg->getBOOL(	"QueryReplies",	"ForSale",	is_for_sale,i);
-		msg->getBOOL(	"QueryReplies",	"Auction",	is_auction,	i);
+		msg->getBOOL(	"QueryReplies",	"ForSale",	for_sale,i);
+		msg->getBOOL(	"QueryReplies",	"Auction",	auction,	i);
 		msg->getF32(	"QueryReplies",	"Dwell",	dwell,		i);
 		if (parcel_id.isNull())
 		{
 			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("places_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
@@ -1392,13 +1383,13 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 			
 			element["id"] = parcel_id;
 			
-			if (is_auction)
+			if (auction)
 			{
 				element["columns"][0]["column"]	= "icon";
 				element["columns"][0]["type"]	= "icon";
 				element["columns"][0]["value"]	= "Icon_Auction";
 			}
-			else if (is_for_sale)
+			else if (for_sale)
 			{
 				element["columns"][0]["column"]	= "icon";
 				element["columns"][0]["type"]	= "icon";
@@ -1413,9 +1404,9 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 			
 			element["columns"][1]["column"]	= "place_name";
 			element["columns"][1]["value"]	= name;
-
-			content["place_name"] = name;
-				
+			
+			content["name"] = name;
+			
 			std::string buffer = llformat("%.0f", (F64)dwell);
 			element["columns"][2]["column"]	= "dwell";
 			element["columns"][2]["value"]	= buffer;
@@ -1432,8 +1423,215 @@ void FSFloaterSearchLegacy::processSearchPlacesReply(LLMessageSystem* msg, void*
 	self->setLoadingProgress(false);
 }
 
+////////////////////////////////////////
+//          Land Search Panel         //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchLand> t_panel_fs_search_land("panel_ls_land");
+FSPanelSearchLand* FSPanelSearchLand::sInstance;
+
+FSPanelSearchLand::FSPanelSearchLand() :
+LLPanel(),
+mQueryID(NULL),
+mStartSearch(0),
+mResultsReceived(0),
+mResultsContent()
+{
+	sInstance = this;
+}
+
+FSPanelSearchLand::~FSPanelSearchLand()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchLand::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchLand::postBuild()
+{
+	childSetAction("land_find", boost::bind(&FSPanelSearchLand::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_land");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchLand::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	LLLineEditor* price_edit = findChild<LLLineEditor>("price_edit");
+	if (price_edit)
+	{
+		price_edit->setCommitOnFocusLost(false);
+		price_edit->setCommitCallback(boost::bind(&FSPanelSearchLand::onBtnFind, this));
+	}
+	LLLineEditor* area_edit = findChild<LLLineEditor>("area_edit");
+	if (area_edit)
+	{
+		area_edit->setCommitOnFocusLost(false);
+		area_edit->setCommitCallback(boost::bind(&FSPanelSearchLand::find, this));
+	}
+	childSetAction("land_next", boost::bind(&FSPanelSearchLand::onBtnNext, this));
+	childSetAction("land_back", boost::bind(&FSPanelSearchLand::onBtnBack, this));
+
+	getChildView("land_next")->setEnabled(FALSE);
+	getChildView("land_back")->setEnabled(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchLand::find()
+{
+	static LLUICachedControl<bool> inc_pg("ShowPGLand", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureLand", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultLand", 0);
+	static LLUICachedControl<bool> limit_price("FindLandPrice", 1);
+	static LLUICachedControl<bool> limit_area("FindLandArea", 1);
+	if (!(inc_pg || inc_mature || inc_adult))
+	{
+		LLNotificationsUtil::add("NoContentToSearch");
+		return;
+	}
+	
+	U32 category = ST_ALL;
+	const std::string& selection = findChild<LLComboBox>("land_category")->getSelectedValue().asString();
+	if (!selection.empty())
+	{
+		if (selection == "Auction")
+			category = ST_AUCTION;
+		else if (selection == "Mainland")
+			category = ST_MAINLAND;
+		else if (selection == "Estate")
+			category = ST_ESTATE;
+	}
+	
+	U32 scope = 0;
+	if (gAgent.wantsPGOnly())
+		scope |= DFQ_PG_SIMS_ONLY;
+	bool mature_enabled = gAgent.canAccessMature();
+	bool adult_enabled = gAgent.canAccessAdult();
+	if (inc_pg)
+		scope |= DFQ_INC_PG;
+	if (inc_mature && mature_enabled)
+		scope |= DFQ_INC_MATURE;
+	if (inc_adult && adult_enabled)
+		scope |= DFQ_INC_ADULT;
+	const std::string& sort = findChild<LLComboBox>("land_sort_combo")->getSelectedValue().asString();
+	if (!sort.empty())
+	{
+		if (sort == "Name")
+			scope |= DFQ_NAME_SORT;
+		else if (sort == "Price")
+			scope |= DFQ_PRICE_SORT;
+		else if (sort == "PPM")
+			scope |= DFQ_PER_METER_SORT;
+		else if (sort == "Area")
+			scope |= DFQ_AREA_SORT;
+	}
+	else
+	{
+		scope |= DFQ_PRICE_SORT;
+	}
+	if (childGetValue("ascending_check").asBoolean())
+		scope |= DFQ_SORT_ASC;
+	if (limit_price)
+		scope |= DFQ_LIMIT_BY_PRICE;
+	if (limit_area)
+		scope |= DFQ_LIMIT_BY_AREA;
+	S32 price = childGetValue("edit_price").asInteger();
+	S32 area = childGetValue("edit_area").asInteger();
+	
+	mResultsReceived = 0;
+	if (mQueryID.notNull())
+		mQueryID.setNull();
+	mQueryID.generate();
+	
+	gMessageSystem->newMessage("DirLandQuery");
+	gMessageSystem->nextBlock("AgentData");
+	gMessageSystem->addUUID("AgentID", gAgent.getID());
+	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->nextBlock("QueryData");
+	gMessageSystem->addUUID("QueryID", getQueryID());
+	gMessageSystem->addU32("QueryFlags", scope);
+	gMessageSystem->addU32("SearchType", category);
+	gMessageSystem->addS32("Price", price);
+	gMessageSystem->addS32("Area", area);
+	gMessageSystem->addS32("QueryStart", mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off places search request: " << getQueryID() << category << llendl;
+	
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_land");
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
+	mNumResultsReturned = 0;
+}
+
+void FSPanelSearchLand::onBtnFind()
+{
+	find();
+}
+
+void FSPanelSearchLand::onBtnNext()
+{
+	mStartSearch += 100;
+	getChildView("land_back")->setEnabled(TRUE);
+	
+	find();
+}
+
+void FSPanelSearchLand::onBtnBack()
+{
+	mStartSearch -= 100;
+	getChildView("land_back")->setEnabled(mStartSearch > 0);
+	
+	find();
+}
+
+void FSPanelSearchLand::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchLand::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("land_back")->setEnabled(FALSE);
+	getChildView("land_next")->setEnabled(FALSE);
+}
+
+S32 FSPanelSearchLand::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("land_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchLand::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_land");
+	if (!list)
+	{
+		return;
+	}
+	mParent->FSFloaterSearch::onSelectedItem(list->getSelectedValue(), 3);
+}
+
 // static
-void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
+void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID	agent_id;
 	LLUUID	query_id;
@@ -1441,8 +1639,8 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	std::string	name;
 	std::string land_sku;
 	std::string land_type;
-	BOOL	is_auction;
-	BOOL	is_for_sale;
+	BOOL	auction;
+	BOOL	for_sale;
 	S32		price;
 	S32		area;
 	
@@ -1453,7 +1651,7 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	if (agent_id != gAgent.getID()) return;
 	llinfos << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
-	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
+	FSPanelSearchLand* self = dynamic_cast<FSPanelSearchLand*>(sInstance);
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
@@ -1469,27 +1667,27 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	
 	static LLUICachedControl<bool> use_price("FindLandPrice", 1);
 	static LLUICachedControl<bool> use_area("FindLandArea", 1);
-	S32 limit_price = self->childGetValue("price_edit").asInteger();
-	S32 limit_area = self->childGetValue("area_edit").asInteger();
+	S32 limit_price = self->childGetValue("land_price_edit").asInteger();
+	S32 limit_area = self->childGetValue("land_area_edit").asInteger();
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	
-	S32 for_sale = 0;
+	S32 not_auction = 0;
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUID(	"QueryReplies", "ParcelID",		parcel_id,	i);
 		msg->getString(	"QueryReplies", "Name",			name,		i);
-		msg->getBOOL(	"QueryReplies", "Auction",		is_auction,	i);
-		msg->getBOOL(	"QueryReplies", "ForSale",		is_for_sale,i);
+		msg->getBOOL(	"QueryReplies", "Auction",		auction,	i);
+		msg->getBOOL(	"QueryReplies", "ForSale",		for_sale,	i);
 		msg->getS32(	"QueryReplies", "SalePrice",	price,		i);
 		msg->getS32(	"QueryReplies", "ActualArea",	area,		i);
 		if (parcel_id.isNull())
 		{
 			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("no_results"));
+			search_results->setCommentText(LLTrans::getString("no_results"));
 		}
 		else
 		{
@@ -1512,18 +1710,18 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 				continue;
 			if (use_area && (area < limit_area))
 				continue;
-		
+			
 			LLSD content;
 			LLSD element;
-		
+			
 			element["id"] = parcel_id;
-			if (is_auction)
+			if (auction)
 			{
 				element["columns"][0]["column"]	= "icon";
 				element["columns"][0]["type"]	= "icon";
 				element["columns"][0]["value"]	= "Icon_Auction";
 			}
-			else if (is_for_sale)
+			else if (for_sale)
 			{
 				element["columns"][0]["column"]	= "icon";
 				element["columns"][0]["type"]	= "icon";
@@ -1535,24 +1733,24 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 				element["columns"][0]["type"]	= "icon";
 				element["columns"][0]["value"]	= "Icon_Place";
 			}
-		
+			
 			element["columns"][1]["column"]	= "land_name";
 			element["columns"][1]["value"]	= name;
-		
+			
 			content["place_name"] = name;
-		
+			
 			std::string buffer = "Auction";
-			if (!is_auction)
+			if (!auction)
 			{
 				buffer = llformat("%d", price);
-				for_sale++;
+				not_auction++;
 			}
 			element["columns"][2]["column"]	= "price";
 			element["columns"][2]["value"]	= price;
-		
+			
 			element["columns"][3]["column"]	= "area";
 			element["columns"][3]["value"]	= area;
-			if (!is_auction)
+			if (!auction)
 			{
 				F32 ppm;
 				if (area > 0)
@@ -1568,15 +1766,15 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 				element["columns"][4]["column"]	= "ppm";
 				element["columns"][4]["value"]	= "1.0";
 			}
-		
+			
 			element["columns"][5]["column"]	= "land_type";
 			element["columns"][5]["value"]	= land_type;
-		
+			
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[parcel_id.asString()] = content;
 		}
 		// We test against non-auction properties because they don't count towards the page limit.
-		self->showNextButton(for_sale);
+		self->showNextButton(not_auction);
 	}
 	if (found_one)
 	{
@@ -1586,14 +1784,182 @@ void FSFloaterSearchLegacy::processSearchLandReply(LLMessageSystem* msg, void**)
 	self->setLoadingProgress(false);
 }
 
-// static
-void FSFloaterSearchLegacy::processSearchEventsReply(LLMessageSystem* msg, void**)
+////////////////////////////////////////
+//      Classifieds Search Panel      //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchClassifieds> t_panel_fs_search_classifieds("panel_ls_classifieds");
+FSPanelSearchClassifieds* FSPanelSearchClassifieds::sInstance;
+
+FSPanelSearchClassifieds::FSPanelSearchClassifieds() :
+LLPanel(),
+mQueryID(NULL),
+mStartSearch(0),
+mResultsReceived(0),
+mResultsContent()
 {
-	llwarns << "Received an event search reply, but we don't handle these yet!" << llendl;
+	sInstance = this;
+}
+
+FSPanelSearchClassifieds::~FSPanelSearchClassifieds()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchClassifieds::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchClassifieds::postBuild()
+{
+	LLLineEditor* search_bar = findChild<LLLineEditor>("classifieds_edit");
+	if (search_bar)
+	{
+		search_bar->setCommitOnFocusLost(false);
+		search_bar->setCommitCallback(boost::bind(&FSPanelSearchClassifieds::onBtnFind, this));
+	}
+	childSetAction("classifieds_find", boost::bind(&FSPanelSearchClassifieds::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_classifieds");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchClassifieds::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	LLComboBox* classifieds_combobox = getChild<LLComboBox>("classifieds_category");
+	LLClassifiedInfo::cat_map::iterator iter;
+	classifieds_combobox->add(LLTrans::getString("all_categories"), LLSD("any"));
+	classifieds_combobox->addSeparator();
+	for (iter = LLClassifiedInfo::sCategories.begin();
+		 iter != LLClassifiedInfo::sCategories.end();
+		 iter++)
+	{
+		classifieds_combobox->add(LLTrans::getString(iter->second));
+	}
+	childSetAction("classifieds_next", boost::bind(&FSPanelSearchClassifieds::onBtnNext, this));
+	childSetAction("classifieds_back", boost::bind(&FSPanelSearchClassifieds::onBtnBack, this));
+
+	getChildView("classifieds_next")->setEnabled(FALSE);
+	getChildView("classifieds_back")->setEnabled(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchClassifieds::find()
+{
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_classifieds");
+	std::string text = getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
+	/// FIXME: This stops the user from sending single-word two queries that
+	/// are too small, but they can still search for multiple item queries
+	/// too small to search. eg. "to be pi"
+	boost::trim(text);
+	if (text.size() < MIN_SEARCH_STRING_SIZE)
+	{
+		search_results->setCommentText(LLTrans::getString("search_short"));
+		return;
+	}
+	
+	static LLUICachedControl<bool> inc_pg("ShowPGClassifieds", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureClassifieds", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultClassifieds", 0);
+	if (!(inc_pg || inc_mature || inc_adult))
+	{
+		LLNotificationsUtil::add("NoContentToSearch");
+		return;
+	}
+	U32 category = childGetValue("classifieds_category").asInteger();
+	BOOL auto_renew = FALSE;
+	U32 flags = pack_classified_flags_request(auto_renew, inc_pg, inc_mature, inc_adult);
+	
+	mResultsReceived = 0;
+	if (mQueryID.notNull())
+		mQueryID.setNull();
+	mQueryID.generate();
+	
+	gMessageSystem->newMessageFast(_PREHASH_DirClassifiedQuery);
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->nextBlockFast(_PREHASH_QueryData);
+	gMessageSystem->addUUIDFast(_PREHASH_QueryID, getQueryID());
+	gMessageSystem->addStringFast(_PREHASH_QueryText, text);
+	gMessageSystem->addU32Fast(_PREHASH_QueryFlags, flags);
+	gMessageSystem->addU32Fast(_PREHASH_Category, category);
+	gMessageSystem->addS32Fast(_PREHASH_QueryStart, mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off classified ad search request: " << getQueryID() << llendl;
+	
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
+	mNumResultsReturned = 0;
+}
+
+void FSPanelSearchClassifieds::onBtnFind()
+{
+	find();
+}
+
+void FSPanelSearchClassifieds::onBtnNext()
+{
+	mStartSearch += 100;
+	getChildView("classifieds_back")->setEnabled(TRUE);
+	
+	find();
+}
+
+void FSPanelSearchClassifieds::onBtnBack()
+{
+	mStartSearch -= 100;
+	getChildView("classifieds_back")->setEnabled(mStartSearch > 0);
+	
+	find();
+}
+
+void FSPanelSearchClassifieds::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchClassifieds::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("classifieds_back")->setEnabled(FALSE);
+	getChildView("classifieds_next")->setEnabled(FALSE);
+}
+
+S32 FSPanelSearchClassifieds::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("classifieds_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchClassifieds::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_classifieds");
+	if (!list)
+	{
+		return;
+	}
+	mParent->FSFloaterSearch::onSelectedItem(list->getSelectedValue(), 4);
 }
 
 // static
-void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, void**)
+void FSPanelSearchClassifieds::processSearchReply(LLMessageSystem* msg, void**)
 {
 	LLUUID	agent_id;
 	LLUUID	query_id;
@@ -1620,7 +1986,7 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 		}
 	}
 	
-	FSFloaterSearchLegacy* self = LLFloaterReg::findTypedInstance<FSFloaterSearchLegacy>("search_legacy");
+	FSPanelSearchClassifieds* self = dynamic_cast<FSPanelSearchClassifieds*>(sInstance);
 	// floater is closed or these are not results from our last request
 	if (NULL == self || query_id != self->mQueryID)
 	{
@@ -1643,30 +2009,30 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 		if (status & STATUS_SEARCH_PLACES_FOUNDNONE)
 		{
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if(status & STATUS_SEARCH_PLACES_SHORTSTRING)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_short"));
+			search_results->setCommentText(LLTrans::getString("search_short"));
 			self->setLoadingProgress(false);
 			return;
 		}
-		else if (status & STATUS_SEARCH_PLACES_BANNEDWORD)
+		else if (status & STATUS_SEARCH_CLASSIFIEDS_BANNEDWORD)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_banned"));
+			search_results->setCommentText(LLTrans::getString("search_banned"));
 			self->setLoadingProgress(false);
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
 		{
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("search_disabled"));
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
 			self->setLoadingProgress(false);
 			return;
 		}
@@ -1676,7 +2042,7 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
 	self->mResultsReceived += num_new_rows;
 	num_new_rows = self->showNextButton(num_new_rows);
-
+	
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		msg->getUUID(	"QueryReplies", "ClassifiedID",		classified_id,	i);
@@ -1688,9 +2054,9 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 		{
 			lldebugs << "Null result returned for QueryID: " << query_id << llendl;
 			LLStringUtil::format_map_t map;
-			map["[TEXT]"] = self->getChild<LLUICtrl>("Edit")->getValue().asString();
+			map["[TEXT]"] = self->getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
 			search_results->setEnabled(FALSE);
-			search_results->setCommentText(self->getString("not_found", map));
+			search_results->setCommentText(LLTrans::getString("not_found", map));
 		}
 		else
 		{
@@ -1715,9 +2081,435 @@ void FSFloaterSearchLegacy::processSearchClassifiedsReply(LLMessageSystem* msg, 
 			element["columns"][2]["column"]	= "price";
 			element["columns"][2]["value"]	= price_for_listing;
 			
+			content["name"] = name;
+			
 			search_results->addElement(element, ADD_BOTTOM);
 			self->mResultsContent[classified_id.asString()] = content;
 		}
+	}
+	if (found_one)
+	{
+		search_results->selectFirstItem();
+		search_results->setFocus(TRUE);
+	}
+	self->setLoadingProgress(false);
+
+}
+
+////////////////////////////////////////
+//        Events Search Panel         //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchEvents> t_panel_fs_search_events("panel_ls_events");
+FSPanelSearchEvents* FSPanelSearchEvents::sInstance;
+
+FSPanelSearchEvents::FSPanelSearchEvents() :
+LLPanel(),
+mQueryID(NULL),
+mResultsReceived(0),
+mStartSearch(0),
+mDay(0),
+mResultsContent()
+{
+	sInstance = this;
+}
+
+FSPanelSearchEvents::~FSPanelSearchEvents()
+{
+	sInstance = NULL;
+}
+
+// virtual
+void FSPanelSearchEvents::onOpen(FSFloaterSearch* parent)
+{
+	mParent = parent;
+}
+
+BOOL FSPanelSearchEvents::postBuild()
+{
+	LLLineEditor* search_bar = findChild<LLLineEditor>("events_edit");
+	if (search_bar)
+	{
+		search_bar->setCommitOnFocusLost(false);
+		search_bar->setCommitCallback(boost::bind(&FSPanelSearchEvents::onBtnFind, this));
+	}
+	childSetAction("events_find", boost::bind(&FSPanelSearchEvents::onBtnFind, this));
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_events");
+	if (search_results)
+	{
+		search_results->setCommitCallback(boost::bind(&FSPanelSearchEvents::onSelectItem, this));
+		search_results->setEnabled(FALSE);
+		search_results->setCommentText(LLTrans::getString("no_results"));
+	}
+	LLRadioGroup* events_select_mode = findChild<LLRadioGroup>("events_search_mode");
+	if (events_select_mode)
+	{
+		events_select_mode->setCommitCallback(boost::bind(&FSPanelSearchEvents::onSearchModeChanged, this));
+		events_select_mode->selectFirstItem();
+	}
+	childSetAction("events_next", boost::bind(&FSPanelSearchEvents::onBtnNext, this));
+	childSetAction("events_back", boost::bind(&FSPanelSearchEvents::onBtnBack, this));
+	childSetAction("events_tomorrow", boost::bind(&FSPanelSearchEvents::onBtnTomorrow, this));
+	childSetAction("events_yesterday", boost::bind(&FSPanelSearchEvents::onBtnYesterday, this));
+	childSetAction("events_today", boost::bind(&FSPanelSearchEvents::onBtnToday, this));
+	
+	getChildView("events_next")->setEnabled(FALSE);
+	getChildView("events_back")->setEnabled(FALSE);
+	getChildView("events_tomorrow")->setEnabled(FALSE);
+	getChildView("events_yesterday")->setEnabled(FALSE);
+	getChildView("events_today")->setEnabled(FALSE);
+	setDay(0);
+	
+	// <FS:CR> Workaround by hiding Next/Back until I've squared that crap away.
+	getChildView("events_next")->setVisible(FALSE);
+	getChildView("events_back")->setVisible(FALSE);
+	
+	return TRUE;
+}
+
+void FSPanelSearchEvents::find()
+{
+	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_events");
+	std::string text = getChild<LLUICtrl>("events_edit")->getValue().asString();
+	boost::trim(text);
+	
+	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultEvents", 0);
+	if (!(inc_pg || inc_mature || inc_adult))
+	{
+		LLNotificationsUtil::add("NoContentToSearch");
+		return;
+	}
+	
+	U32 category = findChild<LLComboBox>("events_category")->getSelectedValue().asInteger();
+	U32 scope = DFQ_DATE_EVENTS;
+	if (gAgent.wantsPGOnly())
+		scope |= DFQ_PG_SIMS_ONLY;
+	bool mature_enabled = gAgent.canAccessMature();
+	bool adult_enabled = gAgent.canAccessAdult();
+	if (inc_pg)
+		scope |= DFQ_INC_PG;
+	if (inc_mature && mature_enabled)
+		scope |= DFQ_INC_MATURE;
+	if (inc_adult && adult_enabled)
+		scope |= DFQ_INC_ADULT;
+	
+	std::ostringstream string;
+	
+	if ("current" == childGetValue("events_search_mode").asString())
+		string << "u|";
+	else
+		string << mDay << "|";
+	string << category << "|";
+	string << text;
+	
+	if (mQueryID.notNull())
+		mQueryID.setNull();
+	mQueryID.generate();
+	
+	gMessageSystem->newMessage("DirFindQuery");
+	gMessageSystem->nextBlock("AgentData");
+	gMessageSystem->addUUID("AgentID", gAgent.getID());
+	gMessageSystem->addUUID("SessionID", gAgent.getSessionID());
+	gMessageSystem->nextBlock("QueryData");
+	gMessageSystem->addUUID("QueryID", getQueryID());
+	gMessageSystem->addString("QueryText", string.str());
+	gMessageSystem->addU32("QueryFlags", scope);
+	gMessageSystem->addS32("QueryStart", mStartSearch);
+	gAgent.sendReliableMessage();
+	llinfos << "Firing off search request: " << getQueryID() << " Search Text: " << string.str() << llendl;
+	
+	search_results->deleteAllItems();
+	search_results->setCommentText(LLTrans::getString("searching"));
+	setLoadingProgress(true);
+	mNumResultsReturned = 0;
+}
+
+void FSPanelSearchEvents::onBtnFind()
+{
+	find();
+}
+
+void FSPanelSearchEvents::onBtnNext()
+{
+	mStartSearch += 100;
+	getChildView("events_back")->setEnabled(TRUE);
+	
+	find();
+}
+
+void FSPanelSearchEvents::onBtnBack()
+{
+	mStartSearch -= 100;
+	getChildView("events_back")->setEnabled(mStartSearch > 0);
+	
+	find();
+}
+
+void FSPanelSearchEvents::onBtnTomorrow()
+{
+	resetSearch();
+	setDay(mDay + 1);
+	
+	find();
+}
+
+void FSPanelSearchEvents::onBtnYesterday()
+{
+	resetSearch();
+	setDay(mDay - 1);
+	
+	find();
+}
+
+void FSPanelSearchEvents::onBtnToday()
+{
+	resetSearch();
+	setDay(0);
+	
+	find();
+}
+
+void FSPanelSearchEvents::setLoadingProgress(bool started)
+{
+	LLLoadingIndicator* indicator = getChild<LLLoadingIndicator>("loading");
+	
+    indicator->setVisible(started);
+	
+    if (started)
+        indicator->start();
+    else
+        indicator->stop();
+}
+
+void FSPanelSearchEvents::resetSearch()
+{
+	mStartSearch = 0;
+	getChildView("events_back")->setEnabled(FALSE);
+	getChildView("events_next")->setEnabled(FALSE);
+}
+
+void FSPanelSearchEvents::onSearchModeChanged()
+{
+	if (getChild<LLUICtrl>("events_search_mode")->getValue().asString() == "current")
+	{
+		getChildView("events_yesterday")->setEnabled(FALSE);
+		getChildView("events_tomorrow")->setEnabled(FALSE);
+		getChildView("events_today")->setEnabled(FALSE);
+	}
+	else
+	{
+		getChildView("events_yesterday")->setEnabled(TRUE);
+		getChildView("events_tomorrow")->setEnabled(TRUE);
+		getChildView("events_today")->setEnabled(TRUE);
+	}
+}
+
+void FSPanelSearchEvents::setDay(S32 day)
+{
+	mDay = day;
+	struct tm* internal_time;
+	
+	time_t utc = time_corrected();
+	utc += day * 24 * 60 * 60;
+	internal_time = utc_to_pacific_time(utc, is_daylight_savings());
+	std::string buffer = llformat("%d/%d", 1 + internal_time->tm_mon, internal_time->tm_mday);
+	childSetValue("events_date", buffer);
+}
+
+S32 FSPanelSearchEvents::showNextButton(S32 rows)
+{
+	bool show_next_button = (mResultsReceived > 100);
+	getChildView("events_next")->setEnabled(show_next_button);
+	if (show_next_button)
+	{
+		rows -= (mResultsReceived - 100);
+	}
+	return rows;
+}
+
+void FSPanelSearchEvents::onSelectItem()
+{
+	LLScrollListCtrl* list = getChild<LLScrollListCtrl>("search_results_events");
+	if (!list)
+	{
+		return;
+	}
+	S32 event_id = list->getSelectedValue();
+	mParent->FSFloaterSearch::onSelectedEvent(event_id);
+}
+
+// static
+void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
+{
+	LLUUID	agent_id;
+	LLUUID	query_id;
+	LLUUID	owner_id;
+	std::string	name;
+	std::string	date;
+	
+	msg->getUUID("AgentData", "AgentID", agent_id);
+	msg->getUUID("QueryData", "QueryID", query_id);
+	
+	// Not for us
+	if (agent_id != gAgent.getID()) return;
+	llinfos << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	
+	FSPanelSearchEvents* self = dynamic_cast<FSPanelSearchEvents*>(sInstance);
+	// floater is closed or these are not results from our last request
+	if (NULL == self || query_id != self->mQueryID)
+	{
+		return;
+	}
+	
+	LLScrollListCtrl* search_results = self->getChild<LLScrollListCtrl>("search_results_events");
+	
+	// Clear "Searching" label on first results
+	if (self->mNumResultsReturned++ == 0)
+	{
+		search_results->deleteAllItems();
+	}
+	// Check for status messages
+	if (msg->getNumberOfBlocks("StatusData"))
+	{
+		U32 status;
+		msg->getU32("StatusData", "Status", status);
+		if (status & STATUS_SEARCH_EVENTS_FOUNDNONE)
+		{
+			LLStringUtil::format_map_t map;
+			map["[TEXT]"] = self->getChild<LLUICtrl>("events_edit")->getValue().asString();
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("not_found", map));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if(status & STATUS_SEARCH_EVENTS_SHORTSTRING)
+		{
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("search_short"));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if (status & STATUS_SEARCH_EVENTS_BANNEDWORD)
+		{
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("search_banned"));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if (status & STATUS_SEARCH_EVENTS_SEARCHDISABLED)
+		{
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if (status & STATUS_SEARCH_EVENTS_NODATEOFFSET)
+		{
+			search_results->setEnabled(FALSE);
+			llwarns << "No date offset!" << llendl;
+			return;
+		}
+		else if (status & STATUS_SEARCH_EVENTS_NOCATEGORY)
+		{
+			search_results->setEnabled(FALSE);
+			llwarns << "No category defined!" << llendl;
+			return;
+		}
+		else if (status & STATUS_SEARCH_EVENTS_NOQUERY)
+		{
+			search_results->setEnabled(FALSE);
+			llwarns << "No query defined!" << llendl;
+			return;
+		}
+	}
+	
+	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
+	self->mResultsReceived += num_new_rows;
+	num_new_rows = self->showNextButton(num_new_rows);
+	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultEvents", 0);
+	BOOL found_one = FALSE;
+	
+	for (S32 i = 0; i < num_new_rows; i++)
+	{
+		U32 event_id;
+		U32 unix_time;
+		U32 event_flags;
+		
+		msg->getUUID(	"QueryReplies",	"OwnerID",		owner_id,	i);
+		msg->getString(	"QueryReplies",	"Name",			name,		i);
+		msg->getU32(	"QueryReplies",	"EventID",		event_id,	i);
+		msg->getString(	"QueryReplies",	"Date",			date,		i);
+		msg->getU32(	"QueryReplies",	"UnixTime",		unix_time,	i);
+		msg->getU32(	"QueryReplies",	"EventFlags",	event_flags,i);
+		
+		// Skip empty events...
+		if (owner_id.isNull())
+		{
+			llinfos << "Skipped " << event_id << " because of a NULL owner result" << llendl;
+			continue;
+		}
+		// Skips events that don't match our scope...
+		if (((event_flags & (EVENT_FLAG_ADULT | EVENT_FLAG_MATURE)) == EVENT_FLAG_NONE) && !inc_pg)
+		{
+			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			continue;
+		}
+		if ((event_flags & EVENT_FLAG_MATURE) && !inc_mature)
+		{
+			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			continue;
+		}
+		if ((event_flags & EVENT_FLAG_ADULT) && !inc_adult)
+		{
+			llinfos << "Skipped " << event_id << " because it was out of scope" << llendl;
+			continue;
+		}
+		search_results->setEnabled(TRUE);
+		found_one = TRUE;
+
+		std::string event_name;
+		LLSD content;
+		LLSD element;
+		
+		element["id"] = llformat("%u", event_id);
+		
+		if (event_flags == EVENT_FLAG_ADULT)
+		{
+			element["columns"][0]["column"] = "icon";
+			element["columns"][0]["type"] = "icon";
+			element["columns"][0]["value"] = "Icon_Legacy_Event_Adult";
+		}
+		else if (event_flags == EVENT_FLAG_MATURE)
+		{
+			element["columns"][0]["column"] = "icon";
+			element["columns"][0]["type"] = "icon";
+			element["columns"][0]["value"] = "Icon_Legacy_Event_Mature";
+		}
+		else
+		{
+			element["columns"][0]["column"] = "icon";
+			element["columns"][0]["type"] = "icon";
+			element["columns"][0]["value"] = "Icon_Legacy_Event_PG";
+		}
+		element["columns"][1]["column"] = "name";
+		element["columns"][1]["value"] = name;
+		
+		element["columns"][2]["column"] = "date";
+		element["columns"][2]["value"] = date;
+		
+		element["columns"][3]["column"] = "time";
+		element["columns"][3]["value"] = llformat("%u", unix_time);
+		
+		content["name"] = name;
+		content["event_id"] = (S32)event_id;
+		
+		search_results->addElement(element, ADD_BOTTOM);
+		std::string event = llformat("%u", event_id);
+		self->mResultsContent[event] = content;
 	}
 	if (found_one)
 	{

@@ -36,6 +36,10 @@
 #include "llfloaterevent.h"
 #include "llagent.h"
 #include "llcommandhandler.h"	// secondlife:///app/... support
+// <FS:CR> FIRE-6310 - Legacy Search
+#include "fsfloatersearchlegacy.h" 
+#include "llviewerfloaterreg.h"
+// </FS:CR>
 
 class LLEventHandler : public LLCommandHandler
 {
@@ -176,8 +180,33 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 	
 	mEventNotifications[new_enp->getEventID()] = new_enp;
 	return true;
-	
 }
+// <FS:CR> FIRE-6310 - Legacy Search
+bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos)
+{
+	if (isEventNotice)
+	{
+		LLEventNotification *new_enp = new LLEventNotification(eventId, eventEpoch, eventDateStr, eventName);
+	
+		llinfos << "Add event " << eventName << " id " << eventId << " date " << eventDateStr << llendl;
+		if(!new_enp->isValid())
+		{
+			delete new_enp;
+			return false;
+		}
+	
+		mEventNotifications[new_enp->getEventID()] = new_enp;	
+		isEventNotice = false; // Turn this off. The next request may not be to add an event notification.
+	}
+	else // This should always be for legacy search. If not, this will need to be refactored!
+	{
+		FSFloaterSearch* legacy_search = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search_legacy");
+		if (legacy_search) // The floater exists, send the results
+			legacy_search->sendEventDetails(eventId, eventEpoch, eventDateStr, eventName, eventDesc, eventDuration, eventFlags, eventGlobalPos);
+	}
+	return true;
+}
+// </FS:CR>
 
 void LLEventNotifier::add(U32 eventId)
 {
@@ -189,7 +218,9 @@ void LLEventNotifier::add(U32 eventId)
 	gMessageSystem->nextBlockFast(_PREHASH_EventData);
 	gMessageSystem->addU32Fast(_PREHASH_EventID, eventId);
 	gAgent.sendReliableMessage();
-
+// <FS:CR> FIRE-6310 - Legacy Search
+	isEventNotice = true; // this is from LLEventNotifier as opposed to a Legacy Search request
+// </FS:CR>
 }
 
 //static 
@@ -201,14 +232,28 @@ void LLEventNotifier::processEventInfoReply(LLMessageSystem *msg, void **)
 	std::string event_name;
 	std::string eventd_date;
 	U32 event_time_utc;
+// <FS:CR> FIRE-6310 - Legacy Search - Gather the info we need for legacy results too...
+	std::string event_desc;
+	U32 event_duration;
+	U32 event_flags;
+	LLVector3d event_global_pos;
+// </FS:CR>
 	
 	msg->getUUIDFast(_PREHASH_AgentData, _PREHASH_AgentID, agent_id );
 	msg->getU32("EventData", "EventID", event_id);
 	msg->getString("EventData", "Name", event_name);
 	msg->getString("EventData", "Date", eventd_date);
 	msg->getU32("EventData", "DateUTC", event_time_utc);
+// <FS:CR> FIRE-6310 - Legacy Search - Gather the info we need for legacy results too...
+	msg->getString("EventData", "Desc", event_desc);
+	msg->getU32("EventData", "Duration", event_duration);
+	msg->getU32("EventData", "EventFlags", event_flags);
+	msg->getVector3d("EventData", "GlobalPos", event_global_pos);
 	
-	gEventNotifier.add(event_id, (F64)event_time_utc, eventd_date, event_name);
+	//gEventNotifier.add(event_id, (F64)event_time_utc, eventd_date, event_name);
+	gEventNotifier.add(event_id, (F64)event_time_utc, eventd_date, event_name,
+					   event_desc, event_duration, event_flags, event_global_pos);
+// </FS:CR>
 }	
 	
 	

@@ -894,5 +894,8 @@ with the same filename but different name
 <texture name="Icon_Place" file_name="icon_place.tga" preload="false" />
 <texture name="Icon_Auction" file_name="icon_auction.tga" preload="false" />
 <texture name="Icon_Group" file_name="icon_group.png" preload="false" />
+<texture name="Icon_Legacy_Event_PG" file_name="icon_legacy_event.tga" preload="false" />
+<texture name="Icon_Legacy_Event_Mature" file_name="icon_legacy_event_mature.tga" preload="false" />
+<texture name="Icon_Legacy_Event_Adult" file_name="icon_legacy_event_adult.tga" preload="false" />
 
 </textures>

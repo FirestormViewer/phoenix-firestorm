@@ -1,0 +1,253 @@
+<panel
+	border="false"
+	follows="all"
+	height="566"
+	layout="topleft"
+	left="1"
+	width="780"
+	label="Land Sales"
+	name="panel_ls_land">
+	<panel
+		border="false"
+		follows="all"
+		height="53"
+		layout="topleft"
+		left="0"
+		width="780"
+		name="panel_ls_input">
+		<check_box
+		control_name="ShowPGLand"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left="660"
+		name="pg_all"
+		top="12"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_PG_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_general"
+		top_delta="-1"
+		width="18"/>
+		<check_box
+		control_name="ShowMatureLand"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left_pad="2"
+		name="mature_all"
+		top_delta="1"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_M_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_moderate"
+		top_delta="-1"
+		width="18"/>
+		<check_box
+		control_name="ShowAdultLand"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left_pad="2"
+		name="adult_all"
+		top_delta="1"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_R_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_adult"
+		top_delta="-1"
+		width="18"/>
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			layout="topleft"
+			left="6"
+			name="search_text"
+			top="12"
+			height="16"
+			width="256">
+			Enter search terms:
+		</text>
+		<combo_box
+			control_name="FindLandType"
+			follows="left|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			top_pad="2"
+			left="6"
+			name="land_category"
+			width="122">
+			<combo_box.item label="All Categories" name="All" value="All"/>
+			<combo_box.item label="Auction" name="Auction" value="Auction"/>
+			<combo_box.item label="Mainland Sales" name="Mainland" value="Mainland"/>
+			<combo_box.item label="Estate Sales" name="Estate" value="Estate"/>
+		</combo_box>
+		<check_box
+		control_name="FindLandPrice"
+		follows="left|top"
+		height="16"
+		label="Price:"
+		layout="topleft"
+		left_pad="3"
+		name="price_check"
+		top_delta="3"
+		width="40"/>
+		<line_editor
+		enabled_control="FindLandPrice"
+		bevel_style="none"
+		border_style="line"
+		border.border_thickness="0"
+		commit_on_focus_lost="false"
+		follows="left|top"
+		height="18"
+		left_pad="20"
+		name="edit_price"
+		top_delta="-1"
+		width="40" />
+		<check_box
+		control_name="FindLandArea"
+		follows="left|top"
+		height="16"
+		label="Area:"
+		layout="topleft"
+		left_pad="3"
+		name="area_check"
+		top_delta="1"
+		width="40"/>
+		<line_editor
+		enabled_control="FindLandArea"
+		bevel_style="none"
+		border_style="line"
+		border.border_thickness="0"
+		commit_on_focus_lost="false"
+		follows="left|top"
+		height="18"
+		left_pad="20"
+		name="edit_area"
+		top_delta="-1"
+		width="40" />
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			layout="topleft"
+			left="365"
+			name="search_text"
+			top="12"
+			height="16"
+			width="256">
+			Sort results by:
+		</text>
+		<combo_box
+			follows="left|top"
+			layout="topleft"
+			height="23"
+			allow_text_entry="false"
+			left_delta="0"
+			top_pad="2"
+			name="land_sort_combo"
+			width="120">
+			<combo_box.item label="Name" name="Name_item" value="Name"/>
+			<combo_box.item label="Price" name="Price_item" value="Price"/>
+			<combo_box.item label="Price per meter" name="PPM_item" value="PPM"/>
+			<combo_box.item label="Area" name="Area_item" value="Area"/>
+		</combo_box>
+		<check_box
+		top_delta="3"
+		follows="left|top"
+		height="16"
+		label="Sort all ascending"
+		layout="topleft"
+		left_pad="3"
+		name="ascending_check"
+		width="100"/>
+		<button
+		follows="top|right"
+		height="23"
+		label="Search"
+		layout="topleft"
+		left="678"
+		top_delta="-4"
+		name="land_find"
+		width="100" />
+	</panel>
+	<!-- Search Pane -->
+	<panel
+		border="true"
+		follows="all"
+		height="510"
+		layout="topleft"
+		left="1"
+		width="410"
+		top_pad="1"
+		name="panel_ls_scrolllist">
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="485"
+			layout="topleft"
+			left="0"
+			name="search_results_land"
+			top="0"
+			width="410">
+			<columns
+			label=""
+			name="icon"
+			width="20" />
+			<columns
+			label="Name"
+			name="land_name"
+			width="210" />
+			<columns
+			label="Price"
+			name="price"
+			width="35" />
+			<columns
+			label="Area"
+			name="area"
+			width="35" />
+			<columns
+			label="L$/m"
+			name="ppm"
+			width="35" />
+			<columns
+			label="Type"
+			name="land_type"
+			width="50" />
+		</scroll_list>
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Back"
+		name="land_back"
+		top_pad="2"
+		left="3"
+		width="100" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Next"
+		name="land_next"
+		width="100"
+		left_pad="1" />
+	</panel>
+</panel>

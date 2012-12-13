@@ -1,0 +1,246 @@
+<panel
+	border="false"
+	follows="all"
+	height="566"
+	layout="topleft"
+	left="1"
+	width="780"
+	label="Events"
+	name="panel_ls_events">
+	<panel
+		border="false"
+		follows="all"
+		height="53"
+		layout="topleft"
+		left="0"
+		width="780"
+		name="panel_ls_input">
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			top_pad="5"
+			layout="topleft"
+			left="6"
+			name="search_text"
+			top="12"
+			height="16"
+			width="156">
+			Enter search terms:
+		</text>
+		<radio_group
+			left_pad="20"
+			height="16"
+			width="300"
+			layout="topleft"
+			name="events_search_mode">
+			<radio_item
+				height="16"
+				label="Ongoing and Upcoming"
+				layout="topleft"
+				name="current"
+				value="current"
+				top_pad="0"
+				width="120" />
+			<radio_item
+				height="16"
+				label="By Date"
+				layout="topleft"
+				name="date"
+				value="date"
+				left_pad="70"
+				width="120" />
+		</radio_group>
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			top_delta="0"
+			layout="topleft"
+			left_pad="5"
+			name="events_date"
+			font.style="BOLD"
+			height="16"
+			width="80">
+			4/20
+		</text>
+		<line_editor
+		bevel_style="none"
+		border_style="line"
+		border.border_thickness="0"
+		commit_on_focus_lost="false"
+		layout="topleft"
+		follows="left|top|right"
+		height="23"
+		left="6"
+		name="events_edit"
+		top="29"
+		width="546" />
+		<button
+		follows="top|right"
+		height="23"
+		label="Search"
+		layout="topleft"
+		left_pad="2"
+		name="events_find"
+		width="100" />
+		<combo_box
+		follows="right|top"
+		layout="topleft"
+		height="23"
+		top_delta="0"
+		left_pad="2"
+		name="events_category"
+		width="122">
+			<combo_box.item label="Any Category" name="any" value="0" />
+			<combo_box.item label="" value="filter_separator" enabled="false" />
+			<combo_box.item label="Discussion" name="discussion" value="18" />
+			<combo_box.item label="Sports" name="sports" value="19" />
+			<combo_box.item label="Live Music" name="music" value="20" />
+			<!-- <combo_box.item label="???" name="mystery_category" value="21" /> -->
+			<combo_box.item label="Commercial" name="commercial" value="22" />
+			<combo_box.item label="Nightlife/Entertainment" name="nightlife" value="23" />
+			<combo_box.item label="Games/Contests" name="games" value="24" />
+			<combo_box.item label="Pageants" name="pageants" value="25" />
+			<combo_box.item label="Education" name="education" value="26" />
+			<combo_box.item label="Arts and Culture" name="arts" value="27" />
+			<combo_box.item label="Charity/Support Groups" name="charity" value="28" />
+			<combo_box.item label="Miscellaneous" name="misc" value="29" />
+		</combo_box>
+		<check_box
+		control_name="ShowPGEvents"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left="660"
+		name="pg_all"
+		top="12"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_PG_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_general"
+		top_delta="-1"
+		width="18"/>
+		<check_box
+		control_name="ShowMatureEvents"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left_pad="2"
+		name="mature_all"
+		top_delta="1"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_M_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_moderate"
+		top_delta="-1"
+		width="18"/>
+		<check_box
+		control_name="ShowAdultEvents"
+		follows="right|top"
+		height="16"
+		label=""
+		layout="topleft"
+		left_pad="2"
+		name="adult_all"
+		top_delta="1"
+		width="15"/>
+		<icon
+		follows="right|top"
+		height="16"
+		image_name="Parcel_R_Dark"
+		layout="topleft"
+		left_pad="2"
+		name="rating_icon_adult"
+		top_delta="-1"
+		width="18"/>
+	</panel>
+	<!-- Search Pane -->
+	<panel
+		border="true"
+		follows="all"
+		height="510"
+		layout="topleft"
+		left="1"
+		width="410"
+		top_pad="1"
+		name="panel_ls_scrolllist">
+		<scroll_list
+			draw_heading="true"
+			follows="all"
+			height="485"
+			layout="topleft"
+			left="0"
+			name="search_results_events"
+			top="0"
+			width="410">
+			<columns
+			label=""
+			name="icon"
+			width="20" />
+			<columns
+			label="Event Name"
+			name="name"
+			width="300" />
+			<columns
+			label="Date/Time"
+			name="date"
+			width="100" />
+			<columns
+			label="Time"
+			name="time"
+			width="0"/>
+		</scroll_list>
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Yesterday"
+		name="events_yesterday"
+		top_pad="2"
+		left="3"
+		width="100" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Today"
+		name="events_today"
+		width="100"
+		left_pad="1" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Tomorrow"
+		name="events_tomorrow"
+		width="100"
+		left_pad="1" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Back"
+		name="events_back"
+		width="100"
+		left_pad="1" />
+		<button
+		layout="topleft"
+		follows="left|bottom"
+		height="23"
+		label="Next"
+		name="events_next"
+		width="100"
+		left_pad="1" />
+	</panel>
+</panel>
