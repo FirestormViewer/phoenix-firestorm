@@ -1,98 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_fs_search_legacy" title="Klasyczne wyszukiwanie">
-	<floater.string name="not_found">
-		Nie znaleziono: &apos;[TEXT]&apos;
-	</floater.string>
-	<floater.string name="no_results">
-		Brak wyników
-	</floater.string>
-	<floater.string name="searching">
-		Szukanie...
-	</floater.string>
-	<floater.string name="all_categories">
-		Wszystkie kategorie
-	</floater.string>
-	<floater.string name="search_banned">
-		Niektóre słowa zostały wykluczone z Twojego zapytania ze względu na ograniczenia treści Norm Wspólnotowych.
-	</floater.string>
-	<floater.string name="search_short">
-		Twoje zapytanie było zbyt krótkie, aby rozpocząć wyszukiwanie.
-	</floater.string>
-	<floater.string name="search_disabled">
-		Klasyczne wyszukiwanie jest wyłączone w tym regionie.
-	</floater.string>
-	<panel name="panel_legacy_search">
-		<text name="search_category_label">
-			Wybierz kategorię:
-		</text>
-		<radio_group name="search_category_radio">
-			<radio_item label="Ludzie" name="people" />
-			<radio_item label="Grupy" name="groups" />
-			<radio_item label="Miejsca" name="places" />
-			<radio_item label="Ziemia" name="land" />
-			<radio_item label="Wydarzenia" name="events" />
-			<radio_item label="Reklamy" name="classifieds" />
-		</radio_group>
-		<text name="search_text">
-			Wpisz zapytanie:
-		</text>
-		<button label="Szukaj" name="Find" />
-		<combo_box name="land_category">
-			<combo_box.item label="Wszystkie kategorie" name="All" />
-			<combo_box.item label="Aukcje" name="Auction" />
-			<combo_box.item label="Sprzedaże na Mainland" name="Mainland" />
-			<combo_box.item label="Sprzedaże Majątków" name="Estate" />
-		</combo_box>
-		<check_box left="528" label="Cena:" name="price_check" />
-		<check_box left="528" label="Obszar:" name="area_check" />
-	</panel>
-	<panel name="panel_legacy_results">
-		<scroll_list name="search_results_people">
-			<columns label="Imię" name="username" />
-		</scroll_list>
-		<scroll_list name="search_results_groups">
-			<columns label="Nazwa grupy" name="group_name" />
-			<columns label="Członków" name="members" />
-			<columns label="Wynik" name="score" />
-		</scroll_list>
-		<scroll_list name="search_results_places">
-			<columns label="Nazwa" name="place_name" />
-			<columns label="Ruch" name="dwell" />
-		</scroll_list>
-		<scroll_list name="search_results_land">
-			<columns label="Nazwa" name="land_name" />
-			<columns label="Cena" name="price" />
-			<columns label="Obszar" name="area" />
-			<columns label="Typ" name="land_type" />
-		</scroll_list>
-		<scroll_list name="search_results_classifieds">
-			<columns label="Nazwa" name="classified_name" />
-			<columns label="Cena wyświetlenia" name="price" />
-		</scroll_list>
-		<scroll_list name="search_results_events">
-			<columns label="Nazwa wydarzenia" name="event_name" />
-			<columns label="Data" name="date" />
-			<columns label="Czas" name="time" />
-		</scroll_list>
-	</panel>
-	<button label="Wstecz" name="Back" />
-	<button label="Dalej" name="Next" />
-	<combo_box name="land_sort_combo">
-		<combo_box.item label="Nazwa" name="Name_item" />
-		<combo_box.item label="Cena" name="Price_item" />
-		<combo_box.item label="Cena za metr" name="PPM_item" />
-		<combo_box.item label="Obszar" name="Area_item" />
-	</combo_box>
-	<check_box label="Sortuj rosnąco" name="ascending_check" />
-	<panel name="panel_details">
-		<button label="Profil" name="people_profile_btn" />
-		<button label="Wiadomość IM" name="people_message_btn" />
+	<tab_container name="ls_tabs">
+		<panel label="Ludzie" name="panel_ls_people" />
+		<panel label="Grupy" name="panel_ls_groups" />
+		<panel label="Miejsca" name="panel_ls_places" />
+		<panel label="Sprzedaż ziemi" name="panel_ls_land" />
+		<panel label="Wydarzenia" name="panel_ls_events" />
+		<panel label="Reklamy" name="panel_ls_classifieds" />
+		<!-- <panel label="Sieć" name="panel_ls_web" /> -->
+	</tab_container>
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="Nazwa niezdefiniowana" />
+		<button label="Otwórz profil" name="people_profile_btn" />
+		<button label="Wyślij wiadomość" name="people_message_btn" />
 		<button label="Nowy znajomy/a" name="people_friend_btn" />
-		<button label="Profil" name="group_profile_btn" />
-		<button label="Czat" name="group_chat_btn" />
-		<button label="Dołącz" name="group_join_btn" />
-		<button label="Teleportuj" name="parcel_teleport_btn" />
-		<button label="Mapa" name="parcel_map_btn" />
-		<!-- <button label="Profil" name="parcel_profile_btn" /> -->
+		<button label="Otwórz profil" name="group_profile_btn" />
+		<button label="Dołącz do czatu" name="group_message_btn" />
+		<button label="Dołącz do grupy" name="group_join_btn" />
+		<button label="Teleportuj" name="teleport_btn" />
+		<button label="Pokaż na mapie" name="map_btn" />
+		<button label="Przypomnij mi" name="event_reminder_btn" />
 	</panel>
 </floater>

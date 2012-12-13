@@ -4979,4 +4979,25 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="FSWithOpensim">
 		ze wsparciem dla OpenSimulatora
 	</string>
+	<string name="not_found">
+		Nie znaleziono: &apos;[TEXT]&apos;
+	</string>
+	<string name="no_results">
+		Brak wyników
+	</string>
+	<string name="searching">
+		Szukanie...
+	</string>
+	<string name="all_categories">
+		Wszystkie kategorie
+	</string>
+	<string name="search_banned">
+		Niektóre słowa zostały wykluczone z Twojego zapytania ze względu na ograniczenia treści Norm Wspólnotowych.
+	</string>
+	<string name="search_short">
+		Twoje zapytanie było zbyt krótkie, aby rozpocząć wyszukiwanie.
+	</string>
+	<string name="search_disabled">
+		Klasyczne wyszukiwanie jest wyłączone w tym regionie.
+	</string>
 </strings>

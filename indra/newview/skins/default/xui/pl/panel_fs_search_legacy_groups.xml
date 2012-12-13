@@ -1,0 +1,17 @@
+<panel label="Grupy" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Wpisz zapytanie:
+		</text>
+		<button label="Szukaj" name="groups_find" />
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="Nazwa grupy" name="group_name" />
+			<columns label="Członków" name="members" />
+			<columns label="Wynik" name="score" />
+		</scroll_list>
+		<button label="Wstecz" name="groups_back" />
+		<button label="Dalej" name="groups_next" />
+	</panel>
+</panel>
