@@ -439,7 +439,7 @@ void FSFloaterSearch::sendEventDetails(U32 eventId, F64 eventEpoch, const std::s
 	mDetailsPanel->setVisible(true);
 	mDetailTitle->setValue(eventName);
 	mDetailDesc->setValue(eventDesc);
-	mDetailSnapshot->setValue(NULL);
+	mDetailSnapshot->setValue(LLSD());
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 	childSetVisible("event_reminder_btn", true);
