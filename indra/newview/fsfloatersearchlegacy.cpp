@@ -1146,9 +1146,6 @@ BOOL FSPanelSearchPlaces::postBuild()
 	}
 	childSetAction("places_next", boost::bind(&FSPanelSearchPlaces::onBtnNext, this));
 	childSetAction("places_back", boost::bind(&FSPanelSearchPlaces::onBtnBack, this));
-	//childSetAction("parcel_profile_btn", boost::bind(&FSFloaterSearch::onBtnParcelProfile, this));
-	//childSetAction("parcel_teleport_btn", boost::bind(&FSFloaterSearch::onBtnParcelTeleport, this));
-	//childSetAction("parcel_map_btn", boost::bind(&FSFloaterSearch::onBtnParcelMap, this));
 	getChildView("places_next")->setEnabled(FALSE);
 	getChildView("places_back")->setEnabled(FALSE);
 	
@@ -1645,7 +1642,7 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	llinfos << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
 	FSPanelSearchLand* self = dynamic_cast<FSPanelSearchLand*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -2198,6 +2195,7 @@ void FSPanelSearchEvents::find()
 	string << category << "|";
 	string << text;
 	
+	mResultsReceived = 0;
 	if (mQueryID.notNull())
 		mQueryID.setNull();
 	mQueryID.generate();
@@ -2348,7 +2346,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	
 	// Not for us
 	if (agent_id != gAgent.getID()) return;
-	llinfos << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
+	lldebugs << "received directory request - QueryID: " << query_id << " AgentID: " << agent_id << llendl;
 	
 	FSPanelSearchEvents* self = dynamic_cast<FSPanelSearchEvents*>(sInstance);
 	// floater is closed or these are not results from our last request
@@ -2426,7 +2424,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);
 	static LLUICachedControl<bool> inc_adult("ShowAdultEvents", 0);
 	BOOL found_one = FALSE;
-	
+
 	for (S32 i = 0; i < num_new_rows; i++)
 	{
 		U32 event_id;
@@ -2439,7 +2437,7 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		msg->getString(	"QueryReplies",	"Date",			date,		i);
 		msg->getU32(	"QueryReplies",	"UnixTime",		unix_time,	i);
 		msg->getU32(	"QueryReplies",	"EventFlags",	event_flags,i);
-		
+
 		// Skip empty events...
 		if (owner_id.isNull())
 		{
