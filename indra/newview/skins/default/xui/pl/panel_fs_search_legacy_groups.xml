@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Grupy" name="panel_ls_groups">
 	<panel name="panel_ls_input">
 		<text name="search_text">
