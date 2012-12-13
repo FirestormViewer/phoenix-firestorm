@@ -13,7 +13,7 @@
 		<check_box label="Cena:" name="price_check" />
 		<check_box label="Obszar:" name="area_check" />
 		<line_editor left_pad="25" name="edit_area" />
-		<text name="search_text">
+		<text name="sort_text">
 			Sortuj po:
 		</text>
 		<combo_box name="land_sort_combo">

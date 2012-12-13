@@ -150,7 +150,7 @@
 			follows="left|top"
 			layout="topleft"
 			left="365"
-			name="search_text"
+			name="sort_text"
 			top="12"
 			height="16"
 			width="256">

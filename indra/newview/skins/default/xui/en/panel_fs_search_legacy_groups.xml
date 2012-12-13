@@ -133,7 +133,7 @@
 			<columns
 			label="Group Name"
 			name="group_name"
-			width="255" />
+			width="245" />
 			<columns
 			label="Members"
 			name="members"

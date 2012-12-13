@@ -1,107 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_fs_search_legacy" title="Klassische Suche">
-	<floater.string name="not_found">
-		„[TEXT]“ nicht gefunden.
-	</floater.string>
-	<floater.string name="no_results">
-		Keine Treffer
-	</floater.string>
-	<floater.string name="searching">
-		Suche läuft...
-	</floater.string>
-	<floater.string name="all_categories">
-		Alle Kategorien
-	</floater.string>
-	<floater.string name="search_banned">
-		Einige Begriffe der Suchabfrage wurden aufgrund von Einschränkungen, die in den Community Standards festgelegt wurden, von der Suche ausgeschlossen.
-	</floater.string>
-	<floater.string name="search_short">
-		Die eingebenen Suchbegriffe waren zu kurz, so dass keine Suche durchgeführt wurde.
-	</floater.string>
-	<floater.string	name="search_disabled">
-		Die klassische Suche wurde in dieser Region deaktiviert.
-	</floater.string>
-	<panel name="panel_legacy_search">
-		<loading_indicator left="142" name="loading"/>
-		<text name="search_category_label">
-			Suchkategorie wählen:
-		</text>
-		<radio_group name="search_category_radio">
-			<radio_item label="Leute" name="people"/>
-			<radio_item label="Gruppen" name="groups"/>
-			<radio_item label="Orte" name="places"/>
-			<radio_item label="Land" name="land"/>
-			<radio_item label="Events" name="events"/>
-			<radio_item label="Anzeigen" name="classifieds"/>
-		</radio_group>
-		<text name="search_text">
-			Suchbegriffe eingeben:
-		</text>
-		<line_editor name="Edit" width="580" />
-		<button label="Suchen" name="Find" width="55"/>
-		<combo_box name="land_category">
-			<combo_box.item label="Alle Kategorien" name="All"/>
-			<combo_box.item label="Auktionen" name="Auction"/>
-			<combo_box.item label="Verkauf Mainland" name="Mainland"/>
-			<combo_box.item label="Verkauf Estate" name="Estate"/>
-		</combo_box>
-		<check_box label="Preis:" name="price_check"/>
-		<check_box label="Größe:" name="area_check"/>
-	</panel>
-	<panel name="panel_legacy_results">
-		<scroll_list name="search_results_people">
-			<columns label="" name="icon"/>
-			<columns label="Name" name="username"/>
-		</scroll_list>
-		<scroll_list name="search_results_groups">
-			<columns label="" name="icon"/>
-			<columns label="Gruppenname" name="group_name"/>
-			<columns label="Mitglieder" name="members"/>
-			<columns label="Bewert." name="score"/>
-		</scroll_list>
-		<scroll_list name="search_results_places">
-			<columns label="" name="icon"/>
-			<columns label="Name" name="place_name"/>
-			<columns label="Traffic" name="dwell"/>
-		</scroll_list>
-		<scroll_list name="search_results_land">
-			<columns label="" name="icon"/>
-			<columns label="Name" name="land_name"/>
-			<columns label="Preis" name="price"/>
-			<columns label="Größe" name="area"/>
-			<columns label="L$/m" name="ppm"/>
-			<columns label="Typ" name="land_type"/>
-		</scroll_list>
-		<scroll_list name="search_results_classifieds">
-			<columns label="" name="icon"/>
-			<columns label="Name" name="classified_name"/>
-			<columns label="Anzeigenpreis" name="price"/>
-		</scroll_list>
-		<scroll_list name="search_results_events">
-			<columns label="" name="icon"/>
-			<columns label="Event-Name" name="event_name"/>
-			<columns label="Datum" name="date"/>
-			<columns label="Uhrzeit" name="time"/>
-		</scroll_list>
-	</panel>
-	<button label="Zurück" name="Back"/>
-	<button label="Vor" name="Next"/>
-	<combo_box name="land_sort_combo">
-		<combo_box.item label="Name" name="Name_item" />
-		<combo_box.item label="Preis" name="Price_item" />
-		<combo_box.item label="Preis/Meter" name="PPM_item" />
-		<combo_box.item label="Größe" name="Area_item" />
-	</combo_box>
-	<check_box label="Aufsteigend sortieren" name="ascending_check" />
-	<panel name="panel_details">
-		<button label="Profil" name="people_profile_btn"/>
-		<button label="Instant Message" name="people_message_btn"/>
-		<button label="Freund hinzufügen" name="people_friend_btn" width="110"/>
-		<button label="Profil" name="group_profile_btn"/>
-		<button	label="Chat" name="group_chat_btn"/>
-		<button	label="Beitreten" name="group_join_btn"/>
-		<button	label="Teleportieren" name="parcel_teleport_btn"/>
-		<button	label="Karte" name="parcel_map_btn"/>
-		<!--<button label="Profil" name="parcel_profile_btn"/>-->
+	<tab_container name="ls_tabs">
+		<panel label="Leute" name="panel_ls_people"/>
+		<panel label="Gruppen" name="panel_ls_groups"/>
+		<panel label="Orte" name="panel_ls_places"/>
+		<panel label="Land-Verkauf" name="panel_ls_land"/>
+		<panel label="Events" name="panel_ls_events"/>
+		<panel label="Anzeigen" name="panel_ls_classifieds"/>
+		<!--<panel label="Web" name="panel_ls_web"/>-->
+	</tab_container>
+	<!-- Details/Action Panes -->
+	<panel name="panel_ls_details">
+		<text_editor name="title" value="Undefinierter Name"/>
+		<text_editor name="desc" value="You unlock this door with the key of imagination. Beyond it is another dimension: a dimension of sound, a dimension of sight, a dimension of mind. You're moving into a land of both shadow and substance, of things and ideas; you've just crossed over into the Twilight Zone. What you are about to see is real; the litigants on the screen are not actors. They are genuine citizens who, having filed their claims in a real small claims court, have been persuaded to drop their suits there and have them settled here, in this forum... the People's Court."/>
+		<button	label="Profil anzeigen" name="people_profile_btn"/>
+		<button label="Nachricht senden" name="people_message_btn"/>
+		<button label="Freund hinzufügen" name="people_friend_btn"/>
+		<button label="Profil anzeigen" name="group_profile_btn"/>
+		<button label="Chat beitreten" name="group_message_btn"/>
+		<button label="Gruppe beitreten" name="group_join_btn"/>
+		<button label="Teleportieren" name="teleport_btn"/>
+		<button label="Karte" name="map_btn"/>
+		<button label="Erinnern" name="event_reminder_btn"/>
 	</panel>
 </floater>

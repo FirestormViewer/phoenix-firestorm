@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Gruppen" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Suchbegriffe eingeben:
+		</text>
+		<button label="Suchen" name="groups_find"/>
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_groups">
+			<columns label="" name="icon"/>
+			<columns label="Gruppenname" name="group_name"/>
+			<columns label="Mitglieder" name="members"/>
+			<columns label="Bewert." name="score"/>
+		</scroll_list>
+		<button label="Zurück" name="groups_back"/>
+		<button label="Vor" name="groups_next"/>
+	</panel>
+</panel>

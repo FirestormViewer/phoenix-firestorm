@@ -5439,4 +5439,27 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="FSWithOpensim">
 		mit OpenSimulator-Unterstützung
 	</string>
+
+	<!-- Firestorm search -->
+	<string name="not_found">
+		„[TEXT]“ nicht gefunden.
+	</string>
+	<string name="no_results">
+		Keine Treffer
+	</string>
+	<string name="searching">
+		Suche läuft...
+	</string>
+	<string name="all_categories">
+		Alle Kategorien
+	</string>
+	<string name="search_banned">
+		Einige Begriffe der Suchabfrage wurden aufgrund von Einschränkungen, die in den Community Standards festgelegt wurden, von der Suche ausgeschlossen.
+	</string>
+	<string name="search_short">
+		Die eingebenen Suchbegriffe waren zu kurz, so dass keine Suche durchgeführt wurde.
+	</string>
+	<string name="search_disabled">
+		Die klassische Suche wurde in dieser Region deaktiviert.
+	</string>
 </strings>

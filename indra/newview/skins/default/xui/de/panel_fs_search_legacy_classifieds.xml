@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Anzeigen" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Suchbegriffe eingeben:
+		</text>
+		<line_editor name="classifieds_edit" width="590"/>
+		<button label="Suchen" name="classifieds_find" width="55"/>
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns label="" name="icon"/>
+			<columns label="Name" name="classified_name"/>
+			<columns label="Anzeigenpreis" name="price"/>
+		</scroll_list>
+		<button label="Zurück" name="classifieds_back"/>
+		<button	label="Vor" name="classifieds_next"/>
+	</panel>
+</panel>

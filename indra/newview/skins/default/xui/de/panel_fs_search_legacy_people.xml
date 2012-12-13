@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Leute" name="panel_ls_people">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Suchbegriffe eingeben:
+		</text>
+		<button label="Suchen" name="people_find"/>
+	</panel>
+	<!-- Search Pane -->
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_people">
+			<columns label="" name="icon"/>
+			<columns label="Name" name="username"/>
+		</scroll_list>
+		<button label="Zurück" name="people_back"/>
+		<button label="Vor" name="people_next"/>
+	</panel>
+</panel>
