@@ -3360,7 +3360,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 		gIMMgr->addMessage(
 			session_id,
 			im_info->mFromID,
-			LLStringUtil::null, // Pass null value so no name gets prepended
+			//<FS:TS> FIRE-8601: Use system name instead of NULL
+			//         Growl notifier acts funny with NULL here.
+			SYSTEM_FROM,
+			//</FS:TS> FIRE-8601
 			LLTrans::getString("IM_announce_incoming", args),
 			im_info->mName,
 			IM_NOTHING_SPECIAL,
