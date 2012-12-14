@@ -67,6 +67,7 @@ public:
 						  U32 eventFlags,
 						  LLVector3d eventGlobalPos);
 	void setLoadingProgress(bool started);
+	static std::string filterShortWords(std::string query_string);
 private:
 	const LLUUID& getSelectedID() { return mSelectedID; }
 	LLVector3d	mParcelGlobal;
@@ -121,6 +122,7 @@ private:
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
+	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -154,6 +156,7 @@ private:
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
+	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -187,6 +190,7 @@ private:
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
+	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	
@@ -253,6 +257,7 @@ private:
 	void resetSearch();
 	S32  showNextButton(S32);
 	void setLoadingProgress(bool started);
+	void editKeystroke(class LLLineEditor* caller, void* user_data);
 	
 	const LLUUID& getQueryID() const { return mQueryID; }
 	

@@ -48,7 +48,8 @@
 		layout="topleft"
 		left_pad="2"
 		name="places_find"
-		width="100" />
+		width="100"
+		enabled="false" />
 		<combo_box
 		follows="right|top"
 		layout="topleft"
@@ -142,11 +143,11 @@
 			<columns
 			label="Name"
 			name="place_name"
-			width="330" />
+			relwidth="0.81" />
 			<columns
 			label="Traffic"
 			name="dwell"
-			width="130" />
+			relwidth="0.16" />
 		</scroll_list>
 		<button
 		layout="topleft"

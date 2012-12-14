@@ -192,11 +192,11 @@
 			<columns
 			label="Event Name"
 			name="name"
-			width="300" />
+			relwidth="0.72" />
 			<columns
 			label="Date/Time"
 			name="date"
-			width="100" />
+			relwidth="0.28" />
 			<columns
 			label="Time"
 			name="time"
@@ -231,17 +231,23 @@
 		layout="topleft"
 		follows="left|bottom"
 		height="23"
+		image_bottom_pad="2"
+		image_overlay="Arrow_Left_Off"
+		image_overlay_alignment="left"
 		label="Back"
 		name="events_back"
-		width="100"
+		width="25"
 		left_pad="1" />
 		<button
 		layout="topleft"
 		follows="left|bottom"
 		height="23"
+		image_bottom_pad="2"
+		image_overlay="Arrow_Right_Off"
+		image_overlay_alignment="left"
 		label="Next"
 		name="events_next"
-		width="100"
+		width="25"
 		left_pad="1" />
 	</panel>
 </panel>

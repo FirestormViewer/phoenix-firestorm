@@ -63,9 +63,12 @@
 #include "llfloaterworldmap.h"
 #include "fspanelclassified.h"
 
-#include <boost/algorithm/string.hpp>
+#include <iostream>
+#include <string>
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
 
-#define MIN_SEARCH_STRING_SIZE 3
+#define MIN_SEARCH_STRING_SIZE 2
 
 LLRadioGroup*	mSearchRadio;
 LLComboBox*		mCategoryPlaces;
@@ -551,6 +554,32 @@ void FSFloaterSearch::onBtnEventReminder()
 	gEventNotifier.add(mEventID);
 }
 
+// static
+std::string FSFloaterSearch::filterShortWords(std::string query_string)
+{
+	if (query_string.length() < 1)
+		return "";
+	std::string final_query;
+	bool filtered = false;
+	boost::char_separator<char> sep(" ");
+	boost::tokenizer<boost::char_separator<char> > tokens(query_string, sep);
+	BOOST_FOREACH(const std::string& word, tokens)
+	{
+		if (word.length() > MIN_SEARCH_STRING_SIZE)
+			final_query.append(word + " ");
+		else
+			filtered = true;
+	}
+	if (filtered)
+	{
+		LLSD args;
+		args["FINALQUERY"] = final_query;
+		LLNotificationsUtil::add("SeachFilteredOnShortWords", args);
+	}
+		
+	return final_query;
+}
+
 ////////////////////////////////////////
 //         People Search Panel        //
 ////////////////////////////////////////
@@ -586,6 +615,7 @@ BOOL FSPanelSearchPeople::postBuild()
 	{
 		search_bar->setCommitOnFocusLost(false);
 		search_bar->setCommitCallback(boost::bind(&FSPanelSearchPeople::onBtnFind, this));
+		search_bar->setKeystrokeCallback(boost::bind(&FSPanelSearchPeople::editKeystroke, this, _1, _2),NULL);
 	}
 	childSetAction("people_find", boost::bind(&FSPanelSearchPeople::onBtnFind, this));
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
@@ -603,15 +633,18 @@ BOOL FSPanelSearchPeople::postBuild()
 	return TRUE;
 }
 
+//static
+void FSPanelSearchPeople::editKeystroke(LLLineEditor* caller, void* user_data)
+{
+	getChildView("people_find")->setEnabled(caller->getText().size() > MIN_SEARCH_STRING_SIZE);
+}
+
 void FSPanelSearchPeople::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
-	std::string text = getChild<LLUICtrl>("people_edit")->getValue().asString();
-	/// FIXME: This stops the user from sending single-word two queries that
-	/// are too small, but they can still search for multiple item queries
-	/// too small to search. eg. "to be pi"
-	boost::trim(text);
-	if (text.size() < MIN_SEARCH_STRING_SIZE)
+
+	std::string text = FSFloaterSearch::filterShortWords(getChild<LLUICtrl>("people_edit")->getValue().asString());
+	if (text.size() == 0)
 	{
 		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
@@ -860,6 +893,7 @@ BOOL FSPanelSearchGroups::postBuild()
 	{
 		search_bar->setCommitOnFocusLost(false);
 		search_bar->setCommitCallback(boost::bind(&FSPanelSearchGroups::onBtnFind, this));
+		search_bar->setKeystrokeCallback(boost::bind(&FSPanelSearchGroups::editKeystroke, this, _1, _2),NULL);
 	}
 	childSetAction("groups_find", boost::bind(&FSPanelSearchGroups::onBtnFind, this));
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_groups");
@@ -877,19 +911,43 @@ BOOL FSPanelSearchGroups::postBuild()
 	return TRUE;
 }
 
+//static
+void FSPanelSearchGroups::editKeystroke(LLLineEditor* caller, void* user_data)
+{
+	getChildView("groups_find")->setEnabled(caller->getText().size() > MIN_SEARCH_STRING_SIZE);
+}
+
 void FSPanelSearchGroups::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_groups");
-	std::string text = getChild<LLUICtrl>("groups_edit")->getValue().asString();
-	/// FIXME: This stops the user from sending single-word two queries that
-	/// are too small, but they can still search for multiple item queries
-	/// too small to search. eg. "to be pi"
-	boost::trim(text);
-	if (text.size() < MIN_SEARCH_STRING_SIZE)
+	
+	std::string text = FSFloaterSearch::filterShortWords(getChild<LLUICtrl>("groups_edit")->getValue().asString());
+	if (text.size() == 0)
 	{
 		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
 	}
+	
+	static LLUICachedControl<bool> inc_pg("ShowPGSims", 1);
+	static LLUICachedControl<bool> inc_mature("ShowMatureSims", 0);
+	static LLUICachedControl<bool> inc_adult("ShowAdultSims", 0);
+	if (!(inc_pg || inc_mature || inc_adult))
+	{
+		LLNotificationsUtil::add("NoContentToSearch");
+		return;
+	}
+	U32 scope = 0;
+	if (gAgent.wantsPGOnly())
+		scope |= DFQ_PG_SIMS_ONLY;
+	bool adult_enabled = gAgent.canAccessAdult();
+	bool mature_enabled = gAgent.canAccessMature();
+	if (inc_pg)
+		scope |= DFQ_INC_PG;
+	if (inc_mature && mature_enabled)
+		scope |= DFQ_INC_MATURE;
+	if (inc_adult && adult_enabled)
+		scope |= DFQ_INC_ADULT;
+	scope |= DFQ_GROUPS;
 	
 	mResultsReceived = 0;
 	if (mQueryID.notNull())
@@ -903,7 +961,7 @@ void FSPanelSearchGroups::find()
 	gMessageSystem->nextBlock("QueryData");
 	gMessageSystem->addUUID("QueryID", getQueryID());
 	gMessageSystem->addString("QueryText", text);
-	gMessageSystem->addU32("QueryFlags", DFQ_GROUPS);
+	gMessageSystem->addU32("QueryFlags", scope);
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
 	llinfos << "Firing off search request: " << getQueryID() << llendl;
@@ -1135,6 +1193,7 @@ BOOL FSPanelSearchPlaces::postBuild()
 	{
 		search_bar->setCommitOnFocusLost(false);
 		search_bar->setCommitCallback(boost::bind(&FSPanelSearchPlaces::onBtnFind, this));
+		search_bar->setKeystrokeCallback(boost::bind(&FSPanelSearchPlaces::editKeystroke, this, _1, _2),NULL);
 	}
 	childSetAction("places_find", boost::bind(&FSPanelSearchPlaces::onBtnFind, this));
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_places");
@@ -1160,15 +1219,18 @@ BOOL FSPanelSearchPlaces::postBuild()
 	return TRUE;
 }
 
+//static
+void FSPanelSearchPlaces::editKeystroke(LLLineEditor* caller, void* user_data)
+{
+	getChildView("places_find")->setEnabled(caller->getText().size() > MIN_SEARCH_STRING_SIZE);
+}
+
 void FSPanelSearchPlaces::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_places");
-	std::string text = getChild<LLUICtrl>("places_edit")->getValue().asString();
-	/// FIXME: This stops the user from sending single-word two queries that
-	/// are too small, but they can still search for multiple item queries
-	/// too small to search. eg. "to be pi"
-	boost::trim(text);
-	if (text.size() < MIN_SEARCH_STRING_SIZE)
+	
+	std::string text = FSFloaterSearch::filterShortWords(getChild<LLUICtrl>("places_edit")->getValue().asString());
+	if (text.size() == 0)
 	{
 		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
@@ -1819,6 +1881,7 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	{
 		search_bar->setCommitOnFocusLost(false);
 		search_bar->setCommitCallback(boost::bind(&FSPanelSearchClassifieds::onBtnFind, this));
+		search_bar->setKeystrokeCallback(boost::bind(&FSPanelSearchClassifieds::editKeystroke, this, _1, _2),NULL);
 	}
 	childSetAction("classifieds_find", boost::bind(&FSPanelSearchClassifieds::onBtnFind, this));
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_classifieds");
@@ -1847,15 +1910,18 @@ BOOL FSPanelSearchClassifieds::postBuild()
 	return TRUE;
 }
 
+//static
+void FSPanelSearchClassifieds::editKeystroke(LLLineEditor* caller, void* user_data)
+{
+	getChildView("classifieds_find")->setEnabled(caller->getText().size() > MIN_SEARCH_STRING_SIZE);
+}
+
 void FSPanelSearchClassifieds::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_classifieds");
-	std::string text = getChild<LLUICtrl>("classifieds_edit")->getValue().asString();
-	/// FIXME: This stops the user from sending single-word two queries that
-	/// are too small, but they can still search for multiple item queries
-	/// too small to search. eg. "to be pi"
-	boost::trim(text);
-	if (text.size() < MIN_SEARCH_STRING_SIZE)
+
+	std::string text = FSFloaterSearch::filterShortWords(getChild<LLUICtrl>("classifieds_edit")->getValue().asString());
+	if (text.size() == 0)
 	{
 		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
@@ -2159,18 +2225,15 @@ BOOL FSPanelSearchEvents::postBuild()
 	getChildView("events_today")->setEnabled(FALSE);
 	setDay(0);
 	
-	// <FS:CR> Workaround by hiding Next/Back until I've squared that crap away.
-	getChildView("events_next")->setVisible(FALSE);
-	getChildView("events_back")->setVisible(FALSE);
-	
 	return TRUE;
 }
 
 void FSPanelSearchEvents::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_events");
+	
 	std::string text = getChild<LLUICtrl>("events_edit")->getValue().asString();
-	boost::trim(text);
+	FSFloaterSearch::filterShortWords(text);
 	
 	static LLUICachedControl<bool> inc_pg("ShowPGEvents", 1);
 	static LLUICachedControl<bool> inc_mature("ShowMatureEvents", 0);

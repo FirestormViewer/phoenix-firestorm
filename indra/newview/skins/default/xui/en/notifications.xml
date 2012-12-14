@@ -1922,9 +1922,9 @@ No frontmost floater to save.
   </notification>
 
   <notification
-   icon="alertmodal.tga"
+   icon="notifytip.tga"
    name="SeachFilteredOnShortWords"
-   type="alertmodal">
+   type="notifytip">
 Your search query was modified and the words that were too short were removed.
 
 Searched for: [FINALQUERY]

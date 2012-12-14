@@ -215,23 +215,23 @@
 			<columns
 			label="Name"
 			name="land_name"
-			width="210" />
+			relwidth="0.45" />
 			<columns
 			label="Price"
 			name="price"
-			width="35" />
+			relwidth="0.1" />
 			<columns
 			label="Area"
 			name="area"
-			width="35" />
+			relwidth="0.1" />
 			<columns
 			label="L$/m"
 			name="ppm"
-			width="35" />
+			relwidth="0.1" />
 			<columns
 			label="Type"
 			name="land_type"
-			width="50" />
+			relwidth="0.2" />
 		</scroll_list>
 		<button
 		layout="topleft"
