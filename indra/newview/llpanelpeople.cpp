@@ -944,6 +944,7 @@ void LLPanelPeople::updateNearbyList()
 	std::vector<LLUUID>::const_iterator
 		item_it = avatar_ids.begin(),
 		item_end = avatar_ids.end();
+	LLLocalSpeakerMgr::getInstance()->update(TRUE);
 	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
 	{
 		//
