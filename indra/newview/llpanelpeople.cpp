@@ -933,6 +933,7 @@ void LLPanelPeople::updateNearbyList()
 	mNearbyList->getIDs() = avatar_ids; // copy constructor, refreshing underlying mNearbyList
 	mNearbyList->setDirty(true,true); // AO: These optional arguements force updating even when we're not a visible window.
 	mNearbyList->getItems(items);
+	LLLocalSpeakerMgr::getInstance()->update(TRUE);
 	
 	//STEP 2: Transform detected model list data into more flexible multimap data structure;
 	//TS: Count avatars in chat range and in the same region
@@ -944,7 +945,6 @@ void LLPanelPeople::updateNearbyList()
 	std::vector<LLUUID>::const_iterator
 		item_it = avatar_ids.begin(),
 		item_end = avatar_ids.end();
-	LLLocalSpeakerMgr::getInstance()->update(TRUE);
 	for (;pos_it != pos_end && item_it != item_end; ++pos_it, ++item_it )
 	{
 		//
