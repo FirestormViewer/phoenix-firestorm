@@ -64,6 +64,12 @@
 // llviewernetwork.h : SJ: Needed to find the grid we are running on
 #include "llviewernetwork.h"
 
+// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+#include "llfocusmgr.h"
+#include "llkeyboard.h"
+#include "lllineeditor.h"
+// </FS:Zi>
+
 static LLDefaultChildRegistry::Register<LLChatHistory> r("chat_history");
 
 const static std::string NEW_LINE(rawstr_to_utf8("\n"));
@@ -735,6 +741,7 @@ LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
 	mBottomSeparatorPad(p.bottom_separator_pad),
 	mTopHeaderPad(p.top_header_pad),
 	mBottomHeaderPad(p.bottom_header_pad),
+	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	mIsLastMessageFromLog(false)
 {
 	// <FS:Zi> FIRE-8600: TAB out of chat history
@@ -1500,4 +1507,42 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 // 
 // 	LLUICtrl::draw();
 // }
+// </FS:Zi>
+
+// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+BOOL LLChatHistory::handleUnicodeCharHere(llwchar uni_char)
+{
+	// do not change focus when the CTRL key is used to make copy/select all etc. possible
+	if(gKeyboard->currentMask(false) & MASK_CONTROL)
+	{
+		// instead, let the base class handle things
+		return LLTextEditor::handleUnicodeCharHere(uni_char);
+	}
+
+	// we don't know which is our chat input line yet
+	if(!mChatInputLine)
+	{
+		// get our focus root
+		LLUICtrl* focusRoot=findRootMostFocusRoot();
+		if(focusRoot)
+		{
+			// focus on the next item that is a text input control
+			focusRoot->focusNextItem(true);
+			// remember the control's pointer if it really is a LLLineEditor
+			mChatInputLine=dynamic_cast<LLLineEditor*>(gFocusMgr.getKeyboardFocus());
+		}
+	}
+
+	// do we know our chat input line now?
+	if(mChatInputLine)
+	{
+		// we do, so focus on it
+		mChatInputLine->setFocus(true);
+		// and let it handle the keystroke
+		return mChatInputLine->handleUnicodeCharHere(uni_char);
+	}
+
+	// we don't know what to do, so let our base class handle the keystroke
+	return LLTextEditor::handleUnicodeCharHere(uni_char);
+}
 // </FS:Zi>

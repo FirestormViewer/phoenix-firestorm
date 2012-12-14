@@ -32,6 +32,8 @@
 #include "llviewerchat.h"
 #include "llavatarname.h"
 
+class LLLineEditor;	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+
 //Chat log widget allowing addition of a message as a widget 
 // class LLChatHistory : public LLUICtrl	// <FS:Zi> FIRE-8600: TAB out of chat history
 class LLChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat history
@@ -152,5 +154,12 @@ class LLChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 // 		typedef std::set<std::string> unread_chat_source_t;
 // 		unread_chat_source_t mUnreadChatSources;
 // </FS:Zi>
+
+	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+	public:
+		virtual BOOL	handleUnicodeCharHere(llwchar uni_char);
+
+		LLLineEditor* mChatInputLine;
+	// </FS:Zi>
 };
 #endif /* LLCHATHISTORY_H_ */
