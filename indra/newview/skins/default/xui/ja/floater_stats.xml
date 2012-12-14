@@ -53,6 +53,7 @@
 				<stat_bar label="オブジェクト" name="simobjects"/>
 				<stat_bar label="アクティブなオブジェクト" name="simactiveobjects"/>
 				<stat_bar label="アクティブなスクリプト" name="simactivescripts"/>
+				<stat_bar label="スクリプト実行" name="simpctscriptsrun"/>
 				<stat_bar label="スクリプトイベント" name="simscripteps"/>
 			<stat_view name="simpathfinding" label="パスファインディング">
 				<stat_bar name="simsimaistepmsec" label="  AIステップ時間"/>

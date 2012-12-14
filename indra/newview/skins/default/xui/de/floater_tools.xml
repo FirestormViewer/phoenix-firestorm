@@ -277,6 +277,11 @@
 				<text name="pathfinding_attributes_label">
 					Pathfinding-Attribute:
 				</text>
+			</panel>
+			<panel name="pathfinding_attrs_panel">
+				<text name="pathfinding_attributes_label">
+					Pathfinding-Attribute:
+				</text>
 				<text name="pathfinding_attributes_value">
 				</text>
 			</panel>

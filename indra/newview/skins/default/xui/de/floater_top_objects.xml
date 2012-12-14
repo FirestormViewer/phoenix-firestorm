@@ -41,12 +41,12 @@
 	<button label="Beacon anzeigen" name="show_beacon_btn" width="108"/>
 	<text name="obj_name_text">
 		Objektname:
-	</text>	
+	</text>
 	<line_editor name="object_name_editor" width="560"/>
 	<button label="Filter" name="filter_object_btn" width="108"/>
 	<text name="owner_name_text">
 		Eigentümer:
-	</text>	
+	</text>
 	<line_editor name="owner_name_editor" width="560"/>
 	<button label="Filter" name="filter_owner_btn" width="108"/>
 	<text name="parcel_name_text">

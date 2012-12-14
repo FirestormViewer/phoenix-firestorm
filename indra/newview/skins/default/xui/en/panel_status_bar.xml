@@ -316,7 +316,6 @@
      left_pad="4"
      top="2"
      name="volume_btn"
-     tool_tip="Global Volume Control"
      width="16" />
   </panel>
 </panel>

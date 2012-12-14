@@ -1430,8 +1430,8 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					val = (U16 *) &data[count];
 #endif
 					new_angv.set(U16_to_F32(val[VX], -size, size),
-						U16_to_F32(val[VY], -size, size),
-						U16_to_F32(val[VZ], -size, size));
+										U16_to_F32(val[VY], -size, size),
+										U16_to_F32(val[VZ], -size, size));
 					setAngularVelocity(new_angv);
 					break;
 
@@ -1457,8 +1457,8 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 					new_rot.mQ[VW] = U8_to_F32(data[12], -1.f, 1.f);
 
 					new_angv.set(U8_to_F32(data[13], -size, size),
-						U8_to_F32(data[14], -size, size),
-						U8_to_F32(data[15], -size, size));
+										U8_to_F32(data[14], -size, size),
+										U8_to_F32(data[15], -size, size) );
 					setAngularVelocity(new_angv);
 					break;
 				}
@@ -1532,8 +1532,8 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 				dp->unpackU16(val[VY], "AccY");
 				dp->unpackU16(val[VZ], "AccZ");
 				new_angv.set(U16_to_F32(val[VX], -64.f, 64.f),
-				             U16_to_F32(val[VY], -64.f, 64.f),
-				             U16_to_F32(val[VZ], -64.f, 64.f));
+									U16_to_F32(val[VY], -64.f, 64.f),
+									U16_to_F32(val[VZ], -64.f, 64.f));
 				setAngularVelocity(new_angv);
 			}
 			break;
@@ -2089,7 +2089,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		|| (new_angv != old_angv))
 	{
 		if (new_rot != mPreviousRotation)
-		{
+	{
 			resetRot();
 		}
 		else if (new_angv != old_angv)
@@ -2212,28 +2212,28 @@ void LLViewerObject::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 
 	if (!mDead)
 	{
-		// CRO - don't velocity interp linked objects!
-		// Leviathan - but DO velocity interp joints
-		if (!mStatic && sVelocityInterpolate && !isSelected())
-		{
-			// calculate dt from last update
-			F32 dt_raw = (F32)(time - mLastInterpUpdateSecs);
-			F32 dt = mTimeDilation * dt_raw;
+	// CRO - don't velocity interp linked objects!
+	// Leviathan - but DO velocity interp joints
+	if (!mStatic && sVelocityInterpolate && !isSelected())
+	{
+		// calculate dt from last update
+		F32 dt_raw = (F32)(time - mLastInterpUpdateSecs);
+		F32 dt = mTimeDilation * dt_raw;
 
 			applyAngularVelocity(dt);
-			
-			if (isAttachment())
-			{
-				mLastInterpUpdateSecs = time;
-				return;
-			}
-			else
-			{	// Move object based on it's velocity and rotation
-				interpolateLinearMotion(time, dt);
-			}
-		}
 
-		updateDrawable(FALSE);
+			if (isAttachment())
+				{
+					mLastInterpUpdateSecs = time;
+				return;
+		}
+		else
+		{	// Move object based on it's velocity and rotation
+			interpolateLinearMotion(time, dt);
+		}
+	}
+
+	updateDrawable(FALSE);
 	}
 }
 

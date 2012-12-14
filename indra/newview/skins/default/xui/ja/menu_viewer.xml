@@ -50,6 +50,7 @@
 		</menu>
 		<menu_item_call label="管理者権限のリクエスト" name="Request Admin Options"/>
 		<menu_item_call label="管理者ステータス解除" name="Leave Admin Options"/>
+		<menu_item_check label="HUD を表示" name="Show HUD Attachments"/>
 		<menu_item_call label="[APP_NAME] を終了" name="Quit"/>
 	</menu>
 	
@@ -65,6 +66,7 @@
 		<menu_item_call label="フレンド" name="My Friends"/>
 		<menu_item_check label="連絡先" name="Contacts"/>
 		<menu_item_check label="連絡先のセット" name="Contact Sets"/>
+		<menu_item_call label="リストをブロック" name="Block List"/>
 		<menu_item_call label="所属グループ" name="My Groups"/>
 		<menu_item_check label="チャット..." name="Nearby Chat"/>
 		<menu_item_check label="人" name="People"/>
@@ -260,7 +262,6 @@
 			<menu_item_check label="パーティクルを非表示にする" name="Hide Particles"/>
 			<menu_item_check label="選択したものを非表示にする" name="Hide Selected"/>
 			<menu_item_check label="透明部分をハイライトする" name="Highlight Transparent"/>
-			<menu_item_check label="HUD を表示する" name="Show HUD Attachments"/>
 			<menu_item_check label="一人称視点のときに十字線を表示する" name="ShowCrosshairs"/>
 		</menu>
 		<menu label="レンダリング（種類）" name="Rendering Types">
@@ -494,7 +495,6 @@
 				<menu_item_call label="キャラクタジオメトリの切り替え" name="Toggle Character Geometry"/>
 				<menu_item_call label="男性アバターのテスト" name="Test Male"/>
 				<menu_item_call label="女性アバターのテスト" name="Test Female"/>
-				<menu_item_call label="PG のトグル" name="Toggle PG"/>
 				<menu_item_check label="選択アバター許可" name="Allow Select Avatar"/>
 			</menu>
 			<menu_item_call label="パラメータを強制的にデフォルトにする" name="Force Params to Default"/>

@@ -23,7 +23,7 @@
 			<combo_box name="start_location_combo">
 				<combo_box.item label="我上一次位置" name="MyLastLocation"/>
 				<combo_box.item label="我的家" name="MyHome"/>
-				<combo_box.item label="&lt; 請輸入地區名稱 &gt;" name="Typeregionname"/>
+				<combo_box.item label="&lt;請輸入地區名稱&gt;" name="Typeregionname"/>
 			</combo_box>
 		</layout_panel>
 		<layout_panel name="links_login_panel">
@@ -38,7 +38,7 @@
 		</layout_panel>
 		<layout_panel name="links">
 			<text name="create_account_text">
-				CREATE YǾUR ACCǾUNT
+				註冊
 			</text>
 			<button name="create_new_account_btn" label="註冊"/>
 		</layout_panel>

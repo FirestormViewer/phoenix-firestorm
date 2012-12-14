@@ -1254,6 +1254,7 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
 Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
+Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu erstellen?
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Konto erstellen..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1819,6 +1820,43 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
+		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Ich“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
+		<url name="url">
+			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
+		</url>
+		<usetemplate ignoretext="Teleport: Die Region, die Sie besuchen möchten, enthält Inhalte, die nur für Erwachsene zugänglich sind." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_Notify">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt.
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_NotifyAdultsOnly">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_ChangeAndReTeleport">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt. Sie können Ihre Einstellungen ändern und den Teleport fortsetzen oder Sie können den Teleport abbrechen.
+		<form name="form">
+			<button name="OK" text="Ändern und fortfahren"/>
+			<button name="Cancel" text="Abbrechen"/>
+			<ignore name="ignore" text="Teleport (kann neu gestartet werden): Die Region, die Sie besuchen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
+		</form>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_Change">
+		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt. Sie können Ihre Einstellungen ändern oder den Teleport abbrechen. Nachdem Sie Ihre Einstellungen geändert haben, können Sie den Teleport erneut versuchen.
+		<form name="form">
+			<button name="OK" text="Einstellungen ändern"/>
+			<button name="Cancel" text="Abbrechen"/>
+			<ignore name="ignore" text="Teleport (kann nicht neu gestartet werden): Die Region, die Sie besuchen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
+		</form>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
+		Wir haben technische Probleme mit Ihrem Teleport, da Ihre Einstellungen nicht mit dem Server synchronisiert sind.
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
+	<notification name="TeleportEntryAccessBlocked">
 		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -1856,7 +1894,7 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		Sie erhalten keine Benachrichtigungen mehr, wenn Sie eine Region der Inhaltseinstufung „[RATING]“ besuchen. Sie können Ihre Inhaltseinstellungen von der Menüleiste aus ändern („Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“).
+		Sie erhalten keine Benachrichtigungen mehr, wenn Sie eine Region der Inhaltseinstufung „[RATING]“ besuchen. Sie können Ihre Inhaltseinstellungen von der Menüleiste aus ändern („Ich“ &gt; „Einstellungen“ &gt; „Allgemein“).
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MaturityChangeError">
@@ -2680,7 +2718,7 @@ Versuchen Sie es in einigen Minuten erneut.
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 „[MESSAGE]“
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
 		<form name="form">
 			<button name="Teleport" text="Teleportieren"/>
 			<button name="Cancel" text="Abbrechen"/>
@@ -2702,7 +2740,7 @@ Diese Region enthält [REGION_CONTENT_MATURITY]-Inhalte, doch aufgrund Ihrer akt
 		[NAME_SLURL] hat Ihnen den Teleport an seinen/ihren Standort angeboten:
 
 „[MESSAGE]“
-&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
+&lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; – [MATURITY_STR]
 
 Diese Region enthält jedoch Inhalte, die nur für Erwachsene zugänglich sind.
 	</notification>
@@ -3378,6 +3416,14 @@ Zukünftige Aktualisierungen dieser Datei werden deaktiviert.
 	<notification name="LocalBitmapsVerifyFail">
 		Versuch, eine ungültige oder nicht lesbare Bilddatei ([FNAME]) hinzuzufügen, die nicht geöffnet oder decodiert werden konnte.
 Versuch abgebrochen.
+	</notification>
+	<notification name="PathfindingReturnMultipleItems">
+		Sie sind dabei, [NUM_ITEMS] Objekte zurückzugeben. Möchten Sie diesen Vorgang wirklich fortsetzen?
+		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte zurückgeben?" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
+	<notification name="PathfindingDeleteMultipleItems">
+		Sie sind dabei, [NUM_ITEMS] Objekte zu löschen. Möchten Sie diesen Vorgang wirklich fortsetzen?
+		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte löschen?" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 	
   <notification name="PhoenixWL">

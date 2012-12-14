@@ -48,6 +48,7 @@
 		<menu_item_call label="Preferencias..." name="Preferences"/>
 		<menu_item_call label="Botones de la barra de herramientas..." name="Toolbars"/>
 		<menu_item_call label="Ocultar todos los controles" name="Hide UI"/>
+		<menu_item_check label="Mostrar los HUD anexados" name="Show HUD Attachments"/>
 		<menu_item_call label="Salir de [APP_NAME]" name="Quit"/>
 	</menu>
 	<menu label="Comunicarme" name="Communicate">
@@ -165,6 +166,11 @@
 			<menu_item_call label="Caracteres..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Ver / probar..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="Actualizar navmesh de la región" name="rebake_region_navmesh"/>
+		</menu>
+		<menu label="Pathfinding" name="Pathfinding">
+			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
+			<menu_item_call label="Personajes..." name="pathfinding_characters_menu_item"/>
+			<menu_item_call label="Ver/probar..." name="pathfinding_console_menu_item"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>

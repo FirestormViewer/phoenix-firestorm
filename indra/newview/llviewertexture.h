@@ -457,6 +457,8 @@ public:
 	void setMinDiscardLevel(S32 discard) 	{ mMinDesiredDiscardLevel = llmin(mMinDesiredDiscardLevel,(S8)discard); }
 
 	bool updateFetch();
+	bool setDebugFetching(S32 debug_level);
+	bool isInDebug() {return mInDebug;}
 	
 	void clearFetchedResults(); //clear all fetched results, for debug use.
 
@@ -519,6 +521,9 @@ public:
 	void        setCanUseHTTP(bool can_use_http) {mCanUseHTTP = can_use_http;}
 
 	void        forceToDeleteRequest();
+	void        loadFromFastCache();
+	void        setInFastCacheList(bool in_list) { mInFastCacheList = in_list; }
+	bool        isInFastCacheList() { return mInFastCacheList; }
 	
 	// <FS:Techwolf Lupindo> texture comment decoder
 	std::map<std::string,std::string> mComment;
@@ -542,6 +547,8 @@ private:
 
 private:
 	BOOL  mFullyLoaded;
+	BOOL  mInDebug;
+	BOOL  mInFastCacheList;
 
 protected:		
 	std::string mLocalFileName;

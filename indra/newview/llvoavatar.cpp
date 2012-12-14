@@ -7069,7 +7069,7 @@ void LLVOAvatar::updateMeshTextures()
 	if(!isSelf())
 	{
 		src_callback_list = &mCallbackTextureList ;
-		paused = mLoadedCallbacksPaused ;
+		paused = !isVisible();
 	}
 
 	std::vector<BOOL> is_layer_baked;
@@ -7614,7 +7614,7 @@ void LLVOAvatar::onFirstTEMessageReceived()
 		if(!isSelf())
 		{
 			src_callback_list = &mCallbackTextureList ;
-			paused = mLoadedCallbacksPaused ;
+			paused = !isVisible();
 		}
 
 		for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
