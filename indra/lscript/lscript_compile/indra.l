@@ -38,6 +38,11 @@ FS			(f|F)
 #include "lscript_http.h"
 #include "llclickaction.h"
 #include "llmediaentry.h"
+// <FS:CR> Add OSSL constants for OS builds
+#ifdef HAS_OPENSIM_SUPPORT
+#include "osslconstants.h"
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 
 void count();
 void line_comment();

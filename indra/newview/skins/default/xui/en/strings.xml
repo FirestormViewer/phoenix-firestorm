@@ -2159,6 +2159,807 @@ float llGetSimStats(integer stat_type)
 Returns the value of a particular simulator statistic.
 </string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
+	
+    
+    
+<!-- FS:CR OSSL/AA function tooltip help texts -- Please add all SL LSL related tooltips above this -->
+<string name="LSLTipText_osSetRegionWaterHeight" translate="false">
+osSetRegionWaterHeight(float height)
+Adjusts water height in current region.
+</string>
+<string name="LSLTipText_osSetRegionSunSettings" translate="false">
+osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour)
+Set the current region's sun settings.
+</string>
+<string name="LSLTipText_osSetEstateSunSettings" translate="false">
+osSetEstateSunSettings(integer sunFixed, float sunHour)
+Set current estate's sun settings.
+</string>
+<string name="LSLTipText_osGetCurrentSunHour" translate="false">
+osGetCurrentSunHour()
+Returns the value of the current region's sun hour.
+</string>
+<string name="LSLTipText_osGetSunParam" translate="false">
+osGetSunParam(string param)
+Returns region's current sun parameters.
+Param are: day_length, year_length, day_night_offset, update_interval.
+</string>
+<string name="LSLTipText_osSetSunParam" translate="false">
+osSetSunParam(string param, float value)
+Sets the current region's sun parameters.
+Param are: day_length, year_length, day_night_offset, update_interval.
+</string>
+<string name="LSLTipText_osWindActiveModelPluginName" translate="false">
+osWindActiveModelPluginName()
+Gets active wind plugin name, specified by "wind_plugin" in OpenSim.ini ("SimpleRandomWind" or "ConfigurableWind").
+</string>
+<string name="LSLTipText_osSetWindParam" translate="false">
+osSetWindParam(string plugin, string param, float value)
+Sets value of param property for plugin module.
+SimpleRandomWind plugin param is: strength.
+ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange.
+</string>
+<string name="LSLTipText_osGetWindParam" translate="false">
+osGetWindParam(string plugin, string param)
+Gets the value of param property for plugin module.
+SimpleRandomWind plugin param is: strength.
+ConfigurableWind plugin params are: avgStrength, avgDirection, varStrength, varDirection, rateChange.
+</string>
+<string name="LSLTipText_osParcelJoin" translate="false">
+osParcelJoin(vector start, vector end)
+Joins two adjacent parcels within the same region.
+</string>
+<string name="LSLTipText_osParcelSubdivide" translate="false">
+osParcelSubdivide(vector start, vector end)
+Subdivides a parcel into two adjacent parcels within the same region.
+</string>
+<string name="LSLTipText_osSetParcelDetails" translate="false">
+osSetParcelDetails(vector pos, list rules)
+This function is the counterpart to llGetParcelDetails. Currently PARCEL_DETAILS_NAME, PARCEL_DETAILS_DESC, PARCEL_DETAILS_OWNER, PARCEL_DETAILS_GROUP, PARCEL_DETAILS_CLAIMDATE are implemented
+</string>
+<string name="LSLTipText_osList2Double" translate="false">
+osList2Double(list src, integer index)
+This function converts a value in the specified index of the list src to the double data type. However, OSSL does not have a double data type. C# contains a double type, but the current LSL implementation does not.
+</string>
+<string name="LSLTipText_osSetDynamicTextureURL" translate="false">
+osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer)
+Renders a web texture on the prim containing the script and returns the UUID of the newly created texture.
+</string>
+<string name="LSLTipText_osSetDynamicTextureURLBlend" translate="false">
+osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha)
+Allows for two dynamic textures to blend on the prim containing this script.
+</string>
+<string name="LSLTipText_osSetDynamicTextureURLBlendFace" translate="false">
+osSetDynamicTextureURLBlendFace(key dynamicID, string contentType, string url, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
+Allows for two dynamic textures to blend on the specified face of the prim containing this script.
+</string>
+<string name="LSLTipText_osSetDynamicTextureData" translate="false">
+osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer)
+Renders a dynamically created texture on the prim containing the script and returns the UUID of the newly created texture.
+</string>
+<string name="LSLTipText_osGetTerrainHeight" translate="false">
+osGetTerrainHeight(integer x, integer y)
+Returns the current region's terrain height as a float at the given coordinates.
+</string>
+<string name="LSLTipText_osSetTerrainHeight" translate="false">
+osSetTerrainHeight(integer x, integer y, float val)
+Sets the current region's terrain height at the given coordinates.
+</string>
+<string name="LSLTipText_osTerrainFlush" translate="false">
+osTerrainFlush()
+Updates terrain changes to OpenSimulator database. This should be called after all the terrain-changes have been done to update Terrain Data.
+</string>
+<string name="LSLTipText_osRegionRestart" translate="false">
+osRegionRestart(float seconds)
+Restarts a region after a specified timeout in seconds.
+</string>
+<string name="LSLTipText_osRegionNotice" translate="false">
+osRegionNotice(string msg)
+Sends a region notice to the entire current region.
+</string>
+<string name="LSLTipText_osConsoleCommand" translate="false">
+osConsoleCommand(string command)
+There are no security checks, so it can do anything a user with access to the command console could do, such as changing the avatar passwords, deleting sims, changing the terrain, and just about everything else.
+NOTE: DO NOT USE THIS COMMAND UNLESS YOU ARE ABSOLUTELY SURE YOU KNOW WHAT YOU ARE DOING!
+</string>
+<string name="LSLTipText_osSetParcelMediaURL" translate="false">
+osSetParcelMediaURL(string url)
+Set parcel media to specified url.
+</string>
+<string name="LSLTipText_osSetParcelSIPaddress" translate="false">
+osSetParcelSIPAddress(string SIPAddress)
+Set parcel SIP Address for voice.
+</string>
+<string name="LSLTipText_osSetPrimFloatOnWater" translate="false">
+osSetPrimFloatOnWater(integer float)
+Make physical prims float at the water level, boolean.
+</string>
+<string name="LSLTipText_osTeleportAgent" translate="false">
+osTeleportAgent(key agent, integer regionX, integer regionY, vector position, vector lookat);
+osTeleportAgent(key agent, string regionName, vector position, vector lookat);
+osTeleportAgent(key agent, vector position, vector lookat)
+Teleports an agent to the specified location. The first variant is able to teleport to any addressable region, including hypergrid destinations. The second variant teleports to a region in the local grid; the region coordinates are specified as region cells (not as global coordinates based on meters). The third variant teleports within the current region.
+For osTeleportAgent() to work, the owner of the prim containing the script must be the same as the parcel that the avatar is currently on. If this isn't the case then the function fails silently.
+</string>
+<string name="LSLTipText_osTeleportOwner" translate="false">
+osTeleportOwner(integer regionX, integer regionY, vector position, vector lookat);
+osTeleportOwner(string regionName, vector position, vector lookat);
+osTeleportOwner(vector position, vector lookat)
+Teleports the owner of the object containing the script to the specified location. The first variant is able to teleport to any addressable region, including hypergrid destinations. The second variant teleports to a region in the local grid; the region coordinates are specified as region cells (not as global coordinates based on meters). The third variant teleports within the current region.
+</string>
+<string name="LSLTipText_osAvatarPlayAnimation" translate="false">
+osAvatarPlayAnimation(key UUID, string animation)
+  Causes an animation to be played on the specified avatar. The variable animation can be either the name of an animation within the prim's inventory, or it can be the animation's UUID. Instead of the name of an animation in the prim's inventory, you can also use the names of the viewer's built-in animations.
+No PERMISSION_TRIGGER_ANIMATION check.
+</string>
+<string name="LSLTipText_osAvatarStopAnimation" translate="false">
+osAvatarStopAnimation(key UUID, string animation)
+This function stops the specified animation if it is playing on the avatar given.
+The value avatar is a UUID, and the animation value is either the name of an animation in the prim's inventory or the UUID of an animation.
+If the specified avatar is not logged in or on the same sim as the script, then osAvatarStopAnimation silently fails.
+</string>
+<string name="LSLTipText_osGetAgentIP" translate="false">
+string osGetAgentIP(key agent)
+Returns a string representing the Avatars IP Address.
+</string>
+<string name="LSLTipText_osGetAgents" translate="false">
+list osGetAgents()
+Returns a list of all the agents names in the region.
+</string>
+<string name="LSLTipText_osForceAttachToAvatar" translate="false">
+osForceAttachToAvatar(integer attachmentPoint)
+Works exactly like llAttachToAvatar() except that PERMISSION_ATTACH is not required.
+</string>
+<string name="LSLTipText_osForceAttachToAvatarFromInventory" translate="false">
+osForceAttachToAvatarFromInventory(string itemName, integer attachmentPoint)
+Attach an inventory item in the object containing this script to any avatar in the region without asking for PERMISSION_ATTACH. Nothing happens if the avatar is not in the region.
+    itemName - The name of the item. If this is not found then a warning is said to the owner.
+    attachmentPoint - The attachment point. For example, ATTACH_CHEST.
+</string>
+<string name="LSLTipText_osForceAttachToOtherAvatarFromInventory" translate="false">
+osForceAttachToOtherAvatarFromInventory(string rawAvatarId, string itemName, integer attachmentPoint)
+Attach an inventory item in the object containing this script to any avatar in the region without asking for PERMISSION_ATTACH.
+rawAvatarId = The UUID of the avatar to which to attach.  itemName = The name of the item.  attachmentPoint = The attachment point. Example, ATTACH_CHEST.
+</string>
+<string name="LSLTipText_osForceDetachFromAvatar" translate="false">
+osForceDetachFromAvatar()
+Works exactly like llDetachFromAvatar() except that PERMISSION_ATTACH is not required.
+</string>
+<string name="LSLTipText_osGetNumberOfAttachments" translate="false">
+osGetNumberOfAttachments(key avatar, list attachmentPoints)
+Returns a strided list of the specified attachment points and the number of attachments on those points.
+</string>
+<string name="LSLTipText_osMessageAttachments" translate="false">
+osMessageAttachments(key avatar, string message, list attachmentPoints, integer flags)
+  Sends a specified message to the specified avatar's attachments on the specified attachment points.
+  Behaves as osMessageObject, without the sending script needing to know the attachment keys in advance.
+</string>
+<string name="LSLTipText_osMovePen" translate="false">
+osMovePen(string drawList, integer x, integer y)
+Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything.
+</string>
+<string name="LSLTipText_osDrawLine" translate="false">
+osDrawLine(string drawList, integer startX, integer startY, integer endX, integer endY)
+    or
+osDrawLine(string drawList, integer endX, integer endY)
+NOTE: Polymorphic Command !  Draws a line on a dynamic texture.
+</string>
+<string name="LSLTipText_osDrawText" translate="false">
+osDrawText(string drawList, string text)
+Renders text on a dynamic texture.
+</string>
+<string name="LSLTipText_osDrawEllipse" translate="false">
+osDrawEllipse(string drawList, integer width, integer height)
+Draws an ellipse on a dynamic texture.
+</string>
+<string name="LSLTipText_osDrawRectangle" translate="false">
+osDrawRectangle(string drawList, integer width, integer height)
+Draws a rectangle on a dynamic texture.
+</string>
+<string name="LSLTipText_osDrawFilledRectangle" translate="false">
+osDrawFilledRectangle(string drawList, integer width, integer height)
+Draws a rectangle on a dynamic texture, and fills it with the current pen color.
+</string>
+<string name="LSLTipText_osDrawPolygon" translate="false">
+osDrawPolygon (string drawList, list x, list y)
+Draws a polygon on a dynamic texture.
+</string>
+<string name="LSLTipText_osDrawFilledPolygon" translate="false">
+osDrawFilledPolygon (string drawList, list x, list y)
+Draws a polygon on a dynamic texture, and fills it with the current pen color.
+</string>
+<string name="LSLTipText_osSetFontSize" translate="false">
+osSetFontSize(string drawList, integer fontSize)
+Sets the font size to be used in osDrawText.
+</string>
+<string name="LSLTipText_osSetFontName" translate="false">
+osSetFontName(string drawList, string fontName)
+Sets current font to be used by osDrawText. Font must exist on region server to display.
+</string>
+<string name="LSLTipText_osSetPenSize" translate="false">
+osSetPenSize(string drawList, integer penSize)
+Sets the pen size (line thickness) that is to be used when drawing dynamic textures.
+</string>
+<string name="LSLTipText_osSetPenColor" translate="false">
+osSetPenColor(string drawList, string color)
+Sets the pen color that is to be used when drawing dynamic textures.
+</string>
+<string name="LSLTipText_osSetPenCap" translate="false">
+osSetPenCap(string drawList, string direction, string type)
+Apply a shape on the end of a line. This allows using arrow, diamond, round and flat caps.
+</string>
+<string name="LSLTipText_osDrawImage" translate="false">
+osDrawImage(string drawList, integer width, integer height, string imageUrl)
+Retrieves an image specified by the imageUrl parameter and draws it at the specified height and width.
+</string>
+<string name="LSLTipText_osGetDrawStringSize" translate="false">
+osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize)
+Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text.
+</string>
+<string name="LSLTipText_osGetScriptEngineName" translate="false">
+string osGetScriptEngineName()
+Returns the name of the script engine which is currently enabled on the server.
+</string>
+<string name="LSLTipText_osGetSimulatorVersion" translate="false">
+string osGetSimulatorVersion()
+Returns current server version information as a string.
+</string>
+<string name="LSLTipText_osParseJSON" translate="false">
+string osParseJSON(string JSON)
+Returns a hashtable containing the structured JSON contents.
+</string>
+<string name="LSLTipText_osParseJSONNew" translate="false">
+osParseJSON(string JSON)
+Returns a hashtable containing the structured JSON contents.
+</string>
+<string name="LSLTipText_osMessageObject" translate="false">
+osMessageObject(key UUID, string message)
+Sends string to object identified by UUID.  Receiving object requires a dataserver(key queryid, string data) in contained script(s).  The queryid passed will be the id of the calling object.
+</string>
+<string name="LSLTipText_osMakeNotecard" translate="false">
+osMakeNotecard(string notecardName, list contents)
+Writes a Notecard contained inside the prim with contents of list.
+</string>
+<string name="LSLTipText_osGetNotecardLine" translate="false">
+string osGetNotecardLine(string name, integer line)
+Reads the requested notecard line and return its data as a string.
+</string>
+<string name="LSLTipText_osGetNotecard" translate="false">
+string osGetNotecard(string name)
+Reads the entire notecard and return its data as a string.
+</string>
+<string name="LSLTipText_osGetNumberOfNotecardLines" translate="false">
+integer osGetNumberOfNotecardLines(string name)
+Returns the total number of lines in a notecard.
+</string>
+<string name="LSLTipText_osAvatarName2Key" translate="false">
+key osAvatarName2Key(string firstname, string lastname)
+Returns the avatar's UUID from their firstname, lastname.
+</string>
+<string name="LSLTipText_osKey2Name" translate="false">
+string osKey2Name(key UUID)
+Returns avatar name from their UUID key.
+</string>
+<string name="LSLTipText_osGetGridNick" translate="false">
+string osGetGridNick()
+Returns the grid's nickname.
+</string>
+<string name="LSLTipText_osGetGridName" translate="false">
+string osGetGridName()
+Returns the grid's name.
+</string>
+<string name="LSLTipText_osGetGridLoginURI" translate="false">
+string osGetGridLoginURI()
+Returns the grid's LoginURI.
+</string>
+<string name="LSLTipText_osFormatString" translate="false">
+string osFormatString(string to_format, list strings)
+Return the string with parameters substituted into it. These parameters need to be incrementing numbers, starting at zero, and surrounded by single accolades (also known as curly brackets).
+</string>
+<string name="LSLTipText_osMatchString" translate="false">
+list osMatchString(string src, string pattern, integer start)
+This function returns a list containing the matches from the given string.
+</string>
+<string name="LSLTipText_osLoadedCreationDate" translate="false">
+string osLoadedCreationDate()
+This function returns a string containing the date that a sim was first created. It will return empty string if the region hasn't been created by oar import, or the region uses SQLite for region database.
+</string>
+<string name="LSLTipText_osLoadedCreationTime" translate="false">
+string osLoadedCreationTime()
+This function returns a string containing the time that a sim was first created. It will return empty string if the region hasn't been created by oar import, or the region uses SQLite for region database.
+</string>
+<string name="LSLTipText_osLoadedCreationID" translate="false">
+string osLoadedCreationID()
+This function returns a string containing the UUID that a sim was originally created with. It will return empty string if the region hasn't been created by oar import, or the region uses SQLite for region database.
+</string>
+<string name="LSLTipText_osGetLinkPrimitiveParams" translate="false">
+list osGetLinkPrimitiveParams(integer linknumber, list rules)
+Returns prim params for the linkset prims specified by linknum.
+If using linkset constants (e.g. LINK_SET, LINK_ALL_CHILDREN, etc), the requested params of each relevant prim are concatenated to the end of the list. Usage is otherwise identical to llGetPrimitiveParams().
+</string>
+<string name="LSLTipText_osIsNpc" translate="false">
+integer osIsNpc(key npc)
+Returns TRUE (1) / FALSE (0) if key provided is an NPC
+</string>
+<string name="LSLTipText_osNpcCreate" translate="false">
+key osNpcCreate(string firstname, string lastname, vector position, string cloneFrom)
+key osNpcCreate(string firstname, string lastname, vector position, string cloneFrom, integer options)
+Creates an NPC named firstname lastname at position from avatar appearance resource cloneFrom
+</string>
+<string name="LSLTipText_osNpcSaveAppearance" translate="false">
+osNpcSaveAppearance(key npc, string notecard)
+Save the NPC's current appearance to a notecard in the prim's inventory. This includes body part data, clothing items and attachments. If a notecard with the same name already exists then it is replaced. The avatar must be present in the region when this function is invoked. The baked textures for the avatar (necessary to recreate appearance) are saved permanently.
+</string>
+<string name="LSLTipText_osNpcLoadAppearance" translate="false">
+osNpcLoadAppearance(key npc, string notecard)
+Load appearance from a notecard. This notecard must contain appearance data created with one of the save appearance functions.
+</string>
+<string name="LSLTipText_osNpcGetPos" translate="false">
+vector osNpcGetPos(key npc)
+Returns current position vector of the NPC.
+</string>
+<string name="LSLTipText_osNpcMoveTo" translate="false">
+osNpcMoveTo(key npc, vector position)
+Moves an NPC to a location within the region.
+</string>
+<string name="LSLTipText_osNpcMoveToTarget" translate="false">
+osNpcMoveToTarget(key npc, vector target, integer options)
+Moves NPC to given target over time. Options = OS_NPC_FLY, OS_NPC_NO_FLY, OS_NPC_LAND_AT_TARGET
+</string>
+<string name="LSLTipText_osNpcGetRot" translate="false">
+rotation osNpcGetRot(key npc)
+Gets the rotation of the avatar. Only the rotation around the Z plane in Euler rotation (horizontal rotation) has any meaning.
+</string>
+<string name="LSLTipText_osNpcSetRot" translate="false">
+osNpcSetRot(key npc, rotation rot)
+Set the rotation of the NPC.
+Only setting the rotation in the Z plane in Euler rotation will have any meaningful effect (turning NPC facing direction). Setting X or Y Euler values will result in the avatar rotating in an undefined manner.
+</string>
+<string name="LSLTipText_osNpcStopMoveToTarget" translate="false">
+osNpcStopMoveToTarget(key npc)
+Stop a current move to a target.
+</string>
+<string name="LSLTipText_osNpcSay" translate="false">
+osNpcSay(key npc, string message)
+npc says message.
+</string>
+<string name="LSLTipText_osNpcTouch" translate="false">
+osNpcTouch(key npcKey, key object_key, integer link_num)
+Allows an NPC to touch the specified object determined by it's key and specific link number of the target object. Only LINK_THIS and LINK_ROOT are valid for this function. Any other of the LINK_* constants will be ignored and no touch takes place.
+</string>
+<string name="LSLTipText_osNpcRemove" translate="false">
+osNpcRemove(key npc)
+Removes the NPC specified by key npc.
+</string>
+<string name="LSLTipText_osOwnerSaveAppearance" translate="false">
+key osOwnerSaveAppearance(string notecard)
+Save the owner's current appearance to a notecard in the prim's inventory. This includes body part data, clothing items and attachments. If a notecard with the same name already exists then it is replaced. The owner must be present in the region when this function is invoked. The baked textures for the owner (necessary to recreate appearance on the NPC) are saved permanently.
+</string>
+<string name="LSLTipText_osAgentSaveAppearance" translate="false">
+key osAgentSaveAppearance(key agentId, string notecard)
+Save an arbitrary avatar's appearance to a notecard in the prim's inventory. This includes body part data, clothing items and attachments. If a notecard with the same name already exists then it is replaced. The avatar must be present in the region when this function is invoked. The baked textures for the avatar (necessary to recreate appearance on the NPC) are saved permanently.
+</string>
+<string name="LSLTipText_osGetMapTexture" translate="false">
+key osGetMapTexture()
+Returns the UUID of the map texture of the current region.
+</string>
+<string name="LSLTipText_osGetRegionMapTexture" translate="false">
+key osGetRegionMapTexture(string regionName)
+This function retrieves the UUID of the texture used to represent the named region on the world map, and returns it.
+</string>
+<string name="LSLTipText_osGetRegionStats" translate="false">
+list osGetRegionStats()
+Returns a list of float values representing a number of region statistics (many of the values shown in the "Stats Bar" of LL-based clients). Provides similar functionality to llGetRegionFPS() and llGetRegionTimeDilation(), but returns 21 statistics simultaneously.
+</string>
+<string name="LSLTipText_osGetSimulatorMemory" translate="false">
+integer osGetSimulatorMemory()
+Returns current memory used by simulator instance.
+</string>
+<string name="LSLTipText_osKickAvatar" translate="false">
+osKickAvatar(string FirstName, string LastName, string alert)
+Kicks specified avatar from the current region.
+</string>
+<string name="LSLTipText_osSetSpeed" translate="false">
+osSetSpeed(key UUID, float SpeedModifier)
+Allows for users to speed themselves up by multiplying the running, walking, rotating and flying of the avatar.
+</string>
+<string name="LSLTipText_osGetHealth" translate="false">
+osGetHealth(key avatar)
+Return the target avatar's health.
+</string>
+<string name="LSLTipText_osCauseDamage" translate="false">
+osCauseDamage(key UUID, float damage)
+Causes damage to the specified avatar.  Region must be damage enabled.
+</string>
+<string name="LSLTipText_osCauseHealing" translate="false">
+osCauseHealing(key UUID, float healing)
+Heals the specified avatar.
+</string>
+<string name="LSLTipText_osGetPrimitiveParams" translate="false">
+list osGetPrimitiveParams(key prim, list rules)
+Gets the parameters of a primitive, specified by its key.
+</string>
+<string name="LSLTipText_osSetPrimitiveParams" translate="false">
+osSetPrimitiveParams(key prim, list rules)
+Sets the parameters for the prim specified by prim_uuid according to rules. This function has the same behave as llSetPrimitiveParams except you can specify target prim anywhere in the scene.
+</string>
+<string name="LSLTipText_osSetProjectionParams" translate="false">
+osSetProjectionParams(integer projection, key texture, float fov, float focus, float ambience);
+osSetProjectionParams(key prim, integer projection, key texture, float fov, float focus, float ambience)
+  2 Variations possible: bool = TRUE / FALSE or double = float
+</string>
+<string name="LSLTipText_osGetAvatarList" translate="false">
+list osGetAvatarList()
+Returns strided list of the UUID, position, and name of each avatar in the region except for the owner.
+</string>
+<string name="LSLTipText_osUnixTimeToTimestamp" translate="false">
+string osUnixTimeToTimestamp(integer unixtime)
+Converts unixtime to an llGetTimeStamp() formated string.
+</string>
+<string name="LSLTipText_osGetInventoryDesc" translate="false">
+string osGetInventoryDesc(string name)
+Returns a string that is the description of inventory item "name"
+</string>
+<string name="LSLTipText_osInviteToGroup" translate="false">  
+integer osInviteToGroup(key user)
+Invite the given agent to the group the object is set to.
+</string>
+<string name="LSLTipText_osEjectFromGroup" translate="false">
+integer osEjectFromGroup(key user)
+Eject the given agent to the group the object is set to.
+</string>
+<string name="LSLTipText_osSetTerrainTexture" translate="false">
+void osSetTerrainTexture(integer level, key texture)
+Set the terrain texture of the estate to the texture given as key. The level can be 0, 1, 2 or 3.
+</string>
+<string name="LSLTipText_osSetTerrainTextureHeight" translate="false">
+void osSetTerrainTextureHeight(integer corner, float low, float high)
+Set the terrain texture height of the estate. The level can be 0, 1, 2 or 3. The values low and high are float values for the altitude measured in meters.    
+</string>
+<string name="LSLTipText_osIsUUID" translate="false">
+osIsUUID(string thing)
+Returns 1 if the supplied string is a valid UUID, returns 0 otherwise.
+</string>
+<string name="LSLTipText_osMin" translate="false">
+osMin(float A, float B)
+Returns the smaller of two numbers. Wraps to the system Math.Min() function
+</string>
+<string name="LSLTipText_osMax" translate="false">
+osMax(float A, float B)
+Returns the larger of two numbers. Wraps to system Math.Max()
+</string>
+<string name="LSLTipText_osGetRezzingObject" translate="false">
+osGetRezzingObject()
+Get the key of the object that rezzed this object. Will return NULL_KEY if rezzed by agent or otherwise unknown source. Should only be reliable inside the on_rez event.
+</string>
+<string name="LSLTipText_osSetContentType" translate="false">
+osSetContentType(key id, string type)
+Sets an arbitrary content return type for an llRequestUrl().
+</string>
+<string name="LSLTipText_osDropAttachment" translate="false">
+osDropAttachment()
+Requires script to be granted PERMISSION_ATTACH, drops an attachment like a user-triggered attachment drop.
+</string>
+<string name="LSLTipText_osDropAttachmentAt" translate="false">
+osDropAttachmentAt(vector pos, rotation rot)
+Requires script to be granted PERMISSION_ATTACH, drops an attachment at position pos with rotation rot
+</string>
+<string name="LSLTipText_osForceDropAttachment" translate="false">
+osForceDropAttachment()
+Drops an attachment like a user-triggered attachment drop without checking if PERMISSION_ATTACH has been granted.
+</string>
+<string name="LSLTipText_osForceDropAttachmentAt" translate="false">
+osForceDropAttachmentAt(vector pos, rotation rot)
+Drops an attachment at position pos with rotation rot without checking if PERMISSION_ATTACH has been granted.
+</string>
+<string name="LSLTipText_osListenRegex" translate="false">
+osListenRegex(integer channelID, string name, string ID, string msg, integer regexBitfield)
+Allows the server to filter listen events by regular expressions. name or message parameters can be regular expressions, these are behaviours are controlled via the regexBitField parameter using the constants OS_LISTEN_REGEX_NAME and OS_LISTEN_REGEX_MESSAGE. If the regex strings are invalid, an error will be shouted on the debug channel.
+</string>
+<string name="LSLTipText_osRegexIsMatch" translate="false">
+osRegexIsMatch(string input, string pattern)
+Returns 1 if the input string matches the regular expression pattern. Wraps to Regex.IsMatch()
+</string>
+<string name="LSLTipText_osGetGridGatekeeperURI" translate="false">
+osGetGridGatekeeperURI()
+Returns the current grid's Gatekeeper URI as a string.
+</string>
+<string name="LSLTipText_osGetGridHomeURI" translate="false">
+osGetGridHomeURI()
+Returns the current grid's home URI as a string.
+</string>
+<string name="LSLTipText_osGetGridCustom" translate="false">
+osGetGridCustom(string key)
+Returns the value of the GridInfo key as a string.
+</string>
+<string name="LSLTipText_osParseJSONNew" translate="false">
+osParseJSONNew(string JSON)
+Returns osd deserialized JSON to object.
+</string>
+<string name="LSLTipText_osReplaceString" translate="false">
+osReplaceString(string src, string pattern, string replace, integer count, integer start)
+This function is for regular expression-based string replacement. The count parameter specifies the total number of replacements to make where -1 makes all possible replacements.
+</string>
+<string name="LSLTipText_osReturnObject" translate="false">
+osReturnObject(key userID)
+Returns object to specified avatars UUID.
+</string>
+<string name="LSLTipText_osReturnObjects" translate="false">
+osReturnObjects(float Parameter)
+Returns group of objects. Parameters are numeric, values are as follows:  owner objects = 0, everyone except owner objects = 1, group objects = 2.
+</string>
+<string name="LSLTipText_osShutDown" translate="false">
+osShutDown()
+Shut down current Simulator.
+Authorized Admin Only by config.
+</string>
+<string name="LSLTipText_osAddAgentToGroup" translate="false">
+osAddAgentToGroup(key avatarID, string group_name, string role_name)
+Adds an avatar to a group.  Where group_name = name of the target group, role_name = role to assign within the group.
+</string>
+<string name="LSLTipText_osRezObject" translate="false">
+osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer isRezAtRoot, integer doRecoil, integer SetDieAtEdge, integer CheckPos)
+Where inventory = object to rez.  Position = vector to rez object.  Velocity = initial velocity.  Rot = initial rotation.  Param = onrez event.  IzAtRoot = TRUE/FALSE flag changes llRezAtRoot to llRezObject.  doRecoil =TRUE/FALSE to push avatar.  SetDieAtEdge = TRUE/FALSE for rezzed object to die at edge of region.  CheckPos = TRUE/FALSE enable/disable 10m rez limit.
+</string>
+<string name="LSLTipText_lsSetWindlightScene" translate="false">
+lsSetWindlightScene(list rules)
+Set the current WindLight scene. Estate managers and owners only.
+</string>
+<string name="LSLTipText_lsSetWindlightSceneTargeted" translate="false">
+lsSetWindlightSceneTargeted(list rules, key target)
+Set the current WindLight scene directed at a specific avatar. Estate managers and owners only.
+</string>
+<string name="LSLTipText_lsGetWindlightScene" translate="false">
+list lsGetWindlightScene(list rules)
+Get the current WindLight settings.
+</string>
+<string name="LSLTipText_cmSetWindlightScene" translate="false">
+cmSetWindlightScene(list rules)
+Set the current WindLight scene. Estate managers and owners only.
+</string>
+<string name="LSLTipText_cmSetWindlightSceneTargeted" translate="false">
+cmSetWindlightSceneTargeted(list rules, key target)
+Set the current WindLight scene directed at a specific avatar. Estate managers and owners only.
+</string>
+<string name="LSLTipText_cmGetWindlightScene" translate="false">
+list cmGetWindlightScene(list rules)
+Returns the current LightShare settings.
+</string>
+<string name="LSLTipText_aaSetCloudDensity" translate="false">
+AaSetCloudDensity(0.5)
+Where float density values are 0.0 =  no cloud to 1.0 = 100% cloud.
+</string>
+<string name="LSLTipText_aaUpdateDatabase" translate="false">
+aaUpdateDatabase(Key, xmlDataToPutIntoTheDatabase, Token)
+Where Key = database field name, xmlDataToPutIntoTheDatabase = serialized XML data,  Token = data-password
+</string>
+<string name="LSLTipText_aaQueryDatabase" translate="false">
+aaQueryDatabase(Key, Token)
+Returns a list with first value is the token, the second the Key, and the third the value
+Where Key = database field name, Token = data-password
+</string>
+<string name="LSLTipText_aaSerializeXML" translate="false">
+aaSerializeXML(keys, values)
+Returns xml formatted string of the keys and values.
+Where keys = list of keys in the database, values = fields to retrieve from database.
+</string>
+<string name="LSLTipText_aaDeserializeXMLKeys" translate="false">
+aaDeserializeXMLKeys(string xmlData)
+Returns a list of keys from XML data.
+Where xmlData = xml formatted data keys.
+</string>
+<string name="LSLTipText_aaDeserializeXMLValues" translate="false">
+aaDeserializeXMLValues(string xmlData)
+Returns a list of Values from XML data.
+Where xmlData = xml formatted data Values.
+</string>
+<string name="LSLTipText_aaSetConeOfSilence" translate="false">
+aaSetConeOfSilence(float radius)
+Where radius = metres radius from centre of scripted item.  This creates an area that sounds can only be heard by the people within the area(radius) and not heard outside and visa-versa.
+</string>
+<string name="LSLTipText_aaJoinCombatTeam" translate="false">
+aaJoinCombatTeam(uuid, team)
+Where uuid = key of avatar, team = string of the team name.
+</string>
+<string name="LSLTipText_aaLeaveCombat" translate="false">
+aaLeaveCombat(uuid)
+Where uuid = avatar key.
+</string>
+<string name="LSLTipText_aaJoinCombat" translate="false">
+aaJoinCombat(uuid)
+Where uuid = avatar key.  If (perm and PERMISSION_COMBAT == PERMISSION_COMBAT) and permission is granted then join combat.
+</string>
+<string name="LSLTipText_aaGetHealth" translate="false">
+aaGetHealth(uuid)
+Returns float value (0.0 to 100.0) of current health.  Where uuid = avatar key.
+</string>
+<string name="LSLTipText_aaGetTeam" translate="false">
+aaGetTeam(uuid)
+Returns a string of avatars team name.  Where uuid = avatar key.
+</string>
+<string name="LSLTipText_aaGetTeamMembers" translate="false">
+aaGetTeamMembers(team)
+Return a list of team members.  Where team = string of team name.
+</string>
+<string name="LSLTipText_aaGetLastOwner" translate="false">
+aaGetLastOwner(PrimID)
+Returns last owner UUID of PrimID where PrimID = uuid of prim.
+    or
+aaGetLastOwner()
+Returns last owner uuid of prim containg script.
+</string>
+<string name="LSLTipText_aaSayDistance" translate="false">
+aaSayDistance(channelID, Distance, text)
+Where channelID = channel to say on, Distance = float in meters for distance to say, text = string to say.
+</string>
+<string name="LSLTipText_aaSayTo" translate="false">
+aaSayTo(userID, text)
+    Where userID = avatar key, text = string msg.  Similar to llOwnerSay but can be directly targeted to an avatar.
+</string>
+<string name="LSLTipText_aaGetText" translate="false">
+aaGetText()
+Returns a string of the hover text of an object.
+</string>
+<string name="LSLTipText_aaGetTextColor" translate="false">
+aaGetTextColor()
+Returns the hovertext color in rotation.
+</string>
+<string name="LSLTipText_aaRaiseError" translate="false">
+aaRaiseError(message)
+Allows you to have errors that end the execution of the event and fire another event in the script.
+</string>
+<string name="LSLTipText_aaFreezeAvatar" translate="false">
+aaFreezeAvatar(id)
+If combat permission are granted then avatar can be frozen (no movement).
+</string>
+<string name="LSLTipText_aaThawAvatar" translate="false">
+aaThawAvatar(id)
+If combat permission are granted then avatar can be un-frozen (movement re-enabled).
+</string>
+<string name="LSLTipText_aaRequestCombatPermission" translate="false">
+aaRequestCombatPermission(id)
+Requests target avatar for Permissions to enter into combat mode.
+Raises a run_time_permissions event.
+if (perm and PERMISSION_COMBAT == PERMISSION_COMBAT).
+</string>
+<string name="LSLTipText_aaGetWalkDisabled" translate="false">
+aaGetWalkDisabled(id)
+Returns integer of TRUE or FALSE for specifid ID.
+</string>
+<string name="LSLTipText_aaSetWalkDisabled" translate="false">
+aaSetWalkDisabled(id, value)
+If PERMISSION_COMBAT is accepted, this disables walk, forcing avatar to fly.
+</string>
+<string name="LSLTipText_aaGetFlyDisabled" translate="false">
+aaGetFlyDisabled(id)
+Returns integer of TRUE or FALSE for specifid ID.  Where ID = avatar uuid
+</string>
+<string name="LSLTipText_aaSetFlyDisabled" translate="false">
+aaSetFlyDisabled(id, value)
+Where ID = avatar uuid, Value = TRUE or FALSE.
+If PERMISSION_COMBAT is accepted, this disables flying, forcing avatar to walk.
+</string>
+<string name="LSLTipText_aaAvatarFullName2Key" translate="false">
+aaAvatarFullName2Key(FullName)
+Returns the avatar uuid from their fullname.  Where FullName = "Firstname Lastname".
+</string>
+<string name="LSLTipText_aaSetCharacterStat" translate="false">
+aaSetCharacterStat(id, StatName, statValue)
+Sets Character Stats.  Where ID = avatar uuid, StatName = stat to change, ststValue the value to change it to.
+</string>
+<string name="LSLTipText_aaSetEnv" translate="false">
+aaSetEnv( EnvName, value)
+    Sets environment values.  Where EnvName = ENABLE_GRAVITY, GRAVITY_FORCE_X, GRAVITY_FORCE_Y, GRAVITY_FORCE_Z, ADD_GRAVITY_POINT, ADD_GRAVITY_FORCE, START_TIME_REVERSAL_SAVING, STOP_TIME_REVERSAL_SAVING, START_TIME_REVERSAL, STOP_TIME_REVERSAL.
+</string>
+<string name="LSLTipText_aaAllRegionInstanceSay" translate="false">
+aaAllRegionInstanceSay(integer channelID, string text)
+</string>
+<string name="LSLTipText_aaWindlightGetSceneIsStatic" translate="false">
+aaWindlightGetSceneIsStatic()
+Returns TRUE / FALSE
+</string>
+<string name="LSLTipText_aaWindlightGetSceneDayCycleKeyFrameCount" translate="false">
+aaWindlightGetSceneDayCycleKeyFrameCount()
+Returns integer value
+</string>
+<string name="LSLTipText_aaWindlightGetDayCycle" translate="false">
+aaWindlightGetDayCycle()
+Returns a List of settings
+</string>
+<string name="LSLTipText_aaWindlightAddDayCycleFrame" translate="false">
+aaWindlightAddDayCycleFrame(float dayCyclePosition, integer dayCycleFrameToCopy)
+Returns TRUE / FALSE
+</string>
+<string name="LSLTipText_aaWindlightRemoveDayCycleFrame" translate="false">
+aaWindlightRemoveDayCycleFrame(int dayCycleFrame)
+    Returns TRUE / FALSE
+</string>
+<string name="LSLTipText_aaWindlightGetScene" translate="false">
+aaWindlightGetScene(list rules)  Returns a List
+    or
+aaWindlightGetScene(integer dayCycleKeyFrame, list rules)
+Returns a list
+</string>
+<string name="LSLTipText_aaWindlightSetScene" translate="false">
+aaWindlightSetScene(list list)
+Returns TRUE/FALSE
+    or
+aaWindlightSetScene(integer dayCycleIndex, list list)
+Returns TRUE/FALSE
+</string>
+<string name="LSLTipText_aaGetIsInfiniteRegion" translate="false">
+aaGetIsInfiniteRegion()
+    Returns TRUE/FALSE
+</string>
+<string name="LSLTipText_botGetWaitingTime" translate="false">
+botGetWaitingTime (waitTime)
+Returns waitTime as vector.
+</string>
+<string name="LSLTipText_botSetMap" translate="false">
+botSetMap(keyOfBot, positions,  movementType, flags)
+keyOfBot = bot uuid, positions = list of position vectors, movementType = corresponding list of move modes:  0 – walk, 1 – fly, flags = BOT_FOLLOW_FLAG_NONE and BOT_FOLLOW_FLAG_INDEFINITELY.
+</string>
+<string name="LSLTipText_botCreateBot" translate="false">
+botCreateBot(FirstName, LastName, idToClone, startPos)
+Where FirstName and LastName = strings for new bot name. idToClone = uuid of prebuild avatar to clone OR another existing avatar.  startPos = vector of starting position on region.
+</string>
+<string name="LSLTipText_botRemoveBot" translate="false">
+botRemoveBot(botID)
+Where botID = uuid of bot.  Removes bot identified by botID.
+</string>
+<string name="LSLTipText_botPauseMovement" translate="false">
+botPauseMovement(botID)
+Where botID = bot uuid.  Pauses bot at current position.
+</string>
+<string name="LSLTipText_botResumeMovement" translate="false">
+botResumeMovement(botID)
+Where botID = bot uuid.  Resumes bot movement.
+</string>
+<string name="LSLTipText_botFollowAvatar" translate="false">
+botFollowAvatar(botID, avName, startFollowDistance, endFollowDistance)
+Where botID = bot uuid.  AvName = sting of avatar name OR avatar uuid.  StartFollowDistance = distance to start following from.  EndFollowDistance = distance to stop following avatar.
+</string>
+<string name="LSLTipText_botStopFollowAvatar" translate="false">
+botStopFollowAvatar(botID)
+Where botID = bot uuid.  Stops bot from following an avatar.
+</string>
+<string name="LSLTipText_botSendChatMessage" translate="false">
+botSendChatMessage(botID, message, channel, sayType)
+Where  botID = bot uuid.  Message = string msg.  Channel = channel to speak on.  SayType = (0=whisper, 1=say, 2=shout).
+</string>
+<string name="LSLTipText_botSetShouldFly" translate="false">
+botSetShouldFly(botID, ShouldFly)
+Where botID = bot uuid.  ShouldFly = TRUE/FALSE.  Enables or disables flight mode.
+</string>
+<string name="LSLTipText_botSendIM" translate="false">
+botSendIM(string bot, string user, string message)
+bot = bot UUID.  user = Target Avatar UUID,  message = text to send.
+</string>
+<string name="LSLTipText_botSitObject" translate="false">
+botSitObject( botID, objectID, offset)
+Where botID = bot uuid,  objectID = uuid of object to sit on,  offset = Vector for sit position (note that VECTOR_ZERO = default sit pos).
+</string>
+<string name="LSLTipText_botStandUp" translate="false">
+botStandUp(botID)
+Where botID = bot uuid.  Command bot to stand up.
+</string>
+<string name="LSLTipText_botTouchObject" translate="false">
+botTouchObject(botID, objectID)
+Where botID = bot uuid,  objectID = object uuid.  Causes bot to touch object identified.
+</string>
+<string name="LSLTipText_botAddTag" translate="false">
+botAddTag(botID, tag)
+Where botID = bot uuid,  tag = string tag over bot.
+</string>
+<string name="LSLTipText_botGetBotsWithTag" translate="false">
+botGetBotsWithTag(tag)
+Where tag = tag string to match.  Return a list of bot UUID's in region with the matching tag.
+</string>
+<string name="LSLTipText_botRemoveBotsWithTag" translate="false">
+botRemoveBotsWithTag(tag)
+Where tag = tag string to match.  Removes bot's matching the tag.
+</string>
+<!-- END FS:CR OSSL/AA function tooltip help texts -->
 
   <!-- Avatar busy/away mode -->
 	<string name="AvatarSetNotAway">Not Away</string>
