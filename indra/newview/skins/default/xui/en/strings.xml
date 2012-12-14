@@ -2162,7 +2162,7 @@ Returns the value of a particular simulator statistic.
 	
     
     
-<!-- FS:CR OSSL/AA function tooltip help texts -- Please add all SL LSL related tooltips above this -->
+<!-- FS:CR OSSL/AA function tooltip help texts - Please add all SL LSL related tooltips above this -->
 <string name="LSLTipText_osSetRegionWaterHeight" translate="false">
 osSetRegionWaterHeight(float height)
 Adjusts water height in current region.
