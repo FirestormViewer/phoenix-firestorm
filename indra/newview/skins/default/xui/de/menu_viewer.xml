@@ -171,11 +171,6 @@
 			<menu_item_call label="Anzeigen/Testen..." name="pathfinding_console_menu_item"/>
 			<menu_item_call label="Rebake Regions-Navmesh" name="rebake_region_navmesh"/>
 		</menu>
-		<menu label="Pathfinding" name="Pathfinding">
-			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="Figuren..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="Anzeigen/Testen..." name="pathfinding_console_menu_item"/>
-		</menu>
 		<menu label="Optionen" name="Options">
 			<menu_item_check label="Erweiterte Berechtigungen anzeigen" name="DebugPermissions"/>
 			<menu_item_check label="Nur meine Objekte auswählen" name="Select Only My Objects"/>

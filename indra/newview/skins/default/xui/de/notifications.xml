@@ -1254,7 +1254,6 @@ Sie können [APP_NAME] normal verwenden. Andere Benutzer können Sie korrekt dar
 		Installation von [APP_NAME] vollständig abgeschlossen.
 
 Falls Sie [CURRENT_GRID] zum ersten Mal verwenden, müssen Sie zuerst ein Konto erstellen, bevor Sie sich anmelden können.
-Zurück zu [http://join.secondlife.com secondlife.com], um ein neues Konto zu erstellen?
 		<usetemplate name="okcancelbuttons" notext="Weiter" yestext="Konto erstellen..."/>
 	</notification>
 	<notification name="LoginPacketNeverReceived">
@@ -1816,43 +1815,6 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		</form>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_PreferencesOutOfSync">
-		Wir haben technische Probleme mit Ihrem Teleport, da Ihre Einstellungen nicht mit dem Server synchronisiert sind.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="TeleportEntryAccessBlocked">
-		Die Region, die Sie besuchen möchten, enthält Inhalte, die Ihre aktuellen Einstellungen überschreiten. Sie können Ihre Einstellungen unter „Ich“ &gt; „Einstellungen“ &gt; „Allgemein“ ändern.
-		<usetemplate name="okbutton" yestext="OK"/>
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
-		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview/de
-		</url>
-		<usetemplate ignoretext="Teleport: Die Region, die Sie besuchen möchten, enthält Inhalte, die nur für Erwachsene zugänglich sind." name="okcancelignore" notext="Schließen" yestext="Zur Knowledge Base gehen"/>
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_Notify">
-		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt.
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_NotifyAdultsOnly">
-		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, die nur für Erwachsene zugänglich sind.
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_ChangeAndReTeleport">
-		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt. Sie können Ihre Einstellungen ändern und den Teleport fortsetzen oder Sie können den Teleport abbrechen.
-		<form name="form">
-			<button name="OK" text="Ändern und fortfahren"/>
-			<button name="Cancel" text="Abbrechen"/>
-			<ignore name="ignore" text="Teleport (kann neu gestartet werden): Die Region, die Sie besuchen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
-		</form>
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_Change">
-		Die Region, die Sie besuchen möchten, enthält [REGIONMATURITY]-Inhalte, doch aufgrund Ihrer aktuellen Einstellungen werden [REGIONMATURITY]-Inhalte nicht dargestellt. Sie können Ihre Einstellungen ändern oder den Teleport abbrechen. Nachdem Sie Ihre Einstellungen geändert haben, können Sie den Teleport erneut versuchen.
-		<form name="form">
-			<button name="OK" text="Einstellungen ändern"/>
-			<button name="Cancel" text="Abbrechen"/>
-			<ignore name="ignore" text="Teleport (kann nicht neu gestartet werden): Die Region, die Sie besuchen möchten, enthält Inhalte, die aufgrund Ihrer Einstellungen nicht dargestellt werden können."/>
-		</form>
-	</notification>
-	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
 		Wir haben technische Probleme mit Ihrem Teleport, da Ihre Einstellungen nicht mit dem Server synchronisiert sind.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
@@ -3772,29 +3734,6 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			ignoretext="Bestätigen, bevor ich Skripte in einer Auswahl modifiziere."
 			notext="Abbrechen"
 			yestext="OK"/>
-	</notification>
-	
-	<notification name="LocalBitmapsUpdateFileNotFound">
-[FNAME] konnte nicht aktualisiert werden, da die Datei nicht mehr gefunden wurde.
-Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
-	</notification>
-
-	<notification name="LocalBitmapsUpdateFailedFinal">
-[FNAME] konnte in [NRETRIES] Versuchen nicht geöffnet oder dekodiert werden und wird daher als defekt erachtet.
-Zukünftige Aktualisierungen für diese Datei wurden deaktiviert.
-	</notification>
-
-	<notification name="LocalBitmapsVerifyFail">
-Es wurde versucht eine ungültige oder unlesbare Grafikdatei [FNAME] hinzuzufügen, die nicht geöffnet oder dekodiert werden konnte.
-Hinzufügen wurde abgebrochen.
-	</notification>
-	<notification name="PathfindingReturnMultipleItems">
-		Sie sind dabei, [NUM_ITEMS] Objekte zurückzugeben. Möchten Sie diesen Vorgang wirklich fortsetzen?
-		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte zurückgeben?" name="okcancelignore" notext="Nein" yestext="Ja"/>
-	</notification>
-	<notification name="PathfindingDeleteMultipleItems">
-		Sie sind dabei, [NUM_ITEMS] Objekte zu löschen. Möchten Sie diesen Vorgang wirklich fortsetzen?
-		<usetemplate ignoretext="Möchten Sie wirklich mehrere Objekte löschen?" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
 
   <!-- <FS:Zi> Add float LSL color entry widgets -->

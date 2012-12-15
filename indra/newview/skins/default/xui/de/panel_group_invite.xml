@@ -10,7 +10,7 @@
 		Einige der ausgewählten Einwohner sind bereits Gruppenmitglieder und haben aus diesem Grund keine Einladung erhalten.
 	</panel.string>
 	<panel.string name="invite_selection_too_large">
-		Gruppeneinladung nicht versendet: Zu viele Einwohner ausgewählt. Gruppeneinladungen sind auf 100 pro Anfrage beschränkt.
+		Gruppeneinladungen nicht gesendet: zu viele Einwohner ausgewählt. Gruppeneinladungen sind auf 100 Einwohner pro Anfrage beschränkt.
 	</panel.string>
 	<text name="help_text">
 		Sie können mehrere Einwohner in Ihre Gruppe einladen. Klicken Sie hierzu auf „Einwohnerliste öffnen“.
