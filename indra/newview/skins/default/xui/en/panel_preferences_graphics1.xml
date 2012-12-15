@@ -1007,24 +1007,6 @@
          top_pad="5"
          width="256"/>
 
-<!-- Max Concurrent HTTP GET requests-->
-        <slider
-         control_name="ImagePipelineUseHTTPFetchMaxRequests"
-         decimal_digits="0"
-         follows="left|top"
-         height="16"
-         increment="1"
-         initial_value="8"
-         label="Max number of concurrent HTTP GET requests"
-         label_width="250"
-         layout="topleft"
-         left="20"
-         max_val="8"
-         min_val="1"
-         name="HTTPFetchMaxRequests"
-         top_pad="5"
-         width="375" />
-
 <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"

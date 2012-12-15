@@ -13198,7 +13198,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>0.0</integer>
+      <real>0.0</real>
     </map>
     <key>TextureFetchUpdateSkipLowPriority</key>
     <map>
@@ -16583,17 +16583,6 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
-  <key>ImagePipelineUseHTTPFetchMaxRequests</key>
-  <map>
-    <key>Comment</key>
-    <string>Max number of simultaneous textures to request when using HTTP texture fetch. Changing this setting above 8 will most likely cause texture loading problems, setting above 32 *WILL* cause loading failures.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>S32</string>
-    <key>Value</key>
-    <integer>8</integer>
-  </map>
   <key>WorldmapFilterDuplicateLandmarks</key>
   <map>
     <key>Comment</key>

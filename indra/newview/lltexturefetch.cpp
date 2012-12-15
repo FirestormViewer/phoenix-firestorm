@@ -55,13 +55,12 @@
 #include "llsdutil.h"
 #include "llstartup.h"
 #include "llviewerstats.h"
+#include "fswsassetblacklist.h" //For Asset blacklist
 
 bool LLTextureFetchDebugger::sDebuggerEnabled = false ;
 LLStat LLTextureFetch::sCacheHitRate("texture_cache_hits", 32);
 LLStat LLTextureFetch::sCacheReadLatency("texture_cache_read_latency", 32);
 
-
-#include "fswsassetblacklist.h"
 
 //////////////////////////////////////////////////////////////////////////////
 class LLTextureFetchWorker : public LLWorkerClass
@@ -301,10 +300,6 @@ private:
 	U8 mImageCodec;
 
 	LLViewerAssetStats::duration_t mMetricsStartTime;
-
-	// <FS:Ansariel> CURL timeout check
-	S32 mHttpCallbackTimeoutCount;
-	// </FS:Ansariel> CURL timeout check
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -916,13 +911,14 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 	if (mState == INIT)
 	{		
+		//asset blacklist
 		if(FSWSAssetBlacklist::getInstance()->isBlacklisted(mID,LLAssetType::AT_TEXTURE))
 		{
 			llinfos << "Blacklisted texture asset blocked." << llendl; 
 			mState = DONE;
 			return true;
 		}
-
+		//end asset blacklist
 
 		mRawImage = NULL ;
 		mRequestedDiscard = -1;
