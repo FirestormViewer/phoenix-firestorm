@@ -48,7 +48,8 @@
 		layout="topleft"
 		left_pad="2"
 		name="groups_find"
-		width="100" />
+		width="100"
+		enabled="false" />
 		<check_box
 		control_name="ShowPGGroups"
 		follows="right|top"
@@ -58,7 +59,8 @@
 		left="660"
 		name="pg_all"
 		top="12"
-		width="15"/>
+		width="15"
+		visible="false"/>
 		<icon
 		follows="right|top"
 		height="16"
@@ -67,7 +69,8 @@
 		left_pad="2"
 		name="rating_icon_general"
 		top_delta="-1"
-		width="18"/>
+		width="18"
+		visible="false"/>
 		<check_box
 		control_name="ShowMatureGroups"
 		follows="right|top"
@@ -77,7 +80,8 @@
 		left_pad="2"
 		name="mature_all"
 		top_delta="1"
-		width="15"/>
+		width="15"
+		visible="false"/>
 		<icon
 		follows="right|top"
 		height="16"
@@ -86,7 +90,8 @@
 		left_pad="2"
 		name="rating_icon_moderate"
 		top_delta="-1"
-		width="18"/>
+		width="18"
+		visible="false"/>
 		<check_box
 		control_name="ShowAdultGroups"
 		follows="right|top"
@@ -96,7 +101,8 @@
 		left_pad="2"
 		name="adult_all"
 		top_delta="1"
-		width="15"/>
+		width="15"
+		visible="false"/>
 		<icon
 		follows="right|top"
 		height="16"
@@ -105,7 +111,8 @@
 		left_pad="2"
 		name="rating_icon_adult"
 		top_delta="-1"
-		width="18"/>
+		width="18"
+		visible="false"/>
 	</panel>
 	<!-- Search Pane -->
 	<panel
@@ -133,15 +140,15 @@
 			<columns
 			label="Group Name"
 			name="group_name"
-			width="245" />
+			relwidth="0.77" />
 			<columns
 			label="Members"
 			name="members"
-			width="65" />
+			relwidth="0.2" />
 			<columns
 			label="Score"
 			name="score"
-			width="75" />
+			width="0" />
 		</scroll_list>
 		<button
 		layout="topleft"

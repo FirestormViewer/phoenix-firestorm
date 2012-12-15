@@ -48,7 +48,8 @@
 		layout="topleft"
 		left_pad="2"
 		name="classifieds_find"
-		width="100" />
+		width="100"
+		enabled="false" />
 		<combo_box
 		follows="right|top"
 		layout="topleft"
@@ -142,11 +143,11 @@
 			<columns
 			label="Name"
 			name="classified_name"
-			width="285" />
+			relwidth="0.75" />
 			<columns
 			label="Listing Price"
 			name="price"
-			width="120"/>
+			relwidth="0.25"/>
 		</scroll_list>
 		<button
 		layout="topleft"

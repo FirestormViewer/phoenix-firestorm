@@ -64,6 +64,12 @@
 // llviewernetwork.h : SJ: Needed to find the grid we are running on
 #include "llviewernetwork.h"
 
+// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+#include "llfocusmgr.h"
+#include "llkeyboard.h"
+#include "lllineeditor.h"
+// </FS:Zi>
+
 static LLDefaultChildRegistry::Register<LLChatHistory> r("chat_history");
 
 const static std::string NEW_LINE(rawstr_to_utf8("\n"));
@@ -723,7 +729,8 @@ protected:
 LLUICtrl* LLChatHistoryHeader::sInfoCtrl = NULL;
 
 LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
-:	LLUICtrl(p),
+// :	LLUICtrl(p),	// <FS:Zi> FIRE-8600: TAB out of chat history
+:	LLTextEditor(p),	// <FS:Zi> FIRE-8600: TAB out of chat history
 	mMessageHeaderFilename(p.message_header),
 	mMessageSeparatorFilename(p.message_separator),
 	mLeftTextPad(p.left_text_pad),
@@ -734,15 +741,19 @@ LLChatHistory::LLChatHistory(const LLChatHistory::Params& p)
 	mBottomSeparatorPad(p.bottom_separator_pad),
 	mTopHeaderPad(p.top_header_pad),
 	mBottomHeaderPad(p.bottom_header_pad),
+	mChatInputLine(NULL),	// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
 	mIsLastMessageFromLog(false)
 {
-	LLTextEditor::Params editor_params(p);
-	editor_params.line_spacing.pixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
-	editor_params.rect = getLocalRect();
-	editor_params.follows.flags = FOLLOWS_ALL;
-	editor_params.enabled = false; // read only
-	editor_params.show_context_menu = "true";
-	mEditor = LLUICtrlFactory::create<LLTextEditor>(editor_params, this);
+	// <FS:Zi> FIRE-8600: TAB out of chat history
+	// LLTextEditor::Params editor_params(p);
+	// editor_params.line_spacing.pixels = llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"), 0, 36);
+	// editor_params.rect = getLocalRect();
+	// editor_params.follows.flags = FOLLOWS_ALL;
+	// editor_params.enabled = false; // read only
+	// editor_params.show_context_menu = "true";
+	// mEditor = LLUICtrlFactory::create<LLTextEditor>(editor_params, this);
+	mLineSpacingPixels=llclamp(gSavedSettings.getS32("FSFontChatLineSpacingPixels"),0,36);
+	// </FS:Zi>
 }
 
 LLChatHistory::~LLChatHistory()
@@ -752,53 +763,65 @@ LLChatHistory::~LLChatHistory()
 
 void LLChatHistory::initFromParams(const LLChatHistory::Params& p)
 {
-	static LLUICachedControl<S32> scrollbar_size ("UIScrollbarSize", 0);
+// <FS:Zi> FIRE-8600: TAB out of chat history
+// 	static LLUICachedControl<S32> scrollbar_size ("UIScrollbarSize", 0);
+// 
+// 	LLRect stack_rect = getLocalRect();
+// 	stack_rect.mRight -= scrollbar_size;
+// 	LLLayoutStack::Params layout_p;
+// 	layout_p.rect = stack_rect;
+// 	layout_p.follows.flags = FOLLOWS_ALL;
+// 	layout_p.orientation = LLLayoutStack::VERTICAL;
+// 	layout_p.mouse_opaque = false;
+// 	layout_p.tab_group = 1;
+// 	
+// 	LLLayoutStack* stackp = LLUICtrlFactory::create<LLLayoutStack>(layout_p, this);
+// 	
+// 	const S32 NEW_TEXT_NOTICE_HEIGHT = 20;
+// 	
+// 	LLLayoutPanel::Params panel_p;
+// 	panel_p.name = "spacer";
+// 	panel_p.background_visible = false;
+// 	panel_p.has_border = false;
+// 	panel_p.mouse_opaque = false;
+// 	panel_p.min_dim = 30;
+// 	panel_p.auto_resize = true;
+// 	panel_p.user_resize = false;
+// 	panel_p.tab_group = 1;
+// 	panel_p.tab_stop = true;
+// 
+// 	stackp->addPanel(LLUICtrlFactory::create<LLLayoutPanel>(panel_p), LLLayoutStack::ANIMATE);
+// 
+// 	panel_p.name = "new_text_notice_holder";
+// 	LLRect new_text_notice_rect = getLocalRect();
+// 	new_text_notice_rect.mTop = new_text_notice_rect.mBottom + NEW_TEXT_NOTICE_HEIGHT;
+// 	panel_p.rect = new_text_notice_rect;
+// 	panel_p.background_opaque = true;
+// 	panel_p.background_visible = true;
+// 	panel_p.visible = false;
+// 	panel_p.min_dim = 0;
+// 	panel_p.auto_resize = false;
+// 	panel_p.user_resize = false;
+// 	mMoreChatPanel = LLUICtrlFactory::create<LLLayoutPanel>(panel_p);
+// 	
+// 	LLTextBox::Params text_p(p.more_chat_text);
+// 	text_p.rect = mMoreChatPanel->getLocalRect();
+// 	text_p.follows.flags = FOLLOWS_ALL;
+// 	text_p.name = "more_chat_text";
+// 	mMoreChatText = LLUICtrlFactory::create<LLTextBox>(text_p, mMoreChatPanel);
+// 	mMoreChatText->setClickedCallback(boost::bind(&LLChatHistory::onClickMoreText, this));
+// 
+// 	stackp->addPanel(mMoreChatPanel, LLLayoutStack::ANIMATE);
 
-	LLRect stack_rect = getLocalRect();
-	stack_rect.mRight -= scrollbar_size;
-	LLLayoutStack::Params layout_p;
-	layout_p.rect = stack_rect;
-	layout_p.follows.flags = FOLLOWS_ALL;
-	layout_p.orientation = LLLayoutStack::VERTICAL;
-	layout_p.mouse_opaque = false;
-	
-	LLLayoutStack* stackp = LLUICtrlFactory::create<LLLayoutStack>(layout_p, this);
-	
-	const S32 NEW_TEXT_NOTICE_HEIGHT = 20;
-	
-	LLLayoutPanel::Params panel_p;
-	panel_p.name = "spacer";
-	panel_p.background_visible = false;
-	panel_p.has_border = false;
-	panel_p.mouse_opaque = false;
-	panel_p.min_dim = 30;
-	panel_p.auto_resize = true;
-	panel_p.user_resize = false;
-
-	stackp->addPanel(LLUICtrlFactory::create<LLLayoutPanel>(panel_p), LLLayoutStack::ANIMATE);
-
-	panel_p.name = "new_text_notice_holder";
-	LLRect new_text_notice_rect = getLocalRect();
-	new_text_notice_rect.mTop = new_text_notice_rect.mBottom + NEW_TEXT_NOTICE_HEIGHT;
-	panel_p.rect = new_text_notice_rect;
-	panel_p.background_opaque = true;
-	panel_p.background_visible = true;
-	panel_p.visible = false;
-	panel_p.min_dim = 0;
-	panel_p.auto_resize = false;
-	panel_p.user_resize = false;
-	mMoreChatPanel = LLUICtrlFactory::create<LLLayoutPanel>(panel_p);
-	
-	LLTextBox::Params text_p(p.more_chat_text);
-	text_p.rect = mMoreChatPanel->getLocalRect();
-	text_p.follows.flags = FOLLOWS_ALL;
-	text_p.name = "more_chat_text";
-	mMoreChatText = LLUICtrlFactory::create<LLTextBox>(text_p, mMoreChatPanel);
-	mMoreChatText->setClickedCallback(boost::bind(&LLChatHistory::onClickMoreText, this));
-
-	stackp->addPanel(mMoreChatPanel, LLLayoutStack::ANIMATE);
+	// initialize the LLTextEditor base class first ... -Zi
+	LLTextEditor::initFromParams(p);
+	// then set up these properties, because otherwise they would get lost when we
+	// do this in the constructor only -Zi
+	setEnabled(false);
+	setReadOnly(true);
+	setShowContextMenu(true);
 }
-
+// </FS:Zi>
 
 /*void LLChatHistory::updateTextRect()
 {
@@ -828,10 +851,12 @@ LLView* LLChatHistory::getHeader(const LLChat& chat,const LLStyle::Params& style
 	return header;
 }
 
-void LLChatHistory::onClickMoreText()
-{
-	mEditor->endOfDoc();
-}
+// <FS:Zi> FIRE-8600: TAB out of chat history
+// void LLChatHistory::onClickMoreText()
+// {
+// 	mEditor->endOfDoc();
+// }
+// </FS:Zi>
 
 void LLChatHistory::clear()
 {
@@ -839,8 +864,9 @@ void LLChatHistory::clear()
 	// workaround: Setting the text to an empty line before clear() gets rid of
 	// the scrollbar, if present, which otherwise would get stuck until the next
 	// line was appended. -Zi
-	mEditor->setText(std::string(" \n"));
-	mEditor->clear();
+	// mEditor->setText(std::string(" \n"));	// <FS:Zi> FIRE-8600: TAB out of chat history
+	setText(std::string(" \n"));	// <FS:Zi> FIRE-8600: TAB out of chat history
+	// mEditor->clear();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	mLastFromID = LLUUID::null;
 }
 
@@ -872,13 +898,16 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 	}
 	
-	llassert(mEditor);
-	if (!mEditor)
-	{
-		return;
-	}
+	// <FS:Zi> FIRE-8600: TAB out of chat history
+	// llassert(mEditor);
+	// if (!mEditor)
+	// {
+	// 	return;
+	// }
+	// </FS:Zi>
 
-	mEditor->setPlainText(use_plain_text_chat_history);
+	// mEditor->setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
+	setPlainText(use_plain_text_chat_history);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	/* This system in incompatible with vertical tabs, the firestorm default.
 	 * disabling until we can find a way to make it work without overdrawing text
@@ -1106,11 +1135,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		// mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getLength() != 0, timestamp_style);
 		if (!hide_timestamps_nearby_chat)
 		{
-			mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getLength() != 0, timestamp_style);
+ 			// mEditor->appendText("[" + chat.mTimeStr + "] ", mEditor->getLength() != 0, timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
+			appendText("[" + chat.mTimeStr + "] ", getLength() != 0, timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		}
 		else
 		{
-			mEditor->appendLineBreakSegment(timestamp_style);
+ 			// mEditor->appendLineBreakSegment(timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
+			appendLineBreakSegment(timestamp_style);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		}
 
 		if (utf8str_trim(chat.mFromName).size() != 0)
@@ -1141,7 +1172,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				link_params.is_link = true;
 				link_params.link_href = url;
 
-				mEditor->appendText(chat.mFromName +delimiter, false, link_params);
+				// mEditor->appendText(chat.mFromName +delimiter, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+				appendText(chat.mFromName +delimiter, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 			}
 //			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
 // [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
@@ -1164,7 +1196,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					link_params.color.alpha = FSIMChatHistoryFade;
 					link_params.readonly_color.alpha = FSIMChatHistoryFade;
 					// FS:LO FIRE-2899 - Faded text for IMs in nearby chat
-					mEditor->appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);
+ 					// mEditor->appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+					appendText(LLTrans::getString("IMPrefix") + " ", false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 				}
 
 				if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
@@ -1173,7 +1206,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					//mEditor->appendText(mDisplayName_Username, false, link_params);
 					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
 					{
-						mEditor->appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);
+						// mEditor->appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(chat.mFromNameGroup + mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					else
 					{
@@ -1183,7 +1217,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 							link_params.font.style(moderator_name_style);
 						}
 						//</FS:HG> FS-1734 seperate name and text styles for moderator	
-						mEditor->appendText(mDisplayName_Username, false, link_params);
+						// mEditor->appendText(mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(mDisplayName_Username, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
@@ -1193,7 +1228,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					//mEditor->appendText(mDisplayName, false, link_params);
 					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
 					{
-						mEditor->appendText(chat.mFromNameGroup + mDisplayName, false, link_params);
+						// mEditor->appendText(chat.mFromNameGroup + mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(chat.mFromNameGroup + mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					else
 					{
@@ -1203,7 +1239,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 							link_params.font.style(moderator_name_style);
 						}
 						//</FS:HG> FS-1734 seperate name and text styles for moderator
-						mEditor->appendText(mDisplayName, false, link_params);
+						// mEditor->appendText(mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(mDisplayName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
@@ -1213,7 +1250,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 					if (chat.mChatType == CHAT_TYPE_IM_GROUP)
 					{
-						mEditor->appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);
+						// mEditor->appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(chat.mFromNameGroup + chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					else
 					{
@@ -1223,13 +1261,15 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 							link_params.font.style(moderator_name_style);
 						}
 						//</FS:HG> FS-1734 seperate name and text styles for moderator
-						mEditor->appendText(chat.mFromName, false, link_params);
+						// mEditor->appendText(chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+						appendText(chat.mFromName, false, link_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 					}
 					// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				}
 				link_params.color(txt_color);
 				link_params.readonly_color(txt_color);
-				mEditor->appendText(delimiter, false, style_params);
+				// mEditor->appendText(delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+				appendText(delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 				//mEditor->appendText(std::string(link_params.link_href) + delimiter, false, link_params);
 			}
 			else
@@ -1238,11 +1278,13 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				//if (chat.mChatType == CHAT_TYPE_IM)
 				if (chat.mChatType == CHAT_TYPE_IM || chat.mChatType == CHAT_TYPE_IM_GROUP)
 				{
-					mEditor->appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);
+					// mEditor->appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+					appendText(LLTrans::getString("IMPrefix") + " " + chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 				}
 				else
 				{
-					mEditor->appendText(chat.mFromName + delimiter, false, style_params);
+					// mEditor->appendText(chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+					appendText(chat.mFromName + delimiter, false, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 				}
 			}
 		}
@@ -1289,7 +1331,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			style_params.color(txt_color);
 			style_params.readonly_color(txt_color);
 			
-			if (mEditor->getLength() == 0)
+			// if (mEditor->getLength() == 0)	// <FS:Zi> FIRE-8600: TAB out of chat history
+			if (getLength() == 0)	// <FS:Zi> FIRE-8600: TAB out of chat history
 				p.top_pad = 0;
 			else
 				p.top_pad = mTopHeaderPad;
@@ -1299,9 +1342,11 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		p.view = view;
 
 		//Prepare the rect for the view
-		LLRect target_rect = mEditor->getDocumentView()->getRect();
+		// LLRect target_rect = mEditor->getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
+		LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		// squeeze down the widget by subtracting padding off left and right
-		target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();
+		// target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
+		target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 		target_rect.mRight -= mRightWidgetPad;
 		view->reshape(target_rect.getWidth(), view->getRect().getHeight());
 		view->setOrigin(target_rect.mLeft, view->getRect().mBottom);
@@ -1310,7 +1355,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		if (utf8str_trim(chat.mFromName).size() != 0 && chat.mFromName != SYSTEM_FROM)
 			widget_associated_text += chat.mFromName + delimiter;
 
-		mEditor->appendWidget(p, widget_associated_text, false);
+		// mEditor->appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
+		appendWidget(p, widget_associated_text, false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 		mLastFromName = chat.mFromName;
 		// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
@@ -1366,9 +1412,11 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			}
 
 			//Prepare the rect for the view
-			LLRect target_rect = mEditor->getDocumentView()->getRect();
+			// LLRect target_rect = mEditor->getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
+			LLRect target_rect = getDocumentView()->getRect();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			// squeeze down the widget by subtracting padding off left and right
-			target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();
+			// target_rect.mLeft += mLeftWidgetPad + mEditor->getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
+			target_rect.mLeft += mLeftWidgetPad + getHPad();	// <FS:Zi> FIRE-8600: TAB out of chat history
 			target_rect.mRight -= mRightWidgetPad;
 			notify_box->reshape(target_rect.getWidth(),	notify_box->getRect().getHeight());
 			notify_box->setOrigin(target_rect.mLeft, notify_box->getRect().mBottom);
@@ -1377,7 +1425,8 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			params.view = notify_box;
 			params.left_pad = mLeftWidgetPad;
 			params.right_pad = mRightWidgetPad;
-			mEditor->appendWidget(params, "\n", false);
+			// mEditor->appendWidget(params, "\n", false);	// <FS:Zi> FIRE-8600: TAB out of chat history
+			appendWidget(params, "\n", false);	// <FS:Zi> FIRE-8600: TAB out of chat history
 		}
 	}
 	else
@@ -1432,25 +1481,68 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 		}
 		// </FS:PP>
 
-		mEditor->appendText(message, FALSE, style_params);
+		// mEditor->appendText(message, FALSE, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
+		appendText(message, FALSE, style_params);	// <FS:Zi> FIRE-8600: TAB out of chat history
 	}
 
-	mEditor->blockUndo();
+	// mEditor->blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
+	blockUndo();	// <FS:Zi> FIRE-8600: TAB out of chat history
 
 	// automatically scroll to end when receiving chat from myself
 	if (chat.mFromID == gAgentID)
 	{
-		mEditor->setCursorAndScrollToEnd();
+		// mEditor->setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
+		setCursorAndScrollToEnd();	// <FS:Zi> FIRE-8600: TAB out of chat history
 	}
 }
 
-void LLChatHistory::draw()
+// <FS:Zi> FIRE-8600: TAB out of chat history
+// void LLChatHistory::draw()
+// {
+// 	if (mEditor->scrolledToEnd())
+// 	{
+// 		mUnreadChatSources.clear();
+// 		mMoreChatPanel->setVisible(FALSE);
+// 	}
+// 
+// 	LLUICtrl::draw();
+// }
+// </FS:Zi>
+
+// <FS_Zi> FIRE-8602: Typing in chat history focuses chat input line
+BOOL LLChatHistory::handleUnicodeCharHere(llwchar uni_char)
 {
-	if (mEditor->scrolledToEnd())
+	// do not change focus when the CTRL key is used to make copy/select all etc. possible
+	if(gKeyboard->currentMask(false) & MASK_CONTROL)
 	{
-		mUnreadChatSources.clear();
-		mMoreChatPanel->setVisible(FALSE);
+		// instead, let the base class handle things
+		return LLTextEditor::handleUnicodeCharHere(uni_char);
 	}
 
-	LLUICtrl::draw();
+	// we don't know which is our chat input line yet
+	if(!mChatInputLine)
+	{
+		// get our focus root
+		LLUICtrl* focusRoot=findRootMostFocusRoot();
+		if(focusRoot)
+		{
+			// focus on the next item that is a text input control
+			focusRoot->focusNextItem(true);
+			// remember the control's pointer if it really is a LLLineEditor
+			mChatInputLine=dynamic_cast<LLLineEditor*>(gFocusMgr.getKeyboardFocus());
+		}
+	}
+
+	// do we know our chat input line now?
+	if(mChatInputLine)
+	{
+		// we do, so focus on it
+		mChatInputLine->setFocus(true);
+		// and let it handle the keystroke
+		return mChatInputLine->handleUnicodeCharHere(uni_char);
+	}
+
+	// we don't know what to do, so let our base class handle the keystroke
+	return LLTextEditor::handleUnicodeCharHere(uni_char);
 }
+// </FS:Zi>
