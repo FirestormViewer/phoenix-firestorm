@@ -66,7 +66,7 @@
 	 max_val="10000"
 	 min_val="0"
 	 name="min_prim_scale"
-	 tool_tip="Minumum size a prim can be made in this region"
+	 tool_tip="Minimum size a prim can be made in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
