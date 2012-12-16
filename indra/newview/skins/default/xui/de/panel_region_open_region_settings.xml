@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Regionseinstellungen" name="RegionSettings">
-	<spinner label="Standard-Draw-Distance" name="draw_distance"/>
-	<check_box label="Draw Distance erzwingen" name="force_draw_distance"/>
-	<button label="?" name="force_draw_distance_help"/>
-	<spinner label="Max. Drag Distance" name="max_drag_distance"/>
-	<spinner label="Max. Prim-Skalierung" name="max_prim_scale"/>
-	<spinner label="Min. Prim-Skalierung" name="min_prim_scale"/>
-	<spinner label="Max. physik. Prim-Skalierung" name="max_phys_prim_scale"/>
-	<spinner label="Max. Hohl-Größe" name="max_hollow_size"/>
-	<spinner label="Min. Loch-Größe" name="min_hole_size"/>
-	<spinner label="Max. Link-Anzahl" name="max_link_count"/>
-	<spinner label="Max. pyhsikalische Link-Anzahl" name="max_link_count_phys"/>
-	<spinner label="Max. Inventarobj. zum Transfer." name="max_inventory_items_transfer"/>
-	<spinner label="Terraindetail-Skalierung" name="terrain_detail_scale"/>
-	<button label="?" name="max_inventory_items_transfer_help"/>
-	<spinner label="Tags anzeigen" name="show_tags"/>
-	<button label="?" name="show_tags_help"/>
-	<spinner label="Max. Anzahl an Gruppen" name="max_groups"/>
-	<button label="?" name="max_groups_help"/>
-	<check_box label="Wasser anzeigen" name="render_water"/>
-	<button label="?" name="render_water_help"/>
-	<check_box label="Mini-Karte erlauben" name="allow_minimap"/>
-	<button label="?" name="allow_minimap_help"/>
-	<check_box label="Physikalische Primitiva erlauben" name="allow_physical_prims"/>
-	<button label="?" name="allow_physical_prims_help"/>
-	<check_box label="Maximale Baubeschränkungen erzwingen" name="enforce_max_build"/>
-	<check_box label="Parzellen-Windlight erlauben" name="allow_parcel_windlight"/>
-	<button label="?" name="allow_parcel_windlight_help"/>
+	<spinner label="Standard-Draw-Distance" name="draw_distance" tool_tip="Legt die standardmäßige Draw Distance für diese Region fest."/>
+	<check_box label="Draw Distance erzwingen" name="force_draw_distance" tool_tip="Falls aktiviert, wird die Draw Distance für alle Einwohner in dieser Region fest vorgeschrieben. Hinweis: Diese Einstellung kann für Einwohner auf älterer Hardware Lag erzeugen. (Standardwert: Aus)"/>
+	<spinner label="Max. Drag Distance" name="max_drag_distance" tool_tip="Legt die maximale Entfernung fest, die ein Primitivum in dieser Region verschoben werden kann."/>
+	<spinner label="Max. Prim-Skalierung" name="max_prim_scale" tool_tip="Legt die maximale Größe fest, die ein Primitivum in dieser Region annehmen kann."/>
+	<spinner label="Min. Prim-Skalierung" name="min_prim_scale" tool_tip="Legt die minimale Größe fest, die ein Primitivum in dieser Region annehmen kann."/>
+	<spinner label="Max. physik. Prim-Skalierung" name="max_phys_prim_scale" tool_tip="Legt die maximale Größe fest, die ein physikalisches Primitivum in dieser Region annehmen kann."/>
+	<spinner label="Max. Hohl-Größe" name="max_hollow_size" tool_tip="Legt die maximale Lochgröße fest, die für ein Primitivum in dieser Region gesetzt werden kann."/>
+	<spinner label="Min. Loch-Größe" name="min_hole_size" tool_tip="Legt die minimale Lochgröße fest, die für ein Primitivum in dieser Region gesetzt werden kann."/>
+	<spinner label="Max. Link-Anzahl" name="max_link_count" tool_tip="Legt die maximale Anzahl an nicht-physikalischen Primitiva fest, die in dieser Region verknüpft werden können."/>
+	<spinner label="Max. pyhsikalische Link-Anzahl" name="max_link_count_phys" tool_tip="Legt die maximale Anzahl an physikalischen Primitiva fest, die in dieser Region verknüpft werden können."/>
+	<spinner label="Max. Inventarobj. zum Transfer." name="max_inventory_items_transfer" tool_tip="Legt fest, wie viele Objekte gleichzeitig zwischen transferiert werden können. Der Wert -1 bedeutet kein Limit. (Standardwert: -1)"/>
+	<spinner label="Terraindetail-Skalierung" name="terrain_detail_scale" tool_tip="Legt die Terraidetail-Skalierung für die Region fest."/>
+	<spinner label="Tags anzeigen" name="show_tags" tool_tip="Legt fest, wie Avatarnamen über den jeweiligen Avataren in der Region angezeigt werden. (Immer anzeigen = 2, kurz anzeigen = 1, nie anzeigen = 0)"/>
+	<spinner label="Max. Anzahl an Gruppen" name="max_groups" tool_tip="Legt fest, wie viele Gruppen ein Einwohner beitreten kann. Der Wert -1 bedeutet kein Limit. (Standardwert: -1)"/>
+	<check_box label="Wasser anzeigen" name="render_water" tool_tip="Falls aktiviert, wird Wasser in der Region dargestellt. (Standardwert: Aktiviert)"/>
+	<check_box label="Mini-Karte erlauben" name="allow_minimap" tool_tip="Erlaubt die Nutzung der Mini-Karte in der Region, falls aktiviert. (Standardwert: Aktiviert)"/>
+	<check_box label="Physikalische Primitiva erlauben" name="allow_physical_prims" tool_tip="Erlaubt die Erstellung physikalischer Primitiva in der Region, fall aktiviert. (Standardwert: Aktiviert)"/>
+	<check_box label="Maximale Baubeschränkungen erzwingen" name="enforce_max_build" tool_tip="Falls aktiviert, werden die maximalen Baubeschränkungen durch die Region forciert."/>
+	<check_box label="Parzellen-Windlight erlauben" name="allow_parcel_windlight" tool_tip="Falls aktiviert, werden die Windlight-Einstellungen für Parzellen aktiviert. (Standardwert: Aktiviert)"/>
 	<button label="Anwenden" name="apply_ors_btn"/>
 </panel>
