@@ -236,9 +236,12 @@
      tool_tip="Drag Landmarks here for quick access to your favorite places in Second Life!"
      width="1024">
               <!-- More button actually is a text box. -->
+              <!-- FS:Ansariel: This widget has a different name because it is a more_button.
+                                Default skin uses a chevron_button and using the same name
+                                would result in the more button not being shown! -->
               <more_button
                 follows="left|bottom"
-                name=">>"
+                name="more_btn_stl"
                 tab_stop="false"
                 tool_tip="Show more of My Favorites"
                 top="13"

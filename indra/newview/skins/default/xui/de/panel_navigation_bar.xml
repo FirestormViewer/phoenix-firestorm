@@ -25,7 +25,7 @@
 				<label name="favorites_bar_label" tool_tip="Landmarken hierher ziehen für schnellen Zugriff auf Lieblingsorte.">
 					Favoritenleiste
 				</label>
-				<chevron_button name=">>" tool_tip="Mehr meiner Favoriten anzeigen"/>
+				<chevron_button name="more_btn" tool_tip="Mehr meiner Favoriten anzeigen"/>
 			</favorites_bar>
 		</layout_panel>
 	</layout_stack>

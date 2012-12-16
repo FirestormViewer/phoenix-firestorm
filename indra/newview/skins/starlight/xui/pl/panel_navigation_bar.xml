@@ -22,7 +22,7 @@
 		</layout_panel>
 		<layout_panel name="favorites_bar_visibility_panel">
 			<favorites_bar name="favorite" tool_tip="Przeciągnij swoje landmarki tutaj by szybko dostać się do swoich ulubionych miejsc w Second Life!">
-				<more_button name=">>" tool_tip="Pokaż więcej Moich Ulubionych">
+				<more_button name="more_btn_stl" tool_tip="Pokaż więcej Moich Ulubionych">
 					Więcej &#9660;
 				</more_button>
 			</favorites_bar>

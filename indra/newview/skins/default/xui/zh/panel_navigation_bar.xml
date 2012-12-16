@@ -13,6 +13,6 @@
 		<label name="favorites_bar_label" tool_tip="拖曳傳送地標到此以便讓你在第二人生中能快速傳送到你最愛的地點!!">
 			最愛列
 		</label>
-		<chevron_button name="&gt;&gt;" tool_tip="顯示更多我的最愛"/>
+		<chevron_button name="more_btn" tool_tip="顯示更多我的最愛"/>
 	</favorites_bar>
 </panel>

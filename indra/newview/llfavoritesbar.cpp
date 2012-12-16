@@ -363,6 +363,9 @@ struct LLFavoritesSort
 LLFavoritesBarCtrl::Params::Params()
 : image_drag_indication("image_drag_indication"),
   more_button("more_button"),
+  // <FS:Ansariel> Allow V3 and FS style favorites bar
+  chevron_button("chevron_button"),
+  // </FS:Ansariel>
   label("label")
 {
 }
@@ -391,10 +394,26 @@ LLFavoritesBarCtrl::LLFavoritesBarCtrl(const LLFavoritesBarCtrl::Params& p)
 	gInventory.addObserver(this);
 
 	//make chevron button                                                                                                                               
-	LLTextBox::Params more_button_params(p.more_button);
-	mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
-	mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
-	addChild(mMoreTextBox);
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//LLTextBox::Params more_button_params(p.more_button);
+	//mMoreTextBox = LLUICtrlFactory::create<LLTextBox> (more_button_params);
+	//mMoreTextBox->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
+	//addChild(mMoreTextBox);
+	if (p.chevron_button.isProvided())
+	{
+		LLButton::Params chevron_button_params(p.chevron_button);                                         
+		chevron_button_params.click_callback.function(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));     
+		mMoreCtrl = LLUICtrlFactory::create<LLButton> (chevron_button_params);
+		addChild(mMoreCtrl);
+	}
+	else
+	{
+		LLTextBox::Params more_button_params(p.more_button);
+		mMoreCtrl = LLUICtrlFactory::create<LLTextBox> (more_button_params);
+		((LLTextBox*)mMoreCtrl)->setClickedCallback(boost::bind(&LLFavoritesBarCtrl::showDropDownMenu, this));
+		addChild(mMoreCtrl);
+	}
+	// </FS:Ansariel>
 
 	LLTextBox::Params label_param(p.label);
 	mBarLabel = LLUICtrlFactory::create<LLTextBox> (label_param);
@@ -720,7 +739,10 @@ void LLFavoritesBarCtrl::updateButtons()
 	const child_list_t* childs = getChildList();
 	child_list_const_iter_t child_it = childs->begin();
 	int first_changed_item_index = 0;
-	int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//int rightest_point = getRect().mRight - mMoreTextBox->getRect().getWidth();
+	int rightest_point = getRect().mRight - mMoreCtrl->getRect().getWidth();
+	// </FS:Ansariel>
 	//lets find first changed button
 	while (child_it != childs->end() && first_changed_item_index < mItems.count())
 	{
@@ -763,10 +785,16 @@ void LLFavoritesBarCtrl::updateButtons()
 		}
 		// we have to remove ChevronButton to make sure that the last item will be LandmarkButton to get the right aligning
 		// keep in mind that we are cutting all buttons in space between the last visible child of favbar and ChevronButton
-		if (mMoreTextBox->getParent() == this)
+		// <FS:Ansariel> Allow V3 and FS style favorites bar
+		//if (mMoreTextBox->getParent() == this)
+		//{
+		//	removeChild(mMoreTextBox);
+		//}
+		if (mMoreCtrl->getParent() == this)
 		{
-			removeChild(mMoreTextBox);
+			removeChild(mMoreCtrl);
 		}
+		// </FS:Ansariel>
 		int last_right_edge = 0;
 		//calculate new buttons offset
 		if (getChildList()->size() > 0)
@@ -805,13 +833,22 @@ void LLFavoritesBarCtrl::updateButtons()
 			S32 buttonHGap = button_params.rect.left; // default value
 			LLRect rect;
 			// Chevron button should stay right aligned
-			rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
-					mMoreTextBox->getRect().getWidth(),
-					mMoreTextBox->getRect().getHeight());
+			// <FS:Ansariel> Allow V3 and FS style favorites bar
+			//rect.setOriginAndSize(getRect().mRight - mMoreTextBox->getRect().getWidth() - buttonHGap, 0,
+			//		mMoreTextBox->getRect().getWidth(),
+			//		mMoreTextBox->getRect().getHeight());
 
-			addChild(mMoreTextBox);
-			mMoreTextBox->setRect(rect);
-			mMoreTextBox->setVisible(TRUE);
+			//addChild(mMoreTextBox);
+			//mMoreTextBox->setRect(rect);
+			//mMoreTextBox->setVisible(TRUE);
+			rect.setOriginAndSize(getRect().mRight - mMoreCtrl->getRect().getWidth() - buttonHGap, 0,
+					mMoreCtrl->getRect().getWidth(),
+					mMoreCtrl->getRect().getHeight());
+
+			addChild(mMoreCtrl);
+			mMoreCtrl->setRect(rect);
+			mMoreCtrl->setVisible(TRUE);
+			// </FS:Ansariel>
 		}
 		// Update overflow menu
 		LLToggleableMenu* overflow_menu = static_cast <LLToggleableMenu*> (mOverflowMenuHandle.get());
@@ -845,7 +882,10 @@ LLButton* LLFavoritesBarCtrl::createButton(const LLPointer<LLViewerInventoryItem
 	LLFavoriteLandmarkButton* fav_btn = NULL;
 
 	// do we have a place for next button + double buttonHGap + mMoreTextBox ?
-	if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
+	// <FS:Ansariel> Allow V3 and FS style favorites bar
+	//if(curr_x + width + 2*button_x_delta +  mMoreTextBox->getRect().getWidth() > getRect().mRight )
+	if(curr_x + width + 2*button_x_delta +  mMoreCtrl->getRect().getWidth() > getRect().mRight )
+	// </FS:Ansariel>
 	{
 		return NULL;
 	}
@@ -933,7 +973,10 @@ void LLFavoritesBarCtrl::showDropDownMenu()
 
 		menu->buildDrawLabels();
 		menu->updateParent(LLMenuGL::sMenuContainer);
-		menu->setButtonRect(mMoreTextBox->getRect(), this);
+		// <FS:Ansariel> Allow V3 and FS style favorites bar
+		//menu->setButtonRect(mMoreTextBox->getRect(), this);
+		menu->setButtonRect(mMoreCtrl->getRect(), this);
+		// </FS:Ansariel>
 		positionAndShowMenu(menu);
 	}
 }

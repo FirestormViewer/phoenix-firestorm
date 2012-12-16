@@ -49,7 +49,6 @@
 			<label name="favorites_bar_label" tool_tip="ランドマークをここにドラッグして、Second Lifeのお気に入りの場所に素早くアクセス！">
 				お気に入りバー
 			</label>
-			<chevron_button name=">>" />
 		</favorites_bar>
 
 	</layout_panel>

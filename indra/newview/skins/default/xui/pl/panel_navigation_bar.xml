@@ -25,7 +25,7 @@
 				<label name="favorites_bar_label" tool_tip="Przeciągnij swoje landmarki tutaj by szybko dostać się do swoich ulubionych miejsc w Second Life!">
 					Pasek Ulubionych
 				</label>
-				<chevron_button name=">>" tool_tip="Pokaż więcej Moich Ulubionych"/>
+				<chevron_button name="more_btn" tool_tip="Pokaż więcej Moich Ulubionych"/>
 			</favorites_bar>
 		</layout_panel>
 	</layout_stack>

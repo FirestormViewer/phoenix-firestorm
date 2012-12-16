@@ -17,7 +17,7 @@
 				<label name="favorites_bar_label" tool_tip="Faites glisser des repères ici pour un accès rapide à vos endroits favoris dans Second Life.">
 					Barre des Favoris
 				</label>
-				<more_button name="&gt;&gt;" tool_tip="Afficher d&apos;avantage de Favoris">
+				<more_button name="more_btn" tool_tip="Afficher d&apos;avantage de Favoris">
 					Plus ▼
 				</more_button>
 			</favorites_bar>

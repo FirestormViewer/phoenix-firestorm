@@ -17,7 +17,7 @@
 				<label name="favorites_bar_label" tool_tip="Arraste marcos para cá para acessar seus lugares preferidos do Second Life!">
 					Barra Destaques
 				</label>
-				<more_button name="&gt;&gt;" tool_tip="Mostrar mais favoritos">
+				<more_button name="more_btn" tool_tip="Mostrar mais favoritos">
 					Mais ▼
 				</more_button>
 			</favorites_bar>

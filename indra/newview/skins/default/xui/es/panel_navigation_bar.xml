@@ -25,7 +25,7 @@
 				<label name="favorites_bar_label" tool_tip="¡Arrastra hitos aquí para acceder más velozmente a tus lugares favoritos de Second Life!">
 					Barra de Favoritos
 				</label>
-				<chevron_button name="&gt;&gt;" tool_tip="Mostrar más de Mis favoritos"/>
+				<chevron_button name="more_btn" tool_tip="Mostrar más de Mis favoritos"/>
 			</favorites_bar>
 		</layout_panel>
 	</layout_stack>

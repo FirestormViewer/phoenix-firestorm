@@ -239,7 +239,8 @@
          width="102">
           Favorites Bar
         </label>
-        <chevron_button name=">>"
+        <chevron_button
+             name="more_btn"
              image_unselected="TabIcon_Close_Off"
              image_selected="TabIcon_Close_Off"
              tab_stop="false"
