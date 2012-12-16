@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_fs_search_legacy" title="Klassische Suche">
+	<floater.string name="string.location">
+		Ort: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Traffic: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Größe: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Mitglieder: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Gründer: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Alter: [AGE]
+	</floater.string>
+	<floater.string name="string.partner">
+		Partner: [PARTNER]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Anzeigen-Preis: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.slurl">
+		[SLURL]
+	</floater.string>
+	<floater.string name="string.duration">
+		Event-Dauer: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Gebühr: [COVERCHARGE]
+	</floater.string>
 	<tab_container name="ls_tabs">
 		<panel label="Leute" name="panel_ls_people"/>
 		<panel label="Gruppen" name="panel_ls_groups"/>
