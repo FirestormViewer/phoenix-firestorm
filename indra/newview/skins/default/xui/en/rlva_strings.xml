@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rlva_strings>
+<rlva_strings name="rlv_root">
 
-  <strings>
+  <strings name="rlv_strings">
     <!-- Primarily used when @showloc restricted -->
     <string name="hidden_generic">(Hidden)</string>
     <string name="hidden_parcel">(Hidden parcel)</string>
@@ -37,7 +37,7 @@
   </strings>
 
   <!-- Generic names used to replace resident names when @shownames restricted -->
-  <anonyms>
+  <anonyms name="rlv_anonyms">
     <anonym>A resident</anonym>
     <anonym>This resident</anonym>
     <anonym>That resident</anonym>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rlva_strings>
-  <strings>
+<rlva_strings name="rlv_root">
+  <strings name="rlv_strings">
     <string name="hidden_generic">(Ukryte)</string>
     <string name="hidden_parcel">(Ukryta działka)</string>
     <string name="hidden_region">(Ukryty region)</string>
@@ -20,7 +20,7 @@
       Rezydent, któremu zaproponowałeś/aś teleport ma uniemożliwione odbieranie ich na tą chwilę, spróbuj później.
     </string>
   </strings>
-  <anonyms>
+  <anonyms name="rlv_anonyms">
     <anonym>Rezydent</anonym>
     <anonym>Osoba</anonym>
     <anonym>Nieznajomy</anonym>
