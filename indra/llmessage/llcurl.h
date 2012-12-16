@@ -460,7 +460,12 @@ private:
 			}
 			else
 			{
-				return (U32)lhs < (U32)rhs;
+				// <FS:ND> 64 bit fix. do not truncate a pointer down to 32 bit
+
+				// return (U32)lhs < (U32)rhs;
+				return lhs < rhs;
+
+				// </FS:ND>
 			}
 		}
 	};
