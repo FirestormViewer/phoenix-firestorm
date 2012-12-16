@@ -967,16 +967,6 @@ BOOL LLPanelRegionOpenSettingsInfo::postBuild()
 	initCtrl("allow_parcel_windlight");
 	initCtrl("terrain_detail_scale");
 
-	childSetAction("force_draw_distance_help", onClickHelp, new std::string("HelpForceDrawDistance"));
-	childSetAction("max_inventory_items_transfer_help", onClickHelp, new std::string("HelpMaxInventoryItemsTransfer"));
-	childSetAction("max_groups_help", onClickHelp, new std::string("HelpMaxGroups"));
-	childSetAction("render_water_help", onClickHelp, new std::string("HelpRenderWater"));
-	childSetAction("allow_minimap_help", onClickHelp, new std::string("HelpAllowMinimap"));
-	childSetAction("allow_physical_prims_help", onClickHelp, new std::string("HelpAllowPhysicalPrims"));
-	childSetAction("enable_teen_mode_help", onClickHelp, new std::string("HelpEnableTeenMode"));
-	childSetAction("show_tags_help", onClickHelp, new std::string("HelpShowTags"));
-	childSetAction("allow_parcel_windlight_help", onClickHelp, new std::string("HelpAllowParcelWindLight"));
-
 	childSetAction("apply_ors_btn", onClickOrs, this);
 
 	refreshFromRegion(gAgent.getRegion());
