@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Ustawienia regionu" name="RegionSettings">
-	<spinner label="Domyślne pole widzenia" name="draw_distance" />
-	<check_box label="Wymuszaj pole widzenia" name="force_draw_distance" />
-	<spinner label="Maks. odległość przeciągania" name="max_drag_distance" />
-	<spinner label="Maksymalny rozmiar primy" name="max_prim_scale" />
-	<spinner label="Minimalny rozmiar primy" name="min_prim_scale" />
-	<spinner label="Maks. rozmiar primy fizycznej" name="max_phys_prim_scale" />
-	<spinner label="Maksymalny rozmiar otworu" name="max_hollow_size" />
-	<spinner label="Minimalny rozmiar otworu" name="min_hole_size" />
-	<spinner label="Maksymalna ilość części" name="max_link_count" />
-	<spinner label="Maks. ilość części fizycznych" name="max_link_count_phys" />
-	<spinner label="Maks. il. przedm. w transferze" name="max_inventory_items_transfer" />
-	<spinner label="Rozm. szczegółów terenu" name="terrain_detail_scale" />
-	<spinner label="Pokaż tagi" name="show_tags" />
-	<spinner label="Maksymalna ilość grup" name="max_groups" />
-	<check_box label="Renderuj wodę" name="render_water" />
-	<check_box label="Zezwól na mipmapy" name="allow_minimap" />
-	<check_box label="Zezwól na primy fizyczne" name="allow_physical_prims" />
-	<check_box label="Wymuś ograniczenia budowania" name="enforce_max_build" />
-	<check_box label="Zezwól na system WindLight" name="allow_parcel_windlight" />
+	<spinner label="Domyślne pole widzenia" name="draw_distance" tool_tip="Ustawia domyślne pole widzenia w regionie" />
+	<check_box label="Wymuszaj pole widzenia" name="force_draw_distance" tool_tip="Włącz blokowanie pola widzenia dla wszystkich agentów w tym regionie. UWAGA: To może spowodować lagi u użytkowników ze słabszymi komputerami. (Domyślnie: wyłączone)" />
+	<spinner label="Maks. odległość przeciągania" name="max_drag_distance" tool_tip="Maksymalna odległość, na jaką można przeciągać primy w tym regionie" />
+	<spinner label="Maksymalny rozmiar primy" name="max_prim_scale" tool_tip="Maksymalny rozmiar primy, jaki może być ustawiony w tym regionie" />
+	<spinner label="Minimalny rozmiar primy" name="min_prim_scale" tool_tip="Minimalny rozmiar primy, jaki może być ustawiony w tym regionie" />
+	<spinner label="Maks. rozmiar primy fizycznej" name="max_phys_prim_scale" tool_tip="Maksymalny rozmiar primy fizycznej, jaki może być ustawiony w tym regionie" />
+	<spinner label="Maksymalny rozmiar otworu" name="max_hollow_size" tool_tip="Maksymalny rozmiar otworu w primie, jaki może być ustawiony w tym regionie" />
+	<spinner label="Minimalny rozmiar otworu" name="min_hole_size" tool_tip="Minimalny rozmiar otworu w primie, jaki może być ustawiony w tym regionie" />
+	<spinner label="Maksymalna ilość części" name="max_link_count" tool_tip="Maksymalna ilość obiektów niefizycznych, jaka może zostać razem scalona w tym regionie" />
+	<spinner label="Maks. ilość części fizycznych" name="max_link_count_phys" tool_tip="Maksymalna ilość obiektów fizycznych, jaka może zostać razem scalona w tym regionie" />
+	<spinner label="Maks. il. przedm. w transferze" name="max_inventory_items_transfer" tool_tip="Ilość obiektów, jaka może zostać przekazana pomiędzy klientami za jednym razem. -1 ustawia nieograniczoną ilość. (Domyślnie: -1)" />
+	<spinner label="Rozm. szczegółów terenu" name="terrain_detail_scale" tool_tip="Rozmiar szczegółów terenu" />
+	<spinner label="Pokaż tagi" name="show_tags" tool_tip="Tryb tagów dla tego regionu. (Pokaż tagi = 2, pokaż przez jakiś czas = 1, zablokuj = 0)" />
+	<spinner label="Maksymalna ilość grup" name="max_groups" tool_tip="Ilość grup, do jakich agent może wstąpić. -1 ustawia nieograniczoną ilość grup. (Domyślnie: -1)" />
+	<check_box label="Renderuj wodę" name="render_water" tool_tip="Włącz renderowanie wody w tym regionie. (Domyślnie: Włączone)" />
+	<check_box label="Zezwól na mipmapy" name="allow_minimap" tool_tip="Zezwól na mipmapy w tym regionie. (Domyślnie: Włączone)" />
+	<check_box label="Zezwól na primy fizyczne" name="allow_physical_prims" tool_tip="Zezwól na tworzenie prim fizycznych w tym regionie. (Domyślnie: Włączone)" />
+	<check_box label="Wymuś ograniczenia budowania" name="enforce_max_build" tool_tip="Wymuś ograniczenia maksymalne budowania w tym regionie. (Domyślnie: Włączone)" />
+	<check_box label="Zezwól na system WindLight" name="allow_parcel_windlight" tool_tip="Włącz system WindLight na działkach w tym regionie. (Domyślnie: Włączone)" />
 	<button label="Zastosuj" name="apply_ors_btn" />
 </panel>
