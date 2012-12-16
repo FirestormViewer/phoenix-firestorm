@@ -68,6 +68,7 @@
 #include <string>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
 
 #define MIN_SEARCH_STRING_SIZE 2
 
@@ -730,8 +731,9 @@ void FSPanelSearchPeople::find()
 {
 	LLScrollListCtrl* search_results = getChild<LLScrollListCtrl>("search_results_people");
 
-	std::string text = FSFloaterSearch::filterShortWords(getChild<LLUICtrl>("people_edit")->getValue().asString());
-	if (text.size() == 0)
+	std::string text = getChild<LLUICtrl>("people_edit")->getValue().asString();
+	boost::trim(text);
+	if (text.size() <= MIN_SEARCH_STRING_SIZE)
 	{
 		search_results->setCommentText(LLTrans::getString("search_short"));
 		return;
