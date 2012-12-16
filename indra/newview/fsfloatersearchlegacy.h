@@ -29,6 +29,7 @@
 #define FS_FSFLOATERSEARCH_H
 
 #include "llfloater.h"
+#include "lliconctrl.h"
 #include "lltexteditor.h"
 #include "lltexturectrl.h"
 #include "llremoteparcelrequest.h"
@@ -54,18 +55,20 @@ public:
 	void groupNameUpdatedCallback(const LLUUID& id, const std::string& name, bool is_group);
 	void onSelectedItem(const LLUUID& selected_item, int type);
 	void onSelectedEvent(const S32 selected_event);
-	void sendParcelDetails(const LLParcelData& parcel_data);
-	void sendClassifiedDetails(LLAvatarClassifiedInfo*& c_info);
-	void sendAvatarDetails(LLAvatarData*& avatar_data);
-	void sendGroupDetails(LLGroupMgrGroupData*& group_data);
-	void sendEventDetails(U32 eventId,
-						  F64 eventEpoch,
-						  const std::string& eventDateStr,
-						  const std::string &eventName,
-						  const std::string &eventDesc,
-						  U32 eventDuration,
-						  U32 eventFlags,
-						  LLVector3d eventGlobalPos);
+	void displayParcelDetails(const LLParcelData& parcel_data);
+	void displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info);
+	void displayAvatarDetails(LLAvatarData*& avatar_data);
+	void displayGroupDetails(LLGroupMgrGroupData*& group_data);
+	void displayEventDetails(U32 eventId,
+							 F64 eventEpoch,
+							 const std::string& eventDateStr,
+							 const std::string &eventName,
+							 const std::string &eventDesc,
+							 const std::string &simName,
+							 U32 eventDuration,
+							 U32 eventFlags,
+							 U32 eventCover,
+							 LLVector3d eventGlobalPos);
 	void setLoadingProgress(bool started);
 	static std::string filterShortWords(std::string query_string);
 private:
@@ -75,6 +78,7 @@ private:
 	U32			mEventID;
 	
 	void resetVerbs();
+	void flushDetails();
 	void onBtnPeopleProfile();
 	void onBtnPeopleIM();
 	void onBtnPeopleFriend();
@@ -89,10 +93,14 @@ private:
 	LLAvatarPropertiesObserver* mAvatarPropertiesObserver;
 	LLGroupMgrObserver* mGroupPropertiesRequest;
 	
+	LLPanel*		mDetailsPanel;
 	LLTextEditor*	mDetailTitle;
 	LLTextEditor*	mDetailDesc;
+	LLTextEditor*	mDetailAux1;
+	LLTextEditor*	mDetailAux2;
+	LLTextEditor*	mDetailLocation;
 	LLTextureCtrl*	mDetailSnapshot;
-	LLPanel*		mDetailsPanel;
+	LLIconCtrl*		mDetailMaturity;
 };
 
 ///////////////////////////////

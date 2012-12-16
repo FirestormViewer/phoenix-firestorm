@@ -14,6 +14,41 @@
 	single_instance="true"
 	title="Legacy Search"
 	width="780">
+	<!-- Strings -->
+	<floater.string name="string.location">
+		Location: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Traffic: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Area: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Members: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Founder: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Age: [AGE]
+	</floater.string>
+	<floater.string name="string.partner">
+		Partner: [PARTNER]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Listing Price: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.slurl">
+		[SLURL]
+	</floater.string>
+	<floater.string name="string.duration">
+		Duration: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Cover: [COVERCHARGE]
+	</floater.string>
+	<!-- Tab time -->
 	<tab_container
 		layout="topleft"
 		follows="all"
@@ -73,7 +108,6 @@
 	</tab_container>
 	<!-- Details/Action Panes -->
 	<panel
-		
 		border="true"
 		follows="top|right|bottom"
 		height="510"
@@ -104,15 +138,78 @@
 		enabled="false"
 		fallback_image="Generic_Person_Large"
 		follows="left|top|right"
-		height="243"
+		height="210"
 		layout="topleft"
-		left="20"
+		left="43"
 		name="snapshot"
-		top_pad="2"
-		width="324"/>
+		top_pad="4"
+		width="280"/>
 		<text_editor
 		left="20"
-		top_pad="5"
+		top_pad="2"
+		height="16"
+		width="180"
+		layout="topleft"
+		follows="left|top|right"
+		name="aux1"
+		bg_visible="false"
+		border_visible="false"
+		h_pad="0"
+		v_pad="0"
+		word_wrap="true"
+		enabled="false"
+		max_length="117"
+		allow_scroll="false"
+		parse_urls="true"
+		value="Auxilary info field 1"/>
+		<text_editor
+		left_pad="4"
+		top_delta="0"
+		height="16"
+		width="140"
+		layout="topleft"
+		follows="left|top|right"
+		name="aux2"
+		bg_visible="false"
+		border_visible="false"
+		h_pad="0"
+		v_pad="0"
+		word_wrap="true"
+		enabled="false"
+		max_length="117"
+		allow_scroll="false"
+		parse_urls="true"
+		value="Auxilary info field 2"/>
+		<icon
+		follows="top|right"
+		height="16"
+		image_name="unknown"
+		layout="topleft"
+		left="20"
+		top_pad="2"
+		name="maturity_icon"
+		width="18" />
+		<text_editor
+		left_pad="4"
+		top_delta="0"
+		height="28"
+		width="302"
+		layout="topleft"
+		follows="left|top|right"
+		name="location"
+		bg_visible="false"
+		border_visible="false"
+		h_pad="0"
+		v_pad="0"
+		word_wrap="true"
+		enabled="false"
+		max_length="117"
+		allow_scroll="false"
+		parse_urls="true"
+		value="Location info field"/>
+		<text_editor
+		left="20"
+		top_pad="12"
 		height="154"
 		width="324"
 		layout="topleft"
@@ -123,6 +220,7 @@
 		h_pad="0"
 		v_pad="0"
 		word_wrap="true"
+		parse_urls="true"
 		enabled="false"
 		max_length="1000"
 		value="You unlock this door with the key of imagination. Beyond it is another dimension: a dimension of sound, a dimension of sight, a dimension of mind. You're moving into a land of both shadow and substance, of things and ideas; you've just crossed over into the Twilight Zone. What you are about to see is real; the litigants on the screen are not actors. They are genuine citizens who, having filed their claims in a real small claims court, have been persuaded to drop their suits there and have them settled here, in this forum... the People's Court."/>

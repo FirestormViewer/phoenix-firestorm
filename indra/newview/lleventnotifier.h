@@ -44,7 +44,7 @@ public:
 	bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName);
 // <FS:CR> FIRE-6310 - Legacy search - send more event info for legacy search to use
 	bool add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName,
-			 const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos);
+			 const std::string &eventDesc, std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos);
 // <FS:CR>
 	void add(U32 eventId);
 

@@ -34,6 +34,7 @@
 #include "llcallingcard.h"
 #include "llclassifiedflags.h"
 #include "llclassifiedstatsresponder.h"
+#include "lldateutil.h"
 #include "llqueryflags.h"
 #include "lleventflags.h"
 #include "lleventnotifier.h"
@@ -101,7 +102,7 @@ public:
 	{
 		if (mParent)
 		{
-			mParent->sendParcelDetails(parcel_data);
+			mParent->displayParcelDetails(parcel_data);
 		}
 		mParcelIDs.erase(parcel_data.parcel_id);
 		LLRemoteParcelInfoProcessor::getInstance()->removeObserver(parcel_data.parcel_id, this);
@@ -154,7 +155,7 @@ public:
 			LLAvatarData* avatar_data = static_cast<LLAvatarData*>(data);
 			if (avatar_data)
 			{
-				mParent->sendAvatarDetails(avatar_data);
+				mParent->displayAvatarDetails(avatar_data);
 				LLAvatarPropertiesProcessor::getInstance()->removeObserver(avatar_data->avatar_id, this);
 			}
 		}
@@ -163,7 +164,7 @@ public:
 			LLAvatarClassifiedInfo* c_info = static_cast<LLAvatarClassifiedInfo*>(data);
 			if(c_info)
 			{
-				mParent->sendClassifiedDetails(c_info);
+				mParent->displayClassifiedDetails(c_info);
 				LLAvatarPropertiesProcessor::getInstance()->removeObserver(c_info->classified_id, this);
 				std::string url = gAgent.getRegion()->getCapability("SearchStatRequest");
 				if (!url.empty())
@@ -214,7 +215,7 @@ public:
 		if (gc == GC_PROPERTIES)
 		{
 			LLGroupMgrGroupData* group_data = LLGroupMgr::getInstance()->getGroupData(mID);
-			mParent->sendGroupDetails(group_data);
+			mParent->displayGroupDetails(group_data);
 			LLGroupMgr::getInstance()->removeObserver(this);
 		}
 	}
@@ -312,12 +313,16 @@ BOOL FSFloaterSearch::postBuild()
 	childSetAction("map_btn", boost::bind(&FSFloaterSearch::onBtnMap, this));
 	resetVerbs();
 	
+	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
 	mDetailTitle =		getChild<LLTextEditor>("title");
 	mDetailDesc =		getChild<LLTextEditor>("desc");
+	mDetailAux1 =		getChild<LLTextEditor>("aux1");
+	mDetailAux2 =		getChild<LLTextEditor>("aux2");
+	mDetailLocation =	getChild<LLTextEditor>("location");
 	mDetailSnapshot =	getChild<LLTextureCtrl>("snapshot");
-	mDetailsPanel =		getChild<LLPanel>("panel_ls_details");
+	mDetailMaturity =	getChild<LLIconCtrl>("maturity_icon");
+	flushDetails();
 	
-	mParcelGlobal.setZero();
 	mDetailsPanel->setVisible(false);
 	
 	return TRUE;
@@ -329,6 +334,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, int type)
 	{
 		mSelectedID = selected_item;
 		resetVerbs();
+		flushDetails();
 		switch (type)
 		{
 			case 1:
@@ -347,6 +353,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, int type)
 				gGenericDispatcher.addHandler("classifiedclickthrough", &sClassifiedClickThrough);
 				break;
 			default:
+				llassert(type); // This is impossible!
 				break;
 		}
 	}
@@ -355,6 +362,7 @@ void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, int type)
 void FSFloaterSearch::onSelectedEvent(const S32 selected_event)
 {
 	resetVerbs();
+	flushDetails();
 	
 	gMessageSystem->newMessageFast(_PREHASH_EventInfoRequest);
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
@@ -365,30 +373,59 @@ void FSFloaterSearch::onSelectedEvent(const S32 selected_event)
 	gAgent.sendReliableMessage();
 }
 
-void FSFloaterSearch::sendParcelDetails(const LLParcelData& parcel_data)
+void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 {
+	S32 region_x;
+	S32 region_y;
+	S32 region_z;
+	region_x = llround(parcel_data.global_x) % REGION_WIDTH_UNITS;
+	region_y = llround(parcel_data.global_y) % REGION_WIDTH_UNITS;
+	region_z = llround(parcel_data.global_z);
+	// HACK: Flag 0x2 == adult region,
+	// Flag 0x1 == mature region, otherwise assume PG
+	if (parcel_data.flags & 0x2)
+		mDetailMaturity->setValue("Parcel_R_Dark");
+	else if (parcel_data.flags & 0x1)
+		mDetailMaturity->setValue("Parcel_M_Dark");
+	else
+		mDetailMaturity->setValue("Parcel_PG_Dark");
+	
+	LLStringUtil::format_map_t map;
+	map["DWELL"] = llformat("%.0f", (F64)parcel_data.dwell);
+	map["AREA"] = llformat("%d m²", parcel_data.actual_area);
+	map["LOCATION"] = llformat("%s (%d, %d, %d)",
+							   parcel_data.sim_name.c_str(), region_x, region_y, region_z);
+	
 	mParcelGlobal = LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z);
 	mDetailsPanel->setVisible(true);
+	mDetailMaturity->setVisible(true);
 	mDetailTitle->setValue(parcel_data.name);
 	mDetailDesc->setValue(parcel_data.desc);
+	mDetailAux1->setValue(getString("string.traffic", map));
+	mDetailAux2->setValue(getString("string.area", map));
+	mDetailLocation->setValue(getString("string.location", map));
 	mDetailSnapshot->setValue(parcel_data.snapshot_id);
-	//flags
-	//sim_name
-	//auction_id
-	//owner_id
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 }
 
-void FSFloaterSearch::sendAvatarDetails(LLAvatarData*& avatar_data)
+void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
 {
 	if (avatar_data)
 	{
+		LLStringUtil::format_map_t map;
+		map["AGE"] = LLDateUtil::ageFromDate(avatar_data->born_on, LLDate::now());
+		if (avatar_data->partner_id.notNull())
+		{
+			map["PARTNER"] = LLSLURL("agent", avatar_data->partner_id, "inspect").getSLURLString();
+			mDetailAux2->setValue(getString("string.partner", map));
+		}
+		
 		mDetailsPanel->setVisible(true);
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(avatar_data->about_text);
 		mDetailSnapshot->setValue(avatar_data->image_id);
-		//born_on
+		mDetailAux1->setValue(getString("string.age", map));
 		LLAvatarNameCache::get(avatar_data->avatar_id,
 							   boost::bind(&FSFloaterSearch::avatarNameUpdatedCallback,this, _1, _2));
 		childSetVisible("people_profile_btn", true);
@@ -398,51 +435,89 @@ void FSFloaterSearch::sendAvatarDetails(LLAvatarData*& avatar_data)
 	}
 }
 
-void FSFloaterSearch::sendGroupDetails(LLGroupMgrGroupData*& group_data)
+void FSFloaterSearch::displayGroupDetails(LLGroupMgrGroupData*& group_data)
 {
 	if (group_data)
-	{
+	{		
+		LLStringUtil::format_map_t map;
+		map["MEMBER_COUNT"] = llformat("%d",group_data->mMemberCount);
+		map["FOUNDER"] = LLSLURL("agent", group_data->mFounderID, "inspect").getSLURLString();
+		
 		mDetailsPanel->setVisible(true);
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(group_data->mCharter);
 		mDetailSnapshot->setValue(group_data->mInsigniaID);
+		mDetailAux1->setValue(getString("string.members", map));
+		mDetailAux2->setValue(getString("string.founder", map));
 		LLGroupData agent_gdatap;
 		bool is_member = gAgent.getGroupData(getSelectedID(),agent_gdatap) || gAgent.isGodlike();
-		bool join_btn_visible = !is_member && group_data->mOpenEnrollment;
+		bool join_btn_enabled = !is_member && group_data->mOpenEnrollment;
 		childSetVisible("group_profile_btn", true);
 		childSetVisible("group_message_btn", true);
 		childSetVisible("group_join_btn", true);
+		getChildView("group_join_btn")->setEnabled(join_btn_enabled);
 		getChildView("group_message_btn")->setEnabled(is_member);
-		getChildView("group_join_btn")->setEnabled(join_btn_visible);
 		gCacheName->getGroup(getSelectedID(),
 							 boost::bind(&FSFloaterSearch::groupNameUpdatedCallback, this, _1, _2, _3));
 	}
 }
 
-void FSFloaterSearch::sendClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
+void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 {
 	if (c_info)
 	{
+		if (c_info->flags & CLASSIFIED_FLAG_MATURE)
+			mDetailMaturity->setValue("Parcel_M_Dark");
+		else
+			mDetailMaturity->setValue("Parcel_PG_Dark");
+		LLStringUtil::format_map_t map;
+		map["LISTING_PRICE"] = llformat("L$%d", c_info->price_for_listing);
+		map["SLURL"] = LLSLURL("parcel", c_info->parcel_id, "about").getSLURLString();
+		
 		mDetailsPanel->setVisible(true);
+		mDetailMaturity->setVisible(true);
 		mParcelGlobal = c_info->pos_global;
 		mDetailTitle->setValue(c_info->name);
 		mDetailDesc->setValue(c_info->description);
 		mDetailSnapshot->setValue(c_info->snapshot_id);
-		//Price for Listing
-		//sim_name
+		mDetailAux1->setValue(getString("string.listing_price", map));
+		mDetailLocation->setValue(getString("string.slurl", map));
 		childSetVisible("teleport_btn", true);
 		childSetVisible("map_btn", true);
 	}
 }
 
-void FSFloaterSearch::sendEventDetails(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos)
+void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, const std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos)
 {
+	if (eventFlags == EVENT_FLAG_ADULT)
+		mDetailMaturity->setValue("Parcel_R_Dark");
+	else if (eventFlags == EVENT_FLAG_MATURE)
+		mDetailMaturity->setValue("Parcel_M_Dark");
+	else
+		mDetailMaturity->setValue("Parcel_PG_Dark");
+	S32 region_x;
+	S32 region_y;
+	S32 region_z;
+	region_x = llround(eventGlobalPos.mdV[VX]) % REGION_WIDTH_UNITS;
+	region_y = llround(eventGlobalPos.mdV[VY]) % REGION_WIDTH_UNITS;
+	region_z = llround(eventGlobalPos.mdV[VZ]);
+	LLStringUtil::format_map_t map;
+	map["DURATION"] = llformat("%d:%.2d", eventDuration / 60, eventDuration % 60);
+	map["LOCATION"] = llformat("%s (%d, %d, %d)", simName.c_str(), region_x, region_y, region_z);
+	if (eventCover > 0)
+	{
+		map["COVERCHARGE"] = llformat("L$%d", eventCover);
+		mDetailAux2->setValue(getString("string.covercharge", map));
+	}
+	
 	mParcelGlobal = eventGlobalPos;
 	mEventID = eventId;
 	mDetailsPanel->setVisible(true);
+	mDetailMaturity->setVisible(true);
 	mDetailTitle->setValue(eventName);
 	mDetailDesc->setValue(eventDesc);
-	mDetailSnapshot->setValue(LLSD());
+	mDetailAux1->setValue(getString("string.duration", map));
+	mDetailLocation->setValue(getString("string.location", map));
 	childSetVisible("teleport_btn", true);
 	childSetVisible("map_btn", true);
 	childSetVisible("event_reminder_btn", true);
@@ -491,6 +566,18 @@ void FSFloaterSearch::resetVerbs()
 	childSetVisible("event_reminder_btn", false);
 	childSetVisible("teleport_btn", false);
 	childSetVisible("map_btn", false);
+}
+
+void FSFloaterSearch::flushDetails()
+{
+	mDetailTitle->setValue("");
+	mDetailDesc->setValue("");
+	mDetailAux1->setValue("");
+	mDetailAux2->setValue("");
+	mDetailLocation->setValue("");
+	mDetailSnapshot->setValue(LLSD());
+	mDetailMaturity->setVisible(false);
+	mParcelGlobal.setZero();
 }
 
 void FSFloaterSearch::onBtnPeopleProfile()

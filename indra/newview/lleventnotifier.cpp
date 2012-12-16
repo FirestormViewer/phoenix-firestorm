@@ -182,7 +182,7 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 	return true;
 }
 // <FS:CR> FIRE-6310 - Legacy Search
-bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, U32 eventDuration, U32 eventFlags, LLVector3d eventGlobalPos)
+bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventDateStr, const std::string &eventName, const std::string &eventDesc, std::string &simName, U32 eventDuration, U32 eventFlags, U32 eventCover, LLVector3d eventGlobalPos)
 {
 	if (isEventNotice)
 	{
@@ -202,7 +202,9 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 	{
 		FSFloaterSearch* legacy_search = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search_legacy");
 		if (legacy_search) // The floater exists, send the results
-			legacy_search->sendEventDetails(eventId, eventEpoch, eventDateStr, eventName, eventDesc, eventDuration, eventFlags, eventGlobalPos);
+			legacy_search->displayEventDetails(eventId, eventEpoch, eventDateStr, eventName, eventDesc, simName, eventDuration, eventFlags, eventCover, eventGlobalPos);
+		else
+			llwarns << "Discarding EventID " << eventId << ". FSFloaterSearch does not exist!" << llendl;
 	}
 	return true;
 }
@@ -231,11 +233,13 @@ void LLEventNotifier::processEventInfoReply(LLMessageSystem *msg, void **)
 	U32 event_id;
 	std::string event_name;
 	std::string eventd_date;
+	std::string simname;
 	U32 event_time_utc;
 // <FS:CR> FIRE-6310 - Legacy Search - Gather the info we need for legacy results too...
-	std::string event_desc;
 	U32 event_duration;
 	U32 event_flags;
+	U32 event_cover;
+	std::string event_desc;
 	LLVector3d event_global_pos;
 // </FS:CR>
 	
@@ -248,11 +252,13 @@ void LLEventNotifier::processEventInfoReply(LLMessageSystem *msg, void **)
 	msg->getString("EventData", "Desc", event_desc);
 	msg->getU32("EventData", "Duration", event_duration);
 	msg->getU32("EventData", "EventFlags", event_flags);
+	msg->getU32("EventData", "Cover", event_cover);
 	msg->getVector3d("EventData", "GlobalPos", event_global_pos);
+	msg->getString("EventData", "SimName", simname);
 	
 	//gEventNotifier.add(event_id, (F64)event_time_utc, eventd_date, event_name);
 	gEventNotifier.add(event_id, (F64)event_time_utc, eventd_date, event_name,
-					   event_desc, event_duration, event_flags, event_global_pos);
+					   event_desc, simname, event_duration, event_flags, event_cover, event_global_pos);
 // </FS:CR>
 }	
 	
