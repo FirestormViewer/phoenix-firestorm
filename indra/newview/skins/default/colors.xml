@@ -137,6 +137,9 @@
   <color
       name="LtOrange"
       value="1 .85 .73 1" />
+  <color
+      name="LtRed"
+      value="1 0.2 0.2 1" />
 
   <!-- Skin and Theme Colors -->
 
@@ -219,7 +222,8 @@
 	<color
 	 name="Titanium_0"
 	 value="0.3 0.3 0.3 0" />
-
+  <color
+      name="Red_80"
       value="1 0 0 0.8" />
   <color
       name="Green_80"
