@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rlva_strings name="rlv_root">
+  <strings name="rlv_strings">
+    <!-- Primarily used when @showloc restricted -->
+    <string name="hidden_generic">(Versteckt)</string>
+    <string name="hidden_parcel">(Versteckte Parzelle)</string>
+    <string name="hidden_region">(Versteckte Region)</string>
+
+    <!-- Received/sent IMs will be replaced by the matching string when @recvim/sendim restricted -->
+    <string name="blocked_recvim">*** IM wurde von deinem Viewer blockiert.</string>
+    <string name="blocked_sendim">*** IM wurde vom Viewer des Senders blockiert.</string>
+
+    <!-- Shown as notifications -->
+    <string name="blocked_generic">Aktion konnte aufgrund von RLV-Einschränkungen nicht durchgeführt werden.</string>
+    <string name="blocked_permattach">Der Versuch „[OBJECT]“ anzuhängen wurde aufgrund von RLV-Einschränkungen verweigert.</string>
+    <string name="blocked_permteleport">„[OBJECT]“ wurde aufgrund von RLV-Einschränkungen verweigert, dich zu teleportieren.</string>
+    <string name="blocked_startim">IM-Sitzung mit [RECIPIENT] konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
+    <string name="blocked_startconf">Konferenz mit [RECIPIENT] konnte aufgrund von RLV-Einschränkungen nicht gestartet werden.</string>
+    <string name="blocked_teleport">Teleport konnte aufgrund von RLV-Einschränkungen nicht initialisiert werden.</string>
+    <string name="blocked_viewxxx">[TYPE] konnte aufgrund von RLV-Einschränkungen nicht geöffnet werden.</string>
+
+    <!-- Sent as "Busy" messages to the remote party -->
+	<!-- FS:Ansariel: Leave them in English because they are sent out to others and we don't know their language -->
+  </strings>
+</rlva_strings>
