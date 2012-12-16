@@ -18,7 +18,7 @@
 	 max_val="10000"
 	 min_val="-1"
 	 name="draw_distance"
-	 tool_tip="Sets the default regional draw distance"
+	 tool_tip="Default regional draw distance"
 	 top="10"
 	 width="250"/>
 	<check_box
@@ -27,7 +27,7 @@
 	 label="Force Draw Distance"
 	 left="10"
 	 name="force_draw_distance"
-	 tool_tip="If this box is checked, draw distance will be locked for all people in the region. Note: This will lag people on older machines. (Default: Off)"
+	 tool_tip="Enables locking draw distance for all agents in this region. NOTE: This may lag users with lower-performance computers. (Default: Off)"
 	 top_delta="22"
 	 width="80"/>
 	<spinner
@@ -40,7 +40,7 @@
 	 max_val="10000"
 	 min_val="0"
 	 name="max_drag_distance"
-	 tool_tip="Sets the maximum distance a prim can be dragged in this region"
+	 tool_tip="Maximum distance a prim can be dragged in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -53,7 +53,7 @@
 	 max_val="10000"
 	 min_val="0"
 	 name="max_prim_scale"
-	 tool_tip="Sets the maximum size a prim can be made in this region"
+	 tool_tip="Maximum size a prim can be made in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -66,7 +66,7 @@
 	 max_val="10000"
 	 min_val="0"
 	 name="min_prim_scale"
-	 tool_tip="Sets the minumum size a prim can be made in this region"
+	 tool_tip="Minumum size a prim can be made in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -79,7 +79,7 @@
 	 max_val="10000"
 	 min_val="0"
 	 name="max_phys_prim_scale"
-	 tool_tip="Sets the maximum size a physical prim can be made in this region"
+	 tool_tip="Maximum size a physical prim can be made in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -92,7 +92,7 @@
 	 max_val="100"
 	 min_val="0"
 	 name="max_hollow_size"
- 	 tool_tip="Sets the maximum size a hole can be made in a prim created in this region"
+ 	 tool_tip="Maximum size a hole can be made in a prim created in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -105,7 +105,7 @@
 	 max_val="100"
 	 min_val="0"
 	 name="min_hole_size"
-	 tool_tip="Sets the minimum size a hole can be made in a prim created in this region"
+	 tool_tip="Minimum size a hole can be made in a prim created in this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -118,7 +118,7 @@
 	 max_val="100000"
 	 min_val="0"
 	 name="max_link_count"
-	 tool_tip="Sets the maximum amount of objects that can be linked in a non-physical linkset for the region"
+	 tool_tip="Maximum amount of objects that can be linked in a non-physical linkset for this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -131,7 +131,7 @@
 	 max_val="100000"
 	 min_val="0"
 	 name="max_link_count_phys"
-	 tool_tip="Sets the maximum amount of objects that can be linked in a physical linkset for the region"
+	 tool_tip="Maximum amount of objects that can be linked in a physical linkset for this region"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -144,7 +144,7 @@
 	 max_val="10000"
 	 min_val="-1"
 	 name="max_inventory_items_transfer"
-	 tool_tip="This box controls how many objects can be transfered between clients at a time. -1 sets no limit on the amount of objects. (Default: -1)"
+	 tool_tip="Number of objects that may be transfered between clients at once. -1 sets unlimited number of objects. (Default: -1)"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -157,7 +157,7 @@
 	 max_val="10000"
 	 min_val="-1"
 	 name="terrain_detail_scale"
-	 tool_tip="Sets the region's terrain detail scale"
+	 tool_tip="Region terrain detail scale"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -170,7 +170,7 @@
 	 max_val="2"
 	 min_val="0"
 	 name="show_tags"
-	 tool_tip="This box controls how avatar name tags are shown in this sim. 2 sets tags to always be shown. 1 sets tags to disappear after some time. 0 blocks the viewing of name tags."
+	 tool_tip="Nametag mode for this region. (Show nametags = 2, Show nametags briefly = 1, Blocks nametags = 0)"
 	 top_delta="22"
 	 width="250"/>
 	<spinner
@@ -183,7 +183,7 @@
 	 max_val="1000"
 	 min_val="-1"
 	 name="max_groups"
-	 tool_tip="This box controls how many groups an agent can join. -1 sets no limit on the amount of groups. (Default: -1)"
+	 tool_tip="Number of groups an agent can join. -1 sets unlimited number of groups. (Default: -1)"
 	 top_delta="22"
 	 width="250"/>
 	<check_box
@@ -192,7 +192,7 @@
 	 label="Render Water"
 	 left="10"
 	 name="render_water"
-	 tool_tip="If this box is checked, water will not be shown for users in the region. (Default: Off)"
+	 tool_tip="Enable water rendering in the region. (Default: On)"
 	 top_delta="20"
 	 width="250"/>
 	<check_box
@@ -201,7 +201,7 @@
 	 label="Allow Minimap"
 	 left="10"
 	 name="allow_minimap"
-	 tool_tip="If this box is checked, the minimap will be disabled for users in the region. (Default: Off)"
+	 tool_tip="Allow the minimap in this region. (Default: On)"
 	 top_delta="18"
 	 width="250"/>
 	<check_box
@@ -210,7 +210,7 @@
 	 label="Allow Physical Prims"
 	 left="10"
 	 name="allow_physical_prims"
-	 tool_tip="If this box is checked, physical prims may not be created in the region. (Default: On)"
+	 tool_tip="Allow physical prims to be created in this region. (Default: On)"
 	 top_delta="18"
 	 width="250"/>
 	<check_box
@@ -219,7 +219,7 @@
 	 label="Enforce Max Build Constraints"
 	 left="10"
 	 name="enforce_max_build"
-	 tool_tip="If this box is checked, the region will enforce maximum build constraints. (Default: On)"
+	 tool_tip="Enforce maximum build constraints in this region. (Default: On)"
 	 top_delta="18"
 	 width="250"/>
 	<check_box
@@ -228,7 +228,7 @@
 	 label="Allow Parcel WindLight"
 	 left="10"
 	 name="allow_parcel_windlight"
-	 tool_tip="If this box is checked, setting WindLight settings in parcels will be enabled. (Default: On)"
+	 tool_tip="Enable WindLight for parcels in this region. (Default: On)"
 	 top_delta="18"
 	 width="250"/>
 	<button
