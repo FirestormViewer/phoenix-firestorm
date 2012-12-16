@@ -44,7 +44,7 @@ inline size_t nd_min( size_t a1, size_t a2 )
 	return a2;
 }
 
-namespace ndMemStats
+namespace ndMallocStats
 {
 	U32 sStats[17];
 
@@ -135,7 +135,7 @@ namespace OSAllocator
 
 	void *malloc( size_t aSize, size_t aAlign )
 	{
-		ndMemStats::addStat( aSize );
+		ndMallocStats::addStat( aSize );
 
 		aSize += sizeof(uintptr_t)*2;
 		aSize += aAlign;
@@ -299,7 +299,7 @@ namespace ndMemoryPool
 
 	void startUp()
 	{
-		ndMemStats::startUp();
+		ndMallocStats::startUp();
 
 		allocPage( 0 );
 		sActive = true;
@@ -307,7 +307,7 @@ namespace ndMemoryPool
 
 	void tearDown()
 	{
-		ndMemStats::tearDown();
+		ndMallocStats::tearDown();
 
 		sActive = false;
 
@@ -445,7 +445,7 @@ namespace ndMemoryPool
 				aOut << " " << i << "/" << dPercentages[i];
 		}
 		aOut << std::endl;
-		ndMemStats::dumpStats( aOut );
+		ndMallocStats::dumpStats( aOut );
 	}
 
 	void tryShrink( )
@@ -459,23 +459,23 @@ namespace ndMemoryPool
 {
 	void startUp()
 	{
-		ndMemStats::startUp();
+		ndMalloStats::startUp();
 	}
 
 	void tearDown()
 	{
-		ndMemStats::tearDown();
+		ndMallocStats::tearDown();
 	}
 
 	void *malloc( size_t aSize, size_t aAlign )
 	{
-		ndMemStats::addStat( aSize );
+		ndMallocStats::addStat( aSize );
 		return OSAllocator::malloc( aSize, aAlign );
 	}
 
 	void *realloc( void *ptr, size_t aSize, size_t aAlign )
 	{
-		ndMemStats::addStat( aSize );
+		ndMalloStats::addStat( aSize );
 		return OSAllocator::realloc( ptr, aSize, aAlign );
 	}
 
@@ -486,7 +486,7 @@ namespace ndMemoryPool
 
 	void dumpStats( std::ostream &aOut )
 	{
-		ndMemStats::dumpStats( aOut );
+		ndMalloStats::dumpStats( aOut );
 	}
 
 	void tryShrink()

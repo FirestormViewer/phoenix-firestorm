@@ -25,6 +25,16 @@
 #include "llpreprocessor.h"
 #include <ostream>
 
+namespace ndMallocStats
+{
+	void startUp();
+	void tearDown();
+
+	void addStat( size_t aSize );
+	void dumpStats( std::ostream &aOut );
+}
+
+
 namespace ndMemoryPool
 {
 	LL_COMMON_API void startUp();
