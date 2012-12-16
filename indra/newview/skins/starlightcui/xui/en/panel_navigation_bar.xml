@@ -158,11 +158,10 @@
 	     name="location_combo"
 	     top="0"
 	     width="587">
-
-	    </location_input>
          <combo_list
 		 height="24"
          mouse_wheel_opaque="true"/>
+	    </location_input>
 
 	</layout_panel>
 	<!-- Contains the location bar -->
