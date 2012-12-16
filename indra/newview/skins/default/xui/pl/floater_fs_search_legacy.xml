@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="floater_fs_search_legacy" title="Klasyczne wyszukiwanie">
+	<floater.string name="string.location">
+		Miejsce: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Ruch: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Obszar: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Członków: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Założył: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Wiek: [AGE]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Cena wyświetlenia: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.duration">
+		Czas trwania: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Opłata wstępu: [COVERCHARGE]
+	</floater.string>
 	<tab_container name="ls_tabs">
 		<panel label="Ludzie" name="panel_ls_people" />
 		<panel label="Grupy" name="panel_ls_groups" />
@@ -11,6 +38,9 @@
 	</tab_container>
 	<panel name="panel_ls_details">
 		<text_editor name="title" value="Nazwa niezdefiniowana" />
+		<text_editor name="aux1" value="Dodatkowe pole informacji 1" />
+		<text_editor name="aux2" value="Dodatkowe pole informacji 2" />
+		<text_editor name="location" value="Informacje o lokalizacji" />
 		<button label="Otwórz profil" name="people_profile_btn" />
 		<button label="Wyślij wiadomość" name="people_message_btn" />
 		<button label="Nowy znajomy/a" name="people_friend_btn" />

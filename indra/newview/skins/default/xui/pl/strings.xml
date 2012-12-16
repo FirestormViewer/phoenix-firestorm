@@ -1444,6 +1444,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="InvFolder favorite">
 		Ulubione
 	</string>
+	<string name="InvFolder favorites">
+		Ulubione
+	</string>
 	<string name="InvFolder Current Outfit">
 		Obecny strój
 	</string>

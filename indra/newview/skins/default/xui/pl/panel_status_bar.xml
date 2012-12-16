@@ -25,6 +25,5 @@
 		<text name="TimeText" tool_tip="Obecny czas (Pacyficzny)"/>
 		<button name="stream_toggle_btn" tool_tip="Odtwórz/Zatrzymaj strumień audio tej działki"/>
 		<button name="media_toggle_btn" tool_tip="Odtwórz/Zatrzymaj wszystkie media (Muzyka, Wideo, WWW)"/>
-		<button name="volume_btn" tool_tip="Regulacja głośności"/>
 	</panel>
 </panel>

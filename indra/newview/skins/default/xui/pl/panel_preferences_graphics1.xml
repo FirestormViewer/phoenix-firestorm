@@ -120,7 +120,6 @@
 				Rendering tekstur:
 			</text>
 			<check_box label="Ładuj tekstury przez HTTP" tool_tip="Zaznacz tą opcję, aby ściągać tekstury poprzez protokół HTTP - odznacz ją, jeśli masz problemy z wyświetlaniem i chcesz wczytywać tekstury w taki sam sposób, jak przed lipcem 2010: na Viewerze 1." name="TexturesHTTP"/>
-			<slider label="Maks. ilość jednoczesnych wywołań HTTP GET" name="HTTPFetchMaxRequests"/>
 			<text name="TextureDetailLabel">
 				Detale tekstur:
 			</text>
