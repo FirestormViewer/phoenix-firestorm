@@ -59,7 +59,10 @@ void LLAgentUI::buildSLURL(LLSLURL& slurl, const bool escaped /*= true*/)
       LLViewerRegion *regionp = gAgent.getRegion();
       if (regionp)
       {
-		  return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+// <FS:CR> Aurora-sim var region teleports
+		  //return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionGlobal());
+		  return_slurl = LLSLURL(regionp->getName(), gAgent.getPositionAgent());
+// </FS:CR>
       }
 	slurl = return_slurl;
 }

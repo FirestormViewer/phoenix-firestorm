@@ -664,8 +664,14 @@ void LLFloaterWorldMap::trackLocation(const LLVector3d& pos_global)
 	}
 	
 	std::string sim_name = sim_info->getName();
-	F32 region_x = (F32)fmod( pos_global.mdV[VX], (F64)REGION_WIDTH_METERS );
-	F32 region_y = (F32)fmod( pos_global.mdV[VY], (F64)REGION_WIDTH_METERS );
+// <FS:CR> Aurora-sim var region teleports
+	//F32 region_x = (F32)fmod( pos_global.mdV[VX], (F64)REGION_WIDTH_METERS );
+	//F32 region_y = (F32)fmod( pos_global.mdV[VY], (F64)REGION_WIDTH_METERS );
+	U32 locX, locY;
+	from_region_handle(sim_info->getHandle(), &locX, &locY);
+	F32 region_x = pos_global.mdV[VX] - locX;
+	F32 region_y = pos_global.mdV[VY] - locY;
+// </FS:CR>
 	std::string full_name = llformat("%s (%d, %d, %d)", 
 									 sim_name.c_str(), 
 									 llround(region_x), 
@@ -777,7 +783,10 @@ void LLFloaterWorldMap::updateLocation()
 				
 				// Figure out where user is
 				// Set the current SLURL
-				mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionGlobal());
+// <FS:CR> Aurora-sim var region teleports
+				//mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionGlobal());
+				mSLURL = LLSLURL(agent_sim_name, gAgent.getPositionAgent());
+// </FS:CR>
 			}
 		}
 		

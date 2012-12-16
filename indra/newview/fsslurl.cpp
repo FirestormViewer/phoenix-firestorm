@@ -445,11 +445,24 @@ LLSLURL::LLSLURL(const std::string& grid,
 {
 	mGrid = grid;
 	mRegion = region;
-	S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
-	S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
-	S32 z = llround( (F32)position[VZ] );
+// <FS:CR> FIRE-8063 - Aurora sim var region teleports
+	//S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
+	//S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
+	//S32 z = llround( (F32)position[VZ] );
+	mPosition = position;
+// </FS:CR>
 	mType = LOCATION;
-	mPosition = LLVector3(x, y, z);
+// <FS:CR> FIRE-8063 - Aurora sim var region teleports
+	//mPosition = LLVector3(x, y, z);
+
+	if(!LLGridManager::getInstance()->isInAuroraSim())
+	{
+		S32 x = llround( (F32)fmod( position[VX], (F32)REGION_WIDTH_METERS ) );
+		S32 y = llround( (F32)fmod( position[VY], (F32)REGION_WIDTH_METERS ) );
+		S32 z = llround( (F32)position[VZ] );
+		mPosition = LLVector3(x, y, z);
+	}
+// </FS:CR>
 }
 
 
@@ -470,10 +483,17 @@ LLSLURL::LLSLURL(const std::string& grid,
 				bool hyper)
 : mHypergrid(hyper)
 {
-  *this = LLSLURL(grid,
-		  region, LLVector3(global_position.mdV[VX],
-				    global_position.mdV[VY],
-				    global_position.mdV[VZ]));
+// <FS:CR> Aurora-sim var region teleports
+	//*this = LLSLURL(grid,
+	//	  region, LLVector3(global_position.mdV[VX],
+	//			    global_position.mdV[VY],
+	//			    global_position.mdV[VZ]));
+	S32 x = llround( (F32)fmod( (F32)global_position.mdV[VX], (F32)REGION_WIDTH_METERS ) );
+	S32 y = llround( (F32)fmod( (F32)global_position.mdV[VY], (F32)REGION_WIDTH_METERS ) );
+	S32 z = llround( (F32)global_position.mdV[VZ] );
+
+  *this = LLSLURL(grid, region, LLVector3(x, y, z));
+// </FS:CR>
 }
 
 // create a slurl from a global position
