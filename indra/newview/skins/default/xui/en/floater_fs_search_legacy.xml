@@ -110,7 +110,7 @@
 	<panel
 		border="true"
 		follows="top|right|bottom"
-		height="510"
+		height="508"
 		layout="topleft"
 		left="412"
 		top="80"
