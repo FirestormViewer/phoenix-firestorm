@@ -720,11 +720,11 @@ void  LLPrivateMemoryPool::LLMemoryBlock::freeMem(void* addr)
 {
 	//bit index
 	//	U32 idx = ((U32)addr - (U32)mBuffer - mDummySize) / mSlotSize ;
-	//<ND> 64 bit fix
+	// <FS:ND> 64 bit fix
 	unsigned char *p1 = reinterpret_cast<unsigned char*>(addr);
 	unsigned char *p2 = reinterpret_cast<unsigned char*>(mBuffer);
 	U32 idx = ( p1 - p2 - mDummySize) / mSlotSize ;
-	//</ND>
+	// </FS:ND>
 
 	U32* bits = &mUsageBits ;
 	if(idx >= 32)
@@ -932,12 +932,12 @@ bool LLPrivateMemoryPool::LLMemoryChunk::empty()
 bool LLPrivateMemoryPool::LLMemoryChunk::containsAddress(const char* addr) const
 {
 	//return (U32)mBuffer <= (U32)addr && (U32)mBuffer + mBufferSize > (U32)addr ;
-	//<ND> 64 bit fix
+	// <FS:ND> 64 bit fix
 	unsigned char const *pBuffer = reinterpret_cast<unsigned char const*>( mBuffer );
 	unsigned char const *pAddr = reinterpret_cast<unsigned char const*>( addr );
 
 	return pBuffer <= pAddr && pBuffer + mBufferSize > pAddr ;
-	//</ND>
+	// </FS:ND>
 }
 
 //debug use
@@ -1298,12 +1298,12 @@ void LLPrivateMemoryPool::LLMemoryChunk::addToAvailBlockList(LLMemoryBlock* blk)
 U32 LLPrivateMemoryPool::LLMemoryChunk::getPageIndex(void * addr) // <ND/> 64 bit fix
 {
 	//	return (addr - (U32)mDataBuffer) / mMinBlockSize ;
-	//<ND> 64 bit fix
+	// <FS:ND> 64 bit fix
 	unsigned char *pAddr = reinterpret_cast< unsigned char* >( addr );
 	unsigned char *pBuffer = reinterpret_cast< unsigned char* >( mDataBuffer );
 
 	return (pAddr - pBuffer) / mMinBlockSize ;
-	//</ND>
+	// </FS:ND>
 }
 
 //for mAvailBlockList
@@ -1642,12 +1642,12 @@ void LLPrivateMemoryPool::removeChunk(LLMemoryChunk* chunk)
 U16 LLPrivateMemoryPool::findHashKey(const char* addr)
 {
 	// return (((U32)addr) / CHUNK_SIZE) % mHashFactor ;
-	//<ND> 64 bit fix
+	// <FS:ND> 64 bit fix
 	unsigned char const *pAddr = reinterpret_cast< unsigned char const *>( addr );
 	U64 nAddr = reinterpret_cast<U64>(pAddr);
 
 	return ( nAddr / CHUNK_SIZE) % mHashFactor ;
-	//</ND>
+	// </FS:ND>
 }
 
 LLPrivateMemoryPool::LLMemoryChunk* LLPrivateMemoryPool::findChunk(const char* addr)

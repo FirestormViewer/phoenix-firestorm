@@ -701,11 +701,11 @@ void LLSDXMLParser::Impl::endElementHandler(const XML_Char* name)
 		return;
 	}
 	
-	// <ND>: we've saved the element we need in a stack, so we can avoid readElement()
+	// <FS:ND>: we've saved the element we need in a stack, so we can avoid readElement()
 	// Element element = readElement(name);
 	Element element = mStackElements.top(); //readElement(name);
 	mStackElements.pop();
-	// </ND>
+	// </FS:ND>
 
 	switch (element)
 	{

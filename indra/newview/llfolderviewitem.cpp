@@ -1252,7 +1252,7 @@ bool LLFolderViewItem::isInSelection() const
 {
 	return mIsSelected || (mParentFolder && mParentFolder->isInSelection());
 }
-// <ND> Don't bother with unneeded tooltips in inventor
+// <FS:ND> Don't bother with unneeded tooltips in inventor
 
 BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
 {
@@ -1276,7 +1276,7 @@ BOOL LLFolderViewItem::handleToolTip(S32 x, S32 y, MASK mask)
 
 	return FALSE;
 }
-// </ND>
+// </FS:ND>
 
 ///----------------------------------------------------------------------------
 /// Class LLFolderViewFolder
@@ -2445,14 +2445,14 @@ void LLFolderViewFolder::setOpen(BOOL openitem)
 
 void LLFolderViewFolder::setOpenArrangeRecursively(BOOL openitem, ERecurseType recurse)
 {
-	// <ND> JIT Folders
+	// <FS:ND> JIT Folders
 	if( !mIsPopulated && mParentPanel )
 	{
 		lldebugs << "Lazy populating " << getName() << llendl;
 		mParentPanel->addSubItems( mFolderId, 0 );
 		mIsPopulated = true;
 	}
-	// </ND>
+	// </FS:ND>
 
 	BOOL was_open = mIsOpen;
 	mIsOpen = openitem;

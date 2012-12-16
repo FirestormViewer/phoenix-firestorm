@@ -170,10 +170,10 @@ void LLPluginProcessParent::init(const std::string &launcher_filename, const std
 	mDebug = debug;
 	setState(STATE_INITIALIZED);
 
-	// <ND> FIRE-3877; Port 0 = choose one for use as default. This was the standard behaviour of LLPluginProcessParent and the reasonable thing to do.
+	// <FS:ND> FIRE-3877; Port 0 = choose one for use as default. This was the standard behaviour of LLPluginProcessParent and the reasonable thing to do.
 	mPortToBind = 0;
 	mBindRetries = 0;
-	// </ND>
+	// </FS:ND>
 }
 
 bool LLPluginProcessParent::accept()
@@ -332,7 +332,7 @@ void LLPluginProcessParent::idle(void)
 						
 						killSockets();
 
-						// <ND> FIRE-3877;  Some drivers, eg bigfoot. Refuse to tell us which port is used when the socket is bound on port 0 (= choose a free port).
+						// <FS:ND> FIRE-3877;  Some drivers, eg bigfoot. Refuse to tell us which port is used when the socket is bound on port 0 (= choose a free port).
 						// If not out of retry attempts, choose a random port between 5500 - 60000 and try again.
 						if( mBindRetries > 10 ) //In theory we could have bad luck and randomly draft already used ports each try. In practice we already deal with a buggy driver anyway. So just fail instead hogging resources in a loop.
 							errorState();
@@ -343,7 +343,7 @@ void LLPluginProcessParent::idle(void)
 							setState( STATE_INITIALIZED );
 							idle_again = true; // Just try a new loop to bind the socket
 						}
-						// </ND>
+						// </FS:ND>
 
 						break;
 					}

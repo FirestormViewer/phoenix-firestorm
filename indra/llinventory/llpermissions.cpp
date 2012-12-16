@@ -570,10 +570,10 @@ void LLPermissions::unpackMessage(LLMessageSystem* msg, const char* block, S32 b
 // File support
 //
 
-// <ND>
+// <FS:ND>
 void splitCacheDescOrName( char *aBuffer, char *&aJunk, char *&aValue );
 int splitCacheLine( char *aBuffer, char *&aKeyword, char *&aValue );
-// </ND>
+// </FS:ND>
 
 BOOL LLPermissions::importFile(LLFILE* fp)
 {
@@ -584,16 +584,19 @@ BOOL LLPermissions::importFile(LLFILE* fp)
 	// calls below.
 	char buffer[BUFSIZE];	/* Flawfinder: ignore */
 	
-	//<ND> inventory optimization
+	// <FS:ND> inventory optimization
+
 	//char keyword[256];	/* Flawfinder: ignore */
 	//char valuestr[256];	/* Flawfinder: ignore */
 	//U32 mask;
 	//keyword[0]  = '\0';
 	//valuestr[0] = '\0';	
 	//char uuid_str[256];	/* Flawfinder: ignore */
+
 	char *keyword;	/* Flawfinder: ignore */
 	char *valuestr;	/* Flawfinder: ignore */
-	//</ND>
+
+	// </FS:ND>
 
 
 	while (!feof(fp))

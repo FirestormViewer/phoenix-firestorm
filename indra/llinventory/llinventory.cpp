@@ -576,7 +576,7 @@ BOOL LLInventoryItem::unpackMessage(LLMessageSystem* msg, const char* block, S32
 #endif
 }
 
-// <ND> Helper functions
+// <FS:ND> Helper functions
 inline bool isWS( char aVal )
 {
 	return aVal == ' ' || aVal == '\t' || aVal == '\r' || aVal == '\n';
@@ -650,7 +650,7 @@ int splitCacheLine( char *aBuffer, char *&aKeyword, char *&aValue )
 
 	return nKWLen;
 }
-// </ND>
+// </FS:ND>
 
 // virtual
 BOOL LLInventoryItem::importFile(LLFILE* fp)
@@ -659,7 +659,7 @@ BOOL LLInventoryItem::importFile(LLFILE* fp)
 	// calls below.
 	char buffer[MAX_STRING];	/* Flawfinder: ignore */
 	
-	// <ND> - cache speedups
+	// <FS:ND> - cache speedups
 	//char keyword[MAX_STRING];	/* Flawfinder: ignore */	
 	//char valuestr[MAX_STRING];	/* Flawfinder: ignore */
 	//char junk[MAX_STRING];	/* Flawfinder: ignore */	
@@ -668,7 +668,7 @@ BOOL LLInventoryItem::importFile(LLFILE* fp)
 	char *keyword;	/* Flawfinder: ignore */	
 	char *valuestr;	/* Flawfinder: ignore */
 	char *junk;	/* Flawfinder: ignore */
-	// </ND>
+	// </FS:ND>
 	
 	BOOL success = TRUE;
 

@@ -80,10 +80,10 @@ void lggContactSetsFloater::onClose(bool app_quitting)
 {
 	LLAvatarTracker::instance().removeObserver(sInstance);
 
-	// <ND> FIRE-3736; remove observers on all pending profile updates. Otherwise crash&burn when the update arrives but the floater is destroyed.
+	// <FS:ND> FIRE-3736; remove observers on all pending profile updates. Otherwise crash&burn when the update arrives but the floater is destroyed.
 	for (std::set<LLUUID>::iterator itr = profileImagePending.begin(); profileImagePending.end() != itr; ++itr)
 		LLAvatarPropertiesProcessor::getInstance()->removeObserver(*itr, this);
-	// </ND>
+	// </FS:ND>
 
 	sInstance = NULL;
 	destroy();

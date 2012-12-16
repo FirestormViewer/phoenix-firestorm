@@ -361,7 +361,7 @@ public:
 		EAcceptance* accept,
 		std::string& tooltip_msg);
 
-	// <ND> JIT folders
+	// <FS:ND> JIT folders
 	virtual bool isPreCreatedFolder()
 	{ return false; }
 
@@ -389,11 +389,11 @@ typedef bool (*sort_order_f)(LLFolderViewItem* a, LLFolderViewItem* b);
 
 class LLFolderViewFolder : public LLFolderViewItem
 {
-	// <ND> JIT folders
+	// <FS:ND> JIT folders
 	LLUUID mFolderId;
 	class LLInventoryPanel *mParentPanel;
 	bool mIsPopulated;
-	// </ND>
+	// </FS:ND>
 
 protected:
 	LLFolderViewFolder( const LLFolderViewItem::Params& );
@@ -409,7 +409,7 @@ public:
 	typedef std::list<LLFolderViewFolder*> folders_t;
 
 
-	// <ND> JIT Folders
+	// <FS:ND> JIT Folders
 	void setPanel( LLInventoryPanel* aPanel )
 	{ mParentPanel = aPanel; }
 
@@ -418,7 +418,7 @@ public:
 
 	virtual bool isPreCreatedFolder()
 	{ return !mIsPopulated; }
-	// </ND>
+	// </FS:ND>
 protected:
 	items_t mItems;
 	folders_t mFolders;

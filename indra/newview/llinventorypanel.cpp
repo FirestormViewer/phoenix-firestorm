@@ -781,17 +781,17 @@ LLFolderViewItem* LLInventoryPanel::buildNewViews(const LLUUID& id, long aRecurs
 		}
 	}
 
-	//  <ND> Subfolder JIT
- 	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </ND>
+	//  <FS:ND> Subfolder JIT
+ 	// FIRE-3615; FIRE-3616: For some panels we get a zero UUID for top level folders here. </FS:ND>
 	// FIRE-3615: Disable this for now. It needs some serious rework.
 	// 	if( (id == getRootFolderID() || getRootFolderID().isNull() || id.isNull()) /*<ND/>: FIRE-3725, breaks worn tab on deeper nesting levels, remove for now: && aRecursionCount < 1*/ )
 		addSubItems( id, 0 );
-	// </ND>
+	// </FS:ND>
 
 	return itemp;
 }
 
-// <ND> JIT subfolder processing
+// <FS:ND> JIT subfolder processing
 void LLInventoryPanel::addSubItems(const LLUUID& id, long aRecursionCount)
 {
  	LLInventoryObject const* objectp = gInventory.getObject(id);

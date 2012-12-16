@@ -173,11 +173,11 @@ if (LINUX)
     set(CMAKE_CXX_FLAGS "-Wno-deprecated ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 429)
 
-  #<ND> Disable unused-but-set-variable for GCC >= 4.6. It causes a lot of warning/errors all over the source. Fixing that would result in changing a good amount of files.
+  #<FS:ND> Disable unused-but-set-variable for GCC >= 4.6. It causes a lot of warning/errors all over the source. Fixing that would result in changing a good amount of files.
   if(${CXX_VERSION_NUMBER} GREATER 460)
     set(CMAKE_CXX_FLAGS "-Wno-unused-but-set-variable ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 460)
-  #</ND>
+  #</FS:ND>
 
   # End of hacks.
 

@@ -164,7 +164,7 @@ LLPluginClassMedia* LLStreamingAudio_MediaPlugins::initializeMedia(const std::st
 	return media_source;
 }
 
-// <ND> stream metadata from plugin
+// <FS:ND> stream metadata from plugin
 bool LLStreamingAudio_MediaPlugins::hasNewMetadata()
 {
 	if (!mMediaPlugin)
@@ -184,4 +184,4 @@ std::string LLStreamingAudio_MediaPlugins::getCurrentTitle()
 	mTitle = mMediaPlugin->getTitle();
 	return mTitle;
 }
-// </ND>
+// </FS:ND>

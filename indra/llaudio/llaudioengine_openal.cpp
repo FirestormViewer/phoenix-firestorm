@@ -325,11 +325,11 @@ void LLAudioBufferOpenAL::cleanup()
 		alGetError(); // <ND/>
 		alDeleteBuffers(1, &mALBuffer);
 
-		// <ND> Print warning on possible leak.
+		// <FS:ND> Print warning on possible leak.
 		ALenum error = alGetError();
 		if( AL_NO_ERROR != error )
 			llwarns << "openal error: " << error << " possible memory leak hit" << llendl;
-		// </ND>
+		// </FS:ND>
 
 		mALBuffer = AL_NONE;
 	}

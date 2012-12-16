@@ -119,7 +119,7 @@ export LD_LIBRARY_PATH="$PWD/lib:${LD_LIBRARY_PATH}"
 # AO: experimentally removing to allow --settings on the command line w/o error. FIRE-1031
 #export SL_OPT="`cat etc/gridargs.dat` $@"
 
-# <ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
+# <FS:ND> [blerg] set LD_PRELOAD so plugins will pick up the correct sll libs, otherwise they will pick up the system versions.
 LLCRYPTO="`pwd`/lib/libcrypto.so.1.0.0"
 LLSSL="`pwd`/lib/libssl.so.1.0.0"
 if [ -f ${LLCRYPTO} ]
@@ -130,7 +130,7 @@ if [ -f ${LLSSL} ]
 then
 	export LD_PRELOAD="${LD_PRELOAD}:${LLSSL}"
 fi
-# <ND> End of hack; God will kill a kitten for this :(
+# <FS:ND> End of hack; God will kill a kitten for this :(
 
 
 # Have to deal specially with gridargs.dat; typical contents look like:

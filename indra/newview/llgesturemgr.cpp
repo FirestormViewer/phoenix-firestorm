@@ -1001,13 +1001,13 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 			// Don't animate the nodding, as this might not blend with
 			// other playing animations.
 
-			// <ND> FIRE-1624, try to parse text as command first. If that fails output it as chat
+			// <FS:ND> FIRE-1624, try to parse text as command first. If that fails output it as chat
 			if( !cmd_line_chat( chat_text, CHAT_TYPE_NORMAL, true ) )
 			{
 				gesture->mCurrentStep++;
 				break;
 			}
-			//</ND>
+			//</FS:ND>
 			
 			const BOOL animate = FALSE;
 

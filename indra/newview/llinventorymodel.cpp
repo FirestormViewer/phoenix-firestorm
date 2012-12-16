@@ -709,7 +709,7 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
 	if (!obj || obj->getIsLinkType())
 		return;
 
-//  <ND>: More efficient link updates
+// <FS:ND>: More efficient link updates
 //
 //	LLInventoryModel::cat_array_t cat_array;
 //	LLInventoryModel::item_array_t item_array;
@@ -745,9 +745,8 @@ void LLInventoryModel::addChangedMaskForLinks(const LLUUID& object_id, U32 mask)
 		for( item_links_set_t::iterator itrIds = itr->second.begin(); itr->second.end() != itrIds; ++itrIds )
 			addChangedMask(mask, *itrIds);
  	}
-	//</ND>
-	
 
+	// </FS:ND>
 }
 
 const LLUUID& LLInventoryModel::getLinkedItemID(const LLUUID& object_id) const
@@ -1198,7 +1197,7 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
 	mItemMap.erase(id);
 	
 	
-	// <ND>: Link processing efficiency
+	// <FS:ND>: Link processing efficiency
 	if(LLAssetType::lookupIsLinkType(obj->getActualType()))
 	{
 		LLUUID idLinked(obj->getLinkedUUID());
@@ -1208,7 +1207,7 @@ void LLInventoryModel::deleteObject(const LLUUID& id)
 	}
 	else
 		mItemLinks.erase( id );
-	// </ND>
+	// </FS:ND>
 	
 	
 	//mInventory.erase(id);
@@ -1638,10 +1637,10 @@ void LLInventoryModel::addItem(LLViewerInventoryItem* item)
 			llinfos << "Adding broken link [ name: " << item->getName() << " itemID: " << item->getUUID() << " assetID: " << item->getAssetUUID() << " )  parent: " << item->getParentUUID() << llendl;
 		}
 		
-		//<ND> Link Processing Efficiency
+		// <FS:ND> Link Processing Efficiency
 		if( LLAssetType::lookupIsLinkType(item->getActualType()) )
 			mItemLinks[ item->getLinkedUUID() ].insert( item->getUUID() );
-		//</ND>
+		// </FS:ND>
 
 		mItemMap[item->getUUID()] = item;
 	}

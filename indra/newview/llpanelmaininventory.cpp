@@ -219,14 +219,14 @@ BOOL LLPanelMainInventory::postBuild()
 		//worn_items_panel->getFilter()->markDefault();
 		worn_items_panel->getFilter()->setFilterObjectTypes(0xffffffff - (0x1 << LLInventoryType::IT_GESTURE));
 
-		// <ND> Do not go all crazy and recurse through the whole inventory
+		// <FS:ND> Do not go all crazy and recurse through the whole inventory
 		//		worn_items_panel->openAllFolders();
 		if( worn_items_panel->getRootFolder() )
 		{
 			worn_items_panel->getRootFolder()->setOpenArrangeRecursively(TRUE, LLFolderViewFolder::RECURSE_NO);
 			worn_items_panel->getRootFolder()->arrangeAll();
 		}
-		// </ND>
+		// </FS:ND>
 
 		worn_items_panel->setSelectCallback(boost::bind(&LLPanelMainInventory::onSelectionChange, this, worn_items_panel, _1, _2));
 	}

@@ -3024,7 +3024,7 @@ LLViewerInventoryItem* LLViewerObject::getInventoryItemByAsset(const LLUUID& ass
 		{
 			LLInventoryObject* obj = *it;
 			if(obj->getType() != LLAssetType::AT_CATEGORY
-			   && obj->getType() != LLAssetType::AT_NONE ) // <ND> check for AT_NONE too loadTaskInvFile can create such objects for "Contants"
+			   && obj->getType() != LLAssetType::AT_NONE ) // <FS:ND> check for AT_NONE too loadTaskInvFile can create such objects for "Contants"
 			{
 				// *FIX: gank-ass down cast!
 				item = (LLViewerInventoryItem*)obj;

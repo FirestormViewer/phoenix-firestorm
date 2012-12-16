@@ -52,7 +52,7 @@ bool LLImage::sUseNewByteRange = false;
 S32  LLImage::sMinimalReverseByteRangePercent = 75;
 LLPrivateMemoryPool* LLImageBase::sPrivatePoolp = NULL ;
 
-// <ND> Report amount of failed buffer allocations
+// <FS:ND> Report amount of failed buffer allocations
 
 U32 LLImageBase::mAllocationErrors;
 
@@ -65,7 +65,7 @@ U32 LLImageBase::getAllocationErrors()
 {
 	return mAllocationErrors;
 }
-//</ND>
+//</FS:ND>
 
 //static
 void LLImage::initClass(bool use_new_byte_range, S32 minimal_reverse_byte_range_percent)

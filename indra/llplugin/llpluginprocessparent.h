@@ -192,10 +192,10 @@ private:
 	LLMutex mIncomingQueueMutex;
 	std::queue<LLPluginMessage> mIncomingQueue;
 
-	// <ND> FIRE-3877;  Bind to a fixed port. Some network drivers (Bigfoot) refuse to tell us to which port a socket is bound if 0 (= choose one) was used.
+	// <FS:ND> FIRE-3877;  Bind to a fixed port. Some network drivers (Bigfoot) refuse to tell us to which port a socket is bound if 0 (= choose one) was used.
 	U32 mPortToBind;
 	U32 mBindRetries;
-	// </ND>
+	// </FS:ND>
 };
 
 #endif // LL_LLPLUGINPROCESSPARENT_H
