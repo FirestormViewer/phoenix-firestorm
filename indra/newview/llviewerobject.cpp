@@ -798,7 +798,7 @@ BOOL LLViewerObject::setDrawableParent(LLDrawable* parentp)
 	}
 	LLDrawable* old_parent = mDrawable->mParent;
 	mDrawable->mParent = parentp; 
-	
+		
 	if (parentp && mDrawable->isActive())
 	{
 		parentp->makeActive();
@@ -2112,6 +2112,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		setChanged(ROTATED | SILHOUETTE);
 	}
 
+
 	if ( gShowObjectUpdates )
 	{
 		LLColor4 color;
@@ -2919,21 +2920,6 @@ void LLViewerObject::updateInventory(
 	bool is_new)
 {
 	LLMemType mt(LLMemType::MTYPE_OBJECT);
-
-	std::list<LLUUID>::iterator begin = mPendingInventoryItemsIDs.begin();
-	std::list<LLUUID>::iterator end = mPendingInventoryItemsIDs.end();
-
-	bool is_fetching = std::find(begin, end, item->getAssetUUID()) != end;
-	bool is_fetched = getInventoryItemByAsset(item->getAssetUUID()) != NULL;
-
-	if (is_fetched || is_fetching)
-	{
-		return;
-	}
-	else
-	{
-		mPendingInventoryItemsIDs.push_back(item->getAssetUUID());
-	}
 
 	// This slices the object into what we're concerned about on the
 	// viewer. The simulator will take the permissions and transfer
