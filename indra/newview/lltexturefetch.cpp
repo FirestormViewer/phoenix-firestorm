@@ -1239,7 +1239,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				LLViewerAssetStatsFF::record_enqueue_thread1(LLViewerAssetType::AT_TEXTURE,
 															 true,
 															 LLImageBase::TYPE_AVATAR_BAKE == mType);
-				if(cur_size > 0) offset--;
+
 				// Will call callbackHttpGet when curl request completes
 				std::vector<std::string> headers;
 				headers.push_back("Accept: image/x-j2c");
@@ -1415,24 +1415,8 @@ bool LLTextureFetchWorker::doWork(S32 param)
 			if (cur_size > 0)
 			{
 				memcpy(buffer, mFormattedImage->getData(), cur_size);
-				mBufferSize--;
-
-				// <FS:ND> Crashfix; mRequestedSize can be 0 sometimes.
-				// What's the best way to do, as cur_size seems to be valid, just warn and be done?
-
-				// if(mRequestedSize == 1) mRequestedDiscard = 0;
-				// else memcpy(buffer + cur_size, mBuffer+1, mRequestedSize-1); // append
-				if(mRequestedSize == 1)
-					mRequestedDiscard = 0;
-				else if( mRequestedSize > 0 && mBuffer )
-					memcpy(buffer + cur_size, mBuffer+1, mRequestedSize-1); // append
-				else
-					llwarns << "Unexpected value for mRequestedSize: " << mRequestedSize << " or mBuffer is zero: " << (void*)mBuffer << llendl;
-
-				// </FS:ND>
-
 			}
-			else memcpy(buffer + cur_size, mBuffer, mRequestedSize); // append
+			memcpy(buffer + cur_size, mBuffer, mRequestedSize); // append
 			// NOTE: setData releases current data and owns new data (buffer)
 			mFormattedImage->setData(buffer, mBufferSize);
 			// delete temp data
@@ -2042,6 +2026,7 @@ bool LLTextureFetch::createRequest(const std::string& url, const LLUUID& id, con
 		desired_size = TEXTURE_CACHE_ENTRY_SIZE;
 		desired_discard = MAX_DISCARD_LEVEL;
 	}
+
 	
 	if (worker)
 	{
