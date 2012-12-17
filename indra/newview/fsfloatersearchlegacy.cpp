@@ -1819,8 +1819,8 @@ void FSPanelSearchLand::processSearchReply(LLMessageSystem* msg, void**)
 	
 	static LLUICachedControl<bool> use_price("FindLandPrice", 1);
 	static LLUICachedControl<bool> use_area("FindLandArea", 1);
-	S32 limit_price = self->childGetValue("land_price_edit").asInteger();
-	S32 limit_area = self->childGetValue("land_area_edit").asInteger();
+	S32 limit_price = self->childGetValue("edit_price").asInteger();
+	S32 limit_area = self->childGetValue("edit_area").asInteger();
 	
 	BOOL found_one = FALSE;
 	S32 num_new_rows = msg->getNumberOfBlocks("QueryReplies");
