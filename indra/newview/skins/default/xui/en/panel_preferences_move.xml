@@ -123,6 +123,14 @@
          tool_tip="Set this to move your camera beyond its normal bounds and below land level. If you are not good at moving the camera, more of your shots may be at bad angles."
          top_pad="7"
          width="315"/>
+        <check_box
+         control_name="FSDisableMouseWheelCameraZoom"
+         height="16"
+         label="Don't use the mouse wheel to control zoom level of the camera"
+         layout="topleft"
+         name="FSDisableMouseWheelCameraZoom"
+         top_pad="5"
+         width="315"/>
         <text
          follows="left|top"
          type="string"

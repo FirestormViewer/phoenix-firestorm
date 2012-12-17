@@ -7,6 +7,7 @@
 			<slider label="Czas przejścia" name="camera_transition_time"/>
 			<slider label="Wygładzanie" name="camera_position_smoothing"/>
 			<check_box label="Pozwól na większą swobodę kamery" name="DisableCameraConstraints" tool_tip="Zaznacz, aby móc ustawiać punkt widzenia kamery daleko poza jego normalne granice lub poniżej poziomu terenu. Jeśli nie jesteś dobry/a w operowaniu kamerą, to możesz mieć większe problemy z dobraniem odpowiedniego kątu patrzenia."/>
+			<check_box label="Nie używaj kółka myszki do kontrolowania poziomu zbliżenia kamery" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				Automatyczna pozycja dla:
 			</text>
