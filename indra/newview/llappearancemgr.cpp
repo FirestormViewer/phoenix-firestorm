@@ -2106,6 +2106,21 @@ void LLAppearanceMgr::updateAppearanceFromCOF(bool update_base_outfit_ordering)
 	}
 }
 
+// [SL:KB] - Patch: Appearance-MixedViewers | Checked: 2010-04-02 (Catznip-3.0.0a) | Added: Catznip-2.0.0a
+void LLAppearanceMgr::updateAppearanceFromInitialWearables(LLInventoryModel::item_array_t& initial_items)
+{
+	const LLUUID& idCOF = getCOF();
+
+	// Remove current COF contents
+	purgeCategory(idCOF, false);
+	gInventory.notifyObservers();
+
+	// Create links to new COF contents
+	LLPointer<LLInventoryCallback> link_waiter = new LLUpdateAppearanceOnDestroy();
+	linkAll(idCOF, initial_items, link_waiter);
+}
+// [/SL:KB]
+
 void LLAppearanceMgr::getDescendentsOfAssetType(const LLUUID& category,
 													LLInventoryModel::item_array_t& items,
 													LLAssetType::EType type,
