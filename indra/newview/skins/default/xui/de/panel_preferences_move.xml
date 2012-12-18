@@ -7,7 +7,8 @@
 			<slider label="Abstand" name="camera_offset_scale"/>
 			<slider label="Übergangszeit" name="camera_transition_time"/>
 			<slider label="Glättung" name="camera_position_smoothing"/>
-			<check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche" />
+			<check_box label="Kamerabeschränkungen aufheben (Kamera freier bewegen)" name="DisableCameraConstraints" tool_tip="Erlaubt die Bewegungen der Kamera außerhalb der normalen Grenzen und der Erdoberfläche"/>
+			<check_box label="Mausrad nicht zum Zoomen verwenden" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				Automatische Position für:
 			</text>
