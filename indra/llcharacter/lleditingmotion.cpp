@@ -214,13 +214,10 @@ BOOL LLEditingMotion::onUpdate(F32 time, U8* joint_mask)
 	target = target * target_dist;
 	if (!target.isFinite())
 	{
-		// <FS:Ansariel> FIRE-7113: Don't error out here, set a fail-safe target vector
-		//llerrs << "Non finite target in editing motion with target distance of " << target_dist << 
-		//	" and focus point " << focus_pt << llendl;
+		// Don't error out here, set a fail-safe target vector
 		llwarns << "Non finite target in editing motion with target distance of " << target_dist << 
 			" and focus point " << focus_pt << llendl;
 		target.setVec(1.f, 1.f, 1.f);
-		// </FS:Ansariel>
 	}
 	
 	mTarget.setPosition( target + mParentJoint.getPosition());

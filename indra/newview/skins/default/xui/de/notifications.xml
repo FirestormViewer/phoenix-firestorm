@@ -3322,12 +3322,36 @@ Möchten Sie fortfahren?
 		<usetemplate ignoretext="Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet und andere können nicht gesetzt werden, da die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
 	</notification>
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
+Einige der ausgewählten Linksets können aufgrund von Berechtigungseinschränkungen nicht auf „[REQUESTED_TYPE]“ gesetzt werden.  Diese Linksets werden stattdessen auf „[RESTRICTED_TYPE]“ gesetzt.
+
+Möchten Sie fortfahren?
+		<usetemplate ignoretext="Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet und andere können aufgrund von Berechtigungseinschränkungen nicht gesetzt werden." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnVolume">
+		Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet.
+
+Einige der ausgewählten Linksets können nicht auf „[REQUESTED_TYPE]“ gesetzt werden, da die Form nicht konvex ist.
+
+Möchten Sie fortfahren?
+		<usetemplate ignoretext="Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet und andere können nicht gesetzt werden, da die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
 		Einige der ausgewählten Linksets können aufgrund von Berechtigungseinschränkungen nicht auf „[REQUESTED_TYPE]“ gesetzt werden.  Diese Linksets werden stattdessen auf „[RESTRICTED_TYPE]“ gesetzt.
 
 Einige der ausgewählten Linksets können nicht auf „[REQUESTED_TYPE]“ gesetzt werden, da die Form nicht konvex ist. Die Nutzungsarten dieser Linksets bleiben unverändert.
 
 Möchten Sie fortfahren?
  		<usetemplate ignoretext="Einige der ausgewählten Linksets können nicht gesetzt werden, da die Berechtigungen eingeschränkt sind und die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
+		Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet.
+
+Einige der ausgewählten Linksets können aufgrund von Berechtigungseinschränkungen nicht auf „[REQUESTED_TYPE]“ gesetzt werden.  Diese Linksets werden stattdessen auf „[RESTRICTED_TYPE]“ gesetzt.
+
+Einige der ausgewählten Linksets können nicht auf „[REQUESTED_TYPE]“ gesetzt werden, da die Form nicht konvex ist. Die Nutzungsarten dieser Linksets bleiben unverändert.
+
+Möchten Sie fortfahren?
+		<usetemplate ignoretext="Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet und andere können nicht gesetzt werden, da die Berechtigungen für das Linkset eingeschränkt sind und die Form nicht konvex ist." name="okcancelignore" notext="Abbrechen" yestext="OK"/>
  	</notification>
 	<notification name="PathfindingLinksets_WarnOnPhantom_MismatchOnRestricted_MismatchOnVolume">
 		Bei einigen ausgewählten Linksets wird die Phantom-Markierung umgeschaltet.

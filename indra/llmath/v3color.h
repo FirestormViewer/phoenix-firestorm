@@ -33,6 +33,7 @@ class LLVector4;
 #include "llerror.h"
 #include "llmath.h"
 #include "llsd.h"
+#include <string.h>
 
 #include <string.h> // <FS:ND/> for strlen/strncpy
 

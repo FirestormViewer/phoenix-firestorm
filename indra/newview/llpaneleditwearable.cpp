@@ -835,14 +835,11 @@ BOOL LLPanelEditWearable::isDirty() const
         BOOL isDirty = FALSE;
         if (mWearablePtr)
         {
-                if (mWearablePtr->isDirty() ||
-					// <FS:ND> Crashfix; Guard against mWearableItem or mNameEditor being 0
-					//                        mWearableItem->getName().compare(mNameEditor->getText()) != 0)
-					( mWearableItem && mNameEditor && mWearableItem->getName().compare(mNameEditor->getText()) != 0 ))
-					// </FS:ND>
-                {
-                        isDirty = TRUE;
-                }
+			if (mWearablePtr->isDirty() ||
+				( mWearableItem && mNameEditor && mWearableItem->getName().compare(mNameEditor->getText()) != 0 ))
+			{
+				isDirty = TRUE;
+			}
         }
         return isDirty;
 }

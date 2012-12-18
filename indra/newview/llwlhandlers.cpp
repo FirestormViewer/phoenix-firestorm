@@ -105,20 +105,12 @@ LLEnvironmentRequestResponder::LLEnvironmentRequestResponder()
 		return;
 	}
 
-	// <FS:ND> Chrashfix, Region can be 0 here.
-
-	// if (unvalidated_content[0]["regionID"].asUUID() != gAgent.getRegion()->getRegionID())
-	// {
-	// 	LL_WARNS("WindlightCaps") << "Not in the region from where this data was received (wanting "
-	// 		<< gAgent.getRegion()->getRegionID() << " but got " << unvalidated_content[0]["regionID"].asUUID()
-	// 		<< ") - ignoring..." << LL_ENDL;
-	// 	return;
-	// }
-
 	LLUUID regionId;
 	if( gAgent.getRegion() )
+	{
 		regionId = gAgent.getRegion()->getRegionID();
-
+	}
+	
 	if (unvalidated_content[0]["regionID"].asUUID() != regionId )
 	{
 		LL_WARNS("WindlightCaps") << "Not in the region from where this data was received (wanting "
@@ -126,8 +118,6 @@ LLEnvironmentRequestResponder::LLEnvironmentRequestResponder()
 			<< ") - ignoring..." << LL_ENDL;
 		return;
 	}
-
-	// </FS:ND>
 
 	LLEnvManagerNew::getInstance()->onRegionSettingsResponse(unvalidated_content);
 }

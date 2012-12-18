@@ -1,4 +1,5 @@
-/* Copyright (C) 2011 Greg Hendrickson (LordGregGreg Back)
+/* @file lggcontactsets.cpp
+   Copyright (C) 2011 Greg Hendrickson (LordGregGreg Back)
    
    This is free software; you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as

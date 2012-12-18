@@ -287,7 +287,7 @@ void LLWLParamManager::loadPresetsFromDir(const std::string& dir)
 			break; // no more files
 		}
 
-		std::string path = dir + file;
+		std::string path = gDirUtilp->add(dir, file);
 		if (!loadPreset(path))
 		{
 			llwarns << "Error loading sky preset from " << path << llendl;

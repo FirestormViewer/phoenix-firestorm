@@ -475,12 +475,8 @@ LLMultiPreview::LLMultiPreview()
 
 void LLMultiPreview::onOpen(const LLSD& key)
 {
-	// <FS:ND> FIRE-6407; Floater could be something else than LLPreview, eg LLFloaterProfile.
-	// Don't use brute force C-cast, but ask nicely via dynamic_cast
-
-	//	LLPreview* frontmost_preview = (LLPreview*)mTabContainer->getCurrentPanel();
+	// Floater could be something else than LLPreview, eg LLFloaterProfile.
 	LLPreview* frontmost_preview = dynamic_cast<LLPreview*>(mTabContainer->getCurrentPanel());
-	// </FS:ND>
 
 	if (frontmost_preview && frontmost_preview->getAssetStatus() == LLPreview::PREVIEW_ASSET_UNLOADED)
 	{
@@ -494,14 +490,13 @@ void LLMultiPreview::handleReshape(const LLRect& new_rect, bool by_user)
 {
 	if(new_rect.getWidth() != getRect().getWidth() || new_rect.getHeight() != getRect().getHeight())
 	{
-		// <FS:ND> FIRE-6407; Floater could be something else than LLPreview, eg LLFloaterProfile.
-		// Don't use brute force C-cast, but ask nicely via dynamic_cast
-
-		//		LLPreview* frontmost_preview = (LLPreview*)mTabContainer->getCurrentPanel();
+		// Floater could be something else than LLPreview, eg LLFloaterProfile.
 		LLPreview* frontmost_preview = dynamic_cast<LLPreview*>(mTabContainer->getCurrentPanel());
-		// </FS:ND>
 
-		if (frontmost_preview) frontmost_preview->userResized();
+		if (frontmost_preview)
+		{
+			frontmost_preview->userResized();
+		}
 	}
 	LLFloater::handleReshape(new_rect, by_user);
 }
@@ -509,12 +504,8 @@ void LLMultiPreview::handleReshape(const LLRect& new_rect, bool by_user)
 
 void LLMultiPreview::tabOpen(LLFloater* opened_floater, bool from_click)
 {
-	// <FS:ND> FIRE-6407; Floater could be something else than LLPreview, eg LLFloaterProfile.
-	// Don't use brute force C-cast, but ask nicely via dynamic_cast
-
-	//	LLPreview* opened_preview = (LLPreview*)opened_floater;
+	// Floater could be something else than LLPreview, eg LLFloaterProfile.
 	LLPreview* opened_preview = dynamic_cast<LLPreview*>(opened_floater);
-	// </FS:ND>
 
 	if (opened_preview && opened_preview->getAssetStatus() == LLPreview::PREVIEW_ASSET_UNLOADED)
 	{

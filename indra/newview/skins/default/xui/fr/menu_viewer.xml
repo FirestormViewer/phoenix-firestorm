@@ -9,7 +9,7 @@
     <menu_item_call label="Acheter des L$" name="Buy and Sell L$"/>
 		<menu_item_call label="Mon profil" name="Profile"/>
 		<menu_item_call label="Mon apparence" name="ChangeOutfit"/>
-		<menu_item_call label="Caméra..." name="Camera Controls"/>
+		<menu_item_call label="Contrôles de la caméra..." name="Camera Controls"/>
     <menu_item_check label="Photo" name="Take Snapshot"/>
     <menu_item_check label="Mon inventaire" name="Inventory"/>
 		<menu_item_check label="Mon inventaire" name="ShowSidetrayInventory"/>

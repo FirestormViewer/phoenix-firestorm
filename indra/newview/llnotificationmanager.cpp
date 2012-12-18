@@ -97,10 +97,12 @@ bool LLNotificationManager::onNotification(const LLSD& notify)
 {
 	LLSysHandler* handle = NULL;
 
-	// <FS:ND> Crashfix: Don't bother if we're going down. Otherwise we might crash when trying to use handlers that are already dead.
+	// Don't bother if we're going down.
+	// Otherwise we might crash when trying to use handlers that are already dead.
 	if( LLApp::isExiting() )
+	{
 		return false;
-	// </FS:ND>
+	}
 
 	if (LLNotifications::destroyed())
 		return false;

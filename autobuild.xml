@@ -242,9 +242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c81e5f3d43b05dabafa1f34342c4425e</string>
+              <string>09ce88432b114e2a7261a93dbcfbaa04</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.45.0-linux-20120326.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.48.0-linux-20120621.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -254,9 +254,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>b32acce28e8f5dc404ff6d36c140ea65</string>
+              <string>cc2373eee6e0d6ef73ee0f3327a66f07</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/boost-1.45.0-windows-20120303.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.48.0-windows-20120909.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

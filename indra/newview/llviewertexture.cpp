@@ -1980,12 +1980,7 @@ void LLViewerFetchedTexture::updateVirtualSize()
 	for(U32 i = 0 ; i < mNumFaces ; i++)
 	{				
 		LLFace* facep = mFaceList[i] ;
-		// <FS:ND> Make sure we have a drawable before calling any method on it
-		if( !ndIsValidPtr(facep) || !facep->getDrawable() )
-			continue;
-		// </FS:ND>
-
-		if(facep->getDrawable()->isRecentlyVisible())
+		if( facep && facep->getDrawable() && facep->getDrawable()->isRecentlyVisible())
 		{
 			addTextureStats(facep->getVirtualSize()) ;
 			setAdditionalDecodePriority(facep->getImportanceToCamera()) ;

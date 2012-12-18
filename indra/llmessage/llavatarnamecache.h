@@ -96,7 +96,7 @@ namespace LLAvatarNameCache
 
 	// Force a re-fetch of the most recent data, but keep the current
 	// data in cache
-	void fetch(const LLUUID& agent_id);
+	void fetch(const LLUUID& agent_id); // FS:TM used in LGGContactSets
 
 	void insert(const LLUUID& agent_id, const LLAvatarName& av_name);
 

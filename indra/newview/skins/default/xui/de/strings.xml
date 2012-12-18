@@ -128,7 +128,7 @@
 		Beenden
 	</string>
 	<string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=de-DE
+		http://join.secondlife.com/index.php?lang=de-DE&amp;sourceid=[sourceid]
 	</string>
 	<string name="LoginFailedViewerNotPermitted">
 		Mit dem von Ihnen verwendeten Viewer ist der Zugriff auf Second Life nicht mehr möglich. Laden Sie von den folgenden Seite einen neuen Viewer herunter:
@@ -1476,6 +1476,12 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	</string>
 	<string name="InvFolder favorites">
 		Favoriten
+	</string>
+	<string name="InvFolder Favorites">
+		Meine Favoriten
+	</string>
+	<string name="InvFolder favorites">
+		Meine Favoriten
 	</string>
 	<string name="InvFolder Current Outfit">
 		Aktuelles Outfit

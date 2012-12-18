@@ -305,6 +305,8 @@ LLCurl::Easy* LLCurl::Easy::getEasy()
 	// multi handles cache if they are added to one.
 	CURLcode result = curl_easy_setopt(easy->mCurlEasyHandle, CURLOPT_DNS_CACHE_TIMEOUT, 0);
 	check_curl_code(result);
+	result = curl_easy_setopt(easy->mCurlEasyHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+	check_curl_code(result);
 	
 	// <FS:ND> Disable SSL/TLS session caching. Some servers refuse to talk to us when session ids are enabled.
 	// id.secondlife.com is such a server, when greeted with a SSL HELLO and a session id, it immediatly returns a RST packet and closes
@@ -502,7 +504,8 @@ void LLCurl::Easy::prepRequest(const std::string& url,
 
 	//setopt(CURLOPT_VERBOSE, 1); // useful for debugging
 	setopt(CURLOPT_NOSIGNAL, 1);
-
+	setopt(CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+	
 	// Set the CURL options for either Socks or HTTP proxy
 	LLProxy::getInstance()->applyProxySettings(this);
 

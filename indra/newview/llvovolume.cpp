@@ -1276,10 +1276,11 @@ BOOL LLVOVolume::calcLOD()
 	{
 		LLVOAvatar* avatar = getAvatar(); 
 		
-		// <FS:ND> Crashfix: Not sure how this can really happen, but alas it does. Better exit here than crashing.
+		// Not sure how this can really happen, but alas it does. Better exit here than crashing.
 		if( !avatar || !avatar->mDrawable )
+		{
 			return FALSE;
-		// </FS:ND>
+		}
 
 		distance = avatar->mDrawable->mDistanceWRTCamera;
 		radius = avatar->getBinRadius();
@@ -1389,7 +1390,8 @@ BOOL LLVOVolume::setDrawableParent(LLDrawable* parentp)
 
 void LLVOVolume::updateFaceFlags()
 {
-	for (S32 i = 0; i < getVolume()->getNumFaces(); i++)
+	// There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
+	for (S32 i = 0; i < getVolume()->getNumFaces() && i < mDrawable->getNumFaces(); i++)
 	{
 		// <FS:ND> There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
 		if( mDrawable->getNumFaces() <= i || getNumTEs() <= i )
@@ -1495,7 +1497,10 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
 		volume = getVolume();
 	}
 
-	for (S32 i = 0; i < getVolume()->getNumVolumeFaces(); i++)
+	// There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
+	for (S32 i = 0;
+		 i < getVolume()->getNumVolumeFaces() && i < mDrawable->getNumFaces() && i < getNumTEs();
+		 i++)
 	{
 		// <FS:ND> There's no guarantee that getVolume()->getNumFaces() == mDrawable->getNumFaces()
 		if( mDrawable->getNumFaces() <= i )
@@ -1536,7 +1541,7 @@ BOOL LLVOVolume::genBBoxes(BOOL force_global)
 
 	updateRadius();
 	mDrawable->movePartition();
-			
+				
 	return res;
 }
 
@@ -1808,10 +1813,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 
 void LLVOVolume::updateFaceSize(S32 idx)
 {
-	// <FS:ND>
 	if( mDrawable->getNumFaces() <= idx )
+	{
 		return;
-	// </FS:ND>
+	}
 
 	LLFace* facep = mDrawable->getFace(idx);
 	if (facep)
@@ -2503,13 +2508,11 @@ void LLVOVolume::addMediaImpl(LLViewerMediaImpl* media_impl, S32 texture_index)
 	//add the face to show the media if it is in playing
 	if(mDrawable)
 	{
-		// <FS:ND> Make sure to not access faces that are out of array bounds.
-		// LLFace* facep = mDrawable->getFace(texture_index) ;
-		LLFace* facep(0);
-
+		LLFace* facep(NULL);
 		if( texture_index < mDrawable->getNumFaces() )
+		{
 			facep = mDrawable->getFace(texture_index) ;
-		// </FS:ND>
+		}
 
 		if(facep)
 		{
@@ -3661,7 +3664,6 @@ BOOL LLVOVolume::lineSegmentIntersect(const LLVector3& start, const LLVector3& e
 		if (LLFloater::isVisible(gFloaterTools) && getAvatar()->isSelf())
 		{
 			updateRiggedVolume();
-			genBBoxes(FALSE);
 			volume = mRiggedVolume;
 			transform = false;
 		}
@@ -3925,10 +3927,7 @@ void LLRiggedVolume::update(const LLMeshSkinInfo* skin, LLVOAvatar* avatar, cons
 
 			LLVector4a* pos = dst_face.mPositions;
 
-		// <FS:ND> Crashfix if weight or pos or mExtents is 0
-		if( pos && weight && dst_face.mExtents )
-		// </FS:ND>
-
+			if( pos && weight && dst_face.mExtents )
 			{
 				LLFastTimer t(FTM_SKIN_RIGGED);
 

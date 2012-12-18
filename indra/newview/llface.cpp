@@ -1068,7 +1068,11 @@ bool LLFace::canRenderAsMask()
 	}
 
 	const LLTextureEntry* te = getTextureEntry();
-
+	if( !te || !getViewerObject() || !getTexture() )
+	{
+		return false;
+	}
+	
 	// <FS:ND> Crashfix; Guard against 0 pointer
 	if( !te || !getViewerObject() || !getTexture() )
 		return false;

@@ -57,7 +57,8 @@
 #include "lldxhardware.h"
 #endif
 
-// [FIX-FIRE-2209 Don't download feature_Tables from HTTP 
+#define LL_EXPORT_GPU_TABLE 0
+// FS:TM - FIX-FIRE-2209 Don't download feature_tables from LL 
 #if LL_DARWIN
 const char FEATURE_TABLE_FILENAME[] = "featuretable_mac.txt";
 //const char FEATURE_TABLE_VER_FILENAME[] = "featuretable_mac.%s.txt";
@@ -72,7 +73,7 @@ const char FEATURE_TABLE_FILENAME[] = "featuretable%s.txt";
 //const char FEATURE_TABLE_VER_FILENAME[] = "featuretable%s.%s.txt";
 #endif
 
-// [FIX-FIRE-2209 Don't download gpu_tables from HTTP 
+//  FS:TM - FIX-FIRE-2209 Don't download gpu_tables from LL 
 const char GPU_TABLE_FILENAME[] = "gpu_table.txt";
 //const char GPU_TABLE_VER_FILENAME[] = "gpu_table.%s.txt";
 
@@ -390,6 +391,13 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		*i = tolower(*i);
 	}
 
+#if LL_EXPORT_GPU_TABLE
+	llofstream json;
+	json.open("gpu_table.json");
+
+	json << "var gpu_table = [" << std::endl;
+#endif
+
 	bool gpuFound;
 	U32 lineNumber;
 	for (gpuFound = false, lineNumber = 0; !gpuFound && !file.eof(); lineNumber++)
@@ -415,7 +423,7 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 
 		// setup the tokenizer
 		std::string buf(buffer);
-		std::string cls, label, expr, supported;
+		std::string cls, label, expr, supported, stats_based, expected_gl_version;
 		boost_tokenizer tokens(buf, boost::char_separator<char>("\t\n"));
 		boost_tokenizer::iterator token_iter = tokens.begin();
 
@@ -436,13 +444,29 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		{
 			supported = *token_iter++;
 		}
+		if (token_iter != tokens.end())
+		{
+			stats_based = *token_iter++;
+		}
+		if (token_iter != tokens.end())
+		{
+			expected_gl_version = *token_iter++;
+		}
 
 		if (label.empty() || expr.empty() || cls.empty() || supported.empty())
 		{
 			LL_WARNS("RenderInit") << "invald gpu_table.txt:" << lineNumber << ": '" << buffer << "'" << LL_ENDL;
 			continue;
 		}
-	
+#if LL_EXPORT_GPU_TABLE
+		json << "{'label' : '" << label << "',\n" << 
+			"'regexp' : '" << expr << "',\n" <<
+			"'class' : '" << cls << "',\n" <<
+			"'supported' : '" << supported << "',\n" <<
+			"'stats_based' : " << stats_based <<  ",\n" <<
+			"'gl_version' : " << expected_gl_version << "\n},\n";
+#endif
+
 		for (U32 i = 0; i < expr.length(); i++)	 /*Flawfinder: ignore*/
 		{
 			expr[i] = tolower(expr[i]);
@@ -453,12 +477,18 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		if(boost::regex_search(renderer, re))
 		{
 			// if we found it, stop!
+#if !LL_EXPORT_GPU_TABLE
 			gpuFound = true;
+#endif
 			mGPUString = label;
 			mGPUClass = (EGPUClass) strtol(cls.c_str(), NULL, 10);
 			mGPUSupported = (BOOL) strtol(supported.c_str(), NULL, 10);
 		}
 	}
+#if LL_EXPORT_GPU_TABLE
+	json << "];\n\n";
+	json.close();
+#endif
 	file.close();
 
 	if ( gpuFound )
@@ -473,6 +503,10 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 	{
 		LL_WARNS("RenderInit") << "GPU '" << rawRenderer << "' not recognized" << LL_ENDL;
 	}
+
+#if LL_DARWIN // never go over "Mid" settings by default on OS X
+	mGPUClass = llmin(mGPUClass, GPU_CLASS_2);
+#endif
 }
 
 // responder saves table into file
@@ -589,7 +623,7 @@ void LLFeatureManager::applyRecommendedSettings()
 {
 	// apply saved settings
 	// cap the level at 2 (high)
-	S32 level = llmax(GPU_CLASS_0, llmin(mGPUClass, GPU_CLASS_2));
+	S32 level = llmax(GPU_CLASS_0, llmin(mGPUClass, GPU_CLASS_5));
 
 	llinfos << "Applying Recommended Features" << llendl;
 
@@ -684,12 +718,21 @@ void LLFeatureManager::setGraphicsLevel(S32 level, bool skipFeatures)
 			}
 			break;
 		case 1:
-			maskFeatures("Mid");
+			maskFeatures("LowMid");
 			break;
 		case 2:
-			maskFeatures("High");
+			maskFeatures("Mid");
 			break;
 		case 3:
+			maskFeatures("MidHigh");
+			break;
+		case 4:
+			maskFeatures("High");
+			break;
+		case 5:
+			maskFeatures("HighUltra");
+			break;
+		case 6:
 			maskFeatures("Ultra");
 			break;
 		default:
@@ -719,14 +762,16 @@ void LLFeatureManager::applyBaseMasks()
 	mFeatures = maskp->getFeatures();
 
 	// mask class
-	if (mGPUClass >= 0 && mGPUClass < 4)
+	if (mGPUClass >= 0 && mGPUClass < 6)
 	{
 		const char* class_table[] =
 		{
 			"Class0",
 			"Class1",
 			"Class2",
-			"Class3"
+			"Class3",
+			"Class4",
+			"Class5",
 		};
 
 		LL_INFOS("RenderInit") << "Setting GPU Class to " << class_table[mGPUClass] << LL_ENDL;
@@ -791,12 +836,10 @@ void LLFeatureManager::applyBaseMasks()
 	{
 		maskFeatures("MapBufferRange");
 	}
-	//Don't auto set texture compression
-	//FS:TM
-	//if (gGLManager.mVRAM > 512)
-	//{
-	//	maskFeatures("VRAMGT512");
-	//}
+	if (gGLManager.mVRAM > 512)
+	{
+		maskFeatures("VRAMGT512");
+	}
 
 	// now mask by gpu string
 	// Replaces ' ' with '_' in mGPUString to deal with inability for parser to handle spaces

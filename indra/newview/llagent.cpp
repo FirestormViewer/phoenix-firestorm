@@ -4498,7 +4498,6 @@ void LLAgent::doTeleportViaLocation(const LLVector3d& pos_global)
 {
 	LLViewerRegion* regionp = getRegion();
 
-	// <FS:Ansariel> Possible crash fix
 	if (!regionp)
 	{
 		return;

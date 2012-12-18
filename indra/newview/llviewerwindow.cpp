@@ -1730,7 +1730,6 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 								mDisplayScale.mV[VX],
 								mDisplayScale.mV[VY],
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths(),
 								gSavedSettings.getString("FSFontSettingsFile"),
 								gSavedSettings.getF32("FSFontSizeAdjustment"));
 	
@@ -5119,7 +5118,6 @@ void LLViewerWindow::initFonts(F32 zoom_factor)
 								mDisplayScale.mV[VX] * zoom_factor,
 								mDisplayScale.mV[VY] * zoom_factor,
 								gDirUtilp->getAppRODataDir(),
-								LLUI::getXUIPaths(),
 								gSavedSettings.getString("FSFontSettingsFile"),
 								gSavedSettings.getF32("FSFontSizeAdjustment"));
 	// Force font reloads, which can be very slow

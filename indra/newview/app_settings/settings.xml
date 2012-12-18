@@ -5853,17 +5853,6 @@
       <key>Value</key>
       <integer>305</integer>
     </map>
-    <key>HelpUseLocal</key>
-    <map>
-      <key>Comment</key>
-      <string>If set, always use this for help: skins/default/html/[LANGUAGE]/help-offline/index.html</string>
-      <key>Persist</key>
-      <integer>0</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
     <key>HelpURLFormat</key>
     <map>
       <key>Comment</key>
@@ -13134,6 +13123,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>SanityComment</key>
       <string>This might cause textures to look blurry and sculpties might fail to load properly.</string>
     </map>
+    <key>TextureFetchConcurrency</key>
+    <map>
+      <key>Comment</key>
+      <string>Maximum number of HTTP connections used for texture fetches</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>TextureFetchDebuggerEnabled</key>
     <map>
       <key>Comment</key>
@@ -14968,6 +14968,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>sourceid</key>
+    <map>
+      <key>Comment</key>
+      <string>Identify referring agency to Linden web servers</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string />
     </map>
     <key>SpeakerParticipantDefaultOrder</key>
     <map>
@@ -19217,5 +19228,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+
+  <key>SimulateFBOFailure</key>
+  <map>
+    <key>Comment</key>
+    <string>[DEBUG] Make allocateScreenBuffer return false.  Used to test error handling.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 </map>
 </llsd>

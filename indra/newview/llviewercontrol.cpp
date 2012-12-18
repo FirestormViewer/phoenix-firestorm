@@ -71,16 +71,16 @@
 #include "llpaneloutfitsinventory.h"
 #include "llpanellogin.h"
 #include "llpaneltopinfobar.h"
-#include "llcombobox.h"
 #include "llspellcheck.h"
-#include "llstatusbar.h"
 #include "llupdaterservice.h"
-#include "llnotificationsutil.h"
 
 // NaCl - Antispam Registry
 #include "NACLantispam.h"
 // NaCl End
+//#include "llcombobox.h"
 #include "llnetmap.h"
+#include "llnotificationsutil.h"
+#include "llstatusbar.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -599,44 +599,23 @@ bool toggle_agent_pause(const LLSD& newvalue)
 // <FS:Zi> Is done inside XUI now, using visibility_control
 // bool toggle_show_navigation_panel(const LLSD& newvalue)
 // {
-// 	bool value = newvalue.asBoolean();
+	//bool value = newvalue.asBoolean();
 
-// 	//LLNavigationBar::getInstance()->setVisible(value);
-// 	LLNavigationBar::getInstance()->showNavigationPanel(value); // <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-// //	gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
+	//LLNavigationBar::getInstance()->setVisible(value);
+	//gSavedSettings.setBOOL("ShowMiniLocationPanel", !value);
 
-// 	return true;
+	//return true;
 // }
-
-// <FS:Ansariel> Re-enable separate toggle for navigation and favorites panel
-// bool toggle_show_favorites_panel(const LLSD& newvalue)
-// {
-// 	LLNavigationBar::getInstance()->showFavoritesPanel(newvalue.asBoolean());
-// 	return true;
-// }
-// </FS:Ansariel>
-// </FS:Zi>
 
 // <FS:Zi> We don't have the mini location bar
 // bool toggle_show_mini_location_panel(const LLSD& newvalue)
 // {
-// 	bool value = newvalue.asBoolean();
-// 
-// 	LLPanelTopInfoBar::getInstance()->setVisible(value);
-// 	gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
-// 
-// 	return true;
-// }
-// </FS:Zi>
+	//bool value = newvalue.asBoolean();
 
-// <FS:Zi> Is done inside XUI now, using visibility_control
-// bool toggle_show_search_topbar(const LLSD& newvalue)
-// {
-// 	bool value = newvalue.asBoolean();
-// 	LLNavigationBar* navbar = LLNavigationBar::getInstance();
-// 	navbar->childSetVisible("search_combo_box",value);
-// 	return true;
-// }
+	//LLPanelTopInfoBar::getInstance()->setVisible(value);
+	//gSavedSettings.setBOOL("ShowNavbarNavigationPanel", !value);
+
+	//return true;
 // </FS:Zi>
 
 bool toggle_show_menubar_location_panel(const LLSD& newvalue)
@@ -845,9 +824,6 @@ void settings_setup_listeners()
 	// <FS:Zi> We don't have the mini location bar
 	// gSavedSettings.getControl("ShowMiniLocationPanel")->getSignal()->connect(boost::bind(&toggle_show_mini_location_panel, _2));
 	// </FS: Zi>
-	// <FS:Zi> Is done inside XUI now, using visibility_control
-	// gSavedSettings.getControl("ShowSearchTopBar")->getSignal()->connect(boost::bind(&toggle_show_search_topbar, _2));
-	// </FS:Zi>
 	gSavedSettings.getControl("ShowMenuBarLocation")->getSignal()->connect(boost::bind(&toggle_show_menubar_location_panel, _2));
 	gSavedSettings.getControl("ShowObjectRenderingCost")->getSignal()->connect(boost::bind(&toggle_show_object_render_cost, _2));
 	gSavedSettings.getControl("UpdaterServiceSetting")->getSignal()->connect(boost::bind(&toggle_updater_service_active, _2));

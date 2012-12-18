@@ -615,16 +615,12 @@ void LLScreenChannel::showToastsBottom()
 	// <FS:Ansariel> Show toasts in front of other floaters
 	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
 
-	// <FS:ND> Don't use mToastList but a local variable. mToastList can be modified during recursive calls and then all iteratos will be invalidated.
-
+	// Use a local variable instead of mToastList.
+	// mToastList can be modified during recursive calls and then all iteratos will be invalidated.
 	std::vector<ToastElem> vToastList( mToastList );
 
-	// <FS:ND/> Crashfix, use local variable instead of mToastList
-	//	for(it = mToastList.rbegin(); it != mToastList.rend(); ++it)
 	for(it = vToastList.rbegin(); it != vToastList.rend(); ++it)
 	{
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//		if(it != mToastList.rbegin())
 		if(it != vToastList.rbegin())
 		{
 			LLToast* toast = (it-1)->getToast();
@@ -653,8 +649,6 @@ void LLScreenChannel::showToastsBottom()
 
 		if(floater && floater->overlapsScreenChannel())
 		{
-			// <FS:ND/> Crashfix, use local variable instead of mToastList
-			//			if(it == mToastList.rbegin())
 			if(it == vToastList.rbegin())
 			{
 				// move first toast above docked floater
@@ -678,8 +672,6 @@ void LLScreenChannel::showToastsBottom()
 
 		if(!stop_showing_toasts)
 		{
-			// <FS:ND/> Crashfix, use local variable instead of mToastList
-			//			if( it != mToastList.rend()-1)
 			if( it != vToastList.rend()-1)
 			{
 				S32 toast_top = toast->getRect().mTop + gSavedSettings.getS32("ToastGap");
@@ -689,8 +681,6 @@ void LLScreenChannel::showToastsBottom()
 
 		// at least one toast should be visible
 
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//		if(it == mToastList.rbegin())
 		if(it == vToastList.rbegin())
 		{
 			stop_showing_toasts = false;
@@ -717,15 +707,10 @@ void LLScreenChannel::showToastsBottom()
 	}
 
 	// Dismiss toasts we don't have space for (STORM-391).
-
-	// <FS:ND/> Crashfix, use local variable instead of mToastList
-	//	if(it != mToastList.rend())
 	if(it != vToastList.rend())
 	{
 		mHiddenToastsNum = 0;
 
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//	for(; it != mToastList.rend(); it++)
 		for(; it != vToastList.rend(); it++)
 		{
 			LLToast* toast = it->getToast();
@@ -785,16 +770,12 @@ void LLScreenChannel::showToastsTop()
 	// <FS:Ansariel> Show toasts in front of other floaters
 	BOOL toasts_in_front = gSavedSettings.getBOOL("FSShowToastsInFront");
 
-	// <FS:ND> Don't use mToastList but a local variable. mToastList can be modified during recursive calls and then all iteratos will be invalidated.
-
+	// Use a local variable instead of mToastList.
+	// mToastList can be modified during recursive calls and then all iteratos will be invalidated.
 	std::vector<ToastElem> vToastList( mToastList );
 
-	// <FS:ND/> Crashfix, use local variable instead of mToastList
-	//	for(it = mToastList.rbegin(); it != mToastList.rend(); ++it)
 	for(it = vToastList.rbegin(); it != vToastList.rend(); ++it)
 	{
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//		if(it != mToastList.rbegin())
 		if(it != vToastList.rbegin())
 		{
 			LLToast* toast = (it-1)->getToast();
@@ -823,8 +804,6 @@ void LLScreenChannel::showToastsTop()
 
 		if(floater && floater->overlapsScreenChannel())
 		{
-			// <FS:ND/> Crashfix, use local variable instead of mToastList
-			//			if(it == mToastList.rbegin())
 			if(it == vToastList.rbegin())
 			{
 				// move first toast above docked floater
@@ -848,8 +827,6 @@ void LLScreenChannel::showToastsTop()
 
 		if(!stop_showing_toasts)
 		{
-			// <FS:ND/> Crashfix, use local variable instead of mToastList
-			//			if( it != mToastList.rend()-1)
 			if( it != vToastList.rend()-1)
 			{
 				S32 toast_bottom = toast->getRect().mBottom - gSavedSettings.getS32("ToastGap");
@@ -858,9 +835,6 @@ void LLScreenChannel::showToastsTop()
 		} 
 
 		// at least one toast should be visible
-
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//		if(it == mToastList.rbegin())
 		if(it == vToastList.rbegin())
 		{
 			stop_showing_toasts = false;
@@ -889,14 +863,10 @@ void LLScreenChannel::showToastsTop()
 	// Dismiss toasts we don't have space for (STORM-391).
 	std::vector<LLToast*> toasts_to_hide;
 
-	// <FS:ND/> Crashfix, use local variable instead of mToastList
-	//	if(it != mToastList.rend())
 	if(it != vToastList.rend())
 	{
 		mHiddenToastsNum = 0;
 
-		// <FS:ND/> Crashfix, use local variable instead of mToastList
-		//		for(; it != mToastList.rend(); it++)
 		for(; it != vToastList.rend(); it++)
 		{
 			LLToast* toast = it->getToast();

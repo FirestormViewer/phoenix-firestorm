@@ -242,6 +242,7 @@ LLGroupMgrGroupData::LLGroupMgrGroupData(const LLUUID& id) :
 	mPendingRoleMemberRequest(FALSE),
 	mAccessTime(0.0f)
 {
+	mMemberVersion.generate();
 }
 
 void LLGroupMgrGroupData::setAccessed()
@@ -322,14 +323,14 @@ void LLGroupMgrGroupData::setRoleData(const LLUUID& role_id, LLRoleData role_dat
 			role_data.mChangeType = RC_UPDATE_DATA;
 		}
 		else
-	{
+		{
 			role_data.mChangeType = RC_UPDATE_POWERS;
 		}
 
 		mRoleChanges[role_id] = role_data;
 	}
 	else
-		{
+	{
 		llwarns << "Change being made to non-existant role " << role_id << llendl;
 	}
 }
@@ -428,6 +429,7 @@ void LLGroupMgrGroupData::removeMemberData()
 	}
 	mMembers.clear();
 	mMemberDataComplete = FALSE;
+	mMemberVersion.generate();
 }
 
 void LLGroupMgrGroupData::removeRoleData()
@@ -948,6 +950,8 @@ void LLGroupMgr::processGroupMembersReply(LLMessageSystem* msg, void** data)
 			LLGroupMgr::getInstance()->sendGroupTitlesRequest(group_id);
 		}
 	}
+
+	group_datap->mMemberVersion.generate();
 
 	if (group_datap->mMembers.size() ==  (U32)group_datap->mMemberCount)
 	{
@@ -1775,8 +1779,6 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
 	bool start_message = true;
 	LLMessageSystem* msg = gMessageSystem;
 
-	
-
 	LLGroupMgrGroupData* group_datap = LLGroupMgr::getInstance()->getGroupData(group_id);
 	if (!group_datap) return;
 
@@ -1858,6 +1860,8 @@ void LLGroupMgr::sendGroupMemberEjects(const LLUUID& group_id,
 	{
 		gAgent.sendReliableMessage();
 	}
+
+	group_datap->mMemberVersion.generate();
 }
 
 
@@ -2014,6 +2018,8 @@ void LLGroupMgr::processCapGroupMembersRequest(const LLSD& content)
 
 		group_datap->mMembers[member_id] = data;
 	}
+
+	group_datap->mMemberVersion.generate();
 
 	// Technically, we have this data, but to prevent completely overhauling
 	// this entire system (it would be nice, but I don't have the time), 

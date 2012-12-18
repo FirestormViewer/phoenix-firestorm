@@ -965,14 +965,10 @@ void LLFloaterPreference::onClose(bool app_quitting)
 {
 	gSavedSettings.setS32("LastPrefTab", getChild<LLTabContainer>("pref core")->getCurrentPanelIndex());
 	LLPanelLogin::setAlwaysRefresh(false);
-	// <FS:Ansariel> Fix for FIRE-8245: Only cancel if the floater is really open
-	//cancel();
-	if (mIsOpen)
+	if (!app_quitting)
 	{
 		cancel();
 	}
-	mIsOpen = false;
-	// </FS:Ansariel>
 }
 
 void LLFloaterPreference::onOpenHardwareSettings()
@@ -1348,24 +1344,15 @@ void LLFloaterPreference::refreshEnabledState()
 	S32 max_tex_mem = LLViewerTextureList::getMaxVideoRamSetting();
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMinValue(min_tex_mem);
 	getChild<LLSliderCtrl>("GraphicsCardTextureMemory")->setMaxValue(max_tex_mem);
-    
+
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("vbo")->setEnabled(FALSE);
-		getChildView("vbo_stream")->setEnabled(FALSE);
 	}
-	else
-#if LL_DARWIN
-		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
-        getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
-#else
-		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
-#endif
-	
-	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||  FS:TM disabled as we do not have RenderCompressTextures in our feature table.
-	//	!gGLManager.mHasVertexBufferObject)
-	if (!gGLManager.mHasVertexBufferObject)
+
+	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
+		!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("texture compression")->setEnabled(FALSE);
 	}

@@ -98,15 +98,7 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 		!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("vbo")->setEnabled(FALSE);
-		getChildView("vbo_stream")->setEnabled(FALSE);
 	}
-	else
-#if LL_DARWIN
-		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
-        getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
-#else
-		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
-#endif
 
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
 		!gGLManager.mHasVertexBufferObject)
@@ -185,7 +177,7 @@ void LLFloaterHardwareSettings::cancel()
 	gSavedSettings.setBOOL("RenderAnisotropic", mUseAniso);
 	gSavedSettings.setU32("RenderFSAASamples", mFSAASamples);
 	gSavedSettings.setF32("RenderGamma", mGamma);
-	//gSavedSettings.setS32("TextureMemory", mVideoCardMem); AO: Don't set this value except when explicitly changed.
+	gSavedSettings.setS32("TextureMemory", mVideoCardMem);
 	gSavedSettings.setF32("RenderFogRatio", mFogRatio);
 	gSavedSettings.setBOOL("ProbeHardwareOnStartup", mProbeHardwareOnStartup );
 

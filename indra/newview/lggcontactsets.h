@@ -1,5 +1,5 @@
-#include "v4color.h"
-/* Copyright (C) 2011 Greg Hendrickson (LordGregGreg Back)
+/* @file lggcontactsets.h
+   Copyright (C) 2011 Greg Hendrickson (LordGregGreg Back)
 
    This is free software; you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,7 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
    02111-1307, USA.  */
 
+#include "v4color.h"
 
 #ifndef LGG_FRIENDS_GROUPS_H
 #define LGG_FRIENDS_GROUPS_H

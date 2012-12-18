@@ -47,12 +47,7 @@ std::string ll_safe_string(const char* in)
 
 std::string ll_safe_string(const char* in, S32 maxlen)
 {
-	// <FS:ND> Crashfix: Safe guard against illegal length too
-
-	//	if(in) return std::string(in, maxlen);
 	if(in && maxlen > 0 ) return std::string(in, maxlen);
-
-	// </FS:ND>
 
 	return std::string();
 }

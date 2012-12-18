@@ -60,12 +60,8 @@
 
 std::string self_av_string()
 {
-	// <FS:ND> On logout gAgentAvatarp can already be invalid
-	if ( !isAgentAvatarValid() )
-		return "";
-	// </FS:ND>
-
-	return gAgentAvatarp->avString();
+	// On logout gAgentAvatarp can already be invalid
+	return isAgentAvatarValid() ? gAgentAvatarp->avString() : "";
 }
 
 // RAII thingy to guarantee that a variable gets reset when the Setter

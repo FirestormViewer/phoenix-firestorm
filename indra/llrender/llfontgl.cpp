@@ -789,7 +789,7 @@ const LLFontDescriptor& LLFontGL::getFontDesc() const
 }
 
 // static
-void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::vector<std::string>& xui_paths, const std::string& fonts_file, F32 size_mod, bool create_gl_textures)
+void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::string& fonts_file, F32 size_mod, bool create_gl_textures)
 {
 	sVertDPI = (F32)llfloor(screen_dpi * y_scale);
 	sHorizDPI = (F32)llfloor(screen_dpi * x_scale);
@@ -800,7 +800,7 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 	// Font registry init
 	if (!sFontRegistry)
 	{
-		sFontRegistry = new LLFontRegistry(xui_paths, create_gl_textures, size_mod);
+		sFontRegistry = new LLFontRegistry(create_gl_textures, size_mod);
 		// Allow the user to pick the fonts
 		if (!sFontRegistry->parseFontInfo(fonts_file))
 		{

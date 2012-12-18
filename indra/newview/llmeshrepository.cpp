@@ -362,7 +362,20 @@ public:
 		mModelData(model_data),
 		mObserverHandle(observer_handle)
 	{
+		if (mThread)
+		{
+			mThread->startRequest();
+		}
 	}
+
+	~LLWholeModelFeeResponder()
+	{
+		if (mThread)
+		{
+			mThread->stopRequest();
+		}
+	}
+
 	virtual void completed(U32 status,
 						   const std::string& reason,
 						   const LLSD& content)
@@ -373,7 +386,6 @@ public:
 			cc = llsd_from_file("fake_upload_error.xml");
 		}
 			
-		mThread->mPendingUploads--;
 		dump_llsd_to_file(cc,make_dump_name("whole_model_fee_response_",dump_num));
 
 		LLWholeModelFeeObserver* observer = mObserverHandle.get();
@@ -416,7 +428,20 @@ public:
 		mModelData(model_data),
 		mObserverHandle(observer_handle)
 	{
+		if (mThread)
+		{
+			mThread->startRequest();
+		}
 	}
+
+	~LLWholeModelUploadResponder()
+	{
+		if (mThread)
+		{
+			mThread->stopRequest();
+		}
+	}
+
 	virtual void completed(U32 status,
 						   const std::string& reason,
 						   const LLSD& content)
@@ -427,7 +452,6 @@ public:
 			cc = llsd_from_file("fake_upload_error.xml");
 		}
 
-		mThread->mPendingUploads--;
 		dump_llsd_to_file(cc,make_dump_name("whole_model_upload_response_",dump_num));
 		
 		LLWholeModelUploadObserver* observer = mObserverHandle.get();
@@ -1186,13 +1210,12 @@ bool LLMeshRepoThread::headerReceived(const LLVolumeParams& mesh_params, U8* dat
 			}
 
 
-		LLMutexLock lock(mMutex); // <FS:ND/> FIRE-7182, make sure only one thread access mPendingLOD at the same time.
+		LLMutexLock lock(mMutex); // make sure only one thread access mPendingLOD at the same time.
 
 		//check for pending requests
 		pending_lod_map::iterator iter = mPendingLOD.find(mesh_params);
 		if (iter != mPendingLOD.end())
 		{
-			//			LLMutexLock lock(mMutex); <FS:ND/> FIRE-7182, lock was moved up, before calling mPendingLOD.find
 			for (U32 i = 0; i < iter->second.size(); ++i)
 			{
 				LODRequest req(mesh_params, iter->second[i]);
@@ -1713,7 +1736,7 @@ void LLMeshUploadThread::doWholeModelUpload()
 			mCurlRequest->process();
 			//sleep for 10ms to prevent eating a whole core
 			apr_sleep(10000);
-		} while (!LLAppViewer::isQuitting() && mCurlRequest->getQueued() > 0);
+		} while (!LLAppViewer::isQuitting() && mPendingUploads > 0);
 	}
 
 	delete mCurlRequest;
@@ -1735,7 +1758,6 @@ void LLMeshUploadThread::requestWholeModelFee()
 	wholeModelToLLSD(model_data,false);
 	dump_llsd_to_file(model_data,make_dump_name("whole_model_fee_request_",dump_num));
 
-	mPendingUploads++;
 	LLCurlRequest::headers_t headers;
 
 	{
@@ -1752,7 +1774,7 @@ void LLMeshUploadThread::requestWholeModelFee()
 		mCurlRequest->process();
 		//sleep for 10ms to prevent eating a whole core
 		apr_sleep(10000);
-	} while (!LLApp::isQuitting() && mCurlRequest->getQueued() > 0);
+	} while (!LLApp::isQuitting() && mPendingUploads > 0);
 
 	delete mCurlRequest;
 	mCurlRequest = NULL;
@@ -1889,11 +1911,11 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	// thread could have already be destroyed during logout
 	if( !gMeshRepo.mThread )
+	{
 		return;
-	// </FS:ND>
-
+	}
 	// <FS:Ansariel> Mesh header/LOD retry functionality
 	{
 		LLMutexLock lock(gMeshRepo.mThread->mMutex);
@@ -1902,7 +1924,7 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 		LL_DEBUGS("MeshRequestTimeout") << "Cleared active mesh LOD request: SculptID=" << mMeshParams.getSculptID() << ", LOD=" << mLOD << LL_ENDL;
 	}
 	// </FS:Ansariel> Mesh header/LOD retry functionality
-
+	
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1961,10 +1983,11 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	// thread could have already be destroyed during logout
 	if( !gMeshRepo.mThread )
+	{
 		return;
-	// </FS:ND>
+	}
 
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
@@ -2024,10 +2047,10 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
 	if( !gMeshRepo.mThread )
+	{
 		return;
-	// </FS:ND>
+	}
 
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
@@ -2087,10 +2110,11 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	// thread could have already be destroyed during logout
 	if( !gMeshRepo.mThread )
+	{
 		return;
-	// </FS:ND>
+	}
 
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
@@ -2150,12 +2174,12 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-	// <FS:ND> FIRE-6485; thread could have already be destroyed during logout
+	// thread could have already be destroyed during logout
 	if( !gMeshRepo.mThread )
+	{
 		return;
-	// </FS:ND>
+	}
 
-	// <FS:Ansariel> Mesh header/LOD retry functionality
 	{
 		LLMutexLock lock(gMeshRepo.mThread->mMutex);
 		LLMeshRepoThread::ActiveHeaderRequest Req(mMeshParams);

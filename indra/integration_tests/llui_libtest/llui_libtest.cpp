@@ -118,12 +118,6 @@ public:
 };
 TestImageProvider gTestImageProvider;
 
-static std::string get_xui_dir()
-{
-	std::string delim = gDirUtilp->getDirDelimiter();
-	return gDirUtilp->getSkinBaseDir() + delim + "default" + delim + "xui" + delim;
-}
-
 void init_llui()
 {
 	// Font lookup needs directory support
@@ -133,13 +127,12 @@ void init_llui()
 	const char* newview_path = "../../../newview";
 #endif
 	gDirUtilp->initAppDirs("SecondLife", newview_path);
-	gDirUtilp->setSkinFolder("default");
+	gDirUtilp->setSkinFolder("default", "en");
 	
 	// colors are no longer stored in a LLControlGroup file
 	LLUIColorTable::instance().loadFromSettings();
 
-	std::string config_filename = gDirUtilp->getExpandedFilename(
-																 LL_PATH_APP_SETTINGS, "settings.xml");
+	std::string config_filename = gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "settings.xml");
 	gSavedSettings.loadFromFile(config_filename);
 	
 	// See LLAppViewer::init()
@@ -154,9 +147,7 @@ void init_llui()
 	
 	const bool no_register_widgets = false;
 	LLWidgetReg::initClass( no_register_widgets );
-	
-	// Unclear if this is needed
-	LLUI::setupPaths();
+
 	// Otherwise we get translation warnings when setting up floaters
 	// (tooltips for buttons)
 	std::set<std::string> default_args;
@@ -168,7 +159,6 @@ void init_llui()
 	// otherwise it crashes.
 	LLFontGL::initClass(96.f, 1.f, 1.f,
 						gDirUtilp->getAppRODataDir(),
-						LLUI::getXUIPaths(),
 						"fonts.xml",
 						f.0,
 						false );	// don't create gl textures
@@ -182,6 +172,14 @@ void init_llui()
 	gFloaterView = LLUICtrlFactory::create<LLFloaterView> (fvparams);
 }
 
+/*==========================================================================*|
+static std::string get_xui_dir()
+{
+	std::string delim = gDirUtilp->getDirDelimiter();
+	return gDirUtilp->getSkinBaseDir() + delim + "default" + delim + "xui" + delim;
+}
+
+// buildFromFile() no longer supports generate-output-LLXMLNode
 void export_test_floaters()
 {
 	// Convert all test floaters to new XML format
@@ -204,7 +202,7 @@ void export_test_floaters()
 		floater->buildFromFile(	filename,
 								//	 FALSE,	// don't open floater
 								output_node);
-		std::string out_filename = xui_dir + filename;
+		std::string out_filename = gDirUtilp->add(xui_dir, filename);
 		std::string::size_type extension_pos = out_filename.rfind(".xml");
 		out_filename.resize(extension_pos);
 		out_filename += "_new.xml";
@@ -216,6 +214,7 @@ void export_test_floaters()
 		fclose(floater_file);
 	}
 }
+|*==========================================================================*/
 
 int main(int argc, char** argv)
 {
@@ -224,7 +223,7 @@ int main(int argc, char** argv)
 
 	init_llui();
 	
-	export_test_floaters();
+//	export_test_floaters();
 	
 	return 0;
 }
