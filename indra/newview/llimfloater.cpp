@@ -865,7 +865,7 @@ void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 			case 3:
 				if (av_name.mIsDisplayNameDefault)
 				{
-					name = av_name.mDisplayName;
+					name = av_name.mUsername;
 				}
 				else
 				{
