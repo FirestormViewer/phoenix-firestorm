@@ -19228,5 +19228,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>1</integer>
     </map>
+    <key>FSIMTabNameFormat</key>
+    <map>
+      <key>Comment</key>
+      <string>Controls in what format the name on IM tabs will be shown: 0 = Display Name, 1 = Username, 2 = Display Name (Username), 3 = Username (Display name)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>S32</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>

@@ -392,6 +392,43 @@
              width="100">
                  (requires restart)
             </text>
+
+			<text
+			 name="FSIMTabNameFormat_label"
+			 follows="left|top"
+			 layout="topleft"
+			 left="30"
+			 height="12"
+			 width="150"
+			 top_pad="12">
+				Name format for IM tabs:
+			</text>
+			<combo_box
+			 control_name="FSIMTabNameFormat"
+			 enabled_control="UseDisplayNames"
+			 layout="topleft"
+			 follows="left|top"
+			 left_pad="10"
+			 top_delta="-5"
+			 name="FSIMTabNameFormat"
+			 width="200">
+				<combo_box.item
+				 label="Display Name"
+				 name="display_name"
+				 value="0" />
+				<combo_box.item
+				 label="Username"
+				 name="user_name"
+				 value="1" />
+				<combo_box.item
+				 label="Display Name (Username)"
+				 name="display_user_name"
+				 value="2" />
+				<combo_box.item
+				 label="Username (Display Name)"
+				 name="user_display_name"
+				 value="3" />
+			</combo_box>
             
             <button
                follows="left|top"
@@ -400,7 +437,7 @@
                layout="topleft"
                left="30"
                name="translation_settings_btn"
-               top_delta="20"
+               top_pad="5"
                width="170">
                <button.commit_callback
                 function="Pref.TranslationSettings" />
