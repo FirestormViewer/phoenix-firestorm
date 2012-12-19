@@ -4978,7 +4978,11 @@ void LLVOAvatar::addBakedTextureStats( LLViewerFetchedTexture* imagep, F32 pixel
 	//the texture pipeline will stop fetching this texture.
 
 	imagep->resetTextureStats();
-	imagep->setCanUseHTTP(false) ; //turn off http fetching for baked textures.
+	// <FS:Ansariel> According to Monty Linden in BUG-871, baked textures can be fetched via HTTP, too!
+	//imagep->setCanUseHTTP(false) ; //turn off http fetching for baked textures.
+	static LLCachedControl<bool> useHttpBakedTextureFetch(gSavedSettings, "UseHTTPBakedTextureFetch");
+	imagep->setCanUseHTTP(useHttpBakedTextureFetch);
+	// </FS:Ansariel>
 	imagep->setMaxVirtualSizeResetInterval(MAX_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL);
 	imagep->resetMaxVirtualSizeResetCounter() ;
 

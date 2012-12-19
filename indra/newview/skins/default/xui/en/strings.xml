@@ -2222,8 +2222,16 @@ osList2Double(list src, integer index)
 This function converts a value in the specified index of the list src to the double data type. However, OSSL does not have a double data type. C# contains a double type, but the current LSL implementation does not.
 </string>
 <string name="LSLTipText_osSetDynamicTextureURL" translate="false">
-osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer)
+string osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer)
 Renders a web texture on the prim containing the script and returns the UUID of the newly created texture.
+</string>
+<string name="LSLTipText_osSetDynamicTextureDataBlend" translate="false">
+string osSetDynamicTextureDataBlend(string dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha)
+Allows for two dynamic textures to blend on the prim containing this script.
+</string>
+<string name="LSLTipText_osSetDynamicTextureDataBlendFace" translate="false">
+string osSetDynamicTextureDataBlendFace(string dynamicID, string contentType, string data, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
+Returns UUID of the generated texture. Intended to be used with subsequent calls to osSetDynamicTextureXXXX functions in order to modify the texture.
 </string>
 <string name="LSLTipText_osSetDynamicTextureURLBlend" translate="false">
 osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha)
@@ -2523,13 +2531,41 @@ Stop a current move to a target.
 osNpcSay(key npc, string message)
 npc says message.
 </string>
+<string name="LSLTipText_osNpcShout" translate="false">
+osNpcShout(key npc, string message)
+npc shouts message.
+</string>
+<string name="LSLTipText_osNpcWhisper" translate="false">
+osNpcWhisper(key npc, string message)
+npc whispers message.
+</string>
+<string name="LSLTipText_osNpcSit" translate="false">
+osNpcSit(key npc, key target, integer options)
+Makes an NPC sit on an object.
+</string>
+<string name="LSLTipText_osNpcStand" translate="false">
+osNpcStand(key npc)
+Makes a sitting NPC stand up.
+</string>
 <string name="LSLTipText_osNpcTouch" translate="false">
 osNpcTouch(key npcKey, key object_key, integer link_num)
 Allows an NPC to touch the specified object determined by it's key and specific link number of the target object. Only LINK_THIS and LINK_ROOT are valid for this function. Any other of the LINK_* constants will be ignored and no touch takes place.
 </string>
 <string name="LSLTipText_osNpcRemove" translate="false">
-osNpcRemove(key npc)
+key osNpcRemove(key npc)
 Removes the NPC specified by key npc.
+</string>
+<string name="LSLTipText_osNpcGetOwner" translate="false">
+key osNpcGetOwner(key npc)
+Get the owner's npc's UUID
+</string>
+<string name="LSLTipText_osNpcPlayAnimation" translate="false">
+osNpcPlayAnimation(key npc, string animation)
+Plays animation on the NPC identified by their key.
+</string>
+<string name="LSLTipText_osNpcStopAnimation" translate="false">
+osNpcStopAnimation(key npc, string animation)
+Stops animation on being played by the NPC identified by their key.
 </string>
 <string name="LSLTipText_osOwnerSaveAppearance" translate="false">
 key osOwnerSaveAppearance(string notecard)

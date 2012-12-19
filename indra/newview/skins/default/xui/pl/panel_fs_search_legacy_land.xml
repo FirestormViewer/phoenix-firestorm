@@ -10,9 +10,10 @@
 			<combo_box.item label="Sprzedaże na Mainland" name="Mainland" />
 			<combo_box.item label="Sprzedaże Majątków" name="Estate" />
 		</combo_box>
-		<check_box label="Cena:" name="price_check" />
-		<check_box label="Obszar:" name="area_check" />
-		<line_editor left_pad="25" name="edit_area" />
+		<check_box label="Cena &lt;" name="price_check" />
+		<line_editor left_pad="23" name="edit_price" />
+		<check_box label="Obszar &gt;" name="area_check" />
+		<line_editor left_pad="32" name="edit_area" />
 		<text name="sort_text">
 			Sortuj po:
 		</text>
