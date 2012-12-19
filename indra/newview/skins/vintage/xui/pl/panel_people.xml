@@ -60,9 +60,9 @@ Chcesz spotkać ludzi? Użyj wyszukiwarki aby znaleźć tematy lub zawartość, 
 					<text name="radarmap_range_label" value="Format nazw radaru:"/>
 					<combo_box name="RadarNameFormat">
 						<combo_box.item name="RadarNameFormat_display" label="Wyświetlane" />
-						<combo_box.item name="RadarNameFormat_user" label="NazwaKonta" />
-						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (NazwaKonta)" />
-						<combo_box.item name="RadarNameFormat_userdisplay" label="NazwaKonta (Wyświetlane)" />
+						<combo_box.item name="RadarNameFormat_user" label="Nazwa konta" />
+						<combo_box.item name="RadarNameFormat_displayuser" label="Wyświetlane (Nazwa konta)" />
+						<combo_box.item name="RadarNameFormat_userdisplay" label="Nazwa konta (Wyświetlane)" />
 					</combo_box>
 				</panel>
 				<panel name="panel_block_list_sidetray" label="Blokowani" />

@@ -58,6 +58,15 @@
 			<text name="req_restart_chattabs">
 				(wymaga restartu)
 			</text>
+			<text name="FSIMTabNameFormat_label">
+				Format imion dla kart IM:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Wyświetlane" name="display_name"/>
+				<combo_box.item label="Nazwa konta" name="user_name"/>
+				<combo_box.item label="Wyświetlane (Nazwa konta)" name="display_user_name"/>
+				<combo_box.item label="Nazwa konta (Wyświetlane)" name="user_display_name"/>
+			</combo_box>
 			<button label="Tłumaczenie..." name="translation_settings_btn"/>
 		</panel>
 		<panel label="Powiadomienia" name="ChatNotifications">
