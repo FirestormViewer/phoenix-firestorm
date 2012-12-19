@@ -17,6 +17,7 @@
 	<menu_item_call label="Przybliż" name="Zoom In"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
 	<menu_item_call label="Derenderuj" name="Derender"/>
+	<menu_item_call label="Derenderuj + czarna lista" name="DerenderPermanent"/>
 	<menu_item_call label="O skryptach" name="ScriptInfo"/>
 	<menu_item_call label="Odśwież tekstury" name="Texture Refresh"/>
 </context_menu>

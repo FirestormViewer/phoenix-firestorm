@@ -17,7 +17,10 @@
 		<pie_slice label="Zwróć" name="Return..."/>
 		<pie_menu label="Więcej >" name="Object Pie More 2">
 			<pie_slice label="Odśwież tekstury" name="Texture Refresh"/>
-			<pie_slice label="Derenderuj" name="Derender"/>
+			<pie_menu name="DerenderMenu" label="Derenderuj &gt;">
+				<pie_slice label="Czarna lista" name="DerenderPermanent"/>
+				<pie_slice label="Tymczasowo" name="Derender"/>
+			</pie_menu>
 			<pie_slice label="Zgłoś..." name="Report Abuse..."/>
 			<pie_menu label="Odnajd. ścieżek >" name="Pathfinding">
 				<pie_slice label="Pokaż w zbiorach części" name="show_in_linksets"/>

@@ -6,7 +6,10 @@
         <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
         <pie_slice label="O skryptach" name="ScriptInfo"/>
         <pie_slice label="Dotknij" name="Attachment Object Touch"/>
-        <pie_slice label="Derenderuj" name="Derender"/>
+        <pie_menu name="DerenderMenu" label="Derenderuj &gt;">
+            <pie_slice label="Tymczasowo" name="Derender"/>
+            <pie_slice label="Czarna lista" name="DerenderPermanent"/>
+        </pie_menu>
     </pie_menu>
     <pie_slice label="Usiądź tu" name="Sit Down Here"/>
     <pie_slice label="Wstań" name="Stand Up"/>
