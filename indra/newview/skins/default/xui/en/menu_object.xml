@@ -270,6 +270,13 @@
     <menu_item_call.on_click
       function="Object.Derender" />
    </menu_item_call>
+   <menu_item_call
+      enabled="true"
+      label="Derender + Blacklist"
+      name="DerenderPermanent">
+    <menu_item_call.on_click
+      function="Object.DerenderPermanent" />
+   </menu_item_call>
    <!-- /Derender -->
    
     <menu_item_call

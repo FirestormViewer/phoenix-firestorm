@@ -20,7 +20,10 @@
             <pie_slice label="Hineinzoomen" name="Zoom In"/>
         </pie_menu>
         <pie_slice label="Untersuchen" name="Avatar Inspect"/>
-        <pie_slice label="Nicht anzeigen" name="Derender"/>
+		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
+			<pie_slice label="Blacklist" name="DerenderPermanent"/>
+			<pie_slice label="Temporär" name="Derender"/>
+		</pie_menu>
     </pie_menu>
     <pie_slice label="IM" name="Send IM..."/>
 </pie_menu>

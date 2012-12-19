@@ -19,6 +19,7 @@
 	<menu_item_call label="Bezahlen" name="Pay..."/>
 	<menu_item_call label="Objektprofil" name="Object Inspect"/>
 	<menu_item_call label="Nicht anzeigen" name="Derender"/>
+	<menu_item_call label="Nicht anzeigen + Blacklist" name="DerenderPermanent"/>
 	<menu_item_call label="Skript-Info" name="ScriptInfo"/>
 	<menu_item_call label="Texturen aktualisieren" name="Texture Refresh"/>
 </context_menu>
