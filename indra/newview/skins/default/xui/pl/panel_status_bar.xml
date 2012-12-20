@@ -3,6 +3,7 @@
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Działka jest na sprzedaż"/>
 		<button name="status_wl_btn" tool_tip="Działka dostarcza ustawienia dla systemu Windlight"/>
+		<button name="status_lightshare_btn" tool_tip="Ustawienia Lightshare"/>
 		<text tool_tip="Nazwa działki, na której się znajdujesz. Kliknij, aby zobaczyć informacje o działce." name="parcel_info_text" value="(ładowanie...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">

@@ -1770,6 +1770,16 @@ Kontynuować?
 [RESIDENTS]
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>
 	</notification>
+	<notification label="Potwierdź bana" name="EstateBanUser">
+		Zabronić dostępu rezydentowi [EVIL_USER] tylko do tego Majątku, czy do [ALL_ESTATES]?
+		<usetemplate name="yesnocancelbuttons" canceltext="Anuluj" notext="Wszystkie Majątki" yestext="Ten Majątek"/>
+	</notification>
+	<notification label="Potwierdź bana" name="EstateBanUserMultiple">
+		Zabronić dostępu poniższym rezydentom tylko do tego Majątku, czy do [ALL_ESTATES]?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Anuluj" notext="Wszystkie Majątki" yestext="Ten Majątek"/>
+	</notification>
 	<notification name="EstateChangeCovenant">
 		Na pewno chcesz zmienić treść umowy dla tego majątku?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="OK"/>

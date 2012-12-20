@@ -11,4 +11,5 @@
 	<menu_item_call label="Działka: Wydal z ziemi" name="eject"/>
 	<menu_item_call label="Majątek: Wyrzuć" name="kick"/>
 	<menu_item_call label="Majątek: Odeślij do domu" name="teleport_home"/>
+	<menu_item_call label="Majątek: Zbanuj" name="estate_ban"/>
 </context_menu>

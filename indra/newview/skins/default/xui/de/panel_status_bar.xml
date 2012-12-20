@@ -18,6 +18,7 @@
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="Diese Parzelle steht zum Verkauf."/>
 		<button name="status_wl_btn" tool_tip="Windlight-Einstellungen der Parzelle"/>
+		<button name="status_lightshare_btn" tool_tip="Lightshare-Einstellungen"/>
 		<text name="parcel_info_text" value="(laden)" tool_tip="Name der Parzelle, auf der du dich befindest. Klicken öffnet die Land-Informationen."/>
 	</panel>
 	<panel name="balance_bg">
