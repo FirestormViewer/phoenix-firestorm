@@ -19,7 +19,10 @@
             <pie_slice label="Odśw. tekstury" name="Texture Refresh"/>
         </pie_menu>
         <pie_slice label="Inspekcja" name="Avatar Inspect"/>
-        <pie_slice label="Derenderuj" name="Derender"/>
+        <pie_menu name="DerenderMenu" label="Derenderuj &gt;">
+            <pie_slice label="Czarna lista" name="DerenderPermanent"/>
+            <pie_slice label="Tymczasowo" name="Derender"/>
+        </pie_menu>
     </pie_menu>
     <pie_slice label="Wiadomość IM" name="Send IM..."/>
 </pie_menu>

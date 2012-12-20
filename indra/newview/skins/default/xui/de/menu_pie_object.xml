@@ -16,7 +16,10 @@
 		<pie_menu label="Anhängen >" name="Pie Object Attach"/>
 		<pie_slice label="Zurückgeben" name="Return..."/>
 		<pie_menu label="Mehr >" name="Object Pie More 2">
-			<pie_slice label="Nicht anzeigen" name="Derender"/>
+			<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
+				<pie_slice label="Blacklist" name="DerenderPermanent"/>
+				<pie_slice label="Temporär" name="Derender"/>
+			</pie_menu>
 			<pie_slice label="Melden..." name="Report Abuse..."/>
 			<pie_separator name="export_placeholder" />
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">

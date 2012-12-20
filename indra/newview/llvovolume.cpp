@@ -906,7 +906,7 @@ void LLVOVolume::updateTextureVirtualSize(bool forced)
 					}
 					tex_list.insert(tex);
 					S32 width= tex->getWidth();
-					S32 height= tex->getWidth();
+					S32 height= tex->getHeight();
 					output+=llformat("%dx%d\n",width,height);
 				}
 			}

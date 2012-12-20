@@ -31,7 +31,7 @@
     label="Radar Name Format"
     name="radarNameFormat">
    	<menu_item_check
-    	label="DisplayName"
+    	label="Display Name"
      	name="radarFmtDN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check
@@ -52,7 +52,7 @@
         	parameter="UN"/>
     </menu_item_check>
    	<menu_item_check
-    	label="DisplayName (UserName)"
+    	label="Display Name (Username)"
      	name="radarFmtDNUN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check
@@ -63,7 +63,7 @@
         	parameter="DNUN"/>
     </menu_item_check>
    	<menu_item_check
-    	label="Username (DisplayName)"
+    	label="Username (Display Name)"
      	name="radarFmtUNDN"
      	enabled_control="UseDisplayNames">
     	<menu_item_check.on_check

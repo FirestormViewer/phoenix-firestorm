@@ -837,16 +837,51 @@ void LLIMFloater::updateSessionName(const std::string& ui_title,
 void LLIMFloater::onAvatarNameCache(const LLUUID& agent_id,
 									const LLAvatarName& av_name)
 {
-	// Use the display name for titles and tabs, because the full username is already in every line header.
-	// This especially makes vertical tabs IMs more readable. -AO
-	std::string name = av_name.getLegacyName();
-	if (LLAvatarNameCache::useDisplayNames() && (!av_name.mDisplayName.empty()))
+	// <FS:Ansariel> FIRE-8658: Let the user decide how the name should be displayed
+	// Use display name only for labels, as the extended name will be in the
+	// floater title
+	//std::string ui_title = av_name.getCompleteName();
+	//updateSessionName(ui_title, av_name.mDisplayName);
+	//mTypingStart.setArg("[NAME]", ui_title);
+
+	std::string name = av_name.getCompleteName();
+	if (LLAvatarNameCache::useDisplayNames())
 	{
-		name = av_name.mDisplayName;
+		switch (gSavedSettings.getS32("FSIMTabNameFormat"))
+		{
+			// Display name
+			case 0:
+				name = av_name.mDisplayName;
+				break;
+			// Username
+			case 1:
+				name = av_name.mUsername;
+				break;
+			// Display name (username)
+			case 2:
+				// Do nothing - we already set the complete name as default
+				break;
+			// Username (display name)
+			case 3:
+				if (av_name.mIsDisplayNameDefault)
+				{
+					name = av_name.mUsername;
+				}
+				else
+				{
+					name = av_name.mUsername + " (" + av_name.mDisplayName + ")";
+				}
+				break;
+			default:
+				// Do nothing - we already set the complete name as default
+				break;
+		}
 	}
+
 	updateSessionName(name, name);
 	mTypingStart.setArg("[NAME]", name);
 	llinfos << "Setting IM tab name to '" << name << "'" << llendl;
+	// </FS:Ansariel>
 }
 
 // virtual

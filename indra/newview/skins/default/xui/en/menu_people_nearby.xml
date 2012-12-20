@@ -164,6 +164,14 @@
        <menu_item_call.on_visible
           function="Avatar.VisibleKickTeleportHome"/>
      </menu_item_call>
+     <menu_item_call
+      label="Estate Ban"
+      name="estate_ban">
+       <menu_item_call.on_click
+          function="Avatar.EstateBan"/>
+       <menu_item_call.on_visible
+          function="Avatar.VisibleKickTeleportHome"/>
+     </menu_item_call>
 
 
 

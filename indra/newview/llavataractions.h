@@ -239,11 +239,18 @@ public:
 	static void estateKickMultiple(const uuid_vec_t& idAgents);
 	static void estateTeleportHomeMultiple(const uuid_vec_t& idAgents);
 
+	// <FS:Ansariel> Estate ban
+	static void estateBan(const LLUUID& idAgent);
+	static void estateBanMultiple(const uuid_vec_t& idAgents);
+	// </FS:Ansariel> Estate ban
+
 	static std::set<LLUUID> getInventorySelectedUUIDs();
 
 protected:
 	static bool callbackEstateKick(const LLSD& notification, const LLSD& response);
 	static bool callbackEstateTeleportHome(const LLSD& notification, const LLSD& response);
+	// <FS:Ansariel> Estate ban
+	static bool callbackEstateBan(const LLSD& notification, const LLSD& response);
 	
 private:
 	static bool callbackAddFriendWithMessage(const LLSD& notification, const LLSD& response);

@@ -137,13 +137,24 @@
             <pie_slice.on_click
                 function="Object.TexRefresh" />
         </pie_slice>
-        <pie_slice
-            enabled="true"
-            label="Derender"
-            name="Derender">
-            <pie_slice.on_click
-                function="Object.Derender" />
-        </pie_slice>
+        <pie_menu
+            name="DerenderMenu"
+            label="Derender &gt;">
+			<pie_slice
+				enabled="true"
+				label="Blacklist"
+				name="DerenderPermanent">
+				<pie_slice.on_click
+					function="Object.DerenderPermanent" />
+			</pie_slice>
+			<pie_slice
+				enabled="true"
+				label="Temporary"
+				name="Derender">
+				<pie_slice.on_click
+					function="Object.Derender" />
+			</pie_slice>
+        </pie_menu>
         <pie_slice
             enabled="false"
             label="Report..."

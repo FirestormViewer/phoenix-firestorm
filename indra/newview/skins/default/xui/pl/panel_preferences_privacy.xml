@@ -27,7 +27,6 @@
 			<check_box label="Dodaj znacznik czasu do każdej linii w logu rozmów" name="show_timestamps_check_im"/>
 			<check_box label="Pokazuj sekundy w logach" name="seconds_in_timestamps"/>
 			<check_box label="Dodaj znacznik czasu do nazwy pliku z zapisem rozmów" name="logfile_name_datestamp"/>
-			<check_box label="Dodawaj nazwę siatki (grida) do folderów logów czatów (ustawiane przy logowaniu)" name="grid_append_chat_log_folder"/>
 			<button label="Lista zablokowanych / wyciszonych" name="block_list"/>
 		</panel>
 		<panel label="Śledzenie spojrzeń" name="tab-lookat">

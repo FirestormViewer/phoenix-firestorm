@@ -294,13 +294,13 @@ void LLPanelBlockedList::onSelectionChanged()
 {
 	updateButtons();
 	LLMute mute = LLMuteList::getInstance()->getMute(mBlockedList->getStringUUIDSelectedItem());
-	getChildView("Profile")->setEnabled(mute.mID.notNull() && mute.mType == LLMute::AGENT);
+	getChildView("Profile")->setEnabled(mBlockedList->getNumSelected() == 1 && mute.mID.notNull() && mute.mType == LLMute::AGENT);
 }
 
 void LLPanelBlockedList::onProfileBtnClick()
 {
 	LLMute mute = LLMuteList::getInstance()->getMute(mBlockedList->getStringUUIDSelectedItem());
-	if (mute.mID.notNull() && mute.mType == LLMute::AGENT)
+	if (mBlockedList->getNumSelected() == 1 && mute.mID.notNull() && mute.mType == LLMute::AGENT)
 	{
 		LLAvatarActions::showProfile(mute.mID);
 	}

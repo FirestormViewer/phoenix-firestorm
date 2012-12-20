@@ -76,6 +76,15 @@
              name="req_restart_chattabs">
                  (Erfordert Neustart)
             </text>
+			<text name="FSIMTabNameFormat_label">
+				Namensformat für IM-Tabs:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="Anzeigename" name="display_name"/>
+				<combo_box.item label="Benutzername" name="user_name"/>
+				<combo_box.item label="Anzeigename (Benutzername)" name="display_user_name"/>
+				<combo_box.item label="Benutzername (Anzeigename)" name="user_display_name"/>
+			</combo_box>
 			<button label="Einstellungen Chat-Übersetzung" name="translation_settings_btn" width="190"/>
 		</panel>
 		

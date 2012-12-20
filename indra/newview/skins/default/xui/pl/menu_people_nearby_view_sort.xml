@@ -4,9 +4,9 @@
 	<menu_item_check label="Ogranicz wyniki do określonej odległości" name="LimitRadarByRange"/>
 	<menu label="Format imion radaru" name="radarNameFormat">
 		<menu_item_check label="Wyświetlane" name="radarFmtDN"/>
-		<menu_item_check label="NazwaKonta" name="radarFmtUN"/>
-		<menu_item_check label="Wyświetlane (NazwaKonta)" name="radarFmtDNUN"/>
-		<menu_item_check label="NazwaKonta (Wyświetlane)" name="radarFmtUNDN"/>
+		<menu_item_check label="Nazwa konta" name="radarFmtUN"/>
+		<menu_item_check label="Wyświetlane (Nazwa konta)" name="radarFmtDNUN"/>
+		<menu_item_check label="Wyświetlane (Wyświetlane)" name="radarFmtUNDN"/>
 	</menu>
 	<menu_item_check label="Pierścień czatu lokalnego na minimapie" name="MiniMapChatRing"/>
 	<menu_item_check label="Powiadom o wejściu osoby w pole widzenia" name="RadarReportDrawRangeEnter"/>

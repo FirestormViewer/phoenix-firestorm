@@ -20,4 +20,5 @@
 	<menu_item_call label="Parzelle: Entfernen" name="eject"/>
 	<menu_item_call label="Estate: Hinauswerfen" name="kick"/>
 	<menu_item_call label="Estate: Teleport nach Hause" name="teleport_home"/>
+	<menu_item_call label="Estate: Verbannen" name="estate_ban"/>
 </context_menu>

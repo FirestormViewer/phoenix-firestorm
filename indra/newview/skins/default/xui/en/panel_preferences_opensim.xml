@@ -134,6 +134,16 @@
   label=""
   name="debug_search_panel">
     <check_box
+      control_name="FSOpenSimLightshare"
+      height="16"
+      initial_value="true"
+      label="Enable region Lightshare settings"
+      layout="topleft"
+      left="30"
+      name="Lightshare"
+      top_pad="1"
+      width="256" />
+	<check_box
       control_name="DebugSearch"
       height="16"
       initial_value="false"

@@ -5,7 +5,10 @@
     <pie_menu name="Attachment Pie More" label="Mehr &gt;">
         <pie_slice label="Skript-Info" name="ScriptInfo"/>
         <pie_slice label="Berühren" name="Attachment Object Touch"/>
-        <pie_slice label="Nicht anzeigen" name="Derender"/>
+		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
+			<pie_slice label="Temporär" name="Derender"/>
+			<pie_slice label="Blacklist" name="DerenderPermanent"/>
+		</pie_menu>
         <pie_separator name="inspect_placeholder" />
     </pie_menu>
     <pie_slice label="Hinsetzen" name="Sit Down Here"/>

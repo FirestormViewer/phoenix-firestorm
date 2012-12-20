@@ -2676,53 +2676,73 @@ void cleanup_menus()
 // Object pie menu
 //-----------------------------------------------------------------------------
 
-class LLObjectDerender : public view_listener_t
+// <FS:Ansariel> FIRE-6970/FIRE-6998: Optional permanent derendering of multiple objects
+void derenderObject(bool permanent)
 {
-    bool handleEvent(const LLSD& userdata)
-    {
-		LLSelectNode* nodep = LLSelectMgr::getInstance()->getSelection()->getFirstRootNode();
-		LLViewerObject* objp = (nodep) ? nodep->getObject() : NULL;
-			
+	LLViewerObject* objp;
+	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
+	while ((objp = select_mgr->getSelection()->getFirstRootObject()))
+	{
 //		if ( (objp) && (gAgentID != objp->getID()) )
 // [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
 		// Don't allow derendering of own attachments when RLVa is enabled
 		if ( (objp) && (gAgentID != objp->getID()) && ((!rlv_handler_t::isEnabled()) || (!objp->isAttachment()) || (!objp->permYouOwner())) )
 // [/RLVa:KB]
 		{
-	        LLSelectMgr::getInstance()->removeObjectFromSelections(objp->getID());
-
-			std::string entry_name;
-			std::string region_name;
-
-			if (objp->isAvatar())
+			if (permanent)
 			{
-				LLNameValue* firstname = objp->getNVPair("FirstName");
-				LLNameValue* lastname = objp->getNVPair("LastName");
-				entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
-			}
-			else
-			{
-				if (!nodep->mName.empty())
-				{
-					entry_name = nodep->mName;
-				}
+				std::string entry_name;
+				std::string region_name;
 
-				LLViewerRegion* region = objp->getRegion();
-				if (region)
+				if (objp->isAvatar())
 				{
-					region_name = region->getName();
+					LLNameValue* firstname = objp->getNVPair("FirstName");
+					LLNameValue* lastname = objp->getNVPair("LastName");
+					entry_name = llformat("%s %s" ,firstname->getString(), lastname->getString());
 				}
-			}
+				else
+				{
+					LLSelectNode* nodep = select_mgr->getSelection()->getFirstRootNode();
+					if (!nodep->mName.empty())
+					{
+						entry_name = nodep->mName;
+					}
+
+					LLViewerRegion* region = objp->getRegion();
+					if (region)
+					{
+						region_name = region->getName();
+					}
+				}
 			
-			FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
+				FSWSAssetBlacklist::getInstance()->addNewItemToBlacklist(objp->getID(), entry_name, region_name, LLAssetType::AT_OBJECT);
+			}
 
-			LLSelectMgr::getInstance()->deselectAll();
+			select_mgr->deselectObjectOnly(objp);
 			gObjectList.killObject(objp);
 		}
-        return true;
+	}
+}
+
+class LLObjectDerenderPermanent : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		derenderObject(true);
+		return true;
+	}
+};
+
+class LLObjectDerender : public view_listener_t
+{
+    bool handleEvent(const LLSD& userdata)
+    {
+		derenderObject(false);
+		return true;
     }
 };
+// </FS:Ansariel>
 
 class LLEnableEditParticleSource : public view_listener_t
 {
@@ -10130,7 +10150,8 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLObjectReturn(), "Object.Return");
 	view_listener_t::addMenu(new LLObjectReportAbuse(), "Object.ReportAbuse");
 	view_listener_t::addMenu(new LLObjectMute(), "Object.Mute");
-    view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
+	view_listener_t::addMenu(new LLObjectDerender(), "Object.Derender");
+	view_listener_t::addMenu(new LLObjectDerenderPermanent(), "Object.DerenderPermanent"); // <FS:Ansariel> Optional derender & blacklist
 	view_listener_t::addMenu(new LLObjectTexRefresh(), "Object.TexRefresh");	// ## Zi: Texture Refresh
 	view_listener_t::addMenu(new LLEditParticleSource(), "Object.EditParticles");
    	view_listener_t::addMenu(new LLEnableEditParticleSource(), "Object.EnableEditParticles");

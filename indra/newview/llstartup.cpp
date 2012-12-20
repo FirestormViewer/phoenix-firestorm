@@ -1092,7 +1092,14 @@ bool idle_startup()
          
 		// create necessary directories
 		// *FIX: these mkdir's should error check
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+		std::string gridlabel = LLGridManager::getInstance()->getGridLabel();
+		gDirUtilp->setLindenUserDir(userid, gridlabel);
+#else
 		gDirUtilp->setLindenUserDir(userid);
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
 		// Set PerAccountSettingsFile to the default value.
@@ -1124,12 +1131,13 @@ bool idle_startup()
 		{
 			gDirUtilp->setChatLogsDir(gSavedPerAccountSettings.getString("InstantMessageLogPath"));		
 		}
-// <FS:CR> FIRE-7343: Seperate chat logs per grid
-		//gDirUtilp->setPerAccountChatLogsDir(userid);
-		static LLCachedControl<bool> AppendGrid(gSavedSettings, "FSAppendGridToLogFolder");
-		gDirUtilp->setPerAccountChatLogsDir(LLGridManager::getInstance()->getGridLabel(), userid, AppendGrid);
-// </FS:CR> FIRE-7343: Seperate chat logs per grid
-		
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
+#else
+		gDirUtilp->setPerAccountChatLogsDir(userid);
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>		
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
 

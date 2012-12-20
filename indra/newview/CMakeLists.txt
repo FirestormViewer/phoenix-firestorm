@@ -123,6 +123,7 @@ set(viewer_SOURCE_FILES
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
+    fslightshare.cpp
     fslslbridge.cpp
     fslslbridgerequest.cpp
     fslslpreproc.cpp
@@ -778,6 +779,7 @@ set(viewer_HEADER_FILES
     fsgridhandler.h
     fsgrouptitles.h
     fskeywords.h
+    fslightshare.h
     fslslbridge.h
     fslslbridgerequest.h
     fslslpreproc.h

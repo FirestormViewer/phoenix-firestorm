@@ -146,6 +146,19 @@
     top="2"
     tool_tip="Parcel has WL settings" 
     width="16"/>
+   <button
+    follows="right|top"
+    height="16"
+    hover_glow_amount="0.15"
+    image_disabled="Icon_Lightshare"
+    image_disabled_selected="Icon_Lightshare"
+    image_selected="Icon_Lightshare"
+    image_unselected="Icon_Lightshare"
+    left="208"
+    name="status_lightshare_btn"
+    top="2"
+    tool_tip="Lightshare settings"
+    width="16"/>
   <icon
     follows="right|top"
     height="13"
