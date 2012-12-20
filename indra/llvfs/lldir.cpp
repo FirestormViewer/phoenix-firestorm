@@ -624,7 +624,7 @@ void LLDir::setLindenUserDir(const std::string &username)
 		mLindenUserDir += userlower;
 // <FS:CR> Seperate user directories per grid on OS build		
 #ifdef HAS_OPENSIM_SUPPORT
-		if (!gridname.empty())
+		if (!gridname.empty() && gridlower != "second_life")
 		{
 			mLindenUserDir += "." + gridlower;
 		}
@@ -679,7 +679,7 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 		mPerAccountChatLogsDir += userlower;
 // <FS:CR> Seperate user directories per grid on OS build
 #ifdef HAS_OPENSIM_SUPPORT
-		if (!gridname.empty())
+		if (!gridname.empty() && gridlower != "second_life")
 		{
 			mPerAccountChatLogsDir += "." + gridlower;
 		}
