@@ -898,4 +898,6 @@ with the same filename but different name
 <texture name="Icon_Legacy_Event_Mature" file_name="icon_legacy_event_mature.tga" preload="false" />
 <texture name="Icon_Legacy_Event_Adult" file_name="icon_legacy_event_adult.tga" preload="false" />
 
+<texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
+
 </textures>

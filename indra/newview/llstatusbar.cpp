@@ -103,6 +103,7 @@
 
 #include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llvieweraudio.h"
+#include "fslightshare.h"	// <FS:CR> FIRE-5118 - Lightshare support
 
 //
 // Globals
@@ -367,6 +368,11 @@ BOOL LLStatusBar::postBuild()
 
 	mPWLBtn = getChild<LLButton>("status_wl_btn");
 	mPWLBtn->setClickedCallback(boost::bind(&LLStatusBar::onParcelWLClicked, this));
+	
+	// <FS:CR> FIRE-5118 - Lightshare support
+	mLightshareBtn = getChild<LLButton>("status_lightshare_btn");
+	mLightshareBtn->setClickedCallback(boost::bind(&LLStatusBar::onLightshareClicked, this));
+	// </FS:CR>
 
 	mBalancePanel = getChild<LLPanel>("balance_bg");
 	mTimeMediaPanel = getChild<LLPanel>("time_and_media_bg");
@@ -1075,6 +1081,9 @@ void LLStatusBar::updateParcelIcons()
 		BOOL see_avatars	= current_parcel->getSeeAVs();
 		bool is_for_sale	= (!current_parcel->isPublic() && vpm->canAgentBuyParcel(current_parcel, false));
 		bool has_pwl		= KCWindlightInterface::instance().getWLset();
+		// <FS:CR> FIRE-5118 - Lightshare support
+		bool has_lightshare	= FSLightshare::getInstance()->getState();
+		// </FS:CR>
 		// <FS:Ansariel> Pathfinding support
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
 
@@ -1114,6 +1123,10 @@ void LLStatusBar::updateParcelIcons()
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
 		mPWLBtn->setEnabled(has_pwl);
+		// <FS:CR> FIRE-5118 - Lightshare support
+		mLightshareBtn->setVisible(has_lightshare);
+		mLightshareBtn->setEnabled(has_lightshare);
+		// </FS:CR>
 	}
 	else
 	{
@@ -1124,6 +1137,9 @@ void LLStatusBar::updateParcelIcons()
 		mDamageText->setVisible(false);
 		mBuyParcelBtn->setVisible(false);
 		mPWLBtn->setVisible(false);
+		// <FS:CR> FIRE-5118 - Lightshare support
+		mLightshareBtn->setVisible(false);
+		// </FS:CR>
 		allow_voice	= vpm->allowAgentVoice();	// <FS:Zi> update allow_voice even if icons are hidden
 	}
 
@@ -1166,6 +1182,9 @@ void LLStatusBar::layoutParcelIcons()
 	}
 	left = layoutWidget(mBuyParcelBtn, left);
 	left = layoutWidget(mPWLBtn, left);
+	// <FS:CR> FIRE-5118 - Lightshare support
+	left = layoutWidget(mLightshareBtn, left);
+	// </FS:CR>
 
 	LLRect infoTextRect = mParcelInfoText->getRect();
 	infoTextRect.mLeft = left;
@@ -1294,6 +1313,13 @@ void LLStatusBar::onParcelWLClicked()
 {
 	KCWindlightInterface::instance().onClickWLStatusButton();
 }
+
+// <FS:CR> FIRE-5118 - Lightshare support
+void LLStatusBar::onLightshareClicked()
+{
+	FSLightshare::getInstance()->processLightshareRefresh();
+}
+// </FS:CR>
 
 void LLStatusBar::onBuyLandClicked()
 {

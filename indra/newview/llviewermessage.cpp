@@ -149,6 +149,7 @@ const static boost::regex NEWLINES("\\n{1}");
 // [/AO]
 #include "tea.h" // <FS:AW opensim currency support>
 #include "fscommon.h"
+#include "fslightshare.h" // <FS:CR> FIRE-5118 - Lightshare support
 
 #if LL_MSVC
 // disable boost::lexical_cast warning
@@ -4671,6 +4672,9 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 		LLWorldMap::getInstance()->cancelTracking();
 	}
 
+	// <FS:CR> FIRE-5118 - Lightshare support
+	FSLightshare::getInstance()->processLightshareRefresh();
+	// </FS:CR>
 /*
 	// send camera update to new region
 	gAgentCamera.updateCamera();
