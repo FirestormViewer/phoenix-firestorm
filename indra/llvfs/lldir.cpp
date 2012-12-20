@@ -596,8 +596,13 @@ std::string LLDir::getForbiddenFileChars()
 {
 	return "\\/:*?\"<>|";
 }
-
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+void LLDir::setLindenUserDir(const std::string &username, const std::string &gridname)
+#else
 void LLDir::setLindenUserDir(const std::string &username)
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 {
 	// if the username isn't set, that's bad
 	if (!username.empty())
@@ -607,9 +612,24 @@ void LLDir::setLindenUserDir(const std::string &username)
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+		std::string gridlower(gridname);
+		LLStringUtil::toLower(gridlower);
+		LLStringUtil::replaceChar(gridlower, ' ', '_');
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 		mLindenUserDir = getOSUserAppDir();
 		mLindenUserDir += mDirDelimiter;
 		mLindenUserDir += userlower;
+// <FS:CR> Seperate user directories per grid on OS build		
+#ifdef HAS_OPENSIM_SUPPORT
+		if (!gridname.empty())
+		{
+			mLindenUserDir += "." + gridlower;
+		}
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 	}
 	else
 	{
@@ -631,10 +651,13 @@ void LLDir::setChatLogsDir(const std::string &path)
 	}
 }
 
-// <FS:CR> FIRE-7343: Seperate chat logs per grid
-//void LLDir::setPerAccountChatLogsDir(const std::string &username)
-void LLDir::setPerAccountChatLogsDir(const std::string &gridname, const std::string &username, bool append)
-// <//FS:CR> FIRE-7343: Seperate chat logs per grid
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+void LLDir::setPerAccountChatLogsDir(const std::string &username, const std::string &gridname)
+#else
+void LLDir::setPerAccountChatLogsDir(const std::string &username)
+#endif // HAS_OPENSIM_SUPPORT
+// <//FS:CR>
 {
 	// if both first and last aren't set, assume we're grabbing the cached dir
 	if (!username.empty())
@@ -644,20 +667,24 @@ void LLDir::setPerAccountChatLogsDir(const std::string &gridname, const std::str
 		std::string userlower(username);
 		LLStringUtil::toLower(userlower);
 		LLStringUtil::replaceChar(userlower, ' ', '_');
-// <FS:CR> FIRE-7343: Seperate chat logs per grid
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
 		std::string gridlower(gridname);
 		LLStringUtil::toLower(gridlower);
 		LLStringUtil::replaceChar(gridlower, ' ', '_');
-// </FS:CR> FIRE-7343: Seperate chat logs per grid
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 		mPerAccountChatLogsDir = getChatLogsDir();
 		mPerAccountChatLogsDir += mDirDelimiter;
 		mPerAccountChatLogsDir += userlower;
-// <FS:CR> FIRE-7343: Seperate chat logs per grid
-		// If the user has elected, append the grid name to chat log directories
-		if (append && !gridname.empty())
+// <FS:CR> Seperate user directories per grid on OS build
+#ifdef HAS_OPENSIM_SUPPORT
+		if (!gridname.empty())
 		{
 			mPerAccountChatLogsDir += "." + gridlower;
 		}
+#endif // HAS_OPENSIM_SUPPORT
+// </FS:CR>
 				
 	}
 	else

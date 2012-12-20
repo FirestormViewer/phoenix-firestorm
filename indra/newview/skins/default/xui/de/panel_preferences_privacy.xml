@@ -32,7 +32,6 @@
 			<check_box label="Zeige Sekunden im Chat- und Log-Zeitstempel" name="seconds_in_timestamps"/>
 			<check_box label="Verstecke Zeitstempel im Chat in der Nähe" name="hide_timestamps_nearby_chat"/>
 			<check_box label="Datumsstempel zu Protokolldateinamen hinzufügen" name="logfile_name_datestamp"/>
-			<check_box label="Grid-Namen zum Verzeichnis der Protokolldateien hinzufügen" name="grid_append_chat_log_folder"/>
 			<text name="log_path_desc">
 				Protokolle speichern in:
 			</text>
