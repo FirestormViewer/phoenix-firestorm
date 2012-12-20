@@ -17,6 +17,7 @@
 		<button label="Entfernen" name="remove_grid" width="80"/>
 	</panel>
 	<panel name="debug_search_panel">
+		<check_box label="Lightshare Regionseinstellungen aktivieren" name="Lightshare"/>
 		<check_box label="Suche Debuggen" name="DebugSearch"/>
 		<text name="search_url_debug_text">
 			Aktuelle URL für die Suche überschreiben: (kein Überschreiben falls leer)
