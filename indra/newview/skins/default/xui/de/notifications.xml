@@ -1782,8 +1782,35 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate canceltext="Abbrechen" name="yesnocancelbuttons" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
 	</notification>
 	<notification label="Rauswurf bestätigen" name="EstateKickUser">
-		Benutzer [EVIL_USER] von diesem Grundbesitz werfen?
+		Einwohner [EVIL_USER] von diesem Grundbesitz werfen?
 		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Rauswurf bestätigen" name="EstateKickMultiple">
+		Die folgenden Einwohner von diesem Grundbesitz werfen?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	
+	<notification label="Nach Hause teleportieren bestätigen" name="EstateTeleportHomeUser">
+		[AVATAR_NAME] nach Hause teleportieren?
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Nach Hause teleportieren bestätigen" name="EstateTeleportHomeMultiple">
+		Die folgenden Einwohnern nach Hause teleportieren?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="OK"/>
+	</notification>
+	<notification label="Verbannen bestätigen" name="EstateBanUser">
+		Zugang für [EVIL_USER] nur für diesen Grundbesitz oder für [ALL_ESTATES] verweigern?
+		<usetemplate name="yesnocancelbuttons" canceltext="Abbrechen" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
+	</notification>
+	<notification label="Verbannen bestätigen" name="EstateBanUserMultiple">
+		Zugang für folgende Einwohner nur für diesen Grundbesitz oder für [ALL_ESTATES] verweigern?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Abbrechen" notext="Alle Grundbesitze" yestext="Diesen Grundbesitz"/>
 	</notification>
 	<notification name="EstateChangeCovenant">
 		Möchten Sie den Grundbesitzvertrag wirklich ändern?

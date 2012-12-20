@@ -82,6 +82,8 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHome,			id));
 		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHome,	id));
 		// [/SL:KB]
+		// <FS:Ansariel> Estate ban user
+		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBan,					id));
 		
 		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
 		registrar.add("Nearby.People.TrackAvatar", boost::bind(&NearbyMenu::onTrackAvatarMenuItemClick, this));
@@ -114,6 +116,8 @@ LLContextMenu* NearbyMenu::createMenu()
 		registrar.add("Avatar.TeleportHome",					boost::bind(&LLAvatarActions::estateTeleportHomeMultiple,	mUUIDs));
 		enable_registrar.add("Avatar.VisibleKickTeleportHome",	boost::bind(&LLAvatarActions::canEstateKickOrTeleportHomeMultiple, mUUIDs, false));
 		// [/SL:KB]
+		// <FS:Ansariel> Estate ban user
+		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBanMultiple,			mUUIDs));
 		
 		// create the context menu from the XUI
 		return createFromFile("menu_people_nearby_multiselect.xml");

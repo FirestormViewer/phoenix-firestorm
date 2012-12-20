@@ -4388,18 +4388,33 @@ Teleport the following residents home?
      yestext="OK"/>
   </notification>
 
-
-
   <notification
-   icon="alertmodal.tga"
-   name="EstateChangeCovenant"
-   type="alertmodal">
-Are you sure you want to change the estate covenant?
+   icon="alert.tga"
+   label="Confirm Ban"
+   name="EstateBanUser"
+   type="alert">
+Deny access for [EVIL_USER] for this estate only or for [ALL_ESTATES]?
     <tag>confirm</tag>
     <usetemplate
-     name="okcancelbuttons"
-     notext="Cancel"
-     yestext="OK"/>
+     name="yesnocancelbuttons"
+     canceltext="Cancel"
+     notext="All Estatees"
+     yestext="This Estate"/>
+  </notification>
+
+  <notification
+   icon="alert.tga"
+   label="Confirm Ban"
+   name="EstateBanUserMultiple"
+   type="alert">
+Deny access for the following residents this estate only or for [ALL_ESTATES]?
+
+[RESIDENTS]
+    <usetemplate
+     name="yesnocancelbuttons"
+     canceltext="Cancel"
+     notext="All Estatees"
+     yestext="This Estate"/>
   </notification>
 
   <notification
@@ -4413,6 +4428,18 @@ Are you sure you want to change the estate covenant?
      yestext="OK"/>
   </notification>
 
+  <notification
+   icon="alertmodal.tga"
+   name="EstateChangeCovenant"
+   type="alertmodal">
+Are you sure you want to change the estate covenant?
+    <tag>confirm</tag>
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="OK"/>
+  </notification>
+  
   <notification
    icon="alertmodal.tga"
    name="RegionEntryAccessBlocked_AdultsOnlyContent"
