@@ -16,10 +16,11 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
    02111-1307, USA.  */
 
-#include "v4color.h"
-
 #ifndef LGG_FRIENDS_GROUPS_H
 #define LGG_FRIENDS_GROUPS_H
+
+#include "v4color.h"
+
 class LGGContactSets
 {
 	LGGContactSets();
@@ -86,7 +87,5 @@ private:
 	LLSD mContactSets;
 
 };
-
-
 
 #endif 
