@@ -230,9 +230,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>86cbc23962babb418992e26f0301e674</string>
+              <string>da0f0847029af9628711831dcb35dec9</string>
               <key>url</key>
-              <string>http://phoenixviewer.com/app/packages/boost-1.45.0-darwin-20120325.tar.bz2</string>
+				<string>http://downloads.phoenixviewer.com/boost-1.52.0-darwin-20121221.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
