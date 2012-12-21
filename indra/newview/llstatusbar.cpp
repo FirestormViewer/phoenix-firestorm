@@ -101,6 +101,7 @@
 // system includes
 #include <iomanip>
 
+#include "llmenuoptionpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llvieweraudio.h"
 #include "fslightshare.h"	// <FS:CR> FIRE-5118 - Lightshare support
 
@@ -110,6 +111,35 @@
 LLStatusBar *gStatusBar = NULL;
 S32 STATUS_BAR_HEIGHT = 26;
 extern S32 MENU_BAR_HEIGHT;
+
+// <FS:LO> FIRE-7639 - Stop the blinking after a while
+LLViewerRegion* agent_region;
+bool bakingStarted = false;
+
+class LORebakeStuck;
+LORebakeStuck *bakeTimeout = NULL;
+
+class LORebakeStuck: public LLEventTimer
+{
+public:
+	LORebakeStuck(LLStatusBar *bar) : LLEventTimer(30.0f)
+	{
+		mbar=bar;
+	}
+	~LORebakeStuck()
+	{
+		bakeTimeout=NULL;
+	}
+	BOOL tick()
+	{
+		mbar->setRebakeStuck(true);
+		return TRUE;
+	}
+private:
+	LLStatusBar *mbar;
+};
+
+// </FS:LO>
 
 
 // TODO: these values ought to be in the XML too
@@ -157,7 +187,9 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mShowParcelIcons(TRUE),
 	mSquareMetersCredit(0),
 	mSquareMetersCommitted(0),
-	mAudioStreamEnabled(FALSE)	// ## Zi: Media/Stream separation
+	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
+	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
+	mRebakeStuck(FALSE)			// <FS:LO> FIRE-7639 - Stop the blinking after a while
 {
 	setRect(rect);
 	
@@ -444,7 +476,45 @@ void LLStatusBar::refresh()
 		LLStringUtil::format (dtStr, substitution);
 		mTextTime->setToolTip (dtStr);
 	}
-	
+
+	// <FS:Zi> Pathfinding rebake functions
+	static LLMenuOptionPathfindingRebakeNavmesh::ERebakeNavMeshMode pathfinding_mode=LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Default;
+	// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	LLViewerRegion* current_region = gAgent.getRegion();
+	if(current_region != agent_region)
+	{
+		agent_region=current_region;
+		bakingStarted = false;
+		mRebakeStuck = false;
+	}
+	// </FS:LO>
+	if(	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+	{
+		// <FS:LO> FIRE-7639 - Stop the blinking after a while
+		if(!bakingStarted)
+		{
+			bakingStarted = true;
+			mRebakeStuck = false;
+			bakeTimeout = new LORebakeStuck(this);
+		}
+		// </FS:LO>
+		
+		if(	agent_region &&
+			agent_region->dynamicPathfindingEnabled() && 
+			mRebakingTimer.getElapsedTimeF32()>0.5f)
+		{
+			mRebakingTimer.reset();
+			mPathfindingFlashOn=!mPathfindingFlashOn;
+			updateParcelIcons();
+		}
+	}
+	else if(pathfinding_mode!=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode())
+	{
+		pathfinding_mode=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->getMode();
+		updateParcelIcons();
+	}
+	// </FS:Zi>
+
 	LLRect r;
 	const S32 MENU_RIGHT = gMenuBarView->getRightmostMenuEdge();
 
@@ -1014,6 +1084,27 @@ void LLStatusBar::updateParcelIcons()
 		// <FS:CR> FIRE-5118 - Lightshare support
 		bool has_lightshare	= FSLightshare::getInstance()->getState();
 		// </FS:CR>
+		// <FS:Ansariel> Pathfinding support
+		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
+
+		// <FS:Zi> Pathfinding rebake functions
+		bool pathfinding_navmesh_dirty=LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
+		F32 pathfinding_dirty_icon_alpha=1.0;
+		if(LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebaking())
+		{
+			// <FS:LO> FIRE-7639 - Stop the blinking after a while
+			if(mRebakeStuck)
+			{
+				pathfinding_dirty_icon_alpha = 0.5;
+			}
+			else
+			{
+				pathfinding_dirty_icon_alpha=mPathfindingFlashOn ? 1.0 : 0.25;
+			}
+			// </FS:LO>
+			pathfinding_navmesh_dirty=true;
+		}
+		// </FS:Zi>
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -1023,6 +1114,11 @@ void LLStatusBar::updateParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mParcelIcon[SEE_AVATARS_ICON]->setVisible(!see_avatars);
+		// <FS:Ansariel> Pathfinding support
+		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(pathfinding_navmesh_dirty);
+		mParcelIcon[PATHFINDING_DIRTY_ICON]->setColor(LLColor4::white % pathfinding_dirty_icon_alpha);
+		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled);
+		// </FS:Ansariel> Pathfinding support
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
 		mPWLBtn->setVisible(has_pwl);
@@ -1152,6 +1248,17 @@ void LLStatusBar::onParcelIconClick(EParcelIcon icon)
 	case SEE_AVATARS_ICON:
 		LLNotificationsUtil::add("SeeAvatars");
 		break;
+	// <FS:Ansariel> Pathfinding support
+	case PATHFINDING_DIRTY_ICON:
+		// <FS:Zi> Pathfinding rebake functions
+		// LLNotificationsUtil::add("PathfindingDirty");
+		LLNotificationsUtil::add("PathfindingDirty",LLSD(),LLSD(),boost::bind(&LLStatusBar::rebakeRegionCallback,this,_1,_2));
+		// </FS:Zi>
+		break;
+	case PATHFINDING_DISABLED_ICON:
+		LLNotificationsUtil::add("DynamicPathfindingDisabled");
+		break;
+	// </FS:Ansariel> Pathfinding support
 	case ICON_COUNT:
 		break;
 	// no default to get compiler warning when a new icon gets added
@@ -1250,3 +1357,18 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 	mBalancePanel->setRect(rect);
 }
 
+// <FS:Zi> Pathfinding rebake functions
+BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& response)
+{
+	std::string newSetName=response["message"].asString();
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	if(option==0)
+	{
+		if(LLMenuOptionPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
+			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
+		return TRUE;
+	}
+	return FALSE;
+}
+// </FS:Zi>

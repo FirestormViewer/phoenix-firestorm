@@ -264,6 +264,7 @@ public:
 
 	static void onClickBalance(void* data);
 
+	void setRebakeStuck(bool stuck) { mRebakeStuck = stuck;} // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
 private:
 
@@ -343,6 +344,14 @@ private:
 	boost::signals2::connection	mShowCoordsCtrlConnection;
 	boost::signals2::connection	mParcelMgrConnection;
 
+	// <FS:Zi> Pathfinding rebake functions
+	BOOL			rebakeRegionCallback(const LLSD& notification,const LLSD& response);
+
+	LLFrameTimer	mRebakingTimer;
+	BOOL			mPathfindingFlashOn;
+	// </FS:Zi>
+
+	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 };
 
 // *HACK: Status bar owns your cached money balance. JC
