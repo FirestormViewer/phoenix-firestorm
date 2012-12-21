@@ -2180,6 +2180,7 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 		return;
 	}
 
+	// <FS:Ansariel> Mesh header/LOD retry functionality
 	{
 		LLMutexLock lock(gMeshRepo.mThread->mMutex);
 		LLMeshRepoThread::ActiveHeaderRequest Req(mMeshParams);
