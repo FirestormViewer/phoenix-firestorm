@@ -213,6 +213,11 @@ LLSocket::ptr_t LLSocket::create(apr_socket_t* socket, apr_pool_t* pool)
 
 bool LLSocket::blockingConnect(const LLHost& host)
 {
+	// <FS:ND> Prevent log spam
+	if( !host.isOk() )
+		return false;
+	// </FS:ND>
+
 	if(!mSocket) return false;
 	apr_sockaddr_t* sa = NULL;
 	std::string ip_address;
