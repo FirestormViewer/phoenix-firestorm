@@ -67,7 +67,6 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llfloaterreg.h"
 
 //============================================================================
@@ -1296,10 +1295,7 @@ void LLLocationInputCtrl::onParcelIconClick(EParcelIcon icon)
 		LLNotificationsUtil::add("NoBuild");
 		break;
 	case PATHFINDING_DIRTY_ICON:
-		// <FS:Zi> Pathfinding rebake functions
-		// LLNotificationsUtil::add("PathfindingDirty");
-		LLNotificationsUtil::add("PathfindingDirty",LLSD(),LLSD(),boost::bind(&LLLocationInputCtrl::rebakeRegionCallback,this,_1,_2));
-		// </FS:Zi>
+		LLNotificationsUtil::add("PathfindingDirty");
 		break;
 	case PATHFINDING_DISABLED_ICON:
 		LLNotificationsUtil::add("DynamicPathfindingDisabled");
@@ -1347,19 +1343,3 @@ void LLLocationInputCtrl::createNavMeshStatusListenerForCurrentRegion()
 		LLPathfindingManager::getInstance()->requestGetNavMeshForRegion(currentRegion, true);
 	}
 }
-
-// <FS:Zi> Pathfinding rebake functions
-BOOL LLLocationInputCtrl::rebakeRegionCallback(const LLSD& notification,const LLSD& response)
-{
-	std::string newSetName=response["message"].asString();
-	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
-
-	if(option==0)
-	{
-		if(LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded())
-			LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
-		return TRUE;
-	}
-	return FALSE;
-}
-// </FS:Zi>

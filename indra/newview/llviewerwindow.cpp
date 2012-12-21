@@ -124,11 +124,11 @@
 #include "lllineeditor.h"
 #include "lllogininstance.h"
 #include "llmenugl.h"
+#include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmodaldialog.h"
 #include "llmorphview.h"
 #include "llmoveview.h"
 #include "llnavigationbar.h"
-#include "llpanelpathfindingrebakenavmesh.h"
 #include "llpaneltopinfobar.h"
 #include "llpopupview.h"
 #include "llpreviewtexture.h"
@@ -2040,16 +2040,10 @@ void LLViewerWindow::initWorldUI()
 	LLPanelStandStopFlying* panel_stand_stop_flying	= LLPanelStandStopFlying::getInstance();
 	panel_ssf_container->addChild(panel_stand_stop_flying);
 
-	// <FS:Zi> Pathfinding rebake functions
-	//         We don't use this panel, we use a menu item instead, so we only initialize the panel
-	//         but don't add it to the UI.
-	// LLPanelPathfindingRebakeNavmesh *panel_rebake_navmesh =	LLPanelPathfindingRebakeNavmesh::getInstance();
-	// panel_ssf_container->addChild(panel_rebake_navmesh);
-	LLPanelPathfindingRebakeNavmesh::getInstance();
-	// </FS:Zi>
-
 	panel_ssf_container->setVisible(TRUE);
 	
+	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->initialize();
+
 	// Load and make the toolbars visible
 	// Note: we need to load the toolbars only *after* the user is logged in and IW
 	if (gToolBarView)
@@ -2187,6 +2181,8 @@ void LLViewerWindow::shutdownViews()
 	delete mRootView;
 	mRootView = NULL;
 	llinfos << "RootView deleted." << llendl ;
+
+	LLMenuOptionPathfindingRebakeNavmesh::getInstance()->quit();
 
 	// Automatically deleted as children of mRootView.  Fix the globals.
 	gStatusBar = NULL;

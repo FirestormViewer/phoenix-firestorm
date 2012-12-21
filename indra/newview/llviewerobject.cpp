@@ -2089,7 +2089,7 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		|| (new_angv != old_angv))
 	{
 		if (new_rot != mPreviousRotation)
-	{
+		{
 			resetRot();
 		}
 		else if (new_angv != old_angv)
@@ -2111,7 +2111,6 @@ U32 LLViewerObject::processUpdateMessage(LLMessageSystem *mesgsys,
 		setRotation(new_rot * mAngularVelocityRot);
 		setChanged(ROTATED | SILHOUETTE);
 	}
-
 
 	if ( gShowObjectUpdates )
 	{

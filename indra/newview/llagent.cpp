@@ -61,7 +61,6 @@
 #include "llspeakers.h"
 // [/SL:KB]
 #include "llnotificationsutil.h"
-#include "llpanelpathfindingrebakenavmesh.h"
 #include "llpaneltopinfobar.h"
 #include "llparcel.h"
 #include "llrendersphere.h"
@@ -2250,7 +2249,6 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(TRUE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(TRUE);
-		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(TRUE);
 
 		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
 
@@ -2377,7 +2375,6 @@ void LLAgent::endAnimationUpdateUI()
 		LLChicletBar::getInstance()->setVisible(FALSE);
 
 		LLPanelStandStopFlying::getInstance()->setVisible(FALSE);
-		LLPanelPathfindingRebakeNavmesh::getInstance()->setVisible(FALSE);
 
 		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
 		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);

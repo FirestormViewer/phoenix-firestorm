@@ -2690,17 +2690,9 @@ std::vector<std::string> LLWindowSDL::getDynamicFallbackFontList()
 	if (sortpat)
 	{
 		// Sort the list of system fonts from most-to-least-desirable.
-
-		// <FS:ND> Crashes after I upgraded to fontconfig 2.9, needs a valid pointer for result
-
-		// fs = FcFontSort(NULL, sortpat, elide_unicode_coverage,
-		// 		NULL, NULL);
-
-		FcResult eResult;
-		fs = FcFontSort(NULL, sortpat, elide_unicode_coverage, NULL, &eResult);
-
-		// </FS:ND>
-
+		FcResult result;
+		fs = FcFontSort(NULL, sortpat, elide_unicode_coverage,
+				NULL, &result);
 		FcPatternDestroy(sortpat);
 	}
 

@@ -450,11 +450,7 @@ struct ProcCacheInfo
 
 inline std::string shortfile(std::string in)
 {
-#if BOOST_FILESYSTEM_VERSION == 3
 	return boost::filesystem::path(std::string(in)).filename().string();
-#else
-	return boost::filesystem::path(std::string(in)).filename();
-#endif
 }
 
 

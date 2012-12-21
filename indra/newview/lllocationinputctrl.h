@@ -205,10 +205,6 @@ private:
 	std::string mHumanReadableLocation;
 	bool isHumanReadableLocationVisible;
 	std::string mMaturityHelpTopic;
-
-	// <FS:Zi> Pathfinding rebake functions
-	BOOL	rebakeRegionCallback(const LLSD& notification,const LLSD& response);
-	// </FS:Zi>
 };
 
 #endif

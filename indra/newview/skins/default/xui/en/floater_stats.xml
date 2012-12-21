@@ -166,7 +166,7 @@
          unit_label="%"
 				 tick_spacing="20"
 				 label_spacing="20"
-				 show_history="true"
+				 show_history="false"
          show_per_sec="false"
 				 show_bar="false"
 				 setting="DebugStatObjCacheMiss">
@@ -187,7 +187,7 @@
          unit_label="%"
 				 tick_spacing="20"
 				 label_spacing="20"
-				 show_history="true"
+				 show_history="false"
          show_per_sec="false"
 				 show_bar="false"
 				 setting="DebugStatTextureCacheHits">
@@ -201,7 +201,7 @@
 				 bar_max="1000.f"
 				 tick_spacing="100"
 				 label_spacing="200"
-				 show_history="true"
+				 show_history="false"
          show_per_sec="false"
 				 show_bar="false"
 				 setting="DebugStatTextureCacheReadLatency">

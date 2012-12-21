@@ -1384,22 +1384,15 @@
           <menu_item_call.on_enable
               function="Tools.EnablePathfindingView" />
         </menu_item_call>
-
-        <!-- <FS:Zi> Pathfinding rebake functions -->
-        <menu_item_separator/>
-
         <menu_item_call
-          label="Rebake Region Navmesh"
-          name="rebake_region_navmesh">
+            label="Rebake region"
+            name="pathfinding_rebake_navmesh_item">
           <menu_item_call.on_click
-            function="World.RebakeRegion" />
+              function="Tools.DoPathfindingRebakeRegion"/>
           <menu_item_call.on_enable
-            function="World.RebakeRegion" />
+              function="Tools.EnablePathfindingRebakeRegion" />
         </menu_item_call>
-        <!-- </FS:Zi> -->
-
       </menu>
-
 
       <menu_item_separator/>
 

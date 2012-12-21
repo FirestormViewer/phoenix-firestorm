@@ -85,6 +85,7 @@
 #include "llpanellogin.h"
 #include "llpanelblockedlist.h"
 #include "piemenu.h"		// ## Zi: Pie Menu
+#include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmoveview.h"
 #include "llparcel.h"
 #include "llrootview.h"
@@ -141,7 +142,6 @@
 #include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
 #include "fswsassetblacklist.h"
 
-#include "llpanelpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llvovolume.h"
 
 using namespace LLVOAvatarDefines;
@@ -5655,6 +5655,37 @@ class LLToolsEnablePathfindingView : public view_listener_t
 	}
 };
 
+class LLToolsDoPathfindingRebakeRegion : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool hasPathfinding = (LLPathfindingManager::getInstance() != NULL);
+
+		if (hasPathfinding)
+		{
+			LLMenuOptionPathfindingRebakeNavmesh::getInstance()->sendRequestRebakeNavmesh();
+		}
+
+		return hasPathfinding;
+	}
+};
+
+class LLToolsEnablePathfindingRebakeRegion : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		bool returnValue = false;
+
+		if (LLPathfindingManager::getInstance() != NULL)
+		{
+			LLMenuOptionPathfindingRebakeNavmesh *rebakeInstance = LLMenuOptionPathfindingRebakeNavmesh::getInstance();
+			returnValue = (rebakeInstance->canRebakeRegion() &&
+				(rebakeInstance->getMode() == LLMenuOptionPathfindingRebakeNavmesh::kRebakeNavMesh_Available));
+		}
+		return returnValue;
+	}
+};
+
 // Round the position of all root objects to the grid
 class LLToolsSnapObjectXY : public view_listener_t
 {
@@ -9694,18 +9725,6 @@ void toggleTeleportHistory()
 }
 // </FS:Ansariel> Toggle teleport history panel directly
 
-// <FS:Zi> Pathfinding rebake functions
-bool enable_rebake_region()
-{
-	return LLPanelPathfindingRebakeNavmesh::getInstance()->isRebakeNeeded();
-}
-
-void handle_rebake_region()
-{
-	LLPanelPathfindingRebakeNavmesh::getInstance()->rebakeNavmesh();
-}
-// </FS:Zi>
-
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -9904,6 +9923,8 @@ void initialize_menus()
 
 	view_listener_t::addMenu(new LLToolsEnablePathfinding(), "Tools.EnablePathfinding");
 	view_listener_t::addMenu(new LLToolsEnablePathfindingView(), "Tools.EnablePathfindingView");
+	view_listener_t::addMenu(new LLToolsDoPathfindingRebakeRegion(), "Tools.DoPathfindingRebakeRegion");
+	view_listener_t::addMenu(new LLToolsEnablePathfindingRebakeRegion(), "Tools.EnablePathfindingRebakeRegion");
 
 	// Help menu
 	// most items use the ShowFloater method
@@ -10256,12 +10277,6 @@ void initialize_menus()
 	commit.add("ToggleSettingsDebug", boost::bind(&toggleSettingsDebug));
 	// <FS:Ansariel> Toggle teleport history panel directly
 	commit.add("ToggleTeleportHistory", boost::bind(&toggleTeleportHistory));
-
-	// <FS:Zi> Pathfinding rebake functions
-	commit.add("World.RebakeRegion", boost::bind(&handle_rebake_region));
-	enable.add("World.RebakeRegion", boost::bind(&enable_rebake_region));
-	// </FS:Zi>
-
 	// <FS:Ansariel> FIRE-7758: Save/load camera position
 	commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
 	commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
