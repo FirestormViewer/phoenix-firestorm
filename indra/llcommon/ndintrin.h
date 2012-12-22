@@ -26,15 +26,7 @@
  */
 
 
-#ifndef LL_STDTYPES_H
-	#if LL_WINDOWS
-		typedef LONG U32;
-	#else
-		typedef unsigned int U32;
-	#endif
-
-	typedef unsigned char U8;
-#endif
+#include "stdtypes.h"
 
 namespace ndIntrin
 {

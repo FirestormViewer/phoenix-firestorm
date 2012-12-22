@@ -25,9 +25,7 @@
 #ifndef NDPOOLDEFINES_H
 #define NDPOOLDEFINES_H
 
-#ifndef LL_STDTYPES_H
- #include "stdtypes.h"
-#endif
+#include "stdtypes.h"
 
 #define FROM_MB( mbVal ) (mbVal*1024*1024)
 #define TO_MB( bVal ) ( bVal / (1024*1024) )
