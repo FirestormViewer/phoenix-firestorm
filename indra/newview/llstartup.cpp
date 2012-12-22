@@ -229,7 +229,7 @@
 
 #include "fswsassetblacklist.h" // <FS:WS> For Assetblacklist init on startup
 #include "fsfloatersearchlegacy.h"	// <FS:CR> FIRE-6310
-
+#include "llfloatersidepanelcontainer.h"
 
 
 //
@@ -1673,6 +1673,13 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			llinfos << "Constructed " <<  pContacts->getTitle() << llendl;
 		// </FS:ND>
 
+		// <FS:Ansariel> FIRE-8560/FIRE-8592: We neet to create the instance of the people
+		//               floater for the radar functions and the V2 friendlist here.
+		//               This is because of the standalone group panels that will
+		//               prevent doing this at login when receiving the agent group
+		//               data update.
+		LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+
 		//gCacheName is required for nearby chat history loading
 		//so I just moved nearby history loading a few states further
 		if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
@@ -2420,12 +2427,6 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 	{
 		set_startup_status(1.0, "", "");
 		display_startup();
-
-		// <FS:Ansariel> FIRE-8592: We neet to create the instance of the people
-		//               floater for the radar functions here. This is because
-		//               of the standalone group panels that will prevent doing
-		//               this at login when receiving the agent group data update.
-		LLFloaterReg::getInstance("people");
 
 // <FS:AW Disable LSL bridge on opensim>
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
