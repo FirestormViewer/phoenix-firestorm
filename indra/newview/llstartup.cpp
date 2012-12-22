@@ -191,46 +191,31 @@
 #include "llvoicechannel.h"
 #include "llpathfindingmanager.h"
 
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-
 #include "lllogin.h"
 #include "llevents.h"
 #include "llstartuplistener.h"
 #include "lltoolbarview.h"
 
-#include "tea.h" // <FS:AW opensim currency support>
-
 #if LL_WINDOWS
 #include "lldxhardware.h"
 #endif
 
-#include "llnotificationmanager.h"
-
+// Firestorm includes
 #if HAS_GROWL
 #include "growlmanager.h"
 #endif
 
-#include "streamtitledisplay.h"
+#include "fscontactsfloater.h"
 #include "fsdata.h"
-
-// NaCl - Antispam Registry
-#include "NACLantispam.h"
-// NaCl End
-// [RLVa:KB] - Checked: 2010-02-27 (RLVa-1.2.0a)
-#include "rlvhandler.h"
-// [/RLVa:KB]
-//-TT Bridge 
+#include "fsfloatersearchlegacy.h"
 #include "fslslbridge.h"
-//-TT
-
-#include "fscontactsfloater.h"		// <FS:ND> Fix for FIRE-3066
-
-#include "fswsassetblacklist.h" // <FS:WS> For Assetblacklist init on startup
-#include "fsfloatersearchlegacy.h"	// <FS:CR> FIRE-6310
+#include "fswsassetblacklist.h"
 #include "llfloatersidepanelcontainer.h"
-
+#include "llnotificationmanager.h"
+#include "NACLantispam.h"
+#include "rlvhandler.h"
+#include "streamtitledisplay.h"
+#include "tea.h"
 
 //
 // exported globals
