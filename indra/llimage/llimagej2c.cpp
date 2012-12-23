@@ -50,16 +50,7 @@ const std::string sTesterName("ImageCompressionTester");
 //static
 std::string LLImageJ2C::getEngineInfo()
 {
-    //return fallbackEngineInfoLLImageJ2CImpl(); # AO, returns corrupted string, needs investigation. Workaround below.
-    std::string J2CEngineStr;
-    llinfos << "Raw engine string was '" << fallbackEngineInfoLLImageJ2CImpl() << "'" << llendl;
-#ifdef USE_KDU
-    J2CEngineStr = "KDU";
-#else
-    J2CEngineStr = "OpenJPEG";
-    J2CEngineStr = fallbackEngineInfoLLImageJ2CImpl();
-#endif
-    return J2CEngineStr;
+    return fallbackEngineInfoLLImageJ2CImpl();
 }
 
 LLImageJ2C::LLImageJ2C() : 	LLImageFormatted(IMG_CODEC_J2C),
