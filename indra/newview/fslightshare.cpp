@@ -127,12 +127,12 @@ void FSLightshare::processSky(LightsharePacket* ls_packet)
 	param_set.setEnableCloudScrollY(!ls_packet->cloudScrollYLock);
 	param_set.setStarBrightness(ls_packet->starBrightness);
 	
-	LLWLParamManager::getInstance()->propagateParameters();
-	
 	LLWLParamKey ls_key;
 	ls_key.name = "LightshareCurrentRegion";
 	ls_key.scope = LLEnvKey::SCOPE_LOCAL;
 	wlparammgr->setParamSet(ls_key, param_set);
+	
+	wlparammgr->propagateParameters();
 }
 
 // static
@@ -175,11 +175,11 @@ void FSLightshare::processWater(LightsharePacket* ls_packet)
 	
 	normalMapTexture.set(out);
 	
-	LLWaterParamManager::getInstance()->setNormalMapID(normalMapTexture);
-	LLWaterParamManager::getInstance()->propagateParameters();
-	
+	wwparammgr->setNormalMapID(normalMapTexture);
 	wwparammgr->setParamSet("LightshareCurrentRegion", param_set);
 	wwparammgr->setNormalMapID(normalMapTexture);
+	
+	wwparammgr->propagateParameters();
 }
 
 void FSLightshare::setState(bool has_lightshare)

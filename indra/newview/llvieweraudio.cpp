@@ -82,7 +82,11 @@ void LLViewerAudio::startInternetStreamWithAutoFade(std::string streamURI)
 	// Old and new stream are identical
 	if (mNextStreamURI == streamURI)
 	{
-		return;
+		/// <FS:CR> FIRE-8419 - Don't return here. It can keep the user from toggling audio streams off/on.
+		/// We handle identical stream URIs with FIRE-7093 anyways.
+		//return;
+		lldebugs << "Identical URI's: " << mNextStreamURI << " and " << streamURI << llendl;
+		// </FS:CR>
 	}
 
 	// Record the URI we are going to be switching to	

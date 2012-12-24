@@ -51,6 +51,7 @@
 #include "fsfloatergroup.h"
 #include "llpanelgroup.h"
 // </FS:Ansariel>
+#include "fscontactsfloater.h"
 
 //
 // Globals
@@ -91,9 +92,21 @@ public:
 		{
 			if (tokens[1].asString() == "show")
 			{
-				LLSD params;
-				params["people_panel_tab_name"] = "groups_panel";
-				LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
+				// <FS:Ansariel> Obey FSUseV2Friends setting where to open the group list
+				//LLSD params;
+				//params["people_panel_tab_name"] = "groups_panel";
+				//LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
+				if (gSavedSettings.getBOOL("FSUseV2Friends"))
+				{
+					LLSD params;
+					params["people_panel_tab_name"] = "groups_panel";
+					LLFloaterSidePanelContainer::showPanel("people", "panel_people", params);
+				}
+				else
+				{
+					FSFloaterContacts::getInstance()->openTab("groups");
+				}
+				// </FS:Ansariel>
 				return true;
 			}
             return false;
