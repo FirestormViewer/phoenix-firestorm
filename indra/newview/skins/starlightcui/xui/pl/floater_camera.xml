@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="camera_floater">
+	<panel name="buttons">
+		<button name="presets_btn" tool_tip="Predefiniowane widoki"/>
+		<button name="pan_btn" tool_tip="Obróć, przybliż, panoramuj"/>
+		<button name="avatarview_btn" tool_tip="Tryby kamery"/>
+	</panel>
+	<floater.string name="rotate_tooltip">
+		Obróć kamerę wokół punktu skupienia
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Przybliż kamerę do punktu skupienia
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Poruszaj kamerą w górę, w dół, w lewo i w prawo
+	</floater.string>
+	<floater.string name="camera_modes_title">
+		Widok
+	</floater.string>
+	<floater.string name="pan_mode_title">
+		Kamera
+	</floater.string>
+	<floater.string name="presets_mode_title">
+		Ustawienie
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Tryb
+	</floater.string>
+	<panel name="controls">
+		<panel name="preset_views_list">
+			<panel_camera_item name="front_view">
+				<panel_camera_item.text name="front_view_text">
+					Widok od przodu
+				</panel_camera_item.text>
+			</panel_camera_item>
+			<panel_camera_item name="group_view">
+				<panel_camera_item.text name="side_view_text">
+					Widok ponad ramieniem
+				</panel_camera_item.text>
+			</panel_camera_item>
+			<panel_camera_item name="rear_view">
+				<panel_camera_item.text name="rear_view_text">
+					Widok od tyłu
+				</panel_camera_item.text>
+			</panel_camera_item>
+		</panel>
+		<panel name="camera_modes_list">
+			<panel_camera_item name="object_view">
+				<panel_camera_item.text name="object_view_text">
+					Pokazywanie obiektu
+				</panel_camera_item.text>
+			</panel_camera_item>
+			<panel_camera_item name="mouselook_view">
+				<panel_camera_item.text name="mouselook_view_text">
+					Widok pierwszoosobowy
+				</panel_camera_item.text>
+			</panel_camera_item>
+		</panel>
+		<panel name="zoom">
+			<layout_stack name="stack">
+				<layout_panel name="panel_rotate">
+					<joystick_rotate name="cam_rotate_stick" tool_tip="Obróć kamerę wokół punktu skupienia"/>
+				</layout_panel>
+				<layout_panel name="panel_zoom">
+					<button name="zoom_plus_btn" tool_tip="Przybliż"/>
+					<slider_bar name="zoom_slider" tool_tip="Przybliż kamerę do punktu skupienia"/>
+					<button name="zoom_minus_btn" tool_tip="Oddal"/>
+				</layout_panel>
+				<layout_panel name="panel_track">
+					<joystick_track name="cam_track_stick" tool_tip="Poruszaj kamerą w górę, w dół, w lewo i w prawo"/>
+				</layout_panel>
+			</layout_stack>
+		</panel>
+	</panel>
+</floater>
