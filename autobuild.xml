@@ -242,9 +242,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>e245086ad3d8ebf04e659270e0420b28</string>
+              <string>8549f57ccf47ce07235afd96a323a29d</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20121128.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/boost-1.52.0-linux-20121225.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1214,9 +1214,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>0681ab7e1988dfdbdad7dd9edb7760ee</string>
+              <string>16841ade3586b7fd19c8c3dc3feb17bc</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/libpng-1.5.1-linux-20110223.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.5.13-linux-20121225.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>

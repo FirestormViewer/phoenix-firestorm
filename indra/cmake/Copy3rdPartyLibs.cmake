@@ -287,6 +287,8 @@ elseif(LINUX)
         libuuid.so.16.0.22
         libssl.so.1.0.0
         libfontconfig.so.1.4.4
+        libpng15.so.15
+        libpng15.so.15.13.0
         #libnotify.so # *TODO test/fix/get linux libnotify(growl)
        )
 

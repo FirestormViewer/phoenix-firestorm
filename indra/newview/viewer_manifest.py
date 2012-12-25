@@ -1271,6 +1271,8 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libdirect-1.4.so.5*")
             self.path("libhunspell-1.3.so*")
             self.path("libalut.so")
+            self.path("libpng15.so.15") #use provided libpng to workaround incompatible system versions on some distros
+            self.path("libpng15.so.15.13.0") #use provided libpng to workaround incompatible system versions on some distros
             self.path("libopenal.so", "libopenal.so.1")
             self.path("libopenal.so", "libvivoxoal.so.1") # vivox's sdk expects this soname
             #self.path("libnotify.so.1.1.2", "libnotify.so.1") # LO - uncomment when testing libnotify(growl) on linux
