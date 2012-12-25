@@ -70,7 +70,10 @@ public:
 
 	virtual void setFloaterFlashing(LLFloater* floaterp, BOOL flashing);
 	virtual BOOL closeAllFloaters();	//Returns FALSE if the floater could not be closed due to pending confirmation dialogs
+	// <FS> Update torn off status and add title bar
+	//void setTabContainer(LLTabContainer* tab_container) { if (!mTabContainer) mTabContainer = tab_container; }
 	void setTabContainer(LLTabContainer* tab_container);
+	// </FS> Update torn off status and add title bar
 	void onTabSelected();
 
 	virtual void updateResizeLimits();
