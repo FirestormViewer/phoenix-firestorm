@@ -391,10 +391,12 @@ void LLFloaterCamera::setCameraFloaterTransparencyMode(const LLSD &data)
 	if(data.asBoolean())
 	{
 		updateTransparency(TT_FORCE_OPAQUE);
+		setBackgroundOpaque(true);
 	}
 	else
 	{
 		updateTransparency(TT_ACTIVE); // force using active floater transparency (STORM-730)
+		setBackgroundOpaque(false);
 	}
 }
 // </FS:PP>

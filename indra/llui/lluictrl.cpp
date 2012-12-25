@@ -1004,7 +1004,7 @@ F32 LLUICtrl::getCurrentTransparency()
 
 	// <FS:PP> FIRE-5583, FIRE-5220: Option to show Camera Controls always opaque
 	case TT_FORCE_OPAQUE:
-		alpha = 10;
+		alpha = 1;
 		break;
 	// </FS:PP>
 

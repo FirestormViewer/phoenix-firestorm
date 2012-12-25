@@ -134,7 +134,7 @@ public:
 		TT_ACTIVE,		// focused floater
 		TT_INACTIVE,	// other floaters
 		TT_FADING,		// fading toast
-		TT_FORCE_OPAQUE, // forced opaqueness (alpha = 10) for FIRE-5583, FIRE-5220 (option to show Camera Controls always opaque)
+		TT_FORCE_OPAQUE, // forced opaqueness (alpha = 1) for FIRE-5583, FIRE-5220 (option to show Camera Controls always opaque)
 	};
 	/*virtual*/ ~LLUICtrl();
 
