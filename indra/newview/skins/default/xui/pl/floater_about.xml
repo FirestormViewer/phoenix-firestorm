@@ -39,6 +39,7 @@ Czcionka (Font): [FONT] ([FONT_SCREEN_DPI])
 Pole widzenia (Draw Distance): [DRAW_DISTANCE]
 Przepustowość (Bandwidth): [BANDWIDTH]
 Mnożnik poziomu detali (LOD Factor): [LOD]
+Jakość wyświetlania (Render quality): [RENDERQUALITY]
 	</floater.string>
 	<floater.string name="none">
 		(brak)

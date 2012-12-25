@@ -5003,4 +5003,16 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="search_disabled">
 		Klasyczne wyszukiwanie jest wyłączone w tym regionie.
 	</string>
+	<string name="render_quality_low">
+		Niska
+	</string>
+	<string name="render_quality_medium">
+		Średnia
+	</string>
+	<string name="render_quality_high">
+		Wysoka
+	</string>
+	<string name="render_quality_unknown">
+		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
+	</string>
 </strings>

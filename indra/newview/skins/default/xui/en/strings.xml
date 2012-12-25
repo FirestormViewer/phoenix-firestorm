@@ -5002,4 +5002,10 @@ Try enclosing path to the editor with double quotes.
   <string name="search_banned">Some terms in your search query were excluded due to content restrictions as clarified in the Community Standards.</string>
   <string name="search_short">Your search terms were too short so no search was performed.</string>
   <string name="search_disabled">Legacy Search has been disabled in this region.</string>
+  
+  <string name="render_quality_low">Low</string>
+  <string name="render_quality_medium">Medium</string>
+  <string name="render_quality_high">High</string>
+  <string name="render_quality_ultra">Ultra</string>
+  <string name="render_quality_unknown">Unknown, beyond the normal range, check RenderQualityPerformance debug setting</string>
 </strings>
