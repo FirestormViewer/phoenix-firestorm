@@ -32,6 +32,16 @@ Audio-Treiberversion: [AUDIO_DRIVER_VERSION]
 Qt Webkit-Version: [QT_WEBKIT_VERSION]
 Voice-Serverversion: [VOICE_VERSION]
 	</floater.string>
+  <floater.string
+     name="AboutSettings">
+Modus: [MODE]
+Oberflächendesign: [SKIN] ([THEME])
+Schriftart: [FONT] ([FONT_SCREEN_DPI])
+Draw Distance: [DRAW_DISTANCE]
+Bandbreite: [BANDWIDTH]
+LOD-Faktor: [LOD]
+Darstellungsqualität: [RENDERQUALITY]
+</floater.string>
 	<floater.string name="none">
 		(keiner)
 	</floater.string>
