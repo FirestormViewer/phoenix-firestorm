@@ -68,6 +68,7 @@
 			<text name="ignorecameraconstraints_requires_restart">
 				(Erfordert Neustart)
 			</text>
+			<check_box label="Kamera-Kontrollen auf undurchsichtigem Hintergrund anzeigen" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Rotation der Minikarte aktivieren" name="minimaprotate" tool_tip="Aktiviert die Rotation der Minikarte bei Drehung des Avatars."/>
 			<check_box name="MiniMapChatRing" label="Chatreichweite auf der Minikarte anzeigen"/>
 			<text name="netmap_double_click_action_lbl">

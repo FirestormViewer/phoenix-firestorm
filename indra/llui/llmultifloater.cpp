@@ -56,6 +56,8 @@ void LLMultiFloater::buildTabContainer()
 	p.name(std::string("Preview Tabs"));
 	p.rect(LLRect(LLPANEL_BORDER_WIDTH, getRect().getHeight() - floater_header_size, getRect().getWidth() - LLPANEL_BORDER_WIDTH, 0));
 	p.follows.flags(FOLLOWS_ALL);
+	// <FS> Update torn off status and add title bar
+	//p.commit_callback.function(boost::bind(&LLMultiFloater::onTabSelected, this));
 	p.tab_position(mTabPos);
 	
 	// remove existing tab container
@@ -203,16 +205,19 @@ void LLMultiFloater::addFloater(LLFloater* floaterp, BOOL select_added_floater, 
 	floater_data.mCanMinimize = floaterp->isMinimizeable();
 	floater_data.mCanResize = floaterp->isResizable();
 
-	// update torn off status and remove title bar
-	//	floaterp->setTornOff(FALSE); <FS:ND> ND_MERGE setting torn off here will bring us right into an endless loop when using nearbychatbar from catznip.
+	// <FS> Update torn off status and add title bar
 	floaterp->getDragHandle()->setTitleVisible(FALSE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop -= floaterp->getHeaderHeight();
 	floaterp->setRect(rect);
+	// </FS>
+
 	// remove minimize and close buttons
 	floaterp->setCanMinimize(FALSE);
 	floaterp->setCanResize(FALSE);
 	floaterp->setCanDrag(FALSE);
+	// <FS:Zi> Fixed edge case where hosted floates changed size on tear-off if user logged out inbetween
+	//floaterp->storeRectControl();
 	// avoid double rendering of floater background (makes it more opaque)
 	floaterp->setBackgroundVisible(FALSE);
 
@@ -312,12 +317,12 @@ void LLMultiFloater::removeFloater(LLFloater* floaterp)
 	if (!floaterp || floaterp->getHost() != this )
 		return;
 
-	// update torn off status and add title bar
-	//	floaterp->setTornOff(TRUE); <FS:ND> ND_MERGE setting torn off here will bring us right back into removeFloater when using nearbychat from catznip.
+	// <FS> Update torn off status and add title bar
 	floaterp->getDragHandle()->setTitleVisible(TRUE);
 	LLRect rect = floaterp->getRect();
 	rect.mTop += floaterp->getHeaderHeight();
 	floaterp->setRect(rect);
+	// </FS>
 	
 	floater_data_map_t::iterator found_data_it = mFloaterDataMap.find(floaterp->getHandle());
 	if (found_data_it != mFloaterDataMap.end())
@@ -467,10 +472,12 @@ void LLMultiFloater::onTabSelected()
 	if (floaterp)
 	{
 		tabOpen(floaterp, true);
+		// <FS> Update torn off status and add title bar
 		mDragHandle->setTitle(mTitle.getString() + " - " + floaterp->getTitle());
 	}
 }
 
+// <FS> Update torn off status and add title bar
 void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
 {
 	if (!mTabContainer)
@@ -479,6 +486,7 @@ void LLMultiFloater::setTabContainer(LLTabContainer* tab_container)
 		mTabContainer->setCommitCallback(boost::bind(&LLMultiFloater::onTabSelected, this));
 	}
 }
+// </FS>
 
 void LLMultiFloater::setCanResize(BOOL can_resize)
 {
@@ -506,6 +514,8 @@ BOOL LLMultiFloater::postBuild()
 		return TRUE;
 	}
 
+	// <FS> Update torn off status and add title bar
+	//mTabContainer = getChild<LLTabContainer>("Preview Tabs");
 	setTabContainer(getChild<LLTabContainer>("Preview Tabs"));
 	
 	setCanResize(mResizable);

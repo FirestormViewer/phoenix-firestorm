@@ -5468,4 +5468,28 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="search_disabled">
 		Die klassische Suche wurde in dieser Region deaktiviert.
 	</string>
+	<string name="render_quality_low">
+		Niedrig
+	</string>
+	<string name="render_quality_mediumlow">
+		Mittel-Niedrig
+	</string>
+	<string name="render_quality_medium">
+		Mittel
+	</string>
+	<string name="render_quality_mediumhigh">
+		Mittel-Hoch
+	</string>
+	<string name="render_quality_high">
+		Hoch
+	</string>
+	<string name="render_quality_highultra">
+		Hoch-Ultra
+	</string>
+	<string name="render_quality_ultra">
+		Ultra
+	</string>
+	<string name="render_quality_unknown">
+		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
+	</string>
 </strings>

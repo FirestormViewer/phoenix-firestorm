@@ -60,6 +60,7 @@
 			<check_box label="Wyłącz minimalną odległość przybliżenia kamery" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
 			<check_box label="Obracaj awatara w stronę patrzenia kamery podczas resetowania widoku" name="resetviewturnsavatar" tool_tip="Po zresetowaniu widoku (lub naciśnięciu klawisza ESC) kierunek patrzenia kamery zostaje zachowany, a awatar - obrócony w jego stronę."/>
 			<check_box label="Przenikanie kamery przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów."/>
+			<check_box label="Pokazuj standardowe, małe okienko sterowania kamerą zawsze jako nieprzezroczyste" name="FSAlwaysOpaqueCameraControls"/>
 			<text name="ignorecameraconstraints_requires_restart">
 				(wymaga restartu)
 			</text>

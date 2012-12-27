@@ -347,6 +347,32 @@ LLSD LLFloaterAbout::getInfo()
 		info["PACKETS_PCT"] = 100.f*info["PACKETS_LOST"].asReal() / info["PACKETS_IN"].asReal();
 	}
 
+	// <FS:PP> FIRE-4785: Current render quality setting in sysinfo / about floater
+	switch (gSavedSettings.getU32("RenderQualityPerformance"))
+	{
+		case 0:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_low");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low";
+			break;
+		case 1:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium";
+			break;
+		case 2:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High";
+			break;
+		case 3:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_ultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra";
+			break;
+		default:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_unknown");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-3)";
+			break;
+	}
+	// </FS:PP>
+
     return info;
 }
 
