@@ -352,23 +352,35 @@ LLSD LLFloaterAbout::getInfo()
 	{
 		case 0:
 			info["RENDERQUALITY"] = LLTrans::getString("render_quality_low");
-			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low";
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Low (1/7)";
 			break;
 		case 1:
-			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
-			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium";
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumlow");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-Low (2/7)";
 			break;
 		case 2:
-			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
-			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High";
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_medium");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium (3/7)";
 			break;
 		case 3:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_mediumhigh");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Medium-High (4/7)";
+			break;
+		case 4:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_high");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High (5/7)";
+			break;
+		case 5:
+			info["RENDERQUALITY"] = LLTrans::getString("render_quality_highultra");
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "High-Ultra (6/7)";
+			break;
+		case 6:
 			info["RENDERQUALITY"] = LLTrans::getString("render_quality_ultra");
-			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra";
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Ultra (7/7)";
 			break;
 		default:
 			info["RENDERQUALITY"] = LLTrans::getString("render_quality_unknown");
-			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-3)";
+			info["RENDERQUALITY_FSDATA_ENGLISH"] = "Unknown, user has RenderQualityPerformance debug setting beyond the normal range (0-6)";
 			break;
 	}
 	// </FS:PP>

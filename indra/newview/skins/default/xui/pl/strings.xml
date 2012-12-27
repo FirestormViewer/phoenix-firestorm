@@ -5004,13 +5004,22 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 		Klasyczne wyszukiwanie jest wyłączone w tym regionie.
 	</string>
 	<string name="render_quality_low">
-		Niska
+		Niska (1/7)
+	</string>
+	<string name="render_quality_mediumlow">
+		Średnio-niska (2/7)
 	</string>
 	<string name="render_quality_medium">
-		Średnia
+		Średnia (3/7)
+	</string>
+	<string name="render_quality_mediumhigh">
+		Średnio-wysoka (4/7)
 	</string>
 	<string name="render_quality_high">
-		Wysoka
+		Wysoka (5/7)
+	</string>
+	<string name="render_quality_highultra">
+		Wysoka-Ultra (6/7)
 	</string>
 	<string name="render_quality_unknown">
 		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
