@@ -17,6 +17,7 @@
 		<button label="Eliminar" name="remove_grid"/>
 	</panel>
 	<panel name="debug_search_panel">
+		<check_box label="Activar la configuración de región Lightshare" name="Lightshare"/>
 		<check_box label="Búsqueda de depuración" name="DebugSearch"/>
 		<text name="search_url_debug_text">
 			Substituir la actual URL de búsqueda (si no está vacío):

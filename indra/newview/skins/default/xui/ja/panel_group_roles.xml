@@ -105,13 +105,15 @@ Ctrl キーを押しながらメンバー名をクリックすると
 		</scroll_list>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			これは「グループからメンバーを追放する」能力です。 オーナーを追放できるのは、別のオーナーだけです。
-		</text_editor>
-		<text name="static2">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				これは「グループからメンバーを追放する」能力です。 オーナーを追放できるのは、別のオーナーだけです。
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
 			この能力を持つ役割
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			この能力を持つメンバー
 		</text>
 	</panel>

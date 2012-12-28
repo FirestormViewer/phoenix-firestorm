@@ -18,7 +18,10 @@
 			<pie_slice label="Enfocar" name="Zoom In"/>
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		</pie_menu>
-		<pie_slice label="Desdibujar" name="Derender"/>
+		<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
+			<pie_slice label="Permanente" name="DerenderPermanent"/>
+			<pie_slice label="Temporal" name="Derender"/>
+		</pie_menu>
 	</pie_menu>
-		<pie_slice label="MI" name="Send IM..."/>
+	<pie_slice label="MI" name="Send IM..."/>
 </pie_menu>

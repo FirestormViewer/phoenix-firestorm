@@ -705,7 +705,8 @@ things in this group. There&apos;s a broad variety of Abilities.
          border="true"
          bevel_style="in"
          follows="left|top|right"
-         layout="topleft">
+         layout="topleft"
+	 name="action_description_panel">
 
         <text_editor
          name="action_description"

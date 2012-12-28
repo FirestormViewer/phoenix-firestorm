@@ -355,22 +355,6 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
 			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos." left_pad="42"/>
 			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
-			<combo_box name="land category with adult">
-				<combo_box.item label="Cualquier categoría" name="item0"/>
-				<combo_box.item label="Localización Linden" name="item1"/>
-				<combo_box.item label="Adulto" name="item2"/>
-				<combo_box.item label="Arte y Cultura" name="item3"/>
-				<combo_box.item label="Negocios" name="item4"/>
-				<combo_box.item label="Educativo" name="item5"/>
-				<combo_box.item label="Juegos de azar" name="item6"/>
-				<combo_box.item label="Entretenimiento" name="item7"/>
-				<combo_box.item label="Para recién llegados" name="item8"/>
-				<combo_box.item label="Parques y Naturaleza" name="item9"/>
-				<combo_box.item label="Residencial" name="item10"/>
-				<combo_box.item label="Compras" name="item11"/>
-				<combo_box.item label="Terreno en alquiler" name="item13"/>
-				<combo_box.item label="Otra" name="item12"/>
-			</combo_box>
 			<combo_box name="land category">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
@@ -481,7 +465,7 @@ los medios:
 				Permitir únicamente el acceso a los Residentes que:
 			</text>
 			<check_box label="Han aportado información de pago [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Para poder acceder a esta parcela los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
-			<check_box label="Son mayores de 18 años [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Para poder acceder a esta parcela los Residentes deben ser mayores de 18 años. Para más información, consulta [SUPPORT_SITE]."/>
+			<check_box label="Son mayores de 18 años [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Los Residentes deben ser mayores de 18 años para poder acceder a esta parcela. Para más información, consulta [SUPPORT_SITE]."/>
 			<check_box label="Acceso permitido al grupo: [GROUP]" name="GroupCheck" tool_tip="Elija el grupo en la pestaña General."/>
 			<check_box label="Vender pases a:" name="PassCheck" tool_tip="Permitir acceso temporal a esta parcela"/>
 			<combo_box name="pass_combo">

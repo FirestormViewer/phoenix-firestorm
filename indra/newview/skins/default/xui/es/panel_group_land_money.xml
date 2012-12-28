@@ -29,26 +29,14 @@
 	<text name="total_land_in_use_label" width="125">
 		Terreno total en uso:
 	</text>
-	<text name="total_land_in_use_value">
-		[AREA] m²
-	</text>
 	<text name="land_available_label" width="125">
 		Terreno disponible:
-	</text>
-	<text name="land_available_value">
-		[AREA] m²
 	</text>
 	<text name="total_contributed_land_label" width="125">
 		Total contribuído:
 	</text>
-	<text name="total_contributed_land_value">
-		[AREA] m²
-	</text>
 	<text name="your_contribution_label" width="125">
 		Tu contribución:
-	</text>
-	<text name="your_contribution_units">
-		m²
 	</text>
 	<text name="your_contribution_max_value">
 		(máx. [AMOUNT])

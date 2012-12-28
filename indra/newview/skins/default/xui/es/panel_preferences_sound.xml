@@ -6,6 +6,7 @@
 			<check_box label="Silenciar al minimizar" name="mute_when_minimized"/>
 			<slider label="Botones" name="UI Volume"/>
 			<slider label="Ambiente" name="Wind Volume"/>
+			<check_box name="collisions_audio_play_btn" tool_tip="Activa/desactiva los sonidos asociados a las colisiones" label="Reproducir sonidos de colisión"/>
 			<slider label="Efectos de sonido" name="SFX Volume"/>
 			<check_box name="gesture_audio_play_btn" tool_tip="Activa/desactiva el sonido de los gestos" label="Reproducir sonido de los gestos"/>
 			<slider label="Flujo de música" name="Music Volume"/>
@@ -22,6 +23,15 @@
 			<check_box name="ShowStreamMetadata" label="Mostrar título del flujo en el chat local"/>
 			<check_box name="StreamMetadataAnnounceToChat" label="Enviar el título del flujo al canal:"/>
 			<spinner top_delta="-3" left_pad="25" name="StreamMetadataAnnounceChannel"/>
+			<check_box name="FSFadeAudioStream" tool_tip="Activa el fundido de sonido cuando cambia el flujo de audio de parcela" label="Fundido de audio de parcela:"/>
+			<slider label="Entrada" name="FSAudioMusicFadeIn" tool_tip="Tiempo de fundido de entrada de audio de parcela."/>
+			<text name="FSAudioMusicFadeInSeconds">
+				segundos
+			</text>
+			<slider label="Salida" name="FSAudioMusicFadeOut" tool_tip="Tiempo de fundido de salida de audio de parcela."/>
+			<text name="FSAudioMusicFadeOutSeconds">
+				segundos
+			</text>
 			<text name="Media Rolloff" width="270">
 				Distancia de atenuación del audio de los medios:
 			</text>
@@ -47,6 +57,7 @@
 				<radio_item label="Mi posición" name="1"/>
 			</radio_group>
 			<check_box label="Animar los labios del avatar al hablar" name="enable_lip_sync"/>
+			<check_box label="Mostrar indicadores de voz sobre los avatares" tool_tip="Muestra el indicador de voz (punto blanco) sobre los avatares" name="FSShowVoiceVisualizer"/>
 			<check_box label="Mostrar indicadores de voz durante las llamadas" tool_tip="Muestra los indicadores de voz y mueve los labios del avatar mientras se mantienen llamadas privadas y de grupo" name="Show_Voice_Visualizers_In_Calls"/>
 			<check_box label="Conmutar el funcionamiento del micrófono al pulsar:" name="push_to_talk_toggle_check" tool_tip="Cuando se activa el modo de conmutación, pulsa y suelta una sola vez el botón o tecla seleccionado para activar o desactivar el micrófono. Cuando no se usa el modo de conmutación, el micrófono difunde tu voz sólo mientras la tecla o botón se mantienen pulsados."/>
 			<line_editor name="modifier_combo" label="Tecla 'Pulsar-para-Hablar'"/>
@@ -83,6 +94,231 @@
 					Por favor, espera...
 				</text>
         		</panel>
+		</panel>
+		<panel label="Sonidos de IU 1" name="UI Sounds tab 1">
+			<text name="textFSExplanation_tab1">
+				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
+Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
+			</text>
+			<text tool_tip="Sonido a reproducir por las alertas por defecto de Firestorm." name="textFSSndAlert">
+				Alerta por defecto:
+			</text>
+			<button name="Prev_UISndAlert" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndAlert" label="R" tool_tip="Restablecer al UUID por defecto." />
+			<check_box label="Reproducir" name="PlayModeUISndAlert"/>
+			<text tool_tip="Sonido a reproducir por pulsaciones de teclado inválidas." name="textFSBadKeystroke">
+				Pulsaciones inválidas:
+			</text>
+			<button name="Prev_UISndBadKeystroke" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndBadKeystroke" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndBadKeystroke"/>
+			<text tool_tip="Sonido a reproducir por pulsaciones de un botón del ratón." name="textFSClick">
+				Pulsación de ratón:
+			</text>
+			<button name="Prev_UISndClick" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndClick" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndClick"/>
+			<text tool_tip="Sonido a reproducir al soltar un botón del ratón." name="textFSClickRelease">
+				Soltar botón de ratón:
+			</text>
+			<button name="Prev_UISndClickRelease" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndClickRelease" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndClickRelease"/>
+			<text tool_tip="Sonido a reproducir cuando un avatar femenino recibe daño." name="textFSHealthReductionF">
+				Daño avatar femenino:
+			</text>
+			<button name="Prev_UISndHealthReductionF" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndHealthReductionF" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndHealthReductionF"/>
+			<text tool_tip="Sonido a reproducir cuando un avatar masculino recibe daño." name="textFSHealthReductionM">
+				Daño avatar masculino:
+			</text>
+			<button name="Prev_UISndHealthReductionM" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndHealthReductionM" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndHealthReductionM"/>
+			<text tool_tip="Sonido a reproducir por operaciones inválidas." name="textFSInvalidOp">
+				Operación inválida:
+			</text>
+			<button name="Prev_UISndInvalidOp" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndInvalidOp" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndInvalidOp"/>
+			<text tool_tip="Sonido a reproducir al reducir el balance de L$." name="textFSMoneyChangeDown">
+				Gasto de L$:
+			</text>
+			<button name="Prev_UISndMoneyChangeDown" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndMoneyChangeDown" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndMoneyChangeDown"/>
+			<text tool_tip="Sonido a reproducir al incrementar el balance de L$." name="textFSMoneyChangeUp">
+				Cobro de L$:
+			</text>
+			<button name="Prev_UISndMoneyChangeUp" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndMoneyChangeUp" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndMoneyChangeUp"/>
+			<text tool_tip="Sonido a reproducir al recibir un MI. Esta configuración es compartida por Chat &gt; Notificaciones &gt; 'Cuando se reciban MIs'." name="textFSNewIncomingIMSession">
+				Recepción de MI:
+			</text>
+			<button name="Prev_UISndNewIncomingIMSession" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndNewIncomingIMSession" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<combo_box name="PlayModeUISndNewIncomingIMSession">
+				<combo_box.item label="Sólo si inicia sesión" name="1"/>
+				<combo_box.item label="En cada mensaje" name="2"/>
+				<combo_box.item label="Sólo si no tiene el foco" name="3"/>
+				<combo_box.item label="Nunca" name="0"/>
+			</combo_box>
+			<text tool_tip="Sonido a reproducir al recibir un mensaje de grupo. Esta configuración es compartida por Chat &gt; Notificaciones &gt; 'Cuando se reciban mensajes de grupo'." name="textFSNewGroupIncomingIMSession">
+				Mensaje de grupo:
+			</text>
+			<button name="Prev_UISndNewIncomingGroupIMSession" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndNewIncomingGroupIMSession" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<combo_box name="PlayModeUISndNewIncomingGroupIMSession">
+				<combo_box.item label="Sólo si inicia sesión" name="1"/>
+				<combo_box.item label="En cada mensaje" name="2"/>
+				<combo_box.item label="Sólo si no tiene el foco" name="3"/>
+				<combo_box.item label="Nunca" name="0"/>
+			</combo_box>
+			<text tool_tip="Sonido a reproducir al iniciar una nueva sesión de MI." name="textFSStartIM">
+				Inicio de sesión de MI:
+			</text>
+			<button name="Prev_UISndStartIM" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndStartIM" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndStartIM"/>
+			<text tool_tip="Sonido a reproducir al crear un nuevo objeto." name="textFSObjectCreate">
+				Creación de objeto:
+			</text>
+			<button name="Prev_UISndObjectCreate" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndObjectCreate" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndObjectCreate"/>
+			<text layout="topleft" tool_tip="Sonido a reproducir al eliminar un objeto." name="textFSObjectDelete">
+				Eliminación de objeto:
+			</text>
+			<button name="Prev_UISndObjectDelete" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndObjectDelete" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndObjectDelete"/>
+			<text tool_tip="Sonido a reproducir al rezzear un objeto." name="textFSObjectRezIn">
+				Extracción de objeto:
+			</text>
+			<button name="Prev_UISndObjectRezIn" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndObjectRezIn" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndObjectRezIn"/>
+			<text tool_tip="Sonido a reproducir al tomar un objeto." name="textFSObjectRezOut">
+				Toma de objeto:
+			</text>
+			<button name="Prev_UISndObjectRezOut" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndObjectRezOut" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndObjectRezOut"/>
+			<text tool_tip="Sonido a reproducir al tomar una fotografía. Esta configuración es compartida por la opción 'Fotos silenciosas' del menú Avanzado." name="textFSSnapshot">
+				Fotografía:
+			</text>
+			<button name="Prev_UISndSnapshot" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndSnapshot" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Silenciar" name="QuietSnapshotsToDiskCheckBox"/>
+			<text tool_tip="Sonido a reproducir al teleportarse. Esta configuración es compartida por Mover y ver &gt; Movimiento &gt; 'Reproducir efecto de sonido al teleportarme'." name="textFSTeleportOut">
+				Teleporte:
+			</text>
+			<button name="Prev_UISndTeleportOut" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndTeleportOut" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndTeleportOut"/>
+		</panel>
+		<panel label="Sonidos de IU 2" name="UI Sounds tab 2">
+			<text name="textFSExplanation_tab2">
+				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
+Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
+			</text>
+			<text tool_tip="Sonido a reproducir cuando aparece un menú circular." name="textFSPieMenuAppear">
+				Aparición menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuAppear" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuAppear" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuAppear"/>
+			<text tool_tip="Sonido a reproducir cuando un menú circular desaparece." name="textFSPieMenuHide">
+				Cierre menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuHide" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuHide" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuHide"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el primer elemento de un menú circular." name="textFSPieMenuSliceHighlight0">
+				Opción 1 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight0" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight0" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight0"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el segundo elemento de un menú circular." name="textFSPieMenuSliceHighlight1">
+				Opción 2 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight1" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight1" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight1"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el tercer elemento de un menú circular." name="textFSPieMenuSliceHighlight2">
+				Opción 3 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight2" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight2" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight2"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el cuarto elemento de un menú circular." name="textFSPieMenuSliceHighlight3">
+				Opción 4 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight3" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight3" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight3"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el quinto elemento de un menú circular." name="textFSPieMenuSliceHighlight4">
+				Opción 5 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight4" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight4" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight4"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el sexto elemento de un menú circular." name="textFSPieMenuSliceHighlight5">
+				Opción 6 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight5" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight5" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight5"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el séptimo elemento de un menú circular." name="textFSPieMenuSliceHighlight6">
+				Opción 7 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight6" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight6" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight6"/>
+			<text tool_tip="Sonido a reproducir cuando se selecciona el octavo elemento de un menú circular." name="textFSPieMenuSliceHighlight7">
+				Opción 8 menú circular:
+			</text>
+			<button name="Prev_UISndPieMenuSliceHighlight7" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndPieMenuSliceHighlight7" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndPieMenuSliceHighlight7"/>
+			<text tool_tip="Sonido a reproducir cuando alguien empieza a escribir un mensaje de chat. Esta configuración es compartida por Chat &gt; General &gt; 'Reproducir sonido de tecleo cuando alguien escribe en el chat local'." name="textFSTyping">
+				Escritura de mensaje:
+			</text>
+			<button name="Prev_UISndTyping" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndTyping" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="FSPlayTypingSoundCheckBox"/>
+			<text tool_tip="Sonido a reproducir cuando se cierra una ventana." name="textFSWindowClose">
+				Cierre de ventana:
+			</text>
+			<button name="Prev_UISndWindowClose" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndWindowClose" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndWindowClose"/>
+			<text tool_tip="Sonido a reproducir cuando se abre una ventana." name="textFSWindowOpen">
+				Apertura de ventana:
+			</text>
+			<button name="Prev_UISndWindowOpen" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndWindowOpen" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndWindowOpen"/>
+			<text tool_tip="Sonido a reproducir cuando se alerta de un reinicio de región." name="textFSRegionRestart">
+				Alerta reinicio región:
+			</text>
+			<button name="Prev_UISndRegionRestart" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndRegionRestart" label="R" tool_tip="Restablecer al UUID por defecto."/> <check_box label="Reproducir" name="PlayModeUISndRegionRestart"/>
+			<text tool_tip="Sonido a reproducir cuando un amigo se conecta." name="textFSFriendOnline">
+				Conexión de un amigo:
+			</text>
+			<button name="Prev_UISndFriendOnline" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndFriendOnline" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndFriendOnline"/>
+			<text tool_tip="Sonido a reproducir cuando un amigo se desconecta." name="textFSFriendOffline">
+				Desconexión de un amigo:
+			</text>
+			<button name="Prev_UISndFriendOffline" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndFriendOffline" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndFriendOffline"/>
 		</panel>
 	</tab_container>
 </panel>

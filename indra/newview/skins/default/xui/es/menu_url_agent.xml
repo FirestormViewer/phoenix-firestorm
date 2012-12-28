@@ -3,6 +3,7 @@
 	<menu_item_call label="Mostrar el perfil del residente" name="show_agent"/>
 	<menu_item_call label="Enfocar" name="zoom_agent"/>
 	<menu_item_call label="Teleportarme a su posición" name="teleportto_agent"/>
+	<menu_item_call label="Ofrecer teleporte" name="offer_teleport"/>
 	<menu_item_call label="Seguimiento" name="track_agent"/>
 	<menu_item_call label="Copiar su nombre en el portapapeles" name="url_copy_label"/>
 	<menu_item_call label="Copiar su SLURL en el portapapeles" name="url_copy"/>

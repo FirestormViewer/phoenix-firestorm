@@ -16,17 +16,23 @@
 		<radio_item label="En el chat local" name="script_0"/>
 		<radio_item label="En una ventana independiente" name="script_1" left_delta="110"/>
 	</radio_group>
+	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
+	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>
+	<check_box label="Mostrar notificaciones de colisión en el chat local" name="FSCollisionMessagesInChat"/>
+	<check_box label="Reportar colisiones a los scripts mediante el canal" name="FSReportCollisionMessages"/>
+	<spinner name="FSReportCollisionMessagesChannel" tool_tip="Canal utilizado para reportar los mensajes de colisión a los scripts (Por defecto: -25000)"/>
 	<text name="friends_logon_label" width="310">
 		Mostrar cuando mis amigos se conecten/desconecten:
 	</text>
 	<check_box name="friends_online_notify_checkbox" label="En tostadas" width="95"/>
 	<check_box name="OnlineOfflinetoNearbyChat" label="En el chat local y en la consola" width="195"/>
-	<check_box label="Activar notificaciones Growl" name="notify_growl_checkbox"/>
-	<check_box name="notify_growl_always_checkbox" label="Mostrar Growl incluso si Firestorm está activo"/>
 	<check_box label="Sólo en el chat local" name="OnlineOfflinetoNearbyChatHistory"/>
+	<text name="friends_logon_sounds_label">
+		Reproducir un sonido cuando mis amigos:
+	</text>
+	<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
+	<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
     </panel>
-
-    <!-- Alerts -->
     <panel label="Alerts" name="tab-alerts">
 	<text name="show_label">
 		Mostrar siempre:

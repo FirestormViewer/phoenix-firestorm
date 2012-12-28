@@ -3,6 +3,7 @@
 	<panel name="parcel_info_panel">
 		<button name="buy_land_btn" tool_tip="La parcela está en venta"/>
 		<button name="status_wl_btn" tool_tip="La parcela tiene configuración WL"/>
+		<button name="status_lightshare_btn" tool_tip="Configuración Lightshare"/>
 		<text name="parcel_info_text" tool_tip="Nombre de la parcela en la que te encuentras. Haz clic para obtener información sobre la misma." value="(cargando...)"/>
 	</panel>
 	<panel.string name="packet_loss_tooltip">
@@ -30,6 +31,5 @@
 		</text>
 		<button name="stream_toggle_btn" tool_tip="Iniciar/detener la reproducción del flujo de audio de la parcela"/>
 		<button name="media_toggle_btn" tool_tip="Iniciar/detener la reproducción de todos los medios (música, vídeo, páginas web)"/>
-		<button name="volume_btn" tool_tip="Control general del volumen"/>
 	</panel>
 </panel>

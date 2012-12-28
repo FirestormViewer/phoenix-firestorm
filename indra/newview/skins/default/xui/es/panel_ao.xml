@@ -3,7 +3,7 @@
 	<panel name="animation_overrider_panel" width="265">
 		<combo_box name="ao_set_selection_combo" tool_tip="Selecciona un conjunto de animaciones para editar."/>
 		<button name="ao_activate" tool_tip="Activar este conjunto de animaciones ahora."/>
-		<check_box name="ao_default" label="Por defecto" tool_tip="Configurar este conjunto de animaciones como conjunto por defecto."/>
+		<check_box name="ao_default" label="Por defecto" tool_tip="Configurar este conjunto de animaciones como a cargar al conectarse."/>
 		<button name="ao_add" tool_tip="Crear un nuevo conjunto de animaciones."/>
 		<button name="ao_remove" tool_tip="Eliminar este conjunto de animaciones."/>
 		<check_box name="ao_sit_override" label="Sentadas" tool_tip="Activa si quieres sustituir las animaciones de sentarse."/>

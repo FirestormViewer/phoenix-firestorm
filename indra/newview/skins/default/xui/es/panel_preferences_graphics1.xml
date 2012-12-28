@@ -130,7 +130,6 @@
 				Dibujo de texturas:
 			</text>
 			<check_box label="Obtener texturas mediante HTTP" tool_tip="Activa la descarga de texturas mediante protocolo HTTP. Desactívalo si tienes problemas de dibujo y quieres seguir obteniendo las texturas como se hacía antes de Julio de 2010 y con el Viewer 1" name="TexturesHTTP"/>
-			<slider label="Número máximo de peticiones HTTP GET concurrentes" name="HTTPFetchMaxRequests" label_width="300" width="425"/>
 			<text name="TextureDetailLabel">
 				Detalle de textura:
 			</text>

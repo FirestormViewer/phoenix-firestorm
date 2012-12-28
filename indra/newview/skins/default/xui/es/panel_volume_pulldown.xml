@@ -3,6 +3,7 @@
 	<slider label="Maestro" name="System Volume" label_width="55" width="155"/>
 	<slider label="Botones" name="UI Volume" label_width="55" width="155"/>
 	<slider label="Ambiente" name="Wind Volume" label_width="55" width="155"/>
+	<check_box name="collisions_audio_play_btn" tool_tip="Activar sonidos por defecto para las colisiones"/>
 	<slider label="Sonidos" name="SFX Volume" label_width="55" width="155"/>
 	<check_box name="gesture_audio_play_btn" tool_tip="Activa el sonido de los gestos"/>
 	<slider label="Música" name="Music Volume" label_width="55" width="155"/>

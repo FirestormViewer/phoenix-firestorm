@@ -7,12 +7,14 @@
 			<slider label="Tiempo de transición" name="camera_transition_time" label_width="120" width="295"/>
 			 <slider label="Suavizado" name="camera_position_smoothing" label_width="120" width="295"/>
 			<check_box label="Permitir más libertad de cámara" name="DisableCameraConstraints" tool_tip="Activa para mover tu cámara más allá de sus límites normales y bajo el nivel del suelo. Si no se te da bien posicionar la cámara, podrías incrementar el número de fotografías con mal ángulo."/>
+			<check_box label="No usar la rueda del ratón para controlar el zoom de la cámara" name="FSDisableMouseWheelCameraZoom"/>
 			<text name="heading2">
 				Posicionar automáticamente la cámara al:
 			</text>
 			<check_box label="Construir/Editar" name="edit_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de objetos"/>
 			<check_box label="Editar apariencia" name="appearance_camera_movement" tool_tip="Usar posicionamiento automático de cámara cuando se entra o sale del modo de edición de la apariencia o vestuario" width="115"/>
 			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
+			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
 			<check_box label="Mostrar puntos de mira en vista subjetiva" name="ShowCrosshairs" tool_tip="Muestra los puntos de mira cuando te encuentras en vista subjetiva"/>
@@ -29,6 +31,7 @@
 			</text>
 			<check_box label="Pulsar-pulsar-mantener para correr" name="tap_tap_hold_to_run"/>
 			<check_box label="Volar/aterrizar al mantener Re Pág/Av Pág" name="automatic_fly"/>
+			<check_box label="Activar el modo conmutado para agacharse" name="crouch_toggle_mode"/>
 			<check_box label="Reproducir efecto de sonido al teleportarme" name="PlayTeleportSound"/>
 			<check_box label="Iniciar siempre el vuelo después de teleportarme" name="FSFlyAfterTeleport"/>
 			<text name="single_click_action_lbl">
@@ -56,6 +59,7 @@
 			<check_box label="Restablecer posición de la cámara tras teleportarme (en la misma región)" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece cuando te teleportas. Esta opción evita ese comportamiento."/>
 			<check_box label="Desactivar la distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva el límite de cercanía de la cámara a un objeto o avatar."/>
 			<check_box label="Orientar avatar hacia la dirección de la cámara al restablecer la vista" name="resetviewturnsavatar" tool_tip="Esta opción mantiene la dirección de la cámara y orienta al avatar cuando se restablece la vista (al pulsar la tecla ESC)."/>
+			<check_box label="Muestra los controles de cámara por defecto siempre opacos" name="FSAlwaysOpaqueCameraControls"/>
 			<check_box label="Permitir a la cámara moverse a través de objetos" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos." width="285"/>
 			<text name="ignorecameraconstraints_requires_restart" top_pad="-2" top_delta="-1">
 				(requiere reiniciar)

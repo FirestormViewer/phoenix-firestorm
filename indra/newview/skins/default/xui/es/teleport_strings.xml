@@ -45,7 +45,7 @@ Para repetir el tutorial, visita la isla de bienvenida pública.
 			En estos momentos no está disponible el sistema del inventario.
 		</message>
 		<message name="MustGetAgeRegion">
-			Solo pueden acceder a esta región los mayores de 18 años.
+			Debes tener 18 años o más para acceder a esta región.
 		</message>
 	</message_set>
 	<message_set name="progress">

@@ -31,6 +31,10 @@
 			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
 			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
+			<check_box name="FSUseStandaloneGroupFloater" label="Usar ventanas independientes para los perfiles de grupo" width="270" tool_tip="Si se activa, los perfiles de grupo se abrirán en ventanas separadas."/>
+			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Usar una ventana independiente para el historial de teleportes" width="270" tool_tip="Si se activa, al usar el atajo para el historial de teleportes, éste se abrirá en una ventana separada."/>
+			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Usar ventanas independientes para hitos, detalles de lugar y de historial de teleportes" width="270" tool_tip="Si se activa, los hitos, los detalles de lugar y los del historial de teleportes se abrirán en ventanas separadas."/>
+			<check_box name="FSUseStandaloneBlocklistFloater" label="Usar ventanas independientes para la lista de bloqueos/silenciados" width="270" tool_tip="Si se activa, la lista de avatares y objetos bloqueados/silenciados se abrirá en una ventana separada."/>
 			<text name="ScriptDialogsPerObjectLabel" width="160">
 				Diálogos de script por objeto:
 			</text>
@@ -44,7 +48,8 @@
 			<text name="GroupTopRightRequiresRestart" left_delta="267" top_pad="-17">
 				(requiere reiniciar)
 			</text>
-			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:" top_pad="13"/>
+			<check_box label="Ocultar los iconos de notificación de chat de grupo y MI" name="FSDisableIMChiclets" tool_tip="Si se activa, Firestorm no mostrará ningún icono de notificación de chat de grupo / MI (el sobre de los avisos de grupo y la suma de MIs permanecerán en pantalla)."/>
+			<check_box name="ButtonFlashing" label="Personalizar parpadeo de los botones:"/>
 			<slider label="Número de parpadeos de los botones:" tool_tip="Número de veces que los botones parpadean para llamar tu atención" name="ButtonsFlashCount"/>
 			<slider label="Frecuencia de parpadeo:" tool_tip="Frecuencia (en Hz) a la que parpadean los botones para notificar un MI" name="ButtonFlashRate"/>
 			<text name="ButtonFlashRateText">
@@ -107,13 +112,6 @@
 			<text name="tooltip_textbox1" width="165">
 				Esquema de fuentes:
 			</text>
-			<combo_box name="Fontsettingsfile">
-				<combo_box.item label="Deja Vu" name="tt_item1"/>
-				<combo_box.item label="Ubuntu Font Family" name="tt_item2"/>
-				<combo_box.item label="Liberation" name="tt_item3"/>
-				<combo_box.item label="Droid Sans" name="tt_item4"/>
-				<combo_box.item label="Mobi Sans" name="tt_item5"/>
-			</combo_box>
 			<text name="tooltip_textbox2">
 				(Requiere reiniciar)
 			</text>

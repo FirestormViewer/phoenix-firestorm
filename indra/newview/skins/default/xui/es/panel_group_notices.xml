@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel label="Avisos" name="notices_tab">
 	<panel.string name="help_text">
-		Los avisos te permiten enviar un mensaje, y opcionalmente un ítem adjunto. Los avisos sólo los reciben los miembros del grupo cuyo rol tiene adjudicada tal capacidad. Puedes desactivar la recepción de avisos de este grupo en la pestaña General.
+		Los avisos te permiten enviar un mensaje, y opcionalmente un ítem adjunto.
+Los avisos sólo los reciben los miembros del grupo cuyo rol tiene adjudicada tal capacidad.
+Puedes desactivar la recepción de avisos de este grupo en la pestaña General.
 	</panel.string>
 	<panel.string name="no_notices_text">
 		No hay avisos archivados
@@ -18,7 +20,7 @@ El máximo es de 200 por día y grupo.
 	<button label="Nuevo aviso" name="create_new_notice" tool_tip="Crear un nuevo aviso"/>
 	<button name="refresh_notices" tool_tip="Actualizar la lista de avisos"/>
 	<text name="notice_list_none_found">
-		No se han encontrado
+		No se han encontrado avisos
 	</text>
 	<panel label="Crear un nuevo aviso" name="panel_create_new_notice">
 		<text name="lbl">

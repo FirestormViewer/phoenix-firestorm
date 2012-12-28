@@ -21,10 +21,10 @@
 	<check_box label="Permitir el teleporte a cualquier punto" name="allow_direct_teleport"/>
 	<button label="Aplicar" name="apply_btn"/>
 	<text name="Only Allow">
-		Permitir únicamente el acceso a los Residentes que:
+		Sólo permitir el acceso a residentes que:
 	</text>
-	<check_box label="Han aportado la información de pago." name="limit_payment" tool_tip="Para poder acceder a este estado los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
-	<check_box label="Son mayores de 18 años" name="limit_age_verified" tool_tip="Para poder acceder a este estado, los Residentes deben ser mayores de 18 años. Para más información, consulta [SUPPORT_SITE]."/>
+	<check_box label="Han aportado la información de pago." name="limit_payment" tool_tip="Los residentes deben haber aportado información de pago para acceder a este estado. Para más información, ver [SUPPORT_SITE]."/>
+	<check_box label="Sean mayores de 18 años" name="limit_age_verified" tool_tip="Los residentes deben tener 18 años o más para acceder a este estado. Para más información, consulta [SUPPORT_SITE]."/>
 	<text name="estate_manager_label">
 		Administradores del Estado:
 	</text>

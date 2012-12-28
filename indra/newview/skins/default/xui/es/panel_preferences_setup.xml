@@ -35,6 +35,7 @@
 			<button label="Restablecer" label_selected="Restablecer" name="reset_logpath" width="75"/>
 			<button label="Abrir registro de fallos" label_selected="Abrir registro de fallos" name="browse_crashlogs" width="135"/>
 			<button label="Abrir directorio de configuración" label_selected="Abrir directorio de configuración" name="browse_settingsdir" width="195"/>
+			<check_box label="No borrar la caché de archivos desempaquetados DSF (sonido) al desconectar" tool_tip="Si se activa, el visor no borrará los archivos desempaquetados de sonido de la caché cuando se desconecte, lo que puede mejorar la experiencia al reproducir sonidos en el mundo. Nota: Activarlo llenará probablemente muy rápido tu directorio de caché, y no estará limitado por tu configuración de tamaño máximo de caché. Esto puede resultar en un uso excesivo de espacio en disco. Desactivado por defecto." name="keep_unpacked_cache"/>
 			<text name="Web:">
 				Navegador web:
 			</text>

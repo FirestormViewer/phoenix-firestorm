@@ -17,16 +17,14 @@
 		<pie_slice label="Devolver" name="Return..."/>
 		<pie_menu label="Más >" name="Object Pie More 2">
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
-			<pie_slice label="Desdibujar" name="Derender"/>
-			<pie_slice label="Denunciar..." name="Report Abuse..."/>
-			<pie_menu label="Lista negra" name="Blacklist">
-				<pie_slice name="Blacklist Object" label="Objeto"/>
-				<pie_slice name="Blacklist Textures" label="Texturas"/>
-				<pie_slice name="Blacklist Sculpt" label="Esculpido"/>
+			<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
+				<pie_slice label="Permanente" name="DerenderPermanent"/>
+				<pie_slice label="Temporal" name="Derender">
 			</pie_menu>
+			<pie_slice label="Denunciar..." name="Report Abuse..."/>
 			<pie_menu label="Pathfinding >" name="Pathfinding">
 				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
-				<pie_slice label="Mostrar en caracteres" name="show_in_characters"/>
+				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>
 			</pie_menu>
 			<pie_slice label="Bloquear" name="Object Mute"/>
 			<pie_menu label="Scripts &gt;" name="ScriptsMenu">

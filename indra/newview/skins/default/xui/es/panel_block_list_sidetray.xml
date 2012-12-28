@@ -2,15 +2,19 @@
 <panel name="block_list_panel">
 	<layout_stack name="block_list_sidetray_main">
 		<layout_panel name="back_button_container">
-	<text name="title_text">
-		Lista de ignorados
-	</text>
+			<text name="title_text">
+				Lista de bloqueados
+			</text>
 		</layout_panel>
 		<layout_panel name="block_list_blocklaypanels">
-	<scroll_list name="blocked" tool_tip="Lista de los residentes ignorados actualmente"/>
-	<button label="Ignorar al residente..." label_selected="Ignorar al residente..." name="Block resident..." tool_tip="Elige a un Residente para ignorarle"/>
-	<button label="Ignorar objetos según el nombre..." label_selected="Ignorar objetos según el nombre..." name="Block object by name..."/>
-	<button label="No ignorar" label_selected="No ignorar" name="Unblock" tool_tip="Quita al Residente o al objeto de la lista de ignorados"/>
+			<scroll_list name="blocked" tool_tip="Lista de avatares y objetos actualmente bloqueados">
+				<scroll_list.columns label="Nombre" name="item_name"/>
+				<scroll_list.columns label="Tipo" name="item_type"/>
+			</scroll_list>
+			<button label="Bloquear avatar..." name="Block resident..." tool_tip="Elige a un avatar a ignorar" width="210"/>
+			<button label="Bloquear objetos según su nombre..." name="Block object by name..." width="210"/>
+			<button label="Desbloquear" name="Unblock" tool_tip="Quita al avatar o al objeto de la lista de bloqueo" width="210"/>
+			<button label="Perfil" name="Profile" tool_tip="Abre el perfil del avatar seleccionado" width="210"/>
 		</layout_panel>
 	</layout_stack>
 </panel>

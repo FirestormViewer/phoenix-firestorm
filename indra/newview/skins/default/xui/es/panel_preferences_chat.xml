@@ -5,21 +5,22 @@
 			<text name="font_size" width="180">
 				Fuente de la ventana de chat:
 			</text>
-			<radio_group name="chat_font_size" top="16" left_delta="180">
+			<radio_group name="chat_font_size" left_delta="180">
 				<radio_item label="Pequeña" name="radio"/>
 				<radio_item label="Mediana" name="radio2" left_delta="75"/>
 				<radio_item label="Grande" name="radio3"/>
 				<radio_item label="Enorme" name="radio4"/>
 			</radio_group>
-			<text name="console_font_size" top="32" width="180">
+			<text name="console_font_size" width="180">
 				Fuente de consola:
 			</text>
-			<radio_group name="chat_console_font_size" top="33" left_delta="180">
+			<radio_group name="chat_console_font_size" left_delta="180">
 				<radio_item label="Pequeña" name="consradio"/>
 				<radio_item label="Mediana" name="consradio2" left_delta="75"/>
 				<radio_item label="Grande" name="consradio3"/>
 				<radio_item label="Enorme" name="consradio4"/>
 			</radio_group>
+			<check_box label="Mostrar chats de grupo, local y sesiones de MI siempre en mayúsculas" name="chat_always_in_uppercase"/>
 			<check_box label="Ejecutar la animación de escribir al hacerlo en el chat" name="play_typing_animation"/>
 			<check_box label="Ejecutar animaciones del avatar (como gritar)" name="play_avatar_animations"/>
 			<check_box label="Reproducir sonido de tecleo cuando alguien escribe en el chat local" name="play_typing_sound"/>
@@ -33,7 +34,7 @@
 			<text name="inworld_typing_rg_label" width="157">
 				Pulsar teclas alfanuméricas...
 			</text>
-			<radio_group name="inworld_typing_preference" top_delta="0" left_pad="5">
+			<radio_group name="inworld_typing_preference" left_pad="5">
 				<radio_item label="Inicia chat local" name="radio_start_chat" width="110"/>
 				<radio_item label="Afecta al movimiento (p. ej. WASD)" name="radio_move" left="115"/>
 			</radio_group>
@@ -42,25 +43,34 @@
 			<text name="show_ims_in_label">
 				Mostrar los MI en:
 			</text>
-			<radio_group name="chat_window" tool_tip="Muestra tus mensajes instantáneos en ventanas independientes o agrupados en una sola con varias pestañas (requiere reiniciar)" top_delta="1" width="195">
+			<radio_group name="chat_window" tool_tip="Muestra tus mensajes instantáneos en ventanas independientes o agrupados en una sola con varias pestañas (requiere reiniciar)" width="195">
 				<radio_item label="Ventanas distintas" name="radio"/>
 				<radio_item label="Pestañas" name="radio2"/>
 			</radio_group>
-			<text name="req_restart_ims" top_delta="-1">
+			<text name="req_restart_ims">
 				(requiere reiniciar)
 			</text>
 			<text name="tab_direction_label" width="110">
 				Pestañas del chat:
 			</text>
 			<radio_group name="chat_tab_direction"
-             tool_tip="Cambia la disposición de las pestañas del chat/IM entre horizontales y verticales cuando se usa el modo de una sola ventana con pestañas (requiere reinciar)" top_delta="-1" width="195">
+             tool_tip="Cambia la disposición de las pestañas del chat/IM entre horizontales y verticales cuando se usa el modo de una sola ventana con pestañas (requiere reinciar)" width="195">
 				<radio_item label="Horizontales" name="radio_horizontal" width="100"/>
 				<radio_item label="Verticales" name="radio_vertical" width="100"/>
 			</radio_group>
-			<text name="req_restart_chattabs" top_delta="1">
+			<text name="req_restart_chattabs">
 				(requiere reiniciar)
 			</text>
-			<button label="Configuración de traducción de chat" name="translation_settings_btn" top_delta="25" width="210"/>
+			<text name="FSIMTabNameFormat_label" width="235">
+				Formato de nombre en pestañas de chat:
+			</text>
+			<combo_box name="FSIMTabNameFormat">
+				<combo_box.item label="DisplayName" name="display_name"/>
+				<combo_box.item label="Nombre de usuario" name="user_name"/>
+				<combo_box.item label="DisplayName (Nombre de usuario)" name="display_user_name"/>
+				<combo_box.item label="Nombre de usuario (DisplayName)" name="user_display_name"/>
+			</combo_box>
+			<button label="Configuración de traducción de chat" name="translation_settings_btn" width="210"/>
 		</panel>
 		<panel label="Notificaciones" name="ChatNotifications">
 			<text name="disable_toast_label">
@@ -85,6 +95,24 @@
 			<spinner tool_tip="0.0-1.0, 0 para fundido máximo, 1 para no fundir" name="FSIMChatHistoryFade"/>
 			<check_box name="FSAnnounceIncomingIM" label="Anunciar MI entrante tan pronto como el remitente empiece a escribir"/>
 			<check_box name="FSIMChatFlashOnFriendStatusChange" label="Hacer parpadear las pestañas de MI cuando tus contactos conecten o desconecten"/>
+			<text name="WhenPlayIMLabel" width="215">
+				Cuando se reciban MIs:
+			</text>
+			<combo_box name="WhenPlayIM" width="265">
+				<combo_box.item label="Reproducir sonido sólo cuando inicie sesión de MI" name="1"/>
+				<combo_box.item label="Reproducir sonido por cada mensaje recibido" name="2"/>
+				<combo_box.item label="Reproducir sonido sólo si no tiene el foco" name="3"/>
+				<combo_box.item label="No reproducir ningún sonido" name="0"/>
+			</combo_box>
+			<text name="WhenPlayGroupIMLabel" width="215">
+				Cuando se reciban mensajes de grupo:
+			</text>
+			<combo_box name="WhenPlayGroupIM" width="265">
+				<combo_box.item label="Reproducir sonido sólo cuando inicie sesión de chat" name="1"/>
+				<combo_box.item label="Reproducir sonido por cada mensaje recibido" name="2"/>
+				<combo_box.item label="Reproducir sonido sólo si no tiene el foco" name="3"/>
+				<combo_box.item label="No reproducir ningún sonido" name="0"/>
+			</combo_box>
 		</panel>
 		<panel label="Firestorm" name="ChatFirestorm">
 			<text name="chat_and_im_enhancements">
@@ -154,11 +182,29 @@
 		</panel>
 		<panel label="Radar" name="ChatRadar">
 			<check_box name="reportChatRangeEnter" label="El radar avisa cuando alguien entra en el alcance del chat"/>
+			<check_box name="PlayModeUISndRadarChatEnter" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarChatEnter" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarChatEnter" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="reportChatRangeLeave" label="El radar avisa cuando alguien sale del alcance del chat"/>
+			<check_box name="PlayModeUISndRadarChatLeave" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarChatLeave" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarChatLeave" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="reportDrawRangeEnter" label="El radar avisa cuando alguien entra en tu distancia de dibujo"/>
+			<check_box name="PlayModeUISndRadarDrawEnter" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarDrawEnter" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarDrawEnter" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="reportDrawRangeLeaave" label="El radar avisa cuando alguien sale de tu distancia de dibujo"/>
+			<check_box name="PlayModeUISndRadarDrawLeave" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarDrawLeave" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarDrawLeave" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="RadarReportSimRangeEnter" label="El radar avisa cuando alguien entra en la región"/>
+			<check_box name="PlayModeUISndRadarSimEnter" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarSimEnter"  label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarSimEnter" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="RadarReportSimRangeLeave" label="El radar avisa cuando alguien sale de la región"/>
+			<check_box name="PlayModeUISndRadarSimLeave" label="UUID de sonido:"/>
+			<button name="Prev_UISndRadarSimLeave" label="P" tool_tip="Probar este sonido."/>
+			<button name="Def_UISndRadarSimLeave" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box name="RadarEnterChannelAlert" label="Reportar a los scripts los que entran en la región"/>
 			<check_box name="RadarLeaveChannelAlert" label="Reportar a los scripts los que salen de la región"/>
 		</panel>
@@ -177,6 +223,8 @@
 			</text>
 		</panel>
 		<panel label="Entrada de texto" name="ChatTextInput">
+			<button name="autoreplace_showgui" label="Autoreemplazar..."/>
+			<button name="spellcheck_showgui" label="Ortografía..."/>
 		</panel>
 	</tab_container>
 </panel>

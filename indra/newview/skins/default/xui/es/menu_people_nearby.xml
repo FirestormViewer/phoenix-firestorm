@@ -20,4 +20,5 @@
 	<menu_item_call label="Expulsar de la parcela y prohibir acceso" name="eject"/>
 	<menu_item_call label="Expulsar de la finca y prohibir acceso" name="kick"/>
 	<menu_item_call label="Enviar a su casa" name="teleport_home"/>
+	<menu_item_call label="Expulsar del estado" name="estate_ban"/>
 </context_menu>

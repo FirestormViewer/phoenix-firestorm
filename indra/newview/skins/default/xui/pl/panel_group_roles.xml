@@ -80,7 +80,7 @@ na wykonywanie różnych zadań. Istnieje wiele przywilejów.
 		</panel>
 	</panel>
 	<panel name="actions_footer">
-		<panel>
+		<panel name="action_description_panel">
 			<text_editor name="action_description">
 				Przywilej &apos;Usuń członka z grupy&apos;. Tylko właściciel może usunąć innego właściciela.
 			</text_editor>
