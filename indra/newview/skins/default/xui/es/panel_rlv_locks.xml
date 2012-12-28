@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Restricciones RLV activas" name="panel_rlvLocks">
+	<scroll_list name="lock_list">
+		<scroll_list.columns label="Tipo" name="lock_type"/>
+		<scroll_list.columns label="Método" name="lock_addrem"/>
+		<scroll_list.columns label="Objeto/Punto afectado" name="lock_target"/>
+		<scroll_list.columns label="Origen" name="lock_origin"/>
+	</scroll_list>
+	<panel name="bottom_panel">
+		<button label="Actualizar" name="refresh_btn" width="90"/>
+		<icon name="dummy_icon" width="409"/>
+	</panel>
+</panel>

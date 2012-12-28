@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Eventos" name="panel_ls_events">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Términos de búsqueda:
+		</text>
+		<radio_group name="events_search_mode">
+			<radio_item label="En curso y próximos" name="current"/>
+			<radio_item label="Por fecha" name="date"/>
+		</radio_group>
+		<text name="events_date">
+			4/20
+		</text>
+		<button label="Buscar" name="events_find"/>
+		<combo_box name="events_category">
+			<combo_box.item label="Cualquier categoría" name="any"/>
+			<combo_box.item label="Debates" name="discussion"/>
+			<combo_box.item label="Deportes" name="sports"/>
+			<combo_box.item label="Música en vivo" name="music"/>
+			<combo_box.item label="Publicidad" name="commercial"/>
+			<combo_box.item label="Vida nocturna/ocio" name="nightlife"/>
+			<combo_box.item label="Juegos/Concursos" name="games"/>
+			<combo_box.item label="Desfiles" name="pageants"/>
+			<combo_box.item label="Educativos" name="education"/>
+			<combo_box.item label="Arte y cultura" name="arts"/>
+			<combo_box.item label="Benéficos" name="charity"/>
+			<combo_box.item label="Varios" name="misc"/>
+		</combo_box>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_events">
+			<columns label="Nombre del evento" name="name"/>
+			<columns label="Fecha/Hora" name="date"/>
+			<columns label="Hora" name="time"/>
+		</scroll_list>
+		<button label="Ayer" name="events_yesterday"/>
+		<button label="Hoy" name="events_today"/>
+		<button label="Mañana" name="events_tomorrow"/>
+		<button label="Anterior" name="events_back"/>
+		<button label="Siguiente" name="events_next"/>
+	</panel>
+</panel>

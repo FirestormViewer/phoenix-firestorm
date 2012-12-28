@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="floater_fs_search_legacy" title="Búsqueda clásica">
+	<floater.string name="string.location">
+		Lugar: [LOCATION]
+	</floater.string>
+	<floater.string name="string.traffic">
+		Tráfico: [DWELL]
+	</floater.string>
+	<floater.string name="string.area">
+		Área: [AREA]
+	</floater.string>
+	<floater.string name="string.members">
+		Miembros: [MEMBER_COUNT]
+	</floater.string>
+	<floater.string name="string.founder">
+		Fundador: [FOUNDER]
+	</floater.string>
+	<floater.string name="string.age">
+		Edad: [AGE]
+	</floater.string>
+	<floater.string name="string.partner">
+		Pareja: [PARTNER]
+	</floater.string>
+	<floater.string name="string.listing_price">
+		Precio venta: [LISTING_PRICE]
+	</floater.string>
+	<floater.string name="string.slurl">
+		[SLURL]
+	</floater.string>
+	<floater.string name="string.duration">
+		Duración: [DURATION]
+	</floater.string>
+	<floater.string name="string.covercharge">
+		Cartel: [COVERCHARGE]
+	</floater.string>
+	<tab_container name="ls_tabs">
+		<panel label="Gente" name="panel_ls_people"/>
+		<panel label="Grupos" name="panel_ls_groups"/>
+		<panel label="Lugares" name="panel_ls_places"/>
+		<panel label="Venta terreno" name="panel_ls_land"/>
+		<panel label="Eventos" name="panel_ls_events"/>
+		<panel label="Clasificados" name="panel_ls_classifieds"/>
+		<!--<panel label="Web" name="panel_ls_web"/>-->
+	</tab_container>
+	<panel name="panel_ls_details">
+		<button label="Abrir perfil" name="people_profile_btn"/>
+		<button label="Enviar mensaje" name="people_message_btn"/>
+		<button label="Ofrecer amistad" name="people_friend_btn"/>
+		<button label="Abrir perfil" name="group_profile_btn"/>
+		<button label="Abrir chat" name="group_message_btn"/>
+		<button label="Unirme al grupo" name="group_join_btn"/>
+		<button label="Teleportarme" name="teleport_btn"/>
+		<button label="Mostrar en mapa" name="map_btn"/>
+		<button label="Avisarme" name="event_reminder_btn"/>
+	</panel>
+</floater>

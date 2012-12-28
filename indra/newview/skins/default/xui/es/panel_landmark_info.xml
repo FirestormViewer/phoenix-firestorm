@@ -20,19 +20,20 @@
 	</string>
 	<button name="back_btn" tool_tip="Atrás"/>
 	<text name="title" value="Perfil del lugar"/>
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
-			<text name="maturity_value" value="desconocido"/>
-			<panel name="landmark_info_panel">
-				<text name="owner_label" value="Propietario:"/>
-				<text name="creator_label" value="Creador:"/>
-				<text name="created_label" value="Creado:"/>
-			</panel>
-			<panel name="landmark_edit_panel">
-				<text name="title_label" value="Título:"/>
-				<text name="notes_label" value="Mis notas:"/>
-				<text name="folder_label" value="Localización del hito:"/>
-			</panel>
-		</panel>
-	</scroll_container>
+	<text name="region_title" value="RegiónEjemplo"/>
+	<text name="maturity_value" value="desconocida"/>
+	<text name="parcel_title" value="RegiónEjemplo, Nombre Largo (145, 228, 26)"/>
+	<panel name="description_panel">
+		<expandable_text name="description" value="(cargando ...)"/>
+	</panel>
+	<panel name="landmark_info_panel">
+		<text name="owner_label" value="Propietario:" width="65"/>
+		<text name="creator_label" value="Creador:" width="65"/>
+		<text name="created_label" value="Creado:" width="65"/>
+	</panel>
+	<panel name="landmark_edit_panel">
+		<text name="title_label" value="Título:"/>
+		<text name="notes_label" value="Mis notas:"/>
+		<text name="folder_label" value="Localización del hito:"/>
+	</panel>
 </panel>
