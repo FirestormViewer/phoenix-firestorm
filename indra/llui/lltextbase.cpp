@@ -632,11 +632,14 @@ void LLTextBase::drawText()
 				}
 
 				// Iterate over all words in the text block and check them one by one
-				while (word_start < seg_end)
+				// while (word_start < seg_end)
+				while ( word_start < wstrText.length() &&  word_start < seg_end ) // <FS:ND/> Do not run past end of wstrTest
 				{
 					// Find the end of the current word (special case handling for "'" when it's used as a contraction)
 					word_end = word_start + 1;
-					while ( (word_end < seg_end) && 
+
+					// while ( (word_end < seg_end) && 
+					while ( (word_end < seg_end) && word_end < wstrText.length() && // <FS:ND/> Don't run past end of wstrText
 							((LLWStringUtil::isPartOfWord(wstrText[word_end])) ||
 								((L'\'' == wstrText[word_end]) && 
 								(LLStringOps::isAlnum(wstrText[word_end - 1])) && (LLStringOps::isAlnum(wstrText[word_end + 1])))) )
@@ -648,16 +651,27 @@ void LLTextBase::drawText()
 						break;
 					}
 
+					// <FS:ND> Exit if we ran past end of string
+					if( word_start >= wstrText.length() || word_end >= wstrText.length() )
+						break;
+					// </FS:ND>
+
 					// Don't process words shorter than 3 characters
+
 					std::string word = wstring_to_utf8str(wstrText.substr(word_start, word_end - word_start));
 					if ( (word.length() >= 3) && (!LLSpellChecker::instance().checkSpelling(word)) )
 					{
 						mMisspellRanges.push_back(std::pair<U32, U32>(word_start, word_end));
 					}
-
+					
 					// Find the start of the next word
 					word_start = word_end + 1;
-					while ( (word_start < seg_end) && (!LLWStringUtil::isPartOfWord(wstrText[word_start])) )
+
+					// <FS:ND> Do not run past end of string.
+
+					// while ( (word_start < seg_end) && (!LLWStringUtil::isPartOfWord(wstrText[word_start])) )
+					while ( word_start < wstrText.length() && (word_start < seg_end) && (!LLWStringUtil::isPartOfWord(wstrText[word_start])) )
+					// </FS:ND>
 					{
 						word_start++;
 					}
