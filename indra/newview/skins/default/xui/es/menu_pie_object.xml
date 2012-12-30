@@ -19,7 +19,7 @@
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 			<pie_menu name="DerenderMenu" label="Desdibujar &gt;">
 				<pie_slice label="Permanente" name="DerenderPermanent"/>
-				<pie_slice label="Temporal" name="Derender">
+				<pie_slice label="Temporal" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
 			<pie_menu label="Pathfinding >" name="Pathfinding">
