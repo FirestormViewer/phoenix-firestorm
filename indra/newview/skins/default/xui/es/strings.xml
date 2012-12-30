@@ -5064,8 +5064,8 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
 	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
 	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
-	<string name="Command_Phototools_Label">Herramientas fotográficas</string>
-	<string name="Command_Phototools_View_Label">Cámara de Phototools</string>
+	<string name="Command_Phototools_Label">Phototools</string>
+	<string name="Command_Phototools_View_Label">Cameratools</string>
 	<string name="Command_Contact_Sets_Label">Contact sets</string>
 	<string name="Command_Mouselook_Label">Vista subjetiva</string>
 	<string name="Command_Legacy_Search_Label">Búsqueda clásica</string>
