@@ -7,7 +7,6 @@
 					<layout_stack name="chat_bar_stand_fly_stack">
 						<layout_panel name="chat_bar_layout_panel">
 							<button name="local_chat_button" tool_tip="Muestra/oculta la ventana del chat local" label="Chat Local"/>
-							<nearby_voice_monitor name="nearby_voice_output_monitor" tool_tip="Actividad del canal de voz"/>
 						</layout_panel>
 					</layout_stack>
 				</layout_panel>

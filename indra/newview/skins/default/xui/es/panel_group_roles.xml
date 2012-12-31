@@ -34,9 +34,6 @@ incluyendo el de Todos y el de Propietarios.
 			<panel.string name="cant_delete_role">
 				Los roles de &apos;Todos&apos; y &apos;Propietarios&apos; son especiales, y no pueden eliminarse.
 			</panel.string>
-			<panel.string name="power_folder_icon">
-				Inv_FolderClosed
-			</panel.string>
 			<filter_editor label="Filtrar los roles" name="filter_input"/>
 			<scroll_list name="role_list">
 				<scroll_list.columns label="Rol" name="name"/>
@@ -87,7 +84,7 @@ incluyendo el de Todos y el de Propietarios.
 		</panel>
 	</panel>
 	<panel name="actions_footer">
-		<panel>
+		<panel name="action_description_panel">
 			<text_editor name="action_description">
 				Esta capacidad es la de &apos;Expulsar miembros de este grupo&apos;. Sólo un propietario puede expulsar a otro.
 			</text_editor>

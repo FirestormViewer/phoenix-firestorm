@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="Model Preview" title="SUBIR MODELO">
+	<string name="no_havok">
+		subida mesh con física
+	</string>
 	<string name="status_idle"/>
 	<string name="status_parse_error">
 		Error: Problema de análisis de DAE - consulta los datos en el registro.
@@ -93,56 +96,56 @@
 				<text initial_value="Vértices" name="vertices" value="Vértices"/>
 				<text initial_value="Alto" name="high_label" value="Alto"/>
 				<combo_box name="lod_source_high">
-					<item name="lod_source_high_load_from_file" label="Cargar de archivo"/>
-					<item name="lod_source_high_generate" label="Generar"/>
+					<item name="Load from file" label="Cargar de archivo"/>
+					<item name="Generate" label="Generar"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_high"/>
 				<combo_box name="lod_mode_high">
-					<item name="lod_mode_high_triangle_limit" label="Límite de triángulo"/>
-					<item name="lod_mode_high_error_threshold" label="Umbral de error"/>
+					<item name="Triangle Limit" label="Límite de triángulo"/>
+					<item name="Error Threshold" label="Umbral de error"/>
 				</combo_box>
 				<text initial_value="0" name="high_triangles" value="0"/>
 				<text initial_value="0" name="high_vertices" value="0"/>
 				<text initial_value="Medio" name="medium_label" value="Medio"/>
 				<combo_box name="lod_source_medium">
-					<item name="lod_source_medium_load_from_file" label="Cargar de archivo"/>
-					<item name="lod_source_medium_generate" label="Generar"/>
-					<item name="lod_source_medium_use_lod_above" label="Usar LoD de arriba"/>
+					<item name="Load from file" label="Cargar de archivo"/>
+					<item name="Generate" label="Generar"/>
+					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_medium"/>
 				<combo_box name="lod_mode_medium">
-					<item name="lod_mode_medium_triangle_limit" label="Límite de triángulo"/>
-					<item name="lod_mode_medium_error_threshold" label="Umbral de error"/>
+					<item name="Triangle Limit" label="Límite de triángulo"/>
+					<item name="Error Threshold" label="Umbral de error"/>
 				</combo_box>
 				<text initial_value="0" name="medium_triangles" value="0"/>
 				<text initial_value="0" name="medium_vertices" value="0"/>
 				<text initial_value="Bajo" name="low_label" value="Bajo"/>
 				<combo_box name="lod_source_low">
-					<item name="lod_source_low_load_from_file" label="Cargar de archivo"/>
-					<item name="lod_source_low_generate" label="Generar"/>
-					<item name="lod_source_low_use_lod_above" label="Usar LoD de arriba"/>
+					<item name="Load from file" label="Cargar de archivo"/>
+					<item name="Generate" label="Generar"/>
+					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_low"/>
 				<combo_box name="lod_mode_low">
-					<item name="lod_mode_low_triangle_limit" label="Límite de triángulo"/>
-					<item name="lod_mode_low_error_threshold" label="Umbral de error"/>
+					<item name="Triangle Limit" label="Límite de triángulo"/>
+					<item name="Error Threshold" label="Umbral de error"/>
 				</combo_box>
 				<text initial_value="0" name="low_triangles" value="0"/>
 				<text initial_value="0" name="low_vertices" value="0"/>
 				<text initial_value="Mínimo" name="lowest_label" value="Mínimo"/>
 				<combo_box name="lod_source_lowest">
-					<item name="lod_source_lowest_load_from_file" label="Cargar de archivo"/>
-					<item name="lod_source_lowest_generate" label="Generar"/>
-					<item name="lod_source_lowest_use_lod_above" label="Usar LoD de arriba"/>
+					<item name="Load from file" label="Cargar de archivo"/>
+					<item name="Generate" label="Generar"/>
+					<item name="Use LoD above" label="Usar LoD de arriba"/>
 				</combo_box>
 				<button label="Buscar..." name="lod_browse_lowest"/>
 				<combo_box name="lod_mode_lowest">
-					<item name="lod_mode_lowest_triangle_limit" label="Límite de triángulo"/>
-					<item name="lod_mode_lowest_error_threshold" label="Umbral de error"/>
+					<item name="Triangle Limit" label="Límite de triángulo"/>
+					<item name="Error Threshold" label="Umbral de error"/>
 				</combo_box>
 				<text initial_value="0" name="lowest_triangles" value="0"/>
 				<text initial_value="0" name="lowest_vertices" value="0"/>
-				<check_box label="Generar normales" name="gen_normals"/>
+				<check_box label="Generar vectores normales" name="gen_normals"/>
 				<text initial_value="Ángulo de pliegue:" name="crease_label" value="Ángulo de pliegue:"/>
 				<spinner name="crease_angle" value="75"/>
 			</panel>

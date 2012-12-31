@@ -28,6 +28,7 @@
 			<check_box label="Añadir hora y fecha a cada línea de los registros de chat" name="show_timestamps_check_im"/>
 			<check_box label="Añadir también los segundos a la hora en los registros de chat" name="seconds_in_timestamps"/>
 			<check_box label="Añadir fecha y hora al nombre de los archivos de registro" name="logfile_name_datestamp"/>
+			<check_box label="Añadir el nombre de la red a los directorios de registro de chat" name="grid_append_chat_log_folder" width="350"/>
 			<button label="Administrar lista de bloqueados/silenciados" name="block_list"/>
 		</panel>
 		<panel label="Puntos de mira" name="tab-lookat">

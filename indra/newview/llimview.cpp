@@ -991,7 +991,9 @@ LLIMModel::LLIMSession* LLIMModel::addMessageSilently(const LLUUID& session_id, 
 
 	if (!session)
 	{
-		llwarns << "session " << session_id << " does not exist " << llendl;
+	        //<FS:TS> Don't spam the log with one of these every time
+	        //        someone logs on or off
+		//llwarns << "session " << session_id << " does not exist " << llendl;
 		return NULL;
 	}
 

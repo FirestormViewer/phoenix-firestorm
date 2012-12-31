@@ -12,5 +12,9 @@
 	<menu_item_call label="Grupos" name="Groups..."/>
 	<menu_item_call label="Perfil" name="Profile..."/>
 	<menu_item_call label="Depurar texturas" name="Debug..."/>
+	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
+	<menu_item_call label="Desdibujar temporalmente" name="Derender"/>
+	<menu_item_call label="Desdibujar permanentemente" name="DerenderPermanent"/>
+	<menu_item_call label="Retexturizar" name="Texture Refresh"/>
 	<menu_item_call label="Soltar" name="Drop"/>
 </context_menu>

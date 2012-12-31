@@ -1,143 +1,108 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Edit Sky Preset" title="Editar cielo predefinido">
+<floater name="Edit Sky Preset" title="Editar configuración de cielo">
 	<string name="title_new">
-		Crear un nuevo cielo predefinido
+		Crear nueva configuración de cielo
 	</string>
 	<string name="title_edit">
-		Editar cielo predefinido
-	</string>
-	<string name="hint_new">
-		Asigna un nombre al valor predefinido, ajusta los controles para crearlo y selecciona &quot;Guardar&quot;.
-	</string>
-	<string name="hint_edit">
-		Para editar el cielo predefinido, ajusta los controles y selecciona &quot;Guardar&quot;.
+		Editar configuración de cielo
 	</string>
 	<string name="combo_label">
-		-Selecciona un valor predefinido-
+		-Selecciona una configuración-
 	</string>
-	<text name="hint">
-		Para editar el valor predefinido, ajusta los controles y selecciona &quot;Guardar&quot;.
-	</text>
-	<text name="label">
-		Nombre predefinido:
-	</text>
-	<text name="note">
-		Nota: Si cambias el nombre del valor predefinido, crearás un predefinido nuevo y el actual no se modificará.
-	</text>
-	<tab_container name="WindLight Tabs">
-		<panel label="ATMÓSFERA" name="Atmosphere">
-			<text name="BHText">
-				Horizonte azul
-			</text>
-			<text name="BDensText">
-				Cantidad de bruma
-			</text>
-			<text name="BDensText2">
-				Saturación
-			</text>
-			<text name="HDText">
-				Densidad de la bruma
-			</text>
-			<text name="DensMultText">
-				Densidad
-			</text>
-			<text name="WLDistanceMultText">
-				Distancia
-			</text>
-			<text name="MaxAltText">
-				Altitud máx.
-			</text>
+	<panel name="P_Presetname">
+		<text name="hint">
+			Para editar la configuración, ajusta los controles y selecciona &quot;Guardar&quot;.
+		</text>
+		<text name="label">
+			Nombre:
+		</text>
+	</panel>
+	<tab_container name="Main_Tab">
+		<panel label="Atmósfera y sol" name="ASUN">
+			<panel name="P_Atmosphere_Header">
+				<text name="T_Atmosphere_Header" value="Configuración de atmósfera"/>
+			</panel>
+			<panel name="P_Blue_Horizon">
+				<text name="BHText" tool_tip="Horizonte azul: El color del cielo. En términos meteorológicos, esta configuración afecta a la 'dispersión atmosférica'." width="60">
+					HrzAz
+				</text>
+				<color_swatch name="WLBlueHorizon" width="175" left_delta="65"/>
+				<text name="BDensText2" tool_tip="Densidad azul: Afecta a la saturación de color del conjunto del cielo. Si mueves el deslizador de Intensidad (I)hacia la derecha, obtendrás colores más brillantes y vibrantes. Si lo mueves a la izquierda, obtendrás colores más mate, incluso fundiendo a blanco y negro. Si deseas ajustar más específicamente el balance de color del cielo, puedes usar los controles individuales de saturación usando los valores Rojo/Verde/Azul." width="60">
+					DensAz
+				</text>
+				<color_swatch name="WLBlueDensity" width="175" left_delta="65"/>
+			</panel>
+			<panel name="P_Atmosphere_OtherSettings">
+				<slider label="NebHorz" name="WLHazeHorizon" tool_tip="Neblina del horizonte: Afecta a la altura de la neblina en el horizonte. A valores más altos, la neblina subirá hasta llegar al cielo y oscurecerá el horizonte real. La neblina en el orizonte puede ayudar a acentuar el sol y crear un efecto polvoriento, polucionado o húmedo. Esta configuración no funcionará si la densidad de la neblina se establece en 0."/>
+				<slider label="DensNeb" name="WLHazeDensity" tool_tip="Densidad de la neblina: Afecta a la cantidad de neblina que quieres ver en la atmósfera. A valores más bajos, puede producir magníficas vistas de exterior en entornos polvorientos o tropicales, y a valores más altos pueden crear una gruesa niebla, disminuyendo la visión. Si configuras la densidad de la neblina a cero, la neblina del horizonte no tendrá efecto."/>
+				<slider label="MltDens" name="WLDensityMult" tool_tip="Multiplicador de la densidad: Afecta a la densidad atmosférica en su conjunto. A valores más bajos, crea una sensación de 'aire fino', y a valores más altos, un efecto de polución muy pesada."/>
+				<slider label="MltDist" name="WLDistanceMult" tool_tip="Multiplicador de distancia: Afecta a la claridad percibida en la atmósfera. Para hacer parecer todo más brumoso y distante, mueve el deslizador a la derecha. Si quieres eliminar completamente el efecto de la configuración de cielo sobre el terreno y los objetos, configúralo a cero."/>
+				<slider label="AltMax" name="WLMaxAltitude" tool_tip="Altitud máxima: Ajusta a los cálculos de altitud que se realizan cuando se computa la iluminación atmosférica. A horas tardías puede ser útil para calcular cuán 'profunda' aparece una puesta de sol, mientras a mediodía puede usarse para conseguir valores de brillo apropiados."/>
+			</panel>
+			<panel name="P_Sun_and_Moon_Header">
+				<text name="T_Sun_and_Moon_Header" value="Configuración de sol y luna"/>
+			</panel>
+			<panel name="P_SM_Color">
+				<text name="SLCText" tool_tip="Color de sol/luna: Afecta al color de la luz producida por el sol y la luna. Recuerda que el color de la luz del sol y la luna afectará al color del cielo." width="60">
+					Color S/L
+				</text>
+				<color_swatch name="WLSunlight" width="175" left_delta="65"/>
+				<text name="WLAmbientText" tool_tip="Ambiente: Controla el color y la intensidad de la luz de ambiente en la atmósfera. Se usa para simular cómo se dispersa la luz del sol por la atmósfera y otros objetos una vez llega a la Tierra. Puedes crear un sol muy brillante, y un mundo relativamente oscuro (¡piensa en una puesta de sol!) con una configuración de ambiente a cero, pero si quieres simular una iluminación de mediodía cuando el sol está bajo en el cielo, necesitas incrementar la configuración de ambiente." width="60">
+					Ambiente
+				</text>
+				<color_swatch name="WLAmbient" width="175" left_delta="65"/>
+			</panel>
+			<panel name="P_SM_OtherSettings">
+				<slider label="Foc.BS" name="WLGlowB" tool_tip="Brillo del sol - Foco: Ajusta en qué mesura se difumina el sol en el cielo. A valores muy altos, el foco puede causar que el sol 'lave' completamente una porción del cielo con luz brillante, y a cero, puede causra que el sol (pero no la luz que produce) desaparezca del cielo."/>
+				<slider label="Tam.BS" name="WLGlowR" tool_tip="Brillo del sol - Tamaño: Define el tamaño de la imagen del sol."/>
+				<slider label="Brll.Estr" name="WLStarAlpha" tool_tip="Brillo de las estrellas: Define la visibilidad de las estrellas en el cielo. Si juegas con este deslizador cuando hay sol, puedes ver las estrellas en pleno día."/>
+				<slider label="Gamma" name="WLGamma" tool_tip="Gamma de la escena: Ajusta la distribución de luz y oscuridad de tu pantalla. Valores más bajos causarán que todo parezca oscurecerse, mientras que valores más altos pueden hacer que la escena parezca gris y 'lavada'. Sólo afecta a la vista 3D, no a los menús ni al resto de la pantalla. NOTA: El valor normal es 1.0."/>
+			</panel>
+			<panel name="P_WL_Daycycle">
+				<icon name="SkyDayCycle" tool_tip="Posición sol/luna: Afecta a la posición vertical del sol y la luna, desde la salida del sol (0.0), pasando por el mediodía (0.25), puesta de sol, (0.5), medianoche (0.75) y de nuevo la salida del sol (1.0)."/>
+				<time name="WLDayTime" tool_tip="Posición sol/luna: Afecta a la posición vertical del sol y la luna, desde la salida del sol (0.0), pasando por el mediodía (0.25), puesta de sol, (0.5), medianoche (0.75) y de nuevo la salida del sol (1.0)."/> 
+				<slider label="Ang Ori" name="WLEastAngle" tool_tip="Ángulo oriental: Cambia el azimut de la salida del sol relativo al Este del mapa, en sentido horario. Con una configuración de 0.5, el sol saldrá por el Oeste y se pondrá por el Este. Con una configuración de 0.25, el sol saldrá por el Sur y se pondrá por el Norte."/>
+			</panel>
 		</panel>
-		<panel label="LUZ" name="Lighting">
-			<text name="SLCText">
-				Color del sol y de la luna
-			</text>
-			<text name="WLAmbientText">
-				Ambiental
-			</text>
-			<text name="SunGlowText">
-				Resplandor del sol
-			</text>
-			<slider label="Visión" name="WLGlowB"/>
-			<slider label="Tamaño" name="WLGlowR"/>
-			<text name="WLStarText">
-				Brillo de las estrellas
-			</text>
-			<text name="SceneGammaText">
-				Gamma de la escena
-			</text>
-			<text name="TODText">
-				Posición del sol y la luna
-			</text>
-			<multi_slider initial_value="0" name="WLSunPos"/>
-			<text name="WL12amHash">
-				|
-			</text>
-			<text name="WL6amHash">
-				|
-			</text>
-			<text name="WL12pmHash2">
-				|
-			</text>
-			<text name="WL6pmHash">
-				|
-			</text>
-			<text name="WL12amHash2">
-				|
-			</text>
-			<text name="WL12am">
-				12 AM
-			</text>
-			<text name="WL6am">
-				6 AM
-			</text>
-			<text name="WL12pmHash">
-				12 PM
-			</text>
-			<text name="WL6pm">
-				6 PM
-			</text>
-			<text name="WL12am2">
-				12 AM
-			</text>
-			<time name="WLDayTime" value="6:00 AM"/>
-			<text name="WLEastAngleText">
-				Ángulo de elevación
-			</text>
-		</panel>
-		<panel label="NUBES" name="Clouds">
-			<text name="WLCloudColorText">
-				Color de las nubes
-			</text>
-			<text name="WLCloudColorText2">
-				Posición/Densidad de las nubes
-			</text>
-			<slider label="X" name="WLCloudX"/>
-			<slider label="Y" name="WLCloudY"/>
-			<slider label="D" name="WLCloudDensity"/>
-			<text name="WLCloudCoverageText">
-				Nubosidad
-			</text>
-			<text name="WLCloudScaleText">
-				Altitud de las nubes
-			</text>
-			<text name="WLCloudDetailText">
-				Detalle de las nubes (Posición/Densidad)
-			</text>
-			<slider label="X" name="WLCloudDetailX"/>
-			<slider label="Y" name="WLCloudDetailY"/>
-			<slider label="D" name="WLCloudDetailDensity"/>
-			<text name="WLCloudScrollXText">
-				Velocidad de las nubes: X
-			</text>
-			<check_box label="Bloquear" name="WLCloudLockX"/>
-			<text name="WLCloudScrollYText">
-				Velocidad de las nubes: Y
-			</text>
-			<check_box label="Bloquear" name="WLCloudLockY"/>
+		<panel name="P_Clouds" label="Nubes">
+			<panel name="P_Clouds_Header">
+				<text name="T_Clouds_Header" value="Configuración de nubes"/>
+			</panel>
+			<panel name="P_Cloud_Color">
+				<text name="WLCloudColorText" tool_tip="Color de las nubes: Afecta al color de las nubes, si existen. Usa los controles individuales Rojo/Verde/Azul para cambiar el color, o la Intensidad (I) para ajustar los tres a la vez." width="60">
+					Color Nub
+				</text>
+				<color_swatch left_delta="65" name="WLCloudColor" width="175"/>
+			</panel>
+			<panel name="P_Cloud_Density">
+				<text name="WLCloudColorText2" tool_tip="XY/Densidad de las nubes: Usa los deslizadores X e Y para cambiar la posición horizontal de todas las nubes en el cielo. El deslizador D afecta a la densidad del conjunto de todas las nubes individuales; a valores más bajos verás nubes más delgadas, rasgadas, y a valores más altos verás nubes más gruesas y sólidas."
+				 width="240">
+					XY/Densidad nubes
+				</text>
+			</panel>
+			<panel name="P_Cloud_CovScale">
+				<slider label="Cob Nub" name="WLCloudCoverage" tool_tip="Cobertura de las nubes: Configura qué fracción del cielo cubren las nubes."/>
+				<slider label="Esc Nub" name="WLCloudScale" tool_tip="Escala de las nubes: Avecta a la pecepción del tamaño de las nubes."/>
+			</panel>
+			<panel name="P_Cloud_Detail">
+				<text name="WLCloudDetailText" tool_tip="Detalle de las nubes (XY/Densidad): Afecta a la posición y el detalle de las imágenes de las nubes. Los deslizadores X e Y mueven su posición horizontal, y el D controla cómo de hinchadas y/o fracturadas parecen.">
+					Detalle nubes (XY/Densidad)
+				</text>
+			</panel>
+			<panel name="P_Cloud_Scroll">
+				<text name="WLCloudScrollXText" tool_tip="Desplazamiento X de las nubes: Afecta a la dirección y velocidad a la cuál se mueven las nubes en el cielo a lo largo de su eje X.">
+					Desplazamiento X nubes
+				</text>
+				<check_box label="Bloquear desplazamiento" name="WLCloudLockX" tool_tip="Bloquear desplazamiento: Evita que las nubes se muevan a lo largo del eje seleccionado."/>
+				<text name="WLCloudScrollYText" tool_tip="Desplazamiento X de las nubes: Afecta a la dirección y velocidad a la cuál se mueven las nubes en el cielo a lo largo de su eje Y.">
+					Desplazamiento Y nubes
+				</text>
+				<check_box label="Bloquear desplazamiento" name="WLCloudLockY" tool_tip="Bloquear desplazamiento: Evita que las nubes se muevan a lo largo del eje seleccionado."/>
+			</panel>
 		</panel>
 	</tab_container>
-	<check_box label="Convertir en mi nueva configuración de cielo" name="make_default_cb"/>
+	<check_box label="Establecer esta configuración ahora" name="make_default_cb"/>
 	<button label="Guardar" name="save"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater name="nearby_chat" title="Chat local">
+<layout_stack name="main_layout_stack">
+	<layout_panel name="chat_history_and_buttons_panel">
+		<button tool_tip="Usar el servicio de traducción seleccionado" name="translate_btn"/>
+		<button tool_tip="Abre la pestaña de chat local." name="chat_history_btn"/>
+		<button tool_tip="Muestra el chat silenciado en la pestaña de chat local." name="chat_history_muted_btn"/>
+	</layout_panel>
+	<layout_panel name="chat_bar_visibility_panel">
+		<layout_stack name="chat_bar_channel_spinner_layout_stack">
+			<layout_panel name="chat_bar_layout_panel">
+				<nearby_chat_control label="Decir en el chat local" name="chat_box"/>
+			</layout_panel>
+			<layout_panel name="channel_spinner_visibility_panel" width="95">
+				<spinner width="95" label="Canal" label_width="34" name="ChatChannel" tool_tip="Canal al que enviar el chat. Activado en Preferencias  -> Chat -> Firestorm -> Mostrar selector de canal en la barra de chat."/>
+			</layout_panel>
+		</layout_stack>
+	</layout_panel>
+</layout_stack>
+</floater>

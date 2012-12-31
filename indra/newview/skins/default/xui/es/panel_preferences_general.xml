@@ -45,17 +45,18 @@
 		<radio_item label="Mostrar" name="radio2"/>
 		<radio_item label="Mostrar brevemente" name="radio3"/>
 	</radio_group>
-	<text left_pad="35" name="RenderNameShowTime_LabelPrefix">
+	<text name="RenderNameShowTime_LabelPrefix">
 		(
 	</text>
 	<text name="RenderNameShowTime_LabelSuffix">
-		seconds)
+		segundos)
 	</text>
 	<check_box label="Mi nombre" name="show_my_name_checkbox1"/>
 	<check_box label="Nombre de usuario" name="show_slids" tool_tip="Mostrar el nombre de usuario, como bobsmith123"/>
 	<check_box label="Títulos de grupos" name="show_all_title_checkbox1" tool_tip="Mostrar títulos de grupos, como Jefe o Miembro"/>
 	<check_box label="Ocultar mi título" name="RenderHideGroupTitle" tool_tip="Muestra u oculta tu etiqueta de grupo a ti mismo y a cualquier otro"/>
 	<check_box label="Destacar amigos" name="show_friends" tool_tip="Realzar las etiquetas de los nombres de tus amigos"/>
+	<check_box label="No eliminar 'Resident' de los nombres antiguos" name="legacy_trim_check" tool_tip="Si se muestra el nombre antiguo, mostrar 'Resident' como apellido si el nombre a mostrar no lo tiene"/>
 	<check_box label="Publicar y mostrar etiquetas de radar (experimental)" name="FSPublishRadarTag" tool_tip="Activar esta casilla te permite ver los tags de radar publicados por otros. También publicará uno llamado 'Firestorm' para ti mismo. Esta característica usa el LSL Bridgde y actualmente es una característica incompleta"/>
 	<check_box label="Ver displaynames" name="display_names_check" tool_tip="Marca para utilizar displaynames (nombres personalizados) en chat, MI, etiquetas de nombres, etc."/>
 	<check_box label="Usar nombres antiguos en vez de nombres de usuario" name="FSshow_legacyun" tool_tip="Muestra los nombres en el formato (Nombre Apellido) en vez de (nombre.apellido)"/>

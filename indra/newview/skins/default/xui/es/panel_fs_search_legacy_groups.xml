@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Grupos" name="panel_ls_groups">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Términos de búsqueda:
+		</text>
+		<button label="Buscar" name="groups_find"/>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list  name="search_results_groups">
+			<columns label="Nombre del grupo" name="group_name" relwidth="0.76"/>
+			<columns label="Miembros" name="members" relwidth="0.21"/>
+			<columns label="Puntuación" name="score"/>
+		</scroll_list>
+		<button label="Anterior" name="groups_back"/>
+		<button label="Siguiente" name="groups_next"/>
+	</panel>
+</panel>

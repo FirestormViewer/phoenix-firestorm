@@ -47,6 +47,8 @@ public:
 	static FSFloaterGroup* openGroupFloater(const LLSD& params);
 	static void closeGroupFloater(const LLUUID& group_id);
 	static bool isFloaterVisible(const LLUUID& group_id);
+	static FSFloaterGroup* getInstance(const LLUUID& group_id);
+	static FSFloaterGroup* findInstance(const LLUUID& group_id);
 
 private:
 	LLPanelGroup*	mGroupPanel;

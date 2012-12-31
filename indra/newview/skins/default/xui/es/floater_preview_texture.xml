@@ -6,15 +6,23 @@
 	<floater.string name="Copy">
 		Copiar al inventario
 	</floater.string>
+	<floater.string name="DateTime">
+		[weekday,datetime,slt] [day,datetime,slt] [month,datetime,slt] [year,datetime,slt] [hour24,datetime,slt]:[min,datetime,slt]:[second,datetime,slt] [timezone,datetime,slt]
+	</floater.string>
+	<floater.string name="UploaderDateTime">
+		Subida por [UPLOADER] el [DATE_TIME]
+	</floater.string>
 	<text name="desc txt">
 		Descripción:
 	</text>
+	<button label="Perfil" name="openprofile"/>
 	<panel name="dimensions_panel">
-		<text name="dimensions">
+		<text name="dimensions" width="100">
 			[WIDTH] px x [HEIGHT] px
 		</text>
+		<button label="UUID" name="copyuuid" tool_tip="Copiar el UUID al portapapeles"/>
 		<text name="aspect_ratio">
-			Previsualizar la ratio de las proporciones
+			Proporciones de la previsualización
 		</text>
 		<combo_box name="combo_aspect_ratio" tool_tip="Vista previa en una proporción concreta">
 			<combo_item name="Unconstrained">
@@ -44,8 +52,11 @@
 		</combo_box>
 	</panel>
 	<panel name="button_panel">
-		<button label="OK" name="Keep"/>
+		<button label="Aceptar" name="Keep"/>
 		<button label="Descartar" name="Discard"/>
-		<button label="Guardar como" name="save_tex_btn"/>
+		<flyout_button label="Cuardar como TGA" name="save_tex_btn" width="140">
+			<flyout_button.item label="Guardar como TGA" name="save_item_tga"/>
+			<flyout_button.item label="Guardar como PNG" name="save_item_png"/>
+		</flyout_button>
 	</panel>
 </floater>

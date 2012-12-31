@@ -15,10 +15,24 @@
 [SERVER_RELEASE_NOTES_URL]
 
 	</floater.string>
-
-	<!-- *NOTE: Do not translate text like GPU, Graphics Card, etc -
-	Most PC users who know what these mean will be used to the English versions,
-	and this info sometimes gets sent to support. -->
+<floater.string name="AboutSystem">
+	CPU: [CPU]
+Memoria (Memory): [MEMORY_MB] MB
+Versión SO (OS Version): [OS_VERSION]
+Fabricante del adaptador de gráficos (Graphics Card Vendor): [GRAPHICS_CARD_VENDOR]
+Adaptador de gráficos (Graphics Card): [GRAPHICS_CARD]
+	</floater.string>
+	<floater.string name="AboutDriver">
+		Versión del controlador de gráficos de Windows (Graphics Driver Version): [GRAPHICS_DRIVER_VERSION]
+	</floater.string>
+	<floater.string name="AboutSettings">
+		Modo del visor (Settings mode): [MODE]
+Skin del visor (Viewer Skin): [SKIN] ([THEME])
+Fuente utilizada (Font Used): [FONT] ([FONT_SCREEN_DPI])
+Distancia de dibujo (Draw distance): [DRAW_DISTANCE]
+Ancho de banda (Bandwidth): [BANDWIDTH]
+Factor de nivel de detalle (LOD factor): [LOD]
+	</floater.string>
 	<floater.string name="none">
 		(ninguno)
 	</floater.string>

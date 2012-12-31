@@ -164,7 +164,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>EnableIMChatPopups</key>
@@ -176,7 +176,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>0</integer>
+    <integer>1</integer>
   </map>
 
   <key>PlainTextChatHistory</key>
@@ -339,6 +339,54 @@
   <map>
     <key>Comment</key>
     <string>If enabled, Firestorm will not show any group / IM chat chiclets (notifications envelope and sum of IMs will remain on the screen).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSShowGroupNameLength</key>
+  <map>
+    <key>Comment</key>
+    <string>Max length of group name to be printed in chat (-1 for full group name, 0 for disabled).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>S32</string>
+    <key>Value</key>
+    <integer>-1</integer>
+  </map>
+
+  <key>FSUseStandalonePlaceDetailsFloater</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, Firestorm will use a standalone floater for each landmark details, teleport history details and parcel details view.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseStandaloneTeleportHistoryFloater</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, Firestorm will use a standalone floater for the teleport history view.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSUseStandaloneBlocklistFloater</key>
+  <map>
+    <key>Comment</key>
+    <string>If enabled, Firestorm will use a standalone floater for the blocklist.</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

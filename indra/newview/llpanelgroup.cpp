@@ -667,11 +667,16 @@ void LLPanelGroup::showNotice(const std::string& subject,
 
 	if (gSavedSettings.getBOOL("FSUseStandaloneGroupFloater")) 
 	{
-		FSFloaterGroup* floater = FSFloaterGroup::openGroupFloater(group_id);
+		FSFloaterGroup* floater = FSFloaterGroup::findInstance(group_id);
+		if (!floater)
+		{
+			floater = FSFloaterGroup::openGroupFloater(group_id);
+		}
 		if (!floater)
 		{
 			return;
 		}
+
 		panel = floater->getGroupPanel();
 	}
 	else

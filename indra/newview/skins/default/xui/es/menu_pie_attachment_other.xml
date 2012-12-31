@@ -19,7 +19,10 @@
 			<pie_slice label="Retexturizar" name="Texture Refresh"/>
 		</pie_menu>
 		<pie_slice label="Inspeccionar" name="Avatar Inspect"/>
-		<pie_slice label="Desdibujar" name="Derender"/>
+		<pie_menu label="Desdibujar &gt;" name="DerenderMenu">
+			<pie_slice label="Permanente" name="DerenderPermanent"/>
+			<pie_slice label="Temporal" name="Derender"/>
+		</pie_menu>
 	</pie_menu>
 	<pie_slice label="MI" name="Send IM..."/>
 </pie_menu>

@@ -134,3 +134,15 @@ bool FSFloaterGroup::isFloaterVisible(const LLUUID& group_id)
 	
 	return false;
 }
+
+// static
+FSFloaterGroup* FSFloaterGroup::getInstance(const LLUUID& group_id)
+{
+	return LLFloaterReg::getTypedInstance<FSFloaterGroup>("fs_group", LLSD().with("group_id", group_id));
+}
+
+// static
+FSFloaterGroup* FSFloaterGroup::findInstance(const LLUUID& group_id)
+{
+	return LLFloaterReg::findTypedInstance<FSFloaterGroup>("fs_group", LLSD().with("group_id", group_id));
+}

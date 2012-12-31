@@ -17,7 +17,10 @@
 			<check_box label="Ocultar carpetas de sistema vacías en el inventario" name="DebugHideEmptySystemFolders" tool_tip="Si lo activas, las ventanas de inventario no mostrará ninguna carpeta de sistema que esté vacía, como las de Favoritos, Hitos, etc."/>
 			<check_box label="Mostrar la carpeta Items Recibidos en el inventario" name="FSShowInboxFolder" tool_tip="Si lo activas, las ventanas de invantario también mostrarán la carpeta Items Recibidos"/>
 			<check_box label="Permitir diferentes términos de búsqueda en cada pestaña del inventario" name="FSSplitInventorySearchOverTabs" tool_tip="Si lo activas se pueden usar diferentes términos de búsqueda en cada pestaña del inventario."/>
-			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar" name="FSDisableAvatarTrackerAtCloseIn"/>
+			<check_box label="Desactivar la baliza de seguimiento al alcanzar al avatar (&lt;= 3m)" name="FSDisableAvatarTrackerAtCloseIn" tool_tip="Si lo activas, la baliza de seguimiento se desactivará automáticamente si la distancia con el avatar es menor que 3 metros. (Por defecto)."/>
+			<check_box label="Crear efectos de partículas cuando los scripts se comunican" name="EffectScriptChatParticles" tool_tip="Si lo activas, los objetos con scripts mostrarán remolinos de partículas de luz cuando los scripts se comuniquen"/>
+			<check_box label="Activar escalado progresivo de distancia de dibujo" name="FSRenderFarClipStepping" tool_tip="Si lo activas, Firestorm aumentará progresivamente la distancia de dibujo después de un teleporte." width="300"/>
+			<slider name="progressive_draw_distance_interval" tool_tip="Intérvalo en segundos entre cada incremento de distancia de dibujo"/>
 			<check_box name="UseLSLBridge" label="Activar el LSL-Client Bridge" tool_tip="Permite al visor usar un accesorio con scripts (Bridge) para extender sus características"/>
 			<check_box name="UseLSLFlightAssist" label="Activar asistente de vuelo del Bridge" tool_tip="Activa el script que permite volar y flotar a mayor altitud"/>
 		</panel>
@@ -172,6 +175,10 @@
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
 			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
 			<check_box label="Interpolar los cambios de entorno de la región con el WL de la parcela" name="FSInterpolateParcelWL" tool_tip="Igual que las opciones anteriores sobre transiciones, pero para la configuración WL de la parcela"/>
+			<text name="wl_crossfade_label" width="225">
+				Duración de la transición (en segundos):
+			</text>
+			<spinner name="FSWindlightInterpolateTime" tool_tip="Duración en segundos de la transición de una configuración WL a otra (Por defecto: 3)"/>
 		</panel>
 		<panel label="Construcción" name="BuildTab">
 			<text name="text_box_objprams" width="200">
@@ -202,6 +209,8 @@
 			<spinner label="Pos. Z" name="Z pos" label_width="60" width="135"/>
 			<check_box label="Valores porcentuales" tool_tip="Los valores por defecto son porcentajes y cada eje se establece en 50" name="EmPivotPercToggle"/>
 			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="EmBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Usar Ctrl+ratón para sujetar y manipular objetos" tool_tip="Si lo activas, podrás tomar y mover objetos con tu ratón y la tecla CTRL." name="FSEnableGrab"/>
+			<check_box label="Permitir Bloq. Mayús. + arrastrar o escalar en una cara de textura en modo de construcción" tool_tip="Si lo activas, permite pulsar-arrastrar o pulsar-escalar de la textura de una cara en el modo de construcción. Esta característica es todavía experimental y debe ser usada con precaución." name="FSExperimentalDragTexture"/>
 			<check_box label="Usar comportamiento antiguo de &quot;Poner objeto en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
 			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Activar el preprocesador LSL" tool_tip="Marcar para activar el preprocesador LSL." name="preproc_checkbox"/>
@@ -263,6 +272,9 @@ no funcionarán en Second Life.
 			<color_swatch name="usernamecolorswatch" tool_tip="Clic para abrir el selector de color"/>
 			<check_box label="Etiquetas de nombre basadas en la distancia" name="FSTagShowDistanceColors" tool_tip="Si lo activas, el color de la etiqueta de los demás avatares mostrarán si están dentro del alcance del chat, de los gritos, o más allá del alcance de los gritos. Esto anula los colores de etiqueta según visor, pero los colores definidos para los amigos o los de los Grupos de Contactos."/>
 			<check_box label="Mostrar distancia en la etiqueta" name="FSTagShowDistance" tool_tip="Si lo activas, las etiquetas de los demás avatares mostrarán la distancia que te serpara de ellos, usando los colores seleccionados abajo." left="300"/>
+			 <text name="NameTagWhisperDistanceColor_Label">
+				 Alcance de susurro
+			</text>
 			<text name="NameTagChatDistanceColor_Label">
 				Alcance de chat
 			</text>

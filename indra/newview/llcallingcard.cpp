@@ -1015,10 +1015,23 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 {
 	LLAvatarName av_name;
 	LLAvatarNameCache::get( buddy_id, &av_name);
-	buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
+	// <FS:Ansariel> Friend names on worldmap should respect display name settings
+	//buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
 	if(buddy->isOnline() && buddy->isRightGrantedFrom(LLRelationship::GRANT_MAP_LOCATION))
 	{
-		mMappable.insert(value);
+		// <FS:Ansariel> Friend names on worldmap should respect display name settings
+		//mMappable.insert(value);
+		if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+		{
+			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
+			mMappable.insert(value);
+		}
+		else
+		{
+			buddy_map_t::value_type value(av_name.mDisplayName, buddy_id);
+			mMappable.insert(value);
+		}
+		// </FS:Ansariel>
 	}
 	return true;
 }

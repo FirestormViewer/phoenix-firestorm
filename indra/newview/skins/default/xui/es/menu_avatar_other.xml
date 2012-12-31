@@ -16,5 +16,8 @@
 	<menu_item_call label="Depurar texturas" name="Debug..."/>
 	<menu_item_call label="Enfocar" name="Zoom In"/>
 	<menu_item_call label="Pagar" name="Pay..."/>
-	<menu_item_call label="Desdibujar" name="Derender"/>
+	<menu_item_call label="Desdibujar temporalmente" name="Derender"/>
+	<menu_item_call label="Desdibujar temporalmente" name="DerenderPermanent"/>
+	<menu_item_call label="Información de scripts" name="ScriptInfo"/>
+	<menu_item_call label="Retexturizar" name="Texture Refresh"/>
 </context_menu>

@@ -293,11 +293,11 @@ void DesktopNotifierLinux::showNotification( const std::string& notification_tit
 	GError* error(0);
 	if ( m_pLibNotify->mNotificationShow( m_pNotification, &error ) )
 	{
-		LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notification type " << notification_type << "sent." << LL_ENDL;
+		LL_INFOS( "DesktopNotifierLinux" ) << "Linux desktop notification type " << notification_type << " sent." << LL_ENDL;
 	}
 	else
 	{
-		LL_WARNS( "DesktopNotifierLinux" ) << "Linux desktop notification FAILED to send. " << error->message << LL_ENDL;
+		LL_WARNS( "DesktopNotifierLinux" ) << "Linux desktop notification type " << notification_type << " FAILED to send, error was " << error->message << LL_ENDL;
 	}
 }
 

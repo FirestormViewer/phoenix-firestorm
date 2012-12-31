@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <context_menu name="Object Pie">
-	<menu_item_call label="Tocar" name="Object Touch"/>
+	<menu_item_call label="Tocar" name="Object Touch">
+		<menu_item_call.on_enable function="Object.EnableTouch" name="EnableTouch" parameter="Tocar" />
+	</menu_item_call>
 	<menu_item_call label="Editar" name="Edit..."/>
 	<menu_item_call label="Construir" name="Build"/>
 	<menu_item_call label="Mostrar en linksets" name="show_in_linksets"/>
@@ -34,10 +36,8 @@
 		<menu_item_call label="Desbloquear" name="Object Unmute"/>
 	</context_menu>
 	<menu_item_call label="Retexturizar" name="Texture Refresh"/>
-	<menu_item_call label="Desdibujar" name="Derender"/>
-	<menu_item_call label="Añadir objeto a Lista Negra" name="BlacklistObject"/>
-	<menu_item_call label="Añadir texturas  a Lista Negra" name="BlacklistTextures"/>
-	<menu_item_call label="Añadir esculpido a Lista Negra" name="BlacklistSculpt"/>
+	<menu_item_call label="Desdibujar temporalmente" name="Derender"/>
+	<menu_item_call label="Desdibujar permanentemente" name="DerenderPermanent"/>
 	<menu_item_call label="Devolver" name="Return..."/>
 	<menu_item_call label="Tomar" name="Pie Object Take"/>
 	<menu_item_call label="Tomar una copia" name="Take Copy"/>

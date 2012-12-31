@@ -45,85 +45,85 @@
 	<text name="title" value="Perfil del objeto"/>
 	<text name="where" value="(En el mundo)"/>
 	<scroll_container name="item_profile_scroll">
-	<panel label="" name="properties_panel">
-		<text name="Name:">
-			Nombre:
-		</text>
-		<text name="Description:">
-			Descripción:
-		</text>
-		<text name="CreatorNameLabel">
-			Creador:
-		</text>
-		<text name="Owner:">
-			Propietario:
-		</text>
-		<text name="Group_label">
-			Grupo:
-		</text>
-		<button name="button set group" tool_tip="Elige un grupo con el que compartir los permisos de este objeto"/>
-		<name_box initial_value="Cargando..." name="Group Name Proxy"/>
-		<button label="Transferir" label_selected="Transferir" name="button deed" tool_tip="La transferencia entrega este objeto con los permisos del próximo propietario. Los objetos compartidos por el grupo pueden ser transferidos por un oficial del grupo."/>
-		<text name="label click action">
-			Pulsa para:
-		</text>
-		<combo_box name="clickaction">
-			<combo_box.item label="Tocarlo" name="Touch/grab(default)"/>
-			<combo_box.item label="Sentarme" name="Sitonobject"/>
-			<combo_box.item label="Comprar" name="Buyobject"/>
-			<combo_box.item label="Pagar" name="Payobject"/>
-			<combo_box.item label="Abrir" name="Open"/>
-		</combo_box>
-		<panel name="perms_inv">
-			<text name="perm_modify">
-				Puedes modificar este objeto
+		<panel label="" name="properties_panel">
+			<text name="Name:">
+				Nombre:
 			</text>
-			<text name="Anyone can:">
-				Cualquiera:
+			<text name="Description:">
+				Descripción:
 			</text>
-			<check_box label="Copiar" name="checkbox allow everyone copy"/>
-			<check_box label="Mover" name="checkbox allow everyone move"/>
-			<text name="GroupLabel">
+			<text name="CreatorNameLabel">
+				Creador:
+			</text>
+			<text name="Owner:">
+				Propietario:
+			</text>
+			<text name="Group_label">
 				Grupo:
 			</text>
-			<check_box label="Compartir" name="checkbox share with group" tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación de este objeto. Debes transferirlo para activar las restricciones según los roles."/>
-			<text name="NextOwnerLabel">
-				Próximo propietario:
+			<button name="button set group" tool_tip="Elige un grupo con el que compartir los permisos de este objeto"/>
+			<name_box initial_value="Cargando..." name="Group Name Proxy"/>
+			<button label="Transferir" label_selected="Transferir" name="button deed" tool_tip="La transferencia entrega este objeto con los permisos del próximo propietario. Los objetos compartidos por el grupo pueden ser transferidos por un oficial del grupo."/>
+			<text name="label click action">
+				Pulsa para:
 			</text>
-			<check_box label="Modificar" name="checkbox next owner can modify"/>
-			<check_box label="Copiar" name="checkbox next owner can copy"/>
-			<check_box label="Transferir" name="checkbox next owner can transfer" tool_tip="El próximo propietario puede dar o revender este objeto"/>
+			<combo_box name="clickaction">
+				<combo_box.item label="Tocarlo" name="Touch/grab(default)"/>
+				<combo_box.item label="Sentarme" name="Sitonobject"/>
+				<combo_box.item label="Comprar" name="Buyobject"/>
+				<combo_box.item label="Pagar" name="Payobject"/>
+				<combo_box.item label="Abrir" name="Open"/>
+			</combo_box>
+			<panel name="perms_inv">
+				<text name="perm_modify">
+					Puedes modificar este objeto
+				</text>
+				<text name="Anyone can:">
+					Cualquiera:
+				</text>
+				<check_box label="Copiar" name="checkbox allow everyone copy"/>
+				<check_box label="Mover" name="checkbox allow everyone move"/>
+				<text name="GroupLabel">
+					Grupo:
+				</text>
+				<check_box label="Compartir" name="checkbox share with group" tool_tip="Permite que todos los miembros del grupo compartan tus permisos de modificación de este objeto. Debes transferirlo para activar las restricciones según los roles."/>
+				<text name="NextOwnerLabel">
+					Próximo propietario:
+				</text>
+				<check_box label="Modificar" name="checkbox next owner can modify"/>
+				<check_box label="Copiar" name="checkbox next owner can copy"/>
+				<check_box label="Transferir" name="checkbox next owner can transfer" tool_tip="El próximo propietario puede dar o revender este objeto"/>
+			</panel>
+			<check_box label="En venta" name="checkbox for sale"/>
+			<combo_box name="sale type">
+				<combo_box.item label="Copiar" name="Copy"/>
+				<combo_box.item label="Contenidos" name="Contents"/>
+				<combo_box.item label="Original" name="Original"/>
+			</combo_box>
+			<spinner label="Precio: L$" name="Edit Cost"/>
+			<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda"/>
+			<text name="pathfinding_attributes_label">
+				Atributos Pathfinding:
+			</text>
+			<text name="B:">
+				B:
+			</text>
+			<text name="O:">
+				O:
+			</text>
+			<text name="G:">
+				G:
+			</text>
+			<text name="E:">
+				E:
+			</text>
+			<text name="N:">
+				N:
+			</text>
+			<text name="F:">
+				F:
+			</text>
 		</panel>
-		<check_box label="En venta" name="checkbox for sale"/>
-		<combo_box name="sale type">
-			<combo_box.item label="Copiar" name="Copy"/>
-			<combo_box.item label="Contenidos" name="Contents"/>
-			<combo_box.item label="Original" name="Original"/>
-		</combo_box>
-		<spinner label="Precio: L$" name="Edit Cost"/>
-		<check_box label="Mostrar en la búsqueda" name="search_check" tool_tip="Permitir que la gente vea este objeto en los resultados de la búsqueda"/>
-		<text name="pathfinding_attributes_label">
-			Atributos Pathfinding:
-		</text>
-		<text name="B:">
-			B:
-		</text>
-		<text name="O:">
-			O:
-		</text>
-		<text name="G:">
-			G:
-		</text>
-		<text name="E:">
-			E:
-		</text>
-		<text name="N:">
-			N:
-		</text>
-		<text name="F:">
-			F:
-		</text>
-	</panel>
 	</scroll_container>
 	<layout_stack name="buttons_ls">
 		<layout_panel name="open_btn_panel">

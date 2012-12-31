@@ -36,13 +36,14 @@
 			<layout_stack name="radar_ls">
 				<layout_panel name="radarlayout">
 					<radar_list name="radar_list">
-						<radar_list.columns label="NOMBRE" name="name" tool_tip="[TOTAL] avatares, [IN_REGION] en la misma región, [IN_CHAT_RANGE] dentro del alcnace del chat"/>
+						<radar_list.columns label="Nombre" name="name" tool_tip="[TOTAL] avatares, [IN_REGION] en la misma región, [IN_CHAT_RANGE] dentro del alcnace del chat"/>
+						<radar_list.columns name="voice_level" tool_tip="Está hablando por voz"/>
 						<radar_list.columns name="in_region" tool_tip="Está en la misma región"/>
-						<radar_list.columns label="M" name="flags" tool_tip="Tiene información de pago"/>
-						<radar_list.columns label="EDAD" name="age" relative_width="0.11"/>
-						<radar_list.columns label="VISTO" name="seen" relative_width="0.14"/>
-						<radar_list.columns label="DIST." name="range"/>
-						<radar_list.columns label="CLAVE" name="uuid"/>
+						<radar_list.columns name="flags" tool_tip="Tiene información de pago"/>
+						<radar_list.columns label="Edad" name="age" relative_width="0.11"/>
+						<radar_list.columns label="Visto" name="seen" relative_width="0.14"/>
+						<radar_list.columns label="Dist." name="range"/>
+						<radar_list.columns label="UUID" name="uuid"/>
 					</radar_list>
 				</layout_panel>
 			</layout_stack>

@@ -14,13 +14,13 @@
 		<radio_item label="Local" name="local" value="1"/>
 	</radio_group>
 	<text name="unknown">
-		Tamaño: [DIMENSIONS]
+		Tamaño:
+[DIMENSIONS]
 	</text>
-	<button label="Por defecto" label_selected="Por defecto" name="Default" width="84"/>
-	<button label="Blanca" label_selected="Blanca" name="Blank"/>
-	<button label="Ninguna" label_selected="Ninguna" left="90" name="None"/>
-	<button label="" label_selected="" name="Pipette"/>
-	<check_box initial_value="true" label="Vista previa inmediata" name="apply_immediate_check"/>
+	<button label="Por defecto" label_selected="Por defecto" name="Default" width="81"/>
+	<button label="Blanca" label_selected="Blanca" name="Blank" width="81"/>
+	<button label="Transparente" label_selected="Transparente" name="Transparent" tool_tip="Nota: Si se selecciona una textura transparente u otra textura con transparencia parcial, la luz no se proyectará." width="81"/>
+	<button label="Ninguna" label_selected="Ninguna" left="90" name="None" width="81"/>
 	<text name="preview_disabled" value="Vista previa inhabilitada"/>
 	<filter_editor label="Filtrar las texturas" name="inventory search editor"/>
 	<check_box initial_value="false" label="Ver las carpetas" name="show_folders_check"/>
@@ -31,6 +31,7 @@
 		<column label="Nombre" name="unit_name"/>
 		<column label="ID" name="unit_id_HIDDEN"/>
 	</scroll_list>
-	<button label="OK" label_selected="OK" name="Select"/>
+	<button label="Aceptar" label_selected="Aceptar" name="Select"/>
 	<button label="Cancelar" label_selected="Cancelar" name="Cancel"/>
+	<check_box initial_value="true" label="Aplicar ya" name="apply_immediate_check"/>
 </floater>

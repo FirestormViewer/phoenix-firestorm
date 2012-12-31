@@ -1,72 +1,73 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Edit Water Preset" title="Editar el agua predefinida">
+<floater name="Edit Water Preset" title="Editar configuración de agua">
 	<string name="title_new">
-		Crear una nueva agua predefinida
+		Crear nueva configuración de agua
 	</string>
 	<string name="title_edit">
-		Editar el agua predefinida
-	</string>
-	<string name="hint_new">
-		Asigna un nombre al valor predefinido, ajusta los controles para crearlo y selecciona &quot;Guardar&quot;.
-	</string>
-	<string name="hint_edit">
-		Para editar el agua predefinida, ajusta los controles y selecciona &quot;Guardar&quot;.
+		Editar configuración de agua
 	</string>
 	<string name="combo_label">
-		-Selecciona un valor predefinido-
+		-Selecciona una configuración-
 	</string>
-	<text name="hint">
-		Para editar el valor predefinido, ajusta los controles y selecciona &quot;Guardar&quot;.
-	</text>
-	<text name="label">
-		Nombre predefinido:
-	</text>
-	<text name="note">
-		Nota: Si cambias el nombre del valor predefinido, crearás un predefinido nuevo y el actual no se modificará.
-	</text>
-	<panel name="panel_water_preset">
-		<text name="water_color_label">
-			Color del agua
-		</text>
-		<text name="water_fog_density_label">
-			Transparencia
-		</text>
-		<text name="underwater_fog_modifier_label">
-			Modificar la claridad del agua
-		</text>
-		<text name="BHText">
-			Sentido de las olas grandes
-		</text>
-		<slider label="X" name="WaterWave1DirX"/>
-		<slider label="Y" name="WaterWave1DirY"/>
-		<text name="BDensText">
-			Tamaño de las ondulaciones
-		</text>
-		<text name="HDText">
-			Escala de Fresnel
-		</text>
-		<text name="FresnelOffsetText">
-			Coeficiente de reflexión
-		</text>
-		<text name="BHText2">
-			Sentido de las olas pequeñas
-		</text>
-		<slider label="X" name="WaterWave2DirX"/>
-		<slider label="Y" name="WaterWave2DirY"/>
-		<text name="DensMultText">
-			Refracción de la superficie
-		</text>
-		<text name="WaterScaleBelowText">
-			Refracción bajo la superficie
-		</text>
-		<text name="MaxAltText">
-			Desenfoque
-		</text>
-		<text name="BHText3">
-			Vista Normal
+	<panel name="P_Presetname">
+		<text name="label">
+			Nombre:
 		</text>
 	</panel>
-	<check_box label="Convertir en mi nueva configuración de agua" name="make_default_cb" left="190"/>
+	<tab_container name="Main_Tab">
+		<panel name="P_Fog_and_Wave" label="Niebla y olas">
+			<panel name="P_Water_Fog"> 
+				<text name="water_color_label" tool_tip="Color de la niebla: Cambia el color del tinte de volumen del agua, esencialmente definiendo el color del agua en si. Si el agua no tiene niebla, se verá cristalina y e incolora.">
+					Color niebla agua
+				</text>
+				<text name="BHText3" tool_tip="Mapa normal: Imagen usada para determinar los reflejos y refracciones. Puede usarse cualquier textura para esta configuración- pero un mapa normal funcionará mejor. ¡Prueba una piel de serpiente, azulejos u otro mapa normal para obtener efectos absurdos!">
+					Mapa normal
+				</text>
+			</panel>
+			<panel name="P_Fog_Settings">
+				<text tool_tip="Exponente de la densidad de la niebla: Controla la densidad de la niebla del agua; esta configuración define cómo de lejos podrás ver a través de ella desde arriba."
+				 top_pad="5" name="water_fog_density_label">
+					Exponente densidad niebla
+				</text>
+				<text tool_tip="Modificador de la niebla subacuática: Controla cómo cambia la densidad de la niebla cuando estás bajo el agua. Útil para crear vistas lejanas bajo el agua manteniendo la superficie bastante opaca. Por ejemplo, con un valor de 0.25, la niebla del agua tiene 1/4 de densidad mientras estás bajo el agua que la que parece tener cuando la miras desde encima de la superficie." name="underwater_fog_modifier_label">
+					Modificador niebla subacuática
+				</text>
+			</panel>
+			<panel name="P_Wave_Settings">
+				<text name="BHText" tool_tip="Dirección de la onda grande: Controla la dirección X e Y y la velocidad de la imagen de onda grande.">
+					Dirección onda grande
+				</text>
+				<text name="BHText2" tool_tip="Dirección de la onda pequeña: Controla la dirección X e Y y la velocidad de la imagen de onda pequeña.">
+					Dirección onda pequeña
+				</text>
+			</panel>
+		</panel>
+		<panel name="P_Reflection" label="Reflexión">
+			<panel name="P_Wavelet">
+				<text name="BDensText" tool_tip="Escala de la ondícula de reflexión: Controla la escala de las tres ondículas que componen la superficie del agua.">
+					Escala ondícula reflexión
+				</text>
+			</panel>
+			<panel name="P_Other_Settings">
+				<text name="HDText" tool_tip="Escala Fresnel: Determina cuánta luz se refleja en los diferentes ángulos; incrementarlo reduce el efecto visual de reflejos en la superficie del agua.">
+					Escala Fresnel
+				</text>
+				<text name="FresnelOffsetText" tool_tip="Desplazamiento Fresnel: Determina la cantidad de luz total que se refleja; incrementarlo aumenta la cantidad de luz reflejada por la superficie del agua.">
+					Desplazamiento Fresnel
+				</text>
+				<text name="DensMultText" tool_tip="Escala de refracción superior: Controla la cantidad de refracción visual puedes ver desde encima de la superficie del agua; éste es el efecto de 'temblor' que puedes ver cuando miras un objeto que está bajo el agua.">
+					Escala refracción superior
+				</text>
+				<text name="WaterScaleBelowText" tool_tip="Escala refracción inferior: Controla la cantidad de refracción visual puedes ver desde debajo de la superficie del agua; éste es el efecto de 'temblor' que puedes ver cuando miras un objeto que está sobre la superficie del agua.">
+					Escala refracción inferior
+				</text>
+				<text name="MaxAltText" tool_tip="Multiplicador del difuminado: Controla cuántas ondas y reflejos se mezclan. Incrementarlo aumenta la distorsión que ves en los reflejos como consecuencia de la actividad de las olas.">
+					Multiplicador del difuminado
+				</text>
+			</panel>
+		</panel>
+	</tab_container>
+	<check_box label="Establecer esta configuración ahora" name="make_default_cb"/>
 	<button label="Guardar" name="save"/>
 	<button label="Cancelar" name="cancel"/>
 </floater>

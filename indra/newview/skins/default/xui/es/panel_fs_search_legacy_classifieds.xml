@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel label="Classifieds" name="panel_ls_classifieds">
+	<panel name="panel_ls_input">
+		<text name="search_text">
+			Términos de búsqueda:
+		</text>
+		<button label="Buscar" name="classifieds_find"/>
+	</panel>
+	<panel name="panel_ls_scrolllist">
+		<scroll_list name="search_results_classifieds">
+			<columns
+			label="Nombre" name="classified_name"/>
+			<columns label="Precio" name="price"/>
+		</scroll_list>
+		<button label="Anterior" name="classifieds_back"/>
+		<button label="Siguiente" name="classifieds_next"/>
+	</panel>
+</panel>

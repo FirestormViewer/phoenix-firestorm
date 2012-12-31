@@ -1,28 +1,107 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="area_search" title="Buscar objetos en el área">
-	<floater.string name="ListedPendingTotalBlank" value="Listados/Pendientes/Totales"/>
-	<floater.string name="ListedPendingTotalFilled" value="[LISTED] Listados/[PENDING] Pendientes/[TOTAL] Totales"/>
-	<text name="name_label">
-		Buscar por nombre:
-	</text>
-	<text name="desc_label">
-		Buscar por descripción:
-	</text>
-	<text name="owner_label">
-		Buscar por propietario:
-	</text>
-	<text name="group_label">
-		Buscar por grupo:
-	</text>
-	<scroll_list name="result_list">
-		<column name="Name" label="Nombre" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
-		<column name="Description" label="Descripción" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
-		<column name="Owner" label="Propietario" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
-		<column name="Group" label="Grupo" tool_tip="Hacer doble clic en cualquier entrada para marcar su posición con una baliza"/>
-	</scroll_list>
-	<button name="Refresh" label="Actualizar"/>
-	<button name="Stop" label="Detener"/>
-	<text name="counter">
-		Listados/Pendientes/Totales
-	</text>
+	<tab_container name="area_searchtab">
+		<panel label="Lista" name="area_search_list_panel">
+			<panel.string name="ListedPendingTotalBlank">
+				Listados| Pendientes| Totales
+			</panel.string>
+			<panel.string name="ListedPendingTotalFilled">
+				[LISTED] Listados | [PENDING] Pendientes | [TOTAL] Totales
+			</panel.string>
+			<scroll_list name="result_list">
+				<scroll_list.columns name="name" label="Nombre"/>
+				<scroll_list.columns name="description" label="Descripción"/>
+				<scroll_list.columns name="owner" label="Propietario"/>
+				<scroll_list.columns name="group" label="Grupo" tool_tip="Con qué grupo está configurado el objeto."/>
+				<scroll_list.columns name="creator" label="Creador"/>
+				<scroll_list.columns name="last_owner" label="Último propietario" tool_tip="Quién lo poseyó anteriormente."/>
+			</scroll_list>
+			<button name="Refresh" label="Actualizar"/>
+			<text name="counter">
+				Listados | Pendientes | Totales
+			</text>
+			<check_box name="beacons" label="Mostrar balizas"/>
+		</panel>
+		<panel label="Buscar" name="area_search_find_panel">
+			<text name="name_label">
+				Nombre:
+			</text>
+			<text name="desc_label">
+				Descripción:
+			</text>
+			<text name="owner_label">
+				Propietario:
+			</text>
+			<text name="group_label">
+				Grupo:
+			</text>
+			<text name="creator_label">
+				Creador:
+			</text>
+			<text name="last_owner_label">
+				Último propietario:
+			</text>
+			<check_box name="regular_expression" label="Usar expresión regular"/>
+			<button name="search" label="Buscar"/>
+			<button name="clear" label="Limpiar"/>
+		</panel>
+		<panel label="Filtrar" name="area_search_filter_panel">
+			<text name="only_list">
+				Sólo listar objetos:
+			</text>
+			<check_box name="filter_locked" label="Bloqueados"/>
+			<check_box name="filter_physical" label="Físicos"/>
+			<check_box name="filter_phantom" label="Fantasma"/>
+			<check_box name="filter_temporary" label="Temporales"/>
+			<check_box name="filter_attachment" label="Anexados"/>
+			<check_box name="filter_moap" label="Medios compartidos"/>
+			<check_box name="filter_for_sale" label="En venta entre"/>
+			<text name="and">
+				y
+			</text>
+			<text name="mouse_text">
+				Al pulsar
+			</text>
+			<combo_box name="click_action" tool_tip="Acción a realizar al pulsar en un objeto con el ratón.">
+				<combo_box.item label="Cualquiera" name="click_any"/>
+				<combo_box.item label="Tocar" name="click_touch"/>
+				<combo_box.item label="Sentarme" name="click_sit"/>
+				<combo_box.item label="Comprar" name="click_buy"/>
+				<combo_box.item label="Pagar" name="click_pay"/>
+				<combo_box.item label="Abrir" name="click_open"/>
+				<combo_box.item label="Reproducir" name="click_play"/>
+				<combo_box.item label="Abrir medio" name="click_open_media"/>
+				<combo_box.item label="Enfocar" name="click_zoom"/>
+			</combo_box>
+			<check_box name="filter_distance" label="Distancia entre"/>
+			<text name="and2">
+				y
+			</text>
+			<text name="only_list">
+				Excluir objetos:
+			</text>
+			<check_box name="exclude_attachment" label="Anexados"/>
+			<check_box name="exclude_physical" label="Físicos"/>
+			<check_box name="exclude_temporary" label="Temporales"/>
+			<button name="apply" label="Aplicar"/>
+		</panel>
+		<panel label="Opciones" name="area_search_options_panel">
+			<text name="display_column">
+				Mostrar columna:
+			</text>
+			<check_box name="show_distance" label="Distancia"/>
+			<check_box name="show_name" label="Nombre"/>
+			<check_box name="show_description" label="Descripción"/>
+			<check_box name="show_owner" label="Propietario"/>
+			<check_box name="show_group" label="Grupo"/>
+			<check_box name="show_creator" label="Creador"/>
+			<check_box name="show_last_owner" label="Último propietario"/>
+		</panel>
+		<panel label="Avanzado" name="area_search_advanced_panel">
+			<check_box name="double_click_touch"
+			 label="Doble clic toca el objeto"/>
+			<check_box name="double_click_buy"
+			 label="Doble clic compra el objeto"/>
+		</panel>
+	</tab_container>
 </floater>

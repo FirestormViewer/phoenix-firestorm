@@ -88,13 +88,15 @@ in questo gruppo. C&apos;è una vasta gamma di abilità.
 		<scroll_list name="role_allowed_actions" tool_tip="Per i dettagli di ogni abilità consentita vedi la scheda abilità."/>
 	</panel>
 	<panel name="actions_footer">
-		<text_editor name="action_description">
-			Questa abilità è &apos;Espelli i membri dal gruppo&apos;. Solo un Capogruppo puo espellere un&apos;altro Capogruppo.
-		</text_editor>
-		<text name="static2">
+		<panel name="action_description_panel">
+			<text_editor name="action_description">
+				Questa abilità è &apos;Espelli i membri dal gruppo&apos;. Solo un Capogruppo puo espellere un&apos;altro Capogruppo.
+			</text_editor>
+		</panel>
+		<text name="action_roles_label">
 			Ruoli con questa abilità
 		</text>
-		<text name="static3">
+		<text name="action_members_label">
 			Membri con questa abilità
 		</text>
 	</panel>

@@ -544,9 +544,10 @@
 			</panel>
 	   	</panel>
 	   	<panel label="Contenido" name="Contents">
-			<button label="Nuevo script" label_selected="Nuevo script" name="button new script"/>
-			<button label="Permisos" name="button permissions"/>
-			<button label="Refrescar" name="button refresh"/>
+			<button label="Nuevo script" label_selected="Nuevo script" name="button new script" width="88"/>
+			<button label="Permisos" name="button permissions" width="78"/>
+			<button label="Refrescar" name="button refresh" width="94"/>
+			<button label="Reiniciar scripts" name="button reset scripts" width="94"/>
 		</panel>
 	</tab_container>
 	<panel name="land info panel">

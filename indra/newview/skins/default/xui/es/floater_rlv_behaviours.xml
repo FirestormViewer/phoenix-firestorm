@@ -4,19 +4,19 @@
 		<panel label="Restricciones" name="behaviour_panel">
 			<scroll_list name="behaviour_list">
 				<scroll_list.columns label="Restricción" name="behaviour"/>
-				<scroll_list.columns label="Nombre del objeto" name="issuer"/>
+				<scroll_list.columns label="Objeto" name="issuer"/>
 			</scroll_list>
 		</panel>
 		<panel label="Excepciones" name="exception_panel">
 			<scroll_list name="exception_list">
 				<scroll_list.columns label="Restricción" name="behaviour"/>
-				<scroll_list.columns label="Opción" name="option"/>
-				<scroll_list.columns label="Nombre del objeto" name="issuer"/>
+				<scroll_list.columns label="Origen" name="option"/>
+				<scroll_list.columns label="Objeto" name="issuer"/>
 			</scroll_list>
 		</panel>
 	</tab_container>
 	<panel name="bottom_panel">
 		<button label="Copiar al portapapeles" name="copy_btn" width="155"/>
-		<icon name="dummy_icon" width="158"/>
+		<icon name="dummy_icon" width="127"/>
 	</panel>
 </floater>

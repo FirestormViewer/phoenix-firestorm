@@ -110,7 +110,7 @@ Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.
 		</panel>
 	</panel>
 	<panel name="actions_footer">
-		<panel>
+		<panel name="action_description_panel">
 			<text_editor name="action_description">
 				Diese Fähigkeit heißt „Mitglieder aus dieser Gruppe werfen“. Eigentümer können nur von anderen Eigentümern hinausgeworfen werden.
 			</text_editor>

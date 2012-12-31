@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater title="Controles de Cámara" name="phototools_camera_floater">
+	<floater.string name="rotate_tooltip">
+		Rotar la cámara alrededor del foco
+	</floater.string>
+	<floater.string name="zoom_tooltip">
+		Acercar/alejar cámara en dirección al foco
+	</floater.string>
+	<floater.string name="move_tooltip">
+		Mover la cámara arriba, abajo, a la izquierda o a la derecha
+	</floater.string>
+	<floater.string name="free_mode_title">
+		Ver objeto
+	</floater.string>
+	<tab_container name="tabs">
+		<panel name="P_Cam_Controls_1" label="Controles 1">
+			<panel name="cameracontrolspanel">
+				<panel name="controls1">
+					<panel name="preset_views_list">
+						<panel_camera_item name="front_view">
+							<panel_camera_item.text name="front_view_text">
+								Vista frontal
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="group_view">
+							<panel_camera_item.text name="side_view_text">
+								Vista lateral
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="rear_view">
+							<panel_camera_item.text name="rear_view_text">
+								Vista trasera
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<panel name="camera_modes_list">
+						<panel_camera_item name="object_view">
+							<panel_camera_item.text name="object_view_text">
+								Vista de objeto
+							</panel_camera_item.text>
+						</panel_camera_item>
+						<panel_camera_item name="mouselook_view">
+							<panel_camera_item.text name="mouselook_view_text">
+								Vista subjetiva
+							</panel_camera_item.text>
+						</panel_camera_item>
+					</panel>
+					<panel name="zoom">
+						<joystick_rotate name="cam_rotate_stick" tool_tip="Orbitar cámara alrededor del foco"/>                      
+						<slider_bar name="zoom_slider" tool_tip="Simplemente mueve la cámara. NOTA: ¡No es un zoom en términos de RL! No tiene efecto alguno sobre el campo de visión (FOV). Usa el deslizador 'Zoom' para un efecto de zoom real."/>
+						<joystick_track name="cam_track_stick" tool_tip="Mueve la cámara hacia arriba, abajo, izquierda o derecha."/>
+					</panel>
+				</panel>
+				<panel name="buttons">
+					<button name="presets_btn" tool_tip="Vistas predefinidas"/>
+					<button name="pan_btn" tool_tip="Panorámica"/>
+					<button name="avatarview_btn" tool_tip="Modos de cámara"/>
+					<button name="store_camera_view_btn" tool_tip="Guardar la vista de cámara actual"/>
+					<button name="load_camera_view_btn" tool_tip="Cargar la vista de cámara guardada"/>
+				</panel>
+			</panel>
+			<panel name="P_Cam_Mov_Settings">
+				<text name="T_Cam_Mov_Settings" width="240">
+					Configuración de movimiento de cámara
+				</text>
+			</panel>
+			<panel name="P_Zoom">
+				<text name="T_Zoom" tool_tip="En términos de RL, ésta es una característica de zoom. Aquí, cambiará el campo de visión en la ventana de tu visor. Es lo mismo que pulsar Ctrl+0 o Ctrl+8. NOTA: No funcinará si tienes activado el 'flycam' (3D SpaceNavigator).">
+					Zoom
+				</text>
+				<button name="Reset_Camera_Angle" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_Zoom_Speed" tool_tip="Controla la velocidad a la que la cámara acercará o alejará el zoom. Valores más altos producen un zoom más lento y suave.">
+					Vel. zoom
+				</text>
+				<button name="Reset_Zoom_Time" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_Camera_Lag" tool_tip="Tiempo que la cámara se demora en seguir el movimiento del avatar. (0 = ninguno, 30 = velocidad del avatar).">
+					Retardo cámara
+				</text>
+				<button name="Reset_Camera_Lag" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_Camera_Offset" tool_tip="Controla la separación entre la cámara y el punto de vista por defecto.">
+					Distancia cámara
+				</text>
+				<button name="Reset_Camera_Offset" label="R" tool_tip="Restablecer valor por defecto."/>
+				<text name="T_Camera_Smoothing" tool_tip="Controla la suavidad con al que la cámara empieza a moverse o se detiene. Valores más altos producen un movimiento más suave (y algo más lento).">
+					Suavizado cámara
+				</text>
+				<button name="Reset_Camera_Smoothing" label="R" tool_tip="Restablecer valor por defecto."/>
+			</panel>
+		</panel>
+		<panel name="P_Cam_Controls_2" label="Controles 2">
+			<panel name="P_Mouse_Movement">
+				<text name="T_Mouse_Movement">
+					Configuración de movimiento de ratón
+				</text>
+			</panel>
+			<panel name="P_Mouse_Movement_Settings">
+				<text name="T_Mouse_Sensitivity" tool_tip="Controla la sensibilidad del ratón cuando te encuentras en vista subjetiva.">
+					Sensibilidad ratón
+				</text>
+				<button name="Reset_Mouse_Sensitivity" label="R" tool_tip="Restablecer valor por defecto."/>
+				<check_box label="Avatar en vista subjetiva" tool_tip="Muestra el avatar y sus objetos anexados por debajo del cuello cuando te hayas en vista subjetiva. Por defecto está DESACTIVADO."
+				 name="first_person_avatar_visible"/>
+				<check_box label="Suavizar movimiento en vista subjetiva" tool_tip="Suaviza el movimiento del ratón cuando te hayas en vista subjetiva." name="MouseSmooth"/>	
+			</panel>
+			<panel name="P_Additional_Camera_Options">
+				<text name="T_Additional_Camera_Options">
+					Opciones de cámara adicionales
+				</text>
+			</panel>
+			<panel name="P_Add_Cam_Opt_Settings">
+				<check_box label="Mantener vista al pulsar tu avatar" name="clickonavatarkeepscamera" tool_tip="Normalmente, cuando haces clic sobre tu avatar, se restablece la posición de la cámara. Esta opción evita este comportamiento."/>
+				<check_box label="Restablecer cámara tras teleporte" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece tras un teleporte (dentro de la misma región). Esta opción evita este comportamiento."/>
+				<check_box label="Desactivar distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva la restricción de la distancia de cámara más cercana posible a un objeto."/>
+				<check_box label="Permitir libertad de cámara" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos. ¡REQUIERE REINICIAR¡"/>
+			</panel>
+		</panel>
+		<panel name="P_3D_Mouse" label="Ratón 3D">
+			<panel name="P_3D_Mouse_Settings1">
+				<slider label="Mover D/I" name="FlycamAxisScale1b" tool_tip="Ajusta la sensibilidad del movimiento Derecha/Izquierda. Si te resulta difícil moverte con precisión, usa valores más bajos."/>
+				<slider label="Mover Arr/Aba" name="FlycamAxisScale2b" tool_tip="Ajusta la sensibilidad del movimiento Arriba/Abajo. Si te resulta difícil moverte con precisión, usa valores más bajos."/>
+				<slider label="Mover D/F" name="FlycamAxisScale0b" tool_tip="Ajusta la sensibilidad del movimiento Dentro/Fuera. Si te resulta difícil moverte con precisión, usa valores más bajos"/>
+				<slider label="Inclinar" name="FlycamAxisScale4" tool_tip="Ajusta la sensibilidad del movimiento de Inclinación. Si te resulta difícil moverte con precisión, usa valores más bajos."/>
+				<slider label="Girar" name="FlycamAxisScale5" tool_tip="Ajusta la sensibilidad del movimiento de Giro. Si te resulta difícil moverte con precisión, usa valores más bajos."/>
+				<slider label="Rodar" name="FlycamAxisScale3" tool_tip="Ajusta la sensibilidad del movimiento de Rodar. Si te resulta difícil moverte con precisión, usa valores más bajos."/>
+				<slider label="Vel. zoom" name="FlycamAxisScale6"
+				 tool_tip="Ajusta la sensibilidad de la Velocidad de Zoom. Si te resulta difícil moverte con precisión, usa valores más bajos"/>
+				<slider label="Aligerar" name="FlycamFeathering" tool_tip="Moverlo a la derecha hará que la cámara se vuelva muy rígida, dando el control completo al joystick. Moverlo hacia la izquierda hará que la cámara se vuelva muy fluída, como si pesara mucho: bueno para instantáneas al vuelo, pero no para encuadrar."/>
+			</panel>
+			<panel name="P_3D_Mouse_Settings2">
+				<spinner label="Asignar eje de zoom" name="JoystickAxis6" tool_tip="Determina a qué eje del ratón se asigna el control de zoom."/>
+				<check_box label="Activar ratón 3D" tool_tip="Activa o desactiva el ratón 3D." name="enable_joystick"/>
+				<check_box name="CB_Zoom_Control" label="Activar zoom (¡ver ayuda emergente!)" tool_tip="Para que el control de zoom funcione, debes configurar la asignación del eje de zoom por encima de '4'."/>
+				<check_box name="CB_Auto_Leveling" label="Autonivelación (evita giros de cámara)"/>
+				<check_box name="CB_3D_Mouse_Avatar" label="Usar ratón 3D para mover el avatar"/>
+				<check_box name="CB_3D_Mouse_Build" label="Usar ratón 3D para mover objetos" tool_tip="Usa el ratón 3D para mover objetos cuando construyes o editas."/>
+			</panel>
+		</panel>
+	</tab_container>
+</floater>

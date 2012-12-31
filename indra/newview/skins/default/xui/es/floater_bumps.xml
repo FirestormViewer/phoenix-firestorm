@@ -4,7 +4,7 @@
 		No se han detectado
 	</floater.string>
 	<floater.string name="bump">
-		[TIME]  [NAME] ha chocado contigo
+		[TIME]  [NAME] te ha empujado
 	</floater.string>
 	<floater.string name="llpushobject">
 		[TIME]  [NAME] te ha empujado con un script
@@ -17,8 +17,5 @@
 	</floater.string>
 	<floater.string name="physical_object_collide">
 		[TIME]  [NAME] te ha golpeado con un objeto físico
-	</floater.string>
-	<floater.string name="timeStr">
-		[[hour,datetime,slt]:[min,datetime,slt]]
 	</floater.string>
 </floater>

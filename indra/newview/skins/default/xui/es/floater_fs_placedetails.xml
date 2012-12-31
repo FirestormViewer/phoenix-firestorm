@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="floater_placedetails" title="Hito">
+	<string name="title_place">
+		Detalles del lugar
+	</string>
+	<string name="title_remote_place">
+		Detalles del lugar
+	</string>
+	<string name="title_remote_place_detail">
+		Detalles del lugar: [NAME]
+	</string>
+	<string name="title_landmark">
+		Hito
+	</string>
+	<string name="title_landmark_detail">
+		Hito: [NAME]
+	</string>
+	<string name="title_create_landmark">
+		Crear hito
+	</string>
+	<string name="title_teleport_history_item">
+		Detalles del historial de teleportes: [NAME]
+	</string>
+	<panel name="button_panel">
+		<layout_stack name="bottom_bar_ls0">
+			<layout_panel name="lp1">
+				<layout_stack name="bottom_bar_ls1">
+					<layout_panel name="teleport_btn_lp">
+						<button label="Teleportarme" name="teleport_btn" tool_tip="Teleportarse al área seleccionada"/>
+					</layout_panel>
+					<layout_panel name="map_btn_lp">
+						<button label="Mapa" name="map_btn" tool_tip="Mostrar el área correspondiente en el mapa mundial"/>
+					</layout_panel>
+					<layout_panel name="edit_btn_lp">
+						<button label="Editar" name="edit_btn" tool_tip="Edita este hito"/>
+					</layout_panel>
+					<layout_panel name="overflow_btn_lp">
+						<menu_button name="overflow_btn" tool_tip="Muestra opciones adicionales"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>	
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="lp2">
+				<layout_stack name="bottom_bar_close_ls3">
+					<layout_panel name="close_btn_lp">
+						<button label="Cerrar" name="close_btn"/>
+					</layout_panel>
+				</layout_stack>
+			</layout_panel>
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls2">
+			<layout_panel name="save_btn_lp">
+				<button label="Guardar" name="save_btn"/>
+			</layout_panel>
+			<layout_panel name="cancel_btn_lp">
+				<button label="Cancelar" name="cancel_btn"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</floater>

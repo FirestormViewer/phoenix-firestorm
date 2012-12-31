@@ -98,13 +98,13 @@ Asegúrate de que tu conexión a Internet está funcionando adecuadamente.
 	</notification>
 	<notification name="OutboxFolderCreated">
 		Se ha creado una carpeta nueva para cada objeto que has transferido al nivel superior de tu Buzón de salida de comerciante.
-		<usetemplate ignoretext="Se ha creado una carpeta nueva en el Buzón de salida de comerciante" name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Se ha creado una carpeta nueva en el Buzón de salida de comerciante" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="OutboxImportComplete">
 		Éxito
 
 Todas las carpetas se han enviado correctamente al Mercado.
-		<usetemplate ignoretext="Todas las carpetas enviadas al Mercado" name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Todas las carpetas enviadas al Mercado" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="OutboxImportHadErrors">
 		Algunas carpetas no se han transferido
@@ -112,19 +112,19 @@ Todas las carpetas se han enviado correctamente al Mercado.
 Han ocurrido errores al enviar algunas carpetas al Mercado. Dichas carpetas todavía están en tu Buzón de salida de comerciante.
 
 Puedes consultar más información en el [[MARKETPLACE_IMPORTS_URL] registro de errores].
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="OutboxImportFailed">
 		Error de transferencia
 
 No se han enviado carpetas al Mercado a causa de un error del sistema o de la red. Vuelve a intentarlo más tarde.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="OutboxInitFailed">
 		Error al inicializar el mercado
 
 La inicialización del mercado ha fallado por un error del sistema o de la red. Vuelve a intentarlo más tarde.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="CompileQueueSaveText">
 		Hubo un problema al subir el texto de un script por la siguiente razón: [REASON]. Por favor, inténtalo más tarde.
@@ -152,6 +152,12 @@ La inicialización del mercado ha fallado por un error del sistema o de la red. 
 	<notification name="FavoritesOnLogin">
 		Nota: Al activar esta opción, cualquiera que utilice este ordenador podrá ver tu lista de lugares favoritos.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="GrowlNotInstalled">
+		ATENCIÓN: Activar esta opción sin tener growl instalado puede dar lugar a pequeños congelamientos cuando alguien te envía un mensaje o se conecta/desconecta.
+Lee http://wiki.phoenixviewer.com/fs_growl para más información.
+¿Deseas activarlo de todas formas?
+		<usetemplate name="okcancelbuttons" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="GrantModifyRights">
 		Al conceder permisos de modificación a otro Residente, le estás permitiendo cambiar, borrar o tomar CUALQUIER objeto que tengas en el mundo. Sé MUY cuidadoso al conceder este permiso.
@@ -1009,19 +1015,19 @@ no tienes permiso para comprar terreno para el grupo que tienes activado actualm
 	<notification label="Añadir lista de reemplazo automático" name="AddAutoReplaceList">
 		Nombre de la nueva lista:
 		<form name="form">
-			<button name="SetName" text="OK"/>
+			<button name="SetName" text="Aceptar"/>
 		</form>
 	</notification>
 	<notification label="Cambiar nombre de la lista de reemplazo automático" name="RenameAutoReplaceList">
 		El nombre &apos;[DUPNAME]&apos; ya se está utilizando.
-    Escribe un nombre nuevo que sea único:
+    Escribe un nuevo nombre que sea único:
 		<form name="form">
 			<button name="ReplaceList" text="Reemplazar la lista actual"/>
-			<button name="SetName" text="Usar un nombre nuevo"/>
+			<button name="SetName" text="Usar un nuevo nombre"/>
 		</form>
 	</notification>
 	<notification name="InvalidAutoReplaceEntry">
-		La palabra clave debe ser una palabra única y el reemplazo no puede estar vacío.
+		La palabra clave debe ser una única palabra y el reemplazo no puede estar vacío.
 	</notification>
 	<notification name="InvalidAutoReplaceList">
 		La lista de reemplazo no es válida.
@@ -1769,6 +1775,36 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		¿Expulsar a [EVIL_USER] de este estado?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
+	<notification label="Confirmar expulsión" name="EstateKickMultiple">
+		¿Expulsar a los siguientes residentes del estado?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification label="Confirmar el envío a su casa" name="EstateTeleportHomeUser">
+		¿Teleportar a [AVATAR_NAME] a su base?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification label="Confirmar el envío a su casa" name="EstateTeleportHomeMultiple">
+		¿Teleportar a los siguientes residentes a su base?
+
+[RESIDENTS]
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
+	</notification>
+	<notification label="Confirmar expulsión/prohibición" name="EstateBanUser">
+		¿Denegar el acceso a [EVIL_USER] sólo a este estado o a [ALL_ESTATES]?
+		<usetemplate name="yesnocancelbuttons" canceltext="Cancelar" notext="Todos los estados" yestext="Este estado"/>
+	</notification>
+	<notification label="Confirmar expulsión/prohibición" name="EstateBanUserMultiple">
+		¿Denegar el acceso a los siguientes residentes sólo a este estado o a [ALL_ESTATES]?
+
+[RESIDENTS]
+		<usetemplate name="yesnocancelbuttons" canceltext="Cancelar" notext="Todos los estados" yestext="Este estado"/>
+	</notification>
+	<notification name="RegionEntryAccessBlocked">
+		La región a la que estás tratando de acceder tiene contenidos que exceden tus preferencias actuales. Puedes cambiar las preferencias en Avatar &gt; Preferencias &gt; General.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
 	<notification name="EstateChangeCovenant">
 		¿Estás seguro de que quieres cambiar el contrato del estado?
 		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Aceptar"/>
@@ -1791,20 +1827,20 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		La región que intentas visitar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 	</notification>
 	<notification name="RegionEntryAccessBlocked_Change">
-		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos. Podemos cambiar tus preferencias o tú puedes cancelar la visita. Después de cambiar tus preferencias, intenta otra vez acceder a la región.
+		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY]. Podemos cambiar tus preferencias o puedes cancelar la visita. Después de cambiar tus preferencias, intenta acceder a la región de nuevo.
 		<form name="form">
 			<button name="OK" text="Cambiar preferencias"/>
 			<button default="true" name="Cancel" text="Cancelar"/>
-			<ignore name="ignore" text="Paso a otra región: tus preferencias de contenido no te permiten visitar la región que has seleccionado."/>
+			<ignore name="ignore" text="Paso a otra región: La región que estás intentando visitar tiene contenido excluído por tus preferencias."/>
 		</form>
 	</notification>
 	<notification name="RegionEntryAccessBlocked_PreferencesOutOfSync">
 		Estamos experimentando dificultades técnicas con el teleporte porque tus preferencias no están sincronizadas con el servidor.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked">
-		Tus preferencias de contenido actuales te impiden visitar la región que has seleccionado. Puedes cambiar las preferencias en Yo &gt; Preferencias &gt; General.
-		<usetemplate name="okbutton" yestext="OK"/>
+		Tus preferencias de contenido actuales te impiden visitar la región que has seleccionado. Puedes cambiar las preferencias en Avatar &gt; Preferencias &gt; General.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_AdultsOnlyContent">
 		La región que intentas visitar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
@@ -1814,17 +1850,17 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		<usetemplate ignoretext="Teleportarme: la región que intentas visitar tiene un contenido solo accesible para los adultos." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_Notify">
-		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos.
+		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY].
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_NotifyAdultsOnly">
 		La región que intentas visitar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_ChangeAndReTeleport">
-		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos. Podemos cambiar tus preferencias y proceder a teleportarte o bien tú puedes cancelar el teleporte.
+		La región que intentas visitar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están confirugadas para excluir contenido [REGIONMATURITY]. Podemos cambiar tus preferencias y proceder a teleportarte o bien puedes cancelar el teleporte.
 		<form name="form">
 			<button name="OK" text="Cambiar y continuar"/>
 			<button name="Cancel" text="Cancelar"/>
-			<ignore name="ignore" text="Teleportar (reiniciable): tus preferencias de contenido no te permiten visitar la región que has seleccionado."/>
+			<ignore name="ignore" text="Teleportar (reiniciable): La región que estás intentando visitar tiene contenido excluído por tus preferencias."/>
 		</form>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_Change">
@@ -1832,69 +1868,69 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 		<form name="form">
 			<button name="OK" text="Cambiar preferencias"/>
 			<button name="Cancel" text="Cancelar"/>
-			<ignore name="ignore" text="Teleportar (no reiniciable): tus preferencias de contenido no te permiten visitar la región que has seleccionado."/>
+			<ignore name="ignore" text="Teleportar (no reiniciable): La región que intentas visitar tiene contenido excluido por tus preferencias."/>
 		</form>
 	</notification>
 	<notification name="TeleportEntryAccessBlocked_PreferencesOutOfSync">
 		Estamos experimentando dificultades técnicas con el teleporte porque tus preferencias no están sincronizadas con el servidor.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
 		No recibirás más notificaciones cuando vayas a visitar una región con un contenido [RATING]. En el futuro, puedes cambiar tus preferencias de contenido en Yo &gt; Preferencias &gt; General en la barra de menús.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="MaturityChangeError">
-		En este momento no se pueden cambiar tus preferencias para ver el contenido [PREFERRED_MATURITY].  Tus preferencias se han restablecido para que puedas ver el contenido [ACTUAL_MATURITY]. Si deseas cambiar las preferencias otra vez, en la barra de menús, selecciona Yo &gt; Preferencias &gt; General.
-		<usetemplate name="okbutton" yestext="OK"/>
+		En este momento no podemos cambiar tus preferencias para ver contenido [PREFERRED_MATURITY]. Tus preferencias se han restablecido para que puedas ver contenido [ACTUAL_MATURITY]. Si deseas volver a cambiar tus preferencias, selecciona en la barra de menú Avatar &gt; Preferencias &gt; General.
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked">
-		Tus preferencias actuales de calificación de contenido te impiden reclamar el terreno que has seleccionado. Puedes cambiar las preferencias en Yo &gt; Preferencias &gt; General.
+		La región que intentas reclamar tiene contenido que excede tus preferencias actuales. Puedes cambiar tus preferencias usando Avatar &gt; Preferencias &gt; General.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_AdultsOnlyContent">
-		Solo los adultos pueden reclamar este terreno.
+		Solo los adultos pueden reclamar ésta parcela.
 		<url name="url">
 			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
-		<usetemplate ignoretext="Solo los adultos pueden reclamar este terreno." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
+		<usetemplate ignoretext="Solo los adultos pueden reclamar ésta parcela." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
 	<notification name="LandClaimAccessBlocked_Notify">
-		El terreno que intentas reclamar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos.
+		La parcela que intentas reclamar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY].
 	</notification>
 	<notification name="LandClaimAccessBlocked_NotifyAdultsOnly">
-		El terreno que intentas reclamar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
+		La parcela que intentas reclamar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 	</notification>
 	<notification name="LandClaimAccessBlocked_Change">
-		El terreno que intentas reclamar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos. Podemos cambiar tus preferencias y después puedes volver a intentar reclamar el terreno.
+		La parcela que intentas reclamar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY]. Podemos cambiar tus preferencias y después puedes volver a intentar reclamar la parcela.
 		<form name="form">
 			<button name="OK" text="Cambiar preferencias"/>
 			<button name="Cancel" text="Cancelar"/>
-			<ignore name="ignore" text="Tus preferencias de contenido no te permiten reclamar el terreno que has seleccionado."/>
+			<ignore name="ignore" text="La parcela que intentas reclamar tiene contenido excluido por tus preferencias."/>
 		</form>
 	</notification>
 	<notification name="LandBuyAccessBlocked">
-		Tus preferencias actuales de calificación de contenido te impiden comprar el terreno que has seleccionado. Puedes cambiar las preferencias en Yo &gt; Preferencias &gt; General.
+		La parcela intentas comprar tiene contenido que excede tus preferencias actuales. Puedes cambiar tus preferencias usando Avatar &gt; Preferencias &gt; General.
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_AdultsOnlyContent">
-		Solo los adultos pueden comprar este terreno.
+		Solo los adultos pueden comprar esta parcela.
 		<url name="url">
 			http://wiki.secondlife.com/wiki/Linden_Lab_Official:Maturity_ratings:_an_overview
 		</url>
-		<usetemplate ignoretext="Solo los adultos pueden comprar este terreno." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
+		<usetemplate ignoretext="Solo los adultos pueden comprar esta parcela." name="okcancelignore" notext="Cerrar" yestext="Ir a la Base de Conocimientos"/>
 	</notification>
 	<notification name="LandBuyAccessBlocked_Notify">
-		El terreno que intentas comprar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos.
+		La parcela que intentas comprar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY].
 	</notification>
 	<notification name="LandBuyAccessBlocked_NotifyAdultsOnly">
-		El terreno que intentas comprar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
+		La parcela que intentas comprar tiene un contenido [REGIONMATURITY], que solo es accesible para los adultos.
 	</notification>
 	<notification name="LandBuyAccessBlocked_Change">
-		El terreno que intentas comprar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales no te autorizan a ver este tipo de contenidos. Podemos cambiar tus preferencias y después puedes volver a intentar comprar el terreno.
+		La parcela que intentas comprar tiene un contenido [REGIONMATURITY], pero tus preferencias actuales están configuradas para excluir contenido [REGIONMATURITY]. Podemos cambiar tus preferencias y después puedes volver a intentar comprar la parcela.
 		<form name="form">
 			<button name="OK" text="Cambiar preferencias"/>
 			<button name="Cancel" text="Cancelar"/>
-			<ignore name="ignore" text="Tus preferencias de contenido no te permiten comprar el terreno que has seleccionado."/>
+			<ignore name="ignore" text="La parcela que intentas comprar tiene contenidos que exceden tus preferencias."/>
 		</form>
 	</notification>
 	<notification name="TooManyPrimsSelected">
@@ -1952,7 +1988,10 @@ Se cambiarán miles de regiones, y se provocará un colapso en el espacio del se
 	<notification label="Cambiada la calificación de la región" name="RegionMaturityChange">
 		Se ha cambiando el nivel de calificación de esta región.
 Puede que lleve algún tiempo hasta que el cambio se vea reflejado en el mapa.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification label="Voice Version Mismatch" name="VoiceVersionMismatch">
+		Esta versión de [APP_NAME] no es compatible con la caracterítica de voz de esta región. Para que el chat de voz funcione correctamente debes actualizar [APP_NAME].
 	</notification>
 	<notification label="No se pudo comprar los objetos" name="BuyObjectOneOwner">
 		No se pueden comprar a la vez objetos de propietarios diferentes.
@@ -2238,11 +2277,11 @@ Publícala en una página web para que otros puedan acceder fácilmente a esta p
 		<usetemplate ignoretext="Ponerme la ropa que estoy creando mientras modifico mi apariencia" name="okcancelignore" notext="No" yestext="Sí"/>
 	</notification>
 	<notification name="NotAgeVerified">
-		El lugar que intentas visitar tiene el acceso restringido a los Residentes mayores de 18 años.
-		<usetemplate ignoretext="No tengo la edad suficiente para visitar áreas restringidas por edad." name="okignore" yestext="OK"/>
+		El lugar que intentas visitar sólo permite el acceso a los residentes mayores de 18 años.
+		<usetemplate ignoretext="No tengo la edad suficiente para visitar áreas restringidas por edad." name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="NotAgeVerified_Notify">
-		Localización restringida para mayores de 18 años.
+		Localización restringida a mayores de 18 años.
 	</notification>
 	<notification name="Cannot enter parcel: no payment info on file">
 		Para visitar este sitio debes haber aportado información de pago en tu cuenta. ¿Quieres ir al sitio web de [CURRENT_GRID] y configurar esto?
@@ -2501,7 +2540,7 @@ Inténtalo seleccionando un trozo más pequeño de terreno.
 		[MESSAGE]
 	</notification>
 	<notification name="EventNotification">
-		Notificación de un evento:
+		Notificación de evento:
 
 [NAME]
 [DATE]
@@ -2602,11 +2641,11 @@ Aquí no puedes volar.
 		<url name="url">
 			http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
 		</url>
-		<usetemplate helptext="Ayuda" ignoretext="Si cambias ciertos objetos en esta región, otros objetos móviles podrían tener un comportamiento incorrecto." name="okhelpignore" yestext="OK"/>
+		<usetemplate helptext="Ayuda" ignoretext="Si cambias ciertos objetos en esta región, otros objetos móviles podrían tener un comportamiento incorrecto." name="okhelpignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Se ha producido un error. Puede haber ocurrido un problema en la red o el servidor, o quizás no tengas derechos de construcción. Este problema podría resolverse cerrando la sesión e iniciando una sesión nueva.
-		<usetemplate name="okbutton" yestext="OK"/>
+		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="SeeAvatars">
 		Esta parcela oculta los avatares y el chat de texto de otras parcelas. No podrás ver a los residentes que estén fuera la parcela ni ellos podrán verte a ti. El chat de texto regular del canal 0 también está restringido a la parcela.
@@ -2626,7 +2665,7 @@ Sólo los scripts pertenecientes al propietario del terreno funcionarán aquí.
 		Sólo puedes reclamar terreno público de la región en la que estás.
 	</notification>
 	<notification name="RegionTPAccessBlocked">
-		Tus preferencias de contenido actuales te impiden visitar la región que has seleccionado. Puedes cambiar las preferencias en Yo &gt; Preferencias &gt; General.
+		La región que intentas visitar tiene contenido que excede tus preferencias actuales. Puedes cambiar las preferencias usando Avatar &gt; Preferencias &gt; General.
 	</notification>
 	<notification name="URBannedFromRegion">
 		Se te ha prohibido el acceso a la región.
@@ -2638,10 +2677,10 @@ Sólo los scripts pertenecientes al propietario del terreno funcionarán aquí.
 		No tienes el estado de pago adecuado para entrar a esta región.
 	</notification>
 	<notification name="MustGetAgeRegion">
-		Solo pueden acceder a esta región los mayores de 18 años.
+		Debes tener 18 años o más para acceder a esta región.
 	</notification>
 	<notification name="MustGetAgeParcel">
-		Para acceder a esta parcela debes ser mayor de 18 años.
+		Debes tener 18 años o más para acceder a esta parcela.
 	</notification>
 	<notification name="NoDestRegion">
 		No se ha encontrado la región de destino.
@@ -2746,7 +2785,7 @@ Por favor, vuelve a intentarlo en unos momentos.
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 		<form name="form">
-			<button name="Teleport" text="Teleportar"/>
+			<button name="Teleport" text="Teleportarme"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -2756,9 +2795,9 @@ Por favor, vuelve a intentarlo en unos momentos.
 “[MESSAGE]”
 &lt;icon&gt;[MATURITY_ICON]&lt;/icon&gt; - [MATURITY_STR]
 
-Esta región tiene un contenido [REGION_CONTENT_MATURITY, pero tus preferencias actuales no te autorizan a ver los contenidos [REGION_CONTENT_MATURITY].  Podemos cambiar tus preferencias y proceder a teleportarte o bien tú puedes cancelar el teleporte.
+Esta región tiene un contenido [REGION_CONTENT_MATURITY, pero tus preferencias actuales están configuradas para excluir contenido [REGION_CONTENT_MATURITY]. Podemos cambiar tus preferencias y proceder a teleportarte o bien puedes cancelar el teleporte.
 		<form name="form">
-			<button name="Teleport" text="Cambiar y continuar"/>
+			<button name="Teleport" text="Cambiar y teleportarme"/>
 			<button name="Cancel" text="Cancelar"/>
 		</form>
 	</notification>
@@ -3165,7 +3204,7 @@ Has actualizado de manera local una textura obtenida mediante bake de [RESOLUTIO
 	</notification>
 	<notification name="LivePreviewUnavailable">
 		No se puede mostrar una vista previa de esta textura porque es de tipo &apos;no copiable&apos; y/o &apos;no transferible&apos;.
-		<usetemplate ignoretext="Advertirme si el modo Vista previa inmediata no está disponible para las texturas &apos;no copiable&apos; y/o &apos;no transferible&apos;" name="okignore" yestext="OK"/>
+		<usetemplate ignoretext="Advertirme si el modo Vista previa inmediata no está disponible para las texturas &apos;no copiables&apos; y/o &apos;no transferibles&apos;" name="okignore" yestext="Aceptar"/>
 	</notification>
 	<notification name="ConfirmLeaveCall">
 		¿Estás seguro de que deseas salir de esta multiconferencia?
@@ -3374,7 +3413,7 @@ Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' po
 	<notification name="PathfindingLinksets_MismatchOnRestricted_MismatchOnVolume">
 		Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
 		
-Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa. El tipo de uso de estos linksets no cambiará.
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque su forma es no-convexa. El tipo de uso de estos linksets no cambiará.
 
 ¿Deseas continuar?	
 		<usetemplate ignoretext="Algunos linksets no pueden ser configurados a causa de restricciones de permisos en el linkset y porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
@@ -3385,7 +3424,7 @@ Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' po
 
 Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' a causa de restricciones de permisos en el linkset. En su lugar, estos linksets serán configurados como '[RESTRICTED_TYPE]'.
 
-Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque la forma es no-convexa.
+Algunos linksets seleccionados no pueden configurarse como '[REQUESTED_TYPE]' porque su forma es no-convexa.
 
 ¿Deseas continuar?
 		<usetemplate ignoretext="A algunos linksets seleccionados se les conmutará su marca 'fantasma' y otros no pueden ser configurados a causa de restricciones de permisos o porque su forma es no-convexa." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
@@ -3448,7 +3487,7 @@ Algunos de los linksets seleccionados no pueden configurarse como &apos;[REQUEST
 	</notification>
 	<notification name="PathfindingLinksets_ChangeToFlexiblePath">
 		El objeto que has seleccionado afecta al navmesh. Al cambiarlo a una Ruta flexible se eliminará del navmesh.
-		<usetemplate ignoretext="El objeto que has seleccionado afecta al navmesh. Al cambiarlo a una Ruta flexible se eliminará del navmesh." name="okcancelignore" notext="Cancelar" yestext="OK"/>
+		<usetemplate ignoretext="El objeto que has seleccionado afecta al navmesh. Al cambiarlo a una Ruta flexible se eliminará del navmesh." name="okcancelignore" notext="Cancelar" yestext="Aceptar"/>
 	</notification>
 	<global name="UnsupportedGLRequirements">
 		Parece que no tienes el hardware apropiado para [APP_NAME]. [APP_NAME] requiere una tarjeta gráfica OpenGL que admita texturas múltiples (&apos;multitexture support&apos;). Si la tienes, comprueba que tienes los últimos controladores para tu tarjeta gráfica, así como los últimos parches y &apos;service packs&apos; para tu sistema operativo.
@@ -3807,5 +3846,23 @@ Intento cancelado.
 		La región en la que has entrado funciona bajo una versión de simulador diferente.
 Simulador actual:   [NEWVERSION]
 Simulador anterior: [OLDVERSION]
+	</notification>
+	<notification name="VintageLoginInfo">
+		¿Sabías que puedes obtener la clásica apariencia de Phoenix en Firestorm? Ve al menú "Modo", junto al botón "Iniciar sesión", y selecciona "Phoenix".
+		<usetemplate name="okbutton" yestext="Aceptar"/>
+	</notification>
+	<notification name="CannotSaveSnapshot">
+		No se ha podido guardar la fotografía.
+	</notification>
+	<notification name="RegExFail">
+		Error en la expresión regular:
+[EWHAT]
+	</notification>
+	<notification name="NoHavok">
+		Algunas funciones como [FEATURE] no están incluídas en [APP_NAME] para OpenSimulator. Si quieres usar [FEATURE], por favor descarga [APP_NAME] para Second Life de
+[DOWNLOAD_URL]
+		<form name="form">
+			<ignore name="ignore" text="Alerta de No Havok"/>
+		</form>
 	</notification>
 </notifications>

@@ -8,6 +8,7 @@
 		<string name="blocked_sendim">*** MI bloqueado por el visor del remitente</string>
 		<string name="blocked_generic">No es posible realizar la acción debido a restricciones RLV</string>
 		<string name="blocked_permattach">El intento de anexar '[OBJECT]' fue denegado debido a restricciones RLV</string>
+		<string name="blocked_permteleport">Se le denegó el permiso a '[OBJECT]' para teleportarte debido a restricciones RLV</string>
 		<string name="blocked_startim">No es posible iniciar una sesión de MI con [RECIPIENT] debido a restricciones RLV</string>
 		<string name="blocked_startconf">No es posible iniciar una conferencia with [RECIPIENT] debido a restricciones RLV</string>
 		<string name="blocked_teleport">No es posible iniciar un teleporte debido a restricciones RLV</string>

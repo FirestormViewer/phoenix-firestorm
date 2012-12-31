@@ -1921,6 +1921,18 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="RegionInfoAllowedGroups">
 		Grupos autorizados: ([ALLOWEDGROUPS], máx. [MAXACCESS])
 	</string>
+	<string name="RegionInfoEstateManagers">
+		Administradores de estado: ([ESTATEMANAGERS], máx. [MAXMANAGERS])
+	</string>
+	<string name="RegionInfoBannedResidents">
+		Residentes con acceso prohibido: ([BANNEDAGENTS], máx. [MAXBANNED])
+	</string>
+	<string name="RegionInfoListTypeAllowedAgents">
+		Residentes permitidos
+	</string>
+	<string name="RegionInfoListTypeBannedAgents">
+		Residentes con acceso prohibido
+	</string>
 	<string name="ScriptLimitsParcelScriptMemory">
 		Memoria de scripts de la parcela
 	</string>
@@ -2154,7 +2166,7 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	</string>
 	<string name="NoPicksText">No has creado ningún destacado.</string>
 	<string name="NoAvatarPicksText">El usuario no tiene destacados</string>
-	<string name="NoClassifiedsText">No has creado ningún clasificado.</string>
+	<string name="NoClassifiedsText">No has creado ningún clasificado. Pulsa el botón '+' para crear uno.</string>
 	<string name="NoAvatarClassifiedsText">El usuario no tiene clasificados</string>
 	<string name="MultiPreviewTitle">
 		Vista previa
@@ -4059,8 +4071,15 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 	<string name="Saved_message">
 		(Guardado [LONG_TIMESTAMP])
 	</string>
-	<string name="IM_unblock_only_groups_friends">Para ver este mensaje, debes desmarcar &apos;Sólo mis amigos y grupos pueden llamarme o enviarme MI&apos; en Preferencias/Privacidad.</string>
-	<string name="IM_announce_incoming">Mensaje entrante de  [NAME]</string>
+	<string name="IM_unblock_only_groups_friends">
+		Para ver este mensaje, debes desmarcar &apos;Sólo mis amigos y grupos pueden llamarme o enviarme MI&apos; en Preferencias/Privacidad.
+	</string>
+	<string name="IM_announce_incoming">
+		Mensaje entrante de  [NAME]
+	</string>
+	<string name="IM_autoresponse_sent">
+		Autorrespuesta enviada
+	</string>
 	<string name="answered_call">
 		Han respondido a tu llamada
 	</string>
@@ -5057,7 +5076,11 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Groundsit_Label">Sentarse en el suelo</string>
 	<string name="Command_Sound_Explorer_Label">Explorador de sonidos</string>
 	<string name="Command_Asset_Blacklist_Label">Lista negra</string>
-	<string name="Command_Phototools_Label">Herramientas fotográficas</string>
+	<string name="Command_Phototools_Label">Phototools</string>
+	<string name="Command_Phototools_View_Label">Cameratools</string>
+	<string name="Command_Contact_Sets_Label">Contact sets</string>
+	<string name="Command_Mouselook_Label">Vista subjetiva</string>
+	<string name="Command_Legacy_Search_Label">Búsqueda clásica</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5145,6 +5168,15 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Sound_Explorer_Tooltip">Abre el explorador de sonidos</string>
 	<string name="Command_Asset_Blacklist_Tooltip">Abre la lista de todos los items que has desdibujado</string>
 	<string name="Command_Phototools_Tooltip">Herramientas para aprovechar al máximo las posibilidades de la fotografía</string>
+	<string name="Command_Phototools_View_Tooltip">
+		Controles avanzados de Cámara de Phototools
+	</string>
+	<string name="Command_Contact_Sets_Tooltip">
+		Abre la ventana de gestión de los grupos de contactos (CTRL+ALT+SHIFT+C)
+	</string>
+	<string name="Command_Mouselook_Tooltip">
+		Entra en modo de vista subjetiva (M)
+	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
 	</string>
@@ -5155,6 +5187,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		actualmente en tu barra de herramientas derecha
 	</string>
 	<string name="Command_Fly_Tooltip">Activar/desactivar el modo de vuelo</string>
+	<string name="Command_Legacy_Search_Tooltip">
+		Buscar lugares, grupos, gente, venta de terrenos y eventos usando la búsqueda clásica
+	</string>
 	<string name="Retain%">
 		% retención
 	</string>
@@ -5210,7 +5245,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		Muy alta
 	</string>
 	<string name="TeleportMaturityExceeded">
-		El Residente no puede visitar esta región.
+		El residente no puede visitar esta región.
 	</string>
 	<string name="UserDictionary">
 		[Usuario]
@@ -5268,4 +5303,30 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="FSCmdLineRSP">Máximo ancho de banda establecido en: [VALUE] KBPS.</string>
 	<string name="NetMapDoubleClickShowWorldMapToolTipMsg">[AGENT][REGION](Doble clic para abrir el Mapa, mayús. y arrastrar para obtener panorámica)</string>
 	<string name="NetMapDoubleClickTeleportToolTipMsg">[REGION](Doble clic para teleportarte, mayús. y arrastrar para obtener panorámica)</string>
+	<string name="Collision_Bump">[NAME] te ha empujado.</string>
+	<string name="Collision_PushObject">[NAME] te ha empujado mediante un script.</string>
+	<string name="Collision_ObjectCollide">[NAME] te ha golpeado con un objeto.</string>
+	<string name="Collision_ScriptedObject">[NAME] te ha golpeado con un objeto con scripts.</string>
+	<string name="Collision_PhysicalObject">[NAME] te ha golpeado con un objeto físico.</string>
+	<string name="Collision_UnknownType">[NAME] ha causado una colisión de tipo desconocido.</string>
+	<string name="BusyResponse">respuesta de ocupado</string>
+	<string name="TeleportMaturityExceeded">El residente no puede visitar esta región.</string>
+	<string name="LoadCameraPositionNoneSaved">Todavía no ha sido guardada ninguna vista de cámara.</string>
+	<string name="LoadCameraPositionOutsideDrawDistance">No se puede restaurar la vista de cámara porque su posición está más allá de tu distancia de dibujo.</string>
+	<string name="DrawDistanceSteppingGestureObsolete">Debido a cambios en el código, ya no es necesario usar este gesto. La distancia de dibujo progresiva ha sido activada.</string>
+	<string name="FSCmdLineDrawDistanceSet">Distancia de dibujo establecida en [DISTANCE]m.</string>
+	<string name="FSWithHavok">con soporte Havok</string>
+	<string name="FSWithOpensim">con soporte OpenSimulator</string>
+	<string name="not_found">&apos;[TEXT]&apos; no encontrado</string>
+	<string name="no_results">No hay resultados</string>
+	<string name="searching">Buscando...</string>
+	<string name="all_categories">Todas las categorías</string>
+	<string name="search_banned">Algunos términos de tu búsqueda han sido excluídos debido a restricciones de contenido, detallados en los Community Standards.</string>
+	<string name="search_short">Tus términos de búsqueda son demasiado cortos y no se ha podido realizar.</string>
+	<string name="search_disabled">La búsqueda clásica ha sido desactivada en esta región.</string>
+	<string name="render_quality_low">Baja</string>
+	<string name="render_quality_medium">Media</string>
+  <string name="render_quality_high">Alta</string>
+  <string name="render_quality_ultra">Ultra</string>
+  <string name="render_quality_unknown">Desconocida, por encima del rango normal, comprueba la configuración del depurador RenderQualityPerformance</string>
 </strings>
