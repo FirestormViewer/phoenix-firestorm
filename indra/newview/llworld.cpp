@@ -1362,11 +1362,11 @@ void LLWorld::updateWaterObjects()
 // <FS:CR> Fix water height on regions larger than 2048x2048
 		//512 - (max_x - region_x),
 		//512 - (max_y - region_y),
-		512 - (max_x - (rwidth - 256) - region_x),
-		512 - (max_y - (rwidth - 256) - region_y),
+		(S32)(512 - (max_x - (rwidth - 256) - region_x)),
+		(S32)(512 - (max_y - (rwidth - 256) - region_y)),
+		(S32)(512 - (region_x - min_x)),
+		(S32)(512 - (region_y - min_y)) };
 // </FS:CR> Fix water height on regions larger than 2048x2048
-		512 - (region_x - min_x),
-		512 - (region_y - min_y) };
 		
 	S32 dir;
 	for (dir = 0; dir < 8; dir++)
