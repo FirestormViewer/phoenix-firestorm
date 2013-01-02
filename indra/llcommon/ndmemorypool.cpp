@@ -459,7 +459,7 @@ namespace ndMemoryPool
 {
 	void startUp()
 	{
-		ndMalloStats::startUp();
+		ndMallocStats::startUp();
 	}
 
 	void tearDown()
@@ -475,7 +475,7 @@ namespace ndMemoryPool
 
 	void *realloc( void *ptr, size_t aSize, size_t aAlign )
 	{
-		ndMalloStats::addStat( aSize );
+		ndMallocStats::addStat( aSize );
 		return OSAllocator::realloc( ptr, aSize, aAlign );
 	}
 
@@ -486,7 +486,7 @@ namespace ndMemoryPool
 
 	void dumpStats( std::ostream &aOut )
 	{
-		ndMalloStats::dumpStats( aOut );
+		ndMallocStats::dumpStats( aOut );
 	}
 
 	void tryShrink()
