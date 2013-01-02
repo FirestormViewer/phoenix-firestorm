@@ -4,6 +4,7 @@ include(Prebuilt)
 # If you want to enable or disable TCMALLOC in viewer builds, this is the place.
 # set ON or OFF as desired.
 set (USE_TCMALLOC ON)
+#set (USE_TCMALLOC OFF) # <FS:ND> tcmalloc removal
 
 if (STANDALONE)
   include(FindGooglePerfTools)
@@ -59,3 +60,9 @@ if (USE_GOOGLE_PERFTOOLS)
   set(GOOGLE_PERFTOOLS_LIBRARIES ${TCMALLOC_LIBRARIES} ${STACKTRACE_LIBRARIES} ${PROFILER_LIBRARIES})
 else (USE_GOOGLE_PERFTOOLS)
 endif (USE_GOOGLE_PERFTOOLS)
+
+# <FS:ND> tcmalloc removal
+if( NOT USE_TCMALLOC )
+ add_definitions( -DND_NO_TCMALLOC )
+endif( NOT USE_TCMALLOC )
+# </FS:ND> tcmalloc removal

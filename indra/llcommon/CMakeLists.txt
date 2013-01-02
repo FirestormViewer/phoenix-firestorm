@@ -108,7 +108,6 @@ set(llcommon_SOURCE_FILES
     reflective.cpp
     timing.cpp
     u64.cpp
-    ndintrin.cpp
     )
     
 set(llcommon_HEADER_FILES
@@ -266,8 +265,12 @@ set(llcommon_HEADER_FILES
     timer.h
     timing.h
     u64.h
-    ndintrin.h
     )
+
+# <FS:ND> Add all nd* files. memory pool, intrinsics, ...
+list(APPEND llcommon_SOURCE_FILES ndallocators.cpp ndintrin.cpp ndmemorypool.cpp )
+list(APPEND llcommon_HEADER_FILES ndintrin.h ndlocks.h ndmemory.h ndmemorypool.h ndpooldefines.h )
+# </FS:ND>
 
 # <FS:CR> Add OSSL constants for OpenSim builds
 if (HAS_OPENSIM_SUPPORT)

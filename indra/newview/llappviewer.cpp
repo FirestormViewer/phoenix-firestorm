@@ -241,6 +241,8 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
+#include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
 #endif // (LL_LINUX || LL_SOLARIS) && LL_GTK
@@ -718,6 +720,8 @@ LLAppViewer::~LLAppViewer()
 
 bool LLAppViewer::init()
 {	
+	ndMemoryPool::startUp(); // <FS:ND/> tcmalloc replacement
+
 	//
 	// Start of the application
 	//
@@ -2176,6 +2180,9 @@ bool LLAppViewer::cleanup()
 	MEM_TRACK_RELEASE
 
     llinfos << "Goodbye!" << llendflush;
+
+	// This coud leak memory that was allocated in the pool. But that's ok. We're about to die and the OS will take care of this.
+	//	ndMemoryPool::tearDown(); // <FS:ND/> tcmalloc replacement
 
 	// return 0;
 	return true;
