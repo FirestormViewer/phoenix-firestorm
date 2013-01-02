@@ -32,6 +32,8 @@
 #include "llstat.h"
 #include "llstl.h"
 
+#include "ndexceptions.h" // <FS:ND/> For ndxran
+
 class LLMsgVarData
 {
 public:
@@ -374,9 +376,9 @@ public:
 			{
 				mHandlerFunc(msgsystem, mUserData);
 			}
-			catch( std::string &why )
+			catch( nd::exceptions::xran &ex )
 			{
-				llwarns << why << llendl;
+				llwarns << ex.what() << llendl;
 			}
 
 			// </FS:ND>
