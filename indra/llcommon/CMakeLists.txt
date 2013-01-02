@@ -268,8 +268,8 @@ set(llcommon_HEADER_FILES
     )
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-list(APPEND llcommon_SOURCE_FILES ndallocators.cpp ndintrin.cpp ndmemorypool.cpp )
-list(APPEND llcommon_HEADER_FILES ndintrin.h ndlocks.h ndmemory.h ndmemorypool.h ndpooldefines.h )
+list(APPEND llcommon_SOURCE_FILES ndallocators.cpp ndintrin.cpp ndmemorypool.cpp ndexceptions.cpp )
+list(APPEND llcommon_HEADER_FILES ndintrin.h ndlocks.h ndmemory.h ndmemorypool.h ndpooldefines.h ndexceptions.h )
 # </FS:ND>
 
 # <FS:CR> Add OSSL constants for OpenSim builds
