@@ -22,7 +22,7 @@
 		restantes
 	</floater.string>
 	<tab_container name="landtab">
-		<panel label="GENERAL" name="land_general_panel">
+		<panel label="General" name="land_general_panel">
 			<panel.string name="new users only">
 				Sólo nuevos residentes
 			</panel.string>
@@ -45,10 +45,10 @@
 				(Propiedad del grupo)
 			</panel.string>
 			<panel.string name="profile_text">
-				Perfil...
+				Perfil
 			</panel.string>
 			<panel.string name="info_text">
-				Información...
+				Información
 			</panel.string>
 			<panel.string name="public_text">
 				(público)
@@ -61,7 +61,6 @@
 			</panel.string>
 			<panel.string name="no_selection_text">
 				No se ha seleccionado una parcela.
-Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver sus características.
 			</panel.string>
 			<panel.string name="time_stamp_template">
 				[wkday,datetime,local] [day,datetime,local] [mth,datetime,local] [year,datetime,local] [hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
@@ -152,7 +151,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<button label="Abandonar el terreno" name="Abandon Land..."/>
 			<button label="Reclamar el terreno" name="Reclaim Land..."/>
 		</panel>
-		<panel label="CONTRATO" name="land_covenant_panel">
+		<panel label="Contrato" name="land_covenant_panel">
 			<panel.string name="can_resell">
 				El terreno comprado en esta región se podrá revender.
 			</panel.string>
@@ -169,7 +168,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Estado:
 			</text>
 			<text name="estate_name_text">
-				residencial
+				continente
 			</text>
 			<text name="estate_owner_lbl">
 				Propietario:
@@ -187,7 +186,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Región:
 			</text>
 			<text name="region_name_text">
-				leyla
+				Cargando...
 			</text>
 			<text name="region_landtype_lbl">
 				Tipo:
@@ -202,19 +201,19 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				Adulto
 			</text>
 			<text name="resellable_lbl">
-				Revender:
+				Reventa:
 			</text>
 			<text name="resellable_clause">
 				El terreno de esta región no se podrá revender.
 			</text>
 			<text name="changeable_lbl">
-				Dividir:
+				División:
 			</text>
 			<text name="changeable_clause">
 				El terreno de esta región no se podrá unir/dividir.
 			</text>
 		</panel>
-		<panel label="OBJETOS" name="land_objects_panel">
+		<panel label="Objetos" name="land_objects_panel">
 			<panel.string name="objects_available_text">
 				[COUNT] de un máx. de [MAX] ([AVAILABLE] disponibles)
 			</panel.string>
@@ -275,7 +274,6 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 			<text name="Autoreturn">
 				Devolución automática de objetos de otros (en min., 0 la desactiva):
 			</text>
-			<line_editor name="clean other time"/>
 			<text name="Object Owners:" width="200">
 				Propietarios de los objetos:
 			</text>
@@ -288,7 +286,7 @@ Vaya al menú Mundo &gt; Acerca del terreno o seleccione otra parcela para ver s
 				<name_list.columns label="Más recientes" name="mostrecent"/>
 			</name_list>
 		</panel>
-		<panel label="OPCIONES" name="land_options_panel">
+		<panel label="Opciones" name="land_options_panel">
 			<panel.string name="search_enabled_tooltip">
 				Permitir que aparezca esta parcela en los resultados de la búsqueda
 			</panel.string>
@@ -354,7 +352,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 			<check_box label="El grupo" name="check group scripts"/>
 			<check_box label="Seguro (sin daño)" name="check safe" tool_tip="Si se marca, convierte el terreno en &apos;seguro&apos;, desactivando el daño en combate. Si no, se activa el daño en combate."/>
 			<check_box label="Sin &apos;empujones&apos;" name="PushRestrictCheck" tool_tip="Previene scripts que empujen. Marcando esta opción prevendrá que en su terreno haya comportamientos destructivos." left_pad="42"/>
-			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela paarezca en resultados de búsqueda"/>
+			<check_box label="Mostrar en la búsqueda (30 L$/semana)" name="ShowDirectoryCheck" tool_tip="Permite que la parcela aparezca en resultados de búsqueda"/>
 			<combo_box name="land category">
 				<combo_box.item label="Cualquier categoría" name="item0"/>
 				<combo_box.item label="Localización Linden" name="item1"/>
@@ -393,7 +391,7 @@ Sólo las parcelas más grandes pueden listarse en la búsqueda.
 				<combo_box.item label="Cualquiera" name="Anywhere"/>
 			</combo_box>
 		</panel>
-		<panel label="MEDIOS" name="land_media_panel">
+		<panel label="Medios" name="land_media_panel">
 			<text name="with media:" width="85">
 				Tipo de medio:
 			</text>
@@ -430,7 +428,7 @@ los medios:
 			</text>
 			<check_box label="Reproducción en bucle" name="media_loop" tool_tip="Ejecuta el medio en bucle: cuando termina su ejecución, vuelve a empezar."/>
 		</panel>
-		<panel label="SONIDO" name="land_audio_panel">
+		<panel label="Sonido" name="land_audio_panel">
 			<text name="MusicURL:">
 				URL de música:
 			</text>
@@ -450,7 +448,7 @@ los medios:
 			<check_box label="Activar la voz (establecido por el Estado)" name="parcel_enable_voice_channel_is_estate_disabled" left="120"/>
 			<check_box label="Limitar la voz a esta parcela" name="parcel_enable_voice_channel_local" left="120"/>
 		</panel>
-		<panel label="ACCESO" name="land_access_panel">
+		<panel label="Acceso" name="land_access_panel">
 			<panel.string name="access_estate_defined">
 				(Definido por el Estado)
 			</panel.string>
@@ -460,12 +458,12 @@ los medios:
 			<text name="Limit access to this parcel to:">
 				Acceso a esta parcela
 			</text>
-			<check_box label="Permitir el acceso público (si no seleccionas esta opción, se crearán líneas de prohibición)" name="public_access"/>
+			<check_box label="Permitir el acceso público (en caso contrario, se crearán líneas de prohibición)" name="public_access"/>
 			<text name="Only Allow">
 				Permitir únicamente el acceso a los Residentes que:
 			</text>
-			<check_box label="Han aportado información de pago [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Para poder acceder a esta parcela los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
-			<check_box label="Son mayores de 18 años [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Los Residentes deben ser mayores de 18 años para poder acceder a esta parcela. Para más información, consulta [SUPPORT_SITE]."/>
+			<check_box label="Hayan aportado información de pago [ESTATE_PAYMENT_LIMIT]" name="limit_payment" tool_tip="Para poder acceder a esta parcela los Residentes deben haber aportado información de pago en su cuenta. Para más información, ver [SUPPORT_SITE]."/>
+			<check_box label="Sean mayores de 18 años [ESTATE_AGE_LIMIT]" name="limit_age_verified" tool_tip="Los Residentes deben ser mayores de 18 años para poder acceder a esta parcela. Para más información, consulta [SUPPORT_SITE]."/>
 			<check_box label="Acceso permitido al grupo: [GROUP]" name="GroupCheck" tool_tip="Elija el grupo en la pestaña General."/>
 			<check_box label="Vender pases a:" name="PassCheck" tool_tip="Permitir acceso temporal a esta parcela"/>
 			<combo_box name="pass_combo">
