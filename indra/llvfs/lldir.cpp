@@ -936,6 +936,7 @@ void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& the
 	if (!theme_folder.empty())
 	{
 		mSkinThemeDir = getSkinDir();
+		append(mSkinThemeDir, "themes");
 		append(mSkinThemeDir, theme_folder);
 		// Next level of generality is a specific theme for the current skin
 		addSearchSkinDir(mSkinThemeDir);
