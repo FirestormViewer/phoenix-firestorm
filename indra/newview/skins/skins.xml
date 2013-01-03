@@ -11,7 +11,7 @@
           <key>name</key>
           <string>Bright Blue</string>
           <key>folder</key>
-          <string>bright_blue</string>
+          <string/>
         </map>
         <map>
           <key>name</key>
@@ -33,7 +33,7 @@
           <key>name</key>
           <string>Grey</string>
           <key>folder</key>
-          <string>grey</string>
+          <string/>
         </map>
         <map>
           <key>name</key>
@@ -160,7 +160,7 @@
           <key>name</key>
           <string>Classic</string>
           <key>folder</key>
-          <string>classic</string>
+          <string/>
         </map>
       </array>
     </map>
