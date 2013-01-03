@@ -2869,7 +2869,7 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 				gDirUtilp->append(strPath, sdSkin["folder"].asString());
 				gDirUtilp->append(strPath, "themes");
 				gDirUtilp->append(strPath, sdTheme["folder"].asString());
-				if (gDirUtilp->fileExists(strPath))
+				if ( (gDirUtilp->fileExists(strPath)) || (sdTheme["folder"].asString().empty()) )
 				{
 					m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
 				}
