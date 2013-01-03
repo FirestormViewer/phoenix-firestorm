@@ -328,11 +328,12 @@ const std::string &LLDir::getSkinDir() const
 	return mSkinDir;
 }
 
-// [SL:KB] - Catznip: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2.0c) | Added: Catznip-2.2.0c
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
 const std::string& LLDir::getSkinThemeDir() const
 {
 	return mSkinThemeDir;
 }
+// [/SL:KB]
 
 const std::string &LLDir::getUserDefaultSkinDir() const
 {
@@ -377,6 +378,9 @@ static std::string ELLPathToString(ELLPath location)
 		ENT(LL_PATH_EXECUTABLE)
 		ENT(LL_PATH_DEFAULT_SKIN)
 		ENT(LL_PATH_FONTS)
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+		ENT(LL_PATH_TOP_SKINTHEME)
+// [/SL:KB]
 		ENT(LL_PATH_LAST)
 	;
 #undef ENT
@@ -469,10 +473,11 @@ std::string LLDir::getExpandedFilename(ELLPath location, const std::string& subd
 		prefix = getSkinDir();
 		break;
 
-	// [SL:KB] - Catznip Viewer-Skins 
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-19 (Catznip-2.4)
 	case LL_PATH_TOP_SKINTHEME:
 		prefix = getSkinThemeDir();
 		break;
+// [/SL:KB]
 			
 	case LL_PATH_DEFAULT_SKIN:
 		prefix = getDefaultSkinDir();
@@ -894,19 +899,26 @@ void LLDir::setPerAccountChatLogsDir(const std::string &username)
 	
 }
 
-void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& language)
+//void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& language)
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& theme_folder, const std::string& language)
+// [/SL:KB]
 {
-	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', language '" << language << "'"
-					   << LL_ENDL;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', theme '" << theme_folder << "', language '" << language << "'"
+ 					   << LL_ENDL;
+// [/SL:KB]
+//	LL_DEBUGS("LLDir") << "Setting skin '" << skin_folder << "', language '" << language << "'"
+//					   << LL_ENDL;
 	mSkinName = skin_folder;
-	setSkinThemeFolder("default"); // KB: Catznip Viewer-Skins
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	mSkinThemeName = theme_folder;
+// [/SL:KB]
 	mLanguage = language;
 
 	// This method is called multiple times during viewer initialization. Each
 	// time it's called, reset mSearchSkinDirs.
 	mSearchSkinDirs.clear();
-	mUserSkinDir += "user_settings"; //AO: Used by KB viewer-skins
-        mUserSkinDir += mDirDelimiter;
 
 	// base skin which is used as fallback for all skinned files
 	// e.g. c:\program files\secondlife\skins\default
@@ -919,6 +931,16 @@ void LLDir::setSkinFolder(const std::string &skin_folder, const std::string& lan
 	append(mSkinDir, skin_folder);
 	// Next level of generality is a skin installed with the viewer.
 	addSearchSkinDir(mSkinDir);
+
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	if (!theme_folder.empty())
+	{
+		mSkinThemeDir = getSkinDir();
+		append(mSkinThemeDir, theme_folder);
+		// Next level of generality is a specific theme for the current skin
+		addSearchSkinDir(mSkinThemeDir);
+	}
+// [/SL:KB]
 
 	// user modifications to skins, current and default
 	// e.g. c:\documents and settings\users\username\application data\second life\skins\dazzle
@@ -947,21 +969,17 @@ std::string LLDir::getSkinFolder() const
 	return mSkinName;
 }
 
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+std::string LLDir::getSkinThemeFolder() const
+{
+	return mSkinThemeName;
+}
+// [/SL:KB]
+
 std::string LLDir::getLanguage() const
 {
 	return mLanguage;
 }
-
-// [KB] - Catznip: Viewer-Skins
-void LLDir::setSkinThemeFolder(const std::string& theme_folder)
-{
-	mSkinThemeDir = mSkinDir;
-	mSkinThemeDir += mDirDelimiter;
-	mSkinThemeDir += "themes";
-	mSkinThemeDir += mDirDelimiter;
-	mSkinThemeDir += theme_folder;
-}
-
 
 bool LLDir::setCacheDir(const std::string &path)
 {
@@ -1005,6 +1023,9 @@ void LLDir::dumpCurrentDirectories()
 	LL_DEBUGS2("AppInit","Directories") << "  CAFile:				 " << getCAFile() << LL_ENDL;
 	LL_DEBUGS2("AppInit","Directories") << "  SkinBaseDir:           " << getSkinBaseDir() << LL_ENDL;
 	LL_DEBUGS2("AppInit","Directories") << "  SkinDir:               " << getSkinDir() << LL_ENDL;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2011-02-14 (Catznip-2.5)
+	LL_DEBUGS2("AppInit","Directories") << "  SkinThemeDir:          " << getSkinThemeDir() << LL_ENDL;
+// [/SL:KB]
 }
 
 std::string LLDir::add(const std::string& path, const std::string& name) const

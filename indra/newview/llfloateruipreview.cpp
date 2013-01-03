@@ -292,7 +292,10 @@ LLLocalizationResetForcer::LLLocalizationResetForcer(LLFloaterUIPreview* floater
 	mSavedLocalization = LLUI::sSettingGroups["config"]->getString("Language");				// save current localization setting
 	LLUI::sSettingGroups["config"]->setString("Language", floater->getLocStr(ID));// hack language to be the one we want to preview floaters in
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), floater->getLocStr(ID));
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), floater->getLocStr(ID));
 }
 
 // Actually reset in destructor
@@ -301,7 +304,10 @@ LLLocalizationResetForcer::~LLLocalizationResetForcer()
 {
 	LLUI::sSettingGroups["config"]->setString("Language", mSavedLocalization);	// reset language to what it was before we changed it
 	// forcibly reset XUI paths with this new language
-	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), gDirUtilp->getSkinThemeFolder(), mSavedLocalization);
+// [/SL:KB]
+//	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), mSavedLocalization);
 }
 
 // Live file constructor

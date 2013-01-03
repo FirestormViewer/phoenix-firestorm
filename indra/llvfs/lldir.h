@@ -53,7 +53,9 @@ typedef enum ELLPath
 	LL_PATH_EXECUTABLE = 16,
 	LL_PATH_DEFAULT_SKIN = 17,
 	LL_PATH_FONTS = 18,
-	LL_PATH_TOP_SKINTHEME = 19, // KB - Catznip Viewer-Skins
+// [SL:KB] - Patch: Viewer-Skins | mS: 2010-10-19 (Catznip-2.4)
+	LL_PATH_TOP_SKINTHEME = 19,
+// [/SL:KB]
 	LL_PATH_FS_RESOURCES = 20,  // TT - Firestorm data
 	LL_PATH_LAST
 } ELLPath;
@@ -131,9 +133,11 @@ class LLDir
 	const std::string &getDirDelimiter() const;	// directory separator for platform (ie. '\' or '/' or ':')
 	const std::string &getDefaultSkinDir() const;	// folder for default skin. e.g. c:\program files\second life\skins\default
 	const std::string &getSkinDir() const;		// User-specified skin folder.
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
+	const std::string &getSkinThemeDir() const;		// User-specified skin theme override folder.
+// [/SL:KB]
 	const std::string &getUserDefaultSkinDir() const; // dir with user modifications to default skin
 	const std::string &getUserSkinDir() const;		// User-specified skin folder with user modifications. e.g. c:\documents and settings\username\application data\second life\skins\curskin
-	const std::string &getSkinThemeDir() const;		// KB: User-specified skin theme override folder.
 	const std::string getSkinBaseDir() const;		// folder that contains all installed skins (not user modifications). e.g. c:\program files\second life\skins
 	const std::string &getLLPluginDir() const;		// Directory containing plugins and plugin shell
 
@@ -148,7 +152,7 @@ class LLDir
 	std::string getExtension(const std::string& filepath) const; // Excludes '.', e.g getExtension("foo.wav") == "wav"
 
 	// these methods search the various skin paths for the specified file in the following order:
-	// getUserSkinDir(), getUserDefaultSkinDir(), getSkinThemeDir, getSkinDir(), getDefaultSkinDir()
+	// getUserSkinDir(), getUserDefaultSkinDir(), getSkinThemeDir(), getSkinDir(), getDefaultSkinDir()
 	/// param value for findSkinnedFilenames(), explained below
 	enum ESkinConstraint { CURRENT_SKIN, ALL_SKINS };
 	/**
@@ -221,9 +225,14 @@ class LLDir
 	virtual void setLindenUserDir(const std::string &username);		// Set the linden user dir to this user's dir
 #endif // HAS_OPENSIM_SUPPORT
 // </FS:CR>
-	virtual void setSkinFolder(const std::string &skin_folder, const std::string& language);
-	virtual void setSkinThemeFolder(const std::string &theme_folder); // KB: Catznip Viewer-skins
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-3.4)
+	virtual void setSkinFolder(const std::string& skin_folder, const std::string& theme_folder, const std::string& language);
+// [/SL:KB]
+//	virtual void setSkinFolder(const std::string &skin_folder, const std::string& language);
 	virtual std::string getSkinFolder() const;
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	virtual std::string getSkinThemeFolder() const;
+// [/SL:KB]
 	virtual std::string getLanguage() const;
 	virtual bool setCacheDir(const std::string &path);
 
@@ -271,10 +280,15 @@ protected:
 	std::string mOSCacheDir;		// operating system cache dir
 	std::string mDirDelimiter;
 	std::string mSkinName;           // caller-specified skin name
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2012-12-26 (Catznip-3.4)
+	std::string mSkinThemeName;		// Location for current skin theme override
+// [/SL:KB]
 	std::string mSkinBaseDir;			// Base for skins paths.
-	std::string mSkinThemeDir;		// KB: Location for current skin theme override
 	std::string mDefaultSkinDir;			// Location for default skin info.
 	std::string mSkinDir;			// Location for current skin info.
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-2.2)
+	std::string mSkinThemeDir;		// Location for current skin theme override
+// [/SL:KB]
 	std::string mUserDefaultSkinDir;		// Location for default skin info.
 	std::string mUserSkinDir;			// Location for user-modified skin info.
 	// Skin directories to search, most general to most specific. This order

@@ -2737,38 +2737,38 @@ void LLPanelPreferenceCrashReports::cancel()
 }
 // [/SL:KB]
 
-// <KB> - Catznip Viewer-Skins 
-
+// [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-21 (Catznip-2.2)
 static LLRegisterPanelClassWrapper<LLPanelPreferenceSkins> t_pref_skins("panel_preference_skins");
 
-
-LLPanelPreferenceSkins::LLPanelPreferenceSkins() : LLPanelPreference(), m_pSkinCombo(NULL), m_pSkinThemeCombo(NULL)
+LLPanelPreferenceSkins::LLPanelPreferenceSkins()
+	: LLPanelPreference()
+	, m_pSkinCombo(NULL)
+	, m_pSkinThemeCombo(NULL)
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
 	llifstream fileSkins(strSkinsPath, std::ios::binary);
 	if (fileSkins.is_open())
 	{
-		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);	
+		LLSDSerialize::fromXMLDocument(m_SkinsInfo, fileSkins);
 	}
 }
 
-
 BOOL LLPanelPreferenceSkins::postBuild()
 {
-
 	m_pSkinCombo = getChild<LLComboBox>("skin_combobox");
 	if (m_pSkinCombo)
 		m_pSkinCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinChanged, this));
-		
+
 	m_pSkinThemeCombo = getChild<LLComboBox>("theme_combobox");
 	if (m_pSkinThemeCombo)
 		m_pSkinThemeCombo->setCommitCallback(boost::bind(&LLPanelPreferenceSkins::onSkinThemeChanged, this));
-			
+
 	refreshSkinList();
 
-	return LLPanelPreference::postBuild();	
+	return LLPanelPreference::postBuild();
 }
 
 void LLPanelPreferenceSkins::apply()
@@ -2778,70 +2778,74 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("SkinCurrent", m_Skin);
 		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
 
-		LLNotificationsUtil::add("ChangeSkin");	
-
+		LLNotificationsUtil::add("ChangeSkin");
 	}
 }
-
 
 void LLPanelPreferenceSkins::cancel()
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
-	refreshSkinList();	
+	refreshSkinList();
 }
 
 void LLPanelPreferenceSkins::onSkinChanged()
 {
 	m_Skin = (m_pSkinCombo) ? m_pSkinCombo->getSelectedValue().asString() : "default";
-	m_SkinTheme = "default";
 	refreshSkinThemeList();
-	onSkinThemeChanged(); // make sure we initialize a theme for our new skin
+	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
 
-        // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
-        // current skin would be carried over, leading to confusion and a first experience with
-        // the skin that the designer didn't intend.
-
-        if  (m_Skin.compare("starlight") == 0)
-        {
-                gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
-                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
-        }
-        else
-        {
-                gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
-                gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
-        }
+    // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
+    // current skin would be carried over, leading to confusion and a first experience with
+    // the skin that the designer didn't intend.
+	if  (m_Skin.compare("starlight") == 0)
+	{
+		gSavedSettings.setBOOL("ShowMenuBarLocation", FALSE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",TRUE);
+	}
+	else
+	{
+		gSavedSettings.setBOOL("ShowMenuBarLocation", TRUE);
+		gSavedSettings.setBOOL("ShowNavbarNavigationPanel",FALSE);
+	}
 
 	if (gSavedSettings.getBOOL("FSSkinClobbersToolbarPrefs"))
 	{
-        	llinfos << "Clearing toolbar settings." << llendl;
-        	gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
+		llinfos << "Clearing toolbar settings." << llendl;
+		gSavedSettings.setBOOL("ResetToolbarSettings",TRUE);
 	}
-
-        //</FS:AO>
+    //</FS:AO>
 }
 
 void LLPanelPreferenceSkins::onSkinThemeChanged()
 {
-	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "default";
+	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
 }
 
 void LLPanelPreferenceSkins::refreshSkinList()
 {
 	if (!m_pSkinCombo)
 		return;
-	
-	m_pSkinCombo->clearRows();
 
+	m_pSkinCombo->clearRows();
 	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray();
-		 itSkinInfo != endSkinInfo; ++itSkinInfo)		
+			itSkinInfo != endSkinInfo; ++itSkinInfo)
 	{
 		const LLSD& sdSkin = *itSkinInfo;
-		m_pSkinCombo->add(sdSkin["name"].asString(), sdSkin["folder"]);	
+		std::string strPath = gDirUtilp->getSkinBaseDir();
+		gDirUtilp->append(strPath, sdSkin["folder"].asString());
+		if (gDirUtilp->fileExists(strPath))
+		{
+			m_pSkinCombo->add(sdSkin["name"].asString(), sdSkin["folder"]);
+		}
 	}
 	
-	m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
+	BOOL fFound = m_pSkinCombo->setSelectedByValue(m_Skin, TRUE);
+	if (!fFound)
+	{
+		m_pSkinCombo->setSelectedByValue("default", TRUE);
+	}
+
 	refreshSkinThemeList();
 }
 
@@ -2852,7 +2856,7 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 
 	m_pSkinThemeCombo->clearRows();
 	for (LLSD::array_const_iterator itSkinInfo = m_SkinsInfo.beginArray(), endSkinInfo = m_SkinsInfo.endArray(); 
-		 itSkinInfo != endSkinInfo; ++itSkinInfo)
+			itSkinInfo != endSkinInfo; ++itSkinInfo)
 	{
 		const LLSD& sdSkin = *itSkinInfo;
 		if (sdSkin["folder"].asString() == m_Skin)
@@ -2861,18 +2865,26 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 			for (LLSD::array_const_iterator itTheme = sdThemes.beginArray(), endTheme = sdThemes.endArray(); itTheme != endTheme; ++itTheme)
 			{
 				const LLSD& sdTheme = *itTheme;
-				m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
+				std::string strPath = gDirUtilp->getSkinBaseDir();
+				gDirUtilp->append(strPath, sdSkin["folder"].asString());
+				gDirUtilp->append(strPath, "themes");
+				gDirUtilp->append(strPath, sdTheme["folder"].asString());
+				if (gDirUtilp->fileExists(strPath))
+				{
+					m_pSkinThemeCombo->add(sdTheme["name"].asString(), sdTheme["folder"]);
+				}
 			}
-			
 			break;
-		}	
+		}
 	}
-	
-	bool foundTheme = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
-	if (!foundTheme)
+
+	BOOL fFound = m_pSkinThemeCombo->setSelectedByValue(m_SkinTheme, TRUE);
+	if (!fFound)
+	{
 		m_pSkinThemeCombo->selectFirstItem();
+	}
 }
-// </KB>
+// [/SL:KB]
 
 #ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
 //<FS:AW  opensim preferences>
