@@ -160,5 +160,9 @@ extern LLGLSLShader			gUIProgram;
 //output vec4(color.rgb,color.a*tex0[tc0].a)
 extern LLGLSLShader			gSolidColorProgram;
 
+// <FS:ND> Solidcolor Shader for Intel Graphics
+extern LLGLSLShader			gSolidColorProgramIntel;
+// </FS:ND>
+
 
 #endif

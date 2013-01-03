@@ -58,6 +58,10 @@ bool LLGLSLShader::sNoFixedFunction = false;
 LLGLSLShader	gUIProgram;
 LLGLSLShader	gSolidColorProgram;
 
+// <FS:ND> FIRE-6855; Solidcolor shader for Intel graphics
+LLGLSLShader	gSolidColorProgramIntel;
+// </FS:ND>
+
 BOOL shouldChange(const LLVector4& v1, const LLVector4& v2)
 {
 	return v1 != v2;
