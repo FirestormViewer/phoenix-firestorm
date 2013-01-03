@@ -38,6 +38,8 @@
 #include "v3math.h"
 #include "v4math.h"
 
+#include "ndexceptions.h" // <FS:ND/> For ndxran
+
 LLTemplateMessageReader::LLTemplateMessageReader(message_template_number_map_t&
 												 number_template_map) :
 	mReceiveSize(0),
@@ -542,7 +544,7 @@ void LLTemplateMessageReader::logRanOffEndOfPacket( const LLHost& host, const S3
 			 << getMessageName() << std::endl;
 	}
 	gMessageSystem->callExceptionFunc(MX_RAN_OFF_END_OF_PACKET);
-	throw std::string( strm.str() );
+	throw nd::exceptions::xran( strm.str() );
 }
 
 static LLFastTimer::DeclareTimer FTM_PROCESS_MESSAGES("Process Messages");

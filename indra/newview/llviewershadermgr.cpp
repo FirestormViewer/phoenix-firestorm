@@ -2737,6 +2737,27 @@ BOOL LLViewerShaderMgr::loadShadersInterface()
 		}
 	}
 
+	// <FS:ND> FIRE-6855;  When running with a intel gfx card, do not use the solidcolorV.glsl files. Instead use a custom one for those cards. Passing color as a uniform and
+	// not a shader attribute
+
+	if (success)
+	{
+		gSolidColorProgramIntel.mName = "Solid Color Shader for Intel";
+		gSolidColorProgramIntel.mShaderFiles.clear();
+		gSolidColorProgramIntel.mShaderFiles.push_back(make_pair("interface/solidcolorIntelV.glsl", GL_VERTEX_SHADER_ARB));
+		gSolidColorProgramIntel.mShaderFiles.push_back(make_pair("interface/solidcolorF.glsl", GL_FRAGMENT_SHADER_ARB)); // The standard fragment shader is just fine. So keep it.
+		gSolidColorProgramIntel.mShaderLevel = mVertexShaderLevel[SHADER_INTERFACE];
+		success = gSolidColorProgramIntel.createShader(NULL, NULL);
+		if (success)
+		{
+			gSolidColorProgramIntel.bind();
+			gSolidColorProgramIntel.uniform1i("tex0", 0);
+			gSolidColorProgramIntel.unbind();
+		}
+	}
+
+	// </FS:ND>
+
 	if (success)
 	{
 		gOcclusionProgram.mName = "Occlusion Shader";

@@ -67,10 +67,18 @@ protected:
     /// implementations do.
     struct StaticBase
     {
-        StaticBase():
-            sIterationNestDepth(0)
+		// <FS:ND> Only needed in debug builds
+#ifdef LL_DEBUG
+        StaticBase()
+            : sIterationNestDepth(0)
         {}
         S32 sIterationNestDepth;
+#else
+       StaticBase()
+        {}
+#endif
+		// </FS:ND>
+
     };
 };
 
@@ -81,6 +89,7 @@ protected:
 template<typename T, typename KEY = T*>
 class LLInstanceTracker : public LLInstanceTrackerBase
 {
+protected:
 	typedef LLInstanceTracker<T, KEY> MyT;
 	typedef typename std::map<KEY, T*> InstanceMap;
 	struct StaticData: public StaticBase
@@ -99,12 +108,20 @@ public:
 		instance_iter(const typename InstanceMap::iterator& it)
 		:	mIterator(it)
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			++getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 		~instance_iter()
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			--getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 
@@ -133,18 +150,30 @@ public:
 		key_iter(typename InstanceMap::iterator it)
 			:	mIterator(it)
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			++getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 		key_iter(const key_iter& other)
 			:	mIterator(other.mIterator)
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			++getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 		~key_iter()
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			--getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 
@@ -203,7 +232,13 @@ protected:
 	virtual ~LLInstanceTracker() 
 	{ 
 		// it's unsafe to delete instances of this type while all instances are being iterated over.
+
+		// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 		llassert_always(getStatic().sIterationNestDepth == 0);
+#endif
+		// </FS:ND>
+
 		remove_();		
 	}
 	virtual void setKey(KEY key) { remove_(); add_(key); }
@@ -229,6 +264,7 @@ private:
 template<typename T>
 class LLInstanceTracker<T, T*> : public LLInstanceTrackerBase
 {
+protected:
 	typedef LLInstanceTracker<T, T*> MyT;
 	typedef typename std::set<T*> InstanceSet;
 	struct StaticData: public StaticBase
@@ -262,18 +298,29 @@ public:
 		instance_iter(const typename InstanceSet::iterator& it)
 		:	mIterator(it)
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			++getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 		instance_iter(const instance_iter& other)
 		:	mIterator(other.mIterator)
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			++getStatic().sIterationNestDepth;
+#endif
 		}
 
 		~instance_iter()
 		{
+			// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 			--getStatic().sIterationNestDepth;
+#endif
+			// </FS:ND>
 		}
 
 	private:
@@ -296,6 +343,10 @@ public:
 	static instance_iter beginInstances() {	return instance_iter(getSet_().begin()); }
 	static instance_iter endInstances() { return instance_iter(getSet_().end()); }
 
+	static instance_iter beginInstances(StaticData &aData) {	return instance_iter(aData.sSet.begin()); }
+	static instance_iter endInstances(StaticData &aData) { return instance_iter(aData.sSet.end()); }
+
+
 protected:
 	LLInstanceTracker()
 	{
@@ -306,7 +357,13 @@ protected:
 	virtual ~LLInstanceTracker()
 	{
 		// it's unsafe to delete instances of this type while all instances are being iterated over.
+
+		// <FS:ND> Minimize calls to getStatic
+#ifdef LL_DEBUG
 		llassert_always(getStatic().sIterationNestDepth == 0);
+#endif
+		// </FS:ND>
+
 		getSet_().erase(static_cast<T*>(this));
 	}
 

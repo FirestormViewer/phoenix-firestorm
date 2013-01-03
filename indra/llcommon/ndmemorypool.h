@@ -1,6 +1,3 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -20,34 +17,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.phoenixviewer.com
  * $/LicenseInfo$
  */
 
+#include "llpreprocessor.h"
+#include <ostream>
 
-#include "stdtypes.h"
-
-namespace ndIntrin
+namespace ndMallocStats
 {
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	void startUp();
+	void tearDown();
 
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
-
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
+	void addStat( size_t aSize );
+	void dumpStats( std::ostream &aOut );
 }
 
-#endif
+
+namespace ndMemoryPool
+{
+	LL_COMMON_API void startUp();
+	LL_COMMON_API void tearDown();
+
+	LL_COMMON_API void *malloc( size_t aSize, size_t aAlign );
+	LL_COMMON_API void *realloc( void *ptr, size_t aSize, size_t aAlign );
+
+	LL_COMMON_API void free( void* ptr );
+
+	LL_COMMON_API void dumpStats( std::ostream & );
+	LL_COMMON_API void tryShrink( );
+}

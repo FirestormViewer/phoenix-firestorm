@@ -44,6 +44,8 @@
 #include "message.h"
 #include "lltimer.h"
 
+#include <ndexceptions.h> // <FS:ND/> For nd::exceptions::xran
+
 //-----------------------------------------------------------------------------
 // Static Definitions
 //-----------------------------------------------------------------------------
@@ -2177,7 +2179,12 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 			file.read((U8*)buffer, size);	/*Flawfinder: ignore*/
 			
 			lldebugs << "Loading keyframe data for: " << motionp->getName() << ":" << motionp->getID() << " (" << size << " bytes)" << llendl;
-			
+	
+			// <FS:ND> Handle invalid files that cannot be properly loaded
+			try
+			{
+			// </FS:ND>
+		
 			LLDataPackerBinaryBuffer dp(buffer, size);
 			if (motionp->deserialize(dp))
 			{
@@ -2188,6 +2195,17 @@ void LLKeyframeMotion::onLoadComplete(LLVFS *vfs,
 				llwarns << "Failed to decode asset for animation " << motionp->getName() << ":" << motionp->getID() << llendl;
 				motionp->mAssetStatus = ASSET_FETCH_FAILED;
 			}
+
+			// <FS:ND> Handle invalid files that cannot be properly loaded
+			}
+			catch( nd::exceptions::xran &ex )
+			{
+				// Maybe delete the file from the VFS here? It's corrupt, deleting it should be harmless?
+
+				llwarns << "Failed to decode asset for animation " << motionp->getName() << ":" << motionp->getID() << " error: " << ex.what() << llendl;
+				motionp->mAssetStatus = ASSET_FETCH_FAILED;
+			}
+			// </FS:ND>
 			
 			delete[] buffer;
 		}

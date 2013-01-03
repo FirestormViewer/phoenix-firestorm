@@ -577,7 +577,15 @@ void LLLayoutStack::createResizeBar(LLLayoutPanel* panelp)
 //static 
 void LLLayoutStack::updateClass()
 {
-	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	// <FS:ND> Minimize calls to getStatic
+
+	typedef LLInstanceTracker<LLLayoutStack, LLLayoutStack*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
+	for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
+	//	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+
+	// </FS:ND>
 	{
 		it->updateLayout();
 		it->mAnimatedThisFrame = false;

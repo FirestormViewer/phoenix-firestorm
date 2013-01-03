@@ -1,6 +1,3 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -20,34 +17,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.phoenixviewer.com
  * $/LicenseInfo$
  */
 
+#ifndef NDPOOLDEFINES_H
+#define NDPOOLDEFINES_H
 
 #include "stdtypes.h"
 
-namespace ndIntrin
-{
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
+#define FROM_MB( mbVal ) (mbVal*1024*1024)
+#define TO_MB( bVal ) ( bVal / (1024*1024) )
+#define BITS_PER_U8 (8)
+#define BITS_PER_U32 ( sizeof(U32) * BITS_PER_U8 )
+
+#ifdef ND_NO_TCMALLOC
+	#define MAX_PAGES (150)
+	#define CHUNK_SIZE (64)
+	#define CHUNK_ALIGNMENT (16)
+	#define PAGE_SIZE (FROM_MB(1) )
+	#define BITMAP_SIZE ( PAGE_SIZE / BITS_PER_U8 / CHUNK_SIZE )
 #else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
-
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
+	#define MAX_PAGES (0)
 #endif
-}
+
+#define STATS_FREQ ( 15 )
 
 #endif

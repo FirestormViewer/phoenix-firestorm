@@ -542,7 +542,17 @@ void gl_draw_scaled_image_with_border(S32 x, S32 y, S32 width, S32 height, LLTex
 	{
 		if (LLGLSLShader::sNoFixedFunction)
 		{
-			gSolidColorProgram.bind();
+			// <FS:ND> FIRE-6855; When running with a intel gfx card, do not use the solidcolor?.glsl files. Instead use a custom one for those cards. Passing color as a uniform and
+			// not a shader attribute
+
+			// gSolidColorProgram.bind();
+
+			if( gGLManager.mIsIntel )
+				gSolidColorProgramIntel.bind();
+			else
+				gSolidColorProgram.bind();
+
+			// </FS:ND>
 		}
 		else
 		{
@@ -553,7 +563,17 @@ void gl_draw_scaled_image_with_border(S32 x, S32 y, S32 width, S32 height, LLTex
 
 	gGL.getTexUnit(0)->bind(image, true);
 
-	gGL.color4fv(color.mV);
+	// <FS:ND> FIRE-6855; When running with a intel gfx card, do not use the solidcolor?.glsl files. Instead use a custom one for those cards. Passing color as a uniform and
+	// not a shader attribute
+
+	// gGL.color4fv(color.mV);
+
+	if( solid_color && LLGLSLShader::sNoFixedFunction && gGLManager.mIsIntel )
+		gGL.diffuseColor4fv( color.mV );
+	else
+		gGL.color4fv(color.mV);
+
+	// </FS:ND>
 	
 	const S32 NUM_VERTICES = 9 * 4; // 9 quads
 	LLVector2 uv[NUM_VERTICES];

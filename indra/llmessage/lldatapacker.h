@@ -27,6 +27,8 @@
 #ifndef LL_LLDATAPACKER_H 
 #define LL_LLDATAPACKER_H
 
+#include "ndexceptions.h" // <FS:ND/> For ndxran
+
 class LLColor4;
 class LLColor4U;
 class LLVector2;
@@ -208,7 +210,7 @@ inline BOOL LLDataPackerBinaryBuffer::verifyLength(const S32 data_size, const ch
 		std::stringstream strm;
 		strm << "Buffer overflow in BinaryBuffer length verify, field name " << name << "!" << std::endl;
 		strm << "Current pos: " << (int)(mCurBufferp - mBufferp) << " Buffer size: " << mBufferSize << " Data size: " << data_size << std::endl;
-		throw std::string( strm.str() );
+		throw nd::exceptions::xran( strm.str() );
 
 		// </FS:ND>
 	}

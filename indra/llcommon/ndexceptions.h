@@ -1,10 +1,7 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
- * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
+ * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Nicky Dasmijn
+ * Copyright (C) 2013, Nicky Dasmijn
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,28 +23,29 @@
  */
 
 
-#include "stdtypes.h"
+#ifndef NDEXCEPTIONS_H
+#define NDEXCEPTIONS_H
 
-namespace ndIntrin
+#include <string>
+
+/* Not derived from std::exception.
+   std::exception::what differs between gcc and MSVC. gcc has a throw() gurantee. Same with std::exception::~exception.
+   That would mean a lot of #ifdef for no real benefit of having the inheritance right now.
+*/
+
+namespace nd
 {
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
-
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
+	namespace exceptions
+	{
+		class xran
+		{
+			std::string mReason;
+		public:
+			xran( std::string const & );
+			
+			std::string const& what() const;
+		};
+	}
 }
 
 #endif

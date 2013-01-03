@@ -638,9 +638,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>c0eacb6348e032fbc69cfdc4bd215ee4</string>
+              <string>172c905affa57a0072d4b7cc1fdc1636</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/freetype-2.4.4-darwin-20110307.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-darwin-20130102.tar.bz2</string>
             </map>
             <key>name</key>
             <string>darwin</string>
@@ -662,9 +662,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>271349827b939406162ce42e42cd18e0</string>
+              <string>e4a73c6fa1a1b37356f2eb73047300b2</string>
               <key>url</key>
-              <string>http://s3.amazonaws.com/viewer-source-downloads/install_pkgs/freetype-2.4.4-windows-20110218.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/freetype-2.3.9-windows-20121231.tar.bz2</string>
             </map>
             <key>name</key>
             <string>windows</string>

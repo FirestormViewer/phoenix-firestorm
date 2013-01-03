@@ -225,8 +225,16 @@ LLFastTimer::DeclareTimer::DeclareTimer(const std::string& name)
 // static
 void LLFastTimer::DeclareTimer::updateCachedPointers()
 {
+	// <FS:ND> Minimize calls to getStatic
+
+	typedef LLInstanceTracker<LLFastTimer::DeclareTimer, LLFastTimer::DeclareTimer*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
 	// propagate frame state pointers to timer declarations
-	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
+
+	//	for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+	// </FS:ND>
 	{
 		// update cached pointer
 		it->mFrameState = &it->mTimer.getFrameState();
@@ -398,9 +406,21 @@ void LLFastTimer::NamedTimer::buildHierarchy()
 {
 	if (sCurFrameIndex < 0 ) return;
 
+	// <FS:ND> Minimize calls to getStatic
+
+	typedef LLInstanceTracker<LLFastTimer::NamedTimer, LLFastTimer::NamedTimer*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
+	// </FS:ND>
+
 	// set up initial tree
 	{
-		for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+		// <FS:ND> Minimize calls to getStatic
+	
+		for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
+		//		for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+
+		// </FS:ND>
 		{
 			NamedTimer& timer = *it;
 			if (&timer == NamedTimerFactory::instance().getRootTimer()) continue;
@@ -507,6 +527,9 @@ void LLFastTimer::NamedTimer::accumulateTimings()
 // static
 void LLFastTimer::NamedTimer::resetFrame()
 {
+	typedef LLInstanceTracker<LLFastTimer::NamedTimer, LLFastTimer::NamedTimer*> tBase;
+	static tBase::StaticData &sData = tBase::getStatic();
+
 	if (sLog)
 	{ //output current frame counts to performance log
 
@@ -528,7 +551,7 @@ void LLFastTimer::NamedTimer::resetFrame()
 		LLSD sd;
 
 		{
-			for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+			for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
 			{
 				NamedTimer& timer = *it;
 				FrameState& info = timer.getFrameState();
@@ -573,7 +596,7 @@ void LLFastTimer::NamedTimer::resetFrame()
 
 	// reset for next frame
 	{
-		for (instance_iter it = beginInstances(); it != endInstances(); ++it)
+		for (instance_iter it = beginInstances(sData); it != endInstances(sData); ++it)
 		{
 			NamedTimer& timer = *it;
 			

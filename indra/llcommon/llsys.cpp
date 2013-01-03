@@ -93,6 +93,7 @@ const char MEMINFO_FILE[] = "/proc/meminfo";
 extern int errno;
 #endif
 
+#include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 
 static const S32 CPUINFO_BUFFER_SIZE = 16383;
 LLCPUInfo gSysCPU;
@@ -916,6 +917,10 @@ void LLMemoryInfo::stream(std::ostream& s) const
 			s << value;           // just use default LLSD formatting
 		s << std::endl;
 	}
+
+	// <FS:ND> tcmalloc replacement
+	ndMemoryPool::dumpStats( s );
+	// </FS:ND>
 }
 
 LLSD LLMemoryInfo::getStatsMap() const

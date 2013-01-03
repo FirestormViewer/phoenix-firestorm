@@ -89,7 +89,7 @@
 	<check_box label="Przyciągaj do siatki" name="checkbox snap to grid"/>
 	<check_box label="Edytuj oś jak gł. obiekt" name="checkbox actual root"/>
 	<check_box label="Pokaż podświetlenie" name="checkbox show highlight"/>
-	<button name="Options..." tool_tip="Więcej opcji siatki"/>
+	<button name="Options..." label="Opcje..." tool_tip="Więcej opcji siatki"/>
 	<button name="ToolCube" tool_tip="Sześcian"/>
 	<button name="ToolPrism" tool_tip="Graniastosłup"/>
 	<button name="ToolPyramid" tool_tip="Ostrosłup"/>

@@ -34,6 +34,11 @@
 #define LL_CHECK_MEMORY
 #endif
 
+// <FS:ND> No tcmalloc
+#ifdef ND_NO_TCMALLOC
+#include "ndmemory.h"
+#else
+
 inline void* ll_aligned_malloc( size_t size, int align )
 {
 	void* mem = malloc( size + (align - 1) + sizeof(void*) );
@@ -130,6 +135,7 @@ inline void ll_aligned_free_32(void *p)
 	free(p); // posix_memalign() is compatible with heap deallocator
 #endif
 }
+#endif // </FS:ND> No tcmalloc
 
 #ifndef __DEBUG_PRIVATE_MEM__
 #define __DEBUG_PRIVATE_MEM__  0
@@ -450,6 +456,9 @@ public:
 	static void  freeMem(LLPrivateMemoryPool* poolp, void* addr) ;
 };
 
+// <FS:ND> No tcmalloc
+#ifndef ND_NO_TCMALLOC
+
 //-------------------------------------------------------------------------------------
 #if __DEBUG_PRIVATE_MEM__
 #define ALLOCATE_MEM(poolp, size) LLPrivateMemoryPoolManager::allocate((poolp), (size), __FUNCTION__, __LINE__)
@@ -458,6 +467,9 @@ public:
 #endif
 #define FREE_MEM(poolp, addr) LLPrivateMemoryPoolManager::freeMem((poolp), (addr))
 //-------------------------------------------------------------------------------------
+
+#endif
+// </FS:ND> No tcmalloc
 
 //
 //the below singleton is used to test the private memory pool.

@@ -1,6 +1,3 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -20,34 +17,56 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.phoenixviewer.com
  * $/LicenseInfo$
  */
 
+#ifndef NDLOCKS_H
+#define NDLOCKS_H
 
-#include "stdtypes.h"
+#include "ndintrin.h"
 
-namespace ndIntrin
+namespace ndLocks
 {
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	inline void lock( volatile U32 *aLock )
+	{
+		while( 0 != ndIntrin::CAS( aLock, 0, 1 ) )
+			;
+	}
 
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	inline void unlock ( volatile U32 *aLock )
+	{
+		*aLock = 0;
+	}
 
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
+	inline bool tryLock( volatile U32 *aLock )
+	{
+		return 0 == ndIntrin::CAS( aLock, 0, 1 );
+	}
 
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
+	class LockHolder
+	{
+		volatile U32 *mLock;
+	public:
+		LockHolder( volatile U32 *aLock )
+			: mLock( aLock )
+		{
+			if( mLock )
+				lock( mLock );
+		}
+
+		~LockHolder()
+		{
+			if( mLock )
+				unlock( mLock );
+		}
+
+		void attach( volatile U32 *aLock )
+		{
+			mLock = aLock;
+		}
+	};
 }
 
 #endif

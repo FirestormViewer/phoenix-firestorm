@@ -1,10 +1,7 @@
-#ifndef NDINTRIN_H
-#define NDINTRIN_H
-
 /**
- * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
+ * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Nicky Dasmijn
+ * Copyright (C) 2013, Nicky Dasmijn
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,29 +22,20 @@
  * $/LicenseInfo$
  */
 
+#include "ndexceptions.h"
 
-#include "stdtypes.h"
-
-namespace ndIntrin
+namespace nd
 {
-#if LL_WINDOWS
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal );
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal );
-	void FAA( volatile U32 *aLoc );
-	U32 FAD( volatile U32 *aLoc );
-#else
-	inline U32  CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
+	namespace exceptions
+	{
+		xran::xran( std::string const &aReason )
+		{
+			mReason = aReason;
+		}
 
-	inline void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return __sync_val_compare_and_swap( aLoc, aCmp, aVal ); }
-
-	inline void FAA( volatile U32 *aLoc )
-	{ __sync_add_and_fetch( aLoc, 1 ); }
-
-	inline U32 FAD( volatile U32 *aLoc )
-	{ return __sync_sub_and_fetch( aLoc,1 ); }
-#endif
+		std::string const& xran::what() const
+		{
+			return mReason;
+		}
+	}
 }
-
-#endif
