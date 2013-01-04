@@ -3,7 +3,7 @@
 <tab_container name="tabs">
  
     <!-- Notifications -->
-    <panel label="Notifications" name="tab-notifications">
+    <panel label="Notificaciones" name="tab-notifications">
 	<text name="tell_me_label">
 		Avisarme:
 	</text>
@@ -33,7 +33,7 @@
 	<check_box name="friends_notify_online_sound" label="Se conectan" width="95"/>
 	<check_box name="friends_notify_offline_sound" label="Se desconectan" width="95" />
     </panel>
-    <panel label="Alerts" name="tab-alerts">
+    <panel label="Alertas" name="tab-alerts">
 	<text name="show_label">
 		Mostrar siempre:
 	</text>
@@ -41,7 +41,6 @@
 	<text name="dont_show_label">
 		No mostrar nunca:
 	</text>
-	<scroll_list name="disabled_popups"/>
     </panel>
 </tab_container>
 </panel>
