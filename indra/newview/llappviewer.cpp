@@ -4468,7 +4468,7 @@ void LLAppViewer::badNetworkHandler()
 		"the issue. \n"
 		" \n"
 		"If the problem continues, see the Tech Support FAQ at: \n"
-		"www.phoenixviewer.com/support.php";
+		"www.firestormviewer.org/support";
 	forceDisconnect(message.str());
 	
 	LLApp::instance()->writeMiniDump();

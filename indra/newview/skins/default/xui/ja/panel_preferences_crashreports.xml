@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Crash Reports" name="crash_reports">
-    <check_box label="クラッシュレポートを phoenixviewer.com に送る" name="checkSendCrashReports" />
+    <check_box label="クラッシュレポートを firestormviewer.org に送る" name="checkSendCrashReports" />
 
     <text label="Logs:" name="textSaveMiniDumpType" >
         ミニダンプのタイプ：
@@ -34,6 +34,6 @@
     </text>
 
     <text name="textInformation4" >
-        個人情報取扱方針　http://www.phoenixviewer.com/privacy.php
+        個人情報取扱方針　http://www.firestormviewer.org/privacy-policy
     </text>
 </panel>

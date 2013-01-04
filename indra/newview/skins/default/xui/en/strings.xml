@@ -11,7 +11,7 @@
 	<string name="CAPITALIZED_APP_NAME">FIRESTORM</string>
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
-	<string name="DOWNLOAD_URL">http://www.phoenixviewer.com/downloads.php</string>
+	<string name="DOWNLOAD_URL">http://www.firestormviewer.org/downloads</string>
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>

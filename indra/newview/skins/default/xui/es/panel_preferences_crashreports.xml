@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Reporte de fallos" name="crash_reports">
-	<check_box label="Enviar reportes de fallos a phoenixviewer.com" name="checkSendCrashReports"/>
+	<check_box label="Enviar reportes de fallos a firestormviewer.org" name="checkSendCrashReports"/>
 	<text label="Registros:" name="textSaveMiniDumpType">
 		Tipo de volcado:
 	</text>
@@ -29,6 +29,6 @@ separadamente si crees que pueden contener información adicional.
 	<text name="textInformation3" height="0">
 	</text>
 	<text name="textInformation4">
-		Política de privacidad: http://www.phoenixviewer.com/privacy.php
+		Política de privacidad: http://www.firestormviewer.org/privacy-policy
 	</text>
 </panel>

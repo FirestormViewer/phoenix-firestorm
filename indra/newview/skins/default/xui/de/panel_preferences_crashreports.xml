@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Absturzmeldungen" name="crash_reports">
-	<check_box label="Absturzmeldungen an phoenixviewer.com senden" name="checkSendCrashReports"/>
+	<check_box label="Absturzmeldungen an firestormviewer.org senden" name="checkSendCrashReports"/>
 	<text name="textSaveMiniDumpType" width="120">
 		Typ Speicherabbild:
 	</text>
@@ -28,6 +28,6 @@
 		falls sie zusätzliche Informationen zum Absturz enthalten.
 	</text>
 	<text name="textInformation4">
-        Datenschutzerklärung: http://www.phoenixviewer.com/privacy.php
+        Datenschutzerklärung: http://www.firestormviewer.org/privacy-policy
     </text>
 </panel>

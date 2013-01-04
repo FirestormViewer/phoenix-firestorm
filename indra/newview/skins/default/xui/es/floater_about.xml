@@ -43,7 +43,7 @@ Factor de nivel de detalle (LOD factor): [LOD]
 		<panel label="Información" name="support_panel">
 			<text name="support_intro">    
 				Para obtener la información más reciente acerca de Firestorm, visita
-http://www.phoenixviewer.com
+http://www.firestormviewer.org
 			</text>
   			<button label="Copiar al portapapeles" name="copy_btn"/>
 		</panel>

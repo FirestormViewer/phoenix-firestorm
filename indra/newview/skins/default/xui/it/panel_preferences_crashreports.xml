@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel label="Segnalazione crash" name="crash_reports">
-    <check_box label="Invia segnalazione del crash a phoenixviewer.com" name="checkSendCrashReports" />
+    <check_box label="Invia segnalazione del crash a firestormviewer.org" name="checkSendCrashReports" />
     <text label="Log:" name="textSaveMiniDumpType">
         Tipo Minidump:
     </text>
@@ -28,6 +28,6 @@
          con una e-mail a parte, se vuoi possono contenere informazioni aggiuntive.
     </text>
     <text name="textInformation4">
-        Tutela della privacy: http://www.phoenixviewer.com/privacy.php
+        Tutela della privacy: http://www.firestormviewer.org/privacy-policy
     </text>
 </panel>

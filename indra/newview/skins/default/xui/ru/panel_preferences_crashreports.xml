@@ -16,7 +16,7 @@
      top="30"
      width="250"
 	 height="16"
-     label="Send crash reports to phoenixviewer.com"
+     label="Send crash reports to firestormviewer.org"
      name="checkSendCrashReports"
      parse_urls="false"
 	 enabled="false"
@@ -173,7 +173,7 @@
      width="350"
 	 font.style="BOLD"
     >
-        Privacy policy: http://privacy-placeholder
+        Privacy policy: http://www.firestormviewer.org/privacy-policy
     </text>
 
 </panel>

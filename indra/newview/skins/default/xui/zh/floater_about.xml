@@ -41,7 +41,7 @@ Qt Webkit 版本： [QT_WEBKIT_VERSION]
 		<panel label="資訊" name="support_panel">
 			<text name="support_intro">    
 For the latest information about Firestorm, visit    
-    http://www.phoenixviewer.com
+http://www.firestormviewer.org
     		</text>
 			<button label="覆製到剪貼簿" name="copy_btn"/>
 		</panel>

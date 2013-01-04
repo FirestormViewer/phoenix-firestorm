@@ -77,7 +77,7 @@ BEGIN
     LTEXT           "This crash reporter collects information about your computer's hardware configuration and operating system which is used only for debugging purposes.\r\nSecondLife logs are not collected.",IDC_STATIC_WHATINFO,4,23,288,29,NOT WS_GROUP
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,106,89,13
     LTEXT           "Sending crash reports is the best way to help us improve the quality of %s.",IDC_STATIC_MOTIVATION,4,54,288,8
-    CONTROL         "This report will be sent to phoenixviewer.com, not Linden Lab.\r\nPlease review the privacy policy at http://www.phoenixviewer.com/privacy.php for more information.",IDC_STATIC,
+    CONTROL         "This report will be sent to firestormviewer.org, not Linden Lab.\r\nPlease review the privacy policy at http://www.firestormviewer.org/privacy-policy for more information.",IDC_STATIC,
                     "Static",SS_LEFTNOWORDWRAP | WS_GROUP,4,68,288,17
 END
 
@@ -98,7 +98,7 @@ BEGIN
     LTEXT           "or trying to do just prior to the crash.",IDC_STATIC,3,56,204,8
     LTEXT           "If you don't wish to send a crash report, press Don't Send.",IDC_STATIC,3,98,223,8
     LTEXT           "This report will be sent to phoenixviewer.com, not Linden Lab. Review",IDC_STATIC,3,68,224,8
-    LTEXT           "our privacy policy at http://www.phoenixviewer.com/privacy.php",IDC_STATIC,3,76,226,8
+    LTEXT           "our privacy policy at http://www.firestormviewer.org/privacy-policy",IDC_STATIC,3,76,226,8
     LTEXT           "for more information.",IDC_STATIC,3,84,226,8
     CONTROL         "Remember this choice",IDC_CHECK_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,3,201,89,13
 END

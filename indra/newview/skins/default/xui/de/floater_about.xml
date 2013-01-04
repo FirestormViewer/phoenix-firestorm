@@ -55,7 +55,7 @@ Darstellungsqualität: [RENDERQUALITY]
 		<panel label="Info" name="support_panel">
     <text name="support_intro">    
 Aktuelle Informationen über Firestorm finden Sie unter
-    http://www.phoenixviewer.com
+http://www.firestormviewer.org
     </text>
 			<button label="In Zwischenablage kopieren" name="copy_btn"/>
 		</panel>

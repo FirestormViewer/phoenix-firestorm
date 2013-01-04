@@ -451,7 +451,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nSho
 			L"The Firestorm auto-update has failed.\n"
 			L"The problem may be caused by other software installed \n"
 			L"on your computer, such as a firewall.\n"
-			L"Please visit http://www.phoenixviewer.com/ \n"
+			L"Please visit http://www.firestormviewer.org \n"
 			L"to download the latest version of Firestorm.\n",
 			NULL, MB_OK);
 		return 1;
