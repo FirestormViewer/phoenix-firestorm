@@ -1357,8 +1357,9 @@ void LLFloaterPreference::refreshEnabledState()
 		getChildView("vbo")->setEnabled(FALSE);
 	}
 
-	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||
-		!gGLManager.mHasVertexBufferObject)
+	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||  FS:TM disabled as we do not have RenderCompressTextures in our feature table.
+	//	!gGLManager.mHasVertexBufferObject)
+	if (!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("texture compression")->setEnabled(FALSE);
 	}
