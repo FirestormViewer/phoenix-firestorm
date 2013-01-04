@@ -900,6 +900,17 @@
          tool_tip="Enabling this on modern hardware gives a performance gain.  However, older hardware often has poor implementations of VBOs and you may get crashes when this is enabled."
          width="315" />
         <check_box
+         control_name="RenderUseStreamVBO"
+         height="16"
+         initial_value="false"
+         label="Enable Streamed VBOs"
+         layout="topleft"
+         left="10"
+         top_pad="5"
+         name="vbo_stream"
+         tool_tip="Disabling this may improve performance when VBOs are enabled. Disabling produced observable improvement on various AMD and Intel GPUs."
+         width="315" />
+        <check_box
          control_name="RenderCompressTextures"
          height="18"
          initial_value="false"

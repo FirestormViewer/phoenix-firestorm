@@ -67,7 +67,7 @@ RenderDeferred				1	1
 RenderDeferredSSAO			1	1
 RenderShadowDetail			1	2
 WatchdogDisabled				1	1
-RenderUseStreamVBO			1	1
+RenderUseStreamVBO			0	0
 RenderFSAASamples			1	16
 RenderMaxTextureIndex		1	16
 

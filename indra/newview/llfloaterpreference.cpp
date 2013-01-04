@@ -1355,7 +1355,15 @@ void LLFloaterPreference::refreshEnabledState()
 		!gGLManager.mHasVertexBufferObject)
 	{
 		getChildView("vbo")->setEnabled(FALSE);
+		getChildView("vbo_stream")->setEnabled(FALSE);
 	}
+	else
+#if LL_DARWIN
+		getChildView("vbo_stream")->setEnabled(FALSE);  //Hardcoded disable on mac
+        getChild<LLUICtrl>("vbo_stream")->setValue((LLSD::Boolean) FALSE);
+#else
+		getChildView("vbo_stream")->setEnabled(LLVertexBuffer::sEnableVBOs);
+#endif
 
 	//if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderCompressTextures") ||  FS:TM disabled as we do not have RenderCompressTextures in our feature table.
 	//	!gGLManager.mHasVertexBufferObject)
