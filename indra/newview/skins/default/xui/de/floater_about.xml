@@ -15,7 +15,7 @@
 	<floater.string name="AboutSystem">
 		CPU: [CPU]
 Speicher: [MEMORY_MB] MB
-Betriebssystem, Version: [OS_VERSION]
+Betriebssystem: [OS_VERSION]
 Grafikkarten-Hersteller: [GRAPHICS_CARD_VENDOR]
 Grafikkarte: [GRAPHICS_CARD]
 	</floater.string>
