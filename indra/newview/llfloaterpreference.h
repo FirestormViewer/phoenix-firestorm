@@ -65,7 +65,7 @@ public:
 
 	void apply();
 	void cancel();
-
+	///*virtual*/ void draw();
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	/*virtual*/	void onClose(bool app_quitting);
@@ -89,6 +89,7 @@ protected:
 	void		onBtnCancel();
 	void		onBtnApply();
 
+	//void		onClickClearCache();			// Clear viewer texture cache, vfs, and VO cache on next startup // AO: was protected, moved to public
 	void		onClickBrowserClearCache();		// Clear web history and caches as well as viewer caches above
 	void		onLanguageChange();
 	void		onNameTagOpacityChange(const LLSD& newvalue);

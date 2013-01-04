@@ -685,6 +685,17 @@ LLFloaterPreference::~LLFloaterPreference()
 	*/
 }
 
+//void LLFloaterPreference::draw()
+//{
+//	BOOL has_first_selected = (getChildRef<LLScrollListCtrl>("disabled_popups").getFirstSelected()!=NULL);
+//	gSavedSettings.setBOOL("FirstSelectedDisabledPopups", has_first_selected);
+//	
+//	has_first_selected = (getChildRef<LLScrollListCtrl>("enabled_popups").getFirstSelected()!=NULL);
+//	gSavedSettings.setBOOL("FirstSelectedEnabledPopups", has_first_selected);
+//	
+//	LLFloater::draw();
+//}
+
 void LLFloaterPreference::saveSettings()
 {
 	LLTabContainer* tabcontainer = getChild<LLTabContainer>("pref core");
@@ -1352,13 +1363,42 @@ void LLFloaterPreference::refreshEnabledState()
 		getChildView("texture compression")->setEnabled(FALSE);
 	}
 
+	//FS:TM from LLFloaterHardwareSettings.cpp
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
-	getChildView("gamma")->setEnabled(!gPipeline.canUseWindLightShaders());
+	LLSpinCtrl* gamma_ctrl = getChild<LLSpinCtrl>("gamma");
+	gamma_ctrl->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("(brightness, lower is brighter)")->setEnabled(!gPipeline.canUseWindLightShaders());
 	getChildView("fog")->setEnabled(!gPipeline.canUseWindLightShaders());
-	getChildView("fsaa")->setEnabled(gPipeline.canUseAntiAliasing());
-	getChildView("antialiasing restart")->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
-	getChildView("LocalLightsDetail")->setEnabled(gSavedSettings.getBOOL("RenderLocalLights"));
+
+	// anti-aliasing
+	{
+		LLUICtrl* fsaa_ctrl = getChild<LLUICtrl>("fsaa");
+		LLTextBox* fsaa_text = getChild<LLTextBox>("antialiasing label");
+		LLView* fsaa_restart = getChildView("antialiasing restart");
+		
+		// Enable or disable the control, the "Antialiasing:" label and the restart warning
+		// based on code support for the feature on the current hardware.
+
+		if (gPipeline.canUseAntiAliasing())
+		{
+			fsaa_ctrl->setEnabled(TRUE);
+			
+			// borrow the text color from the gamma control for consistency
+			fsaa_text->setColor(gamma_ctrl->getEnabledTextColor());
+
+			fsaa_restart->setVisible(!gSavedSettings.getBOOL("RenderDeferred"));
+		}
+		else
+		{
+			fsaa_ctrl->setEnabled(FALSE);
+			fsaa_ctrl->setValue((LLSD::Integer) 0);
+			
+			// borrow the text color from the gamma control for consistency
+			fsaa_text->setColor(gamma_ctrl->getDisabledTextColor());
+			
+			fsaa_restart->setVisible(FALSE);
+		}
+	}
     
 	LLComboBox* ctrl_reflections = getChild<LLComboBox>("Reflections");
 	// <FS:Ansariel> Radio group "ReflectionDetailRadio" doesn't exist as of 20/11/2012
@@ -1631,7 +1671,7 @@ void LLFloaterPreference::refresh()
 	updateSliderText(getChild<LLSliderCtrl>("TerrainMeshDetail",	true), getChild<LLTextBox>("TerrainMeshDetailText",		true));
 	updateSliderText(getChild<LLSliderCtrl>("RenderPostProcess",	true), getChild<LLTextBox>("PostProcessText",			true));
 	updateSliderText(getChild<LLSliderCtrl>("SkyMeshDetail",		true), getChild<LLTextBox>("SkyMeshDetailText",			true));
-	
+		
 	refreshEnabledState();
 }
 
@@ -2110,7 +2150,15 @@ BOOL LLPanelPreference::postBuild()
 		getChildView("voice_unavailable")->setVisible( voice_disabled);
 		getChildView("enable_voice_check")->setVisible( !voice_disabled);
 	}
-	
+
+	//////////////////////PanelGraphics (hardware) ///////////////////
+	if (gGLManager.mIsIntel || gGLManager.mGLVersion < 3.f)
+	{ //remove FSAA settings above "4x"
+		LLComboBox* combo = getChild<LLComboBox>("fsaa");
+		combo->remove("8x");
+		combo->remove("16x");
+	}
+
 	//////////////////////PanelSkins ///////////////////
 	/*
 	if (hasChild("skin_selection"))
