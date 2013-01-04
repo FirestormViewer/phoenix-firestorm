@@ -2560,13 +2560,6 @@ Fliegen ist hier nicht möglich.
 	<notification name="DynamicPathfindingDisabled">
 		Dynamisches Pathfinding ist in dieser Region nicht aktiviert. Geskriptete Objekte, die Pathfinding-LSL-Aufrufe verwenden, funktionieren in dieser Region u. U. nicht wie erwartet.
 	</notification>
-	<notification name="PathfindingRebakeNavmesh">
-		Wenn Sie bestimmte Objekte in dieser Region ändern, verhalten sich andere bewegliche Objekte u. U. inkorrekt. Um dieses Problem zu beheben, muss die Region neu geformt werden. Um weitere Informationen zu erhalten, klicken Sie auf „Hilfe“.
-		<url name="url">
-			http://wiki.secondlife.com/wiki/Pathfinding_Tools_in_the_Second_Life_Viewer
-		</url>
-		<usetemplate helptext="Hilfe" ignoretext="Wenn Sie bestimmte Objekte in dieser Region ändern, verhalten sich andere bewegliche Objekte u. U. inkorrekt." name="okhelpignore" yestext="OK"/>
-	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Es ist ein Fehler aufgetreten. Möglicherweise ist ein Netzwerk- oder Serverproblem aufgetreten oder Sie haben nicht die erforderlichen Baurechte. Dieses Problem lässt sich manchmal durch Ab- und Anmelden lösen.
 		<usetemplate name="okbutton" yestext="OK"/>
