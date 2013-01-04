@@ -2563,10 +2563,6 @@ Nie możesz tutaj latać.
 	<notification name="DynamicPathfindingDisabled">
 		Dynamiczne odnajdywanie ścieżek nie jest włączone w tym regionie. Oskryptowane obiekty używające odwołań LSL wykorzystujących odnajdywanie ścieżek mogą nie działać zgodnie z oczekiwaniami.
 	</notification>
-	<notification name="PathfindingRebakeNavmesh">
-		Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych. Aby sprawić, żeby obiekty ruchome zachowywały się właściwie wymuś odświeżenie Navmeshu w regionie. Wybierz “Pomoc”, aby uzyskać więcej informacji.
-		<usetemplate name="okhelpignore" ignoretext="Zmiana pewnych obiektów w tym regionie może spowodować nieprawidłowe zachowanie innych." yestext="OK" helptext="Pomoc"/>
-	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Wystąpił błąd. To może być problem sieci, serwera lub Twojego braku praw do budowania. Czasami wylogowanie się i zalogowanie ponownie może naprawić problem.
 		<usetemplate name="okbutton" yestext="OK"/>

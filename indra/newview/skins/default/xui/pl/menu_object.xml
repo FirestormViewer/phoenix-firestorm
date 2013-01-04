@@ -5,8 +5,6 @@
 	</menu_item_call>
 	<menu_item_call label="Edytuj" name="Edit..."/>
 	<menu_item_call label="Buduj" name="Build"/>
-	<menu_item_call label="Ścieżki: w zbiorach części" name="show_in_linksets"/>
-	<menu_item_call label="Ścieżki: w postaciach" name="show_in_characters"/>
 	<menu_item_call label="Otwórz" name="Open"/>
 	<menu_item_call label="Usiądź tutaj" name="Object Sit"/>
 	<menu_item_call label="Wstań" name="Object Stand Up"/>
@@ -25,6 +23,8 @@
 		<menu_item_call label="Usuń skrypty" name="Remove Scripts From Selection"/>
 	</context_menu>
 	<menu_item_call label="Przybliż" name="Zoom In"/>
+	<menu_item_call label="Ścieżki: w zbiorach części" name="show_in_linksets"/>
+	<menu_item_call label="Ścieżki: w postaciach" name="show_in_characters"/>
 	<context_menu label="Ubierz..." name="Put On">
 		<menu_item_call label="Załóż" name="Wear"/>
 		<menu_item_call label="Dodaj" name="Add"/>

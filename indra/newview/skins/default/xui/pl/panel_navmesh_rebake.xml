@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<panel name="panel_navmesh_rebake">
-	<button label="Odśwież region" name="navmesh_btn" tool_tip="Kliknij, aby odświeżyć Navmesh regionu." />
-	<button label="Żądanie odświeżenia" name="navmesh_btn_sending" tool_tip="Wysyłanie prośby o odświeżenie na serwer." />
-	<button label="Region się odświeża" name="navmesh_btn_baking" tool_tip="Region się właśnie odświeża. Gdy proces się zakończy ten przycisk zniknie." />
-</panel>

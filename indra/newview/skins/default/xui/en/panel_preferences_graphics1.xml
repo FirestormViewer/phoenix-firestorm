@@ -216,7 +216,7 @@
          layout="topleft"
          left="10"
          name="Fullscreen Mode"
-         tool_tip="Run Firestorm in Fullscreen mode.  A restart is requiered to change mode."
+         tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
          top="0"
          width="280" />
         <text
@@ -449,7 +449,7 @@
          layout="topleft"
          left="10"
          name="local lights_label"
-         tool_tip="Affects the number of rendered light sources when Lighting and Shadows is disabled.  A restart is requiered to change mode.">
+         tool_tip="Affects the number of rendered light sources when Lighting and Shadows is disabled. A restart is required to change mode.">
           Point Lighting (restart required)
         </text>
         <combo_box
