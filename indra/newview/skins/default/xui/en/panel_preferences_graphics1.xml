@@ -9,17 +9,17 @@
  width="540"
  label="Graphics"
  name="Display panel">
-<tab_container
- label="Graphics Prefs"
- layout="topleft"
- follows="all"
- top="5"
- bottom="-10"
- left="1"
- right="-1"
- name="tabs"
- tab_min_width="50"
- tab_position="top" >
+  <tab_container
+   label="Graphics Prefs"
+   layout="topleft"
+   follows="all"
+   top="5"
+   bottom="-10"
+   left="1"
+   right="-1"
+   name="tabs"
+   tab_min_width="50"
+   tab_position="top" >
     <panel
      top_pad="5"
      bottom="-1"
@@ -28,328 +28,339 @@
      follows="all"
      label="General"
      name="General" >
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left="30"
-     name="QualitySpeed"
-     top="10" 
-     width="400">
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left="30"
+       name="QualitySpeed"
+       top="10"
+       width="400">
         Quality and speed:
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="right"
-     height="12"
-     layout="topleft"
-     left="35"
-     name="FasterText"
-     top_pad="4"
-     width="80">
-        Faster
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     height="12"
-     layout="topleft"
-     left_delta="360"
-     name="BetterText"
-     top_delta="0"
-     width="100">
-        Better
-    </text>
-    <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left="128"
-     name="LowGraphicsDivet"
-     top_delta="-2"
-     width="2" />
-  <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="LowMidraphicsDivet"
-     top_delta="-2"
-     width="2" />
-    <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="MidGraphicsDivet"
-     top_delta="0"
-     width="2" />
-  <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="MidHighGraphicsDivet"
-     top_delta="0"
-     width="2" />
-    <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="HighGraphicsDivet"
-     top_delta="0"
-     width="2" />
-  <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="HighUltraGraphicsDivet"
-     top_delta="0"
-     width="2" />
-    <icon
-     color="0.12 0.12 0.12 1"
-     height="14"
-     image_name="Rounded_Square"
-     layout="topleft"
-     left_pad="41"
-     name="UltraGraphicsDivet"
-     top_delta="0"
-     width="2" />
-    <slider
-     control_name="RenderQualityPerformance"
-     decimal_digits="0"
-     follows="left|top"
-     height="16"
-     increment="1"
-     initial_value="0"
-     layout="topleft"
-     left="120"
-     max_val="6"
-     name="QualityPerformanceSelection"
-     show_text="false"
-     top_delta="-2"
-     width="275">
-	 <slider.commit_callback
-			function="Pref.QualityPerformance"/>
-	</slider>		
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left="88"
-     name="ShadersPrefText"
-     top_delta="20"
-     width="80">
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="right"
+       height="12"
+       layout="topleft"
+       left="35"
+       name="FasterText"
+       top_pad="4"
+       width="80">
+        Performance
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       height="12"
+       layout="topleft"
+       left_delta="360"
+       name="BetterText"
+       top_delta="0"
+       width="100">
+        Quality
+      </text>
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left="128"
+       name="LowGraphicsDivet"
+       top_delta="-2"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="LowMidraphicsDivet"
+       top_delta="-2"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="MidGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="MidHighGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="HighGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="HighUltraGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <icon
+       color="DkGray"
+       height="14"
+       image_name="Rounded_Square"
+       layout="topleft"
+       left_pad="41"
+       name="UltraGraphicsDivet"
+       top_delta="0"
+       width="2" />
+      <slider
+       control_name="RenderQualityPerformance"
+       decimal_digits="0"
+       follows="left|top"
+       height="16"
+       increment="1"
+       initial_value="0"
+       layout="topleft"
+       left="120"
+       max_val="6"
+       name="QualityPerformanceSelection"
+       show_text="false"
+       top_delta="-2"
+       width="275">
+        <slider.commit_callback
+           function="Pref.QualityPerformance"/>
+      </slider>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left="88"
+       name="ShadersPrefText"
+       top_delta="20"
+       width="80">
         Low
-    </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="87"
-     name="ShadersPrefText2"
-     top_delta="0"
-     width="80">
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="87"
+       name="ShadersPrefText2"
+       top_delta="0"
+       width="80">
         Mid
-    </text>
-  <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="87"
-     name="ShadersPrefText3"
-     top_delta="0"
-     width="80">
-      High
-  </text>
-    <text
-     type="string"
-     length="1"
-     follows="left|top"
-     halign="center"
-     height="12"
-     layout="topleft"
-     left_delta="85"
-     name="ShadersPrefText4"
-     top_delta="0"
-     width="80">
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="87"
+       name="ShadersPrefText3"
+       top_delta="0"
+       width="80">
+        High
+      </text>
+      <text
+       type="string"
+       length="1"
+       follows="left|top"
+       halign="center"
+       height="12"
+       layout="topleft"
+       left_delta="85"
+       name="ShadersPrefText4"
+       top_delta="0"
+       width="80">
         Ultra
-    </text>
-    <panel
-	 visiblity_control="ShowAdvancedGraphicsSettings"
-     border="false"
-	 follows="top|left"
-     height="300"
-     label="CustomGraphics"
-     layout="topleft"
-     left="5"
-     name="CustomGraphics Panel"
-     top="76"
-     width="485">
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="12"
-		 layout="topleft"
-		 left_delta="5"
-		 name="ShadersText"
-		 top="3"
-		 width="128">
-			Shaders:
-		</text>
-		<check_box
-		 control_name="RenderTransparentWater"
-		 height="16"
-		 initial_value="true"
-		 label="Transparent Water"
-		 layout="topleft"
-		 left_delta="0"
-		 name="TransparentWater"
-		 top_pad="7"
-		 width="256" />
-		<check_box
-		 control_name="RenderObjectBump"
-		 height="16"
-		 initial_value="true"
-		 label="Bump mapping and shiny"
-		 layout="topleft"
-		 left_delta="0"
-		 name="BumpShiny"
-		 top_pad="1"
-		width="256" />
-    <check_box
-		control_name="RenderLocalLights"
-		height="16"
-		initial_value="true"
-		label="Local Lights"
-		layout="topleft"
-		left_delta="0"
-		name="LocalLights"
-		 top_pad="1"
-		 width="256" />
-		  <check_box
-		 control_name="VertexShaderEnable"
-		 height="16"
-		 initial_value="true"
-		 label="Basic shaders"
-		 layout="topleft"
-		 left_delta="0"
-		 name="BasicShaders"
-		 tool_tip="Disabling this option may prevent some graphics card drivers from crashing"
-		 top_pad="1"
-		 width="315">
-			<check_box.commit_callback
-		     function="Pref.VertexShaderEnable" />
-		</check_box>
-		<check_box
-		 control_name="WindLightUseAtmosShaders"
-		 height="16"
-		 initial_value="true"
-		 label="Atmospheric shaders"
-		 layout="topleft"
-		 left_delta="0"
-		 name="WindLightUseAtmosShaders"
-		 top_pad="1"
-		 width="256">
-			<check_box.commit_callback
-			 function="Pref.VertexShaderEnable" />
-		</check_box>
-    	<check_box
-		 control_name="RenderDeferred"
-		 height="16"
-		 initial_value="true"
-		 label="Lighting and Shadows"
-		 layout="topleft"
-		 left_delta="0"
-		 name="UseLightShaders"
-		 top_pad="1"
-		 width="256">
-         	<check_box.commit_callback
-			 function="Pref.VertexShaderEnable" />
-    	</check_box>
-    	<check_box
-		 control_name="RenderDeferredSSAO"
-		 height="16"
-		 initial_value="true"
-		 label="Ambient Occlusion"
-		 layout="topleft"
-		 left_delta="0"
-		 name="UseSSAO"
-		 top_pad="1"
-		 width="256">
-         	<check_box.commit_callback
-			 function="Pref.VertexShaderEnable" />
-    	</check_box>
-      <check_box
-		 control_name="RenderDepthOfField"
-		 height="16"
-		 initial_value="true"
-		 label="Depth of Field"
-		 layout="topleft"
-		 left_delta="0"
-		 name="UseDoF"
-		 top_pad="1"
-		 width="256">
-        <check_box.commit_callback
-     function="Pref.VertexShaderEnable" />
-      </check_box>
+      </text>
+      <panel
+       visiblity_control="ShowAdvancedGraphicsSettings"
+       border="false"
+       follows="top|left"
+       height="300"
+       label="CustomGraphics"
+       layout="topleft"
+       left="5"
+       name="CustomGraphics Panel"
+       top="60"
+       width="485">
+        <check_box
+         control_name="FullScreen"
+         height="16"
+         initial_value="false"
+         label="Fullscreen Mode"
+         layout="topleft"
+         left="10"
+         name="Fullscreen Mode"
+         tool_tip="Run Firestorm in Fullscreen mode.  A restart is requiered to change mode."
+         top="0"
+         width="280" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="0"
+         name="ShadersText"
+         top_pad="5"
+         width="128">
+          Shaders:
+        </text>
+        <check_box
+         control_name="RenderTransparentWater"
+         height="16"
+         initial_value="true"
+         label="Transparent Water"
+         layout="topleft"
+         left_delta="0"
+         name="TransparentWater"
+         top_pad="5"
+         width="256" />
+        <check_box
+         control_name="RenderObjectBump"
+         height="16"
+         initial_value="true"
+         label="Bump mapping and shiny"
+         layout="topleft"
+         left_delta="0"
+         name="BumpShiny"
+         top_pad="1"
+         width="256" />
+        <check_box
+         control_name="RenderLocalLights"
+         height="16"
+         initial_value="true"
+         label="Local Lights"
+         layout="topleft"
+         left_delta="0"
+         name="LocalLights"
+         top_pad="1"
+         width="256" />
+        <check_box
+         control_name="VertexShaderEnable"
+         height="16"
+         initial_value="true"
+         label="Basic shaders"
+         layout="topleft"
+         left_delta="0"
+         name="BasicShaders"
+         tool_tip="Disabling this option may prevent some graphics card drivers from crashing"
+         top_pad="1"
+         width="315">
+          <check_box.commit_callback
+             function="Pref.VertexShaderEnable" />
+        </check_box>
+        <check_box
+         control_name="WindLightUseAtmosShaders"
+         height="16"
+         initial_value="true"
+         label="Atmospheric shaders"
+         layout="topleft"
+         left_delta="0"
+         name="WindLightUseAtmosShaders"
+         top_pad="1"
+         width="256">
+          <check_box.commit_callback
+           function="Pref.VertexShaderEnable" />
+        </check_box>
+        <check_box
+         control_name="RenderDeferred"
+         height="16"
+         initial_value="true"
+         label="Lighting and Shadows"
+         layout="topleft"
+         left_delta="0"
+         name="UseLightShaders"
+         top_pad="1"
+         width="256">
+          <check_box.commit_callback
+         function="Pref.VertexShaderEnable" />
+        </check_box>
+        <check_box
+         control_name="RenderDeferredSSAO"
+         height="16"
+         initial_value="true"
+         label="Ambient Occlusion"
+         layout="topleft"
+         left_delta="0"
+         name="UseSSAO"
+         top_pad="1"
+         width="256">
+          <check_box.commit_callback
+         function="Pref.VertexShaderEnable" />
+        </check_box>
+        <check_box
+         control_name="RenderDepthOfField"
+         height="16"
+         initial_value="true"
+         label="Depth of Field"
+         layout="topleft"
+         left_delta="0"
+         name="UseDoF"
+         top_pad="1"
+         width="256">
+          <check_box.commit_callback
+         function="Pref.VertexShaderEnable" />
+        </check_box>
 
         <text
          type="string"
          length="1"
          top_pad="8"
          follows="top|left"
-         height="23"
+         height="12"
          width="110"
          word_wrap="true"
          layout="topleft"
          left="10"
          name="shadows_label">
-         	Shadows:
+          Shadows:
         </text>
         <combo_box
          control_name="RenderShadowDetail"
          height="23"
          layout="topleft"
          left="10"
-         top_pad="0" 
+         top_pad="3"
          name="ShadowDetail"
          width="150">
-           <combo_box.item
-            label="None"
-            name="0"
-            value="0"/>
-           <combo_box.item
-            label="Sun/Moon"
-            name="1"
-            value="1"/>
-           <combo_box.item
-            label="Sun/Moon + Projectors"
-            name="2"
-            value="2"/>
+          <combo_box.item
+           label="None"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Sun/Moon"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="Sun/Moon + Projectors"
+           name="2"
+           value="2"/>
         </combo_box>
 
         <text
@@ -361,46 +372,46 @@
          width="110"
          word_wrap="true"
          layout="topleft"
-         left="05"
+         left="10"
          name="reflection_label">
-            Water Reflections:
+          Water Reflections:
         </text>
         <combo_box
          control_name="RenderReflectionDetail"
-         height="18"
+         height="23"
          layout="topleft"
-         left_delta="10"
+         left="10"
          top_pad ="3"
          name="Reflections"
          width="150">
-            <combo_box.item
-             label="Minimal"
-             name="0"
-             value="0"/>
-            <combo_box.item
-             label="Terrain and trees"
-             name="1"
-             value="1"/>
-            <combo_box.item
-             label="All static objects"
-             name="2"
-             value="2"/>
-            <combo_box.item
-             label="All avatars and objects"
-             name="3"
-             value="3"/>
-            <combo_box.item
-             label="Everything"
-             name="4"
-             value="4"/>
+          <combo_box.item
+           label="Minimal"
+           name="0"
+           value="0"/>
+          <combo_box.item
+           label="Terrain and trees"
+           name="1"
+           value="1"/>
+          <combo_box.item
+           label="All static objects"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="All avatars and objects"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="Everything"
+           name="4"
+           value="4"/>
         </combo_box>
-    
+<!-- FS:TM Avatar Physics was moved down to LOD section
         <slider
         control_name="RenderAvatarPhysicsLODFactor"
         follows="left|top"
         height="16"
         initial_value="100"
-	increment=".05"
+        increment=".05"
         label="  Avatar Physics:"
         label_width="85"
         layout="topleft"
@@ -409,9 +420,9 @@
         show_text="false"
         top_pad="12"
         width="160">
-           <slider.commit_callback
-            function="Pref.UpdateSliderText"
-            parameter="AvatarPhysicsDetailText" />
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="AvatarPhysicsDetailText" />
         </slider>
         <text
         type="string"
@@ -423,214 +434,125 @@
         name="AvatarPhysicsDetailText"
         top_pad="-16"
         width="128">
-           Low
+          Low
         </text>
+-->
+<!-- FS:TM Point Lighting added instead of above-->
+        <text
+         type="string"
+         length="1"
+         top_pad="8"
+         follows="top|left"
+         height="12"
+         width="170"
+         word_wrap="false"
+         layout="topleft"
+         left="10"
+         name="local lights_label"
+         tool_tip="Affects the number of rendered light sources when Lighting and Shadows is disabled.  A restart is requiered to change mode.">
+          Point Lighting (restart required)
+        </text>
+        <combo_box
+         control_name="RenderShaderLightingMaxLevel"
+         height="23"
+         layout="topleft"
+         left="10"
+         top_pad="3"
+         name="LocalLightsDetail"
+         width="150">
+          <combo_box.item
+           label="Full (default)"
+           name="3"
+           value="3"/>
+          <combo_box.item
+           label="Reduced"
+           name="2"
+           value="2"/>
+          <combo_box.item
+           label="Sun/Moon Only"
+           name="1"
+           value="1"/>
+        </combo_box>
 
-		<slider
-		 control_name="RenderFarClip"
-		 decimal_digits="0"
-		 follows="left|top"
-		 height="16"
-		 increment="8"
-		 initial_value="160"
-		 label="Draw distance:"
-		 label_width="185"
-		 layout="topleft"
-		 left="200"
-		 max_val="512"
-		 min_val="64"
-		 name="DrawDistance"
-		 top="3"
-		 width="296" />
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="12"
-		 layout="topleft"
-		 left_delta="291"
-		 name="DrawDistanceMeterText2"
-		 top_delta="0"
-		 width="128">
-			m
-		</text>    
-		<slider
-		 control_name="RenderMaxPartCount"
-		 decimal_digits="0"
-		 follows="left|top"
-		 height="16"
-		 increment="256"
-		 initial_value="4096"
-		 label="Max. particle count:"
-		 label_width="185"
-		 layout="topleft"
-		 left="200"
-		 max_val="8192"
-		 name="MaxParticleCount"
-		 top_pad="7"
-		 width="303" />
+        <slider
+         control_name="RenderFarClip"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="Draw distance"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="1024"
+         min_val="32"
+         name="DrawDistance"
+         top="0"
+         width="303" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="296"
+         name="DrawDistanceMeterText2"
+         top_delta="0"
+         width="128">
+          m
+        </text>
+        <slider
+         control_name="RenderMaxPartCount"
+         decimal_digits="0"
+         follows="left|top"
+         height="15"
+         increment="256"
+         initial_value="4096"
+         label="Max. particle count"
+         label_width="185"
+         layout="topleft"
+         left="200"
+         max_val="8192"
+         name="MaxParticleCount"
+         top_pad="6"
+         width="303" />
         <slider
          control_name="RenderAvatarMaxVisible"
          decimal_digits="0"
          follows="left|top"
-         height="16"
+         height="15"
          increment="1"
          initial_value="12"
-         label="Max. # of non-impostor avatars:"
+         label="Max. # of non-impostor avatars"
          label_width="185"
          layout="topleft"
          left_delta="0"
          max_val="65"
          min_val="1"
          name="MaxNumberAvatarDrawn"
-         top_pad="4"
+         top_pad="3"
          width="290" />
-		<slider
- 		 control_name="RenderGlowResolutionPow"
-		 decimal_digits="0"
-		 follows="left|top"
-		 height="16"
-		 increment="1"
-		 initial_value="8"
-		 label="Post process quality:"
-		 label_width="185"
-		 layout="topleft"
-		 left="200"
-		 max_val="9"
-		 min_val="8"
-		 name="RenderPostProcess"
-		 show_text="false"
-		 top_pad="4"
-		 width="264">
-			<slider.commit_callback
-			 function="Pref.UpdateSliderText"
-			 parameter="PostProcessText" />
-		</slider>
-		<text
-		 type="string"
-		 length="1"
-		 follows="left|top"
-		 height="12"
-		 layout="topleft"
-		 left_delta="0"
-		 name="MeshDetailText"
-		 top_pad="5"
-		 width="128">
-			Mesh detail:
-		</text>
-		<slider
-		 control_name="RenderVolumeLODFactor"
-		 follows="left|top"
-		 height="16"
-		 increment="0.125"
-		 initial_value="160"
-		 label="  Objects:"
-		 label_width="185"
-		 layout="topleft"
-		 left_delta="0"
-		 max_val="2"
-		 name="ObjectMeshDetail"
-		 show_text="false"
-		 top_pad="6"
-		 width="264">
-			<slider.commit_callback
-			 function="Pref.UpdateSliderText"
-			 parameter="ObjectMeshDetailText" />
-		</slider>
-		<slider
-		 control_name="RenderFlexTimeFactor"
-		 follows="left|top"
-		 height="16"
-		 initial_value="160"
-		 label="  Flexiprims:"
-		 label_width="185"
-		 layout="topleft"
-		 left_delta="0"
-		 name="FlexibleMeshDetail"
-		 show_text="false"
-		 top_pad="4"
-		 width="264">
-			<slider.commit_callback
-			 function="Pref.UpdateSliderText"
-			 parameter="FlexibleMeshDetailText" />
-		</slider>
         <slider
-         control_name="RenderTreeLODFactor"
-         follows="left|top"
-         height="16"
-         increment="0.125"
-         initial_value="160"
-         label="  Trees:"
-         label_width="185"
-         layout="topleft"
-         left_delta="0"
-         name="TreeMeshDetail"
-         show_text="false"
-         top_pad="4"
-         width="264">
-            <slider.commit_callback
-             function="Pref.UpdateSliderText"
-             parameter="TreeMeshDetailText" />
-            </slider>
-        <slider
-         control_name="RenderAvatarLODFactor"
-         follows="left|top"
-         height="16"
-         increment="0.125"
-         initial_value="160"
-         label="  Avatars:"
-         label_width="185"
-         layout="topleft"
-         left_delta="0"
-         name="AvatarMeshDetail"
-         show_text="false"
-         top_pad="4"
-         width="264">
-            <slider.commit_callback
-             function="Pref.UpdateSliderText"
-             parameter="AvatarMeshDetailText" />
-        </slider>
-        <slider
-         control_name="RenderTerrainLODFactor"
-         follows="left|top"
-         height="16"
-         increment="0.125"
-         initial_value="160"
-         label="  Terrain:"
-         label_width="185"
-         layout="topleft"
-         left_delta="0"
-         max_val="2"
-         min_val="1"
-         name="TerrainMeshDetail"
-         show_text="false"
-         top_pad="4"
-         width="264">
-            <slider.commit_callback
-             function="Pref.UpdateSliderText"
-             parameter="TerrainMeshDetailText" />
-        </slider>
-        <slider
-         control_name="WLSkyDetail"
-		 enabled_control="WindLightUseAtmosShaders"
+         control_name="RenderGlowResolutionPow"
          decimal_digits="0"
          follows="left|top"
-         height="16"
-         increment="8"
-         initial_value="160"
-         label="  Sky:"
+         height="15"
+         increment="1"
+         initial_value="8"
+         label="Post process quality"
          label_width="185"
          layout="topleft"
          left_delta="0"
-         max_val="128"
-         min_val="16"
-         name="SkyMeshDetail"
+         max_val="9"
+         min_val="8"
+         name="RenderPostProcess"
          show_text="false"
-         top_pad="4"
+         top_pad="3"
          width="264">
-            <slider.commit_callback
-             function="Pref.UpdateSliderText"
-             parameter="SkyMeshDetailText" />
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="PostProcessText" />
         </slider>
         <text
          type="string"
@@ -640,83 +562,33 @@
          layout="topleft"
          left="469"
          name="PostProcessText"
-         top="60"
+         top_delta="0"
          width="128">
-            Low
+          Low
         </text>
-        <text
-         type="string"
-         length="1"
+
+        <slider
+         control_name="WLSkyDetail"
+         enabled_control="WindLightUseAtmosShaders"
+         decimal_digits="0"
          follows="left|top"
-         height="12"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="Windlight Sky Detail:"
+         label_width="185"
          layout="topleft"
-         left_delta="0"
-         name="ObjectMeshDetailText"
-         top_pad="26"
-         width="128">
-            Low
-        </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_delta="0"
-         name="FlexibleMeshDetailText"
-         top_pad="8"
-         width="128">
-            Low
-        </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_delta="0"
-         name="TreeMeshDetailText"
-         top_pad="8"
-         width="128">
-            Low
-        </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_delta="0"
-         name="AvatarMeshDetailText"
-         top_pad="8"
-         width="128">
-            Low
-        </text>
-        <text
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_delta="0"
-         name="TerrainMeshDetailText"
-         top_pad="8"
-         width="128">
-            Low
-        </text>
-        <text
-		 enabled_control="WindLightUseAtmosShaders"
-         type="string"
-         length="1"
-         follows="left|top"
-         height="12"
-         layout="topleft"
-         left_delta="0"
-         name="SkyMeshDetailText"
-         top_pad="8"
-         width="128">
-            Low
-        </text>
+         left="200"
+         max_val="128"
+         min_val="16"
+         name="SkyMeshDetail"
+         show_text="true"
+         top_pad="5"
+         width="297">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="SkyMeshDetailText" />
+        </slider>
 
         <text
          type="string"
@@ -724,67 +596,226 @@
          follows="left|top"
          height="12"
          layout="topleft"
-         left_delta="-260"
+         left="200"
+         name="MeshDetailText"
+         top_pad="10"
+         width="400">
+          Level of Detail (LOD) Distance Factors:
+        </text>
+
+        <slider
+         control_name="RenderVolumeLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="2"
+         label="  Objects &amp; Sculpts LOD"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         max_val="4"
+         name="ObjectMeshDetail"
+         show_text="true"
+         top_pad="6"
+         width="305">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="ObjectMeshDetailText" />
+        </slider>
+        <slider
+        control_name="RenderFlexTimeFactor"
+        follows="left|top"
+        height="15"
+        initial_value="160"
+        label="  Flexiprims"
+        label_width="140"
+        layout="topleft"
+        left_delta="0"
+        name="FlexibleMeshDetail"
+        show_text="true"
+        top_pad="3"
+        width="305">
+          <slider.commit_callback
+          function="Pref.UpdateSliderText"
+          parameter="FlexibleMeshDetailText" />
+        </slider>
+        <slider
+         control_name="RenderTreeLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Trees"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         name="TreeMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="305">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="TreeMeshDetailText" />
+        </slider>
+        <slider
+         control_name="RenderAvatarLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Avatars"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="305">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="AvatarMeshDetailText" />
+        </slider>
+        <slider
+         control_name="RenderTerrainLODFactor"
+         follows="left|top"
+         height="15"
+         increment="0.125"
+         initial_value="160"
+         label="  Terrain"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         max_val="4"
+         min_val="1"
+         name="TerrainMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="305">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="TerrainMeshDetailText" />
+        </slider>
+        <slider
+         control_name="WLSkyDetail"
+         enabled_control="WindLightUseAtmosShaders"
+         decimal_digits="3"
+         follows="left|top"
+         height="15"
+         increment="8"
+         initial_value="160"
+         label="  Sky:"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         max_val="128"
+         min_val="16"
+         name="SkyMeshDetail"
+         show_text="true"
+         top_pad="3"
+         width="315">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="SkyMeshDetailText" />
+        </slider>
+        <slider
+         control_name="RenderAvatarPhysicsLODFactor"
+         follows="left|top"
+         height="15"
+         decimal_digits="3"
+         initial_value="1"
+         increment=".05"
+         label="  Avatar Physics"
+         label_width="140"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarPhysicsDetail"
+         show_text="true"
+         top_pad="3"
+         width="305">
+          <slider.commit_callback
+           function="Pref.UpdateSliderText"
+           parameter="AvatarPhysicsDetailText" />
+        </slider>
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarPhysicsDetailText"
+         visible="false"
+         top_delta="0"
+         width="0">
+        </text>
+        
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left_delta="0"
          name="AvatarRenderingText"
-         top_pad="18"
+         top_pad="12"
          width="128">
-        Avatar Rendering:
-      </text>
-      <check_box
-       control_name="RenderUseImpostors"
-       height="16"
-       initial_value="true"
-       label="Avatar impostors"
-       layout="topleft"
-       left_delta="0"
-       name="AvatarImpostors"
-       top_pad="7"
-       width="256" />
-      <check_box
-       control_name="RenderAvatarVP"
-       height="16"
-       initial_value="true"
-       label="Hardware skinning"
-       layout="topleft"
-       left_delta="0"
-       name="AvatarVertexProgram"
-       top_pad="1"
-       width="256">
+          Avatar Rendering:
+        </text>
+        <check_box
+         control_name="RenderUseImpostors"
+         height="16"
+         initial_value="true"
+         label="Avatar impostors"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarImpostors"
+         top_pad="5"
+         width="256" />
+        <check_box
+         control_name="RenderAvatarVP"
+         height="16"
+         initial_value="true"
+         label="Hardware skinning"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarVertexProgram"
+         top_pad="1"
+         width="256">
           <check_box.commit_callback
            function="Pref.VertexShaderEnable" />
-      </check_box>
-      <check_box
-       control_name="RenderAvatarCloth"
-       height="16"
-       initial_value="true"
-       label="Avatar cloth"
-       layout="topleft"
-       left_delta="0"
-       name="AvatarCloth"
-       top_pad="1"
-       width="256" />
-      <text
-       type="string"
-       length="1"
-       follows="left|top"
-       height="12"
-       layout="topleft"
-       left="407"
-       left_pad="-30"
-       name="TerrainDetailText"
-        top="250"
-       width="155">
+        </check_box>
+        <check_box
+         control_name="RenderAvatarCloth"
+         height="16"
+         initial_value="true"
+         label="Avatar cloth"
+         layout="topleft"
+         left_delta="0"
+         name="AvatarCloth"
+         top_pad="1"
+         width="256" />
+        <text
+         type="string"
+         length="1"
+         follows="left|top"
+         height="12"
+         layout="topleft"
+         left="407"
+         left_delta="200"
+         name="TerrainDetailText"
+         top_pad="-67"
+         width="155">
           Terrain detail:
-      </text>
-      <radio_group
-       control_name="RenderTerrainDetail"
-       draw_border="false"
-       height="38"
-       layout="topleft"
-       left_delta="5"
-       name="TerrainDetailRadio"
-       top_pad="5"
-       width="70">
+        </text>
+        <radio_group
+         control_name="RenderTerrainDetail"
+         draw_border="false"
+         height="38"
+         layout="topleft"
+         left_delta="5"
+         name="TerrainDetailRadio"
+         top_pad="5"
+         width="70">
           <radio_item
            height="16"
            label="Low"
@@ -799,43 +830,45 @@
            name="2"
            top_delta="16"
            width="50" />
-      </radio_group> -->
-	</panel>
-
-        <button
-         follows="left|top"
-         height="23"
-         label="Apply"
-         label_selected="Apply"
-         layout="topleft"
-         left="10"
-         top="380"
-         name="Apply"
-         width="115" >
-            <button.commit_callback
-             function="Pref.Apply" />
-        </button>
-        <button
-         follows="left|top"
-         height="23"
-         label="Reset"
-         layout="topleft"
-         left_pad="3"
-         name="Defaults"
-         width="115">
-            <button.commit_callback
-             function="Pref.HardwareDefaults" />
-        </button>
-        <button
-         control_name="ShowAdvancedGraphicsSettings"
-         follows="left|top"
-         height="23"
-         is_toggle="true"
-         label="Advanced"
-         layout="topleft"
-         left_pad="35"
-         name="Advanced"
-         width="115" />
+        </radio_group> -->
+      </panel>
+<!-- Dont need 2 Apply buttons in this view
+      <button
+       follows="left|top"
+       height="23"
+       label="Apply"
+       label_selected="Apply"
+       layout="topleft"
+       left="10"
+       top="380"
+       name="Apply"
+       width="115" >
+        <button.commit_callback
+         function="Pref.Apply" />
+      </button>
+-->
+      <button
+       follows="left|top"
+       height="23"
+       label="Reset"
+       layout="topleft"
+       left="135"
+       name="Defaults"
+       top_pad="20"
+       width="115">
+        <button.commit_callback
+         function="Pref.HardwareDefaults" />
+      </button>
+      <button
+       control_name="ShowAdvancedGraphicsSettings"
+       follows="left|top"
+       height="23"
+       is_toggle="true"
+       label="Advanced"
+       layout="topleft"
+       left_pad="35"
+       name="Advanced"
+       width="115" />
     </panel>
 
     <panel
