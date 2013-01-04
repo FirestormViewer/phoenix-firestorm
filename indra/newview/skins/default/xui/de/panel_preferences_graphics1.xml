@@ -72,7 +72,7 @@
 			<text name="PostProcessText">
 				Niedrig
 			</text>
-			<slider label="Windlight-Himmelsdetails:" name="SkyMeshDetail"/>
+			<slider label="Avatar-Physik:" name="AvatarPhysicsDetail"/>
 			<text name="MeshDetailText">
 				Darstellungsgrad:
 			</text>
@@ -81,7 +81,7 @@
 			<slider label="   Bäume:" name="TreeMeshDetail"/>
 			<slider label="   Avatare:" name="AvatarMeshDetail"/>
 			<slider label="   Terrain:" name="TerrainMeshDetail"/>
-			<slider label="   Avatar-Physik:" name="AvatarPhysicsDetail"/>
+			<slider label="   Himmel:" name="SkyMeshDetail"/>
 			<text name="AvatarRenderingText">
 				Avatar-Darstellung:
 			</text>
