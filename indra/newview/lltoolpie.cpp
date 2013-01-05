@@ -1216,7 +1216,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				{
 					permissionsline += LLTrans::getString("TooltipFlagPhantom") + " ";
 				}
-				if (hover_object->flagTemporary())
+				if (hover_object->flagTemporaryOnRez())
 				{
 					permissionsline += LLTrans::getString("TooltipFlagTemporary") + " ";
 				}
