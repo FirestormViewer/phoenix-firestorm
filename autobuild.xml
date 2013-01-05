@@ -1214,9 +1214,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>16841ade3586b7fd19c8c3dc3feb17bc</string>
+              <string>02e52acfef2e7eae49d77a31179b9805</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/libpng-1.5.13-linux-20121225.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/libpng-1.5.13-linux-20130105.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
