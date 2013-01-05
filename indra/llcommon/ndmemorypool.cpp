@@ -74,6 +74,9 @@ namespace ndMallocStats
 			aSize = aSize / 2;
 		}
 
+		if( 0 == i )
+			i = 1;
+
 		ndIntrin::FAA( sStats+i );
 	}
 
@@ -84,21 +87,26 @@ namespace ndMallocStats
 
 		float fTotal = sStats[0];
 
-		aOut << "(#/%):";
+		aOut << "small allocatoions (size/#/%):";
 		aOut << std::setprecision(2) << std::fixed;
 
 		int nSmallAllocs(0);
+		int nSize = 2;
 		for( int i = 1 ; i < sizeof(sStats)/sizeof(int); ++i  )
 		{
 			nSmallAllocs += sStats[i];
 
-			float fPercent = sStats[i];
-			fPercent *= 100.0;
-			fPercent /= fTotal;
 
-			aOut << " " << sStats[i] << "(" << fPercent << ")";
+			if( sStats[i] > 0 )
+			{
+				float fPercent = sStats[i];
+				fPercent *= 100.0;
+				fPercent /= fTotal;
+
+				aOut << " " << nSize << "/" << sStats[i] << "/" << fPercent;
+			}
+			nSize *= 2;
 		}
-
 		float fPercentSmall = nSmallAllocs;
 		fPercentSmall *= 100.0;
 		fPercentSmall /= fTotal;
