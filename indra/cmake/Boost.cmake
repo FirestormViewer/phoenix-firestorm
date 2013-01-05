@@ -80,8 +80,8 @@ else (STANDALONE)
         optimized boost_thread-mt
         debug boost_thread-mt-d)
     set(BOOST_WAVE_LIBRARY 
-        optimized libboost_wave-mt
-        debug libboost_wave-mt-gd)
+        optimized boost_wave-mt
+        debug boost_wave-mt-d)
   elseif (DARWIN)
     set(BOOST_PROGRAM_OPTIONS_LIBRARY
         optimized boost_program_options-mt
@@ -102,7 +102,7 @@ else (STANDALONE)
         optimized boost_thread-mt
         debug boost_thread-mt-d)
     set(BOOST_WAVE_LIBRARY 
-        optimized libboost_wave-mt
-        debug libboost_wave-mt-gd)
+        optimized boost_wave-mt
+        debug boost_wave-mt-d)
   endif (WINDOWS)
 endif (STANDALONE)
