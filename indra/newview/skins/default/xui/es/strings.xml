@@ -5324,9 +5324,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="search_banned">Algunos términos de tu búsqueda han sido excluídos debido a restricciones de contenido, detallados en los Community Standards.</string>
 	<string name="search_short">Tus términos de búsqueda son demasiado cortos y no se ha podido realizar.</string>
 	<string name="search_disabled">La búsqueda clásica ha sido desactivada en esta región.</string>
-	<string name="render_quality_low">Baja</string>
-	<string name="render_quality_medium">Media</string>
-  <string name="render_quality_high">Alta</string>
-  <string name="render_quality_ultra">Ultra</string>
-  <string name="render_quality_unknown">Desconocida, por encima del rango normal, comprueba la configuración del depurador RenderQualityPerformance</string>
+	<string name="render_quality_low">Baja (1/7)</string>
+	<string name="render_quality_mediumlow">Media-baja (2/7)</string>
+	<string name="render_quality_medium">Media (3/7)</string>
+	<string name="render_quality_mediumhigh">Media-alta (4/7)</string>
+	<string name="render_quality_high">Alta (5/7)</string>
+	<string name="render_quality_highultra">Alta-Ultra (6/7)</string>
+	<string name="render_quality_ultra">Ultra (7/7)</string>
+	<string name="render_quality_unknown">Desconocida, por encima del rango normal, comprueba la configuración del depurador RenderQualityPerformance</string>
 </strings>

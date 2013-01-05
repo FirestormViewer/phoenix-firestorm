@@ -2622,10 +2622,6 @@ Aquí no puedes volar.
 	<notification name="DynamicPathfindingDisabled">
 		Pathfinding dinámico no está activado en esta región. Los objetos con scripts que usen llamadas pathfinding LSL pueden no funcionar como se espera en esta región.
 	</notification>
-	<notification name="PathfindingRebakeNavmesh">
-		Cambiar ciertos objetos en esta región podría causar que otros objetos en movimiento se comporten de forma incorrecta. Para que los objetos en movimiento se comporten correctamente, pulsa el botón "Recargar región”. Pulsa “Ayuda” para más información.
-		<usetemplate name="okhelpignore" ignoretext="Cambiar ciertos objetos en esta región puede ocasionar un comportamiento incorrecto de otros objetos en movimiento." yestext="Aceptar" helptext="Ayuda"/>
-	</notification>
 	<notification name="PathfindingCannotRebakeNavmesh">
 		Ha ocurrido un error. Puede deberse a un problema en la conexión o en el servidor, o puede que no tengas permisos para construir. A veces desconectar y volver a conectar puede resolver este problema.
 	<usetemplate name="okbutton" yestext="Aceptar"/>
