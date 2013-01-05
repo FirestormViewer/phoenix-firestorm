@@ -27,6 +27,7 @@
 #include "ndintrin.h"
 
 #include <iomanip>
+#include <string.h>
 
 namespace ndMallocStats
 {

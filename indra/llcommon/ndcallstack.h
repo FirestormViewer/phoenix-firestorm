@@ -26,6 +26,7 @@
  */
 
 #include "ndstackwalk.h"
+#include <string.h>
 
 namespace nd
 {
