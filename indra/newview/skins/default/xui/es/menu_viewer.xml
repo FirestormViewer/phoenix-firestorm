@@ -170,7 +170,7 @@
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Caracteres..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Ver / probar..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Actualizar navmesh de la región" name="rebake_region_navmesh"/>
+			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
