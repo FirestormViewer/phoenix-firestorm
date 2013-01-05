@@ -35,6 +35,8 @@
 #include "ndintrin.h"
 #include "ndlocks.h"
 #include "ndpooldefines.h"
+#include "ndmallocstats.h"
+#include "ndcallstack.h"
 
 inline size_t nd_min( size_t a1, size_t a2 )
 {
@@ -42,77 +44,6 @@ inline size_t nd_min( size_t a1, size_t a2 )
 		return a1;
 
 	return a2;
-}
-
-namespace ndMallocStats
-{
-	U32 sStats[17];
-
-	void startUp()
-	{
-		memset( &sStats[0], 0, sizeof(sStats) );
-	}
-	void tearDown()
-	{ }
-
-	void addStat( size_t aSize )
-	{
-		if( 0 == aSize )
-			return;
-
-		ndIntrin::FAA( &sStats[0]  );
-
-		if( aSize > 65536 )
-			return;
-		aSize -= 1;
-		int i = 0;
-
-		for( ; i <= 16; ++i )
-		{
-			if( 0 == aSize )
-				break;
-			aSize = aSize / 2;
-		}
-
-		if( 0 == i )
-			i = 1;
-
-		ndIntrin::FAA( sStats+i );
-	}
-
-	void dumpStats( std::ostream &aOut )
-	{
-		if( 0 == sStats[0] )
-			return;
-
-		float fTotal = sStats[0];
-
-		aOut << "small allocatoions (size/#/%):";
-		aOut << std::setprecision(2) << std::fixed;
-
-		int nSmallAllocs(0);
-		int nSize = 2;
-		for( int i = 1 ; i < sizeof(sStats)/sizeof(int); ++i  )
-		{
-			nSmallAllocs += sStats[i];
-
-
-			if( sStats[i] > 0 )
-			{
-				float fPercent = sStats[i];
-				fPercent *= 100.0;
-				fPercent /= fTotal;
-
-				aOut << " " << nSize << "/" << sStats[i] << "/" << fPercent;
-			}
-			nSize *= 2;
-		}
-		float fPercentSmall = nSmallAllocs;
-		fPercentSmall *= 100.0;
-		fPercentSmall /= fTotal;
-
-		aOut << " t/s (% s) " << sStats[0] << "/" << nSmallAllocs << "(" << fPercentSmall << ")";
-	}
 }
 
 namespace OSAllocator
@@ -143,7 +74,16 @@ namespace OSAllocator
 
 	void *malloc( size_t aSize, size_t aAlign )
 	{
-		ndMallocStats::addStat( aSize );
+		if( aSize < MAX_ALLOC_SIZE_FOR_LOG_STACK )
+		{
+			nd::Debugging::FunctionStack< 16 > oStack;
+			nd::Debugging::sEBP *pEBP( nd::Debugging::getEBP() );
+			nd::Debugging::getCallstack( pEBP, &oStack );
+
+			ndMallocStats::logAllocation( aSize, &oStack );
+		}
+		else
+			ndMallocStats::logAllocation( aSize, 0 );
 
 		aSize += sizeof(uintptr_t)*2;
 		aSize += aAlign;

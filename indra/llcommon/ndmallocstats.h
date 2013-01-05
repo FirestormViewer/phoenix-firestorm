@@ -1,7 +1,7 @@
 /**
- * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
+ * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Nicky Dasmijn
+ * Copyright (C) 2013, Nicky Dasmijn
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,24 +17,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
- * http://www.firestormviewer.org
+ * The Phoenix Viewer Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.phoenixviewer.com
  * $/LicenseInfo$
  */
 
-#include "llpreprocessor.h"
-#include "ndmallocstats.h"
+#include <ostream>
+#include "ndstackwalk.h"
 
-namespace ndMemoryPool
+namespace ndMallocStats
 {
-	LL_COMMON_API void startUp();
-	LL_COMMON_API void tearDown();
+	void startUp();
+	void tearDown();
 
-	LL_COMMON_API void *malloc( size_t aSize, size_t aAlign );
-	LL_COMMON_API void *realloc( void *ptr, size_t aSize, size_t aAlign );
-
-	LL_COMMON_API void free( void* ptr );
-
-	LL_COMMON_API void dumpStats( std::ostream & );
-	LL_COMMON_API void tryShrink( );
+	void logAllocation( size_t aSize, nd::Debugging::IFunctionStack *aStack );
+	void dumpStats( std::ostream &aOut );
 }

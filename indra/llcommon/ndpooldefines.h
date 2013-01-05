@@ -31,6 +31,7 @@
 #define TO_MB( bVal ) ( bVal / (1024*1024) )
 #define BITS_PER_U8 (8)
 #define BITS_PER_U32 ( sizeof(U32) * BITS_PER_U8 )
+#define MAX_ALLOC_SIZE_FOR_LOG_STACK 1024
 
 #ifdef ND_NO_TCMALLOC
 	#define MAX_PAGES (150)
