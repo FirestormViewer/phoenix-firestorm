@@ -1249,6 +1249,8 @@ class Linux_i686Manifest(LinuxManifest):
             self.path("libboost_filesystem-mt.so.*")
             self.path("libboost_signals-mt.so.*")
             self.path("libboost_system-mt.so.*")
+            self.path("libboost_chrono-mt.so.*")
+            self.path("libboost_date_time-mt.so.*")
             self.path("libboost_wave-mt.so.*")
             self.path("libbreakpad_client.so.0.0.0")
             self.path("libbreakpad_client.so.0")
