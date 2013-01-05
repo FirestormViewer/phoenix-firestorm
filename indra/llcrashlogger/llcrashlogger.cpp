@@ -517,7 +517,7 @@ bool LLCrashLogger::sendCrashLogs()
 	{
 		sent = runCrashLogPost(mAltCrashHost, post_data, std::string("Sending to alternate server"), 3, 5);
 	}
-	
+	    
 	mSentCrashLogs = sent;
 
 // [SL:KB] - Patch: Viewer-CrashLookup | Checked: 2011-03-24 (Catznip-2.6.0a) | Added: Catznip-2.6.0a

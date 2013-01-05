@@ -1,5 +1,5 @@
 /** 
- * @file lldir_mac.h
+ * @file llvfs_objc.h
  * @brief Definition of directory utilities class for Mac OS X
  *
  * $LicenseInfo:firstyear=2000&license=viewerlgpl$
@@ -28,32 +28,16 @@
 #error This header must not be included when compiling for any target other than Mac OS. Consider including lldir.h instead.
 #endif // !LL_DARWIN
 
-#ifndef LL_LLDIR_MAC_H
-#define LL_LLDIR_MAC_H
+#ifndef LL_LLVFS_OBJC_H
+#define LL_LLVFS_OBJC_H
 
-#include "lldir.h"
+#include <iostream>
 
-#include <dirent.h>
-
-class LLDir_Mac : public LLDir
-{
-public:
-	LLDir_Mac();
-	virtual ~LLDir_Mac();
-
-	/*virtual*/ void initAppDirs(const std::string &app_name,
-		const std::string& app_read_only_data_dir);
-
-	virtual std::string getCurPath();
-	virtual U32 countFilesInDir(const std::string &dirname, const std::string &mask);
-	virtual BOOL getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname);
-	//virtual BOOL fileExists(const std::string &filename) const;
-	virtual bool fileExists(const std::string &filename) const;
-
-	/*virtual*/ std::string getLLPluginLauncher();
-	/*virtual*/ std::string getLLPluginFilename(std::string base_name);
-};
-
-#endif // LL_LLDIR_MAC_H
+std::string* getSystemTempFolder();
+std::string* getSystemCacheFolder();
+std::string* getSystemApplicationSupportFolder();
+std::string* getSystemResourceFolder();
+std::string* getSystemExecutableFolder();
 
 
+#endif LL_LLVFS_OBJC_H
