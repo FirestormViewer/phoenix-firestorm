@@ -257,9 +257,23 @@ void LLIMFloater::sendMsg()
 			static LLCachedControl<bool> chat_prefix(gSavedSettings, "FSSupportGroupChatPrefix2");
 			if (chat_prefix && FSData::getInstance()->isSupportGroup(mSessionID))
 			{
+
+				// <FS:PP> FIRE-7075: Skin indicator
+				static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
+				std::string skinIndicator(FSInternalSkinCurrent);
+				if (skinIndicator == "starlightcui")
+				{
+					skinIndicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
+				}
+				else
+				{
+					skinIndicator = skinIndicator.substr(0, 1); // "FS 4.4.1f os", "FS 4.4.1v", "FS 4.4.1a", "FS 4.4.1s os", "FS 4.4.1m os" etc.
+				}
+				// </FS:PP>
+
 				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
-					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() +
+					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef HAS_OPENSIM_SUPPORT
 					" os" +
 #endif
@@ -267,7 +281,7 @@ void LLIMFloater::sendMsg()
 				}
 				else
 				{
-					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() +
+					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
 #ifdef HAS_OPENSIM_SUPPORT
 					" os" +
 #endif
