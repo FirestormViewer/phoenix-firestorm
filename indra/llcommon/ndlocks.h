@@ -27,46 +27,49 @@
 
 #include "ndintrin.h"
 
-namespace ndLocks
+namespace nd
 {
-	inline void lock( volatile U32 *aLock )
+	namespace locks
 	{
-		while( 0 != ndIntrin::CAS( aLock, 0, 1 ) )
-			;
-	}
-
-	inline void unlock ( volatile U32 *aLock )
-	{
-		*aLock = 0;
-	}
-
-	inline bool tryLock( volatile U32 *aLock )
-	{
-		return 0 == ndIntrin::CAS( aLock, 0, 1 );
-	}
-
-	class LockHolder
-	{
-		volatile U32 *mLock;
-	public:
-		LockHolder( volatile U32 *aLock )
-			: mLock( aLock )
+		inline void lock( volatile U32 *aLock )
 		{
-			if( mLock )
-				lock( mLock );
+			while( 0 != nd::intrin::CAS( aLock, 0, 1 ) )
+				;
 		}
 
-		~LockHolder()
+		inline void unlock ( volatile U32 *aLock )
 		{
-			if( mLock )
-				unlock( mLock );
+			*aLock = 0;
 		}
 
-		void attach( volatile U32 *aLock )
+		inline bool tryLock( volatile U32 *aLock )
 		{
-			mLock = aLock;
+			return 0 == nd::intrin::CAS( aLock, 0, 1 );
 		}
-	};
+
+		class LockHolder
+		{
+			volatile U32 *mLock;
+		public:
+			LockHolder( volatile U32 *aLock )
+				: mLock( aLock )
+			{
+				if( mLock )
+					lock( mLock );
+			}
+
+			~LockHolder()
+			{
+				if( mLock )
+					unlock( mLock );
+			}
+
+			void attach( volatile U32 *aLock )
+			{
+				mLock = aLock;
+			}
+		};
+	}
 }
 
 #endif

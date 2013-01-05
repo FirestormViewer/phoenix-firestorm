@@ -36,12 +36,12 @@
 //{
 	void intrusive_ptr_add_ref(LLRegionPresenceVerifier::Response* p)
 	{
-		ndIntrin::FAA( &p->mReferenceCount );
+		nd::intrin::FAA( &p->mReferenceCount );
 	}
 	
 	void intrusive_ptr_release(LLRegionPresenceVerifier::Response* p)
 	{
-		if(p && 0 == ndIntrin::FAD( &p->mReferenceCount ))
+		if(p && 0 == nd::intrin::FAD( &p->mReferenceCount ))
 		{
 			delete p;
 		}

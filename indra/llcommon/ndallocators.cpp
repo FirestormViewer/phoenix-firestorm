@@ -30,47 +30,50 @@
 
 #ifdef ND_NO_TCMALLOC
 
-namespace ndAllocators
+namespace nd
 {
-#ifdef ND_USE_NATIVE_ALLOCS
-	void *ndMalloc( size_t aSize, size_t aAlign )
-	{ return _aligned_malloc( aSize, aAlign );	}
+	namespace allocators
+	{
+	#ifdef ND_USE_NATIVE_ALLOCS
+		void *malloc( size_t aSize, size_t aAlign )
+		{ return _aligned_malloc( aSize, aAlign );	}
 
-	void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
-	{ return _aligned_realloc( ptr, aSize, aAlign );	}
+		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		{ return _aligned_realloc( ptr, aSize, aAlign );	}
 
-	void ndFree( void* ptr )
-	{ return _aligned_free( ptr );	}
-#else
-	void *ndMalloc( size_t aSize, size_t aAlign )
-	{ return ndMemoryPool::malloc( aSize, aAlign );	}
+		void free( void* ptr )
+		{ return _aligned_free( ptr );	}
+	#else
+		void *malloc( size_t aSize, size_t aAlign )
+		{ return nd::memorypool::malloc( aSize, aAlign );	}
 
-	void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
-	{ return ndMemoryPool::realloc( ptr, aSize, aAlign );	}
+		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		{ return nd::memorypool::realloc( ptr, aSize, aAlign );	}
 
-	void ndFree( void* ptr )
-	{ return ndMemoryPool::free( ptr );	}
-#endif
+		void free( void* ptr )
+		{ return nd::memorypool::free( ptr );	}
+	#endif
+	}
 }
-using namespace ndAllocators;
 
 void *operator new(size_t nSize )
 {
-	return ndMalloc( nSize, 16 );
+	return nd::allocators::malloc( nSize, 16 );
 }
 
 void *operator new[](size_t nSize )
 {
-	return ndMalloc( nSize, 16 );
+	return nd::allocators::malloc( nSize, 16 );
 }
 
 void operator delete( void *pMem )
 {
-	ndFree( pMem );
+	nd::allocators::free( pMem );
 }
 
 void operator delete[]( void *pMem )
 {
-	ndFree( pMem );
+	nd::allocators::free( pMem );
 }
+
 #endif

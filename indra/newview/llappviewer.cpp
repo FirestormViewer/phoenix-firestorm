@@ -721,7 +721,7 @@ LLAppViewer::~LLAppViewer()
 
 bool LLAppViewer::init()
 {	
-	ndMemoryPool::startUp(); // <FS:ND/> tcmalloc replacement
+	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
 
 	//
 	// Start of the application
@@ -2200,7 +2200,7 @@ bool LLAppViewer::cleanup()
     llinfos << "Goodbye!" << llendflush;
 
 	// This coud leak memory that was allocated in the pool. But that's ok. We're about to die and the OS will take care of this.
-	//	ndMemoryPool::tearDown(); // <FS:ND/> tcmalloc replacement
+	//	nd::memorypool::tearDown(); // <FS:ND/> tcmalloc replacement
 
 	// return 0;
 	return true;

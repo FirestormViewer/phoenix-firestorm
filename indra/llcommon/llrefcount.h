@@ -59,7 +59,7 @@ public:
 		// <FS:ND> Use intrinsic functions for threadsafe increment
 
 		//	++mRef;
-		ndIntrin::FAA( &mRef );
+		nd::intrin::FAA( &mRef );
 
 		// </FS:ND>
 	} 
@@ -71,7 +71,7 @@ public:
 		// <FS:ND> Use intrinsic functions for threadsafe decrement
 
 		//		if (0 == --mRef) 
-		if (0 == ndIntrin::FAD( &mRef) )
+		if (0 == nd::intrin::FAD( &mRef) )
 
 		// </FS:ND>
 		{

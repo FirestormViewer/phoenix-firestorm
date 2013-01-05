@@ -919,7 +919,7 @@ void LLMemoryInfo::stream(std::ostream& s) const
 	}
 
 	// <FS:ND> tcmalloc replacement
-	ndMemoryPool::dumpStats( s );
+	nd::memorypool::dumpStats( s );
 	// </FS:ND>
 }
 

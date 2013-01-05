@@ -28,19 +28,22 @@
 
 #include <Windows.h>
 
-namespace ndIntrin
+namespace nd
 {
-	U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
-	{ return InterlockedCompareExchange( aLoc, aVal, aCmp ); }
+	namespace intrin
+	{
+		U32 CAS( volatile U32 *aLoc, U32 aCmp, U32 aVal )
+		{ return InterlockedCompareExchange( aLoc, aVal, aCmp ); }
 
-	void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
-	{ return InterlockedCompareExchangePointer ( aLoc, aVal, aCmp ); }
+		void* CASPTR( void * volatile *aLoc, void* aCmp, void * aVal )
+		{ return InterlockedCompareExchangePointer ( aLoc, aVal, aCmp ); }
 
-	void FAA( volatile U32 *aLoc )
-	{ InterlockedIncrement( aLoc ); }
+		void FAA( volatile U32 *aLoc )
+		{ InterlockedIncrement( aLoc ); }
 
-	U32 FAD( volatile U32 *aLoc )
-	{ return InterlockedDecrement( aLoc ); }
+		U32 FAD( volatile U32 *aLoc )
+		{ return InterlockedDecrement( aLoc ); }
+	}
 }
 
 #endif

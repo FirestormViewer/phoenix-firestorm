@@ -1,3 +1,6 @@
+#ifndef NDMALLOCSTATS_H
+#define NDMALLOCSTATS_H
+
 /**
  * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -25,11 +28,16 @@
 #include <ostream>
 #include "ndstackwalk.h"
 
-namespace ndMallocStats
+namespace nd
 {
-	void startUp();
-	void tearDown();
+	namespace allocstats
+	{
+		void startUp();
+		void tearDown();
 
-	void logAllocation( size_t aSize, nd::Debugging::IFunctionStack *aStack );
-	void dumpStats( std::ostream &aOut );
+		void logAllocation( size_t aSize, nd::debugging::IFunctionStack *aStack );
+		void dumpStats( std::ostream &aOut );
+	}
 }
+
+#endif

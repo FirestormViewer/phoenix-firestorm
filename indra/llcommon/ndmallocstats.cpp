@@ -29,72 +29,75 @@
 #include <iomanip>
 #include <string.h>
 
-namespace ndMallocStats
+namespace nd
 {
-	U32 sStats[17];
-
-	void startUp()
+	namespace allocstats
 	{
-		memset( &sStats[0], 0, sizeof(sStats) );
-	}
-	void tearDown()
-	{ }
+		U32 sStats[17];
 
-	void logAllocation( size_t aSize, nd::Debugging::IFunctionStack *aStack )
-	{
-		if( 0 == aSize )
-			return;
+		void startUp()
+		{
+			memset( &sStats[0], 0, sizeof(sStats) );
+		}
+		void tearDown()
+		{ }
 
-		ndIntrin::FAA( &sStats[0]  );
-
-		if( aSize > 65536 )
-			return;
-		aSize -= 1;
-		int i = 0;
-
-		for( ; i <= 16; ++i )
+		void logAllocation( size_t aSize, nd::debugging::IFunctionStack *aStack )
 		{
 			if( 0 == aSize )
-				break;
-			aSize = aSize / 2;
-		}
+				return;
 
-		if( 0 == i )
-			i = 1;
+			nd::intrin::FAA( &sStats[0]  );
 
-		ndIntrin::FAA( sStats+i );
-	}
+			if( aSize > 65536 )
+				return;
+			aSize -= 1;
+			int i = 0;
 
-	void dumpStats( std::ostream &aOut )
-	{
-		if( 0 == sStats[0] )
-			return;
-
-		float fTotal = sStats[0];
-
-		aOut << "small allocations (size/#/%):";
-		aOut << std::setprecision(2) << std::fixed;
-
-		int nSmallAllocs(0);
-		int nSize = 2;
-		for( int i = 1 ; i < sizeof(sStats)/sizeof(int); ++i  )
-		{
-			nSmallAllocs += sStats[i];
-
-			if( sStats[i] > 0 )
+			for( ; i <= 16; ++i )
 			{
-				float fPercent = sStats[i];
-				fPercent *= 100.0;
-				fPercent /= fTotal;
-
-				aOut << " " << nSize << "/" << sStats[i] << "/" << fPercent;
+				if( 0 == aSize )
+					break;
+				aSize = aSize / 2;
 			}
-			nSize *= 2;
-		}
-		float fPercentSmall = nSmallAllocs;
-		fPercentSmall *= 100.0;
-		fPercentSmall /= fTotal;
 
-		aOut << " t/s (% s) " << sStats[0] << "/" << nSmallAllocs << "(" << fPercentSmall << ")";
+			if( 0 == i )
+				i = 1;
+
+			nd::intrin::FAA( sStats+i );
+		}
+
+		void dumpStats( std::ostream &aOut )
+		{
+			if( 0 == sStats[0] )
+				return;
+
+			float fTotal = sStats[0];
+
+			aOut << "small allocations (size/#/%):";
+			aOut << std::setprecision(2) << std::fixed;
+
+			int nSmallAllocs(0);
+			int nSize = 2;
+			for( int i = 1 ; i < sizeof(sStats)/sizeof(int); ++i  )
+			{
+				nSmallAllocs += sStats[i];
+
+				if( sStats[i] > 0 )
+				{
+					float fPercent = sStats[i];
+					fPercent *= 100.0;
+					fPercent /= fTotal;
+
+					aOut << " " << nSize << "/" << sStats[i] << "/" << fPercent;
+				}
+				nSize *= 2;
+			}
+			float fPercentSmall = nSmallAllocs;
+			fPercentSmall *= 100.0;
+			fPercentSmall /= fTotal;
+
+			aOut << " t/s (% s) " << sStats[0] << "/" << nSmallAllocs << "(" << fPercentSmall << ")";
+		}
 	}
 }

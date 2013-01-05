@@ -76,14 +76,14 @@ namespace OSAllocator
 	{
 		if( aSize < MAX_ALLOC_SIZE_FOR_LOG_STACK )
 		{
-			nd::Debugging::FunctionStack< 16 > oStack;
-			nd::Debugging::sEBP *pEBP( nd::Debugging::getEBP() );
-			nd::Debugging::getCallstack( pEBP, &oStack );
+			nd::debugging::FunctionStack< 16 > oStack;
+			nd::debugging::sEBP *pEBP( nd::debugging::getEBP() );
+			nd::debugging::getCallstack( pEBP, &oStack );
 
-			ndMallocStats::logAllocation( aSize, &oStack );
+			nd::allocstats::logAllocation( aSize, &oStack );
 		}
 		else
-			ndMallocStats::logAllocation( aSize, 0 );
+			nd::allocstats::logAllocation( aSize, 0 );
 
 		aSize += sizeof(uintptr_t)*2;
 		aSize += aAlign;
@@ -131,314 +131,322 @@ namespace OSAllocator
 }
 
 #if MAX_PAGES > 0
-namespace ndMemoryPool
+namespace nd
 {
-	struct Page
+	namespace memorypool
 	{
-		U32 mFree;
-		U32 mLocked;
-		U32 mBitmap[BITMAP_SIZE];
-		U8 *mMemory;
-		U8 *mMemoryEnd;
-
-		Page()
-			: mFree(0)
-			, mLocked(0)
-			, mMemory(0)
-			, mMemoryEnd(0)
+		struct Page
 		{
-			memset( mBitmap, 0, sizeof(mBitmap) );
+			U32 mFree;
+			U32 mLocked;
+			U32 mBitmap[BITMAP_SIZE];
+			U8 *mMemory;
+			U8 *mMemoryEnd;
+
+			Page()
+				: mFree(0)
+				, mLocked(0)
+				, mMemory(0)
+				, mMemoryEnd(0)
+			{
+				memset( mBitmap, 0, sizeof(mBitmap) );
+			}
+		};
+
+		Page sPages[ MAX_PAGES ];
+		U32 mPageLock;
+		bool sActive = false;
+
+		void allocMemoryForPage( Page &aPage )
+		{
+			aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, CHUNK_ALIGNMENT ));
+			aPage.mMemoryEnd = aPage.mMemory + PAGE_SIZE;
+			aPage.mFree = PAGE_SIZE;
 		}
-	};
 
-	Page sPages[ MAX_PAGES ];
-	U32 mPageLock;
-	bool sActive = false;
+		void allocPage( int i )
+		{
+			nd::locks::LockHolder( &sPages[i].mLocked );
 
-	void allocMemoryForPage( Page &aPage )
-	{
-		aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, CHUNK_ALIGNMENT ));
-		aPage.mMemoryEnd = aPage.mMemory + PAGE_SIZE;
-		aPage.mFree = PAGE_SIZE;
-	}
+			if( sPages[i].mMemory )
+				return;
 
-	void allocPage( int i )
-	{
-		ndLocks::LockHolder( &sPages[i].mLocked );
+			allocMemoryForPage( sPages[i] );
+		}
 
-		if( sPages[i].mMemory )
-			return;
+		void freePage( int i )
+		{
+			nd::locks::LockHolder( &sPages[i].mLocked );
 
-		allocMemoryForPage( sPages[i] );
-	}
+			if( !sPages[i].mMemory )
+				return;
 
-	void freePage( int i )
-	{
-		ndLocks::LockHolder( &sPages[i].mLocked );
-
-		if( !sPages[i].mMemory )
-			return;
-
-		OSAllocator::free( sPages[i].mMemory );
-		new (&sPages[i]) Page;
+			OSAllocator::free( sPages[i].mMemory );
+			new (&sPages[i]) Page;
+		}
 	}
 }
 
-namespace ndMemoryPool
+namespace nd
 {
-	int allocNewPage( )
+	namespace memorypool
 	{
-		for( int i = 0; i < MAX_PAGES; ++i )
+		int allocNewPage( )
 		{
-			if( 0 == sPages[i].mMemory && ndLocks::tryLock( &sPages[i].mLocked ) )
+			for( int i = 0; i < MAX_PAGES; ++i )
 			{
-				if( 0 != sPages[i].mFree && 0 != sPages[i].mMemory  )
-					return i;
-
-				if( 0 == sPages[i].mMemory  )
+				if( 0 == sPages[i].mMemory && nd::locks::tryLock( &sPages[i].mLocked ) )
 				{
-					allocMemoryForPage( sPages[i] );
-					return i;
+					if( 0 != sPages[i].mFree && 0 != sPages[i].mMemory  )
+						return i;
+
+					if( 0 == sPages[i].mMemory  )
+					{
+						allocMemoryForPage( sPages[i] );
+						return i;
+					}
+
+					nd::locks::unlock( &sPages[i].mLocked );
 				}
-
-				ndLocks::unlock( &sPages[i].mLocked );
 			}
+
+			return -1;
 		}
 
-		return -1;
-	}
-
-	int findPageIndex( )
-	{
-		for( int i = 0; i < MAX_PAGES; ++i )
+		int findPageIndex( )
 		{
-			if( 0 != sPages[i].mFree && ndLocks::tryLock( &sPages[i].mLocked ) )
+			for( int i = 0; i < MAX_PAGES; ++i )
 			{
-				if( 0 != sPages[i].mFree )
+				if( 0 != sPages[i].mFree && nd::locks::tryLock( &sPages[i].mLocked ) )
+				{
+					if( 0 != sPages[i].mFree )
+						return i;
+
+					nd::locks::unlock( &sPages[i].mLocked );
+				}
+			}
+			return allocNewPage();
+		}
+
+		bool isActive()
+		{
+			return sActive;
+		}
+
+		bool usePool( size_t aAllocSize )
+		{
+			return isActive() && aAllocSize <= CHUNK_SIZE;
+		}
+
+		int toPoolIndex( void *aMemory )
+		{
+			if( !isActive() || !aMemory )
+				return -1;
+
+			for( int i = 0; i < MAX_PAGES; ++i )
+				if( aMemory >= sPages[i].mMemory && aMemory < sPages[ i ].mMemoryEnd )
 					return i;
 
-				ndLocks::unlock( &sPages[i].mLocked );
-			}
-		}
-		return allocNewPage();
-	}
-
-	bool isActive()
-	{
-		return sActive;
-	}
-
-	bool usePool( size_t aAllocSize )
-	{
-		return isActive() && aAllocSize <= CHUNK_SIZE;
-	}
-
-	int toPoolIndex( void *aMemory )
-	{
-		if( !isActive() || !aMemory )
 			return -1;
-
-		for( int i = 0; i < MAX_PAGES; ++i )
-			if( aMemory >= sPages[i].mMemory && aMemory < sPages[ i ].mMemoryEnd )
-				return i;
-
-		return -1;
-	}
-
-	void startUp()
-	{
-		ndMallocStats::startUp();
-
-		allocPage( 0 );
-		sActive = true;
-	}
-
-	void tearDown()
-	{
-		ndMallocStats::tearDown();
-
-		sActive = false;
-
-		for( int i = 0; i < MAX_PAGES; ++i )
-			freePage( i );
-	}
-
-	void *malloc( size_t aSize, size_t aAlign )
-	{
-		if( !usePool( aSize ) )
-			return OSAllocator::malloc( aSize, aAlign );
-
-		int nPageIdx( findPageIndex() );
-
-		if( -1 == nPageIdx )
-			return OSAllocator::malloc( aSize, aAlign );
-
-		Page &oPage = sPages[ nPageIdx ];
-		ndLocks::LockHolder oLock(0);
-		oLock.attach( &oPage.mLocked );
-
-		int nBitmapIdx = 0;
-		while( nBitmapIdx < BITMAP_SIZE && oPage.mBitmap[ nBitmapIdx ] == 0xFFFFFFFF )
-			++nBitmapIdx;
-
-		if( BITMAP_SIZE == nBitmapIdx )
-			return OSAllocator::malloc( aSize, aAlign );
-
-		U32 bBitmap = oPage.mBitmap[ nBitmapIdx ];
-		int nBit = 0;
-
-		while( (bBitmap & 0x1) )
-		{
-			bBitmap = (bBitmap & 0xFFFFFFFE) >> 1;
-			nBit++;
 		}
 
-		oPage.mBitmap[ nBitmapIdx ] |= ( 0x1 << nBit );
-		oPage.mFree -= CHUNK_SIZE;
-
-		size_t nOffset = ( ( nBitmapIdx * BITS_PER_U32 ) + nBit)  * CHUNK_SIZE;
-		void *pRet = oPage.mMemory + nOffset;
-		return pRet;
-	}
-
-	void *realloc( void *ptr, size_t aSize, size_t aAlign )
-	{
-		int nPoolIdx = toPoolIndex( ptr );
-
-		// Not in pool or 0 == ptr
-		if( -1 == nPoolIdx )
-			return OSAllocator::realloc( ptr, aSize, aAlign );
-
-		void *pRet = OSAllocator::malloc( aSize, aAlign );
-
-		int nToCopy = nd_min( aSize, CHUNK_SIZE );
-		memcpy( pRet, ptr, nToCopy );
-
-		free( ptr );
-
-		return pRet;
-	}
-
-	void free( void* ptr )
-	{
-		int nPoolIdx = toPoolIndex( ptr );
-
-		if( -1 == nPoolIdx )
+		void startUp()
 		{
-			OSAllocator::free( ptr );
-			return;
+			nd::allocstats::startUp();
+
+			allocPage( 0 );
+			sActive = true;
 		}
 
-		ndLocks::LockHolder oLocker( &sPages[nPoolIdx].mLocked );
-		Page &oPage = sPages[nPoolIdx];
-
-		U8 *pChunk = reinterpret_cast< U8* >( ptr );
-		int nDiff = pChunk - oPage.mMemory;
-		
-		int nBitmapIdx = nDiff / CHUNK_SIZE;
-		int nBit( nBitmapIdx % BITS_PER_U32);
-
-		nBitmapIdx -= nBit;
-		nBitmapIdx /= BITS_PER_U32;
-
-		oPage.mBitmap[ nBitmapIdx ] &= ~ ( 0x1 << nBit );
-		oPage.mFree += CHUNK_SIZE;
-	}
-
-	void dumpStats( std::ostream &aOut )
-	{
-		int nPagesActive(0);
-		int nUnusedPages(0);
-		int nTotalUsed(0);
-
-		double dPercentages[ MAX_PAGES ] = {0};
-
-		for( int i = 0; i < MAX_PAGES; ++i )
+		void tearDown()
 		{
-			if( sPages[i].mMemory )
+			nd::allocstats::tearDown();
+
+			sActive = false;
+
+			for( int i = 0; i < MAX_PAGES; ++i )
+				freePage( i );
+		}
+
+		void *malloc( size_t aSize, size_t aAlign )
+		{
+			if( !usePool( aSize ) )
+				return OSAllocator::malloc( aSize, aAlign );
+
+			int nPageIdx( findPageIndex() );
+
+			if( -1 == nPageIdx )
+				return OSAllocator::malloc( aSize, aAlign );
+
+			Page &oPage = sPages[ nPageIdx ];
+			nd::locks::LockHolder oLock(0);
+			oLock.attach( &oPage.mLocked );
+
+			int nBitmapIdx = 0;
+			while( nBitmapIdx < BITMAP_SIZE && oPage.mBitmap[ nBitmapIdx ] == 0xFFFFFFFF )
+				++nBitmapIdx;
+
+			if( BITMAP_SIZE == nBitmapIdx )
+				return OSAllocator::malloc( aSize, aAlign );
+
+			U32 bBitmap = oPage.mBitmap[ nBitmapIdx ];
+			int nBit = 0;
+
+			while( (bBitmap & 0x1) )
 			{
-				U32 nFree = sPages[i].mFree;
-				nTotalUsed += PAGE_SIZE - nFree ;
-				++nPagesActive;
-
-				if( PAGE_SIZE == nFree )
-					++nUnusedPages;
-	
-				double dPercent = nFree;
-				dPercent *= 100;
-				dPercent /= PAGE_SIZE;
-				dPercentages[i] = dPercent;
+				bBitmap = (bBitmap & 0xFFFFFFFE) >> 1;
+				nBit++;
 			}
+
+			oPage.mBitmap[ nBitmapIdx ] |= ( 0x1 << nBit );
+			oPage.mFree -= CHUNK_SIZE;
+
+			size_t nOffset = ( ( nBitmapIdx * BITS_PER_U32 ) + nBit)  * CHUNK_SIZE;
+			void *pRet = oPage.mMemory + nOffset;
+			return pRet;
 		}
 
-		int nTotal = PAGE_SIZE * nPagesActive;
-		int nTotalUnused = PAGE_SIZE * nUnusedPages;
-
-		double dPercent = nTotalUsed;
-		dPercent *= 100;
-		dPercent /= nTotal;
-
-		double dTotal( TO_MB( nTotal ) );
-		double dUnused( TO_MB( nTotalUnused ) );
-		double dUsed( TO_MB( nTotalUsed) );
-
-		aOut	<< "total pages: " << nPagesActive << " unused pages: " << nUnusedPages << " total bytes: " << std::fixed << std::setprecision( 2 ) << dTotal
-				<< " used: " << dUsed << " (" << dPercent << "%) unused: " << dUnused << std::endl;
-
-		aOut << "page usage (page #/% free):";
-		aOut << std::setprecision( 1 );
-		for( int i = 0; i < MAX_PAGES; ++i )
+		void *realloc( void *ptr, size_t aSize, size_t aAlign )
 		{
-			if( dPercentages[i] > 0 )
-				aOut << " " << i << "/" << dPercentages[i];
+			int nPoolIdx = toPoolIndex( ptr );
+
+			// Not in pool or 0 == ptr
+			if( -1 == nPoolIdx )
+				return OSAllocator::realloc( ptr, aSize, aAlign );
+
+			void *pRet = OSAllocator::malloc( aSize, aAlign );
+
+			int nToCopy = nd_min( aSize, CHUNK_SIZE );
+			memcpy( pRet, ptr, nToCopy );
+
+			free( ptr );
+
+			return pRet;
 		}
-		aOut << std::endl;
-		ndMallocStats::dumpStats( aOut );
-	}
 
-	void tryShrink( )
-	{
-	}
+		void free( void* ptr )
+		{
+			int nPoolIdx = toPoolIndex( ptr );
 
+			if( -1 == nPoolIdx )
+			{
+				OSAllocator::free( ptr );
+				return;
+			}
+
+			nd::locks::LockHolder oLocker( &sPages[nPoolIdx].mLocked );
+			Page &oPage = sPages[nPoolIdx];
+
+			U8 *pChunk = reinterpret_cast< U8* >( ptr );
+			int nDiff = pChunk - oPage.mMemory;
+		
+			int nBitmapIdx = nDiff / CHUNK_SIZE;
+			int nBit( nBitmapIdx % BITS_PER_U32);
+
+			nBitmapIdx -= nBit;
+			nBitmapIdx /= BITS_PER_U32;
+
+			oPage.mBitmap[ nBitmapIdx ] &= ~ ( 0x1 << nBit );
+			oPage.mFree += CHUNK_SIZE;
+		}
+
+		void dumpStats( std::ostream &aOut )
+		{
+			int nPagesActive(0);
+			int nUnusedPages(0);
+			int nTotalUsed(0);
+
+			double dPercentages[ MAX_PAGES ] = {0};
+
+			for( int i = 0; i < MAX_PAGES; ++i )
+			{
+				if( sPages[i].mMemory )
+				{
+					U32 nFree = sPages[i].mFree;
+					nTotalUsed += PAGE_SIZE - nFree ;
+					++nPagesActive;
+
+					if( PAGE_SIZE == nFree )
+						++nUnusedPages;
+	
+					double dPercent = nFree;
+					dPercent *= 100;
+					dPercent /= PAGE_SIZE;
+					dPercentages[i] = dPercent;
+				}
+			}
+
+			int nTotal = PAGE_SIZE * nPagesActive;
+			int nTotalUnused = PAGE_SIZE * nUnusedPages;
+
+			double dPercent = nTotalUsed;
+			dPercent *= 100;
+			dPercent /= nTotal;
+
+			double dTotal( TO_MB( nTotal ) );
+			double dUnused( TO_MB( nTotalUnused ) );
+			double dUsed( TO_MB( nTotalUsed) );
+
+			aOut	<< "total pages: " << nPagesActive << " unused pages: " << nUnusedPages << " total bytes: " << std::fixed << std::setprecision( 2 ) << dTotal
+					<< " used: " << dUsed << " (" << dPercent << "%) unused: " << dUnused << std::endl;
+
+			aOut << "page usage (page #/% free):";
+			aOut << std::setprecision( 1 );
+			for( int i = 0; i < MAX_PAGES; ++i )
+			{
+				if( dPercentages[i] > 0 )
+					aOut << " " << i << "/" << dPercentages[i];
+			}
+			aOut << std::endl;
+			nd::allocstats::dumpStats( aOut );
+		}
+
+		void tryShrink( )
+		{
+		}
+	}
 }
 
 #else
-namespace ndMemoryPool
+namespace nd
 {
-	void startUp()
+	namespace memorypool
 	{
-		ndMallocStats::startUp();
-	}
+		void startUp()
+		{
+			nd::allocstats::startUp();
+		}
 
-	void tearDown()
-	{
-		ndMallocStats::tearDown();
-	}
+		void tearDown()
+		{
+			nd::allocstats::tearDown();
+		}
 
-	void *malloc( size_t aSize, size_t aAlign )
-	{
-		ndMallocStats::addStat( aSize );
-		return OSAllocator::malloc( aSize, aAlign );
-	}
+		void *malloc( size_t aSize, size_t aAlign )
+		{
+			nd::allocstats::addStat( aSize );
+			return OSAllocator::malloc( aSize, aAlign );
+		}
 
-	void *realloc( void *ptr, size_t aSize, size_t aAlign )
-	{
-		ndMallocStats::addStat( aSize );
-		return OSAllocator::realloc( ptr, aSize, aAlign );
-	}
+		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		{
+			nd::allocstats::addStat( aSize );
+			return OSAllocator::realloc( ptr, aSize, aAlign );
+		}
 
-	void free( void* ptr )
-	{
-		OSAllocator::free( ptr );
-	}
+		void free( void* ptr )
+		{
+			OSAllocator::free( ptr );
+		}
 
-	void dumpStats( std::ostream &aOut )
-	{
-		ndMallocStats::dumpStats( aOut );
-	}
+		void dumpStats( std::ostream &aOut )
+		{
+			nd::allocstats::dumpStats( aOut );
+		}
 
-	void tryShrink()
-	{
+		void tryShrink()
+		{
+		}
 	}
 }
 #endif

@@ -30,7 +30,7 @@
 
 namespace nd
 {
-	namespace Debugging
+	namespace debugging
 	{
 		template< int SIZE > class FunctionStack: public IFunctionStack
 		{

@@ -1,3 +1,6 @@
+#ifndef NDMEMORYPooL_H
+#define NDMEMORYPooL_H
+
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
@@ -25,16 +28,21 @@
 #include "llpreprocessor.h"
 #include "ndmallocstats.h"
 
-namespace ndMemoryPool
+namespace nd
 {
-	LL_COMMON_API void startUp();
-	LL_COMMON_API void tearDown();
+	namespace memorypool
+	{
+		LL_COMMON_API void startUp();
+		LL_COMMON_API void tearDown();
 
-	LL_COMMON_API void *malloc( size_t aSize, size_t aAlign );
-	LL_COMMON_API void *realloc( void *ptr, size_t aSize, size_t aAlign );
+		LL_COMMON_API void *malloc( size_t aSize, size_t aAlign );
+		LL_COMMON_API void *realloc( void *ptr, size_t aSize, size_t aAlign );
 
-	LL_COMMON_API void free( void* ptr );
+		LL_COMMON_API void free( void* ptr );
 
-	LL_COMMON_API void dumpStats( std::ostream & );
-	LL_COMMON_API void tryShrink( );
+		LL_COMMON_API void dumpStats( std::ostream & );
+		LL_COMMON_API void tryShrink( );
+	}
 }
+
+#endif

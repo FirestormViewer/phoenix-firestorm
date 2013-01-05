@@ -27,7 +27,7 @@
 
 namespace nd
 {
-	namespace Debugging
+	namespace debugging
 	{
 		struct sEBP
 		{

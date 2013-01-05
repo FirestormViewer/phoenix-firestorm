@@ -264,11 +264,11 @@ private:
 //{
 	inline void intrusive_ptr_add_ref(LLIOPipe* p)
 	{
-		ndIntrin::FAA(&p->mReferenceCount);
+		nd::intrin::FAA(&p->mReferenceCount);
 	}
 	inline void intrusive_ptr_release(LLIOPipe* p)
 	{
-		if(p && 0 == ndIntrin::FAD( &p->mReferenceCount ))
+		if(p && 0 == nd::intrin::FAD( &p->mReferenceCount ))
 		{
 			delete p;
 		}
