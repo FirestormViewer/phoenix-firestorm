@@ -52,6 +52,12 @@ public:
 
 	/*virtual*/ std::string getLLPluginLauncher();
 	/*virtual*/ std::string getLLPluginFilename(std::string base_name);
+
+//<FS:TS> Used by LGG's selection beams
+private:
+	int mCurrentDirIndex;
+	int mCurrentDirCount;
+	std::string mCurrentDir;
 };
 
 #endif // LL_LLDIR_MAC_H

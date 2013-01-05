@@ -218,6 +218,26 @@ void LLDir_Mac::initAppDirs(const std::string &app_name,
 	mCAFile = getExpandedFilename(LL_PATH_APP_SETTINGS, "CA.pem");
 }
 
+//<FS:TS> Used by LGG's selection beams
+U32 LLDir_Mac::countFilesInDir(const std::string &dirname, const std::string &mask)
+{
+	U32 file_count = 0;
+	glob_t g;
+
+	std::string tmp_str;
+	tmp_str = dirname;
+	tmp_str += mask;
+	
+	if(glob(tmp_str.c_str(), GLOB_NOSORT, NULL, &g) == 0)
+	{
+		file_count = g.gl_pathc;
+
+		globfree(&g);
+	}
+
+	return (file_count);
+}
+
 // get the next file in the directory
 // AO: Used by LGG Selection Beams
 BOOL LLDir_Mac::getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname)
