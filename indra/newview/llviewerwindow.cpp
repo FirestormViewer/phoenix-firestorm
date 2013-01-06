@@ -703,6 +703,13 @@ public:
 			addText(xpos, ypos, llformat("Total Allocated(KB): %d", LLPrivateMemoryPoolManager::getInstance()->mTotalAllocatedSize / 1024));
 			ypos += y_inc;
 		}
+		// <FS:LO> pull the text saying if particles are hidden out from beacons
+		if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+		{
+			addText(xpos, ypos, particle_hiding);
+			ypos += y_inc;
+		}
+		// </FS:LO>
 
 		// only display these messages if we are actually rendering beacons at this moment
 		if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
@@ -715,11 +722,13 @@ public:
 				ypos += y_inc;
 			}
 
-			if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
+			// <FS:LO> pull the text saying if particles are hidden out from beacons
+			/*if (LLPipeline::toggleRenderTypeControlNegated((void*)LLPipeline::RENDER_TYPE_PARTICLES))
 			{
 				addText(xpos, ypos, particle_hiding);
 				ypos += y_inc;
-			}
+			}*/
+			// </FS:LO>
 
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
