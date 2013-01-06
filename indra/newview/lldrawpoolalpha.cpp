@@ -396,7 +396,7 @@ void LLDrawPoolAlpha::renderAlpha(U32 mask)
 		{
 
 			// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
-			if(!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)) && (
+			if(!(gPipeline.sRenderParticles) && (
 				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_PARTICLE ||
 				group->mSpatialPartition->mPartitionType == LLViewerRegion::PARTITION_HUD_PARTICLE))
 			{

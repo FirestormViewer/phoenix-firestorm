@@ -384,6 +384,8 @@ S32		LLPipeline::sVisibleLightCount = 0;
 F32		LLPipeline::sMinRenderSize = 0.f;
 F32	LLPipeline::sVolumeSAFrame = 0.f; // ZK LBG
 
+bool	LLPipeline::sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
+
 
 static LLCullResult* sCull = NULL;
 
@@ -513,6 +515,8 @@ void LLPipeline::init()
 	{
 		mRenderTypeEnabled[i] = TRUE; //all rendering types start enabled
 	}
+
+	sRenderParticles = true; // <FS:LO> flag to hold correct, user selected, status of particles
 
 	mRenderDebugFeatureMask = 0xffffffff; // All debugging features on
 	mRenderDebugMask = 0;	// All debug starts off

@@ -869,6 +869,10 @@ class LLAdvancedToggleRenderType : public view_listener_t
 		if ( render_type != 0 )
 		{
 			LLPipeline::toggleRenderTypeControl( (void*)(ptrdiff_t)render_type );
+			if(render_type == LLPipeline::RENDER_TYPE_PARTICLES)
+			{
+				gPipeline.sRenderParticles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+			}
 		}
 		return true;
 	}
@@ -9230,6 +9234,7 @@ class LLViewToggleRenderType : public view_listener_t
 		if (type == "hideparticles")
 		{
 			LLPipeline::toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+			gPipeline.sRenderParticles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
 		}
 		return true;
 	}
