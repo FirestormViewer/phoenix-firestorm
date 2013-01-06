@@ -3,7 +3,7 @@
  border="true"
  follows="top|left"
  height="570"
- label="REGION MEMORY"
+ label="Region Memory"
  layout="topleft"
  name="script_limits_region_memory_panel"
  top="0"
