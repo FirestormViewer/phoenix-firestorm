@@ -54,6 +54,8 @@
 #include "llglslshader.h"
 #include "llviewershadermgr.h"
 
+#include "ndobjectpool.h" // <FS:ND/> For operator new/delete
+
 static LLFastTimer::DeclareTimer FTM_FRUSTUM_CULL("Frustum Culling");
 static LLFastTimer::DeclareTimer FTM_CULL_REBOUND("Cull Rebound");
 
@@ -5102,3 +5104,20 @@ void LLCullResult::assertDrawMapsEmpty()
 		}
 	}
 }
+
+// <FS:ND> Make this non inline to use an object pool
+
+// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
+nd::objectpool::ObjectPool< LLDrawInfo, nd::locks::NoLock, 16, 128 > sDrawinfoPool;
+
+void* LLDrawInfo::operator new(size_t size)
+{
+	return sDrawinfoPool.allocMemoryForObject();
+}
+
+void LLDrawInfo::operator delete(void* ptr)
+{
+	sDrawinfoPool.freeMemoryOfObject( ptr );
+}
+
+// </FS:ND>

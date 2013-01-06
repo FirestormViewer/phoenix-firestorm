@@ -68,16 +68,22 @@ protected:
 	~LLDrawInfo();	
 	
 public:
-	void* operator new(size_t size)
-	{
-		return ll_aligned_malloc_16(size);
-	}
+	// <FS:ND> Make this non inline to use an object pool
 
-	void operator delete(void* ptr)
-	{
-		ll_aligned_free_16(ptr);
-	}
+	// void* operator new(size_t size)
+	// {
+	// 	return ll_aligned_malloc_16(size);
+	// }
 
+	// void operator delete(void* ptr)
+	// {
+	// 	ll_aligned_free_16(ptr);
+	// }
+
+	void* operator new(size_t size);
+	void operator delete(void* ptr);
+
+	// </FS:ND>
 
 	LLDrawInfo(const LLDrawInfo& rhs)
 	{
