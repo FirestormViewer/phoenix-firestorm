@@ -712,7 +712,7 @@ public:
 		// </FS:LO>
 
 		// only display these messages if we are actually rendering beacons at this moment
-		if (LLPipeline::getRenderBeacons(NULL) && LLFloaterReg::instanceVisible("beacons"))
+		if (LLPipeline::getRenderBeacons(NULL) /*&& LLFloaterReg::instanceVisible("beacons")*/) // <FS:LO> Always show the beacon text regardless if the floater is visible
 		{
 			if (LLPipeline::getRenderMOAPBeacons(NULL))
 			{
