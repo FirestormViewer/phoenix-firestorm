@@ -75,6 +75,7 @@ namespace OSAllocator
 	void *malloc( size_t aSize, size_t aAlign )
 	{
 		nd::debugging::sEBP *pEBP(0);
+
 #ifdef LOG_ALLOCATION_STACKS
 		if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
 			pEBP = nd::debugging::getEBP();
@@ -420,13 +421,27 @@ namespace nd
 
 		void *malloc( size_t aSize, size_t aAlign )
 		{
-			nd::allocstats::addStat( aSize );
+			nd::debugging::sEBP *pEBP(0);
+
+#ifdef LOG_ALLOCATION_STACKS
+			if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
+				pEBP = nd::debugging::getEBP();
+#endif
+			nd::allocstats::logAllocation( aSize, pEBP );
+
 			return OSAllocator::malloc( aSize, aAlign );
 		}
 
 		void *realloc( void *ptr, size_t aSize, size_t aAlign )
 		{
-			nd::allocstats::addStat( aSize );
+			nd::debugging::sEBP *pEBP(0);
+
+#ifdef LOG_ALLOCATION_STACKS
+			if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
+				pEBP = nd::debugging::getEBP();
+#endif
+			nd::allocstats::logAllocation( aSize, pEBP );
+
 			return OSAllocator::realloc( ptr, aSize, aAlign );
 		}
 
