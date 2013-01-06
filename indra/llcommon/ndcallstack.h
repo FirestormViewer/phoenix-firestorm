@@ -36,13 +36,13 @@ namespace nd
 		{
 		public:
 			FunctionStack( )
-			{ clear(); }
+			{ this->clear(); }
 
 			~FunctionStack()
 			{ }
 
 			bool isFull() const
-			{ return getDepth() >= getMaxDepth(); }
+			{ return this->getDepth() >= this->getMaxDepth(); }
 
 			unsigned int getDepth() const
 			{ return mDepth; }

@@ -28,9 +28,13 @@
 #include "ndlocks.h"
 #include "ndpooldefines.h"
 
-#include <iomanip>
 #include <string.h>
+#include <stdlib.h>
+
+#include <iomanip>
 #include <set>
+#include <limits>
+#include <cstddef>
 
 namespace nd
 {
@@ -72,7 +76,7 @@ namespace nd
 			{ return std::numeric_limits<size_t>::max() / sizeof(T); }
 
 			pointer allocate (size_type num)
-			{ return (pointer) malloc (num*sizeof(T)); }
+			{ return (pointer) ::malloc (num*sizeof(T)); }
 
 			void construct (pointer p, const T& value)
 			{ new((void*)p)T(value); }
@@ -81,7 +85,7 @@ namespace nd
 			{ p->~T(); }
 
 			void deallocate (pointer p, size_type num)
-			{ free((void*)p); }
+			{ ::free((void*)p); }
 		};
 
 		template <class T1, class T2> bool operator== (const allocator<T1>&, const allocator<T2>&) 

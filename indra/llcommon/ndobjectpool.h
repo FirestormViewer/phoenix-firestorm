@@ -75,14 +75,14 @@ namespace nd
 
 			~ObjectPool()
 			{
-				destroy();
+				this->destroy();
 			}
 
 			T *allocMemoryForObject()
 			{
 				mLock.lock();
 				if( !mMemory.mNext )
-					grow();
+					this->grow();
 
 				ObjectMemory *pRet = mMemory.mNext;
 				mMemory.mNext = pRet->mNext;
@@ -95,7 +95,7 @@ namespace nd
 
 			T *allocObject()
 			{
-				T *pT = allocMemoryForObject();
+				T *pT = this->allocMemoryForObject();
 				new (pT)T;
 				return pT;
 			}
@@ -115,7 +115,7 @@ namespace nd
 					return;
 
 				aObject->~T();
-				freeMemoryOfObject( aObject );
+				this->freeMemoryOfObject( aObject );
 			}
 		};
 	}

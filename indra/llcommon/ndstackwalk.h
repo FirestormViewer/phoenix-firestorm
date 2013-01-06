@@ -76,16 +76,16 @@ namespace nd
 #elif defined( LL_LINUX )
 			asm( "getEBP: MOVL %EBP,%EAX; RET;" );
 			sEBP* getEBP();
-			void* getStackTop()
+			inline void* getStackTop()
 			{ return 0; }
-			void* getStackBottom()
+			inline void* getStackBottom()
 			{ return 0; }
 #else
 			inline sEBP* getEBP()
 			{ return 0; }
-			void* getStackTop()
+			inline void* getStackTop()
 			{ return 0; }
-			void* getStackBottom()
+			inline void* getStackBottom()
 			{ return 0; }
 #endif
 		}
