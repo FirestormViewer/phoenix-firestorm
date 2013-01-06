@@ -546,8 +546,74 @@ void LLGLTexMemBar::draw()
 					cache_max_usage);
 	//, cache_entries, cache_max_entries
 
-	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
+	// <FS:Ansariel> Texture memory bars
+	//LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*4,
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*5,
+	// </FS:Ansariel>
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+
+	// <FS:Ansariel> Texture memory bars
+	S32 bar_left = 0;
+	S32 bar_width = 200;
+	S32 bar_space = 32;
+	S32 top = line_height*4 - 2 + v_offset;
+	S32 bottom = top - 6;
+	S32 left = bar_left;
+	S32 right = left + bar_width;
+	F32 bar_scale;
+	
+	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
+
+	// GL Mem Bar
+		
+	left = bar_left;
+	text = "GL";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*4,
+											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+	
+	left = bar_left+20;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f); // grey
+	gl_rect_2d(left, top, right, bottom);
+
+	bar_scale = (F32)bar_width / (max_total_mem * 1.5f);
+	right = left + llfloor(total_mem * bar_scale);
+	right = llclamp(right, bar_left, bar_left + bar_width);
+	
+	color = (total_mem < llfloor(max_total_mem * texmem_lower_bound_scale)) ? LLColor4::green :
+		  	(total_mem < max_total_mem) ? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+//	gGL.diffuseColor4fv(color.mV);
+	
+	gl_rect_2d(left, top, right, bottom, color); // red/yellow/green
+
+	//
+	bar_left += bar_width + bar_space;
+	//top = bottom - 2; bottom = top - 6;
+	
+	// Bound Mem Bar
+
+	left = bar_left;
+	text = "Bound";
+	LLFontGL::getFontMonospace()->renderUTF8(text, 0, left, v_offset + line_height*4,
+									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
+	left = bar_left + 42;
+	right = left + bar_width;
+	
+	gGL.color4f(0.5f, 0.5f, 0.5f, 0.75f);
+	gl_rect_2d(left, top, right, bottom);
+
+	color = (bound_mem < llfloor(max_bound_mem * texmem_lower_bound_scale)) ? LLColor4::green :
+		  	(bound_mem < max_bound_mem) ? LLColor4::yellow : LLColor4::red;
+	color[VALPHA] = .75f;
+//	gGL.diffuseColor4fv(color.mV);
+
+	bar_scale = (F32)bar_width / (max_bound_mem * 1.5f);
+	right = left + llfloor(bound_mem * bar_scale);
+
+	gl_rect_2d(left, top, right, bottom, color);
+	// </FS:Ansariel>
 
 	U32 cache_read(0U), cache_write(0U), res_wait(0U);
 	LLAppViewer::getTextureFetch()->getStateStats(&cache_read, &cache_write, &res_wait);
@@ -563,7 +629,8 @@ void LLGLTexMemBar::draw()
 	LLFontGL::getFontMonospace()->renderUTF8(text, 0, 0, v_offset + line_height*3,
 											 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
-	S32 left = 0 ;
+	// <FS:Ansariel> Texture memory bars
+	//S32 left = 0 ;
 	//----------------------------------------------------------------------------
 
 	text = llformat("Textures: %d Fetch: %d(%d) Pkts:%d(%d) Cache R/W: %d/%d LFS:%d RAW:%d HTP:%d DEC:%d CRE:%d",
@@ -638,7 +705,10 @@ BOOL LLGLTexMemBar::handleMouseDown(S32 x, S32 y, MASK mask)
 LLRect LLGLTexMemBar::getRequiredRect()
 {
 	LLRect rect;
-	rect.mTop = 50; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	// <FS:Ansariel> Texture memory bars
+	//rect.mTop = 50; //LLFontGL::getFontMonospace()->getLineHeight() * 6;
+	rect.mTop = 65;
+	// </FS:Ansariel>
 	return rect;
 }
 
