@@ -31,6 +31,13 @@ namespace nd
 {
 	namespace locks
 	{
+		class NoLock
+		{
+		public:
+			void lock(){}
+			void unlock() {}
+		};
+
 		inline void lock( volatile U32 *aLock )
 		{
 			while( 0 != nd::intrin::CAS( aLock, 0, 1 ) )
