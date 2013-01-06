@@ -26,10 +26,10 @@
 #include <new>
 #include <stdlib.h>
 #include <stdint.h>
+#include "ndpooldefines.h"
 #include "ndmemorypool.h"
 
 #ifdef ND_NO_TCMALLOC
-
 namespace nd
 {
 	namespace allocators
@@ -75,5 +75,26 @@ void operator delete[]( void *pMem )
 {
 	nd::allocators::free( pMem );
 }
+
+#else
+namespace nd
+{
+	namespace allocators
+	{
+		void *malloc( size_t aSize, size_t aAlign )
+		{
+			return ::malloc( aSize );
+		}
+		void free( void* ptr )
+		{
+			::free( ptr );
+		}
+		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		{
+			return ::realloc( ptr, aSize );
+		}
+	}
+}
+
 
 #endif

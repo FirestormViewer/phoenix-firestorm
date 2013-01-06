@@ -36,24 +36,9 @@ namespace nd
 {
 	namespace allocators
 	{
-#ifdef ND_USE_ND_ALLOCS
 		void *malloc( size_t aSize, size_t aAlign );
 		void free( void* ptr );
 		void *realloc( void *ptr, size_t aSize, size_t aAlign );
-#else
-		inline void *malloc( size_t aSize, size_t aAlign )
-		{
-			return ::malloc( aSize );
-		}
-		inline void free( void* ptr )
-		{
-			::free( ptr );
-		}
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
-		{
-			return ::realloc( ptr, aSize );
-		}
-#endif
 	}
 }
 
