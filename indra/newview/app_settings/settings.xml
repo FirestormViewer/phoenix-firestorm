@@ -220,17 +220,6 @@
     <key>Value</key>
     <integer>1</integer>
   </map>
-  <key>FSMeshUploadPossible</key>
-  <map>
-    <key>Comment</key>
-    <string>If true, shows dummy (preview) avatars in radar.</string>
-    <key>Persist</key>
-    <integer>1</integer>
-    <key>Type</key>
-    <string>Boolean</string>
-    <key>Value</key>
-    <integer>1</integer>
-  </map>
   <key>FSAdvancedTooltips</key>
   <map>
     <key>Comment</key>
@@ -5716,28 +5705,6 @@
       <string />
       <key>Persist</key>
       <integer>0</integer>
-      <key>Type</key>
-      <string>Boolean</string>
-      <key>Value</key>
-      <integer>0</integer>
-    </map>
-    <key>FullScreenAspectRatio</key>
-    <map>
-      <key>Comment</key>
-      <string>Aspect ratio of fullscreen display (width / height)</string>
-      <key>Persist</key>
-      <integer>1</integer>
-      <key>Type</key>
-      <string>F32</string>
-      <key>Value</key>
-      <real>3</real>
-    </map>
-    <key>FullScreenAutoDetectAspectRatio</key>
-    <map>
-      <key>Comment</key>
-      <string>Automatically detect proper aspect ratio for fullscreen display</string>
-      <key>Persist</key>
-      <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>

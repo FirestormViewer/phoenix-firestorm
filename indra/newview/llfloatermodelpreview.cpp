@@ -646,14 +646,6 @@ void LLFloaterModelPreview::loadModel(S32 lod, const std::string& file_name, boo
 
 void LLFloaterModelPreview::onClickCalculateBtn()
 {
-
-	if(!gSavedSettings.getBOOL("FSMeshUploadPossible")){
-		LLSD args;
-		args["MESSAGE"] = llformat("Mesh upload and calculation is not supported yet." );
-		LLNotificationsUtil::add("GenericAlert", args);
-		return;
-	}
-
 	mModelPreview->rebuildUploadData();
 
 	bool upload_skinweights = childGetValue("upload_skin").asBoolean();
@@ -5731,14 +5723,6 @@ void LLFloaterModelPreview::onReset(void* user_data)
 //static
 void LLFloaterModelPreview::onUpload(void* user_data)
 {
-	if(!gSavedSettings.getBOOL("FSMeshUploadPossible")){
-		LLSD args;
-		args["MESSAGE"] = llformat("Mesh upload and calculation is not supported yet." );
-		LLNotificationsUtil::add("GenericAlert", args);
-		return;
-	}
-
-
 	assert_main_thread();
 
 	LLFloaterModelPreview* mp = (LLFloaterModelPreview*) user_data;
