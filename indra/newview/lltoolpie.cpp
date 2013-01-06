@@ -1233,8 +1233,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				// Get prim count
 				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();				
 				args["COUNT"] = llformat("%d", prim_count);
-				std::string primlabel = LLTrans::getString("TooltipPrimCount", args);
-				tooltip_msg.append("\n" + primlabel);
+				tooltip_msg.append("\n" + LLTrans::getString("TooltipPrimCount", args));
 
 				// Display the PE weight for an object if mesh is enabled
 				if (gMeshRepo.meshRezEnabled())
@@ -1249,8 +1248,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 						{
 							args.clear();
 							args["PEWEIGHT"] = llformat("%d", link_cost);
-							std::string pelabel = LLTrans::getString("TooltipPrimEquivalent", args);
-							tooltip_msg.append(pelabel);
+							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
 						}
 						else
 						{
@@ -1270,17 +1268,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
 					args.clear();
 					args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
-					std::string positionlabel = LLTrans::getString("TooltipPosition");
-					LLStringUtil::format(positionlabel, args);
-					tooltip_msg.append("\n" + positionlabel);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
 
 					// Get distance
 					F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
 					args.clear();
 					args["DISTANCE"] = llformat("%.02f", distance);
-					std::string distancelabel = LLTrans::getString("TooltipDistance");
-					LLStringUtil::format(distancelabel, args);
-					tooltip_msg.append("\n" + distancelabel);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipDistance", args));
 				}
 			}
 			// </FS:Ansariel> Advanced object tooltips
