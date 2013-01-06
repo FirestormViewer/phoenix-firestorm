@@ -581,7 +581,9 @@ void LLGLTexMemBar::draw()
 									 text_color, LLFontGL::LEFT, LLFontGL::TOP);
 
 
-	left = 550;
+	// <FS:Ansariel> Move BW figures further to the right to prevent overlapping
+	//left = 550;
+	left = 575;
 	F32 bandwidth = LLAppViewer::getTextureFetch()->getTextureBandwidth();
 	// <FS:Ansariel> Speed-up
 	//F32 max_bandwidth = gSavedSettings.getF32("ThrottleBandwidthKBPS");
