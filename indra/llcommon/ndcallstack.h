@@ -44,27 +44,35 @@ namespace nd
 			bool isFull() const
 			{ return getDepth() >= getMaxDepth(); }
 
-			int getDepth() const
+			unsigned int getDepth() const
 			{ return mDepth; }
 
-			int getMaxDepth() const
+			unsigned int getMaxDepth() const
 			{ return SIZE; }
 
 			void clear()
 			{
 				memset( mStack, 0, sizeof(void*)*SIZE );
 				mDepth = 0;
+				mCalls = 0;
 			}
 
 			void pushReturnAddress( void *aReturnAddress )
 			{ mStack[ mDepth++ ] = aReturnAddress; }
 
-			void* getReturnAddress( int aFrame )
+			void* getReturnAddress( unsigned int aFrame ) const
 			{ return mStack[ aFrame ]; }
 
+			void incCallcount() const
+			{ ++mCalls; }
+
+			unsigned int getCallcount() const
+			{ return mCalls; }
+
 		private:
-			int mDepth;
+			unsigned int mDepth;
 			void *mStack[SIZE];
+			mutable unsigned int mCalls;
 		};
 	}
 }

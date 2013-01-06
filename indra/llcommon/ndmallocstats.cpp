@@ -25,32 +25,115 @@
 #include "ndmallocstats.h"
 #include "llpreprocessor.h"
 #include "ndintrin.h"
+#include "ndlocks.h"
+#include "ndpooldefines.h"
 
 #include <iomanip>
 #include <string.h>
+#include <set>
 
 namespace nd
 {
 	namespace allocstats
 	{
+		template <class T> class allocator
+		{
+		public:
+			typedef size_t    size_type;
+			typedef ptrdiff_t difference_type;
+			typedef T*        pointer;
+			typedef const T*  const_pointer;
+			typedef T&        reference;
+			typedef const T&  const_reference;
+			typedef T         value_type;
+
+			template <class U>	struct rebind
+			{ typedef allocator<U> other; };
+
+			pointer address (reference value) const
+			{ return &value; }
+			
+			const_pointer address (const_reference value) const
+			{ return &value; }
+
+			allocator()
+			{ }
+
+			allocator(const allocator&)
+			{ }
+
+			template <class U> allocator (const allocator<U>&)
+			{ }
+			
+			~allocator()
+			{ }
+
+			size_type max_size () const
+			{ return std::numeric_limits<size_t>::max() / sizeof(T); }
+
+			pointer allocate (size_type num)
+			{ return (pointer) malloc (num*sizeof(T)); }
+
+			void construct (pointer p, const T& value)
+			{ new((void*)p)T(value); }
+
+			void destroy (pointer p)
+			{ p->~T(); }
+
+			void deallocate (pointer p, size_type num)
+			{ free((void*)p); }
+		};
+
+		template <class T1, class T2> bool operator== (const allocator<T1>&, const allocator<T2>&) 
+		{ return true; }
+		template <class T1, class T2> bool operator!= (const allocator<T1>&, const allocator<T2>&) 
+		{ return false; }
+
+		template< typename T> struct compare_stack
+		{
+			bool operator()( T const &aRHS, T const &aLHS )
+			{
+				if( aRHS.getDepth() != aLHS.getDepth() )
+					return aRHS.getDepth() < aLHS.getDepth();
+
+				for( unsigned int i = 0; i < aRHS.getDepth(); ++i )
+				{
+					if( aRHS.getReturnAddress(i) != aLHS.getReturnAddress(i) )
+						return aRHS.getReturnAddress(i) < aLHS.getReturnAddress(i);
+				}
+				return false;
+			}
+		};
+
+#ifdef LOG_ALLOCATION_STACKS
+		typedef nd::debugging::FunctionStack<LOG_STACKSIZE> tStack;
+		typedef std::set< tStack , compare_stack<tStack>, allocator<tStack> > tSet;
+
+		tSet stStacks;
+		volatile U32 lStackLock;
+#endif
+
+		bool bStarted;
 		U32 sStats[17];
 
 		void startUp()
 		{
 			memset( &sStats[0], 0, sizeof(sStats) );
+			bStarted = true;
 		}
 		void tearDown()
-		{ }
+		{ bStarted = false; }
 
-		void logAllocation( size_t aSize, nd::debugging::IFunctionStack *aStack )
+		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP )
 		{
-			if( 0 == aSize )
+			if( !bStarted || 0 == aSize )
 				return;
 
 			nd::intrin::FAA( &sStats[0]  );
 
 			if( aSize > 65536 )
 				return;
+
 			aSize -= 1;
 			int i = 0;
 
@@ -65,6 +148,63 @@ namespace nd
 				i = 1;
 
 			nd::intrin::FAA( sStats+i );
+
+#ifdef LOG_ALLOCATION_STACKS
+			if(  aEBP )
+			{
+				nd::debugging::FunctionStack< LOG_STACKSIZE > oStack;
+				nd::debugging::getCallstack( aEBP, &oStack );
+
+				nd::locks::LockHolder oLock( &lStackLock );
+				tSet::iterator itr = stStacks.insert( oStack ).first;
+				itr->incCallcount();
+			}
+#endif
+		}
+
+#ifdef LOG_ALLOCATION_STACKS
+		void sortStacks( tStack *aStacks, int aCount )
+		{
+			for( int i = aCount-1; i > 0; --i )
+			{
+				if( aStacks[i].getCallcount() > aStacks[i-1].getCallcount() )
+				{
+					tStack tmp = aStacks[i];
+					aStacks[i] = aStacks[i-1];
+					aStacks[i-1] = tmp;
+				}
+				else
+					break;
+			}
+		}
+#endif
+
+		void dumpHighesAllocations( std::ostream &aOut )
+		{
+#ifdef LOG_ALLOCATION_STACKS
+			tStack topStacks[TOP_STACKS_TO_DUMP]; 
+			{
+				nd::locks::LockHolder oLock( &lStackLock );
+				tSet::const_iterator itr = stStacks.begin(), itrE = stStacks.end();
+				for( ; itr != itrE; ++itr )
+				{
+					if( itr->getCallcount() > topStacks[TOP_STACKS_TO_DUMP-1].getCallcount() )
+					{
+						topStacks[TOP_STACKS_TO_DUMP-1] = *itr;
+						sortStacks( topStacks, TOP_STACKS_TO_DUMP );
+					}
+				}
+			}
+			aOut << std::hex;
+			for( int i = 0; i < TOP_STACKS_TO_DUMP; ++i )
+			{
+				aOut << "Calls: " << topStacks[i].getCallcount() << std::endl;
+				for( int j = 0; j < topStacks[i].getDepth() && topStacks[i].getReturnAddress(j) ; ++j )
+					aOut << "0x" << topStacks[i].getReturnAddress(j) << std::endl;
+			}
+
+			aOut << std::dec;
+#endif
 		}
 
 		void dumpStats( std::ostream &aOut )
@@ -72,6 +212,9 @@ namespace nd
 			if( 0 == sStats[0] )
 				return;
 
+#ifdef LOG_ALLOCATION_STACKS
+			dumpHighesAllocations( aOut );
+#endif
 			float fTotal = sStats[0];
 
 			aOut << "small allocations (size/#/%):";

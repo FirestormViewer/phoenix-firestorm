@@ -27,6 +27,7 @@
 
 #include <ostream>
 #include "ndstackwalk.h"
+#include "ndcallstack.h"
 
 namespace nd
 {
@@ -35,7 +36,7 @@ namespace nd
 		void startUp();
 		void tearDown();
 
-		void logAllocation( size_t aSize, nd::debugging::IFunctionStack *aStack );
+		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP );
 		void dumpStats( std::ostream &aOut );
 	}
 }

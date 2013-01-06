@@ -74,16 +74,12 @@ namespace OSAllocator
 
 	void *malloc( size_t aSize, size_t aAlign )
 	{
-		if( aSize < MAX_ALLOC_SIZE_FOR_LOG_STACK )
-		{
-			nd::debugging::FunctionStack< 16 > oStack;
-			nd::debugging::sEBP *pEBP( nd::debugging::getEBP() );
-			nd::debugging::getCallstack( pEBP, &oStack );
-
-			nd::allocstats::logAllocation( aSize, &oStack );
-		}
-		else
-			nd::allocstats::logAllocation( aSize, 0 );
+		nd::debugging::sEBP *pEBP(0);
+#ifdef LOG_ALLOCATION_STACKS
+		if( aSize >= MIN_ALLOC_SIZE_FOR_LOG_STACK && aSize <= MAX_ALLOC_SIZE_FOR_LOG_STACK )
+			pEBP = nd::debugging::getEBP();
+#endif
+		nd::allocstats::logAllocation( aSize, pEBP );
 
 		aSize += sizeof(uintptr_t)*2;
 		aSize += aAlign;
@@ -159,7 +155,7 @@ namespace nd
 
 		void allocMemoryForPage( Page &aPage )
 		{
-			aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, CHUNK_ALIGNMENT ));
+			aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, POOL_CHUNK_ALIGNMENT ));
 			aPage.mMemoryEnd = aPage.mMemory + PAGE_SIZE;
 			aPage.mFree = PAGE_SIZE;
 		}
@@ -235,7 +231,7 @@ namespace nd
 
 		bool usePool( size_t aAllocSize )
 		{
-			return isActive() && aAllocSize <= CHUNK_SIZE;
+			return isActive() && aAllocSize <= POOL_CHUNK_SIZE;
 		}
 
 		int toPoolIndex( void *aMemory )
@@ -299,9 +295,9 @@ namespace nd
 			}
 
 			oPage.mBitmap[ nBitmapIdx ] |= ( 0x1 << nBit );
-			oPage.mFree -= CHUNK_SIZE;
+			oPage.mFree -= POOL_CHUNK_SIZE;
 
-			size_t nOffset = ( ( nBitmapIdx * BITS_PER_U32 ) + nBit)  * CHUNK_SIZE;
+			size_t nOffset = ( ( nBitmapIdx * BITS_PER_U32 ) + nBit)  * POOL_CHUNK_SIZE;
 			void *pRet = oPage.mMemory + nOffset;
 			return pRet;
 		}
@@ -316,7 +312,7 @@ namespace nd
 
 			void *pRet = OSAllocator::malloc( aSize, aAlign );
 
-			int nToCopy = nd_min( aSize, CHUNK_SIZE );
+			int nToCopy = nd_min( aSize, POOL_CHUNK_SIZE );
 			memcpy( pRet, ptr, nToCopy );
 
 			free( ptr );
@@ -340,14 +336,14 @@ namespace nd
 			U8 *pChunk = reinterpret_cast< U8* >( ptr );
 			int nDiff = pChunk - oPage.mMemory;
 		
-			int nBitmapIdx = nDiff / CHUNK_SIZE;
+			int nBitmapIdx = nDiff / POOL_CHUNK_SIZE;
 			int nBit( nBitmapIdx % BITS_PER_U32);
 
 			nBitmapIdx -= nBit;
 			nBitmapIdx /= BITS_PER_U32;
 
 			oPage.mBitmap[ nBitmapIdx ] &= ~ ( 0x1 << nBit );
-			oPage.mFree += CHUNK_SIZE;
+			oPage.mFree += POOL_CHUNK_SIZE;
 		}
 
 		void dumpStats( std::ostream &aOut )

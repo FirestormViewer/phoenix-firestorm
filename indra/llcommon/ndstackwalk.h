@@ -42,11 +42,11 @@ namespace nd
 			{}
 
 			virtual bool isFull() const = 0;
-			virtual int getDepth() const = 0;
-			virtual int getMaxDepth() const = 0;
+			virtual unsigned int getDepth() const = 0;
+			virtual unsigned int getMaxDepth() const = 0;
 
 			virtual void pushReturnAddress( void *aReturnAddress ) = 0;
-			virtual void* getReturnAddress( int aFrame ) = 0;
+			virtual void* getReturnAddress( unsigned int aFrame ) const = 0;
 		};
 
 		extern "C"
@@ -59,11 +59,33 @@ namespace nd
 					RET
 				}
 			}
+			__forceinline __declspec(naked) sEBP* getStackTop()
+			{
+				__asm{
+					MOV EAX,FS:[0x04]
+					RET
+				}
+			}
+			__forceinline __declspec(naked) sEBP* getStackBottom()
+			{
+				__asm{
+					MOV EAX,FS:[0x08]
+					RET
+				}
+			}
 #elif defined( LL_LINUX )
 			asm( "getEBP: MOVL %EBP,%EAX; RET;" );
 			sEBP* getEBP();
+			void* getStackTop()
+			{ return 0; }
+			void* getStackBottom()
+			{ return 0; }
 #else
 			inline sEBP* getEBP()
+			{ return 0; }
+			void* getStackTop()
+			{ return 0; }
+			void* getStackBottom()
 			{ return 0; }
 #endif
 		}
@@ -71,8 +93,10 @@ namespace nd
 		inline void getCallstack( sEBP *aEBP, IFunctionStack *aStack )
 		{
 			sEBP *pEBP(aEBP);
+			void *pTop = getStackTop();
+			void *pBottom = getStackBottom();
 
-			while( pEBP && pEBP->pRet && !aStack->isFull() )
+			while( pBottom < pEBP  && pEBP < pTop && pEBP->pRet && !aStack->isFull() )
 			{
 				aStack->pushReturnAddress( pEBP->pRet );
 				pEBP = pEBP->pPrev;
