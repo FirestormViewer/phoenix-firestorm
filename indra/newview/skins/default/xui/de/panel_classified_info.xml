@@ -10,7 +10,7 @@
 		[PRICE] L$
 	</panel.string>
 	<panel.string name="click_through_text_fmt">
-		[TELEPORT] teleportieren, [MAP] Karte, [PROFILE] Profil
+		[TELEPORT] TP, [MAP] Karte, [PROFILE] Profil
 	</panel.string>
 	<panel.string name="date_fmt">
 		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
