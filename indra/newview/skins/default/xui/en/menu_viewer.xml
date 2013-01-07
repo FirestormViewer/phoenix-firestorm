@@ -569,6 +569,14 @@
      name="World"
      tear_off="true"
      visible="true">
+        <menu_item_call
+         label="Resync Animations"
+         name="Resync Animations">
+            <menu_item_call.on_click
+             function="Tools.ResyncAnimations" />
+        </menu_item_call>
+        
+        <menu_item_separator/>
      
         <menu_item_call
             label="Nearby Avatars"

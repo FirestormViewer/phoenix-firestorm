@@ -8624,6 +8624,35 @@ class FSToolSelectIncludeGroupOwned : public view_listener_t
 };
 // </FS:Ansariel>
 
+// <FS:CR> Resync Animations
+class FSToolsResyncAnimations : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		for (U32 i = 0; i < gObjectList.getNumObjects(); i++)
+		{
+			LLViewerObject* object = gObjectList.getObject(i);
+			if (object &&
+				object->isAvatar())
+			{
+				LLVOAvatar* avatarp = (LLVOAvatar*)object;
+				if (avatarp)
+				{
+					for (LLVOAvatar::AnimIterator anim_it = avatarp->mPlayingAnimations.begin();
+						 anim_it != avatarp->mPlayingAnimations.end();
+						 anim_it++)
+					{
+						avatarp->stopMotion(anim_it->first, TRUE);
+						avatarp->startMotion(anim_it->first);
+					}
+				}
+			}
+		}
+		return true;
+	}
+};
+// </FS:CR>
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9914,6 +9943,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
+	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");
