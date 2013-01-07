@@ -202,6 +202,7 @@ public:
 	void onClickSetBackupSettingsPath();
 	void onClickBackupSettings();
 	void onClickRestoreSettings();
+	void doRestoreSettings(const LLSD& notification,const LLSD& response);	// callback for restore dialog
 	// </FS:Zi>
 private:
 	static std::string sSkin;

@@ -9396,4 +9396,32 @@ Error in the regular expression:
 		text="No Havok Warning"/>
 	</form>
 	</notification>
+
+   <!-- <FS:Zi> Backup Settings -->
+  <notification
+   icon="alertmodal.tga"
+   name="BackupFinished"
+   type="alertmodal">
+Your settings have been backed up.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="BackupPathEmpty"
+   type="alertmodal">
+The backup path is empty. Please provide a location to back up and restore your settings first.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="SettingsRestoreNeedsLogout"
+   type="alertmodal">
+Settings restore requires a viewer restart. Do you want to restore your settings and quit the viewer now?
+    <usetemplate
+     name="okcancelbuttons"
+     notext="Cancel"
+     yestext="Restore"/>
+  </notification>
+  <!-- </FS:Zi> -->
+
 </notifications>

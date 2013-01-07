@@ -3035,17 +3035,22 @@ void LLFloaterPreference::onClickSetBackupSettingsPath()
 
 void LLFloaterPreference::onClickBackupSettings()
 {
-	// get settings backup path
+	// Get settings backup path
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 
 	// If we don't have a path yet, ask the user
 	if(dir_name.empty())
 		onClickSetBackupSettingsPath();
 
-	// If we still don't have a path, do nothing
+	// Remember the backup path for next time
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
+
+	// if the backup path is still empty, complain to the user and do nothing else
 	if(dir_name.empty())
+	{
+		LLNotificationsUtil::add("BackupPathEmpty");
 		return;
+	}
 
 	// get path and file names to the relevant settings files
 	std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
@@ -3158,21 +3163,43 @@ void LLFloaterPreference::onClickBackupSettings()
 			}
 		}
 	}
+	LLNotificationsUtil::add("BackupFinished");
 }
 
 void LLFloaterPreference::onClickRestoreSettings()
 {
-	// close the window so the restored settings can't be destroyed by the user
-	onBtnOK();
+	// ask the user if they really want to restore and restart
+	LLNotificationsUtil::add("SettingsRestoreNeedsLogout",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::doRestoreSettings,this,_1,_2));
+}
 
+void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD& response)
+{
+	// Check the user's answer about restore and restart
+	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
+
+	// If canceled, do nothing
+	if(option==1)
+		return;
+
+	// Get settings backup path
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 
+	// Backup path is empty, ask the user where to find the backup
 	if(dir_name.empty())
 		onClickSetBackupSettingsPath();
 
+	// Remember the backup path for next time
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
+
+	// If the backup path is still empty, complain to the user and do nothing else
 	if(dir_name.empty())
+	{
+		LLNotificationsUtil::add("BackupPathEmpty");
 		return;
+	}
+
+	// Close the window so the restored settings can't be destroyed by the user
+	onBtnOK();
 
 	// get path and file names to the relevant settings files
 	std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
