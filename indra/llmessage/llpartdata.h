@@ -83,6 +83,12 @@ public:
 		mParameter(0.f)
 	{
 	}
+
+	// <FS:ND> Need virtual dtor so derived classed are properly destroyed.
+	virtual ~LLPartData()
+	{ }
+	// </FS:ND>
+
 	BOOL unpack(LLDataPacker &dp);
 	BOOL pack(LLDataPacker &dp);
 	LLSD asLLSD() const;
