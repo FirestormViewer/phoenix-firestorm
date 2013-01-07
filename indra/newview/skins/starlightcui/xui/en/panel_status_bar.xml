@@ -253,7 +253,7 @@
   <panel
     height="18"
     left_pad="7"
-    width="130"
+    width="258"
     top="0"
     follows="right|top"
     name="time_and_media_bg"
