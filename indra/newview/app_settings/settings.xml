@@ -1843,8 +1843,6 @@
       <string>F32</string>
       <key>Value</key>
       <real>1.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>AudioLevelMedia</key>
     <map>
@@ -3719,8 +3717,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>DebugPluginDisableTimeout</key>
@@ -8188,8 +8184,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>MuteMedia</key>
     <map>
@@ -8200,8 +8194,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>MuteMusic</key>
@@ -8214,8 +8206,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>MuteSounds</key>
     <map>
@@ -8226,8 +8216,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>MuteUI</key>
@@ -8240,8 +8228,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>MuteVoice</key>
     <map>
@@ -8252,8 +8238,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>MuteWhenMinimized</key>
