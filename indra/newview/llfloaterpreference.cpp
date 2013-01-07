@@ -3220,12 +3220,12 @@ void LLFloaterPreference::onClickRestoreSettings()
 				gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,mPerAccountFiles[index]),
 				gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,mPerAccountFiles[index]));
 		}
-	}
 
-	// toolbars get overwritten when LLToolbarView is destroyed, so make sure
-	// the toolbars are updated here already
-	gToolBarView->clearToolbars();
-	gToolBarView->loadToolbars(FALSE);
+		// toolbars get overwritten when LLToolbarView is destroyed, so make sure
+		// the toolbars are updated here already
+		gToolBarView->clearToolbars();
+		gToolBarView->loadToolbars(FALSE);
+	}
 
 	// restore global folders and their contents
 	for(S32 index=0;index<mGlobalFolders.size();index++)
