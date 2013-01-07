@@ -81,10 +81,8 @@
 #include "llinventorybridge.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
-#include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llpanellogin.h"
 #include "llpanelblockedlist.h"
-#include "piemenu.h"		// ## Zi: Pie Menu
 #include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmoveview.h"
 #include "llparcel.h"
@@ -124,25 +122,22 @@
 #include "llwindow.h"
 #include "llpathfindingmanager.h"
 #include "boost/unordered_map.hpp"
+
+// Firestorm includes
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-//-TT Client LSL Bridge
 #include "fslslbridge.h"
-//-TT
 #include "fscommon.h"
-
-// ## Zi: Texture Refresh
-#include "llavatarpropertiesprocessor.h"
-#include "lltexturecache.h"
-// ## Zi: Texture Refresh
-
-#include "particleeditor.h"
-#include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
+#include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
 #include "fswsassetblacklist.h"
-
+#include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
+#include "lltexturecache.h"	// ## Zi: Texture Refresh
+#include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
 #include "llvovolume.h"
+#include "particleeditor.h"
+#include "piemenu.h"	// ## Zi: Pie Menu
 
 using namespace LLVOAvatarDefines;
 
