@@ -41,6 +41,8 @@
 #include "llspatialpartition.h"
 #include "llvovolume.h"
 
+#include "ndobjectpool.h" // <FS:ND/> For operator new/delete
+
 const F32 PART_SIM_BOX_SIDE = 16.f;
 const F32 PART_SIM_BOX_OFFSET = 0.5f*PART_SIM_BOX_SIDE;
 const F32 PART_SIM_BOX_RAD = 0.5f*F_SQRT3*PART_SIM_BOX_SIDE;
@@ -859,3 +861,21 @@ void LLViewerPartSim::clearParticlesByOwnerID(const LLUUID& task_id)
 		}
 	}
 }
+
+// <FS:ND> Object pool for LLViewerPart
+
+// Assume this is singlethreaded (nd::locks::NoLock) 16 byte aligned and allocate 128 objects per chunk
+nd::objectpool::ObjectPool< LLViewerPart, nd::locks::NoLock, 16, 128 > sViewerpartPool;
+
+void* LLViewerPart::operator new(size_t size)
+{
+	llassert_always( size == sizeof(LLViewerPart) );
+	return sViewerpartPool.allocMemoryForObject();
+}
+
+void LLViewerPart::operator delete(void* ptr)
+{
+	sViewerpartPool.freeMemoryOfObject( ptr );
+}
+
+// </FS:ND>
