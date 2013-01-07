@@ -71,9 +71,10 @@
 		<menu_item_check label="Blockierliste" name="Block List"/>
 	</menu>
 	<menu label="Welt" name="World">
-        <menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
-        <menu_item_call label="Teleport-Liste" name="Teleport History"/>
-        <menu_item_check label="Orte" name="Places"/>
+		<menu_item_call label="Animationen synchronisieren" name="Resync Animations"/>
+		<menu_item_call label="Avatare in der Nähe" name="Active Speakers"/>
+		<menu_item_call label="Teleport-Liste" name="Teleport History"/>
+		<menu_item_check label="Orte" name="Places"/>
 		<menu_item_check label="Minikarte" name="Mini-Map"/>
 		<menu_item_check label="Karte" name="World Map"/>
 		<menu_item_call label="Landmarke für diesen Ort setzen" name="Create Landmark Here"/>
