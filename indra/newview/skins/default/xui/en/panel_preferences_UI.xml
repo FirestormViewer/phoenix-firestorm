@@ -255,10 +255,10 @@
        control_name="FSEnableVolumeControls"
        height="16"
        name="FSEnableVolumeControls"
-       label="Show volume controls in upper right"
+       label="Show media controls in top menu"
        left_pad="5"
        width="256"
-       tool_tip="If checked, Firestorm will show volume controls (sounds, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
+       tool_tip="If checked, Firestorm will show media controls (volume, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
 
       <check_box
        top_pad="2"
