@@ -26,6 +26,8 @@
  */
 
 #include <limits>
+#include <stdlib.h>
+#include <cstddef>
 
 namespace nd
 {
