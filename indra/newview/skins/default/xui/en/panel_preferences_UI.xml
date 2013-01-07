@@ -248,8 +248,17 @@
        name="ShowNetStats"
        label="Show lag meter"
        left="5"
-       width="270"
+       width="110"
        tool_tip="Show lag meter in the Status Overlay"/>
+
+      <check_box
+       control_name="FSEnableVolumeControls"
+       height="16"
+       name="FSEnableVolumeControls"
+       label="Show volume controls in upper right"
+       left_pad="5"
+       width="256"
+       tool_tip="If checked, Firestorm will show volume controls (sounds, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls."/>
 
       <check_box
        top_pad="2"

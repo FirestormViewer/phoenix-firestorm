@@ -29,7 +29,8 @@
         <check_box name="FSAdvancedTooltips" label="Rozszerzone informacje w chmurkach (klasyczny styl Phoenixa)"/>
         <check_box name="FSShowGroupTitleInTooltip" label="Pokazuj tytuły grupowe awatarów w chmurkach"/>		
         <check_box label="Użyj menu kołowego (pie menu)" name="UsePieMenu" tool_tip="Używaj klasycznego, okrągłego menu znanego z 1.x po kliknięciu na awatary, obiekty, teren lub dodatki - zamiast prostokątnych menu kontekstowych." />
-        <check_box name="ShowNetStats" label="Pokaż miernik lagów" tool_tip="Pokaż miernik lagów w pasku statusu" />
+        <check_box name="ShowNetStats" label="Pokaż miernik lagów" width="135" tool_tip="Pokaż miernik lagów w pasku statusu" />
+        <check_box label="Pokaż kontrolki głośności w prawym górnym rogu" name="FSEnableVolumeControls" tool_tip="Zaznacz, aby Firestorm pokazywał kontrolki głośności (dźwięków, mediów, muzyki strumieniowej) w prawym górnym rogu ekranu. Przydatne, jeśli skórka posiada swoje własne kontrolki." />
         <check_box name="FSUseStandaloneGroupFloater" label="Używaj osobnych okien dla profili grup" tool_tip="Gdy włączysz tą opcję, to profile grup będą otwierane w osobnych oknach." />
         <check_box name="FSUseStandaloneTeleportHistoryFloater" label="Używaj osobnego okna dla historii teleportacji" tool_tip="Gdy włączysz tą opcję, to użycie skrótu klawiszowego odpowiedzialnego za otwarcie historii teleportacji pokaże ją w osobnym oknie." />
         <check_box name="FSUseStandalonePlaceDetailsFloater" label="Używaj osobnych okien dla landmarków, informacji o miejscach i historii teleportacji" tool_tip="Gdy włączysz tą opcję, to landmarki, informacje o miejscach i historia teleportacji będą otwierane w osobnych oknach." />

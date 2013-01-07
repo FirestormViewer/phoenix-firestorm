@@ -250,23 +250,24 @@
      top="2"
      width="40" />
   </panel>
-  	<!-- Draw distance widget here -->
-   <panel
-    height="17"
-    width="128"
-    top="1"
-	left_pad="12"
+  <panel
+    height="18"
+    left_pad="7"
+    width="130"
+    top="0"
     follows="right|top"
-    name="drawdistance_panel"
-    background_opaque="true"
+    name="time_and_media_bg"
+    background_opaque="false"
     background_visible="true">
+
+  	<!-- Draw distance widget here -->
     <icon
      follows="right|top"
      height="16"
      image_name="Draw_Distance"
      name="dd_icon"
      tool_tip="Draw Distance"
-     top="0"
+     top="2"
      left="1"
      visible="true"
      width="16"
@@ -281,23 +282,14 @@
      initial_value="160"
      layout="topleft"
      tool_tip="Maximum distance away from camera to be rezzed (meters)"
-     top="1"
+     top="3"
      left_pad="2"
      max_val="1024"
      min_val="32"
      name="drawdistance" 
      top_delta="0"
      width="98" />
-  </panel>
-  <panel
-    height="18"
-    left_pad="7"
-    width="130"
-    top="0"
-    follows="right|top"
-    name="time_and_media_bg"
-    background_opaque="false"
-    background_visible="true">
+
     <text
      type="string"
      font="SansSerifSmall"
@@ -307,7 +299,7 @@
      height="16"
      top="5"
      layout="topleft"
-     left="0"
+     left="135"
      name="TimeText"
      tool_tip="Current time (Pacific)"
      width="50">

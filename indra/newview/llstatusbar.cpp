@@ -204,6 +204,9 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 
 	gSavedSettings.getControl("ShowNetStats")->getSignal()->connect(boost::bind(&LLStatusBar::updateNetstatVisibility, this, _2));
 
+	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+	gSavedSettings.getControl("FSEnableVolumeControls")->getSignal()->connect(boost::bind(&LLStatusBar::updateVolumeControlsVisibility, this, _2));
+
 	buildFromFile("panel_status_bar.xml");
 }
 
@@ -409,6 +412,14 @@ BOOL LLStatusBar::postBuild()
 		updateNetstatVisibility(LLSD(FALSE));
 	}
 
+	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+	mVolumeIconsWidth = mBtnVolume->getRect().getWidth() + mStreamToggle->getRect().getWidth() + mMediaToggle->getRect().getWidth();
+	if (!gSavedSettings.getBOOL("FSEnableVolumeControls"))
+	{
+		updateVolumeControlsVisibility(LLSD(FALSE));
+	}
+	// </FS:PP>
+
 	return TRUE;
 }
 
@@ -571,9 +582,15 @@ void LLStatusBar::setVisibleForMouselook(bool visible)
 	mTextTime->setVisible(visible);
 	mBalancePanel->setVisible(visible);
 	mBoxBalance->setVisible(visible);
-	mBtnVolume->setVisible(visible);
-	mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
-	mMediaToggle->setVisible(visible);
+	// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+	// mBtnVolume->setVisible(visible);
+	// mStreamToggle->setVisible(visible);		// ## Zi: Media/Stream separation
+	// mMediaToggle->setVisible(visible);
+	BOOL FSEnableVolumeControls = gSavedSettings.getBOOL("FSEnableVolumeControls");
+	mBtnVolume->setVisible(visible && FSEnableVolumeControls);
+	mStreamToggle->setVisible(visible && FSEnableVolumeControls); // ## Zi: Media/Stream separation
+	mMediaToggle->setVisible(visible && FSEnableVolumeControls);
+	// </FS:PP>
 	BOOL showNetStats = gSavedSettings.getBOOL("ShowNetStats");
 	mSGBandwidth->setVisible(visible && showNetStats);
 	mSGPacketLoss->setVisible(visible && showNetStats);
@@ -1356,6 +1373,27 @@ void LLStatusBar::updateNetstatVisibility(const LLSD& data)
 	rect.translate(NETSTAT_WIDTH * translateFactor, 0);
 	mBalancePanel->setRect(rect);
 }
+
+// <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
+void LLStatusBar::updateVolumeControlsVisibility(const LLSD& data)
+{
+	const S32 cVolumeIconsWidth = mVolumeIconsWidth;
+	BOOL showVolumeControls = data.asBoolean();
+	S32 translateFactor = (showVolumeControls ? -1 : 1);
+
+	mBtnVolume->setVisible(showVolumeControls);
+	mStreamToggle->setVisible(showVolumeControls);
+	mMediaToggle->setVisible(showVolumeControls);
+
+	LLRect rect = mTimeMediaPanel->getRect();
+	rect.translate(cVolumeIconsWidth * translateFactor, 0);
+	mTimeMediaPanel->setRect(rect);
+
+	rect = mBalancePanel->getRect();
+	rect.translate(cVolumeIconsWidth * translateFactor, 0);
+	mBalancePanel->setRect(rect);
+}
+// </FS:PP>
 
 // <FS:Zi> Pathfinding rebake functions
 BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& response)

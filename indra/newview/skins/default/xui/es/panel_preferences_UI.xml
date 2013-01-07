@@ -30,7 +30,8 @@
 			<check_box name="FSAdvancedTooltips" label="Mostrar información extendida en las bulas (estilo clásico de Phoenix)"/>
 			<check_box name="FSShowGroupTitleInTooltip" label="Mostrar títulos de grupo del avatar en las bulas"/>			
 			<check_box label="Usar menús circulares" name="UsePieMenu" tool_tip="Usar los clásicos menús circulares V1.x (tipo 'tarta') en vez de los menús contextuales rectangulares cuando hagas clic con el botón derecho sobre el terreno, avatares, objetos o accesorios"/>
-			<check_box name="ShowNetStats" label="Mostrar medidor de lag" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
+			<check_box name="ShowNetStats" label="Mostrar medidor de lag" width="150" tool_tip="Muestra el medidor de lag en la barra de estado" left="5"/>
+			<check_box label="Show volume controls in upper right" name="FSEnableVolumeControls" tool_tip="If checked, Firestorm will show volume controls (sounds, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls." />
 			<check_box name="FSUseStandaloneGroupFloater" label="Usar ventanas independientes para los perfiles de grupo" width="270" tool_tip="Si se activa, los perfiles de grupo se abrirán en ventanas separadas."/>
 			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Usar una ventana independiente para el historial de teleportes" width="270" tool_tip="Si se activa, al usar el atajo para el historial de teleportes, éste se abrirá en una ventana separada."/>
 			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Usar ventanas independientes para hitos, detalles de lugar y de historial de teleportes" width="270" tool_tip="Si se activa, los hitos, los detalles de lugar y los del historial de teleportes se abrirán en ventanas separadas."/>
