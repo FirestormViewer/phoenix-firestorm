@@ -5024,4 +5024,52 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="render_quality_unknown">
 		Nieznana, poza normalnym zakresem, sprawdź ustawienie debugowania RenderQualityPerformance
 	</string>
+	<string name="qtool_busy">
+		Poczekaj, narzędzie wyrównywania jest zajęte.
+	</string>
+	<string name="qtool_still_busy">
+		Poczekaj jeszcze chwilę, narzędzie wyrównywania jest ciągle zajęte.
+	</string>
+	<string name="qtool_done">
+		Narzędzie wyrównywania zakończyło pracę.
+	</string>
+	<string name="fsbridge_no_library">
+		Firestorm nie mógł utworzyć Mostu LSL. Włącz swoją Bibliotekę i zaloguj się ponownie.
+	</string>
+	<string name="fsbridge_already_creating">
+		Tworzenie Mostu LSL już trwa, nie można rozpocząć procesu budowania kolejnego. Poczekaj kilka minut, zanim spróbujesz ponownie.
+	</string>
+	<string name="fsbridge_creating">
+		Trwa tworzenie Mostu LSL. To może chwilę zająć, poczekaj proszę.
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		Most LSL nie został utworzony, bo jest nazwany niepoprawnie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		Most LSL nie został utworzony, bo nie może zostać znaleziony w Szafie. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		Most LSL nie mógł zostać założony na awatara, bo nie jest w aktualnej wersji. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		Most LSL nie mógł zostać założony na awatara, bo nie został znaleziony w odpowiednim miejscu Szafy. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		Most LSL nie mógł zostać założony na awatara, bo coś innego używa punktu zaczepu dodatku zarezerwowanego dla niego. Spróbuj stworzyć go na nowo ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Obiekt Mostu LSL nie mógł zostać znaleziony. Nie można kontynuować procesu jego tworzenia, kończę operację.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Wewnątrz Mostu LSL znaleziono nieoczekiwane elementy.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Proces tworzenia Mostu LSL nie dobiegł do końca. Być może będzie trzeba utworzyć go na nowo, aby zadział ('Naprawa awatara' w menu 'Awatar' na górze).
+	</string>
+	<string name="fsbridge_detached">
+		Most LSL został odłączony od awatara.
+	</string>
+	<string name="fsbridge_created">
+		Most LSL został utworzony pomyślnie.
+	</string>
 </strings>
