@@ -5015,4 +5015,18 @@ Try enclosing path to the editor with double quotes.
   <string name="qtool_busy">Please wait, the align tool is busy working.</string>
   <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
   <string name="qtool_done">The align tool has finished.</string>
+
+  <string name="fsbridge_no_library">Firestorm could not create an LSL bridge. Please enable your library and relog.</string>
+  <string name="fsbridge_already_creating">Bridge creation in process, cannot start another. Please wait a few minutes before trying again.</string>
+  <string name="fsbridge_creating">Creating the bridge. This might take a moment, please wait.</string>
+  <string name="fsbridge_failure_creation_bad_name">Bridge not created. The bridge is named incorrectly. Please try to recreate the bridge.</string>
+  <string name="fsbridge_failure_creation_null">Bridge not created. The bridge couldn't be found in inventory. Please try to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_object">Bridge failed to attach. This is not the current bridge version. Please try to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_wrong_location">Bridge failed to attach. The bridge wasn't found in the right inventory location. Please try to recreate the bridge.</string>
+  <string name="fsbridge_failure_attach_point_in_use">Bridge failed to attach. Something else was using the bridge attachment point. Please try to recreate the bridge.</string>
+  <string name="fsbridge_failure_not_found">The bridge object could not be found. Cannot proceed with its creation, exiting.</string>
+  <string name="fsbridge_warning_unexpected_items">The bridge inventory contains unexpected items.</string>
+  <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to recreate it before using.</string>
+  <string name="fsbridge_detached">Bridge detached.</string>
+  <string name="fsbridge_created">Bridge created.</string>
 </strings>
