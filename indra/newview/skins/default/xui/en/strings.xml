@@ -5011,4 +5011,7 @@ Try enclosing path to the editor with double quotes.
   <string name="render_quality_highultra">High-Ultra (6/7)</string>
   <string name="render_quality_ultra">Ultra (7/7)</string>
   <string name="render_quality_unknown">Unknown, beyond the normal range, check RenderQualityPerformance debug setting</string>
+
+  <string name="qtool_busy">Please wait, the align tool is busy working.</string>
+  <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
 </strings>
