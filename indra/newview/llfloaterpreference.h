@@ -197,6 +197,12 @@ public:
 	
 	void buildPopupLists();
 	static void refreshSkin(void* data);
+
+	// <FS:Zi> Backup settings
+	void onClickSetBackupSettingsPath();
+	void onClickBackupSettings();
+	void onClickRestoreSettings();
+	// </FS:Zi>
 private:
 	static std::string sSkin;
 	bool mClickActionDirty; ///< Set to true when the click/double-click options get changed by user.
@@ -209,6 +215,13 @@ private:
 	std::string mDirectoryVisibility;
 	
 	LLAvatarData mAvatarProperties;
+
+// <FS:Zi> Backup settings
+protected:
+	std::vector<std::string> mGlobalFiles;			// list of global settings files to copy
+	std::vector<std::string> mGlobalFolders;		// list of global folders to copy
+	std::vector<std::string> mPerAccountFiles;		// list of per account settings files to copy
+// </FS:Zi>
 };
 
 class LLPanelPreference : public LLPanel

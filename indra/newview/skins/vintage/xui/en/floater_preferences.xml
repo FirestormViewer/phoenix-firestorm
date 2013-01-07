@@ -9,7 +9,7 @@
  help_topic="preferences"
  save_rect="true"
  single_instance="true"
- title="PREFERENCES"
+ title="Preferences"
  width="658">
 	
 	<floater.string name="LoginToChange">
@@ -174,5 +174,12 @@
          layout="topleft"
          help_topic="preferences_opensim_tab"
          name="opensim" />
+        <panel
+         class="panel_preference_backup"
+         filename="panel_preferences_backup.xml"
+         label="Backup"
+         layout="topleft"
+         help_topic="preferences_backup_tab"
+         name="backup" />
     </tab_container>
 </floater>

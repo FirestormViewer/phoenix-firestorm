@@ -133,12 +133,16 @@ bool LLControlVariable::llsd_compare(const LLSD& a, const LLSD & b)
 LLControlVariable::LLControlVariable(const std::string& name, eControlType type,
 							 LLSD initial, const std::string& comment,
 							 eSanityType sanityType,LLSD sanityValues,const std::string& sanityComment,
-							 bool persist, bool hidefromsettingseditor
+							 // <FS:Zi> Backup Settings
+							 // bool persist, bool hidefromsettingseditor
+							 bool persist, bool can_backup, bool hidefromsettingseditor
+							 // </FS:Zi>
 )
 	: mName(name),
 	  mComment(comment),
 	  mType(type),
 	  mPersist(persist),
+	  mCanBackup(can_backup),		// <FS:Zi> Backup Settings
 	  mHideFromSettingsEditor(hidefromsettingseditor),
 	  mSanityType(sanityType),
 	  mSanityComment(sanityComment)
@@ -273,6 +277,13 @@ void LLControlVariable::setPersist(bool state)
 {
 	mPersist = state;
 }
+
+// <FS:Zi> Backup Settings
+void LLControlVariable::setBackupable(bool state)
+{
+	mCanBackup = state;
+}
+// </FS:Zi>
 
 void LLControlVariable::setHiddenFromSettingsEditor(bool hide)
 {
@@ -427,7 +438,10 @@ std::string LLControlGroup::sanityTypeEnumToString(eSanityType sanitytypeenum)
 	return mSanityTypeString[sanitytypeenum];
 }
 
-BOOL LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL hidefromsettingseditor)
+// <FS:Zi> Backup Settings
+//BOOL LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL hidefromsettingseditor)
+BOOL LLControlGroup::declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL can_backup, BOOL hidefromsettingseditor)
+// </FS:Zi>
 {
 	LLControlVariable* existing_control = getControl(name);
 	if (existing_control)
@@ -450,7 +464,10 @@ BOOL LLControlGroup::declareControl(const std::string& name, eControlType type, 
 	}
 
 	// if not, create the control and add it to the name table
-	LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, sanity_type, sanity_value, sanity_comment, persist, hidefromsettingseditor);
+	// <FS:Zi> Backup Settings
+	// LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, sanity_type, sanity_value, sanity_comment, persist, hidefromsettingseditor);
+	LLControlVariable* control = new LLControlVariable(name, type, initial_val, comment, sanity_type, sanity_value, sanity_comment, persist, can_backup, hidefromsettingseditor);
+	// </FS:Zi>
 	mNameTable[name] = control;	
 	return TRUE;
 }
@@ -885,6 +902,7 @@ U32 LLControlGroup::saveToFile(const std::string& filename, BOOL nondefault_only
 				settings[iter->first]["Type"] = typeEnumToString(control->type());
 				settings[iter->first]["Comment"] = control->getComment();
 				settings[iter->first]["Value"] = control->getSaveValue();
+				settings[iter->first]["Backup"] = control->isBackupable();		// <FS:Zi> Backup Settings
 				++num_saved;
 			}
 			else
@@ -937,6 +955,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 	for(LLSD::map_const_iterator itr = settings.beginMap(); itr != settings.endMap(); ++itr)
 	{
 		bool persist = true;
+		bool can_backup = true;		// <FS:Zi> Backup Settings
 		std::string const & name = itr->first;
 		LLSD const & control_map = itr->second;
 		
@@ -944,7 +963,14 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 		{
 			persist = control_map["Persist"].asInteger();
 		}
-		
+
+		// <FS:Zi> Backup Settings
+		if(control_map.has("Backup")) 
+		{
+			can_backup = control_map["Backup"].asInteger();
+		}
+		// </FS:Zi>
+
 		// Sometimes we want to use the settings system to provide cheap persistence, but we
 		// don't want the settings themselves to be easily manipulated in the UI because 
 		// doing so can cause support problems. So we have this option:
@@ -972,6 +998,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 					existing_control->setPersist(persist);
 					existing_control->setHiddenFromSettingsEditor(hidefromsettingseditor);
 					existing_control->setComment(control_map["Comment"].asString());
+					existing_control->setBackupable(can_backup);		// <FS:Zi> Backup Settings
 				}
 				else
 				{
@@ -997,6 +1024,7 @@ U32 LLControlGroup::loadFromFile(const std::string& filename, bool set_default_v
 						   control_map["SanityValue"],
 						   control_map["SanityComment"].asString(),
 						   persist,
+						   can_backup,		// <FS:Zi> Backup Settings
 						   hidefromsettingseditor
 						   );
 		}

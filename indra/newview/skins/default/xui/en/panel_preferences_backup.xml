@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel
+ border="true"
+ follows="all"
+ height="440"
+ layout="topleft"
+ left="1"
+ top="1"
+ width="540"
+ label="Backup"
+ name="backup">
+    <text
+     name="backup_path_label"
+     layout="topleft"
+     follows="left|top"
+     top="20"
+     left="30"
+     width="80"
+     height="20">
+Backup Path:
+    </text>
+
+    <line_editor
+     name="settings_backup_path"
+     control_name="SettingsBackupPath"
+     layout="topleft"
+     follows="left|right|top"
+     left_pad="8"
+     right="-120"
+      height="20"/>
+
+    <button
+     layout="topleft"
+     left_pad="10"
+     follows="right|top"
+     height="20"
+     label="Set"
+     name="set_backup_settings_path"
+     width="80" >
+        <button.commit_callback
+         function="Pref.SetBackupSettingsPath" />
+    </button>
+
+    <button
+     layout="topleft"
+     top_pad="20"
+     follows="left|top"
+     height="20"
+     label="Backup Settings"
+     left="30"
+     name="backup_settings"
+     width="120" >
+        <button.commit_callback
+         function="Pref.BackupSettings" />
+    </button>
+
+    <button
+     layout="topleft"
+     left_pad="14"
+     follows="left|top"
+     height="20"
+     label="Restore Settings"
+     name="restore_settings"
+     width="120" >
+        <button.commit_callback
+         function="Pref.RestoreSettings" />
+    </button>
+ </panel>
