@@ -13879,6 +13879,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>UISndFootsteps</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file for default footsteps (uuid for sound asset). Change requires restart to take effect.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>e8af4a28-aa83-4310-a7c4-c047e15ea0df</string>
+    </map>
     <key>UISndFriendOffline</key>
     <map>
       <key>Comment</key>
@@ -18215,6 +18226,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndClickRelease.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>PlayModeUISndFootsteps</key>
+    <map>
+      <key>Comment</key>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndFootsteps.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>

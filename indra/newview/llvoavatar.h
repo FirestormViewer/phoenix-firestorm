@@ -999,7 +999,7 @@ protected:
 private:
 	// Global table of sound ids per material, and the ground
 	const static LLUUID	sStepSounds[LL_MCODE_END];
-	const static LLUUID	sStepSoundOnLand;
+	// const static LLUUID	sStepSoundOnLand; - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 
 	//--------------------------------------------------------------------
 	// Foot step state (for generating sounds)
