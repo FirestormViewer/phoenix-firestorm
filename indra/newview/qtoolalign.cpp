@@ -480,7 +480,7 @@ public:
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
 		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-		reportToNearbyChat("The align tool is finished.");
+		reportToNearbyChat(LLTrans::getString("qtool_done"));
 		return TRUE;
 	}
 };

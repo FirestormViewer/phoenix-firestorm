@@ -5014,4 +5014,5 @@ Try enclosing path to the editor with double quotes.
 
   <string name="qtool_busy">Please wait, the align tool is busy working.</string>
   <string name="qtool_still_busy">Please continue to wait, the align tool is still working.</string>
+  <string name="qtool_done">The align tool has finished.</string>
 </strings>
