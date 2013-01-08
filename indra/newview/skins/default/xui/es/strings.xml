@@ -5332,4 +5332,20 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="render_quality_highultra">Alta-Ultra (6/7)</string>
 	<string name="render_quality_ultra">Ultra (7/7)</string>
 	<string name="render_quality_unknown">Desconocida, por encima del rango normal, comprueba la configuración del depurador RenderQualityPerformance</string>
+	<string name="qtool_busy">Espera, por favor. La herramienta de alineación está trabajando.</string>
+	<string name="qtool_still_busy">Por favor, continúa esperando. La herramienta de alineación aún está trabajando.</string>
+	<string name="qtool_done">La herramienta de alineación ha finalizado.</string>
+	<string name="fsbridge_no_library">Firestorm no ha podido crear un LSL bridge. Por favor, activa tu librería y vuelve a iniciar sesión.</string>
+	<string name="fsbridge_already_creating">Creación del bridge en curso, no se puede iniciar otra. Por favor espera unos minutos antes de volverlo a intentar.</string>
+	<string name="fsbridge_creating">Creando el bridge. Puede tardar un momento, por favor espera.</string>
+	<string name="fsbridge_failure_creation_bad_name">No se ha creado el bridge. El bridge tiene un nombre incorrecto. Por favor, trata de crearlo de nuevo.</string>
+	<string name="fsbridge_failure_creation_null">No se ha creado el bridge. No se ha podido encontrar el bridge en el inventario. Por favor, trata de crearlo de nuevo.</string>
+	<string name="fsbridge_failure_attach_wrong_object">El bridge no ha podido ser anexado a tu avatar. No es la versión actual del bridge. Por favor, trata de crearlo de nuevo.</string>
+	<string name="fsbridge_failure_attach_wrong_location">El bridge no ha podido ser anexado a tu avatar. No se encontró el bridge en el lugar adecuado del inventario. Por favor, trata de crearlo de nuevo.</string>
+	<string name="fsbridge_failure_attach_point_in_use">El bridge no ha podido ser anexado a tu avatar. Algo está usando el punto de anclaje del bridge. Por favor, trata de crearlo de nuevo.</string>
+	<string name="fsbridge_failure_not_found">No se ha podido encontrar el objeto del bridge. No se puede proceder a su creación. Saliendo.</string>
+	<string name="fsbridge_warning_unexpected_items">El inventario del bridge contiene items inesperados.</string>
+	<string name="fsbridge_warning_not_finished">El bridge no se terminó de crear. Puede que tengas que crearlo de nuevo antes de usarlo.</string>
+	<string name="fsbridge_detached">Bridge quitado.</string>
+	<string name="fsbridge_created">Bridge creado.</string>
 </strings>

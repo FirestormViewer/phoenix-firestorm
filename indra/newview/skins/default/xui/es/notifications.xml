@@ -3861,4 +3861,14 @@ Simulador anterior: [OLDVERSION]
 			<ignore name="ignore" text="Alerta de No Havok"/>
 		</form>
 	</notification>
+	<notification name="BackupFinished">
+		Tu configuración ha sido respaldada.
+	</notification>
+	<notification name="BackupPathEmpty">
+		La ruta del respaldo está vacía. Por favor, proporciona primero una ruta válida donde respaldar tu configuración.
+	</notification>
+	<notification name="SettingsRestoreNeedsLogout">
+		La restauración de las configuraciones requiere reiniciar. ¿Quieres restaurarlas y salir de visor ahora?
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Restaurar"/>
+	</notification>
 </notifications>

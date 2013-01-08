@@ -2,5 +2,5 @@
 <!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
 <panel name="panel_stand_stop_flying">
 	<button label="Levantarme" name="stand_btn" tool_tip="Pulsa aquí para levantarte."/>
-	<button label="Dejar de volar" name="stop_fly_btn" tool_tip="Dejar de volar"/>
+	<button label="Dejar de volar" name="stop_fly_btn" tool_tip="Dejar de volar" width="100"/>
 </panel>

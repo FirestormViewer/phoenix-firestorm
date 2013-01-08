@@ -112,6 +112,7 @@
 				<check_box label="Restablecer cámara tras teleporte" name="FSResetCameraOnTP" tool_tip="Normalmente, la posición de la cámara se restablece tras un teleporte (dentro de la misma región). Esta opción evita este comportamiento."/>
 				<check_box label="Desactivar distancia mínima de zoom" name="disableminzoomdist" tool_tip="Desactiva la restricción de la distancia de cámara más cercana posible a un objeto."/>
 				<check_box label="Permitir libertad de cámara" name="ignorecameraconstraints" tool_tip="Ignora el 'empujón' que el simulador aplica a tu cámara para mantenerla fuera de los objetos. ¡REQUIERE REINICIAR¡"/>
+				<check_box label="Restablecer cámara al mover el avatar" name="resetcameraonmovement" tool_tip="Restablece la cámara a su posición por defecto cuando mueves el avatar"/>
 			</panel>
 		</panel>
 		<panel name="P_3D_Mouse" label="Ratón 3D">

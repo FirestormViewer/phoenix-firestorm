@@ -20,5 +20,6 @@
 		<panel label="Reporte de fallos" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="Opensim" name="opensim"/>
+		<panel label="Respaldo" name="backup"/>
 	</tab_container>
 </floater>

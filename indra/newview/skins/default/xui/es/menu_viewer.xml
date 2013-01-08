@@ -75,6 +75,7 @@
         </menu_item_call>
 	</menu>
 	<menu label="Mundo" name="World">
+		<menu_item_call label="Resincronizar animaciones" name="Resync Animations"/>
 		<menu_item_call label="Gente cercana" name="Active Speakers"/>
 		<menu_item_call label="Historial de teleportes" name="Teleport History"/>
 		<menu_item_check label="Lugares" name="Places"/>

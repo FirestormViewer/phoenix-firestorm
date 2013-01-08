@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel label="Respaldo" name="backup">
+	<text name="backup_path_label" width="100">
+		Ruta del respaldo:
+	</text>
+	<button label="Establecer" name="set_backup_settings_path"/>
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label" height="60">
+			<text name="account_specific_label" height="60">
+				En estos momentos estás desconectado. Ten en cuenta que los ajustes específicos de tu avatar sólo pueden ser respaldados si estás conectado con él. De todos modos, las configuraciones que se aplican a todas las cuentas de usuario pueden ser respaldados sin necesidad de iniciar sesión.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<button label="Configuración del respaldo" name="backup_settings" width="160"/>
+			<button label="Restaurar configuración" name="restore_settings" width="160"/>
+		</layout_panel>
+	</layout_stack>
+ </panel>
