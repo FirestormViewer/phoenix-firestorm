@@ -43,6 +43,7 @@ Backup Path:
     </button>
 
     <layout_stack
+     name="ls_account_specific_label"
      follows="top|left|right"
      height="150"
      orientation="vertical"
@@ -52,6 +53,7 @@ Backup Path:
      layout="topleft">
 
     <layout_panel
+     name="lp_account_specific_label"
      follows="all"
      left="1"
      right="-1"
@@ -62,6 +64,7 @@ Backup Path:
      invisibility_control="PerAccountSettingsFile">
 
     <text
+     name="account_specific_label"
      follows="all"
      layout="topleft"
      left="0"
@@ -75,6 +78,7 @@ You are currently logged out. Be aware that your account specific settings can o
     </layout_panel>
 
     <layout_panel
+     name="lp_buttons"
      follows="all"
      left="1"
      right="-1"
