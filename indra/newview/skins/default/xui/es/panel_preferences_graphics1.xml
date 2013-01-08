@@ -2,16 +2,19 @@
 <panel label="Gráficos" name="Display panel">
 	<tab_container label="Pref. Gráficos" name="tabs">
 		<panel label="General" name="General">
-			<check_box label="Pantalla completa (require reiniciar)" name="Fullscreen Mode" tool_tip="Ejecuta Firestorm en modo de pantalla completa"/>
+			<text name="QualitySpeed">
+				Calidad y velocidad:
+			</text>
+			<text name="FasterText">
+				Rendimiento
+			</text>
+			<text name="BetterText">
+				Calidad
+			</text>
 			<text name="QualitySpeed">
 				Calidad de dibujo (más rápido cuanto más baja):
 			</text>
-			<icon name="LowGraphicsDivet" left="290"/>
-			<icon name="MidGraphicsDivet"/>
-			<icon name="HighGraphicsDivet"/>
-			<icon name="UltraGraphicsDivet"/>
-			<slider name="QualityPerformanceSelection" width="196" left="283"/>
-			<text name="ShadersPrefText" left="265">
+			<text name="ShadersPrefText">
 				Baja
 			</text>
 			<text name="ShadersPrefText2">
@@ -24,6 +27,7 @@
 				Ultra
 			</text>
 			<panel label="Personalizado" name="CustomGraphics Panel">
+				<check_box label="Pantalla completa" name="Fullscreen Mode" tool_tip="Ejecutar Firestorm en modo de pantalla completa. Se requiere reiniciar para cambiar el modo."/>
 				<text name="ShadersText">
 					Efectos gráficos:
 				</text>
@@ -53,7 +57,7 @@
 					<combo_box.item label="Todos los avatares y objetos" name="3"/>
 					<combo_box.item label="Todo" name="4"/>
 				</combo_box>
-				<text name="local lights_label" width="180">
+				<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando Luces y Sombras está desactivado. Se requiere reiniciar para efectuar los cambios.">
 					Puntos de luz (requiere reiniciar):
 				</text>
 				<combo_box name="LocalLightsDetail" width="165">
@@ -102,7 +106,7 @@
 		<panel label="Hardware" name="Hardware Settings">
 			<check_box label="Filtrado anisotrópico (más lento cuando está activado)" name="ani"/>
 			<check_box label="Activar OpenGL Vertex Buffer Objects" name="vbo" tool_tip="Proporciona un aumento de rendimiento cuando usas hardware moderno. Por contra, el hardware antiguo a menudo ofrece implementaciones muy pobres de VBOs y pueden provocar fallos cuando lo activas."/>
-			<check_box label="Activar VBOs en flujo" name="vbo_stream" tool_tip="Desactivarlo puede mejorar el rendimiento cuando los VBOs están activados, sobre todo en varias tarjetas gráficas de AMD(ATI)."/>
+			<check_box label="Activar VBOs en flujo" name="vbo_stream" tool_tip="Desactivarlo puede mejorar el rendimiento cuando los VBOs están activados. Desactivarlo ha producido mejoras notables en varias GPU de AMD e Intel."/>
 			<check_box label="Activar compresión de texturas con pérdida (requiere reiniciar)" name="texture compression" tool_tip="Comprime las texturas en la memoria de vídeo, permitiendo la carga de texturas de mayor resolución a costa de algo de calidad de color."/>
 			<text name="Antialiasing:">
 				Antialiasing:

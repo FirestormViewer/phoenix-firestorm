@@ -363,7 +363,7 @@ void LLAvatarNameCache::requestNamesViaCapability()
 	while(!sAskQueue.empty())
 	{
 		it = sAskQueue.begin();
-		const LLUUID& agent_id = *it;
+		LLUUID agent_id = *it;
 		sAskQueue.erase(it);
 
 		if (url.empty())
@@ -431,7 +431,7 @@ void LLAvatarNameCache::requestNamesViaLegacy()
 	for (S32 requests = 0; !sAskQueue.empty() && requests < MAX_REQUESTS; ++requests)
 	{
 		it = sAskQueue.begin();
-		const LLUUID& agent_id = *it;
+		LLUUID agent_id = *it;
 		sAskQueue.erase(it);
 
 		// Mark as pending first, just in case the callback is immediately
@@ -583,8 +583,7 @@ void LLAvatarNameCache::eraseUnrefreshed()
             const LLAvatarName& av_name = it->second;
             if (av_name.mExpires < max_unrefreshed)
             {
-                const LLUUID& agent_id = it->first;
-                LL_DEBUGS("AvNameCache") << agent_id 
+                LL_DEBUGS("AvNameCache") << it->first 
                                          << " user '" << av_name.mUsername << "' "
                                          << "expired " << now - av_name.mExpires << " secs ago"
                                          << LL_ENDL;

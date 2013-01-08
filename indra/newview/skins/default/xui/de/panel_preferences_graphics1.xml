@@ -2,7 +2,6 @@
 <panel label="Grafik" name="Display panel">
 <tab_container label="Graphics Prefs" name="tabs">
 	<panel label="Allgemein" name="General">
-	    <check_box label="Vollbildmodus (Erfordert Neustart)" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen."/>
 		<text name="QualitySpeed">
 			Qualität und Geschwindigkeit:
 		</text>
@@ -25,6 +24,7 @@
 			Ultra
 		</text>
 		<panel label="CustomGraphics" name="CustomGraphics Panel">
+			<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
 			<text name="ShadersText">
 				Shader:
 			</text>

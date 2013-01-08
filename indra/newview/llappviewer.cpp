@@ -686,6 +686,7 @@ LLAppViewer::LLAppViewer() :
 	mPeriodicSlowFrame(LLCachedControl<bool>(gSavedSettings,"Periodic Slow Frame", FALSE)),
 	mFastTimerLogThread(NULL),
 	mUpdater(new LLUpdaterService()),
+	mSaveSettingsOnExit(true),		// <FS:Zi> Backup Settings
 	mSettingsLocationList(NULL)
 {
 	if(NULL != sInstance)
@@ -1764,6 +1765,10 @@ bool LLAppViewer::cleanup()
 
 	llinfos << "Cleaning Up" << llendflush;
 
+	// <FS:Zi> Backup Settings
+	if(mSaveSettingsOnExit)
+	{
+	// </FS:Zi>
 	// FIRE-4871: Save per-account settings earlier -- TS
 	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
 	if (per_account_settings_file.empty())
@@ -1785,6 +1790,13 @@ bool LLAppViewer::cleanup()
 	}
 	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	// /FIRE-4871
+	// <FS:Zi> Backup Settings
+	}
+	else
+	{
+		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+	}
+	// </FS:Zi>
 
 	// shut down mesh streamer
 	gMeshRepo.shutdown();
@@ -1979,9 +1991,12 @@ bool LLAppViewer::cleanup()
 
 	// Must do this after all panels have been deleted because panels that have persistent rects
 	// save their rects on delete.
-	gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
+	{
+		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	
 	LLUIColorTable::instance().saveUserSettings();
+	}	// <FS:Zi> Backup Settings
 
 //<Firestorm Skin Cleanup>
 	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
@@ -1996,6 +2011,11 @@ bool LLAppViewer::cleanup()
 //</Firestorm Skip Cleanup>
 	
 	
+	// <FS:Zi> Backup Settings
+	if(mSaveSettingsOnExit)
+	{
+	std::string per_account_settings_file = gSavedSettings.getString("PerAccountSettingsFile");
+	// </FS:Zi>
 	// PerAccountSettingsFile should be empty if no user has been logged on.
 	// *FIX:Mani This should get really saved in a "logoff" mode. 
 	// FIRE-4871: use the same file we picked out earlier -- TS
@@ -2016,15 +2036,24 @@ bool LLAppViewer::cleanup()
 		llinfos << "Second time: Saved per-account settings to " <<
 		        per_account_settings_file << llendflush;
 	}
+	// <FS:Zi> Backup Settings
+	}
+	else
+	{
+		llinfos << "Not saving settings, to prevent settings restore failure." << llendl;
+	}
+	// </FS:Zi>
 
 	// We need to save all crash settings, even if they're defaults [see LLCrashLogger::loadCrashBehaviorSetting()]
 	gCrashSettings.saveToFile(gSavedSettings.getString("CrashSettingsFile"),FALSE);
 
 	//std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("Default", "Warnings"));
 	std::string warnings_settings_filename = gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, getSettingsFilename("User", "Warnings"));
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
 	gWarningSettings.saveToFile(warnings_settings_filename, TRUE);
 
 	// Save URL history file
+	if(mSaveSettingsOnExit)		// <FS:Zi> Backup Settings
 	LLURLHistory::saveFile("url_history.xml");
 
 	// save mute list. gMuteList used to also be deleted here too.

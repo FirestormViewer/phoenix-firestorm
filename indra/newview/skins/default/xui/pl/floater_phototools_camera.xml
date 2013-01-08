@@ -111,6 +111,7 @@
 				<check_box label="Resetuj pozycję kamery po teleportacji" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
 				<check_box label="Wyłącz minimalną odl. przybliżenia" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
 				<check_box label="Przenikaj przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów. WYMAGA RESTARTU!"/>
+				<check_box label="Resetuj pozycję kamery przy poruszaniu się" name="resetcameraonmovement" tool_tip="Resetuje pozycję kamery do domyślnej pozycji, gdy poruszysz awatarem."/>
 			</panel>
 		</panel>
 		<panel name="P_3D_Mouse" label="Mysz 3D">

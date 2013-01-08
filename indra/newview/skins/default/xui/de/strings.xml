@@ -5492,4 +5492,52 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="render_quality_unknown">
 		Unbekannt; Bitte die Debugeinstellung RenderQualityPerformance prüfen!
 	</string>
+	<string name="qtool_busy">
+		Bitte warten, das Ausrichtungstool ist aktiv.
+	</string>
+	<string name="qtool_still_busy">
+		Bitte warten, das Ausrichtungstool ist weiterhin aktiv.
+	</string>
+	<string name="qtool_done">
+		Die Ausrichtung ist beendet.
+	</string>
+	<string name="fsbridge_no_library">
+		Firestorm konnte die LSL-Brücke nicht erstellen. Bitte die Bibliothek aktivieren und neu einloggen.
+	</string>
+	<string name="fsbridge_already_creating">
+		LSL-Brücke wird bereits erstellt. Bitte einige Minuten vor einem erneuten Versuch warten.
+	</string>
+	<string name="fsbridge_creating">
+		LSL-Brücke wird erstellt. Dies kann einen Moment dauern. Bitte warten...
+	</string>
+	<string name="fsbridge_failure_creation_bad_name">
+		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte versuchen, die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_creation_null">
+		LSL-Brücke nicht erstellt. Die Brücke konnte nicht im Inventar gefunden werden. Bitte versuchen, die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_object">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Version der Brücke ist falsch. Bitte versuchen, die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_wrong_location">
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Brücke wurde nicht am korrekten Ort im Inventar gefunden. Bitte versuchen, die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_attach_point_in_use">
+		LSL-Brücke konnte nicht hinzugefügt werden. Der Anhängepunkt war bereits durch ein anderes Objekt belegt. Bitte versuchen, die Brücke neu zu erstellen.
+	</string>
+	<string name="fsbridge_failure_not_found">
+		Das Objekt für die LSL-Brücke konnte nicht gefunden werden. Mit der Erstellung kann nicht fortgefahren werden.
+	</string>
+	<string name="fsbridge_warning_unexpected_items">
+		Die LSL-Brücke enthält unerwartete Objekte.
+	</string>
+	<string name="fsbridge_warning_not_finished">
+		Die LSL-Brücke wurde noch nicht vollständig erstellt, sie muss eventuell neu erstellt werden, um genutzt werden zu können.
+	</string>
+	<string name="fsbridge_detached">
+		LSL-Brücke abgenommen.
+	</string>
+	<string name="fsbridge_created">
+		LSL-Brücke erstellt.
+	</string>
 </strings>

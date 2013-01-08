@@ -312,6 +312,11 @@ public:
 
 	void launchUpdater();
 	//---------------------------------------------
+
+	// <FS:Zi> Backup Settings
+	void setSaveSettingsOnExit(bool state) {mSaveSettingsOnExit = state; };
+	bool mSaveSettingsOnExit;
+	// </FS:Zi>
 };
 
 // consts from viewer.h

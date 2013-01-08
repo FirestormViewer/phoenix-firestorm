@@ -295,6 +295,7 @@ private:
 	void setParcelInfoText(const std::string& new_text);
 
 	void updateNetstatVisibility(const LLSD& data);
+	void updateVolumeControlsVisibility(const LLSD& data); // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 
 private:
 	LLTextBox	*mTextBalance;
@@ -315,6 +316,7 @@ private:
 	LLView		*mScriptOut;
 	LLFrameTimer	mClockUpdateTimer;
 
+	S32				mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
 	S32				mBalance;
 	S32				mHealth;
 	S32				mSquareMetersCredit;

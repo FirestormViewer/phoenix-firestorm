@@ -3702,4 +3702,14 @@ Poprzedni symulator: [OLDVERSION]
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
 		</form>
 	</notification>
+	<notification name="BackupFinished">
+		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
+	</notification>
+	<notification name="BackupPathEmpty">
+		Ścieżka miejsca zapisu jest pusta. Proszę najpierw podać lokalizację, w jakiej będą zapisywanie i której będą przywracane kopie zapasowe.
+	</notification>
+	<notification name="SettingsRestoreNeedsLogout">
+		Przywrócenie ustawień wymaga ponownego uruchomienia przeglądarki. Czy chcesz teraz przywrócić ustawienia i wyłączyć ją?
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć"/>
+	</notification>
 </notifications>

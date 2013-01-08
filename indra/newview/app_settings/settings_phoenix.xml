@@ -395,5 +395,17 @@
     <integer>1</integer>
   </map>
 
+  <key>FSEnableVolumeControls</key>
+  <map>
+    <key>Comment</key>
+    <string>If true, Firestorm will show volume controls (sounds, media, stream) in upper right corner of the screen. Useful, if skin already has its own controls.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
 </map>
 </llsd>

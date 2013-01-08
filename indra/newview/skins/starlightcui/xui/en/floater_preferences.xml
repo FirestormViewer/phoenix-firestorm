@@ -180,5 +180,12 @@
          layout="topleft"
          help_topic="preferences_opensim_tab"
          name="opensim" />
+        <panel
+         class="panel_preference_backup"
+         filename="panel_preferences_backup.xml"
+         label="Backup"
+         layout="topleft"
+         help_topic="preferences_backup_tab"
+         name="backup" />
     </tab_container>
 </floater>

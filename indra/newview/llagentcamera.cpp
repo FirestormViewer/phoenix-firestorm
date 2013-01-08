@@ -314,6 +314,12 @@ void LLAgentCamera::resetView(BOOL reset_camera, BOOL change_camera)
 		// Hide all popup menus
 		gMenuHolder->hideMenus();
 	}
+	
+	// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	static LLCachedControl<bool> sResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (sResetCameraOnMovement)
+	{
+	// </FS:CR>
 
 	if (change_camera && !gSavedSettings.getBOOL("FreezeTime"))
 	{
@@ -360,6 +366,9 @@ void LLAgentCamera::resetView(BOOL reset_camera, BOOL change_camera)
 	}
 
 	mHUDTargetZoom = 1.f;
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	}
+// </FS:CR>
 }
 
 // Allow camera to be moved somewhere other than behind avatar.
@@ -911,7 +920,8 @@ void LLAgentCamera::cameraZoomIn(const F32 fraction)
 	}
 
 
-	LLVector3d	camera_offset(mCameraFocusOffsetTarget);
+	// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
+	// LLVector3d	camera_offset(mCameraFocusOffsetTarget);
 	LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 	F32 min_zoom = LAND_MIN_ZOOM;
 	F32 current_distance = (F32)camera_offset_unit.normalize();
@@ -988,7 +998,8 @@ void LLAgentCamera::cameraOrbitIn(const F32 meters)
 	}
 	else
 	{
-		LLVector3d	camera_offset(mCameraFocusOffsetTarget);
+		// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
+		//LLVector3d	camera_offset(mCameraFocusOffsetTarget);
 		LLVector3d	camera_offset_unit(mCameraFocusOffsetTarget);
 		F32 current_distance = (F32)camera_offset_unit.normalize();
 		F32 new_distance = current_distance - meters;
@@ -1687,7 +1698,9 @@ F32	LLAgentCamera::calcCameraFOVZoomFactor()
 	else if (mFocusObject.notNull() && !mFocusObject->isAvatar() && !mFocusOnAvatar)
 	{
 		// don't FOV zoom on mostly transparent objects
-		LLVector3 focus_offset = mFocusObjectOffset;
+		
+		// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
+		//LLVector3 focus_offset = mFocusObjectOffset;
 		F32 obj_min_dist = 0.f;
 		// Freeing the camera movement some more -KC
 		static LLCachedControl<bool> disable_minconstraints(gSavedSettings,"FSDisableMinZoomDist");
@@ -1852,7 +1865,8 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 			// set the global camera position
 			LLVector3d camera_offset;
 			
-			LLVector3 av_pos = !isAgentAvatarValid() ? LLVector3::zero : gAgentAvatarp->getRenderPosition();
+			// <FS:CR> Unused variable as of 2012-1-7 - Commenting out
+			//LLVector3 av_pos = !isAgentAvatarValid() ? LLVector3::zero : gAgentAvatarp->getRenderPosition();
 			camera_offset.setVec( local_camera_offset );
 			camera_position_global = frame_center_global + head_offset + camera_offset;
 

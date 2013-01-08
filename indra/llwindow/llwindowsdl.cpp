@@ -462,6 +462,15 @@ BOOL LLWindowSDL::createContext(int x, int y, int width, int height, int bits, B
 	if (video_info->current_h > 0)
 	{
 		mOriginalAspectRatio = (float)video_info->current_w / (float)video_info->current_h;
+
+		// <FS:Zi> FIRE-8825 - Try to work around an issue with Fullscreen and dual monitors
+		// assume two equal width monitors if aspect ratio exceeds 2.0
+		// if someone can find out how to read a monitor's native resolution in OpenGL, please change this
+		// SDL1.2 doesn't offer any way to do it, apparently SDL 1.3 does
+		if(mOriginalAspectRatio>2.0f)
+			mOriginalAspectRatio=mOriginalAspectRatio/2.0f;
+		// </FS:Zi>
+
 		llinfos << "Original aspect ratio was " << video_info->current_w << ":" << video_info->current_h << "=" << mOriginalAspectRatio << llendl;
 	}
 

@@ -994,8 +994,10 @@ BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 
 BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg)
 {
+	// <FS:Ansariel> Advanced object tooltips
 	const char* const DEFAULT_DESC = "(No Description)";
 	static LLCachedControl<bool> advancedToolTip(gSavedSettings, "FSAdvancedTooltips");
+	// </FS:Ansariel> Advanced object tooltips
 
 	if ( hover_object->isHUDAttachment() )
 	{
@@ -1150,6 +1152,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				tooltip_msg.append( nodep->mName );
 			}
 
+			// <FS:Ansariel> Advanced object tooltips
 			if (advancedToolTip)
 			{
 				// Set description
@@ -1159,7 +1162,6 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				}
 
 				// Set owner name
-				std::string final_name;
 				std::string full_name;
 			
 				if (nodep->mValid)
@@ -1167,25 +1169,25 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 					LLUUID owner = nodep->mPermissions->getOwner();
 					if (owner.notNull())
 					{
-				
-						if (!gCacheName->getFullName(LLSelectMgr::getInstance()->getHoverNode()->mPermissions->getOwner(), full_name))
-						{
-							full_name = LLTrans::getString("LoadingData");
-						}
-
 						LLAvatarName av_name;
-						if (LLAvatarNameCache::useDisplayNames() && 
-							LLAvatarNameCache::get(owner, &av_name))
+						if (LLAvatarNameCache::get(owner, &av_name))
 						{
-							final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+							full_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 						}
 						else
 						{
-							final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? full_name : RlvStrings::getAnonym(full_name);
+							full_name = LLTrans::getString("LoadingData");
+
+							// If we don't have the avatar name already, let the
+							// avatar name cache retrieve it and simply invoke
+							// us again after it received the name.
+							std::string l;
+							std::string m;
+							LLAvatarNameCache::get(owner, boost::bind(&LLToolPie::handleTooltipObject, this, hover_object, l, m));
 						}
 
 						// Owner name
-						tooltip_msg.append("\n" + LLTrans::getString("TooltipOwner") + " " + final_name);
+						tooltip_msg.append("\n" + LLTrans::getString("TooltipOwner") + " " + full_name);
 					}
 				}
 
@@ -1216,7 +1218,7 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				{
 					permissionsline += LLTrans::getString("TooltipFlagPhantom") + " ";
 				}
-				if (hover_object->flagTemporary())
+				if (hover_object->flagTemporaryOnRez())
 				{
 					permissionsline += LLTrans::getString("TooltipFlagTemporary") + " ";
 				}
@@ -1231,25 +1233,22 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				// Get prim count
 				S32 prim_count = LLSelectMgr::getInstance()->getHoverObjects()->getObjectCount();				
 				args["COUNT"] = llformat("%d", prim_count);
-				std::string primlabel = LLTrans::getString("TooltipPrimCount");
-				LLStringUtil::format(primlabel, args);
-				tooltip_msg.append("\n" + primlabel);
+				tooltip_msg.append("\n" + LLTrans::getString("TooltipPrimCount", args));
 
 				// Display the PE weight for an object if mesh is enabled
 				if (gMeshRepo.meshRezEnabled())
 				{
 					// Ansariel: What a bummer! PE is only available for
 					//           objects in the same region as you!
-					if (hover_object->getRegion()->getRegionID() == gAgent.getRegion()->getRegionID())
+					if (hover_object->getRegion() && gAgent.getRegion() &&
+						hover_object->getRegion()->getRegionID() == gAgent.getRegion()->getRegionID())
 					{
 						S32 link_cost = LLSelectMgr::getInstance()->getHoverObjects()->getSelectedLinksetCost();
 						if (link_cost > 0)
 						{
 							args.clear();
 							args["PEWEIGHT"] = llformat("%d", link_cost);
-							std::string pelabel = LLTrans::getString("TooltipPrimEquivalent");
-							LLStringUtil::format(pelabel, args);
-							tooltip_msg.append(pelabel);
+							tooltip_msg.append(LLTrans::getString("TooltipPrimEquivalent", args));
 						}
 						else
 						{
@@ -1263,22 +1262,22 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				}
 
 				// Get position
-				LLViewerRegion *region = gAgent.getRegion();
-				LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
-				args.clear();
-				args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
-				std::string positionlabel = LLTrans::getString("TooltipPosition");
-				LLStringUtil::format(positionlabel, args);
-				tooltip_msg.append("\n" + positionlabel);
+				LLViewerRegion* region = gAgent.getRegion();
+				if (region)
+				{
+					LLVector3 relPositionObject = region->getPosRegionFromGlobal(hover_object->getPositionGlobal());
+					args.clear();
+					args["POSITION"] = llformat("<%.02f, %.02f, %.02f>", relPositionObject.mV[VX], relPositionObject.mV[VY], relPositionObject.mV[VZ]);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipPosition", args));
 
-				// Get distance
-				F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
-				args.clear();
-				args["DISTANCE"] = llformat("%.02f", distance);
-				std::string distancelabel = LLTrans::getString("TooltipDistance");
-				LLStringUtil::format(distancelabel, args);
-				tooltip_msg.append("\n" + distancelabel);
+					// Get distance
+					F32 distance = (relPositionObject - region->getPosRegionFromGlobal(gAgent.getPositionGlobal())).magVec();
+					args.clear();
+					args["DISTANCE"] = llformat("%.02f", distance);
+					tooltip_msg.append("\n" + LLTrans::getString("TooltipDistance", args));
+				}
 			}
+			// </FS:Ansariel> Advanced object tooltips
 			
 			bool has_media = false;
 			bool is_time_based_media = false;

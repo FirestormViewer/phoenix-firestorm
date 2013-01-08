@@ -23,5 +23,6 @@
 		<panel label="Błędy" name="crashreports"/>
 		<panel label="Firestorm" name="firestorm"/>
 		<panel label="OpenSim" name="opensim"/>
+		<panel label="Kopia zapasowa" name="backup"/>
 	</tab_container>
 </floater>

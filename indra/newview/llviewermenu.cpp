@@ -81,10 +81,8 @@
 #include "llinventorybridge.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
-#include "lllogininstance.h" // <FS:AW  opensim destinations and avatar picker>
 #include "llpanellogin.h"
 #include "llpanelblockedlist.h"
-#include "piemenu.h"		// ## Zi: Pie Menu
 #include "llmenuoptionpathfindingrebakenavmesh.h"
 #include "llmoveview.h"
 #include "llparcel.h"
@@ -124,25 +122,22 @@
 #include "llwindow.h"
 #include "llpathfindingmanager.h"
 #include "boost/unordered_map.hpp"
+
+// Firestorm includes
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
-//-TT Client LSL Bridge
 #include "fslslbridge.h"
-//-TT
 #include "fscommon.h"
-
-// ## Zi: Texture Refresh
-#include "llavatarpropertiesprocessor.h"
-#include "lltexturecache.h"
-// ## Zi: Texture Refresh
-
-#include "particleeditor.h"
-#include "fscontactsfloater.h"		// <FS:Zi> Display group list in contacts floater
+#include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
 #include "fswsassetblacklist.h"
-
+#include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
+#include "lltexturecache.h"	// ## Zi: Texture Refresh
+#include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
 #include "llvovolume.h"
+#include "particleeditor.h"
+#include "piemenu.h"	// ## Zi: Pie Menu
 
 using namespace LLVOAvatarDefines;
 
@@ -869,6 +864,10 @@ class LLAdvancedToggleRenderType : public view_listener_t
 		if ( render_type != 0 )
 		{
 			LLPipeline::toggleRenderTypeControl( (void*)(ptrdiff_t)render_type );
+			if(render_type == LLPipeline::RENDER_TYPE_PARTICLES)
+			{
+				gPipeline.sRenderParticles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+			}
 		}
 		return true;
 	}
@@ -8620,6 +8619,35 @@ class FSToolSelectIncludeGroupOwned : public view_listener_t
 };
 // </FS:Ansariel>
 
+// <FS:CR> Resync Animations
+class FSToolsResyncAnimations : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		for (U32 i = 0; i < gObjectList.getNumObjects(); i++)
+		{
+			LLViewerObject* object = gObjectList.getObject(i);
+			if (object &&
+				object->isAvatar())
+			{
+				LLVOAvatar* avatarp = (LLVOAvatar*)object;
+				if (avatarp)
+				{
+					for (LLVOAvatar::AnimIterator anim_it = avatarp->mPlayingAnimations.begin();
+						 anim_it != avatarp->mPlayingAnimations.end();
+						 anim_it++)
+					{
+						avatarp->stopMotion(anim_it->first, TRUE);
+						avatarp->startMotion(anim_it->first);
+					}
+				}
+			}
+		}
+		return true;
+	}
+};
+// </FS:CR>
+
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
@@ -9230,6 +9258,7 @@ class LLViewToggleRenderType : public view_listener_t
 		if (type == "hideparticles")
 		{
 			LLPipeline::toggleRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
+			gPipeline.sRenderParticles = gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES);
 		}
 		return true;
 	}
@@ -9909,6 +9938,7 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
+	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");

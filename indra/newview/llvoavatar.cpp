@@ -623,7 +623,7 @@ F32 LLVOAvatar::sRenderDistance = 256.f;
 S32	LLVOAvatar::sNumVisibleAvatars = 0;
 S32	LLVOAvatar::sNumLODChangesThisFrame = 0;
 
-const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df");
+// const LLUUID LLVOAvatar::sStepSoundOnLand("e8af4a28-aa83-4310-a7c4-c047e15ea0df"); - <FS:PP> Commented out for FIRE-3169: Option to change the default footsteps sound
 const LLUUID LLVOAvatar::sStepSounds[LL_MCODE_END] =
 {
 	SND_STONE_RUBBER,
@@ -4193,7 +4193,11 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 		mWasOnGroundLeft = onGroundLeft;
 		mWasOnGroundRight = onGroundRight;
 
-		if ( playSound )
+		// <FS:PP> FIRE-3169: Option to change the default footsteps sound
+		// if ( playSound )
+		static LLCachedControl<bool> PlayModeUISndFootsteps(gSavedSettings, "PlayModeUISndFootsteps");
+		if ( playSound && PlayModeUISndFootsteps )
+		// </FS:PP>
 		{
 //			F32 gain = clamp_rescale( mSpeedAccum,
 //							AUDIO_STEP_LO_SPEED, AUDIO_STEP_HI_SPEED,
@@ -4703,8 +4707,8 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 		// Can't test for baked hair being defined, since that won't always be the case (not all viewers send baked hair)
 		// TODO: 1.25 will be able to switch this logic back to calling isTextureVisible();
 
-		if ( getImage(TEX_HAIR_BAKED, 0)
-			&& getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha)
+		if ((getImage(TEX_HAIR_BAKED, 0)
+			&& getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE) || LLDrawPoolAlpha::sShowDebugAlpha)
 		{
 			num_indices += mMeshLOD[MESH_ID_HAIR]->render(mAdjustedPixelArea, first_pass, mIsDummy);
 			first_pass = FALSE;
@@ -5081,7 +5085,12 @@ const LLUUID& LLVOAvatar::getStepSound() const
 {
 	if ( mStepOnLand )
 	{
-		return sStepSoundOnLand;
+		// <FS:PP> FIRE-3169: Option to change the default footsteps sound
+		// return sStepSoundOnLand;
+		static LLCachedControl<std::string> UISndFootsteps(gSavedSettings, "UISndFootsteps");
+		static const LLUUID sFootstepsSnd = LLUUID(UISndFootsteps);
+		return sFootstepsSnd;
+		// </FS:PP>
 	}
 
 	return sStepSounds[mStepMaterial];

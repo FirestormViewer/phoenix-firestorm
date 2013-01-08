@@ -558,6 +558,8 @@ public:
 	static F32				sMinRenderSize;
 	static F32        		sVolumeSAFrame;
 
+	static bool				sRenderParticles; // <FS:LO> flag to hold correct, user selected, status of particles
+
 	//screen texture
 	U32 					mScreenWidth;
 	U32 					mScreenHeight;

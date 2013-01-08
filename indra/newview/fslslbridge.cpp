@@ -51,6 +51,7 @@
 #include "llnotificationmanager.h"
 #include "llviewerobject.h"
 #include "llappearancemgr.h"
+#include "lltrans.h"
 #include "aoengine.h"
 #include "fscommon.h"
 
@@ -289,7 +290,7 @@ void FSLSLBridge :: recreateBridge()
 	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
-		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
+		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));
 		mBridgeCreating = false;
 		return;
 	}
@@ -297,7 +298,7 @@ void FSLSLBridge :: recreateBridge()
 	if (mBridgeCreating)
 	{
 		llwarns << "Bridge creation already in progress, aborting new attempt." << llendl;
-		reportToNearbyChat("Bridge creation in process, can't start another. Please wait a few minutes.");
+		reportToNearbyChat(LLTrans::getString("fsbridge_already_creating"));
 		return;
 	}
 
@@ -325,7 +326,7 @@ void FSLSLBridge :: initBridge()
 	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
-		reportToNearbyChat("Firestorm could not create an LSL bridge. Please enable your library and relog");
+		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));
 		mBridgeCreating = false;
 		return;
 	}
@@ -394,7 +395,7 @@ void FSLSLBridge :: initCreationStep()
 {
 	mBridgeCreating = true;
 	//announce yourself
-	reportToNearbyChat("Creating the bridge. This might take a few moments, please wait");
+	reportToNearbyChat(LLTrans::getString("fsbridge_creating"));
 
 	createNewBridge();
 }
@@ -433,7 +434,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		llwarns << "Bridge not created. Our bridge container attachment isn't named correctly." << llendl;
 		if (mBridgeCreating)
 		{
-			reportToNearbyChat("Bridge not created. Our bridge isn't named correctly. Please try recreating your bridge.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_failure_creation_bad_name"));
 			mBridgeCreating = false; //in case we interrupted the creation
 		}
 		return;
@@ -445,7 +446,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		llwarns << "Bridge container is still NULL in inventory. Aborting." << llendl;
 		if (mBridgeCreating)
 		{
-			reportToNearbyChat("Bridge not created. Our bridge couldn't be found in inventory. Please try recreating your bridge.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_failure_creation_null"));
 			mBridgeCreating = false; //in case we interrupted the creation
 		}
 		return;
@@ -457,7 +458,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		{
 			LLVOAvatarSelf::detachAttachmentIntoInventory(fsObject->getUUID());
 			llwarns << "Attempt to attach to bridge point an object other than current bridge" << llendl;
-			reportToNearbyChat("Bridge not attached. This is not the current bridge version. Please try recreating your bridge.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_failure_attach_wrong_object"));
 			if (mBridgeCreating)
 			{
 				mBridgeCreating = false; //in case we interrupted the creation
@@ -473,7 +474,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 			llwarns << "Bridge container isn't in the correct inventory location. Detaching it and aborting." << llendl;
 			if (mBridgeCreating)
 			{
-				reportToNearbyChat("Bridge not created. Our bridge wasn't found in the right inventory location. Please try recreating your bridge.");
+				reportToNearbyChat(LLTrans::getString("fs_bridge_failure_attach_wrong_location"));
 				mBridgeCreating = false; //in case we interrupted the creation
 			}
 			return;
@@ -490,7 +491,7 @@ void FSLSLBridge :: processAttach(LLViewerObject *object, const LLViewerJointAtt
 		llwarns << "Something unknown just got attached to bridge point, detaching and aborting." << llendl;
 		if (mBridgeCreating)
 		{
-			reportToNearbyChat("Bridge not created, something else was using the bridge attachment point. Please try recreating your bridge.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_failure_attach_point_in_use"));
 			mBridgeCreating = false; //in case we interrupted the creation
 		}
 		LLVOAvatarSelf::detachAttachmentIntoInventory(mpBridge->getUUID());
@@ -560,7 +561,7 @@ void FSLSLBridge::inventoryChanged(LLViewerObject* object,
 			return;
 		else 
 		{
-			reportToNearbyChat("The bridge inventory contains unexpected items.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_warning_unexpected_items"));
 			llwarns << "The bridge inventory contains items other than bridge script." << llendl;
 			if (!isOurScript)	//some junk but no valid script? Unlikely to happen, but lets add script anyway.
 				mBridgeCreating = true;
@@ -631,11 +632,11 @@ void FSLSLBridge :: processDetach(LLViewerObject *object, const LLViewerJointAtt
 	if (mpBridge != NULL && mpBridge->getUUID() == fsObject->getUUID()) 
 	{
 		mpBridge = NULL;
-		reportToNearbyChat("Bridge detached.");
+		reportToNearbyChat(LLTrans::getString("fsbridge_detached"));
 		mIsFirstCallDone = false;
 		if (mBridgeCreating)
 		{
-			reportToNearbyChat("Bridge has not finished creating, you might need to recreate it before using.");
+			reportToNearbyChat(LLTrans::getString("fsbridge_warning_not_finished"));
 			mBridgeCreating = false; //in case we interrupted the creation
 		}
 	}
@@ -906,7 +907,7 @@ void FSLSLBridge :: cleanUpBridge()
 {
 	//something unexpected went wrong. Try to clean up and not crash.
 	llwarns << "Bridge object not found. Can't proceed with creation, exiting." << llendl;
-	reportToNearbyChat("Bridge object not found. Can't proceed with creation, exiting.");
+	reportToNearbyChat(LLTrans::getString("fsbridge_failure_not_found"));
 
 	if( isBridgeValid() )
 		gInventory.purgeObject(mpBridge->getUUID());
@@ -920,7 +921,7 @@ void FSLSLBridge :: finishBridge()
 {
 	//announce yourself
 	llinfos << "Bridge created." << llendl;
-	reportToNearbyChat("Bridge created.");
+	reportToNearbyChat(LLTrans::getString("fsbridge_created"));
 
 	mBridgeCreating = false;
 	mIsFirstCallDone = false;

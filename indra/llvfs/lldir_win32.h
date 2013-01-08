@@ -44,13 +44,13 @@ public:
 
 	/*virtual*/ std::string getCurPath();
 	/*virtual*/ U32 countFilesInDir(const std::string &dirname, const std::string &mask);
-	/*virtual*/ BOOL fileExists(const std::string &filename) const;
-    /*virtual*/ BOOL getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname);
+	/*virtual*/ bool fileExists(const std::string &filename) const;
+	/*virtual*/ BOOL getNextFileInDir(const std::string &dirname, const std::string &mask, std::string &fname); //FS:LGG  for LGG's particle beam
 	/*virtual*/ std::string getLLPluginLauncher();
 	/*virtual*/ std::string getLLPluginFilename(std::string base_name);
 
 private:
-    BOOL getNextFileInDir(const llutf16string &dirname, const std::string &mask, std::string &fname);
+    BOOL getNextFileInDir(const llutf16string &dirname, const std::string &mask, std::string &fname); //FS:LGG for LGG's particle beam
 	void* mDirSearch_h;
 	llutf16string mCurrentDir;
 };

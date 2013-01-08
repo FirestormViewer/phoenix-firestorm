@@ -569,6 +569,14 @@
      name="World"
      tear_off="true"
      visible="true">
+        <menu_item_call
+         label="Resync Animations"
+         name="Resync Animations">
+            <menu_item_call.on_click
+             function="Tools.ResyncAnimations" />
+        </menu_item_call>
+        
+        <menu_item_separator/>
      
         <menu_item_call
             label="Nearby Avatars"
@@ -3741,16 +3749,6 @@
          label="UI"
          name="UI"
          tear_off="true">
-         <!--   <menu_item_check
-             label="New Bottom Bar"
-             name="New Bottom Bar">
-                <menu_item_check.on_check
-                 function="CheckControl"
-                 parameter="BottomPanelNew" />
-                <menu_item_check.on_click
-                 function="ToggleControl"
-                 parameter="BottomPanelNew" />
-            </menu_item_check>-->
             <menu_item_call
              label="Media Browser Test"
              name="Web Browser Test">

@@ -1,8 +1,8 @@
 /** 
- * @file mac_crash_logger.cpp
- * @brief Mac OSX crash logger implementation
+ * @file llvfs_objc.h
+ * @brief Definition of directory utilities class for Mac OS X
  *
- * $LicenseInfo:firstyear=2003&license=viewerlgpl$
+ * $LicenseInfo:firstyear=2000&license=viewerlgpl$
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * 
@@ -22,34 +22,22 @@
  * 
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
- */
+ */ 
 
-#include "linden_common.h"
-#include "llcrashloggermac.h"
-#include "indra_constants.h"
+#if !LL_DARWIN
+#error This header must not be included when compiling for any target other than Mac OS. Consider including lldir.h instead.
+#endif // !LL_DARWIN
+
+#ifndef LL_LLVFS_OBJC_H
+#define LL_LLVFS_OBJC_H
 
 #include <iostream>
-    
-int main(int argc, char **argv)
-{
-	LLCrashLoggerMac app;
-	app.parseCommandOptions(argc, argv);
 
-	if (! app.init())
-	{
-		llwarns << "Unable to initialize application." << llendl;
-		return 1;
-	}
-    if (app.getCrashBehavior() != CRASH_BEHAVIOR_ALWAYS_SEND)
-    {
-//        return NSApplicationMain(argc, (const char **)argv);
-    }
+std::string* getSystemTempFolder();
+std::string* getSystemCacheFolder();
+std::string* getSystemApplicationSupportFolder();
+std::string* getSystemResourceFolder();
+std::string* getSystemExecutableFolder();
 
-	app.mainLoop();
 
-	app.cleanup();
-
-	llinfos << "Crash reporter finished normally." << llendl;
-    
-	return 0;
-}
+#endif LL_LLVFS_OBJC_H

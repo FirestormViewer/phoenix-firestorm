@@ -480,6 +480,17 @@
          control_name="FSResetCameraOnTP"
          tool_tip="Normally, the camera position gets reset when teleporting. This option prevents this behavior."/>
 		 
+        <check_box
+         top_pad="4"
+         follows="left|top"
+         height="16"
+         label="Reset camera position on avatar movement"
+         layout="topleft"
+         left="30"
+         name="FSResetCameraOnMovement"
+         width="270"
+         control_name="FSResetCameraOnMovement"/>
+
 		<check_box
          top_pad="4"
          follows="left|top"

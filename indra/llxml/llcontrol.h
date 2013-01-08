@@ -120,6 +120,7 @@ private:
 	eSanityType		mSanityType;
 	std::string		mSanityComment;
 	bool			mPersist;
+	bool			mCanBackup;		// <FS:Zi> Backup Settings
 	bool			mHideFromSettingsEditor;
 	std::vector<LLSD> mValues;
 	std::vector<LLSD> mSanityValues;
@@ -134,7 +135,10 @@ public:
 		eSanityType sanityType,
 		LLSD sanityValues,
 		const std::string& sanityComment,
-		bool persist = true, bool hidefromsettingseditor = false
+		// <FS:Zi> Backup Settings
+		// bool persist = true, bool hidefromsettingseditor = false
+		bool persist = true, bool can_backup = true, bool hidefromsettingseditor = false
+		// </FS:Zi>
 	);
 
 	virtual ~LLControlVariable();
@@ -159,6 +163,7 @@ public:
 	bool isSane();
 	bool isSaveValueDefault();
 	bool isPersisted() { return mPersist; }
+	bool isBackupable() { return mCanBackup; }		// <FS:Zi> Backup Settings
 	bool isHiddenFromSettingsEditor() { return mHideFromSettingsEditor; }
 	LLSD get()			const	{ return getValue(); }
 	LLSD getValue()		const	{ return mValues.back(); }
@@ -169,6 +174,7 @@ public:
 	void setValue(const LLSD& value, bool saved_value = TRUE);
 	void setDefaultValue(const LLSD& value);
 	void setPersist(bool state);
+	void setBackupable(bool state);		// <FS:Zi> Backup Settings
 	void setHiddenFromSettingsEditor(bool hide);
 	void setComment(const std::string& comment);
 
@@ -237,7 +243,10 @@ public:
 	};
 	void applyToAll(ApplyFunctor* func);
 
-	BOOL declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL hidefromsettingseditor = FALSE);
+	// <FS:Zi> Backup Settings
+	// BOOL declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL hidefromsettingseditor = FALSE);
+	BOOL declareControl(const std::string& name, eControlType type, const LLSD initial_val, const std::string& comment, eSanityType sanity_type, LLSD sanity_value, const std::string& sanity_comment, BOOL persist, BOOL can_backup = TRUE, BOOL hidefromsettingseditor = FALSE);
+	// </FS:Zi>
 
 	BOOL declareU32(const std::string& name, U32 initial_val, const std::string& comment, BOOL persist = TRUE);
 	BOOL declareS32(const std::string& name, S32 initial_val, const std::string& comment, BOOL persist = TRUE);
@@ -397,7 +406,10 @@ private:
 		init_value = convert_to_llsd(default_value);
 		if(type < TYPE_COUNT)
 		{
-			group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), FALSE);
+			// <FS:Zi> Backup Settings
+			// group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), FALSE);
+			group.declareControl(name, type, init_value, comment, SANITY_TYPE_NONE, LLSD(), std::string(""), TRUE, FALSE);
+			// </FS_Zi>
 			return true;
 		}
 		return false;

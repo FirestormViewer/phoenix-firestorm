@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel label="Kopia zapasowa" name="backup">
+	<text name="backup_path_label">
+		Miejsce zapisu:
+	</text>
+	<button label="Ustaw" name="set_backup_settings_path" />
+	<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
+	<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
+</panel>

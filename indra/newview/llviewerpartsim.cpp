@@ -640,10 +640,12 @@ void LLViewerPartSim::updateSimulation()
 
 	const F32 dt = llmin(update_timer.getElapsedTimeAndResetF32(), 0.1f);
 
- 	if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
+	// <FS:LO> Dont suspend partical processing while particles are hidden, just skip over drawing them
+ 	/*if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_PARTICLES)))
 	{
 		return;
-	}
+	}*/
+	// </FS:LO>
 
 	LLFastTimer ftm(FTM_SIMULATE_PARTICLES);
 

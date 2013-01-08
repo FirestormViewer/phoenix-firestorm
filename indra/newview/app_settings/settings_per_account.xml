@@ -100,6 +100,8 @@
             <string>String</string>
         <key>Value</key>
             <string>00000</string>
+        <key>Backup</key>
+            <integer>0</integer>
         </map>
     <key>FSMutedAvatarResponse</key>
         <map>
@@ -177,6 +179,8 @@
           <string>Boolean</string>
         <key>Value</key>
           <integer>1</integer>
+        <key>Backup</key>
+          <integer>0</integer>
         </map>
     <key>LastInventoryInboxActivity</key>
         <map>

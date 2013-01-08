@@ -19,6 +19,7 @@
 #include "llcylinder.h"
 #include "llfloatertools.h"
 #include "llselectmgr.h"
+#include "lltrans.h"
 #include "llviewercamera.h"
 #include "llviewercontrol.h"
 #include "llviewerobject.h"
@@ -454,11 +455,11 @@ void QToolAlign::align()
 {
 	if(AlignThread::sInstance)
 	{
-		reportToNearbyChat("The align tool is still working.");
+		reportToNearbyChat(LLTrans::getString("qtool_still_busy"));
 	}
 	else
 	{
-		reportToNearbyChat("Please hold, the align tool is busy working.");
+		reportToNearbyChat(LLTrans::getString("qtool_busy"));
 		AlignThread::sInstance = new AlignThread();
 		AlignThread::sInstance->start();
 	}
@@ -479,7 +480,7 @@ public:
 		delete AlignThread::sInstance;
 		AlignThread::sInstance = NULL;
 		LLSelectMgr::getInstance()->sendMultipleUpdate(UPD_POSITION);
-		reportToNearbyChat("The align tool is finished.");
+		reportToNearbyChat(LLTrans::getString("qtool_done"));
 		return TRUE;
 	}
 };

@@ -65,6 +65,7 @@
 		<menu_item_call label="Lista zablokowanych" name="Block List"/>
 	</menu>
 	<menu label="Świat" name="World">
+		<menu_item_call label="Synchronizuj animacje" name="Resync Animations"/>
 		<menu_item_call label="Osoby w pobliżu" name="Active Speakers"/>
 		<menu_item_call label="Historia teleportacji" name="Teleport History"/>
 		<menu_item_check label="Miejsca" name="Places"/>
