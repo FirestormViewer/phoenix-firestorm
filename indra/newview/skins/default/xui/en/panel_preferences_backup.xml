@@ -9,6 +9,7 @@
  width="540"
  label="Backup"
  name="backup">
+
     <text
      name="backup_path_label"
      layout="topleft"
@@ -27,7 +28,7 @@ Backup Path:
      follows="left|right|top"
      left_pad="8"
      right="-120"
-      height="20"/>
+     height="20"/>
 
     <button
      layout="topleft"
@@ -41,13 +42,55 @@ Backup Path:
          function="Pref.SetBackupSettingsPath" />
     </button>
 
-    <button
+    <layout_stack
+     follows="top|left|right"
+     height="150"
+     orientation="vertical"
+     top_pad="10"
+     left="30"
+     right="-30"
+     layout="topleft">
+
+    <layout_panel
+     follows="all"
+     left="1"
+     right="-1"
+     height="50"
+     user_resize="false"
+     auto_resize="false"
      layout="topleft"
-     top_pad="20"
+     invisibility_control="PerAccountSettingsFile">
+
+    <text
+     follows="all"
+     layout="topleft"
+     left="0"
+     right="-1"
+     top="0"
+     word_wrap="true"
+     height="50">
+You are currently logged out. Be aware that your account specific settings can only be backed up and restored when you are logged in. However, settings that apply to all user accounts can be backed up without being logged in.
+    </text>
+
+    </layout_panel>
+
+    <layout_panel
+     follows="all"
+     left="1"
+     right="-1"
+     height="100"
+     user_resize="false"
+     auto_resize="true"
+     layout="topleft">
+
+    <button
+     enabled_control="SettingsBackupPath"
+     layout="topleft"
+     top_pad="5"
      follows="left|top"
      height="20"
      label="Backup Settings"
-     left="30"
+     left="50"
      name="backup_settings"
      width="120" >
         <button.commit_callback
@@ -55,8 +98,10 @@ Backup Path:
     </button>
 
     <button
+     enabled_control="SettingsBackupPath"
      layout="topleft"
-     left_pad="14"
+     right="-50"
+	 top_delta="0"
      follows="left|top"
      height="20"
      label="Restore Settings"
@@ -65,4 +110,19 @@ Backup Path:
         <button.commit_callback
          function="Pref.RestoreSettings" />
     </button>
- </panel>
+
+    </layout_panel>
+    </layout_stack>
+
+    <!-- Enable only for debugging of show/hide warning text
+    <check_box
+     label="Hide Warning"
+     layout="topleft"
+     follows="top|left"
+     top="-20"
+     width="100"
+     height="16"
+     name="Debug Show/Hide - Don't use in production"
+     control_name="PerAccountSettingsFile" />
+    -->
+</panel>
