@@ -123,6 +123,7 @@
 				<check_box label="Kameraposition nach Teleport zurücksetzen" name="FSResetCameraOnTP" tool_tip="Normalerweise wird die Kameraposition beim Teleportieren zurückgesetzt. Diese Option verhindert dieses Verhalten."/>
 				<check_box label="Minimale Zoomdistanz aufheben" name="disableminzoomdist" tool_tip="Deaktiviert die minimale Zoomdistanz der Kamera zu einem Objekt."/>
 				<check_box label="Kamerabewegung durch Primitiva erlauben" name="ignorecameraconstraints" tool_tip="Ignoriert die Beschränkung, dass die Kamera nicht durch primitive Objekte bewegt werden kann. ERFORDERT NEUSTART!"/>
+				<check_box label="Kamera bei Avatarbewegung zurücksetzen" name="resetcameraonmovement" tool_tip="Setzt die Kameraposition zurück, sobald der Avatar bewegt wird."/>
 			</panel>
 		</panel>
 

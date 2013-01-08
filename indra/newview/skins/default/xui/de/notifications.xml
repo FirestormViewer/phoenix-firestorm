@@ -3881,4 +3881,16 @@ Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enth
     </form>
   </notification>
 
+  <notification name="BackupFinished">
+Einstellungen wurden gesichert.
+  </notification>
+
+  <notification name="BackupFinished">
+Sicherungspfad ist nicht gesetzt. Bitte zunächst einen Ort festlegen, an dem die Einstellungen gesichert sind und von wo sie wiederhergestellt werden sollen.
+  </notification>
+
+  <notification name="SettingsRestoreNeedsLogout">
+Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sollen die Einstellungen jetzt wiederhergestellt und der Viewer beendet werden?
+	<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen"/>
+  </notification>
 </notifications>

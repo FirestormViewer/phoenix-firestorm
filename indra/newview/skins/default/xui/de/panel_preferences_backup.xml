@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<panel label="Sicherung" name="backup">
+	<text name="backup_path_label" width="90">
+		Sicherungspfad:
+	</text>
+	<button label="Setzen" name="set_backup_settings_path"/>
+    <layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">
+				Du bist derzeit ausgeloggt. Bitte beachte, dass Account-spezifische Einstellungen nur gesichert und wiederhergestellt werden können, wenn du eingeloggt bist. Globale Einstellungen, die für alle Accounts gültig sind, können gesichert werden, ohne eingeloggt zu sein.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<button label="Einstellungen sichern" name="backup_settings" width="180" left="30"/>
+			<button label="Einstellungen wiederherstellen" name="restore_settings" width="180" right="-30"/>
+		</layout_panel>
+	</layout_stack>
+</panel>
