@@ -1996,7 +1996,6 @@ bool LLAppViewer::cleanup()
 		gSavedSettings.saveToFile(gSavedSettings.getString("ClientSettingsFile"), TRUE);
 	
 	LLUIColorTable::instance().saveUserSettings();
-	}	// <FS:Zi> Backup Settings
 
 //<Firestorm Skin Cleanup>
 	std::string skinSaved = gSavedSettings.getString("SkinCurrent");
@@ -2009,6 +2008,7 @@ bool LLAppViewer::cleanup()
 
 	}
 //</Firestorm Skip Cleanup>
+	}	// <FS:Zi> Backup Settings
 	
 	
 	// <FS:Zi> Backup Settings
