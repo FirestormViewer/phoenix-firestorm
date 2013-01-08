@@ -606,7 +606,11 @@ void LLAgent::moveAt(S32 direction, bool reset)
 		setControlFlags(AGENT_CONTROL_AT_NEG | AGENT_CONTROL_FAST_AT);
 	}
 
-	if (reset)
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// if (reset)
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (reset && FSResetCameraOnMovement)
+	// </FS:PP>
 	{
 		gAgentCamera.resetView();
 	}
@@ -634,7 +638,15 @@ void LLAgent::moveAtNudge(S32 direction)
 		setControlFlags(AGENT_CONTROL_NUDGE_AT_NEG);
 	}
 
-	gAgentCamera.resetView();
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// gAgentCamera.resetView();
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (FSResetCameraOnMovement)
+	{
+		gAgentCamera.resetView();
+	}
+	// </FS:PP>
+
 }
 
 //-----------------------------------------------------------------------------
@@ -659,7 +671,15 @@ void LLAgent::moveLeft(S32 direction)
 		setControlFlags(AGENT_CONTROL_LEFT_NEG | AGENT_CONTROL_FAST_LEFT);
 	}
 
-	gAgentCamera.resetView();
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// gAgentCamera.resetView();
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (FSResetCameraOnMovement)
+	{
+		gAgentCamera.resetView();
+	}
+	// </FS:PP>
+
 }
 
 //-----------------------------------------------------------------------------
@@ -684,7 +704,15 @@ void LLAgent::moveLeftNudge(S32 direction)
 		setControlFlags(AGENT_CONTROL_NUDGE_LEFT_NEG);
 	}
 
-	gAgentCamera.resetView();
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// gAgentCamera.resetView();
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (FSResetCameraOnMovement)
+	{
+		gAgentCamera.resetView();
+	}
+	// </FS:PP>
+
 }
 
 //-----------------------------------------------------------------------------
@@ -699,19 +727,23 @@ void LLAgent::moveUp(S32 direction)
 	ageChat();
 
 	gAgentCamera.setUpKey(LLAgentCamera::directionToKey(direction));
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement"); // <FS:PP> FIRE-8798: Option to prevent camera reset on movement
 
 	if (direction > 0)
 	{
 		setControlFlags(AGENT_CONTROL_UP_POS | AGENT_CONTROL_FAST_UP);
 		// <FS:Ansariel> Chalice Yao's crouch toggle
-		gAgentCamera.resetView();
+		if(FSResetCameraOnMovement)
+		{
+			gAgentCamera.resetView();
+		}
 		// </FS:Ansariel>
 	}
 	else if (direction < 0)
 	{
 		setControlFlags(AGENT_CONTROL_UP_NEG | AGENT_CONTROL_FAST_UP);
 		// <FS:Ansariel> Chalice Yao's crouch toggle
-		if (!gSavedSettings.getBOOL("FSCrouchToggleStatus") || !gSavedSettings.getBOOL("FSCrouchToggle"))
+		if ((!gSavedSettings.getBOOL("FSCrouchToggleStatus") || !gSavedSettings.getBOOL("FSCrouchToggle")) && FSResetCameraOnMovement)
 		{
 			gAgentCamera.resetView();
 		}
@@ -739,10 +771,15 @@ void LLAgent::moveYaw(F32 mag, bool reset_view)
 		setControlFlags(AGENT_CONTROL_YAW_NEG);
 	}
 
-    if (reset_view)
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// if (reset_view)
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (reset_view && FSResetCameraOnMovement)
+	// </FS:PP>
 	{
-        gAgentCamera.resetView();
+		gAgentCamera.resetView();
 	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -871,7 +908,16 @@ void LLAgent::toggleFlying()
 	LLFirstUse::notMoving(false);
 
 	gAgent.setFlying( fly );
-	gAgentCamera.resetView();
+
+	// <FS:PP> FIRE-8798: Option to prevent camera reset on movement
+	// gAgentCamera.resetView();
+	static LLCachedControl<bool> FSResetCameraOnMovement(gSavedSettings, "FSResetCameraOnMovement");
+	if (FSResetCameraOnMovement)
+	{
+		gAgentCamera.resetView();
+	}
+	// </FS:PP>
+
 }
 
 // static

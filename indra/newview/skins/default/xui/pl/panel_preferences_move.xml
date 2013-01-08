@@ -57,6 +57,7 @@
 			</text>
 			<check_box label="Nie resetuj kamery, gdy kliknę na swojego awatara" name="clickonavatarkeepscamera" tool_tip="Normalnie gdy klikniesz na swojego awatara pozycja kamery ulega zresetowaniu. Ta opcja usuwa to zachowanie."/>
 			<check_box label="Resetowanie pozycji kamery po teleportacji (wewnątrz regionu)" name="FSResetCameraOnTP" tool_tip="Normalnie pozycja kamery ulega zresetowaniu po teleportacji. Ta opcja zapobiega temu zachowaniu."/>
+			<check_box label="Resetowanie pozycji kamery przy poruszaniu się awatarem" name="FSResetCameraOnMovement"/>
 			<check_box label="Wyłącz minimalną odległość przybliżenia kamery" name="disableminzoomdist" tool_tip="Wyłącz ograniczenie w przybliżaniu obiektów."/>
 			<check_box label="Obracaj awatara w stronę patrzenia kamery podczas resetowania widoku" name="resetviewturnsavatar" tool_tip="Po zresetowaniu widoku (lub naciśnięciu klawisza ESC) kierunek patrzenia kamery zostaje zachowany, a awatar - obrócony w jego stronę."/>
 			<check_box label="Przenikanie kamery przez primy bez ograniczeń" name="ignorecameraconstraints" tool_tip="Ignoruje 'pchnięcie' stosowane przez symulator, aby utrzymać kamerę na zewnątrz obiektów."/>
