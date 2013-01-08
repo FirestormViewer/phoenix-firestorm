@@ -13,22 +13,6 @@
     <file name="Warnings"
           file_name="ignorable_dialogs.xml"
           required="true"/>
-    <!-- <FS:Zi> Settings Backup -->
-    <file name="BackupGlobal"
-          file_name="backup_settings.xml"
-          required="false"/>
-    <file name="BackupPerAccount"
-          file_name="backup_settings_per_account.xml"
-          required="false"/>
-    <file name="Colors"
-          file_name="colors.xml"
-          required="false"/>
-    <file name="BackupColors"
-          file_name="backup_colors.xml"
-          required="false"/>
-    <file name="BackupWarnings"
-          file_name="backup_ignorable_dialogs.xml"/>
-    <!-- </FS:Zi> -->
   </group>
   <group name="User"
          path_index="1">

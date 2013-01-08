@@ -3011,6 +3011,7 @@ S32 copy_prefs_file(const std::string& from, const std::string& to)
 	}
 	else
 	{
+		llwarns << "copy failed. in: " << in << " out: " << out << llendl;
 		rv = -1;
 	}
 	if(in) fclose(in);
@@ -3035,12 +3036,16 @@ void LLFloaterPreference::onClickSetBackupSettingsPath()
 
 void LLFloaterPreference::onClickBackupSettings()
 {
+	llwarns << "entered" << llendl;
 	// Get settings backup path
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 
 	// If we don't have a path yet, ask the user
 	if(dir_name.empty())
+	{
+		llwarns << "ask user for backup path" << llendl;
 		onClickSetBackupSettingsPath();
+	}
 
 	// Remember the backup path for next time
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
@@ -3048,6 +3053,7 @@ void LLFloaterPreference::onClickBackupSettings()
 	// if the backup path is still empty, complain to the user and do nothing else
 	if(dir_name.empty())
 	{
+		llwarns << "backup path empty" << llendl;
 		LLNotificationsUtil::add("BackupPathEmpty");
 		return;
 	}
@@ -3057,9 +3063,9 @@ void LLFloaterPreference::onClickBackupSettings()
 	std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
 
 	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupGlobal"));
+				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
 	std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupPerAccount"));
+				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
 				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 
@@ -3100,17 +3106,21 @@ void LLFloaterPreference::onClickBackupSettings()
 	} func_global(&backup_global_controls), func_per_account(&backup_per_account_controls);
 
 	// run backup on global controls
+	llwarns << "running functor on global settings" << llendl;
 	gSavedSettings.applyToAll(&func_global);
 
 	// make sure to write color preferences before copying them
+	llwarns << "saving UI color table" << llendl;
 	LLUIColorTable::instance().saveUserSettings();
 
 	// set it to save defaults, too (FALSE), because our declaration automatically
 	// makes the value default
+	llwarns << "saving backup global settings" << llendl;
 	backup_global_controls.saveToFile(backup_global_name,FALSE);
 
 	for(S32 index=0;index<mGlobalFiles.size();index++)
 	{
+		llwarns << "copying global file " << mGlobalFiles[index] << llendl;
 		copy_prefs_file(
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFiles[index]),
 			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFiles[index]));
@@ -3120,6 +3130,7 @@ void LLFloaterPreference::onClickBackupSettings()
 	// has logged in
 	if(!per_account_name.empty())
 	{
+		llwarns << "copying per account settings" << llendl;
 		// create per-user folder if it doesn't exist yet
 		LLFile::mkdir(backup_per_account_folder.c_str());
 
@@ -3127,12 +3138,15 @@ void LLFloaterPreference::onClickBackupSettings()
 		if(LLFile::isdir(backup_per_account_folder.c_str()))
 		{
 			// run backup on per-account controls
+			llwarns << "running functor on per account settings" << llendl;
 			gSavedPerAccountSettings.applyToAll(&func_per_account);
 			// save defaults here as well (FALSE)
+			llwarns << "saving backup per account settings" << llendl;
 			backup_per_account_controls.saveToFile(backup_per_account_name,FALSE);
 
 			for(S32 index=0;index<mPerAccountFiles.size();index++)
 			{
+				llwarns << "copying per account file " << mPerAccountFiles[index] << llendl;
 				copy_prefs_file(
 					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,mPerAccountFiles[index]),
 					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,mPerAccountFiles[index]));
@@ -3149,7 +3163,7 @@ void LLFloaterPreference::onClickBackupSettings()
 		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
 		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
 
-		llwarns << "found folder: " << folder_name << llendl;
+		llwarns << "backing up folder: " << folder_name << llendl;
 
 		// create folder if it's not there already
 		LLFile::mkdir(backup_folder_name.c_str());
@@ -3174,19 +3188,26 @@ void LLFloaterPreference::onClickRestoreSettings()
 
 void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD& response)
 {
+	llwarns << "entered" << llendl;
 	// Check the user's answer about restore and restart
 	S32 option=LLNotificationsUtil::getSelectedOption(notification,response);
 
 	// If canceled, do nothing
 	if(option==1)
+	{
+		llwarns << "restore canceled" << llendl;
 		return;
+	}
 
 	// Get settings backup path
 	std::string dir_name=gSavedSettings.getString("SettingsBackupPath");
 
 	// Backup path is empty, ask the user where to find the backup
 	if(dir_name.empty())
+	{
+		llwarns << "ask user for path to restore from" << llendl;
 		onClickSetBackupSettingsPath();
+	}
 
 	// Remember the backup path for next time
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
@@ -3194,6 +3215,7 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	// If the backup path is still empty, complain to the user and do nothing else
 	if(dir_name.empty())
 	{
+		llwarns << "restore path empty" << llendl;
 		LLNotificationsUtil::add("BackupPathEmpty");
 		return;
 	}
@@ -3207,42 +3229,41 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 
 	std::string global_name=gSavedSettings.getString("ClientSettingsFile");
 	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupGlobal"));
+				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
 	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
 				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 	std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupPerAccount"));
-	std::string backup_colors_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupColors"));
-	std::string warnings_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,
-				LLAppViewer::instance()->getSettingsFilename("Default","Warnings"));
-	std::string backup_warnings_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","BackupWarnings"));
+				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 
 	// start clean
+	llwarns << "clearing global settings" << llendl;
 	gSavedSettings.resetToDefaults();
 
 	// run restore on global controls
+	llwarns << "restoring global settings from backup" << llendl;
 	gSavedSettings.loadFromFile(backup_global_name);
+	llwarns << "saving global settings" << llendl;
 	gSavedSettings.saveToFile(global_name,TRUE);
 
 	for(S32 index=0;index<mGlobalFiles.size();index++)
 	{
+		llwarns << "copying global file " << mGlobalFiles[index] << llendl;
 		copy_prefs_file(
 			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFiles[index]),
 			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFiles[index]));
 	}
 
-	// Only restore per-account settings when the path is available, meaning, the user
-	// has logged in
-	if(!backup_per_account_name.empty())
+	// Only restore per-account settings when the path is available
+	if(!per_account_name.empty())
 	{
+		llwarns << "copying per account settings" << llendl;
 		// run restore on per-account controls
 		gSavedPerAccountSettings.loadFromFile(backup_per_account_name);
 		gSavedPerAccountSettings.saveToFile(per_account_name,TRUE);
 
 		for(S32 index=0;index<mPerAccountFiles.size();index++)
 		{
+			llwarns << "copying per account file " << mPerAccountFiles[index] << llendl;
 			copy_prefs_file(
 				gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,mPerAccountFiles[index]),
 				gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,mPerAccountFiles[index]));
@@ -3250,7 +3271,9 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 
 		// toolbars get overwritten when LLToolbarView is destroyed, so make sure
 		// the toolbars are updated here already
+		llwarns << "clearing toolbars" << llendl;
 		gToolBarView->clearToolbars();
+		llwarns << "reloading toolbars" << llendl;
 		gToolBarView->loadToolbars(FALSE);
 	}
 
@@ -3260,6 +3283,8 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 		std::string file_name;
 		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
 		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
+
+		llwarns << "restoring global folder " << folder_name << llendl;
 
 		// create folder if it's not there already
 		LLFile::mkdir(folder_name.c_str());
@@ -3277,6 +3302,7 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	// Make sure the viewer will not save any settings on exit, so our copied files will survive
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
 
+	llwarns << "setting to quit" << llendl;
 	// And quit the viewer so all gets saved immediately
 	LLApp::instance()->setQuitting();
 }
