@@ -746,6 +746,17 @@
 				 width="250"
 				 control_name="FSIgnoreSimulatorCameraConstraints"
 				 tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+				<check_box
+				 top_pad="2"
+				 follows="left|top"
+				 height="16"
+				 label="Reset camera position on avatar movement"
+				 layout="topleft"
+				 left="5"
+				 name="resetcameraonmovement"
+				 width="250"
+				 control_name="FSResetCameraOnMovement"
+				 tool_tip="Resets the camera to its default position when you move the avatar"/>
 			</panel>
 		</panel>
 

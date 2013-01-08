@@ -4501,7 +4501,7 @@
 						 border_visible="true"
 						 background_visible="true">
 							<check_box
-							 top_pad="15"
+							 top_pad="7"
 							 follows="left|top"
 							 height="16"
 							 label="Clicking your avatar keeps camera position"
@@ -4544,6 +4544,17 @@
 							 width="250"
 							 control_name="FSIgnoreSimulatorCameraConstraints"
 							 tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+							<check_box
+							 top_pad="2"
+							 follows="left|top"
+							 height="16"
+							 label="Reset camera position on avatar movement"
+							 layout="topleft"
+							 left="10"
+							 name="resetcamerapositiononmovement"
+							 width="250"
+							 control_name="FSResetCameraOnMovement"
+							 tool_tip="Resets the camera to its default position when you move the avatar"/>
 						</panel>
 					</panel>
 				</tab_container>
