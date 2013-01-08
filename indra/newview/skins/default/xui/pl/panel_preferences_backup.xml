@@ -4,6 +4,15 @@
 		Miejsce zapisu:
 	</text>
 	<button label="Ustaw" name="set_backup_settings_path" />
-	<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
-	<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
+	<layout_stack name="ls_account_specific_label">
+		<layout_panel name="lp_account_specific_label">
+			<text name="account_specific_label">
+				Jesteś teraz wylogowany/y. Pamiętaj, że ustawienia specyficzne dla Twojego konta mogą być archiwizowane i przywracane tylko wtedy, gdy jesteś zalogowany/a. Niemniej, te odnoszące się do wszystkich użytkowników mogą być archiwizowane bez logowania się.
+			</text>
+		</layout_panel>
+		<layout_panel name="lp_buttons">
+			<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
+			<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
+		</layout_panel>
+	</layout_stack>
 </panel>
