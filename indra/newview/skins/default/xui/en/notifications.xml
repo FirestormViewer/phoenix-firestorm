@@ -9414,6 +9414,20 @@ The backup path is empty. Please provide a location to back up and restore your 
 
   <notification
    icon="alertmodal.tga"
+   name="BackupPathDoesNotExistOrCreateFailed"
+   type="alertmodal">
+The backup path could not be found or created.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="BackupPathDoesNotExist"
+   type="alertmodal">
+The backup path could not be found.
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
    name="SettingsRestoreNeedsLogout"
    type="alertmodal">
 Settings restore requires a viewer restart. Do you want to restore your settings and quit the viewer now?

@@ -3047,14 +3047,24 @@ void LLFloaterPreference::onClickBackupSettings()
 		onClickSetBackupSettingsPath();
 	}
 
-	// Remember the backup path for next time
+	// Remember the backup path
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
 
-	// if the backup path is still empty, complain to the user and do nothing else
+	// If the backup path is still empty, complain to the user and do nothing else
 	if(dir_name.empty())
 	{
 		llwarns << "backup path empty" << llendl;
 		LLNotificationsUtil::add("BackupPathEmpty");
+		return;
+	}
+
+	// Try to make sure the folder exists
+	LLFile::mkdir(dir_name.c_str());
+	// If the folder is still not there, give up
+	if(!LLFile::isdir(dir_name.c_str()))
+	{
+		llwarns << "backup path does not exist or could not be created" << llendl;
+		LLNotificationsUtil::add("BackupPathDoesNotExistOrCreateFailed");
 		return;
 	}
 
@@ -3217,6 +3227,14 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	{
 		llwarns << "restore path empty" << llendl;
 		LLNotificationsUtil::add("BackupPathEmpty");
+		return;
+	}
+
+	// If the path does not exist, give up
+	if(!LLFile::isdir(dir_name.c_str()))
+	{
+		llwarns << "backup path does not exist" << llendl;
+		LLNotificationsUtil::add("BackupPathDoesNotExist");
 		return;
 	}
 
