@@ -6691,8 +6691,6 @@
       <string>String</string>
       <key>Value</key>
       <string></string>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>LastFeatureVersion</key>
     <map>
@@ -6703,8 +6701,6 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>0</integer>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>LastFindPanel</key>
