@@ -3,8 +3,8 @@ include(Prebuilt)
 
 # If you want to enable or disable TCMALLOC in viewer builds, this is the place.
 # set ON or OFF as desired.
-set (USE_TCMALLOC ON)
-#set (USE_TCMALLOC OFF) # <FS:ND> tcmalloc removal
+#set (USE_TCMALLOC ON)
+set (USE_TCMALLOC OFF) # <FS:ND> tcmalloc removal
 
 if (STANDALONE)
   include(FindGooglePerfTools)
