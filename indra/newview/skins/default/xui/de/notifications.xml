@@ -3889,6 +3889,14 @@ Einstellungen wurden gesichert.
 Sicherungspfad ist nicht gesetzt. Bitte zunächst einen Ort festlegen, an dem die Einstellungen gesichert sind und von wo sie wiederhergestellt werden sollen.
   </notification>
 
+  <notification name="BackupPathDoesNotExistOrCreateFailed">
+Der Sicherungspfad konnte nicht gefunden oder erstellt werden.
+  </notification>
+
+  <notification name="BackupPathDoesNotExist">
+Der Sicherungspfad konnte nicht gefunden werden.
+  </notification>
+
   <notification name="SettingsRestoreNeedsLogout">
 Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sollen die Einstellungen jetzt wiederhergestellt und der Viewer beendet werden?
 	<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen"/>
