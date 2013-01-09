@@ -4567,12 +4567,12 @@
 						 bg_alpha_color="DkGray_66"
 						 background_visible="true">
 							<check_box
-							 top_pad="15"
+							 top_pad="7"
 							 follows="left|top"
 							 height="16"
 							 label="Clicking your avatar keeps camera position"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 name="clickonavatarkeepscamera"
 							 width="250"
 							 control_name="ClickOnAvatarKeepsCamera"
@@ -4583,7 +4583,7 @@
 							 height="16"
 							 label="Reset camera position after teleport"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 name="FSResetCameraOnTP"
 							 width="250"
 							 control_name="FSResetCameraOnTP"
@@ -4594,7 +4594,7 @@
 							 height="16"
 							 label="Disable minimum camera zoom distance"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 name="disableminzoomdist"
 							 width="250"
 							 control_name="FSDisableMinZoomDist"
@@ -4605,11 +4605,22 @@
 							 height="16"
 							 label="Allow the camera to move w/o constraints"
 							 layout="topleft"
-							 left="10"
+							 left="5"
 							 name="ignorecameraconstraints"
 							 width="250"
 							 control_name="FSIgnoreSimulatorCameraConstraints"
 							 tool_tip="Ignores the 'push' the simulator applies to your camera to keep it out of objects. REQUIRES RESTART!"/>
+							<check_box
+							 top_pad="2"
+							 follows="left|top"
+							 height="16"
+							 label="Reset camera position on avatar movement"
+							 layout="topleft"
+							 left="5"
+							 name="resetcamerapositiononmovement"
+							 width="250"
+							 control_name="FSResetCameraOnMovement"
+							 tool_tip="Resets the camera to its default position when you move the avatar"/>
 						</panel>
 					</panel>
 				</tab_container>
