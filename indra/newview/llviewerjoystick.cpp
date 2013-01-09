@@ -24,6 +24,12 @@
  * $/LicenseInfo$
  */
 
+// </FS:ND> Fix for GCC 4.4.5, oherwise it complains at boost/signal
+#ifdef LL_LINUX
+#pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+// </FS:ND>
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llviewerjoystick.h"
