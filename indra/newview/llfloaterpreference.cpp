@@ -512,7 +512,7 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mGlobalFiles.push_back("colors.xml");
 	mGlobalFiles.push_back("ignorable_dialogs.xml");
 	mGlobalFiles.push_back("grids.user.xml");
-	mGlobalFiles.push_back("settings_autocorrect.xml");
+	mGlobalFiles.push_back("autoreplace.xml");
 
 	// make a list of per account files to copy
 	mPerAccountFiles.push_back("asset_blacklist.xml");
