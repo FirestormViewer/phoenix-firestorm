@@ -59,7 +59,7 @@
 							<column name="restore_per_account_files_label">Wyciszone czaty grupowe</column>
 						</row>
 						<row name="restore_per_account_row_toolbars">
-							<column name="restore_per_account_files_label">Paski narzędzi</column>
+							<column name="restore_per_account_files_label">Paski narzędzi (przyciski)</column>
 						</row>
 						<row name="restore_per_account_row_volumes">
 							<column name="restore_per_account_files_label">Głośności czatów głosowych</column>
