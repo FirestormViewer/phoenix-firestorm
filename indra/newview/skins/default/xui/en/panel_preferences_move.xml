@@ -206,6 +206,15 @@
          name="first_person_avatar_visible"
          width="256" />
         <check_box
+         control_name="FSShowInterfaceInMouselook"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Show user interface in Mouselook"
+         layout="topleft"
+         name="first_person_ui_visible"
+         width="256" />
+        <check_box
          control_name="FSShowMouselookInstructions"
          follows="left|top"
          enabled_control="EnableMouselook"

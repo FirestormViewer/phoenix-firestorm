@@ -2354,6 +2354,12 @@ void LLAgent::endAnimationUpdateUI()
 	//---------------------------------------------------------------------
 	if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
 	{
+
+		// <FS:PP> FIRE-8868: Show UI in mouselook
+		if(!gSavedSettings.getBOOL("FSShowInterfaceInMouselook"))
+		{
+		// </FS:PP>
+
 		// clean up UI
 		// first show anything hidden by UI toggle
 		gViewerWindow->setUIVisibility(TRUE);
@@ -2383,7 +2389,9 @@ void LLAgent::endAnimationUpdateUI()
 		// </FS:Zi>
 
 		// clear out camera lag effect
-		gAgentCamera.clearCameraLag();
+		// <FS:PP> Commented out and moved lower for FIRE-8868: Show UI in mouselook
+		// gAgentCamera.clearCameraLag();
+		// </FS:PP>
 
 		// JC - Added for always chat in third person option
 		gFocusMgr.setKeyboardFocus(NULL);
@@ -2392,10 +2400,12 @@ void LLAgent::endAnimationUpdateUI()
 
 		mViewsPushed = TRUE;
 
-		if (mMouselookModeInSignal)
-		{
-			(*mMouselookModeInSignal)();
-		}
+		// <FS:PP> Commented out and moved lower for FIRE-8868: Show UI in mouselook
+		// if (mMouselookModeInSignal)
+		// {
+		//	(*mMouselookModeInSignal)();
+		// }
+		// </FS:PP>
 
 		// hide all floaters except the mini map
 
@@ -2424,12 +2434,26 @@ void LLAgent::endAnimationUpdateUI()
 		gFloaterView->pushVisibleAll(FALSE, skip_list);
 #endif
 
+		// <FS:PP> FIRE-8868: Show UI in mouselook
+		gConsole->setVisible( TRUE );
+
+		} // Check ends here, anything below will be executed regardless of its state
+
+		gAgentCamera.clearCameraLag();
+
+		if (mMouselookModeInSignal)
+		{
+			(*mMouselookModeInSignal)();
+		}
+		// </FS:PP>
+
 		if( gMorphView )
 		{
 			gMorphView->setVisible(FALSE);
 		}
 
-		gConsole->setVisible( TRUE );
+		// <FS:PP> Commented out and moved few lines higher for FIRE-8868: Show UI in mouselook
+		// gConsole->setVisible( TRUE );
 
 		if (isAgentAvatarValid())
 		{

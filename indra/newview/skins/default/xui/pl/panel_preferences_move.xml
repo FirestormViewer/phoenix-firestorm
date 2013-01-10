@@ -16,6 +16,7 @@
 			<check_box label="Dodawaj dodatkowe oświetlenie" name="EditAppearanceLighting" tool_tip="Włącz lub wyłącz dodatkowe oświetlenie, gdy edytujesz wygląd."/>
 			<check_box label="Włącz funkcjonalność widoku pierwszoosobowego" name="EnableMouselook" tool_tip="Zezwól przeglądarce na używanie perspektywy pierwszej osoby oraz sterowanie w niej kamerą za pomocą myszy"/>
 			<check_box label="Awatar widoczny w trybie pierwszoosobowym" name="first_person_avatar_visible"/>
+			<check_box label="Interfejs widoczny w trybie pierwszoosobowym" name="first_person_ui_visible"/>
 			<check_box label="Pokazuj instrukcje trybu pierwszoosobowego" name="mouselook_instructions_visible" tool_tip="Pokazuj instrukcje w trybie pierwszoosobowym"/>
 			<check_box label="Pokazuj celownik myszki" name="ShowCrosshairs" tool_tip="Pokazuj celownik myszki, gdy widok pierwszoosobowy jest włączony"/>
 			<text name="Mouse Sensitivity">
