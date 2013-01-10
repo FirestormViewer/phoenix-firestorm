@@ -17,6 +17,7 @@
 			<check_box label="Zusätzliche Beleuchtung aktivieren" name="EditAppearanceLighting" tool_tip="Aktiviert die zusätzliche Beleuchtung, wenn die Form des Avatars bearbeitet wird."/>
 			<check_box label="Mouselook-Funktionalität aktivieren" name="EnableMouselook" tool_tip="Aktiviert die Ego-Perspektive und -Steuerung mit der Maus."/>
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
+			<check_box label="Benutzerinterface im Mouselook anzeigen" name="first_person_ui_visible"/>
 			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible"/>
 			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<text name="Mouse Sensitivity" width="195">

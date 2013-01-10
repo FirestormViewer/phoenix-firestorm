@@ -3780,14 +3780,14 @@ Sollen die Skripte in den ausgewählten Objekten wirklich modifiziert werden?
 			yestext="OK"/>
 	</notification>
 
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
-  <notification name="LSLColorCopiedToClipboard">
+<!-- <FS:Zi> Add float LSL color entry widgets -->
+	<notification name="LSLColorCopiedToClipboard">
 Der LSL-Farbcode wurde in die Zwischenablage kopiert. Er kann jetzt in LSL-Skripte eingefügt und genutzt werden.
-   <form name="form">
-      <ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
-    </form>
-  </notification>
-  <!-- <FS:Zi> Add float LSL color entry widgets -->
+		<form name="form">
+			<ignore name="ignore" text="Ein LSL-Farbcode wurde in die Zwischenablage kopiert."/>
+		</form>
+	</notification>
+<!-- <FS:Zi> Add float LSL color entry widgets -->
 
 	<notification name="FSBWTooHigh">
 Es wird empfohlen die Bandbreite nicht höher als 1500 kbit/s zu setzen! Bei einer höheren Bandbreite kann es zu Problemen kommen und die Leistung wird dadurch nicht verbessert.
@@ -3814,91 +3814,87 @@ Soll [REMOVE_GRID] wirklich aus der Grid-Liste entfernt werden?
 	</notification>
 <!-- </FS:AW  grid management-->
 
-  <!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
-  <notification name="ExodusFlickrVerificationExplanation">
+<!-- <FS:TS> FIRE-5453: Flickr upload support (from Exodus) -->
+	<notification name="ExodusFlickrVerificationExplanation">
 Um die Flickr-Uploadfunktion nutzen zu können, muss [APP_NAME] Zugriff auf deinen Account gewährt werden. Beim Fortfahren wird die Flickr-Website im Webbrowser geöffnet, wo du dich einloggen und den Zugriff durch [APP_NAME] autorisieren musst. Der daraufhin angezeigte Code muss in [APP_NAME] eingetragen werden.
 
 Soll [APP_NAME] autorisiert werden, Fotos unter deinem Flickr-Konto zu posten?
-    <usetemplate
-     name="okcancelbuttons"
-     notext="Nein"
-     yestext="Ja"/>
-  </notification>
+		<usetemplate name="okcancelbuttons" notext="Nein"yestext="Ja"/>
+	</notification>
 
-  <notification name="ExodusFlickrVerificationPrompt">
+	<notification name="ExodusFlickrVerificationPrompt">
 Bitte den Flickr-Zugriff im Webbrowser autorisieren und den angezeigen Code eingeben:
-    <form name="form">
-      <button
-       name="OK"
-       text="OK"/>
-      <button
-       name="Cancel"
-       text="Abbrechen"/>
-    </form>
-  </notification>
+		<form name="form">
+			<button name="OK" text="OK"/>
+			<button name="Cancel" text="Abbrechen"/>
+		</form>
+	</notification>
 
-  <notification name="ExodusFlickrVerificationFailed">
+	<notification name="ExodusFlickrVerificationFailed">
 Flickr-Verifikation fehlgeschlagen. Bitte erneut versuchen sowie den eingegebenen Code überprüfen.
-    <usetemplate
-     name="okbutton"
-     yestext="OK"/>
-  </notification>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
-  <notification name="ExodusFlickrUploadComplete">
+	<notification name="ExodusFlickrUploadComplete">
 Das Foto kann jetzt [http://www.flickr.com/photos/upload/edit/?ids=[ID] hier] betrachtet werden.
-  </notification>
-  <!-- </FS:TS> FIRE-5453 -->
+	</notification>
+<!-- </FS:TS> FIRE-5453 -->
 
-  <notification name="FirstUseFlyOverride">
+	<notification name="FirstUseFlyOverride">
 Warnung: Bitte verwende die Funktion zur Aufhebung der Flugbeschränkung verantwortungsvoll! Die Verwendung ohne die Zustimmung des Landeigentümers kann dazu führen, dass du von dem entsprechenden Land verbannt wirst.
-  </notification>
+	</notification>
 
-  <notification name="ServerVersionChanged">
+	<notification name="ServerVersionChanged">
 Die betretene Region verwendet eine andere Simulator-Version.
 Aktueller Simulator: [NEWVERSION]
 Vorheriger Simulator: [OLDVERSION]
-  </notification>
+	</notification>
 
-  <notification name="VintageLoginInfo">
+	<notification name="VintageLoginInfo">
 Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoenix Viewers verwenden können? Wählen Sie den Phoenix-Modus in der „Modus“-Auswahlbox neben dem Anmelden-Button aus.
-	<usetemplate name="okbutton" yestext="OK"/>
-  </notification>
+		<usetemplate name="okbutton" yestext="OK"/>
+	</notification>
 
-  <notification name="CannotSaveSnapshot">
+	<notification name="CannotSaveSnapshot">
 Foto konnte nicht gespeichert werden.
-  </notification>
+	</notification>
 
-  <notification name="RegExFail">
+	<notification name="RegExFail">
 Fehler im Regulären Ausdruck:
 [EWHAT]
-  </notification>
+	</notification>
 
-  <notification name="NoHavok">
+	<notification name="NoHavok">
 Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enthalten. Falls Sie [FEATURE] nutzen möchten, laden Sie sich bitte [APP_NAME] für Second Life hier herunter:
 [DOWNLOAD_URL]
-    <form name="form">
-      <ignore name="ignore" text="Kein-Havok-Warnung"/>
-    </form>
-  </notification>
+		<form name="form">
+			<ignore name="ignore" text="Kein-Havok-Warnung"/>
+		</form>
+	</notification>
 
-  <notification name="BackupFinished">
+	<notification name="BackupFinished">
 Einstellungen wurden gesichert.
-  </notification>
+	</notification>
 
-  <notification name="BackupFinished">
+	<notification name="BackupFinished">
 Sicherungspfad ist nicht gesetzt. Bitte zunächst einen Ort festlegen, an dem die Einstellungen gesichert sind und von wo sie wiederhergestellt werden sollen.
-  </notification>
+	</notification>
 
-  <notification name="BackupPathDoesNotExistOrCreateFailed">
+	<notification name="BackupPathDoesNotExistOrCreateFailed">
 Der Sicherungspfad konnte nicht gefunden oder erstellt werden.
-  </notification>
+	</notification>
 
-  <notification name="BackupPathDoesNotExist">
+	<notification name="BackupPathDoesNotExist">
 Der Sicherungspfad konnte nicht gefunden werden.
-  </notification>
+	</notification>
 
-  <notification name="SettingsRestoreNeedsLogout">
+	<notification name="SettingsRestoreNeedsLogout">
 Das Wiederherstellen von Einstellungen erfordert einen Neustart des Viewers. Sollen die Einstellungen jetzt wiederhergestellt und der Viewer beendet werden?
-	<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen"/>
-  </notification>
+		<usetemplate name="okcancelbuttons" notext="Abbrechen" yestext="Wiederherstellen und beenden"/>
+	</notification>
+
+	<notification name="SettingsRestoreNeedsLogout">
+Wiederherstellen abgeschlossen! Bitte den Viewer neu starten!
+		<usetemplate name="okbutton" yestext="Beenden"/>
+	</notification>
 </notifications>

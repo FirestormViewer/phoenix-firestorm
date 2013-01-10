@@ -5,12 +5,102 @@
 	</text>
 	<button label="Setzen" name="set_backup_settings_path"/>
     <layout_stack name="ls_account_specific_label">
-		<layout_panel name="lp_account_specific_label">
+		<layout_panel name="lp_account_specific_label" height="60">
 			<text name="account_specific_label">
-				Du bist derzeit ausgeloggt. Bitte beachte, dass Account-spezifische Einstellungen nur gesichert und wiederhergestellt werden können, wenn du eingeloggt bist. Globale Einstellungen, die für alle Accounts gültig sind, können gesichert werden, ohne eingeloggt zu sein.
+				Du bist derzeit ausgeloggt. Bitte beachte, dass benutzerspezifische Einstellungen nur gesichert und wiederhergestellt werden können, wenn du eingeloggt bist. Globale Einstellungen, die für alle Accounts gültig sind, können gesichert werden, ohne eingeloggt zu sein.
 			</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Wiederherzustellende Gruppen von Einstellungen (Sicherung speichert immer alle):
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="Globale Daten:" name="restore_global_files_label" />
+						<column label="Wert" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Logindaten</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Farben</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Ignorierte Dialoge</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">Benutzerdef. Grids</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Automatische Ersetzung</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="Benutzerspez. Daten:" name="restore_per_account_files_label" />
+						<column label="Wert" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Asset Blacklist</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Kontakt-Sets</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">Inventarfilter</column>
+						</row>
+						<row name="restore_per_account_row_favsort">
+							<column name="restore_per_account_files_label">Favoriten-Sortierung</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Medienfilter</column>
+						</row>
+						<row name="restore_per_account_row_mutedchats">
+							<column name="restore_per_account_files_label">Stummg. Gruppenchats</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Symbolleisten</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Voice-Chat-Lautstärken</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Teleport-Liste</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Ordner:" name="restore_global_folders_label" />
+						<column label="Wert" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Auswahlstrahlen</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Auswahlstrahlfarben</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Rechtschreibprüfung</column>
+						</row>
+						<row name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Windlight (Notwendig)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Windlight: Tageszyklen</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Windlight: Himmel</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Windlight: Wasser</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
+			<button label="Alles auswählen" name="select_all_button" />
+			<button label="Alles abwählen" name="deselect_all_button" />
+			<check_box label="Globale Einstellungen wiederherstellen" name="restore_global_settings_checkbox" />
+			<check_box label="Benutzerspezifische Einstellungen wiederherstellen" name="restore_per_account_settings_checkbox" />
 			<button label="Einstellungen sichern" name="backup_settings" width="180" left="30"/>
 			<button label="Einstellungen wiederherstellen" name="restore_settings" width="180" right="-30"/>
 		</layout_panel>

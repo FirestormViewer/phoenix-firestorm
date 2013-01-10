@@ -45,7 +45,7 @@ Backup Path:
     <layout_stack
      name="ls_account_specific_label"
      follows="all"
-     height="350"
+     height="390"
      orientation="vertical"
      top_pad="10"
      left="30"
@@ -82,7 +82,7 @@ You are currently logged out. Be aware that your account specific settings can o
      follows="all"
      left="1"
      right="-1"
-     height="210"
+     height="250"
      user_resize="false"
      auto_resize="true"
      layout="topleft">
@@ -331,7 +331,7 @@ Settings groups to be restored (backup will always save all):
      label="Restore per account settings"
      layout="topleft"
      follows="top|left"
-     left_pad="0"
+     left="30"
      width="200"
      height="16"
      name="restore_per_account_settings_checkbox"
