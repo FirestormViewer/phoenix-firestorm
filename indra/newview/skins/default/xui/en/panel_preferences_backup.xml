@@ -88,7 +88,7 @@ You are currently logged out. Be aware that your account specific settings can o
      layout="topleft">
 
     <text
-     name="account_specific_label"
+     name="settings_restored_label"
      follows="top|left|right"
      layout="topleft"
      left="0"
@@ -129,30 +129,30 @@ Settings groups to be restored (backup will always save all):
         <column label="" name="restore_global_files_check" width="16" />
         <column label="Global Files:" name="restore_global_files_label" />
         <column label="Value" name="value" width="-1" />
-        <row>
-            <column type="checkbox" column="restore_global_files_check" value="true" />
-            <column column="restore_global_files_label">Login Credentials</column>
-            <column column="value">bin_conf.dat</column>
+        <row name="restore_global_row_login">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">Login Credentials</column>
+            <column name="value">bin_conf.dat</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_files_check" value="true" />
-            <column column="restore_global_files_label">Colors</column>
-            <column column="value">colors.xml</column>
+        <row name="restore_global_row_colors">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">Colors</column>
+            <column name="value">colors.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_files_check" value="true" />
-            <column column="restore_global_files_label">Ignorable Dialogs</column>
-            <column column="value">ignorable_dialogs.xml</column>
+        <row name="restore_global_row_dialogs">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">Ignorable Dialogs</column>
+            <column name="value">ignorable_dialogs.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_files_check" value="true" />
-            <column column="restore_global_files_label">User-Defined Grids</column>
-            <column column="value">grids.user.xml</column>
+        <row name="restore_global_row_grids">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">User-Defined Grids</column>
+            <column name="value">grids.user.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_files_check" value="true" />
-            <column column="restore_global_files_label">Autoreplace</column>
-            <column column="value">autoreplace.xml</column>
+        <row name="restore_global_row_autoreplace">
+            <column type="checkbox" name="restore_global_files_check" value="true" />
+            <column name="restore_global_files_label">Autoreplace</column>
+            <column name="value">autoreplace.xml</column>
         </row>
     </scroll_list>
 
@@ -178,50 +178,50 @@ Settings groups to be restored (backup will always save all):
         <column label="" name="restore_per_account_files_check" width="16" />
         <column label="Per Account Files:" name="restore_per_account_files_label" />
         <column label="Value" name="value" width="-1" />
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Asset Blacklist</column>
-            <column column="value">asset_blacklist.xml</column>
+        <row name="restore_per_account_row_blacklist">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Asset Blacklist</column>
+            <column name="value">asset_blacklist.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Contact Sets</column>
-            <column column="value">settings_friends_groups.xml</column>
+        <row name="restore_per_account_row_contactsets">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Contact Sets</column>
+            <column name="value">settings_friends_groups.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Inventory Filters</column>
-            <column column="value">filters.xml</column>
+        <row name="restore_per_account_row_invfilters">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Inventory Filters</column>
+            <column name="value">filters.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Favorites Sort Order</column>
-            <column column="value">landmarks_sorting.xml</column>
+        <row name="restore_per_account_row_favsort">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Favorites Sort Order</column>
+            <column name="value">landmarks_sorting.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Media Black/Whitelist</column>
-            <column column="value">medialist.xml</column>
+        <row name="restore_per_account_row_medialists">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Media Black/Whitelist</column>
+            <column name="value">medialist.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Muted Group Chats</column>
-            <column column="value">muted_groups.xml</column>
+        <row name="restore_per_account_row_mutedchats">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Muted Group Chats</column>
+            <column name="value">muted_groups.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Toolbars</column>
-            <column column="value">toolbars.xml</column>
+        <row name="restore_per_account_row_toolbars">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Toolbars</column>
+            <column name="value">toolbars.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Voice Chat Volumes</column>
-            <column column="value">volume_settings.xml</column>
+        <row name="restore_per_account_row_volumes">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Voice Chat Volumes</column>
+            <column name="value">volume_settings.xml</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_per_account_files_check" value="true" />
-            <column column="restore_per_account_files_label">Teleport History</column>
-            <column column="value">teleport_history.xml</column>
+        <row name="restore_per_account_row_tphistory">
+            <column type="checkbox" name="restore_per_account_files_check" value="true" />
+            <column name="restore_per_account_files_label">Teleport History</column>
+            <column name="value">teleport_history.xml</column>
         </row>
     </scroll_list>
 
@@ -233,17 +233,6 @@ Settings groups to be restored (backup will always save all):
      user_resize="false"
      auto_resize="true"
      layout="topleft">
-
-    <text
-     name="restore_folders_label"
-     layout="topleft"
-     follows="left|right|top"
-     left="1"
-     top="0"
-     right="-1"
-     height="16">
-Folders:
-    </text>
 
     <scroll_list
      name="restore_global_folders_list"
@@ -258,43 +247,43 @@ Folders:
         <column label="" name="restore_global_folders_check" width="16" />
         <column label="Folders:" name="restore_global_folders_label" />
         <column label="Value" name="value" width="-1" />
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Selection Beams</column>
-            <column column="value">beams</column>
+        <row name="restore_folders_row_beams">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Selection Beams</column>
+            <column name="value">beams</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Selection Beam Colors</column>
-            <column column="value">beamsColors</column>
+        <row name="restore_folders_row_beamcolors">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Selection Beam Colors</column>
+            <column name="value">beamsColors</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Custom Spell Check</column>
-            <column column="value">dictionaries</column>
+        <row name="restore_folders_row_spellcheck">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Custom Spell Check</column>
+            <column name="value">dictionaries</column>
         </row>
-        <!-- We must hae this entry before the other windlight entries to have the
+        <!-- We must have this entry before the other windlight entries to have the
              windlight/ base folder created. Since we can't hide rows make it so the
              user can't deselect it at least -->
-        <row enabled="false">
-            <column type="checkbox" column="restore_global_folders_check" value="true" enabled="false" />
-            <column column="restore_global_folders_label">Windlight (Mandatory)</column>
-            <column column="value">windlight</column>
+        <row enabled="false" name="restore_folders_row_windlight">
+            <column type="checkbox" name="restore_global_folders_check" value="true" enabled="false" />
+            <column name="restore_global_folders_label">Windlight (Mandatory)</column>
+            <column name="value">windlight</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Windlight Day Cycles</column>
-			<column column="value">windlight/days</column>
+        <row name="restore_folders_row_daycycles">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Windlight Day Cycles</column>
+            <column name="value">windlight/days</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Windlight Skies</column>
-			<column column="value">windlight/skies</column>
+        <row name="restore_folders_row_skies">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Windlight Skies</column>
+            <column name="value">windlight/skies</column>
         </row>
-        <row>
-            <column type="checkbox" column="restore_global_folders_check" value="true" />
-            <column column="restore_global_folders_label">Windlight Waters</column>
-			<column column="value">windlight/water</column>
+        <row name="restore_folders_row_waters">
+            <column type="checkbox" name="restore_global_folders_check" value="true" />
+            <column name="restore_global_folders_label">Windlight Waters</column>
+            <column name="value">windlight/water</column>
         </row>
     </scroll_list>
 
@@ -317,7 +306,7 @@ Folders:
     <button
      layout="topleft"
      right="-30"
-	 top_delta="0"
+     top_delta="0"
      follows="right|top"
      height="20"
      label="Deselect All"
@@ -366,7 +355,7 @@ Folders:
      enabled_control="SettingsBackupPath"
      layout="topleft"
      right="-50"
-	 top_delta="0"
+     top_delta="0"
      follows="right|top"
      height="20"
      label="Restore Settings"
