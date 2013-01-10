@@ -11,6 +11,96 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Grupy ustawień do przywrócenia (kopia zapasowa zawsze zapisuje wszystkie):
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="Współdzielone:" name="restore_global_files_label" />
+						<column label="Wartość" name="value" />
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Dane logowania</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Kolory</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Pomijalne dialogi</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">Siatki (gridy) użytkownika</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Autokorekta</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="Przypisane do konta:" name="restore_per_account_files_label" />
+						<column label="Wartość" name="value" />
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Czarna lista zasobów danych (assetów)</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Zestawy kontaktów</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">Filtry Szafy</column>
+						</row>
+						<row name="restore_per_account_row_favsort">
+							<column name="restore_per_account_files_label">Kolejność sortowania ulubionych</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Czarna/biała lista mediów</column>
+						</row>
+						<row name="restore_per_account_row_mutedchats">
+							<column name="restore_per_account_files_label">Wyciszone czaty grupowe</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Paski narzędzi</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Głośności czatów głosowych</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Historia teleportacji</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Katalogi:" name="restore_global_folders_label" />
+						<column label="Wartość" name="value" />
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Wiązki wyboru</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Kolory wiązek wyboru</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Własne wpisy sprawdzania pisowni</column>
+						</row>
+						<row name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Windlight (obowiązkowe)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Windlight: Cykle dnia</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Windlight: Nieba</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Windlight: Woda</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
+			<button label="Wybierz wszystko" name="select_all_button" />
+			<button label="Odznacz wszystko" name="deselect_all_button" />
+			<check_box label="Przywróć ustaw. współdzielone" name="restore_global_settings_checkbox" />
+			<check_box label="Przywróć ustaw. przypisane do konta" name="restore_per_account_settings_checkbox" />
 			<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
 			<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
 		</layout_panel>

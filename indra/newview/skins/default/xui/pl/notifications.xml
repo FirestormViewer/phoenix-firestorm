@@ -3710,12 +3710,16 @@ Poprzedni symulator: [OLDVERSION]
 	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
 		Przywrócenie ustawień wymaga ponownego uruchomienia przeglądarki. Czy chcesz teraz przywrócić ustawienia i wyłączyć ją?
-		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć"/>
+		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć i wyłącz"/>
 	</notification>
 	<notification name="BackupPathDoesNotExistOrCreateFailed">
 		Ścieżka kopii zapasowej nie może zostać znaleziona lub utworzona.
 	</notification>
 	<notification name="BackupPathDoesNotExist">
 		Ścieżka kopii zapasowej nie może zostać znaleziona.
+	</notification>
+	<notification name="RestoreFinished">
+		Przywracanie zakończone! Proszę wyłączyć i włączyć ponownie swoją przeglądarkę.
+		<usetemplate name="okbutton" yestext="Wyłącz"/>
 	</notification>
 </notifications>
