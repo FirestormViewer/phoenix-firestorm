@@ -379,7 +379,8 @@ Folders:
     </layout_panel>
     </layout_stack>
 
-   <!-- Enable only for debugging of show/hide warning text -->
+    <!-- Enable only for debugging of show/hide warning text -->
+    <!--
     <check_box
      label="Hide Warning"
      layout="topleft"
@@ -389,4 +390,5 @@ Folders:
      height="16"
      name="Debug Show/Hide - Don't use in production"
      control_name="PerAccountSettingsFile" />
+    -->
 </panel>
