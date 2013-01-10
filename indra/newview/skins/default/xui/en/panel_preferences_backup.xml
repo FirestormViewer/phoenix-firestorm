@@ -203,11 +203,6 @@ Settings groups to be restored (backup will always save all):
             <column name="restore_per_account_files_label">Media Black/Whitelist</column>
             <column name="value">medialist.xml</column>
         </row>
-        <row name="restore_per_account_row_mutedchats">
-            <column type="checkbox" name="restore_per_account_files_check" value="true" />
-            <column name="restore_per_account_files_label">Muted Group Chats</column>
-            <column name="value">muted_groups.xml</column>
-        </row>
         <row name="restore_per_account_row_toolbars">
             <column type="checkbox" name="restore_per_account_files_check" value="true" />
             <column name="restore_per_account_files_label">Toolbars</column>
