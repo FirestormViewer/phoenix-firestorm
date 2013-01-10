@@ -3712,4 +3712,10 @@ Poprzedni symulator: [OLDVERSION]
 		Przywrócenie ustawień wymaga ponownego uruchomienia przeglądarki. Czy chcesz teraz przywrócić ustawienia i wyłączyć ją?
 		<usetemplate name="okcancelbuttons" notext="Anuluj" yestext="Przywróć"/>
 	</notification>
+	<notification name="BackupPathDoesNotExistOrCreateFailed">
+		Ścieżka kopii zapasowej nie może zostać znaleziona lub utworzona.
+	</notification>
+	<notification name="BackupPathDoesNotExist">
+		Ścieżka kopii zapasowej nie może zostać znaleziona.
+	</notification>
 </notifications>
