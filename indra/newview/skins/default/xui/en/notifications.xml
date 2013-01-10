@@ -9434,7 +9434,17 @@ Settings restore requires a viewer restart. Do you want to restore your settings
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
-     yestext="Restore"/>
+     yestext="Restore and Quit"/>
+  </notification>
+
+  <notification
+   icon="alertmodal.tga"
+   name="RestoreFinished"
+   type="alertmodal">
+Restore complete! Please restart your viewer now.
+    <usetemplate
+     name="okbutton"
+     yestext="Quit"/>
   </notification>
   <!-- </FS:Zi> -->
 

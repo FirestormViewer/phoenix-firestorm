@@ -127,6 +127,7 @@
 
 // <FS:Zi> Backup Settings
 #include "llline.h"
+#include "llscrolllistctrl.h"
 #include "llspellcheck.h"
 #include "lltoolbarview.h"
 #include "llwaterparammanager.h"
@@ -493,6 +494,8 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	mCommitCallbackRegistrar.add("Pref.SetBackupSettingsPath",	boost::bind(&LLFloaterPreference::onClickSetBackupSettingsPath, this));
 	mCommitCallbackRegistrar.add("Pref.BackupSettings",			boost::bind(&LLFloaterPreference::onClickBackupSettings, this));
 	mCommitCallbackRegistrar.add("Pref.RestoreSettings",		boost::bind(&LLFloaterPreference::onClickRestoreSettings, this));
+	mCommitCallbackRegistrar.add("Pref.BackupSelectAll",		boost::bind(&LLFloaterPreference::onClickSelectAll, this));
+	mCommitCallbackRegistrar.add("Pref.BackupDeselectAll",		boost::bind(&LLFloaterPreference::onClickDeselectAll, this));
 	// </FS:Zi>
 
 	gSavedSettings.getControl("NameTagShowUsernames")->getCommitSignal()->connect(boost::bind(&handleNameTagOptionChanged,  _2));	
@@ -505,34 +508,6 @@ LLFloaterPreference::LLFloaterPreference(const LLSD& key)
 	gSavedSettings.getControl("FSPublishRadarTag")->getCommitSignal()->connect(boost::bind(&handlePublishRadarTagOptionChanged, _2));
 	
 	LLAvatarPropertiesProcessor::getInstance()->addObserver( gAgent.getID(), this );
-
-	// <FS:Zi> Backup Settings
-	// make a list of global files to copy
-	mGlobalFiles.push_back("bin_conf.dat");		// login credentials and accounts
-	mGlobalFiles.push_back("colors.xml");
-	mGlobalFiles.push_back("ignorable_dialogs.xml");
-	mGlobalFiles.push_back("grids.user.xml");
-	mGlobalFiles.push_back("autoreplace.xml");
-
-	// make a list of per account files to copy
-	mPerAccountFiles.push_back("asset_blacklist.xml");
-	mPerAccountFiles.push_back("filters.xml");
-	mPerAccountFiles.push_back("landmarks_sorting.xml");
-	mPerAccountFiles.push_back("medialist.xml");
-	mPerAccountFiles.push_back("muted_groups.xml");
-	mPerAccountFiles.push_back("toolbars.xml");
-	mPerAccountFiles.push_back("volume_settings.xml");	// voice chat volumes
-	mPerAccountFiles.push_back("teleport_history.txt");
-
-	// make a list of folders to copy (flat file, non recursive)
-	mGlobalFolders.push_back("beams");				// custom selection beams
-	mGlobalFolders.push_back("beamsColors");		// custom selection beam colors
-	mGlobalFolders.push_back("dictionaries");		// user defined words/ignores
-	mGlobalFolders.push_back("windlight");			// base windlight settings folder
-	mGlobalFolders.push_back("windlight/days");		// windlight day cycles
-	mGlobalFolders.push_back("windlight/skies");	// windlight sky presets
-	mGlobalFolders.push_back("windlight/water");	// windlight water presets
-	// </FS:Zi>
 }
 
 void LLFloaterPreference::processProperties( void* pData, EAvatarProcessorType type )
@@ -2994,28 +2969,36 @@ void LLPanelPreferenceSkins::refreshSkinThemeList()
 
 // <FS:Zi> Backup Settings
 // copied from llxfer_file.cpp - Hopefully this will be part of LLFile some day -Zi
+// added a safeguard so the destination file is only created when the source file exists -Zi
 S32 copy_prefs_file(const std::string& from, const std::string& to)
 {
 	llwarns << "copying " << from << " to " << to << llendl;
 	S32 rv = 0;
 	LLFILE* in = LLFile::fopen(from, "rb");	/*Flawfinder: ignore*/
+	if(!in)
+	{
+		llwarns << "couldn't open source file " << from << " - copy aborted." << llendl;
+		return -1;
+	}
+
 	LLFILE* out = LLFile::fopen(to, "wb");	/*Flawfinder: ignore*/
-	if(in && out)
+	if(!out)
 	{
-		S32 read = 0;
-		const S32 COPY_BUFFER_SIZE = 16384;
-		U8 buffer[COPY_BUFFER_SIZE];
-		while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
-			  && (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
-		if(ferror(in) || ferror(out)) rv = -2;
+		fclose(in);
+		llwarns << "couldn't open destination file " << to << " - copy aborted." << llendl;
+		return -1;
 	}
-	else
-	{
-		llwarns << "copy failed. in: " << in << " out: " << out << llendl;
-		rv = -1;
-	}
+
+	S32 read = 0;
+	const S32 COPY_BUFFER_SIZE = 16384;
+	U8 buffer[COPY_BUFFER_SIZE];
+	while(((read = fread(buffer, 1, sizeof(buffer), in)) > 0)
+			&& (fwrite(buffer, 1, read, out) == (U32)read));		/* Flawfinder : ignore */
+	if(ferror(in) || ferror(out)) rv = -2;
+
 	if(in) fclose(in);
 	if(out) fclose(out);
+
 	return rv;
 }
 
@@ -3068,17 +3051,6 @@ void LLFloaterPreference::onClickBackupSettings()
 		return;
 	}
 
-	// get path and file names to the relevant settings files
-	std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
-	std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
-
-	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
-	std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
-				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
-	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
-				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
-
 	// define a couple of control groups to store the settings to back up
 	LLControlGroup backup_global_controls("BackupGlobal");
 	LLControlGroup backup_per_account_controls("BackupPerAccount");
@@ -3125,21 +3097,41 @@ void LLFloaterPreference::onClickBackupSettings()
 
 	// set it to save defaults, too (FALSE), because our declaration automatically
 	// makes the value default
+	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
+				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
 	llwarns << "saving backup global settings" << llendl;
 	backup_global_controls.saveToFile(backup_global_name,FALSE);
 
-	for(S32 index=0;index<mGlobalFiles.size();index++)
+	// Get scroll list control that holds the list of global files
+	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
+	// Pull out all data
+	std::vector<LLScrollListItem*> globalFileList=globalScrollList->getAllData();
+	// Go over each entry
+	for(S32 index=0;index<globalFileList.size();index++)
 	{
-		llwarns << "copying global file " << mGlobalFiles[index] << llendl;
+		// Get the next item in the list
+		LLScrollListItem* item=globalFileList[index];
+		// Don't bother with the checkbox and get the path, since we back up all files
+		// and only restore selectively
+		std::string file=item->getColumn(2)->getValue().asString();
+		llwarns << "copying global file " << file << llendl;
 		copy_prefs_file(
-			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFiles[index]),
-			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFiles[index]));
+			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file),
+			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,file));
 	}
 
 	// Only back up per-account settings when the path is available, meaning, the user
 	// has logged in
+	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
+				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 	if(!per_account_name.empty())
 	{
+		// get path and file names to the relevant settings files
+		std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
+		std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
+		std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
+					LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
+
 		llwarns << "copying per account settings" << llendl;
 		// create per-user folder if it doesn't exist yet
 		LLFile::mkdir(backup_per_account_folder.c_str());
@@ -3154,29 +3146,50 @@ void LLFloaterPreference::onClickBackupSettings()
 			llwarns << "saving backup per account settings" << llendl;
 			backup_per_account_controls.saveToFile(backup_per_account_name,FALSE);
 
-			for(S32 index=0;index<mPerAccountFiles.size();index++)
+			// Get scroll list control that holds the list of per account files
+			LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
+			// Pull out all data
+			std::vector<LLScrollListItem*> perAccountFileList=perAccountScrollList->getAllData();
+			// Go over each entry
+			for(S32 index=0;index<perAccountFileList.size();index++)
 			{
-				llwarns << "copying per account file " << mPerAccountFiles[index] << llendl;
+				// Get the next item in the list
+				LLScrollListItem* item=perAccountFileList[index];
+				// Don't bother with the checkbox and get the path, since we back up all files
+				// and only restore selectively
+				std::string file=item->getColumn(2)->getValue().asString();
+				llwarns << "copying per account file " << file << llendl;
 				copy_prefs_file(
-					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,mPerAccountFiles[index]),
-					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,mPerAccountFiles[index]));
+					gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file),
+					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,file));
 			}
 		}
 		else
 			llwarns << backup_per_account_folder << " is not a folder. Per account settings save aborted." << llendl;
 	}
 
-	// copy global folders and their contents
-	for(S32 index=0;index<mGlobalFolders.size();index++)
+	// Get scroll list control that holds the list of global folders
+	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
+	// Pull out all data
+	std::vector<LLScrollListItem*> globalFoldersList=globalFoldersScrollList->getAllData();
+	// Go over each entry
+	for(S32 index=0;index<globalFoldersList.size();index++)
 	{
-		std::string file_name;
-		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
-		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
+		// Get the next item in the list
+		LLScrollListItem* item=globalFoldersList[index];
+		// Don't bother with the checkbox and get the path, since we back up all folders
+		// and only restore selectively
+		std::string folder=item->getColumn(2)->getValue().asString();
 
-		llwarns << "backing up folder: " << folder_name << llendl;
+		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,folder)+gDirUtilp->getDirDelimiter();
+		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,folder)+gDirUtilp->getDirDelimiter();
+
+		llwarns << "backing up global folder: " << folder_name << llendl;
 
 		// create folder if it's not there already
 		LLFile::mkdir(backup_folder_name.c_str());
+
+		std::string file_name;
 		while(gDirUtilp->getNextFileInDir(folder_name,"*",file_name))
 		{
 			llwarns << "found entry: " << folder_name+file_name << llendl;
@@ -3185,8 +3198,10 @@ void LLFloaterPreference::onClickBackupSettings()
 			{
 				copy_prefs_file(folder_name+file_name,backup_folder_name+file_name);
 			}
+			llwarns << "skipping subfolder " << folder_name+file_name << llendl;
 		}
 	}
+
 	LLNotificationsUtil::add("BackupFinished");
 }
 
@@ -3219,7 +3234,7 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 		onClickSetBackupSettingsPath();
 	}
 
-	// Remember the backup path for next time
+	// Remember the backup path
 	dir_name=gSavedSettings.getString("SettingsBackupPath");
 
 	// If the backup path is still empty, complain to the user and do nothing else
@@ -3241,50 +3256,92 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 	// Close the window so the restored settings can't be destroyed by the user
 	onBtnOK();
 
-	// get path and file names to the relevant settings files
-	std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
-	std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
-
-	std::string global_name=gSavedSettings.getString("ClientSettingsFile");
-	std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
-				LLAppViewer::instance()->getSettingsFilename("Default","Global"));
-	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
-				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
-	std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
-				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
-
-	// start clean
-	llwarns << "clearing global settings" << llendl;
-	gSavedSettings.resetToDefaults();
-
-	// run restore on global controls
-	llwarns << "restoring global settings from backup" << llendl;
-	gSavedSettings.loadFromFile(backup_global_name);
-	llwarns << "saving global settings" << llendl;
-	gSavedSettings.saveToFile(global_name,TRUE);
-
-	for(S32 index=0;index<mGlobalFiles.size();index++)
+	if(gSavedSettings.getBOOL("RestoreGlobalSettings"))
 	{
-		llwarns << "copying global file " << mGlobalFiles[index] << llendl;
-		copy_prefs_file(
-			gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFiles[index]),
-			gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFiles[index]));
+		// Get path and file names to backup and restore settings path
+		std::string global_name=gSavedSettings.getString("ClientSettingsFile");
+		std::string backup_global_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,
+					LLAppViewer::instance()->getSettingsFilename("Default","Global"));
+
+		// start clean
+		llwarns << "clearing global settings" << llendl;
+		gSavedSettings.resetToDefaults();
+
+		// run restore on global controls
+		llwarns << "restoring global settings from backup" << llendl;
+		gSavedSettings.loadFromFile(backup_global_name);
+		llwarns << "saving global settings" << llendl;
+		gSavedSettings.saveToFile(global_name,TRUE);
+	}
+
+	// Get scroll list control that holds the list of global files
+	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
+	// Pull out all data
+	std::vector<LLScrollListItem*>globalFileList=globalScrollList->getAllData();
+	// Go over each entry
+	for(S32 index=0;index<globalFileList.size();index++)
+	{
+		// Get the next item in the list
+		LLScrollListItem* item=globalFileList[index];
+		// Look at the first column and make sure it's a checkbox control
+		LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
+		if(!checkbox)
+			continue;
+		// Only restore if this item is checked on
+		if (checkbox->getCheckBox()->getValue().asBoolean())
+		{
+			// Get the path to restore for this item
+			std::string file=item->getColumn(2)->getValue().asString();
+			llwarns << "copying global file " << file << llendl;
+			copy_prefs_file(
+				gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,file),
+				gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file));
+		}
 	}
 
 	// Only restore per-account settings when the path is available
+	std::string per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,
+				LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 	if(!per_account_name.empty())
 	{
-		llwarns << "copying per account settings" << llendl;
-		// run restore on per-account controls
-		gSavedPerAccountSettings.loadFromFile(backup_per_account_name);
-		gSavedPerAccountSettings.saveToFile(per_account_name,TRUE);
+		// Get path and file names to the relevant settings files
+		std::string userlower=gDirUtilp->getBaseFileName(gDirUtilp->getLindenUserDir(),false);
+		std::string backup_per_account_folder=dir_name+gDirUtilp->getDirDelimiter()+userlower;
+		std::string backup_per_account_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,
+					LLAppViewer::instance()->getSettingsFilename("Default","PerAccount"));
 
-		for(S32 index=0;index<mPerAccountFiles.size();index++)
+		if(gSavedSettings.getBOOL("RestorePerAccountSettings"))
 		{
-			llwarns << "copying per account file " << mPerAccountFiles[index] << llendl;
-			copy_prefs_file(
-				gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,mPerAccountFiles[index]),
-				gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,mPerAccountFiles[index]));
+			// run restore on per-account controls
+			llwarns << "restoring per account settings" << llendl;
+			gSavedPerAccountSettings.loadFromFile(backup_per_account_name);
+			llwarns << "saving per account settings" << llendl;
+			gSavedPerAccountSettings.saveToFile(per_account_name,TRUE);
+		}
+
+		// Get scroll list control that holds the list of per account files
+		LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
+		// Pull out all data
+		std::vector<LLScrollListItem*> perAccountFileList=perAccountScrollList->getAllData();
+		// Go over each entry
+		for(S32 index=0;index<perAccountFileList.size();index++)
+		{
+			// Get the next item in the list
+			LLScrollListItem* item=perAccountFileList[index];
+			// Look at the first column and make sure it's a checkbox control
+			LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
+			if(!checkbox)
+				continue;
+			// Only restore if this item is checked on
+			if (checkbox->getCheckBox()->getValue().asBoolean())
+			{
+				// Get the path to restore for this item
+				std::string file=item->getColumn(2)->getValue().asString();
+				llwarns << "copying per account file " << file << llendl;
+				copy_prefs_file(
+					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,file),
+					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,file));
+			}
 		}
 
 		// toolbars get overwritten when LLToolbarView is destroyed, so make sure
@@ -3295,34 +3352,103 @@ void LLFloaterPreference:: doRestoreSettings(const LLSD& notification,const LLSD
 		gToolBarView->loadToolbars(FALSE);
 	}
 
-	// restore global folders and their contents
-	for(S32 index=0;index<mGlobalFolders.size();index++)
+	// Get scroll list control that holds the list of global folders
+	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
+	// Pull out all data
+	std::vector<LLScrollListItem*> globalFoldersList=globalFoldersScrollList->getAllData();
+	// Go over each entry
+	for(S32 index=0;index<globalFoldersList.size();index++)
 	{
-		std::string file_name;
-		std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
-		std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,mGlobalFolders[index])+gDirUtilp->getDirDelimiter();
-
-		llwarns << "restoring global folder " << folder_name << llendl;
-
-		// create folder if it's not there already
-		LLFile::mkdir(folder_name.c_str());
-		while(gDirUtilp->getNextFileInDir(folder_name,"*",file_name))
+		// Get the next item in the list
+		LLScrollListItem* item=globalFoldersList[index];
+		// Look at the first column and make sure it's a checkbox control
+		LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
+		if(!checkbox)
+			continue;
+		// Only restore if this item is checked on
+		if (checkbox->getCheckBox()->getValue().asBoolean())
 		{
-			llwarns << "found entry: " << backup_folder_name+file_name << llendl;
-			// only restore files, not subfolders
-			if(LLFile::isfile(backup_folder_name+file_name.c_str()))
+			// Get the path to restore for this item
+			std::string folder=item->getColumn(2)->getValue().asString();
+
+			std::string folder_name=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,folder)+gDirUtilp->getDirDelimiter();
+			std::string backup_folder_name=gDirUtilp->getExpandedFilename(LL_PATH_NONE,dir_name,folder)+gDirUtilp->getDirDelimiter();
+
+			llwarns << "restoring global folder: " << folder_name << llendl;
+
+			// create folder if it's not there already
+			LLFile::mkdir(folder_name.c_str());
+
+			std::string file_name;
+			while(gDirUtilp->getNextFileInDir(backup_folder_name,"*",file_name))
 			{
-				copy_prefs_file(backup_folder_name+file_name,folder_name+file_name);
+				llwarns << "found entry: " << backup_folder_name+file_name << llendl;
+				// only restore files, not subfolders
+				if(LLFile::isfile(backup_folder_name+file_name.c_str()))
+				{
+					copy_prefs_file(backup_folder_name+file_name,folder_name+file_name);
+				}
+				else
+					llwarns << "skipping subfolder " << backup_folder_name+file_name << llendl;
 			}
 		}
 	}
+	// Tell the user we have finished restoring settings and the viewer must shut down
+	LLNotificationsUtil::add("RestoreFinished",LLSD(),LLSD(),boost::bind(&LLFloaterPreference::onQuitConfirmed,this,_1,_2));
+}
 
+// User confirmed the shutdown and we proceed
+void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& response)
+{
 	// Make sure the viewer will not save any settings on exit, so our copied files will survive
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
-
+	// Quit the viewer so all gets saved immediately
 	llwarns << "setting to quit" << llendl;
-	// And quit the viewer so all gets saved immediately
 	LLApp::instance()->setQuitting();
+}
+
+void LLFloaterPreference::onClickSelectAll()
+{
+	doSelect(TRUE);
+}
+
+void LLFloaterPreference::onClickDeselectAll()
+{
+	doSelect(FALSE);
+}
+
+void LLFloaterPreference::doSelect(BOOL all)
+{
+	// Get scroll list control that holds the list of global files
+	LLScrollListCtrl* globalScrollList=getChild<LLScrollListCtrl>("restore_global_files_list");
+	// Get scroll list control that holds the list of per account files
+	LLScrollListCtrl* perAccountScrollList=getChild<LLScrollListCtrl>("restore_per_account_files_list");
+	// Get scroll list control that holds the list of global folders
+	LLScrollListCtrl* globalFoldersScrollList=getChild<LLScrollListCtrl>("restore_global_folders_list");
+
+	applySelection(globalScrollList,all);
+	applySelection(perAccountScrollList,all);
+	applySelection(globalFoldersScrollList,all);
+}
+
+void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
+{
+	// Pull out all data
+	std::vector<LLScrollListItem*> itemList=control->getAllData();
+	// Go over each entry
+	for(S32 index=0;index<itemList.size();index++)
+	{
+		// Get the next item in the list
+		LLScrollListItem* item=itemList[index];
+		// Check/uncheck the box only when the item is enabled
+		if(item->getEnabled())
+		{
+			// Look at the first column and make sure it's a checkbox control
+			LLScrollListCheck* checkbox=dynamic_cast<LLScrollListCheck*>(item->getColumn(0));
+			if(checkbox)
+				checkbox->getCheckBox()->setValue(all);
+		}
+	}
 }
 // </FS:Zi>
 
