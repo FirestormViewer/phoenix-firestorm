@@ -55,9 +55,6 @@
 						<row name="restore_per_account_row_medialists">
 							<column name="restore_per_account_files_label">Czarna/biała lista mediów</column>
 						</row>
-						<row name="restore_per_account_row_mutedchats">
-							<column name="restore_per_account_files_label">Wyciszone czaty grupowe</column>
-						</row>
 						<row name="restore_per_account_row_toolbars">
 							<column name="restore_per_account_files_label">Paski narzędzi (przyciski)</column>
 						</row>
@@ -99,8 +96,8 @@
 			</layout_stack>
 			<button label="Wybierz wszystko" name="select_all_button" />
 			<button label="Odznacz wszystko" name="deselect_all_button" />
-			<check_box label="Przywróć ustaw. współdzielone" name="restore_global_settings_checkbox" />
-			<check_box label="Przywróć ustaw. przypisane do konta" name="restore_per_account_settings_checkbox" />
+			<check_box label="Przywróć ustawienia współdzielone" name="restore_global_settings_checkbox" />
+			<check_box label="Przywróć ustawienia przypisane do konta" name="restore_per_account_settings_checkbox" />
 			<button width="165" label="Utwórz kopię ustawień" name="backup_settings" />
 			<button width="165" label="Przywróć ustawienia z kopii" name="restore_settings" />
 		</layout_panel>
