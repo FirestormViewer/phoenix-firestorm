@@ -277,7 +277,10 @@ public:
 	//--------------------------------------------------------------------
 public:
 	// Called whenever the agent moves.  Puts camera back in default position, deselects items, etc.
-	void			resetView(BOOL reset_camera = TRUE, BOOL change_camera = FALSE);
+// <FS:CR> FIRE-8798: Option to prevent camera reset on movement
+	//void			resetView(BOOL reset_camera = TRUE, BOOL change_camera = FALSE);
+	void			resetView(BOOL reset_camera = TRUE, BOOL change_camera = FALSE, BOOL movement = FALSE);
+// </FS:CR>
 	// Called on camera movement.  Unlocks camera from the default position behind the avatar.
 	void			unlockView();
 public:
