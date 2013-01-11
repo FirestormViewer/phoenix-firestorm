@@ -2634,6 +2634,11 @@ void LLIMMgr::addMessage(
 		fixed_session_name = session_name;
 	}
 
+	// <FS:PP> Configurable IM sounds
+	static LLCachedControl<U32> PlayModeUISndNewIncomingIMSession(gSavedSettings, "PlayModeUISndNewIncomingIMSession");
+	static LLCachedControl<U32> PlayModeUISndNewIncomingGroupIMSession(gSavedSettings, "PlayModeUISndNewIncomingGroupIMSession");
+	// </FS:PP> Configurable IM sounds
+
 	bool new_session = !hasSession(new_session_id);
 	if (new_session)
 	{
@@ -2675,26 +2680,26 @@ void LLIMMgr::addMessage(
 		}
 
 	// <FS:PP> Configurable IM sounds
-		if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") != 0 && dialog == IM_NOTHING_SPECIAL)
+		if(PlayModeUISndNewIncomingIMSession != 0 && dialog == IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
-		else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") != 0 && dialog != IM_NOTHING_SPECIAL)
+		else if(PlayModeUISndNewIncomingGroupIMSession != 0 && dialog != IM_NOTHING_SPECIAL)
 		{
 			make_ui_sound("UISndNewIncomingGroupIMSession");
 		}
 	}
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 2 && dialog == IM_NOTHING_SPECIAL)
+	else if(PlayModeUISndNewIncomingIMSession == 2 && dialog == IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingIMSession");
 	}
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 2 && dialog != IM_NOTHING_SPECIAL)
+	else if(PlayModeUISndNewIncomingGroupIMSession == 2 && dialog != IM_NOTHING_SPECIAL)
 	{
 		make_ui_sound("UISndNewIncomingGroupIMSession");
 	// </FS:PP>
 	}
 	// <FS:WoLf> IM Sounds only for sessions not in focus
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingIMSession") == 3 && dialog == IM_NOTHING_SPECIAL)
+	else if(PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
 	{
 		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
 		if (im_floater && !im_floater->hasFocus())
@@ -2702,7 +2707,7 @@ void LLIMMgr::addMessage(
 			make_ui_sound("UISndNewIncomingIMSession");
 		}
 	}
-	else if(gSavedSettings.getU32("PlayModeUISndNewIncomingGroupIMSession") == 3 && dialog != IM_NOTHING_SPECIAL)
+	else if(PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
 	{
 		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
 		if (im_floater && !im_floater->hasFocus())
