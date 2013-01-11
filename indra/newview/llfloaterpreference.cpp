@@ -3160,7 +3160,7 @@ void LLFloaterPreference::onClickBackupSettings()
 				std::string file=item->getColumn(2)->getValue().asString();
 				llwarns << "copying per account file " << file << llendl;
 				copy_prefs_file(
-					gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,file),
+					gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT,file),
 					gDirUtilp->getExpandedFilename(LL_PATH_NONE,backup_per_account_folder,file));
 			}
 		}
