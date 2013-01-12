@@ -94,32 +94,30 @@ Looking for people to hang out with? Use the search box to find topics or conten
      follows="left|top|right"
      height="23"
      layout="topleft"
-     left="10"
+     left="9"
      label="Filter"
      max_length_chars="300"
      name="filter_input"
      text_pad_left="10"
      top="3"
-     width="303" />
+     width="314" />
     <tab_container
      follows="all"
      height="383"
      layout="topleft"
-     left="5"
+     left="3"
      name="tabs"
      tab_drag_commit="true"
      tab_group="1"
      tab_min_width="70"
      tab_height="20"
      tab_position="top"
-     top_pad="10"
+     top_pad="5"
      halign="center"
-     width="317">
+     width="326	">
          <panel
          background_opaque="false"
          background_visible="true"
-         bg_alpha_color="SL-Background_50"
-         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Nearby"
@@ -128,11 +126,33 @@ Looking for people to hang out with? Use the search box to find topics or conten
          help_topic="people_nearby_tab"
          name="nearby_panel"
          top="0"
-         width="313">
+         width="326">
 			
 			
-			<layout_stack orientation="vertical" clip="true" follows="all" layout="topleft" top="0" left="0" height="355" width="313" mouse_opaque="false" name="radar_ls" auto_resize="false" user_resize="true">
-			<layout_panel layout="topleft" top="0" left="3" height="140" width="307" max_height="140"  follows="top" mouse_opaque="false" visibility_control="ShowRadarMinimap" name="minimaplayout" auto_resize="false" user_resize="true">
+			<layout_stack
+				orientation="vertical"
+				clip="true"
+				follows="all"
+				layout="topleft" top="0"
+				left="0"
+				height="355"
+				width="326"
+				mouse_opaque="false"
+				name="radar_ls"
+				auto_resize="false"
+				user_resize="true">
+			<layout_panel
+				layout="topleft"
+				top="0" left="3"
+				height="140"
+				width="326"
+				max_height="140"
+				follows="top"
+				mouse_opaque="false"
+				visibility_control="ShowRadarMinimap"
+				name="minimaplayout"
+				auto_resize="false"
+				user_resize="true">
              <net_map
              bg_color="NetMapBackgroundColor"
              visibility_control="ShowRadarMinimap"
@@ -141,12 +161,12 @@ Looking for people to hang out with? Use the search box to find topics or conten
              left="3"
              mouse_opaque="false"
              name="Net Map"
-             width="307"
+             width="326"
              height="140"
              top="0"/>
              </layout_panel>
 
-            <layout_panel layout="topleft" top="0" left="0" height="215" width="313"  mouse_opaque="false" follows="all" name="radarlayout">
+            <layout_panel layout="topleft" top="0" left="0" height="215" width="326"  mouse_opaque="false" follows="all" name="radarlayout">
             <radar_list
 		     draw_heading="true"
 		     follows="all"
@@ -159,7 +179,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 		     name="radar_list"
 		     draw_stripes="true"
 		     multi_select="true"
-		     width="311">
+		     width="326">
 		        <radar_list.columns
 		         label="Name"
 		         name="name"
@@ -211,7 +231,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="nearby_avatar_list"
              visible="false"
              top_pad="0"
-             width="307" />
+             width="326" />
 
 <!--  Buttons -->
 
@@ -224,7 +244,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              left="3"
              name="bottom_panel_nearby"
              top_pad="0"
-             width="313">
+             width="326">
 	             <menu_button
 	             follows="bottom|left"
 	             height="25"
@@ -278,17 +298,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
         <panel
          background_opaque="true"
          background_visible="true"
-         bg_alpha_color="SL-Background_50"
-         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Friends"
          layout="topleft"
-         left="0"
          help_topic="people_friends_tab"
          name="friends_panel"
-         top="0"
-         width="313">
+         width="326">
 <!--
             <accordion
                 background_visible="true"
@@ -316,17 +332,16 @@ Looking for people to hang out with? Use the search box to find topics or conten
              bg_opaque_color="Transparent"
              height="356"
              layout="topleft"
-             left="3"
              tab_group="1"
              tab_position="top"
-             top="0"
              halign="center"
-             width="307">
+			 top_pad="0"
+             width="326">
 
                 <panel
                  layout="topleft"
                  height="356"
-                 width="307"
+                 width="326"
                  name="tab_online"
                  follows="all"
                  title="Online">
@@ -337,12 +352,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
                          follows="all"
                          height="356"
                          layout="topleft"
-                         left="0"
                          multi_select="true"
                          name="avatars_online"
                          show_permissions_granted="true"
-                         top="0"
-                         width="307" />
+                         width="326" />
 <!--
                 </accordion_tab>
                 <accordion_tab
@@ -355,7 +368,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                 <panel
                  layout="topleft"
                  height="356"
-                 width="307"
+                 width="326"
                  name="tab_all"
                  follows="all"
                  title="All">
@@ -365,12 +378,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
                          follows="all"
                          height="356"
                          layout="topleft"
-                         left="0"
                          multi_select="true"
                          name="avatars_all"
                          show_permissions_granted="true"
-                         top="0"
-                         width="307" />
+                         width="326" />
 <!--
                 </accordion_tab>
             </accordion>
@@ -387,7 +398,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              left="3"
              name="bottom_panel_friends"
              top_pad="0"
-             width="313">
+             width="326">
 
 
                           <menu_button
@@ -510,7 +521,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             --></panel>
             <text
              follows="all"
-             height="450"
+             height="356"
              left="13"
              name="no_friends_help_text"
              top="50"
@@ -520,17 +531,13 @@ Looking for people to hang out with? Use the search box to find topics or conten
         <panel
          background_opaque="true"
          background_visible="true"
-         bg_alpha_color="SL-Background_50"
-         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Groups"
          layout="topleft"
-         left="0"
          help_topic="people_groups_tab"
          name="groups_panel"
-         top="0"
-         width="313">
+         width="326">
     <!--
      *NOTE: no_groups_msg & group_list attributes are not defined as translatable in VLT. See EXT-5931
      Values are set from appropriate strings at the top of file via LLPeoplePanel::postBuild()
@@ -540,20 +547,18 @@ Looking for people to hang out with? Use the search box to find topics or conten
              follows="all"
              height="356"
              layout="topleft"
-             left="3"
              name="group_list"
-             top="0"
-             width="307" />
+             top_pad="0"
+             width="326" />
             <panel
              background_visible="true"
              follows="left|right|bottom"
              height="27"
              label="bottom_panel"
              layout="topleft"
-             left="0"
              name="bottom_panel_groups"
              top_pad="0"
-             width="313">
+             width="326">
                <menu_button
                follows="bottom|left"
                tool_tip="Options"
@@ -598,35 +603,29 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   layout="topleft"
                   left_pad="1"
                   name="groups_dummy_icon"
-                  width="209"
-             />
+                  width="229" />
             </panel>
         </panel>
         <panel
          background_opaque="true"
          background_visible="true"
-         bg_alpha_color="SL-Background_50"
-         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Recent"
          layout="topleft"
-         left="0"
          help_topic="people_recent_tab"
          name="recent_panel"
-         top="0"
-         width="313">
+         width="326">
             <avatar_list
              allow_select="true"
              follows="all"
              height="356"
              layout="topleft"
-             left="3"
              multi_select="true"
              name="avatar_list"
              show_last_interaction_time="true"
-             top="0"
-             width="307" />
+             top_pad="0"
+             width="326" />
             <panel
              background_visible="true"
              follows="left|right|bottom"
@@ -636,7 +635,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              left="0"
              name="bottom_panel_recent"
              top_pad="0"
-             width="313">
+             width="326">
                <menu_button
                follows="bottom|left"
                tool_tip="Options"
@@ -672,7 +671,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   layout="topleft"
                   left_pad="1"
                   name="recent_dummy_icon"
-                  width="241"
+                  width="257"
              />
             </panel>
         </panel>
@@ -681,31 +680,29 @@ Looking for people to hang out with? Use the search box to find topics or conten
      follows="bottom|left|right"
      height="23"
      layout="topleft"
-     left="8"
+     left="3"
      top_pad="1"
      name="button_bar"
-     width="313">
+     width="326">
 
 <!--********************************Profile; IM; Call, Share, Teleport********************************-->
-         <layout_stack
-         follows="bottom|left|right"
+       <layout_stack
+        follows="bottom|left|right"
         height="23"
         layout="topleft"
         name="bottom_bar_ls"
-        left="0"
         orientation="horizontal"
         top_pad="0"
-        width="313">
+        width="326">
 
             <layout_panel
             follows="bottom|left|right"
             height="23"
             layout="bottomleft"
-            left="0"
             name="view_profile_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="68">
+            width="72">
                 <button
                  follows="bottom|left|right"
                  height="23"
@@ -715,18 +712,18 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="view_profile_btn"
                  tool_tip="Show picture, groups, and other Residents information"
                  top="0"
-                 width="67" />
+                 width="71" />
             </layout_panel>
 
             <layout_panel
             follows="bottom|left|right"
             height="23"
             layout="bottomleft"
-            left_pad="3"
+            left_pad="1"
             name="im_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="41">
+            width="72">
                 <button
                  follows="bottom|left|right"
                  left="1"
@@ -736,7 +733,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="im_btn"
                  tool_tip="Open instant message session"
                  top="0"
-                 width="40" />
+                 width="71" />
             </layout_panel>
 
             <layout_panel
@@ -747,7 +744,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             name="call_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="52">
+            width="72">
                 <button
                  follows="bottom|left|right"
                  left="1"
@@ -757,7 +754,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="call_btn"
                  tool_tip="Call this Resident"
                  top="0"
-                 width="51" />
+                 width="71" />
             </layout_panel>
 
             <layout_panel
@@ -768,7 +765,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             name="share_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="66">
+            width="72">
                 <button
                  follows="bottom|left|right"
                  left="1"
@@ -778,7 +775,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="share_btn"
                  tool_tip="Share an inventory item"
                  top="0"
-                 width="65" />
+                 width="71" />
             </layout_panel>
 
             <layout_panel
@@ -789,7 +786,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             name="tp_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="77">
+            width="72">
                 <button
                  follows="bottom|left|right"
                  left="1"
@@ -799,7 +796,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="teleport_btn"
                  tool_tip="Offer teleport"
                  top="0"
-                 width="76" />
+                 width="71" />
             </layout_panel>
         </layout_stack>
 
@@ -813,7 +810,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
         left="0"
         orientation="horizontal"
         top="0"
-        width="313">
+        width="326">
             <layout_panel
             follows="bottom|left|right"
             height="23"
@@ -846,7 +843,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             name="chat_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="101">
+            width="108">
                 <button
                 follows="bottom|left|right"
                 left="1"
@@ -857,7 +854,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                 name="chat_btn"
                 tool_tip="Open chat session"
                 top="0"
-                width="100" />
+                width="107" />
             </layout_panel>
 
             <layout_panel
@@ -869,7 +866,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             name="group_call_btn_lp"
             user_resize="false"
             auto_resize="true"
-            width="96">
+            width="108">
                 <button
                 follows="bottom|left|right"
                 left="1"
@@ -880,7 +877,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="group_call_btn"
                  tool_tip="Call this group"
                 top="0"
-                 width="95" />
+                 width="107" />
             </layout_panel>
         </layout_stack>
     </panel>
