@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<colors>
+
+	<!--  Colors in this scheme  -->
+	<!-- 
+   var. 1 = #8F5B3F = rgb(143,91,63) 0.56 0.36 0.25
+   var. 2 = #7D5540 = rgb(125,85,64) 0.49 0.33 0.25
+   var. 3 = #764227 = rgb(118,66,39)  0.46 .26 0.15
+   var. 4 = #A96641 = rgb(169,102,65) 0.66 0.40 0.25
+   var. 5 = #AB7B61 = rgb(171,123,97) 0.76 0.58 0.49
+
+	-->
+	<color
+	 name="ltgrey123"
+	 value="0  0.43333  0 1.0" />
+	 <color
+	 name="drkgrey123"
+	 value="0  0.04314  0 1.0" />
+	 <color
+	 name="btncolordisabled123"
+	 value="0  0.57647  0 1.0" />
+	 <color
+	 name="btncolor123"
+	 value="0 1 0 1.0" />
+	<color
+	 name="AccentColor"
+	 value="0 0.92 0 1.0" />
+	<color
+	 name="EmphasisColor"             
+	 value="0 0.9 0 1.0" />
+	<color
+	 name="SchemeLightest"
+	 value="0 0.58 0 1.0" />
+	<color
+	 name="SchemeLightest_35"
+	 value="0 0.58 0 0.35" />
+	<color 
+	 name="SchemeDark"
+	 value="0 0.33 0 1.0" />
+	<color
+	 name="EmphasisColor_13"
+	 value="0 0.76 0 0.13" />
+	<color
+	 name="EmphasisColor_35"
+	 value="0 0.76 0 0.35" />
+	<color
+	 name="White"
+	 value="1 1 1 1" />
+	<color
+	 name="White_05"
+	 value="1 1 1 0.05" />
+	<color
+	 name="White_10"
+	 value="1 1 1 0.1" />
+	<color
+	 name="White_25"
+	 value="1 1 1 0.25" />
+	<color
+	 name="White_50"
+	 value="1 1 1 0.5" />
+	<color
+	 name="White_70"
+	 value="1 1 1 0.7" />
+	<color
+	 name="LtGray"
+	 value="0.90 0.90 0.90 1" />
+	<color
+	 name="LtGray_50"
+	 value="0.90 0.90 0.90 0.50" />
+	<color
+	 name="DkGray"
+	 value="0.025 0.025 0.025 1" />
+	<color
+	 name="DkGray_66"
+	 value="0.025 0.025 0.025 .66" />
+	<color
+	 name="DkGray_86"
+	 value="0.025 0.025 0.025 .86" />
+	<color
+	 name="DkGray2"
+	 value="0.069 0.069 0.069 1" />
+	<color
+	 name="MouseGray"
+	 value="0.091 0.091 0.091 1" />
+	<color
+	 name="Black"
+	 value="0 0 0 1" />
+	<color
+	 name="Black_10"
+	 value="0 0 0 0.1" />
+	<color
+	 name="Black_25"
+	 value="0 0 0 0.25" />
+	<color
+	 name="Black_50"
+	 value="0 0 0 0.5" />
+	<color
+	 name="Black_78"
+	 value="0 0 0 0.78" />
+	<color
+	name="FrogGreen"
+	value="0.26 0.345 0.263 1" />
+	<color
+	 name="Red"
+	 value="0.729 0 0.121 1" />
+	<color
+	 name="Blue"
+	 value="0 0 1 1" />
+	<color
+	 name="Yellow"
+	 value="1 1 0 1" />
+	<color
+	 name="Green"
+	 value="0 1 0 1" />
+	<color
+	 name="Transparent"
+	 value="0 0 0 0" />
+	<color
+	name="Purple"
+	value="1 0 1 1" />
+	<color
+	name="Lime"
+	value=".8 1 .73 1" />
+	<color
+	name="LtYellow"
+	value="1 1 .79 1" />
+	<color
+	name="LtOrange"
+	value="1 .85 .73 1" />
+
+  <!-- Skin and Theme Colors -->
+
+      <color
+	 name="SL-White"
+	 value="1 1 1 1" />
+	<color
+	 name="SL-Normal"
+	 value="0.25 0.100 0.225 1" />
+	<color
+	 name="SL-Dark"
+	 value="0.90 0.30 0.160 1" />
+	<color
+	 name="SL-Background_Light"
+	 value="0.35 0.35 0.35 1" />
+	<color
+	 name="SL-Background"
+	 value="0.25 0.25 0.25 1" />
+	<color
+	 name="SL-Background_50"
+	 value="0.25 0.25 0.25 0.50" />
+	<color
+	 name="SL-Background_66"
+	 value="0.25 0.25 0.25 0.66" />
+	<color
+	 name="SL-Foreground"
+	 value="0.275 0.020 0.300 1" />
+	<color
+	 name="SL-Foreground_50"
+	 value="0.275 0.020 0.300 0.50" />
+	<color
+	 name="SL-Foreground_66"
+	 value="0.275 0.020 0.300 0.66" />
+	<color
+	 name="SL-Silver"
+	 value="0.75 0.75 0.75 1" />
+	<color
+	 name="SL-MidGray_50"
+	 value="0.7 0.7 0.7 0.50" />
+	<color
+	 name="SL-MidDkGray"
+	 value="0.5 0.5 0.5 1" />
+	<color
+	 name="SL-MidDkGray_50"
+	 value="0.5 0.5 0.5 0.50" />
+	<color
+	 name="SL-Titanium_25"
+	 value="0.25 0.25 0.25 0.25" />
+	<color
+	 name="SL-Titanium"
+	 value="0.3 0.3 0.3 1" />
+	<color
+	 name="SL-DkTitanium"
+	 value="0.24 0.24 0.24 1" />
+	<color
+	 name="SL-TitaniumGray"
+	 value="0.4 0.4 0.4 1" />
+	<color
+	 name="SL-MidBlue"
+	 value="0.3 0.6 0.9 1" />
+	<color
+	 name="OldGray_63"
+	 value="0.243 0.243 0.243 0.63" />
+	<color
+	 name="Brown"
+	 value="0.225 0.100 0.05 1" />
+	<color
+	 name="BrickBrown"
+	 value="0.6 0 0 1" />
+	<color
+	 name="BrightRed"
+	 value="1 0 0 1" />
+	<color
+	 name="NavyBlue_0"
+	 value="0 0.12 0.24 0" />
+      <color
+       name="MdBlue"
+       value=".07 .38 .51 1" />
+<!-- Colors below transparent in panel_notification.xml -->
+	<color
+	 name="Cerise_0"
+	 value="1 0.3 0.3 0" />
+	<color
+	 name="Titanium_0"
+	 value="0.3 0.3 0.3 0" />
+
+	<!-- Added by Ansariel -->
+	<color
+	 name="DkGray2_10"
+	 value="0.25 0.25 0.25 0.1" />
+	<color
+	 name="MidBlue"
+	 value="0 0 0.5 1" />
+    <color
+     name="AnsaStorm_HtmlLink"
+     value="0 1 0 1" />
+
+  <!-- This color name makes potentially unused colors show up bright purple.
+  Leave this here until all Unused? are removed below, otherwise
+  the viewer generates many warnings on startup. -->
+  <color
+	 name="Unused?"
+	 value=".831 1 0 1" />
+
+
+  <!-- UI Colors -->
+	<color
+        name="ScriptDialog"
+        value="0.023 0.016 0.007 1" />
+	<color 
+        name="ScriptDialogFg"
+        reference="White" />
+
+
+    <color
+     name="BottomTrayAlphaColor"
+     reference="Transparent" />
+    <color
+     name="BottomTrayOpaqueColor"
+     reference="Transparent" />
+    <color
+     name="GridlineShadowColor"
+     value="0 0 0 0.31" />
+    <color
+     name="GridlineBGColor"
+     value="0.92 0.92 1 0.78" />
+    <color
+     name="ChicletFlashColor"
+     value="SchemeLightest" />
+    <color
+     name="GroupNotifyBoxColor"
+     value="0.3344 0.5456 0.5159 1" />
+    <color
+     name="GroupOverTierColor"
+     value="0.43 0.06 0.06 1" />
+    <color
+     name="HighlightParentColor"
+     value="0.67 0.83 0.96 1" />
+    <color
+     name="MapAvatarSelfColor"
+     value="0.53125 0 0.498047 1" />
+    <color
+     name="MenuNonProductionGodBgColor"
+     value="0.263 0.325 0.345 1" />
+    <color
+     name="NetMapGroupOwnBelowWater"
+     value="0.78 0 0.78 1" />
+    <color
+     name="NetMapGroupOwnAboveWater"
+     reference="Purple" />
+    <color
+     name="NetMapOtherOwnAboveWater"
+     reference="SL-DkTitanium" />
+<!-- Changed Color -->
+    <color
+     name="NetMapOtherOwnBelowWater"
+     value="DkGray" />
+    <color
+     name="NetMapYouOwnAboveWater"
+     value="0 1 1 1" />
+    <color
+     name="NetMapYouOwnBelowWater"
+     value="0 0.78 0.78 1" />
+    <color
+     name="PropertyColorAuction"
+     value="0.5 0 1 0.4" />
+    <color
+     name="PropertyColorAvail"
+     reference="Transparent" />
+    <color
+     name="PropertyColorForSale"
+     value="1 0.5 0 0.4" />
+    <color
+     name="PropertyColorGroup"
+     value="0 0.72 0.72 0.4" />
+    <color
+     name="PropertyColorOther"
+     value="1 0 0 0.4" />
+    <color
+     name="PropertyColorSelf"
+     value="0 1 0 0.4" />
+  <color
+    name="ColorSwatchBorderColor"
+    value="0.45098 0.517647 0.607843 1"/>
+    <color
+     name="ToolTipBgColor"
+     value="Purple" />
+    <color
+     name="ToolTipBorderColor"
+     value="White" />
+
+  <!-- UI Definitions -->
+  	<color
+	 name="HintTitle"
+	 reference="SchemeLightest" />
+	<color
+	 name="HintText"
+	 reference="White" />
+	<color
+	 name="HintBg"
+	 reference="Black" />
+    <color
+     name="AccordionHeaderTextColor"
+     reference="LtGray" />
+    <color
+     name="AgentChatColor"
+     reference="White" />
+    <color
+     name="AlertBoxColor"
+     reference="SL-DkTitanium" />
+    <color
+     name="AlertCautionBoxColor"
+     reference="LtOrange" />
+    <color
+     name="AlertCautionTextColor"
+     reference="LtYellow" />
+    <color
+     name="AgentLinkColor"
+     reference="White" />
+<!-- Changed Color -->
+    <color
+     name="AlertTextColor"
+     reference="AccentColor" />
+    <color
+     name="AvatarListItemIconDefaultColor"
+     reference="SL-White" />
+    <color
+     name="AvatarListItemIconOnlineColor"
+     reference="SL-White" />
+    <color
+     name="AvatarListItemIconOfflineColor"
+     reference="SL-MidDkGray_50" />
+    <color
+     name="AvatarListItemChatRange"
+     reference="Green" />
+    <color
+     name="AvatarListItemShoutRange"
+     reference="Yellow" />
+    <color
+     name="AvatarListItemBeyondShoutRange"
+     reference="Red" />
+    <color
+     name="AvatarListItemIconVoiceInvitedColor"
+     reference="AvatarListItemIconOfflineColor" />
+    <color
+     name="AvatarListItemIconVoiceJoinedColor"
+     reference="AvatarListItemIconOnlineColor" />
+    <color
+     name="AvatarListItemIconVoiceLeftColor"
+     reference="AvatarListItemIconOfflineColor" />
+    <color
+     name="BackgroundChatColor"
+     reference="DkGray" />
+    <color
+     name="ButtonBorderColor"
+     reference="Unused?" />
+    <color
+     name="ButtonCautionImageColor"
+     reference="EmphasisColor" />
+    <color
+     name="ButtonColor"
+     reference="EmphasisColor" />
+    <color
+     name="ButtonFlashBgColor"
+     reference="White" />
+<!-- Color Changed -->
+    <color
+     name="ButtonImageColor"
+     reference="SL-White" />
+    <color
+     name="ButtonLabelColor"
+     reference="LtGray" />
+    <color
+     name="ButtonLabelDisabledColor"
+     reference="White_25" />
+    <color
+     name="ButtonLabelSelectedColor"
+     reference="White" />
+    <color
+     name="ButtonLabelSelectedDisabledColor"
+     reference="White_25" />
+    <color
+     name="ButtonSelectedBgColor"
+     reference="Unused?" />
+    <color
+     name="ButtonSelectedColor"
+     reference="Unused?" />
+    <color
+     name="ButtonUnselectedBgColor"
+     reference="Unused?" />
+    <color
+     name="ButtonUnselectedFgColor"
+     reference="Unused?" />
+    <color
+     name="ChatHistoryBgColor"
+     reference="OldGray_63" />
+    <color
+     name="ChatHistoryTextColor"
+     reference="LtGray" />
+  <color
+      name="ChatHistoryMutedTextColor"
+      reference="White_70" />
+    <color
+     name="ColorDropShadow"
+     reference="Black_50" />
+    <color
+     name="ComboListBgColor"
+     reference="DkGray" />
+    <color
+     name="ConsoleBackground"
+     reference="Black" />
+    <color
+     name="ContextSilhouetteColor"
+     reference="SchemeLightest" />
+    <color
+     name="DefaultHighlightDark"
+     reference="White_10" />
+    <color
+     name="DefaultHighlightLight"
+     reference="White_25" />
+    <color
+     name="DefaultShadowDark"
+     reference="Black_50" />
+    <color
+     name="DefaultShadowLight"
+     reference="Black_50" />
+    <color
+     name="EffectColor"
+     reference="White" />
+     <color
+     name="FilterBackgroundColor"
+     reference="Black" />
+    <color
+     name="FilterTextColor"
+     reference="EmphasisColor" />
+     <color
+     name="FloaterButtonImageColor"
+     reference="LtGray" />
+    <color
+     name="FloaterDefaultBackgroundColor"
+     reference="SL-Background" />
+<!-- Changed Color -->
+    <color
+     name="FloaterFocusBackgroundColor"
+     reference="SL-Background" />
+<!-- Changed Color -->
+    <color
+     name="FloaterFocusBorderColor"
+     reference="SL-Background_50" />
+    <color
+     name="FloaterUnfocusBorderColor"
+     reference="Black_50" />
+    <color
+     name="FocusColor"
+     reference="EmphasisColor" />
+    <color
+     name="FolderViewLoadingMessageTextColor"
+     reference="EmphasisColor" />
+    <color
+     name="GridFocusPointColor"
+     reference="White_50" />
+    <color
+     name="GridlineColor"
+     reference="White" />
+    <color
+     name="GroupLinkColor"
+     reference="White" />
+    <color
+     name="GroupNotifyTextColor"
+     reference="White"/>
+    <color
+     name="GroupNotifyDimmedTextColor"
+     value="0.5 0.5 0.5 1" />
+    <color
+     name="HTMLLinkColor"
+     reference="AnsaStorm_HtmlLink" />
+    <color
+     name="HealthTextColor"
+     reference="White" />
+    <color
+     name="HelpBgColor"
+     reference="Unused?" />
+    <color
+     name="HelpFgColor"
+     reference="Unused?" />
+    <color
+     name="HelpScrollHighlightColor"
+     reference="Unused?" />
+    <color
+     name="HelpScrollShadowColor"
+     reference="Unused?" />
+    <color
+     name="HelpScrollThumbColor"
+     reference="Unused?" />
+    <color
+     name="HelpScrollTrackColor"
+     reference="Unused?" />
+    <color
+     name="HighlightChildColor"
+     reference="Yellow" />
+    <color
+     name="HighlightInspectColor"
+     reference="Purple" />
+    <color
+     name="IMChatColor"
+     reference="LtGray" />
+    <color
+     name="IMHistoryBgColor"
+     reference="Unused?" />
+    <color
+     name="IMHistoryTextColor"
+     reference="Unused?" />
+    <color
+     name="IconDisabledColor"
+	 reference="White_25" />
+    <color
+     name="IconEnabledColor"
+     reference="White" />
+    <color
+     name="InventoryBackgroundColor"
+     reference="Transparent" />
+    <color
+     name="InventoryFocusOutlineColor"
+     reference="White_25" />
+    <color
+     name="InventoryItemEnabledColor"
+     reference="LtGray" />
+    <color
+     name="InventoryItemHighlightBgColor"
+     reference="SchemeLightest_35" />
+    <color
+     name="InventoryItemHighlightFgColor"
+     reference="White" />
+    <color
+     name="InventoryItemSuffixColor"
+     reference="White_25" />
+    <color
+     name="InventoryItemLibraryColor"
+     reference="White" />
+    <color
+     name="InventoryItemLinkColor"
+     reference="LtGray_50" />
+    <color
+     name="InventorySearchStatusColor"
+     reference="EmphasisColor" />
+    <color
+     name="LabelDisabledColor"
+	 reference="White_25" />
+    <color
+     name="LabelSelectedColor"
+     reference="White" />
+    <color
+     name="LabelSelectedDisabledColor"
+     reference="White_25" />
+    <color
+     name="LabelTextColor"
+     reference="LtGray" />
+    <color
+     name="LoginProgressBarBgColor"
+     reference="Unused?" />
+    <color
+     name="LoginProgressBarFgColor"
+     reference="Unused?" />
+    <color
+     name="LoginProgressBoxBorderColor"
+     reference="NavyBlue_0" />
+    <color
+     name="LoginProgressBoxCenterColor"
+     reference="Black_78" />
+    <color
+     name="LoginProgressBoxShadowColor"
+     reference="Black_78" />
+    <color
+     name="LoginProgressBoxTextColor"
+     reference="White" />
+    <color
+     name="MapAvatarColor"
+     reference="Green" />
+    <color
+     name="MapAvatarFriendColor"
+     reference="Yellow" />
+    <color
+     name="MapFrustumColor"
+     reference="White_10" />
+<!-- Changed Color -->
+    <color
+     name="MapFrustumRotatingColor"
+     reference="White_25" />
+    <color
+     name="MapTrackColor"
+     reference="Red" />
+<!-- Changed Color -->
+    <color
+     name="MapTrackDisabledColor"
+     reference="BrickBrown" />
+    <color
+     name="MenuBarBgColor"
+     reference="DkGray_86" />
+    <color
+     name="MenuBarGodBgColor"
+     reference="FrogGreen" />
+    <color
+     name="MenuDefaultBgColor"
+     reference="DkGray_86" />
+    <color
+     name="MenuItemDisabledColor"
+	 reference="LtGray_50" />
+    <color
+     name="MenuItemEnabledColor"
+     reference="LtGray" />
+    <color
+     name="MenuItemHighlightBgColor"
+     reference="EmphasisColor_35" />
+    <color
+     name="MenuItemHighlightFgColor"
+     reference="White" />
+    <color
+     name="MenuNonProductionBgColor"
+     reference="Black" />
+    <color
+     name="MenuPopupBgColor"
+	  reference="DkGray_86" />
+    <color
+     name="MultiSliderDisabledThumbColor"
+     reference="Unused?" />
+    <color
+     name="MultiSliderThumbCenterColor"
+     reference="Unused?" />
+    <color
+     name="MultiSliderThumbCenterSelectedColor"
+     reference="Unused?" />
+    <color
+     name="MultiSliderThumbOutlineColor"
+     reference="Unused?" />
+    <color
+     name="MultiSliderTrackColor"
+     reference="Unused?" />
+    <color
+     name="MultiSliderTriangleColor"
+     reference="Unused?" />
+  <!--
+    <color
+      name="NameTagBackground"
+      value="0.85 0.85 0.85 0.80" />
+      -->
+    <color
+      name="NameTagBackground"
+      value="0 0 0 1" />
+    <color
+     name="NameTagChat"
+     reference="LtGray" />
+    <color
+     name="NameTagFriend"
+     value="0.75 0.92 0.49 1.0" />
+    <color
+     name="NameTagLegacy"
+     reference="White" />
+    <color
+     name="NameTagMatch"
+     reference="White" />
+    <color
+     name="NameTagMismatch"
+     reference="LtGray" />
+<!-- Changed Color -->
+    <color
+     name="NetMapBackgroundColor"
+     reference="Black_10" />
+    <color
+     name="NotifyBoxColor"
+     reference="LtGray" />
+    <color
+     name="NotifyCautionBoxColor"
+     reference="LtOrange" />
+    <color
+     name="NotifyCautionWarnColor"
+     reference="White" />
+    <color
+     name="NotifyTextColor"
+     reference="White" />
+    <color
+     name="ObjectBubbleColor"
+     reference="DkGray_66" />
+    <color
+     name="ChatNameColor"
+     reference="AccentColor" />
+    <color
+     name="ObjectChatColor"
+     value="0.699 0.899 0.699 1" />
+    <color
+     name="ObjectIMColor"
+     value="0.714 0.484 0.359 1" />
+    <color
+     name="OverdrivenColor"
+     reference="Red" />
+    <color
+     name="PanelDefaultBackgroundColor"
+     reference="DkGray" />
+    <color
+     name="PanelDefaultHighlightLight"
+     reference="White_50" />
+    <color
+     name="PanelFocusBackgroundColor"
+     reference="DkGray2" />
+    <color
+     name="PanelNotificationBackground"
+     value="1 0.3 0.3 0" />
+    <color
+     name="ParcelHoverColor"
+     reference="White" />
+    <color
+     name="PieMenuSelectedColor"
+     reference="SchemeLightest_35" />
+    <color
+     name="ScriptBgReadOnlyColor"
+     reference="SL-TitaniumGray" />
+    <color
+     name="ScriptErrorColor"
+     reference="Red" />
+    <color
+     name="ScrollBGStripeColor"
+     reference="White_10" />
+    <color
+     name="ScrollBgReadOnlyColor"
+      reference="Transparent" />
+    <color
+     name="ScrollBgWriteableColor"
+     reference="White_05" />
+    <color
+     name="ScrollDisabledColor"
+     reference="White_25" />
+    <color
+     name="ScrollHighlightedColor"
+     reference="Unused?" />
+    <color
+     name="ScrollHoveredColor"
+     reference="EmphasisColor_13" />
+    <color
+     name="ScrollSelectedBGColor"
+     reference="SchemeLightest_35" />
+    <color
+     name="ScrollSelectedFGColor"
+     reference="White" />
+    <color
+     name="ScrollUnselectedColor"
+     reference="LtGray" />
+    <color
+     name="ScrollbarThumbColor"
+     reference="White" />
+    <color
+     name="ScrollbarTrackColor"
+     reference="Black" />
+    <color
+     name="SelectedOutfitTextColor"
+     reference="EmphasisColor" />
+<!-- Color Changed -->
+    <color
+     name="SilhouetteChildColor"
+     reference="SL-MidBlue" />
+    <color
+     name="SilhouetteParentColor"
+     reference="Yellow" />
+    <color
+     name="SliderDisabledThumbColor"
+     reference="White_25" />
+    <color
+     name="SliderThumbCenterColor"
+     reference="White" />
+    <color
+     name="SliderThumbOutlineColor"
+     reference="White" />
+    <color
+     name="SliderTrackColor"
+     reference="Unused?" />
+    <color
+     name="SpeakingColor"
+     reference="FrogGreen" />
+    <color
+     name="SystemChatColor"
+     reference="LtGray" />
+    <color
+     name="TextBgFocusColor"
+     reference="White" />
+    <color
+     name="TextBgReadOnlyColor"
+	 reference="DkGray" />
+    <color
+     name="TextBgWriteableColor"
+     reference="LtGray" />
+    <color
+     name="TextCursorColor"
+     reference="Black" />
+    <color
+     name="TextDefaultColor"
+     reference="Black" />
+   <color
+     name="TextEmbeddedItemColor"
+     reference="MidBlue" />
+   <color
+     name="TextEmbeddedItemReadOnlyColor"
+     reference="SL-MidBlue" />
+	<color
+	 name="TextFgColor"             
+	 reference="Black" />
+    <color
+     name="TextFgReadOnlyColor"
+     reference="LtGray" />
+    <color
+     name="TextFgTentativeColor"
+     reference="DkGray" />
+    <color
+     name="TimeTextColor"
+     reference="LtGray" />
+    <color
+     name="TitleBarFocusColor"
+     reference="White_10" />
+    <color
+     name="ToastBackground"
+     value="0.3 0.3 0.3 0" />
+    <color
+     name="ToolTipTextColor"
+     reference="Black" />
+    <color
+     name="InspectorTipTextColor"
+     reference="LtGray" />
+    <color
+     name="UserChatColor"
+     reference="White" />
+    <color
+     name="llOwnerSayChatColor"
+     reference="LtYellow" />
+
+    <!-- New Colors -->
+    <color
+     name="OutputMonitorMutedColor"
+     reference="DkGray2" />
+    <color
+     name="SysWellItemUnselected"
+     reference="Transparent" />
+    <color
+     name="SysWellItemSelected"
+     reference="SL-Titanium" />
+    <color
+     name="ChatToastAgentNameColor"
+     reference="EmphasisColor" />
+    <color
+     name="ChatTimestampColor"
+     reference="White" />
+    <color
+     name="MenuBarProjectBgColor"
+     reference="MdBlue" />
+	 
+	<!-- Groups visible in profiles -->
+	<color
+	 name="GroupHiddenInProfile"
+	 reference="EmphasisColor" />
+	 
+    <!-- Balance at the top -->
+	<color
+	 name="CurrencyColor"
+	 reference="LabelTextColor" />
+</colors>
