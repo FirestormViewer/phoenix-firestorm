@@ -16,6 +16,7 @@
 			<check_box label="Añadir iluminación adicional" name="EditAppearanceLighting" tool_tip="Activa o desactiva la iluminación adicional mientras se edita la apariencia del avatar."/>
 			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
+			<check_box label="Mostrar interfaz de usuario en vista subjetiva" name="first_person_ui_visible"/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
 			<check_box label="Mostrar puntos de mira en vista subjetiva" name="ShowCrosshairs" tool_tip="Muestra los puntos de mira cuando te encuentras en vista subjetiva"/>
 			<text name="Mouse Sensitivity" width="220">

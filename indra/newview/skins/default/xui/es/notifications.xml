@@ -3867,8 +3867,18 @@ Simulador anterior: [OLDVERSION]
 	<notification name="BackupPathEmpty">
 		La ruta del respaldo está vacía. Por favor, proporciona primero una ruta válida donde respaldar tu configuración.
 	</notification>
+	<notification name="BackupPathDoesNotExistOrCreateFailed">
+		No se encontró o no ha podido ser creada la ruta del respaldo.
+	</notification>
+	<notification name="BackupPathDoesNotExist">
+		No se ha hencontrado la ruta del respaldo.
+	</notification>
 	<notification name="SettingsRestoreNeedsLogout">
 		La restauración de las configuraciones requiere reiniciar. ¿Quieres restaurarlas y salir de visor ahora?
-		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Restaurar"/>
+		<usetemplate name="okcancelbuttons" notext="Cancelar" yestext="Restaurar y salir"/>
+	</notification>
+	<notification name="RestoreFinished">
+		¡Restauración completada! Por favor, reinicia tu visor.
+		<usetemplate name="okbutton" yestext="Salir"/>
 	</notification>
 </notifications>

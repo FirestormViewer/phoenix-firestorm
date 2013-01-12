@@ -11,6 +11,93 @@
 			</text>
 		</layout_panel>
 		<layout_panel name="lp_buttons">
+			<text name="settings_restored_label">
+				Grupos de configuraciones a restaurar (el respaldo siempre incluye todo):
+			</text>
+			<layout_stack name="ls_list_view_stack">
+				<layout_panel name="lp_restore_global_files">
+					<scroll_list name="restore_global_files_list">
+						<column label="Archivos globales:" name="restore_global_files_label"/>
+						<column label="Valor" name="value"/>
+						<row name="restore_global_row_login">
+							<column name="restore_global_files_label">Credenciales de conexión</column>
+						</row>
+						<row name="restore_global_row_colors">
+							<column name="restore_global_files_label">Colores</column>
+						</row>
+						<row name="restore_global_row_dialogs">
+							<column name="restore_global_files_label">Diálogos ignorados</column>
+						</row>
+						<row name="restore_global_row_grids">
+							<column name="restore_global_files_label">Redes definidas por el usuario</column>
+						</row>
+						<row name="restore_global_row_autoreplace">
+							<column name="restore_global_files_label">Autoreemplazo</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_per_account_files">
+					<scroll_list name="restore_per_account_files_list">
+						<column label="Archivos por avatar:" name="restore_per_account_files_label"/>
+						<column label="Valor" name="value" width="-1"/>
+						<row name="restore_per_account_row_blacklist">
+							<column name="restore_per_account_files_label">Lista negra</column>
+						</row>
+						<row name="restore_per_account_row_contactsets">
+							<column name="restore_per_account_files_label">Grupos de contactos</column>
+						</row>
+						<row name="restore_per_account_row_invfilters">
+							<column name="restore_per_account_files_label">Filtros de inventario</column>
+						</row>
+						<row name="restore_per_account_row_favsort">
+							<column name="restore_per_account_files_label">Orden de los favoritos</column>
+						</row>
+						<row name="restore_per_account_row_medialists">
+							<column name="restore_per_account_files_label">Lista negra/blanca de medios</column>
+						</row>
+						<row name="restore_per_account_row_toolbars">
+							<column name="restore_per_account_files_label">Barras de herramientas</column>
+						</row>
+						<row name="restore_per_account_row_volumes">
+							<column name="restore_per_account_files_label">Volúmenes de chat de voz</column>
+						</row>
+						<row name="restore_per_account_row_tphistory">
+							<column name="restore_per_account_files_label">Historial de teleportes</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+				<layout_panel name="lp_restore_folders">
+					<scroll_list name="restore_global_folders_list">
+						<column label="Carpetas:" name="restore_global_folders_label"/>
+						<column label="Valor" name="value"/>
+						<row name="restore_folders_row_beams">
+							<column name="restore_global_folders_label">Balizas de selección</column>
+						</row>
+						<row name="restore_folders_row_beamcolors">
+							<column name="restore_global_folders_label">Colores de baliza de selección</column>
+						</row>
+						<row name="restore_folders_row_spellcheck">
+							<column name="restore_global_folders_label">Comprobación ortográfica personalizada</column>
+						</row>
+						<row enabled="false" name="restore_folders_row_windlight">
+							<column name="restore_global_folders_label">Windlight (obligatorio)</column>
+						</row>
+						<row name="restore_folders_row_daycycles">
+							<column name="restore_global_folders_label">Ciclos de día Windlight</column>
+						</row>
+						<row name="restore_folders_row_skies">
+							<column name="restore_global_folders_label">Cielos Windlight</column>
+						</row>
+						<row name="restore_folders_row_waters">
+							<column name="restore_global_folders_label">Aguas Windlight</column>
+						</row>
+					</scroll_list>
+				</layout_panel>
+			</layout_stack>
+			<button label="Seleccionar todo" name="select_all_button"/>
+			<button label="Deseleccionar todo" name="deselect_all_button"/>
+			<check_box label="Restaurar configuraciones globales" name="restore_global_settings_checkbox"/>
+			<check_box label="Restaurar configuraciones por avatar" name="restore_per_account_settings_checkbox"/>
 			<button label="Configuración del respaldo" name="backup_settings" width="160"/>
 			<button label="Restaurar configuración" name="restore_settings" width="160"/>
 		</layout_panel>
