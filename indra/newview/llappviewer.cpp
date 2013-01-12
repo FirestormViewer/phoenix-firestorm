@@ -243,6 +243,8 @@
 #include "llappviewerlistener.h"
 
 #include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
@@ -723,6 +725,7 @@ LLAppViewer::~LLAppViewer()
 bool LLAppViewer::init()
 {	
 	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
+	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
 	//
 	// Start of the application
@@ -1701,6 +1704,10 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
+	// <FS:ND> stop collection stats
+	nd::allocstats::tearDown();
+	// </FS:ND>
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 

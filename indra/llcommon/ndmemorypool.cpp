@@ -249,16 +249,12 @@ namespace nd
 
 		void startUp()
 		{
-			nd::allocstats::startUp();
-
 			allocPage( 0 );
 			sActive = true;
 		}
 
 		void tearDown()
 		{
-			nd::allocstats::tearDown();
-
 			sActive = false;
 
 			for( int i = 0; i < MAX_PAGES; ++i )
@@ -411,12 +407,10 @@ namespace nd
 	{
 		void startUp()
 		{
-			nd::allocstats::startUp();
 		}
 
 		void tearDown()
 		{
-			nd::allocstats::tearDown();
 		}
 
 		void *malloc( size_t aSize, size_t aAlign )

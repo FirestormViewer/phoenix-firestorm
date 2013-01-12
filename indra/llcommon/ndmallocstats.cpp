@@ -72,12 +72,13 @@ namespace nd
 			memset( &sStats[0], 0, sizeof(sStats) );
 			bStarted = true;
 		}
+
 		void tearDown()
 		{ bStarted = false; }
 
 		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP )
 		{
-			if( !bStarted || 0 == aSize )
+			if( !isEnabled() )
 				return;
 
 			nd::intrin::FAA( &sStats[0]  );
@@ -160,7 +161,7 @@ namespace nd
 
 		void dumpStats( std::ostream &aOut )
 		{
-			if( 0 == sStats[0] )
+			if( !isEnabled() )
 				return;
 
 #ifdef LOG_ALLOCATION_STACKS
@@ -192,6 +193,11 @@ namespace nd
 			fPercentSmall /= fTotal;
 
 			aOut << " t/s (% s) " << sStats[0] << "/" << nSmallAllocs << "(" << fPercentSmall << ")";
+		}
+
+		bool isEnabled()
+		{
+			return bStarted && 0 != sStats[0];
 		}
 	}
 }
