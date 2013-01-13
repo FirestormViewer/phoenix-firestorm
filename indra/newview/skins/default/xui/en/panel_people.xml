@@ -245,50 +245,59 @@ Looking for people to hang out with? Use the search box to find topics or conten
              name="bottom_panel_nearby"
              top_pad="0"
              width="326">
-	             <menu_button
-	             follows="bottom|left"
-	             height="25"
-	             image_hover_unselected="Toolbar_Left_Over"
-	             image_overlay="OptionsMenu_Off"
-	             image_selected="Toolbar_Left_Selected"
-	             image_unselected="Toolbar_Left_Off"
-	             layout="topleft"
-	             left="0"
-	             name="nearby_view_sort_btn"
-	             tool_tip="Options"
-	             top="1"
-	             width="31" />
-             	<button
+                <menu_button
+                 follows="bottom|left"
+                 height="25"
+                 image_hover_unselected="Toolbar_Left_Over"
+                 image_overlay="OptionsMenu_Off"
+                 image_selected="Toolbar_Left_Selected"
+                 image_unselected="Toolbar_Left_Off"
+                 layout="topleft"
+                 left="0"
+                 name="nearby_view_sort_btn"
+                 tool_tip="Options"
+                 top="1"
+                 width="31" />
+                <button
                  follows="bottom|left"
                  height="25"
                  image_hover_unselected="Toolbar_Middle_Over"
-                  image_overlay="AddItem_Off"
+                 image_overlay="AddItem_Off"
                  image_selected="Toolbar_Middle_Selected"
-                  image_unselected="Toolbar_Middle_Off"
+                 image_unselected="Toolbar_Middle_Off"
                  layout="topleft"
                  left_pad="1"
                  name="add_friend_btn_nearby"
                  tool_tip="Add selected Resident to your friends List"
                  width="31">
-               	<commit_callback
+                <commit_callback
                   function="People.addFriend" />
-            	</button>
-	             <slider
-		          control_name="NearMeRange"
-		          decimal_digits="0"
-		          follows="bottom|left"
-		          height="16"
-		          increment="2"
-		          initial_value="96"
-		          label="Range(m):"
-		          label_width="70"
-		          layout="topleft"
-		          max_val="4096"
-		          min_val="20"
-		          name="NearMeRange"
-		          visible="True"
-		          left_pad="10"
-		          width="220" />
+                </button>
+                <icon
+                 follows="bottom|left|right"
+                 height="25"
+                 image_name="Toolbar_Right_Off"
+                 layout="topleft"
+                 left_pad="1"
+                 name="nearby_dummy_icon"
+                 width="257" />
+                <slider
+                 control_name="NearMeRange"
+                 decimal_digits="0"
+                 follows="bottom|left"
+                 height="16"
+                 increment="2"
+                 initial_value="96"
+                 label="Range(m):"
+                 label_width="70"
+                 layout="topleft"
+                 max_val="4096"
+                 min_val="20"
+                 name="NearMeRange"
+                 visible="True"
+                 left_delta="10"
+                 top_delta="6"
+                 width="220" />
             </panel>
         </panel>
         
