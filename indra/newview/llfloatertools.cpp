@@ -824,34 +824,6 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		mRadioGroupEdit->setValue("radio align");
 	}
 
-		if (mComboGridMode) 
-	{
-		mComboGridMode->setVisible( edit_visible );
-		S32 index = mComboGridMode->getCurrentIndex();
-		mComboGridMode->removeall();
-
-		switch (mObjectSelection->getSelectType())
-		{
-		case SELECT_TYPE_HUD:
-		  mComboGridMode->add(getString("grid_screen_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  //mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		case SELECT_TYPE_WORLD:
-		  mComboGridMode->add(getString("grid_world_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		case SELECT_TYPE_ATTACHMENT:
-		  mComboGridMode->add(getString("grid_attachment_text"));
-		  mComboGridMode->add(getString("grid_local_text"));
-		  mComboGridMode->add(getString("grid_reference_text"));
-		  break;
-		}
-
-		mComboGridMode->setCurrentByIndex(index);
-	}
-
 	if (mComboGridMode) 
 	{
 		mComboGridMode->setVisible( edit_visible );
