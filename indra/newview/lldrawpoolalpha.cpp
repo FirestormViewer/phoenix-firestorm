@@ -100,11 +100,15 @@ void LLDrawPoolAlpha::renderDeferred(S32 pass)
 
 S32 LLDrawPoolAlpha::getNumPostDeferredPasses() 
 { 
+	static LLCachedControl<bool> RenderDepthOfField(gSavedSettings, "RenderDepthOfField"); // <FS:PP> Attempt to speed up things a little
 	if (LLPipeline::sImpostorRender)
 	{ //skip depth buffer filling pass when rendering impostors
 		return 1;
 	}
-	else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	// <FS:PP> Attempt to speed up things a little
+	// else if (gSavedSettings.getBOOL("RenderDepthOfField"))
+	else if (RenderDepthOfField)
+	// </FS:PP>
 	{
 		return 2; 
 	}

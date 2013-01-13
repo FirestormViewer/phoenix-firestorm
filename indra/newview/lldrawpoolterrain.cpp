@@ -66,8 +66,16 @@ LLDrawPoolTerrain::LLDrawPoolTerrain(LLViewerTexture *texturep) :
 	U32 int_format = GL_ALPHA;
 
 	// Hack!
-	sDetailScale = 1.f/gSavedSettings.getF32("RenderTerrainScale");
-	sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
+
+	// <FS:PP> Attempt to speed up things a little
+	// sDetailScale = 1.f/gSavedSettings.getF32("RenderTerrainScale");
+	// sDetailMode = gSavedSettings.getS32("RenderTerrainDetail");
+	static LLCachedControl<F32> RenderTerrainScale(gSavedSettings, "RenderTerrainScale");
+	static LLCachedControl<S32> RenderTerrainDetail(gSavedSettings, "RenderTerrainDetail");
+	sDetailScale = 1.f/RenderTerrainScale;
+	sDetailMode = RenderTerrainDetail;
+	// </FS:PP>
+
 	mAlphaRampImagep = LLViewerTextureManager::getFetchedTextureFromFile("alpha_gradient.tga", 
 													TRUE, LLViewerTexture::BOOST_UI, 
 													LLViewerTexture::FETCHED_TEXTURE,

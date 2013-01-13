@@ -127,7 +127,11 @@ FSLSLBridge :: ~FSLSLBridge()
 
 bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID ownerID)
 {
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
+	if (!UseLSLBridge)
+	// </FS:PP>
 		return false;
 
 	lldebugs << message << llendl;
@@ -249,7 +253,11 @@ bool FSLSLBridge :: lslToViewer(std::string message, LLUUID fromID, LLUUID owner
 
 bool FSLSLBridge :: viewerToLSL(std::string message, FSLSLBridgeRequestResponder *responder)
 {
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
+	if (!UseLSLBridge)
+	// </FS:PP>
 		return false;
 
 	if (responder == NULL)
@@ -284,10 +292,18 @@ bool FSLSLBridge :: updateBoolSettingValue(std::string msgVal, bool contentVal)
 //
 void FSLSLBridge :: recreateBridge()
 {
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
+	if (!UseLSLBridge)
+	// </FS:PP>
 		return;
 
-	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (gSavedSettings.getBOOL("NoInventoryLibrary"))
+	static LLCachedControl<bool> NoInventoryLibrary(gSavedSettings, "NoInventoryLibrary");
+	if (NoInventoryLibrary)
+	// </FS:PP>
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));
@@ -320,10 +336,18 @@ void FSLSLBridge :: recreateBridge()
 
 void FSLSLBridge :: initBridge()
 {
-	if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (!gSavedSettings.getBOOL("UseLSLBridge"))
+	static LLCachedControl<bool> UseLSLBridge(gSavedSettings, "UseLSLBridge");
+	if (!UseLSLBridge)
+	// </FS:PP>
 		return;
 
-	if (gSavedSettings.getBOOL("NoInventoryLibrary"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (gSavedSettings.getBOOL("NoInventoryLibrary"))
+	static LLCachedControl<bool> NoInventoryLibrary(gSavedSettings, "NoInventoryLibrary");
+	if (NoInventoryLibrary)
+	// </FS:PP>
 	{
 		llwarns << "Asked to create bridge, but we don't have a library. Aborting." << llendl;
 		reportToNearbyChat(LLTrans::getString("fsbridge_no_library"));

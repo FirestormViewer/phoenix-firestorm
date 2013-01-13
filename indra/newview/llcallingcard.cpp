@@ -746,7 +746,12 @@ void LLAvatarTracker::processChangeUserRights(LLMessageSystem* msg, void**)
 void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 {
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_AgentBlock);
-	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
+
+	// <FS:PP> Attempt to speed up things a little
+	// 	BOOL chat_notify = gSavedSettings.getBOOL("ChatOnlineNotification");
+	static LLCachedControl<bool> ChatOnlineNotification(gSavedSettings, "ChatOnlineNotification");
+	BOOL chat_notify = ChatOnlineNotification;
+	// </FS:PP>
 
 	lldebugs << "Received " << count << " online notifications **** " << llendl;
 	if(count > 0)
@@ -783,7 +788,12 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 			gInventory.addChangedMask(LLInventoryObserver::CALLING_CARD, LLUUID::null);
 		}
 		//[FIX FIRE-3522 : SJ] Notify Online/Offline to Nearby Chat even if chat_notify isnt true
-		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
+		
+		// <FS:PP> Attempt to speed up things a little
+		// if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
+		static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
+		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||OnlineOfflinetoNearbyChat)
+		// </FS:PP>
 		{
 			// Look up the name of this agent for the notification
 			LLAvatarNameCache::get(agent_id,
@@ -807,11 +817,19 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	// Ansariel: No please! Take preference settings into account!
 	LLSD args;
 
-	if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+	// <FS:PP> Attempt to speed up things a little
+	// if ((gSavedSettings.getBOOL("NameTagShowUsernames")) && (gSavedSettings.getBOOL("UseDisplayNames")))
+	static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+	static LLCachedControl<bool> UseDisplayNames(gSavedSettings, "UseDisplayNames");
+	if ((NameTagShowUsernames) && (UseDisplayNames))
+	// </FS:PP>
 	{
 		args["NAME"] = av_name.getCompleteName();
 	}
-	else if (gSavedSettings.getBOOL("UseDisplayNames"))
+	// <FS:PP> Attempt to speed up things a little
+	// else if (gSavedSettings.getBOOL("UseDisplayNames"))
+	else if (UseDisplayNames)
+	// </FS:PP>
 	{
 		args["NAME"] = av_name.mDisplayName;
 	}
@@ -856,7 +874,13 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 	// online/offline times to be referenced in chat & logged.
 	// [FIRE-3522 : SJ] Only show Online/Offline toast for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Toasts
 	//                  or for groups which have enabled "Show notice for this set" and in the settingpage of CS is checked that the messages need to be in Nearby Chat
-	if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
+	
+	// <FS:PP> Attempt to speed up things a little
+	// if ((gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat")) || (gSavedSettings.getBOOL("FSContactSetsNotificationNearbyChat") && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
+	static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
+	static LLCachedControl<bool> FSContactSetsNotificationNearbyChat(gSavedSettings, "FSContactSetsNotificationNearbyChat");
+	if ((OnlineOfflinetoNearbyChat) || (FSContactSetsNotificationNearbyChat && LGGContactSets::getInstance()->notifyForFriend(agent_id)))
+	// </FS:PP>
 	{
 		static LLCachedControl<bool> history_only(gSavedSettings, "OnlineOfflinetoNearbyChatHistory"); // LO - Adding a setting to show online/offline notices only in chat history. Helps prevent your screen from being filled with online notices on login.
 		LLChat chat;
@@ -1021,7 +1045,12 @@ bool LLCollectMappableBuddies::operator()(const LLUUID& buddy_id, LLRelationship
 	{
 		// <FS:Ansariel> Friend names on worldmap should respect display name settings
 		//mMappable.insert(value);
-		if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+		
+		// <FS:PP> Attempt to speed up things a little
+		// if (LLAvatarNameCache::useDisplayNames() && gSavedSettings.getBOOL("NameTagShowUsernames"))
+		static LLCachedControl<bool> NameTagShowUsernames(gSavedSettings, "NameTagShowUsernames");
+		if (LLAvatarNameCache::useDisplayNames() && NameTagShowUsernames)
+		// </FS:PP>
 		{
 			buddy_map_t::value_type value(av_name.getCompleteName(), buddy_id);
 			mMappable.insert(value);

@@ -2711,6 +2711,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// Traverses up the hierarchy
 	if( keyboard_focus )
 	{
+		static LLCachedControl<bool> ArrowKeysAlwaysMove(gSavedSettings, "ArrowKeysAlwaysMove"); // <FS:PP> Attempt to speed up things a little
+
 		// <FS:Zi> Remove floating chat bar
 		// LLNearbyChatBar* nearby_chat = LLFloaterReg::findTypedInstance<LLNearbyChatBar>("chat_bar");
 
@@ -2728,7 +2730,10 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		//		|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
 		if(LLNearbyChat::instance().defaultChatBarHasFocus() &&
 		   (LLNearbyChat::instance().defaultChatBarIsIdle() ||
-			gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
+		   // <FS:PP> Attempt to speed up things a little
+		   // gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
+			ArrowKeysAlwaysMove))
+		   // </FS:PP>
 		// </FS:Zi>
 			{
 				// let Control-Up and Control-Down through for chat line history,
@@ -2783,7 +2788,12 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 	// If "Pressing letter keys starts local chat" option is selected, we are not in mouselook, 
 	// no view has keyboard focus, this is a printable character key (and no modifier key is 
 	// pressed except shift), then give focus to nearby chat (STORM-560)
-	if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+
+	// <FS:PP> Attempt to speed up things a little
+	// if ( gSavedSettings.getS32("LetterKeysFocusChatBar") && !gAgentCamera.cameraMouselook() && 
+	static LLCachedControl<S32> LetterKeysFocusChatBar(gSavedSettings, "LetterKeysFocusChatBar");
+	if ( LetterKeysFocusChatBar && !gAgentCamera.cameraMouselook() && 
+	// </FS:PP>
 		!keyboard_focus && key < 0x80 && (mask == MASK_NONE || mask == MASK_SHIFT) )
 	{
 		// <FS:Zi> Remove floating chat bar
