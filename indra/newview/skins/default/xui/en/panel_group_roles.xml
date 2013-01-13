@@ -106,7 +106,7 @@ clicking on their names.
 
             <name_list
              name="member_list"
-             left="4"
+             left="1"
              top_pad="5"
              right="-1"
              height="129"
@@ -135,7 +135,7 @@ clicking on their names.
             <button
              name="member_invite"
              label="Invite"
-             left="5"
+             left="3"
              top_pad="4"
              width="100"
              height="23"
@@ -212,7 +212,7 @@ including the Everyone and Owner Roles.
 
             <scroll_list
              name="role_list"
-             left="4"
+             left="3"
              top_pad="5"
              right="-1"
              height="129"
@@ -241,7 +241,7 @@ including the Everyone and Owner Roles.
             <button
              name="role_create"
              label="New Role"
-             left="5"
+             left="3"
              top_pad="4"
              width="100"
              height="23"
@@ -473,8 +473,8 @@ things in this group. There&apos;s a broad variety of Abilities.
     <panel
      name="roles_footer"
      top="192"
-     left="4"
-     right="-4"
+     left="0"
+     right="-1"
      height="226"
      background_visible="false"
      bg_alpha_color="FloaterUnfocusBorderColor"

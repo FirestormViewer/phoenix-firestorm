@@ -4,7 +4,7 @@
  layout="topleft"
  mouse_opaque="true"
  name="friends"
- width="350">
+ width="355">
 	<panel.string name="FriendCount" value="Friends: [COUNT]"/>
 <!--
 	<view_border
@@ -28,14 +28,14 @@
 -->
 	<scroll_list
      left="4"
-     right="-100"
-     top="10"
-     bottom="-10"
+     right="-85"
+     top="0"
+     bottom="-3"
 	 follows="all"
 	 layout="topleft"
-     column_padding="1"
+     column_padding="0"
      draw_heading="true"
-	 heading_height="24"
+	 heading_height="20"
 	 multi_select="true"
      name="friend_list">
 		<scroll_list.column
@@ -83,12 +83,12 @@
 		 width="-1" />
 	</scroll_list>
 	<button
-	 top="10"
+	 top="1"
 	 follows="top|right"
 	 layout="topleft"
 	 height="22"
 	 label="IM/Call"
-	 right="-10"
+	 left_delta="270"
 	 name="im_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />

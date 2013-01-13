@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="555"
+ height="535"
  help_topic="regioninfo"
  layout="topleft"
  name="regioninfo"
  save_rect="true"
  title="Region / Estate"
- width="530">
+ width="485">
     <tab_container
-     bottom="555"
+     bottom="535"
      follows="left|right|top|bottom"
      layout="topleft"
      left="1"

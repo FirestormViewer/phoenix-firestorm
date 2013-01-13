@@ -5,12 +5,12 @@
  left="280"
  mouse_opaque="true"
  name="groups"
- width="350">
+ width="355">
 	<view_border
-	 top="-9"
+	 top="-1"
 	 bottom="25"
 	 left="6"
-	 width="244"
+	 width="262"
 	 follows="left|top|right|bottom"
 	 bevel_style="in"
 	 name="info_border" />
@@ -21,8 +21,8 @@
 	 left="7"
 	 name="group_list"
 	 color="ScrollBgWriteableColor"
-	 top="-10"
-	 width="243" />
+	 top="-1"
+	 width="260" />
     <text
      type="string"
      length="1"
@@ -35,11 +35,11 @@
 You belong to [COUNT] out of [MAX] groups.
     </text>
 	<button
-	 top="-10"
+	 top="-1"
 	 follows="top|right"
 	 height="22"
 	 label="IM/Call"
-	 right="-10"
+	 left_delta="267"
 	 name="chat_btn"
 	 tool_tip="Open Instant Message session"
 	 width="80" />
