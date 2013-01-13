@@ -3,7 +3,7 @@
 <panel
  default_tab_group="1"
  follows="all"
- height="449"
+ height="420"
  label="People"
  layout="topleft"
  left="0"
@@ -98,9 +98,9 @@ Looking for people to hang out with? Use the search box to find topics or conten
      label="Filter"
      max_length_chars="300"
      name="filter_input"
-     text_pad_left="10"
+     text_pad_left="4"
      top="3"
-     width="314" />
+     width="315" />
     <tab_container
      follows="all"
      height="383"
@@ -693,6 +693,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
         name="bottom_bar_ls"
         orientation="horizontal"
         top_pad="0"
+        visible="false"
         width="326">
 
             <layout_panel
@@ -810,6 +811,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
         left="0"
         orientation="horizontal"
         top="0"
+        visible="false"
         width="326">
             <layout_panel
             follows="bottom|left|right"
