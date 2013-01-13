@@ -328,7 +328,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="tab_online"
                  title="Online">
 //-->
-            <tab_container left_delta="-1"
+            <tab_container
              name="friends_accordion"
              follows="all"
              background_visible="true"
@@ -336,6 +336,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              bg_opaque_color="Transparent"
              height="356"
              layout="topleft"
+             left_delta="-1"
              tab_group="1"
              tab_position="top"
              halign="center"
