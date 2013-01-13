@@ -118,6 +118,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
          <panel
          background_opaque="false"
          background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Nearby"
@@ -135,7 +137,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 				follows="all"
 				layout="topleft" top="0"
 				left="0"
-				height="355"
+				height="356"
 				width="326"
 				mouse_opaque="false"
 				name="radar_ls"
@@ -166,11 +168,11 @@ Looking for people to hang out with? Use the search box to find topics or conten
              top="0"/>
              </layout_panel>
 
-            <layout_panel layout="topleft" top="0" left="0" height="215" width="326"  mouse_opaque="false" follows="all" name="radarlayout">
+            <layout_panel layout="topleft" top="0" left="0" height="216" width="326"  mouse_opaque="false" follows="all" name="radarlayout">
             <radar_list
 		     draw_heading="true"
 		     follows="all"
-		     height="215"
+		     height="216"
 		     layout="topleft"
 		     left="0"
 		     top_pad="0"
@@ -223,7 +225,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             <avatar_list
              allow_select="true"
              follows="left"
-             height="1"
+             height="0"
              ignore_online_status="true"
              layout="topleft"
              left="3"
@@ -296,8 +298,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
 <!-- END NEARBY TAB -->        
         
         <panel
-         background_opaque="true"
+         background_opaque="false"
          background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Friends"
@@ -324,7 +328,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  name="tab_online"
                  title="Online">
 //-->
-            <tab_container
+            <tab_container left_delta="-1"
              name="friends_accordion"
              follows="all"
              background_visible="true"
@@ -336,7 +340,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              tab_position="top"
              halign="center"
 			 top_pad="0"
-             width="326">
+             width="328">
 
                 <panel
                  layout="topleft"
@@ -397,7 +401,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              layout="topleft"
              left="3"
              name="bottom_panel_friends"
-             top_pad="0"
+             top_pad="1"
              width="326">
 
 
@@ -424,7 +428,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                            image_selected="Toolbar_Middle_Selected"
                            image_unselected="Toolbar_Middle_Off"
                            layout="topleft"
-                           left_pad="2"
+                           left_pad="1"
                            name="add_btn"
                            tool_tip="Offer friendship to a Resident"
                            top="0"
@@ -435,13 +439,12 @@ Looking for people to hang out with? Use the search box to find topics or conten
                              height="25"
                              image_hover_unselected="Toolbar_Middle_Over"
                              image_overlay="Permission_Visible_Online"
-                             image_pressed="PushButton_Press"
-                             image_pressed_selected="PushButton_Selected_Press"
-                             image_selected="PushButton_Selected_Press"
+                             image_selected="Toolbar_Middle_Selected"
+                             image_unselected="Toolbar_Middle_Off"
                              control_name="GlobalOnlineStatusToggle"
                              is_toggle="true"
                              layout="topleft"
-                             left_pad="2"
+                             left_pad="1"
                              name="GlobalOnlineStatusToggle"
                              tool_tip="Toggle Global Visibility"
                              width="31" />
@@ -451,10 +454,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
                            height="25"
                            image_name="Toolbar_Middle_Off"
                            layout="topleft"
-                           left_pad="0"
+                           left_pad="1"
                            top="0"
                            name="friends_dummy_icon"
-                           width="211" />
+                           width="193" />
                            
                           <dnd_button
                            follows="bottom|right"
@@ -463,7 +466,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                            image_overlay="TrashItem_Off"
                            image_selected="Toolbar_Right_Selected"
                            image_unselected="Toolbar_Right_Off"
-                           right="-1"
+                           left_pad="1"
                            layout="topleft"
                            name="del_btn"
                            tool_tip="Remove selected person from your Friends list"
@@ -529,8 +532,10 @@ Looking for people to hang out with? Use the search box to find topics or conten
              wrap="true" />
         </panel>
         <panel
-         background_opaque="true"
+         background_opaque="false"
          background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Groups"
@@ -603,12 +608,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
                   layout="topleft"
                   left_pad="1"
                   name="groups_dummy_icon"
-                  width="229" />
+                  width="225" />
             </panel>
         </panel>
         <panel
-         background_opaque="true"
+         background_opaque="false"
          background_visible="true"
+         bg_alpha_color="SL-Background_50"
+         bg_opaque_color="SL-Background_50"
          follows="all"
          height="383"
          label="Recent"
