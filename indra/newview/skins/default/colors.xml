@@ -252,9 +252,6 @@
      name="ChicletFlashColor"
      value="SchemeLightest" />
     <color
-     name="GroupNotifyBoxColor"
-     value="0.3344 0.5456 0.5159 1" />
-    <color
      name="GroupOverTierColor"
      value="0.43 0.06 0.06 1" />
     <color
