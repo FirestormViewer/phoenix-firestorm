@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
  name="groups">
+	<view_border
+	 width="257"
+	 name="info_border" />
 	<group_list
+	 width="255"
 	 name="group_list" />
 	<button
 	 label="IM/Anruf"
 	 name="chat_btn"
 	 tool_tip="Öffnet eine Instant-Message-Sitzung"
+	 left_delta="262"
 	 width="85" />
 	<button
 	 label="Info"

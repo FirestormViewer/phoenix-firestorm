@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="friends">
 	<panel.string name="FriendCount" value="Freunde: [COUNT]"/>
-	<scroll_list name="friend_list">
+	<scroll_list name="friend_list" right="-90">
 		<scroll_list.column name="icon_online_status" tool_tip="Online-Status"/>
 		<scroll_list.column label="Benutzername" name="user_name" tool_tip="Der Benutzername dieses Freundes."/>
 		<scroll_list.column label="Name" name="full_name" tool_tip="Der Name dieses Freundes."/>
@@ -15,6 +15,7 @@
 	 label="IM/Anruf"
 	 name="im_btn"
 	 tool_tip="Öffnet eine Instant-Message-Sitzung"
+	 left_delta="265"
 	 width="85" />
 	<button
 	 label="Profil"
