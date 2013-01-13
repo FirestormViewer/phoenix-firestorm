@@ -350,7 +350,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 
                 <panel
                  layout="topleft"
-                 height="356"
+                 height="333"
                  width="326"
                  name="tab_online"
                  follows="all"
@@ -360,7 +360,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="356"
+                         height="330"
                          layout="topleft"
                          multi_select="true"
                          name="avatars_online"
@@ -377,7 +377,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                 </panel>
                 <panel
                  layout="topleft"
-                 height="356"
+                 height="333"
                  width="326"
                  name="tab_all"
                  follows="all"
@@ -386,7 +386,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
                         <avatar_list
                          allow_select="true"
                          follows="all"
-                         height="356"
+                         height="330"
                          layout="topleft"
                          multi_select="true"
                          name="avatars_all"
