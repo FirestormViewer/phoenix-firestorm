@@ -161,7 +161,7 @@ namespace nd
 
 		void dumpStats( std::ostream &aOut )
 		{
-			if( !isEnabled() )
+			if( !isEnabled() && 0 != sStats[0] )
 				return;
 
 #ifdef LOG_ALLOCATION_STACKS
@@ -197,7 +197,7 @@ namespace nd
 
 		bool isEnabled()
 		{
-			return bStarted && 0 != sStats[0];
+			return bStarted;
 		}
 	}
 }
