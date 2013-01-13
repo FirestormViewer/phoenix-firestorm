@@ -3872,6 +3872,10 @@ Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enth
 		</form>
 	</notification>
 
+	<notification name="DumpArchetypeSuccess">
+Aussehen erfolgreich nach XML exportiert.
+	</notification>
+
 	<notification name="BackupFinished">
 Einstellungen wurden gesichert.
 	</notification>
