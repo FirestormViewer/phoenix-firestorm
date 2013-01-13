@@ -9397,6 +9397,13 @@ Error in the regular expression:
 	</form>
 	</notification>
 
+	<notification
+		icon="notify.tga"
+		name="DumpArchetypeSuccess"
+		type="notify">
+		Successfully saved appearance to XML.
+	</notification>
+	
    <!-- <FS:Zi> Backup Settings -->
   <notification
    icon="alertmodal.tga"

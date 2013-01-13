@@ -107,7 +107,12 @@
 #include "lldebugmessagebox.h"
 #include "llsdutil.h"
 
+// Firestorm includes
 #include "fsdata.h"
+#include "llcontrol.h"
+#include "lggcontactsets.h"
+#include "llfilepicker.h"	// Export avatar mesh
+#include <boost/lexical_cast.hpp>
 
 extern F32 SPEED_ADJUST_MAX;
 extern F32 SPEED_ADJUST_MAX_SEC;
@@ -118,10 +123,6 @@ extern F32 ANIM_SPEED_MIN;
 // disable boost::lexical_cast warning
 #pragma warning (disable:4702)
 #endif
-
-#include <boost/lexical_cast.hpp>
-#include "llcontrol.h"
-#include "lggcontactsets.h"
 
 // #define OUTPUT_BREAST_DATA
 
@@ -2338,7 +2339,8 @@ void LLVOAvatar::computeBodySize()
 
 	// some of the joints have not been cached
 	LLVector3 skull = mSkullp->getPosition();
-	LLVector3 skull_scale = mSkullp->getScale();
+	// <FS:CR> Unused variable as of 2012/1/12
+	//LLVector3 skull_scale = mSkullp->getScale();
 
 	LLVector3 neck = mNeckp->getPosition();
 	LLVector3 neck_scale = mNeckp->getScale();
@@ -2405,7 +2407,8 @@ U32 LLVOAvatar::processUpdateMessage(LLMessageSystem *mesgsys,
 {
 	LLMemType mt(LLMemType::MTYPE_AVATAR);
 	
-	LLVector3 old_vel = getVelocity();
+	// <FS:CR> Unused variable as of 2012/1/12
+	//LLVector3 old_vel = getVelocity();
 	const BOOL has_name = !getNVPair("FirstName");
 
 	// Do base class updates...
@@ -8114,16 +8117,34 @@ void LLVOAvatar::useBakedTexture( const LLUUID& id )
 // static
 void LLVOAvatar::dumpArchetypeXML( void* )
 {
+// <FS:CR> FIRE-8893  - Dump archetype xml to user defined file
+	LLFilePicker& file_picker = LLFilePicker::instance();
+	std::string filename = "new archetype.xml";
+	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, filename))
+	{
+		LL_INFOS("DumpArchetypeXML") << "User closed the filepicker" << LL_ENDL;
+		return;
+	}
+// </FS:CR>
 	LLAPRFile outfile;
-	outfile.open(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"new archetype.xml"), LL_APR_WB );
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined file
+	//outfile.open(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"new archetype.xml"), LL_APR_WB );
+	outfile.open(file_picker.getFirstFile(), LL_APR_WB);
+// </FS:CR>
 	apr_file_t* file = outfile.getFileHandle();
 	if (!file)
 	{
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined file
+		LL_WARNS("DumpArchetypeXML") << "No file to dump to!" << LL_ENDL;
+// </FS:CR>
 		return;
 	}
 	else
 	{
-		llinfos << "xmlfile write handle obtained : " << gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"new archetype.xml") << llendl;
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined file
+		//llinfos << "xmlfile write handle obtained : " << gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"new archetype.xml") << llendl;
+		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << file_picker.getFirstFile() << LL_ENDL;
+// </FS:CR>
 	}
 
 	apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
@@ -8169,6 +8190,10 @@ void LLVOAvatar::dumpArchetypeXML( void* )
 	{
 		outfile.close();
 	}
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined file
+	LL_INFOS("DumpArchetypeXML") << "Archetype xml written successfully!" << LL_ENDL;
+	LLNotificationsUtil::add("DumpArchetypeSuccess");
+// </FS:CR>
 }
 
 
