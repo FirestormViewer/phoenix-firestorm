@@ -87,10 +87,8 @@ private:
 	static LLVector3	intersectRayWithSphere( const LLVector3& ray_pt, const LLVector3& ray_dir, const LLVector3& sphere_center, F32 sphere_radius);
 
 private:
-	LLVector3d			mRotationCenter;			
+	LLVector3d			mRotationCenter;
 	LLCoordGL			mCenterScreen;
-//	S32					mLastHoverMouseX;		// used to suppress hover if mouse doesn't move
-//	S32					mLastHoverMouseY;
 	LLQuaternion		mRotation;
 	
 	LLVector3			mMouseDown;
@@ -105,7 +103,6 @@ private:
 
 	BOOL				mSendUpdateOnMouseUp;
 
-	BOOL				mSmoothRotate;
 	BOOL				mCamEdgeOn;
 
 	LLVector4			mManipulatorVertices[6];
