@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Side tray panel -->
+<panel label="Leute" name="people_panel">
+	<string name="high_server_load" value="Abhängig von der Serverauslastung kann es einen Moment dauern, bis das Umschalten der Sichtbarkeit effektiv wird."/>
+	<string name="camera_no_focus" value="Die Kamera kann nicht auf [AVATARNAME] fokussiert werden, da er/sie sich außerhalb der Draw Distance befindet."/>
+	<string
+	  name="entering_draw_distance"
+	  value="kommt in Draw Distance ([DISTANCE] m)."/>
+	<string
+	  name="leaving_draw_distance"
+	  value="hat die Draw Distance verlassen."/>
+	<string
+	  name="entering_chat_range"
+	  value="kommt in Chat-Reichweite ([DISTANCE] m)."/>
+	<string
+	  name="leaving_chat_range"
+	  value="hat die Chat-Reichweite verlassen."/>
+	<string
+	  name="entering_region"
+	  value="hat die Region betreten."/>
+	<string
+	  name="entering_region_distance"
+	  value="hat die Region betreten ([DISTANCE] m)."/>
+	<string
+	  name="leaving_region"
+	  value="hat die Region verlassen."/>
+	<string name="no_recent_people" value="Hier sind keine Leute. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
+	<string name="no_filtered_recent_people" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
+	<string name="no_one_near" value="Es ist niemand in der Nähe. Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/search/people Suche] oder die [secondlife:///app/worldmap Karte]."/>
+	<string name="no_one_filtered_near" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche]."/>
+	<string name="no_friends_online" value="Keine Freunde online"/>
+	<string name="no_friends" value="Keine Freunde"/>
+	<string name="no_friends_msg">
+		Verwenden Sie die [secondlife:///app/search/people Suche], um Freunde zu finden. Oder klicken Sie mit rechts auf einen Einwohner und fügen Sie diesen als Freund hinzu.
+Sie suchen nach Leuten? Verwenden Sie die [secondlife:///app/worldmap Karte].
+	</string>
+	<string name="no_filtered_friends_msg">
+		Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/people/[SEARCH_TERM] Suche].
+	</string>
+	<string name="people_filter_label" value="Nach Leuten filtern"/>
+	<string name="groups_filter_label" value="Nach Gruppen filtern"/>
+	<string name="no_filtered_groups_msg" value="Sie haben nicht das Richtige gefunden? Versuchen Sie es mit der [secondlife:///app/search/groups/[SEARCH_TERM] Suche]."/>
+	<string name="no_groups_msg" value="Suchen Sie nach Gruppen? Versuchen Sie es mit der [secondlife:///app/search/groups Suche]."/>
+	<string name="MiniMapToolTipMsg" value="[REGION] (Doppelklicken, um Karte zu öffnen; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="AltMiniMapToolTipMsg" value="[REGION] (Doppelklicken, um zu teleportieren; Umschalttaste gedrückt halten und ziehen, um zu schwenken)"/>
+	<string name="avatar_name_count" value="Name [[TOTAL]/[IN_REGION]/[IN_CHAT_RANGE]]"/>
+	<filter_editor label="Filter" name="filter_input"/>
+	<tab_container name="tabs">
+		<panel label="In der Nähe" name="nearby_panel">
+			<layout_stack name="radar_ls">
+				<layout_panel name="radarlayout">
+					<radar_list name="radar_list">
+						<radar_list.columns label="Name" tool_tip="[TOTAL] Avatare, [IN_REGION] in derselben Region, [IN_CHAT_RANGE] in Chat-Reichweite" name="name"/>
+						<radar_list.columns label="" tool_tip="Spricht via Voice" name="voice_level"/>
+						<radar_list.columns label="" tool_tip="Ist in derselben Region" name="in_region"/>
+						<radar_list.columns label="" tool_tip="Hat Zahlungsinformationen hinterlegt" name="flags"/>
+						<radar_list.columns label="Alt." name="age"/>
+						<radar_list.columns label="Zeit" name="seen"/>
+						<radar_list.columns label="Dist." name="range"/>
+					</radar_list>
+				</layout_panel>
+			</layout_stack>
+			<panel label="bottom_panel" name="bottom_panel_nearby">
+				<menu_button name="nearby_view_sort_btn" tool_tip="Optionen"/>
+				<button name="add_friend_btn_nearby" tool_tip="Ausgewählten Einwohner zur Freundeliste hinzufügen"/>
+				<slider label="Distanz (m):" name="NearMeRange"/>
+			</panel>
+		</panel>
+		<panel label="Freunde" name="friends_panel">
+			<tab_container name="friends_accordion">
+				<panel name="tab_online" title="Online"/>
+				<panel name="tab_all" title="Alle"/>
+			</tab_container>
+			<panel label="bottom_panel" name="bottom_panel_friends">
+				<menu_button name="friends_viewsort_btn" tool_tip="Zusätzliche Optionen anzeigen"/>
+				<button name="add_btn" tool_tip="Bieten Sie einem Einwohner die Freundschaft an"/>
+				<button name="GlobalOnlineStatusToggle" tool_tip="Sichtbarkeit des Onlinestatus global umschalten"/>
+				<dnd_button name="del_btn" tool_tip="Ausgewählte Person aus Ihrer Freundesliste entfernen"/>
+			</panel>
+		</panel>
+		<panel label="Gruppen" name="groups_panel">
+			<panel label="bottom_panel" name="bottom_panel_groups">
+				<menu_button name="groups_viewsort_btn" tool_tip="Optionen"/>
+				<button name="plus_btn" tool_tip="Gruppe beitreten/Neue Gruppe erstellen"/>
+				<button name="activate_btn" tool_tip="Ausgewählte Gruppe aktivieren"/>
+			</panel>
+		</panel>
+		<panel label="Aktuell" name="recent_panel">
+			<panel label="bottom_panel" name="bottom_panel_recent">
+				<menu_button name="recent_viewsort_btn" tool_tip="Optionen"/>
+				<button name="add_friend_btn_recent" tool_tip="Ausgewählten Einwohner zur Freundeliste hinzufügen"/>
+			</panel>
+		</panel>
+	</tab_container>
+	<panel name="button_bar">
+		<layout_stack name="bottom_bar_ls">
+			<layout_panel name="view_profile_btn_lp" width="60">
+				<button name="view_profile_btn" width="59" tool_tip="Bilder, Gruppen und andere Einwohner-Informationen anzeigen"/>
+			</layout_panel>
+			<layout_panel name="im_btn_lp">
+				<button name="im_btn" tool_tip="IM-Sitzung öffnen"/>
+			</layout_panel>
+			<layout_panel name="call_btn_lp">
+				<button name="call_btn" tool_tip="Diesen Einwohner anrufen"/>
+			</layout_panel>
+			<layout_panel name="share_btn_lp">
+				<button name="share_btn" tool_tip="Inventarobjekt freigeben"/>
+			</layout_panel>
+			<layout_panel name="tp_btn_lp" width="85">
+				<button name="teleport_btn" width="84" tool_tip="Teleport anbieten"/>
+			</layout_panel>
+		</layout_stack>
+		<layout_stack name="bottom_bar_ls1">
+			<layout_panel name="group_info_btn_lp">
+				<button name="group_info_btn" tool_tip="Gruppeninformationen anzeigen"/>
+			</layout_panel>
+			<layout_panel name="chat_btn_lp">
+				<button name="chat_btn" tool_tip="Chat öffnen"/>
+			</layout_panel>
+			<layout_panel name="group_call_btn_lp">
+				<button name="group_call_btn" tool_tip="Diese Gruppe anrufen"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+</panel>
