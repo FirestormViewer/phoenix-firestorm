@@ -831,10 +831,10 @@
 	 reference="White" />
     <color
      name="TextFgReadOnlyColor"
-     reference="DkGray" />
+     reference="LtGray" />
     <color
      name="TextFgTentativeColor"
-     reference="DkGray" />
+     reference="LtGray" />
     <color
      name="TimeTextColor"
      reference="DkGray" />
