@@ -92,6 +92,9 @@ private:
 	void			renderEdges( const LLBBox& local_bbox );
 	void			renderBoxHandle( F32 x, F32 y, F32 z );
 	void			renderAxisHandle( const LLVector3& start, const LLVector3& end );
+// <FS:CR> FIRE-8882
+	//void			renderGuidelinesPart( const LLBBox& local_bbox );
+// </FS:CR>
 	void			renderSnapGuides( const LLBBox& local_bbox );
 
 	void			revert();

@@ -89,6 +89,8 @@ private:
 private:
 	LLVector3d			mRotationCenter;
 	LLCoordGL			mCenterScreen;
+//	S32					mLastHoverMouseX;		// used to suppress hover if mouse doesn't move
+//	S32					mLastHoverMouseY;
 	LLQuaternion		mRotation;
 	
 	LLVector3			mMouseDown;
@@ -103,6 +105,9 @@ private:
 
 	BOOL				mSendUpdateOnMouseUp;
 
+// <FS:CR> FIRE-8882
+	//BOOL				mSmoothRotate;
+// </FS:CR>
 	BOOL				mCamEdgeOn;
 
 	LLVector4			mManipulatorVertices[6];

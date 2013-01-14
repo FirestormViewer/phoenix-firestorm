@@ -375,6 +375,8 @@ BOOL LLManipTranslate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	BOOL axis_exists = getManipAxis(selected_object, mManipPart, axis);
 	getManipNormal(selected_object, mManipPart, mManipNormal);
 
+	//LLVector3 select_center_agent = gAgent.getPosAgentFromGlobal(LLSelectMgr::getInstance()->getSelectionCenterGlobal());
+	// TomY: The above should (?) be identical to the below
 	LLVector3 select_center_agent = getPivotPoint();
 	mSubdivisions = llclamp(getSubdivisionLevel(select_center_agent, axis_exists ? axis : LLVector3::z_axis, getMinGridScale()), sGridMinSubdivisionLevel, sGridMaxSubdivisionLevel);
 
@@ -415,6 +417,7 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	{
 		lldebugst(LLERR_USER_INPUT) << "hover handled by LLManipTranslate (inactive)" << llendl;		
 		// Always show cursor
+		// gViewerWindow->setCursor(UI_CURSOR_ARROW);
 		gViewerWindow->setCursor(UI_CURSOR_TOOLTRANSLATE);
 
 		highlightManipulators(x, y);
@@ -553,7 +556,10 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
+// <FS:CR> FIRE-8882
+		//if (off_axis_magnitude > mSnapOffsetMeters)
 		if (off_axis_magnitude <= mSnapOffsetMeters)
+// </FS:CR>
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 mouse_down_offset(mDragCursorStartGlobal - mDragSelectionStartGlobal);
@@ -814,6 +820,7 @@ void LLManipTranslate::highlightManipulators(S32 x, S32 y)
 		return;
 	}
 	
+	//LLBBox bbox = LLSelectMgr::getInstance()->getBBoxOfSelection();
 	LLMatrix4 projMatrix = LLViewerCamera::getInstance()->getProjection();
 	LLMatrix4 modelView = LLViewerCamera::getInstance()->getModelview();
 
@@ -1069,6 +1076,7 @@ BOOL LLManipTranslate::handleMouseUp(S32 x, S32 y, MASK mask)
 		
 		mInSnapRegime = FALSE;
 		LLSelectMgr::getInstance()->saveSelectedObjectTransform(SELECT_ACTION_TYPE_PICK);
+		//gAgent.setObjectTracking(gSavedSettings.getBOOL("TrackFocusObject"));
 	}
 
 	return LLManip::handleMouseUp(x, y, mask);
@@ -1104,7 +1112,7 @@ void LLManipTranslate::renderSnapGuides()
 		return;
 	}
 
-	F32 max_subdivisions = sGridMaxSubdivisionLevel;
+	F32 max_subdivisions = sGridMaxSubdivisionLevel;//(F32)gSavedSettings.getS32("GridSubdivision");
 	F32 line_alpha = gSavedSettings.getF32("GridOpacity");
 
 	gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -1131,7 +1139,7 @@ void LLManipTranslate::renderSnapGuides()
 	LLQuaternion grid_rotation;
 
 	LLSelectMgr::getInstance()->getGrid(grid_origin, grid_rotation, grid_scale);
-	LLVector3 saved_selection_center = getSavedPivotPoint(); 
+	LLVector3 saved_selection_center = getSavedPivotPoint(); //LLSelectMgr::getInstance()->getSavedBBoxOfSelection().getCenterAgent();
 	LLVector3 selection_center = getPivotPoint();
 
 	LLViewerObject *first_object = first_node->getObject();
@@ -1318,7 +1326,11 @@ void LLManipTranslate::renderSnapGuides()
 					// add in off-axis offset
 					tick_start += (mSnapOffsetAxis * mSnapOffsetMeters);
 
+// <FS:CR> FIRE-8882
+					//BOOL is_sub_tick = FALSE;
+					//F32 tick_scale = 1.f;
 					F32 tick_scale = -0.8f;
+// </FS:CR>
 					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 					{
 						if (fmodf((F32)(i + sub_div_offset), division_level) == 0.f)
@@ -1326,7 +1338,13 @@ void LLManipTranslate::renderSnapGuides()
 							break;
 						}
 						tick_scale *= 0.7f;
+// <FS:CR> FIRE-8882
+						//is_sub_tick = TRUE;
+// </FS:CR>
 					}
+
+// 					S32 num_ticks_to_fade = is_sub_tick ? num_ticks_per_side / 2 : num_ticks_per_side;
+// 					F32 alpha = line_alpha * (1.f - (0.8f *  ((F32)llabs(i) / (F32)num_ticks_to_fade)));
 
 					tick_end = tick_start + (mSnapOffsetAxis * mSnapOffsetMeters * tick_scale);
 
@@ -1405,8 +1423,24 @@ void LLManipTranslate::renderSnapGuides()
 
 			if (fmodf((F32)(i + sub_div_offset), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, translate_axis, getMinGridScale(), tick_label_spacing)))) == 0.f)
 			{
+// <FS:CR> FIRE-8882
+				//F32 snap_offset_meters;
+
+				//if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
+				//{
+				//	snap_offset_meters = mSnapOffsetMeters;			
+				//}
+				//else
+				//{
+				//	snap_offset_meters = -mSnapOffsetMeters;
+				//}
+// </FS:CR>
 				LLVector3 text_origin = selection_center + 
+// <FS:CR> FIRE-8882
+						//(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit)) + 
+						//	(mSnapOffsetAxis * snap_offset_meters * (1.f + tick_scale));
 						(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit));
+// </FS:CR>
 				
 				LLVector3 tick_offset = (tick_pos - mGridOrigin) * ~mGridRotation;
 				F32 offset_val = 0.5f * tick_offset.mV[ARROW_TO_AXIS[mManipPart]] / getMinGridScale();
