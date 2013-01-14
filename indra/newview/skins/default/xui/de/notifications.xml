@@ -3819,7 +3819,7 @@ Soll [REMOVE_GRID] wirklich aus der Grid-Liste entfernt werden?
 Um die Flickr-Uploadfunktion nutzen zu können, muss [APP_NAME] Zugriff auf deinen Account gewährt werden. Beim Fortfahren wird die Flickr-Website im Webbrowser geöffnet, wo du dich einloggen und den Zugriff durch [APP_NAME] autorisieren musst. Der daraufhin angezeigte Code muss in [APP_NAME] eingetragen werden.
 
 Soll [APP_NAME] autorisiert werden, Fotos unter deinem Flickr-Konto zu posten?
-		<usetemplate name="okcancelbuttons" notext="Nein"yestext="Ja"/>
+		<usetemplate name="okcancelbuttons" notext="Nein" yestext="Ja"/>
 	</notification>
 
 	<notification name="ExodusFlickrVerificationPrompt">
