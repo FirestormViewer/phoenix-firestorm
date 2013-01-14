@@ -27,16 +27,16 @@
 	 value="0 0.92 0 1.0" />
 	<color
 	 name="EmphasisColor"             
-	 value="0 0.9 0 1.0" />
+	 value="0 1 0.08 1.0" />
 	<color
 	 name="SchemeLightest"
-	 value="0 0.58 0 1.0" />
+	 value="0 1 0.08 1.0" />
 	<color
 	 name="SchemeLightest_35"
-	 value="0 0.58 0 0.35" />
+	 value="0 1 0.08 0.35" />
 	<color 
 	 name="SchemeDark"
-	 value="0 0.33 0 1.0" />
+	 value="0 0.58 0 1.0" />
 	<color
 	 name="EmphasisColor_13"
 	 value="0 0.76 0 0.13" />
@@ -138,10 +138,10 @@
 	 value="0.25 0.100 0.225 1" />
 	<color
 	 name="SL-Dark"
-	 value="0.90 0.30 0.160 1" />
+	 value="0.090 0.30 0.160 1" />
 	<color
 	 name="SL-Background_Light"
-	 value="0.35 0.35 0.35 1" />
+	 value="0.035 0.035 0.035 1" />
 	<color
 	 name="SL-Background"
 	 value="0.25 0.25 0.25 1" />
@@ -153,19 +153,19 @@
 	 value="0.25 0.25 0.25 0.66" />
 	<color
 	 name="SL-Foreground"
-	 value="0.275 0.020 0.300 1" />
+	 value="0.175 0.020 0.200 1" />
 	<color
 	 name="SL-Foreground_50"
-	 value="0.275 0.020 0.300 0.50" />
+	 value="0.175 0.020 0.200 0.50" />
 	<color
 	 name="SL-Foreground_66"
-	 value="0.275 0.020 0.300 0.66" />
+	 value="0.175 0.020 0.100 0.66" />
 	<color
 	 name="SL-Silver"
 	 value="0.75 0.75 0.75 1" />
 	<color
 	 name="SL-MidGray_50"
-	 value="0.7 0.7 0.7 0.50" />
+	 value="0.5 0.5 0.5 0.50" />
 	<color
 	 name="SL-MidDkGray"
 	 value="0.5 0.5 0.5 1" />
@@ -174,13 +174,13 @@
 	 value="0.5 0.5 0.5 0.50" />
 	<color
 	 name="SL-Titanium_25"
-	 value="0.25 0.25 0.25 0.25" />
+	 value="0.3 0.3 0.3 0.3" />
 	<color
 	 name="SL-Titanium"
 	 value="0.3 0.3 0.3 1" />
 	<color
 	 name="SL-DkTitanium"
-	 value="0.24 0.24 0.24 1" />
+	 value="0.2 0.2 0.2 1" />
 	<color
 	 name="SL-TitaniumGray"
 	 value="0.4 0.4 0.4 1" />
@@ -220,9 +220,9 @@
 	<color
 	 name="MidBlue"
 	 value="0 0 0.5 1" />
-    <color
-     name="AnsaStorm_HtmlLink"
-     value="0 1 0 1" />
+	<color
+	 name="AnsaStorm_HtmlLink"
+	 value="0 1 0 1" />
 
   <!-- This color name makes potentially unused colors show up bright purple.
   Leave this here until all Unused? are removed below, otherwise
@@ -234,19 +234,18 @@
 
   <!-- UI Colors -->
 	<color
-        name="ScriptDialog"
-        value="0.023 0.016 0.007 1" />
-	<color 
-        name="ScriptDialogFg"
-        reference="White" />
-
+	 name="ScriptDialog"
+	 value="0.023 0.016 0.007 1" />
+	<color
+	 name="ScriptDialogFg"
+	 reference="White" />
 
     <color
      name="BottomTrayAlphaColor"
-     reference="Transparent" />
+     reference="SL-Background_50" />
     <color
      name="BottomTrayOpaqueColor"
-     reference="Transparent" />
+     reference="SL-Background_50" />
     <color
      name="GridlineShadowColor"
      value="0 0 0 0.31" />
@@ -391,7 +390,7 @@
      reference="EmphasisColor" />
     <color
      name="ButtonFlashBgColor"
-     reference="White" />
+     reference="EmphasisColor" />
 <!-- Color Changed -->
     <color
      name="ButtonImageColor"
@@ -627,7 +626,7 @@
      reference="DkGray_86" />
     <color
      name="MenuBarGodBgColor"
-     reference="FrogGreen" />
+     reference="DkGray_86" />
     <color
      name="MenuDefaultBgColor"
      reference="DkGray_86" />
@@ -639,7 +638,7 @@
      reference="LtGray" />
     <color
      name="MenuItemHighlightBgColor"
-     reference="EmphasisColor_35" />
+     reference="SchemeLightest_35" />
     <color
      name="MenuItemHighlightFgColor"
      reference="White" />
@@ -765,7 +764,7 @@
      reference="EmphasisColor_13" />
     <color
      name="ScrollSelectedBGColor"
-     reference="SchemeLightest_35" />
+     reference="EmphasisColor_35" />
     <color
      name="ScrollSelectedFGColor"
      reference="White" />
@@ -784,10 +783,10 @@
 <!-- Color Changed -->
     <color
      name="SilhouetteChildColor"
-     reference="SL-MidBlue" />
+     reference="SchemeLightest" />
     <color
      name="SilhouetteParentColor"
-     reference="Yellow" />
+     reference="SchemeDark" />
     <color
      name="SliderDisabledThumbColor"
      reference="White_25" />
@@ -808,37 +807,37 @@
      reference="LtGray" />
     <color
      name="TextBgFocusColor"
-     reference="White" />
+     reference="Black" />
     <color
      name="TextBgReadOnlyColor"
 	 reference="DkGray" />
     <color
      name="TextBgWriteableColor"
-     reference="LtGray" />
+     reference="White" />
     <color
      name="TextCursorColor"
-     reference="Black" />
+     reference="White" />
     <color
      name="TextDefaultColor"
-     reference="Black" />
+     reference="White" />
    <color
      name="TextEmbeddedItemColor"
-     reference="MidBlue" />
+     reference="EmphasisColor" />
    <color
      name="TextEmbeddedItemReadOnlyColor"
-     reference="SL-MidBlue" />
+     reference="Green" />
 	<color
 	 name="TextFgColor"             
-	 reference="Black" />
+	 reference="White" />
     <color
      name="TextFgReadOnlyColor"
-     reference="LtGray" />
+     reference="DkGray" />
     <color
      name="TextFgTentativeColor"
      reference="DkGray" />
     <color
      name="TimeTextColor"
-     reference="LtGray" />
+     reference="DkGray" />
     <color
      name="TitleBarFocusColor"
      reference="White_10" />
@@ -876,7 +875,7 @@
      reference="White" />
     <color
      name="MenuBarProjectBgColor"
-     reference="MdBlue" />
+     reference="Green" />
 	 
 	<!-- Groups visible in profiles -->
 	<color
