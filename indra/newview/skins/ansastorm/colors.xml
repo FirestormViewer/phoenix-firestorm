@@ -24,7 +24,7 @@
 	 value="0 0.6211 0.8477 1" />
 	<color
 	 name="EmphasisColorLight"             
-	 value="0.86 0.66 0.55 1.0" />
+	 value="0 0.8211 1 1.0" />
 	<color
 	 name="SchemeLightest"
 	 value="0 0.6211 0.8477 1.0" />
@@ -849,22 +849,22 @@
       value="1 0.6 0 1" />	  
   <color
       name="MultiSliderDisabledThumbColor"
-      reference="Black" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderThumbCenterColor"
-      reference="White" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderThumbCenterSelectedColor"
-      reference="Green" />
+      reference="EmphasisColorLight" />
   <color
       name="MultiSliderThumbOutlineColor"
-      reference="Unused?" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderTrackColor"
-      reference="LtGray" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderTriangleColor"
-      reference="Yellow" />
+      reference="EmphasisColor" />
   <!--
       <color
       name="NameTagBackground"

@@ -849,22 +849,22 @@
       value="1 0.6 0 1" />	  
   <color
       name="MultiSliderDisabledThumbColor"
-      reference="Black" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderThumbCenterColor"
-      reference="White" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderThumbCenterSelectedColor"
-      reference="Green" />
+      reference="EmphasisColorLight" />
   <color
       name="MultiSliderThumbOutlineColor"
-      reference="Unused?" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderTrackColor"
-      reference="LtGray" />
+      reference="EmphasisColor" />
   <color
       name="MultiSliderTriangleColor"
-      reference="Yellow" />
+      reference="EmphasisColor" />
   <!--
       <color
       name="NameTagBackground"
