@@ -746,16 +746,16 @@
      reference="Red" />
     <color
      name="ScrollBGStripeColor"
-     reference="White_10" />
+     reference="Black_10" />
     <color
      name="ScrollBgReadOnlyColor"
       reference="Transparent" />
     <color
      name="ScrollBgWriteableColor"
-     reference="White_05" />
+     reference="Black" />
     <color
      name="ScrollDisabledColor"
-     reference="White_25" />
+     reference="Black_25" />
     <color
      name="ScrollHighlightedColor"
      reference="Unused?" />
@@ -813,7 +813,7 @@
 	 reference="DkGray" />
     <color
      name="TextBgWriteableColor"
-     reference="White" />
+     reference="Black_25" />
     <color
      name="TextCursorColor"
      reference="White" />
