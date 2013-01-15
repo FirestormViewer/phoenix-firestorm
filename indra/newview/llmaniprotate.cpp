@@ -72,7 +72,7 @@ const F32 COS_DELTA = cos( DELTA );
 const F32 MAX_MANIP_SELECT_DISTANCE = 100.f;
 const F32 SNAP_ANGLE_INCREMENT = 5.625f;
 const F32 SNAP_ANGLE_DETENTE = SNAP_ANGLE_INCREMENT;
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 //const F32 SNAP_GUIDE_RADIUS_1 = 2.8f;
 //const F32 SNAP_GUIDE_RADIUS_2 = 2.4f;
 //const F32 SNAP_GUIDE_RADIUS_3 = 2.2f;
@@ -80,13 +80,10 @@ const F32 SNAP_ANGLE_DETENTE = SNAP_ANGLE_INCREMENT;
 //const F32 SNAP_GUIDE_RADIUS_5 = 2.05f;
 //const F32 SNAP_GUIDE_INNER_RADIUS = 2.f;
 const F32 SNAP_GUIDE_RING_RADIUS = 2.f;
-const F32 SNAP_GUIDE_TEXT_RADIUS = SNAP_GUIDE_RING_RADIUS + 0.2f;
-const F32 SNAP_GUIDE_RADIUS_1 = SNAP_GUIDE_RING_RADIUS - 0.8f;
-const F32 SNAP_GUIDE_RADIUS_2 = SNAP_GUIDE_RING_RADIUS - 0.4f;
-const F32 SNAP_GUIDE_RADIUS_3 = SNAP_GUIDE_RING_RADIUS - 0.2f;
-const F32 SNAP_GUIDE_RADIUS_4 = SNAP_GUIDE_RING_RADIUS - 0.1f;
-const F32 SNAP_GUIDE_RADIUS_5 = SNAP_GUIDE_RING_RADIUS - 0.05f;
-// </FS:CR>
+const F32 SNAP_GUIDE_RADIUS_STEP = 0.05f;
+const F32 SNAP_GUIDE_TEXT_RADIUS_INNER_DOMAIN = SNAP_GUIDE_RING_RADIUS + 0.2f;
+const F32 SNAP_GUIDE_TEXT_RADIUS_OUTER_DOMAIN = SNAP_GUIDE_RING_RADIUS + 0.1f;
+// </FS:Cron>
 const F32 AXIS_ONTO_CAM_TOLERANCE = cos( 80.f * DEG_TO_RAD );
 const F32 SELECTED_MANIPULATOR_SCALE = 1.05f;
 const F32 MANIPULATOR_SCALE_HALF_LIFE = 0.07f;
@@ -425,10 +422,7 @@ BOOL LLManipRotate::handleMouseDownOnPart( S32 x, S32 y, MASK mask )
 	LLSelectMgr::getInstance()->saveSelectedObjectTransform(SELECT_ACTION_TYPE_ROTATE);
 
 	// save selection center
-// <FS:CR> FIRE-8882
-	//mRotationCenter = gAgent.getPosGlobalFromAgent( getPivotPoint() ); //LLSelectMgr::getInstance()->getSelectionCenterGlobal();
 	mRotationCenter = gAgent.getPosGlobalFromAgent( getPivotPoint() );
-// </FS:CR>
 
 	mManipPart = (EManipPart)hit_part;
 	LLVector3 center = gAgent.getPosAgentFromGlobal( mRotationCenter );
@@ -904,6 +898,20 @@ void LLManipRotate::renderSnapGuides()
 			}
 			gGL.popMatrix();
 
+// <FS:Cron> FIRE-8882
+			U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+			F32 tick_scale = 0.f;
+			switch (snap_domain)
+			{
+				case LL_SNAP_DOMAIN_OUTSIDE:
+					tick_scale = 1.f;
+				break;
+				case LL_SNAP_DOMAIN_INSIDE:
+					tick_scale = -1.0f;
+				break;
+			}
+// </FS:Cron>
+
 			for (S32 i = 0; i < 64; i++)
 			{
 				BOOL render_text = TRUE;
@@ -925,38 +933,38 @@ void LLManipRotate::renderSnapGuides()
 					F32 tick_length = 0.f;
 					if (i % 16 == 0)
 					{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 						//tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_1 - SNAP_GUIDE_INNER_RADIUS);
-						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_1 - SNAP_GUIDE_RING_RADIUS);
-// </FS:CR>
+						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_STEP * tick_scale * 16.f);
+// </FS:Cron>
 					}
 					else if (i % 8 == 0)
 					{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 						//tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_2 - SNAP_GUIDE_INNER_RADIUS);
-						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_2 - SNAP_GUIDE_RING_RADIUS);
-// </FS:CR>
+						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_STEP * tick_scale * 8.f);
+// </FS:Cron>
 					}
 					else if (i % 4 == 0)
 					{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 						//tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_3 - SNAP_GUIDE_INNER_RADIUS);
-						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_3 - SNAP_GUIDE_RING_RADIUS);
-// </FS:CR>
+						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_STEP * tick_scale * 4.f);
+// </FS:Cron>
 					}
 					else if (i % 2 == 0)
 					{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 						//tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_4 - SNAP_GUIDE_INNER_RADIUS);
-						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_4 - SNAP_GUIDE_RING_RADIUS);
-// </FS:CR>
+						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_STEP * tick_scale * 2.f);
+// </FS:Cron>
 					}
 					else
 					{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 						//tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_5 - SNAP_GUIDE_INNER_RADIUS);
-						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_5 - SNAP_GUIDE_RING_RADIUS);
-// </FS:CR>
+						tick_length = mRadiusMeters * (SNAP_GUIDE_RADIUS_STEP * tick_scale);
+// </FS:Cron>
 					}
 					
 					if (mCamEdgeOn)
@@ -997,15 +1005,23 @@ void LLManipRotate::renderSnapGuides()
 // </FS:CR>
 					}
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 					//text_point = outer_point + (projected_snap_axis * mRadiusMeters * 0.1f) * rot;
-					text_point = ring_point + (projected_snap_axis * mRadiusMeters * (SNAP_GUIDE_TEXT_RADIUS - SNAP_GUIDE_RING_RADIUS)) * rot;
+					switch (snap_domain)
+					{
+						case LL_SNAP_DOMAIN_OUTSIDE:
+							text_point = ring_point + (projected_snap_axis * mRadiusMeters * (SNAP_GUIDE_TEXT_RADIUS_OUTER_DOMAIN - SNAP_GUIDE_RING_RADIUS)) * rot;
+						break;
+						case LL_SNAP_DOMAIN_INSIDE:
+							text_point = ring_point + (projected_snap_axis * mRadiusMeters * (SNAP_GUIDE_TEXT_RADIUS_INNER_DOMAIN - SNAP_GUIDE_RING_RADIUS)) * rot;
+						break;
+					}
 
 					//gGL.vertex3fv(inner_point.mV);
 					//gGL.vertex3fv(outer_point.mV);
 					gGL.vertex3fv(ring_point.mV);
 					gGL.vertex3fv(tip_point.mV);
-// </FS:CR>
+// </FS:Cron>
 				}
 				gGL.end();
 
@@ -1578,10 +1594,18 @@ LLQuaternion LLManipRotate::dragConstrained( S32 x, S32 y )
 				}
 			}
 			
-// <FS:CR> FIRE-8882
+
+// <FS:Cron> FIRE-8882
+			U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+			
 			//if (snap_plane > 0)
-			if (snap_plane == SP_BETWEEN_PLANES)
-// </FS:CR>
+			if
+			(
+				(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && snap_plane != SP_BETWEEN_PLANES)
+				||
+				(snap_domain == LL_SNAP_DOMAIN_INSIDE  && snap_plane == SP_BETWEEN_PLANES)
+			)
+// </FS:Cron>
 			{
 				LLVector3 cam_at_axis;
 				if (mObjectSelection->getSelectType() == SELECT_TYPE_HUD)
@@ -1715,7 +1739,20 @@ LLQuaternion LLManipRotate::dragConstrained( S32 x, S32 y )
 			return LLQuaternion::DEFAULT;
 		}
 
-		if (gSavedSettings.getBOOL("SnapEnabled") && projected_mouse.magVec() <= SNAP_GUIDE_RING_RADIUS * mRadiusMeters)
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+		
+		//if (gSavedSettings.getBOOL("SnapEnabled") && projected_mouse.magVec() > SNAP_GUIDE_INNER_RADIUS * mRadiusMeters)
+		if
+		(
+			gSavedSettings.getBOOL("SnapEnabled") &&
+			(
+				(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && projected_mouse.magVec() > SNAP_GUIDE_RING_RADIUS * mRadiusMeters)
+				||
+				(snap_domain == LL_SNAP_DOMAIN_INSIDE && projected_mouse.magVec() <= SNAP_GUIDE_RING_RADIUS * mRadiusMeters)
+			)
+		)
+// </FS:Cron>
 		{
 // <FS:CR> FIRE-8882
 			//if (!mInSnapRegime)

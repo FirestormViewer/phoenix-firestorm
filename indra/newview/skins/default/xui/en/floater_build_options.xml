@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="170"
+ height="200"
  layout="topleft"
  name="build options floater"
  help_topic="build_options_floater"
@@ -54,6 +54,50 @@
      name="GridCrossSection"
      top_pad="5"
      width="200" />
+<!-- <FS:Cron> FIRE-8882 -->
+    <text
+     type="string"
+     length="1"
+     text_color="White"
+     follows="left|top"
+     height="0"
+     layout="topleft"
+     left="10"
+     top_pad="10"
+     name="Snap on"
+     width="80">
+        Snap on:
+    </text>
+    <radio_group
+     control_name="FSSnapDomain"
+     left="90"
+     height="20"
+     layout="topleft"
+     name="FSSnapDomain"
+     top_pad="0"
+     width="180">
+        <radio_item
+         label="Inside"
+         tool_tip="Snaps set to inside of snapping boundary"
+         name="radio inside"
+         value="1"
+         layout="topleft"
+         left="0"
+         top_delta="20"
+         width="90"
+         height="16" />
+        <radio_item
+         label="Outside"
+         tool_tip="Snaps set to outside of snapping boundary (classic behavior)"
+         name="radio outside"
+         value="0"
+         layout="topleft"
+         left_pad="-10"
+         top_delta="0"
+         width="75"
+         height="16" />
+    </radio_group>
+<!-- </FS:Cron> -->
    <text
          type="string"
          length="1"

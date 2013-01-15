@@ -556,10 +556,15 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
 		//if (off_axis_magnitude > mSnapOffsetMeters)
-		if (off_axis_magnitude <= mSnapOffsetMeters)
-// </FS:CR>
+		if (
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && off_axis_magnitude > mSnapOffsetMeters)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && off_axis_magnitude <= mSnapOffsetMeters)
+		)
+// </FS:Cron>
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 mouse_down_offset(mDragCursorStartGlobal - mDragSelectionStartGlobal);
@@ -1280,6 +1285,10 @@ void LLManipTranslate::renderSnapGuides()
 		S32 sub_div_offset = llround(fmod(dist_grid_axis - offset_nearest_grid_unit, getMinGridScale() / sGridMinSubdivisionLevel) / smallest_grid_unit_scale);
 		S32 num_ticks_per_side = llmax(1, llfloor(0.5f * guide_size_meters / smallest_grid_unit_scale));
 
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+// </FS:Cron>
+
 		LLGLDepthTest gls_depth(GL_FALSE);
 
 		for (S32 pass = 0; pass < 3; pass++)
@@ -1326,11 +1335,20 @@ void LLManipTranslate::renderSnapGuides()
 					// add in off-axis offset
 					tick_start += (mSnapOffsetAxis * mSnapOffsetMeters);
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 					//BOOL is_sub_tick = FALSE;
 					//F32 tick_scale = 1.f;
-					F32 tick_scale = -0.8f;
-// </FS:CR>
+					F32 tick_scale = 0.f;
+					switch (snap_domain)
+					{
+						case LL_SNAP_DOMAIN_OUTSIDE:
+							tick_scale = 1.f;
+						break;
+						case LL_SNAP_DOMAIN_INSIDE:
+							tick_scale = -0.8f;
+						break;
+					}
+// </FS:Cron>
 					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 					{
 						if (fmodf((F32)(i + sub_div_offset), division_level) == 0.f)
@@ -1423,24 +1441,28 @@ void LLManipTranslate::renderSnapGuides()
 
 			if (fmodf((F32)(i + sub_div_offset), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, translate_axis, getMinGridScale(), tick_label_spacing)))) == 0.f)
 			{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 				//F32 snap_offset_meters;
+				F32 snap_offset_meters = 0.f;
 
-				//if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
-				//{
-				//	snap_offset_meters = mSnapOffsetMeters;			
-				//}
-				//else
-				//{
-				//	snap_offset_meters = -mSnapOffsetMeters;
-				//}
-// </FS:CR>
+				if (snap_domain == LL_SNAP_DOMAIN_OUTSIDE) {
+// </FS:Cron>
+					if (mSnapOffsetAxis * LLViewerCamera::getInstance()->getUpAxis() > 0.f)
+					{
+						snap_offset_meters = mSnapOffsetMeters;
+					}
+					else
+					{
+						snap_offset_meters = -mSnapOffsetMeters;
+					}
+// <FS:Cron> FIRE-8882
+				}
+				//else case assuming snap_domain == LL_SNAP_DOMAIN_INSIDE for now.  This results in snap_offset_meters == 0.f and the third term of the text_origin assignment becoming zero as an expected consequence. ~Cron Stardust
+// </FS:Cron>
+				
 				LLVector3 text_origin = selection_center + 
-// <FS:CR> FIRE-8882
-						//(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit)) + 
-						//	(mSnapOffsetAxis * snap_offset_meters * (1.f + tick_scale));
-						(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit));
-// </FS:CR>
+						(translate_axis * ((smallest_grid_unit_scale * (F32)i) - offset_nearest_grid_unit)) + 
+							(mSnapOffsetAxis * snap_offset_meters * (1.f + tick_scale));
 				
 				LLVector3 tick_offset = (tick_pos - mGridOrigin) * ~mGridRotation;
 				F32 offset_val = 0.5f * tick_offset.mV[ARROW_TO_AXIS[mManipPart]] / getMinGridScale();

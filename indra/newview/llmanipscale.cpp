@@ -66,7 +66,7 @@ const F32 MAX_MANIP_SELECT_DISTANCE_SQUARED = 11.f * 11.f;
 const F32 SNAP_GUIDE_SCREEN_OFFSET = 0.05f;
 const F32 SNAP_GUIDE_SCREEN_LENGTH = 0.7f;
 // <FS:CR> FIRE-8882
-const F32 SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION = 1.3f;
+const F32 SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION = 1.3f; // Used then the snapping domain is set to inside
 // </FS:CR>
 const F32 SELECTED_MANIPULATOR_SCALE = 1.2f;
 const F32 MANIPULATOR_SCALE_HALF_LIFE = 0.07f;
@@ -823,12 +823,12 @@ void LLManipScale::renderAxisHandle( const LLVector3& start, const LLVector3& en
 // General scale call
 void LLManipScale::drag( S32 x, S32 y )
 {
-	if( (LL_FACE_MIN <= (S32)mManipPart) 
+	if( (LL_FACE_MIN <= (S32)mManipPart)
 		&& ((S32)mManipPart <= LL_FACE_MAX) )
 	{
 		dragFace( x, y );
 	}
-	else if( (LL_CORNER_MIN <= (S32)mManipPart) 
+	else if( (LL_CORNER_MIN <= (S32)mManipPart)
 		&& ((S32)mManipPart <= LL_CORNER_MAX) )
 	{
 		dragCorner( x, y );
@@ -939,14 +939,25 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 	F32 max_scale = partToMaxScale(mManipPart, bbox);
 	F32 min_scale = partToMinScale(mManipPart, bbox);
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
 	//if (snap_enabled && dist_from_scale_line_1 > mSnapRegimeOffset * snap_dir_dot_mouse_offset1)
 	//{
+	
+	U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+	
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
-		if (dist_from_scale_line_1 <= mSnapRegimeOffset * snap_dir_dot_mouse_offset1 && dist_from_scale_line_1 > 0.f)
-// </FS:CR>
+		F32 regime_dist1 = mSnapRegimeOffset * snap_dir_dot_mouse_offset1;
+		F32 regime_dist2 = mSnapRegimeOffset * snap_dir_dot_mouse_offset2;
+		
+		if
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_1 > regime_dist1)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_1 <= regime_dist1 && dist_from_scale_line_1 > 0.f)
+		)
+// </FS:Cron>
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 projected_drag_pos = mouse_on_plane1 - (dist_from_scale_line_1 / snap_dir_dot_mouse_offset1) * mSnapGuideDir1;
@@ -964,10 +975,15 @@ void LLManipScale::dragCorner( S32 x, S32 y )
 				scale_factor *= 0.5f;
 			}
 		}
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 		//else if (snap_enabled && dist_from_scale_line_2 > mSnapRegimeOffset * snap_dir_dot_mouse_offset2)
-		else if (dist_from_scale_line_2 <= mSnapRegimeOffset * snap_dir_dot_mouse_offset2 && dist_from_scale_line_2 > 0.f)
-// </FS:CR>
+		else if
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line_2 > regime_dist2)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line_2 <= regime_dist2 && dist_from_scale_line_2 > 0.f)
+		)
+// </FS:Cron>
 		{
 			mInSnapRegime = TRUE;
 			LLVector3 projected_drag_pos = mouse_on_plane2 - (dist_from_scale_line_2 / snap_dir_dot_mouse_offset2) * mSnapGuideDir2;
@@ -1165,12 +1181,19 @@ void LLManipScale::dragFace( S32 x, S32 y )
 	F32 dist_from_scale_line = dist_vec(scale_center_to_mouse, (mouse_on_scale_line - mScaleCenter));
 	F32 dist_along_scale_line = scale_center_to_mouse * mScaleDir;
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+	U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
 
 	//if (snap_enabled && dist_from_scale_line > mSnapRegimeOffset)
-	if (gSavedSettings.getBOOL("SnapEnabled") && dist_from_scale_line <= mSnapRegimeOffset)
-// </FS:CR>
+	if (gSavedSettings.getBOOL("SnapEnabled") &&
+		(
+			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && dist_from_scale_line > mSnapRegimeOffset)
+			||
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && dist_from_scale_line <= mSnapRegimeOffset)
+		)
+	)
+// </FS:Cron>
 	{
 		mInSnapRegime = TRUE;
 
@@ -1698,6 +1721,10 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 
 		S32 tick_label_spacing = llround(screen_translate_axis * sTickLabelSpacing);
 
+// <FS:Cron> FIRE-8882
+		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+// </FS:Cron>
+
 		for (pass = 0; pass < 3; pass++)
 		{
 			LLColor4 tick_color = setupSnapGuideRenderPass(pass);
@@ -1719,10 +1746,19 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 					continue;
 				}
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 				//F32 tick_scale = 1.f;
-				F32 tick_scale = -0.8f;
-// </FS:CR>
+				F32 tick_scale = 0.f;
+				switch (snap_domain)
+				{
+					case LL_SNAP_DOMAIN_OUTSIDE:
+						tick_scale = 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = -0.8f;
+					break;
+				}
+// </FS:Cron>
 				for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 				{
 					if (fmodf((F32)(i + sub_div_offset_1), division_level) == 0.f)
@@ -1755,10 +1791,19 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 					continue;
 				}
 
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 				//F32 tick_scale = 1.f;
-				F32 tick_scale = -0.8f;
-// </FS:CR>
+				F32 tick_scale = 0.f;
+				switch (snap_domain)
+				{
+					case LL_SNAP_DOMAIN_OUTSIDE:
+						tick_scale = 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = -0.8f;
+					break;
+				}
+// </FS:Cron>
 				for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
 				{
 					if (fmodf((F32)(i + sub_div_offset_2), division_level) == 0.f)
@@ -1777,7 +1822,7 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 			gGL.end();
 		}
 
-		// render tick labels
+		// render near-side tick labels
 		start_tick = -(llmin(ticks_from_scale_center_1, num_ticks_per_side1));
 		stop_tick = llmin(max_ticks1, num_ticks_per_side1);
 
@@ -1787,37 +1832,47 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 
 		for (S32 i = start_tick; i <= stop_tick; i++)
 		{
-// <FS:CR> FIRE-8882
-			//F32 tick_scale = 1.f;
-// </FS:CR>
+			F32 tick_scale = 1.f;
 			F32 alpha = grid_alpha * (1.f - (0.5f *  ((F32)llabs(i) / (F32)num_ticks_per_side1)));
 			LLVector3 tick_pos = drag_point + (mScaleDir * (mScaleSnapUnit1 / max_subdivisions * (F32)i - grid_offset1));
 
-// <FS:CR> FIRE-8882
-			//for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
-			if (fmodf((F32)(i + label_sub_div_offset_1), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit1, tick_label_spacing)))) == 0.f)
-// </FS:CR>
+// <FS:Cron> FIRE-8882
+			switch (snap_domain)
 			{
-// <FS:CR> FIRE-8882
-				//if (fmodf((F32)(i + label_sub_div_offset_1), division_level) == 0.f)
-				//{
-				//	break;
-				//}
-				//tick_scale *= 0.7f;
+				case LL_SNAP_DOMAIN_OUTSIDE:
+// </FS:Cron>
+					for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+					{
+						if (fmodf((F32)(i + label_sub_div_offset_1), division_level) == 0.f)
+						{
+							break;
+						}
+						tick_scale *= 0.7f;
+					}
+// <FS:Cron> FIRE-8882
+					tick_scale += 1.f;
+				break;
+				case LL_SNAP_DOMAIN_INSIDE:
+					tick_scale = SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION;
+				break;
+			}
+// </FS:Cron>
+
+			if (fmodf((F32)(i + label_sub_div_offset_1), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit1, tick_label_spacing)))) == 0.f)
+			{
+// <FS:Cron> FIRE-8882
+				//LLVector3 text_origin = tick_pos + 
+				//	(mSnapGuideDir1 * mSnapRegimeOffset * (1.f + tick_scale));
 				LLVector3 text_origin;
-				if ( (LL_FACE_MIN <= (S32)mManipPart) && ((S32)mManipPart <= LL_FACE_MAX) ) // Face drag
+				if (snap_domain == LL_SNAP_DOMAIN_INSIDE && (LL_FACE_MIN <= (S32)mManipPart) && ((S32)mManipPart <= LL_FACE_MAX) ) // Face drag
 				{
 					text_origin = tick_pos; // Just off center is a good place for face ticks.
 				}
-				else // Corner drag
+				else // Corner drag, or not in the inner snap domain - assuming that means that means the outer domain for now.
 				{
-					text_origin = tick_pos + (mSnapGuideDir1 * (mSnapRegimeOffset * SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION));
+					text_origin = tick_pos + (mSnapGuideDir1 * (mSnapRegimeOffset * tick_scale));
 				}
-			//if (fmodf((F32)(i + label_sub_div_offset_1), (max_subdivisions / llmin(sGridMaxSubdivisionLevel, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit1, tick_label_spacing)))) == 0.f)
-			//{
-			//	LLVector3 text_origin = tick_pos + 
-			//		(mSnapGuideDir1 * mSnapRegimeOffset * (1.f + tick_scale));
-// </FS:CR>
+// </FS:Cron>
 
 				EGridMode grid_mode = LLSelectMgr::getInstance()->getGridMode();
 				F32 tick_val;
@@ -1849,37 +1904,46 @@ void LLManipScale::renderSnapGuides(const LLBBox& bbox)
 			}
 		}
 
-		// label ticks on opposite side, only can happen in scaling modes that effect more than one axis.
+		// label ticks on opposite side, only can happen in scaling modes that effect more than one axis and when the object's axis don't have the same scale.  A differing scale indicates both conditions.
 		if (mScaleSnapUnit2 != mScaleSnapUnit1)
 		{
 			start_tick = -(llmin(ticks_from_scale_center_2, num_ticks_per_side2));
 			stop_tick = llmin(max_ticks2, num_ticks_per_side2);
 			for (S32 i = start_tick; i <= stop_tick; i++)
 			{
-// <FS:CR> FIRE-8882
-				//F32 tick_scale = 1.f;
-// </FS:CR>
+				F32 tick_scale = 1.f;
 				F32 alpha = grid_alpha * (1.f - (0.5f *  ((F32)llabs(i) / (F32)num_ticks_per_side2)));
 				LLVector3 tick_pos = drag_point + (mScaleDir * (mScaleSnapUnit2 / max_subdivisions * (F32)i - grid_offset2));
 
-// <FS:CR> FIRE-8882
-				//for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
-				//{
-				//	if (fmodf((F32)(i + label_sub_div_offset_2), division_level) == 0.f)
-				//	{
-				//		break;
-				//	}
-				//	tick_scale *= 0.7f;
-				//}
-// </FS:CR>
+// <FS:Cron> FIRE-8882
+				switch (snap_domain)
+				{
+					case LL_SNAP_DOMAIN_OUTSIDE:
+// </FS:Cron>
+						for (F32 division_level = max_subdivisions; division_level >= sGridMinSubdivisionLevel; division_level /= 2.f)
+						{
+							if (fmodf((F32)(i + label_sub_div_offset_2), division_level) == 0.f)
+							{
+								break;
+							}
+							tick_scale *= 0.7f;
+						}
+// <FS:Cron> FIRE-8882
+						tick_scale += 1.f;
+					break;
+					case LL_SNAP_DOMAIN_INSIDE:
+						tick_scale = SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION;
+					break;
+				}
+// </FS:Cron>
 
 				if (fmodf((F32)(i + label_sub_div_offset_2), (max_subdivisions / llmin(max_subdivisions, getSubdivisionLevel(tick_pos, mScaleDir, mScaleSnapUnit2, tick_label_spacing)))) == 0.f)
 				{
-// <FS:CR> FIRE-8882
+// <FS:Cron> FIRE-8882
 					//LLVector3 text_origin = tick_pos + 
 					//	(mSnapGuideDir2 * mSnapRegimeOffset * (1.f + tick_scale));
-					LLVector3 text_origin = tick_pos + (mSnapGuideDir2 * (mSnapRegimeOffset * SNAP_GUIDE_CORNER_DRAG_TEXT_POSITION)); // No test needed, as this code area only activates in the Corner Drag case.  That is until such a time as edge scaling is resurrected...
-// </FS:CR>
+					LLVector3 text_origin = tick_pos + (mSnapGuideDir2 * mSnapRegimeOffset * tick_scale); // No test needed, as this code area only activates in the Corner Drag case.  That is until such a time as edge scaling is resurrected...
+// </FS:Cron>
 
 					EGridMode grid_mode = LLSelectMgr::getInstance()->getGridMode();
 					F32 tick_val;

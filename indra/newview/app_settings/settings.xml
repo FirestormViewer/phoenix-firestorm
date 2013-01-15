@@ -19703,5 +19703,18 @@ Change of this parameter will affect the layout of buttons in notification toast
 	  <integer>1</integer>
     </map>
     <!-- <FS:Zi> -->
+    <!-- <FS:Cron> FIRE-8882 -->
+    <key>FSSnapDomain</key>
+    <map>
+        <key>Comment</key>
+        <string>Direction of snap lines (0 = outside of boundary, 1 = inside boundary)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>U32</string>
+        <key>Value</key>
+        <real>1</real>
+    </map>
+    <!-- </FS:Cron> -->
 </map>
 </llsd>

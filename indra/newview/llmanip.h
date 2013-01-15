@@ -112,6 +112,14 @@ public:
 		LL_EDGE_MIN   = LL_EDGE_NEGX_NEGY,
 		LL_EDGE_MAX   = LL_EDGE_POSZ_POSX
 	} EManipPartRanges;
+
+// <FS:Cron> FIRE-8882
+	// For use in detecting the snap domain location
+	typedef enum e_snap_domains {
+		LL_SNAP_DOMAIN_OUTSIDE = 0,
+		LL_SNAP_DOMAIN_INSIDE = 1
+	} ESnapDomains;
+// </FS:Cron>
 public:
 	static void rebuild(LLViewerObject* vobj);
 	
