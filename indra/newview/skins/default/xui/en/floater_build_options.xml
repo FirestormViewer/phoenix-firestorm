@@ -8,43 +8,20 @@
  save_rect="true"
  title="Grid Options"
  width="264">
-    <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="16"
-        layout="topleft"
-        left="10"
-        name="snap_to_label"
-        top_pad="20"
-        width="110">
-        Snap To:
-    </text>
-    <combo_box
-     control_name="FSSnapDomain"
-     left_pad="3"
-     height="18"
-     width="120"
-     allow_text_entry="false"
-     follows="left|top"
-     name="combo_snap_domain">
-        <combo_item name="Inside" value="0" label="Snap on Inside"/>
-        <combo_item name="Outside" value="1" label="Snap on Outside"/>
-    </combo_box>
     <spinner
      control_name="GridResolution"
      follows="left|top"
      height="23"
      initial_value="1"
      label="Units (meters)"
-     label_width="160"
+     label_width="130"
      layout="topleft"
      left="10"
      max_val="5"
      min_val="0.01"
      name="GridResolution"
-     top_pad="3"
-     width="233" />
+     top_pad="30"
+     width="200" />
     <spinner
      control_name="GridDrawSize"
      decimal_digits="1"
@@ -53,14 +30,14 @@
      increment="0.5"
      initial_value="5"
      label="Extents (meters)"
-     label_width="160"
+     label_width="130"
      layout="topleft"
      left_delta="0"
      max_val="50"
      min_val="1"
      name="GridDrawSize"
      top_pad="0"
-     width="233" />
+     width="200" />
     <check_box
      control_name="GridSubUnit"
      height="16"
@@ -100,5 +77,5 @@
      name="GridOpacity"
      show_text="false"
      top_pad="0"
-     width="240" />
+     width="210" />
 </floater>

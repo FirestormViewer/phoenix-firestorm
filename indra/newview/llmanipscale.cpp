@@ -1165,13 +1165,11 @@ void LLManipScale::dragFace( S32 x, S32 y )
 	F32 dist_from_scale_line = dist_vec(scale_center_to_mouse, (mouse_on_scale_line - mScaleCenter));
 	F32 dist_along_scale_line = scale_center_to_mouse * mScaleDir;
 
-	BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
 // <FS:CR> FIRE-8882
-	BOOL snap_domain = gSavedSettings.getBOOL("FSSnapDomain");
+	//BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
+
 	//if (snap_enabled && dist_from_scale_line > mSnapRegimeOffset)
-	if (snap_enabled &&
-		((snap_domain && dist_from_scale_line > mSnapRegimeOffset) ||
-		 (!snap_domain && dist_from_scale_line <= mSnapRegimeOffset)))
+	if (gSavedSettings.getBOOL("SnapEnabled") && dist_from_scale_line <= mSnapRegimeOffset)
 // </FS:CR>
 	{
 		mInSnapRegime = TRUE;

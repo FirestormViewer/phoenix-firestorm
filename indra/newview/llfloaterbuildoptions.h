@@ -42,9 +42,6 @@ class LLFloaterBuildOptions
 private:
 	LLFloaterBuildOptions(const LLSD& key);
 	~LLFloaterBuildOptions();
-// <FS:CR> FIRE-8882
-	BOOL postBuild();
-// </FS:CR>
 };
 
 #endif

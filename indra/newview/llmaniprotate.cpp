@@ -1715,14 +1715,7 @@ LLQuaternion LLManipRotate::dragConstrained( S32 x, S32 y )
 			return LLQuaternion::DEFAULT;
 		}
 
-// <FS:CR> FIRE-8882
-		//if (gSavedSettings.getBOOL("SnapEnabled") && projected_mouse.magVec() <= SNAP_GUIDE_RING_RADIUS * mRadiusMeters)
-		BOOL snap_enabled = gSavedSettings.getBOOL("SnapEnabled");
-		BOOL snap_domain = gSavedSettings.getBOOL("FSSnapDomain");
-		if (snap_enabled &&
-			((snap_domain && projected_mouse.magVec() > SNAP_GUIDE_RING_RADIUS * mRadiusMeters) ||
-			(!snap_domain && projected_mouse.magVec() <= SNAP_GUIDE_RING_RADIUS * mRadiusMeters)))
-// </FS:CR>
+		if (gSavedSettings.getBOOL("SnapEnabled") && projected_mouse.magVec() <= SNAP_GUIDE_RING_RADIUS * mRadiusMeters)
 		{
 // <FS:CR> FIRE-8882
 			//if (!mInSnapRegime)
