@@ -4,6 +4,13 @@
 	<spinner label="Rozmiary siatki (metry)" name="GridDrawSize"/>
 	<check_box label="Przyciągaj do podjednostek" name="GridSubUnit"/>
 	<check_box label="Pokaż przekroje" name="GridCrossSection"/>
+	<text name="Snap on">
+		Przyciągaj:
+	</text>
+	<radio_group name="FSSnapDomain">
+		<radio_item label="Do środka" tool_tip="Przyciąganie ustawione do wewnętrznych granic obszaru" name="radio inside"/>
+		<radio_item label="Na zewnątrz" tool_tip="Przyciąganie ustawione do zewnętrznych granic obszaru (klasyczne zachowanie)" name="radio outside"/>
+	</radio_group>
 	<text name="grid_opacity_label" tool_tip="Nieprzezroczystość siatki">
 		Nieprzezroczystość:
 	</text>
