@@ -558,7 +558,9 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	{
 // <FS:CR> FIRE-8882
 		//if (off_axis_magnitude > mSnapOffsetMeters)
-		if (off_axis_magnitude <= mSnapOffsetMeters)
+		BOOL snap_domain = gSavedSettings.getBOOL("FSSnapDomain");
+		if ((snap_domain && off_axis_magnitude > mSnapOffsetMeters) ||
+			(!snap_domain && off_axis_magnitude <= mSnapOffsetMeters))
 // </FS:CR>
 		{
 			mInSnapRegime = TRUE;
@@ -1568,7 +1570,8 @@ void LLManipTranslate::renderSnapGuides()
 		
 		float a = line_alpha;
 
-		LLColor4 col = LLUIColorTable::instance().getColor("SilhouetteChildColor");
+		// <FS:CR> Unused variable since 2012-1-14
+		//LLColor4 col = LLUIColorTable::instance().getColor("SilhouetteChildColor");
 		{
 			//draw grid behind objects
 			LLGLDepthTest gls_depth(GL_TRUE, GL_FALSE);

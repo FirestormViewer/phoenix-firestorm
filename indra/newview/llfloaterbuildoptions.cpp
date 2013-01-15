@@ -34,6 +34,11 @@
 #include "llfloaterbuildoptions.h"
 #include "lluictrlfactory.h"
 
+// <FS:CR> FIRE-8882
+#include "llcombobox.h"
+#include "llviewercontrol.h"
+// </FS:CR>
+
 //
 // Methods
 //
@@ -45,3 +50,11 @@ LLFloaterBuildOptions::LLFloaterBuildOptions(const LLSD& key)
 LLFloaterBuildOptions::~LLFloaterBuildOptions()
 {
 }
+
+// <FS:CR> FIRE-8882
+BOOL LLFloaterBuildOptions::postBuild()
+{
+	getChild<LLComboBox>("combo_snap_domain")->setValue(gSavedSettings.getBOOL("FSSnapDomain"));
+	return TRUE;
+}
+// </FS:CR>
