@@ -8,8 +8,8 @@
 		Einrasten an:
 	</text>
 	<radio_group name="FSSnapDomain">
-		<radio_item name="radio inside" label="Außenseite" tool_tip="Rastet an der Innenseite des Rasters ein."/>
-		<radio_item name="radio outside" label="Innenseite" tool_tip="Rastet an der Außenseite des Rasters ein (klassisches Verhalten)."/>
+		<radio_item name="radio inside" label="Innenseite" tool_tip="Rastet an der Innenseite des Rasters ein."/>
+		<radio_item name="radio outside" label="Außenseite" tool_tip="Rastet an der Außenseite des Rasters ein (klassisches Verhalten)."/>
 	</radio_group>
 	<text name="grid_opacity_label" tool_tip="Raster-Deckkraft">
 		Deckkraft:
