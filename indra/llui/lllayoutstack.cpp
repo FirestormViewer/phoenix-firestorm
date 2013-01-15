@@ -297,12 +297,21 @@ void LLLayoutStack::removeChild(LLView* view)
 	if (embedded_panelp)
 	{
 		mPanels.erase(std::find(mPanels.begin(), mPanels.end(), embedded_panelp));
-		delete embedded_panelp;
+		// delete embedded_panelp;	// <FS:Zi> Fix crash when removing layout panels from a stack
 		updateFractionalSizes();
 		mNeedsLayout = true;
 	}
 
 	LLView::removeChild(view);
+
+	// <FS:Zi> Fix crash when removing layout panels from a stack
+	if (embedded_panelp)
+	{
+		// only delete the panel after it was removed from LLView to prevent
+		// LLView::removeChild() to run into an already deleted pointer
+		delete embedded_panelp;
+	}
+	// </FS:Zi>
 }
 
 BOOL LLLayoutStack::postBuild()
