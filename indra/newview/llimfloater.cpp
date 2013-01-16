@@ -261,7 +261,8 @@ void LLIMFloater::sendMsg()
 				// <FS:PP> FIRE-7075: Skin indicator
 				static LLCachedControl<std::string> FSInternalSkinCurrent(gSavedSettings, "FSInternalSkinCurrent");
 				std::string skinIndicator(FSInternalSkinCurrent);
-				if (skinIndicator == "starlightcui")
+				LLStringUtil::toLower(skinIndicator);
+				if (skinIndicator == "starlight cui")
 				{
 					skinIndicator = "sc"; // Separate "s" (StarLight) from "sc" (StarLight CUI)
 				}
