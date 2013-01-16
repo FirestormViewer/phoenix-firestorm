@@ -549,20 +549,25 @@ BOOL LLManipTranslate::handleHover(S32 x, S32 y, MASK mask)
 	F64 axis_magnitude = relative_move * axis_d;					// dot product
 	LLVector3d cursor_point_snap_line;
 	
-	F64 off_axis_magnitude;
+// <FS:Cron> FIRE-8882 - off_axis_magnitude was scoped too far away from its only use.
+	//F64 off_axis_magnitude;
 
 	getMousePointOnPlaneGlobal(cursor_point_snap_line, x, y, current_pos_global, mSnapOffsetAxis % axis_f);
-	off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
+	//off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
+// </FS:Cron>
 
 	if (gSavedSettings.getBOOL("SnapEnabled"))
 	{
 // <FS:Cron> FIRE-8882
+		F64 off_axis_magnitude = axis_exists ? llabs((cursor_point_snap_line - current_pos_global) * LLVector3d(mSnapOffsetAxis)) : 0.f;
 		U32 snap_domain = gSavedSettings.getU32("FSSnapDomain");
+		
 		//if (off_axis_magnitude > mSnapOffsetMeters)
-		if (
+		if
+		(
 			(snap_domain == LL_SNAP_DOMAIN_OUTSIDE && off_axis_magnitude > mSnapOffsetMeters)
 			||
-			(snap_domain == LL_SNAP_DOMAIN_INSIDE && off_axis_magnitude <= mSnapOffsetMeters)
+			(snap_domain == LL_SNAP_DOMAIN_INSIDE && axis_exists && off_axis_magnitude <= mSnapOffsetMeters)
 		)
 // </FS:Cron>
 		{
