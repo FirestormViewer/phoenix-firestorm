@@ -3861,6 +3861,9 @@ Simulador anterior: [OLDVERSION]
 			<ignore name="ignore" text="Alerta de No Havok"/>
 		</form>
 	</notification>
+	<notification name="DumpArchetypeSuccess">
+		Apariencia guardada con éxito en XML.
+	</notification>
 	<notification name="BackupFinished">
 		Tu configuración ha sido respaldada.
 	</notification>
