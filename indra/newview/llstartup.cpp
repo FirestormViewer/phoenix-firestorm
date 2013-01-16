@@ -465,8 +465,8 @@ bool idle_startup()
 
 		// <FS:Ansariel> Store current font and skin for system info (FIRE-6806)
 		gSavedSettings.setString("FSInternalFontSettingsFile", gSavedSettings.getString("FSFontSettingsFile"));
-		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("SkinCurrent"));
-		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("SkinCurrentTheme"));
+		gSavedSettings.setString("FSInternalSkinCurrent", gSavedSettings.getString("FSSkinCurrentReadableName"));
+		gSavedSettings.setString("FSInternalSkinCurrentTheme", gSavedSettings.getString("FSSkinCurrentThemeReadableName"));
 		// </FS:Ansariel>
 		
 		if (LLFeatureManager::getInstance()->isSafe())
