@@ -4096,8 +4096,9 @@ public:
 			return;
 		}
 
-		LLVector4a nodeCenter = group->mBounds[0];
-		LLVector4a octCenter = group->mOctreeNode->getCenter();
+		// <FS:CR> Unused variable 2012-1-16
+		//LLVector4a nodeCenter = group->mBounds[0];
+		//LLVector4a octCenter = group->mOctreeNode->getCenter();
 
 		group->rebuildGeom();
 		group->rebuildMesh();
@@ -4711,9 +4712,10 @@ public:
 	}
 
 	virtual bool check(LLDrawable* drawable)
-	{	
-		LLVector3 local_start = mStart;
-		LLVector3 local_end = mEnd;
+	{
+		// <FS:CR> Unused variable 2012-1-16
+		//LLVector3 local_start = mStart;
+		//LLVector3 local_end = mEnd;
 
 		if (!drawable || !gPipeline.hasRenderType(drawable->getRenderType()) || !drawable->isVisible())
 		{

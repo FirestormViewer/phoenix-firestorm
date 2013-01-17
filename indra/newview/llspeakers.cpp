@@ -350,7 +350,8 @@ void LLSpeakerMgr::update(BOOL resort_ok)
 		LLUUID speaker_id = speaker_it->first;
 		LLSpeaker* speakerp = speaker_it->second;
 		
-		speaker_map_t::iterator  cur_speaker_it = speaker_it++;
+		// <FS:CR> Unused variable 2012-1-16
+		//speaker_map_t::iterator  cur_speaker_it = speaker_it++;
 
 		if (voice_channel_active && LLVoiceClient::getInstance()->getVoiceEnabled(speaker_id))
 		{
