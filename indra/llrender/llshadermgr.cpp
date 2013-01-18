@@ -713,9 +713,12 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 
 			// text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
 			
+			// <FS:TS> This causes shader link failures on 64-bit Linux
+#if !(LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) ) )
 			if( gGLManager.mIsATI )
 				text[count++] = strdup("VARYING int vary_texture_index;\n");
 			else
+#endif
 				text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
 
 			// </FS:ND>
