@@ -33,6 +33,7 @@
 #include "llsd.h"
 #include "lltemplatemessagereader.h"
 
+#include "ndexceptions.h" // <FS:ND/> For ndxran
 
 LLTemplateMessageDispatcher::LLTemplateMessageDispatcher(LLTemplateMessageReader &template_message_reader) :
 	mTemplateMessageReader(template_message_reader)
@@ -57,7 +58,13 @@ void LLTemplateMessageDispatcher::dispatch(const std::string& msg_name,
 
 	if (validate_message)
 	{
-		mTemplateMessageReader.readMessage(&(data[0]),host);
+		// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
+				
+		//		mTemplateMessageReader.readMessage(&(data[0]),host);
+		
+		try{ mTemplateMessageReader.readMessage(&(data[0]),host); }
+		catch( nd::exceptions::xran &ex ) { llwarns << ex.what() << llendl; }
+		// </FS:ND>
 	} 
 	else 
 	{
