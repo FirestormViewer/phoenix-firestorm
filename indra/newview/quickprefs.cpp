@@ -1283,7 +1283,7 @@ void FloaterQuickPrefs::onValuesChanged()
 			}
 
 			// choose a sane increment
-			F32 increment;
+			F32 increment=0.1f;
 			if(mControlsList[mSelectedControl].type==ControlTypeSlider)
 			{
 				// fine grained control for sliders
