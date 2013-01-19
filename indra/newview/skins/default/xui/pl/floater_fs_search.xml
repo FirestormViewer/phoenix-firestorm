@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_search_legacy" title="Wyszukiwarka Firestorma">
+<floater name="floater_fs_search" title="Wyszukiwarka Firestorma">
 	<floater.string name="string.location">
 		Miejsce: [LOCATION]
 	</floater.string>
