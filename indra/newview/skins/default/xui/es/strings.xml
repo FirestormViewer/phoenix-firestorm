@@ -5080,7 +5080,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Phototools_View_Label">Cameratools</string>
 	<string name="Command_Contact_Sets_Label">Contact sets</string>
 	<string name="Command_Mouselook_Label">Vista subjetiva</string>
-	<string name="Command_Legacy_Search_Label">Búsqueda clásica</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5187,9 +5186,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		actualmente en tu barra de herramientas derecha
 	</string>
 	<string name="Command_Fly_Tooltip">Activar/desactivar el modo de vuelo</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Buscar lugares, grupos, gente, venta de terrenos y eventos usando la búsqueda clásica
-	</string>
 	<string name="Retain%">
 		% retención
 	</string>

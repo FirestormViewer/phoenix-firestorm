@@ -207,7 +207,6 @@
 	</menu>
 	<menu label="Contenido" name="Content">
 		<menu_item_check label="Buscar" name="Search"/>
-		<menu_item_check label="Búsqueda clásica" name="Legacy Search"/>
 		<menu_item_call label="SL Marketplace" name="SL Marketplace"/>
 		<menu_item_call label="Mercado de L$" name="LindenXchange"/>
 		<menu_item_call label="Librería de scripts" name="Script Library"/>

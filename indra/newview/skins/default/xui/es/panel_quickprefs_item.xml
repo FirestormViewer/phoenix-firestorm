@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<layout_panel name="option_layout_panel">
+	<layout_stack name="option_inner_stack">
+		<layout_panel name="option_panel_updown">
+			<button name="remove_button" tool_tip="Elimina este control"/>
+		</layout_panel>
+		<layout_panel name="text_panel">
+			<text name="option_label">
+				Etiqueta:
+			</text>
+		</layout_panel>
+		<layout_panel name="option_panel">
+			<radio_group name="option_radio_control">
+				<radio_item name="on" label="Sí"/>
+				<radio_item name="off" label="No"/>
+			</radio_group>
+		</layout_panel>
+	</layout_stack>
+</layout_panel>

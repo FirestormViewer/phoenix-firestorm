@@ -34,6 +34,9 @@
 						<row name="restore_global_row_autoreplace">
 							<column name="restore_global_files_label">Autoreemplazo</column>
 						</row>
+						<row name="restore_global_row_quickprefs">
+							<column name="restore_global_files_label">Preferencias rápidas</column>
+						</row>
 					</scroll_list>
 				</layout_panel>
 				<layout_panel name="lp_restore_per_account_files">

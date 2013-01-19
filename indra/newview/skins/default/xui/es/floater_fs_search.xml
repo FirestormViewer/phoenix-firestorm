@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_search" title="Búsqueda clásica">
+<floater name="floater_fs_search" title="Búsqueda Firestorm">
 	<floater.string name="string.location">
 		Lugar: [LOCATION]
 	</floater.string>
@@ -34,13 +34,13 @@
 		Cartel: [COVERCHARGE]
 	</floater.string>
 	<tab_container name="ls_tabs">
+		<panel label="Búsqueda web" name="panel_ls_web"/>
 		<panel label="Gente" name="panel_ls_people"/>
 		<panel label="Grupos" name="panel_ls_groups"/>
 		<panel label="Lugares" name="panel_ls_places"/>
 		<panel label="Venta terreno" name="panel_ls_land"/>
 		<panel label="Eventos" name="panel_ls_events"/>
 		<panel label="Clasificados" name="panel_ls_classifieds"/>
-		<!--<panel label="Web" name="panel_ls_web"/>-->
 	</tab_container>
 	<panel name="panel_ls_details">
 		<button label="Abrir perfil" name="people_profile_btn"/>

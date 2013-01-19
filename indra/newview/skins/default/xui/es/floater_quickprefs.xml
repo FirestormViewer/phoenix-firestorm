@@ -1,66 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="quickprefs" title="Preferencias Rápidas" width="265">
 	<panel name="quickprefs" width="265">
-		<text name="Draw Distance" tool_tip="Cambia tu distancia de dibujo" width="120">
-			Distancia de dibujo:
+		<layout_stack name="wl_options_stack">
+			<layout_panel name="wl_options_panel">
+				<text name="Maximum bandwidth" tool_tip="Configura el ancho de banda de red máximo que puede consumir Firestorm Viewer (en kilobits por segundo)" width="120">
+					Ancho de banda:
+				</text>
+				<slider name="max_bandwidth" left_delta="107"/>
+				<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
+					Cielo WL:
+				</text>
+				<text name="WL Water" tool_tip="Preselecciones Windlight para el agua" width="120">
+					Agua WL:
+				</text>
+				<icon name="SkyDayCycle" tool_tip="Cambia la hora del día"/>
+				<button name="UseRegionWL" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
+				<button name="button_edit" tool_tip="Pulsa para configurar tus Preferencias Rápidas"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Mueve el control seleccionado una posición hacia arriba"/>
+		<line_editor name="label_edit" tool_tip="Escribe aquí la etiqueta para el control" label="Etiqueta:"/>
+		<combo_box name="control_name_combo" tool_tip="Selecciona el control de la lista de configuraciones del depurador">
+			<combo_box.item label="=== Escoge ===" name="control_name_list_header"/>
+		</combo_box>
+		<button name="move_down_button" tool_tip="Mueve el control seleccionado una posición hacia abajo"/>
+		<button name="add_new_button" tool_tip="Añade un nuevo control de preferencias rápidas"/>
+		<text name="control_type_label">
+			Tipo:
 		</text>
-		<slider name="DrawDistance" left_delta="100"/>
-		<text name="Maximum bandwidth" tool_tip="Configura el ancho de banda de red máximo que puede consumir Firestorm Viewer (en kilobits por segundo)" width="120">
-			Ancho de banda:
-		</text>
-		<slider name="max_bandwidth" left_delta="107"/>
-		<text name="Particles" tool_tip="Cantidad de partículas a dibujar" width="120">
-			Max. partículas:
-		</text>
-		<slider name="RenderMaxPartCount" left_delta="100"/>
-		<text name="Avatar Physics LOD" tool_tip="Controla el nivel de detalle de la física del avatar" width="120">
-			LOD física avatar:
-		</text>
-		<slider name="RenderAvatarPhysicsLOD" left_delta="100"/>
-		<text name="LOD Factor" tool_tip="Controla el nivel de detalle de las primitivas (multiplicador del área actual de pantalla cuando se calcula el nivel de detalle) [Por defecto: variable]" width="120">
-			Factor LOD:
-		</text>
-		<slider name="RenderVolumeLODFactor" left_delta="89"/>
-		<text name="Max Avatars" tool_tip="Cuántos avatares se deben dibujar completamente en pantalla. Reducir el número mejora en gran medida los FPS en situaciones de aglomeración. Requiere activar la opción de Avatares Impostores. [Por defecto: 12]" width="120">
-			Máx. avatares:
-		</text>
-		<slider name="RenderAvatarMaxVisible" left_delta="86"/>
-		<text name="Height Offset" tool_tip="Utiliza este valor para manipular, hasta cierto punto, los límites de tu avatar. Puede usarse para distorsionar los orbitadores, o para modificar tu altura sin alterar tu forma." width="120">
-			Despl. vertical:
-		</text>
-		<slider name="AvatarZOffset" left_delta="86"/>
-		<text name="Tag Offset" tool_tip="Modifica la separación vertical entre los avatar y sus etiqueta de nombre. 0 por defecto" width="120">
-			Altura etiquetas:
-		</text>
-		<slider name="FSNameTagZOffsetCorrection" left_delta="86"/>
-		<text name="name_tags_textbox" width="250">
-			Etiquetas:
-		</text>
-		<radio_group name="Name_Tag_Preference">
-			<radio_item label="Sí" name="radio"/>
-			<radio_item label="No" name="radio2"/>
-		</radio_group>
-		<text name="lookat_textbox" width="250">
-			Puntos de mira:
-		</text>
-		<radio_group name="showlookat">
-			<radio_item label="Sí" name="radio"/>
-			<radio_item label="No" name="radio2"/>
-		</radio_group>		
-		<text name="ShowColor_QP_Label">
-			Color bajo el cursor:
-		</text>
-		<radio_group name="Show_Color_Under_Cursor">
-			<radio_item label="Sí" name="radio5"/>
-			<radio_item label="No" name="radio6"/>
-		</radio_group>
-		<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
-			Cielo WL:
-		</text>
-		<text name="WL Water" tool_tip="Preselecciones Windlight para el agua" width="120">
-			Agua WL:
-		</text>
-		<icon name="SkyDayCycle" tool_tip="Cambia la hora del día"/>
-		<button name="UseRegionWL" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
+		<combo_box name="control_type_combo_box" tool_tip="Selecciona el tipo de control de interfaz que quieres usar para esta configuración">
+			<combo_box.item label="Casilla" name="Checkbox"/>
+			<combo_box.item label="Texto" name="Text"/>
+			<combo_box.item label="Número" name="Spinner"/>
+			<combo_box.item label="Deslizador" name="Slider"/>
+			<combo_box.item label="Selector" name="Radio"/>
+			<combo_box.item label="Color 3" name="Color 3"/>
+			<combo_box.item label="Color 4" name="Color 4"/>
+		</combo_box>
+		<check_box name="control_integer_checkbox" tool_tip="Activa esta casilla si tu configuración es un valor entero" label="Entero"/>
+		<spinner name="control_min_edit" tool_tip="Valor mínimo que se podrá seleccionar" label="Mín:"/>
+		<spinner name="control_max_edit" tool_tip="Valor máximo que se podrá seleccionar" label="Máx:"/>
+		<spinner name="control_increment_edit" tool_tip="Incremento o decremento del valor cuando se pulsa la flecha arriba/abajo del número o se usan las teclas del cursor en el deslizador" label="Incr:"/>
+		<button name="button_close" tool_tip="Cierra el panel de edición"/>
 	</panel>
 </floater>
+	
