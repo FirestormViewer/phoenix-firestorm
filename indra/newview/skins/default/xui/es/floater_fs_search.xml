@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_search_legacy" title="Búsqueda clásica">
+<floater name="floater_fs_search" title="Búsqueda clásica">
 	<floater.string name="string.location">
 		Lugar: [LOCATION]
 	</floater.string>
