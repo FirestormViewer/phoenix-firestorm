@@ -201,7 +201,6 @@
 	</menu>
 	<menu label="Inhalt" name="Content">
 		<menu_item_check label="Suchen" name="Search"/>
-		<menu_item_check label="Klassische Suche" name="Legacy Search"/>
 		<menu_item_check label="SL-Marktplatz" name="SL Marketplace"/>
 		<menu_item_check label="L$-Markt-Kurse" name="LindenXchange"/>
 		<menu_item_check label="Skript-Datenbank" name="Script Library"/>

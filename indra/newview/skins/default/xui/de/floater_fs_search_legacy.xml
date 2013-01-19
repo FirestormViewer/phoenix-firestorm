@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_search_legacy" title="Klassische Suche">
+<floater name="floater_fs_search_legacy" title="Firestorm-Suche">
 	<floater.string name="string.location">
 		Ort: [LOCATION]
 	</floater.string>
@@ -34,13 +34,13 @@
 		Gebühr: [COVERCHARGE]
 	</floater.string>
 	<tab_container name="ls_tabs">
+		<panel label="Websuche" name="panel_ls_web"/>
 		<panel label="Leute" name="panel_ls_people"/>
 		<panel label="Gruppen" name="panel_ls_groups"/>
 		<panel label="Orte" name="panel_ls_places"/>
 		<panel label="Land-Verkauf" name="panel_ls_land"/>
 		<panel label="Events" name="panel_ls_events"/>
 		<panel label="Anzeigen" name="panel_ls_classifieds"/>
-		<!--<panel label="Web" name="panel_ls_web"/>-->
 	</tab_container>
 	<!-- Details/Action Panes -->
 	<panel name="panel_ls_details">

@@ -5088,9 +5088,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Mouselook_Label">
 		Mouselook-Modus
 	</string>
-	<string name="Command_Legacy_Search_Label">
-		Klassische Suche
-	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5213,9 +5210,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Mouselook-Modus aktivieren (M)
-	</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Orte, Gruppen und Leute mit der klassischen Suche finden
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
