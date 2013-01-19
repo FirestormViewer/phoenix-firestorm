@@ -1058,12 +1058,15 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 			{
 				enable_floating_point=TRUE;
 
+				// assume we have floating point widgets
+				mControlIncrementSpinner->setIncrement(0.1);
 				// use 3 decimal places by default
 				S32 decimals=3;
 				// unless we have an integer control
 				if(mControlsList[mSelectedControl].integer)
 				{
 					decimals=0;
+					mControlIncrementSpinner->setIncrement(1.0);
 				}
 				// set up floating point widgets
 				mControlMinSpinner->setPrecision(decimals);
