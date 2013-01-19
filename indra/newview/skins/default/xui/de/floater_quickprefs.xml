@@ -1,68 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="quickprefs" title="Schnelleinstellungen" width="280">
 	<panel name="quickprefs" width="280">
-		<text name="Draw Distance" width="105" tool_tip="Legt die Entfernung fest, bis zu der Objekte dargestellt werden.">
-			Draw Distance:
+		<layout_stack name="options_stack" width="280"/>
+		<layout_stack name="wl_options_stack" width="280">
+			<layout_panel name="wl_options_panel">
+				<text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
+					Max. Bandbreite:
+				</text>
+				<slider left_delta="108" name="max_bandwidth"/>		
+				<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
+					WL-Himmel:
+				</text>
+				<combo_box left_delta="77" name="WLPresetsCombo"/>
+				<text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
+					WL-Wasser:
+				</text>
+				<combo_box left_delta="77" name="WaterPresetsCombo"/>
+				<icon name="SkyDayCycle" tool_tip="Tageszeit ändern" width="220"/>
+				<multi_slider name="WLSunPos" width="220"/>
+				<button name="UseRegionWL" tool_tip="Windlight-Voreinstelleungen auf Regionsstandard zurücksetzen"/>
+				<button name="button_edit" tool_tip="Schnelleinstellungen konfigurieren"/>
+			</layout_panel>
+		</layout_stack>
+	</panel>
+
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Einstellung nach oben verschieben"/>
+		<line_editor name="label_edit" tool_tip="Text, der für die Einstellung angezeigt wird" label="Bezeichnung:"/>
+		<combo_box name="control_name_combo" tool_tip="Einstellung aus der Liste der verfügbaren Einstellungen auswählen" width="120">
+			<combo_box.item label="== Wählen ==" name="control_name_list_header"/>
+		</combo_box>
+		<button name="move_down_button" tool_tip="Einstellung nach unten verschieben"/>
+		<button name="add_new_button" tool_tip="Neue Einstellung hinzufügen"/>
+		<text name="control_type_label">
+			Typ:
 		</text>
-		<slider left_delta="101" name="DrawDistance"/>		
-		<text name="Maximum bandwidth" width="105" tool_tip="Legt die maximale Bandbreite der Netzwerknutzung in Kbps (Kilobit pro Sekunde) fest.">
-			Max. Bandbreite:
-		</text>
-		<slider left_delta="108" name="max_bandwidth"/>		
-		<text name="Particles" width="105" tool_tip="Die maximale Anzahl an Partikel, die dargestellt werden sollen.">
-			Max. Partikel:
-		</text>
-		<slider left_delta="101" name="RenderMaxPartCount"/>
-		<text name="Avatar Physics LOD" width="105" tool_tip="Legt das Detaillevel der Avatar-Physik fest.">
-			Avatar-Physik LOD:
-		</text>
-		<slider left_delta="101" name="RenderAvatarPhysicsLOD"/>		
-		<text name="LOD Factor" width="105"  tool_tip="Legt das Detaillevel von Primitiven fest (Multiplikator für den aktuellen Bildschirmbereich, für den das Detaillevel berechnet wird) [Standardwert variiert abhängig vom System]">
-			LOD-Faktor:
-		</text>
-		<slider left_delta="90" name="RenderVolumeLODFactor"/>		
-		<text name="Max Avatars" width="105" tool_tip="Legt fest wie viele Avatar gleichzeitig dargestellt werden sollen. Ein kleinerer Wert verbessert die Geschwindigkeit an belebten Orten deutlich. Avatar Impostors muss hierfür eingeschaltet sein. [Standardwert 12]">
-			Max. Avatare:
-		</text>
-		<slider left_delta="87" name="RenderAvatarMaxVisible"/>		
-		<text name="Height Offset" width="105" tool_tip="Erlaubt das Verändern des Höhenabstandes des Avatars ohne die Form selbst zu verändern.">
-			Höhenabstand:
-		</text>
-		<text name="Tag Offset" tool_tip="Ändert den Höhenabstand der Avatar-Namenstags. Standardwert: 0" width="105">
-			Tag-Höhenabstand:
-		</text>
-		<slider left_delta="87" name="FSNameTagZOffsetCorrection"/>
-		<slider left_delta="87" name="AvatarZOffset"/>		
-		<text name="name_tags_textbox">
-			Avatarnamen:
-		</text>
-		<radio_group left="55" name="Name_Tag_Preference">
-			<radio_item label="An" name="radio"/>
-			<radio_item label="Aus" name="radio2"/>
-		</radio_group>		
-		<text name="lookat_textbox" width="250">
-			Kamerafokus:
-		</text>
-		<radio_group left="55" name="showlookat">
-			<radio_item label="An" name="radio"/>
-			<radio_item label="Aus" name="radio2"/>
-		</radio_group>
-		<text name="ShowColor_QP_Label" width="250">
-			Farbe unter Cursor:
-		</text>
-		<radio_group left="55" name="Show_Color_Under_Cursor">
-			<radio_item label="An" name="radio5"/>
-			<radio_item label="Aus" name="radio6"/>
-		</radio_group>
-		<text name="WL Sky" width="67" tool_tip="Windlight-Voreinstellung für den Himmel.">
-			WL-Himmel:
-		</text>
-		<combo_box left_delta="77" name="WLPresetsCombo"/>
-		<text name="WL Water" width="67" tool_tip="Windlight-Voreinstellung für das Wasser.">
-			WL-Wasser:
-		</text>
-		<combo_box left_delta="77" name="WaterPresetsCombo"/>
-		<icon name="SkyDayCycle" tool_tip="Tageszeit ändern"/>
-		<button name="UseRegionWL" tool_tip="Windlight-Voreinstelleungen auf Regionsstandard zurücksetzen"/>
+		<combo_box name="control_type_combo_box" tool_tip="Typ des Bedienelements festlegen, die für diese Einstellung verwendet werden soll.">
+			<combo_box.item label="Checkbox" name="Checkbox"/>
+			<combo_box.item label="Text" name="Text"/>
+			<combo_box.item label="Regler" name="Spinner"/>
+			<combo_box.item label="Schieber" name="Slider"/>
+			<combo_box.item label="Radiobutton" name="Radio"/>
+			<combo_box.item label="Farbe 3" name="Color 3"/>
+			<combo_box.item label="Farbe 4" name="Color 4"/>
+		</combo_box>
+
+		<check_box name="control_integer_checkbox" tool_tip="Aktivieren, falls die Einstellung ein Ganzzahlwert ist, d.h. nur Zahlen ohne Nachkommastelle" label="Ganzzahl"/>
+		<spinner name="control_min_edit" tool_tip="Der kleinste Wert, der ausgewählt werden kann" label="Min:"/>
+		<spinner name="control_max_edit" tool_tip="Der größte Wert, der ausgewählt werden kann" label="Max:"/>
+		<spinner name="control_increment_edit" tool_tip="Die Schrittweite, um die der Wert erhöht oder verringert wird, wenn der Hoch- bzw. Runter-Pfeil des Reglers angeklickt wird." label="Schritt:" label_width="37" width="86"/>
+		<button name="button_close" tool_tip="Bearbeiten-Modus beenden"/>
 	</panel>
 </floater>
