@@ -118,7 +118,7 @@ set(viewer_SOURCE_FILES
     fsfloatergroup.cpp
     fsfloaterplacedetails.cpp
     fsfloaterprofile.cpp
-    fsfloatersearchlegacy.cpp
+    fsfloatersearch.cpp
     fsfloaterteleporthistory.cpp
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
@@ -773,7 +773,7 @@ set(viewer_HEADER_FILES
     fsfloatergroup.h
     fsfloaterplacedetails.h
     fsfloaterprofile.h
-    fsfloatersearchlegacy.h
+    fsfloatersearch.h
     fsfloaterteleporthistory.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h

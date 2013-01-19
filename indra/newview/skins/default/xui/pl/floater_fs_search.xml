@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="floater_fs_search_legacy" title="Klasyczne wyszukiwanie">
+<floater name="floater_fs_search_legacy" title="Wyszukiwarka Firestorma">
 	<floater.string name="string.location">
 		Miejsce: [LOCATION]
 	</floater.string>
@@ -28,13 +28,13 @@
 		Opłata wstępu: [COVERCHARGE]
 	</floater.string>
 	<tab_container name="ls_tabs">
+		<panel label="Sieć" name="panel_ls_web" />
 		<panel label="Ludzie" name="panel_ls_people" />
 		<panel label="Grupy" name="panel_ls_groups" />
 		<panel label="Miejsca" name="panel_ls_places" />
 		<panel label="Sprzedaż ziemi" name="panel_ls_land" />
 		<panel label="Wydarzenia" name="panel_ls_events" />
 		<panel label="Reklamy" name="panel_ls_classifieds" />
-		<!-- <panel label="Sieć" name="panel_ls_web" /> -->
 	</tab_container>
 	<panel name="panel_ls_details">
 		<text_editor name="title" value="Nazwa niezdefiniowana" />

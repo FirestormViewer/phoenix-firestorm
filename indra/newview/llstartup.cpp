@@ -207,7 +207,7 @@
 
 #include "fscontactsfloater.h"
 #include "fsdata.h"
-#include "fsfloatersearchlegacy.h"
+#include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fswsassetblacklist.h"
 #include "llfloatersidepanelcontainer.h"
