@@ -27,7 +27,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "fsfloatersearchlegacy.h"
+#include "fsfloatersearch.h"
 #include "llagent.h"
 #include "llavatarname.h"
 #include "llavatarnamecache.h"

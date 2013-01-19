@@ -8,7 +8,7 @@
 	legacy_header_height="0"
 	min_height="590"
 	min_width="660"
-	name="floater_fs_search_legacy"
+	name="floater_fs_search"
 	positioning="centered"
 	save_rect="true"
 	single_instance="true"
