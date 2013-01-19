@@ -1,58 +1,47 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater name="quickprefs" title="Szybkie strojenie">
-<panel name="quickprefs">
-        <text name="Draw Distance" tool_tip="Zmień swoje pole widzenia">
-            Pole widzenia:
-        </text>
-        <text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
-            Maks. przepust.:
-        </text>
-        <text name="Particles" tool_tip="Ilość cząsteczek do renderowania">
-            Maks. cząstek:
-        </text>
-        <text name="Avatar Physics LOD" tool_tip="Kontroluj poziom detali (LOD) dla fizyki awatarów (np. fizykę piersi)">
-            LOD fiz. awat.:
-        </text>
-        <text name="LOD Factor" tool_tip="Kontroluj poziom detali (LOD) dla obiektów i prim (mnożnik dla bieżącego obszaru ekranu, gdy obliczony jest poziom szczegółowości) [wartość domyślna - zależy]">
-            Mnożnik LOD:
-        </text>
-        <text name="Max Avatars" tool_tip="Określ, ile awatarów ma być w pełni renderowanych na ekranie. Obniżenie tej wartości widocznie podnosi FPS w zatłoczonych miejscach. Wymaga, aby funkcja 'upraszczaj oddalone awatary' była włączona. [domyślnie 12]">
-            Maks. awatarów:
-        </text>
-        <text name="Height Offset" tool_tip="Użyj tego suwaka, aby do pewnego stopnia manipulować bryłami brzegowymi (bounding boxes) Twojego awatara. Przydatne, aby zmylić tzw. orbitery lub podnieść Cię w górę lub w dół bez zmiany kształtu.">
-            Dostrój wys.:
-        </text>
-        <text name="Tag Offset" tool_tip="Zmienia przesunięcie tagów (imion) awatarów w osi Z (w górę lub w dół). Domyślnie 0">
-            Pozycja tagów:
-        </text>
-        <text name="name_tags_textbox">
-            Tagi imion:
-        </text>
-        <text name="lookat_textbox">
-            Cele spojrzeń:
-        </text>
-        <radio_group name="showlookat">
-            <radio_item label="Włącz" name="radio"/>
-            <radio_item label="Wyłącz" name="radio2"/>
-        </radio_group>
-        <text name="ShowColor_QP_Label">
-            Kolor spod kursora:
-        </text>
-        <radio_group name="Show_Color_Under_Cursor">
-            <radio_item label="Włącz" name="radio5"/>
-            <radio_item label="Wyłącz" name="radio6"/>
-        </radio_group>
-        <radio_group name="Name_Tag_Preference">
-            <radio_item label="Włącz" name="radio"/>
-            <radio_item label="Wyłącz" name="radio2"/>
-        </radio_group>
-        <text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
-            Niebo WL:
-        </text>
-        <text name="WL Water" tool_tip="Ustawienia systemu Windlight dla Twojej wody">
-            Woda WL:
-        </text>
-        <icon name="SkyDayCycle" tool_tip="Zmień porę dnia"/>
-        <button name="UseRegionWL" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu"/>
-</panel>
+	<panel name="quickprefs">
+		<layout_stack name="wl_options_stack">
+			<layout_panel name="wl_options_panel">
+				<text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
+					Maks. przepust.:
+				</text>
+				<text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
+					Niebo WL:
+				</text>
+				<text name="WL Water" tool_tip="Ustawienia systemu Windlight dla Twojej wody">
+					Woda WL:
+				</text>
+				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia" />
+				<button name="UseRegionWL" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
+				<button name="button_edit" tool_tip="Kliknij tutaj, aby skonfigurować kontrolki swojego szybkiego strojenia" />
+			</layout_panel>
+		</layout_stack>
+	</panel>
+	<panel name="edit_overlay_panel">
+		<button name="move_up_button" tool_tip="Przenieś wybraną kontrolkę jeden slot wyżej" />
+		<line_editor name="label_edit" tool_tip="Wpisz tutaj etykietę dla kontrolki" label="Etykieta:" />
+		<combo_box name="control_name_combo" tool_tip="Wybierz kontrolkę z listy ustawień debugowania">
+			<combo_box.item label="=== Wybierz ===" name="control_name_list_header" />
+		</combo_box>
+		<button name="move_down_button" tool_tip="Przenieś wybraną kontrolkę jeden slot niżej" />
+		<button name="add_new_button" tool_tip="Dodaj nową kontrolkę szybkiego strojenia" />
+		<text name="control_type_label">
+			Typ:
+		</text>
+		<combo_box name="control_type_combo_box" tool_tip="Wybierz typ kontrolki interfejsu użytkownika, której chcesz użyć dla tego ustawienia">
+			<combo_box.item label="Pole wyboru (checkbox)" name="Checkbox" />
+			<combo_box.item label="Pole tekstowe" name="Text" />
+			<combo_box.item label="Pole ze strzałkami (spinner)" name="Spinner" />
+			<combo_box.item label="Suwak" name="Slider" />
+			<combo_box.item label="Pole przełączania opcji (radio)" name="Radio" />
+			<combo_box.item label="Kolor 3" name="Color 3" />
+			<combo_box.item label="Kolor 4" name="Color 4" />
+		</combo_box>
+		<check_box name="control_integer_checkbox" tool_tip="Aktywuj tą opcję, jeśli dane ustawienie ma być traktowane jako liczba całkowita, np. gdy zawiera tylko pełne cyfry" label="Cyfra" />
+		<spinner name="control_min_edit" tool_tip="Najniższa wartość, jaką będzie można wybrać" label="Min:" />
+		<spinner name="control_max_edit" tool_tip="Najwyższa wartość, jaką będzie można wybrać" label="Maks:" />
+		<spinner name="control_increment_edit" tool_tip="Przyrost wartości, jaki nastąpi po kliknięciu na strzałkę w górę/dół przy polu z nimi lub po użyciu przycisków lewo/prawo na klawiaturze w przypadku suwaka" label="Pow:" />
+		<button name="button_close" tool_tip="Zamknij panel edycji" />
+	</panel>
 </floater>
