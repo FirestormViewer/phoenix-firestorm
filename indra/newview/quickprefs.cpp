@@ -1356,7 +1356,7 @@ void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl,void* userdata)
 	// remove the control from the internal list
 	removeControl(panel->getName());
 	// update the user interface
-	updateControls();
+	// updateControls();
 	// reinstate focus in case we lost it
 	setFocus(TRUE);
 }
