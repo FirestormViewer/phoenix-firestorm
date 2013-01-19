@@ -13,6 +13,11 @@
     <file name="Warnings"
           file_name="ignorable_dialogs.xml"
           required="true"/>
+    <!-- <FS:Zi> Dynamic quick prefs -->
+    <file name="QuickPreferences"
+          file_name="quick_preferences.xml"
+          required="false"/>
+    <!-- </FS:Zi> -->
   </group>
   <group name="User"
          path_index="1">

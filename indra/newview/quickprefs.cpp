@@ -6,6 +6,7 @@
  * Second Life Viewer Source Code
  * Copyright (C) 2010, Linden Research, Inc.
  * Copyright (C) 2011, WoLf Loonie @ Second Life
+ * Copyright (C) 2013, Zi Ree @ Second Life
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -46,6 +47,32 @@
 #include "llcheckboxctrl.h"
 #include "llcubemap.h"
 
+// <FS:Zi> Dynamic quick prefs
+#include "llappviewer.h"
+#include "llcolorswatch.h"
+#include "llf32uictrl.h"
+#include "lllayoutstack.h"
+#include "llsliderctrl.h"
+#include "llspinctrl.h"
+
+#include <boost/foreach.hpp>
+#include <llui.h>
+
+FloaterQuickPrefs::QuickPrefsXML::QuickPrefsXML()
+:	entries("entries")
+{}
+
+FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
+:	control_name("control_name"),
+	label("label"),
+	control_type("control_type"),
+	integer("integer"),
+	min("min"),
+	max("max"),
+	increment("increment")
+{}
+// </FS:Zi>
+
 // Ansariel: Copied from llviewercontrol.cpp, handleSetShaderChanged()
 static void handleShaderChanged()
 {
@@ -70,6 +97,30 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
+	// <FS:Zi> Dynamic Quickprefs
+	gSavedSettings.setBOOL("QuickPrefsEditMode",FALSE);
+
+	// Scan widgets and reapply control variables because some control types
+	// (LLSliderCtrl for example) don't update their GUI when hidden
+	control_list_t::iterator it;
+	for(it=mControlsList.begin();it!=mControlsList.end();++it)
+	{
+		const ControlEntry& entry=it->second;
+
+		LLUICtrl* current_widget=entry.widget;
+		if(!current_widget)
+		{
+			llwarns << "missing widget for control " << it->first << llendl;
+			continue;
+		}
+
+		LLControlVariable* var=current_widget->getControlVariable();
+		if(var)
+		{
+			current_widget->setValue(var->getValue());
+		}
+	}
+	// </FS:Zi>
 }
 
 
@@ -95,6 +146,7 @@ void FloaterQuickPrefs::initCallbacks(void)
 	}
 
 	gRlvHandler.setBehaviourCallback(boost::bind(&FloaterQuickPrefs::updateRlvRestrictions, this, _1, _2));
+	gSavedSettings.getControl("QuickPrefsEditMode")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::onEditModeChanged, this));	// <FS:Zi> Dynamic Quickprefs
 }
 
 BOOL FloaterQuickPrefs::postBuild()
@@ -175,6 +227,101 @@ BOOL FloaterQuickPrefs::postBuild()
 	{
 		enableWindlightButtons(!gRlvHandler.hasBehaviour(RLV_BHVR_SETENV));
 	}
+
+	// <FS:Zi> Dynamic quick prefs
+
+	// find the layout_stack to insert the controls into
+	mOptionsStack=getChild<LLLayoutStack>("options_stack");
+
+	// get the path to the user defined or default quick preferences settings
+	std::string settings_path=getSettingsPath(FALSE);
+
+	QuickPrefsXML xml;
+	LLXMLNodePtr root;
+
+	if(!LLXMLNode::parseFile(settings_path,root,NULL))
+	{
+		llwarns << "Unable to load quick preferences from file: " << settings_path << llendl;
+	}
+	else if(!root->hasName("quickprefs"))
+	{
+		llwarns << settings_path << " is not a valid quick preferences definition file" << llendl;
+	}
+	else
+	{
+		// Parse the quick preferences settings
+		LLXUIParser parser;
+		parser.readXUI(root,xml,settings_path);
+
+		if(!xml.validateBlock())
+		{
+			llwarns << "Unable to validate quick preferences from file: " << settings_path << llendl;
+		}
+		else
+		{
+			// add the elements from the XML file to the internal list of controls
+			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry,xml.entries)
+			{
+				U32 type=xml_entry.control_type;
+				addControl(
+					xml_entry.control_name,
+					xml_entry.label,
+					(ControlType) type,
+					xml_entry.integer,
+					xml_entry.min,
+					xml_entry.max,
+					xml_entry.increment
+				);
+			}
+		}
+	}
+
+	// get edit widget pointers
+	mControlLabelEdit=getChild<LLLineEditor>("label_edit");
+	mControlNameCombo=getChild<LLComboBox>("control_name_combo");
+	mControlTypeCombo=getChild<LLComboBox>("control_type_combo_box");
+	mControlIntegerCheckbox=getChild<LLCheckBoxCtrl>("control_integer_checkbox");
+	mControlMinSpinner=getChild<LLSpinCtrl>("control_min_edit");
+	mControlMaxSpinner=getChild<LLSpinCtrl>("control_max_edit");
+	mControlIncrementSpinner=getChild<LLSpinCtrl>("control_increment_edit");
+
+	// wire up callbacks for changed values
+	mControlLabelEdit->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlNameCombo->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlTypeCombo->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlIntegerCheckbox->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlMinSpinner->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlMaxSpinner->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+	mControlIncrementSpinner->setCommitCallback(boost::bind(&FloaterQuickPrefs::onValuesChanged,this));
+
+	// wire up ordering and adding buttons
+	getChild<LLButton>("move_up_button")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onMoveUpClicked,this));
+	getChild<LLButton>("move_down_button")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onMoveDownClicked,this));
+	getChild<LLButton>("add_new_button")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAddNewClicked,this));
+
+	// functor to add debug settings to the editor dropdown
+	struct f : public LLControlGroup::ApplyFunctor
+	{
+		LLComboBox* combo;
+		f(LLComboBox* c) : combo(c) {}
+		virtual void apply(const std::string& name, LLControlVariable* control)
+		{
+			// do not add things that are hidden in the debug settings floater
+			if (!control->isHiddenFromSettingsEditor())
+			{
+				// don't add floater positions, sizes or visibility values
+				if(name.find("floater_")!=0)
+				{
+					(*combo).addSimpleElement(name);
+				}
+			}
+		}
+	} func(mControlNameCombo);
+
+	// add global and per account settings to the dropdown
+	gSavedSettings.applyToAll(&func);
+	gSavedPerAccountSettings.applyToAll(&func);
+	// </FS:Zi>
 
 	return LLDockableFloater::postBuild();
 }
@@ -575,3 +722,713 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 		childSetEnabled("edit_water_preset", enable);
 	}
 }
+
+// <FS:Zi> Dynamic quick prefs
+std::string FloaterQuickPrefs::getSettingsPath(BOOL save_mode)
+{
+	// get the settings file name
+	std::string settings_file=LLAppViewer::instance()->getSettingsFilename("Default","QuickPreferences");
+	// expand to user defined path
+	std::string settings_path=gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,settings_file);
+
+	// if not in save mode, and the file was not found, use the default path
+	if(!save_mode && !LLFile::isfile(settings_path))
+	{
+		settings_path=gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS,settings_file);
+	}
+	return settings_path;
+}
+
+void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntry& entry)
+{
+	// rename the panel to contain the control's name, for identification later
+	entry.panel->setName(controlName);
+
+	// build a list of all possible control widget types
+	std::map<ControlType,std::string> typeMap;
+	std::map<ControlType,std::string>::iterator it;
+
+	typeMap[ControlTypeCheckbox]="option_checkbox_control";
+	typeMap[ControlTypeText]="option_text_control";
+	typeMap[ControlTypeSpinner]="option_spinner_control";
+	typeMap[ControlTypeSlider]="option_slider_control";
+	typeMap[ControlTypeRadio]="option_radio_control";
+	typeMap[ControlTypeColor3]="option_color3_control";
+	typeMap[ControlTypeColor4]="option_color4_control";
+
+	// hide all widget types except for the one the user wants
+	LLUICtrl* widget;
+	for(it=typeMap.begin();it!=typeMap.end();++it)
+	{
+		if(entry.type!=it->first)
+		{
+			widget=entry.panel->getChild<LLUICtrl>(it->second);
+			// dummy to disable old control
+			widget->setControlName("QuickPrefsEditMode");
+			widget->setVisible(FALSE);
+			widget->setEnabled(FALSE);
+		}
+	}
+
+	// get the widget type the user wanted from the panel
+	widget=entry.panel->getChild<LLUICtrl>(typeMap[entry.type]);
+
+	// use 3 decimal places by default
+	S32 decimals=3;
+
+	// save pointer to the widget in our internal list
+	entry.widget=widget;
+
+	// add the settings control to the widget and enable/show it
+	widget->setControlName(controlName);
+	widget->setVisible(TRUE);
+	widget->setEnabled(TRUE);
+
+	// if no increment is given, try to guess a good number
+	if(entry.increment==0.0f)
+	{
+		// finer grained for sliders
+		if(entry.type==ControlTypeSlider)
+		{
+			entry.increment=(entry.max-entry.min)/100.0f;
+		}
+		// a little less for spinners
+		else if(entry.type==ControlTypeSpinner)
+		{
+			entry.increment=(entry.max-entry.min)/20.0f;
+		}
+	}
+
+	// if it's an integer entry, round the numbers
+	if(entry.integer)
+	{
+		entry.min=llround(entry.min);
+		entry.max=llround(entry.max);
+
+		// recalculate increment
+		entry.increment=llround(entry.increment);
+		if(entry.increment==0)
+		{
+			entry.increment=1;
+		}
+
+		// no decimal places for integers
+		decimals=0;
+	}
+
+	// set up values for special case control widget types
+	LLUICtrl* alpha_widget=entry.panel->getChild<LLUICtrl>("option_color_alpha_control");
+	alpha_widget->setVisible(FALSE);
+
+	// sadly, using LLF32UICtrl does not work properly, so we have to use a branch
+	// for each floating point type
+	if(entry.type==ControlTypeSpinner)
+	{
+		LLSpinCtrl* spinner=(LLSpinCtrl*) widget;
+		spinner->setPrecision(decimals);
+		spinner->setMinValue(entry.min);
+		spinner->setMaxValue(entry.max);
+		spinner->setIncrement(entry.increment);
+	}
+	else if(entry.type==ControlTypeSlider)
+	{
+		LLSliderCtrl* slider=(LLSliderCtrl*) widget;
+		slider->setPrecision(decimals);
+		slider->setMinValue(entry.min);
+		slider->setMaxValue(entry.max);
+		slider->setIncrement(entry.increment);
+	}
+	else if(entry.type==ControlTypeColor4)
+	{
+		LLColorSwatchCtrl* color_widget=(LLColorSwatchCtrl*) widget;
+		alpha_widget->setVisible(TRUE);
+		alpha_widget->setValue(color_widget->get().mV[VALPHA]);
+	}
+
+	// reuse a previously created text label if possible
+	LLTextBox* label_textbox=entry.label_textbox;
+	// if the text label is not known yet, this is a brand new control panel
+	if(!label_textbox)
+	{
+		// otherwise, get the pointer to the new label
+		label_textbox=entry.panel->getChild<LLTextBox>("option_label");
+
+		// add double click and single click callbacks on the text label
+		label_textbox->setDoubleClickCallback(boost::bind(&FloaterQuickPrefs::onDoubleClickLabel,this,_1,entry.panel));
+		label_textbox->setMouseUpCallback(boost::bind(&FloaterQuickPrefs::onClickLabel,this,_1,entry.panel));
+
+		// since this is a new control, wire up the remove button signal, too
+		LLButton* remove_button=entry.panel->getChild<LLButton>("remove_button");
+		remove_button->setCommitCallback(boost::bind(&FloaterQuickPrefs::onRemoveClicked,this,_1,entry.panel));
+
+		// and the commit signal for the alpha value in a color4 control
+		alpha_widget->setCommitCallback(boost::bind(&FloaterQuickPrefs::onAlphaChanged,this,_1,widget));
+
+		// save the text label pointer in the internal list
+		entry.label_textbox=label_textbox;
+	}
+	// set the value(visible text) for the text label
+	label_textbox->setValue(entry.label+":");
+
+	// get the named control variable from global or per account settings
+	LLControlVariable* var=gSavedSettings.getControl(controlName);
+	if(!var)
+	{
+		var=gSavedPerAccountSettings.getControl(controlName);
+	}
+
+	// if we found the control, set up the chosen widget to use it
+	if(var)
+	{
+		widget->setValue(var->getValue());
+		widget->setToolTip(var->getComment());
+		label_textbox->setToolTip(var->getComment());
+	}
+	else
+	{
+		llwarns << "Could not find control variable " << controlName << llendl;
+	}
+}
+
+LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std::string& controlLabel,ControlType type,BOOL integer,F32 min,F32 max,F32 increment)
+{
+	// create a new controls panel
+	LLLayoutPanel* panel=LLUICtrlFactory::createFromFile<LLLayoutPanel>("panel_quickprefs_item.xml",NULL,LLLayoutStack::child_registry_t::instance());
+	if(!panel)
+	{
+		llwarns << "could not add panel" << llendl;
+		return NULL;
+	}
+
+	// sanity checks
+	if(max<min)				max=min;
+	// 0.0 will make updateControl calculate the increment itself
+	if(increment<0.0f)		increment=0.0f;
+
+	// create a new internal entry for this control
+	ControlEntry newControl;
+	newControl.panel=panel;
+	newControl.widget=NULL;
+	newControl.label_textbox=NULL;
+	newControl.label=controlLabel;
+	newControl.type=type;
+	newControl.integer=integer;
+	newControl.min=min;
+	newControl.max=max;
+	newControl.increment=increment;
+
+	// update the new control
+	updateControl(controlName,newControl);
+
+	// add the control to the internal list
+	mControlsList[controlName]=newControl;
+	// put it at the bottom of the ordering stack
+	mControlsOrder.push_back(controlName);
+
+	// add a new layout_panel to the stack
+	mOptionsStack->addPanel(panel,LLLayoutStack::NO_ANIMATE);
+
+	// show the panel and hide the border
+	panel->setVisible(TRUE);
+	panel->setBorderVisible(FALSE);
+
+	// make the floater fit the newly added control panel
+	reshape(getRect().getWidth(),getRect().getHeight()+panel->getRect().getHeight());
+
+	return newControl.widget;
+}
+
+void FloaterQuickPrefs::removeControl(const std::string& controlName)
+{
+	// find the control panel to remove
+	const control_list_t::iterator it=mControlsList.find(controlName);
+	if(it==mControlsList.end())
+	{
+		llwarns << "Couldn't find control entry " << controlName << llendl;
+		return;
+	}
+
+	// get a pointer to the panel to remove
+	LLLayoutPanel* panel=it->second.panel;
+	// remember the panel's height because it will be deleted by removeChild() later
+	S32 height=panel->getRect().getHeight();
+
+	// remove the panel from the internal list
+	mControlsList.erase(it);
+	// also remove it from the ordering list
+	mControlsOrder.remove(controlName);
+	// and delete it from the user interface stack
+	mOptionsStack->removeChild(panel);
+
+	// make the floater shrink to its new size
+	reshape(getRect().getWidth(),getRect().getHeight()-height);
+}
+
+void FloaterQuickPrefs::updateControls()
+{
+	// make a copy of the internal list and ordering
+	control_list_t temp_list=mControlsList;
+	std::list<std::string> temp_order=mControlsOrder;
+
+	// repeat for all entries in the internal list
+	while(!mControlsList.empty())
+	{
+		// copy current widget values to temp list so we can restore them afterwards
+		control_list_t::iterator it=mControlsList.begin();
+		temp_list[it->first].value=it->second.widget->getValue();
+
+		// remove the control, this will also remove it from the internal list
+		removeControl(it->first);
+	}
+
+	// repeat for all entries in the previously copied list
+	while(!temp_order.empty())
+	{
+		// get the current control entry by its control's name
+		control_list_t::iterator it=temp_list.find(temp_order.front());
+		const ControlEntry& entry=it->second;
+
+		// re-adding the control to the internal list and user interface
+		LLUICtrl* widget=addControl(
+			it->first,
+			entry.label,
+			entry.type,
+			entry.integer,
+			entry.min,
+			entry.max,
+			entry.increment);
+
+		// restore the widget's previous value
+		widget->setValue(entry.value);
+		// remove the temporary control entry
+		temp_order.pop_front();
+	}
+
+	// restore edit selection, if any
+	selectControl(mSelectedControl);
+}
+
+void FloaterQuickPrefs::selectControl(std::string controlName)
+{
+	// remove previously selected marker, if any
+	if(!mSelectedControl.empty())
+	{
+		mControlsList[mSelectedControl].panel->setBorderVisible(FALSE);
+	}
+
+	// save the currently selected name in a volatile settings control to
+	// enable/disable the editor widgets
+	mSelectedControl=controlName;
+	gSavedSettings.setString("QuickPrefsSelectedControl",controlName);
+
+	// if we are not in edit mode, we can stop here
+	if(!gSavedSettings.getBOOL("QuickPrefsEditMode"))
+	{
+		return;
+	}
+
+	// select the topmost entry in the name dropdown, in case we don't find the name
+	mControlNameCombo->selectNthItem(0);
+
+	// assume we don't need the min/max/increment/integer widgets by default
+	BOOL enable_floating_point=FALSE;
+
+	// if actually a selection is present, set up the editor widgets
+	if(!mSelectedControl.empty())
+	{
+		// draw the new selection border
+		LLLayoutPanel* panel=mControlsList[mSelectedControl].panel;
+		panel->setBorderVisible(TRUE);
+
+		// set up editor values
+		mControlLabelEdit->setValue(LLSD(mControlsList[mSelectedControl].label));
+		mControlNameCombo->setValue(LLSD(mSelectedControl));
+		mControlTypeCombo->setValue(mControlsList[mSelectedControl].type);
+		mControlIntegerCheckbox->setValue(LLSD(mControlsList[mSelectedControl].integer));
+		mControlMinSpinner->setValue(LLSD(mControlsList[mSelectedControl].min));
+		mControlMaxSpinner->setValue(LLSD(mControlsList[mSelectedControl].max));
+		mControlIncrementSpinner->setValue(LLSD(mControlsList[mSelectedControl].increment));
+
+		// special handling to enable min/max/integer/increment widgets
+		switch(mControlsList[mSelectedControl].type)
+		{
+			// enable floating point widgets for these types
+			case ControlTypeSpinner:	// fall through
+			case ControlTypeSlider:		// fall through
+			{
+				enable_floating_point=TRUE;
+
+				// use 3 decimal places by default
+				S32 decimals=3;
+				// unless we have an integer control
+				if(mControlsList[mSelectedControl].integer)
+				{
+					decimals=0;
+				}
+				// set up floating point widgets
+				mControlMinSpinner->setPrecision(decimals);
+				mControlMaxSpinner->setPrecision(decimals);
+				mControlIncrementSpinner->setPrecision(decimals);
+				break;
+			}
+			// the rest will not need them
+			default:
+			{
+			}
+		}
+	}
+
+	// enable/disable floating point widgets
+	mControlMinSpinner->setEnabled(enable_floating_point);
+	mControlMaxSpinner->setEnabled(enable_floating_point);
+	mControlIntegerCheckbox->setEnabled(enable_floating_point);
+	mControlIncrementSpinner->setEnabled(enable_floating_point);
+}
+
+void FloaterQuickPrefs::onClickLabel(LLUICtrl* ctrl,void* userdata)
+{
+	// don't do anything when we are not in edit mode
+	if(!gSavedSettings.getBOOL("QuickPrefsEditMode"))
+	{
+		return;
+	}
+	// get the associated panel from the submitted userdata
+	LLUICtrl* panel=(LLUICtrl*) userdata;
+	// select the clicked control, identified by its name
+	selectControl(panel->getName());
+}
+
+void FloaterQuickPrefs::onDoubleClickLabel(LLUICtrl* ctrl,void* userdata)
+{
+	// toggle edit mode
+	BOOL edit_mode=!gSavedSettings.getBOOL("QuickPrefsEditMode");
+	gSavedSettings.setBOOL("QuickPrefsEditMode",edit_mode);
+
+	// select the double clicked control if we toggled edit on
+	if(edit_mode)
+	{
+		// get the associated widget from the submitted userdata
+		LLUICtrl* panel=(LLUICtrl*) userdata;
+		selectControl(panel->getName());
+	}
+}
+
+void FloaterQuickPrefs::onEditModeChanged()
+{
+	// if edit mode was enabled, stop here
+	if(gSavedSettings.getBOOL("QuickPrefsEditMode"))
+	{
+		return;
+	}
+
+	// deselect the current control
+	selectControl("");
+
+	QuickPrefsXML xml;
+	std::string settings_path=getSettingsPath(TRUE);
+
+	// loop through the list of controls, in the displayed order
+	std::list<std::string>::iterator it;
+	for(it=mControlsOrder.begin();it!=mControlsOrder.end();++it)
+	{
+		const ControlEntry& entry=mControlsList[*it];
+		QuickPrefsXMLEntry xml_entry;
+
+		// add control values to the XML entry
+		xml_entry.control_name=*it;
+		xml_entry.label=entry.label;
+		xml_entry.control_type=(U32) entry.type;
+		xml_entry.integer=entry.integer;
+		xml_entry.min=entry.min;
+		xml_entry.max=entry.max;
+		xml_entry.increment=entry.increment;
+
+		// add the XML entry to the overall XML container
+		xml.entries.add(xml_entry);
+	}
+
+	// Serialize the parameter tree
+	LLXMLNodePtr output_node=new LLXMLNode("quickprefs",false);
+	LLXUIParser parser;
+	parser.writeXUI(output_node,xml);
+
+	// Write the resulting XML to file
+	if(!output_node->isNull())
+	{
+		LLFILE *fp=LLFile::fopen(settings_path,"w");
+		if(fp!=NULL)
+		{
+			LLXMLNode::writeHeaderToFile(fp);
+			output_node->writeToFile(fp);
+			fclose(fp);
+		}
+	}
+}
+
+void FloaterQuickPrefs::onValuesChanged()
+{
+	// safety, do nothing if we are not in edit mode
+	if(!gSavedSettings.getBOOL("QuickPrefsEditMode"))
+	{
+		return;
+	}
+
+	// remember the current and possibly new control names
+	std::string old_control_name=mSelectedControl;
+	std::string new_control_name=mControlNameCombo->getValue();
+
+	// if we changed the control's variable, rebuild the user interface
+	if(!new_control_name.empty() && old_control_name!=new_control_name)
+	{
+		// remember the old control parameters so we can restore them later
+		ControlEntry old_parameters=mControlsList[mSelectedControl];
+		// disable selection so the border doesn't cause a crash
+		selectControl("");
+		// rename the old ordering entry so we keep the position in the stack
+		std::list<std::string>::iterator it;
+		for(it=mControlsOrder.begin();it!=mControlsOrder.end();++it)
+		{
+			if(*it==old_control_name)
+			{
+				*it=new_control_name;
+				break;
+			}
+		}
+
+		// remove the old control name from the internal list, to clear the LLLayoutPanel
+		removeControl(old_control_name);
+		// add new control, but this will insert a new ordering entry ...
+		addControl(new_control_name,new_control_name);
+		// ... so remove the newly added ordering entry, since this is not needed
+		mControlsOrder.pop_back();
+		// grab the new values and make the selection border go to the right panel
+		selectControl(new_control_name);
+		// restore the old UI settings
+		mControlsList[mSelectedControl].label=old_parameters.label;
+		// find the control variable in global or per account settings
+		LLControlVariable* var=gSavedSettings.getControl(mSelectedControl);
+		if(!var)
+		{
+			var=gSavedPerAccountSettings.getControl(mSelectedControl);
+		}
+
+		if(var)
+		{
+			// choose sane defaults for floating point controls, so the control value won't be destroyed
+			// start with these
+			F32 min=0.0;
+			F32 max=1.0;
+			F32 value=var->getValue().asReal();
+
+			// if the value was negative and smaller than the current minimum
+			if(value<0.0f)
+			{
+				// make the minimum even smaller
+				min=value*2.0f;
+			}
+			// if the value is above zero, set max to double of the current value
+			else if(value>0.0f)
+			{
+				max=value*2.0f;
+			}
+
+			// do a best guess on variable types and control widgets
+			ControlType type;
+			BOOL integer;
+			switch(var->type())
+			{
+				// Boolean gets the full set
+				case TYPE_BOOLEAN:
+				{
+					// increment will be calculated below
+					min=0.0;
+					max=1.0;
+					integer=TRUE;
+					type=ControlTypeRadio;
+					break;
+				}
+				// LLColor3/4 are just colors
+				case TYPE_COL3:
+				{
+					type=ControlTypeColor3;
+					break;
+				}
+				case TYPE_COL4:
+				{
+					type=ControlTypeColor4;
+					break;
+				}
+				// U32 can never be negative
+				case TYPE_U32:
+				{
+					min=0.0;
+				}
+				// Fallthrough, S32 and U32 are integer values
+				case TYPE_S32:
+				{
+					integer=TRUE;
+				}
+				// Fallthrough, S32, U32 and F32 should use sliders
+				case TYPE_F32:
+				{
+					type=ControlTypeSlider;
+					break;
+				}
+				// Everything else gets a text widget for now
+				default:
+				{
+					type=ControlTypeText;
+					integer=FALSE;
+				}
+			}
+
+			// choose a sane increment
+			F32 increment;
+			if(mControlsList[mSelectedControl].type==ControlTypeSlider)
+			{
+				// fine grained control for sliders
+				increment=(max-min)/100.0f;
+			}
+			else if(mControlsList[mSelectedControl].type==ControlTypeSpinner)
+			{
+				// not as fine grained for spinners
+				increment=(max-min)/20.0f;
+			}
+
+			// don't let values go too small
+			if(increment<0.1)
+			{
+				increment=0.1;
+			}
+
+			// save calculated values to the edit widgets
+			mControlsList[mSelectedControl].min=min;
+			mControlsList[mSelectedControl].max=max;
+			mControlsList[mSelectedControl].increment=increment;
+			mControlsList[mSelectedControl].type=type; // old_parameters.type;
+			mControlsList[mSelectedControl].widget->setValue(var->getValue());
+		}
+		// rebuild controls UI (probably not needed)
+		// updateControls();
+		// update our new control
+		updateControl(mSelectedControl,mControlsList[mSelectedControl]);
+	}
+	// the control's setting variable is still the same, so just update the values
+	else
+	{
+		mControlsList[mSelectedControl].label=mControlLabelEdit->getValue().asString();
+		mControlsList[mSelectedControl].type=(ControlType) mControlTypeCombo->getValue().asInteger();
+		mControlsList[mSelectedControl].integer=mControlIntegerCheckbox->getValue().asBoolean();
+		mControlsList[mSelectedControl].min=mControlMinSpinner->getValue().asReal();
+		mControlsList[mSelectedControl].max=mControlMaxSpinner->getValue().asReal();
+		mControlsList[mSelectedControl].increment=mControlIncrementSpinner->getValue().asReal();
+		// and update the user interface
+		updateControl(mSelectedControl,mControlsList[mSelectedControl]);
+	}
+	// select the control
+	selectControl(mSelectedControl);
+
+	// sometimes we seem to lose focus, so make sure we keep it
+	setFocus(TRUE);
+}
+
+void FloaterQuickPrefs::onAddNewClicked()
+{
+	// count a number to keep control names unique
+	static S32 sCount=0;
+	std::string new_control_name="NewControl"+LLSD(sCount).asString();
+	// add the new control to the internal list and user interface
+	addControl(new_control_name,new_control_name);
+	sCount++;
+	// select the newly created control
+	selectControl(new_control_name);
+}
+
+void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl,void* userdata)
+{
+	// get the associated panel from the submitted userdata
+	LLUICtrl* panel=(LLUICtrl*) userdata;
+	// deselect the current entry
+	selectControl("");
+	// remove the control from the internal list
+	removeControl(panel->getName());
+	// update the user interface
+	updateControls();
+	// reinstate focus in case we lost it
+	setFocus(TRUE);
+}
+
+void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl,void* userdata)
+{
+	// get the associated color swatch from the submitted userdata
+	LLColorSwatchCtrl* color_swatch=(LLColorSwatchCtrl*) userdata;
+	// get the current color
+	LLColor4 color=color_swatch->get();
+	// replace the alpha value of the color with the value in the alpha spinner
+	color.setAlpha(ctrl->getValue().asReal());
+	// save the color back into the color swatch
+	color_swatch->getControlVariable()->setValue(color.getValue());
+}
+
+void FloaterQuickPrefs::onMoveUpClicked()
+{
+	// find the control in the ordering list
+	std::list<std::string>::iterator it;
+	for(it=mControlsOrder.begin();it!=mControlsOrder.end();++it)
+	{
+		if(*it==mSelectedControl)
+		{
+			// if it's already on top of the list, do nothing
+			if(it==mControlsOrder.begin())
+				return;
+
+			// get the iterator of the previous item
+			std::list<std::string>::iterator previous=it;
+			--previous;
+
+			// copy the previous item to the one we want to move
+			*it=*previous;
+			// copy the moving item to previous
+			*previous=mSelectedControl;
+			// update the user interface
+			updateControls();
+			return;
+		}
+	}
+	return;
+}
+
+void FloaterQuickPrefs::onMoveDownClicked()
+{
+	// find the control in the ordering list
+	std::list<std::string>::iterator it;
+	for(it=mControlsOrder.begin();it!=mControlsOrder.end();++it)
+	{
+		if(*it==mSelectedControl)
+		{
+			// if it's already at the end of the list, do nothing
+			if(*it==mControlsOrder.back())
+				return;
+
+			// get the iterator of the next item
+			std::list<std::string>::iterator next=it;
+			++next;
+
+			// copy the next item to the one we want to move
+			*it=*next;
+			// copy the moving item to next
+			*next=mSelectedControl;
+			// update the user interface
+			updateControls();
+			return;
+		}
+	}
+	return;
+}
+
+void FloaterQuickPrefs::onClose(bool app_quitting)
+{
+	// close edit mode and save settings
+	gSavedSettings.setBOOL("QuickPrefsEditMode",FALSE);
+}
+// </FS:Zi>

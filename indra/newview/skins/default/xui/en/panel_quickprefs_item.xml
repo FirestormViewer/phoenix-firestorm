@@ -1,0 +1,192 @@
+<!-- one item in the list of quick preferences -->
+
+<!-- border parameters decide how the selection looks while editing -->
+<layout_panel
+ border="true"
+ border_thickness="2"
+ bevel_style="bright"
+ highlight_light_color="EmphasisColor"
+ name="option_layout_panel"
+ layout="topleft"
+ follows="all"
+ height="20">
+
+<layout_stack
+ follows="all"
+ layout="topleft"
+ name="option_inner_stack"
+ left="4"
+ top="0"
+ right="-4"
+ height="20"
+ border_size="0"
+ orientation="horizontal">
+<layout_panel
+ name="option_panel_updown"
+ layout="topleft"
+ follows="all"
+ visibility_control="QuickPrefsEditMode"
+ auto_resize="false"
+ width="20">
+
+<button
+ layout="topleft"
+ follows="right|top"
+ name="remove_button"
+ tool_tip="Remove this control"
+ label=""
+ image_unselected="Icon_Close_Foreground"
+ image_selected="Icon_Close_Foreground"
+ image_pressed="Icon_Close_Press"
+ left="0"
+ width="16"
+ top="2"
+ height="16" />
+
+</layout_panel>
+
+<layout_panel
+ name="text_panel"
+ layout="topleft"
+ follows="all"
+ auto_resize="true"
+ width="95">
+
+<text
+ name="option_label"
+ layout="topleft"
+ follows="left|top"
+ left="0"
+ top="2"
+ right="-1"
+ height="20">
+Control Label:
+</text>
+
+</layout_panel>
+
+<layout_panel
+ name="option_panel"
+ layout="topleft"
+ follows="all"
+ min_width="50"
+ auto_resize="false"
+ width="155">
+
+<!-- one of these controls will be chosen by the user, all others remain hidden -->
+<check_box
+ name="option_checkbox_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="0"
+ top="-11"
+ height="20"
+ right="-1"
+ visible="false"
+ label="" />
+
+<line_editor
+ name="option_text_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="0"
+ top="2"
+ height="16"
+ right="-1"
+ visible="false" />
+
+<spinner
+ name="option_spinner_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="0"
+ top="-12"
+ height="16"
+ right="-1"
+ visible="false"
+ label="" />
+
+<slider
+ name="option_slider_control"
+ layout="topleft"
+ follows="left|right|top"
+ can_edit_text="true"
+ left="0"
+ top="2"
+ height="16"
+ right="-1"
+ visible="false"
+ label="" />
+
+<radio_group
+ name="option_radio_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="20"
+ top="5"
+ height="16"
+ right="-1"
+ visible="false"
+ label="">
+    <radio_item
+     name="on"
+     width="60"
+     layout="topleft"
+     follows="left|top"
+     label="On"
+     value="1" />
+    <radio_item
+     name="off"
+     width="60"
+     layout="topleft"
+     follows="right|top"
+     left_pad="10"
+     label="Off"
+     value="0" />
+</radio_group>
+
+<color_swatch
+ name="option_color3_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="10"
+ top="2"
+ height="18"
+ width="60"
+ visible="false"
+ can_apply_immediately="true"
+ label_height="0"
+ label="" />
+
+<color_swatch
+ name="option_color4_control"
+ layout="topleft"
+ follows="left|right|top"
+ left="10"
+ top="2"
+ height="18"
+ width="60"
+ visible="false"
+ can_apply_immediately="true"
+ label_height="0"
+ label="" />
+<spinner
+ name="option_color_alpha_control"
+ layout="topleft"
+ follows="left|right|top"
+ left_pad="6"
+ top_delta="0"
+ height="16"
+ right="-1"
+ min_val="0"
+ max_val="1"
+ increment="0.005"
+ visible="false"
+ label="" />
+<!-- one of these controls will be chosen by the user, all others remain hidden -->
+
+</layout_panel>
+
+</layout_stack>
+
+</layout_panel>
