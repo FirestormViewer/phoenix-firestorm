@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<panel
+border="false"
+follows="all"
+height="566"
+layout="topleft"
+left="1"
+width="780"
+label="Websearch"
+name="panel_ls_web">
+	<web_browser
+	 top="5"
+	 bottom="-1"
+	 left="5"
+	 right="-5"
+	 layout="topleft"
+	 follows="all"
+	 name="search_browser"
+	 ignore_ui_scale="false"
+	 start_url="" />
+</panel>

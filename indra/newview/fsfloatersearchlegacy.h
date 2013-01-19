@@ -36,6 +36,7 @@
 #include "llavatarpropertiesprocessor.h"
 #include "llgroupmgr.h"
 #include "llavatarnamecache.h"
+#include "llmediactrl.h"
 
 class LLRemoteParcelInfoObserver;
 class LLAvatarPropertiesObserver;
@@ -76,9 +77,11 @@ private:
 	LLVector3d	mParcelGlobal;
 	LLUUID		mSelectedID;
 	U32			mEventID;
+	bool		mHasSelection;
 	
 	void resetVerbs();
 	void flushDetails();
+	void onTabChange();
 	void onBtnPeopleProfile();
 	void onBtnPeopleIM();
 	void onBtnPeopleFriend();
@@ -314,6 +317,27 @@ private:
 	LLSD		mResultsContent;
 	LLUUID		mQueryID;
 	FSFloaterSearch* mParent;
+};
+
+class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver
+{
+	LOG_CLASS(FSFloaterSearch);
+public:
+	struct SearchQuery : public LLInitParam::Block<SearchQuery>
+	{
+		Optional<std::string> category;
+		Optional<std::string> query;
+		
+		SearchQuery();
+	};
+	FSPanelSearchWeb();
+	/*virtual*/ BOOL postBuild();
+	std::string loadURL();
+private:
+	~FSPanelSearchWeb();
+	
+	LLMediaCtrl*	mWebBrowser;
+	LLSD			mCategoryPaths;
 };
 
 #endif // FS_FSFLOATERSEARCH_H

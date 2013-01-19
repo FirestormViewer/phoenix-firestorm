@@ -1665,21 +1665,11 @@
         shortcut="control|F">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="search" />
+             parameter="search_legacy" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="search" />
+             parameter="search_legacy" />
             </menu_item_check>
-        <menu_item_check
-			label="Legacy Search"
-			name="Legacy Search">
-            <menu_item_check.on_check
-			function="Floater.Visible"
-			parameter="search_legacy" />
-            <menu_item_check.on_click
-			function="Floater.Toggle"
-			parameter="search_legacy" />
-		</menu_item_check>
 
     	<menu_item_call
              label="SL Marketplace"

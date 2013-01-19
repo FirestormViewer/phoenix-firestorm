@@ -12,7 +12,7 @@
 	positioning="centered"
 	save_rect="true"
 	single_instance="true"
-	title="Legacy Search"
+	title="Firestorm Search"
 	width="780">
 	<!-- Strings -->
 	<floater.string name="string.location">
@@ -60,6 +60,12 @@
 		width="780"
 		height="585">
 		<panel
+			class="panel_ls_web"
+			filename="panel_fs_search_legacy_web.xml"
+			label="Websearch"
+			layout="topleft"
+			name="panel_ls_web" />
+		<panel
 			class="panel_ls_people"
 			filename="panel_fs_search_legacy_people.xml"
 			label="People"
@@ -95,16 +101,6 @@
 			label="Classifieds"
 			layout="topleft"
 			name="panel_ls_classifieds" />
-		<!--<panel
-			border="false"
-			follows="left|top|right"
-			height="589"
-			layout="topleft"
-			left="0"
-			width="780"
-			label="Web"
-			name="panel_ls_web">
-		</panel>-->
 	</tab_container>
 	<!-- Details/Action Panes -->
 	<panel

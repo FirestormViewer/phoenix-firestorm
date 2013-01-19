@@ -44,9 +44,11 @@
 #include "llremoteparcelrequest.h"
 #include "llavatarpropertiesprocessor.h"
 #include "llproductinforequest.h"
+#include "lllogininstance.h"
 #include "llviewercontrol.h"
 #include "llviewerfloaterreg.h"
 #include "llviewergenericmessage.h"
+#include "llviewernetwork.h"
 #include "llviewerregion.h"
 #include "llnotificationsutil.h"
 #include "lldispatcher.h"
@@ -54,6 +56,7 @@
 #include "message.h"
 
 #include "llcombobox.h"
+#include "lltabcontainer.h"
 #include "llfloaterreg.h"
 #include "llloadingindicator.h"
 #include "llradiogroup.h"
@@ -303,6 +306,9 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 
 BOOL FSFloaterSearch::postBuild()
 {
+	LLTabContainer* tabs = getChild<LLTabContainer>("ls_tabs");
+	if (tabs)
+		tabs->setCommitCallback(boost::bind(&FSFloaterSearch::onTabChange, this));
 	childSetAction("people_profile_btn", boost::bind(&FSFloaterSearch::onBtnPeopleProfile, this));
 	childSetAction("people_message_btn", boost::bind(&FSFloaterSearch::onBtnPeopleIM, this));
 	childSetAction("people_friend_btn", boost::bind(&FSFloaterSearch::onBtnPeopleFriend, this));
@@ -324,9 +330,43 @@ BOOL FSFloaterSearch::postBuild()
 	mDetailMaturity =	getChild<LLIconCtrl>("maturity_icon");
 	flushDetails();
 	
-	mDetailsPanel->setVisible(false);
+	if (mDetailsPanel)
+		mDetailsPanel->setVisible(false);
+	mHasSelection = false;
+	
+	
+	/// Disable websearch on OpenSim because most OpenSim grids don't have one and the ones that do
+	/// suck even more than LL's. (Scary but true!)
+#ifdef HAS_OPENSIM_SUPPORT
+	if (!LLGridManager::getInstance()->isInSLMain() && !LLGridManager::getInstance()->isInSLBeta())
+	{
+		if (tabs)
+		{
+			LLPanel* web_panel = tabs->getPanelByName("panel_ls_web");
+			if (web_panel)
+			{
+				tabs->removeTabPanel(web_panel);
+			}
+		}
+	}
+#endif // HAS_OPENSIM_SUPPORT
 	
 	return TRUE;
+}
+
+void FSFloaterSearch::onTabChange()
+{
+	LLPanel* active_panel = getChild<LLTabContainer>("ls_tabs")->getCurrentPanel();
+	LLPanel* panel_web = getChild<LLPanel>("panel_ls_web");
+	
+	if(active_panel == panel_web)
+	{
+		mDetailsPanel->setVisible(false);
+	}
+	else
+	{
+		mDetailsPanel->setVisible(mHasSelection);
+	}
 }
 
 void FSFloaterSearch::onSelectedItem(const LLUUID& selected_item, int type)
@@ -399,6 +439,7 @@ void FSFloaterSearch::displayParcelDetails(const LLParcelData& parcel_data)
 	
 	mParcelGlobal = LLVector3d(parcel_data.global_x, parcel_data.global_y, parcel_data.global_z);
 	mDetailsPanel->setVisible(true);
+	mHasSelection = true;
 	mDetailMaturity->setVisible(true);
 	mDetailTitle->setValue(parcel_data.name);
 	mDetailDesc->setValue(parcel_data.desc);
@@ -423,6 +464,7 @@ void FSFloaterSearch::displayAvatarDetails(LLAvatarData*& avatar_data)
 		}
 		
 		mDetailsPanel->setVisible(true);
+		mHasSelection = true;
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(avatar_data->about_text);
 		mDetailSnapshot->setValue(avatar_data->image_id);
@@ -445,6 +487,7 @@ void FSFloaterSearch::displayGroupDetails(LLGroupMgrGroupData*& group_data)
 		map["FOUNDER"] = LLSLURL("agent", group_data->mFounderID, "inspect").getSLURLString();
 		
 		mDetailsPanel->setVisible(true);
+		mHasSelection = true;
 		mDetailTitle->setValue(LLTrans::getString("LoadingData"));
 		mDetailDesc->setValue(group_data->mCharter);
 		mDetailSnapshot->setValue(group_data->mInsigniaID);
@@ -476,6 +519,7 @@ void FSFloaterSearch::displayClassifiedDetails(LLAvatarClassifiedInfo*& c_info)
 		map["SLURL"] = LLSLURL("parcel", c_info->parcel_id, "about").getSLURLString();
 		
 		mDetailsPanel->setVisible(true);
+		mHasSelection = true;
 		mDetailMaturity->setVisible(true);
 		mParcelGlobal = c_info->pos_global;
 		mDetailTitle->setValue(c_info->name);
@@ -514,6 +558,7 @@ void FSFloaterSearch::displayEventDetails(U32 eventId, F64 eventEpoch, const std
 	mParcelGlobal = eventGlobalPos;
 	mEventID = eventId;
 	mDetailsPanel->setVisible(true);
+	mHasSelection = true;
 	mDetailMaturity->setVisible(true);
 	mDetailTitle->setValue(eventName);
 	mDetailDesc->setValue(eventDesc);
@@ -2669,4 +2714,103 @@ void FSPanelSearchEvents::processSearchReply(LLMessageSystem* msg, void**)
 		search_results->setFocus(TRUE);
 	}
 	self->setLoadingProgress(false);
+}
+
+////////////////////////////////////////
+//          WebSearch Panel           //
+////////////////////////////////////////
+
+static LLRegisterPanelClassWrapper<FSPanelSearchWeb> t_panel_fs_search_web("panel_ls_web");
+
+FSPanelSearchWeb::FSPanelSearchWeb()
+: LLPanel()
+, mWebBrowser(NULL)
+{
+	// declare a map that transforms a category name into
+	// the URL suffix that is used to search that category
+	mCategoryPaths = LLSD::emptyMap();
+	mCategoryPaths["all"]          = "search";
+	// We don't use these yet, but someday we will.
+	//mCategoryPaths["people"]       = "search/people";
+	//mCategoryPaths["places"]       = "search/places";
+	//mCategoryPaths["events"]       = "search/events";
+	//mCategoryPaths["groups"]       = "search/groups";
+	//mCategoryPaths["wiki"]         = "search/wiki";
+	//mCategoryPaths["destinations"] = "destinations";
+	//mCategoryPaths["classifieds"]  = "classifieds";
+}
+
+FSPanelSearchWeb::~FSPanelSearchWeb()
+{
+}
+
+FSPanelSearchWeb::SearchQuery::SearchQuery()
+:	category("category", ""), // <- Stupidnesss until we move to full webbrowser replacement
+query("query")
+{}
+
+BOOL FSPanelSearchWeb::postBuild()
+{
+	mWebBrowser = getChild<LLMediaCtrl>("search_browser");
+	if (mWebBrowser)
+	{
+		mWebBrowser->addObserver(this);
+		mWebBrowser->navigateTo(loadURL(), "text/html");
+	}
+    return TRUE;
+}
+
+std::string FSPanelSearchWeb::loadURL()
+{
+	LLSD subs;
+	subs["CATEGORY"] = mCategoryPaths["all"].asString();
+
+	// add the search query string
+	subs["QUERY"] = "";
+	
+	// add the permissions token that login.cgi gave us
+	// We use "search_token", and fallback to "auth_token" if not present.
+	LLSD search_token = LLLoginInstance::getInstance()->getResponse("search_token");
+	if (search_token.asString().empty())
+	{
+		search_token = LLLoginInstance::getInstance()->getResponse("auth_token");
+	}
+	subs["AUTH_TOKEN"] = search_token.asString();
+	
+	// add the user's preferred maturity (can be changed via prefs)
+	std::string maturity;
+	if (gAgent.prefersAdult())
+	{
+		maturity = "42";  // PG,Mature,Adult
+	}
+	else if (gAgent.prefersMature())
+	{
+		maturity = "21";  // PG,Mature
+	}
+	else
+	{
+		maturity = "13";  // PG
+	}
+	subs["MATURITY"] = maturity;
+	
+	std::string url;
+#ifdef HAS_OPENSIM_SUPPORT
+	std::string debug_url = gSavedSettings.getString("SearchURLDebug");
+	if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
+	{
+		url = debug_url;
+	}
+	else if(LLGridManager::getInstance()->isInOpenSim())
+	{
+		url = LLLoginInstance::getInstance()->hasResponse("search")
+		? LLLoginInstance::getInstance()->getResponse("search").asString()
+		: gSavedSettings.getString("SearchURLOpenSim");
+	}
+	else // we are in SL or SL beta
+#endif // HAS_OPENSIM_SUPPORT
+	{
+		url = gSavedSettings.getString("SearchURL");
+	}
+	url = LLWeb::expandURLSubstitutions(url, subs);
+	return url;
 }
