@@ -114,8 +114,8 @@ protected:
 		std::string label;
 		ControlType type;
 		BOOL integer;
-		F32 min;
-		F32 max;
+		F32 min_value;
+		F32 max_value;
 		F32 increment;
 		LLSD value;		// used temporary during updateControls()
 	};
@@ -127,8 +127,8 @@ protected:
 		Mandatory<std::string>	label;
 		Mandatory<U32>			control_type;
 		Mandatory<BOOL>			integer;
-		Mandatory<F32>			min;
-		Mandatory<F32>			max;
+		Mandatory<F32>			min_value;	// "min" is frowned upon by a braindead windows include
+		Mandatory<F32>			max_value;	// "max" see "min"
 		Mandatory<F32>			increment;
 
 		QuickPrefsXMLEntry();
@@ -170,7 +170,7 @@ protected:
 	std::string getSettingsPath(BOOL save_mode);
 
 	// adds a new control and returns a pointer to the chosen widget
-	LLUICtrl* addControl(const std::string& controlName,const std::string& controlLabel,ControlType type=ControlTypeRadio,BOOL integer=FALSE,F32 min=-1000000.0f,F32 max=1000000.0,F32 increment=0.0f);
+	LLUICtrl* addControl(const std::string& controlName,const std::string& controlLabel,ControlType type=ControlTypeRadio,BOOL integer=FALSE,F32 min_value=-1000000.0f,F32 max_value=1000000.0,F32 increment=0.0f);
 	// removes a control
 	void removeControl(const std::string& controlName);
 	// updates a single control

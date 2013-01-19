@@ -67,8 +67,8 @@ FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 	label("label"),
 	control_type("control_type"),
 	integer("integer"),
-	min("min"),
-	max("max"),
+	min_value("min"),		// "min" is frowned upon by a braindead windows include
+	max_value("max"),		// "max" see "min"
 	increment("increment")
 {}
 // </FS:Zi>
@@ -268,8 +268,8 @@ BOOL FloaterQuickPrefs::postBuild()
 					xml_entry.label,
 					(ControlType) type,
 					xml_entry.integer,
-					xml_entry.min,
-					xml_entry.max,
+					xml_entry.min_value,
+					xml_entry.max_value,
 					xml_entry.increment
 				);
 			}
@@ -790,20 +790,20 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 		// finer grained for sliders
 		if(entry.type==ControlTypeSlider)
 		{
-			entry.increment=(entry.max-entry.min)/100.0f;
+			entry.increment=(entry.max_value-entry.min_value)/100.0f;
 		}
 		// a little less for spinners
 		else if(entry.type==ControlTypeSpinner)
 		{
-			entry.increment=(entry.max-entry.min)/20.0f;
+			entry.increment=(entry.max_value-entry.min_value)/20.0f;
 		}
 	}
 
 	// if it's an integer entry, round the numbers
 	if(entry.integer)
 	{
-		entry.min=llround(entry.min);
-		entry.max=llround(entry.max);
+		entry.min_value=llround(entry.min_value);
+		entry.max_value=llround(entry.max_value);
 
 		// recalculate increment
 		entry.increment=llround(entry.increment);
@@ -826,16 +826,16 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 	{
 		LLSpinCtrl* spinner=(LLSpinCtrl*) widget;
 		spinner->setPrecision(decimals);
-		spinner->setMinValue(entry.min);
-		spinner->setMaxValue(entry.max);
+		spinner->setMinValue(entry.min_value);
+		spinner->setMaxValue(entry.max_value);
 		spinner->setIncrement(entry.increment);
 	}
 	else if(entry.type==ControlTypeSlider)
 	{
 		LLSliderCtrl* slider=(LLSliderCtrl*) widget;
 		slider->setPrecision(decimals);
-		slider->setMinValue(entry.min);
-		slider->setMaxValue(entry.max);
+		slider->setMinValue(entry.min_value);
+		slider->setMaxValue(entry.max_value);
 		slider->setIncrement(entry.increment);
 	}
 	else if(entry.type==ControlTypeColor4)
@@ -890,7 +890,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 	}
 }
 
-LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std::string& controlLabel,ControlType type,BOOL integer,F32 min,F32 max,F32 increment)
+LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std::string& controlLabel,ControlType type,BOOL integer,F32 min_value,F32 max_value,F32 increment)
 {
 	// create a new controls panel
 	LLLayoutPanel* panel=LLUICtrlFactory::createFromFile<LLLayoutPanel>("panel_quickprefs_item.xml",NULL,LLLayoutStack::child_registry_t::instance());
@@ -901,7 +901,7 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std
 	}
 
 	// sanity checks
-	if(max<min)				max=min;
+	if(max_value<min_value)	max_value=min_value;
 	// 0.0 will make updateControl calculate the increment itself
 	if(increment<0.0f)		increment=0.0f;
 
@@ -913,8 +913,8 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std
 	newControl.label=controlLabel;
 	newControl.type=type;
 	newControl.integer=integer;
-	newControl.min=min;
-	newControl.max=max;
+	newControl.min_value=min_value;
+	newControl.max_value=max_value;
 	newControl.increment=increment;
 
 	// update the new control
@@ -994,8 +994,8 @@ void FloaterQuickPrefs::updateControls()
 			entry.label,
 			entry.type,
 			entry.integer,
-			entry.min,
-			entry.max,
+			entry.min_value,
+			entry.max_value,
 			entry.increment);
 
 		// restore the widget's previous value
@@ -1045,8 +1045,8 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 		mControlNameCombo->setValue(LLSD(mSelectedControl));
 		mControlTypeCombo->setValue(mControlsList[mSelectedControl].type);
 		mControlIntegerCheckbox->setValue(LLSD(mControlsList[mSelectedControl].integer));
-		mControlMinSpinner->setValue(LLSD(mControlsList[mSelectedControl].min));
-		mControlMaxSpinner->setValue(LLSD(mControlsList[mSelectedControl].max));
+		mControlMinSpinner->setValue(LLSD(mControlsList[mSelectedControl].min_value));
+		mControlMaxSpinner->setValue(LLSD(mControlsList[mSelectedControl].max_value));
 		mControlIncrementSpinner->setValue(LLSD(mControlsList[mSelectedControl].increment));
 
 		// special handling to enable min/max/integer/increment widgets
@@ -1139,8 +1139,8 @@ void FloaterQuickPrefs::onEditModeChanged()
 		xml_entry.label=entry.label;
 		xml_entry.control_type=(U32) entry.type;
 		xml_entry.integer=entry.integer;
-		xml_entry.min=entry.min;
-		xml_entry.max=entry.max;
+		xml_entry.min_value=entry.min_value;
+		xml_entry.max_value=entry.max_value;
 		xml_entry.increment=entry.increment;
 
 		// add the XML entry to the overall XML container
@@ -1216,20 +1216,20 @@ void FloaterQuickPrefs::onValuesChanged()
 		{
 			// choose sane defaults for floating point controls, so the control value won't be destroyed
 			// start with these
-			F32 min=0.0;
-			F32 max=1.0;
+			F32 min_value=0.0;
+			F32 max_value=1.0;
 			F32 value=var->getValue().asReal();
 
 			// if the value was negative and smaller than the current minimum
 			if(value<0.0f)
 			{
 				// make the minimum even smaller
-				min=value*2.0f;
+				min_value=value*2.0f;
 			}
 			// if the value is above zero, set max to double of the current value
 			else if(value>0.0f)
 			{
-				max=value*2.0f;
+				max_value=value*2.0f;
 			}
 
 			// do a best guess on variable types and control widgets
@@ -1241,8 +1241,8 @@ void FloaterQuickPrefs::onValuesChanged()
 				case TYPE_BOOLEAN:
 				{
 					// increment will be calculated below
-					min=0.0;
-					max=1.0;
+					min_value=0.0;
+					max_value=1.0;
 					integer=TRUE;
 					type=ControlTypeRadio;
 					break;
@@ -1261,7 +1261,7 @@ void FloaterQuickPrefs::onValuesChanged()
 				// U32 can never be negative
 				case TYPE_U32:
 				{
-					min=0.0;
+					min_value=0.0;
 				}
 				// Fallthrough, S32 and U32 are integer values
 				case TYPE_S32:
@@ -1287,12 +1287,12 @@ void FloaterQuickPrefs::onValuesChanged()
 			if(mControlsList[mSelectedControl].type==ControlTypeSlider)
 			{
 				// fine grained control for sliders
-				increment=(max-min)/100.0f;
+				increment=(max_value-min_value)/100.0f;
 			}
 			else if(mControlsList[mSelectedControl].type==ControlTypeSpinner)
 			{
 				// not as fine grained for spinners
-				increment=(max-min)/20.0f;
+				increment=(max_value-min_value)/20.0f;
 			}
 
 			// don't let values go too small
@@ -1302,8 +1302,8 @@ void FloaterQuickPrefs::onValuesChanged()
 			}
 
 			// save calculated values to the edit widgets
-			mControlsList[mSelectedControl].min=min;
-			mControlsList[mSelectedControl].max=max;
+			mControlsList[mSelectedControl].min_value=min_value;
+			mControlsList[mSelectedControl].max_value=max_value;
 			mControlsList[mSelectedControl].increment=increment;
 			mControlsList[mSelectedControl].type=type; // old_parameters.type;
 			mControlsList[mSelectedControl].widget->setValue(var->getValue());
@@ -1319,8 +1319,8 @@ void FloaterQuickPrefs::onValuesChanged()
 		mControlsList[mSelectedControl].label=mControlLabelEdit->getValue().asString();
 		mControlsList[mSelectedControl].type=(ControlType) mControlTypeCombo->getValue().asInteger();
 		mControlsList[mSelectedControl].integer=mControlIntegerCheckbox->getValue().asBoolean();
-		mControlsList[mSelectedControl].min=mControlMinSpinner->getValue().asReal();
-		mControlsList[mSelectedControl].max=mControlMaxSpinner->getValue().asReal();
+		mControlsList[mSelectedControl].min_value=mControlMinSpinner->getValue().asReal();
+		mControlsList[mSelectedControl].max_value=mControlMaxSpinner->getValue().asReal();
 		mControlsList[mSelectedControl].increment=mControlIncrementSpinner->getValue().asReal();
 		// and update the user interface
 		updateControl(mSelectedControl,mControlsList[mSelectedControl]);

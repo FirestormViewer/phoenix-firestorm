@@ -274,6 +274,18 @@ text_color="SchemeLightest"
     width="100">
        Need help logging in?   
 </text>
+<!-- enable this to test quickprefs on login screen -Zi -->
+<button
+label="QP"
+top_delta="0"
+width="50"
+height="16"
+>
+        <button.commit_callback
+         function="Floater.Show"
+		 parameter="quickprefs" />
+	 </button>
+
     </layout_panel>
   </layout_stack>
 </panel>
