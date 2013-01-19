@@ -73,6 +73,7 @@ public:
 	void setLoadingProgress(bool started);
 	static std::string filterShortWords(std::string query_string);
 private:
+	virtual void onClose(bool app_quitting);
 	const LLUUID& getSelectedID() { return mSelectedID; }
 	LLVector3d	mParcelGlobal;
 	LLUUID		mSelectedID;

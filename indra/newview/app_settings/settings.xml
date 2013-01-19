@@ -19767,5 +19767,18 @@ Change of this parameter will affect the layout of buttons in notification toast
         <real>1</real>
     </map>
     <!-- </FS:Cron> -->
+    <key>FSLastSearchTab</key>
+    <map>
+		<key>Comment</key>
+		<string>Last selected tab in search window</string>
+		<key>Persist</key>
+		<integer>1</integer>
+		<key>Type</key>
+		<string>S32</string>
+		<key>Value</key>
+		<integer>0</integer>
+		<key>Backup</key>
+		<integer>0</integer>
+    </map>
 </map>
 </llsd>

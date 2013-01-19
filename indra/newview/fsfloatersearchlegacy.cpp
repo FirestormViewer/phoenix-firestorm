@@ -304,6 +304,12 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 	panel_classifieds->onSearchPanelOpen(this);
 }
 
+//virtual
+void FSFloaterSearch::onClose(bool app_quitting)
+{
+	gSavedSettings.setS32("FSLastSearchTab", getChild<LLTabContainer>("ls_tabs")->getCurrentPanelIndex());
+}
+
 BOOL FSFloaterSearch::postBuild()
 {
 	LLTabContainer* tabs = getChild<LLTabContainer>("ls_tabs");
@@ -334,7 +340,6 @@ BOOL FSFloaterSearch::postBuild()
 		mDetailsPanel->setVisible(false);
 	mHasSelection = false;
 	
-	
 	/// Disable websearch on OpenSim because most OpenSim grids don't have one and the ones that do
 	/// suck even more than LL's. (Scary but true!)
 #ifdef HAS_OPENSIM_SUPPORT
@@ -350,6 +355,8 @@ BOOL FSFloaterSearch::postBuild()
 		}
 	}
 #endif // HAS_OPENSIM_SUPPORT
+	if (!tabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
+		tabs->selectFirstTab();
 	
 	return TRUE;
 }
