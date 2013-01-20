@@ -60,7 +60,7 @@
  layout="topleft"
  follows="all"
  auto_resize="true"
- width="95">
+ width="115">
 
 <text
  name="option_label"
@@ -81,7 +81,7 @@ Control Label:
  follows="all"
  min_width="50"
  auto_resize="false"
- width="155">
+ width="135">
 
 <!-- one of these controls will be chosen by the user, all others remain hidden -->
 <check_box
@@ -185,7 +185,7 @@ Control Label:
  layout="topleft"
  follows="left|right|top"
  left_pad="6"
- top_delta="0"
+ top_delta="-4"
  height="16"
  right="-1"
  min_val="0"
