@@ -40,11 +40,11 @@
 		left_delta="0"
 		name="classifieds_edit"
 		top="29"
-		width="545" />
+		width="546" />
 		<button
 		follows="top|right"
 		height="23"
-		label="Find"
+		label="Search"
 		layout="topleft"
 		left_pad="2"
 		name="classifieds_find"
