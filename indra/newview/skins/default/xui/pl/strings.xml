@@ -5066,4 +5066,34 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="fsbridge_created">
 		Most LSL został utworzony pomyślnie.
 	</string>
+	<string name="QP Draw Distance">
+		Pole widzenia
+	</string>
+	<string name="QP Max Particles">
+		Maks. cząstek
+	</string>
+	<string name="QP Avatar Physics LOD">
+		LOD fiz. awatarów
+	</string>
+	<string name="QP LOD Factor">
+		Mnożnik LOD
+	</string>
+	<string name="QP Max Avatars">
+		Maks. awatarów
+	</string>
+	<string name="QP Height Offset">
+		Dostrój wysokość
+	</string>
+	<string name="QP Tags Offset">
+		Pozycja tagów
+	</string>
+	<string name="QP Name Tags">
+		Tagi imion
+	</string>
+	<string name="QP LookAt Target">
+		Cele spojrzeń
+	</string>
+	<string name="QP Color Under Cursor">
+		Kolor spod kursora
+	</string>
 </strings>
