@@ -266,12 +266,15 @@ BOOL FloaterQuickPrefs::postBuild()
 				addControl(
 					xml_entry.control_name,
 					xml_entry.label,
+					NULL,
 					(ControlType) type,
 					xml_entry.integer,
 					xml_entry.min_value,
 					xml_entry.max_value,
 					xml_entry.increment
 				);
+				// put it at the bottom of the ordering stack
+				mControlsOrder.push_back(xml_entry.control_name);
 			}
 		}
 	}
@@ -890,7 +893,7 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 	}
 }
 
-LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std::string& controlLabel,ControlType type,BOOL integer,F32 min_value,F32 max_value,F32 increment)
+LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std::string& controlLabel,LLView* slot,ControlType type,BOOL integer,F32 min_value,F32 max_value,F32 increment)
 {
 	// create a new controls panel
 	LLLayoutPanel* panel=LLUICtrlFactory::createFromFile<LLLayoutPanel>("panel_quickprefs_item.xml",NULL,LLLayoutStack::child_registry_t::instance());
@@ -907,7 +910,7 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std
 
 	// create a new internal entry for this control
 	ControlEntry newControl;
-	newControl.panel=panel;
+	newControl.panel=panel->getChild<LLPanel>("option_ordering_panel");
 	newControl.widget=NULL;
 	newControl.label_textbox=NULL;
 	newControl.label=controlLabel;
@@ -922,23 +925,39 @@ LLUICtrl* FloaterQuickPrefs::addControl(const std::string& controlName,const std
 
 	// add the control to the internal list
 	mControlsList[controlName]=newControl;
-	// put it at the bottom of the ordering stack
-	mControlsOrder.push_back(controlName);
 
-	// add a new layout_panel to the stack
-	mOptionsStack->addPanel(panel,LLLayoutStack::NO_ANIMATE);
+	// if we have a slot already, reparent our new ordering panel and delete the old layout_panel
+	if(slot)
+	{
+		// add the ordering panel to the slot
+		slot->addChild(newControl.panel);
+		// make sure the panel moves to the top left corner
+		newControl.panel->setOrigin(0,0);
+		// resize it to make it fill the slot
+		newControl.panel->reshape(slot->getRect().getWidth(),slot->getRect().getHeight());
+		// remove the old layout panel from memory
+		delete panel;
+	}
+	// otherwise create a new slot
+	else
+	{
+		// add a new layout_panel to the stack
+		mOptionsStack->addPanel(panel,LLLayoutStack::NO_ANIMATE);
+		// add the panel to the list of ordering slots
+		mOrderingSlots.push_back(panel);
+		// make the floater fit the newly added control panel
+		reshape(getRect().getWidth(),getRect().getHeight()+panel->getRect().getHeight());
+		// show the panel
+		panel->setVisible(TRUE);
+	}
 
-	// show the panel and hide the border
-	panel->setVisible(TRUE);
-	panel->setBorderVisible(FALSE);
-
-	// make the floater fit the newly added control panel
-	reshape(getRect().getWidth(),getRect().getHeight()+panel->getRect().getHeight());
+	// hide the border
+	newControl.panel->setBorderVisible(FALSE);
 
 	return newControl.widget;
 }
 
-void FloaterQuickPrefs::removeControl(const std::string& controlName)
+void FloaterQuickPrefs::removeControl(const std::string& controlName,BOOL remove_slot)
 {
 	// find the control panel to remove
 	const control_list_t::iterator it=mControlsList.find(controlName);
@@ -949,63 +968,31 @@ void FloaterQuickPrefs::removeControl(const std::string& controlName)
 	}
 
 	// get a pointer to the panel to remove
-	LLLayoutPanel* panel=it->second.panel;
+	LLPanel* panel=it->second.panel;
 	// remember the panel's height because it will be deleted by removeChild() later
 	S32 height=panel->getRect().getHeight();
 
 	// remove the panel from the internal list
 	mControlsList.erase(it);
-	// also remove it from the ordering list
-	mControlsOrder.remove(controlName);
-	// and delete it from the user interface stack
-	mOptionsStack->removeChild(panel);
 
-	// make the floater shrink to its new size
-	reshape(getRect().getWidth(),getRect().getHeight()-height);
-}
+	// get a pointer to the layout slot used
+	LLLayoutPanel* slot=(LLLayoutPanel*) panel->getParent();
+	// remove the panel from the slot
+	slot->removeChild(panel);
+	// clear the panel from memory
+	delete panel;
 
-void FloaterQuickPrefs::updateControls()
-{
-	// make a copy of the internal list and ordering
-	control_list_t temp_list=mControlsList;
-	std::list<std::string> temp_order=mControlsOrder;
-
-	// repeat for all entries in the internal list
-	while(!mControlsList.empty())
+	// remove the layout_panel if desired
+	if(remove_slot)
 	{
-		// copy current widget values to temp list so we can restore them afterwards
-		control_list_t::iterator it=mControlsList.begin();
-		temp_list[it->first].value=it->second.widget->getValue();
+		// remove the slot from our list
+		mOrderingSlots.remove(slot);
+		// and delete it from the user interface stack
+		mOptionsStack->removeChild(slot);
 
-		// remove the control, this will also remove it from the internal list
-		removeControl(it->first);
+		// make the floater shrink to its new size
+		reshape(getRect().getWidth(),getRect().getHeight()-height);
 	}
-
-	// repeat for all entries in the previously copied list
-	while(!temp_order.empty())
-	{
-		// get the current control entry by its control's name
-		control_list_t::iterator it=temp_list.find(temp_order.front());
-		const ControlEntry& entry=it->second;
-
-		// re-adding the control to the internal list and user interface
-		LLUICtrl* widget=addControl(
-			it->first,
-			entry.label,
-			entry.type,
-			entry.integer,
-			entry.min_value,
-			entry.max_value,
-			entry.increment);
-
-		// restore the widget's previous value
-		widget->setValue(entry.value);
-		// remove the temporary control entry
-		temp_order.pop_front();
-	}
-
-	// restore edit selection, if any
-	selectControl(mSelectedControl);
 }
 
 void FloaterQuickPrefs::selectControl(std::string controlName)
@@ -1037,8 +1024,7 @@ void FloaterQuickPrefs::selectControl(std::string controlName)
 	if(!mSelectedControl.empty())
 	{
 		// draw the new selection border
-		LLLayoutPanel* panel=mControlsList[mSelectedControl].panel;
-		panel->setBorderVisible(TRUE);
+		mControlsList[mSelectedControl].panel->setBorderVisible(TRUE);
 
 		// set up editor values
 		mControlLabelEdit->setValue(LLSD(mControlsList[mSelectedControl].label));
@@ -1187,7 +1173,7 @@ void FloaterQuickPrefs::onValuesChanged()
 		ControlEntry old_parameters=mControlsList[mSelectedControl];
 		// disable selection so the border doesn't cause a crash
 		selectControl("");
-		// rename the old ordering entry so we keep the position in the stack
+		// rename the old ordering entry
 		std::list<std::string>::iterator it;
 		for(it=mControlsOrder.begin();it!=mControlsOrder.end();++it)
 		{
@@ -1198,12 +1184,12 @@ void FloaterQuickPrefs::onValuesChanged()
 			}
 		}
 
-		// remove the old control name from the internal list, to clear the LLLayoutPanel
-		removeControl(old_control_name);
-		// add new control, but this will insert a new ordering entry ...
-		addControl(new_control_name,new_control_name);
-		// ... so remove the newly added ordering entry, since this is not needed
-		mControlsOrder.pop_back();
+		// remember the old slot
+		LLView* slot=old_parameters.panel->getParent();
+		// remove the old control name from the internal list but keep the slot available
+		removeControl(old_control_name,FALSE);
+		// add new control with the old slot
+		addControl(new_control_name,new_control_name,slot);
 		// grab the new values and make the selection border go to the right panel
 		selectControl(new_control_name);
 		// restore the old UI settings
@@ -1342,6 +1328,8 @@ void FloaterQuickPrefs::onAddNewClicked()
 	std::string new_control_name="NewControl"+LLSD(sCount).asString();
 	// add the new control to the internal list and user interface
 	addControl(new_control_name,new_control_name);
+	// put it at the bottom of the ordering stack
+	mControlsOrder.push_back(new_control_name);
 	sCount++;
 	// select the newly created control
 	selectControl(new_control_name);
@@ -1353,10 +1341,10 @@ void FloaterQuickPrefs::onRemoveClicked(LLUICtrl* ctrl,void* userdata)
 	LLUICtrl* panel=(LLUICtrl*) userdata;
 	// deselect the current entry
 	selectControl("");
-	// remove the control from the internal list
+	// first remove the control from the ordering list
+	mControlsOrder.remove(panel->getName());
+	// then remove it from the internal list and from memory
 	removeControl(panel->getName());
-	// update the user interface
-	// updateControls();
 	// reinstate focus in case we lost it
 	setFocus(TRUE);
 }
@@ -1371,6 +1359,21 @@ void FloaterQuickPrefs::onAlphaChanged(LLUICtrl* ctrl,void* userdata)
 	color.setAlpha(ctrl->getValue().asReal());
 	// save the color back into the color swatch
 	color_swatch->getControlVariable()->setValue(color.getValue());
+}
+
+void FloaterQuickPrefs::swapControls(const std::string& control1, const std::string& control2)
+{
+	// get the control entries of both controls
+	ControlEntry temp_entry_1=mControlsList[control1];
+	ControlEntry temp_entry_2=mControlsList[control2];
+
+	// find the respective ordering slots
+	LLView* temp_slot_1=temp_entry_1.panel->getParent();
+	LLView* temp_slot_2=temp_entry_2.panel->getParent();
+
+	// swap the controls around
+	temp_slot_1->addChild(temp_entry_2.panel);
+	temp_slot_2->addChild(temp_entry_1.panel);
 }
 
 void FloaterQuickPrefs::onMoveUpClicked()
@@ -1394,7 +1397,7 @@ void FloaterQuickPrefs::onMoveUpClicked()
 			// copy the moving item to previous
 			*previous=mSelectedControl;
 			// update the user interface
-			updateControls();
+			swapControls(mSelectedControl,*it);
 			return;
 		}
 	}
@@ -1422,7 +1425,7 @@ void FloaterQuickPrefs::onMoveDownClicked()
 			// copy the moving item to next
 			*next=mSelectedControl;
 			// update the user interface
-			updateControls();
+			swapControls(mSelectedControl,*it);
 			return;
 		}
 	}

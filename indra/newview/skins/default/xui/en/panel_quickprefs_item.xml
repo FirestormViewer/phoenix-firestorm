@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <!-- one item in the list of quick preferences -->
 
-<!-- border parameters decide how the selection looks while editing -->
 <layout_panel
+ name="option_layout_panel"
+ layout="topleft"
+ follows="all"
+ height="20">
+
+<!-- border parameters decide how the selection looks while editing -->
+<panel
+ follows="all"
+ layout="topleft"
+ name="option_ordering_panel"
  border="true"
  border_thickness="2"
  bevel_style="bright"
  highlight_light_color="EmphasisColor"
- name="option_layout_panel"
- layout="topleft"
- follows="all"
+ left="0"
+ top="0"
+ right="-1"
  height="20">
 
 <layout_stack
@@ -18,7 +27,7 @@
  name="option_inner_stack"
  left="4"
  top="0"
- right="-4"
+ right="-3"
  height="20"
  border_size="0"
  orientation="horizontal">
@@ -189,5 +198,7 @@ Control Label:
 </layout_panel>
 
 </layout_stack>
+
+</panel>
 
 </layout_panel>

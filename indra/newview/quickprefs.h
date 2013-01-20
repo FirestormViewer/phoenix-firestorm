@@ -108,7 +108,7 @@ protected:
 
 	struct ControlEntry
 	{
-		LLLayoutPanel* panel;
+		LLPanel* panel;
 		LLUICtrl* widget;
 		LLTextBox* label_textbox;
 		std::string label;
@@ -148,6 +148,8 @@ protected:
 
 	// order of the controls on the user interface
 	std::list<std::string> mControlsOrder;
+	// list of layout_panel slots to put our options in
+	std::list<LLLayoutPanel*> mOrderingSlots;
 
 	// pointer to the layout_stack where the controls will be inserted
 	LLLayoutStack* mOptionsStack;
@@ -170,13 +172,11 @@ protected:
 	std::string getSettingsPath(BOOL save_mode);
 
 	// adds a new control and returns a pointer to the chosen widget
-	LLUICtrl* addControl(const std::string& controlName,const std::string& controlLabel,ControlType type=ControlTypeRadio,BOOL integer=FALSE,F32 min_value=-1000000.0f,F32 max_value=1000000.0,F32 increment=0.0f);
+	LLUICtrl* addControl(const std::string& controlName,const std::string& controlLabel,LLView* slot=NULL,ControlType type=ControlTypeRadio,BOOL integer=FALSE,F32 min_value=-1000000.0f,F32 max_value=1000000.0,F32 increment=0.0f);
 	// removes a control
-	void removeControl(const std::string& controlName);
+	void removeControl(const std::string& controlName,BOOL remove_slot=TRUE);
 	// updates a single control
 	void updateControl(const std::string& controlName,ControlEntry& entry);
-	// updates the whole list of controls, needed for reordering and on initial display
-	void updateControls();
 
 	// make this control the currently selected one
 	void selectControl(std::string controlName);
@@ -196,6 +196,9 @@ protected:
 	void onAlphaChanged(LLUICtrl* ctrl,void* userdata);		// userdata is the associated color swatch
 	void onMoveUpClicked();
 	void onMoveDownClicked();
+
+	// swaps two controls, used for move up and down
+	void swapControls(const std::string& control1,const std::string& control2);
 // </FS:Zi>
 };
 #endif
