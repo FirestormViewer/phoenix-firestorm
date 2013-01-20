@@ -1200,6 +1200,9 @@ Tofu Buzzard
 	SH-2477
 	STORM-1684
 	STORM-1819
+    STORM-1921
+    STORM-1927
+    STORM-1928
 Tony Kembia
 Torben Trautman
 TouchaHoney Perhaps
