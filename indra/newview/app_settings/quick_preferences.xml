@@ -21,7 +21,7 @@
      control_type="3"
      increment="0.05"
      integer="0"
-     label="Av Physics LOD"
+     label="Avatar Physics LOD"
      max="1"
      min="0" />
     <entries
@@ -37,7 +37,7 @@
      control_type="3"
      increment="1"
      integer="1"
-     label="Render Avatar"
+     label="Max Avatars"
      max="65"
      min="0" />
     <entries
