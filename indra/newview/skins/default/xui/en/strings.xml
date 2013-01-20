@@ -5027,4 +5027,16 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to recreate it before using.</string>
   <string name="fsbridge_detached">Bridge detached.</string>
   <string name="fsbridge_created">Bridge created.</string>
+
+  <!-- <FS:Zi> Quick preferences default options -->
+  <string name="QP Draw Distance">Draw Distance</string>
+  <string name="QP Max Particles">Max Particles</string>
+  <string name="QP Avatar Physics LOD">Avatar Physics LOD</string>
+  <string name="QP LOD Factor">LOD Factor</string>
+  <string name="QP Max Avatars">Max Avatars</string>
+  <string name="QP Height Offset">Height Offset</string>
+  <string name="QP Tags Offset">Tags Offset</string>
+  <string name="QP Name Tags">Name Tags</string>
+  <string name="QP LookAt Target">LookAt Target</string>
+  <string name="QP Color Under Cursor">Color Under Cursor</string>
 </strings>

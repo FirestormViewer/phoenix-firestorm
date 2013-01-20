@@ -262,10 +262,17 @@ BOOL FloaterQuickPrefs::postBuild()
 			// add the elements from the XML file to the internal list of controls
 			BOOST_FOREACH(const QuickPrefsXMLEntry& xml_entry,xml.entries)
 			{
+				// get the label
+				std::string label=xml_entry.label;
+				// get the same as translated label
+				std::string translated_label=xml_entry.label;
+				// replace translated label with translated version, if available
+				LLTrans::findString(translated_label,"QP "+label);
+
 				U32 type=xml_entry.control_type;
 				addControl(
 					xml_entry.control_name,
-					xml_entry.label,
+					translated_label,
 					NULL,
 					(ControlType) type,
 					xml_entry.integer,
