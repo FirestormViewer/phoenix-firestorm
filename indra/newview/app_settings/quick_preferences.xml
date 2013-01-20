@@ -43,7 +43,7 @@
     <entries
      control_name="AvatarZOffset"
      control_type="3"
-     increment="0.1"
+     increment="0.05"
      integer="0"
      label="Height Offset"
      max="2"
