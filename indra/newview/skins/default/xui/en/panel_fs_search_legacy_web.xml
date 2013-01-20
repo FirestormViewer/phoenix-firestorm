@@ -17,5 +17,6 @@ name="panel_ls_web">
 	 follows="all"
 	 name="search_browser"
 	 ignore_ui_scale="false"
-	 start_url="" />
+	 trusted_content="true"
+	 start_url="about:blank" />
 </panel>
