@@ -143,11 +143,11 @@
 			<columns
 			label="Name"
 			name="classified_name"
-			relwidth="0.75" />
+			relwidth="0.70" />
 			<columns
 			label="Listing Price"
 			name="price"
-			relwidth="0.25"/>
+			relwidth="0.3"/>
 		</scroll_list>
 		<button
 		layout="topleft"
