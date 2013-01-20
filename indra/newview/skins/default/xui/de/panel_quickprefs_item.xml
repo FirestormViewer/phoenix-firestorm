@@ -5,12 +5,12 @@
 			<layout_panel name="option_panel_updown">
 				<button name="remove_button" tool_tip="Einstellung entfernen"/>
 			</layout_panel>
-			<layout_panel name="text_panel" width="115">
+			<layout_panel name="text_panel">
 				<text name="option_label">
 					Bezeichnung:
 				</text>
 			</layout_panel>
-			<layout_panel name="option_panel">
+			<layout_panel name="option_panel" width="155">
 				<radio_group name="option_radio_control">
 					<radio_item name="on" label="An"/>
 					<radio_item name="off" label="Aus"/>
