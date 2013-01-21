@@ -36,7 +36,7 @@ PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
 LL_ARGS_PASSTHRU=""
-JOBS="1"
+JOBS="0"
 
 ###
 ### Helper Functions
