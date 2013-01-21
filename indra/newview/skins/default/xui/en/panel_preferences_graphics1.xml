@@ -81,7 +81,7 @@
        layout="topleft"
        left_pad="41"
        name="LowMidraphicsDivet"
-       top_delta="-2"
+       top_delta="0"
        width="2" />
       <icon
        color="DkGray"
@@ -140,7 +140,7 @@
        max_val="6"
        name="QualityPerformanceSelection"
        show_text="false"
-       top_delta="-2"
+       top_delta="-1"
        width="275">
         <slider.commit_callback
            function="Pref.QualityPerformance"/>
