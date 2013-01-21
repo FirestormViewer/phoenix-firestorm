@@ -199,17 +199,6 @@
        width="80">
         Ultra
       </text>
-      <panel
-       visiblity_control="ShowAdvancedGraphicsSettings"
-       border="false"
-       follows="top|left"
-       height="300"
-       label="CustomGraphics"
-       layout="topleft"
-       left="5"
-       name="CustomGraphics Panel"
-       top="60"
-       width="485">
         <check_box
          control_name="FullScreen"
          height="16"
@@ -219,7 +208,7 @@
          left="10"
          name="Fullscreen Mode"
          tool_tip="Run Firestorm in Fullscreen mode. A restart is required to change mode."
-         top="0"
+         top="65"
          width="280" />
         <text
          type="string"
@@ -394,38 +383,7 @@
            name="4"
            value="4"/>
         </combo_box>
-<!-- FS:TM Avatar Physics was moved down to LOD section
-        <slider
-        control_name="RenderAvatarPhysicsLODFactor"
-        follows="left|top"
-        height="16"
-        initial_value="100"
-        increment=".05"
-        label="  Avatar Physics:"
-        label_width="85"
-        layout="topleft"
-        left_delta="-16"
-        name="AvatarPhysicsDetail"
-        show_text="false"
-        top_pad="12"
-        width="160">
-          <slider.commit_callback
-           function="Pref.UpdateSliderText"
-           parameter="AvatarPhysicsDetailText" />
-        </slider>
-        <text
-        type="string"
-        length="1"
-        follows="left|top"
-        height="12"
-        layout="topleft"
-        left_delta="165"
-        name="AvatarPhysicsDetailText"
-        top_pad="-16"
-        width="128">
-          Low
-        </text>
--->
+<!-- FS:TM Avatar Physics was moved down to LOD section-->
 <!-- FS:TM Point Lighting added instead of above-->
         <text
          type="string"
@@ -462,7 +420,7 @@
            name="1"
            value="1"/>
         </combo_box>
-
+      <!--Top of second column in General tab-->
         <slider
          control_name="RenderFarClip"
          decimal_digits="0"
@@ -477,7 +435,7 @@
          max_val="1024"
          min_val="32"
          name="DrawDistance"
-         top="0"
+         top="65"
          width="301" />
         <text
          type="string"
@@ -797,45 +755,20 @@
            name="2"
            top_delta="16"
            width="50" />
-        </radio_group> -->
-      </panel>
-<!-- Dont need 2 Apply buttons in this view
-      <button
-       follows="left|top"
-       height="23"
-       label="Apply"
-       label_selected="Apply"
-       layout="topleft"
-       left="10"
-       top="380"
-       name="Apply"
-       width="115" >
-        <button.commit_callback
-         function="Pref.Apply" />
-      </button>
--->
+        </radio_group>
+        
       <button
        follows="left|top"
        height="23"
        label="Reset"
        layout="topleft"
-       left="207"
+       left="210"
        name="Defaults"
-       top_pad="15"
+       top_pad="25"
        width="115">
         <button.commit_callback
          function="Pref.HardwareDefaults" />
       </button>
-      <button
-       control_name="ShowAdvancedGraphicsSettings"
-       follows="left|top"
-       height="23"
-       is_toggle="true"
-       label="Advanced"
-       layout="topleft"
-       left_pad="35"
-       name="Advanced"
-       width="115" />
     </panel>
 
 <!--Hardware Settings-->
