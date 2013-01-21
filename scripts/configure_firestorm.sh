@@ -58,7 +58,7 @@ showUsage()
     echo "  --package   : Build installer"
     echo "  --fmod      : Build fmod"
     echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
-    echo "  --jobs <num>: Build with <num> jobs in parallel (Linux only)"
+    echo "  --jobs <num>: Build with <num> jobs in parallel (Linux and Darwin only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build"
     echo
@@ -266,7 +266,7 @@ echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
 echo -e "      CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
 echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
 echo -e "       BTYPE: $BTYPE"               | tee -a $LOG
-if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
+if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" -o $PLATFORM == "darwin" ] ; then
     echo -e "        JOBS: $JOBS"                | tee -a $LOG
 fi
 echo -e "       Logging to $LOG"
@@ -377,8 +377,13 @@ fi
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $PLATFORM..."
     if [ $PLATFORM == "darwin" ] ; then
+        if [ $JOBS == "0" ] ; then
+            JOBS=""
+        else
+            JOBS="-jobs $JOBS"
+        fi
         if [ $OSTYPE == "darwin11" -o $OSTYPE == "darwin12" ] ; then
-            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
         else
             xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
         fi
