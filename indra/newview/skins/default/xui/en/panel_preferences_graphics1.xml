@@ -283,7 +283,8 @@
          control_name="RenderDeferred"
          height="16"
          initial_value="true"
-         label="Lighting and Shadows"
+         label="Deferred Rendering"
+         tool_tip="Enables advanced light rendering."
          layout="topleft"
          left_delta="0"
          name="UseLightShaders"
@@ -396,7 +397,7 @@
          layout="topleft"
          left="10"
          name="local lights_label"
-         tool_tip="Affects the number of rendered light sources when Lighting and Shadows is disabled. A restart is required to change mode.">
+         tool_tip="Affects the number of rendered light sources when Deferred Rendering is disabled. A restart is required to change mode.">
           Point Lighting (restart required)
         </text>
         <combo_box
@@ -1040,7 +1041,7 @@
          control_name="RenderAutoMaskAlphaNonDeferred"
          height="16"
          initial_value="false"
-         label="Render alpha masks when 'Lighting and Shadows' is not enabled"
+         label="Render alpha masks when 'Deferred Rendering' is not enabled"
          tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when Shadows are not selected"
          layout="topleft"
          left_delta="10"
@@ -1051,7 +1052,7 @@
          control_name="RenderAutoMaskAlphaDeferred"
          height="16"
          initial_value="false"
-         label="Render alpha masks when 'Lighting and Shadows' is enabled"
+         label="Render alpha masks when 'Deferred Rendering' is enabled"
          tool_tip="When ticked this makes the Alpha masks (see-thru bits) render correctly when Shadows are selected"
          layout="topleft"
          left_delta="0"
