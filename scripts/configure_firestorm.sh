@@ -36,6 +36,7 @@ PLATFORM="darwin" # darwin, win32, win64, linux32, linux64
 BTYPE="Release"
 CHANNEL="" # will be overwritten later with platform-specific values unless manually specified.
 LL_ARGS_PASSTHRU=""
+JOBS="1"
 
 ###
 ### Helper Functions
@@ -57,6 +58,7 @@ showUsage()
     echo "  --package   : Build installer"
     echo "  --fmod      : Build fmod"
     echo "  --platform  : darwin | win32 | win64 | linux32 | linux64"
+    echo "  --jobs <num>: Build with <num> jobs in parallel (Linux only)"
     echo
     echo "All arguments not in the above list will be passed through to LL's configure/build"
     echo
@@ -66,7 +68,7 @@ getArgs()
 # $* = the options passed in from main
 {
     if [ $# -gt 0 ]; then
-      while getoptex "clean build config version package fmod platform: kdu help chan: btype:" "$@" ; do
+      while getoptex "clean build config version package fmod jobs: platform: kdu help chan: btype:" "$@" ; do
 
           #insure options are valid
           if [  -z "$OPTOPT"  ] ; then
@@ -88,6 +90,7 @@ getArgs()
           package)    WANTS_PACKAGE=$TRUE;;
           build)    WANTS_BUILD=$TRUE;;
           platform)    PLATFORM="$OPTARG";;
+          jobs)    JOBS="$OPTARG";;
 
           help)     showUsage && exit 0;;
 
@@ -263,6 +266,9 @@ echo -e "       BUILD: `b2a $WANTS_BUILD`"   | tee -a $LOG
 echo -e "      CONFIG: `b2a $WANTS_CONFIG`"  | tee -a $LOG
 echo -e "    PASSTHRU: $LL_ARGS_PASSTHRU"    | tee -a $LOG
 echo -e "       BTYPE: $BTYPE"               | tee -a $LOG
+if [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
+    echo -e "        JOBS: $JOBS"                | tee -a $LOG
+fi
 echo -e "       Logging to $LOG"
 
 
@@ -376,9 +382,11 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
         else
             xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
         fi
-    elif [ $PLATFORM == "linux32" ] ; then
-        JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
-        make -j 3 | tee -a $LOG
+    elif [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
+        if [ $JOBS == "0" ] ; then
+            JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
+        fi
+        make -j $JOBS | tee -a $LOG
     elif [ $PLATFORM == "win32" ] ; then
         msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
     fi
