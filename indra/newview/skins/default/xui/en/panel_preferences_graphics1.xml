@@ -20,6 +20,8 @@
    name="tabs"
    tab_min_width="50"
    tab_position="top" >
+
+<!--General-->
     <panel
      top_pad="5"
      bottom="-1"
@@ -309,19 +311,6 @@
          layout="topleft"
          left_delta="0"
          name="UseSSAO"
-         top_pad="1"
-         width="256">
-          <check_box.commit_callback
-         function="Pref.VertexShaderEnable" />
-        </check_box>
-        <check_box
-         control_name="RenderDepthOfField"
-         height="16"
-         initial_value="true"
-         label="Depth of Field"
-         layout="topleft"
-         left_delta="0"
-         name="UseDoF"
          top_pad="1"
          width="256">
           <check_box.commit_callback
@@ -849,6 +838,7 @@
        width="115" />
     </panel>
 
+<!--Hardware Settings-->
     <panel
      top_pad="5"
      bottom="-1"
@@ -1004,6 +994,7 @@
          width="262" />
     </panel>
 
+<!--Rendering-->
     <panel
      top_pad="5"
      bottom="-1"
@@ -1024,7 +1015,7 @@
          width="308">
             World Updating:
         </text>
-<!-- world pauser -->
+      <!-- world pauser -->
         <check_box
          control_name="AgentPause"
          height="16"
@@ -1062,7 +1053,7 @@
          top_pad="5"
          width="256"/>
 
-<!-- New Texture detail 5 is lowest, 0 is highest -->
+      <!-- New Texture detail 5 is lowest, 0 is highest -->
         <text
          type="string"
          length="1"
@@ -1252,6 +1243,7 @@
          width="405" />
     </panel>
 
+<!--Depth of Field-->
 	   <panel
      top_pad="5"
      bottom="-1"
@@ -1260,6 +1252,19 @@
      follows="all"
      label="Depth of Field"
      name="DOF panel" >
+       <check_box
+        control_name="RenderDepthOfField"
+        height="16"
+        initial_value="true"
+        label="Enable Depth of Field (This will blur the view except where the camera focus is at.)"
+        layout="topleft"
+        left_delta="10"
+        name="UseDoF"
+        top_pad="25"
+        width="256">
+         <check_box.commit_callback
+        function="Pref.VertexShaderEnable" />
+       </check_box>
         <slider
          control_name="CameraFNumber"
          decimal_digits="2"
@@ -1270,12 +1275,12 @@
          label="Camera F Number:"
          label_width="160"
          layout="topleft"
-         left="10"
+         left_delta="0"
          max_val="64"
          min_val="1"
          name="CameraFNum"
          tool_tip="Camera f-number value for DoF effect"
-         top_pad="16"
+         top_pad="10"
          width="374"/>
         <slider
          control_name="CameraFocalLength"
@@ -1287,7 +1292,7 @@
          label="Camera Focal Length mm:"
          label_width="160"
          layout="topleft"
-         left="10"
+         left_delta="0"
          max_val="1000"
          min_val="1"
          name="CameraFocal"
@@ -1304,7 +1309,7 @@
          label="Camera FOV degs:"
          label_width="160"
          layout="topleft"
-         left="10"
+         left_delta="0"
          max_val="200"
          min_val="10"
          name="Camera FOV"
@@ -1321,7 +1326,7 @@
          label="Camera Aspect Ratio:"
          label_width="160"
          layout="topleft"
-         left="10"
+         left_delta="0"
          max_val="5"
          min_val="0"
          name="CameraAspectRatio"
@@ -1338,7 +1343,7 @@
          label="DOF Focus Transition Time:"
          label_width="160"
          layout="topleft"
-         left="10"
+         left_delta="0"
          max_val="10"
          min_val="0.1"
          name="CameraFocusTrans"
@@ -1346,22 +1351,22 @@
          top_pad="5"
          width="374"/>
        <slider
-        control_name="CameraDoFResScale"
-        decimal_digits="2"
-        follows="left|top"
-        height="16"
-        increment="0.05"
-        initial_value="0.70"
-        label="DOF Rendering Quality:"
-        label_width="160"
-        layout="topleft"
-        left="10"
-        max_val="1"
-        min_val="0.25"
-        name="CameraDoFResScale"
-        tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
-        top_pad="5"
-        width="374"/>
+         control_name="CameraDoFResScale"
+         decimal_digits="2"
+         follows="left|top"
+         height="16"
+         increment="0.05"
+         initial_value="0.70"
+         label="DOF Rendering Quality:"
+         label_width="160"
+         layout="topleft"
+         left_delta="0"
+         max_val="1"
+         min_val="0.25"
+         name="CameraDoFResScale"
+         tool_tip="Affects the quality of the blurring and the performance of rendering.  (higher = better quality, lower = better perforamce)"
+         top_pad="5"
+         width="374"/>
     </panel>
 </tab_container>
 </panel>
