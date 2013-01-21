@@ -388,7 +388,7 @@
 			<menu_item_check label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
-			<menu_item_check label="Oświetlenie i cienie" name="Lighting and Shadows"/>
+			<menu_item_check label="Renderowanie opóźniane" name="Lighting and Shadows"/>
 			<menu_item_check label="Cienie Słońca, Księżyca i innych źródeł" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL" name="Debug GL"/>
