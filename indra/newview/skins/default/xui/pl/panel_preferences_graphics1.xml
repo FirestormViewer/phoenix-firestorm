@@ -20,78 +20,74 @@
 			<text name="ShadersPrefText3">
 				Wysoka
 			</text>
-			<panel name="CustomGraphics Panel">
-				<check_box label="Pełny ekran" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie. Aby zmienić tryb wymagany jest restart."/>
-				<text name="ShadersText">
-					Cieniowanie pikseli:
-				</text>
-				<check_box label="Przezroczysta woda" name="TransparentWater"/>
-				<check_box label="Mapping wypukłości i połysk" name="BumpShiny"/>
-				<check_box label="Lokalne światła" name="LocalLights"/>
-				<check_box label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych."/>
-				<check_box label="Shadery atmosfery" name="WindLightUseAtmosShaders"/>
-				<check_box label="Światła i cienie" name="UseLightShaders"/>
-				<check_box label="Okluzja otoczenia" name="UseSSAO"/>
-				<check_box label="Głębia ostrości" name="UseDoF"/>
-				<text name="shadows_label">
-					Cienie:
-				</text>
-				<combo_box name="ShadowDetail">
-					<combo_box.item label="Brak" name="0"/>
-					<combo_box.item label="Słońce/Księżyc" name="1"/>
-					<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
-				</combo_box>
-				<text name="reflection_label">
-					Odbicia w wodzie:
-				</text>
-				<combo_box name="Reflections">
-					<combo_box.item label="Minimalne" name="0"/>
-					<combo_box.item label="Teren i drzewa" name="1"/>
-					<combo_box.item label="Wszystkie obiekty statyczne" name="2"/>
-					<combo_box.item label="Wszystkie awatary i obiekty" name="3"/>
-					<combo_box.item label="Wszystko" name="4"/>
-				</combo_box>
-				<text name="local lights_label" tool_tip="Wpływa na liczbę renderowanych źródeł światła, gdy Światła i Cienie są wyłączone. Aby zmienić tryb wymagany jest restart.">
-					Oświetlenie punktowe:
-				</text>
-				<combo_box name="LocalLightsDetail">
-					<combo_box.item label="Pełne (domyślne)" name="3"/>
-					<combo_box.item label="Częściowe" name="2"/>
-					<combo_box.item label="Tylko Słońce/Księżyc" name="1"/>
-				</combo_box>
-				<slider label="Pole widzenia" name="DrawDistance"/>
-				<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
-				<slider label="Maks. il. wyświetlanych awatarów" name="MaxNumberAvatarDrawn"/>
-				<slider label="Jakość post-procesu" name="RenderPostProcess"/>
-				<text name="PostProcessText">
-					Niska
-				</text>
-				<slider label="Fizyka awatarów" name="AvatarPhysicsDetail"/>
-				<text name="MeshDetailText">
-					Poziom szczegółowości obiektów (LOD):
-				</text>
-				<slider label="  Obiekty i skulpty" name="ObjectMeshDetail"/>
-				<slider label="  Obiekty elastyczne" name="FlexibleMeshDetail"/>
-				<slider label="  Drzewa" name="TreeMeshDetail"/>
-				<slider label="  Awatary" name="AvatarMeshDetail"/>
-				<slider label="  Teren" name="TerrainMeshDetail"/>
-				<slider label="  Niebo" name="SkyMeshDetail"/>
-				<text name="AvatarRenderingText">
-					Rendering awatarów:
-				</text>
-				<check_box label="Upraszczaj oddalone awatary" name="AvatarImpostors"/>
-				<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
-				<check_box label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
-				<text name="TerrainDetailText">
-					Szczegóły terenu:
-				</text>
-				<radio_group name="TerrainDetailRadio">
-					<radio_item label="Mało" name="0"/>
-					<radio_item label="Dużo" name="2"/>
-				</radio_group>
-			</panel>
+			<check_box label="Pełny ekran" name="Fullscreen Mode" tool_tip="Uruchamia Firestorma na pełnym ekranie. Aby zmienić tryb wymagany jest restart."/>
+			<text name="ShadersText">
+				Cieniowanie pikseli:
+			</text>
+			<check_box label="Przezroczysta woda" name="TransparentWater"/>
+			<check_box label="Mapping wypukłości i połysk" name="BumpShiny"/>
+			<check_box label="Lokalne światła" name="LocalLights"/>
+			<check_box label="Podstawowe shadery" name="BasicShaders" tool_tip="Wyłączenie tej opcji może naprawić błędy niektórych sterowników graficznych."/>
+			<check_box label="Shadery atmosfery" name="WindLightUseAtmosShaders"/>
+			<check_box label="Renderowanie opóźniane" tool_tip="Włącza zaawansowane renderowanie świateł ('deferred rendering')." name="UseLightShaders"/>
+			<check_box label="Okluzja otoczenia" name="UseSSAO"/>
+			<text name="shadows_label">
+				Cienie:
+			</text>
+			<combo_box name="ShadowDetail">
+				<combo_box.item label="Brak" name="0"/>
+				<combo_box.item label="Słońce/Księżyc" name="1"/>
+				<combo_box.item label="Słońce/Księżyc + inne źródła" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				Odbicia w wodzie:
+			</text>
+			<combo_box name="Reflections">
+				<combo_box.item label="Minimalne" name="0"/>
+				<combo_box.item label="Teren i drzewa" name="1"/>
+				<combo_box.item label="Wszystkie obiekty statyczne" name="2"/>
+				<combo_box.item label="Wszystkie awatary i obiekty" name="3"/>
+				<combo_box.item label="Wszystko" name="4"/>
+			</combo_box>
+			<text name="local lights_label" tool_tip="Wpływa na liczbę renderowanych źródeł światła, gdy 'renderowanie opóźniane' jest wyłączone. Aby zmienić tryb wymagany jest restart.">
+				Oświetlenie punktowe:
+			</text>
+			<combo_box name="LocalLightsDetail">
+				<combo_box.item label="Pełne (domyślne)" name="3"/>
+				<combo_box.item label="Częściowe" name="2"/>
+				<combo_box.item label="Tylko Słońce/Księżyc" name="1"/>
+			</combo_box>
+			<slider label="Pole widzenia" name="DrawDistance"/>
+			<slider label="Maks. ilość cząsteczek" name="MaxParticleCount"/>
+			<slider label="Maks. il. wyświetlanych awatarów" name="MaxNumberAvatarDrawn"/>
+			<slider label="Jakość post-procesu" name="RenderPostProcess"/>
+			<text name="PostProcessText">
+				Niska
+			</text>
+			<slider label="Fizyka awatarów" name="AvatarPhysicsDetail"/>
+			<text name="MeshDetailText">
+				Poziom szczegółowości obiektów (LOD):
+			</text>
+			<slider label="  Obiekty i skulpty" name="ObjectMeshDetail"/>
+			<slider label="  Obiekty elastyczne" name="FlexibleMeshDetail"/>
+			<slider label="  Drzewa" name="TreeMeshDetail"/>
+			<slider label="  Awatary" name="AvatarMeshDetail"/>
+			<slider label="  Teren" name="TerrainMeshDetail"/>
+			<slider label="  Niebo" name="SkyMeshDetail"/>
+			<text name="AvatarRenderingText">
+				Rendering awatarów:
+			</text>
+			<check_box label="Upraszczaj oddalone awatary" name="AvatarImpostors"/>
+			<check_box label="Rendering awatara przez GPU" name="AvatarVertexProgram"/>
+			<check_box label="Oddzielne warstwy ubrań" name="AvatarCloth"/>
+			<text name="TerrainDetailText">
+				Szczegóły terenu:
+			</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="Mało" name="0"/>
+				<radio_item label="Dużo" name="2"/>
+			</radio_group>
 			<button label="Resetuj" name="Defaults"/>
-			<button label="Zaawansowane" name="Advanced"/>
 		</panel>
 		<panel label="Ustawienia sprzętowe" name="Hardware Settings">
 			<check_box label="Filtrowanie anizotropowe (wolniej, gdy włączone)" name="ani"/>
@@ -130,8 +126,8 @@
 			<text name="Alpha Mask Rendering">
 				Maski przezroczystości (alpha):
 			</text>
-			<check_box label="Renderuj gdy 'Światła i cienie' są WYŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie nie są zaznaczone" name="RenderAutoMaskAlphaNonDeferred"/>
-			<check_box label="Renderuj gdy 'Światła i cienie' są WŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie SĄ zaznaczone" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Renderuj maski przezroczystości gdy 'renderowanie opóźniane' jest WYŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie nie są zaznaczone" name="RenderAutoMaskAlphaNonDeferred"/>
+			<check_box label="Renderuj maski przezroczystości gdy 'renderowanie opóźniane' jest WŁĄCZONE" tool_tip="Gdy opcja jest zaznaczona, to następuje poprawny rendering masek alpha (przezroczystych bitów), gdy cienie SĄ zaznaczone" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Inne opcje wyświetlania:
 			</text>
@@ -146,6 +142,7 @@
 			<slider label="Wielkość tekstur terenu (wymaga restartu)" name="RenderTerrainScale" tool_tip="Określa wielkość tekstur terenu - mniej oznacza: bardziej skompresowane (wymaga restartu)."/>
 		</panel>
 		<panel label="Głębia ostrości" name="DOF panel">
+			<check_box label="Włącz głębię ostrości (rozmywaj widok z wyjątkiem miejsca, gdzie skupiona jest kamera)" name="UseDoF"/>
 			<slider label="Wartość F kamery:" name="CameraFNum" tool_tip="Wartość F kamery dla głębi ostrości"/>
 			<slider label="Ogniskowa (mm):" name="CameraFocal" tool_tip="Ogniskowa dla głębi ostrości (w milimetrach)"/>
 			<slider label="Pole widzenia (°):" name="Camera FOV" tool_tip="Pionowy kąt pola widzenia kamery dla głębi ostrości (w stopniach)"/>

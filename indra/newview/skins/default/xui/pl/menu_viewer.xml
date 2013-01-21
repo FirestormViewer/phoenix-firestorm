@@ -393,8 +393,8 @@
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL" name="Debug GL"/>
 			<menu_item_check label="Debugowanie potoków" name="Debug Pipeline"/>
-			<menu_item_check label="Automatyczne maski alpha (z opóźnieniem)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatyczne maski alpha (bez opóźnienia)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (z opóźnianiem)" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
