@@ -173,6 +173,10 @@
          Czas przenikania (w sekundach):
          </text>
         <spinner tool_tip="Czas przenikania z jednego zestawu ustawień w inny [Domyślnie: 3]" name="FSWindlightInterpolateTime" />
+		<text name="could_texture_text">
+			Tekstura chmur (restart zalecany):
+		</text>
+		<combo_box name="cloud_combo" tool_tip="Wybierz teksturę chmur, jakiej chcesz użyć." />
     </panel>
     <panel label="Budowanie" name="BuildTab">
         <text name="text_box_objprams">
