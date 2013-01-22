@@ -419,7 +419,7 @@
 			<menu_item_call label="Texturinfo für ausgewähltes Objekt" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Objekt-Objekt Okklusion" name="Object-Object Occlusion"/>
-			<menu_item_check label="Licht und Schatten" name="Lighting and Shadows"/>
+			<menu_item_check label="Deferred Rendering" name="Lighting and Shadows"/>
 			<menu_item_check label="Schatten von Sonne-/Mond-Projektoren" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO und Schattenglättung" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Globale Beleuchtung (experimentell)" name="Global Illumination"/>
@@ -483,6 +483,7 @@
 			<menu_item_call label="Aus XML-Datei laden" name="Load from XML"/>
 			<menu_item_call label="In XML-Datei speichern" name="Save to XML"/>
 			<menu_item_check label="XUI-Namen anzeigen" name="Show XUI Names"/>
+			<menu_item_check label="Debug-Informationen für Views anzeigen" name="DebugViews"/>
 			<menu_item_call label="Test-IMs senden" name="Send Test IMs"/>
 			<menu_item_call label="Namen-Cache leeren" name="Flush Names Caches"/>
 		</menu>

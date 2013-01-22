@@ -194,6 +194,10 @@
 			Überblenddauer (Sekunden):
 		</text>
 		<spinner name="FSWindlightInterpolateTime" tool_tip="Die Zeit, die für die Überblendung von einer Voreinstellung zu einer anderen benötigt wird. [Standard: 3]"/>
+		<text name="could_texture_text">
+			Wolken-Textur (Neustart empfohlen)
+		</text>
+		<combo_box name="cloud_combo" tool_tip="Wolken-Textur auswählen, die im Viewer verwendet werden soll."/>
 	</panel>
 
 	<!--Build-->
