@@ -3415,7 +3415,7 @@ void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& r
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
 	// Quit the viewer so all gets saved immediately
 	llwarns << "setting to quit" << llendl;
-	LLApp::instance()->setQuitting();
+	LLAppViewer::instance()->requestQuit();
 }
 
 void LLFloaterPreference::onClickSelectAll()
