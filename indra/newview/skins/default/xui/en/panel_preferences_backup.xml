@@ -168,6 +168,7 @@ Settings groups to be restored (backup will always save all):
      follows="all"
      user_resize="false"
      auto_resize="true"
+     enabled_control="PerAccountSettingsFile"
      layout="topleft">
 
     <scroll_list
@@ -179,6 +180,7 @@ Settings groups to be restored (backup will always save all):
      right="-1"
      height="180"
      draw_heading="true"
+     enabled_control="PerAccountSettingsFile"
      multi_select="false">
         <column label="" name="restore_per_account_files_check" width="16" />
         <column label="Per Account Files:" name="restore_per_account_files_label" />
@@ -224,6 +226,21 @@ Settings groups to be restored (backup will always save all):
             <column name="value">teleport_history.xml</column>
         </row>
     </scroll_list>
+    <!-- since enabled_control does not work properly on scroll list items and
+         enabling/disabling in code did not show any visual difference, we just use
+         an overlay panel when the control is disabled -->
+    <panel
+     name="restore_per_account_disable_cover"
+     background_visible="true"
+     background_opaque="true"
+     bg_opaque_color="Black_50"
+     layout="topleft"
+     follows="all"
+     left="0"
+     top="0"
+     right="-1"
+     height="180"
+     invisibility_control="PerAccountSettingsFile" />
 
     </layout_panel>
 
@@ -335,6 +352,7 @@ Settings groups to be restored (backup will always save all):
      width="200"
      height="16"
      name="restore_per_account_settings_checkbox"
+     enabled_control="PerAccountSettingsFile"
      control_name="RestorePerAccountSettings" />
 
     <button
