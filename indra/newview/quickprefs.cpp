@@ -98,6 +98,13 @@ FloaterQuickPrefs::~FloaterQuickPrefs()
 void FloaterQuickPrefs::onOpen(const LLSD& key)
 {
 	// <FS:Zi> Dynamic Quickprefs
+
+	// bail out here if this is a reused Phototools floater
+	if(getIsPhototools())
+	{
+		return;
+	}
+
 	gSavedSettings.setBOOL("QuickPrefsEditMode",FALSE);
 
 	// Scan widgets and reapply control variables because some control types
@@ -229,6 +236,12 @@ BOOL FloaterQuickPrefs::postBuild()
 	}
 
 	// <FS:Zi> Dynamic quick prefs
+
+	// bail out here if this is a reused Phototools floater
+	if(getIsPhototools())
+	{
+		return LLDockableFloater::postBuild();
+	}
 
 	// find the layout_stack to insert the controls into
 	mOptionsStack=getChild<LLLayoutStack>("options_stack");
@@ -1441,6 +1454,12 @@ void FloaterQuickPrefs::onMoveDownClicked()
 
 void FloaterQuickPrefs::onClose(bool app_quitting)
 {
+	// bail out here if this is a reused Phototools floater
+	if(getIsPhototools())
+	{
+		return;
+	}
+
 	// close edit mode and save settings
 	gSavedSettings.setBOOL("QuickPrefsEditMode",FALSE);
 }
