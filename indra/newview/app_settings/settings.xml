@@ -19780,5 +19780,16 @@ Change of this parameter will affect the layout of buttons in notification toast
 		<key>Backup</key>
 		<integer>0</integer>
     </map>
+    <key>FSCloudTexture</key>
+    <map>
+        <key>Comment</key>
+        <string>Windlight cloud texture (don't edit by hand)</string>
+        <key>Persist</key>
+        <integer>1</integer>
+        <key>Type</key>
+        <string>String</string>
+        <key>Value</key>
+        <string>Default.tga</string>
+    </map>
 </map>
 </llsd>

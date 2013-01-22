@@ -23,6 +23,7 @@ public:
 
 	void refreshTagCombos();
 	void applyTagCombos();
+	void populateCloudCombo();
 
 protected:
 	LLComboBox* m_UseLegacyClienttags;
