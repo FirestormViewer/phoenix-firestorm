@@ -3926,6 +3926,16 @@
                 <menu_item_check.on_click
                  function="Advanced.ToggleXUINames" />
             </menu_item_check>
+            <menu_item_check
+             label="Show debugging info for views"
+             name="DebugViews">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="DebugViews" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="DebugViews" />
+            </menu_item_check>
           <menu_item_call
            label="Send Test IMs"
            name="Send Test IMs">

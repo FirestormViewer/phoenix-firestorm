@@ -452,6 +452,7 @@
 			<menu_item_call label="Wczytaj z XML" name="Load from XML"/>
 			<menu_item_call label="Zapisz do XML" name="Save to XML"/>
 			<menu_item_check label="Pokaż nazwy XUI" name="Show XUI Names"/>
+			<menu_item_check label="Pokaż informacje debugowania dla widoków" name="DebugViews"/>
 			<menu_item_call label="Wyślij wiadomość (IM) testową" name="Send Test IMs"/>
 			<menu_item_call label="Wyczyść bufor pamięci nazw" name="Flush Names Caches"/>
 		</menu>
