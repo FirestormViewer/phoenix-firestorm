@@ -121,7 +121,11 @@ bool LLWindowSDL::ll_try_gtk_init(void)
 	if (!tried_gtk_init)
 	{
 		tried_gtk_init = TRUE;
+
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 		if (!g_thread_supported ()) g_thread_init (NULL);
+#endif
+
 		maybe_lock_display();
 		gtk_is_good = gtk_init_check(NULL, NULL);
 		maybe_unlock_display();

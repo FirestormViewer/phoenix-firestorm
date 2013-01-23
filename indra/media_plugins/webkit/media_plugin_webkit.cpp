@@ -229,7 +229,11 @@ private:
 		// take care to initialize glib properly, because some
 		// versions of Qt don't, and we indirectly need it for (some
 		// versions of) Flash to not crash the browser.
+
+#if ( !defined(GLIB_MAJOR_VERSION) && !defined(GLIB_MINOR_VERSION) ) || ( GLIB_MAJOR_VERSION < 2 ) || ( GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32 )
 		if (!g_thread_supported ()) g_thread_init (NULL);
+#endif
+
 		g_type_init();
 #endif
 
