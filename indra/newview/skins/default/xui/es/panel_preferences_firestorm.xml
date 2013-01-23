@@ -175,10 +175,14 @@
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
 			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
 			<check_box label="Interpolar los cambios de entorno de la región con el WL de la parcela" name="FSInterpolateParcelWL" tool_tip="Igual que las opciones anteriores sobre transiciones, pero para la configuración WL de la parcela"/>
-			<text name="wl_crossfade_label" width="225">
+			<text name="wl_crossfade_label" width="230">
 				Duración de la transición (en segundos):
 			</text>
 			<spinner name="FSWindlightInterpolateTime" tool_tip="Duración en segundos de la transición de una configuración WL a otra (Por defecto: 3)"/>
+			<text name="could_texture_text" width="225">
+				Textura de nube (reinicio recomendado):
+			</text>
+			<combo_box name="cloud_combo" tool_tip="Selecciona la textura de nube que quieres usar."/>
 		</panel>
 		<panel label="Construcción" name="BuildTab">
 			<text name="text_box_objprams" width="200">

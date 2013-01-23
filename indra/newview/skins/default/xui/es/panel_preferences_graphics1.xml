@@ -26,82 +26,77 @@
 			<text name="ShadersPrefText4">
 				Ultra
 			</text>
-			<panel label="Personalizado" name="CustomGraphics Panel">
-				<check_box label="Pantalla completa" name="Fullscreen Mode" tool_tip="Ejecutar Firestorm en modo de pantalla completa. Se requiere reiniciar para cambiar el modo."/>
-				<text name="ShadersText">
-					Efectos gráficos:
-				</text>
-				<check_box label="Agua transparente" name="TransparentWater"/>
-				<check_box label="Mapeado topológico y brillos" name="BumpShiny"/>
-				<check_box label="Focos locales de luz" name="LocalLights"/>
-				<check_box label="Efectos básicos" name="BasicShaders" tool_tip="Desactivar esta opción puede evitar que algunas tarjetas gráficas fallen"/>
-				<check_box label="Efectos atmosféricos" name="WindLightUseAtmosShaders"/>
-				<check_box label="Luces y sombras" name="UseLightShaders"/>
-				<check_box label="Oclusión de ambiente" name="UseSSAO"/>
-				<check_box label="Profundidad de campo" name="UseDoF"/>
-				<text name="shadows_label">
-					Sombras:
-				</text>
-				<combo_box name="ShadowDetail" width="165">
-					<combo_box.item label="Ninguna" name="0"/>
-					<combo_box.item label="Sol/Luna" name="1"/>
-					<combo_box.item label="Sol/Luna + focos" name="2"/>
-				</combo_box>
-				<text name="reflection_label">
-					Reflejos en el agua:
-				</text>
-				<combo_box name="Reflections" width="165">
-					<combo_box.item label="Mínimos" name="0"/>
-					<combo_box.item label="Terreno y árboles" name="1"/>
-					<combo_box.item label="Todos los objetos estáticos" name="2"/>
-					<combo_box.item label="Todos los avatares y objetos" name="3"/>
-					<combo_box.item label="Todo" name="4"/>
-				</combo_box>
-				<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando Luces y Sombras está desactivado. Se requiere reiniciar para efectuar los cambios.">
-					Puntos de luz (requiere reiniciar):
-				</text>
-				<combo_box name="LocalLightsDetail" width="165">
-					<combo_box.item label="Completo (por defecto)" name="3"/>
-					<combo_box.item label="Reducido" name="2"/>
-					<combo_box.item label="Sólo Sol/Luna" name="1"/>
-				</combo_box>
-				<slider label="Distancia de dibujo" name="DrawDistance" width="308" label_width="190"/>
-				<text name="DrawDistanceMeterText2" left_delta="302">
-					m
-				</text>
-				<slider label="Máx. número de partículas" name="MaxParticleCount" width="308" label_width="190"/>
-				<slider label="Máx. # de avatares no impostores" name="MaxNumberAvatarDrawn" width="296" label_width="190"/>
-				<slider label="Calidad de postprocesado" name="RenderPostProcess" width="272" label_width="190"/>
-				<text name="PostProcessText" left="476">
-					Baja
-				</text>
-				<slider label="Detalle cielo Windlight:" name="SkyMeshDetail" width="302" label_width="190"/>
-				<text name="MeshDetailText">
-					Factores de distancia del Nivel de Detalle (LOD):
-				</text>
-				<slider label="  Objetos y sculpts" name="ObjectMeshDetail"/>
-				<slider label="  Primitivas flexibles" name="FlexibleMeshDetail"/>
-				<slider label="  Árboles" name="TreeMeshDetail"/>
-				<slider label="  Avatares" name="AvatarMeshDetail"/>
-				<slider label="  Terreno" name="TerrainMeshDetail"/>
-				<slider label="  Física del avatar" name="AvatarPhysicsDetail"/>
-				<text name="AvatarRenderingText">
-                			Dibujo del avatar:
-				</text>
-				<check_box label="Impostores de avatar" name="AvatarImpostors"/>
-				<check_box label="Aplicar piel por hardware" name="AvatarVertexProgram"/>
-				<check_box label="Ropas del avatar" name="AvatarCloth"/>
-				<text name="TerrainDetailText">
-					Detalle del terreno:
-				</text>
-				<radio_group name="TerrainDetailRadio">
-					<radio_item label="Bajo" name="0"/>
-					<radio_item label="Alto" name="2"/>
-				</radio_group>
-			</panel>
-			<button label="Aplicar" label_selected="Aplicar" name="Apply"/>
-			<button label="Por defecto" name="Defaults"/>
-			<button label="Avanzado" name="Advanced"/>
+			<check_box label="Pantalla completa" name="Fullscreen Mode" tool_tip="Ejecutar Firestorm en modo de pantalla completa. Se requiere reiniciar para cambiar el modo."/>
+			<text name="ShadersText">
+				Efectos gráficos:
+			</text>
+			<check_box label="Agua transparente" name="TransparentWater"/>
+			<check_box label="Mapeado topológico y brillos" name="BumpShiny"/>
+			<check_box label="Focos locales de luz" name="LocalLights"/>
+			<check_box label="Efectos básicos" name="BasicShaders" tool_tip="Desactivar esta opción puede evitar que algunas tarjetas gráficas fallen"/>
+			<check_box label="Efectos atmosféricos" name="WindLightUseAtmosShaders"/>
+			<check_box label="Dibujo diferido" tool_tip="Activa el dibujo avanzado de la luz" name="UseLightShaders"/>
+			<check_box label="Oclusión de ambiente" name="UseSSAO"/>
+			<text name="shadows_label">
+				Sombras:
+			</text>
+			<combo_box name="ShadowDetail" width="165">
+				<combo_box.item label="Ninguna" name="0"/>
+				<combo_box.item label="Sol/Luna" name="1"/>
+				<combo_box.item label="Sol/Luna + focos" name="2"/>
+			</combo_box>
+			<text name="reflection_label">
+				Reflejos en el agua:
+			</text>
+			<combo_box name="Reflections" width="165">
+				<combo_box.item label="Mínimos" name="0"/>
+				<combo_box.item label="Terreno y árboles" name="1"/>
+				<combo_box.item label="Todos los objetos estáticos" name="2"/>
+				<combo_box.item label="Todos los avatares y objetos" name="3"/>
+				<combo_box.item label="Todo" name="4"/>
+			</combo_box>
+			<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando 'Dibujo diferido' está desactivado. Se requiere reiniciar para efectuar los cambios.">
+				Puntos de luz (requiere reiniciar):
+			</text>
+			<combo_box name="LocalLightsDetail" width="165">
+				<combo_box.item label="Completo (por defecto)" name="3"/>
+				<combo_box.item label="Reducido" name="2"/>
+				<combo_box.item label="Sólo Sol/Luna" name="1"/>
+			</combo_box>
+			<slider label="Distancia de dibujo" name="DrawDistance" width="308" label_width="190"/>
+			<text name="DrawDistanceMeterText2" left_delta="302">
+				m
+			</text>
+			<slider label="Máx. número de partículas" name="MaxParticleCount" width="308" label_width="190"/>
+			<slider label="Máx. # de avatares no impostores" name="MaxNumberAvatarDrawn" width="296" label_width="190"/>
+			<slider label="Calidad de postprocesado" name="RenderPostProcess" width="272" label_width="190"/>
+			<text name="PostProcessText" left="476">
+				Baja
+			</text>
+			<slider label="Detalle cielo Windlight:" name="SkyMeshDetail" width="302" label_width="190"/>
+			<text name="MeshDetailText">
+				Factores de distancia del Nivel de Detalle (LOD):
+			</text>
+			<slider label="  Objetos y sculpts" name="ObjectMeshDetail"/>
+			<slider label="  Primitivas flexibles" name="FlexibleMeshDetail"/>
+			<slider label="  Árboles" name="TreeMeshDetail"/>
+			<slider label="  Avatares" name="AvatarMeshDetail"/>
+			<slider label="  Terreno" name="TerrainMeshDetail"/>
+			<slider label="  Física del avatar" name="AvatarPhysicsDetail"/>
+			<text name="AvatarRenderingText">
+				Dibujo del avatar:
+			</text>
+			<check_box label="Impostores de avatar" name="AvatarImpostors"/>
+			<check_box label="Aplicar piel por hardware" name="AvatarVertexProgram"/>
+			<check_box label="Ropas del avatar" name="AvatarCloth"/>
+			<text name="TerrainDetailText">
+				Detalle del terreno:
+			</text>
+			<radio_group name="TerrainDetailRadio">
+				<radio_item label="Bajo" name="0"/>
+				<radio_item label="Alto" name="2"/>
+			</radio_group>
+			<button label="Restablecer" name="Defaults"/>
 		</panel>
 		<panel label="Hardware" name="Hardware Settings">
 			<check_box label="Filtrado anisotrópico (más lento cuando está activado)" name="ani"/>
@@ -145,9 +140,9 @@
 			<text name="Alpha Mask Rendering">
 				Dibujo de máscara alfa:
 			</text>
-			<check_box label="Dibujar máscaras alfa cuando 'Luces y sombras' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activadas las sombras" name="RenderAutoMaskAlphaNonDeferred"
+			<check_box label="Dibujar máscaras alfa cuando 'Dibujo diferido' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activadas las sombras" name="RenderAutoMaskAlphaNonDeferred"
          top_pad="12"/>
-			<check_box label="Dibujar máscaras alfa cuando 'Luces y sombras' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente SÍ están activadas las sombras" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Dibujar máscaras alfa cuando 'Dibujo Diferido' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente SÍ están activadas las sombras" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>
@@ -177,6 +172,7 @@
 			<slider label="Escala de incremento del difuminado" name="RenderGIBlurInc"/>
 		</panel>
 		<panel label="Profundidad de campo" name="DOF panel">
+			<check_box label="Profundidad de campo (difumina la vista excepto en el punto de foco de la cámara)" name="UseDoF"/>
 			<slider label="Apertura de diafragma (F):" name="CameraFNum" tool_tip="Valor F de la cámara para el efecto PDC" width="389" label_width="171"/>
 			<slider label="Distancia focal (mm):" name="CameraFocal"
          tool_tip="Distancia focal de la cámara para el efecto PDC (en milímetros)" width="395" label_width="171"/>
