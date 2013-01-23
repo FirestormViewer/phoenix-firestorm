@@ -3779,7 +3779,12 @@ bool LLAppViewer::anotherInstanceRunning()
 		// File exists, try opening with write permissions
 		LLAPRFile outfile ;
 		outfile.open(marker_file, LL_APR_WB);
-		apr_file_t* fMarker = outfile.getFileHandle() ; 
+
+		// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+		// apr_file_t* fMarker = outfile.getFileHandle() ; 
+		LLAPRFile::tFiletype* fMarker = outfile.getFileHandle() ; 
+		// </FS:ND>
+		
 		if (!fMarker)
 		{
 			// Another instance is running. Skip the rest of these operations.
@@ -5152,7 +5157,7 @@ void LLAppViewer::sendLogoutRequest()
 		if (mLogoutMarkerFile)
 		{
 			llinfos << "Created logout marker file " << mLogoutMarkerFileName << llendl;
-    		apr_file_close(mLogoutMarkerFile);
+    		// apr_file_close(mLogoutMarkerFile);
 		}
 		else
 		{

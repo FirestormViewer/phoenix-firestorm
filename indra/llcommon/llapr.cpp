@@ -31,7 +31,12 @@
 #include "apr_dso.h"
 
 apr_pool_t *gAPRPoolp = NULL; // Global APR memory pool
-LLVolatileAPRPool *LLAPRFile::sAPRFilePoolp = NULL ; //global volatile APR memory pool.
+
+// <FS:ND> moved LLAPRFile into a namespace, so we can toggle the implementation without much fuss
+//LLVolatileAPRPool *LLAPRFile::sAPRFilePoolp = NULL ; //global volatile APR memory pool.
+LLVolatileAPRPool *ll::apr::LLAPRFile::sAPRFilePoolp = NULL ; //global volatile APR memory pool.
+// </FS:ND>
+
 apr_thread_mutex_t *gLogMutexp = NULL;
 apr_thread_mutex_t *gCallStacksLogMutexp = NULL;
 
@@ -52,9 +57,13 @@ void ll_init_apr()
 		apr_thread_mutex_create(&gCallStacksLogMutexp, APR_THREAD_MUTEX_UNNESTED, gAPRPoolp);
 	}
 
-	if(!LLAPRFile::sAPRFilePoolp)
+	// if(!LLAPRFile::sAPRFilePoolp)
+	// {
+	// 	LLAPRFile::sAPRFilePoolp = new LLVolatileAPRPool(FALSE) ;
+	// }
+	if(!ll::apr::LLAPRFile::sAPRFilePoolp)
 	{
-		LLAPRFile::sAPRFilePoolp = new LLVolatileAPRPool(FALSE) ;
+		ll::apr::LLAPRFile::sAPRFilePoolp = new LLVolatileAPRPool(FALSE) ;
 	}
 }
 
@@ -84,10 +93,15 @@ void ll_cleanup_apr()
 		apr_pool_destroy(gAPRPoolp);
 		gAPRPoolp = NULL;
 	}
-	if (LLAPRFile::sAPRFilePoolp)
+	// if (LLAPRFile::sAPRFilePoolp)
+	// {
+	// 	delete LLAPRFile::sAPRFilePoolp ;
+	//	LLAPRFile::sAPRFilePoolp = NULL ;
+	// }
+	if (ll::apr::LLAPRFile::sAPRFilePoolp)
 	{
-		delete LLAPRFile::sAPRFilePoolp ;
-		LLAPRFile::sAPRFilePoolp = NULL ;
+		delete ll::apr::LLAPRFile::sAPRFilePoolp ;
+		ll::apr::LLAPRFile::sAPRFilePoolp = NULL ;
 	}
 	apr_terminate();
 }
@@ -319,6 +333,7 @@ void ll_apr_assert_status(apr_status_t status, apr_dso_handle_t *handle)
     llassert(! ll_apr_warn_status(status, handle));
 }
 
+namespace ll { namespace apr {
 //---------------------------------------------------------------------
 //
 // LLAPRFile functions
@@ -800,6 +815,7 @@ bool LLAPRFile::removeDir(const std::string& dirname, LLVolatileAPRPool* pool)
 //end of static components of LLAPRFile
 //*******************************************************************************************************************************
 //
+} }
 
 // <FS:ND> Special case for UTF-8 filenames under windows. As we cannot pass UTF-16 filenames into apr use a shortfilename, those are always ASCII
 std::string ndConvertFilename( std::string const &aFilename )

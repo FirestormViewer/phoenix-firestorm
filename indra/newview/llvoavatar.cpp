@@ -8131,7 +8131,12 @@ void LLVOAvatar::dumpArchetypeXML( void* )
 	//outfile.open(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS,"new archetype.xml"), LL_APR_WB );
 	outfile.open(file_picker.getFirstFile(), LL_APR_WB);
 // </FS:CR>
-	apr_file_t* file = outfile.getFileHandle();
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	//apr_file_t* file = outfile.getFileHandle();
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	// </FS:ND>
+
 	if (!file)
 	{
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined file

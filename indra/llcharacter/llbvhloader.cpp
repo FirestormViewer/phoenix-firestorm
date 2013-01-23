@@ -221,7 +221,12 @@ ELoadStatus LLBVHLoader::loadTranslationTable(const char *fileName)
 
 	LLAPRFile infile ;
 	infile.open(path, LL_APR_R);
-	apr_file_t *fp = infile.getFileHandle();
+	
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// apr_file_t *fp = infile.getFileHandle();
+	LLAPRFile::tFiletype *fp = infile.getFileHandle();
+	// </FS:ND>
+
 	if (!fp)
 		return E_ST_NO_XLT_FILE;
 
@@ -1338,7 +1343,11 @@ void LLBVHLoader::reset()
 //------------------------------------------------------------------------
 // LLBVHLoader::getLine()
 //------------------------------------------------------------------------
-BOOL LLBVHLoader::getLine(apr_file_t* fp)
+
+// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+//BOOL LLBVHLoader::getLine(apr_file_t* fp)
+BOOL LLBVHLoader::getLine(LLAPRFile::tFiletype* fp)
+// </FS:ND>
 {
 	if (apr_file_eof(fp) == APR_EOF)
 	{

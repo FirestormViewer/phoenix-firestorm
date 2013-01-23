@@ -1600,7 +1600,12 @@ BOOL LLImageFormatted::load(const std::string &filename, int load_size)
 	S32 file_size = 0;
 	LLAPRFile infile ;
 	infile.open(filename, LL_APR_RB, NULL, &file_size);
-	apr_file_t* apr_file = infile.getFileHandle();
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	// apr_file_t* apr_file = infile.getFileHandle();
+	LLAPRFile::tFiletype* apr_file = infile.getFileHandle();
+	// </FS:ND>
+
 	if (!apr_file)
 	{
 		setLastError("Unable to open file for reading", filename);
