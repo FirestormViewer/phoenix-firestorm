@@ -837,7 +837,7 @@
      reference="LtGray" />
     <color
      name="TimeTextColor"
-     reference="DkGray" />
+     reference="LtGray" />
     <color
      name="TitleBarFocusColor"
      reference="White_10" />
