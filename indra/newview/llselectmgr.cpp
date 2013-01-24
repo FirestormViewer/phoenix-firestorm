@@ -6202,7 +6202,21 @@ void LLSelectNode::renderOneSilhouette(const LLColor4 &color)
 
 	if (shader)
 	{ //switch to "solid color" program for SH-2690 -- works around driver bug causing bad triangles when rendering silhouettes
-		gSolidColorProgram.bind();
+
+		// <FS:ND> FIRE-6855; When running with a intel gfx card, do not use the solidcolor?.glsl files. Instead use a custom one for those cards. Passing color as a uniform and
+		// not a shader attribute
+
+		// gSolidColorProgram.bind();
+
+		if( gGLManager.mIsIntel )
+		{
+			gSolidColorProgramIntel.bind();
+			gGL.diffuseColor4fv( color.mV );
+		}
+		else
+			gSolidColorProgram.bind();
+
+		// </FS:ND>
 	}
 
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
