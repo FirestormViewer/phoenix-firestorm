@@ -69,10 +69,7 @@
 		<menu_item_check label="Gestos" name="Gestures"/>
 		<menu_item_check label="Filtros de voz" name="ShowVoice"/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
-		<menu_item_call label="Lista de bloqueados" name="Block List">
-            <menu_item_call.on_click
-              function="Communicate.BlockList" />
-        </menu_item_call>
+		<menu_item_call label="Lista de bloqueados" name="Block List"/>
 	</menu>
 	<menu label="Mundo" name="World">
 		<menu_item_call label="Resincronizar animaciones" name="Resync Animations"/>
@@ -244,7 +241,6 @@
 		<menu_item_check label="Vestir reemplaza lo no bloqueado" name="Wear Replaces Unlocked"/>
 		<menu_item_check label="Restricciones..." name="Restrictions"/>
 	</menu>
-
 	<menu label="Avanzado" name="Advanced">
 		<menu_item_call label="Recargar texturas" name="Rebake Texture"/>
 		<menu_item_call label="Interfaz en el tamaño predeterminado" name="Set UI Size to Default"/>
@@ -473,7 +469,6 @@
 			<menu_item_call label="Salvar a XML" name="Save to XML"/>
 			<menu_item_check label="Mostrar nombres de XUI" name="Show XUI Names"/>
 			<menu_item_check label="Mostrar información de depuración de las vistas" name="DebugViews"/>
-            </menu_item_check>
 			<menu_item_call label="Enviar MIs de prueba" name="Send Test IMs"/>
 			<menu_item_call label="Eliminar cachés de nombres" name="Flush Names Caches"/>
 		</menu>
