@@ -32,7 +32,7 @@ Propietario [OWNER]
 	</text>
 	<button label="Comprar" name="buy_btn"/>
 	<button label="Pagar" name="pay_btn"/>
-	<button label="Coger una copia" name="take_free_copy_btn"/>
+	<button label="Tomar copia" name="take_free_copy_btn"/>
 	<button label="Tocar" name="touch_btn"/>
 	<button label="Sentarme" name="sit_btn"/>
 	<button label="Abrir" name="open_btn"/>
