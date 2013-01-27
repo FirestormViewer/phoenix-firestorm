@@ -368,7 +368,11 @@ public:
 		}
 		else
 		{
-			llerrs << "Empty leaf" << llendl;
+			// <FS:NaCl> [Megaprim crash fix]
+			//llerrs << "Empty leaf" << llendl;
+			llwarns << "Empty leaf" << llendl;
+			return;
+			// </FS:NaCl> [Megaprim crash fix]
 		}
 
 		for (S32 i = 0; i < branch->getChildCount(); ++i)
