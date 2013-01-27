@@ -275,7 +275,7 @@ void LL_COMMON_API ll_apr_assert_status(apr_status_t status, apr_dso_handle_t* h
 
 extern "C" LL_COMMON_API apr_pool_t* gAPRPoolp; // Global APR memory pool
 
-#include "ndfile.h"
+#include "nd/ndfile.h"
 typedef ll::apr::LLAPRFile LLAPRFile;
 //typedef nd::apr::ndFile LLAPRFile;
 

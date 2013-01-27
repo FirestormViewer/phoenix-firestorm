@@ -82,7 +82,7 @@
 #include "lltransfertargetvfile.h"
 #include "llmemtype.h"
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 // Constants
 //const char* MESSAGE_LOG_FILENAME = "message.log";

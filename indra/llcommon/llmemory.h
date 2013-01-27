@@ -36,7 +36,7 @@
 
 // <FS:ND> No tcmalloc
 #ifdef ND_NO_TCMALLOC
-#include "ndmemory.h"
+#include "nd/ndmemory.h"
 #else
 
 inline void* ll_aligned_malloc( size_t size, int align )

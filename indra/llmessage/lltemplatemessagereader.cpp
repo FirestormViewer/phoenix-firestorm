@@ -38,7 +38,7 @@
 #include "v3math.h"
 #include "v4math.h"
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 LLTemplateMessageReader::LLTemplateMessageReader(message_template_number_map_t&
 												 number_template_map) :

@@ -54,7 +54,7 @@
 #include "llglslshader.h"
 #include "llviewershadermgr.h"
 
-#include "ndobjectpool.h" // <FS:ND/> For operator new/delete
+#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
 
 static LLFastTimer::DeclareTimer FTM_FRUSTUM_CULL("Frustum Culling");
 static LLFastTimer::DeclareTimer FTM_CULL_REBOUND("Cull Rebound");
