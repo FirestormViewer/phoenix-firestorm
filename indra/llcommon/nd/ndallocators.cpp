@@ -29,7 +29,7 @@
 #include "ndpooldefines.h"
 #include "ndmemorypool.h"
 
-#ifdef ND_NO_TCMALLOC
+#if defined(ND_NO_TCMALLOC) && ND_USE_MEMORY_POOL==1
 namespace nd
 {
 	namespace allocators
