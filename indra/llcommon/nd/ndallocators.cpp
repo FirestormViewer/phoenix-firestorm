@@ -29,7 +29,7 @@
 #include "ndpooldefines.h"
 #include "ndmemorypool.h"
 
-#ifdef ND_NO_TCMALLOC
+#if defined(ND_NO_TCMALLOC)
 namespace nd
 {
 	namespace allocators
@@ -56,6 +56,7 @@ namespace nd
 	}
 }
 
+#ifdef ND_OVERRIDE_NEW
 void *operator new(size_t nSize )
 {
 	return nd::allocators::malloc( nSize, 16 );
@@ -75,6 +76,7 @@ void operator delete[]( void *pMem )
 {
 	nd::allocators::free( pMem );
 }
+#endif
 
 #else
 namespace nd
