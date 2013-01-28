@@ -31,7 +31,7 @@
 #include "message.h" // TODO: babbage: Remove...
 #include "llstl.h"
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 class LLMsgVarData
 {

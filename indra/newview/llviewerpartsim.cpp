@@ -41,7 +41,7 @@
 #include "llspatialpartition.h"
 #include "llvovolume.h"
 
-#include "ndobjectpool.h" // <FS:ND/> For operator new/delete
+#include "nd/ndobjectpool.h" // <FS:ND/> For operator new/delete
 
 const F32 PART_SIM_BOX_SIDE = 16.f;
 const F32 PART_SIM_BOX_OFFSET = 0.5f*PART_SIM_BOX_SIDE;

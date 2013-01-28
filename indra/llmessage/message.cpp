@@ -81,7 +81,7 @@
 #include "v4math.h"
 #include "lltransfertargetvfile.h"
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 // Constants
 //const char* MESSAGE_LOG_FILENAME = "message.log";

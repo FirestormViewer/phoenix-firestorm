@@ -242,8 +242,8 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
-#include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
-#include "ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
 
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK

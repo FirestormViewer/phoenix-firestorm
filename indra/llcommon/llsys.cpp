@@ -93,7 +93,7 @@ const char MEMINFO_FILE[] = "/proc/meminfo";
 extern int errno;
 #endif
 
-#include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
 
 static const S32 CPUINFO_BUFFER_SIZE = 16383;
 LLCPUInfo gSysCPU;
