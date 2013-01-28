@@ -36,6 +36,7 @@
 #include "llfloaterreg.h"
 #include "llhudmanager.h"
 #include "lljoystickbutton.h"
+#include "llmoveview.h"
 #include "llselectmgr.h"
 #include "llsmoothstep.h"
 #include "lltoolmgr.h"
@@ -2190,6 +2191,11 @@ void LLAgentCamera::changeCameraToDefault()
 	else
 	{
 		changeCameraToThirdPerson();
+	}
+	if (gSavedSettings.getBOOL("HideUIControls"))
+	{
+		gViewerWindow->setUIVisibility(false);
+		LLPanelStandStopFlying::getInstance()->setVisible(false);
 	}
 }
 

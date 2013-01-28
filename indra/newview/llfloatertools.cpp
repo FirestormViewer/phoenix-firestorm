@@ -1218,6 +1218,17 @@ void commit_grid_mode(LLUICtrl *ctrl)
 	LLSelectMgr::getInstance()->setGridMode((EGridMode)combo->getCurrentIndex());
 }
 
+// static
+void LLFloaterTools::setGridMode(S32 mode)
+{
+	LLFloaterTools* tools_floater = LLFloaterReg::getTypedInstance<LLFloaterTools>("build");
+	if (!tools_floater || !tools_floater->mComboGridMode)
+	{
+		return;
+	}
+
+	tools_floater->mComboGridMode->setCurrentByIndex(mode);
+}
 
 void LLFloaterTools::onClickGridOptions()
 {

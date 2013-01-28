@@ -156,14 +156,11 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
 	
 	// <FS:Ansariel> Synchronize double click handling throughout instances
-	//// If we're not tracking a beacon already, double-click will set one 
-	//if (!LLTracker::isTracking(NULL))
+	//LLTracker::stopTracking(NULL);
+	//LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+	//if (world_map)
 	//{
-	//	LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-	//	if (world_map)
-	//	{
-	//		world_map->trackLocation(pos_global);
-	//	}
+	//	world_map->trackLocation(pos_global);
 	//}
 	//
 	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
@@ -327,6 +324,11 @@ void LLFloaterMap::handleZoom(const LLSD& userdata)
 	{
 		mMap->setScale(scale);
 	}
+}
+
+LLFloaterMap* LLFloaterMap::getInstance()
+{
+	return LLFloaterReg::getTypedInstance<LLFloaterMap>("mini_map");
 }
 
 void	LLFloaterMap::setMinimized(BOOL b)

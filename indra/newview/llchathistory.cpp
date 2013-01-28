@@ -130,7 +130,9 @@ public:
 		mFrom(),
 		mSessionID(),
 		mMinUserNameWidth(0),
-		mUserNameFont(NULL)
+		mUserNameFont(NULL),
+		mUserNameTextBox(NULL),
+		mTimeBoxTextBox(NULL)
 	{}
 
 	static LLChatHistoryHeader* createInstance(const std::string& file_name)
@@ -216,6 +218,9 @@ public:
 
 		setMouseEnterCallback(boost::bind(&LLChatHistoryHeader::showInfoCtrl, this));
 		setMouseLeaveCallback(boost::bind(&LLChatHistoryHeader::hideInfoCtrl, this));
+
+		mUserNameTextBox = getChild<LLTextBox>("user_name");
+		mTimeBoxTextBox = getChild<LLTextBox>("time_box");
 
 		return LLPanel::postBuild();
 	}
@@ -493,8 +498,8 @@ public:
 
 	/*virtual*/ void draw()
 	{
-		LLTextBox* user_name = getChild<LLTextBox>("user_name");
-		LLTextBox* time_box = getChild<LLTextBox>("time_box");
+		LLTextBox* user_name = mUserNameTextBox; //getChild<LLTextBox>("user_name");
+		LLTextBox* time_box = mTimeBoxTextBox; //getChild<LLTextBox>("time_box");
 
 		LLRect user_name_rect = user_name->getRect();
 		S32 user_name_width = user_name_rect.getWidth();
@@ -724,6 +729,8 @@ protected:
 
 	S32					mMinUserNameWidth;
 	const LLFontGL*		mUserNameFont;
+	LLTextBox*			mUserNameTextBox;
+	LLTextBox*			mTimeBoxTextBox; 
 };
 
 LLUICtrl* LLChatHistoryHeader::sInfoCtrl = NULL;

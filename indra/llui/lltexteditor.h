@@ -67,7 +67,8 @@ public:
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.2.0a) | Added: Catznip-2.8.0a
 								commit_on_return,
 // [/SL:KB]
-								show_context_menu;
+								show_context_menu,
+								enable_tooltip_paste;
 
 		//colors
 		Optional<LLUIColor>		default_color;
@@ -302,6 +303,8 @@ private:
 	// Methods
 	//
 	void	        pasteHelper(bool is_primary);
+	void			cleanStringForPaste(LLWString & clean_string);
+	void			pasteTextWithLinebreaks(LLWString & clean_string);
 
 	void			drawLineNumbers();
 
@@ -338,6 +341,7 @@ private:
 	BOOL			mAllowEmbeddedItems;
 	bool			mShowContextMenu;
 	bool			mParseOnTheFly;
+	bool			mEnableTooltipPaste;
 	
 	LLUUID			mSourceID;
 

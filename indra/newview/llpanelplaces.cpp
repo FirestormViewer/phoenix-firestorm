@@ -381,6 +381,7 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 
 	if (key.size() != 0)
 	{
+		isLandmarkEditModeOn = false;
 		std::string key_type = key["type"].asString();
 		if (key_type == LANDMARK_TAB_INFO_TYPE)
 		{
@@ -430,7 +431,6 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 			mPlaceInfoType = key_type;
 			mPosGlobal.setZero();
 			mItem = NULL;
-			isLandmarkEditModeOn = false;
 			togglePlaceInfoPanel(TRUE);
 
 			if (mPlaceInfoType == AGENT_INFO_TYPE)

@@ -40,6 +40,7 @@ class LLFloaterMap : public LLFloater
 {
 public:
 	LLFloaterMap(const LLSD& key);
+	static LLFloaterMap* getInstance();
 	virtual ~LLFloaterMap();
 	
 	/*virtual*/ BOOL 	postBuild();

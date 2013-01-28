@@ -29,7 +29,6 @@
 
 #include "lldarray.h"
 #include "message.h" // TODO: babbage: Remove...
-#include "llstat.h"
 #include "llstl.h"
 
 #include "ndexceptions.h" // <FS:ND/> For ndxran
@@ -265,6 +264,7 @@ enum EMsgDeprecation
 	MD_DEPRECATED
 };
 
+
 class LLMessageTemplate
 {
 public:
@@ -366,7 +366,6 @@ public:
 	{
 		if (mHandlerFunc)
 		{
-            LLPerfBlock msg_cb_time("msg_cb", mName);
 
 			// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
 

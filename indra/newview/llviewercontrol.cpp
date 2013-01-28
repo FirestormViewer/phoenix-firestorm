@@ -72,6 +72,8 @@
 #include "llpanellogin.h"
 #include "llpaneltopinfobar.h"
 #include "llspellcheck.h"
+#include "llslurl.h"
+#include "llstartup.h"
 #include "llupdaterservice.h"
 
 // NaCl - Antispam Registry
@@ -564,6 +566,20 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
+bool handleLoginLocationChanged()
+{
+	/*
+	 * This connects the default preference setting to the state of the login
+	 * panel if it is displayed; if you open the preferences panel before
+	 * logging in, and change the default login location there, the login
+	 * panel immediately changes to match your new preference.
+	 */
+	std::string new_login_location = gSavedSettings.getString("LoginLocation");
+	LL_DEBUGS("AppInit")<<new_login_location<<LL_ENDL;
+	LLStartUp::setStartSLURL(LLSLURL(new_login_location));
+	return true;
+}
+
 bool handleSpellCheckChanged()
 {
 	if (gSavedSettings.getBOOL("SpellCheck"))
@@ -831,6 +847,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
+	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
 	gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here

@@ -50,6 +50,7 @@
 #include "llviewertexture.h"
 #include "llviewerregion.h"
 #include "llviewerstats.h"
+#include "llviewerstatsrecorder.h"
 #include "llviewerassetstats.h"
 #include "llworld.h"
 #include "llsdutil.h"
@@ -2100,6 +2101,7 @@ S32 LLTextureFetchWorker::callbackHttpGet(LLCore::HttpResponse * response,
 		LL_DEBUGS("Texture") << "HTTP RECEIVED: " << mID.asString() << " Bytes: " << data_size << LL_ENDL;
 		if (data_size > 0)
 		{
+			LLViewerStatsRecorder::instance().textureFetch(data_size);
 			// *TODO: set the formatted image data here directly to avoid the copy
 
 			// Hold on to body for later copy
@@ -2174,6 +2176,7 @@ S32 LLTextureFetchWorker::callbackHttpGet(LLCore::HttpResponse * response,
 	mLoaded = TRUE;
 	setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
 
+	LLViewerStatsRecorder::instance().log(0.2f);
 	return data_size ;
 }
 
@@ -3216,7 +3219,11 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 		return false;
 	}
 
-	worker->lockWorkMutex();											// +Mw
+	LLViewerStatsRecorder::instance().textureFetch(data_size);
+	LLViewerStatsRecorder::instance().log(0.1f);
+
+	worker->lockWorkMutex();
+
 
 	//	Copy header data into image object
 	worker->mImageCodec = codec;
@@ -3263,8 +3270,12 @@ bool LLTextureFetch::receiveImagePacket(const LLHost& host, const LLUUID& id, U1
 		mNetworkQueueMutex.unlock();									// -Mfnq
 		return false;
 	}
+	
+	LLViewerStatsRecorder::instance().textureFetch(data_size);
+	LLViewerStatsRecorder::instance().log(0.1f);
 
-	worker->lockWorkMutex();											// +Mw
+	worker->lockWorkMutex();
+
 	
 	res = worker->insertPacket(packet_num, data, data_size);
 	
@@ -4038,7 +4049,7 @@ bool LLTextureFetchDebugger::processStartDebug(F32 max_time)
 	}
 
 	//collect statistics
-	mTotalFetchingTime = gDebugTimers[0].getElapsedTimeF32() - mTotalFetchingTime;
+	mTotalFetchingTime = gTextureTimer.getElapsedTimeF32() - mTotalFetchingTime;
 	
 	std::set<LLUUID> fetched_textures;
 	S32 size = mFetchingHistory.size();
@@ -4139,7 +4150,7 @@ void LLTextureFetchDebugger::tryToStopDebug()
 			mFetchingHistory.clear();
 			mHandleToFetchIndex.clear();
 			init();	
-			mTotalFetchingTime = gDebugTimers[0].getElapsedTimeF32(); //reset
+			mTotalFetchingTime = gTextureTimer.getElapsedTimeF32(); //reset
 		}
 	}
 }

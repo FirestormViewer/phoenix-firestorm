@@ -175,7 +175,6 @@ static LLFastTimer::DeclareTimer FTM_UPDATE_CAMERA("Update Camera");
 void display_update_camera()
 {
 	LLFastTimer t(FTM_UPDATE_CAMERA);
-	LLMemType mt_uc(LLMemType::MTYPE_DISPLAY_UPDATE_CAMERA);
 	// TODO: cut draw distance down if customizing avatar?
 	// TODO: cut draw distance on per-parcel basis?
 
@@ -240,7 +239,7 @@ static LLFastTimer::DeclareTimer FTM_UPDATE_SKY("Update Sky");
 static LLFastTimer::DeclareTimer FTM_UPDATE_TEXTURES("Update Textures");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE("Update Images");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_CLASS("Class");
-static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_BUMP("Bump");
+static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_BUMP("Image Update Bump");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_LIST("List");
 static LLFastTimer::DeclareTimer FTM_IMAGE_UPDATE_DELETE("Delete");
 static LLFastTimer::DeclareTimer FTM_RESIZE_WINDOW("Resize Window");
@@ -252,7 +251,6 @@ static LLFastTimer::DeclareTimer FTM_TELEPORT_DISPLAY("Teleport Display");
 // Paint the display!
 void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 {
-	LLMemType mt_render(LLMemType::MTYPE_RENDER);
 	LLFastTimer t(FTM_RENDER);
 
 	if (gWindowResized)
@@ -673,7 +671,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 	
 	if (!gDisconnected)
 	{
-		LLMemType mt_du(LLMemType::MTYPE_DISPLAY_UPDATE);
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Update");
 		if (gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_HUD))
 		{ //don't draw hud objects in this frame
@@ -695,7 +692,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		// *TODO: merge these two methods
 		{
 			LLFastTimer t(FTM_HUD_UPDATE);
-			LLMemType mt_uh(LLMemType::MTYPE_DISPLAY_UPDATE_HUD);
 			LLHUDManager::getInstance()->updateEffects();
 			LLHUDObject::updateAll();
 			stop_glerror();
@@ -703,7 +699,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		{
 			LLFastTimer t(FTM_DISPLAY_UPDATE_GEOM);
-			LLMemType mt_ug(LLMemType::MTYPE_DISPLAY_UPDATE_GEOM);
 			const F32 max_geom_update_time = 0.005f*10.f*gFrameIntervalSeconds; // 50 ms/second update time
 			gPipeline.createObjects(max_geom_update_time);
 			gPipeline.processPartitionQ();
@@ -764,8 +759,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:Swap");
 		
 		{ 
-			LLMemType mt_ds(LLMemType::MTYPE_DISPLAY_SWAP);
-
 			if (gResizeScreenTexture)
 			{
 				gResizeScreenTexture = FALSE;
@@ -824,7 +817,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 		//if (!for_snapshot)
 		{
-			LLMemType mt_gw(LLMemType::MTYPE_DISPLAY_GEN_REFLECTION);
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Imagery");
 			gPipeline.generateWaterReflection(*LLViewerCamera::getInstance());
 			gPipeline.generateHighlight(*LLViewerCamera::getInstance());
@@ -844,7 +836,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:UpdateImages");
 		
 		{
-			LLMemType mt_iu(LLMemType::MTYPE_DISPLAY_IMAGE_UPDATE);
 			LLFastTimer t(FTM_IMAGE_UPDATE);
 			
 			{
@@ -888,7 +879,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLAppViewer::instance()->pingMainloopTimeout("Display:StateSort");
 		{
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-			LLMemType mt_ss(LLMemType::MTYPE_DISPLAY_STATE_SORT);
 			gPipeline.stateSort(*LLViewerCamera::getInstance(), result);
 			stop_glerror();
 				
@@ -910,7 +900,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		LLPipeline::sUseOcclusion = occlusion;
 
 		{
-			LLMemType mt_ds(LLMemType::MTYPE_DISPLAY_SKY);
 			LLAppViewer::instance()->pingMainloopTimeout("Display:Sky");
 			LLFastTimer t(FTM_UPDATE_SKY);	
 			gSky.updateSky();
@@ -1005,7 +994,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 				&& !gRestoreGL)
 		{
 			LLViewerCamera::sCurCameraID = LLViewerCamera::CAMERA_WORLD;
-			LLMemType mt_rg(LLMemType::MTYPE_DISPLAY_RENDER_GEOM);
 
 			// <FS:Ansariel> gSavedSettings replacement
 			//if (gSavedSettings.getBOOL("RenderDepthPrePass") && LLGLSLShader::sNoFixedFunction)
@@ -1070,7 +1058,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 		
 		if (to_texture)
 		{
-			LLMemType mt_rf(LLMemType::MTYPE_DISPLAY_RENDER_FLUSH);
 			if (LLPipeline::sRenderDeferred && !LLPipeline::sUnderWaterRender)
 			{
 				gPipeline.mDeferredScreen.flush();
@@ -1137,7 +1124,6 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot)
 
 void render_hud_attachments()
 {
-	LLMemType mt_ra(LLMemType::MTYPE_DISPLAY_RENDER_ATTACHMENTS);
 	gGL.matrixMode(LLRender::MM_PROJECTION);
 	gGL.pushMatrix();
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
@@ -1335,7 +1321,6 @@ static LLFastTimer::DeclareTimer FTM_SWAP("Swap");
 
 void render_ui(F32 zoom_factor, int subfield)
 {
-	LLMemType mt_ru(LLMemType::MTYPE_DISPLAY_RENDER_UI);
 	LLGLState::checkStates();
 	
 	glh::matrix4f saved_view = glh_get_current_modelview();

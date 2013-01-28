@@ -240,9 +240,10 @@ LLTextEditor::Params::Params()
 	default_color("default_color"),
     commit_on_focus_lost("commit_on_focus_lost", false),
 // [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-08-20 (Catznip-3.2.0a) | Added: Catznip-2.8.0a
-    commit_on_return("commit_on_return", false),
+	commit_on_return("commit_on_return", false),
 // [/SL:KB]
-	show_context_menu("show_context_menu")
+	show_context_menu("show_context_menu"),
+	enable_tooltip_paste("enable_tooltip_paste")
 {
 	addSynonym(prevalidate_callback, "text_type");
 }
@@ -264,7 +265,8 @@ LLTextEditor::LLTextEditor(const LLTextEditor::Params& p) :
 	mTabsToNextField(p.ignore_tab),
 	mPrevalidateFunc(p.prevalidate_callback()),
 	mContextMenu(NULL),
-	mShowContextMenu(p.show_context_menu)
+	mShowContextMenu(p.show_context_menu),
+	mEnableTooltipPaste(p.enable_tooltip_paste)
 {
 	mSourceID.generate();
 
@@ -1463,6 +1465,23 @@ void LLTextEditor::pasteHelper(bool is_primary)
 
 	// Clean up string (replace tabs and remove characters that our fonts don't support).
 	LLWString clean_string(paste);
+	cleanStringForPaste(clean_string);
+
+	// Insert the new text into the existing text.
+
+	//paste text with linebreaks.
+	pasteTextWithLinebreaks(clean_string);
+
+	deselect();
+
+	onKeyStroke();
+	mParseOnTheFly = TRUE;
+}
+
+
+// Clean up string (replace tabs and remove characters that our fonts don't support).
+void LLTextEditor::cleanStringForPaste(LLWString & clean_string)
+{
 	LLWStringUtil::replaceTabsWithSpaces(clean_string, SPACES_PER_TAB);
 	if( mAllowEmbeddedItems )
 	{
@@ -1481,17 +1500,18 @@ void LLTextEditor::pasteHelper(bool is_primary)
 			}
 		}
 	}
+}
 
 	// <FS:ND> FIRE-4885; Truncate the text to mMaxTextByteLength.
 	// Can safely do this here, otherwise it would done in '::insert', which is bad for performance, as ::insert is called once per line.
 	// In theory text already in the editor should be taken into account too, but then text that would be overwriten would have to be considered aswell.
-	if ( wstring_utf8_length(clean_string) > mMaxTextByteLength )
-		clean_string = utf8str_to_wstring( utf8str_truncate( wstring_to_utf8str(clean_string), mMaxTextByteLength ) );
+	//if ( wstring_utf8_length(clean_string) > mMaxTextByteLength )
+	//	clean_string = utf8str_to_wstring( utf8str_truncate( wstring_to_utf8str(clean_string), mMaxTextByteLength ) );
 	// </FS:ND>
 
-	// Insert the new text into the existing text.
 
-	//paste text with linebreaks.
+void LLTextEditor::pasteTextWithLinebreaks(LLWString & clean_string)
+{
 	std::basic_string<llwchar>::size_type start = 0;
 	std::basic_string<llwchar>::size_type pos = clean_string.find('\n',start);
 	
@@ -1514,14 +1534,7 @@ void LLTextEditor::pasteHelper(bool is_primary)
 		setCursorPos(mCursorPos + insert(mCursorPos, str, FALSE, LLTextSegmentPtr()));
 	}
 	else addLineBreakChar(FALSE);
-
-	deselect();
-
-	onKeyStroke();
-	mParseOnTheFly = TRUE;
 }
-
-
 
 // copy selection to primary
 void LLTextEditor::copyPrimary()
@@ -1756,19 +1769,50 @@ BOOL LLTextEditor::handleKeyHere(KEY key, MASK mask )
 	{
 		return FALSE;
 	}
-		
+
 	if (mReadOnly && mScroller)
 	{
 		handled = (mScroller && mScroller->handleKeyHere( key, mask ))
 				|| handleSelectionKey(key, mask)
 				|| handleControlKey(key, mask);
+	}
+	else 
+	{
+		if (mEnableTooltipPaste &&
+			LLToolTipMgr::instance().toolTipVisible() && 
+			KEY_TAB == key)
+		{	// Paste the first line of a tooltip into the editor
+			std::string message;
+			LLToolTipMgr::instance().getToolTipMessage(message);
+			LLWString tool_tip_text(utf8str_to_wstring(message));
+
+			if (tool_tip_text.size() > 0)
+			{
+				// Delete any selected characters (the tooltip text replaces them)
+				if(hasSelection())
+				{
+					deleteSelection(TRUE);
+				}
+
+				std::basic_string<llwchar>::size_type pos = tool_tip_text.find('\n',0);
+				if (pos != -1)
+				{	// Extract the first line of the tooltip
+					tool_tip_text = std::basic_string<llwchar>(tool_tip_text, 0, pos);
+				}
+
+				// Add the text
+				cleanStringForPaste(tool_tip_text);
+				pasteTextWithLinebreaks(tool_tip_text);
+				handled = TRUE;
+			}
 		}
-		else 
-		{
-		handled = handleNavigationKey( key, mask )
-				|| handleSelectionKey(key, mask)
-				|| handleControlKey(key, mask)
-				|| handleSpecialKey(key, mask);
+		else
+		{	// Normal key handling
+			handled = handleNavigationKey( key, mask )
+					|| handleSelectionKey(key, mask)
+					|| handleControlKey(key, mask)
+					|| handleSpecialKey(key, mask);
+		}
 	}
 
 	if( handled )

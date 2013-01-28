@@ -144,9 +144,10 @@ LLToolBar::LLToolBar(const LLToolBar::Params& p)
 	mButtonEnterSignal(NULL),
 	mButtonLeaveSignal(NULL),
 	mButtonRemoveSignal(NULL),
-	// <FS:Zi> add layout style and alignment initialisation
-	// mDragAndDropTarget(false)
 	mDragAndDropTarget(false),
+	// <FS:Zi> add layout style and alignment initialisation
+	//mCaretIcon(NULL)
+	mCaretIcon(NULL),
 	mLayoutStyle(p.layout_style),
 	mAlignment(p.alignment)
 	// </FS:Zi>
@@ -975,7 +976,12 @@ void LLToolBar::draw()
 	LLUI::translate((F32)getRect().mLeft, (F32)getRect().mBottom);
 
 	// Position the caret 
-	LLIconCtrl* caret = getChild<LLIconCtrl>("caret");
+	if (!mCaretIcon)
+	{
+		mCaretIcon = getChild<LLIconCtrl>("caret");
+	}
+
+	LLIconCtrl* caret = mCaretIcon;
 	caret->setVisible(FALSE);
 	if (mDragAndDropTarget && !mButtonCommands.empty())
 	{

@@ -293,6 +293,7 @@ public:
 		else
 		{
 			llwarns << "Control " << name << " not found." << llendl;
+			return T();
 		}
 		return convert_from_llsd<T>(value, type, name);
 	}
