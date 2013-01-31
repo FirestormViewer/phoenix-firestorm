@@ -34,7 +34,7 @@
 		Numer części:
 	</floater.string>
 	<floater.string name="selected_faces">
-		Powierzchnie:
+		Numer strony:
 	</floater.string>
 	<floater.string name="grid_screen_text">
 		Widok
@@ -128,7 +128,9 @@
 		Siła
 	</text>
 	<button label="Zastosuj" label_selected="Zastosuj" name="button apply to selection" tool_tip="Modyfikuj zaznaczony teren"/>
-	<text name="link_num_obj_count" tooltip="Ilość części może nie być dokładna."/>
+	<text name="link_num_obj_count" tooltip="Ilość części może nie być dokładna.">
+		[DESC] [NUM]
+	</text>
 	<text name="selection_empty">
 		Zaznacz coś!
 	</text>

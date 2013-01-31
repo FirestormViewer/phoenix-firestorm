@@ -449,5 +449,14 @@
       <integer>1</integer>
       <!-- Special case. Mapped to settings procedurally. -->
     </map>
+	
+    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement -->
+    <key>NSDocumentRevisionsDebugMode</key>
+    <map>
+      <key>desc</key>
+      <string>Does nothing... Workaround for command like arguement Xcode passes when running from the IDE</string>
+      <key />
+    </map>
+    <!-- FS:CR - Workaround for Xcode IDE adding its own arguement -->
   </map>
 </llsd>
