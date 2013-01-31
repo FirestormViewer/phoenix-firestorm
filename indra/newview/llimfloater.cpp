@@ -1141,7 +1141,7 @@ bool LLIMFloater::toggle(const LLUUID& session_id)
 			floater->setVisible(false);
 			return false;
 		}
-		else if(floater && (!floater->isDocked() || floater->getVisible() && !floater->hasFocus()))
+		else if(floater && (!floater->isDocked() || (floater->getVisible() && !floater->hasFocus())))
 		{
 			floater->setVisible(TRUE);
 			floater->setFocus(TRUE);
