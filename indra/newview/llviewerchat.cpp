@@ -293,6 +293,11 @@ std::string LLViewerChat::getSenderSLURL(const LLChat& chat, const LLSD& args)
 	case CHAT_SOURCE_OBJECT:
 		return getObjectImSLURL(chat, args);
 
+	// <FS:Ansariel> Stop spamming the log when processing system messages
+	case CHAT_SOURCE_SYSTEM:
+		return LLStringUtil::null;
+	// </FS:Ansariel>
+
 	default:
 		llwarns << "Getting SLURL for an unsupported sender type: " << chat.mSourceType << llendl;
 	}
