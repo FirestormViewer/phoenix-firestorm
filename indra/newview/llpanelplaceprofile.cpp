@@ -175,29 +175,43 @@ void LLPanelPlaceProfile::resetLocation()
 	mForSalePanel->setVisible(FALSE);
 	mYouAreHerePanel->setVisible(FALSE);
 
+	// <FS:Ansariel> Fix loading icon; don't use translated string!
+	const std::string unknown("Unknown_Icon");
+
 	std::string loading = LLTrans::getString("LoadingData");
 	mParcelOwner->setValue(loading);
 
-	mParcelRatingIcon->setValue(loading);
+// <FS:Ansariel> Fix loading icon; don't use translated string!
+	//mParcelRatingIcon->setValue(loading);
+	mParcelRatingIcon->setValue(unknown);
 	mParcelRatingText->setText(loading);
-	mVoiceIcon->setValue(loading);
+	//mVoiceIcon->setValue(loading);
+	mVoiceIcon->setValue(unknown);
 	mVoiceText->setText(loading);
-	mFlyIcon->setValue(loading);
+	//mFlyIcon->setValue(loading);
+	mFlyIcon->setValue(unknown);
 	mFlyText->setText(loading);
-	mPushIcon->setValue(loading);
+	//mPushIcon->setValue(loading);
+	mPushIcon->setValue(unknown);
 	mPushText->setText(loading);
-	mBuildIcon->setValue(loading);
+	//mBuildIcon->setValue(loading);
+	mBuildIcon->setValue(unknown);
 	mBuildText->setText(loading);
-	mScriptsIcon->setValue(loading);
+	//mScriptsIcon->setValue(loading);
+	mScriptsIcon->setValue(unknown);
 	mScriptsText->setText(loading);
-	mDamageIcon->setValue(loading);
+	//mDamageIcon->setValue(loading);
+	mDamageIcon->setValue(unknown);
 	mDamageText->setText(loading);
-	mSeeAVsIcon->setValue(loading);
+	//mSeeAVsIcon->setValue(loading);
+	mSeeAVsIcon->setValue(unknown);
 	mSeeAVsText->setText(loading);
 
 	mRegionNameText->setValue(loading);
 	mRegionTypeText->setValue(loading);
-	mRegionRatingIcon->setValue(loading);
+	//mRegionRatingIcon->setValue(loading);
+	mRegionRatingIcon->setValue(unknown);
+// </FS:Ansariel> Fix loading icon; don't use translated string!
 	mRegionRatingText->setValue(loading);
 	mRegionOwnerText->setValue(loading);
 	mRegionGroupText->setValue(loading);

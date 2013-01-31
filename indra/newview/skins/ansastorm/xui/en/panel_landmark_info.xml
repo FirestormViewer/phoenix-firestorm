@@ -110,7 +110,7 @@
     <icon
      follows="top|right"
      height="16"
-     image_name="unknown"
+     image_name="Unknown_Icon"
      layout="topleft"
      left_pad="0"
      top_pad="-12"
