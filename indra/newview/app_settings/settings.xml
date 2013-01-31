@@ -2964,9 +2964,9 @@
         <real>-3.0</real>
         <real>0.0</real>
         <real>0.75</real>
+      </array>
       <key>Backup</key>
       <integer>0</integer>
-      </array>
     </map>
     <key>CameraOffsetFrontView</key>
     <map>
