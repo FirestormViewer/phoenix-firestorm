@@ -940,10 +940,10 @@ bool idle_startup()
 			login_show();
 			display_startup();
 			// connect dialog is already shown, so fill in the names
-			if (gUserCredential.notNull())                                                                         
-			{                                                                                                      
-				LLPanelLogin::setFields( gUserCredential );
-			}     
+			if (gUserCredential.notNull())
+			{
+				LLPanelLogin::setFields( gUserCredential, gRememberPassword);
+			}
 			display_startup();
 			LLPanelLogin::giveFocus();
 
@@ -2536,20 +2536,13 @@ void login_show()
 {
 	LL_INFOS("AppInit") << "Initializing Login Screen" << LL_ENDL;
 
-#ifdef LL_RELEASE_FOR_DOWNLOAD
-	BOOL bUseDebugLogin = gSavedSettings.getBOOL("UseDebugLogin");
-#else
-	BOOL bUseDebugLogin = TRUE;
-#endif
 	// Hide the toolbars: may happen to come back here if login fails after login agent but before login in region
 	if (gToolBarView)
 	{
 		gToolBarView->setVisible(FALSE);
 	}
 	
-	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(),
-						bUseDebugLogin || gSavedSettings.getBOOL("SecondLifeEnterprise"),
-						login_callback, NULL );
+	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 
 	// <FS:PP> "Did you know about Phoenix mode?" notification, showed once per installation
 	if (!gSavedSettings.getBOOL("FSVintageLoginInfo"))
