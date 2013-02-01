@@ -10,7 +10,7 @@
 	name="panel_ls_groups">
 	<panel
 		border="false"
-		follows="all"
+		follows="top|left|right"
 		height="53"
 		layout="topleft"
 		left="0"
