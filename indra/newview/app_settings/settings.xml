@@ -14759,6 +14759,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <string>c825dfbc-9827-7e02-6507-3713d18916c1</string>
     </map>
+    <key>UISndTeleportOffer</key>
+    <map>
+      <key>Comment</key>
+      <string>Sound file for teleport offer (uuid for sound asset)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>String</string>
+      <key>Value</key>
+      <string>67cc2844-00f3-2b3c-b991-6418d01e1bb7</string>
+    </map>
     <key>UISndTeleportOut</key>
     <map>
       <key>Comment</key>
@@ -19022,6 +19033,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Take snapshots to disk without playing animation or sound. Originally QuietSnapshotsToDisk.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>PlayModeUISndTeleportOffer</key>
+    <map>
+      <key>Comment</key>
+      <string>Holds state for Prefs &gt; Sound/Media &gt; UI Sounds - UISndTeleportOffer.</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
