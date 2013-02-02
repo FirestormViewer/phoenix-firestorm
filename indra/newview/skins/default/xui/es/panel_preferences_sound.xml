@@ -325,6 +325,12 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
+			<text tool_tip="Sonido a reproducir cuando alguien te ofrece teleportarte a su posición." name="textFSTeleportOffer">
+				Oferta de teleporte:
+			</text>
+			<button name="Prev_UISndTeleportOffer" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndTeleportOffer"/>
 		</panel>
 	</tab_container>
 </panel>
