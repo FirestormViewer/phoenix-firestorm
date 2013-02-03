@@ -10532,7 +10532,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderDepthOfField</key>
   <map>
     <key>Comment</key>
-    <string>Whether to use depth of field effect when Deferred Rendering is enabled</string>
+    <string>Whether to use depth of field effect when Advanced Lighting Model is enabled</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
@@ -10556,7 +10556,7 @@ Change of this parameter will affect the layout of buttons in notification toast
   <key>RenderSpotLightsInNondeferred</key>
   <map>
     <key>Comment</key>
-    <string>Whether to support projectors as spotlights when Deferred Rendering is disabled</string>
+    <string>Whether to support projectors as spotlights when Advanced Lighting Model is disabled</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

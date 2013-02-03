@@ -2364,7 +2364,7 @@ class LLAdvancedEnableRenderFBO: public view_listener_t
 };
 
 /////////////////////////////////////
-// Enable Deferred Rendering	  ///
+// Enable Advanced Lighting Model ///
 /////////////////////////////////////
 class LLAdvancedEnableRenderDeferred: public view_listener_t
 {
@@ -2377,7 +2377,7 @@ class LLAdvancedEnableRenderDeferred: public view_listener_t
 };
 
 /////////////////////////////////////
-// Enable Deferred Rendering sub-options
+// Enable Advanced Lighting Model sub-options
 /////////////////////////////////////
 class LLAdvancedEnableRenderDeferredOptions: public view_listener_t
 {
