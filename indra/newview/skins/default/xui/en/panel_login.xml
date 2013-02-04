@@ -84,22 +84,35 @@
 tool_tip="The account name you chose when you registered, like bobsmith420 or Steller Sunshine"
           top_pad="0"
           name="username_combo"
-          width="178">
+          width="156">
 <!-- empirically, displayed width is 150 anyway?!? -->
-        <combo_box.combo_button
+        <!--<combo_box.combo_button
             visible ="false"/>
         <combo_box.drop_down_button
-            visible ="false"/>
+            visible ="false"/>-->
       </combo_box>
 <!-- left="175" based on actual "username_combo" width of 150 vs. 178 -->
+      <button
+        follows="left|bottom"
+        height="18"
+        image_unselected="TrashItem_Off"
+        image_selected="TrashItem_Press"
+        image_pressed="TrashItem_Press"
+        tool_tip="Remove this username"
+        label=""
+        layout="topleft"
+        name="remove_user_btn"
+        left_pad="0"
+        top_delta="1"
+        width="18" />
       <text
           follows="left|bottom"
           font="SansSerifSmall"
           height="16"
           name="password_text"
           top="35"
-          left="175"
-          width="150">
+          left="192"
+          width="128">
         Password:
       </text>
       <line_editor
@@ -111,7 +124,7 @@ tool_tip="The account name you chose when you registered, like bobsmith420 or St
           select_on_focus="true"
           commit_on_focus_lost="false"
           top_pad="0"
-          width="135" />
+          width="128" />
     </layout_panel>
     <layout_panel
         auto_resize="false"

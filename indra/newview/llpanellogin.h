@@ -90,9 +90,13 @@ private:
 	friend class LLPanelLoginListener;
 	void reshapeBrowser();
 	void addFavoritesToStartLocation();
-	void addUsersWithFavoritesToUsername();
+// <FS:CR>
+	//void addUsersWithFavoritesToUsername();
+	void addUsersToCombo(BOOL show_server);
+	void onSelectUser();
 	void onModeChange(const LLSD& original_value, const LLSD& new_value);
 	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
+// </FS:CR>
 	void onSelectServer();
 	void onLocationSLURL();
 
@@ -103,6 +107,10 @@ private:
 	static void onClickHelp(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
 	static void updateServerCombo();
+// <FS:CR>
+	static void onClickRemove(void*);
+	static std::string credentialName();
+// </FS:CR>
 
 private:
 	LLPointer<LLUIImage> mLogoImage;

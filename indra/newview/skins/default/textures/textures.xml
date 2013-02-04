@@ -694,9 +694,9 @@ with the same filename but different name
 
   <texture name="Tooltip" file_name="widgets/Tooltip.png" preload="true" scale.left="2" scale.top="16" scale.right="100" scale.bottom="3" />
 
-  <texture name="TrashItem_Disabled" file_name="icons/TrashItem_Disabled.png" preload="false" />
-  <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="false" />
-  <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="false" />
+  <texture name="TrashItem_Disabled" file_name="icons/TrashItem_Disabled.png" preload="true" />
+  <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="true" />
+  <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="true" />
 
   <texture name="inventory_18" file_name="bottomtray/inventory_18.png" preload="true" />
   <texture name="chatbar_18" file_name="bottomtray/chatbar_18.png" preload="true" />
