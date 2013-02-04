@@ -68,33 +68,10 @@
         </map>
     <key>grid.avatarconnection.com:8002/</key>
         <map>
-        <key>LastModified</key>
-            <date>2012-08-03T15:36:57.31Z</date>
-        <key>about</key>
-            <string>http://avatarconnection.com/</string>
-        <key>gridname</key>
-            <string>Avatar Connection</string>
-        <key>gridnick</key>
-            <string>AvatarConnection</string>
-        <key>helperuri</key>
-            <string>http://grid.avatarconnection.com:9000/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://avatarconnection.com/grid/index.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://grid.avatarconnection.com:8002/</string>
-            </array>
+        <key>DEPRECATED</key>
+			<string>TRUE</string>
         <key>name</key>
             <string>grid.avatarconnection.com:8002/</string>
-        <key>register</key>
-            <string>http://avatarconnection.com/</string>
-        <key>slurl_base</key>
-            <string>hop://grid.avatarconnection.com:8002//</string>
         </map>
     <key>grid.roleplayworlds.net:8002</key>
         <map>
