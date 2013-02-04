@@ -33,7 +33,7 @@
 #include "llinventorymodel.h"
 #include "llinventoryobserver.h"
 #include "llviewercontrol.h"
-#include "llwearable.h"
+#include "llviewerwearable.h"
 
 class LLInventoryFilter;
 class LLInventoryPanel;
@@ -197,6 +197,8 @@ public:
 				 const LLUUID& uuid) :
 		LLInvFVBridge(inventory, root, uuid) {}
 
+	typedef boost::function<void(std::string& slurl)> slurl_callback_t;
+
 	virtual void performAction(LLInventoryModel* model, std::string action);
 	virtual void selectItem();
 	virtual void restoreItem();
@@ -214,7 +216,6 @@ public:
 	virtual BOOL isItemCopyable() const;
 	virtual BOOL hasChildren() const { return FALSE; }
 	virtual BOOL isUpToDate() const { return TRUE; }
-
 	/*virtual*/ void clearDisplayName() { mDisplayName.clear(); }
 
 	LLViewerInventoryItem* getItem() const;
@@ -486,10 +487,10 @@ public:
 
 	static void		onWearOnAvatar( void* userdata );	// Access to wearOnAvatar() from menu
 	static BOOL		canWearOnAvatar( void* userdata );
-//	static void		onWearOnAvatarArrived( LLWearable* wearable, void* userdata );
+//	static void		onWearOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
 	void			wearOnAvatar();
 
-//	static void		onWearAddOnAvatarArrived( LLWearable* wearable, void* userdata );
+//	static void		onWearAddOnAvatarArrived( LLViewerWearable* wearable, void* userdata );
 	void			wearAddOnAvatar();
 
 	static BOOL		canEditOnAvatar( void* userdata );	// Access to editOnAvatar() from menu
@@ -497,9 +498,6 @@ public:
 	void			editOnAvatar();
 
 	static BOOL		canRemoveFromAvatar( void* userdata );
-//	static void		onRemoveFromAvatar( void* userdata );
-//	static void		onRemoveFromAvatarArrived( LLWearable* wearable, 	void* userdata );
-	static void 	removeItemFromAvatar(LLViewerInventoryItem *item);
 	static void 	removeAllClothesFromAvatar();
 	void			removeFromAvatar();
 protected:

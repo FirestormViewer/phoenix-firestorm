@@ -28,7 +28,6 @@
 #define LL_LLRENDERTARGET_H
 
 // LLRenderTarget is unavailible on the mapserver since it uses FBOs.
-#if !LL_MESA_HEADLESS
 
 #include "llgl.h"
 #include "llrender.h"
@@ -57,14 +56,13 @@
 
 */
 
-class LLMultisampleBuffer;
-
 class LLRenderTarget
 {
 public:
 	//whether or not to use FBO implementation
 	static bool sUseFBO; 
 	static U32 sBytesAllocated;
+	static U32 sCurFBO;
 
 	LLRenderTarget();
 	~LLRenderTarget();
@@ -73,6 +71,12 @@ public:
 	//must be called before use
 	//multiple calls will release previously allocated resources
 	bool allocate(U32 resx, U32 resy, U32 color_fmt, bool depth, bool stencil, LLTexUnit::eTextureType usage = LLTexUnit::TT_TEXTURE, bool use_fbo = false, S32 samples = 0);
+
+	//resize existing attachments to use new resolution and color format
+	// CAUTION: if the GL runs out of memory attempting to resize, this render target will be undefined
+	// DO NOT use for screen space buffers or for scratch space for an image that might be uploaded
+	// DO use for render targets that resize often and aren't likely to ruin someone's day if they break
+	void resize(U32 resx, U32 resy, U32 color_fmt);
 
 	//add color buffer attachment
 	//limit of 4 color attachments per render target
@@ -92,9 +96,6 @@ public:
 	//applies appropriate viewport
 	void bindTarget();
 
-	//unbind target for rendering
-	static void unbindTarget();
-	
 	//clear render targer, clears depth buffer if present,
 	//uses scissor rect if in copy-to-texture mode
 	void clear(U32 mask = 0xFFFFFFFF);
@@ -144,6 +145,7 @@ protected:
 	std::vector<U32> mTex;
 	std::vector<U32> mInternalFormat;
 	U32 mFBO;
+	U32 mPreviousFBO;
 	U32 mDepth;
 	bool mStencil;
 	bool mUseDepth;
@@ -152,8 +154,6 @@ protected:
 	
 	static LLRenderTarget* sBoundTarget;
 };
-
-#endif //!LL_MESA_HEADLESS
 
 #endif
 

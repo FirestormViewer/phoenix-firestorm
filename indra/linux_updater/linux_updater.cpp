@@ -251,7 +251,7 @@ std::string next_image_filename(std::string& image_path, LLDirIterator& iter)
 {
 	std::string image_filename;
 	iter.next(image_filename);
-	return image_path + "/" + image_filename;
+	return gDirUtilp->add(image_path, image_filename);
 }
 
 void on_window_closed(GtkWidget *sender, GdkEvent* event, gpointer data)
@@ -812,7 +812,6 @@ void parse_args_and_init(int argc, char **argv, UpdaterAppState *app_state)
 int main(int argc, char **argv)
 {
 	UpdaterAppState* app_state = new UpdaterAppState;
-	GThread *worker_thread;
 
 	parse_args_and_init(argc, argv, app_state);
 
@@ -842,8 +841,7 @@ int main(int argc, char **argv)
 	//llinfos << "SAMPLE TRANSLATION IS: " << LLTrans::getString("LoginInProgress") << llendl;
 
 	// create download thread
-	worker_thread = g_thread_create
-		(GThreadFunc(worker_thread_cb), app_state, FALSE, NULL);
+	g_thread_create(GThreadFunc(worker_thread_cb), app_state, FALSE, NULL);
 
 	gdk_threads_enter();
 	gtk_main();

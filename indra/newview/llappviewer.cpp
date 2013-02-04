@@ -4,7 +4,7 @@
  *
  * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * Copyright (C) 2012, Linden Research, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -89,6 +89,7 @@
 #include "lllogininstance.h"
 #include "llprogressview.h"
 #include "llvocache.h"
+#include "llvopartgroup.h"
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
@@ -115,12 +116,12 @@
 #include "llnotificationsutil.h"
 
 #include "llleap.h"
+#include "stringize.h"
 
 // Third party library includes
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string.hpp>
-
 
 
 #if LL_WINDOWS
@@ -217,6 +218,7 @@
 #include "llsecapi.h"
 #include "llmachineid.h"
 #include "llmainlooprepeater.h"
+
 
 // *FIX: These extern globals should be cleaned up.
 // The globals either represent state/config/resource-storage of either 
@@ -378,6 +380,9 @@ void init_default_trans_args()
 	default_trans_args.insert("CAPITALIZED_APP_NAME");
 	default_trans_args.insert("SECOND_LIFE_GRID");
 	default_trans_args.insert("SUPPORT_SITE");
+	// This URL shows up in a surprising number of places in various skin
+	// files. We really only want to have to maintain a single copy of it.
+	default_trans_args.insert("create_account_url");
 }
 
 //----------------------------------------------------------------------------
@@ -632,7 +637,6 @@ LLAppViewer::LLAppViewer() :
 	mForceGraphicsDetail(false),
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	mYieldTime(-1),
 	mMainloopTimeout(NULL),
 	mAgentRegionLastAlive(false),
 	mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", FALSE)),
@@ -665,6 +669,15 @@ LLAppViewer::~LLAppViewer()
 	removeMarkerFile();
 }
 
+class LLUITranslationBridge : public LLTranslationBridge
+{
+public:
+	virtual std::string getString(const std::string &xml_desc)
+	{
+		return LLTrans::getString(xml_desc);
+	}
+};
+
 bool LLAppViewer::init()
 {	
 	//
@@ -676,15 +689,22 @@ bool LLAppViewer::init()
 	//
 	LLFastTimer::reset();
 
+	// initialize LLWearableType translation bridge.
+	// Memory will be cleaned up in ::cleanupClass()
+	LLWearableType::initClass(new LLUITranslationBridge());
+
 	// initialize SSE options
 	LLVector4a::initClass();
+
+	//initialize particle index pool
+	LLVOPartGroup::initClass();
 
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
 	gDirUtilp->initAppDirs("SecondLife");
 	// set skin search path to default, will be overridden later
 	// this allows simple skinned file lookups to work
-	gDirUtilp->setSkinFolder("default");
+	gDirUtilp->setSkinFolder("default", "en");
 
 	initLogging();
 	
@@ -702,7 +722,7 @@ bool LLAppViewer::init()
 	//set the max heap size.
 	initMaxHeapSize() ;
 
-	LLPrivateMemoryPoolManager::initClass((BOOL)gSavedSettings.getBOOL("MemoryPrivatePoolEnabled"), (U32)gSavedSettings.getU32("MemoryPrivatePoolSize")) ;
+	LLPrivateMemoryPoolManager::initClass((BOOL)gSavedSettings.getBOOL("MemoryPrivatePoolEnabled"), (U32)gSavedSettings.getU32("MemoryPrivatePoolSize")*1024*1024) ;
 
 	// write Google Breakpad minidump files to our log directory
 	std::string logdir = gDirUtilp->getExpandedFilename(LL_PATH_LOGS, "");
@@ -727,6 +747,10 @@ bool LLAppViewer::init()
 	LLViewerStatsRecorder::initClass();
 #endif
 
+	// Initialize the non-LLCurl libcurl library.  Should be called
+	// before consumers (LLTextureFetch).
+	mAppCoreHttp.init();
+	
     // *NOTE:Mani - LLCurl::initClass is not thread safe. 
     // Called before threads are created.
     LLCurl::initClass(gSavedSettings.getF32("CurlRequestTimeOut"), 
@@ -765,15 +789,18 @@ bool LLAppViewer::init()
 	LLUI::initClass(settings_map,
 		LLUIImageList::getInstance(),
 		ui_audio_callback,
-		&LLUI::sGLScaleFactor);
+		&LLUI::getScaleFactor());
 	LL_INFOS("InitInfo") << "UI initialized." << LL_ENDL ;
 
-	// Setup paths and LLTrans after LLUI::initClass has been called.
-	LLUI::setupPaths();
-	LLTransUtil::parseStrings("strings.xml", default_trans_args);
-	LLTransUtil::parseLanguageStrings("language_settings.xml");
+	// NOW LLUI::getLanguage() should work. gDirUtilp must know the language
+	// for this session ASAP so all the file-loading commands that follow,
+	// that use findSkinnedFilenames(), will include the localized files.
+	gDirUtilp->setSkinFolder(gDirUtilp->getSkinFolder(), LLUI::getLanguage());
 
-	// Setup notifications after LLUI::setupPaths() has been called.
+	// Setup LLTrans after LLUI::initClass has been called.
+	initStrings();
+
+	// Setup notifications after LLUI::initClass() has been called.
 	LLNotifications::instance();
 	LL_INFOS("InitInfo") << "Notifications initialized." << LL_ENDL ;
 
@@ -1200,7 +1227,7 @@ bool LLAppViewer::mainLoop()
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
 	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true);
-	LLTimer frameTimer,idleTimer;
+	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
 	joystick->setNeedsReset(true);
@@ -1211,6 +1238,8 @@ bool LLAppViewer::mainLoop()
     // time. Obviously, if that changes, just instantiate the LLSD at the
     // point of posting.
     LLSD newFrame;
+
+	BOOL restore_rendering_masks = FALSE;
 
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
@@ -1229,6 +1258,28 @@ bool LLAppViewer::mainLoop()
 		
 		try
 		{
+			// Check if we need to restore rendering masks.
+			if (restore_rendering_masks)
+			{
+				gPipeline.popRenderDebugFeatureMask();
+				gPipeline.popRenderTypeMask();
+			}
+			// Check if we need to temporarily enable rendering.
+			F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+			{
+				periodicRenderingTimer.reset();
+				restore_rendering_masks = TRUE;
+				gPipeline.pushRenderTypeMask();
+				gPipeline.pushRenderDebugFeatureMask();
+				gPipeline.setAllRenderTypes();
+				gPipeline.setAllRenderDebugFeatures();
+			}
+			else
+			{
+				restore_rendering_masks = FALSE;
+			}
+
 			pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 			if (gViewerWindow)
@@ -1276,11 +1327,11 @@ bool LLAppViewer::mainLoop()
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
 				// done initializing.  JC
-				if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
+				if (gViewerWindow->getWindow()->getVisible()
 					&& gViewerWindow->getActive()
 					&& !gViewerWindow->getWindow()->getMinimized()
 					&& LLStartUp::getStartupState() == STATE_STARTED
-					&& (gHeadlessClient || !gViewerWindow->getShowProgress())
+					&& !gViewerWindow->getShowProgress()
 					&& !gFocusMgr.focusLocked())
 				{
 					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
@@ -1328,8 +1379,7 @@ bool LLAppViewer::mainLoop()
 				}
 
 				// Render scene.
-				// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
-				if (!LLApp::isExiting() && !gHeadlessClient)
+				if (!LLApp::isExiting())
 				{
 					pingMainloopTimeout("Main:Display");
 					gGLActive = TRUE;
@@ -1351,10 +1401,11 @@ bool LLAppViewer::mainLoop()
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
-				if(mYieldTime >= 0)
+				S32 yield_time = gSavedSettings.getS32("YieldTime");
+				if(yield_time >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
-					ms_sleep(mYieldTime);
+					ms_sleep(yield_time);
 				}
 
 				// yield cooperatively when not running as foreground window
@@ -1466,6 +1517,26 @@ bool LLAppViewer::mainLoop()
 				{
 					gFrameStalls++;
 				}
+
+				// Limit FPS
+				F32 max_fps = gSavedSettings.getF32("MaxFPS");
+				// Only limit FPS when we are actually rendering something.  Otherwise
+				// logins, logouts and teleports take much longer to complete.
+				if (max_fps > F_APPROXIMATELY_ZERO && 
+					LLStartUp::getStartupState() == STATE_STARTED &&
+					!gTeleportDisplay &&
+					!logoutRequestSent())
+				{
+					// Sleep a while to limit frame rate.
+					F32 min_frame_time = 1.f / max_fps;
+					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+					if (milliseconds_to_sleep > 0)
+					{
+						LLFastTimer t(FTM_YIELD);
+						ms_sleep(milliseconds_to_sleep);
+					}
+				}
+
 				frameTimer.reset();
 
 				resumeMainloopTimeout();
@@ -1746,6 +1817,8 @@ bool LLAppViewer::cleanup()
 	llinfos << "Cleaning up Objects" << llendflush;
 	
 	LLViewerObject::cleanupVOClasses();
+
+	LLAvatarAppearance::cleanupClass();
 	
 	LLPostProcess::cleanupClass();
 
@@ -1877,6 +1950,7 @@ bool LLAppViewer::cleanup()
 
 	// Delete workers first
 	// shotdown all worker threads before deleting them in case of co-dependencies
+	mAppCoreHttp.requestStop();
 	sTextureFetch->shutdown();
 	sTextureCache->shutdown();	
 	sImageDecodeThread->shutdown();
@@ -1884,8 +1958,20 @@ bool LLAppViewer::cleanup()
 	sTextureFetch->shutDownTextureCacheThread() ;
 	sTextureFetch->shutDownImageDecodeThread() ;
 
+	llinfos << "Shutting down message system" << llendflush;
+	end_messaging_system();
+
+	// *NOTE:Mani - The following call is not thread safe. 
+	LL_CHECK_MEMORY
+	LLCurl::cleanupClass();
+	LL_CHECK_MEMORY
+
+	// Non-LLCurl libcurl library
+	mAppCoreHttp.cleanup();
+
 	LLFilePickerThread::cleanupClass();
 
+	//MUST happen AFTER LLCurl::cleanupClass
 	delete sTextureCache;
     sTextureCache = NULL;
 	delete sTextureFetch;
@@ -1954,12 +2040,6 @@ bool LLAppViewer::cleanup()
 
 	LLViewerAssetStatsFF::cleanup();
 	
-	llinfos << "Shutting down message system" << llendflush;
-	end_messaging_system();
-
-	// *NOTE:Mani - The following call is not thread safe. 
-	LLCurl::cleanupClass();
-
 	// If we're exiting to launch an URL, do that here so the screen
 	// is at the right resolution before we launch IE.
 	if (!gLaunchFileOnQuit.empty())
@@ -1978,6 +2058,8 @@ bool LLAppViewer::cleanup()
 	}
 	llinfos << "Cleaning up LLProxy." << llendl;
 	LLProxy::cleanupClass();
+
+	LLWearableType::cleanupClass();
 
 	LLMainLoopRepeater::instance().stop();
 
@@ -2249,10 +2331,8 @@ bool LLAppViewer::initConfiguration()
 		OSMessageBox(msg.str(),LLStringUtil::null,OSMB_OK);
 		return false;
 	}
-	
-	LLUI::setupPaths(); // setup paths for LLTrans based on settings files only
-	LLTransUtil::parseStrings("strings.xml", default_trans_args);
-	LLTransUtil::parseLanguageStrings("language_settings.xml");
+
+	initStrings(); // setup paths for LLTrans based on settings files only
 	// - set procedural settings
 	// Note: can't use LL_PATH_PER_SL_ACCOUNT for any of these since we haven't logged in yet
 	gSavedSettings.setString("ClientSettingsFile", 
@@ -2566,13 +2646,15 @@ bool LLAppViewer::initConfiguration()
 		LLStartUp::setStartSLURL(start_slurl);
     }
 
-    const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
-    if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
-    {   
-		// hack to force the skin to default.
-        gDirUtilp->setSkinFolder(skinfolder->getValue().asString());
-		//gDirUtilp->setSkinFolder("default");
-    }
+	const LLControlVariable* skinfolder = gSavedSettings.getControl("SkinCurrent");
+	if(skinfolder && LLStringUtil::null != skinfolder->getValue().asString())
+	{	
+		// Examining "Language" may not suffice -- see LLUI::getLanguage()
+		// logic. Unfortunately LLUI::getLanguage() doesn't yet do us much
+		// good because we haven't yet called LLUI::initClass().
+		gDirUtilp->setSkinFolder(skinfolder->getValue().asString(),
+								 gSavedSettings.getString("Language"));
+	}
 
 	if (gSavedSettings.getBOOL("SpellCheck"))
 	{
@@ -2586,8 +2668,6 @@ bool LLAppViewer::initConfiguration()
 			LLSpellChecker::instance().setSecondaryDictionaries(dict_list);
 		}
 	}
-
-    mYieldTime = gSavedSettings.getS32("YieldTime");
 
 	// Read skin/branding settings if specified.
 	//if (! gDirUtilp->getSkinDir().empty() )
@@ -2742,6 +2822,52 @@ bool LLAppViewer::initConfiguration()
 	loadColorSettings();
 
 	return true; // Config was successful.
+}
+
+// The following logic is replicated in initConfiguration() (to be able to get
+// some initial strings before we've finished initializing enough to know the
+// current language) and also in init() (to initialize for real). Somehow it
+// keeps growing, necessitating a method all its own.
+void LLAppViewer::initStrings()
+{
+	LLTransUtil::parseStrings("strings.xml", default_trans_args);
+	LLTransUtil::parseLanguageStrings("language_settings.xml");
+
+	// parseStrings() sets up the LLTrans substitution table. Add this one item.
+	LLTrans::setDefaultArg("[sourceid]", gSavedSettings.getString("sourceid"));
+
+	// Now that we've set "[sourceid]", have to go back through
+	// default_trans_args and reinitialize all those other keys because some
+	// of them, in turn, reference "[sourceid]".
+	BOOST_FOREACH(std::string key, default_trans_args)
+	{
+		std::string brackets(key), nobrackets(key);
+		// Invalid to inspect key[0] if key is empty(). But then, the entire
+		// body of this loop is pointless if key is empty().
+		if (key.empty())
+			continue;
+
+		if (key[0] != '[')
+		{
+			// key was passed without brackets. That means that 'nobrackets'
+			// is correct but 'brackets' is not.
+			brackets = STRINGIZE('[' << brackets << ']');
+		}
+		else
+		{
+			// key was passed with brackets. That means that 'brackets' is
+			// correct but 'nobrackets' is not. Erase the left bracket.
+			nobrackets.erase(0, 1);
+			std::string::size_type length(nobrackets.length());
+			if (length && nobrackets[length - 1] == ']')
+			{
+				nobrackets.erase(length - 1);
+			}
+		}
+		// Calling LLTrans::getString() is what embeds the other default
+		// translation strings into this one.
+		LLTrans::setDefaultArg(brackets, LLTrans::getString(nobrackets));
+	}
 }
 
 namespace {
@@ -2932,9 +3058,6 @@ bool LLAppViewer::meetsRequirementsForMaximizedStart()
 bool LLAppViewer::initWindow()
 {
 	LL_INFOS("AppInit") << "Initializing window..." << LL_ENDL;
-
-	// store setting in a global for easy access and modification
-	gHeadlessClient = gSavedSettings.getBOOL("HeadlessClient");
 
 	// always start windowed
 	BOOL ignorePixelDepth = gSavedSettings.getBOOL("IgnorePixelDepth");
@@ -3596,8 +3719,7 @@ void LLAppViewer::migrateCacheDirectory()
 	{
 		gSavedSettings.setBOOL("MigrateCacheDirectory", FALSE);
 
-		std::string delimiter = gDirUtilp->getDirDelimiter();
-		std::string old_cache_dir = gDirUtilp->getOSUserAppDir() + delimiter + "cache";
+		std::string old_cache_dir = gDirUtilp->add(gDirUtilp->getOSUserAppDir(), "cache");
 		std::string new_cache_dir = gDirUtilp->getCacheDir(true);
 
 		if (gDirUtilp->fileExists(old_cache_dir))
@@ -3613,8 +3735,8 @@ void LLAppViewer::migrateCacheDirectory()
 			while (iter.next(file_name))
 			{
 				if (file_name == "." || file_name == "..") continue;
-				std::string source_path = old_cache_dir + delimiter + file_name;
-				std::string dest_path = new_cache_dir + delimiter + file_name;
+				std::string source_path = gDirUtilp->add(old_cache_dir, file_name);
+				std::string dest_path = gDirUtilp->add(new_cache_dir, file_name);
 				if (!LLFile::rename(source_path, dest_path))
 				{
 					file_count++;
@@ -3845,7 +3967,7 @@ bool LLAppViewer::initCache()
 		LLDirIterator iter(dir, mask);
 		if (iter.next(found_file))
 		{
-			old_vfs_data_file = dir + gDirUtilp->getDirDelimiter() + found_file;
+			old_vfs_data_file = gDirUtilp->add(dir, found_file);
 
 			S32 start_pos = found_file.find_last_of('.');
 			if (start_pos > 0)
@@ -4353,6 +4475,10 @@ void LLAppViewer::idle()
 	}
 
 	if (gDisconnected)
+    {
+		return;
+    }
+	if (gTeleportDisplay)
     {
 		return;
     }
@@ -5156,20 +5282,20 @@ void LLAppViewer::launchUpdater()
 	// we tell the updater where to find the xml containing string
 	// translations which it can use for its own UI
 	std::string xml_strings_file = "strings.xml";
-	std::vector<std::string> xui_path_vec = LLUI::getXUIPaths();
+	std::vector<std::string> xui_path_vec =
+		gDirUtilp->findSkinnedFilenames(LLDir::XUI, xml_strings_file);
 	std::string xml_search_paths;
-	std::vector<std::string>::const_iterator iter;
+	const char* delim = "";
 	// build comma-delimited list of xml paths to pass to updater
-	for (iter = xui_path_vec.begin(); iter != xui_path_vec.end(); )
+	BOOST_FOREACH(std::string this_skin_path, xui_path_vec)
 	{
-		std::string this_skin_dir = gDirUtilp->getDefaultSkinDir()
-			+ gDirUtilp->getDirDelimiter()
-			+ (*iter);
-		llinfos << "Got a XUI path: " << this_skin_dir << llendl;
-		xml_search_paths.append(this_skin_dir);
-		++iter;
-		if (iter != xui_path_vec.end())
-			xml_search_paths.append(","); // comma-delimit
+		// Although we already have the full set of paths with the filename
+		// appended, the linux-updater.bin command-line switches require us to
+		// snip the filename OFF and pass it as a separate switch argument. :-P
+		llinfos << "Got a XUI path: " << this_skin_path << llendl;
+		xml_search_paths.append(delim);
+		xml_search_paths.append(gDirUtilp->getDirName(this_skin_path));
+		delim = ",";
 	}
 	// build the overall command-line to run the updater correctly
 	LLAppViewer::sUpdaterInfo->mUpdateExePath = 

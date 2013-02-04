@@ -42,20 +42,23 @@ struct LLWearableArrivedData
 {
 	LLWearableArrivedData(LLAssetType::EType asset_type,
 		const std::string& wearable_name,
-		void(*asset_arrived_callback)(LLWearable*, void* userdata),
+		LLAvatarAppearance* avatarp,
+		void(*asset_arrived_callback)(LLViewerWearable*, void* userdata),
 						  void* userdata) :
 		mAssetType( asset_type ),
 		mCallback( asset_arrived_callback ), 
 		mUserdata( userdata ),
 		mName( wearable_name ),
-		mRetries(0)
+		mRetries(0),
+		mAvatarp(avatarp)
 		{}
 
 	LLAssetType::EType mAssetType;
-	void	(*mCallback)(LLWearable*, void* userdata);
+	void	(*mCallback)(LLViewerWearable*, void* userdata);
 	void*	mUserdata;
 	std::string mName;
 	S32	mRetries;
+	LLAvatarAppearance *mAvatarp;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -72,10 +75,10 @@ void LLWearableList::cleanup()
 	mList.clear();
 }
 
-void LLWearableList::getAsset(const LLAssetID& assetID, const std::string& wearable_name, LLAssetType::EType asset_type, void(*asset_arrived_callback)(LLWearable*, void* userdata), void* userdata)
+void LLWearableList::getAsset(const LLAssetID& assetID, const std::string& wearable_name, LLAvatarAppearance* avatarp, LLAssetType::EType asset_type, void(*asset_arrived_callback)(LLViewerWearable*, void* userdata), void* userdata)
 {
 	llassert( (asset_type == LLAssetType::AT_CLOTHING) || (asset_type == LLAssetType::AT_BODYPART) );
-	LLWearable* instance = get_if_there(mList, assetID, (LLWearable*)NULL );
+	LLViewerWearable* instance = get_if_there(mList, assetID, (LLViewerWearable*)NULL );
 	if( instance )
 	{
 		asset_arrived_callback( instance, userdata );
@@ -85,7 +88,7 @@ void LLWearableList::getAsset(const LLAssetID& assetID, const std::string& weara
 		gAssetStorage->getAssetData(assetID,
 			asset_type,
 			LLWearableList::processGetAssetReply,
-			(void*)new LLWearableArrivedData( asset_type, wearable_name, asset_arrived_callback, userdata ),
+			(void*)new LLWearableArrivedData( asset_type, wearable_name, avatarp, asset_arrived_callback, userdata ),
 			TRUE);
 	}
 }
@@ -95,35 +98,47 @@ void LLWearableList::processGetAssetReply( const char* filename, const LLAssetID
 {
 	BOOL isNewWearable = FALSE;
 	LLWearableArrivedData* data = (LLWearableArrivedData*) userdata;
-//	LLWearable* wearable = NULL; // NULL indicates failure
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
-	LLWearable* wearable = get_if_there(LLWearableList::instance().mList, uuid, (LLWearable*)NULL);
+//	LLViewerWearable* wearable = NULL; // NULL indicates failure
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2010-08-13 (Catznip-2.1)
+	LLViewerWearable* wearable = get_if_there(LLWearableList::instance().mList, uuid, (LLViewerWearable*)NULL);
 	if (wearable)
 	{
+		LL_DEBUGS("Wearable") << "processGetAssetReply()" << LL_ENDL;
+		LL_DEBUGS("Wearable") << wearable << LL_ENDL;
+
 		if(data->mCallback)
+		{
 			data->mCallback(wearable, data->mUserdata);
+		}
 		delete data;
+
 		return;
 	}
 // [/SL:KB]
-
+	LLAvatarAppearance *avatarp = data->mAvatarp;
+	
 	if( !filename )
 	{
 		LL_WARNS("Wearable") << "Bad Wearable Asset: missing file." << LL_ENDL;
 	}
+	else if(!avatarp)
+	{
+		LL_WARNS("Wearable") << "Bad asset request: missing avatar pointer." << LL_ENDL;
+	}
 	else if (status >= 0)
 	{
 		// read the file
-		LLFILE* fp = LLFile::fopen(std::string(filename), "rb");		/*Flawfinder: ignore*/
-		if( !fp )
+		llifstream ifs(filename, llifstream::binary);
+		if( !ifs.is_open() )
 		{
 			LL_WARNS("Wearable") << "Bad Wearable Asset: unable to open file: '" << filename << "'" << LL_ENDL;
 		}
 		else
 		{
-			wearable = new LLWearable(uuid);
-			bool res = wearable->importFile( fp );
-			if (!res)
+			wearable = new LLViewerWearable(uuid);
+			LLWearable::EImportResult result = wearable->importStream(
+												ifs, avatarp );
+			if (LLWearable::SUCCESS != result)
 			{
 				if (wearable->getType() == LLWearableType::WT_COUNT)
 				{
@@ -133,9 +148,12 @@ void LLWearableList::processGetAssetReply( const char* filename, const LLAssetID
 				wearable = NULL;
 			}
 
-			fclose( fp );
 			if(filename)
 			{
+				if (ifs.is_open())
+				{
+					ifs.close();
+				}
 				LLFile::remove(std::string(filename));
 			}
 		}
@@ -213,11 +231,11 @@ void LLWearableList::processGetAssetReply( const char* filename, const LLAssetID
 }
 
 
-LLWearable* LLWearableList::createCopy(const LLWearable* old_wearable, const std::string& new_name)
+LLViewerWearable* LLWearableList::createCopy(const LLViewerWearable* old_wearable, const std::string& new_name)
 {
 	lldebugs << "LLWearableList::createCopy()" << llendl;
 
-	LLWearable *wearable = generateNewWearable();
+	LLViewerWearable *wearable = generateNewWearable();
 	wearable->copyDataFrom(old_wearable);
 
 	LLPermissions perm(old_wearable->getPermissions());
@@ -232,12 +250,12 @@ LLWearable* LLWearableList::createCopy(const LLWearable* old_wearable, const std
 	return wearable;
 }
 
-LLWearable* LLWearableList::createNewWearable( LLWearableType::EType type )
+LLViewerWearable* LLWearableList::createNewWearable( LLWearableType::EType type, LLAvatarAppearance *avatarp )
 {
 	lldebugs << "LLWearableList::createNewWearable()" << llendl;
 
-	LLWearable *wearable = generateNewWearable();
-	wearable->setType( type );
+	LLViewerWearable *wearable = generateNewWearable();
+	wearable->setType( type, avatarp );
 	
 	std::string name = LLTrans::getString( LLWearableType::getTypeDefaultNewName(wearable->getType()) );
 	wearable->setName( name );
@@ -261,13 +279,13 @@ LLWearable* LLWearableList::createNewWearable( LLWearableType::EType type )
 	return wearable;
 }
 
-LLWearable *LLWearableList::generateNewWearable()
+LLViewerWearable *LLWearableList::generateNewWearable()
 {
 	LLTransactionID tid;
 	tid.generate();
 	LLAssetID new_asset_id = tid.makeAssetID(gAgent.getSecureSessionID());
 
-	LLWearable* wearable = new LLWearable(tid);
+	LLViewerWearable* wearable = new LLViewerWearable(tid);
 	mList[new_asset_id] = wearable;
 	return wearable;
 }

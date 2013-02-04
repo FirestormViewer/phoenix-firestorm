@@ -1097,11 +1097,13 @@ bool LLMeshRepoThread::headerReceived(const LLVolumeParams& mesh_params, U8* dat
 			mMeshHeader[mesh_id] = header;
 			}
 
+
+		LLMutexLock lock(mMutex); // make sure only one thread access mPendingLOD at the same time.
+
 		//check for pending requests
 		pending_lod_map::iterator iter = mPendingLOD.find(mesh_params);
 		if (iter != mPendingLOD.end())
 		{
-			LLMutexLock lock(mMutex);
 			for (U32 i = 0; i < iter->second.size(); ++i)
 			{
 				LODRequest req(mesh_params, iter->second[i]);
@@ -1796,7 +1798,12 @@ void LLMeshLODResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
-
+	// thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+	{
+		return;
+	}
+	
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1851,6 +1858,12 @@ void LLMeshSkinInfoResponder::completedRaw(U32 status, const std::string& reason
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+	{
+		return;
+	}
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1905,6 +1918,11 @@ void LLMeshDecompositionResponder::completedRaw(U32 status, const std::string& r
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	if( !gMeshRepo.mThread )
+	{
+		return;
+	}
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -1959,6 +1977,12 @@ void LLMeshPhysicsShapeResponder::completedRaw(U32 status, const std::string& re
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+	{
+		return;
+	}
+
 	S32 data_size = buffer->countAfter(channels.in(), NULL);
 
 	if (status < 200 || status > 400)
@@ -2013,6 +2037,12 @@ void LLMeshHeaderResponder::completedRaw(U32 status, const std::string& reason,
 							  const LLChannelDescriptors& channels,
 							  const LLIOPipe::buffer_ptr_t& buffer)
 {
+	// thread could have already be destroyed during logout
+	if( !gMeshRepo.mThread )
+	{
+		return;
+	}
+
 	if (status < 200 || status > 400)
 	{
 		//llwarns
@@ -3058,6 +3088,7 @@ void LLPhysicsDecomp::doDecomposition()
 		param_map[params[i].mName] = params+i;
 	}
 
+	U32 ret = LLCD_OK;
 	//set parameter values
 	for (decomp_params::iterator iter = mCurRequest->mParams.begin(); iter != mCurRequest->mParams.end(); ++iter)
 	{
@@ -3071,7 +3102,6 @@ void LLPhysicsDecomp::doDecomposition()
 			continue;
 		}
 
-		U32 ret = LLCD_OK;
 
 		if (param->mType == LLCDParam::LLCD_FLOAT)
 		{
@@ -3090,8 +3120,6 @@ void LLPhysicsDecomp::doDecomposition()
 
 	mCurRequest->setStatusMessage("Executing.");
 
-	LLCDResult ret = LLCD_OK;
-	
 	if (LLConvexDecomposition::getInstance() != NULL)
 	{
 		ret = LLConvexDecomposition::getInstance()->executeStage(stage);

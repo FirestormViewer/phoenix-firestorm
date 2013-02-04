@@ -48,8 +48,8 @@
 #include "llviewercontrol.h"
 #include "llviewerobjectlist.h"
 #include "llviewermenufile.h"
+#include "llviewertexlayer.h"
 #include "llviewerwindow.h"
-#include "lltexlayer.h"
 #include "lltrans.h"
 
 // library includes
@@ -456,7 +456,7 @@ LLSendTexLayerResponder::LLSendTexLayerResponder(const LLSD& post_data,
 
 LLSendTexLayerResponder::~LLSendTexLayerResponder()
 {
-	// mBakedUploadData is normally deleted by calls to LLTexLayerSetBuffer::onTextureUploadComplete() below
+	// mBakedUploadData is normally deleted by calls to LLViewerTexLayerSetBuffer::onTextureUploadComplete() below
 	if (mBakedUploadData)
 	{	// ...but delete it in the case where uploadComplete() is never called
 		delete mBakedUploadData;
@@ -477,12 +477,12 @@ void LLSendTexLayerResponder::uploadComplete(const LLSD& content)
 	if (result == "complete"
 		&& mBakedUploadData != NULL)
 	{	// Invoke 
-		LLTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, 0, LL_EXSTAT_NONE);
+		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, 0, LL_EXSTAT_NONE);
 		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
 	}
 	else
 	{	// Invoke the original callback with an error result
-		LLTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+		LLViewerTexLayerSetBuffer::onTextureUploadComplete(new_id, (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
 		mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
 	}
 }
@@ -492,7 +492,7 @@ void LLSendTexLayerResponder::error(U32 statusNum, const std::string& reason)
 	llinfos << "status: " << statusNum << " reason: " << reason << llendl;
 	
 	// Invoke the original callback with an error result
-	LLTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
+	LLViewerTexLayerSetBuffer::onTextureUploadComplete(LLUUID(), (void*) mBakedUploadData, -1, LL_EXSTAT_NONE);
 	mBakedUploadData = NULL;	// deleted in onTextureUploadComplete()
 }
 
@@ -919,7 +919,7 @@ public:
 	bool uploadConfirmationCallback(
 		const LLSD& notification,
 		const LLSD& response,
-		boost::intrusive_ptr<LLNewAgentInventoryVariablePriceResponder> responder)
+		LLPointer<LLNewAgentInventoryVariablePriceResponder> responder)
 	{
 		S32 option;
 		std::string confirmation_url;
@@ -949,7 +949,7 @@ public:
 
 	void confirmUpload(
 		const std::string& confirmation_url,
-		boost::intrusive_ptr<LLNewAgentInventoryVariablePriceResponder> responder)
+		LLPointer<LLNewAgentInventoryVariablePriceResponder> responder)
 	{
 		if ( getFilename().empty() )
 		{
@@ -1124,7 +1124,7 @@ void LLNewAgentInventoryVariablePriceResponder::showConfirmationDialog(
 		// and cause sadness.
 		mImpl->confirmUpload(
 			confirmation_url,
-			boost::intrusive_ptr<LLNewAgentInventoryVariablePriceResponder>(this));
+			LLPointer<LLNewAgentInventoryVariablePriceResponder>(this));
 	}
 	else
 	{
@@ -1157,7 +1157,7 @@ void LLNewAgentInventoryVariablePriceResponder::showConfirmationDialog(
 				mImpl,
 				_1,
 				_2,
-				boost::intrusive_ptr<LLNewAgentInventoryVariablePriceResponder>(this)));
+				LLPointer<LLNewAgentInventoryVariablePriceResponder>(this)));
 	}
 }
 

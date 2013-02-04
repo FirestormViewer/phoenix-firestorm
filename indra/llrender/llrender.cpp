@@ -357,7 +357,6 @@ bool LLTexUnit::bind(LLCubeMap* cubeMap)
 }
 
 // LLRenderTarget is unavailible on the mapserver since it uses FBOs.
-#if !LL_MESA_HEADLESS
 bool LLTexUnit::bind(LLRenderTarget* renderTarget, bool bindDepth)
 {
 	if (mIndex < 0) return false;
@@ -380,7 +379,6 @@ bool LLTexUnit::bind(LLRenderTarget* renderTarget, bool bindDepth)
 
 	return true;
 }
-#endif // LL_MESA_HEADLESS
 
 bool LLTexUnit::bindManual(eTextureType type, U32 texture, bool hasMips)
 {
@@ -648,7 +646,7 @@ void LLTexUnit::setTextureCombiner(eTextureBlendOp op, eTextureBlendSrc src1, eT
 		gGL.flush();
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
 	}
-
+	
 	// We want an early out, because this function does a LOT of stuff.
 	if ( ( (isAlpha && (mCurrAlphaOp == op) && (mCurrAlphaSrc1 == src1) && (mCurrAlphaSrc2 == src2))
 			|| (!isAlpha && (mCurrColorOp == op) && (mCurrColorSrc1 == src1) && (mCurrColorSrc2 == src2)) ) && !gGL.mDirty)
@@ -1436,6 +1434,17 @@ void LLRender::matrixMode(U32 mode)
 	llassert(mode < NUM_MATRIX_MODES);
 	mMatrixMode = mode;
 }
+
+U32 LLRender::getMatrixMode()
+{
+	if (mMatrixMode >= MM_TEXTURE0 && mMatrixMode <= MM_TEXTURE3)
+	{ //always return MM_TEXTURE if current matrix mode points at any texture matrix
+		return MM_TEXTURE;
+	}
+
+	return mMatrixMode;
+}
+
 
 void LLRender::loadIdentity()
 {

@@ -177,7 +177,7 @@ BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 		// re-connect object to the joint correctly
 	}
 	
-// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-3.0.0a (2011-01-13) | Added: Catznip-2.4.0h
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2011-01-13 (Catznip-2.4)
 	// LLViewerJointAttachment::removeObject() sets the object's item to the NULL UUID so we need to extract it *after* the block above
 	object->extractAttachmentItemID();
 // [/SL:KB]

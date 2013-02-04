@@ -12,12 +12,13 @@ include(DragDrop)
 include(EXPAT)
 include(FMOD)
 include(OPENAL)
-include(FindOpenGL)
+include(OpenGL)
 include(Hunspell)
 include(JsonCpp)
 include(LLAudio)
 include(LLCharacter)
 include(LLCommon)
+include(LLCoreHttp)
 include(LLImage)
 include(LLImageJ2COJ)
 include(LLInventory)
@@ -44,6 +45,7 @@ include(LLLogin)
 include(VisualLeakDetector)
 include(GLOD)
 include(CMakeCopyIfDifferent)
+include(LLAppearance)
 
 if (NOT HAVOK_TPV)
    # When using HAVOK_TPV, the library is precompiled, so no need for this
@@ -57,6 +59,7 @@ include_directories(
     ${LLAUDIO_INCLUDE_DIRS}
     ${LLCHARACTER_INCLUDE_DIRS}
     ${LLCOMMON_INCLUDE_DIRS}
+    ${LLCOREHTTP_INCLUDE_DIRS}
     ${LLPHYSICS_INCLUDE_DIRS}
     ${FMOD_INCLUDE_DIR}
     ${LLIMAGE_INCLUDE_DIRS}
@@ -64,7 +67,6 @@ include_directories(
     ${LLINVENTORY_INCLUDE_DIRS}
     ${LLMATH_INCLUDE_DIRS}
     ${LLMESSAGE_INCLUDE_DIRS}
-    ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
     ${LLPLUGIN_INCLUDE_DIRS}
     ${LLPRIMITIVE_INCLUDE_DIRS}
     ${LLRENDER_INCLUDE_DIRS}
@@ -80,6 +82,13 @@ include_directories(
     ${LIBS_PREBUILD_DIR}/include/hunspell
     ${OPENAL_LIB_INCLUDE_DIRS}
     ${LIBS_PREBUILT_DIR}/include/collada/1.4
+    ${LLAPPEARANCE_INCLUDE_DIRS}
+    )
+
+include_directories(SYSTEM
+    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
+    ${LLXML_SYSTEM_INCLUDE_DIRS}
+    ${LLPHYSICSEXTENSIONS_INCLUDE_DIRS}
     )
 
 set(viewer_SOURCE_FILES
@@ -97,6 +106,7 @@ set(viewer_SOURCE_FILES
     llagentwearables.cpp
     llagentwearablesfetch.cpp
     llanimstatelabels.cpp
+    llappcorehttp.cpp
     llappearancemgr.cpp
     llappviewer.cpp
     llappviewerlistener.cpp
@@ -156,7 +166,6 @@ set(viewer_SOURCE_FILES
     lldrawpooltree.cpp
     lldrawpoolwater.cpp
     lldrawpoolwlsky.cpp
-    lldriverparam.cpp
     lldynamictexture.cpp
     llemote.cpp
     llenvmanager.cpp
@@ -317,7 +326,6 @@ set(viewer_SOURCE_FILES
     lllistcontextmenu.cpp
     lllistview.cpp
     lllocalbitmaps.cpp
-    lllocaltextureobject.cpp
     lllocationhistory.cpp
     lllocationinputctrl.cpp
     lllogchat.cpp
@@ -334,6 +342,7 @@ set(viewer_SOURCE_FILES
     llmediactrl.cpp
     llmediadataclient.cpp
     llmemoryview.cpp
+    llmenuoptionpathfindingrebakenavmesh.cpp
     llmeshrepository.cpp
     llmimetypes.cpp
     llmorphview.cpp
@@ -398,7 +407,6 @@ set(viewer_SOURCE_FILES
     llpanelonlinestatus.cpp
     llpaneloutfitedit.cpp
     llpaneloutfitsinventory.cpp
-    llpanelpathfindingrebakenavmesh.cpp
     llpanelpeople.cpp
     llpanelpeoplemenus.cpp
     llpanelpermissions.cpp
@@ -440,11 +448,10 @@ set(viewer_SOURCE_FILES
     llpathfindingpathtool.cpp
     llphysicsmotion.cpp
     llphysicsshapebuilderutil.cpp
+    llpipelinelistener.cpp
     llplacesinventorybridge.cpp
     llplacesinventorypanel.cpp
     llpopupview.cpp
-    llpolymesh.cpp
-    llpolymorph.cpp
     llpostcard.cpp
     llpreview.cpp
     llpreviewanim.cpp
@@ -495,9 +502,6 @@ set(viewer_SOURCE_FILES
     llsyswellwindow.cpp
     llteleporthistory.cpp
     llteleporthistorystorage.cpp
-    lltexglobalcolor.cpp
-    lltexlayer.cpp
-    lltexlayerparams.cpp
     lltextureatlas.cpp
     lltextureatlasmanager.cpp
     lltexturecache.cpp
@@ -595,18 +599,18 @@ set(viewer_SOURCE_FILES
     llviewershadermgr.cpp
     llviewerstats.cpp
     llviewerstatsrecorder.cpp
+    llviewertexlayer.cpp
     llviewertexteditor.cpp
     llviewertexture.cpp
     llviewertextureanim.cpp
     llviewertexturelist.cpp
     llviewerthrottle.cpp
-    llviewervisualparam.cpp
+    llviewerwearable.cpp
     llviewerwindow.cpp
     llviewerwindowlistener.cpp
     llvlcomposition.cpp
     llvlmanager.cpp
     llvoavatar.cpp
-    llvoavatardefines.cpp
     llvoavatarself.cpp
     llvocache.cpp
     llvograss.cpp
@@ -627,10 +631,8 @@ set(viewer_SOURCE_FILES
     llwatchdog.cpp
     llwaterparammanager.cpp
     llwaterparamset.cpp
-    llwearable.cpp
     llwearableitemslist.cpp
     llwearablelist.cpp
-    llwearabletype.cpp
     llweb.cpp
     llwebprofile.cpp
     llwebsharing.cpp
@@ -672,6 +674,7 @@ set(viewer_HEADER_FILES
     llagentwearables.h
     llagentwearablesfetch.h
     llanimstatelabels.h
+    llappcorehttp.h
     llappearance.h
     llappearancemgr.h
     llappviewer.h
@@ -732,7 +735,6 @@ set(viewer_HEADER_FILES
     lldrawpooltree.h
     lldrawpoolwater.h
     lldrawpoolwlsky.h
-    lldriverparam.h
     lldynamictexture.h
     llemote.h
     llenvmanager.h
@@ -893,7 +895,6 @@ set(viewer_HEADER_FILES
     lllistcontextmenu.h
     lllistview.h
     lllocalbitmaps.h
-    lllocaltextureobject.h
     lllocationhistory.h
     lllocationinputctrl.h
     lllogchat.h
@@ -910,6 +911,7 @@ set(viewer_HEADER_FILES
     llmediactrl.h
     llmediadataclient.h
     llmemoryview.h
+    llmenuoptionpathfindingrebakenavmesh.h
     llmeshrepository.h
     llmimetypes.h
     llmorphview.h
@@ -968,7 +970,6 @@ set(viewer_HEADER_FILES
     llpanelonlinestatus.h
     llpaneloutfitedit.h
     llpaneloutfitsinventory.h
-    llpanelpathfindingrebakenavmesh.h
     llpanelpeople.h
     llpanelpeoplemenus.h
     llpanelpermissions.h
@@ -1005,10 +1006,9 @@ set(viewer_HEADER_FILES
     llpathfindingpathtool.h
     llphysicsmotion.h
     llphysicsshapebuilderutil.h
+    llpipelinelistener.h
     llplacesinventorybridge.h
     llplacesinventorypanel.h
-    llpolymesh.h
-    llpolymorph.h
     llpopupview.h
     llpostcard.h
     llpreview.h
@@ -1062,9 +1062,6 @@ set(viewer_HEADER_FILES
     lltable.h
     llteleporthistory.h
     llteleporthistorystorage.h
-    lltexglobalcolor.h
-    lltexlayer.h
-    lltexlayerparams.h
     lltextureatlas.h
     lltextureatlasmanager.h
     lltexturecache.h
@@ -1163,18 +1160,18 @@ set(viewer_HEADER_FILES
     llviewershadermgr.h
     llviewerstats.h
     llviewerstatsrecorder.h
+    llviewertexlayer.h
     llviewertexteditor.h
     llviewertexture.h
     llviewertextureanim.h
     llviewertexturelist.h
     llviewerthrottle.h
-    llviewervisualparam.h
+    llviewerwearable.h
     llviewerwindow.h
     llviewerwindowlistener.h
     llvlcomposition.h
     llvlmanager.h
     llvoavatar.h
-    llvoavatardefines.h
     llvoavatarself.h
     llvocache.h
     llvograss.h
@@ -1195,10 +1192,8 @@ set(viewer_HEADER_FILES
     llwatchdog.h
     llwaterparammanager.h
     llwaterparamset.h
-    llwearable.h
     llwearableitemslist.h
     llwearablelist.h
-    llwearabletype.h
     llweb.h
     llwebprofile.h
     llwebsharing.h
@@ -1553,6 +1548,12 @@ add_executable(${VIEWER_BINARY_NAME}
     ${viewer_SOURCE_FILES}
     )
 
+if (SDL_FOUND)
+  set_property(TARGET ${VIEWER_BINARY_NAME}
+    PROPERTY COMPILE_DEFINITIONS LL_SDL=1
+    )
+endif (SDL_FOUND)
+
 # add package files
 file(GLOB EVENT_HOST_SCRIPT_GLOB_LIST
      ${CMAKE_CURRENT_SOURCE_DIR}/../viewer_components/*.py)
@@ -1565,10 +1566,9 @@ if (WINDOWS)
     set_target_properties(${VIEWER_BINARY_NAME}
         PROPERTIES
         # *TODO -reenable this once we get server usage sorted out
-        #LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:\"__tcmalloc\""
-        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS /INCLUDE:__tcmalloc "
-        LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO"
-        LINK_FLAGS_RELEASE "/MAP\"secondlife-bin.MAP\" /OPT:REF"
+        LINK_FLAGS "/debug /NODEFAULTLIB:LIBCMT /SUBSYSTEM:WINDOWS ${TCMALLOC_LINK_FLAGS} /LARGEADDRESSAWARE"
+        LINK_FLAGS_DEBUG "/NODEFAULTLIB:\"LIBCMT;LIBCMTD;MSVCRT\" /INCREMENTAL:NO /LARGEADDRESSAWARE"
+        LINK_FLAGS_RELEASE "/MAP\"secondlife-bin.MAP\" /OPT:REF /LARGEADDRESSAWARE"
         )
     if(USE_PRECOMPILED_HEADERS)
         set_target_properties(
@@ -1585,7 +1585,7 @@ if (WINDOWS)
     # In the meantime, if you have any ideas on how to easily maintain one list, either here or in viewer_manifest.py
     # and have the build deps get tracked *please* tell me about it.
 
-    if(USE_GOOGLE_PERFTOOLS)
+    if(USE_TCMALLOC)
       # Configure a var for tcmalloc location, if used.
       # Note the need to specify multiple names explicitly.
       set(GOOGLE_PERF_TOOLS_SOURCE
@@ -1593,7 +1593,7 @@ if (WINDOWS)
         ${SHARED_LIB_STAGING_DIR}/RelWithDebInfo/libtcmalloc_minimal.dll
         ${SHARED_LIB_STAGING_DIR}/Debug/libtcmalloc_minimal-debug.dll
         )
-     endif(USE_GOOGLE_PERFTOOLS)
+     endif(USE_TCMALLOC)
 
 
     set(COPY_INPUT_DEPENDENCIES
@@ -1813,6 +1813,7 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLXML_LIBRARIES}
     ${LSCRIPT_LIBRARIES}
     ${LLMATH_LIBRARIES}
+    ${LLCOREHTTP_LIBRARIES}
     ${LLCOMMON_LIBRARIES}
     ${NDOF_LIBRARY}
     ${HUNSPELL_LIBRARY}
@@ -1837,18 +1838,8 @@ target_link_libraries(${VIEWER_BINARY_NAME}
     ${LLPHYSICS_LIBRARIES}
     ${LLPHYSICSEXTENSIONS_LIBRARIES}
     ${TCMALLOC_LIBRARIES}
+    ${LLAPPEARANCE_LIBRARIES}
     )
-
-if (USE_KDU)
-    target_link_libraries(${VIEWER_BINARY_NAME}
-        ${LLKDU_LIBRARIES}
-        ${KDU_LIBRARY}
-        )
-else (USE_KDU)
-    target_link_libraries(${VIEWER_BINARY_NAME}
-        ${LLIMAGEJ2COJ_LIBRARIES}
-        )
-endif (USE_KDU)
 
 build_version(viewer)
 
@@ -1957,6 +1948,12 @@ if (DARWIN)
     )
 
   add_dependencies(${VIEWER_BINARY_NAME} SLPlugin media_plugin_quicktime media_plugin_webkit mac-updater mac-crash-logger)
+  
+  if (ENABLE_SIGNING)
+      set(SIGNING_SETTING "--signature=${SIGNING_IDENTITY}")
+  else (ENABLE_SIGNING)
+      set(SIGNING_SETTING "")
+  endif (ENABLE_SIGNING)
 
   if (PACKAGE)
       add_custom_target(package ALL DEPENDS ${VIEWER_BINARY_NAME})
@@ -1976,6 +1973,7 @@ if (DARWIN)
           --login_channel=${VIEWER_LOGIN_CHANNEL}
           --source=${CMAKE_CURRENT_SOURCE_DIR}
           --touch=${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/.${product}.touched
+          ${SIGNING_SETTING}
         DEPENDS
           ${CMAKE_CURRENT_SOURCE_DIR}/viewer_manifest.py
       )
@@ -1987,8 +1985,9 @@ if (INSTALL)
 endif (INSTALL)
 
 if (PACKAGE)
+  set(SYMBOL_SEARCH_DIRS "")
   if (WINDOWS)
-    set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-windows.tar.bz2")
     # slplugin.exe failing symbols dump - need to debug, might have to do with updated version of google breakpad
     # set(VIEWER_EXE_GLOBS "${VIEWER_BINARY_NAME}${CMAKE_EXECUTABLE_SUFFIX} slplugin.exe")
@@ -1997,13 +1996,20 @@ if (PACKAGE)
     set(VIEWER_COPY_MANIFEST copy_w_viewer_manifest)
   endif (WINDOWS)
   if (DARWIN)
-    set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${product}.app")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
+    # *TODO: Generate these search dirs in the cmake files related to each binary.
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/llplugin/slplugin/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_crash_logger/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/mac_updater/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/gstreamer010/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/quicktime/${CMAKE_CFG_INTDIR}")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_BINARY_DIR}/media_plugins/webkit/${CMAKE_CFG_INTDIR}")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-darwin.tar.bz2")
-    set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin")
+    set(VIEWER_EXE_GLOBS "'Second Life' SLPlugin mac-updater mac-crash-logger")
     set(VIEWER_LIB_GLOB "*.dylib")
   endif (DARWIN)
   if (LINUX)
-    set(VIEWER_DIST_DIR "${CMAKE_CURRENT_BINARY_DIR}/packaged")
+    list(APPEND SYMBOL_SEARCH_DIRS "${CMAKE_CURRENT_BINARY_DIR}/packaged")
     set(VIEWER_SYMBOL_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/secondlife-symbols-linux.tar.bz2")
     set(VIEWER_EXE_GLOBS "do-not-directly-run-secondlife-bin SLPlugin")
     set(VIEWER_LIB_GLOB "*${CMAKE_SHARED_MODULE_SUFFIX}*")
@@ -2023,7 +2029,7 @@ if (PACKAGE)
     ARGS
       "${CMAKE_CURRENT_SOURCE_DIR}/generate_breakpad_symbols.py"
       "${LLBUILD_CONFIG}"
-      "${VIEWER_DIST_DIR}"
+      "${SYMBOL_SEARCH_DIRS}"
       "${VIEWER_EXE_GLOBS}"
       "${VIEWER_LIB_GLOB}"
       "${AUTOBUILD_INSTALL_DIR}/bin/dump_syms"
@@ -2055,9 +2061,24 @@ if (LL_TESTS)
   )
 
   set_source_files_properties(
+    llworldmap.cpp
+    llworldmipmap.cpp
+    PROPERTIES
+    LL_TEST_ADDITIONAL_SOURCE_FILES 
+    tests/llviewertexture_stub.cpp
+    #llviewertexturelist.cpp
+  )
+
+  set_source_files_properties(
     lltranslate.cpp
     PROPERTIES
     LL_TEST_ADDITIONAL_LIBRARIES "${JSONCPP_LIBRARIES}"
+  )
+
+  set_source_files_properties(
+    lllogininstance.cpp
+    PROPERTIES
+    LL_TEST_ADDITIONAL_LIBRARIES "${BOOST_SYSTEM_LIBRARY}"
   )
 
   ##################################################

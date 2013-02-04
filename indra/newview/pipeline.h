@@ -119,8 +119,25 @@ public:
 	void createGLBuffers();
 	void createLUTBuffers();
 
-	void allocateScreenBuffer(U32 resX, U32 resY);
+	//allocate the largest screen buffer possible up to resX, resY
+	//returns true if full size buffer allocated, false if some other size is allocated
+	bool allocateScreenBuffer(U32 resX, U32 resY);
+
+	typedef enum {
+		FBO_SUCCESS_FULLRES = 0,
+		FBO_SUCCESS_LOWRES,
+		FBO_FAILURE
+	} eFBOStatus;
+
+private:
+	//implementation of above, wrapped for easy error handling
+	eFBOStatus doAllocateScreenBuffer(U32 resX, U32 resY);
+public:
+
+	//attempt to allocate screen buffers at resX, resY
+	//returns true if allocation successful, false otherwise
 	bool allocateScreenBuffer(U32 resX, U32 resY, U32 samples);
+
 	void allocatePhysicsBuffer();
 	
 	void resetVertexBuffers(LLDrawable* drawable);
@@ -150,6 +167,8 @@ public:
 	void		 allocDrawable(LLViewerObject *obj);
 
 	void		 unlinkDrawable(LLDrawable*);
+
+	static void removeMutedAVsLights(LLVOAvatar*);
 
 	// Object related methods
 	void        markVisible(LLDrawable *drawablep, LLCamera& camera);
@@ -223,6 +242,7 @@ public:
 	void updateGL();
 	void rebuildPriorityGroups();
 	void rebuildGroups();
+	void clearRebuildGroups();
 
 	//calculate pixel area of given box from vantage point of given camera
 	static F32 calcPixelArea(LLVector3 center, LLVector3 size, LLCamera& camera);
@@ -294,29 +314,37 @@ public:
 	void setLight(LLDrawable *drawablep, BOOL is_light);
 	
 	BOOL hasRenderBatches(const U32 type) const;
-	LLCullResult::drawinfo_list_t::iterator beginRenderMap(U32 type);
-	LLCullResult::drawinfo_list_t::iterator endRenderMap(U32 type);
-	LLCullResult::sg_list_t::iterator beginAlphaGroups();
-	LLCullResult::sg_list_t::iterator endAlphaGroups();
+	LLCullResult::drawinfo_iterator beginRenderMap(U32 type);
+	LLCullResult::drawinfo_iterator endRenderMap(U32 type);
+	LLCullResult::sg_iterator beginAlphaGroups();
+	LLCullResult::sg_iterator endAlphaGroups();
 	
 
 	void addTrianglesDrawn(S32 index_count, U32 render_type = LLRender::TRIANGLES);
 
 	BOOL hasRenderDebugFeatureMask(const U32 mask) const	{ return (mRenderDebugFeatureMask & mask) ? TRUE : FALSE; }
 	BOOL hasRenderDebugMask(const U32 mask) const			{ return (mRenderDebugMask & mask) ? TRUE : FALSE; }
-	
-
+	void setAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0xffffffff; }
+	void clearAllRenderDebugFeatures() { mRenderDebugFeatureMask = 0x0; }
+	void setAllRenderDebugDisplays() { mRenderDebugMask = 0xffffffff; }
+	void clearAllRenderDebugDisplays() { mRenderDebugMask = 0x0; }
 
 	BOOL hasRenderType(const U32 type) const;
 	BOOL hasAnyRenderType(const U32 type, ...) const;
 
 	void setRenderTypeMask(U32 type, ...);
-	void orRenderTypeMask(U32 type, ...);
+	// This is equivalent to 'setRenderTypeMask'
+	//void orRenderTypeMask(U32 type, ...);
 	void andRenderTypeMask(U32 type, ...);
 	void clearRenderTypeMask(U32 type, ...);
+	void setAllRenderTypes();
+	void clearAllRenderTypes();
 	
 	void pushRenderTypeMask();
 	void popRenderTypeMask();
+
+	void pushRenderDebugFeatureMask();
+	void popRenderDebugFeatureMask();
 
 	static void toggleRenderType(U32 type);
 
@@ -382,6 +410,7 @@ private:
 	BOOL updateDrawableGeom(LLDrawable* drawable, BOOL priority);
 	void assertInitializedDoError();
 	bool assertInitialized() { const bool is_init = isInit(); if (!is_init) assertInitializedDoError(); return is_init; };
+	void connectRefreshCachedSettingsSafe(const std::string name);
 	void hideDrawable( LLDrawable *pDrawable );
 	void unhideDrawable( LLDrawable *pDrawable );
 public:
@@ -613,6 +642,7 @@ protected:
 
 	U32						mRenderDebugFeatureMask;
 	U32						mRenderDebugMask;
+	std::stack<U32>			mRenderDebugFeatureStack;
 
 	U32						mOldRenderDebugMask;
 	
@@ -663,6 +693,8 @@ protected:
 	LLDrawable::drawable_list_t 	mBuildQ2; // non-priority
 	LLSpatialGroup::sg_vector_t		mGroupQ1; //priority
 	LLSpatialGroup::sg_vector_t		mGroupQ2; // non-priority
+
+	LLSpatialGroup::sg_vector_t		mGroupSaveQ1; // a place to save mGroupQ1 until it is safe to unref
 
 	LLSpatialGroup::sg_vector_t		mMeshDirtyGroup; //groups that need rebuildMesh called
 	U32 mMeshDirtyQueryObject;

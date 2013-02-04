@@ -153,7 +153,7 @@ void LLStandardBumpmap::addstandard()
 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mLabel = label;
 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage = 
 			LLViewerTextureManager::getFetchedTexture(LLUUID(bump_image_id));	
-		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setBoostLevel(LLViewerTexture::BOOST_BUMP) ;
+		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setBoostLevel(LLGLTexture::BOOST_BUMP) ;
 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->setLoadedCallback(LLBumpImageList::onSourceStandardLoaded, 0, TRUE, FALSE, NULL, NULL );
 		gStandardBumpmapList[LLStandardBumpmap::sStandardBumpmapCount].mImage->forceToSaveRawImage(0) ;
 		LLStandardBumpmap::sStandardBumpmapCount++;
@@ -847,12 +847,12 @@ void LLDrawPoolBump::renderDeferred(S32 pass)
 	LLFastTimer ftm(FTM_RENDER_BUMP);
 
 	U32 type = LLRenderPass::PASS_BUMP;
-	LLCullResult::drawinfo_list_t::iterator begin = gPipeline.beginRenderMap(type);
-	LLCullResult::drawinfo_list_t::iterator end = gPipeline.endRenderMap(type);
+	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
+	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
 	U32 mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_TEXCOORD0 | LLVertexBuffer::MAP_BINORMAL | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_COLOR;
 	
-	for (LLCullResult::drawinfo_list_t::iterator i = begin; i != end; ++i)	
+	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
 
@@ -1075,7 +1075,7 @@ LLViewerTexture* LLBumpImageList::getBrightnessDarknessImage(LLViewerFetchedText
 			src_image->getHeight() != bump->getHeight())// ||
 			//(LLPipeline::sRenderDeferred && bump->getComponents() != 4))
 		{
-			src_image->setBoostLevel(LLViewerTexture::BOOST_BUMP) ;
+			src_image->setBoostLevel(LLGLTexture::BOOST_BUMP) ;
 			src_image->setLoadedCallback( callback_func, 0, TRUE, FALSE, new LLUUID(src_image->getID()), NULL );
 			src_image->forceToSaveRawImage(0) ;
 		}
@@ -1448,10 +1448,10 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 
 void LLDrawPoolBump::renderBump(U32 type, U32 mask)
 {	
-	LLCullResult::drawinfo_list_t::iterator begin = gPipeline.beginRenderMap(type);
-	LLCullResult::drawinfo_list_t::iterator end = gPipeline.endRenderMap(type);
+	LLCullResult::drawinfo_iterator begin = gPipeline.beginRenderMap(type);
+	LLCullResult::drawinfo_iterator end = gPipeline.endRenderMap(type);
 
-	for (LLCullResult::drawinfo_list_t::iterator i = begin; i != end; ++i)	
+	for (LLCullResult::drawinfo_iterator i = begin; i != end; ++i)	
 	{
 		LLDrawInfo& params = **i;
 

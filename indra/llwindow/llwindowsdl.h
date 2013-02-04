@@ -41,8 +41,8 @@
 #endif
 
 // AssertMacros.h does bad things.
+#include "fix_macros.h"
 #undef verify
-#undef check
 #undef require
 
 
@@ -147,7 +147,7 @@ public:
 protected:
 	LLWindowSDL(LLWindowCallbacks* callbacks,
 		const std::string& title, int x, int y, int width, int height, U32 flags,
-		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync, BOOL use_gl,
+		BOOL fullscreen, BOOL clearBg, BOOL disable_vsync,
 		BOOL ignore_pixel_depth, U32 fsaa_samples);
 	~LLWindowSDL();
 

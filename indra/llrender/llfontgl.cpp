@@ -541,7 +541,6 @@ S32 LLFontGL::maxDrawableChars(const llwchar* wchars, F32 max_pixels, S32 max_ch
 	
 	BOOL clip = FALSE;
 	F32 cur_x = 0;
-	F32 drawn_x = 0;
 
 	S32 start_of_last_word = 0;
 	BOOL in_word = FALSE;
@@ -624,7 +623,6 @@ S32 LLFontGL::maxDrawableChars(const llwchar* wchars, F32 max_pixels, S32 max_ch
 
 		// Round after kerning.
 		cur_x = (F32)llround(cur_x);
-		drawn_x = cur_x;
 	}
 
 	if( clip )
@@ -789,7 +787,7 @@ const LLFontDescriptor& LLFontGL::getFontDesc() const
 }
 
 // static
-void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, const std::vector<std::string>& xui_paths, bool create_gl_textures)
+void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::string& app_dir, bool create_gl_textures)
 {
 	sVertDPI = (F32)llfloor(screen_dpi * y_scale);
 	sHorizDPI = (F32)llfloor(screen_dpi * x_scale);
@@ -800,7 +798,7 @@ void LLFontGL::initClass(F32 screen_dpi, F32 x_scale, F32 y_scale, const std::st
 	// Font registry init
 	if (!sFontRegistry)
 	{
-		sFontRegistry = new LLFontRegistry(xui_paths, create_gl_textures);
+		sFontRegistry = new LLFontRegistry(create_gl_textures);
 		sFontRegistry->parseFontInfo("fonts.xml");
 	}
 	else

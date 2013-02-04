@@ -316,7 +316,6 @@ bool idle_startup()
 	
 	const F32 PRECACHING_DELAY = gSavedSettings.getF32("PrecachingDelay");
 	static LLTimer timeout;
-	static S32 timeout_count = 0;
 
 	static LLTimer login_time;
 
@@ -332,7 +331,6 @@ bool idle_startup()
 
 	// last location by default
 	static S32  agent_location_id = START_LOCATION_ID_LAST;
-	static S32  location_which = START_LOCATION_ID_LAST;
 
 	static bool show_connect_box = true;
 
@@ -362,6 +360,15 @@ bool idle_startup()
 
 	if ( STATE_FIRST == LLStartUp::getStartupState() )
 	{
+		static bool first_call = true;
+		if (first_call)
+		{
+			// Other phases get handled when startup state changes,
+			// need to capture the initial state as well.
+			LLStartUp::getPhases().startPhase(LLStartUp::getStartupStateString());
+			first_call = false;
+		}
+
 		gViewerWindow->showCursor(); 
 		gViewerWindow->getWindow()->setCursor(UI_CURSOR_WAIT);
 
@@ -721,24 +728,25 @@ bool idle_startup()
 
 	if (STATE_LOGIN_SHOW == LLStartUp::getStartupState())
 	{
-		LL_DEBUGS("AppInit") << "Initializing Window" << LL_ENDL;
+		LL_DEBUGS("AppInit") << "Initializing Window, show_connect_box = "
+							 << show_connect_box << LL_ENDL;
 
 		// if we've gone backwards in the login state machine, to this state where we show the UI
 		// AND the debug setting to exit in this case is true, then go ahead and bail quickly
 		if ( mLoginStatePastUI && gSavedSettings.getBOOL("QuitOnLoginActivated") )
 		{
+			LL_DEBUGS("AppInit") << "taking QuitOnLoginActivated exit" << LL_ENDL;
 			// no requirement for notification here - just exit
 			LLAppViewer::instance()->earlyExitNoNotify();
 		}
 
 		gViewerWindow->getWindow()->setCursor(UI_CURSOR_ARROW);
 
-		timeout_count = 0;
-
 		// Login screen needs menus for preferences, but we can enter
 		// this startup phase more than once.
 		if (gLoginMenuBarView == NULL)
 		{
+			LL_DEBUGS("AppInit") << "initializing menu bar" << LL_ENDL;
 			display_startup();
 			initialize_edit_menu();
 			initialize_spellcheck_menu();
@@ -749,19 +757,17 @@ bool idle_startup()
 
 		if (show_connect_box)
 		{
+			LL_DEBUGS("AppInit") << "show_connect_box on" << LL_ENDL;
 			// Load all the name information out of the login view
 			// NOTE: Hits "Attempted getFields with no login view shown" warning, since we don't
 			// show the login view until login_show() is called below.  
 			if (gUserCredential.isNull())                                                                          
 			{                                                  
+				LL_DEBUGS("AppInit") << "loading credentials from gLoginHandler" << LL_ENDL;
 				display_startup();
 				gUserCredential = gLoginHandler.initializeLoginInfo();                 
 				display_startup();
 			}     
-			if (gHeadlessClient)
-			{
-				LL_WARNS("AppInit") << "Waiting at connection box in headless client.  Did you mean to add autologin params?" << LL_ENDL;
-			}
 			// Make sure the process dialog doesn't hide things
 			display_startup();
 			gViewerWindow->setShowProgress(FALSE);
@@ -770,17 +776,28 @@ bool idle_startup()
 			login_show();
 			display_startup();
 			// connect dialog is already shown, so fill in the names
-			if (gUserCredential.notNull())                                                                         
-			{                                                                                                      
-				LLPanelLogin::setFields( gUserCredential, gRememberPassword);                                  
-			}     
+			if (gUserCredential.notNull())
+			{
+				LLPanelLogin::setFields( gUserCredential, gRememberPassword);
+			}
 			display_startup();
 			LLPanelLogin::giveFocus();
+
+			if (gSavedSettings.getBOOL("FirstLoginThisInstall"))
+			{
+				LL_INFOS("AppInit") << "FirstLoginThisInstall, calling show_first_run_dialog()" << LL_ENDL;
+				show_first_run_dialog();
+			}
+			else
+			{
+				LL_DEBUGS("AppInit") << "FirstLoginThisInstall off" << LL_ENDL;
+			}
 
 			LLStartUp::setStartupState( STATE_LOGIN_WAIT );		// Wait for user input
 		}
 		else
 		{
+			LL_DEBUGS("AppInit") << "show_connect_box off, skipping to STATE_LOGIN_CLEANUP" << LL_ENDL;
 			// skip directly to message template verification
 			LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
 		}
@@ -961,15 +978,12 @@ bool idle_startup()
 		  {
 		  case LLSLURL::LOCATION:
 		    agent_location_id = START_LOCATION_ID_URL;
-		    location_which = START_LOCATION_ID_LAST;
 		    break;
 		  case LLSLURL::LAST_LOCATION:
 		    agent_location_id = START_LOCATION_ID_LAST;
-		    location_which = START_LOCATION_ID_LAST;
 		    break;
 		  default:
 		    agent_location_id = START_LOCATION_ID_HOME;
-		    location_which = START_LOCATION_ID_HOME;
 		    break;
 		  }
 
@@ -1220,6 +1234,9 @@ bool idle_startup()
 
 		// init the shader managers
 		LLPostProcess::initClass();
+		display_startup();
+
+		LLAvatarAppearance::initClass();
 		display_startup();
 
 		LLViewerObject::initVOClasses();
@@ -2704,9 +2721,10 @@ void LLStartUp::setStartupState( EStartupState state )
 		getStartupStateString() << " to " <<  
 		startupStateToString(state) << LL_ENDL;
 
-	sPhases->stopPhase(getStartupStateString());
+	getPhases().stopPhase(getStartupStateString());
 	gStartupState = state;
-	sPhases->startPhase(getStartupStateString());
+	getPhases().startPhase(getStartupStateString());
+
 	postStartupState();
 }
 
@@ -3281,11 +3299,8 @@ bool process_login_success_response()
 	{
 		// replace the default help URL format
 		gSavedSettings.setString("HelpURLFormat",text);
-		
-		// don't fall back to Standalone's pre-connection static help
-		gSavedSettings.setBOOL("HelpUseLocal", false);
 	}
-			
+
 	std::string home_location = response["home"];
 	if(!home_location.empty())
 	{
@@ -3426,6 +3441,14 @@ bool process_login_success_response()
 
 	}
 
+	// set the location of the Agent Appearance service, from which we can request
+	// avatar baked textures if they are supported by the current region
+	std::string agent_appearance_url = response["agent_appearance_service"];
+	if (!agent_appearance_url.empty())
+	{
+		gSavedSettings.setString("AgentAppearanceServiceURL", agent_appearance_url);
+	}
+
 	// Set the location of the snapshot sharing config endpoint
 	std::string snapshot_config_url = response["snapshot_config_url"];
 	if(!snapshot_config_url.empty())
@@ -3470,13 +3493,6 @@ bool process_login_success_response()
 
 void transition_back_to_login_panel(const std::string& emsg)
 {
-	if (gHeadlessClient && gSavedSettings.getBOOL("AutoLogin"))
-	{
-		LL_WARNS("AppInit") << "Failed to login!" << LL_ENDL;
-		LL_WARNS("AppInit") << emsg << LL_ENDL;
-		exit(0);
-	}
-
 	// Bounce back to the login screen.
 	reset_login(); // calls LLStartUp::setStartupState( STATE_LOGIN_SHOW );
 	gSavedSettings.setBOOL("AutoLogin", FALSE);

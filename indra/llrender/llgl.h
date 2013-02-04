@@ -424,6 +424,10 @@ const U32 FENCE_WAIT_TIME_NANOSECONDS = 1000;  //1 ms
 class LLGLFence
 {
 public:
+	virtual ~LLGLFence()
+	{
+	}
+
 	virtual void placeFence() = 0;
 	virtual bool isCompleted() = 0;
 	virtual void wait() = 0;
@@ -453,7 +457,6 @@ void init_glstates();
 void parse_gl_version( S32* major, S32* minor, S32* release, std::string* vendor_specific, std::string* version_string );
 
 extern BOOL gClothRipple;
-extern BOOL gHeadlessClient;
 extern BOOL gGLActive;
 
 // Deal with changing glext.h definitions for newer SDK versions, specifically

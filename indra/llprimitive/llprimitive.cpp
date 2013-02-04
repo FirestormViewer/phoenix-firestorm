@@ -39,6 +39,7 @@
 #include "lldatapacker.h"
 #include "llsdutil_math.h"
 #include "llprimtexturelist.h"
+#include "imageids.h"
 
 /**
  * exported constants
@@ -149,7 +150,8 @@ bool LLPrimitive::cleanupVolumeManager()
 LLPrimitive::LLPrimitive()
 :	mTextureList(),
 	mNumTEs(0),
-	mMiscFlags(0)
+	mMiscFlags(0),
+	mNumBumpmapTEs(0)
 {
 	mPrimitiveCode = 0;
 
@@ -237,7 +239,10 @@ void  LLPrimitive::setAllTETextures(const LLUUID &tex_id)
 //===============================================================
 void LLPrimitive::setTE(const U8 index, const LLTextureEntry& te)
 {
-	mTextureList.copyTexture(index, te);
+	if(mTextureList.copyTexture(index, te) != TEM_CHANGE_NONE && te.getBumpmap() > 0)
+	{
+		mNumBumpmapTEs++;
+	}
 }
 
 S32  LLPrimitive::setTETexture(const U8 index, const LLUUID &id)
@@ -316,6 +321,7 @@ S32  LLPrimitive::setTERotation(const U8 index, const F32 r)
 //===============================================================
 S32  LLPrimitive::setTEBumpShinyFullbright(const U8 index, const U8 bump)
 {
+	updateNumBumpmap(index, bump);
 	return mTextureList.setBumpShinyFullbright(index, bump);
 }
 
@@ -326,11 +332,13 @@ S32  LLPrimitive::setTEMediaTexGen(const U8 index, const U8 media)
 
 S32  LLPrimitive::setTEBumpmap(const U8 index, const U8 bump)
 {
+	updateNumBumpmap(index, bump);
 	return mTextureList.setBumpMap(index, bump);
 }
 
 S32  LLPrimitive::setTEBumpShiny(const U8 index, const U8 bump_shiny)
 {
+	updateNumBumpmap(index, bump_shiny);
 	return mTextureList.setBumpShiny(index, bump_shiny);
 }
 
@@ -1227,94 +1235,77 @@ BOOL LLPrimitive::packTEMessage(LLDataPacker &dp) const
 	return FALSE;
 }
 
-S32 LLPrimitive::unpackTEMessage(LLMessageSystem* mesgsys, char const* block_name)
+S32 LLPrimitive::parseTEMessage(LLMessageSystem* mesgsys, char const* block_name, const S32 block_num, LLTEContents& tec)
 {
-	return(unpackTEMessage(mesgsys,block_name,-1));
-}
-
-S32 LLPrimitive::unpackTEMessage(LLMessageSystem* mesgsys, char const* block_name, const S32 block_num)
-{
-	// use a negative block_num to indicate a single-block read (a non-variable block)
 	S32 retval = 0;
-	const U32 MAX_TES = 32;
-
-	// Avoid construction of 32 UUIDs per call. JC
-
-	U8     image_data[MAX_TES*16];
-	U8	  colors[MAX_TES*4];
-	F32    scale_s[MAX_TES];
-	F32    scale_t[MAX_TES];
-	S16    offset_s[MAX_TES];
-	S16    offset_t[MAX_TES];
-	S16    image_rot[MAX_TES];
-	U8	   bump[MAX_TES];
-	U8	   media_flags[MAX_TES];
-    U8     glow[MAX_TES];
-	
-	const U32 MAX_TE_BUFFER = 4096;
-	U8 packed_buffer[MAX_TE_BUFFER];
-	U8 *cur_ptr = packed_buffer;
-
-	U32 size;
-	U32 face_count = 0;
 
 	if (block_num < 0)
 	{
-		size = mesgsys->getSizeFast(block_name, _PREHASH_TextureEntry);
+		tec.size = mesgsys->getSizeFast(block_name, _PREHASH_TextureEntry);
 	}
 	else
 	{
-		size = mesgsys->getSizeFast(block_name, block_num, _PREHASH_TextureEntry);
+		tec.size = mesgsys->getSizeFast(block_name, block_num, _PREHASH_TextureEntry);
 	}
 
-	if (size == 0)
+	if (tec.size == 0)
 	{
 		return retval;
 	}
 
 	if (block_num < 0)
 	{
-		mesgsys->getBinaryDataFast(block_name, _PREHASH_TextureEntry, packed_buffer, 0, 0, MAX_TE_BUFFER);
+		mesgsys->getBinaryDataFast(block_name, _PREHASH_TextureEntry, tec.packed_buffer, 0, 0, LLTEContents::MAX_TE_BUFFER);
 	}
 	else
 	{
-		mesgsys->getBinaryDataFast(block_name, _PREHASH_TextureEntry, packed_buffer, 0, block_num, MAX_TE_BUFFER);
+		mesgsys->getBinaryDataFast(block_name, _PREHASH_TextureEntry, tec.packed_buffer, 0, block_num, LLTEContents::MAX_TE_BUFFER);
 	}
 
-	face_count = getNumTEs();
+	tec.face_count = getNumTEs();
 
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)image_data, 16, face_count, MVT_LLUUID);
+	U8 *cur_ptr = tec.packed_buffer;
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.image_data, 16, tec.face_count, MVT_LLUUID);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)colors, 4, face_count, MVT_U8);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.colors, 4, tec.face_count, MVT_U8);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)scale_s, 4, face_count, MVT_F32);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.scale_s, 4, tec.face_count, MVT_F32);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)scale_t, 4, face_count, MVT_F32);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.scale_t, 4, tec.face_count, MVT_F32);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)offset_s, 2, face_count, MVT_S16Array);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.offset_s, 2, tec.face_count, MVT_S16Array);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)offset_t, 2, face_count, MVT_S16Array);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.offset_t, 2, tec.face_count, MVT_S16Array);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)image_rot, 2, face_count, MVT_S16Array);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.image_rot, 2, tec.face_count, MVT_S16Array);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)bump, 1, face_count, MVT_U8);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.bump, 1, tec.face_count, MVT_U8);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)media_flags, 1, face_count, MVT_U8);
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.media_flags, 1, tec.face_count, MVT_U8);
 	cur_ptr++;
-	cur_ptr += unpackTEField(cur_ptr, packed_buffer+size, (U8 *)glow, 1, face_count, MVT_U8);
-	
+	cur_ptr += unpackTEField(cur_ptr, tec.packed_buffer+tec.size, (U8 *)tec.glow, 1, tec.face_count, MVT_U8);
+
+	retval = 1;
+	return retval;
+}
+
+S32 LLPrimitive::applyParsedTEMessage(LLTEContents& tec)
+{
+	S32 retval = 0;
+
 	LLColor4 color;
 	LLColor4U coloru;
-	for (U32 i = 0; i < face_count; i++)
+	for (U32 i = 0; i < tec.face_count; i++)
 	{
-		retval |= setTETexture(i, ((LLUUID*)image_data)[i]);
-		retval |= setTEScale(i, scale_s[i], scale_t[i]);
-		retval |= setTEOffset(i, (F32)offset_s[i] / (F32)0x7FFF, (F32) offset_t[i] / (F32) 0x7FFF);
-		retval |= setTERotation(i, ((F32)image_rot[i] / TEXTURE_ROTATION_PACK_FACTOR) * F_TWO_PI);
-		retval |= setTEBumpShinyFullbright(i, bump[i]);
-		retval |= setTEMediaTexGen(i, media_flags[i]);
-		retval |= setTEGlow(i, (F32)glow[i] / (F32)0xFF);
-		coloru = LLColor4U(colors + 4*i);
+		LLUUID& req_id = ((LLUUID*)tec.image_data)[i];
+		retval |= setTETexture(i, req_id);
+		retval |= setTEScale(i, tec.scale_s[i], tec.scale_t[i]);
+		retval |= setTEOffset(i, (F32)tec.offset_s[i] / (F32)0x7FFF, (F32) tec.offset_t[i] / (F32) 0x7FFF);
+		retval |= setTERotation(i, ((F32)tec.image_rot[i] / TEXTURE_ROTATION_PACK_FACTOR) * F_TWO_PI);
+		retval |= setTEBumpShinyFullbright(i, tec.bump[i]);
+		retval |= setTEMediaTexGen(i, tec.media_flags[i]);
+		retval |= setTEGlow(i, (F32)tec.glow[i] / (F32)0xFF);
+		coloru = LLColor4U(tec.colors + 4*i);
 
 		// Note:  This is an optimization to send common colors (1.f, 1.f, 1.f, 1.f)
 		// as all zeros.  However, the subtraction and addition must be done in unsigned
@@ -1329,6 +1320,15 @@ S32 LLPrimitive::unpackTEMessage(LLMessageSystem* mesgsys, char const* block_nam
 	}
 
 	return retval;
+}
+
+S32 LLPrimitive::unpackTEMessage(LLMessageSystem* mesgsys, char const* block_name, const S32 block_num)
+{
+	LLTEContents tec;
+	S32 retval = parseTEMessage(mesgsys, block_name, block_num, tec);
+	if (!retval)
+		return retval;
+	return applyParsedTEMessage(tec);
 }
 
 S32 LLPrimitive::unpackTEMessage(LLDataPacker &dp)
@@ -1445,6 +1445,26 @@ void LLPrimitive::takeTextureList(LLPrimTextureList& other_list)
 	mTextureList.take(other_list);
 }
 
+void LLPrimitive::updateNumBumpmap(const U8 index, const U8 bump)
+{
+	LLTextureEntry* te = getTE(index);
+	if(!te)
+	{
+		return;
+	}
+
+	U8 old_bump = te->getBumpmap();	
+	if(old_bump > 0)
+	{
+		mNumBumpmapTEs--;
+	}
+	if((bump & TEM_BUMP_MASK) > 0)
+	{
+		mNumBumpmapTEs++;
+	}
+
+	return;
+}
 //============================================================================
 
 // Moved from llselectmgr.cpp
