@@ -166,7 +166,7 @@ void LLViewerJointAttachment::setupDrawable(LLViewerObject *object)
 //-----------------------------------------------------------------------------
 BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 {
-	object->extractAttachmentItemID();
+//	object->extractAttachmentItemID();
 
 	// Same object reattached
 	if (isObjectAttached(object))
@@ -177,6 +177,11 @@ BOOL LLViewerJointAttachment::addObject(LLViewerObject* object)
 		// re-connect object to the joint correctly
 	}
 	
+// [SL:KB] - Patch: Appearance-Misc | Checked: Catznip-3.0.0a (2011-01-13) | Added: Catznip-2.4.0h
+	// LLViewerJointAttachment::removeObject() sets the object's item to the NULL UUID so we need to extract it *after* the block above
+	object->extractAttachmentItemID();
+// [/SL:KB]
+
 	// Two instances of the same inventory item attached --
 	// Request detach, and kill the object in the meantime.
 	if (getAttachedObject(object->getAttachmentItemID()))
