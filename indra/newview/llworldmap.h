@@ -105,7 +105,7 @@ public:
 	void setSize(U16 sizeX, U16 sizeY) { mSizeX = sizeX; mSizeY = sizeY; }
 // </FS:CR> Aurora Sim
 	void setAccess (U32 accesscode) { mAccess = accesscode; }
-	void setRegionFlags (U32 region_flags) { mRegionFlags = region_flags; }
+	void setRegionFlags (U64 region_flags) { mRegionFlags = region_flags; }
 	void setLandForSaleImage (LLUUID image_id);
 //	void setWaterHeight (F32 water_height) { mWaterHeight = water_height; }
 
@@ -167,7 +167,7 @@ private:
 	bool mFirstAgentRequest;	// Init agent request flag
 
 	U32  mAccess;				// Down/up and maturity rating of the region
-	U32 mRegionFlags;			// Tell us if the siminfo has been received (if non 0) and what kind of region it is (Sandbox, allow damage)
+	U64 mRegionFlags;			// Tell us if the siminfo has been received (if non 0) and what kind of region it is (Sandbox, allow damage)
 	// Currently not used but might prove useful one day so we comment out 
 //	F32 mWaterHeight;			// Water height on the region (not actively used)
 
@@ -218,8 +218,8 @@ public:
 	// Insert a region and items in the map global instance
 	// Note: x_world and y_world in world coordinates (meters)
 // <FS:CR> Aurora Sim
-	static bool insertRegion(U32 x_world, U32 y_world, std::string& name, LLUUID& uuid, U32 accesscode, U32 region_flags);
-	static bool insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, std::string& name, LLUUID& uuid, U32 accesscode, U32 region_flags);
+	static bool insertRegion(U32 x_world, U32 y_world, std::string& name, LLUUID& uuid, U32 accesscode, U64 region_flags);
+	static bool insertRegion(U32 x_world, U32 y_world, U16 x_size, U16 y_size, std::string& name, LLUUID& uuid, U32 accesscode, U64 region_flags);
 // </FS:CR> Aurora Sim
 	static bool insertItem(U32 x_world, U32 y_world, std::string& name, LLUUID& uuid, U32 type, S32 extra, S32 extra2);
 

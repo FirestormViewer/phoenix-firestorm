@@ -35,7 +35,6 @@
 #include "llinventoryobserver.h"
 #include "llviewerinventory.h"
 
-class LLWearable;
 class LLWearableHoldingPattern;
 class LLInventoryCallback;
 class LLOutfitUnLockTimer;
@@ -110,6 +109,9 @@ public:
 
 	// Find the Current Outfit folder.
 	const LLUUID getCOF() const;
+	S32 getCOFVersion() const;
+
+	S32 mLastUpdateRequestCOFVersion;
 
 	// Finds the folder link to the currently worn outfit
 	const LLViewerInventoryItem *getBaseOutfitLink();
@@ -124,6 +126,7 @@ public:
 	// Update the displayed outfit name in UI.
 	void updatePanelOutfitName(const std::string& name);
 
+	void purgeBaseOutfitLink(const LLUUID& category);
 	void createBaseOutfitLink(const LLUUID& category, LLPointer<LLInventoryCallback> link_waiter);
 
 	void updateAgentWearables(LLWearableHoldingPattern* holder, bool append);
@@ -147,11 +150,10 @@ public:
 	void addCOFItemLink(const LLInventoryItem *item, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL);
 
 	// Remove COF entries
-	void removeCOFItemLinks(const LLUUID& item_id, bool do_update = true);
-	void removeCOFLinksOfType(LLWearableType::EType type, bool do_update = true);
-
-	// Add COF link to ensemble folder.
-	void addEnsembleLink(LLInventoryCategory* item, bool do_update = true);
+	void removeCOFItemLinks(const LLUUID& item_id);
+	void removeCOFLinksOfType(LLWearableType::EType type);
+	void removeAllClothesFromAvatar();
+	void removeAllAttachmentsFromAvatar();
 
 	//has the current outfit changed since it was loaded?
 	bool isOutfitDirty() { return mOutfitIsDirty; }
@@ -179,6 +181,7 @@ public:
 	bool updateBaseOutfit();
 
 	//Remove clothing or detach an object from the agent (a bodypart cannot be removed)
+	void removeItemsFromAvatar(const uuid_vec_t& item_ids);
 	void removeItemFromAvatar(const LLUUID& item_id);
 
 
@@ -198,6 +201,8 @@ public:
 	bool isOutfitLocked() { return mOutfitLocked; }
 
 	bool isInUpdateAppearanceFromCOF() { return mIsInUpdateAppearanceFromCOF; }
+
+	void requestServerAppearanceUpdate(LLCurl::ResponderPtr responder_ptr = NULL);
 
 protected:
 	LLAppearanceMgr();
@@ -219,7 +224,6 @@ private:
 								   bool follow_folder_links);
 
 	void purgeCategory(const LLUUID& category, bool keep_outfit_links);
-	void purgeBaseOutfitLink(const LLUUID& category);
 
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 

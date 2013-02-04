@@ -33,7 +33,8 @@
 #include "llagentdata.h" 			// gAgentID, gAgentSessionID
 #include "llcharacter.h"
 #include "llcoordframe.h"			// for mFrameAgent
-#include "llvoavatardefines.h"
+#include "llavatarappearancedefines.h"
+#include "llpermissionsflags.h"
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -259,10 +260,12 @@ private:
 	//------------------------------------------------------------------------
 	// Inventory
 	//------------------------------------------------------------------------
-	public:
-		bool restoreToWorld;
-		LLUUID restoreToWorldGroup;
-		LLViewerInventoryItem* restoreToWorldItem;
+	
+	// <FS:TM> removed for shunshine merge
+	//public:
+	//	bool restoreToWorld;
+	//	LLUUID restoreToWorldGroup;
+	//	LLViewerInventoryItem* restoreToWorldItem;
 	
 /**                    Position
  **                                                                            **
@@ -657,6 +660,7 @@ private:
 
 	void            handleTeleportFinished();
 	void            handleTeleportFailed();
+	void			handleServerBakeRegionTransition(const LLUUID& region_id);
 
 	//--------------------------------------------------------------------
 	// Teleport State
@@ -963,7 +967,7 @@ private:
 	S32				mNumPendingQueries;
 	S32				mWearablesCacheQueryID;
 	U32				mUpdateSerialNum;
-	S32		    	mActiveCacheQueries[LLVOAvatarDefines::BAKED_NUM_INDICES];
+	S32		    	mActiveCacheQueries[LLAvatarAppearanceDefines::BAKED_NUM_INDICES];
 };
 
 extern LLAgentQueryManager gAgentQueryManager;

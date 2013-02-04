@@ -372,10 +372,8 @@ void LLSidepanelTaskInfo::refresh()
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
-	BOOL creators_identical;
 	std::string creator_name;
-	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID,
-																	  creator_name);
+	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
 
 //	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
 //	getChildView("Creator Name")->setEnabled(TRUE);
@@ -414,9 +412,10 @@ void LLSidepanelTaskInfo::refresh()
 // [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
 	{
-		// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
-		if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
-			creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
+		// <FS:TM> removed for shunshine merge
+		//// Only anonymize the creator if all of the selection was created by the same avie who's also the owner or they're a nearby avie
+		//if ( (creators_identical) && (mCreatorID != gAgent.getID()) && ((mCreatorID == mOwnerID) || (RlvUtil::isNearbyAgent(mCreatorID))) )
+		//	creator_name = LLSLURL("agent", mCreatorID, "rlvanonym").getSLURLString();
 
 		// Only anonymize the owner name if all of the selection is owned by the same avie and isn't group owned
 		if ( (owners_identical) && (!LLSelectMgr::getInstance()->selectIsGroupOwned()) && (mOwnerID != gAgent.getID()) )

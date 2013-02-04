@@ -1,5 +1,5 @@
 /** 
- *
+ * @file flvlocks.h
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -237,9 +237,9 @@ public:
 	void removeWearableTypeLock(LLWearableType::EType eType, const LLUUID& idRlvObj, ERlvLockMask eLock);
 
 	// Returns TRUE if the wearable is RLV_LOCK_REMOVE locked
-	bool isLockedWearable(const LLWearable* pWearable) const;
+	bool isLockedWearable(const LLViewerWearable* pWearable) const;
 	// Returns TRUE if the wearable is RLV_LOCK_REMOVE locked by anything other than idRlvObj
-	bool isLockedWearableExcept(const LLWearable* pWearable, const LLUUID& idRlvObj) const;
+	bool isLockedWearableExcept(const LLViewerWearable* pWearable, const LLUUID& idRlvObj) const;
 
 	// NOTE: isLockedWearableType doesn't check if a worn wearable is a specific wearable lock so don't let these be called by the outside
 protected:
@@ -508,7 +508,7 @@ inline bool RlvWearableLocks::canRemove(const LLInventoryItem* pItem) const
 {
 	// The specified item can be removed if its wearable can be removed
 	RLV_ASSERT( (pItem) && (LLInventoryType::IT_WEARABLE == pItem->getInventoryType()) );
-	const LLWearable* pWearable = (pItem) ? gAgentWearables.getWearableFromItemID(pItem->getLinkedUUID()) : NULL;
+	const LLViewerWearable* pWearable = (pItem) ? gAgentWearables.getWearableFromItemID(pItem->getLinkedUUID()) : NULL;
 	return (pWearable) && (!isLockedWearable(pWearable));
 }
 
@@ -545,7 +545,7 @@ inline bool RlvWearableLocks::hasLockedWearableType(ERlvLockMask eLock) const
 }
 
 // Checked: 2010-11-30 (RLVa-1.3.0b) | Modified: RLVa-1.2.0a
-inline bool RlvWearableLocks::isLockedWearable(const LLWearable* pWearable) const
+inline bool RlvWearableLocks::isLockedWearable(const LLViewerWearable* pWearable) const
 {
 	// Wearable is locked if:
 	//   - it's specifically marked as non-removable

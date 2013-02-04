@@ -50,6 +50,7 @@
 #include "llclipboard.h"
 #include "llinventorydefines.h"
 #include "llinventoryfunctions.h"
+#include "llinventoryicon.h"
 #include "llinventorymodel.h"
 #include "llinventorymodelbackgroundfetch.h"
 #include "llinventorypanel.h"
@@ -122,8 +123,6 @@ void dec_busy_count()
 }
 
 // Function declarations
-void remove_inventory_category_from_avatar(LLInventoryCategory* category);
-void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_id);
 // <FS:TT> Patch: ReplaceWornItemsOnly
 void wear_inventory_category_on_avatar(LLInventoryCategory* category);
 // </FS:TT>
@@ -1545,71 +1544,71 @@ void LLItemBridge::restoreItem()
 		LLInvFVBridge::changeItemParent(model, item, new_parent, FALSE);
 	}
 }
-
-void LLItemBridge::restoreToWorld()
-{
-	//Similar functionality to the drag and drop rez logic
-	bool remove_from_inventory = false;
-
-	LLViewerInventoryItem* itemp = static_cast<LLViewerInventoryItem*>(getItem());
-	if (itemp)
-	{
-		LLMessageSystem* msg = gMessageSystem;
-
-		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
-		{
-			LLUUID group_id = gAgent.getGroupID();
-			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-			LLUUID parcel_group_id = parcel->getGroupID();
-			if (gAgent.isInGroup(parcel_group_id))
-			{
-				if (group_id != parcel_group_id)
-				{
-					//Agent is not in the required group.
-					gAgent.restoreToWorld = true;
-					gAgent.restoreToWorldGroup = group_id;
-					gAgent.restoreToWorldItem = itemp;
-					LLMessageSystem* msg = gMessageSystem;
-					msg->newMessageFast(_PREHASH_ActivateGroup);
-					msg->nextBlockFast(_PREHASH_AgentData);
-					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-					msg->addUUIDFast(_PREHASH_GroupID, parcel_group_id);
-					gAgent.sendReliableMessage();
-					return;
-				}
-			}
-		}
-
-		msg->newMessage("RezRestoreToWorld");
-		msg->nextBlockFast(_PREHASH_AgentData);
-		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-
-		msg->nextBlockFast(_PREHASH_InventoryData);
-		itemp->packMessage(msg);
-		msg->sendReliable(gAgent.getRegion()->getHost());
-		//remove local inventory copy, sim will deal with permissions and removing the item
-		//from the actual inventory if its a no-copy etc
-		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
-		{
-			remove_from_inventory = true;
-		}
-		
-		// Check if it's in the trash. (again similar to the normal rez logic)
-		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-		if(gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
-		{
-			remove_from_inventory = true;
-		}
-	}
-
-	if(remove_from_inventory)
-	{
-		gInventory.deleteObject(itemp->getUUID());
-		gInventory.notifyObservers();
-	}
-}
+// <FS:TM> removed for shunshine merge
+//void LLItemBridge::restoreToWorld()
+//{
+//	//Similar functionality to the drag and drop rez logic
+//	bool remove_from_inventory = false;
+//
+//	LLViewerInventoryItem* itemp = static_cast<LLViewerInventoryItem*>(getItem());
+//	if (itemp)
+//	{
+//		LLMessageSystem* msg = gMessageSystem;
+//
+//		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+//		{
+//			LLUUID group_id = gAgent.getGroupID();
+//			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+//			LLUUID parcel_group_id = parcel->getGroupID();
+//			if (gAgent.isInGroup(parcel_group_id))
+//			{
+//				if (group_id != parcel_group_id)
+//				{
+//					//Agent is not in the required group.
+//					gAgent.restoreToWorld = true;
+//					gAgent.restoreToWorldGroup = group_id;
+//					gAgent.restoreToWorldItem = itemp;
+//					LLMessageSystem* msg = gMessageSystem;
+//					msg->newMessageFast(_PREHASH_ActivateGroup);
+//					msg->nextBlockFast(_PREHASH_AgentData);
+//					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+//					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+//					msg->addUUIDFast(_PREHASH_GroupID, parcel_group_id);
+//					gAgent.sendReliableMessage();
+//					return;
+//				}
+//			}
+//		}
+//
+//		msg->newMessage("RezRestoreToWorld");
+//		msg->nextBlockFast(_PREHASH_AgentData);
+//		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+//		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+//
+//		msg->nextBlockFast(_PREHASH_InventoryData);
+//		itemp->packMessage(msg);
+//		msg->sendReliable(gAgent.getRegion()->getHost());
+//		//remove local inventory copy, sim will deal with permissions and removing the item
+//		//from the actual inventory if its a no-copy etc
+//		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+//		{
+//			remove_from_inventory = true;
+//		}
+//		
+//		// Check if it's in the trash. (again similar to the normal rez logic)
+//		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+//		if(gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
+//		{
+//			remove_from_inventory = true;
+//		}
+//	}
+//
+//	if(remove_from_inventory)
+//	{
+//		gInventory.deleteObject(itemp->getUUID());
+//		gInventory.notifyObservers();
+//	}
+//}
 
 void LLItemBridge::gotoItem()
 {
@@ -1634,7 +1633,7 @@ LLUIImagePtr LLItemBridge::getIcon() const
 										mIsLink);
 	}
 	
-	return LLInventoryIcon::getIcon(LLInventoryIcon::ICONNAME_OBJECT);
+	return LLInventoryIcon::getIcon(LLInventoryType::ICONNAME_OBJECT);
 }
 
 PermissionMask LLItemBridge::getPermissionMask() const
@@ -2672,7 +2671,6 @@ BOOL move_inv_category_world_to_agent(const LLUUID& object_id,
 	if(drop && accept)
 	{
 		it = inventory_objects.begin();
-		LLInventoryObject::object_list_t::iterator first_it = inventory_objects.begin();
 		LLMoveInv* move_inv = new LLMoveInv;
 		move_inv->mObjectID = object_id;
 		move_inv->mCategoryID = category_id;
@@ -2971,7 +2969,7 @@ void LLFolderBridge::performAction(LLInventoryModel* model, std::string action)
 		LLViewerInventoryCategory* cat = getCategory();
 		if(!cat) return;
 
-		remove_inventory_category_from_avatar ( cat );
+		LLAppearanceMgr::instance().takeOffOutfit( cat->getLinkedUUID() );
 		return;
 	}
 	else if ("purge" == action)
@@ -5388,7 +5386,7 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 		else if(item && item->isFinished())
 		{
 			// must be in library. copy it to our inventory and put it on.
-			LLPointer<LLInventoryCallback> cb = new RezAttachmentCallback(0);
+			LLPointer<LLInventoryCallback> cb = new LLBoostFuncInventoryCallback(boost::bind(rez_attachment_cb, _1, (LLViewerJointAttachment*)0));
 			copy_inventory_item(
 				gAgent.getID(),
 				item->getPermissions().getOwner(),
@@ -5411,11 +5409,7 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 // [/SL:KB]
 	else if (isRemoveAction(action))
 	{
-		LLInventoryItem* item = gInventory.getItem(mUUID);
-		if(item)
-		{
-			LLVOAvatarSelf::detachAttachmentIntoInventory(item->getLinkedUUID());
-		}
+		LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
 	}
 	else LLItemBridge::performAction(model, action);
 }
@@ -5757,129 +5751,6 @@ LLWearableBridge::LLWearableBridge(LLInventoryPanel* inventory,
 	mInvType = inv_type;
 }
 
-void remove_inventory_category_from_avatar( LLInventoryCategory* category )
-{
-	if(!category) return;
-	lldebugs << "remove_inventory_category_from_avatar( " << category->getName()
-			 << " )" << llendl;
-
-
-	if (gAgentCamera.cameraCustomizeAvatar())
-	{
-		// switching to outfit editor should automagically save any currently edited wearable
-		LLFloaterSidePanelContainer::showPanel("appearance", LLSD().with("type", "edit_outfit"));
-	}
-
-	remove_inventory_category_from_avatar_step2(TRUE, category->getUUID() );
-}
-
-// <FS>
-//struct OnRemoveStruct
-//{
-//	LLUUID mUUID;
-//	OnRemoveStruct(const LLUUID& uuid):
-//		mUUID(uuid)
-//	{
-//	}
-//};
-// </FS>
-
-void remove_inventory_category_from_avatar_step2( BOOL proceed, LLUUID category_id)
-{
-
-	// Find all the wearables that are in the category's subtree.
-	lldebugs << "remove_inventory_category_from_avatar_step2()" << llendl;
-	if(proceed)
-	{
-		LLInventoryModel::cat_array_t cat_array;
-		LLInventoryModel::item_array_t item_array;
-		LLFindWearables is_wearable;
-		gInventory.collectDescendentsIf(category_id,
-										cat_array,
-										item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_wearable);
-		S32 i;
-		S32 wearable_count = item_array.count();
-
-		LLInventoryModel::cat_array_t	obj_cat_array;
-		LLInventoryModel::item_array_t	obj_item_array;
-		LLIsType is_object( LLAssetType::AT_OBJECT );
-		gInventory.collectDescendentsIf(category_id,
-										obj_cat_array,
-										obj_item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_object);
-		S32 obj_count = obj_item_array.count();
-
-		// Find all gestures in this folder
-		LLInventoryModel::cat_array_t	gest_cat_array;
-		LLInventoryModel::item_array_t	gest_item_array;
-		LLIsType is_gesture( LLAssetType::AT_GESTURE );
-		gInventory.collectDescendentsIf(category_id,
-										gest_cat_array,
-										gest_item_array,
-										LLInventoryModel::EXCLUDE_TRASH,
-										is_gesture);
-		S32 gest_count = gest_item_array.count();
-
-		if (wearable_count > 0)	//Loop through wearables.  If worn, remove.
-		{
-			for(i = 0; i  < wearable_count; ++i)
-			{
-				LLViewerInventoryItem *item = item_array.get(i);
-				if (item->getType() == LLAssetType::AT_BODYPART)
-					continue;
-				if (gAgent.isTeen() && item->isWearableType() &&
-					(item->getWearableType() == LLWearableType::WT_UNDERPANTS || item->getWearableType() == LLWearableType::WT_UNDERSHIRT))
-					continue;
-				if (get_is_item_worn(item->getUUID()))
-				{
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-0.2.2a
-//					if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
-//						continue;
-// [/RLVa:KB]
-//					LLWearableList::instance().getAsset(item->getAssetUUID(),
-//														item->getName(),
-//														item->getType(),
-//														LLWearableBridge::onRemoveFromAvatarArrived,
-//														new OnRemoveStruct(item->getLinkedUUID()));
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
-					LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
-// [/SL:KB]
-				}
-			}
-		}
-
-		if (obj_count > 0)
-		{
-			for(i = 0; i  < obj_count; ++i)
-			{
-				LLViewerInventoryItem *obj_item = obj_item_array.get(i);
-				if (get_is_item_worn(obj_item->getUUID()))
-				{
-					LLVOAvatarSelf::detachAttachmentIntoInventory(obj_item->getLinkedUUID());
-				}
-			}
-		}
-
-		if (gest_count > 0)
-		{
-			for(i = 0; i  < gest_count; ++i)
-			{
-				LLViewerInventoryItem *gest_item = gest_item_array.get(i);
-				if (get_is_item_worn(gest_item->getUUID()))
-				{
-					LLGestureMgr::instance().deactivateGesture( gest_item->getLinkedUUID() );
-					gInventory.updateItem( gest_item );
-					gInventory.notifyObservers();
-				}
-
-			}
-		}
-	}
-}
-
 BOOL LLWearableBridge::renameItem(const std::string& new_name)
 {
 	if (get_is_item_worn(mUUID))
@@ -6109,7 +5980,7 @@ void LLWearableBridge::wearAddOnAvatar()
 }
 
 // static
-//void LLWearableBridge::onWearOnAvatarArrived( LLWearable* wearable, void* userdata )
+//void LLWearableBridge::onWearOnAvatarArrived( LLViewerWearable* wearable, void* userdata )
 //{
 //	LLUUID* item_id = (LLUUID*) userdata;
 //	if(wearable)
@@ -6135,7 +6006,7 @@ void LLWearableBridge::wearAddOnAvatar()
 
 // static
 // BAP remove the "add" code path once everything is fully COF-ified.
-//void LLWearableBridge::onWearAddOnAvatarArrived( LLWearable* wearable, void* userdata )
+//void LLWearableBridge::onWearAddOnAvatarArrived( LLViewerWearable* wearable, void* userdata )
 //{
 //	LLUUID* item_id = (LLUUID*) userdata;
 //	if(wearable)
@@ -6195,109 +6066,12 @@ BOOL LLWearableBridge::canRemoveFromAvatar(void* user_data)
 	return FALSE;
 }
 
-// static
-//void LLWearableBridge::onRemoveFromAvatar(void* user_data)
-//{
-//	LLWearableBridge* self = (LLWearableBridge*)user_data;
-//	if(!self) return;
-//	if(get_is_item_worn(self->mUUID))
-//	{
-//		LLViewerInventoryItem* item = self->getItem();
-//		if (item)
-//		{
-//			LLUUID parent_id = item->getParentUUID();
-//			LLWearableList::instance().getAsset(item->getAssetUUID(),
-//												item->getName(),
-//												item->getType(),
-//												onRemoveFromAvatarArrived,
-//												new OnRemoveStruct(LLUUID(self->mUUID)));
-//		}
-//	}
-//}
-
-// static
-//void LLWearableBridge::onRemoveFromAvatarArrived(LLWearable* wearable,
-//												 void* userdata)
-//{
-//	OnRemoveStruct *on_remove_struct = (OnRemoveStruct*) userdata;
-//	const LLUUID &item_id = gInventory.getLinkedItemID(on_remove_struct->mUUID);
-// [RLVa:KB] - Checked: 2010-03-20 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
-//	if ( (rlv_handler_t::isEnabled()) && ((!wearable) || (!gRlvWearableLocks.canRemove(gInventory.getItem(item_id)))) )
-//	{
-//		delete on_remove_struct;
-//		return;
-//	}
-// [/RLVa:KB]
-//	if(wearable)
-//	{
-//		if( get_is_item_worn( item_id ) )
-//		{
-//			LLWearableType::EType type = wearable->getType();
-//
-//			if( !(type==LLWearableType::WT_SHAPE || type==LLWearableType::WT_SKIN || type==LLWearableType::WT_HAIR || type==LLWearableType::WT_EYES ) ) //&&
-//				//!((!gAgent.isTeen()) && ( type==LLWearableType::WT_UNDERPANTS || type==LLWearableType::WT_UNDERSHIRT )) )
-//			{
-//				bool do_remove_all = false;
-//				U32 index = gAgentWearables.getWearableIndex(wearable);
-//				gAgentWearables.removeWearable( type, do_remove_all, index );
-//			}
-//		}
-//	}
-//
-//	// Find and remove this item from the COF.
-//	LLAppearanceMgr::instance().removeCOFItemLinks(item_id,false);
-//	gInventory.notifyObservers();
-//
-//	delete on_remove_struct;
-//}
-
-// static
-void LLWearableBridge::removeAllClothesFromAvatar()
-{
-        // Fetch worn clothes (i.e. the ones in COF).
-        LLInventoryModel::item_array_t clothing_items;
-        LLInventoryModel::cat_array_t dummy;
-        LLIsType is_clothing(LLAssetType::AT_CLOTHING);
-        gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(),
-                                                                        dummy,
-                                                                        clothing_items,
-                                                                        LLInventoryModel::EXCLUDE_TRASH,
-                                                                        is_clothing,
-                                                                        false);
-
-        // Take them off by removing from COF.
-        for (LLInventoryModel::item_array_t::const_iterator it = clothing_items.begin(); it != clothing_items.end(); ++it)
-        {
-// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
-		if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(*it)) )
-			continue;
-// [/RLVa:KB]
-            LLAppearanceMgr::instance().removeItemFromAvatar((*it)->getUUID());
-        }
-}
-
-// static
-void LLWearableBridge::removeItemFromAvatar(LLViewerInventoryItem *item)
-{
-	if (item)
-	{
-//		LLWearableList::instance().getAsset(item->getAssetUUID(),
-//											item->getName(),
-//											item->getType(),
-//											LLWearableBridge::onRemoveFromAvatarArrived,
-//											new OnRemoveStruct(item->getUUID()));
-// [SL:KB] - Patch: Appearance-RemoveWearableFromAvatar | Checked: 2010-08-13 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
-		LLAppearanceMgr::instance().removeItemFromAvatar(item->getUUID());
-// [/SL:KB]
-	}
-}
-
 void LLWearableBridge::removeFromAvatar()
 {
+	llwarns << "safe to remove?" << llendl;
 	if (get_is_item_worn(mUUID))
 	{
-		LLViewerInventoryItem* item = getItem();
-		removeItemFromAvatar(item);
+		LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
 	}
 }
 

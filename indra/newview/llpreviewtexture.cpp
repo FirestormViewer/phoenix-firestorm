@@ -77,7 +77,7 @@ LLPreviewTexture::LLPreviewTexture(const LLSD& key)
 	  mAspectRatio(0.f),
 	  mPreviewToSave(FALSE),
 	  mImage(NULL),
-	  mImageOldBoostLevel(LLViewerTexture::BOOST_NONE),
+	  mImageOldBoostLevel(LLGLTexture::BOOST_NONE),
 	  mShowingButtons(false),
 	  mDisplayNameCallback(false)
 {
@@ -814,9 +814,9 @@ void LLPreviewTexture::onAspectRatioCommit(LLUICtrl* ctrl, void* userdata)
 
 void LLPreviewTexture::loadAsset()
 {
-	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, MIPMAP_TRUE, LLViewerTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+	mImage = LLViewerTextureManager::getFetchedTexture(mImageID, MIPMAP_TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 	mImageOldBoostLevel = mImage->getBoostLevel();
-	mImage->setBoostLevel(LLViewerTexture::BOOST_PREVIEW);
+	mImage->setBoostLevel(LLGLTexture::BOOST_PREVIEW);
 	mImage->forceToSaveRawImage(0) ;
 	mAssetStatus = PREVIEW_ASSET_LOADING;
 	mUpdateDimensions = TRUE;

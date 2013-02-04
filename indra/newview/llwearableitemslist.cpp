@@ -34,6 +34,7 @@
 #include "llagentwearables.h"
 #include "llappearancemgr.h"
 #include "llinventoryfunctions.h"
+#include "llinventoryicon.h"
 #include "lltransutil.h"
 #include "llviewerattachmenu.h"
 // [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-09-04 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
@@ -819,8 +820,6 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
 	const uuid_vec_t& ids = mUUIDs;		// selected items IDs
 	LLUUID selected_id = ids.front();	// ID of the first selected item
 
-	functor_t take_off = boost::bind(&LLAppearanceMgr::removeItemFromAvatar, LLAppearanceMgr::getInstance(), _1);
-
 	// Register handlers common for all wearable types.
 	registrar.add("Wearable.Wear", boost::bind(wear_multiple, ids, true));
 	registrar.add("Wearable.Add", boost::bind(wear_multiple, ids, false));
@@ -830,15 +829,18 @@ LLContextMenu* LLWearableItemsList::ContextMenu::createMenu()
 // [/SL:KB]
 	registrar.add("Wearable.CreateNew", boost::bind(createNewWearable, selected_id));
 	registrar.add("Wearable.ShowOriginal", boost::bind(show_item_original, selected_id));
-	registrar.add("Wearable.TakeOffDetach", boost::bind(handleMultiple, take_off, ids));
+	registrar.add("Wearable.TakeOffDetach", 
+				  boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
 
 	// Register handlers for clothing.
-	registrar.add("Clothing.TakeOff", boost::bind(handleMultiple, take_off, ids));
+	registrar.add("Clothing.TakeOff", 
+				  boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
 
 	// Register handlers for body parts.
 
 	// Register handlers for attachments.
-	registrar.add("Attachment.Detach", boost::bind(handleMultiple, take_off, ids));
+	registrar.add("Attachment.Detach", 
+				  boost::bind(&LLAppearanceMgr::removeItemsFromAvatar, LLAppearanceMgr::getInstance(), ids));
 	registrar.add("Attachment.Profile", boost::bind(show_item_profile, selected_id));
 	registrar.add("Object.Attach", boost::bind(LLViewerAttachMenu::attachObjects, ids, _2));
 

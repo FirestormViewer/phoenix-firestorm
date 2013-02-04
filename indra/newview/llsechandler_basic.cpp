@@ -1242,7 +1242,6 @@ void LLSecAPIBasicHandler::_readProtectedData()
 									llifstream::binary);
 
 	if (!protected_data_stream.fail()) {
-		int offset;
 		U8 salt[STORE_SALT_SIZE];
 		U8 buffer[BUFFER_READ_SIZE];
 		U8 decrypted_buffer[BUFFER_READ_SIZE];
@@ -1253,7 +1252,6 @@ void LLSecAPIBasicHandler::_readProtectedData()
 
 		// read in the salt and key
 		protected_data_stream.read((char *)salt, STORE_SALT_SIZE);
-		offset = 0;
 		if (protected_data_stream.gcount() < STORE_SALT_SIZE)
 		{
 			throw LLProtectedDataException("Config file too short.");

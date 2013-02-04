@@ -679,7 +679,6 @@ LLAppViewer::LLAppViewer() :
 	mForceGraphicsDetail(false),
 	mQuitRequested(false),
 	mLogoutRequestSent(false),
-	mYieldTime(-1),
 	mMainloopTimeout(NULL),
 	mAgentRegionLastAlive(false),
 	mRandomizeFramerate(LLCachedControl<bool>(gSavedSettings,"Randomize Framerate", FALSE)),
@@ -720,6 +719,15 @@ LLAppViewer::~LLAppViewer()
 	removeMarkerFile();
 }
 
+class LLUITranslationBridge : public LLTranslationBridge
+{
+public:
+	virtual std::string getString(const std::string &xml_desc)
+	{
+		return LLTrans::getString(xml_desc);
+	}
+};
+
 bool LLAppViewer::init()
 {	
 	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
@@ -732,6 +740,10 @@ bool LLAppViewer::init()
 	// we run the "program crashed last time" error handler below.
 	//
 	LLFastTimer::reset();
+
+	// initialize LLWearableType translation bridge.
+	// Memory will be cleaned up in ::cleanupClass()
+	LLWearableType::initClass(new LLUITranslationBridge());
 
 	// initialize SSE options
 	LLVector4a::initClass();
@@ -892,7 +904,7 @@ bool LLAppViewer::init()
 	LLUI::initClass(settings_map,
 		LLUIImageList::getInstance(),
 		ui_audio_callback,
-		&LLUI::sGLScaleFactor);
+		&LLUI::getScaleFactor());
 	LL_INFOS("InitInfo") << "UI initialized." << LL_ENDL ;
 
 	// NOW LLUI::getLanguage() should work. gDirUtilp must know the language
@@ -1351,7 +1363,7 @@ bool LLAppViewer::mainLoop()
 	LLVoiceChannel::initClass();
 	LLVoiceClient::getInstance()->init(gServicePump);
 	LLVoiceChannel::setCurrentVoiceChannelChangedCallback(boost::bind(&LLCallFloater::sOnCurrentChannelChanged, _1), true);
-	LLTimer frameTimer,idleTimer;
+	LLTimer frameTimer,idleTimer,periodicRenderingTimer;
 	LLTimer debugTime;
 	LLViewerJoystick* joystick(LLViewerJoystick::getInstance());
 	joystick->setNeedsReset(true);
@@ -1362,6 +1374,8 @@ bool LLAppViewer::mainLoop()
     // time. Obviously, if that changes, just instantiate the LLSD at the
     // point of posting.
     LLSD newFrame;
+
+	BOOL restore_rendering_masks = FALSE;
 
 	//LLPrivateMemoryPoolTester::getInstance()->run(false) ;
 	//LLPrivateMemoryPoolTester::getInstance()->run(true) ;
@@ -1380,6 +1394,28 @@ bool LLAppViewer::mainLoop()
 		
 		try
 		{
+			// Check if we need to restore rendering masks.
+			if (restore_rendering_masks)
+			{
+				gPipeline.popRenderDebugFeatureMask();
+				gPipeline.popRenderTypeMask();
+			}
+			// Check if we need to temporarily enable rendering.
+			F32 periodic_rendering = gSavedSettings.getF32("ForcePeriodicRenderingTime");
+			if (periodic_rendering > F_APPROXIMATELY_ZERO && periodicRenderingTimer.getElapsedTimeF64() > periodic_rendering)
+			{
+				periodicRenderingTimer.reset();
+				restore_rendering_masks = TRUE;
+				gPipeline.pushRenderTypeMask();
+				gPipeline.pushRenderDebugFeatureMask();
+				gPipeline.setAllRenderTypes();
+				gPipeline.setAllRenderDebugFeatures();
+			}
+			else
+			{
+				restore_rendering_masks = FALSE;
+			}
+
 			pingMainloopTimeout("Main:MiscNativeWindowEvents");
 
 			if (gViewerWindow)
@@ -1427,11 +1463,11 @@ bool LLAppViewer::mainLoop()
 				// Scan keyboard for movement keys.  Command keys and typing
 				// are handled by windows callbacks.  Don't do this until we're
 				// done initializing.  JC
-				if ((gHeadlessClient || gViewerWindow->getWindow()->getVisible())
+				if (gViewerWindow->getWindow()->getVisible()
 					&& gViewerWindow->getActive()
 					&& !gViewerWindow->getWindow()->getMinimized()
 					&& LLStartUp::getStartupState() == STATE_STARTED
-					&& (gHeadlessClient || !gViewerWindow->getShowProgress())
+					&& !gViewerWindow->getShowProgress()
 					&& !gFocusMgr.focusLocked())
 				{
 					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
@@ -1487,8 +1523,7 @@ bool LLAppViewer::mainLoop()
 				}
 
 				// Render scene.
-				// *TODO: Should we run display() even during gHeadlessClient?  DK 2011-02-18
-				if (!LLApp::isExiting() && !gHeadlessClient)
+				if (!LLApp::isExiting())
 				{
 					pingMainloopTimeout("Main:Display");
 					gGLActive = TRUE;
@@ -1510,10 +1545,11 @@ bool LLAppViewer::mainLoop()
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
-				if(mYieldTime >= 0)
+				S32 yield_time = gSavedSettings.getS32("YieldTime");
+				if(yield_time >= 0)
 				{
 					LLFastTimer t(FTM_YIELD);
-					ms_sleep(mYieldTime);
+					ms_sleep(yield_time);
 				}
 
 				// yield cooperatively when not running as foreground window
@@ -1625,6 +1661,26 @@ bool LLAppViewer::mainLoop()
 				{
 					gFrameStalls++;
 				}
+
+				// Limit FPS
+				F32 max_fps = gSavedSettings.getF32("MaxFPS");
+				// Only limit FPS when we are actually rendering something.  Otherwise
+				// logins, logouts and teleports take much longer to complete.
+				if (max_fps > F_APPROXIMATELY_ZERO && 
+					LLStartUp::getStartupState() == STATE_STARTED &&
+					!gTeleportDisplay &&
+					!logoutRequestSent())
+				{
+					// Sleep a while to limit frame rate.
+					F32 min_frame_time = 1.f / max_fps;
+					S32 milliseconds_to_sleep = llclamp((S32)((min_frame_time - frameTimer.getElapsedTimeF64()) * 1000.f), 0, 1000);
+					if (milliseconds_to_sleep > 0)
+					{
+						LLFastTimer t(FTM_YIELD);
+						ms_sleep(milliseconds_to_sleep);
+					}
+				}
+
 				frameTimer.reset();
 
 				resumeMainloopTimeout();
@@ -1941,6 +1997,8 @@ bool LLAppViewer::cleanup()
 	llinfos << "Cleaning up Objects" << llendflush;
 	
 	LLViewerObject::cleanupVOClasses();
+
+	LLAvatarAppearance::cleanupClass();
 	
 	LLPostProcess::cleanupClass();
 
@@ -2216,6 +2274,8 @@ bool LLAppViewer::cleanup()
 	}
 	llinfos << "Cleaning up LLProxy." << llendl;
 	LLProxy::cleanupClass();
+
+	LLWearableType::cleanupClass();
 
 	LLMainLoopRepeater::instance().stop();
 
@@ -2903,8 +2963,6 @@ bool LLAppViewer::initConfiguration()
 		}
 	}
 
-    mYieldTime = gSavedSettings.getS32("YieldTime");
-
 	// Read skin/branding settings if specified.
 	//if (! gDirUtilp->getSkinDir().empty() )
 	//{
@@ -3329,9 +3387,6 @@ bool LLAppViewer::meetsRequirementsForMaximizedStart()
 bool LLAppViewer::initWindow()
 {
 	LL_INFOS("AppInit") << "Initializing window..." << LL_ENDL;
-
-	// store setting in a global for easy access and modification
-	gHeadlessClient = gSavedSettings.getBOOL("HeadlessClient");
 
 	// always start windowed
 	BOOL ignorePixelDepth = gSavedSettings.getBOOL("IgnorePixelDepth");

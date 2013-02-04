@@ -43,6 +43,7 @@
 
 #include "llglheaders.h"
 #include "llagent.h"
+#include "lldbstrings.h"
 
 const S32 LLToastScriptTextbox::DEFAULT_MESSAGE_MAX_LINE_COUNT= 7;
 

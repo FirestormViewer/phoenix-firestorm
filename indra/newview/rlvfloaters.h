@@ -1,5 +1,5 @@
 /** 
- *
+ * @file rlvfloaters.h
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 

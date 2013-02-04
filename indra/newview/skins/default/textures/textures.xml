@@ -807,10 +807,7 @@ with the same filename but different name
   <texture name="icon_top_pick.tga" />
 
  <!-- FS Ansariel: Icons don't exist and only spawn warn messages in log
-  <texture name="inv_folder_mesh.tga"/>
-  <texture name="inv_item_mesh.tga"/>
   -->
-
   <texture name="lag_status_critical.tga" />
   <texture name="lag_status_good.tga" />
   <texture name="lag_status_warning.tga" />

@@ -17,6 +17,10 @@ include_directories(
     ${LLXML_INCLUDE_DIRS}
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
+include_directories(SYSTEM
+    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
+    ${LLXML_SYSTEM_INCLUDE_DIRS}
+    )
 
 set(llinventory_SOURCE_FILES
     llcategory.cpp
@@ -60,6 +64,12 @@ list(APPEND llinventory_SOURCE_FILES ${llinventory_HEADER_FILES})
 
 add_library (llinventory ${llinventory_SOURCE_FILES})
 
+target_link_libraries(llinventory
+    ${LLCOMMON_LIBRARIES}
+    ${LLMATH_LIBRARIES}
+    ${LLMESSAGE_LIBRARIES}
+    ${LLXML_LIBRARIES}
+    )
 
 
 #add unit tests

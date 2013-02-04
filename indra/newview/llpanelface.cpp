@@ -88,7 +88,6 @@ BOOL	LLPanelFace::postBuild()
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
 
-	LLRect	rect = this->getRect();
 	LLTextureCtrl*	mTextureCtrl;
 	LLColorSwatchCtrl*	mColorSwatch;
 

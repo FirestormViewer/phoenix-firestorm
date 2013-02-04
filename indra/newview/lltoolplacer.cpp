@@ -200,7 +200,7 @@ BOOL LLToolPlacer::addObject( LLPCode pcode, S32 x, S32 y, U8 use_physics )
 		return FALSE;
 	}
 
-	if (regionp->getRegionFlags() & REGION_FLAGS_SANDBOX)
+	if (regionp->getRegionFlag(REGION_FLAGS_SANDBOX))
 	{
 		//LLFirstUse::useSandbox();
 	}
@@ -535,7 +535,7 @@ BOOL LLToolPlacer::addDuplicate(S32 x, S32 y)
 										FALSE);				// select copy
 
 	if (regionp
-		&& (regionp->getRegionFlags() & REGION_FLAGS_SANDBOX))
+		&& (regionp->getRegionFlag(REGION_FLAGS_SANDBOX)))
 	{
 		//LLFirstUse::useSandbox();
 	}

@@ -116,8 +116,6 @@ void LLMorphView::onSpecialRenderModeLightChanged()
 //-----------------------------------------------------------------------------
 void	LLMorphView::shutdown()
 {
-	LLVOAvatarSelf::onCustomizeEnd();
-
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->startMotion( ANIM_AGENT_BODY_NOISE );

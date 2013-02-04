@@ -51,6 +51,8 @@ public:
 
 	/*virtual*/ void onOpen(const LLSD& key);
 
+	/*virtual*/ void onClickCloseBtn();
+
 	LLPanel* openChildPanel(const std::string& panel_name, const LLSD& params);
 
 // [RLVa:KB] - Checked: 2012-02-07 (RLVa-1.4.5) | Added: RLVa-1.4.5

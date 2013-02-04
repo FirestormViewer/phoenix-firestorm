@@ -1,5 +1,5 @@
 /** 
- *
+ * @file rlvcommon.h
  * Copyright (c) 2009-2011, Kitty Barnett
  * 
  * The source code in this file is provided to you under the terms of the 
@@ -44,7 +44,7 @@ class LLInventoryItem;
 class LLViewerInventoryCategory;
 class LLViewerInventoryItem;
 class LLViewerJointAttachment;
-class LLWearable;
+class LLViewerWearable;
 
 //
 // RLVa-specific

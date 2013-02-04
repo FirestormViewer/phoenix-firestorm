@@ -27,6 +27,10 @@ include_directories(
     ${LIBS_PREBUILD_DIR}/include/hunspell
     ${TEAPOT_INCLUDE_DIRS}# <FS:AW opensim currency support>
     )
+include_directories(SYSTEM
+    ${LLCOMMON_SYSTEM_INCLUDE_DIRS}
+    ${LLXML_SYSTEM_INCLUDE_DIRS}
+    )
 
 set(llui_SOURCE_FILES
     llaccordionctrl.cpp
@@ -111,7 +115,6 @@ set(llui_SOURCE_FILES
     lluicolortable.cpp
     lluictrl.cpp
     lluictrlfactory.cpp
-    lluiimage.cpp
     lluistring.cpp
     llundo.cpp
     llurlaction.cpp
@@ -221,7 +224,6 @@ set(llui_HEADER_FILES
     lluifwd.h
     llui.h
     lluicolor.h
-    lluiimage.h
     lluistring.h
     llundo.h
     llurlaction.h

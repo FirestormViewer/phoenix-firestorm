@@ -1470,7 +1470,6 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
 	item_array_t items;
 	update_map_t update;
 	S32 count = content["items"].size();
-	bool all_one_folder = true;
 	LLUUID folder_id;
 	// Does this loop ever execute more than once?
 	for(S32 i = 0; i < count; ++i)
@@ -1502,10 +1501,6 @@ void  LLInventoryModel::fetchInventoryResponder::result(const LLSD& content)
 		if (folder_id.isNull())
 		{
 			folder_id = titem->getParentUUID();
-		}
-		else
-		{
-			all_one_folder = false;
 		}
 	}
 
@@ -2604,7 +2599,6 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
 	item_array_t items;
 	update_map_t update;
 	S32 count = msg->getNumberOfBlocksFast(_PREHASH_InventoryData);
-	bool all_one_folder = true;
 	LLUUID folder_id;
 	// Does this loop ever execute more than once?
 	for(S32 i = 0; i < count; ++i)
@@ -2635,10 +2629,6 @@ bool LLInventoryModel::messageUpdateCore(LLMessageSystem* msg, bool account)
 		if (folder_id.isNull())
 		{
 			folder_id = titem->getParentUUID();
-		}
-		else
-		{
-			all_one_folder = false;
 		}
 	}
 	if(account)
@@ -3455,7 +3445,7 @@ void LLInventoryModel::wearWearablesOnAvatar(LLUUID category_id)
 					for (U32 j=0; j<count; j++) //remove all
 					{
 						//take the first one from the list, since the list is diminishing.
-						LLWearable* wearable = gAgentWearables.getWearable((LLWearableType::EType)iType,0);
+						LLViewerWearable* wearable = gAgentWearables.getViewerWearable((LLWearableType::EType)iType,0);
 						//if the item is from our folder - don't remove it
 						//for (LLViewerInventoryItem *item = item_array.get(i); 
 						if (mItemArray.find((LLViewerInventoryItem *)wearable) == -1)
