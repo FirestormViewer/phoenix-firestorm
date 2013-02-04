@@ -5764,7 +5764,7 @@ BOOL LLVOAvatar::processFullyLoadedChange(bool loading)
 BOOL LLVOAvatar::isFullyLoaded() const
 {
 //	return (mRenderUnloadedAvatar || mFullyLoaded);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
 	// Changes to LLAppearanceMgr::updateAppearanceFromCOF() expect this function to actually return mFullyLoaded for gAgentAvatarp
 	return (mRenderUnloadedAvatar && !isSelf()) ||(mFullyLoaded);
 // [/SL:KB]

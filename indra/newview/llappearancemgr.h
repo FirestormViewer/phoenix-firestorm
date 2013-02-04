@@ -224,7 +224,7 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-3.0.0a) | Modified: Catznip-2.1.2e
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
 public:
 	void linkPendingAttachments();
 	void onRegisterAttachmentComplete(const LLUUID& idItem);
@@ -258,7 +258,7 @@ private:
 	bool mUpdateBaseOrder;
 };
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1)
 class LLRegisterAttachmentCallback : public LLInventoryCallback
 {
 public:
