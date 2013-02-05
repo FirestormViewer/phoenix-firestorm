@@ -39,6 +39,11 @@ LLDockControl::LLDockControl(LLView* dockWidget, LLFloater* dockableFloater,
 {
 	mDockAt = dockAt;
 
+	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
+	if (mDockWidget != NULL)
+		mDockHandle = mDockWidget->getHandle();
+	// </FS:ND>
+
 	if (dockableFloater->isDocked())
 	{
 		on();
@@ -79,8 +84,17 @@ LLDockControl::~LLDockControl()
 void LLDockControl::setDock(LLView* dockWidget)
 {
 	mDockWidget = dockWidget;
+
+	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
+	mDockHandle = LLHandle< LLView >();
+	// </FS:ND>
+
 	if (mDockWidget != NULL)
 	{
+		// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
+		mDockHandle = mDockWidget->getHandle();
+		// <FS:ND>
+
 		repositionDockable();
 		mDockWidgetVisible = isDockVisible();
 	}

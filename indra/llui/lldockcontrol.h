@@ -63,7 +63,15 @@ public:
 	void setDock(LLView* dockWidget);
 	LLView* getDock()
 	{
-		return mDockWidget;
+		// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
+
+		// return mDockWidget;
+
+		if( mDockWidget && !mDockHandle.isDead() )
+			return mDockWidget;
+		return 0;
+		
+		// </FS:ND>
 	}
 	void repositionDockable();
 	void drawToungue();
@@ -91,6 +99,10 @@ private:
 	LLUIImagePtr mDockTongue;
 	S32 mDockTongueX;
 	S32 mDockTongueY;
+
+	// <FS:ND> FIRE-9134; Fix crash on logout. USe handle to detect if mDockWidget is already dead (To simplify the amount of code changed for future merged, use a LLHandle + the old LLView*)
+	LLHandle< LLView > mDockHandle;
+	// </FS:ND>
 };
 
 #endif /* LL_DOCKCONTROL_H */
