@@ -380,11 +380,23 @@ LLMenuParcelObserver::~LLMenuParcelObserver()
 void LLMenuParcelObserver::changed()
 {
 	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getParcelSelection()->getParcel();
-	gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
-	
+	// <FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
+	//gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
+	//
+	//BOOL buyable = enable_buy_land(NULL);
+	//gMenuHolder->childSetEnabled("Land Buy", buyable);
+	//gMenuHolder->childSetEnabled("Buy Land...", buyable);
+
+	static LLView* land_buy_pass = gMenuHolder->getChildView("Land Buy Pass");
+	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
+	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
+
+	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
+
 	BOOL buyable = enable_buy_land(NULL);
-	gMenuHolder->childSetEnabled("Land Buy", buyable);
-	gMenuHolder->childSetEnabled("Buy Land...", buyable);
+	land_buy->setEnabled(buyable);
+	buy_land->setEnabled(buyable);
+	// </FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
 }
 
 
