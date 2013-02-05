@@ -3851,7 +3851,7 @@ Vorheriger Simulator: [OLDVERSION]
 	</notification>
 
 	<notification name="VintageLoginInfo">
-Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoenix Viewers verwenden können? Wählen Sie den Phoenix-Modus in der „Modus“-Auswahlbox neben dem Anmelden-Button aus.
+Wussten Sie schon, dass Sie die klassische Benutzeroberläche im Stil des Phoenix Viewers verwenden können? Wählen Sie den Phoenix-Modus in der „Modus“-Auswahlbox auf der rechten Seite aus.
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 
