@@ -365,6 +365,13 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
 
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta teleportacji." name="textFSTeleportOffer">
+				Oferta teleportacji:
+			</text>
+			<button name="Prev_UISndTeleportOffer" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndTeleportOffer" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOffer"/>
+
 		</panel>
 	</tab_container>
 </panel>

@@ -3,7 +3,7 @@
 	can_resize="true"
 	default_tab_group="1"
 	height="590"
-	help_topic="fs_legacy_search"
+	help_topic="fs_search"
 	layout="topleft"
 	legacy_header_height="0"
 	min_height="590"

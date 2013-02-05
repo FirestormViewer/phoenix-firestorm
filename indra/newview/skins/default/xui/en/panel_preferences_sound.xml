@@ -3012,6 +3012,62 @@ Hover your mouse cursor over UUID field to show its default value.
          left_pad="1"
          width="120" />
 
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on teleport offer."
+         name="textFSTeleportOffer">
+            Teleport offer:
+        </text>
+        <line_editor
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndTeleportOffer"
+         control_name="UISndTeleportOffer"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndTeleportOffer"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndTeleportOffer"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndTeleportOffer"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndTeleportOffer"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndTeleportOffer"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndTeleportOffer"
+         left_pad="1"
+         width="120" />
+
     </panel>
 </tab_container>
 </panel>
