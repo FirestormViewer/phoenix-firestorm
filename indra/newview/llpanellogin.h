@@ -61,7 +61,10 @@ public:
 		void (*callback)(S32 option, void* user_data), 
 		void* callback_data);
 
-	static void setFields(LLPointer<LLCredential> credential, BOOL remember);
+// <FS:CR>
+	//static void setFields(LLPointer<LLCredential> credential, BOOL remember);
+	static void setFields(LLPointer<LLCredential> credential);
+// </FS:CR>
 
 	static void getFields(LLPointer<LLCredential>& credential, BOOL& remember);
 
@@ -109,6 +112,7 @@ private:
 	static void updateServerCombo();
 // <FS:CR>
 	static void onClickRemove(void*);
+	static void gridListChanged(bool success);
 	static std::string credentialName();
 // </FS:CR>
 

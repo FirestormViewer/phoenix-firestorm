@@ -143,6 +143,12 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	buildFromFile( "panel_login.xml");
 
 	reshape(rect.getWidth(), rect.getHeight());
+	
+	// <FS:CR> Mode Selector
+	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
+	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
+	mode_combo.setCommitCallback(boost::bind(&LLPanelLogin::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
+	// </FS:CR>
 
 	LLLineEditor* password_edit(getChild<LLLineEditor>("password_edit"));
 	password_edit->setKeystrokeCallback(onPassKey, this);
@@ -159,65 +165,68 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLComboBox* server_choice_combo = getChild<LLComboBox>("server_combo");
 	server_choice_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectServer, this));
 
+// <FS:CR>
+	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
+	{
+		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
+		LLStartUp::setStartSLURL(slurl);
+	}
+// </FS:CR>
+
+// <FS:CR>
 	// Load all of the grids, sorted, and then add a bar and the current grid at the top
-	server_choice_combo->removeall();
+	//server_choice_combo->removeall();
 
-	std::string current_grid = LLGridManager::getInstance()->getGrid();
-	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
-	for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
-		 grid_choice != known_grids.end();
-		 grid_choice++)
-	{
-		if (!grid_choice->first.empty() && current_grid != grid_choice->first)
-		{
-			LL_DEBUGS("AppInit")<<"adding "<<grid_choice->first<<LL_ENDL;
-			server_choice_combo->add(grid_choice->second, grid_choice->first);
-		}
-	}
-	server_choice_combo->sortByName();
-	server_choice_combo->addSeparator(ADD_TOP);
-	LL_DEBUGS("AppInit")<<"adding current "<<current_grid<<LL_ENDL;
-	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(), 
-							 current_grid,
-							 ADD_TOP);	
-	server_choice_combo->selectFirstItem();		
-
-// <FS:CR> Mode Selector
-	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
-	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
-	mode_combo.setCommitCallback(boost::bind(&LLPanelLogin::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
+	//std::string current_grid = LLGridManager::getInstance()->getGrid();
+	//std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
+	//for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
+	//	 grid_choice != known_grids.end();
+	//	 grid_choice++)
+	//{
+	//	if (!grid_choice->first.empty() && current_grid != grid_choice->first)
+	//	{
+	//		LL_DEBUGS("AppInit")<<"adding "<<grid_choice->first<<LL_ENDL;
+	//		server_choice_combo->add(grid_choice->second, grid_choice->first);
+	//	}
+	//}
+	//server_choice_combo->sortByName();
+	//server_choice_combo->addSeparator(ADD_TOP);
+	//LL_DEBUGS("AppInit")<<"adding current "<<current_grid<<LL_ENDL;
+	//server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(), 
+	//						 current_grid,
+	//						 ADD_TOP);	
+	//server_choice_combo->selectFirstItem();
+	updateServerCombo();
 // </FS:CR>
-	LLSLURL start_slurl(LLStartUp::getStartSLURL());
-// <FS:CR>
+	
+// <FS:CR> Moved this down further
+	//LLSLURL start_slurl(LLStartUp::getStartSLURL());
 	//if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
-// </FS:CR>
-	{
+	//{
 		// no, so get the preference setting
-		std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
-		LL_INFOS("AppInit") << "default LoginLocation '" << defaultStartLocation << "'" << LL_ENDL;
-		LLSLURL defaultStart(defaultStartLocation);
-		if ( defaultStart.isSpatial() )
-		{
-			LLStartUp::setStartSLURL(defaultStart);
-		}
-		else
-		{
-			LL_INFOS("AppInit")<<"no valid LoginLocation, using home"<<LL_ENDL;
-			LLSLURL homeStart(LLSLURL::SIM_LOCATION_HOME);
-			LLStartUp::setStartSLURL(homeStart);
-		}
-	}
-// <FS:CR>
+	//	std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
+	//	LL_INFOS("AppInit") << "default LoginLocation '" << defaultStartLocation << "'" << LL_ENDL;
+	//	LLSLURL defaultStart(defaultStartLocation);
+	//	if ( defaultStart.isSpatial() )
+	//	{
+	//		LLStartUp::setStartSLURL(defaultStart);
+	//	}
+	//	else
+	//	{
+	//		LL_INFOS("AppInit")<<"no valid LoginLocation, using home"<<LL_ENDL;
+	//		LLSLURL homeStart(LLSLURL::SIM_LOCATION_HOME);
+	//		LLStartUp::setStartSLURL(homeStart);
+	//	}
+	//}
 	//else
 	//{
 	//	LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	//}
-	
-	childSetAction("remove_user_btn", onClickRemove, this);
 // </FS:CR>
-	
-	childSetAction("connect_btn", onClickConnect, this);
 
+	childSetAction("remove_user_btn", onClickRemove, this); // <FS:CR> Remove credentials
+	childSetAction("connect_btn", onClickConnect, this);
+	
 	getChild<LLPanel>("links_login_panel")->setDefaultBtn("connect_btn");
 
 	std::string channel = LLVersionInfo::getChannel();
@@ -240,7 +249,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 
 	reshapeBrowser();
 
-	loadLoginPage();
+	// </FS:CR> Moved below
+	//loadLoginPage();
 
 	// Show last logged in user favorites in "Start at" combo.
 /// <FS:CR> We don't use addUsersWithFavoritesToUsername() in Firestorm. We use addUsersToCombo() when setting
@@ -252,6 +262,8 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 // <FS:CR> Don't automatically connect on selection!
 	//username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this));
 	username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectUser, this));
+	
+	loadLoginPage();
 // </FS:CR>
 }
 
@@ -484,8 +496,11 @@ void LLPanelLogin::show(const LLRect &rect,
 }
 
 // static
-void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
-							 BOOL remember)
+// <FS:CR>
+//void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
+//							 BOOL remember)
+void LLPanelLogin::setFields(LLPointer<LLCredential> credential)
+// </FS:CR>
 {
 	if (!sInstance)
 	{
@@ -525,6 +540,7 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
 	// a filler to get some stars
 	LLSD authenticator = credential->getAuthenticator();
 	LL_INFOS("Credentials") << "Setting authenticator field " << authenticator["type"].asString() << LL_ENDL;
+	bool remember; // <FS:CR>
 	if(authenticator.isMap() && 
 	   authenticator.has("secret") && 
 	   (authenticator["secret"].asString().size() > 0))
@@ -536,10 +552,12 @@ void LLPanelLogin::setFields(LLPointer<LLCredential> credential,
 		// nice row of asterixes.
 		const std::string filler("123456789!123456");
 		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string("123456789!123456"));
+		remember = true; // <FS:CR>
 	}
 	else
 	{
 		sInstance->getChild<LLUICtrl>("password_edit")->setValue(std::string());		
+		remember = false; // <FS:CR>
 	}
 	sInstance->getChild<LLUICtrl>("remember_check")->setValue(remember);
 }
@@ -1012,18 +1030,23 @@ void LLPanelLogin::updateServer()
 // <FS:CR>
 				//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
 				LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
+				//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
+				//sInstance->setFields(credential, remember);
+				sInstance->setFields(credential);
 // </FS:CR>
-				bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-				sInstance->setFields(credential, remember);
 			}
 
-			// update the login panel links 
-			bool system_grid = LLGridManager::getInstance()->isSystemGrid();
+			// update the login panel links
+			// <FS:CR> Unused by Firestorm
+			//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
+			// </FS:CR>
 
 			// Want to vanish not only create_new_account_btn, but also the
 			// title text over it, so turn on/off the whole layout_panel element.
-			sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
-			sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
+			// <FS:CR> or not!
+			//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
+			//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
+			// </FS:CR>
 
 			// grid changed so show new splash screen (possibly)
 			loadLoginPage();
@@ -1226,8 +1249,8 @@ void LLPanelLogin::onSelectUser()
 	}
 	LLPointer<LLCredential> credential =  gSecAPIHandler->loadCredential(combo_val);
 	
-	combo = sInstance->getChild<LLComboBox>("start_location_combo");
-	LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
+	//combo = sInstance->getChild<LLComboBox>("start_location_combo");
+	//LLStartUp::setStartSLURL(LLSLURL(gSavedSettings.getString("LoginLocation")));
 	
 	std::string credName = combo_val.asString();
 	
@@ -1236,8 +1259,7 @@ void LLPanelLogin::onSelectUser()
 	if(sInstance && !sInstance->areCredentialFieldsDirty())
 	{
 		LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credName);
-		bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-		sInstance->setFields(credential, remember);
+		sInstance->setFields(credential);
 	}
 	U32 arobase = credName.find("@");
 	if (arobase != -1 && arobase +1 < credName.length())
@@ -1311,6 +1333,12 @@ std::string LLPanelLogin::credentialName()
 	LLStringUtil::trim(username);
 	
 	return username + "@" + LLGridManager::getInstance()->getGrid();
+}
+
+// static
+void LLPanelLogin::gridListChanged(bool success)
+{
+	updateServerCombo();
 }
 
 /////////////////////////
