@@ -9362,7 +9362,7 @@ Previous simulator: [OLDVERSION]
   <notification
    name="VintageLoginInfo"
    type="alertmodal">
-Did you know you can get the classic Phoenix Viewer look with Firestorm? Go to the "Default Settings" menu next to the login button and select "Phoenix".
+Did you know you can get the classic Phoenix Viewer look with Firestorm? Go to the "select mode" menu on the right and select "Phoenix".
     <usetemplate
       name="okbutton"
       yestext="OK"/>
