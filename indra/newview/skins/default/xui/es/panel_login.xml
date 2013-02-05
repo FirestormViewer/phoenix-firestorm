@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="panel_login">
-	<panel.string name="create_account_url">
-		http://join.secondlife.com/index.php?lang=es-ES
-	</panel.string>
 	<panel.string name="forgot_password_url">
 		https://secondlife.com/my/account/request.php?lang=es-ES
 	</panel.string>
 	<layout_stack name="login_widgets">
 		<layout_panel name="login">
+			<text name="log_in_text">
+				CONECTAR
+			</text>
 			<text name="username_text">
 				Nombre de usuario:
 			</text>
-			<combo_box name="username_combo" tool_tip="El nombre de usuario que elegiste al registrarte, como bobsmith12 o Steller Sunshine"/>
-			<button label="Borrar esta entrada" name="delete_saved_login_btn"/>
+			<combo_box name="username_combo" tool_tip="El nombre de usuario que elegiste al registrarte, como bobsmith420 o Steller Sunshine"/>
+			<button tool_tip="Eliminar este usuario" name="remove_user_btn"/>
 			<text name="password_text">
 				Contraseña:
 			</text>
-			<check_box label="Recordar la contraseña" name="remember_check"/>
-			<button label="Iniciar sesión" name="connect_btn"/>
-			<text name="mode_selection_text">
-				Modo:
-			</text>
-			<combo_box name="mode_combo" tool_tip="Selecciona con qué estilo de visor estás más familiarizado para establecer tus opciones por defecto apropiadamente.">
-				<combo_box.item label="Firestorm" name="Firestorm"/>
-				<combo_box.item label="Phoenix" name="Phoenix"/>
-				<combo_box.item label="Oficial V3" name="V3"/>
-				<combo_box.item label="Híbrido" name="Hybrid"/>
-			</combo_box>
+		</layout_panel>
+		<layout_panel name="start_location_panel">
 			<text name="start_location_text">
 				Iniciar en:
 			</text>
@@ -35,23 +26,32 @@
 				<combo_box.item label="Mi Base" name="MyHome"/>
 				<combo_box.item label="&lt;Escribe en qué región&gt;" name="Typeregionname"/>
 			</combo_box>
-			<text name="grid_selection_text">
+		</layout_panel>
+		<layout_panel name="grid_panel">
+			<text name="grid_login_text">
 				Iniciar en la red:
 			</text>
-			<text name="grid_mgr_help_text">
-				Ayuda sobre redes
-			</text>
 		</layout_panel>
-		<layout_panel name="links">
+		<layout_panel name="links_login_panel">
 			<text name="create_new_account_text">
 				Registrarme
 			</text>
 			<text name="forgot_password_text">
 				¿Olvidaste el nombre de usuario o la contraseña?
 			</text>
-			<text name="login_help">
-				¿Necesitas ayuda para conectarte?
+			<button label="Iniciar sesión" name="connect_btn"/>
+			<check_box label="Recordar la contraseña" name="remember_check"/>
+		</layout_panel>
+		<layout_panel name="mode_selection">
+			<text name="mode_selection_text">			
+				SELECCIONAR MODO:
 			</text>
+			<combo_box name="mode_combo" tool_tip="Selecciona con qué estilo de visor estás más familiarizado para establecer tus opciones por defecto apropiadamente.">
+				<combo_box.item label="Firestorm" name="Firestorm"/>
+				<combo_box.item label="Phoenix" name="Phoenix"/>
+				<combo_box.item label="Oficial V3" name="V3"/>
+				<combo_box.item label="Híbrido" name="Hybrid"/>
+			</combo_box>
 		</layout_panel>
 	</layout_stack>
 </panel>

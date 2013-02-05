@@ -3844,7 +3844,7 @@ Simulador actual:   [NEWVERSION]
 Simulador anterior: [OLDVERSION]
 	</notification>
 	<notification name="VintageLoginInfo">
-		¿Sabías que puedes obtener la clásica apariencia de Phoenix en Firestorm? Ve al menú "Modo", junto al botón "Iniciar sesión", y selecciona "Phoenix".
+		¿Sabías que puedes obtener la clásica apariencia de Phoenix en Firestorm? Ve al menú "Modo", a la derecha, y selecciona "Phoenix".
 		<usetemplate name="okbutton" yestext="Aceptar"/>
 	</notification>
 	<notification name="CannotSaveSnapshot">
