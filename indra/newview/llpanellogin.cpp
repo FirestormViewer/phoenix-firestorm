@@ -243,6 +243,11 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
 	need_help_text->setClickedCallback(onClickHelp, NULL);
 	
+// <FS:CR> Grid Manager Help link
+	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_login_text");
+	grid_mgr_help_text->setClickedCallback(onClickGridMgrHelp, NULL);
+// </FS:CR>
+	
 	// get the web browser control
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("login_html");
 	web_browser->addObserver(this);
@@ -1233,7 +1238,16 @@ void LLPanelLogin::onClickRemove(void*)
 			sInstance->getChild<LLUICtrl>("password_edit")->clear();
 		}
 	}
+}
 
+//static
+void LLPanelLogin::onClickGridMgrHelp(void*)
+{
+	if (sInstance)
+	{
+		LLViewerHelp* vhelp = LLViewerHelp::getInstance();
+		vhelp->showTopic(vhelp->gridMgrHelpTopic());
+	}
 }
 
 void LLPanelLogin::onSelectUser()
