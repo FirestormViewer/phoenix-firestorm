@@ -532,6 +532,24 @@ Weitere Informationen finden Sie auf [_URL].
 		</url>
 		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
 	</notification>
+	<notification name="AMDOldDriver">
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+
+    Unter [_URL] nach aktualisierten Treibern suchen?
+		<url name="url">
+			http://support.amd.com/de/Pages/AMDSupportHub.aspx
+		</url>
+		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
+	<notification name="NVIDIAOldDriver">
+		Wahrscheinlich gibt es einen neueren Treiber für Ihren Grafikchip. Durch Aktualisieren der Grafiktreiber lässt sich die Leistung u. U. beträchtlich verbessern.
+
+    Unter [_URL] nach aktualisierten Treibern suchen?
+		<url name="url">
+			http://www.nvidia.com/Download/index.aspx?lang=de
+		</url>
+		<usetemplate ignoretext="Mein Grafiktreiber ist veraltet" name="okcancelignore" notext="Nein" yestext="Ja"/>
+	</notification>
 	<notification name="UnknownGPU">
 		Ihr System verwendet eine Grafikkarte, die [APP_NAME] nicht erkennt.
 Dies passiert dann, wenn die neue Hardware noch nicht mit [APP_NAME] getestet wurde.  Wahrscheinlich wird das Programm richtig ausgeführt, aber Sie müssen eventuell ein paar Grafikeinstellungen vornehmen.

@@ -3984,7 +3984,7 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 		Generelle Region
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Avatare sichtbar; Chat außerhalb dieser Parzelle gestattet
+		Avatare innerhalb dieser Parzelle können nicht von Avataren außerhalb der Parzelle gesehen oder gehört werden.
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Bewegliche Objekte verhalten sich in dieser Region u. U. erst dann korrekt, wenn die Region neu geformt wird.
