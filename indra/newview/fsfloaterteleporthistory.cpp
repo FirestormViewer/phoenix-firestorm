@@ -94,3 +94,9 @@ void FSFloaterTeleportHistory::onFilterEdit(const std::string& search_string, bo
 		mHistoryPanel->onSearchEdit(string);
 	}
 }
+
+void FSFloaterTeleportHistory::resetFilter()
+{
+	mFilterEditor->clear();
+	onFilterEdit("", true);
+}

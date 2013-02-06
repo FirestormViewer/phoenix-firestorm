@@ -81,6 +81,10 @@
 #include "llnetmap.h"
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llpanelplaces.h"
+#include "fsfloaterteleporthistory.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -670,6 +674,21 @@ static void handleNetMapDoubleClickActionChanged()
 }
 // </FS:Ansariel> Synchronize tooltips throughout instances
 
+// <FS:Ansariel> Clear places / teleport history search filter
+static void handleUseStandaloneTeleportHistoryFloater()
+{
+	LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
+	if (places)
+	{
+		places->findChild<LLPanelPlaces>("main_panel")->resetFilter();
+	}
+	FSFloaterTeleportHistory* tphistory = LLFloaterReg::findTypedInstance<FSFloaterTeleportHistory>("fs_teleporthistory");
+	if (tphistory)
+	{
+		tphistory->resetFilter();
+	}
+}
+// </FS:Ansariel> Clear places / teleport history search filter
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -847,6 +866,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Synchronize tooltips throughout instances
 	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
+
+	// <FS:Ansariel> Clear places / teleport history search filter
+	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloater));
 }
 
 #if TEST_CACHED_CONTROL

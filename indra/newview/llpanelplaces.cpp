@@ -1239,6 +1239,14 @@ LLPanelPlaceInfo* LLPanelPlaces::getCurrentInfoPanel()
 	return NULL;
 }
 
+// <FS:Ansariel> Reset (clear) filter
+void LLPanelPlaces::resetFilter()
+{
+	mFilterEditor->clear();
+	onFilterEdit("", true);
+}
+// </FS:Ansariel>
+
 static bool is_agent_in_selected_parcel(LLParcel* parcel)
 {
 	LLViewerParcelMgr* parcel_mgr = LLViewerParcelMgr::getInstance();
