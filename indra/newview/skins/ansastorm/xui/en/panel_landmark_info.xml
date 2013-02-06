@@ -56,6 +56,26 @@
      name="icon_R"
      translate="false"
      value="Parcel_R_Dark" />
+
+	<layout_stack
+		name="place_info_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="0"
+		left="0"
+		width="331"
+		height="570"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="header_container"
+		auto_resize="false"
+		height="30"
+		width="331"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+
     <button
      follows="top|left"
      height="24"
@@ -82,6 +102,15 @@
      use_ellipses="true"
      value="Place Profile"
      width="280" />
+	
+	</layout_panel>
+	<layout_panel
+		name="place_info_content"
+		auto_resize="true"
+		height="540"
+		width="331"
+		layout="topleft"
+		follows="all">
 
     <texture_picker
      enabled="false"
@@ -314,4 +343,8 @@
          name="folder_combo"
          right="-1" />
     </panel>
+
+	</layout_panel>
+	</layout_stack> 
+
 </panel>

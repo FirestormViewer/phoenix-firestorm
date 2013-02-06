@@ -14,8 +14,16 @@
 	<string name="server_forbidden_text">
 		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Cofnij"/>
 	<text name="title" value="Profil miejsca"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 	<text name="maturity_value" value="nieznany"/>
 	<panel name="description_panel">
 		<expandable_text name="description" value="(ładowanie...)"/>
@@ -30,4 +38,7 @@
 		<text name="notes_label" value="Moje notatki:"/>
 		<text name="folder_label" value="Lokalizacja:"/>
 	</panel>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

@@ -287,7 +287,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::LANDMARK);
-			mPanelLandmarkInfo->setEnableHeader(false);
+			mPanelLandmarkInfo->setHeaderVisible(FALSE);
 			
 			mPanelPlaceInfo->setVisible(FALSE);
 			mPanelLandmarkInfo->setVisible(TRUE);
@@ -312,7 +312,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelLandmarkInfo->resetLocation();
 			mPanelLandmarkInfo->setInfoType(LLPanelPlaceInfo::CREATE_LANDMARK);
-			mPanelLandmarkInfo->setEnableHeader(false);
+			mPanelLandmarkInfo->setHeaderVisible(FALSE);
 			mPanelLandmarkInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 			
 			mPanelPlaceInfo->setVisible(FALSE);
@@ -347,7 +347,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::PLACE);
-			mPanelPlaceInfo->setEnableHeader(false);
+			mPanelPlaceInfo->setHeaderVisible(FALSE);
 			mPanelPlaceInfo->setVisible(TRUE);
 			mPanelLandmarkInfo->setVisible(FALSE);
 
@@ -372,7 +372,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::TELEPORT_HISTORY);
 			mPanelPlaceInfo->displayParcelInfo(LLUUID(), mGlobalPos);
 
-			mPanelPlaceInfo->setEnableHeader(false);
+			mPanelPlaceInfo->setHeaderVisible(FALSE);
 			mPanelPlaceInfo->setVisible(TRUE);
 			mPanelLandmarkInfo->setVisible(FALSE);
 
@@ -386,7 +386,7 @@ void FSFloaterPlaceDetails::onOpen(const LLSD& key)
 
 			mPanelPlaceInfo->resetLocation();
 			mPanelPlaceInfo->setInfoType(LLPanelPlaceInfo::AGENT);
-			mPanelPlaceInfo->setEnableHeader(false);
+			mPanelPlaceInfo->setHeaderVisible(FALSE);
 			mPanelPlaceInfo->setVisible(TRUE);
 			mPanelLandmarkInfo->setVisible(FALSE);
 

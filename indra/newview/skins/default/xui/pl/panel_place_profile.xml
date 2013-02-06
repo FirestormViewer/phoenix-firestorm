@@ -36,8 +36,16 @@
 	<string name="server_forbidden_text">
 		Dostęp do informacji o tym miejscu jest ograniczony. Zweryfikuj swoje przywileje z właścicielem działki.
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Cofnij"/>
 	<text name="title" value="Profil Miejsca"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 	<scroll_container name="place_scroll">
 		<panel name="scrolling_panel">
 			<text name="owner_label" value="Właściciel:"/>
@@ -98,4 +106,7 @@
 			</accordion>
 		</panel>
 	</scroll_container>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

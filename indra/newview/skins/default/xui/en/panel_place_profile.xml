@@ -161,6 +161,26 @@
      name="icon_SeeAVs_On"
      translate="false"
      value="Parcel_SeeAVsOn_Dark" />
+
+	<layout_stack
+		name="place_info_sidetray_main"
+		layout="topleft"
+		follows="all"
+		top="0"
+		left="0"
+		width="331"
+		height="610"
+		border_size="0"
+		orientation="vertical">
+	<layout_panel
+		name="header_container"
+		auto_resize="false"
+		height="30"
+		width="331"
+		layout="topleft"
+		visible="true"
+		follows="top|left|right">
+
     <button
      follows="top|left"
      height="24"
@@ -187,6 +207,16 @@
      use_ellipses="true"
      value="Place Profile"
      width="280" />
+	
+	</layout_panel>
+	<layout_panel
+		name="place_info_content"
+		auto_resize="true"
+		height="580"
+		width="331"
+		layout="topleft"
+		follows="all">
+
     <scroll_container
      color="SL-Background_50"
      follows="all"
@@ -996,4 +1026,8 @@
             </accordion>
         </panel>
     </scroll_container>
+
+	</layout_panel>
+	</layout_stack> 
+
 </panel>
