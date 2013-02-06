@@ -8,14 +8,9 @@
    width="313"
    help_topic="panel_landmarks"
    border="false"
-   background_visible="true"
-   bg_alpha_color="DkGray"
    follows="all">
     <tab_container
      name="landmarks_accordion"
-     background_visible="true"
-     bg_alpha_color="DkGray2"
-     bg_opaque_color="DkGray2"
      fit_parent="true"
      layout="topleft"
      follows="all"
@@ -104,7 +99,6 @@
         </panel>
     </tab_container>
  <panel
-     background_visible="true"
      bevel_style="none"
      bottom="3"
      follows="left|right|bottom"
@@ -119,7 +113,7 @@
 		   follows="top|left|right"
 		   height="25"
 		   layout="topleft"
-		   top_pad="1"
+		   top="0"
 		   left="0"
 		   name="bottom_panel"
 		   width="307">
