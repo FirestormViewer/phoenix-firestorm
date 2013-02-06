@@ -216,7 +216,17 @@ void LLViewerStatsRecorder::writeToLog( F32 interval )
 				<< "Texture Fetch bps\t"
 				<< "\n";
 
-			fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+			// <FS:ND> Make GCC happy about return value of fwrite not used
+
+			// fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+
+			size_t nWritten = fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+			if( nWritten != data_msg.str().size() )
+			{
+				llwarns << "Write truncated, tried to write " << data_msg.str().size() << " written " << nWritten << llendl;
+			}
+
+			// </FS:ND>
 		}
 		else
 		{
@@ -249,7 +259,18 @@ void LLViewerStatsRecorder::writeToLog( F32 interval )
 		<< "\t" << (mTextureFetchSize * 8 / delta_time)
 		<< "\n";
 
-	fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+	// <FS:ND> Make GCC happy about return value of fwrite not used
+
+	// fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+
+	size_t nWritten = fwrite(data_msg.str().c_str(), 1, data_msg.str().size(), mObjectCacheFile );
+	if( nWritten != data_msg.str().size() )
+	{
+		llwarns << "Write truncated, tried to write " << data_msg.str().size() << " written " << nWritten << llendl;
+	}
+
+	// </FS:ND>
+
 	clearStats();
 }
 
