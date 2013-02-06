@@ -329,8 +329,8 @@ void LLPanelPlaceInfo::onAvatarNameCache(const LLUUID& agent_id,
 
 
 // <FS:Ansariel> FIRE-817: Separate place details floater
-void LLPanelPlaceInfo::setHeaderVisible(BOOL enable)
+void LLPanelPlaceInfo::setHeaderVisible(BOOL visible)
 {
-	getChildView("header_container")->setVisible(enable);
+	getChildView("header_container")->setVisible(visible);
 }
 // </FS:Ansariel>
