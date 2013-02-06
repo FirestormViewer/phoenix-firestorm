@@ -267,6 +267,29 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 // <FS:CR> Don't automatically connect on selection!
 	//username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this));
 	username_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectUser, this));
+
+	LLSLURL start_slurl(LLStartUp::getStartSLURL());
+	if ( !start_slurl.isSpatial() ) // has a start been established by the command line or NextLoginLocation ?
+	{
+	// no, so get the preference setting
+		std::string defaultStartLocation = gSavedSettings.getString("LoginLocation");
+		LL_INFOS("AppInit") << "default LoginLocation '" << defaultStartLocation << "'" << LL_ENDL;
+		LLSLURL defaultStart(defaultStartLocation);
+		if ( defaultStart.isSpatial() )
+		{
+			LLStartUp::setStartSLURL(defaultStart);
+		}
+		else
+		{
+			LL_INFOS("AppInit")<<"no valid LoginLocation, using home"<<LL_ENDL;
+			LLSLURL homeStart(LLSLURL::SIM_LOCATION_HOME);
+			LLStartUp::setStartSLURL(homeStart);
+		}
+	}
+	else
+	{
+		LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
+	}
 	
 	loadLoginPage();
 // </FS:CR>
