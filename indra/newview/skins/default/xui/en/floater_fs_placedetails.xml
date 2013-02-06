@@ -9,7 +9,7 @@
  help_topic="floater_placedetails"
  save_rect="true"
  title="Landmark"
- min_height="550"
+ min_height="570"
  min_width="250"
  width="322">
 	<string name="title_place">

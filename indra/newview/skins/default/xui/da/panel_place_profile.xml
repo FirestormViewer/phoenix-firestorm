@@ -51,8 +51,6 @@
 		</layout_panel>
 		<layout_panel name="place_info_content">
 
-	<scroll_container name="place_scroll">
-		<panel name="scrolling_panel">
 			<text name="owner_label" value="Ejer:"/>
 			<text name="maturity_value" value="ukendt"/>
 			<accordion name="advanced_info_accordion">
@@ -115,8 +113,6 @@
 					</panel>
 				</accordion_tab>
 			</accordion>
-		</panel>
-	</scroll_container>
 
 		</layout_panel>
 	</layout_stack> 

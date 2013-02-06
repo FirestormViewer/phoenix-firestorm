@@ -2,7 +2,7 @@
 <panel
  background_visible="true"
  follows="all"
- height="610"
+ height="570"
  layout="topleft"
  left="0"
  min_height="350"
@@ -169,17 +169,17 @@
 		top="0"
 		left="0"
 		width="331"
-		height="610"
+		height="570"
 		border_size="0"
 		orientation="vertical">
-	<layout_panel
-		name="header_container"
-		auto_resize="false"
-		height="30"
-		width="331"
-		layout="topleft"
-		visible="true"
-		follows="top|left|right">
+		<layout_panel
+			name="header_container"
+			auto_resize="false"
+			height="30"
+			width="331"
+			layout="topleft"
+			visible="true"
+			follows="top|left|right">
 
     <button
      follows="top|left"
@@ -208,35 +208,15 @@
      value="Place Profile"
      width="280" />
 	
-	</layout_panel>
-	<layout_panel
-		name="place_info_content"
-		auto_resize="true"
-		height="580"
-		width="331"
-		layout="topleft"
-		follows="all">
+		</layout_panel>
+		<layout_panel
+			name="place_info_content"
+			auto_resize="true"
+			height="540"
+			width="331"
+			layout="topleft"
+			follows="all">
 
-    <scroll_container
-     color="SL-Background_50"
-     follows="all"
-     height="572"
-     layout="topleft"
-     left="9"
-     name="place_scroll"
-     opaque="true"
-     top_pad="10"
-     width="310">
-        <panel
-         bg_alpha_color="SL-Background_50"
-         follows="left|top|right|bottom"
-         height="580"
-         layout="topleft"
-         left="0"
-         min_height="300"
-         name="scrolling_panel"
-         top="0"
-         width="310">
             <texture_picker
              enabled="false"
              fallback_image="default_land_picture.j2c"
@@ -245,8 +225,8 @@
              layout="topleft"
              left="11"
              name="logo"
-             top="10"
-             width="290" />
+             top_pad="10"
+             width="315" />
             <layout_stack
              border_size="0"
              clip="false"
@@ -312,7 +292,7 @@
              top_pad="5"
              use_ellipses="true"
              value="unknown"
-             width="290" />
+             width="320" />
             <text
              parse_urls="false"
              follows="left|top|right"
@@ -323,7 +303,7 @@
              top_pad="4"
              use_ellipses="true"
              value="unknown"
-             width="285" />
+             width="320" />
             <expandable_text
              follows="left|top|right"
              height="50"
@@ -332,7 +312,7 @@
              name="description"
              top_pad="10"
              value="unknown"
-             width="300" />
+             width="320" />
             <text
              follows="left|top"
              height="14"
@@ -371,17 +351,17 @@
              name="maturity_value"
              top_delta="0"
              value="unknown"
-             width="268" />
+             width="285" />
             <accordion
              fit_parent="true"
              follows="all"
-             height="268"
+             height="225"
              layout="topleft"
              single_expansion="true"
              left="0"
              name="advanced_info_accordion"
              top_pad="5"
-             width="313">
+             width="335">
                 <accordion_tab
                  fit_panel="false"
                  height="175"
@@ -421,7 +401,7 @@
                          name="rating_value"
                          top_delta="0"
                          value="unknown"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -448,7 +428,7 @@
                          name="voice_value"
                          top_delta="0"
                          value="On"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -474,7 +454,7 @@
                          name="fly_value"
                          top_delta="0"
                          value="On"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -500,7 +480,7 @@
                          name="push_value"
                          top_delta="0"
                          value="Off"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -526,7 +506,7 @@
                          name="build_value"
                          top_delta="0"
                          value="On"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -552,7 +532,7 @@
                          name="scripts_value"
                          top_delta="0"
                          value="On"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -578,7 +558,7 @@
                          name="damage_value"
                          top_delta="0"
                          value="Off"
-                         width="60" />
+                         width="130" />
                         <icon
                          follows="top|left"
                          height="18"
@@ -603,7 +583,7 @@
                          left_pad="0"
                          name="see_avatars_value"
                          value="Off"
-                         width="60" />
+                         width="130" />
                         <button
                          follows="bottom|right"
                          height="23"
@@ -651,6 +631,7 @@
                          left_pad="0"
                          name="region_name"
                          top_delta="0"
+                         use_ellipses="true"
                          value="Mooseland"
                          width="187" />
                         <text
@@ -669,6 +650,7 @@
                          left_pad="0"
                          name="region_type"
                          top_delta="0"
+                         use_ellipses="true"
                          value="Moose"
                          width="187" />
                         <text
@@ -782,6 +764,7 @@
                          left_pad="0"
                          name="estate_name"
                          top_delta="0"
+                         use_ellipses="true" 
                          width="187" />
                         <text
                          follows="left|top"
@@ -799,6 +782,7 @@
                          left_pad="0"
                          name="estate_rating"
                          top_delta="0"
+                         use_ellipses="true" 
                          width="187" />
                         <text
                          follows="left|top"
@@ -827,7 +811,7 @@
                          name="covenant_label"
                          top_pad="5"
                          value="Covenant:"
-                         width="277" />
+                         width="80" />
                         <text_editor
                          bg_focus_color="SL-Background"
                          bg_readonly_color="SL-Background"
@@ -1024,10 +1008,8 @@
                     </panel>
                 </accordion_tab>
             </accordion>
-        </panel>
-    </scroll_container>
 
-	</layout_panel>
+		</layout_panel>
 	</layout_stack> 
 
 </panel>
