@@ -4532,7 +4532,8 @@ Missbrauchsbericht
 	<string name="server_is_down">
 		Trotz all unserer Bemühungen ist ein unerwarteter Fehler aufgetreten.
 
-Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein Problem besteht. Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
+Bitte überprüfen Sie status.secondlifegrid.net um festzustellen, ob ein bekanntes Problem besteht.
+Falls der Fehler weiterhin auftritt, überprüfen Sie bitte Ihre Netzwerk- und Firewalleinstellungen.
 	</string>
 	<string name="dateTimeWeekdaysNames">
 		Sonntag:Montag:Dienstag:Mittwoch:Donnerstag:Freitag:Samstag
