@@ -143,7 +143,17 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 											  mFormattedImage->getHeight(),
 											  mFormattedImage->getComponents());
 		}
-		done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
+
+		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+
+		// done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
+
+		if( mDecodedImageRaw && !mDecodedImageRaw->isBufferInvalid() )
+			done = mFormattedImage->decode(mDecodedImageRaw, decode_time_slice); // 1ms
+		else
+			done = false;
+		// </FS:ND>
+
 		mDecodedRaw = done;
 	}
 	if (done && mNeedsAux && !mDecodedAux && mFormattedImage.notNull())
@@ -155,7 +165,18 @@ bool LLImageDecodeThread::ImageRequest::processRequest()
 											  mFormattedImage->getHeight(),
 											  1);
 		}
-		done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
+
+		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+
+		// done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
+
+		if( mDecodedImageAux && !mDecodedImageAux->isBufferInvalid() )
+			done = mFormattedImage->decodeChannels(mDecodedImageAux, decode_time_slice, 4, 4); // 1ms
+		else
+			done = false;
+
+		// </FS:ND>
+
 		mDecodedAux = done;
 	}
 

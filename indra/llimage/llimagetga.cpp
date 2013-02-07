@@ -338,6 +338,11 @@ BOOL LLImageTGA::decode(LLImageRaw* raw_image, F32 decode_time)
 
 	raw_image->resize(getWidth(), getHeight(), getComponents());
 
+	// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+	if( raw_image->isBufferInvalid() )
+		return FALSE;
+	// </FS:ND>
+
 	if( (getComponents() != 1) &&
 		(getComponents() != 3) &&
 		(getComponents() != 4) )
@@ -368,6 +373,11 @@ BOOL LLImageTGA::decode(LLImageRaw* raw_image, F32 decode_time)
 
 BOOL LLImageTGA::decodeTruecolor( LLImageRaw* raw_image, BOOL rle, BOOL flipped )
 {
+	// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+	if( !raw_image || raw_image->isBufferInvalid() )
+		return FALSE;
+	// </FS:ND>
+
 	BOOL success = FALSE;
 	BOOL alpha_opaque = FALSE;
 	if( rle )
@@ -519,6 +529,11 @@ void LLImageTGA::decodeColorMapPixel32( U8* dst, const U8* src )
 
 BOOL LLImageTGA::decodeColorMap( LLImageRaw* raw_image, BOOL rle, BOOL flipped )
 {
+	// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+	if( !raw_image || raw_image->isBufferInvalid() )
+		return FALSE;
+	// </FS:ND>
+
 	// If flipped, origin is the top left.  Need to reverse the order of the rows.
 	// Otherwise the origin is the bottom left.
 

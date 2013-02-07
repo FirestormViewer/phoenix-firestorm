@@ -964,6 +964,11 @@ BOOL LLImageRaw::scale( S32 new_width, S32 new_height, BOOL scale_image_data )
 
 		U8* new_buffer = allocateDataSize(new_width, new_height, getComponents());
 
+		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+		if( !new_buffer )
+			return FALSE;
+		// </FS:ND>
+
 		// Horizontal
 		for( S32 row = 0; row < new_height; row++ )
 		{
@@ -979,6 +984,11 @@ BOOL LLImageRaw::scale( S32 new_width, S32 new_height, BOOL scale_image_data )
 
 		// allocate	new	image data,	will delete	old	data
 		U8*	new_buffer = allocateDataSize(new_width, new_height, getComponents());
+
+		// <FS:ND> Handle out of memory situations a bit more graceful than a crash
+		if( !new_buffer )
+			return FALSE;
+		// </FS:ND>
 
 		for( S32 row = 0; row <	new_height;	row++ )
 		{
