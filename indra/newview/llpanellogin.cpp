@@ -153,7 +153,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLLineEditor* password_edit(getChild<LLLineEditor>("password_edit"));
 	password_edit->setKeystrokeCallback(onPassKey, this);
 	// STEAM-14: When user presses Enter with this field in focus, initiate login
-	password_edit->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this));
+	//password_edit->setCommitCallback(boost::bind(&LLPanelLogin::onClickConnect, this)); // <FS:LO> Not needed because of the global fix below
 
 	// change z sort of clickable text to be behind buttons
 	sendChildToBack(getChildView("forgot_password_text"));
@@ -227,7 +227,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	childSetAction("remove_user_btn", onClickRemove, this); // <FS:CR> Remove credentials
 	childSetAction("connect_btn", onClickConnect, this);
 	
-	getChild<LLPanel>("links_login_panel")->setDefaultBtn("connect_btn");
+	getChild<LLPanel>("login")->setDefaultBtn(findChild<LLButton>("connect_btn")); // <FS:LO> manualy find the button with findChild() as setDefaultButton() uses getChild(), which cant be used in a ctor as it makes a dummy instead
 
 	std::string channel = LLVersionInfo::getChannel();
 	std::string version = llformat("%s (%d)",
