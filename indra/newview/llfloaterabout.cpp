@@ -272,12 +272,13 @@ LLSD LLFloaterAbout::getInfo()
 	info["BANDWIDTH"] = gSavedSettings.getF32("ThrottleBandwidthKBPS");
 	info["LOD"] =gSavedSettings.getF32("RenderVolumeLODFactor");
 
-
 	//[FIRE 3113 : SJ] Added Settingsfile to info
-	if (gSavedSettings.getString("SessionSettingsFile") == "settings_firestorm.xml") info["MODE"] = "Firestorm";
-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_phoenix.xml") info["MODE"] = "Phoenix";
-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_v3.xml") info["MODE"] = "V3";
-	else if (gSavedSettings.getString("SessionSettingsFile") == "settings_hybrid.xml") info["MODE"] = "Hybrid";
+	info["MODE"] = "Unknown Mode";
+	std::string sessionSettingsFile = gSavedSettings.getString("SessionSettingsFile");
+	if (sessionSettingsFile == "settings_firestorm.xml") info["MODE"] = "Firestorm";
+	else if (sessionSettingsFile == "settings_phoenix.xml") info["MODE"] = "Phoenix";
+	else if (sessionSettingsFile == "settings_v3.xml") info["MODE"] = "Viewer 3";
+	else if (sessionSettingsFile == "settings_hybrid.xml") info["MODE"] = "Hybrid";
 
 	info["VIEWER_RELEASE_NOTES_URL"] = get_viewer_release_notes_url();
 
