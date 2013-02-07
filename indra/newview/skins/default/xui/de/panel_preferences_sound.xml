@@ -358,12 +358,12 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndFriendOffline" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndFriendOffline"/>
 
-		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
-			Schritte:
+		<text tool_tip="Sound UUID played on friendship offer." name="textFSFriendshipOffer">
+			Friendship offer:
 		</text>
-		<button label="V" name="Prev_UISndFootsteps" tool_tip="Vorschau zu diesem Sound."/>
-		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
-		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
+		<button label="V" name="Prev_UISndFriendshipOffer" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndFriendshipOffer" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndFriendshipOffer"/>
 
 		<text tool_tip="UUID des Klangs für Teleport-Angebote." name="textFSTeleportOffer">
 			Teleport-Angebote:
@@ -371,6 +371,35 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="V" name="Prev_UISndTeleportOffer" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndTeleportOffer" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndTeleportOffer"/>
+    </panel>
+
+	<!-- UI Sounds 3 -->
+	<panel label="UI Sounds 3" name="UI Sounds tab 3">
+		<text name="textFSExplanation_tab3">
+			Hier können die Klänge der Benutzeroberfläche geändert, aktiviert oder deaktiviert werden.
+Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
+		</text>
+
+		<text tool_tip="UUID des Klangs für Schritte. Erfordert Neustart" name="textFSFootsteps">
+			Schritte:
+		</text>
+		<button label="V" name="Prev_UISndFootsteps" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
+
+		<text tool_tip="Sound UUID played on group invitation." name="textFSGroupInvitation">
+			Group invitation:
+		</text>
+		<button label="V" name="Prev_UISndGroupInvitation" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndGroupInvitation" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndGroupInvitation"/>
+
+		<text tool_tip="Sound UUID played on group notice." name="textFSGroupNotice">
+			Group notice:
+		</text>
+		<button label="V" name="Prev_UISndGroupNotice" tool_tip="Vorschau zu diesem Sound."/>
+		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
+		<check_box label="Abspielen" name="PlayModeUISndGroupNotice"/>
     </panel>
 	
 	</tab_container>

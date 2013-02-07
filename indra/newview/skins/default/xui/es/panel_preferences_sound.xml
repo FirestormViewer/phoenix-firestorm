@@ -319,18 +319,42 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndFriendOffline" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFriendOffline" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndFriendOffline"/>
-			<text tool_tip="Sonido a reproducir con las pisadas por defecto. Requiere reiniciar para aplicar los cambios." name="textFSFootsteps">
-				Sonido de pasos:
+			<text tool_tip="Sound UUID played on friendship offer." name="textFSFriendshipOffer">
+				Friendship offer:
 			</text>
-			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
-			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
-			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
+			<button name="Prev_UISndFriendshipOffer" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndFriendshipOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndFriendshipOffer"/>
 			<text tool_tip="Sonido a reproducir cuando alguien te ofrece teleportarte a su posición." name="textFSTeleportOffer">
 				Oferta de teleporte:
 			</text>
 			<button name="Prev_UISndTeleportOffer" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndTeleportOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndTeleportOffer"/>
+		</panel>
+		<panel label="Sonidos de IU 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">
+				Aquí puedes cambiar (mediante UUIDs) los sonidos por defecto de la interfaz.
+Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por defecto.
+			</text>
+			<text tool_tip="Sonido a reproducir con las pisadas por defecto. Requiere reiniciar para aplicar los cambios." name="textFSFootsteps">
+				Sonido de pasos:
+			</text>
+			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
+			<text tool_tip="Sound UUID played on group invitation." name="textFSGroupInvitation">
+				Group invitation:
+			</text>
+			<button name="Prev_UISndGroupInvitation" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndGroupInvitation" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndGroupInvitation"/>
+			<text tool_tip="Sound UUID played on group notice." name="textFSGroupNotice">
+				Group notice:
+			</text>
+			<button name="Prev_UISndGroupNotice" label="P" tool_tip="Probar sonido."/>
+			<button name="Def_UISndGroupNotice" label="R" tool_tip="Restablecer al UUID por defecto."/>
+			<check_box label="Reproducir" name="PlayModeUISndGroupNotice"/>
 		</panel>
 	</tab_container>
 </panel>

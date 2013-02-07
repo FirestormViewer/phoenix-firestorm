@@ -2991,6 +2991,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["SUBJECT"] = subj;
 				args["MESSAGE"] = mes;
 				LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(timestamp));
+				make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
 			}
 
 			// Also send down the old path for now.
@@ -3044,6 +3045,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = message;
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 				LLNotificationsUtil::add("JoinGroup", args, payload);
+				make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 			}
 		}
 		break;
@@ -3676,6 +3678,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					//support for frienship offers from clients before July 2008
 				        LLNotificationsUtil::add("OfferFriendshipNoMessage", args, payload);
+				        make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 				else
 				{
@@ -3684,6 +3687,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				    params.substitutions = args;
 				    params.payload = payload;
 				    LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				    make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 			}
 		}

@@ -97,7 +97,7 @@
 				</text>
 			</panel>
 		</panel>
-		<panel label="Dźwięki interfejsu 1" name="UI Sounds tab 1">
+		<panel label="Interfejs 1" name="UI Sounds tab 1">
 			<text name="textFSExplanation_tab1">
 				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
 Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
@@ -240,7 +240,7 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOut"/>
 
 		</panel>
-		<panel label="Dźwięki interfejsu 2" name="UI Sounds tab 2">
+		<panel label="Interfejs 2" name="UI Sounds tab 2">
 			<text name="textFSExplanation_tab2">
 				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
 Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
@@ -358,12 +358,12 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Def_UISndFriendOffline" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFriendOffline"/>
 
-			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
-				Domyślny odgłos kroków:
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta znajomości." name="textFSFriendshipOffer">
+				Oferta znajomości:
 			</text>
-			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
-			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
-			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
+			<button name="Prev_UISndFriendshipOffer" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFriendshipOffer" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFriendshipOffer"/>
 
 			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się oferta teleportacji." name="textFSTeleportOffer">
 				Oferta teleportacji:
@@ -371,6 +371,34 @@ Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną war
 			<button name="Prev_UISndTeleportOffer" tool_tip="Podgląd dźwięku."/>
 			<button name="Def_UISndTeleportOffer" tool_tip="Resetuj do domyślnego UUID."/>
 			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndTeleportOffer"/>
+
+		</panel>
+		<panel label="Interfejs 3" name="UI Sounds tab 3">
+			<text name="textFSExplanation_tab3">
+				Możesz tutaj zmieniać (wpisując UUIDy), włączać lub wyłączać standardowe dźwięki interfejsu.
+Przytrzymaj kursor myszki ponad polem na UUID, aby zobaczyć jego domyślną wartość.
+			</text>
+
+			<text tool_tip="UUID dźwięku odgrywany, gdy rozlega się domyślny odgłos kroków. Zmiana wymaga restartu, aby odniosła skutek." name="textFSFootsteps">
+				Domyślny odgłos kroków:
+			</text>
+			<button name="Prev_UISndFootsteps" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndFootsteps" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndFootsteps"/>
+
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się zaproszenie do grupy." name="textFSGroupInvitation">
+				Zaproszenie do grupy:
+			</text>
+			<button name="Prev_UISndGroupInvitation" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndGroupInvitation" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndGroupInvitation"/>
+
+			<text tool_tip="UUID dźwięku odgrywany, gdy pojawia się ogłoszenie grupy." name="textFSGroupNotice">
+				Ogłoszenie grupy:
+			</text>
+			<button name="Prev_UISndGroupNotice" tool_tip="Podgląd dźwięku."/>
+			<button name="Def_UISndGroupNotice" tool_tip="Resetuj do domyślnego UUID."/>
+			<check_box label="Odtwarzaj dźwięk" name="PlayModeUISndGroupNotice"/>
 
 		</panel>
 	</tab_container>

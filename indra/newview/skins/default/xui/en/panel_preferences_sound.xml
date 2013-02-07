@@ -2963,22 +2963,22 @@ Hover your mouse cursor over UUID field to show its default value.
          left="5"
          height="14"
          width="150"
-         tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
-         name="textFSFootsteps">
-            Default footsteps:
+         tool_tip="Sound UUID played on friendship offer."
+         name="textFSFriendshipOffer">
+            Friendship offer:
         </text>
         <line_editor
-         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
+         tool_tip="67cc2844-00f3-2b3c-b991-6418d01e1bb7"
          follows="left|top"
          left_pad="5"
          height="20"
          max_length_chars="256"
-         name="UISndFootsteps"
-         control_name="UISndFootsteps"
+         name="UISndFriendshipOffer"
+         control_name="UISndFriendshipOffer"
          width="218"/>
         <button
          follows="left|top"
-         name="Prev_UISndFootsteps"
+         name="Prev_UISndFriendshipOffer"
          height="20"
          label="P"
          layout="topleft"
@@ -2988,11 +2988,11 @@ Hover your mouse cursor over UUID field to show its default value.
          tool_tip="Preview this sound.">
            <button.commit_callback
              function="PreviewUISound"
-             parameter="UISndFootsteps"/>
+             parameter="UISndFriendshipOffer"/>
         </button>
         <button
          follows="left|top"
-         name="Def_UISndFootsteps"
+         name="Def_UISndFriendshipOffer"
          height="20"
          label="D"
          layout="topleft"
@@ -3001,14 +3001,14 @@ Hover your mouse cursor over UUID field to show its default value.
          tool_tip="Reset to the default UUID.">
            <button.commit_callback
              function="ResetControl"
-             parameter="UISndFootsteps"/>
+             parameter="UISndFriendshipOffer"/>
         </button>
         <check_box
-         control_name="PlayModeUISndFootsteps"
+         control_name="PlayModeUISndFriendshipOffer"
          height="20"
          label="Play this sound"
          layout="topleft"
-         name="PlayModeUISndFootsteps"
+         name="PlayModeUISndFriendshipOffer"
          left_pad="1"
          width="120" />
 
@@ -3065,6 +3065,198 @@ Hover your mouse cursor over UUID field to show its default value.
          label="Play this sound"
          layout="topleft"
          name="PlayModeUISndTeleportOffer"
+         left_pad="1"
+         width="120" />
+
+    </panel>
+
+    <!-- UI Sounds 3 -->
+    <panel
+     top_pad="5"
+     bottom="-1"
+     left="1"
+     right="-1"
+     follows="all"
+     label="UI Sounds 3"
+     name="UI Sounds tab 3">
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="10"
+         left="5"
+         height="14"
+         width="520"
+         name="textFSExplanation_tab3">
+            Here you can change (by providing sound UUIDs), enable or disable default interface sounds.
+Hover your mouse cursor over UUID field to show its default value.
+        </text>
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="25"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on default footsteps. Change requires restart to take effect."
+         name="textFSFootsteps">
+            Default footsteps:
+        </text>
+        <line_editor
+         tool_tip="e8af4a28-aa83-4310-a7c4-c047e15ea0df"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndFootsteps"
+         control_name="UISndFootsteps"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndFootsteps"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndFootsteps"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndFootsteps"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndFootsteps"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndFootsteps"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndFootsteps"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on group invitation."
+         name="textFSGroupInvitation">
+            Group invitation:
+        </text>
+        <line_editor
+         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndGroupInvitation"
+         control_name="UISndGroupInvitation"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndGroupInvitation"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndGroupInvitation"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndGroupInvitation"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndGroupInvitation"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndGroupInvitation"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndGroupInvitation"
+         left_pad="1"
+         width="120" />
+
+        <text
+         layout="topleft"
+         follows="left|top"
+         top_pad="7"
+         left="5"
+         height="14"
+         width="150"
+         tool_tip="Sound UUID played on group notice."
+         name="textFSGroupNotice">
+            Group notice:
+        </text>
+        <line_editor
+         tool_tip="c825dfbc-9827-7e02-6507-3713d18916c1"
+         follows="left|top"
+         left_pad="5"
+         height="20"
+         max_length_chars="256"
+         name="UISndGroupNotice"
+         control_name="UISndGroupNotice"
+         width="218"/>
+        <button
+         follows="left|top"
+         name="Prev_UISndGroupNotice"
+         height="20"
+         label="P"
+         layout="topleft"
+         top_delta="-1"
+         left_pad="1"
+         width="17"
+         tool_tip="Preview this sound.">
+           <button.commit_callback
+             function="PreviewUISound"
+             parameter="UISndGroupNotice"/>
+        </button>
+        <button
+         follows="left|top"
+         name="Def_UISndGroupNotice"
+         height="20"
+         label="D"
+         layout="topleft"
+         left_pad="1"
+         width="15"
+         tool_tip="Reset to the default UUID.">
+           <button.commit_callback
+             function="ResetControl"
+             parameter="UISndGroupNotice"/>
+        </button>
+        <check_box
+         control_name="PlayModeUISndGroupNotice"
+         height="20"
+         label="Play this sound"
+         layout="topleft"
+         name="PlayModeUISndGroupNotice"
          left_pad="1"
          width="120" />
 
