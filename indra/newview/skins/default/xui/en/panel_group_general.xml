@@ -113,6 +113,7 @@ Hover your mouse over the options for more help.
      layout="topleft" />
 
     <text_editor
+     bg_readonly_color="Transparent"
      name="charter"
      left_pad="4"
      top_pad="-109"
