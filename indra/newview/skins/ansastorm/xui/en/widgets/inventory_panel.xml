@@ -2,7 +2,7 @@
 <panel
   bg_opaque_color="DkGray2_10"
   bg_alpha_color="DkGray2_10"
-  background_visible="true"
+  background_visible="false"
   background_opaque="false"
   show_load_status="true"
   accepts_drag_and_drop="true"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-background_visible="true"
+background_visible="false"
  follows="all"
  height="570"
  label="Group Profile"
@@ -121,8 +121,8 @@ background_visible="true"
    <layout_panel
        bg_alpha_color="SL-Background_66"
        bg_opaque_color="SL-Background_66"
-       background_visible="true"
-       background_opaque="true"
+       background_visible="false"
+       background_opaque="false"
        name="group_accordions"
        follows="all"
        layout="topleft"

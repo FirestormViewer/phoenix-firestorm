@@ -2,8 +2,8 @@
 <panel
   bg_opaque_color="inventory_bg_color"
   bg_alpha_color="inventory_bg_color_a"
-  background_visible="true"
-  background_opaque="true"
+  background_visible="false"
+  background_opaque="false"
   show_load_status="true"
   accepts_drag_and_drop="true"
   >

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
+ background_visible="false"
  bevel_style="in"
  follows="all"
  height="570"
@@ -170,8 +170,8 @@
      use_ellipses="true"
      width="354" />
     <panel
-     background_opaque="true"
-     background_visible="true"
+     background_opaque="false"
+     background_visible="false"
      bg_alpha_color="DkGray2"
      bg_opaque_color="DkGray2"
      border="false"

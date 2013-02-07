@@ -26,7 +26,7 @@ width="415">
    value="Changing outfits" />
    <panel
    background_opaque="false"
-   background_visible="true"
+   background_visible="false"
    bg_alpha_color="SL-Background_66"
    left="10"
    top="5"

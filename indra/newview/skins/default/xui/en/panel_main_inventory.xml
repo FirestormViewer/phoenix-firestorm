@@ -95,8 +95,8 @@
   <tab_container
      bg_alpha_color="DkGray"
      bg_opaque_color="DkGray"
-     background_visible="true"
-     background_opaque="true"
+     background_visible="false"
+     background_opaque="false"
      follows="all"
      halign="center"
      height="340"
