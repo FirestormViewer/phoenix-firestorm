@@ -358,8 +358,8 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndFriendOffline" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndFriendOffline"/>
 
-		<text tool_tip="Sound UUID played on friendship offer." name="textFSFriendshipOffer">
-			Friendship offer:
+		<text tool_tip="UUID des Klangs für Freundschafts-Angebote." name="textFSFriendshipOffer">
+			Freundschafts-Angebote:
 		</text>
 		<button label="V" name="Prev_UISndFriendshipOffer" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndFriendshipOffer" tool_tip="Auf Standardwert zurücksetzen."/>
@@ -387,15 +387,15 @@ Der jeweilige Standardwert wird im Hovertip des UUID-Feldes angezeigt.
 		<button label="S" name="Def_UISndFootsteps" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndFootsteps"/>
 
-		<text tool_tip="Sound UUID played on group invitation." name="textFSGroupInvitation">
-			Group invitation:
+		<text tool_tip="UUID des Klangs für Gruppeneinladungen." name="textFSGroupInvitation">
+			Gruppeneinladungen:
 		</text>
 		<button label="V" name="Prev_UISndGroupInvitation" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndGroupInvitation" tool_tip="Auf Standardwert zurücksetzen."/>
 		<check_box label="Abspielen" name="PlayModeUISndGroupInvitation"/>
 
-		<text tool_tip="Sound UUID played on group notice." name="textFSGroupNotice">
-			Group notice:
+		<text tool_tip="UUID des Klangs für Gruppennachrichten." name="textFSGroupNotice">
+			Gruppennachrichten:
 		</text>
 		<button label="V" name="Prev_UISndGroupNotice" tool_tip="Vorschau zu diesem Sound."/>
 		<button label="S" name="Def_UISndGroupNotice" tool_tip="Auf Standardwert zurücksetzen."/>
