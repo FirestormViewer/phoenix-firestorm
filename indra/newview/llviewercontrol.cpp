@@ -675,7 +675,7 @@ static void handleNetMapDoubleClickActionChanged()
 // </FS:Ansariel> Synchronize tooltips throughout instances
 
 // <FS:Ansariel> Clear places / teleport history search filter
-static void handleUseStandaloneTeleportHistoryFloater()
+static void handleUseStandaloneTeleportHistoryFloaterChanged()
 {
 	LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
 	if (places)
@@ -868,7 +868,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
 
 	// <FS:Ansariel> Clear places / teleport history search filter
-	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloater));
+	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));
 }
 
 #if TEST_CACHED_CONTROL
