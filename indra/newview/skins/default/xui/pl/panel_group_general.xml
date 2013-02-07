@@ -28,7 +28,7 @@ By otrzymać dodatkowe wskazówki przytrzymuj kursor ponad opcjami.
 		<text name="join_cost_text">
 			Wstęp wolny
 		</text>
-		<button label="DOŁĄCZ!" name="btn_join"/>
+		<button label="Dołącz!" name="btn_join"/>
 		<name_list name="visible_members">
 			<name_list.columns label="Członek" name="name"/>
 			<name_list.columns label="Tytuł" name="title"/>

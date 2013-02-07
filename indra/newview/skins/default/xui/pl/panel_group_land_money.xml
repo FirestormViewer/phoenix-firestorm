@@ -48,19 +48,19 @@
 		Należy zwiększyć kredyt na używanie działek.
 	</text>
 	<tab_container name="group_money_tab_container">
-		<panel label="PLANOWANIE" name="group_money_planning_tab">
+		<panel label="Planowanie" name="group_money_planning_tab">
 			<text_editor name="group_money_planning_text">
 				Ładowanie...
 			</text_editor>
 		</panel>
-		<panel label="SZCZEGÓŁY" name="group_money_details_tab">
+		<panel label="Szczegóły" name="group_money_details_tab">
 			<text_editor name="group_money_details_text">
 				Ładowanie...
 			</text_editor>
 			<button name="earlier_details_button" tool_tip="Wcześniej"/>
 			<button name="later_details_button" tool_tip="Później"/>
 		</panel>
-		<panel label="SPRZEDAŻ" name="group_money_sales_tab">
+		<panel label="Sprzedaż" name="group_money_sales_tab">
 			<text_editor name="group_money_sales_text">
 				Ładowanie...
 			</text_editor>

@@ -1807,6 +1807,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="SummaryForTheWeek" value="Podsumowanie dla tego tygodnia, począwszy od "/>
 	<string name="NextStipendDay" value="Następna wypłata będzie w "/>
+	<string name="GroupPlanningDate">
+		[day,datetime,utc].[mthnum,datetime,utc].[year,datetime,utc]
+	</string>
 	<string name="GroupIndividualShare" value="                      Grupa       Udziały Indywidualne"/>
 	<string name="GroupColumn" value="                      Grupa"/>
 	<string name="Balance">
@@ -2162,6 +2165,9 @@ Spróbuj zalogować się ponownie za minutę.
 	</string>
 	<string name="GroupMoneyDebits">
 		Obciążenia
+	</string>
+	<string name="GroupMoneyDate">
+		[weekday,datetime,utc], [day,datetime,utc] [mth,datetime,utc] [year,datetime,utc]
 	</string>
 	<string name="ViewerObjectContents">
 		Zawartość
@@ -4380,7 +4386,7 @@ Raport o Nadużyciu
 		Kobieta - Wow
 	</string>
 	<string name="AvatarBirthDateFormat">
-		[mthnum,datetime,slt]/[day,datetime,slt]/[year,datetime,slt]
+		[day,datetime,slt].[mthnum,datetime,slt].[year,datetime,slt]
 	</string>
 	<string name="DefaultMimeType">
 		brak/brak

@@ -14,31 +14,26 @@
 	<string name="server_forbidden_text">
 		Informacje o miejscu są niedostępne z powodu braku dostępu. Prosimy sprawdzić swoje prawa z właścicielem działki.
 	</string>
-
 	<layout_stack name="place_info_sidetray_main">
 		<layout_panel name="header_container">
-
-	<button name="back_btn" tool_tip="Cofnij"/>
-	<text name="title" value="Profil miejsca"/>
-
+			<button name="back_btn" tool_tip="Cofnij"/>
+			<text name="title" value="Profil miejsca"/>
 		</layout_panel>
 		<layout_panel name="place_info_content">
-
-	<text name="maturity_value" value="nieznany"/>
-	<panel name="description_panel">
-		<expandable_text name="description" value="(ładowanie...)"/>
-	</panel>
-	<panel name="landmark_info_panel">
-		<text name="owner_label" value="Właściciel:"/>
-		<text name="creator_label" value="Twórca:"/>
-		<text name="created_label" value="Data:"/>
-	</panel>
-	<panel name="landmark_edit_panel">
-		<text name="title_label" value="Tytuł:"/>
-		<text name="notes_label" value="Moje notatki:"/>
-		<text name="folder_label" value="Lokalizacja:"/>
-	</panel>
-
+			<text name="maturity_value" value="nieznany"/>
+			<panel name="description_panel">
+				<expandable_text name="description" value="(ładowanie...)"/>
+			</panel>
+			<panel name="landmark_info_panel">
+				<text name="owner_label" value="Właściciel:"/>
+				<text name="creator_label" value="Twórca:"/>
+				<text name="created_label" value="Data:"/>
+			</panel>
+			<panel name="landmark_edit_panel">
+				<text name="title_label" value="Tytuł:"/>
+				<text name="notes_label" value="Moje notatki:"/>
+				<text name="folder_label" value="Lokalizacja:"/>
+			</panel>
 		</layout_panel>
 	</layout_stack> 
 </panel>
