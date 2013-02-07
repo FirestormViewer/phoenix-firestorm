@@ -260,7 +260,7 @@
         <panel
          border="false"
          follows="all"
-         label="PLANNING"
+         label="Planning"
          layout="topleft"
          left="0"
          help_topic="group_money_planning_tab"
@@ -290,7 +290,7 @@
         <panel
          border="false"
          follows="all"
-         label="DETAILS"
+         label="Details"
          layout="topleft"
          left="0"
          help_topic="group_money_details_tab"
@@ -338,7 +338,7 @@
         <panel
          border="false"
          follows="all"
-         label="SALES"
+         label="Sales"
          layout="topleft"
          left="0"
          help_topic="group_money_sales_tab"

@@ -146,7 +146,7 @@ Hover your mouse over the options for more help.
      left_pad="4"
      right="-1"
      height="20"
-     label="JOIN NOW!"
+     label="Join now!"
      visible="true"
      follows="top|right"
      layout="topleft" />

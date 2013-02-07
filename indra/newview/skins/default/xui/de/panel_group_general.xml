@@ -28,7 +28,7 @@ Bewegen Sie die Maus über die Optionen, um weitere Informationen anzuzeigen.
 		<text name="join_cost_text" width="230">
 			Kostenlos
 		</text>
-		<button label="JETZT BEITRETEN!" name="btn_join" />
+		<button label="Jetzt beitreten!" name="btn_join" />
 		<name_list name="visible_members">
 			<name_list.columns label="Mitglied" name="name" relwidth="0.40"/>
 			<name_list.columns label="Titel" name="title" relwidth="0.25"/>
