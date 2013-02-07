@@ -5089,6 +5089,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Mouselook_Label">
 		Mouselook-Modus
 	</string>
+	<string name="Command_Landmark_Here_Label">
+		Landmarke erstellen
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5211,6 +5214,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Mouselook-Modus aktivieren (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Erstellt eine Landmarke an der aktuellen Position
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
