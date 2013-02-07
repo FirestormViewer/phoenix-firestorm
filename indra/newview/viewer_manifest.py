@@ -1231,7 +1231,7 @@ class LinuxManifest(ViewerManifest):
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),self.channel_oneword(),'-'.join(self.args['version'])))
 
 
 class Linux_i686Manifest(LinuxManifest):
