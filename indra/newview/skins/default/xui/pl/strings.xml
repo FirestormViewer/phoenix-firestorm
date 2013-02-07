@@ -4652,6 +4652,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Mouselook_Label">
 		Tryb pierwszoosobowy
 	</string>
+	<string name="Command_Landmark_Here_Label">
+		Utwórz Landmark
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4771,6 +4774,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Wejście w tryb pierwszoosobowy, widoku z oczu awatara (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Utwórz Landmark Twojej bieżącej pozycji
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
