@@ -3,7 +3,7 @@
 	#include "lscript_tree.h"
 
     #ifdef __cplusplus
-    extern "C" {
+    extern //"C" {
     #endif
 
 	int yylex(void);
@@ -21,7 +21,7 @@
 	#endif
 
     #ifdef __cplusplus
-    }
+    //}
     #endif
 %}
 
