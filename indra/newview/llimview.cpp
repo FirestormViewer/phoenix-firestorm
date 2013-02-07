@@ -2642,6 +2642,19 @@ void LLIMMgr::addMessage(
 	bool new_session = !hasSession(new_session_id);
 	if (new_session)
 	{
+		// <FS:Ansariel> Clear muted group chat early to prevent contacts floater
+		//               (re-)gaining focus; the server already knows the correct
+		//               session id, so we can leave it!
+		if (exoGroupMuteList::instance().isMuted(new_session_id))
+		{
+			llinfos << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << llendl;
+			clearPendingInvitation(new_session_id);
+			clearPendingAgentListUpdates(new_session_id);
+			LLIMModel::getInstance()->sendLeaveSession(new_session_id, other_participant_id);
+			return;
+		}
+		// </FS:Ansariel>
+
 		LLIMModel::getInstance()->newSession(new_session_id, fixed_session_name, dialog, other_participant_id);
 
 		// When we get a new IM, and if you are a god, display a bit
@@ -2667,9 +2680,7 @@ void LLIMMgr::addMessage(
 
 		// Logically it would make more sense to reject the session sooner, in another area of the
 		// code, but the session has to be established inside the server before it can be left.
-		//if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
-		if ((LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
-			|| exoGroupMuteList::instance().isMuted(new_session_id)) // <exodus/>
+		if (LLMuteList::getInstance()->isMuted(other_participant_id) && !LLMuteList::getInstance()->isLinden(from))
 		{
 			llwarns << "Leaving IM session from initiating muted resident " << from << llendl;
 			if(!gIMMgr->leaveSession(new_session_id))
