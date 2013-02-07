@@ -113,7 +113,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_OSX_SYSROOT macosx10.6)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvmgcc42")
       
-  set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf)
+  set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT dwarf-with-dsym)
 
   # NOTE: To attempt an i386/PPC Universal build, add this on the configure line:
   # -DCMAKE_OSX_ARCHITECTURES:STRING='i386;ppc'

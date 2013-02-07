@@ -429,12 +429,4 @@
            execute_function="View.Mouselook"
            is_enabled_function="View.EnableMouselook"
            />
-  <command name="landmark_here"
-           available_in_toybox="true"
-           icon="landmark_here"
-           label_ref="Command_Landmark_Here_Label"
-           tooltip_ref="Command_Landmark_Here_Tooltip"
-           execute_function="World.CreateLandmark"
-           is_enabled_function="World.EnableCreateLandmark"
-           />
 </commands>
