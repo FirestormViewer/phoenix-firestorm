@@ -4977,7 +4977,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
-  <string name="BusyResponse">busy reponse</string>
+  <string name="BusyResponse">busy response</string>
   
   <string name="TeleportMaturityExceeded">The Resident cannot visit this region.</string>
 
