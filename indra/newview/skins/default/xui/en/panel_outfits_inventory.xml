@@ -3,7 +3,7 @@
  bg_alpha_color="Transparent"
  bg_opaque_color="Transparent"
  background_opaque="false"
- background_visible="true"
+ background_visible="false"
   follows="all"
  height="575"
  label="Things"
@@ -35,7 +35,7 @@
            filename="panel_outfits_list.xml"
            height="520"
            name="outfitslist_tab"
-           background_visible="true"
+           background_visible="false"
            bg_alpha_color="SL-Background_66"
            help_topic="my_outfits_tab"
            follows="all"
@@ -43,7 +43,7 @@
            layout="topleft"
            right="-1" />
          <panel
-           background_visible="true"
+           background_visible="false"
            bg_alpha_color="SL-Background_66"
            class="panel_wearing"
            filename="panel_outfits_wearing.xml"
@@ -57,7 +57,7 @@
    </tab_container>
 
    <panel
-       background_visible="true"
+       background_visible="false"
        follows="bottom|left|right"
        height="27"
        layout="topleft"

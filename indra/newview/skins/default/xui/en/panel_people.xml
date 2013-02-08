@@ -117,7 +117,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
      width="326	">
          <panel
          background_opaque="false"
-         background_visible="true"
+         background_visible="false"
          follows="all"
          height="383"
          label="Nearby"
@@ -236,7 +236,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
 <!--  Buttons -->
 
             <panel
-             background_visible="true"
+             background_visible="false"
              follows="left|right|bottom"
              height="27"
              label="bottom_panel"
@@ -305,8 +305,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
 <!-- END NEARBY TAB -->        
         
         <panel
-         background_opaque="true"
-         background_visible="true"
+         background_opaque="false"
+         background_visible="false"
          follows="all"
          height="383"
          label="Friends"
@@ -334,14 +334,14 @@ Looking for people to hang out with? Use the search box to find topics or conten
                  title="Online">
 //-->
             <tab_container
-             left_delta="-1"
              name="friends_accordion"
              follows="all"
-             background_visible="true"
+             background_visible="false"
              bg_alpha_color="Transparent"
              bg_opaque_color="Transparent"
              height="356"
              layout="topleft"
+             left_delta="-1"
              tab_group="1"
              tab_position="top"
              halign="center"
@@ -400,7 +400,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
             </tab_container>
 
             <panel
-             background_visible="true"
+             background_visible="false"
              follows="left|right|bottom"
              height="27"
              label="bottom_panel"
@@ -538,8 +538,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
              wrap="true" />
         </panel>
         <panel
-         background_opaque="true"
-         background_visible="true"
+         background_opaque="false"
+         background_visible="false"
          follows="all"
          height="383"
          label="Groups"
@@ -560,7 +560,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              top_pad="0"
              width="326" />
             <panel
-             background_visible="true"
+             background_visible="false"
              follows="left|right|bottom"
              height="27"
              label="bottom_panel"
@@ -616,8 +616,8 @@ Looking for people to hang out with? Use the search box to find topics or conten
             </panel>
         </panel>
         <panel
-         background_opaque="true"
-         background_visible="true"
+         background_opaque="false"
+         background_visible="false"
          follows="all"
          height="383"
          label="Recent"
@@ -636,7 +636,7 @@ Looking for people to hang out with? Use the search box to find topics or conten
              top_pad="0"
              width="326" />
             <panel
-             background_visible="true"
+             background_visible="false"
              follows="left|right|bottom"
              height="27"
              label="bottom_panel"

@@ -37,6 +37,8 @@ public:
 
 	BOOL postBuild();
 
+	void resetFilter();
+
 private:
 	void onFilterEdit(const std::string& search_string, bool force_filter);
 

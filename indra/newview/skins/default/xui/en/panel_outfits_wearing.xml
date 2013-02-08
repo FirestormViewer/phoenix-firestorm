@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
- background_visible="true"
+ background_visible="false"
  bg_alpha_color="DkGray"
  follows="all"
  height="430"
@@ -21,7 +21,7 @@
      width="309"
      worn_indication_enabled="false" />
     <panel
-     background_visible="true"
+     background_visible="false"
      follows="bottom|left|right"
      height="28"
      layout="topleft"

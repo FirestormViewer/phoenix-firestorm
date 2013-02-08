@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel name="Teleport History" bottom="0" height="400" left="0" width="313"
      help_topic="panel_teleport_history"
-     border="false" follows="left|top|right|bottom"
-     background_visible="true"
-     bg_alpha_color="SL-Background_66">
+     border="false" follows="left|top|right|bottom">
     <accordion
      follows="left|top|right|bottom"
-     height="373"
+     height="371"
      layout="topleft"
      left="3"
      top="0"
      name="history_accordion"
-     background_visible="true"
-     bg_alpha_color="Transparent"
      width="307">
         <no_matched_tabs_text
          name="no_matched_teleports_msg"
@@ -148,7 +144,6 @@
 	    </accordion_tab>
     </accordion>
     <panel
-     background_visible="true"
      bevel_style="none"
      bottom="0"
      follows="left|right|bottom"
@@ -177,7 +172,7 @@
          layout="topleft"
          left_pad="1"
          name="dummy_icon"
-         width="273"
+         width="275"
         />
     </panel>
 </panel>

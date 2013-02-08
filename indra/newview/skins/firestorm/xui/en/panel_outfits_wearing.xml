@@ -19,7 +19,7 @@
      width="309"
      worn_indication_enabled="false" />
     <panel
-     background_visible="true"
+     background_visible="false"
      follows="bottom|left|right"
      height="28"
      layout="topleft"

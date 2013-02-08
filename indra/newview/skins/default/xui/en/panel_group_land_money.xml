@@ -260,7 +260,7 @@
         <panel
          border="false"
          follows="all"
-         label="PLANNING"
+         label="Planning"
          layout="topleft"
          left="0"
          help_topic="group_money_planning_tab"
@@ -268,6 +268,7 @@
          top="0"
          width="313">
             <text_editor
+             bg_visible="false"
              font="Monospace"
              enabled="false"
              type="string"
@@ -289,7 +290,7 @@
         <panel
          border="false"
          follows="all"
-         label="DETAILS"
+         label="Details"
          layout="topleft"
          left="0"
          help_topic="group_money_details_tab"
@@ -297,6 +298,7 @@
          top="0"
          width="313">
         <text_editor
+         bg_visible="false"
          enabled="false"
          type="string"
          follows="all"
@@ -336,7 +338,7 @@
         <panel
          border="false"
          follows="all"
-         label="SALES"
+         label="Sales"
          layout="topleft"
          left="0"
          help_topic="group_money_sales_tab"
@@ -344,6 +346,7 @@
          top="0"
          width="313">
         <text_editor
+         bg_visible="false"
          enabled="false"
          type="string"
          follows="all"

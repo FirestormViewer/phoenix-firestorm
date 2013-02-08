@@ -22,7 +22,7 @@
      width="309">
     </accordion>
     <panel
-     background_visible="true"
+     background_visible="false"
 	 follows="bottom|left|right"
 	 height="28"
 	 layout="topleft"

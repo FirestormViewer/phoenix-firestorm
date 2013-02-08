@@ -59,7 +59,7 @@
 
         <panel
          name="members_sub_tab"
-         label="MEMBERS"
+         label="Members"
          tool_tip="Members"
          help_topic="roles_members_tab"
          left="0"
@@ -156,7 +156,7 @@ clicking on their names.
 
         <panel
          name="roles_sub_tab"
-         label="ROLES"
+         label="Roles"
          tool_tip="Roles"
          help_topic="roles_roles_tab"
          left="0"
@@ -262,7 +262,7 @@ including the Everyone and Owner Roles.
 
         <panel
          name="actions_sub_tab"
-         label="ABILITIES"
+         label="Abilities"
          tool_tip="You can view an Ability&apos;s Description and which Roles and Members can execute the Ability."
          help_topic="roles_actions_tab"
          left="0"
