@@ -19869,5 +19869,20 @@ Change of this parameter will affect the layout of buttons in notification toast
         <key>Value</key>
         <string>Default.tga</string>
     </map>
+    <key>FSLoginDontSavePassword</key>
+    <map>
+      <key>Comment</key>
+      <string>Internal setting used to indicate that passwords shouldn't be saved if --login cmdline switch is used.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>HideFromEditor</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+	  <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>

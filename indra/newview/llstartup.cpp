@@ -858,8 +858,22 @@ bool idle_startup()
 		}
 		else if (gSavedSettings.getBOOL("AutoLogin"))  
 		{
-			gRememberPassword = TRUE;
-			gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			// <FS:Ansariel> Option to not save password if using login cmdline switch;
+			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
+			//               so we end up here!
+			//gRememberPassword = TRUE;
+			//gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
+			{
+				gRememberPassword = FALSE;
+			}
+			else
+			{
+				gRememberPassword = TRUE;
+				gSavedSettings.setBOOL("RememberPassword", TRUE);
+			}
+			// </FS:Ansariel>
+
 			show_connect_box = false;    			
 		}
 		else 
@@ -1050,7 +1064,13 @@ bool idle_startup()
 		{  
 			userid = gUserCredential->userID();                                                                    
 		}
-		gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		// <FS:Ansariel> Option to not save password if using login cmdline switch
+		//gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		if (!gSavedSettings.getBOOL("FSLoginDontSavePassword"))
+		{
+			gSavedSettings.setBOOL("RememberPassword", gRememberPassword);
+		}
+		// </FS:Ansariel>
 		LL_INFOS("AppInit") << "Attempting login as: " << userid << LL_ENDL;                                           
 //		gDebugInfo["LoginName"] = userid;                                                                              
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b

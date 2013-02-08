@@ -3099,6 +3099,13 @@ bool LLAppViewer::initConfiguration()
 		// the login location will be set by the login panel (see LLPanelLogin)
 	}
 
+	// <FS:Ansariel> Option to not save password if using login cmdline switch
+	if (clp.hasOption("logindontsavepassword") && clp.hasOption("login"))
+	{
+		gSavedSettings.setBOOL("FSLoginDontSavePassword", TRUE);
+	}
+	// </FS:Ansariel>
+
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
 	loadColorSettings();
