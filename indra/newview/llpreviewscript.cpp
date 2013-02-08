@@ -1312,6 +1312,8 @@ bool LLScriptEdContainer::onBackupTimer()
 		if (mBackupFilename.empty())
 			mBackupFilename = getBackupFileName();
 		mScriptEd->writeToFile(mBackupFilename, true);
+
+		llinfos << "Backing up script to " << mBackupFilename << llendl;
 	}
 	return false;
 }

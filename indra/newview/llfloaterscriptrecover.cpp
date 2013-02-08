@@ -32,6 +32,18 @@
 
 #include "llfloaterscriptrecover.h"
 
+const std::string NEW_LSL_NAME = "New Script";
+
+std::string fixNewScriptDefaulName(const std::string& scriptName)
+{
+	std::string fixedScriptName = scriptName;
+	if (scriptName == NEW_LSL_NAME)
+	{
+		LLStringUtil::replaceChar(fixedScriptName, ' ', '_');
+	}
+	return fixedScriptName;
+}
+
 // ============================================================================
 // LLFloaterScriptRecover
 //
@@ -207,8 +219,12 @@ bool LLScriptRecoverQueue::recoverNext()
 	std::string strItemDescr;
 	LLViewerAssetType::generateDescriptionFor(LLAssetType::AT_LSL_TEXT, strItemDescr);
 
+	// Ansariel: Need to work around a bug preventing us from creating a
+	//           script with the default name for new scripts
+	std::string strScriptName = fixNewScriptDefaulName(itFile->second["name"].asString());
+
 	create_inventory_item(gAgent.getID(), gAgent.getSessionID(), idFNF, LLTransactionID::tnull, 
-	                      itFile->second["name"].asString(), strItemDescr, LLAssetType::AT_LSL_TEXT, LLInventoryType::IT_LSL,
+	                      strScriptName, strItemDescr, LLAssetType::AT_LSL_TEXT, LLInventoryType::IT_LSL,
 	                      NOT_WEARABLE, PERM_MOVE | PERM_TRANSFER, new LLCreateRecoverScriptCallback(this));
 	return true;
 }
@@ -225,7 +241,7 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 	std::string strFileName;
 	for (filename_queue_t::iterator itFile = m_FileQueue.begin(); itFile != m_FileQueue.end(); ++itFile)
 	{
-		if (itFile->second["name"].asString() != pItem->getName())
+		if (fixNewScriptDefaulName(itFile->second["name"].asString()) != pItem->getName())
 			continue;
 		strFileName = itFile->second["path"].asString();
 		itFile->second["item"] = idItem;
@@ -245,14 +261,25 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 
 void LLScriptRecoverQueue::onSavedScript(const LLUUID& idItem, const LLSD&, bool fSuccess)
 {
-	const LLViewerInventoryItem* pItem = gInventory.getItem(idItem);
-	if (pItem)
+	LLPointer<LLViewerInventoryItem> pItem = gInventory.getItem(idItem);
+	if (pItem.notNull())
 	{
 		filename_queue_t::iterator itFile = m_FileQueue.begin();
 		while ( (itFile != m_FileQueue.end()) && ((!itFile->second.has("item")) || (itFile->second["item"].asUUID() != idItem)) )
 			++itFile;
 		if (itFile != m_FileQueue.end())
 		{
+			// Ansariel: Rename back scripts with default name
+			std::string strScriptName = itFile->second["name"].asString();
+			if (strScriptName == NEW_LSL_NAME)
+			{
+				LLPointer<LLViewerInventoryItem> pNewItem = new LLViewerInventoryItem(pItem);
+				pNewItem->rename(strScriptName);
+				pNewItem->updateServer(FALSE);
+				gInventory.updateItem(pNewItem);
+				gInventory.notifyObservers();
+			}
+
 			LLFile::remove(itFile->first);
 			m_FileQueue.erase(itFile);
 		}
