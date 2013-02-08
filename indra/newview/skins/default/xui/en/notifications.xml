@@ -9429,7 +9429,7 @@ Failed to place object at specified location.  Please try again.
    name="NoOwnNoGardening"
    type="notify">
    <tag>fail</tag>
-You Can't create trees and grass on land you don't own.
+You can't create trees and grass on land you don't own.
   </notification>
 
   <notification
@@ -9609,7 +9609,7 @@ You cannot copy your selection because you do not have permission to copy the ob
    name="NoTransNoSelCopy"
    type="notify">
    <tag>fail</tag>
-You cannot copy your selection because the object '[OBJ_NAME]' is not transferrable.
+You cannot copy your selection because the object '[OBJ_NAME]' is not transferable.
   </notification>
 
   <notification
@@ -9617,7 +9617,7 @@ You cannot copy your selection because the object '[OBJ_NAME]' is not transferra
    name="NoTransNoCopy"
    type="notify">
    <tag>fail</tag>
-You cannot copy your selection because the object '[OBJ_NAME]' is not transferrable.
+You cannot copy your selection because the object '[OBJ_NAME]' is not transferable.
   </notification>
 
   <notification
@@ -10586,7 +10586,7 @@ Can't divide land.\nThere is more than one parcel selected.\nTry selecting a sma
    name="CantDivideLandCantFindParcel"
    type="notify">
    <tag>fail</tag>
-Can't divide land.\nCan't find the parcel.\nPlease report with Help -> Reprt Bug...
+Can't divide land.\nCan't find the parcel.\nPlease report with Help -> Report Bug...
   </notification>
 
   <notification
