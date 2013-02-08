@@ -34,7 +34,7 @@
 
 const std::string NEW_LSL_NAME = "New Script";
 
-std::string fixNewScriptDefaulName(const std::string& scriptName)
+std::string fixNewScriptDefaultName(const std::string& scriptName)
 {
 	std::string fixedScriptName = scriptName;
 	if (scriptName == NEW_LSL_NAME)
@@ -221,7 +221,7 @@ bool LLScriptRecoverQueue::recoverNext()
 
 	// Ansariel: Need to work around a bug preventing us from creating a
 	//           script with the default name for new scripts
-	std::string strScriptName = fixNewScriptDefaulName(itFile->second["name"].asString());
+	std::string strScriptName = fixNewScriptDefaultName(itFile->second["name"].asString());
 
 	create_inventory_item(gAgent.getID(), gAgent.getSessionID(), idFNF, LLTransactionID::tnull, 
 	                      strScriptName, strItemDescr, LLAssetType::AT_LSL_TEXT, LLInventoryType::IT_LSL,
@@ -241,7 +241,7 @@ void LLScriptRecoverQueue::onCreateScript(const LLUUID& idItem)
 	std::string strFileName;
 	for (filename_queue_t::iterator itFile = m_FileQueue.begin(); itFile != m_FileQueue.end(); ++itFile)
 	{
-		if (fixNewScriptDefaulName(itFile->second["name"].asString()) != pItem->getName())
+		if (fixNewScriptDefaultName(itFile->second["name"].asString()) != pItem->getName())
 			continue;
 		strFileName = itFile->second["path"].asString();
 		itFile->second["item"] = idItem;
