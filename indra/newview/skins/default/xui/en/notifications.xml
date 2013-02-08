@@ -353,7 +353,7 @@ Save all changes to clothing/body parts?
    icon="alertmodal.tga"
    name="FriendsAndGroupsOnly"
    type="alertmodal">
-    Non-friends won't know that you've choosen to ignore their calls and instant messages.
+    Non-friends won't know that you've chosen to ignore their calls and instant messages.
     <usetemplate
      name="okbutton"
      yestext="OK"/>
@@ -1420,7 +1420,7 @@ Unable to give inventory item.
    icon="alertmodal.tga"
    name="TransactionCancelled"
    type="alertmodal">
-Transaction cancelled.
+Transaction canceled.
   </notification>
 
   <notification
@@ -5883,21 +5883,21 @@ URL: [MOAPURL]
    icon="notifytip.tga"
    name="Cancelled"
    type="notifytip">
-Cancelled.
+Canceled.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledSit"
    type="notifytip">
-Cancelled Sit.
+Canceled Sit.
   </notification>
 
   <notification
    icon="notifytip.tga"
    name="CancelledAttach"
    type="notifytip">
-Cancelled Attach.
+Canceled Attach.
   </notification>
 
   <notification
@@ -6660,7 +6660,7 @@ Could not teleport closer to destination.
 	name="TPCancelled"
    persist="true"
 	type="notify">
-Teleport cancelled.
+Teleport canceled.
   </notification>
 
   <notification
@@ -7256,7 +7256,7 @@ Your L$ balance is shown in the upper-right.
     <tag>funds</tag>
 Thank you for your payment!
 
-Your L$ balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be cancelled. In that case, the purchase amount will be credited to your US$ balance.
+Your L$ balance will be updated when processing completes. If processing takes more than 20 mins, your transaction may be canceled. In that case, the purchase amount will be credited to your US$ balance.
 
 The status of your payment can be checked on your Transaction History page on your [http://secondlife.com/account/ Dashboard]
   </notification>
@@ -9265,7 +9265,7 @@ Disabling future updates for this file.
    persist="true"
    type="notify">
 Attempted to add an invalid or unreadable image file [FNAME] which could not be opened or decoded.
-Attempt cancelled.
+Attempt canceled.
   </notification>
 
   <notification
@@ -11025,7 +11025,7 @@ Your snapshot can now be viewed [http://www.flickr.com/photos/upload/edit/?ids=[
    icon="alertmodal.tga"
    name="FirstUseFlyOverride"
    type="alertmodal">
-Caution: Use the Fly Override responsibily! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel you are flying.
+Caution: Use the Fly Override responsibly! Using the Fly Override without the land owner's permission may result in your avatar being banned from the parcel in which you are flying.
     <usetemplate
      name="okbutton"
      yestext="OK"/>

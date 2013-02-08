@@ -2112,7 +2112,7 @@ Returns a list of position vectors indicating pathfinding waypoints between posi
 <string name="LSLTipText_llSetMemoryLimit" translate="false">
 integer llSetMemoryLimit(integer limit)
 Request limit bytes to be reserved for this script.
-Returns a success/failure flag (STATUS_OK when sucessful, another of the STATUS_* flags on failure) for whether the memory limit was set.
+Returns a success/failure flag (STATUS_OK when successful, another of the STATUS_* flags on failure) for whether the memory limit was set.
 Only relevant for Mono-compiled scripts.
 </string>
 <string name="LSLTipText_llGetMemoryLimit" translate="false">
