@@ -2218,7 +2218,7 @@
                 <array>
                   <string>--config</string>
                   <string>--version</string>
-		  <string>-DHAS_OPENSIM_SUPPORT:BOOL=ON</string>
+                  <string>-DHAS_OPENSIM_SUPPORT:BOOL=ON</string>
                 </array>
               </map>
               <key>name</key>
