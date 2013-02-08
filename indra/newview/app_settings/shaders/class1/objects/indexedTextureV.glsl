@@ -25,10 +25,7 @@
 
 ATTRIBUTE int texture_index;
 
-// <FS:ND> Fix for pink on old ATI drivers
-// VARYING_FLAT int vary_texture_index;
-VARYING int vary_texture_index;
-// </FS:ND>
+VARYING_FLAT int vary_texture_index;
 
 void passTextureIndex()
 {
