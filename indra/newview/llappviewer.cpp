@@ -2397,6 +2397,14 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 
 		BOOST_FOREACH(const SettingsFile& file, group.files)
 		{
+			// <FS:Ansariel> Skip quickprefs settings - we don't have a settings group
+			//               for it as it's not a regular settings file
+			if (file.name() == "QuickPreferences")
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
 			llinfos << "Attempting to load settings for the group " << file.name()
 			    << " - from location " << location_key << llendl;
 
