@@ -147,6 +147,7 @@
 			<menu_item_call label="Weź kopię" name="Take Copy"/>
 			<menu_item_call label="Duplikuj" name="Duplicate"/>
 			<menu_item_call label="Edytor cząsteczek" name="Menu Object Edit Particles"/>
+			<menu_item_call label="Zabierz z powrotem do Szafy" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Zapisz obiekt do Szafy" name="Save Object Back to My Inventory"/>
 			<menu_item_call label="Zapisz do zawartości obiektu" name="Save Object Back to Object Contents"/>
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
@@ -388,7 +389,7 @@
 			<menu_item_check label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
-			<menu_item_check label="Renderowanie opóźniane" name="Lighting and Shadows"/>
+			<menu_item_check label="Zaawansowane oświetlenie" name="Lighting and Shadows"/>
 			<menu_item_check label="Cienie Słońca, Księżyca i innych źródeł" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL" name="Debug GL"/>
@@ -471,9 +472,14 @@
 				<menu_item_call label="Testowa kobieta" name="Test Female"/>
 				<menu_item_check label="Pozwól na zaznaczanie awatarów" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="Szybkość animacji" name="Animation Speed">
+				<menu_item_call label="Wszystkie animacje 10% szybciej" name="All Animations 10 Faster"/>
+				<menu_item_call label="Wszystkie animacje 10% wolniej" name="All Animations 10 Slower"/>
+				<menu_item_call label="Resetuj szybkość wszystkich animacji" name="Reset All Animation Speed"/>
+				<menu_item_check label="Animacje w zwolnionym tempie" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="Powrót do domyślnych parametrów" name="Force Params to Default"/>
 			<menu_item_check label="Informacje o animacji" name="Animation Info"/>
-			<menu_item_check label="Animacje w zwolnionym tempie" name="Slow Motion Animations"/>
 			<menu_item_check label="Pokaż na co patrzą inni" name="Show Look At"/>
 			<menu_item_check label="Pokaż na co wskazują inni" name="Show Point At"/>
 			<menu_item_check label="Debuguj aktualizacje stawów" name="Debug Joint Updates"/>

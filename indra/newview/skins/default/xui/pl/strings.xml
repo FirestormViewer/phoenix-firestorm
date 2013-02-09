@@ -394,7 +394,7 @@ Spróbuj zalogować się ponownie za minutę.
 		Kliknij aby zobaczyć szczegóły tego miejsca
 	</string>
 	<string name="TooltipAgentUrl">
-		Kliknij aby zobaczyc profil Rezydenta
+		Kliknij aby zobaczyć profil Rezydenta
 	</string>
 	<string name="TooltipAgentInspect">
 		Dowiedz się więcej o tym Rezydencie
@@ -3929,7 +3929,7 @@ Jeżeli nadal otrzymujesz ten komunikat, skontaktuj się z [SUPPORT_SITE].
 		Region ogólny
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Awatary widoczne, czat poza działką dozwolony
+		Awatary wewnątrz tej działki nie mogą być widziane lub słyszane przez awatary, które są poza nią
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Obiekty poruszające się mogą nie zachowywać się poprawnie, póki region nie zostanie odświeżony.
