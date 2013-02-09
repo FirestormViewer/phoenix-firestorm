@@ -56,7 +56,7 @@ namespace nd
 	}
 }
 
-#ifdef ND_OVERRIDE_NEW
+#if ND_OVERRIDE_NEW
 void *operator new(size_t nSize )
 {
 	return nd::allocators::malloc( nSize, 16 );
