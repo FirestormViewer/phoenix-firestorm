@@ -2738,8 +2738,11 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		// </FS:Zi>
 			{
 				// let Control-Up and Control-Down through for chat line history,
+				//<FS:TS> Control-Right and Control-Left too for chat line editing
 				if (!(key == KEY_UP && mask == MASK_CONTROL)
-					&& !(key == KEY_DOWN && mask == MASK_CONTROL))
+					&& !(key == KEY_DOWN && mask == MASK_CONTROL)
+					&& !(key == KEY_LEFT && mask == MASK_CONTROL)
+					&& !(key == KEY_RIGHT && mask == MASK_CONTROL))
 				{
 					switch(key)
 					{
