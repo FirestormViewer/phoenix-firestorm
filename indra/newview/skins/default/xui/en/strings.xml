@@ -12,6 +12,7 @@
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="DOWNLOAD_URL">http://www.firestormviewer.org/downloads</string>
+	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
