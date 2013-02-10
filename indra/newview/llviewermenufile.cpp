@@ -396,10 +396,92 @@ const std::string upload_pick(void* data)
 // <FS:CR Threaded Filepickers>
 #endif
 
-static void show_floater_callback(const std::string& floater, const std::string& filename)
+// <FS:Ansariel> Add back validation checks for threaded filepickers
+//static void show_floater_callback(const std::string& floater, const std::string& filename)
+static void show_floater_callback(const std::string& floater, const std::string& filename, LLFilePicker::ELoadFilter type)
+// </FS:Ansariel>
 {
 	if (!filename.empty() && !floater.empty())
 	{
+		// <FS:Ansariel> Add back validation checks for threaded filepickers;
+		//               Copied from upload_pick()
+		std::string ext = gDirUtilp->getExtension(filename);
+
+		//strincmp doesn't like NULL pointers
+		if (ext.empty())
+		{
+			std::string short_name = gDirUtilp->getBaseFileName(filename);
+		
+			// No extension
+			LLSD args;
+			args["FILE"] = short_name;
+			LLNotificationsUtil::add("NoFileExtension", args);
+			return;
+		}
+		else
+		{
+			//so there is an extension
+			//loop over the valid extensions and compare to see
+			//if the extension is valid
+
+			//now grab the set of valid file extensions
+			std::string valid_extensions = build_extensions_string(type);
+
+			BOOL ext_valid = FALSE;
+		
+			typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+			boost::char_separator<char> sep(" ");
+			tokenizer tokens(valid_extensions, sep);
+			tokenizer::iterator token_iter;
+
+			//now loop over all valid file extensions
+			//and compare them to the extension of the file
+			//to be uploaded
+			for( token_iter = tokens.begin();
+				 token_iter != tokens.end() && ext_valid != TRUE;
+				 ++token_iter)
+			{
+				const std::string& cur_token = *token_iter;
+
+				if (cur_token == ext || cur_token == "*.*")
+				{
+					//valid extension
+					//or the acceptable extension is any
+					ext_valid = TRUE;
+				}
+			}//end for (loop over all tokens)
+
+			if (ext_valid == FALSE)
+			{
+				//should only get here if the extension exists
+				//but is invalid
+				LLSD args;
+				args["EXTENSION"] = ext;
+				args["VALIDS"] = valid_extensions;
+				LLNotificationsUtil::add("InvalidFileExtension", args);
+				return;
+			}
+		}//end else (non-null extension)
+
+		//valid file extension
+	
+		//now we check to see
+		//if the file is actually a valid image/sound/etc.
+		if (type == LLFilePicker::FFLOAD_WAV)
+		{
+			// pre-qualify wavs to make sure the format is acceptable
+			std::string error_msg;
+			if (check_for_invalid_wav_formats(filename,error_msg))
+			{
+				llinfos << error_msg << ": " << filename << llendl;
+				LLSD args;
+				args["FILE"] = filename;
+				LLNotificationsUtil::add( error_msg, args );
+				return;
+			}
+		}//end if a wave/sound file
+		// </FS:Ansariel>
+
 		LLFloaterReg::showInstance(floater, LLSD(filename));
 	}
 }
@@ -431,7 +513,7 @@ class LLFileUploadImage : public view_listener_t
 		//{
 		//	LLFloaterReg::showInstance("upload_image", LLSD(filename));
 		//}
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback,"upload_image",_1)))->getFile();
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_IMAGE, boost::bind(&show_floater_callback, "upload_image", _1, LLFilePicker::FFLOAD_IMAGE)))->getFile();
 // </FS:CR Threaded Filepickers>
 		return TRUE;
 	}
@@ -461,7 +543,7 @@ class LLFileUploadSound : public view_listener_t
 		//{
 		//	LLFloaterReg::showInstance("upload_sound", LLSD(filename));
 		//}
-		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback,"upload_sound",_1)))->getFile();
+		(new LLGenericLoadFilePicker(LLFilePicker::FFLOAD_WAV, boost::bind(&show_floater_callback, "upload_sound", _1, LLFilePicker::FFLOAD_WAV)))->getFile();
 // </FS:CR Threaded Filepickers>
 		return true;
 	}
