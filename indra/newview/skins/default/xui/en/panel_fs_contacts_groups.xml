@@ -54,6 +54,13 @@ You belong to [COUNT] out of [MAX] groups.
 	 bottom_delta="-25"
 	 follows="top|right"
 	 height="22"
+	 label="Group Titles"
+	 name="titles_btn"
+	 width="80" />
+	<button
+	 bottom_delta="-25"
+	 follows="top|right"
+	 height="22"
 	 label="Activate"
 	 name="activate_btn"
 	 width="80" />
@@ -65,7 +72,7 @@ You belong to [COUNT] out of [MAX] groups.
 	 name="leave_btn"
 	 width="80" />
 	<button
-	 bottom_delta="-25"
+	 bottom_delta="-35"
 	 follows="top|right"
 	 height="22"
 	 label="Create..."
@@ -81,16 +88,9 @@ You belong to [COUNT] out of [MAX] groups.
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
-	 height="22"
-	 label="Group Titles"
-	 name="titles_btn"
-	 width="80" />
-	<!--<button
-	 bottom_delta="-25"
-	 follows="top|right"
 	 font="SansSerif"
 	 height="22"
 	 label="Invite..."
 	 name="invite_btn"
-	 width="80" />-->
+	 width="80" />
 </panel>

@@ -42,6 +42,7 @@
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
+#include "llfloatergroupinvite.h"
 #include "llfriendcard.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
@@ -164,6 +165,7 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupsTab->childSetAction("create_btn",	boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked,	this));
 	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,	this));
 	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,	this));
+	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,	this));
 	
 	return TRUE;
 }
@@ -395,6 +397,15 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 void FSFloaterContacts::onGroupTitlesButtonClicked()
 {
 	LLFloaterReg::toggleInstance("group_titles");
+}
+
+void FSFloaterContacts::onGroupInviteButtonClicked()
+{
+	LLUUID group_id = getCurrentItemID();
+	if (group_id.notNull())
+	{
+		LLFloaterGroupInvite::showForGroup(group_id);
+	}
 }
 
 //

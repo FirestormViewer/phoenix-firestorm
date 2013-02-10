@@ -131,6 +131,7 @@ private:
 	void					onGroupCreateButtonClicked();
 	void					onGroupSearchButtonClicked();
 	void					onGroupTitlesButtonClicked();
+	void					onGroupInviteButtonClicked();
 	void					updateButtons();
 
 	LLTabContainer*			mTabContainer;
