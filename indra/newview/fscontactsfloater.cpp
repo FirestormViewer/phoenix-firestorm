@@ -155,7 +155,7 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
 	
 	mGroupList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
-	mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateButtons, this));
+	mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateGroupButtons, this));
 	mGroupList->setReturnCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
 	
 	mGroupsTab->childSetAction("chat_btn", boost::bind(&FSFloaterContacts::onGroupChatButtonClicked,	this));
@@ -170,13 +170,21 @@ BOOL FSFloaterContacts::postBuild()
 	return TRUE;
 }
 
-void FSFloaterContacts::updateButtons()
+void FSFloaterContacts::updateGroupButtons()
 {
-	std::vector<LLPanel*> items;
-	mGroupList->getItems(items);
+	LLUUID groupId = getCurrentItemID();
+	bool isGroup = groupId.notNull();
 
-	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
-	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+	LLUICtrl* groupcount = mGroupsTab->getChild<LLUICtrl>("groupcount");
+	groupcount->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count()));
+	groupcount->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+	
+	getChildView("chat_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_SESSION_JOIN));
+	getChildView("info_btn")->setEnabled(isGroup);
+	getChildView("activate_btn")->setEnabled(groupId != gAgent.getGroupID());
+	getChildView("leave_btn")->setEnabled(isGroup);
+	getChildView("create_btn")->setEnabled(gAgent.mGroups.count() < gMaxAgentGroups);
+	getChildView("invite_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_MEMBER_INVITE));
 }
 
 void FSFloaterContacts::onOpen(const LLSD& key)
@@ -212,8 +220,7 @@ void FSFloaterContacts::openTab(const std::string& name)
 	{
 		visible=TRUE;
 		childShowTab("friends_and_groups", "groups_panel");
-		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
-		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+		updateGroupButtons();
 	}
 
 	if(visible)
@@ -225,7 +232,9 @@ void FSFloaterContacts::openTab(const std::string& name)
 			floater_container->showFloater(this);
 		}
 		else
+		{
 			setVisible(TRUE);
+		}
 	}
 }
 
