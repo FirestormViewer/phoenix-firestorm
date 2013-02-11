@@ -21,6 +21,7 @@
 #include "llagentwearables.h"
 #include "lleventtimer.h"
 #include "llvoavatarself.h"
+#include "llviewerwearable.h"
 
 #include "rlvdefines.h"
 #include "rlvcommon.h"
