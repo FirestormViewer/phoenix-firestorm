@@ -38,6 +38,9 @@
 #include "llviewerparcelmgr.h"
 #include "llvoavatarself.h"
 #include "llslurl.h"
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 //static
 void LLAgentUI::buildFullname(std::string& name)
@@ -99,6 +102,18 @@ BOOL LLAgentUI::buildLocationString(std::string& str, ELocationFormat fmt,const 
 	// create a default name and description for the landmark
 	std::string parcel_name = LLViewerParcelMgr::getInstance()->getAgentParcelName();
 	std::string region_name = region->getName();
+// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0d) | Modified: RLVa-1.2.0d
+	// RELEASE-RLVa: [SL-2.0.0] Check ELocationFormat to make sure our switch still makes sense
+	if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
+	{
+		parcel_name = RlvStrings::getString(RLV_STRING_HIDDEN_PARCEL);
+		region_name = RlvStrings::getString(RLV_STRING_HIDDEN_REGION);
+		if (LOCATION_FORMAT_NO_MATURITY == fmt)
+			fmt = LOCATION_FORMAT_LANDMARK;
+		else if (LOCATION_FORMAT_FULL == fmt)
+			fmt = LOCATION_FORMAT_NO_COORDS;
+	}
+// [/RLVa:KB]
 	std::string sim_access_string = region->getSimAccessString();
 	std::string buffer;
 	if( parcel_name.empty() )

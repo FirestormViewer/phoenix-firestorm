@@ -86,6 +86,10 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llappviewer.h"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 const std::string HELLO_LSL =
 	"default\n"
@@ -1953,6 +1957,14 @@ void LLLiveLSLEditor::onRunningCheckboxClicked( LLUICtrl*, void* userdata )
 	//self->mRunningCheckbox->get();
 	if( object )
 	{
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+		{
+			RlvUtil::notifyBlockedGeneric();
+			return;
+		}
+// [/RLVa:KB]
+
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_SetScriptRunning);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -1978,6 +1990,14 @@ void LLLiveLSLEditor::onReset(void *userdata)
 	LLViewerObject* object = gObjectList.findObject( self->mObjectUUID );
 	if(object)
 	{
+// [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f) | Modified: RLVa-1.0.5a
+		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+		{
+			RlvUtil::notifyBlockedGeneric();
+			return;
+		}
+// [/RLVa:KB]
+
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessageFast(_PREHASH_ScriptReset);
 		msg->nextBlockFast(_PREHASH_AgentData);
@@ -2094,6 +2114,14 @@ void LLLiveLSLEditor::saveIfNeeded(bool sync /*= true*/)
 		LLNotificationsUtil::add("SaveScriptFailObjectNotFound");
 		return;
 	}
+
+// [RLVa:KB] - Checked: 2010-11-25 (RLVa-1.2.2b) | Modified: RLVa-1.2.2b
+	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(object->getRootEdit())) )
+	{
+		RlvUtil::notifyBlockedGeneric();
+		return;
+	}
+// [/RLVa:KB]
 
 	// get the latest info about it. We used to be losing the script
 	// name on save, because the viewer object version of the item,
@@ -2369,6 +2397,7 @@ void LLLiveLSLEditor::onLoad(void* userdata)
 void LLLiveLSLEditor::onSave(void* userdata, BOOL close_after_save)
 {
 	LLLiveLSLEditor* self = (LLLiveLSLEditor*)userdata;
+
 	self->mCloseAfterSave = close_after_save;
 	self->saveIfNeeded();
 }

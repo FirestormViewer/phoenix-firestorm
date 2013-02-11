@@ -56,8 +56,10 @@
 #include "llworld.h"
 #include "lluiconstants.h"
 #include "llstring.h"
-
 #include "llviewercontrol.h"
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f)
+#include "rlvcommon.h"
+// [/RLVa:KB]
 
 static LLDefaultChildRegistry::Register<LLChatHistory> r("chat_history");
 
@@ -89,6 +91,10 @@ public:
 		LLSD payload;
 		payload["object_id"] = object_id;
 		payload["owner_id"] = query_map["owner"];
+// [RLVa:KB] - Checked: 2010-11-02 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+		if (query_map.has("rlv_shownames"))
+			payload["rlv_shownames"] = query_map["rlv_shownames"];
+// [/RLVa:KB]
 		payload["name"] = query_map["name"];
 		payload["slurl"] = LLWeb::escapeURL(query_map["slurl"]);
 		payload["group_owned"] = query_map["groupowned"];
@@ -103,6 +109,10 @@ class LLChatHistoryHeader: public LLPanel
 public:
 	LLChatHistoryHeader()
 	:	LLPanel(),
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		mShowContextMenu(true), 
+		mShowInfoCtrl(true),
+// [/RLVa:KB]
 		mPopupMenuHandleAvatar(),
 		mPopupMenuHandleObject(),
 		mAvatarID(),
@@ -221,7 +231,11 @@ public:
 
 	void showInspector()
 	{
-		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) return;
+//		if (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) return;
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		// Don't double-click show the inspector if we're not showing the info control
+		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() && CHAT_SOURCE_SYSTEM != mSourceType) ) return;
+// [/RLVa:KB]
 		
 		if (mSourceType == CHAT_SOURCE_OBJECT)
 		{
@@ -281,9 +295,26 @@ public:
 
 			// Start with blank so sample data from XUI XML doesn't
 			// flash on the screen
-			user_name->setValue( LLSD() );
-			LLAvatarNameCache::get(mAvatarID,
-				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+//			user_name->setValue( LLSD() );
+//			LLAvatarNameCache::get(mAvatarID,
+//				boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
+			if (!chat.mRlvNamesFiltered)
+			{
+				user_name->setValue( LLSD() );
+				LLAvatarNameCache::get(mAvatarID,
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+			}
+			else
+			{
+				// If the agent's chat was subject to @shownames=n we should display their anonimized name
+				mFrom = chat.mFromName;
+				user_name->setValue(mFrom);
+				user_name->setToolTip(mFrom);
+				setToolTip(mFrom);
+				updateMinUserNameWidth();
+			}
+// [/RLVa:KB]
 		}
 		else if (chat.mChatStyle == CHAT_STYLE_HISTORY ||
 				 mSourceType == CHAT_SOURCE_AGENT)
@@ -334,6 +365,15 @@ public:
 
 		if(mSourceType != CHAT_SOURCE_AGENT ||	mAvatarID.isNull())
 			icon->setDrawTooltip(false);
+
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		// Don't show the context menu, info control or avatar icon tooltip if this chat was subject to @shownames=n
+		if ( (chat.mRlvNamesFiltered) && ((CHAT_SOURCE_AGENT == mSourceType) || (CHAT_SOURCE_OBJECT == mSourceType))  )
+		{
+			mShowInfoCtrl = mShowContextMenu = false;
+			icon->setDrawTooltip(false);
+		}
+// [/RLVa:KB]
 
 		switch (mSourceType)
 		{
@@ -445,6 +485,10 @@ protected:
 
 	void showContextMenu(S32 x,S32 y)
 	{
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		if (!mShowContextMenu)
+			return;
+// [/RLVa:KB]
 		if(mSourceType == CHAT_SOURCE_SYSTEM)
 			showSystemContextMenu(x,y);
 		if(mAvatarID.notNull() && mSourceType == CHAT_SOURCE_AGENT)
@@ -496,6 +540,9 @@ protected:
 	void showInfoCtrl()
 	{
 		if (mAvatarID.isNull() || mFrom.empty() || CHAT_SOURCE_SYSTEM == mSourceType) return;
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+		if ( (!mShowInfoCtrl) || (mAvatarID.isNull() || mFrom.empty() || CHAT_SOURCE_SYSTEM == mSourceType) ) return;
+// [/RLVa:KB]
 				
 		if (!sInfoCtrl)
 		{
@@ -565,6 +612,10 @@ protected:
 	EChatSourceType		mSourceType;
 	std::string			mFrom;
 	LLUUID				mSessionID;
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.2a) | Added: RLVa-1.2.0f
+	bool                mShowContextMenu;
+	bool                mShowInfoCtrl;
+// [/RLVa:KB]
 
 	S32					mMinUserNameWidth;
 	const LLFontGL*		mUserNameFont;
@@ -793,8 +844,18 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 			// Don't hotlink any messages from the system (e.g. "Second Life:"), so just add those in plain text.
 			if ( chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mFromID.notNull())
 			{
-				// for object IMs, create a secondlife:///app/objectim SLapp
-				std::string url = LLViewerChat::getSenderSLURL(chat, args);
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+				// NOTE-RLVa: we don't need to do any @shownames or @showloc filtering here because we'll already have an existing URL
+				std::string url = chat.mURL;
+				RLV_ASSERT( (url.empty()) || (std::string::npos != url.find("objectim")) );
+				if ( (url.empty()) || (std::string::npos == url.find("objectim")) )
+				{
+// [/RLVa:KB]
+					// for object IMs, create a secondlife:///app/objectim SLapp
+					/*std::string*/ url = LLViewerChat::getSenderSLURL(chat, args);
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+				}
+// [/RLVa:KB]
 
 				// set the link for the object name to be the objectim SLapp
 				// (don't let object names with hyperlinks override our objectim Url)
@@ -808,7 +869,10 @@ void LLChatHistory::appendMessage(const LLChat& chat, const LLSD &args, const LL
 				mEditor->appendText(chat.mFromName + delimiter,
 									false, link_params);
 			}
-			else if ( chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
+//			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log)
+// [RLVa:KB] - Checked: 2010-04-22 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
+			else if (chat.mFromName != SYSTEM_FROM && chat.mFromID.notNull() && !message_from_log && !chat.mRlvNamesFiltered)
+// [/RLVa:KB]
 			{
 				LLStyle::Params link_params(style_params);
 				link_params.overwriteFrom(LLStyleMap::instance().lookupAgent(chat.mFromID));

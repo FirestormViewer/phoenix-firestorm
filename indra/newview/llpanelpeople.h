@@ -55,6 +55,10 @@ public:
 	// when voice is available
 	/*virtual*/ void onChange(EStatusType status, const std::string &channelURI, bool proximal);
 
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	LLAvatarList* getNearbyList() { return mNearbyList; }
+// [/RLVa:KB]
+
 	// internals
 	class Updater;
 

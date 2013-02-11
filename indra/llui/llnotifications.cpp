@@ -888,6 +888,13 @@ std::string LLNotification::getLabel() const
 	return (mTemplatep ? label : "");
 }
 
+// [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
+bool LLNotification::hasLabel() const
+{
+	return !mTemplatep->mLabel.empty();
+}
+// [/SL:KB]
+
 std::string LLNotification::getURL() const
 {
 	if (!mTemplatep)
