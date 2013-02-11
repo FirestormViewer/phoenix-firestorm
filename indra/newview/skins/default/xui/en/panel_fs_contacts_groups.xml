@@ -88,7 +88,6 @@ You belong to [COUNT] out of [MAX] groups.
 	<button
 	 bottom_delta="-25"
 	 follows="top|right"
-	 font="SansSerif"
 	 height="22"
 	 label="Invite..."
 	 name="invite_btn"
