@@ -727,7 +727,12 @@ void LLInvFVBridge::getClipboardEntries(bool show_asset_id,
 	}
 
 	// Don't allow items to be pasted directly into the COF or the inbox/outbox
-	if (!isCOFFolder() && !isInboxFolder() && !isOutboxFolder()
+	// <FS:Ansariel> Enable paste for inbox; doesn't actually makes much sense,
+	//               but since we are not prevented from pasting via shortcut,
+	//               we enable it in the context menu, too.
+	//if (!isCOFFolder() && !isInboxFolder() && !isOutboxFolder()
+	if (!isCOFFolder() && !isOutboxFolder()
+	// </FS:Ansariel>
 		// <FS:TT> Client LSL Bridge (also for #AO)
 		&& !isProtectedFolder())
 		// </FS:TT>
