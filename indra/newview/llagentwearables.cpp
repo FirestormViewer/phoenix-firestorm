@@ -1653,12 +1653,12 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 {
 	if (!isAgentAvatarValid()) return;
 
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Check our callers and verify that erasing elements from the passed vector won't break random things
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0)
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
 	{
 		llvo_vec_t::iterator itObj = objects_to_remove.begin();
-		while (itObj != objects_to_remove.end())
+		while (objects_to_remove.end() != itObj)
 		{
 			const LLViewerObject* pAttachObj = *itObj;
 			if (gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
@@ -1666,12 +1666,12 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 				itObj = objects_to_remove.erase(itObj);
 
 				// Fall-back code: re-add the attachment if it got removed from COF somehow (compensates for possible bugs elsewhere)
-				LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-				LLLinkedItemIDMatches f(pAttachObj->getAttachmentItemID());
-				gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, LLInventoryModel::EXCLUDE_TRASH, f);
-				RLV_ASSERT( 0 != items.count() );
-				if (0 == items.count())
+				bool fInCOF = LLAppearanceMgr::isLinkInCOF(pAttachObj->getAttachmentItemID());
+				RLV_ASSERT(fInCOF);
+				if (!fInCOF)
+				{
 					LLAppearanceMgr::instance().registerAttachment(pAttachObj->getAttachmentItemID());
+				}
 			}
 			else
 			{
@@ -1702,10 +1702,10 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 	static bool sInitialAttachmentsRequested = false;
 
-	// RELEASE-RLVa: [SL-2.5.2] Check our callers and verify that erasing elements from the passed vector won't break random things
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
 	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
@@ -1758,7 +1758,7 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
 			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
@@ -1775,7 +1775,7 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		}
 	}
 
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 	sInitialAttachmentsRequested = true;
 // [/RLVa:KB]
 }

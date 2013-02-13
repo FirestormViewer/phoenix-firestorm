@@ -848,7 +848,9 @@ void RlvForceWear::remAttachment(const LLViewerObject* pAttachObj)
 
 	// Add it to 'm_remAttachments' if it's not already there
 	if (!isRemAttachment(pAttachObj))
-		m_remAttachments.push_back(pAttachObj);
+	{
+		m_remAttachments.push_back(const_cast<LLViewerObject*>(pAttachObj));
+	}
 }
 
 // Checked: 2010-08-30 (RLVa-1.2.1c) | Modified: RLVa-1.2.1c
@@ -901,7 +903,7 @@ void RlvForceWear::remWearable(const LLViewerWearable* pWearable)
 		m_remWearables.push_back(pWearable);
 }
 
-// Checked: 2010-09-18 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// Checked: 2010-09-18 (RLVa-1.2.1)
 void RlvForceWear::done()
 {
 	// Sanity check - don't go through all the motions below only to find out there's nothing to actually do
@@ -938,19 +940,9 @@ void RlvForceWear::done()
 	if (m_remAttachments.size())
 	{
 		// Don't bother with COF if all we're doing is detaching some attachments (keeps people from rebaking on every @remattach=force)
-		gMessageSystem->newMessage("ObjectDetach");
-		gMessageSystem->nextBlockFast(_PREHASH_AgentData);
-		gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-		gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-		for (std::list<const LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
-				itAttachObj != m_remAttachments.end(); ++itAttachObj)
-		{
-			gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
-			gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, (*itAttachObj)->getLocalID());
-		}
-		gMessageSystem->sendReliable(gAgent.getRegionHost());
+		LLAgentWearables::userRemoveMultipleAttachments(m_remAttachments);
 
-		for (std::list<const LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
+		for (std::vector<LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
 				itAttachObj != m_remAttachments.end(); ++itAttachObj)
 		{
 			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID());

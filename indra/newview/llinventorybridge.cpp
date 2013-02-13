@@ -73,7 +73,7 @@
 #include "llvoavatarself.h"
 #include "llwearablelist.h"
 #include "lllandmarkactions.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -5209,9 +5209,11 @@ std::string LLObjectBridge::getLabelSuffix() const
 
 void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attachment, bool replace)
 {
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1)
 	// If no attachment point was specified, try looking it up from the item name
-	if ( (rlv_handler_t::isEnabled()) && (!attachment) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
+	static LLCachedControl<bool> fRlvDeprecateAttachPt(gSavedSettings, "RLVaDebugDeprecateExplicitPoint");
+	if ( (rlv_handler_t::isEnabled()) && (!fRlvDeprecateAttachPt) && 
+	     (!attachment) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		attachment = RlvAttachPtLookup::getAttachPoint(item);
 	}
@@ -5251,19 +5253,23 @@ void rez_attachment(LLViewerInventoryItem* item, LLViewerJointAttachment* attach
 	if (replace &&
 		(attachment && attachment->getNumObjects() > 0))
 	{
-// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
+// [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1)
 		// Block if we can't "replace wear" what's currently there
-		if ( (rlv_handler_t::isEnabled()) && ((gRlvAttachmentLocks.canAttach(attachment) & RLV_WEAR_REPLACE) == 0)  )
+		if ( (rlv_handler_t::isEnabled()) && ((gRlvAttachmentLocks.canAttach(attachment) & RLV_WEAR_REPLACE) == 0) )
+		{
 			return;
+		}
 // [/RLVa:KB]
 		LLNotificationsUtil::add("ReplaceAttachment", LLSD(), payload, confirm_attachment_rez);
 	}
 	else
 	{
-// [RLVa:KB] - Checked: 2010-08-07 (RLVa-1.2.0i) | Modified: RLVa-1.2.0i
+// [RLVa:KB] - Checked: 2010-08-07 (RLVa-1.2.0)
 		// Block wearing anything on a non-attachable attachment point
 		if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachmentPoint(attach_pt, RLV_LOCK_ADD)) )
+		{
 			return;
+		}
 // [/RLVa:KB]
 		LLNotifications::instance().forceResponse(LLNotification::Params("ReplaceAttachment").payload(payload), 0/*YES*/);
 	}
@@ -5287,36 +5293,25 @@ bool confirm_attachment_rez(const LLSD& notification, const LLSD& response)
 
 		if (itemp)
 		{
-			/*
-			{
-				U8 attachment_pt = notification["payload"]["attachment_point"].asInteger();
-// [RLVa:KB] - Checked: 2010-08-06 (RLVa-1.2.0i) | Added: RLVa-1.2.0i
-				// NOTE: we're letting our callers decide whether or not to use ATTACHMENT_ADD
-				if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) &&
-					 ((!notification["payload"].has("rlv_force")) || (!notification["payload"]["rlv_force"].asBoolean())) )
-				{
-					ERlvWearMask eWearAction = (attachment_pt & ATTACHMENT_ADD) ? RLV_WEAR_ADD : RLV_WEAR_REPLACE;
-					RlvAttachmentLockWatchdog::instance().onWearAttachment(itemp, eWearAction);;
-
-					attachment_pt |= ATTACHMENT_ADD;
-				}
-// [/RLVa:KB]
-				LLMessageSystem* msg = gMessageSystem;
-				msg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
-				msg->nextBlockFast(_PREHASH_AgentData);
-				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-				msg->nextBlockFast(_PREHASH_ObjectData);
-				msg->addUUIDFast(_PREHASH_ItemID, itemp->getUUID());
-				msg->addUUIDFast(_PREHASH_OwnerID, itemp->getPermissions().getOwner());
-				msg->addU8Fast(_PREHASH_AttachmentPt, attachment_pt);
-				pack_permissions_slam(msg, itemp->getFlags(), itemp->getPermissions());
-				msg->addStringFast(_PREHASH_Name, itemp->getName());
-				msg->addStringFast(_PREHASH_Description, itemp->getDescription());
-				msg->sendReliable(gAgent.getRegion()->getHost());
-				return false;
-			}
-			*/
+//			/*
+//			{
+//				U8 attachment_pt = notification["payload"]["attachment_point"].asInteger();
+//				LLMessageSystem* msg = gMessageSystem;
+//				msg->newMessageFast(_PREHASH_RezSingleAttachmentFromInv);
+//				msg->nextBlockFast(_PREHASH_AgentData);
+//				msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+//				msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+//				msg->nextBlockFast(_PREHASH_ObjectData);
+//				msg->addUUIDFast(_PREHASH_ItemID, itemp->getUUID());
+//				msg->addUUIDFast(_PREHASH_OwnerID, itemp->getPermissions().getOwner());
+//				msg->addU8Fast(_PREHASH_AttachmentPt, attachment_pt);
+//				pack_permissions_slam(msg, itemp->getFlags(), itemp->getPermissions());
+//				msg->addStringFast(_PREHASH_Name, itemp->getName());
+//				msg->addStringFast(_PREHASH_Description, itemp->getDescription());
+//				msg->sendReliable(gAgent.getRegion()->getHost());
+//				return false;
+//			}
+//			*/
 
 			// Queue up attachments to be sent in next idle tick, this way the
 			// attachments are batched up all into one message versus each attachment
@@ -5508,10 +5503,6 @@ LLWearableBridge::LLWearableBridge(LLInventoryPanel* inventory,
 	mInvType = inv_type;
 }
 
-// [RLVa:KB] - Checked: 2010-04-04 (RLVa-1.2.0c) | Modified: RLVa-0.2.2a
-//					if ( (rlv_handler_t::isEnabled()) && (!gRlvWearableLocks.canRemove(item)) )
-//						continue;
-// [/RLVa:KB]
 BOOL LLWearableBridge::renameItem(const std::string& new_name)
 {
 	if (get_is_item_worn(mUUID))

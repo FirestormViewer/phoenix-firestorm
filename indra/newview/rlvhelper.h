@@ -292,7 +292,7 @@ protected:
 	typedef std::map<S32, LLInventoryModel::item_array_t> addattachments_map_t;
 	addattachments_map_t             m_addAttachments;
 	LLInventoryModel::item_array_t   m_addGestures;
-	std::list<const LLViewerObject*> m_remAttachments;
+	std::vector<LLViewerObject*>     m_remAttachments;	// This should match the definition of LLAgentWearables::llvo_vec_t
 	std::list<const LLViewerWearable*> m_remWearables;
 	LLInventoryModel::item_array_t   m_remGestures;
 
