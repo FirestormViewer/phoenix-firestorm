@@ -232,8 +232,8 @@ protected:
 
 bool rlvPredCanWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
 bool rlvPredCanNotWearItem(const LLViewerInventoryItem* pItem, ERlvWearMask eWearMask);
-bool rlvPredCanRemoveItem(const LLViewerInventoryItem* pItem);
-bool rlvPredCanNotRemoveItem(const LLViewerInventoryItem* pItem);
+bool rlvPredCanRemoveItem(const LLInventoryItem* pItem);
+bool rlvPredCanNotRemoveItem(const LLInventoryItem* pItem);
 
 struct RlvPredCanWearItem
 {
