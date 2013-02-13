@@ -5,13 +5,13 @@
 	<menu_item_check label="Porządkuj według daty" name="sort_by_recent"/>
 	<menu_item_check label="Sortuj foldery zawsze wg. nazwy" name="sort_folders_by_name"/>
 	<menu_item_check label="Sortuj foldery systemowe od góry" name="sort_system_folders_to_top"/>
-	<menu label="Szukaj po..." name="inventory_search_menu">
+	<context_menu label="Szukaj po..." name="inventory_search_menu">
 		<menu_item_check name="inventory_search_by_name" label="Nazwie"/>
 		<menu_item_check name="inventory_search_by_creator" label="Twórcy"/>
 		<menu_item_check name="inventory_search_by_description" label="Opisie"/>
 		<menu_item_check name="inventory_search_by_all" label="Wszystkim"/>
 		<menu_item_check name="inventory_show_partial_results" label="Częściowe wyniki wyszukiwania"/>
-	</menu>
+	</context_menu>
 	<menu_item_check label="Dodawaj obiekty po dwukliku" name="add_inv_toggle"/>
 	<menu_item_call label="Pokaż filtry" name="show_filters"/>
 	<menu_item_call label="Zresetuj filtry" name="reset_filters"/>
