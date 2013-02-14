@@ -19880,8 +19880,30 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-	  <integer>0</integer>
+      <integer>0</integer>
       <key>Backup</key>
+      <integer>0</integer>
+    </map>
+    <key>FSTeleportHistoryShowPosition</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows the local position within a region in the teleport history.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSTeleportHistoryShowDate</key>
+    <map>
+      <key>Comment</key>
+      <string>Shows the exact date and time in the teleport history.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
       <integer>0</integer>
     </map>
 </map>
