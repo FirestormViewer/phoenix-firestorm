@@ -202,7 +202,8 @@ LLScrollListCtrl::LLScrollListCtrl(const LLScrollListCtrl::Params& p)
 	// <FS:Ansariel> Fix for FS-specific people list (radar)
 	//mContextMenuType(MENU_NONE)
 	mContextMenuType(MENU_NONE),
-	mFilterColumn(-1)
+	mFilterColumn(-1),
+	mIsFiltered(false)
 {
 	mItemListRect.setOriginAndSize(
 		mBorderThickness,
@@ -346,7 +347,7 @@ S32 LLScrollListCtrl::isEmpty() const
 S32 LLScrollListCtrl::getItemCount() const
 {
 	// <FS:Ansariel> Fix for FS-specific people list (radar)
-	if (mFilterColumn > -1 && !mFilterString.empty())
+	if (mIsFiltered)
 	{
 		S32 count(0);
 		item_list::const_iterator iter;
@@ -1496,24 +1497,43 @@ void LLScrollListCtrl::drawItems()
 		static LLUICachedControl<F32> type_ahead_timeout ("TypeAheadTimeout", 0);
 		highlight_color.mV[VALPHA] = clamp_rescale(mSearchTimer.getElapsedTimeF32(), type_ahead_timeout * 0.7f, type_ahead_timeout, 0.4f, 0.f);
 
-		S32 first_line = mScrollLines;
-		S32 last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		//S32 first_line = mScrollLines;
+		//S32 last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		S32 first_line;
+		S32 last_line;
+		if (mIsFiltered)
+		{
+			first_line = 0;
+			last_line = (S32)mItemList.size() - 1;
+		}
+		else
+		{
+			first_line = mScrollLines;
+			last_line = llmin((S32)mItemList.size() - 1, mScrollLines + getLinesPerPage());
+		}
+		S32 line = first_line;
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 
 		if (first_line >= mItemList.size())
 		{
 			return;
 		}
 		item_list::iterator iter;
-		for (S32 line = first_line; line <= last_line; line++)
+		// <FS:Ansariel> Fix for FS-specific people list (radar)
+		//for (S32 line = first_line; line <= last_line; line++)
+		//{
+		//	LLScrollListItem* item = mItemList[line];
+		for (S32 itline = first_line; itline <= last_line; itline++)
 		{
-			LLScrollListItem* item = mItemList[line];
+			LLScrollListItem* item = mItemList[itline];
 			
 			// <FS:Ansariel> Fix for FS-specific people list (radar)
 			if (isFiltered(item))
 			{
 				continue;
 			}
-			// </FS:Ansariel> Fix for FS-specific people list (radar)
+		// </FS:Ansariel> Fix for FS-specific people list (radar)
 
 			item_rect.setOriginAndSize( 
 				x, 
@@ -1578,6 +1598,9 @@ void LLScrollListCtrl::drawItems()
 
 				cur_y -= mLineHeight;
 			}
+			// <FS:Ansariel> Fix for FS-specific people list (radar)
+			line++;
+			// </FS:Ansariel> Fix for FS-specific people list (radar)
 		}
 	}
 }
@@ -3196,11 +3219,12 @@ void LLScrollListCtrl::setFilterString(const std::string& str)
 {
 	mFilterString = str;
 	std::transform(mFilterString.begin(), mFilterString.end(), mFilterString.begin(), ::tolower);
+	mIsFiltered = (mFilterColumn > -1 && !mFilterString.empty());
 }
 
 bool LLScrollListCtrl::isFiltered(const LLScrollListItem* item) const
 {
-	if (mFilterColumn > -1 && !mFilterString.empty())
+	if (mIsFiltered)
 	{
 		std::string filterColumnValue = item->getColumn(mFilterColumn)->getValue().asString();
 		std::transform(filterColumnValue.begin(), filterColumnValue.end(), filterColumnValue.begin(), ::tolower);
