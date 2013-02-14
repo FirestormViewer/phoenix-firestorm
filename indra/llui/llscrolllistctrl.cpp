@@ -647,7 +647,12 @@ S32 LLScrollListCtrl::calcMaxContentWidth()
 
 		if (mColumnWidthsDirty)
 		{
-			mColumnWidthsDirty = false;
+			// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
+			//               This seems to be misplaced here as we would only
+			//               take the first column into account for max
+			//               content width calculation.
+			//mColumnWidthsDirty = false;
+			// </FS:Ansariel>
 			// update max content width for this column, by looking at all items
 			column->mMaxContentWidth = column->mHeader ? LLFontGL::getFontSansSerifSmall()->getWidth(column->mLabel) + mColumnPadding + HEADING_TEXT_PADDING : 0;
 			item_list::iterator iter;
@@ -661,6 +666,9 @@ S32 LLScrollListCtrl::calcMaxContentWidth()
 		}
 		max_item_width += column->mMaxContentWidth;
 	}
+	// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
+	mColumnWidthsDirty = false;
+	// </FS:Ansariel>
 
 	return max_item_width;
 }
@@ -685,11 +693,17 @@ bool LLScrollListCtrl::updateColumnWidths()
 			new_width = (mItemListRect.getWidth() - mTotalStaticColumnWidth - mTotalColumnPadding) / mNumDynamicWidthColumns;
 		}
 
-		if (column->getWidth() != new_width)
-		{
-			column->setWidth(new_width);
-			width_changed = true;
-		}
+		// <FS:Ansariel> FIRE-8911/MAINT-2223: Fix for broken column resize
+		//               This apparently doesn't work as it should, preventing
+		//               a proper resize. Fall back to pre-3.4.3 behavior and
+		//               always assume a changed width.
+		//if (column->getWidth() != new_width)
+		//{
+		//	column->setWidth(new_width);
+		//	width_changed = true;
+		//}
+		width_changed = true;
+		// </FS:Ansariel>
 	}
 	return width_changed;
 }
