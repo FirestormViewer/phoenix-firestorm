@@ -2293,7 +2293,7 @@ BOOL LLPanelPreference::postBuild()
 	// </FS:LO>
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
 // <FS:AW Disable LSL bridge on opensim>
-	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
+	if(LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim() && hasChild("UseLSLBridge", TRUE))
 	{
  		getChild<LLCheckBoxCtrl>("UseLSLBridge")->setEnabled(FALSE);
 	}
