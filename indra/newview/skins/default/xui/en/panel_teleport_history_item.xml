@@ -8,7 +8,7 @@
  top="0"
  width="380">
     <panel.string name="DateFmt">
-        [mthnum,datetime,local]/[day,datetime,local]/[year,datetime,local], [hour12,datetime,local]:[min,datetime,local] [ampm,datetime,local]
+        [mthnum,datetime,utc]/[day,datetime,utc]/[year,datetime,utc], [hour12,datetime,utc]:[min,datetime,utc] [ampm,datetime,utc]
     </panel.string>
     <icon
      follows="top|right|left"
