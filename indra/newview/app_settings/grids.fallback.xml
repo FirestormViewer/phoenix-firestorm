@@ -3,7 +3,7 @@
     <key>craft-world.org:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2012-08-03T15:33:03.16Z</date>
+            <date>2013-02-05T00:05:39.27Z</date>
         <key>about</key>
             <string>http://www.craft-world.org/</string>
         <key>gatekeeper</key>
@@ -27,6 +27,8 @@
             </array>
         <key>name</key>
             <string>craft-world.org:8002</string>
+        <key>platform</key>
+            <string>OpenSim</string>
         <key>register</key>
             <string>http://www.craft-world.org/page/en/register-an-avatar.php</string>
         <key>slurl_base</key>
@@ -205,6 +207,42 @@
             <string>https://www.avination.com/join.html</string>
         <key>slurl_base</key>
             <string>https://login.avination.com/</string>
+        </map>
+    <key>login.francogrid.org:80</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-02-14T02:00:46.10Z</date>
+        <key>about</key>
+            <string>http://francogrid.org/</string>
+        <key>gridname</key>
+            <string>FrancoGrid</string>
+        <key>gridnick</key>
+            <string>francogrid</string>
+        <key>help</key>
+            <string>http://francogrid.org/aide</string>
+        <key>helperuri</key>
+            <string>http://helper.main.francogrid.org/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://viewer.francogrid.org/</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://login.francogrid.org/</string>
+            </array>
+        <key>name</key>
+            <string>login.francogrid.org:80</string>
+        <key>password</key>
+            <string>http://francogrid.org/user/password</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://francogrid.org/user/register</string>
+        <key>slurl_base</key>
+            <string>hop://login.francogrid.org:80/</string>
         </map>
     <key>login.danger.osgrid.org</key>
         <map>
