@@ -176,6 +176,42 @@
         <key>slurl_base</key>
             <string>hop://localhost:9000/</string>
         </map>
+    <key>login.aurorascape.com:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-02-06T02:20:52.02Z</date>
+        <key>about</key>
+            <string />
+        <key>gridname</key>
+            <string>AuroraScape</string>
+        <key>gridnick</key>
+            <string>AuroraScape</string>
+        <key>help</key>
+            <string />
+        <key>helperuri</key>
+            <string>http://login.aurorascape.com:8002/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://login.aurorascape.com:8008/welcome</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://login.aurorascape.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>login.aurorascape.com:8002</string>
+        <key>password</key>
+            <string />
+        <key>platform</key>
+            <string>Aurora</string>
+        <key>register</key>
+            <string />
+        <key>slurl_base</key>
+            <string>hop://login.aurorascape.com:8002/</string>
+        </map>
     <key>login.avination.com/</key>
         <map>
         <key>LastModified</key>
