@@ -4,8 +4,8 @@
 		[day,datetime,local].[mthnum,datetime,local].[year,datetime,local], [hour,datetime,local]:[min,datetime,local]
 	</panel.string>
 	<layout_stack name="ls_item">
-		<layout_panel name="lp_region" width="170">
-			<text name="region" value="..." width="170"/>
+		<layout_panel name="lp_region" width="165">
+			<text name="region" value="..." width="165"/>
 		</layout_panel>
 		<layout_panel name="lp_position">
 			<text name="position" value="0, 0, 0"/>
