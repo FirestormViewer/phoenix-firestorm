@@ -93,7 +93,7 @@ public:
 	// Accessors
 	//--------------------------------------------------------------------
 public:
-// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0)
 	void				getWearableItemIDs(uuid_vec_t& idItems) const;
 	void				getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const;
 // [/RLVa:KB]
@@ -113,7 +113,7 @@ public:
 private:
 	/*virtual*/void	wearableUpdated(LLWearable *wearable, BOOL removed);
 public:
-	void			setWearableItem(LLInventoryItem* new_item, LLViewerWearable* wearable, bool do_append = false);
+//	void			setWearableItem(LLInventoryItem* new_item, LLViewerWearable* wearable, bool do_append = false);
 	void			setWearableOutfit(const LLInventoryItem::item_array_t& items, const LLDynamicArray< LLViewerWearable* >& wearables, BOOL remove);
 	void			setWearableName(const LLUUID& item_id, const std::string& new_name);
 	// *TODO: Move this into llappearance/LLWearableData ?
@@ -153,8 +153,11 @@ private:
 	// Removing wearables
 	//--------------------------------------------------------------------
 public:
-	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
+//	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
 private:
+// [RLVa:KB] - Checked: 2010-05-11 (RLVa-1.2.0)
+	void			removeWearable(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
+// [/RLVa:KB]
 	void			removeWearableFinal(const LLWearableType::EType type, bool do_remove_all /*= false*/, U32 index /*= 0*/);
 protected:
 	static bool		onRemoveWearableDialog(const LLSD& notification, const LLSD& response);

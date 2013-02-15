@@ -49,7 +49,7 @@
 #include "llvoavatarself.h"
 #include "llviewerwearable.h"
 #include "llwearablelist.h"
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 #include "rlvhandler.h"
 #include "rlvlocks.h"
 // [/RLVa:KB]
@@ -771,7 +771,7 @@ const LLUUID LLAgentWearables::getWearableItemID(LLWearableType::EType type, U32
 		return LLUUID();
 }
 
-// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
+// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0)
 void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
 {
 	for (wearableentry_map_t::const_iterator itWearableType = mWearableDatas.begin(); 
@@ -786,8 +786,8 @@ void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_
 	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
 	if (mWearableDatas.end() != itWearableType)
 	{
-		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
-				itWearable != endWearable; ++itWearable)
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin();
+				itWearable != itWearableType->second.end(); ++itWearable)
 		{
 			const LLViewerWearable* pWearable = dynamic_cast<LLViewerWearable*>(*itWearable);
 			if (pWearable)
@@ -1179,11 +1179,7 @@ void LLAgentWearables::removeWearable(const LLWearableType::EType type, bool do_
 	{
 		LLViewerWearable* old_wearable = getViewerWearable(type,index);
 		
-//		if (old_wearable)
-// [RLVa:KB] - Checked: 2010-05-11 (RLVa-1.2.0c) | Modified: RLVa-1.2.0g
-		// NOTE: we block actual removal in removeWearableFinal(); all we really want here is to avoid showing the save notice
-		if ( (old_wearable) && ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.isLockedWearable(old_wearable))) )
-// [/RLVa:KB]
+		if (old_wearable)
 		{
 			if (old_wearable->isDirty())
 			{
@@ -1241,19 +1237,16 @@ void LLAgentWearables::removeWearableFinal(const LLWearableType::EType type, boo
 		{
 			LLViewerWearable* old_wearable = getViewerWearable(type,i);
 			//queryWearableCache(); // moved below
-//			if (old_wearable)
-// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
-			if ( (old_wearable) && ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.isLockedWearable(old_wearable))) )
-// [/RLVa:KB]
+			if (old_wearable)
 			{
 				popWearable(old_wearable);
 				old_wearable->removeFromAvatar(TRUE);
 			}
 		}
 //		clearWearableType(type);
-// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
-		// The line above shouldn't be needed and would cause issues if we block removing one of the wearables
-		RLV_VERIFY( ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.hasLockedWearable(type))) ? 0 == getWearableCount(type) : true );
+// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0)
+		// The line above shouldn't be needed
+		RLV_VERIFY(0 == getWearableCount(type));
 // [/RLVa:KB]
 	}
 	else
@@ -1261,10 +1254,7 @@ void LLAgentWearables::removeWearableFinal(const LLWearableType::EType type, boo
 		LLViewerWearable* old_wearable = getViewerWearable(type, index);
 		//queryWearableCache(); // moved below
 
-//		if (old_wearable)
-// [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
-		if ( (old_wearable) && ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.isLockedWearable(old_wearable))) )
-// [/RLVa:KB]
+		if (old_wearable)
 		{
 			popWearable(old_wearable);
 			old_wearable->removeFromAvatar(TRUE);
@@ -1368,56 +1358,46 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 }
 
 
-// User has picked "wear on avatar" from a menu.
-void LLAgentWearables::setWearableItem(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
-{
-	//LLAgentDumper dumper("setWearableItem");
-	if (isWearingItem(new_item->getUUID()))
-	{
-		llwarns << "wearable " << new_item->getUUID() << " is already worn" << llendl;
-		return;
-	}
-	
-	const LLWearableType::EType type = new_wearable->getType();
-
-// [RLVa:KB] - Checked: 2010-03-19 (RLVa-1.2.0a) | Modified: RLVa-1.2.0g
-	// TODO-RLVa: [RLVa-1.2.1] This looks like dead code in SL-2.0.2 so we can't really check to see if it works :|
-	if (rlv_handler_t::isEnabled())
-	{
-		ERlvWearMask eWear = gRlvWearableLocks.canWear(type);
-		if ( (RLV_WEAR_LOCKED == eWear) || ((!do_append) && (!(eWear & RLV_WEAR_REPLACE))) )
-			return;
-	}
-// [/RLVa:KB]
-
-	if (!do_append)
-	{
-		// Remove old wearable, if any
-		// MULTI_WEARABLE: hardwired to 0
-		LLViewerWearable* old_wearable = getViewerWearable(type,0);
-		if (old_wearable)
-		{
-			const LLUUID& old_item_id = old_wearable->getItemID();
-			if ((old_wearable->getAssetID() == new_wearable->getAssetID()) &&
-				(old_item_id == new_item->getUUID()))
-			{
-				lldebugs << "No change to wearable asset and item: " << LLWearableType::getTypeName(type) << llendl;
-				return;
-			}
-			
-			if (old_wearable->isDirty())
-			{
-				// Bring up modal dialog: Save changes? Yes, No, Cancel
-				LLSD payload;
-				payload["item_id"] = new_item->getUUID();
-				LLNotificationsUtil::add("WearableSave", LLSD(), payload, boost::bind(onSetWearableDialog, _1, _2, new_wearable));
-				return;
-			}
-		}
-	}
-
-	setWearableFinal(new_item, new_wearable, do_append);
-}
+//// User has picked "wear on avatar" from a menu.
+//void LLAgentWearables::setWearableItem(LLInventoryItem* new_item, LLViewerWearable* new_wearable, bool do_append)
+//{
+//	//LLAgentDumper dumper("setWearableItem");
+//	if (isWearingItem(new_item->getUUID()))
+//	{
+//		llwarns << "wearable " << new_item->getUUID() << " is already worn" << llendl;
+//		return;
+//	}
+//	
+//	const LLWearableType::EType type = new_wearable->getType();
+//
+//	if (!do_append)
+//	{
+//		// Remove old wearable, if any
+//		// MULTI_WEARABLE: hardwired to 0
+//		LLViewerWearable* old_wearable = getViewerWearable(type,0);
+//		if (old_wearable)
+//		{
+//			const LLUUID& old_item_id = old_wearable->getItemID();
+//			if ((old_wearable->getAssetID() == new_wearable->getAssetID()) &&
+//				(old_item_id == new_item->getUUID()))
+//			{
+//				lldebugs << "No change to wearable asset and item: " << LLWearableType::getTypeName(type) << llendl;
+//				return;
+//			}
+//			
+//			if (old_wearable->isDirty())
+//			{
+//				// Bring up modal dialog: Save changes? Yes, No, Cancel
+//				LLSD payload;
+//				payload["item_id"] = new_item->getUUID();
+//				LLNotificationsUtil::add("WearableSave", LLSD(), payload, boost::bind(onSetWearableDialog, _1, _2, new_wearable));
+//				return;
+//			}
+//		}
+//	}
+//
+//	setWearableFinal(new_item, new_wearable, do_append);
+//}
 
 // static 
 bool LLAgentWearables::onSetWearableDialog(const LLSD& notification, const LLSD& response, LLViewerWearable* wearable)
@@ -1673,12 +1653,12 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 {
 	if (!isAgentAvatarValid()) return;
 
-// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Modified: RLVa-1.2.0a
-	// RELEASE-RLVa: [SL-2.0.0] Check our callers and verify that erasing elements from the passed vector won't break random things
+// [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0)
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
 	if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_REMOVE)) )
 	{
 		llvo_vec_t::iterator itObj = objects_to_remove.begin();
-		while (itObj != objects_to_remove.end())
+		while (objects_to_remove.end() != itObj)
 		{
 			const LLViewerObject* pAttachObj = *itObj;
 			if (gRlvAttachmentLocks.isLockedAttachment(pAttachObj))
@@ -1686,12 +1666,12 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 				itObj = objects_to_remove.erase(itObj);
 
 				// Fall-back code: re-add the attachment if it got removed from COF somehow (compensates for possible bugs elsewhere)
-				LLInventoryModel::cat_array_t folders; LLInventoryModel::item_array_t items;
-				LLLinkedItemIDMatches f(pAttachObj->getAttachmentItemID());
-				gInventory.collectDescendentsIf(LLAppearanceMgr::instance().getCOF(), folders, items, LLInventoryModel::EXCLUDE_TRASH, f);
-				RLV_ASSERT( 0 != items.count() );
-				if (0 == items.count())
+				bool fInCOF = LLAppearanceMgr::isLinkInCOF(pAttachObj->getAttachmentItemID());
+				RLV_ASSERT(fInCOF);
+				if (!fInCOF)
+				{
 					LLAppearanceMgr::instance().registerAttachment(pAttachObj->getAttachmentItemID());
+				}
 			}
 			else
 			{
@@ -1722,10 +1702,10 @@ void LLAgentWearables::userRemoveMultipleAttachments(llvo_vec_t& objects_to_remo
 
 void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_array_t& obj_item_array)
 {
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 	static bool sInitialAttachmentsRequested = false;
 
-	// RELEASE-RLVa: [SL-2.5.2] Check our callers and verify that erasing elements from the passed vector won't break random things
+	// RELEASE-RLVa: [SL-3.4] Check our callers and verify that erasing elements from the passed vector won't break random things
 	if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 	{
 		// Fall-back code: everything should really already have been pruned before we get this far
@@ -1778,7 +1758,7 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		msg->addUUIDFast(_PREHASH_ItemID, item->getLinkedUUID());
 		msg->addUUIDFast(_PREHASH_OwnerID, item->getPermissions().getOwner());
 		msg->addU8Fast(_PREHASH_AttachmentPt, 0 | ATTACHMENT_ADD);	// Wear at the previous or default attachment point
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 		if ( (rlv_handler_t::isEnabled()) && (sInitialAttachmentsRequested) && (gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) )
 		{
 			RlvAttachmentLockWatchdog::instance().onWearAttachment(item, RLV_WEAR_ADD);
@@ -1795,7 +1775,7 @@ void LLAgentWearables::userAttachMultipleAttachments(LLInventoryModel::item_arra
 		}
 	}
 
-// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1b) | Added: RLVa-1.3.1b
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1)
 	sInitialAttachmentsRequested = true;
 // [/RLVa:KB]
 }

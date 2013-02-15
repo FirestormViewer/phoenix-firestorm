@@ -1345,30 +1345,11 @@ bool LLAppearanceMgr::wearItemOnAvatar(const LLUUID& item_id_to_wear, bool do_up
 		return false;
 	}
 
-// [RLVa:KB] - Checked: 2010-09-04 (RLVa-1.2.1a) | Modified: RLVa-1.2.1a
-	if ( (rlv_handler_t::isEnabled()) && 
-		 ((gRlvAttachmentLocks.hasLockedAttachmentPoint(RLV_LOCK_ANY)) || (gRlvWearableLocks.hasLockedWearableType(RLV_LOCK_ANY))) )
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+	replace |= (LLAssetType::AT_BODYPART == item_to_wear->getType()); // Body parts should always replace
+	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanWearItem(item_to_wear, (replace) ? RLV_WEAR_REPLACE : RLV_WEAR_ADD)) )
 	{
-		switch (item_to_wear->getType())
-		{
-			case LLAssetType::AT_BODYPART:
-			case LLAssetType::AT_CLOTHING:
-				{
-					ERlvWearMask eWear = gRlvWearableLocks.canWear(item_to_wear);
-					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
-						return false;
-				}
-				break;
-			case LLAssetType::AT_OBJECT:
-				{
-					ERlvWearMask eWear = gRlvAttachmentLocks.canAttach(item_to_wear);
-					if ( (RLV_WEAR_LOCKED == eWear) || ((replace) && ((RLV_WEAR_REPLACE & eWear) == 0)) )
-						return false;
-				}
-				break;
-			default:
-				return false;
-		}
+		return false;
 	}
 // [/RLVa:KB]
 
@@ -1817,7 +1798,7 @@ void LLAppearanceMgr::syncCOF(const LLInventoryModel::item_array_t& items, LLAss
 	for (S32 idxNewItem = 0, cntNewItem = new_cof_items.count(); idxNewItem < cntNewItem; idxNewItem++)
 	{
 		LLViewerInventoryItem* pItem = new_cof_items.get(idxNewItem);
-		if (items_to_add.end() != std::find(items_to_add.begin(), items_to_add.end(), pItem))
+		if (items_to_add.end() == std::find(items_to_add.begin(), items_to_add.end(), pItem))
 		{
 			items_to_add.push_back(pItem);
 		}
@@ -2989,6 +2970,16 @@ void LLAppearanceMgr::removeCOFItemLinks(const LLUUID& item_id)
 		const LLInventoryItem* item = item_array.get(i).get();
 		if (item->getIsLinkType() && item->getLinkedUUID() == item_id)
 		{
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+			// NOTE-RLVa: debug-only, can be removed down the line
+			if (rlv_handler_t::isEnabled())
+			{
+				RLV_ASSERT(rlvPredCanRemoveItem(item));
+			}
+#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+// [/RLVa:KB]
+
 			gInventory.purgeObject(item->getUUID());
 		}
 	}
@@ -3007,6 +2998,16 @@ void LLAppearanceMgr::removeCOFLinksOfType(LLWearableType::EType type)
 		const LLViewerInventoryItem* item = *it;
 		if (item->getIsLinkType()) // we must operate on links only
 		{
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+			// NOTE-RLVa: debug-only, can be removed down the line
+			if (rlv_handler_t::isEnabled())
+			{
+				RLV_ASSERT(rlvPredCanRemoveItem(item));
+			}
+#endif // LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+// [/RLVa:KB]
+
 			gInventory.purgeObject(item->getUUID());
 		}
 	}
@@ -3568,20 +3569,50 @@ void LLAppearanceMgr::removeItemsFromAvatar(const uuid_vec_t& ids_to_remove)
 	{
 		llwarns << "called with empty list, nothing to do" << llendl;
 	}
+
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+	bool fUpdateAppearance = false;
 	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
 	{
-		const LLUUID& id_to_remove = *it;
-		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-		removeCOFItemLinks(linked_item_id);
+		const LLInventoryItem* linked_item = gInventory.getLinkedItem(*it);
+		if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
+		{
+			continue;
+		}
+
+		fUpdateAppearance = true;
+		removeCOFItemLinks(linked_item->getUUID());
 	}
-	updateAppearanceFromCOF();
+
+	if (fUpdateAppearance)
+	{
+		updateAppearanceFromCOF();
+	}
+// [/RLVa:KB]
+//	for (uuid_vec_t::const_iterator it = ids_to_remove.begin(); it != ids_to_remove.end(); ++it)
+//	{
+//		const LLUUID& id_to_remove = *it;
+//		const LLUUID& linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+//		removeCOFItemLinks(linked_item_id);
+//	}
+//	updateAppearanceFromCOF();
 }
 
 void LLAppearanceMgr::removeItemFromAvatar(const LLUUID& id_to_remove)
 {
-	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
-	removeCOFItemLinks(linked_item_id);
+// [RLVa:KB] - Checked: 2013-02-12 (RLVa-1.4.8)
+	const LLInventoryItem* linked_item = gInventory.getLinkedItem(id_to_remove);
+	if ( (rlv_handler_t::isEnabled()) && (!rlvPredCanRemoveItem(linked_item)) )
+	{
+		return;
+	}
+
+	removeCOFItemLinks(linked_item->getUUID());
 	updateAppearanceFromCOF();
+// [/RLVA:KB]
+//	LLUUID linked_item_id = gInventory.getLinkedItemID(id_to_remove);
+//	removeCOFItemLinks(linked_item_id);
+//	updateAppearanceFromCOF();
 }
 
 bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_body)
