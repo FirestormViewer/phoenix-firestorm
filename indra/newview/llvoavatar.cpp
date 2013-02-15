@@ -3196,6 +3196,12 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// Avatars must have a first and last name
 	if (!firstname || !lastname) return;
 
+	// <FS:Ansariel> OpenSim chat distance compatibility
+	static const F32 chat_range_whisper_squared = LLWorld::getInstance()->getWhisperDistance() * LLWorld::getInstance()->getWhisperDistance();
+	static const F32 chat_range_say_squared = LLWorld::getInstance()->getSayDistance() * LLWorld::getInstance()->getSayDistance();
+	static const F32 chat_range_shout_squared = LLWorld::getInstance()->getShoutDistance() * LLWorld::getInstance()->getShoutDistance();
+	// </FS:Ansariel>
+
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Added: RLVa-1.2.2a
 	bool fRlvShowNames = gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
@@ -3253,16 +3259,16 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	{
 		F64 distance_squared = dist_vec_squared(getPositionGlobal(), gAgent.getPositionGlobal());
 		// <FS:CR> FIRE-6664: Add whisper range color tag
-		if (distance_squared <= CHAT_WHISPER_RADIUS_SQUARED)
+		if (distance_squared <= chat_range_whisper_squared)
 		{
 			distance_color = tag_whisper_color;
 		}
-		else if (distance_squared <= CHAT_NORMAL_RADIUS_SQUARED)
+		else if (distance_squared <= chat_range_say_squared)
 		// </FS:CR> FIRE-6664: Add whisper range color tag
 		{
 			distance_color = tag_chat_color;
 		}
-		else if (distance_squared <= CHAT_SHOUT_RADIUS_SQUARED)
+		else if (distance_squared <= chat_range_shout_squared)
 		{
 			distance_color = tag_shout_color;
 		}
