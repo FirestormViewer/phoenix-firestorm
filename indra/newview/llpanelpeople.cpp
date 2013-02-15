@@ -1280,17 +1280,19 @@ void LLPanelPeople::updateNearbyList()
 			radarRangeCell->setFontStyle(LLFontGL::NORMAL);
 		}
 
-		//AO: Set friends colors / styles
+		// Set friends colors / styles
+		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
 		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("name")->mIndex);
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
 		if (relation)
 		{
-			radarNameCell->setFontStyle(LLFontGL::BOLD);
+			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
 		}
-		else
+		if (LLMuteList::instance().isMuted(avId))
 		{
-			radarNameCell->setFontStyle(LLFontGL::NORMAL);
+			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
 		}
+		radarNameCell->setFontStyle(nameCellStyle);
 
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, FALSE, FALSE, TRUE))
 		{
