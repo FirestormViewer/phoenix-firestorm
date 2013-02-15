@@ -2016,19 +2016,6 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 // [/RLVa:KB]
 	removeDuplicateItems(gest_items);
 	
-// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	if (!append)
-	{
-// [/SL:KB]
-
-	// Remove current COF contents.  Have to do this after creating
-	// the link_waiter so links can be followed for any items that get
-	// carried over (e.g. keeping old shape if the new outfit does not
-	// contain one)
-	bool keep_outfit_links = append;
-	purgeCategory(cof, keep_outfit_links);
-	gInventory.notifyObservers();
-
 #ifndef LL_RELEASE_FOR_DOWNLOAD
 	LL_DEBUGS("Avatar") << self_av_string() << "Linking body items" << LL_ENDL;
 #endif
@@ -2060,18 +2047,6 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 		LL_DEBUGS("Avatar") << self_av_string() << "Linking gesture items" << LL_ENDL;
 #endif
 		link_waiter->addItems(gest_items);
-// [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	//}
-	//else
-	//{
-	//	// Synchronize COF
-	//	//  -> it's possible that we don't link to any new items in which case 'link_waiter' fires when it goes out of scope below
-	//	syncCOF(wear_items, LLAssetType::AT_CLOTHING, link_waiter);
-	//	syncCOF(obj_items, LLAssetType::AT_OBJECT, link_waiter);
-	//	syncCOF(gest_items, LLAssetType::AT_GESTURE, link_waiter);
-	//	gInventory.notifyObservers();
-	//}
-// [/SL:KB]
 
 		// Add link to outfit if category is an outfit. 
 		if (idOutfit.notNull())
@@ -2118,15 +2093,9 @@ void LLAppearanceMgr::updateCOF(LLInventoryModel::item_array_t& body_items_new,
 //	bool keep_outfit_links = append;
 //	purgeCategory(cof, keep_outfit_links);
 //	gInventory.notifyObservers();
-	LL_DEBUGS("Avatar") << self_av_string() << "waiting for LLUpdateAppearanceOnDestroy" << LL_ENDL;
-// [/RLVa:KB]
-//	if (!append)
-//	{
-//		createBaseOutfitLink(category, link_waiter);
-//	}
 
+	LL_DEBUGS("Avatar") << self_av_string() << "waiting for LLUpdateAppearanceOnDestroy" << LL_ENDL;
 }
-	}
 
 void LLAppearanceMgr::updatePanelOutfitName(const std::string& name)
 {
@@ -2219,23 +2188,6 @@ void LLAppearanceMgr::updateAgentWearables(LLWearableHoldingPattern* holder, boo
 			}
 		}
 	}
-
-// [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
-	if ( (rlv_handler_t::isEnabled()) && (gAgentWearables.areInitalWearablesLoaded()) )
-	{
-		// We need to report removals before additions or scripts will get confused
-		for (uuid_vec_t::const_iterator itItemID = idsCurrent.begin(); itItemID != idsCurrent.end(); ++itItemID)
-		{
-			const LLViewerWearable* pWearable = gAgentWearables.getWearableFromItemID(*itItemID);
-			if (pWearable)
-				RlvBehaviourNotifyHandler::onTakeOff(pWearable->getType(), true);
-		}
-		for (S32 idxItem = 0, cntItem = itemsNew.count(); idxItem < cntItem; idxItem++)
-		{
-			RlvBehaviourNotifyHandler::onWear(itemsNew.get(idxItem)->getWearableType(), true);
-		}
-	}
-// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2011-03-31 (RLVa-1.3.0f) | Added: RLVa-1.3.0f
 	if ( (rlv_handler_t::isEnabled()) && (gAgentWearables.areInitalWearablesLoaded()) )
@@ -3674,7 +3626,7 @@ bool LLAppearanceMgr::moveWearable(LLViewerInventoryItem* item, bool closer_to_b
 
 	//to cause appearance of the agent to be updated
 	bool result = false;
-	if ((result = gAgentWearables.moveWearable(item, closer_to_body)))
+	if (result = gAgentWearables.moveWearable(item, closer_to_body))
 	{
 		gAgentAvatarp->wearableUpdated(item->getWearableType(), FALSE);
 	}

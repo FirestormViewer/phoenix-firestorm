@@ -1015,7 +1015,7 @@ void RlvForceWear::done()
 
 // Checked: 2010-02-17 (RLVa-1.1.0o) | Modified: RLVa-1.1.0o
 /*
-void RlvForceWear::onWearableArrived(LLViewerWearable* pWearable, void* pParam)
+void RlvForceWear::onWearableArrived(LLWearable* pWearable, void* pParam)
 {
 	#ifdef RLV_EXPERIMENTAL_COMPOSITEFOLDERS
 	// If this wearable will end up replacing a currently worn one that belongs to a composite folder then we need to detach the composite

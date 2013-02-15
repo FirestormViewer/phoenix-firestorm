@@ -109,7 +109,6 @@ void LLInitialWearablesFetch::done()
 	else
 		rlvCallbackTimerOnce(nDelay, boost::bind(&LLInitialWearablesFetch::processContents,this));
 // [/RLVa:KB]
-
 	if (isAgentAvatarValid())
 	{
 		gAgentAvatarp->getPhases().stopPhase("initial_wearables_fetch");
