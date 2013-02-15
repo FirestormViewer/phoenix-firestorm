@@ -979,11 +979,13 @@ void LLPanelPeople::updateNearbyList()
 			continue;
 		}
 
+		// Try to get the avatar's viewer object - we will need it anyway later
+		LLVOAvatar* avVo = (LLVOAvatar*)gObjectList.findObject(avId);
+
 		static LLUICachedControl<bool> showdummyav("FSShowDummyAVsinRadar");
 		if (!showdummyav)
 		{
-			LLVOAvatar* voav = (LLVOAvatar*)gObjectList.findObject(avId);
-			if (voav && voav->mIsDummy)
+			if (avVo && avVo->mIsDummy)
 			{
 				continue;
 			}
@@ -1299,7 +1301,7 @@ void LLPanelPeople::updateNearbyList()
 		}
 
 		// Check if avatar is in draw distance and a VOAvatar instance actually exists
-		if (avRange <= drawRadius && avRange > -1 && gObjectList.findObject(avId))
+		if (avRange <= drawRadius && avRange > -1 && avVo)
 		{
 			radarRangeCell->setFontStyle(LLFontGL::BOLD);
 		}
