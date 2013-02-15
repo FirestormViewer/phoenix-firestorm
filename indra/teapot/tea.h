@@ -34,7 +34,6 @@
 #define TEA_H
 
 #include <string>
-#include <boost/algorithm/string.hpp>
 
 class Tea
 {

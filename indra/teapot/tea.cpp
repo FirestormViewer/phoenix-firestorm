@@ -31,6 +31,7 @@
  */
 
 #include "tea.h"
+#include <boost/algorithm/string.hpp>
 
 
 std::string Tea::sCurrency="L$";

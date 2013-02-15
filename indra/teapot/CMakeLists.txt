@@ -7,6 +7,7 @@ include(LLVFS)
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}
+	${LLCOMMON_SYSTEM_INCLUDE_DIRS}
     ${LLVFS_INCLUDE_DIRS}
     )
 
@@ -24,7 +25,5 @@ set_source_files_properties(${teapot_HEADER_FILES}
 
 list(APPEND teapot_SOURCE_FILES ${teapot_HEADER_FILES})
 
-add_library (teapot ${teapot_SOURCE_FILES})
-target_link_libraries(
-    teapot
-    )
+add_library( teapot ${teapot_SOURCE_FILES} )
+target_link_libraries( teapot )
