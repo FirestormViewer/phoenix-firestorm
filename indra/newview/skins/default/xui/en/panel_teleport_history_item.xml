@@ -79,6 +79,7 @@
          height="25"
          width="85"
          layout="topleft"
+         visible="false"
          follows="top|left|right">
 
     <text
@@ -101,6 +102,7 @@
          height="25"
          width="120"
          layout="topleft"
+         visible="false"
          follows="top|left|right">
 
     <text
