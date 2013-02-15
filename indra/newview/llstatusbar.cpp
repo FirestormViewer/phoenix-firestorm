@@ -104,7 +104,6 @@
 #include "llmenuoptionpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llvieweraudio.h"
 #include "fslightshare.h"	// <FS:CR> FIRE-5118 - Lightshare support
-
 //
 // Globals
 //

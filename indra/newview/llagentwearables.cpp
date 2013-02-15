@@ -59,7 +59,7 @@
 LLAgentWearables gAgentWearables;
 
 BOOL LLAgentWearables::mInitialWearablesUpdateReceived = FALSE;
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
 bool LLAgentWearables::mInitialWearablesLoaded = false;
 // [/SL:KB]
 
@@ -780,19 +780,23 @@ void LLAgentWearables::getWearableItemIDs(uuid_vec_t& idItems) const
 		getWearableItemIDs(itWearableType->first, idItems);
 	}
 }
-// <FS:TM> removed for shunshine merge
-//void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
-//{
-//	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
-//	if (mWearableDatas.end() != itWearableType)
-//	{
-//		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
-//				itWearable != endWearable; ++itWearable)
-//		{
-//			idItems.push_back((*itWearable)->getItemID());
-//		}
-//	}
-//}
+
+void LLAgentWearables::getWearableItemIDs(LLWearableType::EType eType, uuid_vec_t& idItems) const
+{
+	wearableentry_map_t::const_iterator itWearableType = mWearableDatas.find(eType);
+	if (mWearableDatas.end() != itWearableType)
+	{
+		for (wearableentry_vec_t::const_iterator itWearable = itWearableType->second.begin(), endWearable = itWearableType->second.end();
+				itWearable != endWearable; ++itWearable)
+		{
+			const LLViewerWearable* pWearable = dynamic_cast<LLViewerWearable*>(*itWearable);
+			if (pWearable)
+			{
+				idItems.push_back(pWearable->getItemID());
+			}
+		}
+	}
+}
 // [/RLVa:KB]
 
 const LLUUID LLAgentWearables::getWearableAssetID(LLWearableType::EType type, U32 index) const
@@ -1249,7 +1253,7 @@ void LLAgentWearables::removeWearableFinal(const LLWearableType::EType type, boo
 //		clearWearableType(type);
 // [RLVa:KB] - Checked: 2010-05-14 (RLVa-1.2.0g) | Added: RLVa-1.2.0g
 		// The line above shouldn't be needed and would cause issues if we block removing one of the wearables
-		RLV_VERIFY( ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.hasLockedWearable(type))) ? mWearableDatas[type].empty() : true );
+		RLV_VERIFY( ((!rlv_handler_t::isEnabled()) || (!gRlvWearableLocks.hasLockedWearable(type))) ? 0 == getWearableCount(type) : true );
 // [/RLVa:KB]
 	}
 	else
@@ -1395,7 +1399,7 @@ void LLAgentWearables::setWearableOutfit(const LLInventoryItem::item_array_t& it
 	// Start rendering & update the server
 	mWearablesLoaded = TRUE; 
 	checkWearablesLoaded();
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-3.0.0a) | Modified: Catznip-2.2.0a
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-09-22 (Catznip-2.2)
 	if (!mInitialWearablesLoaded)
 	{
 		mInitialWearablesLoaded = true;
@@ -1634,8 +1638,8 @@ void LLAgentWearables::invalidateBakedTextureHash(LLMD5& hash) const
 // Combines userRemoveMulipleAttachments() and userAttachMultipleAttachments() logic to
 // get attachments into desired state with minimal number of adds/removes.
 //void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array)
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
-void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool fAttachOnly)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
+void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj_item_array, bool attach_only)
 // [/SL:KB]
 {
 	// Possible cases:
@@ -1702,8 +1706,8 @@ void LLAgentWearables::userUpdateAttachments(LLInventoryModel::item_array_t& obj
 
 	// Remove everything in objects_to_remove
 //	userRemoveMultipleAttachments(objects_to_remove);
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-3.0.0a) | Added: Catznip-2.2.0a
-	if (!fAttachOnly)
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-22 (Catznip-2.2)
+	if (!attach_only)
 	{
 		userRemoveMultipleAttachments(objects_to_remove);
 	}
@@ -2066,7 +2070,7 @@ bool LLAgentWearables::changeInProgress() const
 	return mCOFChangeInProgress;
 }
 
-// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-3.0.0a) | Added: Catznip-2.1.1d
+// [SL:KB] - Patch: Appearance-InitialWearablesLoadedCallback | Checked: 2010-08-14 (Catznip-2.1)
 boost::signals2::connection LLAgentWearables::addInitialWearablesLoadedCallback(loaded_callback_t cb)
 {
 	return mInitialWearablesLoadedSignal.connect(cb);

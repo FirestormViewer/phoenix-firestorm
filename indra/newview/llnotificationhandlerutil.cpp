@@ -189,18 +189,19 @@ bool LLHandlerUtil::canSpawnIMSession(const LLNotificationPtr& notification)
 //			|| TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()
 //			|| TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName();
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
-//	return 
+//	return
 //		(canEmbedNotificationInIM(notification)) && 
 //		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-//		  (TELEPORT_OFFERED == notification->getName()) );
+//		  (TELEPORT_OFFERED == notification->getName()) || 
+//		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/SL:KB]
 // [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
-	return 
+	return
 		(canEmbedNotificationInIM(notification)) && 
 		( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(notification->getPayload()["from_id"].asUUID())) ) &&
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) || 
+		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/RLVa:KB]
 }
 
@@ -233,8 +234,8 @@ bool LLHandlerUtil::canAddNotifPanelToIM(const LLNotificationPtr& notification)
 	return 
 		(canEmbedNotificationInIM(notification)) && 
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) || 
+		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/SL:KB]
 }
 
@@ -250,8 +251,8 @@ bool LLHandlerUtil::isNotificationReusable(const LLNotificationPtr& notification
 	return 
 		(canEmbedNotificationInIM(notification)) && 
 		( (OFFER_FRIENDSHIP == notification->getName()) || (USER_GIVE_ITEM == notification->getName()) || 
-		  (TELEPORT_OFFERED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) ||
-		  (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
+		  (TELEPORT_OFFERED == notification->getName()) ||
+		  (TELEPORT_OFFERED_MATURITY_EXCEEDED == notification->getName()) || (TELEPORT_OFFERED_MATURITY_BLOCKED == notification->getName()) );
 // [/SL:KB]
 }
 

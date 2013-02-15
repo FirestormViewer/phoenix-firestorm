@@ -293,7 +293,7 @@ protected:
 	addattachments_map_t             m_addAttachments;
 	LLInventoryModel::item_array_t   m_addGestures;
 	std::list<const LLViewerObject*> m_remAttachments;
-	std::list<const LLViewerWearable*>     m_remWearables;
+	std::list<const LLViewerWearable*> m_remWearables;
 	LLInventoryModel::item_array_t   m_remGestures;
 
 private:

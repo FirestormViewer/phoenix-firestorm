@@ -230,7 +230,9 @@ private:
 	void setOutfitLocked(bool locked);
 
 // [SL:KB] - Checked: 2010-04-24 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-	void syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, LLPointer<LLInventoryCallback> cb);
+	void purgeItems(const LLInventoryModel::item_array_t& items);
+	void syncCOF(const LLInventoryModel::item_array_t& items, LLAssetType::EType type, 
+	             LLInventoryModel::item_array_t& items_to_add, LLInventoryModel::item_array_t& items_to_remove);
 // [/SL:KB]
 
 	bool mAttachmentInvLinkEnabled;
@@ -245,7 +247,7 @@ private:
 
 	std::auto_ptr<LLOutfitUnLockTimer> mUnlockOutfitTimer;
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-3.0.0a) | Modified: Catznip-2.1.2e
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-09-18 (Catznip-2.1)
 public:
 	void linkPendingAttachments();
 	void onRegisterAttachmentComplete(const LLUUID& idItem);
@@ -279,7 +281,7 @@ private:
 	bool mUpdateBaseOrder;
 };
 
-// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-3.0.0a) | Added: Catznip-2.1.2a
+// [SL:KB] - Patch: Appearance-SyncAttach | Checked: 2010-08-31 (Catznip-2.1)
 class LLRegisterAttachmentCallback : public LLInventoryCallback
 {
 public:

@@ -743,7 +743,7 @@ void RlvForceWear::forceRemove(const LLViewerWearable* pWearable)
 void RlvForceWear::forceRemove(LLWearableType::EType wtType)
 {
 	for (U32 idxWearable = 0, cntWearable = gAgentWearables.getWearableCount(wtType); idxWearable < cntWearable; idxWearable++)
-		forceRemove(gAgentWearables.getWearable(wtType, idxWearable));
+		forceRemove(gAgentWearables.getViewerWearable(wtType, idxWearable));
 }
 
 // Checked: 2010-03-19 (RLVa-1.2.0c) | Modified: RLVa-1.2.0a
@@ -953,7 +953,7 @@ void RlvForceWear::done()
 		for (std::list<const LLViewerObject*>::const_iterator itAttachObj = m_remAttachments.begin(); 
 				itAttachObj != m_remAttachments.end(); ++itAttachObj)
 		{
-			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID(), false);
+			pAppearanceMgr->removeCOFItemLinks((*itAttachObj)->getAttachmentItemID());
 		}
 
 		m_remAttachments.clear();

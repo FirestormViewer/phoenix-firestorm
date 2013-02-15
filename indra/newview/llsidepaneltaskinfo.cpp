@@ -372,8 +372,14 @@ void LLSidepanelTaskInfo::refresh()
 	
 	// Update creator text field
 	getChildView("Creator:")->setEnabled(TRUE);
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	BOOL creators_identical = FALSE;
+// [/RLVa:KB]
 	std::string creator_name;
-	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+	creators_identical = LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
+// [/RLVa:KB]
+//	LLSelectMgr::getInstance()->selectGetCreator(mCreatorID, creator_name);
 
 //	getChild<LLUICtrl>("Creator Name")->setValue(creator_name);
 //	getChildView("Creator Name")->setEnabled(TRUE);
