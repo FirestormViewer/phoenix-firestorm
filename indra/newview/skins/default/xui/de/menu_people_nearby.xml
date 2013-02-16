@@ -15,7 +15,7 @@
 	<menu_item_call label="Gruppeneinladung schicken" name="GroupInvite"/>
 	<menu_item_call label="Skript-Info anzeigen" name="ScriptInfo"/>
 	<menu_item_check label="Ignorieren/Freischalten" name="Block/Unblock"/>
-	<menu_item_call label="Abuse-Report erstellen" name="report"/>
+	<menu_item_call label="Missbrauch melden" name="report"/>
 	<menu_item_call label="Einfrieren" name="freeze"/>
 	<menu_item_call label="Parzelle: Entfernen" name="eject"/>
 	<menu_item_call label="Estate: Hinauswerfen" name="kick"/>
