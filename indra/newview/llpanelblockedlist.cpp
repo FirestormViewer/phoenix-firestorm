@@ -119,6 +119,7 @@ void LLPanelBlockedList::onOpen(const LLSD& key)
 void LLPanelBlockedList::selectBlocked(const LLUUID& mute_id)
 {
 	mBlockedList->selectByID(mute_id);
+	mBlockedList->scrollToShowSelected();
 }
 
 void LLPanelBlockedList::showPanelAndSelect(const LLUUID& idToSelect)
