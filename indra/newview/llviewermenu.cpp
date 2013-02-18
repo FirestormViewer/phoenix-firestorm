@@ -7055,7 +7055,8 @@ bool update_grid_help()
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
-	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("help"))
+	bool is_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if (is_opensim && grid_info.has("help"))
 	{
 		needs_seperator = true;
 		gMenuHolder->childSetVisible("current_grid_help",true);
@@ -7070,7 +7071,7 @@ bool update_grid_help()
 		gMenuHolder->childSetVisible("current_grid_help_login",false);
 	}
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("about"))
+	if (is_opensim && grid_info.has("about"))
 	{
 		needs_seperator = true;
 		gMenuHolder->childSetVisible("current_grid_about",true);
@@ -7090,7 +7091,7 @@ bool update_grid_help()
 
 // <FS:AW  opensim destinations and avatar picker>
 #ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
+	if (is_opensim)
 	{
 		if (!LLLoginInstance::getInstance()->hasResponse("destination_guide_url") 
 		||LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString().empty()
@@ -7106,6 +7107,7 @@ bool update_grid_help()
 			gMenuHolder->childSetVisible("Destinations", false);
 		}
 	}
+	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
 #endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
