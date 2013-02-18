@@ -587,10 +587,14 @@ void LLFastTimer::nextFrame()
 {
 	countsPerSecond(); // good place to calculate clock frequency
 	U64 frame_time = getCPUClockCount64();
+//<FS:TS> Don't spam the log with messages about fast timer inaccuracy
+//        when we've turned fast timers off
+#if !FAST_TIMER_ON
 	if ((frame_time - sLastFrameTime) >> 8 > 0xffffffff)
 	{
 		llinfos << "Slow frame, fast timers inaccurate" << llendl;
 	}
+#endif
 
 	if (!sPauseHistory)
 	{
