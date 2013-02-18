@@ -118,6 +118,8 @@
 #include "llworld.h"
 // </AW: opensim-limits>
 
+#include "nd/ndboolswitch.h" // <FS:ND/> To toggle LLRender::sGLCoreProfile 
+
 const S32 SLM_SUPPORTED_VERSION = 3;
 
 //static
@@ -4173,7 +4175,15 @@ void LLModelPreview::genLODs(S32 which_lod, U32 decimation, bool enforce_tri_lim
 			{
 				type_mask = mVertexBuffer[5][base][i]->getTypeMask();
 
+				// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+				nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+				// </FS:	ND>
+
 				LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
+
+				// <FS:ND> And reset LLRender::sGLCoreProfile again
+				switchCoreProfile.reset();
+				// </FS:	ND>
 
 				if (sizes[i*2+1] > 0 && sizes[i*2] > 0)
 				{
@@ -4865,7 +4875,15 @@ void LLModelPreview::genBuffers(S32 lod, bool include_skin_weights)
 				mask |= LLVertexBuffer::MAP_WEIGHT4;
 			}
 
+			// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+			nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+			// </FS:ND>
+
 			vb = new LLVertexBuffer(mask, 0);
+			
+			// <FS:ND> And reset LLRender::sGLCoreProfile again
+			switchCoreProfile.reset();
+			// </FS:ND>
 
 			vb->allocateBuffer(num_vertices, num_indices, TRUE);
 
@@ -4996,8 +5014,16 @@ void LLModelPreview::addEmptyFace( LLModel* pTarget )
 {
 	U32 type_mask = LLVertexBuffer::MAP_VERTEX | LLVertexBuffer::MAP_NORMAL | LLVertexBuffer::MAP_TEXCOORD0;
 	
+	// <FS:ND> Make sure LLRender::sGLCoreProfile is off, so we get a buffer we can pass into GLOD
+	nd::utils::boolSwitch switchCoreProfile ( &LLRender::sGLCoreProfile, false );
+	// </FS:ND>
+
 	LLPointer<LLVertexBuffer> buff = new LLVertexBuffer(type_mask, 0);
 	
+	// <FS:ND> And reset LLRender::sGLCoreProfile again
+	switchCoreProfile.reset();
+	// </FS:ND>
+
 	buff->allocateBuffer(1, 3, true);
 	memset( (U8*) buff->getMappedData(), 0, buff->getSize() );
 	memset( (U8*) buff->getIndicesPointer(), 0, buff->getIndicesSize() );
