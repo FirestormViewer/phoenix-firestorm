@@ -1617,14 +1617,14 @@ void AOEngine::parseNotecard(const char* buffer)
 			continue;
 		}
 
-		U32 endTag=line.find("]");
-		if(endTag==std::string::npos)
+		if(line.find("]") == std::string::npos)
 		{
 			LLSD args;
 			args["LINE"]=(S32) index;
 			LLNotificationsUtil::add("AOImportNoValidDelimiter",args);
 			continue;
 		}
+		U32 endTag = line.find("]");
 
 		std::string stateName=line.substr(1,endTag-1);
 		LLStringUtil::trim(stateName);
