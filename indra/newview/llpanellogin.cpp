@@ -983,14 +983,14 @@ void LLPanelLogin::onClickNewAccount(void*)
 	if (sInstance)
 	{
 // <AW: opensim>
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		LLSD grid_info;
 		LLGridManager::getInstance()->getGridData(grid_info);
 
 		if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has(GRID_REGISTER_NEW_ACCOUNT))
 			LLWeb::loadURLInternal(grid_info[GRID_REGISTER_NEW_ACCOUNT]);
 		else
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </AW: opensim>
 			LLWeb::loadURLExternal(LLTrans::getString("create_account_url"));
 	}
@@ -1009,14 +1009,14 @@ void LLPanelLogin::onClickForgotPassword(void*)
 	if (sInstance)
 	{
 // <AW: opensim>
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		LLSD grid_info;
 		LLGridManager::getInstance()->getGridData(grid_info);
 
 		if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has(GRID_FORGOT_PASSWORD))
 			LLWeb::loadURLInternal(grid_info[GRID_FORGOT_PASSWORD]);
 		else
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </AW: opensim>
 		LLWeb::loadURLExternal(sInstance->getString( "forgot_password_url" ));
 	}
@@ -1221,19 +1221,19 @@ void LLPanelLogin::addUsersToCombo(BOOL show_server)
 					name.append( " @ " + grid_label);
 				add_grid = true;
 			}
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 			else if (!grid_label.empty() && show_server)
 			{
 				name.append(" @ " + grid_label);
 				add_grid = true;
 			}
-#else  // HAS_OPENSIM_SUPPORT
+#else  // OPENSIM
 			else if (SECOND_LIFE_BETA_LABEL == grid_label && show_server)
 			{
 				name.append(" @ " + grid_label);
 				add_grid = true;
 			}
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 			if (add_grid)
 			{
 				combo->add(name,LLSD(credname));
@@ -1325,9 +1325,9 @@ void LLPanelLogin::updateServerCombo()
 {
 	if (sInstance)
 	{
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		//LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 		// We add all of the possible values, sorted, and then add a bar and the current value at the top
 		LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
 		server_choice_combo->removeall();

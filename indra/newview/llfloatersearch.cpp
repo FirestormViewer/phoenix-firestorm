@@ -122,13 +122,13 @@ void LLFloaterSearch::onOpen(const LLSD& key)
 	p.trusted_content = true;
 // <FS:AW  opensim search support>
 //	p.allow_address_entry = false;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool debug = gSavedSettings.getBOOL("DebugSearch");
 	p.allow_address_entry = debug;
 // <FS:AW optional opensim support>
-#else // HAS_OPENSIM_SUPPORT
+#else // OPENSIM
 	p.allow_address_entry = false;
-#endif // HAS_OPENSIM_SUPPORT 
+#endif // OPENSIM 
 // </FS:AW optional opensim support>
 
 // </FS:AW  opensim search support>
@@ -215,7 +215,7 @@ void LLFloaterSearch::search(const SearchQuery &p)
 //	std::string url = gSavedSettings.getString("SearchURL");
 	std::string url;
 
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	std::string debug_url = gSavedSettings.getString("SearchURLDebug");
 	if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
 	{
@@ -228,7 +228,7 @@ void LLFloaterSearch::search(const SearchQuery &p)
 			: gSavedSettings.getString("SearchURLOpenSim");
 	}
 	else // we are in SL or SL beta
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		url = gSavedSettings.getString("SearchURL");
 	}

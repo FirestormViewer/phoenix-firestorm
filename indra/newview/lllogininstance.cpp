@@ -586,7 +586,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 	}
 
 // <FS:AW various patches>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	//TODO: make this more flexible
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
@@ -598,7 +598,7 @@ void LLLoginInstance::constructAuthParams(LLPointer<LLCredential> user_credentia
 		//not in this patch
 		//requested_options.append("profile-server-url");
 	}
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW various patches>
 
 	// (re)initialize the request params with creds.

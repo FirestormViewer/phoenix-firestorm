@@ -722,7 +722,7 @@ bool idle_startup()
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
 			LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
 		}
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
 		LLGridManager::getInstance()->initGrids();
 		LLStartUp::setStartupState( STATE_FETCH_GRID_INFO );
@@ -730,13 +730,13 @@ bool idle_startup()
 #else
 		LLGridManager::getInstance()->initialize(std::string());
 		LLStartUp::setStartupState( STATE_AUDIO_INIT );
-#endif // HAS_OPENSIM_SUPPORT 
+#endif // OPENSIM 
 // </FS:AW optional opensim support>
 	}
 
 	if (STATE_FETCH_GRID_INFO == LLStartUp::getStartupState())
 	{
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 		static LLFrameTimer grid_timer;
 
 		const F32 grid_time = grid_timer.getElapsedTimeF32();
@@ -1099,12 +1099,12 @@ bool idle_startup()
 		// create necessary directories
 		// *FIX: these mkdir's should error check
 // <FS:CR> Seperate user directories per grid on OS build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		std::string gridlabel = LLGridManager::getInstance()->getGridLabel();
 		gDirUtilp->setLindenUserDir(userid, gridlabel);
 #else
 		gDirUtilp->setLindenUserDir(userid);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
@@ -1138,11 +1138,11 @@ bool idle_startup()
 			gDirUtilp->setChatLogsDir(gSavedPerAccountSettings.getString("InstantMessageLogPath"));		
 		}
 // <FS:CR> Seperate user directories per grid on OS build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
 #else
 		gDirUtilp->setPerAccountChatLogsDir(userid);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>		
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
@@ -1290,11 +1290,11 @@ bool idle_startup()
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.
 		login->connect(gUserCredential);
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 // <AW: opensim>
 		LLGridManager::getInstance()->saveGridList();
 // </AW: opensim>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 		LLStartUp::setStartupState( STATE_LOGIN_CURL_UNSTUCK );
 		return FALSE;
 	}
@@ -2435,13 +2435,13 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 
 // <FS:AW Disable LSL bridge on opensim>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#ifdef OPENSIM // <FS:AW optional opensim support/>
 		if (LLGridManager::getInstance()->isInOpenSim()  && !LLGridManager::getInstance()->isInAuroraSim())
 		{
 			LLControlVariable* use_bridge = gSavedSettings.getControl("UseLSLBridge");
 			use_bridge->setValue(LLSD(FALSE), FALSE);
 		}
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#endif // OPENSIM // <FS:AW optional opensim support/>
 // </FS:AW Disable LSL bridge on opensim>
 
 //-TT Client LSL Bridge
@@ -3797,7 +3797,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	
 // <FS:CR> FIRE-8063: Read Aurora web profile url from login data
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	std::string web_profile_url = response["web_profile_url"];
 	if(!web_profile_url.empty())
 	{
@@ -3812,7 +3812,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
 		LL_INFOS("LLStartup") << "web_profile_url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR> FIRE-8063: Read Aurora web profile url from login data
 
 	// Default male and female avatars allowing the user to choose their avatar on first login.
@@ -3905,7 +3905,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 
 // <FS:AW opensim currency support>
 	std::string currency = "L$";
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if(response.has("currency"))
 	{
 		currency = response["currency"].asString();
@@ -3938,7 +3938,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << llendl;
 	}
 // </FS:AW  opensim destinations and avatar picker>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system

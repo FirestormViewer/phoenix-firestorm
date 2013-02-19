@@ -737,17 +737,17 @@ set(viewer_SOURCE_FILES
     NACLfloaterexploresounds.cpp
     )
 
-if (HAS_OPENSIM_SUPPORT)
+if (OPENSIM)
     list(APPEND viewer_SOURCE_FILES
                 fsgridhandler.cpp
                 fsslurl.cpp
         )
-else (HAS_OPENSIM_SUPPORT)
+else (OPENSIM)
     list(APPEND viewer_SOURCE_FILES
                 llslurl.cpp
                 llviewernetwork.cpp
         )
-endif (HAS_OPENSIM_SUPPORT)
+endif (OPENSIM)
 
 set(VIEWER_BINARY_NAME "firestorm-bin" CACHE STRING
     "The name of the viewer executable to create.")
@@ -2372,12 +2372,12 @@ if (LL_TESTS)
      llsecapi.cpp
     "${test_libs}"
     )
-  if (NOT HAS_OPENSIM_SUPPORT)#<FS:AW optional opensim support>
+  if (NOT OPENSIM)#<FS:AW optional opensim support>
     set(llslurl_test_sources
         llslurl.cpp
         llviewernetwork.cpp
     )
-  endif (NOT HAS_OPENSIM_SUPPORT)#<FS:AW optional opensim support>
+  endif (NOT OPENSIM)#<FS:AW optional opensim support>
 
 # RLVa - incompatible
 #  LL_ADD_INTEGRATION_TEST(llslurl

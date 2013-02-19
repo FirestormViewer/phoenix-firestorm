@@ -289,14 +289,14 @@ BOOL LLPanelMainInventory::postBuild()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -1666,14 +1666,14 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 			// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 			S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 			std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 			bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 			if(in_opensim)
 			{
 				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 			}
 			else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 			{
 				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 			}

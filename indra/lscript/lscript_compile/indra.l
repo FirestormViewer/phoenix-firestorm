@@ -39,9 +39,9 @@ FS			(f|F)
 #include "llclickaction.h"
 #include "llmediaentry.h"
 // <FS:CR> Add OSSL constants for OS builds
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 #include "osslconstants.h"
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 
 void count();
@@ -61,11 +61,9 @@ void parse_string();
 
 #define ECHO do { } while (0)
 
-#if defined(__cplusplus)
-extern "C" { int yylex( void ); }
-extern "C" { int yyparse( void ); }
-extern "C" { int yyerror(const char *fmt, ...); }
-#endif
+int yylex( void );
+int yyparse( void );
+int yyerror(const char *fmt, ...);
 
 %}
 

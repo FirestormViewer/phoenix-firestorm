@@ -275,7 +275,7 @@ void LLIMFloater::sendMsg()
 				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
 					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 					" os" +
 #endif
 					") "));
@@ -283,7 +283,7 @@ void LLIMFloater::sendMsg()
 				else
 				{
 					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 					" os" +
 #endif
 					") "));

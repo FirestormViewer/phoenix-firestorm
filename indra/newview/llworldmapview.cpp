@@ -59,7 +59,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 #include "llviewernetwork.h"	// <FS:CR> Aurora Sim
 #endif
 
@@ -358,13 +358,13 @@ void LLWorldMapView::draw()
 
 	// Draw the image tiles
 // <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if(!LLGridManager::getInstance()->isInAuroraSim()) {
 		drawMipmap(width, height);
 	}
 #else
 	drawMipmap(width, height);
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 // </FS:CR> Aurora Sim
 
 	gGL.flush();
@@ -450,11 +450,11 @@ void LLWorldMapView::draw()
 		}
 		 **********************/
 // <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
 #else
 		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();

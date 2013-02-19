@@ -2645,10 +2645,10 @@ bool LLAppViewer::initConfiguration()
 		gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
 		
 // <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		if (!gSavedSettings.getBOOL("ForceShowGrid"))
 			gSavedSettings.setBOOL("ForceShowGrid", TRUE);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 		
 		// Note that the "FirstRunThisInstall" settings is currently unused.

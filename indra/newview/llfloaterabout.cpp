@@ -244,11 +244,11 @@ LLSD LLFloaterAbout::getInfo()
 	info["BUILD_TIME"] = __TIME__;
 	info["CHANNEL"] = LLVersionInfo::getChannel();
 // <FS:CR> FIRE-8273: Add Open-sim indicator to About floater
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithOpensim");
 #else
 	info["BUILD_TYPE"] = LLTrans::getString("FSWithHavok");
-#endif
+#endif // OPENSIM
 // </FS:CR>
 	info["SKIN"] = gSavedSettings.getString("FSInternalSkinCurrent");
 	info["THEME"] = gSavedSettings.getString("FSInternalSkinCurrentTheme");

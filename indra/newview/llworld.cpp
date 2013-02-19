@@ -155,7 +155,7 @@ void LLWorld::refreshLimits()
 	}
 
 	mLimitsNeedRefresh = false;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if(LLGridManager::getInstance()->isInOpenSim())
 	{
 		//llmath/xform.h
@@ -199,7 +199,7 @@ void LLWorld::refreshLimits()
 // </FS:CR> Aurora Sim
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		//llmath/xform.h
 		mRegionMaxHeight = SL_MAX_OBJECT_Z;

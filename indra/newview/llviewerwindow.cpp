@@ -2085,7 +2085,7 @@ void LLViewerWindow::initWorldUI()
 // 		avatar_picker->navigateTo(url, "text/html");
 // 	}
 	std::string destination_guide_url;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		if (LLLoginInstance::getInstance()->hasResponse("destination_guide_url"))
@@ -2094,7 +2094,7 @@ void LLViewerWindow::initWorldUI()
 		}
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT  // <FS:AW optional opensim support>
+#endif // OPENSIM  // <FS:AW optional opensim support>
 	{
 		destination_guide_url = gSavedSettings.getString("DestinationGuideURL");
 	}
@@ -2112,7 +2112,7 @@ void LLViewerWindow::initWorldUI()
 	}
 
 	std::string avatar_picker_url;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		if (LLLoginInstance::getInstance()->hasResponse("avatar_picker_url"))
@@ -2121,7 +2121,7 @@ void LLViewerWindow::initWorldUI()
 		}
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT  // <FS:AW optional opensim support>
+#endif // OPENSIM  // <FS:AW optional opensim support>
 	{
 		avatar_picker_url = gSavedSettings.getString("AvatarPickerURL");
 	}

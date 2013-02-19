@@ -561,14 +561,14 @@ void init_menus()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -7051,7 +7051,7 @@ bool update_grid_help()
 
 	bool needs_seperator = false;
 
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
@@ -7065,12 +7065,12 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_help_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_help",false);
 		gMenuHolder->childSetVisible("current_grid_help_login",false);
 	}
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if (is_opensim && grid_info.has("about"))
 	{
 		needs_seperator = true;
@@ -7080,7 +7080,7 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_about_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_about",false);
 		gMenuHolder->childSetVisible("current_grid_about_login",false);
@@ -7090,7 +7090,7 @@ bool update_grid_help()
 	gMenuHolder->childSetVisible("grid_help_seperator_login",needs_seperator);
 
 // <FS:AW  opensim destinations and avatar picker>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if (is_opensim)
 	{
 		if (!LLLoginInstance::getInstance()->hasResponse("destination_guide_url") 
@@ -7108,7 +7108,7 @@ bool update_grid_help()
 		}
 	}
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
 	return true;
@@ -9654,14 +9654,14 @@ void LLUploadCostCalculator::calculateCost()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}

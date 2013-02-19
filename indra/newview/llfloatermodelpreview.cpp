@@ -537,7 +537,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	{
 		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php", current_grid.c_str());
 	}
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	else
 	{
 		// TODO: Opensim: Set it to something reasonable
@@ -549,7 +549,7 @@ BOOL LLFloaterModelPreview::postBuild()
 	args["FEATURE"] = getString("no_havok");
 	LLNotificationsUtil::add("NoHavok", args);
 // </FS:CR>
-#endif // <FS:AW optional opensim support>
+#endif // OPENSIM <FS:AW optional opensim support>
 
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
