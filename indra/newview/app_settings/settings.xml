@@ -3102,7 +3102,7 @@
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>50</real>
+    <real>70</real>
   </map>
 
   <key>CameraFieldOfView</key>
@@ -10154,7 +10154,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>500.0</real>
+    <real>1500.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10167,7 +10167,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>200</integer>
+    <integer>400</integer>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10180,21 +10180,21 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.30</real>
+    <real>5.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
   <key>RenderSSAOEffect</key>
   <map>
     <key>Comment</key>
-    <string>Multiplier for (1) value and (2) saturation (HSV definition), for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Third component is unused.)</string>
+    <string>Multiplier for (1) value for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Only first component is used.)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>0.80</real>
+      <real>0.50</real>
       <real>1.00</real>
       <real>0.00</real>
     </array>
@@ -10422,6 +10422,65 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Backup</key>
     <integer>0</integer>
   </map>
+  <key>RenderMacroNoiseFalloff</key>
+  <map>
+    <key>Comment</key>
+    <string>Distance multiplier for macro-dappling effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.0018</real>
+  </map>
+  <key>RenderMacroNoiseFrequency</key>
+  <map>
+    <key>Comment</key>
+    <string>Frequency of macro-dappling effect along X,Y,Z axes</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Vector3</string>
+    <key>Value</key>
+    <array>
+      <real>0.010</real>
+      <real>0.070</real>
+      <real>0.050</real>
+    </array>
+  </map>
+  <key>RenderMacroNoiseNormScale</key>
+  <map>
+    <key>Comment</key>
+    <string>Normal-offset scale to use for sample position in macro-dappling effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.5</real>
+  </map>
+  <key>RenderMacroNoiseStrength</key>
+  <map>
+    <key>Comment</key>
+    <string>Strength of macro-dappling effect</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>0.175</real>
+  </map>
+  <key>RenderMacroNoiseSunBaffle</key>
+  <map>
+    <key>Comment</key>
+    <string>Distance by which to make macro-dappling effect sample position affected by sun direction</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>F32</string>
+    <key>Value</key>
+    <real>20.0</real>
+  </map>
   <key>RenderDeferredNoise</key>
   <map>
     <key>Comment</key>
@@ -10471,7 +10530,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>-0.008</real>
+    <real>-0.003</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10574,7 +10633,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>-0.001</real>
+    <real>0.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10587,7 +10646,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.04</real>
+    <real>0.15</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10873,7 +10932,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>3.0</real>
+      <real>1.0</real>
       <real>2.0</real>
       <real>0.0</real>
     </array>
@@ -10890,7 +10949,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>1.4</real>
+    <real>3.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -11055,7 +11114,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>2</integer>
+      <integer>16</integer>
     </map>
     <key>RenderGlowLumWeights</key>
     <map>
@@ -11067,8 +11126,8 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>Vector3</string>
       <key>Value</key>
       <array>
-        <real>1</real>
-        <real>0</real>
+        <real>0.6</real>
+        <real>0.4</real>
         <real>0</real>
       </array>
     </map>
@@ -11081,7 +11140,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.25</real>
+      <real>0.115</real>
     </map>
     <key>RenderGlowMinLuminance</key>
     <map>
@@ -11092,7 +11151,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>9999</real>
+      <real>99999</real>
     </map>
     <key>RenderGlowResolutionPow</key>
     <map>
@@ -11114,7 +11173,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.35</real>
+      <real>0.122</real>
     </map>
     <key>RenderGlowWarmthAmount</key>
     <map>
@@ -11151,7 +11210,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>1.3</real>
+      <real>3.0</real>
     </map>
     <key>RenderGround</key>
     <map>

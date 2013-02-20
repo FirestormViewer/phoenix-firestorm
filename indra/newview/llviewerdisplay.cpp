@@ -1210,7 +1210,10 @@ void render_hud_attachments()
 		LLSpatialGroup::sNoDelete = FALSE;
 		//gPipeline.clearReferences();
 
-		render_hud_elements();
+		// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+		//render_hud_elements();
+		LLPipeline::render_hud_elements();
+		// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 
 		//restore type mask
 		gPipeline.popRenderTypeMask();
@@ -1341,7 +1344,10 @@ void render_ui(F32 zoom_factor, int subfield)
 			gPipeline.renderBloom(gSnapshot, zoom_factor, subfield);
 		}
 		
-		render_hud_elements();
+		// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+		//render_hud_elements();
+		LLPipeline::render_hud_elements();
+		// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 		render_hud_attachments();
 	}
 

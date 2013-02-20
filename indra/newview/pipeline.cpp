@@ -172,6 +172,13 @@ F32 LLPipeline::CameraFocusTransitionTime;
 F32 LLPipeline::CameraFNumber;
 F32 LLPipeline::CameraFocalLength;
 F32 LLPipeline::CameraFieldOfView;
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+F32 LLPipeline::RenderMacroNoiseFalloff;
+F32 LLPipeline::RenderMacroNoiseStrength;
+LLVector3 LLPipeline::RenderMacroNoiseFrequency;
+F32 LLPipeline::RenderMacroNoiseNormScale;
+F32 LLPipeline::RenderMacroNoiseSunBaffle;
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 F32 LLPipeline::RenderShadowNoise;
 F32 LLPipeline::RenderShadowBlurSize;
 F32 LLPipeline::RenderSSAOScale;
@@ -451,6 +458,10 @@ LLPipeline::LLPipeline() :
 	mLightingDetail(0),
 	mScreenWidth(0),
 	mScreenHeight(0)
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+	//	mSunShadowMapWidth(0),
+	//	mSpotShadowMapWidth(0)
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	mNoiseMap = 0;
 	mTrueNoiseMap = 0;
@@ -975,6 +986,8 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 			{
 				mShadow[i].release();
 			}
+			// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+			//mSunShadowMapWidth = 0;
 		}
 
 		U32 width = (U32) (resX*scale);
@@ -994,6 +1007,8 @@ bool LLPipeline::allocateScreenBuffer(U32 resX, U32 resY, U32 samples)
 			{
 				mShadow[i].release();
 			}
+			// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+			//mSpotShadowMapWidth = 0;
 		}
 
 		//HACK make screenbuffer allocations start failing after 30 seconds
@@ -1109,6 +1124,13 @@ void LLPipeline::refreshCachedSettings()
 	CameraFNumber = gSavedSettings.getF32("CameraFNumber");
 	CameraFocalLength = gSavedSettings.getF32("CameraFocalLength");
 	CameraFieldOfView = gSavedSettings.getF32("CameraFieldOfView");
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+	RenderMacroNoiseFalloff = gSavedSettings.getF32("RenderMacroNoiseFalloff");
+	RenderMacroNoiseStrength = gSavedSettings.getF32("RenderMacroNoiseStrength");
+	RenderMacroNoiseFrequency = gSavedSettings.getVector3("RenderMacroNoiseFrequency");
+	RenderMacroNoiseNormScale = gSavedSettings.getF32("RenderMacroNoiseNormScale");
+	RenderMacroNoiseSunBaffle = gSavedSettings.getF32("RenderMacroNoiseSunBaffle");
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 	RenderShadowNoise = gSavedSettings.getF32("RenderShadowNoise");
 	RenderShadowBlurSize = gSavedSettings.getF32("RenderShadowBlurSize");
 	RenderSSAOScale = gSavedSettings.getF32("RenderSSAOScale");
@@ -3409,7 +3431,10 @@ void LLPipeline::forAllVisibleDrawables(void (*func)(LLDrawable*))
 }
 
 //function for creating scripted beacons
-void renderScriptedBeacons(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderScriptedBeacons(LLDrawable* drawablep)
+void LLPipeline::renderScriptedBeacons(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	LLViewerObject *vobj = drawablep->getVObj();
 	if (vobj 
@@ -3438,7 +3463,10 @@ void renderScriptedBeacons(LLDrawable* drawablep)
 	}
 }
 
-void renderScriptedTouchBeacons(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderScriptedTouchBeacons(LLDrawable* drawablep)
+void LLPipeline::renderScriptedTouchBeacons(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	LLViewerObject *vobj = drawablep->getVObj();
 	if (vobj 
@@ -3468,7 +3496,10 @@ void renderScriptedTouchBeacons(LLDrawable* drawablep)
 }
 }
 
-void renderPhysicalBeacons(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderPhysicalBeacons(LLDrawable* drawablep)
+void LLPipeline::renderPhysicalBeacons(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	LLViewerObject *vobj = drawablep->getVObj();
 	if (vobj 
@@ -3497,7 +3528,10 @@ void renderPhysicalBeacons(LLDrawable* drawablep)
 }
 }
 
-void renderMOAPBeacons(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderMOAPBeacons(LLDrawable* drawablep)
+void LLPipeline::renderMOAPBeacons(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	LLViewerObject *vobj = drawablep->getVObj();
 
@@ -3537,7 +3571,10 @@ void renderMOAPBeacons(LLDrawable* drawablep)
 }
 }
 
-void renderParticleBeacons(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderParticleBeacons(LLDrawable* drawablep)
+void LLPipeline::renderParticleBeacons(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	// Look for attachments, objects, etc.
 	LLViewerObject *vobj = drawablep->getVObj();
@@ -3566,7 +3603,10 @@ void renderParticleBeacons(LLDrawable* drawablep)
 }
 }
 
-void renderSoundHighlights(LLDrawable* drawablep)
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void renderSoundHighlights(LLDrawable* drawablep)
+void LLPipeline::renderSoundHighlights(LLDrawable* drawablep)
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	// Look for attachments, objects, etc.
 	LLViewerObject *vobj = drawablep->getVObj();
@@ -3841,7 +3881,10 @@ void LLPipeline::postSort(LLCamera& camera)
 }
 
 
-void render_hud_elements()
+// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+//void render_hud_elements()
+void LLPipeline::render_hud_elements()
+// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 {
 	LLFastTimer t(FTM_RENDER_UI);
 	gPipeline.disableLights();		
@@ -7339,6 +7382,9 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 				if (channel > -1)
 				{
 					mDeferredLight.bindTexture(0, channel);
+					// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+					gGL.getTexUnit(channel)->setTextureFilteringOption(LLTexUnit::TFO_BILINEAR); // scale fairly pleasantly
+					// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 				}
 
 				shader->uniform1f(LLShaderMgr::DOF_MAX_COF, CameraMaxCoF);
@@ -7781,6 +7827,24 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, U32 light_index, U32 n
 
 	shader.uniformMatrix4fv(LLShaderMgr::DEFERRED_SHADOW_MATRIX, 6, FALSE, mat);
 
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+        LLMatrix4 camera_mat;
+	LLViewerCamera* vcam = LLViewerCamera::getInstance();
+	vcam->getRotMatrixToParent(camera_mat);
+	// have matrix translate to GL ref space, not CFR
+	LLVector3 cam_origin = vcam->getOrigin();
+	camera_mat.mMatrix[3][0] = cam_origin.mV[VX];
+	camera_mat.mMatrix[3][1] = cam_origin.mV[VY];
+	camera_mat.mMatrix[3][2] = cam_origin.mV[VZ];
+	shader.uniformMatrix4fv(LLShaderMgr::CAMERA_MATRIX_TO_GL, 1, FALSE, (GLfloat*)camera_mat.mMatrix);
+
+	shader.uniform1f(LLShaderMgr::MACRO_NOISE_FALLOFF, RenderMacroNoiseFalloff);
+	shader.uniform1f(LLShaderMgr::MACRO_NOISE_STRENGTH, RenderMacroNoiseStrength);
+	shader.uniform3fv(LLShaderMgr::MACRO_NOISE_FREQUENCY, 1, RenderMacroNoiseFrequency.mV);
+	shader.uniform1f(LLShaderMgr::MACRO_NOISE_NORMSCALE, RenderMacroNoiseNormScale);
+	shader.uniform1f(LLShaderMgr::MACRO_NOISE_SUNBAFFLE, RenderMacroNoiseSunBaffle);
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+
 	stop_glerror();
 
 	channel = shader.enableTexture(LLShaderMgr::ENVIRONMENT_MAP, LLTexUnit::TT_CUBE_MAP);
@@ -7814,14 +7878,17 @@ void LLPipeline::bindDeferredShader(LLGLSLShader& shader, U32 light_index, U32 n
 	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_FACTOR_INV, 1.0/ssao_factor);
 
 	LLVector3 ssao_effect = RenderSSAOEffect;
-	F32 matrix_diag = (ssao_effect[0] + 2.0*ssao_effect[1])/3.0;
-	F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0;
-	// This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
-	// value factor, and scales remainder by saturation factor
-	F32 ssao_effect_mat[] = {	matrix_diag, matrix_nondiag, matrix_nondiag,
-								matrix_nondiag, matrix_diag, matrix_nondiag,
-								matrix_nondiag, matrix_nondiag, matrix_diag};
-	shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_SSAO_EFFECT_MAT, 1, GL_FALSE, ssao_effect_mat);
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+	//F32 matrix_diag = (ssao_effect[0] + 2.0*ssao_effect[1])/3.0;
+	//F32 matrix_nondiag = (ssao_effect[0] - ssao_effect[1])/3.0;
+	//// This matrix scales (proj of color onto <1/rt(3),1/rt(3),1/rt(3)>) by
+	//// value factor, and scales remainder by saturation factor
+	//F32 ssao_effect_mat[] = {	matrix_diag, matrix_nondiag, matrix_nondiag,
+	//							matrix_nondiag, matrix_diag, matrix_nondiag,
+	//							matrix_nondiag, matrix_nondiag, matrix_diag};
+	//shader.uniformMatrix3fv(LLShaderMgr::DEFERRED_SSAO_EFFECT_MAT, 1, GL_FALSE, ssao_effect_mat);
+	shader.uniform1f(LLShaderMgr::DEFERRED_SSAO_EFFECT, ssao_effect[0]);
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 
 	//F32 shadow_offset_error = 1.f + RenderShadowOffsetError * fabsf(LLViewerCamera::getInstance()->getOrigin().mV[2]);
 	F32 shadow_bias_error = RenderShadowBiasError * fabsf(LLViewerCamera::getInstance()->getOrigin().mV[2])/3000.f;

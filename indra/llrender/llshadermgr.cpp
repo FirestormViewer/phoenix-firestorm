@@ -1096,6 +1096,16 @@ void LLShaderMgr::initAttribsAndUniforms()
 
 	mReservedUniforms.push_back("minimum_alpha");
 
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+	mReservedUniforms.push_back("camera_matrix_to_gl");
+
+	mReservedUniforms.push_back("macro_noise_falloff");
+	mReservedUniforms.push_back("macro_noise_strength");
+	mReservedUniforms.push_back("macro_noise_frequency");
+	mReservedUniforms.push_back("macro_noise_normscale");
+	mReservedUniforms.push_back("macro_noise_sunbaffle");
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+
 	mReservedUniforms.push_back("shadow_matrix");
 	mReservedUniforms.push_back("env_mat");
 	mReservedUniforms.push_back("shadow_clip");
@@ -1106,7 +1116,10 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("ssao_max_radius");
 	mReservedUniforms.push_back("ssao_factor");
 	mReservedUniforms.push_back("ssao_factor_inv");
-	mReservedUniforms.push_back("ssao_effect_mat");
+	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+	//mReservedUniforms.push_back("ssao_effect_mat");
+	mReservedUniforms.push_back("ssao_effect");
+	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 	mReservedUniforms.push_back("screen_res");
 	mReservedUniforms.push_back("near_clip");
 	mReservedUniforms.push_back("shadow_offset");
