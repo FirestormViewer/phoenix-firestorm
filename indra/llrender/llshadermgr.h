@@ -164,6 +164,10 @@ public:
 		DEFERRED_LIGHT,
 		DEFERRED_BLOOM,
 		DEFERRED_PROJECTION,
+// <FS:CR> Import Vignette from Exodus
+		EXO_RENDER_VIGNETTE,
+		EXO_RENDER_SCREEN,
+// </FS:CR> Import Vignette from Exodus
 		END_RESERVED_UNIFORMS
 	} eGLSLReservedUniforms;
 

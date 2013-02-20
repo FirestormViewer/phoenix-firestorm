@@ -1155,6 +1155,10 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("lightMap");
 	mReservedUniforms.push_back("bloomMap");
 	mReservedUniforms.push_back("projectionMap");
+// <FS:CR> Import Vignette from Exodus
+	mReservedUniforms.push_back("exo_vignette");
+	mReservedUniforms.push_back("exo_screen");
+// </FS:CR> Import Vignette from Exodus
 
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

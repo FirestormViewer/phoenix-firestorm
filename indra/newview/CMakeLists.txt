@@ -109,7 +109,8 @@ set(viewer_SOURCE_FILES
     exoflickr.cpp
     exoflickrauth.cpp
     exogroupmutelist.cpp
-    exopanelsnapshotflickr.cpp 
+    exopanelsnapshotflickr.cpp
+    exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
     fscommon.cpp
@@ -764,6 +765,7 @@ set(viewer_HEADER_FILES
     exoflickr.h
     exoflickrauth.h
     exogroupmutelist.h
+    exopostprocess.h
     floatermedialists.h
     fsareasearch.h
     fscommon.h
