@@ -1415,13 +1415,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		// load water shader
 		gDeferredWaterProgram.mName = "Deferred Water Shader";
-		// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-		gDeferredWaterProgram.mFeatures.atmosphericHelpers = true;
-		// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 		gDeferredWaterProgram.mFeatures.calculatesAtmospherics = true;
-		// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-		gDeferredWaterProgram.mFeatures.hasAtmospherics = true;
-		// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 		gDeferredWaterProgram.mFeatures.hasGamma = true;
 		gDeferredWaterProgram.mFeatures.hasTransport = true;
 		gDeferredWaterProgram.mShaderFiles.clear();

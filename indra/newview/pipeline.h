@@ -405,15 +405,6 @@ private:
 	void connectRefreshCachedSettingsSafe(const std::string name);
 	void hideDrawable( LLDrawable *pDrawable );
 	void unhideDrawable( LLDrawable *pDrawable );
-	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-	static void renderScriptedBeacons(LLDrawable* drawablep);
-	static void renderScriptedTouchBeacons(LLDrawable* drawablep);
-	static void renderPhysicalBeacons(LLDrawable* drawablep);
-	static void renderMOAPBeacons(LLDrawable* drawablep);
-	static void renderParticleBeacons(LLDrawable* drawablep);
-	static void renderSoundHighlights(LLDrawable* drawablep);
-	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-	
 public:
 	enum {GPU_CLASS_MAX = 3 };
 
@@ -511,9 +502,6 @@ public:
 	LLSpatialPartition* getSpatialPartition(LLViewerObject* vobj);
 
 	void updateCamera(BOOL reset = FALSE);
-
-	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-	static void render_hud_elements();
 	
 	LLVector3				mFlyCamPosition;
 	LLQuaternion			mFlyCamRotation;
@@ -835,9 +823,6 @@ public:
 	//debug use
 	static U32              sCurRenderPoolType ;
 
-// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-//private:
-// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 	//cached settings
 	static BOOL WindLightUseAtmosShaders;
 	static BOOL VertexShaderEnable;
@@ -883,13 +868,6 @@ public:
 	static F32 CameraFNumber;
 	static F32 CameraFocalLength;
 	static F32 CameraFieldOfView;
-	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-	static F32 RenderMacroNoiseFalloff;
-	static F32 RenderMacroNoiseStrength;
-	static LLVector3 RenderMacroNoiseFrequency;
-	static F32 RenderMacroNoiseNormScale;
-	static F32 RenderMacroNoiseSunBaffle;
-	// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
 	static F32 RenderShadowNoise;
 	static F32 RenderShadowBlurSize;
 	static F32 RenderSSAOScale;
@@ -923,9 +901,7 @@ public:
 };
 
 void render_bbox(const LLVector3 &min, const LLVector3 &max);
-// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-//void render_hud_elements();
-// </FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
+void render_hud_elements();
 
 extern LLPipeline gPipeline;
 extern BOOL gDebugPipeline;

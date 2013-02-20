@@ -82,29 +82,30 @@ vec2 getKern(int i)
 float calcAmbientOcclusion(vec4 pos, vec3 norm)
 {
 	vec2 pos_screen = vary_fragcoord.xy;
+	vec3 pos_world = pos.xyz;
 	vec2 noise_reflect = texture2D(noiseMap, vary_fragcoord.xy/128.0).xy;
 		
   // We treat the first sample as the origin, which definitely doesn't obscure itself thanks to being visible for sampling in the first place.
   float points = 1.0;
-  float angle_hidden = 0.0;
+	float angle_hidden = 0.0;
 		
   // use a kernel scale that diminishes with distance.
   // a scale of less than 32 is just wasting good samples, though.
   float scale = max(32.0, min(ssao_radius / -pos.z, ssao_max_radius));
-
+		
   // it was found that keeping # of samples a constant was the fastest, probably due to compiler optimizations (unrolling?)
-  for (int i = 0; i < 8; i++)
-  {
+	for (int i = 0; i < 8; i++)
+	{
     vec2 samppos_screen = pos_screen + scale * reflect(getKern(i), noise_reflect);
-
+			
     // if sample is out-of-screen then give it no weight by continuing
     if (any(lessThan(samppos_screen.xy, vec2(0.0, 0.0))) ||
        any(greaterThan(samppos_screen.xy, vec2(screen_res.xy)))) continue;
-
+			
     vec3 samppos_world = getPosition(samppos_screen).xyz; 
 			
     vec3 diff = samppos_world - pos.xyz;
-
+			
     if (diff.z < ssao_factor && diff.z != 0.0)
     {
 	float dist = length(diff);
@@ -115,12 +116,12 @@ float calcAmbientOcclusion(vec4 pos, vec3 norm)
 	angle_hidden += (samplehidden);
 	points += 1.0;
       }
-  }
-
+	}
+		
   angle_hidden /= points;
 		
   float rtn = (1.0 - angle_hidden);
-
+	
   return (rtn * rtn);
 }
 

@@ -462,8 +462,6 @@ void LLPostProcess::drawOrthoQuad(unsigned int width, unsigned int height, QuadT
 		glVertex2f((GLfloat) width, (GLfloat) screenH - height);
 	glEnd();
 #endif
-	// <FS:Ansariel> Tofu Buzzard's SSR & Macro Dapple
-	llassert_always(false);
 }
 
 void LLPostProcess::viewOrthogonal(unsigned int width, unsigned int height)
