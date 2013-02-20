@@ -230,7 +230,6 @@ label="Home"
           top_pad="0"
           height="23"
           label="Log In"
-          label_color="White"
           layout="topleft"
           name="connect_btn"
           width="90" />
