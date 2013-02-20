@@ -150,6 +150,10 @@ BOOL LLTexLayerSetBuffer::renderTexLayerSet()
 		gAlphaMaskProgram.bind();
 		gAlphaMaskProgram.setMinimumAlpha(0.004f);
 	}
+	else
+	{
+		gGL.setAlphaRejectSettings(LLRender::CF_GREATER, 0.00f);
+	}
 
 	LLVertexBuffer::unbind();
 
@@ -928,7 +932,45 @@ LLWearableType::EType LLTexLayerInterface::getWearableType() const
 	ETextureIndex te = getLocalTextureIndex();
 	if (TEX_INVALID == te)
 	{
-		return LLWearableType::WT_INVALID;
+		LLWearableType::EType type = LLWearableType::WT_INVALID;
+		param_color_list_t::const_iterator color_iter = mParamColorList.begin();
+		param_alpha_list_t::const_iterator alpha_iter = mParamAlphaList.begin();
+
+		for (; color_iter != mParamColorList.end(); color_iter++)
+		{
+			LLTexLayerParamColor* param = *color_iter;
+			if (param) 
+			{
+				LLWearableType::EType new_type = (LLWearableType::EType)param->getWearableType();
+				if (new_type != LLWearableType::WT_INVALID && new_type != type) 
+				{
+					if (type != LLWearableType::WT_INVALID) 
+					{
+						return LLWearableType::WT_INVALID;
+					}
+					type = new_type;
+				}
+			}
+		}
+
+		for (; alpha_iter != mParamAlphaList.end(); alpha_iter++)
+		{
+			LLTexLayerParamAlpha* param = *alpha_iter;
+			if (param) 
+			{
+				LLWearableType::EType new_type = (LLWearableType::EType)param->getWearableType();
+				if (new_type != LLWearableType::WT_INVALID && new_type != type) 
+				{
+					if (type != LLWearableType::WT_INVALID) 
+					{
+						return LLWearableType::WT_INVALID;
+					}
+					type = new_type;
+				}
+			}
+		}
+
+		return type;
 	}
 	return LLAvatarAppearanceDictionary::getTEWearableType(te);
 }
@@ -1132,7 +1174,8 @@ BOOL LLTexLayer::render(S32 x, S32 y, S32 width, S32 height)
 			}
 		}//*/
 
-		renderMorphMasks(x, y, width, height, net_color);
+		const bool force_render = true;
+		renderMorphMasks(x, y, width, height, net_color, force_render);
 		alpha_mask_specified = TRUE;
 		gGL.flush();
 		gGL.blendFunc(LLRender::BF_DEST_ALPHA, LLRender::BF_ONE_MINUS_DEST_ALPHA);
@@ -1381,8 +1424,13 @@ BOOL LLTexLayer::blendAlphaTexture(S32 x, S32 y, S32 width, S32 height)
 }
 
 static LLFastTimer::DeclareTimer FTM_RENDER_MORPH_MASKS("renderMorphMasks");
-BOOL LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLColor4 &layer_color)
+void LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLColor4 &layer_color, bool force_render)
 {
+	if (!force_render && !hasMorph())
+	{
+		lldebugs << "skipping renderMorphMasks for " << getUUID() << llendl;
+		return;
+	}
 	LLFastTimer t(FTM_RENDER_MORPH_MASKS);
 	BOOL success = TRUE;
 
@@ -1419,6 +1467,11 @@ BOOL LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 	{
 		LLTexLayerParamAlpha* param = *iter;
 		success &= param->render( x, y, width, height );
+		if (!success && !force_render)
+		{
+			lldebugs << "Failed to render param " << param->getID() << " ; skipping morph mask." << llendl;
+			return;
+		}
 	}
 
 	// Approximates a min() function
@@ -1444,25 +1497,29 @@ BOOL LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		}
 	}
 
-	if( !getInfo()->mStaticImageFileName.empty() )
+	if( !getInfo()->mStaticImageFileName.empty() && getInfo()->mStaticImageIsMask )
 	{
 		LLGLTexture* tex = LLTexLayerStaticImageList::getInstance()->getTexture(getInfo()->mStaticImageFileName, getInfo()->mStaticImageIsMask);
 		if( tex )
 		{
-			if(	(tex->getComponents() == 4) ||
-				( (tex->getComponents() == 1) && getInfo()->mStaticImageIsMask ) )
+			if(	(tex->getComponents() == 4) || (tex->getComponents() == 1) )
 			{
 				LLGLSNoAlphaTest gls_no_alpha_test;
 				gGL.getTexUnit(0)->bind(tex, TRUE);
 				gl_rect_2d_simple_tex( width, height );
 				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 			}
+			else
+			{
+				llwarns << "Skipping rendering of " << getInfo()->mStaticImageFileName 
+						<< "; expected 1 or 4 components." << llendl;
+			}
 		}
 	}
 
 	// Draw a rectangle with the layer color to multiply the alpha by that color's alpha.
 	// Note: we're still using gGL.blendFunc( GL_DST_ALPHA, GL_ZERO );
-	if (layer_color.mV[VW] != 1.f)
+	if ( !is_approx_equal(layer_color.mV[VW], 1.f) )
 	{
 		LLGLDisable no_alpha(GL_ALPHA_TEST);
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
@@ -1515,8 +1572,6 @@ BOOL LLTexLayer::renderMorphMasks(S32 x, S32 y, S32 width, S32 height, const LLC
 		mMorphMasksValid = TRUE;
 		getTexLayerSet()->applyMorphMask(alpha_data, width, height, 1);
 	}
-
-	return success;
 }
 
 static LLFastTimer::DeclareTimer FTM_ADD_ALPHA_MASK("addAlphaMask");
@@ -1531,7 +1586,8 @@ void LLTexLayer::addAlphaMask(U8 *data, S32 originX, S32 originY, S32 width, S32
 		findNetColor( &net_color );
 		// TODO: eliminate need for layer morph mask valid flag
 		invalidateMorphMasks();
-		renderMorphMasks(originX, originY, width, height, net_color);
+		const bool force_render = false;
+		renderMorphMasks(originX, originY, width, height, net_color, force_render);
 		alphaData = getAlphaData();
 	}
 	if (alphaData)
@@ -1540,7 +1596,7 @@ void LLTexLayer::addAlphaMask(U8 *data, S32 originX, S32 originY, S32 width, S32
 		{
 			U8 curAlpha = data[i];
 			U16 resultAlpha = curAlpha;
-			resultAlpha *= (alphaData[i] + 1);
+			resultAlpha *= ( ((U16)alphaData[i]) + 1);
 			resultAlpha = resultAlpha >> 8;
 			data[i] = (U8)resultAlpha;
 		}
@@ -1915,9 +1971,15 @@ LLGLTexture* LLTexLayerStaticImageList::getTexture(const std::string& file_name,
 		{
 			if( (image_raw->getComponents() == 1) && is_mask )
 			{
-				// Note: these are static, unchanging images so it's ok to assume
-				// that once an image is a mask it's always a mask.
-				tex->setExplicitFormat( GL_ALPHA8, GL_ALPHA );
+				// Convert grayscale alpha masks from single channel into RGBA.
+				// Fill RGB with black to allow fixed function gl calls
+				// to match shader implementation.
+				LLPointer<LLImageRaw> alpha_image_raw = image_raw;
+				image_raw = new LLImageRaw(image_raw->getWidth(),
+										   image_raw->getHeight(),
+										   4);
+
+				image_raw->copyUnscaledAlphaMask(alpha_image_raw, LLColor4U::black);
 			}
 			tex->createGLTexture(0, image_raw, 0, TRUE, LLGLTexture::LOCAL);
 

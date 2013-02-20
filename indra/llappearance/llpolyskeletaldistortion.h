@@ -63,6 +63,7 @@ struct LLPolySkeletalBoneInfo
 	BOOL mHasPositionDeformation;
 };
 
+LL_ALIGN_PREFIX(16)
 class LLPolySkeletalDistortionInfo : public LLViewerVisualParamInfo
 {
 	friend class LLPolySkeletalDistortion;
@@ -118,13 +119,13 @@ public:
 	/*virtual*/ const LLVector4a*	getNextDistortion(U32 *index, LLPolyMesh **poly_mesh){index = 0; poly_mesh = NULL; return NULL;};
 
 protected:
+	LL_ALIGN_16(LLVector4a mDefaultVec);
 	typedef std::map<LLJoint*, LLVector3> joint_vec_map_t;
 	joint_vec_map_t mJointScales;
 	joint_vec_map_t mJointOffsets;
-	LLVector4a	mDefaultVec;
 	// Backlink only; don't make this an LLPointer.
 	LLAvatarAppearance *mAvatar;
-};
+} LL_ALIGN_POSTFIX(16);
 
 #endif // LL_LLPOLYSKELETALDISTORTION_H
 

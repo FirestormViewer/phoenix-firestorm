@@ -230,7 +230,6 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 										   LLDataPacker* dpp, 
 										   BOOL just_created)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT_PROCESS_UPDATE_CORE);
 	LLMessageSystem* msg = gMessageSystem;
 
 	// ignore returned flags
@@ -283,7 +282,6 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 											 const EObjectUpdateType update_type,
 											 bool cached, bool compressed)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT_PROCESS_UPDATE);
 	LLFastTimer t(FTM_PROCESS_OBJECTS);	
 	
 	LLViewerObject *objectp;
@@ -337,6 +335,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 
 	U64 region_handle;
 	mesgsys->getU64Fast(_PREHASH_RegionData, _PREHASH_RegionHandle, region_handle);
+	
 	LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromHandle(region_handle);
 
 	if (!regionp)
@@ -348,16 +347,14 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 	U8 compressed_dpbuffer[2048];
 	LLDataPackerBinaryBuffer compressed_dp(compressed_dpbuffer, 2048);
 	LLDataPacker *cached_dpp = NULL;
-
-#if LL_RECORD_VIEWER_STATS
-	LLViewerStatsRecorder::instance()->beginObjectUpdateEvents(regionp);
-#endif
+	LLViewerStatsRecorder& recorder = LLViewerStatsRecorder::instance();
 
 	for (i = 0; i < num_objects; i++)
 	{
 		// timer is unused?
 		LLTimer update_timer;
 		BOOL justCreated = FALSE;
+		S32	msg_size = 0;
 
 		if (cached)
 		{
@@ -365,6 +362,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			U32 crc;
 			mesgsys->getU32Fast(_PREHASH_ObjectData, _PREHASH_ID, id, i);
 			mesgsys->getU32Fast(_PREHASH_ObjectData, _PREHASH_CRC, crc, i);
+			msg_size += sizeof(U32) * 2;
 		
 			// Lookup data packer and add this id to cache miss lists if necessary.
 			U8 cache_miss_type = LLViewerRegion::CACHE_MISS_TYPE_NONE;
@@ -380,9 +378,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			else
 			{
 				// Cache Miss.
-				#if LL_RECORD_VIEWER_STATS
-				LLViewerStatsRecorder::instance()->recordCacheMissEvent(id, update_type, cache_miss_type);
-				#endif
+				recorder.cacheMissEvent(id, update_type, cache_miss_type, msg_size);
 
 				continue; // no data packer, skip this object
 			}
@@ -425,6 +421,8 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 		else if (update_type != OUT_FULL) // !compressed, !OUT_FULL ==> OUT_FULL_CACHED only?
 		{
 			mesgsys->getU32Fast(_PREHASH_ObjectData, _PREHASH_ID, local_id, i);
+			msg_size += sizeof(U32);
+
 			getUUIDFromLocal(fullid,
 							local_id,
 							gMessageSystem->getSenderIP(),
@@ -439,6 +437,8 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 		{
 			mesgsys->getUUIDFast(_PREHASH_ObjectData, _PREHASH_FullID, fullid, i);
 			mesgsys->getU32Fast(_PREHASH_ObjectData, _PREHASH_ID, local_id, i);
+			msg_size += sizeof(LLUUID);
+			msg_size += sizeof(U32);
 			// llinfos << "Full Update, obj " << local_id << ", global ID" << fullid << "from " << mesgsys->getSender() << llendl;
 		}
 		objectp = findObject(fullid);
@@ -484,9 +484,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				if (update_type == OUT_TERSE_IMPROVED)
 				{
 					// llinfos << "terse update for an unknown object (compressed):" << fullid << llendl;
-					#if LL_RECORD_VIEWER_STATS
-					LLViewerStatsRecorder::instance()->recordObjectUpdateFailure(local_id, update_type);
-					#endif
+					recorder.objectUpdateFailure(local_id, update_type, msg_size);
 					continue;
 				}
 			}
@@ -498,22 +496,20 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 				if (update_type != OUT_FULL)
 				{
 					//llinfos << "terse update for an unknown object:" << fullid << llendl;
-					#if LL_RECORD_VIEWER_STATS
-					LLViewerStatsRecorder::instance()->recordObjectUpdateFailure(local_id, update_type);
-					#endif
+					recorder.objectUpdateFailure(local_id, update_type, msg_size);
 					continue;
 				}
 
 				mesgsys->getU8Fast(_PREHASH_ObjectData, _PREHASH_PCode, pcode, i);
+				msg_size += sizeof(U8);
+
 			}
 #ifdef IGNORE_DEAD
 			if (mDeadObjects.find(fullid) != mDeadObjects.end())
 			{
 				mNumDeadObjectUpdates++;
 				//llinfos << "update for a dead object:" << fullid << llendl;
-				#if LL_RECORD_VIEWER_STATS
-				LLViewerStatsRecorder::instance()->recordObjectUpdateFailure(local_id, update_type);
-				#endif
+				recorder.objectUpdateFailure(local_id, update_type, msg_size);
 				continue;
 			}
 #endif
@@ -522,9 +518,7 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			if (!objectp)
 			{
 				llinfos << "createObject failure for object: " << fullid << llendl;
-				#if LL_RECORD_VIEWER_STATS
-				LLViewerStatsRecorder::instance()->recordObjectUpdateFailure(local_id, update_type);
-				#endif
+				recorder.objectUpdateFailure(local_id, update_type, msg_size);
 				continue;
 			}
 			justCreated = TRUE;
@@ -550,12 +544,8 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			if (update_type != OUT_TERSE_IMPROVED) // OUT_FULL_COMPRESSED only?
 			{
 				bCached = true;
-				#if LL_RECORD_VIEWER_STATS
 				LLViewerRegion::eCacheUpdateResult result = objectp->mRegionp->cacheFullUpdate(objectp, compressed_dp);
-				LLViewerStatsRecorder::instance()->recordCacheFullUpdate(local_id, update_type, result, objectp);
-				#else
-				objectp->mRegionp->cacheFullUpdate(objectp, compressed_dp);
-				#endif
+				recorder.cacheFullUpdate(local_id, update_type, result, objectp, msg_size);
 			}
 		}
 		else if (cached) // Cache hit only?
@@ -571,16 +561,12 @@ void LLViewerObjectList::processObjectUpdate(LLMessageSystem *mesgsys,
 			}
 			processUpdateCore(objectp, user_data, i, update_type, NULL, justCreated);
 		}
-		#if LL_RECORD_VIEWER_STATS
-		LLViewerStatsRecorder::instance()->recordObjectUpdateEvent(local_id, update_type, objectp);
-		#endif
+		recorder.objectUpdateEvent(local_id, update_type, objectp, msg_size);
 		objectp->setLastUpdateType(update_type);
 		objectp->setLastUpdateCached(bCached);
 	}
 
-#if LL_RECORD_VIEWER_STATS
-	LLViewerStatsRecorder::instance()->endObjectUpdateEvents();
-#endif
+	recorder.log(0.2f);
 
 	LLVOAvatar::cullAvatarsByPixelArea();
 }
@@ -869,8 +855,6 @@ private:
 
 void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
-
 	// Update globals
 	LLViewerObject::setVelocityInterpolate( gSavedSettings.getBOOL("VelocityInterpolate") );
 	LLViewerObject::setPingInterpolate( gSavedSettings.getBOOL("PingInterpolate") );
@@ -918,12 +902,12 @@ void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 	static std::vector<LLViewerObject*> idle_list;
 
 	U32 idle_count = 0;
-		
+	
 	static LLFastTimer::DeclareTimer idle_copy("Idle Copy");
 
 	{
 		LLFastTimer t(idle_copy);
-		
+
  		for (std::vector<LLPointer<LLViewerObject> >::iterator active_iter = mActiveObjects.begin();
 			active_iter != mActiveObjects.end(); active_iter++)
 		{
@@ -932,9 +916,9 @@ void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 			{
 				if (idle_count >= idle_list.size())
 				{
-					idle_list.push_back( objectp );
-				}
-				else
+				idle_list.push_back( objectp );
+			}
+			else
 				{
 					idle_list[idle_count] = objectp;
 				}
@@ -951,7 +935,7 @@ void LLViewerObjectList::update(LLAgent &agent, LLWorld &world)
 	std::vector<LLViewerObject*>::iterator idle_end = idle_list.begin()+idle_count;
 
 	if (gSavedSettings.getBOOL("FreezeTime"))
-	{	
+	{
 		
 		for (std::vector<LLViewerObject*>::iterator iter = idle_list.begin();
 			iter != idle_end; iter++)
@@ -1182,7 +1166,6 @@ void LLViewerObjectList::clearDebugText()
 
 void LLViewerObjectList::cleanupReferences(LLViewerObject *objectp)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	if (mDeadObjects.find(objectp->mID) != mDeadObjects.end())
 	{
 		llinfos << "Object " << objectp->mID << " already on dead list!" << llendl;	
@@ -1410,7 +1393,6 @@ void LLViewerObjectList::removeFromActiveList(LLViewerObject* objectp)
 
 void LLViewerObjectList::updateActive(LLViewerObject *objectp)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	if (objectp->isDead())
 	{
 		return; // We don't update dead objects!
@@ -1427,10 +1409,10 @@ void LLViewerObjectList::updateActive(LLViewerObject *objectp)
 			{
 				mActiveObjects.push_back(objectp);
 				objectp->setListIndex(mActiveObjects.size()-1);
-				objectp->setOnActiveList(TRUE);
-			}
-			else
-			{
+			objectp->setOnActiveList(TRUE);
+		}
+		else
+		{
 				llassert(idx < mActiveObjects.size());
 				llassert(mActiveObjects[idx] == objectp);
 
@@ -1559,13 +1541,13 @@ void LLViewerObjectList::shiftObjects(const LLVector3 &offset)
 
 	{
 		LLFastTimer t(FTM_PIPELINE_SHIFT);
-		gPipeline.shiftObjects(offset);
+	gPipeline.shiftObjects(offset);
 	}
 
 	{
 		LLFastTimer t(FTM_REGION_SHIFT);
-		LLWorld::getInstance()->shiftRegions(offset);
-	}
+	LLWorld::getInstance()->shiftRegions(offset);
+}
 }
 
 void LLViewerObjectList::repartitionObjects()
@@ -1892,7 +1874,6 @@ void LLViewerObjectList::resetObjectBeacons()
 
 LLViewerObject *LLViewerObjectList::createObjectViewer(const LLPCode pcode, LLViewerRegion *regionp)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	LLUUID fullid;
 	fullid.generate();
 
@@ -1913,13 +1894,9 @@ LLViewerObject *LLViewerObjectList::createObjectViewer(const LLPCode pcode, LLVi
 }
 
 
-static LLFastTimer::DeclareTimer FTM_CREATE_OBJECT("Create Object");
-
 LLViewerObject *LLViewerObjectList::createObject(const LLPCode pcode, LLViewerRegion *regionp,
 												 const LLUUID &uuid, const U32 local_id, const LLHost &sender)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
-	LLFastTimer t(FTM_CREATE_OBJECT);
 	
 	LLUUID fullid;
 	if (uuid == LLUUID::null)
@@ -1983,7 +1960,6 @@ S32 LLViewerObjectList::findReferences(LLDrawable *drawablep) const
 
 void LLViewerObjectList::orphanize(LLViewerObject *childp, U32 parent_id, U32 ip, U32 port)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 #ifdef ORPHAN_SPAM
 	llinfos << "Orphaning object " << childp->getID() << " with parent " << parent_id << llendl;
 #endif

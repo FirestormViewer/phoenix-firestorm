@@ -27,7 +27,6 @@
 #include "linden_common.h"
 
 #include "material_codes.h"
-#include "llmemtype.h"
 #include "llerror.h"
 #include "message.h"
 #include "llprimitive.h"
@@ -190,7 +189,6 @@ void LLPrimitive::clearTextureList()
 // static
 LLPrimitive *LLPrimitive::createPrimitive(LLPCode p_code)
 {
-	LLMemType m1(LLMemType::MTYPE_PRIMITIVE);
 	LLPrimitive *retval = new LLPrimitive();
 	
 	if (retval)
@@ -208,7 +206,6 @@ LLPrimitive *LLPrimitive::createPrimitive(LLPCode p_code)
 //===============================================================
 void LLPrimitive::init_primitive(LLPCode p_code)
 {
-	LLMemType m1(LLMemType::MTYPE_PRIMITIVE);
 	clearTextureList();
 	mPrimitiveCode = p_code;
 }
@@ -706,7 +703,6 @@ S32	face_index_from_id(LLFaceID face_ID, const std::vector<LLProfile::Face>& fac
 
 BOOL LLPrimitive::setVolume(const LLVolumeParams &volume_params, const S32 detail, bool unique_volume)
 {
-	LLMemType m1(LLMemType::MTYPE_VOLUME);
 	LLVolume *volumep;
 	if (unique_volume)
 	{
@@ -1250,6 +1246,7 @@ S32 LLPrimitive::parseTEMessage(LLMessageSystem* mesgsys, char const* block_name
 
 	if (tec.size == 0)
 	{
+		tec.face_count = 0;
 		return retval;
 	}
 

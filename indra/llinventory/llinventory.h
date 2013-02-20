@@ -30,7 +30,6 @@
 #include "lldarray.h"
 #include "llfoldertype.h"
 #include "llinventorytype.h"
-#include "llmemtype.h"
 #include "llpermissions.h"
 #include "llrefcount.h"
 #include "llsaleinfo.h"
@@ -54,7 +53,6 @@ public:
 	// Initialization
 	//--------------------------------------------------------------------
 public:
-	MEM_TYPE_NEW(LLMemType::MTYPE_INVENTORY);
 	LLInventoryObject();
 	LLInventoryObject(const LLUUID& uuid, 
 					  const LLUUID& parent_uuid,
@@ -129,7 +127,6 @@ public:
 	// Initialization
 	//--------------------------------------------------------------------
 public:
-	MEM_TYPE_NEW(LLMemType::MTYPE_INVENTORY);
 	LLInventoryItem(const LLUUID& uuid,
 					const LLUUID& parent_uuid,
 					const LLPermissions& permissions,
@@ -160,6 +157,7 @@ public:
 	virtual const LLUUID& getCreatorUUID() const;
 	virtual const LLUUID& getAssetUUID() const;
 	virtual const std::string& getDescription() const;
+	virtual const std::string& getActualDescription() const; // Does not follow links
 	virtual const LLSaleInfo& getSaleInfo() const;
 	virtual LLInventoryType::EType getInventoryType() const;
 	virtual U32 getFlags() const;
@@ -242,7 +240,6 @@ public:
 	// Initialization
 	//--------------------------------------------------------------------
 public:
-	MEM_TYPE_NEW(LLMemType::MTYPE_INVENTORY);
 	LLInventoryCategory(const LLUUID& uuid, const LLUUID& parent_uuid,
 						LLFolderType::EType preferred_type,
 						const std::string& name);

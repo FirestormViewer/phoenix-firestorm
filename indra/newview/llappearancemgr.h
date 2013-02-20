@@ -97,7 +97,14 @@ public:
 	const LLUUID getCOF() const;
 	S32 getCOFVersion() const;
 
+	// COF version of last viewer-initiated appearance update request.
 	S32 mLastUpdateRequestCOFVersion;
+	S32 getLastUpdateRequestCOFVersion() const;
+
+	// COF version of last appearance message received for self av.
+	S32 mLastAppearanceUpdateCOFVersion;
+	S32 getLastAppearanceUpdateCOFVersion() const;
+	void setLastAppearanceUpdateCOFVersion(S32 new_val);
 
 	// Finds the folder link to the currently worn outfit
 	const LLViewerInventoryItem *getBaseOutfitLink();
@@ -132,9 +139,12 @@ public:
 				 LLPointer<LLInventoryCallback> cb);
 
 	// Add COF link to individual item.
-	void addCOFItemLink(const LLUUID& item_id, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL);
-	void addCOFItemLink(const LLInventoryItem *item, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL);
+	void addCOFItemLink(const LLUUID& item_id, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL, const std::string description = "");
+	void addCOFItemLink(const LLInventoryItem *item, bool do_update = true, LLPointer<LLInventoryCallback> cb = NULL, const std::string description = "");
 
+	// Find COF entries referencing the given item.
+	LLInventoryModel::item_array_t findCOFItemLinks(const LLUUID& item_id);
+	
 	// Remove COF entries
 	void removeCOFItemLinks(const LLUUID& item_id);
 	void removeCOFLinksOfType(LLWearableType::EType type);
@@ -209,8 +219,7 @@ private:
 								   LLInventoryModel::item_array_t& gest_items,
 								   bool follow_folder_links);
 
-	void purgeCategory(const LLUUID& category, bool keep_outfit_links);
-
+	void purgeCategory(const LLUUID& category, bool keep_outfit_links, LLInventoryModel::item_array_t* keep_items = NULL);
 	static void onOutfitRename(const LLSD& notification, const LLSD& response);
 
 	void setOutfitLocked(bool locked);

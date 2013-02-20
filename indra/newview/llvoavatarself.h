@@ -379,6 +379,13 @@ public:
 		LLUUID			mAvatarID;
 		LLAvatarAppearanceDefines::ETextureIndex	mIndex;
 	};
+
+	LLTimer					mTimeSinceLastRezMessage;
+	bool					updateAvatarRezMetrics(bool force_send);
+
+	std::vector<LLSD>		mPendingTimerRecords;
+	void 					addMetricsTimerRecord(const LLSD& record);
+	
 	void 					debugWearablesLoaded() { mDebugTimeWearablesLoaded = mDebugSelfLoadTimer.getElapsedTimeF32(); }
 	void 					debugAvatarVisible() { mDebugTimeAvatarVisible = mDebugSelfLoadTimer.getElapsedTimeF32(); }
 	void 					outputRezDiagnostics() const;
@@ -390,10 +397,12 @@ public:
 	BOOL					isAllLocalTextureDataFinal() const;
 
 	const LLViewerTexLayerSet*	debugGetLayerSet(LLAvatarAppearanceDefines::EBakedTextureIndex index) const { return (LLViewerTexLayerSet*)(mBakedTextureDatas[index].mTexLayerSet); }
+	const std::string		verboseDebugDumpLocalTextureDataInfo(const LLViewerTexLayerSet* layerset) const; // Lists out state of this particular baked texture layer
+	void					dumpAllTextures() const;
 	const std::string		debugDumpLocalTextureDataInfo(const LLViewerTexLayerSet* layerset) const; // Lists out state of this particular baked texture layer
 	const std::string		debugDumpAllLocalTextureDataInfo() const; // Lists out which baked textures are at highest LOD
-	LLSD					metricsData();
-	void					sendAppearanceChangeMetrics(); // send data associated with completing a change.
+	void					sendViewerAppearanceChangeMetrics(); // send data associated with completing a change.
+	void 					checkForUnsupportedServerBakeAppearance();
 private:
 	LLFrameTimer    		mDebugSelfLoadTimer;
 	F32						mDebugTimeWearablesLoaded;
@@ -413,8 +422,7 @@ extern LLPointer<LLVOAvatarSelf> gAgentAvatarp;
 BOOL isAgentAvatarValid();
 
 void selfStartPhase(const std::string& phase_name);
-void selfStopPhase(const std::string& phase_name);
-void selfStopAllPhases();
+void selfStopPhase(const std::string& phase_name, bool err_check = true);
 void selfClearPhases();
 
 #endif // LL_VO_AVATARSELF_H

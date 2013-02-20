@@ -67,12 +67,12 @@ void (*LLViewerTextureList::sUUIDCallback)(void **, const LLUUID&) = NULL;
 U32 LLViewerTextureList::sTextureBits = 0;
 U32 LLViewerTextureList::sTexturePackets = 0;
 S32 LLViewerTextureList::sNumImages = 0;
-LLStat LLViewerTextureList::sNumImagesStat(32, TRUE);
-LLStat LLViewerTextureList::sNumRawImagesStat(32, TRUE);
-LLStat LLViewerTextureList::sGLTexMemStat(32, TRUE);
-LLStat LLViewerTextureList::sGLBoundMemStat(32, TRUE);
-LLStat LLViewerTextureList::sRawMemStat(32, TRUE);
-LLStat LLViewerTextureList::sFormattedMemStat(32, TRUE);
+LLStat LLViewerTextureList::sNumImagesStat("Num Images", 32, TRUE);
+LLStat LLViewerTextureList::sNumRawImagesStat("Num Raw Images", 32, TRUE);
+LLStat LLViewerTextureList::sGLTexMemStat("GL Texture Mem", 32, TRUE);
+LLStat LLViewerTextureList::sGLBoundMemStat("GL Bound Mem", 32, TRUE);
+LLStat LLViewerTextureList::sRawMemStat("Raw Image Mem", 32, TRUE);
+LLStat LLViewerTextureList::sFormattedMemStat("Formatted Image Mem", 32, TRUE);
 
 LLViewerTextureList gTextureList;
 static LLFastTimer::DeclareTimer FTM_PROCESS_IMAGES("Process Images");
@@ -374,7 +374,24 @@ LLViewerFetchedTexture* LLViewerTextureList::getImageFromUrl(const std::string& 
 	}
 
 	LLPointer<LLViewerFetchedTexture> imagep = findImage(new_id);
-	
+
+	if (!imagep.isNull())
+	{
+		LLViewerFetchedTexture *texture = imagep.get();
+		if (texture->getUrl().empty())
+		{
+			llwarns << "Requested texture " << new_id << " already exists but does not have a URL" << llendl;
+		}
+		else if (texture->getUrl() != url)
+		{
+			// This is not an error as long as the images really match -
+			// e.g. could be two avatars wearing the same outfit.
+			LL_DEBUGS("Avatar") << "Requested texture " << new_id
+								<< " already exists with a different url, requested: " << url
+								<< " current: " << texture->getUrl() << llendl;
+		}
+		
+	}
 	if (imagep.isNull())
 	{
 		switch(texture_type)
@@ -436,7 +453,23 @@ LLViewerFetchedTexture* LLViewerTextureList::getImage(const LLUUID &image_id,
 	}
 	
 	LLPointer<LLViewerFetchedTexture> imagep = findImage(image_id);
-	
+	if (!imagep.isNull())
+	{
+		LLViewerFetchedTexture *texture = imagep.get();
+		if (request_from_host.isOk() &&
+			!texture->getTargetHost().isOk())
+		{
+			llwarns << "Requested texture " << image_id << " already exists but does not have a host" << llendl;
+		}
+		else if (request_from_host.isOk() &&
+				 texture->getTargetHost().isOk() &&
+				 request_from_host != texture->getTargetHost())
+		{
+			llwarns << "Requested texture " << image_id << " already exists with a different target host, requested: " 
+					<< request_from_host << " current: " << texture->getTargetHost() << llendl;
+		}
+		
+	}
 	if (imagep.isNull())
 	{
 		imagep = createImage(image_id, usemipmaps, boost_priority, texture_type, internal_format, primary_format, request_from_host) ;
@@ -1008,14 +1041,6 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 			break;
 		}
 	}
-	//if (fetch_count == 0)
-	//{
-	//	gDebugTimers[0].pause();
-	//}
-	//else
-	//{
-	//	gDebugTimers[0].unpause();
-	//}
 	return image_op_timer.getElapsedTimeF32();
 }
 
@@ -1387,7 +1412,6 @@ void LLViewerTextureList::receiveImagePacket(LLMessageSystem *msg, void **user_d
 {
 	static LLCachedControl<bool> log_texture_traffic(gSavedSettings,"LogTextureNetworkTraffic") ;
 
-	LLMemType mt1(LLMemType::MTYPE_APPFMTIMAGE);
 	LLFastTimer t(FTM_PROCESS_IMAGES);
 	
 	// Receives image packet, copy into image object,
