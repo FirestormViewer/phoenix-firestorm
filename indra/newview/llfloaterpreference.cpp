@@ -1761,7 +1761,7 @@ void LLFloaterPreference::onClickSetSounds()
 void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 {
 	std::string uisndid = ui_sound_id.asString();
-	make_ui_sound(uisndid.c_str());
+	make_ui_sound(uisndid.c_str(), true);
 }
 // </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 

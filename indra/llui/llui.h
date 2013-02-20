@@ -61,7 +61,11 @@ class LLHelp;
 
 // UI colors
 extern const LLColor4 UI_VERTEX_COLOR;
-void make_ui_sound(const char* name);
+
+// <FS:PP> UI Sounds preview
+// void make_ui_sound(const char* name);
+void make_ui_sound(const char* name, BOOL forceSound = FALSE);
+// </FS:PP> UI Sounds preview
 
 BOOL ui_point_in_rect(S32 x, S32 y, S32 left, S32 top, S32 right, S32 bottom);
 void gl_state_for_2d(S32 width, S32 height);
