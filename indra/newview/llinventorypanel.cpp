@@ -969,8 +969,11 @@ bool LLInventoryPanel::beginIMSession()
 
 	std::string name;
 
-	LLDynamicArray<LLUUID> members;
-	EInstantMessage type = IM_SESSION_CONFERENCE_START;
+//	LLDynamicArray<LLUUID> members;
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	uuid_vec_t members;
+// [/RLVa:KB]
+//	EInstantMessage type = IM_SESSION_CONFERENCE_START;
 
 	std::set<LLUUID>::const_iterator iter;
 	for (iter = selected_items.begin(); iter != selected_items.end(); iter++)
@@ -1012,7 +1015,10 @@ bool LLInventoryPanel::beginIMSession()
 						id = item_array.get(i)->getCreatorUUID();
 						if(at.isBuddyOnline(id))
 						{
-							members.put(id);
+//							members.put(id);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+							members.push_back(id);
+// [/RLVa:KB]
 						}
 					}
 				}
@@ -1034,7 +1040,10 @@ bool LLInventoryPanel::beginIMSession()
 
 						if(at.isBuddyOnline(id))
 						{
-							members.put(id);
+//							members.put(id);
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+							members.push_back(id);
+// [/RLVa:KB]
 						}
 					}
 				} //if IT_CALLINGCARD
@@ -1050,11 +1059,14 @@ bool LLInventoryPanel::beginIMSession()
 		name = LLTrans::getString("conference-title");
 	}
 
-	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
-	if (session_id != LLUUID::null)
-	{
-		LLIMFloater::show(session_id);
-	}
+//	LLUUID session_id = gIMMgr->addSession(name, type, members[0], members);
+//	if (session_id != LLUUID::null)
+//	{
+//		LLIMFloater::show(session_id);
+//	}
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+	LLAvatarActions::startConference(members);
+// [/RLVa:KB]
 		
 	return true;
 }
@@ -1142,8 +1154,11 @@ LLInventoryPanel* LLInventoryPanel::getActiveInventoryPanel(BOOL auto_open)
 			active_inv_floaterp->setMinimized(FALSE);
 		}
 	}	
-	else if (auto_open)
+//	else if (auto_open)
+// [RLVa:KB] - Checked: 2012-05-15 (RLVa-1.4.6)
+	else if ( (auto_open) && (LLFloaterReg::canShowInstance(floater_inventory->getInstanceName())) )
 	{
+// [/RLVa:KB]
 		floater_inventory->openFloater();
 
 		res = inventory_panel->getActivePanel();
