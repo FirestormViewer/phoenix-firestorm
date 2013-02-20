@@ -319,8 +319,8 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndFriendOffline" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFriendOffline" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndFriendOffline"/>
-			<text tool_tip="Sound UUID played on friendship offer." name="textFSFriendshipOffer">
-				Friendship offer:
+			<text tool_tip="Sonido a reproducir cuando alguien te ofrece amistad." name="textFSFriendshipOffer">
+				Oferta de amistad:
 			</text>
 			<button name="Prev_UISndFriendshipOffer" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFriendshipOffer" label="R" tool_tip="Restablecer al UUID por defecto."/>
@@ -343,14 +343,14 @@ Sitúa el cursor del ratón sobre el campo de UUID para mostrar su valor por def
 			<button name="Prev_UISndFootsteps" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndFootsteps" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndFootsteps"/>
-			<text tool_tip="Sound UUID played on group invitation." name="textFSGroupInvitation">
-				Group invitation:
+			<text tool_tip="Sonido a reproducir cuando te invitan a un grupo." name="textFSGroupInvitation">
+				Invitación a grupo:
 			</text>
 			<button name="Prev_UISndGroupInvitation" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndGroupInvitation" label="R" tool_tip="Restablecer al UUID por defecto."/>
 			<check_box label="Reproducir" name="PlayModeUISndGroupInvitation"/>
-			<text tool_tip="Sound UUID played on group notice." name="textFSGroupNotice">
-				Group notice:
+			<text tool_tip="Sonido a reproducir al recibir un aviso de grupo." name="textFSGroupNotice">
+				Aviso de grupo:
 			</text>
 			<button name="Prev_UISndGroupNotice" label="P" tool_tip="Probar sonido."/>
 			<button name="Def_UISndGroupNotice" label="R" tool_tip="Restablecer al UUID por defecto."/>

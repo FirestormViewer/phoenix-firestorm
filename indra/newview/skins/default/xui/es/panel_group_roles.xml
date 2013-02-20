@@ -7,7 +7,7 @@
 		¿Quieres guardar estos cambios?
 	</panel.string>
 	<tab_container name="roles_tab_container">
-		<panel label="MIEMBROS" name="members_sub_tab" tool_tip="Miembros">
+		<panel label="Miembros" name="members_sub_tab" tool_tip="Miembros">
 			<panel.string name="help_text">
 				Puede añadir o quitar los roles asignados a los miembros.
 Seleccione varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada uno de sus nombres.
@@ -24,7 +24,7 @@ Seleccione varios nombres manteniendo pulsada la tecla Ctrl y pulsando en cada u
 			<button label="Invitar" name="member_invite"/>
 			<button label="Expulsar" name="member_eject"/>
 		</panel>
-		<panel label="ROLES" name="roles_sub_tab" tool_tip="Roles">
+		<panel label="Roles" name="roles_sub_tab" tool_tip="Roles">
 			<panel.string name="help_text">
 				Los roles tienen una etiqueta propia y unas capacidades que se
 permiten ejercer a sus miembros. Los miembros pueden
@@ -43,7 +43,7 @@ incluyendo el de Todos y el de Propietarios.
 			<button label="Añadir un rol" name="role_create"/>
 			<button label="Eliminar el rol" name="role_delete"/>
 		</panel>
-		<panel label="CAPACIDADES" name="actions_sub_tab" tool_tip="Puedes ver una descripción de una capacidad y qué miembros y roles la tienen.">
+		<panel label="Capacidades" name="actions_sub_tab" tool_tip="Puedes ver una descripción de una capacidad y qué miembros y roles la tienen.">
 			<panel.string name="help_text">
 				Las capacidades permiten a los miembros que tienen ese rol el hacer tareas específicas dentro de este grupo. Hay una gran variedad de capacidades.
 			</panel.string>

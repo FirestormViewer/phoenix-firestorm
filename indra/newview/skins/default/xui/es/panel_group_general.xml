@@ -28,7 +28,7 @@ Deja el cursor sobre las opciones para obtener más ayuda.
 		<text name="join_cost_text">
 			Entrar (L$00000)
 		</text>
-		<button label="¡ENTRA AHORA!" name="btn_join"/>	
+		<button label="¡Entra ahora!" name="btn_join"/>	
 		<name_list name="visible_members">
 			<name_list.columns label="Miembro" name="name"/>
 			<name_list.columns label="Etiqueta" name="title"/>

@@ -3991,7 +3991,7 @@ Si sigues recibiendo este mensaje, contacta con [SUPPORT_SITE].
 		Región General
 	</string>
 	<string name="LocationCtrlSeeAVsTooltip">
-		Los avatares son visibles y está permitido el chat fuera de esta parcela
+		Los avatares en esta parcela no pueden ser vistos ni oídos por otros avatares desde fuera de la misma
 	</string>
 	<string name="LocationCtrlPathfindingDirtyTooltip">
 		Los objetos móviles pueden no comportarse adecuadamente en esta región hasta que ésta sea recargada.
@@ -5080,6 +5080,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Phototools_View_Label">Cameratools</string>
 	<string name="Command_Contact_Sets_Label">Contact sets</string>
 	<string name="Command_Mouselook_Label">Vista subjetiva</string>
+	<string name="Command_Landmark_Here_Label">Crear hito</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5175,6 +5176,9 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Entra en modo de vista subjetiva (M)
+	</string>
+	<string name="Command_Landmark_Here_Tooltip">
+		Crea un hito en tu posición actual
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior

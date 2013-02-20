@@ -36,6 +36,11 @@
 			<check_box name="FSUseStandaloneTeleportHistoryFloater" label="Usar una ventana independiente para el historial de teleportes" width="270" tool_tip="Si se activa, al usar el atajo para el historial de teleportes, éste se abrirá en una ventana separada."/>
 			<check_box name="FSUseStandalonePlaceDetailsFloater" label="Usar ventanas independientes para hitos, detalles de lugar y de historial de teleportes" width="270" tool_tip="Si se activa, los hitos, los detalles de lugar y los del historial de teleportes se abrirán en ventanas separadas."/>
 			<check_box name="FSUseStandaloneBlocklistFloater" label="Usar ventanas independientes para la lista de bloqueos/silenciados" width="270" tool_tip="Si se activa, la lista de avatares y objetos bloqueados/silenciados se abrirá en una ventana separada."/>
+			<text width="200" name="ExtendedTeleportHistoryLabel">
+				Extender historial de telepores con:
+			</text>
+			<check_box name="FSTeleportHistoryShowPosition" label="Posición" tool_tip="Si lo activas, se mostrarán las coordenadas de la región en el historial de teleportes."/>
+			<check_box name="FSTeleportHistoryShowDate" label="Fecha" tool_tip="Si lo activas, se mostrará la fecha y la hora del teleporte en el historial de teleportes."/>
 			<text name="ScriptDialogsPerObjectLabel" width="160">
 				Diálogos de script por objeto:
 			</text>

@@ -63,9 +63,8 @@
 		<menu_item_check label="Grupos de contactos" name="Contact Sets"/>
 		<menu_item_call label="Grupos" name="My Groups"/>
 		<menu_item_check label="Chat" name="Nearby Chat"/>
-		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gente" name="People"/>
-		<menu_item_check label="Lugares" name="Places"/>
+		<menu_item_check label="Conversaciones" name="Conversations"/>
 		<menu_item_check label="Gestos" name="Gestures"/>
 		<menu_item_check label="Filtros de voz" name="ShowVoice"/>
 		<menu_item_check label="Chat de voz" name="Nearby Voice"/>
@@ -100,7 +99,7 @@
 			<menu_item_call label="Mediodía" name="Noon"/>
 			<menu_item_call label="Atardecer" name="Sunset"/>
 			<menu_item_call label="Medianoche" name="Midnight"/>
-			<menu_item_call label="Hora de la región" name="Revert to Region Default"/>
+			<menu_item_call label="Hora del estado" name="Revert to Region Default"/>
 		</menu>
 		<menu label="Editor de entorno" name="Environment Editor">
 			<menu_item_call label="Configuración de entorno..." name="Environment Settings"/>
@@ -166,14 +165,9 @@
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
-			<menu_item_call label="Caracteres..." name="pathfinding_characters_menu_item"/>
-			<menu_item_call label="Ver / probar..." name="pathfinding_console_menu_item"/>
-			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
-		</menu>
-		<menu label="Pathfinding" name="Pathfinding">
-			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>
 			<menu_item_call label="Personajes..." name="pathfinding_characters_menu_item"/>
 			<menu_item_call label="Ver/probar..." name="pathfinding_console_menu_item"/>
+			<menu_item_call label="Actualizar región" name="pathfinding_rebake_navmesh_item"/>
 		</menu>
 		<menu label="Opciones" name="Options">
 			<menu_item_check label="Mostrar los permisos avanzados" name="DebugPermissions"/>
@@ -402,7 +396,7 @@
 			<menu_item_check label="Información base de textura de lo seleccionado" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Wireframe" name="Wireframe"/>
 			<menu_item_check label="Oclusión objeto-objeto" name="Object-Object Occlusion"/>
-			<menu_item_check label="Dibujo diferido" name="Lighting and Shadows"/>
+			<menu_item_check label="Modelo avanzado de iluminación" name="Lighting and Shadows"/>
 			<menu_item_check label="Sombras del sol/la luna/proyectores" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO y suavizado de sombras" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Iluminación global (experimental)" name="Global Illumination"/>
@@ -488,9 +482,14 @@
 				<menu_item_call label="Conmutar PG" name="Toggle PG"/>
 				<menu_item_check label="Permitir seleccionar avatar" name="Allow Select Avatar"/>
 			</menu>
+			<menu label="Velocidad de las animaciones" name="Animation Speed">
+				<menu_item_call label="Todas un 10% más rápido" name="All Animations 10 Faster"/>
+				<menu_item_call label="Todas un 10% más lento" name="All Animations 10 Slower"/>
+				<menu_item_call label="Restablecer la velocidad de todas" name="Reset All Animation Speed"/>
+				<menu_item_check label="Cámara lenta" name="Slow Motion Animations"/>
+			</menu>
 			<menu_item_call label="Forzar parámetros por defecto" name="Force Params to Default"/>
 			<menu_item_check label="Información de animación" name="Animation Info"/>
-			<menu_item_check label="Animaciones en cámara lenta" name="Slow Motion Animations"/>
 			<menu_item_check label="Mostrar puntos de mira de foco" name="Show Look At"/>
 			<menu_item_check label="Mostrar puntos de mira de ratón" name="Show Point At"/>
 			<menu_item_check label="Depurar actualizaciones de articulación" name="Debug Joint Updates"/>
