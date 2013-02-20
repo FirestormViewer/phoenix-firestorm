@@ -592,10 +592,9 @@ void LLHUDEffectLookAt::render()
 					break;
 			}
 
-			gViewerWindow->setup3DRender();
+			gGL.pushMatrix();
 			hud_render_utf8text(name,position,*fontp,LLFontGL::NORMAL,LLFontGL::DROP_SHADOW,-0.5*fontp->getWidthF32(name),3.0,lookAtColor,FALSE);
-			gGL.end();
-			glPopMatrix();
+			gGL.popMatrix();
 		}
 
 		// render crosshair

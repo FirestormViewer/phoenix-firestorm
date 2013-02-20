@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="move_floater" title="">
+<floater name="move_floater" title="" width="92">
 	<string name="walk_forward_tooltip">
 		Caminar hacia adelante (cursor arriba o W)
 	</string>
 	<string name="walk_back_tooltip">
-		Caminar de espaldas (cursor abajo o S)
+		Caminar hacia atrás (cursor abajo o S)
 	</string>
 	<string name="walk_left_tooltip">
-		Caminar a la izq. (pulsa Mayúsculas + cursor izq. o A)
+		Caminar a la izquierda (mayúscula + cursor izq. o A)
 	</string>
 	<string name="walk_right_tooltip">
-		Caminar a la der. (pulsa Mayúsculas + cursor der. o D)
+		Caminar a la derecha (mayúscula + cursor der. o D)
 	</string>
 	<string name="run_forward_tooltip">
 		Correr hacia adelante (cursor arriba o W)
 	</string>
 	<string name="run_back_tooltip">
-		Correr de espaldas (cursor abajo o S)
+		Correr hacia atrás (cursor abajo o S)
 	</string>
 	<string name="run_left_tooltip">
-		Correr a la izq. (pulsa Mayúsculas + cursor izq. o A)
+		Correr a la izquierda (mayúscula + cursor izq. o A)
 	</string>
 	<string name="run_right_tooltip">
-		Correr a la der. (pulsa Mayúsculas + cursor der. o D)
+		Correr a la derecha (mayúscula + cursor der. o D)
 	</string>
 	<string name="fly_forward_tooltip">
 		Volar hacia adelante (cursor arriba o W)
@@ -31,42 +31,36 @@
 		Volar hacia atrás (cursor abajo o S)
 	</string>
 	<string name="fly_left_tooltip">
-		Volar a la izq. (pulsa Mayúsculas + cursor izq. o A)
+		Volar a la izquierda (mayúscula + cursor izq. o A)
 	</string>
 	<string name="fly_right_tooltip">
-		Volar a la der. (pulsa Mayúsculas + cursor der. o D)
+		Volar a la derecha (mayúscula + cursor der. o D)
 	</string>
 	<string name="fly_up_tooltip">
-		Volar (pulsa E para subir)
+		Remontar vuelo (E)
 	</string>
 	<string name="fly_down_tooltip">
-		Volar (pulsa C para descender)
+		Descender (C)
 	</string>
 	<string name="jump_tooltip">
-		Saltar (pulsa E)
+		Saltar (E)
 	</string>
 	<string name="crouch_tooltip">
-		Agacharse (pulsa C)
-	</string>
-	<string name="walk_title">
-	</string>
-	<string name="run_title">
-	</string>
-	<string name="fly_title">
+		Agacharse (C)
 	</string>
 	<panel name="panel_actions">
-		<button label="" label_selected="" name="turn left btn" tool_tip="Girar a la izq. (cursor izq. o A)"/>
-		<joystick_slide name="move left btn" tool_tip="Caminar a la izq. (pulsa Mayúsculas + cursor izq. o A)"/>
-		<button label="" label_selected="" name="turn right btn" tool_tip="Girar a la der. (cursor der. o D)"/>
-		<joystick_slide name="move right btn" tool_tip="Caminar a la der. (pulsa Mayúsculas + cursor der. o D)"/>
-		<joystick_turn name="forward btn" tool_tip="Caminar hacia adelante (cursor arriba o W)"/>
+		<button label="" label_selected="" name="turn left btn" tool_tip="Girar a la izquierda (cursor izq. o A)" left="6"/>
+		<joystick_slide name="move left btn" tool_tip="Caminar a la izquierda (pulsa Mayúscula + cursor izq. o A)"/>
+		<button label="" label_selected="" name="turn right btn" tool_tip="Girar a la derecha (cursor der. o D)" right="-34"/>
+		<joystick_slide name="move right btn" tool_tip="Caminar a la derecha (pulsa Mayúscula + cursor der. o D)"/>
+		<joystick_turn name="forward btn" tool_tip="Caminar hacia adelante (cursor arriba o W)" left="25"/>
 		<joystick_turn name="backward btn" tool_tip="Caminar de espaldas (cursor abajo o S)"/>
-		<button label="" label_selected="" name="move up btn" tool_tip="Volar (pulsa E para subir)"/>
-		<button label="" label_selected="" name="move down btn" tool_tip="Volar (pulsa C para descender)"/>
+		<button label="" label_selected="" name="move up btn" tool_tip="Remontar vuelo (E)" right="-16"/>
+		<button label="" label_selected="" name="move down btn" tool_tip="Descender (C)"/>
 	</panel>
 	<panel name="panel_modes">
-		<button label="" name="mode_walk_btn" tool_tip="Modo de caminar"/>
-		<button label="" name="mode_run_btn" tool_tip="Modo de correr"/>
-		<button label="" name="mode_fly_btn" tool_tip="Modo de volar"/>
+		<button label="" name="mode_walk_btn" tool_tip="Modo paseo" width="29"/>
+		<button label="" name="mode_run_btn" tool_tip="Modo carrera" width="29"/>
+		<button label="" name="mode_fly_btn" tool_tip="Modo vuelo" width="29"/>
 	</panel>
 </floater>

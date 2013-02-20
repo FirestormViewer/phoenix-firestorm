@@ -15,13 +15,13 @@
 		<text name="sort_text" left="355">
 			Ordenar por:
 		</text>
+		<check_box label="Ascendente" name="ascending_check"/>
 		<combo_box name="land_sort_combo">
 			<combo_box.item label="Nombre" name="Name_item"/>
 			<combo_box.item label="Precio" name="Price_item"/>
 			<combo_box.item label="Precio/m2" name="PPM_item"/>
 			<combo_box.item label="Área" name="Area_item"/>
 		</combo_box>
-		<check_box label="Ordenar todo ascendentemente" name="ascending_check"/>
 		<button label="Buscar" name="land_find" width="90" left="688"/>
 	</panel>
 	<panel name="panel_ls_scrolllist">

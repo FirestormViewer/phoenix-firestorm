@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <panel name="mini_progress_panel">
 	<progress_bar name="progress_bar_mini" right="-80"/>
 	<button label="Abbrechen" name="cancel_btn" width="70"/>

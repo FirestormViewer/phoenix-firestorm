@@ -5088,9 +5088,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Mouselook_Label">
 		Mouselook-Modus
 	</string>
-	<string name="Command_Legacy_Search_Label">
-		Klassische Suche
-	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5213,9 +5210,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Mouselook_Tooltip">
 		Mouselook-Modus aktivieren (M)
-	</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Orte, Gruppen und Leute mit der klassischen Suche finden
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -5539,5 +5533,36 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="fsbridge_created">
 		LSL-Brücke erstellt.
+	</string>
+
+	<string name="QP Draw Distance">
+		Draw Distance
+	</string>
+	<string name="QP Max Particles">
+		Max. Partikel
+	</string>
+	<string name="QP Avatar Physics LOD">
+		Avatar-Physik LOD
+	</string>
+	<string name="QP LOD Factor">
+		LOD-Faktor
+	</string>
+	<string name="QP Max Avatars">
+		Max. Avatare
+	</string>
+	<string name="QP Height Offset">
+		Höhenabstand
+	</string>
+	<string name="QP Tags Offset">
+		Tag-Höhenabstand
+	</string>
+	<string name="QP Name Tags">
+		Avatarnamen
+	</string>
+	<string name="QP LookAt Target">
+		Kamerafokus
+	</string>
+	<string name="QP Color Under Cursor">
+		Farbe unter Cursor
 	</string>
 </strings>

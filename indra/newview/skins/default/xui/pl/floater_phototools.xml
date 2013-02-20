@@ -61,16 +61,16 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">		
-				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Światła i cienie' w karcie 'Światła'.">
+				<text name="T_R_Res" tool_tip="Określa rozdzielczość/jakość odbić w wodzie. Aby zmiany odniosły skutek musisz wyłączyć i włączyć 'podstawowe shadery'. Poza tym, gdy ustawienia rozdzielczości są w trybie 'bardzo dobrym' lub wyższym musisz także włączyć 'Renderowanie opóźniane' w karcie 'Światła'.">
 					Rozdzielczość
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Przyzwoita" name="0"/>
 					<combo_box.item label="Dobra" name="1"/>
-					<combo_box.item label="Bardzo dobra - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="2"/>
-					<combo_box.item label="Świetna - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="3"/>
-					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="4"/>
-					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Światła i cienie' (karta Światła)" name="5"/>
+					<combo_box.item label="Bardzo dobra - UWAGA: Musisz także włączyć 'Renderowanie opóźniane' (karta Światła)" name="2"/>
+					<combo_box.item label="Świetna - UWAGA: Musisz także włączyć 'Renderowanie opóźniane' (karta Światła)" name="3"/>
+					<combo_box.item label="Znakomita - UWAGA: Musisz także włączyć 'Renderowanie opóźniane' (karta Światła)" name="4"/>
+					<combo_box.item label="Jak żywa - UWAGA: Musisz także włączyć 'Renderowanie opóźniane' (karta Światła)" name="5"/>
 				</combo_box>
 				<check_box label="Przezroczysta woda" name="TransparentWater" tool_tip="Renderuj wodę jako powierzchnię przezroczystą. Wyłączenie tej opcji pokryje wodę nieprzejrzystą, prostą teksturą."/>
 			</panel>
@@ -82,7 +82,7 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Włącz światła i cienie" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
+				<check_box label="Włącz renderowanie opóźniane" name="RenderDeferred" tool_tip="Ta opcja włącza oświetlenie i cienie od Słońca i Księżyca oraz innych źródeł światła w świecie, pozwala również na włączenie głębi ostrości i innych funkcji graficznych. Zasadniczo należy zaznaczyć to pole, żeby zobaczyć większość 'fajerwerek graficznych' w świecie. Jeśli nie możesz włączyć tej opcji lub zobaczyć żadnego jej efektu upewnij się najpierw, że zarówno podstawowe, jak i atmosferyczne shadery są włączone w karcie 'WL'."/>
 				<check_box label="Wszystkie lokalne światła" name="LocalLights" tool_tip="Ta opcja włącza wszystkie światła w świecie. Jeśli ją wyłączysz, to światło pochodzące od Słońca i Księżyca ciągle będzie widoczne. Przydatne, gdy chcesz wyeliminować oświetlenie pochodzące z regionu i użyć tylko światła słonecznego/księżycowego."/>
 				<check_box label="Włącz doczepiane światła (np. twarzy)" name="Render Attached Lights" tool_tip="Ta opcja włącza światła doczepione do awatarów, na przykład te oświetlające twarze. Użyteczne, gdy trzeba wyłączyć oświetlenie twarzy."/>
 			</panel>
@@ -163,7 +163,7 @@
 				</text>
 			</panel>
 			<panel name="P_DoF_Settings">
-				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'cienie i dynamiczne oświetlenie' w karcie 'Światła'."/>
+				<check_box label="Włącz głębię ostrości" name="UseDepthofField" tool_tip="Ta opcja włączy głębię ostrości, która służy do 'określania zakresu odległości, w którym obiekty obserwowane przez urządzenie optyczne sprawiają wrażenie ostrych' (Wikipedia). Jeśli nie korzystasz z tej funkcji - wyłącz ją, przyspieszy to wyświetlanie obrazu. Jeśli nie możesz włączyć tej funkcji lub zobaczyć żadnego z jej efektów włącz 'Renderowanie opóźniane' w karcie 'Światła'."/>
 				<check_box label="Pokazuj pole widzenia w przeglądarce" name="MIC_Show_FOV" tool_tip="Ta opcja pokazuje pionowe pole widzenia kamery. W SL jest możliwe, aby zmienić długość ogniskowej tak, jak w realnym życiu - im mniejsze pole widzenia, tym większa ogniskowa obiektywu. Ogniskowa 50mm ma pole widzenia 27.0 stopni. Aby ustawić pole widzenia użyj suwaka poniżej. Zobacz: 'pl.wikipedia.org/wiki/Kąt_widzenia', aby wyświetlić tabelkę prezentującą stosunek pomiędzy polem widzenia, a ogniskową (mm). WYŁĄCZ TĘ FUNKCJĘ PRZED ROBIENIEM ZDJĘĆ, ALBO BĘDZIE ONA WIDOCZNA NA OBRAZIE!"/>
 			</panel>
 			<panel name="P_Zoom">

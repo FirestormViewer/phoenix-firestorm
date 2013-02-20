@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater name="build options floater" title="OPCIONES DE LA REJILLA">
-	<floater.string name="grid_screen_text">
-		Pantalla
-	</floater.string>
-	<floater.string name="grid_local_text">
-		Local
-	</floater.string>
-	<floater.string name="grid_world_text">
-		Mundo
-	</floater.string>
-	<floater.string name="grid_reference_text">
-		Referencia
-	</floater.string>
-	<floater.string name="grid_attachment_text">
-		Accesorio
-	</floater.string>
-	<text name="grid_mode_label" tool_tip="Opacidad de la cuadrícula">
-		Modo
-	</text>
-	<combo_box name="combobox grid mode" tool_tip="Elige qué cuadricula usar para posicionar el objeto">
-		<combo_box.item label="Mundo" name="World"/>
-		<combo_box.item label="Local" name="Local"/>
-		<combo_box.item label="Referencia" name="Reference"/>
-	</combo_box>
+<floater name="build options floater" title="Opciones de rejilla">
 	<spinner label="Unidades (metros)" name="GridResolution"/>
 	<spinner label="Alcance (metros)" name="GridDrawSize"/>
 	<check_box label="Ajustar a subunidades" name="GridSubUnit"/>
 	<check_box label="Ver sección transversal" name="GridCrossSection"/>
+	<text name="Snap on">
+		Ajustar a:
+	</text>
+	<radio_group name="FSSnapDomain">
+		<radio_item label="Interior" tool_tip="Ajusta a los límites interiores de la rejilla" name="radio inside"/>
+		<radio_item label="Exterior" tool_tip="Ajusta a los límites exteriores de la rejilla (comportamiento clásico)" name="radio outside"/>
+	</radio_group>
 	<text tool_tip="Opacidad de la rejilla" name="grid_opacity_label">
 		Opacidad:
 	</text>

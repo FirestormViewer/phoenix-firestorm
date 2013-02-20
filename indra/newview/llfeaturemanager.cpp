@@ -504,8 +504,8 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 		LL_WARNS("RenderInit") << "GPU '" << rawRenderer << "' not recognized" << LL_ENDL;
 	}
 
-#if LL_DARWIN // never go over "Mid" settings by default on OS X
-	mGPUClass = llmin(mGPUClass, GPU_CLASS_2);
+#if LL_DARWIN // never go over "Mid-High" settings by default on OS X
+	mGPUClass = llmin(mGPUClass, GPU_CLASS_3);
 #endif
 }
 

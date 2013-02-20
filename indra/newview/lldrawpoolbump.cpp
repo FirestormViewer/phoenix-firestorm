@@ -803,7 +803,11 @@ void LLDrawPoolBump::endBump(U32 pass)
 
 S32 LLDrawPoolBump::getNumDeferredPasses()
 { 
-	if (gSavedSettings.getBOOL("RenderObjectBump"))
+	// <FS:PP> Attempt to speed up things a little
+	// if (gSavedSettings.getBOOL("RenderObjectBump"))
+	static LLCachedControl<bool> RenderObjectBump(gSavedSettings, "RenderObjectBump");
+	if (RenderObjectBump)
+	// </FS:PP>
 	{
 		return 1;
 	}
@@ -1144,7 +1148,11 @@ void LLBumpImageList::generateNormalMapFromAlpha(LLImageRaw* src, LLImageRaw* nr
 
 	S32 src_cmp = src->getComponents();
 
-	F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
+	// <FS:PP> Attempt to speed up things a little
+	// F32 norm_scale = gSavedSettings.getF32("RenderNormalMapScale");
+	static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
+	F32 norm_scale = RenderNormalMapScale;
+	// </FS:PP>
 
 	U32 idx = 0;
 	//generate normal map from pseudo-heightfield
@@ -1373,7 +1381,11 @@ void LLBumpImageList::onSourceLoaded( BOOL success, LLViewerTexture *src_vi, LLI
 					LLGLDisable blend(GL_BLEND);
 					gGL.setColorMask(TRUE, TRUE);
 					gNormalMapGenProgram.bind();
-					gNormalMapGenProgram.uniform1f("norm_scale", gSavedSettings.getF32("RenderNormalMapScale"));
+					// <FS:PP> Attempt to speed up things a little
+					// gNormalMapGenProgram.uniform1f("norm_scale", gSavedSettings.getF32("RenderNormalMapScale"));
+					static LLCachedControl<F32> RenderNormalMapScale(gSavedSettings, "RenderNormalMapScale");
+					gNormalMapGenProgram.uniform1f("norm_scale", RenderNormalMapScale);
+					// </FS:PP>
 					gNormalMapGenProgram.uniform1f("stepX", 1.f/bump->getWidth());
 					gNormalMapGenProgram.uniform1f("stepY", 1.f/bump->getHeight());
 

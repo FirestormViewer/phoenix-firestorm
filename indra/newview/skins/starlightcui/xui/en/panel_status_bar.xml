@@ -293,7 +293,7 @@
     <text
      type="string"
      font="SansSerifSmall"
-     text_readonly_color="TimeTextColor"
+     text_color="TimeTextColor"
      follows="right|top"
      halign="right"
      height="16"

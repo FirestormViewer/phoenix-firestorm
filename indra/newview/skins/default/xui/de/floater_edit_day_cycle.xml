@@ -15,7 +15,7 @@
 	<string name="combo_label">
 		-Voreinstellung auswählen-
 	</string>
-	<text name="label">
+	<text name="label" width="150">
 		Name der Voreinstellung:
 	</text>
 	<text name="note">
@@ -33,8 +33,8 @@
 	<panel name="day_cycle_slider_panel">
 		<multi_slider initial_value="0" name="WLTimeSlider"/>
 		<multi_slider initial_value="0" name="WLDayCycleKeys"/>
-		<button label="Schlüssel hinzufügen" label_selected="Schlüssel hinzufügen" name="WLAddKey"/>
-		<button label="Schlüssel löschen" label_selected="Schlüssel löschen" name="WLDeleteKey"/>
+		<button label="Schlüssel hinzuf." label_selected="Schlüssel hinzuf." name="WLAddKey" left_pad="10" width="105"/>
+		<button label="Schlüssel löschen" label_selected="Schlüssel löschen" name="WLDeleteKey" width="105"/>
 		<text name="WL12am">
 			0:00
 		</text>
@@ -90,11 +90,11 @@
 			|
 		</text>
 	</panel>
-	<text name="WLCurKeyPresetText">
+	<text name="WLCurKeyPresetText" width="112" left_delta="166">
 		Himmeleinstellung:
 	</text>
 	<combo_box label="Voreinstellung" name="WLSkyPresets"/>
-	<text name="WLCurKeyTimeText">
+	<text name="WLCurKeyTimeText" left_delta="-50" width="45">
 		Uhrzeit:
 	</text>
 	<time name="time" value="6:00"/>

@@ -153,39 +153,38 @@
 			name="sort_text"
 			top="12"
 			height="16"
-			width="256">
+			width="98">
 			Sort results by:
 		</text>
+		<check_box
+			follows="left|top"
+			height="16"
+			label="Ascending"
+			layout="topleft"
+			left_pad="3"
+			name="ascending_check"
+			width="100"/>
 		<combo_box
 			follows="left|top"
 			layout="topleft"
 			height="23"
 			allow_text_entry="false"
-			left_delta="0"
-			top_pad="2"
+			left_delta="-102"
+			top_pad="1"
 			name="land_sort_combo"
-			width="120">
+			width="118">
 			<combo_box.item label="Name" name="Name_item" value="Name"/>
 			<combo_box.item label="Price" name="Price_item" value="Price"/>
 			<combo_box.item label="Price per meter" name="PPM_item" value="PPM"/>
 			<combo_box.item label="Area" name="Area_item" value="Area"/>
 		</combo_box>
-		<check_box
-		top_delta="3"
-		follows="left|top"
-		height="16"
-		label="Sort all ascending"
-		layout="topleft"
-		left_pad="3"
-		name="ascending_check"
-		width="100"/>
 		<button
 		follows="top|right"
 		height="23"
 		label="Search"
 		layout="topleft"
 		left="678"
-		top_delta="-4"
+		top_delta="0"
 		name="land_find"
 		width="100" />
 	</panel>

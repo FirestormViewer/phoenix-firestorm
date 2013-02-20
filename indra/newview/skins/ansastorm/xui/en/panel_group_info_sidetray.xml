@@ -2,14 +2,14 @@
 <panel
 background_visible="true"
  follows="all"
- height="480"
+ height="473"
  label="Group Profile"
  layout="topleft"
  min_height="350"
  left="0"
  top="20"
  name="GroupInfo"
- width="500">
+ width="495">
     <panel.string
      name="default_needs_apply_text">
         There are unsaved changes
@@ -31,10 +31,10 @@ background_visible="true"
 		name="group_info_sidetray_main"
 		layout="topleft"
 		follows="all"
-		top="0"
+		top="-475"
 		left="0"
 		width="498"
-		height="480"
+		height="475"
 		border_size="0"
 		orientation="vertical">
 	<layout_panel
@@ -113,7 +113,7 @@ background_visible="true"
      name="layout"
      orientation="vertical"
       follows="all"
-     left="8"
+     left="0"
      top_pad="0"
      height="415"
      right="-1"
@@ -197,7 +197,7 @@ background_visible="true"
 			name="button_row_ls"
 			left_pad="0"
 			orientation="horizontal"
-			top_delta="2"
+			top_delta="0"
 			width="445">
 				<layout_panel
 				follows="bottom|left|right"

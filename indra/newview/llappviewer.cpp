@@ -246,6 +246,8 @@
 #include "llappviewerlistener.h"
 
 #include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
 #include "glib.h"
@@ -734,6 +736,7 @@ public:
 bool LLAppViewer::init()
 {	
 	nd::memorypool::startUp(); // <FS:ND/> tcmalloc replacement
+	nd::allocstats::startUp(); // <FS:ND/> start collecting alloc stats
 
 	//
 	// Start of the application
@@ -1760,6 +1763,10 @@ void LLAppViewer::flushVFSIO()
 
 bool LLAppViewer::cleanup()
 {
+	// <FS:ND> stop collection stats
+	nd::allocstats::tearDown();
+	// </FS:ND>
+
 	//ditch LLVOAvatarSelf instance
 	gAgentAvatarp = NULL;
 
@@ -3830,7 +3837,12 @@ bool LLAppViewer::anotherInstanceRunning()
 		// File exists, try opening with write permissions
 		LLAPRFile outfile ;
 		outfile.open(marker_file, LL_APR_WB);
-		apr_file_t* fMarker = outfile.getFileHandle() ; 
+
+		// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+		// apr_file_t* fMarker = outfile.getFileHandle() ; 
+		LLAPRFile::tFiletype* fMarker = outfile.getFileHandle() ; 
+		// </FS:ND>
+		
 		if (!fMarker)
 		{
 			// Another instance is running. Skip the rest of these operations.
@@ -5203,7 +5215,7 @@ void LLAppViewer::sendLogoutRequest()
 		if (mLogoutMarkerFile)
 		{
 			llinfos << "Created logout marker file " << mLogoutMarkerFileName << llendl;
-    		apr_file_close(mLogoutMarkerFile);
+    		// apr_file_close(mLogoutMarkerFile);
 		}
 		else
 		{

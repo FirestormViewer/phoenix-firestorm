@@ -1665,21 +1665,11 @@
         shortcut="control|F">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="search" />
+             parameter="search_legacy" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="search" />
+             parameter="search_legacy" />
             </menu_item_check>
-        <menu_item_check
-			label="Legacy Search"
-			name="Legacy Search">
-            <menu_item_check.on_check
-			function="Floater.Visible"
-			parameter="search_legacy" />
-            <menu_item_check.on_click
-			function="Floater.Toggle"
-			parameter="search_legacy" />
-		</menu_item_check>
 
     	<menu_item_call
              label="SL Marketplace"
@@ -3448,7 +3438,7 @@
           <menu_item_separator />
 
           <menu_item_check
-                       label="Lighting and Shadows"
+                       label="Deferred Rendering"
                        name="Lighting and Shadows">
             <menu_item_check.on_check
              function="CheckControl"
@@ -3935,6 +3925,16 @@
                  parameter="showUIname" />
                 <menu_item_check.on_click
                  function="Advanced.ToggleXUINames" />
+            </menu_item_check>
+            <menu_item_check
+             label="Show debugging info for views"
+             name="DebugViews">
+                <menu_item_check.on_check
+                 function="CheckControl"
+                 parameter="DebugViews" />
+                <menu_item_check.on_click
+                 function="ToggleControl"
+                 parameter="DebugViews" />
             </menu_item_check>
           <menu_item_call
            label="Send Test IMs"

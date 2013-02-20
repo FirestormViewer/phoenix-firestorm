@@ -62,16 +62,16 @@
 				</combo_box>
 			</panel>
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Determina la resolución/calidad de los reflejos en el agua. Para que los cambios tengan efecto, conmuta la casilla de abajo.">
+				<text name="T_R_Res" tool_tip="Determina la resolución/calidad de los reflejos en el agua. Siempre que las configuraciones de resolución se establezcan a 'Muy buena' o superior, debes activar también 'Dibujo diferido' en la pestaña 'Luz'.">
 					 Resolución
 				 </text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Decente" name="0"/>
 					<combo_box.item label="Buena" name="1"/>
-					<combo_box.item label="Muy buena" name="2"/>
-					<combo_box.item label="Excelente" name="3"/>
-					<combo_box.item label="Excepcional" name="4"/>
-					<combo_box.item label="Realista" name="5"/>
+					<combo_box.item label="Muy buena      - NOTA: Debes activar también 'Dibujo diferido' (pestaña 'Luz')" name="2"/>
+					<combo_box.item label="Excelente        - NOTA: Debes activar también 'Dibujo diferido' (pestaña 'Luz')" name="3"/>
+					<combo_box.item label="Excepcional    - NOTA: Debes activar también 'Dibujo diferido' (pestaña 'Luz')" name="4"/>
+					<combo_box.item label="Realista            - NOTA: Debes activar también 'Dibujo diferido' (pestaña 'Luz')" name="5"/>
 				</combo_box>
 				<check_box label="Agua transparente" name="TransparentWater" tool_tip="Dibujar el agua como transparente. Desactivarlo dibuja el agua como opaca con una textura simple aplicada."/>
 				<!--slider label="Resolución" name="REflection Res"/-->
@@ -84,7 +84,7 @@
 				</text>
 			</panel>
 			<panel name="P_L_S_Settings">
-				<check_box label="Activar sombras y luces dinámicas" name="RenderDeferred" tool_tip="Activa las sombras de sol, luna y fuentes de luz. También permite activar la profundidad de campo y otras características gráficas. Básicamente, necesitas activarlo para apreciar casi todo lo vistoso de SL. Si no puedes activar esta característica o apreciar sus efectos, asegúrate de que los efectos atmosféricos y los efectos básicos están activados en la pestaña 'WL'."/>
+				<check_box label="Activar dibujo diferido" name="RenderDeferred" tool_tip="Activa las sombras de sol, luna y fuentes de luz. También permite activar la profundidad de campo y otras características gráficas. Básicamente, necesitas activarlo para apreciar casi todo lo vistoso de SL. Si no puedes activar esta característica o apreciar sus efectos, asegúrate de que los efectos atmosféricos y los efectos básicos están activados en la pestaña 'WL'."/>
 				<check_box label="Activar todas las luces locales" name="LocalLights" tool_tip="Activa todas las luces del entorno. Si desactivas esta característica, la luz del sol y de la luna aún se verán. Útil cuando quieres eliminar toda iluminación que no provenga del sol y de la luna."/>
 				<check_box label="Activar luces anexadas" tool_tip="Activa cualquier luz, como las iluminaciones faciales que los avatares tengan anexadas. Útil para desactivar las iluminaciones faciales cuando sea necesario." name="Render Attached Lights"/>
 			</panel>
@@ -166,7 +166,7 @@
 				</text>
 			</panel>
 			<panel name="P_DoF_Settings">
-				<check_box label="Activar la profundidad de campo (DOF)" name="UseDepthofField" tool_tip="Activa la Profundidad de Campo (Depth of Field - DOF), que 'determina la distanicia entre el objeto más crecano y el más lejano de una escena que aparecen aceptablemente nítidos en una imagen'(wikipedia). Si no estás usándola, desactívala y mejorarás el rendimiento. Si no puedes activar esta característica o no ves sus efectos, activa 'Sombras y luces dinámicas en la pestaña 'Luz'"/>
+				<check_box label="Activar la profundidad de campo (DOF)" name="UseDepthofField" tool_tip="Activa la Profundidad de Campo (Depth of Field - DOF), que 'determina la distanicia entre el objeto más cercano y el más lejano de una escena que aparecen aceptablemente nítidos en una imagen'(wikipedia). Si no estás usándola, desactívala y mejorarás el rendimiento. Si no puedes activar esta característica o no ves sus efectos, activa 'Dibujo diferido' en la pestaña 'Luz'"/>
 				<check_box name="MIC_Show_FOV" label="Mostrar el FOV actual en pantalla" tool_tip="Muestra el campo de visión (field of view - FOV) vertical para la cámara. En SL es posible cambiar la longitud de la lente como en RL. Cuanto más pequeño el FOV, más larga la lente de la cámara. Una lente de 50mm tiene un FOV de 27.0 grados. Para ajustar el FOV, usa el deslizador de abajo. Por favor, lee lens has a FOV of 27.0 degrees. To adjust the FOV use the zoom slider bar below. En  'es.wikipedia.org/wiki/Ángulo_de_visión' puedes ver una tabla que muestra la relación entre el FOV y la distancia focal de la lente (en mm). ¡DESACTÍVALO ANTES DE DISPARAR, O APARERÁ EN LA FOTO!"/>
 			</panel>
 			<panel name="P_Zoom">

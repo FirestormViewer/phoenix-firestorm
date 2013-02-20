@@ -38,6 +38,8 @@ namespace nd
 
 		void logAllocation( size_t aSize, nd::debugging::sEBP * aEBP );
 		void dumpStats( std::ostream &aOut );
+
+		bool isEnabled();
 	}
 }
 

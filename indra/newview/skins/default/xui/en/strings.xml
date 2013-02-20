@@ -4842,7 +4842,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Phototools_View_Label">Phototools camera</string>
   <string name="Command_Contact_Sets_Label">Contact sets</string>
   <string name="Command_Mouselook_Label">Mouselook</string>
-  <string name="Command_Legacy_Search_Label">Legacy Search</string>
   
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -4892,7 +4891,6 @@ Try enclosing path to the editor with double quotes.
   <string name="Toolbar_Right_Tooltip" >currently in your right toolbar</string>
 
   <string name="Command_Fly_Tooltip">Toggle flying mode on/off</string>
-  <string name="Command_Legacy_Search_Tooltip">Find places, groups, people using legacy searching</string>
 
  <!-- Mesh UI terms -->
   <string name="Retain%">Retain%</string>
@@ -5029,4 +5027,16 @@ Try enclosing path to the editor with double quotes.
   <string name="fsbridge_warning_not_finished">The bridge has not finished creating, you may need to recreate it before using.</string>
   <string name="fsbridge_detached">Bridge detached.</string>
   <string name="fsbridge_created">Bridge created.</string>
+
+  <!-- <FS:Zi> Quick preferences default options -->
+  <string name="QP Draw Distance">Draw Distance</string>
+  <string name="QP Max Particles">Max Particles</string>
+  <string name="QP Avatar Physics LOD">Avatar Physics LOD</string>
+  <string name="QP LOD Factor">LOD Factor</string>
+  <string name="QP Max Avatars">Max Avatars</string>
+  <string name="QP Height Offset">Height Offset</string>
+  <string name="QP Tags Offset">Tags Offset</string>
+  <string name="QP Name Tags">Name Tags</string>
+  <string name="QP LookAt Target">LookAt Target</string>
+  <string name="QP Color Under Cursor">Color Under Cursor</string>
 </strings>

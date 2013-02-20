@@ -8079,7 +8079,8 @@ void handle_selected_texture_info(void*)
 
 		LLSD args;
 		args["MESSAGE"] = msg;
-		LLNotificationsUtil::add("SystemMessage", args);
+		// LLNotificationsUtil::add("SystemMessage", args);
+		LLNotificationsUtil::add("SystemMessageTip", args);	// <FS:Zi> use chat, not toasts
 	   
    		U8 te_count = node->getObject()->getNumTEs();
    		// map from texture ID to list of faces using it
@@ -8114,7 +8115,8 @@ void handle_selected_texture_info(void*)
 
 			LLSD args;
 			args["MESSAGE"] = msg;
-			LLNotificationsUtil::add("SystemMessage", args);
+			// LLNotificationsUtil::add("SystemMessage", args);
+			LLNotificationsUtil::add("SystemMessageTip", args);	// <FS:Zi> use chat, not toasts
    		}
 	}
 }

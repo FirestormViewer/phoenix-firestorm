@@ -41,6 +41,7 @@
 #include "llviewerregion.h"
 #include "llface.h"
 #include "llrender.h"
+#include "llviewercontrol.h"	// <FS:CR> Cloud noise selection
 
 LLPointer<LLViewerTexture> LLDrawPoolWLSky::sCloudNoiseTexture = NULL;
 
@@ -53,7 +54,11 @@ static LLGLSLShader* sky_shader = NULL;
 LLDrawPoolWLSky::LLDrawPoolWLSky(void) :
 	LLDrawPool(POOL_WL_SKY)
 {
-	const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "clouds2.tga"));
+// <FS:CR> Cloud noise selection
+	//const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight", "clouds2.tga"));
+	static LLCachedControl<std::string> cloud_texture(gSavedSettings, "FSCloudTexture", "Default.tga");
+	const std::string cloudNoiseFilename(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight" + gDirUtilp->getDirDelimiter() + "clouds", cloud_texture));
+// </FS:CR>
 	llinfos << "loading WindLight cloud noise from " << cloudNoiseFilename << llendl;
 
 	LLPointer<LLImageFormatted> cloudNoiseFile(LLImageFormatted::createFromExtension(cloudNoiseFilename));

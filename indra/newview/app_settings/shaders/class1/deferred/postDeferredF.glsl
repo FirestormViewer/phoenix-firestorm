@@ -75,23 +75,20 @@ void dofSampleNear(inout vec4 diff, inout float w, float min_sc, vec2 tc)
 
 void main() 
 {
-	vec2 tc = vary_fragcoord.xy;
-	
 	vec4 diff = texture2DRect(diffuseRect, vary_fragcoord.xy);
 	
 	{ 
-		float w = 1.0;
-		
 		float sc = (diff.a*2.0-1.0)*max_cof;
+		float w = 1.0;
 			
-		float PI = 3.14159265358979323846264;
+		const float PI = 3.14159265358979323846264;
 
 		// sample quite uniformly spaced points within a circle, for a circular 'bokeh'		
 		if (sc > 0.5)
 		{
 			while (sc > 0.5)
 			{
-				int its = int(max(1.0,(sc*3.7)));
+				int its = int(max(1.0,(sc*PI)));
 				for (int i=0; i<its; ++i)
 				{
 					float ang = sc+i*2*PI/its; // sc is added for rotary perturbance
@@ -100,7 +97,7 @@ void main()
 					// you could test sample coords against an interesting non-circular aperture shape here, if desired.
 					dofSampleNear(diff, w, sc, vary_fragcoord.xy + vec2(samp_x,samp_y));
 				}
-				sc -= 1.0;
+				sc -= 2.0;
 			}
 		}
 		else if (sc < -0.5)
@@ -108,7 +105,7 @@ void main()
 			sc = abs(sc);
 			while (sc > 0.5)
 			{
-				int its = int(max(1.0,(sc*3.7)));
+			  int its = int(max(1.0,(sc*PI)));
 				for (int i=0; i<its; ++i)
 				{
 					float ang = sc+i*2*PI/its; // sc is added for rotary perturbance
@@ -117,7 +114,7 @@ void main()
 					// you could test sample coords against an interesting non-circular aperture shape here, if desired.
 					dofSample(diff, w, sc, vary_fragcoord.xy + vec2(samp_x,samp_y));
 				}
-				sc -= 1.0;
+				sc -= 2.0;
 			}
 		}
 

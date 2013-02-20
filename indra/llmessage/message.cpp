@@ -82,6 +82,8 @@
 #include "lltransfertargetvfile.h"
 #include "llmemtype.h"
 
+#include "ndexceptions.h" // <FS:ND/> For ndxran
+
 // Constants
 //const char* MESSAGE_LOG_FILENAME = "message.log";
 static const F32 CIRCUIT_DUMP_TIMEOUT = 30.f;
@@ -723,7 +725,15 @@ BOOL LLMessageSystem::checkMessages( S64 frame_count )
 			if( valid_packet )
 			{
 				logValidMsg(cdp, host, recv_reliable, recv_resent, (BOOL)(acks>0) );
-				valid_packet = mTemplateMessageReader->readMessage(buffer, host);
+
+				// <FS:ND> Handle invalid packets by throwing an exception and a graceful continue
+				
+				// valid_packet = mTemplateMessageReader->readMessage(buffer, host);
+				
+				try { valid_packet = mTemplateMessageReader->readMessage(buffer, host); }
+				catch( nd::exceptions::xran &ex ) { llwarns << ex.what() << llendl; }
+
+				// </FS:ND>
 			}
 
 			// It's possible that the circuit went away, because ANY message can disable the circuit

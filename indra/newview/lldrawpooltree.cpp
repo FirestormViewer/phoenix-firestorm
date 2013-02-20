@@ -174,9 +174,14 @@ void LLDrawPoolTree::endDeferredPass(S32 pass)
 void LLDrawPoolTree::beginShadowPass(S32 pass)
 {
 	LLFastTimer t(FTM_SHADOW_TREE);
-	
-	glPolygonOffset(gSavedSettings.getF32("RenderDeferredTreeShadowOffset"),
-					gSavedSettings.getF32("RenderDeferredTreeShadowBias"));
+
+	// <FS:PP> Attempt to speed up things a little
+	// glPolygonOffset(gSavedSettings.getF32("RenderDeferredTreeShadowOffset"),
+	//				gSavedSettings.getF32("RenderDeferredTreeShadowBias"));
+	static LLCachedControl<F32> RenderDeferredTreeShadowOffset(gSavedSettings, "RenderDeferredTreeShadowOffset");
+	static LLCachedControl<F32> RenderDeferredTreeShadowBias(gSavedSettings, "RenderDeferredTreeShadowBias");
+	glPolygonOffset(RenderDeferredTreeShadowOffset, RenderDeferredTreeShadowBias);
+	// </FS:PP>
 
 	gDeferredTreeShadowProgram.bind();
 	gDeferredTreeShadowProgram.setMinimumAlpha(0.5f);
@@ -190,9 +195,15 @@ void LLDrawPoolTree::renderShadow(S32 pass)
 void LLDrawPoolTree::endShadowPass(S32 pass)
 {
 	LLFastTimer t(FTM_SHADOW_TREE);
-	
-	glPolygonOffset(gSavedSettings.getF32("RenderDeferredSpotShadowOffset"),
-						gSavedSettings.getF32("RenderDeferredSpotShadowBias"));
+
+	// <FS:PP> Attempt to speed up things a little
+	// glPolygonOffset(gSavedSettings.getF32("RenderDeferredSpotShadowOffset"),
+	//					gSavedSettings.getF32("RenderDeferredSpotShadowBias"));
+	static LLCachedControl<F32> RenderDeferredSpotShadowOffset(gSavedSettings, "RenderDeferredSpotShadowOffset");
+	static LLCachedControl<F32> RenderDeferredSpotShadowBias(gSavedSettings, "RenderDeferredSpotShadowBias");
+	glPolygonOffset(RenderDeferredSpotShadowOffset, RenderDeferredSpotShadowBias);
+	// </FS:PP>
+
 	gDeferredTreeShadowProgram.unbind();
 }
 

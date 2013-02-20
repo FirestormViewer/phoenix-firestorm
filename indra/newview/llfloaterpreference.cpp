@@ -2828,6 +2828,8 @@ LLPanelPreferenceSkins::LLPanelPreferenceSkins()
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+	m_SkinName = gSavedSettings.getString("FSSkinCurrentReadableName");
+	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
 
 	const std::string strSkinsPath = gDirUtilp->getSkinBaseDir() + gDirUtilp->getDirDelimiter() + "skins.xml";
 	llifstream fileSkins(strSkinsPath, std::ios::binary);
@@ -2859,6 +2861,9 @@ void LLPanelPreferenceSkins::apply()
 		gSavedSettings.setString("SkinCurrent", m_Skin);
 		gSavedSettings.setString("SkinCurrentTheme", m_SkinTheme);
 
+		gSavedSettings.setString("FSSkinCurrentReadableName", m_SkinName);
+		gSavedSettings.setString("FSSkinCurrentThemeReadableName", m_SkinThemeName);
+
 		LLNotificationsUtil::add("ChangeSkin");
 	}
 }
@@ -2867,6 +2872,8 @@ void LLPanelPreferenceSkins::cancel()
 {
 	m_Skin = gSavedSettings.getString("SkinCurrent");
 	m_SkinTheme = gSavedSettings.getString("SkinCurrentTheme");
+	m_SkinName = gSavedSettings.getString("FSSkinCurrentReadableName");
+	m_SkinThemeName = gSavedSettings.getString("FSSkinCurrentThemeReadableName");
 	refreshSkinList();
 }
 
@@ -2875,6 +2882,9 @@ void LLPanelPreferenceSkins::onSkinChanged()
 	m_Skin = (m_pSkinCombo) ? m_pSkinCombo->getSelectedValue().asString() : "default";
 	refreshSkinThemeList();
 	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
+
+	m_SkinName = m_pSkinCombo->getSelectedItemLabel();
+	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
 
     // <FS:AO> Some crude hardcoded preferences per skin. Without this, some defaults from the
     // current skin would be carried over, leading to confusion and a first experience with
@@ -2901,6 +2911,7 @@ void LLPanelPreferenceSkins::onSkinChanged()
 void LLPanelPreferenceSkins::onSkinThemeChanged()
 {
 	m_SkinTheme = (m_pSkinThemeCombo) ? m_pSkinThemeCombo->getSelectedValue().asString() : "";
+	m_SkinThemeName = m_pSkinThemeCombo->getSelectedItemLabel();
 }
 
 void LLPanelPreferenceSkins::refreshSkinList()
@@ -3404,7 +3415,7 @@ void LLFloaterPreference::onQuitConfirmed(const LLSD& notification,const LLSD& r
 	LLAppViewer::instance()->setSaveSettingsOnExit(FALSE);
 	// Quit the viewer so all gets saved immediately
 	llwarns << "setting to quit" << llendl;
-	LLApp::instance()->setQuitting();
+	LLAppViewer::instance()->requestQuit();
 }
 
 void LLFloaterPreference::onClickSelectAll()

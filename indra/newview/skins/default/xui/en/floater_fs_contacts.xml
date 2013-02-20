@@ -16,7 +16,7 @@
  save_tearoff_state="true"
  single_instance="true"
  title="Contacts"
- width="395">
+ width="396">
  	<string
 	 name="no_friends"
 	 value="No friends" />
@@ -30,7 +30,7 @@
      follows="all"
      height="390"
      layout="topleft"
-     left="4"
+     left="0"
      name="friends_and_groups"
      tab_position="top"
      tab_width="80"

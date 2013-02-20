@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="310"
+    height="115"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,39 +20,54 @@
     left="0"
     top="16"
     width="260"
-    height="309"
+    height="99"
     follows="all"
     layout="topleft">
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Draw Distance"
-            tool_tip="Change your Draw Distance"
-            mouse_opaque="false"
-            top="10"
-            width="90">
-            Draw Distance:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderFarClip"
-            decimal_digits="0"
-            follows="left|top"
-            height="15"
-            increment="8"
-            initial_value="160"
-            layout="topleft"
-            left_delta="93"
-            max_val="1024"
-            min_val="32"
-            name="DrawDistance"
-            top_delta="-2"
-            width="150"
-            label_width="3"/>			
+    <layout_stack
+     layout="topleft"
+     follows="all"
+     name="options_stack"
+     left="0"
+     top="4"
+     width="260"
+     height="0"
+     orientation="vertical"
+     border_size="0">
+        <!-- <FS:Zi> dummy panel to make XUI validation happy -->
+        <layout_panel
+         layout="topleft"
+         follows="all"
+         name="dummy_options_panel"
+         visible="false"
+         height="20">
+        </layout_panel>
+     </layout_stack>
+
+     <view_border
+      layout="topleft"
+      follows="left|right|bottom"
+      name="divider_line_dynamic_to_static"
+      top_pad="2"
+      left="2"
+      height="2"
+      right="-2" />
+
+     <layout_stack
+      layout="topleft"
+      follows="left|right|bottom"
+      name="wl_options_stack"
+      left="0"
+      top_pad="0"
+      width="260"
+      height="89"
+      orientation="vertical">
+
+     <layout_panel
+      layout="topleft"
+      follows="all"
+      name="wl_options_panel"
+      invisibility_control="QuickPrefsEditMode"
+      height="89">
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
@@ -64,7 +79,7 @@
             name="Maximum bandwidth"
             tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
             mouse_opaque="false"
-            top_delta="20"
+            top_pad="2"
             width="90">
             Max Bandwidth:
         </text>
@@ -72,313 +87,18 @@
             can_edit_text="true"
             control_name="ThrottleBandwidthKBPS"
             decimal_digits="0"
-            follows="left|top"
-            height="15"
+            follows="left|right|top"
+            height="16"
             increment="50"
             initial_value="500"
             layout="topleft"
-            left_delta="99"
+            left_delta="94"
             max_val="3000"
             min_val="50"
             name="max_bandwidth"
             top_delta="-2"
-            width="144" />
+            right="-7" />
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Particles"
-            tool_tip="Amount of particles to render"
-            mouse_opaque="false"            
-            top_delta="20"
-            width="90">
-            Max Particles:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderMaxPartCount"
-            decimal_digits="0"
-            follows="left|top"
-            height="15"
-            increment="256"
-            initial_value="4096"
-            layout="topleft"
-            left_delta="93"
-            max_val="8192"
-            min_val="0"
-            name="RenderMaxPartCount"
-            top_delta="-2"
-            width="150"
-            label_width="3"/>
-			<text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Avatar Physics LOD"
-            tool_tip="Controls level of detail of avatar physics (such as breast physics)"
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            Av Physics LOD:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderAvatarPhysicsLODFactor"
-            decimal_digits="2"
-            follows="left|top"
-            height="15"
-            increment="0.05"
-            initial_value="1"
-            layout="topleft"
-            left_delta="93"
-            max_val="1"
-            min_val="0"
-            name="RenderAvatarPhysicsLOD"
-            top_delta="-2"
-            width="147"
-            label_width="3"/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="LOD Factor"
-            tool_tip="Controls level of detail of primitives (multiplier for current screen area when calculated level of detail) [Default varies]"
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            LOD Factor:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderVolumeLODFactor"
-            decimal_digits="3"
-            follows="left|top"
-            height="15"
-            increment="0.125"
-            initial_value="2"
-            layout="topleft"
-            left_delta="82"
-            max_val="4"
-            min_val="0"
-            name="RenderVolumeLODFactor"
-            top_delta="-2"
-            width="164"
-            label_width="14"/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Max Avatars"
-            tool_tip="How many avatars to fully render on screen. Lowering this greatly improves FPS in crowded situations. Requires Avatar Imposters to be on. [Default 12]"
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            Max Avatars:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="RenderAvatarMaxVisible"
-            decimal_digits="0"
-            follows="left|top"
-            height="15"
-            increment="1"
-            initial_value="12"
-            layout="topleft"
-            left_delta="79"
-            max_val="65"
-            min_val="1"
-            name="RenderAvatarMaxVisible"
-            top_delta="-2"
-            width="152"
-            label_width="17"/>
-        <text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Height Offset"
-            tool_tip="Use this to manipulate, to a degree, your avatar bounding box. This can be used to distort orbiters, or to raise you up or down without altering your shape."
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            Height Offset:
-        </text>
-        <slider
-            can_edit_text="true"
-            control_name="AvatarZOffset"
-            decimal_digits="2"
-            follows="left|top"
-            height="15"
-            increment="0.05"
-            initial_value="0"
-            layout="topleft"
-            left_delta="79"
-            max_val="2"
-            min_val="-2"
-            name="AvatarZOffset"
-            top_delta="-2"
-            width="165"
-            label_width="17"/>
-		<text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="10"
-            layout="topleft"
-            left="5"
-            name="Tag Offset"
-            tool_tip="Changes the Z-offset for avatar name tags. Default 0"
-            mouse_opaque="false"
-            top_delta="20"
-            width="90">
-            Tags Offset:
-        </text>
-		<slider
-            can_edit_text="true"
-            control_name="FSNameTagZOffsetCorrection"
-            decimal_digits="2"
-            follows="left|top"
-            height="15"
-            increment="1"
-            initial_value="0"
-            layout="topleft"
-            left_delta="79"
-            max_val="5"
-            min_val="-5"
-            name="FSNameTagZOffsetCorrection"
-            top_delta="-2"
-            width="162"
-            label_width="17"/>
-		<text
-            type="string"
-            length="1"
-            follows="left|top"
-            height="0"
-            layout="topleft"
-            left="5"
-            name="name_tags_textbox"
-            top_pad="8"
-            width="250">
-            Name Tags:
-        </text>
-        <radio_group
-            control_name="AvatarNameTagMode"
-            height="20"
-            layout="topleft"
-            left="55"
-            top_pad="0" 
-            name="Name_Tag_Preference">
-         <radio_item
-            label="On"
-            name="radio"
-            top_delta="20" 
-            layout="topleft"
-            height="16" 
-            left="72" 
-            value="1"
-            width="75" />
-         <radio_item
-            label="Off"
-            left_pad="-10"
-            layout="topleft"
-            top_delta="0" 
-            height="16" 
-            name="radio2"
-            value="0"
-            width="75" />
-        </radio_group>
-    <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="0"
-		layout="topleft"
-		left="5"
-		name="lookat_textbox"
-		top_pad="0"
-		width="250">
-        LookAt Target:
-    </text>
-    <radio_group
-		 control_name="DebugLookAt"
-		 height="20"
-		 layout="topleft"
-		 left="55"
-		 top_pad="0"
-		 name="showlookat">
-      <radio_item
-         label="On"
-         name="radio"
-         top_delta="20"
-         layout="topleft"
-         height="16"
-         left="72"
-         value="1"
-         width="75" />
-      <radio_item
-         label="Off"
-         left_pad="-10"
-         layout="topleft"
-         top_delta="0"
-         height="16"
-         name="radio2"
-         value="0"
-         width="75" />
-	</radio_group>
-
-    <text
-		type="string"
-		length="1"
-		follows="left|top"
-		height="0"
-		layout="topleft"
-		left="5"
-		name="ShowColor_QP_Label"
-		top_pad="0"
-		width="250">
-        Color Under Cursor:
-    </text>	
-    <radio_group
-		 control_name="DebugShowColor"
-		 height="20"
-		 layout="topleft"
-		 left="55"
-		 top_pad="0"
-		 name="Show_Color_Under_Cursor">
-      <radio_item
-         label="On"
-         name="radio5"
-         top_delta="20"
-         layout="topleft"
-         height="16"
-         left="72"
-         value="1"
-         width="75" />
-      <radio_item
-         label="Off"
-         left_pad="-10"
-         layout="topleft"
-         top_delta="0"
-         height="16"
-         name="radio6"
-         value="0"
-         width="75" />
-	</radio_group>
         <text
             type="string"
             length="1"
@@ -389,11 +109,12 @@
             name="WL Sky"
             tool_tip="Windlight presets for your sky"
             mouse_opaque="false"
-            top_delta="26"
+            top_delta="24"
             width="90">
             WL Sky:
         </text>
         <combo_box
+            follows="left|top"
             height="20"
             layout="topleft"
             left_delta="58"
@@ -403,7 +124,7 @@
         <button
             enabled="true"
             name="WLPrevPreset"
-            follows="left|bottom"
+            follows="left|top"
             height="20"
             width="20"
             bottom_delta="-0"
@@ -415,7 +136,7 @@
         <button
             enabled="true"
             name="WLNextPreset"
-            follows="left|bottom"
+            follows="left|top"
             height="20"
             width="20"
             bottom_delta="-0"
@@ -439,6 +160,7 @@
             WL Water:
         </text>
         <combo_box
+            follows="left|top"
             height="20"
             layout="topleft"
             left_delta="58"
@@ -448,7 +170,7 @@
         <button
             enabled="true"
             name="WWPrevPreset"
-            follows="left|bottom"
+            follows="left|top"
             height="20"
             width="20"
             bottom_delta="-0"
@@ -460,7 +182,7 @@
         <button
             enabled="true"
             name="WWNextPreset"
-            follows="left|bottom"
+            follows="left|top"
             height="20"
             width="20"
             bottom_delta="-0"
@@ -477,13 +199,13 @@
             top_pad="5"
             name="SkyDayCycle"
             use_draw_context_alpha="false"
-            width="220"
+            width="200"
             tool_tip="Change the time of the day"/>
         <multi_slider
             can_edit_text="true"
             control_name="WLSunPos"
             decimal_digits="0"
-            follows="bottom"
+            follows="top"
             height="10"
             increment="0.0833333"
             initial_value="0"
@@ -494,11 +216,11 @@
             name="WLSunPos"
             show_text="false"
             top_pad="-1"
-            width="220" />
+            width="200" />
         <button
             enabled="true"
             name="UseRegionWL"
-            follows="left|bottom"
+            follows="left|top"
             height="20"
             width="20"
             bottom_delta="-3"
@@ -508,5 +230,240 @@
             image_overlay="StopReload_Off"
             scale_image="true"
             tool_tip="Reset the WindLight options to region default" />
+
+        <!-- <FS:Zi> floater titlebar button to edit dynamic quickprefs -->
+        <button
+            layout="topleft"
+            follows="right|top"
+            name="button_edit"
+            tool_tip="Click here to configure your Quick Preferences controls"
+            label=""
+            toggle="true"
+            control_name="QuickPrefsEditMode"
+            image_overlay="Edit_Wrench"
+            left_delta="21"
+            width="20"
+            bottom_delta="0"
+            height="20" />
+        <!-- </FS:Zi> -->
+
+    </layout_panel>
+    </layout_stack>
 </panel>
+
+<!-- <FS:Zi> Dynamic quick prefs: edit overlay -->
+<panel
+ layout="topleft"
+ follows="left|right|bottom"
+ name="edit_overlay_panel"
+ visibility_control="QuickPrefsEditMode"
+ left="1"
+ top="-93"
+ right="-1"
+ height="93">
+
+<view_border
+ layout="topleft"
+ follows="all"
+ name="divider_line_edit_options"
+ left="0"
+ top="0"
+ right="-1"
+ height="2" />
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="move_up_button"
+ tool_tip="Move selected control one slot up"
+ enabled_control="QuickPrefsSelectedControl"
+ label=""
+ image_overlay="Arrow_Up"
+ top="8"
+ left="4"
+ width="20"
+ height="20"/>
+
+<line_editor
+ layout="topleft"
+ follows="left|top"
+ name="label_edit"
+ enabled_control="QuickPrefsSelectedControl"
+ tool_tip="Type the label for the control here"
+ label="Control label:"
+ left_pad="4"
+ width="100"
+ height="20" />
+
+<combo_box
+ layout="topleft"
+ follows="left|top"
+ name="control_name_combo"
+ enabled_control="QuickPrefsSelectedControl"
+ tool_tip="Select control from the list of debug settings"
+ left_pad="4"
+ width="100"
+ height="18">
+<combo_box.item
+ type="string"
+ label="=== Choose ==="
+ name="control_name_list_header"
+ value="" />
+</combo_box>
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="move_down_button"
+ tool_tip="Move selected control one slot down"
+ enabled_control="QuickPrefsSelectedControl"
+ label=""
+ image_overlay="Arrow_Down"
+ left="4"
+ top_pad="4"
+ width="20"
+ height="20" />
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="add_new_button"
+ tool_tip="Add a new quick preferences control"
+ label=""
+ image_overlay="AddItem_Off"
+ left_pad="4"
+ width="20"
+ height="20" />
+
+<text
+ layout="topleft"
+ follows="left|top"
+ name="control_type_label"
+ enabled_control="QuickPrefsSelectedControl"
+ left_pad="6"
+ width="42"
+ height="20">
+Type:
+</text>
+
+<combo_box
+ layout="topleft"
+ follows="left|top"
+ name="control_type_combo_box"
+ tool_tip="Select the type of user interface control you want to use for this setting"
+ enabled_control="QuickPrefsSelectedControl"
+ left_pad="4"
+ width="90"
+ height="20">
+<!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
+<combo_box.item
+ type="string"
+ label="Checkbox"
+ name="Checkbox"
+ value="0" />
+<combo_box.item
+ type="string"
+ label="Text"
+ name="Text"
+ value="1" />
+<combo_box.item
+ type="string"
+ label="Spinner"
+ name="Spinner"
+ value="2" />
+<combo_box.item
+ type="string"
+ label="Slider"
+ name="Slider"
+ value="3" />
+<combo_box.item
+ type="string"
+ label="Radio"
+ name="Radio"
+ value="4" />
+<combo_box.item
+ type="string"
+ label="Color 3"
+ name="Color 3"
+ value="5" />
+<combo_box.item
+ type="string"
+ label="Color 4"
+ name="Color 4"
+ value="6" />
+</combo_box>
+
+<!-- enable/disable done in code depending on the type of control chosen -->
+<check_box
+ layout="topleft"
+ follows="left|top"
+ name="control_integer_checkbox"
+ tool_tip="Activate this checkbox if your setting is an integer value, i.e. it has only whole numbers"
+ left_pad="4"
+ height="20"
+ width="16"
+ label="Integer" />
+
+<!-- enable/disable done in code depending on the type of control chosen -->
+<spinner
+ layout="topleft"
+ follows="left|top"
+ name="control_min_edit"
+ tool_tip="The lowest value you will be allowed to select"
+ decimal_digits="2"
+ label="Min:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left="4"
+ top_pad="6"
+ width="81"
+ height="22" />
+<spinner
+ layout="topleft"
+ follows="left|top"
+ name="control_max_edit"
+ tool_tip="The highest value you will be allowed to select"
+ decimal_digits="2"
+ label="Max:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left_pad="4"
+ width="81"
+ height="22" />
+<spinner
+ layout="topleft"
+ follows="left|top"
+ name="control_increment_edit"
+ tool_tip="The increment for your value when you click the up/down arrow on a spinner or use the cursor keys on a slider"
+ decimal_digits="2"
+ label="Incr:"
+ label_width="32"
+ min_val="-100000.0"
+ max_val="100000.0"
+ increment="1.0"
+ left_pad="4"
+ width="81"
+ height="22" />
+
+<!-- reverse the image names here beause we have a toggle ON button -->
+<button
+ layout="topleft"
+ follows="right|top"
+ name="button_close"
+ tool_tip="Close the edit overlay panel"
+ label=""
+ toggle="true"
+ control_name="QuickPrefsEditMode"
+ image_unselected="Icon_Close_Press"
+ image_selected="Icon_Close_Foreground"
+ left="-18"
+ width="16"
+ top="6"
+ height="16" />
+</panel>
+
 </floater>

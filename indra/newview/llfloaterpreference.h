@@ -310,6 +310,8 @@ protected:
 	std::string m_SkinTheme;
 	LLComboBox* m_pSkinThemeCombo;
 	LLSD        m_SkinsInfo;
+	std::string	m_SkinName;
+	std::string	m_SkinThemeName;
 };
 // [/SL:KB]
 

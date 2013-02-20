@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Width and height of this panel should be synchronized with "panel_modes" in the floater_moveview.xml-->
 <panel name="panel_stand_stop_flying">
-	<button label="Levantarme" name="stand_btn" tool_tip="Pulsa aquí para levantarte."/>
-	<button label="Dejar de volar" name="stop_fly_btn" tool_tip="Dejar de volar" width="100"/>
+	<button label="Levantarme" name="stand_btn" tool_tip="Pulsa aquí para levantarte." width="86"/>
+	<button label="Detener vuelo" name="stop_fly_btn" tool_tip="Pulsa aquí para dejar de volar" width="86"/>
+	<button label="Flycam" name="flycam_btn" tool_tip="Pulsa para detener el modo Flycam" width="86"/>
 </panel>

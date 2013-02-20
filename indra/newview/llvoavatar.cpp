@@ -7318,7 +7318,12 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	LLAPRFile outfile;
 	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
 	outfile.open(fullpath, LL_APR_WB );
-	apr_file_t* file = outfile.getFileHandle();
+
+	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
+	//apr_file_t* file = outfile.getFileHandle();
+	LLAPRFile::tFiletype* file = outfile.getFileHandle();
+	// </FS:ND>
+
 	if (!file)
 	{
 		return;

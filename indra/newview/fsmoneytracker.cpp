@@ -70,7 +70,12 @@ std::string FSMoneyTracker::appendTime()
 	time_t utc_time;
 	utc_time = time_corrected();
 	std::string timeStr ="["+ LLTrans::getString("TimeHour")+"]:[" + LLTrans::getString("TimeMin")+"]";
-	if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	
+	// <FS:PP> Attempt to speed up things a little
+	// if (gSavedSettings.getBOOL("FSSecondsinChatTimestamps"))
+	static LLCachedControl<bool> FSSecondsinChatTimestamps(gSavedSettings, "FSSecondsinChatTimestamps");
+	if (FSSecondsinChatTimestamps)
+	// </FS:PP>
 	{
 		timeStr += ":[" + LLTrans::getString("TimeSec")+"]";
 	}

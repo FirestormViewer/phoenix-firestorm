@@ -17,13 +17,13 @@
 		<text name="sort_text">
 			Sortuj po:
 		</text>
+		<check_box label="Rosnąco" name="ascending_check" />
 		<combo_box name="land_sort_combo">
 			<combo_box.item label="Nazwa" name="Name_item" />
 			<combo_box.item label="Cena" name="Price_item" />
 			<combo_box.item label="Cena za metr" name="PPM_item" />
 			<combo_box.item label="Obszar" name="Area_item" />
 		</combo_box>
-		<check_box label="Sortuj rosnąco" name="ascending_check" />
 		<button label="Szukaj" name="land_find" />
 	</panel>
 	<panel name="panel_ls_scrolllist">

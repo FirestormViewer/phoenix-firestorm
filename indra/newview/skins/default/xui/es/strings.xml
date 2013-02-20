@@ -5080,7 +5080,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Phototools_View_Label">Cameratools</string>
 	<string name="Command_Contact_Sets_Label">Contact sets</string>
 	<string name="Command_Mouselook_Label">Vista subjetiva</string>
-	<string name="Command_Legacy_Search_Label">Búsqueda clásica</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5187,9 +5186,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 		actualmente en tu barra de herramientas derecha
 	</string>
 	<string name="Command_Fly_Tooltip">Activar/desactivar el modo de vuelo</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Buscar lugares, grupos, gente, venta de terrenos y eventos usando la búsqueda clásica
-	</string>
 	<string name="Retain%">
 		% retención
 	</string>
@@ -5348,4 +5344,14 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="fsbridge_warning_not_finished">El bridge no se terminó de crear. Puede que tengas que crearlo de nuevo antes de usarlo.</string>
 	<string name="fsbridge_detached">Bridge quitado.</string>
 	<string name="fsbridge_created">Bridge creado.</string>
+	<string name="QP Draw Distance">Distancia de dibujo</string>
+	<string name="QP Max Particles"># máx. partículas</string>
+	<string name="QP Avatar Physics LOD">Detalle física av.</string>
+	<string name="QP LOD Factor">Nivel de detalle</string>
+	<string name="QP Max Avatars"># máximo avatares</string>
+	<string name="QP Height Offset">Altura avatar</string>
+	<string name="QP Tags Offset">Altura etiquetas</string>
+	<string name="QP Name Tags">Etiquetas nombre</string>
+	<string name="QP LookAt Target">Puntos de mira</string>
+	<string name="QP Color Under Cursor">Color bajo el cursor</string>
 </strings>

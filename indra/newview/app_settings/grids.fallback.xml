@@ -135,6 +135,42 @@
         <key>slurl_base</key>
             <string>hop://grid01.from-ne.com:8002/</string>
         </map>
+    <key>islandoasisgrid.biz:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-01-21T20:10:35.17Z</date>
+        <key>about</key>
+            <string>http://www.islandoasis.biz/GridStats.aspx</string>
+        <key>gridname</key>
+            <string>Island Oasis</string>
+        <key>gridnick</key>
+            <string>Island_Oasis</string>
+        <key>help</key>
+            <string>http://www.islandoasis.biz/Support.aspx</string>
+        <key>helperuri</key>
+            <string>http://islandoasisgrid:8020/OsCurrency/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://www.islandoasis.biz/welcome.aspx</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://islandoasisgrid.biz:8002/</string>
+            </array>
+        <key>name</key>
+            <string>islandoasisgrid.biz:8002</string>
+        <key>password</key>
+            <string>http://www.islandoasis.biz/Login.aspx</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://www.islandoasis.biz/verification.aspx</string>
+        <key>slurl_base</key>
+            <string>hop://islandoasisgrid.biz:8002/</string>
+        </map>
     <key>localhost:9000</key>
         <map>
         <key>LastModified</key>

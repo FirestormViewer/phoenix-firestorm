@@ -140,11 +140,11 @@
 			<columns
 			label="Group Name"
 			name="group_name"
-			relwidth="0.77" />
+			relwidth="0.72" />
 			<columns
 			label="Members"
 			name="members"
-			relwidth="0.2" />
+			relwidth="0.25" />
 			<columns
 			label="Score"
 			name="score"

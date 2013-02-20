@@ -19,6 +19,12 @@
           <key>folder</key>
           <string>classic_brown</string>
         </map>
+        <map>
+          <key>name</key>
+          <string>Ectoplasma</string>
+          <key>folder</key>
+          <string>ectoplasma</string>
+        </map>
       </array>
     </map>
 

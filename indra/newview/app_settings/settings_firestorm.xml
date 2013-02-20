@@ -95,6 +95,34 @@
     <string>grey</string>
   </map>
 
+  <key>FSSkinCurrentReadableName</key>
+  <map>
+    <key>Comment</key>
+    <string>The readable name of the currently selected skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>Firestorm</string>
+  </map>
+
+  <key>FSSkinCurrentThemeReadableName</key>
+  <map>
+    <key>Comment</key>
+    <string>The readable name of the selected theme for the current skin.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>HideFromEditor</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>String</string>
+    <key>Value</key>
+    <string>Grey</string>
+  </map>
+
   <key>LetterKeysFocusChatBar</key>
   <map>
     <key>Comment</key>

@@ -37,7 +37,7 @@
 #include "llagent.h"
 #include "llcommandhandler.h"	// secondlife:///app/... support
 // <FS:CR> FIRE-6310 - Legacy Search
-#include "fsfloatersearchlegacy.h" 
+#include "fsfloatersearch.h" 
 #include "llviewerfloaterreg.h"
 // </FS:CR>
 

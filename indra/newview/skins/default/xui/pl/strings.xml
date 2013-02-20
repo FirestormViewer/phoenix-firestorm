@@ -4646,9 +4646,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Mouselook_Label">
 		Tryb pierwszoosobowy
 	</string>
-	<string name="Command_Legacy_Search_Label">
-		Klasyczne szukanie
-	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4780,9 +4777,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Fly_Tooltip">
 		Włącz/wyłącz tryb latania
-	</string>
-	<string name="Command_Legacy_Search_Tooltip">
-		Znajdź miejsca, grupy oraz ludzi używając klasycznego sposobu wyszukiwania
 	</string>
 	<string name="Retain%">
 		%Zachowania
@@ -5071,5 +5065,35 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="fsbridge_created">
 		Most LSL został utworzony pomyślnie.
+	</string>
+	<string name="QP Draw Distance">
+		Pole widzenia
+	</string>
+	<string name="QP Max Particles">
+		Maks. cząstek
+	</string>
+	<string name="QP Avatar Physics LOD">
+		LOD fiz. awatarów
+	</string>
+	<string name="QP LOD Factor">
+		Mnożnik LOD
+	</string>
+	<string name="QP Max Avatars">
+		Maks. awatarów
+	</string>
+	<string name="QP Height Offset">
+		Dostrój wysokość
+	</string>
+	<string name="QP Tags Offset">
+		Pozycja tagów
+	</string>
+	<string name="QP Name Tags">
+		Tagi imion
+	</string>
+	<string name="QP LookAt Target">
+		Cele spojrzeń
+	</string>
+	<string name="QP Color Under Cursor">
+		Kolor spod kursora
 	</string>
 </strings>

@@ -1352,7 +1352,27 @@
          name="FSWindlightInterpolateTime"
          width="50"
          tool_tip="The duration for crossfading from one preset to another [Default: 3]"/>
-		 
+		<text
+		 top_pad="10"
+		 type="string"
+		 length="1"
+		 follows="left|top"
+		 height="15"
+		 layout="topleft"
+		 left="10"
+		 name="could_texture_text"
+		 width="220">
+		 Cloud texture (restart recommended):
+        </text>
+		<combo_box
+		 allow_text_entry="false"
+		 left_pad="5"
+		 follows="left|top"
+		 height="20"
+		 name="cloud_combo"
+		 width="130"
+		 control_name="FSCloudTexture"
+		 tool_tip="Select the cloud texture you would like to use."/>
     </panel>
 
     <!--Build-->

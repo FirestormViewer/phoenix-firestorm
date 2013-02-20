@@ -2,7 +2,7 @@
 <panel
  label="General"
  width="470"
- height="420"
+ height="410"
  class="panel_group_general"
  name="general_tab"
  layout="topleft"
@@ -24,10 +24,10 @@ Hover your mouse over the options for more help.
 
    <panel
     name="group_general_panel"
-    left="8"
-    top="8"
-    height="404"
-    width="455"
+    left="3"
+    top="-408"
+    height="408"
+    width="467"
     follows="all"
     layout="topleft">
 
@@ -173,7 +173,7 @@ Hover your mouse over the options for more help.
     <name_list
      left="0"
      top_pad="4"
-     height="112"
+     height="115"
      column_padding="0"
      draw_heading="true"
      heading_height="23"

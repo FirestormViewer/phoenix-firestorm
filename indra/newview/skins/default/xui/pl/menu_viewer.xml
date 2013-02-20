@@ -194,7 +194,6 @@
 	</menu>
 	<menu label="Zawartość" name="Content">
 		<menu_item_check label="Wyszukiwarka" name="Search"/>
-		<menu_item_check label="Klasyczne szukanie" name="Legacy Search"/>
 		<menu_item_call label="Marketplace Second Life" name="SL Marketplace"/>
 		<menu_item_call label="Dane z rynku L$" name="LindenXchange"/>
 		<menu_item_call label="Biblioteka skryptów" name="Script Library"/>
@@ -389,13 +388,13 @@
 			<menu_item_check label="Bazowe informacje wybranych tekstur" name="Selected Texture Info Basis"/>
 			<menu_item_check label="Tryb obrazu szkieletowego" name="Wireframe"/>
 			<menu_item_check label="Okluzja obiektu do obiektu" name="Object-Object Occlusion"/>
-			<menu_item_check label="Oświetlenie i cienie" name="Lighting and Shadows"/>
+			<menu_item_check label="Renderowanie opóźniane" name="Lighting and Shadows"/>
 			<menu_item_check label="Cienie Słońca, Księżyca i innych źródeł" name="Shadows from Sun/Moon/Projectors"/>
 			<menu_item_check label="SSAO i wygładzanie cieni" name="SSAO and Shadow Smoothing"/>
 			<menu_item_check label="Debugowanie GL" name="Debug GL"/>
 			<menu_item_check label="Debugowanie potoków" name="Debug Pipeline"/>
-			<menu_item_check label="Automatyczne maski alpha (z opóźnieniem)" name="Automatic Alpha Masks (deferred)"/>
-			<menu_item_check label="Automatyczne maski alpha (bez opóźnienia)" name="Automatic Alpha Masks (non-deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (z opóźnianiem)" name="Automatic Alpha Masks (deferred)"/>
+			<menu_item_check label="Automatyczne maski alpha (bez opóźniania)" name="Automatic Alpha Masks (non-deferred)"/>
 			<menu_item_check label="Tekstury animacji" name="Animation Textures"/>
 			<menu_item_check label="Wyłącz tekstury" name="Disable Textures"/>
 			<menu_item_check label="Maksymalna rozdzielczość tekstur (niebezpieczne)" name="Full Res Textures"/>
@@ -453,6 +452,7 @@
 			<menu_item_call label="Wczytaj z XML" name="Load from XML"/>
 			<menu_item_call label="Zapisz do XML" name="Save to XML"/>
 			<menu_item_check label="Pokaż nazwy XUI" name="Show XUI Names"/>
+			<menu_item_check label="Pokaż informacje debugowania dla widoków" name="DebugViews"/>
 			<menu_item_call label="Wyślij wiadomość (IM) testową" name="Send Test IMs"/>
 			<menu_item_call label="Wyczyść bufor pamięci nazw" name="Flush Names Caches"/>
 		</menu>

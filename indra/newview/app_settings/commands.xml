@@ -209,9 +209,9 @@
            label_ref="Command_Search_Label"
            tooltip_ref="Command_Search_Tooltip"
            execute_function="Floater.Toggle"
-           execute_parameters="search"
+           execute_parameters="search_legacy"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="search"
+           is_running_parameters="search_legacy"
            />
   <command name="snapshot"
            available_in_toybox="true"
@@ -428,15 +428,5 @@
            tooltip_ref="Command_Mouselook_Tooltip"
            execute_function="View.Mouselook"
            is_enabled_function="View.EnableMouselook"
-           />
-  <command name="legacy_search"
-           available_in_toybox="true"
-           icon="lsearch"
-           label_ref="Command_Legacy_Search_Label"
-           tooltip_ref="Command_Legacy_Search_Tooltip"
-           execute_function="Floater.Toggle"
-           execute_parameters="search_legacy"
-           is_running_function="Floater.IsOpen"
-           is_running_parameters="search_legacy"
            />
 </commands>

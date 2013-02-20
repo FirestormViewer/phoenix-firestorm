@@ -4708,7 +4708,7 @@ public:
 	}
 
 	virtual bool check(LLDrawable* drawable)
-	{	
+	{
 		if (!drawable || !gPipeline.hasRenderType(drawable->getRenderType()) || !drawable->isVisible())
 		{
 			return false;

@@ -12,6 +12,7 @@
 #include "llvoavatar.h"
 #include "llvoavatarself.h"
 #include "llspinctrl.h"
+#include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
@@ -45,6 +46,7 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	getChild<LLUICtrl>("UseEnvironmentFromRegionAlways")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways, this));
 	// init the enable state of the related wl prefs
 	onUseEnvironmentFromRegionAlways();
+	populateCloudCombo();
 
 	return LLPanelPreference::postBuild();	
 }
@@ -251,4 +253,26 @@ void PanelPreferenceFirestorm::applyTagCombos()
 	}
 
 	if(change) LLVOAvatar::invalidateNameTags();
+}
+
+void PanelPreferenceFirestorm::populateCloudCombo()
+{
+	LLComboBox* cloud_combo = getChild<LLComboBox>("cloud_combo");
+	if(cloud_combo)
+	{
+		const std::string cloudDir(gDirUtilp->getExpandedFilename(LL_PATH_APP_SETTINGS, "windlight" + gDirUtilp->getDirDelimiter() + "clouds"));
+
+		LLDirIterator dir_iter(cloudDir, "*.tga");
+		while (1)
+		{
+			std::string file;
+			if (!dir_iter.next(file))
+			{
+				break; // no more files
+			}
+			
+			cloud_combo->add(file);
+		}
+		cloud_combo->setSimple(gSavedSettings.getString("FSCloudTexture"));
+	}
 }

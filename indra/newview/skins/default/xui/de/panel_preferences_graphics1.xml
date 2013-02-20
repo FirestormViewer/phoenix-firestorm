@@ -23,82 +23,77 @@
 		<text name="ShadersPrefText4">
 			Ultra
 		</text>
-		<panel label="CustomGraphics" name="CustomGraphics Panel">
-			<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
-			<text name="ShadersText">
-				Shader:
-			</text>
-			<check_box initial_value="true" label="Transparentes Wasser" name="TransparentWater"/>
-			<check_box initial_value="true" label="Bumpmapping und Glanz" name="BumpShiny"/>
-			<check_box initial_value="true" label="Lokale Lichtquellen" name="LocalLights"/>
-			<check_box initial_value="true" label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
-			<check_box initial_value="true" label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
-			<check_box initial_value="true" label="Licht und Schatten" name="UseLightShaders"/>
-			<check_box initial_value="true" label="Ambient Occlusion" name="UseSSAO"/>
-			<check_box initial_value="true" label="Schärfentiefe" name="UseDoF"/>
-			<text name="shadows_label">
-				Schatten:
-			</text>
-			<combo_box name="ShadowDetail">
-				<combo_box.item label="Keine" name="0"/>
-				<combo_box.item label="Sonne/Mond" name="1"/>
-				<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
-			</combo_box>
-			<text name="reflection_label">
-				Wasserreflexionen:
-			</text>
-			<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
-				<combo_box.item label="Minimal" name="0"/>
-				<combo_box.item label="Terrain und Bäume" name="1"/>
-				<combo_box.item label="Alle statischen Objekte" name="2"/>
-				<combo_box.item label="Alle Avatare und Objekte" name="3"/>
-				<combo_box.item label="Alles" name="4"/>
-			</combo_box>
-            <text name="local lights_label">
-                Punkt. Beleucht. (Neustart erf.):
-            </text>
-            <combo_box name="LocalLightsDetail">
-                <combo_box.item label="Vollständig (Standard)" name="3"/>
-                <combo_box.item label="Reduziert" name="2"/>
-                <combo_box.item label="Nur Sonne/Mond" name="1"/>
-            </combo_box>
-			<slider label="Sichtweite:" name="DrawDistance"/>
-			<text name="DrawDistanceMeterText2">
-				m
-			</text>
-			<slider label="Max. Partikelzahl:" name="MaxParticleCount"/>
-			<slider label="Max. Anzahl voll dargestellter Avatare:" label_width="230" name="MaxNumberAvatarDrawn" width="315"/>
-			<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
-			<text name="PostProcessText">
-				Niedrig
-			</text>
-			<slider label="Avatar-Physik:" name="AvatarPhysicsDetail"/>
-			<text name="MeshDetailText">
-				Darstellungsgrad:
-			</text>
-			<slider label="   Objekte:" name="ObjectMeshDetail"/>
-			<slider label="   Flexiprimitiva:" name="FlexibleMeshDetail"/>
-			<slider label="   Bäume:" name="TreeMeshDetail"/>
-			<slider label="   Avatare:" name="AvatarMeshDetail"/>
-			<slider label="   Terrain:" name="TerrainMeshDetail"/>
-			<slider label="   Himmel:" name="SkyMeshDetail"/>
-			<text name="AvatarRenderingText">
-				Avatar-Darstellung:
-			</text>
-			<check_box initial_value="true" label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
-			<check_box initial_value="true" label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
-			<check_box initial_value="true" label="Avatar-Kleidung" name="AvatarCloth"/>
-			<text name="TerrainDetailText">
-				Terraindetails:
-			</text>
-			<radio_group name="TerrainDetailRadio">
-				<radio_item label="Niedrig" name="0"/>
-				<radio_item label="Hoch" name="2"/>
-			</radio_group>
-		</panel>
-		<button label="Übernehmen" label_selected="Übernehmen" name="Apply"/>
+		<check_box label="Vollbildmodus" name="Fullscreen Mode" tool_tip="Firestorm im Vollbildmodus ausführen. (Erfordert Neustart)"/>
+		<text name="ShadersText">
+			Shader:
+		</text>
+		<check_box initial_value="true" label="Transparentes Wasser" name="TransparentWater"/>
+		<check_box initial_value="true" label="Bumpmapping und Glanz" name="BumpShiny"/>
+		<check_box initial_value="true" label="Lokale Lichtquellen" name="LocalLights"/>
+		<check_box initial_value="true" label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
+		<check_box initial_value="true" label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
+		<check_box initial_value="true" label="Deferred Rendering" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
+		<check_box initial_value="true" label="Ambient Occlusion" name="UseSSAO"/>
+		<text name="shadows_label">
+			Schatten:
+		</text>
+		<combo_box name="ShadowDetail">
+			<combo_box.item label="Keine" name="0"/>
+			<combo_box.item label="Sonne/Mond" name="1"/>
+			<combo_box.item label="Sonne/Mond + Projektoren" name="2"/>
+		</combo_box>
+		<text name="reflection_label">
+			Wasserreflexionen:
+		</text>
+		<combo_box initial_value="true" label="Wasserreflexionen" name="Reflections">
+			<combo_box.item label="Minimal" name="0"/>
+			<combo_box.item label="Terrain und Bäume" name="1"/>
+			<combo_box.item label="Alle statischen Objekte" name="2"/>
+			<combo_box.item label="Alle Avatare und Objekte" name="3"/>
+			<combo_box.item label="Alles" name="4"/>
+		</combo_box>
+		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen, wenn Deferred Rendering aktiviert ist (Neustart erforderlich).">
+			Punkt. Beleucht. (Neustart erf.):
+		</text>
+		<combo_box name="LocalLightsDetail">
+			<combo_box.item label="Vollständig (Standard)" name="3"/>
+			<combo_box.item label="Reduziert" name="2"/>
+			<combo_box.item label="Nur Sonne/Mond" name="1"/>
+		</combo_box>
+		<slider label="Sichtweite:" name="DrawDistance"/>
+		<text name="DrawDistanceMeterText2">
+			m
+		</text>
+		<slider label="Max. Partikelzahl:" name="MaxParticleCount"/>
+		<slider label="Max. Anzahl voll dargestellter Avatare:" label_width="230" name="MaxNumberAvatarDrawn" width="315"/>
+		<slider label="Post-Processing-Qualität:" name="RenderPostProcess"/>
+		<text name="PostProcessText">
+			Niedrig
+		</text>
+		<slider label="Avatar-Physik:" name="AvatarPhysicsDetail"/>
+		<text name="MeshDetailText">
+			Darstellungsgrad:
+		</text>
+		<slider label="   Objekte:" name="ObjectMeshDetail"/>
+		<slider label="   Flexiprimitiva:" name="FlexibleMeshDetail"/>
+		<slider label="   Bäume:" name="TreeMeshDetail"/>
+		<slider label="   Avatare:" name="AvatarMeshDetail"/>
+		<slider label="   Terrain:" name="TerrainMeshDetail"/>
+		<slider label="   Himmel:" name="SkyMeshDetail"/>
+		<text name="AvatarRenderingText">
+			Avatar-Darstellung:
+		</text>
+		<check_box initial_value="true" label="Vereinfachte Avatardarstellung" name="AvatarImpostors"/>
+		<check_box initial_value="true" label="Hardware-Hautberechnung" name="AvatarVertexProgram"/>
+		<check_box initial_value="true" label="Avatar-Kleidung" name="AvatarCloth"/>
+		<text name="TerrainDetailText">
+			Terraindetails:
+		</text>
+		<radio_group name="TerrainDetailRadio">
+			<radio_item label="Niedrig" name="0"/>
+			<radio_item label="Hoch" name="2"/>
+		</radio_group>
 		<button label="Zurücksetzen" name="Defaults"/>
-		<button label="Erweitert" name="Advanced"/>
 	</panel>
 
 	<panel label="Hardware" name="Hardware Settings">
@@ -150,8 +145,8 @@
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
 		</text>
-		<check_box label="Alpha-Masken wenn 'Licht und Schatten' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Licht und Schatten nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
-		<check_box label="Alpha-Masken wenn 'Licht und Schatten' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Licht und Schatten aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Deferred Rendering' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Deferred Rendering' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>
@@ -167,6 +162,7 @@
 	</panel>
 	
 	<panel label="Schärfentiefe" name="DOF panel">
+		<check_box label="Schärfentiefe aktivieren (Bereiche außerhalb des Kamerafokus erscheinen unscharf)" name="UseDoF"/>
 		<slider label="Kamera-Blendenzahl (k-Wert):" name="CameraFNum" tool_tip="Kamera-Blendenzahl (k-Wert) für die Schärfentiefe" label_width="195" width="409"/>
 		<slider label="Kamera-Brennweite in mm:" name="CameraFocal" tool_tip="Kamera-Brennweite für die Schärfentiefe (in Millimeter)" label_width="195" width="409"/>
 		<slider label="Kamera-Sichtfeld (Grad):" name="Camera FOV" tool_tip="Vertikales Kamera-Sichtfeld für die Schärfentiefe (in Grad)" label_width="195" width="409"/>

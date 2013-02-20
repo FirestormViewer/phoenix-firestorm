@@ -216,13 +216,21 @@ F32 lggBeamMaps::setUpAndGetDuration()
 				lggBeamData dot;
 				
 				dot.p = LLVector3d(beamData["offset"]);
-				dot.p *= (gSavedSettings.getF32("FSBeamShapeScale")*2.0f);
+				// <FS:PP> Attempt to speed up things a little
+				// dot.p *= (gSavedSettings.getF32("FSBeamShapeScale")*2.0f);
+				static LLCachedControl<F32> FSBeamShapeScale(gSavedSettings, "FSBeamShapeScale");
+				dot.p *= (FSBeamShapeScale*2.0f);
+				// </FS:PP>
 				LLColor4 color = LLColor4(beamData["color"]);
 				dot.c = LLColor4U(color);
 				dots.push_back(dot);
 			}
 			
-			F32 maxBPerQS = gSavedSettings.getF32("FSMaxBeamsPerSecond") / 4.0f;
+			// <FS:PP> Attempt to speed up things a little
+			// F32 maxBPerQS = gSavedSettings.getF32("FSMaxBeamsPerSecond") / 4.0f;
+			static LLCachedControl<F32> FSMaxBeamsPerSecond(gSavedSettings, "FSMaxBeamsPerSecond");
+			F32 maxBPerQS = FSMaxBeamsPerSecond / 4.0f;
+			// </FS:PP>
 			duration = llceil((F32)(myPicture.size()) / maxBPerQS) * 0.25f;
 			llinfos << "reading it all now size is " << myPicture.size() << " and duration is " << duration << llendl;
 		
@@ -354,7 +362,11 @@ std::vector<std::string> lggBeamMaps::getColorsFileNames()
 }
 void lggBeamMaps::stopBeamChat()
 {
-	if(gSavedSettings.getBOOL("FSParticleChat"))
+	// <FS:PP> Attempt to speed up things a little
+	// if(gSavedSettings.getBOOL("FSParticleChat"))
+	static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
+	if(FSParticleChat)
+	// </FS:PP>
 	{
 		if(sPartsNow != FALSE)
 		{
@@ -376,7 +388,11 @@ void lggBeamMaps::stopBeamChat()
 }
 void lggBeamMaps::updateBeamChat(LLVector3d currentPos)
 {
-	if(gSavedSettings.getBOOL("FSParticleChat"))
+	// <FS:PP> Attempt to speed up things a little
+	// if(gSavedSettings.getBOOL("FSParticleChat"))
+	static LLCachedControl<bool> FSParticleChat(gSavedSettings, "FSParticleChat");
+	if(FSParticleChat)
+	// </FS:PP>
 	{
 		if(sPartsNow != TRUE)
 		{
