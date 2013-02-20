@@ -1106,7 +1106,10 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("ssao_max_radius");
 	mReservedUniforms.push_back("ssao_factor");
 	mReservedUniforms.push_back("ssao_factor_inv");
-	mReservedUniforms.push_back("ssao_effect_mat");
+	// <FS:Ansariel> Tofu's SSR
+	//mReservedUniforms.push_back("ssao_effect_mat");
+	mReservedUniforms.push_back("ssao_effect");
+	// </FS:Ansariel> Tofu's SSR
 	mReservedUniforms.push_back("screen_res");
 	mReservedUniforms.push_back("near_clip");
 	mReservedUniforms.push_back("shadow_offset");

@@ -10154,7 +10154,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>500.0</real>
+    <real>1500.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10167,7 +10167,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>U32</string>
     <key>Value</key>
-    <integer>200</integer>
+    <integer>250</integer>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -10180,21 +10180,21 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>0.30</real>
+    <real>5.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
   <key>RenderSSAOEffect</key>
   <map>
     <key>Comment</key>
-    <string>Multiplier for (1) value and (2) saturation (HSV definition), for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Third component is unused.)</string>
+    <string>Multiplier for (1) value for areas which are totally occluded.  Blends with original color for partly-occluded areas.  (Only first component is used.)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>0.80</real>
+      <real>0.50</real>
       <real>1.00</real>
       <real>0.00</real>
     </array>
@@ -10873,7 +10873,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <string>Vector3</string>
     <key>Value</key>
     <array>
-      <real>3.0</real>
+      <real>1.0</real>
       <real>2.0</real>
       <real>0.0</real>
     </array>
@@ -10890,7 +10890,7 @@ Change of this parameter will affect the layout of buttons in notification toast
     <key>Type</key>
     <string>F32</string>
     <key>Value</key>
-    <real>1.4</real>
+    <real>3.0</real>
     <key>Backup</key>
     <integer>0</integer>
   </map>
@@ -19920,6 +19920,17 @@ Change of this parameter will affect the layout of buttons in notification toast
             <real>1.0</real>
             <real>1.0</real>
         </array>
+    </map>
+    <key>FSRenderSSR</key>
+    <map>
+      <key>Comment</key>
+      <string>Enabled rendering of screen space reflections.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
     </map>
 </map>
 </llsd>

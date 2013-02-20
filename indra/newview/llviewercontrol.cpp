@@ -886,6 +886,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Clear places / teleport history search filter
 	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));
+
+	// <FS:Ansariel> Tofu's SSR
+	gSavedSettings.getControl("FSRenderSSR")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL
