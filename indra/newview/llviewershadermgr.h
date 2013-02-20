@@ -55,11 +55,7 @@ public:
 	BOOL loadShadersInterface();
 	BOOL loadShadersWindLight();
 	BOOL loadTransformShaders();
-// <FS:CR> Import Vignette from Exodus
-	void unloadExodusPostShaders();
-    BOOL loadExodusPostShaders();
-// </FS:CR>
-
+	
 	std::vector<S32> mVertexShaderLevel;
 	S32	mMaxAvatarShaderLevel;
 

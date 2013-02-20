@@ -1042,7 +1042,7 @@ void LLPipeline::updateRenderDeferred()
 					!gUseWireframe;
 
 	sRenderDeferred = deferred;
-	gExodusPostProcessStack.ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
+	exoPostProcess::instance().ExodusRenderPostUpdate(); // <FS:CR> Import Vignette from Exodus
 	if (deferred)
 	{ //must render glow when rendering deferred since post effect pass is needed to present any lighting at all
 		sRenderGlow = TRUE;
@@ -1138,7 +1138,7 @@ void LLPipeline::refreshCachedSettings()
 	CameraOffset = gSavedSettings.getBOOL("CameraOffset");
 	CameraMaxCoF = gSavedSettings.getF32("CameraMaxCoF");
 	CameraDoFResScale = gSavedSettings.getF32("CameraDoFResScale");
-	gExodusPostProcessStack.ExodusRenderPostSettingsUpdate();	// <FS:CR> Import Vignette from Exodus
+	exoPostProcess::instance().ExodusRenderPostSettingsUpdate();	// <FS:CR> Import Vignette from Exodus
 
 	RenderAutoHideSurfaceAreaLimit = gSavedSettings.getF32("RenderAutoHideSurfaceAreaLimit");
 	
@@ -7046,7 +7046,7 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 
 	gGL.setColorMask(true, true);
 	glClearColor(0,0,0,0);
-	gExodusPostProcessStack.ExodusRenderPostStack(&mScreen, &mScreen); // <FS:CR> Import Vignette from Exodus
+	exoPostProcess::instance().ExodusRenderPostStack(&mScreen, &mScreen); // <FS:CR> Import Vignette from Exodus
 	{
 		{
 			LLFastTimer ftm(FTM_RENDER_BLOOM_FBO);
@@ -7185,7 +7185,7 @@ void LLPipeline::renderBloom(BOOL for_snapshot, F32 zoom_factor, int subfield)
 
 
 		bool multisample = RenderFSAASamples > 1 && mFXAABuffer.isComplete();
-		gExodusPostProcessStack.multisample = multisample;	// <FS:CR> Import Vignette from Exodus
+		exoPostProcess::instance().multisample = multisample;	// <FS:CR> Import Vignette from Exodus
 
 		gViewerWindow->setup3DViewport();
 				

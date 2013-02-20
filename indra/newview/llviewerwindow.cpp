@@ -217,6 +217,7 @@
 #endif
 
 #include "utilitybar.h"		// <FS:Zi> Support for the classic V1 style buttons in some skins
+#include "exopostprocess.h"	// <FS:Ansariel> Exodus Vignette
 
 //
 // Globals
@@ -1701,6 +1702,8 @@ LLViewerWindow::LLViewerWindow(const Params& p)
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
 	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 	gGL.init() ;
+	// <FS:Ansariel> Exodus vignette
+	exoPostProcess::getInstance(); // Make sure we've created one of these
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -2245,6 +2248,11 @@ void LLViewerWindow::shutdownGL()
 	stop_glerror();
 
 	gGL.shutdown();
+	
+	// <FS:Ansariel> Exodus vignette
+	// This must die before LLVertexBuffer does
+	exoPostProcess::deleteSingleton();
+	// </FS:Ansariel> Exodus vignette
 
 	LLVertexBuffer::cleanupClass();
 

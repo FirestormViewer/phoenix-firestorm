@@ -6,7 +6,9 @@
 #extension GL_ARB_texture_rectangle : enable
 
 #ifdef DEFINE_GL_FRAGCOLOR
-out vec4 gl_FragColor;
+out vec4 frag_color;
+#else
+#define frag_color gl_FragColor
 #endif
 
 uniform sampler2DRect exo_screen;
@@ -21,5 +23,5 @@ void main ()
 	vec2 tc = vary_fragcoord / screen_res - 0.5f;
 	float vignette = 1 - dot(tc, tc);
 	diff.rgb *= clamp(pow(mix(1, vignette * vignette * vignette * vignette * exo_vignette.z, exo_vignette.x), exo_vignette.y), 0, 1);
-	gl_FragColor = diff;
+	frag_color = diff;
 }

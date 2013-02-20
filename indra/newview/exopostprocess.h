@@ -34,19 +34,13 @@ public:
 	static void BindRenderTarget(LLRenderTarget* tgt, LLGLSLShader* shader, S32 uniform, S32 unit = 0, LLTexUnit::eTextureType mode = LLTexUnit::TT_TEXTURE);
 };
 
-class exoPostProcess
+class exoPostProcess : public LLSingleton<exoPostProcess>
 {
+	friend class LLSingleton<exoPostProcess>;
 private:
 	static exoPostProcess *postProcess;
 	exoPostProcess();
 public:
-	static exoPostProcess* instance() {
-		if(!postProcess)
-		{
-			postProcess = new exoPostProcess();
-		}
-		return postProcess;
-	}
 	~exoPostProcess();
     enum ExodusRenderPostType
     {
@@ -84,6 +78,5 @@ public:
 	
 	S32					mVertexShaderLevel;
 };
-extern exoPostProcess gExodusPostProcessStack;
 
 #endif

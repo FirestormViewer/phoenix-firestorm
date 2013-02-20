@@ -163,6 +163,7 @@ LLGLSLShader			gGlowProgram;
 LLGLSLShader			gGlowExtractProgram;
 LLGLSLShader			gPostColorFilterProgram;
 LLGLSLShader			gPostNightVisionProgram;
+LLGLSLShader			gVignettePost;	// <FS:CR> Import Vignette from Exodus
 
 // Deferred rendering shaders
 LLGLSLShader			gDeferredImpostorProgram;
@@ -206,8 +207,6 @@ LLGLSLShader			gDeferredWLSkyProgram;
 LLGLSLShader			gDeferredWLCloudProgram;
 LLGLSLShader			gDeferredStarProgram;
 LLGLSLShader			gNormalMapGenProgram;
-
-LLGLSLShader            gVignettePost;	// <FS:CR> Import Vignette from Exodus
 
 LLViewerShaderMgr::LLViewerShaderMgr() :
 	mVertexShaderLevel(SHADER_COUNT, 0),
@@ -748,6 +747,7 @@ void LLViewerShaderMgr::unloadShaders()
 
 	gPostColorFilterProgram.unload();
 	gPostNightVisionProgram.unload();
+	gVignettePost.unload();
 
 	gDeferredDiffuseProgram.unload();
 	gDeferredDiffuseAlphaMaskProgram.unload();
@@ -757,7 +757,6 @@ void LLViewerShaderMgr::unloadShaders()
 	gDeferredSkinnedDiffuseProgram.unload();
 	gDeferredSkinnedBumpProgram.unload();
 	gDeferredSkinnedAlphaProgram.unload();
-	unloadExodusPostShaders();	// <FS:CR> Import Vignette from Exodus
 
 	gTransformPositionProgram.unload();
 	gTransformTexCoordProgram.unload();
@@ -1058,6 +1057,18 @@ BOOL LLViewerShaderMgr::loadShadersEffects()
 		}
 	}
 	
+// <FS:CR> Import Vignette from Exodus
+	if (success)
+	{
+		gVignettePost.mName = "Exodus Vignette Post";
+		gVignettePost.mShaderFiles.clear();
+		gVignettePost.mShaderFiles.push_back(make_pair("post/exoPostBaseV.glsl", GL_VERTEX_SHADER_ARB));
+		gVignettePost.mShaderFiles.push_back(make_pair("post/exoVignetteF.glsl", GL_FRAGMENT_SHADER_ARB));
+		gVignettePost.mShaderLevel = mVertexShaderLevel[SHADER_EFFECT];
+		success = gVignettePost.createShader(NULL, NULL);
+	}
+// </FS:CR>
+	
 	return success;
 
 }
@@ -1106,7 +1117,6 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gDeferredWLCloudProgram.unload();
 		gDeferredStarProgram.unload();
 		gNormalMapGenProgram.unload();
-		unloadExodusPostShaders();	// <FS:CR> Import Vignette from Exodus
 		return TRUE;
 	}
 
@@ -1623,35 +1633,9 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 		gNormalMapGenProgram.mShaderGroup = LLGLSLShader::SG_SKY;
 		success = gNormalMapGenProgram.createShader(NULL, NULL);
 	}
-	
-	success = loadExodusPostShaders(); // <FS:CR> Import Vignette from Exodus
 
 	return success;
 }
-
-// <FS:CR> Import Vignette from Exodus
-void LLViewerShaderMgr::unloadExodusPostShaders()
-{
-    gVignettePost.unload();
-}
-
-BOOL LLViewerShaderMgr::loadExodusPostShaders()
-{
-    BOOL success = TRUE;
-    
-    if (success)
-    {
-        gVignettePost.mName = "Exodus Vignette Post";
-        gVignettePost.mShaderFiles.clear();
-        gVignettePost.mShaderFiles.push_back(make_pair("deferred/postDeferredV.glsl", GL_VERTEX_SHADER_ARB));
-        gVignettePost.mShaderFiles.push_back(make_pair("post/exoVignetteF.glsl", GL_FRAGMENT_SHADER_ARB));
-        gVignettePost.mShaderLevel = mVertexShaderLevel[SHADER_EFFECT];
-        success = gVignettePost.createShader(NULL, NULL);
-    }
-    
-    return success;
-}
-// </FS:CR> Import Vignette from Exodus
 
 BOOL LLViewerShaderMgr::loadShadersObject()
 {

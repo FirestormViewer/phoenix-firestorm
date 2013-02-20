@@ -27,9 +27,6 @@
 
 LLVector3	exoPostProcess::sExodusRenderVignette;
 
-exoPostProcess *exoPostProcess::postProcess = NULL;
-exoPostProcess gExodusPostProcessStack = *exoPostProcess::instance();
-
 exoPostProcess::exoPostProcess()
 {
     
