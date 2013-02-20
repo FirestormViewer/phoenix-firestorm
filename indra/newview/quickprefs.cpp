@@ -786,10 +786,14 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 		if(entry.type!=it->first)
 		{
 			widget=entry.panel->getChild<LLUICtrl>(it->second);
-			// dummy to disable old control
-			widget->setControlName("QuickPrefsEditMode");
-			widget->setVisible(FALSE);
-			widget->setEnabled(FALSE);
+
+			if (widget)
+			{
+				// dummy to disable old control
+				widget->setControlName("QuickPrefsEditMode");
+				widget->setVisible(FALSE);
+				widget->setEnabled(FALSE);
+			}
 		}
 	}
 
