@@ -63,7 +63,7 @@ uniform vec4 glow;
 uniform float scene_light_strength;
 uniform mat3 env_mat;
 uniform vec4 shadow_clip;
-uniform mat3 ssao_effect_mat;
+uniform float ssao_effect;
 
 uniform mat4 inv_proj;
 uniform vec2 screen_res;
@@ -219,7 +219,7 @@ void calcAtmospherics(vec3 inPositionEye, float ambFactor) {
 	 * vec3 ambHueSat = vec3(tmpAmbient) - vec3(ambValue);
 	 * tmpAmbient = vec4(RenderSSAOEffect.valueFactor * vec3(ambValue) + RenderSSAOEffect.saturationFactor *(1.0 - ambFactor) * ambHueSat, ambAlpha);
 	 */
-	tmpAmbient = vec4(mix(ssao_effect_mat * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
+	tmpAmbient = vec4(mix(ssao_effect * tmpAmbient.rgb, tmpAmbient.rgb, ambFactor), tmpAmbient.a);
 
 	//brightness of surface both sunlight and ambient
 	setSunlitColor(vec3(sunlight * .5));
