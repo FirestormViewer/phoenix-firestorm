@@ -152,7 +152,10 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 }
 
 
-static bool handleSetShaderChanged(const LLSD& newvalue)
+// <FS:Ansariel> Expose handleSetShaderChanged()
+//static bool handleSetShaderChanged(const LLSD& newvalue)
+bool handleSetShaderChanged(const LLSD& newvalue)
+// </FS:Ansariel>
 {
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
