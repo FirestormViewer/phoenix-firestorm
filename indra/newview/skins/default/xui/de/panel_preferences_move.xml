@@ -18,7 +18,8 @@
 			<check_box label="Mouselook-Funktionalität aktivieren" name="EnableMouselook" tool_tip="Aktiviert die Ego-Perspektive und -Steuerung mit der Maus."/>
 			<check_box label="Mich im Mouselook anzeigen" name="first_person_avatar_visible"/>
 			<check_box label="Benutzerinterface im Mouselook anzeigen" name="first_person_ui_visible"/>
-			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible"/>
+			<check_box label="Mouselook verlassen, nachdem Fokus wiederlangt wurde" name="exit_mouselook_focus_on_focus" tool_tip="Verlässt den Mouselook-Modus, wenn Firestorm den Fokus wiederlangt hat, nachdem es im Hintergrund lief."/>
+			<check_box label="Zeige Mouselook-Hilfestellungen" name="mouselook_instructions_visible" tool_tip="Zeigt Hilfestellungen zum Mouselook-Modus an."/>
 			<check_box label="Zeige Fadenkreuz im Mouselook" name="ShowCrosshairs" tool_tip="Aktiviert die Fadenkreuz-Funktion innerhalb des Mouselook-Modus."/>
 			<text name="Mouse Sensitivity" width="195">
 				Mausempfindlichkeit für Mouselook:
