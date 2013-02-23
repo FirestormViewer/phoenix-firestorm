@@ -215,6 +215,16 @@
          name="first_person_ui_visible"
          width="256" />
         <check_box
+         control_name="FSEnableRightclickMenuInMouselook"
+         follows="left|top"
+         enabled_control="EnableMouselook"
+         height="16"
+         label="Enable context menus in Mouselook"
+         layout="topleft"
+         name="FSEnableRightclickMenuInMouselook"
+         tool_tip="Opens pie/context menu in mouselook mode upon ALT + right mouse button"
+         width="256" />
+        <check_box
          control_name="FSLeaveMouselookOnFocus"
          follows="left|top"
          enabled_control="EnableMouselook"
