@@ -2235,7 +2235,7 @@ void LLPanelLandOptions::refreshSearch()
 		// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
 		//const std::string& none_string = LLParcel::getCategoryUIString(LLParcel::C_NONE);
 		//mCategoryCombo->setSimple(none_string);
-		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_ANY);
+		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_NONE);
 		mCategoryCombo->setValue(none_string);
 		// </FS:Ansariel>
 		mCategoryCombo->setEnabled(FALSE);
