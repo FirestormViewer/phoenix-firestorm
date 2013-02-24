@@ -2988,6 +2988,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["SUBJECT"] = subj;
 				args["MESSAGE"] = mes;
 				LLNotifications::instance().add(LLNotification::Params("GroupNotice").substitutions(args).payload(payload).time_stamp(timestamp));
+				make_ui_sound("UISndGroupNotice"); // <FS:PP> Group notice sound
 			}
 
 			// Also send down the old path for now.
@@ -3041,6 +3042,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				args["MESSAGE"] = message;
 				// we shouldn't pass callback functor since it is registered in LLFunctorRegistration
 				LLNotificationsUtil::add("JoinGroup", args, payload);
+				make_ui_sound("UISndGroupInvitation"); // <FS:PP> Group invitation sound
 			}
 		}
 		break;
@@ -3487,6 +3489,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 					send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 					send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else if (doesUserRequireMaturityIncrease)
 				{
@@ -3494,12 +3497,13 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					params.substitutions = args;
 					params.payload = payload;
 					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+					make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 				}
 				else
 				{
-					LLNotification::Params params("TeleportOffered");
-					params.substitutions = args;
-					params.payload = payload;
+			    LLNotification::Params params("TeleportOffered");
+			    params.substitutions = args;
+			    params.payload = payload;
 
 // [RLVa:KB] - Checked: 2010-12-11 (RLVa-1.2.2c) | Modified: RLVa-1.2.2c
 					if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_ACCEPTTP)) || (fRlvSummon)) )
@@ -3512,6 +3516,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					else
 					{
 						LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+						make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 					}
 // [/RLVa:KB]
 //					LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
@@ -3595,6 +3600,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
 				send_simple_im(from_id, LLTrans::getString("TeleportMaturityExceeded"), IM_NOTHING_SPECIAL, session_id);
 				send_simple_im(from_id, LLStringUtil::null, IM_LURE_DECLINED, session_id);
+				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else if (doesUserRequireMaturityIncrease)
 			{
@@ -3602,13 +3608,14 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				params.substitutions = args;
 				params.payload = payload;
 				LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				make_ui_sound("UISndTeleportOffer"); // <FS:PP> Teleport offer sound
 			}
 			else
 			{
-				// do not show a message box, because you're about to be
-				// teleported.
-				LLNotifications::instance().forceResponse(LLNotification::Params("TeleportOffered").payload(payload), 0);
-			}
+			// do not show a message box, because you're about to be
+			// teleported.
+			LLNotifications::instance().forceResponse(LLNotification::Params("TeleportOffered").payload(payload), 0);
+		}
 		}
 		break;
 
@@ -3663,6 +3670,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				{
 					//support for frienship offers from clients before July 2008
 				        LLNotificationsUtil::add("OfferFriendshipNoMessage", args, payload);
+				        make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 				else
 				{
@@ -3671,6 +3679,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				    params.substitutions = args;
 				    params.payload = payload;
 				    LLPostponedNotification::add<LLPostponedOfferNotification>(	params, from_id, false);
+				    make_ui_sound("UISndFriendshipOffer"); // <FS:PP> Friendship offer sound
 				}
 			}
 		}
@@ -5125,7 +5134,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		msg_number += 1;
 		if (head_rot_chg < THRESHOLD_HEAD_ROT_QDOT)
 		{
-			//LL_INFOS("Messaging") << " head rot " << head_rotation << LL_ENDL;
+			//LL_INFOS("Messaging") << "head rot " << head_rotation << LL_ENDL;
 			LL_INFOS("Messaging") << "msg " << msg_number << ", frame " << LLFrameTimer::getFrameCount() << ", head_rot_chg " << head_rot_chg << LL_ENDL;
 		}
 		if (cam_rot_chg.magVec() > ROTATION_THRESHOLD) 
@@ -5144,7 +5153,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		{
 			LL_INFOS("Messaging") << "msg " << msg_number << ", frame " << LLFrameTimer::getFrameCount() << ", dcf = " << control_flag_change << LL_ENDL;
 		}
-		*/
+*/
 
 		duplicate_count = 0;
 	}
@@ -5269,7 +5278,6 @@ extern U32 gObjectBits;
 
 void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 {	
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5286,7 +5294,6 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5303,7 +5310,6 @@ void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data
 
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	// Update the data counters
 	if (mesgsys->getReceiveCompressedSize())
 	{
@@ -5321,7 +5327,6 @@ void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_data)
 {
-	LLMemType mt(LLMemType::MTYPE_OBJECT);
 	if (mesgsys->getReceiveCompressedSize())
 	{
 		gObjectBits += mesgsys->getReceiveCompressedSize() * 8;
@@ -5334,7 +5339,7 @@ void process_terse_object_update_improved(LLMessageSystem *mesgsys, void **user_
 	gObjectList.processCompressedObjectUpdate(mesgsys, user_data, OUT_TERSE_IMPROVED);
 }
 
-static LLFastTimer::DeclareTimer FTM_PROCESS_OBJECTS("Process Objects");
+static LLFastTimer::DeclareTimer FTM_PROCESS_OBJECTS("Process Kill Objects");
 
 
 void process_kill_object(LLMessageSystem *mesgsys, void **user_data)
@@ -6674,14 +6679,14 @@ static void process_money_balance_reply_extended(LLMessageSystem* msg)
 bool handle_prompt_for_maturity_level_change_callback(const LLSD& notification, const LLSD& response)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	
+
 	if (0 == option)
 	{
 		// set the preference to the maturity of the region we're calling
 		U8 preferredMaturity = static_cast<U8>(notification["payload"]["_region_access"].asInteger());
 		gSavedSettings.setU32("PreferredMaturity", static_cast<U32>(preferredMaturity));
 	}
-	
+
 	return false;
 }
 
@@ -6744,7 +6749,7 @@ bool handle_special_notification(std::string notificationID, LLSD& llsdBlock)
 			gAgent.clearTeleportRequest();
 			maturityLevelNotification = LLNotificationsUtil::add(notificationID+"_AdultsOnlyContent", llsdBlock);
 			returnValue = true;
-
+	
 			notifySuffix = "_NotifyAdultsOnly";
 		}
 		else if (gAgent.prefersPG() || gAgent.prefersMature())
@@ -6841,7 +6846,7 @@ bool handle_teleport_access_blocked(LLSD& llsdBlock)
 			maturityLevelNotification = LLNotificationsUtil::add(notificationID+"_PreferencesOutOfSync", llsdBlock, llsdBlock, handle_prompt_for_maturity_level_change_callback);
 			returnValue = true;
 		}
-	}
+		}
 
 	if ((maturityLevelNotification == NULL) || maturityLevelNotification->isIgnored())
 	{
@@ -7008,9 +7013,9 @@ void process_alert_core(const std::string& message, BOOL modal)
 		std::string alert_name(message.substr(ALERT_PREFIX.length()));
 		if (!handle_special_alerts(alert_name))
 		{
-			LLNotificationsUtil::add(alert_name);
+		LLNotificationsUtil::add(alert_name);
 			processed_message = alert_name; // <FS:PP> FIRE-317, region restart alert
-		}
+	}
 	}
 	else if (message.find(NOTIFY_PREFIX) == 0)
 	{
@@ -7281,14 +7286,14 @@ void process_economy_data(LLMessageSystem *msg, void** /*user_data*/)
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}

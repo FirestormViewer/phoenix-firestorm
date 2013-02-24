@@ -111,6 +111,8 @@ public:
 	bool selectedMediaEditable();
 	void updateLandImpacts();
 
+	static void setGridMode(S32 mode);
+
 	void onClickBtnCopyKeys();
 	void onClickExpand();
 

@@ -884,9 +884,17 @@ void LLPanelPeople::updateNearbyList()
 	//AO : Warning, reworked heavily for Firestorm. Do not merge into here without understanding what it's doing.
 	
 	if (!mNearbyList)
+	{
 		return;
+	}
 	
 	//Configuration
+	LLWorld* world = LLWorld::getInstance();
+	LLMuteList* mutelist = LLMuteList::getInstance();
+
+	static const F32 chat_range_say = world->getSayDistance();
+	static const F32 chat_range_shout = world->getShoutDistance();
+
 	static LLCachedControl<bool> RadarReportChatRangeEnter(gSavedSettings, "RadarReportChatRangeEnter");
 	static LLCachedControl<bool> RadarReportChatRangeLeave(gSavedSettings, "RadarReportChatRangeLeave");
 	static LLCachedControl<bool> RadarReportDrawRangeEnter(gSavedSettings, "RadarReportDrawRangeEnter");
@@ -895,26 +903,29 @@ void LLPanelPeople::updateNearbyList()
 	static LLCachedControl<bool> RadarReportSimRangeLeave(gSavedSettings, "RadarReportSimRangeLeave");
 	static LLCachedControl<bool> RadarEnterChannelAlert(gSavedSettings, "RadarEnterChannelAlert");
 	static LLCachedControl<bool> RadarLeaveChannelAlert(gSavedSettings, "RadarLeaveChannelAlert");
-
-	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
-	F32 drawRadius = F32(RenderFarClip);
+	static LLCachedControl<F32> nearMeRange(gSavedSettings, "NearMeRange");
 	static LLCachedControl<bool> limitRange(gSavedSettings, "LimitRadarByRange");
 	static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
+	static LLCachedControl<F32> RenderFarClip(gSavedSettings, "RenderFarClip");
+
+	F32 drawRadius = F32(RenderFarClip);
 	const LLVector3d& posSelf = gAgent.getPositionGlobal();
 	LLViewerRegion* reg = gAgent.getRegion();
 	LLUUID regionSelf;
 	if (reg)
+	{
 		regionSelf = reg->getRegionID();
+	}
 	bool alertScripts = mRadarAlertRequest; // save the current value, so it doesn't get changed out from under us by another thread
 	std::vector<LLPanel*> items;
-	LLWorld* world = LLWorld::getInstance();
 	time_t now = time(NULL);
 
 	//STEP 0: Clear model data, saving pieces as needed.
+	static S32 uuidColumnIndex = mRadarList->getColumn("uuid")->mIndex;
 	std::vector<LLUUID> selected_ids;
-	for(size_t i=0;i<mRadarList->getAllSelected().size();i++)
+	for (size_t i = 0; i < mRadarList->getAllSelected().size(); i++)
 	{
-		selected_ids.push_back(mRadarList->getAllSelected().at(i)->getColumn(mRadarList->getColumn("uuid")->mIndex)->getValue().asUUID());
+		selected_ids.push_back(mRadarList->getAllSelected().at(i)->getColumn(uuidColumnIndex)->getValue().asUUID());
 	}
 	S32 lastScroll = mRadarList->getScrollPos();
 	mRadarList->clearRows();
@@ -927,11 +938,15 @@ void LLPanelPeople::updateNearbyList()
 	std::vector<LLVector3d> positions;
 	std::vector<LLUUID> avatar_ids;
 	if (limitRange)
-		LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), gSavedSettings.getF32("NearMeRange"));
+	{
+		LLWorld::getInstance()->getAvatars(&avatar_ids, &positions, gAgent.getPositionGlobal(), nearMeRange);
+	}
 	else
+	{
 		LLWorld::getInstance()->getAvatars(&avatar_ids, &positions);
+	}
 	mNearbyList->getIDs() = avatar_ids; // copy constructor, refreshing underlying mNearbyList
-	mNearbyList->setDirty(true,true); // AO: These optional arguements force updating even when we're not a visible window.
+	mNearbyList->setDirty(true, true); // AO: These optional arguements force updating even when we're not a visible window.
 	mNearbyList->getItems(items);
 	LLLocalSpeakerMgr::getInstance()->update(TRUE);
 	
@@ -960,11 +975,20 @@ void LLPanelPeople::updateNearbyList()
 		// Skip modelling this avatar if its basic data is either inaccessible, or it's a dummy placeholder
 		LLViewerRegion *reg	 = world->getRegionFromPosGlobal(avPos);
 		if ((!reg) || (!av)) // don't update this radar listing if data is inaccessible
+		{
 			continue;
+		}
+
+		// Try to get the avatar's viewer object - we will need it anyway later
+		LLVOAvatar* avVo = (LLVOAvatar*)gObjectList.findObject(avId);
+
 		static LLUICachedControl<bool> showdummyav("FSShowDummyAVsinRadar");
-		if(!showdummyav){
-			LLVOAvatar* voav = (LLVOAvatar*)gObjectList.findObject(avId);
-			if(voav && voav->mIsDummy) continue;
+		if (!showdummyav)
+		{
+			if (avVo && avVo->mIsDummy)
+			{
+				continue;
+			}
 		}
 
 		avRegion = reg->getRegionID();
@@ -975,11 +999,15 @@ void LLPanelPeople::updateNearbyList()
 			for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
 			{
 				if (it2->second.lastRegion == avRegion)
-					seentime = (S32)difftime(now,it2->second.firstSeen);
+				{
+					seentime = (S32)difftime(now, it2->second.firstSeen);
+				}
 			}
 		}
 		else
-			seentime		 = (S32)difftime(now,av->getFirstSeen());
+		{
+			seentime = (S32)difftime(now,av->getFirstSeen());
+		}
 		//av->setFirstSeen(now - (time_t)seentime); // maintain compatibility with underlying list, deprecated
 		S32 hours = (S32)(seentime / 3600);
 		S32 mins = (S32)((seentime - hours * 3600) / 60);
@@ -987,18 +1015,22 @@ void LLPanelPeople::updateNearbyList()
 		std::string avSeenStr = llformat("%d:%02d:%02d", hours, mins, secs);
 		S32 avStatusFlags     = av->getAvStatus();
 		std::string avFlagStr = "";
-			if (avStatusFlags & AVATAR_IDENTIFIED)
-				avFlagStr += "$";
+		if (avStatusFlags & AVATAR_IDENTIFIED)
+		{
+			avFlagStr += "$";
+		}
 		std::string avAgeStr = av->getAvatarAge();
 		std::string avName   = getRadarName(avId);
-		av->setAvatarName(avName); // maintain compatibility with underlying list, deprecated
+		av->setAvatarName(avName); // maintain compatibility with underlying list; used in other locations!
 		U32 lastZOffsetTime  = av->getLastZOffsetTime();
 		F32 avZOffset        = av->getZOffset();
 		if (avPos[VZ] == AVATAR_UNKNOWN_Z_OFFSET) // if our official z position is AVATAR_UNKNOWN_Z_OFFSET, we need a correction.
 		{
 			// set correction if we have it
-			if (avZOffset > 0.1) 
+			if (avZOffset > 0.1)
+			{
 				avPos[VZ] = avZOffset;
+			}
 			else
 			{
 				avPos[VZ] = -1; // placeholder value, better than "0", until we get real data.
@@ -1021,10 +1053,7 @@ void LLPanelPeople::updateNearbyList()
 		if (lastRadarSweep.count(avId) == 0)
 		{
 			// chat alerts
-// <FS:CR> Aurora Sim
-			//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS) && avRange > -1)
-			if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance()) && avRange > -1)
-// </FS:CR> Aurora Sim
+			if (RadarReportChatRangeEnter && (avRange <= chat_range_say) && avRange > -1)
 			{
 				LLStringUtil::format_map_t args;
 				args["DISTANCE"] = llformat("%3.2f", avRange);
@@ -1050,8 +1079,10 @@ void LLPanelPeople::updateNearbyList()
 					std::string message = getString("entering_region_distance", args);
 					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 				}
-				else 
+				else
+				{
 					LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
+				}
 			}
 			if (RadarEnterChannelAlert || (alertScripts))
 			{
@@ -1060,10 +1091,14 @@ void LLPanelPeople::updateNearbyList()
 				if (!RadarLeaveChannelAlert)
 				{
 					if (avRegion == regionSelf)
+					{
 						mRadarEnterAlerts.push_back(avId);
+					}
 				}
 				else
+				{
 					mRadarEnterAlerts.push_back(avId);
+				}
 			}
 		}
 		
@@ -1079,10 +1114,7 @@ void LLPanelPeople::updateNearbyList()
 				rf = lastRadarSweep.find(avId)->second;
 				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave )
 				{
-// <FS:CR> Aurora Sim
-					//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
-					if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance() && avRange > -1) && (rf.lastDistance > LLWorld::getInstance()->getSayDistance() || rf.lastDistance == -1))
-// </FS:CR> Aurora Sim
+					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > -1) && (rf.lastDistance > chat_range_say || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
@@ -1090,10 +1122,7 @@ void LLPanelPeople::updateNearbyList()
 						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-// <FS:CR> Aurora Sim
-					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
-					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
-// </FS:CR> Aurora Sim
+					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == -1) && (rf.lastDistance <= chat_range_say && rf.lastDistance > -1))
 					{
 						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
@@ -1109,7 +1138,7 @@ void LLPanelPeople::updateNearbyList()
 						make_ui_sound("UISndRadarDrawEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-					else if ( RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
+					else if (RadarReportDrawRangeLeave && (avRange > drawRadius || avRange == -1) && (rf.lastDistance <= drawRadius && rf.lastDistance > -1))
 					{
 						make_ui_sound("UISndRadarDrawLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_draw_distance")));		
@@ -1127,8 +1156,10 @@ void LLPanelPeople::updateNearbyList()
 							std::string message = getString("entering_region_distance", args);
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 						}
-						else 
+						else
+						{
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
+						}
 					}
 					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
 					{
@@ -1146,16 +1177,15 @@ void LLPanelPeople::updateNearbyList()
 				for (multimap<LLUUID,radarFields>::iterator it2 = dupeAvs.first; it2 != dupeAvs.second; ++it2)
 				{
 					if (it2->second.firstSeen > rf.firstSeen)
+					{
 						rf = it2->second;
+					}
 				}
 				llinfos << "AO: Duplicates detected for " << avName <<" , most recent is " << rf.firstSeen << llendl;
 				
 				if (RadarReportChatRangeEnter || RadarReportChatRangeLeave)
 				{
-// <FS:CR> Aurora Sim
-					//if (RadarReportChatRangeEnter && (avRange <= CHAT_NORMAL_RADIUS && avRange > -1) && (rf.lastDistance > CHAT_NORMAL_RADIUS || rf.lastDistance == -1))
-					if (RadarReportChatRangeEnter && (avRange <= LLWorld::getInstance()->getSayDistance() && avRange > -1) && (rf.lastDistance > LLWorld::getInstance()->getSayDistance() || rf.lastDistance == -1))
-// </FS:CR> Aurora Sim
+					if (RadarReportChatRangeEnter && (avRange <= chat_range_say && avRange > -1) && (rf.lastDistance > chat_range_say || rf.lastDistance == -1))
 					{
 						LLStringUtil::format_map_t args;
 						args["DISTANCE"] = llformat("%3.2f", avRange);
@@ -1163,10 +1193,7 @@ void LLPanelPeople::updateNearbyList()
 						make_ui_sound("UISndRadarChatEnter"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 					}
-// <FS:CR> Aurora Sim
-					//else if (RadarReportChatRangeLeave && (avRange > CHAT_NORMAL_RADIUS || avRange == -1) && (rf.lastDistance <= CHAT_NORMAL_RADIUS && rf.lastDistance > -1))
-					else if (RadarReportChatRangeLeave && (avRange > LLWorld::getInstance()->getSayDistance() || avRange == -1) && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance() && rf.lastDistance > -1))
-// </FS:CR> Aurora Sim
+					else if (RadarReportChatRangeLeave && (avRange > chat_range_say || avRange == -1) && (rf.lastDistance <= chat_range_say && rf.lastDistance > -1))
 					{
 						make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 						LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
@@ -1200,8 +1227,10 @@ void LLPanelPeople::updateNearbyList()
 							std::string message = getString("entering_region_distance", args);
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, message));
 						}
-						else 
+						else
+						{
 							LLAvatarNameCache::get(avId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("entering_region")));
+						}
 					}
 					else if (RadarReportSimRangeLeave && (rf.lastRegion == regionSelf) && (avRegion != regionSelf))
 					{
@@ -1248,15 +1277,16 @@ void LLPanelPeople::updateNearbyList()
 		LLScrollListItem* radarRow = mRadarList->addElement(row);
 
 		//AO: Set any range colors / styles
-		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("range")->mIndex);
+		static S32 rangeColumnIndex = mRadarList->getColumn("range")->mIndex;
+		LLScrollListText* radarRangeCell = (LLScrollListText*)radarRow->getColumn(rangeColumnIndex);
 		if (avRange > -1)
 		{
-			if (avRange <= CHAT_NORMAL_RADIUS)
+			if (avRange <= chat_range_say)
 			{
 				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemChatRange", LLColor4::red));
 				inChatRange++;
 			}
-			else if (avRange <= CHAT_SHOUT_RADIUS)
+			else if (avRange <= chat_range_shout)
 			{
 				radarRangeCell->setColor(LLUIColorTable::instance().getColor("AvatarListItemShoutRange", LLColor4::white));
 			}
@@ -1271,7 +1301,7 @@ void LLPanelPeople::updateNearbyList()
 		}
 
 		// Check if avatar is in draw distance and a VOAvatar instance actually exists
-		if (avRange <= drawRadius && avRange > -1 && gObjectList.findObject(avId))
+		if (avRange <= drawRadius && avRange > -1 && avVo)
 		{
 			radarRangeCell->setFontStyle(LLFontGL::BOLD);
 		}
@@ -1280,17 +1310,20 @@ void LLPanelPeople::updateNearbyList()
 			radarRangeCell->setFontStyle(LLFontGL::NORMAL);
 		}
 
-		//AO: Set friends colors / styles
-		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("name")->mIndex);
+		// Set friends colors / styles
+		LLFontGL::StyleFlags nameCellStyle = LLFontGL::NORMAL;
+		static S32 nameColumnIndex = mRadarList->getColumn("name")->mIndex;
+		LLScrollListText* radarNameCell = (LLScrollListText*)radarRow->getColumn(nameColumnIndex);
 		const LLRelationship* relation = LLAvatarTracker::instance().getBuddyInfo(avId);
 		if (relation)
 		{
-			radarNameCell->setFontStyle(LLFontGL::BOLD);
+			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::BOLD);
 		}
-		else
+		if (mutelist->isMuted(avId))
 		{
-			radarNameCell->setFontStyle(LLFontGL::NORMAL);
+			nameCellStyle = (LLFontGL::StyleFlags)(nameCellStyle | LLFontGL::ITALIC);
 		}
+		radarNameCell->setFontStyle(nameCellStyle);
 
 		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, FALSE, FALSE, TRUE))
 		{
@@ -1304,7 +1337,8 @@ void LLPanelPeople::updateNearbyList()
 			LLSpeaker* speaker = LLLocalSpeakerMgr::getInstance()->findSpeaker(avId);
 			if (speaker && speaker->isInVoiceChannel())
 			{
-				LLScrollListText* voiceLevelCell = (LLScrollListText*)radarRow->getColumn(mRadarList->getColumn("voice_level")->mIndex);
+				static S32 voiceLevelColumnIndex = mRadarList->getColumn("voice_level")->mIndex;
+				LLScrollListText* voiceLevelCell = (LLScrollListText*)radarRow->getColumn(voiceLevelColumnIndex);
 				EVoicePowerLevel power_level = voice_client->getPowerLevel(avId);
 				
 				switch (power_level)
@@ -1402,10 +1436,7 @@ void LLPanelPeople::updateNearbyList()
 		if (!mNearbyList->contains(prevId))
 		{
 			radarFields rf = i->second;
-// <FS:CR> Aurora Sim
-			//if (RadarReportChatRangeLeave && (rf.lastDistance <= CHAT_NORMAL_RADIUS) && rf.lastDistance > -1)
-			if (RadarReportChatRangeLeave && (rf.lastDistance <= LLWorld::getInstance()->getSayDistance()) && rf.lastDistance > -1)
-// </FS:CR> Aurora Sim
+			if (RadarReportChatRangeLeave && (rf.lastDistance <= chat_range_say) && rf.lastDistance > -1)
 			{
 				make_ui_sound("UISndRadarChatLeave"); // <FS:PP> FIRE-6069: Radar alerts sounds
 				LLAvatarNameCache::get(prevId,boost::bind(&LLPanelPeople::radarAlertMsg, this, _1, _2, getString("leaving_chat_range")));
@@ -1422,7 +1453,9 @@ void LLPanelPeople::updateNearbyList()
 			}
 				
 			if (RadarLeaveChannelAlert)
+			{
 				mRadarLeaveAlerts.push_back(prevId);
+			}
 		}
 	}
 
@@ -1435,7 +1468,7 @@ void LLPanelPeople::updateNearbyList()
 		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_entering);
 		std::string msg = llformat("%d,%d",mRadarFrameCount,num_this_pass);
 		U32 loop = 0;
-		while(loop < num_entering)
+		while (loop < num_entering)
 		{
 			for (int i = 0; i < num_this_pass; i++)
 			{
@@ -1465,7 +1498,7 @@ void LLPanelPeople::updateNearbyList()
 		U32 num_this_pass = min(MAX_AVATARS_PER_ALERT,num_leaving);
 		std::string msg = llformat("%d,-%d",mRadarFrameCount,min(MAX_AVATARS_PER_ALERT,num_leaving));
 		U32 loop = 0;
-		while(loop < num_leaving)
+		while (loop < num_leaving)
 		{
 			for (int i = 0; i < num_this_pass; i++)
 			{
@@ -1490,7 +1523,9 @@ void LLPanelPeople::updateNearbyList()
 
 	// reset any active alert requests
 	if (alertScripts)
+	{
 		mRadarAlertRequest = false;
+	}
 
 	//
 	//STEP 4: Cache our current model data, so we can compare it with the next fresh group of model data for fast change detection.
@@ -1516,10 +1551,14 @@ void LLPanelPeople::updateNearbyList()
 		{
 			LLViewerRegion* lastRegion = world->getRegionFromPosGlobal(rf.lastGlobalPos);
 			if (lastRegion)
+			{
 				rf.lastRegion = lastRegion->getRegionID();
+			}
 		}
-		else 
+		else
+		{
 			rf.lastRegion = LLUUID(0);
+		}
 		
 		lastRadarSweep.insert(pair<LLUUID,radarFields>(av->getAvatarId(),rf));
 	}

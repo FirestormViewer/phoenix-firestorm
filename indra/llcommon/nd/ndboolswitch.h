@@ -1,7 +1,10 @@
+#ifndef NDBOOLSWITCH_H
+#define NDBOOLSWITCH_H
+
 /**
- * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
+ * $LicenseInfo:firstyear=2013&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2012, Nicky Dasmijn
+ * Copyright (C) 2013, Nicky Dasmijn
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,35 +25,43 @@
  * $/LicenseInfo$
  */
 
-#ifndef NDPOOLDEFINES_H
-#define NDPOOLDEFINES_H
+namespace nd
+{
+	namespace utils
+	{
+		class boolSwitch
+		{
+			bool *mLocation;
+			bool mOriginalValue;
+			bool mNeedsReset;
+		public:
+			boolSwitch( bool *aLocation, bool aValue )
+				: mLocation( aLocation )
+				, mNeedsReset( false )
+			{
+				if( mLocation )
+				{
+					mOriginalValue = *mLocation;
+					mNeedsReset = true;
+					*mLocation = aValue;
+				}
+			}
 
-#include "stdtypes.h"
+			~boolSwitch( )
+			{
+				reset();
+			}
 
-#define FROM_MB( mbVal ) (mbVal*1024*1024)
-#define TO_MB( bVal ) ( bVal / (1024*1024) )
-#define BITS_PER_U8 (8)
-#define BITS_PER_U32 ( sizeof(U32) * BITS_PER_U8 )
+			void reset()
+			{
+				if( mLocation && mNeedsReset )
+					*mLocation = mOriginalValue;
 
-#ifdef ND_NO_TCMALLOC
-	#define MAX_PAGES (150)
-	#define POOL_CHUNK_SIZE (64)
-	#define POOL_CHUNK_ALIGNMENT (16)
-	#define PAGE_SIZE (FROM_MB(1) )
-	#define BITMAP_SIZE ( PAGE_SIZE / BITS_PER_U8 / POOL_CHUNK_SIZE )
-#else
-	#define MAX_PAGES (0)
-#endif
+				mNeedsReset = false;
+			}
 
-#define STATS_FREQ ( 15 )
-
-// Define those to log the stacktrace for allocations with certain size. You better know what you do when enabing this
-#if 0
-	#define LOG_ALLOCATION_STACKS
-	#define MIN_ALLOC_SIZE_FOR_LOG_STACK 32
-	#define MAX_ALLOC_SIZE_FOR_LOG_STACK 1024
-	#define LOG_STACKSIZE 16
-	#define TOP_STACKS_TO_DUMP 10
-#endif
+		};
+	}
+}
 
 #endif

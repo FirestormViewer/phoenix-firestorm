@@ -33,7 +33,7 @@
 #include "llsd.h"
 #include "lltemplatemessagereader.h"
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 LLTemplateMessageDispatcher::LLTemplateMessageDispatcher(LLTemplateMessageReader &template_message_reader) :
 	mTemplateMessageReader(template_message_reader)

@@ -18,8 +18,16 @@
 	<string name="acquired_date">
 		[wkday,datetime,local][day,datetime,local] [mth,datetime,local] [year,datetime,local][hour,datetime,local]:[min,datetime,local]:[second,datetime,local]
 	</string>
+
+	<layout_stack name="place_info_sidetray_main">
+		<layout_panel name="header_container">
+
 	<button name="back_btn" tool_tip="Atrás"/>
 	<text name="title" value="Perfil del lugar"/>
+
+		</layout_panel>
+		<layout_panel name="place_info_content">
+
 	<text name="region_title" value="RegiónEjemplo"/>
 	<text name="maturity_value" value="desconocida"/>
 	<text name="parcel_title" value="RegiónEjemplo, Nombre Largo (145, 228, 26)"/>
@@ -36,4 +44,7 @@
 		<text name="notes_label" value="Mis notas:"/>
 		<text name="folder_label" value="Localización del hito:"/>
 	</panel>
+
+		</layout_panel>
+	</layout_stack> 
 </panel>

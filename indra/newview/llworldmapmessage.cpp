@@ -133,9 +133,9 @@ void LLWorldMapMessage::sendHandleRegionRequest(U64 region_handle,
 void LLWorldMapMessage::sendMapBlockRequest(U16 min_x, U16 min_y, U16 max_x, U16 max_y, bool return_nonexistent)
 {
 // <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if(LLGridManager::getInstance()->isInOpenSim()) return_nonexistent = true;
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 // </FS:CR> Aurora Sim
 	//LL_INFOS("World Map") << "LLWorldMap::sendMapBlockRequest()" << ", min = (" << min_x << ", " << min_y << "), max = (" << max_x << ", " << max_y << "), nonexistent = " << return_nonexistent << LL_ENDL;
 	LLMessageSystem* msg = gMessageSystem;

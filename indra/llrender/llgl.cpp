@@ -44,7 +44,6 @@
 #include "llmath.h"
 #include "m4math.h"
 #include "llstring.h"
-#include "llmemtype.h"
 #include "llstacktrace.h"
 
 #include "llglheaders.h"
@@ -2286,7 +2285,6 @@ void LLGLNamePool::release(GLuint name)
 //static
 void LLGLNamePool::upkeepPools()
 {
-	LLMemType mt(LLMemType::MTYPE_UPKEEP_POOLS);
 	for (tracker_t::instance_iter iter = beginInstances(); iter != endInstances(); ++iter)
 	{
 		LLGLNamePool & pool = *iter;

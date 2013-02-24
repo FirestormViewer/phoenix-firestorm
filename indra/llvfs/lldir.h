@@ -217,13 +217,13 @@ class LLDir
 
 	virtual void setChatLogsDir(const std::string &path);		// Set the chat logs dir to this user's dir
 // <FS:CR> Seperate user directories per grid on OS build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	virtual void setPerAccountChatLogsDir(const std::string &username, const std::string &gridname);
 	virtual void setLindenUserDir(const std::string &username, const std::string &gridname);
 #else	
 	virtual void setPerAccountChatLogsDir(const std::string &username);		// Set the per user chat log directory.
 	virtual void setLindenUserDir(const std::string &username);		// Set the linden user dir to this user's dir
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 // [SL:KB] - Patch: Viewer-Skins | Checked: 2010-10-20 (Catznip-3.4)
 	virtual void setSkinFolder(const std::string& skin_folder, const std::string& theme_folder, const std::string& language);

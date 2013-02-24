@@ -73,22 +73,11 @@ FloaterQuickPrefs::QuickPrefsXMLEntry::QuickPrefsXMLEntry()
 {}
 // </FS:Zi>
 
-// Ansariel: Copied from llviewercontrol.cpp, handleSetShaderChanged()
-static void handleShaderChanged()
-{
-	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
-	gBumpImageList.destroyGL();
-	gBumpImageList.restoreGL();
-
-	// else, leave terrain detail as is
-	LLViewerShaderMgr::instance()->setShaders();
-}
-
 FloaterQuickPrefs::FloaterQuickPrefs(const LLSD& key)
 :	LLTransientDockableFloater(NULL, true, key)
 {
 	// For Phototools
-	mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleShaderChanged));
+	mCommitCallbackRegistrar.add("Quickprefs.ShaderChanged", boost::bind(&handleSetShaderChanged, LLSD()));
 }
 
 FloaterQuickPrefs::~FloaterQuickPrefs()
@@ -786,10 +775,14 @@ void FloaterQuickPrefs::updateControl(const std::string& controlName,ControlEntr
 		if(entry.type!=it->first)
 		{
 			widget=entry.panel->getChild<LLUICtrl>(it->second);
-			// dummy to disable old control
-			widget->setControlName("QuickPrefsEditMode");
-			widget->setVisible(FALSE);
-			widget->setEnabled(FALSE);
+
+			if (widget)
+			{
+				// dummy to disable old control
+				widget->setControlName("QuickPrefsEditMode");
+				widget->setVisible(FALSE);
+				widget->setEnabled(FALSE);
+			}
 		}
 	}
 

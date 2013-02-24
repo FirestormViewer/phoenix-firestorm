@@ -373,8 +373,6 @@ void update_texture_fetch()
 // true when all initialization done.
 bool idle_startup()
 {
-	LLMemType mt1(LLMemType::MTYPE_STARTUP);
-	
 	const F32 PRECACHING_DELAY = gSavedSettings.getF32("PrecachingDelay");
 	static LLTimer timeout;
 
@@ -726,7 +724,7 @@ bool idle_startup()
 			std::string url = gSavedSettings.getString("GridListDownloadURL");
 			LLHTTPClient::getIfModified(url, new GridListRequestResponder(), last_modified );
 		}
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 		// Fetch grid infos as needed
 		LLGridManager::getInstance()->initGrids();
 		LLStartUp::setStartupState( STATE_FETCH_GRID_INFO );
@@ -734,13 +732,13 @@ bool idle_startup()
 #else
 		LLGridManager::getInstance()->initialize(std::string());
 		LLStartUp::setStartupState( STATE_AUDIO_INIT );
-#endif // HAS_OPENSIM_SUPPORT 
+#endif // OPENSIM 
 // </FS:AW optional opensim support>
 	}
 
 	if (STATE_FETCH_GRID_INFO == LLStartUp::getStartupState())
 	{
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 		static LLFrameTimer grid_timer;
 
 		const F32 grid_time = grid_timer.getElapsedTimeF32();
@@ -862,8 +860,22 @@ bool idle_startup()
 		}
 		else if (gSavedSettings.getBOOL("AutoLogin"))  
 		{
-			gRememberPassword = TRUE;
-			gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			// <FS:Ansariel> Option to not save password if using login cmdline switch;
+			//               gLoginHandler.initializeLoginInfo() sets AutoLogin to TRUE,
+			//               so we end up here!
+			//gRememberPassword = TRUE;
+			//gSavedSettings.setBOOL("RememberPassword", TRUE);                                                      
+			if (gSavedSettings.getBOOL("FSLoginDontSavePassword"))
+			{
+				gRememberPassword = FALSE;
+			}
+			else
+			{
+				gRememberPassword = TRUE;
+				gSavedSettings.setBOOL("RememberPassword", TRUE);
+			}
+			// </FS:Ansariel>
+
 			show_connect_box = false;    			
 		}
 		else 
@@ -936,10 +948,13 @@ bool idle_startup()
 			login_show();
 			display_startup();
 			// connect dialog is already shown, so fill in the names
-			if (gUserCredential.notNull())                                                                         
-			{                                                                                                      
-				LLPanelLogin::setFields( gUserCredential );
-			}     
+			if (gUserCredential.notNull())
+			{
+// <FS:CR>
+				//LLPanelLogin::setFields( gUserCredential, gRememberPassword);
+				LLPanelLogin::setFields(gUserCredential);
+// </FS:CR>
+			}
 			display_startup();
 			LLPanelLogin::giveFocus();
 
@@ -1045,7 +1060,13 @@ bool idle_startup()
 		{  
 			userid = gUserCredential->userID();                                                                    
 		}
-		gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		// <FS:Ansariel> Option to not save password if using login cmdline switch
+		//gSavedSettings.setBOOL("RememberPassword", gRememberPassword);                                                 
+		if (!gSavedSettings.getBOOL("FSLoginDontSavePassword"))
+		{
+			gSavedSettings.setBOOL("RememberPassword", gRememberPassword);
+		}
+		// </FS:Ansariel>
 		LL_INFOS("AppInit") << "Attempting login as: " << userid << LL_ENDL;                                           
 //		gDebugInfo["LoginName"] = userid;                                                                              
 // [SL:KB] - Patch: Viewer-CrashReporting | Checked: 2010-11-16 (Catznip-2.6.0a) | Added: Catznip-2.4.0b
@@ -1074,12 +1095,12 @@ bool idle_startup()
 		// create necessary directories
 		// *FIX: these mkdir's should error check
 // <FS:CR> Seperate user directories per grid on OS build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		std::string gridlabel = LLGridManager::getInstance()->getGridLabel();
 		gDirUtilp->setLindenUserDir(userid, gridlabel);
 #else
 		gDirUtilp->setLindenUserDir(userid);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 		LLFile::mkdir(gDirUtilp->getLindenUserDir());
 
@@ -1113,11 +1134,11 @@ bool idle_startup()
 			gDirUtilp->setChatLogsDir(gSavedPerAccountSettings.getString("InstantMessageLogPath"));		
 		}
 // <FS:CR> Seperate user directories per grid on OS build
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		gDirUtilp->setPerAccountChatLogsDir(userid, gridlabel);
 #else
 		gDirUtilp->setPerAccountChatLogsDir(userid);
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>		
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
@@ -1262,11 +1283,11 @@ bool idle_startup()
 		// This call to LLLoginInstance::connect() starts the 
 		// authentication process.
 		login->connect(gUserCredential);
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 // <AW: opensim>
 		LLGridManager::getInstance()->saveGridList();
 // </AW: opensim>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 		LLStartUp::setStartupState( STATE_LOGIN_CURL_UNSTUCK );
 		return FALSE;
 	}
@@ -1678,7 +1699,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 
 		//reset statistics
-		LLViewerStats::getInstance()->resetStats();
+		LLViewerStats::instance().resetStats();
 
 		display_startup();
 		//
@@ -2236,7 +2257,7 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 			llinfos << "gAgentStartLocation : " << gAgentStartLocation << llendl;
 			LLSLURL start_slurl = LLStartUp::getStartSLURL();
 			LL_DEBUGS("AppInit") << "start slurl "<<start_slurl.asString()<<LL_ENDL;
-
+			
 			if (((start_slurl.getType() == LLSLURL::LOCATION) && (gAgentStartLocation == "url")) ||
 				((start_slurl.getType() == LLSLURL::LAST_LOCATION) && (gAgentStartLocation == "last")) ||
 				((start_slurl.getType() == LLSLURL::HOME_LOCATION) && (gAgentStartLocation == "home")))
@@ -2410,13 +2431,13 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		display_startup();
 
 // <FS:AW Disable LSL bridge on opensim>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
-		if (LLGridManager::getInstance()->isInOpenSim())
+#ifdef OPENSIM // <FS:AW optional opensim support/>
+		if (LLGridManager::getInstance()->isInOpenSim()  && !LLGridManager::getInstance()->isInAuroraSim())
 		{
 			LLControlVariable* use_bridge = gSavedSettings.getControl("UseLSLBridge");
 			use_bridge->setValue(LLSD(FALSE), FALSE);
 		}
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#endif // OPENSIM // <FS:AW optional opensim support/>
 // </FS:AW Disable LSL bridge on opensim>
 
 //-TT Client LSL Bridge
@@ -2532,20 +2553,13 @@ void login_show()
 {
 	LL_INFOS("AppInit") << "Initializing Login Screen" << LL_ENDL;
 
-#ifdef LL_RELEASE_FOR_DOWNLOAD
-	BOOL bUseDebugLogin = gSavedSettings.getBOOL("UseDebugLogin");
-#else
-	BOOL bUseDebugLogin = TRUE;
-#endif
 	// Hide the toolbars: may happen to come back here if login fails after login agent but before login in region
 	if (gToolBarView)
 	{
 		gToolBarView->setVisible(FALSE);
 	}
 	
-	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(),
-						bUseDebugLogin || gSavedSettings.getBOOL("SecondLifeEnterprise"),
-						login_callback, NULL );
+	LLPanelLogin::show(	gViewerWindow->getWindowRectScaled(), login_callback, NULL );
 
 	// <FS:PP> "Did you know about Phoenix mode?" notification, showed once per installation
 	if (!gSavedSettings.getBOOL("FSVintageLoginInfo"))
@@ -2632,7 +2646,7 @@ bool login_alert_status(const LLSD& notification, const LLSD& response)
       //      break;
         case 2:     // Teleport
             // Restart the login process, starting at our home locaton
-			LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_HOME));
+	  LLStartUp::setStartSLURL(LLSLURL(LLSLURL::SIM_LOCATION_HOME));
             LLStartUp::setStartupState( STATE_LOGIN_CLEANUP );
             break;
         default:
@@ -3779,7 +3793,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 	
 // <FS:CR> FIRE-8063: Read Aurora web profile url from login data
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	std::string web_profile_url = response["web_profile_url"];
 	if(!web_profile_url.empty())
 	{
@@ -3794,7 +3808,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		gSavedSettings.setString("WebProfileURL", web_profile_url); 
 		LL_INFOS("LLStartup") << "web_profile_url : no web_profile_url answer, we use the default setting for the web : " << web_profile_url << LL_ENDL;
 	}
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR> FIRE-8063: Read Aurora web profile url from login data
 
 	// Default male and female avatars allowing the user to choose their avatar on first login.
@@ -3895,7 +3909,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 
 // <FS:AW opensim currency support>
 	std::string currency = "L$";
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if(response.has("currency"))
 	{
 		currency = response["currency"].asString();
@@ -3928,7 +3942,7 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << llendl;
 	}
 // </FS:AW  opensim destinations and avatar picker>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system

@@ -547,7 +547,7 @@ void LLNavigationBar::onLocationSelection()
 	  return;
 	}
 
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW hypergrid support >
 	std::string grid = slurl.getGrid();
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
@@ -576,7 +576,7 @@ void LLNavigationBar::onLocationSelection()
 		region_name = gatekeeper + ":" + region_name;
 	}
 // </FS:AW hypergrid support >
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 	// Resolve the region name to its global coordinates.
 	// If resolution succeeds we'll teleport.

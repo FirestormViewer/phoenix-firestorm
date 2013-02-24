@@ -99,7 +99,7 @@
 		<button name="BeamColor_refresh" label="Aktualisieren" tool_tip="Aktualisiert die Liste mit Farbeinstellungen."/>
 		<slider name="FSMaxBeamsPerSecond" label="Updates/Sek:" tool_tip="Definiert wie viele Updates pro Sekunden gesendet werden sollen. [Standard: 40]"/>
 		<check_box label="Auswahlstrahl aktivieren" name="SLPartBeam"/>
-		<check_box label="SL-Partikel-Chat aktivieren" name="FSParticleChat"/>
+		<check_box label="Auswahlinformationen an Chat senden" name="FSParticleChat" tool_tip="Sendet Informationen über die Auswahl (Start/Stop sowie globale Position) an Chat-Kanal 9000."/>
 
 		<combo_box name="FSBeamShape_combo" tool_tip="Erlaubt die Auswahl der Form für den Auswahlstrahl."/>
 		<button name="delete_beam" label="Löschen" tool_tip="Die aktuelle Form löschen."/>

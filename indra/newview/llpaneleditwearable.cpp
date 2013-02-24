@@ -1190,7 +1190,7 @@ void LLPanelEditWearable::showWearable(LLViewerWearable* wearable, BOOL show, BO
 
 void LLPanelEditWearable::showDefaultSubpart()
 {
-        changeCamera(3);
+        changeCamera(0);
 }
 
 void LLPanelEditWearable::onTabExpandedCollapsed(const LLSD& param, U8 index)

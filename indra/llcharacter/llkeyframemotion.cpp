@@ -44,7 +44,7 @@
 #include "message.h"
 #include "lltimer.h"
 
-#include <ndexceptions.h> // <FS:ND/> For nd::exceptions::xran
+#include "nd/ndexceptions.h" // <FS:ND/> For nd::exceptions::xran
 
 //-----------------------------------------------------------------------------
 // Static Definitions

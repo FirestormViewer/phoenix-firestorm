@@ -27,7 +27,7 @@
 #ifndef LL_LLDATAPACKER_H 
 #define LL_LLDATAPACKER_H
 
-#include "ndexceptions.h" // <FS:ND/> For ndxran
+#include "nd/ndexceptions.h" // <FS:ND/> For ndxran
 
 class LLColor4;
 class LLColor4U;

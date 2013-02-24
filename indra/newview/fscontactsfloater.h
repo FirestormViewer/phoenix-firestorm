@@ -1,10 +1,10 @@
 /** 
  * @file fscontactsfloater.h
- * @brief 
+ * @brief Legacy contacts floater header file
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2011, The Phoenix Firestorm Project, Inc.
+ * Copyright (C) 2013, The Phoenix Firestorm Project, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,9 +27,6 @@
  
 #ifndef LL_FSCONTACTSFLOATER_H
 #define LL_FSCONTACTSFLOATER_H
-
-#include <map>
-#include <vector>
 
 #include "llfloater.h"
 #include "lleventtimer.h"
@@ -131,7 +128,8 @@ private:
 	void					onGroupCreateButtonClicked();
 	void					onGroupSearchButtonClicked();
 	void					onGroupTitlesButtonClicked();
-	void					updateButtons();
+	void					onGroupInviteButtonClicked();
+	void					updateGroupButtons();
 
 	LLTabContainer*			mTabContainer;
 

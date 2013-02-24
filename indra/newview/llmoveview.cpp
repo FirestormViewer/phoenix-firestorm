@@ -749,33 +749,42 @@ void LLPanelStandStopFlying::onStopFlyingButtonClick()
  */
 void LLPanelStandStopFlying::updatePosition()
 {
-	// <FS:Zi> Keep the Stand & Stop Flying panel always in the same position,
-// 	if (mAttached) return;
-// 
-// 	S32 y_pos = 0;
-// 	S32 bottom_tb_center = 0;
-// 	if (LLToolBar* toolbar_bottom = gToolBarView->getChild<LLToolBar>("toolbar_bottom"))
-// 	{
-// 		y_pos = toolbar_bottom->getRect().getHeight();
-// 		bottom_tb_center = toolbar_bottom->getRect().getCenterX();
-// 	}
-// 
-// 	S32 left_tb_width = 0;
-// 	if (LLToolBar* toolbar_left = gToolBarView->getChild<LLToolBar>("toolbar_left"))
-// 	{
-// 		left_tb_width = toolbar_left->getRect().getWidth();
-// 	}
-// 
-// 	if(LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container"))
-// 	{
-// 		panel_ssf_container->setOrigin(0, y_pos);
-// 	}
-// 
-// 	S32 x_pos = bottom_tb_center-getRect().getWidth()/2 - left_tb_width;
-// 
-// 	setOrigin( x_pos, 0);
+// <FS:Zi> Keep the Stand & Stop Flying panel always in the same position,
+//	if (mAttached) return;
+//
+//	S32 y_pos = 0;
+//	S32 bottom_tb_center = 0;
+//	if (LLToolBar* toolbar_bottom = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_BOTTOM))
+//	{
+//		y_pos = toolbar_bottom->getRect().getHeight();
+//		bottom_tb_center = toolbar_bottom->getRect().getCenterX();
+//	}
+//
+//	S32 left_tb_width = 0;
+//	if (LLToolBar* toolbar_left = gToolBarView->getToolbar(LLToolBarView::TOOLBAR_LEFT))
+//	{
+//		left_tb_width = toolbar_left->getRect().getWidth();
+//	}
+//
+//	if (!mStateManagementButtons.get())
+//	{
+//		LLPanel* panel_ssf_container = getRootView()->getChild<LLPanel>("state_management_buttons_container");
+//		if (panel_ssf_container)
+//		{
+//			mStateManagementButtons = panel_ssf_container->getHandle();
+//		}
+//	}
+//
+//	if(LLPanel* panel_ssf_container = mStateManagementButtons.get())
+//	{
+//		panel_ssf_container->setOrigin(0, y_pos);
+//	}
+//
+//	S32 x_pos = bottom_tb_center-getRect().getWidth()/2 - left_tb_width;
+//
+//	setOrigin( x_pos, 0);
 	return;
-	// </FS:Zi>
+// </FS:Zi>
 }
 
 // EOF

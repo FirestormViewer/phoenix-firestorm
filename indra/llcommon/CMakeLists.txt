@@ -53,7 +53,7 @@ set(llcommon_SOURCE_FILES
     lleventfilter.cpp
     llevents.cpp
     lleventtimer.cpp
-    llfasttimer_class.cpp
+    llfasttimer.cpp
     llfile.cpp
     llfindlocale.cpp
     llfixedbuffer.cpp
@@ -71,7 +71,6 @@ set(llcommon_SOURCE_FILES
     llmd5.cpp
     llmemory.cpp
     llmemorystream.cpp
-    llmemtype.cpp
     llmetrics.cpp
     llmetricperformancetester.cpp
     llmortician.cpp
@@ -168,7 +167,6 @@ set(llcommon_HEADER_FILES
     lleventemitter.h
     llextendedstatus.h
     llfasttimer.h
-    llfasttimer_class.h
     llfile.h
     llfindlocale.h
     llfixedbuffer.h
@@ -197,7 +195,6 @@ set(llcommon_HEADER_FILES
     llmd5.h
     llmemory.h
     llmemorystream.h
-    llmemtype.h
     llmetrics.h
     llmetricperformancetester.h
     llmortician.h
@@ -269,8 +266,9 @@ set(llcommon_HEADER_FILES
     )
 
 # <FS:ND> Add all nd* files. memory pool, intrinsics, ...
-set(llcommon_ND_SOURCE_FILES ndallocators.cpp ndintrin.cpp ndmemorypool.cpp ndexceptions.cpp ndmallocstats.cpp ndfile.cpp )
-set(llcommon_ND_HEADER_FILES ndintrin.h ndlocks.h ndmemory.h ndmemorypool.h ndpooldefines.h ndexceptions.h ndmallocstats.h ndstackwalk.h ndcallstack.h ndobjectpool.h ndstlallocator.h ndfile.h )
+
+FILE( GLOB llcommon_ND_SOURCE_FILES nd/nd*.cpp )
+FILE( GLOB llcommon_ND_HEADER_FILES nd/nd*.h )
 
 SOURCE_GROUP( nd FILES ${llcommon_ND_SOURCE_FILES} ${llcommon_ND_HEADER_FILES} )
 
@@ -280,11 +278,11 @@ list(APPEND llcommon_HEADER_FILES ${llcommon_ND_HEADER_FILES} )
 # </FS:ND>
 
 # <FS:CR> Add OSSL constants for OpenSim builds
-if (HAS_OPENSIM_SUPPORT)
+if (OPENSIM)
     LIST(APPEND llcommon_HEADER_FILES
     osslconstants.h
     )
-endif (HAS_OPENSIM_SUPPORT)
+endif (OPENSIM)
 # </FS:CR>
 
 set_source_files_properties(${llcommon_HEADER_FILES}

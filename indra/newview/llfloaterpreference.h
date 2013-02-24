@@ -329,7 +329,7 @@ public:
 };
 // [/SL:KB]
 
-#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 // <FS:AW  opensim preferences>
 class LLPanelPreferenceOpensim : public LLPanelPreference
 {
@@ -358,7 +358,7 @@ protected:
 	LLScrollListCtrl* mGridListControl;
 };
 // </FS:AW  opensim preferences>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 class LLFloaterPreferenceProxy : public LLFloater
 {

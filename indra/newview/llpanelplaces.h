@@ -81,6 +81,9 @@ public:
 
 	/*virtual*/ S32 notifyParent(const LLSD& info);
 
+	// <FS:Ansariel> Reset (clear) filter
+	void resetFilter();
+
 private:
 	void onLandmarkLoaded(LLLandmark* landmark);
 	void onFilterEdit(const std::string& search_string, bool force_filter);

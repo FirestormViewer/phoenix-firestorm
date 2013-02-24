@@ -72,6 +72,8 @@
 #include "llpanellogin.h"
 #include "llpaneltopinfobar.h"
 #include "llspellcheck.h"
+#include "llslurl.h"
+#include "llstartup.h"
 #include "llupdaterservice.h"
 
 // NaCl - Antispam Registry
@@ -81,6 +83,10 @@
 #include "llnetmap.h"
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"
+#include "llfloaterreg.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llpanelplaces.h"
+#include "fsfloaterteleporthistory.h"
 
 // Third party library includes
 #include <boost/algorithm/string.hpp>
@@ -146,7 +152,10 @@ static bool handleTerrainDetailChanged(const LLSD& newvalue)
 }
 
 
-static bool handleSetShaderChanged(const LLSD& newvalue)
+// <FS:Ansariel> Expose handleSetShaderChanged()
+//static bool handleSetShaderChanged(const LLSD& newvalue)
+bool handleSetShaderChanged(const LLSD& newvalue)
+// </FS:Ansariel>
 {
 	// changing shader level may invalidate existing cached bump maps, as the shader type determines the format of the bump map it expects - clear and repopulate the bump cache
 	gBumpImageList.destroyGL();
@@ -564,6 +573,20 @@ bool handleForceShowGrid(const LLSD& newvalue)
 	return true;
 }
 
+bool handleLoginLocationChanged()
+{
+	/*
+	 * This connects the default preference setting to the state of the login
+	 * panel if it is displayed; if you open the preferences panel before
+	 * logging in, and change the default login location there, the login
+	 * panel immediately changes to match your new preference.
+	 */
+	std::string new_login_location = gSavedSettings.getString("LoginLocation");
+	LL_DEBUGS("AppInit")<<new_login_location<<LL_ENDL;
+	LLStartUp::setStartSLURL(LLSLURL(new_login_location));
+	return true;
+}
+
 bool handleSpellCheckChanged()
 {
 	if (gSavedSettings.getBOOL("SpellCheck"))
@@ -670,6 +693,21 @@ static void handleNetMapDoubleClickActionChanged()
 }
 // </FS:Ansariel> Synchronize tooltips throughout instances
 
+// <FS:Ansariel> Clear places / teleport history search filter
+static void handleUseStandaloneTeleportHistoryFloaterChanged()
+{
+	LLFloaterSidePanelContainer* places = LLFloaterReg::findTypedInstance<LLFloaterSidePanelContainer>("places");
+	if (places)
+	{
+		places->findChild<LLPanelPlaces>("main_panel")->resetFilter();
+	}
+	FSFloaterTeleportHistory* tphistory = LLFloaterReg::findTypedInstance<FSFloaterTeleportHistory>("fs_teleporthistory");
+	if (tphistory)
+	{
+		tphistory->resetFilter();
+	}
+}
+// </FS:Ansariel> Clear places / teleport history search filter
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -831,6 +869,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderTransparentWater")->getSignal()->connect(boost::bind(&handleRenderTransparentWaterChanged, _2));
 	gSavedSettings.getControl("SpellCheck")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
 	gSavedSettings.getControl("SpellCheckDictionary")->getSignal()->connect(boost::bind(&handleSpellCheckChanged));
+	gSavedSettings.getControl("LoginLocation")->getSignal()->connect(boost::bind(&handleLoginLocationChanged));
 // [SL:KB] - Patch: UI-DndButtonCommit | Checked: 2011-06-19 (Catznip-2.6.0c) | Added: Catznip-2.6.0c
 	gSavedSettings.getControl("DragAndDropCommitDelay")->getSignal()->connect(boost::bind(&handleSettingF32Change, _2, &DELAY_DRAG_HOVER_COMMIT));
 	gSavedPerAccountSettings.getControl("AvatarZOffset")->getSignal()->connect(boost::bind(&handleAvatarZOffsetChanged, _2)); // ## Zi: Moved Avatar Z offset from RLVa to here
@@ -847,6 +886,12 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Synchronize tooltips throughout instances
 	gSavedSettings.getControl("FSNetMapDoubleClickAction")->getSignal()->connect(boost::bind(&handleNetMapDoubleClickActionChanged));
+
+	// <FS:Ansariel> Clear places / teleport history search filter
+	gSavedSettings.getControl("FSUseStandaloneTeleportHistoryFloater")->getSignal()->connect(boost::bind(&handleUseStandaloneTeleportHistoryFloaterChanged));
+
+	// <FS:Ansariel> Tofu's SSR
+	gSavedSettings.getControl("FSRenderSSR")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 }
 
 #if TEST_CACHED_CONTROL

@@ -12,6 +12,7 @@
 	<string name="SECOND_LIFE_GRID">Second Life Grid</string>
 	<string name="SUPPORT_SITE">Second Life Support Portal</string>
 	<string name="DOWNLOAD_URL">http://www.firestormviewer.org/downloads</string>
+	<string name="CURRENT_GRID"/> <!-- Will be set in fsgridhandler.cpp / llviewernetwork.cpp -->
 
 	<!-- starting up -->
 	<string name="StartupDetectingHardware">Detecting hardware...</string>
@@ -2112,7 +2113,7 @@ Returns a list of position vectors indicating pathfinding waypoints between posi
 <string name="LSLTipText_llSetMemoryLimit" translate="false">
 integer llSetMemoryLimit(integer limit)
 Request limit bytes to be reserved for this script.
-Returns a success/failure flag (STATUS_OK when sucessful, another of the STATUS_* flags on failure) for whether the memory limit was set.
+Returns a success/failure flag (STATUS_OK when successful, another of the STATUS_* flags on failure) for whether the memory limit was set.
 Only relevant for Mono-compiled scripts.
 </string>
 <string name="LSLTipText_llGetMemoryLimit" translate="false">
@@ -4294,7 +4295,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
   <string name="LocationCtrlAdultIconTooltip">Adult Region</string>
   <string name="LocationCtrlModerateIconTooltip">Moderate Region</string>
   <string name="LocationCtrlGeneralIconTooltip">General Region</string>
-  <string name="LocationCtrlSeeAVsTooltip">Avatars visible and chat allowed outside of this parcel</string>
+  <string name="LocationCtrlSeeAVsTooltip">Avatars inside this parcel cannot be seen or heard by avatars outside this parcel</string>
   <string name="LocationCtrlPathfindingDirtyTooltip">Objects that move may not behave correctly in this region until the region is rebaked.</string>
   <string name="LocationCtrlPathfindingDisabledTooltip">Dynamic pathfinding is not enabled on this region.</string>
   <!-- Strings used by the (currently Linux) auto-updater app -->
@@ -4618,8 +4619,8 @@ Abuse Report</string>
   <string name="server_is_down">
 	Despite our best efforts, something unexpected has gone wrong.
 
-	Please check status.secondlifegrid.net to see if there is a known problem with the service.
-        If you continue to experience problems, please check your network and firewall setup.
+Please check status.secondlifegrid.net to see if there is a known problem with the service.
+If you continue to experience problems, please check your network and firewall setup.
   </string>
 
   <!-- overriding datetime formating.
@@ -4842,6 +4843,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Phototools_View_Label">Phototools camera</string>
   <string name="Command_Contact_Sets_Label">Contact sets</string>
   <string name="Command_Mouselook_Label">Mouselook</string>
+  <string name="Command_Landmark_Here_Label">Create Landmark</string>
   
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -4885,6 +4887,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Phototools_View_Tooltip">Advanced phototools camera controls</string>
   <string name="Command_Contact_Sets_Tooltip">Opens contact sets (CTRL+ALT+SHIFT+C)</string>
   <string name="Command_Mouselook_Tooltip">Enter mouselook mode (M)</string>
+  <string name="Command_Landmark_Here_Tooltip">Creates a landmark at your current position</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
@@ -4975,7 +4978,7 @@ Try enclosing path to the editor with double quotes.
   <string name="Collision_PhysicalObject">[NAME] hit you with a physical object.</string>
   <string name="Collision_UnknownType">[NAME] caused a collision of unknown type.</string>
 
-  <string name="BusyResponse">busy reponse</string>
+  <string name="BusyResponse">busy response</string>
   
   <string name="TeleportMaturityExceeded">The Resident cannot visit this region.</string>
 

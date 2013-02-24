@@ -73,6 +73,7 @@
 			<combo_box.item label="Kaufen" name="Buyobject"/>
 			<combo_box.item label="Bezahlen" name="Payobject"/>
 			<combo_box.item label="Öffnen" name="Open"/>
+			<combo_box.item label="Zoomen" name="Zoom"/>
 		</combo_box>
 		<panel name="perms_inv">
 			<text name="perm_modify">

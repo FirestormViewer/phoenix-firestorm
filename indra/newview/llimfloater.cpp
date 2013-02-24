@@ -275,7 +275,7 @@ void LLIMFloater::sendMsg()
 				if (utf8_text.find("/me ") == 0 || utf8_text.find("/me'") == 0)
 				{
 					utf8_text.insert(4,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 					" os" +
 #endif
 					") "));
@@ -283,7 +283,7 @@ void LLIMFloater::sendMsg()
 				else
 				{
 					utf8_text.insert(0,("(FS " + LLVersionInfo::getShortVersion() + skinIndicator +
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 					" os" +
 #endif
 					") "));
@@ -1141,7 +1141,7 @@ bool LLIMFloater::toggle(const LLUUID& session_id)
 			floater->setVisible(false);
 			return false;
 		}
-		else if(floater && (!floater->isDocked() || floater->getVisible() && !floater->hasFocus()))
+		else if(floater && (!floater->isDocked() || (floater->getVisible() && !floater->hasFocus())))
 		{
 			floater->setVisible(TRUE);
 			floater->setFocus(TRUE);

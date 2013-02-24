@@ -56,10 +56,7 @@ static const std::string PARCEL_OWNERSHIP_STATUS_STRING[LLParcel::OS_COUNT+1] =
 // * Web site "create event" tools
 // DO NOT DELETE ITEMS FROM THIS LIST WITHOUT DEEPLY UNDERSTANDING WHAT YOU'RE DOING.
 //
-// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-//static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT] =
-static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT + 1] =
-// </FS:Ansariel>
+static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT] =
 {
     "none",
     "linden",
@@ -75,11 +72,7 @@ static const std::string PARCEL_CATEGORY_STRING[LLParcel::C_COUNT + 1] =
     "shopping",
     "stage",
     "other",
-	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-	//"rental"
-	"rental",
-	"any"
-	// </FS:Ansariel>
+	"rental"
 };
 static const std::string PARCEL_CATEGORY_UI_STRING[LLParcel::C_COUNT + 1] =
 {
@@ -212,7 +205,7 @@ void LLParcel::init(const LLUUID &owner_id,
 	mAABBMin.setVec(SOME_BIG_NUMBER, SOME_BIG_NUMBER, SOME_BIG_NUMBER);
 	mAABBMax.setVec(SOME_BIG_NEG_NUMBER, SOME_BIG_NEG_NUMBER, SOME_BIG_NEG_NUMBER);
 
-	mLocalID = 0;
+	mLocalID = INVALID_PARCEL_ID;
 
 	//mSimWidePrimCorrection = 0;
 	setMaxPrimCapacity((S32)(sim_object_limit * area / (F32)(REGION_WIDTH_METERS * REGION_WIDTH_METERS)));
@@ -1269,13 +1262,6 @@ const std::string& category_to_string(LLParcel::ECategory category)
     {
         index = category;
     }
-	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-    else
-    {
-        // C_ANY = -1 , but the "Any" string is at the end of the list
-        index = ((S32) LLParcel::C_COUNT);
-    }
-	// </FS:Ansariel>
     return PARCEL_CATEGORY_STRING[index];
 }
 
@@ -1296,24 +1282,11 @@ const std::string& category_to_ui_string(LLParcel::ECategory category)
 
 LLParcel::ECategory category_string_to_category(const std::string& s)
 {
-	// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-    //for(S32 i = 0; i < LLParcel::C_COUNT; ++i)
-	for(S32 i = 0; i < LLParcel::C_COUNT + 1; ++i)
-	// </FS:Ansariel>
+    for(S32 i = 0; i < LLParcel::C_COUNT; ++i)
     {
         if(s == PARCEL_CATEGORY_STRING[i])
         {
-			// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
-            //return (LLParcel::ECategory)i;
-			if (i == LLParcel::C_COUNT)
-			{
-				return LLParcel::C_ANY;
-			}
-			else
-			{
-				return (LLParcel::ECategory)i;
-			}
-			// </FS:Ansariel>
+            return (LLParcel::ECategory)i;
         }
     }
     llwarns << "Parcel category outside of possibilities " << s << llendl;

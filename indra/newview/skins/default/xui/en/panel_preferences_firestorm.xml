@@ -744,9 +744,10 @@
          follows="left|top"
          height="16"
          initial_value="true"
-         label="SL Particle Chat"
+         label="Send selection data to chat"
          left="15"
          name="FSParticleChat"
+         tool_tip="Sends selection data (selection start/stop and global position) to chat channel 9000."
          width="250"
          control_name="FSParticleChat" />
 

@@ -39,7 +39,7 @@
          layout="topleft"
          left="10"
          name="UI Size:"
-         top_pad="10"
+         top_pad="8"
          width="200">
             UI Scaling (may have side effects):
         </text>
@@ -61,7 +61,7 @@
         <text
          type="string"
          left="5"
-         top_pad="7"
+         top_pad="5"
          length="1"
          follows="left|top"
          height="12"
@@ -80,7 +80,7 @@
          left_delta="10"
          name="ShowHoverTips"
          tool_tip="Set this to show hover tips on avatars and some other things - set this one first (CTRL+SHIFT+T)"
-         top_pad="12"
+         top_pad="5"
          width="256" />
         <check_box
          control_name="ShowAllObjectHoverTip"
@@ -113,7 +113,7 @@
          layout="topleft"
          left="275"
          name="tooltip_textbox"
-         top_pad="-76"
+         top_pad="-70"
          width="200">
            Hovertip Trigger Delays:
         </text>
@@ -133,7 +133,7 @@
          min_val="0"
          name="ToolTipDelay_slider"
          tool_tip="Delay after that tooltips for user interface elements such as buttons are shown. (Default: 0.7)"
-         top_pad="8"
+         top_pad="1"
          width="200" />
         <text
          type="string"
@@ -213,9 +213,9 @@
          name="FSAdvancedTooltips"
          label="Show extended information in hovertips (classic Phoenix style)"
          layout="topleft"
-         top_pad="4"
+         top_pad="5"
          left="15"
-         height="20"
+         height="16"
          width="350" />
 
         <check_box
@@ -223,8 +223,8 @@
          name="FSShowGroupTitleInTooltip"
          label="Show avatar group titles in hovertips"
          layout="topleft"
-         top_pad="0"
-         height="20"
+         top_pad="2"
+         height="16"
          width="350" />		
 
       <check_box
@@ -236,7 +236,7 @@
        left="5"
        name="UsePieMenu"
        tool_tip="Use the classic V1.x circular menu instead of the rectangular context menus when right clicking on land, avatars, objects or attachments."
-       top_pad="8"
+       top_pad="5"
        width="256" />
 
       <check_box
@@ -303,6 +303,40 @@
        left="5"
        width="270"
        tool_tip="If enabled, the list of blocked/muted residents and objects will open in a separate window."/>
+
+      <text
+       type="string"
+       left="5"
+       top_pad="2"
+       width="140"
+       follows="left|top"
+       height="16"
+       layout="topleft"
+       name="ExtendedTeleportHistoryLabel">
+        Extend teleport history by:
+      </text>
+	  
+      <check_box
+       top_delta="0"
+       control_name="FSTeleportHistoryShowPosition"
+       follows="left|top"
+       height="16"
+       name="FSTeleportHistoryShowPosition"
+       label="Position"
+       left_pad="5"
+       width="75"
+       tool_tip="If enabled, the local coordinates within the region will be shown in the teleport history."/>
+
+      <check_box
+       top_delta="0"
+       control_name="FSTeleportHistoryShowDate"
+       follows="left|top"
+       height="16"
+       name="FSTeleportHistoryShowDate"
+       label="Date"
+       left_pad="5"
+       width="75"
+       tool_tip="If enabled, the date and time of the teleport will be shown in the teleport history."/>
 
       <text
        type="string"

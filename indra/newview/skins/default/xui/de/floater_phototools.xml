@@ -10,7 +10,7 @@
 			</panel>
 
 			<panel name="P_WL_Settings">
-				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Deferred Rendering, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird."/>
+				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Erweitertes Beleuchtungsmodell, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird."/>
 				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
 			</panel>
 
@@ -71,16 +71,16 @@
 			</panel>
 		
 			<panel name="P_R_Res">
-				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest. Falls eine Qualität von „Sehr gut“ oder höher verwendet wird, muss „Deferred Rendering“ aktiviert sein (siehe Reiter „Licht“).">
+				<text name="T_R_Res" tool_tip="Legt die Qualität der Wasserreflektionen fest. Falls eine Qualität von „Sehr gut“ oder höher verwendet wird, muss „Erweitertes Beleuchtungsmodell“ aktiviert sein (siehe Reiter „Licht“).">
 					Qualität
 				</text>
 				<combo_box name="ReflectionRescombo">
 					<combo_box.item label="Annehmbar" name="0"/>
 					<combo_box.item label="Gut" name="1"/>
-					<combo_box.item label="Sehr gut                   - HINWEIS: „Deferred Rendering“ muss aktiviert sein (Reiter „Licht“)" name="2"/>
-					<combo_box.item label="Exzellent                  - HINWEIS: „Deferred Rendering“ muss aktiviert sein (Reiter „Licht“)" name="3"/>
-					<combo_box.item label="Überragend             - HINWEIS: „Deferred Rendering“ muss aktiviert sein (Reiter „Licht“)" name="4"/>
-					<combo_box.item label="Lebensecht             - HINWEIS: „Deferred Rendering“ muss aktiviert sein (Reiter „Licht“)" name="5"/>
+					<combo_box.item label="Sehr gut                   - HINWEIS: „Erweitertes Beleuchtungsmodell“ muss aktiviert sein (Reiter „Licht“)" name="2"/>
+					<combo_box.item label="Exzellent                  - HINWEIS: „Erweitertes Beleuchtungsmodell“ muss aktiviert sein (Reiter „Licht“)" name="3"/>
+					<combo_box.item label="Überragend             - HINWEIS: „Erweitertes Beleuchtungsmodell“ muss aktiviert sein (Reiter „Licht“)" name="4"/>
+					<combo_box.item label="Lebensecht             - HINWEIS: „Erweitertes Beleuchtungsmodell“ muss aktiviert sein (Reiter „Licht“)" name="5"/>
 				</combo_box>
 				<check_box label="Transparentes Wasser" name="TransparentWater" tool_tip="Stellt Wasser transparent dar. Falls diese Einstellung deaktiert ist, wird Wasser undurchsichtig und mit einer einfachen Textur versehen dargestellt."/>
 			</panel>
@@ -94,7 +94,7 @@
 			</panel>
 
 			<panel name="P_L_S_Settings">
-				<check_box label="Deferred Rendering aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
+				<check_box label="Erweitertes Beleuchtungsmodell aktivieren" name="RenderDeferred" tool_tip="Diese Einstellung aktiviert Schatten von Sonne und Mond sowie anderen Lichtquellen. Sie ist Voraussetzung für Schärfentiefe und andere Grafik-Features. Falls diese Einstellung nicht aktiviert werden kann oder keinen Effekt hat, bitte prüfen, ob „Einfache Shader“ und „Atmosphären-Shader“ aktiviert sind (siehe Reiter „WL“)."/>
 				<check_box label="Alle Lokalen Lichtquellen aktivieren" name="LocalLights" tool_tip="Diese Einstellung aktiviert alle lokalen Lichtquellen innerhalb der Welt. Wird sie deaktiviert, wird weiterhin das von Sonne und Mond ausgestrahlte Licht angezeigt. Nützlich, falls lokale Lichtquellen nicht und nur noch von Sonne und Mond angezeigt werden soll."/>
 				<check_box label="Angehängte Lichter aktivieren (Facelights)" name="Render Attached Lights" tool_tip="Diese Einstellung aktiviert alle Lichter wie zum Beispiel Facelights, die von Avataren getragen werden. Nützlich, falls Facelights deaktiviert werden sollen."/>
 			</panel>
@@ -191,7 +191,7 @@
 			</panel>
 
 			<panel name="P_DoF_Settings">
-				<check_box label="Schärfentiefe aktivieren" name="UseDepthofField" tool_tip="Diese Einstellung aktiviert die Schärfentiefe, die die Ausdehnung des Bildausschnitts festlegt, der noch scharf dargestellt wird. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu erhöhen. Falls diese Funktion nicht aktiviert werden kann oder kein Effekt sichtbar ist, muss „Deferred Rendering“ auf dem Reiter „Licht“ aktiviert werden."/>
+				<check_box label="Schärfentiefe aktivieren" name="UseDepthofField" tool_tip="Diese Einstellung aktiviert die Schärfentiefe, die die Ausdehnung des Bildausschnitts festlegt, der noch scharf dargestellt wird. Falls diese Funktion nicht benötigt wird, sollte sie deaktiviert werden, um die Framerate zu erhöhen. Falls diese Funktion nicht aktiviert werden kann oder kein Effekt sichtbar ist, muss „Erweitertes Beleuchtungsmodell“ auf dem Reiter „Licht“ aktiviert werden."/>
 				<check_box label="Aktuelles Kamera-Sichtfeld (FOV) anzeigen" name="MIC_Show_FOV" tool_tip="Zeigt das aktuelle vertikale Sichtfeld der Kamera an. Im Viewer ist es wie im echten Leben möglich, die Brennweite der Kameralinse zu verändern. Je kleiner der Sichtbereich, desto größer die Brennweite. Eine 50mm-Linse hat ein Sichtfeld von 27.0 Grad. Siehe auch http://de.wikipedia.org/wiki/Bildwinkel für weitergehende Informationen. ACHTUNG: DIESE EINSTELLUNG SOLLTE VOR DEM FOTOGRAFIEREN AUSGESCHALTET WERDEN, DA SIE SONST AUF DEM BILD ERSCHEINT!"/>
 			</panel>
 

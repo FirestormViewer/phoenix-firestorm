@@ -86,7 +86,11 @@ LLToolPlacer::LLToolPlacer()
 BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, S32* hit_face, 
 							 BOOL* b_hit_land, LLVector3* ray_start_region, LLVector3* ray_end_region, LLViewerRegion** region )
 {
-	F32 max_dist_from_camera = gSavedSettings.getF32( "MaxSelectDistance" ) - 1.f;
+	// <FS:Ansariel> Performance tweak and selection fix
+	static LLCachedControl<bool> limitSelectDistance(gSavedSettings, "LimitSelectDistance");
+	static LLCachedControl<F32> max_dist_from_camera(gSavedSettings, "MaxSelectDistance");
+	//F32 max_dist_from_camera = gSavedSettings.getF32( "MaxSelectDistance" ) - 1.f;
+	// </FS:Ansariel>
 
 	// Viewer-side pick to find the right sim to create the object on.  
 	// First find the surface the object will be created on.
@@ -127,8 +131,12 @@ BOOL LLToolPlacer::raycastForNewObjPos( S32 x, S32 y, LLViewerObject** hit_obj, 
 
 	// Make sure the surface isn't too far away.
 	LLVector3d ray_start_global = gAgentCamera.getCameraPositionGlobal();
-	F32 dist_to_surface_sq = (F32)((surface_pos_global - ray_start_global).magVecSquared());
-	if( dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	// <FS:Ansariel> Performance tweak and selection fix
+	//F32 dist_to_surface_sq = (F32)((surface_pos_global - ray_start_global).magVecSquared());
+	//if( dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	F32 dist_to_surface_sq = (F32)((surface_pos_global - gAgent.getPositionGlobal()).magVecSquared());
+	if(limitSelectDistance && dist_to_surface_sq > (max_dist_from_camera * max_dist_from_camera) )
+	// </FS:Ansariel>
 	{
 		return FALSE;
 	}

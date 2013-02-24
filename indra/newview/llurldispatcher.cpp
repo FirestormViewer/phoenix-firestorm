@@ -158,7 +158,7 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 // 	bool handled = LLCommandDispatcher::dispatch(
 // 			slurl.getAppCmd(), slurl.getAppPath(), query_map, web, nav_type, trusted_browser);
 	LLSD path;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	if ("teleport" == slurl.getAppCmd())
 	{
 		path = LLSD::emptyArray();
@@ -169,7 +169,7 @@ bool LLURLDispatcherImpl::dispatchApp(const LLSLURL& slurl,
 		}
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		path = slurl.getAppPath();
 	}
@@ -210,7 +210,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 // 									  LLURLDispatcherImpl::regionNameCallback,
 // 									  slurl.getSLURLString(),
 	LLSLURL hyper = slurl;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	std::string grid = slurl.getGrid();
 	std::string current_grid = LLGridManager::getInstance()->getGrid();
 
@@ -239,7 +239,7 @@ bool LLURLDispatcherImpl::dispatchRegion(const LLSLURL& slurl, const std::string
 		hyper = LLSLURL(gatekeeper + ":" + slurl.getRegion(), slurl.getPosition(), true);
 	}
 
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 // </FS:AW optional opensim support>
 	// Request a region handle by name
 	LLWorldMapMessage::getInstance()->sendNamedRegionRequest(hyper.getRegion(),
@@ -264,7 +264,7 @@ void LLURLDispatcherImpl::regionNameCallback(U64 region_handle, const LLSLURL& s
 void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL& slurl, const LLUUID& snapshot_id, bool teleport)
 {
  // <FS:AW optional opensim support>
-#ifndef HAS_OPENSIM_SUPPORT
+#ifndef OPENSIM
   // we can't teleport cross grid at this point
 	if(   LLGridManager::getInstance()->getGrid(slurl.getGrid())
 	   != LLGridManager::getInstance()->getGrid())
@@ -277,7 +277,7 @@ void LLURLDispatcherImpl::regionHandleCallback(U64 region_handle, const LLSLURL&
 		return;
 	}
 
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:AW optional opensim support>
 
 	LLVector3d global_pos = from_region_handle(region_handle);
@@ -332,7 +332,7 @@ public:
 		// a global position, and teleport to it
 		if (tokens.size() < 1) return false;
  // <FS:AW optional opensim support>
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		LLSLURL slurl(tokens, true);
 
 		std::string grid = slurl.getGrid();
@@ -373,7 +373,7 @@ public:
 			LLURLDispatcherImpl::regionHandleCallback,
 			LLSLURL(dest).getSLURLString(),
 			true);	// teleport
-#else // HAS_OPENSIM_SUPPORT
+#else // OPENSIM
 		LLVector3 coords(128, 128, 0);
 		if (tokens.size() <= 4)
 		{
@@ -390,7 +390,7 @@ public:
  			LLURLDispatcherImpl::regionHandleCallback,
 			LLSLURL(region_name, coords).getSLURLString(),
  			true);	// teleport
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:AW optional opensim support>
 
 		return true;

@@ -32,7 +32,7 @@
 #define SECOND_LIFE_BETA_LABEL "Second Life Beta"
 
 // <FS:AW optional opensim support>
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 #include "fsgridhandler.h"
 #else
 // </FS:AW optional opensim support>
@@ -237,7 +237,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
 	bool mIsInProductionGrid;
 };
 
-#endif//HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 const S32 MAC_ADDRESS_BYTES = 6;
 

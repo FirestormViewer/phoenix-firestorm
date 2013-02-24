@@ -1,10 +1,10 @@
 /** 
- * @file 
- * @brief 
+ * @file fscontactsfloater.cpp
+ * @brief Legacy contacts floater implementation
  *
  * $LicenseInfo:firstyear=2011&license=fsviewerlgpl$
  * Phoenix Firestorm Viewer Source Code
- * Copyright (C) 2011, The Phoenix Firestorm Project, Inc.
+ * Copyright (C) 2013, The Phoenix Firestorm Project, Inc.
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,21 +33,19 @@
 #include "llagent.h"
 #include "llavatarname.h"
 #include "llfloaterreg.h"
-#include "llfloater.h"
 #include "lltabcontainer.h"
 
 #include "llavataractions.h"
-#include "llavatarlist.h"
 #include "llavatarlistitem.h"
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llfloateravatarpicker.h"
+#include "llfloatergroupinvite.h"
 #include "llfriendcard.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
 #include "llimfloatercontainer.h"
 #include "llnotificationsutil.h"
-#include "llscrolllistctrl.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llstartup.h"
 #include "llviewercontrol.h"
@@ -138,15 +136,13 @@ BOOL FSFloaterContacts::postBuild()
 	mFriendsList->sortByColumn(std::string("icon_online_status"), FALSE);
 	mFriendsList->setSearchColumn(mFriendsList->getColumn("full_name")->mIndex);
 	
-	mFriendsTab->childSetAction("im_btn", boost::bind(&FSFloaterContacts::onImButtonClicked, this));
-	mFriendsTab->childSetAction("profile_btn", boost::bind(&FSFloaterContacts::onViewProfileButtonClicked, this));
-	mFriendsTab->childSetAction("offer_teleport_btn", boost::bind(&FSFloaterContacts::onTeleportButtonClicked, this));
-	mFriendsTab->childSetAction("pay_btn", boost::bind(&FSFloaterContacts::onPayButtonClicked, this));
-	
-	mFriendsTab->childSetAction("remove_btn", boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked, this));
-	mFriendsTab->childSetAction("add_btn", boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked, this));
-	
-	mFriendsTab->childSetAction("lgg_fg_openFG", boost::bind(&FSFloaterContacts::onContactSetsButtonClicked, this));
+	mFriendsTab->childSetAction("im_btn",				boost::bind(&FSFloaterContacts::onImButtonClicked,				this));
+	mFriendsTab->childSetAction("profile_btn",			boost::bind(&FSFloaterContacts::onViewProfileButtonClicked,		this));
+	mFriendsTab->childSetAction("offer_teleport_btn",	boost::bind(&FSFloaterContacts::onTeleportButtonClicked,		this));
+	mFriendsTab->childSetAction("pay_btn",				boost::bind(&FSFloaterContacts::onPayButtonClicked,				this));
+	mFriendsTab->childSetAction("remove_btn",			boost::bind(&FSFloaterContacts::onDeleteFriendButtonClicked,	this));
+	mFriendsTab->childSetAction("add_btn",				boost::bind(&FSFloaterContacts::onAddFriendWizButtonClicked,	this));
+	mFriendsTab->childSetAction("lgg_fg_openFG",		boost::bind(&FSFloaterContacts::onContactSetsButtonClicked,		this));
 
 	mGroupsTab = getChild<LLPanel>(GROUP_TAB_NAME);
 	mGroupList = mGroupsTab->getChild<LLGroupList>("group_list");
@@ -154,27 +150,36 @@ BOOL FSFloaterContacts::postBuild()
 	mGroupList->setNoFilteredItemsMsg(getString("no_filtered_groups_msg"));
 	
 	mGroupList->setDoubleClickCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
-	mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateButtons, this));
+	mGroupList->setCommitCallback(boost::bind(&FSFloaterContacts::updateGroupButtons, this));
 	mGroupList->setReturnCallback(boost::bind(&FSFloaterContacts::onGroupChatButtonClicked, this));
 	
-	mGroupsTab->childSetAction("chat_btn", boost::bind(&FSFloaterContacts::onGroupChatButtonClicked,	this));
-	mGroupsTab->childSetAction("info_btn", boost::bind(&FSFloaterContacts::onGroupInfoButtonClicked,	this));
-	mGroupsTab->childSetAction("activate_btn", boost::bind(&FSFloaterContacts::onGroupActivateButtonClicked,	this));
-	mGroupsTab->childSetAction("leave_btn",	boost::bind(&FSFloaterContacts::onGroupLeaveButtonClicked,	this));
-	mGroupsTab->childSetAction("create_btn",	boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked,	this));
-	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,	this));
-	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,	this));
+	mGroupsTab->childSetAction("chat_btn",		boost::bind(&FSFloaterContacts::onGroupChatButtonClicked,		this));
+	mGroupsTab->childSetAction("info_btn",		boost::bind(&FSFloaterContacts::onGroupInfoButtonClicked,		this));
+	mGroupsTab->childSetAction("activate_btn",	boost::bind(&FSFloaterContacts::onGroupActivateButtonClicked,	this));
+	mGroupsTab->childSetAction("leave_btn",		boost::bind(&FSFloaterContacts::onGroupLeaveButtonClicked,		this));
+	mGroupsTab->childSetAction("create_btn",	boost::bind(&FSFloaterContacts::onGroupCreateButtonClicked,		this));
+	mGroupsTab->childSetAction("search_btn",	boost::bind(&FSFloaterContacts::onGroupSearchButtonClicked,		this));
+	mGroupsTab->childSetAction("titles_btn",	boost::bind(&FSFloaterContacts::onGroupTitlesButtonClicked,		this));
+	mGroupsTab->childSetAction("invite_btn",	boost::bind(&FSFloaterContacts::onGroupInviteButtonClicked,		this));
 	
 	return TRUE;
 }
 
-void FSFloaterContacts::updateButtons()
+void FSFloaterContacts::updateGroupButtons()
 {
-	std::vector<LLPanel*> items;
-	mGroupList->getItems(items);
+	LLUUID groupId = getCurrentItemID();
+	bool isGroup = groupId.notNull();
 
-	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
-	mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+	LLUICtrl* groupcount = mGroupsTab->getChild<LLUICtrl>("groupcount");
+	groupcount->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count()));
+	groupcount->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+	
+	getChildView("chat_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_SESSION_JOIN));
+	getChildView("info_btn")->setEnabled(isGroup);
+	getChildView("activate_btn")->setEnabled(groupId != gAgent.getGroupID());
+	getChildView("leave_btn")->setEnabled(isGroup);
+	getChildView("create_btn")->setEnabled(gAgent.mGroups.count() < gMaxAgentGroups);
+	getChildView("invite_btn")->setEnabled(isGroup && gAgent.hasPowerInGroup(groupId, GP_MEMBER_INVITE));
 }
 
 void FSFloaterContacts::onOpen(const LLSD& key)
@@ -199,31 +204,32 @@ void FSFloaterContacts::onOpen(const LLSD& key)
 
 void FSFloaterContacts::openTab(const std::string& name)
 {
-	BOOL visible=FALSE;
+	bool visible = false;
 
-	if(name=="friends")
+	if (name == "friends")
 	{
-		visible=TRUE;
+		visible = true;
 		childShowTab("friends_and_groups", "friends_panel");
 	}
-	else if(name=="groups")
+	else if (name == "groups")
 	{
-		visible=TRUE;
+		visible = true;
 		childShowTab("friends_and_groups", "groups_panel");
-		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[COUNT]", llformat("%d", gAgent.mGroups.count())); //  items.end()));//
-		mGroupsTab->getChild<LLUICtrl>("groupcount")->setTextArg("[MAX]", llformat("%d", gMaxAgentGroups));
+		updateGroupButtons();
 	}
 
-	if(visible)
+	if (visible)
 	{
 		LLIMFloaterContainer* floater_container = (LLIMFloaterContainer *) getHost();
-		if(floater_container)
+		if (floater_container)
 		{
 			floater_container->setVisible(TRUE);
 			floater_container->showFloater(this);
 		}
 		else
+		{
 			setVisible(TRUE);
+		}
 	}
 }
 
@@ -248,7 +254,7 @@ FSFloaterContacts* FSFloaterContacts::getInstance()
 void FSFloaterContacts::onAvatarListDoubleClicked(LLUICtrl* ctrl)
 {
 	LLAvatarListItem* item = dynamic_cast<LLAvatarListItem*>(ctrl);
-	if(!item)
+	if (!item)
 	{
 		return;
 	}
@@ -333,7 +339,9 @@ bool FSFloaterContacts::isItemsFreeOfFriends(const uuid_vec_t& uuids)
 void FSFloaterContacts::onAvatarPicked(const uuid_vec_t& ids, const std::vector<LLAvatarName> names)
 {
 	if (!names.empty() && !ids.empty())
+	{
 		LLAvatarActions::requestFriendshipDialog(ids[0], names[0].getCompleteName());
+	}
 }
 
 void FSFloaterContacts::onAddFriendWizButtonClicked()
@@ -341,7 +349,11 @@ void FSFloaterContacts::onAddFriendWizButtonClicked()
 	// Show add friend wizard.
 	LLFloaterAvatarPicker* picker = LLFloaterAvatarPicker::show(boost::bind(&FSFloaterContacts::onAvatarPicked, _1, _2), FALSE, TRUE);
 	// Need to disable 'ok' button when friend occurs in selection
-	if (picker)	picker->setOkBtnEnableCb(boost::bind(&FSFloaterContacts::isItemsFreeOfFriends, this, _1));
+	if (picker)
+	{
+		picker->setOkBtnEnableCb(boost::bind(&FSFloaterContacts::isItemsFreeOfFriends, this, _1));
+	}
+
 	LLFloater* root_floater = gFloaterView->getParentFloater(this);
 	if (root_floater)
 	{
@@ -362,7 +374,9 @@ void FSFloaterContacts::onGroupChatButtonClicked()
 {
 	LLUUID group_id = getCurrentItemID();
 	if (group_id.notNull())
+	{
 		LLGroupActions::startIM(group_id);
+	}
 }
 
 void FSFloaterContacts::onGroupInfoButtonClicked()
@@ -379,7 +393,9 @@ void FSFloaterContacts::onGroupLeaveButtonClicked()
 {
 	LLUUID group_id = getCurrentItemID();
 	if (group_id.notNull())
+	{
 		LLGroupActions::leave(group_id);
+	}
 }
 
 void FSFloaterContacts::onGroupCreateButtonClicked()
@@ -395,6 +411,15 @@ void FSFloaterContacts::onGroupSearchButtonClicked()
 void FSFloaterContacts::onGroupTitlesButtonClicked()
 {
 	LLFloaterReg::toggleInstance("group_titles");
+}
+
+void FSFloaterContacts::onGroupInviteButtonClicked()
+{
+	LLUUID group_id = getCurrentItemID();
+	if (group_id.notNull())
+	{
+		LLFloaterGroupInvite::showForGroup(group_id);
+	}
 }
 
 //
@@ -450,9 +475,13 @@ void FSFloaterContacts::sortFriendList()
 	mFriendsList->updateLayout();
 
 	if (mSortByUserName)
+	{
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_USER_NAME)->mName;
+	}
 	else
+	{
 		mFriendsList->getColumn(LIST_FRIEND_NAME)->mSortingColumn = mFriendsList->getColumn(LIST_FRIEND_NAME)->mName;
+	}
 	mFriendsList->setNeedsSort(true);
 }
 
@@ -790,7 +819,7 @@ void FSFloaterContacts::confirmModifyRights(rights_map_t& ids, EGrantRevoke comm
 bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const LLSD& response, rights_map_t* rights)
 {
 	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	if(0 == option)
+	if (0 == option)
 	{
 		sendRightsGrant(*rights);
 	}
@@ -812,31 +841,34 @@ bool FSFloaterContacts::modifyRightsConfirmation(const LLSD& notification, const
 
 void FSFloaterContacts::applyRightsToFriends()
 {
-	BOOL rights_changed = FALSE;
+	bool rights_changed = false;
 
 	// store modify rights separately for confirmation
 	rights_map_t rights_updates;
 
-	BOOL need_confirmation = FALSE;
+	bool need_confirmation = false;
 	EGrantRevoke confirmation_type = GRANT;
 
 	// this assumes that changes only happened to selected items
 	std::vector<LLScrollListItem*> selected = mFriendsList->getAllSelected();
-	for(std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
+	for (std::vector<LLScrollListItem*>::iterator itr = selected.begin(); itr != selected.end(); ++itr)
 	{
 		LLUUID id = (*itr)->getValue();
 		const LLRelationship* buddy_relationship = LLAvatarTracker::instance().getBuddyInfo(id);
-		if (buddy_relationship == NULL) continue;
+		if (buddy_relationship == NULL)
+		{
+			continue;
+		}
 
 		bool show_online_staus = (*itr)->getColumn(LIST_VISIBLE_ONLINE)->getValue().asBoolean();
 		bool show_map_location = (*itr)->getColumn(LIST_VISIBLE_MAP)->getValue().asBoolean();
 		bool allow_modify_objects = (*itr)->getColumn(LIST_EDIT_MINE)->getValue().asBoolean();
 
 		S32 rights = buddy_relationship->getRightsGrantedTo();
-		if(buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS) != show_online_staus)
+		if (buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_ONLINE_STATUS) != show_online_staus)
 		{
-			rights_changed = TRUE;
-			if(show_online_staus) 
+			rights_changed = true;
+			if (show_online_staus) 
 			{
 				rights |= LLRelationship::GRANT_ONLINE_STATUS;
 			}
@@ -849,10 +881,10 @@ void FSFloaterContacts::applyRightsToFriends()
 				(*itr)->getColumn(LIST_VISIBLE_MAP)->setValue(FALSE);
 			}
 		}
-		if(buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION) != show_map_location)
+		if (buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_MAP_LOCATION) != show_map_location)
 		{
-			rights_changed = TRUE;
-			if(show_map_location) 
+			rights_changed = true;
+			if (show_map_location) 
 			{
 				// ONLINE_STATUS necessary for MAP_LOCATION
 				rights |= LLRelationship::GRANT_MAP_LOCATION;
@@ -866,12 +898,12 @@ void FSFloaterContacts::applyRightsToFriends()
 		}
 		
 		// now check for change in modify object rights, which requires confirmation
-		if(buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS) != allow_modify_objects)
+		if (buddy_relationship->isRightGrantedTo(LLRelationship::GRANT_MODIFY_OBJECTS) != allow_modify_objects)
 		{
-			rights_changed = TRUE;
-			need_confirmation = TRUE;
+			rights_changed = true;
+			need_confirmation = true;
 
-			if(allow_modify_objects)
+			if (allow_modify_objects)
 			{
 				rights |= LLRelationship::GRANT_MODIFY_OBJECTS;
 				confirmation_type = GRANT;
@@ -905,7 +937,10 @@ void FSFloaterContacts::applyRightsToFriends()
 
 void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
 {
-	if (ids.empty()) return;
+	if (ids.empty())
+	{
+		return;
+	}
 
 	LLMessageSystem* msg = gMessageSystem;
 
@@ -917,7 +952,7 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
 
 	rights_map_t::iterator id_it;
 	rights_map_t::iterator end_it = ids.end();
-	for(id_it = ids.begin(); id_it != end_it; ++id_it)
+	for (id_it = ids.begin(); id_it != end_it; ++id_it)
 	{
 		msg->nextBlockFast(_PREHASH_Rights);
 		msg->addUUID(_PREHASH_AgentRelated, id_it->first);
@@ -927,7 +962,5 @@ void FSFloaterContacts::sendRightsGrant(rights_map_t& ids)
 	mNumRightsChanged = ids.size();
 	gAgent.sendReliableMessage();
 }
-
-
 
 // EOF

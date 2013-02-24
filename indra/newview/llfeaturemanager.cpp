@@ -483,6 +483,7 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 			mGPUString = label;
 			mGPUClass = (EGPUClass) strtol(cls.c_str(), NULL, 10);
 			mGPUSupported = (BOOL) strtol(supported.c_str(), NULL, 10);
+			sscanf(expected_gl_version.c_str(), "%f", &mExpectedGLVersion);
 		}
 	}
 #if LL_EXPORT_GPU_TABLE
@@ -503,10 +504,10 @@ void LLFeatureManager::parseGPUTable(std::string filename)
 	{
 		LL_WARNS("RenderInit") << "GPU '" << rawRenderer << "' not recognized" << LL_ENDL;
 	}
-
-#if LL_DARWIN // never go over "Mid-High" settings by default on OS X
-	mGPUClass = llmin(mGPUClass, GPU_CLASS_3);
-#endif
+//FS:TM based on team vote, don't allow defaulting above High (level 4).  Used this here to reduce merge issues with gpu_table.xml
+//#if LL_DARWIN // never go over "Mid" settings by default on OS X (FS:TM was GPU_CLASS_2)
+	mGPUClass = llmin(mGPUClass, GPU_CLASS_4);
+//#endif
 }
 
 // responder saves table into file

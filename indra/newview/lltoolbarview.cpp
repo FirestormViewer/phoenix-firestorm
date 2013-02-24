@@ -81,11 +81,11 @@ LLToolBarView::LLToolBarView(const LLToolBarView::Params& p)
 	mShowToolbars(true),
 	mDragToolbarButton(NULL),
 	mDragItem(NULL),
-	// <FS:Ansariel> Member variables needed for console chat bottom offset
-	//mToolbarsLoaded(false)
 	mToolbarsLoaded(false),
-	mBottomChatStack(NULL),
-	mBottomToolbarPanel(NULL)
+	// <FS:Ansariel> Member variables needed for console chat bottom offset
+	//mBottomToolbarPanel(NULL)
+	mBottomToolbarPanel(NULL),
+	mBottomChatStack(NULL)
 	// </FS:Ansariel> Member variables needed for console chat bottom offset
 {
 	for (S32 i = 0; i < TOOLBAR_COUNT; i++)
@@ -110,6 +110,7 @@ BOOL LLToolBarView::postBuild()
 	mToolbars[TOOLBAR_LEFT]   = getChild<LLToolBar>("toolbar_left");
 	mToolbars[TOOLBAR_RIGHT]  = getChild<LLToolBar>("toolbar_right");
 	mToolbars[TOOLBAR_BOTTOM] = getChild<LLToolBar>("toolbar_bottom");
+	mBottomToolbarPanel = getChild<LLView>("bottom_toolbar_panel");
 
 	for (int i = TOOLBAR_FIRST; i <= TOOLBAR_LAST; i++)
 	{

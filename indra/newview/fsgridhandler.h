@@ -282,16 +282,21 @@ protected:
 	LLSD mGridList;
 // <AW opensim>
 	LLSD mConnectedGrid;
-	bool mIsInSLMain;
-	bool mIsInSLBeta;
-	bool mIsInOpenSim;
-// <FS:CR> Aurora Sim
-	bool mIsInAuroraSim;
-// </FS:CR> Aurora Sim
 	int mResponderCount;
 	bool mReadyToLogin;
 	bool mCommandLineDone;
 // </AW opensim>
+	
+	// <FS:CR> OpenSim
+	enum e_grid_platform
+	{
+		GP_NOTSET,
+		GP_SLMAIN,
+		GP_SLBETA,
+		GP_OPENSIM,
+		GP_AURORA
+	} EGridPlatform;
+	// </FS:CR>
 };
 
 #endif // FS_GRIDHANDLER_H

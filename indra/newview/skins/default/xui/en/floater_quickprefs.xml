@@ -396,6 +396,7 @@ Type:
 <!-- enable/disable done in code depending on the type of control chosen -->
 <check_box
  layout="topleft"
+ enabled="false"
  follows="left|top"
  name="control_integer_checkbox"
  tool_tip="Activate this checkbox if your setting is an integer value, i.e. it has only whole numbers"
@@ -407,6 +408,7 @@ Type:
 <!-- enable/disable done in code depending on the type of control chosen -->
 <spinner
  layout="topleft"
+ enabled="false"
  follows="left|top"
  name="control_min_edit"
  tool_tip="The lowest value you will be allowed to select"
@@ -422,6 +424,7 @@ Type:
  height="22" />
 <spinner
  layout="topleft"
+ enabled="false"
  follows="left|top"
  name="control_max_edit"
  tool_tip="The highest value you will be allowed to select"
@@ -436,6 +439,7 @@ Type:
  height="22" />
 <spinner
  layout="topleft"
+ enabled="false"
  follows="left|top"
  name="control_increment_edit"
  tool_tip="The increment for your value when you click the up/down arrow on a spinner or use the cursor keys on a slider"

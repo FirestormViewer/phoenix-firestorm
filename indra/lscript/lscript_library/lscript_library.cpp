@@ -538,7 +538,7 @@ void LLScriptLibrary::init()
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 	
 // <FS:CR> Opensim/Aurora scripting functions - Please add Second Life LSL functions above this line!
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	/// OSSL/Aurora Functions (current as of 13 December 2012)
 	/// Reference: https://github.com/opensim/opensim/blob/master/OpenSim/Region/ScriptEngine/Shared/Api/Runtime/OSSL_Stub.cs
 	addFunction(10.f, 0.f, dummy_func, "osSetRegionWaterHeight", NULL, "f");
@@ -761,7 +761,7 @@ void LLScriptLibrary::init()
 	addFunction(10.f, 0.f, dummy_func, "botAddTag", NULL, "ss");
 	addFunction(10.f, 0.f, dummy_func, "botGetBotsWithTag", "l", "s");
 	addFunction(10.f, 0.f, dummy_func, "botRemoveBotsWithTag", NULL, "s");
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR> Opensim/Aurora scripting functions
 }
 

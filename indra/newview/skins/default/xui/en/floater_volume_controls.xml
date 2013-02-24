@@ -14,14 +14,14 @@
 	save_dock_state="false"
 	title="Volume Controls"
 	background_opaque="false"
-	width="210">
+	width="225">
 
 	<panel
 		name="global_volume_controls_panel"
 		filename="panel_volume_pulldown.xml"
 		left="0"
 		top="20"
-		width="210"
+		width="225"
 		height="155"
 		follows="all"
 		layout="topleft">

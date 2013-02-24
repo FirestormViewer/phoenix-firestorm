@@ -936,13 +936,13 @@
       reference="Red" />
   <color
       name="PanelDefaultBackgroundColor"
-      reference="DkGray" />
+      reference="Transparent" />
   <color
       name="PanelDefaultHighlightLight"
       reference="White_50" />
   <color
       name="PanelFocusBackgroundColor"
-      reference="DkGray2" />
+      reference="Transparent" />
   <color
       name="PanelNotificationBackground"
       value="1 0.3 0.3 0" />

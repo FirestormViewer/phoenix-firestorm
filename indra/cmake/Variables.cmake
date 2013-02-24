@@ -190,11 +190,11 @@ set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header dire
 
 # <FS:ND> When using Havok, we have to turn OpenSim support off
 if( HAVOK_TPV )
- if( HAS_OPENSIM_SUPPORT )
-  message( "Compiling with Havok, turning OpenSim support off" )
- endif( HAS_OPENSIM_SUPPORT )
+ if( OPENSIM )
+  message( "Compiling with Havok libraries, disabling OpenSim support" )
+ endif( OPENSIM )
   
- set( HAS_OPENSIM_SUPPORT OFF )
+ set( OPENSIM OFF )
 endif( HAVOK_TPV )
 # </FS:ND>
 

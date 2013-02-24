@@ -706,6 +706,9 @@ LLContextMenu* LLParticipantList::LLParticipantListMenu::createMenu()
 
 	// Don't show sort options for P2P chat
 	bool is_sort_visible = (mParent.mAvatarList && mParent.mAvatarList->size() > 1);
+	// <FS:Ansariel> Hide SortBy separator
+	main_menu->setItemVisible("Sort Separator", is_sort_visible);
+	// </FS:Ansariel>
 	main_menu->setItemVisible("SortByName", is_sort_visible);
 	main_menu->setItemVisible("SortByRecentSpeakers", is_sort_visible);
 	main_menu->setItemVisible("Moderator Options Separator", isGroupModerator());

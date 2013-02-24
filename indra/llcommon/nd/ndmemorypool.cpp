@@ -154,21 +154,31 @@ namespace nd
 		U32 mPageLock;
 		bool sActive = false;
 
-		void allocMemoryForPage( Page &aPage )
+		bool allocMemoryForPage( Page &aPage )
 		{
 			aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, POOL_CHUNK_ALIGNMENT ));
+
+			if( 0 == aPage.mMemory )
+			{
+				aPage.mMemoryEnd = 0;
+				aPage.mFree = 0;
+
+				return false;
+			}
+
 			aPage.mMemoryEnd = aPage.mMemory + PAGE_SIZE;
 			aPage.mFree = PAGE_SIZE;
+			return true;
 		}
 
-		void allocPage( int i )
+		bool allocPage( int i )
 		{
 			nd::locks::LockHolder( &sPages[i].mLocked );
 
 			if( sPages[i].mMemory )
-				return;
+				return true;
 
-			allocMemoryForPage( sPages[i] );
+			return allocMemoryForPage( sPages[i] );
 		}
 
 		void freePage( int i )
@@ -199,8 +209,13 @@ namespace nd
 
 					if( 0 == sPages[i].mMemory  )
 					{
-						allocMemoryForPage( sPages[i] );
-						return i;
+						if( allocMemoryForPage( sPages[i] ) )
+							return i;
+						else
+						{
+							nd::locks::unlock( &sPages[i].mLocked );
+							return -1;
+						}
 					}
 
 					nd::locks::unlock( &sPages[i].mLocked );

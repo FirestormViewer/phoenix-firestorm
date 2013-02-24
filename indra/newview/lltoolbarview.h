@@ -110,7 +110,8 @@ public:
 	static BOOL handleDropTool(void* cargo_data, S32 x, S32 y, LLToolBar* toolbar);
 	static void resetDragTool(LLToolBarButton* toolbarButton);
 	LLInventoryObject* getDragItem();
-
+	LLView* getBottomToolbar() { return mBottomToolbarPanel; }
+	LLToolBar* getToolbar(EToolBarLocation toolbar) { return mToolbars[toolbar]; }
 	bool isModified() const;
 	
 	// <FS:Ansariel> Allow accessing the toolbars itself
@@ -143,9 +144,9 @@ private:
 	LLToolBarButton*	mDragToolbarButton;
 	LLInventoryObject*	mDragItem;
 	bool				mShowToolbars;
+	LLView*				mBottomToolbarPanel;
 
 	// <FS:Ansariel> Member variables needed for console chat bottom offset
-	LLView*				mBottomToolbarPanel;
 	LLView*				mBottomChatStack;
 	// </FS:Ansariel>
 };

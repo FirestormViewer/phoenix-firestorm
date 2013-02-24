@@ -546,7 +546,7 @@
 				 top_pad="15"
 				 width="80"
 				 layout="topleft"
-				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Deferred Rendering' in tab 'Light'.">
+				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Advanced Lighting Model' in tab 'Light'.">
 					Resolution
 				</text>
 				<combo_box
@@ -568,19 +568,19 @@
 					 name="1"
 					 value="512"/>
 					<combo_box.item
-					 label="Very Good          - NOTE: You must also enable 'Deferred Rendering' (Light Tab)"
+					 label="Very Good          - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="2"
 					 value="1024"/>
 					<combo_box.item
-					 label="Excellent            - NOTE: You must also enable 'Deferred Rendering' (Light Tab)"
+					 label="Excellent            - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="3"
 					 value="1536"/>
 					<combo_box.item
-					 label="Outstanding      - NOTE: You must also enable 'Deferred Rendering' (Light Tab)"
+					 label="Outstanding      - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="4"
 					 value="2048"/>
 					<combo_box.item
-					 label="Life-Like             - NOTE: You must also enable 'Deferred Rendering' (Light Tab)"
+					 label="Life-Like             - NOTE: You must also enable 'Advanced Lighting Model' (Light Tab)"
 					 name="5"
 					 value="4096"/>
 					<combo_box.commit_callback
@@ -666,7 +666,7 @@
 				 enabled_control="VertexShaderEnable"
 				 height="16"
 				 initial_valuthe="true"
-				 label="Enable Deferred Rendering"
+				 label="Enable Advanced Lighting Model"
 				 layout="topleft"
 				 left="5"
 				 name="RenderDeferred"
@@ -1503,7 +1503,7 @@
 				 layout="topleft"
 				 left="5"
 				 name="UseDepthofField"
-				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Deferred Rendering' in tab 'Light'."
+				 tool_tip="This will enable Depth of Field which will 'determine distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). If you are not using it turn it off and it will speed up your frame rate. If you cannot enable this feature or do not see its effect, please turn on 'Advanced Lighting Model' in tab 'Light'."
 				 top_pad="10"
 				 width="230"/>
 				<check_box

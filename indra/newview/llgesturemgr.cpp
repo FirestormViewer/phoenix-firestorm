@@ -61,7 +61,7 @@
 #include "chatbar_as_cmdline.h" // <ND/> For FIRE-1624
 
 // Longest time, in seconds, to wait for all animations to stop playing
-const F32 MAX_WAIT_ANIM_SECS = 30.f;
+const F32 MAX_WAIT_ANIM_SECS = 60.f;
 
 // If this gesture is a link, get the base gesture that this link points to,
 // otherwise just return this id.

@@ -111,7 +111,6 @@ LLPanelMainInventory::LLPanelMainInventory(const LLPanel::Params& p)
 	  mMenuAdd(NULL),
 	  mNeedUploadCost(true)
 {
-	LLMemType mt(LLMemType::MTYPE_INVENTORY_VIEW_INIT);
 	// Menu Callbacks (non contex menus)
 	mCommitCallbackRegistrar.add("Inventory.DoToSelected", boost::bind(&LLPanelMainInventory::doToSelected, this, _2));
 	mCommitCallbackRegistrar.add("Inventory.CloseAllFolders", boost::bind(&LLPanelMainInventory::closeAllFolders, this));
@@ -290,14 +289,14 @@ BOOL LLPanelMainInventory::postBuild()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -903,7 +902,6 @@ void LLPanelMainInventory::setFilterTextFromFilter()
 
 void LLPanelMainInventory::toggleFindOptions()
 {
-	LLMemType mt(LLMemType::MTYPE_INVENTORY_VIEW_TOGGLE);
 	LLFloater *floater = getFinder();
 	if (!floater)
 	{
@@ -1026,7 +1024,6 @@ void LLFloaterInventoryFinder::updateElementsFromFilter()
 
 void LLFloaterInventoryFinder::draw()
 {
-	LLMemType mt(LLMemType::MTYPE_INVENTORY_DRAW);
 	U64 filter = 0xffffffffffffffffULL;
 	BOOL filtered_by_all_types = TRUE;
 
@@ -1495,6 +1492,8 @@ BOOL LLPanelMainInventory::isActionEnabled(const LLSD& userdata)
 
 	if (command_name == "share")
 	{
+		LLFolderViewItem* current_item = getActivePanel()->getRootFolder()->getCurSelectedItem();
+		if (!current_item) return FALSE;
 		LLSidepanelInventory* parent = LLFloaterSidePanelContainer::getPanel<LLSidepanelInventory>("inventory");
 		return parent ? parent->canShare() : FALSE;
 	}
@@ -1667,14 +1666,14 @@ void LLPanelMainInventory::setUploadCostIfNeeded()
 			// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 			S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 			std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 			bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 			if(in_opensim)
 			{
 				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 			}
 			else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 			{
 				upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 			}

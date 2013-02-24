@@ -53,7 +53,11 @@ class LLWindow;
 class LLView;
 class LLHelp;
 
-void make_ui_sound(const char* name);
+
+// <FS:PP> UI Sounds preview
+// void make_ui_sound(const char* name);
+void make_ui_sound(const char* name, BOOL forceSound = FALSE);
+// </FS:PP> UI Sounds preview
 
 class LLImageProviderInterface;
 

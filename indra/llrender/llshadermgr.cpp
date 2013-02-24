@@ -715,11 +715,12 @@ GLhandleARB LLShaderMgr::loadShaderFile(const std::string& filename, S32 & shade
 			// text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
 			
 			// <FS:TS> This causes shader link failures on 64-bit Linux
-#if !(LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) ) )
-			if( gGLManager.mIsATI )
-				text[count++] = strdup("VARYING int vary_texture_index;\n");
-			else
-#endif
+			// <FS:TM> Below unfortently broke deferred on ATI cards during the merging on 3.4.4.  vary_texture_index wasnt handeled properly and shader 'simple shader' failed to compile
+//#if !(LL_GNUC && ( defined(__amd64__) || defined(__x86_64__) ) )
+//			if( gGLManager.mIsATI )
+//				text[count++] = strdup("VARYING int vary_texture_index;\n");
+//			else
+//#endif
 				text[count++] = strdup("VARYING_FLAT int vary_texture_index;\n");
 
 			// </FS:ND>
@@ -1105,7 +1106,10 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("ssao_max_radius");
 	mReservedUniforms.push_back("ssao_factor");
 	mReservedUniforms.push_back("ssao_factor_inv");
-	mReservedUniforms.push_back("ssao_effect_mat");
+	// <FS:Ansariel> Tofu's SSR
+	//mReservedUniforms.push_back("ssao_effect_mat");
+	mReservedUniforms.push_back("ssao_effect");
+	// </FS:Ansariel> Tofu's SSR
 	mReservedUniforms.push_back("screen_res");
 	mReservedUniforms.push_back("near_clip");
 	mReservedUniforms.push_back("shadow_offset");
@@ -1154,6 +1158,10 @@ void LLShaderMgr::initAttribsAndUniforms()
 	mReservedUniforms.push_back("lightMap");
 	mReservedUniforms.push_back("bloomMap");
 	mReservedUniforms.push_back("projectionMap");
+// <FS:CR> Import Vignette from Exodus
+	mReservedUniforms.push_back("exo_vignette");
+	mReservedUniforms.push_back("exo_screen");
+// </FS:CR> Import Vignette from Exodus
 
 	llassert(mReservedUniforms.size() == END_RESERVED_UNIFORMS);
 

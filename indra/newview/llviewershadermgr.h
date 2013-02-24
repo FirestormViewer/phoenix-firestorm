@@ -55,7 +55,7 @@ public:
 	BOOL loadShadersInterface();
 	BOOL loadShadersWindLight();
 	BOOL loadTransformShaders();
-
+	
 	std::vector<S32> mVertexShaderLevel;
 	S32	mMaxAvatarShaderLevel;
 
@@ -360,5 +360,6 @@ extern LLGLSLShader			gDeferredWLSkyProgram;
 extern LLGLSLShader			gDeferredWLCloudProgram;
 extern LLGLSLShader			gDeferredStarProgram;
 extern LLGLSLShader			gNormalMapGenProgram;
+extern LLGLSLShader         gVignettePost;	// <FS:CR> Import Vignette from Exodus
 
 #endif

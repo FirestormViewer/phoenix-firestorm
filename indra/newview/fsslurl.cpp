@@ -36,6 +36,7 @@
 #include "llfiltersd2xmlrpc.h"
 #include "curl/curl.h"
 #include <boost/algorithm/string.hpp>
+#include "llstartup.h"
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d)
 #include "rlvhandler.h"
 // [/RLVa:KB]
@@ -204,7 +205,12 @@ LLSLURL::LLSLURL(const std::string& slurl)
 					mGrid = default_grid;
 				}
 
-				if(mGrid.empty())
+				// Ansariel: We get here at an early stage during startup when
+				//           checking if we are launched with an SLURL cmdline
+				//           option and need to hand over to a running instance.
+				//           In that case simply ignore the fact we don't have a
+				//           gridname yet. We are only interested in validating it.
+				if(mGrid.empty() && LLStartUp::getStartupState() == STATE_STARTED)
 				{
 					LL_DEBUGS("SLURL") << "couldn't find the grid so bail" << LL_ENDL;
 					// we couldn't find the grid in the grid manager, so bail

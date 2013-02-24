@@ -2,12 +2,12 @@
 <toggleable_menu name="menu_group_plus">
 	<menu_item_check label="Mostrar minimapa sobre el radar" name="ShowRadarMinimap"/>
 	<menu_item_check label="Limitar el alcance de los resultados" name="LimitRadarByRange"/>
-	<menu label="Formato de los nombres" name="radarNameFormat">
+	<context_menu label="Formato de los nombres" name="radarNameFormat">
 		<menu_item_check label="DisplayName" name="radarFmtDN"/>
 		<menu_item_check label="Nombre de usuario" name="radarFmtUN"/>
 		<menu_item_check label="DisplayName (Nombre de usuario)" name="radarFmtDNUN"/>
 		<menu_item_check label="Nombre de usuario (DisplayName)" name="radarFmtUNDN"/>
-	</menu>
+	</context_menu>
 	<menu_item_check label="Mostrar alcance del chat local en el minimapa" name="MiniMapChatRing"/>
 	<menu_item_check label="Reportar los que entran en tu distancia de dibujo" name="RadarReportDrawRangeEnter"/>
 	<menu_item_check label="Reportar los que salen de tu distancia de dibujo" name="RadarReportDrawRangeLeave"/>

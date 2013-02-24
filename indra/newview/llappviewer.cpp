@@ -245,8 +245,8 @@
 // define a self-registering event API object
 #include "llappviewerlistener.h"
 
-#include "ndmemorypool.h" // <FS:ND/> tcmalloc replacement
-#include "ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
+#include "nd/ndmemorypool.h" // <FS:ND/> tcmalloc replacement
+#include "nd/ndmallocstats.h" // <FS:ND/> collect stats about memory allocations
 
 
 #if (LL_LINUX || LL_SOLARIS) && LL_GTK
@@ -820,6 +820,7 @@ bool LLAppViewer::init()
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_phoenix.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_hybrid.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_v3.xml"));
+                LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "quick_preferences.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "settings_minimal.xml"));
 		LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "account_settings_phoenix.xml"));
                 LLFile::remove(gDirUtilp->getExpandedFilename(LL_PATH_USER_SETTINGS, "bin_conf.dat"));
@@ -863,10 +864,6 @@ bool LLAppViewer::init()
 	}
 
     mAlloc.setProfilingEnabled(gSavedSettings.getBOOL("MemProfiling"));
-
-#if LL_RECORD_VIEWER_STATS
-	LLViewerStatsRecorder::initClass();
-#endif
 
 	// Initialize the non-LLCurl libcurl library.  Should be called
 	// before consumers (LLTextureFetch).
@@ -944,9 +941,6 @@ bool LLAppViewer::init()
 	//////////////////////////////////////////////////////////////////////////////
 	// *FIX: The following code isn't grouped into functions yet.
 
-	// Statistics / debug timer initialization
-	init_statistics();
-	
 	//
 	// Various introspection concerning the libs we're using - particularly
 	// the libs involved in getting to a full login screen.
@@ -1188,11 +1182,20 @@ bool LLAppViewer::init()
 	}
 
 #if LL_WINDOWS
-	if (gGLManager.mIsIntel && 
-		LLFeatureManager::getInstance()->getGPUClass() > 0 &&
-		gGLManager.mGLVersion <= 3.f)
+	if (gGLManager.mGLVersion < LLFeatureManager::getInstance()->getExpectedGLVersion())
 	{
-		LLNotificationsUtil::add("IntelOldDriver");
+		if (gGLManager.mIsIntel)
+		{
+			LLNotificationsUtil::add("IntelOldDriver");
+		}
+		else if (gGLManager.mIsNVIDIA)
+		{
+			LLNotificationsUtil::add("NVIDIAOldDriver");
+		}
+		else if (gGLManager.mIsATI)
+		{
+			LLNotificationsUtil::add("AMDOldDriver");
+		}
 	}
 #endif
 
@@ -1350,9 +1353,10 @@ static LLFastTimer::DeclareTimer FTM_SERVICE_CALLBACK("Callback");
 static LLFastTimer::DeclareTimer FTM_AGENT_AUTOPILOT("Autopilot");
 static LLFastTimer::DeclareTimer FTM_AGENT_UPDATE("Update");
 
+LLFastTimer::DeclareTimer FTM_FRAME("Frame", true);
+
 bool LLAppViewer::mainLoop()
 {
-	LLMemType mt1(LLMemType::MTYPE_MAIN);
 	mMainloopTimeout = new LLWatchdogTimeout();
 	
 	//-------------------------------------------
@@ -1390,7 +1394,8 @@ bool LLAppViewer::mainLoop()
 	// Handle messages
 	while (!LLApp::isExiting())
 	{
-		LLFastTimer::nextFrame(); // Should be outside of any timer instances
+		LLFastTimer _(FTM_FRAME);
+		LLFastTimer::nextFrame(); 
 
 		//clear call stack records
 		llclearcallstacks;
@@ -1476,7 +1481,6 @@ bool LLAppViewer::mainLoop()
 					&& !gViewerWindow->getShowProgress()
 					&& !gFocusMgr.focusLocked())
 				{
-					LLMemType mjk(LLMemType::MTYPE_JOY_KEY);
 					joystick->scanJoystick();
 					// <FS:Ansariel> Chalice Yao's crouch toggle
 					static LLCachedControl<bool> fsCrouchToggle(gSavedSettings, "FSCrouchToggle");
@@ -1498,7 +1502,6 @@ bool LLAppViewer::mainLoop()
 
 					if (gAres != NULL && gAres->isInitialized())
 					{
-						LLMemType mt_ip(LLMemType::MTYPE_IDLE_PUMP);
 						pingMainloopTimeout("Main:ServicePump");				
 						LLFastTimer t4(FTM_PUMP);
 						{
@@ -1547,7 +1550,6 @@ bool LLAppViewer::mainLoop()
 
 			// Sleep and run background threads
 			{
-				LLMemType mt_sleep(LLMemType::MTYPE_SLEEP);
 				LLFastTimer t2(FTM_SLEEP);
 				
 				// yield some time to the os based on command line option
@@ -2223,10 +2225,6 @@ bool LLAppViewer::cleanup()
 
 	LLMetricPerformanceTesterBasic::cleanClass() ;
 
-#if LL_RECORD_VIEWER_STATS
-	LLViewerStatsRecorder::cleanupClass();
-#endif
-
 	llinfos << "Cleaning up Media and Textures" << llendflush;
 
 	//Note:
@@ -2463,6 +2461,14 @@ bool LLAppViewer::loadSettingsFromDirectory(const std::string& location_key,
 
 		BOOST_FOREACH(const SettingsFile& file, group.files)
 		{
+			// <FS:Ansariel> Skip quickprefs settings - we don't have a settings group
+			//               for it as it's not a regular settings file
+			if (file.name() == "QuickPreferences")
+			{
+				continue;
+			}
+			// </FS:Ansariel>
+
 			llinfos << "Attempting to load settings for the group " << file.name()
 			    << " - from location " << location_key << llendl;
 
@@ -2700,7 +2706,14 @@ bool LLAppViewer::initConfiguration()
 	if (gSavedSettings.getBOOL("FirstRunThisInstall"))
 	{
 		gSavedSettings.setString("SessionSettingsFile", "settings_firestorm.xml");
-
+		
+// <FS:CR> Set ForceShowGrid to TRUE on first run if we're on an OpenSim build
+#ifdef OPENSIM
+		if (!gSavedSettings.getBOOL("ForceShowGrid"))
+			gSavedSettings.setBOOL("ForceShowGrid", TRUE);
+#endif // OPENSIM
+// </FS:CR>
+		
 		// Note that the "FirstRunThisInstall" settings is currently unused.
 		gSavedSettings.setBOOL("FirstRunThisInstall", FALSE);
 	}
@@ -3155,6 +3168,13 @@ bool LLAppViewer::initConfiguration()
 	{
 		// the login location will be set by the login panel (see LLPanelLogin)
 	}
+
+	// <FS:Ansariel> Option to not save password if using login cmdline switch
+	if (clp.hasOption("logindontsavepassword") && clp.hasOption("login"))
+	{
+		gSavedSettings.setBOOL("FSLoginDontSavePassword", TRUE);
+	}
+	// </FS:Ansariel>
 
 	gLastRunVersion = gSavedSettings.getString("LastRunVersion");
 
@@ -3630,8 +3650,6 @@ void LLAppViewer::writeSystemInfo()
 	LL_INFOS("SystemInfo") << "Memory info:\n" << gSysMemory << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS: " << getOSInfo().getOSStringSimple() << LL_ENDL;
 	LL_INFOS("SystemInfo") << "OS info: " << getOSInfo() << LL_ENDL;
-
-	LL_INFOS("SystemInfo") << "Timers: " << LLFastTimer::sClockType << LL_ENDL;
 
 	writeDebugInfo(); // Save out debug_info.log early, in case of crash.
 }
@@ -4678,7 +4696,6 @@ static LLFastTimer::DeclareTimer FTM_VLMANAGER("VL Manager");
 ///////////////////////////////////////////////////////
 void LLAppViewer::idle()
 {
-	LLMemType mt_idle(LLMemType::MTYPE_IDLE);
 	pingMainloopTimeout("Main:Idle");
 	
 	// Update frame timers
@@ -4809,7 +4826,6 @@ void LLAppViewer::idle()
 		// of SEND_STATS_PERIOD so that the initial stats report will
 		// be sent immediately.
 		static LLFrameStatsTimer viewer_stats_timer(SEND_STATS_PERIOD);
-		reset_statistics();
 
 		// Update session stats every large chunk of time
 		// *FIX: (???) SAMANTHA
@@ -4872,7 +4888,7 @@ void LLAppViewer::idle()
 		idle_afk_check();
 
 		//  Update statistics for this frame
-		update_statistics(gFrameCount);
+		update_statistics();
 	}
 
 	////////////////////////////////////////
@@ -5298,7 +5314,6 @@ static LLFastTimer::DeclareTimer FTM_CHECK_REGION_CIRCUIT("Check Region Circuit"
 
 void LLAppViewer::idleNetwork()
 {
-	LLMemType mt_in(LLMemType::MTYPE_IDLE_NETWORK);
 	pingMainloopTimeout("idleNetwork");
 	
 	gObjectList.mNumNewObjects = 0;

@@ -26,7 +26,9 @@
 #ifndef LLMEMORY_H
 #define LLMEMORY_H
 
-#include "llmemtype.h"
+#include "linden_common.h"
+
+class LLMutex ;
 
 #if LL_WINDOWS && LL_DEBUG
 #define LL_CHECK_MEMORY llassert(_CrtCheckMemory());
@@ -36,7 +38,7 @@
 
 // <FS:ND> No tcmalloc
 #ifdef ND_NO_TCMALLOC
-#include "ndmemory.h"
+#include "nd/ndmemory.h"
 #else
 
 inline void* ll_aligned_malloc( size_t size, int align )

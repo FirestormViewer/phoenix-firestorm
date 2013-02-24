@@ -27,7 +27,7 @@
         parameter="LimitRadarByRange" />
   </menu_item_check>
   
-  <menu
+  <context_menu
     label="Radar Name Format"
     name="radarNameFormat">
    	<menu_item_check
@@ -73,7 +73,7 @@
         	function="Radar.NameFmt" 
         	parameter="UNDN"/>
     </menu_item_check>
-   </menu>
+   </context_menu>
   
   
   <menu_item_separator layout="topleft" />

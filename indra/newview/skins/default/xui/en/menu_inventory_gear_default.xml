@@ -64,7 +64,7 @@
      layout="topleft" />
 
     <!-- ## Zi: Extended Inventory Search -->
-	<menu
+	<context_menu
 		label="Search By..."
 		name="inventory_search_menu"
 		top="0">
@@ -132,7 +132,7 @@
 				parameter="partial" />
 		</menu_item_check>
 -->
-	</menu>
+	</context_menu>
     <!-- ## Zi: Extended Inventory Search -->
 
     <menu_item_separator

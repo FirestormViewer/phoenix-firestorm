@@ -342,7 +342,7 @@ BOOL FSFloaterSearch::postBuild()
 	
 	/// Disable websearch on OpenSim because most OpenSim grids don't have one and the ones that do
 	/// suck even more than LL's. (Scary but true!)
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if (!LLGridManager::getInstance()->isInSLMain() && !LLGridManager::getInstance()->isInSLBeta())
 	{
 		if (tabs)
@@ -354,7 +354,7 @@ BOOL FSFloaterSearch::postBuild()
 			}
 		}
 	}
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 	if (!tabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
 		tabs->selectFirstTab();
 	
@@ -2801,7 +2801,7 @@ std::string FSPanelSearchWeb::loadURL()
 	subs["MATURITY"] = maturity;
 	
 	std::string url;
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	std::string debug_url = gSavedSettings.getString("SearchURLDebug");
 	if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
 	{
@@ -2814,7 +2814,7 @@ std::string FSPanelSearchWeb::loadURL()
 		: gSavedSettings.getString("SearchURLOpenSim");
 	}
 	else // we are in SL or SL beta
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 	{
 		url = gSavedSettings.getString("SearchURL");
 	}

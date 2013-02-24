@@ -4,7 +4,7 @@
  bg_alpha_color="Transparent"
  bg_opaque_color="Transparent"
  background_opaque="false"
- background_visible="true"
+ background_visible="false"
  border="false"
  height="600"
  follows="all"
@@ -90,7 +90,7 @@
 
 <!-- "HEADER WITH ICON, STATUS TEXT AND OUTFIT NAME" -->
     <panel
-     background_visible="true"
+     background_visible="false"
      bg_alpha_color="SL-Background_66"
      bevel_style="none"
      follows="top|left|right"
@@ -268,7 +268,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 
                 <layout_panel
                  auto_resize="false"
-                 background_visible="true"
+                 background_visible="false"
                  bg_alpha_color="SL-Background_66"
                  height="30"
                  name="filter_panel"
@@ -371,7 +371,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
 
     <!-- BUTTON BAR -->
     <panel
-     background_visible="true"
+     background_visible="false"
      bevel_style="none"
      follows="bottom|left|right"
      height="27"
@@ -418,7 +418,7 @@ It is calculated as border_size + 2*UIResizeBarOverlap
     
     <!-- BUTTON BAR - WEARABLES ADDING MODE -->
     <panel
-     background_visible="true"
+     background_visible="false"
      bevel_style="none"
      follows="left|right|bottom"
      height="27"

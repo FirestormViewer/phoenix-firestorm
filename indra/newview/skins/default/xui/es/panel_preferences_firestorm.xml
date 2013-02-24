@@ -89,7 +89,7 @@
 			<button left="113" name="PhoenixBeamPrev_rainbow"/>
 			<slider name="FSMaxBeamsPerSecond" label="Frec. de actualización:" tool_tip="Cuántas actualizaciones del rayo enviar por segundo. 40 por defecto" label_width="125"/>
 			<check_box label="Activar rayo de selección" name="SLPartBeam"/>
-			<check_box label="Chat de partículas SL" name="FSParticleChat"/>
+			<check_box label="Enviar datos de selección al chat" name="FSParticleChat" tool_tip="Envía los datos de selección (inicio/final de selección y posición global) al canal 9000 del chat."/>
 			<combo_box name="FSBeamShape_combo" tool_tip="Selecciona la forma del rayo de partículas"/>
 			<button name="delete_beam" label="Borrar" tool_tip="Elimina este rayo"/>
 			<button name="custom_beam_btn" label="Crear nuevo" tool_tip="Personalizar la forma del rayo" width="85"/>

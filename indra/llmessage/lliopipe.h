@@ -35,7 +35,7 @@
 
 #include "llsd.h"
 
-#include "ndintrin.h"
+#include "nd/ndintrin.h"
 
 class LLIOPipe;
 class LLPumpIO;

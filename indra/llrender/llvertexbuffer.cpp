@@ -31,7 +31,6 @@
 #include "llvertexbuffer.h"
 // #include "llrender.h"
 #include "llglheaders.h"
-#include "llmemtype.h"
 #include "llrender.h"
 #include "llvector4a.h"
 #include "llshadermgr.h"
@@ -922,7 +921,6 @@ void LLVertexBuffer::unbind()
 //static
 void LLVertexBuffer::cleanupClass()
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_CLEANUP_CLASS);
 	unbind();
 	
 	sStreamIBOPool.cleanup();
@@ -1003,8 +1001,6 @@ LLVertexBuffer::LLVertexBuffer(U32 typemask, S32 usage) :
 	mMappable(false),
 	mFence(NULL)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_CONSTRUCTOR);
-
 	mMappable = (mUsage == GL_DYNAMIC_DRAW_ARB && !sDisableVBOMapping);
 
 	//zero out offsets
@@ -1064,7 +1060,6 @@ S32 LLVertexBuffer::getSize() const
 //virtual
 LLVertexBuffer::~LLVertexBuffer()
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_DESTRUCTOR);
 	destroyGLBuffer();
 	destroyGLIndices();
 
@@ -1184,8 +1179,6 @@ void LLVertexBuffer::releaseIndices()
 
 void LLVertexBuffer::createGLBuffer(U32 size)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_CREATE_VERTICES);
-	
 	if (mGLBuffer)
 	{
 		destroyGLBuffer();
@@ -1215,8 +1208,6 @@ void LLVertexBuffer::createGLBuffer(U32 size)
 
 void LLVertexBuffer::createGLIndices(U32 size)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_CREATE_INDICES);
-	
 	if (mGLIndices)
 	{
 		destroyGLIndices();
@@ -1251,7 +1242,6 @@ void LLVertexBuffer::createGLIndices(U32 size)
 
 void LLVertexBuffer::destroyGLBuffer()
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_DESTROY_BUFFER);
 	if (mGLBuffer)
 	{
 		if (mMappedDataUsingVBOs)
@@ -1272,7 +1262,6 @@ void LLVertexBuffer::destroyGLBuffer()
 
 void LLVertexBuffer::destroyGLIndices()
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_DESTROY_INDICES);
 	if (mGLIndices)
 	{
 		if (mMappedIndexDataUsingVBOs)
@@ -1293,8 +1282,6 @@ void LLVertexBuffer::destroyGLIndices()
 
 void LLVertexBuffer::updateNumVerts(S32 nverts)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_UPDATE_VERTS);
-
 	llassert(nverts >= 0);
 
 	if (nverts > 65536)
@@ -1322,8 +1309,6 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 void LLVertexBuffer::updateNumIndices(S32 nindices)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_UPDATE_INDICES);
-
 	llassert(nindices >= 0);
 
 	U32 needed_size = sizeof(U16) * nindices;
@@ -1340,8 +1325,6 @@ void LLVertexBuffer::updateNumIndices(S32 nindices)
 
 void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_ALLOCATE_BUFFER);
-	
 	stop_glerror();
 
 	// <FS:ND> FIRE-5077; Just print an info if there are more than 0xFFFF, for now just so there is a message in the logs where in older version #vertices would have been capped.
@@ -1502,8 +1485,6 @@ void LLVertexBuffer::resizeBuffer(S32 newnverts, S32 newnindices)
 	llassert(newnverts >= 0);
 	llassert(newnindices >= 0);
 
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_RESIZE_BUFFER);
-	
 	updateNumVerts(newnverts);		
 	updateNumIndices(newnindices);
 	
@@ -1551,7 +1532,6 @@ static LLFastTimer::DeclareTimer FTM_VBO_MAP_BUFFER("VBO Map");
 volatile U8* LLVertexBuffer::mapVertexBuffer(S32 type, S32 index, S32 count, bool map_range)
 {
 	bindGLBuffer(true);
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_MAP_BUFFER);
 	if (mFinal)
 	{
 		llerrs << "LLVertexBuffer::mapVeretxBuffer() called on a finalized buffer." << llendl;
@@ -1600,7 +1580,6 @@ volatile U8* LLVertexBuffer::mapVertexBuffer(S32 type, S32 index, S32 count, boo
 
 		if (!mVertexLocked)
 		{
-			LLMemType mt_v(LLMemType::MTYPE_VERTEX_MAP_BUFFER_VERTICES);
 			mVertexLocked = true;
 			sMappedCount++;
 			stop_glerror();	
@@ -1733,7 +1712,6 @@ static LLFastTimer::DeclareTimer FTM_VBO_MAP_INDEX("IBO Map");
 
 volatile U8* LLVertexBuffer::mapIndexBuffer(S32 index, S32 count, bool map_range)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_MAP_BUFFER);
 	bindGLIndices(true);
 	if (mFinal)
 	{
@@ -1780,8 +1758,6 @@ volatile U8* LLVertexBuffer::mapIndexBuffer(S32 index, S32 count, bool map_range
 
 		if (!mIndexLocked)
 		{
-			LLMemType mt_v(LLMemType::MTYPE_VERTEX_MAP_BUFFER_INDICES);
-
 			mIndexLocked = true;
 			sMappedCount++;
 			stop_glerror();	
@@ -1906,7 +1882,6 @@ static LLFastTimer::DeclareTimer FTM_IBO_FLUSH_RANGE("Flush IBO Range");
 
 void LLVertexBuffer::unmapBuffer()
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_UNMAP_BUFFER);
 	if (!useVBOs())
 	{
 		return; //nothing to unmap
@@ -2264,7 +2239,6 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 {
 	flush();
 
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_SET_BUFFER);
 	//set up pointers if the data mask is different ...
 	bool setup = (sLastMask != data_mask);
 
@@ -2403,7 +2377,6 @@ void LLVertexBuffer::setBuffer(U32 data_mask)
 // virtual (default)
 void LLVertexBuffer::setupVertexBuffer(U32 data_mask)
 {
-	LLMemType mt2(LLMemType::MTYPE_VERTEX_SETUP_VERTEX_BUFFER);
 	stop_glerror();
 	volatile U8* base = useVBOs() ? (U8*) mAlignedOffset : mMappedData;
 

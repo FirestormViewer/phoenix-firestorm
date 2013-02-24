@@ -726,8 +726,24 @@ void LLFloaterWorldMap::updateTeleportCoordsDisplay( const LLVector3d& pos )
 	enableTeleportCoordsDisplay( true );
 	
 	// convert global specified position to a local one
-	F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
-	F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
+// <FS:CR> Aurora-Sim var region support
+	//F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
+	//F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
+	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos);
+	if (!sim_info)
+	{
+		// We haven't found a region for that point yet
+		S32 world_x = S32(pos.mdV[0] / 256);
+		S32 world_y = S32(pos.mdV[1] / 256);
+		LLWorldMapMessage::getInstance()->sendMapBlockRequest(world_x, world_y, world_x, world_y, true);
+		
+		return;
+	}
+	U32 locX, locY;
+	from_region_handle(sim_info->getHandle(), &locX, &locY);
+	F32 region_local_x = pos.mdV[VX] - locX;
+	F32 region_local_y = pos.mdV[VY] - locY;
+// </FS:CR>
 	//F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
 	F32 region_local_z = (F32)pos.mdV[VZ];
 

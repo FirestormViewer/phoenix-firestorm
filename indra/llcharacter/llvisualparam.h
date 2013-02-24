@@ -99,6 +99,7 @@ protected:
 // An interface class for a generalized parametric modification of the avatar mesh
 // Contains data that is specific to each Avatar
 //-----------------------------------------------------------------------------
+LL_ALIGN_PREFIX(16)
 class LLVisualParam
 {
 public:

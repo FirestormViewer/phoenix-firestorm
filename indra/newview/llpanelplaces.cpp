@@ -381,6 +381,7 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 
 	if (key.size() != 0)
 	{
+		isLandmarkEditModeOn = false;
 		std::string key_type = key["type"].asString();
 		if (key_type == LANDMARK_TAB_INFO_TYPE)
 		{
@@ -430,7 +431,6 @@ void LLPanelPlaces::onOpen(const LLSD& key)
 			mPlaceInfoType = key_type;
 			mPosGlobal.setZero();
 			mItem = NULL;
-			isLandmarkEditModeOn = false;
 			togglePlaceInfoPanel(TRUE);
 
 			if (mPlaceInfoType == AGENT_INFO_TYPE)
@@ -1238,6 +1238,14 @@ LLPanelPlaceInfo* LLPanelPlaces::getCurrentInfoPanel()
 
 	return NULL;
 }
+
+// <FS:Ansariel> Reset (clear) filter
+void LLPanelPlaces::resetFilter()
+{
+	mFilterEditor->clear();
+	onFilterEdit("", true);
+}
+// </FS:Ansariel>
 
 static bool is_agent_in_selected_parcel(LLParcel* parcel)
 {

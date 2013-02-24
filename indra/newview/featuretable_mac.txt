@@ -227,7 +227,7 @@ WLSkyDetail					1	48
 RenderFSAASamples			1	2
 
 //
-// High Graphics Settings (deferred)
+// High Graphics Settings
 //
 list High
 RenderAnisotropic			1	1
@@ -251,14 +251,14 @@ RenderUseImpostors			1	1
 RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	1
-RenderDeferred				1	1
+RenderDeferred				1	0
 RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
 WLSkyDetail					1	48
 RenderFSAASamples			1	2
 
 //
-// High Ultra Graphics Settings (deferred + SSAO)
+// High Ultra Graphics Settings (deferred)
 //
 list HighUltra
 RenderAnisotropic			1	1
@@ -283,7 +283,7 @@ RenderVolumeLODFactor		1	2.0
 VertexShaderEnable			1	1
 WindLightUseAtmosShaders	1	1
 RenderDeferred				1	1
-RenderDeferredSSAO			1	1
+RenderDeferredSSAO			1	0
 RenderShadowDetail			1	0
 WLSkyDetail					1	64
 RenderFSAASamples			1	2

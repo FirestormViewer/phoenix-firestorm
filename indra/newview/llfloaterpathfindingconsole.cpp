@@ -58,9 +58,9 @@
 #include "pipeline.h"
 
 // <FS:CR> For NoHavok alert
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 #include "llnotificationsutil.h"
-#endif
+#endif // OPENSIM
 // </FS:CR>
 
 #define XUI_RENDER_HEATMAP_NONE 0
@@ -251,11 +251,11 @@ void LLFloaterPathfindingConsole::onOpen(const LLSD& pKey)
 		switchIntoTestPathMode();
 	}
 // <FS:CR> Show an alert dialog if using the Opensim viewer as functionality will be limited without Havok
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	LLSD args;
 	args["FEATURE"] = getString("no_havok");
 	LLNotificationsUtil::add("NoHavok", args);
-#endif
+#endif // OPENSIM
 // </FS:CR>
 }
 

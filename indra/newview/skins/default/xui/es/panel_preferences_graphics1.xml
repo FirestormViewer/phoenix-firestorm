@@ -35,7 +35,7 @@
 			<check_box label="Focos locales de luz" name="LocalLights"/>
 			<check_box label="Efectos básicos" name="BasicShaders" tool_tip="Desactivar esta opción puede evitar que algunas tarjetas gráficas fallen"/>
 			<check_box label="Efectos atmosféricos" name="WindLightUseAtmosShaders"/>
-			<check_box label="Dibujo diferido" tool_tip="Activa el dibujo avanzado de la luz" name="UseLightShaders"/>
+			<check_box label="Modelo avanz. de iluminación" tool_tip="Activa el dibujo avanzado de la luz" name="UseLightShaders"/>
 			<check_box label="Oclusión de ambiente" name="UseSSAO"/>
 			<text name="shadows_label">
 				Sombras:
@@ -55,7 +55,7 @@
 				<combo_box.item label="Todos los avatares y objetos" name="3"/>
 				<combo_box.item label="Todo" name="4"/>
 			</combo_box>
-			<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando 'Dibujo diferido' está desactivado. Se requiere reiniciar para efectuar los cambios.">
+			<text name="local lights_label" width="180" tool_tip="Afecta al número de fuentes de luz dibujadas cuando 'Modelo avanzado de iluminación' está desactivado. Se requiere reiniciar para efectuar los cambios.">
 				Puntos de luz (requiere reiniciar):
 			</text>
 			<combo_box name="LocalLightsDetail" width="165">
@@ -140,9 +140,9 @@
 			<text name="Alpha Mask Rendering">
 				Dibujo de máscara alfa:
 			</text>
-			<check_box label="Dibujar máscaras alfa cuando 'Dibujo diferido' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activadas las sombras" name="RenderAutoMaskAlphaNonDeferred"
+			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está desactivado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente cuando no están activadas las sombras" name="RenderAutoMaskAlphaNonDeferred"
          top_pad="12"/>
-			<check_box label="Dibujar máscaras alfa cuando 'Dibujo Diferido' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente SÍ están activadas las sombras" name="RenderAutoMaskAlphaDeferred"/>
+			<check_box label="Dibujar máscaras alfa cuando 'Modelo avanzado de iluminación' está activado" tool_tip="Hace que las máscaras alfa (partes transparentes) se muestren correctamente SÍ están activadas las sombras" name="RenderAutoMaskAlphaDeferred"/>
 			<text name="Miscellaneous Rendering">
 				Dibujo (varios):
 			</text>

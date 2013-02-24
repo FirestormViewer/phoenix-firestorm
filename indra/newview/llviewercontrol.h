@@ -47,6 +47,9 @@ void settings_setup_listeners();
 // for the graphics settings
 void create_graphics_group(LLControlGroup& group);
 
+// <FS:Ansariel> Expose handleSetShaderChanged()
+bool handleSetShaderChanged(const LLSD& newvalue);
+
 // saved at end of session
 extern LLControlGroup gSavedSettings;
 extern LLControlGroup gSavedPerAccountSettings;

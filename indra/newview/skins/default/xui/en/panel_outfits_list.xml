@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <panel
-   background_visible="true"
+   background_visible="false"
    bg_alpha_color="DkGray"
    border="false"
    follows="all"
@@ -11,7 +11,7 @@
    top="0"
    width="312">
     <accordion
-     background_visible="true"
+     background_visible="false"
      bg_alpha_color="SL-Background_66"
      bg_opaque_color="SL_Background_66"
      follows="all"
@@ -30,7 +30,7 @@
          value="You don't have any outfits yet. Try [secondlife:///app/search/all/ Search]"/>
     </accordion>
     <panel
-     background_visible="true"
+     background_visible="false"
 	 follows="bottom|left|right"
 	 height="28"
 	 layout="topleft"

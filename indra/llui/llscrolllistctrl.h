@@ -504,6 +504,7 @@ private:
 	// <FS:Ansariel> Fix for FS-specific people list (radar)
 	std::string		mFilterString;
 	S32				mFilterColumn;
+	bool			mIsFiltered;
 
 	S32				mSearchColumn;
 	S32				mNumDynamicWidthColumns;

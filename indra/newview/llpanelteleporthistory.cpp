@@ -57,7 +57,10 @@ static const std::string COLLAPSED_BY_USER = "collapsed_by_user";
 class LLTeleportHistoryFlatItem : public LLPanel
 {
 public:
-	LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl);
+	// <FS:Ansariel> Extended TP history
+	//LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl);
+	LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl);
+	// </FS:Ansariel>
 	virtual ~LLTeleportHistoryFlatItem();
 
 	virtual BOOL postBuild();
@@ -70,6 +73,11 @@ public:
 	void setRegionName(const std::string& name);
 	void setHighlightedText(const std::string& text);
 	void updateTitle();
+
+	// <FS:Ansariel> Extended TP history
+	void setDate(const LLDate& date);
+	void setLocalPos(const LLVector3& local_pos);
+	// </FS:Ansariel>
 
 	/*virtual*/ void setValue(const LLSD& value);
 
@@ -93,6 +101,14 @@ private:
 	std::string mRegionName;
 	std::string mHighlight;
 	LLRootHandle<LLTeleportHistoryFlatItem> mItemHandle;
+
+	// <FS:Ansariel> Extended TP history
+	LLVector3	mLocalPos;
+	LLDate		mDate;
+
+	LLTextBox*	mDateBox;
+	LLTextBox*	mLocalPosBox;
+	// </FS:Ansariel>
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,11 +139,18 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl)
+// <FS:Ansariel> Extended TP history
+//LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const std::string &hl)
+LLTeleportHistoryFlatItem::LLTeleportHistoryFlatItem(S32 index, LLTeleportHistoryPanel::ContextMenu *context_menu, const std::string &region_name, const LLDate& date, const LLVector3& local_pos, const std::string &hl)
+// </FS:Ansariel>
 :	LLPanel(),
 	mIndex(index),
 	mContextMenu(context_menu),
 	mRegionName(region_name),
+	// <FS:Ansariel> Extended TP history
+	mDate(date),
+	mLocalPos(local_pos),
+	// </FS:Ansariel>
 	mHighlight(hl)
 {
 	buildFromFile( "panel_teleport_history_item.xml");
@@ -141,6 +164,11 @@ LLTeleportHistoryFlatItem::~LLTeleportHistoryFlatItem()
 BOOL LLTeleportHistoryFlatItem::postBuild()
 {
 	mTitle = getChild<LLTextBox>("region");
+
+	// <FS:Ansariel> Extended TP history
+	mDateBox = getChild<LLTextBox>("date");
+	mLocalPosBox = getChild<LLTextBox>("position");
+	// </FS:Ansariel>
 
 	mProfileBtn = getChild<LLButton>("profile_btn");
         
@@ -181,6 +209,18 @@ void LLTeleportHistoryFlatItem::setRegionName(const std::string& name)
 	mRegionName = name;
 }
 
+// <FS:Ansariel> Extended TP history
+void LLTeleportHistoryFlatItem::setDate(const LLDate& date)
+{
+	mDate = date;
+}
+
+void LLTeleportHistoryFlatItem::setLocalPos(const LLVector3& local_pos)
+{
+	mLocalPos.set(local_pos);
+}
+// </FS:Ansariel>
+
 void LLTeleportHistoryFlatItem::updateTitle()
 {
 	static LLUIColor sFgColor = LLUIColorTable::instance().getColor("MenuItemEnabledColor", LLColor4U(255, 255, 255));
@@ -190,6 +230,25 @@ void LLTeleportHistoryFlatItem::updateTitle()
 		LLStyle::Params().color(sFgColor),
 		mRegionName,
 		mHighlight);
+
+	// <FS:Ansariel> Extended TP history
+	LLTextUtil::textboxSetHighlightedVal(
+		mLocalPosBox,
+		LLStyle::Params().color(sFgColor),
+		llformat("%.0f, %.0f, %.0f", mLocalPos.mV[VX], mLocalPos.mV[VY], mLocalPos.mV[VZ]),
+		mHighlight);
+
+	LLSD args;
+	args["datetime"] = mDate.secondsSinceEpoch();
+	std::string date = getString("DateFmt");
+	LLStringUtil::format(date, args);
+
+	LLTextUtil::textboxSetHighlightedVal(
+		mDateBox,
+		LLStyle::Params().color(sFgColor),
+		date,
+		mHighlight);
+	// </FS:Ansariel>
 }
 
 void LLTeleportHistoryFlatItem::onMouseEnter(S32 x, S32 y, MASK mask)
@@ -252,6 +311,12 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 	const S32 cur_item_index,
 	const std::string &hl)
 {
+	// <FS:Ansariel> Extended TP history
+	LLVector3 local_pos((F32)fmod(persistent_item.mGlobalPos.mdV[VX], (F64)REGION_WIDTH_METERS),
+						(F32)fmod(persistent_item.mGlobalPos.mdV[VY], (F64)REGION_WIDTH_METERS),
+						(F32)persistent_item.mGlobalPos.mdV[VZ]);
+	// </FS:Ansariel>
+
 	LLTeleportHistoryFlatItem* item = NULL;
 	if ( cur_item_index < (S32) mItems.size() )
 	{
@@ -260,6 +325,10 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 		{
 			item->setIndex(cur_item_index);
 			item->setRegionName(persistent_item.mTitle);
+			// <FS:Ansariel> Extended TP history
+			item->setDate(persistent_item.mDate);
+			item->setLocalPos(local_pos);
+			// </FS:Ansariel>
 			item->setHighlightedText(hl);
 			item->setVisible(TRUE);
 			item->updateTitle();
@@ -276,6 +345,10 @@ LLTeleportHistoryFlatItemStorage::getFlatItemForPersistentItem (
 		item = new LLTeleportHistoryFlatItem(cur_item_index,
 											 context_menu,
 											 persistent_item.mTitle,
+											 // <FS:Ansariel> Extended TP history
+											 persistent_item.mDate,
+											 local_pos,
+											 // </FS:Ansariel>
 											 hl);
 		mItems.push_back(item->getItemHandle());
 	}
@@ -986,6 +1059,11 @@ void LLTeleportHistoryPanel::onCollapseAllFolders()
 		mItemContainers.get(n)->setDisplayChildren(false);
 	}
 	mHistoryAccordion->arrange();
+
+	if (mLastSelectedFlatlList)
+	{
+		mLastSelectedFlatlList->resetSelection();
+	}
 }
 
 void LLTeleportHistoryPanel::onClearTeleportHistory()

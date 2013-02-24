@@ -1125,7 +1125,6 @@ class LinuxManifest(ViewerManifest):
         if self.prefix(src="", dst="bin"):
             self.path("firestorm-bin","do-not-directly-run-firestorm-bin")
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
-            self.path("../linux_updater/linux-updater", "linux-updater.bin")
             self.path2basename("../llplugin/slplugin", "SLPlugin")
             self.path2basename("../viewer_components/updater/scripts/linux", "update_install")
             self.end_prefix("bin")
@@ -1188,9 +1187,7 @@ class LinuxManifest(ViewerManifest):
         #    installer_name += '_' + self.channel_oneword().upper()
 	print "installer name=%s" % installer_name
 
-        if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
-            print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-            self.run_command("find %(d)r/bin %(d)r/lib -type f \\! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+        self.strip_binaries()
 
         # Fix access permissions
         self.run_command("""
@@ -1225,11 +1222,16 @@ class LinuxManifest(ViewerManifest):
                 'dst': self.get_dst_prefix(),
                 'inst': self.build_path_of(installer_name)})
 
+    def strip_binaries(self):
+        if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
+            print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
+            self.run_command(r"find %(d)r/bin %(d)r/lib -type f \! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+
         #AO: Try to package up symbols
         # New Method, for reading cross platform stack traces on a linux/mac host
         if (os.path.exists("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower())):
             # Rename to add version numbers
-            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),substitution_strings['channel_oneword'],substitution_strings['version_dashes']))
+            os.rename("%s/firestorm-symbols-linux.tar.bz2" % self.args['configuration'].lower(),"%s/Phoenix_%s_%s_symbols-linux.tar.bz2" % (self.args['configuration'].lower(),self.channel_oneword(),'-'.join(self.args['version'])))
 
 
 class Linux_i686Manifest(LinuxManifest):
@@ -1323,9 +1325,7 @@ class Linux_i686Manifest(LinuxManifest):
                     self.path("libvivoxplatform.so")
                     self.end_prefix("lib")
 
-            if self.args['buildtype'].lower() == 'release' and self.is_packaging_viewer():
-                    print "* Going strip-crazy on the packaged binaries, since this is a RELEASE build"
-                    self.run_command("find %(d)r/bin %(d)r/lib -type f \\! -name update_install | xargs --no-run-if-empty strip -S" % {'d': self.get_dst_prefix()} ) # makes some small assumptions about our packaged dir structure
+            self.strip_binaries()
 
 
 class Linux_x86_64Manifest(LinuxManifest):

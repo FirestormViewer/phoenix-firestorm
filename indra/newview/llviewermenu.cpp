@@ -192,7 +192,6 @@ PieMenu		*gPieMenuAttachmentOther = NULL;
 PieMenu		*gPieMenuLand	= NULL;
 // ## Zi: Pie menu
 
-const std::string SAVE_INTO_INVENTORY("Save Object Back to My Inventory");
 const std::string SAVE_INTO_TASK_INVENTORY("Save Object Back to Object Contents");
 
 LLMenuGL* gAttachSubMenu = NULL;
@@ -350,7 +349,6 @@ void handle_grab_baked_texture(void*);
 BOOL enable_grab_baked_texture(void*);
 void handle_dump_region_object_cache(void*);
 
-BOOL enable_save_into_inventory(void*);
 BOOL enable_save_into_task_inventory(void*);
 
 BOOL enable_detach(const LLSD& = LLSD());
@@ -381,8 +379,9 @@ LLMenuParcelObserver::~LLMenuParcelObserver()
 
 void LLMenuParcelObserver::changed()
 {
-	// <FS:Ansariel> Cache controls
-	//gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL));
+	LLParcel *parcel = LLViewerParcelMgr::getInstance()->getParcelSelection()->getParcel();
+	// <FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
+	//gMenuHolder->childSetEnabled("Land Buy Pass", LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
 	//
 	//BOOL buyable = enable_buy_land(NULL);
 	//gMenuHolder->childSetEnabled("Land Buy", buyable);
@@ -392,11 +391,12 @@ void LLMenuParcelObserver::changed()
 	static LLView* land_buy = gMenuHolder->getChildView("Land Buy");
 	static LLView* buy_land = gMenuHolder->getChildView("Buy Land...");
 
-	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL));
+	land_buy_pass->setEnabled(LLPanelLandGeneral::enableBuyPass(NULL) && !(parcel->getOwnerID()== gAgent.getID()));
+
 	BOOL buyable = enable_buy_land(NULL);
 	land_buy->setEnabled(buyable);
 	buy_land->setEnabled(buyable);
-	// </FS:Ansariel> Cache controls
+	// </FS:Ansariel> FIRE-4454: Cache controls because of performance reasons
 }
 
 
@@ -561,14 +561,14 @@ void init_menus()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -1436,22 +1436,6 @@ class LLAdvancedPrintAgentInfo : public view_listener_t
 	}
 };
 
-
-
-////////////////////////////////
-// PRINT TEXTURE MEMORY STATS //
-////////////////////////////////
-
-
-class LLAdvancedPrintTextureMemoryStats : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		output_statistics(NULL);
-		return true;
-	}
-};
-
 //////////////////
 // DEBUG CLICKS //
 //////////////////
@@ -1820,6 +1804,54 @@ class LLAdvancedForceParamsToDefault : public view_listener_t
 	}
 };
 
+
+//////////////////////////
+//   ANIMATION SPEED    //
+//////////////////////////
+
+// Utility function to set all AV time factors to the same global value
+static void set_all_animation_time_factors(F32	time_factor)
+{
+	LLMotionController::setCurrentTimeFactor(time_factor);
+	for (std::vector<LLCharacter*>::iterator iter = LLCharacter::sInstances.begin();
+		iter != LLCharacter::sInstances.end(); ++iter)
+	{
+		(*iter)->setAnimTimeFactor(time_factor);
+	}
+}
+
+class LLAdvancedAnimTenFaster : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		//llinfos << "LLAdvancedAnimTenFaster" << llendl;
+		F32 time_factor = LLMotionController::getCurrentTimeFactor();
+		time_factor = llmin(time_factor + 0.1f, 2.f);	// Upper limit is 200% speed
+		set_all_animation_time_factors(time_factor);
+		return true;
+	}
+};
+
+class LLAdvancedAnimTenSlower : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		//llinfos << "LLAdvancedAnimTenSlower" << llendl;
+		F32 time_factor = LLMotionController::getCurrentTimeFactor();
+		time_factor = llmax(time_factor - 0.1f, 0.1f);	// Lower limit is at 10% of normal speed
+		set_all_animation_time_factors(time_factor);
+		return true;
+	}
+};
+
+class LLAdvancedAnimResetAll : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		set_all_animation_time_factors(1.f);
+		return true;
+	}
+};
 
 
 //////////////////////////
@@ -2359,7 +2391,7 @@ class LLAdvancedEnableRenderFBO: public view_listener_t
 };
 
 /////////////////////////////////////
-// Enable Deferred Rendering	  ///
+// Enable Advanced Lighting Model ///
 /////////////////////////////////////
 class LLAdvancedEnableRenderDeferred: public view_listener_t
 {
@@ -2372,7 +2404,7 @@ class LLAdvancedEnableRenderDeferred: public view_listener_t
 };
 
 /////////////////////////////////////
-// Enable Deferred Rendering sub-options
+// Enable Advanced Lighting Model sub-options
 /////////////////////////////////////
 class LLAdvancedEnableRenderDeferredOptions: public view_listener_t
 {
@@ -4127,6 +4159,20 @@ class FSSelfCheckIgnorePreJump : public view_listener_t
 	}
 };
 
+class LLCheckPanelPeopleTab : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+		{
+			std::string panel_name = userdata.asString();
+
+			LLPanel *panel = LLFloaterSidePanelContainer::getPanel("people", panel_name);
+			if(panel && panel->isInVisibleChain())
+			{
+				return true;
+			}
+			return false;
+		}
+};
 // Toggle one of "People" panel tabs in side tray.
 class LLTogglePanelPeopleTab : public view_listener_t
 {
@@ -4678,25 +4724,27 @@ class LLViewToggleUI : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		LLNotification::Params params("ConfirmHideUI");
-		params.functor.function(boost::bind(&LLViewToggleUI::confirm, this, _1, _2));
-		LLSD substitutions;
+		if(gAgentCamera.getCameraMode() != CAMERA_MODE_MOUSELOOK)
+		{
+			LLNotification::Params params("ConfirmHideUI");
+			params.functor.function(boost::bind(&LLViewToggleUI::confirm, this, _1, _2));
+			LLSD substitutions;
 #if LL_DARWIN
-		substitutions["SHORTCUT"] = "Cmd+Shift+U";
+			substitutions["SHORTCUT"] = "Cmd+Shift+U";
 #else
-		substitutions["SHORTCUT"] = "Ctrl+Shift+U";
+			substitutions["SHORTCUT"] = "Ctrl+Shift+U";
 #endif
-		params.substitutions = substitutions;
-		if (gViewerWindow->getUIVisibility())
-		{
-			// hiding, so show notification
-			LLNotifications::instance().add(params);
+			params.substitutions = substitutions;
+			if (!gSavedSettings.getBOOL("HideUIControls"))
+			{
+				// hiding, so show notification
+				LLNotifications::instance().add(params);
+			}
+			else
+			{
+				LLNotifications::instance().forceResponse(params, 0);
+			}
 		}
-		else
-		{
-			LLNotifications::instance().forceResponse(params, 0);
-		}
-
 		return true;
 	}
 
@@ -4706,7 +4754,9 @@ class LLViewToggleUI : public view_listener_t
 
 		if (option == 0) // OK
 		{
-			gViewerWindow->setUIVisibility(!gViewerWindow->getUIVisibility());
+			gViewerWindow->setUIVisibility(gSavedSettings.getBOOL("HideUIControls"));
+			LLPanelStandStopFlying::getInstance()->setVisible(gSavedSettings.getBOOL("HideUIControls"));
+			gSavedSettings.setBOOL("HideUIControls",!gSavedSettings.getBOOL("HideUIControls"));
 		}
 	}
 };
@@ -5626,18 +5676,6 @@ BOOL sitting_on_selection()
 
 	return (gAgentAvatarp->isSitting() && gAgentAvatarp->getRoot() == root_object);
 }
-
-class LLToolsSaveToInventory : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		if(enable_save_into_inventory(NULL))
-		{
-			derez_objects(DRD_SAVE_INTO_AGENT_INVENTORY, LLUUID::null);
-		}
-		return true;
-	}
-};
 
 class LLToolsSaveToObjectInventory : public view_listener_t
 {
@@ -7028,11 +7066,12 @@ bool update_grid_help()
 
 	bool needs_seperator = false;
 
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	LLSD grid_info;
 	LLGridManager::getInstance()->getGridData(grid_info);
 	std::string grid_label = LLGridManager::getInstance()->getGridLabel();
-	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("help"))
+	bool is_opensim = LLGridManager::getInstance()->isInOpenSim();
+	if (is_opensim && grid_info.has("help"))
 	{
 		needs_seperator = true;
 		gMenuHolder->childSetVisible("current_grid_help",true);
@@ -7041,13 +7080,13 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_help_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_help",false);
 		gMenuHolder->childSetVisible("current_grid_help_login",false);
 	}
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim() && grid_info.has("about"))
+#ifdef OPENSIM // <FS:AW optional opensim support>
+	if (is_opensim && grid_info.has("about"))
 	{
 		needs_seperator = true;
 		gMenuHolder->childSetVisible("current_grid_about",true);
@@ -7056,7 +7095,7 @@ bool update_grid_help()
 		gMenuHolder->childSetLabelArg("current_grid_about_login", "[CURRENT_GRID]", grid_label);
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		gMenuHolder->childSetVisible("current_grid_about",false);
 		gMenuHolder->childSetVisible("current_grid_about_login",false);
@@ -7066,8 +7105,8 @@ bool update_grid_help()
 	gMenuHolder->childSetVisible("grid_help_seperator_login",needs_seperator);
 
 // <FS:AW  opensim destinations and avatar picker>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
-	if (LLGridManager::getInstance()->isInOpenSim())
+#ifdef OPENSIM // <FS:AW optional opensim support>
+	if (is_opensim)
 	{
 		if (!LLLoginInstance::getInstance()->hasResponse("destination_guide_url") 
 		||LLLoginInstance::getInstance()->getResponse("destination_guide_url").asString().empty()
@@ -7083,7 +7122,8 @@ bool update_grid_help()
 			gMenuHolder->childSetVisible("Destinations", false);
 		}
 	}
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
+#endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
 	return true;
@@ -8438,50 +8478,6 @@ bool LLHasAsset::operator()(LLInventoryCategory* cat,
 	return FALSE;
 }
 
-BOOL enable_save_into_inventory(void*)
-{
-	// *TODO: clean this up
-	// find the last root
-	LLSelectNode* last_node = NULL;
-	for (LLObjectSelection::root_iterator iter = LLSelectMgr::getInstance()->getSelection()->root_begin();
-		 iter != LLSelectMgr::getInstance()->getSelection()->root_end(); iter++)
-	{
-		last_node = *iter;
-	}
-
-#ifdef HACKED_GODLIKE_VIEWER
-	return TRUE;
-#else
-# ifdef TOGGLE_HACKED_GODLIKE_VIEWER
-	if (LLGridManager::getInstance()->isInSLBeta()
-        && gAgent.isGodlike())
-	{
-		return TRUE;
-	}
-# endif
-	// check all pre-req's for save into inventory.
-	if(last_node && last_node->mValid && !last_node->mItemID.isNull()
-	   && (last_node->mPermissions->getOwner() == gAgent.getID())
-	   && (gInventory.getItem(last_node->mItemID) != NULL))
-	{
-		LLViewerObject* obj = last_node->getObject();
-		if( obj && !obj->isAttachment() )
-		{
-			return TRUE;
-		}
-	}
-	return FALSE;
-#endif
-}
-
-class LLToolsEnableSaveToInventory : public view_listener_t
-{
-	bool handleEvent(const LLSD& userdata)
-	{
-		bool new_value = enable_save_into_inventory(NULL);
-		return new_value;
-	}
-};
 
 BOOL enable_save_into_task_inventory(void*)
 {
@@ -8913,6 +8909,7 @@ class LLToolsUseSelectionForGrid : public view_listener_t
 		} func;
 		LLSelectMgr::getInstance()->getSelection()->applyToRootObjects(&func);
 		LLSelectMgr::getInstance()->setGridMode(GRID_MODE_REF_OBJECT);
+		LLFloaterTools::setGridMode((S32)GRID_MODE_REF_OBJECT);
 		return true;
 	}
 };
@@ -9665,14 +9662,14 @@ void LLUploadCostCalculator::calculateCost()
 	// \0/ Copypasta! See llviewermessage, llviewermenu and llpanelmaininventory
 	S32 cost = LLGlobalEconomy::Singleton::getInstance()->getPriceUpload();
 	std::string upload_cost;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 	bool in_opensim = LLGridManager::getInstance()->isInOpenSim();
 	if(in_opensim)
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : LLTrans::getString("free");
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 	{
 		upload_cost = cost > 0 ? llformat("%s%d", "L$", cost) : llformat("%d", gSavedSettings.getU32("DefaultUploadCost"));
 	}
@@ -9943,7 +9940,6 @@ void initialize_menus()
 	commit.add("Tools.ScriptInfo",boost::bind(&handle_script_info));
 	commit.add("Tools.BuyOrTake", boost::bind(&handle_buy_or_take));
 	commit.add("Tools.TakeCopy", boost::bind(&handle_take_copy));
-	view_listener_t::addMenu(new LLToolsSaveToInventory(), "Tools.SaveToInventory");
 	view_listener_t::addMenu(new LLToolsSaveToObjectInventory(), "Tools.SaveToObjectInventory");
 	view_listener_t::addMenu(new LLToolsSelectedScriptAction(), "Tools.SelectedScriptAction");
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
@@ -9958,7 +9954,6 @@ void initialize_menus()
 	enable.add("Tools.EnableTakeCopy", boost::bind(&enable_object_take_copy));
 	enable.add("Tools.VisibleBuyObject", boost::bind(&tools_visible_buy_object));
 	enable.add("Tools.VisibleTakeObject", boost::bind(&tools_visible_take_object));
-	view_listener_t::addMenu(new LLToolsEnableSaveToInventory(), "Tools.EnableSaveToInventory");
 	view_listener_t::addMenu(new LLToolsEnableSaveToObjectInventory(), "Tools.EnableSaveToObjectInventory");
 
 	view_listener_t::addMenu(new LLToolsEnablePathfinding(), "Tools.EnablePathfinding");
@@ -10039,7 +10034,6 @@ void initialize_menus()
 	commit.add("Advanced.DumpFocusHolder", boost::bind(&handle_dump_focus) );
 	view_listener_t::addMenu(new LLAdvancedPrintSelectedObjectInfo(), "Advanced.PrintSelectedObjectInfo");
 	view_listener_t::addMenu(new LLAdvancedPrintAgentInfo(), "Advanced.PrintAgentInfo");
-	view_listener_t::addMenu(new LLAdvancedPrintTextureMemoryStats(), "Advanced.PrintTextureMemoryStats");
 	view_listener_t::addMenu(new LLAdvancedToggleDebugClicks(), "Advanced.ToggleDebugClicks");
 	view_listener_t::addMenu(new LLAdvancedCheckDebugClicks(), "Advanced.CheckDebugClicks");
 	view_listener_t::addMenu(new LLAdvancedCheckDebugViews(), "Advanced.CheckDebugViews");
@@ -10074,6 +10068,11 @@ void initialize_menus()
 	view_listener_t::addMenu(new LLAdvancedTestMale(), "Advanced.TestMale");
 	view_listener_t::addMenu(new LLAdvancedTestFemale(), "Advanced.TestFemale");
 	
+	// Advanced > Character > Animation Speed
+	view_listener_t::addMenu(new LLAdvancedAnimTenFaster(), "Advanced.AnimTenFaster");
+	view_listener_t::addMenu(new LLAdvancedAnimTenSlower(), "Advanced.AnimTenSlower");
+	view_listener_t::addMenu(new LLAdvancedAnimResetAll(), "Advanced.AnimResetAll");
+
 	// Advanced > Character (toplevel)
 	view_listener_t::addMenu(new LLAdvancedForceParamsToDefault(), "Advanced.ForceParamsToDefault");
 	view_listener_t::addMenu(new LLAdvancedReloadVertexShader(), "Advanced.ReloadVertexShader");
@@ -10174,6 +10173,7 @@ void initialize_menus()
 
 	// we don't use boost::bind directly to delay side tray construction
 	view_listener_t::addMenu( new LLTogglePanelPeopleTab(), "SideTray.PanelPeopleTab");
+	view_listener_t::addMenu( new LLCheckPanelPeopleTab(), "SideTray.CheckPanelPeopleTab");
 
 	 // Avatar pie menu
 	view_listener_t::addMenu(new LLObjectMute(), "Avatar.Mute");

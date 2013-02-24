@@ -3,7 +3,7 @@
     <key>craft-world.org:8002</key>
         <map>
         <key>LastModified</key>
-            <date>2012-08-03T15:33:03.16Z</date>
+            <date>2013-02-05T00:05:39.27Z</date>
         <key>about</key>
             <string>http://www.craft-world.org/</string>
         <key>gatekeeper</key>
@@ -27,6 +27,8 @@
             </array>
         <key>name</key>
             <string>craft-world.org:8002</string>
+        <key>platform</key>
+            <string>OpenSim</string>
         <key>register</key>
             <string>http://www.craft-world.org/page/en/register-an-avatar.php</string>
         <key>slurl_base</key>
@@ -68,33 +70,10 @@
         </map>
     <key>grid.avatarconnection.com:8002/</key>
         <map>
-        <key>LastModified</key>
-            <date>2012-08-03T15:36:57.31Z</date>
-        <key>about</key>
-            <string>http://avatarconnection.com/</string>
-        <key>gridname</key>
-            <string>Avatar Connection</string>
-        <key>gridnick</key>
-            <string>AvatarConnection</string>
-        <key>helperuri</key>
-            <string>http://grid.avatarconnection.com:9000/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://avatarconnection.com/grid/index.php</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://grid.avatarconnection.com:8002/</string>
-            </array>
+        <key>DEPRECATED</key>
+			<string>TRUE</string>
         <key>name</key>
             <string>grid.avatarconnection.com:8002/</string>
-        <key>register</key>
-            <string>http://avatarconnection.com/</string>
-        <key>slurl_base</key>
-            <string>hop://grid.avatarconnection.com:8002//</string>
         </map>
     <key>grid.roleplayworlds.net:8002</key>
         <map>
@@ -197,6 +176,42 @@
         <key>slurl_base</key>
             <string>hop://localhost:9000/</string>
         </map>
+    <key>login.aurorascape.com:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-02-17T18:13:40.60Z</date>
+        <key>about</key>
+            <string>http://aurorascape.com/</string>
+        <key>gridname</key>
+            <string>AuroraScape</string>
+        <key>gridnick</key>
+            <string>AuroraScape</string>
+        <key>help</key>
+            <string>http://forum.aurorascape.com/</string>
+        <key>helperuri</key>
+            <string>http://login.aurorascape.com:8002/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://login.aurorascape.com:8008/welcomescreen/index.html</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://login.aurorascape.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>login.aurorascape.com:8002</string>
+        <key>password</key>
+            <string>http://login.aurorascape.com:8008/forgot_pass.html</string>
+        <key>platform</key>
+            <string>Aurora</string>
+        <key>register</key>
+            <string>http://login.aurorascape.com:8008/register.html</string>
+        <key>slurl_base</key>
+            <string>hop://login.aurorascape.com:8002/</string>
+        </map>
     <key>login.avination.com/</key>
         <map>
         <key>LastModified</key>
@@ -228,6 +243,42 @@
             <string>https://www.avination.com/join.html</string>
         <key>slurl_base</key>
             <string>https://login.avination.com/</string>
+        </map>
+    <key>login.francogrid.org:80</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-02-14T02:00:46.10Z</date>
+        <key>about</key>
+            <string>http://francogrid.org/</string>
+        <key>gridname</key>
+            <string>FrancoGrid</string>
+        <key>gridnick</key>
+            <string>francogrid</string>
+        <key>help</key>
+            <string>http://francogrid.org/aide</string>
+        <key>helperuri</key>
+            <string>http://helper.main.francogrid.org/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://viewer.francogrid.org/</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://login.francogrid.org/</string>
+            </array>
+        <key>name</key>
+            <string>login.francogrid.org:80</string>
+        <key>password</key>
+            <string>http://francogrid.org/user/password</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://francogrid.org/user/register</string>
+        <key>slurl_base</key>
+            <string>hop://login.francogrid.org:80/</string>
         </map>
     <key>login.danger.osgrid.org</key>
         <map>

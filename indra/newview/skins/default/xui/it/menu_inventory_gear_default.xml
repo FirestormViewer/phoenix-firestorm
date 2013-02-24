@@ -6,13 +6,13 @@
 	<menu_item_check label="Ordina le cartelle sempre in base al nome" name="sort_folders_by_name"/>
 	<menu_item_check label="Ordina cartelle di sistema all&apos;inizio" name="sort_system_folders_to_top"/>
 	<!-- ## Zi: Extended Inventory Search -->
-	<menu label="Cerca per..." name="inventory_search_menu">
+	<context_menu label="Cerca per..." name="inventory_search_menu">
 		<menu_item_check name="inventory_search_by_name" label="Nome"/>
 		<menu_item_check name="inventory_search_by_creator" label="Creatore"/>
 		<menu_item_check name="inventory_search_by_description" label="Descrizione"/>
 		<menu_item_check name="inventory_search_by_uuid" label="UUID"/>
 		<menu_item_check name="inventory_search_by_all" label="Tutti"/>
-	</menu>
+	</context_menu>
 	<menu_item_check label="Aggiungi oggetto con doppio click" name="add_inv_toggle"/>
 	<menu_item_call label="Mostra filtri" name="show_filters"/>
 	<menu_item_call label="Ripristina filtri" name="reset_filters"/>

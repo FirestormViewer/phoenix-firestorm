@@ -26,7 +26,7 @@
  */
 #ifndef LLSLURL_H
 #define LLSLURL_H
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 #include "fsslurl.h"
 #else
 
@@ -114,6 +114,6 @@ protected:
 	LLVector3  mPosition;
 };
 
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 
 #endif // LLSLURL_H

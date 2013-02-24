@@ -32,7 +32,7 @@
 		<check_box initial_value="true" label="Lokale Lichtquellen" name="LocalLights"/>
 		<check_box initial_value="true" label="Einfache Shader" name="BasicShaders" tool_tip="Deaktivieren Sie diese Option, wenn der Grafikkartentreiber Abstürze verursacht"/>
 		<check_box initial_value="true" label="Atmosphären-Shader" name="WindLightUseAtmosShaders"/>
-		<check_box initial_value="true" label="Deferred Rendering" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
+		<check_box initial_value="true" label="Erw. Beleuchtungsmodell" name="UseLightShaders" tool_tip="Aktiviert erweitertes Rendering von Lichtquellen."/>
 		<check_box initial_value="true" label="Ambient Occlusion" name="UseSSAO"/>
 		<text name="shadows_label">
 			Schatten:
@@ -52,7 +52,7 @@
 			<combo_box.item label="Alle Avatare und Objekte" name="3"/>
 			<combo_box.item label="Alles" name="4"/>
 		</combo_box>
-		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen, wenn Deferred Rendering aktiviert ist (Neustart erforderlich).">
+		<text name="local lights_label" tool_tip="Beeinflusst die Anzahl an dargestellten Lichtquellen, wenn Erweitertes Beleuchtungsmodell aktiviert ist (Neustart erforderlich).">
 			Punkt. Beleucht. (Neustart erf.):
 		</text>
 		<combo_box name="LocalLightsDetail">
@@ -145,8 +145,8 @@
 		<text name="Alpha Mask Rendering">
 			Darstellung von Alpha-Masken:
 		</text>
-		<check_box label="Alpha-Masken wenn 'Deferred Rendering' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
-		<check_box label="Alpha-Masken wenn 'Deferred Rendering' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' deaktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Deferred Rendering nicht aktiviert ist." name="RenderAutoMaskAlphaNonDeferred"/>
+		<check_box label="Alpha-Masken wenn 'Erweitertes Beleuchtungsmodell' aktiviert ist" tool_tip="Falls aktiviert werden Alpha-Masken korrekt dargestellt, falls Erweitertes Beleuchtungsmodell aktiviert ist." name="RenderAutoMaskAlphaDeferred"/>
 		<text name="Miscellaneous Rendering">
 			Sonstige Darstellungsoptionen:
 		</text>

@@ -28,7 +28,7 @@
 
 #include <boost/noncopyable.hpp>
 
-#include "ndintrin.h" // <FS:ND/> For FAA/FAD
+#include "nd/ndintrin.h" // <FS:ND/> For FAA/FAD
 
 #define LL_REF_COUNT_DEBUG 0
 #if LL_REF_COUNT_DEBUG

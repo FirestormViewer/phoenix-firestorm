@@ -794,7 +794,7 @@ void LLPanelLandGeneral::refresh()
 			mBtnReleaseLand->setEnabled( can_release );
 		}
 
-		BOOL use_pass = parcel->getParcelFlag(PF_USE_PASS_LIST) && !LLViewerParcelMgr::getInstance()->isCollisionBanned();;
+		BOOL use_pass = parcel->getOwnerID()!= gAgent.getID() && parcel->getParcelFlag(PF_USE_PASS_LIST) && !LLViewerParcelMgr::getInstance()->isCollisionBanned();;
 		mBtnBuyPass->setEnabled(use_pass);
 
 		// <Ansariel> Retrieve parcel UUID. We need to ask the itself for the
@@ -2235,7 +2235,7 @@ void LLPanelLandOptions::refreshSearch()
 		// <FS:Ansariel> FIRE-7773: Parcel categories don't stay selected
 		//const std::string& none_string = LLParcel::getCategoryUIString(LLParcel::C_NONE);
 		//mCategoryCombo->setSimple(none_string);
-		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_ANY);
+		const std::string& none_string = LLParcel::getCategoryString(LLParcel::C_NONE);
 		mCategoryCombo->setValue(none_string);
 		// </FS:Ansariel>
 		mCategoryCombo->setEnabled(FALSE);

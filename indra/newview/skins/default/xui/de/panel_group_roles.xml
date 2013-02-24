@@ -7,7 +7,7 @@
 		Möchten Sie Ihre Änderungen speichern?
 	</panel.string>
 	<tab_container name="roles_tab_container">
-		<panel label="MITGLIEDER" name="members_sub_tab" tool_tip="Mitglieder">
+		<panel label="Mitglieder" name="members_sub_tab" tool_tip="Mitglieder">
 			<panel.string name="help_text">
 				Sie können Mitgliedern Rollen zuweisen und entziehen.
 Drücken Sie die Strg-Taste und klicken Sie auf Namen,
@@ -25,7 +25,7 @@ um mehrere Mitglieder auszuwählen.
 			<button label="Einladen" name="member_invite"/>
 			<button label="Hinauswerfen" name="member_eject"/>
 		</panel>
-		<panel label="ROLLEN" name="roles_sub_tab">
+		<panel label="Rollen" name="roles_sub_tab">
 			<panel.string name="help_text">
 				Rollen haben einen Titel und umfassen bestimmte
 Fähigkeiten. Mitglieder können mehrere
@@ -53,7 +53,7 @@ definieren, darunter  &apos;Jeder &apos; und  &apos;Eigentümer &apos;.
 			<button label="Neue Rolle" name="role_create"/>
 			<button label="Rolle löschen" name="role_delete"/>
 		</panel>
-		<panel label="FÄHIGKEITEN" name="actions_sub_tab" tool_tip="Sie können eine Beschreibung der Fähigkeit anzeigen und welche Rollen bzw. Mitglieder über diese Fähigkeit verfügen.">
+		<panel label="Fähigkeiten" name="actions_sub_tab" tool_tip="Sie können eine Beschreibung der Fähigkeit anzeigen und welche Rollen bzw. Mitglieder über diese Fähigkeit verfügen.">
 			<panel.string name="help_text">
 				Fähigkeiten verleihen Mitgliedern in Rollen bestimmte
 Rechte in einer Gruppe. Es gibt viele verschiedene Fähigkeiten.

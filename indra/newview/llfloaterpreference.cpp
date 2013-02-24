@@ -308,7 +308,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 	if ( option == 0 ) // YES
 	{
 		std::string url;
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#ifdef OPENSIM // <FS:AW optional opensim support>
 		if(LLGridManager::getInstance()->isInOpenSim())
 		{
 			url = LLLoginInstance::getInstance()->hasResponse("search")
@@ -316,7 +316,7 @@ bool callback_pick_debug_search(const LLSD& notification, const LLSD& response)
 				: gSavedSettings.getString("SearchURLOpenSim");
 		}
 		else // we are in SL or SL beta
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 		{
 			//not in OpenSim means we are in SL or SL beta
 			url = gSavedSettings.getString("SearchURL");
@@ -631,7 +631,7 @@ BOOL LLFloaterPreference::postBuild()
 // [/SL:KB]
 
 // <FS:AW  opensim preferences>
-#ifndef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support/>
+#ifndef OPENSIM// <FS:AW optional opensim support/>
 	// Hide the opensim tab if opensim isn't enabled
 	LLTabContainer* tab_container = getChild<LLTabContainer>("pref core");
 	if (tab_container)
@@ -641,7 +641,7 @@ BOOL LLFloaterPreference::postBuild()
 			tab_container->removeTabPanel(opensim_panel);
 	}
 // </FS:AW  opensim preferences>
-#endif  // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#endif  // OPENSIM // <FS:AW optional opensim support/>
 
 
 // ## Zi: Pie menu
@@ -1038,7 +1038,7 @@ void LLFloaterPreference::onBtnOK()
 		llinfos << "Can't close preferences!" << llendl;
 	}
 
-	LLPanelLogin::updateLocationCombo( false );
+	LLPanelLogin::updateLocationSelectorsVisibility();	
 	//Need to reload the navmesh if the pathing console is up
 	LLHandle<LLFloaterPathfindingConsole> pathfindingConsoleHandle = LLFloaterPathfindingConsole::getInstanceHandle();
 	if ( !pathfindingConsoleHandle.isDead() )
@@ -1063,7 +1063,7 @@ void LLFloaterPreference::onBtnApply( )
 	apply();
 	saveSettings();
 
-	LLPanelLogin::updateLocationCombo( false );
+	LLPanelLogin::updateLocationSelectorsVisibility();
 }
 
 // static 
@@ -1761,7 +1761,7 @@ void LLFloaterPreference::onClickSetSounds()
 void LLFloaterPreference::onClickPreviewUISound(const LLSD& ui_sound_id)
 {
 	std::string uisndid = ui_sound_id.asString();
-	make_ui_sound(uisndid.c_str());
+	make_ui_sound(uisndid.c_str(), true);
 }
 // </FS:PP> FIRE-8190: Preview function for "UI Sounds" Panel
 
@@ -2291,14 +2291,14 @@ BOOL LLPanelPreference::postBuild()
 	}
 #endif
 	// </FS:LO>
-#ifdef HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#ifdef OPENSIM // <FS:AW optional opensim support/>
 // <FS:AW Disable LSL bridge on opensim>
-	if(LLGridManager::getInstance()->isInOpenSim() && hasChild("UseLSLBridge", TRUE))
+	if(LLGridManager::getInstance()->isInOpenSim() && !LLGridManager::getInstance()->isInAuroraSim() && hasChild("UseLSLBridge", TRUE))
 	{
  		getChild<LLCheckBoxCtrl>("UseLSLBridge")->setEnabled(FALSE);
 	}
 // </FS:AW Disable LSL bridge on opensim>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support/>
+#endif // OPENSIM // <FS:AW optional opensim support/>
 
 	apply();
 	return true;
@@ -3463,7 +3463,7 @@ void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
 }
 // </FS:Zi>
 
-#ifdef HAS_OPENSIM_SUPPORT// <FS:AW optional opensim support>
+#ifdef OPENSIM// <FS:AW optional opensim support>
 //<FS:AW  opensim preferences>
 static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
@@ -3626,5 +3626,5 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 }
 // </FS:AW  opensim search support>
 // </FS:AW  opensim preferences>
-#endif // HAS_OPENSIM_SUPPORT // <FS:AW optional opensim support>
+#endif // OPENSIM // <FS:AW optional opensim support>
 

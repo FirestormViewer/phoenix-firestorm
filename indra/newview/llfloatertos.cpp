@@ -134,7 +134,7 @@ BOOL LLFloaterTOS::postBuild()
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("tos_html");
 // <FS:CR> FIRE-8063 - Aurora and OpenSim TOS
 	bool use_web_browser = false;
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		//Check to see if the message is a link to display
@@ -148,7 +148,7 @@ BOOL LLFloaterTOS::postBuild()
 		}
 	}
 	else
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 	{
 		use_web_browser = true;
 	}
@@ -162,7 +162,7 @@ BOOL LLFloaterTOS::postBuild()
 // <FS:CR> FIRE-8063 - Aurora and OpenSim TOS
 		// Next line moved into logic below...
 		//web_browser->navigateTo( getString( "loading_url" ) );
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		if (LLGridManager::getInstance()->isInOpenSim())
 		{
 			mRealNavigateBegun = true;
@@ -170,14 +170,14 @@ BOOL LLFloaterTOS::postBuild()
 			web_browser->navigateTo(mMessage);
 		}
 		else
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 		{
 			// Don't use the start_url parameter for this browser instance -- it may finish loading before we get to add our observer.
 			// Store the URL separately and navigate here instead.
 			web_browser->navigateTo( getString( "loading_url" ) );
 		}
 	}
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	else if (LLGridManager::getInstance()->isInOpenSim())
 	{
 		std::string showTos = "data:text/html,%3Chtml%3E%3Chead%3E"
@@ -196,7 +196,7 @@ BOOL LLFloaterTOS::postBuild()
 		tos_agreement->setEnabled(true);
 		web_browser->navigateTo(showTos);
 	}
-#endif // HAS_OPENSIM_SUPPORT
+#endif // OPENSIM
 // </FS:CR>
 
 	return TRUE;

@@ -760,15 +760,24 @@ BOOL LLToolCompGun::handleRightMouseDown(S32 x, S32 y, MASK mask)
 
 	// Returning true will suppress the context menu
 	// NaCl - Rightclick-mousewheel zoom
-	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
-	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
-	LLVector3 vTemp=_NACL_MLFovValues;
-	vTemp.mV[0]=CameraAngle;
-	vTemp.mV[2]=1.0f;
-	gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-	gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+	if (!(gKeyboard->currentMask(TRUE) & MASK_ALT))
+	{
+		static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
+		static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
+		LLVector3 vTemp=_NACL_MLFovValues;
+		vTemp.mV[0]=CameraAngle;
+		vTemp.mV[2]=1.0f;
+		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+		gSavedSettings.setF32("CameraAngle",vTemp.mV[1]);
+
+		return TRUE;
+	}
 	// NaCl End
-	return TRUE;
+
+	// <FS:Ansariel> Enable context/pie menu in mouselook
+	//return TRUE;
+	return (!gSavedSettings.getBOOL("FSEnableRightclickMenuInMouselook"));
+	// </FS:Ansariel>
 }
 // NaCl - Rightclick-mousewheel zoom
 BOOL LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
@@ -776,10 +785,14 @@ BOOL LLToolCompGun::handleRightMouseUp(S32 x, S32 y, MASK mask)
 	static LLCachedControl<LLVector3> _NACL_MLFovValues(gSavedSettings,"_NACL_MLFovValues");
 	static LLCachedControl<F32> CameraAngle(gSavedSettings,"CameraAngle");
 	LLVector3 vTemp=_NACL_MLFovValues;
-	vTemp.mV[1]=CameraAngle;
-	vTemp.mV[2]=0.0f;
-	gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
-	gSavedSettings.setF32("CameraAngle",vTemp.mV[0]);
+	// Only reset if zoomed
+	if (vTemp.mV[2] == 1.0f)
+	{
+		vTemp.mV[1]=CameraAngle;
+		vTemp.mV[2]=0.0f;
+		gSavedSettings.setVector3("_NACL_MLFovValues",vTemp);
+		gSavedSettings.setF32("CameraAngle",vTemp.mV[0]);
+	}
 	return TRUE;
 }
 // NaCl End

@@ -1385,7 +1385,7 @@ BOOL LLPanelRegionTerrainInfo::sendUpdate()
 
 	// Make sure user hasn't chosen wacky textures unless we're on Aurora-sim.
 // <FS:CR> Aurora Sim - Region Settings Console
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if (!validateTextureSizes() && !LLGridManager::getInstance()->isInAuroraSim())
 	{
 		return FALSE;
@@ -1395,7 +1395,7 @@ BOOL LLPanelRegionTerrainInfo::sendUpdate()
 	{
 		return FALSE;
 	}
-#endif
+#endif // OPENSIM
 // </FS:CR> Aurora Sim - Region Settings Console
 
 	LLTextureCtrl* texture_ctrl;

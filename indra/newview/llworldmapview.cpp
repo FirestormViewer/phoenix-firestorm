@@ -59,7 +59,7 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 #include "llviewernetwork.h"	// <FS:CR> Aurora Sim
 #endif
 
@@ -358,13 +358,13 @@ void LLWorldMapView::draw()
 
 	// Draw the image tiles
 // <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 	if(!LLGridManager::getInstance()->isInAuroraSim()) {
 		drawMipmap(width, height);
 	}
 #else
 	drawMipmap(width, height);
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 // </FS:CR> Aurora Sim
 
 	gGL.flush();
@@ -450,11 +450,11 @@ void LLWorldMapView::draw()
 		}
 		 **********************/
 // <FS:CR> Aurora Sim
-#ifdef HAS_OPENSIM_SUPPORT
+#ifdef OPENSIM
 		else if ((mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD)) || LLGridManager::getInstance()->isInAuroraSim())
 #else
 		else if (mapShowLandForSale && (level <= DRAW_LANDFORSALE_THRESHOLD))
-#endif //HAS_OPENSIM_SUPPORT
+#endif //OPENSIM
 		{
 			// Draw the overlay image "Land for Sale / Land for Auction"
 			LLViewerFetchedTexture* overlayimage = info->getLandForSaleImage();
@@ -1406,7 +1406,7 @@ void LLWorldMapView::drawTrackingCircle( const LLRect& rect, S32 x, S32 y, const
 
 	gGL.matrixMode(LLRender::MM_MODELVIEW);
 	gGL.pushMatrix();
-	gGL.translatef((F32)x, (F32)y, 0.f);
+	gGL.translatef((F32)x * LLUI::getScaleFactor().mV[VX], (F32)y * LLUI::getScaleFactor().mV[VY], 0.f);
 	gl_washer_segment_2d(inner_radius, outer_radius, start_theta, end_theta, 40, color, color);
 	gGL.popMatrix();
 

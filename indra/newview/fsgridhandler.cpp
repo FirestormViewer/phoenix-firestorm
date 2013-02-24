@@ -1,4 +1,4 @@
-/** 
+/**
  * @file fsgridhandler.cpp
  * @author James Cook, Richard Nelson
  * @brief Networking constants and globals for viewer.
@@ -12,16 +12,16 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
  * version 2.1 of the License only.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
@@ -47,6 +47,7 @@
 #else
 #include <unistd.h>
 #endif
+
 // <AW opensim>
 class GridInfoRequestResponder : public LLHTTPClient::Responder
 {
@@ -178,20 +179,12 @@ const char* DEFAULT_APP_SLURL_BASE = "x-grid-location-info://%s/app";
 
 // <AW opensim>
 LLGridManager::LLGridManager()
-:	mIsInSLMain(false),
-	mIsInSLBeta(false),
-	mIsInOpenSim(false),
-// <FS:CR> Aurora Sim
-	mIsInAuroraSim(false),
-// </FS:CR> Aurora Sim
+:	EGridPlatform(GP_NOTSET),
 	mReadyToLogin(false),
 	mCommandLineDone(false),
 	mResponderCount(0)
 {
 	mGrid.clear() ;
-// <FS:AW  grid management>
-//	mGridList = LLSD();
-// <FS:AW  grid management>
 }
 
 void LLGridManager::resetGrids()
@@ -1318,12 +1311,7 @@ std::string LLGridManager::getLoginPage()
 // <AW opensim>
 void LLGridManager::updateIsInProductionGrid()
 {
-	mIsInSLMain = false;
-	mIsInSLBeta = false;
-	mIsInOpenSim = false;
-// <FS:CR> Aurora Sim
-	mIsInAuroraSim = false;
-// </FS:CR> Aurora Sim
+	EGridPlatform = GP_NOTSET;
 
 	// *NOTE:Mani This used to compare GRID_INFO_AGNI to gGridChoice,
 	// but it seems that loginURI trumps that.
@@ -1331,7 +1319,7 @@ void LLGridManager::updateIsInProductionGrid()
 	getLoginURIs(uris);
 	if(uris.empty())
 	{
-		LL_DEBUGS("GridManager") << "uri is empty, no grid type set." << LL_ENDL;
+		LL_DEBUGS("GridManager") << "uri is empty, setting grid platform to NOTHING." << LL_ENDL;
 		return;
 	}
 
@@ -1341,22 +1329,21 @@ void LLGridManager::updateIsInProductionGrid()
 	// cool for http://agni.nastyfraud.com/steal.php#allyourmoney
 	if(login_uri.authority().find("login.agni.lindenlab.com") ==  0)
 	{
-		LL_DEBUGS("GridManager")<< "uri: "<<  login_uri.authority() << " set IsInSLMain" << LL_ENDL;
-		mIsInSLMain = true;
+		LL_DEBUGS("GridManager")<< "uri: "<<  login_uri.authority() << " setting grid platform to SL MAIN" << LL_ENDL;
+		EGridPlatform = GP_SLMAIN;
 		return;
 	}
 	else if( login_uri.authority().find("lindenlab.com") !=  std::string::npos )//here is no real money
 	{
-		LL_DEBUGS("GridManager")<< "uri: "<< login_uri.authority() << " set IsInSLBeta" << LL_ENDL;
-		mIsInSLBeta = true;
+		LL_DEBUGS("GridManager")<< "uri: "<< login_uri.authority() << " setting grid platform to SL BETA" << LL_ENDL;
+		EGridPlatform = GP_SLBETA;
 		return;
 	}
 
 // <FS:CR> Aurora Sim
 	if(mGridList[mGrid][GRID_PLATFORM].asString() == "Aurora") {
-		LL_DEBUGS("GridManager")<< "uri: "<< uris[0] << "set isInAuroraSim" << LL_ENDL;		
-		mIsInAuroraSim = true;
-		mIsInOpenSim = true; //also enable opensim related options here
+		LL_DEBUGS("GridManager")<< "uri: "<< uris[0] << "setting grid platform to AURORA" << LL_ENDL;		
+		EGridPlatform = GP_AURORA;
 		return;
 	}
 // </FS:CR> Aurora Sim
@@ -1371,30 +1358,30 @@ void LLGridManager::updateIsInProductionGrid()
 		return;
 	}
 
-	LL_DEBUGS("GridManager")<< "uri: "<< login_uri.authority() << " set IsInOpenSim" << LL_ENDL;
-	mIsInOpenSim = true;
+	LL_DEBUGS("GridManager")<< "uri: "<< login_uri.authority() << " setting grid platform to OPENSIM" << LL_ENDL;
+	EGridPlatform = GP_OPENSIM;
 }
 // </AW opensim>
 
 bool LLGridManager::isInSLMain()
 {
-	return mIsInSLMain;
+	return (EGridPlatform == GP_SLMAIN);
 }
 
 bool LLGridManager::isInSLBeta()
 {
-	return mIsInSLBeta;
+	return (EGridPlatform == GP_SLBETA);
 }
 
 bool LLGridManager::isInOpenSim()
 {
-	return mIsInOpenSim;
+	return (EGridPlatform == GP_OPENSIM || EGridPlatform == GP_AURORA);
 }
 
 // <FS:CR> Aurora Sim
 bool LLGridManager::isInAuroraSim()
 {
-	return mIsInAuroraSim;
+	return (EGridPlatform == GP_AURORA);
 }
 // </FS:CR> Aurora Sim
 
