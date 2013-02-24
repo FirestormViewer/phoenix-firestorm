@@ -51,6 +51,8 @@
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
 
+#include "fslslbridge.h"
+
 ///----------------------------------------------------------------------------
 /// LLFloaterScriptLimits
 ///----------------------------------------------------------------------------
@@ -1189,11 +1191,17 @@ void LLPanelScriptLimitsAttachment::setAttachmentDetails(LLSD content)
 
 	for(int i = 0; i < number_attachments; i++)
 	{
+		// <FS:Ansariel> Firestorm Bridge hack
+		bool isValid = true;
+
 		std::string humanReadableLocation = "";
 		if(content["attachments"][i].has("location"))
 		{
 			std::string actualLocation = content["attachments"][i]["location"];
 			humanReadableLocation = LLTrans::getString(actualLocation.c_str());
+
+			// <FS:Ansariel> Firestorm Bridge hack
+			isValid = (actualLocation != "Invalid Attachment");
 		}
 		
 		S32 number_objects = content["attachments"][i]["objects"].size();
@@ -1212,13 +1220,13 @@ void LLPanelScriptLimitsAttachment::setAttachmentDetails(LLSD content)
 			}
 			std::string name = content["attachments"][i]["objects"][j]["name"].asString();
 
-			// Ansariel: Crude hack to make the bridge display the proper attachment spot
-			//           and not "MissingString(Bad attachment point)"
-			if (humanReadableLocation == "MissingString(Bad attachment point)" && (name.find("Firestorm LSL Bridge") != std::string::npos || name == "Rock - medium, round"))
+			// <FS:Ansariel> Firestorm Bridge hack
+			if (!isValid && (name.find(FS_BRIDGE_NAME) != std::string::npos || name == LIB_ROCK_NAME))
 			{
 				humanReadableLocation = LLTrans::getString("Bridge");
 				name = "Firestorm LSL Bridge";
 			}
+			// </FS:Ansariel>
 			
 			LLSD element;
 

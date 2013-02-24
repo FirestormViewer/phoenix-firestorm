@@ -40,6 +40,9 @@
 //-TT Client LSL Bridge File
 //
 
+const std::string LIB_ROCK_NAME = "Rock - medium, round";
+const std::string FS_BRIDGE_NAME = "#Firestorm LSL Bridge v";
+
 class FSLSLBridge : public LLSingleton<FSLSLBridge>, public LLHTTPClient::Responder, public LLVOInventoryListener
 {
 	static const U8 BRIDGE_POINT = 127;
