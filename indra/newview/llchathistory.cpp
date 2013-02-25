@@ -335,12 +335,24 @@ public:
 			{
 				user_name->setValue( LLSD() );
 				LLAvatarNameCache::get(mAvatarID,
-					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2));
+					boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType, chat.mFromNameGroup)); // FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+					//boost::bind(&LLChatHistoryHeader::onAvatarNameCache, this, _1, _2, chat.mChatType));
 			}
 			else
 			{
 				// If the agent's chat was subject to @shownames=n we should display their anonimized name
 				mFrom = chat.mFromName;
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
+				//if (chat.mChatType == CHAT_TYPE_IM) mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				if (chat.mChatType == CHAT_TYPE_IM)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + mFrom;
+				}
+				else if (chat.mChatType == CHAT_TYPE_IM_GROUP)
+				{
+					mFrom = LLTrans::getString("IMPrefix") + " " + chat.mFromNameGroup + mFrom;
+				}
+				// FS:LO FIRE-5230 - Chat Console Improvement: Replacing the "IM" in front of group chat messages with the actual group name
 				user_name->setValue(mFrom);
 				user_name->setToolTip(mFrom);
 				setToolTip(mFrom);
