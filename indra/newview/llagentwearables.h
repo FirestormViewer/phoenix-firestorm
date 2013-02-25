@@ -193,7 +193,7 @@ private:
 	// Save Wearables
 	//--------------------------------------------------------------------
 public:	
-	void			saveWearableAs(const LLWearableType::EType type, const U32 index, const std::string& new_name, BOOL save_in_lost_and_found);
+	void			saveWearableAs(const LLWearableType::EType type, const U32 index, const std::string& new_name, const std::string& description, BOOL save_in_lost_and_found);
 	void			saveWearable(const LLWearableType::EType type, const U32 index, BOOL send_update = TRUE,
 								 const std::string new_name = "");
 	void			saveAllWearables();
@@ -293,7 +293,8 @@ private:
 											LLWearableType::EType type,
 											U32 index,
 											LLViewerWearable* wearable,
-											U32 todo = CALL_NONE);
+											U32 todo = CALL_NONE,
+											const std::string description = "");
 		virtual void fire(const LLUUID& inv_item);
 	private:
 		LLWearableType::EType mType;
@@ -301,6 +302,7 @@ private:
 		LLViewerWearable* mWearable;
 		U32 mTodo;
 		LLPointer<LLRefCount> mCB;
+		std::string mDescription;
 	};
 
 }; // LLAgentWearables

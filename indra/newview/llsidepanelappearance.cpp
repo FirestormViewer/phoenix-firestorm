@@ -231,7 +231,7 @@ void LLSidepanelAppearance::updateToVisibility(const LLSD &new_visibility)
 		{
 			gAgentCamera.changeCameraToDefault();
 			gAgentCamera.resetView();
-		}
+		}	
 		
 		if ( mEditWearable->getVisible() )
 		{
@@ -380,6 +380,7 @@ void LLSidepanelAppearance::toggleOutfitEditPanel(BOOL visible, BOOL disable_cam
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);
+			LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
 		}
 	}
 }
@@ -414,6 +415,7 @@ void LLSidepanelAppearance::toggleWearableEditPanel(BOOL visible, LLViewerWearab
 	{
 		// Save changes if closing.
 		mEditWearable->saveChanges();
+		LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);

@@ -3691,6 +3691,17 @@
     <key>Value</key>
     <integer>0</integer>
   </map>
+  <key>DebugAvatarAppearanceMessage</key>
+  <map>
+    <key>Comment</key>
+    <string>Dump a bunch of XML files when handling appearance messages</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
 	<key>DebugAvatarRezTime</key>
 	<map>
 		<key>Comment</key>
@@ -3715,6 +3726,17 @@
     <key>Value</key>
     <integer>1</integer>
     <key>Backup</key>
+    <integer>0</integer>
+  </map>
+  <key>DebugAvatarCompositeBaked</key>
+  <map>
+    <key>Comment</key>
+    <string>Colorize avatar meshes based on baked/composite state.</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
     <integer>0</integer>
   </map>
   <key>DebugAvatarCompositeBaked</key>
@@ -5831,7 +5853,6 @@
       <key>Value</key>
       <real>96.0</real>
     </map>
-
     <key>ForceAssetFail</key>
     <map>
       <key>Comment</key>
@@ -5854,9 +5875,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <real>0.0</real>
-      <key>Backup</key>
-      <integer>0</integer>
+      <integer>0.0</integer>
     </map>
     <key>ForceShowGrid</key>
     <map>
@@ -5867,6 +5886,8 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
+      <real>0.0</real>
+      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>ForceMandatoryUpdate</key>
@@ -5879,8 +5900,6 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>ForceMissingType</key>
     <map>
@@ -5892,8 +5911,6 @@
       <string>U32</string>
       <key>Value</key>
       <integer>255</integer>
-      <key>Backup</key>
-      <integer>0</integer>
     </map>
     <key>FreezeTime</key>
     <map>
@@ -5901,6 +5918,28 @@
       <string />
       <key>Persist</key>
       <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FullScreenAspectRatio</key>
+    <map>
+      <key>Comment</key>
+      <string>Aspect ratio of fullscreen display (width / height)</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>3</real>
+    </map>
+    <key>FullScreenAutoDetectAspectRatio</key>
+    <map>
+      <key>Comment</key>
+      <string>Automatically detect proper aspect ratio for fullscreen display</string>
+      <key>Persist</key>
+      <integer>1</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
@@ -5915,7 +5954,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>https://marketplace.secondlife.com/products/search?search[category_id]=200&amp;search[page]=1&amp;search[per_page]=12</string>
+      <string>https://marketplace.secondlife.com/products/search?search[category_id]=200&amp;search[maturity][]=General&amp;search[page]=1&amp;search[per_page]=12</string>
     </map>
     <key>GridCrossSections</key>
     <map>
@@ -6257,6 +6296,17 @@
     <map>
       <key>Comment</key>
         <string>Rate at which we simulate failures of copy/link requests in some operations</string>
+      <key>Persist</key>
+        <integer>1</integer>
+      <key>Type</key>
+        <string>F32</string>
+      <key>Value</key>
+        <real>0.0</real>
+    </map>
+    <key>InventoryDebugSimulateLateOpRate</key>
+    <map>
+      <key>Comment</key>
+        <string>Rate at which we simulate late-completing copy/link requests in some operations</string>
       <key>Persist</key>
         <integer>1</integer>
       <key>Type</key>
@@ -11254,6 +11304,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>DisableAllRenderTypes</key>
+    <map>
+      <key>Comment</key>
+      <string>Disables all rendering types.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>DisableAllRenderFeatures</key>
+    <map>
+      <key>Comment</key>
+      <string>Disables all rendering features.</string>
+      <key>Persist</key>
+      <integer>0</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
     <key>RenderHUDInSnapshot</key>
     <map>
       <key>Comment</key>
@@ -12515,6 +12587,17 @@ Change of this parameter will affect the layout of buttons in notification toast
     <map>
       <key>Comment</key>
       <string>Show/hide permission icons in the friend list</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>NearbyListShowMap</key>
+    <map>
+      <key>Comment</key>
+      <string>Show/hide map above nearby people list</string>
       <key>Persist</key>
       <integer>1</integer>
       <key>Type</key>
@@ -15612,6 +15695,17 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>VerifyInitialWearables</key>
+    <map>
+      <key>Comment</key>
+      <string>Compares the initial wearables to the COF contents to determine which one to use for the intial outfit</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
     <key>VertexShaderEnable</key>
     <map>
       <key>Comment</key>
@@ -16219,6 +16313,28 @@ Change of this parameter will affect the layout of buttons in notification toast
       <integer>-1</integer>
       <key>Backup</key>
       <integer>0</integer>
+    </map>
+    <key>MaxFPS</key>
+    <map>
+      <key>Comment</key>
+      <string>Yield some time to the local host if we reach a threshold framerate.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>-1.0</integer>
+    </map>
+    <key>ForcePeriodicRenderingTime</key>
+    <map>
+      <key>Comment</key>
+      <string>Periodically enable all rendering masks for a single frame.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <integer>-1.0</integer>
     </map>
     <key>MaxFPS</key>
     <map>
@@ -17933,6 +18049,18 @@ Change of this parameter will affect the layout of buttons in notification toast
   <map>
     <key>Comment</key>
     <string>[DEBUG] Make allocateScreenBuffer return false.  Used to test error handling.</string>
+    <key>Persist</key>
+    <integer>0</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>0</integer>
+  </map>
+
+  <key>DisablePrecacheDelayAfterTeleporting</key>
+  <map>
+    <key>Comment</key>
+    <string>Disables the artificial delay in the viewer that precaches some incoming assets</string>
     <key>Persist</key>
     <integer>0</integer>
     <key>Type</key>

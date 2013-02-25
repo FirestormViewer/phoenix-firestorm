@@ -386,15 +386,13 @@ std::string LLSLURL::getSLURLString() const
 				S32 x = llround( (F32)mPosition[VX] );
 				S32 y = llround( (F32)mPosition[VY] );
 				S32 z = llround( (F32)mPosition[VZ] );	
-				std::string ret =  LLGridManager::getInstance()->getSLURLBase(mGrid);
-// 				ret.append(LLURI::escape(mRegion)); 
-// 				ret.append(llformat("/%d/%d/%d",x,y,z));
+//				return LLGridManager::getInstance()->getSLURLBase(mGrid) + 
+//				LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z); 
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-				ret.append(	( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
-						? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z)) : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) ));
-
+				return LLGridManager::getInstance()->getSLURLBase(mGrid) +
+					( ((!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) || (!RlvUtil::isNearbyRegion(mRegion)))
+						? (LLURI::escape(mRegion) + llformat("/%d/%d/%d",x,y,z)) : RlvStrings::getString(RLV_STRING_HIDDEN_REGION) );
 // [/RLVa:KB]
-				return ret;
 			}
 		case APP:
 		{

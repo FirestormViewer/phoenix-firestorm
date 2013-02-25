@@ -615,6 +615,7 @@ LLViewerTexture::LLViewerTexture(const LLImageRaw* raw, BOOL usemipmaps) :
 
 LLViewerTexture::~LLViewerTexture()
 {
+	// LL_DEBUGS("Avatar") << mID << llendl;
 	cleanup();
 	sImageCount--;
 }
@@ -1174,7 +1175,8 @@ void LLViewerFetchedTexture::destroyTexture()
 	{
 		return ;
 	}
-	
+
+	//LL_DEBUGS("Avatar") << mID << llendl;
 	destroyGLTexture() ;
 	mFullyLoaded = FALSE ;
 }

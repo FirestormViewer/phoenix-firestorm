@@ -47,7 +47,7 @@ public:
 	virtual ~LLSidepanelAppearance();
 
 	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void onOpen(const LLSD& key);
+	/*virtual*/ void onOpen(const LLSD& key);	
 
 	void refreshCurrentOutfitName(const std::string& name = "");
 
@@ -64,6 +64,7 @@ public:
 	void showDefaultSubpart();
 	void updateScrollingPanelList();
 	void updateToVisibility( const LLSD& new_visibility );
+	LLPanelEditWearable* getWearable(){ return mEditWearable; }
 
 // [RLVa:KB] - Checked: 2010-09-16 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 	bool isOutfitEditPanelVisible() const;

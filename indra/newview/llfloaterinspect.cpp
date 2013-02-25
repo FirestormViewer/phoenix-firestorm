@@ -45,8 +45,6 @@
 #include "rlvhandler.h"
 #include "llagent.h"
 // [/RLVa:KB]
-#include "llavatarname.h"
-#include "lltrans.h"
 
 //LLFloaterInspect* LLFloaterInspect::sInstance = NULL;
 
@@ -242,16 +240,18 @@ void LLFloaterInspect::refresh()
 		const LLUUID& idOwner = obj->mPermissions->getOwner();
 		const LLUUID& idCreator = obj->mPermissions->getCreator();
 		LLAvatarName av_name;
-// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 
-		// work with the name if we actually get a result
+		// Only work with the names if we actually get a result
 		// from the name cache. If not, defer setting the
 		// actual name and set a placeholder.
 		if (LLAvatarNameCache::get(idOwner, &av_name))
 		{
-			bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idOwner != gAgent.getID()) && 
+//			owner_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			bool fRlvFilterOwner = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (idOwner != gAgent.getID()) && 
 				(!obj->mPermissions->isGroupOwned());
 			owner_name = (!fRlvFilterOwner) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [/RLVa:KB]
 		}
 		else
 		{
@@ -261,16 +261,20 @@ void LLFloaterInspect::refresh()
 
 		if (LLAvatarNameCache::get(idCreator, &av_name))
 		{
-			bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!av_name.mIsTemporaryName) && (idCreator != gAgent.getID()) && 
+//			creator_name = av_name.getCompleteName();
+// [RLVa:KB] - Checked: 2010-11-01 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
+			const LLUUID& idCreator = obj->mPermissions->getCreator();
+			LLAvatarNameCache::get(idCreator, &av_name);
+			bool fRlvFilterCreator = (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (idCreator != gAgent.getID()) && 
 				( (obj->mPermissions->getOwner() == idCreator) || (RlvUtil::isNearbyAgent(idCreator)) );
 			creator_name = (!fRlvFilterCreator) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+// [/RLVa:KB]
 		}
 		else
 		{
 			creator_name = LLTrans::getString("RetrievingData");
 			LLAvatarNameCache::get(idCreator, boost::bind(&LLFloaterInspect::onGetAvNameCallback, _1, _2, this));
 		}
-// [/RLVa:KB]
 
 		row["id"] = obj->getObject()->getID();
 		row["columns"][0]["column"] = "object_name";

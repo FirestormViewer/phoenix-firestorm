@@ -1254,6 +1254,7 @@ S32 LLPrimitive::parseTEMessage(LLMessageSystem* mesgsys, char const* block_name
 
 	if (tec.size == 0)
 	{
+		tec.face_count = 0;
 		return retval;
 	}
 

@@ -122,6 +122,10 @@
 #include "llwindow.h"
 #include "llpathfindingmanager.h"
 #include "boost/unordered_map.hpp"
+// [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
+#include "rlvhandler.h"
+#include "rlvlocks.h"
+// [/RLVa:KB]
 
 // Firestorm includes
 // [RLVa:KB] - Checked: 2011-05-22 (RLVa-1.3.1a)
@@ -1292,10 +1296,10 @@ class LLAdvancedToggleWireframe : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-//		gUseWireframe = !(gUseWireframe);
 // [RLVa:KB] - Checked: 2010-08-22 (RLVa-1.2.1a) | Added: RLVa-1.2.1a
 		gUseWireframe = (!gUseWireframe) && (!gRlvAttachmentLocks.hasLockedHUD());
 // [/RLVa:KB]
+//		gUseWireframe = !(gUseWireframe);
 		gWindowResized = TRUE;
 		LLPipeline::updateRenderDeferred();
 		gPipeline.resetVertexBuffers();
@@ -3384,9 +3388,9 @@ bool enable_object_mute()
 		bool is_linden =
 			lastname && !LLStringUtil::compareStrings(lastname->getString(), "Linden");
 		bool is_self = avatar->isSelf();
-//             return !is_linden && !is_self;
+//		return !is_linden && !is_self;
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-//             return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
 
 		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
@@ -7592,8 +7596,8 @@ class LLAttachmentDetachFromPoint : public view_listener_t
 // [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a) | Added: RLVa-1.2.0a
 				if ( (rlv_handler_t::isEnabled()) && (gRlvAttachmentLocks.isLockedAttachment(attached_object)) )
 					continue;
-// [/RLVa:KB]
 				ids_to_remove.push_back(attached_object->getAttachmentItemID());
+// [/RLVa:KB]
 			}
 		}
 		if (!ids_to_remove.empty())

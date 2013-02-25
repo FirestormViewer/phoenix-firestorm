@@ -1070,14 +1070,14 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 			{
 //				final_name = av_name.getCompleteName();
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title+av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name);
 // [/RLVa:KB]
 			}
 			else
 			{
 //				final_name = full_name;
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
-				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? group_title+full_name : RlvStrings::getAnonym(full_name);
+				final_name = (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) ? full_name : RlvStrings::getAnonym(full_name);
 // [/RLVa:KB]
 			}
 

@@ -187,7 +187,6 @@ set(STANDALONE OFF CACHE BOOL "Do not use Linden-supplied prebuilt libraries.")
 set(UNATTENDED OFF CACHE BOOL "Should be set to ON for building with VC Express editions.")
 
 set(USE_PRECOMPILED_HEADERS ON CACHE BOOL "Enable use of precompiled header directives where supported.")
-
 # <FS:ND> When using Havok, we have to turn OpenSim support off
 if( HAVOK_TPV )
  if( OPENSIM )

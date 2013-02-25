@@ -552,6 +552,7 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	if (rlv_handler_t::isEnabled())
 	{
 		// NOTE-RLVa: we can only filter the *message* here since most everything else will already be part of "args" as well
+		LLChat& tmp_chat = const_cast<LLChat&>(chat_msg);
 		if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC)) && (!tmp_chat.mRlvLocFiltered) && (CHAT_SOURCE_AGENT != tmp_chat.mSourceType) )
 		{
 			RlvUtil::filterLocation(tmp_chat.mText);
@@ -565,10 +566,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	}
 // [/RLVa:KB]
 
+
 // ## Zi - Post merge fixup ## //	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
 // ## Zi - Post merge fixup ## //	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
 	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
-
 	// Build notification data 
 	LLSD notification;
 	notification["message"] = chat_msg.mText;
@@ -777,8 +778,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 			//LLSD notification;
 			notification["id"] = id;
 // [RLVa:KB] - Checked: 2010-04-20 (RLVa-1.2.0f) | Added: RLVa-1.2.0f
-			if (rlv_handler_t::isEnabled())
-				notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
+		if (rlv_handler_t::isEnabled())
+			notification["show_icon_tooltip"] = !chat_msg.mRlvNamesFiltered;
 // [/RLVa:KB]
 			notification["message"] = chat_msg.mText;
 			//notification["from"] = chat_msg.mFromName;

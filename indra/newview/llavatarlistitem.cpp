@@ -220,13 +220,11 @@ S32 LLAvatarListItem::notifyParent(const LLSD& info)
 void LLAvatarListItem::onMouseEnter(S32 x, S32 y, MASK mask)
 {
 	getChildView("hovered_icon")->setVisible( true);
-
-	// AO, removed on-hover visibility. Don't do this. instead flip info buttons on full-time in postbuild.
 //	mInfoBtn->setVisible(mShowInfoBtn);
 //	mProfileBtn->setVisible(mShowProfileBtn);
 // [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.2a) | Added: RLVa-1.2.0d
-//	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
-//	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mInfoBtn->setVisible( (mShowInfoBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
+	mProfileBtn->setVisible( (mShowProfileBtn) && ((!mRlvCheckShowNames) || (!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))) );
 // [/RLVa:KB]
 
 	mHovered = true;
@@ -699,15 +697,7 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 //	setAvatarToolTip(av_name.mUsername);
 // [RLVa:KB] - Checked: 2010-10-31 (RLVa-1.2.2a) | Modified: RLVa-1.2.2a
 	bool fRlvFilter = (mRlvCheckShowNames) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES));
-	if (mShowDisplayName && !mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
-	else if (!mShowDisplayName && mShowUsername)
-		setAvatarName( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
-	else 
-		setAvatarName( (!fRlvFilter) ? av_name.getCompleteName() : RlvStrings::getAnonym(av_name) );
-
-	// NOTE: If you change this, you will break sorting the contacts list
-	//  by username unless you go change the comparator too. -- TS	
+	setAvatarName( (!fRlvFilter) ? av_name.mDisplayName : RlvStrings::getAnonym(av_name) );
 	setAvatarToolTip( (!fRlvFilter) ? av_name.mUsername : RlvStrings::getAnonym(av_name) );
 	// TODO-RLVa: bit of a hack putting this here. Maybe find a better way?
 	mAvatarIcon->setDrawTooltip(!fRlvFilter);
@@ -715,7 +705,7 @@ void LLAvatarListItem::onAvatarNameCache(const LLAvatarName& av_name)
 
 	//KC - store the username for use in sorting
 	mUserName = av_name.mUsername;
-
+	
 	//requesting the list to resort
 	notifyParent(LLSD().with("sort", LLSD()));
 	

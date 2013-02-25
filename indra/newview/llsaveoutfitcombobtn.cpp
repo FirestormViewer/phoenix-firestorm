@@ -78,8 +78,8 @@ void LLSaveOutfitComboBtn::saveOutfit(bool as_new)
 	if (panel_outfits_inventory)
 	{
 		panel_outfits_inventory->onSave();
-	} 
-	
+	} 	
+    
     if ( gAgent.getRegion() && gAgent.getRegion()->getCentralBakeVersion())
 	{
 		LLAppearanceMgr::instance().requestServerAppearanceUpdate();

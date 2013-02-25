@@ -508,8 +508,4 @@ namespace LLInitParam
 	};
 }
 
-extern LLGLSLShader gSolidColorProgramIntel;
-
-// <FS:ND> FIRE-6855; Solidcolor shader for Intel graphics
-// </FS:ND>
 #endif

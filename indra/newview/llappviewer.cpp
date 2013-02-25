@@ -93,6 +93,10 @@
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 #include "llappearancemgr.h"
 // [/SL:KB]
+// [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g)
+#include "rlvhandler.h"
+// [/RLVa:KB]
+
 #include "llweb.h"
 #include "llsecondlifeurls.h"
 #include "llupdaterservice.h"
@@ -480,14 +484,13 @@ void idle_afk_check()
 {
 	// check idle timers
 	F32 current_idle = gAwayTriggerTimer.getElapsedTimeF32();
-	static LLCachedControl<S32> afkTimeout(gSavedSettings, "AFKTimeout");
 //	F32 afk_timeout  = gSavedSettings.getS32("AFKTimeout");
 // [RLVa:KB] - Checked: 2010-05-03 (RLVa-1.2.0g) | Modified: RLVa-1.2.0g
 #ifdef RLV_EXTENSION_CMD_ALLOWIDLE
 	// Enforce an idle time of 30 minutes if @allowidle=n restricted
-	F32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? (F32)afkTimeout : 60 * 30;
+	F32 afk_timeout = (!gRlvHandler.hasBehaviour(RLV_BHVR_ALLOWIDLE)) ? gSavedSettings.getS32("AFKTimeout") : 60 * 30;
 #else
-	F32 afk_timeout = (F32)afkTimeout;
+	F32 afk_timeout = gSavedSettings.getS32("AFKTimeout");
 #endif // RLV_EXTENSION_CMD_ALLOWIDLE
 // [/RLVa:KB]
 	if (afk_timeout && (current_idle > afk_timeout) && ! gAgent.getAFK())
@@ -2397,18 +2400,12 @@ void errorCallback(const std::string &error_string)
 	gLLErrorActivated = true;
 	
 //	LLError::crashAndLoop(error_string);
-// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.6.0a) | Added: Catznip-2.4.0g
-#if !LL_RELEASE_FOR_DOWNLOAD
-#if LL_WINDOWS
+// [SL:KB] - Patch: Viewer-Build | Checked: 2010-12-04 (Catznip-2.4)
+#if !LL_RELEASE_FOR_DOWNLOAD && LL_WINDOWS
 	DebugBreak();
-#elif LL_LINUX
-	raise(SIGINT);
-#else // other OSes could hook in here, too
-	LLError::crashAndLoop(error_string);
-#endif // LL_WINDOWS
 #else
 	LLError::crashAndLoop(error_string);
-#endif // !LL_RELEASE_FOR_DOWNLOAD
+#endif // LL_RELEASE_WITH_DEBUG_INFO && LL_WINDOWS
 // [/SL:KB]
 }
 
@@ -4021,6 +4018,12 @@ void LLAppViewer::requestQuit()
 
 	// Try to send metrics back to the grid
 	metricsSend(!gDisconnected);
+
+	// Try to send last batch of avatar rez metrics.
+	if (!gDisconnected && isAgentAvatarValid())
+	{
+		gAgentAvatarp->updateAvatarRezMetrics(true); // force a last packet to be sent.
+	}
 	
 	LLHUDEffectSpiral *effectp = (LLHUDEffectSpiral*)LLHUDManager::getInstance()->createViewerEffect(LLHUDObject::LL_HUD_EFFECT_POINT, TRUE);
 	effectp->setPositionGlobal(gAgent.getPositionGlobal());
@@ -4863,7 +4866,6 @@ void LLAppViewer::idle()
 			// The 5-second interval is nice for this purpose.  If the object debug
 			// bit moves or is disabled, please give this a suitable home.
 			LLViewerAssetStatsFF::record_fps_main(gFPSClamped);
-			LLViewerAssetStatsFF::record_avatar_stats();
 		}
 	}
 
@@ -5460,6 +5462,11 @@ void LLAppViewer::disconnectViewer()
 
 	// close inventory interface, close all windows
 	LLFloaterInventory::cleanup();
+
+// [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
+	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
+	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
+// [/SL:KB]
 
 // [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
 	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
