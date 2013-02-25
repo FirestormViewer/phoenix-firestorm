@@ -35,6 +35,7 @@
 #include "llcoordframe.h"			// for mFrameAgent
 #include "llavatarappearancedefines.h"
 #include "llpermissionsflags.h"
+#include "llviewerinventory.h"	// <FS:CR> Needed for LLViewerInventoryItem
 
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
@@ -260,12 +261,10 @@ private:
 	//------------------------------------------------------------------------
 	// Inventory
 	//------------------------------------------------------------------------
-	
-	// <FS:TM> removed for shunshine merge
-	//public:
-	//	bool restoreToWorld;
-	//	LLUUID restoreToWorldGroup;
-	//	LLViewerInventoryItem* restoreToWorldItem;
+	public:
+		bool restoreToWorld;
+		LLUUID restoreToWorldGroup;
+		LLViewerInventoryItem* restoreToWorldItem;
 	
 /**                    Position
  **                                                                            **

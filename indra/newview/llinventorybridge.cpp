@@ -1436,12 +1436,11 @@ void LLItemBridge::performAction(LLInventoryModel* model, std::string action)
 		purgeItem(model, mUUID);
 		return;
 	}
-// <FS:TM> removed for shunshine merge
-//	else if ("restoreToWorld" == action)
-//	{
-//		restoreToWorld();
-//		return;
-//	}
+	else if ("restoreToWorld" == action)
+	{
+		restoreToWorld();
+		return;
+	}
 	else if ("restore" == action)
 	{
 		restoreItem();
@@ -1554,71 +1553,71 @@ void LLItemBridge::restoreItem()
 		LLInvFVBridge::changeItemParent(model, item, new_parent, FALSE);
 	}
 }
-// <FS:TM> removed for shunshine merge
-//void LLItemBridge::restoreToWorld()
-//{
-//	//Similar functionality to the drag and drop rez logic
-//	bool remove_from_inventory = false;
-//
-//	LLViewerInventoryItem* itemp = static_cast<LLViewerInventoryItem*>(getItem());
-//	if (itemp)
-//	{
-//		LLMessageSystem* msg = gMessageSystem;
-//
-//		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
-//		{
-//			LLUUID group_id = gAgent.getGroupID();
-//			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
-//			LLUUID parcel_group_id = parcel->getGroupID();
-//			if (gAgent.isInGroup(parcel_group_id))
-//			{
-//				if (group_id != parcel_group_id)
-//				{
-//					//Agent is not in the required group.
-//					gAgent.restoreToWorld = true;
-//					gAgent.restoreToWorldGroup = group_id;
-//					gAgent.restoreToWorldItem = itemp;
-//					LLMessageSystem* msg = gMessageSystem;
-//					msg->newMessageFast(_PREHASH_ActivateGroup);
-//					msg->nextBlockFast(_PREHASH_AgentData);
-//					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-//					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-//					msg->addUUIDFast(_PREHASH_GroupID, parcel_group_id);
-//					gAgent.sendReliableMessage();
-//					return;
-//				}
-//			}
-//		}
-//
-//		msg->newMessage("RezRestoreToWorld");
-//		msg->nextBlockFast(_PREHASH_AgentData);
-//		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
-//		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
-//
-//		msg->nextBlockFast(_PREHASH_InventoryData);
-//		itemp->packMessage(msg);
-//		msg->sendReliable(gAgent.getRegion()->getHost());
-//		//remove local inventory copy, sim will deal with permissions and removing the item
-//		//from the actual inventory if its a no-copy etc
-//		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
-//		{
-//			remove_from_inventory = true;
-//		}
-//		
-//		// Check if it's in the trash. (again similar to the normal rez logic)
-//		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
-//		if(gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
-//		{
-//			remove_from_inventory = true;
-//		}
-//	}
-//
-//	if(remove_from_inventory)
-//	{
-//		gInventory.deleteObject(itemp->getUUID());
-//		gInventory.notifyObservers();
-//	}
-//}
+
+void LLItemBridge::restoreToWorld()
+{
+	//Similar functionality to the drag and drop rez logic
+	bool remove_from_inventory = false;
+
+	LLViewerInventoryItem* itemp = static_cast<LLViewerInventoryItem*>(getItem());
+	if (itemp)
+	{
+		LLMessageSystem* msg = gMessageSystem;
+
+		if (gSavedSettings.getBOOL("RezUnderLandGroup"))
+		{
+			LLUUID group_id = gAgent.getGroupID();
+			LLParcel *parcel = LLViewerParcelMgr::getInstance()->getAgentParcel();
+			LLUUID parcel_group_id = parcel->getGroupID();
+			if (gAgent.isInGroup(parcel_group_id))
+			{
+				if (group_id != parcel_group_id)
+				{
+					//Agent is not in the required group.
+					gAgent.restoreToWorld = true;
+					gAgent.restoreToWorldGroup = group_id;
+					gAgent.restoreToWorldItem = itemp;
+					LLMessageSystem* msg = gMessageSystem;
+					msg->newMessageFast(_PREHASH_ActivateGroup);
+					msg->nextBlockFast(_PREHASH_AgentData);
+					msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+					msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+					msg->addUUIDFast(_PREHASH_GroupID, parcel_group_id);
+					gAgent.sendReliableMessage();
+					return;
+				}
+			}
+		}
+
+		msg->newMessage("RezRestoreToWorld");
+		msg->nextBlockFast(_PREHASH_AgentData);
+		msg->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+		msg->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+
+		msg->nextBlockFast(_PREHASH_InventoryData);
+		itemp->packMessage(msg);
+		msg->sendReliable(gAgent.getRegion()->getHost());
+		//remove local inventory copy, sim will deal with permissions and removing the item
+		//from the actual inventory if its a no-copy etc
+		if(!itemp->getPermissions().allowCopyBy(gAgent.getID()))
+		{
+			remove_from_inventory = true;
+		}
+		
+		// Check if it's in the trash. (again similar to the normal rez logic)
+		const LLUUID trash_id = gInventory.findCategoryUUIDForType(LLFolderType::FT_TRASH);
+		if(gInventory.isObjectDescendentOf(itemp->getUUID(), trash_id))
+		{
+			remove_from_inventory = true;
+		}
+	}
+
+	if(remove_from_inventory)
+	{
+		gInventory.deleteObject(itemp->getUUID());
+		gInventory.notifyObservers();
+	}
+}
 
 void LLItemBridge::gotoItem()
 {

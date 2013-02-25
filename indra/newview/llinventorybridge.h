@@ -209,8 +209,7 @@ public:
 	virtual void performAction(LLInventoryModel* model, std::string action);
 	virtual void selectItem();
 	virtual void restoreItem();
-// <FS:TM> removed for shunshine merge
-//	virtual void restoreToWorld();
+	virtual void restoreToWorld();
 	virtual void gotoItem();
 	virtual LLUIImagePtr getIcon() const;
 	virtual const std::string& getDisplayName() const;
