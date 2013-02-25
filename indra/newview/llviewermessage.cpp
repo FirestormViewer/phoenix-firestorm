@@ -4258,16 +4258,15 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				chat.mText = LLTrans::getString("whisper") + " ";
 				break;
 			case CHAT_TYPE_OWNER:
-//-TT Client LSL Bridge
+				// <FS:TT> Client LSL Bridge
 				{
 					static LLCachedControl<bool> sUseLSLBridge(gSavedSettings, "UseLSLBridge");
-					if (sUseLSLBridge)
+					if (sUseLSLBridge && FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
 					{
-						if(FSLSLBridge::instance().lslToViewer(mesg, from_id, owner_id))
-							return;
+						return;
 					}
 				}
-//-TT
+				// </FS:TT>
 
 // [RLVa:KB] - Checked: 2010-02-XX (RLVa-1.2.0a) | Modified: RLVa-1.1.0f
 				// TODO-RLVa: [RLVa-1.2.0] consider rewriting this before a RLVa-1.2.0 release
