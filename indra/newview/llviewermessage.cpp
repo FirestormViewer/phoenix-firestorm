@@ -3962,7 +3962,27 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	}
 	else
 	{
-		chat.mFromName = from_name;
+		// <FS:KC> Objects with no name get renamed to NO_NAME_OBJECT so the object profile is still accessable
+		//chat.mFromName = from_name;
+		static const boost::regex whitespace_exp("^\\s*$");
+		if (chat.mSourceType == CHAT_SOURCE_OBJECT && boost::regex_search(from_name, whitespace_exp))
+		{
+			//[FIRE-2434 Mark Unamed Objects based on setting
+			static LLCachedControl<bool> FSMarkObjects(gSavedSettings, "FSMarkObjects");
+			if (FSMarkObjects)
+			{
+				chat.mFromName = LLTrans::getString("no_name_object");
+			}
+			else
+			{
+				chat.mFromName = "";
+			}
+		}
+		else
+		{
+			chat.mFromName = from_name;
+		}
+		// </FS:KC>
 	}
 
 	BOOL is_busy = gAgent.getBusy();
