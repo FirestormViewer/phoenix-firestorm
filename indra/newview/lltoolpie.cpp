@@ -1091,11 +1091,13 @@ BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string l
 				LLInspector::Params p;
 				p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
 				p.message(final_name);
-				// Ansariel: Get rid of the useless button!
+				// <FS:Ansariel> Get rid of the "i"-button on advanced hovertips
+				//p.image.name("Inspector_I");
 				if (!advancedToolTip)
 				{
 					p.image.name("Inspector_I");
 				}
+				// </FS:Ansariel>
 				p.click_callback(boost::bind(showAvatarInspector, hover_object->getID()));
 				p.visible_time_near(6.f);
 				p.visible_time_far(3.f);
