@@ -5875,7 +5875,7 @@
       <key>Type</key>
       <string>F32</string>
       <key>Value</key>
-      <integer>0.0</integer>
+      <real>0.0</real>
     </map>
     <key>ForceShowGrid</key>
     <map>
@@ -5886,8 +5886,6 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <real>0.0</real>
-      <key>Backup</key>
       <integer>0</integer>
     </map>
     <key>ForceMandatoryUpdate</key>
@@ -5900,6 +5898,8 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+      <key>Backup</key>
+      <integer>0</integer>
     </map>
     <key>ForceMissingType</key>
     <map>
@@ -5911,6 +5911,8 @@
       <string>U32</string>
       <key>Value</key>
       <integer>255</integer>
+      <key>Backup</key>
+      <integer>0</integer>
     </map>
     <key>FreezeTime</key>
     <map>
