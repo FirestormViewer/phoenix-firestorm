@@ -4342,9 +4342,6 @@ Poprzedni symulator: [OLDVERSION]
 			<ignore name="ignore" text="Ostrzeżenie o braku Havoka"/>
 		</form>
 	</notification>
-	<notification name="DumpArchetypeSuccess">
-		Pomyślnie zapisano wygląd do XML.
-	</notification>
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
 	</notification>

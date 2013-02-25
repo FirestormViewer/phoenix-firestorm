@@ -14,6 +14,7 @@
 	<menu_item_call label="Wyrzuć (majątek)" name="kick"/>
 	<menu_item_call label="CSR" name="csr"/>
 	<menu_item_call label="Debugowanie tekstur" name="debug"/>
+	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 	<menu_item_call label="Znajdź na mapie" name="find_on_map"/>
 	<menu_item_call label="Przybliż" name="zoom_in"/>
 	<menu_item_call label="Zapłać" name="pay"/>

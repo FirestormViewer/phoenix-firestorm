@@ -27,4 +27,5 @@
 	<menu_item_call label="Grupy" name="Groups..."/>
 	<menu_item_call label="Profil" name="Profile..."/>
 	<menu_item_call label="Debugowanie tekstur" name="Debug..."/>
+	<menu_item_call label="Zrzuć XML" name="Dump XML"/>
 </toggleable_menu>
