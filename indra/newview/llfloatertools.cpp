@@ -1036,11 +1036,25 @@ void LLFloaterTools::onClose(bool app_quitting)
 	mParcelSelection = NULL;
 	mObjectSelection = NULL;
 
+	// <FS:Ansariel> Enable context/pie menu in mouselook
 	// Switch back to basic toolset
-	LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
+	//LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
 	// we were already in basic toolset, using build tools
 	// so manually reset tool to default (pie menu tool)
-	LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
+	//LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
+	if (!gAgentCamera.cameraMouselook())
+	{
+		LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
+		LLToolMgr::getInstance()->getCurrentToolset()->selectFirstTool();
+	}
+	else 
+	{
+		// Switch back to mouselook toolset
+		LLToolMgr::getInstance()->setCurrentToolset(gMouselookToolset);
+		gViewerWindow->hideCursor();
+		gViewerWindow->moveCursorToCenter();
+	}
+	// </FS:Ansariel>
 
 	//gMenuBarView->setItemVisible("BuildTools", FALSE);
 	LLFloaterReg::hideInstance("media_settings");
