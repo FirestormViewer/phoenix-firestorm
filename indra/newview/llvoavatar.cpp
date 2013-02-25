@@ -114,6 +114,7 @@ extern F32 ANIM_SPEED_MIN;
 
 #include "llcontrol.h"
 #include "lggcontactsets.h"
+#include "llfilepicker.h"	// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 
 // #define OUTPUT_BREAST_DATA
 
@@ -4218,8 +4219,8 @@ U32 LLVOAvatar::renderTransparent(BOOL first_pass)
 		}
 		// Can't test for baked hair being defined, since that won't always be the case (not all viewers send baked hair)
 		// TODO: 1.25 will be able to switch this logic back to calling isTextureVisible();
-		if ( getImage(TEX_HAIR_BAKED, 0) && 
-		     getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE || LLDrawPoolAlpha::sShowDebugAlpha)		
+		if ((getImage(TEX_HAIR_BAKED, 0) && getImage(TEX_HAIR_BAKED, 0)->getID() != IMG_INVISIBLE)
+			|| LLDrawPoolAlpha::sShowDebugAlpha)
 		{
 			LLViewerJoint* hair_mesh = getViewerJoint(MESH_ID_HAIR);
 			if (hair_mesh)
@@ -7777,9 +7778,21 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	}
 	std::string outfilename = get_sequential_numbered_file_name(outprefix,".xml");
 	
+// <FS:CR> FIRE-8893  - Dump archetype xml to user defined location
+	LLFilePicker& file_picker = LLFilePicker::instance();
+	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, outfilename))
+	{
+		LL_INFOS("DumpArchetypeXML") << "User closed the filepicker" << LL_ENDL;
+		return;
+	}
+// </FS:CR>
+	
 	LLAPRFile outfile;
-	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
-	outfile.open(fullpath, LL_APR_WB );
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+	//std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
+	//outfile.open(fullpath, LL_APR_WB );
+	outfile.open(file_picker.getFirstFile(), LL_APR_WB);
+// </FS:CR>
 
 	// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
 	//apr_file_t* file = outfile.getFileHandle();
@@ -7788,11 +7801,18 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 
 	if (!file)
 	{
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+		LL_WARNS("DumpArchetypeXML") << "No file to dump to!" << LL_ENDL;
+// </FS:CR>
 		return;
 	}
 	else
 	{
-		llinfos << "xmlfile write handle obtained : " << fullpath << llendl;
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+		//llinfos << "xmlfile write handle obtained : " << fullpath << llendl;
+		LL_INFOS("DumpArchetypeXML") << "xmlfile write handle obtained : " << file_picker.getFirstFile() << LL_ENDL;
+// </FS:CR>
+
 	}
 
 	apr_file_printf( file, "<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"yes\"?>\n" );
@@ -7866,6 +7886,10 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 		gAgentAvatarp->dumpWearableInfo(outfile);
 	}
 	// File will close when handle goes out of scope
+// <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
+	LL_INFOS("DumpArchetypeXML") << "Archetype xml written successfully!" << LL_ENDL;
+	LLNotificationsUtil::add("DumpArchetypeSuccess");
+// </FS:CR>
 }
 
 
