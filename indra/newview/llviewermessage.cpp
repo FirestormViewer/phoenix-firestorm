@@ -4274,6 +4274,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				{
 					mesg.erase(0, 1);
 					LLStringUtil::toLower(mesg);
+					allowConvertChatUppercase = false;
 
 					std::string strExecuted, strFailed, strRetained, *pstr;
 
@@ -4350,6 +4351,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 				if  ( (rlv_handler_t::isEnabled()) && (chatter) && (chat.mSourceType == CHAT_SOURCE_OBJECT) &&
 					  (gSavedSettings.getBOOL("EffectScriptChatParticles")) )
 				{
+					allowConvertChatUppercase = false;
 					LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
 					psc->setSourceObject(chatter);
 					psc->setColor(color);
