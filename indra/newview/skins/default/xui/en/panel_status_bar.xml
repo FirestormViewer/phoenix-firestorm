@@ -182,11 +182,11 @@
     visible="true"
     width="35"
     />
+     <!-- <FS:Zi> This text changes color when hovered over, implemented in llstatusbar.cpp
+                  Colors are defined in colors.xml as ParcelNormalColor and ParcelHoverColor -->
      <text
 	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
-	   text_color="White"
-	   hover="true"
-	   hover_color="ParcelHoverColor"
+       text_color="ParcelNormalColor"
        follows="left|top|right"
        height="16"
        layout="topleft"

@@ -354,6 +354,12 @@ private:
 	// </FS:Zi>
 
 	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
+
+// <FS:Zi> Make hovering over parcel info actually work
+private:
+	void	onMouseEnterParcelInfo();
+	void	onMouseLeaveParcelInfo();
+// </FS:Zi>
 };
 
 // *HACK: Status bar owns your cached money balance. JC

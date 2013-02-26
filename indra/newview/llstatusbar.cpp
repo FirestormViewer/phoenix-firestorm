@@ -362,6 +362,11 @@ BOOL LLStatusBar::postBuild()
 
 	// Ansariel: Removed the info button in favor of clickable parcel info text
 	mParcelInfoText->setClickedCallback(boost::bind(&LLStatusBar::onInfoButtonClicked, this));
+	// <FS:Zi> Make hovering over parcel info actually work
+	//         Since <text ...> doesn't have any hover functions, add this in code
+	mParcelInfoText->setMouseEnterCallback(boost::bind(&LLStatusBar::onMouseEnterParcelInfo, this));
+	mParcelInfoText->setMouseLeaveCallback(boost::bind(&LLStatusBar::onMouseLeaveParcelInfo, this));
+	// </FS:Zi>
 
 	mDamageText = getChild<LLTextBox>("damage_text");
 
@@ -1407,5 +1412,17 @@ BOOL LLStatusBar::rebakeRegionCallback(const LLSD& notification,const LLSD& resp
 		return TRUE;
 	}
 	return FALSE;
+}
+// </FS:Zi>
+
+// <FS:Zi> Make hovering over parcel info actually work
+void LLStatusBar::onMouseEnterParcelInfo()
+{
+	mParcelInfoText->setColor(LLUIColorTable::instance().getColor("ParcelHoverColor"));
+}
+
+void LLStatusBar::onMouseLeaveParcelInfo()
+{
+	mParcelInfoText->setColor(LLUIColorTable::instance().getColor("ParcelNormalColor"));
 }
 // </FS:Zi>
