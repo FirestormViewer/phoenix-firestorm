@@ -48,4 +48,4 @@ private:
 	LLChatHistory* mTransactionHistory;
 };
 
-#endif
+#endif // FS_MONEYTRACKER_H

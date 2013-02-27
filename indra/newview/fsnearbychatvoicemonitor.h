@@ -20,8 +20,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef FS_NEARBYCHATVOICEMONITOR
-#define FS_NEARBYCHATVOICEMONITOR
+#ifndef FS_NEARBYCHATVOICEMONITOR_H
+#define FS_NEARBYCHATVOICEMONITOR_H
 
 #include "llnearbychatcontrol.h"
 #include "lloutputmonitorctrl.h"
@@ -54,4 +54,4 @@ protected:
 	bool				mVoiceMonitorVisible;
 };
 
-#endif // FS_NEARBYCHATVOICEMONITOR
+#endif // FS_NEARBYCHATVOICEMONITOR_H

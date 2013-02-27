@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FSFLOATERSEARCH_H
-#define FS_FSFLOATERSEARCH_H
+#ifndef FS_FLOATERSEARCH_H
+#define FS_FLOATERSEARCH_H
 
 #include "llfloater.h"
 #include "lliconctrl.h"
@@ -341,4 +341,4 @@ private:
 	LLSD			mCategoryPaths;
 };
 
-#endif // FS_FSFLOATERSEARCH_H
+#endif // FS_FLOATERSEARCH_H

@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FSFLOATERWSASSETBLACKLIST_H
-#define FS_FSFLOATERWSASSETBLACKLIST_H
+#ifndef FS_FLOATERWSASSETBLACKLIST_H
+#define FS_FLOATERWSASSETBLACKLIST_H
 
 #include "llfloater.h"
 #include "llassettype.h"
@@ -60,4 +60,4 @@ private:
 	LLScrollListCtrl* mResultList;
 };
 
-#endif // FS_FSFLOATERPROFILE_H
+#endif // FS_FLOATERWSASSETBLACKLIST_H

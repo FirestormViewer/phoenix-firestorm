@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef FS_FSCOMMON_H
-#define FS_FSCOMMON_H
+#ifndef FS_COMMON_H
+#define FS_COMMON_H
 
 #include "llchat.h"
 
@@ -49,4 +49,4 @@ namespace FSCommon
 	S32 secondsSinceEpochFromString(const std::string& format, const std::string& str);
 };
 
-#endif // FS_FSCOMMON_H
+#endif // FS_COMMON_H

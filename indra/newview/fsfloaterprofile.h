@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FSFLOATERPROFILE_H
-#define FS_FSFLOATERPROFILE_H
+#ifndef FS_FLOATERPROFILE_H
+#define FS_FLOATERPROFILE_H
 
 #include "llfloater.h"
 
@@ -63,4 +63,4 @@ private:
     LLUUID mAvatarId;
 };
 
-#endif // FS_FSFLOATERPROFILE_H
+#endif // FS_FLOATERPROFILE_H

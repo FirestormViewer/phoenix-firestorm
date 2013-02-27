@@ -25,8 +25,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FSPANELPROFILE_H
-#define FS_FSPANELPROFILE_H
+#ifndef FS_PANELPROFILE_H
+#define FS_PANELPROFILE_H
 
 #include "llfloater.h"
 #include "llavatarpropertiesprocessor.h"
@@ -584,4 +584,4 @@ protected:
 	LLTextEditor*		mNotesEditor;
 };
 
-#endif // FS_FSPANELPROFILE_H
+#endif // FS_PANELPROFILE_H

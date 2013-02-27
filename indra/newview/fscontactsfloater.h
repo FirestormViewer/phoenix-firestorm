@@ -25,8 +25,8 @@
  */
  
  
-#ifndef LL_FSCONTACTSFLOATER_H
-#define LL_FSCONTACTSFLOATER_H
+#ifndef FS_CONTACTSFLOATER_H
+#define FS_CONTACTSFLOATER_H
 
 #include "llfloater.h"
 #include "lleventtimer.h"
@@ -140,4 +140,4 @@ private:
 };
 
 
-#endif // LL_FSCONTACTSFLOATER_H
+#endif // FS_CONTACTSFLOATER_H

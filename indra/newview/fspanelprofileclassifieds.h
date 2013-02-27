@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef FS_FSPANELCLASSIFIEDS_H
-#define FS_FSPANELCLASSIFIEDS_H
+#ifndef FS_PANELCLASSIFIEDS_H
+#define FS_PANELCLASSIFIEDS_H
 
 #include "llpanel.h"
 #include "v3dmath.h"
@@ -202,4 +202,4 @@ private:
 	S32 mPriceForListing;
 };
 
-#endif // FS_FSPANELCLASSIFIEDS_H
+#endif // FS_PANELCLASSIFIEDS_H

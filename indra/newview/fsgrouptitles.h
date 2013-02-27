@@ -81,4 +81,4 @@ protected:
 	LLGroupData		mGroupData;
 };
 
-#endif
+#endif // FS_GROUPTITLES_H

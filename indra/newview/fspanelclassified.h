@@ -27,8 +27,9 @@
 // Display of a classified used both for the global view in the
 // Find directory, and also for each individual user's classified in their
 // profile.
-#ifndef LL_FSPANELCLASSIFIED_H
-#define LL_FSPANELCLASSIFIED_H
+
+#ifndef FS_PANELCLASSIFIED_H
+#define FS_PANELCLASSIFIED_H
 
 #include "llavatarpropertiesprocessor.h"
 #include "llclassifiedinfo.h"
@@ -293,4 +294,4 @@ private:
 	commit_signal_t mSaveButtonClickedSignal;
 };
 
-#endif // LL_FSPANELCLASSIFIED_H
+#endif // FS_PANELCLASSIFIED_H

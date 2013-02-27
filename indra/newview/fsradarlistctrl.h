@@ -24,8 +24,8 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLRADARLISTCTRL_H
-#define LL_LLRADARLISTCTRL_H
+#ifndef FS_RADARLISTCTRL_H
+#define FS_RADARLISTCTRL_H
 
 #include <set>
 #include "llscrolllistctrl.h"
@@ -92,4 +92,4 @@ private:
 	
 };
 
-#endif
+#endif // FS_RADARLISTCTRL_H
