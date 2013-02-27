@@ -500,15 +500,28 @@
              label="Use console for chat popups instead of floating toasts (Viewer 1.x style)"/>
 
             <check_box
+             enabled_control="FSUseNearbyChatConsole"
              layout="topleft"
              follows="left|top"
              top_pad="1"
-             left="30"
+             left="40"
              width="400"
              height="18"
              name="FSLogImToChatConsole"
              control_name="FSLogImToChatConsole"
-             label="Show IMs and group chat in chat console"/>
+             label="Show IMs in chat console"/>
+
+            <check_box
+             enabled_control="FSUseNearbyChatConsole"
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             left="40"
+             width="400"
+             height="18"
+             name="FSLogGroupImToChatConsole"
+             control_name="FSLogGroupImToChatConsole"
+             label="Show group chat in chat console"/>
 
             <text
              follows="left|top"
@@ -520,6 +533,7 @@
             </text>
             <spinner
              decimal_digits="0"
+             enabled_control="FSUseNearbyChatConsole"
              control_name="FSShowGroupNameLength"
              follows="left|top"
              height="20"

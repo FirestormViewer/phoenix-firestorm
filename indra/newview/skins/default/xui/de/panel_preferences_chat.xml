@@ -97,7 +97,8 @@
             <check_box name="EnableGroupChatPopups" label="Gruppenchats" tool_tip="Aktivieren um Popups anzuzeigen, wenn neue Gruppennachrichten eintreffen"/>
             <check_box name="EnableIMChatPopups" label="IM-Chats" tool_tip="Aktivieren um Popups anzuzeigen, wenn Instant Messages eintreffen"/>
             <check_box name="FSUseNearbyChatConsole" label="Chat-Konsole anstelle von Toasts für Chat-Popups verwenden (Viewer 1.x-Stil)"/>
-            <check_box name="FSLogImToChatConsole" label="Instant Messages und Gruppenchats in Chat-Konsole anzeigen"/>
+            <check_box name="FSLogImToChatConsole" label="Instant Messages in Chat-Konsole anzeigen"/>
+            <check_box name="FSLogGroupImToChatConsole" label="Gruppenchats in Chat-Konsole anzeigen"/>
 			<text name="FSShowGroupNameLength_label" width="365">
 				Länge des Gruppennamens, der in der Chathistorie angezeigt wird
 			</text>

@@ -71,6 +71,8 @@
 // [/RLVa:KB]
 
 #include "exogroupmutelist.h"
+#include "fsconsoleutils.h"
+
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
 const static std::string NEARBY_P2P_BY_OTHER("nearby_P2P_by_other");
@@ -124,13 +126,23 @@ void toast_callback(const LLSD& msg){
 		return;
 	}
 
+	// <FS:Ansariel> Don't toast if the message is an announcement
+	if (msg["is_announcement"].asBoolean())
+	{
+		return;
+	}
+	// </FS:Ansariel> Don't toast if the message is an announcement
+
+	// <FS:Ansariel> (Group-)IMs in chat console
+	if (FSConsoleUtils::ProcessInstantMessage(msg["session_id"], msg["from_id"], msg["message"]))
+	{
+		return;
+	}
+	// </FS:Ansariel> (Group-)IMs in chat console
+
 	// check whether incoming IM belongs to an active session or not
 	if (LLIMModel::getInstance()->getActiveSessionID().notNull()
-	// <FS:Ansariel> Don't abort if we want to log in chat console and the IM floater has focus
-	//		&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
-			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"]
-			 && !gSavedSettings.getBOOL("FSLogImToChatConsole"))
-	// </FS:Ansariel> Don't abort if we want to log in chat console and the IM floater has focus
+			&& LLIMModel::getInstance()->getActiveSessionID() == msg["session_id"])
 	{
 		return;
 	}
@@ -157,20 +169,10 @@ void toast_callback(const LLSD& msg){
 
 	// Skip toasting if we have open window of IM with this session id
 	LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
-	// <FS:Ansariel> Don't abort if we want to log in chat console
-	//if (open_im_floater && open_im_floater->getVisible())
-	if (open_im_floater && open_im_floater->getVisible() && !gSavedSettings.getBOOL("FSLogImToChatConsole"))
-	// </FS:Ansariel> Don't abort if we want to log in chat console
+	if (open_im_floater && open_im_floater->getVisible())
 	{
 		return;
 	}
-
-	// <FS:Ansariel> Don't toast if the message is an announcement
-	if (msg["is_announcement"].asBoolean())
-	{
-		return;
-	}
-	// </FS:Ansariel> Don't toast if the message is an announcement
 
 	LLAvatarNameCache::get(msg["from_id"].asUUID(),
 		boost::bind(&on_avatar_name_cache_toast,

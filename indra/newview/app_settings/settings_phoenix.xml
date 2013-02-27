@@ -192,7 +192,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
 
   <key>EnableIMChatPopups</key>
@@ -204,7 +204,7 @@
     <key>Type</key>
     <string>Boolean</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>0</integer>
   </map>
 
   <key>PlainTextChatHistory</key>
@@ -354,7 +354,19 @@
   <key>FSLogImToChatConsole</key>
   <map>
     <key>Comment</key>
-    <string>Defines if (group) IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
+    <string>Defines if IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
+    <key>Persist</key>
+    <integer>1</integer>
+    <key>Type</key>
+    <string>Boolean</string>
+    <key>Value</key>
+    <integer>1</integer>
+  </map>
+
+  <key>FSLogGroupImToChatConsole</key>
+  <map>
+    <key>Comment</key>
+    <string>Defines if group IM notifications should be sent to the nearby chat console (v1-style) or toasts (v2-style).</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>

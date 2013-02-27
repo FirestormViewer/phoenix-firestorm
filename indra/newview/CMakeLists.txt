@@ -121,6 +121,7 @@ set(viewer_SOURCE_FILES
     floatermedialists.cpp
     fsareasearch.cpp
     fscommon.cpp
+    fsconsoleutils.cpp
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterblocklist.cpp
@@ -768,6 +769,7 @@ set(viewer_HEADER_FILES
     floatermedialists.h
     fsareasearch.h
     fscommon.h
+    fsconsoleutils.h
     fscontactsfloater.h
     fsdata.h
     fsfloaterblocklist.h

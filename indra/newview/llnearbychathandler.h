@@ -45,15 +45,9 @@ public:
 
 	virtual void processChat(const LLChat& chat_msg, const LLSD &args);
 
-	void updateFSUseNearbyChatConsole(const LLSD &data);
-
 protected:
 	virtual void onDeleteToast(LLToast* toast);
 	virtual void initChannel();
-
-	void onAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg);
-
-	BOOL FSUseNearbyChatConsole;
 
 	static boost::scoped_ptr<LLEventPump> sChatWatcher;
 };
