@@ -947,6 +947,9 @@
       name="PanelNotificationBackground"
       value="1 0.3 0.3 0" />
   <color
+      name="ParcelNormalColor"
+      reference="LabelTextColor" />
+  <color
       name="ParcelHoverColor"
       reference="White" />
   <color
