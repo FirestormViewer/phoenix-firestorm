@@ -26,6 +26,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llimfloater.h"
 
 #include "llnotificationsutil.h"
@@ -1872,3 +1874,5 @@ void LLIMFloater::setEnableAddFriendButton(BOOL enabled)
 	getChild<LLButton>("add_friend_btn")->setEnabled(enabled);
 }
 // </FS:Ansariel>
+
+#endif

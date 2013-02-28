@@ -70,7 +70,10 @@
 #include "llinventorypanel.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -2504,7 +2507,10 @@ void god_message_name_cb(const LLAvatarName& av_name, LLChat chat, std::string m
 	// Treat like a system message and put in chat history.
 	chat.mText = av_name.getCompleteName() + ": " + message;
 
-	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if(nearby_chat)
 	{
 		nearby_chat->addMessage(chat);
@@ -3298,7 +3304,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 
 			// Note: lie to Nearby Chat, pretending that this is NOT an IM, because
 			// IMs from obejcts don't open IM sessions.
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(!chat_from_system && nearby_chat)
 			{
 				chat.mOwnerID = from_id;
@@ -7474,7 +7483,10 @@ void notify_cautioned_script_question(const LLSD& notification, const LLSD& resp
 // [RLVa:KB] - Checked: 2012-07-28 (RLVa-1.4.7)
 		if (caution)
 		{
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if(nearby_chat)
 			{
 				LLChat chat_msg(notice.getString());

@@ -1,5 +1,5 @@
 /** 
- * @file llnearbychatcontrol.cpp
+ * @file fsnearbychatcontrol.cpp
  * @brief Nearby chat input control implementation
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
@@ -27,9 +27,12 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llnearbychatcontrol.h"
-#include "llnearbychathub.h"
-#include "llfloaternearbychat.h"
+#include "fsnearbychatcontrol.h"
+#include "fsnearbychathub.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // #include "llviewercontrol.h"
 // #include "llviewerwindow.h"
 // #include "llrootview.h"
@@ -86,7 +89,7 @@
 // #include "llviewerstats.h"
 // </FS:Zi>
 
-static LLDefaultChildRegistry::Register<LLNearbyChatControl> r("nearby_chat_control");
+static LLDefaultChildRegistry::Register<FSNearbyChatControl> r("fs_nearby_chat_control");
 
 struct LLChatTypeTrigger {
 	std::string name;
@@ -98,12 +101,12 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/shout"	, CHAT_TYPE_SHOUT}
 };
 
-LLNearbyChatControl::LLNearbyChatControl(const LLNearbyChatControl::Params& p) :
+FSNearbyChatControl::FSNearbyChatControl(const FSNearbyChatControl::Params& p) :
 	LLLineEditor(p)
 {
 	setAutoreplaceCallback(boost::bind(&LLAutoReplace::autoreplaceCallback, LLAutoReplace::getInstance(), _1, _2));
 	setKeystrokeCallback(onKeystroke,this);
-	LLNearbyChat::instance().registerChatBar(this);
+	FSNearbyChat::instance().registerChatBar(this);
 
 	setEnableLineHistory(TRUE);
 	setIgnoreArrowKeys( FALSE );
@@ -115,14 +118,14 @@ LLNearbyChatControl::LLNearbyChatControl(const LLNearbyChatControl::Params& p) :
 	setFont(LLViewerChat::getChatFont());
 
 	// Register for font change notifications
-	LLViewerChat::setFontChangedCallback(boost::bind(&LLNearbyChatControl::setFont, this, _1));
+	LLViewerChat::setFontChangedCallback(boost::bind(&FSNearbyChatControl::setFont, this, _1));
 }
 
-LLNearbyChatControl::~LLNearbyChatControl()
+FSNearbyChatControl::~FSNearbyChatControl()
 {
 }
 
-void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
+void FSNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 {
 	LLWString raw_text = caller->getWText();
 	
@@ -142,7 +145,10 @@ void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	if (gSavedSettings.getBOOL("FSNearbyChatbar") &&
 		gSavedSettings.getBOOL("FSShowChatChannel"))
 	{
-		channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		// <FS:Ansariel> [FS communication UI]
+		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		// </FS:Ansariel> [FS communication UI]
 	}
 	// -Zi
 
@@ -195,7 +201,7 @@ void LLNearbyChatControl::onKeystroke(LLLineEditor* caller,void* userdata)
 	}
 }
 
-BOOL LLNearbyChatControl::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
+BOOL FSNearbyChatControl::matchChatTypeTrigger(const std::string& in_str, std::string* out_str)
 {
 	U32 in_len = in_str.length();
 	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
@@ -219,25 +225,25 @@ BOOL LLNearbyChatControl::matchChatTypeTrigger(const std::string& in_str, std::s
 }
 
 // send our focus status to the LLNearbyChat hub
-void LLNearbyChatControl::onFocusReceived()
+void FSNearbyChatControl::onFocusReceived()
 {
-	LLNearbyChat::instance().setFocusedInputEditor(this,TRUE);
+	FSNearbyChat::instance().setFocusedInputEditor(this,TRUE);
 	LLLineEditor::onFocusReceived();
 }
 
-void LLNearbyChatControl::onFocusLost()
+void FSNearbyChatControl::onFocusLost()
 {
-	LLNearbyChat::instance().setFocusedInputEditor(this,FALSE);
+	FSNearbyChat::instance().setFocusedInputEditor(this,FALSE);
 	LLLineEditor::onFocusLost();
 }
 
-void LLNearbyChatControl::setFocus(BOOL focus)
+void FSNearbyChatControl::setFocus(BOOL focus)
 {
-	LLNearbyChat::instance().setFocusedInputEditor(this,focus);
+	FSNearbyChat::instance().setFocusedInputEditor(this,focus);
 	LLLineEditor::setFocus(focus);
 }
 
-void LLNearbyChatControl::autohide()
+void FSNearbyChatControl::autohide()
 {
 	if(getName()=="default_chat_bar")
 	{
@@ -248,13 +254,13 @@ void LLNearbyChatControl::autohide()
 
 		if(gAgentCamera.cameraMouselook() || gSavedSettings.getBOOL("AutohideChatBar"))
 		{
-			LLNearbyChat::instance().showDefaultChatBar(FALSE);
+			FSNearbyChat::instance().showDefaultChatBar(FALSE);
 		}
 	}
 }
 
 // handle ESC key here
-BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
+BOOL FSNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 {
 	BOOL handled = FALSE;
 	EChatType type = CHAT_TYPE_NORMAL;
@@ -301,7 +307,7 @@ BOOL LLNearbyChatControl::handleKeyHere(KEY key, MASK mask )
 		LLLineEditor::onCommit();
 
 		// send chat to nearby chat hub
-		LLNearbyChat::instance().sendChat(getConvertedText(),type);
+		FSNearbyChat::instance().sendChat(getConvertedText(),type);
 
 		setText(LLStringExplicit(""));
 		autohide();

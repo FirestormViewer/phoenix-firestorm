@@ -53,7 +53,7 @@
 #include "llviewerstats.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychatbar.h"
-#include "llnearbychathub.h"
+#include "fsnearbychathub.h"
 // </FS:Zi>
 #include "llappearancemgr.h"
 #include "llgesturelistener.h"
@@ -1013,7 +1013,7 @@ void LLGestureMgr::runStep(LLMultiGesture* gesture, LLGestureStep* step)
 
 			// <FS:Zi> Remove floating chat bar
 			// LLNearbyChatBar::getInstance()->sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
-			LLNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
+			FSNearbyChat::instance().sendChatFromViewer(chat_text, CHAT_TYPE_NORMAL, animate);
 			// </FS:Zi>
 
 			gesture->mCurrentStep++;

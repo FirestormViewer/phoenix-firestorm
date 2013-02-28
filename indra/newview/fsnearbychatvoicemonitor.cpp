@@ -33,7 +33,7 @@ FSNearbyChatVoiceControl::Params::Params() :
 {}
 
 FSNearbyChatVoiceControl::FSNearbyChatVoiceControl(const FSNearbyChatVoiceControl::Params& p) :
-	LLNearbyChatControl(p),
+	FSNearbyChatControl(p),
 	mVoiceMonitor(NULL),
 	mOriginalTextpadLeft(p.text_pad_left),
 	mOriginalTextpadRight(p.text_pad_right),
@@ -70,5 +70,5 @@ void FSNearbyChatVoiceControl::draw()
 			mVoiceMonitor->setVisible(FALSE);
 		}
 	}
-	LLNearbyChatControl::draw();
+	FSNearbyChatControl::draw();
 }

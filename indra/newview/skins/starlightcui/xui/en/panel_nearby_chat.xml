@@ -42,7 +42,7 @@
      layout="topleft"
      name="chat_history_lp"
      width="318">
-      <chat_history
+      <fs_chat_history
        bg_readonly_color="SL-CustomBackground"
        bg_writeable_color="SL-CustomBackground"
        follows="all"

@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LLCHATHISTORY_H_
 #define LLCHATHISTORY_H_
 
@@ -163,3 +165,5 @@ class LLChatHistory : public LLTextEditor	// <FS:Zi> FIRE-8600: TAB out of chat 
 	// </FS:Zi>
 };
 #endif /* LLCHATHISTORY_H_ */
+
+#endif

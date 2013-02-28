@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Pokaż profil tej grupy"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">
+			<button name="view_profile_btn" tool_tip="Pokaż profil tego rezydenta"/>
+		</layout_panel>
+		<layout_panel name="friend_panel">
+			<button name="add_friend_btn" tool_tip="Dodaj tego rezydenta do znajomych"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<button name="teleport_btn" tool_tip="Zaoferuj teleportację do siebie temu rezydentowi"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button name="share_btn" tool_tip="Wyślij przedmiot temu rezydentowi"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button name="pay_btn" tool_tip="Wyślij pieniądze temu rezydentowi"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">
+			<button name="call_btn" tool_tip="Dodaj rozmowę głosową do tego czata"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button name="end_call_btn" tool_tip="Zakończ rozmowę głosową"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">
+			<button name="voice_ctrls_btn" tool_tip="Właściwości głosu"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">
+			<button name="im_history_btn" tool_tip="Otwórz historię konwersacji"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box label="Dodawaj typ Przeglądarki" name="FSSupportGroupChatPrefix_toggle" tool_tip="Dodaje (FS) na początku Twoich wiadomości aby pomóc grupie wsparcia dowiedzieć się, czy Twój problem dotyczy Firestorma / Phoenixa. Twoja pomoc w unikaniu zamieszania jest mile widziana!"/>
+	<button tool_tip="Wyślij info systemowe" name="send_sysinfo_btn"/>
+	<layout_stack name="im_panels">
+		<layout_panel name="panel_im_control_lp">
+			<line_editor label="Do" name="chat_editor"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

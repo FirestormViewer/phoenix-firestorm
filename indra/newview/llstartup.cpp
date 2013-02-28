@@ -54,7 +54,10 @@
 #include "llfloaterreg.h"
 #include "llfocusmgr.h"
 #include "llhttpsender.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "lllocationhistory.h"
 #include "llimageworker.h"
 
@@ -65,7 +68,10 @@
 #include "llmoveview.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -1686,7 +1692,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 		//so I just moved nearby history loading a few states further
 		if (gSavedPerAccountSettings.getBOOL("LogShowHistory"))
 		{
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			if (nearby_chat) nearby_chat->loadHistory();
 		}
 		display_startup();
@@ -2532,7 +2541,10 @@ LLWorld::getInstance()->addRegion(gFirstSimHandle, gFirstSim, first_sim_size_x, 
 
 		LLAgentPicksInfo::getInstance()->requestNumberOfPicks();
 
-		LLIMFloater::initIMFloater();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater::initIMFloater();
+		FSFloaterIM::initIMFloater();
+		// </FS:Ansariel> [FS communication UI]
 		display_startup();
 
 		llassert(LLPathfindingManager::getInstance() != NULL);

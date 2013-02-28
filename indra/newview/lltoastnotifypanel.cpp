@@ -40,7 +40,10 @@
 #include "lltrans.h"
 #include "llnotificationsutil.h"
 #include "llviewermessage.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 
 const S32 BOTTOM_PAD = VPAD * 3;
 const S32 IGNORE_BTN_TOP_DELTA = 3*VPAD;//additional ignore_btn padding
@@ -561,7 +564,10 @@ LLIMToastNotifyPanel::~LLIMToastNotifyPanel()
 	// This may happened when IM floater reloads messages, exactly when user
 	// changes layout of IM chat log(disable/enable plaintext mode).
 	// See EXT-6500
-	LLIMFloater* im_floater = LLIMFloater::findInstance(mSessionID);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = LLIMFloater::findInstance(mSessionID);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(mSessionID);
+	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL && !im_floater->isDead())
 	{
 		mCloseNotificationOnDestroy = false;

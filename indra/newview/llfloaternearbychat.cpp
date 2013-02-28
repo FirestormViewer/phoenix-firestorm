@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llfloaternearbychat.h"
 
 #include "llviewercontrol.h"
@@ -64,8 +66,12 @@
 #include "llbutton.h"
 #include "lllayoutstack.h"
 
-#include "llimfloatercontainer.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloatercontainer.h"
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
+// </FS:Ansariel> [FS communication UI]
 #include "lllineeditor.h"
 
 //AO - includes for textentry
@@ -349,7 +355,10 @@ void	LLFloaterNearbyChat::openFloater(const LLSD& key)
 	// We override this to put nearbychat in the IM floater. -AO
 	if(isChatMultiTab())
 	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		// only show the floater container if we are actually attached -Zi
 		if (floater_container && !gSavedSettings.getBOOL("ChatHistoryTornOff"))
 		{
@@ -381,7 +390,10 @@ void	LLFloaterNearbyChat::setVisible(BOOL visible)
 	static LLCachedControl<bool> chatHistoryTornOff(gSavedSettings, "ChatHistoryTornOff");
 	if (FSUseNearbyChatConsole)
 	{
-		LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+		FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		if (floater_container && !chatHistoryTornOff && !floater_container->getVisible())
 		{
 			// In case the nearby chat is docked into the IM floater and the
@@ -406,7 +418,10 @@ void LLFloaterNearbyChat::onFocusReceived()
 
 void	LLFloaterNearbyChat::onOpen(const LLSD& key )
 {
-	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if (floater_container)
 	{
 		if (gSavedSettings.getBOOL("ChatHistoryTornOff"))
@@ -612,7 +627,10 @@ BOOL LLFloaterNearbyChat::getVisible()
 {
 	if(isChatMultiTab())
 	{
-		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		
 		// Treat inactive floater as invisible.
 		bool is_active = im_container->getActiveFloater() == this;
@@ -631,3 +649,5 @@ BOOL LLFloaterNearbyChat::getVisible()
 		return LLDockableFloater::getVisible();
 	}
 }
+
+#endif

@@ -26,6 +26,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llchathistory.h"
 
 #include "llavatarnamecache.h"
@@ -1553,3 +1555,5 @@ BOOL LLChatHistory::handleUnicodeCharHere(llwchar uni_char)
 	return LLTextEditor::handleUnicodeCharHere(uni_char);
 }
 // </FS:Zi>
+
+#endif

@@ -50,9 +50,9 @@
            label_ref="Command_Chat_Label"
            tooltip_ref="Command_Chat_Tooltip"
            execute_function="Floater.Toggle"
-           execute_parameters="im_container"
+           execute_parameters="fs_im_container"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="im_container"
+           is_running_parameters="fs_im_container"
            />
   <command name="compass"
            available_in_toybox="false"

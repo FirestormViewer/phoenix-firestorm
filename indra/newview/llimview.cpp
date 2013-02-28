@@ -48,7 +48,10 @@
 #include "llavatariconctrl.h"
 #include "llcallingcard.h"
 #include "llchat.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llgroupiconctrl.h"
 #include "llmd5.h"
 #include "llmutelist.h"
@@ -59,7 +62,10 @@
 #include "llnotificationsutil.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llspeakers.h" //for LLIMSpeakerMgr
 #include "lltextbox.h"
@@ -116,7 +122,10 @@ static void on_avatar_name_cache_toast(const LLUUID& agent_id,
 	args["FROM"] = av_name.getCompleteName();
 	args["FROM_ID"] = msg["from_id"];
 	args["SESSION_ID"] = msg["session_id"];
-	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&LLIMFloater::show, msg["session_id"].asUUID()));
+	// <FS:Ansariel> [FS communication UI]
+	//LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&LLIMFloater::show, msg["session_id"].asUUID()));
+	LLNotificationsUtil::add("IMToast", args, LLSD(), boost::bind(&FSFloaterIM::show, msg["session_id"].asUUID()));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 void toast_callback(const LLSD& msg){
@@ -168,7 +177,10 @@ void toast_callback(const LLSD& msg){
 	}
 
 	// Skip toasting if we have open window of IM with this session id
-	LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* open_im_floater = LLIMFloater::findInstance(msg["session_id"]);
+	FSFloaterIM* open_im_floater = FSFloaterIM::findInstance(msg["session_id"]);
+	// </FS:Ansariel> [FS communication UI]
 	if (open_im_floater && open_im_floater->getVisible())
 	{
 		return;
@@ -193,7 +205,10 @@ void LLIMModel::setActiveSessionID(const LLUUID& session_id)
 
 LLIMModel::LLIMModel() 
 {
-	addNewMsgCallback(boost::bind(&LLIMFloater::newIMCallback, _1));
+	// <FS:Ansariel> [FS communication UI]
+	//addNewMsgCallback(boost::bind(&LLIMFloater::newIMCallback, _1));
+	addNewMsgCallback(boost::bind(&FSFloaterIM::newIMCallback, _1));
+	// </FS:Ansariel> [FS communication UI]
 	addNewMsgCallback(boost::bind(&toast_callback, _1));
 }
 
@@ -712,7 +727,10 @@ void LLIMModel::processSessionInitializedReply(const LLUUID& old_session_id, con
 			gIMMgr->notifyObserverSessionIDUpdated(old_session_id, new_session_id);
 		}
 
-		LLIMFloater* im_floater = LLIMFloater::findInstance(old_session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(old_session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(old_session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (im_floater)
 		{
 			im_floater->sessionInitReplyReceived(new_session_id);
@@ -882,7 +900,10 @@ bool LLIMModel::addToHistory(const LLUUID& session_id, const std::string& from, 
 		chat.mSourceType = CHAT_SOURCE_AGENT;
 		chat.mText = utf8_text;
 		chat.mTimeStr = timestr;
-		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+		// </FS:Ansariel> [FS communication UI]
 		nearby_chat->addMessage(chat, true, LLSD());
 	}
 	// </Ansariel>
@@ -1737,7 +1758,10 @@ LLIMMgr::onConfirmForceCloseError(
 	//only 1 option really
 	LLUUID session_id = notification["payload"]["session_id"];
 
-	LLFloater* floater = LLIMFloater::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloater* floater = LLIMFloater::findInstance(session_id);
+	LLFloater* floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if ( floater )
 	{
 		floater->closeFloater(FALSE);
@@ -2603,7 +2627,10 @@ LLIMMgr::LLIMMgr()
 	mPendingInvitations = LLSD::emptyMap();
 	mPendingAgentListUpdates = LLSD::emptyMap();
 
-	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLIMFloater::sRemoveTypingIndicator, _1));
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&LLIMFloater::sRemoveTypingIndicator, _1));
+	LLIMModel::getInstance()->addNewMsgCallback(boost::bind(&FSFloaterIM::sRemoveTypingIndicator, _1));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // Add a message to a session. 
@@ -2713,7 +2740,10 @@ void LLIMMgr::addMessage(
 	// <FS:WoLf> IM Sounds only for sessions not in focus
 	else if(PlayModeUISndNewIncomingIMSession == 3 && dialog == IM_NOTHING_SPECIAL)
 	{
-		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (im_floater && !im_floater->hasFocus())
 		{
 			make_ui_sound("UISndNewIncomingIMSession");
@@ -2721,7 +2751,10 @@ void LLIMMgr::addMessage(
 	}
 	else if(PlayModeUISndNewIncomingGroupIMSession == 3 && dialog != IM_NOTHING_SPECIAL)
 	{
-		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (im_floater && !im_floater->hasFocus())
 		{
 			make_ui_sound("UISndNewIncomingGroupIMSession");
@@ -2766,7 +2799,10 @@ void LLIMMgr::addSystemMessage(const LLUUID& session_id, const std::string& mess
 		// <FS:Zi> Remove floating chat bar
 		// LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
 		// LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
-		LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+		FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		// </FS:Zi>
 
 		if(nearby_chat)
@@ -3095,7 +3131,10 @@ void LLIMMgr::clearPendingInvitation(const LLUUID& session_id)
 
 void LLIMMgr::processAgentListUpdates(const LLUUID& session_id, const LLSD& body)
 {
-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if ( im_floater )
 	{
 		im_floater->processAgentListUpdates(body);
@@ -3452,7 +3491,10 @@ void LLIMMgr::processIMTypingCore(const LLIMInfo* im_info, BOOL typing)
 	}
 	// </Ansariel>
 
-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 
 	if ( im_floater )
 	{
@@ -3498,7 +3540,10 @@ public:
 				speaker_mgr->updateSpeakers(gIMMgr->getPendingAgentListUpdates(session_id));
 			}
 
-			LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+			// <FS:Ansariel> [FS communication UI]
+			//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+			FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+			// </FS:Ansariel> [FS communication UI]
 			if ( im_floater )
 			{
 				if ( body.has("session_info") )
@@ -3592,7 +3637,10 @@ public:
 		const LLSD& input) const
 	{
 		LLUUID session_id = input["body"]["session_id"].asUUID();
-		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if ( im_floater )
 		{
 			im_floater->processSessionUpdate(input["body"]["info"]);

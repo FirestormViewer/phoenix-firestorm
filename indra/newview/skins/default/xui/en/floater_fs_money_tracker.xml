@@ -10,7 +10,7 @@
  can_minimize="true"
  can_close="true"
  can_drag_on_left="false">
-    <chat_history
+    <fs_chat_history
     	font="SansSerifSmall"
     	follows="left|right|top|bottom"
     	height="155"
@@ -19,7 +19,7 @@
     	parse_urls="true"
     	left="1"
     	width="198">
-    </chat_history>
+    </fs_chat_history>
     <button
       	name="Clear"
       	label="Clear"

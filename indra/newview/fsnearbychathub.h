@@ -25,31 +25,31 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLNEARBYCHAT_H
-#define LL_LLNEARBYCHAT_H
+#ifndef FS_NEARBYCHAT_H
+#define FS_NEARBYCHAT_H
 
 #include "llsingleton.h"
 #include "llviewerchat.h"
 
-class LLNearbyChatControl;
+class FSNearbyChatControl;
 
-class LLNearbyChat : public LLSingleton<LLNearbyChat>
+class FSNearbyChat : public LLSingleton<FSNearbyChat>
 {
-	friend class LLSingleton<LLNearbyChat>;
+	friend class LLSingleton<FSNearbyChat>;
 
 private:
-	LLNearbyChat();
-	~LLNearbyChat();
+	FSNearbyChat();
+	~FSNearbyChat();
 
 	void sendMsg();
 
 	static S32 sLastSpecialChatChannel;
-	LLNearbyChatControl* mDefaultChatBar;
+	FSNearbyChatControl* mDefaultChatBar;
 
 	void onDefaultChatBarButtonClicked();
 
 public:
-	void registerChatBar(LLNearbyChatControl* chatBar);
+	void registerChatBar(FSNearbyChatControl* chatBar);
 
 	// set the contents of the chat bar to "text" if it was empty, otherwise just show it
 	void showDefaultChatBar(BOOL visible,const char* text=0) const;
@@ -60,12 +60,12 @@ public:
 	void sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate);
 	void sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate);
 
-	void setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL focus);
+	void setFocusedInputEditor(FSNearbyChatControl* inputEditor,BOOL focus);
 
 	BOOL defaultChatBarIsIdle() const;
 	BOOL defaultChatBarHasFocus() const;
 
-	LLNearbyChatControl* mFocusedInputEditor;
+	FSNearbyChatControl* mFocusedInputEditor;
 };
 
-#endif
+#endif // FS_NEARBYCHAT_H

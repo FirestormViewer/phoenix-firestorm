@@ -64,11 +64,17 @@
 #include "lggcontactsets.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llfloaterreg.h"
 #include "llnotificationmanager.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// <FS:Ansariel>
 
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
@@ -889,7 +895,10 @@ static void on_avatar_name_cache_notify(const LLUUID& agent_id,
 		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
 		if (history_only)
 		{
-			LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+			FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+			// </FS:Ansariel> [FS communication UI]
 			nearby_chat->addMessage(chat, true, LLSD());
 		}
 		else
@@ -916,7 +925,10 @@ void LLAvatarTracker::formFriendship(const LLUUID& id)
 
 			// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
 			LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
-			LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+			// <FS:Ansariel> [FS communication UI]
+			//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+			FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
+			// </FS:Ansariel> [FS communication UI]
 			if (im_floater)
 			{
 				im_floater->setEnableAddFriendButton(FALSE);
@@ -942,7 +954,10 @@ void LLAvatarTracker::processTerminateFriendship(LLMessageSystem* msg, void**)
 
 		// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
 		LLUUID im_session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, id);
-		LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(im_session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(im_session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (im_floater)
 		{
 			im_floater->setEnableAddFriendButton(TRUE);

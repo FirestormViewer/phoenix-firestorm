@@ -27,6 +27,8 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if 0
+
 #include "llimfloatercontainer.h"
 #include "llfloaterreg.h"
 #include "llimview.h"
@@ -286,3 +288,5 @@ void LLIMFloaterContainer::setMinimized(BOOL b)
 }
 
 // EOF
+
+#endif

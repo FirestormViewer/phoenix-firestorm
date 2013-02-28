@@ -31,7 +31,10 @@
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
 // #include "llnearbychatbar.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
@@ -98,7 +101,10 @@ bool LLTipHandler::processNotification(const LLSD& notify)
 			LLHandlerUtil::logToNearbyChat(notification, CHAT_SOURCE_SYSTEM);
 
 			// don't show toast if Nearby Chat is opened
-			LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+			FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+			// </FS:Ansariel> [FS communication UI]
 			// <FS:Zi> Remove floating chat bar
 			// LLNearbyChatBar* nearby_chat_bar = LLNearbyChatBar::getInstance();
 			// if (!nearby_chat_bar->isMinimized() && nearby_chat_bar->getVisible() && nearby_chat->getVisible())

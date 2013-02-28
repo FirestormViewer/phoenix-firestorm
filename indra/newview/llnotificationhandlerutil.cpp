@@ -34,11 +34,17 @@
 #include "llurlaction.h"
 
 #include "llagent.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotificationhandler.h"
 #include "llnotifications.h"
@@ -296,11 +302,17 @@ bool LLHandlerUtil::canSpawnToast(const LLNotificationPtr& notification)
 }
 
 // static
-LLIMFloater* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
+// <FS:Ansariel> [FS communication UI]
+//LLIMFloater* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
+FSFloaterIM* LLHandlerUtil::findIMFloater(const LLNotificationPtr& notification)
+// </FS:Ansariel> [FS communication UI]
 {
 	LLUUID from_id = notification->getPayload()["from_id"];
 	LLUUID session_id = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, from_id);
-	return LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//return LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
+	return LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // static
@@ -308,7 +320,10 @@ bool LLHandlerUtil::isIMFloaterOpened(const LLNotificationPtr& notification)
 {
 	bool res = false;
 
-	LLIMFloater* im_floater = findIMFloater(notification);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = findIMFloater(notification);
+	FSFloaterIM* im_floater = findIMFloater(notification);
+	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL)
 	{
 		res = im_floater->getVisible() == TRUE;
@@ -321,7 +336,10 @@ bool LLHandlerUtil::isIMFloaterFocused(const LLNotificationPtr& notification)
 {
 	bool res = false;
 
-	LLIMFloater* im_floater = findIMFloater(notification);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = findIMFloater(notification);
+	FSFloaterIM* im_floater = findIMFloater(notification);
+	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL)
 	{
 		res = im_floater->hasFocus() == TRUE;
@@ -484,7 +502,10 @@ void LLHandlerUtil::logGroupNoticeToIMGroup(
 // static
 void LLHandlerUtil::logToNearbyChat(const LLNotificationPtr& notification, EChatSourceType type)
 {
-	LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterNearbyChat* nearby_chat = LLFloaterNearbyChat::getInstance();
+	FSFloaterNearbyChat* nearby_chat = FSFloaterNearbyChat::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if(nearby_chat)
 	{
 		LLChat chat_msg(notification->getMessage());
@@ -573,7 +594,10 @@ void LLHandlerUtil::addNotifPanelToIM(const LLNotificationPtr& notification)
 // static
 void LLHandlerUtil::updateIMFLoaterMesages(const LLUUID& session_id)
 {
-	LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+	FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+	// </FS:Ansariel> [FS communication UI]
 	if (im_floater != NULL && im_floater->getVisible())
 	{
 		im_floater->updateMessages();

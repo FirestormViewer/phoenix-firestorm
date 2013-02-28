@@ -44,7 +44,10 @@
 #include "llfriendcard.h"
 #include "llgroupactions.h"
 #include "llgrouplist.h"
-#include "llimfloatercontainer.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloatercontainer.h"
+#include "fsfloaterimcontainer.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llnotificationsutil.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llstartup.h"
@@ -184,7 +187,10 @@ void FSFloaterContacts::updateGroupButtons()
 
 void FSFloaterContacts::onOpen(const LLSD& key)
 {
-	LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	// <FS:Ansariel> [FS communication UI]
+	//LLIMFloaterContainer* floater_container = LLIMFloaterContainer::getInstance();
+	FSFloaterIMContainer* floater_container = FSFloaterIMContainer::getInstance();
+	// </FS:Ansariel> [FS communication UI]
 	if (gSavedSettings.getBOOL("ContactsTornOff"))
 	{
 		// first set the tear-off host to the conversations container
@@ -220,7 +226,10 @@ void FSFloaterContacts::openTab(const std::string& name)
 
 	if (visible)
 	{
-		LLIMFloaterContainer* floater_container = (LLIMFloaterContainer *) getHost();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloaterContainer* floater_container = (LLIMFloaterContainer *) getHost();
+		FSFloaterIMContainer* floater_container = (FSFloaterIMContainer *) getHost();
+		// </FS:Ansariel> [FS communication UI]
 		if (floater_container)
 		{
 			floater_container->setVisible(TRUE);

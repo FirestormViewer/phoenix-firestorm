@@ -26,6 +26,7 @@
  * $/LicenseInfo$
  */
 
+#if 0
 
 #ifndef LL_LLNEARBYCHATBARLISTENER_H
 #define LL_LLNEARBYCHATBARLISTENER_H
@@ -51,3 +52,4 @@ private:
 
 #endif // LL_LLNEARBYCHATBARLISTENER_H
 
+#endif

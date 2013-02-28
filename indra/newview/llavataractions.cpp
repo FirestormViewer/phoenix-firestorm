@@ -68,7 +68,10 @@
 #include "llviewerobjectlist.h"
 #include "llviewermessage.h"	// for handle_lure
 #include "llviewerregion.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "lltrans.h"
 #include "llcallingcard.h"
 #include "llslurl.h"			// IDEVO
@@ -200,7 +203,10 @@ static void on_avatar_name_cache_start_im(const LLUUID& agent_id,
 	LLUUID session_id = gIMMgr->addSession(name, IM_NOTHING_SPECIAL, agent_id);
 	if (session_id != LLUUID::null)
 	{
-		LLIMFloater::show(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater::show(session_id);
+		FSFloaterIM::show(session_id);
+		// </FS:Ansariel> [FS communication UI]
 	}
 	make_ui_sound("UISndStartIM");
 }
@@ -361,7 +367,10 @@ void LLAvatarActions::startConference(const uuid_vec_t& ids)
 	LLUUID session_id = gIMMgr->addSession(title, IM_SESSION_CONFERENCE_START, ids[0], id_array);
 	if (session_id != LLUUID::null)
 	{
-		LLIMFloater::show(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater::show(session_id);
+		FSFloaterIM::show(session_id);
+		// </FS:Ansariel> [FS communication UI]
 	}
 	make_ui_sound("UISndStartIM");
 }

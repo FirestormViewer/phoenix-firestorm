@@ -76,7 +76,10 @@ void LLFirstUse::otherAvatarChatFirst(bool enable)
 {
 	// <FS:Zi> Remove floating chat bar
 	// firstUseNotification("FirstOtherChatBeforeUser", enable, "HintChat", LLSD(), LLSD().with("target", "chat_bar").with("direction", "top_right").with("distance", 24));
-	firstUseNotification("FirstOtherChatBeforeUser", enable, "HintChat", LLSD(), LLSD().with("target", "nearby_chat").with("direction", "top_right").with("distance", 24));
+	// <FS:Ansariel> [FS communication UI]
+	//firstUseNotification("FirstOtherChatBeforeUser", enable, "HintChat", LLSD(), LLSD().with("target", "nearby_chat").with("direction", "top_right").with("distance", 24));
+	firstUseNotification("FirstOtherChatBeforeUser", enable, "HintChat", LLSD(), LLSD().with("target", "fs_nearby_chat").with("direction", "top_right").with("distance", 24));
+	// </FS:Ansariel> [FS communication UI]
 	// </FS:Zi>
 }
 

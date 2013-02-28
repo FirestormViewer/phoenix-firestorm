@@ -52,13 +52,19 @@
 #include "llfloaterabout.h"
 #include "llfloaterhardwaresettings.h"
 #include "llfloatersidepanelcontainer.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llkeyboard.h"
 #include "llmodaldialog.h"
 #include "llnavigationbar.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llnotifications.h"
 #include "llnotificationsutil.h"
@@ -580,13 +586,16 @@ void LLFloaterPreference::saveAvatarProperties( void )
 
 BOOL LLFloaterPreference::postBuild()
 {
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
-
-	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
-
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
-
-	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	// <FS:Ansariel> [FS communication UI]
+	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
+	//gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLIMFloater::processChatHistoryStyleUpdate, _2));
+	//gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
+	gSavedSettings.getControl("PlainTextChatHistory")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterIM::processChatHistoryStyleUpdate, _2));
+	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&FSFloaterNearbyChat::processChatHistoryStyleUpdate, _2));
+	// </FS:Ansariel> [FS communication UI]
 
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&LLViewerChat::signalChatFontChanged));
 

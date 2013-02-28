@@ -46,7 +46,10 @@
 #include "rlvhandler.h"
 // [/RLVa:KB]
 
-#include "llfloaternearbychat.h"	// <FS:Zi> Remove floating chat bar
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"	// <FS:Zi> Remove floating chat bar
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 
 static const S32 msg_left_offset = 10;
 static const S32 msg_right_offset = 10;
@@ -339,14 +342,20 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 		{
 			// <FS:Zi> Remove floating chat bar
 			// LLNearbyChatBar::getInstance()->showHistory();
-			LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+			// <FS:Ansariel> [FS communication UI]
+			//LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+			FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
+			// </FS:Ansariel> [FS communication UI]
 			// </FS:Zi>
 
 			// <FS:Ansariel> If nearby chat history is docked, we also need
 			//               to open the container floater (FIRE-6265)
 			if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
 			{
-				LLFloaterReg::showInstance("im_container");
+				// <FS:Ansariel> [FS communication UI]
+				//LLFloaterReg::showInstance("im_container");
+				LLFloaterReg::showInstance("fs_im_container");
+				// </FS:Ansariel> [FS communication UI]
 			}
 			// </FS:Ansariel>
 			return FALSE;
@@ -355,14 +364,20 @@ BOOL	LLNearbyChatToastPanel::handleMouseUp	(S32 x, S32 y, MASK mask)
 
 	// <FS:Zi> Remove floating chat bar
 	// LLNearbyChatBar::getInstance()->showHistory();
-	LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterNearbyChat::getInstance()->setVisible(TRUE);
+	FSFloaterNearbyChat::getInstance()->setVisible(TRUE);
+	// </FS:Ansariel> [FS communication UI]
 	// </FS:Zi>
 
 	// <FS:Ansariel> If nearby chat history is docked, we also need
 	//               to open the container floater (FIRE-6265)
 	if (!gSavedSettings.getBOOL("ChatHistoryTornOff"))
 	{
-		LLFloaterReg::showInstance("im_container");
+		// <FS:Ansariel> [FS communication UI]
+		//LLFloaterReg::showInstance("im_container");
+		LLFloaterReg::showInstance("fs_im_container");
+		// </FS:Ansariel> [FS communication UI]
 	}
 	// </FS:Ansariel>
 	return LLPanel::handleMouseUp(x,y,mask);

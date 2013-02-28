@@ -202,7 +202,7 @@
 
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llnearbychathub.h"
+#include "fsnearbychathub.h"
 // </FS:Zi>
 #include "llwindowlistener.h"
 #include "llviewerwindowlistener.h"
@@ -2110,7 +2110,7 @@ void LLViewerWindow::initWorldUI()
 	// <FS:Zi> Autohide main chat bar if applicable
 	BOOL visible=!gSavedSettings.getBOOL("AutohideChatBar");
 
-	LLNearbyChat::instance().showDefaultChatBar(visible);
+	FSNearbyChat::instance().showDefaultChatBar(visible);
 	gSavedSettings.setBOOL("MainChatbarVisible",visible);
 	// </FS:Zi>
 }
@@ -2702,8 +2702,8 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		//	// cursor with arrow keys, so allow movement
 		//	if (chat_editor->getText().empty() 
 		//		|| gSavedSettings.getBOOL("ArrowKeysAlwaysMove"))
-		if(LLNearbyChat::instance().defaultChatBarHasFocus() &&
-		   (LLNearbyChat::instance().defaultChatBarIsIdle() ||
+		if(FSNearbyChat::instance().defaultChatBarHasFocus() &&
+		   (FSNearbyChat::instance().defaultChatBarIsIdle() ||
 		   // <FS:PP> Attempt to speed up things a little
 		   // gSavedSettings.getBOOL("ArrowKeysAlwaysMove")))
 			ArrowKeysAlwaysMove))
@@ -2782,7 +2782,7 @@ BOOL LLViewerWindow::handleKey(KEY key, MASK mask)
 		// 	LLNearbyChatBar::getInstance()->startChat(NULL);
 		// 	return TRUE;
 		// }
-		LLNearbyChat::instance().showDefaultChatBar(TRUE);
+		FSNearbyChat::instance().showDefaultChatBar(TRUE);
 		return TRUE;
 		// </FS:Zi>
 	}

@@ -34,7 +34,10 @@
 
 // newview includes
 #include "llchiclet.h"
-#include "llimfloater.h" // for LLIMFloater
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h" // for LLIMFloater
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llpaneltopinfobar.h"
 #include "llsyswellwindow.h"
 
@@ -110,7 +113,10 @@ void LLChicletBar::sessionAdded(const LLUUID& session_id, const std::string& nam
 		chiclet->setIMSessionName(name);
 		chiclet->setOtherParticipantId(other_participant_id);
 		
-		LLIMFloater::onIMChicletCreated(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater::onIMChicletCreated(session_id);
+		FSFloaterIM::onIMChicletCreated(session_id);
+		// </FS:Ansariel> [FS communication UI]
 
 	}
 	else
@@ -125,7 +131,10 @@ void LLChicletBar::sessionRemoved(const LLUUID& session_id)
 	if(getChicletPanel())
 	{
 		// IM floater should be closed when session removed and associated chiclet closed
-		LLIMFloater* iMfloater = LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* iMfloater = LLFloaterReg::findTypedInstance<LLIMFloater>("impanel", session_id);
+		FSFloaterIM* iMfloater = LLFloaterReg::findTypedInstance<FSFloaterIM>("fs_impanel", session_id);
+		// </FS:Ansariel> [FS communication UI]
 		if (iMfloater != NULL)
 		{
 			iMfloater->closeFloater();

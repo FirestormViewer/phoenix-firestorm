@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLIMFLOATERCONTAINER_H
 #define LL_LLIMFLOATERCONTAINER_H
 
@@ -71,3 +73,5 @@ private:
 };
 
 #endif // LL_LLIMFLOATERCONTAINER_H
+
+#endif

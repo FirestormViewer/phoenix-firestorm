@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="panel_im">
+	<layout_stack name="ls_control_panel">
+		<layout_panel name="gprofile_panel">
+			<button name="group_info_btn" tool_tip="Mostrar el perfil de este grupo"/>
+		</layout_panel>
+		<layout_panel name="profile_panel">	  
+			<button name="view_profile_btn" tool_tip="Mostrar el perfil de este residente"/>
+		</layout_panel>
+		<layout_panel name="trans_panel">             
+			<button tool_tip="Usar el servicio de traducción de Google" name="translate_btn"/>       
+		</layout_panel>      
+		<layout_panel name="friend_panel">
+			<button tool_tip="Ofrecer amistad a este residente" name="add_friend_btn"/>
+		</layout_panel>
+		<layout_panel name="tp_panel">
+			<button tool_tip="Convocar / Ofrecer teleporte a este residente" name="teleport_btn"/>
+		</layout_panel>
+		<layout_panel name="share_panel">
+			<button tool_tip="Enviar un elemento de tu inventario a este residente" name="share_btn"/>
+		</layout_panel>
+		<layout_panel name="pay_panel">
+			<button tool_tip="Enviar dinero a este residente" name="pay_btn"/>
+		</layout_panel>
+		<layout_panel name="call_btn_panel">              
+			<button tool_tip="Añadir voz a este chat" name="call_btn"/>
+		</layout_panel>
+		<layout_panel name="end_call_btn_panel">
+			<button tool_tip="Finalizar llamada de voz" name="end_call_btn"/>
+		</layout_panel>
+		<layout_panel name="voice_ctrls_btn_panel">             
+			<button tool_tip="Controles de voz" name="voice_ctrls_btn"/>
+		</layout_panel>
+		<layout_panel name="im_history_btn_panel">             
+			<button tool_tip="Abre el historial de chat con este residente o grupo" name="im_history_btn"/>
+		</layout_panel>
+	</layout_stack>
+	<check_box label="Especificar visor" name="FSSupportGroupChatPrefix_toggle" tool_tip="Añade (FS) al principio de tus mensajes para ayudar al equipo de soporte a determinar si tu pregunta se refiere a Phoenix o a Firestorm. ¡Se agradece tu ayuda para evitar confusiones!"/>
+	<button tool_tip="Enviar información de tu sistema" name="send_sysinfo_btn"/>	
+	<layout_stack name="im_panels">
+		<layout_panel name="panel_im_control_lp">
+			<line_editor label="A" name="chat_editor"/>
+		</layout_panel>
+	</layout_stack>
+</floater>

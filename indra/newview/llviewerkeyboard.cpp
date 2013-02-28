@@ -33,7 +33,7 @@
 #include "llagentcamera.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychatbar.h"
-#include "llnearbychathub.h"
+#include "fsnearbychathub.h"
 #include "lllineeditor.h"
 // </FS:Zi>
 #include "llviewercontrol.h"
@@ -582,7 +582,7 @@ void start_chat( EKeystate s )
 	// start chat
 	// <FS:Zi> Remove floating chat bar
 	// LLNearbyChatBar::startChat(NULL);
-	LLNearbyChat::instance().showDefaultChatBar(TRUE);
+	FSNearbyChat::instance().showDefaultChatBar(TRUE);
 	// </FS:Zi>
 }
 
@@ -620,7 +620,7 @@ void start_gesture( EKeystate s )
  		//	LLNearbyChat::startChat(NULL);
  		//}
 
-		LLNearbyChat::instance().showDefaultChatBar(TRUE,"/");
+		FSNearbyChat::instance().showDefaultChatBar(TRUE,"/");
  		// </FS:Ansariel>
 	}
 }

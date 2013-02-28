@@ -126,7 +126,10 @@
 #include "llmoveview.h"
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychat.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
 // <//FS:Zi>
 #include "llpanelblockedlist.h"
 #include "llpanelclassified.h"
@@ -153,6 +156,8 @@
 #include "fscontactsfloater.h"
 #include "fsfloaterblocklist.h"
 #include "fsfloatergroup.h"
+#include "fsfloaterim.h"
+#include "fsfloaterimcontainer.h"
 #include "fsfloaterplacedetails.h"
 #include "fsfloaterprofile.h"
 #include "fsfloatersearch.h"
@@ -224,7 +229,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("camera", "floater_camera.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCamera>);
 	// <FS:Zi> Remove floating chat bar
 	// LLFloaterReg::add("chat_bar", "floater_chat_bar.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLNearbyChatBar>);
-	LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNearbyChat>);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterReg::add("nearby_chat", "floater_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterNearbyChat>);
+	LLFloaterReg::add("fs_nearby_chat", "floater_fs_nearby_chat.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterNearbyChat>);
+	// </FS:Ansariel> [FS communication UI]
 	// </FS:Zi>
 
 	LLFloaterReg::add("compile_queue", "floater_script_queue.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterCompileQueue>);
@@ -249,8 +257,12 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("help_browser", "floater_help_browser.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHelpBrowser>);	
 	LLFloaterReg::add("hud", "floater_hud.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterHUD>);
 
-	LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloater>);
-	LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloaterContainer>);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterReg::add("impanel", "floater_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloater>);
+	//LLFloaterReg::add("im_container", "floater_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMFloaterContainer>);
+	LLFloaterReg::add("fs_impanel", "floater_fs_im_session.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIM>);
+	LLFloaterReg::add("fs_im_container", "floater_fs_im_container.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterIMContainer>);
+	// <FS:Ansariel> [FS communication UI]
 	LLFloaterReg::add("im_well_window", "floater_sys_well.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIMWellWindow>);
 	LLFloaterReg::add("incoming_call", "floater_incoming_call.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLIncomingCallDialog>);
 	LLFloaterReg::add("inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);

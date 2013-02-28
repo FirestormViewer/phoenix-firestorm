@@ -1,5 +1,5 @@
  /** 
- * @file llnearbychatcontrol.h
+ * @file fsnearbychatcontrol.h
  * @brief Nearby chat input control implementation
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
@@ -25,19 +25,19 @@
  * $/LicenseInfo$
  */
 
-#ifndef LL_LLNEARBYCHATCONTROL_H
-#define LL_LLNEARBYCHATCONTROL_H
+#ifndef FS_NEARBYCHATCONTROL_H
+#define FS_NEARBYCHATCONTROL_H
 
 #include "llchat.h"
 #include "lllineeditor.h"
 
-class LLNearbyChatControl : public LLLineEditor
+class FSNearbyChatControl : public LLLineEditor
 {
 public:
 	struct Params : public LLInitParam::Block<Params, LLLineEditor::Params> {};
 
-	LLNearbyChatControl(const Params& p);
-	~LLNearbyChatControl();
+	FSNearbyChatControl(const Params& p);
+	~FSNearbyChatControl();
 
 	virtual void onFocusReceived();
 	virtual void onFocusLost();
@@ -55,4 +55,4 @@ private:
 	void autohide();
 };
 
-#endif
+#endif // FS_NEARBYCHATCONTROL_H

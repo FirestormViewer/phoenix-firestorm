@@ -25,6 +25,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_LLFLOATERNEARBYCHAT_H
 #define LL_LLFLOATERNEARBYCHAT_H
 
@@ -111,5 +113,7 @@ private:
 
 	BOOL FSUseNearbyChatConsole;
 };
+
+#endif
 
 #endif

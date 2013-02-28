@@ -24,7 +24,6 @@
 #include "fsmoneytracker.h"
 #include "llfloaterreg.h"
 #include "llviewercontrol.h"
-#include "llchathistory.h"
 #include "lllineeditor.h"
 #include "llnotificationmanager.h"
 #include "lltrans.h"
@@ -44,7 +43,10 @@ FSMoneyTracker::~FSMoneyTracker()
 
 BOOL FSMoneyTracker::postBuild()
 {
-	mTransactionHistory = getChild<LLChatHistory>("money_chat_history");
+	// <FS:Ansariel> [FS communication UI]
+	//mTransactionHistory = getChild<LLChatHistory>("money_chat_history");
+	mTransactionHistory = getChild<FSChatHistory>("money_chat_history");
+	// </FS:Ansariel> [FS communication UI]
 	mTransactionHistory->clear();
 	
 	// Button Actions

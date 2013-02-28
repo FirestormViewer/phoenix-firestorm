@@ -39,7 +39,10 @@
 #include "llagentcamera.h"
 #include "llavatarlist.h"
 #include "llcalc.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llinventorymodel.h"
@@ -851,7 +854,10 @@ bool cmd_line_chat(std::string revised_text, EChatType type, bool from_gesture)
 
 			else if (command == std::string(sFSCmdLineClearChat))
 			{
-				LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+				// <FS:Ansariel> [FS communication UI]
+				//LLFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());
+				FSFloaterNearbyChat* chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+				// </FS:Ansariel> [FS communication UI]
 				if (chat)
 				{
 					chat->clearChatHistory();

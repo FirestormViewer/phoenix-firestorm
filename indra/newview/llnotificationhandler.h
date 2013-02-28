@@ -38,7 +38,10 @@
 
 #include "llavatarname.h"
 
-class LLIMFloater;
+// <FS:Ansariel> [FS communication UI]
+//class LLIMFloater;
+class FSFloaterIM;
+// </FS:Ansariel> [FS communication UI]
 
 namespace LLNotificationsUI
 {
@@ -415,7 +418,10 @@ private:
 	/**
 	 * Find IM floater based on "from_id"
 	 */
-	static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
+	// <FS:Ansariel> [FS communication UI]
+	//static LLIMFloater* findIMFloater(const LLNotificationPtr& notification);
+	static FSFloaterIM* findIMFloater(const LLNotificationPtr& notification);
+	// </FS:Ansariel> [FS communication UI]
 
 // [SL:KB] - Patch: UI-Notifications | Checked: 2011-04-11 (Catznip-2.5.0a) | Added: Catznip-2.5.0a
 	/**

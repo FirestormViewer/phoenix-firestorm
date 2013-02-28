@@ -1,5 +1,5 @@
 /** 
- * @file llnearbychat.cpp
+ * @file fsnearbychat.cpp
  * @brief @brief Nearby chat central class for handling multiple chat input controls
  *
  * $LicenseInfo:firstyear=2009&license=viewerlgpl$
@@ -27,9 +27,12 @@
 
 #include "llviewerprecompiledheaders.h"
 
-#include "llnearbychathub.h"
-#include "llnearbychatcontrol.h"
-#include "llfloaternearbychat.h"
+#include "fsnearbychathub.h"
+#include "fsnearbychatcontrol.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// </FS:Ansariel> [FS communication UI]
 
 #include "llviewercontrol.h"
 #include "llviewerwindow.h"
@@ -76,20 +79,20 @@ static LLChatTypeTrigger sChatTypeTriggers[] = {
 	{ "/shout"	, CHAT_TYPE_SHOUT}
 };
 
-S32 LLNearbyChat::sLastSpecialChatChannel = 0;
+S32 FSNearbyChat::sLastSpecialChatChannel = 0;
 
-LLNearbyChat::LLNearbyChat() :
+FSNearbyChat::FSNearbyChat() :
 	mDefaultChatBar(NULL),
 	mFocusedInputEditor(NULL)
 {
-	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&LLNearbyChat::onDefaultChatBarButtonClicked, this));
+	gSavedSettings.getControl("MainChatbarVisible")->getSignal()->connect(boost::bind(&FSNearbyChat::onDefaultChatBarButtonClicked, this));
 }
 
-LLNearbyChat::~LLNearbyChat()
+FSNearbyChat::~FSNearbyChat()
 {
 }
 
-void LLNearbyChat::onDefaultChatBarButtonClicked()
+void FSNearbyChat::onDefaultChatBarButtonClicked()
 {
 	showDefaultChatBar(gSavedSettings.getBOOL("MainChatbarVisible"));
 }
@@ -246,12 +249,12 @@ void really_send_chat_from_viewer(std::string utf8_out_text, EChatType type, S32
 }
 //</FS:TS> FIRE-787
 
-void LLNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
+void FSNearbyChat::sendChatFromViewer(const std::string& utf8text, EChatType type, BOOL animate)
 {
 	sendChatFromViewer(utf8str_to_wstring(utf8text), type, animate);
 }
 
-void LLNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate)
+void FSNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BOOL animate)
 {
 	// Look for "/20 foo" channel chats.
 	S32 channel = 0;
@@ -262,7 +265,10 @@ void LLNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 		gSavedSettings.getBOOL("FSShowChatChannel") &&
 		(channel == 0))
 	{
-		channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		// <FS:Ansariel> [FS communication UI]
+		//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+		// </FS:Ansariel> [FS communication UI]
 	}
 	std::string utf8_out_text = wstring_to_utf8str(out_text);
 	std::string utf8_text = wstring_to_utf8str(wtext);
@@ -323,7 +329,7 @@ void LLNearbyChat::sendChatFromViewer(const LLWString& wtext, EChatType type, BO
 	send_chat_from_viewer(utf8_out_text, type, channel);
 }
 
-EChatType LLNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
+EChatType FSNearbyChat::processChatTypeTriggers(EChatType type, std::string &str)
 {
 	U32 length = str.length();
 	S32 cnt = sizeof(sChatTypeTriggers) / sizeof(*sChatTypeTriggers);
@@ -357,7 +363,7 @@ EChatType LLNearbyChat::processChatTypeTriggers(EChatType type, std::string &str
 
 // If input of the form "/20foo" or "/20 foo", returns "foo" and channel 20.
 // Otherwise returns input and channel 0.
-LLWString LLNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
+LLWString FSNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 {
 	if (mesg[0] == '/'
 		&& mesg[1] == '/')
@@ -410,7 +416,7 @@ LLWString LLNearbyChat::stripChannelNumber(const LLWString &mesg, S32* channel)
 	}
 }
 
-void LLNearbyChat::sendChat(LLWString text,EChatType type)
+void FSNearbyChat::sendChat(LLWString text,EChatType type)
 {
 	LLWStringUtil::trim(text);
 
@@ -432,7 +438,10 @@ void LLNearbyChat::sendChat(LLWString text,EChatType type)
 			gSavedSettings.getBOOL("FSShowChatChannel") &&
 			(channel == 0))
 		{
-			channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+			// <FS:Ansariel> [FS communication UI]
+			//channel = (S32)(LLFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+			channel = (S32)(FSFloaterNearbyChat::getInstance()->getChild<LLSpinCtrl>("ChatChannel")->get());
+			// </FS:Ansariel> [FS communication UI]
 		}
 		
 		std::string utf8text = wstring_to_utf8str(text);
@@ -473,7 +482,7 @@ void LLNearbyChat::sendChat(LLWString text,EChatType type)
 }
 
 // all chat bars call this function and we keep the first or one that's seen as the default
-void LLNearbyChat::registerChatBar(LLNearbyChatControl* chatBar)
+void FSNearbyChat::registerChatBar(FSNearbyChatControl* chatBar)
 {
 	// TODO: make this a Param option "is_default"
 	if(!mDefaultChatBar || chatBar->getName()=="default_chat_bar")
@@ -483,7 +492,7 @@ void LLNearbyChat::registerChatBar(LLNearbyChatControl* chatBar)
 }
 
 // unhide the default nearby chat bar on request (pressing Enter or a letter key)
-void LLNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
+void FSNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 {
 	if(!mDefaultChatBar)
 		return;
@@ -506,7 +515,7 @@ void LLNearbyChat::showDefaultChatBar(BOOL visible,const char* text) const
 }
 
 // We want to know which nearby chat editor (if any) currently has focus
-void LLNearbyChat::setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL focus)
+void FSNearbyChat::setFocusedInputEditor(FSNearbyChatControl* inputEditor,BOOL focus)
 {
 	if(focus)
 		mFocusedInputEditor=inputEditor;
@@ -519,7 +528,7 @@ void LLNearbyChat::setFocusedInputEditor(LLNearbyChatControl* inputEditor,BOOL f
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
 // and the hide chat bar feature in mouselook in llagent.cpp
-BOOL LLNearbyChat::defaultChatBarIsIdle() const
+BOOL FSNearbyChat::defaultChatBarIsIdle() const
 {
 	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
 		return mFocusedInputEditor->getText().empty();
@@ -529,7 +538,7 @@ BOOL LLNearbyChat::defaultChatBarIsIdle() const
 }
 
 // for the "arrow key moves avatar when chat is empty" hack in llviewerwindow.cpp
-BOOL LLNearbyChat::defaultChatBarHasFocus() const
+BOOL FSNearbyChat::defaultChatBarHasFocus() const
 {
 	if(mFocusedInputEditor && mFocusedInputEditor->getName()=="default_chat_bar")
 		return TRUE;

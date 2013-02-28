@@ -80,7 +80,10 @@
 #include <boost/tokenizer.hpp>
 
 #include "llinventorydefines.h"
-#include "llimfloatercontainer.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloatercontainer.h"
+#include "fsfloaterimcontainer.h"
+// </FS:Ansariel> [FS communication UI]
 
 
 class LLFileEnableUpload : public view_listener_t
@@ -662,7 +665,10 @@ class LLFileCloseWindow : public view_listener_t
 	bool handleEvent(const LLSD& userdata)
 	{
 		// If the IM container is focused, try to close the selected tab instead of the container -KC
-		LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloaterContainer* im_container = LLIMFloaterContainer::getInstance();
+		FSFloaterIMContainer* im_container = FSFloaterIMContainer::getInstance();
+		// </FS:Ansariel> [FS communication UI]
 		if (im_container && im_container->hasFocus())
 		{
 			LLFloater* floater = im_container->getActiveFloater();

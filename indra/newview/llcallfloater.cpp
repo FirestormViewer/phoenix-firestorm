@@ -38,7 +38,10 @@
 #include "llavatariconctrl.h"
 #include "llavatarlist.h"
 #include "lldraghandle.h"
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
 #include "llfloaterreg.h"
 #include "llparticipantlist.h"
@@ -318,7 +321,10 @@ void LLCallFloater::updateSession()
 	    voice_channel &&
 	    LLVoiceChannel::STATE_CONNECTED == voice_channel->getState())
 	{
-		LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		// <FS:Ansariel> [FS communication UI]
+		//LLIMFloater* im_floater = LLIMFloater::findInstance(session_id);
+		FSFloaterIM* im_floater = FSFloaterIM::findInstance(session_id);
+		// </FS:Ansariel> [FS communication UI]
 		bool show_me = !(im_floater && im_floater->getVisible());
 		if (show_me) 
 		{

@@ -23,16 +23,16 @@
 #ifndef FS_NEARBYCHATVOICEMONITOR_H
 #define FS_NEARBYCHATVOICEMONITOR_H
 
-#include "llnearbychatcontrol.h"
+#include "fsnearbychatcontrol.h"
 #include "lloutputmonitorctrl.h"
 
 class LLUICtrlFactory;
 
-class FSNearbyChatVoiceControl : public LLNearbyChatControl
+class FSNearbyChatVoiceControl : public FSNearbyChatControl
 {
 
 public:
-	struct Params : public LLInitParam::Block<Params, LLNearbyChatControl::Params>
+	struct Params : public LLInitParam::Block<Params, FSNearbyChatControl::Params>
 	{
 		Optional<S32>							voice_monitor_padding;
 		Optional<NearbyVoiceMonitor::Params>	nearby_voice_monitor;

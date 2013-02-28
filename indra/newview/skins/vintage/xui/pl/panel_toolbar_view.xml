@@ -7,7 +7,7 @@
   <layout_stack name="bottom_chat_stack">
   <layout_panel name="bottom_chat_bar_panel">
   <button name="local_chat_button" tool_tip="Pokaż/ukryj okno czatu lokalnego (CTRL+H)" label="Czat lokalny" />
-  <nearby_chat_control name="default_chat_bar" label="Na czat lokalny" />
+  <fs_nearby_chat_control name="default_chat_bar" label="Na czat lokalny" />
   </layout_panel>
   </layout_stack>
   </layout_panel>

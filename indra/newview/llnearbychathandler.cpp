@@ -43,7 +43,10 @@
 #include "llviewerwindow.h"//for screen channel position
 // <FS:Zi> Remove floating chat bar
 // #include "llnearbychatbar.h"
-#include "llfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llfloaternearbychat.h"
+#include "fsfloaternearbychat.h"
+// <FS:Ansariel> [FS communication UI]
 // </FS:Zi>
 #include "llrootview.h"
 #include "lllayoutstack.h"
@@ -528,7 +531,9 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 	// <FS:Ansariel> Optional muted chat history
 		//return;
 	{
-		LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+		// <FS:Ansariel> [FS communication UI]
+		FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+		// <FS:Ansariel> [FS communication UI]
 		nearby_chat->addMessage(chat_msg, true, args);
 		return;
 	}
@@ -559,7 +564,10 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 
 // ## Zi - Post merge fixup ## //	LLFloater* chat_bar = LLFloaterReg::getInstance("chat_bar");
 // ## Zi - Post merge fixup ## //	LLNearbyChat* nearby_chat = chat_bar->findChild<LLNearbyChat>("nearby_chat");
-	LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<LLFloaterNearbyChat>("nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());	// ## Zi - Post merge fixup ##
+	// </FS:Ansariel> [FS communication UI]
 	// Build notification data 
 	LLSD notification;
 	notification["message"] = chat_msg.mText;

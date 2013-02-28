@@ -74,7 +74,7 @@
           image_selected="PushButton_Selected_Press"
           tool_tip="Использовать переводчик Google"
           name="translate_btn"/>
-        <chat_history
+        <fs_chat_history
 	 font="SansSerifSmall"
          follows="left|right|top|bottom"
          height="255"
@@ -83,7 +83,7 @@
          parse_urls="true"
          left="1"
          width="250">
-        </chat_history>
+        </fs_chat_history>
     </layout_panel>
   </layout_stack>
 

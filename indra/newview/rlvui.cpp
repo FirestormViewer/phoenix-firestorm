@@ -590,7 +590,10 @@ bool RlvUIEnabler::canViewRegionProperties()
 bool RlvUIEnabler::hasOpenIM(const LLUUID& idAgent)
 {
 	LLUUID idSession = LLIMMgr::computeSessionID(IM_NOTHING_SPECIAL, idAgent);
-	return (NULL != LLFloaterReg::findInstance("impanel", idSession));
+	// <FS:Ansariel> [FS communication UI]
+	//return (NULL != LLFloaterReg::findInstance("impanel", idSession));
+	return (NULL != LLFloaterReg::findInstance("fs_impanel", idSession));
+	// </FS:Ansariel> [FS communication UI]
 }
 
 // Checked: 2011-11-04 (RLVa-1.4.4a) | Modified: RLVa-1.4.4a

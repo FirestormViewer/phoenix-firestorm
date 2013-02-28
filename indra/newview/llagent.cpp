@@ -57,7 +57,7 @@
 #include "llnavigationbar.h" // to show/hide navigation bar when changing mouse look state
 // <FS:Zi> Remove floating chat bar
 //#include "llnearbychatbar.h"
-#include "llnearbychathub.h"
+#include "fsnearbychathub.h"
 // </FS:Zi>
 #include "llspeakers.h"
 // [/SL:KB]
@@ -2195,7 +2195,7 @@ void LLAgent::startTyping()
 	}
 	// <FS:Zi> Remove floating chat bar
 	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_START, FALSE);
-	LLNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
+	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_START, FALSE);
 	// </FS:Zi>
 }
 
@@ -2210,7 +2210,7 @@ void LLAgent::stopTyping()
 		sendAnimationRequest(ANIM_AGENT_TYPE, ANIM_REQUEST_STOP);
 	// <FS:Zi> Remove floating chat bar
 	// LLNearbyChatBar::getInstance()->sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
-	LLNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
+	FSNearbyChat::instance().sendChatFromViewer("", CHAT_TYPE_STOP, FALSE);
 	// </FS:Zi>
 	}
 }
@@ -2277,7 +2277,7 @@ void LLAgent::endAnimationUpdateUI()
 		// <FS:Zi> Unhide chat bar, unless autohide is enabled
 		gSavedSettings.setBOOL("MouseLookEnabled",FALSE);
 		if(!gSavedSettings.getBOOL("AutohideChatBar"))
-			LLNearbyChat::instance().showDefaultChatBar(TRUE);
+			FSNearbyChat::instance().showDefaultChatBar(TRUE);
 		// </FS:Zi>
 
 		gToolBarView->setToolBarsVisible(true);
@@ -2437,8 +2437,8 @@ void LLAgent::endAnimationUpdateUI()
 
 		// <FS:Zi> Hide chat bar in mouselook mode, unless there is text in it
 		gSavedSettings.setBOOL("MouseLookEnabled",TRUE);
-		if(LLNearbyChat::instance().defaultChatBarIsIdle())
-			LLNearbyChat::instance().showDefaultChatBar(FALSE);
+		if(FSNearbyChat::instance().defaultChatBarIsIdle())
+			FSNearbyChat::instance().showDefaultChatBar(FALSE);
 		// </FS:Zi>
 
 		// clear out camera lag effect

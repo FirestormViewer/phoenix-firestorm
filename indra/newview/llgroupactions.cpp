@@ -39,7 +39,10 @@
 #include "llimview.h" // for gIMMgr
 #include "llnotificationsutil.h"
 #include "llstatusbar.h"	// can_afford_transaction()
-#include "llimfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llimfloater.h"
+#include "fsfloaterim.h"
+// </FS:Ansariel> [FS communication UI]
 #include "groupchatlistener.h"
 // [RLVa:KB] - Checked: 2011-03-28 (RLVa-1.3.0f)
 #include "llslurl.h"
@@ -489,7 +492,10 @@ LLUUID LLGroupActions::startIM(const LLUUID& group_id)
 			group_id);
 		if (session_id != LLUUID::null)
 		{
-			LLIMFloater::show(session_id);
+			// <FS:Ansariel> [FS communication UI]
+			//LLIMFloater::show(session_id);
+			FSFloaterIM::show(session_id);
+			// </FS:Ansariel> [FS communication UI]
 		}
 		make_ui_sound("UISndStartIM");
 		return session_id;

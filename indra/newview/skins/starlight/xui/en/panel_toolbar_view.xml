@@ -219,7 +219,7 @@
           width="80">
   <commit_callback
           function="Floater.Toggle"
-          parameter="nearby_chat" />
+          parameter="fs_nearby_chat" />
   </button>
 
   <nearby_chat_voice_monitor layout="topleft"

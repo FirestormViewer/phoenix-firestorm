@@ -25,7 +25,10 @@
 
 #include "llfloater.h"
 #include "llsingleton.h"
-#include "llchathistory.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llchathistory.h"
+#include "fschathistory.h"
+// </FS:Ansariel> [FS communication UI]
 #include "lllineeditor.h"
 #include "llchat.h"
 #include <string.h>
@@ -45,7 +48,10 @@ public:
 private:
 	void clear();
 	std::string appendTime();
-	LLChatHistory* mTransactionHistory;
+	// <FS:Ansariel> [FS communication UI]
+	//LLChatHistory* mTransactionHistory;
+	FSChatHistory* mTransactionHistory;
+	// </FS:Ansariel> [FS communication UI]
 };
 
 #endif // FS_MONEYTRACKER_H

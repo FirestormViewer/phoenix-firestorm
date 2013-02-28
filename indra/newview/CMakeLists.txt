@@ -120,12 +120,16 @@ set(viewer_SOURCE_FILES
     exopostprocess.cpp
     floatermedialists.cpp
     fsareasearch.cpp
+    fschathistory.cpp
     fscommon.cpp
     fsconsoleutils.cpp
     fscontactsfloater.cpp
     fsdata.cpp
     fsfloaterblocklist.cpp
     fsfloatergroup.cpp
+    fsfloaterim.cpp
+    fsfloaterimcontainer.cpp
+    fsfloaternearbychat.cpp
     fsfloaterplacedetails.cpp
     fsfloaterprofile.cpp
     fsfloatersearch.cpp
@@ -138,6 +142,9 @@ set(viewer_SOURCE_FILES
     fslslbridgerequest.cpp
     fslslpreproc.cpp
     fsmoneytracker.cpp
+    fsnearbychatbarlistener.cpp
+    fsnearbychatcontrol.cpp
+    fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
     fspanelclassified.cpp
     fspanelprefs.cpp
@@ -417,9 +424,7 @@ set(viewer_SOURCE_FILES
     llnameeditor.cpp
     llnamelistctrl.cpp
     llnavigationbar.cpp
-    llnearbychatcontrol.cpp
     llnearbychathandler.cpp
-    llnearbychathub.cpp
     llnearbychatbarlistener.cpp
     llnetmap.cpp
     llnotificationalerthandler.cpp
@@ -768,12 +773,16 @@ set(viewer_HEADER_FILES
     exopostprocess.h
     floatermedialists.h
     fsareasearch.h
+    fschathistory.h
     fscommon.h
     fsconsoleutils.h
     fscontactsfloater.h
     fsdata.h
     fsfloaterblocklist.h
     fsfloatergroup.h
+    fsfloaterim.h
+    fsfloaterimcontainer.h
+    fsfloaternearbychat.h
     fsfloaterplacedetails.h
     fsfloaterprofile.h
     fsfloatersearch.h
@@ -787,6 +796,9 @@ set(viewer_HEADER_FILES
     fslslbridgerequest.h
     fslslpreproc.h
     fsmoneytracker.h
+    fsnearbychatbarlistener.h
+    fsnearbychatcontrol.h
+    fsnearbychathub.h
     fsnearbychatvoicemonitor.h
     fspanelclassified.h
     fspanelprefs.h
@@ -1068,9 +1080,7 @@ set(viewer_HEADER_FILES
     llnameeditor.h
     llnamelistctrl.h
     llnavigationbar.h
-    llnearbychatcontrol.h
     llnearbychathandler.h
-    llnearbychathub.h
     llnearbychatbarlistener.h
     llnetmap.h
     llnotificationhandler.h

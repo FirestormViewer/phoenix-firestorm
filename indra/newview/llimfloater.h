@@ -24,6 +24,8 @@
  * $/LicenseInfo$
  */
 
+#if 0
+
 #ifndef LL_IMFLOATER_H
 #define LL_IMFLOATER_H
 
@@ -221,3 +223,5 @@ private:
 
 
 #endif  // LL_IMFLOATER_H
+
+#endif

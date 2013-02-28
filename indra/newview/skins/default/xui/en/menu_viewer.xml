@@ -481,10 +481,10 @@
          use_mac_ctrl="true">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="nearby_chat" />
+             parameter="fs_nearby_chat" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="nearby_chat" />
+             parameter="fs_nearby_chat" />
         </menu_item_check>
         <menu_item_check
          label="People"
@@ -503,10 +503,10 @@
          use_mac_ctrl="true">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="im_container" />
+             parameter="fs_im_container" />
             <menu_item_check.on_click
              function="Floater.ToggleOrBringToFront"
-             parameter="im_container" />
+             parameter="fs_im_container" />
         </menu_item_check>
 
         <menu_item_separator/>

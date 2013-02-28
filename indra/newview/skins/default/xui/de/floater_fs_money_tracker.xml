@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <floater name="money_tracker" title="Tip-Tracker" width="250">
-	<chat_history name="money_chat_history" width="248"/>
+	<fs_chat_history name="money_chat_history" width="248"/>
 	<button name="Clear" label="Löschen" width="242"/>
 </floater>
