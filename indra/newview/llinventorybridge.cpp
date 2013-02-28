@@ -1018,8 +1018,8 @@ BOOL LLInvFVBridge::isProtectedFolder() const
 	const LLInventoryModel* model = getInventoryModel();
 	if(!model) return FALSE;
 	if ((mUUID ==  FSLSLBridge::instance().getBridgeFolder()) 
-		|| (model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
-		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder"))
+		|| ((model->isObjectDescendentOf(mUUID, FSLSLBridge::instance().getBridgeFolder()))
+		&& gSavedPerAccountSettings.getBOOL("ProtectBridgeFolder")))
 		return TRUE;
 
 	if ((mUUID==AOEngine::instance().getAOFolder() 
@@ -5422,6 +5422,12 @@ void LLObjectBridge::performAction(LLInventoryModel* model, std::string action)
 	{
 		LLAppearanceMgr::instance().wearItemOnAvatar(mUUID, true, false); // Don't replace if adding.
 	}
+// [SL:KB] - Patch: Inventory-AttachmentEdit - Checked: 2010-08-25 (Catznip-2.2.0a) | Added: Catznip-2.1.2a
+	else if ("edit" == action)
+	{
+		handle_attachment_edit(mUUID);
+	}
+// [/SL:KB]
 	else if (isRemoveAction(action))
 	{
 		LLAppearanceMgr::instance().removeItemFromAvatar(mUUID);
