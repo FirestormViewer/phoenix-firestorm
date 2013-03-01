@@ -1,5 +1,5 @@
 /** 
- * @file llpanelimcontrolpanel.h
+ * @file fspanelimcontrolpanel.h
  * @brief LLPanelIMControlPanel and related class definitions
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
@@ -24,10 +24,10 @@
  * $/LicenseInfo$
  */
 
-#if 0
+// Original file: // Original file: llpanelimcontrolpanel.h
 
-#ifndef LL_LLPANELIMCONTROLPANEL_H
-#define LL_LLPANELIMCONTROLPANEL_H
+#ifndef FS_PANELIMCONTROLPANEL_H
+#define FS_PANELIMCONTROLPANEL_H
 
 #include "llpanel.h"
 #include "llvoicechannel.h"
@@ -35,14 +35,14 @@
 
 class LLParticipantList;
 
-class LLPanelChatControlPanel 
+class FSPanelChatControlPanel 
 	: public LLPanel
 	, public LLVoiceClientStatusObserver
 {
 public:
-	LLPanelChatControlPanel() :
+	FSPanelChatControlPanel() :
 		mSessionId(LLUUID()) {};
-	~LLPanelChatControlPanel();
+	~FSPanelChatControlPanel();
 
 	virtual BOOL postBuild();
 
@@ -72,11 +72,11 @@ private:
 };
 
 
-class LLPanelIMControlPanel : public LLPanelChatControlPanel, LLFriendObserver
+class FSPanelIMControlPanel : public FSPanelChatControlPanel, LLFriendObserver
 {
 public:
-	LLPanelIMControlPanel();
-	~LLPanelIMControlPanel();
+	FSPanelIMControlPanel();
+	~FSPanelIMControlPanel();
 
 	BOOL postBuild();
 
@@ -106,11 +106,11 @@ private:
 };
 
 
-class LLPanelGroupControlPanel : public LLPanelChatControlPanel
+class FSPanelGroupControlPanel : public FSPanelChatControlPanel
 {
 public:
-	LLPanelGroupControlPanel(const LLUUID& session_id);
-	~LLPanelGroupControlPanel();
+	FSPanelGroupControlPanel(const LLUUID& session_id);
+	~FSPanelGroupControlPanel();
 
 	BOOL postBuild();
 
@@ -128,15 +128,13 @@ private:
 	/*virtual*/ void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
 };
 
-class LLPanelAdHocControlPanel : public LLPanelGroupControlPanel
+class FSPanelAdHocControlPanel : public FSPanelGroupControlPanel
 {
 public:
-	LLPanelAdHocControlPanel(const LLUUID& session_id);
+	FSPanelAdHocControlPanel(const LLUUID& session_id);
 
 	BOOL postBuild();
 
 };
 
-#endif // LL_LLPANELIMCONTROLPANEL_H
-
-#endif
+#endif // FS_PANELIMCONTROLPANEL_H

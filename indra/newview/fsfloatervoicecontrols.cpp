@@ -1,5 +1,5 @@
 /** 
- * @file llcallfloater.cpp
+ * @file fsfloatervoicecontrols.cpp
  * @author Mike Antipov
  * @brief Voice Control Panel in a Voice Chats (P2P, Group, Nearby...).
  *
@@ -25,11 +25,11 @@
  * $/LicenseInfo$
  */
 
+// Original file: FSFloaterVoiceControls.cpp
+
 #include "llviewerprecompiledheaders.h"
 
-#if 0
-
-#include "llcallfloater.h"
+#include "fsfloatervoicecontrols.h"
 
 #include "llnotificationsutil.h"
 #include "lltrans.h"
@@ -40,10 +40,7 @@
 #include "llavatariconctrl.h"
 #include "llavatarlist.h"
 #include "lldraghandle.h"
-// <FS:Ansariel> [FS communication UI]
-//#include "llimfloater.h"
 #include "fsfloaterim.h"
-// </FS:Ansariel> [FS communication UI]
 #include "llimview.h"
 #include "llfloaterreg.h"
 #include "llparticipantlist.h"
@@ -60,7 +57,7 @@
 #include "llsliderctrl.h"
 
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids);
-void reshape_floater(LLCallFloater* floater, S32 delta_height);
+void reshape_floater(FSFloaterVoiceControls* floater, S32 delta_height);
 
 class LLNonAvatarCaller : public LLAvatarListItem
 {
@@ -101,9 +98,9 @@ static void* create_non_avatar_caller(void*)
 	return new LLNonAvatarCaller;
 }
 
-LLVoiceChannel* LLCallFloater::sCurrentVoiceChannel = NULL;
+LLVoiceChannel* FSFloaterVoiceControls::sCurrentVoiceChannel = NULL;
 
-LLCallFloater::LLCallFloater(const LLSD& key)
+FSFloaterVoiceControls::FSFloaterVoiceControls(const LLSD& key)
 : LLTransientDockableFloater(NULL, false, key)
 , mSpeakerManager(NULL)
 , mParticipants(NULL)
@@ -116,19 +113,19 @@ LLCallFloater::LLCallFloater(const LLSD& key)
 , mInitParticipantsVoiceState(false)
 {
 	static LLUICachedControl<S32> voice_left_remove_delay ("VoiceParticipantLeftRemoveDelay", 10);
-	mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&LLCallFloater::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
+	mSpeakerDelayRemover = new LLSpeakersDelayActionsStorage(boost::bind(&FSFloaterVoiceControls::removeVoiceLeftParticipant, this, _1), voice_left_remove_delay);
 
 	mFactoryMap["non_avatar_caller"] = LLCallbackMap(create_non_avatar_caller, NULL);
 	LLVoiceClient::instance().addObserver(this);
 	LLTransientFloaterMgr::getInstance()->addControlView(this);
 
 	// update the agent's name if display name setting change
-	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&LLCallFloater::updateAgentModeratorState, this));
-	LLViewerDisplayName::addNameChangedCallback(boost::bind(&LLCallFloater::updateAgentModeratorState, this));
+	LLAvatarNameCache::addUseDisplayNamesCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
+	LLViewerDisplayName::addNameChangedCallback(boost::bind(&FSFloaterVoiceControls::updateAgentModeratorState, this));
 
 }
 
-LLCallFloater::~LLCallFloater()
+FSFloaterVoiceControls::~FSFloaterVoiceControls()
 {
 	resetVoiceRemoveTimers();
 	delete mSpeakerDelayRemover;
@@ -147,23 +144,23 @@ LLCallFloater::~LLCallFloater()
 }
 
 // virtual
-BOOL LLCallFloater::postBuild()
+BOOL FSFloaterVoiceControls::postBuild()
 {
 	mAvatarList = getChild<LLAvatarList>("speakers_list");
-	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&LLCallFloater::onAvatarListRefreshed, this));
+	mAvatarListRefreshConnection = mAvatarList->setRefreshCompleteCallback(boost::bind(&FSFloaterVoiceControls::onAvatarListRefreshed, this));
 
-	mAvatarList->setCommitCallback(boost::bind(&LLCallFloater::onParticipantSelected,this));
+	mAvatarList->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onParticipantSelected,this));
 
-	childSetAction("leave_call_btn", boost::bind(&LLCallFloater::leaveCall, this));
+	childSetAction("leave_call_btn", boost::bind(&FSFloaterVoiceControls::leaveCall, this));
 
 	mNonAvatarCaller = findChild<LLNonAvatarCaller>("non_avatar_caller");
 	mNonAvatarCaller->setVisible(FALSE);
 
 	mVolumeSlider=getChild<LLSliderCtrl>("volume_slider");
-	mVolumeSlider->setCommitCallback(boost::bind(&LLCallFloater::onVolumeChanged,this));
+	mVolumeSlider->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onVolumeChanged,this));
 
 	mMuteButton=getChild<LLButton>("mute_btn");
-	mMuteButton->setCommitCallback(boost::bind(&LLCallFloater::onMuteChanged,this));
+	mMuteButton->setCommitCallback(boost::bind(&FSFloaterVoiceControls::onMuteChanged,this));
 
 	initAgentData();
 
@@ -176,13 +173,13 @@ BOOL LLCallFloater::postBuild()
 }
 
 // virtual
-void LLCallFloater::onOpen(const LLSD& /*key*/)
+void FSFloaterVoiceControls::onOpen(const LLSD& /*key*/)
 {
 	LLFirstUse::speak(false);
 }
 
 // virtual
-void LLCallFloater::draw()
+void FSFloaterVoiceControls::draw()
 {
 	// we have to refresh participants to display ones not in voice as disabled.
 	// It should be done only when she joins or leaves voice chat.
@@ -209,18 +206,18 @@ void LLCallFloater::draw()
 }
 
 // virtual
-void LLCallFloater::setFocus( BOOL b )
+void FSFloaterVoiceControls::setFocus( BOOL b )
 {
 	LLFloater::setFocus(b);
 
 	// Force using active floater transparency (STORM-730).
-	// We have to override setFocus() for LLCallFloater because selecting an item
+	// We have to override setFocus() for FSFloaterVoiceControls because selecting an item
 	// of the voice morphing combobox causes the floater to lose focus and thus become transparent.
 	updateTransparency(TT_ACTIVE);
 }
 
 // virtual
-void LLCallFloater::onParticipantsChanged()
+void FSFloaterVoiceControls::onParticipantsChanged()
 {
 	if (NULL == mParticipants) return;
 	updateParticipantsVoiceState();
@@ -238,7 +235,7 @@ void LLCallFloater::onParticipantsChanged()
 /// PRIVATE SECTION
 //////////////////////////////////////////////////////////////////////////
 
-void LLCallFloater::leaveCall()
+void FSFloaterVoiceControls::leaveCall()
 {
 	LLVoiceChannel* voice_channel = LLVoiceChannel::getCurrentVoiceChannel();
 	if (voice_channel)
@@ -247,7 +244,7 @@ void LLCallFloater::leaveCall()
 	}
 }
 
-void LLCallFloater::updateSession()
+void FSFloaterVoiceControls::updateSession()
 {
 	LLVoiceChannel* voice_channel = LLVoiceChannel::getCurrentVoiceChannel();
 	if (voice_channel)
@@ -339,7 +336,7 @@ void LLCallFloater::updateSession()
 // [/RLVa:KB]
 }
 
-void LLCallFloater::refreshParticipantList()
+void FSFloaterVoiceControls::refreshParticipantList()
 {
 	bool non_avatar_caller = VC_PEER_TO_PEER_AVALINE == mVoiceType;
 
@@ -357,7 +354,7 @@ void LLCallFloater::refreshParticipantList()
 	{
 		llassert(mParticipants == NULL); // check for possible memory leak
 		mParticipants = new LLParticipantList(mSpeakerManager, mAvatarList, true, mVoiceType != VC_GROUP_CHAT && mVoiceType != VC_AD_HOC_CHAT, false);
-		mParticipants->setValidateSpeakerCallback(boost::bind(&LLCallFloater::validateSpeaker, this, _1));
+		mParticipants->setValidateSpeakerCallback(boost::bind(&FSFloaterVoiceControls::validateSpeaker, this, _1));
 		const U32 speaker_sort_order = gSavedSettings.getU32("SpeakerParticipantDefaultOrder");
 		mParticipants->setSortOrder(LLParticipantList::EParticipantSortOrder(speaker_sort_order));
 		
@@ -372,7 +369,7 @@ void LLCallFloater::refreshParticipantList()
 	}
 }
 
-void LLCallFloater::onAvatarListRefreshed()
+void FSFloaterVoiceControls::onAvatarListRefreshed()
 {
 	if (mInitParticipantsVoiceState)
 	{
@@ -385,7 +382,7 @@ void LLCallFloater::onAvatarListRefreshed()
 	}
 }
 
-void LLCallFloater::onParticipantSelected()
+void FSFloaterVoiceControls::onParticipantSelected()
 {
 	uuid_vec_t participants;
 	mAvatarList->getSelectedUUIDs(participants);
@@ -413,7 +410,7 @@ void LLCallFloater::onParticipantSelected()
 	mVolumeSlider->setValue(LLVoiceClient::instance().getUserVolume(mSelectedParticipant));
 }
 
-void LLCallFloater::onVolumeChanged()
+void FSFloaterVoiceControls::onVolumeChanged()
 {
 	if(mSelectedParticipant.isNull())
 		return;
@@ -421,7 +418,7 @@ void LLCallFloater::onVolumeChanged()
 	LLVoiceClient::instance().setUserVolume(mSelectedParticipant,mVolumeSlider->getValueF32());
 }
 
-void LLCallFloater::onMuteChanged()
+void FSFloaterVoiceControls::onMuteChanged()
 {
 	if(mSelectedParticipant.isNull())
 		return;
@@ -439,7 +436,7 @@ void LLCallFloater::onMuteChanged()
 }
 
 // static
-void LLCallFloater::sOnCurrentChannelChanged(const LLUUID& /*session_id*/)
+void FSFloaterVoiceControls::sOnCurrentChannelChanged(const LLUUID& /*session_id*/)
 {
 	LLVoiceChannel* channel = LLVoiceChannel::getCurrentVoiceChannel();
 
@@ -448,12 +445,12 @@ void LLCallFloater::sOnCurrentChannelChanged(const LLUUID& /*session_id*/)
 	// So, lets ignore this call.
 	if (channel == sCurrentVoiceChannel) return;
 
-	LLCallFloater* call_floater = LLFloaterReg::getTypedInstance<LLCallFloater>("voice_controls");
+	FSFloaterVoiceControls* call_floater = LLFloaterReg::getTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
 
 	call_floater->connectToChannel(channel);
 }
 
-void LLCallFloater::onAvatarNameCache(const LLUUID& agent_id,
+void FSFloaterVoiceControls::onAvatarNameCache(const LLUUID& agent_id,
 									  const LLAvatarName& av_name)
 {
 	LLStringUtil::format_map_t args;
@@ -462,7 +459,7 @@ void LLCallFloater::onAvatarNameCache(const LLUUID& agent_id,
 	setTitle(title);
 }
 
-void LLCallFloater::updateTitle()
+void FSFloaterVoiceControls::updateTitle()
 {
 	LLVoiceChannel* voice_channel = LLVoiceChannel::getCurrentVoiceChannel();
 	if (mVoiceType == VC_PEER_TO_PEER)
@@ -473,7 +470,7 @@ void LLCallFloater::updateTitle()
 		if (im_session)
 		{
 			LLAvatarNameCache::get(im_session->mOtherParticipantID,
-				boost::bind(&LLCallFloater::onAvatarNameCache,
+				boost::bind(&FSFloaterVoiceControls::onAvatarNameCache,
 					this, _1, _2));
 			return;
 		}
@@ -514,7 +511,7 @@ void LLCallFloater::updateTitle()
 	setTitle(title);
 }
 
-void LLCallFloater::initAgentData()
+void FSFloaterVoiceControls::initAgentData()
 {
 	mAgentPanel = getChild<LLPanel> ("my_panel");
 
@@ -532,7 +529,7 @@ void LLCallFloater::initAgentData()
 	}
 }
 
-void LLCallFloater::setModeratorMutedVoice(bool moderator_muted)
+void FSFloaterVoiceControls::setModeratorMutedVoice(bool moderator_muted)
 {
 	mIsModeratorMutedVoice = moderator_muted;
 
@@ -543,7 +540,7 @@ void LLCallFloater::setModeratorMutedVoice(bool moderator_muted)
 	mSpeakingIndicator->setIsMuted(moderator_muted);
 }
 
-void LLCallFloater::onModeratorNameCache(const LLAvatarName& av_name)
+void FSFloaterVoiceControls::onModeratorNameCache(const LLAvatarName& av_name)
 {
 	std::string name;
 	name = av_name.mDisplayName;
@@ -566,9 +563,9 @@ void LLCallFloater::onModeratorNameCache(const LLAvatarName& av_name)
 	mAgentPanel->getChild<LLUICtrl>("user_text")->setValue(name);
 }
 
-void LLCallFloater::updateAgentModeratorState()
+void FSFloaterVoiceControls::updateAgentModeratorState()
 {
-	LLAvatarNameCache::get(gAgentID, boost::bind(&LLCallFloater::onModeratorNameCache, this, _2));
+	LLAvatarNameCache::get(gAgentID, boost::bind(&FSFloaterVoiceControls::onModeratorNameCache, this, _2));
 }
 
 static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids)
@@ -585,7 +582,7 @@ static void get_voice_participants_uuids(uuid_vec_t& speakers_uuids)
 
 }
 
-void LLCallFloater::initParticipantsVoiceState()
+void FSFloaterVoiceControls::initParticipantsVoiceState()
 {
 	// Set initial status for each participant in the list.
 	std::vector<LLPanel*> items;
@@ -633,7 +630,7 @@ void LLCallFloater::initParticipantsVoiceState()
 	}
 }
 
-void LLCallFloater::updateParticipantsVoiceState()
+void FSFloaterVoiceControls::updateParticipantsVoiceState()
 {
 	uuid_vec_t speakers_list;
 
@@ -683,7 +680,7 @@ void LLCallFloater::updateParticipantsVoiceState()
 	}
 }
 
-void LLCallFloater::updateNotInVoiceParticipantState(LLAvatarListItem* item)
+void FSFloaterVoiceControls::updateNotInVoiceParticipantState(LLAvatarListItem* item)
 {
 	LLUUID participant_id = item->getAvatarId();
 	ESpeakerState current_state = getState(participant_id);
@@ -724,7 +721,7 @@ void LLCallFloater::updateNotInVoiceParticipantState(LLAvatarListItem* item)
 	}
 }
 
-void LLCallFloater::setState(LLAvatarListItem* item, ESpeakerState state)
+void FSFloaterVoiceControls::setState(LLAvatarListItem* item, ESpeakerState state)
 {
 	// *HACK: mantipov: sometimes such situation is possible while switching to voice channel:
 /*
@@ -762,12 +759,12 @@ void LLCallFloater::setState(LLAvatarListItem* item, ESpeakerState state)
 	}
 }
 
-void LLCallFloater::setVoiceRemoveTimer(const LLUUID& voice_speaker_id)
+void FSFloaterVoiceControls::setVoiceRemoveTimer(const LLUUID& voice_speaker_id)
 {
 	mSpeakerDelayRemover->setActionTimer(voice_speaker_id);
 }
 
-bool LLCallFloater::removeVoiceLeftParticipant(const LLUUID& voice_speaker_id)
+bool FSFloaterVoiceControls::removeVoiceLeftParticipant(const LLUUID& voice_speaker_id)
 {
 	uuid_vec_t& speaker_uuids = mAvatarList->getIDs();
 	uuid_vec_t::iterator pos = std::find(speaker_uuids.begin(), speaker_uuids.end(), voice_speaker_id);
@@ -781,17 +778,17 @@ bool LLCallFloater::removeVoiceLeftParticipant(const LLUUID& voice_speaker_id)
 }
 
 
-void LLCallFloater::resetVoiceRemoveTimers()
+void FSFloaterVoiceControls::resetVoiceRemoveTimers()
 {
 	mSpeakerDelayRemover->removeAllTimers();
 }
 
-void LLCallFloater::removeVoiceRemoveTimer(const LLUUID& voice_speaker_id)
+void FSFloaterVoiceControls::removeVoiceRemoveTimer(const LLUUID& voice_speaker_id)
 {
 	mSpeakerDelayRemover->unsetActionTimer(voice_speaker_id);
 }
 
-bool LLCallFloater::validateSpeaker(const LLUUID& speaker_id)
+bool FSFloaterVoiceControls::validateSpeaker(const LLUUID& speaker_id)
 {
 	bool is_valid = true;
 	switch (mVoiceType)
@@ -806,7 +803,7 @@ bool LLCallFloater::validateSpeaker(const LLUUID& speaker_id)
 		break;
 	case VC_GROUP_CHAT:
 		// if participant had left this call before do not allow add her again. See EXT-4216.
-		// but if she Join she will be added into the list from the LLCallFloater::onChange()
+		// but if she Join she will be added into the list from the FSFloaterVoiceControls::onChange()
 		is_valid = STATE_LEFT != getState(speaker_id);
 		break;
 	default:
@@ -817,18 +814,18 @@ bool LLCallFloater::validateSpeaker(const LLUUID& speaker_id)
 	return is_valid;
 }
 
-void LLCallFloater::connectToChannel(LLVoiceChannel* channel)
+void FSFloaterVoiceControls::connectToChannel(LLVoiceChannel* channel)
 {
 	mVoiceChannelStateChangeConnection.disconnect();
 
 	sCurrentVoiceChannel = channel;
 
-	mVoiceChannelStateChangeConnection = sCurrentVoiceChannel->setStateChangedCallback(boost::bind(&LLCallFloater::onVoiceChannelStateChanged, this, _1, _2));
+	mVoiceChannelStateChangeConnection = sCurrentVoiceChannel->setStateChangedCallback(boost::bind(&FSFloaterVoiceControls::onVoiceChannelStateChanged, this, _1, _2));
 
 	updateState(channel->getState());
 }
 
-void LLCallFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
+void FSFloaterVoiceControls::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
 	// check is voice operational and if it doesn't work hide VCP (EXT-4397)
 	if(LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking())
@@ -841,7 +838,7 @@ void LLCallFloater::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old
 	}
 }
 
-void LLCallFloater::updateState(const LLVoiceChannel::EState& new_state)
+void FSFloaterVoiceControls::updateState(const LLVoiceChannel::EState& new_state)
 {
 	LL_DEBUGS("Voice") << "Updating state: " << new_state << ", session name: " << sCurrentVoiceChannel->getSessionName() << LL_ENDL;
 	if (LLVoiceChannel::STATE_CONNECTED == new_state)
@@ -854,7 +851,7 @@ void LLCallFloater::updateState(const LLVoiceChannel::EState& new_state)
 	}
 }
 
-void LLCallFloater::reset(const LLVoiceChannel::EState& new_state)
+void FSFloaterVoiceControls::reset(const LLVoiceChannel::EState& new_state)
 {
 	// lets forget states from the previous session
 	// for timers...
@@ -894,5 +891,3 @@ void LLCallFloater::reset(const LLVoiceChannel::EState& new_state)
 }
 
 //EOF
-
-#endif

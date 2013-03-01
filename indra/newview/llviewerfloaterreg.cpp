@@ -32,7 +32,10 @@
 #include "llviewerfloaterreg.h"
 #include "llfloaterautoreplacesettings.h"
 #include "llcompilequeue.h"
-#include "llcallfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llcallfloater.h"
+#include "fsfloatervoicecontrols.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llfasttimerview.h"
 #include "llfloaterabout.h"
 #include "llfloaterauction.h"
@@ -367,7 +370,10 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("upload_script", "floater_script_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptPreview>, "upload");
 	LLFloaterReg::add("upload_sound", "floater_sound_preview.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSoundPreview>, "upload");
 
-	LLFloaterReg::add("voice_controls", "floater_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLCallFloater>);
+	// <FS:Ansariel> [FS communication UI]
+	//LLFloaterReg::add("voice_controls", "floater_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLCallFloater>);
+	LLFloaterReg::add("fs_voice_controls", "floater_fs_voice_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVoiceControls>);
+	// </FS:Ansariel> [FS communication UI]
 	LLFloaterReg::add("voice_effect", "floater_voice_effect.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterVoiceEffect>);
 
 	LLFloaterReg::add("web_content", "floater_web_content.xml", (LLFloaterBuildFunc)&LLFloaterWebContent::create);	

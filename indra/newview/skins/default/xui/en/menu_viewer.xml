@@ -535,15 +535,16 @@
              parameter="voice_effect" />
         </menu_item_check>
 
+        <!-- DO NOT DELETE IN CHUI MERGE -->
         <menu_item_check
          label="Nearby Voice"
          name="Nearby Voice">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="voice_controls" />
+             parameter="fs_voice_controls" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="voice_controls" />
+             parameter="fs_voice_controls" />
         </menu_item_check>
         <!--
         <menu_item_separator/>

@@ -134,6 +134,7 @@ set(viewer_SOURCE_FILES
     fsfloaterprofile.cpp
     fsfloatersearch.cpp
     fsfloaterteleporthistory.cpp
+    fsfloatervoicecontrols.cpp
     fsfloaterwsassetblacklist.cpp
     fsgrouptitles.cpp
     fskeywords.cpp
@@ -147,6 +148,7 @@ set(viewer_SOURCE_FILES
     fsnearbychathub.cpp
     fsnearbychatvoicemonitor.cpp
     fspanelclassified.cpp
+    fspanelimcontrolpanel.cpp
     fspanelprefs.cpp
     fspanelprofile.cpp
     fspanelprofileclassifieds.cpp
@@ -787,6 +789,7 @@ set(viewer_HEADER_FILES
     fsfloaterprofile.h
     fsfloatersearch.h
     fsfloaterteleporthistory.h
+    fsfloatervoicecontrols.h
     fsfloaterwsassetblacklist.h
     fsgridhandler.h
     fsgrouptitles.h
@@ -801,6 +804,7 @@ set(viewer_HEADER_FILES
     fsnearbychathub.h
     fsnearbychatvoicemonitor.h
     fspanelclassified.h
+    fspanelimcontrolpanel.h
     fspanelprefs.h
     fspanelprofile.h
     fspanelprofileclassifieds.h

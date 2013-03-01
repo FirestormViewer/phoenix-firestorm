@@ -1,5 +1,5 @@
 /** 
- * @file llcallfloater.h
+ * @file fsfloatervoicecontrols.h
  * @author Mike Antipov
  * @brief Voice Control Panel in a Voice Chats (P2P, Group, Nearby...).
  *
@@ -25,10 +25,10 @@
  * $/LicenseInfo$
  */
 
-#if 0
+// Original file: llcallfloater.h
 
-#ifndef LL_LLCALLFLOATER_H
-#define LL_LLCALLFLOATER_H
+#ifndef FS_FLOATERVOICECONTROLS_H
+#define FS_FLOATERVOICECONTROLS_H
 
 #include "lltransientdockablefloater.h"
 #include "llvoicechannel.h"
@@ -55,14 +55,14 @@ class LLSliderCtrl;
  * When the Resident is engaged in any chat except Nearby Chat, the Voice Control Panel
  * also provides a 'Leave Call' button to allow the Resident to leave that voice channel.
  */
-class LLCallFloater : public LLTransientDockableFloater, LLVoiceClientParticipantObserver
+class FSFloaterVoiceControls : public LLTransientDockableFloater, LLVoiceClientParticipantObserver
 {
 public:
 
-	LOG_CLASS(LLCallFloater);
+	LOG_CLASS(FSFloaterVoiceControls);
 
-	LLCallFloater(const LLSD& key);
-	~LLCallFloater();
+	FSFloaterVoiceControls(const LLSD& key);
+	~FSFloaterVoiceControls();
 
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
@@ -298,6 +298,5 @@ private:
 };
 
 
-#endif //LL_LLCALLFLOATER_H
+#endif // FS_FLOATERVOICECONTROLS_H
 
-#endif

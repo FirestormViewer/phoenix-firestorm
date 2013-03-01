@@ -19,7 +19,10 @@
 #include "llavataractions.h"			// LLAvatarActions::profileVisible()
 #include "llavatarlist.h"				// Avatar list control used by the "Nearby" tab in the "People" sidebar panel
 #include "llavatarnamecache.h"
-#include "llcallfloater.h"
+// <FS:Ansariel> [FS communication UI]
+//#include "llcallfloater.h"
+#include "fsfloatervoicecontrols.h"
+// </FS:Ansariel> [FS communication UI]
 #include "llenvmanager.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llhudtext.h"					// LLHUDText::refreshAllObjectText()
@@ -367,7 +370,10 @@ void RlvUIEnabler::onToggleShowNames(bool fQuitting)
 		pPeoplePanel->getNearbyList()->updateAvatarNames();
 
 	// Refresh the speaker list
-	LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
+	// <FS:Ansariel> [FS communication UI]
+	//LLCallFloater* pCallFloater = LLFloaterReg::findTypedInstance<LLCallFloater>("voice_controls");
+	FSFloaterVoiceControls* pCallFloater = LLFloaterReg::findTypedInstance<FSFloaterVoiceControls>("fs_voice_controls");
+	// </FS:Ansariel> [FS communication UI]
 	if (pCallFloater)
 		pCallFloater->getAvatarCallerList()->updateAvatarNames();
 

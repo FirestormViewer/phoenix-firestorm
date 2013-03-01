@@ -414,7 +414,7 @@
           width="38">
   <button.commit_callback
           function="Floater.ToggleOrBringToFront"
-          parameter="voice_controls" />
+          parameter="fs_voice_controls" />
   </button>
 
   <button name="utility_talk_button"

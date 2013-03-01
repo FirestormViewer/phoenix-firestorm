@@ -1,5 +1,5 @@
 /** 
- * @file llpanelavatar.cpp
+ * @file fspanelimcontrolpanel.cpp
  * @brief LLPanelAvatar and related class implementations
  *
  * $LicenseInfo:firstyear=2004&license=viewerlgpl$
@@ -24,13 +24,13 @@
  * $/LicenseInfo$
  */
 
-#include "llviewerprecompiledheaders.h"
+// Original file: llpanelimcontrolpanel.cpp
 
-#if 0
+#include "llviewerprecompiledheaders.h"
 
 #include "llfloaterreg.h"
 
-#include "llpanelimcontrolpanel.h"
+#include "fspanelimcontrolpanel.h"
 
 #include "llagent.h"
 #include "llappviewer.h" // for gDisconnected
@@ -45,22 +45,22 @@
 #include "llspeakers.h"
 #include "lltrans.h"
 
-void LLPanelChatControlPanel::onCallButtonClicked()
+void FSPanelChatControlPanel::onCallButtonClicked()
 {
 	gIMMgr->startCall(mSessionId);
 }
 
-void LLPanelChatControlPanel::onEndCallButtonClicked()
+void FSPanelChatControlPanel::onEndCallButtonClicked()
 {
 	gIMMgr->endCall(mSessionId);
 }
 
-void LLPanelChatControlPanel::onOpenVoiceControlsClicked()
+void FSPanelChatControlPanel::onOpenVoiceControlsClicked()
 {
-	LLFloaterReg::showInstance("voice_controls");
+	LLFloaterReg::showInstance("fs_voice_controls");
 }
 
-void LLPanelChatControlPanel::onChange(EStatusType status, const std::string &channelURI, bool proximal)
+void FSPanelChatControlPanel::onChange(EStatusType status, const std::string &channelURI, bool proximal)
 {
 	if(status == STATUS_JOINING || status == STATUS_LEFT_CHANNEL)
 	{
@@ -70,12 +70,12 @@ void LLPanelChatControlPanel::onChange(EStatusType status, const std::string &ch
 	updateCallButton();
 }
 
-void LLPanelChatControlPanel::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
+void FSPanelChatControlPanel::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
 	updateButtons(new_state);
 }
 
-void LLPanelChatControlPanel::updateCallButton()
+void FSPanelChatControlPanel::updateCallButton()
 {
 	// hide/show call button
 	bool voice_enabled = LLVoiceClient::getInstance()->voiceEnabled() && LLVoiceClient::getInstance()->isVoiceWorking();
@@ -97,7 +97,7 @@ void LLPanelChatControlPanel::updateCallButton()
 	getChildView("call_btn")->setEnabled(enable_connect);
 }
 
-void LLPanelChatControlPanel::updateButtons(LLVoiceChannel::EState state)
+void FSPanelChatControlPanel::updateButtons(LLVoiceChannel::EState state)
 {
 	bool is_call_started = state >= LLVoiceChannel::STATE_CALL_STARTED;
 	getChildView("end_call_btn_panel")->setVisible( is_call_started);
@@ -110,7 +110,7 @@ void LLPanelChatControlPanel::updateButtons(LLVoiceChannel::EState state)
 	
 }
 
-LLPanelChatControlPanel::~LLPanelChatControlPanel()
+FSPanelChatControlPanel::~FSPanelChatControlPanel()
 {
 	// AO: Now handled by main im floater
 	//mVoiceChannelStateChangeConnection.disconnect();
@@ -120,7 +120,7 @@ LLPanelChatControlPanel::~LLPanelChatControlPanel()
 	//}
 }
 
-BOOL LLPanelChatControlPanel::postBuild()
+BOOL FSPanelChatControlPanel::postBuild()
 {
 	// AO: Now handled by main im floater
 	//childSetAction("call_btn", boost::bind(&LLPanelChatControlPanel::onCallButtonClicked, this));
@@ -131,7 +131,7 @@ BOOL LLPanelChatControlPanel::postBuild()
 	return TRUE;
 }
 
-void LLPanelChatControlPanel::setSessionId(const LLUUID& session_id)
+void FSPanelChatControlPanel::setSessionId(const LLUUID& session_id)
 {
 	//Method is called twice for AdHoc and Group chat. Second time when server init reply received
 	mSessionId = session_id;
@@ -147,17 +147,17 @@ void LLPanelChatControlPanel::setSessionId(const LLUUID& session_id)
 	//}
 }
 
-LLPanelIMControlPanel::LLPanelIMControlPanel()
+FSPanelIMControlPanel::FSPanelIMControlPanel()
 {
 }
 
-LLPanelIMControlPanel::~LLPanelIMControlPanel()
+FSPanelIMControlPanel::~FSPanelIMControlPanel()
 {
 	// AO: Now handled by main im floater
 	//LLAvatarTracker::instance().removeParticularFriendObserver(mAvatarID, this);
 }
 
-BOOL LLPanelIMControlPanel::postBuild()
+BOOL FSPanelIMControlPanel::postBuild()
 {
 	// AO: Now handled by main im floater
 	//childSetAction("view_profile_btn", boost::bind(&LLPanelIMControlPanel::onViewProfileButtonClicked, this));
@@ -167,20 +167,20 @@ BOOL LLPanelIMControlPanel::postBuild()
 	//childSetAction("pay_btn", boost::bind(&LLPanelIMControlPanel::onPayButtonClicked, this));
 	//getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(getChild<LLAvatarIconCtrl>("avatar_icon")->getAvatarId()));
 
-	childSetAction("mute_btn", boost::bind(&LLPanelIMControlPanel::onClickMuteVolume, this));
-	childSetAction("block_btn", boost::bind(&LLPanelIMControlPanel::onClickBlock, this));
-	childSetAction("unblock_btn", boost::bind(&LLPanelIMControlPanel::onClickUnblock, this));
+	childSetAction("mute_btn", boost::bind(&FSPanelIMControlPanel::onClickMuteVolume, this));
+	childSetAction("block_btn", boost::bind(&FSPanelIMControlPanel::onClickBlock, this));
+	childSetAction("unblock_btn", boost::bind(&FSPanelIMControlPanel::onClickUnblock, this));
 	
-	getChild<LLUICtrl>("volume_slider")->setCommitCallback(boost::bind(&LLPanelIMControlPanel::onVolumeChange, this, _2));
+	getChild<LLUICtrl>("volume_slider")->setCommitCallback(boost::bind(&FSPanelIMControlPanel::onVolumeChange, this, _2));
 
 //	getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(getChild<LLAvatarIconCtrl>("avatar_icon")->getAvatarId()));
 
-	setFocusReceivedCallback(boost::bind(&LLPanelIMControlPanel::onFocusReceived, this));
+	setFocusReceivedCallback(boost::bind(&FSPanelIMControlPanel::onFocusReceived, this));
 	
-	return LLPanelChatControlPanel::postBuild();
+	return FSPanelChatControlPanel::postBuild();
 }
 
-void LLPanelIMControlPanel::draw()
+void FSPanelIMControlPanel::draw()
 {
 	bool is_muted = LLMuteList::getInstance()->isMuted(mAvatarID);
 
@@ -213,10 +213,10 @@ void LLPanelIMControlPanel::draw()
 		volume_slider->setValue( (F64)volume );
 	}
 
-	LLPanelChatControlPanel::draw();
+	FSPanelChatControlPanel::draw();
 }
 
-void LLPanelIMControlPanel::onClickMuteVolume()
+void FSPanelIMControlPanel::onClickMuteVolume()
 {
 	// By convention, we only display and toggle voice mutes, not all mutes
 	LLMuteList* mute_list = LLMuteList::getInstance();
@@ -233,53 +233,53 @@ void LLPanelIMControlPanel::onClickMuteVolume()
 	}
 }
 
-void LLPanelIMControlPanel::onClickBlock()
+void FSPanelIMControlPanel::onClickBlock()
 {
 	LLMute mute(mAvatarID, getChild<LLTextBox>("avatar_name")->getText(), LLMute::AGENT);
 	
 	LLMuteList::getInstance()->add(mute);
 }
 
-void LLPanelIMControlPanel::onClickUnblock()
+void FSPanelIMControlPanel::onClickUnblock()
 {
 	LLMute mute(mAvatarID, getChild<LLTextBox>("avatar_name")->getText(), LLMute::AGENT);
 
 	LLMuteList::getInstance()->remove(mute);
 }
 
-void LLPanelIMControlPanel::onVolumeChange(const LLSD& data)
+void FSPanelIMControlPanel::onVolumeChange(const LLSD& data)
 {
 	F32 volume = (F32)data.asReal();
 	LLVoiceClient::getInstance()->setUserVolume(mAvatarID, volume);
 }
 
-void LLPanelIMControlPanel::onTeleportButtonClicked()
+void FSPanelIMControlPanel::onTeleportButtonClicked()
 {
 	LLAvatarActions::offerTeleport(mAvatarID);
 }
-void LLPanelIMControlPanel::onPayButtonClicked()
+void FSPanelIMControlPanel::onPayButtonClicked()
 {
 	LLAvatarActions::pay(mAvatarID);
 }
 
-void LLPanelIMControlPanel::onViewProfileButtonClicked()
+void FSPanelIMControlPanel::onViewProfileButtonClicked()
 {
 	LLAvatarActions::showProfile(mAvatarID);
 }
 
-void LLPanelIMControlPanel::onAddFriendButtonClicked()
+void FSPanelIMControlPanel::onAddFriendButtonClicked()
 {
 	LLAvatarIconCtrl* avatar_icon = getChild<LLAvatarIconCtrl>("avatar_icon");
 	std::string full_name = avatar_icon->getFullName();
 	LLAvatarActions::requestFriendshipDialog(mAvatarID, full_name);
 }
 
-void LLPanelIMControlPanel::onShareButtonClicked()
+void FSPanelIMControlPanel::onShareButtonClicked()
 {
 	LLAvatarActions::share(mAvatarID);
 }
 
-void LLPanelIMControlPanel::onFocusReceived()
+void FSPanelIMControlPanel::onFocusReceived()
 {
 	// Disable all the buttons (Call, Teleport, etc) if disconnected.
 	if (gDisconnected)
@@ -288,9 +288,9 @@ void LLPanelIMControlPanel::onFocusReceived()
 	}
 }
 
-void LLPanelIMControlPanel::setSessionId(const LLUUID& session_id)
+void FSPanelIMControlPanel::setSessionId(const LLUUID& session_id)
 {
-	LLPanelChatControlPanel::setSessionId(session_id);
+	FSPanelChatControlPanel::setSessionId(session_id);
 
 	LLIMModel& im_model = LLIMModel::instance();
 
@@ -335,7 +335,7 @@ void LLPanelIMControlPanel::setSessionId(const LLUUID& session_id)
 }
 
 //virtual
-void LLPanelIMControlPanel::changed(U32 mask)
+void FSPanelIMControlPanel::changed(U32 mask)
 {
 	getChildView("add_friend_btn")->setEnabled(!LLAvatarActions::isFriend(mAvatarID));
 	
@@ -346,7 +346,7 @@ void LLPanelIMControlPanel::changed(U32 mask)
 	}
 }
 
-void LLPanelIMControlPanel::onNameCache(const LLUUID& id, const std::string& full_name, bool is_group)
+void FSPanelIMControlPanel::onNameCache(const LLUUID& id, const std::string& full_name, bool is_group)
 {
 	if ( id == mAvatarID )
 	{
@@ -359,39 +359,39 @@ void LLPanelIMControlPanel::onNameCache(const LLUUID& id, const std::string& ful
 	}
 }
 
-LLPanelGroupControlPanel::LLPanelGroupControlPanel(const LLUUID& session_id):
+FSPanelGroupControlPanel::FSPanelGroupControlPanel(const LLUUID& session_id):
 mParticipantList(NULL)
 {
 }
 
-BOOL LLPanelGroupControlPanel::postBuild()
+BOOL FSPanelGroupControlPanel::postBuild()
 {
 	//childSetAction("group_info_btn", boost::bind(&LLPanelGroupControlPanel::onGroupInfoButtonClicked, this));
 
-	return LLPanelChatControlPanel::postBuild();
+	return FSPanelChatControlPanel::postBuild();
 }
 
-LLPanelGroupControlPanel::~LLPanelGroupControlPanel()
+FSPanelGroupControlPanel::~FSPanelGroupControlPanel()
 {
 	delete mParticipantList;
 	mParticipantList = NULL;
 }
 
 // virtual
-void LLPanelGroupControlPanel::draw()
+void FSPanelGroupControlPanel::draw()
 {
 	// Need to resort the participant list if it's in sort by recent speaker order.
 	if (mParticipantList)
 		mParticipantList->update();
-	LLPanelChatControlPanel::draw();
+	FSPanelChatControlPanel::draw();
 }
 
-void LLPanelGroupControlPanel::onGroupInfoButtonClicked()
+void FSPanelGroupControlPanel::onGroupInfoButtonClicked()
 {
 	LLGroupActions::show(mGroupID);
 }
 
-void LLPanelGroupControlPanel::onSortMenuItemClicked(const LLSD& userdata)
+void FSPanelGroupControlPanel::onSortMenuItemClicked(const LLSD& userdata)
 {
 	// TODO: Check this code when when sort order menu will be added. (EM)
 	if (false && !mParticipantList)
@@ -406,15 +406,15 @@ void LLPanelGroupControlPanel::onSortMenuItemClicked(const LLSD& userdata)
 
 }
 
-void LLPanelGroupControlPanel::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
+void FSPanelGroupControlPanel::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
-	LLPanelChatControlPanel::onVoiceChannelStateChanged(old_state, new_state);
+	FSPanelChatControlPanel::onVoiceChannelStateChanged(old_state, new_state);
 	mParticipantList->setSpeakingIndicatorsVisible(new_state >= LLVoiceChannel::STATE_CALL_STARTED);
 }
 
-void LLPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
+void FSPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
 {
-	LLPanelChatControlPanel::setSessionId(session_id);
+	FSPanelChatControlPanel::setSessionId(session_id);
 
 	mGroupID = session_id;
 
@@ -427,14 +427,12 @@ void LLPanelGroupControlPanel::setSessionId(const LLUUID& session_id)
 }
 
 
-LLPanelAdHocControlPanel::LLPanelAdHocControlPanel(const LLUUID& session_id):LLPanelGroupControlPanel(session_id)
+FSPanelAdHocControlPanel::FSPanelAdHocControlPanel(const LLUUID& session_id):FSPanelGroupControlPanel(session_id)
 {
 }
 
-BOOL LLPanelAdHocControlPanel::postBuild()
+BOOL FSPanelAdHocControlPanel::postBuild()
 {
 	//We don't need LLPanelGroupControlPanel::postBuild() to be executed as there is no group_info_btn at AdHoc chat
-	return LLPanelChatControlPanel::postBuild();
+	return FSPanelChatControlPanel::postBuild();
 }
-
-#endif

@@ -46,7 +46,7 @@
 #include "lllayoutstack.h"
 #include "lllineeditor.h"
 #include "lllogchat.h"
-#include "llpanelimcontrolpanel.h"
+#include "fspanelimcontrolpanel.h"
 #include "llscreenchannel.h"
 #include "llsyswellwindow.h"
 #include "lltrans.h"
@@ -500,7 +500,7 @@ void FSFloaterIM::onEndCallButtonClicked()
 void FSFloaterIM::onOpenVoiceControlsClicked()
 {
 	llinfos << "FSFloaterIM::onOpenVoiceControlsClicked" << llendl;
-	LLFloaterReg::showInstance("voice_controls");
+	LLFloaterReg::showInstance("fs_voice_controls");
 }
 void FSFloaterIM::onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state)
 {
@@ -971,8 +971,8 @@ void FSFloaterIM::draw()
 void* FSFloaterIM::createPanelIMControl(void* userdata)
 {
 	FSFloaterIM *self = (FSFloaterIM*)userdata;
-	self->mControlPanel = new LLPanelIMControlPanel();
-	self->mControlPanel->setXMLFilename("panel_im_control_panel.xml");
+	self->mControlPanel = new FSPanelIMControlPanel();
+	self->mControlPanel->setXMLFilename("panel_fs_im_control_panel.xml");
 	return self->mControlPanel;
 }
 
@@ -981,8 +981,8 @@ void* FSFloaterIM::createPanelIMControl(void* userdata)
 void* FSFloaterIM::createPanelGroupControl(void* userdata)
 {
 	FSFloaterIM *self = (FSFloaterIM*)userdata;
-	self->mControlPanel = new LLPanelGroupControlPanel(self->mSessionID);
-	self->mControlPanel->setXMLFilename("panel_group_control_panel.xml");
+	self->mControlPanel = new FSPanelGroupControlPanel(self->mSessionID);
+	self->mControlPanel->setXMLFilename("panel_fs_group_control_panel.xml");
 	return self->mControlPanel;
 }
 
@@ -990,8 +990,8 @@ void* FSFloaterIM::createPanelGroupControl(void* userdata)
 void* FSFloaterIM::createPanelAdHocControl(void* userdata)
 {
 	FSFloaterIM *self = (FSFloaterIM*)userdata;
-	self->mControlPanel = new LLPanelAdHocControlPanel(self->mSessionID);
-	self->mControlPanel->setXMLFilename("panel_adhoc_control_panel.xml");
+	self->mControlPanel = new FSPanelAdHocControlPanel(self->mSessionID);
+	self->mControlPanel->setXMLFilename("panel_fs_adhoc_control_panel.xml");
 	return self->mControlPanel;
 }
 

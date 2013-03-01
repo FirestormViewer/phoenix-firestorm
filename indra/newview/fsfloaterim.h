@@ -38,7 +38,7 @@
 class LLAvatarName;
 class LLButton;		// support sysinfo button -Zi
 class LLLineEditor;
-class LLPanelChatControlPanel;
+class FSPanelChatControlPanel;
 class FSChatHistory;
 class LLInventoryItem;
 class LLInventoryCategory;
@@ -199,7 +199,7 @@ private:
 
 	static void confirmLeaveCallCallback(const LLSD& notification, const LLSD& response);
 
-	LLPanelChatControlPanel* mControlPanel;
+	FSPanelChatControlPanel* mControlPanel;
 	LLUUID mSessionID;
 	S32 mLastMessageIndex;
 
