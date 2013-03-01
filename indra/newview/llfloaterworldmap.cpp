@@ -722,35 +722,29 @@ void LLFloaterWorldMap::enableTeleportCoordsDisplay( bool enabled )
 // update display of teleport destination coordinates - pos is in global coordinates
 void LLFloaterWorldMap::updateTeleportCoordsDisplay( const LLVector3d& pos )
 {
-	// if we're going to update their value, we should also enable them
-	enableTeleportCoordsDisplay( true );
-	
 	// convert global specified position to a local one
 // <FS:CR> Aurora-Sim var region support
 	//F32 region_local_x = (F32)fmod( pos.mdV[VX], (F64)REGION_WIDTH_METERS );
 	//F32 region_local_y = (F32)fmod( pos.mdV[VY], (F64)REGION_WIDTH_METERS );
 	LLSimInfo* sim_info = LLWorldMap::getInstance()->simInfoFromPosGlobal(pos);
-	if (!sim_info)
+	if (sim_info)
 	{
-		// We haven't found a region for that point yet
-		S32 world_x = S32(pos.mdV[0] / 256);
-		S32 world_y = S32(pos.mdV[1] / 256);
-		LLWorldMapMessage::getInstance()->sendMapBlockRequest(world_x, world_y, world_x, world_y, true);
+		// if we're going to update their value, we should also enable them
+		enableTeleportCoordsDisplay( true );
 		
-		return;
-	}
-	U32 locX, locY;
-	from_region_handle(sim_info->getHandle(), &locX, &locY);
-	F32 region_local_x = pos.mdV[VX] - locX;
-	F32 region_local_y = pos.mdV[VY] - locY;
-// </FS:CR>
-	//F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
-	F32 region_local_z = (F32)pos.mdV[VZ];
+		U32 locX, locY;
+		from_region_handle(sim_info->getHandle(), &locX, &locY);
+		F32 region_local_x = pos.mdV[VX] - locX;
+		F32 region_local_y = pos.mdV[VY] - locY;
+		//F32 region_local_z = (F32)fmod( pos.mdV[VZ], (F64)REGION_WIDTH_METERS );
+		F32 region_local_z = (F32)pos.mdV[VZ];
 
-	// write in the values
-	childSetValue("teleport_coordinate_x", region_local_x );
-	childSetValue("teleport_coordinate_y", region_local_y );
-	childSetValue("teleport_coordinate_z", region_local_z );
+		// write in the values
+		childSetValue("teleport_coordinate_x", region_local_x );
+		childSetValue("teleport_coordinate_y", region_local_y );
+		childSetValue("teleport_coordinate_z", region_local_z );
+	}
+// </FS:CR>
 }
 
 void LLFloaterWorldMap::updateLocation()
