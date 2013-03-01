@@ -1706,13 +1706,6 @@ void LLPanelPeople::updateButtons()
 	}
 // [/RLBa:KB]
 
-// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
-	if ( (nearby_tab_active) && (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) )
-	{
-		item_selected = multiple_selected = false;
-	}
-// [/RLBa:KB]
-
 	buttonSetEnabled("view_profile_btn",item_selected);
 	buttonSetEnabled("share_btn",		item_selected);
 	buttonSetEnabled("im_btn",			multiple_selected); // allow starting the friends conference for multiple selection
