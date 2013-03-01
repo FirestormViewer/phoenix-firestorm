@@ -302,7 +302,6 @@ set(viewer_SOURCE_FILES
     llfloatermodelpreview.cpp
     llfloatermodeluploadbase.cpp
     llfloaternamedesc.cpp
-    llfloaternearbychat.cpp
     llfloaternotificationsconsole.cpp
     llfloaterobjectweights.cpp
     llfloateropenobject.cpp
@@ -960,7 +959,6 @@ set(viewer_HEADER_FILES
     llfloatermodelpreview.h
     llfloatermodeluploadbase.h
     llfloaternamedesc.h
-    llfloaternearbychat.h
     llfloaternotificationsconsole.h
     llfloaterobjectweights.h
     llfloateropenobject.h
