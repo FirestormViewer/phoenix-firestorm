@@ -121,9 +121,9 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 			{
 				msg = msg + ": " + chat.mText;
 			}
-#if LL_WINDOWS
+			
 			gGrowlManager->notify("Keyword Alert", msg, "Keyword Alert");
-#endif
+			
 			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
 			if (sFSKeywordChangeColor)
 			{
