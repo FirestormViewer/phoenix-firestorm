@@ -26,7 +26,7 @@
  */
 
 #if 0
-
+ 
 #ifndef LL_LLCALLFLOATER_H
 #define LL_LLCALLFLOATER_H
 
@@ -42,7 +42,6 @@ class LLOutputMonitorCtrl;
 class LLParticipantList;
 class LLSpeakerMgr;
 class LLSpeakersDelayActionsStorage;
-class LLSliderCtrl;
 
 /**
  * The Voice Control Panel is an ambient window summoned by clicking the flyout chevron
@@ -77,10 +76,6 @@ public:
 	/*virtual*/ void onParticipantsChanged();
 
 	static void sOnCurrentChannelChanged(const LLUUID& session_id);
-
-// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
-	LLAvatarList* getAvatarCallerList() { return mAvatarList; }
-// [/RLVa:KB]
 
 private:
 	typedef enum e_voice_controls_type
@@ -124,24 +119,6 @@ private:
 	 * and updates voice states each time anybody is joined/left voice chat in session.
 	 */
 	void onAvatarListRefreshed();
-
-	/**
-	 * Gets called whenever a selection changes in the nearby voice list.
-	 * 
-	 * This updates the slider and mute button at the lower edge, so the selected participant
-	 * becomes the target of this control.
-	 */
-	void onParticipantSelected();
-
-	/**
-	 * Gets called whenever the volume on the optional single slider control gets changed
-	 */
-	void onVolumeChanged();
-
-	/**
-	 * Gets called whenever the optional single mute button gets toggled
-	 */
-	void onMuteChanged();
 
 	/**
 	 * Updates window title with an avatar name
@@ -258,10 +235,6 @@ private:
 	LLPanel* mAgentPanel;
 	LLOutputMonitorCtrl* mSpeakingIndicator;
 	bool mIsModeratorMutedVoice;
-
-	LLUUID mSelectedParticipant;
-	LLSliderCtrl* mVolumeSlider;
-	LLButton* mMuteButton;
 
 	/**
 	 * Flag indicated that participants voice states should be initialized.

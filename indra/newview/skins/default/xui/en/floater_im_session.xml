@@ -2,13 +2,11 @@
 <floater
  legacy_header_height="18"
  background_visible="true"
- show_title="true"
- follows="all"
- height="350"
+ default_tab_group="1"
+ height="355"
+ help_topic="floater_im_box"
  layout="topleft"
- left="0"
  name="panel_im"
- top="0"
  can_dock="false"
  can_minimize="true"
  can_close="true"
@@ -16,354 +14,25 @@
  width="394"
  can_resize="true"
  min_width="250"
- min_height="150">
- 
-   <layout_stack
-    border_size="0"
-	animate="false" 
-	follows="top|left"
-	clip="false"
-	height="27"
-	width="200"
-	left_pad="0"
-	layout="topleft"
-	orientation="horizontal"
-	name="ls_control_panel"
-	top="13"
-	left="3">
-       <layout_panel
-          auto_resize="false"
-          user_resize="false"
-          name="slide_panel"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="40"
-          follows="left|top">
-       	<button
-          height="20"
-          follows="left|top"
-          top="0"
-          left="5"
-          image_overlay="TabIcon_Open_Off"
-          layout="topleft"
-          width="24"
-          name="slide_left_btn" />
-       	<button
-          height="20"
-          follows="left|top"
-          top="0"
-          left="5"
-          image_overlay="TabIcon_Close_Off"
-          width="24"
-          name="slide_right_btn" />
-       </layout_panel>
-       
-       <layout_panel
-          name="gprofile_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">
-       	<button
-          name="group_info_btn"
-          follows="left|top"
-          top="0"
-          height="20"
-          width="24"
-          left_delta="5"
-          image_overlay="profile_icon_24x24"
-          image_pressed="PushButton_Press"
-          image_pressed_selected="PushButton_Selected_Press"
-          image_selected="PushButton_Selected_Press"
-          tool_tip="Show this group's profile"/>
-       </layout_panel>
-       
-       <layout_panel
-          name="profile_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">	  
-       		<button
-             name="view_profile_btn"
-             follows="left|top"
-             top="0"
-             height="20"
-             width="24"
-             left_delta="5"
-             image_overlay="profile_icon_24x24"
-             image_pressed="PushButton_Press"
-             image_pressed_selected="PushButton_Selected_Press"
-             image_selected="PushButton_Selected_Press"
-             tool_tip="Show this resident's profile" />
-       </layout_panel>
-       
-
-<!-- Ansariel: Translation of IMs is currently not available
-       <layout_panel
-          name="trans_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="20"
-          width="20"
-          follows="left|top">             
-        	<button
-	          follows="left|top"
-	          top="0"
-	          width="24"
-	          height="24"
-	          image_overlay="TabIcon_Translate_Off"
-	          control_name="TranslateChat"
-	          is_toggle="true"
-	          image_pressed="PushButton_Press"
-	          image_pressed_selected="PushButton_Selected_Press"
-	          image_selected="PushButton_Selected_Press"
-	          tool_tip="Use selected translation service"
-              name="translate_btn"/>       
-       </layout_panel>      
--->
-
-        <layout_panel
-          name="friend_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">
-        	<button
-            follows="left|top"
-            height="20"
-            top="0"
-            left_delta="5"
-            image_overlay="friends_icon_24x24"
-            image_pressed="PushButton_Press"
-            image_pressed_selected="PushButton_Selected_Press"
-            image_selected="PushButton_Selected_Press"
-            tool_tip="Add this resident as a friend"
-            name="add_friend_btn"
-            width="24" />
-       </layout_panel>
-       
-       <layout_panel
-          name="tp_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">
-        <button
-          follows="left|top"
-          top="0"
-          height="20"
-          left_delta="5"
-          image_overlay="teleport_icon_24x24"
-          image_pressed="PushButton_Press"
-          image_pressed_selected="PushButton_Selected_Press"
-          image_selected="PushButton_Selected_Press"
-          tool_tip="Summon / Teleport this resident"
-          name="teleport_btn"
-          width="24" />
-       </layout_panel>
-       
-       <layout_panel
-          name="share_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">
-        <button
-          follows="left|top"
-          top="0"
-          height="20"
-          left_delta="5"
-          image_overlay="gift_icon_24x24"
-          image_pressed="PushButton_Press"
-          image_pressed_selected="PushButton_Selected_Press"
-          image_selected="PushButton_Selected_Press"
-          tool_tip="Send an item to this resident"
-          name="share_btn"
-          width="24" />
-       </layout_panel>
-       
-       <layout_panel
-          name="pay_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">
-        	<button
-            follows="left|top"
-            top="0"
-            height="20"
-            left_delta="5"
-            image_overlay="sale_icon_24x24"
-            image_pressed="PushButton_Press"
-            image_pressed_selected="PushButton_Selected_Press"
-            image_selected="PushButton_Selected_Press"
-            tool_tip="Send money to this resident"
-            name="pay_btn"
-            width="24" />
-       </layout_panel>
-
-       <layout_panel
-          name="call_btn_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">              
-         	<button
-            follows="left|top"
-            height="20"
-            left_delta="5"
-            image_overlay="call_icon_24x24"
-            image_pressed="PushButton_Press"
-            image_pressed_selected="PushButton_Selected_Press"
-            image_selected="PushButton_Selected_Press"
-            tool_tip="Add a voice to this chat"
-            name="call_btn"
-            top="0"
-            width="24" />
-       </layout_panel> 
-       
-       <layout_panel
-          name="end_call_btn_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">       
-         	<button
-            follows="left|top"
-            height="20"
-            left_delta="5"
-            image_overlay="call_end_icon_24x24"
-            image_pressed="PushButton_Press"
-            image_pressed_selected="PushButton_Selected_Press"
-            image_selected="PushButton_Selected_Press"
-            tool_tip="End Voice Call"
-            name="end_call_btn"
-            top="0"
-            width="24" />
-       </layout_panel>
-       
-       <layout_panel
-          name="voice_ctrls_btn_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">             
-         <button
-          follows="left|top"
-          height="20"
-          left_delta="10"
-          image_pressed="PushButton_Press"
-          image_pressed_selected="PushButton_Selected_Press"
-          image_selected="PushButton_Selected_Press"
-          tool_tip="Voice Properties"
-          image_overlay="VoicePTT_Off"
-          name="voice_ctrls_btn"
-          top="0"
-          width="24" />
-        </layout_panel>
-      
-       <layout_panel
-          name="im_history_btn_panel"
-          auto_resize="false"
-          user_resize="false"
-          top="0"
-          layout="topleft"
-          height="24"
-          width="27"
-          follows="left|top">             
-         <button
-          follows="left|top"
-          height="20"
-          left_delta="5"
-          image_pressed="PushButton_Press"
-          image_pressed_selected="PushButton_Selected_Press"
-          image_selected="PushButton_Selected_Press"
-          tool_tip="Open this Instant Message's past history."
-          image_overlay="List_View_On"
-          name="im_history_btn"
-          top="0"
-          width="25" />
-        </layout_panel>
-      
-</layout_stack>
-
-    <!-- Checkbox for FS prefix on support groups -->
-    <check_box
-     visible="true"
-     control_name="FSSupportGroupChatPrefix2"
-     follows="left|top"
-     height="18"
-     label="Specify viewer type"
-     layout="topleft"
-     left_pad="-50"
-     name="FSSupportGroupChatPrefix_toggle"
-     tab_group="5"
-     tool_tip="Add (FS) in front of your messages to help support staff understand whether your question pertains to Phoenix or Firestorm. Your help avoiding confusion is greatly appreciated!"
-     width="150" />
-    <!-- END: FS Prefix -->
-  <!--button for sending sys info-->
-<button
-	follows="right|top"
-	height="20"
-	image_pressed="Info_Press"
-	image_pressed_selected="PushButton_Selected_Press"
-	image_selected="PushButton_Selected_Press"
-	tool_tip="Send System Info"
-	image_overlay="Info_Off"
-	name="send_sysinfo_btn"
-	left_delta="0"
-	right="-35"
-	tab_group="5"
-	width="24" />
-<!--End sys info button-->
+ min_height="190">
   <layout_stack
-   animate="false" 
-   follows="all"
-   height="308"
-   width="394"
-   layout="topleft"
-   orientation="horizontal"
-   name="im_panels"
-   top="40"
-   left="0">
+   animate="true" 
+   default_tab_group="2"
+  follows="all"
+  height="320"
+  width="394"
+  layout="topleft"
+  orientation="horizontal"
+  name="im_panels"
+  tab_group="1"
+  top="20"
+  left="0">
     <layout_panel
       name="im_control_panel_holder"
       min_width="115"
       width="150" 
       height="320" 
-      auto_resize="false"
-      user_resize="true">
+      auto_resize="false">
       <panel
         name="panel_im_control_panel"
         layout="topleft"
@@ -372,36 +41,52 @@
         follows="all"/>
       </layout_panel>
     <layout_panel
-       name="panel_im_control_lp"
+       default_tab_group="3"
        left="0"
+       tab_group="2"
        top="0"
        height="200"
 	     width="244"
        user_resize="true">
-
-        <fs_chat_history
-         font="SansSerifSmall"
+        <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Open_Off"
+          layout="topleft"
+          width="25"
+          name="slide_left_btn" />
+         <button
+          height="20"
+          follows="left|top"
+          top="0"
+          left="2"
+          image_overlay="TabIcon_Close_Off"
+          width="25"
+          name="slide_right_btn" />
+        <chat_history
+	 font="SansSerifSmall"
          follows="left|right|top|bottom"
-         height="170"
+         height="150"
          name="chat_history"
          parse_highlights="true"
          parse_urls="true"
-         left="3"
+        left="1"
          width="238">
-        </fs_chat_history>
+        </chat_history>
         <line_editor
          bottom="0"
          left="3"
          follows="left|right|bottom"
-         font="SansSerifSmall"
+	 font="SansSerifSmall"
          height="20"
          label="To"
          layout="bottomleft"
-         select_on_focus="true"
          name="chat_editor"
          spellcheck="true"
-         tab_group="1"
-         width="238">
+         tab_group="3"
+         width="236">
         </line_editor>
     </layout_panel>
   </layout_stack>

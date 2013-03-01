@@ -31,26 +31,17 @@
 #if 0
 
 #include "llnearbychatbarlistener.h"
-
-// <FS:Zi> Remove floating chat bar
-// #include "llnearbychatbar.h"
-#include "fsnearbychathub.h"
-// </FS:Zi>
+#include "llnearbychatbar.h"
 
 #include "llagent.h"
 #include "llchat.h"
-#include "llviewercontrol.h"
 
 
-// <FS:Zi> Remove floating chat bar
-// LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
-//  : LLEventAPI("LLChatBar",
-//               "LLChatBar listener to (e.g.) sendChat, etc."),
-//	mChatbar(chatbar)
-LLNearbyChatBarListener::LLNearbyChatBarListener()
+
+LLNearbyChatBarListener::LLNearbyChatBarListener(LLNearbyChatBar & chatbar)
   : LLEventAPI("LLChatBar",
-               "LLChatBar listener to (e.g.) sendChat, etc.")
-// </FS:Zi>
+               "LLChatBar listener to (e.g.) sendChat, etc."),
+	mChatbar(chatbar)
 {
     add("sendChat",
         "Send chat to the simulator:\n"
@@ -106,12 +97,7 @@ void LLNearbyChatBarListener::sendChat(LLSD const & chat_data) const
 	}
 
 	// Send it as if it was typed in
-	// <FS:Zi> Remove floating chat bar
-	// mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
-	// <FS:Ansariel> [FS communication UI]
-	//LLNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("FSPlayChatAnimation"));
-	FSNearbyChat::instance().sendChatFromViewer(chat_to_send, type_o_chat, ((BOOL)(channel == 0)) && gSavedSettings.getBOOL("FSPlayChatAnimation"));
-	// </FS:Ansariel> [FS communication UI]
-	// <FS:Zi>
+	mChatbar.sendChatFromViewer(chat_to_send, type_o_chat, (BOOL)(channel == 0));
 }
+
 #endif

@@ -33,10 +33,8 @@
 #include "lllogchat.h"
 #include "lltooldraganddrop.h"
 #include "lltransientdockablefloater.h"
-#include "llvoicechannel.h"
 
 class LLAvatarName;
-class LLButton;		// support sysinfo button -Zi
 class LLLineEditor;
 class LLPanelChatControlPanel;
 class LLChatHistory;
@@ -47,7 +45,7 @@ class LLInventoryCategory;
  * Individual IM window that appears at the bottom of the screen,
  * optionally "docked" to the bottom tray.
  */
-class LLIMFloater : public LLTransientDockableFloater, LLVoiceClientStatusObserver, LLFriendObserver
+class LLIMFloater : public LLTransientDockableFloater
 {
 	LOG_CLASS(LLIMFloater);
 public:
@@ -88,18 +86,6 @@ public:
 	// callback for LLIMModel on new messages
 	// route to specific floater if it is visible
 	static void newIMCallback(const LLSD& data);
-	
-	//AO: Callbacks for voice handling formerly in llPanelImControlPanel
-	void onCallButtonClicked();
-	void onEndCallButtonClicked();
-	void onOpenVoiceControlsClicked();
-	void onVoiceChannelStateChanged(const LLVoiceChannel::EState& old_state, const LLVoiceChannel::EState& new_state);
-	void onChange(EStatusType status, const std::string &channelURI, bool proximal);
-	void updateButtons(bool is_call_started);
-	void updateCallButton();
-	void changed(U32 mask);
-	// ## Zi: overridden to fix the IM focus bug - FIRE-3989 etc.
-	BOOL focusFirstItem(BOOL prefer_text_fields = FALSE, BOOL focus_flash = TRUE );
 
 	// called when docked floater's position has been set by chiclet
 	void setPositioned(bool b) { mPositioned = b; };
@@ -132,19 +118,10 @@ public:
 
 	virtual LLTransientFloaterMgr::ETransientGroup getGroup() { return LLTransientFloaterMgr::IM; }
 
-	// <FS:Ansariel> FIRE-3248: Disable add friend button on IM floater if friendship request accepted
-	void setEnableAddFriendButton(BOOL enabled);
-
 protected:
 	/* virtual */
 	void	onClickCloseBtn();
 
-	// support sysinfo button -Zi
-	void	onSysinfoButtonVisibilityChanged(const LLSD& yes);
-	LLButton* mSysinfoButton;
-	// support sysinfo button -Zi
-
-	BOOL enableViewerVersionCallback(const LLSD& notification,const LLSD& response);		// <FS:Zi> Viewer version popup
 private:
 	// process focus events to set a currently active session
 	/* virtual */ void onFocusLost();
@@ -165,24 +142,6 @@ private:
 	static void		onInputEditorFocusReceived( LLFocusableElement* caller, void* userdata );
 	static void		onInputEditorFocusLost(LLFocusableElement* caller, void* userdata);
 	static void		onInputEditorKeystroke(LLLineEditor* caller, void* userdata);
-	
-	// AO, originally from llpaneChatControlPanel trees
-	void onViewProfileButtonClicked();
-	void onAddFriendButtonClicked();
-	void onShareButtonClicked();
-	void onTeleportButtonClicked();
-	void onPayButtonClicked();
-	void onGroupInfoButtonClicked();
-	void onHistoryButtonClicked();
-
-	// support sysinfo button -Zi
-	void onSysinfoButtonClicked();
-	BOOL onSendSysinfo(const LLSD& notification,const LLSD& response);
-	// support sysinfo button -Zi
-
-	// connection to voice channel state change signal
-	boost::signals2::connection mVoiceChannelStateChangeConnection;
-	
 	void			setTyping(bool typing);
 	void			onSlide();
 	static void*	createPanelIMControl(void* userdata);

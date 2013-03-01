@@ -10,7 +10,7 @@
   bottom_separator_pad="1"
   top_header_pad="12"
   bottom_header_pad="5"
-	max_length="67108864"
+	max_length="2147483647"
 	track_bottom="true"
 	name="chat_history"
 	type="string"

@@ -11,7 +11,7 @@
  min_width="190"
  name="floater_voice_controls"
  help_topic="floater_voice_controls"
- title="Voice Controls"
+ title="VOICE CONTROLS"
  save_dock_state="true"
  save_visibility="true"
  save_rect="true"
@@ -19,19 +19,19 @@
  width="282">
     <string
      name="title_nearby">
-        Nearby Voice
+        VOICE SETTINGS
     </string>
     <string
      name="title_group">
-        Group Call with [GROUP]
+        GROUP CALL WITH [GROUP]
     </string>
     <string
      name="title_adhoc">
-        Conference Call
+        CONFERENCE CALL
     </string>
     <string
      name="title_peer_2_peer">
-        Call with [NAME]
+        CALL WITH [NAME]
     </string>
     <string
      name="no_one_near">
@@ -99,10 +99,9 @@
          orientation="horizontal"
          width="262">
           <layout_panel
-            height="30"
+            height="26"
             width="200">
             <panel
-			 top="0"
              class="panel_voice_effect"
              name="panel_voice_effect"
              visiblity_control="VoiceMorphingEnabled"
@@ -119,7 +118,6 @@
             <button
              follows="right|top"
              height="23"
-			 top="4"
              label="Leave Call"
              name="leave_call_btn"
              width="100" />
@@ -137,12 +135,11 @@
           width="280">
         <avatar_list
          follows="all"
-         height="120"
+         height="132"
          ignore_online_status="true"
          layout="topleft"
          multi_select="true"
          name="speakers_list"
-         show_voice_volume="true"
          width="280" />
         <panel
          filename="panel_avatar_list_item.xml"

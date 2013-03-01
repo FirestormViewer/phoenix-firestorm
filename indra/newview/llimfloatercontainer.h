@@ -48,13 +48,10 @@ public:
 	/*virtual*/ BOOL postBuild();
 	/*virtual*/ void onOpen(const LLSD& key);
 	void onCloseFloater(LLUUID& id);
-	
+
 	/*virtual*/ void addFloater(LLFloater* floaterp, 
 								BOOL select_added_floater, 
 								LLTabContainer::eInsertionPoint insertion_point = LLTabContainer::END);
-// [SL:KB] - Patch: Chat-NearbyChatBar | Checked: 2011-12-11 (Catznip-3.2.0d) | Added: Catznip-3.2.0d
-	/*virtual*/ void removeFloater(LLFloater* floaterp);
-// [/SL:KB]
 
 	static LLFloater* getCurrentVoiceFloater();
 
@@ -63,13 +60,13 @@ public:
 	static LLIMFloaterContainer* getInstance();
 
 	virtual void setMinimized(BOOL b);
-	
-	void onNewMessageReceived(const LLSD& data); // public so nearbychat can call it directly. TODO: handle via callback. -AO
 
 private:
 	typedef std::map<LLUUID,LLFloater*> avatarID_panel_map_t;
 	avatarID_panel_map_t mSessions;
 	boost::signals2::connection mNewMessageConnection;
+
+	void onNewMessageReceived(const LLSD& data);
 };
 
 #endif // LL_LLIMFLOATERCONTAINER_H
