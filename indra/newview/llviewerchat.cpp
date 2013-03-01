@@ -39,9 +39,9 @@
 #include "fskeywords.h"
 #include "lggcontactsets.h"
 #include "rlvhandler.h"
-#if LL_WINDOWS
-#include "growlmanager.h"
-#endif
+
+#include "growlmanager.h" // <FS:LO> Growl include
+
 
 // LLViewerChat
 LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
