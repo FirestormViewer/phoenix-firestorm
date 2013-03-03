@@ -1,0 +1,15 @@
+[Viewer/Build]
+- changed : compiler options for "Release with Debug" builds
+- changed : compiler and linker options for "Release" builds
+- changed : removed LL's changeset tags and added new (consistent) SL-X.Y.Z tags for releases
+- changed : break into the debugger rather than forcing the process into an unrecoverable state for "llerrs" on non-release builds
+    -> Windows only
+- changed : set the "FMOD" flag to TRUE for the (Windows) ReleaseOS build configuration
+- changed : set the "UNATTENDED" flag to FALSE for all (Windows) *OS build configurations
+- changed : updated OpenJPEG package with debug information for crash debugging
+- fixed   : *OS builds don't set the default Visual Studio project and configuration
+- fixed   : libpng is built with "Whole Program Optimization" and causing slow linker performance
+    -> "MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance"
+    -> causes the linker to abort the current run and start over
+- fixed   : viewer crashes or refuses to start when TeamViewer is installed or running
+    -> see http://jira.phoenixviewer.com/browse/FIRE-3062
