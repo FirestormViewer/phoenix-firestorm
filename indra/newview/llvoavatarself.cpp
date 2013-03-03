@@ -2223,6 +2223,7 @@ public:
 						   const std::string& reason,
 						   const LLSD& content)
 	{
+		gPendingMetricsUploads--; // if we add retry, this should be moved to the isGoodStatus case.
 		if (isGoodStatus(status))
 		{
 			LL_DEBUGS("Avatar") << "OK" << LL_ENDL;
@@ -2233,11 +2234,6 @@ public:
 			LL_WARNS("Avatar") << "Failed " << status << " reason " << reason << LL_ENDL;
 			error(status,reason);
 		}
-	}
-
-	// virtual
-	void error(U32 status_num, const std::string & reason)
-	{
 	}
 
 	// virtual
@@ -2384,6 +2380,7 @@ void LLVOAvatarSelf::sendViewerAppearanceChangeMetrics()
 	}
 	if (!caps_url.empty())
 	{
+		gPendingMetricsUploads++;
 		LLCurlRequest::headers_t headers;
 		LLHTTPClient::post(caps_url,
 						   msg,
@@ -2543,34 +2540,33 @@ void LLVOAvatarSelf::addLocalTextureStats( ETextureIndex type, LLViewerFetchedTe
 {
 	if (!isIndexLocalTexture(type)) return;
 
-	if (getLocalTextureID(type, index) != IMG_DEFAULT_AVATAR)
+	if (!covered_by_baked)
 	{
-		imagep->setNoDelete();
-		if (imagep->getDiscardLevel() != 0)
+		if (getLocalTextureID(type, index) != IMG_DEFAULT_AVATAR)
 		{
-			F32 desired_pixels;
-			desired_pixels = llmin(mPixelArea, (F32)getTexImageArea());
-
-			// DRANO what priority should wearable-based textures have?
-			if (isUsingLocalAppearance())
+			imagep->setNoDelete();
+			if (imagep->getDiscardLevel() != 0)
 			{
+				F32 desired_pixels;
+				desired_pixels = llmin(mPixelArea, (F32)getTexImageArea());
+				
 				imagep->setBoostLevel(getAvatarBoostLevel());
 				imagep->setAdditionalDecodePriority(SELF_ADDITIONAL_PRI) ;
-			}
-			imagep->resetTextureStats();
-			imagep->setMaxVirtualSizeResetInterval(MAX_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL);
-			imagep->addTextureStats( desired_pixels / texel_area_ratio );
-			imagep->forceUpdateBindStats() ;
-			if (imagep->getDiscardLevel() < 0)
-			{
-				mHasGrey = TRUE; // for statistics gathering
+				imagep->resetTextureStats();
+				imagep->setMaxVirtualSizeResetInterval(MAX_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL);
+				imagep->addTextureStats( desired_pixels / texel_area_ratio );
+				imagep->forceUpdateBindStats() ;
+				if (imagep->getDiscardLevel() < 0)
+				{
+					mHasGrey = TRUE; // for statistics gathering
+				}
 			}
 		}
-	}
-	else
-	{
-		// texture asset is missing
-		mHasGrey = TRUE; // for statistics gathering
+		else
+		{
+			// texture asset is missing
+			mHasGrey = TRUE; // for statistics gathering
+		}
 	}
 }
 
@@ -3052,8 +3048,6 @@ void LLVOAvatarSelf::dumpScratchTextureByteCount()
 {
 	llinfos << "Scratch Texture GL: " << (sScratchTexBytes/1024) << "KB" << llendl;
 }
-
-void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value);
 
 void LLVOAvatarSelf::dumpWearableInfo(LLAPRFile& outfile)
 {
