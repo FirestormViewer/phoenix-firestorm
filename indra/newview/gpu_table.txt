@@ -447,6 +447,7 @@ NVIDIA GTX 750							.*NVIDIA .*GTX *75.*					3	1	0	0
 NVIDIA GTX 760							.*NVIDIA .*GTX *76.*					5	1	0	0
 NVIDIA GTX 770							.*NVIDIA .*GTX *77.*					5	1	0	0
 NVIDIA GTX 780							.*NVIDIA .*GTX *78.*					5	1	0	0
+NVIDIA GTX TITAN						.*NVIDIA .*GTX *TITAN.*					5	1	0	0
 NVIDIA C51								.*NVIDIA .*C51.*						0	1	1	2
 NVIDIA G72								.*NVIDIA .*G72.*						1	1	0	0
 NVIDIA G73								.*NVIDIA .*G73.*						1	1	0	0

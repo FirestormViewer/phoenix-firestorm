@@ -226,7 +226,7 @@
 			<menu_item_check label="Assertion-Fehler anzeigen" name="Show Assertion Failures"/>
 			<menu_item_check label="Gesperrte Layer ausblenden" name="Hide Locked Layers"/>
 			<menu_item_check label="Gesperrte Anhänge ausblenden" name="Hide Locked Attachments"/>
-			<menu_item_check label="Altes Namensschame verwenden" name="Enable Legacy Naming"/>
+			<menu_item_check label="Altes Namensschema verwenden" name="Enable Legacy Naming"/>
 			<menu_item_check label="Teilen von Kleidung aktivieren" name="Enable Shared Wear"/>
 			<menu_item_check label="Geteilte Gegenstände beim Tragen umbenennen" name="Rename Shared Items on Wear"/>
 			<menu_item_check label="Sperren..." name="Locks"/>

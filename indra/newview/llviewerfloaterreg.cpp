@@ -149,9 +149,6 @@
 // #include "llnearbychatbar.h"	// <FS:Zi> Remove floating chat bar
 
 // *NOTE: Please add files in alphabetical order to keep merges easy.
-// [RLVa:KB] - Checked: 2010-03-11
-#include "rlvfloaters.h"
-// [/RLVa:KB]
 // ND: And for FS please put yours after this line, for easier merges too
 #include "ao.h"
 #include "floatermedialists.h"

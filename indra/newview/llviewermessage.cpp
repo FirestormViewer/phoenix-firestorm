@@ -3917,7 +3917,6 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	LLColor4	color(1.0f, 1.0f, 1.0f, 1.0f);
 	LLUUID		from_id;
 	LLUUID		owner_id;
-	BOOL		is_owned_by_me = FALSE;
 	LLViewerObject*	chatter;
 
 	msg->getString("ChatData", "FromName", from_name);
@@ -4074,74 +4073,6 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 			}
 		}
 		// NaCl End
-
-// [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
-		if ( (rlv_handler_t::isEnabled()) && (CHAT_TYPE_START != chat.mChatType) && (CHAT_TYPE_STOP != chat.mChatType) )
-		{
-			// NOTE: chatter can be NULL (may not have rezzed yet, or could be another avie's HUD attachment)
-			BOOL is_attachment = (chatter) ? chatter->isAttachment() : FALSE;
-
-			// Filtering "rules":
-			//   avatar  => filter all avie text (unless it's this avie or they're an exemption)
-			//   objects => filter everything except attachments this avie owns (never filter llOwnerSay chat)
-			if ( ( (CHAT_SOURCE_AGENT == chat.mSourceType) && (from_id != gAgent.getID()) ) || 
-				 ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && ((!is_owned_by_me) || (!is_attachment)) && 
-				   (CHAT_TYPE_OWNER != chat.mChatType) ) )
-			{
-				bool fIsEmote = RlvUtil::isEmote(mesg);
-				if ((!fIsEmote) &&
-					(((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHAT)) && (!gRlvHandler.isException(RLV_BHVR_RECVCHAT, from_id))) ||
-					 ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVCHATFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVCHATFROM, from_id))) ))
-				{
-					if ( (gRlvHandler.filterChat(mesg, false)) && (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis")) )
-						return;
-				}
-				else if ((fIsEmote) &&
-					     (((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTE)) && (!gRlvHandler.isException(RLV_BHVR_RECVEMOTE, from_id))) ||
-					      ((gRlvHandler.hasBehaviour(RLV_BHVR_RECVEMOTEFROM)) && (gRlvHandler.isException(RLV_BHVR_RECVEMOTEFROM, from_id))) ))
- 				{
-					if (!gSavedSettings.getBOOL("RestrainedLoveShowEllipsis"))
-						return;
-					mesg = "/me ...";
-				}
-			}
-
-			// Filtering "rules":
-			//   avatar => filter only their name (unless it's this avie)
-			//   other  => filter everything
-			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES))
-			{
-				if (CHAT_SOURCE_AGENT != chat.mSourceType)
-				{
-					RlvUtil::filterNames(chat.mFromName);
-				}
-				else if (chat.mFromID != gAgent.getID())
-				{
-					chat.mFromName = RlvStrings::getAnonym(chat.mFromName);
-					chat.mRlvNamesFiltered = TRUE;
-				} 
-			}
-
-			// Create an "objectim" URL for objects if we're either @shownames or @showloc restricted
-			// (we need to do this now because we won't be have enough information to do it later on)
-			if ( (CHAT_SOURCE_OBJECT == chat.mSourceType) && 
-				 ((gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))) )
-			{
-				LLSD sdQuery;
-				sdQuery["name"] = chat.mFromName;
-				sdQuery["owner"] = owner_id;
-
-				if ( (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)) && (!is_owned_by_me) )
-					sdQuery["rlv_shownames"] = true;
-
-				const LLViewerRegion* pRegion = LLWorld::getInstance()->getRegionFromPosAgent(chat.mPosAgent);
-				if (pRegion)
-					sdQuery["slurl"] = LLSLURL(pRegion->getName(), chat.mPosAgent).getLocationString();
-
-				chat.mURL = LLSLURL("objectim", from_id, LLURI::mapToQueryString(sdQuery)).getSLURLString();
-			}
-		}
-// [/RLVa:KB]
 
 // [RLVa:KB] - Checked: 2010-04-23 (RLVa-1.2.0f) | Modified: RLVa-1.2.0f
 		if ( (rlv_handler_t::isEnabled()) && (CHAT_TYPE_START != chat.mChatType) && (CHAT_TYPE_STOP != chat.mChatType) )

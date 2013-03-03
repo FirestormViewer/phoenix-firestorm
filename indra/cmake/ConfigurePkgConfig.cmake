@@ -61,8 +61,15 @@ IF("$ENV{PKG_CONFIG_LIBDIR}" STREQUAL "")
   # Also add some non-architecture specific package locations.
   SET(VALID_PKG_LIBDIRS "${VALID_PKG_LIBDIRS}:/usr/share/pkgconfig:/usr/local/share/pkgconfig")
 
-  # Remove first unwanted ':'
-  string(SUBSTRING ${VALID_PKG_LIBDIRS} 1 -1 VALID_PKG_LIBDIRS)
+  # Remove first unwanted ':'                                                                                                                                                                                                                                                                                                  
+# <FS:ND> using -1 for remaining lengh is only valid since cmake 2.8,5
+#  string(SUBSTRING ${VALID_PKG_LIBDIRS} 1 -1 VALID_PKG_LIBDIRS)    
+
+  string( LENGTH ${VALID_PKG_LIBDIRS} VALID_PKG_LIBDIRS_LENGTH )
+  math( EXPR VALID_PKG_LIBDIRS_LENGTH ${VALID_PKG_LIBDIRS_LENGTH}-1 )
+  string( SUBSTRING ${VALID_PKG_LIBDIRS} 1 ${VALID_PKG_LIBDIRS_LENGTH} VALID_PKG_LIBDIRS )
+
+# </FS:ND>
 
   # Set PKG_CONFIG_LIBDIR environment.
   SET(ENV{PKG_CONFIG_LIBDIR} ${VALID_PKG_LIBDIRS})

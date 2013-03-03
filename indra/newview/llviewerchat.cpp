@@ -39,9 +39,9 @@
 #include "fskeywords.h"
 #include "lggcontactsets.h"
 #include "rlvhandler.h"
-#if LL_WINDOWS
-#include "growlmanager.h"
-#endif
+
+#include "growlmanager.h" // <FS:LO> Growl include
+
 
 // LLViewerChat
 LLViewerChat::font_change_signal_t LLViewerChat::sChatFontChangedSignal;
@@ -98,6 +98,19 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 				else if ( chat.mChatType == CHAT_TYPE_IM )
 				{
 					r_color = LLUIColorTable::instance().getColor("ObjectIMColor");
+					// <FS:LO> FIRE-5889: Object IM's Not Triggering Growl Notifications
+					std::string msg = chat.mFromName;
+					std::string prefix = chat.mText.substr(0, 4);
+					if(prefix == "/me " || prefix == "/me'")
+					{
+						msg = msg + chat.mText.substr(3);
+					}
+					else
+					{
+						msg = msg + ": " + chat.mText;
+					}
+					gGrowlManager->notify(chat.mFromName, msg, GROWL_IM_MESSAGE_TYPE);
+					// </FS:LO>
 				}
 				else
 				{
@@ -121,9 +134,9 @@ void LLViewerChat::getChatColor(const LLChat& chat, LLColor4& r_color, bool is_l
 			{
 				msg = msg + ": " + chat.mText;
 			}
-#if LL_WINDOWS
+			
 			gGrowlManager->notify("Keyword Alert", msg, "Keyword Alert");
-#endif
+			
 			static LLCachedControl<bool> sFSKeywordChangeColor(gSavedPerAccountSettings, "FSKeywordChangeColor");
 			if (sFSKeywordChangeColor)
 			{

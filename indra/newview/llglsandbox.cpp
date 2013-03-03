@@ -265,13 +265,6 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			}
 // [/RLVa:KB]
 
-// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
-			if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canEdit(vobjp)) )
-			{
-				continue;
-			}
-// [/RLVa:KB]
-
 			S32 result = LLViewerCamera::getInstance()->sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
 			if (result)
 			{

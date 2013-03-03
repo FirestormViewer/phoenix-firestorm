@@ -326,6 +326,7 @@ fi
 
 if [ $WANTS_CONFIG -eq $TRUE ] ; then
     echo "Configuring $PLATFORM..."
+    rm .configure_ok 2>/dev/null
 
     if [ $WANTS_KDU -eq $TRUE ] ; then
         KDU="-DUSE_KDU:BOOL=ON"
@@ -366,7 +367,9 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         TARGET="Visual Studio 10"
     fi
 
-    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    ( cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU && touch .configure_ok ) | tee $LOG
+
+    if [ ! -f .configure_ok ] ; then exit 1 ; fi
 
     if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
@@ -376,6 +379,8 @@ fi
 
 if [ $WANTS_BUILD -eq $TRUE ] ; then
     echo "Building $PLATFORM..."
+    rm .build_ok 2>/dev/null
+
     if [ $PLATFORM == "darwin" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=""
@@ -383,18 +388,20 @@ if [ $WANTS_BUILD -eq $TRUE ] ; then
             JOBS="-jobs $JOBS"
         fi
         if [ $OSTYPE == "darwin11" -o $OSTYPE == "darwin12" ] ; then
-            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+            ( xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj $JOBS GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 && touch .build_ok ) | tee -a $LOG
         else
-            xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 | tee -a $LOG
+            ( xcodebuild -configuration $BTYPE -project Firestorm.xcodeproj GCC_VERSION=4.2 GCC_OPTIMIZATION_LEVEL=3 GCC_ENABLE_SSE3_EXTENSIONS=YES 2>&1 && touch .build_ok ) | tee -a $LOG
         fi
     elif [ $PLATFORM == "linux32" -o $PLATFORM == "linux64" ] ; then
         if [ $JOBS == "0" ] ; then
             JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
         fi
-        make -j $JOBS | tee -a $LOG
+        ( make -j $JOBS && touch .build_ok )  | tee -a $LOG
     elif [ $PLATFORM == "win32" ] ; then
-        msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental"
+        ( msbuild.exe Firestorm.sln /flp:LogFile=logs\\FirestormBuild_win32.log /flp1:errorsonly;LogFile=logs\\FirestormBuild_win32.err /flp:LogFile=logs\\FirestormBuild_win32.log /p:Configuration=$BTYPE /p:Platform=Win32 /t:Build /p:useenv=true /verbosity:normal /toolsversion:4.0 /p:"VCBuildAdditionalOptions= /incremental" && touch .build_ok )
     fi
+
+    if [ -f .build_ok ] ; then exit 1; fi
 fi
 
 echo "Finished"

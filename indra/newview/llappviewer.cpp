@@ -5474,11 +5474,6 @@ void LLAppViewer::disconnectViewer()
 	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
 // [/SL:KB]
 
-// [SL:KB] - Patch: Appearance-Misc | Checked: 2013-02-12 (Catznip-3.4)
-	// Destroying all objects below will trigger attachment detaching code and attempt to remove the COF links for them
-	LLAppearanceMgr::instance().setAttachmentInvLinkEnable(false);
-// [/SL:KB]
-
 	gAgentWearables.cleanup();
 	gAgentCamera.cleanup();
 	// Also writes cached agent settings to gSavedSettings

@@ -840,7 +840,7 @@
       reference="White" />
   <color
       name="MenuNonProductionBgColor"
-     reference="Black" />
+     reference="Red" />
   <color
       name="MenuPopupBgColor"
       reference="DkGray_86" />
