@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
+ background_visible="true"
+ background_opaque="false"
  legacy_header_height="18"
  can_resize="true"
  height="200"
@@ -10,15 +12,16 @@
  title="[ALL SCRIPTS]"
  width="440">
     <text_editor
-     bottom="197"
+     bg_visible="false"
      follows="left|top|right|bottom"
-     height="176"
+     height="170"
      layout="topleft"
      max_length="16777216"
      name="Chat History Editor"
      parse_highlights="true" 
      read_only="true"
-     width="420"
+     width="438"
+     top="25"
      track_bottom="true" 
      word_wrap="true" />
 </floater>

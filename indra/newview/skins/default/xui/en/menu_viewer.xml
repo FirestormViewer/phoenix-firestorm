@@ -1317,6 +1317,12 @@
            name="Scripts"
            tear_off="true">
           <menu_item_call
+             label="Show Script Warnings/Errors"
+             name="Script Debug">
+            <menu_item_call.on_click
+               function="ShowScriptDebug" />
+          </menu_item_call>
+          <menu_item_call
              label="Script Info (Counter)"
              name="Script Info">
             <menu_item_call.on_click

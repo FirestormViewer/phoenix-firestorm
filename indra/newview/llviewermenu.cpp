@@ -10322,4 +10322,7 @@ void initialize_menus()
 	commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
 	commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Script debug floater
+	commit.add("ShowScriptDebug", boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
 }
