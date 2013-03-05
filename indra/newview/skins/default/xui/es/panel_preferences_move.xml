@@ -17,6 +17,8 @@
 			<check_box label="Activar la funcionalidad de vista subjetiva" name="EnableMouselook" tool_tip="Permite una perspectiva de primera persona y el contról de la cámara con el ratón"/>
 			<check_box label="Mostrar mi avatar en vista subjetiva" name="first_person_avatar_visible"/>
 			<check_box label="Mostrar interfaz de usuario en vista subjetiva" name="first_person_ui_visible"/>
+			<check_box label="Activa menús contextuales en vista sujetiva" name="FSEnableRightclickMenuInMouselook" tool_tip="En modo de vista subjetiva, ALT + botón derecho del ratón abritá el menú contextual/tarta"/>
+			<check_box label="Salir de la vista subjetiva al recuperar el foco" name="exit_mouselook_focus_on_focus" tool_tip="Abandona la vista subjetiva si Firestorm vuelve a obtener el foco tras haber estado funcionando en segundo plano."/>
 			<check_box label="Mostrar instrucciones de vista subjetiva" name="mouselook_instructions_visible" tool_tip=""/>
 			<check_box label="Mostrar puntos de mira en vista subjetiva" name="ShowCrosshairs" tool_tip="Muestra los puntos de mira cuando te encuentras en vista subjetiva"/>
 			<text name="Mouse Sensitivity" width="220">

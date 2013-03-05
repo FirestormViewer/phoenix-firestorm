@@ -155,6 +155,7 @@
 			<menu_item_call label="Devolver objeto" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Scripts" name="Scripts">
+			<menu_item_call label="Mostrar advertencias/errores de script" name="Script Debug"/>
 			<menu_item_call label="Información de scripts (contador)" name="Script Info"/>
 			<menu_item_call label="Recompilar los scripts (Mono)" name="Mono"/>
 			<menu_item_call label="Recompilar los scripts (LSL)" name="LSL"/>

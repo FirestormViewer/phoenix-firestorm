@@ -29,4 +29,5 @@
 	<menu_item_call label="Grupos" name="Groups..."/>
 	<menu_item_call label="Perfil" name="Profile..."/>
 	<menu_item_call label="Depurar texturas" name="Debug..."/>
+	<menu_item_call label="Volcar XML" name="Dump XML"/>
 </context_menu>
