@@ -81,6 +81,11 @@ namespace LLAvatarNameCache
 	void setUseDisplayNames(bool use);
 	bool useDisplayNames();
 
+// [RLVa:KB] - Checked: 2010-12-08 (RLVa-1.4.0a) | Added: RLVa-1.2.2c
+	bool getForceDisplayNames();
+	void setForceDisplayNames(bool force);
+// [/RLVa:KB]
+
 	void erase(const LLUUID& agent_id);
 
     /// Provide some fallback for agents that return errors

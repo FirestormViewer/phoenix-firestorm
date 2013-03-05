@@ -37,6 +37,9 @@
 #include "llviewercontrol.h"
 #include "llviewerregion.h"		// getCapability()
 #include "llworld.h"
+// [RLVa:KB] - Checked: 2010-06-04 (RLVa-1.2.2a)
+#include "rlvhandler.h"
+// [/RLVa:KB]
 
 // Linden libraries
 #include "llavatarnamecache.h"	// IDEVO
@@ -260,6 +263,22 @@ void LLFloaterAvatarPicker::onRangeAdjust()
 void LLFloaterAvatarPicker::onList()
 {
 	getChildView("ok_btn")->setEnabled(isSelectBtnEnabled());
+
+// [RLVa:KB] - Checked: 2010-06-05 (RLVa-1.2.2a) | Modified: RLVa-1.2.0d
+	if (rlv_handler_t::isEnabled())
+	{
+		LLTabContainer* pTabs = getChild<LLTabContainer>("ResidentChooserTabs");
+		LLPanel* pNearMePanel = getChild<LLPanel>("NearMePanel");
+		RLV_ASSERT( (pTabs) && (pNearMePanel) );
+		if ( (pTabs) && (pNearMePanel) )
+		{
+			bool fRlvEnable = !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+			pTabs->enableTabButton(pTabs->getIndexForPanel(pNearMePanel), fRlvEnable);
+			if ( (!fRlvEnable) && (pTabs->getCurrentPanel() == pNearMePanel) )
+				pTabs->selectTabByName("SearchPanel");
+		}
+	}
+// [/RLVa:KB]
 }
 
 void LLFloaterAvatarPicker::populateNearMe()
@@ -515,7 +534,10 @@ BOOL LLFloaterAvatarPicker::handleDragAndDrop(S32 x, S32 y, MASK mask,
 				std::string avatar_name = selection->getColumn(0)->getValue().asString();
 				if (dest_agent_id.notNull() && dest_agent_id != gAgentID)
 				{
-					if (drop)
+//					if (drop)
+// [RLVa:KB] - Checked: 2011-04-11 (RLVa-1.3.0h) | Added: RLVa-1.3.0h
+					if ( (drop) && ( (!rlv_handler_t::isEnabled()) || (gRlvHandler.canStartIM(dest_agent_id)) ) )
+// [/RLVa:KB]
 					{
 						// Start up IM before give the item
 						session_id = gIMMgr->addSession(avatar_name, IM_NOTHING_SPECIAL, dest_agent_id);
