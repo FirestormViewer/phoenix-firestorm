@@ -153,6 +153,7 @@
 			<menu_item_call label="Zwróć obiekt" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Skrypty" name="Scripts">
+			<menu_item_call label="Ostrzeżenia/błędy skryptów" name="Script Debug"/>
 			<menu_item_call label="Info o skryptach (Licznik)" name="Script Info"/>
 			<menu_item_call label="Zrekompiluj skrypty (Mono)" name="Mono"/>
 			<menu_item_call label="Zrekompiluj skrypty (LSL)" name="LSL"/>
