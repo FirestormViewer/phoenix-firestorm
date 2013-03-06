@@ -219,6 +219,16 @@ BOOL LLFloaterBvhPreview::postBuild()
 	
 	mStopButton = getChild<LLButton>( "stop_btn");
 	mStopButton->setClickedCallback(boost::bind(&LLFloaterBvhPreview::onBtnStop, this));
+	
+// <FS:CR> Allow Higher priority animations to be uploaded
+	LLSpinCtrl* spinner = getChild<LLSpinCtrl>("priority");
+	U32 max_value = gSavedSettings.getU32("FSMaxAnimationPriority");
+	// Never allow a higher priority than 7 because that's ridiculous.
+	if (max_value > 7) max_value = 7;
+	// Also, disallow setting to 0 because that's stupidness.
+	if (max_value < 1) max_value = 1;
+	spinner->setMaxValue(max_value);
+// </FS:CR>
 
 	loadBVH();
 
