@@ -10,8 +10,8 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef FS_FSFLOATERPOSESTAND_H
-#define FS_FSFLOATERPOSESTAND_H
+#ifndef FS_FLOATERPOSESTAND_H
+#define FS_FLOATERPOSESTAND_H
 
 #include "llfloater.h"
 #include "llcombobox.h"

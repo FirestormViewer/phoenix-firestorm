@@ -29,6 +29,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef FS_LSLPREPROC_H
+#define FS_LSLPREPROC_H
+
 #include "llviewerprecompiledheaders.h"
 #include "llpreviewscript.h"
 
@@ -83,3 +86,5 @@ public:
 	BOOL mHDDInclude;
 	std::string mMainScriptName;
 };
+
+#endif // FS_LSLPREPROC_H

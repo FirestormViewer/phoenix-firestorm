@@ -11,8 +11,8 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
-#ifndef  LGGBEAMCOLORDATA
-#define LGGBEAMCOLORDATA
+#ifndef LGG_BEAMSCOLORS_H
+#define LGG_BEAMSCOLORS_H
 
 #include "llviewerprecompiledheaders.h"
 
@@ -41,4 +41,4 @@ public:
 	// List sorted by name.
 };
 
-#endif
+#endif // LGG_BEAMSCOLORS_H

@@ -16,8 +16,8 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
    02111-1307, USA.  */
 
-#ifndef LGG_FRIENDS_GROUPS_H
-#define LGG_FRIENDS_GROUPS_H
+#ifndef LGG_CONTACTSETS_H
+#define LGG_CONTACTSETS_H
 
 #include "v4color.h"
 
@@ -88,4 +88,4 @@ private:
 
 };
 
-#endif 
+#endif // LGG_CONTACTSETS_H

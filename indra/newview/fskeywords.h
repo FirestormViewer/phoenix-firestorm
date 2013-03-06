@@ -1,3 +1,5 @@
+#ifndef FS_KEYWORDS_H
+#define FS_KEYWORDS_H
 
 #include "llsingleton.h"
 #include "llstring.h"
@@ -20,3 +22,5 @@ private:
 	
 	
 };
+
+#endif // FS_KEYWORDS_H

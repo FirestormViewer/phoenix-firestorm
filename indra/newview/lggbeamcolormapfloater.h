@@ -11,6 +11,8 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#ifndef LGG_BEAMCOLORMAPFLOATER_H
+#define LGG_BEAMCOLORMAPFLOATER_H
 
 #include "llviewerprecompiledheaders.h"
 
@@ -70,3 +72,5 @@ protected:
 	LLSliderCtrl* mColorSlider;
 
 };
+
+#endif // LGG_BEAMCOLORMAPFLOATER_H

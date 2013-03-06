@@ -22,6 +22,9 @@
  * http://www.firestormviewer.org
  */
 
+#ifndef KC_WLINTERFACE_H
+#define KC_WLINTERFACE_H
+
 #include "llviewerprecompiledheaders.h"
 #include "llsingleton.h"
 #include "lleventtimer.h"
@@ -79,3 +82,5 @@ protected:
 	bool mHaveRegionSettings;
 	bool mDisabled; // control bool to clear all states after being disabled
 };
+
+#endif // KC_WLINTERFACE_H
