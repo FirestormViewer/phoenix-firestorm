@@ -127,6 +127,7 @@ set(viewer_SOURCE_FILES
     fsfloaterblocklist.cpp
     fsfloatergroup.cpp
     fsfloaterplacedetails.cpp
+    fsfloaterposestand.cpp
     fsfloaterprofile.cpp
     fsfloatersearch.cpp
     fsfloaterteleporthistory.cpp
@@ -775,6 +776,7 @@ set(viewer_HEADER_FILES
     fsfloaterblocklist.h
     fsfloatergroup.h
     fsfloaterplacedetails.h
+    fsfloaterposestand.h
     fsfloaterprofile.h
     fsfloatersearch.h
     fsfloaterteleporthistory.h
