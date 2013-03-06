@@ -144,6 +144,7 @@ set(viewer_SOURCE_FILES
     fspanelprefs.cpp
     fspanelprofile.cpp
     fspanelprofileclassifieds.cpp
+    fspose.cpp
     fsradarlistctrl.cpp
     fsslurlcommand.cpp
     fswsassetblacklist.cpp
@@ -794,6 +795,7 @@ set(viewer_HEADER_FILES
     fspanelprefs.h
     fspanelprofile.h
     fspanelprofileclassifieds.h
+    fspose.h
     fsradarlistctrl.h
     fsslurl.h
     fsslurlcommand.h

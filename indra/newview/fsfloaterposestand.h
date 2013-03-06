@@ -29,12 +29,9 @@ private:
 	virtual void onOpen(const LLSD& key);
 	virtual void onClose(bool app_quitting);
 	void loadPoses();
-	void stopPose();
 	void onCommitCombo();
-	void setPose(std::string new_pose);
 	
 	LLComboBox* mComboPose;
-	LLUUID	mCurrentPose;
 };
 
 #endif // FS_FLOATERPOSESTAND_H

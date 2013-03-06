@@ -13,13 +13,11 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsfloaterposestand.h"
 
-#include "llagent.h"
+#include "fspose.h"
 #include "llsdserialize.h"
-#include "llvoavatarself.h"
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
-	mCurrentPose(LLUUID::null),
 	mComboPose(NULL)
 {
 }
@@ -47,7 +45,7 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 // virtual
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
-	stopPose();
+	FSPose::getInstance()->stopPose();
 }
 
 void FSFloaterPoseStand::loadPoses()
@@ -71,25 +69,5 @@ void FSFloaterPoseStand::loadPoses()
 void FSFloaterPoseStand::onCommitCombo()
 {
 	std::string selected_pose = mComboPose->getValue();
-	setPose(selected_pose);
-}
-
-void FSFloaterPoseStand::setPose(std::string new_pose)
-{
-	if (isAgentAvatarValid())
-	{
-		if (mCurrentPose.notNull())
-			gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
-		mCurrentPose.set(new_pose);
-		gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_START);
-	}
-}
-
-void FSFloaterPoseStand::stopPose()
-{
-	if (isAgentAvatarValid() && mCurrentPose != LLUUID::null)
-	{
-		gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
-		mCurrentPose.setNull();
-	}
+	FSPose::getInstance()->setPose(selected_pose);
 }
