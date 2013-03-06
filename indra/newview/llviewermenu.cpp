@@ -138,6 +138,7 @@
 #include "llvovolume.h"
 #include "particleeditor.h"
 #include "piemenu.h"	// ## Zi: Pie Menu
+#include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -8648,7 +8649,18 @@ class FSToolsResyncAnimations : public view_listener_t
 		return true;
 	}
 };
-// </FS:CR>
+// </FS:CR> Resync Animations
+
+// <FS:CR> FIRE-4345: Undeform
+class FSToolsUndeform : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		FSPose::getInstance()->setPose("44e98907-3764-119f-1c13-cba9945d2ff4");
+		return true;
+	}
+};
+// </FS:CR> FIRE-4345: Undeform
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
@@ -9945,6 +9957,7 @@ void initialize_menus()
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
 	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
+	view_listener_t::addMenu(new FSToolsUndeform(), "Tools.Undeform");	// <FS:CR> FIRE-4345: Undeform
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");
