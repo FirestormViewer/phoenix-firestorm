@@ -333,6 +333,7 @@ BOOL FloaterQuickPrefs::postBuild()
 	// add global and per account settings to the dropdown
 	gSavedSettings.applyToAll(&func);
 	gSavedPerAccountSettings.applyToAll(&func);
+	mControlNameCombo->sortByName();
 	// </FS:Zi>
 
 	return LLDockableFloater::postBuild();
