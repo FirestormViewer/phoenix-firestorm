@@ -4893,9 +4893,6 @@ void LLAgent::sendAgentSetAppearance()
 	}
 	
 
-
-	if (!isAgentAvatarValid() || (getRegion() && getRegion()->getCentralBakeVersion())) return;
-
 	LL_INFOS("Avatar") << gAgentAvatarp->avString() << "TAT: Sent AgentSetAppearance: " << gAgentAvatarp->getBakedStatusForPrintout() << LL_ENDL;
 	//dumpAvatarTEs( "sendAgentSetAppearance()" );
 
