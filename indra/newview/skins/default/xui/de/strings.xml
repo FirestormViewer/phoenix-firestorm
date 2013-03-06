@@ -3110,6 +3110,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="Hip Width">
 		Breite der Hüfte
 	</string>
+	<string name="Hover">
+		Schweben
+	</string>
 	<string name="In">
 		In
 	</string>
