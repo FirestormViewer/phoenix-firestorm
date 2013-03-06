@@ -41,7 +41,7 @@ BOOL FSFloaterPoseStand::postBuild()
 // virtual
 void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
-	setPose(mCurrentPose.asString());
+	onCommitCombo();
 }
 
 // virtual
