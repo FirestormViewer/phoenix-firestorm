@@ -15,6 +15,7 @@
 
 #include "fspose.h"
 #include "llsdserialize.h"
+#include "lltrans.h"
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
@@ -59,7 +60,7 @@ void FSFloaterPoseStand::loadPoses()
 		{
 			for(LLSD::map_iterator p_itr = poses.beginMap(); p_itr != poses.endMap(); ++p_itr)
 			{
-				mComboPose->add(p_itr->second["name"], LLUUID(p_itr->first));
+				mComboPose->add(LLTrans::getString(p_itr->second["name"]), LLUUID(p_itr->first));
 			}
 		}
 		pose_file.close();
