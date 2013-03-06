@@ -584,7 +584,6 @@ BOOL LLInventoryModelFetchDescendentsResponder::getIsRecursive(const LLUUID& cat
 {
 	return (std::find(mRecursiveCatUUIDs.begin(),mRecursiveCatUUIDs.end(), cat_id) != mRecursiveCatUUIDs.end());
 }
-
 // Bundle up a bunch of requests to send all at once.
 // static   
 void LLInventoryModelBackgroundFetch::bulkFetch()

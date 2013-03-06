@@ -138,6 +138,7 @@
 #include "llvovolume.h"
 #include "particleeditor.h"
 #include "piemenu.h"	// ## Zi: Pie Menu
+#include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -7123,6 +7124,7 @@ bool update_grid_help()
 		}
 	}
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
+	gMenuHolder->childSetVisible("Avatar Phantom", LLGridManager::getInstance()->isInOpenSim());	// <FS:CR> Phantom mode still works on opensim, so allow it there
 #endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
@@ -8648,7 +8650,18 @@ class FSToolsResyncAnimations : public view_listener_t
 		return true;
 	}
 };
-// </FS:CR>
+// </FS:CR> Resync Animations
+
+// <FS:CR> FIRE-4345: Undeform
+class FSToolsUndeform : public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"));
+		return true;
+	}
+};
+// </FS:CR> FIRE-4345: Undeform
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
@@ -9945,6 +9958,7 @@ void initialize_menus()
 	// <FS:Ansariel> FIRE-304: Option to exclude group owned objects
 	view_listener_t::addMenu(new FSToolSelectIncludeGroupOwned(), "Tools.SelectIncludeGroupOwned");
 	view_listener_t::addMenu(new FSToolsResyncAnimations(), "Tools.ResyncAnimations");	// <FS:CR> Resync Animations
+	view_listener_t::addMenu(new FSToolsUndeform(), "Tools.Undeform");	// <FS:CR> FIRE-4345: Undeform
 
 	view_listener_t::addMenu(new LLToolsEnableToolNotPie(), "Tools.EnableToolNotPie");
 	view_listener_t::addMenu(new LLToolsEnableSelectNextPart(), "Tools.EnableSelectNextPart");
@@ -10322,4 +10336,7 @@ void initialize_menus()
 	commit.add("Camera.StoreView", boost::bind(&LLAgentCamera::storeCameraPosition, &gAgentCamera));
 	commit.add("Camera.LoadView", boost::bind(&LLAgentCamera::loadCameraPosition, &gAgentCamera));
 	// </FS:Ansariel>
+
+	// <FS:Ansariel> Script debug floater
+	commit.add("ShowScriptDebug", boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
 }

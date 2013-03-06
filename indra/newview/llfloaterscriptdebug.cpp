@@ -72,6 +72,11 @@ BOOL LLFloaterScriptDebug::postBuild()
 {
 	LLMultiFloater::postBuild();
 
+	// <FS:Ansariel> Disconnect close signal. It would call closeAllFloaters()
+	//               and the floaters in the tabs will be gone since LL
+	//               messed with the floater instance handling!
+	mCloseSignal.disconnect_all_slots();
+
 	if (mTabContainer)
 	{
 		return TRUE;
@@ -106,7 +111,7 @@ void LLFloaterScriptDebug::addScriptLine(const std::string &utf8mesg, const std:
 	if (objectp)
 	{
 		objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", TRUE, LLGLTexture::BOOST_UI));
-		floater_label = llformat("%s(%.0f, %.0f, %.0f)",
+		floater_label = llformat("%s (%.0f, %.0f, %.0f)",
 						user_name.c_str(),
 						objectp->getPositionRegion().mV[VX],
 						objectp->getPositionRegion().mV[VY],

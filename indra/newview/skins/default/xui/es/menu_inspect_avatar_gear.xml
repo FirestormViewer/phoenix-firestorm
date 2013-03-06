@@ -14,6 +14,7 @@
 	<menu_item_call label="Expulsar" name="kick"/>
 	<menu_item_call label="CSR" name="csr"/>
 	<menu_item_call label="Depurar las texturas" name="debug"/>
+	<menu_item_call label="Volcar XML" name="Dump XML"/>
 	<menu_item_call label="Encontrar en el mapa" name="find_on_map"/>
 	<menu_item_call label="Acercar el zoom" name="zoom_in"/>
 	<menu_item_call label="Pagar" name="pay"/>

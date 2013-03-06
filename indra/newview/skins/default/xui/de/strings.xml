@@ -3110,6 +3110,9 @@ Falls diese Meldung weiterhin angezeigt wird, wenden Sie sich bitte an [SUPPORT_
 	<string name="Hip Width">
 		Breite der Hüfte
 	</string>
+	<string name="Hover">
+		Schweben
+	</string>
 	<string name="In">
 		In
 	</string>
@@ -5571,5 +5574,40 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="QP Color Under Cursor">
 		Farbe unter Cursor
+	</string>
+	
+	<!-- <FS:Ansariel> Posestand animation names -->
+	<string name="PS_T_Pose">
+		T-Pose
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Arme unten, Beine zusammen
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Arme unten, sitzend
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Arme abwärts, Beine zusammen
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Arme abwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_foreward_Legs_apart">
+		Arme nach vorn, Beine auseinander
+	</string>
+	<string name="PS_Arms_foreward_Legs_together">
+		Arme nach vorn, Beine zusammen
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Arme gerade, Beine auseinander
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Arme gerade, sitzend
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Arme aufwärts, Beine auseinander
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Arme aufwärts, Beine zusammen
 	</string>
 </strings>

@@ -25,6 +25,7 @@
         <menu_item_check label="Kamerasteuerung" name="Camera Controls"/>
 		<menu label="Avatar-Befinden" name="avhealth">
 			<menu_item_call label="Avatar-Animationen stoppen" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Avatar undeformieren" name="undeform_avatar"/>
 			<menu_item_call label="Aktualisiere Aussehen (Rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Auf männlichen Standard-Avatar zurücksetzen" name="ResetDefaultAvM"/>
             <menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
@@ -33,6 +34,7 @@
 			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
+		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
 		<menu label="Hochladen" name="Upload">
 			<menu_item_call label="Bild ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Sound ([COST])..." name="Upload Sound"/>
@@ -158,13 +160,14 @@
 			<menu_item_call label="Objekt zurückgeben" name="Return Object back to Owner"/>
 		</menu>
 		<menu label="Skripte" name="Scripts">
+			<menu_item_call label="Skriptwarnungen/Fehler anzeigen" name="Script Debug"/>
+			<menu_item_call label="Skript-Info (Counter)" name="Script Info"/>
 			<menu_item_call label="Skripte rekompilieren (Mono)" name="Mono"/>
 			<menu_item_call label="Skripte rekompilieren (LSL)" name="LSL"/>
 			<menu_item_call label="Skripte zurücksetzen" name="Reset Scripts"/>
 			<menu_item_call label="Skripte auf ausführen einstellen" name="Set Scripts to Running"/>
 			<menu_item_call label="Skripte auf nicht ausführen einstellen" name="Set Scripts to Not Running"/>
 			<menu_item_call label="Skripte in Auswahl löschen" name="Remove Scripts From Selection"/>
-			<menu_item_call label="Skript-Info (Counter)" name="Script Info"/>
 		</menu>
 		<menu label="Pathfinding" name="Pathfinding">
 			<menu_item_call label="Linksets..." name="pathfinding_linksets_menu_item"/>

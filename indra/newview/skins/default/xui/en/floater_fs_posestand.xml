@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<floater
+	height="48"
+	width="250"
+	help_topic="pose_stand"
+	layout="topleft"
+	legacy_header_height="18"
+	name="floater_fs_posestand"
+	single_instance="true"
+	title="Pose Stand">
+	<combo_box
+		follows="right|top"
+		layout="topleft"
+		height="23"
+		allow_text_entry="false"
+		top="20"
+		left="5"
+		name="pose_combo"
+		width="240"/>
+</floater>
+

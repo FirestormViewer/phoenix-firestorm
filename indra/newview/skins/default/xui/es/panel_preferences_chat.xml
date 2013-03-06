@@ -79,7 +79,8 @@
 			<check_box label="Chats de grupo" name="EnableGroupChatPopups" tool_tip="Activa esta casilla para ver una ventana emergente cada vez que recibas un mensaje de un chat de grupo"/>
 			<check_box label="Chats de MI" name="EnableIMChatPopups" tool_tip="Activa esta casilla para ver una ventana emergente cada vez que recibas un mensaje instantáneo"/>
 			<check_box name="FSUseNearbyChatConsole" label="Usar la consola para los mensajes de chat en vez de &quot;tostadas&quot; (estilo Viewer 1.x)"/>
-			<check_box name="FSLogImToChatConsole" label="Mostrar los MI y los chats de grupo en consola"/>
+			<check_box name="FSLogImToChatConsole" label="Mostrar los MI en la consola"/>
+			<check_box name="FSLogGroupImToChatConsole" label="Mostrar chats de grupo en la consola"/>
 			<text name="FSShowGroupNameLength_label" width="380">
 				Longitud del nombre del grupo a mostrar en el historial de chat
 			</text>

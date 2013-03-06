@@ -145,6 +145,9 @@ protected:
 	virtual void		buildCharacter();
 	virtual BOOL		loadAvatar();
 	virtual void		bodySizeChanged() = 0;
+// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
+	virtual F32			getAvatarOffset() /*const*/;
+// [/RLVa:KB]
 
 	BOOL				setupBone(const LLAvatarBoneInfo* info, LLJoint* parent, S32 &current_volume_num, S32 &current_joint_num);
 	BOOL				allocateCharacterJoints(U32 num);
@@ -160,6 +163,7 @@ protected:
 	//--------------------------------------------------------------------
 public:
 	LLVector3			mBodySize;
+	LLVector3			mAvatarOffset;
 protected:
 	F32					mPelvisToFoot;
 

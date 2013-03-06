@@ -3956,6 +3956,7 @@ If you continue to receive this message, contact the [SUPPORT_SITE].
 <string name="Higher">Higher</string>
 <string name="Hip Length">Hip Length</string>
 <string name="Hip Width">Hip Width</string>
+<string name="Hover">Hover</string>
 <string name="In">In</string>
 <string name="In Shdw Color">Inner Shadow Color</string>
 <string name="In Shdw Opacity">Inner Shadow Opacity</string>
@@ -5042,4 +5043,17 @@ Try enclosing path to the editor with double quotes.
   <string name="QP Name Tags">Name Tags</string>
   <string name="QP LookAt Target">LookAt Target</string>
   <string name="QP Color Under Cursor">Color Under Cursor</string>
+
+  <!-- <FS:Ansariel> Posestand animation names -->
+  <string name="PS_T_Pose">T-Pose</string>
+  <string name="PS_Arms_Down_Legs_together">Arms Down, Legs together</string>
+  <string name="PS_Arms_down_sitting">Arms down, sitting</string>
+  <string name="PS_Arms_downward_Legs_together">Arms downward, Legs together</string>
+  <string name="PS_Arms_downward_Legs_apart">Arms downward, Legs apart</string>
+  <string name="PS_Arms_foreward_Legs_apart">Arms foreward, Legs apart</string>
+  <string name="PS_Arms_foreward_Legs_together">Arms foreward, Legs together</string>
+  <string name="PS_Arms_straight_Legs_apart">Arms straight, Legs apart</string>
+  <string name="PS_Arms_straight_sitting">Arms straight, sitting</string>
+  <string name="PS_Arms_upward_Legs_apart">Arms upward, Legs apart</string>
+  <string name="PS_Arms_upward_Legs_together">Arms upward, Legs together</string>
 </strings>
