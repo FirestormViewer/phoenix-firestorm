@@ -8656,7 +8656,7 @@ class FSToolsUndeform : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		FSPose::getInstance()->setPose("44e98907-3764-119f-1c13-cba9945d2ff4");
+		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"));
 		return true;
 	}
 };
