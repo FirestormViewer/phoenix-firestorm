@@ -359,6 +359,11 @@ public:
 public:
 	bool			sendAppearanceMessage(LLMessageSystem *mesgsys) const;
 
+// [RLVa:KB] - Checked: 2013-03-03 (RLVa-1.4.8)
+protected:
+	/*virtual*/ F32	getAvatarOffset() /*const*/;
+// [/RLVa:KB]
+
 /**                    Appearance
  **                                                                            **
  *******************************************************************************/

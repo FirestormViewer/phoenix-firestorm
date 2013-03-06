@@ -209,11 +209,6 @@ enum ERenderName
 	RENDER_NAME_FADE
 };
 
-
-// Utility func - FIXME move out of avatar.
-std::string get_sequential_numbered_file_name(const std::string& prefix,
-											  const std::string& suffix);
-
 //-----------------------------------------------------------------------------
 // Callback data
 //-----------------------------------------------------------------------------
@@ -233,6 +228,24 @@ struct LLTextureMaskData
  ** Begin private LLVOAvatar Support classes
  **
  **/
+
+struct LLAppearanceMessageContents
+{
+	LLAppearanceMessageContents():
+		mAppearanceVersion(-1),
+		mParamAppearanceVersion(-1),
+		mCOFVersion(LLViewerInventoryCategory::VERSION_UNKNOWN)
+	{
+	}
+	LLTEContents mTEContents;
+	S32 mAppearanceVersion;
+	S32 mParamAppearanceVersion;
+	S32 mCOFVersion;
+	// For future use:
+	//U32 appearance_flags = 0;
+	std::vector<F32> mParamWeights;
+	std::vector<LLVisualParam*> mParams;
+};
 
 //-----------------------------------------------------------------------------
 // class LLBodyNoiseMotion
@@ -1929,7 +1942,8 @@ void LLVOAvatar::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 		return;
 	}	
 
- 	if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_AVATAR)))
+	if (!(gPipeline.hasRenderType(LLPipeline::RENDER_TYPE_AVATAR))
+		&& !(gSavedSettings.getBOOL("DisableAllRenderTypes")))
 	{
 		return;
 	}
@@ -2131,7 +2145,7 @@ void LLVOAvatar::idleUpdateVoiceVisualizer(bool voice_enabled)
 		{
 			LLVector3 tagPos = mRoot->getWorldPosition();
 			tagPos[VZ] -= mPelvisToFoot;
-			tagPos[VZ] += ( mBodySize[VZ] + 0.125f );
+			tagPos[VZ] += ( mBodySize[VZ] + mAvatarOffset[VZ] + 0.125f );
 			mVoiceVisualizer->setVoiceSourceWorldPosition( tagPos );
 		}
 	}//if ( voiceEnabled )
@@ -3072,12 +3086,12 @@ LLVector3 LLVOAvatar::idleUpdateNameTagPosition(const LLVector3& root_pos_last)
 	local_camera_up.normalize();
 	local_camera_up = local_camera_up * ~root_rot;
 
-	local_camera_up.scaleVec(mBodySize * 0.5f);
-	local_camera_at.scaleVec(mBodySize * 0.5f);
+	local_camera_up.scaleVec((mBodySize + mAvatarOffset) * 0.5f);
+	local_camera_at.scaleVec((mBodySize + mAvatarOffset) * 0.5f);
 
 	LLVector3 name_position = mRoot->getWorldPosition();
 	name_position[VZ] -= mPelvisToFoot;
-	name_position[VZ] += (mBodySize[VZ]* 0.55f);
+	name_position[VZ] += ((mBodySize[VZ] + mAvatarOffset[VZ])* 0.55f);
 	name_position += (local_camera_up * root_rot) - (projected_vec(local_camera_at * root_rot, camera_to_av));	
 	name_position += pixel_up_vec * 15.f;
 
@@ -3396,6 +3410,8 @@ BOOL LLVOAvatar::updateCharacter(LLAgent &agent)
 		}
 
 		root_pos = gAgent.getPosGlobalFromAgent(getRenderPosition());
+		root_pos.mdV[VZ] += getVisualParamWeight(11001);
+
 
 		resolveHeightGlobal(root_pos, ground_under_pelvis, normal);
 		F32 foot_to_ground = (F32) (root_pos.mdV[VZ] - mPelvisToFoot - ground_under_pelvis.mdV[VZ]);				
@@ -4387,22 +4403,40 @@ std::string LLVOAvatar::bakedTextureOriginInfo()
 	
 	std::set<LLUUID> baked_ids;
 	collectBakedTextureUUIDs(baked_ids);
-	for (std::set<LLUUID>::const_iterator it = baked_ids.begin(); it != baked_ids.end(); ++it)
+	for (U32 i = 0; i < mBakedTextureDatas.size(); i++)
 	{
-		LLViewerFetchedTexture *imagep = gTextureList.findImage(*it);
-		bool has_url = false, has_host = false;
-		if (!imagep->getUrl().empty())
+		ETextureIndex texture_index = mBakedTextureDatas[i].mTextureIndex;
+		LLViewerFetchedTexture *imagep =
+			LLViewerTextureManager::staticCastToFetchedTexture(getImage(texture_index,0), TRUE);
+		if (!imagep ||
+			imagep->getID() == IMG_DEFAULT ||
+			imagep->getID() == IMG_DEFAULT_AVATAR)
+			
 		{
-			has_url = true;
+			result += "-";
 		}
-		if (imagep->getTargetHost().isOk())
+		else
 		{
-			has_host = true;
+			bool has_url = false, has_host = false;
+			if (!imagep->getUrl().empty())
+			{
+				has_url = true;
+			}
+			if (imagep->getTargetHost().isOk())
+			{
+				has_host = true;
+			}
+			S32 discard = imagep->getDiscardLevel();
+			if (has_url && !has_host) result += discard ? "u" : "U"; // server-bake texture with url 
+			else if (has_host && !has_url) result += discard ? "h" : "H"; // old-style texture on sim
+			else if (has_host && has_url) result += discard ? "x" : "X"; // both origins?
+			else if (!has_host && !has_url) result += discard ? "n" : "N"; // no origin?
+			if (discard != 0)
+			{
+				result += llformat("(%d/%d)",discard,imagep->getDesiredDiscardLevel());
+			}
 		}
-		if (has_url && !has_host) result += "u"; // server-bake texture with url 
-		else if (has_host && !has_url) result += "h"; // old-style texture on sim
-		else if (has_host && has_url) result += "?"; // both origins?
-		else if (!has_host && !has_url) result += "n"; // no origin?
+
 	}
 	return result;
 }
@@ -6276,6 +6310,7 @@ void LLVOAvatar::updateRezzedStatusTimers()
 			for (S32 i = 1; i < 4; i++)
 			{
 				startPhase("load_" + LLVOAvatar::rezStatusToString(i));
+				startPhase("first_load_" + LLVOAvatar::rezStatusToString(i));
 			}
 		}
 		if (rez_status < mLastRezzedStatus)
@@ -6292,6 +6327,7 @@ void LLVOAvatar::updateRezzedStatusTimers()
 			for (S32 i = llmax(mLastRezzedStatus+1,1); i <= rez_status; i++)
 			{
 				stopPhase("load_" + LLVOAvatar::rezStatusToString(i));
+				stopPhase("first_load_" + LLVOAvatar::rezStatusToString(i), false);
 			}
 			if (rez_status == 3)
 			{
@@ -6521,6 +6557,8 @@ LLMotion* LLVOAvatar::findMotion(const LLUUID& id) const
 	return mMotionController.findMotion(id);
 }
 
+// This is a semi-deprecated debugging tool - meshes will not show as
+// colorized if using deferred rendering.
 void LLVOAvatar::debugColorizeSubMeshes(U32 i, const LLColor4& color)
 {
 	if (gSavedSettings.getBOOL("DebugAvatarCompositeBaked"))
@@ -6635,29 +6673,7 @@ void LLVOAvatar::updateMeshTextures()
 		LLViewerTexLayerSet* layerset = getTexLayerSet(i);
 		if (use_lkg_baked_layer[i] && !isUsingLocalAppearance() )
 		{
-			LLViewerFetchedTexture* baked_img;
-#ifndef LL_RELEASE_FOR_DOWNLOAD
-			LLViewerFetchedTexture* existing_baked_img = LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[i].mLastTextureID);
-#endif
-			ETextureIndex te = ETextureIndex(mBakedTextureDatas[i].mTextureIndex);
-			const std::string url = getImageURL(te, mBakedTextureDatas[i].mLastTextureID);
-			if (!url.empty())
-			{
-				baked_img = LLViewerTextureManager::getFetchedTextureFromUrl(url, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE, 0, 0, mBakedTextureDatas[i].mLastTextureID);
-			}
-			else
-			{
-				// Baked textures should be requested from the sim this avatar is on. JC
-				const LLHost target_host = getObjectHost();
-				if (!target_host.isOk())
-				{
-					llwarns << "updateMeshTextures: invalid host for object: " << getID() << llendl;
-				}
-
-				baked_img = LLViewerTextureManager::getFetchedTextureFromHost( mBakedTextureDatas[i].mLastTextureID, target_host );
-			}
-			llassert(baked_img == existing_baked_img);
-
+			LLViewerFetchedTexture* baked_img = LLViewerTextureManager::getFetchedTexture(mBakedTextureDatas[i].mLastTextureID);
 			mBakedTextureDatas[i].mIsUsed = TRUE;
 
 			debugColorizeSubMeshes(i,LLColor4::red);
@@ -7120,10 +7136,11 @@ void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value)
 
 
 void LLVOAvatar::dumpAppearanceMsgParams( const std::string& dump_prefix,
-										  const std::vector<F32>& params_for_dump,
-										  const LLTEContents& tec)
+										  const LLAppearanceMessageContents& contents)
 {
 	std::string outfilename = get_sequential_numbered_file_name(dump_prefix,".xml");
+	const std::vector<F32>& params_for_dump = contents.mParamWeights;
+	const LLTEContents& tec = contents.mTEContents;
 
 	LLAPRFile outfile;
 	std::string fullpath = gDirUtilp->getExpandedFilename(LL_PATH_LOGS,outfilename);
@@ -7138,7 +7155,12 @@ void LLVOAvatar::dumpAppearanceMsgParams( const std::string& dump_prefix,
 		LL_DEBUGS("Avatar") << "dumping appearance message to " << fullpath << llendl;
 	}
 
+	apr_file_printf(file, "<header>\n");
+	apr_file_printf(file, "\t\t<cof_version %i />\n", contents.mCOFVersion);
+	apr_file_printf(file, "\t\t<appearance_version %i />\n", contents.mAppearanceVersion);
+	apr_file_printf(file, "</header>\n");
 
+	apr_file_printf(file, "\n<params>\n");
 	LLVisualParam* param = getFirstVisualParam();
 	for (S32 i = 0; i < params_for_dump.size(); i++)
 	{
@@ -7151,31 +7173,17 @@ void LLVOAvatar::dumpAppearanceMsgParams( const std::string& dump_prefix,
 		dump_visual_param(file, viewer_param, value);
 		param = getNextVisualParam();
 	}
+	apr_file_printf(file, "</params>\n");
+
+	apr_file_printf(file, "\n<textures>\n");
 	for (U32 i = 0; i < tec.face_count; i++)
 	{
 		std::string uuid_str;
 		((LLUUID*)tec.image_data)[i].toString(uuid_str);
 		apr_file_printf( file, "\t\t<texture te=\"%i\" uuid=\"%s\"/>\n", i, uuid_str.c_str());
 	}
+	apr_file_printf(file, "</textures>\n");
 }
-
-struct LLAppearanceMessageContents
-{
-	LLAppearanceMessageContents():
-		mAppearanceVersion(-1),
-		mParamAppearanceVersion(-1),
-		mCOFVersion(LLViewerInventoryCategory::VERSION_UNKNOWN)
-	{
-	}
-	LLTEContents mTEContents;
-	S32 mAppearanceVersion;
-	S32 mParamAppearanceVersion;
-	S32 mCOFVersion;
-	// For future use:
-	//U32 appearance_flags = 0;
-	std::vector<F32> mParamWeights;
-	std::vector<LLVisualParam*> mParams;
-};
 
 void LLVOAvatar::parseAppearanceMessage(LLMessageSystem* mesgsys, LLAppearanceMessageContents& contents)
 {
@@ -7315,7 +7323,7 @@ void LLVOAvatar::processAvatarAppearance( LLMessageSystem* mesgsys )
 	parseAppearanceMessage(mesgsys, contents);
 	if (enable_verbose_dumps)
 	{
-		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", contents.mParamWeights, contents.mTEContents);
+		dumpAppearanceMsgParams(dump_prefix + "appearance_msg", contents);
 	}
 
 	S32 appearance_version;
@@ -7540,6 +7548,7 @@ void LLVOAvatar::getAnimNames( LLDynamicArray<std::string>* names )
 	names->put( "enter_away_from_keyboard_state" );
 }
 
+// static
 void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture *src_vi, LLImageRaw* src, LLImageRaw* aux_src, S32 discard_level, BOOL final, void* userdata )
 {
 	if (!userdata) return;
@@ -7558,7 +7567,7 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 		{
 			if (!aux_src->getData())
 			{
-				llerrs << "No auxiliary source data for onBakedTextureMasksLoaded" << llendl;
+				llerrs << "No auxiliary source (morph mask) data for image id " << id << llendl;
 				return;
 			}
 
@@ -7610,7 +7619,7 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 			}
 			if (!found_texture_id)
 			{
-				llinfos << "onBakedTextureMasksLoaded(): unexpected image id: " << id << llendl;
+				llinfos << "unexpected image id: " << id << llendl;
 			}
 			self->dirtyMesh();
 		}
@@ -7618,7 +7627,7 @@ void LLVOAvatar::onBakedTextureMasksLoaded( BOOL success, LLViewerFetchedTexture
 		{
             // this can happen when someone uses an old baked texture possibly provided by 
             // viewer-side baked texture caching
-			llwarns << "Masks loaded callback but NO aux source!" << llendl;
+			llwarns << "Masks loaded callback but NO aux source, id " << id << llendl;
 		}
 	}
 

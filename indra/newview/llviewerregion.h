@@ -244,6 +244,7 @@ public:
 	void failedSeedCapability();
 	S32 getNumSeedCapRetries();
 	void setCapability(const std::string& name, const std::string& url);
+	void setCapabilityDebug(const std::string& name, const std::string& url);
 	// implements LLCapabilityProvider
     virtual std::string getCapability(const std::string& name) const;
 
@@ -348,7 +349,9 @@ public:
 
 	void getNeighboringRegions( std::vector<LLViewerRegion*>& uniqueRegions );
 	void getNeighboringRegionsStatus( std::vector<S32>& regions );
-	
+	const LLViewerRegionImpl * getRegionImpl() const { return mImpl; }
+	LLViewerRegionImpl * getRegionImplNC() { return mImpl; }
+
 public:
 	struct CompareDistance
 	{
