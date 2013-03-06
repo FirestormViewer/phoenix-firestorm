@@ -5126,10 +5126,10 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="PS_Arms_downward_Legs_apart">
 		Ramiona nisko, nogi oddzielnie
 	</string>
-	<string name="PS_Arms_foreward_Legs_apart">
+	<string name="PS_Arms_forward_Legs_apart">
 		Ramiona w przód, nogi oddzielnie
 	</string>
-	<string name="PS_Arms_foreward_Legs_together">
+	<string name="PS_Arms_forward_Legs_together">
 		Ramiona w przód, nogi złączone
 	</string>
 	<string name="PS_Arms_straight_Legs_apart">
