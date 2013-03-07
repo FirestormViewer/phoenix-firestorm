@@ -191,6 +191,13 @@ LLModel::EModelStatus load_face_from_dom_triangles(std::vector<LLVolumeFace>& fa
 		LLVolumeFace::VertexData cv;
 		if (pos_source)
 		{
+			// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+			if( i+pos_offset >= idx.getCount() )
+				return LLModel::BAD_ELEMENT;
+			if( (idx[i+pos_offset]*3+2) >= v.getCount() )
+				return LLModel::BAD_ELEMENT;
+			// </FS:ND>
+
 			cv.setPosition(LLVector4a(v[idx[i+pos_offset]*3+0],
 								v[idx[i+pos_offset]*3+1],
 								v[idx[i+pos_offset]*3+2]));
@@ -198,12 +205,26 @@ LLModel::EModelStatus load_face_from_dom_triangles(std::vector<LLVolumeFace>& fa
 
 		if (tc_source)
 		{
+			// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+			if( i+tc_offset >= idx.getCount() )
+				return LLModel::BAD_ELEMENT;
+			if( (idx[i+tc_offset]*2+1) >= tc.getCount() )
+				return LLModel::BAD_ELEMENT;
+			// </FS:ND>
+
 			cv.mTexCoord.setVec(tc[idx[i+tc_offset]*2+0],
 								tc[idx[i+tc_offset]*2+1]);
 		}
 		
 		if (norm_source)
 		{
+			// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+			if( i+norm_offset >= idx.getCount() )
+				return LLModel::BAD_ELEMENT;
+			if( (idx[i+norm_offset]*3+2) >= n.getCount() )
+				return LLModel::BAD_ELEMENT;
+			// </FS:ND>
+
 			cv.setNormal(LLVector4a(n[idx[i+norm_offset]*3+0],
 								n[idx[i+norm_offset]*3+1],
 								n[idx[i+norm_offset]*3+2]));
@@ -394,6 +415,13 @@ LLModel::EModelStatus load_face_from_dom_polylist(std::vector<LLVolumeFace>& fac
 				}
 				// </FS:ND>
 				
+				// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+				if( cur_idx+pos_offset >= idx.getCount() )
+					return LLModel::BAD_ELEMENT;
+				if( (idx[cur_idx+pos_offset]*3+2) >= v.getCount() )
+					return LLModel::BAD_ELEMENT;
+				// </FS:ND>
+
 				cv.getPosition().set(v[idx[cur_idx+pos_offset]*3+0],
 									v[idx[cur_idx+pos_offset]*3+1],
 									v[idx[cur_idx+pos_offset]*3+2]);
@@ -401,12 +429,26 @@ LLModel::EModelStatus load_face_from_dom_polylist(std::vector<LLVolumeFace>& fac
 
 			if (tc_source)
 			{
+				// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+				if( cur_idx+tc_offset >= idx.getCount() )
+					return LLModel::BAD_ELEMENT;
+				if( (idx[cur_idx+tc_offset]*2+1) >= tc.getCount() )
+					return LLModel::BAD_ELEMENT;
+				// </FS:ND>
+
 				cv.mTexCoord.setVec(tc[idx[cur_idx+tc_offset]*2+0],
 									tc[idx[cur_idx+tc_offset]*2+1]);
 			}
 			
 			if (norm_source)
 			{
+				// <FS:ND> FIRE-9394; Guard against all kind of out of bounds access
+				if( cur_idx+norm_offset >= idx.getCount() )
+					return LLModel::BAD_ELEMENT;
+				if( (idx[cur_idx+norm_offset]*3+2) >= n.getCount() )
+					return LLModel::BAD_ELEMENT;
+				// </FS:ND>
+
 				cv.getNormal().set(n[idx[cur_idx+norm_offset]*3+0],
 									n[idx[cur_idx+norm_offset]*3+1],
 									n[idx[cur_idx+norm_offset]*3+2]);
