@@ -562,6 +562,7 @@ bool handleSettingF32Change(const LLSD& sdValue, F32* pValue)
 // ## Zi: Moved Avatar Z offset from RLVa to here
 bool handleAvatarZOffsetChanged(const LLSD& sdValue)
 {
+    if (gAgentAvatarp)
 	gAgentAvatarp->computeBodySize();
 	return true;
 }
