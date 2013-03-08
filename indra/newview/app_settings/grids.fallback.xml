@@ -178,39 +178,10 @@
         </map>
     <key>login.aurorascape.com:8002</key>
         <map>
-        <key>LastModified</key>
-            <date>2013-02-17T18:13:40.60Z</date>
-        <key>about</key>
-            <string>http://aurorascape.com/</string>
-        <key>gridname</key>
-            <string>AuroraScape</string>
-        <key>gridnick</key>
-            <string>AuroraScape</string>
-        <key>help</key>
-            <string>http://forum.aurorascape.com/</string>
-        <key>helperuri</key>
-            <string>http://login.aurorascape.com:8002/</string>
-        <key>login_identifier_types</key>
-            <array>
-                <string>agent</string>
-                <string>account</string>
-            </array>
-        <key>loginpage</key>
-            <string>http://login.aurorascape.com:8008/welcomescreen/index.html</string>
-        <key>loginuri</key>
-            <array>
-                <string>http://login.aurorascape.com:8002/</string>
-            </array>
+		<key>DEPRECATED</key>
+            <string>TRUE</string>
         <key>name</key>
             <string>login.aurorascape.com:8002</string>
-        <key>password</key>
-            <string>http://login.aurorascape.com:8008/forgot_pass.html</string>
-        <key>platform</key>
-            <string>Aurora</string>
-        <key>register</key>
-            <string>http://login.aurorascape.com:8008/register.html</string>
-        <key>slurl_base</key>
-            <string>hop://login.aurorascape.com:8002/</string>
         </map>
     <key>login.avination.com/</key>
         <map>
