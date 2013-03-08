@@ -42,9 +42,10 @@
 						</array>
 					<key>tags</key>
 						<array>
-						     <string>Avatar</string>
-						<!-- sample entry for debugging specific items	
-						     <string>Voice</string>		
+						     
+						<!-- sample entry for debugging specific items
+							 <string>Voice</string>
+							 <string>Avatar</string>							
 						-->
 						     <string>parseFile</string>
 						</array>
