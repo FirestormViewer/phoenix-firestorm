@@ -68,7 +68,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="55"
+			 height="61"
 			 border_visible="true"
 			 background_visible="true">
 				<check_box
@@ -79,7 +79,7 @@
 				 left="5"
 				 name="BasicShaders"
 				 tool_tip="This should ALWAYS be on as it is required for DoF, Shadows and Lights, Ambient Occlusion, Water Reflections and more."
-				 top_pad="10"
+				 top_pad="8"
 				 width="240">
 				</check_box>
 				<check_box
@@ -91,10 +91,20 @@
 				 layout="topleft"
 				 left="5"
 				 name="WindLightUseAtmosShaders"
-				 top_pad="10"
+				 top_pad="2"
 				 tool_tip="This will enable full WindLight functionality (atmospheric shaders). If you cannot enable this feature, ensure that Basic Shaders are enabled below."
-				 width="110">
+				 width="240">
 				</check_box>
+				<check_box
+				 control_name="UseEnvironmentFromRegion"
+				 follows="left|top"
+				 height="16"
+				 label="Use Region Windlight"
+				 layout="topleft"
+				 left="5"
+				 name="UseRegionWindlight"
+				 top_pad="2"
+				 width="240"/>
 			</panel>
 
 			<panel
@@ -104,7 +114,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="70"
+			 height="85"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -117,7 +127,7 @@
 				 name="WL Sky"
 				 tool_tip="Windlight presets for your sky."
 				 mouse_opaque="false"
-				 top_pad="15"
+				 top_pad="10"
 				 width="90">
 					WL Sky
 				</text>
@@ -161,7 +171,7 @@
 				 name="WL Water"
 				 tool_tip="Windlight presets for your water."
 				 mouse_opaque="false"
-				 top_pad="12"
+				 top_pad="8"
 				 width="90">
 				 WL Water
 				</text>
@@ -188,6 +198,50 @@
 				<button
 				 enabled="true"
 				 name="WWNextPreset"
+				 follows="top|left"
+				 height="23"
+				 width="20"
+				 bottom_delta="-0"
+				 left_pad="0"
+				 image_overlay="Arrow_Right_Off"
+				 scale_image="true"/>
+				<text
+				 type="string"
+				 length="1"
+				 follows="left|top"
+				 height="10"
+				 layout="topleft"
+				 left="5"
+				 name="Day Cycle"
+				 tool_tip="Windlight presets for your day cycle."
+				 mouse_opaque="false"
+				 top_pad="8"
+				 width="90">
+				 Day Cycle
+				</text>
+				<combo_box
+				 allow_text_entry="true"
+				 max_chars="50"
+				 height="23"
+				 follows="top|left"
+				 layout="topleft"
+				 left_delta="58"
+				 name="DCPresetsCombo"
+				 top_delta="-4"
+				 width="170"/>
+				<button
+				 enabled="true"
+				 name="DCPrevPreset"
+				 follows="top|left"
+				 height="23"
+				 width="20"
+				 bottom_delta="-0"
+				 left_pad="-3"
+				 image_overlay="Arrow_Left_Off"
+				 scale_image="true"/>
+				<button
+				 enabled="true"
+				 name="DCNextPreset"
 				 follows="top|left"
 				 height="23"
 				 width="20"
@@ -234,7 +288,7 @@
 				 width="240"/>
 				<button
 				 enabled="true"
-				 name="UseRegionWL"
+				 name="ResetToRegionDefault"
 				 follows="left|top"
 				 height="47"
 				 width="20"
@@ -252,7 +306,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="135"
-			 height="140"
+			 height="135"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -260,7 +314,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 top_pad="10"
+				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
 				 width="135">
@@ -349,7 +403,7 @@
 			 top_delta="0"
 			 left_pad="5"
 			 width="135"
-			 height="140"
+			 height="135"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -357,7 +411,7 @@
 				 follows="left|top"
 				 layout="topleft"
 				 left="10"
-				 top_pad="10"
+				 top_pad="5"
 				 height="20"
 				 word_wrap="true"
 				 tool_tip="Click an item below to create new preset or modify an existing one."
@@ -441,7 +495,7 @@
 			 name="P_W_Reflections"
 			 follows="top|left"
 			 layout="topleft"
-			 top_pad="10"
+			 top_pad="5"
 			 left="0"
 			 width="285"
 			 height="22"
@@ -468,7 +522,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="40"
+			 height="36"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -476,7 +530,7 @@
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="15"
+				 top_pad="13"
 				 width="75"
 				 layout="topleft"
 				 tool_tip="Determine what will show up in water reflections.">
@@ -521,7 +575,7 @@
 			 top_pad="5"
 			 left="4"
 			 width="275"
-			 height="58"
+			 height="54"
 			 border_visible="true"
 			 background_visible="true">
 				<text
@@ -529,7 +583,7 @@
 				 follows="left|top"
 				 height="15"
 				 left="10" 
-				 top_pad="15"
+				 top_pad="13"
 				 width="80"
 				 layout="topleft"
 				 tool_tip="Determines the resolution/quality of water reflections. Whenever resolution settings are set to 'Very Good' or above, you must also enable 'Advanced Lighting Model' in tab 'Light'.">

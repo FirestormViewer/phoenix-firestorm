@@ -14,7 +14,7 @@
 					Agua WL:
 				</text>
 				<icon name="SkyDayCycle" tool_tip="Cambia la hora del día"/>
-				<button name="UseRegionWL" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
+				<button name="ResetToRegionDefault" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
 				<button name="button_edit" tool_tip="Pulsa para configurar tus Preferencias Rápidas"/>
 			</layout_panel>
 		</layout_stack>

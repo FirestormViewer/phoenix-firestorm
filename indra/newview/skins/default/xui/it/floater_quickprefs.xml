@@ -47,6 +47,6 @@
 		</text>
 		<combo_box name="WaterPresetsCombo"/>
 		<icon name="SkyDayCycle"/>
-		<button name="UseRegionWL" tool_tip="Reimposta il Windlight come è impostato nella Regione"/>
+		<button name="ResetToRegionDefault" tool_tip="Reimposta il Windlight come è impostato nella Regione"/>
 	</panel>
 </floater>

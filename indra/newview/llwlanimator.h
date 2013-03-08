@@ -128,6 +128,14 @@ public:
 	/// get local time between 0 and 1
 	static F64 getLocalTime();
 
+	// <FS:Ansariel> Quickprefs integration
+	void stopInterpolation()
+	{
+		mIsInterpolating = false;
+		mIsInterpolatingSky = false;
+	}
+	// </FS:Ansariel>
+
 private:
 	ETime mTimeType;
 	bool mIsRunning, mIsInterpolating, mIsInterpolatingSky;

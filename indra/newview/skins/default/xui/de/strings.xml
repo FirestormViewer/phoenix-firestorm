@@ -5610,4 +5610,14 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="PS_Arms_upward_Legs_together">
 		Arme aufwärts, Beine zusammen
 	</string>
+
+	<string name="QP_WL_Region_Default">
+		Regionsstandard
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Tageszyklus-basiert
+	</string>
+	<string name="QP_WL_None">
+		Keiner
+	</string>
 </strings>

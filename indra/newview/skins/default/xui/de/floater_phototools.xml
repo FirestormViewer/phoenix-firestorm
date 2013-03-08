@@ -12,6 +12,7 @@
 			<panel name="P_WL_Settings">
 				<check_box label="Einfache Shader - Aktiviert lassen (s. Tooltip!)" name="BasicShaders" tool_tip="Diese Einstellung sollte IMMER eingeschaltet sein, da sie für Schärfentiefe, Erweitertes Beleuchtungsmodell, Ambient Occlusion, Wasserreflektionen und weiteren Features benötigt wird."/>
 				<check_box name="WindLightUseAtmosShaders" label="Atmosphären-Shader aktivieren (Windlight)" tool_tip="Diese Einstellung aktiviert die komplette Windlight-Funktionalität (Atmosphären-Shader). Falls diese Einstellung nicht aktiviert werden kann, bitte prüfen, ob „Einfache Shader“ weiter unten aktiviert sind."/>
+				<check_box name="UseRegionWindlight" label="Regions-Windlight-Vorstellungen verwenden"/>
 			</panel>
 
 			<panel name="P_WL_Sky_Water">
@@ -21,12 +22,15 @@
 				<text name="WL Water" tool_tip="Windlight-Voreinstellungen für Wasser.">
 					Wasser
 				</text>
+				<text name="Day Cycle" tool_tip="Windlight-Voreinstellungen für den Tageszyklus.">
+					Tageszykl.
+				</text>
 			</panel>
 			
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="Ändert die Tageszeit. HINWEIS: HIERDURCH WIRD ÜBLICHERWEISE DIE WINDLIGHT-VOREINSTELLUNG AUF STANDARD ZURÜCKGESETZT! Um die Position der Sonne für eine spezifische Voreinstellung zu ändern, „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ auswählen."/>
 				<multi_slider name="WLSunPos" tool_tip="Diese Funktion funktioniert eventuell nicht korrekt. In diesem Fall „Neuer Himmel“ oder „Himmel bearbeiten“ unter „WL-Voreinstellungen“ verwenden."/>
-				<button name="UseRegionWL" tool_tip="Windlight-Optionen auf Regionsstandard zurücksetzen."/>
+				<button name="ResetToRegionDefault" tool_tip="Windlight-Optionen auf Regionsstandard zurücksetzen."/>
 			</panel>
 
 			<panel name="P_Q_Windlights">
