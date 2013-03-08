@@ -74,7 +74,7 @@ static F32 time24_to_sun_pos(F32 time)
 		ret += 24.f;
 	}
 
-	return ret / 24.f;
+	return (ret / 24.f);
 }
 
 
@@ -439,7 +439,7 @@ std::string FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 	std::string preset_name;
 	std::string start_preset_name;
 
-	start_preset_name = ctrl->getValue().asString();
+	start_preset_name = ctrl->getSelectedValue().asString();
 	do
 	{
 		curid += increment;
