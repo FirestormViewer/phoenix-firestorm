@@ -65,6 +65,7 @@ void FSFloaterPoseStand::loadPoses()
 		}
 		pose_file.close();
 	}
+	mComboPose->sortByName();
 }
 
 void FSFloaterPoseStand::onCommitCombo()

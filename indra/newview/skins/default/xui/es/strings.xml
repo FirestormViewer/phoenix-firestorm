@@ -5358,4 +5358,15 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="QP Name Tags">Etiquetas nombre</string>
 	<string name="QP LookAt Target">Puntos de mira</string>
 	<string name="QP Color Under Cursor">Color bajo el cursor</string>
+	<string name="PS_T_Pose">Pose "T"</string>
+	<string name="PS_Arms_Down_Legs_together">Brazos abajo, piernas juntas</string>
+	<string name="PS_Arms_down_sitting">Brazos abajo, sentado</string>
+	<string name="PS_Arms_downward_Legs_together">Brazos hacia abajo, piernas juntas</string>
+	<string name="PS_Arms_downward_Legs_apart">Brazos hacia abajo, piernas separadas</string>
+	<string name="PS_Arms_forward_Legs_apart">Brazos hacia delante, piernas separadas</string>
+	<string name="PS_Arms_forward_Legs_together">Brazos hacia delante, piernas juntas</string>
+	<string name="PS_Arms_straight_Legs_apart">Brazos rectos, piernas separadas</string>
+	<string name="PS_Arms_straight_sitting">Brazos rectos, sentado</string>
+	<string name="PS_Arms_upward_Legs_apart">Brazos hacia arriba, piernas separadas</string>
+	<string name="PS_Arms_upward_Legs_together">Brazos hacia arriba, piernas juntas</string>
 </strings>

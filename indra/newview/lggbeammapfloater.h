@@ -11,6 +11,9 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#ifndef LGG_BEAMMAPFLOATER_H
+#define LGG_BEAMMAPFLOATER_H
+
 #include "llviewerprecompiledheaders.h"
 
 #include "llagentdata.h"
@@ -75,3 +78,5 @@ private:
 
 	F32 mContextConeOpacity;
 };
+
+#endif // LGG_BEAMMAPFLOATER_H

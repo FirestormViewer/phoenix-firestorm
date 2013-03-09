@@ -10,10 +10,8 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef FS_FSPOSE_H
-#define FS_FSPOSE_H
-
-#endif // FS_FSPOSE_H
+#ifndef FS_POSE_H
+#define FS_POSE_H
 
 #include "llsingleton.h"
 
@@ -30,3 +28,5 @@ protected:
 private:
 	LLUUID	mCurrentPose;
 };
+
+#endif // FS_POSE_H

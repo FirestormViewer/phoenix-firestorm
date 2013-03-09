@@ -1,9 +1,13 @@
 /*${License blank}*/
-#ifndef panel_prefs_firestorm
-#define panel_prefs_firestorm
+
+#ifndef FS_PANELPREFS_H
+#define FS_PANELPREFS_H
+
 #include "llfloaterpreference.h"
 #include "lllineeditor.h"
+
 class LLLineEditor;
+
 class PanelPreferenceFirestorm : public LLPanelPreference
 {
 public:
@@ -30,4 +34,5 @@ protected:
 	LLComboBox* m_ColorClienttags;
 	LLComboBox* m_ClientTagsVisibility;
 };
-#endif
+
+#endif // FS_PANELPREFS_H

@@ -7,6 +7,7 @@
  * Copyright (C) 2010, Linden Research, Inc.
  * Copyright (C) 2011, WoLf Loonie @ Second Life
  * Copyright (C) 2013, Zi Ree @ Second Life
+ * Copyright (C) 2013, Ansariel Hiller @ Second Life
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,6 +44,17 @@ class LLLayoutPanel;
 class LLSpinCtrl;
 // </FS:Zi>
 
+#define PRESET_NAME_REGION_DEFAULT "__Regiondefault__"
+#define PRESET_NAME_SKY_DAY_CYCLE "__Sky_Day_Cycle__"
+#define PRESET_NAME_NONE "__None__"
+
+typedef enum e_quickpref_update_param
+{
+	QP_PARAM_SKY,
+	QP_PARAM_WATER,
+	QP_PARAM_DAYCYCLE
+} EQuickPrefUpdateParam;
+
 class FloaterQuickPrefs : public LLTransientDockableFloater
 {
 	friend class LLFloaterReg;
@@ -50,26 +62,44 @@ class FloaterQuickPrefs : public LLTransientDockableFloater
 private:
 	FloaterQuickPrefs(const LLSD& key);
 	~FloaterQuickPrefs();
-	void onSunMoved(LLUICtrl* ctrl, void* userdata);
+	void onSunMoved();
 
-public:
-	/*virtual*/ BOOL postBuild();
-	/*virtual*/ void	draw();
-	void syncControls();
-	virtual void onOpen(const LLSD& key);
+	void selectSkyPreset(const std::string& preset_name);
+	void selectWaterPreset(const std::string& preset_name);
+	void selectDayCyclePreset(const std::string& preset_name);
 
-	void initCallbacks(void);
-	void onChangeWaterPreset(LLUICtrl* ctrl);
-	void onChangeSkyPreset(LLUICtrl* ctrl);
+	bool isValidPresetName(const std::string& preset_name);
+	std::string stepComboBox(LLComboBox* ctrl, bool forward);
+
+	void initCallbacks();
+	void loadPresets();
+
+	void onChangeUseRegionWindlight();
+	void onChangeWaterPreset();
+	void onChangeSkyPreset();
+	void onChangeDayCyclePreset();
 	void deactivateAnimator();
 	void onClickSkyPrev();
 	void onClickSkyNext();
 	void onClickWaterPrev();
 	void onClickWaterNext();
-	void onClickRegionWL();
+	void onClickDayCyclePrev();
+	void onClickDayCycleNext();
+	void onClickResetToRegionDefault();
 
 	void updateRlvRestrictions(ERlvBehaviour behavior, ERlvParamType type);
 	void enableWindlightButtons(BOOL enable);
+
+public:
+	/*virtual*/ BOOL postBuild();
+	/*virtual*/ void draw();
+	virtual void onOpen(const LLSD& key);
+
+
+	static void updateParam(EQuickPrefUpdateParam param, const LLSD& value);
+	void setSelectedSky(const std::string& preset_name);
+	void setSelectedWater(const std::string& preset_name);
+	void setSelectedDayCycle(const std::string& preset_name);
 
 	// Phototools additions
 	void refreshSettings();
@@ -80,6 +110,8 @@ private:
 	LLMultiSliderCtrl*	mWLSunPos;
 	LLComboBox*			mWLPresetsCombo;
 	LLComboBox*			mWaterPresetsCombo;
+	LLComboBox*			mDayCyclePresetsCombo;
+	LLCheckBoxCtrl*		mUseRegionWindlight;
 
 	// Phototools additions
 	LLCheckBoxCtrl*		mCtrlShaderEnable;

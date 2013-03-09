@@ -5111,4 +5111,37 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="QP Color Under Cursor">
 		Kolor spod kursora
 	</string>
+	<string name="PS_T_Pose">
+		Poza w kształcie litery T
+	</string>
+	<string name="PS_Arms_Down_Legs_together">
+		Ramiona w dole, nogi złączone
+	</string>
+	<string name="PS_Arms_down_sitting">
+		Ramiona w dole, siedząc
+	</string>
+	<string name="PS_Arms_downward_Legs_together">
+		Ramiona nisko, nogi złączone
+	</string>
+	<string name="PS_Arms_downward_Legs_apart">
+		Ramiona nisko, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_forward_Legs_apart">
+		Ramiona w przód, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_forward_Legs_together">
+		Ramiona w przód, nogi złączone
+	</string>
+	<string name="PS_Arms_straight_Legs_apart">
+		Ramiona prosto, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_straight_sitting">
+		Ramiona prosto, siedząc
+	</string>
+	<string name="PS_Arms_upward_Legs_apart">
+		Ramiona w górze, nogi oddzielnie
+	</string>
+	<string name="PS_Arms_upward_Legs_together">
+		Ramiona w górze, nogi złączone
+	</string>
 </strings>

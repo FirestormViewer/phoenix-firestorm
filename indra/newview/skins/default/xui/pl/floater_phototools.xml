@@ -22,7 +22,7 @@
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia. UWAGA: TA OPCJA ZAZWYCZAJ RESETUJE USTAWIENIA SYSTEMU Windlight DO DOMYŚLNYCH! Aby zmienić pozycję Słońca zgodnie z wcześniej zapisanym ustawieniem wybierz 'Nowe ustawienie nieba' lub 'Edytuj ustawienie nieba' z menu poniżej."/>
 				<multi_slider name="WLSunPos" tool_tip="Ten suwak może nie działać poprawnie. Użyj 'Nowe ustawienie nieba' lub 'Edytuj ustawienie nieba', jeśli napotkasz jakieś trudności."/>
-				<button name="UseRegionWL" tool_tip="Zresetuj ustawienia systemu Windlight do domyślnych regionu."/>
+				<button name="ResetToRegionDefault" tool_tip="Zresetuj ustawienia systemu Windlight do domyślnych regionu."/>
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">

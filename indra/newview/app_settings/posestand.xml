@@ -18,22 +18,22 @@
 	<key>a0f213b6-5506-3cf8-32ac-cfc9684048e7</key>
 		<map>
 			<key>name</key>
-			<string>PS_Arms_downward_Legs_together</string>
+			<string>PS_Arms_downward_Legs_apart</string>
 		</map>
 	<key>9e95943d-8020-e622-a4e0-4c9f8058091a</key>
 		<map>
 			<key>name</key>
-			<string>PS_Arms_downward_Legs_apart</string>
+			<string>PS_Arms_downward_Legs_together</string>
 		</map>
 	<key>6c5e15de-7079-f558-d635-7123b7379dec</key>
 		<map>
 			<key>name</key>
-			<string>PS_Arms_foreward_Legs_apart</string>
+			<string>PS_Arms_forward_Legs_apart</string>
 		</map>
 	<key>58401663-f5d3-828c-6cb5-ff618308e6be</key>
 		<map>
 			<key>name</key>
-			<string>PS_Arms_foreward_Legs_together</string>
+			<string>PS_Arms_forward_Legs_together</string>
 		</map>
 	<key>7598be4b-6b1d-afaf-bc5e-0708fa3c214a</key>
 		<map>

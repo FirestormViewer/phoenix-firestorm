@@ -5050,10 +5050,14 @@ Try enclosing path to the editor with double quotes.
   <string name="PS_Arms_down_sitting">Arms down, sitting</string>
   <string name="PS_Arms_downward_Legs_together">Arms downward, Legs together</string>
   <string name="PS_Arms_downward_Legs_apart">Arms downward, Legs apart</string>
-  <string name="PS_Arms_foreward_Legs_apart">Arms foreward, Legs apart</string>
-  <string name="PS_Arms_foreward_Legs_together">Arms foreward, Legs together</string>
+  <string name="PS_Arms_forward_Legs_apart">Arms forward, Legs apart</string>
+  <string name="PS_Arms_forward_Legs_together">Arms forward, Legs together</string>
   <string name="PS_Arms_straight_Legs_apart">Arms straight, Legs apart</string>
   <string name="PS_Arms_straight_sitting">Arms straight, sitting</string>
   <string name="PS_Arms_upward_Legs_apart">Arms upward, Legs apart</string>
   <string name="PS_Arms_upward_Legs_together">Arms upward, Legs together</string>
+  
+  <string name="QP_WL_Region_Default">Region default</string>
+  <string name="QP_WL_Day_Cycle_Based">Day cycle based</string>
+  <string name="QP_WL_None">None</string>
 </strings>

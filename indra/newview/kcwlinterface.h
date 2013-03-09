@@ -18,9 +18,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
- * The Phoenix Firestorm Project, 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
  * http://www.firestormviewer.org
+ * $/LicenseInfo$
  */
+
+#ifndef KC_WLINTERFACE_H
+#define KC_WLINTERFACE_H
 
 #include "llviewerprecompiledheaders.h"
 #include "llsingleton.h"
@@ -79,3 +83,5 @@ protected:
 	bool mHaveRegionSettings;
 	bool mDisabled; // control bool to clear all states after being disabled
 };
+
+#endif // KC_WLINTERFACE_H

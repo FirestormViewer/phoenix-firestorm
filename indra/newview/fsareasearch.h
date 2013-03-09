@@ -25,6 +25,9 @@
  * $/LicenseInfo$
  */
 
+#ifndef FS_AREASEARCH_H
+#define FS_AREASEARCH_H
+
 #include "llfloater.h"
 #include "llsingleton.h"
 #include "lluuid.h"
@@ -389,3 +392,5 @@ public:
 private:
 	FSAreaSearch* mFSAreaSearch;
 };
+
+#endif // FS_AREASEARCH_H

@@ -13,7 +13,7 @@
 					Woda WL:
 				</text>
 				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia" />
-				<button name="UseRegionWL" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
+				<button name="ResetToRegionDefault" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
 				<button name="button_edit" tool_tip="Kliknij tutaj, aby skonfigurować kontrolki swojego szybkiego strojenia" />
 			</layout_panel>
 		</layout_stack>

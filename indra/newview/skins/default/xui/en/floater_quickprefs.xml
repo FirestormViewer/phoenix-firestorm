@@ -5,7 +5,7 @@
     can_resize="false"
     can_dock="false"
     can_close="true"
-    height="115"
+    height="160"
     width="260"
     layout="topleft"
     name="quickprefs"
@@ -20,7 +20,7 @@
     left="0"
     top="16"
     width="260"
-    height="99"
+    height="144"
     follows="all"
     layout="topleft">
     <layout_stack
@@ -59,7 +59,7 @@
       left="0"
       top_pad="0"
       width="260"
-      height="89"
+      height="134"
       orientation="vertical">
 
      <layout_panel
@@ -67,7 +67,7 @@
       follows="all"
       name="wl_options_panel"
       invisibility_control="QuickPrefsEditMode"
-      height="89">
+      height="134">
 <!--<FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
         <text
             type="string"
@@ -79,7 +79,7 @@
             name="Maximum bandwidth"
             tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
             mouse_opaque="false"
-            top_pad="2"
+            top_pad="5"
             width="90">
             Max Bandwidth:
         </text>
@@ -99,6 +99,16 @@
             top_delta="-2"
             right="-7" />
  <!--</FS:HG> FIRE-6340, FIRE-6567 - Setting Bandwidth issues -->
+        <check_box
+            control_name="UseEnvironmentFromRegion"
+            follows="left|top"
+            height="20"
+            label="Use Region Windlight"
+            layout="topleft"
+            left="2"
+            name="UseRegionWindlight"
+            top_pad="0"
+            width="200" />
         <text
             type="string"
             length="1"
@@ -191,6 +201,52 @@
             label_selected=""
             image_overlay="Arrow_Right_Off"
             scale_image="true" />
+        <text
+            type="string"
+            length="1"
+            follows="left|top"
+            height="10"
+            layout="topleft"
+            left="5"
+            name="Day Cycle"
+            tool_tip="Windlight presets for your day cycle"
+            mouse_opaque="false"
+            top_delta="24"
+            width="90">
+            Day Cycle:
+        </text>
+        <combo_box
+            follows="left|top"
+            height="20"
+            layout="topleft"
+            left_delta="58"
+            name="DCPresetsCombo"
+            top_delta="-4"
+            width="150" />
+        <button
+            enabled="true"
+            name="DCPrevPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="152"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Left_Off"
+            scale_image="true" />
+        <button
+            enabled="true"
+            name="DCNextPreset"
+            follows="left|top"
+            height="20"
+            width="20"
+            bottom_delta="-0"
+            left_delta="21"
+            label=""
+            label_selected=""
+            image_overlay="Arrow_Right_Off"
+            scale_image="true" />
         <icon
             height="15"
             image_name="icon_day_cycle_12am.tga"
@@ -219,7 +275,7 @@
             width="200" />
         <button
             enabled="true"
-            name="UseRegionWL"
+            name="ResetToRegionDefault"
             follows="left|top"
             height="20"
             width="20"
@@ -258,9 +314,9 @@
  name="edit_overlay_panel"
  visibility_control="QuickPrefsEditMode"
  left="1"
- top="-93"
+ top="-138"
  right="-1"
- height="93">
+ height="143">
 
 <view_border
  layout="topleft"
@@ -277,12 +333,22 @@
  name="move_up_button"
  tool_tip="Move selected control one slot up"
  enabled_control="QuickPrefsSelectedControl"
- label=""
  image_overlay="Arrow_Up"
  top="8"
  left="4"
  width="20"
- height="20"/>
+ height="23"/>
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="add_new_button"
+ tool_tip="Add a new quick preferences control"
+ image_overlay="AddItem_Off"
+ left_pad="4"
+ top_delta="0"
+ width="20"
+ height="23" />
 
 <line_editor
  layout="topleft"
@@ -292,8 +358,19 @@
  tool_tip="Type the label for the control here"
  label="Control label:"
  left_pad="4"
- width="100"
- height="20" />
+ width="185"
+ height="23" />
+
+<button
+ layout="topleft"
+ follows="left|top"
+ name="move_down_button"
+ tool_tip="Move selected control one slot down"
+ enabled_control="QuickPrefsSelectedControl"
+ image_overlay="Arrow_Down"
+ left="4"
+ width="20"
+ height="23" />
 
 <combo_box
  layout="topleft"
@@ -302,8 +379,8 @@
  enabled_control="QuickPrefsSelectedControl"
  tool_tip="Select control from the list of debug settings"
  left_pad="4"
- width="100"
- height="18">
+ width="225"
+ height="23">
 <combo_box.item
  type="string"
  label="=== Choose ==="
@@ -311,38 +388,15 @@
  value="" />
 </combo_box>
 
-<button
- layout="topleft"
- follows="left|top"
- name="move_down_button"
- tool_tip="Move selected control one slot down"
- enabled_control="QuickPrefsSelectedControl"
- label=""
- image_overlay="Arrow_Down"
- left="4"
- top_pad="4"
- width="20"
- height="20" />
-
-<button
- layout="topleft"
- follows="left|top"
- name="add_new_button"
- tool_tip="Add a new quick preferences control"
- label=""
- image_overlay="AddItem_Off"
- left_pad="4"
- width="20"
- height="20" />
-
 <text
  layout="topleft"
  follows="left|top"
  name="control_type_label"
  enabled_control="QuickPrefsSelectedControl"
- left_pad="6"
+ left="4"
+ top_pad="8"
  width="42"
- height="20">
+ height="23">
 Type:
 </text>
 
@@ -353,8 +407,9 @@ Type:
  tool_tip="Select the type of user interface control you want to use for this setting"
  enabled_control="QuickPrefsSelectedControl"
  left_pad="4"
- width="90"
- height="20">
+ top_delta="-5"
+ width="135"
+ height="23">
 <!-- do not use <combo_item>Foo</combo_item>, it doesn't work -->
 <combo_box.item
  type="string"
@@ -402,6 +457,7 @@ Type:
  tool_tip="Activate this checkbox if your setting is an integer value, i.e. it has only whole numbers"
  left_pad="4"
  height="20"
+ top_delta="0"
  width="16"
  label="Integer" />
 
@@ -419,7 +475,7 @@ Type:
  max_val="100000.0"
  increment="1.0"
  left="4"
- top_pad="6"
+ top_pad="7"
  width="81"
  height="22" />
 <spinner
@@ -459,14 +515,13 @@ Type:
  follows="right|top"
  name="button_close"
  tool_tip="Close the edit overlay panel"
- label=""
  toggle="true"
  control_name="QuickPrefsEditMode"
  image_unselected="Icon_Close_Press"
  image_selected="Icon_Close_Foreground"
  left="-18"
  width="16"
- top="6"
+ top="10"
  height="16" />
 </panel>
 

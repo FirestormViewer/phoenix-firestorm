@@ -29,6 +29,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef FS_DATA_H
+#define FS_DATA_H
+
 #include <map>
 #include <llsd.h>
 #include <llinstantmessage.h>
@@ -100,3 +103,5 @@ private:
 	FSDataAgent mSupportAgent;
 	std::map<LLUUID, FSDataAgent> mSupportAgentList;
 };
+
+#endif // FS_DATA_H

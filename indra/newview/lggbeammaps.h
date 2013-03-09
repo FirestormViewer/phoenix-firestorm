@@ -11,6 +11,9 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details.
  */
 
+#ifndef LGG_BEAMMAPS_H
+#define LGG_BEAMMAPS_H
+
 #include "llhudeffecttrail.h"
 #include "llviewerprecompiledheaders.h"
 #include "lggbeamscolors.h"
@@ -51,3 +54,5 @@ class lggBeamMaps
 
 
 extern lggBeamMaps gLggBeamMaps;
+
+#endif // LGG_BEAMMAPS_H

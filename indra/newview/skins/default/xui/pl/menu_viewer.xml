@@ -24,7 +24,7 @@
 		<menu_item_check label="Ustawienia kamery" name="Camera Controls"/>
 		<menu label="Naprawa awatara" name="avhealth">
 			<menu_item_call label="Zatrzymaj animacje" name="Stop Animating My Avatar"/>
-			<menu_item_call label="Cofnij deformacje awatara" name="undeform_avatar"/>
+			<menu_item_call label="Usuń deformacje awatara" name="undeform_avatar"/>
 			<menu_item_call label="Wymuś aktualizację wyglądu (rebake)" name="Rebake Texture"/>
 			<menu_item_call label="Resetuj do domyślnego męskiego awatara (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Resetuj do domyślnego żeńskiego awatara (Character Test)" name="ResetDefaultAvF"/>
@@ -33,7 +33,7 @@
 			<menu_item_call label="Stwórz na nowo Most LSL" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Śledzenie napiwków" name="money_tracker"/>
-		<menu_item_call label="Statyw do pozowania" name="pose_stand"/>
+		<menu_item_call label="Podest do pozowania" name="pose_stand"/>
 		<menu label="Załaduj" name="Upload">
 			<menu_item_call label="Teksturę ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Dźwięk ([COST])..." name="Upload Sound"/>

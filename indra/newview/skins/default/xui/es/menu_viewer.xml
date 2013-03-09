@@ -25,6 +25,7 @@
 		<menu_item_check label="Controles de cámara" name="Camera Controls"/>
 		<menu label="Salud del avatar" name="avhealth">
 			<menu_item_call label="Detener mis animaciones" name="Stop Animating My Avatar"/>
+			<menu_item_call label="Deshacer deformación del avatar" name="undeform_avatar"/>
 			<menu_item_call label="Recargar texturas" name="Rebake Texture"/>
 			<menu_item_call label="Volver al avatar masculino por defecto (Character Test)" name="ResetDefaultAvM"/>
 			<menu_item_call label="Volver al avatar femenino por defecto (Character Test)" name="ResetDefaultAvF"/>
@@ -33,6 +34,7 @@
 			<menu_item_call label="Regenerar el LSL Bridge" name="Recreate LSL Bridge"/>			
 		</menu>
 		<menu_item_call label="Historial de transacciones" name="money_tracker"/>
+		<menu_item_call label="Pose..." name="pose_stand"/>
 		<menu label="Subir" name="Upload">
 			<menu_item_call label="Imagen ([COST])..." name="Upload Image"/>
 			<menu_item_call label="Sonido ([COST])..." name="Upload Sound"/>

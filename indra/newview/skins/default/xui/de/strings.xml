@@ -5592,10 +5592,10 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="PS_Arms_downward_Legs_apart">
 		Arme abwärts, Beine auseinander
 	</string>
-	<string name="PS_Arms_foreward_Legs_apart">
+	<string name="PS_Arms_forward_Legs_apart">
 		Arme nach vorn, Beine auseinander
 	</string>
-	<string name="PS_Arms_foreward_Legs_together">
+	<string name="PS_Arms_forward_Legs_together">
 		Arme nach vorn, Beine zusammen
 	</string>
 	<string name="PS_Arms_straight_Legs_apart">
@@ -5609,5 +5609,15 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="PS_Arms_upward_Legs_together">
 		Arme aufwärts, Beine zusammen
+	</string>
+
+	<string name="QP_WL_Region_Default">
+		Regionsstandard
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Tageszyklus-basiert
+	</string>
+	<string name="QP_WL_None">
+		Keiner
 	</string>
 </strings>

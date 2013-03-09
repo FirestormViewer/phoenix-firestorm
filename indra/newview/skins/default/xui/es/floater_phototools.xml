@@ -23,7 +23,7 @@
 			<panel name="P_Sun">
 				<icon name="SkyDayCycle" tool_tip="Cambia la hora del día. NOTA: ¡ESTO SUELE RESTABLECER WINDLIGHT A LA CONFIGURACIÓN POR DEFECTO! Para cambiar la posición del sol para una configuración Windlight específica, selecciona 'Nueva configuración de cielo' o 'Editar configuración de cielo' del menú de abajo."/>
 				<multi_slider name="WLSunPos" tool_tip="Esto podría no funcionar correctamente. Usa 'Nueva configuración de cielo' o 'Editar configuración de cielo' si encuentras dificultades."/>
-				<button name="UseRegionWL" tool_tip="Restablece Windlight a las opciones por defecto de la región."/>
+				<button name="ResetToRegionDefault" tool_tip="Restablece Windlight a las opciones por defecto de la región."/>
 			</panel>
 			<panel name="P_Q_Windlights">
 				<text name="T_Q_Windlights">

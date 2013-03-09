@@ -251,7 +251,7 @@ std::string LLSDXMLFormatter::escapeString(const std::string& in)
 class LLSDXMLParser::Impl
 {
 public:
-	Impl();
+	Impl(bool emit_errors);
 	~Impl();
 	
 	S32 parse(std::istream& input, LLSD& data);
@@ -295,6 +295,7 @@ private:
 	
 	static const XML_Char* findAttribute(const XML_Char* name, const XML_Char** pairs);
 	
+	bool mEmitErrors;
 
 	XML_Parser	mParser;
 
@@ -317,7 +318,8 @@ private:
 };
 
 
-LLSDXMLParser::Impl::Impl()
+LLSDXMLParser::Impl::Impl(bool emit_errors)
+	: mEmitErrors(emit_errors)
 {
 	mParser = XML_ParserCreate(NULL);
 	reset();
@@ -404,7 +406,10 @@ S32 LLSDXMLParser::Impl::parse(std::istream& input, LLSD& data)
 		{
 			((char*) buffer)[count ? count - 1 : 0] = '\0';
 		}
-		llinfos << "LLSDXMLParser::Impl::parse: XML_STATUS_ERROR parsing:" << (char*) buffer << llendl;
+		if (mEmitErrors)
+		{
+			llinfos << "LLSDXMLParser::Impl::parse: XML_STATUS_ERROR parsing:" << (char*) buffer << llendl;
+		}
 		data = LLSD();
 		return LLSDParser::PARSE_FAILURE;
 	}
@@ -482,7 +487,10 @@ S32 LLSDXMLParser::Impl::parseLines(std::istream& input, LLSD& data)
 	if (status == XML_STATUS_ERROR  
 		&& !mGracefullStop)
 	{
-		llinfos << "LLSDXMLParser::Impl::parseLines: XML_STATUS_ERROR" << llendl;
+		if (mEmitErrors)
+		{
+			llinfos << "LLSDXMLParser::Impl::parseLines: XML_STATUS_ERROR" << llendl;
+		}
 		return LLSDParser::PARSE_FAILURE;
 	}
 
@@ -923,7 +931,7 @@ LLSDXMLParser::Impl::Element LLSDXMLParser::Impl::readElement(const XML_Char* na
 /**
  * LLSDXMLParser
  */
-LLSDXMLParser::LLSDXMLParser() : impl(* new Impl)
+LLSDXMLParser::LLSDXMLParser(bool emit_errors /* = true */) : impl(* new Impl(emit_errors))
 {
 }
 

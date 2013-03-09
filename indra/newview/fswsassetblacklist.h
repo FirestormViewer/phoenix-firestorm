@@ -25,6 +25,9 @@
  * $/LicenseInfo$
  */
 
+#ifndef FS_WSASSETBLACKLIST_H
+#define FS_WSASSETBLACKLIST_H
+
 #include "llviewerprecompiledheaders.h"
 #include "llsingleton.h"
 #include "llfloater.h"
@@ -51,3 +54,5 @@ private:
 	static std::string blacklist_file_name;
 	static BlacklistMAP BlacklistIDs;
 };
+
+#endif // FS_WSASSETBLACKLIST_H
