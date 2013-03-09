@@ -454,7 +454,7 @@ std::string FloaterQuickPrefs::stepComboBox(LLComboBox* ctrl, bool forward)
 		ctrl->setCurrentByIndex(curid);
 		preset_name = ctrl->getSelectedValue().asString();
 	}
-	while (!isValidPresetName(preset_name) || preset_name == start_preset_name);
+	while (!isValidPresetName(preset_name) && preset_name != start_preset_name);
 
 	return preset_name;
 }
