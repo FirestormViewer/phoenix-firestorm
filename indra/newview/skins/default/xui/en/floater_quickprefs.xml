@@ -79,7 +79,7 @@
             name="Maximum bandwidth"
             tool_tip="Set your Network bandwidth in Kbps (kilobits per second)"
             mouse_opaque="false"
-            top_pad="2"
+            top_pad="5"
             width="90">
             Max Bandwidth:
         </text>
