@@ -18,7 +18,7 @@
 				</text>
 				<combo_box left_delta="77" name="WaterPresetsCombo"/>
 				<text name="Day Cycle" width="67" tool_tip="Windlight-Voreinstellung für den Tageszyklus.">
-					Tagszyklus:
+					Tageszyklus:
 				</text>
 				<combo_box left_delta="77" name="DCPresetsCombo"/>
 				<icon name="SkyDayCycle" tool_tip="Tageszeit ändern" width="220"/>
