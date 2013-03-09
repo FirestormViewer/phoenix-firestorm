@@ -1444,7 +1444,7 @@ public:
 		mAgents = agents_to_invite;
 	}
 
-	virtual void error(U32 statusNum, const std::string& reason)
+	virtual void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
 	{
 		//try an "old school" way.
 		if ( statusNum == 400 )
@@ -1455,6 +1455,9 @@ public:
 				mOtherParticipantID,
 				mAgents);
 		}
+
+		llwarns << "LLStartConferenceChatResponder error [status:"
+				<< statusNum << "]: " << content << llendl;
 
 		//else throw an error back to the client?
 		//in theory we should have just have these error strings
@@ -1601,8 +1604,10 @@ public:
 		}
 	}
 
-	void error(U32 statusNum, const std::string& reason)
-	{		
+	void errorWithContent(U32 statusNum, const std::string& reason, const LLSD& content)
+	{
+		llwarns << "LLViewerChatterBoxInvitationAcceptResponder error [status:"
+				<< statusNum << "]: " << content << llendl;
 		//throw something back to the viewer here?
 		if ( gIMMgr )
 		{

@@ -803,9 +803,10 @@ class ConsoleRequestResponder : public LLHTTPClient::Responder
 {
 public:
 	/*virtual*/
-	void error(U32 status, const std::string& reason)
+	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 	{
-		llwarns << "requesting mesh_rez_enabled failed" << llendl;
+		llwarns << "ConsoleRequestResponder error requesting mesh_rez_enabled [status:"
+				<< status << "]: " << content << llendl;
 	}
 };
 
@@ -815,9 +816,10 @@ class ConsoleUpdateResponder : public LLHTTPClient::Responder
 {
 public:
 	/* virtual */
-	void error(U32 status, const std::string& reason)
+	void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 	{
-		llwarns << "Updating mesh enabled region setting failed" << llendl;
+		llwarns << "ConsoleRequestResponder error updating mesh enabled region setting [status:"
+				<< status << "]: " << content << llendl;
 	}
 };
 
@@ -2391,10 +2393,10 @@ public:
 	}
 	
 	// if we get an error response
-	virtual void error(U32 status, const std::string& reason)
+	virtual void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 	{
-		llinfos << "LLEstateChangeInfoResponder::error "
-			<< status << ": " << reason << llendl;
+		llinfos << "LLEstateChangeInfoResponder::error [status:"
+			<< status << "]: " << content << llendl;
 	}
 private:
 	LLHandle<LLPanel> mpPanel;
