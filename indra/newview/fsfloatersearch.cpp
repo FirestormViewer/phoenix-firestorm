@@ -1385,6 +1385,16 @@ void FSPanelSearchPlaces::find()
 		LLNotificationsUtil::add("NoContentToSearch");
 		return;
 	}
+	S8 category;
+	std::string category_string = findChild<LLComboBox>("places_category")->getSelectedValue();
+	if (category_string == "any")
+	{
+		category = LLParcel::C_ANY;
+	}
+	else
+	{
+		category = LLParcel::getCategoryFromString(category_string);
+	}
 	U32 scope = 0;
 	if (gAgent.wantsPGOnly())
 		scope |= DFQ_PG_SIMS_ONLY;
@@ -1396,7 +1406,6 @@ void FSPanelSearchPlaces::find()
 		scope |= DFQ_INC_MATURE;
 	if (inc_adult && adult_enabled)
 		scope |= DFQ_INC_ADULT;
-	S8 category = LLParcel::getCategoryFromString(findChild<LLComboBox>("places_category")->getSelectedValue().asString());
 	scope |= DFQ_DWELL_SORT;
 	
 	mResultsReceived = 0;
@@ -1413,6 +1422,7 @@ void FSPanelSearchPlaces::find()
 	gMessageSystem->addString("QueryText", text);
 	gMessageSystem->addU32("QueryFlags", scope);
 	gMessageSystem->addS8("Category", category);
+	// TODO: Search filter by region name.
 	gMessageSystem->addString("SimName", "");
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
@@ -1547,6 +1557,13 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
+		{
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if (status & STATUS_SEARCH_PLACES_ESTATEEMPTY)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
