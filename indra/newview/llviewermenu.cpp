@@ -8657,7 +8657,9 @@ class FSToolsUndeform : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"));
+		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
+		gAgentAvatarp->updateVisualParams();
+		
 		return true;
 	}
 };
