@@ -5369,4 +5369,7 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="PS_Arms_straight_sitting">Brazos rectos, sentado</string>
 	<string name="PS_Arms_upward_Legs_apart">Brazos hacia arriba, piernas separadas</string>
 	<string name="PS_Arms_upward_Legs_together">Brazos hacia arriba, piernas juntas</string>
+	<string name="QP_WL_Region_Default">Por defecto de la región</string>
+	<string name="QP_WL_Day_Cycle_Based">Basado en ciclo de día</string>
+	<string name="QP_WL_None">Ninguno</string>
 </strings>
