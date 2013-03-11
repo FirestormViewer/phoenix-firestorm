@@ -1429,7 +1429,7 @@ BOOL LLViewerShaderMgr::loadShadersDeferred()
 	{
 		// <FS:Ansariel> Tofu's SSR
 		std::string frag = "deferred/softenLightF.glsl";
-		if (gSavedSettings.getBOOL("FSRenderSSR"))
+		if (mVertexShaderLevel[SHADER_DEFERRED] == 2 && gSavedSettings.getBOOL("FSRenderSSR"))
 		{
 			frag = "deferred/softenLightSSRF.glsl";
 		}
