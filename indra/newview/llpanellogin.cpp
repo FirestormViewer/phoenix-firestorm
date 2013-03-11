@@ -240,8 +240,10 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	LLTextBox* create_new_account_text = getChild<LLTextBox>("create_new_account_text");
 	create_new_account_text->setClickedCallback(onClickNewAccount, NULL);
 
-	LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
-	need_help_text->setClickedCallback(onClickHelp, NULL);
+	// <FS:Ansariel> We don't have the help link
+	//LLTextBox* need_help_text = getChild<LLTextBox>("login_help");
+	//need_help_text->setClickedCallback(onClickHelp, NULL);
+	// </FS:Ansariel>
 	
 // <FS:CR> Grid Manager Help link
 	LLTextBox* grid_mgr_help_text = getChild<LLTextBox>("grid_login_text");
