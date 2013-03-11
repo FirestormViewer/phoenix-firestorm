@@ -1795,16 +1795,21 @@ void LLViewerWindow::initBase()
 	cp.rect(getChatConsoleRect());
 	cp.parse_urls(true); // Ansariel: Enable URL parsing for the chat console
 	cp.background_image("Rounded_Square"); // Ansariel: Configurable background for different console types
-	// AO, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
+	// <FS:AO>, have console respect/reuse NearbyToastLifeTime for the length popup chat messages are displayed.
 	//cp.persist_time(gSavedSettings.getF32("ChatPersistTime"));
 	cp.persist_time((F32)gSavedSettings.getS32("NearbyToastLifeTime"));
-	// /AO
+	// </FS:AO>
 
 	cp.font_size_index(gSavedSettings.getS32("ChatConsoleFontSize"));
 	cp.follows.flags(FOLLOWS_LEFT | FOLLOWS_RIGHT | FOLLOWS_BOTTOM);
 	gConsole = LLUICtrlFactory::create<LLConsole>(cp);
 	getRootView()->addChild(gConsole);
 	// </FS:Ansariel>
+
+	// <FS:Zi> Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them
+	initialize_edit_menu();
+	initialize_spellcheck_menu();
+	// </FS:Zi>
 
 	// Create the floater view at the start so that other views can add children to it. 
 	// (But wait to add it as a child of the root view so that it will be in front of the 
@@ -1818,11 +1823,7 @@ void LLViewerWindow::initBase()
 	//         created right after this get the correct parent assigned.
 	gMenuHolder = getRootView()->getChild<LLViewerMenuHolderGL>("Menu Holder");
 	LLMenuGL::sMenuContainer = gMenuHolder;
-
-	// Set up edit menu here to get the spellcheck callbacks assigned before anyone uses them -Zi
-	initialize_edit_menu();
-	initialize_spellcheck_menu();
-	// <FS:Zi>
+	// </FS:Zi>
 
 	// placeholder widget that controls where "world" is rendered
 	mWorldViewPlaceholder = main_view->getChildView("world_view_rect")->getHandle();
@@ -1839,7 +1840,8 @@ void LLViewerWindow::initBase()
 	// Hide the toolbars for the moment: we'll make them visible after logging in world (see LLViewerWindow::initWorldUI())
 	gToolBarView->setVisible(FALSE);
 
-	UtilityBar::instance().init();	// <FS:Zi> initialize the utility bar (classic V1 style buttons next to the chat bar)
+	// <FS:Zi> initialize the utility bar (classic V1 style buttons next to the chat bar)
+	UtilityBar::instance().init();
 
 	// Constrain floaters to inside the menu and status bar regions.
 	gFloaterView = main_view->getChild<LLFloaterView>("Floater View");
