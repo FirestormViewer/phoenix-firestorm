@@ -1215,10 +1215,7 @@ even though the user gets a free copy.
 	 label="Apply"
 	 name="button mark for sale"
 	 tool_tip="Mark/Update object(s) for sale."
-	 width="100">
-		<button.commit_callback
-		function="BuildTool.ApplySale"/>
-	</button>
+	 width="100"/>
 	<button
 	 top_pad="7"
 	 left="10"
