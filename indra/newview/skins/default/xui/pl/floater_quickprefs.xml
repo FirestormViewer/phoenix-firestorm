@@ -15,7 +15,7 @@
 				</text>
 				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia" />
 				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
-					Cykl dnia
+					Cykl dnia:
 				</text>
 				<button name="ResetToRegionDefault" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
 				<button name="button_edit" tool_tip="Kliknij tutaj, aby skonfigurować kontrolki swojego szybkiego strojenia" />
