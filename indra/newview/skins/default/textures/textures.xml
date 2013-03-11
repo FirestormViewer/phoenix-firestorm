@@ -719,6 +719,8 @@ with the same filename but different name
   <texture name="contact_sets" file_name="toolbar_icons/contact_sets.png" preload="true" />
   <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" />
   <texture name="landmark_here" file_name="toolbar_icons/landmark_here.png" preload="true" />
+  <texture name="teleport_history" file_name="toolbar_icons/teleporthistory.png" preload="true" />
+  <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
 
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />

@@ -4845,6 +4845,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Contact_Sets_Label">Contact sets</string>
   <string name="Command_Mouselook_Label">Mouselook</string>
   <string name="Command_Landmark_Here_Label">Create Landmark</string>
+  <string name="Command_Teleport_History_Label">Teleport History</string>
+  <string name="Command_Pose_Stand_Label">Pose Stand</string>
   
 
   <string name="Command_AboutLand_Tooltip">Information about the land you're visiting</string>
@@ -4889,6 +4891,8 @@ Try enclosing path to the editor with double quotes.
   <string name="Command_Contact_Sets_Tooltip">Opens contact sets (CTRL+ALT+SHIFT+C)</string>
   <string name="Command_Mouselook_Tooltip">Enter mouselook mode (M)</string>
   <string name="Command_Landmark_Here_Tooltip">Creates a landmark at your current position</string>
+  <string name="Command_Teleport_History_Tooltip">Opens Teleport History</string>
+  <string name="Command_Pose_Stand_Tooltip">Avatar pose stand for adjusting attachments</string>
 
   <string name="Toolbar_Bottom_Tooltip">currently in your bottom toolbar</string>
   <string name="Toolbar_Left_Tooltip"  >currently in your left toolbar</string>
