@@ -188,7 +188,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSquareMetersCommitted(0),
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
 	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
-	mRebakeStuck(FALSE)			// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	mNearbyIcons(FALSE)			// <FS:Ansariel> Script debug
 {
 	setRect(rect);
 	
@@ -357,7 +358,12 @@ BOOL LLStatusBar::postBuild()
 	mPanelNearByMedia->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
 	mPanelNearByMedia->setVisible(FALSE);
 
-	mScriptOut = getChildView("scriptout");
+	// <FS:Ansariel> Script debug
+	//mScriptOut = getChildView("scriptout");
+	mScriptOut = getChild<LLIconCtrl>("scriptout");
+	mScriptOut->setMouseDownCallback(boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
+	mNearbyIcons = LLHUDIcon::iconsNearby();
+	// </FS:Ansariel> Script debug
 	
 	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
@@ -581,6 +587,14 @@ void LLStatusBar::refresh()
 	// ## Zi: Media/Stream separation
 
 	mParcelInfoText->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+
+	// <FS:Ansariel> Script debug
+	if (mNearbyIcons != LLHUDIcon::iconsNearby())
+	{
+		mNearbyIcons = LLHUDIcon::iconsNearby();
+		updateParcelIcons();
+	}
+	// </FS:Ansariel> Script debug
 }
 
 void LLStatusBar::setVisibleForMouselook(bool visible)
@@ -1150,6 +1164,9 @@ void LLStatusBar::updateParcelIcons()
 		mLightshareBtn->setVisible(has_lightshare);
 		mLightshareBtn->setEnabled(has_lightshare);
 		// </FS:CR>
+		// <FS:Ansariel> Script debug
+		mScriptOut->setVisible(LLHUDIcon::iconsNearby());
+		// </FS:Ansariel> Script debug
 	}
 	else
 	{
@@ -1163,6 +1180,9 @@ void LLStatusBar::updateParcelIcons()
 		// <FS:CR> FIRE-5118 - Lightshare support
 		mLightshareBtn->setVisible(false);
 		// </FS:CR>
+		// <FS:Ansariel> Script debug
+		mScriptOut->setVisible(FALSE);
+		// </FS:Ansariel> Script debug
 		allow_voice	= vpm->allowAgentVoice();	// <FS:Zi> update allow_voice even if icons are hidden
 	}
 
@@ -1197,6 +1217,7 @@ void LLStatusBar::layoutParcelIcons()
 	//           info text!
 	S32 left = FIRST_ICON_HPAD;
 
+	left = layoutWidget(mScriptOut, left);
 	left = layoutWidget(mDamageText, left);
 
 	for (int i = ICON_COUNT - 1; i >= 0; --i)

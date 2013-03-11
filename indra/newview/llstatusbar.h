@@ -313,7 +313,10 @@ private:
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
 	LLButton	*mMediaToggle;
 	LLButton	*mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	LLView		*mScriptOut;
+	// <FS:Ansariel> Script debug
+	//LLView		*mScriptOut;
+	LLIconCtrl	*mScriptOut;
+	// </FS:Ansariel> Script debug
 	LLFrameTimer	mClockUpdateTimer;
 
 	S32				mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
@@ -352,6 +355,9 @@ private:
 	LLFrameTimer	mRebakingTimer;
 	BOOL			mPathfindingFlashOn;
 	// </FS:Zi>
+
+	// <FS:Ansariel> Script debug
+	BOOL			mNearbyIcons;
 
 	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 
