@@ -448,7 +448,6 @@
 			<menu_item_call label="Volcar objeto del foco" name="Dump Focus Holder"/>
 			<menu_item_call label="Imprimir información del objeto seleccionado" name="Print Selected Object Info"/>
 			<menu_item_call label="Imprimir información del avatar" name="Print Agent Info"/>
-			<menu_item_call label="Estadísticas de memoria" name="Memory Stats"/>
 			<menu_item_check label="Piloto automático con doble clic" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Teleporte con doble clic" name="DoubleClick Teleport"/>
 			<menu_item_check label="Depurar SelectMgr" name="Debug SelectMgr"/>

@@ -463,7 +463,6 @@
 			<menu_item_call label="フォーカスホールダーをダンプ" name="Dump Focus Holder"/>
 			<menu_item_call label="選択したオブジェクト情報をプリント" name="Print Selected Object Info"/>
 			<menu_item_call label="エージェント情報をプリント" name="Print Agent Info"/>
-			<menu_item_call label="メモリ使用状況" name="Memory Stats"/>
 			<menu_item_check label="ダブルクリックオートパイロット" name="Double-ClickAuto-Pilot"/>
 			 <menu_item_check label="ダブルクリックテレポート" name="DoubleClick Teleport"/>
 			<menu_item_check label="地域デバッグコンソール" name="Region Debug Console"/>

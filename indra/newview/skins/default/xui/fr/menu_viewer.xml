@@ -359,7 +359,6 @@
 			<menu_item_call label="Dump Focus Holder" name="Dump Focus Holder"/>
 			<menu_item_call label="Imprimer les infos sur l&apos;objet sélectionné" name="Print Selected Object Info"/>
 			<menu_item_call label="Imprimer les infos sur l&apos;avatar" name="Print Agent Info"/>
-			<menu_item_call label="Statistiques de mémoire" name="Memory Stats"/>
 			<menu_item_check label="Console de débogage de région" name="Region Debug Console"/>
 			<menu_item_check label="Débogage SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="Débogage clics" name="Debug Clicks"/>
