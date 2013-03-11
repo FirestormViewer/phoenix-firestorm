@@ -60,7 +60,9 @@ LLPanelVolumePulldown::LLPanelVolumePulldown()
 BOOL LLPanelVolumePulldown::postBuild()
 {
 	// set the initial volume-slider's position to reflect reality
-	LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "mastervolume" );
+	// <FS:Ansariel> Was renamed to "System Volume"
+	//LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "mastervolume" );
+	LLSliderCtrl* volslider =  getChild<LLSliderCtrl>( "System Volume" );
 	volslider->setValue(gSavedSettings.getF32("AudioLevelMaster"));
 
 	return LLPanel::postBuild();
