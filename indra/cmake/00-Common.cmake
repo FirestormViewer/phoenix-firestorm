@@ -159,7 +159,7 @@ if (LINUX)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
-    add_definitions(-D_FORTIFY_SOURCE=2)
+#    add_definitions(-D_FORTIFY_SOURCE=2)
   else (${GXX_VERSION} STREQUAL ${CXX_VERSION})
     if (NOT ${GXX_VERSION} MATCHES " 4.1.*Red Hat")
       add_definitions(-D_FORTIFY_SOURCE=2)
