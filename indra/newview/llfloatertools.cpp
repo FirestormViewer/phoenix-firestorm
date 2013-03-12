@@ -264,14 +264,15 @@ BOOL	LLFloaterTools::postBuild()
 	mCheckStretchTexture	= getChild<LLCheckBoxCtrl>("checkbox stretch textures");
 	getChild<LLUICtrl>("checkbox stretch textures")->setValue((BOOL)gSavedSettings.getBOOL("ScaleStretchTextures"));
 	mComboGridMode			= getChild<LLComboBox>("combobox grid mode");
-	//Phoenix:KC show highlight
+
+	// <FS:KC> show highlight
+	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
 	mCheckShowHighlight = getChild<LLCheckBoxCtrl>("checkbox show highlight");
 	mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
 	mCheckShowHighlight->setValue(mOrginalShowHighlight);
 
 	mCheckActualRoot = getChild<LLCheckBoxCtrl>("checkbox actual root");
-
-	//mCheckStretchUniformLabel = getChild<LLTextBox>("checkbox uniform label");
+	// </FS:KC>
 
 
 	//
@@ -327,7 +328,7 @@ BOOL	LLFloaterTools::postBuild()
 
 	sShowObjectCost = gSavedSettings.getBOOL("ShowObjectRenderingCost");
 	
-	//Phoenix:KC - added back more/less button
+	// <FS:KC> Added back more/less button
 	LLButton* btnExpand = getChild<LLButton>("btnExpand");
 	if (btnExpand)
 	{
@@ -342,6 +343,7 @@ BOOL	LLFloaterTools::postBuild()
 	{
 		gSavedSettings.setBOOL("FSToolboxExpanded", TRUE);
 	}
+	// </FS:KC>
 
 	return TRUE;
 }
@@ -369,8 +371,11 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mComboGridMode(NULL),
 	mCheckStretchUniform(NULL),
 	mCheckStretchTexture(NULL),
-	mCheckShowHighlight(NULL), //Phoenix:KC
-	mCheckActualRoot(NULL), //Phoenix:KC
+	// <FS:KC>
+	//mCheckStretchUniformLabel(NULL),
+	mCheckShowHighlight(NULL),
+	mCheckActualRoot(NULL),
+	// </FS:KC>
 
 	mBtnRotateLeft(NULL),
 	mBtnRotateReset(NULL),
@@ -437,8 +442,10 @@ LLFloaterTools::LLFloaterTools(const LLSD& key)
 	mCommitCallbackRegistrar.add("BuildTool.LinkObjects",		boost::bind(&LLSelectMgr::linkObjects, LLSelectMgr::getInstance()));
 	mCommitCallbackRegistrar.add("BuildTool.UnlinkObjects",		boost::bind(&LLSelectMgr::unlinkObjects, LLSelectMgr::getInstance()));
 
+	// <FS>
 	mCommitCallbackRegistrar.add("BuildTool.CopyKeys",			boost::bind(&LLFloaterTools::onClickBtnCopyKeys,this));
 	mCommitCallbackRegistrar.add("BuildTool.Expand",			boost::bind(&LLFloaterTools::onClickExpand,this));
+	// </FS>
 
 	mLandImpactsObserver = new LLLandImpactsObserver();
 	LLViewerParcelMgr::getInstance()->addObserver(mLandImpactsObserver);
@@ -492,11 +499,7 @@ void LLFloaterTools::refresh()
 	// Refresh object and prim count labels
 	LLLocale locale(LLLocale::USER_LOCALE);
 	
-	//-TT 2.8.2 - from KC
-	//std::string obj_count_string;
-	//LLResMgr::getInstance()->getIntegerString(obj_count_string, LLSelectMgr::getInstance()->getSelection()->getRootObjectCount());
-	//getChild<LLUICtrl>("obj_count")->setTextArg("[COUNT]", obj_count_string);	
-
+	// <FS:KC>
 	std::string desc_string;
 	std::string num_string;
 	bool enable_link_count = true;
@@ -562,11 +565,7 @@ void LLFloaterTools::refresh()
 	}
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[DESC]", desc_string);
 	getChild<LLUICtrl>("link_num_obj_count")->setTextArg("[NUM]", num_string);
-	// - KC
-	std::string prim_count_string;
-	LLResMgr::getInstance()->getIntegerString(prim_count_string, prim_count);
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
-	//getChild<LLUICtrl>("prim_count")->setTextArg("[COUNT]", prim_count_string);
+	// </FS:KC>
 #if 0
 	if (!gMeshRepo.meshRezEnabled())
 	{		
@@ -640,14 +639,10 @@ void LLFloaterTools::refresh()
 		childSetVisible("selection_empty", !have_selection);
 	}
 
-	// disable the object and prim counts if nothing selected
+	// <FS> disable the object and prim counts if nothing selected
 	bool have_selection = ! LLSelectMgr::getInstance()->getSelection()->isEmpty();
-	//getChildView("obj_count")->setEnabled(have_selection);
 	getChildView("link_num_obj_count")->setEnabled(have_selection && enable_link_count);
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
-	//getChildView("prim_count")->setEnabled(have_selection);
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1917 SH-1935
-	//getChildView("RenderingCost")->setEnabled(have_selection && sShowObjectCost);
+	// </FS>
 
 	// Refresh child tabs
 	mPanelPermissions->refresh();
@@ -858,8 +853,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 	//mCheckSelectLinked	->setVisible( edit_visible );
 	if (mCheckStretchUniform) mCheckStretchUniform->setVisible( edit_visible );
 	if (mCheckStretchTexture) mCheckStretchTexture->setVisible( edit_visible );
-	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible ); //Phoenix:KC
-	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible ); //Phoenix:KC
+	// <FS:KC>
+	//if (mCheckStretchUniformLabel) mCheckStretchUniformLabel->setVisible( edit_visible );
+	if (mCheckShowHighlight) mCheckShowHighlight->setVisible( edit_visible );
+	if (mCheckActualRoot) mCheckActualRoot->setVisible( edit_visible );
+	// </FS:KC>
 
 	// Create buttons
 	BOOL create_visible = (tool == LLToolCompCreate::getInstance());
@@ -955,13 +953,11 @@ void LLFloaterTools::updatePopup(LLCoordGL center, MASK mask)
 		getChildView("Strength:")->setVisible( land_visible);
 	}
 
-	//getChildView("link_num_obj_count")->setVisible( !land_visible);
-	// <FS:Ansariel> Was removed from floater_tools.xml as part of SH-1719
-	//getChildView("prim_count")->setVisible( !land_visible);
-
+	// <FS>
 	static LLCachedControl<bool> sFSToolboxExpanded(gSavedSettings,  "FSToolboxExpanded", TRUE);
 	mTab->setVisible(!land_visible && sFSToolboxExpanded);
 	mPanelLandInfo->setVisible(land_visible && sFSToolboxExpanded);
+	// </FS>
 
 	bool have_selection = !LLSelectMgr::getInstance()->getSelection()->isEmpty();
 
@@ -988,7 +984,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
 	mParcelSelection = LLViewerParcelMgr::getInstance()->getFloatingParcelSelection();
 	mObjectSelection = LLSelectMgr::getInstance()->getEditSelection();
 	
-	//Phoenix:KC - set the check box value from the saved setting
+	// <FS:KC> Set the check box value from the saved setting
 	// this function runs on selection change
 	if (!mOpen)
 	{
@@ -996,6 +992,7 @@ void LLFloaterTools::onOpen(const LLSD& key)
 		mOrginalShowHighlight = gSavedSettings.getBOOL("RenderHighlightSelections");
 		mCheckShowHighlight->setValue(mOrginalShowHighlight);
 	}
+	// </FS:KC>
 
 	std::string panel = key.asString();
 	if (!panel.empty())
@@ -1025,9 +1022,10 @@ void LLFloaterTools::onClose(bool app_quitting)
 	LLSelectMgr::getInstance()->promoteSelectionToRoot();
 	gSavedSettings.setBOOL("EditLinkedParts", FALSE);
 
-	//Reset silhouette override -KC
+	// <FS:KC>
 	gSavedSettings.setBOOL("RenderHighlightSelections", mOrginalShowHighlight);
 	mOpen = FALSE; //hack cause onOpen runs on every selection change but onClose doesnt.
+	// </FS:KC>
 
 	gViewerWindow->showCursor();
 
