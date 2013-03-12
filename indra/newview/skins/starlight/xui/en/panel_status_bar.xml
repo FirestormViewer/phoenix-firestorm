@@ -169,6 +169,17 @@
     visible="true"
     width="35"
     />
+  <icon
+    follows="right|top"
+    height="16"
+    image_name="Statusbar_Script_Error"
+    name="scriptout"
+    top="1"
+    left="273"
+    visible="true"
+    width="16"
+	scale_image="false"
+    />
      <text
 	   tool_tip="Name of land parcel on which you are standing. Click for About Land."
 	   text_color="White"
@@ -177,7 +188,7 @@
        follows="left|top|right"
        height="16"
        layout="topleft"
-       left="277"
+       left="291"
        length="1"
        name="parcel_info_text"
        top="5"

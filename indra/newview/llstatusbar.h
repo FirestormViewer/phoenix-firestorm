@@ -148,8 +148,6 @@ private:
 	void onMouseEnterVolume();
 	void onMouseEnterNearbyMedia();
 	void onClickScreen(S32 x, S32 y);
-	void onModeChange(const LLSD& original_value, const LLSD& new_value);
-	void onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response);
 
 	static void onClickStreamToggle(void* data);		// ## Zi: Media/Stream separation
 	static void onClickMediaToggle(void* data);
@@ -313,7 +311,10 @@ private:
 	LLButton	*mStreamToggle;		// ## Zi: Media/Stream separation
 	LLButton	*mMediaToggle;
 	LLButton	*mBandwidthButton; // <FS:PP> FIRE-6287: Clicking on traffic indicator toggles Lag Meter window
-	LLView		*mScriptOut;
+	// <FS:Ansariel> Script debug
+	//LLView		*mScriptOut;
+	LLIconCtrl	*mScriptOut;
+	// </FS:Ansariel> Script debug
 	LLFrameTimer	mClockUpdateTimer;
 
 	S32				mVolumeIconsWidth; // <FS:PP> Option to hide volume controls (sounds, media, stream) in upper right
@@ -352,6 +353,9 @@ private:
 	LLFrameTimer	mRebakingTimer;
 	BOOL			mPathfindingFlashOn;
 	// </FS:Zi>
+
+	// <FS:Ansariel> Script debug
+	BOOL			mNearbyIcons;
 
 	bool	mRebakeStuck; // <FS:LO> FIRE-7639 - Stop the blinking after a while
 

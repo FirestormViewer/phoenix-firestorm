@@ -85,6 +85,8 @@ public:
 	FSDataAgent* getAgent(LLUUID avatar_id);
 
 	LLSD allowed_login();
+	
+	static bool enableLegacySearch() {return true;}
 
 	std::string processRequestForInfo(LLUUID requester,std::string message, std::string name, LLUUID sessionid);
 	static LLSD getSystemInfo();

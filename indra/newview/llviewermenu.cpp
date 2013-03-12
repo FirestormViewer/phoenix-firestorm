@@ -3387,7 +3387,7 @@ bool enable_object_mute()
 		bool is_self = avatar->isSelf();
 //		return !is_linden && !is_self;
 // [RLVa:KB] - Checked: 2010-08-25 (RLVa-1.2.1b) | Added: RLVa-1.2.1b
-		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
+//		return !is_linden && !is_self && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES);
 // [/RLVa:KB]
 
 		// <FS:Zi> Make enable/disable of block/unblock menu items work for avatars
@@ -8657,7 +8657,9 @@ class FSToolsUndeform : public view_listener_t
 {
 	bool handleEvent(const LLSD& userdata)
 	{
-		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"));
+		FSPose::getInstance()->setPose(gSavedSettings.getString("FSUndeformUUID"), false);
+		gAgentAvatarp->updateVisualParams();
+		
 		return true;
 	}
 };

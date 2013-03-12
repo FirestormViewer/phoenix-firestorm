@@ -95,7 +95,7 @@ LLAvatarListItem::LLAvatarListItem(bool not_from_ui_factory/* = true*/)
 	mShowPermissions(false),
 	mHovered(false),
 	mShowVoiceVolume(false),
-	mNearbyRange(false),
+	mNearbyRange(0),
 	mShowDisplayName(true),
 	mShowUsername(true),
 	mFirstSeen(time(NULL)),

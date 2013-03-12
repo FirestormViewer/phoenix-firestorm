@@ -715,7 +715,7 @@ namespace LLInitParam
 		{
 			if (NAME_VALUE_LOOKUP::getValueFromName(name, mValue))
 			{
-				setValueName(name);
+				NAME_VALUE_LOOKUP::setValueName(name);
 			}
 
 			return *this;
@@ -879,7 +879,7 @@ namespace LLInitParam
 				BaseBlock::addParam(block_descriptor, param_descriptor, name);
 			}
 
-			setValue(value);
+			param_value_t::setValue(value);
 		} 
 
 		bool isProvided() const { return Param::anyProvided(); }
@@ -961,7 +961,7 @@ namespace LLInitParam
 		void set(value_assignment_t val, bool flag_as_provided = true)
 		{
 			param_value_t::clearValueName();
-			setValue(val);
+			param_value_t::setValue(val);
 			setProvided(flag_as_provided);
 		}
 
@@ -1102,7 +1102,7 @@ namespace LLInitParam
 		// assign block contents to this param-that-is-a-block
 		void set(value_assignment_t val, bool flag_as_provided = true)
 		{
-			setValue(val);
+			param_value_t::setValue(val);
 			param_value_t::clearValueName();
 			// force revalidation of block
 			// next call to isProvided() will update provision status based on validity
@@ -1753,7 +1753,7 @@ namespace LLInitParam
 
 			Optional& operator =(value_assignment_t val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 
@@ -1782,7 +1782,7 @@ namespace LLInitParam
 
 			Mandatory& operator =(value_assignment_t val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 
@@ -1817,7 +1817,7 @@ namespace LLInitParam
 
 			Multiple& operator =(value_assignment_t val)
 			{
-				set(val);
+				super_t::set(val);
 				return *this;
 			}
 

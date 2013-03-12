@@ -1705,10 +1705,10 @@
         shortcut="control|F">
             <menu_item_check.on_check
              function="Floater.Visible"
-             parameter="search_legacy" />
+             parameter="search" />
             <menu_item_check.on_click
              function="Floater.Toggle"
-             parameter="search_legacy" />
+             parameter="search" />
             </menu_item_check>
 
     	<menu_item_call
@@ -3831,13 +3831,6 @@
              shortcut="shift|P">
                 <menu_item_call.on_click
                  function="Advanced.PrintAgentInfo" />
-            </menu_item_call>
-            <menu_item_call
-             label="Memory Stats"
-             name="Memory Stats"
-             shortcut="control|alt|shift|M">
-                <menu_item_call.on_click
-                 function="Advanced.PrintTextureMemoryStats" />
             </menu_item_call>
             <menu_item_check
              label="Double-Click Auto-Pilot"

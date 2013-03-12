@@ -351,7 +351,6 @@
 			<menu_item_call label="Odaklayıcı Tutucunun Dökümünü Al" name="Dump Focus Holder"/>
 			<menu_item_call label="Seçilen Nesne Bilgisini Yazdır" name="Print Selected Object Info"/>
 			<menu_item_call label="Aracı Bilgisini Yazdır" name="Print Agent Info"/>
-			<menu_item_call label="Bellek İstatistikleri" name="Memory Stats"/>
 			<menu_item_check label="Bölge Hata Ayıklama Konsolu" name="Region Debug Console"/>
 			<menu_item_check label="SelectMgr İçin Hata Ayıklama" name="Debug SelectMgr"/>
 			<menu_item_check label="Tıklamalar İçin Hata Ayıklama" name="Debug Clicks"/>

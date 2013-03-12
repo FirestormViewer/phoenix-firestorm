@@ -607,7 +607,8 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 			return;
 		}
 
-		if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
+		// <FS:Ansariel> Script debug icon
+		//if (gSavedSettings.getS32("ShowScriptErrorsLocation")== 1)// show error in window //("ScriptErrorsAsChat"))
 		{
 
 			LLColor4 txt_color;
@@ -618,7 +619,14 @@ void LLNearbyChatHandler::processChat(const LLChat& chat_msg,
 												chat_msg.mFromName,
 												txt_color,
 												chat_msg.mFromID);
-			return;
+			// <FS:Ansariel> Script debug icon
+			//return;
+			if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 1)
+			{
+				return;
+			}
+			// </FS:Ansariel> Script debug icon
+
 		}
 	}
 

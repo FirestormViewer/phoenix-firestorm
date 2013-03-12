@@ -437,7 +437,6 @@
 			<menu_item_call label="Zrzut punktu skupienia" name="Dump Focus Holder"/>
 			<menu_item_call label="Listuj informacje o zaznaczonym obiekcie" name="Print Selected Object Info"/>
 			<menu_item_call label="Listuj informacje o Agencie" name="Print Agent Info"/>
-			<menu_item_call label="Statystyki pamięci" name="Memory Stats"/>
 			<menu_item_check label="Klik-klik-autopilot" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Klik-klik-teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="Debuguj SelectMgr" name="Debug SelectMgr"/>

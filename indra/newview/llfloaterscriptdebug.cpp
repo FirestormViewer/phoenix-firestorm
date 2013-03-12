@@ -65,7 +65,10 @@ LLFloaterScriptDebug::~LLFloaterScriptDebug()
 
 void LLFloaterScriptDebug::show(const LLUUID& object_id)
 {
-	addOutputWindow(object_id);
+	// <FS:Ansariel> Script debug icon
+	//addOutputWindow(object_id);
+	addOutputWindow(object_id, true);
+	// </FS:Ansariel> Script debug icon
 }
 
 BOOL LLFloaterScriptDebug::postBuild()
@@ -85,7 +88,10 @@ BOOL LLFloaterScriptDebug::postBuild()
 	return FALSE;
 }
 
-LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID &object_id)
+// <FS:Ansariel> Script debug icon
+//LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID &object_id)
+LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID& object_id, bool show /* = false */)
+// </FS:Ansariel> Script debug icon
 {
 	LLMultiFloater* host = LLFloaterReg::showTypedInstance<LLMultiFloater>("script_debug", LLSD());
 	if (!host)
@@ -95,6 +101,13 @@ LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID &object_id)
 	// prevent stealing focus, see EXT-8040
 	LLFloater* floaterp = LLFloaterReg::showInstance("script_debug_output", object_id, FALSE);
 	LLFloater::setFloaterHost(NULL);
+
+	// <FS:Ansariel> Script debug icon
+	if (gSavedSettings.getS32("ShowScriptErrorsLocation") == 0 && !show)
+	{
+		host->closeFloater();
+	}
+	// </FS:Ansariel> Script debug icon
 
 	return floaterp;
 }
@@ -111,6 +124,9 @@ void LLFloaterScriptDebug::addScriptLine(const std::string &utf8mesg, const std:
 	if (objectp)
 	{
 		objectp->setIcon(LLViewerTextureManager::getFetchedTextureFromFile("script_error.j2c", TRUE, LLGLTexture::BOOST_UI));
+		// <FS:Ansariel> Mark script error icons
+		objectp->getIcon()->setScriptError();
+		// </FS:Ansariel> Mark script error icons
 		floater_label = llformat("%s (%.0f, %.0f, %.0f)",
 						user_name.c_str(),
 						objectp->getPositionRegion().mV[VX],

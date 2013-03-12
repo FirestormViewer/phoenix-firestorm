@@ -20,7 +20,7 @@ class FSPose : public LLSingleton<FSPose>
 	friend class LLSingleton<FSPose>;
 	LOG_CLASS(FSPose);
 public:
-	void setPose(std::string new_pose);
+	void setPose(std::string new_pose, bool save_state = true);
 	void stopPose();
 protected:
 	FSPose();

@@ -268,11 +268,16 @@ public:
 	}
 };
 
+FSFloaterSearch::SearchQuery::SearchQuery()
+:	category("category", ""),
+query("query")
+{}
+
 ////////////////////////////////////////
 //         The floater itself         //
 ////////////////////////////////////////
 
-FSFloaterSearch::FSFloaterSearch(const LLSD& key)
+FSFloaterSearch::FSFloaterSearch(const Params& key)
 :	LLFloater(key)
 {
 	mRemoteParcelObserver = new FSSearchRemoteParcelInfoObserver(this);
@@ -295,13 +300,16 @@ void FSFloaterSearch::onOpen(const LLSD& key)
 	FSPanelSearchEvents* panel_events	= findChild<FSPanelSearchEvents>("panel_ls_events");
 	FSPanelSearchLand* panel_land		= findChild<FSPanelSearchLand>("panel_ls_land");
 	FSPanelSearchClassifieds* panel_classifieds	= findChild<FSPanelSearchClassifieds>("panel_ls_classifieds");
+	FSPanelSearchWeb* panel_web			= findChild<FSPanelSearchWeb>("panel_ls_web");
 	
+	Params p(key);
 	panel_people->onSearchPanelOpen(this);
 	panel_groups->onSearchPanelOpen(this);
 	panel_places->onSearchPanelOpen(this);
 	panel_events->onSearchPanelOpen(this);
 	panel_land->onSearchPanelOpen(this);
 	panel_classifieds->onSearchPanelOpen(this);
+	panel_web->loadURL(p.search);
 }
 
 //virtual
@@ -340,21 +348,6 @@ BOOL FSFloaterSearch::postBuild()
 		mDetailsPanel->setVisible(false);
 	mHasSelection = false;
 	
-	/// Disable websearch on OpenSim because most OpenSim grids don't have one and the ones that do
-	/// suck even more than LL's. (Scary but true!)
-#ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSLMain() && !LLGridManager::getInstance()->isInSLBeta())
-	{
-		if (tabs)
-		{
-			LLPanel* web_panel = tabs->getPanelByName("panel_ls_web");
-			if (web_panel)
-			{
-				tabs->removeTabPanel(web_panel);
-			}
-		}
-	}
-#endif // OPENSIM
 	if (!tabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
 		tabs->selectFirstTab();
 	
@@ -1385,6 +1378,16 @@ void FSPanelSearchPlaces::find()
 		LLNotificationsUtil::add("NoContentToSearch");
 		return;
 	}
+	S8 category;
+	std::string category_string = findChild<LLComboBox>("places_category")->getSelectedValue();
+	if (category_string == "any")
+	{
+		category = LLParcel::C_ANY;
+	}
+	else
+	{
+		category = LLParcel::getCategoryFromString(category_string);
+	}
 	U32 scope = 0;
 	if (gAgent.wantsPGOnly())
 		scope |= DFQ_PG_SIMS_ONLY;
@@ -1396,7 +1399,6 @@ void FSPanelSearchPlaces::find()
 		scope |= DFQ_INC_MATURE;
 	if (inc_adult && adult_enabled)
 		scope |= DFQ_INC_ADULT;
-	S8 category = LLParcel::getCategoryFromString(findChild<LLComboBox>("places_category")->getSelectedValue().asString());
 	scope |= DFQ_DWELL_SORT;
 	
 	mResultsReceived = 0;
@@ -1413,6 +1415,7 @@ void FSPanelSearchPlaces::find()
 	gMessageSystem->addString("QueryText", text);
 	gMessageSystem->addU32("QueryFlags", scope);
 	gMessageSystem->addS8("Category", category);
+	// TODO: Search filter by region name.
 	gMessageSystem->addString("SimName", "");
 	gMessageSystem->addS32("QueryStart", mStartSearch);
 	gAgent.sendReliableMessage();
@@ -1547,6 +1550,13 @@ void FSPanelSearchPlaces::processSearchReply(LLMessageSystem* msg, void**)
 			return;
 		}
 		else if (status & STATUS_SEARCH_PLACES_SEARCHDISABLED)
+		{
+			search_results->setEnabled(FALSE);
+			search_results->setCommentText(LLTrans::getString("search_disabled"));
+			self->setLoadingProgress(false);
+			return;
+		}
+		else if (status & STATUS_SEARCH_PLACES_ESTATEEMPTY)
 		{
 			search_results->setEnabled(FALSE);
 			search_results->setCommentText(LLTrans::getString("search_disabled"));
@@ -2737,43 +2747,46 @@ FSPanelSearchWeb::FSPanelSearchWeb()
 	// the URL suffix that is used to search that category
 	mCategoryPaths = LLSD::emptyMap();
 	mCategoryPaths["all"]          = "search";
-	// We don't use these yet, but someday we will.
-	//mCategoryPaths["people"]       = "search/people";
-	//mCategoryPaths["places"]       = "search/places";
-	//mCategoryPaths["events"]       = "search/events";
-	//mCategoryPaths["groups"]       = "search/groups";
-	//mCategoryPaths["wiki"]         = "search/wiki";
-	//mCategoryPaths["destinations"] = "destinations";
-	//mCategoryPaths["classifieds"]  = "classifieds";
+	mCategoryPaths["people"]       = "search/people";
+	mCategoryPaths["places"]       = "search/places";
+	mCategoryPaths["events"]       = "search/events";
+	mCategoryPaths["groups"]       = "search/groups";
+	mCategoryPaths["wiki"]         = "search/wiki";
+	mCategoryPaths["destinations"] = "destinations";
+	mCategoryPaths["classifieds"]  = "classifieds";
 }
 
 FSPanelSearchWeb::~FSPanelSearchWeb()
 {
 }
 
-FSPanelSearchWeb::SearchQuery::SearchQuery()
-:	category("category", ""), // <- Stupidnesss until we move to full webbrowser replacement
-query("query")
-{}
-
 BOOL FSPanelSearchWeb::postBuild()
 {
 	mWebBrowser = getChild<LLMediaCtrl>("search_browser");
-	if (mWebBrowser)
-	{
-		mWebBrowser->addObserver(this);
-		mWebBrowser->navigateTo(loadURL(), "text/html");
-	}
+	if (mWebBrowser) mWebBrowser->addObserver(this);
     return TRUE;
 }
 
-std::string FSPanelSearchWeb::loadURL()
+void FSPanelSearchWeb::loadURL(const FSFloaterSearch::SearchQuery &p)
 {
+	if (! mWebBrowser || !p.validateBlock())
+	{
+		return;
+	}
+	
+	// work out the subdir to use based on the requested category
 	LLSD subs;
-	subs["CATEGORY"] = mCategoryPaths["all"].asString();
-
+	if (mCategoryPaths.has(p.category))
+	{
+		subs["CATEGORY"] = mCategoryPaths[p.category].asString();
+	}
+	else
+	{
+		subs["CATEGORY"] = mCategoryPaths["all"].asString();
+	}
+	
 	// add the search query string
-	subs["QUERY"] = "";
+	subs["QUERY"] = LLURI::escape(p.query);
 	
 	// add the permissions token that login.cgi gave us
 	// We use "search_token", and fallback to "auth_token" if not present.
@@ -2800,7 +2813,13 @@ std::string FSPanelSearchWeb::loadURL()
 	}
 	subs["MATURITY"] = maturity;
 	
+	// add the user's god status
+	subs["GODLIKE"] = gAgent.isGodlike() ? "1" : "0";
+	
+	// Get the search URL and expand all of the substitutions
+	// (also adds things like [LANGUAGE], [VERSION], [OS], etc.)
 	std::string url;
+	
 #ifdef OPENSIM
 	std::string debug_url = gSavedSettings.getString("SearchURLDebug");
 	if (gSavedSettings.getBOOL("DebugSearch") && !debug_url.empty())
@@ -2813,11 +2832,14 @@ std::string FSPanelSearchWeb::loadURL()
 		? LLLoginInstance::getInstance()->getResponse("search").asString()
 		: gSavedSettings.getString("SearchURLOpenSim");
 	}
-	else // we are in SL or SL beta
+	else
 #endif // OPENSIM
 	{
 		url = gSavedSettings.getString("SearchURL");
 	}
+	
 	url = LLWeb::expandURLSubstitutions(url, subs);
-	return url;
+	
+	// Finally, load the URL in the webpanel
+	mWebBrowser->navigateTo(url, "text/html");
 }

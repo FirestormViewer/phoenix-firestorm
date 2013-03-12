@@ -415,7 +415,6 @@
 			<menu_item_call label="Вывод средства фокусировки" name="Dump Focus Holder"/>
 			<menu_item_call label="Печать информации о выбранных объектах" name="Print Selected Object Info"/>
 			<menu_item_call label="Печать информации об агенте" name="Print Agent Info"/>
-			<menu_item_call label="Статистическая информация о памяти" name="Memory Stats"/>
 			<menu_item_check label="Консоль отладки региона" name="Region Debug Console"/>
 			<menu_item_check label="Отладка SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="Отладка щелчков мышью" name="Debug Clicks"/>

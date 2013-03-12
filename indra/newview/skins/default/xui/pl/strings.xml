@@ -4658,6 +4658,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Landmark_Here_Label">
 		Utwórz Landmark
 	</string>
+	<string name="Command_Teleport_History_Label">
+		Historia teleportacji
+	</string>
+	<string name="Command_Pose_Stand_Label">
+		Podest do pozowania
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4780,6 +4786,12 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Landmark_Here_Tooltip">
 		Utwórz Landmark Twojej bieżącej pozycji
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Otwiera historię teleportacji
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Podest do pozowania dla awatara, do dostrajania dodatków
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
@@ -5143,5 +5155,14 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="PS_Arms_upward_Legs_together">
 		Ramiona w górze, nogi złączone
+	</string>
+	<string name="QP_WL_Region_Default">
+		Domyślne regionu
+	</string>
+	<string name="QP_WL_Day_Cycle_Based">
+		Bazowane na cyklu dnia
+	</string>
+	<string name="QP_WL_None">
+		Brak
 	</string>
 </strings>

@@ -272,7 +272,6 @@
 			<menu_item_call label="Media browser test" name="Web Browser Test"/>
 			<menu_item_call label="Browser med webindhold" name="Web Content Browser"/>
 			<menu_item_call label="Print info om valgt objekt" name="Print Selected Object Info"/>
-			<menu_item_call label="Hukommelse statistik" name="Memory Stats"/>
 			<menu_item_check label="Debug konsol for region" name="Region Debug Console"/>
 			<menu_item_check label="Debug klik" name="Debug Clicks"/>
 			<menu_item_check label="Debug muse-hændelser" name="Debug Mouse Events"/>

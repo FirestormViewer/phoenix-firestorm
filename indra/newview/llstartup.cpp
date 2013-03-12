@@ -220,6 +220,7 @@
 #include "fsfloatersearch.h"
 #include "fslslbridge.h"
 #include "fswsassetblacklist.h"
+#include "llfloatersearch.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
 #include "NACLantispam.h"
@@ -3959,7 +3960,25 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		LL_DEBUGS("OS_SETTINGS") << "no destination_guide_url in login response" << llendl;
 	}
 // </FS:AW  opensim destinations and avatar picker>
-#endif // OPENSIM // <FS:AW optional opensim support>
+	
+// <FS:CR> Legacy search killswitch!
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLFloaterReg::add("search", "floater_fs_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearch>);
+	}
+	else
+#endif // OPENSIM
+	{
+		if (FSData::enableLegacySearch())
+		{
+			LLFloaterReg::add("search", "floater_fs_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearch>);
+		}
+		else
+		{
+			LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
+		}
+	}
+// </FS:CR>
 
 	bool success = false;
 	// JC: gesture loading done below, when we have an asset system

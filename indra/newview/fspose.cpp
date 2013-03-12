@@ -25,14 +25,17 @@ FSPose::~FSPose()
 {
 }
 
-void FSPose::setPose(std::string new_pose)
+void FSPose::setPose(std::string new_pose, bool save_state)
 {
 	if (isAgentAvatarValid())
 	{
 		if (mCurrentPose.notNull())
+		{
 			gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_STOP);
-		mCurrentPose.set(new_pose);
-		gAgent.sendAnimationRequest(mCurrentPose, ANIM_REQUEST_START);
+		}
+		if (save_state)
+			mCurrentPose.set(new_pose);
+		gAgent.sendAnimationRequest(LLUUID(new_pose), ANIM_REQUEST_START);
 	}
 }
 

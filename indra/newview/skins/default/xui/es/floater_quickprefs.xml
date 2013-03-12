@@ -7,11 +7,15 @@
 					Ancho de banda:
 				</text>
 				<slider name="max_bandwidth" left_delta="107"/>
+				<check_box label="Usar WL de la región" name="UseRegionWindlight" width="200"/>
 				<text name="WL Sky" tool_tip="Preselecciones Windlight para el cielo" width="120">
 					Cielo WL:
 				</text>
 				<text name="WL Water" tool_tip="Preselecciones Windlight para el agua" width="120">
 					Agua WL:
+				</text>
+				<text name="Day Cycle" tool_tip="Preselecciones Windlight para tu ciclo de día">
+					Ciclo día:
 				</text>
 				<icon name="SkyDayCycle" tool_tip="Cambia la hora del día"/>
 				<button name="ResetToRegionDefault" tool_tip="Restablece las opciones WindLight a los valores por defecto de la región"/>
@@ -21,12 +25,12 @@
 	</panel>
 	<panel name="edit_overlay_panel">
 		<button name="move_up_button" tool_tip="Mueve el control seleccionado una posición hacia arriba"/>
+		<button name="add_new_button" tool_tip="Añade un nuevo control de preferencias rápidas"/>
 		<line_editor name="label_edit" tool_tip="Escribe aquí la etiqueta para el control" label="Etiqueta:"/>
+		<button name="move_down_button" tool_tip="Mueve el control seleccionado una posición hacia abajo"/>
 		<combo_box name="control_name_combo" tool_tip="Selecciona el control de la lista de configuraciones del depurador">
 			<combo_box.item label="=== Escoge ===" name="control_name_list_header"/>
 		</combo_box>
-		<button name="move_down_button" tool_tip="Mueve el control seleccionado una posición hacia abajo"/>
-		<button name="add_new_button" tool_tip="Añade un nuevo control de preferencias rápidas"/>
 		<text name="control_type_label">
 			Tipo:
 		</text>

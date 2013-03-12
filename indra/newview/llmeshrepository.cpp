@@ -3611,58 +3611,6 @@ void LLPhysicsDecomp::doDecompositionSingleHull()
 	}
 }
 
-#ifdef ND_HASCONVEXDECOMP_TRACER
-
-class ndDecompTracer: public ndConvexDecompositionTracer
-{
-	int mRefCount;
-
-public:
-	ndDecompTracer()
-		: mRefCount(0)
-	{
-	}
-
-	virtual void trace( char const *a_strMsg )
-	{
-		llinfos << a_strMsg << llendl;
-	}
-
-	virtual void startTraceData( char const *a_strWhat)
-	{
-		llinfos << a_strWhat << llendl;
-	}
-
-	virtual void traceData( char const *a_strData )
-	{
-		llinfos << a_strData << llendl;
-	}
-
-	virtual void endTraceData()
-	{
-
-	}
-
-	virtual int getLevel()
-	{
-		return eTraceFunctions;// | eTraceData;
-	}
-
-	virtual void addref()
-	{
-		++mRefCount;
-	}
-
-	virtual void release()
-	{
-		--mRefCount;
-		if( mRefCount == 0 )
-			delete this;
-	}
-};
-
-#endif
-
 void LLPhysicsDecomp::run()
 {
 	LLConvexDecomposition* decomp = LLConvexDecomposition::getInstance();
@@ -3673,13 +3621,6 @@ void LLPhysicsDecomp::run()
 		mInited = true;
 		return;
 	}
-
-#ifdef ND_HASCONVEXDECOMP_TRACER
-	ndConvexDecompositionTracable *pTraceable = dynamic_cast< ndConvexDecompositionTracable* >( decomp );
-
-	if( pTraceable )
-		pTraceable->setTracer( new ndDecompTracer() );
-#endif
 
 	decomp->initThread();
 	mInited = true;

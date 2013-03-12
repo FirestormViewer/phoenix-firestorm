@@ -815,7 +815,7 @@ void FloaterQuickPrefs::enableWindlightButtons(BOOL enable)
 	childSetEnabled("WaterPresetsCombo", enable);
 	childSetEnabled("WWPrevPreset", enable);
 	childSetEnabled("WWNextPreset", enable);
-	childSetEnabled("UseRegionWL", enable);
+	childSetEnabled("ResetToRegionDefault", enable);
 	childSetEnabled("UseRegionWindlight", enable);
 	childSetEnabled("DCPresetsCombo", enable);
 	childSetEnabled("DCPrevPreset", enable);

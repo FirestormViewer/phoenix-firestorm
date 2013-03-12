@@ -376,7 +376,6 @@
 			<menu_item_call label="Test browser multimedia" name="Web Browser Test"/>
 			<menu_item_call label="Browser contenuto Web" name="Web Content Browser"/>
 			<menu_item_call label="Stampa informazioni oggetto selezionato" name="Print Selected Object Info"/>
-			<menu_item_call label="Statistiche memoria" name="Memory Stats"/>
 			<menu_item_check label="Console di debug regione" name="Region Debug Console"/>
 			<menu_item_check label="Debug clic" name="Debug Clicks"/>
 			<menu_item_check label="Debug eventi mouse" name="Debug Mouse Events"/>

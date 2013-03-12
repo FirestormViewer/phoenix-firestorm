@@ -350,7 +350,6 @@
 			<menu_item_call label="傾印焦點容器" name="Dump Focus Holder"/>
 			<menu_item_call label="列印所選物件資訊" name="Print Selected Object Info"/>
 			<menu_item_call label="列印用戶資訊" name="Print Agent Info"/>
-			<menu_item_call label="計憶體狀態" name="Memory Stats"/>
 			<menu_item_check label="地區除錯控制台" name="Region Debug Console"/>
 			<menu_item_check label="除錯 SelectMgr" name="Debug SelectMgr"/>
 			<menu_item_check label="除錯點按動作" name="Debug Clicks"/>

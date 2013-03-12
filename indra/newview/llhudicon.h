@@ -75,6 +75,11 @@ public:
 
 	BOOL lineSegmentIntersect(const LLVector3& start, const LLVector3& end, LLVector3* intersection);
 
+	// <FS:Ansariel> Mark script error icons
+	void setScriptError();
+	static BOOL scriptIconsNearby();
+	// </FS:Ansariel> Mark script error icons
+
 protected:
 	LLHUDIcon(const U8 type);
 	~LLHUDIcon();
@@ -92,6 +97,11 @@ private:
 
 	typedef std::vector<LLPointer<LLHUDIcon> > icon_instance_t;
 	static icon_instance_t sIconInstances;
+
+	// <FS:Ansariel> Mark script error icons
+	bool					mScriptError;
+	static icon_instance_t	sScriptErrorIconInstances;
+	// </FS:Ansariel> Mark script error icons
 };
 
 #endif // LL_LLHUDICON_H

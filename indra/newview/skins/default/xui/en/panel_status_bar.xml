@@ -182,6 +182,17 @@
     visible="true"
     width="35"
     />
+  <icon
+    follows="right|top"
+    height="16"
+    image_name="Statusbar_Script_Error"
+    name="scriptout"
+    top="1"
+    left="273"
+    visible="true"
+    width="16"
+	scale_image="false"
+    />
      <!-- <FS:Zi> This text changes color when hovered over, implemented in llstatusbar.cpp
                   Colors are defined in colors.xml as ParcelNormalColor and ParcelHoverColor -->
      <text
@@ -190,7 +201,7 @@
        follows="left|top|right"
        height="16"
        layout="topleft"
-       left="277"
+       left="291"
        length="1"
        name="parcel_info_text"
        top="3"

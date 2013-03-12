@@ -468,7 +468,6 @@
 			<menu_item_call label="Fokus ausgeben" name="Dump Focus Holder"/>
 			<menu_item_call label="Ausgewählte Objektinfo drucken" name="Print Selected Object Info"/>
 			<menu_item_call label="Agent-Info drucken" name="Print Agent Info"/>
-			<menu_item_call label="Speicher-Stats" name="Memory Stats"/>
 			<menu_item_check label="Doppel-Klick-Auto-Pilot" name="Double-ClickAuto-Pilot"/>
 			<menu_item_check label="Doppel-Klick-Teleport" name="DoubleClick Teleport"/>
 			<menu_item_check label="Regions-Debug-Konsole" name="Region Debug Console"/>

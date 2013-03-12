@@ -209,9 +209,9 @@
            label_ref="Command_Search_Label"
            tooltip_ref="Command_Search_Tooltip"
            execute_function="Floater.Toggle"
-           execute_parameters="search_legacy"
+           execute_parameters="search"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="search_legacy"
+           is_running_parameters="search"
            />
   <command name="snapshot"
            available_in_toybox="true"
@@ -437,5 +437,25 @@
            tooltip_ref="Command_Landmark_Here_Tooltip"
            execute_function="World.CreateLandmark"
            is_enabled_function="World.EnableCreateLandmark"
+           />
+  <command name="teleport_history"
+           available_in_toybox="true"
+           icon="teleport_history"
+           label_ref="Command_Teleport_History_Label"
+           tooltip_ref="Command_Teleport_History_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="fs_teleporthistory"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="fs_teleporthistory"
+           />
+  <command name="pose_stand"
+           available_in_toybox="true"
+           icon="pose_stand"
+           label_ref="Command_Pose_Stand_Label"
+           tooltip_ref="Command_Pose_Stand_Tooltip"
+           execute_function="Floater.Toggle"
+           execute_parameters="fs_posestand"
+           is_running_function="Floater.IsOpen"
+           is_running_parameters="fs_posestand"
            />
 </commands>

@@ -6,6 +6,7 @@
 				<text name="Maximum bandwidth" tool_tip="Ustaw przepustowość swojej sieci w Kbps (kilobitach na sekundę)">
 					Maks. przepust.:
 				</text>
+				<check_box label="Używaj Windlight regionu" name="UseRegionWindlight" />
 				<text name="WL Sky" tool_tip="Ustawienia systemu Windlight dla Twojego nieba">
 					Niebo WL:
 				</text>
@@ -13,6 +14,9 @@
 					Woda WL:
 				</text>
 				<icon name="SkyDayCycle" tool_tip="Zmień porę dnia" />
+				<text name="Day Cycle" tool_tip="Zapisane ustawienia systemu Windlight dla cyklów dnia.">
+					Cykl dnia:
+				</text>
 				<button name="ResetToRegionDefault" tool_tip="Resetuj opcje systemu Windlight do domyślnych regionu" />
 				<button name="button_edit" tool_tip="Kliknij tutaj, aby skonfigurować kontrolki swojego szybkiego strojenia" />
 			</layout_panel>
@@ -20,12 +24,12 @@
 	</panel>
 	<panel name="edit_overlay_panel">
 		<button name="move_up_button" tool_tip="Przenieś wybraną kontrolkę jeden slot wyżej" />
+		<button name="add_new_button" tool_tip="Dodaj nową kontrolkę szybkiego strojenia" />
 		<line_editor name="label_edit" tool_tip="Wpisz tutaj etykietę dla kontrolki" label="Etykieta:" />
+		<button name="move_down_button" tool_tip="Przenieś wybraną kontrolkę jeden slot niżej" />
 		<combo_box name="control_name_combo" tool_tip="Wybierz kontrolkę z listy ustawień debugowania">
 			<combo_box.item label="=== Wybierz ===" name="control_name_list_header" />
 		</combo_box>
-		<button name="move_down_button" tool_tip="Przenieś wybraną kontrolkę jeden slot niżej" />
-		<button name="add_new_button" tool_tip="Dodaj nową kontrolkę szybkiego strojenia" />
 		<text name="control_type_label">
 			Typ:
 		</text>

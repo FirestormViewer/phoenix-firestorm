@@ -848,6 +848,9 @@ BOOL LLTabContainer::handleKeyHere(KEY key, MASK mask)
 // virtual
 BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 {
+	if( 0 == getTabCount() )
+		return LLUICtrl::handleScrollWheel(x, y, clicks);
+
 	LLTabTuple* firsttuple = getTab(0);
 	static LLUICachedControl<S32> tabcntrv_pad ("UITabCntrvPad", 0);
 	BOOL has_scroll_arrows = (getMaxScrollPos() > 0);

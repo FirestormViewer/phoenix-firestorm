@@ -188,7 +188,8 @@ LLStatusBar::LLStatusBar(const LLRect& rect)
 	mSquareMetersCommitted(0),
 	mPathfindingFlashOn(TRUE),	// <FS:Zi> Pathfinding rebake functions
 	mAudioStreamEnabled(FALSE),	// ## Zi: Media/Stream separation
-	mRebakeStuck(FALSE)			// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	mRebakeStuck(FALSE),		// <FS:LO> FIRE-7639 - Stop the blinking after a while
+	mNearbyIcons(FALSE)			// <FS:Ansariel> Script debug
 {
 	setRect(rect);
 	
@@ -268,12 +269,14 @@ BOOL LLStatusBar::postBuild()
 	getChild<LLUICtrl>("buyL")->setCommitCallback(
 		boost::bind(&LLStatusBar::onClickBuyCurrency, this));
 
-	getChild<LLUICtrl>("goShop")->setCommitCallback(boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
+	// <FS:Ansariel> Not used in Firestorm
+	//getChild<LLUICtrl>("goShop")->setCommitCallback(boost::bind(&LLWeb::loadURLExternal, gSavedSettings.getString("MarketplaceURL")));
 
 	mBoxBalance = getChild<LLTextBox>("balance");
 	mBoxBalance->setClickedCallback( &LLStatusBar::onClickBalance, this );
 	
-	mBtnStats = getChildView("stat_btn");
+	// <FS:Ansariel> Not used in Firestorm
+	//mBtnStats = getChildView("stat_btn");
 
 	mBtnVolume = getChild<LLButton>( "volume_btn" );
 	mBtnVolume->setClickedCallback( onClickVolume, this );
@@ -355,7 +358,12 @@ BOOL LLStatusBar::postBuild()
 	mPanelNearByMedia->setFollows(FOLLOWS_TOP|FOLLOWS_RIGHT);
 	mPanelNearByMedia->setVisible(FALSE);
 
-	mScriptOut = getChildView("scriptout");
+	// <FS:Ansariel> Script debug
+	//mScriptOut = getChildView("scriptout");
+	mScriptOut = getChild<LLIconCtrl>("scriptout");
+	mScriptOut->setMouseDownCallback(boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
+	mNearbyIcons = LLHUDIcon::scriptIconsNearby();
+	// </FS:Ansariel> Script debug
 	
 	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
 	mParcelInfoText = getChild<LLTextBox>("parcel_info_text");
@@ -407,10 +415,6 @@ BOOL LLStatusBar::postBuild()
 	mParcelMgrConnection = LLViewerParcelMgr::getInstance()->addAgentParcelChangedCallback(
 			boost::bind(&LLStatusBar::onAgentParcelChange, this));
 
-	LLUICtrl& mode_combo = getChildRef<LLUICtrl>("mode_combo");
-	mode_combo.setValue(gSavedSettings.getString("SessionSettingsFile"));
-	mode_combo.setCommitCallback(boost::bind(&LLStatusBar::onModeChange, this, getChild<LLUICtrl>("mode_combo")->getValue(), _2));
-
 	if (!gSavedSettings.getBOOL("ShowNetStats"))
 	{
 		updateNetstatVisibility(LLSD(FALSE));
@@ -425,32 +429,6 @@ BOOL LLStatusBar::postBuild()
 	// </FS:PP>
 
 	return TRUE;
-}
-
-void LLStatusBar::onModeChange(const LLSD& original_value, const LLSD& new_value)
-{
-	if (original_value.asString() != new_value.asString())
-	{
-		LLNotificationsUtil::add("ModeChange", LLSD(), LLSD(), boost::bind(&LLStatusBar::onModeChangeConfirm, this, original_value, new_value, _1, _2));
-	}
-}
-
-void LLStatusBar::onModeChangeConfirm(const LLSD& original_value, const LLSD& new_value, const LLSD& notification, const LLSD& response)
-{
-	S32 option = LLNotificationsUtil::getSelectedOption(notification, response);
-	switch (option)
-	{
-	case 0:
-		gSavedSettings.getControl("SessionSettingsFile")->set(new_value);
-		LLAppViewer::instance()->requestQuit();
-		break;
-	case 1:
-		// revert to original value
-		getChild<LLUICtrl>("mode_combo")->setValue(original_value);
-		break;
-	default:
-		break;
-	}
 }
 
 // Per-frame updates of visibility
@@ -579,6 +557,14 @@ void LLStatusBar::refresh()
 	// ## Zi: Media/Stream separation
 
 	mParcelInfoText->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
+
+	// <FS:Ansariel> Script debug
+	if (mNearbyIcons != LLHUDIcon::scriptIconsNearby())
+	{
+		mNearbyIcons = LLHUDIcon::scriptIconsNearby();
+		updateParcelIcons();
+	}
+	// </FS:Ansariel> Script debug
 }
 
 void LLStatusBar::setVisibleForMouselook(bool visible)
@@ -1148,6 +1134,9 @@ void LLStatusBar::updateParcelIcons()
 		mLightshareBtn->setVisible(has_lightshare);
 		mLightshareBtn->setEnabled(has_lightshare);
 		// </FS:CR>
+		// <FS:Ansariel> Script debug
+		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
+		// </FS:Ansariel> Script debug
 	}
 	else
 	{
@@ -1161,6 +1150,9 @@ void LLStatusBar::updateParcelIcons()
 		// <FS:CR> FIRE-5118 - Lightshare support
 		mLightshareBtn->setVisible(false);
 		// </FS:CR>
+		// <FS:Ansariel> Script debug
+		mScriptOut->setVisible(FALSE);
+		// </FS:Ansariel> Script debug
 		allow_voice	= vpm->allowAgentVoice();	// <FS:Zi> update allow_voice even if icons are hidden
 	}
 
@@ -1195,6 +1187,7 @@ void LLStatusBar::layoutParcelIcons()
 	//           info text!
 	S32 left = FIRST_ICON_HPAD;
 
+	left = layoutWidget(mScriptOut, left);
 	left = layoutWidget(mDamageText, left);
 
 	for (int i = ICON_COUNT - 1; i >= 0; --i)

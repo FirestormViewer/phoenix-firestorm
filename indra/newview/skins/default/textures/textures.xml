@@ -486,6 +486,9 @@ with the same filename but different name
   <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
   <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
 
+<!-- FS:Ansariel: Icon for script errors in V1 status bar -->
+  <texture name="Statusbar_Script_Error" file_name="icons/status_script_debug.tga" preload="false" />
+
   <texture name="Pause_Off" file_name="icons/Pause_Off.png" preload="false" />
   <texture name="Pause_Over" file_name="icons/Pause_Over.png" preload="false" />
   <texture name="Pause_Press" file_name="icons/Pause_Press.png" preload="false" />
@@ -716,6 +719,8 @@ with the same filename but different name
   <texture name="contact_sets" file_name="toolbar_icons/contact_sets.png" preload="true" />
   <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" />
   <texture name="landmark_here" file_name="toolbar_icons/landmark_here.png" preload="true" />
+  <texture name="teleport_history" file_name="toolbar_icons/teleporthistory.png" preload="true" />
+  <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
 
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />

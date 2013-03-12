@@ -2753,6 +2753,15 @@ void LLViewerObject::processTaskInvFile(void** user_data, S32 error_code, LLExtS
 	{
 		object->loadTaskInvFile(ft->mFilename);
 
+		// <FS:ND> Crashfix, not sure why object->mInventory can be 0
+		if( !object->mInventory )
+		{
+			llwarns << "object->mInventory == 0" << llendl;
+			delete ft;
+			return;
+		}
+		// </FS:ND>
+
 		LLInventoryObject::object_list_t::iterator it = object->mInventory->begin();
 		LLInventoryObject::object_list_t::iterator end = object->mInventory->end();
 		std::list<LLUUID>& pending_lst = object->mPendingInventoryItemsIDs;

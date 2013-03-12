@@ -11,6 +11,7 @@
 				<check_box label="Efectos básicos - !Déjalo activado!" name="BasicShaders"
 				 tool_tip="Esto debería estar SIEMPRE activado, ya que es necesario para PdC, sombras y luces, oclusión de ambiente, reflejos en el agua, etc.."/>
 				<check_box label="Activar efectos atmosféricos (Windlight)" name="WindLightUseAtmosShaders" tool_tip="Esto activa la funcionalidad completa de Windlight (efectos atmosféricos). Si no puedes activar esta característica, asegúrate de que los efectos básicos están activados."/>
+				<check_box label="Usar WL de la región" name="UseRegionWindlight"/>
 			</panel>
 			<panel name="P_WL_Sky_Water">
 				<text name="WL Sky" tool_tip="Configuraciones Windlight para el cielo">
@@ -18,6 +19,9 @@
 				</text>
 				<text name="WL Water" tool_tip="Configuraciones Windlight para el agua">
 					Agua WL
+				</text>
+				<text name="Day Cycle" tool_tip="Preselecciones Windlight para tu ciclo de día">
+					Ciclo día
 				</text>
 			</panel>
 			<panel name="P_Sun">
