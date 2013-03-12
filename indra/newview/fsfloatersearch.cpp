@@ -348,21 +348,6 @@ BOOL FSFloaterSearch::postBuild()
 		mDetailsPanel->setVisible(false);
 	mHasSelection = false;
 	
-	/// Disable websearch on OpenSim because most OpenSim grids don't have one and the ones that do
-	/// suck even more than LL's. (Scary but true!)
-#ifdef OPENSIM
-	if (!LLGridManager::getInstance()->isInSLMain() && !LLGridManager::getInstance()->isInSLBeta())
-	{
-		if (tabs)
-		{
-			LLPanel* web_panel = tabs->getPanelByName("panel_ls_web");
-			if (web_panel)
-			{
-				tabs->removeTabPanel(web_panel);
-			}
-		}
-	}
-#endif // OPENSIM
 	if (!tabs->selectTab(gSavedSettings.getS32("FSLastSearchTab")))
 		tabs->selectFirstTab();
 	
