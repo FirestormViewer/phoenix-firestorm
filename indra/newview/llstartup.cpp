@@ -3950,7 +3950,11 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 // </FS:AW  opensim destinations and avatar picker>
 	
 // <FS:CR> Legacy search killswitch!
-	if (!LLGridManager::getInstance()->isInOpenSim())
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		LLFloaterReg::add("search", "floater_fs_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearch>);
+	}
+	else
 #endif // OPENSIM
 	{
 		if (FSData::enableLegacySearch())
@@ -3961,10 +3965,6 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 		{
 			LLFloaterReg::add("search", "floater_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSearch>);
 		}
-	}
-	else
-	{
-		LLFloaterReg::add("search", "floater_fs_search.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterSearch>);
 	}
 // </FS:CR>
 
