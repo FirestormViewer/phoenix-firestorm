@@ -209,9 +209,9 @@
            label_ref="Command_Search_Label"
            tooltip_ref="Command_Search_Tooltip"
            execute_function="Floater.Toggle"
-           execute_parameters="search_legacy"
+           execute_parameters="search"
            is_running_function="Floater.IsOpen"
-           is_running_parameters="search_legacy"
+           is_running_parameters="search"
            />
   <command name="snapshot"
            available_in_toybox="true"

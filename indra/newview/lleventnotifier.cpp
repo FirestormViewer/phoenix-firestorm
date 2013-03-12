@@ -200,7 +200,7 @@ bool LLEventNotifier::add(U32 eventId, F64 eventEpoch, const std::string& eventD
 	}
 	else // This should always be for legacy search. If not, this will need to be refactored!
 	{
-		FSFloaterSearch* legacy_search = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search_legacy");
+		FSFloaterSearch* legacy_search = LLFloaterReg::findTypedInstance<FSFloaterSearch>("search");
 		if (legacy_search) // The floater exists, send the results
 			legacy_search->displayEventDetails(eventId, eventEpoch, eventDateStr, eventName, eventDesc, simName, eventDuration, eventFlags, eventCover, eventGlobalPos);
 		else

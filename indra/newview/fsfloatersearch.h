@@ -47,7 +47,22 @@ class FSFloaterSearch
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
-	FSFloaterSearch(const LLSD& key);
+	struct SearchQuery : public LLInitParam::Block<SearchQuery>
+	{
+		Optional<std::string> category;
+		Optional<std::string> query;
+		
+		SearchQuery();
+	};
+	
+	struct _Params : public LLInitParam::Block<_Params, LLFloater::Params>
+	{
+		Optional<SearchQuery> search;
+	};
+	
+	typedef LLSDParamAdapter<_Params> Params;
+	
+	FSFloaterSearch(const Params& key);
 	virtual ~FSFloaterSearch();
 	virtual void onOpen(const LLSD& key);
 	BOOL postBuild();
@@ -324,16 +339,9 @@ class FSPanelSearchWeb : public LLPanel, public LLViewerMediaObserver
 {
 	LOG_CLASS(FSFloaterSearch);
 public:
-	struct SearchQuery : public LLInitParam::Block<SearchQuery>
-	{
-		Optional<std::string> category;
-		Optional<std::string> query;
-		
-		SearchQuery();
-	};
 	FSPanelSearchWeb();
 	/*virtual*/ BOOL postBuild();
-	std::string loadURL();
+	void loadURL(const FSFloaterSearch::SearchQuery &query);
 private:
 	~FSPanelSearchWeb();
 	
