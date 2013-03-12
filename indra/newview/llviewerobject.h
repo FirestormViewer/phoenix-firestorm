@@ -388,6 +388,9 @@ public:
 	void setIcon(LLViewerTexture* icon_image);
 	void clearIcon();
 
+	// <FS:Ansariel> Getter for HUD icon attached to the object
+	LLPointer<LLHUDIcon> getIcon() const { return mIcon; };
+
 	void markForUpdate(BOOL priority);
 	void updateVolume(const LLVolumeParams& volume_params);
 	virtual	void updateSpatialExtents(LLVector4a& min, LLVector4a& max);

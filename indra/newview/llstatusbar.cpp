@@ -362,7 +362,7 @@ BOOL LLStatusBar::postBuild()
 	//mScriptOut = getChildView("scriptout");
 	mScriptOut = getChild<LLIconCtrl>("scriptout");
 	mScriptOut->setMouseDownCallback(boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
-	mNearbyIcons = LLHUDIcon::iconsNearby();
+	mNearbyIcons = LLHUDIcon::scriptIconsNearby();
 	// </FS:Ansariel> Script debug
 	
 	mParcelInfoPanel = getChild<LLPanel>("parcel_info_panel");
@@ -559,9 +559,9 @@ void LLStatusBar::refresh()
 	mParcelInfoText->setEnabled(!gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC));
 
 	// <FS:Ansariel> Script debug
-	if (mNearbyIcons != LLHUDIcon::iconsNearby())
+	if (mNearbyIcons != LLHUDIcon::scriptIconsNearby())
 	{
-		mNearbyIcons = LLHUDIcon::iconsNearby();
+		mNearbyIcons = LLHUDIcon::scriptIconsNearby();
 		updateParcelIcons();
 	}
 	// </FS:Ansariel> Script debug
@@ -1135,7 +1135,7 @@ void LLStatusBar::updateParcelIcons()
 		mLightshareBtn->setEnabled(has_lightshare);
 		// </FS:CR>
 		// <FS:Ansariel> Script debug
-		mScriptOut->setVisible(LLHUDIcon::iconsNearby());
+		mScriptOut->setVisible(LLHUDIcon::scriptIconsNearby());
 		// </FS:Ansariel> Script debug
 	}
 	else
