@@ -110,6 +110,7 @@
          left_delta="5"
          name="script_0"
          top="0"
+         value="0"
          width="100" />
         <radio_item
          height="16"
@@ -118,6 +119,7 @@
          left_delta="100"
          name="script_1"
          top_delta="0"
+         value="1"
          width="100" />
     </radio_group>
      <check_box
