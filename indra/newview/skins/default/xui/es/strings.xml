@@ -5081,6 +5081,8 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="Command_Contact_Sets_Label">Contact sets</string>
 	<string name="Command_Mouselook_Label">Vista subjetiva</string>
 	<string name="Command_Landmark_Here_Label">Crear hito</string>
+	<string name="Command_Teleport_History_Label">Historial de teleportes</string>
+	<string name="Command_Pose_Stand_Label">Pose</string>
 	<string name="Command_AboutLand_Tooltip">
 		Información sobre el terreno que vas a visitar
 	</string>
@@ -5179,6 +5181,12 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	</string>
 	<string name="Command_Landmark_Here_Tooltip">
 		Crea un hito en tu posición actual
+	</string>
+	<string name="Command_Teleport_History_Tooltip">
+		Abre el historial de teleportes
+	</string>
+	<string name="Command_Pose_Stand_Tooltip">
+		Pose del avatar para ajustar accesorios
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		actualmente en tu barra de herramientas inferior
