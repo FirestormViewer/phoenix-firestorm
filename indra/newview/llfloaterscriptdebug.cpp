@@ -88,8 +88,10 @@ BOOL LLFloaterScriptDebug::postBuild()
 	return FALSE;
 }
 
+// <FS:Ansariel> Script debug icon
 //LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID &object_id)
 LLFloater* LLFloaterScriptDebug::addOutputWindow(const LLUUID& object_id, bool show /* = false */)
+// </FS:Ansariel> Script debug icon
 {
 	LLMultiFloater* host = LLFloaterReg::showTypedInstance<LLMultiFloater>("script_debug", LLSD());
 	if (!host)
