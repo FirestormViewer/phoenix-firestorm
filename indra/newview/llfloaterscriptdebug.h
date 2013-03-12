@@ -42,7 +42,10 @@ public:
 	static void addScriptLine(const std::string &utf8mesg, const std::string &user_name, const LLColor4& color, const LLUUID& source_id);
 
 protected:
-	static LLFloater* addOutputWindow(const LLUUID& object_id);
+	// <FS:Ansariel> Script debug icon
+	//static LLFloater* addOutputWindow(const LLUUID& object_id);
+	static LLFloater* addOutputWindow(const LLUUID& object_id, bool show = false);
+	// </FS:Ansariel> Script debug icon
 
 protected:
 	static LLFloaterScriptDebug*	sInstance;
