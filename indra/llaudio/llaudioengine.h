@@ -253,6 +253,16 @@ protected:
 private:
 	void setDefaults();
 	LLStreamingAudioInterface *mStreamingAudioImpl;
+
+	// <FS:ND> Protect against corrupted sounds
+
+	std::map<LLUUID,U32> mCorruptData;
+
+public:
+	void markSoundCorrupt( LLUUID const & );
+	bool isCorruptSound( LLUUID const& ) const;
+
+	// </FS:ND>
 };
 
 

@@ -645,6 +645,7 @@ void LLAudioDecodeMgr::Impl::processQueue(const F32 num_secs)
 				mCurrentDecodep = new LLVorbisDecodeState(uuid, d_path);
 				if (!mCurrentDecodep->initDecode())
 				{
+					gAudiop->markSoundCorrupt( uuid );
 					mCurrentDecodep = NULL;
 				}
 			}
@@ -671,6 +672,11 @@ void LLAudioDecodeMgr::processQueue(const F32 num_secs)
 
 BOOL LLAudioDecodeMgr::addDecodeRequest(const LLUUID &uuid)
 {
+	// <FS:ND> Protect against corrupted sounds. Just do a quit exit instead of trying to decode over and over.
+	if( gAudiop->isCorruptSound( uuid ) )
+		return FALSE;
+	// </FS:ND>
+
 	if (gAudiop->hasDecodedFile(uuid))
 	{
 		// Already have a decoded version, don't need to decode it.

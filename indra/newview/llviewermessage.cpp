@@ -5466,6 +5466,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
 
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
+
 	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
 		return;
 	}
@@ -5578,6 +5583,11 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) 
 			return;
 	// NaCl End
+
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
 	if (!objectp) return;
