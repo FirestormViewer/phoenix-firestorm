@@ -1,6 +1,10 @@
 # -*- cmake -*-
 include(LLTestCommand)
-include(GoogleMock)
+
+# <FS:ND> Google Mock/Test is not used
+#include(GoogleMock)
+# </FS:ND>
+
 include(Tut)
 
 MACRO(LL_ADD_PROJECT_UNIT_TESTS project sources)
@@ -16,8 +20,9 @@ MACRO(LL_ADD_PROJECT_UNIT_TESTS project sources)
   #
   # WARNING: do NOT modify this code without working with poppy -
   # there is another branch that will conflict heavily with any changes here.
-INCLUDE(GoogleMock)
-
+# <FS:ND> Google Mock/Test is not used
+#INCLUDE(GoogleMock)
+# </FS:ND>
 
   IF(LL_TEST_VERBOSE)
     MESSAGE("LL_ADD_PROJECT_UNIT_TESTS UNITTEST_PROJECT_${project} sources: ${sources}")

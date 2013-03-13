@@ -14,7 +14,9 @@ include(Linking)
 include(Tut)
 include(LLAddBuildTest)
 
-include(GoogleMock)
+# <FS:ND> Google Mock/Test is not used
+#include(GoogleMock)
+# </FS:ND>
 
 include_directories(
     ${LLCOMMON_INCLUDE_DIRS}

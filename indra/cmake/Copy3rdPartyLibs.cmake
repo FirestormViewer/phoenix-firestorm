@@ -272,12 +272,12 @@ elseif(LINUX)
         libexpat.so
         libexpat.so.1
         libGLOD.so
-        libgmock_main.so
-        libgmock.so.0
+#        libgmock_main.so
+#        libgmock.so.0
         libgmodule-2.0.so
         libgobject-2.0.so
-        libgtest_main.so
-        libgtest.so.0
+#        libgtest_main.so
+#        libgtest.so.0
         libhunspell-1.3.so.0.0.0
         libminizip.so
         libopenal.so
