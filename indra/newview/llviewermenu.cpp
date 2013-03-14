@@ -7183,9 +7183,22 @@ class LLPromptShowURL : public view_listener_t
 
 			if(gSavedSettings.getBOOL("UseExternalBrowser"))
 			{ 
-    			LLSD payload;
-    			payload["url"] = url;
-    			LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				// <FS:Ansariel> FS-1951: LLWeb::loadURL() will spawn the WebLaunchExternalTarget
+				//               confirmation if opening with an external browser
+    			//LLSD payload;
+    			//payload["url"] = url;
+    			//LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				if (alert == "WebLaunchExternalTarget")
+				{
+					LLWeb::loadURL(url);
+				}
+				else
+				{
+					LLSD payload;
+					payload["url"] = url;
+					LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				}
+				// </FS:Ansariel>
 			}
 			else
 			{
