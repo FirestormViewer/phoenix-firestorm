@@ -36,6 +36,7 @@
 
 class LLInventoryPanel;
 class LLFloater;
+class LLAvatarName;
 
 /**
  * Friend-related actions (add, remove, offer teleport, etc)
@@ -243,6 +244,12 @@ public:
 	static void estateBan(const LLUUID& idAgent);
 	static void estateBanMultiple(const uuid_vec_t& idAgents);
 	// </FS:Ansariel> Estate ban
+
+	// <FS:Ansariel> Derender
+	static void derender(const LLUUID& agent_id, bool permanent);
+	static void derenderMultiple(const uuid_vec_t& agent_ids, bool permanent);
+	static void onDerenderAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, bool permanent);
+	// </FS:Ansariel> Derender
 
 	static std::set<LLUUID> getInventorySelectedUUIDs();
 

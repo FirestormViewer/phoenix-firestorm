@@ -84,6 +84,10 @@ LLContextMenu* NearbyMenu::createMenu()
 		// [/SL:KB]
 		// <FS:Ansariel> Estate ban user
 		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBan,					id));
+		// <FS:Ansariel> Derender
+		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derender,						id, false));
+		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derender,						id, true));
+		// </FS:Ansariel> Derender
 		
 		registrar.add("Nearby.People.TeleportToAvatar", boost::bind(&NearbyMenu::teleportToAvatar,	this));
 		registrar.add("Nearby.People.TrackAvatar", boost::bind(&NearbyMenu::onTrackAvatarMenuItemClick, this));
@@ -118,6 +122,10 @@ LLContextMenu* NearbyMenu::createMenu()
 		// [/SL:KB]
 		// <FS:Ansariel> Estate ban user
 		registrar.add("Avatar.EstateBan",						boost::bind(&LLAvatarActions::estateBanMultiple,			mUUIDs));
+		// <FS:Ansariel> Derender
+		registrar.add("Avatar.Derender",						boost::bind(&LLAvatarActions::derenderMultiple,				mUUIDs, false));
+		registrar.add("Avatar.DerenderPermanent",				boost::bind(&LLAvatarActions::derenderMultiple,				mUUIDs, true));
+		// </FS:Ansariel> Derender
 		
 		// create the context menu from the XUI
 		return createFromFile("menu_people_nearby_multiselect.xml");

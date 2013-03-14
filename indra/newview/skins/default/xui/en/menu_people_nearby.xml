@@ -172,7 +172,16 @@
        <menu_item_call.on_visible
           function="Avatar.VisibleKickTeleportHome"/>
      </menu_item_call>
-
-
-
+     <menu_item_call
+      label="Derender"
+      name="derender">
+       <menu_item_call.on_click
+          function="Avatar.Derender"/>
+     </menu_item_call>
+     <menu_item_call
+      label="Derender + Blacklist"
+      name="derender_permanent">
+       <menu_item_call.on_click
+          function="Avatar.DerenderPermanent"/>
+     </menu_item_call>
 </context_menu>
