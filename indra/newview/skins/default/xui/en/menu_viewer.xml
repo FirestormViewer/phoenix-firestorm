@@ -776,7 +776,8 @@
           
           <menu_item_check
              label="Land Owners"
-             name="Land Owners">
+             name="Land Owners"
+             shortcut="control|alt|O">
             <menu_item_check.on_check
                control="ShowParcelOwners" />
             <menu_item_check.on_click
