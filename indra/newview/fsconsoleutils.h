@@ -39,7 +39,7 @@ public:
 	static bool ProcessInstantMessage(const LLUUID& session_id, const LLUUID& from_id, const std::string& message);
 
 protected:
-
+	static BOOL isNearbyChatVisible();
 	static void onProcessChatAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const LLChat& chat_msg);
 	static void onProccessInstantMessageNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, const std::string& message_str, const std::string& group);
 
