@@ -503,7 +503,7 @@ void LLPreviewGesture::addKeys()
 	combo->add( NONE_LABEL );
 	for (KEY key = ' '; key < KEY_NONE; key++)
 	{
-		char buffer[] = {key, '\0'};
+		char buffer[] = {(char)key, '\0'}; // <FS:ND/> Added (char) for proper array initialization
 		std::string str_org(buffer);
 		std::string str_translated = LLKeyboard::stringFromKey(key);
 

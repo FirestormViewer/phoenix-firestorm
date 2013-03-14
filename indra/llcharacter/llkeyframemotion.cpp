@@ -2285,8 +2285,8 @@ void LLKeyframeDataCache::removeKeyframeData(const LLUUID& id)
 	keyframe_data_map_t::iterator found_data = sKeyframeDataMap.find(id);
 	if (found_data != sKeyframeDataMap.end())
 	{
-		// <FS:ND> FIRE-5385; Do not delete data directory, instead move it into the garbabe queue, so it gets deleted once no one holds a reference anymore.
-		// Otherwise it leeads to memory corruption etc.
+		// <FS:ND> FIRE-5385; Do not delete data directly, instead move it into the garbabe queue, so it gets deleted once no one holds a reference anymore.
+		// Otherwise it leads to memory corruption etc.
 
 		// delete found_data->second.mList;
 		// sKeyframeDataMap.erase(found_data);
@@ -2330,8 +2330,16 @@ LLKeyframeDataCache::~LLKeyframeDataCache()
 //-----------------------------------------------------------------------------
 void LLKeyframeDataCache::clear()
 {
+	// <FS:ND> FIRE-8144; Do not delete data directly, instead move it into the garbage queue, so it gets deleted once no one holds a reference anymore.
+	// Otherwise it leads to memory corruption etc.
+
+	//	for( keyframe_data_map_t::iterator itr = sKeyframeDataMap.begin(); sKeyframeDataMap.end() != itr; ++itr )
+	//		delete itr->second.mList;
+
 	for( keyframe_data_map_t::iterator itr = sKeyframeDataMap.begin(); sKeyframeDataMap.end() != itr; ++itr )
-		delete itr->second.mList;
+		mGarbage.push_back( itr->second.mList );
+
+	// </FS:ND>
 
 	sKeyframeDataMap.clear();
 }

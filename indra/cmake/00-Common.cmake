@@ -158,13 +158,21 @@ if (LINUX)
       OUTPUT_VARIABLE CXX_VERSION
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  if (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  #</FS:ND>
+
   if (${GXX_VERSION} STREQUAL ${CXX_VERSION})
-#    add_definitions(-D_FORTIFY_SOURCE=2)
+    add_definitions(-D_FORTIFY_SOURCE=2)
   else (${GXX_VERSION} STREQUAL ${CXX_VERSION})
     if (NOT ${GXX_VERSION} MATCHES " 4.1.*Red Hat")
       add_definitions(-D_FORTIFY_SOURCE=2)
     endif (NOT ${GXX_VERSION} MATCHES " 4.1.*Red Hat")
   endif (${GXX_VERSION} STREQUAL ${CXX_VERSION})
+
+  #<FS:ND> Gentoo defines _FORTIFY_SOURCE by default
+  endif (NOT ${GXX_VERSION} MATCHES "Gentoo 4.7.*")
+  #</FS:ND>
 
   # Let's actually get a numerical version of gxx's version
   STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.([0-9]).*" "\\1\\2\\3" CXX_VERSION_NUMBER ${CXX_VERSION})
@@ -180,6 +188,11 @@ if (LINUX)
   if(${CXX_VERSION_NUMBER} GREATER 460)
     set(CMAKE_CXX_FLAGS "-Wno-unused-but-set-variable ${CMAKE_CXX_FLAGS}")
   endif (${CXX_VERSION_NUMBER} GREATER 460)
+  #</FS:ND>
+  #<FS:ND> Disable attribute warnings for GCC >= 4.7. It causes a lot of warning/errors in boost.
+  if(${CXX_VERSION_NUMBER} GREATER 470)
+    set(CMAKE_CXX_FLAGS "-Wno-attributes ${CMAKE_CXX_FLAGS}")
+  endif (${CXX_VERSION_NUMBER} GREATER 470)
   #</FS:ND>
 
   # End of hacks.

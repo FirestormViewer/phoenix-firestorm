@@ -35,6 +35,11 @@
 class LLTranslationBridge
 {
 public:
+	// <FS:ND> virtual dtor or dtors or derived class might not be properly called
+	virtual ~LLTranslationBridge()
+	{ }
+	// </FS:ND>
+
 	virtual std::string getString(const std::string &xml_desc) = 0;
 };
 

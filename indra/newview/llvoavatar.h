@@ -993,7 +993,11 @@ extern const S32 MAX_TEXTURE_VIRTURE_SIZE_RESET_INTERVAL;
 
 std::string get_sequential_numbered_file_name(const std::string& prefix,
 											  const std::string& suffix);
+
+// <FS:ND> Remove LLVolatileAPRPool/apr_file_t and use FILE* instead
 void dump_visual_param(apr_file_t* file, LLVisualParam* viewer_param, F32 value);
+void dump_visual_param(LLAPRFile::tFiletype* file, LLVisualParam* viewer_param, F32 value);
+//</FS:ND>
 
 #endif // LL_VOAVATAR_H
 

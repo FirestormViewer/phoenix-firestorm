@@ -29,6 +29,7 @@
 
 #include "fsconsoleutils.h"
 
+#include "fsfloaternearbychat.h"
 #include "lggcontactsets.h"
 #include "llagent.h"
 #include "llconsole.h"
@@ -38,6 +39,13 @@
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "rlvhandler.h"
+
+// static
+BOOL FSConsoleUtils::isNearbyChatVisible()
+{
+	FSFloaterNearbyChat* nearby_chat = LLFloaterReg::getTypedInstance<FSFloaterNearbyChat>("fs_nearby_chat", LLSD());
+	return nearby_chat->getVisible();
+}
 
 // static
 bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args)
@@ -96,7 +104,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!LLFloaterReg::instanceVisible("fs_nearby_chat", LLSD()));
+		gConsole->setVisible(!isNearbyChatVisible());
 	}
 	else
 	{
@@ -119,7 +127,7 @@ bool FSConsoleUtils::ProcessChatMessage(const LLChat& chat_msg, const LLSD &args
 		LLColor4 chatcolor;
 		LLViewerChat::getChatColor(chat_msg, chatcolor);
 		gConsole->addConsoleLine(consoleChat, chatcolor);
-		gConsole->setVisible(!LLFloaterReg::instanceVisible("fs_nearby_chat", LLSD()));
+		gConsole->setVisible(!isNearbyChatVisible());
 	}
 
 	return true;
@@ -175,7 +183,7 @@ void FSConsoleUtils::onProcessChatAvatarNameLookup(const LLUUID& agent_id, const
 	LLColor4 chatcolor;
 	LLViewerChat::getChatColor(chat_msg, chatcolor);
 	gConsole->addConsoleLine(consoleChat, chatcolor);
-	gConsole->setVisible(!LLFloaterReg::instanceVisible("fs_nearby_chat", LLSD()));
+	gConsole->setVisible(!isNearbyChatVisible());
 }
 
 //static
@@ -272,5 +280,5 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	}
 
 	gConsole->addConsoleLine("IM: " + senderName + delimiter + message, textColor);
-	gConsole->setVisible(!LLFloaterReg::instanceVisible("fs_nearby_chat", LLSD()));
+	gConsole->setVisible(!isNearbyChatVisible());
 }

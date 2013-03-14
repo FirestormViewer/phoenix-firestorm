@@ -2670,10 +2670,16 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 			(gRlvHandler.canReceiveIM(from_id)) )
 // [/RLVa:KB]
 		{
+			// <FS:Ansariel> Log autoresponse notification after initial message
+			bool has_session = true;
+
 			// return a standard "busy" message, but only do it to online IM 
 			// (i.e. not other auto responses and not store-and-forward IM)
 			if (!gIMMgr->hasSession(session_id))
 			{
+				// <FS:Ansariel> Log autoresponse notification after initial message
+				has_session = false;
+
 				// if there is not a panel for this conversation (i.e. it is a new IM conversation
 				// initiated by the other party) then...
 				std::string my_name;
@@ -2703,25 +2709,10 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 					IM_BUSY_AUTO_RESPONSE,
 					session_id);
 				gAgent.sendReliableMessage();
-				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
-				gIMMgr->addMessage(
-					session_id,
-					from_id,
-					LLStringUtil::null, // Pass null value so no name gets prepended
-					LLTrans::getString("IM_autoresponse_sent"),
-					my_name,
-					IM_NOTHING_SPECIAL,
-					parent_estate_id,
-					region_id,
-					position,
-					false, // <-- Wow! This parameter is never handled!!!
-					TRUE
-					);
-				// </FS:LO>
 			}
 
 			// <FS:Ansariel> checkfor and process reqinfo
-			if (gIMMgr->hasSession(session_id))
+			if (has_session)
 			{
 				message = FSData::getInstance()->processRequestForInfo(from_id,message,name,session_id);
 			}
@@ -2745,6 +2736,25 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 				region_id,
 				position,
 				true);
+
+			if (!has_session)
+			{
+				// <FS:LO> Fire-5389 - "Autoresponse Sent" message added to Firestorm as was in Phoenix
+				gIMMgr->addMessage(
+					session_id,
+					from_id,
+					LLStringUtil::null, // Pass null value so no name gets prepended
+					LLTrans::getString("IM_autoresponse_sent"),
+					name,
+					IM_NOTHING_SPECIAL,
+					parent_estate_id,
+					region_id,
+					position,
+					false, // <-- Wow! This parameter is never handled!!!
+					TRUE
+					);
+				// </FS:LO>
+			}
 		}
 		else if (from_id.isNull())
 		{
@@ -5475,6 +5485,11 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_OwnerID, owner_id);
 	msg->getUUIDFast(_PREHASH_SoundData, _PREHASH_ObjectID, object_id);
 
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
+
 	if(FSWSAssetBlacklist::getInstance()->isBlacklisted(sound_id,LLAssetType::AT_SOUND)){
 		return;
 	}
@@ -5587,6 +5602,11 @@ void process_preload_sound(LLMessageSystem *msg, void **user_data)
 		if(NACLAntiSpamRegistry::checkQueue((U32)NACLAntiSpamRegistry::QUEUE_SOUND_PRELOAD,owner_id,_NACL_AntiSpamSoundPreloadMulti)) 
 			return;
 	// NaCl End
+
+	// <FS:ND> Protect against corrupted sounds
+	if( gAudiop->isCorruptSound( sound_id ) )
+		return;
+	// </FS:ND>
 
 	LLViewerObject *objectp = gObjectList.findObject(object_id);
 	if (!objectp) return;

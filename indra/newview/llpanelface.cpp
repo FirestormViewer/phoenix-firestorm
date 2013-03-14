@@ -85,8 +85,10 @@ BOOL	LLPanelFace::postBuild()
 	childSetCommitCallback("TexOffsetU",LLPanelFace::onCommitTextureInfo, this);
 	childSetCommitCallback("TexOffsetV",LLPanelFace::onCommitTextureInfo, this);
 	childSetAction("button align",&LLPanelFace::onClickAutoFix,this);
+	// <FS>
 	childSetAction("copytextures",&LLPanelFace::onClickCopy,this);
 	childSetAction("pastetextures",&LLPanelFace::onClickPaste,this);
+	// </FS>
 
 	LLTextureCtrl*	mTextureCtrl;
 	LLColorSwatchCtrl*	mColorSwatch;
@@ -507,12 +509,14 @@ void LLPanelFace::getState()
 		//		
 		//		//mBtnAutoFix->setEnabled ( editable );
 		//	}
+		// <FS>
 		S32 selected_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
 		BOOL single_volume = (LLSelectMgr::getInstance()->selectionAllPCode( LL_PCODE_VOLUME ))
 						 && (selected_count == 1);
 		getChildView("copytextures")->setEnabled(single_volume && editable);
 		getChildView("pastetextures")->setEnabled(editable);
 		getChildView("textbox params")->setEnabled(single_volume && editable);
+		// </FS>
 		getChildView("button apply")->setEnabled(editable);
 
 		bool identical;
