@@ -49,6 +49,7 @@ class UtilityBar
 	protected:
 		void onParcelStreamClicked();
 		void onParcelMediaClicked();
+		void onAudioPrefsButtonClicked();
 
 		LLButton* mParcelStreamPlayButton;
 		LLButton* mParcelMediaPlayButton;

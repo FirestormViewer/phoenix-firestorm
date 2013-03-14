@@ -26,8 +26,13 @@
 
 #include "utilitybar.h"
 
-#include "llagent.h"
 #include "llbutton.h"
+#include "llfloaterreg.h"
+#include "llpanel.h"
+#include "lltabcontainer.h"
+
+#include "llagent.h"
+#include "llfloaterpreference.h"
 #include "llstatusbar.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -63,6 +68,8 @@ void UtilityBar::init()
 		mTalkButton->setMouseDownCallback(boost::bind(&LLAgent::pressMicrophone, _2));
 		mTalkButton->setMouseUpCallback(boost::bind(&LLAgent::releaseMicrophone, _2));
 	}
+
+	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Vol.GoAudioPrefs", boost::bind(&UtilityBar::onAudioPrefsButtonClicked, this));
 
 	mEventTimer.start();
 }
@@ -136,6 +143,23 @@ void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)
 		else
 		{
 			mAOInterfaceButton->setImageOverlay("arrow_up.tga");
+		}
+	}
+}
+
+void UtilityBar::onAudioPrefsButtonClicked()
+{
+	// bring up the prefs floater
+	LLFloaterPreference* prefsfloater = LLFloaterReg::showTypedInstance<LLFloaterPreference>("preferences");
+	if (prefsfloater)
+	{
+		// grab the 'audio' panel from the preferences floater and
+		// bring it the front!
+		LLTabContainer* tabcontainer = prefsfloater->getChild<LLTabContainer>("pref core");
+		LLPanel* audiopanel = prefsfloater->getChild<LLPanel>("audio");
+		if (tabcontainer && audiopanel)
+		{
+			tabcontainer->selectTabPanel(audiopanel);
 		}
 	}
 }
