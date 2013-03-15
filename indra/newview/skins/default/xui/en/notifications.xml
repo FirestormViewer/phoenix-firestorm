@@ -11085,6 +11085,20 @@ Error in the regular expression:
 		Successfully saved appearance to XML.
 	</notification>
 	
+	<notification
+		icon="notify.tga"
+		name="StreamListExportSuccess"
+		type="notify">
+		Successfully exported stream list to XML to [FILENAME].
+	</notification>
+	
+	<notification
+		icon="notify.tga"
+		name="StreamListImportSuccess"
+		type="notify">
+		Successfully imported stream list from XML.
+	</notification>
+	
    <!-- <FS:Zi> Backup Settings -->
   <notification
    icon="alertmodal.tga"
