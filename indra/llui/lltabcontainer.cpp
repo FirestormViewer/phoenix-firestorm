@@ -874,11 +874,11 @@ BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	{
 		if(clicks < 0)
 		{
-			setScrollPos(getScrollPos() - 1);
+			setScrollPos(llmax(0, getScrollPos()-1));
 		}
 		else
 		{
-			setScrollPos(getScrollPos() + 1);
+			setScrollPos(llmin(getScrollPos()+1, getMaxScrollPos()));
 		}
 	}
 
