@@ -179,13 +179,7 @@ BOOL LLPanelGroup::postBuild()
 
 	getChild<LLButton>("btn_create")->setVisible(false);
 
-	// <FS:Ansariel> Standalone group floaters
-	//childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
-	if (!gSavedSettings.getBOOL("FSUseStandaloneGroupFloater"))
-	{
-		childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
-	}
-	// </FS:Ansariel>
+	childSetCommitCallback("back",boost::bind(&LLPanelGroup::onBackBtnClick,this),NULL);
 
 	childSetCommitCallback("btn_create",boost::bind(&LLPanelGroup::onBtnCreate,this),NULL);
 	
