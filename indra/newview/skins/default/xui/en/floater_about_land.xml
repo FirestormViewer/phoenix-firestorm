@@ -1852,7 +1852,7 @@ Only large parcels can be listed in search.
             <button
              follows="left|top"
              height="23"
-             label="+"
+             image_overlay="AddItem_Off"
              layout="topleft"
              left_pad="0"
              top_delta="0"
@@ -1861,7 +1861,7 @@ Only large parcels can be listed in search.
             <button
              follows="left|top"
              height="23"
-             label="-"
+             image_overlay="MinusItem_Off"
              layout="topleft"
              left_pad="4"
              top_delta="0"
