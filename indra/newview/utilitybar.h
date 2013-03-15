@@ -45,16 +45,17 @@ class UtilityBar
 		void init();
 		virtual BOOL tick();
 		void setAOInterfaceButtonExpanded(bool expanded);
+		void setVolumeControlsButtonExpanded(bool expanded);
 
 	protected:
 		void onParcelStreamClicked();
 		void onParcelMediaClicked();
-		void onAudioPrefsButtonClicked();
 
 		LLButton* mParcelStreamPlayButton;
 		LLButton* mParcelMediaPlayButton;
 		LLButton* mTalkButton;
 		LLButton* mAOInterfaceButton;
+		LLButton* mVolumeControlsInterfaceButton;
 };
 
 #endif // UTILITYBAR_H

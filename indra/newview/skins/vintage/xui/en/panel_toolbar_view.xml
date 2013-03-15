@@ -368,7 +368,7 @@
           width="22">
   <button.commit_callback
           function="Floater.ToggleOrBringToFront"
-          parameter="volume_controls" />
+          parameter="fs_volume_controls" />
   </button>
   <!-- Volume controls -->
 

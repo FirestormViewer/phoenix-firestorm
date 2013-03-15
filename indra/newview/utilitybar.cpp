@@ -32,7 +32,6 @@
 #include "lltabcontainer.h"
 
 #include "llagent.h"
-#include "llfloaterpreference.h"
 #include "llstatusbar.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -57,6 +56,7 @@ void UtilityBar::init()
 	mParcelMediaPlayButton = rootView->findChild<LLButton>("utility_parcel_media_button");
 	mTalkButton = rootView->findChild<LLButton>("utility_talk_button");
 	mAOInterfaceButton = rootView->findChild<LLButton>("show_ao_interface_button");
+	mVolumeControlsInterfaceButton = rootView->findChild<LLButton>("show_volume_controls_button");
 
 	if(mParcelStreamPlayButton)
 		mParcelStreamPlayButton->setCommitCallback(boost::bind(&UtilityBar::onParcelStreamClicked,this));
@@ -68,8 +68,6 @@ void UtilityBar::init()
 		mTalkButton->setMouseDownCallback(boost::bind(&LLAgent::pressMicrophone, _2));
 		mTalkButton->setMouseUpCallback(boost::bind(&LLAgent::releaseMicrophone, _2));
 	}
-
-	LLUICtrl::CommitCallbackRegistry::currentRegistrar().add("Vol.GoAudioPrefs", boost::bind(&UtilityBar::onAudioPrefsButtonClicked, this));
 
 	mEventTimer.start();
 }
@@ -147,19 +145,17 @@ void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)
 	}
 }
 
-void UtilityBar::onAudioPrefsButtonClicked()
+void UtilityBar::setVolumeControlsButtonExpanded(bool expanded)
 {
-	// bring up the prefs floater
-	LLFloaterPreference* prefsfloater = LLFloaterReg::showTypedInstance<LLFloaterPreference>("preferences");
-	if (prefsfloater)
+	if (mVolumeControlsInterfaceButton)
 	{
-		// grab the 'audio' panel from the preferences floater and
-		// bring it the front!
-		LLTabContainer* tabcontainer = prefsfloater->getChild<LLTabContainer>("pref core");
-		LLPanel* audiopanel = prefsfloater->getChild<LLPanel>("audio");
-		if (tabcontainer && audiopanel)
+		if (expanded)
 		{
-			tabcontainer->selectTabPanel(audiopanel);
+			mVolumeControlsInterfaceButton->setImageOverlay("arrow_down.tga");
+		}
+		else
+		{
+			mVolumeControlsInterfaceButton->setImageOverlay("arrow_up.tga");
 		}
 	}
 }
