@@ -23,8 +23,6 @@ public:
 	void onBeamColorDelete();
 	void onBeamDelete();
 
-	void onUseEnvironmentFromRegionAlways();
-
 	void refreshTagCombos();
 	void applyTagCombos();
 	void populateCloudCombo();
