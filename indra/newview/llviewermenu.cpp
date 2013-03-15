@@ -2729,7 +2729,7 @@ void derenderObject(bool permanent)
 	LLViewerObject* objp;
 	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
-	while ((objp = select_mgr->getSelection()->getFirstRootObject()))
+	while ((objp = select_mgr->getSelection()->getFirstRootObject(TRUE)))
 	{
 //		if ( (objp) && (gAgentID != objp->getID()) )
 // [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
