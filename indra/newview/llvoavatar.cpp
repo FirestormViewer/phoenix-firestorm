@@ -7916,7 +7916,9 @@ void LLVOAvatar::dumpArchetypeXML(const std::string& prefix, bool group_by_weara
 	// File will close when handle goes out of scope
 // <FS:CR> FIRE-8893 - Dump archetype xml to user defined location
 	LL_INFOS("DumpArchetypeXML") << "Archetype xml written successfully!" << LL_ENDL;
-	LLNotificationsUtil::add("DumpArchetypeSuccess");
+	LLSD args;
+	args["FILENAME"] = outfilename;
+	LLNotificationsUtil::add("DumpArchetypeSuccess", args);
 // </FS:CR>
 }
 

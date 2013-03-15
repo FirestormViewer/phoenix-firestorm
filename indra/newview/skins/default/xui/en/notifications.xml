@@ -11082,7 +11082,21 @@ Error in the regular expression:
 		icon="notify.tga"
 		name="DumpArchetypeSuccess"
 		type="notify">
-		Successfully saved appearance to XML.
+		Successfully saved appearance to XML to [FILENAME].
+	</notification>
+	
+	<notification
+		icon="notify.tga"
+		name="StreamListExportSuccess"
+		type="notify">
+		Successfully exported stream list to XML to [FILENAME].
+	</notification>
+	
+	<notification
+		icon="notify.tga"
+		name="StreamListImportSuccess"
+		type="notify">
+		Successfully imported stream list from XML.
 	</notification>
 	
    <!-- <FS:Zi> Backup Settings -->

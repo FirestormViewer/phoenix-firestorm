@@ -246,6 +246,7 @@ void LLPanelLandAudio::onBtnStreamAdd(LLUICtrl*, void *userdata)
 	if (!music_url.empty())
 	{
 		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
+		streamlist["version"] = 1;
 		streamlist["audio"].append(music_url);
 		gSavedSettings.setLLSD("FSStreamList", streamlist);
 		self->refresh();
