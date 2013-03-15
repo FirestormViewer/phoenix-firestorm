@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<floater name="Environment Editor Floater" title="CONFIGURACIÓN DE ENTORNO">
+<floater name="Environment Editor Floater" title="Configuración de entorno">
 	<check_box label="Usar siempre esta configuración:" name="use_env_from_region_always" tool_tip="Si marcas esta opción, siempre se usarán las configuraciones de abajo."/>
 	<radio_group name="region_settings_radio_group">
 		<radio_item label="Usar configuración de región" name="use_region_settings"/>
