@@ -51,7 +51,7 @@
         <panel
          border="false"
          follows="all"
-         label="GENERAL"
+         label="General"
          layout="topleft"
          left="0"
          help_topic="land_general_tab"
@@ -587,7 +587,7 @@ Loading...
         <panel
          border="true"
          follows="all"
-         label="COVENANT"
+         label="Covenant"
          layout="topleft"
          left="0"
          top="0"
@@ -820,7 +820,7 @@ Loading...
         <panel
          border="true"
          follows="all"
-         label="OBJECTS"
+         label="Objects"
          layout="topleft"
          left="0"
          top="0"
@@ -1181,7 +1181,7 @@ Loading...
         <panel
          border="true"
          follows="all"
-         label="OPTIONS"
+         label="Options"
          layout="topleft"
          help_topic="land_options_tab"
          name="land_options_panel"
@@ -1606,7 +1606,7 @@ Only large parcels can be listed in search.
         <panel
          border="true"
          follows="all"
-         label="MEDIA"
+         label="Media"
          layout="topleft"
          left="0"
          top="0"
@@ -1819,7 +1819,7 @@ Only large parcels can be listed in search.
         <panel
          border="true"
          follows="all"
-         label="SOUND"
+         label="Sound"
          layout="topleft"
          left="0"
          top="0"
@@ -1954,7 +1954,7 @@ Only large parcels can be listed in search.
         <panel
          border="true"
          follows="all"
-         label="ACCESS"
+         label="Access"
          layout="topleft"
          left="0"
          top="0"
