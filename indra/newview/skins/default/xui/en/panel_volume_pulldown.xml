@@ -166,7 +166,7 @@
      left_pad="5"
      name="mute_audio"
      tab_stop="false"
-     width="16"/>
+     width="16">
       <button.commit_callback
       function="Vol.SetSounds"/>
     </button>
