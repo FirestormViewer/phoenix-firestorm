@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
 	height="48"
-	width="250"
+	width="280"
 	help_topic="pose_stand"
 	layout="topleft"
 	legacy_header_height="18"
@@ -10,7 +10,7 @@
 	single_instance="true"
 	title="Pose Stand">
 	<combo_box
-		follows="right|top"
+		follows="left|top"
 		layout="topleft"
 		height="23"
 		allow_text_entry="false"
@@ -18,5 +18,23 @@
 		left="5"
 		name="pose_combo"
 		width="240"/>
+	<check_box
+		control_name="FSPoseStandLock"
+		height="16"
+		label=""
+		follows="left|top"
+		layout="topleft"
+		left_pad="1"
+		name="enable_lock"
+		width="16" />
+	<icon
+		height="14"
+		image_name="Locked_Icon"
+		follows="left|top"
+		layout="topleft"
+		left_pad="2"
+		top_delta="-2"
+		mouse_opaque="true"
+		name="lock"
+		width="10" />
 </floater>
-

@@ -14,12 +14,16 @@
 #include "fsfloaterposestand.h"
 
 #include "fspose.h"
+#include "llagent.h"
+#include "llvoavatarself.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
-	mComboPose(NULL)
+	mComboPose(NULL),
+	mPoseStandLock(false)
 {
 }
 
@@ -40,12 +44,21 @@ BOOL FSFloaterPoseStand::postBuild()
 // virtual
 void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
+	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting() && isAgentAvatarValid())
+	{
+		gAgent.sitDown();
+		mPoseStandLock = true;
+	}
+	gAgentAvatarp->setIsEditingAppearance(TRUE);
 	onCommitCombo();
 }
 
 // virtual
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
+	if (mPoseStandLock == true && gAgentAvatarp->isSitting() && isAgentAvatarValid())
+		gAgent.standUp();
+	gAgentAvatarp->setIsEditingAppearance(FALSE);
 	FSPose::getInstance()->stopPose();
 }
 

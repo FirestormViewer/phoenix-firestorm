@@ -31,6 +31,7 @@ private:
 	void loadPoses();
 	void onCommitCombo();
 	
+	bool mPoseStandLock;
 	LLComboBox* mComboPose;
 };
 
