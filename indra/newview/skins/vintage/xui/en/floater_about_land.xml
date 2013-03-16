@@ -1792,16 +1792,36 @@ Only large parcels can be listed in search.
              width="364">
                 Music URL:
             </text>
-            <line_editor
+            <combo_box
              follows="left|top"
              height="20"
              layout="topleft"
              left="100"
-             max_length_bytes="255"
+             max_chars="255"
              name="music_url"
              top_delta="0"
-             right="-15"
+             right="-54"
+			 allow_text_entry="true"
+             allow_new_values="true"
              select_on_focus="true" />
+            <button
+             follows="left|top"
+             height="20"
+             image_overlay="AddItem_Off"
+             layout="topleft"
+             left_pad="0"
+             top_delta="0"
+             name="stream_add_btn"
+             width="20" />
+            <button
+             follows="left|top"
+             height="20"
+             image_overlay="MinusItem_Off"
+             layout="topleft"
+             left_pad="4"
+             top_delta="0"
+             name="stream_delete_btn"
+             width="20" />
             <text
              type="string"
              length="1"
