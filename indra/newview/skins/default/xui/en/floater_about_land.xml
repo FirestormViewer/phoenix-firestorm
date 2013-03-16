@@ -1846,8 +1846,8 @@ Only large parcels can be listed in search.
              name="music_url"
              top_delta="0"
              right="-54"
-			 allow_text_entry="true"
-			 allow_new_values="true"
+             allow_text_entry="true"
+             allow_new_values="true"
              select_on_focus="true" />
             <button
              follows="left|top"
