@@ -11115,7 +11115,15 @@ Error in the regular expression:
         <tag>StreamMetadata</tag>
         ♫ Now Playing:
         [TITLE]♫
-    </notification>    
+    </notification>
+    
+    <notification
+        icon="notifytip.tga"
+        name="RadarAlert"
+        type="notifytip">
+		[NAME] [MESSAGE]
+	</notification>
+
 	
    <!-- <FS:Zi> Backup Settings -->
   <notification

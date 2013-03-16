@@ -709,8 +709,10 @@ BOOL LLPanelPeople::postBuild()
 	registrar.add("People.Groups.ViewSort.Action",  boost::bind(&LLPanelPeople::onGroupsViewSortMenuItemClicked,  this, _2));
 	registrar.add("People.Recent.ViewSort.Action",  boost::bind(&LLPanelPeople::onRecentViewSortMenuItemClicked,  this, _2));
 	registrar.add("Radar.NameFmt",					boost::bind(&LLPanelPeople::onRadarNameFmtClicked, this, _2));
+	registrar.add("Radar.ReportTo",					boost::bind(&LLPanelPeople::onRadarReportToClicked, this, _2));	// <FS:CR> Milkshake-style Radar Alerts
 
 	enable_registrar.add("Radar.NameFmtCheck",					boost::bind(&LLPanelPeople::radarNameFmtCheck, this, _2));
+	enable_registrar.add("Radar.ReportToCheck",					boost::bind(&LLPanelPeople::radarReportToCheck, this, _2));	// <FS:CR> Milkshake-style Radar Alerts
 	enable_registrar.add("People.Group.Minus.Enable",			boost::bind(&LLPanelPeople::isRealGroup,	this));
 	enable_registrar.add("People.Friends.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onFriendsViewSortMenuItemCheck,	this, _2));
 	enable_registrar.add("People.Recent.ViewSort.CheckItem",	boost::bind(&LLPanelPeople::onRecentViewSortMenuItemCheck,	this, _2));
@@ -780,17 +782,36 @@ void LLPanelPeople::radarAlertMsg(const LLUUID& agent_id, const LLAvatarName& av
 	//LLStringUtil::format_map_t formatargs;
 	//formatargs["AVATARNAME"] = getRadarName(av_name);
 	//LLStringUtil::format(postMsg, formatargs);
-
-	LLChat chat;
-	chat.mText = postMsg;
-	chat.mSourceType = CHAT_SOURCE_SYSTEM;
-	chat.mFromName = getRadarName(av_name);
-	chat.mFromID = agent_id;
-	chat.mChatType = CHAT_TYPE_RADAR;
-	// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
-	LLSD args;
-	args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-	LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	
+// <FS:CR> Milkshake-style radar alerts
+	LLCachedControl<bool> milkshake_radar(gSavedSettings, "FSMilkshakeRadarToasts", false);
+	
+	if (milkshake_radar)
+	{
+		LLSD payload = agent_id;
+		LLSD args;
+		args["NAME"] = getRadarName(av_name);
+		args["MESSAGE"] = postMsg;
+		LLNotificationPtr notification;
+		notification = LLNotificationsUtil::add("RadarAlert",
+												args,
+												payload.with("respond_on_mousedown", TRUE),
+												boost::bind(&LLAvatarActions::zoomIn, agent_id));
+	}
+	else
+	{
+// </FS:CR>
+		LLChat chat;
+		chat.mText = postMsg;
+		chat.mSourceType = CHAT_SOURCE_SYSTEM;
+		chat.mFromName = getRadarName(av_name);
+		chat.mFromID = agent_id;
+		chat.mChatType = CHAT_TYPE_RADAR;
+		// FS:LO FIRE-1439 - Clickable avatar names on local chat radar crossing reports
+		LLSD args;
+		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
+		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+	} // <FS:CR />
 }
 
 
@@ -2380,6 +2401,28 @@ bool LLPanelPeople::radarNameFmtCheck(const LLSD& userdata)
 	}
 	return false;
 }
+
+// <FS:CR> Milkshake-style radar alerts
+void LLPanelPeople::onRadarReportToClicked(const LLSD& userdata)
+{
+	std::string chosen_item = userdata.asString();
+	if (chosen_item == "radar_toasts")
+		gSavedSettings.setBOOL("FSMilkshakeRadarToasts", TRUE);
+	else if (chosen_item == "radar_nearby_chat")
+		gSavedSettings.setBOOL("FSMilkshakeRadarToasts", FALSE);
+}
+
+bool LLPanelPeople::radarReportToCheck(const LLSD& userdata)
+{
+	std::string menu_item = userdata.asString();
+	bool report_to = gSavedSettings.getBOOL("FSMilkshakeRadarToasts");
+	if (report_to)
+		return (menu_item == "radar_toasts");
+	else
+		return (menu_item == "radar_nearby_chat");
+	return false;
+}
+// </FS:CR>
 
 std::string LLPanelPeople::getRadarName(LLAvatarName avname)
 {
