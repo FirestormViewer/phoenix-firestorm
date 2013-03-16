@@ -28,16 +28,16 @@
  */
 
 #include "llviewerprecompiledheaders.h"
-#include "message.h"
+
+#include "streamtitledisplay.h"
 #include "llagent.h"
-#include "llchat.h"
-//#include "llfloaterchat.h"
-#include "llnotificationmanager.h"
 #include "llaudioengine.h"
+#include "llnotificationsutil.h"
 #include "llstreamingaudio.h"
 #include "llviewercontrol.h"
 #include "lltrans.h"
-#include "streamtitledisplay.h"
+#include "fscommon.h"
+#include "message.h"
 
 StreamTitleDisplay::StreamTitleDisplay() : LLEventTimer(2) { };
 
@@ -49,44 +49,55 @@ BOOL StreamTitleDisplay::tick()
 
 void StreamTitleDisplay::checkMetadata()
 {
-	LLCachedControl<bool> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata");
+	LLCachedControl<U32> ShowStreamMetadata(gSavedSettings, "ShowStreamMetadata");
 	LLCachedControl<bool> StreamMetadataAnnounceToChat(gSavedSettings, "StreamMetadataAnnounceToChat");
 
 	if(!gAudiop)
 		return;
-	if(gAudiop->getStreamingAudioImpl()->hasNewMetadata() && (ShowStreamMetadata || StreamMetadataAnnounceToChat))
+	if(gAudiop->getStreamingAudioImpl()->hasNewMetadata() && (ShowStreamMetadata > 0 || StreamMetadataAnnounceToChat))
 	{
-		LLChat chat;
+		std::string chat = "";
 		std::string title = gAudiop->getStreamingAudioImpl()->getCurrentTitle();
 		std::string artist = gAudiop->getStreamingAudioImpl()->getCurrentArtist();
-		// Sometimes we get blanks...
-		chat.mText = "";
+
 		if(artist.length() > 0)
 		{
-			chat.mText = artist;
+			chat = artist;
 		}
 		if(title.length() > 0)
 		{
-			if (chat.mText.length() > 0)
+			if (chat.length() > 0)
 			{
-				chat.mText += " - ";
+				chat += " - ";
 			}
-			chat.mText += title;
+			chat += title;
 		}
-		if (chat.mText.length() > 0)
+		if (chat.length() > 0)
 		{
 			if (StreamMetadataAnnounceToChat)
 			{
-				sendStreamTitleToChat(chat.mText);
+				sendStreamTitleToChat(chat);
 			}
 
-			if (ShowStreamMetadata)
+			if (ShowStreamMetadata > 1)
 			{
-				chat.mText = LLTrans::getString("StreamtitleNowPlaying") + " " + chat.mText;
-				chat.mSourceType = CHAT_SOURCE_SYSTEM;
+				chat = LLTrans::getString("StreamtitleNowPlaying") + " " + chat;
+				reportToNearbyChat(chat);
+			}
+			else if (ShowStreamMetadata == 1)
+			{
 				LLSD args;
-				args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-				LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+				args["TITLE"] = title;
+				if(artist.length() > 0)
+				{
+					args["ARTIST"] = artist;
+					LLNotificationsUtil::add("StreamMetadata", args);
+					
+				}
+				else
+				{
+					LLNotificationsUtil::add("StreamMetadataNoArtist", args);
+				}
 			}
 		}
 	}

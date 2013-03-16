@@ -11099,6 +11099,24 @@ Error in the regular expression:
 		Successfully imported stream list from XML.
 	</notification>
 	
+    <notification
+        icon="notifytip.tga"
+        name="StreamMetadata"
+        type="notifytip">
+        <tag>StreamMetadata</tag>
+        ♫ Now Playing:
+        [TITLE]
+        [ARTIST]♫
+    </notification>
+    <notification
+        icon="notifytip.tga"
+        name="StreamMetadataNoArtist"
+        type="notifytip">
+        <tag>StreamMetadata</tag>
+        ♫ Now Playing:
+        [TITLE]♫
+    </notification>    
+	
    <!-- <FS:Zi> Backup Settings -->
   <notification
    icon="alertmodal.tga"

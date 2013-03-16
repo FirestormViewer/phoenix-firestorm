@@ -405,16 +405,51 @@
              parameter="media_lists" />
         </button>
         
-        <check_box
-         control_name="ShowStreamMetadata"
-         name="ShowStreamMetadata"
-         label="Show stream title in nearby chat"
-         follows="left|top"
-         layout="topleft"
-         top_pad="-2"
-         left="25"
-         height="18"
-         width="200" />
+		<text
+			type="string"
+			length="1"
+			follows="left|top"
+			height="20"
+			layout="topleft"
+			left="26"
+			name="show_stream_metadata_text"
+			top_pad="2"
+			width="200">
+			Show stream title notifications:
+        </text>
+		<radio_group
+			control_name="ShowStreamMetadata"
+			height="20"
+			width="300"
+			layout="topleft"
+			left_pad="0"
+			name="show_stream_metadata">
+            <radio_item
+				label="Off"
+				name="radio_off"
+				top="0"
+				layout="topleft"
+				height="16"
+				left="0"
+				value="0"
+				width="90" />
+            <radio_item
+				label="Toasts"
+				left_pad="1"
+				layout="topleft"
+				height="16"
+				name="radio_toasts"
+				value="1"
+				width="90" />
+            <radio_item
+				label="Nearby Chat"
+				left_pad="1"
+				layout="topleft"
+				height="16"
+				name="radio_chat"
+				value="2"
+				width="90" />
+        </radio_group>
         <check_box
          top_pad="1"
          left="45"

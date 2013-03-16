@@ -417,15 +417,14 @@
   <key>ShowStreamMetadata</key>
   <map>
     <key>Comment</key>
-    <string>Shows stream metadata (artist, title) in local chat.</string>
+    <string>Shows stream metadata (artist, title) notifications. (0 = Off, 1 = Notification Toast, 2 = Nearby Chat)</string>
     <key>Persist</key>
     <integer>1</integer>
     <key>Type</key>
-    <string>Boolean</string>
+    <string>U32</string>
     <key>Value</key>
-    <integer>1</integer>
+    <integer>2</integer>
   </map>
-
   <key>StreamMetadataAnnounceToChat</key>
   <map>
     <key>Comment</key>
