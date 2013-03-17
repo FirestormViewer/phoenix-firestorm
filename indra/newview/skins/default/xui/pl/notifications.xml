@@ -4349,6 +4349,15 @@ Poprzedni symulator: [OLDVERSION]
 	<notification name="StreamListImportSuccess">
 		Pomyślnie zaimportowano listę strumieni z pliku XML.
 	</notification>
+	<notification name="StreamMetadata">
+        ♫ Teraz odtwarzane:
+        [TITLE]
+        [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+        ♫ Teraz odtwarzane:
+        [TITLE]♫
+	</notification>   
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
 	</notification>

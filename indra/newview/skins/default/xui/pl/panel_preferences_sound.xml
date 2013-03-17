@@ -23,7 +23,14 @@
 			<check_box label="Uruchamiaj media dołączone do innych awatarów" name="media_show_on_others_btn" tool_tip="Odznacz tę funkcję by ukryć media załączone do awatarów w pobliżu"/>
 			<check_box name="media_filter" tool_tip="Zaznacz tą opcję, aby móc wybierać, czy odtwarzać media z konkretnego hosta, czy nie" label="Włącz filtr mediów (zwiększone bezp.)"/>
 			<button label="Zarządzaj witrynami" name="edit_media_lists_button"/>
-			<check_box name="ShowStreamMetadata" label="Pokazuj tytuł strumienia w czacie lokalnym"/>
+			<text name="show_stream_metadata_text">
+				Powiadomienia o tytule strumienia:
+			</text>
+			<radio_group name="show_stream_metadata">
+				<radio_item label="Wyłącz" name="radio_off" />
+				<radio_item label="Tosty" name="radio_toasts" />
+				<radio_item label="Czat lokalny" name="radio_chat" />
+			</radio_group>
 			<check_box name="StreamMetadataAnnounceToChat" label="Wysyłaj tytuł strum. na kanał:"/>
 			<check_box name="FSFadeAudioStream" tool_tip="Zaznacz to pole, jeśli wygładzanie ma być używane, gdy zmieni się muzyka strumieniowa na działce" label="Płynnie wygładzaj przechodzenie między strumieniami muzyki na działkach:"/>
 			<slider label="Wejście" name="FSAudioMusicFadeIn" tool_tip="Czas wygładzania dla dźwięku działki przy wchodzeniu. Ustaw na 0, aby wyłączyć wygładzanie."/>
