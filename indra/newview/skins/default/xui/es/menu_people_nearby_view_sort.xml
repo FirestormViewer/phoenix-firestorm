@@ -8,6 +8,10 @@
 		<menu_item_check label="DisplayName (Nombre de usuario)" name="radarFmtDNUN"/>
 		<menu_item_check label="Nombre de usuario (DisplayName)" name="radarFmtUNDN"/>
 	</context_menu>
+	<context_menu label="Reportar en" name="report_to_menu">
+		<menu_item_check label="Chat local" name="radar_nearby_chat"/>
+		<menu_item_check label="Tostadas" name="radar_nearby_chat"/>
+	</context_menu>
 	<menu_item_check label="Mostrar alcance del chat local en el minimapa" name="MiniMapChatRing"/>
 	<menu_item_check label="Reportar los que entran en tu distancia de dibujo" name="RadarReportDrawRangeEnter"/>
 	<menu_item_check label="Reportar los que salen de tu distancia de dibujo" name="RadarReportDrawRangeLeave"/>

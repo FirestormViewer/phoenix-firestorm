@@ -4497,6 +4497,15 @@ Simulador anterior: [OLDVERSION]
 	<notification name="StreamListImportSuccess">
 		Lista de flujos importada con éxito de archivo XML.
 	</notification>
+	<notification name="StreamMetadata">
+        ♫ Estás escuchando:
+        [TITLE]
+        [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+        ♫ Estás escuchando:
+        [TITLE]♫
+	</notification>  
 	<notification name="BackupFinished">
 		Tu configuración ha sido respaldada.
 	</notification>

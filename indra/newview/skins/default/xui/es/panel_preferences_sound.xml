@@ -20,7 +20,14 @@
 			<check_box name="media_show_on_others_btn" tool_tip="Desactiva para ocultar los medios anexados a avatares de tu entorno" label="Reproducir medios anexados a otros avatares"/>
 			<check_box name="media_filter" tool_tip="Activa/desactiva el filtro que te permite escoger a qué servidores permites la reproducción de medios" label="Activar filtro de medios (seguridad mejorada)"/>
 			<button label="Administrar servidores de medios" name="edit_media_lists_button" width="200" left_pad="50"/>
-			<check_box name="ShowStreamMetadata" label="Mostrar título del flujo en el chat local"/>
+			<text name="show_stream_metadata_text" width="230">
+				Mostrar notificaciones de título de flujo:
+			</text>
+			<radio_group name="show_stream_metadata" width="270">
+				<radio_item label="No" name="radio_off"/>
+				<radio_item label="Tostadas" name="radio_toasts"/>
+				<radio_item label="Chat local" name="radio_chat"/>
+			</radio_group>
 			<check_box name="StreamMetadataAnnounceToChat" label="Enviar el título del flujo al canal:"/>
 			<spinner top_delta="-3" left_pad="25" name="StreamMetadataAnnounceChannel"/>
 			<check_box name="FSFadeAudioStream" tool_tip="Activa el fundido de sonido cuando cambia el flujo de audio de parcela" label="Fundido de audio de parcela:"/>
