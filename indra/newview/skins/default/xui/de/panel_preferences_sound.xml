@@ -24,7 +24,14 @@
 		<check_box label="Medien, die an andere Avatare angehängt sind, wiedergeben." name="media_show_on_others_btn" tool_tip="Diese Option deaktivieren, um Medien für andere Avataren, die sich in der Nähe befinden, auszublenden."/>
 		<check_box name="media_filter" tool_tip="Aktiviert den Medienfilter, der abhängig der Medien-URL die Wiedergabe erlaubt oder verbietet." label="Medienfilter aktivieren (erhöhte Sicherheit)"/>
 		<button label="Listen bearbeiten..." name="edit_media_lists_button" left_pad="45"/>
-        <check_box name="ShowStreamMetadata" label="Musikstream-Titel im lokalem Chat anzeigen"/>
+		<text name="show_stream_metadata_text">
+			Musikstream-Titel anzeigen:
+		</text>
+		<radio_group name="show_stream_metadata">
+			<radio_item label="Aus" name="radio_off"/>
+			<radio_item label="Toasts" name="radio_toasts"/>
+			<radio_item label="Chat in der Nähe" name="radio_chat"/>
+		</radio_group>
         <check_box name="StreamMetadataAnnounceToChat" label="Stream-Titel an diesen Kanal senden:" width="230"/>
         <check_box name="FSFadeAudioStream" tool_tip="Aktiviert Fading, wenn sich der Parzellen-Audiostream ändert" label="Parzellen-Audiostream-Fading aktivieren:"/>
 		<slider label="Einblenden" label_width="70" name="FSAudioMusicFadeIn" tool_tip="Einblenddauer für Parzellen-Audiostream."/>

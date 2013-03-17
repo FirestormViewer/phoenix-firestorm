@@ -3901,6 +3901,20 @@ Stream-Liste erfolgreich als XML nach [FILENAME] exportiert.
 	<notification name="StreamListImportSuccess">
 Stream-Liste erfolgreich aus XML importiert.
 	</notification>
+	
+	<notification name="StreamMetadata">
+		♫ Aktueller Titel:
+       [TITLE]
+       [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+		♫ Aktueller Titel:
+       [TITLE]♫
+	</notification>
+
+	<notification name="RadarAlert">
+		[NAME] [MESSAGE]
+	</notification>
 
 	<notification name="BackupFinished">
 Einstellungen wurden gesichert.

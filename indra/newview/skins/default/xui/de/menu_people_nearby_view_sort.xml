@@ -8,6 +8,10 @@
 		<menu_item_check label="Anzeigename (Benutzername)" name="radarFmtDNUN"/>
 		<menu_item_check label="Benutzername (Anzeigename)" name="radarFmtUNDN"/>
 	</context_menu>
+	<context_menu label="Melden via" name="report_to_menu">
+		<menu_item_check label="Chat in der Nähe" name="radar_nearby_chat"/>
+		<menu_item_check label="Benachrichtigungs-Toasts" name="radar_nearby_chat"/>
+	</context_menu>
 	<menu_item_check label="Chat-Reichweite auf Karte anzeigen" name="MiniMapChatRing"/>
 	<menu_item_check label="Betreten der Draw Distance melden" name="RadarReportDrawRangeEnter"/>
 	<menu_item_check label="Verlassen der Draw Distance melden" name="RadarReportDrawRangeLeave"/>
