@@ -65,6 +65,7 @@
 		<spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Ereignis-Multplikator für Sound-Preload-Anfragen [Standard: 4]"/>
 		<button name="AntiSpamUnblock" label="Alle blockierten Spam-Quellen freigeben" width="250"/>
 
+		<check_box label="„Blockieren“-Button von Skript-Dialogen entfernen" name="FSRemoveScriptBlockButton"/>
 		<check_box label="Benachrichtigen, falls Objekte zu schnell eintreffen" name="FSNotifyIncomingObjectSpam"/>
 		<check_box label="Benachrichtigen, falls Objekte von anderen Einwohnern zu schnell eintreffen" name="FSNotifyIncomingObjectSpamFrom"/>
 		<slider name="FSOfferThrottleMaxCount" label="Schwellwert für zu schnell eintreffende Objekte:" label_width="260" width="385" tool_tip="Setzt den Schwellwert für die Anzahl an eintreffenden Objekten innerhalb von 10 Sekunden, ab dem eine Drosselung einsetzt. Standardwert: 5"/>
