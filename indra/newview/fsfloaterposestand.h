@@ -23,13 +23,13 @@ class FSFloaterPoseStand
 public:
 	FSFloaterPoseStand(const LLSD& key);
 	BOOL postBuild();
+	void setLock(bool enabled);
+	void onCommitCombo();
 private:
 	~FSFloaterPoseStand();
-	
 	virtual void onOpen(const LLSD& key);
 	virtual void onClose(bool app_quitting);
 	void loadPoses();
-	void onCommitCombo();
 	
 	bool mPoseStandLock;
 	LLComboBox* mComboPose;

@@ -46,8 +46,7 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
 	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting() && isAgentAvatarValid())
 	{
-		gAgent.sitDown();
-		mPoseStandLock = true;
+		setLock(true);
 	}
 	gAgentAvatarp->setIsEditingAppearance(TRUE);
 	onCommitCombo();
@@ -57,7 +56,9 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
 	if (mPoseStandLock == true && gAgentAvatarp->isSitting() && isAgentAvatarValid())
-		gAgent.standUp();
+	{
+		setLock(false);
+	}
 	gAgentAvatarp->setIsEditingAppearance(FALSE);
 	FSPose::getInstance()->stopPose();
 }
@@ -85,4 +86,17 @@ void FSFloaterPoseStand::onCommitCombo()
 {
 	std::string selected_pose = mComboPose->getValue();
 	FSPose::getInstance()->setPose(selected_pose);
+}
+
+void FSFloaterPoseStand::setLock(bool enabled)
+{
+	if (enabled)
+	{
+		gAgent.sitDown();
+	}
+	else
+	{
+		gAgent.standUp();
+	}
+	mPoseStandLock = enabled;
 }

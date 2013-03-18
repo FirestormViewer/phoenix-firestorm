@@ -86,6 +86,7 @@
 #include "llfloaterreg.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llpanelplaces.h"
+#include "fsfloaterposestand.h"
 #include "fsfloaterteleporthistory.h"
 
 // Third party library includes
@@ -711,6 +712,20 @@ static void handleUseStandaloneTeleportHistoryFloaterChanged()
 	}
 }
 // </FS:Ansariel> Clear places / teleport history search filter
+
+// <FS:CR> Posestand Ground Lock
+static void handleSetPoseStandLock(const LLSD& newvalue)
+{
+	FSFloaterPoseStand* pose_stand = LLFloaterReg::findTypedInstance<FSFloaterPoseStand>("fs_posestand");
+	if (pose_stand)
+	{
+		pose_stand->setLock(newvalue);
+		pose_stand->onCommitCombo();
+	}
+		
+}
+// </FS:CR> Posestand Ground Lock
+
 ////////////////////////////////////////////////////////////////////////////
 
 void settings_setup_listeners()
@@ -895,6 +910,9 @@ void settings_setup_listeners()
 
 	// <FS:Ansariel> Tofu's SSR
 	gSavedSettings.getControl("FSRenderSSR")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+	
+	// <FS:CR> Pose stand ground lock
+	gSavedSettings.getControl("FSPoseStandLock")->getSignal()->connect(boost::bind(&handleSetPoseStandLock, _2));
 }
 
 #if TEST_CACHED_CONTROL
