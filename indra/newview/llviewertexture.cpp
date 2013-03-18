@@ -1404,20 +1404,10 @@ void LLViewerFetchedTexture::dump()
 // ONLY called from LLViewerFetchedTextureList
 void LLViewerFetchedTexture::destroyTexture() 
 {
-	// <FS:Ansariel> This was commented out as part of MAINT-775 and is a REALLY bad idea!
-	//               It will dump textures off memory once you turn away and you
-	//               will end up with gray textures that need to be fetched again.
-	//               Let's do this smarter and drop textures off memory soon before
-	//               we reach the desired max texture memory!
 	//if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes)//not ready to release unused memory.
 	//{
 	//	return ;
 	//}
-	if(LLImageGL::sGlobalTextureMemoryInBytes < sMaxDesiredTextureMemInBytes * 0.95f)//not ready to release unused memory.
-	{
-		return ;
-	}
-	// </FS:Ansariel>
 	if (mNeedsCreateTexture)//return if in the process of generating a new texture.
 	{
 		return ;
