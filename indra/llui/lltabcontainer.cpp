@@ -1786,6 +1786,7 @@ void LLTabContainer::setTabImage(LLPanel* child, LLIconCtrl* icon)
 void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
 {
 	static LLUICachedControl<S32> tab_padding ("UITabPadding", 0);
+	static LLUICachedControl<S32> tab_vpadding ("UITabVPadding", 0);
 
 	if (!mIsVertical)
 	{
@@ -1837,7 +1838,7 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
 		tuple->mPadding = image_overlay_height;
 
 		tuple->mButton->reshape(tuple->mButton->getRect().getWidth(),
-								llclamp(mTabHeight + tab_padding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
+								llclamp(mTabHeight + tab_vpadding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
 		// add back in button height to total tab strip height
 		mTotalTabHeight += tuple->mButton->getRect().getHeight();
 		
