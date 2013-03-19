@@ -607,7 +607,7 @@ BOOL LLPanelPeople::postBuild()
 	nearby_tab->getChildView("NearMeRange")->setVisible(gSavedSettings.getBOOL("LimitRadarByRange"));
 	
 	// AO: radarlist takes over for nearbylist for presentation.
-	mRadarList = nearby_tab->getChild<LLRadarListCtrl>("radar_list");
+	mRadarList = nearby_tab->getChild<FSRadarListCtrl>("radar_list");
 	mRadarList->sortByColumn("range",TRUE); // sort by range
 	mRadarList->setFilterColumn(0);
 	mRadarFrameCount = 0;

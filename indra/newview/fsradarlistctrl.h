@@ -1,10 +1,10 @@
 /** 
- * @file fs_radarlistctr.h
+ * @file fsradarlistctrl.h
  * @brief A radar-specific scrolllist implementation, so we can subclass custom methods.
  *
- * $LicenseInfo:firstyear=2003&license=viewerlgpl$
- * Second Life Viewer Source Code
- * Copyright (C) 2010, Linden Research, Inc.
+ * $LicenseInfo:firstyear=2011&license=viewerlgpl$
+ * Phoenix Firestorm Viewer Source Code
+ * Copyright (c) 2011 Arrehn Oberlander
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,19 +20,20 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
- * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
+ * The Phoenix Firestorm Project, Inc., 1831 Oakwood Drive, Fairmont, Minnesota 56031-3225 USA
+ * http://www.firestormviewer.org
  * $/LicenseInfo$
  */
 
 #ifndef FS_RADARLISTCTRL_H
 #define FS_RADARLISTCTRL_H
 
-#include <set>
 #include "llscrolllistctrl.h"
-#include "lllistcontextmenu.h"
 
-class LLRadarListCtrl
-: public LLScrollListCtrl, public LLInstanceTracker<LLRadarListCtrl>
+class LLListContextMenu;
+
+class FSRadarListCtrl
+: public LLScrollListCtrl, public LLInstanceTracker<FSRadarListCtrl>
 {
 public:
 	
@@ -84,7 +85,7 @@ public:
 	
 	
 protected:
-	LLRadarListCtrl(const Params&);
+	FSRadarListCtrl(const Params&);
 	friend class LLUICtrlFactory;
 
 private:
