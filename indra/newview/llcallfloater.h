@@ -75,6 +75,10 @@ public:
 
 	static void sOnCurrentChannelChanged(const LLUUID& session_id);
 
+// [RLVa:KB] - Checked: 2010-04-05 (RLVa-1.2.0d) | Added: RLVa-1.2.0d
+	LLAvatarList* getAvatarCallerList() { return mAvatarList; }
+// [/RLVa:KB]
+
 private:
 	typedef enum e_voice_controls_type
 	{
