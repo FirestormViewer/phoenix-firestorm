@@ -38,8 +38,9 @@
 #include "llavataractions.h"
 #include "llcallingcard.h"			// for LLAvatarTracker
 #include "llviewermenu.h"			// for gMenuHolder
-#include "llfloatersidepanelcontainer.h"
 #include "llpanelpeople.h"
+
+#include "fscommon.h"
 
 namespace LLPanelPeopleMenus
 {
@@ -242,15 +243,21 @@ void NearbyMenu::teleportToAvatar()
 // AO: wrapper for functionality managed by LLPanelPeople, because it manages the nearby avatar list.
 // Will only work for avatars within radar range.
 {
-	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
-	peoplePanel->teleportToAvatar(mUUIDs.front());
+	LLPanelPeople* peoplePanel = getPeoplePanel();
+	if (peoplePanel)
+	{
+		peoplePanel->teleportToAvatar(mUUIDs.front());
+	}
 }
 
 // Ansariel: Avatar tracking feature
 void NearbyMenu::onTrackAvatarMenuItemClick()
 {
-	LLPanelPeople* peoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
-	peoplePanel->startTracking(mUUIDs.front());
+	LLPanelPeople* peoplePanel = getPeoplePanel();
+	if (peoplePanel)
+	{
+		peoplePanel->startTracking(mUUIDs.front());
+	}
 }
 
 } // namespace LLPanelPeopleMenus

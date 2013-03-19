@@ -840,11 +840,11 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 			//           aka radar when above 1020m.
 			if (isHigher1020mBug)
 			{
-				LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
-				if (panel_people != NULL)
+				LLPanelPeople* panel_people = getPeoplePanel();
+				if (panel_people)
 				{
-					LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avatar_id);
-					if (avatar_list_item != NULL)
+					LLAvatarListItem* avatar_list_item = panel_people->getNearbyList()->getAvatarListItem(avatar_id);
+					if (avatar_list_item)
 					{
 						F32 radar_distance = avatar_list_item->getRange();
 
@@ -1304,7 +1304,7 @@ void LLNetMap::startTracking()
 {
 	if (mClosestAgentAtLastRightClick.notNull())
 	{
-		LLPanelPeople* panel_people = (LLPanelPeople*)LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+		LLPanelPeople* panel_people = getPeoplePanel();
 		if (panel_people != NULL)
 		{
 			panel_people->startTracking(mClosestAgentAtLastRightClick);

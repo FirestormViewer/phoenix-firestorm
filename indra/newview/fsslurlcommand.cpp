@@ -27,6 +27,7 @@
 #include "llviewerprecompiledheaders.h"
 #include "fsslurlcommand.h"
 
+#include "fscommon.h"
 #include "llagent.h"
 #include "llavataractions.h"
 #include "llavatarlist.h"
@@ -39,7 +40,7 @@
 
 LLAvatarListItem* getAvatarListItem(const LLUUID& avatar_id)
 {
-	LLPanelPeople* panel_people = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
+	LLPanelPeople* panel_people = getPeoplePanel();
 	if (panel_people)
 	{
 		return panel_people->getNearbyList()->getAvatarListItem(avatar_id);
@@ -117,7 +118,7 @@ public:
 		{
 			if (gAgentID != target_id)
 			{
-				LLPanelPeople* panel_people = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
+				LLPanelPeople* panel_people = getPeoplePanel();
 				LLAvatarListItem* avatar_list_item = getAvatarListItem(target_id);
 				if (avatar_list_item && panel_people)
 				{

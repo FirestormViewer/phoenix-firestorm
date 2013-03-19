@@ -5542,10 +5542,12 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	// AO: Hack for legacy radar script interface compatibility. Interpret certain
 	// sound assets as a request for a full radar update to a channel
 	if ((owner_id == gAgent.getID()) && (sound_id.asString() == gSavedSettings.getString("RadarLegacyChannelAlertRefreshUUID")))
-        {
-	        LLPanelPeople* pPeoplePanel = dynamic_cast<LLPanelPeople*>(LLFloaterSidePanelContainer::getPanel("people", "panel_people"));
-                if (pPeoplePanel)
-                        pPeoplePanel->requestRadarChannelAlertSync();
+	{
+		LLPanelPeople* pPeoplePanel = getPeoplePanel();
+		if (pPeoplePanel)
+		{
+			pPeoplePanel->requestRadarChannelAlertSync();
+		}
 		return;
 	}
 		
