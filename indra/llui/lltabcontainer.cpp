@@ -315,7 +315,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	}
 	else if (mIsVertical)
 	{
-		mMinTabWidth = p.tab_min_height;
+		mMinTabHeight = p.tab_min_height;
 	}
 	else
 	{
