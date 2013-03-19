@@ -1946,19 +1946,41 @@ void LLVOAvatarSelf::dumpTotalLocalTextureByteCount()
 
 BOOL LLVOAvatarSelf::getIsCloud() const
 {
-	// do we have our body parts?
-	if (gAgentWearables.getWearableCount(LLWearableType::WT_SHAPE) == 0 ||
-		gAgentWearables.getWearableCount(LLWearableType::WT_HAIR) == 0 ||
-		gAgentWearables.getWearableCount(LLWearableType::WT_EYES) == 0 ||
-		gAgentWearables.getWearableCount(LLWearableType::WT_SKIN) == 0)	
+	// Let people know why they're clouded without spamming them into oblivion.
+	bool do_warn = false;
+	static LLTimer time_since_notice;
+	F32 update_freq = 30.0;
+	if (time_since_notice.getElapsedTimeF32() > update_freq)
 	{
-		lldebugs << "No body parts" << llendl;
+		time_since_notice.reset();
+		do_warn = true;
+	}
+	
+	// do we have our body parts?
+	S32 shape_count = gAgentWearables.getWearableCount(LLWearableType::WT_SHAPE);
+	S32 hair_count = gAgentWearables.getWearableCount(LLWearableType::WT_HAIR);
+	S32 eye_count = gAgentWearables.getWearableCount(LLWearableType::WT_EYES);
+	S32 skin_count = gAgentWearables.getWearableCount(LLWearableType::WT_SKIN);
+	if (!shape_count || !hair_count || !eye_count || !skin_count)
+	{
+		if (do_warn)
+		{
+			llinfos << "Self is clouded due to missing one or more required body parts: "
+					<< (shape_count ? "" : "SHAPE ")
+					<< (hair_count ? "" : "HAIR ")
+					<< (eye_count ? "" : "EYES ")
+					<< (skin_count ? "" : "SKIN ")
+					<< llendl;
+		}
 		return TRUE;
 	}
 
 	if (!isTextureDefined(TEX_HAIR, 0))
 	{
-		lldebugs << "No hair texture" << llendl;
+		if (do_warn)
+		{
+			llinfos << "Self is clouded because of no hair texture" << llendl;
+		}
 		return TRUE;
 	}
 
@@ -1967,14 +1989,20 @@ BOOL LLVOAvatarSelf::getIsCloud() const
 		if (!isLocalTextureDataAvailable(getLayerSet(BAKED_LOWER)) &&
 			(!isTextureDefined(TEX_LOWER_BAKED, 0)))
 		{
-			lldebugs << "Lower textures not baked" << llendl;
+			if (do_warn)
+			{
+				llinfos << "Self is clouded because lower textures not baked" << llendl;
+			}
 			return TRUE;
 		}
 
 		if (!isLocalTextureDataAvailable(getLayerSet(BAKED_UPPER)) &&
 			(!isTextureDefined(TEX_UPPER_BAKED, 0)))
 		{
-			lldebugs << "Upper textures not baked" << llendl;
+			if (do_warn)
+			{
+				llinfos << "Self is clouded because upper textures not baked" << llendl;
+			}
 			return TRUE;
 		}
 
@@ -1991,7 +2019,11 @@ BOOL LLVOAvatarSelf::getIsCloud() const
 			const LLViewerTexture* baked_img = getImage( texture_data.mTextureIndex, 0 );
 			if (!baked_img || !baked_img->hasGLTexture())
 			{
-				lldebugs << "Texture at index " << i << " (texture index is " << texture_data.mTextureIndex << ") is not loaded" << llendl;
+				if (do_warn)
+				{
+					llinfos << "Self is clouded because texture at index " << i
+							<< " (texture index is " << texture_data.mTextureIndex << ") is not loaded" << llendl;
+				}
 				return TRUE;
 			}
 		}
@@ -2232,7 +2264,7 @@ public:
 		else
 		{
 			LL_WARNS("Avatar") << "Failed " << status << " reason " << reason << LL_ENDL;
-			error(status,reason);
+			errorWithContent(status,reason,content);
 		}
 	}
 
@@ -2408,11 +2440,12 @@ public:
 	}
 
 	// Error
-	/*virtual*/ void error(U32 status, const std::string& reason)
+	/*virtual*/ void errorWithContent(U32 status, const std::string& reason, const LLSD& content)
 	{
 		if (isAgentAvatarValid())
 		{
-			LL_DEBUGS("Avatar") << "failed, will rebake" << llendl;
+			LL_DEBUGS("Avatar") << "failed, will rebake [status:"
+					<< status << "]: " << content << llendl;
 			forceAppearanceUpdate();
 		}
 	}	
@@ -2437,7 +2470,7 @@ void LLVOAvatarSelf::checkForUnsupportedServerBakeAppearance()
 		return;
 
 	// if baked image service is unknown, need to refresh.
-	if (gSavedSettings.getString("AgentAppearanceServiceURL").empty())
+	if (LLAppearanceMgr::instance().getAppearanceServiceURL().empty())
 	{
 		CheckAgentAppearanceServiceResponder::forceAppearanceUpdate();
 	}
@@ -2615,7 +2648,7 @@ void LLVOAvatarSelf::setNewBakedTexture( ETextureIndex te, const LLUUID& uuid )
 {
 	// Baked textures live on other sims.
 	LLHost target_host = getObjectHost();	
-	setTEImage( te, LLViewerTextureManager::getFetchedTextureFromHost( uuid, target_host ) );
+	setTEImage( te, LLViewerTextureManager::getFetchedTextureFromHost( uuid, FTT_HOST_BAKE, target_host ) );
 	updateMeshTextures();
 	dirtyMesh();
 
@@ -2931,8 +2964,9 @@ void LLVOAvatarSelf::onCustomizeStart(bool disable_camera_switch)
 		gAgentAvatarp->idleUpdateAppearanceAnimation();
 #endif
 		
-		gAgentAvatarp->invalidateAll();
-		gAgentAvatarp->updateMeshTextures();
+		gAgentAvatarp->invalidateAll(); // mark all bakes as dirty, request updates
+		gAgentAvatarp->updateMeshTextures(); // make sure correct textures are applied to the avatar mesh.
+		gAgentAvatarp->updateTextures(); // call updateTextureStats
 	}
 }
 
