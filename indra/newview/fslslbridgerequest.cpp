@@ -26,17 +26,16 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fslslbridgerequest.h"
+
+#include "fscommon.h"
 #include "fslslbridge.h"
-#include "llagent.h"  // for gAgent
-#include "llhttpclient.h"
 #include <string>
 #include <boost/tokenizer.hpp> // for radar 
-#include "llpanel.h"
 #include "llpanelpeople.h"
 #include "llavatarlist.h"
 #include "llavatarlistitem.h"
-#include "llfloatersidepanelcontainer.h"
 
 #ifdef LL_STANDALONE
 #include <expat.h>
@@ -63,13 +62,13 @@ void FSLSLBridgeRequestManager::processBridgeCall(const LLSD& content)
 {
 	std::string strContent = content.asString();
 	llinfos << "Got info: " << strContent << llendl;
-	
 }
 
 FSLSLBridgeRequestResponder::FSLSLBridgeRequestResponder() 
 { 
 	//FSLSLBridgeRequestManager::instance().initSingleton(); 
 }
+
 //If we get back a normal response, handle it here
 void FSLSLBridgeRequestResponder::result(const LLSD& content)
 {
@@ -88,17 +87,16 @@ void FSLSLBridgeRequestResponder::error(U32 status, const std::string& reason)
 	<< status << ": " << reason << ")" << llendl;
 }
 
-
 // AO: The below handler is used to parse return data from the bridge, requesting bulk ZOffset updates.
 FSLSLBridgeRequestRadarPosResponder::FSLSLBridgeRequestRadarPosResponder()
 {
 }
 void FSLSLBridgeRequestRadarPosResponder::result(const LLSD& content)
 {
-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	LLPanelPeople* panel_people = getPeoplePanel();
 	if (panel_people)
 	{
-		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();
+		LLAvatarList* nearbyList = panel_people->getNearbyList();
 		
 		std::string strContent = content.asString();
 		//llinfos << "Got info: " << strContent << llendl;	

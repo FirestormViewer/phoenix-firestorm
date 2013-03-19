@@ -28,7 +28,10 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscommon.h"
+
+#include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
+#include "llpanel.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -111,6 +114,15 @@ std::string applyMuPose(const std::string& message)
 	return utf8_text;
 }
 
+LLPanelPeople* getPeoplePanel()
+{
+	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	if (panel_people)
+	{
+		return dynamic_cast<LLPanelPeople*>(panel_people);
+	}
+	return NULL;
+}
 
 S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::string& str)
 {

@@ -1887,6 +1887,7 @@ void LLTabContainer::setRightTabBtnOffset(S32 offset)
 void LLTabContainer::setPanelTitle(S32 index, const std::string& title)
 {
 	static LLUICachedControl<S32> tab_padding ("UITabPadding", 0);
+	static LLUICachedControl<S32> tab_vpadding ("UITabVPadding", 0);
 
 	if (index >= 0 && index < getTabCount())
 	{
@@ -1907,7 +1908,7 @@ void LLTabContainer::setPanelTitle(S32 index, const std::string& title)
 		else
 		{
 			mTotalTabHeight -= tab_button->getRect().getHeight();
-			tab_button->reshape(tab_button->getRect().getWidth(), llclamp(mTabHeight + tab_padding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
+			tab_button->reshape(tab_button->getRect().getWidth(), llclamp(mTabHeight + tab_vpadding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
 			mTotalTabHeight += tab_button->getRect().getHeight();
 		}
 		// </FS:LO>

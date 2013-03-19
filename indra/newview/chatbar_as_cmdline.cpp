@@ -1169,11 +1169,11 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 	std::string av_name;
 	LLStringUtil::toLower(partial_name);
 
-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	LLPanelPeople* panel_people = getPeoplePanel();
 	if (panel_people)
 	{
 		std::vector<LLPanel*> items;
-		LLAvatarList* nearbyList = ((LLPanelPeople*)panel_people)->getNearbyList();
+		LLAvatarList* nearbyList = panel_people->getNearbyList();
 		nearbyList->getItems(items);
 
 		for (std::vector<LLPanel*>::const_iterator itItem = items.begin(); itItem != items.end(); ++itItem)
@@ -1195,10 +1195,10 @@ LLUUID cmdline_partial_name2key(std::string partial_name)
 void cmdline_tp2name(std::string target)
 {
 	LLUUID avkey = cmdline_partial_name2key(target);
-	LLPanel* panel_people = LLFloaterSidePanelContainer::getPanel("people", "panel_people");
+	LLPanelPeople* panel_people = getPeoplePanel();
 	if (avkey.notNull() && panel_people)
 	{
-		LLAvatarListItem* avatar_list_item = ((LLPanelPeople*)panel_people)->getNearbyList()->getAvatarListItem(avkey);
+		LLAvatarListItem* avatar_list_item = panel_people->getNearbyList()->getAvatarListItem(avkey);
 		if (avatar_list_item)
 		{
 			LLVector3d pos = avatar_list_item->getPosition();

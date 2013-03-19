@@ -29,10 +29,12 @@
 #define FS_COMMON_H
 
 #include "llchat.h"
+#include "llpanelpeople.h"
 
 void reportToNearbyChat(const std::string& message);
 std::string applyAutoCloseOoc(const std::string& message);
 std::string applyMuPose(const std::string& message);
+LLPanelPeople* getPeoplePanel();
 
 namespace FSCommon
 {

@@ -184,7 +184,7 @@ private:
 	LLAvatarList*			mNearbyList;
 	LLAvatarList*			mRecentList;
 	LLGroupList*			mGroupList;
-	LLRadarListCtrl*		mRadarList;
+	FSRadarListCtrl*		mRadarList;
 	LLNetMap*				mMiniMap;
 
 	LLHandle<LLView>		mGroupPlusMenuHandle;
