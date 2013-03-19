@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<floater title="Regulacja głośności" name="volume_controls" width="220">
-  <panel name="global_volume_controls_panel" width="220" />
-</floater>

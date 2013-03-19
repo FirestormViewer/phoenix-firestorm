@@ -75,9 +75,33 @@
     </menu_item_check>
    </context_menu>
   
-  
   <menu_item_separator layout="topleft" />
 
+  <context_menu
+    label="Report To"
+    name="report_to_menu">
+    <menu_item_check
+    	label="Nearby Chat"
+     	name="radar_nearby_chat">
+    	<menu_item_check.on_check
+      function="Radar.ReportToCheck"
+      parameter="radar_nearby_chat" />
+    	<menu_item_check.on_click
+      function="Radar.ReportTo"
+      parameter="radar_nearby_chat" />
+    </menu_item_check>
+    <menu_item_check
+    	label="Notification Toasts"
+     	name="radar_nearby_chat">
+    	<menu_item_check.on_check
+        function="Radar.ReportToCheck"
+        parameter="radar_toasts" />
+    	<menu_item_check.on_click
+        function="Radar.ReportTo"
+        parameter="radar_toasts" />
+    </menu_item_check>
+  </context_menu>
+    
   <menu_item_check
    label="Local chat distance ring in Minimap"
    name="MiniMapChatRing">

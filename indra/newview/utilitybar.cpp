@@ -26,8 +26,12 @@
 
 #include "utilitybar.h"
 
-#include "llagent.h"
 #include "llbutton.h"
+#include "llfloaterreg.h"
+#include "llpanel.h"
+#include "lltabcontainer.h"
+
+#include "llagent.h"
 #include "llstatusbar.h"
 #include "llviewercontrol.h"
 #include "llviewermedia.h"
@@ -52,6 +56,7 @@ void UtilityBar::init()
 	mParcelMediaPlayButton = rootView->findChild<LLButton>("utility_parcel_media_button");
 	mTalkButton = rootView->findChild<LLButton>("utility_talk_button");
 	mAOInterfaceButton = rootView->findChild<LLButton>("show_ao_interface_button");
+	mVolumeControlsInterfaceButton = rootView->findChild<LLButton>("show_volume_controls_button");
 
 	if(mParcelStreamPlayButton)
 		mParcelStreamPlayButton->setCommitCallback(boost::bind(&UtilityBar::onParcelStreamClicked,this));
@@ -136,6 +141,21 @@ void UtilityBar::setAOInterfaceButtonExpanded(bool expanded)
 		else
 		{
 			mAOInterfaceButton->setImageOverlay("arrow_up.tga");
+		}
+	}
+}
+
+void UtilityBar::setVolumeControlsButtonExpanded(bool expanded)
+{
+	if (mVolumeControlsInterfaceButton)
+	{
+		if (expanded)
+		{
+			mVolumeControlsInterfaceButton->setImageOverlay("arrow_down.tga");
+		}
+		else
+		{
+			mVolumeControlsInterfaceButton->setImageOverlay("arrow_up.tga");
 		}
 	}
 }

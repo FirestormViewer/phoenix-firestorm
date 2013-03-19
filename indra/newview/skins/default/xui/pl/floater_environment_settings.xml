@@ -22,7 +22,7 @@
 			Ustaw. nieba (stałe lub cykliczne):
 		</text>
 		<radio_group name="sky_dayc_settings_radio_group">
-			<radio_item label="Stałe niebo" name="my_sky_settings"/>
+			<radio_item label="Stałe" name="my_sky_settings"/>
 			<radio_item label="Cykl dnia" name="my_dayc_settings"/>  	
 		</radio_group>
 		<combo_box name="sky_settings_preset_combo">

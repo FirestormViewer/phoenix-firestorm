@@ -40,6 +40,9 @@
 #include "llfloaterpreference.h"
 #include "llsliderctrl.h"
 
+#include "llcheckboxctrl.h"
+#include "llviewercontrol.h"
+
 /* static */ const F32 LLPanelVolumePulldown::sAutoCloseFadeStartTimeSec = 4.0f;
 /* static */ const F32 LLPanelVolumePulldown::sAutoCloseTotalTimeSec = 5.0f;
 
@@ -54,6 +57,9 @@ LLPanelVolumePulldown::LLPanelVolumePulldown()
 
     mCommitCallbackRegistrar.add("Vol.setControlFalse", boost::bind(&LLPanelVolumePulldown::setControlFalse, this, _2));
 	mCommitCallbackRegistrar.add("Vol.GoAudioPrefs", boost::bind(&LLPanelVolumePulldown::onAdvancedButtonClick, this, _2));
+	// <FS:Ansariel> Missing callback function
+	mCommitCallbackRegistrar.add("Vol.SetSounds", boost::bind(&LLPanelVolumePulldown::setSounds, this));
+
 	buildFromFile( "panel_volume_pulldown.xml");
 }
 
@@ -148,3 +154,12 @@ void LLPanelVolumePulldown::draw()
 	}
 }
 
+// <FS:Ansariel> Missing callback function
+void LLPanelVolumePulldown::setSounds()
+{
+	// Disable Enable gesture/collisions sounds checkbox if the master sound is disabled
+	// or if sound effects are disabled.
+	getChild<LLCheckBoxCtrl>("gesture_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+	getChild<LLCheckBoxCtrl>("collisions_audio_play_btn")->setEnabled(!gSavedSettings.getBOOL("MuteSounds"));
+}
+// </FS:Ansariel> Missing callback function

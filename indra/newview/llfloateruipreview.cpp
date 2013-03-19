@@ -463,6 +463,7 @@ BOOL LLFloaterUIPreview::postBuild()
 	main_panel_tmp->getChild<LLButton>("save_floater")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveFloater, this, PRIMARY_FLOATER));
 	main_panel_tmp->getChild<LLButton>("save_all_floaters")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickSaveAll, this, PRIMARY_FLOATER));
 
+	getChild<LLButton>("refresh_btn")->setClickedCallback(boost::bind(&LLFloaterUIPreview::refreshList, this)); // <FS:CR> Manual refresh
 	getChild<LLButton>("export_schema")->setClickedCallback(boost::bind(&LLFloaterUIPreview::onClickExportSchema, this));
 	getChild<LLUICtrl>("show_rectangles")->setCommitCallback(
 		boost::bind(&LLFloaterUIPreview::onClickShowRectangles, this, _2));

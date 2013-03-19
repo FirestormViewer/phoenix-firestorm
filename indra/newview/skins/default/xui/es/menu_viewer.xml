@@ -289,6 +289,10 @@
 			<menu_item_check label="Objetos flexibles" name="Flexible Objects"/>
 		</menu>
 		<menu label="RLVa" name="RLVa Embedded"/>
+		<menu label="Respaldo de flujos de medios" name="media_stream_import_export">
+			<menu_item_call label="Importar lista de flujos en XML..." name="media_stream_import"/>
+			<menu_item_call label="Exportar lista de flujos a XML..." name="media_stream_export"/>
+		</menu>
 		<menu_item_check label="Usar Plugin Read Thread" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Vaciar caché de grupo" name="ClearGroupCache"/>
 		<menu_item_check label="Vista subjetiva suavizada" name="Mouse Smoothing"/>

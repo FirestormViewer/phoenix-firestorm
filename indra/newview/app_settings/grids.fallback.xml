@@ -34,6 +34,36 @@
         <key>slurl_base</key>
             <string>hop://craft-world.org:8002/</string>
         </map>
+    <key>gaynations.org:7002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2012-12-05T04:58:55.72Z</date>
+        <key>about</key>
+            <string>http://gaynations.org/</string>
+        <key>gridname</key>
+            <string>Gay Nations</string>
+        <key>gridnick</key>
+            <string>gay nations</string>
+        <key>helperuri</key>
+            <string>http://gaynations.org/helper</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://gaynations.org/splashpage</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://os.gaynations.org:7002/</string>
+            </array>
+        <key>name</key>
+            <string>gaynations.org:7002</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>slurl_base</key>
+            <string>hop://gaynations.org:7002/</string>
+        </map>
     <key>grid.3rdrockgrid.com:8002</key>
         <map>
         <key>LastModified</key>
@@ -149,6 +179,44 @@
             <string>http://www.islandoasis.biz/verification.aspx</string>
         <key>slurl_base</key>
             <string>hop://islandoasisgrid.biz:8002/</string>
+        </map>
+    <key>lfgrid.com:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-03-18T21:51:17.62Z</date>
+        <key>about</key>
+            <string>http://lfgrid.com/about/</string>
+        <key>gatekeeper</key>
+            <string>lfgrid.com:8002</string>
+        <key>gridname</key>
+            <string>Littlefield Grid</string>
+        <key>gridnick</key>
+            <string>LFgrid</string>
+        <key>help</key>
+            <string>http://lfgrid.com/help</string>
+        <key>helperuri</key>
+            <string>http://lfgrid.com/services/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://www.lfgrid.com/splash/index.php</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://lfgrid.com:8002/</string>
+            </array>
+        <key>name</key>
+            <string>lfgrid.com:8002</string>
+        <key>password</key>
+            <string>http://lfgrid.com:8002/wifi/forgotpassword</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://lfgrid.com:8002/wifi/user/account/</string>
+        <key>slurl_base</key>
+            <string>hop://lfgrid.com:8002/</string>
         </map>
     <key>localhost:9000</key>
         <map>

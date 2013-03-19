@@ -103,7 +103,7 @@
      height="20"
      layout="topleft"
      left_delta="104"
-     max_length_bytes="31"
+     max_length_bytes="63"
      name="replace_editor"
      tool_tip="Replace the trigger word(s) with these words. For example, trigger &apos;hello&apos; replace with &apos;howdy&apos; will turn the chat &apos;I wanted to say hello&apos; into &apos;I wanted to say howdy&apos; as well as playing the gesture"
      top_delta="-4"

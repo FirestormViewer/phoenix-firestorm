@@ -79,6 +79,10 @@ public:
 											tab_min_width,
 											tab_max_width,
 											tab_height,
+											// <FS:LO> Add proper scrolling to vertical tabs
+											tab_min_height,
+											tab_max_height,
+											// </FS:LO>
 											label_pad_bottom,
 											label_pad_left;
 
@@ -287,6 +291,7 @@ private:
 	TabPosition 					mTabPosition;
 	S32								mLockedTabCount;
 	S32								mMinTabWidth;
+	S32								mMinTabHeight; // <FS:LO> Add proper scrolling to vertical tabs
 	LLButton*						mPrevArrowBtn;
 	LLButton*						mNextArrowBtn;
 
@@ -299,7 +304,9 @@ private:
 	S32								mRightTabBtnOffset; // Extra room to the right of the tab buttons.
 
 	S32								mMaxTabWidth;
+	S32								mMaxTabHeight; // <FS:LO> Add proper scrolling to vertical tabs
 	S32								mTotalTabWidth;
+	S32								mTotalTabHeight; // <FS:LO> Add proper scrolling to vertical tabs
 	S32								mTabHeight;
 
 	// Padding under the text labels of tab buttons

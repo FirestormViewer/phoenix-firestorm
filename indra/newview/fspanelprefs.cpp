@@ -42,10 +42,6 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	m_ClientTagsVisibility = getChild<LLComboBox>("ClientTagsVisibility");	
 	refreshTagCombos();
 
-	// disable the prefs for features that are disabled by the global auto env being disabled
-	getChild<LLUICtrl>("UseEnvironmentFromRegionAlways")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways, this));
-	// init the enable state of the related wl prefs
-	onUseEnvironmentFromRegionAlways();
 	populateCloudCombo();
 
 	return LLPanelPreference::postBuild();	
@@ -155,18 +151,6 @@ void PanelPreferenceFirestorm::onBeamDelete()
 	}
 	refreshBeamLists();
 }
-
-void PanelPreferenceFirestorm::onUseEnvironmentFromRegionAlways()
-{
-	const bool auto_env = gSavedSettings.getBOOL("UseEnvironmentFromRegionAlways");
-
-    getChild<LLUICtrl>("FSWLParcelEnabled")->setEnabled(auto_env);
-    getChild<LLUICtrl>("FSWLWhitelistFriends")->setEnabled(auto_env);
-    getChild<LLUICtrl>("FSWLWhitelistGroups")->setEnabled(auto_env);
-    getChild<LLUICtrl>("FSWLWhitelistAll")->setEnabled(auto_env);
-    getChild<LLUICtrl>("FSInterpolateParcelWL")->setEnabled(auto_env);
-}
-
 
 void PanelPreferenceFirestorm::refreshTagCombos()
 {	

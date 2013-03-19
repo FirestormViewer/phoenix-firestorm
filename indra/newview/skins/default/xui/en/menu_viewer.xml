@@ -777,7 +777,8 @@
           
           <menu_item_check
              label="Land Owners"
-             name="Land Owners">
+             name="Land Owners"
+             shortcut="control|alt|O">
             <menu_item_check.on_check
                control="ShowParcelOwners" />
             <menu_item_check.on_click
@@ -2495,6 +2496,23 @@
          name="RLVa Embedded"
          tear_off="true"
          visible="true" />
+		<menu
+			label="Media Streams Backup"
+			name="media_stream_import_export"
+			tear_off="true">
+			<menu_item_call
+				label="Import Stream List XML..."
+				name="media_stream_import">
+                <menu_item_call.on_click
+				function="Streamlist.xml_import" />
+            </menu_item_call>
+			<menu_item_call
+				label="Export Stream List XML..."
+				name="media_stream_export">
+                <menu_item_call.on_click
+				function="Streamlist.xml_export" />
+            </menu_item_call>
+		</menu>
         <menu_item_check
          label="Use Plugin Read Thread"
          name="Use Plugin Read Thread">

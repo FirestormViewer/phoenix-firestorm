@@ -12,4 +12,6 @@
 	<menu_item_call label="Patear" name="kick"/>
 	<menu_item_call label="Enviar a su casa" name="teleport_home"/>
 	<menu_item_call label="Expulsar del estado" name="estate_ban"/>
+	<menu_item_call label="Desdibujar" name="derender"/>
+	<menu_item_call label="Desdibujar + lista negra" name="derender_permanent"/>
 </context_menu>

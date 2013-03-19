@@ -28,7 +28,11 @@
 #ifndef LLPANELLANDAUDIO_H
 #define LLPANELLANDAUDIO_H
 
-#include "lllineeditor.h"
+// <FS:CR> FIRE-593 - We use a combobox now, not a lineeditor
+//#include "lllineeditor.h"
+#include "llcombobox.h"
+#include "llbutton.h"
+// </FS:CR>
 #include "llpanel.h"
 #include "llparcelselection.h"
 #include "lluifwd.h"	// widget pointer types
@@ -44,13 +48,22 @@ public:
 
 private:
 	static void onCommitAny(LLUICtrl* ctrl, void *userdata);
+// <FS:CR> FIRE-593 - Add/remove streams from the list
+	static void onBtnStreamAdd(LLUICtrl* ctrl, void *userdata);
+	static void onBtnStreamDelete(LLUICtrl* ctrl, void *userdata);
+// </FS:CR>
 
 private:
 	LLCheckBoxCtrl* mCheckSoundLocal;
 	LLCheckBoxCtrl* mCheckParcelEnableVoice;
 	LLCheckBoxCtrl* mCheckEstateDisabledVoice;
-	LLCheckBoxCtrl* mCheckParcelVoiceLocal;	
-	LLLineEditor*	mMusicURLEdit;
+	LLCheckBoxCtrl* mCheckParcelVoiceLocal;
+// <FS:CR> FIRE-593 - Use a combobox, also add buttons so we can add/remove items from it.
+	//LLLineEditor*	mMusicURLEdit;
+	LLComboBox*	mMusicURLEdit;
+	LLButton* mBtnStreamAdd;
+	LLButton* mBtnStreamDelete;
+// </FS:CR>
 	LLCheckBoxCtrl* mMusicUrlCheck;
 	LLCheckBoxCtrl* mCheckAVSoundAny;
 	LLCheckBoxCtrl* mCheckAVSoundGroup;

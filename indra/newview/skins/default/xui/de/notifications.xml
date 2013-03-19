@@ -3891,7 +3891,29 @@ Einige Funktionen wie [FEATURE] sind nicht in [APP_NAME] für OpenSimulator enth
 	</notification>
 
 	<notification name="DumpArchetypeSuccess">
-Aussehen erfolgreich nach XML exportiert.
+Aussehen erfolgreich als XML nach [FILENAME] exportiert.
+	</notification>
+
+	<notification name="StreamListExportSuccess">
+Stream-Liste erfolgreich als XML nach [FILENAME] exportiert.
+	</notification>
+
+	<notification name="StreamListImportSuccess">
+Stream-Liste erfolgreich aus XML importiert.
+	</notification>
+	
+	<notification name="StreamMetadata">
+		♫ Aktueller Titel:
+       [TITLE]
+       [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+		♫ Aktueller Titel:
+       [TITLE]♫
+	</notification>
+
+	<notification name="RadarAlert">
+		[NAME] [MESSAGE]
 	</notification>
 
 	<notification name="BackupFinished">

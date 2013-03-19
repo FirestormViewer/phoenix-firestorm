@@ -40,7 +40,7 @@
 #include "llcombobox.h"
 #include "llfloaterurlentry.h"
 #include "llfocusmgr.h"
-#include "lllineeditor.h"
+//#include "lllineeditor.h"	// <FS:CR> FIRE-593 - Unused since we use a combobox instead
 #include "llparcel.h"
 #include "lltextbox.h"
 #include "llradiogroup.h"
@@ -49,6 +49,8 @@
 #include "lltexturectrl.h"
 #include "roles_constants.h"
 #include "llscrolllistctrl.h"
+
+#include "llviewercontrol.h"	// <FS:CR> FIRE-593 - Needed for gSavedSettings where we store our media list
 
 // Values for the parcel voice settings radio group
 enum
@@ -88,8 +90,17 @@ BOOL LLPanelLandAudio::postBuild()
 	mCheckParcelVoiceLocal = getChild<LLCheckBoxCtrl>("parcel_enable_voice_channel_local");
 	childSetCommitCallback("parcel_enable_voice_channel_local", onCommitAny, this);
 
-	mMusicURLEdit = getChild<LLLineEditor>("music_url");
+// <FS:CR> FIRE-593 - We use a combobox now, not a line editor, also set callbacks for new add/remove stream buttons
+	//mMusicURLEdit = getChild<LLLineEditor>("music_url");
+	mMusicURLEdit = getChild<LLComboBox>("music_url");
 	childSetCommitCallback("music_url", onCommitAny, this);
+	
+	mBtnStreamAdd = getChild<LLButton>("stream_add_btn");
+	childSetCommitCallback("stream_add_btn", onBtnStreamAdd, this);
+	
+	mBtnStreamDelete = getChild<LLButton>("stream_delete_btn");
+	childSetCommitCallback("stream_delete_btn", onBtnStreamDelete, this);
+// </FS:CR>
 
 	mCheckAVSoundAny = getChild<LLCheckBoxCtrl>("all av sound check");
 	childSetCommitCallback("all av sound check", onCommitAny, this);
@@ -148,7 +159,25 @@ void LLPanelLandAudio::refresh()
 		mCheckParcelEnableVoice->set(allow_voice);
 		mCheckParcelVoiceLocal->set(!parcel->getParcelFlagUseEstateVoiceChannel());
 
-		mMusicURLEdit->setText(parcel->getMusicURL());
+// <FS:CR> FIRE-593 - Populate the audio combobox with our saved urls, then add the parcel's current url up top.
+		//mMusicURLEdit->setText(parcel->getMusicURL());
+		std::string current_url = parcel->getMusicURL();
+		mMusicURLEdit->clearRows();
+		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
+		LLSD streams = streamlist["audio"];
+
+		for(LLSD::array_iterator s_itr = streams.beginArray(); s_itr != streams.endArray(); ++s_itr)
+		{
+			mMusicURLEdit->add(LLSD(*s_itr));
+			lldebugs << "adding: " << *s_itr << " to the audio stream combo." << llendl;
+		}
+		mMusicURLEdit->addSeparator(ADD_TOP);
+		mMusicURLEdit->add(LLSD(current_url), ADD_TOP);
+		mMusicURLEdit->selectByValue(current_url);
+		
+		mBtnStreamAdd->setEnabled( can_change_media );
+		mBtnStreamDelete->setEnabled( can_change_media );
+// </FS:CR>
 		mMusicURLEdit->setEnabled( can_change_media );
 
 		BOOL can_change_av_sounds = LLViewerParcelMgr::isParcelModifiableByAgent(parcel, GP_LAND_OPTIONS) && parcel->getHaveNewParcelLimitData();
@@ -172,7 +201,10 @@ void LLPanelLandAudio::onCommitAny(LLUICtrl*, void *userdata)
 
 	// Extract data from UI
 	BOOL sound_local		= self->mCheckSoundLocal->get();
-	std::string music_url	= self->mMusicURLEdit->getText();
+// <FS:CR> FIRE-593 - It's a combobox now
+	//std::string music_url = self->mMusicURLEdit->getText();
+	std::string music_url = self->mMusicURLEdit->getSimple();
+// </FS:CR>
 
 	BOOL voice_enabled = self->mCheckParcelEnableVoice->get();
 	BOOL voice_estate_chan = !self->mCheckParcelVoiceLocal->get();
@@ -201,3 +233,39 @@ void LLPanelLandAudio::onCommitAny(LLUICtrl*, void *userdata)
 	// Might have changed properties, so let's redraw!
 	self->refresh();
 }
+
+// <FS:CR> FIRE-593 - Add/remove streams from the list with these. They're fantastic!
+// static
+void LLPanelLandAudio::onBtnStreamAdd(LLUICtrl*, void *userdata)
+{
+	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
+	
+	std::string music_url = self->mMusicURLEdit->getSimple();
+	LLStringUtil::trim(music_url);
+	
+	if (!music_url.empty())
+	{
+		LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
+		streamlist["version"] = 1;
+		streamlist["audio"].append(music_url);
+		gSavedSettings.setLLSD("FSStreamList", streamlist);
+		self->refresh();
+	}
+}
+
+// static
+void LLPanelLandAudio::onBtnStreamDelete(LLUICtrl*, void *userdata)
+{
+	LLPanelLandAudio *self = (LLPanelLandAudio *)userdata;
+	
+	std::string music_url = self->mMusicURLEdit->getSimple();
+	LLStringUtil::trim(music_url);
+	
+	LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
+	
+	// TODO: Make this remove specific items from the list instead of flushing the whole list.
+	streamlist.clear();
+	gSavedSettings.setLLSD("FSStreamList", streamlist);
+	self->refresh();
+}
+// </FS:CR>

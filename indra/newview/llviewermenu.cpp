@@ -131,14 +131,16 @@
 #include "fslslbridge.h"
 #include "fscommon.h"
 #include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
+#include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
 #include "llavatarpropertiesprocessor.h"	// ## Zi: Texture Refresh
+#include "llsdserialize.h"
 #include "lltexturecache.h"	// ## Zi: Texture Refresh
 #include "lllogininstance.h"	// <FS:AW  opensim destinations and avatar picker>
 #include "llvovolume.h"
 #include "particleeditor.h"
 #include "piemenu.h"	// ## Zi: Pie Menu
-#include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
+
 
 using namespace LLAvatarAppearanceDefines;
 
@@ -2729,7 +2731,7 @@ void derenderObject(bool permanent)
 	LLViewerObject* objp;
 	LLSelectMgr* select_mgr = LLSelectMgr::getInstance();
 
-	while ((objp = select_mgr->getSelection()->getFirstRootObject()))
+	while ((objp = select_mgr->getSelection()->getFirstRootObject(TRUE)))
 	{
 //		if ( (objp) && (gAgentID != objp->getID()) )
 // [RLVa:KB] - Checked: 2012-03-11 (RLVa-1.4.5) | Added: RLVa-1.4.5 | FS-specific
@@ -7183,9 +7185,22 @@ class LLPromptShowURL : public view_listener_t
 
 			if(gSavedSettings.getBOOL("UseExternalBrowser"))
 			{ 
-    			LLSD payload;
-    			payload["url"] = url;
-    			LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				// <FS:Ansariel> FS-1951: LLWeb::loadURL() will spawn the WebLaunchExternalTarget
+				//               confirmation if opening with an external browser
+    			//LLSD payload;
+    			//payload["url"] = url;
+    			//LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				if (alert == "WebLaunchExternalTarget")
+				{
+					LLWeb::loadURL(url);
+				}
+				else
+				{
+					LLSD payload;
+					payload["url"] = url;
+					LLNotificationsUtil::add(alert, LLSD(), payload, callback_show_url);
+				}
+				// </FS:Ansariel>
 			}
 			else
 			{
@@ -8664,6 +8679,57 @@ class FSToolsUndeform : public view_listener_t
 	}
 };
 // </FS:CR> FIRE-4345: Undeform
+
+// <FS:CR> Stream list import/export
+class FSStreamListExportXML :public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLFilePicker& file_picker = LLFilePicker::instance();
+		if(file_picker.getSaveFile(LLFilePicker::FFSAVE_XML, LLDir::getScrubbedFileName("stream_list.xml")))
+		{
+			std::string filename = file_picker.getFirstFile();
+			llofstream export_file(filename);
+			LLSDSerialize::toPrettyXML(gSavedSettings.getLLSD("FSStreamList"), export_file);
+			export_file.close();
+			LLSD args;
+			args["FILENAME"] = filename;
+			LLNotificationsUtil::add("StreamListExportSuccess", args);
+		}
+		else
+			llinfos << "User closed the filepicker. Aborting!" << llendl;
+
+		return true;
+	}
+};
+
+class FSStreamListImportXML :public view_listener_t
+{
+	bool handleEvent(const LLSD& userdata)
+	{
+		LLFilePicker& file_picker = LLFilePicker::instance();
+		if(file_picker.getOpenFile(LLFilePicker::FFLOAD_XML))
+		{
+			std::string filename = file_picker.getFirstFile();
+			llifstream stream_list(filename);
+			if(!stream_list.is_open())
+			{
+				llwarns << "Couldn't open the xml file for reading. Aborting import!" << llendl;
+				return true;
+			}
+			LLSD stream_data;
+			if(LLSDSerialize::fromXML(stream_data, stream_list) >= 1)
+			{
+				gSavedSettings.setLLSD("FSStreamList", stream_data);
+				LLNotificationsUtil::add("StreamListImportSuccess");
+			}
+			stream_list.close();
+		}
+		
+		return true;
+	}
+};
+// </FS:CR> Stream list import/export
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {
@@ -10341,4 +10407,8 @@ void initialize_menus()
 
 	// <FS:Ansariel> Script debug floater
 	commit.add("ShowScriptDebug", boost::bind(&LLFloaterScriptDebug::show, LLUUID::null));
+	
+	// <FS:CR> Stream list import/export
+	view_listener_t::addMenu(new FSStreamListExportXML(), "Streamlist.xml_export");
+	view_listener_t::addMenu(new FSStreamListImportXML(), "Streamlist.xml_import");
 }

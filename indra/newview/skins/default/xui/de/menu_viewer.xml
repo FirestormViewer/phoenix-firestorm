@@ -311,6 +311,10 @@
 			<menu_item_check label="Anziehen ersetzt nicht-gesperrte Kleidung" name="Wear Replaces Unlocked"/>
 			<menu_item_check label="Beschränkungen..." name="Restrictions"/>
 		</menu>
+		<menu label="Medien-Stream-Backup" name="media_stream_import_export">
+			<menu_item_call label="XML mit Medien-Stream importieren..." name="media_stream_import"/>
+			<menu_item_call label="Medien-Stream als XML exportieren..." name="media_stream_export"/>
+		</menu>
 		<menu_item_check label="Plugin-Read-Thread verwenden" name="Use Plugin Read Thread"/>
 		<menu_item_call label="Gruppen-Cache löschen" name="ClearGroupCache"/>
 		<menu_item_check label="Weiche Mausbewegung" name="Mouse Smoothing"/>

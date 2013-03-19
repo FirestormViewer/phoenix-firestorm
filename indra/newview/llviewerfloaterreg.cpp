@@ -163,6 +163,7 @@
 #include "fsfloaterprofile.h"
 #include "fsfloatersearch.h"
 #include "fsfloaterteleporthistory.h"
+#include "fsfloatervolumecontrols.h"
 #include "fsfloaterwsassetblacklist.h"
 #include "fsgrouptitles.h"
 #include "fsmoneytracker.h"
@@ -393,6 +394,7 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("fs_posestand", "floater_fs_posestand.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPoseStand>);
 	LLFloaterReg::add("fs_placedetails", "floater_fs_placedetails.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterPlaceDetails>);
 	LLFloaterReg::add("fs_teleporthistory", "floater_fs_teleporthistory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterTeleportHistory>);
+	LLFloaterReg::add("fs_volume_controls", "floater_fs_volume_controls.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterVolumeControls>);
 	LLFloaterReg::add("group_titles", "floater_fs_group_titles.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSGroupTitles>);
 	LLFloaterReg::add("imcontacts", "floater_fs_contacts.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterContacts>);
 	LLFloaterReg::add("lgg_beamcolormap", "floater_beamcolor.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<lggBeamColorMapFloater>);
@@ -408,7 +410,6 @@ void LLViewerFloaterReg::registerFloaters()
 	LLFloaterReg::add("secondary_inventory", "floater_my_inventory.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterSidePanelContainer>);
 	LLFloaterReg::add("script_recover", "floater_script_recover.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<LLFloaterScriptRecover>);
 	LLFloaterReg::add("sound_explorer", "floater_NACL_explore_sounds.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<NACLFloaterExploreSounds>);
-	LLFloaterReg::add("volume_controls", "floater_volume_controls.xml", &LLFloaterReg::build<LLFloater>);
 	LLFloaterReg::add("ws_asset_blacklist", "floater_asset_blacklist.xml", (LLFloaterBuildFunc)&LLFloaterReg::build<FSFloaterWSAssetBlacklist>);
 
 	LLFloaterReg::registerControlVariables(); // Make sure visibility and rect controls get preserved when saving

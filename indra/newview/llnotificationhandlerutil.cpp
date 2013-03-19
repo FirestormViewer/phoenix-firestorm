@@ -149,7 +149,12 @@ const static std::string GRANTED_MODIFY_RIGHTS("GrantedModifyRights"),
 						TELEPORT_OFFERED_MATURITY_EXCEEDED("TeleportOffered_MaturityExceeded"),
 						TELEPORT_OFFERED_MATURITY_BLOCKED("TeleportOffered_MaturityBlocked"),
 						TELEPORT_OFFER_SENT("TeleportOfferSent"),
-						IM_SYSTEM_MESSAGE_TIP("IMSystemMessageTip");
+						IM_SYSTEM_MESSAGE_TIP("IMSystemMessageTip"),
+// <FS:CR> Additional Firestorm notifications
+						RADAR_ALERT("RadarAlert"),
+						STREAM_METADATA("StreamMetadata"),
+						STREAM_METADATA_NA("StreamMetadataNoArtist");
+// </FS:CR>
 
 
 // static
@@ -183,7 +188,13 @@ bool LLHandlerUtil::canLogToNearbyChat(const LLNotificationPtr& notification)
 			&& FRIEND_OFFLINE != notification->getName()
 			&& INVENTORY_ACCEPTED != notification->getName()
 			&& INVENTORY_DECLINED != notification->getName()
-			&& IM_SYSTEM_MESSAGE_TIP != notification->getName();
+			&& IM_SYSTEM_MESSAGE_TIP != notification->getName()
+/// <FS:CR> Don't log RadarAlert or StreamMetadata notifications to nearby chat.
+/// If the user elects to log them, they can use the Nearby chat logging modes.
+			&& RADAR_ALERT != notification->getName()
+			&& STREAM_METADATA != notification->getName()
+			&& STREAM_METADATA_NA != notification->getName();
+// </FS:CR>
 }
 
 // static

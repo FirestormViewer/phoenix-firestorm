@@ -206,6 +206,10 @@ LLTabContainer::Params::Params()
 :	tab_width("tab_width"),
 	tab_min_width("tab_min_width"),
 	tab_max_width("tab_max_width"),
+	// <FS:LO> Add proper scrolling to vertical tab
+	tab_min_height("tab_min_height"),
+	tab_max_height("tab_max_height"),
+	// </FS:LO>
 	tab_height("tab_height"),
 	label_pad_bottom("label_pad_bottom"),
 	label_pad_left("label_pad_left"),
@@ -244,6 +248,8 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mMinTabWidth(0),
 	mMaxTabWidth(p.tab_max_width),
 	mTabHeight(p.tab_height),
+	mMinTabHeight(0), // <FS:LO> Add proper scrolling to vertical tabs
+	mMaxTabHeight(p.tab_max_width), // <FS:LO> Add proper scrolling to vertical tabs
 	mLabelPadBottom(p.label_pad_bottom),
 	mLabelPadLeft(p.label_pad_left),
 	mPrevArrowBtn(NULL),
@@ -254,6 +260,7 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 	mJumpNextArrowBtn(NULL),
 	mRightTabBtnOffset(p.tab_padding_right),
 	mTotalTabWidth(0),
+	mTotalTabHeight(0), // <FS:LO> Add proper scrolling to vertical tabs
 	mTabPosition(p.tab_position),
 	mFontHalign(p.font_halign),
 	mFont(p.font),
@@ -300,6 +307,22 @@ LLTabContainer::LLTabContainer(const LLTabContainer::Params& p)
 		// tab containers
 		mMinTabWidth = tabcntr_vert_tab_min_width;
 	}
+
+	// <FS:LO> Add proper scrolling to vertical tabs
+	if (p.tab_height.isProvided())
+	{
+		mMinTabHeight = p.tab_height;
+	}
+	else if (mIsVertical)
+	{
+		mMinTabHeight = p.tab_min_height;
+	}
+	else
+	{
+		mMinTabHeight = 20; // TODO find a more sutable value for this or make it a setting like the above. -Liny
+	}
+	// </FS:LO>
+
 
 	initButtons( );
 }
@@ -408,13 +431,15 @@ void LLTabContainer::draw()
 	static LLUICachedControl<S32> tabcntr_tab_h_pad ("UITabCntrTabHPad", 0);
 	static LLUICachedControl<S32> tabcntr_arrow_btn_size ("UITabCntrArrowBtnSize", 0);
 	static LLUICachedControl<S32> tabcntr_tab_partial_width ("UITabCntrTabPartialWidth", 0);
+	static LLUICachedControl<S32> tabcntr_tab_partial_height ("UITabCntrTabPartialHeight", 0); // <FS:LO> Add proper scrolling to vertical tabs
 	S32 target_pixel_scroll = 0;
 	S32 cur_scroll_pos = getScrollPos();
 	if (cur_scroll_pos > 0)
 	{
-		S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);
+		//S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1); // <FS:LO> Add proper scrolling to vertical tabs
 		if (!mIsVertical)
 		{
+			S32 available_width_with_arrows = getRect().getWidth() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);// <FS:LO> Add proper scrolling to vertical tabs
 			for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
 			{
 				if (cur_scroll_pos == 0)
@@ -430,6 +455,26 @@ void LLTabContainer::draw()
 			// clamp so that rightmost tab never leaves right side of screen
 			target_pixel_scroll = llmin(mTotalTabWidth - available_width_with_arrows, target_pixel_scroll);
 		}
+		// <FS:LO> Add proper scrolling to vertical tabs
+		else
+		{
+			S32 available_height_with_arrows = getRect().getHeight() - 2 * (LLPANEL_BORDER_WIDTH + tabcntrv_arrow_btn_size  + tabcntrv_arrow_btn_size + 1);
+			for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
+			{
+				if (cur_scroll_pos == 0)
+				{
+					break;
+				}
+				target_pixel_scroll += (*iter)->mButton->getRect().getHeight();
+				cur_scroll_pos--;
+			}
+
+			// Show part of the tab to the bottom of what is fully visible
+			target_pixel_scroll -= tabcntr_tab_partial_height;
+			// clamp so that topmost tab never leaves top side of screen
+			target_pixel_scroll = llmin(mTotalTabHeight - available_height_with_arrows, target_pixel_scroll);
+		}
+		// </FS:LO>
 	}
 
 	setScrollPosPixels((S32)lerp((F32)getScrollPosPixels(), (F32)target_pixel_scroll, LLCriticalDamp::getInterpolant(0.08f)));
@@ -603,14 +648,6 @@ BOOL LLTabContainer::handleMouseDown( S32 x, S32 y, MASK mask )
 			gFocusMgr.setMouseCapture(this);
 			tab_button->setFocus(TRUE);
 		}
-		//<FS:ND> Fire-865; Scroll next/prev was not handled in IM tabs
-		else if (mPrevArrowBtn && mPrevArrowBtn->getRect().pointInRect(x, y))
-		{
-			selectPrevTab();
-		}
-		else if (mNextArrowBtn && mNextArrowBtn->getRect().pointInRect(x, y))
-			selectNextTab();
-		//</FS:ND>
 	}
 	return handled;
 }
@@ -874,11 +911,11 @@ BOOL LLTabContainer::handleScrollWheel(S32 x, S32 y, S32 clicks)
 	{
 		if(clicks < 0)
 		{
-			setScrollPos(getScrollPos() - 1);
+			setScrollPos(llmax(0, getScrollPos()-1));
 		}
 		else
 		{
-			setScrollPos(getScrollPos() + 1);
+			setScrollPos(llmin(getScrollPos()+1, getMaxScrollPos()));
 		}
 	}
 
@@ -1037,10 +1074,17 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 	LLStringUtil::trim(trimmed_label);
 
 	S32 button_width = mMinTabWidth;
+	S32 button_height = mMinTabHeight; // <FS:LO> Add proper scrolling to vertical tabs
 	if (!mIsVertical)
 	{
 		button_width = llclamp(mFont->getWidth(trimmed_label) + tab_padding, mMinTabWidth, mMaxTabWidth);
 	}
+	// <FS:LO> Add proper scrolling to vertical tabs
+	else
+	{
+		button_height = llclamp(mTabHeight + tab_padding, mMinTabHeight, mMaxTabHeight);
+	}
+	// </FS:LO>
 	
 	// Tab panel
 	S32 tab_panel_top;
@@ -1089,6 +1133,7 @@ void LLTabContainer::addTabPanel(const TabPanelParams& panel)
 	child->setVisible( FALSE );  // Will be made visible when selected
 
 	mTotalTabWidth += button_width;
+	mTotalTabHeight += button_height; // <FS:LO> Add proper scrolling to vertical tabs
 
 	// Tab button
 	LLRect btn_rect;  // Note: btn_rect.mLeft is just a dummy.  Will be updated in draw().
@@ -1281,6 +1326,18 @@ void LLTabContainer::removeTabPanel(LLPanel* child)
 			}
 			tab_count++;
 		}
+		// <FS:LO> Add proper scrolling to vertical tabs
+		// Adjust the total tab height.
+		for(tuple_list_t::iterator iter = mTabList.begin(); iter != mTabList.end(); ++iter)
+		{
+			LLTabTuple* tuple = *iter;
+			if( tuple->mTabPanel == child )
+			{
+				mTotalTabHeight -= tuple->mButton->getRect().getHeight();
+				break;
+			}
+		}
+		// </FS:LO>
 	}
 	else
 	{
@@ -1729,6 +1786,7 @@ void LLTabContainer::setTabImage(LLPanel* child, LLIconCtrl* icon)
 void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
 {
 	static LLUICachedControl<S32> tab_padding ("UITabPadding", 0);
+	static LLUICachedControl<S32> tab_vpadding ("UITabVPadding", 0);
 
 	if (!mIsVertical)
 	{
@@ -1758,6 +1816,37 @@ void LLTabContainer::reshapeTuple(LLTabTuple* tuple)
 		// tabs have changed size, might need to scroll to see current tab
 		updateMaxScrollPos();
 	}
+	// <FS:LO> Add proper scrolling to vertical tabs
+	else
+	{
+		S32 image_overlay_height = 0;
+
+		if(mCustomIconCtrlUsed)
+		{
+			LLCustomButtonIconCtrl* button = dynamic_cast<LLCustomButtonIconCtrl*>(tuple->mButton);
+			LLIconCtrl* icon_ctrl = button ? button->getIconCtrl() : NULL;
+			image_overlay_height = icon_ctrl ? icon_ctrl->getRect().getHeight() : 0;
+		}
+		else
+		{
+			image_overlay_height = tuple->mButton->getImageOverlay().notNull() ?
+					tuple->mButton->getImageOverlay()->getImage()->getHeight(0) : 0;
+		}
+		// remove current height from total tab strip height
+		mTotalTabHeight -= tuple->mButton->getRect().getHeight();
+
+		tuple->mPadding = image_overlay_height;
+
+		tuple->mButton->reshape(tuple->mButton->getRect().getWidth(),
+								llclamp(mTabHeight + tab_vpadding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
+		// add back in button height to total tab strip height
+		mTotalTabHeight += tuple->mButton->getRect().getHeight();
+		
+
+		// tabs have changed size, might need to scroll to see current tab
+		updateMaxScrollPos();
+	}
+	// </FS:LO>
 }
 
 void LLTabContainer::setTitle(const std::string& title)
@@ -1804,9 +1893,24 @@ void LLTabContainer::setPanelTitle(S32 index, const std::string& title)
 		LLTabTuple* tuple = getTab(index);
 		LLButton* tab_button = tuple->mButton;
 		const LLFontGL* fontp = LLFontGL::getFontSansSerifSmall();
+		/* <FS:LO> Add proper scrolling to vertical tabs
 		mTotalTabWidth -= tab_button->getRect().getWidth();
 		tab_button->reshape(llclamp(fontp->getWidth(title) + tab_padding + tuple->mPadding, mMinTabWidth, mMaxTabWidth), tab_button->getRect().getHeight());
 		mTotalTabWidth += tab_button->getRect().getWidth();
+		*/
+		if(!mIsVertical)
+		{
+			mTotalTabWidth -= tab_button->getRect().getWidth();
+			tab_button->reshape(llclamp(fontp->getWidth(title) + tab_padding + tuple->mPadding, mMinTabWidth, mMaxTabWidth), tab_button->getRect().getHeight());
+			mTotalTabWidth += tab_button->getRect().getWidth();
+		}
+		else
+		{
+			mTotalTabHeight -= tab_button->getRect().getHeight();
+			tab_button->reshape(tab_button->getRect().getWidth(), llclamp(mTabHeight + tab_padding + tuple->mPadding, mMinTabHeight, mMaxTabHeight));
+			mTotalTabHeight += tab_button->getRect().getHeight();
+		}
+		// </FS:LO>
 		tab_button->setLabelSelected(title);
 		tab_button->setLabelUnselected(title);
 	}
@@ -2081,6 +2185,7 @@ void LLTabContainer::updateMaxScrollPos()
 	BOOL no_scroll = TRUE;
 	if (mIsVertical)
 	{
+		/* <FS:LO> Add proper scrolling to vertical tabs
 		S32 tab_total_height = (BTN_HEIGHT + tabcntrv_pad) * getTabCount();
 		S32 available_height = getRect().getHeight() - getTopBorderHeight();
 		if( tab_total_height > available_height )
@@ -2089,6 +2194,36 @@ void LLTabContainer::updateMaxScrollPos()
 			S32 available_height_with_arrows = getRect().getHeight() - 2*(tabcntrv_arrow_btn_size + 3*tabcntrv_pad);
 			S32 additional_needed = tab_total_height - available_height_with_arrows;
 			setMaxScrollPos((S32) ceil(additional_needed / float(BTN_HEIGHT) ) );
+			no_scroll = FALSE;
+		}*/
+		static LLUICachedControl<S32> tabcntr_tab_v_pad ("UITabCntrTabHPad", 0);
+		static LLUICachedControl<S32> tabcntr_arrow_btn_size ("UITabCntrvArrowBtnSize", 0);
+		static LLUICachedControl<S32> tabcntr_tab_partial_height ("UITabCntrTabPartialHeight", 0);
+		S32 tab_space = 0;
+		S32 available_space = 0;
+		tab_space = mTotalTabHeight;
+		available_space = getRect().getHeight() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_tab_v_pad);
+
+		if( tab_space > available_space )
+		{
+			S32 available_height_with_arrows = getRect().getHeight() - mRightTabBtnOffset - 2 * (LLPANEL_BORDER_WIDTH + tabcntr_arrow_btn_size  + tabcntr_arrow_btn_size + 1);
+			// subtract off reserved portion on left
+			available_height_with_arrows -= tabcntr_tab_partial_height;
+
+			S32 running_tab_height = 0;
+			setMaxScrollPos(getTabCount());
+			for(tuple_list_t::reverse_iterator tab_it = mTabList.rbegin(); tab_it != mTabList.rend(); ++tab_it)
+			{
+				running_tab_height += (*tab_it)->mButton->getRect().getHeight();
+				if (running_tab_height > available_height_with_arrows)
+				{
+					break;
+				}
+				setMaxScrollPos(getMaxScrollPos()-1);
+			}
+			// in case last tab doesn't actually fit on screen, make it the last scrolling position
+			setMaxScrollPos(llmin(getMaxScrollPos(), getTabCount() - 1));
+			// </FS:LO>
 			no_scroll = FALSE;
 		}
 	}

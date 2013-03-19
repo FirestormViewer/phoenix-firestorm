@@ -263,7 +263,7 @@
      label="Protection"
      name="ProtectionTab">
         <check_box
-         top_pad="12"
+         top_pad="10"
          left="10"
          label="Block left-click sitting on objects"
          control_name="FSBlockClickSit"
@@ -272,7 +272,7 @@
          name="FSBlockClickSit"
          width="256" />
         <check_box
-         top_pad="5"
+         top_pad="4"
          label="Allow scripts to show map UI (llMapDestination)"
          control_name="ScriptsCanShowUI"
          follows="left|top"
@@ -281,7 +281,7 @@
          width="256" />
 
         <text
-         top_pad="10"
+         top_pad="5"
          follows="left|top"
          height="12"
          name="revokepermissions_txt"
@@ -333,15 +333,15 @@
 
         <text
          left="5"
-         top_pad="10"
+         top_pad="5"
          follows="left|top"
          height="12"
          name="SurfaceAreaThreshholdLabel"
          width="360">
          Texture Lag Protection (may break some objects):
          </text>
-         <check_box
-         top_pad="10"
+        <check_box
+         top_pad="8"
          left="20"
          label="Automatically hide large objects with high texture area. Threshold: "
          control_name="RenderVolumeSAProtection"
@@ -366,7 +366,7 @@
          width="90" />
 
         <check_box
-         top_pad="15"
+         top_pad="10"
          left="10"
          label="Enable Spam Protection"
          control_name="UseAntiSpam"
@@ -496,6 +496,15 @@
         <check_box
          top_pad="10"
          left="10"
+         label="Remove &quot;Block&quot; button from script dialogs"
+         control_name="FSRemoveScriptBlockButton"
+         follows="left|top"
+         height="16"
+         name="FSRemoveScriptBlockButton"
+         width="200" />
+        <check_box
+         top_pad="4"
+         left="10"
          label="Notify about items from objects coming in too fast"
          control_name="FSNotifyIncomingObjectSpam"
          follows="left|top"
@@ -503,7 +512,7 @@
          name="FSNotifyIncomingObjectSpam"
          width="200" />
         <check_box
-         top_pad="5"
+         top_pad="4"
          left="10"
          label="Notify about items from other residents coming in too fast"
          control_name="FSNotifyIncomingObjectSpamFrom"
@@ -1287,6 +1296,7 @@
          top_pad="8"
          label="Use Phoenix Parcel Windlight Sharing (Experimental)"
          control_name="FSWLParcelEnabled"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLParcelEnabled"
@@ -1296,6 +1306,7 @@
          left="15"
          label="Auto apply WL settings from friend's land"
          control_name="FSWLWhitelistFriends"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistFriends"
@@ -1304,6 +1315,7 @@
          top_pad="5"
          label="Auto apply WL settings from my groups' land"
          control_name="FSWLWhitelistGroups"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistGroups"
@@ -1312,6 +1324,7 @@
          top_pad="5"
          label="Auto apply WL settings from any parcel"
          control_name="FSWLWhitelistAll"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSWLWhitelistAll"
@@ -1320,6 +1333,7 @@
          top_pad="5"
          label="Crossfade region environment changes for Parcel WL"
          control_name="FSInterpolateParcelWL"
+         enabled_control="UseEnvironmentFromRegionAlways"
          follows="left|top"
          height="16"
          name="FSInterpolateParcelWL"

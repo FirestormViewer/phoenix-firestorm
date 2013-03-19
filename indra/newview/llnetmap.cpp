@@ -73,9 +73,8 @@
 #include "llfloatersidepanelcontainer.h"
 #include "lggcontactsets.h"
 
-#include "llnotificationsutil.h"
-#include "llnotificationmanager.h"
 #include "llavataractions.h"
+#include "fscommon.h"
 
 static LLDefaultChildRegistry::Register<LLNetMap> r1("net_map");
 
@@ -1267,12 +1266,7 @@ void LLNetMap::camAvatar()
 	F32 range = dist_vec(mClosestAgentAtLastRightClickPos, gAgent.getPositionGlobal());
 	if (range > gSavedSettings.getF32("RenderFarClip") || gObjectList.findObject(mClosestAgentAtLastRightClick) == NULL)
 	{
-		LLChat chat;
-		chat.mText = LLTrans::getString("minimap_no_focus");
-		chat.mSourceType = CHAT_SOURCE_SYSTEM;
-		LLSD args;
-		args["type"] = LLNotificationsUI::NT_NEARBYCHAT;
-		LLNotificationsUI::LLNotificationManager::instance().onChat(chat, args);
+		reportToNearbyChat(LLTrans::getString("minimap_no_focus"));
 	}
 	else
 	{

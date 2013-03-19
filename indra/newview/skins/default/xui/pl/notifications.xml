@@ -3887,7 +3887,7 @@ ponieważ serwer jest pełny.
 	<notification name="CantSaveModifyAttachment">
 		Nie można zapisać do zawartości obiektu: To zmodyfikowałoby prawa dodatku.
 	</notification>
-	<notificationname="TooManyScripts">
+	<notification name="TooManyScripts">
 		Za dużo skryptów.
 	</notification>
 	<notification name="UnableAddScript">
@@ -4136,11 +4136,9 @@ ponieważ serwer jest pełny.
 	<notification name="CantBuyParcelNotAuthorized">
 		Nie jesteś upoważnionym kupcem dla tej działki.
 	</notification>
-	<!-- <FS:PP> TO-DO: Fix this string in English file and make a proper translation here. Authorization? Authentication? -->
 	<notification name="CantBuyParcelAwaitingPurchaseAuth">
-		You cannot purchase this parcel because it is already awaiting purchase aut
+		Nie możesz kupić tej działki, ponieważ oczekuje już ona na autoryzację zakupu.
 	</notification>
-	<!-- </FS:PP> -->
 	<notification name="CantBuildOverflowParcel">
 		Nie możesz tutaj budować obiektów, ponieważ mogłoby to przekroczyć pojemność działki.
 	</notification>
@@ -4343,8 +4341,23 @@ Poprzedni symulator: [OLDVERSION]
 		</form>
 	</notification>
 	<notification name="DumpArchetypeSuccess">
-		Pomyślnie zapisano wygląd do XML.
+		Pomyślnie zapisano wygląd w formacie XML do pliku [FILENAME].
 	</notification>
+	<notification name="StreamListExportSuccess">
+		Pomyślnie wyeksportowano listę strumieni w formacie XML do pliku [FILENAME].
+	</notification>
+	<notification name="StreamListImportSuccess">
+		Pomyślnie zaimportowano listę strumieni z pliku XML.
+	</notification>
+	<notification name="StreamMetadata">
+        ♫ Teraz odtwarzane:
+        [TITLE]
+        [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+        ♫ Teraz odtwarzane:
+        [TITLE]♫
+	</notification>   
 	<notification name="BackupFinished">
 		Twoje ustawienia zostały zapisane i zarchiwizowane w kopii zapasowej.
 	</notification>

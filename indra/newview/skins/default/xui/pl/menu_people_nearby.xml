@@ -21,4 +21,6 @@
 	<menu_item_call label="Majątek: Wyrzuć" name="kick"/>
 	<menu_item_call label="Majątek: Odeślij do domu" name="teleport_home"/>
 	<menu_item_call label="Majątek: Zbanuj" name="estate_ban"/>
+	<menu_item_call label="Derenderuj" name="derender"/>
+	<menu_item_call label="Derenderuj + czarna lista" name="derender_permanent"/>
 </context_menu>

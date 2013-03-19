@@ -91,6 +91,7 @@
 #include "fsfloaterprofile.h"
 #include "llfloaterregioninfo.h"
 #include "lltrans.h"
+#include "fswsassetblacklist.h"
 
 // static
 void LLAvatarActions::requestFriendshipDialog(const LLUUID& id, const std::string& name)
@@ -1790,3 +1791,39 @@ bool LLAvatarActions::callbackEstateBan(const LLSD& notification, const LLSD& re
 	return false;
 }
 // </FS:Ansariel> Estate ban user
+
+// <FS:Ansariel> Derender
+//static
+void LLAvatarActions::derender(const LLUUID& agent_id, bool permanent)
+{
+	LLAvatarNameCache::get(agent_id, boost::bind(&LLAvatarActions::onDerenderAvatarNameLookup, _1, _2, permanent));
+}
+
+//static
+void LLAvatarActions::derenderMultiple(const uuid_vec_t& agent_ids, bool permanent)
+{
+	for (uuid_vec_t::const_iterator it = agent_ids.begin(); it != agent_ids.end(); it++)
+	{
+		LLAvatarNameCache::get((*it), boost::bind(&LLAvatarActions::onDerenderAvatarNameLookup, _1, _2, permanent));
+	}
+}
+
+//static
+void LLAvatarActions::onDerenderAvatarNameLookup(const LLUUID& agent_id, const LLAvatarName& av_name, bool permanent)
+{
+	if (permanent)
+	{
+		FSWSAssetBlacklist* instance = FSWSAssetBlacklist::getInstance();
+		if (!instance->isBlacklisted(agent_id, LLAssetType::AT_OBJECT))
+		{
+			instance->addNewItemToBlacklist(agent_id, av_name.getLegacyName(), "", LLAssetType::AT_OBJECT);
+		}
+	}
+
+	LLViewerObject* av_obj = gObjectList.findObject(agent_id);
+	if (av_obj)
+	{
+		gObjectList.killObject(av_obj);
+	}
+}
+// </FS:Ansariel> Derender

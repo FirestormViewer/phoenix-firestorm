@@ -655,7 +655,8 @@ public:
 	// True if we are currently in appearance editing mode. Often but
 	// not always the same as isUsingLocalAppearance().
 	/*virtual*/ BOOL	isEditingAppearance() const { return mIsEditingAppearance; }
-
+	void setIsEditingAppearance(BOOL editing) { mIsEditingAppearance = editing; }	// <FS:CR> for Built-in Posestand
+	
 	// FIXME review isUsingLocalAppearance uses, some should be isEditing instead.
 
 private:

@@ -45,6 +45,7 @@ class UtilityBar
 		void init();
 		virtual BOOL tick();
 		void setAOInterfaceButtonExpanded(bool expanded);
+		void setVolumeControlsButtonExpanded(bool expanded);
 
 	protected:
 		void onParcelStreamClicked();
@@ -54,6 +55,7 @@ class UtilityBar
 		LLButton* mParcelMediaPlayButton;
 		LLButton* mTalkButton;
 		LLButton* mAOInterfaceButton;
+		LLButton* mVolumeControlsInterfaceButton;
 };
 
 #endif // UTILITYBAR_H

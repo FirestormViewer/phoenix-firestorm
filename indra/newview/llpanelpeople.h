@@ -152,6 +152,8 @@ private:
 	void					onRecentViewSortMenuItemClicked(const LLSD& userdata);
 	void					onRadarNameFmtClicked(const LLSD& userdata);
 	bool					radarNameFmtCheck(const LLSD& userdata);
+	void					onRadarReportToClicked(const LLSD& userdata);	// <FS:CR> Milkshake-style Radar Alerts
+	bool					radarReportToCheck(const LLSD& userdata);	// <FS:CR> Milkshake-style Radar Alerts
 
 	//returns false only if group is "none"
 	bool					isRealGroup();

@@ -14,12 +14,16 @@
 #include "fsfloaterposestand.h"
 
 #include "fspose.h"
+#include "llagent.h"
+#include "llvoavatarself.h"
 #include "llsdserialize.h"
 #include "lltrans.h"
+#include "llviewercontrol.h"
 
 FSFloaterPoseStand::FSFloaterPoseStand(const LLSD& key)
 :	LLFloater(key),
-	mComboPose(NULL)
+	mComboPose(NULL),
+	mPoseStandLock(false)
 {
 }
 
@@ -40,12 +44,22 @@ BOOL FSFloaterPoseStand::postBuild()
 // virtual
 void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
+	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting() && isAgentAvatarValid())
+	{
+		setLock(true);
+	}
+	gAgentAvatarp->setIsEditingAppearance(TRUE);
 	onCommitCombo();
 }
 
 // virtual
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
+	if (mPoseStandLock == true && gAgentAvatarp->isSitting() && isAgentAvatarValid())
+	{
+		setLock(false);
+	}
+	gAgentAvatarp->setIsEditingAppearance(FALSE);
 	FSPose::getInstance()->stopPose();
 }
 
@@ -72,4 +86,17 @@ void FSFloaterPoseStand::onCommitCombo()
 {
 	std::string selected_pose = mComboPose->getValue();
 	FSPose::getInstance()->setPose(selected_pose);
+}
+
+void FSFloaterPoseStand::setLock(bool enabled)
+{
+	if (enabled)
+	{
+		gAgent.sitDown();
+	}
+	else
+	{
+		gAgent.standUp();
+	}
+	mPoseStandLock = enabled;
 }

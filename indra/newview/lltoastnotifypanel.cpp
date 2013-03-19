@@ -312,12 +312,12 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 	S32 bottom_offset = mIsScriptDialog ? (BTN_HEIGHT + IGNORE_BTN_TOP_DELTA + BOTTOM_PAD) : BOTTOM_PAD;
 	S32 max_width = mControlPanel->getRect().getWidth();
 	LLButton* ignore_btn = NULL;
-	// LLButton* mute_btn = NULL; *spam protection is part of FS now. May be a debug setting in future*
+	LLButton* mute_btn = NULL;
 	for (std::vector<index_button_pair_t>::const_iterator it = buttons.begin(); it != buttons.end(); it++)
 	{
 		if (-2 == it->first)
 		{
-	//		mute_btn = it->second; *Removing Mute Button*
+			mute_btn = it->second;
 			continue;
 		}
 		if (it->first == -1)
@@ -354,16 +354,18 @@ void LLToastNotifyPanel::updateButtonsLayout(const std::vector<index_button_pair
 		mute_btn_pad = 4 * HPAD; //only use a 4 * HPAD padding if an ignore button exists
 	}
 	// FIRE-3948: Commenting all out as mute button is disabled (FS:MS)
-	// if (mIsScriptDialog && mute_btn != NULL)
-	//{
-	//	LLRect mute_btn_rect(mute_btn->getRect());
+	// <FS:Ansariel> Undo the removal and make it optional after I was looking for the mute button on spammy dialogs!
+	//if (mIsScriptDialog && mute_btn != NULL)
+	if (mIsScriptDialog && mute_btn != NULL && !gSavedSettings.getBOOL("FSRemoveScriptBlockButton"))
+	{
+		LLRect mute_btn_rect(mute_btn->getRect());
 		// Place mute (Block) button to the left of the ignore button.
-	//	S32 mute_btn_left = max_width - mute_btn_rect.getWidth() - ignore_btn_width - mute_btn_pad;
-	//	mute_btn_rect.setOriginAndSize(mute_btn_left, BOTTOM_PAD,// always move mute button at the bottom
-	//			mute_btn_rect.getWidth(), mute_btn_rect.getHeight());
-	//	mute_btn->setRect(mute_btn_rect);
-	//	mControlPanel->addChild(mute_btn); 
-	//}
+		S32 mute_btn_left = max_width - mute_btn_rect.getWidth() - ignore_btn_width - mute_btn_pad;
+		mute_btn_rect.setOriginAndSize(mute_btn_left, BOTTOM_PAD,// always move mute button at the bottom
+				mute_btn_rect.getWidth(), mute_btn_rect.getHeight());
+		mute_btn->setRect(mute_btn_rect);
+		mControlPanel->addChild(mute_btn); 
+	}
 }
 void LLToastNotifyPanel::adjustPanelForScriptNotice(S32 button_panel_width, S32 button_panel_height)
 {

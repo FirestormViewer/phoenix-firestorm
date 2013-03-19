@@ -4489,8 +4489,23 @@ Simulador anterior: [OLDVERSION]
 		</form>
 	</notification>
 	<notification name="DumpArchetypeSuccess">
-		Apariencia guardada con éxito en XML.
+		Apariencia guardada con éxito en XML en [FILENAME].
 	</notification>
+	<notification name="StreamListExportSuccess">
+		Lista de flujos exportada con éxito en archivo XML [FILENAME].
+	</notification>
+	<notification name="StreamListImportSuccess">
+		Lista de flujos importada con éxito de archivo XML.
+	</notification>
+	<notification name="StreamMetadata">
+        ♫ Estás escuchando:
+        [TITLE]
+        [ARTIST]♫
+	</notification>
+	<notification name="StreamMetadataNoArtist">
+        ♫ Estás escuchando:
+        [TITLE]♫
+	</notification>  
 	<notification name="BackupFinished">
 		Tu configuración ha sido respaldada.
 	</notification>
