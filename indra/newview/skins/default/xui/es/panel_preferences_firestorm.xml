@@ -42,6 +42,7 @@
 			<check_box label="Ocultar automáticamente objetos con grandes áreas de textura. Umbral:" name="RenderVolumeSAProtection" tool_tip="Te protege de objetos con grandes texturas sobre grandes superficies, a veces diseñados para provocar fallos del visor. El umbral por defecto es de 5.000 metros cuadrados, pero si crees que algunos objetos no se están dibujando y esta opción está activada, puedes necesitar aumentarlo." width="425"/>
 			<spinner left_pad="5" name="RenderVolumeSAFrameMax" width="60"/>
 			<check_box label="Activar protección contra spam" name="UseAntiSpam"/>
+			<check_box label="Quitar el botón &quot;Bloquear&quot; de los diálogos de script" name="FSRemoveScriptBlockButton"/>
 			<text name="AntiSpamText1" width="305">
 				Máximo de líneas en un solo mensaje:
 			</text>
