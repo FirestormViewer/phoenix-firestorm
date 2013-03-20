@@ -1045,13 +1045,16 @@ public:
 	
 	void sculpt(U16 sculpt_width, U16 sculpt_height, S8 sculpt_components, const U8* sculpt_data, S32 sculpt_level);
 
-	F32 sculptGetSurfaceArea(); // ZK LBG
+	// NaCl - Graphics crasher protection
+	void calcSurfaceArea(); // ZK LBG
+	// NaCl End
 
 	void copyVolumeFaces(const LLVolume* volume);
 	void cacheOptimize();
 
 private:
 	void sculptGenerateMapVertices(U16 sculpt_width, U16 sculpt_height, S8 sculpt_components, const U8* sculpt_data, U8 sculpt_type);
+	F32 sculptGetSurfaceArea();
 	void sculptGeneratePlaceholder();
 	void sculptCalcMeshResolution(U16 width, U16 height, U8 type, S32& s, S32& t);
 
