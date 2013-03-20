@@ -35,7 +35,7 @@
          border="false"
          follows="all"
          height="303"
-         label="MEMBERS"
+         label="Members"
          layout="topleft"
          left="0"
          right="-1"
@@ -118,7 +118,7 @@ clicking on their names.
         <panel
          border="false"
          height="303"
-         label="ROLES"
+         label="Roles"
          layout="topleft"
          left="0"
          right="-1"
@@ -214,7 +214,7 @@ including the Everyone and Owner Roles.
         <panel
          border="false"
          height="303"
-         label="ABILITIES"
+         label="Abilities"
          layout="topleft"
          left="0"
          right="-1"
