@@ -103,7 +103,7 @@ private:
 	static U32 globalAmount;
 	static bool bGlobalQueue;
 
-	static int checkGlobalEntry(const LLUUID& source, U32 multiplier);
+	static S32 checkGlobalEntry(const LLUUID& source, U32 multiplier);
 	static void clearGlobalEntries();
 	static void purgeGlobalEntries();
 	static void blockGlobalEntry(const LLUUID& source);

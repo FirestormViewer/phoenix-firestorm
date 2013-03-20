@@ -186,7 +186,7 @@ NACLAntiSpamRegistry::NACLAntiSpamRegistry(U32 time, U32 amount)
 	globalAmount = amount;
 	static LLCachedControl<bool> _NACL_AntiSpamGlobalQueue(gSavedSettings, "_NACL_AntiSpamGlobalQueue");
 	bGlobalQueue = _NACL_AntiSpamGlobalQueue;
-	for (int queue = 0; queue < QUEUE_MAX; ++queue)
+	for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 	{
 		queues[queue] = new NACLAntiSpamQueue(time, amount);
 	}
@@ -207,7 +207,7 @@ void NACLAntiSpamRegistry::registerQueues(U32 time, U32 amount)
 	globalAmount = amount;
 	static LLCachedControl<bool> _NACL_AntiSpamGlobalQueue(gSavedSettings, "_NACL_AntiSpamGlobalQueue");
 	bGlobalQueue = _NACL_AntiSpamGlobalQueue;
-	for (int queue = 0; queue < QUEUE_MAX; ++queue)
+	for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 	{
 		queues[queue] = new NACLAntiSpamQueue(time, amount);
 	}
@@ -250,7 +250,7 @@ void NACLAntiSpamRegistry::setRegisteredQueueAmount(U32 name, U32 amount)
 void NACLAntiSpamRegistry::setAllQueueTimes(U32 time)
 {
 	globalTime = time;
-	for (int queue = 0; queue < QUEUE_MAX; ++queue)
+	for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 	{
 		if (queues[queue])
 		{
@@ -262,7 +262,7 @@ void NACLAntiSpamRegistry::setAllQueueTimes(U32 time)
 void NACLAntiSpamRegistry::setAllQueueAmounts(U32 amount)
 {
 	globalAmount = amount;
-	for (int queue = 0; queue < QUEUE_MAX; ++queue)
+	for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 	{
 		if (!queues[queue])
 		{
@@ -357,7 +357,7 @@ bool NACLAntiSpamRegistry::checkQueue(U32 name, const LLUUID& source, U32 multip
 		return false;
 	}
 	
-	int result = 0;
+	S32 result = 0;
 	if (bGlobalQueue)
 	{
 		result = NACLAntiSpamRegistry::checkGlobalEntry(source, multiplier);
@@ -418,13 +418,13 @@ void NACLAntiSpamRegistry::setGlobalTime(U32 time)
 
 void NACLAntiSpamRegistry::clearAllQueues()
 {
-	if(bGlobalQueue)
+	if (bGlobalQueue)
 	{
 		NACLAntiSpamRegistry::clearGlobalEntries();
 	}
 	else
 	{
-		for (int queue = 0; queue < QUEUE_MAX; ++queue)
+		for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 		{
 			if (queues[queue])
 			{
@@ -442,7 +442,7 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 	}
 	else
 	{
-		for (int queue = 0; queue < QUEUE_MAX; ++queue)
+		for (S32 queue = 0; queue < QUEUE_MAX; ++queue)
 		{
 			if (queues[queue])
 			{
@@ -453,7 +453,7 @@ void NACLAntiSpamRegistry::purgeAllQueues()
 	llinfos << "AntiSpam Queues Purged" << llendl;
 }
 
-int NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& name, U32 multiplier)
+S32 NACLAntiSpamRegistry::checkGlobalEntry(const LLUUID& name, U32 multiplier)
 {
 	it2 = globalEntries.find(name);
 	if (it2 != globalEntries.end())
