@@ -36,11 +36,13 @@
 #include "llfloaterreg.h"
 #include "llvfs.h"
 #include "llaudioengine.h"
-
+#include "llxorcipher.h"
 
 std::string FSWSAssetBlacklist::blacklist_file_name;
 std::map<LLUUID,LLSD> FSWSAssetBlacklist::BlacklistData;
 BlacklistMAP FSWSAssetBlacklist::BlacklistIDs;
+
+const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
 LLAssetType::EType S32toAssetType(S32 assetindex)
 {
@@ -74,8 +76,6 @@ bool FSWSAssetBlacklist::isBlacklisted(LLUUID id, LLAssetType::EType type)
 	{
 		return false;
 	}
-	
-	id = LLUUID::generateNewID(id.asString() + "hash");
 
 	BlacklistMAP::iterator it;
 	it = BlacklistIDs.find(type);	
@@ -107,7 +107,7 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, std:
 	data["asset_type"] = type;
 	data["asset_date"] = input_date;
 
-	addNewItemToBlacklistData(LLUUID::generateNewID(id.asString() + "hash"), data, save);
+	addNewItemToBlacklistData(id, data, save);
 }
 
 void FSWSAssetBlacklist::removeItemFromBlacklist(LLUUID id)
@@ -193,8 +193,13 @@ void FSWSAssetBlacklist::loadBlacklist()
 				for(LLSD::map_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
 				{
 					LLUUID uid = LLUUID(itr->first);
+					LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+					cipher.decrypt(uid.mData, UUID_BYTES);
 					LLSD data = itr->second;
-					if(uid.isNull()) continue;
+					if(uid.isNull())
+					{
+						continue;
+					}
 					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
 					if(type == LLAssetType::AT_NONE) continue;
@@ -232,10 +237,10 @@ void FSWSAssetBlacklist::loadBlacklist()
 					newdata["asset_type"] = type;
 					newdata["asset_date"] = data["entry_date"].asString();
 
-					if (!data["ID_hashed"].asBoolean())
-					{
-						uid = LLUUID::generateNewID(uid.asString() + "hash");
-					}				
+					//if (!data["ID_hashed"].asBoolean())
+					//{
+					//	uid = LLUUID::generateNewID(uid.asString() + "hash");
+					//}
 					
 					addNewItemToBlacklistData(uid, newdata, false);
 				}
@@ -258,7 +263,11 @@ void FSWSAssetBlacklist::saveBlacklist()
 
 	for (std::map<LLUUID,LLSD>::iterator itr = BlacklistData.begin(); itr != BlacklistData.end(); ++itr)
 	{
-		savedata[itr->first.asString()] = itr->second;
+		// <FS:CR> Apply "cheesy encryption" to obfuscate these to the user.
+		LLUUID shadow_id(itr->first);
+		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+		cipher.encrypt(shadow_id.mData, UUID_BYTES);
+		savedata[shadow_id.asString()] = itr->second;
 	}
 
 	LLSDSerialize::toPrettyXML(savedata, save_file);	
