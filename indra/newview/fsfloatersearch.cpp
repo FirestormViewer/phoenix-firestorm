@@ -664,7 +664,7 @@ void FSFloaterSearch::onBtnTeleport()
 		LLFloaterWorldMap::getInstance()->trackLocation(mParcelGlobal);
 		/// <FS:CR> What should we do when when we teleport? The default (1) is to close the floater,
 		/// the user may elect to minimize the floater (2), or to do nothing (any other setting)
-		LLCachedControl<U32> teleport_action(gSavedSettings, "FSLegacySearchActionOnTeleport");
+		static LLCachedControl<U32> teleport_action(gSavedSettings, "FSLegacySearchActionOnTeleport");
 		if (teleport_action == 1)
 			closeFloater();
 		else if (teleport_action == 2)
