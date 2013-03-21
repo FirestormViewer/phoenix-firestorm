@@ -47,8 +47,7 @@
 							 <string>Voice</string>
 							 <string>Avatar</string>							
 						-->
-							<string>Avatar</string>
-							<string>parseFile</string>
+						     <string>parseFile</string>
 						</array>
 				</map>
       </array>
