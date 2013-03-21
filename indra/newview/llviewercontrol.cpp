@@ -512,17 +512,17 @@ bool handleVoiceClientPrefsChanged(const LLSD& newvalue)
 // NaCl - Antispam Registry
 bool handleNaclAntiSpamGlobalQueueChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::setGlobalQueue(newvalue.asBoolean());
+	NACLAntiSpamRegistry::instance().setGlobalQueue(newvalue.asBoolean());
 	return true;
 }
 bool handleNaclAntiSpamTimeChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::setAllQueueTimes(newvalue.asInteger());
+	NACLAntiSpamRegistry::instance().setAllQueueTimes(newvalue.asInteger());
 	return true;
 }
 bool handleNaclAntiSpamAmountChanged(const LLSD& newvalue)
 {
-	NACLAntiSpamRegistry::setAllQueueAmounts(newvalue.asInteger());
+	NACLAntiSpamRegistry::instance().setAllQueueAmounts(newvalue.asInteger());
 	return true;
 }
 // NaCl End 

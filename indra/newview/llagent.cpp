@@ -966,7 +966,7 @@ void LLAgent::setRegion(LLViewerRegion *regionp)
 		if (mRegionp)
 		{
 			// NaCl - Antispam Registry clear anti-spam queues when changing regions
-			NACLAntiSpamRegistry::purgeAllQueues();
+			NACLAntiSpamRegistry::instance().purgeAllQueues();
 			// NaCl End
 
 			// We've changed regions, we're now going to change our agent coordinate frame.
