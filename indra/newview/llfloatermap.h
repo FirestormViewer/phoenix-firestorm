@@ -29,7 +29,6 @@
 
 #include "llfloater.h"
 
-class LLMenuGL;
 class LLNetMap;
 class LLTextBox;
 
@@ -40,31 +39,17 @@ class LLFloaterMap : public LLFloater
 {
 public:
 	LLFloaterMap(const LLSD& key);
-	static LLFloaterMap* getInstance();
 	virtual ~LLFloaterMap();
 	
 	/*virtual*/ BOOL 	postBuild();
 	/*virtual*/ BOOL	handleDoubleClick( S32 x, S32 y, MASK mask );
-	/*virtual*/ BOOL	handleRightMouseDown( S32 x, S32 y, MASK mask );
 	/*virtual*/ void	reshape(S32 width, S32 height, BOOL called_from_parent = TRUE);
 	/*virtual*/ void	draw();
 
 private:
-	void handleZoom(const LLSD& userdata);
-	void handleStopTracking (const LLSD& userdata);
+//	void handleZoom(const LLSD& userdata);
 	void setDirectionPos( LLTextBox* text_box, F32 rotation );
 	void updateMinorDirections();
-	void handleMark(const LLSD& userdata);
-	void handleClearMarks();
-	void handleCam();
-	void handleShowProfile();
-	void handleStartTracking();
-
-	void setMinimized( BOOL );
-
-	void stretchMiniMap(S32 width,S32 height);
-	
-	LLMenuGL*		mPopupMenu;
 
 	LLTextBox*		mTextBoxEast;
 	LLTextBox*		mTextBoxNorth;

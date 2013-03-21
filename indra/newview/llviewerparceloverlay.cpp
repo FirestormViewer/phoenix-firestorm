@@ -52,6 +52,10 @@
 
 const U8  OVERLAY_IMG_COMPONENTS = 4;
 
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+LLViewerParcelOverlay::update_signal_t* LLViewerParcelOverlay::mUpdateSignal = NULL;
+// [/SL:KB]
+
 LLViewerParcelOverlay::LLViewerParcelOverlay(LLViewerRegion* region, F32 region_width_meters)
 :	mRegion( region ),
 	mParcelGridsPerEdge( S32( region_width_meters / PARCEL_GRID_STEP_METERS ) ),
@@ -857,6 +861,10 @@ void LLViewerParcelOverlay::idleUpdate(bool force_update)
 		{
 			updateOverlayTexture();
 			updatePropertyLines();
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+			if (mUpdateSignal)
+				(*mUpdateSignal)(mRegion);
+// [/SL:KB]
 			mTimeSinceLastUpdate.reset();
 		}
 	}
@@ -1009,3 +1017,12 @@ S32 LLViewerParcelOverlay::renderPropertyLines	()
 
 	return drawn;
 }
+
+// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+boost::signals2::connection LLViewerParcelOverlay::setUpdateCallback(const update_signal_t::slot_type & cb)
+{
+	if (!mUpdateSignal)
+		mUpdateSignal = new update_signal_t();
+	return mUpdateSignal->connect(cb); 
+}
+// [/SL:KB]

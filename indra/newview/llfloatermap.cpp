@@ -45,8 +45,6 @@
 #include "llfloaterworldmap.h"
 #include "llagent.h"
 
-#include "rlvhandler.h"
-#include "llviewermenu.h"
 #include "llworld.h"	// <FS:CR> Aurora Sim />
 
 //
@@ -74,7 +72,6 @@ LLFloaterMap::LLFloaterMap(const LLSD& key)
 	  mTextBoxNorthEast(NULL),
 	  mTextBoxNorthWest(NULL),
 	  mTextBoxSouthWest(NULL),
-	  mPopupMenu(NULL),
 	  mMap(NULL)
 {
 }
@@ -86,16 +83,14 @@ LLFloaterMap::~LLFloaterMap()
 BOOL LLFloaterMap::postBuild()
 {
 	mMap = getChild<LLNetMap>("Net Map");
-	// <FS:Ansariel> Synchronize tooltips throughout instances
-	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	//{
-	//	mMap->setToolTipMsg(getString("AltToolTipMsg"));
-	//}
-	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	//{
-	//	mMap->setToolTipMsg(getString("ToolTipMsg"));
-	//}
-	// </FS:Ansariel> Synchronize tooltips throughout instances
+	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	{
+		mMap->setToolTipMsg(getString("AltToolTipMsg"));
+	}
+	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	{
+		mMap->setToolTipMsg(getString("ToolTipMsg"));
+	}
 	sendChildToBack(mMap);
 	
 	mTextBoxNorth = getChild<LLTextBox> ("floater_map_north");
@@ -107,37 +102,11 @@ BOOL LLFloaterMap::postBuild()
 	mTextBoxSouthWest = getChild<LLTextBox> ("floater_map_southwest");
 	mTextBoxNorthWest = getChild<LLTextBox> ("floater_map_northwest");
 
-	// <Firestorm Minimap changes>
-	LLUICtrl::CommitCallbackRegistry::ScopedRegistrar registrar;
-	
-	registrar.add("Minimap.Zoom", boost::bind(&LLFloaterMap::handleZoom, this, _2));
-	registrar.add("Minimap.Tracker", boost::bind(&LLFloaterMap::handleStopTracking, this, _2));
-
-	registrar.add("Minimap.Mark", boost::bind(&LLFloaterMap::handleMark, this, _2));
-	registrar.add("Minimap.ClearMarks", boost::bind(&LLFloaterMap::handleClearMarks, this));
-
-	registrar.add("Minimap.Cam", boost::bind(&LLFloaterMap::handleCam, this));
-	registrar.add("Minimap.ShowProfile", boost::bind(&LLFloaterMap::handleShowProfile, this));
-	registrar.add("Minimap.StartTracking", boost::bind(&LLFloaterMap::handleStartTracking, this));
-
-	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
-	if (mPopupMenu && !LLTracker::isTracking(0))
-	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-	}
-	// </Firestorm minimap changes>
-
-	stretchMiniMap(getRect().getWidth() - MAP_PADDING_LEFT - MAP_PADDING_RIGHT,
-		getRect().getHeight() - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
-
 	updateMinorDirections();
 
 	// Get the drag handle all the way in back
 	sendChildToBack(getDragHandle());
 
-	setIsChrome(TRUE);
-	getDragHandle()->setTitleVisible(TRUE);
-	
 	// keep onscreen
 	gFloaterView->adjustToFitScreen(this, FALSE);
 
@@ -155,39 +124,24 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 	LLVector3d pos_global = mMap->viewPosToGlobal(x, y);
 	
-	// <FS:Ansariel> Synchronize double click handling throughout instances
-	//LLTracker::stopTracking(NULL);
-	//LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
-	//if (world_map)
-	//{
-	//	world_map->trackLocation(pos_global);
-	//}
-	//
-	//if (gSavedSettings.getBOOL("DoubleClickTeleport"))
-	//{
-	//	// If DoubleClickTeleport is on, double clicking the minimap will teleport there
-	//	gAgent.teleportViaLocationLookAt(pos_global);
-	//}
-	//else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
-	//{
-	//	LLFloaterReg::showInstance("world_map");
-	//}
-	mMap->performDoubleClickAction(pos_global);
-	// </FS:Ansariel> Synchronize double click handling throughout instances
-    return TRUE;
-}
-
-BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
-{
-	mMap->saveClosestAgentAtLastRightClick();
-
-	if (mPopupMenu)
+	// If we're not tracking a beacon already, double-click will set one 
+	if (!LLTracker::isTracking(NULL))
 	{
-		mPopupMenu->buildDrawLabels();
- 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
-		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(NULL));
-		mPopupMenu->setItemEnabled("Profile", (mMap->getClosestAgentAtLastRightClick().notNull() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)));
- 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
+		LLFloaterWorldMap* world_map = LLFloaterWorldMap::getInstance();
+		if (world_map)
+		{
+			world_map->trackLocation(pos_global);
+		}
+	}
+	
+	if (gSavedSettings.getBOOL("DoubleClickTeleport"))
+	{
+		// If DoubleClickTeleport is on, double clicking the minimap will teleport there
+		gAgent.teleportViaLocationLookAt(pos_global);
+	}
+	else if (gSavedSettings.getBOOL("DoubleClickShowWorldMap"))
+	{
+		LLFloaterReg::showInstance("world_map");
 	}
 	return TRUE;
 }
@@ -261,12 +215,6 @@ void LLFloaterMap::draw()
 		setMouseOpaque(TRUE);
 		getDragHandle()->setMouseOpaque(TRUE);
 	}
-
-	if (LLTracker::isTracking(0))
-	{
-		mPopupMenu->setItemEnabled("Stop Tracking", true);
-	}
-	
 // <FS:CR> Aurora Sim
 	//LLFloater::draw();
 	if(LLWorld::getInstance()->getAllowMinimap())
@@ -276,106 +224,35 @@ void LLFloaterMap::draw()
 // <FS:CR> Aurora Sim
 }
 
-void LLFloaterMap::stretchMiniMap(S32 width,S32 height)
-{
-	//fix for ext-7112
-	//by default ctrl can't overlap caption area
-	if(mMap)
-	{
-		LLRect map_rect;
-		map_rect.setLeftTopAndSize( MAP_PADDING_LEFT, getRect().getHeight() - MAP_PADDING_TOP, width, height);
-		mMap->reshape( width, height, 1);
-		mMap->setRect(map_rect);
-	}
-}
-
 void LLFloaterMap::reshape(S32 width, S32 height, BOOL called_from_parent)
 {
 	LLFloater::reshape(width, height, called_from_parent);
 	
-	stretchMiniMap(width - MAP_PADDING_LEFT - MAP_PADDING_RIGHT,
-		height - MAP_PADDING_TOP - MAP_PADDING_BOTTOM);
-
 	updateMinorDirections();
 }
 
-void LLFloaterMap::handleZoom(const LLSD& userdata)
-{
-	std::string level = userdata.asString();
-	
-	F32 scale = 0.0f;
-
-	if (level == std::string("default"))
-	{
-		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-		if(pvar)
-		{
-			pvar->resetToDefault();
-			scale = gSavedSettings.getF32("MiniMapScale");
-		}
-	}
-	else if (level == std::string("close"))
-		scale = LLNetMap::MAP_SCALE_MAX;
-	else if (level == std::string("medium"))
-		scale = LLNetMap::MAP_SCALE_MID;
-	else if (level == std::string("far"))
-		scale = LLNetMap::MAP_SCALE_MIN;
-	if (scale != 0.0f)
-	{
-		mMap->setScale(scale);
-	}
-}
-
-LLFloaterMap* LLFloaterMap::getInstance()
-{
-	return LLFloaterReg::getTypedInstance<LLFloaterMap>("mini_map");
-}
-
-void	LLFloaterMap::setMinimized(BOOL b)
-{
-	LLFloater::setMinimized(b);
-	if(b)
-	{
-		setTitle(getString("mini_map_caption"));
-	}
-	else
-	{
-		setTitle("");
-	}
-}
-
-void LLFloaterMap::handleMark(const LLSD& userdata)
-{
-	mMap->setAvatarMark(userdata);
-}
-
-void LLFloaterMap::handleClearMarks()
-{
-	mMap->clearAvatarMarks();
-}
-
-void LLFloaterMap::handleCam()
-{
-	mMap->camAvatar();
-}
-
-void LLFloaterMap::handleStopTracking (const LLSD& userdata)
-{
-	if (mPopupMenu)
-	{
-		mPopupMenu->setItemEnabled ("Stop Tracking", false);
-		LLTracker::stopTracking ((void*)(ptrdiff_t)LLTracker::isTracking(NULL));
-	}
-}
-
-void LLFloaterMap::handleShowProfile()
-{
-	mMap->showProfile();
-}
-
-// <FS:Ansariel> Avatar tracking feature
-void LLFloaterMap::handleStartTracking()
-{
-	mMap->startTracking();
-}
-// </FS:Ansariel> Avatar tracking feature
+//void LLFloaterMap::handleZoom(const LLSD& userdata)
+//{
+//	std::string level = userdata.asString();
+//	
+//	F32 scale = 0.0f;
+//	if (level == std::string("default"))
+//	{
+//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+//		if(pvar)
+//		{
+//			pvar->resetToDefault();
+//			scale = gSavedSettings.getF32("MiniMapScale");
+//		}
+//	}
+//	else if (level == std::string("close"))
+//		scale = LLNetMap::MAP_SCALE_MAX;
+//	else if (level == std::string("medium"))
+//		scale = LLNetMap::MAP_SCALE_MID;
+//	else if (level == std::string("far"))
+//		scale = LLNetMap::MAP_SCALE_MIN;
+//	if (scale != 0.0f)
+//	{
+//		mMap->setScale(scale);
+//	}
+//}
