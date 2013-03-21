@@ -5,7 +5,7 @@
 #include "lluuid.h"
 #include "llsingleton.h"
 
-struct LLUUIDEntryHasher : public std::unary_function<size_t, LLUUID >
+struct LLUUIDEntryHasher : public std::unary_function<LLUUID, size_t>
 {
 	size_t operator() (const LLUUID& id) const
 	{
