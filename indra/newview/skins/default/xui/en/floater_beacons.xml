@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater
  legacy_header_height="18"
- height="245"
+ height="267"
  layout="topleft"
  name="beacons"
  help_topic="beacons"
@@ -12,7 +12,7 @@
  width="240">
     <panel
      follows="left|top|right|bottom"
-     height="240"
+     height="262"
      layout="topleft"
      left="10"
      name="beacons_panel"
@@ -28,6 +28,19 @@
             Show :
          </text>
         <check_box
+         height="16"
+         layout="topleft"
+         label="Bounding boxes for lights in scene"
+         name="lights_bounding_boxes">
+          <check_box.on_check
+           function="Advanced.CheckInfoDisplay"
+           parameter="lights"/>
+          <check_box.check_button.commit_callback
+           function="Advanced.ToggleInfoDisplay"
+           parameter="lights"/>
+        </check_box>
+        <check_box
+         top_pad="10"
          control_name="renderbeacons"
          height="16"
          width="100"
