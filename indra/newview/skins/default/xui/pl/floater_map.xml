@@ -7,6 +7,6 @@
 		[REGION](Kliknij dwa razy by teleportować, przeciągaj z shiftem by przesunąć)
 	</floater.string>
 	<floater.string name="mini_map_caption">
-		MINIMAPA
+		Minimapa
 	</floater.string>
 </floater>

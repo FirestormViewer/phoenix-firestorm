@@ -58,7 +58,7 @@
    </tab_container>
 
    <panel
-       background_visible="true"
+       background_visible="false"
        follows="bottom|left|right"
        height="27"
        layout="topleft"

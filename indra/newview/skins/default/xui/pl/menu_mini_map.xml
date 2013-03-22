@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Zoom blisko" name="Zoom Close"/>
-	<menu_item_call label="Zoom średnio" name="Zoom Medium"/>
-	<menu_item_call label="Zoom daleko" name="Zoom Far"/>
-	<menu_item_call label="Zoom domyślny" name="Zoom Default"/>
-	<menu_item_check label="Obróć mapę" name="Rotate Map"/>
-	<menu_item_check label="Autocentrowanie" name="Auto Center"/>
-	<menu_item_check label="Pierścień zasięgu czatu" name="Chat Distance Ring"/>
+	<menu_item_call label="Pokaż profil" name="View Profile"/>
+	<menu label="Pokaż profil" name="View Profiles"></menu>
+	<menu_item_call label="Przybliż kamerę" name="Cam"/>
 	<menu name="MarkAvatar" label="Oznacz...">
 		<menu_item_call label="Czerwony" name="MarkRed"/>
 		<menu_item_call label="Fioletowy" name="MarkPurple"/>
@@ -14,9 +10,24 @@
 		<menu_item_call label="Żółty" name="MarkYellow"/>
 		<menu_item_call label="Wyczyść" name="Clear Marks"/>
 	</menu>
-	<menu_item_call label="Kamera" name="Cam"/>
-	<menu_item_call label="Profil" name="Profile"/>
 	<menu_item_call label="Zacznij śledzić" name="Start Tracking"/>
 	<menu_item_call label="Przestań śledzić" name="Stop Tracking"/>
-	<menu_item_call label="Mapa Świata" name="World Map"/>
+	<menu label="Powiększenie" name="Minimap Zoom">
+		<menu_item_call label="Duże" name="Zoom Close"/>
+		<menu_item_call label="Średnie" name="Zoom Medium"/>
+		<menu_item_call label="Małe" name="Zoom Far"/>
+		<menu_item_call label="Domyślne" name="Zoom Default"/>
+	</menu>
+	<menu label="Pokaż" name="Minimap Show">
+		<menu_item_check label="Obiekty" name="Objects"/>
+		<menu_item_check label="Granice działek" name="Property Lines"/>
+		<menu_item_check label="Działki na sprzedaż" name="Parcels for Sale"/>
+		<menu_item_check label="Tekstury terenu" name="Terrain Textures"/>
+		<menu_item_check label="Tekstury mapy świata" name="World Map Textures"/>
+	</menu>
+	<menu_item_check label="Obracaj mapę" name="Rotate Map"/>
+	<menu_item_check label="Autocentrowanie" name="Auto Center"/>
+	<menu_item_check label="Pierścień zasięgu czatu" name="Chat Distance Ring"/>
+	<menu_item_call label="Profil miejsca" name="Place Profile"/>
+	<menu_item_call label="Mapa świata" name="World Map"/>
 </menu>

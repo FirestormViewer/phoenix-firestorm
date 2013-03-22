@@ -8188,6 +8188,50 @@
       <key>Backup</key>
       <integer>0</integer>
     </map>
+    <key>MiniMapCollisionParcels</key>
+    <map>
+      <key>Comment</key>
+      <string>Show collision parcels on the mini-map as they become available</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
+    <key>MiniMapForSaleParcels</key>
+    <map>
+      <key>Comment</key>
+      <string>Show for-sale parcels with a yellow highlight on the mini-map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
+    <key>MiniMapObjects</key>
+    <map>
+      <key>Comment</key>
+      <string>Show object layers on the mini-map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
+    </map>
+    <key>MiniMapPropertyLines</key>
+    <map>
+      <key>Comment</key>
+      <string>Show property boundaries on the mini-map</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>0</boolean>
+    </map>
     <key>MiniMapPrimMaxRadius</key>
     <map>
       <key>Comment</key>
@@ -8220,6 +8264,17 @@
       <string>Boolean</string>
       <key>Value</key>
       <integer>0</integer>
+    </map>
+    <key>MiniMapWorldMapTextures</key>
+    <map>
+      <key>Comment</key>
+      <string>Use the world map texture tile on the mini-map rather than the terrain texture</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <boolean>1</boolean>
     </map>
     <key>MiniMapRotate</key>
     <map>
@@ -9629,7 +9684,7 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Backup</key>
       <integer>0</integer>
     </map>

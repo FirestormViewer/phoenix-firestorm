@@ -26,21 +26,17 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fswsassetblacklist.h"
-#include "llsdserialize.h"
-#include "llassettype.h"
-#include "llstring.h"
-#include "llviewerregion.h"
-#include "llagent.h"
+
 #include "fsfloaterwsassetblacklist.h"
 #include "llfloaterreg.h"
+#include "llsdserialize.h"
 #include "llvfs.h"
-#include "llaudioengine.h"
+#include "llxorcipher.h"
 
 
-std::string FSWSAssetBlacklist::blacklist_file_name;
-std::map<LLUUID,LLSD> FSWSAssetBlacklist::BlacklistData;
-BlacklistMAP FSWSAssetBlacklist::BlacklistIDs;
+const LLUUID MAGIC_ID("3c115e51-04f4-523c-9fa6-98aff1034730");
 
 LLAssetType::EType S32toAssetType(S32 assetindex)
 {
@@ -64,37 +60,30 @@ LLAssetType::EType S32toAssetType(S32 assetindex)
 
 void FSWSAssetBlacklist::init()
 {
-	blacklist_file_name = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
+	mBlacklistFileName = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "asset_blacklist.xml");
 	loadBlacklist();
 }
 
-bool FSWSAssetBlacklist::isBlacklisted(LLUUID id, LLAssetType::EType type)
+bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type)
 {
-	if (BlacklistData.size() == 0)
-	{
-		return false;
-	}
-	
-	id = LLUUID::generateNewID(id.asString() + "hash");
-
-	BlacklistMAP::iterator it;
-	it = BlacklistIDs.find(type);	
-	
-	if (it == BlacklistIDs.end())
+	if (mBlacklistData.empty())
 	{
 		return false;
 	}
 
-	std::vector<LLUUID> uuids = it->second;
-	if (std::find(uuids.begin(), uuids.end(), id) != uuids.end())
+	t_blacklist_type_map::iterator it;
+	it = mBlacklistTypeContainer.find(type);	
+	
+	if (it == mBlacklistTypeContainer.end())
 	{
-		return true;
+		return false;
 	}
 
-	return false;
+	t_blacklisted_uuid_container uuids = it->second;
+	return (uuids.find(id) != uuids.end());
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, std::string region, LLAssetType::EType type, bool save)
+void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save)
 {
 	LLDate curdate = LLDate(time_corrected());
 	std::string input_date = curdate.asString();
@@ -107,36 +96,34 @@ void FSWSAssetBlacklist::addNewItemToBlacklist(LLUUID id, std::string name, std:
 	data["asset_type"] = type;
 	data["asset_date"] = input_date;
 
-	addNewItemToBlacklistData(LLUUID::generateNewID(id.asString() + "hash"), data, save);
+	addNewItemToBlacklistData(id, data, save);
 }
 
-void FSWSAssetBlacklist::removeItemFromBlacklist(LLUUID id)
+void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
-	std::map<LLUUID,LLSD>::iterator it;
-	it = BlacklistData.find(id);
-	if (it == BlacklistData.end())
+	t_blacklist_data::iterator it;
+	it = mBlacklistData.find(id);
+
+	if (it == mBlacklistData.end())
 	{
 		return;
 	}
 
 	LLSD data = it->second;
-	
-	BlacklistIDs[S32toAssetType(data["asset_type"].asInteger())].erase(
-			std::remove(BlacklistIDs[S32toAssetType(data["asset_type"].asInteger())].begin(),
-			BlacklistIDs[S32toAssetType(data["asset_type"].asInteger())].end(), id),
-			BlacklistIDs[S32toAssetType(data["asset_type"].asInteger())].end());
+	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-	BlacklistData.erase(id);
+	mBlacklistTypeContainer[type].erase(id);
+	mBlacklistData.erase(it);
 
 	saveBlacklist();	
 }
 
-void FSWSAssetBlacklist::addNewItemToBlacklistData(LLUUID id, LLSD data, bool save)
+void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save)
 {
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-	addEntryToBlacklistMap(id,type);
-	BlacklistData.insert(std::pair<LLUUID,LLSD>(id,data));
+	addEntryToBlacklistMap(id, type);
+	mBlacklistData.insert(std::pair<LLUUID, LLSD>(id, data));
 
 	if (save)
 	{
@@ -150,60 +137,61 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(LLUUID id, LLSD data, bool sa
 	}
 }
 
-bool FSWSAssetBlacklist::addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type)
+bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type)
 {
 	if (id.isNull())
 	{
 		return false;
 	}
 
-	std::stringstream typesstream;
-	typesstream << (int)type;
-	std::string types = typesstream.str();
-	std::map<LLAssetType::EType,std::vector<LLUUID> >::iterator it;
-	it = BlacklistIDs.find(type);
+	t_blacklist_type_map::iterator it;
+	it = mBlacklistTypeContainer.find(type);
 	
-	if (it == BlacklistIDs.end())
+	if (it != mBlacklistTypeContainer.end())
 	{
-		std::vector<LLUUID> vec;
-		vec.push_back(id);
-		BlacklistIDs[type] = vec;
-		it = BlacklistIDs.find(type);
-		return true;
-	} 
-	
-	if (it != BlacklistIDs.end())
-	{
-		BlacklistIDs[type].push_back(id);
-		return true;
+		mBlacklistTypeContainer[type].insert(id);
 	}
-	return false;
+	else
+	{
+		t_blacklisted_uuid_container cont;
+		cont.insert(id);
+		mBlacklistTypeContainer[type] = cont;
+	}
+	return true;
 }
 
 void FSWSAssetBlacklist::loadBlacklist()
 {
-	if (gDirUtilp->fileExists(blacklist_file_name))
+	if (gDirUtilp->fileExists(mBlacklistFileName))
 	{
-		llifstream blacklistdata(blacklist_file_name);
-		if (blacklistdata.is_open())
+		llifstream blacklist_data_stream(mBlacklistFileName);
+		if (blacklist_data_stream.is_open())
 		{
 			LLSD data;
-			if (LLSDSerialize::fromXML(data, blacklistdata) >= 1)
+			if (LLSDSerialize::fromXML(data, blacklist_data_stream) >= 1)
 			{
-				for(LLSD::map_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
+				for (LLSD::map_const_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
 				{
 					LLUUID uid = LLUUID(itr->first);
+					LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+					cipher.decrypt(uid.mData, UUID_BYTES);
 					LLSD data = itr->second;
-					if(uid.isNull()) continue;
-					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
+					if (uid.isNull())
+					{
+						continue;
+					}
 
-					if(type == LLAssetType::AT_NONE) continue;
+					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
+					if (type == LLAssetType::AT_NONE)
+					{
+						continue;
+					}
 					
 					addNewItemToBlacklistData(uid, data, false);
 				}
 			}
 		}
-		blacklistdata.close();
+		blacklist_data_stream.close();
 	}
 	else
 	{
@@ -217,7 +205,7 @@ void FSWSAssetBlacklist::loadBlacklist()
 			if (oldfile.is_open())
 			{
 				LLSDSerialize::fromXMLDocument(datallsd, oldfile);
-				for (LLSD::map_iterator itr = datallsd.beginMap(); itr != datallsd.endMap(); ++itr)
+				for (LLSD::map_const_iterator itr = datallsd.beginMap(); itr != datallsd.endMap(); ++itr)
 				{
 					LLUUID uid = LLUUID(itr->first);
 					LLSD data = itr->second;
@@ -232,10 +220,10 @@ void FSWSAssetBlacklist::loadBlacklist()
 					newdata["asset_type"] = type;
 					newdata["asset_date"] = data["entry_date"].asString();
 
-					if (!data["ID_hashed"].asBoolean())
-					{
-						uid = LLUUID::generateNewID(uid.asString() + "hash");
-					}				
+					//if (!data["ID_hashed"].asBoolean())
+					//{
+					//	uid = LLUUID::generateNewID(uid.asString() + "hash");
+					//}
 					
 					addNewItemToBlacklistData(uid, newdata, false);
 				}
@@ -253,12 +241,16 @@ void FSWSAssetBlacklist::loadBlacklist()
 
 void FSWSAssetBlacklist::saveBlacklist()
 {
-	llofstream save_file(blacklist_file_name);
+	llofstream save_file(mBlacklistFileName);
 	LLSD savedata;
 
-	for (std::map<LLUUID,LLSD>::iterator itr = BlacklistData.begin(); itr != BlacklistData.end(); ++itr)
+	for (t_blacklist_data::const_iterator itr = mBlacklistData.begin(); itr != mBlacklistData.end(); ++itr)
 	{
-		savedata[itr->first.asString()] = itr->second;
+		// <FS:CR> Apply "cheesy encryption" to obfuscate these to the user.
+		LLUUID shadow_id(itr->first);
+		LLXORCipher cipher(MAGIC_ID.mData, UUID_BYTES);
+		cipher.encrypt(shadow_id.mData, UUID_BYTES);
+		savedata[shadow_id.asString()] = itr->second;
 	}
 
 	LLSDSerialize::toPrettyXML(savedata, save_file);	

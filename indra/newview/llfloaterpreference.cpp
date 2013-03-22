@@ -1256,7 +1256,7 @@ void LLFloaterPreference::onClickChatOnlineNotices()
 
 void LLFloaterPreference::onClickClearSpamList()
 {
-	NACLAntiSpamRegistry::purgeAllQueues(); 
+	NACLAntiSpamRegistry::instance().purgeAllQueues(); 
 }
 
 void LLFloaterPreference::setPreprocInclude()

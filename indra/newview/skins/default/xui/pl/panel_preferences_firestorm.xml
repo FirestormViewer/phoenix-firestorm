@@ -58,11 +58,12 @@
         </text>
         <spinner name="_NACL_AntiSpamSoundPreloadMulti" tool_tip="Mnożnik dla zdarzeń buforowania dźwięku [domyślnie: 4]" />
         <button name="AntiSpamUnblock" label="Odblokuj wszystkie źródła spamu" />
+        <check_box label="Usuń przycisk &quot;Blokuj&quot; z okien dialogowych skryptów" name="FSRemoveScriptBlockButton" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez obiekty" name="FSNotifyIncomingObjectSpam" />
         <check_box label="Powiadom o zbyt szybkim słaniu przedmiotów przez innych Rezydentów" name="FSNotifyIncomingObjectSpamFrom" />
         <slider name="FSOfferThrottleMaxCount" label="Limit ofert przychodzących obiektów:" tool_tip="Ustaw limit dla ofert przychodzących obiektów, w ciągu 10 sekund zanim zostaną one ograniczone. Domyślnie 5" />
-	</panel>
-	<panel label="Awatar" name="firestorm_avatar">
+    </panel>
+    <panel label="Awatar" name="firestorm_avatar">
         <text name="HeadMovement">
             Ustaw, jak mocno głowa Awatara śledzi myszkę ('0' oznacza brak ruchu):
         </text>

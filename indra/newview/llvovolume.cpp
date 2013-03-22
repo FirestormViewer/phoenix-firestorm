@@ -216,8 +216,10 @@ private:
 
 LLVOVolume::LLVOVolume(const LLUUID &id, const LLPCode pcode, LLViewerRegion *regionp)
 	: LLViewerObject(id, pcode, regionp),
+	// NaCl - Graphics crasher protection
 	  mVolumeImpl(NULL),
 	  mVolumeSurfaceArea(-1.0)
+	// NaCl End
 {
 	mTexAnimMode = 0;
 	mRelativeXform.setIdentity();
@@ -1050,7 +1052,7 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 	
 	if (is404)
 	{
-		setIcon(LLViewerTextureManager::getFetchedTextureFromFile("icons/Inv_Mesh.png", TRUE, LLGLTexture::BOOST_UI));
+		setIcon(LLViewerTextureManager::getFetchedTextureFromFile("icons/Inv_Mesh.png", FTT_LOCAL_FILE, TRUE, LLGLTexture::BOOST_UI));
 		//render prim proxy when mesh loading attempts give up
 		volume_params.setSculptID(LLUUID::null, LL_SCULPT_TYPE_NONE);
 
@@ -1066,6 +1068,9 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 		}
 	
 		updateSculptTexture();
+		// NaCl - Graphics crasher protection
+		getVolume()->calcSurfaceArea();
+		// NaCl End
 
 		if (isSculpted())
 		{
@@ -1134,7 +1139,7 @@ void LLVOVolume::updateSculptTexture()
 		LLUUID id =  sculpt_params->getSculptTexture();
 		if (id.notNull())
 		{
-			mSculptTexture = LLViewerTextureManager::getFetchedTexture(id, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
+			mSculptTexture = LLViewerTextureManager::getFetchedTexture(id, FTT_DEFAULT, TRUE, LLGLTexture::BOOST_NONE, LLViewerTexture::LOD_TEXTURE);
 		}
 	}
 	else
@@ -1695,10 +1700,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 			LLFastTimer t(FTM_GEN_FLEX);
 			res = mVolumeImpl->doUpdateGeometry(drawable);
 		}
-
+		// NaCl - Graphics crasher protection
 		if( enableVolumeSAPProtection() )
-			mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
-		
+			mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+		// NaCl End
 		updateFaceFlags();
 		return res;
 	}
@@ -1803,10 +1808,10 @@ BOOL LLVOVolume::updateGeometry(LLDrawable *drawable)
 		LLFastTimer t(FTM_GEN_TRIANGLES);
 		genBBoxes(FALSE);
 	}
-
+	// NaCl - Graphics crasher protection
 	if( enableVolumeSAPProtection() )
-		mVolumeSurfaceArea = getVolume()->sculptGetSurfaceArea();
-
+		mVolumeSurfaceArea = getVolume()->getSurfaceArea();
+	// NaCl End
 	// Update face flags
 	updateFaceFlags();
 	
@@ -4381,6 +4386,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 		// AO:  Z's protection auto-derender code
 		if (enableVolumeSAPProtection())
 		{
+			// NaCl - Graphics crasher protection
 	   		static LLCachedControl<F32> volume_sa_thresh(gSavedSettings,"RenderVolumeSAThreshold");
 			static LLCachedControl<F32> sculpt_sa_thresh(gSavedSettings, "RenderSculptSAThreshold");
 			static LLCachedControl<F32> volume_sa_max_frame(gSavedSettings, "RenderVolumeSAFrameMax");
@@ -4394,6 +4400,7 @@ void LLVolumeGeometryManager::rebuildGeom(LLSpatialGroup* group)
 					continue;
 				}
 			}
+			// NaCl End
 		}
 		// </AO>
 

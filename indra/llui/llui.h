@@ -344,12 +344,11 @@ public:
 
 	// this avoids a MSVC bug where non-referenced static members are "optimized" away
 	// even if their constructors have side effects
-	void reference()
+	S32 reference()
 	{
-#ifdef LL_WINDOWS
 		S32 dummy;
 		dummy = 0;
-#endif /*LL_WINDOWS*/
+		return dummy;
 	}
 };
 

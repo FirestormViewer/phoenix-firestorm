@@ -175,7 +175,22 @@ with the same filename but different name
   <texture name="ComboButton_On" file_name="widgets/ComboButton_On.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
   <texture name="ComboButton_Off" file_name="widgets/ComboButton_Off.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
   <texture name="ComboButton_UpOff" file_name="widgets/ComboButton_UpOff.png" preload="true" scale.left="10" scale.top="11" scale.right="20" scale.bottom="11" />
+
   <texture name="Container" file_name="containers/Container.png" preload="false" />
+
+  <texture name="Conv_toolbar_add_person" file_name="icons/Conv_toolbar_add_person.png" preload="false" />
+  <texture name="Conv_toolbar_arrow_ne" file_name="icons/Conv_toolbar_arrow_ne.png" preload="false" />
+  <texture name="Conv_toolbar_arrow_sw" file_name="icons/Conv_toolbar_arrow_sw.png" preload="false" />
+  <texture name="Conv_toolbar_call_log" file_name="icons/Conv_toolbar_call_log.png" preload="false" />
+  <texture name="Conv_toolbar_close" file_name="icons/Conv_toolbar_close.png" preload="false" />
+  <texture name="Conv_toolbar_collapse" file_name="icons/Conv_toolbar_collapse.png" preload="false" />
+  <texture name="Conv_toolbar_expand" file_name="icons/Conv_toolbar_expand.png" preload="false" />
+  <texture name="Conv_toolbar_hang_up" file_name="icons/Conv_toolbar_hang_up.png" preload="false" />
+  <texture name="Conv_toolbar_open_call" file_name="icons/Conv_toolbar_open_call.png" preload="false" />
+  <texture name="Conv_toolbar_plus" file_name="icons/Conv_toolbar_plus.png" preload="false" />
+  <texture name="Conv_toolbar_sort" file_name="icons/Conv_toolbar_sort.png" preload="false" />
+  <texture name="Conv_log_inbox" file_name="icons/Conv_log_inbox.png" preload="false" />
+
   <texture name="Copy" file_name="icons/Copy.png" preload="false" />
   
   <texture name="DisclosureArrow_Opened_Off" file_name="widgets/DisclosureArrow_Opened_Off.png" preload="true" />
@@ -362,6 +377,8 @@ with the same filename but different name
   <texture name="NavBar_BG" file_name="navbar/NavBar_BG.png" preload="true" scale.left="1" scale.top="1" scale.right="0" scale.bottom="0" />
   <texture name="NavBar_BG_NoFav_Bevel" file_name="navbar/NavBar_BG_NoFav_Bevel.png" preload="true" scale.left="1" scale.top="1" scale.right="0" scale.bottom="0" />
   <texture name="NavBar_BG_NoNav_Bevel" file_name="navbar/NavBar_BG_NoNav_Bevel.png" preload="true" scale.left="1" scale.top="1" scale.right="0" scale.bottom="0" />
+
+  <texture name="Nearby_chat_icon" file_name="icons/nearby_chat_icon.png" preload="false" />
 
   <texture name="Notices_Unread" file_name="bottomtray/Notices_Unread.png" preload="true" />
 
@@ -636,9 +653,9 @@ with the same filename but different name
 
   <texture name="Tooltip" file_name="widgets/Tooltip.png" preload="true" scale.left="2" scale.top="16" scale.right="100" scale.bottom="3" />
 
-  <texture name="TrashItem_Disabled" file_name="icons/TrashItem_Disabled.png" preload="false" />
-  <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="false" />
-  <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="false" />
+  <texture name="TrashItem_Disabled" file_name="icons/TrashItem_Disabled.png" preload="true" />
+  <texture name="TrashItem_Off" file_name="icons/TrashItem_Off.png" preload="true" />
+  <texture name="TrashItem_Press" file_name="icons/TrashItem_Press.png" preload="true" />
 
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />
   <texture name="Unread_IM" file_name="bottomtray/Unread_IM.png" preload="false" />
@@ -727,10 +744,6 @@ with the same filename but different name
   <texture name="icon_for_sale.tga" file_name="icons/Icon_For_Sale.png" />
   <texture name="icon_top_pick.tga" />
 
- <!-- FS Ansariel: Icons don't exist and only spawn warn messages in log
-  <texture name="inv_folder_mesh.tga"/>
-  <texture name="inv_item_mesh.tga"/>
-  -->
   <texture name="lag_status_critical.tga" />
   <texture name="lag_status_good.tga" />
   <texture name="lag_status_warning.tga" />
@@ -867,15 +880,24 @@ with the same filename but different name
   <texture name="Muted_Chat" file_name="icons/Muted_Chat.png" preload="false" />
   <texture name="phototools" file_name="toolbar_icons/phototools_fs.png" preload="true" />
   <texture name="phototools_camera" file_name="toolbar_icons/phototools_cam.png" preload="true" />
+  <texture name="landmark_here" file_name="toolbar_icons/landmark_here.png" preload="true" />
+  <texture name="teleport_history" file_name="toolbar_icons/teleporthistory.png" preload="true" />
+  <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
   <texture name="mouselook" file_name="toolbar_icons/mouselook.png" preload="true" /> 
   <texture name="Cam_Store_Pos" file_name="bottomtray/camera_store.png" preload="false" />
   <texture name="Cam_Load_Pos" file_name="bottomtray/camera_load.png" preload="false" />
+  <texture name="Icon_Legacy_Event_PG" file_name="icon_legacy_event.tga" preload="false" />
+  <texture name="Icon_Legacy_Event_Mature" file_name="icon_legacy_event_mature.tga" preload="false" />
+  <texture name="Icon_Legacy_Event_Adult" file_name="icon_legacy_event_adult.tga" preload="false" />
+  <texture name="Icon_Lightshare" file_name="icons/Icon_Lightshare.png" preload="false" />
+  
   <!-- <exodus> inc in FS -->
   <texture name="Snapshot_Exodus_Flickr" file_name="snapshot_flickr.png" preload="false" />
   <!-- </exodus> inc in FS -->
 <!-- FS:Ansariel: Icons for V1 status bar -->
   <texture name="Pathfinding_Dirty_Light" file_name="icons/Pathfinding_Dirty_Light.png" preload="false" />
   <texture name="Pathfinding_Disabled_Light" file_name="icons/Pathfinding_Disabled_Light.png" preload="false" />
+  <texture name="Statusbar_Script_Error" file_name="icons/status_script_debug.tga" preload="false" />
 
 
   <!-- Firstorm virtual system folders - added in FS 2.6.1 -->

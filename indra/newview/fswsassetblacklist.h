@@ -28,31 +28,36 @@
 #ifndef FS_WSASSETBLACKLIST_H
 #define FS_WSASSETBLACKLIST_H
 
-#include "llviewerprecompiledheaders.h"
+#include <boost/unordered_set.hpp>
+
+#include "fscommon.h"
 #include "llsingleton.h"
 #include "llfloater.h"
 #include "llassettype.h"
 
-
-typedef std::map<LLAssetType::EType,std::vector<LLUUID> > BlacklistMAP;
+typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_blacklisted_uuid_container;
+typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container> t_blacklist_type_map;
+typedef std::map<LLUUID, LLSD> t_blacklist_data;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 {
 public:
 	void init();
-	bool isBlacklisted(LLUUID id, LLAssetType::EType type);
-	void addNewItemToBlacklist(LLUUID id, std::string name, std::string region, LLAssetType::EType type, bool save = true);
-	void addNewItemToBlacklistData(LLUUID id, LLSD data, bool save = true);
-	void removeItemFromBlacklist(LLUUID id);
-	static std::map<LLUUID,LLSD> BlacklistData;
+	bool isBlacklisted(const LLUUID& id, LLAssetType::EType type);
+	void addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save = true);
+	void addNewItemToBlacklistData(const LLUUID& id, const LLSD& data, bool save = true);
+	void removeItemFromBlacklist(const LLUUID& id);
+
+	t_blacklist_data getBlacklistData() const { return mBlacklistData; };
 
 private:
 	void loadBlacklist();
 	void saveBlacklist();
-	bool addEntryToBlacklistMap(LLUUID id, LLAssetType::EType type);
+	bool addEntryToBlacklistMap(const LLUUID& id, LLAssetType::EType type);
 	
-	static std::string blacklist_file_name;
-	static BlacklistMAP BlacklistIDs;
+	std::string				mBlacklistFileName;
+	t_blacklist_type_map	mBlacklistTypeContainer;
+	t_blacklist_data		mBlacklistData;
 };
 
 #endif // FS_WSASSETBLACKLIST_H

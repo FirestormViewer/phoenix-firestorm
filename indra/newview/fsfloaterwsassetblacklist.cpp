@@ -26,11 +26,11 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
 #include "fsfloaterwsassetblacklist.h"
+
 #include "fswsassetblacklist.h"
 #include "llfloater.h"
-#include "lluuid.h"
-#include "llsd.h"
 #include "llscrolllistctrl.h"
 #include "llviewercontrol.h"
 
@@ -70,17 +70,15 @@ std::string FSFloaterWSAssetBlacklist::TypeToString(S32 type)
 
 void FSFloaterWSAssetBlacklist::BuildBlacklist()
 {
-	typedef std::map<LLUUID, LLSD>::iterator it_type;
-	std::map<LLUUID,LLSD> data = FSWSAssetBlacklist::getInstance()->BlacklistData;
+	t_blacklist_data data = FSWSAssetBlacklist::instance().getBlacklistData();
 	
-	for(it_type iterator = data.begin(); iterator != data.end(); iterator++)
+	for (t_blacklist_data::const_iterator iterator = data.begin(); iterator != data.end(); ++iterator)
 	{
-			LLSD data = iterator->second;
-			addElementToList(iterator->first, iterator->second);
+		addElementToList(iterator->first, iterator->second);
 	}
 }
 
-void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data)
+void FSFloaterWSAssetBlacklist::addElementToList(const LLUUID& id, const LLSD& data)
 {
 	LLSD element;
 	element["id"] = id;
@@ -100,7 +98,7 @@ void FSFloaterWSAssetBlacklist::addElementToList(LLUUID id, LLSD data)
 	mResultList->addElement(element, ADD_BOTTOM);
 }
 
-void FSFloaterWSAssetBlacklist::removeElementFromList(LLUUID id)
+void FSFloaterWSAssetBlacklist::removeElementFromList(const LLUUID& id)
 {
 	mResultList->deleteSingleItem(mResultList->getItemIndex(id));
 }
@@ -129,12 +127,11 @@ BOOL FSFloaterWSAssetBlacklist::postBuild()
 
 void FSFloaterWSAssetBlacklist::onRemoveBtn()
 {
-	std::vector<LLScrollListItem*> list=mResultList->getAllSelected();
+	std::vector<LLScrollListItem*> list = mResultList->getAllSelected();
 
-	for (std::vector<LLScrollListItem*>::iterator it = list.begin(); it != list.end(); it++)
+	for (std::vector<LLScrollListItem*>::const_iterator it = list.begin(); it != list.end(); ++it)
 	{
-		LLScrollListItem* item = *it;
-		FSWSAssetBlacklist::getInstance()->removeItemFromBlacklist(item->getUUID());
+		FSWSAssetBlacklist::instance().removeItemFromBlacklist((*it)->getUUID());
 	}
 	
 	mResultList->deleteSelectedItems();

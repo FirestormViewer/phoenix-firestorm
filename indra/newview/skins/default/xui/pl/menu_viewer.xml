@@ -82,10 +82,10 @@
 		<menu label="Pokaż więcej" name="LandShow">
 			<menu_item_check label="Linie zakazu" name="Ban Lines"/>
 			<menu_item_check label="Emitery" name="beacons"/>
-			<menu_item_check label="Granice działki" name="Property Lines"/>
-			<menu_item_check label="Właściciele działki" name="Land Owners" shortcut="control|alt|W"/>
+			<menu_item_check label="Granice działek" name="Property Lines"/>
+			<menu_item_check label="Właściciele działek" name="Land Owners" shortcut="control|alt|W"/>
 			<menu_item_check label="Współrzędne" name="Coordinates"/>
-			<menu_item_check label="Zezwolenia działki" name="Parcel Properties"/>
+			<menu_item_check label="Zezwolenia działek" name="Parcel Properties"/>
 			<menu_item_check label="Menu Zaawansowane" name="Show Advanced Menu"/>
 		</menu>
 		<menu_item_call label="Teleportuj do Miejsca Startu" name="Teleport Home"/>

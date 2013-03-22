@@ -790,7 +790,10 @@
       reference="DkGray2" />
   <color
       name="ModelUploaderLabels"
-      value="1 0.6 0 1" />	  
+      value="1 0.6 0 1" />
+  <color
+      name="MiniMapPropertyLine"
+      value="1 1 1 1" />
   <color
       name="MultiSliderDisabledThumbColor"
       reference="Black" />

@@ -4,6 +4,7 @@
 		<text name="label_show">
 			Pokaż:
 		</text>
+		<check_box label="Bryły brzegowe świateł sceny" name="lights_bounding_boxes"/>
 		<check_box label="Emitery" name="beacons"/>
 		<check_box label="Podświetlenia" name="highlights"/>
 		<text name="beacon_width_label" tool_tip="Zasięg emiterów">

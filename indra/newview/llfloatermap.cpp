@@ -45,9 +45,16 @@
 #include "llfloaterworldmap.h"
 #include "llagent.h"
 
+// Firestorm includes
 #include "rlvhandler.h"
+#include "llavataractions.h"
+#include "llavatarnamecache.h"
+#include "llfloatersidepanelcontainer.h"
+#include "llviewerobject.h"
+#include "llviewerparceloverlay.h"
+#include "llviewerparcelmgr.h"
 #include "llviewermenu.h"
-#include "llworld.h"	// <FS:CR> Aurora Sim />
+#include "llworld.h"	// <FS:CR> Aurora Sim
 
 //
 // Constants
@@ -74,7 +81,7 @@ LLFloaterMap::LLFloaterMap(const LLSD& key)
 	  mTextBoxNorthEast(NULL),
 	  mTextBoxNorthWest(NULL),
 	  mTextBoxSouthWest(NULL),
-	  mPopupMenu(NULL),
+	  mPopupMenu(NULL), // <FS:CR>
 	  mMap(NULL)
 {
 }
@@ -117,8 +124,21 @@ BOOL LLFloaterMap::postBuild()
 	registrar.add("Minimap.ClearMarks", boost::bind(&LLFloaterMap::handleClearMarks, this));
 
 	registrar.add("Minimap.Cam", boost::bind(&LLFloaterMap::handleCam, this));
-	registrar.add("Minimap.ShowProfile", boost::bind(&LLFloaterMap::handleShowProfile, this));
 	registrar.add("Minimap.StartTracking", boost::bind(&LLFloaterMap::handleStartTracking, this));
+	
+	// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+	registrar.add("Minimap.ShowProfile", boost::bind(&LLFloaterMap::handleShowProfile, this, _2));
+	registrar.add("Minimap.TextureType", boost::bind(&LLFloaterMap::handleTextureType, this, _2));
+	registrar.add("Minimap.ToggleOverlay", boost::bind(&LLFloaterMap::handleOverlayToggle, this, _2));
+	
+	LLUICtrl::EnableCallbackRegistry::ScopedRegistrar enable_registrar;
+	enable_registrar.add("Minimap.CheckTextureType", boost::bind(&LLFloaterMap::checkTextureType, this, _2));
+	// [/SL:KB]
+	
+	// [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
+	LLViewerParcelMgr::instance().setCollisionUpdateCallback(boost::bind(&LLFloaterMap::refreshParcelOverlay, this));
+	LLViewerParcelOverlay::setUpdateCallback(boost::bind(&LLFloaterMap::refreshParcelOverlay, this));
+	// [/SL:KB]
 
 	mPopupMenu = LLUICtrlFactory::getInstance()->createFromFile<LLMenuGL>("menu_mini_map.xml", gMenuHolder, LLViewerMenuHolderGL::child_registry_t::instance());
 	if (mPopupMenu && !LLTracker::isTracking(0))
@@ -179,15 +199,58 @@ BOOL LLFloaterMap::handleDoubleClick(S32 x, S32 y, MASK mask)
 
 BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 {
-	mMap->saveClosestAgentAtLastRightClick();
-
 	if (mPopupMenu)
 	{
+		// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+		mMap->mPosGlobalRightClick = mMap->viewPosToGlobal(x, y);
+		
+		mPopupMenu->setItemVisible("View Profile", mMap->mClosestAgentsToCursor.size() == 1);
+		
+		LLMenuItemBranchGL* pProfilesMenu = mPopupMenu->getChild<LLMenuItemBranchGL>("View Profiles");
+		if (pProfilesMenu)
+		{
+			pProfilesMenu->setVisible(mMap->mClosestAgentsToCursor.size() > 1);
+			
+			pProfilesMenu->getBranch()->empty();
+			for (uuid_vec_t::const_iterator itAgent = mMap->mClosestAgentsToCursor.begin(); itAgent != mMap->mClosestAgentsToCursor.end(); ++itAgent)
+			{
+				LLMenuItemCallGL::Params p;
+				p.name = llformat("Profile Item %d", itAgent - mMap->mClosestAgentsToCursor.begin());
+				
+				LLAvatarName avName; const LLUUID& idAgent = *itAgent;
+				if (LLAvatarNameCache::get(idAgent, &avName))
+				{
+					p.label = avName.getCompleteName();
+				}
+				else
+				{
+					p.label = LLTrans::getString("LoadingData");
+					LLAvatarNameCache::get(idAgent, boost::bind(&LLFloaterMap::setAvatarProfileLabel, this, _2, p.name.getValue()));
+				}
+				p.on_click.function = boost::bind(&LLAvatarActions::showProfile, _2);
+				p.on_click.parameter = idAgent;
+				
+				LLMenuItemCallGL* pMenuItem  = LLUICtrlFactory::create<LLMenuItemCallGL>(p);
+				if (pMenuItem)
+					pProfilesMenu->getBranch()->addChild(pMenuItem);
+			}
+		}
+		F32 range = dist_vec(mMap->getClosestAgentPosition(), gAgent.getPositionGlobal());
+		mPopupMenu->setItemVisible("Cam", (range < gSavedSettings.getF32("RenderFarClip")
+										   || gObjectList.findObject(mMap->getClosestAgentRightClick()) != NULL));
+		mPopupMenu->setItemVisible("MarkAvatar", mMap->getClosestAgentToCursor().notNull());
+		mPopupMenu->setItemVisible("Start Tracking", mMap->getClosestAgentToCursor().notNull());
+		mPopupMenu->setItemVisible("Profile Separator", (mMap->mClosestAgentsToCursor.size() >= 1
+														 || mMap->getClosestAgentToCursor().notNull()));
+		// [/SL:KB]
 		mPopupMenu->buildDrawLabels();
- 		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
-		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(NULL));
-		mPopupMenu->setItemEnabled("Profile", (mMap->getClosestAgentAtLastRightClick().notNull() && !gRlvHandler.hasBehaviour(RLV_BHVR_SHOWNAMES)));
- 		LLMenuGL::showPopup(this, mPopupMenu, x, y);
+		mPopupMenu->updateParent(LLMenuGL::sMenuContainer);
+		// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+		mPopupMenu->setItemVisible("Stop Tracking", LLTracker::isTracking(0));
+		mPopupMenu->setItemVisible("Stop Tracking Separator", LLTracker::isTracking(0));
+		// [/SL:KB]
+		//		mPopupMenu->setItemEnabled("Stop Tracking", LLTracker::isTracking(0));
+		LLMenuGL::showPopup(this, mPopupMenu, x, y);
 	}
 	return TRUE;
 }
@@ -368,14 +431,79 @@ void LLFloaterMap::handleStopTracking (const LLSD& userdata)
 	}
 }
 
-void LLFloaterMap::handleShowProfile()
-{
-	mMap->showProfile();
-}
-
 // <FS:Ansariel> Avatar tracking feature
 void LLFloaterMap::handleStartTracking()
 {
 	mMap->startTracking();
 }
 // </FS:Ansariel> Avatar tracking feature
+
+// <FS:CR> FIXME: Cut and paste duplicate code from llnetmap.cpp
+void LLFloaterMap::setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name)
+{
+	LLMenuItemGL* pItem = mPopupMenu->findChild<LLMenuItemGL>(item_name, TRUE /*recurse*/);
+	if (pItem)
+	{
+		pItem->setLabel(avName.getCompleteName());
+		pItem->getMenu()->arrange();
+	}
+}
+
+void LLFloaterMap::handleOverlayToggle(const LLSD& sdParam)
+{
+	// Toggle the setting
+	const std::string strControl = sdParam.asString();
+	BOOL fCurValue = gSavedSettings.getBOOL(strControl);
+	gSavedSettings.setBOOL(strControl, !fCurValue);
+	
+	// Force an overlay update
+	refreshParcelOverlay();
+}
+
+void LLFloaterMap::handleShowProfile(const LLSD& sdParam) const
+{
+	const std::string strParam = sdParam.asString();
+	if ("closest" == strParam)
+	{
+		LLAvatarActions::showProfile(mMap->getClosestAgentRightClick());
+	}
+	else if ("place" == strParam)
+	{
+		LLSD sdParams;
+		sdParams["type"] = "remote_place";
+		sdParams["x"] = mMap->mPosGlobalRightClick.mdV[VX];
+		sdParams["y"] = mMap->mPosGlobalRightClick.mdV[VY];
+		sdParams["z"] = mMap->mPosGlobalRightClick.mdV[VZ];
+		
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", sdParams);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", sdParams);
+		}
+	}
+}
+
+bool LLFloaterMap::checkTextureType(const LLSD& sdParam) const
+{
+	const std::string strParam = sdParam.asString();
+	
+	bool fWorldMapTextures = gSavedSettings.getBOOL("MiniMapWorldMapTextures");
+	if ("maptile" == strParam)
+		return fWorldMapTextures;
+	else if ("terrain" == strParam)
+		return !fWorldMapTextures;
+	return false;
+}
+
+void LLFloaterMap::handleTextureType(const LLSD& sdParam) const
+{
+	gSavedSettings.setBOOL("MiniMapWorldMapTextures", ("maptile" == sdParam.asString()));
+}
+
+void LLFloaterMap::refreshParcelOverlay()
+{
+	mMap->mUpdateParcelImage = true;
+}

@@ -28,6 +28,7 @@
 #define LL_LLFLOATERMAP_H
 
 #include "llfloater.h"
+#include "llavatarname.h" // <FS:CR>
 
 class LLMenuGL;
 class LLNetMap;
@@ -57,8 +58,13 @@ private:
 	void handleMark(const LLSD& userdata);
 	void handleClearMarks();
 	void handleCam();
-	void handleShowProfile();
 	void handleStartTracking();
+	void handleShowProfile(const LLSD& sdParam) const;
+	void handleOverlayToggle(const LLSD& sdParam);
+	void refreshParcelOverlay();
+	bool checkTextureType(const LLSD& sdParam) const;
+	void handleTextureType(const LLSD& sdParam) const;
+	void setAvatarProfileLabel(const LLAvatarName& avName, const std::string& item_name);	// <FS:CR>
 
 	void setMinimized( BOOL );
 
