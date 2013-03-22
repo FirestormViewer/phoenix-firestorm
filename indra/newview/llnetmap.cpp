@@ -1612,28 +1612,28 @@ void LLNetMap::handleZoom(const LLSD& userdata)
 	
 	F32 scale = 0.0f;
 // [SL:KB] - Patch: World-MinimapZoom | Checked: 2012-08-15 (Catznip-3.3)
-	if (level == "close")
-		scale = 2048.f;
-	else if (level == "medium")
-		scale = 512.f;
-	else if (level == "far")
-		scale = 128.f;
+	//if (level == "close")
+	//	scale = 2048.f;
+	//else if (level == "medium")
+	//	scale = 512.f;
+	//else if (level == "far")
+	//	scale = 128.f;
 // [/Sl:KB]
-//	if (level == std::string("default"))
-//	{
-//		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
-//		if(pvar)
-//		{
-//			pvar->resetToDefault();
-//			scale = gSavedSettings.getF32("MiniMapScale");
-//		}
-//	}
-//	else if (level == std::string("close"))
-//		scale = LLNetMap::MAP_SCALE_MAX;
-//	else if (level == std::string("medium"))
-//		scale = LLNetMap::MAP_SCALE_MID;
-//	else if (level == std::string("far"))
-//		scale = LLNetMap::MAP_SCALE_MIN;
+	if (level == std::string("default"))
+	{
+		LLControlVariable *pvar = gSavedSettings.getControl("MiniMapScale");
+		if(pvar)
+		{
+			pvar->resetToDefault();
+			scale = gSavedSettings.getF32("MiniMapScale");
+		}
+	}
+	else if (level == std::string("close"))
+		scale = LLNetMap::MAP_SCALE_MAX;
+	else if (level == std::string("medium"))
+		scale = LLNetMap::MAP_SCALE_MID;
+	else if (level == std::string("far"))
+		scale = LLNetMap::MAP_SCALE_MIN;
 	if (scale != 0.0f)
 	{
 		setScale(scale);
