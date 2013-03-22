@@ -28,12 +28,15 @@
 #ifndef FS_WSASSETBLACKLIST_H
 #define FS_WSASSETBLACKLIST_H
 
+#include <boost/unordered_set.hpp>
+
+#include "fscommon.h"
 #include "llsingleton.h"
 #include "llfloater.h"
 #include "llassettype.h"
 
-typedef std::vector<LLUUID> t_blacklisted_uuid_container;
-typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container > t_blacklist_type_map;
+typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_blacklisted_uuid_container;
+typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container> t_blacklist_type_map;
 typedef std::map<LLUUID, LLSD> t_blacklist_data;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>

@@ -80,12 +80,7 @@ bool FSWSAssetBlacklist::isBlacklisted(const LLUUID& id, LLAssetType::EType type
 	}
 
 	t_blacklisted_uuid_container uuids = it->second;
-	if (std::find(uuids.begin(), uuids.end(), id) != uuids.end())
-	{
-		return true;
-	}
-
-	return false;
+	return (uuids.find(id) != uuids.end());
 }
 
 void FSWSAssetBlacklist::addNewItemToBlacklist(const LLUUID& id, const std::string& name, const std::string& region, LLAssetType::EType type, bool save)
@@ -108,6 +103,7 @@ void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 {
 	t_blacklist_data::iterator it;
 	it = mBlacklistData.find(id);
+
 	if (it == mBlacklistData.end())
 	{
 		return;
@@ -116,12 +112,8 @@ void FSWSAssetBlacklist::removeItemFromBlacklist(const LLUUID& id)
 	LLSD data = it->second;
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-	mBlacklistTypeContainer[type].erase(
-			std::remove(mBlacklistTypeContainer[type].begin(),
-			mBlacklistTypeContainer[type].end(), id),
-			mBlacklistTypeContainer[type].end());
-
-	mBlacklistData.erase(id);
+	mBlacklistTypeContainer[type].erase(id);
+	mBlacklistData.erase(it);
 
 	saveBlacklist();	
 }
@@ -130,8 +122,8 @@ void FSWSAssetBlacklist::addNewItemToBlacklistData(const LLUUID& id, const LLSD&
 {
 	LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-	addEntryToBlacklistMap(id,type);
-	mBlacklistData.insert(std::pair<LLUUID,LLSD>(id,data));
+	addEntryToBlacklistMap(id, type);
+	mBlacklistData.insert(std::pair<LLUUID, LLSD>(id, data));
 
 	if (save)
 	{
@@ -152,21 +144,18 @@ bool FSWSAssetBlacklist::addEntryToBlacklistMap(const LLUUID& id, LLAssetType::E
 		return false;
 	}
 
-	std::stringstream typesstream;
-	typesstream << (int)type;
-	std::string types = typesstream.str();
 	t_blacklist_type_map::iterator it;
 	it = mBlacklistTypeContainer.find(type);
 	
 	if (it != mBlacklistTypeContainer.end())
 	{
-		mBlacklistTypeContainer[type].push_back(id);
+		mBlacklistTypeContainer[type].insert(id);
 	}
 	else
 	{
-		t_blacklisted_uuid_container vec;
-		vec.push_back(id);
-		mBlacklistTypeContainer[type] = vec;
+		t_blacklisted_uuid_container cont;
+		cont.insert(id);
+		mBlacklistTypeContainer[type] = cont;
 	}
 	return true;
 }
@@ -175,11 +164,11 @@ void FSWSAssetBlacklist::loadBlacklist()
 {
 	if (gDirUtilp->fileExists(mBlacklistFileName))
 	{
-		llifstream mBlacklistData(mBlacklistFileName);
-		if (mBlacklistData.is_open())
+		llifstream blacklist_data_stream(mBlacklistFileName);
+		if (blacklist_data_stream.is_open())
 		{
 			LLSD data;
-			if (LLSDSerialize::fromXML(data, mBlacklistData) >= 1)
+			if (LLSDSerialize::fromXML(data, blacklist_data_stream) >= 1)
 			{
 				for (LLSD::map_const_iterator itr = data.beginMap(); itr != data.endMap(); ++itr)
 				{
@@ -191,15 +180,18 @@ void FSWSAssetBlacklist::loadBlacklist()
 					{
 						continue;
 					}
-					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
 
-					if(type == LLAssetType::AT_NONE) continue;
+					LLAssetType::EType type = S32toAssetType(data["asset_type"].asInteger());
+					if (type == LLAssetType::AT_NONE)
+					{
+						continue;
+					}
 					
 					addNewItemToBlacklistData(uid, data, false);
 				}
 			}
 		}
-		mBlacklistData.close();
+		blacklist_data_stream.close();
 	}
 	else
 	{
