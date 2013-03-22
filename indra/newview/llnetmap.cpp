@@ -1677,14 +1677,6 @@ void LLNetMap::handleCam()
 	camAvatar();
 }
 
-void LLNetMap::showProfile()
-{
-	if (mClosestAgentRightClick.notNull())
-	{
-		LLAvatarActions::showProfile(mClosestAgentRightClick);
-	}
-}
-
 // <FS:Ansariel> Avatar tracking feature
 void LLNetMap::handleStartTracking()
 {

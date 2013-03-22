@@ -95,6 +95,8 @@ public:
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
 	LLUUID			getClosestAgentRightClick() const { return mClosestAgentRightClick; }
+	LLUUID			getClosestAgentToCursor() const { return mClosestAgentToCursor; }
+	LLVector3d		getClosestAgentPosition() const { return mClosestAgentPosition; }
 
 	// <FS:Ansariel> Synchronize double click handling throughout instances
 	void			performDoubleClickAction(LLVector3d pos_global);
@@ -124,7 +126,6 @@ private:
 
 	static bool		outsideSlop(S32 x, S32 y, S32 start_x, S32 start_y, S32 slop);
 
-private:
 //	bool			mUpdateNow;
 // [SL:KB] - Patch: World-MinimapOverlay | Checked: 2012-06-20 (Catznip-3.3.0)
 	bool			mUpdateObjectImage;
@@ -158,13 +159,9 @@ private:
 
 	LLUUID			mClosestAgentToCursor;
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
-	uuid_vec_t		mClosestAgentsToCursor;
-
 	LLVector3d		mClosestAgentPosition;
 	LLUUID			mClosestAgentRightClick;
-	LLVector3d		mPosGlobalRightClick;
 // [/SL:KB]
-//	LLUUID			mClosestAgentAtLastRightClick;
 	// <FS:Ansariel> Synchronize tooltips throughout instances
 	//std::string		mToolTipMsg;
 	static std::string	sToolTipMsg;
@@ -177,10 +174,10 @@ public:
 	void			setAvatarMark(const LLSD& userdata);
 	void			clearAvatarMarks();
 	void			camAvatar();
-	void			showProfile();
 // <FS:CR> Minimap improvements
 	void			handleShowProfile(const LLSD& sdParam) const;
-	void			saveClosestAgentRightClick();
+	uuid_vec_t		mClosestAgentsToCursor;
+	LLVector3d		mPosGlobalRightClick;
 // </FS:CR>
 	void			startTracking();
 
