@@ -1323,7 +1323,10 @@ void LLNetMap::createObjectImage()
 {
 	if (createImage(mObjectRawImagep))
 		mObjectImagep = LLViewerTextureManager::getLocalTexture( mObjectRawImagep.get(), FALSE);
-	setScale(mScale);
+	// <FS:Ansariel> Synchronize scale throughout instances
+	//setScale(mScale);
+	setScale(sScale);
+	// </FS:Ansariel> Synchronize scale throughout instances
 	mUpdateObjectImage = true;
 }
 
