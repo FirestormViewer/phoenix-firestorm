@@ -2,16 +2,9 @@
 #define NACL_ANTISPAM_H
 
 #include <boost/unordered_map.hpp>
+#include "fscommon.h"
 #include "lluuid.h"
 #include "llsingleton.h"
-
-struct LLUUIDEntryHasher : public std::unary_function<LLUUID, size_t>
-{
-	size_t operator() (const LLUUID& id) const
-	{
-		return id.getCRC32();
-	}
-};
 
 typedef enum e_antispam_queue
 {
@@ -50,7 +43,7 @@ private:
 	bool	mBlocked;
 };
 
-typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, LLUUIDEntryHasher> t_spam_queue_entry_map;
+typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDEntryHasher> t_spam_queue_entry_map;
 
 class NACLAntiSpamQueue
 {
