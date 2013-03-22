@@ -1490,9 +1490,7 @@ BOOL LLNetMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					pProfilesMenu->getBranch()->addChild(pMenuItem);
 			}
 		}
-		F32 range = dist_vec(mClosestAgentPosition, gAgent.getPositionGlobal());
-		mPopupMenu->setItemVisible("Cam", (range < gSavedSettings.getF32("RenderFarClip")
-										   || gObjectList.findObject(mClosestAgentRightClick) != NULL));
+		mPopupMenu->setItemVisible("Cam", isZoomable());
 		mPopupMenu->setItemVisible("MarkAvatar", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Start Tracking", mClosestAgentToCursor.notNull());
 		mPopupMenu->setItemVisible("Profile Separator", (mClosestAgentsToCursor.size() >= 1
@@ -1680,12 +1678,26 @@ void LLNetMap::clearAvatarMarks()
 
 void LLNetMap::camAvatar()
 {
-	LLAvatarActions::zoomIn(mClosestAgentRightClick);
+	if (isZoomable())
+	{
+		LLAvatarActions::zoomIn(mClosestAgentRightClick);
+	}
+	else
+	{
+		reportToNearbyChat(LLTrans::getString("minimap_no_focus"));
+	}
 }
 
 void LLNetMap::handleCam()
 {
 	camAvatar();
+}
+
+bool LLNetMap::isZoomable()
+{
+	F32 range = dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
+	bool is_zoomable = (range < gSavedSettings.getF32("RenderFarClip") || gObjectList.findObject(mClosestAgentRightClick) != NULL);
+	return is_zoomable;
 }
 
 // <FS:Ansariel> Avatar tracking feature

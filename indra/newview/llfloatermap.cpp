@@ -202,6 +202,7 @@ BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 	if (mPopupMenu)
 	{
 		// [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
+		mMap->mClosestAgentRightClick = mMap->getClosestAgentToCursor();
 		mMap->mPosGlobalRightClick = mMap->viewPosToGlobal(x, y);
 		
 		mPopupMenu->setItemVisible("View Profile", mMap->mClosestAgentsToCursor.size() == 1);
@@ -235,9 +236,7 @@ BOOL LLFloaterMap::handleRightMouseDown(S32 x, S32 y, MASK mask)
 					pProfilesMenu->getBranch()->addChild(pMenuItem);
 			}
 		}
-		F32 range = dist_vec(mMap->getClosestAgentPosition(), gAgent.getPositionGlobal());
-		mPopupMenu->setItemVisible("Cam", (range < gSavedSettings.getF32("RenderFarClip")
-										   || gObjectList.findObject(mMap->getClosestAgentRightClick()) != NULL));
+		mPopupMenu->setItemVisible("Cam", mMap->isZoomable());
 		mPopupMenu->setItemVisible("MarkAvatar", mMap->getClosestAgentToCursor().notNull());
 		mPopupMenu->setItemVisible("Start Tracking", mMap->getClosestAgentToCursor().notNull());
 		mPopupMenu->setItemVisible("Profile Separator", (mMap->mClosestAgentsToCursor.size() >= 1
@@ -465,7 +464,7 @@ void LLFloaterMap::handleShowProfile(const LLSD& sdParam) const
 	const std::string strParam = sdParam.asString();
 	if ("closest" == strParam)
 	{
-		LLAvatarActions::showProfile(mMap->getClosestAgentRightClick());
+		LLAvatarActions::showProfile(mMap->mClosestAgentRightClick);
 	}
 	else if ("place" == strParam)
 	{

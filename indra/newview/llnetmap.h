@@ -94,9 +94,9 @@ public:
 	// </FS:Ansariel> Synchronize tooltips throughout instances
 	void			renderScaledPointGlobal( const LLVector3d& pos, const LLColor4U &color, F32 radius );
 	LLVector3d		viewPosToGlobal(S32 x,S32 y);
-	LLUUID			getClosestAgentRightClick() const { return mClosestAgentRightClick; }
 	LLUUID			getClosestAgentToCursor() const { return mClosestAgentToCursor; }
 	LLVector3d		getClosestAgentPosition() const { return mClosestAgentPosition; }
+	bool			isZoomable();
 
 	// <FS:Ansariel> Synchronize double click handling throughout instances
 	void			performDoubleClickAction(LLVector3d pos_global);
@@ -160,7 +160,6 @@ private:
 	LLUUID			mClosestAgentToCursor;
 // [SL:KB] - Patch: World-MiniMap | Checked: 2012-07-08 (Catznip-3.3.0)
 	LLVector3d		mClosestAgentPosition;
-	LLUUID			mClosestAgentRightClick;
 // [/SL:KB]
 	// <FS:Ansariel> Synchronize tooltips throughout instances
 	//std::string		mToolTipMsg;
@@ -178,6 +177,7 @@ public:
 	void			handleShowProfile(const LLSD& sdParam) const;
 	uuid_vec_t		mClosestAgentsToCursor;
 	LLVector3d		mPosGlobalRightClick;
+	LLUUID			mClosestAgentRightClick;
 // </FS:CR>
 	void			startTracking();
 
