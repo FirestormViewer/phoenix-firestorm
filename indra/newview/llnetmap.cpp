@@ -1007,18 +1007,15 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 		p.fillFrom(LLUICtrlFactory::instance().getDefaultParams<LLInspector>());
 		
 		// Add distance to avatars in hovertip for minimap
-		if (avatar_id != gAgent.getID())
+		if (avatar_id != gAgentID)
 		{
-			LLVector3d myPosition = gAgent.getPositionGlobal();
-			LLVector3d otherPosition = mClosestAgentPosition;
-			LLVector3d delta = otherPosition - myPosition;
-			F32 distance = (F32)delta.magVec();
+			F32 distance(0.f);
 
 			// If avatar is >=1020, the value for Z might be returned as AVATAR_UNKNOWN_Z_OFFSET
-			bool isHigher1020mBug = (otherPosition[VZ] == AVATAR_UNKNOWN_Z_OFFSET);
+			bool isHigher1020mBug = (mClosestAgentPosition[VZ] == AVATAR_UNKNOWN_Z_OFFSET);
 
-			// Ansariel: Try to get distance from the nearby people panel
-			//           aka radar when above 1020m.
+			// <FS:Ansariel> Try to get distance from the nearby people panel
+			//               aka radar when above 1020m.
 			if (isHigher1020mBug)
 			{
 				LLPanelPeople* panel_people = getPeoplePanel();
@@ -1029,13 +1026,17 @@ BOOL LLNetMap::handleToolTipAgent(const LLUUID& avatar_id)
 					{
 						F32 radar_distance = avatar_list_item->getRange();
 
-						if (radar_distance > -1.f)
+						if (radar_distance > AVATAR_UNKNOWN_RANGE)
 						{
 							distance = radar_distance;
 							isHigher1020mBug = false;
 						}
 					}
 				}
+			}
+			else
+			{
+				distance = dist_vec(gAgent.getPositionGlobal(), mClosestAgentPosition);
 			}
 
 			LLStringUtil::format_map_t args;
