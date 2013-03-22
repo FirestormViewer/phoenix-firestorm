@@ -79,7 +79,7 @@ public:
 
 private:
 	void saveToDisk(LLSD newSettings);
-	LLSD getExampleLLSD();	
+	LLSD getExampleLLSD();
 	std::string getFileName();
 	std::string getDefaultFileName();
 	std::string getOldFileName();
