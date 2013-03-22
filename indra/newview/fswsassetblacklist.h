@@ -28,6 +28,7 @@
 #ifndef FS_WSASSETBLACKLIST_H
 #define FS_WSASSETBLACKLIST_H
 
+#include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 
 #include "fscommon.h"
@@ -37,7 +38,7 @@
 
 typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_blacklisted_uuid_container;
 typedef std::map<LLAssetType::EType, t_blacklisted_uuid_container> t_blacklist_type_map;
-typedef std::map<LLUUID, LLSD> t_blacklist_data;
+typedef boost::unordered_map<LLUUID, LLSD, FSUUIDEntryHasher> t_blacklist_data;
 
 class FSWSAssetBlacklist : public LLSingleton<FSWSAssetBlacklist>
 {
