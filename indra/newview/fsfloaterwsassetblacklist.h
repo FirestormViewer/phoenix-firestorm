@@ -29,12 +29,8 @@
 #define FS_FLOATERWSASSETBLACKLIST_H
 
 #include "llfloater.h"
-#include "llassettype.h"
-
 
 class LLScrollListCtrl;
-
-
 
 class FSFloaterWSAssetBlacklist : public LLFloater
 {
@@ -44,13 +40,12 @@ public:
     virtual ~FSFloaterWSAssetBlacklist();
 
     /*virtual*/ void onOpen(const LLSD& key);
-
     /*virtual*/ BOOL postBuild();
+
 	std::string TypeToString(S32 type);
 	void BuildBlacklist();
-	void addElementToList(LLUUID id, LLSD data);
-	void removeElementFromList(LLUUID id);
-
+	void addElementToList(const LLUUID& id, const LLSD& data);
+	void removeElementFromList(const LLUUID& id);
 
 protected:
     void onRemoveBtn();
