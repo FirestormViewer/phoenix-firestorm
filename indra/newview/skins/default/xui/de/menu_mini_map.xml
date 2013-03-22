@@ -13,10 +13,10 @@
 	<menu_item_call label="Verfolgung starten" name="Start Tracking"/>
 	<menu_item_call label="Verfolgung abschalten" name="Stop Tracking"/>
 	<menu name="Minimap Zoom" label="Zoom">
-		<menu_item_call label="Zoom Nah" name="Zoom Close"/>
-		<menu_item_call label="Zoom Mittel" name="Zoom Medium"/>
-		<menu_item_call label="Zoom Weit" name="Zoom Far"/>
-		<menu_item_call label="Zoom-Standard" name="Zoom Default"/>
+		<menu_item_call label="Nah" name="Zoom Close"/>
+		<menu_item_call label="Mittel" name="Zoom Medium"/>
+		<menu_item_call label="Weit" name="Zoom Far"/>
+		<menu_item_call label="Standard" name="Zoom Default"/>
 	</menu>
 	<menu name="Minimap Show" label="Anzeigen">
 		<menu_item_check label="Objekte" name="Objects"/>
