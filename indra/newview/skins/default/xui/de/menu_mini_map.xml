@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <menu name="Popup">
-	<menu_item_call label="Zoom Nah" name="Zoom Close"/>
-	<menu_item_call label="Zoom Mittel" name="Zoom Medium"/>
-	<menu_item_call label="Zoom Weit" name="Zoom Far"/>
-	<menu_item_call label="Zoom-Standard" name="Zoom Default"/>
-	<menu_item_check label="Karte drehen" name="Rotate Map"/>
-	<menu_item_check label="Automatisch zentrieren" name="Auto Center"/>
-	<menu_item_check label="Chatdistanz-Markierung" name="Chat Distance Ring"/>
+	<menu_item_call label="Profil anzeigen" name="View Profile"/>
+	<menu_item_call label="Mit Kamera verfolgen" name="Cam"/>
 	<menu name="MarkAvatar" label="Markieren...">
 		<menu_item_call label="Rot" name="MarkRed"/>
 		<menu_item_call label="Lila" name="MarkPurple"/>
@@ -14,9 +9,24 @@
 		<menu_item_call label="Gelb" name="MarkYellow"/>
 		<menu_item_call label="Markierungen löschen" name="Clear Marks"/>
 	</menu>
-	<menu_item_call label="Mit Kamera verfolgen" name="Cam"/>
-	<menu_item_call label="Profil anzeigen" name="Profile"/>
 	<menu_item_call label="Verfolgung starten" name="Start Tracking"/>
 	<menu_item_call label="Verfolgung abschalten" name="Stop Tracking"/>
+	<menu name="Minimap Zoom" label="Zoom">
+		<menu_item_call label="Zoom Nah" name="Zoom Close"/>
+		<menu_item_call label="Zoom Mittel" name="Zoom Medium"/>
+		<menu_item_call label="Zoom Weit" name="Zoom Far"/>
+		<menu_item_call label="Zoom-Standard" name="Zoom Default"/>
+	</menu>
+	<menu name="Minimap Show" label="Anzeigen">
+		<menu_item_check label="Objekte" name="Objects"/>
+		<menu_item_check label="Grundstücksgrenzen" name="Property Lines"/>
+		<menu_item_check label="Land zum Verkauf" name="Parcels for Sale"/>
+		<menu_item_check label="Terrain-Texturen" name="Terrain Textures"/>
+		<menu_item_check label="Weltkarten-Texturen" name="World Map Textures"/>
+	</menu>
+	<menu_item_check label="Karte drehen" name="Rotate Map"/>
+	<menu_item_check label="Automatisch zentrieren" name="Auto Center"/>
+	<menu_item_check label="Chatdistanz-Markierung" name="Chat Distance Ring"/>
+	<menu_item_call label="Ortsprofil anzeigen" name="Place Profile"/>
 	<menu_item_call label="Weltkarte" name="World Map"/>
 </menu>
