@@ -1421,7 +1421,14 @@ void LLNetMap::handleShowProfile(const LLSD& sdParam) const
 		sdParams["y"] = mPosGlobalRightClick.mdV[VY];
 		sdParams["z"] = mPosGlobalRightClick.mdV[VZ];
 
-		LLFloaterSidePanelContainer::showPanel("places", sdParams);
+		if (gSavedSettings.getBOOL("FSUseStandalonePlaceDetailsFloater"))
+		{
+			LLFloaterReg::showInstance("fs_placedetails", sdParams);
+		}
+		else
+		{
+			LLFloaterSidePanelContainer::showPanel("places", sdParams);
+		}
 	}
 }
 
