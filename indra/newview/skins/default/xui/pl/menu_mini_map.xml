@@ -2,7 +2,7 @@
 <menu name="Popup">
 	<menu_item_call label="Pokaż profil" name="View Profile"/>
 	<menu label="Pokaż profil" name="View Profiles"></menu>
-	<menu_item_call label="Kamera" name="Cam"/>
+	<menu_item_call label="Przybliż kamerę" name="Cam"/>
 	<menu name="MarkAvatar" label="Oznacz...">
 		<menu_item_call label="Czerwony" name="MarkRed"/>
 		<menu_item_call label="Fioletowy" name="MarkPurple"/>
