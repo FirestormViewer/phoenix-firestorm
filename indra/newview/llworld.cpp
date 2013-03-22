@@ -66,6 +66,7 @@
 #include <map>
 #include <cstring>
 
+#include "fscommon.h"
 
 //
 // Globals

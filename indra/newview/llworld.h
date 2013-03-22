@@ -55,8 +55,6 @@ class LLCloudPuff;
 class LLCloudGroup;
 class LLVOAvatar;
 
-const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // <FS:Ansariel> Const value for avatars at unknown height
-
 // LLWorld maintains a stack of unused viewer_regions and an array of pointers to viewer regions
 // as simulators are connected to, viewer_regions are popped off the stack and connected as required
 // as simulators are removed, they are pushed back onto the stack

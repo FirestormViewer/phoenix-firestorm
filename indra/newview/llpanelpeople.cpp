@@ -102,8 +102,6 @@ static const std::string RECENT_TAB_NAME	= "recent_panel";
 
 static const std::string COLLAPSED_BY_USER  = "collapsed_by_user";
 
-static const F32 AVATAR_UNKNOWN_RANGE = -1.f;
-
 /** Comparator for comparing avatar items by last interaction date */
 class LLAvatarItemRecentComparator : public LLAvatarItemComparator
 {

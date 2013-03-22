@@ -31,6 +31,9 @@
 #include "llchat.h"
 #include "llpanelpeople.h"
 
+const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
+const F32 AVATAR_UNKNOWN_RANGE = -1.f;
+
 void reportToNearbyChat(const std::string& message);
 std::string applyAutoCloseOoc(const std::string& message);
 std::string applyMuPose(const std::string& message);
