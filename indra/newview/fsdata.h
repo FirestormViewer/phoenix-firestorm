@@ -50,6 +50,7 @@ struct FSDataAgent
 
 class FSData : public LLSingleton<FSData>
 {
+	friend class LLSingleton<FSData>;
 	LOG_CLASS(FSData);
 public:
 	void startDownload();
