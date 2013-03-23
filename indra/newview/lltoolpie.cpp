@@ -994,6 +994,13 @@ BOOL LLToolPie::handleTooltipLand(std::string line, std::string tooltip_msg)
 
 BOOL LLToolPie::handleTooltipObject( LLViewerObject* hover_object, std::string line, std::string tooltip_msg)
 {
+	// <FS:Ansariel> FIRE-9522: Crashfix
+	if (!hover_object)
+	{
+		return TRUE;
+	}
+	// </FS:Ansariel>
+
 	// <FS:Ansariel> Advanced object tooltips
 	const char* const DEFAULT_DESC = "(No Description)";
 	static LLCachedControl<bool> advancedToolTip(gSavedSettings, "FSAdvancedTooltips");
