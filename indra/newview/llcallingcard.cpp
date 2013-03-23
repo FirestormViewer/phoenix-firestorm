@@ -799,7 +799,7 @@ void LLAvatarTracker::processNotify(LLMessageSystem* msg, bool online)
 		// <FS:PP> Attempt to speed up things a little
 		// if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||gSavedSettings.getBOOL("OnlineOfflinetoNearbyChat"))
 		static LLCachedControl<bool> OnlineOfflinetoNearbyChat(gSavedSettings, "OnlineOfflinetoNearbyChat");
-		if(chat_notify||LGGContactSets::getInstance()->notifyForFriend(agent_id)||OnlineOfflinetoNearbyChat)
+		if(chat_notify || LGGContactSets::getInstance()->notifyForFriend(agent_id) || OnlineOfflinetoNearbyChat)
 		// </FS:PP>
 		{
 			// Look up the name of this agent for the notification

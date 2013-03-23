@@ -612,7 +612,7 @@ void LLNetMap::draw()
 			// </FS:Ansariel> Mark Avatars with special colors
 					
 			//color based on contact sets prefs
-			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid,FALSE,FALSE,FALSE,TRUE))
+			if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(uuid, FALSE, FALSE, FALSE, TRUE))
 			{
 				color = LGGContactSets::getInstance()->getFriendColor(uuid);
 			}
