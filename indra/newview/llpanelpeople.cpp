@@ -2418,7 +2418,6 @@ bool LLPanelPeople::radarReportToCheck(const LLSD& userdata)
 		return (menu_item == "radar_toasts");
 	else
 		return (menu_item == "radar_nearby_chat");
-	//return false;
 }
 // </FS:CR>
 
