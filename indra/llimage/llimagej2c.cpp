@@ -396,7 +396,10 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 		}
 		else
 		{
-			res = validate(data, file_size);
+// [SL:KB] - Patch: Viewer-ImageBaseHeapCorruption | Checked: 2012-08-12 (Catznip-3.3)
+			res = validate(data, file_size, false);
+// [/SL:KB]
+//			res = validate(data, file_size);
 		}
 	}
 	
@@ -409,12 +412,21 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 }
 
 
-BOOL LLImageJ2C::validate(U8 *data, U32 file_size)
+//BOOL LLImageJ2C::validate(U8 *data, U32 file_size)
+// [SL:KB] - Patch: Viewer-ImageBaseHeapCorruption | Checked: 2012-08-12 (Catznip-3.3)
+BOOL LLImageJ2C::validate(U8 *data, U32 file_size, bool copy_data)
+// [/SL:KB]
 {
 
 	resetLastError();
 	
-	setData(data, file_size);
+// [SL:KB] - Patch: Viewer-ImageBaseHeapCorruption | Checked: 2012-08-12 (Catznip-3.3)
+	if (!copy_data)
+		setData(data, file_size);
+	else
+		copyData(data, file_size);
+// [/SL:KB]
+//	setData(data, file_size);
 
 	BOOL res = updateData();
 	if ( res )

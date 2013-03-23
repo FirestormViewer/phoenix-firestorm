@@ -422,7 +422,12 @@ void LLViewerTexLayerSetBuffer::doUpload()
 			file.read(data, file_size);
 			if (data)
 			{
-				valid = integrity_test->validate(data, file_size); // integrity_test will delete 'data'
+// [SL:KB] - Patch: Viewer-ImageBaseHeapCorruption | Checked: 2012-08-12 (Catznip-3.3)
+				// Image data needs copying since 'data' was allocated with new[] and LLImageBase wants malloc or pool allocated memory
+				valid = integrity_test->validate(data, file_size, true);
+				delete[] data;
+// [/SL:KB]
+//				valid = integrity_test->validate(data, file_size); // integrity_test will delete 'data'
 			}
 			else
 			{

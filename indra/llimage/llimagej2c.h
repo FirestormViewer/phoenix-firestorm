@@ -65,7 +65,10 @@ public:
 	// Encode with comment text 
 	BOOL encode(const LLImageRaw *raw_imagep, const char* comment_text, F32 encode_time=0.0);
 
-	BOOL validate(U8 *data, U32 file_size);
+//	BOOL validate(U8 *data, U32 file_size);
+// [SL:KB] - Patch: Viewer-ImageBaseHeapCorruption | Checked: 2012-08-12 (Catznip-3.3)
+	BOOL validate(U8 *data, U32 file_size, bool copy_data);
+// [/SL:KB]
 	BOOL loadAndValidate(const std::string &filename);
 
 	// Encode accessors
