@@ -272,19 +272,20 @@ BOOL LGGContactSets::hasFriendColorThatShouldShow(LLUUID friend_id, ELGGCSType t
 	switch (type)
 	{
 		case LGG_CS_CHAT:
-			if (fsContactSetsColorizeChat)
-				break;
+			if (!fsContactSetsColorizeChat)
+				return FALSE;
+			break;
 		case LGG_CS_TAG:
-			if (fsContactSetsColorizeTag)
-				break;
+			if (!fsContactSetsColorizeTag)
+				return FALSE;
+			break;
 		case LGG_CS_RADAR:
-			if (fsContactSetsColorizeRadar)
-				break;
+			if (!fsContactSetsColorizeRadar)
+				return FALSE;
+			break;
 		case LGG_CS_MINIMAP:
-			if (fsContactSetsColorizeMiniMap)
-				break;
-		default:
-			return FALSE;
+			if (!fsContactSetsColorizeMiniMap)
+				return FALSE;
 			break;
 	};
 
