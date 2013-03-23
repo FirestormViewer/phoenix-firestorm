@@ -20,21 +20,20 @@
 #define LGG_CONTACTSETS_H
 
 #include "v4color.h"
+#include "llsingleton.h"
 
-class LGGContactSets
+class LGGContactSets : public LLSingleton<LGGContactSets>
 {
-	LGGContactSets();
-	~LGGContactSets();
-	static LGGContactSets* sInstance;
+	friend class LLSingleton<LGGContactSets>;
+	LOG_CLASS(LGGContactSets);
 public:
-	static LGGContactSets* getInstance();
 	static LLColor4 toneDownColor(LLColor4 inColor, float strength, bool usedForBackground=FALSE);
 
 	BOOL saveGroupToDisk(std::string groupName, std::string fileName);
 	LLSD exportGroup(std::string groupName);
 	LLSD getContactSets();
 	LLColor4 getGroupColor(std::string groupName);
-	LLColor4 getFriendColor(LLUUID friend_id, std::string ignoredGroupName="");
+	LLColor4 getFriendColor(LLUUID friend_id, std::string ignoredGroupName = "");
 	BOOL hasFriendColorThatShouldShow(LLUUID friend_id,bool chat=FALSE, bool tag=FALSE, bool radar=FALSE, bool miniMap=FALSE);
 	LLColor4 getDefaultColor();
 	void setDefaultColor(LLColor4 dColor);
@@ -78,6 +77,9 @@ public:
 	void loadFromDisk();
 
 private:
+	LGGContactSets();
+	~LGGContactSets();
+	
 	void saveToDisk(LLSD newSettings);
 	LLSD getExampleLLSD();
 	std::string getFileName();
