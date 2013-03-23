@@ -1343,7 +1343,7 @@ void LLPanelPeople::updateNearbyList()
 		}
 		radarNameCell->setFontStyle(nameCellStyle);
 
-		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, FALSE, FALSE, TRUE))
+		if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(avId, LGG_CS_RADAR))
 		{
 			radarNameCell->setColor(LGGContactSets::getInstance()->getFriendColor(avId));
 		}

@@ -2709,7 +2709,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 	// if we aren't self, if we use colored Clienttags and if we have a color
 	// then use that color as name_tag_color
 	static LLUICachedControl<bool> show_friends("NameTagShowFriends");
-	if(mClientTagData.has("color") && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), FALSE, TRUE))) && gSavedSettings.getU32("FSColorClienttags") > 0 && !this->isSelf())
+	if(mClientTagData.has("color") && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))) && gSavedSettings.getU32("FSColorClienttags") > 0 && !this->isSelf())
 	{
 		name_tag_color = mClientTagData["color"]; 
 	}
@@ -2753,7 +2753,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		// Override nametag color only if friend color is disabled
 		// or avatar is not a friend nor has a contact set color
-		if (show_distance_color_tag && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), FALSE, TRUE))))
+		if (show_distance_color_tag && !(show_friends && (is_friend || LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))))
 		{
 			name_tag_color = distance_color;
 		}
@@ -2952,7 +2952,7 @@ void LLVOAvatar::idleUpdateNameTagText(BOOL new_name)
 
 		LLColor4 new_chat = LLUIColorTable::instance().getColor( isSelf() ? "UserChatColor" : "AgentChatColor" );
 				//color based on contact sets prefs
-				if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), TRUE))
+				if(LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_CHAT))
 				{
 					new_chat = LGGContactSets::getInstance()->getFriendColor(getID());
 				}
@@ -3148,7 +3148,7 @@ LLColor4 LLVOAvatar::getNameTagColor(bool is_friend)
 		}
 	}
 	
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), FALSE, TRUE))
+	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(getID(), LGG_CS_TAG))
 	{
 		return LGGContactSets::getInstance()->getFriendColor(getID());
 	}

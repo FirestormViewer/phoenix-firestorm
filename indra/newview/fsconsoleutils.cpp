@@ -274,7 +274,7 @@ void FSConsoleUtils::onProccessInstantMessageNameLookup(const LLUUID& agent_id, 
 	LLColor4 textColor = LLUIColorTable::instance().getColor("AgentChatColor");
 
 	//color based on contact sets prefs
-	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id, TRUE))
+	if (LGGContactSets::getInstance()->hasFriendColorThatShouldShow(agent_id, LGG_CS_CHAT))
 	{
 		textColor = LGGContactSets::getInstance()->getFriendColor(agent_id);
 	}
