@@ -5632,4 +5632,8 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="QP_WL_None">
 		Keiner
 	</string>
+
+	<string name="GroupChatMuteNotice">
+		Ignoriere Gruppenchat von [NAME].
+	</string>
 </strings>

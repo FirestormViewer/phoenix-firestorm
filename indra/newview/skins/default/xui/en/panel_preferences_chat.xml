@@ -613,14 +613,25 @@
             <check_box
              layout="topleft"
              follows="left|top"
-             top_pad="6"
+             top_pad="1"
              left="30"
              width="400"
              height="18"
              name="FSIMChatFlashOnFriendStatusChange"
              control_name="FSIMChatFlashOnFriendStatusChange"
              label="Flash IM tabs when friends come online or go offline"/>
-			 
+
+            <check_box
+             layout="topleft"
+             follows="left|top"
+             top_pad="1"
+             left="30"
+             width="400"
+             height="18"
+             name="FSReportMutedGroupChat"
+             control_name="FSReportMutedGroupChat"
+             label="Report muted group chat in nearby chat"/>
+
             <text
              follows="left|top"
              layout="topleft"

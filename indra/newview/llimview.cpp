@@ -78,6 +78,7 @@
 
 #include "exogroupmutelist.h"
 #include "fsconsoleutils.h"
+#include "fscommon.h"
 
 const static std::string ADHOC_NAME_SUFFIX(" Conference");
 
@@ -2681,6 +2682,13 @@ void LLIMMgr::addMessage(
 		if (exoGroupMuteList::instance().isMuted(new_session_id))
 		{
 			llinfos << "Muting group chat from " << new_session_id.asString() << ": " << fixed_session_name << llendl;
+
+			if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+			{
+				LLStringUtil::format_map_t args;
+				args["NAME"] = fixed_session_name;
+				reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+			}
 			clearPendingInvitation(new_session_id);
 			clearPendingAgentListUpdates(new_session_id);
 			LLIMModel::getInstance()->sendLeaveSession(new_session_id, other_participant_id);
@@ -3724,6 +3732,13 @@ public:
 				if (FSMuteAllGroups || (FSMuteGroupWhenNoticesDisabled && !group_data.mAcceptNotices))
 				{
 					llinfos << "Firestorm: muting group chat: " << group_data.mName << LL_ENDL;
+
+					if (gSavedSettings.getBOOL("FSReportMutedGroupChat"))
+					{
+						LLStringUtil::format_map_t args;
+						args["NAME"] = group_data.mName;
+						reportToNearbyChat(LLTrans::getString("GroupChatMuteNotice", args));
+					}
 					
 					//KC: make sure we leave the group chat at the server end as well
 					std::string aname;

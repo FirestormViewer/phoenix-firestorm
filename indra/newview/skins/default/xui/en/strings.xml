@@ -5064,4 +5064,6 @@ Try enclosing path to the editor with double quotes.
   <string name="QP_WL_Region_Default">Region default</string>
   <string name="QP_WL_Day_Cycle_Based">Day cycle based</string>
   <string name="QP_WL_None">None</string>
+
+  <string name="GroupChatMuteNotice">Muting group chat from [NAME].</string>
 </strings>
