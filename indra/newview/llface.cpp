@@ -1196,6 +1196,21 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 	}
 
 
+	// <FS:ND> The volume face vf can have more indices/vertices than this face. All striders below are aquired with a size of this face, but then written with num_verices/num_indices values,
+	// thus overflowing the buffer when vf holds more data.
+	// We can either clamp num_* down like here, or aquire all striders not using the face size, but the size if vf (that is swapping out mGeomCount with num_vertices and mIndicesCout with num_indices
+	// in all calls to nVertbuffer->get*Strider(...). Final solution is to just return FALSE and be done with it.
+	// 
+	// The correct poison of choice is debatable, either copying not all data of vf (clamping) or writing more data than this face claims to have (aquiring bigger striders). Returning will not display this face at all.
+	//
+	// clamping it is for now.
+
+	num_vertices = llclamp( num_vertices, (S32)0, (S32)mGeomCount );
+	num_indices = llclamp( num_indices, (S32)0, (S32)mIndicesCount );
+
+	// </FS:ND>
+
+
 	//don't use map range (generates many redundant unmap calls)
 	bool map_range = false; //gGLManager.mHasMapBufferRange || gGLManager.mHasFlushBufferRange;
 
@@ -1653,7 +1668,14 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 						if (!do_xform)
 						{
 							LLFastTimer t(FTM_FACE_TEX_QUICK_NO_XFORM);
-							S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
+
+							// <FS:ND> Don't round up, or there's high risk to write past buffer
+
+							// S32 tc_size = (num_vertices*2*sizeof(F32)+0xF) & ~0xF;
+							S32 tc_size = (num_vertices*2*sizeof(F32));
+
+							// </FS:ND>
+
 							LLVector4a::memcpyNonAliased16((F32*) tex_coords.get(), (F32*) vf.mTexCoords, tc_size);
 						}
 						else
