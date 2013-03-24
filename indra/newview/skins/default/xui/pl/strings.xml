@@ -5165,4 +5165,7 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="QP_WL_None">
 		Brak
 	</string>
+	<string name="GroupChatMuteNotice">
+		Wyciszanie czatu grupowego [NAME].
+	</string>
 </strings>
