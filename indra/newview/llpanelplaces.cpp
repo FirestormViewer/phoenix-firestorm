@@ -1209,7 +1209,9 @@ void LLPanelPlaces::updateVerbs()
 			mTeleportBtn->setEnabled(have_3d_pos &&
 									 !LLViewerParcelMgr::getInstance()->inAgentParcel(mPosGlobal));
 		}
-		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
+		// <FS:Ansariel> FIRE-9536: Teleport button disabled if standalone TP history & sidepanel TP history detail
+		//else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE)
+		else if (mPlaceInfoType == LANDMARK_INFO_TYPE || mPlaceInfoType == REMOTE_PLACE_INFO_TYPE || mPlaceInfoType == TELEPORT_HISTORY_INFO_TYPE)
 		{
 			mTeleportBtn->setEnabled(have_3d_pos);
 		}
