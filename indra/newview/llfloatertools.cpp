@@ -599,6 +599,11 @@ void LLFloaterTools::refresh()
 #endif
 	{
 		F32 link_cost  = LLSelectMgr::getInstance()->getSelection()->getSelectedLinksetCost();
+// <FS:CR> FIRE-9287 - LI/Prim count not reflected on OpenSim
+#ifdef OPENSIM
+		S32 prim_count = LLSelectMgr::getInstance()->getSelection()->getObjectCount();
+#endif // OPENSIM
+// </FS:CR>
 		S32 link_count = LLSelectMgr::getInstance()->getSelection()->getRootObjectCount();
 
 		LLCrossParcelFunctor func;
@@ -625,6 +630,13 @@ void LLFloaterTools::refresh()
 
 		LLStringUtil::format_map_t selection_args;
 		selection_args["OBJ_COUNT"] = llformat("%.1d", link_count);
+// <FS:CR> FIRE-9287 - LI/Prim count not reflected on OpenSim
+#ifdef OPENSIM
+		if (LLGridManager::getInstance()->isInOpenSim())
+			selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)prim_count);
+		else
+#endif // OPENSIM
+// </FS:CR>
 		selection_args["LAND_IMPACT"] = llformat("%.1d", (S32)link_cost);
 
 		std::ostringstream selection_info;
