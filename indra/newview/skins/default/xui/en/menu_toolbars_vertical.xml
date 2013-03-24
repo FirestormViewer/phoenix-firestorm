@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <context_menu
+      label="Toolbar"
       layout="topleft"
       name="Toolbars Popup"
       tear_off="true"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<context_menu name="Toolbars Popup">
+<context_menu name="Toolbars Popup" label="Symbolleistenschaltflächen">
 	<menu_item_call label="Diese Schaltfläche entfernen" name="Remove button"/>
 	<menu_item_call label="Symbolleistenschaltflächen..." name="Choose Buttons"/>
 	<menu_item_check label="Linksbündig ausrichten" name="left_aligned"/>
