@@ -1672,6 +1672,18 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 	LLColor4 group_own_below_water_color = 
 						LLUIColorTable::instance().getColor( "NetMapGroupOwnBelowWater" );
 
+// <FS:CR> FIRE-1846: Firestorm netmap enhancements
+	LLColor4 you_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapYouPhysical", LLColor4::red );
+	LLColor4 group_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapGroupPhysical", LLColor4::green );
+	LLColor4 other_own_physical_color = LLUIColorTable::instance().getColor ( "NetMapOtherPhysical", LLColor4::green );
+	LLColor4 scripted_object_color = LLUIColorTable::instance().getColor ( "NetMapScripted", LLColor4::orange );
+	LLColor4 temp_on_rez_object_color = LLUIColorTable::instance().getColor ( "NetMapTempOnRez", LLColor4::orange );
+	static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
+	static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
+	static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
+	static LLCachedControl<U32> fs_netmap_phantom_opacity(gSavedSettings, "FSNetMapPhantomOpacity", 100);
+	const F32 MIN_RADIUS_FOR_ACCENTED_OBJECTS = 2.f;
+// </FS:CR>
 	static LLCachedControl<F32> max_radius(gSavedSettings, "MiniMapPrimMaxRadius");
 	static LLCachedControl<F32> max_zdistance_from_avatar(gSavedSettings, "MiniMapPrimMaxVertDistance");
 
@@ -1746,7 +1758,53 @@ void LLViewerObjectList::renderObjectsForMap(LLNetMap &netmap)
 		{
 			color = below_water_color;
 		}
-
+		
+// <FS:CR> FIRE-1846: Firestorm netmap enhancements
+		if (fs_netmap_scripted && objectp->flagScripted())
+		{
+			color = scripted_object_color;
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (fs_netmap_physical && objectp->flagUsePhysics())
+		{
+			if (objectp->permYouOwner())
+			{
+				color = you_own_physical_color;
+			}
+			else if (objectp->permGroupOwner())
+			{
+				color = group_own_physical_color;
+			}
+			else
+			{
+				color = other_own_physical_color;
+			}
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (fs_netmap_temp_on_rez && objectp->flagTemporaryOnRez())
+		{
+			color = temp_on_rez_object_color;
+			if( approx_radius < MIN_RADIUS_FOR_ACCENTED_OBJECTS )
+			{
+				approx_radius = MIN_RADIUS_FOR_ACCENTED_OBJECTS;
+			}
+		}
+		
+		if (objectp->flagPhantom())
+		{
+			color.setAlpha(llclampb((U32)fs_netmap_phantom_opacity));
+			
+		}
+// </FS:CR>
+		
 		netmap.renderScaledPointGlobal( 
 			pos, 
 			color,

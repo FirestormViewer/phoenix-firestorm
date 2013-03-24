@@ -144,6 +144,36 @@
       <menu_item_check.on_enable
        control="MiniMapPropertyLines" />
     </menu_item_check>
+    <menu_item_check
+     label="Physical Objects"
+     name="Physical Objects">
+      <menu_item_check.on_check
+       function="CheckControl"
+       parameter="FSNetMapPhysical" />
+      <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="FSNetMapPhysical" />
+    </menu_item_check>
+    <menu_item_check
+	 label="Scripted Objects"
+	 name="Scripted Objects">
+      <menu_item_check.on_check
+       function="CheckControl"
+       parameter="FSNetMapScripted" />
+      <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="FSNetMapScripted" />
+    </menu_item_check>
+    <menu_item_check
+     label="Temp On Rez Objects"
+     name="Temp On Rez Objects">
+      <menu_item_check.on_check
+       function="CheckControl"
+       parameter="FSNetMapTempOnRez" />
+      <menu_item_check.on_click
+       function="ToggleControl"
+       parameter="FSNetMapTempOnRez" />
+    </menu_item_check>
     <menu_item_separator />
     <menu_item_check
      label="Terrain Textures"

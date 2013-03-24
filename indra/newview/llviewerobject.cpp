@@ -3127,7 +3127,14 @@ void LLViewerObject::setScale(const LLVector3 &scale, BOOL damped)
 
 	if( (LL_PCODE_VOLUME == getPCode()) && !isDead() )
 	{
-		if (permYouOwner() || (scale.magVecSquared() > (7.5f * 7.5f)) )
+// <FS:CR> FIRE-1846 - Make sure accented objects always show when enabled.
+		//if (permYouOwner() || (scale.magVecSquared() > (7.5f * 7.5f)) )
+		static LLCachedControl<bool> fs_netmap_physical(gSavedSettings, "FSNetMapPhysical", false);
+		static LLCachedControl<bool> fs_netmap_scripted(gSavedSettings, "FSNetMapScripted", false);
+		static LLCachedControl<bool> fs_netmap_temp_on_rez(gSavedSettings, "FSNetMapTempOnRez", false);
+		if (permYouOwner() || (scale.magVecSquared() > (7.5f * 7.5f)) || (fs_netmap_physical && flagUsePhysics())
+			|| (fs_netmap_scripted && flagScripted()) || (fs_netmap_temp_on_rez && flagTemporaryOnRez()) )
+// </FS:CR>
 		{
 			if (!mOnMap)
 			{
