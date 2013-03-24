@@ -3730,7 +3730,9 @@ bool process_login_success_response(U32 &first_sim_size_x, U32 &first_sim_size_y
 	}
 
 	// If MOTD has not been set by fsdata, fallback to LL MOTD
-	if (gAgent.mMOTD.empty())
+// <FS:CR> FIRE-8571, FIRE-9274
+	if (gAgent.mMOTD.empty() || !LLGridManager::getInstance()->isInSLMain())
+// </FS:CR>
 	{
 		gAgent.mMOTD.assign(response["message"]);
 	}
