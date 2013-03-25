@@ -185,7 +185,7 @@ void FSExport::exportSelection()
 	LLSelectNode* node = *iter;
 
 	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_ALL, LLDir::getScrubbedFileName(node->mName + ".oxp")))
+	if(!file_picker.getSaveFile(LLFilePicker::FFSAVE_EXPORT, LLDir::getScrubbedFileName(node->mName + ".oxp")))
 	{
 		return;
 	}
