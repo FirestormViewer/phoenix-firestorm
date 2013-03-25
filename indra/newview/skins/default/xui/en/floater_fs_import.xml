@@ -36,7 +36,7 @@
     </floater.string>
     <floater.string
      name="sound_uploading">
-        Uploading sound [SOUND] of [SOUNDETOTAL].
+        Uploading sound [SOUND] of [SOUNDTOTAL].
     </floater.string>
     <floater.string
      name="animation_uploading">

@@ -20,7 +20,7 @@
 		Przesyłanie tekstury [TEXTURE] a [TEXTURETOTAL].
 	</floater.string>
 	<floater.string name="sound_uploading">
-		Przesyłanie dźwięku [SOUND] z [SOUNDETOTAL].
+		Przesyłanie dźwięku [SOUND] z [SOUNDTOTAL].
 	</floater.string>
 	<floater.string name="animation_uploading">
 		Przesyłanie animacji [ANIMATION] z [ANIMATIONTOTAL].

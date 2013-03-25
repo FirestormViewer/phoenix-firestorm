@@ -17,10 +17,10 @@
 		Import beendet.
 	</floater.string>
 	<floater.string name="texture_uploading">
-		Hochladen von Texture [TEXTURE] von [TEXTURETOTAL].
+		Hochladen von Textur [TEXTURE] von [TEXTURETOTAL].
 	</floater.string>
 	<floater.string name="sound_uploading">
-		Hochladen von Sound [SOUND] von [SOUNDETOTAL].
+		Hochladen von Sound [SOUND] von [SOUNDTOTAL].
 	</floater.string>
 	<floater.string name="animation_uploading">
 		Hochladen von Animation [ANIMATION] von [ANIMATIONTOTAL].
