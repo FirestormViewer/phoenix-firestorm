@@ -557,7 +557,7 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 			wcsncpy( mFilesW,L"untitled.oxp", FILENAME_BUFFER_SIZE);
 		}
 		mOFN.lpstrDefExt = L"oxp";
-		mOFN.lpstrfilter = L"OXP Backup Files (*.oxp)\0*.oxp\0" L"\0";
+		mOFN.lpstrFilter = L"OXP Backup Files (*.oxp)\0*.oxp\0" L"\0";
 		break;
 // </FS:CR>
 	default:
