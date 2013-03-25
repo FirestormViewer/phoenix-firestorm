@@ -18,6 +18,8 @@
 			<pie_slice label="Skript-Info" name="ScriptInfo"/>
             <pie_slice label="Anrufen" name="Call"/>
             <pie_slice label="Hineinzoomen" name="Zoom In"/>
+            <pie_slice label="Tex Refresh" name="Texture Refresh"/>
+            <pie_slice label="Exportieren" name="Export"/>
         </pie_menu>
         <pie_slice label="Untersuchen" name="Avatar Inspect"/>
 		<pie_menu name="DerenderMenu" label="N. anzeigen &gt;">
