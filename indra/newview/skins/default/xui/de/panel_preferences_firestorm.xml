@@ -203,15 +203,22 @@
 
 	<!--Build-->
 	<panel label="Bauen" name="BuildTab">
-		<text name="text_box_objprams">
-			Standard-Objektparameter
+		<text name="text_box_objprams" left="10">
+			Standard-Objektgröße
 		</text>
-		<spinner label="X-Größe" name="X size" label_width="50" width="130"/>
-		<spinner label="Y-Größe" name="Y size" label_width="50" width="130"/>
-		<spinner label="Z-Größe" name="Z size" label_width="50" width="130"/>
-		<text name="text_box_objmaterial">
-			Material:
+		<text left="170" name="text_box_objprams2">
+			Einstellungen
 		</text>
+		<text left="370" name="text_box_objprams3">
+			Textur
+		</text>
+        <view_border name="TextureBorder" width="270"/>
+		<spinner label="X-Größe" name="X size" label_width="50" width="120"/>
+		<spinner label="Y-Größe" name="Y size" label_width="50" width="120"/>
+		<spinner label="Z-Größe" name="Z size" label_width="50" width="120"/>
+		<check_box label="Phantom" name="FSBuildPrefs_PhantomToggle"/>
+		<check_box label="Physikalisch" name="FSBuildPrefs_PhysicalToggle"/>
+		<check_box label="Temporär" name="FSBuildPrefs_TemporaryToggle"/>
 		<combo_box name="material">
 			<combo_item name="Stone" label="Stein"/>
 			<combo_item name="Metal" label="Metall"/>
@@ -221,20 +228,52 @@
 			<combo_item name="Plastic" label="Plastik"/>
 			<combo_item name="Rubber" label="Gummi"/>
 		</combo_box>
-
+		<texture_picker label="Textur" name="texture control" tool_tip="Anklicken, um eine Textur auszuwählen"/>
+		<color_swatch label="Farbe" name="colorswatch" tool_tip="Anklicken, um die Farbauswahl zu öffnen"/>
+		<spinner label="Alpha" label_width="60" name="alpha" width="110" />
+		<spinner label="Leuchten" label_width="60" name="glow" width="110"/>
+		<check_box label="Ganz hell" name="EmFBToggle"/>
+		<combo_box name="combobox shininess" tool_tip="Legt fest, wie stark das Objekt glänzt">
+			<combo_item name="None" label="Kein"/>
+			<combo_item name="Low" label="Niedrid"/>
+			<combo_item name="Medium" label="Mittel"/>
+			<combo_item name="High" label="Hoch"/>
+        </combo_box>
+		<check_box name="FSBuildPrefs_EmbedItem" label="Objekt zu neuem Prim hinzufügen"/>
+		<text name="Give inventory" tool_tip="Gegenstand aus Inventar hier ablegen">
+			Gegenstand aus Inventar hier ablegen
+		</text>
+		<text name="build_item_add_disp_rect_txt">
+			Aktuell gesetzt: ITEM
+        </text>
+		<text name="text_box_permissions">
+			Berechtigungen
+		</text>
+		<text name="text_box_permnextowner">
+			Nächster Besitzer:
+		</text>
+		<check_box label="Kopieren" tool_tip="Berechtigung zum Kopieren" name="next_owner_copy"/>
+		<check_box label="Bearbeiten" tool_tip="Berechtigung zum Bearbeeiten" name="next_owner_modify"/>
+		<check_box label="Transferieren" tool_tip="Berechtigung zum Transferieren" name="next_owner_transfer"/>
+		<text name="text_box_permnote1">
+			Werden auch für neue
+		</text>
+		<text name="text_box_permnote2">
+			Uploads verwendet.
+		</text>
 		<text name="text_box_pivotpoint">
 			Drehpunkt
 		</text>
-		<view_border name="PivotBorder" width="240"/>
-		<check_box label="Achsen-Pfeile am Wurzel-Prim anzeigen" tool_tip="Standardverhalten ist, die Achse am Massenzentrum eines Linksets anzuzeigen. Aktivieren, um die Achse am Wurzel-Prim anzuzeigen." name="EmBuildPrefsActualRoot_toggle"/>
-		<spinner label="X-Position" name="X pos" label_width="60" width="140"/>
-		<spinner label="Y-Position" name="Y pos" label_width="60" width="140"/>
-		<spinner label="Z-Position" name="Z pos" label_width="60" width="140"/>
-		<check_box label="Werte sind Prozentangaben" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="EmPivotPercToggle"/>
-		<check_box label="Hervorhebung ausgewählte Primitive aktivieren" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="EmBuildPrefsRenderHighlight_toggle" top="150"/>
+		<view_border name="PivotBorder" width="145"/>
+		<check_box label="Pfeilachsen an Wurzel" tool_tip="Standardverhalten ist, die Achse am Massenzentrum eines Linksets anzuzeigen. Aktivieren, um die Achse am Wurzel-Prim anzuzeigen." name="FSBuildPrefsActualRoot_toggle"/>
+		<spinner label="X-Position" name="X pos" label_width="60" width="135"/>
+		<spinner label="Y-Position" name="Y pos" label_width="60" width="135"/>
+		<spinner label="Z-Position" name="Z pos" label_width="60" width="135"/>
+		<check_box label="Werte sind in Prozent" tool_tip="Standardwerte sind Prozentangaben mit einem Wert von 50 für jede Achse" name="FSPivotPercToggle"/>
+		<check_box label="Ausgewählte Primitive hervorheben" tool_tip="Deaktivieren, um die gelben und blauen Grundrisse nicht anzuzeigen. Verbessert die Performanz, wenn eine Vielzahl an Primitiven ausgewählt wird." name="FSBuildPrefsRenderHighlight_toggle"/>
 		<check_box label="Strg+Maus zum Greifen und Manipulieren von Objekten verwenden" tool_tip="Falls aktiviert, können Objekte durch Bewegen der Maus bei gleichzeitig gedrückter Strg-Taste gegriffen und bewegt werden." name="FSEnableGrab"/>
 		<check_box label="Aktiviere Klicken-Ziehen od. Klicken-Skalieren (mit Caps Lock) einer Texturfläche beim Bauen" tool_tip="Falls aktiviert, wird Klicken-Ziehen oder Klicken-Skalieren (mit Caps Lock) einer Texturfläche im Baumodus aktiviert. Dieses ist eine experimentelle Funktion und sollte mit Vorsicht benutzt werden." name="FSExperimentalDragTexture"/>
-		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; aktivieren" tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
+		<check_box label="Altes Verhalten für &quot;Zum Verkauf:&quot; akt." tool_tip="Falls aktiviert wird die Änderung direkt gespeichert und es ist keine Bestätigung notwendig." name="FSCommitForSaleOnChange_toggle"/>
 		<check_box label="Vom Inventar aus bearbeitete Skripte als Mono speichern" tool_tip="Speichert Skripte, die direkt vom Inventar aus bearbeitet werden, als Mono anstatt LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 		<check_box label="LSL-Präprozessor aktivieren" tool_tip="Aktiviert die Präprozessorunterstützung für LSL-Skripte" name="preproc_checkbox"/>
 		<check_box label="Skript-Optimierer" tool_tip="Optimiert den von Skripten benötigten Platz auf Kosten der Lesbarkeit." name="preprocoptimizer_checkbox"/>
