@@ -2056,6 +2056,13 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(0);
+
+			// <FS:ND> protect against buffer overflows
+			if( count == -1 )
+				count = vbo.getNumIndices()-index;
+			strider.setCount( count );
+			// <FS:ND>
+
 			return true;
 		}
 		else if (vbo.hasDataType(type))
@@ -2072,6 +2079,13 @@ template <class T,S32 type> struct VertexBufferStrider
 
 			strider = (T*)ptr;
 			strider.setStride(stride);
+
+			// <FS:ND> protect against buffer overflows
+			if( count == -1 )
+				count = vbo.getNumVerts()-index;
+			strider.setCount( count );
+			// <FS:ND>
+
 			return true;
 		}
 		else

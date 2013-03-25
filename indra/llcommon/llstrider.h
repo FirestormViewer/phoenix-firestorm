@@ -38,10 +38,10 @@ template <class Object> class LLStrider
 	U32     mSkip;
 public:
 
-	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); } 
+	LLStrider()  { mObjectp = NULL; mSkip = sizeof(Object); mBufferEnd = 0; } 
 	~LLStrider() { } 
 
-	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; return *this;}
+	const LLStrider<Object>& operator =  (Object *first)    { mObjectp = first; mBufferEnd = 0; return *this;}
 	void setStride (S32 skipBytes)	{ mSkip = (skipBytes ? skipBytes : sizeof(Object));}
 
 	LLStrider<Object> operator+(const S32& index) 
@@ -49,19 +49,102 @@ public:
 		LLStrider<Object> ret;
 		ret.mBytep = mBytep + mSkip*index;
 		ret.mSkip = mSkip;
+		ret.mBufferEnd = mBufferEnd;
 
 		return ret;
 	}
 
-	void skip(const U32 index)     { mBytep += mSkip*index;}
-	U32 getSkip() const			   { return mSkip; }
-	Object* get()                  { return mObjectp; }
-	Object* operator->()           { return mObjectp; }
-	Object& operator *()           { return *mObjectp; }
-	Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
-	Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
+    void skip(const U32 index)     { mBytep += mSkip*index;}
+    U32 getSkip() const            { return mSkip; }
 
-	Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
+	// <FS:ND> protect against buffer overflows
+
+    // Object* get()                  { return mObjectp; }
+    // Object* operator->()           { return mObjectp; }
+    // Object& operator *()           { return *mObjectp; }
+    // Object* operator ++(int)       { Object* old = mObjectp; mBytep += mSkip; return old; }
+    // Object* operator +=(int i)     { mBytep += mSkip*i; return mObjectp; }
+
+    // Object& operator[](U32 index)  { return *(Object*)(mBytep + (mSkip * index)); }
+
+	Object* get()
+	{
+		if( !assertValid( mBytep ) )
+			return &mDummy;
+
+		return mObjectp;
+	}
+
+	Object* operator->()
+	{
+		if( !assertValid( mBytep ) )
+			return &mDummy;
+
+		return mObjectp;
+	}
+
+	Object& operator *()
+	{
+		if( !assertValid( mBytep ) )
+			return mDummy;
+
+		return *mObjectp;
+	}
+
+	Object* operator ++(int)
+	{
+		Object* old = mObjectp;
+		mBytep += mSkip;
+
+		if( !assertValid( (U8*)old ) )
+			return &mDummy;
+
+		return old;
+	}
+
+	Object* operator +=(int i)
+	{
+		mBytep += mSkip*i;
+		assertValid( mBytep );
+		return mObjectp;
+	}
+
+	Object& operator[](U32 index)
+	{
+		if( !assertValid( mBytep + mSkip*index ) )
+			return mDummy;
+
+		return *(Object*)(mBytep + (mSkip * index));
+	}
+
+	void setCount( U32 aCount )
+	{
+		mBufferEnd = mBytep + mSkip*aCount;
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+		mCount = aCount;
+#endif
+	}
+
+	bool assertValid( U8 const *aBuffer )
+	{
+		if( !aBuffer || !mBufferEnd )
+			return true;
+		if( aBuffer < mBufferEnd )
+			return true;
+
+		llerrs << "Vertex buffer access beyond end of VBO" << llendl;
+		return false;
+	}
+
+private:
+	U8 *mBufferEnd;
+
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG
+	U32 mCount;
+#endif
+
+	Object mDummy;
+	// <FS:ND>
 };
 
 #endif // LL_LLSTRIDER_H
