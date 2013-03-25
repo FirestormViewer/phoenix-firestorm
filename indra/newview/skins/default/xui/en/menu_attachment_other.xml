@@ -171,4 +171,12 @@
   <menu_item_call.on_click
        function="Object.TexRefresh" />
     </menu_item_call>
+    <menu_item_call
+     label="Export"
+     name="Export">
+        <menu_item_call.on_click
+         function="Object.Export" />
+        <menu_item_call.on_enable
+         function="Object.EnableExport" />
+    </menu_item_call>
 </context_menu>
