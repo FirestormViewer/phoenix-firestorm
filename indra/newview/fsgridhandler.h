@@ -29,7 +29,6 @@
 #ifndef FS_GRIDHANDLER_H
 #define FS_GRIDHANDLER_H
 
-#include "llsingleton.h"
 #include "llxmlnode.h"
 
 #include <boost/function.hpp>
