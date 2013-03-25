@@ -7128,6 +7128,7 @@ bool update_grid_help()
 	}
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
 	gMenuHolder->childSetVisible("Avatar Phantom", LLGridManager::getInstance()->isInOpenSim());	// <FS:CR> Phantom mode still works on opensim, so allow it there
+	gMenuHolder->childSetEnabled("Avatar Phantom", LLGridManager::getInstance()->isInOpenSim());	// <FS:CR> Phantom mode still works on opensim, so allow it there
 #endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 
