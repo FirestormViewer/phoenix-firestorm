@@ -44,5 +44,6 @@
 	<menu_item_call label="Weź kopię" name="Take Copy"/>
 	<menu_item_call label="Zapłać" name="Pay..."/>
 	<menu_item_call label="Kup" name="Buy..."/>
+	<menu_item_call label="Eksportuj" name="Export"/>
 	<menu_item_call label="Skasuj" name="Delete"/>
 </context_menu>

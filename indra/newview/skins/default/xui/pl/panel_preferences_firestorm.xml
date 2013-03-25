@@ -181,14 +181,20 @@
     </panel>
     <panel label="Budowanie" name="BuildTab">
         <text name="text_box_objprams">
-         Domyślne parametry obiektów
-         </text>
+         Domyślny rozmiar
+        </text>
+        <text name="text_box_objprams2">
+         Właściwości
+        </text>
+        <text name="text_box_objprams3">
+         Tekstura
+        </text>
         <spinner label="Roz. X" name="X size" />
         <spinner label="Roz. Y" name="Y size" />
         <spinner label="Roz. Z" name="Z size" />
-        <text name="text_box_objmaterial">
-         Materiał:
-         </text>
+        <check_box label="Widmowy" name="FSBuildPrefs_PhantomToggle"/>
+        <check_box label="Fizyczny" name="FSBuildPrefs_PhysicalToggle"/>
+        <check_box label="Tymczasowy" name="FSBuildPrefs_TemporaryToggle"/>
         <combo_box name="material">
              <combo_item name="Stone" label="Kamień"/>
              <combo_item name="Glass" label="Szkło"/>
@@ -197,19 +203,52 @@
              <combo_item name="Plastic" label="Plastik"/>
              <combo_item name="Rubber" label="Guma"/>
         </combo_box>
+        <texture_picker label="Tekstura" name="texture control" tool_tip="Kliknij, aby wybrać obraz"/>
+        <color_swatch label="Kolor" name="colorswatch" tool_tip="Kliknij, aby wybrać kolor"/>
+        <spinner label="Przezr." name="alpha"/>
+        <spinner label="Blask" name="glow"/>
+        <check_box label="Pełna jasność" name="EmFBToggle"/>
+        <combo_box name="combobox shininess" tool_tip="Określ, jak mocny połysk ma mieć obiekt">
+          <combo_item name="None" label="Żadny"/>
+          <combo_item name="Low" label="Niski"/>
+          <combo_item name="Medium" label="Średni"/>
+          <combo_item name="High" label="Wysoki"/>
+        </combo_box>
+        <check_box name="FSBuildPrefs_EmbedItem" label="Umieszczaj obiekt w nowych primach"/>
+        <text name="Give inventory" tool_tip="Upuść przedmiot w tym miejscu.">
+         Upuść przedmiot w tym miejscu.
+        </text>
+        <text name="build_item_add_disp_rect_txt">
+         Obecnie ustawiono na: ITEM
+        </text>
+        <text name="text_box_permissions">
+          Zezwolenia
+        </text>
+        <text name="text_box_permnextowner">
+          Nast. właściciel:
+        </text>
+        <check_box label="Kopiowanie" tool_tip="Zezwolenie na kopiowanie" name="next_owner_copy"/>
+        <check_box label="Modyfikowanie" tool_tip="Zezwolenie na modyfikowanie" name="next_owner_modify"/>
+        <check_box label="Transferowanie" tool_tip="Zezwolenie na transferowanie" name="next_owner_transfer"/>
+        <text name="text_box_permnote1">
+		  To się także odnosi
+        </text>
+        <text name="text_box_permnote2">
+          do nowych importów.
+        </text>
         <text name="text_box_pivotpoint">
           Punkt obracania osi
         </text>
-        <check_box label="Pokaż strzałkę osi na pozycji gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="EmBuildPrefsActualRoot_toggle" />
+        <check_box label="Oś na poz. gł. primy" tool_tip="Domyślne zachowanie to pokazywanie osi na środku masy zbioru części. Gdy włączysz tą opcję, to będzie ona pokazywana zamiast tego na głównej primie." name="FSBuildPrefsActualRoot_toggle" />
         <spinner label="Poz. X" name="X pos" />
         <spinner label="Poz. Y" name="Y pos" />
         <spinner label="Poz. Z" name="Z pos" />
-        <check_box label="Wartości w procentach" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="EmPivotPercToggle" />
-        <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="EmBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Wart. procentowo" tool_tip="Domyślne ustawienie jako procenty, a każda oś na 50" name="FSPivotPercToggle" />
+        <check_box label="Podświetlanie wybranych primów" tool_tip="Gdy odznaczysz tą opcję, to żółte/niebieskie podświetlenia krawędzi nie są renderowane - zwiększa wydajność, gdy zaznaczonych jest wiele primów." name="FSBuildPrefsRenderHighlight_toggle" />
+        <check_box label="Stare zachowanie &quot;Ustaw na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapsisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
+        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Używaj CTRL+myszki, aby chwytać obiekty i manipulować nimi" tool_tip="Gdy zaznaczysz tą opcję, to będziesz w stanie chwytać i przesuwać obiekty za pomocą myszki oraz klawisza CTRL." name="FSEnableGrab" />
         <check_box label="Przesuwaj / skaluj tekstury budując, gdy trzymany jest przycisk myszy oraz klawisz caps-lock" tool_tip="Gdy zaznaczysz tą opcję, to będziesz mógł/mogła przesuwać lub skalować strony tekstur trzymając przycisk myszy (wraz z klawiszem caps-lock) w trybie budowania. Ta funkcja jest eksperymentalna i powinna być używana ostrożnie." name="FSExperimentalDragTexture" />
-        <check_box label="Użyj starego zachowania &quot;Ustaw obiekt na sprzedaż&quot;" tool_tip="Gdy zaznaczone, to informacja o tym, że obiekt jest na sprzedaż zapsisywana jest już po zmianie, nie wymagając potwierdzenia." name="FSCommitForSaleOnChange_toggle" />
-        <check_box label="Zapisuj skrypty edytowane w Szafie jako Mono" tool_tip="Gdy zaznaczone, to wszystkie skrypty edytowane w Szafie są zapisywane jako Mono zamiast LSL." name="FSSaveInventoryScriptsAsMono_toggle" />
         <check_box label="Włącz preprocesor LSL" tool_tip="Preprocesor LSL będzie aktywny, gdy ta opcja zostanie zaznaczona." name="preproc_checkbox" />
         <check_box label="Optymalizator" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor będzie LSL optymalizować miejsce zajmowane przez skrypty kosztem ich czytelności." name="preprocoptimizer_checkbox" />
         <check_box label="Instrukcja switch()" tool_tip="Gdy ta opcja zostanie zaznaczona, to preprocesor LSL pozwoli na korzystanie z instrukcji switch() do sterowania przepływem skryptu." name="preprocswitch_checkbox" />
