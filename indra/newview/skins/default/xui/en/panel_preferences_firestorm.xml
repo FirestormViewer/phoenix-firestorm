@@ -1640,10 +1640,10 @@
          tool_tip="Set the amount of shine for the object"
          width="90"
          control_name="FSBuildPrefs_Shiny">
-          <combo_item name="None" value="None">None</combo_item>
-          <combo_item name="Low" value="Low">Low</combo_item>
-          <combo_item name="Medium" value="Medium">Medium</combo_item>
-          <combo_item name="High" value="High">High</combo_item>
+          <combo_item name="None" value="None" label="None"/>
+          <combo_item name="Low" value="Low" label="Low"/>
+          <combo_item name="Medium" value="Medium" label="Medium"/>
+          <combo_item name="High" value="High" label="High"/>
         </combo_box>
 <!--
 TODO: add the code to enable drag and drop support for items
