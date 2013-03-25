@@ -462,12 +462,16 @@ int apr_file_lock( FILE *aFile, int aLock )
 #endif
 }
 
-int apr_file_read( FILE *aFile, void *aBuffer, U32 *aLen )
+int apr_file_read( FILE *aFile, void *aBuffer, apr_size_t *aLen )
 {
+	if( aLen )
+		*aLen = 0;
+
 	U32 nRead = fread( aBuffer, 1, *aLen, aFile );
 	if( 0 == nRead )
 		return APR_OS_START_SYSERR + ferror( aFile );
 
-	*aLen = nRead;
+	if( aLen )
+		*aLen = nRead;
 	return APR_SUCCESS;
 }

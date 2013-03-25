@@ -103,7 +103,7 @@ int LL_COMMON_API apr_file_printf( FILE*, char const*, ... );
 int LL_COMMON_API apr_file_eof( FILE* );
 int LL_COMMON_API apr_file_gets( char*, U32, FILE* );
 int LL_COMMON_API apr_file_lock( FILE*, int );
-int LL_COMMON_API apr_file_read( FILE*, void*, U32* );
+int LL_COMMON_API apr_file_read( FILE*, void*, apr_size_t* );
 
 namespace nd
 {
