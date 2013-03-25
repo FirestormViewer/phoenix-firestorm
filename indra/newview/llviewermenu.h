@@ -160,6 +160,10 @@ void handle_export_selected( void * );
 U32 render_type_from_string(std::string render_type);
 U32 feature_from_string(std::string feature);
 U32 info_display_from_string(std::string info_display);
+// <FS:Techwolf Lupindo> export
+bool enable_object_export();
+// </FS:Techwolf Lupindo>
+
 
 class LLViewerMenuHolderGL : public LLMenuHolderGL
 {

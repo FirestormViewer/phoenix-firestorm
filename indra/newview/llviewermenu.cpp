@@ -130,6 +130,7 @@
 // [/RLVa:KB]
 #include "fslslbridge.h"
 #include "fscommon.h"
+#include "fsexport.h"
 #include "fscontactsfloater.h"	// <FS:Zi> Display group list in contacts floater
 #include "fspose.h"	// <FS:CR> FIRE-4345: Undeform
 #include "fswsassetblacklist.h"
@@ -9842,6 +9843,22 @@ void toggleTeleportHistory()
 }
 // </FS:Ansariel> Toggle teleport history panel directly
 
+// <FS:Techwolf Lupindo> export
+BOOL enable_export_object()
+{
+	return LLSelectMgr::getInstance()->selectGetAllValid();
+}
+
+class FSObjectExport : public view_listener_t
+{
+	bool handleEvent( const LLSD& userdata)
+	{
+		FSExport::getInstance()->exportSelection();
+		return true;
+	}
+};
+// </FS:Techwolf Lupindo>
+
 // <FS:Zi> Make sure to call this before any of the UI is set up, so all text editors can
 //         pick up the menu properly.
 void initialize_edit_menu()
@@ -10411,4 +10428,9 @@ void initialize_menus()
 	// <FS:CR> Stream list import/export
 	view_listener_t::addMenu(new FSStreamListExportXML(), "Streamlist.xml_export");
 	view_listener_t::addMenu(new FSStreamListImportXML(), "Streamlist.xml_import");
+
+	// <FS:Techwolf Lupindo> export
+	view_listener_t::addMenu(new FSObjectExport(), "Object.Export");
+	enable.add("Object.EnableExport", boost::bind(&enable_export_object));
+	// </FS:Techwolf Lupindo>
 }

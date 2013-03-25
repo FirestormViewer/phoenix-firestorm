@@ -48,6 +48,8 @@
 							 <string>Avatar</string>							
 						-->
 						     <string>parseFile</string>
+						     <string>import</string>
+						     <string>export</string>
 						</array>
 				</map>
       </array>

@@ -496,6 +496,10 @@ public:
 	inline BOOL		flagCameraSource() const		{ return ((mFlags & FLAGS_CAMERA_SOURCE) != 0); }
 	inline BOOL		flagCameraDecoupled() const		{ return ((mFlags & FLAGS_CAMERA_DECOUPLED) != 0); }
 
+	// <FS:Techwolf Lupindo> prim export
+	U32 getFlags() { return mFlags; }
+	// <FS:Techwolf Lupindo>
+	
 	U8       getPhysicsShapeType() const;
 	inline F32      getPhysicsGravity() const       { return mPhysicsGravity; }
 	inline F32      getPhysicsFriction() const      { return mPhysicsFriction; }
@@ -680,7 +684,10 @@ protected:
 	void setParticleSource(const LLPartSysData& particle_parameters, const LLUUID& owner_id);
 	
 public:
-		
+	// <FS:Techwolf Lupindo> export
+	LLViewerPartSourceScript* getPartSourceScript() { return mPartSourcep.get(); }
+	bool getPhysicsShapeUnknown () { return mPhysicsShapeUnknown; }
+	// </FS:Techwolf Lupindo>
 private:
 	void setNameValueList(const std::string& list);		// clears nv pairs and then individually adds \n separated NV pairs from \0 terminated string
 	void deleteTEImages(); // correctly deletes list of images

@@ -30,6 +30,7 @@
 
 #include "llchat.h"
 #include "llpanelpeople.h"
+#include "llviewerobject.h"
 
 const F32 AVATAR_UNKNOWN_Z_OFFSET = -1.f; // Const value for avatars at unknown height
 const F32 AVATAR_UNKNOWN_RANGE = -1.f;
@@ -65,6 +66,9 @@ namespace FSCommon
 	* @return Number of seconds since 01/01/1970 UTC.
 	*/
 	S32 secondsSinceEpochFromString(const std::string& format, const std::string& str);
+	
+	// apply default build preferences to the object
+	void applyDefaultBuildPreferences(LLViewerObject* object);
 };
 
 #endif // FS_COMMON_H

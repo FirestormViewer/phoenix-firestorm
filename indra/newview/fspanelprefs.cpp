@@ -13,6 +13,8 @@
 #include "llvoavatarself.h"
 #include "llspinctrl.h"
 #include "lldiriterator.h"	// <FS:CR> for populating the cloud combo
+#include "lltexturectrl.h"
+#include "llinventorymodel.h"
 
 static LLRegisterPanelClassWrapper<PanelPreferenceFirestorm> t_pref_fs("panel_preference_firestorm");
 
@@ -43,6 +45,8 @@ BOOL PanelPreferenceFirestorm::postBuild()
 	refreshTagCombos();
 
 	populateCloudCombo();
+	
+	getChild<LLTextureCtrl>("texture control")->setCommitCallback(boost::bind(&PanelPreferenceFirestorm::onCommitTexture, this, _2));
 
 	return LLPanelPreference::postBuild();	
 }
@@ -260,3 +264,31 @@ void PanelPreferenceFirestorm::populateCloudCombo()
 		cloud_combo->setSimple(gSavedSettings.getString("FSCloudTexture"));
 	}
 }
+
+void PanelPreferenceFirestorm::onCommitTexture(const LLSD& data)
+{
+	LLTextureCtrl* texture_ctrl = getChild<LLTextureCtrl>("texture control");
+	if(!texture_ctrl) return;
+	if( !texture_ctrl->getTentative() )
+	{
+		// we grab the item id first, because we want to do a
+		// permissions check
+		LLUUID id = texture_ctrl->getImageItemID();
+		if(id.isNull())
+		{
+			id = texture_ctrl->getImageAssetID();
+		}
+		
+		// Texture picker defaults aren't inventory items
+		// * Don't need to worry about permissions for them
+		LLViewerInventoryItem* item = gInventory.getItem(id);
+		if(item && !item->getPermissions().allowOperationBy(PERM_COPY, gAgent.getID()))
+		{
+			// Do not have permission to copy the texture.
+			return;
+		}
+
+		gSavedSettings.setString("DefaultObjectTexture", texture_ctrl->getImageAssetID().asString());
+	}
+}
+

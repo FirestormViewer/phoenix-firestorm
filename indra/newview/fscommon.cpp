@@ -28,10 +28,14 @@
 #include "llviewerprecompiledheaders.h"
 
 #include "fscommon.h"
-
+#include "llagent.h"
 #include "llfloatersidepanelcontainer.h"
 #include "llnotificationmanager.h"
+#include "llinventorymodel.h"
 #include "llpanel.h"
+#include "lltooldraganddrop.h"
+#include "llviewerinventory.h"
+#include "llviewerregion.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -138,3 +142,100 @@ S32 FSCommon::secondsSinceEpochFromString(const std::string& format, const std::
 	time_duration diff = time_t_date - time_t_epoch;
 	return diff.total_seconds();
 }
+
+void FSCommon::applyDefaultBuildPreferences(LLViewerObject* object)
+{
+	if (!object)
+	{
+		return;
+	}
+  
+	LLTextureEntry texture_entry;
+	texture_entry.setID(LLUUID(gSavedSettings.getString("DefaultObjectTexture")));
+	texture_entry.setColor(gSavedSettings.getColor4("FSBuildPrefs_Color"));
+	texture_entry.setAlpha((100.f - gSavedSettings.getF32("FSBuildPrefs_Alpha")) / 100.f);
+	texture_entry.setGlow(gSavedSettings.getF32("FSBuildPrefs_Glow"));
+	if(gSavedSettings.getBOOL("FSBuildPrefs_FullBright"))
+	{
+		texture_entry.setFullbright(TEM_FULLBRIGHT_MASK);
+	}
+	
+	U8 shiny = 0; // Default none
+	std::string shininess = gSavedSettings.getString("FSBuildPrefs_Shiny");
+	if(shininess == "Low")
+	{
+		shiny = 1;
+	}
+	else if(shininess == "Medium")
+	{
+		shiny = 2;
+	}
+	else if(shininess == "High")
+	{
+		shiny = 3;
+	}
+	texture_entry.setShiny(shiny);
+	
+	for(U8 face = 0; face < object->getNumTEs(); face++)
+	{
+		object->setTE(face, texture_entry);
+	}
+	object->sendTEUpdate();
+	
+	if(gSavedSettings.getBOOL("FSBuildPrefs_EmbedItem"))
+	{
+		LLViewerInventoryItem* item = (LLViewerInventoryItem*)gInventory.getItem((LLUUID)gSavedSettings.getString("FSBuildPrefs_Item"));
+		if(item)
+		{
+			if (item->getType() == LLAssetType::AT_LSL_TEXT)
+			{
+				
+				LLToolDragAndDrop::dropScript(object, item, TRUE,
+							      LLToolDragAndDrop::SOURCE_AGENT,
+							      gAgentID);
+			}
+			else
+			{
+				LLToolDragAndDrop::dropInventory(object, item,
+								LLToolDragAndDrop::SOURCE_AGENT,
+								gAgentID);
+			}
+		}
+	}
+	
+	U32 object_local_id = object->getLocalID();
+	gMessageSystem->newMessageFast(_PREHASH_ObjectPermissions);
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID());
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->nextBlockFast(_PREHASH_HeaderData);
+	gMessageSystem->addBOOLFast(_PREHASH_Override, (BOOL)FALSE);
+	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
+	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
+	gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
+	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerCopy"));
+	gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_MODIFY);
+	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
+	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
+	gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
+	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerModify"));
+	gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_COPY);
+	gMessageSystem->nextBlockFast(_PREHASH_ObjectData);
+	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
+	gMessageSystem->addU8Fast(_PREHASH_Field, PERM_NEXT_OWNER);
+	gMessageSystem->addBOOLFast(_PREHASH_Set, gSavedSettings.getBOOL("NextOwnerTransfer"));
+	gMessageSystem->addU32Fast(_PREHASH_Mask, PERM_TRANSFER);
+	gMessageSystem->sendReliable(object->getRegion()->getHost());
+
+	gMessageSystem->newMessage(_PREHASH_ObjectFlagUpdate);
+	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
+	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgent.getID() );
+	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgent.getSessionID());
+	gMessageSystem->addU32Fast(_PREHASH_ObjectLocalID, object_local_id);
+	gMessageSystem->addBOOLFast(_PREHASH_UsePhysics, gSavedSettings.getBOOL("FSBuildPrefs_Physical"));
+	gMessageSystem->addBOOL(_PREHASH_IsTemporary, gSavedSettings.getBOOL("FSBuildPrefs_Temporary"));
+	gMessageSystem->addBOOL(_PREHASH_IsPhantom, gSavedSettings.getBOOL("FSBuildPrefs_Phantom"));
+	gMessageSystem->addBOOL("CastsShadows", FALSE );
+	gMessageSystem->sendReliable(object->getRegion()->getHost());
+}
+

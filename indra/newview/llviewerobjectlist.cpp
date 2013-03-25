@@ -77,6 +77,9 @@
 
 #include "llappviewer.h"
 #include "fswsassetblacklist.h"
+#include "fsfloaterimport.h"
+#include "fscommon.h"
+#include "llfloaterreg.h"
 
 extern F32 gMinObjectDistance;
 extern BOOL gAnimateTextures;
@@ -256,20 +259,33 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 	// (from gPipeline.addObject)
 	// so that the drawable parent is set properly
 	findOrphans(objectp, msg->getSenderIP(), msg->getSenderPort());
-	
+
 	// If we're just wandering around, don't create new objects selected.
 	if (just_created 
 		&& update_type != OUT_TERSE_IMPROVED 
 		&& objectp->mCreateSelected)
 	{
-		if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
+		// <FS:Techwolf Lupindo> import support
+		bool import_handled = false;
+		FSFloaterImport* floater_import = LLFloaterReg::getTypedInstance<FSFloaterImport>("fs_import");
+		if( floater_import )
 		{
-			// llinfos << "DEBUG selecting " << objectp->mID << " " 
-			// << objectp->mLocalID << llendl;
-			LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
-			dialog_refresh_all();
+			import_handled = floater_import->processPrimCreated(objectp);
 		}
+		if (!import_handled)
+		{
+			// apply new object created preferences
+			FSCommon::applyDefaultBuildPreferences(objectp);
 
+			if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
+			{
+				// llinfos << "DEBUG selecting " << objectp->mID << " " 
+				// << objectp->mLocalID << llendl;
+				LLSelectMgr::getInstance()->selectObjectAndFamily(objectp);
+				dialog_refresh_all();
+			}
+		}
+		// <FS:Techwolf Lupindo>
 		objectp->mCreateSelected = false;
 		gViewerWindow->getWindow()->decBusyCount();
 		gViewerWindow->setCursor( UI_CURSOR_ARROW );

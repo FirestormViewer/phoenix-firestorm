@@ -125,8 +125,10 @@ set(viewer_SOURCE_FILES
     fsconsoleutils.cpp
     fscontactsfloater.cpp
     fsdata.cpp
+    fsexport.cpp
     fsfloaterblocklist.cpp
     fsfloatergroup.cpp
+    fsfloaterimport.cpp
     fsfloaterim.cpp
     fsfloaterimcontainer.cpp
     fsfloaternearbychat.cpp
@@ -784,8 +786,10 @@ set(viewer_HEADER_FILES
     fsconsoleutils.h
     fscontactsfloater.h
     fsdata.h
+    fsexport.h
     fsfloaterblocklist.h
     fsfloatergroup.h
+    fsfloaterimport.h
     fsfloaterim.h
     fsfloaterimcontainer.h
     fsfloaternearbychat.h

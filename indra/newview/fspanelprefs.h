@@ -26,6 +26,8 @@ public:
 	void refreshTagCombos();
 	void applyTagCombos();
 	void populateCloudCombo();
+	
+	void onCommitTexture(const LLSD& data);
 
 protected:
 	LLComboBox* m_UseLegacyClienttags;
