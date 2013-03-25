@@ -1815,7 +1815,7 @@ For now, just make the UI elements invisiable but still have the debug settings 
          height="10"
          name="text_box_permnote2"
          width="135">
-          apply to new uploads.
+          to new uploads.
         </text>
 
         <text
