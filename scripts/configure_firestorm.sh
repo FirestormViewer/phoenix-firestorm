@@ -364,9 +364,10 @@ if [ $WANTS_CONFIG -eq $TRUE ] ; then
         TARGET="Unix Makefiles"
     elif [ \( $PLATFORM == "win32" \) ] ; then
         TARGET="Visual Studio 10"
+        UNATTENDED="-DUNATTENDED=ON"
     fi
 
-    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE -DUNATTENDED:BOOL=ON -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
+    cmake -G "$TARGET" ../indra $FMOD $KDU $PACKAGE $UNATTENDED -DLL_TESTS:BOOL=OFF -DWORD_SIZE:STRING=32 -DCMAKE_BUILD_TYPE:STRING=$BTYPE -DROOT_PROJECT_NAME:STRING=Firestorm $LL_ARGS_PASSTHRU | tee $LOG
 
     if [ $PLATFORM == "win32" ] ; then
     ../indra/tools/vstool/VSTool.exe --solution Firestorm.sln --startup firestorm-bin --workingdir firestorm-bin "..\\..\\indra\\newview" --config $BTYPE
