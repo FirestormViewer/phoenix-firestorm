@@ -47,7 +47,19 @@
 #include "llstring.h"
 #include "lleventtimer.h"
 
-#include "google_breakpad/exception_handler.h"
+
+// <FS:ND> Build without google breakpad if it's not available. That's fine to do.
+// Breakpad is only ever used to create minidumps. Those are important for official released, but if a selfcompiler wants to build without it, that's no problem.
+
+// #include "google_breakpad/exception_handler.h"
+
+#ifndef ND_NO_BREAKPAD
+  #include "google_breakpad/exception_handler.h"
+#else
+  #include "nd/ndexception_handler_stub.h"
+#endif
+
+// </FS:ND>
 
 //
 // Signal handling

@@ -265,7 +265,7 @@ elseif(LINUX)
         libboost_signals-mt.so.${BOOST_VERSION}.0
         libboost_system-mt.so.${BOOST_VERSION}.0
         libboost_wave-mt.so.${BOOST_VERSION}.0
-        libbreakpad_client.so.0
+#        libbreakpad_client.so.0
         libcollada14dom.so
         libcrypto.so.1.0.0
         libdb-5.1.so
@@ -295,6 +295,11 @@ elseif(LINUX)
     if (USE_TCMALLOC)
       set(release_files ${release_files} "libtcmalloc_minimal.so")
     endif (USE_TCMALLOC)
+
+    # <FS:ND> We only ever need google breakpad when crash reporting is used
+    if(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
+      set(release_files ${release_files} "libbreakpad_client.so.0")
+    endif(RELEASE_CRASH_REPORTING OR NON_RELEASE_CRASH_REPORTING)
 
     if (FMOD)
       set(release_files ${release_files} "libfmod-3.75.so")
