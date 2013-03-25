@@ -262,10 +262,19 @@ void LLPanelLandAudio::onBtnStreamDelete(LLUICtrl*, void *userdata)
 	LLStringUtil::trim(music_url);
 	
 	LLSD streamlist = gSavedSettings.getLLSD("FSStreamList");
-	
-	// TODO: Make this remove specific items from the list instead of flushing the whole list.
-	streamlist.clear();
-	gSavedSettings.setLLSD("FSStreamList", streamlist);
+	LLSD streamlist_new;
+	streamlist_new["version"] = 1;
+
+	for (LLSD::array_const_iterator it = streamlist["audio"].beginArray(); it != streamlist["audio"].endArray(); ++it)
+	{
+		std::string current_url = (*it).asString();
+		if (current_url != music_url)
+		{
+			streamlist_new["audio"].append(current_url);
+		}
+	}
+
+	gSavedSettings.setLLSD("FSStreamList", streamlist_new);
 	self->refresh();
 }
 // </FS:CR>
