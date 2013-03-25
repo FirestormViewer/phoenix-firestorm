@@ -45,7 +45,7 @@ namespace nd
 
 			void grow()
 			{
-				char *pMemory = reinterpret_cast< char* >( nd::allocators::malloc( mObjectSize * AllocationSize, Alignment ) );
+				char *pMemory = reinterpret_cast< char* >( nd::allocators::ndMalloc( mObjectSize * AllocationSize, Alignment ) );
 				ObjectMemory *pPrev = &mMemory;
 
 				for( int i = 0; i < AllocationSize; ++i )

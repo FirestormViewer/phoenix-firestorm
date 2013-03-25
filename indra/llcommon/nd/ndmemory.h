@@ -31,23 +31,23 @@ namespace nd
 {
 	namespace allocators
 	{
-		void *malloc( size_t aSize, size_t aAlign );
-		void free( void* ptr );
-		void *realloc( void *ptr, size_t aSize, size_t aAlign );
+		void *ndMalloc( size_t aSize, size_t aAlign );
+		void ndFree( void* ptr );
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
 	}
 }
 
 #if 0
 
-#define ll_aligned_malloc( size, align ) nd::allocators::malloc(size, align)
+#define ll_aligned_malloc( size, align ) nd::allocators::ndMalloc(size, align)
 #define ll_aligned_malloc_16( size ) nd::allocators::malloc( size, 16 )
 #define ll_aligned_malloc_32(size) nd::allocators::malloc( size, 32 )
 
-#define ll_aligned_free( ptr ) nd::allocators::free(ptr)
-#define ll_aligned_free_16( ptr ) nd::allocators::free( ptr )
-#define ll_aligned_free_32( ptr ) nd::allocators::free( ptr )
+#define ll_aligned_free( ptr ) nd::allocators::ndFree(ptr)
+#define ll_aligned_free_16( ptr ) nd::allocators::ndFree( ptr )
+#define ll_aligned_free_32( ptr ) nd::allocators::ndFree( ptr )
 
-#define ll_aligned_realloc_16( ptr, size, x ) nd::allocators::realloc( ptr, size, 16 )
+#define ll_aligned_realloc_16( ptr, size, x ) nd::allocators::ndRealloc( ptr, size, 16 )
 
 #define ALLOCATE_MEM(poolp, size) ll_aligned_malloc_16(size);
 #define FREE_MEM(poolp, addr) ll_aligned_free_16( addr );
@@ -59,24 +59,24 @@ namespace nd
 	#define ll_aligned_malloc_16( size ) _aligned_malloc( size, 16 )
 	#define ll_aligned_malloc_32(size) _aligned_malloc( size, 32 )
 
-	#define ll_aligned_free( ptr ) _aligned_free (ptr)
-	#define ll_aligned_free_16( ptr ) _aligned_free ( ptr )
-	#define ll_aligned_free_32( ptr ) _aligned_free ( ptr )
+	#define ll_aligned_free( ptr ) _aligned_ndFree (ptr)
+	#define ll_aligned_free_16( ptr ) _aligned_ndFree ( ptr )
+	#define ll_aligned_free_32( ptr ) _aligned_ndFree ( ptr )
 
-	#define ll_aligned_realloc_16( ptr, size, x ) _aligned_realloc( ptr, size, 16 )
+	#define ll_aligned_realloc_16( ptr, size, x ) _aligned_ndRealloc( ptr, size, 16 )
 
 	#define ALLOCATE_MEM(poolp, size) ll_aligned_malloc_16(size);
 	#define FREE_MEM(poolp, addr) ll_aligned_free_16( addr );
 #else
-	inline void* ll_aligned_malloc( size_t aSize, size_t aAlign ) { return nd::allocators::malloc(aSize, aAlign); }
-	inline void* ll_aligned_malloc_16( size_t aSize )             { return nd::allocators::malloc(aSize, 16); }
-	inline void* ll_aligned_malloc_32( size_t aSize )             { return nd::allocators::malloc(aSize, 32); }
+	inline void* ll_aligned_malloc( size_t aSize, size_t aAlign ) { return nd::allocators::ndMalloc(aSize, aAlign); }
+	inline void* ll_aligned_malloc_16( size_t aSize )             { return nd::allocators::ndMalloc(aSize, 16); }
+	inline void* ll_aligned_malloc_32( size_t aSize )             { return nd::allocators::ndMalloc(aSize, 32); }
 
-	inline void ll_aligned_free( void *aPtr )    { nd::allocators::free( aPtr ); }
-	inline void ll_aligned_free_16( void *aPtr ) { nd::allocators::free( aPtr ); }
-	inline void ll_aligned_free_32( void *aPtr ) { nd::allocators::free( aPtr ); }
+	inline void ll_aligned_free( void *aPtr )    { nd::allocators::ndFree( aPtr ); }
+	inline void ll_aligned_free_16( void *aPtr ) { nd::allocators::ndFree( aPtr ); }
+	inline void ll_aligned_free_32( void *aPtr ) { nd::allocators::ndFree( aPtr ); }
 
-	inline void* ll_aligned_realloc_16( void *aPtr, size_t aSize, size_t  ) { return nd::allocators::realloc( aPtr, aSize, 16 ); }
+	inline void* ll_aligned_realloc_16( void *aPtr, size_t aSize, size_t  ) { return nd::allocators::ndRealloc( aPtr, aSize, 16 ); }
 
 	inline void* ALLOCATE_MEM( void *aPool, size_t aSize ) { return ll_aligned_malloc_16(aSize); }
 	inline void FREE_MEM( void *poolp, void *aPtr)         { ll_aligned_free_16( aPtr ); }

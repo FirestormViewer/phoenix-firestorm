@@ -72,7 +72,7 @@ namespace OSAllocator
 		pTmp[-2] = aSize;
 	}
 
-	void *malloc( size_t aSize, size_t aAlign )
+	void *ndMalloc( size_t aSize, size_t aAlign )
 	{
 		nd::debugging::sEBP *pEBP(0);
 
@@ -103,9 +103,9 @@ namespace OSAllocator
 		return pRet;
 	}
 
-	void *realloc( void *aPtr, size_t aSize, size_t aAlign )
+	void *ndRealloc( void *aPtr, size_t aSize, size_t aAlign )
 	{
-		void* pMem = malloc( aSize, aAlign );
+		void* pMem = ndMalloc( aSize, aAlign );
 	
 		if( !pMem )
 			return 0;
@@ -120,7 +120,7 @@ namespace OSAllocator
 		return pMem;
 	}
 
-	void free( void* ptr )
+	void ndFree( void* ptr )
 	{
 		if( ptr )
 			::free( OSbaseFromAlloc( ptr ) );
@@ -156,7 +156,7 @@ namespace nd
 
 		bool allocMemoryForPage( Page &aPage )
 		{
-			aPage.mMemory = static_cast<U8*>(OSAllocator::malloc( PAGE_SIZE, POOL_CHUNK_ALIGNMENT ));
+			aPage.mMemory = static_cast<U8*>(OSAllocator::ndMalloc( PAGE_SIZE, POOL_CHUNK_ALIGNMENT ));
 
 			if( 0 == aPage.mMemory )
 			{
@@ -188,7 +188,7 @@ namespace nd
 			if( !sPages[i].mMemory )
 				return;
 
-			OSAllocator::free( sPages[i].mMemory );
+			OSAllocator::ndFree( sPages[i].mMemory );
 			new (&sPages[i]) Page;
 		}
 	}
@@ -276,15 +276,15 @@ namespace nd
 				freePage( i );
 		}
 
-		void *malloc( size_t aSize, size_t aAlign )
+		void *ndMalloc( size_t aSize, size_t aAlign )
 		{
 			if( !usePool( aSize ) )
-				return OSAllocator::malloc( aSize, aAlign );
+				return OSAllocator::ndMalloc( aSize, aAlign );
 
 			int nPageIdx( findPageIndex() );
 
 			if( -1 == nPageIdx )
-				return OSAllocator::malloc( aSize, aAlign );
+				return OSAllocator::ndMalloc( aSize, aAlign );
 
 			Page &oPage = sPages[ nPageIdx ];
 			nd::locks::LockHolder oLock(0);
@@ -295,7 +295,7 @@ namespace nd
 				++nBitmapIdx;
 
 			if( BITMAP_SIZE == nBitmapIdx )
-				return OSAllocator::malloc( aSize, aAlign );
+				return OSAllocator::ndMalloc( aSize, aAlign );
 
 			U32 bBitmap = oPage.mBitmap[ nBitmapIdx ];
 			int nBit = 0;
@@ -314,31 +314,31 @@ namespace nd
 			return pRet;
 		}
 
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
 		{
 			int nPoolIdx = toPoolIndex( ptr );
 
 			// Not in pool or 0 == ptr
 			if( -1 == nPoolIdx )
-				return OSAllocator::realloc( ptr, aSize, aAlign );
+				return OSAllocator::ndRealloc( ptr, aSize, aAlign );
 
-			void *pRet = OSAllocator::malloc( aSize, aAlign );
+			void *pRet = OSAllocator::ndMalloc( aSize, aAlign );
 
 			int nToCopy = nd_min( aSize, POOL_CHUNK_SIZE );
 			memcpy( pRet, ptr, nToCopy );
 
-			free( ptr );
+			ndFree( ptr );
 
 			return pRet;
 		}
 
-		void free( void* ptr )
+		void ndFree( void* ptr )
 		{
 			int nPoolIdx = toPoolIndex( ptr );
 
 			if( -1 == nPoolIdx )
 			{
-				OSAllocator::free( ptr );
+				OSAllocator::ndFree( ptr );
 				return;
 			}
 
@@ -428,7 +428,7 @@ namespace nd
 		{
 		}
 
-		void *malloc( size_t aSize, size_t aAlign )
+		void *ndMalloc( size_t aSize, size_t aAlign )
 		{
 			nd::debugging::sEBP *pEBP(0);
 
@@ -438,10 +438,10 @@ namespace nd
 #endif
 			nd::allocstats::logAllocation( aSize, pEBP );
 
-			return OSAllocator::malloc( aSize, aAlign );
+			return OSAllocator::ndMalloc( aSize, aAlign );
 		}
 
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
 		{
 			nd::debugging::sEBP *pEBP(0);
 
@@ -451,12 +451,12 @@ namespace nd
 #endif
 			nd::allocstats::logAllocation( aSize, pEBP );
 
-			return OSAllocator::realloc( ptr, aSize, aAlign );
+			return OSAllocator::ndRealloc( ptr, aSize, aAlign );
 		}
 
-		void free( void* ptr )
+		void ndFree( void* ptr )
 		{
-			OSAllocator::free( ptr );
+			OSAllocator::ndFree( ptr );
 		}
 
 		void dumpStats( std::ostream &aOut )

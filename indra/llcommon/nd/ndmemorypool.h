@@ -1,5 +1,5 @@
-#ifndef NDMEMORYPooL_H
-#define NDMEMORYPooL_H
+#ifndef NDMEMORYPOOL_H
+#define NDMEMORYPOOL_H
 
 /**
  * $LicenseInfo:firstyear=2012&license=fsviewerlgpl$
@@ -35,10 +35,10 @@ namespace nd
 		LL_COMMON_API void startUp();
 		LL_COMMON_API void tearDown();
 
-		LL_COMMON_API void *malloc( size_t aSize, size_t aAlign );
-		LL_COMMON_API void *realloc( void *ptr, size_t aSize, size_t aAlign );
+		LL_COMMON_API void *ndMalloc( size_t aSize, size_t aAlign );
+		LL_COMMON_API void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
 
-		LL_COMMON_API void free( void* ptr );
+		LL_COMMON_API void ndFree( void* ptr );
 
 		LL_COMMON_API void dumpStats( std::ostream & );
 		LL_COMMON_API void tryShrink( );

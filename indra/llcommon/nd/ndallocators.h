@@ -36,9 +36,9 @@ namespace nd
 {
 	namespace allocators
 	{
-		void *malloc( size_t aSize, size_t aAlign );
-		void free( void* ptr );
-		void *realloc( void *ptr, size_t aSize, size_t aAlign );
+		void *ndMalloc( size_t aSize, size_t aAlign );
+		void ndFree( void* ptr );
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign );
 	}
 }
 

@@ -35,23 +35,23 @@ namespace nd
 	namespace allocators
 	{
 	#ifdef ND_USE_NATIVE_ALLOCS
-		void *malloc( size_t aSize, size_t aAlign )
+		void *ndMalloc( size_t aSize, size_t aAlign )
 		{ return _aligned_malloc( aSize, aAlign );	}
 
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
 		{ return _aligned_realloc( ptr, aSize, aAlign );	}
 
-		void free( void* ptr )
+		void ndFree( void* ptr )
 		{ return _aligned_free( ptr );	}
 	#else
-		void *malloc( size_t aSize, size_t aAlign )
-		{ return nd::memorypool::malloc( aSize, aAlign );	}
+		void *ndMalloc( size_t aSize, size_t aAlign )
+		{ return nd::memorypool::ndMalloc( aSize, aAlign );	}
 
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
-		{ return nd::memorypool::realloc( ptr, aSize, aAlign );	}
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
+		{ return nd::memorypool::ndRealloc( ptr, aSize, aAlign );	}
 
-		void free( void* ptr )
-		{ return nd::memorypool::free( ptr );	}
+		void ndFree( void* ptr )
+		{ return nd::memorypool::ndFree( ptr );	}
 	#endif
 	}
 }
@@ -59,22 +59,22 @@ namespace nd
 #if ND_OVERRIDE_NEW
 void *operator new(size_t nSize )
 {
-	return nd::allocators::malloc( nSize, 16 );
+	return nd::allocators::ndMalloc( nSize, 16 );
 }
 
 void *operator new[](size_t nSize )
 {
-	return nd::allocators::malloc( nSize, 16 );
+	return nd::allocators::ndMalloc( nSize, 16 );
 }
 
 void operator delete( void *pMem )
 {
-	nd::allocators::free( pMem );
+	nd::allocators::ndFree( pMem );
 }
 
 void operator delete[]( void *pMem )
 {
-	nd::allocators::free( pMem );
+	nd::allocators::ndFree( pMem );
 }
 #endif
 
@@ -83,15 +83,15 @@ namespace nd
 {
 	namespace allocators
 	{
-		void *malloc( size_t aSize, size_t aAlign )
+		void *ndMalloc( size_t aSize, size_t aAlign )
 		{
 			return ::malloc( aSize );
 		}
-		void free( void* ptr )
+		void ndFree( void* ptr )
 		{
 			::free( ptr );
 		}
-		void *realloc( void *ptr, size_t aSize, size_t aAlign )
+		void *ndRealloc( void *ptr, size_t aSize, size_t aAlign )
 		{
 			return ::realloc( ptr, aSize );
 		}
