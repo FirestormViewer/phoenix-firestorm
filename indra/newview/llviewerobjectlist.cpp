@@ -275,7 +275,8 @@ void LLViewerObjectList::processUpdateCore(LLViewerObject* objectp,
 		if (!import_handled)
 		{
 			// apply new object created preferences
-			FSCommon::applyDefaultBuildPreferences(objectp);
+			// TODO: Fix me!
+			//FSCommon::applyDefaultBuildPreferences(objectp);
 
 			if ( LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance() )
 			{
