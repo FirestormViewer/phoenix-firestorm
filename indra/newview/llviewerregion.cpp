@@ -668,23 +668,50 @@ std::string LLViewerRegion::regionFlagsToString(U64 flags)
 // static
 std::string LLViewerRegion::accessToString(U8 sim_access)
 {
+	// <FS:ND> Prevent querying LLTrans each frame
+	static std::vector< std::string > vcAccess;
+	if( vcAccess.empty() )
+	{
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_PG") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MATURE") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_ADULT") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_DOWN") );
+		vcAccess.push_back( LLTrans::getString("SIM_ACCESS_MIN") );
+	}
+	// </FS:ND>
+
 	switch(sim_access)
 	{
 	case SIM_ACCESS_PG:
-		return LLTrans::getString("SIM_ACCESS_PG");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_PG");
+		return vcAccess[0];
+		// </FS:ND>
 
 	case SIM_ACCESS_MATURE:
-		return LLTrans::getString("SIM_ACCESS_MATURE");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_MATURE");
+		return vcAccess[1];
+		// </FS:ND>
 
 	case SIM_ACCESS_ADULT:
-		return LLTrans::getString("SIM_ACCESS_ADULT");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_ADULT");
+		return vcAccess[2];
+		// </FS:ND>
 
 	case SIM_ACCESS_DOWN:
-		return LLTrans::getString("SIM_ACCESS_DOWN");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_DOWN");
+		return vcAccess[3];
+		// </FS:ND>
 
 	case SIM_ACCESS_MIN:
 	default:
-		return LLTrans::getString("SIM_ACCESS_MIN");
+		// <FS:ND> Prevent querying LLTrans each frame
+		// return LLTrans::getString("SIM_ACCESS_MIN");
+		return vcAccess[4];
+		// </FS:ND>
 	}
 }
 
