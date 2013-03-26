@@ -192,6 +192,14 @@ void LLWLParamSet::set(const std::string& paramName, const LLColor4 & val)
 
 LLVector4 LLWLParamSet::getVector(const std::string& paramName, bool& error) 
 {
+	// <FS:ND> Early exit when paramName isn't even there. Safes us a lot of allocations/deallocations each frame
+	if( !mParamValues.has( paramName ) )
+	{
+		error = true;
+		return LLVector4(0,0,0,0);
+	}
+	// </FS:ND>
+
 	// test to see if right type
 	LLSD cur_val = mParamValues.get(paramName);
 	if (!cur_val.isArray()) 
@@ -212,6 +220,14 @@ LLVector4 LLWLParamSet::getVector(const std::string& paramName, bool& error)
 
 F32 LLWLParamSet::getFloat(const std::string& paramName, bool& error) 
 {
+	// <FS:ND> Early exit when paramName isn't even there. Safes us a lot of allocations/deallocations each frame
+	if( !mParamValues.has( paramName ) )
+	{
+		error = true;
+		return 0.;
+	}
+	// </FS:ND>
+
 	// test to see if right type
 	LLSD cur_val = mParamValues.get(paramName);
 	if (cur_val.isArray() && cur_val.size() != 0) 
