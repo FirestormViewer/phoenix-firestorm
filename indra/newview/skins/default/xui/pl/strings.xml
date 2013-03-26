@@ -1036,6 +1036,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="dictionary_files">
 		Słowniki
 	</string>
+	<string name="backup_files">
+		Kopie zapasowe obiektów
+	</string>
 	<string name="AvatarSetNotAway">
 		Nie Śpij
 	</string>
