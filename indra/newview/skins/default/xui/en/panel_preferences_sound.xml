@@ -559,7 +559,7 @@
          left="25"
          name="Media Rolloff"
          mouse_opaque="false"
-         top_delta="20"
+         top_delta="18"
          width="155">
             Media audio rolloff distance:
         </text>
@@ -636,7 +636,7 @@
          name="money_change_threshold_label"
          tool_tip="Plays a sound when money is spent or received higher then the amount set here."
          mouse_opaque="false"
-         top_delta="22"
+         top_delta="18"
          width="117">
             L$ change threshold:
         </text>
