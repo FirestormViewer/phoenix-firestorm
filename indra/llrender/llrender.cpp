@@ -1906,6 +1906,12 @@ void LLRender::flush()
 			mBuffer->getVertexStrider(mVerticesp, 0, count);
 			mBuffer->getTexCoord0Strider(mTexcoordsp, 0, count);
 			mBuffer->getColorStrider(mColorsp, 0, count);
+
+			// <FS:ND> protect against buffer overflows
+			mVerticesp.setCount( mBuffer->getNumVerts() );
+			mTexcoordsp.setCount( mBuffer->getNumVerts() );
+			mColorsp.setCount( mBuffer->getNumVerts() );
+			// </FS:ND>
 		}
 		
 		mBuffer->flush();
