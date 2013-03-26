@@ -435,6 +435,12 @@ LLLocationInputCtrl::LLLocationInputCtrl(const LLLocationInputCtrl::Params& p)
 	mEditLandmarkTooltip = LLTrans::getString("LocationCtrlEditLandmarkTooltip");
 	mButton->setToolTip(LLTrans::getString("LocationCtrlComboBtnTooltip"));
 	mInfoBtn->setToolTip(LLTrans::getString("LocationCtrlInfoBtnTooltip"));
+
+	// <FS:ND> Prevent querying LLTrans each frame
+	mTooltips.push_back( LLTrans::getString("LocationCtrlGeneralIconTooltip") );
+	mTooltips.push_back( LLTrans::getString("LocationCtrlAdultIconTooltip") );
+	mTooltips.push_back( LLTrans::getString("LocationCtrlModerateIconTooltip") );
+	// </FS:ND>
 }
 
 LLLocationInputCtrl::~LLLocationInputCtrl()
@@ -990,17 +996,32 @@ void LLLocationInputCtrl::refreshMaturityButton()
 	{
 	case SIM_ACCESS_PG:
 		rating_image = mIconMaturityGeneral;
-		rating_tooltip = LLTrans::getString("LocationCtrlGeneralIconTooltip");
+
+		// <FS:ND> Prevent querying LLTrans each frame
+		// rating_tooltip = LLTrans::getString("LocationCtrlGeneralIconTooltip");
+		rating_tooltip = mTooltips[eGeneral];
+		// </FS:ND>
+
 		break;
 
 	case SIM_ACCESS_ADULT:
 		rating_image = mIconMaturityAdult;
-		rating_tooltip = LLTrans::getString("LocationCtrlAdultIconTooltip");
+
+		// <FS:ND> Prevent querying LLTrans each frame
+		// rating_tooltip = LLTrans::getString("LocationCtrlAdultIconTooltip");
+		rating_tooltip = mTooltips[eAdult];
+		// </FS:ND>
+
 		break;
 
 	case SIM_ACCESS_MATURE:
 		rating_image = mIconMaturityModerate;
-		rating_tooltip = LLTrans::getString("LocationCtrlModerateIconTooltip");
+
+		// <FS:ND> Prevent querying LLTrans each frame
+		// rating_tooltip = LLTrans::getString("LocationCtrlModerateIconTooltip");
+		rating_tooltip = mTooltips[eModerate];
+		// </FS:ND>
+
 		break;
 
 	default:
