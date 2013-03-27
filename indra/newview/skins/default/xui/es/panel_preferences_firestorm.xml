@@ -186,15 +186,22 @@
 			<combo_box name="cloud_combo" tool_tip="Selecciona la textura de nube que quieres usar."/>
 		</panel>
 		<panel label="Construcción" name="BuildTab">
-			<text name="text_box_objprams" width="200">
-				Parámetros de objeto por defecto
+			<text name="text_box_objprams" left="17">
+				Tamaño por defecto
 			</text>
-			<spinner label="Tamaño X" name="X size" label_width="60" width="135"/>
-			<spinner label="Tamaño Y" name="Y size" label_width="60" width="135"/>
-			<spinner label="Tamaño Z" name="Z size" label_width="60" width="135"/>
-			<text name="text_box_objmaterial">
-				Material:
+			<text name="text_box_objprams2" left="165">
+				Configuración
 			</text>
+			<text name="text_box_objprams3" left="370">
+				Textura
+			</text>
+			<view_border name="TextureBorder" width="265"/>
+			<spinner label="X" name="X size"/>
+			<spinner label="Y" name="Y size"/>
+			<spinner label="Z" name="Z size"/>
+			<check_box label="Fantasma" name="FSBuildPrefs_PhantomToggle"/>
+			<check_box label="Físico" name="FSBuildPrefs_PhysicalToggle"/>
+			<check_box label="Temporal" name="FSBuildPrefs_TemporaryToggle"/>
 			<combo_box name="material" left="165">
 				<combo_item name="Stone" label="Piedra"/>
 				<combo_item name="Metal" label="Metal"/>
@@ -204,20 +211,53 @@
 				<combo_item name="Plastic" label="Plástico"/>
 				<combo_item name="Rubber" label="Goma"/>
 			</combo_box>
+			<texture_picker label="Textura" name="texture control" tool_tip="Pulsa para elegir una textura"/>
+			<color_swatch label="Color" name="colorswatch" tool_tip="Pulsa para abrir el selector de color"/>
+			<spinner label="Transp." name="alpha"/>
+			<spinner label="Respl." name="glow"/>
+			<check_box label="Brillo completo" name="EmFBToggle"/>
+			<combo_box name="combobox shininess" tool_tip="Establece el nivel de brillo del objeto">
+				<combo_item name="None" label="Ninguno"/>
+				<combo_item name="Low" label="Bajo"/>
+				<combo_item name="Medium" label="Medio"/>
+				<combo_item name="High" label="Alto"/>
+				</combo_box>
+			<check_box name="FSBuildPrefs_EmbedItem" label="Incrustar un objeto en los nuevos prims"/>
+			<text name="Give inventory" tool_tip="Arrastra aquí un ítem del inventario.">
+				Arrastra aquí un ítem del inventario.
+			</text>
+			<text name="build_item_add_disp_rect_txt">
+				Actualmente establecido a: ITEM
+			</text>
+			<text name="text_box_permissions">
+				Permisos
+			</text>
+			<text name="text_box_permnextowner">
+				Próximo propietario:
+			</text>
+			<check_box label="Copiar" tool_tip="Permisos de copia" name="next_owner_copy"/>
+			<check_box label="Modificar" tool_tip="Permisos de modificación" name="next_owner_modify"/>
+			<check_box label="Transferir" tool_tip="Permisos de transferencia" name="next_owner_transfer"/>
+			<text name="text_box_permnote1">
+				También se aplicará
+			</text>
+			<text name="text_box_permnote2">
+				a las nuevas subidas.
+			</text>
 			<text name="text_box_pivotpoint">
 				Punto de pivotaje
 			</text>
-			<view_border name="PivotBorder" width="250"/>
-			<check_box label="Mostrar eje en la posición de la prim raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="EmBuildPrefsActualRoot_toggle"/>
-			<spinner label="Pos. X" name="X pos" label_width="60" width="135"/>
-			<spinner label="Pos. Y" name="Y pos" label_width="60" width="135"/>
-			<spinner label="Pos. Z" name="Z pos" label_width="60" width="135"/>
-			<check_box label="Valores porcentuales" tool_tip="Los valores por defecto son porcentajes y cada eje se establece en 50" name="EmPivotPercToggle"/>
-			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="EmBuildPrefsRenderHighlight_toggle"/>
+			<view_border name="PivotBorder" width="142"/>
+			<check_box label="Eje en prim raíz" tool_tip="El comportamiento por defecto es mostrar el eje en el centro de masa del conjunto. Si lo activas, el eje se mostrará en la primitiva raíz (principal) del conjunto de primitivas enlazadas." name="FSBuildPrefsActualRoot_toggle"/>
+			<spinner label="Pos. X" name="X pos"/>
+			<spinner label="Pos. Y" name="Y pos"/>
+			<spinner label="Pos. Z" name="Z pos"/>
+			<check_box label="Valores porcent." tool_tip="Los valores por defecto son porcentajes y cada eje se establece en 50" name="FSPivotPercToggle"/>
+			<check_box label="Resaltar las primitivas seleccionadas" tool_tip="Cuando lo desactivas, no se muestran los efectos amarillos/azules de resaltado, mejorando el rendimiento cuando se selecciona un gran número de primitivas." name="FSBuildPrefsRenderHighlight_toggle"/>
+			<check_box label="Modo antiguo de &quot;Poner en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
+			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Usar Ctrl+ratón para sujetar y manipular objetos" tool_tip="Si lo activas, podrás tomar y mover objetos con tu ratón y la tecla CTRL." name="FSEnableGrab"/>
 			<check_box label="Permitir Bloq. Mayús. + arrastrar o escalar en una cara de textura en modo de construcción" tool_tip="Si lo activas, permite pulsar-arrastrar o pulsar-escalar de la textura de una cara en el modo de construcción. Esta característica es todavía experimental y debe ser usada con precaución." name="FSExperimentalDragTexture"/>
-			<check_box label="Usar comportamiento antiguo de &quot;Poner objeto en venta&quot;" tool_tip="Cuando lo activas, la información de venta del objeto se guarda al cambiarla, en vez de pedir confirmación." name="FSCommitForSaleOnChange_toggle"/>
-			<check_box label="Guardar como Mono los scripts editados desde el inventario" tool_tip="Cuando está activado, al editar un script directamente desde el inventario y luego guardarlo, lo guarda como Mono en vez de como LSL." name="FSSaveInventoryScriptsAsMono_toggle"/>
 			<check_box label="Activar el preprocesador LSL" tool_tip="Marcar para activar el preprocesador LSL." name="preproc_checkbox"/>
 			<check_box label="Optimizar scripts" tool_tip="Marcar para que el preprocesador LSL optimice el espacio utilizado por los scripts, a costa de su legibilidad." name="preprocoptimizer_checkbox"/>
 			<check_box label="Instrucción switch()" tool_tip="Marcar para que el preprocesador LSL permita el uso de la instrucción switch() para controlar el flujo de los scripts." name="preprocswitch_checkbox"/>
