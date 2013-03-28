@@ -1901,7 +1901,7 @@ Tausende Regionen werden verändert und der Spaceserver wird dadurch stark belas
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="PreferredMaturityChanged">
-		Sie erhalten keine Benachrichtigungen mehr, wenn Sie eine Region der Inhaltseinstufung „[RATING]“ besuchen. Sie können Ihre Inhaltseinstellungen von der Menüleiste aus ändern („Ich“ &gt; „Einstellungen“ &gt; „Allgemein“).
+		Sie erhalten keine Benachrichtigungen mehr, wenn Sie eine Region der Inhaltseinstufung „[RATING]“ besuchen. Sie können Ihre Inhaltseinstellungen von der Menüleiste aus ändern („Avatar“ &gt; „Einstellungen“ &gt; „Allgemein“).
 		<usetemplate name="okbutton" yestext="OK"/>
 	</notification>
 	<notification name="MaturityChangeError">
