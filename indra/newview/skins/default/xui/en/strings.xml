@@ -2160,6 +2160,18 @@ A region's global coordinates can be retrieved using llRequestSimulatorData(regi
 float llGetSimStats(integer stat_type)
 Returns the value of a particular simulator statistic.
 </string>
+<string name="LSLTipText_llSetAnimationOverride" translate="false">
+llSetAnimationOverride(string anim_state, string anim)
+Set the animation (anim) that will play for the given animation state (anim_state).
+</string>
+<string name="LSLTipText_llGetAnimationOverride" translate="false">
+string llGetAnimationOverride(string anim_state)
+Returns a string that is the name of the animation that is being used for the specified animation state (anim_state).
+</string>
+<string name="LSLTipText_llResetAnimationOverride" translate="false">
+llResetAnimationOverride(string anim_state)
+Resets the animation override of the specified animation state (anim_state) to the corresponding default value.
+</string>
 <!-- END FS:Ansariel: LSL function tooltip help texts manually added -->
 	
     

@@ -535,6 +535,12 @@ void LLScriptLibrary::init()
 
 	// Server RC LeTigre 12.10.12.265819 new function
 	addFunction(0.f, 0.f, dummy_func, "llGetSimStats", "f", "i");
+
+	// Server RC LeTigre/BlueSteel 13.03.22.272565 new functions
+	addFunction(0.f, 0.f, dummy_func, "llSetAnimationOverride", NULL, "ss");
+	addFunction(0.f, 0.f, dummy_func, "llGetAnimationOverride", "s", "s");
+	addFunction(0.f, 0.f, dummy_func, "llResetAnimationOverride", NULL, "s");
+
 	// </FS:Ansariel> According to Kelly Linden we don't need to obey the function ID order in the viewer!
 	
 // <FS:CR> Opensim/Aurora scripting functions - Please add Second Life LSL functions above this line!
