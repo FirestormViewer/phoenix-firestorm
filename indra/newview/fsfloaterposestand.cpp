@@ -52,7 +52,6 @@ void FSFloaterPoseStand::onOpen(const LLSD& key)
 		setLock(true);
 	}
 	gAgent.stopCurrentAnimations();
-	gAgentAvatarp->setIsEditingAppearance(TRUE);
 	gAgent.setCustomAnim(TRUE);
 	gFocusMgr.setKeyboardFocus(NULL);
 	gFocusMgr.setMouseCapture(NULL);
@@ -70,7 +69,6 @@ void FSFloaterPoseStand::onClose(bool app_quitting)
 		setLock(false);
 		gAgent.standUp();
 	}
-	gAgentAvatarp->setIsEditingAppearance(FALSE);
 	gAgent.setCustomAnim(FALSE);
 	FSPose::getInstance()->stopPose();
 	gAgent.stopCurrentAnimations();
