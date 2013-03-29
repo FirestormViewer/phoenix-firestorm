@@ -6,7 +6,6 @@
  left="100"
  mouse_opaque="false"
  name="Popup"
- tear_off="true"
  top="724"
  visible="false"
  width="128">
