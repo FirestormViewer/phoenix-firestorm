@@ -813,7 +813,7 @@
 	 reference="DkGray" />
     <color
      name="TextBgWriteableColor"
-     reference="Black_25" />
+     reference="Black" />
     <color
      name="TextCursorColor"
      reference="White" />
