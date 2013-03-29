@@ -20367,5 +20367,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSDestroyGLTexturesImmediately</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, GL textures will be removed from memory immediately when its fetched texture is removed. This might result in textures behind you being unloaded.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
 </map>
 </llsd>
