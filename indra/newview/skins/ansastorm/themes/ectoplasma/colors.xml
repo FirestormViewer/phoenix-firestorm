@@ -755,7 +755,7 @@
      reference="Black" />
     <color
      name="ScrollDisabledColor"
-     reference="Black_25" />
+     reference="LtGray_50" />
     <color
      name="ScrollHighlightedColor"
      reference="Unused?" />
