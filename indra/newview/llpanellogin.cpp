@@ -1325,39 +1325,38 @@ void LLPanelLogin::onSelectUser()
 // static
 void LLPanelLogin::updateServerCombo()
 {
-	if (sInstance)
-	{
+	if (!sInstance) return;
+	
 #ifdef OPENSIM
-		//LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
+	LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
 #endif // OPENSIM
-		// We add all of the possible values, sorted, and then add a bar and the current value at the top
-		LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
-		server_choice_combo->removeall();
+	// We add all of the possible values, sorted, and then add a bar and the current value at the top
+	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
+	server_choice_combo->removeall();
+
+	std::string current_grid = LLGridManager::getInstance()->getGrid();
+	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
 	
-		std::string current_grid = LLGridManager::getInstance()->getGrid();
-		std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
-	
-		for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
-			 grid_choice != known_grids.end();
-			 grid_choice++)
+	for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
+		 grid_choice != known_grids.end();
+		 grid_choice++)
+	{
+		if (!grid_choice->first.empty() && current_grid != grid_choice->first)
 		{
-			if (!grid_choice->first.empty() && current_grid != grid_choice->first)
-			{
-				LL_DEBUGS("AppInit") << "adding " << grid_choice->first << LL_ENDL;
-				server_choice_combo->add(grid_choice->second, grid_choice->first);
-			}
+			LL_DEBUGS("AppInit") << "adding " << grid_choice->first << LL_ENDL;
+			server_choice_combo->add(grid_choice->second, grid_choice->first);
 		}
-		server_choice_combo->sortByName();
-		server_choice_combo->addSeparator(ADD_TOP);
-	
-		LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
-		server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
-								 current_grid,
-								 ADD_TOP);
-		server_choice_combo->selectFirstItem();
-		update_grid_help();
-		updateServer();
 	}
+	server_choice_combo->sortByName();
+	server_choice_combo->addSeparator(ADD_TOP);
+	
+	LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
+	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
+							 current_grid,
+							 ADD_TOP);
+	server_choice_combo->selectFirstItem();
+	update_grid_help();
+	updateServer();
 }
 
 // static

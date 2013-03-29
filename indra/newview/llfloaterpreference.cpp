@@ -3553,6 +3553,7 @@ void LLPanelPreferenceOpensim::addedGrid(bool success)
 	if (success)
 	{
 		onClickClearGrid();
+		LLPanelLogin::updateServerCombo();
 	}
 	refreshGridList(success);
 }
@@ -3597,6 +3598,7 @@ bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD
 		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
 		/*mGridListChanged =*/ LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::refreshGridList, this, _1));
 		LLGridManager::getInstance()->removeGrid(grid);
+		LLPanelLogin::updateServerCombo();
 	}
 	return false;
 }
