@@ -59,6 +59,10 @@
 #include "llweb.h"
 
 #include "llfiltereditor.h"
+// <FS:CR> Needed to hide Received Items on OpenSim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
 
 static LLRegisterPanelClassWrapper<LLSidepanelInventory> t_inventory("sidepanel_inventory");
 
@@ -348,7 +352,14 @@ void LLSidepanelInventory::enableInbox(bool enabled)
 	LLLayoutPanel * inbox_layout_panel = getChild<LLLayoutPanel>(INBOX_LAYOUT_PANEL_NAME);
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	//inbox_layout_panel->setVisible(enabled);
-	inbox_layout_panel->setVisible(enabled && !gSavedSettings.getBOOL("FSShowInboxFolder"));
+	inbox_layout_panel->setVisible(enabled&& !gSavedSettings.getBOOL("FSShowInboxFolder")//); <FS:CR>
+// <FS:CR> Don't show Received Items panel on OpenSim
+#ifdef OPENSIM
+								   && !LLGridManager::getInstance()->isInOpenSim()
+#endif // OPENSIM
+
+								   );
+// </FS:CR>
 }
 
 // <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
