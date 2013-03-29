@@ -184,9 +184,9 @@
 		<check_box label="Umgebung bei Änderungen am Himmel in den Schnelleinstellungen überblenden" name="FSInterpolateSky" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Himmel. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
 		<check_box label="Umgebung bei Änderungen am Wasser in den Schnelleinstellungen überblenden" name="FSInterpolateWater" tool_tip="Kontrolliert den Überblendeffekt bei Änderung an der Voreinstellung zum Wasser. Dieser Effekt kann eine kurzzeitige Performanzminderung zur Folge haben. Deaktivieren, um die Änderung sofort anzuzeigen."/>
 		<text name="FSWLshare_txt">
-			Phoenix Windlight-Sharing (Experimentell):
+			Firestorm Windlight-Sharing:
 		</text>
-		<check_box label="Phoenix Windlight-Sharing für Parzellen aktivieren (Experimentell)" name="FSWLParcelEnabled"/>
+		<check_box label="Firestorm Windlight-Sharing für Parzellen aktivieren" name="FSWLParcelEnabled"/>
 		<check_box label="WL-Einstellungen von Freunden automatisch übernehmen" name="FSWLWhitelistFriends"/>
 		<check_box label="WL-Einstellungen von Land im Besitz meiner Gruppen automatisch übernehmen" name="FSWLWhitelistGroups"/>
 		<check_box label="WL-Einstellungen von allen Parzellen automatisch übernehmen" name="FSWLWhitelistAll"/>

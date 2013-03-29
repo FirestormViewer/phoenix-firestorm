@@ -163,9 +163,9 @@
         <check_box label="Płynne przenikanie ustawień regionu i moich Szybkich Preferencji" name="FSInterpolateSky" tool_tip="Opcja kontroluje płynne mieszanie się z sobą ustawień WL regionu i Szybkich Preferencji. Ten efekt może spowodować, że wolniejsze komputery mogą zwalniać na kilka sekund podczas zmiany otoczenia. Wyłącz te dwie opcje, aby pominąć efekt i stosować ustawienia natychmiast." />
         <check_box label="Płynne przenikanie ustawień wody i moich Szybkich Preferencji" name="FSInterpolateWater" tool_tip="To samo co powyżej, ale dla wody." />
         <text name="FSWLshare_txt" width="350">
-          Dzielenie się WL Phoenixa dla działek (testowe)
+          Dzielenie się WL Firestorma dla działek
         </text>
-        <check_box label="Używaj dzielenia się WL Phoenixa dla działek (testowe)" name="FSWLParcelEnabled" />
+        <check_box label="Używaj dzielenia się WL Firestorma dla działek" name="FSWLParcelEnabled" />
         <check_box label="Automatycznie stosuj ustawienia WL na działkach znajomych" name="FSWLWhitelistFriends" />
         <check_box label="Automatycznie stosuj ustawienia WL na działkach moich grup" name="FSWLWhitelistGroups" />
         <check_box label="Automatycznie stosuj ustawienia WL na wszystkich działkach" name="FSWLWhitelistAll" />

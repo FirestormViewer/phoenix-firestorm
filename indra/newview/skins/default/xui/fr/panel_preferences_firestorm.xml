@@ -409,16 +409,16 @@
 		<check_box name="PhoenixRestoreLastWLsettingsOnLogin" 
 			label="Save Windlight settings on logout"/>
 	-->
-		<text name="phoenixWLshare_txt">
-			Partage WL Phoenix (Experimental)
+		<text name="FSWLshare_txt">
+			Firestorm WL Share
 		</text>
-		<check_box name="PhoenixWLParcelEnabled"
-			label="Activer le partage parcellaire WindLight Phoenix"/>
-		<check_box name="PhoenixWLWhitelistFriends"
+		<check_box name="FSWLParcelEnabled"
+			label="Activer le partage parcellaire WindLight Firestorm"/>
+		<check_box name="FSWLWhitelistFriends"
 			label="Pour les terrains de vos amis"/>
-		<check_box name="PhoenixWLWhitelistGroups"
+		<check_box name="FSWLWhitelistGroups"
 			label="Pour les terrains de vos groupes"/>
-		<check_box name="PhoenixWLWhitelistAll"
+		<check_box name="FSWLWhitelistAll"
 			label="Pour tous les terrains"/>
 	</panel>
 

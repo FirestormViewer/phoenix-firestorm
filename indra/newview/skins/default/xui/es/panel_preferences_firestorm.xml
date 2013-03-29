@@ -169,9 +169,9 @@
 			<check_box label="Transición entre configuraciones de cielo" name="FSInterpolateSky" tool_tip="Proporciona un efecto de fundido entre las configuraciones de cielo WL al cambiarlas. El efecto puede reducir los FPS durante unos segundos en equipos lentos. Desactivar estas dos opciones para evitar el efecto y aplicar los cambios instantáneamente." />
 			<check_box label="Transición entre configuraciones de agua" name="FSInterpolateWater" tool_tip="Igual que la opción anterior, pero para el agua." />
 			<text name="FSWLshare_txt">
-				Compartición WL de Phoenix (experimental):
+				Compartición WL de Firestorm:
 			</text>
-			<check_box label="Usar compartición de Windlight de parcela (Experimental)" name="FSWLParcelEnabled"/>
+			<check_box label="Usar compartición de Windlight de parcela" name="FSWLParcelEnabled"/>
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis amigos" name="FSWLWhitelistFriends"/>
 			<check_box label="Autoaplicar las configuraciones WL de los terrenos de mis grupos" name="FSWLWhitelistGroups"/>
 			<check_box label="Autoaplicar las configuraciones WL de cualquier parcela" name="FSWLWhitelistAll"/>
