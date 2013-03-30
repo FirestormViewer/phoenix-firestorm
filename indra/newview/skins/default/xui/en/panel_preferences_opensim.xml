@@ -184,7 +184,7 @@
 		  name="lock"
 		  width="10" />
 		  <text
-			  top_pad="2"
+			  top_pad="6"
 			  follows="left|top"
 			  layout="topleft"
 			  left="50"
@@ -225,7 +225,7 @@
 			  visible="false"
 			  enabled_control="FSEditGrid"
 			  follows="left|top"
-			  height="19"
+			  height="16"
 			  label="Save"
 			  layout="topleft"
 			  left_pad="2"
