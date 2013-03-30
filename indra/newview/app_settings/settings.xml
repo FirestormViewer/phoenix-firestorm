@@ -20378,5 +20378,16 @@ Change of this parameter will affect the layout of buttons in notification toast
       <key>Value</key>
       <integer>0</integer>
     </map>
+    <key>FSDestroyGLTexturesThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Threshold, at what texture memory load level GL textures will be removed from memory if FSDestroyGLTexturesImmediately is set to TRUE.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.9</real>
+    </map>
 </map>
 </llsd>
