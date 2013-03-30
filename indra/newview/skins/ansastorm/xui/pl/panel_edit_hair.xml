@@ -20,6 +20,10 @@
 			</accordion>
 		</panel>
 		<panel name="hair_facial_tab_holder" title="Twarz">
+			<text name="hair_facial_not_available">
+				Opcje twarzy są dostępne tylko dla
+męskich awatarów.
+			</text>
 			<accordion name="hair_facial_accordion">
 				<accordion_tab name="hair_facial_tab" title="Twarz"/>
 			</accordion>
