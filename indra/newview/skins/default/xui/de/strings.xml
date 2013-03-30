@@ -5575,9 +5575,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="QP Max Avatars">
 		Max. Avatare
 	</string>
-	<string name="QP Height Offset">
-		Höhenabstand
-	</string>
 	<string name="QP Tags Offset">
 		Tag-Höhenabstand
 	</string>

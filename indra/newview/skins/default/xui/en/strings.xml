@@ -5055,7 +5055,6 @@ Try enclosing path to the editor with double quotes.
   <string name="QP Avatar Physics LOD">Avatar Physics LOD</string>
   <string name="QP LOD Factor">LOD Factor</string>
   <string name="QP Max Avatars">Max Avatars</string>
-  <string name="QP Height Offset">Height Offset</string>
   <string name="QP Tags Offset">Tags Offset</string>
   <string name="QP Name Tags">Name Tags</string>
   <string name="QP LookAt Target">LookAt Target</string>

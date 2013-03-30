@@ -41,14 +41,6 @@
      max="65"
      min="0" />
     <entries
-     control_name="AvatarZOffset"
-     control_type="3"
-     increment="0.05"
-     integer="0"
-     label="Height Offset"
-     max="2"
-     min="-2" />
-    <entries
      control_name="FSNameTagZOffsetCorrection"
      control_type="3"
      increment="1"
