@@ -35,6 +35,7 @@
 
 #include "llfloater.h"
 #include "llavatarpropertiesprocessor.h"
+#include "lllineeditor.h" // <FS:CR>
 
 class LLPanelPreference;
 class LLPanelLCD;
@@ -346,7 +347,9 @@ protected:
 	void addedGrid(bool success);
 	void onClickClearGrid();
 	void onClickRefreshGrid();
+	void onClickSaveGrid();
 	void onClickRemoveGrid();
+	void onSelectGrid();
 	bool removeGridCB(const LLSD& notification, const LLSD& response);
 // </FS:AW  grid management>
 // <FS:AW  opensim search support>
@@ -356,6 +359,17 @@ protected:
 
 	void refreshGridList(bool success = true);
 	LLScrollListCtrl* mGridListControl;
+private:
+	LLLineEditor* mEditorGridName;
+	LLLineEditor* mEditorGridURI;
+	LLLineEditor* mEditorLoginPage;
+	LLLineEditor* mEditorHelperURI;
+	LLLineEditor* mEditorWebsite;
+	LLLineEditor* mEditorSupport;
+	LLLineEditor* mEditorRegister;
+	LLLineEditor* mEditorPassword;
+	LLLineEditor* mEditorSearch;
+	LLLineEditor* mEditorGridMessage;
 };
 // </FS:AW  opensim preferences>
 #endif // OPENSIM // <FS:AW optional opensim support>
@@ -385,7 +399,6 @@ private:
 	bool mSocksSettingsDirty;
 	typedef std::map<LLControlVariable*, LLSD> control_values_map_t;
 	control_values_map_t mSavedValues;
-
 };
 
 

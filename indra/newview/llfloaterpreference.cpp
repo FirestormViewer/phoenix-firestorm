@@ -3497,31 +3497,57 @@ void LLFloaterPreference::applySelection(LLScrollListCtrl* control,BOOL all)
 }
 // </FS:Zi>
 
-#ifdef OPENSIM// <FS:AW optional opensim support>
-//<FS:AW  opensim preferences>
+// <FS:AW optional opensim support>
+#ifdef OPENSIM
 static LLRegisterPanelClassWrapper<LLPanelPreferenceOpensim> t_pref_opensim("panel_preference_opensim");
 
 LLPanelPreferenceOpensim::LLPanelPreferenceOpensim() : LLPanelPreference(),
 	mGridListControl(NULL)
 {
-// <FS:AW  opensim search support>
 	mCommitCallbackRegistrar.add("Pref.ClearDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickClearDebugSearchURL, this));
 	mCommitCallbackRegistrar.add("Pref.PickDebugSearchURL", boost::bind(&LLPanelPreferenceOpensim::onClickPickDebugSearchURL, this));
-// </FS:AW  opensim search support>
-// <FS:AW  grid management>
 	mCommitCallbackRegistrar.add("Pref.AddGrid", boost::bind(&LLPanelPreferenceOpensim::onClickAddGrid, this));
 	mCommitCallbackRegistrar.add("Pref.ClearGrid", boost::bind(&LLPanelPreferenceOpensim::onClickClearGrid, this));
 	mCommitCallbackRegistrar.add("Pref.RefreshGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRefreshGrid, this));
 	mCommitCallbackRegistrar.add("Pref.RemoveGrid", boost::bind( &LLPanelPreferenceOpensim::onClickRemoveGrid, this));
-// </FS:AW  grid management>
+	mCommitCallbackRegistrar.add("Pref.SaveGrid", boost::bind(&LLPanelPreferenceOpensim::onClickSaveGrid, this));
 }
-// <FS:AW  grid management>
+
 BOOL LLPanelPreferenceOpensim::postBuild()
 {
+	mEditorGridName = findChild<LLLineEditor>("name_edit");
+	mEditorGridURI = findChild<LLLineEditor>("grid_uri_edit");
+	mEditorLoginPage = findChild<LLLineEditor>("login_page_edit");
+	mEditorHelperURI = findChild<LLLineEditor>("helper_uri_edit");
+	mEditorWebsite = findChild<LLLineEditor>("website_edit");
+	mEditorSupport = findChild<LLLineEditor>("support_edit");
+	mEditorRegister = findChild<LLLineEditor>("register_edit");
+	mEditorPassword = findChild<LLLineEditor>("password_edit");
+	mEditorSearch = findChild<LLLineEditor>("search_edit");
+	mEditorGridMessage = findChild<LLLineEditor>("message_edit");
 	mGridListControl = getChild<LLScrollListCtrl>("grid_list");
+	mGridListControl->setCommitCallback(boost::bind(&LLPanelPreferenceOpensim::onSelectGrid, this));
 	refreshGridList();
 
 	return LLPanelPreference::postBuild();
+}
+
+void LLPanelPreferenceOpensim::onSelectGrid()
+{
+	LLSD  grid_info;
+	std::string grid = mGridListControl->getSelectedValue();
+	LLGridManager::getInstance()->getGridData(grid, grid_info);
+	
+	mEditorGridName->setText(grid_info[GRID_LABEL_VALUE].asString());
+	mEditorGridURI->setText(grid_info[GRID_LOGIN_URI_VALUE][0].asString());
+	mEditorLoginPage->setText(grid_info[GRID_LOGIN_PAGE_VALUE].asString());
+	mEditorHelperURI->setText(grid_info[GRID_HELPER_URI_VALUE].asString());
+	mEditorWebsite->setText(grid_info["about"].asString());
+	mEditorSupport->setText(grid_info["help"].asString());
+	mEditorRegister->setText(grid_info[GRID_REGISTER_NEW_ACCOUNT].asString());
+	mEditorPassword->setText(grid_info[GRID_FORGOT_PASSWORD].asString());
+	mEditorSearch->setText(grid_info["search"].asString());
+	mEditorGridMessage->setText(grid_info["message"].asString());
 }
 
 void LLPanelPreferenceOpensim::apply()
@@ -3553,9 +3579,32 @@ void LLPanelPreferenceOpensim::addedGrid(bool success)
 	if (success)
 	{
 		onClickClearGrid();
-		LLPanelLogin::updateServerCombo();
 	}
 	refreshGridList(success);
+}
+
+// TODO: Save changes to grid entries
+void LLPanelPreferenceOpensim::onClickSaveGrid()
+{
+	LLSD  grid_info;
+	grid_info[GRID_VALUE] = mGridListControl->getSelectedValue();
+	grid_info[GRID_LABEL_VALUE] = mEditorGridName->getValue();
+	grid_info[GRID_LOGIN_URI_VALUE][0] = mEditorGridURI->getValue();
+	grid_info[GRID_LOGIN_PAGE_VALUE] = mEditorLoginPage->getValue();
+	grid_info[GRID_HELPER_URI_VALUE] = mEditorHelperURI->getValue();
+	grid_info["about"] = mEditorWebsite->getValue();
+	grid_info["help"] = mEditorSupport->getValue();
+	grid_info[GRID_REGISTER_NEW_ACCOUNT] = mEditorRegister->getValue();
+	grid_info[GRID_FORGOT_PASSWORD] = mEditorPassword->getValue();
+	grid_info["search"] = mEditorSearch->getValue();
+	grid_info["message"] = mEditorGridMessage->getValue();
+	GridEntry* grid_entry = new GridEntry;
+	grid_entry->grid = grid_info;
+	grid_entry->set_current = false;
+	
+	//getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
+	//LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::addedGrid, this, _1));
+	//LLGridManager::getInstance()->addGrid(grid_entry, LLGridManager::MANUAL);
 }
 
 void LLPanelPreferenceOpensim::onClickClearGrid()
@@ -3598,7 +3647,6 @@ bool LLPanelPreferenceOpensim::removeGridCB(const LLSD& notification, const LLSD
 		getChild<LLUICtrl>("grid_management_panel")->setEnabled(FALSE);
 		/*mGridListChanged =*/ LLGridManager::getInstance()->addGridListChangedCallback(boost::bind(&LLPanelPreferenceOpensim::refreshGridList, this, _1));
 		LLGridManager::getInstance()->removeGrid(grid);
-		LLPanelLogin::updateServerCombo();
 	}
 	return false;
 }
@@ -3648,8 +3696,7 @@ void LLPanelPreferenceOpensim::refreshGridList(bool success)
 		}
 	}
 }
-// <FS:AW  grid management>
-// <FS:AW  opensim search support>
+
 void LLPanelPreferenceOpensim::onClickClearDebugSearchURL()
 {
 	LLNotificationsUtil::add("ConfirmClearDebugSearchURL", LLSD(), LLSD(), callback_clear_debug_search);
@@ -3660,7 +3707,6 @@ void LLPanelPreferenceOpensim::onClickPickDebugSearchURL()
 
 	LLNotificationsUtil::add("ConfirmPickDebugSearchURL", LLSD(), LLSD(),callback_pick_debug_search );
 }
-// </FS:AW  opensim search support>
-// </FS:AW  opensim preferences>
-#endif // OPENSIM // <FS:AW optional opensim support>
 
+#endif // OPENSIM
+// <FS:AW optional opensim support>

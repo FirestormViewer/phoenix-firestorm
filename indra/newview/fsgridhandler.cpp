@@ -638,8 +638,8 @@ void LLGridManager::addGrid(const std::string& loginuri)
 // </FS:AW  grid management>
 
 //
-// LLGridManager::addGrid - add a grid to the grid list, populating the needed values
-// if they're not populated yet.
+/// LLGridManager::addGrid - add a grid to the grid list, populating the needed values
+/// if they're not populated yet.
 //
 void LLGridManager::addGrid(GridEntry* grid_entry,  AddState state)
 {

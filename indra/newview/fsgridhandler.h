@@ -116,6 +116,7 @@ public:
 		FETCH,
 		FETCHTEMP,
 		SYSTEM,
+		MANUAL,
 		RETRY,
 		LOCAL,
 		FINISH,
@@ -254,10 +255,10 @@ public:
 	void saveGridList();
 // </AW opensim>
 	void clearFavorites();
+	void addGrid(GridEntry* grid_info, AddState state);
 
 private:
 	friend class GridInfoRequestResponder;
-	void addGrid(GridEntry* grid_info, AddState state);
 	void incResponderCount(){++mResponderCount;}
 	void decResponderCount(){--mResponderCount;}
 	void gridInfoResponderCB(GridEntry* grid_data);

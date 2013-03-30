@@ -88,7 +88,6 @@ public:
 
 	/// to be called from LLStartUp::setStartSLURL
 	static void onUpdateStartSLURL(const LLSLURL& new_start_slurl);
-	static void updateServerCombo();
 
 private:
 	friend class LLPanelLoginListener;
@@ -110,6 +109,7 @@ private:
 	static void onClickForgotPassword(void*);
 	static void onClickHelp(void*);
 	static void onPassKey(LLLineEditor* caller, void* user_data);
+	static void updateServerCombo();
 // <FS:CR>
 	static void onClickRemove(void*);
 	static void onClickGridMgrHelp(void*);

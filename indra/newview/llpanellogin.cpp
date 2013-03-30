@@ -293,6 +293,7 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 		LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	}
 	
+	updateServerCombo();
 	loadLoginPage();
 // </FS:CR>
 }
