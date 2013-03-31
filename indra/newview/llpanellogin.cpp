@@ -166,14 +166,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	server_choice_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectServer, this));
 
 // <FS:CR>
-	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
-	{
-		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
-		LLStartUp::setStartSLURL(slurl);
-	}
-// </FS:CR>
-
-// <FS:CR>
 	// Load all of the grids, sorted, and then add a bar and the current grid at the top
 	//server_choice_combo->removeall();
 
@@ -196,7 +188,12 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	//						 current_grid,
 	//						 ADD_TOP);	
 	//server_choice_combo->selectFirstItem();
-	updateServerCombo();
+	updateServer();
+	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
+	{
+		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
+		LLStartUp::setStartSLURL(slurl);
+	}
 // </FS:CR>
 	
 // <FS:CR> Moved this down further
@@ -293,7 +290,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 		LLPanelLogin::onUpdateStartSLURL(start_slurl); // updates grid if needed
 	}
 	
-	updateServerCombo();
 	loadLoginPage();
 // </FS:CR>
 }
@@ -1050,46 +1046,48 @@ void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 
 void LLPanelLogin::updateServer()
 {
-	if (sInstance)
+	if (!sInstance)
 	{
-		try 
+		return;
+	}
+	try
+	{
+		// if they've selected another grid, we should load the credentials
+		// for that grid and set them to the UI.
+		if(!sInstance->areCredentialFieldsDirty())
 		{
-			// if they've selected another grid, we should load the credentials
-			// for that grid and set them to the UI.
-			if(!sInstance->areCredentialFieldsDirty())
-			{
 // <FS:CR>
-				//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
-				LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
-				//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-				//sInstance->setFields(credential, remember);
-				sInstance->setFields(credential);
+			//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
+			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
+			//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
+			//sInstance->setFields(credential, remember);
+			sInstance->setFields(credential);
 // </FS:CR>
-			}
-
-			// update the login panel links
-			// <FS:CR> Unused by Firestorm
-			//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
-			// </FS:CR>
-
-			// Want to vanish not only create_new_account_btn, but also the
-			// title text over it, so turn on/off the whole layout_panel element.
-			// <FS:CR> or not!
-			//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
-			//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
-			// </FS:CR>
-
-			// grid changed so show new splash screen (possibly)
-			loadLoginPage();
 		}
-		catch (LLInvalidGridName ex)
-		{
-			LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
-			LLSD args;
-			args["GRID"] = ex.name();
-			LLNotificationsUtil::add("InvalidGrid", args);	
-			return;
-		}
+
+		// update the login panel links
+		// <FS:CR> Unused by Firestorm
+		//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
+		// </FS:CR>
+		
+		// Want to vanish not only create_new_account_btn, but also the
+		// title text over it, so turn on/off the whole layout_panel element.
+		// <FS:CR> or not!
+		//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
+		//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
+		// </FS:CR>
+
+		// grid changed so show new splash screen (possibly)
+		updateServerCombo();
+		loadLoginPage();
+	}
+	catch (LLInvalidGridName ex)
+	{
+		LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
+		LLSD args;
+		args["GRID"] = ex.name();
+		LLNotificationsUtil::add("InvalidGrid", args);
+		return;
 	}
 }
 
@@ -1320,7 +1318,7 @@ void LLPanelLogin::onSelectUser()
 		// do nothing
 	}
 	addFavoritesToStartLocation();
-	updateServerCombo();
+	updateServer();
 }
 
 // static
@@ -1357,7 +1355,6 @@ void LLPanelLogin::updateServerCombo()
 							 ADD_TOP);
 	server_choice_combo->selectFirstItem();
 	update_grid_help();
-	updateServer();
 }
 
 // static
@@ -1377,7 +1374,7 @@ std::string LLPanelLogin::credentialName()
 // static
 void LLPanelLogin::gridListChanged(bool success)
 {
-	updateServerCombo();
+	updateServer();
 }
 
 /////////////////////////
