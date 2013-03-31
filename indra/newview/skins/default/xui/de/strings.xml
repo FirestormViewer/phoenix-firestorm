@@ -5104,6 +5104,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Pose_Stand_Label">
 		Pose-Stand
 	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto auf Datenträger
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5235,6 +5238,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
 		Startet den Pose-Stand für den Avatar zum Justieren von Anhängen
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Macht ein Foto und speichert es auf der Festplatte
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
