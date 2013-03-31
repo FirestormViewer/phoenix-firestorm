@@ -46,4 +46,8 @@ namespace google_breakpad
 	};
 };
 
+#if LL_WINDOWS
+typedef void MDRawAssertionInfo;
+#endif
+
 #endif
