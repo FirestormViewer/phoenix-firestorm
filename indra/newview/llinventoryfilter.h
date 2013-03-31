@@ -158,7 +158,7 @@ public:
 	// ## Zi: Extended Inventory Search
 	void setFilterSubStringTarget(const std::string& targetName);
 	EFilterSubstringTarget getFilterSubStringTarget() const;
-	const std::string& getSearchableTarget(const LLFolderViewItem* item) const;
+	std::string getSearchableTarget(const LLFolderViewItem* item) const;
 	// ## Zi: Extended Inventory Search
 
 	// +-------------------------------------------------------------------+

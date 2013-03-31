@@ -121,8 +121,13 @@ public:
 	static const F32 FOLDER_CLOSE_TIME_CONSTANT;
 	static const F32 FOLDER_OPEN_TIME_CONSTANT;
 
+	// <FS:ND> replaced by getSearchableLabel() const
+
 	// Mostly for debugging printout purposes.
-	const std::string& getSearchableLabel() { return mSearchableLabel; }
+	
+	// const std::string& getSearchableLabel() { return mSearchableLabel; }
+
+	// </FS:ND>
 	
 	BOOL isLoading() const { return mIsLoading; }
 
@@ -136,14 +141,10 @@ protected:
 	LLFolderViewItem(const Params& p);
 
 	std::string					mLabel;
-	std::string					mSearchableLabel;
 
-	// ## Zi: Extended Inventory Search
-	std::string					mSearchableCreator;
-	std::string					mSearchableDescription;
-	std::string					mSearchableUUID;
-	std::string					mSearchableAll;
-	// ## Zi: Extended Inventory Search
+	// <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
+	// std::string					mSearchableLabel;
+	// </FS:ND>
 
 	S32							mLabelWidth;
 	bool						mLabelWidthDirty;
@@ -155,7 +156,11 @@ protected:
 	LLFontGL::StyleFlags		mLabelStyle;
 	std::string					mLabelSuffix;
 	LLUIImagePtr				mIcon;
+
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG // <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
 	std::string					mStatusText;
+#endif	// </FS:ND>
+
 	LLUIImagePtr				mIconOpen;
 	LLUIImagePtr				mIconOverlay;
 	BOOL						mHasVisibleChildren;
@@ -281,18 +286,23 @@ public:
 	// viewed. This method will ask the viewed object itself.
 	const std::string& getName( void ) const;
 
-	const std::string& getSearchableLabel( void ) const;
+	// const std::string& getSearchableLabel( void ) const;
+	std::string getSearchableLabel( void ) const;
 
 	// ## Zi: Extended Inventory Search
-	const std::string& getSearchableCreator( void ) const;
-	const std::string& getSearchableDescription( void ) const;
-	const std::string& getSearchableUUID( void ) const;
-	const std::string& getSearchableAll( void ) const;
+	std::string getSearchableCreator( void ) const;
+	std::string getSearchableDescription( void ) const;
+	std::string getSearchableUUID( void ) const;
+	std::string getSearchableAll( void ) const;
+
+	LLViewerInventoryItem * getInventoryItem(void) const;
+
 	// ## Zi: Extended Inventory Search
 
 	// This method returns the label displayed on the view. This
 	// method was primarily added to allow sorting on the folder
 	// contents possible before the entire view has been constructed.
+
 	const std::string& getLabel() const { return mLabel; }
 
 	// Used for sorting, like getLabel() above.

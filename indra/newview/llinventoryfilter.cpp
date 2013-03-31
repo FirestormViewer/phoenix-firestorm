@@ -123,7 +123,7 @@ LLInventoryFilter::EFilterSubstringTarget LLInventoryFilter::getFilterSubStringT
 }
 
 // returns one of the searchable strings, depending on the currently selected search type
-const std::string& LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
+std::string LLInventoryFilter::getSearchableTarget(const LLFolderViewItem* item) const
 {
 	if(mFilterSubStringTarget==SUBST_TARGET_NAME)
 		return item->getSearchableLabel();

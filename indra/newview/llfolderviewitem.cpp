@@ -311,82 +311,38 @@ void LLFolderViewItem::refreshFromListener()
 
 void LLFolderViewItem::refresh()
 {
+	std::string oldLabel = mLabel;
+	std::string oldSearchable = getSearchableAll();
+
 	refreshFromListener();
 
-	std::string searchable_label(mLabel);
-	searchable_label.append(mLabelSuffix);
-	LLStringUtil::toUpper(searchable_label);
+	// std::string searchable_label(mLabel);
+	// searchable_label.append(mLabelSuffix);
+	// LLStringUtil::toUpper(searchable_label);
+	// 
+	// if (mSearchableLabel.compare(searchable_label))
+	// {
+	// 	mSearchableLabel.assign(searchable_label);
+	// 	dirtyFilter();
+	// 	// some part of label has changed, so overall width has potentially changed, and sort order too
+	// 	if (mParentFolder)
+	// 	{
+	// 		mParentFolder->requestSort();
+	// 		mParentFolder->requestArrange();
+	// 	}
+	// }
 
-	// ## Zi: Extended Inventory Search
-	LLViewerInventoryItem* item=getInventoryItem();
-	if(item)
+	if( oldLabel.compare( mLabel ) )
 	{
-		// flag to determine if we need to change the mSearchableAll string
-		BOOL change_all=FALSE;
-
-		// creator never changes, so we only take it once
-		if(mSearchableCreator.empty())
-		{
-				std::string creator_name;
-				if(gCacheName->getFullName(item->getCreatorUUID(),creator_name))
-				{
-					LLStringUtil::toUpper( creator_name );
-
-					if( mSearchableCreator != creator_name )
-					{
-						mSearchableCreator=creator_name;
-						change_all=TRUE;
-					}
-				}
-		}
-
-		if(!item->getDescription().empty() )
-		{
-			std::string strDescr( item->getDescription() );
-			LLStringUtil::toUpper( strDescr );
-
-			if( strDescr != mSearchableDescription )
-			{
-				mSearchableDescription = strDescr;
-				change_all=TRUE;
-			}
-		}
-
-		if(!item->getAssetUUID().isNull())
-		{
-			std::string strUUID( mSearchableDescription );
-			LLStringUtil::toUpper( strUUID );
-
-			if( strUUID != mSearchableUUID )
-			{
-				mSearchableUUID = strUUID;
-				change_all=TRUE;
-			}
-		}
-
-		// if any of the above was changed, rebuild the mSearchableAll string
-		// using the + separator because it's used for multi substring search, so
-		// this can't do any harm like searches bleeding over from one field
-		// into the next
-		if(change_all)
-		{
-			mSearchableAll=mSearchableLabel+"+"+mSearchableCreator+"+"+mSearchableDescription+"+"+mSearchableUUID;
-			dirtyFilter();
-		}
-	}
-	// ## Zi: Extended Inventory Search
-
-	if (mSearchableLabel.compare(searchable_label))
-	{
-		mSearchableLabel.assign(searchable_label);
 		dirtyFilter();
-		// some part of label has changed, so overall width has potentially changed, and sort order too
 		if (mParentFolder)
-		{
-			mParentFolder->requestSort();
-			mParentFolder->requestArrange();
-		}
+	 	{
+	 		mParentFolder->requestSort();
+	 		mParentFolder->requestArrange();
+	 	}
 	}
+	else if(oldSearchable.compare( getSearchableAll() ) )
+		dirtyFilter();
 
 	mLabelWidthDirty = true;
 }
@@ -547,10 +503,12 @@ void LLFolderViewItem::filter( LLInventoryFilter& filter)
 
 	filter.decrementFilterCount();
 
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG // <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
 	if (getRoot()->getDebugFilters())
 	{
 		mStatusText = llformat("%d", mLastFilterGeneration);
 	}
+#endif // </FS:ND>
 }
 
 void LLFolderViewItem::dirtyFilter()
@@ -705,31 +663,73 @@ void LLFolderViewItem::rename(const std::string& new_name)
 	}
 }
 
-const std::string& LLFolderViewItem::getSearchableLabel() const
+std::string LLFolderViewItem::getSearchableLabel() const
 {
-	return mSearchableLabel;
+	std::string searchable_label(mLabel);
+	searchable_label.append(mLabelSuffix);
+	LLStringUtil::toUpper(searchable_label);
+	return searchable_label;
+	 
+	//	return mSearchableLabel;
 }
 
 // ## Zi: Extended Inventory Search
-const std::string& LLFolderViewItem::getSearchableCreator() const
+std::string LLFolderViewItem::getSearchableCreator() const
 {
-	return mSearchableCreator;
+	LLViewerInventoryItem* item=getInventoryItem();
+	std::string creator_name;
+	if(item)
+		if(gCacheName->getFullName(item->getCreatorUUID(),creator_name))
+			LLStringUtil::toUpper( creator_name );
+
+	return creator_name;
 }
 
-const std::string& LLFolderViewItem::getSearchableDescription() const
+std::string LLFolderViewItem::getSearchableDescription() const
 {
-	return mSearchableDescription;
+	std::string strDescr;
+	LLViewerInventoryItem* item=getInventoryItem();
+
+	if(item)
+	{
+		if(!item->getDescription().empty() )
+		{
+			strDescr =  item->getDescription();
+			LLStringUtil::toUpper( strDescr );
+		}
+	}
+
+	return strDescr;
 }
 
-const std::string& LLFolderViewItem::getSearchableUUID() const
+std::string LLFolderViewItem::getSearchableUUID() const
 {
-	return mSearchableUUID;
+	std::string strUUID;
+	LLViewerInventoryItem* item=getInventoryItem();
+	if(item)
+	{
+		if(!item->getAssetUUID().isNull())
+		{
+			strUUID = item->getAssetUUID().asString();
+			LLStringUtil::toUpper( strUUID );
+		}
+
+	}
+	return strUUID;
 }
 
-const std::string& LLFolderViewItem::getSearchableAll() const
+std::string LLFolderViewItem::getSearchableAll() const
 {
-	return mSearchableAll;
+	return getSearchableLabel()+"+"+getSearchableCreator()+"+"+getSearchableDescription()+"+"+getSearchableUUID();
 }
+
+LLViewerInventoryItem * LLFolderViewItem::getInventoryItem(void) const
+{
+	if (!getListener()) return NULL;
+	return gInventory.getItem(getListener()->getUUID());
+}
+
+
 // ## Zi: Extended Inventory Search
 
 LLViewerInventoryItem * LLFolderViewItem::getInventoryItem(void)
@@ -1122,6 +1122,7 @@ void LLFolderViewItem::draw()
 	//--------------------------------------------------------------------------------//
 	// Highlight filtered text
 	//
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG // <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
 	if (getRoot()->getDebugFilters())
 	{
 		if (!getFiltered() && !possibly_has_children)
@@ -1136,6 +1137,8 @@ void LLFolderViewItem::draw()
 												 S32_MAX, S32_MAX, &right_x, FALSE );
 		text_left = right_x;
 	}
+#endif // </FS:ND>
+
 	//--------------------------------------------------------------------------------//
 	// Draw the actual label text
 	//
@@ -1574,12 +1577,14 @@ void LLFolderViewFolder::filter( LLInventoryFilter& filter)
 		}
 	}
 
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG // <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
 	if (getRoot()->getDebugFilters())
 	{
 		mStatusText = llformat("%d", mLastFilterGeneration);
 		mStatusText += llformat("(%d)", mCompletedFilterGeneration);
 		mStatusText += llformat("+%d", mMostFilteredDescendantGeneration);
 	}
+#endif // </FS:NS>
 
 	// all descendants have been filtered later than must pass generation
 	// but none passed
@@ -1714,10 +1719,12 @@ void LLFolderViewFolder::filterFolder(LLInventoryFilter& filter)
 	setFilteredFolder(passed_filter, filter.getCurrentGeneration());
 	filter.decrementFilterCount();
 
+#if LL_RELEASE_WITH_DEBUG_INFO || LL_DEBUG // <FS:ND> Reduce memory load for users with huge inventory by only creating member we really need
 	if (getRoot()->getDebugFilters())
 	{
 		mStatusText = llformat("%d", mLastFilterGeneration);
 	}
+#endif // </FS:ND>
 }
 
 void LLFolderViewFolder::setFiltered(BOOL filtered, S32 filter_generation)
@@ -3085,3 +3092,4 @@ bool LLInventorySort::operator()(const LLFolderViewItem* const& a, const LLFolde
 		}
 	}
 }
+

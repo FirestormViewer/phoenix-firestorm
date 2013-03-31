@@ -382,6 +382,11 @@ private:
 
 	FolderviewProxy *mFolderviewProxy;
 	// </FS:ND>
+
+#if !LL_RELEASE_WITH_DEBUG_INFO && !LL_DEBUG // <FS:ND> To reduce memory load for users with huge inventory this member is not defined in LLFolderViewItem for those targets
+	std::string	mStatusText;
+#endif	// </FS:ND>
+
 };
 
 bool sort_item_name(LLFolderViewItem* a, LLFolderViewItem* b);
