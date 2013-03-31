@@ -166,14 +166,6 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	server_choice_combo->setCommitCallback(boost::bind(&LLPanelLogin::onSelectServer, this));
 
 // <FS:CR>
-	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
-	{
-		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
-		LLStartUp::setStartSLURL(slurl);
-	}
-// </FS:CR>
-
-// <FS:CR>
 	// Load all of the grids, sorted, and then add a bar and the current grid at the top
 	//server_choice_combo->removeall();
 
@@ -196,7 +188,12 @@ LLPanelLogin::LLPanelLogin(const LLRect &rect,
 	//						 current_grid,
 	//						 ADD_TOP);	
 	//server_choice_combo->selectFirstItem();
-	updateServerCombo();
+	updateServer();
+	if(LLStartUp::getStartSLURL().getType() != LLSLURL::LOCATION)
+	{
+		LLSLURL slurl(gSavedSettings.getString("LoginLocation"));
+		LLStartUp::setStartSLURL(slurl);
+	}
 // </FS:CR>
 	
 // <FS:CR> Moved this down further
@@ -1049,46 +1046,48 @@ void LLPanelLogin::onPassKey(LLLineEditor* caller, void* user_data)
 
 void LLPanelLogin::updateServer()
 {
-	if (sInstance)
+	if (!sInstance)
 	{
-		try 
+		return;
+	}
+	try
+	{
+		// if they've selected another grid, we should load the credentials
+		// for that grid and set them to the UI.
+		if(!sInstance->areCredentialFieldsDirty())
 		{
-			// if they've selected another grid, we should load the credentials
-			// for that grid and set them to the UI.
-			if(!sInstance->areCredentialFieldsDirty())
-			{
 // <FS:CR>
-				//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
-				LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
-				//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
-				//sInstance->setFields(credential, remember);
-				sInstance->setFields(credential);
+			//LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(LLGridManager::getInstance()->getGrid());
+			LLPointer<LLCredential> credential = gSecAPIHandler->loadCredential(credentialName());
+			//bool remember = sInstance->getChild<LLUICtrl>("remember_check")->getValue();
+			//sInstance->setFields(credential, remember);
+			sInstance->setFields(credential);
 // </FS:CR>
-			}
-
-			// update the login panel links
-			// <FS:CR> Unused by Firestorm
-			//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
-			// </FS:CR>
-
-			// Want to vanish not only create_new_account_btn, but also the
-			// title text over it, so turn on/off the whole layout_panel element.
-			// <FS:CR> or not!
-			//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
-			//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
-			// </FS:CR>
-
-			// grid changed so show new splash screen (possibly)
-			loadLoginPage();
 		}
-		catch (LLInvalidGridName ex)
-		{
-			LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
-			LLSD args;
-			args["GRID"] = ex.name();
-			LLNotificationsUtil::add("InvalidGrid", args);	
-			return;
-		}
+
+		// update the login panel links
+		// <FS:CR> Unused by Firestorm
+		//bool system_grid = LLGridManager::getInstance()->isSystemGrid();
+		// </FS:CR>
+		
+		// Want to vanish not only create_new_account_btn, but also the
+		// title text over it, so turn on/off the whole layout_panel element.
+		// <FS:CR> or not!
+		//sInstance->getChild<LLLayoutPanel>("links")->setVisible(system_grid);
+		//sInstance->getChildView("forgot_password_text")->setVisible(system_grid);
+		// </FS:CR>
+
+		// grid changed so show new splash screen (possibly)
+		updateServerCombo();
+		loadLoginPage();
+	}
+	catch (LLInvalidGridName ex)
+	{
+		LL_WARNS("AppInit")<<"server '"<<ex.name()<<"' selection failed"<<LL_ENDL;
+		LLSD args;
+		args["GRID"] = ex.name();
+		LLNotificationsUtil::add("InvalidGrid", args);
+		return;
 	}
 }
 
@@ -1319,45 +1318,43 @@ void LLPanelLogin::onSelectUser()
 		// do nothing
 	}
 	addFavoritesToStartLocation();
-	updateServerCombo();
+	updateServer();
 }
 
 // static
 void LLPanelLogin::updateServerCombo()
 {
-	if (sInstance)
-	{
+	if (!sInstance) return;
+	
 #ifdef OPENSIM
-		//LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
+	LLGridManager::getInstance()->addGridListChangedCallback(&LLPanelLogin::gridListChanged);
 #endif // OPENSIM
-		// We add all of the possible values, sorted, and then add a bar and the current value at the top
-		LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
-		server_choice_combo->removeall();
+	// We add all of the possible values, sorted, and then add a bar and the current value at the top
+	LLComboBox* server_choice_combo = sInstance->getChild<LLComboBox>("server_combo");
+	server_choice_combo->removeall();
+
+	std::string current_grid = LLGridManager::getInstance()->getGrid();
+	std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
 	
-		std::string current_grid = LLGridManager::getInstance()->getGrid();
-		std::map<std::string, std::string> known_grids = LLGridManager::getInstance()->getKnownGrids();
-	
-		for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
-			 grid_choice != known_grids.end();
-			 grid_choice++)
+	for (std::map<std::string, std::string>::iterator grid_choice = known_grids.begin();
+		 grid_choice != known_grids.end();
+		 grid_choice++)
+	{
+		if (!grid_choice->first.empty() && current_grid != grid_choice->first)
 		{
-			if (!grid_choice->first.empty() && current_grid != grid_choice->first)
-			{
-				LL_DEBUGS("AppInit") << "adding " << grid_choice->first << LL_ENDL;
-				server_choice_combo->add(grid_choice->second, grid_choice->first);
-			}
+			LL_DEBUGS("AppInit") << "adding " << grid_choice->first << LL_ENDL;
+			server_choice_combo->add(grid_choice->second, grid_choice->first);
 		}
-		server_choice_combo->sortByName();
-		server_choice_combo->addSeparator(ADD_TOP);
-	
-		LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
-		server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
-								 current_grid,
-								 ADD_TOP);
-		server_choice_combo->selectFirstItem();
-		update_grid_help();
-		updateServer();
 	}
+	server_choice_combo->sortByName();
+	server_choice_combo->addSeparator(ADD_TOP);
+	
+	LL_DEBUGS("AppInit") << "adding current " << current_grid << LL_ENDL;
+	server_choice_combo->add(LLGridManager::getInstance()->getGridLabel(),
+							 current_grid,
+							 ADD_TOP);
+	server_choice_combo->selectFirstItem();
+	update_grid_help();
 }
 
 // static
@@ -1377,7 +1374,7 @@ std::string LLPanelLogin::credentialName()
 // static
 void LLPanelLogin::gridListChanged(bool success)
 {
-	updateServerCombo();
+	updateServer();
 }
 
 /////////////////////////

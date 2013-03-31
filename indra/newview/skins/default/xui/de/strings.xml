@@ -1054,6 +1054,9 @@ Warten Sie kurz und versuchen Sie dann noch einmal, sich anzumelden.
 	<string name="dictionary_files">
 		Wörterbücher
 	</string>
+	<string name="backup_files">
+		Objekt-Sicherungen
+	</string>
 	<string name="AvatarSetNotAway">
 		Nicht abwesend
 	</string>
@@ -5101,6 +5104,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	<string name="Command_Pose_Stand_Label">
 		Pose-Stand
 	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Foto auf Datenträger
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informationen zu dem von Ihnen besuchten Land
 	</string>
@@ -5232,6 +5238,9 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
 		Startet den Pose-Stand für den Avatar zum Justieren von Anhängen
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Macht ein Foto und speichert es auf der Festplatte
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		gegenwärtig in der unteren Symbolleiste
@@ -5527,19 +5536,19 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		LSL-Brücke wird erstellt. Dies kann einen Moment dauern. Bitte warten...
 	</string>
 	<string name="fsbridge_failure_creation_bad_name">
-		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte versuchen, die Brücke neu zu erstellen.
+		LSL-Brücke nicht erstellt. Der Name der Brücke ist inkorrekt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>
 	<string name="fsbridge_failure_creation_null">
-		LSL-Brücke nicht erstellt. Die Brücke konnte nicht im Inventar gefunden werden. Bitte versuchen, die Brücke neu zu erstellen.
+		LSL-Brücke nicht erstellt. Die Brücke konnte nicht im Inventar gefunden werden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>
 	<string name="fsbridge_failure_attach_wrong_object">
-		LSL-Brücke konnte nicht hinzugefügt werden. Die Version der Brücke ist falsch. Bitte versuchen, die Brücke neu zu erstellen.
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Version der Brücke ist falsch. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>
 	<string name="fsbridge_failure_attach_wrong_location">
-		LSL-Brücke konnte nicht hinzugefügt werden. Die Brücke wurde nicht am korrekten Ort im Inventar gefunden. Bitte versuchen, die Brücke neu zu erstellen.
+		LSL-Brücke konnte nicht hinzugefügt werden. Die Brücke wurde nicht am korrekten Ort im Inventar gefunden. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>
 	<string name="fsbridge_failure_attach_point_in_use">
-		LSL-Brücke konnte nicht hinzugefügt werden. Der Anhängepunkt war bereits durch ein anderes Objekt belegt. Bitte versuchen, die Brücke neu zu erstellen.
+		LSL-Brücke konnte nicht hinzugefügt werden. Der Anhängepunkt war bereits durch ein anderes Objekt belegt. Bitte die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ verwenden, um die Brücke neu zu erstellen.
 	</string>
 	<string name="fsbridge_failure_not_found">
 		Das Objekt für die LSL-Brücke konnte nicht gefunden werden. Mit der Erstellung kann nicht fortgefahren werden.
@@ -5548,7 +5557,7 @@ Setzen Sie den Editorpfad in Anführungszeichen
 		Die LSL-Brücke enthält unerwartete Objekte.
 	</string>
 	<string name="fsbridge_warning_not_finished">
-		Die LSL-Brücke wurde noch nicht vollständig erstellt, sie muss eventuell neu erstellt werden, um genutzt werden zu können.
+		Die LSL-Brücke wurde noch nicht vollständig erstellt, sie muss eventuell über die Menü-Option „Avatar“ &gt; „Avatar-Befinden“ &gt; „LSL-Brücke neu erstellen“ neu erstellt werden, um genutzt werden zu können.
 	</string>
 	<string name="fsbridge_detached">
 		LSL-Brücke abgenommen.
@@ -5571,9 +5580,6 @@ Setzen Sie den Editorpfad in Anführungszeichen
 	</string>
 	<string name="QP Max Avatars">
 		Max. Avatare
-	</string>
-	<string name="QP Height Offset">
-		Höhenabstand
 	</string>
 	<string name="QP Tags Offset">
 		Tag-Höhenabstand

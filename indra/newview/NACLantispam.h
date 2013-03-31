@@ -2,6 +2,7 @@
 #define NACL_ANTISPAM_H
 
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include "fscommon.h"
 #include "lluuid.h"
 #include "llsingleton.h"
@@ -44,6 +45,7 @@ private:
 };
 
 typedef boost::unordered_map<LLUUID, NACLAntiSpamQueueEntry*, FSUUIDEntryHasher> t_spam_queue_entry_map;
+typedef boost::unordered_set<LLUUID, FSUUIDEntryHasher> t_collision_sound_set;
 
 class NACLAntiSpamQueue
 {
@@ -93,6 +95,8 @@ public:
 	void clearAllQueues();
 	void purgeAllQueues();
 
+	bool isCollisionSound(const LLUUID& sound_id);
+
 private:
 	NACLAntiSpamRegistry();
 	~NACLAntiSpamRegistry();
@@ -110,5 +114,6 @@ private:
 	U32						mGlobalTime;
 	U32						mGlobalAmount;
 	bool					mGlobalQueue;
+	t_collision_sound_set	mCollisionSounds;
 };
 #endif // NACL_ANTISPAM_H

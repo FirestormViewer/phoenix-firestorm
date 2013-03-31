@@ -1041,6 +1041,9 @@ Intenta iniciar sesión de nuevo en unos instantes.
 	<string name="dictionary_files">
 		Diccionarios
 	</string>
+	<string name="backup_files">
+		Respaldos de objetos
+	</string>
 	<string name="AvatarSetNotAway">
 		Salir del estado ausente
 	</string>
@@ -5361,7 +5364,6 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="QP Avatar Physics LOD">Detalle física av.</string>
 	<string name="QP LOD Factor">Nivel de detalle</string>
 	<string name="QP Max Avatars"># máximo avatares</string>
-	<string name="QP Height Offset">Altura avatar</string>
 	<string name="QP Tags Offset">Altura etiquetas</string>
 	<string name="QP Name Tags">Etiquetas nombre</string>
 	<string name="QP LookAt Target">Puntos de mira</string>
@@ -5380,4 +5382,5 @@ Inténtalo incluyendo la ruta de acceso al editor entre comillas
 	<string name="QP_WL_Region_Default">Por defecto de la región</string>
 	<string name="QP_WL_Day_Cycle_Based">Basado en ciclo de día</string>
 	<string name="QP_WL_None">Ninguno</string>
+	<string name="GroupChatMuteNotice">Silenciando el chat de grupo de [NAME].</string>
 </strings>

@@ -21,7 +21,7 @@
 				<pie_slice label="Temporär" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Melden..." name="Report Abuse..."/>
-			<pie_separator name="export_placeholder" />
+			<pie_slice label="Exportieren" name="Export"/>
 			<pie_menu label="Pathfinding &gt;" name="Pathfinding">
 				<pie_slice label="In Linksets" name="show_in_linksets"/>
 				<pie_slice label="In Figuren" name="show_in_characters"/>

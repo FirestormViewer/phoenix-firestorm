@@ -861,4 +861,8 @@
     <color
      name="CurrencyColor"
      reference="LabelTextColor" />
+
+  <color
+      name="Phototools_Header"
+      reference="EmphasisColor" />
 </colors>

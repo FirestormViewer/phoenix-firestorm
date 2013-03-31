@@ -4,7 +4,7 @@
   help_topic="fs_import"
   title="Object Import"
   width="210"
-  height="138"
+  height="145"
   save_rect="true"
   can_resize="false"
   can_minimize="true"
@@ -36,7 +36,7 @@
     </floater.string>
     <floater.string
      name="sound_uploading">
-        Uploading sound [SOUND] of [SOUNDETOTAL].
+        Uploading sound [SOUND] of [SOUNDTOTAL].
     </floater.string>
     <floater.string
      name="animation_uploading">
@@ -65,7 +65,7 @@
      type="string"
      length="1"
      follows="left|top"
-     height="19"
+     height="26"
      layout="topleft"
      left="5"
      name="file_status_text"
@@ -131,7 +131,7 @@
       left_delta="130"
       enabled="false"
       name="temp_asset"
-      label="temp" >
+      label="Temp" >
       <check_box.commit_callback
 	    function="Import.TempAsset" />
     </check_box>

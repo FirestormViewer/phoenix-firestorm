@@ -44,23 +44,34 @@ BOOL FSFloaterPoseStand::postBuild()
 // virtual
 void FSFloaterPoseStand::onOpen(const LLSD& key)
 {
-	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting() && isAgentAvatarValid())
+	if (!isAgentAvatarValid())
+		return;
+	
+	if (gSavedSettings.getBOOL("FSPoseStandLock") && !gAgentAvatarp->isSitting())
 	{
 		setLock(true);
 	}
-	gAgentAvatarp->setIsEditingAppearance(TRUE);
+	gAgent.stopCurrentAnimations();
+	gAgent.setCustomAnim(TRUE);
+	gFocusMgr.setKeyboardFocus(NULL);
+	gFocusMgr.setMouseCapture(NULL);
 	onCommitCombo();
 }
 
 // virtual
 void FSFloaterPoseStand::onClose(bool app_quitting)
 {
-	if (mPoseStandLock == true && gAgentAvatarp->isSitting() && isAgentAvatarValid())
+	if (!isAgentAvatarValid())
+		return;
+	
+	if (mPoseStandLock == true && gAgentAvatarp->isSitting())
 	{
 		setLock(false);
+		gAgent.standUp();
 	}
-	gAgentAvatarp->setIsEditingAppearance(FALSE);
+	gAgent.setCustomAnim(FALSE);
 	FSPose::getInstance()->stopPose();
+	gAgent.stopCurrentAnimations();
 }
 
 void FSFloaterPoseStand::loadPoses()

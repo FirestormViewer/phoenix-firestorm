@@ -6437,10 +6437,35 @@ void LLSelectMgr::updateSelectionCenter()
 	{
 		mSelectedObjects->mSelectType = getSelectTypeForObject(object);
 
-		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid())
+		// <FS:Ansariel> Chalice Yao's pause agent on attachment selection
+		//if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT && isAgentAvatarValid())
+		//{
+		//	mPauseRequest = gAgentAvatarp->requestPause();
+		//}
+		if (mSelectedObjects->mSelectType == SELECT_TYPE_ATTACHMENT)
 		{
-			mPauseRequest = gAgentAvatarp->requestPause();
+			if (isAgentAvatarValid() && object->permYouOwner())
+			{
+				mPauseRequest = gAgentAvatarp->requestPause();
+			}
+			else
+			{
+				LLViewerObject* objectp = mSelectedObjects->getPrimaryObject();
+				if (objectp && objectp->isAttachment())
+				{
+					while (objectp && !objectp->isAvatar())
+					{
+						objectp = (LLViewerObject*)objectp->getParent();
+					}
+
+					if (objectp && objectp->isAvatar())
+					{
+						mPauseRequest = objectp->asAvatar()->requestPause();
+					}
+				}
+			}
 		}
+		// </FS:Ansariel>
 		else
 		{
 			mPauseRequest = NULL;

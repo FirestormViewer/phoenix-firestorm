@@ -22,6 +22,7 @@
 				<pie_slice label="Temporal" name="Derender"/>
 			</pie_menu>
 			<pie_slice label="Denunciar..." name="Report Abuse..."/>
+			<pie_slice label="Exportar" name="Export"/>
 			<pie_menu label="Pathfinding >" name="Pathfinding">
 				<pie_slice label="Mostrar en linksets" name="show_in_linksets"/>
 				<pie_slice label="Mostrar en personajes" name="show_in_characters"/>

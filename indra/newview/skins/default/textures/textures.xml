@@ -721,6 +721,7 @@ with the same filename but different name
   <texture name="landmark_here" file_name="toolbar_icons/landmark_here.png" preload="true" />
   <texture name="teleport_history" file_name="toolbar_icons/teleporthistory.png" preload="true" />
   <texture name="pose_stand" file_name="toolbar_icons/posestand.png" preload="true" />
+  <texture name="Command_Snapshot_2_Disk_Icon" file_name="toolbar_icons/snapshot_to_disk.png" preload="true" />
 
   
   <texture name="Unread_Chiclet" file_name="bottomtray/Unread_Chiclet.png" preload="false" />

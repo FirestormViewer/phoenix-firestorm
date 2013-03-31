@@ -172,9 +172,9 @@
         <check_box label="Cambiare gradualmente le impostazioni del cielo" name="FSInterpolateSky" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
         <check_box label="Cambiare gradualmente le impostazioni dell'acuqa" name="FSInterpolateWater" tool_tip="Questa opzione cambierà le impostazioni dell'ambiente gradualmente, questo provocherà rallentamenti poichè richiede un'utilizzo di FPS. Disabilitarla per cambiare instantaniamente le impostazioni dell'ambiente" />
         <text name="FSWLshare_txt">
-          Condivisione Phoenix WL (Sperimentale)
+          Condivisione Firestorm WL
         </text>
-        <check_box label="Usa Phoenix Parcel Windlight (Sperimentale)" name="FSWLParcelEnabled" />
+        <check_box label="Usa Firestorm Parcel Windlight" name="FSWLParcelEnabled" />
         <check_box label="Applica automaticamente le impostazioni WL nelle sim di amici" name="FSWLWhitelistFriends" />
         <check_box label="Applica automaticamente le impostazioni WL nelle land dei miei Gruppi" name="FSWLWhitelistGroups" />
         <check_box label="Applica automaticamente le impostazioni WL ovunque" name="FSWLWhitelistAll" />

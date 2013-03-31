@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<floater name="fs_import" title="Importowanie obiektu">
+	<floater.string name="file_status">
+		[LINKSETS] zbiorów części. [PRIMS] prim. [TEXTURES] tekstur.
+        [SOUNDS] dźwięków. [ANIMATIONS] animacji.
+	</floater.string>
+	<floater.string name="file_status_error">
+		Błąd odczytu. Wybierz inny plik.
+	</floater.string>
+	<floater.string name="file_version_error">
+		Błąd parsowania pliku, zły format lub wersja.
+	</floater.string>
+	<floater.string name="file_status_running">
+		Zbiór części [LINKSET] z [LINKSETS], prima [PRIM] z [PRIMS]
+	</floater.string>
+	<floater.string name="file_status_done">
+		Importowanie zakończone.
+	</floater.string>
+	<floater.string name="texture_uploading">
+		Przesyłanie tekstury [TEXTURE] a [TEXTURETOTAL].
+	</floater.string>
+	<floater.string name="sound_uploading">
+		Przesyłanie dźwięku [SOUND] z [SOUNDTOTAL].
+	</floater.string>
+	<floater.string name="animation_uploading">
+		Przesyłanie animacji [ANIMATION] z [ANIMATIONTOTAL].
+	</floater.string>
+	<floater.string name="asset_uploading">
+		Przesyłanie zasobu danych [ASSET] z [ASSETTOTAL].
+	</floater.string>
+	<floater.string name="upload_cost">
+		Łączny koszt ładowanych: [COST] L$.
+	</floater.string>
+	<text name="file_status_text">
+		Wybierz plik.
+	</text>
+	<button name="pick_file" label="Wybierz plik" />
+	<button name="import_file" label="Importuj" />
+	<check_box name="do_not_attach" label="Nie zakładaj obiektu" />
+	<check_box name="region_position" label="Przywróć pozycję w regionie" />
+	<check_box name="upload_asset" label="Załaduj" />
+	<check_box name="temp_asset" label="tymcz." />
+</floater>

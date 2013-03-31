@@ -128,7 +128,7 @@ void FSFloaterImport::onClickBtnPickFile()
 {
 	// pick a file
 	LLFilePicker& file_picker = LLFilePicker::instance();
-	if(!file_picker.getOpenFile(LLFilePicker::FFLOAD_ALL))
+	if(!file_picker.getOpenFile(LLFilePicker::FFLOAD_IMPORT))
 	{
 		// User canceled or we failed to acquire file.
 		return;

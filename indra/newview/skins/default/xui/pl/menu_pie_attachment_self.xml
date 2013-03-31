@@ -10,6 +10,7 @@
             <pie_slice label="Tymczasowo" name="Derender"/>
             <pie_slice label="Czarna lista" name="DerenderPermanent"/>
         </pie_menu>
+        <pie_slice label="Eksportuj" name="Export"/>
     </pie_menu>
     <pie_slice label="Usiądź tu" name="Sit Down Here"/>
     <pie_slice label="Wstań" name="Stand Up"/>

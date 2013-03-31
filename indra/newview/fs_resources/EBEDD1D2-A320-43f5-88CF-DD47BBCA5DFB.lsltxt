@@ -95,7 +95,7 @@
         integer n = llGetInventoryNumber(INVENTORY_SCRIPT);
         if (n > 1)
         {
-            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option re-create your bridge now.");
+            llOwnerSay("NOTICE: One or more scripts have been added to your Firestorm bridge! If you did not expect this message, use the Firestorm 'Avatar/Avatar Health/Recreate Bridge' menu option to re-create your bridge now.");
             llSleep(1.0);
             while(n)
             {

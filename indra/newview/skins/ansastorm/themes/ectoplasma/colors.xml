@@ -755,7 +755,7 @@
      reference="Black" />
     <color
      name="ScrollDisabledColor"
-     reference="Black_25" />
+     reference="LtGray_50" />
     <color
      name="ScrollHighlightedColor"
      reference="Unused?" />
@@ -813,7 +813,7 @@
 	 reference="DkGray" />
     <color
      name="TextBgWriteableColor"
-     reference="Black_25" />
+     reference="Black" />
     <color
      name="TextCursorColor"
      reference="White" />
@@ -886,4 +886,8 @@
 	<color
 	 name="CurrencyColor"
 	 reference="LabelTextColor" />
+
+  <color
+      name="Phototools_Header"
+      reference="SchemeLightest_35" />
 </colors>

@@ -31,7 +31,7 @@
             <menu_item_call label="Auf weiblichen Standard-Avatar zurücksetzen" name="ResetDefaultAvF"/>
 			<menu_item_check label="Render-Weight für Avatare anzeigen (Ersatz für ARC)" name="Avatar Rendering Cost"/>
 			<menu_item_call label="Lag-Meter" name="Lag Meter"/>
-			<menu_item_call label="LSL-Bridge neu erstellen" name="Recreate LSL Bridge"/>
+			<menu_item_call label="LSL-Brücke neu erstellen" name="Recreate LSL Bridge"/>
 		</menu>
 		<menu_item_call label="Tip-Tracker" name="money_tracker"/>
 		<menu_item_call label="Pose-Stand..." name="pose_stand"/>
@@ -42,6 +42,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
+			<menu_item_call label="Linkset importieren" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Admin-Status anfordern" name="Request Admin Options"/>
 		<menu_item_call label="Admin-Status verlassen" name="Leave Admin Options"/>
@@ -197,6 +198,7 @@
 			<menu_item_call label="Modell..." name="Upload Model"/>
 			<menu_item_call label="Mehrfach-Upload ([COST] pro Datei)..." name="Bulk Upload"/>
 			<menu_item_call label="Standard-Berechtigungen für Upload festlegen" name="perm prefs"/>
+			<menu_item_call label="Linkset importieren" name="import linkset"/>
 		</menu>
 		<menu_item_call label="Rückgängig" name="Undo"/>
 		<menu_item_call label="Wiederholen" name="Redo"/>

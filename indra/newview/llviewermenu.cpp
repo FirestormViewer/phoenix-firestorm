@@ -7126,8 +7126,17 @@ bool update_grid_help()
 			gMenuHolder->childSetVisible("Destinations", false);
 		}
 	}
+// <FS:CR> Show/hide some menu items depending on if they're supported by the platform or not
 	gMenuHolder->childSetVisible("firestorm_support_group", LLGridManager::getInstance()->isInSLMain()); // <FS:CR> FVS only exists on Agni
-	gMenuHolder->childSetVisible("Avatar Phantom", LLGridManager::getInstance()->isInOpenSim());	// <FS:CR> Phantom mode still works on opensim, so allow it there
+	bool opensim = LLGridManager::getInstance()->isInOpenSim();
+	gMenuHolder->childSetVisible("Avatar Phantom", opensim);
+	gMenuHolder->childSetEnabled("Avatar Phantom", opensim);
+	gMenuHolder->childSetVisible("Manage Account", !opensim);
+	gMenuHolder->childSetVisible("MerchantOutbox", !opensim);
+	// FIX ME: gMenuHolder->childSetVisible("Pathfinding", !opensim);
+	gMenuHolder->childSetVisible("LindenXchange", !opensim);
+	gMenuHolder->childSetVisible("SL Marketplace", !opensim); // TODO: Devise or conspire a way to fetch other grids' web marketplaces instead of hiding this
+// </FS:CR>
 #endif // OPENSIM // <FS:AW optional opensim support>
 // </FS:AW  opensim destinations and avatar picker>
 

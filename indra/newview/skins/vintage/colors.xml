@@ -268,4 +268,7 @@
 	<color
 		name="ParcelHoverColor"
 		reference="White" />
+  <color
+      name="Phototools_Header"
+      reference="EmphasisColor" />
 </colors>

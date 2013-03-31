@@ -9,6 +9,7 @@
 			<pie_slice label="Temporär" name="Derender"/>
 			<pie_slice label="Blacklist" name="DerenderPermanent"/>
 		</pie_menu>
+		<pie_slice label="Exportieren" name="Export"/>
         <pie_separator name="inspect_placeholder" />
     </pie_menu>
     <pie_slice label="Hinsetzen" name="Sit Down Here"/>

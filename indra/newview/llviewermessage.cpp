@@ -5529,22 +5529,16 @@ void process_sound_trigger(LLMessageSystem *msg, void **)
 	}
 
 	// NaCl - Antispam Registry
-	bool bDoSpamCheck = true;
-	std::string sSound = sound_id.asString();
  	static LLCachedControl<U32> _NACL_AntiSpamSoundMulti(gSavedSettings, "_NACL_AntiSpamSoundMulti");
 	static LLCachedControl<bool> FSPlayCollisionSounds(gSavedSettings, "FSPlayCollisionSounds");
-	for (S32 i = 0; i < COLLISION_SOUNDS_SIZE; i++) //AO: Should probably do this as a hashmap O(1) instead of O(n)
+	if (NACLAntiSpamRegistry::instance().isCollisionSound(sound_id))
 	{
-		if (COLLISION_SOUNDS[i] == sSound)
+		if (!FSPlayCollisionSounds)
 		{
-			if (!FSPlayCollisionSounds)
-			{
-				return;
-			}
-			bDoSpamCheck = false;
+			return;
 		}
 	}
-	if (bDoSpamCheck)
+	else
 	{
 		if (NACLAntiSpamRegistry::instance().checkQueue(ANTISPAM_QUEUE_SOUND, object_id, _NACL_AntiSpamSoundMulti))
 		{

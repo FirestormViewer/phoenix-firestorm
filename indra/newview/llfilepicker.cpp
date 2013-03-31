@@ -60,6 +60,10 @@ LLFilePicker LLFilePicker::sInstance;
 #define MODEL_FILTER L"Model files (*.dae)\0*.dae\0"
 #define SCRIPT_FILTER L"Script files (*.lsl)\0*.lsl\0"
 #define DICTIONARY_FILTER L"Dictionary files (*.dic; *.xcu)\0*.dic;*.xcu\0"
+// <FS:CR> Import filter
+//#define IMPORT_FILTER L"Import (*.oxp; *.hpa)\0*.oxp;*.hpa\0"
+#define IMPORT_FILTER L"Import (*.oxp)\0*.oxp\0"
+// </FS:CR>
 #endif
 
 //
@@ -223,6 +227,12 @@ BOOL LLFilePicker::setupFilter(ELoadFilter filter)
 		mOFN.lpstrFilter = DICTIONARY_FILTER \
 			L"\0";
 		break;
+// <FS:CR> Import filter
+	case FFLOAD_IMPORT:
+		mOFN.lpstrFilter = IMPORT_FILTER \
+			L"\0";
+		break;
+// </FS:CR>
 	default:
 		res = FALSE;
 		break;
@@ -540,6 +550,16 @@ BOOL LLFilePicker::getSaveFile(ESaveFilter filter, const std::string& filename, 
 			L"XML File (*.xml)\0*.xml\0" \
 			L"\0";
 		break; 
+// <FS:CR> Export filter
+	case FFSAVE_EXPORT:
+		if (filename.empty())
+		{
+			wcsncpy( mFilesW,L"untitled.oxp", FILENAME_BUFFER_SIZE);
+		}
+		mOFN.lpstrDefExt = L"oxp";
+		mOFN.lpstrFilter = L"OXP Backup Files (*.oxp)\0*.oxp\0" L"\0";
+		break;
+// </FS:CR>
 	default:
 		return FALSE;
 	}
@@ -692,7 +712,18 @@ Boolean LLFilePicker::navOpenFilterProc(AEDesc *theItem, void *info, void *callB
 								result = false;
 							}
 						}
-						
+// <FS:CR> Import filter
+						else if (filter == FFLOAD_IMPORT)
+						{
+							if (fileInfo.filetype != 'OXP ' &&
+								//fileInfo.filetype != 'HPA ' &&
+								(fileInfo.extension && (CFStringCompare(fileInfo.extension, CFSTR("oxp"), kCFCompareCaseInsensitive) != kCFCompareEqualTo) )) //&&
+								 //fileInfo.extension && (CFStringCompare(fileInfo.extension, CFSTR("hpa"), kCFCompareCaseInsensitive) != kCFCompareEqualTo)))
+							{
+								result = false;
+							}
+						}
+// </FS:CR>
 						if (fileInfo.extension)
 						{
 							CFRelease(fileInfo.extension);
@@ -843,7 +874,13 @@ OSStatus	LLFilePicker::doNavSaveDialog(ESaveFilter filter, const std::string& fi
 			creator = '\?\?\?\?';
 			extension = CFSTR(".lsl");
 			break;
-		
+// <FS:CR> Export filter
+		case FFSAVE_EXPORT:
+			type = 'OXP ';
+			creator = '\?\?\?\?';
+			extension = CFSTR(".oxp");
+			break;
+// </FS:CR>
 		case FFSAVE_ALL:
 		default:
 			type = '\?\?\?\?';
@@ -1308,6 +1345,28 @@ static std::string add_dictionary_filter_to_gtkchooser(GtkWindow *picker)
 							LLTrans::getString("dictionary_files") + " (*.dic; *.xcu)");
 }
 
+// <FS:CR> GTK Import/Export filters
+static std::string add_import_filter_to_gtkchooser(GtkWindow *picker)
+{
+	GtkFileFilter *gfilter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(gfilter, "*.oxp");
+	std::string filtername = LLTrans::getString("backup_files") + " (*.oxp)";
+	//gtk_file_filter_add_pattern(gfilter, "*.hpa");
+	//std::string filtername = LLTrans::getString("backup_files") + " (*.oxp; *.hpa)";
+	add_common_filters_to_gtkchooser(gfilter, picker, filtername);
+	return filtername;
+}
+
+static std::string add_export_filter_to_gtkchooser(GtkWindow *picker)
+{
+	GtkFileFilter *gfilter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(gfilter, "*.oxp");
+	std::string filtername = LLTrans::getString("backup_files") + " (*.oxp)";
+	add_common_filters_to_gtkchooser(gfilter, picker, filtername);
+	return filtername;
+}
+// </FS:CR>
+								
 BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename, bool blocking )
 {
 	BOOL rtn = FALSE;
@@ -1376,6 +1435,12 @@ BOOL LLFilePicker::getSaveFile( ESaveFilter filter, const std::string& filename,
 			caption += add_script_filter_to_gtkchooser(picker);
 			suggest_ext = ".lsl";
 			break;
+// <FS:CR> Export filter
+		case FFSAVE_EXPORT:
+			caption += add_export_filter_to_gtkchooser(picker);
+			suggest_ext = ".oxp";
+			break;
+// </FS:CR>
 		default:;
 			break;
 		}
@@ -1447,6 +1512,11 @@ BOOL LLFilePicker::getOpenFile( ELoadFilter filter, bool blocking )
 		case FFLOAD_DICTIONARY:
 			filtername = add_dictionary_filter_to_gtkchooser(picker);
 			break;
+// <FS:CR> Import filter
+		case FFLOAD_IMPORT:
+			filtername = add_import_filter_to_gtkchooser(picker);
+			break;
+// </FS:CR>
 		default:;
 			break;
 		}

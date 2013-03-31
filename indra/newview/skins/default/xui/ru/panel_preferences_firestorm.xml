@@ -165,9 +165,9 @@
 		<check_box label="Переписать окружающую среду своими настройками" name="FSInterpolateSky" tool_tip=""/>
 		<check_box label="Переписать окружающую среду своими настройками воды" name="FSInterpolateWater" tool_tip=""/>
 		<text name="FSWLshare_txt">
-			Phoenix Windlight-Sharing (экспериментальный):
+			Firestorm Windlight-Sharing:
 		</text>
-		<check_box label="активировать ля парселя(экспериментальный)" name="FSWLParcelEnabled"/>
+		<check_box label="активировать ля парселя" name="FSWLParcelEnabled"/>
 		<check_box label="Автоматически применять настройки WL от друзей" name="FSWLWhitelistFriends"/>
 		<check_box label="Автоматически применять настройки WL от групп" name="FSWLWhitelistGroups"/>
 		<check_box label="Автоматически применять настройки WL от всех" name="FSWLWhitelistAll"/>

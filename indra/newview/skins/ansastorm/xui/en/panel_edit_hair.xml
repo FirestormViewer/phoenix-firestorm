@@ -178,6 +178,16 @@
        follows="left"
        height="400"
        width="263">
+      <text name="hair_facial_not_available"
+       invisibility_control="AvatarSex"
+       follows="top|left"
+       layout="topleft"
+       top="0"
+       left="10"
+       height="50">
+          Face options are only available
+for male avatars.
+       </text>
       <!-- Viewer demands an accordion here, so we provide one -->
       <accordion
        layout="topleft"

@@ -1036,6 +1036,9 @@ Spróbuj zalogować się ponownie za minutę.
 	<string name="dictionary_files">
 		Słowniki
 	</string>
+	<string name="backup_files">
+		Kopie zapasowe obiektów
+	</string>
 	<string name="AvatarSetNotAway">
 		Nie Śpij
 	</string>
@@ -4664,6 +4667,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	<string name="Command_Pose_Stand_Label">
 		Podest do pozowania
 	</string>
+	<string name="Command_Snapshot_To_Disk_Label">
+		Zdjęcie na dysk
+	</string>
 	<string name="Command_AboutLand_Tooltip">
 		Informacje o miejscu, które odwiedzasz
 	</string>
@@ -4792,6 +4798,9 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="Command_Pose_Stand_Tooltip">
 		Podest do pozowania dla awatara, do dostrajania dodatków
+	</string>
+	<string name="Command_Snapshot_To_Disk_Tooltip">
+		Wykonuje szybko zdjęcie i zapisuje je na twardym dysku
 	</string>
 	<string name="Toolbar_Bottom_Tooltip">
 		obecnie na Twoim dolnym pasku
@@ -5107,9 +5116,6 @@ Spróbuj załączyć ścieżkę do edytora w cytowaniu.
 	</string>
 	<string name="QP Max Avatars">
 		Maks. awatarów
-	</string>
-	<string name="QP Height Offset">
-		Dostrój wysokość
 	</string>
 	<string name="QP Tags Offset">
 		Pozycja tagów

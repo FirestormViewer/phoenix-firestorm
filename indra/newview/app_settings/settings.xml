@@ -16590,8 +16590,8 @@ Change of this parameter will affect the layout of buttons in notification toast
           <string>snapshot</string>
           <string>postcard</string>
           <string>mini_map</string>
-          <string>nearby_chat</string>
-          <string>im_container</string>
+          <string>fs_nearby_chat</string>
+          <string>fs_im_container</string>
           <string>inventory</string>
           <string>beacons</string>
           <string>avatar_picker</string>
@@ -20362,6 +20362,39 @@ Change of this parameter will affect the layout of buttons in notification toast
       <string>New object created default fullbright</string>
       <key>Persist</key>
       <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSDestroyGLTexturesImmediately</key>
+    <map>
+      <key>Comment</key>
+      <string>If enabled, GL textures will be removed from memory immediately when its fetched texture is removed. This might result in textures behind you being unloaded.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
+    <key>FSDestroyGLTexturesThreshold</key>
+    <map>
+      <key>Comment</key>
+      <string>Threshold, at what texture memory load level GL textures will be removed from memory if FSDestroyGLTexturesImmediately is set to TRUE.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>F32</string>
+      <key>Value</key>
+      <real>0.9</real>
+    </map>
+    <key>FSEditGrid</key>
+    <map>
+      <key>Comment</key>
+      <string>Allows editing a grid from the grid manager</string>
+      <key>Persist</key>
+      <integer>0</integer>
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>

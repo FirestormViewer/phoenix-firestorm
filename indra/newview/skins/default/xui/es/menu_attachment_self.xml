@@ -3,6 +3,7 @@
 	<menu_item_call label="Tocar" name="Attachment Object Touch"/>
 	<menu_item_call label="Editar" name="Edit..."/>
 	<menu_item_call label="Quitar" name="Detach"/>
+	<menu_item_call label="Exportar" name="Export"/>
 	<menu_item_call label="Sentarme" name="Sit Down Here"/>
 	<menu_item_call label="Levantarme" name="Stand Up"/>
 	<menu_item_call label="Apariencia" name="Change Outfit"/>
