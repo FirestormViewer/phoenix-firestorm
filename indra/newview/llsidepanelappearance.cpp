@@ -380,7 +380,7 @@ void LLSidepanelAppearance::toggleOutfitEditPanel(BOOL visible, BOOL disable_cam
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);
-			LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
+			LLAppearanceMgr::getInstance()->updateIsDirty();
 		}
 	}
 }
@@ -415,7 +415,7 @@ void LLSidepanelAppearance::toggleWearableEditPanel(BOOL visible, LLViewerWearab
 	{
 		// Save changes if closing.
 		mEditWearable->saveChanges();
-		LLAppearanceMgr::getInstance()->setOutfitDirty( FALSE );
+		LLAppearanceMgr::getInstance()->updateIsDirty();
 		if (!disable_camera_switch)   // if we're just switching between outfit and wearable editing, don't end customization.
 		{
 			LLVOAvatarSelf::onCustomizeEnd(disable_camera_switch);
@@ -458,7 +458,6 @@ void LLSidepanelAppearance::editWearable(LLViewerWearable *wearable, LLView *dat
 	LLSidepanelAppearance *panel = dynamic_cast<LLSidepanelAppearance*>(data);
 	if (panel)
 	{
-		panel->showOutfitsInventoryPanel();
 		panel->showWearableEditPanel(wearable, disable_camera_switch);
 	}
 }
