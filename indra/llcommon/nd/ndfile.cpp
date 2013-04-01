@@ -220,11 +220,12 @@ namespace nd
 		
 		bool ndFile::isExist(const std::string& filename, ndVolatileAPRPool* pool, apr_int32_t flags)
 		{
-			FILE *pFile = LLFile::fopen( filename, nd::aprhelper::ndConvertOpenFlags( flags, filename ) );
-			if( pFile )
-				LLFile::close( pFile );
-		
-			return 0 != pFile;
+			llstat oStat;
+			int nRes = LLFile::stat( filename, &oStat );
+			if( 0 == nRes )
+				return S_ISREG( oStat.st_mode );
+
+			return false;
 		}
 		
 		S32 ndFile::size(const std::string& aFilename, ndVolatileAPRPool* pool)
