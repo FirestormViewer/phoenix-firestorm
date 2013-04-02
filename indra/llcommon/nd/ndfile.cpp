@@ -465,8 +465,7 @@ int apr_file_lock( FILE *aFile, int aLock )
 
 int apr_file_read( FILE *aFile, void *aBuffer, apr_size_t *aLen )
 {
-	if( aLen )
-		*aLen = 0;
+	llassert_always( aLen );
 
 	U32 nRead = fread( aBuffer, 1, *aLen, aFile );
 	if( 0 == nRead )
