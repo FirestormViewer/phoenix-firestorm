@@ -144,6 +144,44 @@
         <key>slurl_base</key>
             <string>hop://grid01.from-ne.com:8002/</string>
         </map>
+    <key>hypergrid.org:8002</key>
+        <map>
+        <key>LastModified</key>
+            <date>2013-04-02T01:01:24.65Z</date>
+        <key>about</key>
+            <string>http://www.hypergrid.org/metropolis/wiki</string>
+        <key>gatekeeper</key>
+            <string>hypergrid.org:8002</string>
+        <key>gridname</key>
+            <string>Metropolis Metaversum</string>
+        <key>gridnick</key>
+            <string>Metropolis</string>
+        <key>help</key>
+            <string>http://metropolis.hypergrid.orgi/forum</string>
+        <key>helperuri</key>
+            <string>http://metropolis.hypergrid.org/currency/helper/</string>
+        <key>login_identifier_types</key>
+            <array>
+                <string>agent</string>
+                <string>account</string>
+            </array>
+        <key>loginpage</key>
+            <string>http://metropolis.hypergrid.org</string>
+        <key>loginuri</key>
+            <array>
+                <string>http://hypergrid.org:8002/</string>
+            </array>
+        <key>name</key>
+            <string>hypergrid.org:8002</string>
+        <key>password</key>
+            <string>http://metropolis.hypergrid.org/password.php</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://www.hypergrid.org/metropolis/metro_rg.php</string>
+        <key>slurl_base</key>
+            <string>hop://hypergrid.org:8002/</string>
+        </map>
     <key>islandoasisgrid.biz:8002</key>
         <map>
         <key>LastModified</key>
