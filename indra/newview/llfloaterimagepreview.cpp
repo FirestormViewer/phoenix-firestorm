@@ -61,6 +61,8 @@
 #include "llviewercontrol.h"
 #include "lltrans.h"
 #include "llimagedimensionsinfo.h"
+#include "llviewerregion.h" // <FS:CR> getCentralBakeVersion()
+#include "llcheckboxctrl.h"
 
 const S32 PREVIEW_BORDER_WIDTH = 2;
 const S32 PREVIEW_RESIZE_HANDLE_SIZE = S32(RESIZE_HANDLE_WIDTH * OO_SQRT2) + PREVIEW_BORDER_WIDTH;
@@ -119,12 +121,15 @@ BOOL LLFloaterImagePreview::postBuild()
 
 		if (mRawImagep->getWidth() * mRawImagep->getHeight () <= LL_IMAGE_REZ_LOSSLESS_CUTOFF * LL_IMAGE_REZ_LOSSLESS_CUTOFF)
 			getChildView("lossless_check")->setEnabled(TRUE);
-
-		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
-		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0)
+		
+// <FS:CR> Temporary texture uploads
+		if (LLGlobalEconomy::Singleton::getInstance()->getPriceUpload() == 0
+			|| gAgent.getRegion()->getCentralBakeVersion() > 0)
 		{
-			childHide("temp_check");
+			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+			getChild<LLCheckBoxCtrl>("temp_check")->setVisible(FALSE);
 		}
+// </FS:CR>
 	}
 	else
 	{

@@ -246,6 +246,7 @@ public:
 	grid_list_changed_signal_t	mGridListChangedSignal;
 // <FS:AW  grid management>
 // <AW opensim>
+	bool isInSecondLife();
 	bool isInSLMain();
 	bool isInSLBeta();
 	bool isInOpenSim();

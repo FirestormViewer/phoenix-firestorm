@@ -83,6 +83,13 @@
 #include "llwebprofile.h"
 #include "llwindow.h"
 
+// <FS:CR> FIRE-9621 - Hide Profile panel on Snapshots on non-sl grids
+#ifdef OPENSIM
+#include "llviewernetwork.h" // isOpenSim()
+#endif // OPENSIM
+#include "llviewerregion.h" // <FS:CR> getCentralBakeVersion() for temporary texture uploads
+// </FS:CR>
+
 ///----------------------------------------------------------------------------
 /// Local function declarations, constants, enums, and typedefs
 ///----------------------------------------------------------------------------
@@ -1381,7 +1388,6 @@ void LLFloaterSnapshot::Impl::updateControls(LLFloaterSnapshot* floater)
 	// <FS:Zi> Save all settings
 	// enableAspectRatioCheckbox(floater, !floater->impl.mAspectRatioCheckOff);
 	// setAspectRatioCheckboxValue(floater, gSavedSettings.getBOOL("KeepAspectForSnapshot"));
-	// setTempUploadCheckboxValue(floater, gSavedSettings.getBOOL("TemporaryUpload")); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
 	// </FS:Zi>
 	floater->getChildView("layer_types")->setEnabled(shot_type == LLSnapshotLivePreview::SNAPSHOT_LOCAL);
 
@@ -1660,15 +1666,6 @@ void LLFloaterSnapshot::Impl::applyKeepAspectCheck(LLFloaterSnapshot* view, BOOL
 		}
 	}
 }
-
-// <FS:Zi> Save all settings
-//FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.
-// static
-// void LLFloaterSnapshot::Impl::applyTempUploadCheck(LLFloaterSnapshot* view, BOOL checked)
-// {
-// 	gSavedSettings.setBOOL("TemporaryUpload", checked);
-// }
-// </FS:Zi>
 
 // static
 void LLFloaterSnapshot::Impl::onCommitFreezeFrame(LLUICtrl* ctrl, void* data)
@@ -2112,7 +2109,13 @@ LLFloaterSnapshot::~LLFloaterSnapshot()
 BOOL LLFloaterSnapshot::postBuild()
 {
 	// Kick start Web Sharing, to fetch its config data if it needs to.
-	if (gSavedSettings.getBOOL("SnapshotSharingEnabled"))
+	if (gSavedSettings.getBOOL("SnapshotSharingEnabled")//)
+// <FS:CR> FIRE-9621 Hide Profile panel on Snapshots on non-sl grids
+#ifdef OPENSIM
+		&& (LLGridManager::getInstance()->isInSecondLife())
+#endif // OPENSIM
+		)
+// </FS:CR>
 	{
 		LLWebSharing::instance().init();
 	}
@@ -2159,8 +2162,6 @@ BOOL LLFloaterSnapshot::postBuild()
 	// make sure preview is below snapshot floater
 	parent_view->addChild(previewp);
 	parent_view->addChild(gSnapshotFloaterView);
-	
-	// gSavedSettings.setBOOL("TemporaryUpload", FALSE); //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge.	// <FS:Zi> Save all settings
 	
 	//move snapshot floater to special purpose snapshotfloaterview
 	gFloaterView->removeChild(this);
@@ -2281,6 +2282,23 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 		tabcontainer->selectFirstTab();
 	}
 	// </FS:HG> FIRE-5811 Save Last Snapshot Tab
+	// <FS:CR> FIRE-9621	
+#ifdef OPENSIM
+	if (LLGridManager::getInstance()->isInOpenSim())
+	{
+		if (tabcontainer)
+		{
+			llinfos << "Found tab container" << llendl;
+			LLPanel* panel_snapshot_profile = tabcontainer->getPanelByName("panel_snapshot_profile");
+			if (panel_snapshot_profile)
+			{
+				llinfos << "Found panel tab" << llendl;
+				tabcontainer->removeTabPanel(panel_snapshot_profile);
+			}
+		}
+	}
+#endif // OPENSIM
+	// </FS:CR>
 
 	LLSnapshotLivePreview* preview = LLFloaterSnapshot::Impl::getPreviewView(this);
 	if(preview)
@@ -2292,6 +2310,11 @@ void LLFloaterSnapshot::onOpen(const LLSD& key)
 	gSnapshotFloaterView->setEnabled(TRUE);
 	gSnapshotFloaterView->setVisible(TRUE);
 	gSnapshotFloaterView->adjustToFitScreen(this, FALSE);
+// <FS:CR> FIRE-9613 - Hide temp uploads on SSB enabled regions
+	if (gAgent.getRegion()->getCentralBakeVersion() == 0)
+		getChild<LLCheckBoxCtrl>("inventory_temp_upload")->setVisible(TRUE);
+// </FS:CR>
+
 
 	// <FS:HG> FIRE-5811 Save Last Snapshot Tab 
 	// // Initialize default tab.

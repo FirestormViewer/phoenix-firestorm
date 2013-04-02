@@ -132,7 +132,7 @@
      layout="topleft"
      left="10"
      name="inventory_temp_upload"
-     visible="true" />
+     visible="false" />
 	 <!-- //FS:LO Fire-6268 [Regression] Temp upload for snapshots missing after FUI merge. -->
 <!--    <button
      follows="right|bottom"
