@@ -143,7 +143,7 @@ namespace nd
 			}
 
 			S32 offsetNew = ftell( file_handle );
-			if( offset != 0 && offset != offsetNew )
+			if( offset != 0 && SEEK_SET == nd::aprhelper::ndConvertSeekFlags( where ) && offset != offsetNew )
 			{
 				llwarns << "Seek failed, wanted offset " << offset << " got " << offsetNew << llendl;
 			}
