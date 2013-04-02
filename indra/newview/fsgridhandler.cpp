@@ -1363,27 +1363,35 @@ void LLGridManager::updateIsInProductionGrid()
 }
 // </AW opensim>
 
+// For any Second Life grid
+bool LLGridManager::isInSecondLife()
+{
+	return (EGridPlatform == GP_SLMAIN || GP_SLBETA);
+}
+
+// For Agni
 bool LLGridManager::isInSLMain()
 {
 	return (EGridPlatform == GP_SLMAIN);
 }
 
+// For Aditi
 bool LLGridManager::isInSLBeta()
 {
 	return (EGridPlatform == GP_SLBETA);
 }
 
+// For OpenSim
 bool LLGridManager::isInOpenSim()
 {
 	return (EGridPlatform == GP_OPENSIM || EGridPlatform == GP_AURORA);
 }
 
-// <FS:CR> Aurora Sim
+// For Aurora Sim
 bool LLGridManager::isInAuroraSim()
 {
 	return (EGridPlatform == GP_AURORA);
 }
-// </FS:CR> Aurora Sim
 
 void LLGridManager::saveGridList()
 {

@@ -1383,12 +1383,13 @@ void upload_new_resource(
 	if( LLAssetType::AT_TEXTURE == asset_type )
 	{
 		LLViewerStats::getInstance()->incStat(LLViewerStats::ST_UPLOAD_TEXTURE_COUNT );
-		temp_upload = gSavedSettings.getBOOL("TemporaryUpload");
-		if (temp_upload)
+// <FS:CR> Temporary Texture Uploads
+		if (gSavedSettings.getBOOL("TemporaryUpload"))
 		{
 			name = "[temp] " + name;
+			gSavedSettings.setBOOL("TemporaryUpload", FALSE);
 		}
-		gSavedSettings.setBOOL("TemporaryUpload", FALSE);
+// </FS:CR>
 	}
 	else
 	if( LLAssetType::AT_ANIMATION == asset_type)
