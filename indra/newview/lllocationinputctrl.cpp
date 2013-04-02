@@ -69,6 +69,11 @@
 
 #include "llmenuoptionpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llfloaterreg.h"
+// <FS:CR> Don't show pathfinding icons in OpenSim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
+// </FS:CR>
 
 //============================================================================
 /*
@@ -920,6 +925,12 @@ void LLLocationInputCtrl::refreshParcelIcons()
 		bool allow_damage	= vpm->allowAgentDamage(agent_region, current_parcel);
 		bool see_avs        = current_parcel->getSeeAVs();
 		bool pathfinding_dynamic_enabled = agent_region->dynamicPathfindingEnabled();
+// <FS:CR> Don't show pathfinding icons on OpenSim
+		bool is_opensim = false;
+#ifdef OPENSIM
+		is_opensim = LLGridManager::getInstance()->isInOpenSim();
+#endif // OPENSIM
+// </FS:CR>
 
 		// Most icons are "block this ability"
 		mParcelIcon[VOICE_ICON]->setVisible(   !allow_voice );
@@ -929,7 +940,8 @@ void LLLocationInputCtrl::refreshParcelIcons()
 		mParcelIcon[SCRIPTS_ICON]->setVisible( !allow_scripts );
 		mParcelIcon[DAMAGE_ICON]->setVisible(  allow_damage );
 		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(mIsNavMeshDirty);
-		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!mIsNavMeshDirty && !pathfinding_dynamic_enabled);
+		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!mIsNavMeshDirty && !pathfinding_dynamic_enabled //);
+														   && !is_opensim);// <FS:CR> Don't show pathfinding icons on OpenSim
 
 		mDamageText->setVisible(allow_damage);
 		mParcelIcon[SEE_AVATARS_ICON]->setVisible( !see_avs );

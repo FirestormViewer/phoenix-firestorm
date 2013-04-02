@@ -104,6 +104,12 @@
 #include "llmenuoptionpathfindingrebakenavmesh.h"	// <FS:Zi> Pathfinding rebake functions
 #include "llvieweraudio.h"
 #include "fslightshare.h"	// <FS:CR> FIRE-5118 - Lightshare support
+// <FS:CR> Don't show pathfinding icons on OpenSim
+#ifdef OPENSIM
+#include "llviewernetwork.h"
+#endif // OPENSIM
+// </FS:CR>
+
 //
 // Globals
 //
@@ -1076,6 +1082,12 @@ void LLStatusBar::updateParcelIcons()
 			current_parcel = agent_parcel;
 		}
 
+		// <FS:CR> Don't show pathfinding icons on OpenSim
+		bool is_opensim = false;
+#ifdef OPENSIM
+		is_opensim = LLGridManager::getInstance()->isInOpenSim();
+#endif // OPENSIM
+		// </FS:CR>
 		// <FS:Zi> allow_voice is now declared outside the if() block
 		//	bool allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
 		allow_voice	= vpm->allowAgentVoice(agent_region, current_parcel);
@@ -1124,7 +1136,7 @@ void LLStatusBar::updateParcelIcons()
 		// <FS:Ansariel> Pathfinding support
 		mParcelIcon[PATHFINDING_DIRTY_ICON]->setVisible(pathfinding_navmesh_dirty);
 		mParcelIcon[PATHFINDING_DIRTY_ICON]->setColor(LLColor4::white % pathfinding_dirty_icon_alpha);
-		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled);
+		mParcelIcon[PATHFINDING_DISABLED_ICON]->setVisible(!pathfinding_navmesh_dirty && !pathfinding_dynamic_enabled && !is_opensim);
 		// </FS:Ansariel> Pathfinding support
 		mDamageText->setVisible(allow_damage);
 		mBuyParcelBtn->setVisible(is_for_sale);
