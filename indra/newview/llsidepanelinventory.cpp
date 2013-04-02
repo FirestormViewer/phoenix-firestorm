@@ -353,9 +353,9 @@ void LLSidepanelInventory::enableInbox(bool enabled)
 	// <FS:Ansariel> Optional hiding of Received Items folder aka Inbox
 	//inbox_layout_panel->setVisible(enabled);
 	inbox_layout_panel->setVisible(enabled&& !gSavedSettings.getBOOL("FSShowInboxFolder")//); <FS:CR>
-// <FS:CR> Don't show Received Items panel on OpenSim
+// <FS:CR> Show Received Items panel only in Second Life
 #ifdef OPENSIM
-								   && !LLGridManager::getInstance()->isInOpenSim()
+								   && LLGridManager::getInstance()->isInSecondLife()
 #endif // OPENSIM
 
 								   );

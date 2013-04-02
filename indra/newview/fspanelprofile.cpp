@@ -855,7 +855,7 @@ BOOL FSPanelProfileWeb::postBuild()
     mLoadButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitLoad, this, _1));
 
     mWebProfileButton->setCommitCallback(boost::bind(&FSPanelProfileWeb::onCommitWebProfile, this, _1));
-	mWebProfileButton->setVisible(LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta());
+	mWebProfileButton->setVisible(LLGridManager::getInstance()->isInSecondLife());
 
     mWebBrowser = getChild<LLMediaCtrl>("profile_html");
     mWebBrowser->addObserver(this);

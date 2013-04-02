@@ -263,7 +263,7 @@ void FSExport::addPrim(LLViewerObject* object, bool root)
 	LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode(&func);
 	if (node)
 	{
-		if ((LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta())
+		if ((LLGridManager::getInstance()->isInSecondLife())
 			&& object->permYouOwner()
 			&& (gAgentID == node->mPermissions->getCreator() || megaPrimCheck(node->mPermissions->getCreator(), object)))
 		{
@@ -514,7 +514,7 @@ bool FSExport::exportTexture(const LLUUID& texture_id)
 	std::string name;
 	std::string description;
 	
-	if (LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta())
+	if (LLGridManager::getInstance()->isInSecondLife())
 	{
 		if (imagep->mComment.find("a") != imagep->mComment.end())
 		{
@@ -686,7 +686,7 @@ bool FSExport::assetCheck(LLUUID asset_id, std::string& name, std::string& descr
 					exportable = true;
 				}
 #endif
-				if ((LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta()) && (perms.getCreator() == gAgentID))
+				if (LLGridManager::getInstance()->isInSecondLife() && (perms.getCreator() == gAgentID))
 				{
 					exportable = true;
 				}
@@ -723,7 +723,7 @@ void FSExport::inventoryChanged(LLViewerObject* object, LLInventoryObject::objec
 			exportable = true;
 		}
 #endif
-		if ((LLGridManager::getInstance()->isInSLMain() || LLGridManager::getInstance()->isInSLBeta()) && (perms.getCreator() == gAgentID))
+		if (LLGridManager::getInstance()->isInSecondLife() && (perms.getCreator() == gAgentID))
 		{
 			exportable = true;
 		}

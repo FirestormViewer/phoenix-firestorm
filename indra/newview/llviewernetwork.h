@@ -203,6 +203,7 @@ class LLGridManager : public LLSingleton<LLGridManager>
 
 	/// Is the selected grid a Second Life beta grid?
 	bool isInSLBeta() { return (isSystemGrid() && !isInProductionGrid()); }
+	bool isInSecondLife() { return (isInSLMain() || isInSLBeta()); }	// <FS:CR>
   private:
 //</FS:AW compatibility with opensim api>
 	/// Is the selected grid a production grid?
