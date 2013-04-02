@@ -290,9 +290,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>5962b0a3c8e0e7a4248492686f38f5ba</string>
+              <string>0c8c5a18124173f829094716a137cf3a</string>
               <key>url</key>
-              <string>http://downloads.phoenixviewer.com/colladadom-2.2-linux-20120702.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/colladadom-2.2-linux-20130402.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
@@ -1848,9 +1848,9 @@
             <key>archive</key>
             <map>
               <key>hash</key>
-              <string>bb0abe962b3b8208ed2dab0424aab33d</string>
+              <string>c2575f2bf90d274b2453dac30ecac187</string>
               <key>url</key>
-              <string>http://automated-builds-secondlife-com.s3.amazonaws.com/hg/repo/3p-pcre/rev/228822/arch/Linux/installer/pcre-7.6-linux-20110504.tar.bz2</string>
+              <string>http://downloads.phoenixviewer.com/pcre-8.32-linux-20130402.tar.bz2</string>
             </map>
             <key>name</key>
             <string>linux</string>
