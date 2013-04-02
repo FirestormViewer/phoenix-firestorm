@@ -157,7 +157,7 @@
         <key>gridnick</key>
             <string>Metropolis</string>
         <key>help</key>
-            <string>http://metropolis.hypergrid.orgi/forum</string>
+            <string>http://metropolis.hypergrid.org/forum</string>
         <key>helperuri</key>
             <string>http://metropolis.hypergrid.org/currency/helper/</string>
         <key>login_identifier_types</key>
